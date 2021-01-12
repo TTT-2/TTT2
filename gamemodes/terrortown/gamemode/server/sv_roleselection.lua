@@ -414,7 +414,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 		-- if there are still defined layer
 		if #layeredBaseRolesTbl >= i then
-			for j = i , #layeredBaseRolesTbl do
+			for j = i, #layeredBaseRolesTbl do
 				local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(availableBaseRolesTbl, layeredBaseRolesTbl[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
 
 				-- if there is no selectable role left in the current layer
@@ -439,7 +439,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		end
 
 		selectableRoles[subrole] = rolesAmountList[subrole]
-
 		baseroleLoopTbl[#baseroleLoopTbl + 1] = subrole
 
 		curRoles = curRoles + 1
@@ -468,24 +467,28 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 			-- the selected role
 			local subrole = nil
-			local currentSubroleLayer = layeredSubRolesTbl[currentBaserole]
+			local currentSubroleLayers = layeredSubRolesTbl[currentBaserole]
 
-			-- if there are still defined layer
-			if currentSubroleLayer ~= nil and #currentSubroleLayer >= i then
-				local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(currentSubroleTbl, currentSubroleLayer[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
+			-- if there are still defined layers
+			if currentSubroleLayers ~= nil and #currentSubroleLayers >= i then
+				for j = i, #currentSubroleLayers do
+					local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(currentSubroleTbl, currentSubroleLayers[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
 
-				-- if there is no selectable role left in the current layer
-				if #cleanedLayerTbl < 1 then
-					table.remove(layeredSubRolesTbl, i) -- remove the current layer
+					-- if there is no selectable role left in the current layer
+					if #cleanedLayerTbl < 1 then
+						table.remove(layeredSubRolesTbl, i) -- remove the current layer
 
-					-- redo the current loop with the same index
-					i = i - 1
+						-- redo the current loop with the same index
+						continue
+					end
 
-					continue
+					subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+					break;
 				end
+			end
 
-				subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-			else -- if no subrole was selected (no layer left or no layer defined)
+			-- if no subrole was selected (no layer left or no layer defined)
+			if not subrole then
 				local rnd = math.random(#currentSubroleTbl)
 				subrole = currentSubroleTbl[rnd]
 
