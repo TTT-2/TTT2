@@ -601,7 +601,7 @@ local function CheckCreditAward(victim, attacker)
 	-- DET KILLED ANOTHER TEAM AWARD
 	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
 		local amt = math.ceil(ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
-		
+
 		if amt > 0 then
 			local plys = player.GetAll()
 
@@ -612,7 +612,7 @@ local function CheckCreditAward(victim, attacker)
 					ply:AddCredits(amt)
 				end
 			end
-			
+
 			LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_all", {num = amt})
 		end
 	end
