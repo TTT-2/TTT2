@@ -1390,7 +1390,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 	-- handle damage scaling by karma
 	if IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
-		if ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
+		if KARMA.IsEnabled() and ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
 			-- scale everything to karma damage factor except the knife, because it assumes a kill
 			dmginfo:ScaleDamage(att:GetDamageFactor())
 		end
