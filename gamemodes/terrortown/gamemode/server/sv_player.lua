@@ -601,17 +601,20 @@ local function CheckCreditAward(victim, attacker)
 	-- DET KILLED ANOTHER TEAM AWARD
 	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
 		local amt = math.ceil(ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
-		local plys = player.GetAll()
 
-		for i = 1, #plys do
-			local ply = plys[i]
+		if amt > 0 then
+			local plys = player.GetAll()
 
-			if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then
-				ply:AddCredits(amt)
+			for i = 1, #plys do
+				local ply = plys[i]
+
+				if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then
+					ply:AddCredits(amt)
+				end
 			end
-		end
 
-		LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_all", {num = amt})
+			LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_all", {num = amt})
+		end
 	end
 
 	-- TRAITOR AWARD
@@ -656,10 +659,10 @@ local function CheckCreditAward(victim, attacker)
 				for k = 1, #plys do
 					local ply = plys[k]
 
-					if ply:IsActive() and ply:IsShopper() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
-						ply:AddCredits(amt)
+			if ply:IsActive() and ply:IsShopper() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
+				ply:AddCredits(amt)
 
-						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
+				--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
 						LANG.Msg(ply, "credit_all", {num = amt}, MSG_MSTACK_ROLE)
 					end
 				end
