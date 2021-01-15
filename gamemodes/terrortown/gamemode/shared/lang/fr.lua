@@ -7,7 +7,7 @@ local L = LANG.CreateLanguage("fr")
 -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/french.lua
 L.__alias = "français"
 
-L.lang_name = "Francais (French)"
+L.lang_name = "Français (French)"
 
 --- General text used in various places
 L.traitor = "Traitre"
@@ -19,24 +19,24 @@ L.terrorists = "Terroristes"
 L.spectators = "Spectateurs"
 
 L.noteam = "Pas de Team"
-L.innocents = "Team Innocents"
-L.traitors = "Team Traitres"
+L.innocents = "Team des Innocents"
+L.traitors = "Team des Traitres"
 
 --- Round statut messages
 L.round_minplayers = "Pas assez de joueurs pour commencer un nouveau round..."
-L.round_voting = "Vote en cours, le round est retardé de {num} secondes..."
-L.round_begintime = "Un nouveau round commence dans {num} secondes. Préparez-vous."
+L.round_voting = "Un vote est en cours, le round est retardé de {num} secondes..."
+L.round_begintime = "Un nouveau round commencera dans {num} secondes. Préparez-vous."
 L.round_selected = "Les Traitres ont été choisis."
 L.round_started = "Le round a commencé !"
-L.round_restart = "Le round a recommencé de force par un admin."
+L.round_restart = "Un admin a redémarré le round."
 
 L.round_traitors_one = "Traitre, vous êtes seul."
 L.round_traitors_more = "Traitre, voici vos alliés : {names}"
 
-L.win_time = "Temps écoulé. Les Traitres ont perdu."
-L.win_traitor = "Les Traitres ont gagné !"
-L.win_innocent = "Les Traitres ont été battus !"
-L.win_bees = "Les Abeilles ont gagné!(é)"
+L.win_time = "Temps écoulé. Les Traitres ont perdus."
+L.win_traitor = "Les Traitres ont gagnés !"
+L.win_innocent = "Les Traitres ont été vaincus !"
+L.win_bees = "Les Abeilles ont gagnés !"
 L.win_showreport = "Regardons le rapport du round {num} secondes."
 
 L.limit_round = "Limite de round atteinte. {mapname} va bientôt charger."
@@ -48,8 +48,8 @@ L.credit_all = "Vous êtes récompensés de {num} crédit(s) pour vos performanc
 L.credit_kill = "Vous avez reçu {num} crédit(s) pour avoir tué un {role}."
 
 --- Karma
-L.karma_dmg_full = "Votre Karma est à {amount}, donc vous ferez plein dégâts ce round !"
-L.karma_dmg_other = "Votre Karma est à {amount}. De ce fait tous les dégâts que vous faites seront réduits de {num}%"
+L.karma_dmg_full = "Votre Karma est à {amount}, vous infligerez donc des dégâts normaux ce round!"
+L.karma_dmg_other = "Votre Karma est à {amount}. De ce fait tous les dégâts que vous infligerez seront réduits de {num}%"
 
 --- Body identification messages
 L.body_found = "{finder} à trouvé le corps de {victim}. {role}"
@@ -62,8 +62,8 @@ L.body_found_inno = "C'était un Innocent."
 
 L.body_confirm = "{finder} a confirmé la mort de {victim}."
 
-L.body_call = "{player} a appelé un Détective pour le corps de {victim} !"
-L.body_call_error = "Vous devez confirmer la mort de ce joueur avant d'appeler un Détective !"
+L.body_call = "{player} Appelle un Détective sur le corps de {victim} !"
+L.body_call_error = "Veuillez identifier le corps avant d'appeler un Détective !"
 
 L.body_burning = "Aie ! Ce cadavre est en feu !"
 L.body_credits = "Vous avez trouvé {num} crédit(s) sur le corps !"
@@ -84,13 +84,13 @@ L.equip_statut = "Statut de la commande"
 L.equip_cost = "Il vous reste {num} crédit(s)."
 L.equip_help_cost = "Chaque équipement que vous achetez coûte 1 crédit."
 
-L.equip_help_carry = "Vous ne pouvez que acheter où vous avez de la place."
+L.equip_help_carry = "Vous pouvez acheter que si l’emplacement pour l'objet est libre."
 L.equip_carry = "Vous pouvez porter cet objet."
 L.equip_carry_own = "Vous portez déjà cet objet."
 L.equip_carry_slot = "Vous avez déjà une arme dans l’emplacement {slot}."
 L.equip_carry_minplayers = "Il n'y a pas assez de joueurs sur le serveur pour activer cette arme."
 
-L.equip_help_stock = "De certains objets vous ne pouvez en acheter qu'un par round."
+L.equip_help_stock = "Certains objets ne peuvent être acheté qu'une fois par round."
 L.equip_stock_deny = "Cet objet n'est plus en stock."
 L.equip_stock_ok = "Cet objet est en stock."
 
@@ -104,27 +104,27 @@ L.equip_confirm = "Acheter"
 
 -- Disguiser tab in equipment menu
 L.disg_name = "Déguisement"
-L.disg_menutitle = "Contrôle déguisement"
+L.disg_menutitle = "Contrôle du déguisement"
 L.disg_not_owned = "Vous n'avez pas de Déguisement !"
-L.disg_enable = "Activer déguisement"
+L.disg_enable = "Activer le déguisement"
 
 L.disg_help1 = "Lorsque votre déguisement est actif, votre nom, santé et karma ne sont pas visibles quand quelqu'un vous regarde. De plus, vous n'apparaîtrez pas sur le radar du Détective."
-L.disg_help2 = "Appuyez sur Numpad Enter pour activer/desactiver le déguisement sans le menu. Vous pouvez aussi lier une touche à 'ttt_toggle_disguise' avec la console."
+L.disg_help2 = "Appuyez sur Entrée du Pavé-Numérique pour activer/desactiver le déguisement sans le menu. Vous pouvez aussi choisir une autre touche en appuyant sur F1 -> Configuration."
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
-L.radar_menutitle = "Contrôle radar"
+L.radar_menutitle = "Contrôle du radar"
 L.radar_not_owned = "Vous n'avez pas de Radar !"
-L.radar_scan = "Faire un scan"
-L.radar_auto = "Auto-répéter le scan"
+L.radar_scan = "Scanner"
+L.radar_auto = "Scanner à répetition"
 L.radar_help = "Les résultats du scan restent pendant {num} secondes, après cela le Radar devra recharger et pourra être utilisé de nouveau."
 L.radar_charging = "Votre Radar charge !"
 
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfert"
-L.xfer_menutitle = "Transférer crédits"
+L.xfer_menutitle = "Transférer des crédits"
 L.xfer_send = "Envoyer un crédit"
-L.xfer_help = "Vous ne pouvez envoyer des crédits qu'à vos amis {role}s."
+L.xfer_help = "Vous ne pouvez envoyer des crédits qu'à vos amis {role}."
 
 L.xfer_no_recip = "Récepteur non valide, transfert annulé."
 L.xfer_no_credits = "Pas assez de crédit pour le transfert."
@@ -137,24 +137,24 @@ L.radio_help = "Appuyez sur un bouton pour que votre Radio joue ce son."
 L.radio_notplaced = "Vous devez placer la Radio pour la faire jouer un son."
 
 -- Radio soundboard buttons
-L.radio_button_scream = "Cri"
+L.radio_button_scream = "Cri d'agonie"
 L.radio_button_expl = "Explosion"
 L.radio_button_pistol = "Tir de Pistolet"
 L.radio_button_m16 = "Tir de M16"
 L.radio_button_deagle = "Tir de Deagle"
 L.radio_button_mac10 = "Tir de MAC10"
-L.radio_button_shotgun = "Tir fusil à pompe"
-L.radio_button_rifle = "Tir de fusil"
+L.radio_button_shotgun = "Tir de fusil à pompe"
+L.radio_button_rifle = "Tir de fusil de sniper"
 L.radio_button_huge = "Tir de H.U.G.E"
-L.radio_button_c4 = "Beep de C4"
-L.radio_button_burn = "En feu"
+L.radio_button_c4 = "Bip de C4"
+L.radio_button_burn = "Bruits de feu"
 L.radio_button_steps = "Bruits de pas"
 
 -- Intro screen shown after joining
-L.intro_help = "Si vous êtes nouveau, appuyez sur F1 pour des instructions !"
+L.intro_help = "Si vous êtes nouveau, appuyez sur F1 pour lire les instructions !"
 
 -- Radiocommands/quickchat
-L.quick_title = "Touches de Quickchat"
+L.quick_title = "Touches de Tchat-rapide"
 
 L.quick_yes = "Oui."
 L.quick_no = "Non."
@@ -164,12 +164,12 @@ L.quick_see = "Je vois {player}."
 L.quick_suspect = "{player} est suspect."
 L.quick_traitor = "{player} est un Traitre !"
 L.quick_inno = "{player} est innocent."
-L.quick_check = "Y a quelqu'un ?"
+L.quick_check = "Quelqu'un est encore en vie ?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below. Keep these lowercase.
-L.quick_nobody = "personne"
-L.quick_disg = "quelqu'un de déguisé"
+L.quick_nobody = "Personne"
+L.quick_disg = "Quelqu'un de déguisé"
 L.quick_corpse = "un corps non-identifié"
 L.quick_corpse_id = "le corps de {player}"
 
@@ -182,20 +182,20 @@ L.search_call = "Appeler un Détective"
 -- Descriptions of pieces of information found
 L.search_nick = "C'est le corps de {player}."
 
-L.search_role_traitor = "C'était un Traitre !"
+L.search_role_traitor = "C'était un Traitre!"
 L.search_role_det = "C'était un Détective."
-L.search_role_inno = "C'était un terroriste innocent."
+L.search_role_inno = "C'était un Terroriste Innocent."
 
 L.search_words = "Quelque chose vous dit que quelques unes des dernières paroles de cette personne étaient : '{lastwords}'"
 L.search_armor = "Il avait une armure non-standard."
 L.search_disg = "Il portait un dispositif qui permet de cacher son identité."
 L.search_radar = "Il portait une sorte de radar. Ce radar ne fonctionne plus."
-L.search_c4 = "Dans une poche, il y a une note. Elle dit que couper le fil numéro {num} va désamorcer la bombe."
+L.search_c4 = "Dans une poche, il y a une note. Elle dit que couper le fil numéro {num} va désamorcer le C4."
 
 L.search_dmg_crush = "Il a beaucoup de fractures. On dirait que l'impact d'un objet lourd l'a tué."
 L.search_dmg_bullet = "Il est évident qu'on lui a tiré dessus jusqu'à la mort."
 L.search_dmg_fall = "Une chute lui a été fatale."
-L.search_dmg_boom = "Ses blessures et les vêtements déchirés indiquent qu'une explosion l'a tué."
+L.search_dmg_boom = "Les blessures et les vêtements déchirés indiquent qu'une explosion l'a tué."
 L.search_dmg_club = "Il est couvert d'ecchymoses et semble avoir été battu. Très clairement, il a été frappé à mort."
 L.search_dmg_drown = "Le corps montre les signes d'une inévitable noyade."
 L.search_dmg_stab = "Il s'est fait coupé et poignardé avant de saigner à mort."
@@ -218,7 +218,7 @@ L.sb_playing = "Vous jouez sur..."
 L.sb_mapchange = "On change de carte dans {num} round(s) ou dans {time}"
 
 L.sb_mia = "Portés disparus"
-L.sb_confirmed = "Confirmés Morts"
+L.sb_confirmed = "Morts Confirmés"
 
 L.sb_ping = "Ping"
 L.sb_deaths = "Morts"
@@ -234,7 +234,7 @@ L.sb_tag_kill = "A TUER"
 L.sb_tag_miss = "PERDU"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "Cette arme est à court de stock : vous l'avez déjà acheté ce round."
+L.buy_no_stock = "Cette arme est en rupture de stock : vous l'avez déjà acheté ce round."
 L.buy_pending = "Vous avez déjà une commande en attente, attendez de la recevoir d'abord."
 L.buy_received = "Vous avez reçu votre équipement spécial."
 
@@ -269,23 +269,23 @@ Activer/Desactiver le déguisement vers l'onglet Déguisement de ce menu ou appu
 -- C4
 L.c4_hint = "Utilisez {usekey} pour amorcer ou désamorcer."
 L.c4_disarm_warn = "Un explosif C4 que vous avez planté a été désamorcé."
-L.c4_armed = "Vous avez amorcé la bombe avec succès."
-L.c4_disarmed = "Vous avez désamorcé la bombe avec succès."
+L.c4_armed = "Vous avez amorcé le C4 avec succès."
+L.c4_disarmed = "Vous avez désamorcé le C4 avec succès."
 L.c4_no_room = "Vous n'avez pas la place pour ce C4."
 
-L.c4_desc = "Explosif surpuissant menu d'un minuteur."
+L.c4_desc = "Explosif surpuissant à retardement.Utiliser le avec précaution."
 
 L.c4_arm = "Amorcer le C4"
 L.c4_arm_timer = "Minuteur"
 L.c4_arm_secondes = "Secondes avant détonation :"
-L.c4_arm_attempts = "Pendant le désamorçage, {num} des 6 fils va instantanément détoner quand coupé."
+L.c4_arm_attempts = "Pendant le désamorçage, {num} des 6 fils va instantanément faire exploser le C4 quand il sera coupé."
 
 L.c4_remove_title = "Retrait"
-L.c4_remove_pickup = "Ramasser C4"
-L.c4_remove_destroy1 = "Détruire C4"
+L.c4_remove_pickup = "Ramasser le C4"
+L.c4_remove_destroy1 = "Détruire le C4"
 L.c4_remove_destroy2 = "Confirmer : destruction"
 
-L.c4_disarm = "Désamorcer C4"
+L.c4_disarm = "Désamorcer le C4"
 L.c4_disarm_cut = "Couper le fil {num}"
 
 L.c4_disarm_owned = "Coupez un fil pour désamorcer la bombe. C'est votre bombe, donc tous les fils fonctionneront."
@@ -296,7 +296,7 @@ L.c4_statut_disarmed = "DÉSARMÉE"
 
 -- Visualizer
 L.vis_name = "Visualiseur"
-L.vis_hint = "Appuyez sur {usekey} pour ramasser (Détectives uniquement)."
+L.vis_hint = "Appuyez sur {usekey} pour ramasser (Détectives seulement)."
 
 L.vis_desc = [[
 Dispositif de visualisation de scène de crime.
@@ -305,7 +305,7 @@ Analyse un corps pour montrer commentla victime a été tuée, mais seulement s'
 
 -- Decoy
 L.decoy_name = "Leurre"
-L.decoy_no_room = "Vous ne pouvez pas porter ce leurre."
+L.decoy_no_room = "Vous ne pouvez pas prendre ce leurre."
 L.decoy_broken = "Votre Leurre a été détruit !"
 
 L.decoy_short_desc = "Ce leurre montre un faux signal radar visible par les autres team"
@@ -315,7 +315,7 @@ L.decoy_desc = [[
 Montre un faux signe sur le radar des autres team ,et font que leur scanner ADN montre la position du Leurre s'il cherche le vôtre.]]
 
 -- Defuser
-L.defuser_name = "Démineur"
+L.defuser_name = "Kit de désamorçage"
 L.defuser_help = "{primaryfire} désamorce le C4 ciblé."
 
 L.defuser_desc = [[
@@ -383,7 +383,7 @@ Pousse les gens à une distance de sécurité.
 Munitions illimitées, mais lent à tirer.]]
 
 -- Binoculars
-L.binoc_name = "Binocles"
+L.binoc_name = "Jumelles"
 
 L.binoc_desc = [[
 Zoomer sur des corps et les identifier de loin.
@@ -400,13 +400,13 @@ Utilise les munitions normales de SMG.]]
 L.dna_name = "Scanner ADN"
 L.dna_identify = "Le corps doit être identifié pour récupérer l'ADN du tueur."
 L.dna_notfound = "Pas d'échantillon ADN trouvé sur la cible."
-L.dna_limit = "Limite de stockage atteinte. Retirez les vieux échantillons pour en ajouter de nouveaux."
-L.dna_decayed = "L'échantillon ADN du tueur s'est dégradé."
-L.dna_killer = "Échantillon ADN du tueur récupéré du corps !"
+L.dna_limit = "Limite de stockage atteint. Retirez les vieux échantillons pour en ajouter de nouveaux."
+L.dna_decayed = "L'échantillon ADN du tueur s'est décomposé."
+L.dna_killer = "Échantillon ADN du tueur récupéré sur le corps !"
 L.dna_no_killer = "L'ADN n'a pas pu être récupérée (le tueur s'est déconnecté ?)."
 L.dna_armed = "La bombe est amorcée ! Désamorcez-la d'abord !"
-L.dna_object = "{num} nouveaux échantillon(s) ADN de l'objet."
-L.dna_gone = "Pas d'ADN par ici."
+L.dna_object = "Vous avez collecté {num} échantillon(s) d'ADN sur cet objet."
+L.dna_gone = "Aucun ADN détecté dans la zone."
 
 L.dna_desc = [[
 Collectez des échantillons ADN d'objets et utilisez-les pour trouvez le propriétaire de cet ADN.
@@ -428,18 +428,18 @@ L.rifle_name = "Fusil de sniper"
 L.shotgun_name = "Fusil à pompe"
 
 -- Teleporter
-L.tele_name = "TÉlÉporteur"
-L.tele_failed = "Téléport raté."
-L.tele_marked = "Position de téléport marquée."
+L.tele_name = "Téléporteur"
+L.tele_failed = "Téléportation ratée."
+L.tele_marked = "Position de téléportation marquée."
 
-L.tele_no_ground = "Impossible de téléporter à moins d'être sur un sol solide !"
-L.tele_no_crouch = "Impossible de téléporter en étant accroupi !"
+L.tele_no_ground = "Impossible de se téléporter à moins d'être sur un sol solide !"
+L.tele_no_crouch = "Impossible de se téléporter en étant accroupi !"
 L.tele_no_mark = "Aucune position marquée. Marquez une destination avant de vous téléporter."
 
 L.tele_no_mark_ground = "Impossible de marquer une position à moins d'être sur un sol solide !"
 L.tele_no_mark_crouch = "Impossible de marquer une position en étant accroupi !"
 
-L.tele_help_pri = "{primaryfire} téléporte la position marquée."
+L.tele_help_pri = "{primaryfire} téléporte à la position marquée."
 L.tele_help_sec = "{secondaryfire} marque la position actuelle."
 
 L.tele_desc = [[
@@ -448,14 +448,14 @@ Teleporte vers un lieu marqué.
 La téléportation fait du bruit, et le nombre d'utilisations est limité.]]
 
 -- Ammo names, shown when picked up
-L.ammo_pistol = "Munitions 9mm"
+L.ammo_pistol = "Munitions de 9mm"
 
-L.ammo_smg1 = "Munitions SMG"
+L.ammo_smg1 = "Munitions de SMG"
 L.ammo_buckshot = "Munitions de fusil à pompe"
-L.ammo_357 = "Munitions fusil"
-L.ammo_alyxgun = "Munitions Deagle"
-L.ammo_ar2altfire = "Munitions de pistolet de détresse"
-L.ammo_gravity = "Munitions de Poltergeist"
+L.ammo_357 = "Munitions de fusil"
+L.ammo_alyxgun = "Munitions de Deagle"
+L.ammo_ar2altfire = "Munitions du pistolet de détresse"
+L.ammo_gravity = "Munitions du Poltergeist"
 
 -- Round statut
 L.round_wait = "En attente"
@@ -465,30 +465,30 @@ L.round_post = "Terminé"
 
 -- Health, ammo and time area
 L.overtime = "PROLONGATIONS"
-L.hastemode = "MODE HÂTE"
+L.hastemode = "MODE HÂTIF"
 
 -- TargetID health statut
 L.hp_healthy = "En Bonne Santé"
 L.hp_hurt = "Touché"
 L.hp_wounded = "Blessé"
 L.hp_badwnd = "Grièvement Blessé"
-L.hp_death = "Presque Mort"
+L.hp_death = "Proche de la Mort"
 
 -- TargetID karma statut
-L.karma_max = "Honorable"
-L.karma_high = "Cru"
+L.karma_max = "Réputé"
+L.karma_high = "Honnnête"
 L.karma_med = "Gâchette facile"
 L.karma_low = "Dangereux"
 L.karma_min = "Irresponsable"
 
 -- TargetID misc
 L.corpse = "Corps"
-L.corpse_hint = "Appuyez sur {usekey} pour fouiller. {walkkey} + {usekey} pour une fouille approfondie."
+L.corpse_hint = "Appuyez sur {usekey} pour fouiller. {walkkey} + {usekey} pour fouiller discrètement."
 
 L.target_disg = "(DÉGUISÉ)"
 L.target_unid = "Corps non-identifié"
 
-L.target_credits = "Fouiller pour récupérer crédit non dépensés"
+L.target_credits = "Fouiller pour récupérer des crédit(s) non dépensés"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Usage unique"
@@ -504,7 +504,7 @@ L.mute_off = "Aucun mutés"
 
 -- Spectators and prop possession
 L.punch_title = "FRAPPE-O-METRE"
-L.punch_help = "Touche de déplacement ou saut : frappe l'objet. Accroupir : quitter l'objet."
+L.punch_help = "Touche de déplacement ou saut : déplace l'objet. Accroupir : quitter l'objet."
 L.punch_bonus = "Votre mauvais score a baissé votre limite frappe-o-metre de {num}"
 L.punch_malus = "Votre bon score a augmenté votre limite frappe-o-metre de {num} !"
 
@@ -525,7 +525,7 @@ Appuyez sur {menukey} pour recevoir votre équipement !]]
 L.info_popup_traitor_alone = [[
 Vous êtes un TRAITRE ! Vous n'avez pas d'amis traitres ce round.
 
-Tuez tous les autres pour gagner !
+Tuez tous le monde pour gagner !
 
 Appuyez sur {menukey} pour recevoir votre équipement !]]
 
@@ -542,16 +542,16 @@ Appuyez sur {menukey} pour recevoir votre équipement !]]
 L.name_kick = "Un joueur a été automatiquement expulsé pour avoir changé son nom pendant un round."
 
 L.idle_popup = [[
-Vous avez étiez absent {num} secondes et a donc été mis dans le mode Spectateur uniquement. Dans ce mode, vous n'apparaîtrez pas quand un nouveau round démarre.
+Vous avez étiez absent {num} secondes et donc été mis dans le mode Spectateur-only. Dans ce mode, vous n'apparaîtrez pas quand un nouveau round démarre.
 
 Vous pouvez Rejoindre/Quitter ce mode quand vous voulez en appuyant sur {helpkey} et en décochant la case adéquat dans l'onglet Options. Vous pouvez aussi choisir de le désactiver maintenant.]]
 
 L.idle_popup_close = "Ne rien faire"
-L.idle_popup_off = "Désactiver le mode maintenant"
+L.idle_popup_off = "Désactiver le mode Spectateur-only maintenant"
 
-L.idle_warning = "Attention : on dirait que vous n'êtes plus là, vous allez être déplacé vers les spectateurs à moins de montrer de l'activité !"
+L.idle_warning = "Attention : on dirait que vous n'êtes plus là, vous allez être déplacé en spectateurs sauf si vous montrer de l'activité !"
 
-L.spec_mode_warning = "Vous êtes en mode Spectateur et vous n'apparaîtrez pas quand un round commence. Pour désactivez ce mode, appuyez sur F1, allez vers Jouabilité -> Général -> Paramètres de jeu -> 'Mode Spectateur-only'."
+L.spec_mode_warning = "Vous êtes en mode Spectateur et vous n'apparaîtrez pas quand un round commencera. Pour désactivez ce mode, appuyez sur F1, allez vers Jouabilité -> Général -> Paramètres de jeu -> 'Mode Spectateur-only'."
 
 -- Tips panel
 L.tips_panel_title = "Astuces"
@@ -645,12 +645,12 @@ L.report_title = "Rapport du round"
 L.report_tab_hilite = "Temps forts"
 L.report_tab_hilite_tip = "Temps forts du round"
 L.report_tab_events = "Événements"
-L.report_tab_events_tip = "Journal des événements qui sont arrivés ce round"
+L.report_tab_events_tip = "Journal des événements qui sont arrivés durant ce round"
 L.report_tab_scores = "Scores"
-L.report_tab_scores_tip = "Points marqués par chaque joueur dans ce round seul"
+L.report_tab_scores_tip = "Points marqués par chaque joueur dans ce round"
 
 -- Event log saving
-L.report_save = "Sauv. .txt"
+L.report_save = "Sauv .txt"
 L.report_save_tip = "Sauvegarde le Journal des Événements vers un fichier texte"
 L.report_save_error = "Aucune donnée du Journal à sauvegarder."
 L.report_save_result = "Le Journal a été sauvegardé dans :"
@@ -663,7 +663,7 @@ L.hilite_win_innocents = "VICTOIRE DES INNOCENTS !"
 L.hilite_players1 = "Vous étiez {numplayers}, dont {numtraitors} traitres"
 L.hilite_players2 = "Vous étiez {numplayers}, dont un traitre"
 
-L.hilite_duration = "Le round a duré {time}"
+L.hilite_duration = "Le round a durée {time}"
 
 -- Columns
 L.col_time = "Temps"
@@ -671,8 +671,8 @@ L.col_event = "Événement"
 L.col_player = "Joueur"
 L.col_roles = "Rôle(s)"
 L.col_teams = "Team(s)"
-L.col_kills1 = "Meurtres innocents"
-L.col_kills2 = "Meurtres traitres"
+L.col_kills1 = "Meurtres des innocents"
+L.col_kills2 = "Meurtres des traitres"
 L.col_points = "Points"
 L.col_team = "Bonus d'équipe"
 L.col_total = "Points totaux"
@@ -726,12 +726,12 @@ L.ev_body = "{finder} a trouvé le corps de {victim}"
 L.ev_c4_plant = "{player} a planté un C4"
 L.ev_c4_boom = "Le C4 planté par {player} a explosé"
 L.ev_c4_disarm1 = "{player} a désamorcé le C4 planté par {owner}"
-L.ev_c4_disarm2 = "{player} a échoué au déminage du C4 planté par {owner}"
+L.ev_c4_disarm2 = "{player} a échoué au désamorçage du C4 planté par {owner}"
 L.ev_credit = "{finder} a trouvé {num} crédit(s) sur le corps de {player}"
 
-L.ev_start = "Les round a commencé"
-L.ev_win_traitor = "Les ignobles traitres remportent la victoire !"
-L.ev_win_inno = "Les adorable innocents remportent la victoire !"
+L.ev_start = "Le round a commencé"
+L.ev_win_traitor = "Les traitres remportent la victoire !"
+L.ev_win_inno = "Les innocents remportent la victoire !"
 L.ev_win_time = "Les traitres ont manqué de temps et ont perdu !"
 
 --- Awards/highlights
@@ -944,10 +944,10 @@ L.sb_sortby = "Trier Par :"
 
 --- 2018-07-24
 L.equip_tooltip_main = "Menu d'Équipement"
-L.equip_tooltip_radar = "Contrôle Radar"
-L.equip_tooltip_disguise = "Contrôle Déguisement"
-L.equip_tooltip_radio = "Contrôle Radar"
-L.equip_tooltip_xfer = "Transfert crédits"
+L.equip_tooltip_radar = "Contrôle du Radar"
+L.equip_tooltip_disguise = "Contrôle du Déguisement"
+L.equip_tooltip_radio = "Contrôle de la Radio"
+L.equip_tooltip_xfer = "Transfert de crédits"
 L.equip_tooltip_reroll = "Reroll Items"
 
 L.confgrenade_name = "Discombobulateur"
@@ -991,9 +991,9 @@ L.shop_settings_desc = "Changer les valeurs pour adapter les Random Shop ConVars
 
 L.bindings_new = "Nouvelle touche choisis pour {name}: {key}"
 
-L.hud_default_failed = "Le HUD {hudname} n'a pas été défini comme nouveau paramètre par défaut. Vous n'avez pas la permission de ça faire, ou bien ce HUD n'existe pas."
-L.hud_forced_failed = "Échec du chargement du HUD {hudname}. Vous n'avez pas la permission de le faire, ou bien ce HUD n'existe pas."
-L.hud_restricted_failed = "Echec de la restriction du HUD {hudname}. Vous n'avez pas la permission de le faire."
+L.hud_default_failed = "Le HUD {hudname} n'a pas été défini comme nouveau paramètre par défaut. Vous n'avez pas la permission , ou bien ce HUD n'existe pas."
+L.hud_forced_failed = "Échec du chargement du HUD {hudname}. Vous n'avez pas la permission , ou bien ce HUD n'existe pas."
+L.hud_restricted_failed = "Echec de la restriction du HUD {hudname}. Vous n'avez pas la permission."
 
 L.shop_role_select = "Sélectionnez un rôle"
 L.shop_role_selected = "{role}'s shop a été sélectionné!"
@@ -1006,9 +1006,9 @@ L.spec_help2 = "Pour quitter le mode spectateur, ouvrez le menu en appuyant sur 
 L.drop_ammo_prevented = "Quelque chose vous empêche de lâcher vos munitions."
 
 -- 2019-10-28
-L.target_c4 = "Appuyez sur [{usekey}] pour ouvrir le menu C4"
+L.target_c4 = "Appuyez sur [{usekey}] pour ouvrir le menu du C4"
 L.target_c4_armed = "Appuyez sur [{usekey}] pour désarmer le C4"
-L.target_c4_armed_defuser = "Appuyez sur [{usekey}] pour utiliser le désamorçage"
+L.target_c4_armed_defuser = "Appuyez sur [{usekey}] pour désamorcer le C4"
 L.target_c4_not_disarmable = "Vous ne pouvez pas désamorcer le C4 d'un autre Traitre, à moins qu'il soit mort"
 L.c4_short_desc = "Quelque chose de très explosif"
 
@@ -1016,9 +1016,9 @@ L.target_pickup = "Appuyez sur [{usekey}] pour ramasser"
 L.target_slot_info = "Emplacement: {slot}"
 L.target_pickup_weapon = "Appuyez sur [{usekey}] pour ramasser l'arme"
 L.target_switch_weapon = "Appuyez sur [{usekey}] pour changer d'arme"
-L.target_pickup_weapon_hidden = ", Appuyez sur [{usekey} + {walkkey}] pour le ramasser discrètement"
+L.target_pickup_weapon_hidden = ", Appuyez sur [{usekey} + {walkkey}] pour ramasser discrètement"
 L.target_switch_weapon_hidden = ", Appuyez sur [{usekey} + {walkkey}] pour changer discrètement"
-L.target_switch_weapon_nospace = "Il n'y a pas de slot d'inventaire disponible pour cette arme"
+L.target_switch_weapon_nospace = "Il n'y a pas de place disponible dans l'inventaire  pour cette arme"
 L.target_switch_drop_weapon_info = "Lâcher {name} du slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "Il n'y a pas d'arme a lâcher dans ce slot {slot}"
 
@@ -1028,7 +1028,7 @@ L.corpse_too_far_away = "Ce cadavre est trop loin."
 L.radio_pickup_wrong_team = "Vous ne pouvez pas prendre la radio d'une autre team."
 L.radio_short_desc = "Les sons des armes sont de la musique pour moi"
 
-L.hstation_subtitle = "Appuiez sur [{usekey}] pour recevoir ds soins."
+L.hstation_subtitle = "Appuiez sur [{usekey}] pour recevoir des soins."
 L.hstation_charge = "Charge restante de la station de soin: {charge}"
 L.hstation_empty = "Il n'y a plus de charge dans cette station de soins"
 L.hstation_maxhealth = "Votre santé est pleine"
@@ -1051,7 +1051,7 @@ L.tbut_team_toggle = "Appuyez sur [SHIFT + {walkkey} + {usekey}] pour basculer c
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Configuration actuelle:"
 L.tbut_intended_config = "Configuration prévue par le créateur de la carte:"
-L.tbut_admin_mode_only = "Uniquement visible pour vous parce que vous êtes un administrateur et que '{cv}' est réglé sur '1'"
+L.tbut_admin_mode_only = "Uniquement visible pour vous car vous êtes un administrateur et que '{cv}' est réglé sur '1'"
 L.tbut_allow = "Autoriser"
 L.tbut_prohib = "Interdire"
 L.tbut_default = "Par défaut"
@@ -1063,7 +1063,7 @@ L.door_close = "Appuyez sur [{usekey}] pour fermer la porte."
 L.door_locked = "Cette porte est verrouillé"
 
 -- 2020-02-11
-L.automoved_to_spec = "(AUTOMATED MESSAGE) Vous avez été transféré dans la team Spectateur car vous était inactif/AFK."
+L.automoved_to_spec = "(MESSAGE AUTOMATIQUE) Vous avez été transféré dans la team Spectateur car vous était inactif/AFK."
 L.mute_team = "{team} muet."
 
 -- 2020-02-16
@@ -1077,7 +1077,7 @@ L.help_title = "Aide et paramètres"
 
 L.menu_changelog_title = "Changelog"
 L.menu_guide_title = "TTT2 Guide"
-L.menu_bindings_title = "Key Bindings"
+L.menu_bindings_title = "Configuration"
 L.menu_language_title = "Langue"
 L.menu_appearance_title = "Apparence"
 L.menu_gameplay_title = "Jouabilité"
@@ -1087,9 +1087,9 @@ L.menu_administration_title = "Administration"
 L.menu_equipment_title = "Édité l'équipement"
 L.menu_shops_title = "Édité les Shops"
 
-L.menu_changelog_description = "Une liste de changements et de corrections dans les versions récentes"
-L.menu_guide_description = "Vous aide à démarrer avec TTT2 et vous explique certaines choses sur le gameplay, les rôles et d'autres choses"
-L.menu_bindings_description = "Lie les caractéristiques spécifiques de TTT2 et de ses addons à votre guise"
+L.menu_changelog_description = "Liste des changements et des corrections dans les versions récentes"
+L.menu_guide_description = "Vous aide à démarrer TTT2 et vous explique certaines notions sur le gameplay, les rôles et d'autres choses"
+L.menu_bindings_description = "Configurer les caractéristiques spécifiques de TTT2 et de ses addons"
 L.menu_language_description = "Sélectionnez la langue du jeu"
 L.menu_appearance_description = "Modifier l'apparence et la performance de votre UI"
 L.menu_gameplay_description = "Empêcher des rôles et modifier certains éléments"
@@ -1103,12 +1103,12 @@ L.submenu_guide_gameplay_title = "Jouabilité"
 L.submenu_guide_roles_title = "Rôles"
 L.submenu_guide_equipment_title = "Équipement"
 
-L.submenu_bindings_bindings_title = "Bindings"
+L.submenu_bindings_bindings_title = "Configuration des touches"
 
 L.submenu_language_language_title = "Langue"
 
 L.submenu_appearance_general_title = "Général"
-L.submenu_appearance_hudswitcher_title = "HUD Switcher"
+L.submenu_appearance_hudswitcher_title = "Paramètres du HUD"
 L.submenu_appearance_vskin_title = "VSkin"
 L.submenu_appearance_targetid_title = "TargetID"
 L.submenu_appearance_shop_title = "Paramètres des Shop"
@@ -1119,12 +1119,12 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Autre"
 
 L.submenu_gameplay_general_title = "Général"
-L.submenu_gameplay_avoidroles_title = "Blacklistage de role"
+L.submenu_gameplay_avoidroles_title = "Blacklistage de rôle"
 
-L.submenu_administration_hud_title = "HUD Settings"
+L.submenu_administration_hud_title = "Paramètres HUD"
 L.submenu_administration_random_shop = "Shop Aléatoire"
 
-L.help_color_desc = "Si ce paramètre est activé, il est possible de choisir une couleur globale qui sera utilisée pour le contour du targetID et le réticule."
+L.help_color_desc = "Si ce paramètre est activé, il est possible de choisir une couleur qui sera utilisée pour le contour du targetID et du réticule."
 L.help_scale_factor = "L'échelle influence tous les éléments de l'UI (HUD, vgui et targetID). Il est automatiquement mis à jour si la résolution de l'écran est modifiée. La modification de cette valeur entraîne la réinitialisation du HUD!"
 L.help_hud_game_reload = "Le HUD n'est pas disponible pour le moment. Le jeu doit être rechargé."
 L.help_hud_special_settings = "Voici les paramètres spécifiques de ce HUD."
@@ -1157,7 +1157,7 @@ L.label_shop_show_custom = "Afficher le marqueur d'objet personnalisé"
 L.label_shop_show_fav = "Afficher le marqueur d'article favoris"
 L.label_crosshair_enable = "Activer le réticule"
 L.label_crosshair_gap_enable = "Activer le réticule centrer"
-L.label_crosshair_gap = "Personnalisé l'écartement du Réticule centrer"
+L.label_crosshair_gap = "Personnalisé l'écartement du réticule centrer"
 L.label_crosshair_opacity = "Opacité du réticule"
 L.label_crosshair_ironsight_opacity = "Opacité du réticule du viseur"
 L.label_crosshair_size = "Taille du réticule"
@@ -1199,23 +1199,23 @@ L.label_hud_basecolor = "Couleur de base"
 
 L.label_menu_not_populated = "Ce sous-menu ne contient aucun contenu."
 
-L.header_bindings_ttt2 = "TTT2 Bindings"
-L.header_bindings_other = "Autre Bindings"
+L.header_bindings_ttt2 = "Configuration des touches TTT2"
+L.header_bindings_other = "Autre touches"
 L.header_language = "Paramètres de langue"
-L.header_global_color = "Select Global Color"
-L.header_hud_select = "Sélectionnez un HUD"
+L.header_global_color = "Sélection de couleur"
+L.header_hud_select = "Sélectionner un HUD"
 L.header_hud_customize = "Personnaliser le HUD"
-L.header_vskin_select = "Sélectionnez et personnalisez le VSkin"
+L.header_vskin_select = "Sélectionner et personnaliser le VSkin"
 L.header_targetid = "Paramètres TargetID"
-L.header_shop_settings = "Paramètres du shop d'équipement"
+L.header_shop_settings = "Paramètres du shop d'Équipement"
 L.header_shop_layout = "Mise en page de la liste des objets"
 L.header_shop_marker = "Paramètres des marqueurs d'objet"
 L.header_crosshair_settings = "Réglages du réticule"
-L.header_damage_indicator = "Paramètres des indicateurs de dégats"
+L.header_damage_indicator = "Paramètres de l'indicateurs de dégats"
 L.header_performance_settings = "Paramètres de performance"
 L.header_interface_settings = "Paramètres de l'interface"
 L.header_gameplay_settings = "Paramètres de jeu"
-L.header_roleselection = "Activez/Desactiver l'attribution des rôles"
+L.header_roleselection = "Activez/Desactiver l'attribution de certains rôles"
 L.header_hud_administration = "Sélectionnez le HUDs par Défaut et Obligatoire"
 L.header_hud_enabled = "Activer/Désactiver HUDs"
 
@@ -1223,9 +1223,9 @@ L.button_menu_back = "Retour"
 L.button_none = "Aucun"
 L.button_press_key = "Appuyez sur une touche"
 L.button_save = "Sauvegarder"
-L.button_reset = "RÉinitialiser"
+L.button_reset = "Réinitialiser"
 L.button_close = "Fermer"
-L.button_hud_editor = "HUD Éditeur"
+L.button_hud_editor = "Éditeur d'HUD"
 
 -- 2020-04-20
 L.item_speedrun = "Speedrun"
@@ -1239,7 +1239,7 @@ L.item_no_fire_damage_desc = [[Vous immunise contre les dégâts causés par le 
 L.item_no_hazard_damage = "Pas de dégâts dus au radiations"
 L.item_no_hazard_damage_desc = [[Vous immunise contre les dégâts causés par le poison, les radiations et les acides.]]
 L.item_no_energy_damage = "Pas de dégâts énergétiques"
-L.item_no_energy_damage_desc = [[vous immunise contre les dégâts énergétiques tels que les lasers, le plasma et l'électricité.]]
+L.item_no_energy_damage_desc = [[Vous immunise contre les dégâts énergétiques tels que les lasers, le plasma et l'électricité.]]
 L.item_no_prop_damage = "Pas de dégâts dus au props"
 L.item_no_prop_damage_desc = [[Vous immunise contre les dégâts causés par les props.]]
 L.item_no_drown_damage = "Pas de dégâts de noyade"
@@ -1264,7 +1264,7 @@ L.door_destructible = "La porte est destructible ({health}HP)"
 -- 2020-05-28
 L.confirm_detective_only = "Seuls les détectives peuvent confirmer les corps"
 L.inspect_detective_only = "Seuls les détectives peuvent inspecter les corps"
-L.corpse_hint_no_inspect = "Seuls les inspecteurs peuvent fouiller ce corps."
+L.corpse_hint_no_inspect = "Seuls les détectives peuvent fouiller ce corps."
 L.corpse_hint_inspect_only = "Appuyez sur [{usekey}] pour effectuer une recherche. Seuls les détectives peuvent confirmer le corps."
 L.corpse_hint_inspect_only_credits = "Appuyez sur [{usekey}] pour recevoir des crédits. Seuls les détectives peuvent fouiller ce corps."
 
@@ -1273,7 +1273,7 @@ L.label_bind_disguiser = "Activer/Désactiver le déguisement"
 
 -- 2020-06-24
 L.dna_help_primary = "Prélever un échantillon d'ADN"
-L.dna_help_secondary = "Changer le slot de l'ADN"
+L.dna_help_secondary = "Changer la place de l'ADN"
 L.dna_help_reload = "Supprimer un échantillon"
 
 L.binoc_help_pri = "Identifier un corps."
@@ -1286,11 +1286,11 @@ L.decoy_help_pri = "Planter le leurre."
 -- 2020-08-07
 L.pickup_error_spec = "Vous ne pouvez pas prendre cela en tant que spectateur."
 L.pickup_error_owns = "Vous ne pouvez pas prendre ça parce que vous avez déjà cette arme."
-L.pickup_error_noslot = "Vous ne pouvez pas prendre cela car vous n'avez pas de slot libre."
+L.pickup_error_noslot = "Vous ne pouvez pas prendre cela car vous n'avez pas de place libre."
 
 -- 2020-11-02
---L.lang_server_default = "Server Default"
---L.help_lang_info = [[
---This translation is {coverage}% complete with the english language taken as a default reference.
+L.lang_server_default = "Langue du serveur par défaut"
+L.help_lang_info = [[
+Cette traduction est complète à {coverage}%.
 
---Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+Gardez à l'esprit que les traductions sont réalisées par la communauté. N'hésitez pas à y contribuer si il y a quelque chose qui manque ou si il y a des erreurs.]]
