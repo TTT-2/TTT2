@@ -7,7 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new vgui system
-  - introduced new development interfaces to easily create menues and settings for addons
+  - Introduced new development interfaces to easily create menues and settings for addons
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Added `drawsc` library featuring scalable draw functions
@@ -15,15 +15,20 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
 - Added a new event system
-  - added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
-  - added a hook `TTT2AddedEvent` that is called after an event was added
+  - Added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
+  - Added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 - Added French translation (by @MisterClems)
+- Added a few table module functions
+- Added a few LANG module functions
 - Added a new classbuilder that can be used to create classes from files
+- Added a `targetid` library, that can be used to draw TargetIDs for entities
+- Added a hook `TTT2CanTransferCredits` that is called before credits are transferred
+- Credits can now be transferred across teams and from roles whom the recipient does not know
 
 ### Changed
 
-- the F1 menu is completely overhauled
+- The F1 menu is completely overhauled
 - Cleaned up language files, they are now identical on a line by line comparison
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
@@ -35,13 +40,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed `TTTCanPickupAmmo` hook, return `false` to cancel pickup
 - Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
 - Changed all C4 hooks to be cancelable
+- Changed the language identifiers to generic english names
 - moved functions from sh_util into their respective library files
+- Moved functions from sh_util into their respective library files
+- Updated the list of troublesome addons used by the addonchecker
 
 ### Fixed
 
 - Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
 - Fixed defuser only working for detectives
 - Fixed a roleselection bug, where forced roles would not be deducted from the available roles
+- Fixed a credit award bug, where detectives would receive a pointless notification about being awarded with 0 credits
+- Fixed a karma bug, where damage would still be reduced even though the karma system was disabled
+- Fixed a roleselection bug, where invalid layers led to skipping the next layer too
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 
@@ -52,7 +63,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 - Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
-- Added a `targetid` library, that can be used to draw TargetIDs for entities
 
 ### Changed
 

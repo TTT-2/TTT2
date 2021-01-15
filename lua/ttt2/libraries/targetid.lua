@@ -23,8 +23,8 @@ local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 local key_params = {}
 
 -- Convars for targetid
-local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
-local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+local cvDeteOnlyConfirm
+local cvDeteOnlyInspect
 
 -- Materials for targetid
 local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
@@ -56,6 +56,9 @@ function targetid.Initialize()
 		usekey = Key("+use", "USE"),
 		walkkey = Key("+walk", "WALK")
 	}
+
+	cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+	cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 end
 
 ---

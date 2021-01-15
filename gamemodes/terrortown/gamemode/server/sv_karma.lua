@@ -93,6 +93,11 @@ local function ttt_karma_max(cvar, old, new)
 end
 cvars.AddChangeCallback("ttt_karma_max", ttt_karma_max)
 
+local function ttt_karma(cvar, old, new)
+	SetGlobalBool("ttt_karma", tobool(new))
+end
+cvars.AddChangeCallback("ttt_karma", ttt_karma)
+
 ---
 -- Initializes the KARMA System
 -- @realm server

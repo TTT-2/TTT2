@@ -1,6 +1,13 @@
 -- Japanese language strings
 
-local L = LANG.CreateLanguage("日本語")
+local L = LANG.CreateLanguage("ja")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- - does not exist -
+L.__alias = "日本語"
+
+L.lang_name = "日本語 (Japanese)"
 
 -- General text used in various places
 L.traitor = "Traitor"
@@ -116,9 +123,7 @@ L.radar_charging = "Radarはまだチャージしています!"
 -- Transfer tab in equipment menu
 L.xfer_name = "譲渡"
 L.xfer_menutitle = "クレジット譲渡."
-L.xfer_no_credits = "あなたはあげられるだけのクレジットを持っていません."
 L.xfer_send = "クレジットを送る."
-L.xfer_help = "あなたは仲間の{role}にクレジットを渡すことだけできます."
 
 L.xfer_no_recip = "受取人が妥当ではないのでクレジットの移動は中断しました."
 L.xfer_no_credits = "渡すクレジットが不足しています."
@@ -291,8 +296,6 @@ L.c4_status_disarmed = "解除済み"
 -- Visualizer
 L.vis_name = "Visualizer(可視化装置)"
 L.vis_hint = "{usekey}を押して拾う(Detectiveのみ)."
-
-L.vis_help_pri = "{primaryfire}で起動したデバイスを落とす."
 
 L.vis_desc = [[
 犯行シーンを可視化するデバイスです.
@@ -1283,3 +1286,10 @@ L.decoy_help_pri = "Decoyを設置する."
 L.pickup_error_spec = "あなたは観戦者なのでこれを拾うことはできません."
 L.pickup_error_owns = "あなたはすでにこの武器を所持しているため拾えません."
 L.pickup_error_noslot = "あなたはスロットに空きがないためこれは拾えません."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
