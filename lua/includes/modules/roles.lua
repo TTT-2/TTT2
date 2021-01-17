@@ -360,7 +360,7 @@ function GetShopRoles()
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		if v.isAbstract or v == NONE or v == INNOCENT then continue end
+		if v.isAbstract or v == NONE then continue end
 
 		local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
 		if shopFallback ~= SHOP_DISABLED then
