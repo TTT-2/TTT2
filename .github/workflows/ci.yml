@@ -1,7 +1,7 @@
 name: CI
 
 env:
-  GLUALINT_VERSION: 1.16.4
+  GLUALINT_VERSION: 1.17.0
   NEODOC_VERSION: 0.1.4
 
 # Controls when the action will run. Triggers the workflow on push or pull request
