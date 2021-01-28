@@ -41,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - moved functions from sh_util into their respective library files
 - Moved functions from sh_util into their respective library files
 - Updated the list of troublesome addons used by the addonchecker
+- Updated German translation (by @Creyox)
 
 ### Fixed
 
