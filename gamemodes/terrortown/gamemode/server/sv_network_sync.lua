@@ -153,6 +153,7 @@ end
 --
 -- @param any|table path The path this meta data is associated with (already includes the needed keywords)
 -- @param table|nil metadata The metadata table
+-- @param Player|Entity ply The player/entity to set the value on
 function ttt2net.SetMetaDataOnPlayer(path, metadata, ply)
 	local tmpPath
 
@@ -319,6 +320,7 @@ end
 -- it will do the same as {@ttt2net.RemoveOverrides}.
 --
 -- @param table path The path to clear out all overrides on.
+-- @param Player|Entity ply The player/entity object that will be cleared
 function ttt2net.RemoveOverridesOnPlayer(path, ply)
 	local tmpPath
 
@@ -839,8 +841,9 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 --
 -- @param any|table path The path to set the value for
 -- @param bool|nil value The value to set
-function plymeta:TTT2NETSetBool(path, value)
-	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self)
+-- @param Entity|nil client The client/entity to set this value for (as an override for the default value)
+function plymeta:TTT2NETSetBool(path, value, client)
+	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self, client)
 end
 
 ---
@@ -849,11 +852,12 @@ end
 -- @param any|table path The path to set the value for
 -- @param number|nil value The value to set
 -- @param number|nil bits The bits that this number needs to be stored (optional, otherwise a default of 32 is used)
-function plymeta:TTT2NETSetInt(path, value, bits)
+-- @param Entity|nil client The client/entity to set this value for (as an override for the default value)
+function plymeta:TTT2NETSetInt(path, value, bits, client)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
 		bits = bits
-	}, value, self)
+	}, value, self, client)
 end
 
 ---
@@ -862,12 +866,13 @@ end
 -- @param any|table path The path to set the value for
 -- @param number|nil value The unsigned number value to set
 -- @param number|nil bits The bits that this number needs to be stored (optional, otherwise a default of 32 is used)
-function plymeta:TTT2NETSetUInt(path, value, bits)
+-- @param Entity|nil client The client/entity to set this value for (as an override for the default value)
+function plymeta:TTT2NETSetUInt(path, value, bits, client)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
 		unsigned = true,
 		bits = bits
-	}, value, self)
+	}, value, self, client)
 end
 
 ---
@@ -875,8 +880,9 @@ end
 --
 -- @param any|table path The path to set the value for
 -- @param float|nil value The value to set
-function plymeta:TTT2NETSetFloat(path, value)
-	ttt2net.SetOnPlayer(path, { type = "float" }, value, self)
+-- @param Entity|nil client The client/entity to set this value for (as an override for the default value)
+function plymeta:TTT2NETSetFloat(path, value, client)
+	ttt2net.SetOnPlayer(path, { type = "float" }, value, self, client)
 end
 
 ---
@@ -884,6 +890,7 @@ end
 --
 -- @param any|table path The path to set the value for
 -- @param string|nil value The value to set
-function plymeta:TTT2NETSetString(path, value)
-	ttt2net.SetOnPlayer(path, { type = "string" }, value, self)
+-- @param Entity|nil client The client/entity to set this value for (as an override for the default value)
+function plymeta:TTT2NETSetString(path, value, client)
+	ttt2net.SetOnPlayer(path, { type = "string" }, value, self, client)
 end

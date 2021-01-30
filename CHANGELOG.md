@@ -37,7 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - it basically works the same as the native file loader
   - there are three subfolders: `client`, `server` and `shared`
   - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
-- Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)
+- Added Spanish version for base addon (by @Tekiad and @DennisWolfgang)
 - Added Chinese Simplified translation (by @TheOnly8Z)
 - Added double-click buying
 - Added a default avatar for players and an avatar for bots
