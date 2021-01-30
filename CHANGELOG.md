@@ -42,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
 - Updated English localization (by @Satton2)
+- Updated German translation (by @Creyox)
 
 ### Fixed
 
