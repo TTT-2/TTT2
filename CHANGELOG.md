@@ -51,6 +51,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a credit award bug, where detectives would receive a pointless notification about being awarded with 0 credits
 - Fixed a karma bug, where damage would still be reduced even though the karma system was disabled
 - Fixed a roleselection bug, where invalid layers led to skipping the next layer too
+- Fixed Magneto Stick ragdoll pinning instructions not showing for innocents when `ttt_ragdoll_pinning_innocents` is enabled
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 
