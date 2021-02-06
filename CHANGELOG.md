@@ -12,9 +12,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Added `drawsc` library featuring scalable draw functions
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
-- Updated Simplified Chinese localization (by @TheOnly8Z)
-- Updated Italian localization (by @ThePlatynumGhost)
-- Updated Russian localization (by @scientistnt and @Satton2)
 - Added a new event system
   - Added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
   - Added a hook `TTT2AddedEvent` that is called after an event was added
@@ -42,6 +39,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - moved functions from sh_util into their respective library files
 - Moved functions from sh_util into their respective library files
 - Updated the list of troublesome addons used by the addonchecker
+- Updated Simplified Chinese localization (by @TheOnly8Z)
+- Updated Italian localization (by @ThePlatynumGhost)
+- Updated English localization (by @Satton2)
+- Updated Russian localization (by @scientistnt and @Satton2)
 - Updated German translation (by @Creyox)
 
 ### Fixed
