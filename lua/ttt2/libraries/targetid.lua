@@ -253,7 +253,7 @@ function targetid.HUDDrawTargetIDWeapons(tData)
 	tData:SetTitle(TryT(weapon_name) .. " [" .. ParT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
 
 	local key_params_wep = {
-		usekey = string.upper(input.GetKeyName(bind.Find("ttt2_weaponswitch"))),
+		usekey = string.upper(input.GetKeyName(bind.Find("ttt2_weaponswitch")) or ""),
 		walkkey = Key("+walk", "WALK")
 	}
 
