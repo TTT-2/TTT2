@@ -801,6 +801,41 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 09, day = 28}))
 
+	AddChange("TTT2 Base - v0.8.0b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added new vgui system with new F1 menu</li>
+			<li>Introduced a global scale factor based on screen resolution to scale HUD elements accordingly</li>
+			<li>Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded</li>
+			<li>Added Drag&Drop role layering VGUI (preview), accessible with the console command <i>ttt2_edit_rolelayering</i></li>
+			<li>Added a new event system</li>
+			<li>Credits can now be transferred across teams and from roles whom the recipient does not know</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>TargetID text is now scaled with the global scale factor</li>
+			<li>Removed C4 defuse restriction for teammates</li>
+			<li>Changed the language identifiers to generic english names</li>
+			<li>Updated Simplified Chinese localization (by @TheOnly8Z)</li>
+			<li>Updated Italian localization (by @ThePlatynumGhost)</li>
+			<li>Updated English localization (by @Satton2)</li>
+			<li>Updated Russian localization (by @scientistnt and @Satton2)</li>
+			<li>Updated German translation (by @Creyox)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory</li>
+			<li>Fixed a roleselection bug, where forced roles would not be deducted from the available roles</li>
+			<li>Fixed a credit award bug, where detectives would receive a pointless notification about being awarded with 0 credits</li>
+			<li>Fixed a karma bug, where damage would still be reduced even though the karma system was disabled</li>
+			<li>Fixed a roleselection bug, where invalid layers led to skipping the next layer too</li>
+			<li>Fixed Magneto Stick ragdoll pinning instructions not showing for innocents when <i>ttt_ragdoll_pinning_innocents</i> is enabled</li>
+			<li>Fixed a bug where the targetID info broke if the pickup key is unbound</li>
+		</ul>
+	]], os.time({year = 2021, month = 02, day = 06}))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
