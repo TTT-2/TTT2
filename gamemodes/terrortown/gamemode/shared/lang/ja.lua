@@ -1,19 +1,19 @@
--- Japanese language strings
+---- Japanese language strings
 
-local L = LANG.CreateLanguage("ja")
+local L = LANG.CreateLanguage("日本語")
 
--- Compatibility language name that might be removed soon.
--- the alias name is based on the original TTT language name:
--- - does not exist -
+
+
+
 L.__alias = "日本語"
 
 L.lang_name = "日本語 (Japanese)"
 
 -- General text used in various places
-L.traitor = "Traitor"
-L.detective = "Detective"
-L.innocent = "Innocent"
-L.last_words = "最期の言葉"
+L.traitor    = "Traitor"
+L.detective  = "Detective"
+L.innocent   = "Innocent"
+L.last_words = "遺言"
 
 L.terrorists = "テロリスト"
 L.spectators = "観戦者"
@@ -22,53 +22,53 @@ L.noteam = "無所属"
 L.innocents = "Innocent陣営"
 L.traitors = "Traitor陣営"
 
--- Round status messages
-L.round_minplayers = "新しいラウンドを開始するのに十分なプレイヤーがいません…"
-L.round_voting = "投票中, {num}秒まで新しいラウンドを延期しています."
-L.round_begintime = "{num}秒内に新しいラウンドを開始します. 準備してくださいね."
-L.round_selected = "Traitorが選ばれました."
-L.round_started = "ラウンドを開始します!"
-L.round_restart = "ラウンドは管理者によってリスタートされます."
+--- Round status messages
+L.round_minplayers = "ラウンドを開始するのに必要なプレイヤーがいないようだ…"
+L.round_voting     = "投票中のため, {num}秒まで新しいラウンドを延期中…"
+L.round_begintime  = "{num}秒内にラウンドを開始する。早めに準備をしよう。"
+L.round_selected   = "Traitorが選ばれた。"
+L.round_started    = "ラウンド開始。"
+L.round_restart    = "ラウンドは管理者によってリスタートされた。"
 
-L.round_traitors_one = "Traitorさん, あなたは一人です."
-L.round_traitors_more = "Traitor達、力を合わせて彼らを皆殺しにしましょう."
+L.round_traitors_one  = "Traitorよ, 一人でも頑張れ。"
+L.round_traitors_more = "Traitor達よ、力を合わせて彼らを皆殺しにしよう。"
 
-L.win_time = "時間切れです. Traitorは負けました."
-L.win_traitors = "Traitorが勝ちました!"
-L.win_innocents = "Traitorは倒されました!"
-L.win_bees = "蜂が勝ちました! (つまり引き分け)"
-L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみましょう."
+L.win_time         = "時間切れ。 Traitorの敗北だ。"
+L.win_traitors      = "Traitorの勝利!"
+L.win_innocents     = "Innocentの勝利!"
+L.win_bees = "蜂の勝利! (つまり引き分け)"
+L.win_showreport   = "さあ{num}秒の間ラウンドレポートを見てみよう。"
 
-L.limit_round = "ラウンドリミットに達しました. {mapname}がすぐにロードされるでしょう."
-L.limit_time = "タイムリミットに達しました. {mapname}がすぐにロードされるでしょう."
-L.limit_left = "{mapname}にマップ変更するまで{num}ラウンドないし{time}分残っています."
+L.limit_round      = "ラウンドリミットに達した。もうすぐロードされるだろう。"
+L.limit_time       = "タイムリミットに達した。もうすぐロードされるだろう。"
+L.limit_left       = "マップ変更するまで{num}ラウンドないし{time}分残っている。"
 
--- Credit awards
---L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
-L.credit_kill = "あなたは{role}を始末したため{num}クレジットを受け取りました."
+--- Credit awards
+L.credit_all   = "任務遂行により、{num}個のクレジットを受け取った。"
+L.credit_kill      = "{role}を始末したため{num}クレジットを受け取った。"
 
--- Karma
-L.karma_dmg_full = "あなたのカルマは{amount}なのでこのラウンドでは最大のダメージを与えられますよ!"
-L.karma_dmg_other = "あなたのカルマは{amount}です. 結果としてあなたの与える全てのダメージは{num}%減少します."
+--- Karma
+L.karma_dmg_full   = "今のカルマは{amount}なので、与えられるダメージは通常だ。"
+L.karma_dmg_other  = "今のカルマは{amount}なので、与えられるダメージは{num}%減少してしまった。"
 
--- Body identification messages
-L.body_found = "{finder}は{victim}の死体を見つけました. {role}"
---L.body_found_team = "{finder} found the body of {victim}. {role} ({team})"
+--- Body identification messages
+L.body_found       = "{finder}は{victim}の死体を見つけた. {role}"
+L.body_found_team = "{finder}は{victim}の死体を見つけた. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_t = "彼はTraitorでした!"
-L.body_found_d = "彼はDetectiveでした."
-L.body_found_i = "彼はInnocentでした."
+L.body_found_traitor     = "彼はTraitorだった!"
+L.body_found_det     = "彼はDetectiveだったようだ…"
+L.body_found_inno     = "彼はInnocentだったようだ…"
 
-L.body_confirm = "{finder}は{victim}の死を確認しました."
+L.body_confirm     = "{finder}は{victim}の死を確認しました."
 
-L.body_call = "{player}はDetectiveを{victim}の死体の場所に呼びました!"
-L.body_call_error = "あなたはDetectiveを呼ぶ前にこのプレイヤーの死を確認しなくてはなりません!"
+L.body_call        = "{player}はDetectiveを{victim}の死体の場所に呼んだ!"
+L.body_call_error  = "Detectiveを呼ぶ前にこのプレイヤーの死の確認が必要だ!"
 
-L.body_burning = "痛っ! この死体は燃えていますよ!"
-L.body_credits = "あなたは死体から{num}クレジットを見つけました!"
+L.body_burning     = "熱っ! この死体は燃えてるぞ!"
+L.body_credits     = "死体から{num}クレジットを拾った!"
 
--- Menus and windows
+--- Menus and windows
 L.close = "閉じる"
 L.cancel = "キャンセル"
 
@@ -77,384 +77,417 @@ L.next = "次へ"
 L.prev = "前へ"
 
 -- Equipment buying menu
-L.equip_title = "装備品"
-L.equip_tabtitle = "装備品購入"
+L.equip_title     = "アイテム"
+L.equip_tabtitle  = "アイテム購入"
 
-L.equip_status = "Ordering status"
-L.equip_cost = "あなたは残り{num}クレジット持っています."
-L.equip_help_cost = "いずれの装備も購入費用は1クレジットです."
+L.equip_status    = "注文状況"
+L.equip_cost      = "残り{num}クレジット"
+L.equip_help_cost = "いずれの装備も購入費用は1クレジットだ(設定でクレジット消費数を設定できる)。"
 
-L.equip_help_carry = "あなたが持っていない物だけ買うことができます."
-L.equip_carry = "あなたはこの装備を持つことができます."
-L.equip_carry_own = "あなたは既にこのアイテムを持っています."
-L.equip_carry_slot = "あなたは既にスロット{slot}の武器を持っています."
---L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
+L.equip_help_carry = "自分が所持してないものだけだけ買うことができるぞ。"
+L.equip_carry      = "この装備は持つことが可能だ。"
+L.equip_carry_own  = "既にこのアイテムを持っているぞ。"
+L.equip_carry_slot = "既にスロット{slot}の武器を持っているぞ。"
+L.equip_carry_minplayers = "この武器を使うためには今のゲーム内の最大人数を満たすまで使えない。"
 
-L.equip_help_stock = "いくつかのアイテムはラウンド毎に1つしか買えません."
-L.equip_stock_deny = "このアイテムはもう在庫がありません."
-L.equip_stock_ok = "このアイテムは在庫があります."
+L.equip_help_stock = "いくつかのアイテムはラウンド毎に1つしか買えない。"
+L.equip_stock_deny = "このアイテムはもう在庫がない。"
+L.equip_stock_ok   = "このアイテムはまだ在庫がある。"
 
-L.equip_custom = "このサーバーはカスタムアイテムを追加しました."
+L.equip_custom     = "このサーバーにカスタムアイテムを追加した。"
 
-L.equip_spec_name = "名前"
-L.equip_spec_type = "タイプ"
-L.equip_spec_desc = "説明"
+L.equip_spec_name  = "名前"
+L.equip_spec_type  = "タイプ"
+L.equip_spec_desc  = "説明"
 
-L.equip_confirm = "装備品購入"
+L.equip_confirm    = "装備品購入"
 
 -- Disguiser tab in equipment menu
-L.disg_name = "Disguiser(変装装置)"
+L.disg_name      = "Disguiser(変装装置)"
 L.disg_menutitle = "Disguiseコントロール"
-L.disg_not_owned = "あなたはDisguiserを持っていません!"
-L.disg_enable = "変装する."
+L.disg_not_owned = "Disguiserを持っていないぞ!"
+L.disg_enable    = "変装完了。"
 
-L.disg_help1 = "変装(Disguise)が有効な時, 誰かがあなたを見てもあなたの名前, ヘルスとカルマを表示しません. 加えて, あなたはDetectiveのレーダーからも隠されるでしょう."
-L.disg_help2 = "テンキーのEnterを押すとメニューを使用せずに変装を切り替えます. 開発者コンソールで'ttt_toggle_disguise'を異なるキーに割り当てることもできます."
+L.disg_help1     = "変装(Disguise)している時, 誰かがあなたを見てもあなたの名前, ヘルスとカルマを表示はされない。 加えて, あなたはDetectiveのレーダーにも反応されないだろう。"
+L.disg_help2     = "テンキーのEnterを押すとCキーからのメニューを使用せずに変装を切り替えできる。 開発者コンソールで'ttt_toggle_disguise'を異なるキーに割り当てることが可能だ。"
 
 -- Radar tab in equipment menu
-L.radar_name = "Radar(レーダー)"
+L.radar_name      = "Radar(レーダー)"
 L.radar_menutitle = "Radarコントロール"
-L.radar_not_owned = "あなたはRadarを持っていません!"
-L.radar_scan = "スキャンを実行."
-L.radar_auto = "自動で繰り返し実行."
-L.radar_help = "スキャン結果を{num}秒間表示し, その後Radarはリチャージして再び使えるようになります."
-L.radar_charging = "Radarはまだチャージしています!"
+L.radar_not_owned = "Radarはまだ持っていないぞ!"
+L.radar_scan      = "スキャンを実行。"
+L.radar_auto      = "自動で繰り返し実行。"
+L.radar_help      = "スキャン結果を{num}秒間表示し, その後Radarは再び新しい位置を教えてくれるぞ!"
+L.radar_charging  = "Radarはまだチャージ中だ!"
 
 -- Transfer tab in equipment menu
-L.xfer_name = "譲渡"
-L.xfer_menutitle = "クレジット譲渡."
-L.xfer_send = "クレジットを送る."
+L.xfer_name       = "譲渡"
+L.xfer_menutitle  = "クレジット譲渡"
+L.xfer_send       = "クレジット送信"
 
-L.xfer_no_recip = "受取人が妥当ではないのでクレジットの移動は中断しました."
-L.xfer_no_credits = "渡すクレジットが不足しています."
-L.xfer_success = "クレジットの{player}への受け渡しを完了しました."
-L.xfer_received = "{player}はあなたに{num}クレジットを渡しました."
+L.xfer_no_recip   = "受取人が妥当ではないのでクレジットの移動は中断された。"
+L.xfer_no_credits = "渡すクレジットが不足している。"
+L.xfer_success    = "クレジットの{player}への受け渡しを完了した。"
+L.xfer_received   = "{player}はあなたに{num}クレジットを渡した。"
 
 -- Radio tab in equipment menu
-L.radio_name = "Radio(ラジオ)"
-L.radio_help = "音を再生するためにボタンをクリックしましょう."
-L.radio_notplaced = "再生するためにはRadioを置かなくてはなりません."
+L.radio_name      = "Radio(ラジオ)"
+L.radio_help      = "音を再生するためにボタンをクリックしよう。"
+L.radio_notplaced = "再生するためにはRadioを置かなくてはならないぞ。"
 
 -- Radio soundboard buttons
-L.radio_button_scream = "悲鳴"
-L.radio_button_expl = "爆発音"
-L.radio_button_pistol = "Pistol発砲音"
-L.radio_button_m16 = "M16発砲音"
-L.radio_button_deagle = "Deagle発砲音"
-L.radio_button_mac10 = "MAC10発砲音"
+L.radio_button_scream  = "悲鳴"
+L.radio_button_expl    = "爆発音"
+L.radio_button_pistol  = "Pistol発砲音"
+L.radio_button_m16     = "M16発砲音"
+L.radio_button_deagle  = "Deagle発砲音"
+L.radio_button_mac10   = "MAC10発砲音"
 L.radio_button_shotgun = "Shotgun発砲音"
-L.radio_button_rifle = "Rifle発砲音"
-L.radio_button_huge = "H.U.G.E発砲音"
-L.radio_button_c4 = "C4警告音"
-L.radio_button_burn = "燃焼音"
-L.radio_button_steps = "足音"
+L.radio_button_rifle   = "Rifle発砲音"
+L.radio_button_huge    = "H.U.G.E発砲音"
+L.radio_button_c4      = "C4警告音"
+L.radio_button_burn    = "燃焼音"
+L.radio_button_steps   = "足音"
 
 -- Intro screen shown after joining
-L.intro_help = "このゲームは始めてですか? F1を押すとインストラクションを見れますよ!"
+L.intro_help     = "このゲームは始めてかな? F1を押すとインストラクションを見れるぞ!"
 
 -- Radiocommands/quickchat
-L.quick_title = "クイックチャットキー"
+L.quick_title   = "クイックチャットキー"
 
-L.quick_yes = "わかった."
-L.quick_no = "ダメだ."
-L.quick_help = "助けてくれ!"
-L.quick_imwith = "{player}と一緒にいるぞ."
-L.quick_see = "{player}を見ているぞ."
-L.quick_suspect = "{player}が怪しい動きをしているぞ."
+L.quick_yes     = "わかった。"
+L.quick_no      = "ダメだ。"
+L.quick_help    = "助けてくれ!"
+L.quick_imwith  = "{player}と一緒にいるぞ。"
+L.quick_see     = "{player}を監視中だ。"
+L.quick_suspect = "{player}が怪しい動きをしているぞ。"
 L.quick_traitor = "{player}はTraitorだ!"
-L.quick_inno = "{player}はInnocentだな."
-L.quick_check = "まだ生きている奴はいるか?"
+L.quick_inno    = "{player}はInnocentだな。"
+L.quick_check   = "まだ生きている奴はいるか?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below. Keep these lowercase.
-L.quick_nobody = "いない奴"
-L.quick_disg = "変装中の誰か"
-L.quick_corpse = "誰かの死体"
+-- also be one of the below.  Keep these lowercase.
+L.quick_nobody    = "いない奴"
+L.quick_disg      = "変装中"
+L.quick_corpse    = "死体"
 L.quick_corpse_id = "{player}の死体"
 
--- Body search window
-L.search_title = "調査結果"
-L.search_info = "情報"
-L.search_confirm = "死亡確認"
-L.search_call = "Detectiveを呼ぶ"
+--- Body search window
+L.search_title  = "調査結果"
+L.search_info   = "情報"
+L.search_confirm = "確認済み"
+L.search_call   = "Detectiveを呼ぶ"
 
 -- Descriptions of pieces of information found
-L.search_nick = "これは{player}の死体だ."
+L.search_nick   = "こいつは{player}の死体だ。"
 
-L.search_role_t = "こいつはTraitorだった!"
-L.search_role_d = "こいつはDetectiveだった."
-L.search_role_i = "こいつはInnocentだった."
+L.search_role_traitor = "こいつはTraitorだった!"
+L.search_role_det = "こいつはDetectiveだった。"
+L.search_role_inno = "こいつはInnocentだった。"
 
-L.search_words = "こいつの最期の言葉:'{lastwords}'は俺に何を教えるのか."
-L.search_armor = "奴らは非標準のボディアーマーを着ている."
-L.search_disg = "奴らは正体を隠すことのできるデバイスを持っている."
-L.search_radar = "奴らはある種のレーダーを持っている. もう機能していないがな."
-L.search_c4 = "ポケットからメモを見つけた. それには安全に爆弾を解除するには{num}番のワイヤーをカットしろと書かれている."
+L.search_words  = "遺言:'{lastwords}'"
+L.search_armor  = "ボディアーマーを着ていたようだ。"
+L.search_disg   = "変装をしていたようだ。"
+L.search_radar  = "レーダーを所持していたようだ。もう機能していないがな。"
+L.search_c4     = "ポケットからメモを見つけた。 それには安全に爆弾を解除するには{num}番のワイヤーをカットしろと書かれている。"
 
-L.search_dmg_crush = "こいつの骨の多くが折れている. 重たい物がぶつかった衝撃で死んだようだ."
-L.search_dmg_bullet = "こいつが撃たれて死んだのは明白だ."
-L.search_dmg_fall = "こいつは落下して死んだか."
-L.search_dmg_boom = "こいつの傷と焼けた衣服は爆発によってこいつが死を迎えたことを示している."
-L.search_dmg_club = "死体には打撲傷と殴られた跡がある. 明らかにこいつは殴られて死んでいる."
-L.search_dmg_drown = "死体は溺れた証拠を示している."
-L.search_dmg_stab = "こいつは刺され,切られてすぐに出血死している."
-L.search_dmg_burn = "この辺りはテロリストが焼けたような臭いがするな..."
-L.search_dmg_tele = "こいつのDNAはタキオン粒子の放出によってかき混ぜられたように見える!"
-L.search_dmg_car = "このテロリストが道路を渡った際, 無謀なドライバーに轢かれたか."
-L.search_dmg_other = "このテロリストの死因を特定できない."
+L.search_dmg_crush  = "こいつの骨の多くが折れている. 重たい物がぶつかった衝撃で死んだようだ。"
+L.search_dmg_bullet = "こいつが撃たれて死んだのは明白だ。"
+L.search_dmg_fall   = "こいつは落下して死んだか."
+L.search_dmg_boom   = "こいつの傷と焼けた衣服は爆発によってこいつが死を迎えたことを示している."
+L.search_dmg_club   = "死体には打撲傷と殴られた跡がある。 殴られて死んだようだな。"
+L.search_dmg_drown  = "死因は溺死のようだ。"
+L.search_dmg_stab   = "こいつは刺され,切られてすぐに出血死している。"
+L.search_dmg_burn   = "この辺りはテロリストが焼けたような臭いがするな..."
+L.search_dmg_tele   = "こいつのDNAはタキオン粒子の放出によってかき混ぜられたように見える!"
+L.search_dmg_car    = "このテロリストが道路を渡った際, 無謀なドライバーに轢かれたか。"
+L.search_dmg_other  = "このテロリストの死因を特定できない。"
 
-L.search_weapon = "{weapon}の扱いに慣れているようだな."
-L.search_head = "致命的な傷はヘッドショットによるものだ. 叫ぶ間も無い."
-L.search_time = "こいつは調査のおおよそ{time}秒前に死んだな."
-L.search_dna = "裏切り者のDNAサンプルをDNA scannerで回収しなくては. DNAサンプルは今からおおよそ{time}秒で腐敗するだろう."
+L.search_weapon = "{weapon}によって殺されたようだな。"
+L.search_head   = "致命的な傷はヘッドショットによるものだ。 叫ぶ間も無い。"
+L.search_time   = "こいつは調査のおおよそ{time}秒前に死んだな。"
+L.search_dna    = "裏切り者のDNAサンプルをDNA scannerで回収しなくては。 DNAサンプルは今からおおよそ{time}秒で腐敗するだろう。"
 
-L.search_kills1 = "{player}の死を立証する殺害リストを見つけた."
+L.search_kills1 = "{player}の死を立証する殺害リストを見つけた。"
 L.search_kills2 = "これらの名前の載った殺害リストを見つけた:"
-L.search_eyes = "Detectiveスキルを使用し, こいつの見た最後の人物を確認した: {player}. 裏切り者か, それとも偶然か?"
+L.search_eyes   = "Detectiveスキルを使用し, こいつの見た最後の人物を確認した: {player}. 裏切り者か, それとも偶然か?"
 
 -- Scoreboard
-L.sb_playing = "You are playing on..."
-L.sb_mapchange = "マップ変更まで{num}ラウンドか{time}秒"
+L.sb_playing    = "You are playing on..."
+L.sb_mapchange  = "マップ変更まで{num}ラウンドか{time}秒"
 
-L.sb_mia = "行方不明"
-L.sb_confirmed = "死亡確認"
+L.sb_mia        = "行方不明"
+L.sb_confirmed  = "死亡確認"
 
-L.sb_ping = "Ping"
-L.sb_deaths = "死亡回数"
-L.sb_score = "スコア"
-L.sb_karma = "カルマ"
+L.sb_ping       = "Ping"
+L.sb_deaths     = "死亡回数"
+L.sb_score      = "スコア"
+L.sb_karma      = "カルマ"
 
-L.sb_info_help = "このプレイヤーの死体を調査すると, ここで結果を精査することができます."
+L.sb_info_help  = "このプレイヤーの死体を調査すると, ここで結果を精査することができるぞ。"
 
 L.sb_tag_friend = "仲間"
-L.sb_tag_susp = "疑わしい"
-L.sb_tag_avoid = "避ける"
-L.sb_tag_kill = "殺す"
-L.sb_tag_miss = "行方不明"
+L.sb_tag_susp   = "容疑者"
+L.sb_tag_avoid  = "避けたい者"
+L.sb_tag_kill   = "殺害対象"
+L.sb_tag_miss   = "行方不明"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "この武器は品切れです: このラウンドでは既に購入しています."
-L.buy_pending = "既にオーダーしています, 受け取りまでお待ちください."
-L.buy_received = "特殊装備を受け取りました."
+L.buy_no_stock    = "この武器は品切れだ: 既にこのラウンドで購入済みだ。"
+L.buy_pending     = "既に注文されている, 受け取りまで待とう。"
+L.buy_received    = "特殊装備を受け取った。"
 
-L.drop_no_room = "空きが無いので武器を捨ててください!"
+L.drop_no_room    = "空きが無いから武器を捨てるしかない。"
 
-L.disg_turned_on = "変装しました!"
-L.disg_turned_off = "変装をやめました."
+L.disg_turned_on  = "変装完了。"
+L.disg_turned_off = "変装解除。"
 
 -- Equipment item descriptions
-L.item_passive = "パッシブ効果アイテム"
-L.item_active = "使用アイテム"
-L.item_weapon = "武器"
+L.item_passive    = "パッシブ効果アイテム"
+L.item_active     = "使用アイテム"
+L.item_weapon     = "武器"
 
-L.item_armor = "Body Armor(ボディアーマー)"
+L.item_armor      = "Body Armor(ボディアーマー)"
 L.item_armor_desc = [[
-銃によるダメージを30%減少させます.
+弾丸、炎、爆発によるダメージを軽減。Over Time(オーバータイム)になったら使い物にならない。.
 
-Detectivesは標準で装備しています.]]
+複数の購入が可能。ある特定の装甲値に達した後、アーマーは強化される。]]
 
-L.item_radar = "Radar(レーダー)"
+L.item_radar      = "Radar(レーダー)"
 L.item_radar_desc = [[
-生命反応のスキャンを可能にします.
+生命反応を捉えることができる。
 
-購入するとすぐに自動でスキャンを開始します. 設定はこのメニューのRadarタブでします.]]
+購入するとすぐに自動で探知してくれる。 設定はCキーのRadarメニューから。]]
 
-L.item_disg = "Disguiser(変装装置)"
-L.item_disg_desc = [[
-使用中はあなたのID情報を隠します. さらに獲物が最期に目撃した人物になるのも避けます.
+L.item_disg       = "Disguiser(変装装置)"
+L.item_disg_desc  = [[
+変装中はあなたのID情報を隠せる。 さらに,獲物が最期に目撃した人物になるのも避けれる。
 
-このメニューのDisguiseタブ内か テンキーのEnterで切り替えます.]]
+このメニューのDisguiseメニュー内かテンキーのEnterで切り替えれる。]]
 
 -- C4
-L.c4_hint = "{usekey}を押して起動もしくは解除する."
-L.c4_disarm_warn = "あなたが設置したC4爆弾は解除されました."
-L.c4_armed = "あなたは首尾よく爆弾を起動しました."
-L.c4_disarmed = "あなたは爆弾を上手い事解除しました."
-L.c4_no_room = "あなたはこのC4を持てません."
+L.c4_hint         = "{usekey}を押して起動もしくは解除"
+L.c4_no_disarm    = "他のTraitorのC4は彼らが死ぬまで解除できない。"
+L.c4_disarm_warn  = "C4爆弾が解除されてしまった。"
+L.c4_armed        = "爆弾の起動を完了した。"
+L.c4_disarmed     = "爆弾の解除に成功した。"
+L.c4_no_room      = "この狭い所ではC4は持てないようだ。"
 
-L.c4_desc = "強力な時限爆弾です."
+L.c4_desc         = "強力な時限爆弾です."
 
-L.c4_arm = "C4を起動"
-L.c4_arm_timer = "タイマー"
-L.c4_arm_seconds = "爆発まで:"
-L.c4_arm_attempts = "解除を試みる際, 6本のワイヤーの{num}本はカットすると即時爆発の原因となるでしょう."
+L.c4_arm          = "C4を起動"
+L.c4_arm_timer    = "タイマー"
+L.c4_arm_seconds  = "爆発まで:"
+L.c4_arm_attempts = "解除を試みる際, 6本のワイヤーの{num}本はカットしてしまうと即爆発するので要注意だ。"
 
-L.c4_remove_title = "撤去"
-L.c4_remove_pickup = "C4を取る"
+L.c4_remove_title    = "撤去"
+L.c4_remove_pickup   = "C4を拾う"
 L.c4_remove_destroy1 = "C4を破壊する"
-L.c4_remove_destroy2 = "確認: 破壊"
+L.c4_remove_destroy2 = "確認します。: 破壊しますか?"
 
-L.c4_disarm = "C4を解除"
-L.c4_disarm_cut = "クリックして{num}本目のワイヤーを切断する"
+L.c4_disarm       = "C4を解除"
+L.c4_disarm_cut   = "クリックして{num}本目のワイヤーを切断する"
 
-L.c4_disarm_owned = "ワイヤーをカットして爆弾を解除してください. あなたの爆弾なのでどのワイヤーでも解除となるでしょう."
-L.c4_disarm_other = "安全なワイヤーをカットして爆弾を解除してください. 間違えたら爆発しますよ!"
+L.c4_disarm_owned = "ワイヤーをカットして爆弾を解除してくれ。 あなたの爆弾だからどのワイヤーでも安全だ。"
+L.c4_disarm_other = "安全なワイヤーをカットして爆弾を解除してくれ。 間違えたら即爆発だ!"
 
-L.c4_status_armed = "起動中"
+L.c4_status_armed    = "起動中"
 L.c4_status_disarmed = "解除済み"
 
 -- Visualizer
-L.vis_name = "Visualizer(可視化装置)"
-L.vis_hint = "{usekey}を押して拾う(Detectiveのみ)."
+L.vis_name        = "Visualizer(可視化装置)"
+L.vis_hint        = "{usekey}で拾う(Detectiveのみ)"
 
-L.vis_desc = [[
-犯行シーンを可視化するデバイスです.
+L.vis_short_desc = "被害者が銃撃の傷により死亡した場合のみ殺害現場を可視化してくれる。"
 
-死体を分析して被害者がどのように殺害されたかを表示しますが, 被害者が銃撃の傷で死んだ場合のみです.]]
+L.vis_desc        = [[
+殺害現場を可視化してくれる機械だ。
+
+死体を分析して被害者がどのように殺害されたかを
+表示しますが, 被害者が銃撃の傷で死んだ場合
+のみだ。]]
 
 -- Decoy
-L.decoy_name = "Decoy(囮)"
-L.decoy_no_room = "あなたはこのDecoyを持つことができません."
-L.decoy_broken = "あなたのDecoyは破壊されました!"
+L.decoy_name      = "Decoy(囮)"
+L.decoy_no_room   = "この狭い所ではDecoyは持てないようだ。"
+L.decoy_broken    = "Decoyが破壊された!"
 
---L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
---L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
+L.decoy_short_desc = "このDecoyは別陣営のレーダーに偽のレーダー反応を示してくれる。"
+L.decoy_pickup_wrong_team = "別陣営からのDecoyは拾うことはできない。"
 
-L.decoy_desc = [[
-Detectiveに偽のレーダーサインを表示し,彼らがあなたのDNAをスキャンしていた場合は彼らのDNA ScannerがDecoyの場所を表示するようにします.]]
+L.decoy_desc      = [[
+Detectiveに偽のレーダー反応を表示させ、
+彼らがあなたのDNAをスキャンしていた場合は
+彼らのDNA ScannerがDecoyの場所を
+表示するようにしてくれる。]]
 
 -- Defuser
-L.defuser_name = "Defuser(除去装置)"
-L.defuser_help = "{primaryfire}で狙ったC4を除去する."
+L.defuser_name    = "Defuser(除去装置)"
+L.defuser_help    = "{primaryfire}でC4除去"
 
-L.defuser_desc = [[
-C4爆弾を即座に除去します.
+L.defuser_desc    = [[
+C4爆弾を即座に除去する。
 
-使用は無制限です. これを持っていればC4に気がつくのは簡単になるでしょう.]]
+使用回数は無制限。 これを持っていれば
+C4に気がつくのに簡単だろうな。]]
 
 -- Flare gun
-L.flare_name = "Flare gun(信号拳銃)"
+L.flare_name      = "Flare gun(信号拳銃)"
+L.flare_desc      = [[
+死体を燃やすことができる。証拠隠滅に必須。
+弾は限られているので注意。
 
-L.flare_desc = [[
-発見されないように死体を燃やすことができるようになります. 弾は無限です.
+燃えている死体は異音を発する。]]
 
-燃えている死体は異音を発します.]]
 
 -- Health station
-L.hstation_name = "Health Station(回復ステーション)"
+L.hstation_name   = "Health Station(回復ステーション)"
+L.hstation_subtitle = "[{usekey}]で回復する."
+L.hstation_charge = "Health Stationのチャージ値: {charge}"
+L.hstation_empty = "もうこのHealth Stationにはチャージがありません."
+L.hstation_maxhealth = "体力は満タンだぞ。"
+L.hstation_short_desc = "Health Stationは時間経過とともにゆっくりチャージします."
 
-L.hstation_broken = "あなたのHealth Stationは破壊されました!"
-L.hstation_help = "{primaryfire}でHealth Stationを設置する."
+L.hstation_broken = "Health Stationが破壊された!"
+L.hstation_help   = "{primaryfire}でHealth Station設置"
 
-L.hstation_desc = [[
+L.hstation_desc   = [[
 置いてあると回復が可能になります.
 
-リチャージは遅いです. 誰でも使用することができ, 傷つけられることもあります. 使用者のDNAサンプルをチェックすることができます.]]
+リチャージは遅いです. 誰でも使用することができ,
+傷つけられることもあります. 使用者の
+DNAサンプルをチェックすることができます.]]
 
 -- Knife
-L.knife_name = "Knife(ナイフ)"
-L.knife_thrown = "Knife投擲"
+L.knife_name      = "Knife(ナイフ)"
+L.knife_thrown    = "Knife投擲"
 
-L.knife_desc = [[
-負傷したターゲットを即座に静かに始末しますが, 一度しか使用できません.
+L.knife_desc      = [[
+負傷したターゲットを即座に静かに始末しますが,
+一度しか使用できません.
 
 オルトファイアで投げることができます.]]
 
 -- Poltergeist
-L.polter_desc = [[
-オブジェクトにThumperを設置すると彼らの周囲に乱暴に押し動かします.
+L.polter_desc     = [[
+オブジェクトにThumperを設置すると彼らの
+周囲に乱暴に押し動かします.
 
-エナジーバーストはすぐ近くの人間にダメージを与えます.]]
+エナジーバーストはすぐ近くの人間にダメージを
+与えます.]]
 
 -- Radio
-L.radio_broken = "あなたのRadioは破壊されました!"
-L.radio_help_pri = "{primaryfire}でRadioを置く."
+L.radio_broken    = "Radioが破壊された!"
+L.radio_help_pri  = "{primaryfire}でRadioを置く."
 
-L.radio_desc = [[
+L.radio_desc      = [[
 注意を逸らしたり欺くために音を再生します.
 
-適当な場所にRadioを置いてから, このメニュー内のRadioタブで使用して音を再生します.]]
+適当な場所にRadioを置いてから, 
+このメニュー内のRadioタブで使用して
+音を再生します.]]
 
 -- Silenced pistol
-L.sipistol_name = "Silenced Pistol(消音ピストル)"
+L.sipistol_name   = "Silenced Pistol(消音ピストル)"
 
-L.sipistol_desc = [[
-発砲音の小さいハンドガンで, ノーマルピストルの弾丸を使用します.
+L.sipistol_desc   = [[
+発砲音の小さいハンドガン。普通のピストルの
+弾丸を使用する。
 
-撃たれた犠牲者は悲鳴をあげないでしょう.]]
+撃たれた犠牲者は悲鳴をあげることはないだろう。]]
 
 -- Newton launcher
-L.newton_name = "Newton launcher(ニュートンランチャー)"
+L.newton_name     = "Newton launcher(ニュートンランチャー)"
 
-L.newton_desc = [[
-安全な距離から人を押します.
+L.newton_desc     = [[
+遠距離から人を弾き飛ばす.
 
-弾は無限ですが, 発射は遅いです.]]
+弾は無限だが, 発射は遅い。]]
 
 -- Binoculars
-L.binoc_name = "Binoculars(双眼鏡)"
-
-L.binoc_desc = [[
-遠く離れた距離から死体にズームインし彼らを確認できます.
+L.binoc_name      = "Binoculars(双眼鏡)"
+L.binoc_desc      = [[
+遠く離れた距離から死体にズームインし彼らを
+確認できます.
 
 無制限で使用できますが, 確認には数秒かかります.]]
 
+
 -- UMP
-L.ump_desc = [[
+L.ump_desc        = [[
 ターゲットを混乱させる実験的なSMGです.
 
 標準的なSMGの弾丸を使用します.]]
 
+
 -- DNA scanner
-L.dna_name = "DNA scanner(DNAスキャナー)"
-L.dna_notfound = "DNAサンプルは見つかりませんでした."
-L.dna_limit = "容器は限界に達しました. 古いサンプルを捨てて新しいのを加えてください."
-L.dna_decayed = "殺害者のDNAサンプルは腐っていました."
-L.dna_killer = "死体から殺害者のDNAサンプルを入手しました!"
---L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
-L.dna_no_killer = "DNAは回収されることができません (殺害者は切断した?)."
-L.dna_armed = "この爆弾は動いています! 早く解除してください!"
-L.dna_object = "オブジェクトから{num}個の新しいDNAサンプルを入手しました."
-L.dna_gone = "このエリアにDNA反応はありません."
+L.dna_name        = "DNA scanner(DNAスキャナー)"
+L.dna_notfound    = "DNAサンプルは見つかりませんでした."
+L.dna_limit       = "容器は限界に達しました. 古いサンプルを捨てて新しいのを加えてください."
+L.dna_decayed     = "殺害者のDNAサンプルは腐っていました."
+L.dna_killer      = "死体から殺害者のDNAサンプルを入手しました!"
+L.dna_duplicate = "一致しました! スキャナーにこのDNAが登録されました."
+L.dna_no_killer   = "DNAは回収されることができません (殺害者はゲームを退出したんでしょうか?)."
+L.dna_armed       = "この爆弾は動いています! 早く解除してください!"
+L.dna_object      = "オブジェクトから{num}個の新しいDNAサンプルを入手しました."
+L.dna_gone        = "このエリアにDNA反応はありません."
+L.dna_tid_possible = "スキャン可能"
+L.dna_tid_impossible = "スキャン不可能"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
-L.dna_desc = [[
-物からDNAサンプルを入手しそれらを使用してDNAの持ち主を探します.
+L.dna_desc        = [[
+物からDNAサンプルを入手しそれらを使用してDNAの
+持ち主を探します.
 
-新鮮な死体に使用し殺害者のDNAを入手して彼らを追跡します.]]
+新鮮な死体に使用し殺害者のDNAを入手して彼らを
+追跡します.]]
 
 -- Magneto stick
-L.magnet_name = "Magneto-stick(マグネットスティック)"
-L.magnet_help = "{primaryfire}で死体を面に貼り付ける."
+L.magnet_name     = "Magneto-stick(マグネットスティック)"
+L.magnet_help     = "{primaryfire}で死体を面に貼り付ける."
 
 -- Grenades and misc
-L.grenade_smoke = "Smoke grenade(スモークグレネード)"
-L.grenade_fire = "Incendiary grenade(焼夷グレネード)"
+L.grenade_smoke   = "Smoke grenade(スモークグレネード)"
+L.grenade_fire    = "Incendiary grenade(焼夷グレネード)"
 
-L.unarmed_name = "Holstered"
-L.crowbar_name = "Crowbar"
-L.pistol_name = "Pistol"
-L.rifle_name = "Rifle"
-L.shotgun_name = "Shotgun"
+L.unarmed_name    = "Holstered"
+L.crowbar_name    = "Crowbar"
+L.pistol_name     = "Pistol"
+L.rifle_name      = "Rifle"
+L.shotgun_name    = "Shotgun"
 
 -- Teleporter
-L.tele_name = "Teleporter(テレポーター)"
-L.tele_failed = "テレポートに失敗しました."
-L.tele_marked = "テレポート位置をマークしました."
+L.tele_name       = "Teleporter(テレポーター)"
+L.tele_failed     = "テレポートに失敗しました."
+L.tele_marked     = "テレポート位置をマークしました."
 
-L.tele_no_ground = "しっかりとした足場に立つまではテレポートはできません!"
-L.tele_no_crouch = "しゃがんでいるとテレポートできませんよ!"
-L.tele_no_mark = "マークした場所がありません. テレポートする前に移動先をマークしてください."
+L.tele_no_ground  = "しっかりとした足場に立つまではテレポートはできません!"
+L.tele_no_crouch  = "しゃがんでいるとテレポートできませんよ!"
+L.tele_no_mark    = "マークした場所がありません. テレポートする前に移動先をマークしてください."
 
 L.tele_no_mark_ground = "しっかりとした足場に立つまではテレポート位置をマークすることはできません!"
 L.tele_no_mark_crouch = "しゃがんでいるとテレポート位置をマークすることができません!"
 
-L.tele_help_pri = "{primaryfire}でマークした場所にテレポートする."
-L.tele_help_sec = "{secondaryfire}で現在地をマークする."
+L.tele_help_pri   = "{primaryfire}でマークした場所にテレポートする."
+L.tele_help_sec   = "{secondaryfire}で現在地をマークする."
 
-L.tele_desc = [[
+L.tele_desc       = [[
 あらかじめマークした地点にテレポートします.
 
 テレポートはノイズを発し, 使用回数は無限です.]]
 
--- Ammo names, shown when picked up
-L.ammo_pistol = "9mm弾"
 
-L.ammo_smg1 = "SMG弾"
-L.ammo_buckshot = "Shotgun弾"
-L.ammo_357 = "Rifle弾"
-L.ammo_alyxgun = "Deagle弾"
+-- Ammo names, shown when picked up
+L.ammo_pistol     = "9mm弾"
+
+L.ammo_smg1       = "SMG弾"
+L.ammo_buckshot   = "Shotgun弾"
+L.ammo_357        = "Rifle弾"
+L.ammo_alyxgun    = "Deagle弾"
 L.ammo_ar2altfire = "Flare弾"
-L.ammo_gravity = "Poltergeist弾"
+L.ammo_gravity    = "重力弾"
+
 
 -- Round status
 L.round_wait = "待機中"
