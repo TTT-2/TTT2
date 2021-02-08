@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Inheriting from the same base in different folders did not work
+
 ### Added
 
 - Added a new vgui system
