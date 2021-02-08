@@ -24,9 +24,10 @@ classbuilder = classbuilder or {}
 -- @param[opt] function OnInitialization This callback function is called on initialization of the class
 -- @param[default=false] boolean shouldInherit Set this to true if this class should inherit from its base
 -- @param[opt] function SpecialCheck A function that makes a special check, inheritance is blocked if false is returned
+-- @param[opt] table passthrough A table that can be passed through if the classdata table should be extended
 -- @return table Returns a table of all the created classes
 -- @realm shared
-function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck)
+function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck, passthrough)
 	-- In case this function is run on the server but the class should only exist
 	-- on the client, this function should work only as a proxy.
 	if SERVER and realm == CLIENT_FILE then
@@ -70,7 +71,7 @@ function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shou
 		for name, class in pairs(classTable) do
 			if not class.base then continue end
 
-			local base = classTable[class.base]
+			local base = classTable[class.base] or passthrough[class.base]
 
 			if isfunction(SpecialCheck) and not SpecialCheck(class, base) then continue end
 
