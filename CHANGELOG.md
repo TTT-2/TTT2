@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.8.1b](https://github.com/TTT-2/TTT2/tree/v0.8.1b) (2021-02-19)
+
 ### Fixed
 
 - Inheriting from the same base using the classbuilder in different folders did not work

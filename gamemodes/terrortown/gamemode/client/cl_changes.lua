@@ -836,6 +836,13 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2021, month = 02, day = 06}))
 
+	AddChange("TTT2 Base - v0.8.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed inheriting from the same base using the classbuilder in different folders</li>
+		</ul>
+	]], os.time({year = 2021, month = 02, day = 19}))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
