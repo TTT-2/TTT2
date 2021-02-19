@@ -197,12 +197,12 @@ concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 -- Called to check if a transaction between two players is allowed.
 -- @param Player sender that wants to send credits
 -- @param Player recipient that would receive the credits
--- @param Number credits_per_xfer that would be transferred
+-- @param number credits_per_xfer that would be transferred
 -- @return[default=nil] boolean which disallows a transaction when false
 -- @return[default=nil] string for the client which offers info related to the transaction
 -- @hook
 -- @realm server
-function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
+function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
 
 end
 
