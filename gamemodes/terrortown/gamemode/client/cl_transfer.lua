@@ -21,7 +21,7 @@ local selected_sid
 -- @return[default=nil] string for the client which offers info related to the transaction
 -- @hook
 -- @realm client
-function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
+function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
 
 end
 

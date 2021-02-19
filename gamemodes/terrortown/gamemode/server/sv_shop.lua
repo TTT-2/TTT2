@@ -202,7 +202,7 @@ concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 -- @return[default=nil] string for the client which offers info related to the transaction
 -- @hook
 -- @realm server
-function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
+function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
 
 end
 
