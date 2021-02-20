@@ -30,7 +30,7 @@ L.round_selected = "トレイター選択完了。"
 L.round_started = "ラウンド開始！"
 L.round_restart = "ラウンドは管理者によってリスタートされたようだ。"
 
-L.round_traitors_one = "トレイターよ、一人でも頑張れ。"
+L.round_traitors_one = "トレイターよ、一人でも頑張るんだ。"
 L.round_traitors_more = "トレイター達よ、力を合わせて彼らを皆殺しにしよう。"
 
 L.win_time = "時間切れ。トレイターの負けだ。"
