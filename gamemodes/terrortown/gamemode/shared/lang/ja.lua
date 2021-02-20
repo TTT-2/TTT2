@@ -35,7 +35,7 @@ L.round_traitors_more = "トレイター達よ、力を合わせて彼らを皆�
 
 L.win_time = "時間切れ。トレイターの負けだ。"
 L.win_traitors = "トレイターの勝利！"
-L.win_innocents = "Innocentの勝利！"
+L.win_innocents = "イノセントの勝利！"
 L.win_bees = "蜂の勝利！（つまり引き分け）"
 L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみよう。"
 
@@ -118,7 +118,7 @@ L.radar_not_owned = "レーダーはまだ持っていないぞ！"
 L.radar_scan      = "スキャンを実行。"
 L.radar_auto      = "自動で繰り返し実行。"
 L.radar_help      = "スキャン結果を{num}秒間表示し、その後レーダーは再び新しい位置を教えてくれる。"
-L.radar_charging  = "Radarはまだチャージ中..."
+L.radar_charging  = "レーダーチャージ中..."
 
 -- Transfer tab in equipment menu
 L.xfer_name       = "譲渡"
@@ -133,7 +133,7 @@ L.xfer_received   = "{player}はあなたに{num}クレジットを渡した。"
 -- Radio tab in equipment menu
 L.radio_name      = "ラジオ"
 L.radio_help      = "音を再生するためにボタンをクリックしよう。"
-L.radio_notplaced = "再生するためにはRadioを置かなくてはならないぞ。"
+L.radio_notplaced = "再生するためにはラジオを置かなくてはならないぞ。"
 
 -- Radio soundboard buttons
 L.radio_button_scream  = "悲鳴"
@@ -213,7 +213,7 @@ L.search_kills2 = "これらの名前の載った殺害リストを見つけた:
 L.search_eyes   = "探偵スキルを使用し、こいつの見た最後の人物を確認した: {player}. 裏切り者か、それとも偶然か？"
 
 -- Scoreboard
-L.sb_playing    = "ゲームプレイ中..."
+L.sb_playing    = "サーバー名"
 L.sb_mapchange  = "マップ変更まで{num}ラウンドか{time}秒"
 
 L.sb_mia        = "行方不明"
@@ -287,8 +287,8 @@ L.c4_remove_destroy2 = "確認:破壊"
 L.c4_disarm       = "C4を解除"
 L.c4_disarm_cut   = "クリックして{num}本目のワイヤーを切断する"
 
-L.c4_disarm_owned = "ワイヤーをカットして爆弾を解除してくれ。あなたの爆弾だからどのワイヤーでも安全だ。"
-L.c4_disarm_other = "安全なワイヤーをカットして爆弾を解除してくれ。間違えたら即爆発だ！"
+L.c4_disarm_owned = "ワイヤーをカットして爆弾を解除してくれ。自分の爆弾だからどのワイヤーでも安全だ。"
+L.c4_disarm_other = "安全なワイヤーをカットして爆弾を解除するんだ。間違えたら即爆発だ！"
 
 L.c4_status_armed    = "起動中"
 L.c4_status_disarmed = "解除済み"
@@ -449,10 +449,10 @@ L.tele_desc       = [[
 -- Ammo names, shown when picked up
 L.ammo_pistol     = "9mm弾"
 
-L.ammo_smg1       = "SMGの弾"
-L.ammo_buckshot   = "ショットガンの弾"
-L.ammo_357        = "スナイパーライフルの弾"
-L.ammo_alyxgun    = "マグナムの弾"
+L.ammo_smg1       = "SMG弾"
+L.ammo_buckshot   = "バックショット"
+L.ammo_357        = "ライフル弾"
+L.ammo_alyxgun    = "マグナム弾"
 L.ammo_ar2altfire = "火炎弾"
 L.ammo_gravity    = "重力弾"
 
@@ -503,10 +503,10 @@ L.mute_all     = "全てをミュートした"
 L.mute_off     = "ミュートを解除した"
 
 -- Spectators and prop possession
-L.punch_title  = "PUNCH-O-METER(パンチ・オー・メーター)"
+L.punch_title  = "パンチ・オー・メーター"
 L.punch_help   = "移動キーもしくはジャンプ: オブジェクト移動。しゃがみ:オブジェクトを離れる。"
-L.punch_bonus  = "あなたのスコアが低かったので、punch-o-meterのリミットを{num}下がった。"
-L.punch_malus  = "あなたのスコアが高かったので、punch-o-meterのリミットを{num}上がった！"
+L.punch_bonus  = "スコアが低かったため、パンチ・オー・メーターの最大値が{num}下がった。"
+L.punch_malus  = "スコアが高かったため、パンチ・オー・メーターの最大値が{num}上がった！"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
