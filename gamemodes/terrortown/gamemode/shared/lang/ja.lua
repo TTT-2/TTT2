@@ -34,8 +34,8 @@ L.round_traitors_one = "トレイターよ、一人でも頑張れ。"
 L.round_traitors_more = "トレイター達よ、力を合わせて彼らを皆殺しにしよう。"
 
 L.win_time = "時間切れ。トレイターの負けだ。"
-L.win_traitors = "トレイターの勝利！"
-L.win_innocents = "Innocentの勝利！"
+L.win_traitors = "トレイター達の勝利！"
+L.win_innocents = "イノセント達の勝利！"
 L.win_bees = "蜂の勝利！（つまり引き分け）"
 L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみよう。"
 
@@ -118,7 +118,7 @@ L.radar_not_owned = "レーダーはまだ持っていないぞ！"
 L.radar_scan      = "スキャンを実行。"
 L.radar_auto      = "自動で繰り返し実行。"
 L.radar_help      = "スキャン結果を{num}秒間表示し、その後レーダーは再び新しい位置を教えてくれる。"
-L.radar_charging  = "Radarはまだチャージ中..."
+L.radar_charging  = "レーダーはまだチャージ中..."
 
 -- Transfer tab in equipment menu
 L.xfer_name       = "譲渡"
@@ -447,12 +447,12 @@ L.tele_desc       = [[
 テレポートはノイズを発し、使用回数は限られている。]]
 
 -- Ammo names, shown when picked up
-L.ammo_pistol     = "9mm弾"
+L.ammo_pistol     = "拳銃弾"
 
-L.ammo_smg1       = "SMGの弾"
-L.ammo_buckshot   = "ショットガンの弾"
-L.ammo_357        = "スナイパーライフルの弾"
-L.ammo_alyxgun    = "マグナムの弾"
+L.ammo_smg1       = "SMG弾"
+L.ammo_buckshot   = "バックショット"
+L.ammo_357        = "ライフル弾"
+L.ammo_alyxgun    = "マグナム弾"
 L.ammo_ar2altfire = "火炎弾"
 L.ammo_gravity    = "重力弾"
 
@@ -503,10 +503,10 @@ L.mute_all     = "全てをミュートした"
 L.mute_off     = "ミュートを解除した"
 
 -- Spectators and prop possession
-L.punch_title  = "PUNCH-O-METER(パンチ・オー・メーター)"
+L.punch_title  = "パンチ・オー・メーター"
 L.punch_help   = "移動キーもしくはジャンプ: オブジェクト移動。しゃがみ:オブジェクトを離れる。"
-L.punch_bonus  = "あなたのスコアが低かったので、punch-o-meterのリミットを{num}下がった。"
-L.punch_malus  = "あなたのスコアが高かったので、punch-o-meterのリミットを{num}上がった！"
+L.punch_bonus  = "あなたのスコアが低かったので、パンチ・オー・メーターの最大値が{num}下がった。"
+L.punch_malus  = "あなたのスコアが高かったので、パンチ・オー・メーターの最大値が{num}上がった！"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
