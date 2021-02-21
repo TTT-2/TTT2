@@ -283,18 +283,6 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 	return false
 end
 
----
--- Whether or not the @{Player} can receive the chat message.
--- @param Player reader @{Player} who can receive chat
--- @param Player sender @{Player} who sends the text message
--- @param boolean isTeam Are they trying to use the team chat
--- @return[default=true] boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
--- @hook
--- @realm server
-function GM:TTT2CanSeeChat(reader, sender, isTeam)
-	return true
-end
-
 local mumbles = {
 	"mumble",
 	"mm",
@@ -457,60 +445,96 @@ local function deathrec(ply, cmd, args)
 end
 concommand.Add("_deathrec", deathrec)
 
----
--- Override or hook in plugin for spam prevention and whatnot. Return true
--- to block a command.
--- @param Player ply
--- @param string msg_name
--- @param Player msg_target
--- @return[default=nil] boolean
--- @hook
--- @realm server
-function GM:TTTPlayerRadioCommand(ply, msg_name, msg_target)
-
-end
-
 local function ttt_radio_send(ply, cmd, args)
 	if not IsValid(ply) or not ply:IsTerror() or #args ~= 2 then return end
 
-	local msg_name = args[1]
-	local msg_target = args[2]
+	local msgName = args[1]
+	local msgTarget = args[2]
 
 	local name = ""
-	local rag_name = nil
+	local ragPlayerNick = nil
 
-	if tonumber(msg_target) then
+	if tonumber(msgTarget) then
 		-- player or corpse ent idx
-		local ent = Entity(tonumber(msg_target))
+		local ent = Entity(tonumber(msgTarget))
 
 		if IsValid(ent) then
 			if ent:IsPlayer() then
 				name = ent:Nick()
 			elseif ent:GetClass() == "prop_ragdoll" then
 				name = LANG.NameParam("quick_corpse_id")
-				rag_name = CORPSE.GetPlayerNick(ent, "A Terrorist")
+				ragPlayerNick = CORPSE.GetPlayerNick(ent, "A Terrorist")
 			end
 		end
 
-		msg_target = ent
+		msgTarget = ent
 	else
 		-- lang string
-		name = LANG.NameParam(msg_target)
+		name = LANG.NameParam(msgTarget)
 	end
 
 	---
 	-- @realm server
-	if hook.Run("TTTPlayerRadioCommand", ply, msg_name, msg_target) then return end
+	if hook.Run("TTTPlayerRadioCommand", ply, msgName, msgTarget) then return end
 
 	net.Start("TTT_RadioMsg")
 	net.WriteEntity(ply)
-	net.WriteString(msg_name)
+	net.WriteString(msgName)
 	net.WriteString(name)
 
-	if rag_name then
-		net.WriteString(rag_name)
+	if ragPlayerNick then
+		net.WriteString(ragPlayerNick)
 	end
 
 	net.Broadcast()
 end
 concommand.Add("_ttt_radio_send", ttt_radio_send)
+
+---
+-- Called when a player tries to use a quickchat/radio command. You can use this
+-- for anti-spam measures or to replace or modify a message.
+-- @param Player ply The player that tries to send a message command
+-- @param string msgName The message identifier, such as `quick_yes` for `Yes.`
+-- @param number|string msgTarget The target part of the command (an entity index if it's a
+-- player or identified corpse, an identifier like "quick_nobody" if not)
+-- @return[default=nil] boolean Return true to not send this message
+-- @hook
+-- @realm server
+function GM:TTTPlayerRadioCommand(ply, msgName, msgTarget)
+
+end
+
+---
+-- Whether or not the @{Player} can receive the chat message.
+-- @param Player reader The @{Player} who can receive chat
+-- @param Player sender The @{Player} who sends the text message
+-- @param boolean isTeam Are they trying to use the team chat
+-- @return[default=true] boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
+-- @hook
+-- @realm server
+function GM:TTT2CanSeeChat(reader, sender, isTeam)
+	return true
+end
+
+---
+-- Cancelable hook to block a team chat message.
+-- @param Player sender The player that sends the message.
+-- @param string team The team identifier
+-- @param string msg The message that is about to be sent
+-- @return nil|boolean Return false to block message
+-- @hook
+-- @realm server
+function GM:TTT2AvoidTeamChat(sender, team, msg)
+
+end
+
+---
+-- Cancelable hook to block a general chat message.
+-- @param Player sender The player that sends the message.
+-- @param string msg The message that is about to be sent
+-- @return nil|boolean Return false to block message
+-- @hook
+-- @realm server
+function GM:TTT2AvoidGeneralChat(sender, msg)
+
+end

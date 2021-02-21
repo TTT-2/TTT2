@@ -278,3 +278,13 @@ function PANEL:PerformLayout()
 end
 
 vgui.Register("TTTScoreGroup", PANEL, "Panel")
+
+---
+-- Hook that is called for every player on the creation of their row in the
+-- scoreboard.
+-- @param Player ply The player whose row is created
+-- @hook
+-- @realm client
+function GM:TTT2ScoreboardAddPlayerRow(ply)
+
+end

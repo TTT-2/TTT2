@@ -209,3 +209,13 @@ end
 net.Receive("TTT2ReceiveHUD", function()
 	UpdateHUD(net.ReadString())
 end)
+
+---
+-- This hook is called after the HUD was updated and the HUD change
+-- was confirmed by the server.
+-- @param string name The name of the new HUD
+-- @hook
+-- @realm client
+function GM:TTT2HUDUpdated(name)
+
+end

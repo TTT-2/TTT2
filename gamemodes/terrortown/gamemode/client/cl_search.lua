@@ -322,6 +322,37 @@ function PreprocSearch(raw)
 end
 
 ---
+-- This hook can be used to populate the body search panel.
+-- @param table search The search data table
+-- @param table raw The raw search data
+-- @hook
+-- @realm client
+function GM:TTTBodySearchPopulate(search, raw)
+
+end
+
+---
+-- This hook can be used to modify the equipment info of a corpse.
+-- @param table search The search data table
+-- @param table equip The raw equipment table
+-- @hook
+-- @realm client
+function GM:TTTBodySearchEquipment(search, equip)
+
+end
+
+---
+-- This hook is called right before the killer found @{MSTACK} notification
+-- is added.
+-- @param string finder The nickname of the finder
+-- @param string victim The nickname of the victim
+-- @hook
+-- @realm client
+function GM:TTT2ConfirmedBody(finder, victim)
+
+end
+
+---
 -- Returns a function meant to override OnActivePanelChanged, which modifies
 -- dactive and dtext based on the search information that is associated with the
 -- newly selected panel

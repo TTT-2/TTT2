@@ -57,9 +57,9 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local name = WEPS.GetClass(v)
 
 		if name
-		and not v.Doublicated
-		and not string.match(name, "base")
-		and not eject[name]
+			and not v.Doublicated
+			and not string.match(name, "base")
+			and not eject[name]
 		then
 			if v.id then
 				tbl[#tbl + 1] = v
@@ -78,10 +78,10 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local name = WEPS.GetClass(v)
 
 		if name
-		and not v.Doublicated
-		and not string.match(name, "base")
-		and not string.match(name, "event")
-		and not eject[name]
+			and not v.Doublicated
+			and not string.match(name, "base")
+			and not string.match(name, "event")
+			and not eject[name]
 		then
 			if v.id then
 				tbl[#tbl + 1] = v
@@ -95,6 +95,15 @@ function ShopEditor.GetEquipmentForRoleAll()
 	Equipmentnew = tbl
 
 	return Equipmentnew
+end
+
+---
+-- This hook can be used to hinder weapons from being rendered in the shopeditor.
+-- @param table blockedWeapons A hashtable with the classnames of blocked weapons
+-- @hook
+-- @realm client
+function GM:TTT2ModifyShopEditorIgnoreEquip(blockedWeapons)
+
 end
 
 ---

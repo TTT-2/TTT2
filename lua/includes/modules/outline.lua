@@ -193,3 +193,12 @@ hook.Add("PostDrawEffects", "RenderOutlines", function()
 
 	List, ListSize = {}, 0
 end)
+
+---
+-- A rendering hook that is run in @{GM:PostDrawEffects} before the outlines are rendered.
+-- @2D
+-- @hook
+-- @realm client
+function GM:PreDrawOutlines()
+
+end
