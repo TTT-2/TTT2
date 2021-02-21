@@ -463,6 +463,9 @@ if CLIENT then
 		death = Color(255, 0, 0, 255)
 	}
 
+	-- Backward compatibility
+	IsOffScreen = util.IsOffScreen
+
 	---
 	-- Checks whether a given position is on screen
 	-- @param table scrpos table with x and y attributes
