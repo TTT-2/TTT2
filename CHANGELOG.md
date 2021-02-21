@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Added global alias for IsOffScreen function to util.IsOffScreen
 - Updated Japanese localization (by @Westoon)
 - Moved rendering modules to libraries
 
