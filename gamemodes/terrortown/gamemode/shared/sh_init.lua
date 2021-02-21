@@ -494,12 +494,6 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
 
--- load non-wrapped modules directly
-require("marks")
-
--- TODO load modules that are currently not included in gmod but waiting for merge
-require("outline")
-
 include("includes/modules/pon.lua")
 
 -- include extensions
@@ -522,6 +516,8 @@ include("ttt2/libraries/vguihandler.lua")
 include("ttt2/libraries/vskin.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
+include("ttt2/libraries/marks.lua")
+include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/none.lua")
