@@ -200,11 +200,12 @@ local function RemoveInternal(ents)
 
 	for i = 1, thermalvisionListSize do
 		for j = 1, entsSize do
-			if thermalvisionList[i].ent == ents[j] then
-				--for now only setting it to nil
-				thermalvisionList[i] = nil
-				break
-			end
+			if thermalvisionList[i].ent ~= ents[j] then continue end
+
+			--for now only setting it to nil
+			thermalvisionList[i] = nil
+
+			break
 		end
 	end
 
