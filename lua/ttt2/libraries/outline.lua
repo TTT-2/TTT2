@@ -8,13 +8,13 @@ local surface = surface
 local hook = hook
 local Material = Material
 
-module("outline", package.seeall)
-
 if SERVER then
 	AddCSLuaFile()
 
 	return
 end
+
+outline = {}
 
 OUTLINE_MODE_BOTH = 0
 OUTLINE_MODE_NOTVISIBLE = 1
@@ -42,7 +42,7 @@ local MODE = 3
 -- @param Color color
 -- @param number mode [OUTLINE_MODE_BOTH, OUTLINE_MODE_NOTVISIBLE, OUTLINE_MODE_VISIBLE]
 -- @realm client
-function Add(ents, color, mode)
+function outline.Add(ents, color, mode)
 	-- Maximum 255 reference values
 	if ListSize >= 255 then return end
 
@@ -67,7 +67,7 @@ end
 ---
 -- @return Entity The last rendered @{Entity}
 -- @realm client
-function RenderedEntity()
+function outline.RenderedEntity()
 	return RenderEnt
 end
 
