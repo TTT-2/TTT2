@@ -491,7 +491,7 @@ L.target_unknown = "テロリスト"
 L.target_credits = "調べて未使用クレジットを入手する"
 
 -- HUD buttons with hand icons that only some roles can see and use
-L.tbut_single  = "一度霧"
+L.tbut_single  = "一度きり"
 L.tbut_reuse   = "再使用可能"
 L.tbut_retime  = "{num}秒後に再使用可能"
 L.tbut_help    = "[{usekey}]を押して起動"
@@ -511,7 +511,7 @@ L.punch_malus  = "スコアが高かったため、パンチ・オー・メー�
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
 あなたは無実（？）のテロリスト、イノセントだ！だが周囲にはトレイター（裏切り者）が...
-あなたは誰を信用し、誰があなたを蜂の巣にするのだろうな?
+あなたは誰を信用し、誰があなたを蜂の巣にするのだろうな？
 
 背中に注意し信頼関係を築き生き延びよう！]]
 
