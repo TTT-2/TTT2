@@ -271,10 +271,6 @@ fileloader.LoadFolder("terrortown/migrations/client/", false, CLIENT_FILE, funct
 	MsgN("Marked TTT2 client migration file for distribution: ", path)
 end)
 
-fileloader.LoadFolder("terrortown/migrations/shared/", false, SHARED_FILE, function(path)
-	MsgN("Marked and added TTT2 shared migration file for distribution: ", path)
-end)
-
 fileloader.LoadFolder("terrortown/migrations/server/", false, SERVER_FILE, function(path)
 	MsgN("Added TTT2 server migration file: ", path)
 end)
