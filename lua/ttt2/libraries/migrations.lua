@@ -70,22 +70,6 @@ function migrations.Add(identifier, version, upQuery, downQuery, existingTable)
 end
 
 ---
--- Runs all unrun migrations with the given identifier.
--- @param string identifier The identifier for which all migrations should be run.
--- @return boolean|nil Returns `true` if at least one migration was run, `nil` if all migrations were already run and `false` in case of an error.
--- @realm shared
-function migrations.MigrateAll(identifier)
-end
-
----
--- Reverts all run migrations with the given identifier.
--- @param string identifier The identifier for which all migrations should be reverted.
--- @return boolean|nil Returns `true` if at least one migration was reverted, `nil` if no migration was reverted and `false` in case of an error.
--- @realm shared
-function migrations.RevertAll(identifier)
-end
-
----
 -- Runs or reverts migrations with the given identifier to the given version (the state after the upQuery of the specified version).
 -- @param string identifier The identifier for the migrations which should be set.
 -- @param number version The desired version of the databaseschema.
