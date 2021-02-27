@@ -17,13 +17,15 @@ end
 
 ---
 -- Adds a migration to the database and also runs the migration.
--- @param string identifier The unique identifier for a series of migrations. Together with `version` used to control the sequence of migrations.
--- @param number version The unique version in the series of migrations. Together with `identifier` used to control the sequence of migrations.
+-- @note This should be used in an extra file at `terrortown/migrations/<realm>/<identifier>.lua`.
+-- @param string identifier The unique identifier for a series of migrations.
+-- @param number version The unique version in the series of migrations. Should incremented by 1 for each new version.
 -- @param string upQuery The sqlQuery to execute.
--- @param string downQuery The sqlQuery used to revert the `upQuery`.
+-- @param [opt]string downQuery The sqlQuery used to revert the `upQuery`.
+-- @param [opt]string existingTable The name of the database table to port to the 'migrations' library.
 -- @return boolean|nil Returns `true` if the migration succeeded, `nil` if the migration was already executed and `false` in case of an error.
 -- @realm shared
-function migrations.Add(identifier, version, upQuery, downQuery)
+function migrations.Add(identifier, version, upQuery, downQuery, existingTable)
 
 	local checkQuery = "SELECT \"executed_at\" FROM \"migration_master\""
 						.. " WHERE \"identifier\"=" .. sql.SQLStr(identifier)
@@ -47,12 +49,14 @@ function migrations.Add(identifier, version, upQuery, downQuery)
 		return false
 	end
 
-	sql.Begin()
-	if sql.Query(upQuery) == false then
-		sql.Query("Rollback;")
-		return false
+	if existingTable and not sql.TableExists(existingTable) then
+		sql.Begin()
+		if sql.Query(upQuery) == false then
+			sql.Query("Rollback;")
+			return false
+		end
+		sql.Commit()
 	end
-	sql.Commit()
 
 	local setExecutedQuery = "UPDATE \"migration_master\" SET \"executed_at\"=" .. sql.SQLStr(os.time())
 							.. " WHERE \"identifier\"=" .. sql.SQLStr(identifier)
