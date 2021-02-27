@@ -18,7 +18,7 @@ if not sql.TableExists("migration_master") then
 end
 
 ---
--- Adds a migration to the database. Use @{migrations.MigrateToVersion()} once after all migrations are added.
+-- Adds a migration to the database. Use @{migrations.MigrateToVersion} once after all migrations are added.
 -- @note This should be used in an extra file at `terrortown/migrations/<realm>/<namespace>.lua`.
 -- @param string namespace The unique namespace for a series of migrations.
 -- @param number version The unique version in the namespace. Should incremented by 1 for each new version.
