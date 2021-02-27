@@ -267,6 +267,14 @@ fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function
 	MsgN("Added TTT2 server autorun file: ", path)
 end)
 
+fileloader.LoadFolder("terrortown/migrations/client/", false, CLIENT_FILE, function(path)
+	MsgN("Marked TTT2 client migration file for distribution: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/migrations/server/", false, SERVER_FILE, function(path)
+	MsgN("Added TTT2 server migration file: ", path)
+end)
+
 CHANGED_EQUIPMENT = {}
 
 ---

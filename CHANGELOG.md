@@ -4,12 +4,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added `migrations` library to enable easy schema changes of database tables
+
 ### Changed
 
 - Added global alias for IsOffScreen function to util.IsOffScreen
 - Updated Japanese localization (by @Westoon)
 - Moved rendering modules to libraries
-
 
 ## [v0.8.1b](https://github.com/TTT-2/TTT2/tree/v0.8.1b) (2021-02-19)
 
