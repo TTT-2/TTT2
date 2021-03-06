@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- TTT: fix instant reload of dropped weapon (by @svdm)
+- TTT: fix ragdoll pinning HUD for innocents (by @Flapchik)
+
 ### Changed
 
 - Added global alias for IsOffScreen function to util.IsOffScreen
