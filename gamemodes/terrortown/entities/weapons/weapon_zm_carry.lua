@@ -680,7 +680,7 @@ if SERVER then
 	-- @ignore
 	function SWEP:Initialize()
 		self.dt.can_rag_pin = GetGlobalBool("ttt_ragdoll_pinning")
-		self.dt.can_pin_rag_inno = GetGlobalBool("ttt_ragdoll_pinning_innocents")
+		self.dt.can_rag_pin_inno = GetGlobalBool("ttt_ragdoll_pinning_innocents")
 		self.dt.carried_rag = nil
 
 		return self.BaseClass.Initialize(self)
