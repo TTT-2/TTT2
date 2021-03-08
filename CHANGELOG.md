@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Inheriting from the same base using the classbuilder in different folders did not work
 - Fixed a docstring in the vskin module
 - Made TTT2CanTransferCredits hook a part of GM for API Documentation sanity
+- Fixed outline library not working
 
 ## [v0.8.0b](https://github.com/TTT-2/TTT2/tree/v0.8.0b) (2021-02-06)
 
