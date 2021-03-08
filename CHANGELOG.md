@@ -8,6 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - TTT: fix instant reload of dropped weapon (by @svdm)
 - TTT: fix ragdoll pinning HUD for innocents (by @Flapchik)
+- Fixed outline library not working
 
 ### Changed
 
