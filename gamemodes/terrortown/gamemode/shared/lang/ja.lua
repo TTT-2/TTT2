@@ -311,7 +311,7 @@ L.decoy_short_desc = "このデコイは別陣営のレーダーに偽のレー�
 L.decoy_pickup_wrong_team = "別陣営からのデコイを拾うことはできないぞ。"
 
 L.decoy_desc      = [[
-探偵に偽のレーダー反応を表示させ、彼らがあなたのDNAをスキャンしていた場合は彼らのDNAスキャナーがデコイの場所を表示するようにしてくれる。]]
+Detectiveに偽のレーダー反応を表示させ、彼らがあなたのDNAをスキャンしていた場合は彼らのDNAスキャナーがデコイの場所を表示するようにしてくれる。]]
 
 -- Defuser
 L.defuser_name    = "除去装置"
@@ -504,7 +504,7 @@ L.mute_off     = "ミュートを解除した"
 
 -- Spectators and prop possession
 L.punch_title  = "パンチ・オー・メーター"
-L.punch_help   = "移動キーもしくはジャンプ: オブジェクト移動。しゃがみ:オブジェクトを離れる。"
+L.punch_help   = "移動キーもしくはジャンプ:オブジェクト移動。しゃがみ:オブジェクトを離れる。"
 L.punch_bonus  = "スコアが低かったため、パンチ・オー・メーターの最大値が{num}下がった。"
 L.punch_malus  = "スコアが高かったため、パンチ・オー・メーターの最大値が{num}上がった！"
 
@@ -517,7 +517,7 @@ L.info_popup_innocent = [[
 
 L.info_popup_detective = [[
 あなたは探偵だ！テロリストの本部はTraitor（裏切り者）を見つけるためにあなたに特別な力を与えた。
-それらを使用しイノセント達の生存を手助けしよう、でも気をつけろ:
+それらを使用しInnocent達の生存を手助けしよう、でも気をつけろ:
 Traitorは真っ先にあなたを始末しようと殺意を向けているぞ！
 
 {menukey}を押して装備を受け取るんだ！]]
@@ -636,7 +636,7 @@ L.tip38 = "(C4やRadioのような)置くことのできるアイテムの多く
 
 L.tip39 = "C4の解除失敗による爆発はタイマーがゼロに達したC4の爆発より小さいです."
 
-L.tip40 = "ラウンドタイマーの上に'HASTE MODE'と書かれている場合, ラウンドは数分だけ早くなりますが, あらゆる死によって追加の時間を得られます(TF2のCPのように). このモードはTraitorに動き続けるようプレッシャーをかけます."
+L.tip40 = "ラウンドタイマーの上に'残り時間'と書かれている場合, ラウンドは数分だけ早くなりますが, あらゆる死によって追加の時間を得られます(TF2のCPのように). このモードはTraitorに動き続けるようプレッシャーをかけます."
 
 -- Round report
 L.report_title = "ラウンドレポート"
@@ -954,7 +954,7 @@ L.confgrenade_name = "Discombobulator"
 L.polter_name = "ポルターガイスト"
 L.stungun_name = "UMP-プロトタイプ"
 
-L.knife_instant = "即座に殺す"
+L.knife_instant = "斬殺"
 
 L.binoc_zoom_level = "拡大レベル"
 L.binoc_body = "死体が検出された。"
@@ -1022,7 +1022,7 @@ L.target_switch_weapon_nospace = "この武器のインベントリがないな�
 L.target_switch_drop_weapon_info = "{name}をスロット{slot}から捨てる"
 L.target_switch_drop_weapon_info_noslot = "スロット{slot}には捨てるものがないな。"
 
-L.corpse_searched_by_detective = "探偵により調査済み"
+L.corpse_searched_by_detective = "Detectiveにより調査済み"
 L.corpse_too_far_away = "その死体から遠すぎる。"
 
 L.radio_pickup_wrong_team = "別陣営が所有するラジオは使えないようだ。"
@@ -1248,8 +1248,8 @@ L.item_no_drown_damage_desc = [[溺れるダメージを無効にする。]]
 -- 2020-04-21
 L.dna_tid_possible = "スキャン可能"
 L.dna_tid_impossible = "スキャン不可能"
-L.dna_screen_ready = "DNA-無し"
-L.dna_screen_match = "DNA-一致"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
 -- 2020-04-30
 L.message_revival_canceled = "蘇生が中断されたようだ。"
@@ -1264,9 +1264,9 @@ L.door_destructible = "ドアが破損している({health}HP)"
 -- 2020-05-28
 L.confirm_detective_only = "Detectiveにしか死体を確認できないようだ。"
 L.inspect_detective_only = "Detectiveにしか死体を検査できないようだ。"
-L.corpse_hint_no_inspect = "探偵にしかこの死体を探せないようだ。"
-L.corpse_hint_inspect_only = "[{usekey}] で探せる。探偵にしか死体を確認できない。"
-L.corpse_hint_inspect_only_credits = "[{usekey}] でクレジットを受け取れる。探偵にしかこの死体を探せないようだ。"
+L.corpse_hint_no_inspect = "Detectiveにしかこの死体を探せないようだ。"
+L.corpse_hint_inspect_only = "[{usekey}] で探す。Detectiveにしか死体を確認できないようだ。"
+L.corpse_hint_inspect_only_credits = "[{usekey}] でクレジットを受け取る。Detectiveにしかこの死体を探せないようだ。"
 
 -- 2020-06-04
 L.label_bind_disguiser = "変装する"
