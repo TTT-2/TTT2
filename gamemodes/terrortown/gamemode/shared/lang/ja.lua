@@ -10,32 +10,32 @@ L.__alias = "日本語"
 L.lang_name = "日本語 (Japanese)"
 
 -- General text used in various places
-L.traitor = "トレイター"
-L.detective = "探偵"
-L.innocent = "イノセント"
+L.traitor = "Traitor"
+L.detective = "Detective"
+L.innocent = "Innocent"
 L.last_words = "遺言"
 
 L.terrorists = "テロリスト"
 L.spectators = "観戦者"
 
 L.noteam = "無所属"
-L.innocents = "イノセント陣営"
-L.traitors = "トレイター陣営"
+L.innocents = "Innocent陣営"
+L.traitors = "Traitor陣営"
 
 -- Round status messages
 L.round_minplayers = "ラウンドを開始するのに必要なプレイヤーがいないようだ…"
 L.round_voting = "投票中のため、{num}秒まで新しいラウンドを延期中…"
 L.round_begintime = "{num}秒内にラウンドを開始する。早めに準備をしよう。"
-L.round_selected = "トレイター選択完了。"
+L.round_selected = "Traitor選択完了。"
 L.round_started = "ラウンド開始！"
 L.round_restart = "ラウンドは管理者によってリスタートされたようだ。"
 
-L.round_traitors_one = "トレイターよ、一人でも頑張るんだ。"
-L.round_traitors_more = "トレイター達よ、力を合わせて彼らを皆殺しにしよう。"
+L.round_traitors_one = "Traitorよ、一人でも頑張るんだ。"
+L.round_traitors_more = "Traitorよ、仲間は{names}だ。"
 
-L.win_time = "時間切れ。トレイターの負けだ。"
-L.win_traitors = "トレイターの勝利！"
-L.win_innocents = "イノセントの勝利！"
+L.win_time = "時間切れ。Traitorの負けだ。"
+L.win_traitors = "Traitorの勝利！"
+L.win_innocents = "Innocentの勝利！"
 L.win_bees = "蜂の勝利！（つまり引き分け）"
 L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみよう。"
 
@@ -56,14 +56,14 @@ L.body_found       = "{finder}は{victim}の死体を見つけた. {role}"
 L.body_found_team = "{finder}は{victim}の死体を見つけた. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_traitor     = "奴はトレイターだったな！"
-L.body_found_det     = "奴は探偵だったようだ…"
-L.body_found_inno     = "奴はイノセントだったようだ…"
+L.body_found_traitor     = "奴はTraitorだったな！"
+L.body_found_det     = "奴はDetectiveだったようだ…"
+L.body_found_inno     = "奴はInnocentだったようだ…"
 
 L.body_confirm     = "{finder}は{victim}の死を確認した。"
 
-L.body_call        = "{player}は探偵を{victim}の死体の場所に呼んだ！"
-L.body_call_error  = "探偵を呼ぶ前にこのプレイヤーの死の確認が必要だ！"
+L.body_call        = "{player}はDetectiveを{victim}の死体の場所に呼んだ！"
+L.body_call_error  = "Detectiveを呼ぶ前にこのプレイヤーの死の確認が必要だ！"
 
 L.body_burning     = "熱っ！この死体は燃えてるぞ！"
 L.body_credits     = "死体から{num}クレジットを拾った！"
@@ -108,7 +108,7 @@ L.disg_menutitle = "変装メニュー"
 L.disg_not_owned = "変装装置はまだ持っていないぞ！"
 L.disg_enable    = "変装を有効にする"
 
-L.disg_help1     = "変装している時、誰かがあなたを見てもあなたの名前、体力とカルマは表示されない。また、探偵のレーダーにも反応されないだろうな。"
+L.disg_help1     = "変装している時、誰かがあなたを見てもあなたの名前、体力とカルマは表示されない。また、Detectiveのレーダーにも反応されないだろうな。"
 L.disg_help2     = "テンキーのEnterを押すとCキーからのメニューを使用せずに変装を切り替えできる。 開発者コンソールで「ttt_toggle_disguise」を異なるキーに割り当てることが可能。"
 
 -- Radar tab in equipment menu
@@ -161,8 +161,8 @@ L.quick_help    = "助けてくれ！"
 L.quick_imwith  = "{player}と一緒にいるぞ。"
 L.quick_see     = "{player}を監視中だ。"
 L.quick_suspect = "{player}が怪しい動きをしているぞ。"
-L.quick_traitor = "{player}がトレイターだ！"
-L.quick_inno    = "{player}はイノセントだな。"
+L.quick_traitor = "{player}がTraitorだ！"
+L.quick_inno    = "{player}はInnocentだな。"
 L.quick_check   = "まだ生きている奴はいるか？"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
@@ -181,15 +181,15 @@ L.search_call   = "探偵を呼ぶ"
 -- Descriptions of pieces of information found
 L.search_nick   = "こいつは{player}の死体だ。"
 
-L.search_role_traitor = "こいつはトレイターだったな！"
-L.search_role_det = "こいつは探偵だった。"
-L.search_role_inno = "こいつはイノセントだった。"
+L.search_role_traitor = "こいつはTraitorだったな！"
+L.search_role_det = "こいつはDetectiveだった。"
+L.search_role_inno = "こいつはInnocentだった。"
 
-L.search_words  = "遺言「{lastwords}」"
+L.search_words  = "遺言'{lastwords}'"
 L.search_armor  = "ボディアーマーを着ていたようだ。"
 L.search_disg   = "変装をしていたようだ。"
 L.search_radar  = "レーダーを所持していたようだ。もう機能していないがな。"
-L.search_c4     = "ポケットからメモを見つけた。それには「爆弾を解除するには{num}番のワイヤーをカットしろ」と書かれている。"
+L.search_c4     = "ポケットからメモを見つけた。それには'爆弾を解除するには{num}番のワイヤーをカットしろ'と書かれている。"
 
 L.search_dmg_crush  = "こいつの骨の多くが折れている。重たい物でもぶつかって死んだようだ。"
 L.search_dmg_bullet = "こいつは撃たれて死んだようだな。"
@@ -311,7 +311,7 @@ L.decoy_short_desc = "このデコイは別陣営のレーダーに偽のレー�
 L.decoy_pickup_wrong_team = "別陣営からのデコイを拾うことはできないぞ。"
 
 L.decoy_desc      = [[
-探偵に偽のレーダー反応を表示させ、彼らがあなたのDNAをスキャンしていた場合は彼らのDNAスキャナーがデコイの場所を表示するようにしてくれる。]]
+Detectiveに偽のレーダー反応を表示させ、彼らがあなたのDNAをスキャンしていた場合は彼らのDNAスキャナーがデコイの場所を表示するようにしてくれる。]]
 
 -- Defuser
 L.defuser_name    = "除去装置"
@@ -417,8 +417,8 @@ L.magnet_name     = "マグネットスティック"
 L.magnet_help     = "{primaryfire}で死体を貼り付ける"
 
 -- Grenades and misc
-L.grenade_smoke   = "スモークグレネード"
-L.grenade_fire    = "焼夷グレネード"
+L.grenade_smoke   = "発煙弾"
+L.grenade_fire    = "焼夷手榴弾"
 
 L.unarmed_name    = "無防備"
 L.crowbar_name    = "バール"
@@ -504,33 +504,33 @@ L.mute_off     = "ミュートを解除した"
 
 -- Spectators and prop possession
 L.punch_title  = "パンチ・オー・メーター"
-L.punch_help   = "移動キーもしくはジャンプ: オブジェクト移動。しゃがみ:オブジェクトを離れる。"
+L.punch_help   = "移動キーもしくはジャンプ:オブジェクト移動。しゃがみ:オブジェクトを離れる。"
 L.punch_bonus  = "スコアが低かったため、パンチ・オー・メーターの最大値が{num}下がった。"
 L.punch_malus  = "スコアが高かったため、パンチ・オー・メーターの最大値が{num}上がった！"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
-あなたは無実（？）のテロリスト、イノセントだ！だが周囲にはトレイター（裏切り者）が...
+あなたは無実のテロリスト、Innocentだ！だが周囲にはTraitor（裏切り者）が...
 あなたは誰を信用し、誰があなたを蜂の巣にするのだろうな？
 
 背中に注意し信頼関係を築き生き延びよう！]]
 
 L.info_popup_detective = [[
-あなたは探偵だ！テロリストの本部はトレイター（裏切り者）を見つけるためにあなたに特別な力を与えた。
-それらを使用しイノセント達の生存を手助けしよう、でも気をつけろ:
+あなたは探偵だ！テロリストの本部はTraitor（裏切り者）を見つけるためにあなたに特別な力を与えた。
+それらを使用しInnocent達の生存を手助けしよう、でも気をつけろ:
 Traitorは真っ先にあなたを始末しようと殺意を向けているぞ！
 
 {menukey}を押して装備を受け取るんだ！]]
 
 L.info_popup_traitor_alone = [[
-あなたはトレイター（裏切り者）だ！このラウンドでは仲間はいないようだ。
+あなたはTraitor（裏切り者）だ！このラウンドでは仲間はいないようだ。
 
 自分以外の全員始末すれば勝利だ！
 
 {menukey}を押して特別な装備を受け取るんだ！]]
 
 L.info_popup_traitor = [[
-あなたはトレイター（裏切り者）だ！他者を全て始末するために仲間と共に協力するんだ。
+あなたはTraitor（裏切り者）だ！他者を全て始末するために仲間と共に協力するんだ。
 だが気をつけろ、あなたの裏切り行為はバレるかもしれないぞ...
 
 仲間達:
@@ -636,7 +636,7 @@ L.tip38 = "(C4やRadioのような)置くことのできるアイテムの多く
 
 L.tip39 = "C4の解除失敗による爆発はタイマーがゼロに達したC4の爆発より小さいです."
 
-L.tip40 = "ラウンドタイマーの上に'HASTE MODE'と書かれている場合, ラウンドは数分だけ早くなりますが, あらゆる死によって追加の時間を得られます(TF2のCPのように). このモードはTraitorに動き続けるようプレッシャーをかけます."
+L.tip40 = "ラウンドタイマーの上に'残り時間'と書かれている場合, ラウンドは数分だけ早くなりますが, あらゆる死によって追加の時間を得られます(TF2のCPのように). このモードはTraitorに動き続けるようプレッシャーをかけます."
 
 -- Round report
 L.report_title = "ラウンドレポート"
@@ -656,12 +656,12 @@ L.report_save_error  = "保存するイベントログのデータがない。"
 L.report_save_result = "イベントログのデータが保存された:"
 
 -- Big title window
-L.hilite_win_traitors = "トレイター陣営の勝利"
+L.hilite_win_traitors = "Traitor陣営の勝利"
 L.hilite_win_bees = "蜂側の勝利"
-L.hilite_win_innocent = "イノセント陣営の勝利"
+L.hilite_win_innocent = "Innocent陣営の勝利"
 
-L.hilite_players1 = "{numplayers}人のプレイヤーが参加して、彼らの内{numtraitors}人がトレイターだった。"
-L.hilite_players2 = "{numplayers}人のプレイヤーが参加して、彼らの内1人だけトレイターだった。"
+L.hilite_players1 = "{numplayers}人のプレイヤーが参加して、彼らの内{numtraitors}人がTraitorだった。"
+L.hilite_players2 = "{numplayers}人のプレイヤーが参加して、彼らの内1人だけTraitorだった。"
 
 L.hilite_duration = "ラウンドが終わるのに{time}秒かかった。"
 
@@ -730,9 +730,9 @@ L.ev_c4_disarm2  = "{player}は{owner}の設置したC4の解除に失敗した"
 L.ev_credit      = "{finder}は{player}の死体から{num}クレジットを見つけた"
 
 L.ev_start       = "ラウンドを開始した"
-L.ev_win_traitor = "卑劣なトレイター達がラウンドに勝利した！"
-L.ev_win_inno    = "愛すべきイノセント達がラウンドに勝利した！"
-L.ev_win_time    = "トレイター達は時間切れで敗北した！"
+L.ev_win_traitor = "卑劣なTraitor達がラウンドに勝利した！"
+L.ev_win_inno    = "愛すべきInnocent達がラウンドに勝利した！"
+L.ev_win_time    = "Traitor達は時間切れで敗北した！"
 
 -- Awards/highlights
 L.aw_sui1_title = "自殺カルトのリーダー"
@@ -937,7 +937,7 @@ L.aw_tod2_text  = "はラウンド開始してすぐに死亡しました."
 L.drop_no_ammo = "弾薬箱として捨てるのに武器に装填されている弾がないようだ。"
 
 -- 2015-05-25
-L.hat_retrieve = "探偵の帽子を拾った。"
+L.hat_retrieve = "Detectiveの帽子を拾った。"
 
 -- 2017-09-03
 L.sb_sortby = "並び変え順:"
@@ -950,11 +950,11 @@ L.equip_tooltip_radio = "ラジオメニュー"
 L.equip_tooltip_xfer = "クレジット譲渡"
 L.equip_tooltip_reroll = "アイテムスロット"
 
-L.confgrenade_name = "吹っ飛びグレネード"
+L.confgrenade_name = "Discombobulator"
 L.polter_name = "ポルターガイスト"
 L.stungun_name = "UMP-プロトタイプ"
 
-L.knife_instant = "即座に殺す"
+L.knife_instant = "斬殺"
 
 L.binoc_zoom_level = "拡大レベル"
 L.binoc_body = "死体が検出された。"
@@ -1022,7 +1022,7 @@ L.target_switch_weapon_nospace = "この武器のインベントリがないな�
 L.target_switch_drop_weapon_info = "{name}をスロット{slot}から捨てる"
 L.target_switch_drop_weapon_info_noslot = "スロット{slot}には捨てるものがないな。"
 
-L.corpse_searched_by_detective = "探偵により調査済み"
+L.corpse_searched_by_detective = "Detectiveにより調査済み"
 L.corpse_too_far_away = "その死体から遠すぎる。"
 
 L.radio_pickup_wrong_team = "別陣営が所有するラジオは使えないようだ。"
@@ -1046,9 +1046,9 @@ L.pickup_pending = "既に武器を拾っている、受け取りまで少し待
 -- 2020-01-07
 L.tbut_help_admin = "traitor button設定を編集する"
 L.tbut_role_toggle = "[{walkkey} + {usekey}]で{role}に切り替える"
-L.tbut_role_config = "役職: {current}"
+L.tbut_role_config = "役職:{current}"
 L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}]で{team}に切り替える"
-L.tbut_team_config = "陣営: {current}"
+L.tbut_team_config = "陣営:{current}"
 L.tbut_current_config = "現在の設定:"
 L.tbut_intended_config = "マップ制作者による意図された設定:"
 L.tbut_admin_mode_only = "'{cv}''1'にセットしているため、あなたにしか見えない。"
@@ -1248,8 +1248,8 @@ L.item_no_drown_damage_desc = [[溺れるダメージを無効にする。]]
 -- 2020-04-21
 L.dna_tid_possible = "スキャン可能"
 L.dna_tid_impossible = "スキャン不可能"
-L.dna_screen_ready = "DNA-無し"
-L.dna_screen_match = "DNA-一致"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
 -- 2020-04-30
 L.message_revival_canceled = "蘇生が中断されたようだ。"
@@ -1262,11 +1262,11 @@ L.hud_revival_time = "{time}秒"
 L.door_destructible = "ドアが破損している({health}HP)"
 
 -- 2020-05-28
-L.confirm_detective_only = "探偵にしか死体を確認できないようだ。"
-L.inspect_detective_only = "探偵にしか死体を検査できないようだ。"
-L.corpse_hint_no_inspect = "探偵にしかこの死体を探せないようだ。"
-L.corpse_hint_inspect_only = "[{usekey}] で探せる。探偵にしか死体を確認できない。"
-L.corpse_hint_inspect_only_credits = "[{usekey}] でクレジットを受け取れる。探偵にしかこの死体を探せないようだ。"
+L.confirm_detective_only = "Detectiveにしか死体を確認できないようだ。"
+L.inspect_detective_only = "Detectiveにしか死体を検査できないようだ。"
+L.corpse_hint_no_inspect = "Detectiveにしかこの死体を探せないようだ。"
+L.corpse_hint_inspect_only = "[{usekey}] で探す。Detectiveにしか死体を確認できないようだ。"
+L.corpse_hint_inspect_only_credits = "[{usekey}] でクレジットを受け取る。Detectiveにしかこの死体を探せないようだ。"
 
 -- 2020-06-04
 L.label_bind_disguiser = "変装する"
