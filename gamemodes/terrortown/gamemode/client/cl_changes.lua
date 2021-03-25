@@ -843,6 +843,22 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2021, month = 02, day = 19}))
 
+	AddChange("TTT2 Base - v0.8.2b", [[
+		<h2>Improved:</h2>
+		<ul>
+			<li>Added global alias for IsOffScreen function to util.IsOffScreen</li>
+			<li>Updated Japanese localization (by @Westoon)</li>
+			<li>Moved rendering modules to libraries</li>
+			<li>Assigned PvP category to the gamemode.</li>
+		</ul>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>TTT: fix instant reload of dropped weapon (by @svdm)</li>
+			<li>TTT: fix ragdoll pinning HUD for innocents (by @Flapchik)</li>
+			<li>Fixed outline library not working</li>
+		</ul>
+	]], os.time({year = 2021, month = 03, day = 25}))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
