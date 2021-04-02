@@ -35,7 +35,7 @@ local function TraitorSort(a, b)
 		return false
 	end
 
-	if a:GetTeam() == TEAM_TRAITOR and not b:GetTeam() == TEAM_TRAITOR then
+	if a:GetTeam() == TEAM_TRAITOR and b:GetTeam() ~= TEAM_TRAITOR then
 		return true
 	end
 

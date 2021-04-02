@@ -339,7 +339,7 @@ if SERVER then
 	}
 
 	local function RadioCmd(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActive() or not #args == 2 then return end
+		if not IsValid(ply) or not ply:IsActive() or #args ~= 2 then return end
 
 		local eidx = tonumber(args[1])
 		local snd = tostring(args[2])
