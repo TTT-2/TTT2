@@ -1,13 +1,13 @@
-------------
+---
 -- HUDELEMENT base class.
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @author saibotk
 -- @author LeBroomer
 
 local surface = surface
 local table = table
 local draw = draw
-local SQL = SQL
+local sql = sql
 local hudelements = hudelements
 local math = math
 
@@ -362,35 +362,35 @@ end
 -- @return table size (<code>{@{number} w, @{number} h}</code>)
 -- @realm client
 function HUDELEMENT:GetBorderParams()
-	if self:IsParent() then
-		local pos = self:GetPos()
-		local size = self:GetSize()
-		local children = self:GetChildren()
-
-		local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
-
-		-- iterate over children
-		for i = 1, #children do
-			local elem_str = children[i]
-			local elem = hudelements.GetStored(elem_str)
-
-			local hud = huds.GetStored(HUDManager.GetHUD())
-
-			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldDraw() then
-				local c_pos = elem:GetPos()
-				local c_size = elem:GetSize()
-
-				x_min = math.min(x_min, c_pos.x)
-				y_min = math.min(y_min, c_pos.y)
-				x_max = math.max(x_max, c_pos.x + c_size.w)
-				y_max = math.max(y_max, c_pos.y + c_size.h)
-			end
-		end
-
-		return {x = x_min, y = y_min}, {w = x_max - x_min, h = y_max - y_min}
-	else
+	if not self:IsParent() then
 		return self:GetPos(), self:GetSize()
 	end
+
+	local pos = self:GetPos()
+	local size = self:GetSize()
+	local children = self:GetChildren()
+
+	local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
+
+	-- iterate over children
+	for i = 1, #children do
+		local elem_str = children[i]
+		local elem = hudelements.GetStored(elem_str)
+
+		local hud = huds.GetStored(HUDManager.GetHUD())
+
+		if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldDraw() then
+			local c_pos = elem:GetPos()
+			local c_size = elem:GetSize()
+
+			x_min = math.min(x_min, c_pos.x)
+			y_min = math.min(y_min, c_pos.y)
+			x_max = math.max(x_max, c_pos.x + c_size.w)
+			y_max = math.max(y_max, c_pos.y + c_size.h)
+		end
+	end
+
+	return {x = x_min, y = y_min}, {w = x_max - x_min, h = y_max - y_min}
 end
 
 ---
@@ -693,7 +693,7 @@ end
 -- Saves the current savingkey values (position, size)
 -- @realm client
 function HUDELEMENT:SaveData()
-	SQL.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
+	sql.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
 ---
@@ -704,10 +704,10 @@ function HUDELEMENT:LoadData()
 	local loadedData = {}
 
 	-- load and initialize the elements data from database
-	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
-		local loaded = SQL.Load("ttt2_hudelements", self.id, loadedData, skeys)
+	if sql.CreateSqlTable("ttt2_hudelements", skeys) then
+		local loaded = sql.Load("ttt2_hudelements", self.id, loadedData, skeys)
 		if not loaded then
-			SQL.Init("ttt2_hudelements", self.id, self, skeys)
+			sql.Init("ttt2_hudelements", self.id, self, skeys)
 		end
 	end
 

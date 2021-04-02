@@ -1,3 +1,5 @@
+--- @ignore
+
 local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
@@ -53,7 +55,7 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale()
+		self.scale = appearance.GetGlobalScale()
 		self.basecolor = self:GetHUDBasecolor()
 		self.element_height = element_height * self.scale
 		self.margin = margin * self.scale

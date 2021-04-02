@@ -2,6 +2,7 @@
 -- addonChecker to detect known incompatabilities.
 -- @author saibotk
 -- @author Mineotopia
+-- @module addonChecker
 
 ADDON_INCOMPATIBLE = 0
 ADDON_OUTDATED = 1
@@ -176,11 +177,6 @@ addonChecker.curatedList = {
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
-	["940215686"] = { -- Clairvoyancy by Doctor Jew
-		alternative = "1637001449",
-		reason = "Does not use the TTT2 sidebar system.",
-		type = ADDON_OUTDATED
-	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
@@ -252,11 +248,6 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED
 	},
 	["309299668"] = { -- Martyrdom by Exho
-		alternative = "1630269736",
-		reason = "Does not use the TTT2 sidebar system.",
-		type = ADDON_OUTDATED
-	},
-	["1324649928"] = { -- Martyrdom by Doctor Jew
 		alternative = "1630269736",
 		reason = "Does not use the TTT2 sidebar system.",
 		type = ADDON_OUTDATED

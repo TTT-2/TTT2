@@ -55,15 +55,33 @@ if CLIENT then
 		net.ReadVector(), net.ReadAngle(), net.ReadVector(), net.ReadVector(), net.ReadAngle(), net.ReadVector()))
 	end)
 
-	return
+	return -- following code is serverside-only
 end
 
 -- Options
+
+---
+-- @realm server
 local gs_crazyphysics = CreateConVar("gs_crazyphysics", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Enables Lua crazyphysics detection")
+
+---
+-- @realm server
 local gs_crazyphysics_echo = CreateConVar("gs_crazyphysics_echo", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Inform players of ragdoll freezing/removal")
+
+---
+-- @realm server
 local gs_crazyphysics_interval = CreateConVar("gs_crazyphysics_interval", "0.1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How often to check entities for extreme velocity")
+
+---
+-- @realm server
 local gs_crazyphysics_speed_defuse = CreateConVar("gs_crazyphysics_speed_defuse", "4000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max velocity in in/s an entity can reach before it's frozen")
+
+---
+-- @realm server
 local gs_crazyphysics_speed_remove = CreateConVar("gs_crazyphysics_speed_remove", "6000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max velocity in in/s an entity can reach before it's removed")
+
+---
+-- @realm server
 local gs_crazyphysics_defusetime = CreateConVar("gs_crazyphysics_defusetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How long to freeze the entity for during diffusal")
 
 -- Add entity classes you want checked

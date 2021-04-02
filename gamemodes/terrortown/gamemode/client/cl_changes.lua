@@ -4,22 +4,20 @@
 -- some micro-optimizations (localizing globals)
 local os = os
 local hook = hook
-local IsValid = IsValid
-local vgui = vgui
-local draw = draw
 local table = table
 
--- internal
-local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
-local btnPanelColor = Color(22, 42, 57)
+---
+-- @realm client
+-- @internal
+local changesVersion = CreateConVar("changes_version", "v0.0.0.0", FCVAR_ARCHIVE)
 
-local changesPanel, changes, currentVersion
+local changes, currentVersion
 
 ---
 -- Adds a change into the changes list
 -- @param string version
 -- @param string text
--- @param number[default=nil] date the date when this update got released
+-- @param[opt] number date the date when this update got released
 -- @realm client
 function AddChange(version, text, date)
 	changes = changes or {}
@@ -30,31 +28,6 @@ function AddChange(version, text, date)
 
 	currentVersion = version
 end
-
-local htmlStart = [[
-	<head>
-		<style>
-			body {
-				font-family: Verdana, Trebuchet;
-				background-color: rgb(22, 42, 57);
-				color: white;
-				font-weight: 100;
-			}
-			body * {
-				font-size: 13pt;
-			}
-			h1 {
-				font-size: 16pt;
-				text-decoration: underline;
-			}
-		</style>
-	</head>
-	<body>
-]]
-
-local htmlEnd = [[
-	</body>
-]]
 
 ---
 -- Creates the changes list
@@ -828,118 +801,91 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 09, day = 28}))
 
+	AddChange("TTT2 Base - v0.8.0b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added new vgui system with new F1 menu</li>
+			<li>Introduced a global scale factor based on screen resolution to scale HUD elements accordingly</li>
+			<li>Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded</li>
+			<li>Added Drag&Drop role layering VGUI (preview), accessible with the console command <i>ttt2_edit_rolelayering</i></li>
+			<li>Added a new event system</li>
+			<li>Credits can now be transferred across teams and from roles whom the recipient does not know</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>TargetID text is now scaled with the global scale factor</li>
+			<li>Removed C4 defuse restriction for teammates</li>
+			<li>Changed the language identifiers to generic english names</li>
+			<li>Updated Simplified Chinese localization (by @TheOnly8Z)</li>
+			<li>Updated Italian localization (by @ThePlatynumGhost)</li>
+			<li>Updated English localization (by @Satton2)</li>
+			<li>Updated Russian localization (by @scientistnt and @Satton2)</li>
+			<li>Updated German translation (by @Creyox)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory</li>
+			<li>Fixed a roleselection bug, where forced roles would not be deducted from the available roles</li>
+			<li>Fixed a credit award bug, where detectives would receive a pointless notification about being awarded with 0 credits</li>
+			<li>Fixed a karma bug, where damage would still be reduced even though the karma system was disabled</li>
+			<li>Fixed a roleselection bug, where invalid layers led to skipping the next layer too</li>
+			<li>Fixed Magneto Stick ragdoll pinning instructions not showing for innocents when <i>ttt_ragdoll_pinning_innocents</i> is enabled</li>
+			<li>Fixed a bug where the targetID info broke if the pickup key is unbound</li>
+		</ul>
+	]], os.time({year = 2021, month = 02, day = 06}))
+
+	AddChange("TTT2 Base - v0.8.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed inheriting from the same base using the classbuilder in different folders</li>
+		</ul>
+	]], os.time({year = 2021, month = 02, day = 19}))
+
+	AddChange("TTT2 Base - v0.8.2b", [[
+		<h2>Improved:</h2>
+		<ul>
+			<li>Added global alias for IsOffScreen function to util.IsOffScreen</li>
+			<li>Updated Japanese localization (by @Westoon)</li>
+			<li>Moved rendering modules to libraries</li>
+			<li>Assigned PvP category to the gamemode.</li>
+		</ul>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>TTT: fix instant reload of dropped weapon (by @svdm)</li>
+			<li>TTT: fix ragdoll pinning HUD for innocents (by @Flapchik)</li>
+			<li>Fixed outline library not working</li>
+		</ul>
+	]], os.time({year = 2021, month = 03, day = 25}))
+
+	---
 	-- run hook for other addons to add their changelog as well
+	-- @realm client
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
 ---
--- Creates the HTML panel
--- @param PANEL panel
--- @param table change
 -- @realm client
--- @internal
-local function MakePanel(panel, change)
-	local header = "<h1>" .. change.version .. " Update"
-
-	if change.date > 0 then
-		header = header .. " <i> - (date: " .. os.date("%Y/%m/%d", change.date) .. ")</i>"
-	end
-
-	header = header .. "</h1>"
-
-	local html = vgui.Create("DHTML", panel)
-
-	html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
-	html:Dock(FILL)
-	html:DockMargin(10, 10, 10, 10)
-
-	panel.htmlSheet = html
-end
-
-local function SortChanges(a, b)
-	if a.date < 0 and b.date < 0 then
-		return a.date < b.date
-	end
-
-	return a.date > b.date
-end
-
----
--- Displays the changes window
--- @realm client
-function ShowChanges()
-	if IsValid(changesPanel) then
-		changesPanel:Remove()
-
-		return
-	end
-
+function GetSortedChanges()
 	CreateChanges()
 
-	local frame = vgui.Create("DFrame")
-	frame:SetSize(ScrW() * 0.8, ScrH() * 0.8)
-	frame:Center()
-	frame:SetTitle("Update " .. currentVersion)
-	frame:SetVisible(true)
-	frame:SetDraggable(true)
-	frame:ShowCloseButton(true)
-	frame:SetMouseInputEnabled(true)
-	frame:SetDeleteOnClose(true)
-
-	local sheet = vgui.Create("DColumnSheet", frame)
-	sheet:Dock(FILL)
-
-	sheet.Navigation:SetWidth(256)
-
 	-- sort changes list by date
-	table.sort(changes, SortChanges)
-
-	for i = 1, #changes do
-		local change = changes[i]
-
-		local panel = vgui.Create("DPanel", sheet)
-		panel:Dock(FILL)
-
-		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, btnPanelColor)
+	table.sort(changes, function(a, b)
+		if a.date < 0 and b.date < 0 then
+			return a.date < b.date
+		else
+			return a.date > b.date
 		end
+	end)
 
-		local leftBtn = sheet:AddSheet(change.version, panel).Button
-
-		local oldClick = leftBtn.DoClick
-		leftBtn.DoClick = function(slf)
-			if currentVersion == change.version then return end
-
-			oldClick(slf)
-
-			frame:SetTitle("TTT2 Update - " .. change.version)
-
-			if not panel.htmlSheet then
-				MakePanel(panel, change)
-			end
-
-			currentVersion = change.version
-		end
-
-		if change.version == currentVersion then
-			MakePanel(panel, change)
-
-			sheet:SetActiveButton(leftBtn)
-		end
-	end
-
-	frame:MakePopup()
-	frame:SetKeyboardInputEnabled(false)
-
-	changesPanel = frame
-
-	return changesPanel
+	return changes
 end
 
 net.Receive("TTT2DevChanges", function(len)
 	if changesVersion:GetString() == GAMEMODE.Version then return end
 
-	ShowChanges()
+	--ShowChanges()
 
 	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)

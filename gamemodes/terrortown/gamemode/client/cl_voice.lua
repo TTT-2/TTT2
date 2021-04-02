@@ -1,6 +1,6 @@
 ---
+-- Voicechat popup
 -- @module VOICE
--- @desc Voicechat popup
 
 DEFINE_BASECLASS("gamemode_base")
 
@@ -29,6 +29,8 @@ g_VoicePanelList = nil
 local function VoiceTryEnable()
 	local client = LocalPlayer()
 
+	---
+	-- @realm client
 	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
 		return false
 	end
@@ -56,6 +58,8 @@ end
 local function VoiceTeamTryEnable()
 	local client = LocalPlayer()
 
+	---
+	-- @realm client
 	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
 		return false
 	end
@@ -87,10 +91,10 @@ local function VoiceTeamTryDisable()
 end
 
 -- register a binding for the general voicechat
-bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "TTT2 Bindings", "f1_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
+bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "header_bindings_ttt2", "label_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
 
 -- register a binding for the team voicechat
-bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "TTT2 Bindings", "f1_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
+bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "header_bindings_ttt2", "label_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
 
 -- 255 at 100
 -- 5 at 5000
@@ -169,7 +173,7 @@ function GM:PlayerStartVoice(ply)
 	if huds and HUDManager then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			paintFn = hud.voicePaint or paintFn
+			paintFn = hud.VoicePaint or paintFn
 		end
 	end
 
@@ -195,6 +199,8 @@ function GM:PlayerStartVoice(ply)
 		pnl.Color = DETECTIVE.color
 	end
 
+	---
+	-- @realm client
 	pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply) or pnl.Color
 
 	PlayerVoicePanels[ply] = pnl
@@ -255,6 +261,7 @@ timer.Create("VoiceClean", 10, 0, VoiceClean)
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerEndVoice
+-- @local
 function GM:PlayerEndVoice(ply, no_reset)
 	if IsValid(PlayerVoicePanels[ply]) then
 		PlayerVoicePanels[ply]:Remove()

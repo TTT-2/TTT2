@@ -1,8 +1,7 @@
 ---
 -- @class ENT
--- @realm shared
--- @section C4
 -- @desc c4 explosive
+-- @section C4
 
 local math = math
 local hook = hook
@@ -44,53 +43,28 @@ ENT.CanUseKey = true
 ENT.Avoidable = true
 
 ---
--- @function GetThrower()
--- @return Entity
---
----
--- @function SetThrower(ent)
--- @param Entity ent
----
+-- @accessor Entity
+-- @realm shared
 AccessorFunc(ENT, "thrower", "Thrower")
 
 ---
--- @function GetRadius()
--- @return number
---
----
--- @function SetRadius(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
 
 ---
--- @function GetDmg()
--- @return number
---
----
--- @function SetDmg(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
 ---
--- @function GetArmTime()
--- @return number
---
----
--- @function SetArmTime(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "arm_time", "ArmTime", FORCE_NUMBER)
 
 ---
--- @function GetTimerLength()
--- @return number
---
----
--- @function SetTimerLength(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 
 -- Generate accessors for DT vars. This way all consumer code can keep accessing
@@ -98,34 +72,30 @@ AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 -- they are set up as DT vars.
 
 ---
--- @function GetExplodeTime()
--- @return number
---
----
--- @function SetExplodeTime(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFuncDT(ENT, "explode_time", "ExplodeTime")
 
 ---
--- @function GetArmed()
--- @return boolean
---
----
--- @function SetArmed(bool)
--- @param boolean bool
----
-AccessorFuncDT(ENT, "armed", "Armed")
+-- @accessor boolean
+-- @realm shared
+AccessorFuncDT(ENT, "armed", "Armed", FORCE_BOOL)
 
 ENT.Beep = 0
 ENT.DetectiveNearRadius = 300
 ENT.SafeWires = nil
 
+---
+-- Initializes the data
+-- @realm shared
 function ENT:SetupDataTables()
 	self:DTVar("Int", 0, "explode_time")
 	self:DTVar("Bool", 0, "armed")
 end
 
+---
+-- Initializes the C4
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -164,6 +134,7 @@ end
 
 ---
 -- @param number length time
+-- @realm shared
 function ENT:SetDetonateTimer(length)
 	self:SetTimerLength(length)
 	self:SetExplodeTime(CurTime() + length)
@@ -171,25 +142,17 @@ end
 
 ---
 -- @param Entity activator
+-- @realm shared
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() then
-		-- Traitors not allowed to disarm other traitor's C4 until he is dead
-		local owner = self:GetOwner()
-
-		if self:GetArmed() and owner ~= activator and IsValid(owner) and owner:Alive() and owner:GetTeam() == activator:GetTeam() then
-			LANG.Msg(activator, "c4_no_disarm", nil, MSG_MSTACK_ROLE)
-
-			return
-		end
-
 		self:ShowC4Config(activator)
 	end
 end
 
 ---
--- @module ENT
 -- @param number t
 -- @return number
+-- @realm shared
 function ENT.SafeWiresForTime(t)
 	local m = t / 60
 
@@ -208,6 +171,7 @@ end
 
 ---
 -- @param boolean state
+-- @realm shared
 function ENT:WeldToGround(state)
 	if self.IsOnWall then return end
 
@@ -264,8 +228,9 @@ end
 
 ---
 -- @param Entity dmgowner
--- @oaram Vector center
+-- @param Vector center
 -- @param number radius
+-- @realm shared
 function ENT:SphereDamage(dmgowner, center, radius)
 	-- It seems intuitive to use FindInSphere here, but that will find all ents
 	-- in the radius, whereas there exist only ~16 players. Hence it is more
@@ -311,8 +276,11 @@ local c4boom = Sound("c4.explode")
 
 ---
 -- @param table tr Trace Structure
+-- @realm shared
 function ENT:Explode(tr)
-	hook.Call("TTTC4Explode", nil, self)
+	---
+	-- @realm shared
+	hook.Run("TTTC4Explode", self)
 
 	if SERVER then
 		self:SetNoDraw(true)
@@ -387,7 +355,7 @@ function ENT:Explode(tr)
 
 		self:SetExplodeTime(0)
 
-		SCORE:HandleC4Explosion(dmgowner, self:GetArmTime(), CurTime())
+		events.Trigger(EVENT_C4EXPLODE, dmgowner)
 
 		self:Remove()
 	else
@@ -406,6 +374,7 @@ end
 
 ---
 -- @return[default=false] boolean
+-- @realm shared
 function ENT:IsDetectiveNear()
 	local center = self:GetPos()
 	local r = self.DetectiveNearRadius * self.DetectiveNearRadius
@@ -433,6 +402,8 @@ end
 local beep = Sound("weapons/c4/c4_beep1.wav")
 local MAX_MOVE_RANGE = 1000000 -- sq of 1000
 
+---
+-- @realm shared
 function ENT:Think()
 	if not self:GetArmed() then return end
 
@@ -502,6 +473,7 @@ end
 ---
 -- @return boolen
 -- @see ENT:GetArmed
+-- @realm shared
 function ENT:Defusable()
 	return self:GetArmed()
 end
@@ -540,7 +512,7 @@ if SERVER then
 	function ENT:Disarm(ply)
 		local owner = self:GetOwner()
 
-		SCORE:HandleC4Disarm(ply, owner, true)
+		events.Trigger(EVENT_C4DISARM, owner, ply, true)
 
 		if ply ~= owner and IsValid(owner) then
 			LANG.Msg(owner, "c4_disarm_warn")
@@ -560,7 +532,7 @@ if SERVER then
 	function ENT:FailedDisarm(ply)
 		self.DisarmCausedExplosion = true
 
-		SCORE:HandleC4Disarm(ply, self:GetOwner(), false)
+		events.Trigger(EVENT_C4DISARM, self:GetOwner(), ply, false)
 
 		-- tiny moment of zen and realization before the bang
 		self:SetExplodeTime(CurTime() + 0.1)
@@ -620,6 +592,8 @@ if SERVER then
 			end
 		end
 
+		events.Trigger(EVENT_C4PLANT, ply)
+
 		-- send indicator to traitors
 		self:SendWarn(true)
 	end
@@ -657,14 +631,18 @@ if SERVER then
 
 				bomb:Arm(ply, time)
 
-				hook.Call("TTTC4Arm", nil, bomb, ply)
+				---
+				-- @realm server
+				hook.Run("TTTC4Arm", bomb, ply)
 			end
 		end
 	end
 	concommand.Add("ttt_c4_config", ReceiveC4Config)
 
 	local function SendDisarmResult(ply, bomb, result)
-		hook.Call("TTTC4Disarm", nil, bomb, result, ply)
+		---
+		-- @realm server
+		hook.Run("TTTC4Disarm", bomb, result, ply)
 
 		net.Start("TTT_C4DisarmResult")
 		net.WriteEntity(bomb)
@@ -716,7 +694,9 @@ if SERVER then
 			else
 				local prints = bomb.fingerprints or {}
 
-				hook.Call("TTTC4Pickup", nil, bomb, ply)
+				---
+				-- @realm server
+				hook.Run("TTTC4Pickup", bomb, ply)
 
 				-- picks up weapon, switches if possible and needed, returns weapon if successful
 				local wep = ply:SafePickupWeaponClass("weapon_ttt_c4", true)
@@ -752,16 +732,16 @@ if SERVER then
 				-- spark to show onlookers we destroyed this bomb
 				util.EquipmentDestroyed(bomb:GetPos())
 
-				hook.Call("TTTC4Destroyed", nil, bomb, ply)
+				---
+				-- @realm server
+				hook.Run("TTTC4Destroyed", bomb, ply)
 
 				bomb:Remove()
 			end
 		end
 	end
 	concommand.Add("ttt_c4_destroy", ReceiveC4Destroy)
-end
-
-if CLIENT then
+else -- CLIENT
 	local TryT = LANG.TryTranslation
 	local GetPT = LANG.GetParamTranslation
 

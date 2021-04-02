@@ -1,3 +1,6 @@
+---
+-- @class Player
+
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
@@ -5,8 +8,6 @@ if not plymeta then
 	return
 end
 
-
--- SHARED ARMOR FUNCTIONS
 ---
 -- Returns the current armor
 -- @return[default=0] number armor

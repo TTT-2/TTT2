@@ -1,3 +1,5 @@
+--- @ignore
+
 local base = "pure_skin_element"
 
 HUDELEMENT.Base = base

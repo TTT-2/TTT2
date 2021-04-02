@@ -1,3 +1,5 @@
+--- @ignore
+
 -- item info
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
@@ -42,7 +44,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale()
+		self.scale = appearance.GetGlobalScale()
 		self.basecolor = self:GetHUDBasecolor()
 		self.padding = padding * self.scale
 

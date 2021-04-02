@@ -1,8 +1,7 @@
 ---
 -- @class PANEL
--- @realm client
--- @section TTTScorePlayerInfoBase
 -- @desc Player info panel, based on sandbox scoreboard's infocard
+-- @section TTTScorePlayerInfoBase
 
 TTTScoreboard = TTTScoreboard or {}
 
@@ -15,6 +14,8 @@ local GetTranslation = LANG.GetTranslation
 -- Base stuff
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self.Player = nil
 
@@ -23,18 +24,22 @@ end
 
 ---
 -- @param Player ply
+-- @realm client
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 
 	self:UpdatePlayerData()
 end
 
+---
+-- @realm client
 function PANEL:UpdatePlayerData()
 	-- override me
 end
 
 ---
 -- @return[default=true] boolean
+-- @realm client
 function PANEL:Paint()
 	return true
 end
@@ -48,6 +53,8 @@ vgui.Register("TTTScorePlayerInfoBase", PANEL, "Panel")
 
 PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self.List = vgui.Create("DPanelSelect", self)
 	self.List:EnableHorizontal(true)
@@ -65,6 +72,8 @@ function PANEL:Init()
 	self.Help:SetVisible(false)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self:SetSize(self:GetWide(), 75)
 
@@ -80,6 +89,8 @@ function PANEL:PerformLayout()
 	self.Help:SetPos(5, 5)
 end
 
+---
+-- @realm client
 function PANEL:UpdatePlayerData()
 	if not IsValid(self.Player) then return end
 
@@ -171,6 +182,8 @@ TTTScoreboard.Tags = {
 
 PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self.TagButtons = {}
 
@@ -184,6 +197,7 @@ end
 
 ---
 -- @param Player ply
+-- @realm client
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 
@@ -194,15 +208,21 @@ function PANEL:SetPlayer(ply)
 	self:InvalidateLayout()
 end
 
+---
+-- @ignore
 function PANEL:ApplySchemeSettings()
 
 end
 
+---
+-- @realm client
 function PANEL:UpdateTag()
 	self:GetParent():UpdatePlayerData()
 	self:GetParent():SetOpen(false)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self:SetSize(self:GetWide(), 30)
 
@@ -229,6 +249,8 @@ vgui.Register("TTTScorePlayerInfoTags", PANEL, "TTTScorePlayerInfoBase")
 
 PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self.Player = nil
 
@@ -250,12 +272,14 @@ end
 
 ---
 -- @param Player ply
+-- @realm client
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 end
 
 ---
 -- @param table tag
+-- @realm client
 function PANEL:SetupTag(tag)
 	self.Tag = tag
 
@@ -265,6 +289,8 @@ function PANEL:SetupTag(tag)
 	self:SetTextColor(self.Tag and self.Tag.color or COLOR_WHITE)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self:SetText(self.Tag and GetTranslation(self.Tag.txt) or "")
 	self:SizeToContents()
@@ -272,6 +298,8 @@ function PANEL:PerformLayout()
 	self:SetSize(self:GetWide() + 10, self:GetTall() + 3)
 end
 
+---
+-- @realm client
 function PANEL:DoRightClick()
 	if IsValid(self.Player) then
 		self.Player.sb_tag = nil
@@ -280,6 +308,8 @@ function PANEL:DoRightClick()
 	end
 end
 
+---
+-- @realm client
 function PANEL:DoClick()
 	if IsValid(self.Player) then
 		if self.Player.sb_tag == self.Tag then
@@ -292,6 +322,8 @@ function PANEL:DoClick()
 	end
 end
 
+---
+-- @realm client
 function PANEL:PaintOver()
 	if self.Player and self.Player.sb_tag == self.Tag then
 		surface.SetDrawColor(255, 200, 0, 255)

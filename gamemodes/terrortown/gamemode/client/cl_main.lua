@@ -8,15 +8,12 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local surface = surface
-local CreateConVar = CreateConVar
 local hook = hook
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
-
-ttt_include("cl_fonts")
 
 ttt_include("sh_init")
 
@@ -26,6 +23,7 @@ ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
+ttt_include("sh_rolelayering")
 ttt_include("sh_scoring")
 ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
@@ -44,6 +42,26 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("cl_vskin__default_skin")
+ttt_include("cl_vskin__vgui__dframe")
+ttt_include("cl_vskin__vgui__dmenubutton")
+ttt_include("cl_vskin__vgui__dsubmenubutton")
+ttt_include("cl_vskin__vgui__dnavpanel")
+ttt_include("cl_vskin__vgui__dcontentpanel")
+ttt_include("cl_vskin__vgui__dbuttonpanel")
+ttt_include("cl_vskin__vgui__dcategoryheader")
+ttt_include("cl_vskin__vgui__dcategorycollapse")
+ttt_include("cl_vskin__vgui__dform")
+ttt_include("cl_vskin__vgui__dbutton")
+ttt_include("cl_vskin__vgui__dbinder")
+ttt_include("cl_vskin__vgui__dlabel")
+ttt_include("cl_vskin__vgui__dcombobox")
+ttt_include("cl_vskin__vgui__dcheckboxlabel")
+ttt_include("cl_vskin__vgui__dnumslider")
+ttt_include("cl_vskin__vgui__dbinderpanel")
+ttt_include("cl_vskin__vgui__dscrollpanel")
+ttt_include("cl_vskin__vgui__dvscrollbar")
+
 ttt_include("cl_network_sync")
 ttt_include("cl_hud_editor")
 ttt_include("cl_hud_manager")
@@ -57,6 +75,7 @@ ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
+ttt_include("cl_help_data")
 ttt_include("cl_help")
 ttt_include("cl_msgstack")
 ttt_include("cl_eventpopup")
@@ -92,8 +111,9 @@ end)
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+---
+-- @realm client
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
 
 local cues = {
 	Sound("ttt/thump01e.mp3"),
@@ -115,6 +135,8 @@ end
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
+	---
+	-- @realm client
 	hook.Run("TTT2Initialize")
 
 	self.round_state = ROUND_WAIT
@@ -130,6 +152,18 @@ function GM:Initialize()
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
+	-- load vskin files
+	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 vskin file: ", path)
+	end)
+
+	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 vskin file: ", path)
+	end)
+
+	-- initialize scale callbacks
+	appearance.RegisterScaleChangeCallback(HUDManager.ResetHUD)
+
 	LANG.Init()
 
 	self.BaseClass:Initialize()
@@ -137,8 +171,16 @@ function GM:Initialize()
 	ARMOR:Initialize()
 	SPEED:Initialize()
 
+	local skinName = vskin.GetVSkinName()
+
+	vskin.UpdatedVSkin(skinName, skinName)
+
+	---
+	-- @realm client
 	hook.Run("TTT2FinishedLoading")
 
+	---
+	-- @realm client
 	hook.Run("PostInitialize")
 end
 
@@ -149,6 +191,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
+	---
+	-- @realm client
 	hook.Run("TTT2PostCleanupMap")
 end
 
@@ -160,12 +204,14 @@ end
 -- <a href="https://en.wikipedia.org/wiki/Potentially_visible_set">PVS</a>,
 -- the client will receive it as NULL entity.
 -- @hook
--- @realm server
+-- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
+	---
+	-- @realm client
 	hook.Run("TTTInitPostEntity")
 
 	items.MigrateLegacyItems()
@@ -215,10 +261,16 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	---
+	-- @realm client
 	hook.Run("PostInitPostEntity")
 
+	---
+	-- @realm client
 	hook.Run("InitFallbackShops")
 
+	---
+	-- @realm client
 	hook.Run("LoadedFallbackShops")
 
 	net.Start("TTT2SyncShopsWithServer")
@@ -255,6 +307,31 @@ function GM:InitPostEntity()
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
+end
+
+---
+-- Called after the gamemode has loaded
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
+-- @local
+function GM:PostGamemodeLoaded()
+	ScoringEventSetup()
+end
+
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	-- rebuild menues on game reload
+	vguihandler.Rebuild()
+
+	local skinName = vskin.GetVSkinName()
+	vskin.UpdatedVSkin(skinName, skinName)
+
+	ScoringEventSetup()
 end
 
 ---
@@ -334,12 +411,18 @@ local function RoundStateChange(o, n)
 	-- be called with for example o = WAIT and n = POST, for newly connecting
 	-- players, which hooking code may not expect
 	if n == ROUND_PREP then
-		-- can enter PREP from any phase due to ttt_roundrestart
-		hook.Call("TTTPrepareRound", GAMEMODE)
+		---
+		-- Can enter PREP from any phase due to ttt_roundrestart
+		-- @realm shared
+		hook.Run("TTTPrepareRound")
 	elseif o == ROUND_PREP and n == ROUND_ACTIVE then
-		hook.Call("TTTBeginRound", GAMEMODE)
+		---
+		-- @realm shared
+		hook.Run("TTTBeginRound")
 	elseif o == ROUND_ACTIVE and n == ROUND_POST then
-		hook.Call("TTTEndRound", GAMEMODE)
+		---
+		-- @realm shared
+		hook.Run("TTTEndRound")
 	end
 
 	-- whatever round state we get, clear out the voice flags
@@ -756,5 +839,7 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	draw.CacheAvatar(steamid64, "medium")
 	draw.CacheAvatar(steamid64, "large")
 
+	---
+	-- @realm shared
 	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)

@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section old_ttt_element
 
 local surface = surface
@@ -13,8 +13,9 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
-	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
+	---
+	-- @realm client
+	local hudWidth = CreateConVar("ttt2_base_hud_width", "0", FCVAR_ARCHIVE)
 
 	-- Color presets
 	HUDELEMENT.bg_colors = {
@@ -78,7 +79,8 @@ if CLIENT then
 	-- @param number y
 	-- @param number w
 	-- @param number h
-	-- @param table table of @{Color}. There need to be a .background and a .fill attribute
+	-- @param table colors Table of @{Color}. There need to be a .background and a .fill attribute
+	-- @param number value
 	-- @realm client
 	function HUDELEMENT:PaintBar(x, y, w, h, colors, value)
 		value = value or 1
@@ -141,7 +143,7 @@ if CLIENT then
 	function HUDELEMENT:DrawBg(x, y, width, height, client)
 		-- Traitor area sizes
 		local th = self.bgheight
-		local tw = width - self.hastewidth - (hudTeamicon:GetBool() and self.bgheight or 0) - self.smargin * 2 -- bgheight = team icon
+		local tw = width - self.hastewidth - self.bgheight - self.smargin * 2 -- bgheight = team icon
 
 		-- Adjust for these
 		y = y - th

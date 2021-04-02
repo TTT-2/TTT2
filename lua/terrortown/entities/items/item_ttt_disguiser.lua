@@ -1,7 +1,6 @@
 ---
--- disguiser @{ITEM}
+-- Disguiser @{ITEM}
 -- @module DISGUISE
--- @see ITEM
 
 DISGUISE = CLIENT and {}
 
@@ -74,10 +73,13 @@ if CLIENT then
 			hud = Material("vgui/ttt/perks/hud_disguiser.png"),
 			type = "good"
 		})
-	end)
-end
 
-if SERVER then
+		bind.Register("ttt2_disguiser_toggle", function()
+			WEPS.DisguiseToggle(LocalPlayer())
+		end,
+		nil, "header_bindings_ttt2", "label_bind_disguiser", KEY_PAD_ENTER)
+	end)
+else -- SERVER
 	local function SetDisguise(ply, cmd, args)
 		if not IsValid(ply) or not ply:IsActive() and ply:GetTeam() == TEAM_TRAITOR then return end -- TODO ?
 
@@ -85,6 +87,8 @@ if SERVER then
 
 		local state = #args == 1 and tobool(args[1])
 
+		---
+		-- @realm server
 		if hook.Run("TTTToggleDisguiser", ply, state) then return end
 
 		ply:SetNWBool("disguised", state)

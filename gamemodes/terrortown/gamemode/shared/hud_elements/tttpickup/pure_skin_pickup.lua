@@ -1,3 +1,5 @@
+--- @ignore
+
 local draw = draw
 local surface = surface
 local math = math
@@ -60,7 +62,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale()
+		self.scale = appearance.GetGlobalScale()
 		self.basecolor = self:GetHUDBasecolor()
 		self.element_height = element_height * self.scale
 		self.margin = margin * self.scale

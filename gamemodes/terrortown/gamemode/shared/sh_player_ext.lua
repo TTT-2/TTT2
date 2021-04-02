@@ -1,7 +1,7 @@
 ---
--- @module Player
+-- Shared extensions to player table
 -- @ref https://wiki.garrysmod.com/page/Category:Player
--- @desc shared extensions to player table
+-- @class Player
 
 local net = net
 local table = table
@@ -64,7 +64,7 @@ end
 -- Returns the @{ROLE} BaseRole id
 -- @return[default=0] number
 -- @realm shared
--- @see plymeta.GetBaseRole
+-- @see Player:GetBaseRole
 function plymeta:GetRole()
 	return self.role or ROLE_NONE
 end
@@ -100,23 +100,37 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
 
 		if activeRolesCount > 0 then
+			---
+			-- @realm shared
 			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
 		if oldActiveRolesCount <= 0 then
+			---
+			-- @realm shared
 			hook.Run("TTT2ToggleRole", oldRoleData, false)
 		end
 	end
 
 	if oldRole ~= newBaseRole or forceHooks then
+		---
+		-- @realm shared
 		hook.Run("TTT2UpdateBaserole", self, oldRole, newBaseRole)
 	end
 
 	if oldSubrole ~= subrole or forceHooks then
+		---
+		-- @realm shared
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
+
+		if SERVER then
+			events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole)
+		end
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
+		---
+		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 
@@ -128,6 +142,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		self:SetRoleBgColor(roleData.bgcolor)
 
 		if SERVER then
+			---
+			-- @realm server
 			hook.Run("PlayerLoadout", self, false)
 
 			if GetConVar("ttt_enforce_playermodel"):GetBool() then
@@ -138,6 +154,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			-- Always clear color state, may later be changed in TTTPlayerSetColor
 			self:SetColor(COLOR_WHITE)
 
+			---
+			-- @realm server
 			hook.Run("TTTPlayerSetColor", self)
 		end
 	end
@@ -165,6 +183,8 @@ end
 -- @param Color col
 -- @realm shared
 function plymeta:SetRoleColor(col)
+	---
+	-- @realm shared
 	self.roleColor = hook.Run("TTT2ModifyRoleColor", self, col) or col
 end
 
@@ -181,6 +201,8 @@ end
 -- @param Color col
 -- @realm shared
 function plymeta:SetRoleDkColor(col)
+	---
+	-- @realm shared
 	self.roleDkColor = hook.Run("TTT2ModifyRoleDkColor", self, col) or col
 end
 
@@ -197,6 +219,8 @@ end
 -- @param Color col
 -- @realm shared
 function plymeta:SetRoleLtColor(col)
+	---
+	-- @realm shared
 	self.roleLtColor = hook.Run("TTT2ModifyRoleLtColor", self, col) or col
 end
 
@@ -213,6 +237,8 @@ end
 -- @param Color col
 -- @realm shared
 function plymeta:SetRoleBgColor(col)
+	---
+	-- @realm shared
 	self.roleBgColor = hook.Run("TTT2ModifyRoleBgColor", self, col) or col
 end
 
@@ -282,7 +308,13 @@ function plymeta:UpdateTeam(team)
 	local newTeam = self:GetTeam()
 
 	if oldTeam ~= newTeam then
+		---
+		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
+
+		if SERVER then
+			events.Trigger(EVENT_TEAMCHANGE, self, oldTeam, newTeam)
+		end
 	end
 end
 
@@ -371,32 +403,32 @@ function plymeta:GetBaseRoleData()
 end
 
 ---
--- @function plymeta:IsInnocent()
--- @desc Checks whether a @{Player} is an Innocent
+-- Checks whether a @{Player} is an Innocent
 -- @return boolean
--- @see plymeta:GetInnocent
+-- @see Player:GetInnocent
 -- @realm shared
 -- @deprecated
+-- @function plymeta:IsInnocent()
 plymeta.IsInnocent = plymeta.GetInnocent
 
 ---
--- @function plymeta:IsTraitor()
--- @desc Checks whether a @{Player} is a Traitor
+-- Checks whether a @{Player} is a Traitor
 -- @note basically traitor without special traitor roles, but includes all SubRoles.
 -- Other BaseRoles which are in the same team are excluded!
 -- @return boolean
--- @see plymeta:GetTraitor
+-- @see Player:GetTraitor
 -- @realm shared
 -- @deprecated
+-- @function plymeta:IsTraitor()
 plymeta.IsTraitor = plymeta.GetTraitor
 
 ---
--- @function plymeta:IsDetective()
--- @desc Checks whether a @{Player} is a Detective
+-- Checks whether a @{Player} is a Detective
 -- @return boolean
--- @see plymeta:GetDetective
+-- @see Player:GetDetective
 -- @realm shared
 -- @deprecated
+-- @function plymeta:IsDetective()
 plymeta.IsDetective = plymeta.GetDetective
 
 ---
@@ -443,8 +475,8 @@ end
 -- @param number subrole subrole id of a @{ROLE}
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActive
--- @see plymeta:IsRole
+-- @see Player:IsActive
+-- @see Player:IsRole
 function plymeta:IsActiveRole(subrole)
 	return self:IsActive() and self:IsRole(subrole)
 end
@@ -453,7 +485,7 @@ end
 -- Checks whether a @{Player} is active and is an Innocent
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActiveRole
+-- @see Player:IsActiveRole
 function plymeta:IsActiveInnocent()
 	return self:IsActiveRole(ROLE_INNOCENT)
 end
@@ -462,7 +494,7 @@ end
 -- Checks whether a @{Player} is active and is a Traitor
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActiveRole
+-- @see Player:IsActiveRole
 function plymeta:IsActiveTraitor()
 	return self:IsActiveRole(ROLE_TRAITOR)
 end
@@ -471,7 +503,7 @@ end
 -- Checks whether a @{Player} is active and is a Detective
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActiveRole
+-- @see Player:IsActiveRole
 function plymeta:IsActiveDetective()
 	return self:IsActiveRole(ROLE_DETECTIVE)
 end
@@ -480,8 +512,8 @@ end
 -- Checks whether a @{Player} is active and has a special @{ROLE}
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActive
--- @see plymeta:IsSpecial
+-- @see Player:IsActive
+-- @see Player:IsSpecial
 function plymeta:IsActiveSpecial()
 	return self:IsActive() and self:IsSpecial()
 end
@@ -499,8 +531,8 @@ end
 -- Checks whether a @{Player} is active and able to shop
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActive
--- @see plymeta:IsShopper
+-- @see Player:IsActive
+-- @see Player:IsShopper
 function plymeta:IsActiveShopper()
 	return self:IsActive() and self:IsShopper()
 end
@@ -676,7 +708,7 @@ end
 -- Checks whether a @{Player} is a dead terrorist
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsSpec
+-- @see Player:IsSpec
 function plymeta:IsDeadTerror()
 	return self:IsSpec() and not self:Alive()
 end
@@ -745,8 +777,9 @@ end
 -- Overrides GetEyeTrace for an optional trace mask param. Technically traces
 -- like GetEyeTraceNoCursor but who wants to type that all the time, and we
 -- never use cursor tracing anyway.
--- @param MASK[https://wiki.garrysmod.com/page/Enums/MASK] mask The trace mask. This determines what the trace should hit and what it shouldn't hit. A mask is a combination of CONTENTS_Enums - you can use these for more advanced masks.
--- @see https://wiki.garrysmod.com/page/Structures/Trace
+-- @param MASK mask The trace mask. This determines what the trace should hit and what it shouldn't hit.
+-- A mask is a combination of CONTENTS_Enums - you can use these for more advanced masks.
+-- @ref https://wiki.garrysmod.com/page/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
 	mask = mask or MASK_SOLID
@@ -874,12 +907,13 @@ function GM:TTT2PlayerReady(ply)
 
 end
 
+local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
+
 ---
 -- Sets the @{Player}'s @{Model}
 -- @param string mdlName
 -- @note override to fix PS/ModelSelector/... issues
 -- @realm shared
-local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
 function plymeta:SetModel(mdlName)
 	local mdl
 

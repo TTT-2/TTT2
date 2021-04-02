@@ -1,15 +1,62 @@
 ---
 -- @author Mineotopia
+-- @class TARGET_DATA
 
 local IsColor = IsColor
 
 TARGET_DATA = {}
 
 ---
+-- Initializes the @{TARGET_DATA} object
+-- @param entity ent The focused Entity
+-- @param entity unchangedEnt The original focused Entity if focus was changed by the hook
+-- @param number distance The distance to the focused Entity
+-- @return @{TARGET_DATA} The object to be used in the hook
+-- @internal
+-- @realm client
+function TARGET_DATA:Initialize(ent, unchangedEnt, distance)
+	-- combine data into a table to read them inside a hook
+	local data = {
+		ent = ent,
+		unchangedEnt = unchangedEnt,
+		distance = distance
+	}
+
+	-- preset a table of values that can be changed with a hook
+	local params = {
+		drawInfo = nil,
+		drawOutline = nil,
+		outlineColor = COLOR_WHITE,
+		displayInfo = {
+			key = nil,
+			icon = {},
+			title = {
+				icons = {},
+				text = "",
+				color = COLOR_WHITE
+			},
+			subtitle = {
+				icons = {},
+				text = "",
+				color = COLOR_LLGRAY
+			},
+			desc = {}
+		},
+		refPosition = {
+			x = math.Round(0.5 * ScrW() / appearance.GetGlobalScale(), 0),
+			y = math.Round(0.5 * ScrH() / appearance.GetGlobalScale(), 0) + 42
+		}
+	}
+
+	return TARGET_DATA:BindTarget(data, params)
+end
+
+
+---
 -- Binds two target data tables to the @{TARGET_DATA} object
 -- @param table data The data table about the focused entity
 -- @param table params The default table with the params that should be modified by the hook
--- @return @{TARGET_DATA} The object to be used in the hook
+-- @return TARGET_DATA The object to be used in the hook
 -- @internal
 -- @realm client
 function TARGET_DATA:BindTarget(data, params)
@@ -137,7 +184,7 @@ end
 -- Sets the title of the specific targetID element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[default=nil] table inline_icons A table of materials that should be rendered in front of the text
+-- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetTitle(text, color, inline_icons)
 	self.params.displayInfo.title = {
@@ -151,7 +198,7 @@ end
 -- Sets the subtitle of the specific targetID element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
--- @param[default=nil] table inline_icons A table of materials that should be rendered in front of the text
+-- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetSubtitle(text, color, inline_icons)
 	self.params.displayInfo.subtitle = {
@@ -165,7 +212,7 @@ end
 -- Adds a line of text to the description area of the targetID element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param[default=nil] table inline_icons A table of materials that should be rendered in front of the text
+-- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
@@ -223,6 +270,7 @@ end
 ---
 -- Returns the raw data tables of the targetID element to me modified by experienced users
 -- @return table, table The table of the entity data, the table of the targetID element parameters
+-- @realm client
 function TARGET_DATA:GetRaw()
 	return self.data, self.params
 end

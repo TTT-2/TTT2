@@ -1,9 +1,8 @@
 ---
 -- @class PANEL
--- @realm client
--- @section TTTScoreGroup
 -- @desc Unlike sandbox, we have teams to deal with, so here's an extra panel in the
 -- hierarchy that handles a set of player rows belonging to its team.
+-- @section TTTScoreGroup
 
 ttt_include("vgui__cl_sb_row")
 
@@ -21,6 +20,8 @@ local PANEL = {}
 local cv_ttt_scoreboard_sorting
 local cv_ttt_scoreboard_ascending
 
+---
+-- @ignore
 function PANEL:Init()
 	self.name = "Unnamed"
 	self.color = COLOR_WHITE
@@ -37,6 +38,7 @@ end
 -- @param string name
 -- @param Color color
 -- @param string group
+-- @realm client
 function PANEL:SetGroupInfo(name, color, group)
 	self.name = name
 	self.color = color
@@ -45,6 +47,8 @@ end
 
 local bgcolor = Color(20, 20, 20, 150)
 
+---
+-- @ignore
 function PANEL:Paint()
 	-- Darkened background
 	draw.RoundedBox(8, 0, 0, self:GetWide(), self:GetTall(), bgcolor)
@@ -106,9 +110,12 @@ end
 
 ---
 -- @param Player ply
+-- @realm client
 function PANEL:AddPlayerRow(ply)
 	if ScoreGroup(ply) ~= self.group or self.rows[ply] then return end
 
+	---
+	-- @realm client
 	hook.Run("TTT2ScoreboardAddPlayerRow", ply)
 
 	local row = vgui.Create("TTTScorePlayerRow", self)
@@ -123,10 +130,13 @@ end
 
 ---
 -- @param Player ply
+-- @realm client
 function PANEL:HasPlayerRow(ply)
 	return self.rows[ply] ~= nil
 end
 
+---
+-- @realm client
 function PANEL:HasRows()
 	return self.rowcount > 0
 end
@@ -189,6 +199,8 @@ local function SortFunc(rowa, rowb)
 	end
 end
 
+---
+-- @realm client
 function PANEL:UpdateSortCache()
 	self.rows_sorted = {}
 
@@ -201,6 +213,8 @@ function PANEL:UpdateSortCache()
 	table.sort(self.rows_sorted, SortFunc)
 end
 
+---
+-- @realm client
 function PANEL:UpdatePlayerData()
 	local to_remove = {}
 
@@ -235,6 +249,8 @@ function PANEL:UpdatePlayerData()
 	self:InvalidateLayout()
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	if self.rowcount < 1 then
 		self:SetVisible(false)

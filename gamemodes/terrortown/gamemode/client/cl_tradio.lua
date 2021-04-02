@@ -1,6 +1,6 @@
 ---
+-- Traitor radio controls
 -- @module TRADIO
--- @desc Traitor radio controls
 
 TRADIO = {}
 

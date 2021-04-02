@@ -1,14 +1,7 @@
 ---
--- @realm client
--- @section Scoreboard
-
----
 -- @class PANEL
----
-
----
--- @section TTTScorePlayerRow
 -- @desc Scoreboard player score row, based on sandbox version
+-- @section TTTScorePlayerRow
 ---
 
 ttt_include("vgui__cl_sb_info")
@@ -36,7 +29,8 @@ local dev_tbl = {
 	["76561198049831089"] = true, -- Alf21
 	["76561198058039701"] = true, -- saibotk
 	["76561198047819379"] = true, -- Mineotopia
-	["76561198052323988"] = true -- LeBroomer
+	["76561198052323988"] = true, -- LeBroomer
+	["76561198076404571"] = true -- Histalek
 }
 
 local vip_tbl = {
@@ -56,7 +50,8 @@ local vip_tbl = {
 	["76561193814529882"] = true, -- Trystan
 	["76561198114719750"] = true, -- Reispfannenfresser
 	["76561198082931319"] = true, -- Henk
-	["76561198049910438"] = true -- Zzzaaaccc13
+	["76561198049910438"] = true, -- Zzzaaaccc13
+	["76561198296468397"] = true -- ZenBre4ker
 }
 
 local addondev_tbl = {
@@ -67,7 +62,9 @@ local addondev_tbl = {
 }
 
 ---
+-- Add an add-on developer
 -- @param string steamid64
+-- @realm client
 function AddTTT2AddonDev(steamid64)
 	if not steamid64 then return end
 
@@ -118,6 +115,8 @@ local function _func4(ply)
 	return math.Round(ply:GetBaseKarma())
 end
 
+---
+-- @ignore
 function PANEL:Init()
 	-- cannot create info card until player state is known
 	self.info = nil
@@ -132,8 +131,10 @@ function PANEL:Init()
 		self:AddColumn(GetTranslation("sb_karma"), _func4)
 	end
 
+	---
 	-- Let hooks add their custom columns
-	hook.Call("TTTScoreboardColumns", nil, self)
+	-- @realm client
+	hook.Run("TTTScoreboardColumns", self)
 
 	for i = 1, #self.cols do
 		self.cols[i]:SetMouseInputEnabled(false)
@@ -219,6 +220,7 @@ end
 -- @param function func
 -- @param number width
 -- @return Panel DLabel
+-- @realm client
 function PANEL:AddColumn(label, func, width)
 	local lbl = vgui.Create("DLabel", self)
 	lbl.GetPlayerText = func
@@ -232,19 +234,21 @@ end
 
 ---
 -- Mirror sb_main, of which it and this file both call using the
---	TTTScoreboardColumns hook, but it is useless in this file
+-- TTTScoreboardColumns hook, but it is useless in this file.
 -- Exists only so the hook wont return an error if it tries to
---	use the AddFakeColumn function of `sb_main`, which would
---	cause this file to raise a `function not found` error or others
+-- use the AddFakeColumn function of `sb_main`, which would
+-- cause this file to raise a `function not found` error or others
+-- @realm client
 function PANEL:AddFakeColumn()
 
 end
 
 ---
--- Updates the color for a @{Player} in the scoreboard
+-- Updates the @{Color} for a @{Player} in the scoreboard
 -- @param Player ply
 -- @return Color
 -- @hook
+-- @realm client
 function GM:TTTScoreboardColorForPlayer(ply)
 	if IsValid(ply) then
 		local steamid64 = ply:SteamID64()
@@ -273,6 +277,7 @@ end
 -- @param Player ply
 -- @return Color
 -- @hook
+-- @realm client
 function GM:TTTScoreboardRowColorForPlayer(ply)
 	local col = color_trans
 
@@ -286,7 +291,9 @@ end
 
 local function ColorForPlayer(ply)
 	if IsValid(ply) then
-		local c = hook.Call("TTTScoreboardColorForPlayer", GAMEMODE, ply)
+		---
+		-- @realm client
+		local c = hook.Run("TTTScoreboardColorForPlayer", ply)
 
 		-- verify that we got a proper color
 		if c and istable(c) and c.r and c.b and c.g and c.a then
@@ -302,6 +309,8 @@ end
 ---
 -- @param number width
 -- @param number height
+-- @realm client
+-- @ignore
 function PANEL:Paint(width, height)
 	if not IsValid(self.Player) then
 		return false
@@ -312,7 +321,10 @@ function PANEL:Paint(width, height)
 	--	end
 
 	local ply = self.Player
-	local c = hook.Call("TTTScoreboardRowColorForPlayer", GAMEMODE, ply)
+
+	---
+	-- @realm client
+	local c = hook.Run("TTTScoreboardRowColorForPlayer", ply)
 
 	surface.SetDrawColor(clr(c))
 	surface.DrawRect(0, 0, width, SB_ROW_HEIGHT)
@@ -327,6 +339,7 @@ end
 
 ---
 -- @param Player ply
+-- @realm client
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 	self.avatar:SetPlayer(ply)
@@ -363,10 +376,13 @@ end
 
 ---
 -- @return Player
+-- @realm client
 function PANEL:GetPlayer()
 	return self.Player
 end
 
+---
+-- @realm client
 function PANEL:UpdatePlayerData()
 	if not IsValid(self.Player) then return end
 
@@ -467,6 +483,8 @@ function PANEL:UpdatePlayerData()
 	end
 end
 
+---
+-- @ignore
 function PANEL:ApplySchemeSettings()
 	local ply = self.Player
 
@@ -515,6 +533,8 @@ function PANEL:ApplySchemeSettings()
 	self.heroes:SetImageColor(namecolor.heroes)
 end
 
+---
+-- @realm client
 function PANEL:LayoutColumns()
 	local cx = self:GetWide()
 
@@ -566,6 +586,8 @@ function PANEL:LayoutColumns()
 	end
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self.avatar:SetPos(0, 0)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
@@ -617,12 +639,14 @@ end
 ---
 -- @param number x
 -- @param number y
+-- @realm client
 function PANEL:DoClick(x, y)
 	self:SetOpen(not self.open)
 end
 
 ---
 -- @param boolean o
+-- @realm client
 function PANEL:SetOpen(o)
 	if self.open then
 		surface.PlaySound("ui/buttonclickrelease.wav")
@@ -638,11 +662,15 @@ function PANEL:SetOpen(o)
 	sboard_panel:PerformLayout()
 end
 
+---
+-- @realm client
 function PANEL:DoRightClick()
 	local menu = DermaMenu()
 	menu.Player = self:GetPlayer()
 
-	local close = hook.Call("TTTScoreboardMenu", nil, menu)
+	---
+	-- @realm client
+	local close = hook.Run("TTTScoreboardMenu", menu)
 	if close then
 		menu:Remove()
 

@@ -1,7 +1,10 @@
 ---
--- @desc A small library that enables registering map entity
+-- A small library that enables registering map entity
 -- output triggers to lua hooks.
 -- @author Mineotopia
+-- @module entityOutputs
+
+if CLIENT then return end -- this is a serverside-only module
 
 entityOutputs = entityOutputs or {}
 entityOutputs.hooks = entityOutputs.hooks or {}
@@ -45,6 +48,8 @@ function entityOutputs.RegisterHook(hookName)
 	hook.Add(hookName .. "_Internal", hookName .. "_name", function()
 		local activator, caller = ACTIVATOR, CALLER
 
+		---
+		-- @ignore
 		hook.Run(hookName, caller, activator)
 	end)
 end
@@ -68,6 +73,8 @@ function entityOutputs.RegisterMapEntityOutput(ent, outputName, hookName, delay,
 	delay = delay or 0
 	repititions = repititions or -1
 
+	---
+	-- @ignore
 	ent:Fire("AddOutput", outputName .. " triggerhook:RunPassedCode:hook.Run('" .. hookName .. "_Internal'):" .. delay .. ":" .. repititions)
 
 	entityOutputs.RegisterHook(hookName)

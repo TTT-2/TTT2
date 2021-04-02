@@ -1,9 +1,8 @@
 ---
 -- @class PANEL
--- @realm client
--- @section ShopEditButton
 -- @desc Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
+-- @section ShopEditButton
 
 local GetTranslation = LANG.GetTranslation
 local math = math
@@ -12,15 +11,12 @@ local vgui = vgui
 local PANEL = {}
 
 ---
--- @function GetIconSize()
--- @return number
---
----
--- @function SetIconSize(i)
--- @param number i
----
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.Icon = vgui.Create("DImage", self)
 	self.Icon:SetMouseInputEnabled(false)
@@ -31,6 +27,9 @@ function PANEL:Init()
 	self:SetIconSize(64)
 end
 
+---
+-- @param number mcode
+-- @realm client
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		self:DoClick()
@@ -39,30 +38,44 @@ function PANEL:OnMousePressed(mcode)
 	end
 end
 
+---
+-- @realm client
 function PANEL:OnMouseReleased()
 
 end
 
+---
+-- @realm client
 function PANEL:DoClick()
 
 end
 
+---
+-- @realm client
 function PANEL:OpenMenu()
 
 end
 
+---
+-- @ignore
 function PANEL:ApplySchemeSettings()
 
 end
 
+---
+-- @realm client
 function PANEL:OnCursorEntered()
 
 end
 
+---
+-- @realm client
 function PANEL:OnCursorExited()
 
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	if self.animPress:Active() then return end
 
@@ -73,18 +86,26 @@ end
 
 ---
 -- @param Material icon
+-- @realm client
 function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
 
+----
+-- @realm client
 function PANEL:GetIcon()
 	return self.Icon:GetImage()
 end
 
+---
+-- @param Color c
+-- @realm client
 function PANEL:SetIconColor(c)
 	self.Icon:SetImageColor(c)
 end
 
+---
+-- @ignore
 function PANEL:Think()
 	self.animPress:Run()
 end
@@ -93,6 +114,7 @@ end
 -- @param table anim
 -- @param number delta
 -- @param table data
+-- @realm client
 function PANEL:PressedAnim(anim, delta, data)
 	if anim.Started then return end
 
@@ -111,20 +133,16 @@ vgui.Register("ShopEditButton", PANEL, "Panel")
 
 ---
 -- @section ShopEditorChildFrame
----
 
 PANEL = {}
 
 ---
--- @function GetPrevFunc()
--- @return function
---
----
--- @function SetPrevFunc(func)
--- @param function func
----
+-- @accessor function
+-- @realm client
 AccessorFunc(PANEL, "m_fPrevFunc", "PrevFunc")
 
+---
+-- @ignore
 function PANEL:Init()
 	local frame = self
 

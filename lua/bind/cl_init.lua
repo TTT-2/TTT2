@@ -1,10 +1,8 @@
 ------------
 -- Bind module.
--- @module bind
+-- @ref https://github.com/MysteryPancake/GMod-Binding/
 -- @author saibotk
--- @desc Source: https://github.com/MysteryPancake/GMod-Binding/
-
-local ipairs = ipairs
+-- @module bind
 
 bind = {}
 
@@ -15,7 +13,10 @@ local Registry = {}
 local FirstPressed = {}
 local WasPressed = {}
 local SettingsBindings = {}
-local SettingsBindingsCategories = { "TTT2 Bindings", "Other Bindings" }
+local SettingsBindingsCategories = {
+	"header_bindings_ttt2",
+	"header_bindings_other"
+}
 
 --
 --
@@ -110,7 +111,10 @@ local function TTT2LoadBindings()
 		local result = sql.Query("SELECT * FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
 
 		if istable(result) then
-			for _, tbl in ipairs(result) do
+			local resultCount = #result
+
+			for i = 1, resultCount do
+				local tbl = result[i]
 				local tmp = tbl.button
 
 				bind.RemoveAll(tbl.name, false)
@@ -144,7 +148,7 @@ end
 -- @internal
 local function TTT2BindCheckThink()
 	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
-	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or HELPSCRN.IsOpen() then return end
+	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or vguihandler.IsOpen() then return end
 
 	for btn, tbl in pairs(Bindings) do
 		local cache = input.IsButtonDown(btn)
@@ -182,6 +186,7 @@ hook.Add("InitPostEntity", "TTT2LoadBindings", TTT2LoadBindings)
 ---
 -- Returns a table of all the bindings
 -- @return table
+-- @realm client
 function bind.GetTable()
 	return Bindings
 end
@@ -190,7 +195,8 @@ end
 -- Finds the first button associated with a specific binding and returns
 -- the button. Returns KEY_NONE if no button is found.
 -- @param string name
--- @return number
+-- @return[default=KEY_NONE] number
+-- @realm client
 function bind.Find(name)
 	if not name then return end
 
@@ -211,6 +217,7 @@ end
 -- the buttons. Returns an empty table if no button is found.
 -- @param string name
 -- @return table
+-- @realm client
 function bind.FindAll(name)
 	if not name then return end
 
@@ -231,6 +238,7 @@ end
 -- Whether or not this bind has been pressed and was not yet released.
 -- @param string name
 -- @return boolean
+-- @realm client
 function bind.IsPressed(name)
 	if not name then return end
 
@@ -250,6 +258,7 @@ end
 -- @param number btn
 -- @param string name
 -- @param boolean persistent
+-- @realm client
 function bind.Remove(btn, name, persistent)
 	if persistent then
 		DBRemoveBinding(name, btn) -- Still try to delete from DB
@@ -268,10 +277,14 @@ end
 -- Removes all bindings (buttons) associated with the given identifier.
 -- @param string name
 -- @param boolean persistent
+-- @realm client
 function bind.RemoveAll(name, persistent)
+	local foundBinds = bind.FindAll(name)
+	local foundBindsCount = #foundBinds
+
 	-- clear all bindings
-	for _, v in ipairs(bind.FindAll(name)) do
-		bind.Remove(v, name, persistent)
+	for i = 1, foundBindsCount do
+		bind.Remove(foundBinds[i], name, persistent)
 	end
 end
 
@@ -279,11 +292,12 @@ end
 -- Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
 -- @param string name
 -- @param string label
--- @param string[opt] category
--- @param number[optchain] defaultKey
+-- @param[opt] string category
+-- @param[optchain] number defaultKey
+-- @realm client
 function bind.AddSettingsBinding(name, label, category, defaultKey)
 	if not category then
-		category = "Other Bindings"
+		category = "header_bindings_other"
 	end
 
 	if not table.HasValue(SettingsBindingsCategories, category) then
@@ -291,7 +305,9 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 	end
 
 	-- check if it already exists
-	for _, tbl in ipairs(SettingsBindings) do
+	for i = 1, #SettingsBindings do
+		local tbl = SettingsBindings[i]
+
 		if tbl.name == name then
 			tbl.label = label -- update
 			tbl.category = category
@@ -314,13 +330,12 @@ end
 -- @param string name
 -- @param function onPressedFunc
 -- @param function onReleasedFunc
--- @param[opt] nil|string|boolean dontShowOrCategory
--- @param string[optchain] settingsLabel
--- @param number[optchain] defaultKey
+-- @param[opt] string|boolean dontShowOrCategory
+-- @param[optchain] string settingsLabel
+-- @param[optchain] number defaultKey
+-- @realm client
 function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, settingsLabel, defaultKey)
-	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then
-		return
-	end
+	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then return end
 
 	Registry[name] = {
 		onPressed  = onPressedFunc,
@@ -339,6 +354,7 @@ end
 -- @param number btn The button ID, see: <a href="BUTTON_CODE_Enums">https://wiki.garrysmod.com/page/Enums/BUTTON_CODE</a>
 -- @param string name The command that should be executed
 -- @param boolean persistent
+-- @realm client
 function bind.Add(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
@@ -357,6 +373,7 @@ end
 -- @param number btn
 -- @param string name
 -- @param boolean persistent
+-- @realm client
 function bind.Set(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
@@ -367,6 +384,7 @@ end
 ---
 -- Returns the SettingsBindings table.
 -- @return table
+-- @realm client
 function bind.GetSettingsBindings()
 	return SettingsBindings
 end
@@ -374,6 +392,7 @@ end
 ---
 -- Returns the SettingsBindingsCategories table.
 -- @return table
+-- @realm client
 function bind.GetSettingsBindingsCategories()
 	return SettingsBindingsCategories
 end

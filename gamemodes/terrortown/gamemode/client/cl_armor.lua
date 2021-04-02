@@ -1,7 +1,12 @@
+---
+-- @class ARMOR
+
 ARMOR = {}
 
+---
 -- HANDLE ARMOR STATUS ICONS
 -- init icons
+-- @realm client
 function ARMOR:Initialize()
 	STATUS:RegisterStatus("ttt_armor_status", {
 		hud = {

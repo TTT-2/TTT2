@@ -2,6 +2,7 @@
 -- This is the <code>items</code> module
 -- @author Alf21
 -- @author saibotk
+-- @module items
 
 module("items", package.seeall)
 
@@ -96,7 +97,7 @@ end
 ---
 -- Get an item by name (a copy)
 -- @param string name item name
--- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new item table
 -- @realm shared
 function Get(name, retTbl)

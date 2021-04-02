@@ -9,7 +9,7 @@ TTTFiles = {
 	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
-	cl_fonts = {file = "cl_fonts.lua", on = "client"},
+	cl_help_data = {file = "cl_help_data.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
 	cl_hud_manager = {file = "cl_hud_manager.lua", on = "client"},
@@ -58,11 +58,11 @@ TTTFiles = {
 	sh_printmessage_override = {file = "sh_printmessage_override.lua", on = "shared"},
 	sh_cvar_handler = {file = "sh_cvar_handler.lua", on = "shared"},
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
+	sh_rolelayering = {file = "sh_rolelayering.lua", on = "shared"},
 	sh_scoring = {file = "sh_scoring.lua", on = "shared"},
 	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
 	sh_sql = {file = "sh_sql.lua", on = "shared"},
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
-	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_voice = {file = "sh_voice.lua", on = "shared"},
 	sh_speed = {file = "sh_speed.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
@@ -70,8 +70,6 @@ TTTFiles = {
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
 	vgui__cl_droleimage = {file = "vgui/cl_droleimage.lua", on = "client"},
-	vgui__cl_f1settings_button = {file = "vgui/cl_f1settings_button.lua", on = "client"},
-	vgui__cl_hudswitcher = {file = "vgui/cl_hudswitcher.lua", on = "client"},
 	vgui__cl_progressbar = {file = "vgui/cl_progressbar.lua", on = "client"},
 	vgui__cl_sb_info = {file = "vgui/cl_sb_info.lua", on = "client"},
 	vgui__cl_sb_main = {file = "vgui/cl_sb_main.lua", on = "client"},
@@ -83,6 +81,27 @@ TTTFiles = {
 	vgui__cl_simpleclickicon = {file = "vgui/cl_simpleclickicon.lua", on = "client"},
 	vgui__cl_simpleicon = {file = "vgui/cl_simpleicon.lua", on = "client"},
 	vgui__cl_simpleroleicon = {file = "vgui/cl_simpleroleicon.lua", on = "client"},
+
+	-- cl_vskin client files
+	cl_vskin__default_skin = {file = "cl_vskin/default_skin.lua", on = "client"},
+	cl_vskin__vgui__dframe = {file = "cl_vskin/vgui/dframe_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dmenubutton = {file = "cl_vskin/vgui/dmenubutton_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dsubmenubutton = {file = "cl_vskin/vgui/dsubmenubutton_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dnavpanel = {file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcontentpanel = {file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbuttonpanel = {file = "cl_vskin/vgui/dbuttonpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcategoryheader = {file = "cl_vskin/vgui/dcategoryheader_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcategorycollapse = {file = "cl_vskin/vgui/dcategorycollapse_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dform = {file = "cl_vskin/vgui/dform_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbutton = {file = "cl_vskin/vgui/dbutton_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbinder = {file = "cl_vskin/vgui/dbinder_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dlabel = {file = "cl_vskin/vgui/dlabel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcombobox = {file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcheckboxlabel = {file = "cl_vskin/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dnumslider = {file = "cl_vskin/vgui/dnumslider_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbinderpanel = {file = "cl_vskin/vgui/dbinderpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dscrollpanel = {file = "cl_vskin/vgui/dscrollpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dvscrollbar = {file = "cl_vskin/vgui/dvscrollbar_ttt2.lua", on = "client"},
 }
 
 if SERVER then
@@ -118,6 +137,8 @@ if SERVER then
 	table.Merge(TTTFiles, tmp)
 end
 
+---
+-- @realm shared
 hook.Run("TTT2ModifyFiles", TTTFiles)
 
 if SERVER then
@@ -128,6 +149,10 @@ if SERVER then
 	end
 end
 
+---
+-- Include a registered overwritable TTT2 file
+-- @param string filename The registered filename-pseudo, but not the path
+-- @realm shared
 function ttt_include(filename)
 	local fd = TTTFiles[filename]
 

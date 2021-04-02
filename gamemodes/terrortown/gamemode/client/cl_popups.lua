@@ -4,7 +4,6 @@
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local timer = timer
-local CreateConVar = CreateConVar
 
 ---
 -- Round start
@@ -14,6 +13,9 @@ local function GetTextForPlayer(ply)
 
 	if ply:GetTeam() ~= TEAM_TRAITOR then
 		local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+		---
+		-- @realm client
 		if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 			return GetTranslation("info_popup_" .. roleData.name)
 		else
@@ -40,6 +42,9 @@ local function GetTextForPlayer(ply)
 			traitorlist = table.concat(traitorlist)
 
 			local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+			---
+			-- @realm client
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 				return GetTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
 			else
@@ -47,6 +52,9 @@ local function GetTextForPlayer(ply)
 			end
 		else
 			local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+			---
+			-- @realm client
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 				return GetTranslation("info_popup_" .. roleData.name .. "_alone")
 			else
@@ -56,6 +64,8 @@ local function GetTextForPlayer(ply)
 	end
 end
 
+---
+-- @realm client
 local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIVE)
 
 local function drawFunc(s, w, h)
@@ -83,7 +93,7 @@ local function RoundStartPopup()
 	if huds and HUDManager then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			paintFn = hud.popupPaint or paintFn
+			paintFn = hud.PopupPaint or paintFn
 		end
 	end
 

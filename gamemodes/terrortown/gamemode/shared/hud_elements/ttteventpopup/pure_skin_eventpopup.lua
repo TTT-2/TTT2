@@ -1,3 +1,5 @@
+--- @ignore
+
 local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
@@ -44,7 +46,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale()
+		self.scale = appearance.GetGlobalScale()
 		self.pad = pad * self.scale
 		self.icon_size = icon_size * self.scale
 

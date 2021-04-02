@@ -1,5 +1,6 @@
 ---
 -- Admin commands
+-- @section AdminCommands
 
 local math = math
 local table = table
@@ -8,7 +9,6 @@ local pairs = pairs
 local ipairs = ipairs
 local util = util
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 
 local function GetPrintFn(ply)
 	if IsValid(ply) then
@@ -123,10 +123,24 @@ local function PrintKarma(ply)
 end
 concommand.Add("ttt_print_karma", PrintKarma)
 
+---
+-- @realm server
 local cv_ttt_highlight_admins = CreateConVar("ttt_highlight_admins", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local cv_ttt_highlight_dev = CreateConVar("ttt_highlight_dev", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local cv_ttt_highlight_vip = CreateConVar("ttt_highlight_vip", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local cv_ttt_highlight_addondev = CreateConVar("ttt_highlight_addondev", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local cv_ttt_highlight_supporter = CreateConVar("ttt_highlight_supporter", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddScoreboardGlobals", function()
@@ -153,7 +167,12 @@ cvars.AddChangeCallback(cv_ttt_highlight_supporter:GetName(), function(cv, old, 
 	SetGlobalBool(cv_ttt_highlight_supporter:GetName(), tobool(tonumber(new)))
 end)
 
+---
+-- @realm server
 local dmglog_console = CreateConVar("ttt_log_damage_for_console", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local dmglog_save = CreateConVar("ttt_damagelog_save", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function PrintDamageLog(ply)
@@ -215,6 +234,8 @@ function DamageLog(txt)
 	end
 end
 
+---
+-- @realm server
 local ttt_bantype = CreateConVar("ttt_ban_type", "autodetect", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function DetectServerPlugin()

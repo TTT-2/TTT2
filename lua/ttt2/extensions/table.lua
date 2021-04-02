@@ -1,8 +1,11 @@
 ---
 -- table exentsions
 -- @author saibotk
+-- @module table
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 local table = table
 local pairs = pairs
@@ -12,13 +15,28 @@ local tremove = table.remove
 local isfunction = isfunction
 
 ---
+-- Randomizes a @{table}
+-- @param table t
+-- @realm shared
+function table.Randomize(t)
+	local out = {}
+
+	while #t > 0 do
+		out[#out + 1] = table.remove(t, math.random(#t))
+	end
+
+	t = out
+end
+
+---
 -- Get the value from a table with a path that is given as a table of indexes.
 -- The method will try to traverse the dataTable and return the value or
 -- it will return nil, if a key (even a subpath) is not defined.
 --
--- @param dataTable table the table to traverse and search the path in.
--- @param path table the table with keys that will be used to traverse the tree (in order).
+-- @param table dataTable the table to traverse and search the path in.
+-- @param any path the table with keys that will be used to traverse the tree (in order).
 -- @return any the value at the given path or nil if it does not exist
+-- @realm shared
 function table.GetWithPath(dataTable, path)
 	assert(path, "table.GetWithPath(..) missing path parameter.")
 
@@ -43,8 +61,10 @@ end
 -- This method will traverse the given dataTable and create tables along the path if
 -- necessary. It will then set the value in the traversed table.
 --
--- @param dataTable table the table to traverse and set the value in.
--- @param path table the table with keys that will be used to traverse the tree (in order).
+-- @param table dataTable the table to traverse and set the value in.
+-- @param any path the table with keys that will be used to traverse the tree (in order).
+-- @param any value
+-- @realm shared
 function table.SetWithPath(dataTable, path, value)
 	assert(path, "table.SetWithPath(..) missing path parameter.")
 
@@ -163,7 +183,7 @@ end
 -- This @{function} adds missing values into a table
 -- @param table target
 -- @param table source
--- @param[opt] nil|boolean iterable
+-- @param[opt] boolean iterable
 -- @realm shared
 function table.AddMissing(target, source, iterable)
 	if #source == 0 then return end
@@ -180,12 +200,13 @@ function table.AddMissing(target, source, iterable)
 end
 
 ---
--- Removes all empty table entries, making the table sequential again. 
+-- Removes all empty table entries, making the table sequential again.
 -- Use this function to more efficiently removing multiple indices from a sequential table by combining it
 -- with a function setting all entries to be removed to nil. Do NOT use table.Remove() or table.RemoveByValue()
 --
--- @param dataTable table the table to traverse and set the value in.
--- @param tableSize number the number of entries in dataTable
+-- @param table dataTable the table to traverse and set the value in.
+-- @param number tableSize the number of entries in dataTable
+-- @realm shared
 function table.RemoveEmptyEntries(dataTable, tableSize)
 	local j = 1
 
@@ -264,4 +285,58 @@ function table.ExtractRandomEntry(tbl, filterFn)
 			return entry
 		end
 	end
+end
+
+---
+-- Returns an indexed table of indexes that exist in both tables.
+-- @note This function is most suitable for string indexed tables.
+-- @param table tbl The table to iterate over
+-- @param table reference The reference table to compare against
+-- @return table A table with the keys that exist in both tables
+-- @realm shared
+function table.GetEqualEntryKeys(tbl, reference)
+	local equalTbl = {}
+
+	for index in pairs(tbl) do
+		if not reference[index] then continue end
+
+		equalTbl[#equalTbl + 1] = index
+	end
+
+	return equalTbl
+end
+
+---
+-- Returns the amount of table entries that exist in both tables.
+-- @note This function is most suitable for string indexed tables.
+-- @param table tbl The table to iterate over
+-- @param table reference The reference table to compare against
+-- @return number The amount of indexes that exist in both tables
+-- @realm shared
+function table.GetEqualEntriesAmount(tbl, reference)
+	return #table.GetEqualEntryKeys(tbl, reference)
+end
+
+-- Copies any missing data from base table to the target table.
+-- @note This function will not create a new table. It modifies the existing table.
+-- @param table t The target table that will be modified
+-- @param table base The (fallback) base table
+-- @return table The modified target table
+-- @realm shared
+function table.DeepInherit(t, base)
+	if not base then
+		return t
+	end
+
+	for k, v in pairs(base) do
+		if t[k] == nil then
+			t[k] = v
+		elseif k ~= "BaseClass" and istable(t[k]) then
+			table.DeepInherit(t[k], v)
+		end
+	end
+
+	t.BaseClass = base
+
+	return t
 end

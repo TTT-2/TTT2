@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section dynamic_hud_element
 
 local base = "hud_element_base"
@@ -18,10 +18,9 @@ if CLIENT then
 	-- Returns the current @{HUD} scale (for this element)
 	-- @return[default=1.0] number
 	-- @realm client
+	-- @deprecated
 	function HUDELEMENT:GetHUDScale()
-		local hud = huds.GetStored(HUDManager.GetHUD())
-
-		return (hud and hud.scale) or 1.0
+		return appearance.GetGlobalScale()
 	end
 
 	---
@@ -35,6 +34,14 @@ if CLIENT then
 	end
 
 	---
+	-- @param string text
+	-- @param string font
+	-- @param number x
+	-- @param number y
+	-- @param Color color
+	-- @param number xalign
+	-- @param number yalign
+	-- @param boolean dark
 	-- @deprecated
 	-- @realm client
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign, dark)
@@ -42,6 +49,15 @@ if CLIENT then
 	end
 
 	---
+	-- @param string text
+	-- @param string font
+	-- @param number x
+	-- @param number y
+	-- @param Color color
+	-- @param number xalign
+	-- @param number yalign
+	-- @param boolean shadow
+	-- @param number scale
 	-- @deprecated
 	-- @realm client
 	function HUDELEMENT:AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)

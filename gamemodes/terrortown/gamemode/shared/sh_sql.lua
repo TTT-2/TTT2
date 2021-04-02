@@ -1,12 +1,11 @@
 ---
--- @module SQL
 -- @author Alf21
 -- @author saibotk
+-- @module sql
 
 local pairs = pairs
-local sql = sql
 
-SQL = {}
+sql = sql or {}
 
 --
 --
@@ -15,14 +14,14 @@ SQL = {}
 
 ---
 -- Transformes parsed data into usable data
--- Opposite of @{SQL.ParseData}
+-- Opposite of @{sql.ParseData}
 -- @param string key the data you wanna get
 -- @param table data data with data.typ
 -- @param table res resource / parsed data
 -- @return any usable data
 -- @realm shared
 -- @todo usage
-function SQL.GetParsedData(key, data, res)
+function sql.GetParsedData(key, data, res)
 	if key == "BaseClass" then return end
 
 	local val = res[key]
@@ -72,39 +71,43 @@ end
 
 ---
 -- Transformes usable data into parsed data
--- Opposite of @{SQL.GetParsedData}
+-- Opposite of @{sql.GetParsedData}
 -- @param table tbl table with data
 -- @param table keys the data you wanna save
 -- @return any parsed data
 -- @realm shared
 -- @todo usage
-function SQL.ParseData(tbl, keys)
+function sql.ParseData(tbl, keys)
 	local tmp = {}
 
 	for key, data in pairs(keys) do
 		if key == "BaseClass" then continue end
 
-		if tbl[key] ~= nil then
-			local dat = tbl[key]
+		local dat = tbl[key]
 
-			if data.typ == "bool" then
-				dat = dat and 1 or 0
+		if dat == nil then
+			dat = data.default
+		end
 
-				tmp[key] = dat
-			elseif data.typ == "pos" then
-				tmp[key .. "_x"] = dat.x or 0
-				tmp[key .. "_y"] = dat.y or 0
-			elseif data.typ == "size" then
-				tmp[key .. "_w"] = dat.w or 0
-				tmp[key .. "_h"] = dat.h or 0
-			elseif data.typ == "color" then
-				tmp[key .. "_r"] = dat.r or 255
-				tmp[key .. "_g"] = dat.g or 255
-				tmp[key .. "_b"] = dat.b or 255
-				tmp[key .. "_a"] = dat.a or 255
-			else
-				tmp[key] = dat
-			end
+		if dat == nil then continue end
+
+		if data.typ == "bool" then
+			dat = dat and 1 or 0
+
+			tmp[key] = dat
+		elseif data.typ == "pos" then
+			tmp[key .. "_x"] = dat.x or 0
+			tmp[key .. "_y"] = dat.y or 0
+		elseif data.typ == "size" then
+			tmp[key .. "_w"] = dat.w or 0
+			tmp[key .. "_h"] = dat.h or 0
+		elseif data.typ == "color" then
+			tmp[key .. "_r"] = dat.r or 255
+			tmp[key .. "_g"] = dat.g or 255
+			tmp[key .. "_b"] = dat.b or 255
+			tmp[key .. "_a"] = dat.a or 255
+		else
+			tmp[key] = dat
 		end
 	end
 
@@ -118,7 +121,7 @@ end
 -- @return string data string
 -- @realm shared
 -- @todo usage
-function SQL.ParseDataString(key, data)
+function sql.ParseDataString(key, data)
 	if key == "BaseClass" then return end
 
 	local sanitizedKey = sql.SQLStr(key, true)
@@ -150,10 +153,10 @@ end
 -- @return string SQL "Insert" @{string}
 -- @realm shared
 -- @todo usage
-function SQL.BuildInsertString(tableName, name, tbl, keys)
+function sql.BuildInsertString(tableName, name, tbl, keys)
 	if not keys then return end
 
-	local tmp = SQL.ParseData(tbl, keys)
+	local tmp = sql.ParseData(tbl, keys)
 
 	local str = "INSERT INTO " .. sql.SQLStr(tableName) .. " (name"
 
@@ -181,10 +184,10 @@ end
 -- @return string SQL "Update" @{string}
 -- @realm shared
 -- @todo usage
-function SQL.BuildUpdateString(tableName, name, tbl, keys)
+function sql.BuildUpdateString(tableName, name, tbl, keys)
 	if not keys then return end
 
-	local tmp = SQL.ParseData(tbl, keys)
+	local tmp = sql.ParseData(tbl, keys)
 
 	local b = true
 	local str = "UPDATE " .. sql.SQLStr(tableName) .. " SET "
@@ -210,14 +213,14 @@ end
 -- @return boolean Whether the database table was created successfully
 -- @realm shared
 -- @todo usage
-function SQL.CreateSqlTable(tableName, keys)
+function sql.CreateSqlTable(tableName, keys)
 	local result
 
 	if not sql.TableExists(tableName) then
 		local str = "CREATE TABLE " .. sql.SQLStr(tableName) .. " (name TEXT PRIMARY KEY"
 
 		for key, data in pairs(keys) do
-			str = str .. ", " .. SQL.ParseDataString(key, data)
+			str = str .. ", " .. sql.ParseDataString(key, data)
 		end
 
 		str = str .. ")"
@@ -237,7 +240,7 @@ function SQL.CreateSqlTable(tableName, keys)
 
 			if exists then continue end
 
-			local res = SQL.ParseDataString(key, data)
+			local res = sql.ParseDataString(key, data)
 			if not res then continue end
 
 			local resArr = string.Explode(",", res)
@@ -260,10 +263,10 @@ end
 -- @return table false is returned if there is an error, nil if the query returned no data.
 -- @realm shared
 -- @todo usage
-function SQL.Init(tableName, name, tbl, keys)
+function sql.Init(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
-	local query = SQL.BuildInsertString(tableName, name, tbl, keys)
+	local query = sql.BuildInsertString(tableName, name, tbl, keys)
 	if not query then return end
 
 	return sql.Query(query)
@@ -278,25 +281,27 @@ end
 -- @return table false is returned if there is an error, nil if the query returned no data.
 -- @realm shared
 -- @todo usage
-function SQL.Save(tableName, name, tbl, keys)
+function sql.Save(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
-	local query = SQL.BuildUpdateString(tableName, name, tbl, keys)
+	local query = sql.BuildUpdateString(tableName, name, tbl, keys)
 	if not query then return end
 
 	return sql.Query(query)
 end
 
 ---
--- Loads a databse table and set all necessary data of the data @{table}
+-- Loads a database table and set all necessary data of the data @{table}
 -- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
 -- @return table false is returned if there is an error, nil if the query returned no data.
+-- @return boolean returns whether there is a difference between the given data `tbl` and the sqlite data,
+-- so that's an indicator whether old data was overwritten
 -- @realm shared
 -- @todo usage
-function SQL.Load(tableName, name, tbl, keys)
+function sql.Load(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
 	local result = sql.Query("SELECT * FROM " .. sql.SQLStr(tableName) .. " WHERE name = " .. sql.SQLStr(name))
@@ -311,10 +316,10 @@ function SQL.Load(tableName, name, tbl, keys)
 	for key, data in pairs(keys) do
 		if key == "BaseClass" then continue end
 
-		local nres = SQL.GetParsedData(key, data, res)
+		local nres = sql.GetParsedData(key, data, res)
 		if nres == nil or nres == "NULL" or tbl[key] == nres then continue end
 
-		tbl[key] = nres -- override with saved one
+		tbl[key] = nres -- overwrite with saved one
 		changed = true
 	end
 

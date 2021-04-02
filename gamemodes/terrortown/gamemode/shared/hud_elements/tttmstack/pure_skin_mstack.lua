@@ -1,3 +1,5 @@
+--- @ignore
+
 local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
@@ -81,7 +83,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale()
+		self.scale = appearance.GetGlobalScale()
 		self.basecolor = self:GetHUDBasecolor()
 
 		self.leftPad = leftPad * self.scale
