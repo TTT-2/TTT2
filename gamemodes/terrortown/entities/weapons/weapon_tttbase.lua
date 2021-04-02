@@ -251,7 +251,7 @@ if CLIENT then
 		end
 
 		-- set up crosshair color
-		local color = client.GetRoleColor and client:GetRoleColor() or INNOCENT.color
+		local color = client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
 
 		color = appearance.SelectFocusColor(color)
 

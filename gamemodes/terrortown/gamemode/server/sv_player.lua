@@ -787,7 +787,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 				if b then -- special role killing award
 					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0)
 				else -- give traitor killing award if killing another role
-					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. TRAITOR.name .. "kill"):GetInt() or 0)
+					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. roles.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. roles.TRAITOR.name .. "kill"):GetInt() or 0)
 				end
 			end
 		end

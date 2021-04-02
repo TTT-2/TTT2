@@ -234,7 +234,7 @@ else -- CLIENT
 
 		tData:AddDescriptionLine(
 			(hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
-			(hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
+			(hstation_charge > 0) and roles.DETECTIVE.ltcolor or COLOR_ORANGE
 		)
 
 		if client:Health() < client:GetMaxHealth() then return end

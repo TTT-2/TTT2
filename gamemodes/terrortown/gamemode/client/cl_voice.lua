@@ -196,7 +196,7 @@ function GM:PlayerStartVoice(ply)
 	end
 
 	if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
-		pnl.Color = DETECTIVE.color
+		pnl.Color = roles.DETECTIVE.color
 	end
 
 	---

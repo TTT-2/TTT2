@@ -172,7 +172,7 @@ end
 -- @realm shared
 function plymeta:GetRoleColor()
 	if not self.roleColor then
-		self.roleColor = NONE.color
+		self.roleColor = roles.NONE.color
 	end
 
 	return self.roleColor

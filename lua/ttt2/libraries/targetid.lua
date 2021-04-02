@@ -460,7 +460,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
-			DETECTIVE.ltcolor,
+			roles.DETECTIVE.ltcolor,
 			{materialDetective}
 		)
 	end
