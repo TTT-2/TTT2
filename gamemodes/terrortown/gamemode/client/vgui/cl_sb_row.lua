@@ -346,7 +346,6 @@ function PANEL:SetPlayer(ply)
 
 	if not self.info then
 		local g = ScoreGroup(ply)
-		-- TODO add teams
 
 		if g == GROUP_TERROR and ply ~= LocalPlayer() then
 			self.info = vgui.Create("TTTScorePlayerInfoTags", self)

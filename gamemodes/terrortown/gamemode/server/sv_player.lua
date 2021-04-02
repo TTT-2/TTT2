@@ -923,10 +923,9 @@ function GM:SpectatorThink(ply)
 		local clicked = ply:KeyPressed(IN_ATTACK)
 
 		-- After first click, go into chase cam, then after another click, to into
-		-- roam. If no clicks made, go into chase after X secs, and roam after Y.
+		-- eye mode. If no clicks made, go into chase after X secs, and eye mode after Y.
 		-- Don't switch for a second in case the player was shooting when he died,
 		-- this would make him accidentally switch out of ragdoll cam.
-		-- TODO correct this description: Changed to force into eye mode
 
 		local m = ply:GetObserverMode()
 
@@ -966,7 +965,7 @@ function GM:SpectatorThink(ply)
 		ply:Spectate(OBS_MODE_ROAMING)
 	end
 
-	-- when speccing a player
+	-- when spectating a player
 	if ply:GetObserverMode() ~= OBS_MODE_ROAMING and not ply.propspec and not ply:GetRagdollSpec() then
 		local tgt = ply:GetObserverTarget()
 
@@ -1139,7 +1138,6 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 			local push = ply.was_pushed
 
 			if push and math.max(push.t or 0, push.hurt or 0) > CurTime() - 4 then
-				-- TODO: move push time checking stuff into fn?
 				att = push.att
 			end
 

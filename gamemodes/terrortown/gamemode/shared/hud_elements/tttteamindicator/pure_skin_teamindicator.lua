@@ -84,10 +84,10 @@ if CLIENT then
 
 		if LocalPlayer():Alive() and LocalPlayer():IsTerror() then
 			icon = tm.iconMaterial
-			c = tm.color or Color(0, 0, 0, 255) -- TODO define outside
+			c = tm.color or COLOR_BLACK
 		else -- player is dead and spectator
 			icon = material_watching
-			c = Color(91, 94, 99, 255)
+			c = COLOR_CUSTOMGRAY
 		end
 
 		-- draw dark bottom overlay

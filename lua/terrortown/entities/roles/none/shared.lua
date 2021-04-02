@@ -5,7 +5,7 @@ ROLE.index = ROLE_NONE
 ---
 -- @ignore
 function ROLE:PreInitialize()
-	self.color = Color(91, 94, 99, 255)
+	self.color = COLOR_CUSTOMGRAY
 
 	self.abbr = "none"
 

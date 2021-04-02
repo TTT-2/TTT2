@@ -248,14 +248,11 @@ function GM:InitPostEntity()
 		wep.CanBuy = {} -- reset normal weapons equipment
 	end
 
-	-- TODO why should Equipment be nil?
-	if istable(Equipment) then
-		local roleList = roles.GetList()
+	local roleList = roles.GetList()
 
-		-- reset normal equipment tables
-		for i = 1, #roleList do
-			Equipment[roleList[i].index] = {}
-		end
+	-- reset normal equipment tables
+	for i = 1, #roleList do
+		Equipment[roleList[i].index] = {}
 	end
 
 	-- initialize fallback shops
