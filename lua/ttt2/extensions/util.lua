@@ -463,9 +463,6 @@ if CLIENT then
 		death = Color(255, 0, 0, 255)
 	}
 
-	-- Backward compatibility
-	IsOffScreen = util.IsOffScreen
-
 	---
 	-- Checks whether a given position is on screen
 	-- @param table scrpos table with x and y attributes
@@ -474,6 +471,9 @@ if CLIENT then
 	function util.IsOffScreen(scrpos)
 		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
 	end
+
+	-- Backward compatibility
+	IsOffScreen = util.IsOffScreen
 
 	---
 	-- Creates a @{string} based on the given health and maxhealth
