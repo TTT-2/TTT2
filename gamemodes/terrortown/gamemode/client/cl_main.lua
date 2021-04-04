@@ -293,9 +293,12 @@ function GM:InitPostEntity()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		draw.CacheAvatar(plys[i]:SteamID64(), "small") -- caching
-		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
-		draw.CacheAvatar(plys[i]:SteamID64(), "large") -- caching
+		local plyid64 = plys[i]:SteamID64()
+
+		-- caching
+		draw.CacheAvatar(plyid64, "small")
+		draw.CacheAvatar(plyid64, "medium")
+		draw.CacheAvatar(plyid64, "large")
 	end
 
 	timer.Create("cache_ents", 1, 0, function()

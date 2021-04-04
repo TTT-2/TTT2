@@ -1539,7 +1539,7 @@ function GM:TTTCheckForWin()
 		return alive[1]
 	else -- rare case: nobody is alive, e.g. because of an explosion
 		--return WIN_NONE -- none_win
-		return WIN_TRAITOR
+		return WIN_TRAITOR -- TODO WIN_NONE?
 	end
 end
 

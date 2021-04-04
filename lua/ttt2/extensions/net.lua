@@ -3,6 +3,12 @@
 -- @author saibotk
 -- @module net
 
+local net = net
+local util = util
+local table = table
+local tostring = tostring
+local isfunction = isfunction
+
 -- Stream network message name constant
 local NETMSG_STREAM = "TTT2_NET_STREAM"
 
@@ -32,13 +38,14 @@ net.stream_callbacks = {}
 function net.SendStream(messageId, data, client)
 	local encodedString = pon.encode(data)
 	local split = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
+	local splitSize = #split
 
-	for i = 1, #split do
+	for i = 1, splitSize do
 		net.Start(NETMSG_STREAM)
 		-- Write the messageId
 		net.WriteUInt(util.CRC(messageId), 32)
 		-- Write if there are still fragments coming after this one
-		net.WriteBool(i < #split)
+		net.WriteBool(i < splitSize)
 		-- Write the actual data fragment as a string, which internally will also send its size
 		net.WriteString(split[i])
 

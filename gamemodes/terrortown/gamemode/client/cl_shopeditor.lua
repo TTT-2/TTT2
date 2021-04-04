@@ -549,7 +549,7 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	-- remove none role and own shop (to change the position)
 	local i = 0
 
-	for k = 1, #rls do
+	while i < #rls do
 		i = i + 1
 
 		local index = rls[i].index
@@ -649,16 +649,13 @@ function ShopEditor.CreateShopLinker()
 	end
 
 	local rls = roles.GetSortedRoles()
-	local i = 0
 
 	-- remove none role
 	for k = 1, #rls do
-		local index = rls[i].index
+		if rls[k].index == ROLE_NONE then
+			table.remove(rls, k)
 
-		if index == ROLE_NONE then
-			table.remove(rls, i)
-
-			i = i - 1
+			break
 		end
 	end
 

@@ -329,7 +329,7 @@ if SERVER then
 			local tmp = {}
 
 			for i = 1, #tbl do
-				tmp[#tmp + 1] = tbl[i].id
+				tmp[i] = tbl[i].id
 			end
 
 			if #tmp <= 0 then continue end
@@ -635,9 +635,8 @@ else -- CLIENT
 
 					for i = 1, #tmp do
 						local id = tmp[i]
-						local equip = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 
-						tmp2[#tmp2 + 1] = equip
+						tmp2[i] = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 					end
 
 					RANDOMSHOP[LocalPlayer()] = tmp2

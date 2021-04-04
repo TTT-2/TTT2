@@ -901,7 +901,7 @@ local function ReceiveEquipment()
 	local toRem = {}
 
 	for i = 1, eqAmount do
-		tmp[#tmp + 1] = net.ReadString()
+		tmp[i] = net.ReadString()
 	end
 
 	local equipItems = ply:GetEquipmentItems()

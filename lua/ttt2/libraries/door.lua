@@ -3,6 +3,15 @@
 -- @author Mineotopia
 -- @module door
 
+local string = string
+local player = player
+local net = net
+local hook = hook
+local util = util
+local timer = timer
+local IsValid = IsValid
+local Angle = Angle
+
 if SERVER then
 	AddCSLuaFile()
 

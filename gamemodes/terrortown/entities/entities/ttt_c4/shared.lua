@@ -569,7 +569,7 @@ if SERVER then
 		local choices = {}
 
 		for i = 1, C4_WIRE_COUNT do
-			choices[#choices + 1] = i
+			choices[i] = i
 		end
 
 		-- random selection process, lot like traitor selection

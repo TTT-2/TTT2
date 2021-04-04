@@ -265,11 +265,12 @@ local function ReceiveRadarScan()
 		local team = net.ReadString()
 
 		local color
+
 		if net.ReadBool() then
 			color = net.ReadColor()
 		end
 
-		RADAR.targets[#RADAR.targets + 1] = {pos = pos, subrole = subrole, team = team, hasSubrole = hasSubrole, color = color}
+		RADAR.targets[i] = {pos = pos, subrole = subrole, team = team, hasSubrole = hasSubrole, color = color}
 	end
 
 	RADAR.enable = true

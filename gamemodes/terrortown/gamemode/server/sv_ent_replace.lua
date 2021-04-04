@@ -7,7 +7,11 @@ ents.TTT = {}
 local math = math
 local pairs = pairs
 local util = util
+local string = string
+local file = file
 local IsValid = IsValid
+local Vector = Vector
+local Angle = Angle
 
 ---
 -- @realm server
@@ -382,12 +386,15 @@ end
 -- entities of the classes given the table
 local function PlaceWeaponsAtEnts(spots_classes)
 	local spots = {}
+	local count = 0
 
 	for i = 1, #spots_classes do
 		local entsTbl = ents.FindByClass(spots_classes[i])
 
 		for k = 1, #entsTbl do
-			spots[#spots + 1] = entsTbl[k]
+			count = count + 1
+
+			spots[count] = entsTbl[k]
 		end
 	end
 
@@ -402,7 +409,7 @@ local function PlaceWeaponsAtEnts(spots_classes)
 	local num = 0
 	local w
 
-	for _, v in RandomPairs(spots) do
+	for _, v in RandomPairs(spots) do -- TODO RandomPairs performance test?
 		w = spawnables[math.random(#spawnables)]
 
 		if w and IsValid(v) and util.IsInWorld(v:GetPos()) then
@@ -413,6 +420,7 @@ local function PlaceWeaponsAtEnts(spots_classes)
 			-- People with only a grenade are sad pandas. To get IsGrenade here,
 			-- we need the spawned ent that has inherited the goods from the
 			-- basegrenade swep.
+			-- TODO IsValid and IsInWorld check is missed as well as this could be a grenade again as well
 			if spawned and spawned.IsGrenade then
 				w = spawnables[math.random(#spawnables)]
 
