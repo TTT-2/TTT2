@@ -289,7 +289,7 @@ local function OnInitialization(class, path, name)
 
 	_G["EVENT_" .. string.upper(name)] = name
 
-	MsgN("Added TTT2 event file: ", path)
+	MsgN("Added TTT2 event file: ", path, name)
 end
 
 eventTypes = classbuilder.BuildFromFolder(
@@ -307,5 +307,6 @@ table.Merge(eventTypes, classbuilder.BuildFromFolder(
 	"EVENT", -- class scope
 	OnInitialization, -- on class loaded
 	true, -- should inherit
-	ShouldInherit -- special inheritance check
+	ShouldInherit, -- special inheritance check
+	eventTypes
 ))

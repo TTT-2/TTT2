@@ -472,6 +472,9 @@ if CLIENT then
 		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
 	end
 
+	-- Backward compatibility
+	IsOffScreen = util.IsOffScreen
+
 	---
 	-- Creates a @{string} based on the given health and maxhealth
 	-- @param number health

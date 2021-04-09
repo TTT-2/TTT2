@@ -109,7 +109,7 @@ L.disg_not_owned = "Du trägst keine Tarnung!"
 L.disg_enable = "Tarnung aktivieren"
 
 L.disg_help1 = "Wenn deine Tarnung aktiv ist, werden dein Name, Leben und Karma nicht angezeigt, wenn dich jemand anschaut. Zusätzlich tauchst du nicht auf dem Radar des Detektivs auf."
-L.disg_help2 = "Drücke Enter auf dem Numpad, um die Tarnung an oder aus zu schalten, ohne das Menü zu nutzen. Du kannst alternativ 'ttt_toggle_diguise' durch die Konsole auf eine andere Taste legen."
+L.disg_help2 = "Drücke Enter auf dem Numpad, um die Tarnung an- oder auszuschalten, ohne das Menü zu nutzen. Du kannst alternativ 'ttt_toggle_diguise' durch die Konsole auf eine andere Taste legen."
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
@@ -150,7 +150,7 @@ L.radio_button_burn = "Brennen"
 L.radio_button_steps = "Schritte"
 
 -- Intro screen shown after joining
-L.intro_help = "Wenn du zum ersten Mal spielst, dann drücke F1 für Instruktionen!"
+L.intro_help = "Wenn du zum ersten Mal spielst, drücke F1 für Instruktionen!"
 
 -- Radiocommands/quickchat
 L.quick_title = "Quickchat-Befehle"
@@ -188,7 +188,7 @@ L.search_role_inno = "Diese Person war ein unschuldiger Terrorist!"
 L.search_words = "Etwas sagt dir, dass die letzten Worte dieser Person \"{lastwords}\" waren."
 L.search_armor = "Sie trug eine nicht-standardmäßige Körperrüstung."
 L.search_disg = "Sie trug ein Gerät, dass ihre Identität verstecken konnte."
-L.search_radar = "Sie trug eine Form eines Radars. Er funktioniert nicht länger."
+L.search_radar = "Sie trug eine Form eines Radars. Es funktioniert nicht mehr."
 L.search_c4 = "In der Tasche war eine Notiz. Sie besagt, dass das Durchschneiden des Drahtes {num} die Bombe sicher entschärfen wird."
 
 L.search_dmg_crush = "Viele Knochen des Opfers sind gebrochen. Es scheint, als habe der Einschlag eines schweren Objekts zum Tode geführt."
@@ -217,7 +217,7 @@ L.sb_playing = "Du spielst auf..."
 L.sb_mapchange = "Die Karte wechselt in {num} Runden oder in {time}"
 
 L.sb_mia = "Vermisst"
-L.sb_confirmed = "Definitiv Tot"
+L.sb_confirmed = "Definitiv tot"
 
 L.sb_ping = "Ping"
 L.sb_deaths = "Tode"
@@ -266,7 +266,7 @@ Versteckt deine ID. Vermeidet außerdem, dass du die letzte vom Opfer gesehene P
 Schalte es im Reiter "Tarnung" ein oder aus oder drücke Enter auf dem Numpad.]]
 
 -- C4
-L.c4_hint = "Drücke {usekey} zum scharf stellen oder entschärfen."
+L.c4_hint = "Drücke {usekey} zum Scharfstellen oder Entschärfen."
 L.c4_disarm_warn = "Eine Ladung C4, die du platziert hast, ist entschärft worden."
 L.c4_armed = "Du hast die Bombe erfolgreich scharf gestellt."
 L.c4_disarmed = "Du hast die Bombe erfolgreich entschärft."
@@ -738,7 +738,7 @@ L.aw_sui1_title = "Leiter des Selbstmord-Kultes"
 L.aw_sui1_text = "zeigte den anderen Selbstmördern, wie sie es zu tun haben, indem er der erste war."
 
 L.aw_sui2_title = "Allein und deprimiert"
-L.aw_sui2_text = "war der einzige, der sich selbst umgebracht hat."
+L.aw_sui2_text = "war der Einzige, der sich selbst umgebracht hat."
 
 L.aw_exp1_title = "Stipendium für Explosive Forschungen"
 L.aw_exp1_text = "wurde für seine Forschungen an Explosionen anerkannt. {num} Versuchskaninchen haben mitgeholfen."
