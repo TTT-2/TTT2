@@ -550,7 +550,7 @@ L.idle_popup_off = "Deaktiviere Nur-Zuschauer-Modus"
 
 L.idle_warning = "Warnung: Du scheinst AFK zu sein und wirst zum Zuschauer, außer du zeigst Aktivität!"
 
-L.spec_mode_warning = "Du bist im Zuschauermodus und wirst nicht spielen, wenn eine Runde beginnt. Um diesen Modus zu verlassen, drücke F1, gehe in die Einstellungen und nimm den Haken bei ‘Nur-Zuschauer-Modus’ raus."
+L.spec_mode_warning = "Du bist im Zuschauermodus und wirst nicht spielen, wenn eine Runde beginnt. Um diesen Modus zu verlassen, drücke F1, gehe in die ‘Gameplay’ Einstellungen und nimm den Haken bei ‘Nur-Zuschauer-Modus’ raus."
 
 -- Tips panel
 L.tips_panel_title = "Tipps"
