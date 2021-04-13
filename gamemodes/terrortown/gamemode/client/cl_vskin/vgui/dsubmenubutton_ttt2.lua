@@ -67,14 +67,23 @@ function PANEL:GetTitleFont()
 	return self.contents.title_font
 end
 
+---
+-- @param Material iconMat
+-- @realmn client
 function PANEL:SetIcon(iconMat)
 	self.contents.icon = iconMat
 end
 
+---
+-- @return icon
+-- @realm client
 function PANEL:GetIcon()
 	return self.contents.icon
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:HasIcon()
 	return self.contents.icon ~= nil
 end

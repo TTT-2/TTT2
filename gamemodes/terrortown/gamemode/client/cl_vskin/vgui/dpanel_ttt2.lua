@@ -221,12 +221,14 @@ function PANEL:HasTooltipText()
 end
 
 ---
+-- @param string font
 -- @realm client
 function PANEL:SetTooltipFont(font)
 	self.tooltip.font = font
 end
 
 ---
+-- @return string
 -- @realm client
 function PANEL:GetTooltipFont()
 	return self.tooltip.font

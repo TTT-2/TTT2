@@ -55,14 +55,14 @@ function PANEL:SetTitleOpacity(opacity)
 end
 
 ---
--- @retun number
+-- @return number
 -- @realm client
 function PANEL:GetTitleOpacity()
 	return self.contents.opacity
 end
 
 ---
--- @para, number align
+-- @param number align
 -- @realm client
 function PANEL:SetTitleAlign(align)
 	self.contents.align = align or TEXT_ALIGN_CENTER
