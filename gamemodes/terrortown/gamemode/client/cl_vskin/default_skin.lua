@@ -830,6 +830,11 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
 	local colorBackground = panel:GetColor()
 	local colorText = utilGetDefaultColor(colorBackground)
@@ -856,14 +861,29 @@ function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
 	end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintColoredBoxTTT2(panel, w, h)
 	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetColor())
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintVerticalBorderedBoxTTT2(panel, w, h)
 	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
 	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
 	local colorForeground = colors.accent
@@ -891,6 +911,11 @@ function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
 	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
 	local colorForeground = colors.accent
@@ -918,6 +943,11 @@ function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintTooltipTTT2(panel, w, h)
 	local colorLine = ColorAlpha(colors.default, 100)
 

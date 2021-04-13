@@ -1,16 +1,51 @@
+---
+-- @class PANEL
+-- @section DPanelTTT2
+
 local PANEL = {}
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL)
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bDisabled", "Disabled")
+
+---
+-- @accessor Color
+-- @realm client
 AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
 
+---
+-- @accessor Panel
+-- @realm client
 Derma_Hook(PANEL, "Paint", "Paint", "Panel")
+
+---
+-- @accessor Panel
+-- @realm client
 Derma_Hook(PANEL, "ApplySchemeSettings", "Scheme", "Panel")
+
+---
+-- @accessor Panel
+-- @realm client
 Derma_Hook(PANEL, "PerformLayout", "Layout", "Panel")
 
+---
+-- @ignore
 function PANEL:Init()
 	self:SetPaintBackground(true)
 
@@ -35,6 +70,9 @@ function PANEL:Init()
 	end
 end
 
+---
+-- @param boolean
+-- @realm client
 function PANEL:SetDisabled(bDisabled)
 	self.m_bDisabled = bDisabled
 
@@ -47,14 +85,23 @@ function PANEL:SetDisabled(bDisabled)
 	end
 end
 
+---
+-- @param boolean
+-- @realm client
 function PANEL:SetEnabled(bEnabled)
 	self:SetDisabled(not bEnabled)
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:IsEnabled()
 	return not self:GetDisabled()
 end
 
+---
+-- @param number
+-- @realm client
 function PANEL:OnMousePressed(mousecode)
 	if self:IsSelectionCanvas() and not dragndrop.IsDragging() then
 		self:StartBoxSelection()
@@ -66,9 +113,11 @@ function PANEL:OnMousePressed(mousecode)
 		self:MouseCapture(true)
 		self:DragMousePress(mousecode)
 	end
-
 end
 
+---
+-- @param number
+-- @realm client
 function PANEL:OnMouseReleased(mousecode)
 	if self:EndBoxSelection() then return end
 
@@ -79,10 +128,16 @@ function PANEL:OnMouseReleased(mousecode)
 	end
 end
 
+---
+-- @realm client
 function PANEL:UpdateColours()
 
 end
 
+---
+-- @param number x
+-- @param number y
+-- @realm client
 function PANEL:SetTooltipFixedPosition(x, y)
 	self.tooltip.fixedPosition = {
 		x = x,
@@ -90,14 +145,24 @@ function PANEL:SetTooltipFixedPosition(x, y)
 	}
 end
 
+---
+-- @return number, number
+-- @realm client
 function PANEL:GetTooltipFixedPosition()
 	return self.tooltip.fixedPosition.x, self.tooltip.fixedPosition.y
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:HasTooltipFixedPosition()
 	return self.tooltip.fixedPosition ~= nil
 end
 
+---
+-- @param number w
+-- @param number h
+-- @realm client
 function PANEL:SetTooltipFixedSize(w, h)
 	self.tooltip.fixedSize = {
 		w = w,
@@ -105,41 +170,64 @@ function PANEL:SetTooltipFixedSize(w, h)
 	}
 end
 
+---
+-- @return number, number
+-- @realm client
 function PANEL:GetTooltipFixedSize()
 	return self.tooltip.fixedSize.w, self.tooltip.fixedSize.h
 end
 
+---
+-- @realm client
 function PANEL:HasTooltipFixedSize()
 	return self.tooltip.fixedSize ~= nil
 end
 
+---
+-- @param number
+-- @realm client
 function PANEL:SetTooltipOpeningDelay(delay)
 	self.tooltip.delay = delay
 end
 
+---
+-- @return number
+-- @realm client
 function PANEL:GetTooltipOpeningDelay()
 	return self.tooltip.delay
 end
 
--- overwrite the tooltip function
+---
+-- @param string text
+-- @realm client
 function PANEL:SetTooltip(text)
 	self:SetTooltipPanelOverride("DTooltipTTT2")
 
 	self.tooltip.text = text
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetTooltipText()
 	return self.tooltip.text
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:HasTooltipText()
 	return self.tooltip.text ~= nil and self.tooltip.text ~= ""
 end
 
+---
+-- @realm client
 function PANEL:SetTooltipFont(font)
 	self.tooltip.font = font
 end
 
+---
+-- @realm client
 function PANEL:GetTooltipFont()
 	return self.tooltip.font
 end

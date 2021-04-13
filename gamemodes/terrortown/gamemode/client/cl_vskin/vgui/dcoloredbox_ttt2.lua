@@ -1,5 +1,11 @@
+---
+-- @class PANEL
+-- @section DColoredBoxTTT2
+
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self:SetText("")
 
@@ -10,14 +16,24 @@ function PANEL:Init()
 	}
 end
 
+---
+-- @param Color color
+-- @realm client
 function PANEL:SetColor(color)
 	self.contents.color = color or COLOR_WHITE
 end
 
-function PANEL:GetColor(color)
+---
+-- @return Color
+-- @realm client
+function PANEL:GetColor()
 	return self.contents.color
 end
 
+---
+-- @param number w
+-- @param number h
+-- @realm client
 function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "ColoredBoxTTT2", self, w, h)
 

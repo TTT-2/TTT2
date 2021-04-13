@@ -292,6 +292,9 @@ function PANEL:ShowCloseButton(bShow)
 	self.btnClose:SetVisible(bShow)
 end
 
+---
+-- @param function fn
+-- @realm client
 function PANEL:CloseButtonClickOverride(fn)
 	if not IsValid(self.btnClose) or not isfunction(fn) then return end
 

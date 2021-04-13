@@ -1,5 +1,11 @@
+---
+-- @class PANEL
+-- @section DTooltipTTT2
+
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self:SetText("")
 	self:SetDrawOnTop(true)
@@ -9,10 +15,18 @@ function PANEL:Init()
 	self.sizeArrow = 8
 end
 
+---
+-- @param table skin
+-- @return Color
+-- @realm client
 function PANEL:UpdateColours(skin)
 	return self:SetTextStyleColor(skin.Colours.TooltipText)
 end
 
+---
+-- @param Panel panel
+-- @param boolean bDelete
+-- @realm client
 function PANEL:SetContents(panel, bDelete)
 	panel:SetParent(self)
 
@@ -24,6 +38,8 @@ function PANEL:SetContents(panel, bDelete)
 	self.contents:SetVisible(false)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	if not IsValid(self.targetPanel) then return end
 
@@ -44,6 +60,8 @@ function PANEL:PerformLayout()
 	end
 end
 
+---
+-- @realm client
 function PANEL:PositionTooltip()
 	if not IsValid(self.targetPanel) then
 		self:Close()
@@ -71,12 +89,19 @@ function PANEL:PositionTooltip()
 	self:SetPos(x, y)
 end
 
+---
+-- @param number w
+-- @param number h
+-- @realm client
 function PANEL:Paint(w, h)
 	self:PositionTooltip()
 
 	derma.SkinHook("Paint", "TooltipTTT2", self, w, h)
 end
 
+---
+-- @param Panel panel
+-- @realm client
 function PANEL:OpenForPanel(panel)
 	self.targetPanel = panel
 
@@ -92,6 +117,8 @@ function PANEL:OpenForPanel(panel)
 	end)
 end
 
+---
+-- @realm client
 function PANEL:Close()
 	if not self.deleteContentsOnClose and IsValid(self.contents) then
 		self.contents:SetVisible(false)
@@ -101,16 +128,22 @@ function PANEL:Close()
 	self:Remove()
 end
 
+---
+-- @realm client
 function PANEL:GetText()
 	return self.targetPanel:GetTooltipText() or ""
 end
 
+---
+-- @realm client
 function PANEL:HasText()
 	if not IsValid(self.targetPanel) then return end
 
 	return self.targetPanel:HasTooltipText()
 end
 
+---
+-- @realm client
 function PANEL:GetFont()
 	return self.targetPanel:GetTooltipFont() or "Default"
 end
