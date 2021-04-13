@@ -6,49 +6,45 @@
 
 local vskin = vskin
 
-local materialInfo = Material("vgui/ttt/vskin/roundend/info")
-local materialEvents = Material("vgui/ttt/vskin/roundend/events")
-local materialScores = Material("vgui/ttt/vskin/roundend/scores")
-
 local sizes = {
 	width = 1200,
 	height = 700,
 	padding = 10
 }
 
-local function PopulateInfoPanel(parent)
-	print("INFO")
+-- load score menu pages
+local function ShouldInherit(t, base)
+	return t.base ~= t.type
 end
 
-local function PopulateEventsPanel(parent)
-	print("EVENTS")
+local function OnInitialization(class, path, name)
+	class.type = name
+	class.base = class.base or "base_scoremenu"
+
+	MsgN("Added TTT2 score menu file: ", path, name)
 end
 
-local function PopulateScoresPanel(parent)
-	print("SCORES")
+local subMenus = classbuilder.BuildFromFolder(
+	"terrortown/menus/score/",
+	CLIENT_FILE,
+	"CLSCOREMENU", -- class scope
+	OnInitialization, -- on class loaded
+	true, -- should inherit
+	ShouldInherit -- special inheritance check
+)
+
+-- transfer subMenues into indexed table
+local subMenusIndexed = {}
+
+for _, subMenu in pairs(subMenus) do
+	if subMenu.type == "base_scoremenu" then continue end
+
+	subMenusIndexed[#subMenusIndexed + 1] = subMenu
 end
 
-local function InternalModifyRoundendMenu(panelData)
-	local infoPanel = panelData:RegisterSubMenu("roundend_info")
+table.SortByMember(subMenusIndexed, "priority")
 
-	infoPanel:SetTitle("title")
-	infoPanel:SetIcon(materialInfo)
-	infoPanel:PopulatePanel(PopulateInfoPanel)
-
-	local eventsPanel = panelData:RegisterSubMenu("roundend_events")
-
-	eventsPanel:SetTitle("title")
-	eventsPanel:SetIcon(materialEvents)
-	eventsPanel:PopulatePanel(PopulateEventsPanel)
-
-	local scoresPanel = panelData:RegisterSubMenu("roundend_scores")
-
-	scoresPanel:SetTitle("title")
-	scoresPanel:SetIcon(materialScores)
-	scoresPanel:PopulatePanel(PopulateScoresPanel)
-end
-
-CLSCORE = {}
+CLSCORE = CLSCORE or {}
 
 function CLSCORE:CalculateSizes()
 	sizes.heightMainArea = sizes.height - 2 * sizes.padding
@@ -63,17 +59,6 @@ end
 
 function CLSCORE:CreatePanel()
 	self:CalculateSizes()
-
-	-- GENERATE MENU CONTENT
-	local menuTbl = {}
-	local panelData = menuDataHandler.CreateNewRoundendMenu()
-
-	panelData:BindData(menuTbl)
-
-	InternalModifyRoundendMenu(panelData)
-
-	-- RUN HOOK TO ADD DATA TO MENU
-	hook.Run("TTT2ModifyRoundEndMenu", panelData)
 
 	local frame = vguihandler.GenerateFrame(sizes.width, sizes.height, "report_title", true)
 
@@ -130,18 +115,18 @@ function CLSCORE:CreatePanel()
 	-- POPULATE SIDEBAR PANEL
 	local lastActive
 
-	for i = 1, #menuTbl do
-		local data = menuTbl[i]
+	for i = 1, #subMenusIndexed do
+		local data = subMenusIndexed[i]
 
 		local menuButton = menuBoxGrid:Add("DSubMenuButtonTTT2")
 		menuButton:SetSize(sizes.widthMenu - 1, sizes.heightMenuButton)
-		menuButton:SetIcon(data.iconMat)
+		menuButton:SetIcon(data.icon)
 		menuButton:SetTooltip(data.title)
 		menuButton.DoClick = function(slf)
 			contentBox:Clear()
 
-			if isfunction(data.populateFn) then
-				data.populateFn(contentBox)
+			if isfunction(data.Populate) then
+				data:Populate(contentBox)
 			end
 
 			slf:SetActive(true)
@@ -156,8 +141,8 @@ function CLSCORE:CreatePanel()
 	end
 
 	-- load initial menu
-	if isfunction(menuTbl[1].populateFn) then
-		menuTbl[1].populateFn(contentBox)
+	if isfunction(subMenusIndexed[1].Populate) then
+		subMenusIndexed[1]:Populate(contentBox)
 	end
 
 	return frame
@@ -193,7 +178,9 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:ClearPanel()
-
+	if IsValid(self.panel) then
+		self.panel:Close()
+	end
 end
 
 ---
@@ -210,7 +197,7 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:Reset()
-
+	self:ClearPanel()
 end
 
 ---
@@ -253,20 +240,15 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:Toggle()
+	--TODO remove
+	self:ClearPanel()
+
 	if self:IsPanelHidden() then
 		self:ShowPanel()
 	else
 		self:HidePanel()
 	end
 end
-
----
--- Used to modify the roundend screen menu by adding custom submenues to it.
--- @param ROUNDEND_MENU_DATA panelData The already existing panel data
-function GM:TTT2ModifyRoundEndMenu(panelData)
-
-end
-
 
 -- TODO: Remove before release
 concommand.Add("scp", function()

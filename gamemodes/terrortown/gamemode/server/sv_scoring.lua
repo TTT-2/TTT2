@@ -17,3 +17,6 @@ function SCORE:AddEvent(entry, t_override)
 
 	self.Events[#self.Events + 1] = entry
 end
+
+-- provide score menu files by loading them from here:
+fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)
