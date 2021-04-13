@@ -1,3 +1,6 @@
+---
+-- @class EPOP
+
 util.AddNetworkString("ttt2_eventpopup")
 
 EPOP = EPOP or {}

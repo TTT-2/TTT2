@@ -1,3 +1,6 @@
+--- @ignore
+-- @author Alf21
+
 local function SendLayersData(layerTbl)
 	local layerTblSize = #layerTbl
 
@@ -116,7 +119,7 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 		return self:DropAction_Simple(drops, bDoDrop, command, x, y)
 	end
 
-	-- This panel is only meant to be copied from, not editednot 
+	-- This panel is only meant to be copied from, not editednot
 	if self:GetReadOnly() then return end
 
 	local h = closest:GetTall()

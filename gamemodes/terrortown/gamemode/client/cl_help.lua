@@ -1,11 +1,14 @@
 ---
 -- @class HELPSCRN
--- @desc Help screen
 
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 
+---
+-- @realm client
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
+
+---
+-- @realm client
 CreateConVar("ttt_mute_team_check", "0")
 
 local function SpectateCallback(cv, old, new)
@@ -148,6 +151,8 @@ function HELPSCRN:ShowMainMenu()
 
 	InternalModifyHelpMainMenu(helpData)
 
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyHelpMainMenu", helpData)
 
 	local menuesNormal = helpData:GetVisibleNormalMenues()
@@ -167,6 +172,10 @@ function HELPSCRN:ShowMainMenu()
 	AddMenuButtons(menuesAdmin, dsettings)
 end
 
+---
+-- @see HELPSCRN:ShowMainMenu()
+-- @realm client
+-- @function HELPSCRN:Show()
 HELPSCRN.Show = HELPSCRN.ShowMainMenu
 
 ---
@@ -199,6 +208,8 @@ function HELPSCRN:BuildContentArea()
 
 	if not IsValid(parent) then return end
 
+	---
+	-- @realm client
 	if hook.Run("TTT2OnHelpSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
 	parent:Clear()
@@ -290,6 +301,8 @@ function HELPSCRN:ShowSubMenu(data)
 
 	InternalModifyHelpSubMenu(helpData, data.id)
 
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyHelpSubMenu", helpData, data.id)
 
 	-- cache reference to last active button

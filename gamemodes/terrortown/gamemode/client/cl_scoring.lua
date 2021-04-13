@@ -1,4 +1,5 @@
 ---
+-- Game Report
 -- @class CLSCORE
 -- @desc Game report at round end
 -- @author Mineotopia

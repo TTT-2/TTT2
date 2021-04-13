@@ -63,7 +63,6 @@ TTTFiles = {
 	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
 	sh_sql = {file = "sh_sql.lua", on = "shared"},
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
-	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_voice = {file = "sh_voice.lua", on = "shared"},
 	sh_speed = {file = "sh_speed.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
@@ -142,6 +141,8 @@ if SERVER then
 	table.Merge(TTTFiles, tmp)
 end
 
+---
+-- @realm shared
 hook.Run("TTT2ModifyFiles", TTTFiles)
 
 if SERVER then
@@ -152,6 +153,10 @@ if SERVER then
 	end
 end
 
+---
+-- Include a registered overwritable TTT2 file
+-- @param string filename The registered filename-pseudo, but not the path
+-- @realm shared
 function ttt_include(filename)
 	local fd = TTTFiles[filename]
 

@@ -1,3 +1,6 @@
+-- @class SKIN
+-- @section default_skin
+
 local materialClose = Material("vgui/ttt/vskin/icon_close")
 local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
@@ -9,6 +12,7 @@ local SKIN = {
 }
 
 local TryT = LANG.TryTranslation
+local ParT = LANG.GetParamTranslation
 
 local mathRound = math.Round
 
@@ -59,6 +63,9 @@ surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 1
 surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
 surface.CreateAdvancedFont("DermaTTT2TextHuge", {font = "Trebuchet24", size = 72, weight = 900})
 
+---
+-- Updates the @{SKIN}
+-- @realm client
 function SKIN:UpdatedVSkin()
 	colors = {
 		background = vskinGetBackgroundColor(),
@@ -92,6 +99,12 @@ function SKIN:UpdatedVSkin()
 	}
 end
 
+---
+-- Draws the @{SKIN}'s frame
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintFrameTTT2(panel, w, h)
 	if panel:GetPaintShadow() then
 		DisableClipping(true)
@@ -109,22 +122,48 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 	drawShadowedText(TryT(panel:GetTitle()), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 end
 
+---
+-- Draws the Panel
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintPanel(panel, w, h)
 
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintNavPanelTTT2(panel, w, h)
 	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintButtonPanelTTT2(panel, w, h)
 	drawBox(0, 0, w, 1, ColorAlpha(colors.default, 200))
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintContentPanelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.content)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintWindowCloseButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
@@ -148,6 +187,11 @@ function SKIN:PaintWindowCloseButton(panel, w, h)
 	drawFilteredShadowedTexture(padding, padding + shift, w - 2 * padding, h - 2 * padding, materialClose, colorText.a, colorText)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintWindowBackButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
@@ -182,6 +226,11 @@ function SKIN:PaintWindowBackButton(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintScrollBarGrip(panel, w, h)
 	local colorScrollbar = colors.scrollBar
 	local posX = 4
@@ -199,6 +248,11 @@ function SKIN:PaintScrollBarGrip(panel, w, h)
 	drawRoundedBox(sizes.cornerRadius, posX, 0, sizeX, h, colorScrollbar)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	if not panel.m_bBackground then return end
 
@@ -253,6 +307,11 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	if not panel.m_bBackground then return end
 
@@ -297,6 +356,11 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintCheckBox(panel, w, h)
 	local colorBox, colorCenter, offset
 
@@ -334,6 +398,11 @@ function SKIN:PaintCheckBox(panel, w, h)
 	drawRoundedBox(4, offset + 3, 3, h - 6, h - 6, colorCenter)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintCheckBoxLabel(panel, w, h)
 	local colorBox = colors.settingsBox
 	local colorText = colors.settingsText
@@ -356,11 +425,21 @@ function SKIN:PaintCheckBoxLabel(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintCollapsibleCategoryTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.background)
 	drawBox(0, h - sizes.border, w, sizes.border, colors.accent)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 	local colorLine = utilGetChangedColor(colors.background, 50)
 	local colorText = utilGetChangedColor(colors.default, 50)
@@ -388,6 +467,11 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintButtonTTT2(panel, w, h)
 	local colorLine = colors.accentDark
 	local colorBox = colors.accent
@@ -425,6 +509,11 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintFormButtonIconTTT2(panel, w, h)
 	local colorBoxBack = colors.settingsBox
 	local colorBox = colors.accent
@@ -457,6 +546,11 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
 	drawFilteredShadowedTexture(pad, pad + shift, w - 2 * pad, h - 2 * pad, panel.material, colorText.a, colorText)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintBinderButtonTTT2(panel, w, h)
 	local colorBoxBack = colors.settingsBox
 	local colorBox = colors.accent
@@ -496,6 +590,11 @@ function SKIN:PaintBinderButtonTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintLabelTTT2(panel, w, h)
 	drawSimpleText(
 		TryT(panel:GetText()),
@@ -508,6 +607,11 @@ function SKIN:PaintLabelTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintFormLabelTTT2(panel, w, h)
 	local colorText = colors.settingsText
 	local colorBox = colors.settingsBox
@@ -529,6 +633,11 @@ function SKIN:PaintFormLabelTTT2(panel, w, h)
 		)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintFormBoxTTT2(panel, w, h)
 	local colorBox = colors.settingsBox
 	local colorHandle = colors.handle
@@ -542,6 +651,11 @@ function SKIN:PaintFormBoxTTT2(panel, w, h)
 	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintMenuLabelTTT2(panel, w, h)
 	drawSimpleText(
 		TryT(panel:GetText()),
@@ -554,18 +668,23 @@ function SKIN:PaintMenuLabelTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.helpBox)
 	drawBox(0, 0, 4, h, colors.helpBar)
 
-	local textTranslated = TryT(panel:GetText())
+	local textTranslated = ParT(panel:GetText(), panel:GetParams())
 	local textWrapped = drawGetWrappedText(
 		textTranslated,
 		w - 2 * panel.paddingX,
 		panel:GetFont()
 	)
 
-	local _, heightText = drawGetTextSize(textTranslated, panel:GetFont())
+	local _, heightText = drawGetTextSize("", panel:GetFont())
 	local posY = panel.paddingY
 
 	for i = 1, #textWrapped do
@@ -583,6 +702,11 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintSliderKnob(panel, w, h)
 	local colorBox = colors.accent
 
@@ -601,6 +725,11 @@ function SKIN:PaintSliderKnob(panel, w, h)
 	drawRoundedBox(math.floor(w * 0.5), 0, 0, w, h, colorBox)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintNumSliderTTT2(panel, w, h)
 	local colorBox = colors.settingsBox
 	local colorHandle = colors.handle
@@ -623,6 +752,11 @@ function SKIN:PaintNumSliderTTT2(panel, w, h)
 	drawBox(5, 0.5 * h - 1, (w - pad) * panel:GetFraction() - pad, 2, colorLineActive)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 	local colorBox = colors.settingsBox
 	local colorText = colors.settingsText
@@ -644,6 +778,11 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintBinderPanelTTT2(panel, w, h)
 	local colorBox = colors.settingsBox
 
@@ -654,6 +793,11 @@ function SKIN:PaintBinderPanelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colorBox)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintComboBoxTTT2(panel, w, h)
 	local colorBox = colors.settingsBox
 	local colorHandle = colors.handle

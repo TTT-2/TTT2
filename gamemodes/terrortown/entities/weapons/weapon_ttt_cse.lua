@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_cse
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -47,24 +51,34 @@ SWEP.AllowDrop = false
 
 SWEP.DeathScanDelay = 15
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:DropDevice()
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:DropDevice()
 end
 
+---
+-- @ignore
 function SWEP:DrawWorldModel()
 
 end
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:PreDrop(isdeath)
 	if not isdeath then return end
 
@@ -75,10 +89,14 @@ function SWEP:PreDrop(isdeath)
 	cse:SetDetonateTimer(self.DeathScanDelay or 10)
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:OnRemove()
 	if SERVER then return end
 
@@ -91,6 +109,8 @@ end
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
+---
+-- @realm shared
 function SWEP:DropDevice()
 	if CLIENT then return end
 
@@ -133,6 +153,8 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("vis_help_pri")
 

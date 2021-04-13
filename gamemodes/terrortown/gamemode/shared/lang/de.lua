@@ -1,6 +1,13 @@
 -- German language strings
 
-local L = LANG.CreateLanguage("Deutsch")
+local L = LANG.CreateLanguage("de")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/german.lua
+L.__alias = "deutsch"
+
+L.lang_name = "Deutsch (German)"
 
 -- General text used in various places
 L.traitor = "Verräter"
@@ -102,7 +109,7 @@ L.disg_not_owned = "Du trägst keine Tarnung!"
 L.disg_enable = "Tarnung aktivieren"
 
 L.disg_help1 = "Wenn deine Tarnung aktiv ist, werden dein Name, Leben und Karma nicht angezeigt, wenn dich jemand anschaut. Zusätzlich tauchst du nicht auf dem Radar des Detektivs auf."
-L.disg_help2 = "Drücke Enter auf dem Numpad, um die Tarnung an oder aus zu schalten, ohne das Menü zu nutzen. Du kannst alternativ 'ttt_toggle_diguise' durch die Konsole auf eine andere Taste legen."
+L.disg_help2 = "Drücke Enter auf dem Numpad, um die Tarnung an- oder auszuschalten, ohne das Menü zu nutzen. Du kannst alternativ 'ttt_toggle_diguise' durch die Konsole auf eine andere Taste legen."
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
@@ -116,9 +123,7 @@ L.radar_charging = "Dein Radar lädt immer noch auf!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
 L.xfer_menutitle = "Credits transferieren"
-L.xfer_no_credits = "Du kannst keine Credits abgeben!"
 L.xfer_send = "Sende einen Credit"
-L.xfer_help = "Du kannst Credits nur an weitere {role} senden."
 
 L.xfer_no_recip = "Der Empfänger ist ungültig, Credit-Transfer abgebrochen."
 L.xfer_no_credits = "Ungenügend Credits für einen Transfer."
@@ -145,7 +150,7 @@ L.radio_button_burn = "Brennen"
 L.radio_button_steps = "Schritte"
 
 -- Intro screen shown after joining
-L.intro_help = "Wenn du zum ersten Mal spielst, dann drücke F1 für Instruktionen!"
+L.intro_help = "Wenn du zum ersten Mal spielst, drücke F1 für Instruktionen!"
 
 -- Radiocommands/quickchat
 L.quick_title = "Quickchat-Befehle"
@@ -183,7 +188,7 @@ L.search_role_inno = "Diese Person war ein unschuldiger Terrorist!"
 L.search_words = "Etwas sagt dir, dass die letzten Worte dieser Person \"{lastwords}\" waren."
 L.search_armor = "Sie trug eine nicht-standardmäßige Körperrüstung."
 L.search_disg = "Sie trug ein Gerät, dass ihre Identität verstecken konnte."
-L.search_radar = "Sie trug eine Form eines Radars. Er funktioniert nicht länger."
+L.search_radar = "Sie trug eine Form eines Radars. Es funktioniert nicht mehr."
 L.search_c4 = "In der Tasche war eine Notiz. Sie besagt, dass das Durchschneiden des Drahtes {num} die Bombe sicher entschärfen wird."
 
 L.search_dmg_crush = "Viele Knochen des Opfers sind gebrochen. Es scheint, als habe der Einschlag eines schweren Objekts zum Tode geführt."
@@ -212,7 +217,7 @@ L.sb_playing = "Du spielst auf..."
 L.sb_mapchange = "Die Karte wechselt in {num} Runden oder in {time}"
 
 L.sb_mia = "Vermisst"
-L.sb_confirmed = "Definitiv Tot"
+L.sb_confirmed = "Definitiv tot"
 
 L.sb_ping = "Ping"
 L.sb_deaths = "Tode"
@@ -261,7 +266,7 @@ Versteckt deine ID. Vermeidet außerdem, dass du die letzte vom Opfer gesehene P
 Schalte es im Reiter "Tarnung" ein oder aus oder drücke Enter auf dem Numpad.]]
 
 -- C4
-L.c4_hint = "Drücke {usekey} zum scharf stellen oder entschärfen."
+L.c4_hint = "Drücke {usekey} zum Scharfstellen oder Entschärfen."
 L.c4_disarm_warn = "Eine Ladung C4, die du platziert hast, ist entschärft worden."
 L.c4_armed = "Du hast die Bombe erfolgreich scharf gestellt."
 L.c4_disarmed = "Du hast die Bombe erfolgreich entschärft."
@@ -291,8 +296,6 @@ L.c4_status_disarmed = "ENTSCHÄRFT"
 -- Visualizer
 L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
-
-L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.
@@ -547,7 +550,7 @@ L.idle_popup_off = "Deaktiviere Nur-Zuschauer-Modus"
 
 L.idle_warning = "Warnung: Du scheinst AFK zu sein und wirst zum Zuschauer, außer du zeigst Aktivität!"
 
-L.spec_mode_warning = "Du bist im Zuschauermodus und wirst nicht spielen, wenn eine Runde beginnt. Um diesen Modus zu verlassen, drücke F1, gehe in die Einstellungen und nimm den Haken bei ‘Nur-Zuschauer-Modus’ raus."
+L.spec_mode_warning = "Du bist im Zuschauermodus und wirst nicht spielen, wenn eine Runde beginnt. Um diesen Modus zu verlassen, drücke F1, gehe in die ‘Gameplay’ Einstellungen und nimm den Haken bei ‘Nur-Zuschauer-Modus’ raus."
 
 -- Tips panel
 L.tips_panel_title = "Tipps"
@@ -735,7 +738,7 @@ L.aw_sui1_title = "Leiter des Selbstmord-Kultes"
 L.aw_sui1_text = "zeigte den anderen Selbstmördern, wie sie es zu tun haben, indem er der erste war."
 
 L.aw_sui2_title = "Allein und deprimiert"
-L.aw_sui2_text = "war der einzige, der sich selbst umgebracht hat."
+L.aw_sui2_text = "war der Einzige, der sich selbst umgebracht hat."
 
 L.aw_exp1_title = "Stipendium für Explosive Forschungen"
 L.aw_exp1_text = "wurde für seine Forschungen an Explosionen anerkannt. {num} Versuchskaninchen haben mitgeholfen."
@@ -1283,3 +1286,10 @@ L.decoy_help_pri = "Platziere die Attrappe."
 L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
 L.pickup_error_owns = "Du kannst diese Waffe nicht aufheben, weil du die gleiche Waffe bereits trägst."
 L.pickup_error_noslot = "Du verfügst über keinen freien Slot, um diese Waffe aufzuheben."
+
+-- 2020-11-02
+L.lang_server_default = "Server Standard"
+L.help_lang_info = [[
+Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
+
+Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]

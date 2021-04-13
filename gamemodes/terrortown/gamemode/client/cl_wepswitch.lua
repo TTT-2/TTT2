@@ -1,21 +1,30 @@
 ---
+-- We need our own weapon switcher because the hl2 one skips empty weapons
 -- @class WSWITCH
--- @desc we need our own weapon switcher because the hl2 one skips empty weapons
 
 local pairs = pairs
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 
-WSWITCH = {}
-WSWITCH.Show = false
-WSWITCH.Selected = -1
-WSWITCH.NextSwitch = -1
-WSWITCH.WeaponCache = {}
+WSWITCH = {
+	Show = false,
+	Selected = -1,
+	NextSwitch = -1,
+	WeaponCache = {},
 
-WSWITCH.cv = {}
-WSWITCH.cv_hide = CreateConVar("ttt_weaponswitcher_hide", "1", FCVAR_ARCHIVE)
-WSWITCH.cv.fast = CreateConVar("ttt_weaponswitcher_fast", "0", FCVAR_ARCHIVE)
-WSWITCH.cv.display = CreateConVar("ttt_weaponswitcher_displayfast", "0", FCVAR_ARCHIVE)
+	cv = {
+		---
+		-- @realm client
+		hide = CreateConVar("ttt_weaponswitcher_hide", "1", FCVAR_ARCHIVE),
+
+		---
+		-- @realm client
+		fast = CreateConVar("ttt_weaponswitcher_fast", "0", FCVAR_ARCHIVE),
+
+		---
+		-- @realm client
+		display = CreateConVar("ttt_weaponswitcher_displayfast", "0", FCVAR_ARCHIVE)
+	}
+}
 
 local delay = 0.03
 local showtime = 3
@@ -180,7 +189,7 @@ function WSWITCH:Enable()
 	end
 
 	-- cache for speed, checked every Think
-	self.Stay = not self.cv_hide:GetBool()
+	self.Stay = not self.cv.hide:GetBool()
 end
 
 ---

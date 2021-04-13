@@ -1,5 +1,11 @@
+---
+-- @class PANEL
+-- @section DBinderPanelTTT2
+
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self.binder = vgui.Create("DBinderTTT2", self)
 	self.disable = vgui.Create("DButtonTTT2", self)
@@ -17,6 +23,8 @@ function PANEL:Init()
 	end
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout(w, h)
 	self.binder:SetSize(150, h)
 	self.binder:SetPos(0, 0)
@@ -25,6 +33,8 @@ function PANEL:PerformLayout(w, h)
 	self.disable:SetPos(w - h, 0)
 end
 
+---
+-- @ignore
 function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "BinderPanelTTT2", self, w, h)
 

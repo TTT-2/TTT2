@@ -1,3 +1,5 @@
+--- @ignore
+
 -- item info
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 

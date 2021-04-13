@@ -1,6 +1,6 @@
 ---
 -- HUD base class.
--- @module HUD
+-- @class HUD
 -- @section old_ttt
 
 local surface = surface
@@ -18,32 +18,6 @@ DEFINE_BASECLASS(base)
 HUD.Base = base
 HUD.disableHUDEditor = true
 HUD.previewImage = Material("vgui/ttt/huds/old_ttt/preview.png")
-
----
--- Draws the old role icon
--- @param number x
--- @param number y
--- @param number w width
--- @param number h height
--- @param Material icon the role icon
--- @param Color color
--- @realm client
-function DrawOldRoleIcon(x, y, w, h, icon, color)
-	local base_mat = Material("vgui/ttt/dynamic/base")
-	local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
-
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(base_mat)
-	surface.DrawTexturedRect(x, y, w, h)
-
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(base_overlay)
-	surface.DrawTexturedRect(x, y, w, h)
-
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.SetMaterial(icon)
-	surface.DrawTexturedRect(x, y, w, h)
-end
 
 ---
 -- Loads this HUD and connects with special @{HUDELEMENT}

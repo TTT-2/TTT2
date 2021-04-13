@@ -2,10 +2,10 @@
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"
-GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer"
+GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek"
 GM.Email = "ttt2@neoxult.de"
-GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.7.4b"
+GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
+GM.Version = "0.8.2b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -112,10 +112,9 @@ TEAMS = TEAMS or {
 
 ACTIVEROLES = ACTIVEROLES or {}
 
-CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm shared
+local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
@@ -137,6 +136,7 @@ end
 
 ---
 -- Sorts a
+-- @param table tbl
 -- @return table
 -- @see roles.GetList
 -- @realm shared
@@ -240,6 +240,7 @@ if SERVER then
 
 	---
 	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+	-- @param ROLE roleData
 	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
 	-- @return boolean
 	-- @realm server
@@ -381,19 +382,6 @@ function CountTraitors()
 	return #GetTraitors()
 end
 
----
--- Randomizes a @{table}
--- @realm shared
-function table.Randomize(t)
-	local out = {}
-
-	while #t > 0 do
-		out[#out + 1] = table.remove(t, math.random(#t))
-	end
-
-	t = out
-end
-
 -- TODO move to client file
 if CLIENT then
 	local SafeTranslate
@@ -506,37 +494,37 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
 
--- load non-wrapped modules directly
-require("marks")
-
--- TODO load modules that are currently not included in gmod but waiting for merge
-require("outline")
-
 include("includes/modules/pon.lua")
 
 -- include extensions
+include("ttt2/extensions/math.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
 
 -- include libraries
+include("ttt2/libraries/fileloader.lua")
+include("ttt2/libraries/classbuilder.lua")
 include("ttt2/libraries/fonts.lua")
 include("ttt2/libraries/appearance.lua")
 include("ttt2/libraries/drawsc.lua")
 include("ttt2/libraries/vguihandler.lua")
 include("ttt2/libraries/vskin.lua")
-include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
+include("ttt2/libraries/marks.lua")
+include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
+include("ttt2/libraries/none.lua")
+include("ttt2/libraries/targetid.lua")
 
 -- include ttt required files
-ttt_include("sh_util")
 ttt_include("sh_decal")
 ttt_include("sh_lang")
 ttt_include("sh_sql")
@@ -643,7 +631,7 @@ TEAMBUYTABLE = TEAMBUYTABLE or {}
 ---
 -- Checks whether an equipment is buyable
 -- @param table tbl equipment table
--- @param @{Player} player
+-- @param Player player
 -- @return boolean
 -- @return string text as an icon
 -- @return string result or error

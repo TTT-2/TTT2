@@ -1,6 +1,5 @@
 ---
 -- @class ENT
--- @realm shared
 -- @section GameText
 
 ENT.Type = "point"
@@ -21,6 +20,7 @@ ENT.Receiver = RECEIVE_ACTIVATOR
 ---
 -- @param string key
 -- @param string|number value
+-- @realm shared
 function ENT:KeyValue(key, value)
 	if key == "message" then
 		self.Message = tostring(value) or "ERROR: bad value"
@@ -50,6 +50,7 @@ end
 -- @param string name
 -- @param Entity|Player activator
 -- @return[default=true] boolean
+-- @realm shared
 function ENT:AcceptInput(name, activator)
 	if name == "Display" then
 		local recv = activator

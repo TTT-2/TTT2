@@ -1,6 +1,6 @@
 ---
+-- Body search popup
 -- @section body_search_manager
--- @desc Body search popup
 
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
@@ -314,7 +314,9 @@ function PreprocSearch(raw)
 		end
 	end
 
-	hook.Call("TTTBodySearchPopulate", nil, search, raw)
+	---
+	-- @realm client
+	hook.Run("TTTBodySearchPopulate", search, raw)
 
 	return search
 end
@@ -645,7 +647,9 @@ local function TTTRagdollSearch()
 	-- set search.show_sb based on detective_search or self search
 	search.show_sb = search.show or search.detective_search
 
-	hook.Call("TTTBodySearchEquipment", nil, search, eq)
+	---
+	-- @realm shared
+	hook.Run("TTTBodySearchEquipment", search, eq)
 
 	if search.show then
 		ShowSearchScreen(search)
@@ -680,6 +684,8 @@ local function TTT2ConfirmMsg()
 
 	local img = draw.GetAvatarMaterial(sid64, "medium")
 
+	---
+	-- @realm client
 	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)

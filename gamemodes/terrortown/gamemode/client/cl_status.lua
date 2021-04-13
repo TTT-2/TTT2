@@ -1,6 +1,6 @@
 ---
--- @class STATUS
 -- @author Mineotopia
+-- @class STATUS
 
 STATUS = {}
 STATUS.registered = {}

@@ -1,23 +1,38 @@
 ---
--- @section Utils
--- @desc Random stuff
+-- A bunch of random function bundled in the util module
+-- @author Mineotopia
+-- @author LeBroomer
+-- @author Alf21
+-- @author tkindanight
+-- @module util
 
-if not util then return end
+if SERVER then
+	AddCSLuaFile()
+end
 
-local math = math
-local string = string
+local band = bit.band
 local IsValid = IsValid
-local weapons = weapons
-local scripted_ents = scripted_ents
-local GetPlayers = player.GetAll
 local isfunction = isfunction
-local HSVToColor = HSVToColor
 local VectorRand = VectorRand
+local HSVToColor = HSVToColor
+
+local playerGetAll = player.GetAll
+local stringSplit = string.Split
+local tableConcat = table.concat
+local weaponsGetStored = weapons.GetStored
+local sentsGetStored = scripted_ents.GetStored
+local sentsGet = scripted_ents.Get
+
+local mathMax = math.max
+local mathMin = math.min
+local mathClamp = math.Clamp
+local mathRound = math.Round
+local mathFloor = math.floor
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
@@ -53,16 +68,16 @@ end
 -- @return Weapon
 -- @realm shared
 function util.WeaponForClass(cls)
-	local wep = weapons.GetStored(cls)
+	local wep = weaponsGetStored(cls)
 
 	if not wep then
-		wep = scripted_ents.GetStored(cls)
+		wep = sentsGetStored(cls)
 		if wep then
 
 			-- don't like to rely on this, but the alternative is
-			-- scripted_ents.Get which does a full table copy, so only do
+			-- sentsGet which does a full table copy, so only do
 			-- that as last resort
-			wep = wep.t or scripted_ents.Get(cls)
+			wep = wep.t or sentsGet(cls)
 		end
 	end
 
@@ -75,7 +90,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-	local plys = GetPlayers()
+	local plys = playerGetAll()
 
 	if not isfunction(filterFn) then
 		return plys
@@ -97,7 +112,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-	local plys = GetPlayers()
+	local plys = playerGetAll()
 	local tmp = {}
 
 	for i = 1, #plys do
@@ -136,66 +151,18 @@ function util.GetNextAlivePlayer(ply)
 end
 
 ---
--- Uppercases the first character only
--- @param string str
--- @return string
--- @realm shared
-function string.Capitalize(str)
-	return string.upper(string.sub(str, 1, 1)) .. string.sub(str, 2)
-end
-
----
--- @function util.Capitalize(str)
--- @desc Uppercases the first character only
--- @param string str
--- @return string
--- @realm shared
--- @see string.Capitalize
-util.Capitalize = string.Capitalize
-
----
--- Color unpacking
--- @param Color color
--- @return number red value of the given color
--- @return number green value of the given color
--- @return number blue value of the given color
--- @return number alpha value of the given color
--- @realm shared
-function clr(color)
-	return color.r, color.g, color.b, color.a
-end
-
----
--- This @{function} creates a getter and a setter @{function} based on the name and the prefix "Get" and "Set"
--- @param table tbl the @{table} that should receive the Getter and Setter @{function}
--- @param string varname the name the tbl @{table} should have as key value
--- @param string name the name that should be concatenated to the prefix "Get" and "Set"
--- @realm shared
-function AccessorFuncDT(tbl, varname, name)
-	tbl["Get" .. name] = function(s)
-		return s.dt and s.dt[varname]
-	end
-
-	tbl["Set" .. name] = function(s, v)
-		if s.dt then
-			s.dt[varname] = v
-		end
-	end
-end
-
----
 -- Darkens a given @{Color} value
 -- @param Color color The original color value
 -- @param number value The value to darken the color [0..255]
 -- @return Color The darkened color
 -- @realm shared
 function util.ColorDarken(color, value)
-	value = math.Clamp(value, 0, 255)
+	value = mathClamp(value, 0, 255)
 
 	return Color(
-		math.max(color.r - value, 0),
-		math.max(color.g - value, 0),
-		math.max(color.b - value, 0),
+		mathMax(color.r - value, 0),
+		mathMax(color.g - value, 0),
+		mathMax(color.b - value, 0),
 		color.a
 	)
 end
@@ -207,12 +174,12 @@ end
 -- @return Color The lightened color
 -- @realm shared
 function util.ColorLighten(color, value)
-	value = math.Clamp(value, 0, 255)
+	value = mathClamp(value, 0, 255)
 
 	return Color(
-		math.min(color.r + value, 255),
-		math.min(color.g + value, 255),
-		math.min(color.b + value, 255),
+		mathMin(color.r + value, 255),
+		mathMin(color.g + value, 255),
+		mathMin(color.b + value, 255),
 		color.a
 	)
 end
@@ -305,15 +272,15 @@ end
 ---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @param number t times
 -- @realm shared
 -- @todo improve description
 function util.StartBleeding(ent, dmg, t)
 	if dmg < 5 or not IsValid(ent) or ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror()) then return end
 
-	local times = math.Clamp(math.Round(dmg / 15), 1, 20)
-	local delay = math.Clamp(t / times, 0.1, 2)
+	local times = mathClamp(mathRound(dmg / 15), 1, 20)
+	local delay = mathClamp(t / times, 0.1, 2)
 
 	if ent:IsPlayer() then
 		times = times * 2
@@ -327,6 +294,10 @@ function util.StartBleeding(ent, dmg, t)
 	end)
 end
 
+---
+-- Stops the bleeding effect
+-- @param Entity ent
+-- @realm shared
 function util.StopBleeding(ent)
 	timer.Remove("bleed" .. ent:EntIndex())
 end
@@ -349,7 +320,7 @@ end
 ---
 -- Useful default behaviour for semi-modal DFrames
 -- @param Panel pnl
--- @param KEY[https://wiki.garrysmod.com/page/Enums/BUTTON_CODE] kc key
+-- @param KEY kc key
 -- @realm shared
 -- @todo improve description
 function util.BasicKeyHandler(pnl, kc)
@@ -377,6 +348,7 @@ end
 ---
 -- Just a noop @{function} that is doing NOTHING
 -- @realm shared
+-- @see util.passthrough
 function util.noop()
 
 end
@@ -390,91 +362,6 @@ end
 function util.passthrough(x)
 	return x
 end
-
-local gsub = string.gsub
-
----
--- Simple string interpolation:
--- string.Interp("{killer} killed {victim}", {killer = "Bob", victim = "Joe"})
--- returns "Bob killed Joe"
--- No spaces or special chars in parameter name, just alphanumerics.
--- @param string str
--- @param table tbl
--- @return string
--- @realm shared
-function string.Interp(str, tbl)
-	return gsub(str, "{(%w+)}", tbl)
-end
-
----
--- Short helper for input.LookupBinding, returns capitalised key or a default
--- @param string binding
--- @param string default
--- @return string
--- @realm shared
--- @ref https://wiki.garrysmod.com/page/input/LookupBinding
-function Key(binding, default)
-	local b = input.LookupBinding(binding)
-	if not b then
-		return default
-	end
-
-	return string.upper(b)
-end
-
-local exp = math.exp
-
----
--- Equivalent to ExponentialDecay from Source's mathlib.
--- Convenient for falloff curves.
--- @param number halflife
--- @param number dt
--- @return number
--- @realm shared
-function math.ExponentialDecay(halflife, dt)
-	-- ln(0.5) = -0.69..
-	return exp((-0.69314718 / halflife) * dt)
-end
-
----
--- Debugging function
--- @param number level required level
--- @param any ... anything that should be printed
--- @realm shared
-function Dev(level, ...)
-	if not cvars or cvars.Number("developer", 0) < level then return end
-
-	Msg("[TTT dev]")
-	-- table.concat does not tostring, derp
-
-	local params = {...}
-
-	for i = 1, #params do
-		Msg(" " .. tostring(params[i]))
-	end
-
-	Msg("\n")
-end
-
----
--- A simple check whether an @{Entity} is a valid @{Player}
--- @param Entity ent
--- @return boolean
--- @realm shared
-function IsPlayer(ent)
-	return ent and IsValid(ent) and ent:IsPlayer()
-end
-
----
--- A simple check whether an @{Entity} is a valid ragdoll
--- @param Entity ent
--- @return boolean
--- @realm shared
-function IsRagdoll(ent)
-	return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
-end
-
-local band = bit.band
 
 ---
 -- Sets the bit of a given value
@@ -490,8 +377,85 @@ function util.BitSet(val, bit2)
 	return band(val, bit2) == bit2
 end
 
+---
+-- Includes a file for a client
+-- @param string file path
+-- @realm shared
+function util.IncludeClientFile(file)
+	if CLIENT then
+		include(file)
+	else
+		AddCSLuaFile(file)
+	end
+end
+
+---
+-- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
+-- @param number seconds
+-- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
+-- @return string
+-- @realm shared
+function util.SimpleTime(seconds, fmt)
+	if not seconds then
+		seconds = 0
+	end
+
+	local ms = (seconds - mathFloor(seconds)) * 100
+
+	seconds = mathFloor(seconds)
+
+	local s = seconds % 60
+
+	seconds = (seconds - s) / 60
+
+	local m = seconds % 60
+
+	return string.format(fmt, m, s, ms)
+end
+
+---
+-- When overwriting a gamefunction, the old one has to be cached in order to still use it.
+-- This creates an infinite recursion problem (stack overflow). Registering the function with
+-- this helper function fixes the problem.
+-- @param string name The name of the original function
+-- @return Function The pointer to the original functions
+-- @realm shared
+function util.OverwriteFunction(name)
+	local str = stringSplit(name, ".")
+
+	if not _G[name .. "_backup"] then
+		if #str == 1 then
+			_G[name .. "_backup"] = _G[str[1]]
+		elseif #str == 2 then
+			_G[name .. "_backup"] = _G[str[1]][str[2]]
+		end
+	end
+
+	return _G[name .. "_backup"]
+end
+
+---
+-- Returns the file name by removing the file ending.
+-- @param string name The file name with file ending
+-- @return string The file name without file ending
+-- @realm shared
+function util.GetFileName(name)
+	local splitString = stringSplit(name, '.')
+
+	return tableConcat(splitString, ".", 1, #splitString - 1)
+end
+
+---
+-- Uppercases the first character only.
+-- @param string str
+-- @return string
+-- @realm shared
+-- @see string.Capitalize
+-- @function util.Capitalize(str)
+util.Capitalize = string.Capitalize
+
 if CLIENT then
-	local healthcolors = {
+	local colorsHealth = {
 		healthy = Color(0, 255, 0, 255),
 		hurt = Color(170, 230, 10, 255),
 		wounded = Color(230, 215, 10, 255),
@@ -504,9 +468,12 @@ if CLIENT then
 	-- @param table scrpos table with x and y attributes
 	-- @return boolean
 	-- @realm client
-	function IsOffScreen(scrpos)
+	function util.IsOffScreen(scrpos)
 		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
 	end
+
+	-- Backward compatibility
+	IsOffScreen = util.IsOffScreen
 
 	---
 	-- Creates a @{string} based on the given health and maxhealth
@@ -518,19 +485,19 @@ if CLIENT then
 		maxhealth = maxhealth or 100
 
 		if health > maxhealth * 0.9 then
-			return "hp_healthy", healthcolors.healthy
+			return "hp_healthy", colorsHealth.healthy
 		elseif health > maxhealth * 0.7 then
-			return "hp_hurt", healthcolors.hurt
+			return "hp_hurt", colorsHealth.hurt
 		elseif health > maxhealth * 0.45 then
-			return "hp_wounded", healthcolors.wounded
+			return "hp_wounded", colorsHealth.wounded
 		elseif health > maxhealth * 0.2 then
-			return "hp_badwnd", healthcolors.badwound
+			return "hp_badwnd", colorsHealth.badwound
 		else
-			return "hp_death", healthcolors.death
+			return "hp_death", colorsHealth.death
 		end
 	end
 
-	local karmacolors = {
+	local colorsKarma = {
 		max = COLOR_WHITE,
 		high = Color(255, 240, 135, 255),
 		med = Color(245, 220, 60, 255),
@@ -547,15 +514,15 @@ if CLIENT then
 		local maxkarma = GetGlobalInt("ttt_karma_max", 1000)
 
 		if karma > maxkarma * 0.89 then
-			return "karma_max", karmacolors.max
+			return "karma_max", colorsKarma.max
 		elseif karma > maxkarma * 0.8 then
-			return "karma_high", karmacolors.high
+			return "karma_high", colorsKarma.high
 		elseif karma > maxkarma * 0.65 then
-			return "karma_med", karmacolors.med
+			return "karma_med", colorsKarma.med
 		elseif karma > maxkarma * 0.5 then
-			return "karma_low", karmacolors.low
+			return "karma_low", colorsKarma.low
 		else
-			return "karma_min", karmacolors.min
+			return "karma_min", colorsKarma.min
 		end
 	end
 
@@ -576,59 +543,4 @@ if CLIENT then
 
 		draw.FilteredTexture(x, y, w, h, material, alpha, col)
 	end
-end
-
----
--- Includes a file for a client
--- @param string file path
--- @realm shared
-function util.IncludeClientFile(file)
-	if CLIENT then
-		include(file)
-	else
-		AddCSLuaFile(file)
-	end
-end
-
----
--- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
--- @param number seconds
--- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
-function util.SimpleTime(seconds, fmt)
-	if not seconds then
-		seconds = 0
-	end
-
-	local ms = (seconds - math.floor(seconds)) * 100
-
-	seconds = math.floor(seconds)
-
-	local s = seconds % 60
-
-	seconds = (seconds - s) / 60
-
-	local m = seconds % 60
-
-	return string.format(fmt, m, s, ms)
-end
-
----
--- When overwriting a gamefunction, the old one has to be cached in order to still use it.
--- This creates an infinite recursion problem (stack overflow). Registering the function with
--- this helper function fixes the problem.
--- @param string name The name of the original function
--- @return Function The pointer to the original functions
--- @realm shared
-function util.OverwriteFunction(name)
-	local str = string.Split(name, ".")
-
-	if not _G[name .. "_backup"] then
-		if #str == 1 then
-			_G[name .. "_backup"] = _G[str[1]]
-		elseif #str == 2 then
-			_G[name .. "_backup"] = _G[str[1]][str[2]]
-		end
-	end
-
-	return _G[name .. "_backup"]
 end

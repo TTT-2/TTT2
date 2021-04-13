@@ -294,6 +294,7 @@ end
 
 ---
 -- Draws an element with red borders
+-- @param HUDELEMENT elem
 -- @realm client
 -- @internal
 function HUDEditor.DrawElem(elem)
