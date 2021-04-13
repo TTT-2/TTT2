@@ -1,4 +1,5 @@
 ---
+-- @ignore
 -- @class CLSCORE
 -- @desc Game report
 
