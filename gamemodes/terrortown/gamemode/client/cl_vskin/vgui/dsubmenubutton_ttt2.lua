@@ -69,7 +69,7 @@ end
 
 ---
 -- @param Material iconMat
--- @realmn client
+-- @realm client
 function PANEL:SetIcon(iconMat)
 	self.contents.icon = iconMat
 end
