@@ -95,7 +95,7 @@ end
 -- @note Players with zero score this round will not be included in this list.
 -- @return table A table with the score per player
 -- @realm shared
-function events.GetTotalPlayerScores()
+function events.GetPlayerTotalScores()
 	local eventList = events.list
 	local scoreList = {}
 
@@ -190,8 +190,8 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function events.UpdateScoreboard()
-		local scores = events.GetTotalPlayerScores()
-		local deaths = eventdata.GetTotalPlayerDeaths()
+		local scores = events.GetPlayerTotalScores()
+		local deaths = eventdata.GetPlayerTotalDeaths()
 
 		for ply64, score in pairs(scores) do
 			ply = player.GetBySteamID64(ply64)
