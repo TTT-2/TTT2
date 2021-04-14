@@ -233,8 +233,6 @@ concommand.Add("rend", function()
 
 	local frameBoxes = vgui.Create("DIconLayout", contentBox)
 	frameBoxes:Dock(FILL)
-	frameBoxes:SetSpaceX(padding)
-	frameBoxes:SetSpaceY(padding)
 
 	local winBox = frameBoxes:Add("DColoredTextBoxTTT2")
 	winBox:SetColor(TRAITOR.color)
@@ -252,7 +250,7 @@ concommand.Add("rend", function()
 	buttonBoxRowLabel:SetSize(widthTopLabel, heightTopButtonPanel)
 	buttonBoxRowLabel:SetText("Show role distribution from")
 	buttonBoxRowLabel.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "LabelRighTTT2", slf, w, h)
+		derma.SkinHook("Paint", "LabelRightTTT2", slf, w, h)
 
 		return true
 	end

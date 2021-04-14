@@ -1293,3 +1293,11 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 --This translation is {coverage}% complete with the english language taken as a default reference.
 
 --Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+
+-- 2021-04-13
+--L.hilite_win_traitors = "TEAM TRAITOR WON"
+--L.hilite_win_innocents = "TEAM INNOCENT WON"
+--L.hilite_win_tie = "IT IS A TIE"
+--L.hilite_win_time = "TIME IS UP"
+
+--L.hilite_duration = "The round lasted {time}"

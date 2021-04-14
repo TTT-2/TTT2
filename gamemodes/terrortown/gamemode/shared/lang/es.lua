@@ -654,16 +654,6 @@ L.report_save_tip = "Guarda los registros de evento en un archivo de texto"
 L.report_save_error = "No hay un registro de eventos para guardar."
 L.report_save_result = "El registro de eventos fue guardado en:"
 
--- Big title window
-L.hilite_win_traitors = "LOS TRAIDORES GANAN"
-L.hilite_win_bees = "LAS ABEJAS GANAN"
-L.hilite_win_innocents = "LOS INOCENTES GANAN"
-
-L.hilite_players1 = "{numplayers} tomaron parte, {numtraitors} eran traidores"
-L.hilite_players2 = "{numplayers} tomaron parte, uno de ellos era traidor"
-
-L.hilite_duration = "La ronda duró {time}"
-
 -- Columns
 L.col_time = "Tiempo"
 L.col_event = "Evento"
@@ -1293,3 +1283,11 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 --This translation is {coverage}% complete with the english language taken as a default reference.
 
 --Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+
+-- 2021-04-13
+--L.hilite_win_traitors = "TEAM TRAITOR WON"
+--L.hilite_win_innocents = "TEAM INNOCENT WON"
+--L.hilite_win_tie = "IT IS A TIE"
+--L.hilite_win_time = "TIME IS UP"
+
+--L.hilite_duration = "The round lasted {time}"

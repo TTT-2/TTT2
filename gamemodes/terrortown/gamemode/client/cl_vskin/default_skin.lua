@@ -612,6 +612,23 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintLabelRightTTT2(panel, w, h)
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		w,
+		0.5 * h,
+		utilGetChangedColor(colors.default, 40),
+		TEXT_ALIGN_RIGHT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintFormLabelTTT2(panel, w, h)
 	local colorText = colors.settingsText
 	local colorBox = colors.settingsBox

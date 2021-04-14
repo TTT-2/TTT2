@@ -655,16 +655,6 @@ L.report_save_tip = "Saves the Event Log to a text file"
 L.report_save_error = "No Event Log data to save."
 L.report_save_result = "The Event Log has been saved to:"
 
--- Big title window
-L.hilite_win_traitors = "TEAM TRAITOR WON"
-L.hilite_win_bees = "NOBODY WON"
-L.hilite_win_innocents = "TEAM INNOCENT WON"
-
-L.hilite_players1 = "{numplayers} players took part, {numtraitors} were traitors"
-L.hilite_players2 = "{numplayers} players took part, one of them the traitor"
-
-L.hilite_duration = "The round lasted {time}"
-
 -- Columns
 L.col_time = "Time"
 L.col_event = "Event"
@@ -1294,3 +1284,11 @@ L.help_lang_info = [[
 This translation is {coverage}% complete with the english language taken as a default reference.
 
 Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
+
+-- 2021-04-13
+L.hilite_win_traitors = "TEAM TRAITOR WON"
+L.hilite_win_innocents = "TEAM INNOCENT WON"
+L.hilite_win_tie = "IT IS A TIE"
+L.hilite_win_time = "TIME IS UP"
+
+L.hilite_duration = "The round lasted {time}"

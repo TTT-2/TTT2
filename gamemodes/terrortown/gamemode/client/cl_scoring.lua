@@ -6,11 +6,55 @@
 
 local vskin = vskin
 
-local sizes = {
-	width = 1200,
-	height = 700,
-	padding = 10
-}
+local function CreateColumns(plys)
+	local teamsTbl = {}
+	local index = 1
+	local direction = 1
+
+	local colTbl = {
+		{},
+		{},
+		{}
+	}
+	local colTeamsTbl = {
+		{},
+		{},
+		{}
+	}
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if not teamsTbl[ply.team] then
+			print(tostring(ply.team))
+
+			teamsTbl[ply.team] = {}
+		end
+
+		teamsTbl[ply.team][#teamsTbl[ply.team] + 1] = ply
+	end
+
+	for i = 1, table.Count(teamsTbl) do
+		if index == 4 then
+			direction = -1
+			index = 3
+		end
+
+		if index == 0 then
+			direction = 1
+			index = 1
+		end
+
+		local plyTable, team = table.GetAndRemoveBiggestSubTable(teamsTbl)
+
+		colTbl[index][#colTbl[index] + 1] = plyTable
+		colTeamsTbl[index][#colTeamsTbl[index] + 1] = team
+
+		index = index + direction
+	end
+
+	return colTbl, colTeamsTbl
+end
 
 -- load score menu pages
 local function ShouldInherit(t, base)
@@ -33,7 +77,7 @@ local subMenus = classbuilder.BuildFromFolder(
 	ShouldInherit -- special inheritance check
 )
 
--- transfer subMenues into indexed table
+-- transfer subMenus into indexed table
 local subMenusIndexed = {}
 
 for _, subMenu in pairs(subMenus) do
@@ -45,22 +89,37 @@ end
 table.SortByMember(subMenusIndexed, "priority")
 
 CLSCORE = CLSCORE or {}
+CLSCORE.sizes = {}
 
 function CLSCORE:CalculateSizes()
-	sizes.heightMainArea = sizes.height - 2 * sizes.padding
-	sizes.widthMenu = 50 + vskin.GetBorderSize()
-	sizes.widthMainArea = sizes.width - sizes.widthMenu - 2 * sizes.padding
-	sizes.heightButton = 45
-	sizes.widthButton = 175
-	sizes.heightBottomButtonPanel = sizes.heightButton + sizes.padding + 1
-	sizes.heightContent = sizes.heightMainArea - sizes.heightBottomButtonPanel
-	sizes.heightMenuButton = 50
+	self.sizes.width = 1200
+	self.sizes.height = 700
+	self.sizes.padding = 10
+	self.sizes.paddingSmall = 0.5 * self.sizes.padding
+
+	self.sizes.heightMainArea = self.sizes.height - 2 * self.sizes.padding
+	self.sizes.widthMenu = 50 + vskin.GetBorderSize()
+	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - 2 * self.sizes.padding
+
+	self.sizes.heightHeaderPanel = 100
+	self.sizes.widthTopButton = 140
+	self.sizes.heightTopButton = 30
+	self.sizes.widthTopLabel = 0.5 * self.sizes.widthMainArea - self.sizes.widthTopButton - self.sizes.padding
+	self.sizes.heightTopButtonPanel = self.sizes.heightTopButton + 2 * self.sizes.padding
+	self.sizes.heightRow = 25
+	self.sizes.heightTitleRow = 30
+
+	self.sizes.heightButton = 45
+	self.sizes.widthButton = 175
+	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+	self.sizes.heightContent = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+	self.sizes.heightMenuButton = 50
 end
 
 function CLSCORE:CreatePanel()
 	self:CalculateSizes()
 
-	local frame = vguihandler.GenerateFrame(sizes.width, sizes.height, "report_title", true)
+	local frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "report_title", true)
 
 	frame:SetPadding(0, 0, 0, 0)
 	frame:CloseButtonClickOverride(function()
@@ -69,8 +128,8 @@ function CLSCORE:CreatePanel()
 
 	-- LEFT HAND MENU STRIP
 	local menuBox = vgui.Create("DPanelTTT2", frame)
-	menuBox:SetSize(sizes.widthMenu, sizes.heightMainArea)
-	menuBox:DockMargin(0, sizes.padding, 0, sizes.padding)
+	menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
+	menuBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
 	menuBox:Dock(LEFT)
 	menuBox.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "VerticalBorderedBoxTTT2", slf, w, h)
@@ -80,34 +139,34 @@ function CLSCORE:CreatePanel()
 
 	local menuBoxGrid = vgui.Create("DIconLayout", menuBox)
 	menuBoxGrid:Dock(FILL)
-	menuBoxGrid:SetSpaceY(sizes.padding)
+	menuBoxGrid:SetSpaceY(self.sizes.padding)
 
 	-- RIGHT HAND MAIN AREA
 	local mainBox = vgui.Create("DPanelTTT2", frame)
-	mainBox:SetSize(sizes.widthMainArea, sizes.heightMainArea)
-	mainBox:DockMargin(sizes.padding, sizes.padding, sizes.padding, sizes.padding)
+	mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	mainBox:DockMargin(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
 	mainBox:Dock(RIGHT)
 
 	local contentBox = vgui.Create("DPanelTTT2", mainBox)
-	contentBox:SetSize(sizes.widthMainArea, sizes.heightContent)
+	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightContent)
 	contentBox:Dock(TOP)
 
 	local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
-	buttonArea:SetSize(sizes.widthMainArea, sizes.heightBottomButtonPanel)
+	buttonArea:SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
 	buttonArea:Dock(BOTTOM)
 
 	local buttonSave = vgui.Create("DButtonTTT2", buttonArea)
 	buttonSave:SetText("report_save")
-	buttonSave:SetSize(sizes.widthButton, sizes.heightButton)
-	buttonSave:SetPos(0, sizes.padding + 1)
+	buttonSave:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonSave:SetPos(0, self.sizes.padding + 1)
 	buttonSave.DoClick = function(btn)
 		self:SaveLog()
 	end
 
 	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
 	buttonClose:SetText("close")
-	buttonClose:SetSize(sizes.widthButton, sizes.heightButton)
-	buttonClose:SetPos(sizes.widthMainArea - 175, sizes.padding + 1)
+	buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonClose:SetPos(self.sizes.widthMainArea - 175, self.sizes.padding + 1)
 	buttonClose.DoClick = function(btn)
 		self:HidePanel()
 	end
@@ -119,7 +178,7 @@ function CLSCORE:CreatePanel()
 		local data = subMenusIndexed[i]
 
 		local menuButton = menuBoxGrid:Add("DSubMenuButtonTTT2")
-		menuButton:SetSize(sizes.widthMenu - 1, sizes.heightMenuButton)
+		menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
 		menuButton:SetIcon(data.icon)
 		menuButton:SetTooltip(data.title)
 		menuButton.DoClick = function(slf)
@@ -179,7 +238,7 @@ end
 -- @internal
 function CLSCORE:ClearPanel()
 	if IsValid(self.panel) then
-		self.panel:Close()
+		self.panel:CloseFrame()
 	end
 end
 
@@ -201,26 +260,31 @@ function CLSCORE:Reset()
 end
 
 ---
--- Initializes the score @{Panel}
--- @param table eventTable The list of eventTable
+-- Initializes the score @{Panel} and prepares the needed data
 -- @realm client
 -- @internal
-function CLSCORE:Init(eventTable)
-	self.events = eventTable
+function CLSCORE:Init()
+	self.events = events.GetEventList()
 	self.eventsSorted = events.SortByPlayerAndEvent()
+	self.eventsInfoData = eventdata.GetPlayerEndRoles() -- TODO needed?
+	self.eventsInfoScores = events.GetPlayerTotalScores()
 
 	-- now iterate over the event table to get an instant access
 	-- to the important data
-	for i = 1, #eventTable do
-		local event = eventTable[i]
+	for i = 1, #self.events do
+		local event = self.events[i]
 
-		if event == EVENT_SELECTED then
-			self.playerInitialRoles = event.plys
-		elseif event == EVENT_FINISH then
-			self.playerFinalRoles = event.plys
-			self.wintype = event.wintype
+		if event.type == EVENT_FINISH then
+			self.wintype = event.event.wintype
+			self.eventsInfoPlayers = event.event.plys
 		end
 	end
+
+	-- prepare info screen data into sorted groups
+	self.eventsInfoColumnData, self.eventsInfoColumnTeams = CreateColumns(self.eventsInfoPlayers)
+
+	-- get data for info title
+	self.eventsInfoTitleText, self.eventsInfoTitleColor = self:GetWinData()
 end
 
 ---
@@ -228,11 +292,29 @@ end
 -- @param table eventTable A list of eventTable that should be reported
 -- @realm client
 -- @internal
-function CLSCORE:ReportEvents(eventTable)
+function CLSCORE:ReportEvents()
 	self:Reset()
 
-	self:Init(eventTable)
+	self:Init()
 	self:ShowPanel()
+end
+
+---
+-- Converts the wintype into title data.
+-- @internal
+-- @return string The title text string
+-- @return Color The background color for the title box
+-- @realm client
+function CLSCORE:GetWinData()
+	local wintype = self.wintype
+
+	if wintype == WIN_TIMELIMIT then
+		return "hilite_win_time", COLOR_LBROWN
+	elseif wintype == WIN_NONE then
+		return "hilite_win_tie", COLOR_LBROWN
+	else
+		return "hilite_win_" .. wintype, TEAMS[wintype].color
+	end
 end
 
 ---

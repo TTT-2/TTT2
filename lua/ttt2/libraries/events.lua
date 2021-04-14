@@ -136,6 +136,14 @@ function events.GetDeprecatedEventList()
 	return deprecatedEvents
 end
 
+---
+-- Returns the events in a timed order.
+-- @return table The event list.
+-- @realm shared
+function events.GetEventList()
+	return events.list
+end
+
 if SERVER then
 	---
 	-- Triggers an event, adds it to a managed list and starts the score calculation for this event.
@@ -248,11 +256,7 @@ else --CLIENT
 			events.list[i] = newEvent
 		end
 
-		-- set old deprecated event table
-		local deprecatedEvents = events.GetDeprecatedEventList()
-
-		table.SortByMember(deprecatedEvents, "t", true)
-		CLSCORE:ReportEvents(deprecatedEvents, events.SortByPlayerAndEvent())
+		CLSCORE:ReportEvents()
 	end)
 end
 

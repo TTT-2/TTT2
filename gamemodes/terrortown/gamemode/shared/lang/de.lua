@@ -654,16 +654,6 @@ L.report_save_tip = "Speichert den Ereignis-Log in einer Textdatei"
 L.report_save_error = "Keine Ereignis-Log Daten vorhanden."
 L.report_save_result = "Der Ereignis-Log wurde gespeichert:"
 
--- Big title window
-L.hilite_win_traitors = "DIE VERRÄTER GEWINNEN!"
-L.hilite_win_bees = "UNENTSCHIEDEN!"
-L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWINNEN!"
-
-L.hilite_players1 = "{numplayers} Spieler nahmen teil, davon waren {numtraitors} Verräter."
-L.hilite_players2 = "{numplayers} Spieler nahmen teil, einer war ein Verräter."
-
-L.hilite_duration = "Die Runde dauerte {time}."
-
 -- Columns
 L.col_time = "Dauer"
 L.col_event = "Ereignis"
@@ -1293,3 +1283,12 @@ L.help_lang_info = [[
 Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
 
 Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
+
+-- 2021-04-13
+L.hilite_win_traitors = "DIE VERRÄTER GEWINNEN"
+L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWINNEN"
+L.hilite_win_tie = "UNENTSCHIEDEN"
+L.hilite_win_time = "ZEIT VORBEI"
+
+L.hilite_duration = "Die Runde dauerte {time}."
+

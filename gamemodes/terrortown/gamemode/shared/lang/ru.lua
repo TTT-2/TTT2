@@ -1293,3 +1293,11 @@ L.help_lang_info = [[
 Этот перевод завершён на {coverage}%. В качестве образца использовался английский язык.
 
 Имейте в виду, что эти переводы созданы сообществом. Не стесняйтесь вносить свой вклад, если что-то отсутствует или переведено неправильно.]]
+
+-- 2021-04-13
+--L.hilite_win_traitors = "TEAM TRAITOR WON"
+--L.hilite_win_innocents = "TEAM INNOCENT WON"
+--L.hilite_win_tie = "IT IS A TIE"
+--L.hilite_win_time = "TIME IS UP"
+
+--L.hilite_duration = "The round lasted {time}"
