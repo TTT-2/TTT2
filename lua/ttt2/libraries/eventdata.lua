@@ -46,7 +46,7 @@ function eventdata.GetPlayerBeginRoles()
 
 		if event.type ~= EVENT_SELECTED then continue end
 
-		return event.plys
+		return event.event.plys
 	end
 end
 
@@ -63,6 +63,38 @@ function eventdata.GetPlayerEndRoles()
 
 		if event.type ~= EVENT_FINISH then continue end
 
-		return event.plys
+		return event.event.plys
 	end
+end
+
+function eventdata.GetPlayerRoles()
+	local eventList = events.list
+	local plyRoles = {}
+
+	-- we can use the fact that the eventlist is chronological
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if event.type == EVENT_SELECTED then
+			local plys = event.event.plys
+
+			for k = 1, #plys do
+				local ply = plys[k]
+
+				plyRoles[ply.sid64] = {{
+					role = ply.role,
+					team = ply.team
+				}}
+			end
+		elseif event.type == EVENT_ROLECHANGE then
+			local ply = event.event
+
+			plyRoles[ply.sid64][#plyRoles[ply.sid64] + 1] = {
+				role = ply.newRole,
+				team = ply.newTeam
+			}
+		end
+	end
+
+	return plyRoles
 end

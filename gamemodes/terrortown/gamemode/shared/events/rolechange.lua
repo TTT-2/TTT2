@@ -6,12 +6,16 @@ if CLIENT then
 end
 
 if SERVER then
-	function EVENT:Trigger(ply)
+	function EVENT:Trigger(ply, oldRole, newRole, oldTeam, newTeam)
 		self:AddAffectedPlayers({ply:SteamID64()})
 
 		return self:Add({
 			nick = ply:Nick(),
-			sid64 = ply:SteamID64()
+			sid64 = ply:SteamID64(),
+			oldRole = oldRole,
+			newRole = newRole,
+			oldTeam = oldTeam,
+			newTeam = newTeam
 		})
 	end
 end
