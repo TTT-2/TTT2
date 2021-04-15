@@ -97,8 +97,9 @@ function CLSCORE:CalculateSizes()
 	self.sizes.padding = 10
 	self.sizes.paddingSmall = 0.5 * self.sizes.padding
 
-	self.sizes.heightMainArea = self.sizes.height - 2 * self.sizes.padding
 	self.sizes.widthMenu = 50 + vskin.GetBorderSize()
+
+	self.sizes.heightMainArea = self.sizes.height - 2 * self.sizes.padding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
 	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - 2 * self.sizes.padding
 
 	self.sizes.heightHeaderPanel = 100
@@ -112,7 +113,7 @@ function CLSCORE:CalculateSizes()
 	self.sizes.heightButton = 45
 	self.sizes.widthButton = 175
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
-	self.sizes.heightContent = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+	self.sizes.heightContent = self.sizes.heightMainArea - self.sizes.heightHeaderPanel - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
 	self.sizes.heightMenuButton = 50
 end
 
@@ -148,7 +149,7 @@ function CLSCORE:CreatePanel()
 	mainBox:Dock(RIGHT)
 
 	local contentBox = vgui.Create("DPanelTTT2", mainBox)
-	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightContent)
+	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
 	contentBox:Dock(TOP)
 
 	local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
@@ -268,6 +269,7 @@ function CLSCORE:Init()
 	self.eventsSorted = events.SortByPlayerAndEvent()
 	self.eventsInfoData = eventdata.GetPlayerEndRoles() -- TODO needed?
 	self.eventsInfoScores = events.GetPlayerTotalScores()
+	self.eventsPlayerRoles = eventdata.GetPlayerRoles()
 
 	-- now iterate over the event table to get an instant access
 	-- to the important data

@@ -1301,4 +1301,8 @@ L.help_lang_info = [[
 --L.hilite_win_tie = "IT IS A TIE"
 --L.hilite_win_time = "TIME IS UP"
 
+--L.tooltip_karma_gained = "Karma gained this round"
+--L.tooltip_score_gained = "Score gained this round"
+--L.tooltip_roles_time = "Roles over time:"
+
 --L.hilite_duration = "The round lasted {time}"

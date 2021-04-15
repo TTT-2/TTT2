@@ -1,6 +1,41 @@
 --- @ignore
 
+local TryT = LANG.TryTranslation
+
 local materialNoTeam = Material("vgui/ttt/dynamic/roles/icon_no_team")
+
+local function MakePlayerTooltip(parent, width, ply)
+	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64]
+	local height = 25
+
+	local boxLayout = vgui.Create("DIconLayout", parent)
+	boxLayout:Dock(FILL)
+
+	local plyNameBox = boxLayout:Add("DColoredTextBoxTTT2")
+	plyNameBox:SetSize(width, 25)
+	plyNameBox:SetColor(vskin.GetBackgroundColor())
+	plyNameBox:SetTitle("tooltip_roles_time")
+	plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+
+	for i = 1, #plyRoles do
+		local plyRole = plyRoles[i]
+		local roleData = roles.GetByIndex(plyRole.role)
+
+		local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
+		plyRoleBox:SetSize(width, 20)
+		plyRoleBox:SetColor(vskin.GetBackgroundColor())
+		plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+		plyRoleBox:SetIcon(roleData.iconMaterial)
+
+		plyRoleBox.GetTitle = function()
+			return TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")"
+		end
+
+		height = height + 20
+	end
+
+	return height
+end
 
 CLSCOREMENU.base = "base_scoremenu"
 
@@ -22,8 +57,9 @@ function CLSCOREMENU:Populate(parent)
 	winBox:SetTitleFont("DermaTTT2TextHuge")
 
 	-- SWITCHER BETWEEN ROUND BEGIN AND ROUND END
-	local buttonBox = frameBoxes:Add("DPanel")
-	buttonBox:SetSize(sizes.widthMainArea, sizes.heightTopButtonPanel)
+	local buttonBox = frameBoxes:Add("DPanelTTT2")
+	buttonBox:SetSize(sizes.widthMainArea, sizes.heightTopButtonPanel + 2 * sizes.padding)
+	buttonBox:DockPadding(0, sizes.padding, 0, sizes.padding)
 
 	local buttonBoxRow = vgui.Create("DIconLayout", buttonBox)
 	buttonBoxRow:Dock(FILL)
@@ -37,7 +73,7 @@ function CLSCOREMENU:Populate(parent)
 		return true
 	end
 
-	local buttonBoxRowPanel = buttonBoxRow:Add("DPanel")
+	local buttonBoxRowPanel = buttonBoxRow:Add("DPanelTTT2")
 	buttonBoxRowPanel:SetSize(2 * sizes.widthTopButton + sizes.padding, sizes.heightTopButtonPanel)
 
 	local buttonBoxRowButton1 = vgui.Create("DButtonTTT2", buttonBoxRowPanel)
@@ -65,7 +101,7 @@ function CLSCOREMENU:Populate(parent)
 
 	-- MAKE MAIN FRAME SCROLLABLE
 	local scrollPanel = frameBoxes:Add("DScrollPanelTTT2")
-	scrollPanel:SetSize(sizes.widthMainArea, sizes.heightContent - sizes.heightHeaderPanel - sizes.heightTopButtonPanel - 4 * sizes.padding)
+	scrollPanel:SetSize(sizes.widthMainArea, sizes.heightContent)
 
 	-- SPLIT FRAME INTO A GRID LAYOUT
 	local playerCoumns = vgui.Create("DIconLayout", scrollPanel)
@@ -131,7 +167,7 @@ function CLSCOREMENU:Populate(parent)
 			for m = 1, #plys do
 				local ply = plys[m]
 
-				local plyRowPanel = teamPlayerBox:Add("DPanel")
+				local plyRowPanel = teamPlayerBox:Add("DPanelTTT2")
 				plyRowPanel:SetSize(widthColumn, sizes.heightRow)
 
 				local plyRow = vgui.Create("DIconLayout", plyRowPanel)
@@ -139,40 +175,40 @@ function CLSCOREMENU:Populate(parent)
 				plyRow:DockMargin(sizes.padding, 0, 0, 0)
 				plyRow:Dock(FILL)
 
-				local widthKarma = 50
+				local widthKarma = 0 --50
 				local widthScore = 35
 				local widthName = widthColumn - widthKarma - widthScore - 4 * sizes.padding
 
 				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyNameBox:SetSize(widthName, sizes.heightRow)
 				plyNameBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
-				plyNameBox:SetTitle(ply.nick .. (ply.alive and "" or " †"))
-				--plyNameBox:SetTitleOpacity(ply.alive and 1.0 or 0.2)
+				plyNameBox:SetTitle(ply.nick .. (ply.alive and "" or " (†)"))
 				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
 
-				local test = vgui.Create("DColoredBoxTTT2")
+				local plyNameTooltipPanel = vgui.Create("DPanelTTT2")
 
-				plyNameBox:SetTooltipPanel(test)
+				local heightTooltip = MakePlayerTooltip(plyNameTooltipPanel, widthName, ply)
+
+				plyNameBox:SetTooltipPanel(plyNameTooltipPanel)
 				plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-				plyNameBox:SetTooltipFixedSize(widthName, 150)
+				plyNameBox:SetTooltipFixedSize(widthName, heightTooltip)
+				plyNameTooltipPanel:SetSize(widthName, heightTooltip)
 
-				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
+				--[[local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
 				plyKarmaBox:SetColor(COLOR_BLUE)
-				--plyKarmaBox:SetTitle(ply.addkarma)
 				plyKarmaBox:SetTitle("xx")
 				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
-				plyKarmaBox:SetTooltip("Karma")
-				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+				plyKarmaBox:SetTooltip("tooltip_karma_gained")
+				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1) ]]
 
 				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyPointsBox:SetSize(widthScore, sizes.heightRow)
 				plyPointsBox:SetColor(COLOR_ORANGE)
-				--plyPointsBox:SetTitle(ply.addscore)
-				plyPointsBox:SetTitle("xx")
+				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64])
 				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
-				plyPointsBox:SetTooltip("Score")
+				plyPointsBox:SetTooltip("tooltip_score_gained")
 				plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
 			end
 		end

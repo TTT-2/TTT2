@@ -968,7 +968,7 @@ end
 function SKIN:PaintTooltipTTT2(panel, w, h)
 	local colorLine = ColorAlpha(colors.default, 100)
 
-	local sizeArrow = panel.sizeArrow
+	local sizeArrow = panel:GetArrowSize()
 	local sizeRhombus = 2 * sizeArrow
 
 	drawBox(0, sizeArrow, w, h - sizeArrow, colorLine)
@@ -979,7 +979,7 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
 
 	if panel:HasText() then
 		drawSimpleText(
-			panel:GetText(),
+			TryT(panel:GetText()),
 			panel:GetFont(),
 			0.5 * w,
 			0.5 * (h + sizeArrow),

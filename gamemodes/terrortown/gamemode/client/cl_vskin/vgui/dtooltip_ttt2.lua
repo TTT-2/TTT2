@@ -11,8 +11,6 @@ function PANEL:Init()
 	self:SetDrawOnTop(true)
 
 	self.deleteContentsOnClose = false
-
-	self.sizeArrow = 8
 end
 
 ---
@@ -49,15 +47,22 @@ function PANEL:PerformLayout()
 		self:SetWide(self.contents:GetWide() + 8)
 		self:SetTall(self.contents:GetTall() + 8)
 	else
-		local w, h = draw.GetTextSize(self:GetText(), self:GetFont())
+		local w, h = draw.GetTextSize(LANG.TryTranslation(self:GetText()), self:GetFont())
 
-		self:SetSize(w + 20, h + 8 + self.sizeArrow)
+		self:SetSize(w + 20, h + 8 + self.targetPanel.tooltip.sizeArrow)
 	end
 
 	if IsValid(self.contents) then
-		self.contents:SetPos(1, self.sizeArrow + 1)
+		self.contents:SetPos(1, self.targetPanel.tooltip.sizeArrow + 1)
 		self.contents:SetVisible(true)
 	end
+end
+
+---
+-- @return number
+-- @realm client
+function PANEL:GetArrowSize()
+	return self.targetPanel.tooltip.sizeArrow
 end
 
 ---

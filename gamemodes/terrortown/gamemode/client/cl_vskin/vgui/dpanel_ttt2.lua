@@ -58,7 +58,8 @@ function PANEL:Init()
 		fixedSize = nil,
 		delay = 0,
 		text = "",
-		font = "DermaTTT2Text"
+		font = "DermaTTT2Text",
+		sizeArrow = 8
 	}
 
 	local oldSetTooltipPanel = self.SetTooltipPanel
@@ -164,9 +165,10 @@ end
 -- @param number h
 -- @realm client
 function PANEL:SetTooltipFixedSize(w, h)
+	-- +2 are the outline pixels
 	self.tooltip.fixedSize = {
-		w = w,
-		h = h
+		w = w + 2,
+		h = h + self.tooltip.sizeArrow + 2
 	}
 end
 

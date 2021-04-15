@@ -1290,5 +1290,9 @@ L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWINNEN"
 L.hilite_win_tie = "UNENTSCHIEDEN"
 L.hilite_win_time = "ZEIT VORBEI"
 
+L.tooltip_karma_gained = "Diese Runde bekommenes Karma"
+L.tooltip_score_gained = "Diese Runde bekommene Punkte"
+L.tooltip_roles_time = "Rollen in der Runde:"
+
 L.hilite_duration = "Die Runde dauerte {time}."
 
