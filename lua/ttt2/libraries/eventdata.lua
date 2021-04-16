@@ -89,6 +89,11 @@ function eventdata.GetPlayerRoles()
 		elseif event.type == EVENT_ROLECHANGE and event.event.roundState == ROUND_ACTIVE then
 			local ply = event.event
 
+			-- if a player connects after the round started, they don't have a starting role
+			if not plyRoles[ply.sid64] then
+				plyRoles[ply.sid64] = {}
+			end
+
 			plyRoles[ply.sid64][#plyRoles[ply.sid64] + 1] = {
 				role = ply.newRole,
 				team = ply.newTeam
