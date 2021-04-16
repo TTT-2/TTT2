@@ -338,8 +338,8 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:Toggle()
-	--TODO remove
-	self:ClearPanel()
+	-- if no round has happened yet, the menu can't be opened
+	if not self.events then return end
 
 	if self:IsPanelHidden() then
 		self:ShowPanel()
@@ -350,6 +350,7 @@ end
 
 -- TODO: Remove before release
 concommand.Add("scp", function()
+	CLSCORE:Clear()
 	CLSCORE:Toggle()
 end)
 
