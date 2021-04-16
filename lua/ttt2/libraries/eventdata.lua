@@ -86,7 +86,7 @@ function eventdata.GetPlayerRoles()
 					team = ply.team
 				}}
 			end
-		elseif event.type == EVENT_ROLECHANGE then
+		elseif event.type == EVENT_ROLECHANGE and event.event.roundState == ROUND_ACTIVE then
 			local ply = event.event
 
 			plyRoles[ply.sid64][#plyRoles[ply.sid64] + 1] = {

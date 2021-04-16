@@ -102,7 +102,7 @@ function CLSCORE:CalculateSizes()
 	self.sizes.heightMainArea = self.sizes.height - 2 * self.sizes.padding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
 	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - 2 * self.sizes.padding
 
-	self.sizes.heightHeaderPanel = 100
+	self.sizes.heightHeaderPanel = 120
 	self.sizes.widthTopButton = 140
 	self.sizes.heightTopButton = 30
 	self.sizes.widthTopLabel = 0.5 * self.sizes.widthMainArea - self.sizes.widthTopButton - self.sizes.padding
@@ -267,7 +267,6 @@ end
 function CLSCORE:Init()
 	self.events = events.GetEventList()
 	self.eventsSorted = events.SortByPlayerAndEvent()
-	self.eventsInfoData = eventdata.GetPlayerEndRoles() -- TODO needed?
 	self.eventsInfoScores = events.GetPlayerTotalScores()
 	self.eventsPlayerRoles = eventdata.GetPlayerRoles()
 
@@ -276,14 +275,19 @@ function CLSCORE:Init()
 	for i = 1, #self.events do
 		local event = self.events[i]
 
+		if event.type == EVENT_SELECTED then
+			self.eventsInfoPlayersStart = event.event.plys
+		end
+
 		if event.type == EVENT_FINISH then
 			self.wintype = event.event.wintype
-			self.eventsInfoPlayers = event.event.plys
+			self.eventsInfoPlayersEnd = event.event.plys
 		end
 	end
 
 	-- prepare info screen data into sorted groups
-	self.eventsInfoColumnData, self.eventsInfoColumnTeams = CreateColumns(self.eventsInfoPlayers)
+	self.eventsInfoColumnDataStart, self.eventsInfoColumnTeamsStart = CreateColumns(self.eventsInfoPlayersStart)
+	self.eventsInfoColumnDataEnd, self.eventsInfoColumnTeamsEnd = CreateColumns(self.eventsInfoPlayersEnd)
 
 	-- get data for info title
 	self.eventsInfoTitleText, self.eventsInfoTitleColor = self:GetWinData()
@@ -309,6 +313,16 @@ end
 -- @realm client
 function CLSCORE:GetWinData()
 	local wintype = self.wintype
+
+	print("wintype:")
+	print(wintype)
+
+	-- convert default TTT win conditions
+	if wintype == WIN_TRAITOR then
+		wintype = TEAM_TRAITOR
+	elseif wintype == WIN_INNOCENT then
+		wintype = TEAM_INNOCENT
+	end
 
 	if wintype == WIN_TIMELIMIT then
 		return "hilite_win_time", COLOR_LBROWN

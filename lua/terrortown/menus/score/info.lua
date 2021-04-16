@@ -37,6 +37,119 @@ local function MakePlayerTooltip(parent, width, ply)
 	return height
 end
 
+local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDeath)
+	-- SPLIT FRAME INTO A GRID LAYOUT
+	local playerCoumns = vgui.Create("DIconLayout", parent)
+	playerCoumns:Dock(FILL)
+	playerCoumns:SetSpaceX(sizes.padding)
+	playerCoumns:SetSpaceY(sizes.padding)
+
+	local _, heightScroll = parent:GetSize()
+
+	local heightColumn = heightScroll
+	local widthColumn = (sizes.widthMainArea - 2 * sizes.padding - (heightScroll < heightColumn and 15 or 0) ) / 3
+
+	local teamInfoBox = {}
+
+	teamInfoBox[1] = playerCoumns:Add("DColoredBoxTTT2")
+	teamInfoBox[1]:SetSize(widthColumn, heightColumn)
+	teamInfoBox[1]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
+
+	teamInfoBox[2] = playerCoumns:Add("DColoredBoxTTT2")
+	teamInfoBox[2]:SetSize(widthColumn, heightColumn)
+	teamInfoBox[2]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
+
+	teamInfoBox[3] = playerCoumns:Add("DColoredBoxTTT2")
+	teamInfoBox[3]:SetSize(widthColumn, heightColumn)
+	teamInfoBox[3]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
+
+	-- FILL THE COLUMNS
+	for i = 1, 3 do
+		local teamPlayersList = columnData[i]
+		local teamNamesList = columnTeams[i]
+
+		local columnBox = teamInfoBox[i]:Add("DIconLayout")
+		columnBox:SetSpaceY(sizes.padding)
+		columnBox:Dock(FILL)
+
+		for k = 1, #teamPlayersList do
+			local plys = teamPlayersList[k]
+			local teamData = TEAMS[teamNamesList[k]]
+
+			-- support roles without a team
+			if teamNamesList[k] == TEAM_NONE or not teamData or teamData.alone then
+				teamData = {
+					color = Color(91, 94, 99, 255),
+					iconMaterial = materialNoTeam
+				}
+			end
+
+			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
+			teamBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
+			teamBox:SetSize(widthColumn, sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall)
+
+			local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
+			teamPlayerBox:SetSpaceY(sizes.paddingSmall)
+			teamPlayerBox:Dock(FILL)
+
+			local teamNameBox = teamPlayerBox:Add("DColoredTextBoxTTT2")
+			teamNameBox:SetSize(widthColumn, sizes.heightTitleRow)
+			teamNameBox:SetColor(teamData.color)
+			teamNameBox:SetTitle(teamNamesList[k])
+			teamNameBox:SetTitleFont("DermaTTT2TextLarger")
+			teamNameBox:SetIcon(teamData.iconMaterial)
+
+			for m = 1, #plys do
+				local ply = plys[m]
+
+				local plyRowPanel = teamPlayerBox:Add("DPanelTTT2")
+				plyRowPanel:SetSize(widthColumn, sizes.heightRow)
+
+				local plyRow = vgui.Create("DIconLayout", plyRowPanel)
+				plyRow:SetSpaceX(sizes.padding)
+				plyRow:DockMargin(sizes.padding, 0, 0, 0)
+				plyRow:Dock(FILL)
+
+				local widthKarma = 0 --50
+				local widthScore = 35
+				local widthName = widthColumn - widthKarma - widthScore - 4 * sizes.padding
+
+				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
+				plyNameBox:SetSize(widthName, sizes.heightRow)
+				plyNameBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
+				plyNameBox:SetTitle(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
+				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
+
+				local plyNameTooltipPanel = vgui.Create("DPanelTTT2")
+
+				local heightTooltip = MakePlayerTooltip(plyNameTooltipPanel, widthName, ply)
+
+				plyNameBox:SetTooltipPanel(plyNameTooltipPanel)
+				plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+				plyNameBox:SetTooltipFixedSize(widthName, heightTooltip)
+				plyNameTooltipPanel:SetSize(widthName, heightTooltip)
+
+				--[[local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
+				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
+				plyKarmaBox:SetColor(COLOR_BLUE)
+				plyKarmaBox:SetTitle("xx")
+				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
+				plyKarmaBox:SetTooltip("tooltip_karma_gained")
+				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1) ]]
+
+				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
+				plyPointsBox:SetSize(widthScore, sizes.heightRow)
+				plyPointsBox:SetColor(COLOR_ORANGE)
+				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64])
+				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
+				plyPointsBox:SetTooltip("tooltip_score_gained")
+				plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+			end
+		end
+	end
+end
+
 CLSCOREMENU.base = "base_scoremenu"
 
 CLSCOREMENU.icon = Material("vgui/ttt/vskin/roundend/info")
@@ -97,120 +210,28 @@ function CLSCOREMENU:Populate(parent)
 
 		return true
 	end
-	buttonBoxRowButton2.isActive = true
 
 	-- MAKE MAIN FRAME SCROLLABLE
 	local scrollPanel = frameBoxes:Add("DScrollPanelTTT2")
 	scrollPanel:SetSize(sizes.widthMainArea, sizes.heightContent)
 
-	-- SPLIT FRAME INTO A GRID LAYOUT
-	local playerCoumns = vgui.Create("DIconLayout", scrollPanel)
-	playerCoumns:Dock(FILL)
-	playerCoumns:SetSpaceX(sizes.padding)
-	playerCoumns:SetSpaceY(sizes.padding)
+	-- default button state
+	buttonBoxRowButton1.isActive = false
+	buttonBoxRowButton2.isActive = true
+	PopulatePlayerView(scrollPanel, sizes, CLSCORE.eventsInfoColumnDataEnd, CLSCORE.eventsInfoColumnTeamsEnd, true)
 
-	local _, heightScroll = scrollPanel:GetSize()
+	-- onclick functions for buttons
+	buttonBoxRowButton1.DoClick = function()
+		buttonBoxRowButton1.isActive = true
+		buttonBoxRowButton2.isActive = false
 
-	local heightColumn = heightScroll
-	local widthColumn = (sizes.widthMainArea - 2 * sizes.padding - (heightScroll < heightColumn and 15 or 0) ) / 3
+		PopulatePlayerView(scrollPanel, sizes, CLSCORE.eventsInfoColumnDataStart, CLSCORE.eventsInfoColumnTeamsStart, false)
+	end
 
-	local teamInfoBox = {}
+	buttonBoxRowButton2.DoClick = function()
+		buttonBoxRowButton1.isActive = false
+		buttonBoxRowButton2.isActive = true
 
-	teamInfoBox[1] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[1]:SetSize(widthColumn, heightColumn)
-	teamInfoBox[1]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
-
-	teamInfoBox[2] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[2]:SetSize(widthColumn, heightColumn)
-	teamInfoBox[2]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
-
-	teamInfoBox[3] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[3]:SetSize(widthColumn, heightColumn)
-	teamInfoBox[3]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
-
-	-- FILL THE COLUMNS
-	for i = 1, 3 do
-		local teamPlayersList = CLSCORE.eventsInfoColumnData[i]
-		local teamNamesList = CLSCORE.eventsInfoColumnTeams[i]
-
-		local columnBox = teamInfoBox[i]:Add("DIconLayout")
-		columnBox:SetSpaceY(sizes.padding)
-		columnBox:Dock(FILL)
-
-		for k = 1, #teamPlayersList do
-			local plys = teamPlayersList[k]
-			local teamData = TEAMS[teamNamesList[k]]
-
-			-- support roles without a team
-			if teamNamesList[k] == TEAM_NONE or not teamData or teamData.alone then
-				teamData = {
-					color = Color(91, 94, 99, 255),
-					iconMaterial = materialNoTeam
-				}
-			end
-
-			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
-			teamBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
-			teamBox:SetSize(widthColumn, sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall)
-
-			local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
-			teamPlayerBox:SetSpaceY(sizes.paddingSmall)
-			teamPlayerBox:Dock(FILL)
-
-			local teamNameBox = teamPlayerBox:Add("DColoredTextBoxTTT2")
-			teamNameBox:SetSize(widthColumn, sizes.heightTitleRow)
-			teamNameBox:SetColor(teamData.color)
-			teamNameBox:SetTitle(teamNamesList[k])
-			teamNameBox:SetTitleFont("DermaTTT2TextLarger")
-			teamNameBox:SetIcon(teamData.iconMaterial)
-
-			for m = 1, #plys do
-				local ply = plys[m]
-
-				local plyRowPanel = teamPlayerBox:Add("DPanelTTT2")
-				plyRowPanel:SetSize(widthColumn, sizes.heightRow)
-
-				local plyRow = vgui.Create("DIconLayout", plyRowPanel)
-				plyRow:SetSpaceX(sizes.padding)
-				plyRow:DockMargin(sizes.padding, 0, 0, 0)
-				plyRow:Dock(FILL)
-
-				local widthKarma = 0 --50
-				local widthScore = 35
-				local widthName = widthColumn - widthKarma - widthScore - 4 * sizes.padding
-
-				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
-				plyNameBox:SetSize(widthName, sizes.heightRow)
-				plyNameBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
-				plyNameBox:SetTitle(ply.nick .. (ply.alive and "" or " (†)"))
-				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
-
-				local plyNameTooltipPanel = vgui.Create("DPanelTTT2")
-
-				local heightTooltip = MakePlayerTooltip(plyNameTooltipPanel, widthName, ply)
-
-				plyNameBox:SetTooltipPanel(plyNameTooltipPanel)
-				plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-				plyNameBox:SetTooltipFixedSize(widthName, heightTooltip)
-				plyNameTooltipPanel:SetSize(widthName, heightTooltip)
-
-				--[[local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
-				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
-				plyKarmaBox:SetColor(COLOR_BLUE)
-				plyKarmaBox:SetTitle("xx")
-				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
-				plyKarmaBox:SetTooltip("tooltip_karma_gained")
-				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1) ]]
-
-				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
-				plyPointsBox:SetSize(widthScore, sizes.heightRow)
-				plyPointsBox:SetColor(COLOR_ORANGE)
-				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64])
-				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
-				plyPointsBox:SetTooltip("tooltip_score_gained")
-				plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-			end
-		end
+		PopulatePlayerView(scrollPanel, sizes, CLSCORE.eventsInfoColumnDataEnd, CLSCORE.eventsInfoColumnTeamsEnd, true)
 	end
 end
