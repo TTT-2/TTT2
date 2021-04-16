@@ -267,8 +267,9 @@ end
 function CLSCORE:Init()
 	self.events = events.GetEventList()
 	self.eventsSorted = events.SortByPlayerAndEvent()
-	self.eventsInfoScores = events.GetPlayerTotalScores()
+	self.eventsInfoScores = eventdata.GetPlayerTotalScores()
 	self.eventsPlayerRoles = eventdata.GetPlayerRoles()
+	self.eventsPlayerScores = eventdata.GetPlayerScores()
 
 	-- now iterate over the event table to get an instant access
 	-- to the important data
@@ -314,9 +315,6 @@ end
 function CLSCORE:GetWinData()
 	local wintype = self.wintype
 
-	print("wintype:")
-	print(wintype)
-
 	-- convert default TTT win conditions
 	if wintype == WIN_TRAITOR then
 		wintype = TEAM_TRAITOR
@@ -350,7 +348,7 @@ end
 
 -- TODO: Remove before release
 concommand.Add("scp", function()
-	CLSCORE:Clear()
+	CLSCORE:Reset()
 	CLSCORE:Toggle()
 end)
 

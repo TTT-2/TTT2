@@ -1300,8 +1300,14 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 --L.hilite_win_tie = "IT IS A TIE"
 --L.hilite_win_time = "TIME IS UP"
 
---L.tooltip_karma_gained = "Karma gained this round"
---L.tooltip_score_gained = "Score gained this round"
+--L.tooltip_karma_gained = "Karma gained this round:"
+--L.tooltip_score_gained = "Score gained this round:"
 --L.tooltip_roles_time = "Roles over time:"
+
+--L.tooltip_finish_score_alive_teammates = "Alive teammates bonus: {score}"
+--L.tooltip_finish_score_timelimit = "Time is up bonus: {score}"
+--L.tooltip_finish_score_dead_enemies = "Dead enemies bonus: {score}"
+--L.tooltip_kill_score = "Kill bonus: {score}"
+--L.tooltip_bodyfound_score = "Bodyfound bonus: {score}"
 
 --L.hilite_duration = "The round lasted {time}"

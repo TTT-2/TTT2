@@ -90,33 +90,6 @@ function events.SortByPlayerAndEvent()
 end
 
 ---
--- Returns a table with the player steamID64 as indexes and the score
--- for this specific player.
--- @note Players with zero score this round will not be included in this list.
--- @return table A table with the score per player
--- @realm shared
-function events.GetPlayerTotalScores()
-	local eventList = events.list
-	local scoreList = {}
-
-	for i = 1, #eventList do
-		local event = eventList[i]
-
-		if not event:HasScore() then continue end
-
-		local plys64 = event:GetScoredPlayers()
-
-		for k = 1, #plys64 do
-			local ply64 = plys64[k]
-
-			scoreList[ply64] = (scoreList[ply64] or 0) + event:GetSummedPlayerScore(ply64)
-		end
-	end
-
-	return scoreList
-end
-
----
 -- Generates an event list in the deprecated format. Only contains
 -- events that were present in default TTT. Is sorted by time.
 -- @return table The deprecated event list
@@ -198,7 +171,7 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function events.UpdateScoreboard()
-		local scores = events.GetPlayerTotalScores()
+		local scores = eventdata.GetPlayerTotalScores()
 		local deaths = eventdata.GetPlayerTotalDeaths()
 
 		for ply64, score in pairs(scores) do

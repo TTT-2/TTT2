@@ -1,21 +1,22 @@
 --- @ignore
 
 local TryT = LANG.TryTranslation
+local ParT = LANG.GetParamTranslation
 
 local materialNoTeam = Material("vgui/ttt/dynamic/roles/icon_no_team")
 
-local function MakePlayerTooltip(parent, width, ply)
+local function MakePlayerRoleTooltip(parent, width, ply)
 	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64]
 	local height = 25
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
 
-	local plyNameBox = boxLayout:Add("DColoredTextBoxTTT2")
-	plyNameBox:SetSize(width, 25)
-	plyNameBox:SetColor(vskin.GetBackgroundColor())
-	plyNameBox:SetTitle("tooltip_roles_time")
-	plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
+	titleBox:SetSize(width, 25)
+	titleBox:SetColor(vskin.GetBackgroundColor())
+	titleBox:SetTitle("tooltip_roles_time")
+	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	for i = 1, #plyRoles do
 		local plyRole = plyRoles[i]
@@ -32,6 +33,44 @@ local function MakePlayerTooltip(parent, width, ply)
 		end
 
 		height = height + 20
+	end
+
+	return height
+end
+
+local function MakePlayerScoreTooltip(parent, width, ply)
+	local plyScores = CLSCORE.eventsPlayerScores[ply.sid64]
+	local height = 25
+
+	local boxLayout = vgui.Create("DIconLayout", parent)
+	boxLayout:Dock(FILL)
+
+	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
+	titleBox:SetSize(width, 25)
+	titleBox:SetColor(vskin.GetBackgroundColor())
+	titleBox:SetTitle("tooltip_score_gained")
+	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+
+	for i = 1, #plyScores do
+		local plyScoreEvent = plyScores[i]
+		local rawScoreTexts = plyScoreEvent:GetRawScoreText(ply.sid64)
+
+		for k = 1, #rawScoreTexts do
+			local rawScoreText = rawScoreTexts[k]
+
+			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
+			plyRoleBox:SetSize(width, 20)
+			plyRoleBox:SetColor(vskin.GetBackgroundColor())
+			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+
+			plyRoleBox.GetTitle = function()
+				return "- " .. ParT(rawScoreText.name, {score = rawScoreText.score})
+			end
+
+			print(rawScoreText.name)
+
+			height = height + 20
+		end
 	end
 
 	return height
@@ -121,14 +160,14 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
 
-				local plyNameTooltipPanel = vgui.Create("DPanelTTT2")
+				local plyRolesTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local heightTooltip = MakePlayerTooltip(plyNameTooltipPanel, widthName, ply)
+				local heightRolesTooltip = MakePlayerRoleTooltip(plyRolesTooltipPanel, widthName, ply)
 
-				plyNameBox:SetTooltipPanel(plyNameTooltipPanel)
+				plyNameBox:SetTooltipPanel(plyRolesTooltipPanel)
 				plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-				plyNameBox:SetTooltipFixedSize(widthName, heightTooltip)
-				plyNameTooltipPanel:SetSize(widthName, heightTooltip)
+				plyNameBox:SetTooltipFixedSize(widthName, heightRolesTooltip)
+				plyRolesTooltipPanel:SetSize(widthName, heightRolesTooltip)
 
 				--[[local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
@@ -144,7 +183,15 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64])
 				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
 				plyPointsBox:SetTooltip("tooltip_score_gained")
+
+				local plyScoreTooltipPanel = vgui.Create("DPanelTTT2")
+
+				local heightScoreTooltip = MakePlayerScoreTooltip(plyScoreTooltipPanel, 200, ply)
+
+				plyPointsBox:SetTooltipPanel(plyScoreTooltipPanel)
 				plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+				plyPointsBox:SetTooltipFixedSize(200, heightScoreTooltip)
+				plyScoreTooltipPanel:SetSize(200, heightScoreTooltip)
 			end
 		end
 	end

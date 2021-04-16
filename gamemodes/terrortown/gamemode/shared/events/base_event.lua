@@ -107,6 +107,21 @@ function EVENT:GetSummedPlayerScore(ply64)
 	return scoreSum
 end
 
+function EVENT:GetRawScoreText(ply64)
+	local rawTable = {}
+
+	for name, score in pairs(self.score[ply64]) do
+		if score == 0 then continue end
+
+		rawTable[#rawTable + 1] = {
+			name = "tooltip_" .. self.type .. "_" .. name,
+			score = score
+		}
+	end
+
+	return rawTable
+end
+
 ---
 -- Returns a list of all player steamID64s who were affected by this event.
 -- @return table A table of steamID64s

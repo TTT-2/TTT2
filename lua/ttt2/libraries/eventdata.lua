@@ -103,3 +103,53 @@ function eventdata.GetPlayerRoles()
 
 	return plyRoles
 end
+
+function eventdata.GetPlayerScores()
+	local eventList = events.list
+	local plyScores = {}
+
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if not event:HasScore() then continue end
+
+		local plys64 = event:GetScoredPlayers()
+
+		for k = 1, #plys64 do
+			local ply64 = plys64[k]
+
+			plyScores[ply64] = plyScores[ply64] or {}
+
+			plyScores[ply64][#plyScores[ply64] + 1] = event
+		end
+	end
+
+	return plyScores
+end
+
+---
+-- Returns a table with the player steamID64 as indexes and the score
+-- for this specific player.
+-- @note Players with zero score this round will not be included in this list.
+-- @return table A table with the score per player
+-- @realm shared
+function eventdata.GetPlayerTotalScores()
+	local eventList = events.list
+	local scoreList = {}
+
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if not event:HasScore() then continue end
+
+		local plys64 = event:GetScoredPlayers()
+
+		for k = 1, #plys64 do
+			local ply64 = plys64[k]
+
+			scoreList[ply64] = (scoreList[ply64] or 0) + event:GetSummedPlayerScore(ply64)
+		end
+	end
+
+	return scoreList
+end
