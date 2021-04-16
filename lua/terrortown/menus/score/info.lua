@@ -28,7 +28,7 @@ local function MakePlayerTooltip(parent, width, ply)
 		plyRoleBox:SetIcon(roleData.iconMaterial)
 
 		plyRoleBox.GetTitle = function()
-			return TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")"
+			return tostring(i) .. ". " .. TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")"
 		end
 
 		height = height + 20
