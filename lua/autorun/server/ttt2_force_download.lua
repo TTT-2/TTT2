@@ -160,6 +160,9 @@ resource.AddFile("materials/vgui/ttt/vskin/helpscreen/legacy.vmt")
 resource.AddFile("materials/vgui/ttt/vskin/helpscreen/equipment.vmt")
 resource.AddFile("materials/vgui/ttt/vskin/helpscreen/shops.vmt")
 resource.AddFile("materials/vgui/ttt/vskin/helpscreen/administration.vmt")
+resource.AddFile("materials/vgui/ttt/vskin/roundend/events.vmt")
+resource.AddFile("materials/vgui/ttt/vskin/roundend/info.vmt")
+resource.AddFile("materials/vgui/ttt/vskin/roundend/scores.vmt")
 
 -- dna scanner icons, mats and models
 resource.AddFile("models/weapons/v_ttt2_dna_scanner.mdl")
