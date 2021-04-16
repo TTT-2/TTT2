@@ -19,8 +19,8 @@ L.terrorists = "Terrorists"
 L.spectators = "Spectators"
 
 L.noteam = "No Team"
-L.innocents = "Team Innocents"
-L.traitors = "Team Traitors"
+L.innocents = "Team Innocent"
+L.traitors = "Team Traitor"
 
 -- Round status messages
 L.round_minplayers = "Not enough players to start a new round..."

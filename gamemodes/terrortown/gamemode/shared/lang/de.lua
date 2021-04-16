@@ -1285,8 +1285,8 @@ Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Überset
 Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
 
 -- 2021-04-13
-L.hilite_win_traitors = "DIE VERRÄTER GEWINNEN"
-L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWINNEN"
+L.hilite_win_traitors = "DIE VERRÄTER GEWANNEN"
+L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWANNEN"
 L.hilite_win_tie = "UNENTSCHIEDEN"
 L.hilite_win_time = "ZEIT VORBEI"
 
