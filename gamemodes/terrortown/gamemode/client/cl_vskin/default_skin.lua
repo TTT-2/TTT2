@@ -862,6 +862,14 @@ function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
 	local sizeIcon = h - 2 * pad
 
 	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+	if panel:HasFlashColor() then
+		local colorFlash = table.Copy(colorText)
+		colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
+
+		drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
+	end
+
 	drawShadowedText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),

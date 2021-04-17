@@ -15,6 +15,7 @@ function PANEL:Init()
 		opacity = 1.0,
 		align = TEXT_ALIGN_CENTER,
 		color = COLOR_WHITE,
+		flashcolor = false,
 		icon = nil
 	}
 end
@@ -87,6 +88,20 @@ end
 -- @realm client
 function PANEL:GetColor()
 	return self.contents.color
+end
+
+---
+-- @param Color color
+-- @realm client
+function PANEL:EnableFlashColor(enb)
+	self.contents.flashcolor = enb
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasFlashColor()
+	return self.contents.flashcolor or false
 end
 
 ---

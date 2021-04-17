@@ -1304,10 +1304,10 @@ L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot l
 --L.tooltip_score_gained = "Score gained this round:"
 --L.tooltip_roles_time = "Roles over time:"
 
---L.tooltip_finish_score_alive_teammates = "Alive teammates bonus: {score}"
---L.tooltip_finish_score_timelimit = "Time is up bonus: {score}"
---L.tooltip_finish_score_dead_enemies = "Dead enemies bonus: {score}"
---L.tooltip_kill_score = "Kill bonus: {score}"
---L.tooltip_bodyfound_score = "Bodyfound bonus: {score}"
+--L.tooltip_finish_score_alive_teammates = "Alive teammates: {score}"
+--L.tooltip_finish_score_timelimit = "Time is up: {score}"
+--L.tooltip_finish_score_dead_enemies = "Dead enemies: {score}"
+--L.tooltip_kill_score = "Kill: {score}"
+--L.tooltip_bodyfound_score = "Bodyfound: {score}"
 
 --L.hilite_duration = "The round lasted {time}"

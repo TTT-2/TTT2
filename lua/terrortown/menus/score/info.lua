@@ -138,6 +138,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			teamNameBox:SetTitleFont("DermaTTT2TextLarger")
 			teamNameBox:SetIcon(teamData.iconMaterial)
 
+			local localPly64 = LocalPlayer():SteamID64()
+
 			for m = 1, #plys do
 				local ply = plys[m]
 
@@ -159,6 +161,11 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyNameBox:SetTitle(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
 				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
+
+				-- highlight local player
+				if ply.sid64 == localPly64 then
+					plyNameBox:EnableFlashColor(true)
+				end
 
 				local plyRolesTooltipPanel = vgui.Create("DPanelTTT2")
 

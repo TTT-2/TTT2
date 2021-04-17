@@ -1294,11 +1294,11 @@ L.tooltip_karma_gained = "Diese Runde bekommenes Karma:"
 L.tooltip_score_gained = "Diese Runde bekommene Punkte:"
 L.tooltip_roles_time = "Rollen in der Runde:"
 
-L.tooltip_finish_score_alive_teammates = "Lebende-Teammitglieder-Bonus: {score}"
-L.tooltip_finish_score_timelimit = "Zeit-vorbei-Bonus: {score}"
-L.tooltip_finish_score_dead_enemies = "Tote-Gegner-Bonus: {score}"
-L.tooltip_kill_score = "Mordbonus: {score}"
-L.tooltip_bodyfound_score = "Leichenfindungsbonus: {score}"
+L.tooltip_finish_score_alive_teammates = "Lebende Teammitglieder: {score}"
+L.tooltip_finish_score_timelimit = "Zeit vorbei: {score}"
+L.tooltip_finish_score_dead_enemies = "Tote Gegner: {score}"
+L.tooltip_kill_score = "Mord: {score}"
+L.tooltip_bodyfound_score = "Leichenfindung: {score}"
 
 L.hilite_duration = "Die Runde dauerte {time}."
 
