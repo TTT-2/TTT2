@@ -12,8 +12,39 @@ function PANEL:Init()
 	self.contents = {
 		title = "",
 		title_font = "DermaTTT2MenuButtonTitle",
-		color = COLOR_WHITE
+		color = COLOR_WHITE,
+		parent = nil,
+		shift = 0
 	}
+end
+
+---
+-- @param Panel parent
+-- @realm client
+function PANEL:SetDynamicColor(parent, shift)
+	self.contents.parent = parent
+	self.contents.shift = shift
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasDynamicColor()
+	return self.contents.parent ~= nil
+end
+
+---
+-- @return Color
+-- @realm client
+function PANEL:GetDynamicParentColor()
+	return self.contents.parent.dynBaseColor
+end
+
+---
+-- @return Color
+-- @realm client
+function PANEL:GetDynamicParentColorShift()
+	return self.contents.shift
 end
 
 ---

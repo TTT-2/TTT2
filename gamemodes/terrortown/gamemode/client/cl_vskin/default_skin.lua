@@ -853,7 +853,18 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
-	local colorBackground = panel:GetColor()
+	local colorBackground
+
+	-- get the background color
+	if panel:HasDynamicColor() then
+		colorBackground = utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, panel:GetDynamicParentColorShift())
+	else
+		colorBackground = panel:GetColor()
+	end
+
+	-- set the dynamic background color for the child elements
+	panel.dynBaseColor = colorBackground
+
 	local colorText = utilGetDefaultColor(colorBackground)
 	local align = panel:GetTitleAlign()
 	local alpha = mathRound(colorText.a * panel:GetTitleOpacity())
@@ -892,7 +903,19 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintColoredBoxTTT2(panel, w, h)
-	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetColor())
+	local colorBackground
+
+	-- get the background color
+	if panel:HasDynamicColor() then
+		colorBackground = utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, 30)
+	else
+		colorBackground = panel:GetColor()
+	end
+
+	-- set the dynamic background color for the child elements
+	panel.dynBaseColor = colorBackground
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
 end
 
 ---
@@ -910,7 +933,6 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
-	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
 	local colorForeground = colors.accent
 	local shift = 0
 
@@ -921,6 +943,8 @@ function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
 	elseif not panel.isActive then
 		colorForeground = colors.handle
 	end
+
+	local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
 
 	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, true, false, true, false)
 	drawRoundedBox(sizes.cornerRadius, 2, 2, w - 3, h - 4, colorForeground)
@@ -942,7 +966,6 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
-	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
 	local colorForeground = colors.accent
 	local shift = 0
 
@@ -954,8 +977,10 @@ function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
 		colorForeground = colors.handle
 	end
 
+	local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
+
 	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, false, true, false, true)
-		drawRoundedBox(sizes.cornerRadius, 1, 2, w - 3, h - 4, colorForeground)
+	drawRoundedBox(sizes.cornerRadius, 1, 2, w - 3, h - 4, colorForeground)
 
 	drawSimpleText(
 		TryT(panel:GetText()),

@@ -14,7 +14,7 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
 	titleBox:SetSize(width, 25)
-	titleBox:SetColor(vskin.GetBackgroundColor())
+	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_roles_time")
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
@@ -24,7 +24,7 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 
 		local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
 		plyRoleBox:SetSize(width, 20)
-		plyRoleBox:SetColor(vskin.GetBackgroundColor())
+		plyRoleBox:SetDynamicColor(parent, 0)
 		plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 		plyRoleBox:SetIcon(roleData.iconMaterial)
 
@@ -47,7 +47,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
 	titleBox:SetSize(width, 25)
-	titleBox:SetColor(vskin.GetBackgroundColor())
+	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_score_gained")
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
@@ -60,7 +60,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 
 			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
 			plyRoleBox:SetSize(width, 20)
-			plyRoleBox:SetColor(vskin.GetBackgroundColor())
+			plyRoleBox:SetDynamicColor(parent, 0)
 			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 			plyRoleBox.GetTitle = function()
@@ -90,15 +90,15 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 	teamInfoBox[1] = playerCoumns:Add("DColoredBoxTTT2")
 	teamInfoBox[1]:SetSize(widthColumn, heightColumn)
-	teamInfoBox[1]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
+	teamInfoBox[1]:SetDynamicColor(parent, 30)
 
 	teamInfoBox[2] = playerCoumns:Add("DColoredBoxTTT2")
 	teamInfoBox[2]:SetSize(widthColumn, heightColumn)
-	teamInfoBox[2]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
+	teamInfoBox[2]:SetDynamicColor(parent, 30)
 
 	teamInfoBox[3] = playerCoumns:Add("DColoredBoxTTT2")
 	teamInfoBox[3]:SetSize(widthColumn, heightColumn)
-	teamInfoBox[3]:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 30))
+	teamInfoBox[3]:SetDynamicColor(parent, 30)
 
 	-- FILL THE COLUMNS
 	for i = 1, 3 do
@@ -122,7 +122,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			end
 
 			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
-			teamBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
+			--teamBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
+			teamBox:SetDynamicColor(parent, 15)
 			teamBox:SetSize(widthColumn, sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall)
 
 			local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
@@ -151,11 +152,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local widthKarma = 0 --50
 				local widthScore = 35
-				local widthName = widthColumn - widthKarma - widthScore - 4 * sizes.padding
+				local widthName = widthColumn - widthKarma - widthScore - 3 * sizes.padding -- 4 with karma
 
 				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyNameBox:SetSize(widthName, sizes.heightRow)
-				plyNameBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
+				plyNameBox:SetDynamicColor(parent, 15)
+				--plyNameBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
 				plyNameBox:SetTitle(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
 				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
