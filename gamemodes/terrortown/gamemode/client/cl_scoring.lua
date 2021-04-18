@@ -26,8 +26,6 @@ local function CreateColumns(plys)
 		local ply = plys[i]
 
 		if not teamsTbl[ply.team] then
-			print(tostring(ply.team))
-
 			teamsTbl[ply.team] = {}
 		end
 

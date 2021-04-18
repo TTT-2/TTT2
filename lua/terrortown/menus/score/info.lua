@@ -67,8 +67,6 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 				return "- " .. ParT(rawScoreText.name, {score = rawScoreText.score})
 			end
 
-			print(rawScoreText.name)
-
 			height = height + 20
 		end
 	end
