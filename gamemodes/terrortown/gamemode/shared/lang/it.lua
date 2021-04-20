@@ -1253,6 +1253,12 @@ L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot l
 --L.tooltip_kill_score = "Kill: {score}"
 --L.tooltip_bodyfound_score = "Bodyfound: {score}"
 
+--L.finish_score_alive_teammates = "Alive teammates:"
+--L.finish_score_timelimit = "Time is up:"
+--L.finish_score_dead_enemies = "Dead enemies:"
+--L.kill_score = "Kill:"
+--L.bodyfound_score = "Bodyfound:"
+
 --L.title_event_bodyfound = "A body was found"
 --L.title_event_c4_disarm = "A C4 charge was disarmed"
 --L.title_event_c4_explode = "A C4 charge exploded"

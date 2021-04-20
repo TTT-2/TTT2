@@ -1059,8 +1059,8 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	)
 
 	local posY = offsetYIcon + sizeIcon + padding
-
 	local textTable = panel:GetText()
+	local _, heightText = drawGetTextSize("", panel:GetFont())
 
 	for i = 1, #textTable do
 		local text = textTable[i]
@@ -1082,8 +1082,6 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 			panel:GetFont()
 		)
 
-		local _, heightText = drawGetTextSize("", panel:GetFont())
-
 		for k = 1, #textWrapped do
 			drawSimpleText(
 				textWrapped[k],
@@ -1099,6 +1097,61 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 		end
 
 		posY = posY + 15
+	end
+
+	local event = panel:GetEvent()
+
+	if not event:HasScore() then return end
+
+	local colorBox = ColorAlpha(colors.default, 10)
+	local scoredPlayers = event:GetScoredPlayers()
+
+	for i = 1, #scoredPlayers do
+		local ply64 = scoredPlayers[i]
+		local rawScoreTexts = event:GetRawScoreText(ply64)
+		local scoreRows = #rawScoreTexts
+
+		if scoreRows == 0 then continue end
+
+		local height = (scoreRows + 1) * heightText + 2 * padding
+
+		drawRoundedBox(sizes.cornerRadius, offsetXText, posY, w - offsetXText - 2 * padding, height, colorBox)
+
+		drawSimpleText(
+			event:GetNameFrom64(ply64) .. ":",
+			panel:GetFont(),
+			offsetXText + padding,
+			posY + padding,
+			colorText,
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_TOP
+		)
+
+		for k = 1, scoreRows do
+			local rawScoreText = rawScoreTexts[k]
+
+			drawSimpleText(
+				TryT(rawScoreText.name),
+				panel:GetFont(),
+				offsetXText + 2 * padding,
+				posY + padding + k * heightText,
+				colorText,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+
+			drawSimpleText(
+				rawScoreText.score,
+				panel:GetFont(),
+				offsetXText + 2 * padding + 175,
+				posY + padding + k * heightText,
+				colorText,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+		end
+
+		posY = posY + height + 15
 	end
 end
 

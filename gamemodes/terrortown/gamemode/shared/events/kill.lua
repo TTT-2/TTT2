@@ -155,7 +155,10 @@ if SERVER then
 	function EVENT:Trigger(victim, attacker, dmgInfo)
 		if not IsValid(victim) or not victim:IsPlayer() then return end
 
-		self:AddAffectedPlayers({victim:SteamID64()})
+		self:AddAffectedPlayers(
+			{victim:SteamID64()},
+			{victim:Nick()}
+		)
 
 		local event = {
 			victim = {
@@ -181,7 +184,10 @@ if SERVER then
 				team = attacker:GetTeam()
 			}
 
-			self:AddAffectedPlayers({attacker:SteamID64()})
+			self:AddAffectedPlayers(
+				{attacker:SteamID64()},
+				{attacker:Nick()}
+			)
 
 			-- set death type
 			if event.attacker.sid64 == event.victim.sid64 then

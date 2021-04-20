@@ -7,6 +7,7 @@ local ParT = LANG.GetParamTranslation
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
 local mathmax = math.max
+local tableCount = table.Count
 
 local PANEL = {}
 
@@ -22,18 +23,37 @@ function PANEL:Init()
 	}
 end
 
+---
+-- @param EVENT event
+-- @realm client
 function PANEL:SetEvent(event)
 	self.contents.event = event
 end
 
+---
+-- @return EVENT
+-- @realm client
+function PANEL:GetEvent()
+	return self.contents.event
+end
+
+---
+-- @return Material
+-- @realm client
 function PANEL:GetIcon()
 	return self.contents.event.icon
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetTitle()
 	return self.contents.event.title
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetText()
 	return self.contents.event:GetText()
 end
@@ -70,6 +90,7 @@ function PANEL:GetContentHeight(width)
 	local size = 50 -- title height
 
 	local textTable = self:GetText()
+	local _, heightText = drawGetTextSize("", self:GetFont())
 
 	for i = 1, #textTable do
 		local text = textTable[i]
@@ -91,9 +112,21 @@ function PANEL:GetContentHeight(width)
 			self:GetFont()
 		)
 
-		local _, heightText = drawGetTextSize("", self:GetFont())
-
 		size = size + #textWrapped * heightText + 15 -- 15: paragraph end
+	end
+
+	local event = self:GetEvent()
+
+	if event:HasScore() then
+		local scoredPlayers = event:GetScoredPlayers()
+
+		for i = 1, #scoredPlayers do
+			local scoreRows = #event:GetRawScoreText(scoredPlayers[i])
+
+			if scoreRows == 0 then continue end
+
+			size = size + (scoreRows + 1) * heightText + 35 -- 35 spacing + padding
+		end
 	end
 
 	return mathmax(size, 75)

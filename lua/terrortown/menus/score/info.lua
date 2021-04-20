@@ -64,7 +64,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 			plyRoleBox.GetTitle = function()
-				return "- " .. ParT(rawScoreText.name, {score = rawScoreText.score})
+				return "- " .. ParT("tooltip_" .. rawScoreText.name, {score = rawScoreText.score})
 			end
 
 			height = height + 20

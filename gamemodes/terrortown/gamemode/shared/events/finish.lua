@@ -46,7 +46,10 @@ if SERVER then
 				alive = ply:Alive() and ply:IsTerror()
 			}
 
-			self:AddAffectedPlayers({ply:SteamID64()})
+			self:AddAffectedPlayers(
+				{ply:SteamID64()},
+				{ply:Nick()}
+			)
 		end
 
 		return self:Add({

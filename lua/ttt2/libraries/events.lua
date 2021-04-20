@@ -72,7 +72,7 @@ function events.SortByPlayerAndEvent()
 	for i = 1, #eventList do
 		local event = eventList[i]
 		local type = event.type
-		local plys64 = event:GetAffectedPlayer()
+		local plys64 = event:GetAffectedPlayer64s()
 
 		-- now that we have a list of all players affected by this event
 		-- each of those players should have this event added to their list
@@ -224,7 +224,7 @@ else --CLIENT
 			local newEvent = events.Create(eventData.type)
 			newEvent:SetEventTable(eventData.event)
 			newEvent:SetScoreTable(eventData.score)
-			newEvent:SetPlayersTable(eventData.plys)
+			newEvent:SetPlayersTable(eventData.plys64, eventData.plys)
 
 			events.list[i] = newEvent
 		end

@@ -34,7 +34,10 @@ if SERVER then
 				team = ply:GetTeam()
 			}
 
-			self:AddAffectedPlayers({ply:SteamID64()})
+			self:AddAffectedPlayers(
+				{ply:SteamID64()},
+				{ply:Nick()}
+			)
 		end
 
 		return self:Add(event)

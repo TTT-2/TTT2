@@ -1243,6 +1243,12 @@ L.tooltip_finish_score_dead_enemies = "Tote Gegner: {score}"
 L.tooltip_kill_score = "Mord: {score}"
 L.tooltip_bodyfound_score = "Leichenfindung: {score}"
 
+L.finish_score_alive_teammates = "Lebende Teammitglieder:"
+L.finish_score_timelimit = "Zeit vorbei:"
+L.finish_score_dead_enemies = "Tote Gegner:"
+L.kill_score = "Mord:"
+L.bodyfound_score = "Leichenfindung:"
+
 L.title_event_bodyfound = "Eine Leiche wurde gefunden"
 L.title_event_c4_disarm = "Eine C4 Ladung wurde entschärft"
 L.title_event_c4_explode = "Eine C4 Ladung ist explodiert"

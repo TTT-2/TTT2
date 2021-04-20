@@ -41,7 +41,10 @@ end
 
 if SERVER then
 	function EVENT:Trigger(owner, disarmer, successful)
-		self:AddAffectedPlayers({owner:SteamID64(), disarmer:SteamID64()})
+		self:AddAffectedPlayers(
+			{owner:SteamID64(), disarmer:SteamID64()},
+			{owner:Nick(), disarmer:Nick()}
+		)
 
 		return self:Add({
 			successful = successful,

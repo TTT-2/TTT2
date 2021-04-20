@@ -15,6 +15,7 @@ EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
 EVENT.plys = {}
+EVENT.plys64 = {}
 
 ---
 -- Sets the event data table to the event.
@@ -39,8 +40,9 @@ end
 -- @param table event The affected players data table that should be added
 -- @internal
 -- @realm shared
-function EVENT:SetPlayersTable(players)
-	self.plys = players
+function EVENT:SetPlayersTable(plys64, plys)
+	self.plys64 = plys64
+	self.plys = plys
 end
 
 ---
@@ -74,6 +76,14 @@ end
 -- @realm shared
 function EVENT:HasPlayerScore(ply64)
 	return self.score[ply64] ~= nil
+end
+
+---
+-- Returns the whole score table
+-- @return table The score table, indexed with sid64
+-- @realm shared
+function EVENT:GetScore()
+	return self.score
 end
 
 ---
@@ -119,7 +129,7 @@ function EVENT:GetRawScoreText(ply64)
 		if score == 0 then continue end
 
 		rawTable[#rawTable + 1] = {
-			name = "tooltip_" .. self.type .. "_" .. name,
+			name = self.type .. "_" .. name,
 			score = score
 		}
 	end
@@ -131,8 +141,26 @@ end
 -- Returns a list of all player steamID64s who were affected by this event.
 -- @return table A table of steamID64s
 -- @realm shared
-function EVENT:GetAffectedPlayer()
+function EVENT:GetAffectedPlayer64s()
+	return self.plys64
+end
+
+---
+-- Returns a list of all player names who were affected by this event.
+-- @return table A table of player names
+-- @realm shared
+function EVENT:GetAffectedPlayers()
 	return self.plys
+end
+
+function EVENT:GetNameFrom64(ply64)
+	local i = 1
+
+	while (self.plys64[i] ~= ply64) do
+		i = i + 1
+	end
+
+	return self.plys[i]
 end
 
 ---
@@ -141,7 +169,7 @@ end
 -- @return boolean Returns true if the player was affected by this event.
 -- @realm shared
 function EVENT:HasAffectedPlayer(ply64)
-	return tableHasValue(self.plys, ply64)
+	return tableHasValue(self.plys64, ply64)
 end
 
 ---
@@ -168,9 +196,11 @@ end
 if SERVER then
 	---
 	-- Adds players that are affected by this event.
-	-- @param table plys A table of player steamID64
+	-- @param table plys64 A table of player steamID64
+	-- @param table plys A table of player namees
 	-- @realm server
-	function EVENT:AddAffectedPlayers(plys)
+	function EVENT:AddAffectedPlayers(plys64, plys)
+		tableAdd(self.plys64, plys64)
 		tableAdd(self.plys, plys)
 	end
 
@@ -215,6 +245,7 @@ if SERVER then
 			type = self.type,
 			event = self.event,
 			score = self.score,
+			plys64 = self.plys64,
 			plys = self.plys
 		}
 	end

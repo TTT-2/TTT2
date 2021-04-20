@@ -21,7 +21,10 @@ end
 
 if SERVER then
 	function EVENT:Trigger(planter)
-		self:AddAffectedPlayers({planter:SteamID64()})
+		self:AddAffectedPlayers(
+			{planter:SteamID64()},
+			{planter:Nick()}
+		)
 
 		return self:Add({
 			nick = planter:Nick(),

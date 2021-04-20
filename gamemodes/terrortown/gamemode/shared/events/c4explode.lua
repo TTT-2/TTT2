@@ -21,7 +21,10 @@ end
 
 if SERVER then
 	function EVENT:Trigger(owner)
-		self:AddAffectedPlayers({owner:SteamID64()})
+		self:AddAffectedPlayers(
+			{owner:SteamID64()},
+			{owner:Nick()}
+		)
 
 		return self:Add({
 			nick = owner:Nick(),

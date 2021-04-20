@@ -25,7 +25,10 @@ end
 
 if SERVER then
 	function EVENT:Trigger(finder, rag, credits)
-		self:AddAffectedPlayers({finder:SteamID64(), CORPSE.GetPlayerSID64(rag)})
+		self:AddAffectedPlayers(
+			{finder:SteamID64(), CORPSE.GetPlayerSID64(rag)},
+			{finder:Nick(), CORPSE.GetPlayerNick(rag, "A Terrorist")}
+		)
 
 		return self:Add({
 			finder = {
