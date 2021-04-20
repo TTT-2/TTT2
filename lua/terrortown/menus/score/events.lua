@@ -3,7 +3,7 @@
 CLSCOREMENU.base = "base_scoremenu"
 
 CLSCOREMENU.icon = Material("vgui/ttt/vskin/roundend/events")
-CLSCOREMENU.title = "title_events"
+CLSCOREMENU.title = "title_score_events"
 CLSCOREMENU.priority = 99
 
 function CLSCOREMENU:Populate(parent)
@@ -23,7 +23,7 @@ function CLSCOREMENU:Populate(parent)
 
 	local buttonBoxRowLabel = buttonBoxRow:Add("DLabelTTT2")
 	buttonBoxRowLabel:SetSize(sizes.widthTopLabel, sizes.heightTopButtonPanel)
-	buttonBoxRowLabel:SetText("Show events from")
+	buttonBoxRowLabel:SetText("label_show_events")
 	buttonBoxRowLabel.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "LabelRightTTT2", slf, w, h)
 
@@ -37,7 +37,7 @@ function CLSCOREMENU:Populate(parent)
 	buttonBoxRowButton1:SetSize(sizes.widthTopButton, sizes.heightTopButton)
 	buttonBoxRowButton1:DockMargin(sizes.padding, sizes.padding, 0, sizes.padding)
 	buttonBoxRowButton1:Dock(LEFT)
-	buttonBoxRowButton1:SetText("You")
+	buttonBoxRowButton1:SetText("button_show_events_you")
 	buttonBoxRowButton1.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "ButtonRoundEndLeftTTT2", slf, w, h)
 
@@ -48,7 +48,7 @@ function CLSCOREMENU:Populate(parent)
 	buttonBoxRowButton2:SetSize(sizes.widthTopButton, sizes.heightTopButton)
 	buttonBoxRowButton2:DockMargin(0, sizes.padding, 0, sizes.padding)
 	buttonBoxRowButton2:Dock(RIGHT)
-	buttonBoxRowButton2:SetText("Global")
+	buttonBoxRowButton2:SetText("button_show_events_global")
 	buttonBoxRowButton2.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "ButtonRoundEndRightTTT2", slf, w, h)
 

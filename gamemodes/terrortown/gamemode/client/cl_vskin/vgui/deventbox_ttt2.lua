@@ -7,7 +7,6 @@ local ParT = LANG.GetParamTranslation
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
 local mathmax = math.max
-local tableCount = table.Count
 
 local PANEL = {}
 

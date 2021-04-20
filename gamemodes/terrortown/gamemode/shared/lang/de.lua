@@ -1228,6 +1228,17 @@ Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Überset
 Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
 
 -- 2021-04-13
+L.title_score_info = "Rundenendeninfo"
+L.title_score_events = "Ereignistimeline"
+L.title_score_scores = "Punktetabelle"
+
+L.label_show_events = "Zeige Ereignisse von"
+L.button_show_events_you = "Dir"
+L.button_show_events_global = "Global"
+L.label_show_roles = "Zeige Rollenverteilung vom"
+L.button_show_roles_begin = "Rundenbegin"
+L.button_show_roles_end = "Rundenende"
+
 L.hilite_win_traitors = "DIE VERRÄTER GEWANNEN"
 L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWANNEN"
 L.hilite_win_tie = "UNENTSCHIEDEN"

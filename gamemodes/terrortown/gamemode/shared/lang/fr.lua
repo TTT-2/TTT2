@@ -1239,6 +1239,17 @@ Cette traduction est complète à {coverage}%.
 Gardez à l'esprit que les traductions sont réalisées par la communauté. N'hésitez pas à y contribuer si il y a quelque chose qui manque ou si il y a des erreurs.]]
 
 -- 2021-04-13
+--L.title_score_info = "Round End Info"
+--L.title_score_events = "Event Timeline"
+--L.title_score_scores = "Score Table"
+
+--L.label_show_events = "Show events from"
+--L.button_show_events_you = "You"
+--L.button_show_events_global = "Global"
+--L.label_show_roles = "Show role distribution from"
+--L.button_show_roles_begin = "Round Begin"
+--L.button_show_roles_end = "Round End"
+
 --L.hilite_win_traitors = "TEAM TRAITOR WON"
 --L.hilite_win_innocents = "TEAM INNOCENT WON"
 --L.hilite_win_tie = "IT IS A TIE"
