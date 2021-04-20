@@ -146,7 +146,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			-- @realm server
 			hook.Run("PlayerLoadout", self, false)
 
-			if GetConVar("ttt_enforce_playermodel"):GetBool() and oldSubrole then -- don't update the model if oldSubrole is nil (player isn't already spawned, leading to an error)
+			-- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
+			if GetConVar("ttt_enforce_playermodel"):GetBool() and oldSubrole then
 				-- update subroleModel
 				self:SetModel(self:GetSubRoleModel())
 			end
