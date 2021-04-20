@@ -1,8 +1,19 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_respawn"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_respawn"
+
+	function EVENT:GetText()
+		return {
+			{
+				string = "desc_event_respawn",
+				params = {
+					player = self.event.nick
+				}
+			}
+		}
+	end
 end
 
 if SERVER then

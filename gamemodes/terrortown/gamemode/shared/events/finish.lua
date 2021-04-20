@@ -1,8 +1,33 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_finished"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_finish"
+
+	function EVENT:GetText()
+		local alive = 0
+
+		for i = 1, #self.event.plys do
+			if self.event.plys[i].alive then
+				alive = alive + 1
+			end
+		end
+
+		local time = math.Round(self.event.time / 1000, 0)
+		local minutes = math.floor(time / 60)
+		local seconds = math.floor(time % 60)
+
+		return {
+			{
+				string = "desc_event_finish",
+				params = {
+					alive = alive,
+					minutes = minutes,
+					seconds = seconds
+				}
+			}
+		}
+	end
 end
 
 if SERVER then

@@ -1,8 +1,42 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_c4_disarm"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_c4_disarm"
+
+	function EVENT:GetText()
+		if self.event.successful then
+			return {
+				{
+					string = "desc_event_c4_disarm_success",
+					params = {
+						owner = self.event.owner.nick,
+						disarmer = self.event.disarmer.nick,
+						orole = roles.GetByIndex(self.event.owner.role).name,
+						oteam = self.event.owner.team,
+						drole = roles.GetByIndex(self.event.disarmer.role).name,
+						dteam = self.event.disarmer.team
+					},
+					translateParams = true
+				}
+			}
+		else
+			return {
+				{
+					string = "desc_event_c4_disarm_failed",
+					params = {
+						owner = self.event.owner.nick,
+						disarmer = self.event.disarmer.nick,
+						orole = roles.GetByIndex(self.event.owner.role),
+						oteam = self.event.owner.team,
+						drole = roles.GetByIndex(self.event.disarmer.role),
+						dteam = self.event.disarmer.team
+					},
+					translateParams = true
+				}
+			}
+		end
+	end
 end
 
 if SERVER then

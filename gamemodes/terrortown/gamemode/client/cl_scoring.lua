@@ -112,6 +112,7 @@ function CLSCORE:CalculateSizes()
 	self.sizes.widthButton = 175
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
 	self.sizes.heightContent = self.sizes.heightMainArea - self.sizes.heightHeaderPanel - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
+	self.sizes.heightContentLarge = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
 	self.sizes.heightMenuButton = 50
 end
 

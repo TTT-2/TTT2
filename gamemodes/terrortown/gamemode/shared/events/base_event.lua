@@ -6,6 +6,11 @@ local tableGetKeys = table.GetKeys
 local tableHasValue = table.HasValue
 local tableAdd = table.Add
 
+if CLIENT then
+	EVENT.icon = Material("vgui/ttt/vskin/events/base_event")
+	EVENT.title = ""
+end
+
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
@@ -147,6 +152,17 @@ end
 -- @realm shared
 function EVENT:Serialize()
 
+end
+
+if CLIENT then
+	---
+	-- Generates the textparameters needed for the event timeline
+	-- @note This function should be overwritten but not not called.
+	-- @return table A table of identifier-param pairs
+	-- @realm client
+	function EVENT:GetText()
+		return {}
+	end
 end
 
 if SERVER then

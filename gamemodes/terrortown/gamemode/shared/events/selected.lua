@@ -1,8 +1,19 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_selected"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_selected"
+
+	function EVENT:GetText()
+		return {
+			{
+				string = "desc_event_selected",
+				params = {
+					amount = #self.event.plys
+				}
+			}
+		}
+	end
 end
 
 if SERVER then

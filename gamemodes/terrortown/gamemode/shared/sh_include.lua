@@ -106,6 +106,7 @@ TTTFiles = {
 	cl_vskin__vgui__dcoloredbox = {file = "cl_vskin/vgui/dcoloredbox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcoloredtextbox = {file = "cl_vskin/vgui/dcoloredtextbox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dtooltip = {file = "cl_vskin/vgui/dtooltip_ttt2.lua", on = "client"},
+	cl_vskin__vgui__deventbox = {file = "cl_vskin/vgui/deventbox_ttt2.lua", on = "client"},
 }
 
 if SERVER then

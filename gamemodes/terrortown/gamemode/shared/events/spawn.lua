@@ -1,8 +1,19 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_spawn"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_spawn"
+
+	function EVENT:GetText()
+		return {
+			{
+				string = "desc_event_spawn",
+				params = {
+					player = self.event.finder.nick,
+				}
+			}
+		}
+	end
 end
 
 if SERVER then
@@ -19,8 +30,7 @@ end
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 
-	-- this will be readded with the new roundendscreen
-	--if event.roundState ~= ROUND_ACTIVE then return end
+	if event.roundState ~= ROUND_ACTIVE then return end
 
 	return {
 		id = self.type,

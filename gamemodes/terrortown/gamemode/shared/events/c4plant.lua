@@ -1,8 +1,22 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_c4_plant"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_c4_plant"
+
+	function EVENT:GetText()
+		return {
+			{
+				string = "desc_event_c4_plant",
+				params = {
+					owner = self.event.owner.nick,
+					role = roles.GetByIndex(self.event.owner.role).name,
+					team = self.event.owner.team
+				},
+				translateParams = true
+			}
+		}
+	end
 end
 
 if SERVER then

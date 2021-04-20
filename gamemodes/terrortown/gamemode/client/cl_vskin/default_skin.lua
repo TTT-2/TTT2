@@ -61,6 +61,7 @@ surface.CreateAdvancedFont("DermaTTT2CatHeader", {font = "Trebuchet24", size = 1
 surface.CreateAdvancedFont("DermaTTT2Text", {font = "Trebuchet24", size = 16, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 18, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2TextLargest", {font = "Trebuchet24", size = 24, weight = 900})
 surface.CreateAdvancedFont("DermaTTT2TextHuge", {font = "Trebuchet24", size = 72, weight = 900})
 
 ---
@@ -1020,6 +1021,84 @@ function SKIN:PaintTooltipTTT2(panel, w, h)
 			TEXT_ALIGN_CENTER,
 			TEXT_ALIGN_CENTER
 		)
+	end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintEventBoxTTT2(panel, w, h)
+	local colorLine = ColorAlpha(colors.default, 25)
+	local colorText = ColorAlpha(colors.default, 200)
+
+	local sizeIcon = 30
+	local padding = 8
+	local widthLine = 4
+	local offsetXLine = 0.5 * sizeIcon + padding
+	local offsetXIcon = offsetXLine - 0.5 * (sizeIcon - widthLine)
+	local offsetYIcon = 20 + padding
+	local offsetYLine = offsetYIcon + padding + sizeIcon
+	local offsetXText = offsetXIcon + sizeIcon + padding
+
+	drawBox(offsetXLine, 0, widthLine, offsetYIcon - padding, colorLine)
+	drawBox(offsetXLine, offsetYLine, widthLine, h - offsetYLine, colorLine)
+
+	drawFilteredShadowedTexture(offsetXIcon, offsetYIcon, sizeIcon, sizeIcon, panel:GetIcon(), colorText.a, colorText)
+
+	drawShadowedText(
+		TryT(panel:GetTitle()),
+		panel:GetTitleFont(),
+		offsetXText,
+		offsetYIcon + 0.5 * sizeIcon,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER,
+		1
+	)
+
+	local posY = offsetYIcon + sizeIcon + padding
+
+	local textTable = panel:GetText()
+
+	for i = 1, #textTable do
+		local text = textTable[i]
+		local params = {}
+
+		if text.translateParams then
+			for key, value in pairs(text.params) do
+				params[key] = TryT(value)
+			end
+		else
+			params = text.params
+		end
+
+		local textTranslated = ParT(text.string, params or {})
+
+		local textWrapped = drawGetWrappedText(
+			textTranslated,
+			w - offsetXText,
+			panel:GetFont()
+		)
+
+		local _, heightText = drawGetTextSize("", panel:GetFont())
+
+		for k = 1, #textWrapped do
+			drawSimpleText(
+				textWrapped[k],
+				panel:GetFont(),
+				offsetXText,
+				posY,
+				colorText,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+
+			posY = posY + heightText
+		end
+
+		posY = posY + 15
 	end
 end
 

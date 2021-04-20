@@ -1,8 +1,16 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_game_state"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_game"
+
+	function EVENT:GetText()
+		return {
+			{
+				string = "desc_event_game",
+			}
+		}
+	end
 end
 
 if SERVER then

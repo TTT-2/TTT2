@@ -1,8 +1,34 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_bodyfound"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_bodyfound"
+
+	function EVENT:GetText()
+		local text = {
+			{
+				string = "desc_event_bodyfound",
+				params = {
+					finder = self.event.finder.nick,
+					found = self.event.found.nick,
+					firole = roles.GetByIndex(self.event.finder.role).name,
+					fiteam = self.event.finder.team,
+					forole = roles.GetByIndex(self.event.found.role).name,
+					foteam = self.event.found.team,
+					credits = self.event.found.credits
+				},
+				translateParams = true
+			}
+		}
+
+		if self.event.found.headshot then
+			text[2] = {
+				string = "desc_event_bodyfound_headshot"
+			}
+		end
+
+		return text
+	end
 end
 
 if SERVER then

@@ -1,8 +1,24 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_rolechange"
+	--EVENT.icon = nil
+	EVENT.title = "title_event_rolechange"
+
+	function EVENT:GetText()
+		return {
+			{
+				string = "desc_event_rolechange",
+				params = {
+					player = self.event.nick,
+					orole = roles.GetByIndex(self.event.oldRole).name,
+					oteam = self.event.oldTeam,
+					nrole = roles.GetByIndex(self.event.newRole).name,
+					nteam = self.event.newTeam
+				},
+				translateParams = true
+			}
+		}
+	end
 end
 
 if SERVER then
