@@ -420,7 +420,6 @@ local function PlaceWeaponsAtEnts(spots_classes)
 			-- People with only a grenade are sad pandas. To get IsGrenade here,
 			-- we need the spawned ent that has inherited the goods from the
 			-- basegrenade swep.
-			-- TODO IsValid and IsInWorld check is missed as well as this could be a grenade again as well
 			if spawned and spawned.IsGrenade then
 				w = spawnables[math.random(#spawnables)]
 
