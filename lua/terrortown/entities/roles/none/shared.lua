@@ -13,7 +13,5 @@ function ROLE:PreInitialize()
 	self.defaultEquipment = {}
 
 	self.builtin = true
-	self.scoreKillsMultiplier = 0
-	self.scoreTeamKillsMultiplier = 0
 	self.notSelectable = true
 end

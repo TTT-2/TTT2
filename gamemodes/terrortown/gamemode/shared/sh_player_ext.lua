@@ -290,7 +290,7 @@ end
 
 ---
 -- Returns the real @{ROLE}'s team
--- @return ?string
+-- @return nil|string
 -- @realm shared
 function plymeta:GetRealTeam()
 	return self.roleteam
@@ -385,7 +385,7 @@ function plymeta:GetSubRoleData()
 		return rlsList[i]
 	end
 
-	return NONE
+	return roles.NONE
 end
 
 ---
@@ -402,7 +402,7 @@ function plymeta:GetBaseRoleData()
 		return rlsList[i]
 	end
 
-	return NONE
+	return roles.NONE
 end
 
 ---
