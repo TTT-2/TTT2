@@ -658,7 +658,6 @@ function plymeta:InitialSpawn()
 	self:SetWalkSpeed(220)
 	self:SetMaxSpeed(220)
 
-	-- Always spawn innocent initially, traitor will be selected later
 	self:ResetStatus()
 
 	-- Always reset sprint

@@ -16,10 +16,6 @@ if not plymeta then
 	return
 end
 
-local defaultRoleDkColor = Color(28, 116, 10, 255)
-local defaultRoleLtColor = Color(110, 200, 70, 255)
-local defaultRoleBgColor = Color(200, 68, 81, 255)
-
 ---
 -- Checks whether a player is a available terrorist (not a spectator)
 -- @return boolean
@@ -77,10 +73,9 @@ end
 -- @param boolean forceHooks whether update hooks should be triggerd, even if the role didn't changed
 -- @realm shared
 function plymeta:SetRole(subrole, team, forceHooks)
-	local oldRole = self:GetBaseRole()
-	local oldSubrole = self:GetSubRole()
-	local oldRoleData = self:GetSubRoleData()
-	local oldTeam = self:GetTeam()
+	local oldBaseRole = self.role and self:GetBaseRole() or nil
+	local oldSubrole = self.subrole and self:GetSubRole() or nil
+	local oldTeam = self.roleteam and self:GetTeam() or nil
 
 	local roleData = roles.GetByIndex(subrole)
 
@@ -94,10 +89,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 
 	if oldSubrole ~= subrole then
 		local activeRolesCount = GetActiveRolesCount(roleData) + 1
-		local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
 
 		SetActiveRolesCount(roleData, activeRolesCount)
-		SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
 
 		if activeRolesCount > 0 then
 			---
@@ -105,17 +98,24 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
-		if oldActiveRolesCount <= 0 then
-			---
-			-- @realm shared
-			hook.Run("TTT2ToggleRole", oldRoleData, false)
+		if oldSubrole then
+			local oldRoleData = roles.GetByIndex(oldSubrole)
+			local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
+
+			SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
+
+			if oldActiveRolesCount <= 0 then
+				---
+				-- @realm shared
+				hook.Run("TTT2ToggleRole", oldRoleData, false)
+			end
 		end
 	end
 
-	if oldRole ~= newBaseRole or forceHooks then
+	if oldBaseRole ~= newBaseRole or forceHooks then
 		---
 		-- @realm shared
-		hook.Run("TTT2UpdateBaserole", self, oldRole, newBaseRole)
+		hook.Run("TTT2UpdateBaserole", self, oldBaseRole, newBaseRole)
 	end
 
 	if oldSubrole ~= subrole or forceHooks then
@@ -123,7 +123,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		-- @realm shared
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 
-		if SERVER then
+		if SERVER and subrole ~= ROLE_NONE then
 			events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole)
 		end
 	end
@@ -146,7 +146,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			-- @realm server
 			hook.Run("PlayerLoadout", self, false)
 
-			if GetConVar("ttt_enforce_playermodel"):GetBool() then
+			if GetConVar("ttt_enforce_playermodel"):GetBool() and oldSubrole then -- don't update the model if oldSubrole is nil (player isn't already spawned, leading to an error)
 				-- update subroleModel
 				self:SetModel(self:GetSubRoleModel())
 			end
@@ -161,8 +161,11 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	if SERVER then
-		oldRoleData:RemoveRoleLoadout(self, true)
 		roleData:GiveRoleLoadout(self, true)
+
+		if oldSubrole then
+			roles.GetByIndex(oldSubrole):RemoveRoleLoadout(self, true)
+		end
 	end
 end
 
@@ -190,10 +193,10 @@ end
 
 ---
 -- Returns the current @{ROLE}'s darker color
--- @return[default=Color(28, 116, 10, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleDkColor()
-	return self.roleDkColor or defaultRoleDkColor
+	return self.roleDkColor
 end
 
 ---
@@ -208,10 +211,10 @@ end
 
 ---
 -- Returns the current @{ROLE}'s lighter color
--- @return[default=Color(28, 116, 10, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleLtColor()
-	return self.roleLtColor or defaultRoleLtColor
+	return self.roleLtColor
 end
 
 ---
@@ -226,10 +229,10 @@ end
 
 ---
 -- Returns the current @{ROLE}'s background color
--- @return[default=Color(200, 68, 81, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleBgColor()
-	return self.roleBgColor or defaultRoleBgColor
+	return self.roleBgColor
 end
 
 ---
