@@ -409,7 +409,7 @@ local function PlaceWeaponsAtEnts(spots_classes)
 	local num = 0
 	local w
 
-	for _, v in RandomPairs(spots) do -- TODO RandomPairs performance test?
+	for _, v in RandomPairs(spots) do
 		w = spawnables[math.random(#spawnables)]
 
 		if w and IsValid(v) and util.IsInWorld(v:GetPos()) then
