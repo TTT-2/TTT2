@@ -44,11 +44,18 @@ local function KillText(event)
 
 	local params = {
 		victim = event.victim.nick,
-		attacker = event.attacker.nick,
+		vrole = roles.GetByIndex(event.victim.role).name,
+		vteam = event.victim.team,
 		trap = equip,
 		tool = equip,
 		weapon = equip
 	}
+
+	if event.attacker then
+		params.attacker = event.attacker.nick
+		params.arole = roles.GetByIndex(event.attacker.role).name
+		params.ateam = event.attacker.team
+	end
 
 	if event.attacker and event.attacker.sid64 == event.victim.sid64 then
 		if is_dmg(dmg.type, DMG_BLAST) then
@@ -122,24 +129,25 @@ if CLIENT then
 
 	function EVENT:GetText()
 		local string, params = KillText(self.event)
-		local type
-
-		if self.event.type == KILL_SUICIDE then
-			type = "desc_event_kill_suicide"
-		elseif self.event.type == KILL_TEAM then
-			type = "desc_event_kill_team"
-		end
-
-		return {
+		local text = {
 			{
 				string = string,
 				params = params,
 				translateParams = true
-			},
-			{
-				string = type
 			}
 		}
+
+		if self.event.type == KILL_SUICIDE then
+			text[2] = {
+				string = "desc_event_kill_suicide"
+			}
+		elseif self.event.type == KILL_TEAM then
+			text[2] = {
+				string = "desc_event_kill_team"
+			}
+		end
+
+		return text
 	end
 end
 

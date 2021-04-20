@@ -83,8 +83,6 @@ function PANEL:GetContentHeight(width)
 			params = text.params
 		end
 
-		PrintTable(params or {})
-
 		local textTranslated = ParT(text.string, params or {})
 
 		local textWrapped = drawGetWrappedText(
