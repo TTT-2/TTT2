@@ -1,7 +1,7 @@
 --- @ignore
 
 if CLIENT then
-	--EVENT.icon = nil
+	EVENT.icon = Material("vgui/ttt/vskin/events/finish")
 	EVENT.title = "title_event_finish"
 
 	function EVENT:GetText()

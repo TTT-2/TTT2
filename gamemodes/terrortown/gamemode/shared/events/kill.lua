@@ -124,7 +124,7 @@ local function KillText(event)
 end
 
 if CLIENT then
-	--EVENT.icon = nil
+	EVENT.icon = Material("vgui/ttt/vskin/events/kill")
 	EVENT.title = "title_event_kill"
 
 	function EVENT:GetText()

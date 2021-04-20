@@ -1,7 +1,7 @@
 --- @ignore
 
 if CLIENT then
-	--EVENT.icon = nil
+	EVENT.icon = Material("vgui/ttt/vskin/events/rolechange")
 	EVENT.title = "title_event_rolechange"
 
 	function EVENT:GetText()
