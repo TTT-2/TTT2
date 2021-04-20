@@ -1,5 +1,28 @@
 --- @ignore
 
+local function PopulateEventTable(parent, sizes, events, onlyLocalPlayer)
+	local sid64 = LocalPlayer():SteamID64()
+
+	parent:Clear()
+
+	-- SPLIT MAIN FRAME INTO FRAMEBOXES
+	local frameBoxesScroll = vgui.Create("DIconLayout", parent)
+	frameBoxesScroll:Dock(FILL)
+
+	for i = 1, #events do
+		local event = events[i]
+
+		event.onlyLocalPlayer = onlyLocalPlayer
+
+		if event.event.roundState ~= ROUND_ACTIVE then continue end
+		if onlyLocalPlayer and not event:HasAffectedPlayer(sid64) then continue end
+
+		local eventBox = frameBoxesScroll:Add("DEventBoxTTT2")
+		eventBox:SetEvent(event)
+		eventBox:SetSize(sizes.widthMainArea, eventBox:GetContentHeight(sizes.widthMainArea))
+	end
+end
+
 CLSCOREMENU.base = "base_scoremenu"
 
 CLSCOREMENU.icon = Material("vgui/ttt/vskin/roundend/events")
@@ -59,17 +82,23 @@ function CLSCOREMENU:Populate(parent)
 	local scrollPanel = frameBoxes:Add("DScrollPanelTTT2")
 	scrollPanel:SetSize(sizes.widthMainArea, sizes.heightContentLarge)
 
-	-- SPLIT MAIN FRAME INTO FRAMEBOXES
-	local frameBoxesScroll = vgui.Create("DIconLayout", scrollPanel)
-	frameBoxesScroll:Dock(FILL)
+	-- default button state
+	buttonBoxRowButton1.isActive = false
+	buttonBoxRowButton2.isActive = true
+	PopulateEventTable(scrollPanel, sizes, events, false)
 
-	for i = 1, #events do
-		local event = events[i]
+	-- onclick functions for buttons
+	buttonBoxRowButton1.DoClick = function()
+		buttonBoxRowButton1.isActive = true
+		buttonBoxRowButton2.isActive = false
 
-		if event.event.roundState ~= ROUND_ACTIVE then continue end
+		PopulateEventTable(scrollPanel, sizes, events, true)
+	end
 
-		local eventBox = frameBoxesScroll:Add("DEventBoxTTT2")
-		eventBox:SetEvent(event)
-		eventBox:SetSize(sizes.widthMainArea, eventBox:GetContentHeight(sizes.widthMainArea))
+	buttonBoxRowButton2.DoClick = function()
+		buttonBoxRowButton1.isActive = false
+		buttonBoxRowButton2.isActive = true
+
+		PopulateEventTable(scrollPanel, sizes, events, false)
 	end
 end

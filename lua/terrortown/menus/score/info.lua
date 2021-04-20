@@ -75,6 +75,8 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 end
 
 local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDeath)
+	parent:Clear()
+
 	-- SPLIT FRAME INTO A GRID LAYOUT
 	local playerCoumns = vgui.Create("DIconLayout", parent)
 	playerCoumns:Dock(FILL)

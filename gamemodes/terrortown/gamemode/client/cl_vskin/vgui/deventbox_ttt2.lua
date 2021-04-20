@@ -118,9 +118,14 @@ function PANEL:GetContentHeight(width)
 
 	if event:HasScore() then
 		local scoredPlayers = event:GetScoredPlayers()
+		local sid64 = LocalPlayer():SteamID64()
 
 		for i = 1, #scoredPlayers do
-			local scoreRows = #event:GetRawScoreText(scoredPlayers[i])
+			local ply64 = scoredPlayers[i]
+
+			if event.onlyLocalPlayer and ply64 ~= sid64 then continue end
+
+			local scoreRows = #event:GetRawScoreText(ply64)
 
 			if scoreRows == 0 then continue end
 

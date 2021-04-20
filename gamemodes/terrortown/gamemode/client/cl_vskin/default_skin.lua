@@ -1105,9 +1105,13 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
 	local colorBox = ColorAlpha(colors.default, 10)
 	local scoredPlayers = event:GetScoredPlayers()
+	local sid64 = LocalPlayer():SteamID64()
 
 	for i = 1, #scoredPlayers do
 		local ply64 = scoredPlayers[i]
+
+		if event.onlyLocalPlayer and ply64 ~= sid64 then continue end
+
 		local rawScoreTexts = event:GetRawScoreText(ply64)
 		local scoreRows = #rawScoreTexts
 
