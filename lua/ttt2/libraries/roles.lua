@@ -316,7 +316,7 @@ end
 
 ---
 -- Generates a new subrole id.
--- starts with <code>1</code> to prevent incompatibilities with <code>ROLE_NONE</code> => new roles will start at the id: <code>7</code>
+-- New roles will start at the id: <code>7</code>
 -- <ul>
 -- <li><code>0</code> = <code>ROLE_INNOCENT</code></li>
 -- <li><code>1</code> = <code>ROLE_TRAITOR</code></li>
@@ -327,7 +327,16 @@ end
 -- @return number new generated subrole id
 -- @realm shared
 function roles.GenerateNewRoleID()
-	return #roles.GetList() + 4
+	local id = 3 -- 3 nops (4, 5, 6)
+	local reservedList = {"INNOCENT", "TRAITOR", "DETECTIVE", "NONE"}
+
+	for i = 1, #reservedList do
+		if not roles[reservedList[i]] then
+			id = id + 1
+		end
+	end
+
+	return #roles.GetList() + id
 end
 
 ---

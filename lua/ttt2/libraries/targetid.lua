@@ -328,7 +328,7 @@ function targetid.HUDDrawTargetIDPlayers(tData)
 	local rstate = GetRoundState()
 	local target_role
 
-	if ent.GetSubRole and rstate == ROUND_ACTIVE and ent:IsSpecial() then
+	if isfunction(ent.GetSubRole) and rstate == ROUND_ACTIVE and ent:HasRole() then
 		target_role = ent:GetSubRoleData()
 	end
 

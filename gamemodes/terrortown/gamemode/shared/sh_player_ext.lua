@@ -171,7 +171,7 @@ end
 
 ---
 -- Returns the current @{ROLE}'s color
--- @return[default=Color(80, 173, 59, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleColor()
 	if not self.roleColor then

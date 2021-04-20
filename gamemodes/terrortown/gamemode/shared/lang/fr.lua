@@ -1294,3 +1294,6 @@ L.help_lang_info = [[
 Cette traduction est complète à {coverage}%.
 
 Gardez à l'esprit que les traductions sont réalisées par la communauté. N'hésitez pas à y contribuer si il y a quelque chose qui manque ou si il y a des erreurs.]]
+
+-- 2021-04-20
+--L.none = "No Role"

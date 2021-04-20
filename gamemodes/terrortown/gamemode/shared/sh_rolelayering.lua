@@ -49,8 +49,8 @@ if SERVER then
 		if send then -- send data to the client
 			local layerTbl
 
-			-- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
-			if requestedRoleTbl == ROLE_ANY then
+			-- ROLE_NONE = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+			if requestedRoleTbl == ROLE_NONE then
 				layerTbl = roleselection.baseroleLayers
 			else
 				layerTbl = roleselection.subroleLayers[requestedRoleTbl]
@@ -64,8 +64,8 @@ if SERVER then
 
 			net.Send(ply)
 		else -- receive data from the client
-			-- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
-			if requestedRoleTbl == ROLE_ANY then
+			-- ROLE_NONE = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+			if requestedRoleTbl == ROLE_NONE then
 				roleselection.baseroleLayers = ReadLayersData()
 			else
 				roleselection.subroleLayers[requestedRoleTbl] = ReadLayersData()
@@ -542,7 +542,7 @@ local function CreateLayer(roleIndex, layers)
 	local baseroleList, subroleList = GetLayerableBaserolesWithSubroles()
 	local roleList
 
-	if roleIndex == ROLE_ANY then
+	if roleIndex == ROLE_NONE then
 		roleList = baseroleList
 	else
 		roleList = subroleList[roleIndex]
@@ -576,7 +576,7 @@ local function CreateLayer(roleIndex, layers)
 		leftRoles[#leftRoles + 1] = subrole
 	end
 
-	local title = (roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(roles.GetByIndex(roleIndex).name)) .. " layers"
+	local title = (roleIndex == ROLE_NONE and "Baserole" or LANG.TryTranslation(roles.GetByIndex(roleIndex).name)) .. " layers"
 
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(ScrW() - 50, ScrH() - 50)
@@ -586,8 +586,8 @@ local function CreateLayer(roleIndex, layers)
 	comboBox:Dock(TOP)
 	comboBox:SetValue(title)
 
-	if roleIndex ~= ROLE_ANY then
-		comboBox:AddChoice("Baserole layers", ROLE_ANY)
+	if roleIndex ~= ROLE_NONE then
+		comboBox:AddChoice("Baserole layers", ROLE_NONE)
 	end
 
 	for subrole in pairs(subroleList) do
@@ -602,7 +602,7 @@ local function CreateLayer(roleIndex, layers)
 
 		net.Start("TTT2SyncRolesLayer")
 		net.WriteBit(0) -- Request data = 0, Send data = 1
-		net.WriteUInt(data, ROLE_BITS) -- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+		net.WriteUInt(data, ROLE_BITS) -- ROLE_NONE = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
 		net.SendToServer()
 	end
 
@@ -666,7 +666,7 @@ concommand.Add("ttt2_edit_rolelayering", function()
 
 	net.Start("TTT2SyncRolesLayer")
 	net.WriteBit(0) -- Request data = 0, Send data = 1
-	net.WriteUInt(ROLE_ANY, ROLE_BITS) -- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+	net.WriteUInt(ROLE_NONE, ROLE_BITS) -- ROLE_NONE = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
 	net.SendToServer()
 end)
 

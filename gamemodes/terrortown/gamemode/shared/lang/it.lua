@@ -1293,3 +1293,6 @@ L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot l
 --This translation is {coverage}% complete with the english language taken as a default reference.
 
 --Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+
+-- 2021-04-20
+--L.none = "No Role"

@@ -1294,3 +1294,6 @@ L.help_lang_info = [[
 This translation is {coverage}% complete with the english language taken as a default reference.
 
 Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
+
+-- 2021-04-20
+L.none = "No Role"

@@ -173,7 +173,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		local rd = ply:GetSubRoleData()
 
 		if ply:IsActive()
-		and ply:IsSpecial()
+		and ply:HasRole()
 		and (not client:IsActive() or ply:IsInTeam(client) or ply:IsDetective())
 		and not rd.avoidTeamIcons
 		then

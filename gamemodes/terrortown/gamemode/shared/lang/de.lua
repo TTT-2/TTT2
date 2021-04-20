@@ -1293,3 +1293,6 @@ L.help_lang_info = [[
 Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
 
 Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
+
+-- 2021-04-20
+L.none = "Keine Rolle"
