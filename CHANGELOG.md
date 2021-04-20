@@ -22,9 +22,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Converted `roles` module into a library
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
-- Adjusted some functions to support simplified role and team checks (`Player:HasRole()` and `Player:HasTeam()` to check for a valid role / team)
-- Moved global `roleData` to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`)
 - Changed `bees` win to `nones` win
+
+### Breaking Changes
+- Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
+- Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.
 
 
 ## [v0.8.2b](https://github.com/TTT-2/TTT2/tree/v0.8.2b) (2021-03-25)
