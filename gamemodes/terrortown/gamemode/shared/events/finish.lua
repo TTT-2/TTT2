@@ -15,7 +15,7 @@ if CLIENT then
 
 		local time = math.Round(self.event.time / 1000, 0)
 		local minutes = math.floor(time / 60)
-		local seconds = math.floor(time % 60)
+		local seconds = string.format("%02d", math.floor(time % 60))
 
 		return {
 			{
