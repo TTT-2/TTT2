@@ -551,7 +551,7 @@ L.idle_popup_off = "Disable Spectator-only mode now"
 
 L.idle_warning = "Warning: you appear to be idle/AFK, and will be made to spectate unless you show activity!"
 
-L.spec_mode_warning = "You are in Spectator Mode and will not spawn when a round starts. To disable this mode, press F1, go to Settings and uncheck 'Spectate-only mode'."
+L.spec_mode_warning = "You are in Spectator Mode and will not spawn when a round starts. To disable this mode, press F1, go to 'Gameplay' and uncheck 'Spectate-only mode'."
 
 -- Tips panel
 L.tips_panel_title = "Tips"
