@@ -47,7 +47,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 
 					if p:GetSubRoleData().disableSync
 					and rs == ROUND_ACTIVE
-					-- and not p:RoleKnown() -- TODO this has to be reworked
+					-- TODO this has to be reworked
 					and not p:RoleKnown()
 					---
 					-- @realm server
@@ -182,7 +182,7 @@ function SendConfirmedTeam(team, ply_or_rf)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local _func = function(p)
-		-- return p:RoleKnown() -- TODO rework
+		return p:RoleKnown() -- TODO rework
 	end
 
 	SendTeamList(team, ply_or_rf, _func)
@@ -220,7 +220,7 @@ function SendFullStateUpdate()
 			local rd = v:GetSubRoleData()
 
 			if not roleData.unknownTeam and v:GetTeam() == team
-				-- or v:RoleKnown() -- TODO rework
+				or v:RoleKnown() -- TODO rework
 				or table.HasValue(rd.visibleForTeam, ply:GetTeam())
 				or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
 				or v:GetBaseRole() == ROLE_DETECTIVE
@@ -314,7 +314,7 @@ local function ttt_request_rolelist(ply)
 			local rd = v:GetSubRoleData()
 
 			if not ply:GetSubRoleData().unknownTeam and v:GetTeam() == team
-				-- or v:RoleKnown() -- TODO rework
+				or v:RoleKnown() -- TODO rework
 				or table.HasValue(rd.visibleForTeam, ply:GetTeam())
 				or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
 				or v:GetBaseRole() == ROLE_DETECTIVE

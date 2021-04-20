@@ -889,6 +889,38 @@ function plymeta:SetSubRoleModel(mdl)
 end
 
 ---
+-- Returns the @{Player} corpse state (found?)
+-- @return boolean
+-- @realm shared
+function plymeta:OnceFound()
+	return self:TTT2NETGetFloat("t_first_found", -1) >= 0
+end
+
+---
+-- Returns whether a @{ROLE} was found
+-- @return boolean
+-- @realm shared
+function plymeta:RoleKnown()
+	return self:TTT2NETGetBool("role_found", false)
+end
+
+---
+-- Returns whether a @{Player} was revived after being confirmed this round
+-- @return boolean
+-- @realm shared
+function plymeta:WasRevivedAndConfirmed()
+	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
+end
+
+---
+-- Returns whether a @{Player} was the first that was found this round
+-- @return boolean
+-- @realm shared
+function plymeta:GetFirstFound()
+	return math.Round(self:TTT2NETGetFloat("t_first_found", -1))
+end
+
+---
 -- Returns whether the player is ready. A player is ready when he is able to look
 -- around and move (first call of @{GM:SetupMove})
 -- @return boolean
