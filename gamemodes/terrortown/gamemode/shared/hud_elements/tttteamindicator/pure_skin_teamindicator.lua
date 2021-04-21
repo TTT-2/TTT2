@@ -82,12 +82,12 @@ if CLIENT then
 		local iconSize = h - self.pad * 2
 		local icon, c
 
-		if LocalPlayer():Alive() and LocalPlayer():IsTerror() then
+		if client:Alive() and client:IsTerror() then
 			icon = tm.iconMaterial
 			c = tm.color or COLOR_BLACK
 		else -- player is dead and spectator
 			icon = material_watching
-			c = COLOR_CUSTOMGRAY
+			c = COLOR_WARMGRAY
 		end
 
 		-- draw dark bottom overlay

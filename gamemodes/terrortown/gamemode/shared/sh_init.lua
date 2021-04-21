@@ -497,7 +497,7 @@ COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
-COLOR_CUSTOMGRAY = Color(91, 94, 99, 255)
+COLOR_WARMGRAY = Color(91, 94, 99, 255)
 
 include("includes/modules/pon.lua")
 
