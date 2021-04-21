@@ -36,7 +36,7 @@ L.round_traitors_more = "Traitre, voici vos alliés : {names}"
 L.win_time = "Temps écoulé. Les Traitres ont perdus."
 L.win_traitor = "Les Traitres ont gagnés !"
 L.win_innocent = "Les Traitres ont été vaincus !"
-L.win_bees = "Les Abeilles ont gagnés !"
+L.win_nones = "Les Abeilles ont gagnés !"
 L.win_showreport = "Regardons le rapport du round {num} secondes."
 
 L.limit_round = "Limite de round atteinte. {mapname} va bientôt charger."
@@ -657,7 +657,7 @@ L.report_save_result = "Le Journal a été sauvegardé dans :"
 
 -- Big title window
 L.hilite_win_traitors = "VICTOIRE DES TRAITRES !"
-L.hilite_win_bees = "VICTOIRE DES ABEILLES"
+L.hilite_win_none = "VICTOIRE DES ABEILLES"
 L.hilite_win_innocents = "VICTOIRE DES INNOCENTS !"
 
 L.hilite_players1 = "Vous étiez {numplayers}, dont {numtraitors} traitres"
@@ -1294,3 +1294,6 @@ L.help_lang_info = [[
 Cette traduction est complète à {coverage}%.
 
 Gardez à l'esprit que les traductions sont réalisées par la communauté. N'hésitez pas à y contribuer si il y a quelque chose qui manque ou si il y a des erreurs.]]
+
+-- 2021-04-20
+--L.none = "No Role"

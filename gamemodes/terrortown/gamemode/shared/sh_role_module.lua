@@ -1,6 +1,3 @@
--- include modules
-require("roles")
-
 -- load roles
 local rolesPre = "terrortown/entities/roles/"
 local rolesFiles = file.Find(rolesPre .. "*.lua", "LUA")

@@ -4,10 +4,30 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+
+### Added
+
+- Added `ROLE_NONE` (ID `3` by default)
+  - Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`
+  - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
+
 ### Fixed
 
 - Fixed IsOffScreen function being global for compatibility
 - Fixed a German translation string (by @FaRLeZz)
+- Fixed a data initialization bug that appeared on the first (initial) spawn
+
+### Changed
+- Microoptimization to improve code performance
+- Converted `roles` module into a library
+- Code cleanup and removed silly negations
+- Extended some ttt2net functions
+- Changed `bees` win to `nones` win
+
+### Breaking Changes
+- Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
+- Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.
+
 
 ## [v0.8.2b](https://github.com/TTT-2/TTT2/tree/v0.8.2b) (2021-03-25)
 

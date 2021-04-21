@@ -169,8 +169,8 @@ local function IdentifyCorpse(pCorpse)
 	CORPSE.SetFound(pCorpse, true)
 
 	local pPlayer = pCorpse:GetDTEntity(CORPSE.dti.ENT_PLAYER)
-	local nRole = ROLE_INNOCENT
-	local nTeam = TEAM_INNOCENT
+	local nRole = ROLE_NONE
+	local nTeam = TEAM_NONE
 
 	if IsValid(pPlayer) then
 		pPlayer:TTT2NETSetBool("body_found", true)

@@ -519,6 +519,7 @@ function GM:PlayerDisconnected(ply)
 			ply:Kill()
 		end
 
+		-- TODO ?
 		-- Prevent the disconnected player from being in the resends
 		ply:SetRole(ROLE_NONE)
 	end
@@ -618,7 +619,7 @@ local function CheckCreditAward(victim, attacker)
 	end
 
 	-- TRAITOR AWARD
-	if (attacker:HasTeam(TEAM_TRAITOR) or rd.traitorCreditAward) and not victim:IsInTeam(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
+	if (attacker:GetTeam() == TEAM_TRAITOR or rd.traitorCreditAward) and not victim:IsInTeam(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
 		local terror_alive = 0
 		local terror_dead = 0
 		local terror_total = 0
@@ -773,7 +774,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 		-- if traitor team kills another team
 		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsInTeam(ply) then
-			if attacker:HasTeam(TEAM_TRAITOR) then
+			if attacker:GetTeam() == TEAM_TRAITOR then
 				reward = math.ceil(ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0)
 			else
 				local vrd = ply:GetSubRoleData()
@@ -786,7 +787,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 				if b then -- special role killing award
 					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0)
 				else -- give traitor killing award if killing another role
-					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. TRAITOR.name .. "kill"):GetInt() or 0)
+					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. roles.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. roles.TRAITOR.name .. "kill"):GetInt() or 0)
 				end
 			end
 		end
@@ -922,10 +923,9 @@ function GM:SpectatorThink(ply)
 		local clicked = ply:KeyPressed(IN_ATTACK)
 
 		-- After first click, go into chase cam, then after another click, to into
-		-- roam. If no clicks made, go into chase after X secs, and roam after Y.
+		-- eye mode. If no clicks made, go into chase after X secs, and eye mode after Y.
 		-- Don't switch for a second in case the player was shooting when he died,
 		-- this would make him accidentally switch out of ragdoll cam.
-		-- TODO correct this description: Changed to force into eye mode
 
 		local m = ply:GetObserverMode()
 
@@ -965,7 +965,7 @@ function GM:SpectatorThink(ply)
 		ply:Spectate(OBS_MODE_ROAMING)
 	end
 
-	-- when speccing a player
+	-- when spectating a player
 	if ply:GetObserverMode() ~= OBS_MODE_ROAMING and not ply.propspec and not ply:GetRagdollSpec() then
 		local tgt = ply:GetObserverTarget()
 
@@ -1138,7 +1138,6 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 			local push = ply.was_pushed
 
 			if push and math.max(push.t or 0, push.hurt or 0) > CurTime() - 4 then
-				-- TODO: move push time checking stuff into fn?
 				att = push.att
 			end
 

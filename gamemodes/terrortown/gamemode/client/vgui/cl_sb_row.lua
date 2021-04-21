@@ -281,7 +281,7 @@ end
 function GM:TTTScoreboardRowColorForPlayer(ply)
 	local col = color_trans
 
-	if IsValid(ply) and ply.GetRoleColor and ply:GetRoleColor() and ply:GetSubRole() and ply:GetSubRole() ~= ROLE_INNOCENT then
+	if IsValid(ply) and ply.HasRole and ply:HasRole() then
 		col = table.Copy(ply:GetRoleColor())
 		col.a = 255 -- old value: 30
 	end
@@ -346,7 +346,6 @@ function PANEL:SetPlayer(ply)
 
 	if not self.info then
 		local g = ScoreGroup(ply)
-		-- TODO add teams
 
 		if g == GROUP_TERROR and ply ~= LocalPlayer() then
 			self.info = vgui.Create("TTTScorePlayerInfoTags", self)
@@ -425,7 +424,7 @@ function PANEL:UpdatePlayerData()
 		self.team:SetTooltip(LANG.GetTranslation(tm))
 	end
 
-	local showTeam = not ply:IsRole(ROLE_INNOCENT) or ply:RoleKnown()
+	local showTeam = ply:HasRole()
 
 	self.team2:SetVisible(showTeam)
 	self.team:SetVisible(showTeam)

@@ -148,13 +148,9 @@ end
 function GetShopFallback(subrole, tbl)
 	local rd = roles.GetByIndex(subrole)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-	local fb = roles.GetStored(shopFallback)
 
-	if fb then
-		fb = fb.index
-	else
-		fb = ROLE_INNOCENT
-	end
+	local fb = roles.GetStored(shopFallback)
+	fb = fb and fb.index or ROLE_NONE
 
 	if not fb or shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
 		return subrole, fb
@@ -197,7 +193,7 @@ function GetShopFallbackTable(subrole)
 
 	subrole, fallback = GetShopFallback(subrole)
 
-	if fallback == ROLE_INNOCENT then -- fallback is SHOP_UNSET
+	if fallback == ROLE_NONE then -- fallback is SHOP_UNSET
 		rd = roles.GetByIndex(subrole)
 
 		if rd.fallbackTable then
@@ -333,7 +329,7 @@ if SERVER then
 			local tmp = {}
 
 			for i = 1, #tbl do
-				tmp[#tmp + 1] = tbl[i].id
+				tmp[i] = tbl[i].id
 			end
 
 			if #tmp <= 0 then continue end
@@ -639,9 +635,8 @@ else -- CLIENT
 
 					for i = 1, #tmp do
 						local id = tmp[i]
-						local equip = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 
-						tmp2[#tmp2 + 1] = equip
+						tmp2[i] = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 					end
 
 					RANDOMSHOP[LocalPlayer()] = tmp2

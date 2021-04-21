@@ -78,9 +78,9 @@ TRAITOR_EQUIPMENT = {
 }
 
 -- role teams to have an identifier
-TEAM_NONE = "noteam"
 TEAM_INNOCENT = "innocents"
 TEAM_TRAITOR = "traitors"
+TEAM_NONE = "nones"
 
 -- never use this as a team, its just a const to check something
 TEAM_NOCHANGE = "nochange"
@@ -93,8 +93,7 @@ ROLE_BITS = 8
 ROLE_INNOCENT = 0
 ROLE_TRAITOR = 1
 ROLE_DETECTIVE = 2
-ROLE_ANY = 3
-ROLE_NONE = ROLE_INNOCENT
+ROLE_NONE = 3
 
 -- TEAM_ARRAY
 TEAMS = TEAMS or {
@@ -107,6 +106,11 @@ TEAMS = TEAMS or {
 		icon = "vgui/ttt/dynamic/roles/icon_traitor",
 		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_traitor"),
 		color = Color(209, 43, 39, 255)
+	},
+	[TEAM_NONE] = {
+		icon = "vgui/ttt/dynamic/roles/icon_no_team",
+		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_no_team"),
+		color = Color(91, 94, 99, 255)
 	}
 }
 
@@ -148,7 +152,7 @@ end
 ---
 -- Get the role table by the role id
 -- @param number index subrole id
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @see roles.GetByIndex
 -- @realm shared
 -- @deprecated
@@ -159,7 +163,7 @@ end
 ---
 -- Get the role table by the role name
 -- @param string name role name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @see roles.GetByName
 -- @realm shared
 -- @deprecated
@@ -170,7 +174,7 @@ end
 ---
 -- Get the role table by the role abbreviation
 -- @param string abbr role abbreviation
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @see roles.GetByAbbr
 -- @realm shared
 -- @deprecated
@@ -267,7 +271,7 @@ end
 ---
 -- Get the default role table of a specific role team
 -- @param string team role team name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 -- @see roles.GetDefaultTeamRole
 -- @deprecated
@@ -278,7 +282,7 @@ end
 ---
 -- Get the default role tables of a specific role team
 -- @param string team role team name
--- @return table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @return table returns the role tables. This will return the <code>NONE</code> role table as well as its subrole tables as fallback.
 -- @realm shared
 -- @see roles.GetDefaultTeamRoles
 -- @deprecated
@@ -493,6 +497,7 @@ COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
+COLOR_WARMGRAY = Color(91, 94, 99, 255)
 
 include("includes/modules/pon.lua")
 
@@ -519,6 +524,7 @@ include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/marks.lua")
 include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
+include("ttt2/libraries/roles.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")

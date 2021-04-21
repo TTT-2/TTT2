@@ -51,7 +51,7 @@ local function DB_GetStringTable(db_table)
 			local tab = {}
 
 			for i = 1, #res do
-				tab[#tab + 1] = res[i].name
+				tab[i] = res[i].name
 			end
 
 			return tab

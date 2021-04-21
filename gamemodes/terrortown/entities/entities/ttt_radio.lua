@@ -57,7 +57,7 @@ end
 -- @param Player activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
+	if IsValid(activator) and activator:IsPlayer() and activator:IsInTeam(self:GetOwner()) then
 		local prints = self.fingerprints or {}
 
 		-- picks up weapon, switches if possible and needed, returns weapon if successful
@@ -339,7 +339,7 @@ if SERVER then
 	}
 
 	local function RadioCmd(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActive() or not #args == 2 then return end
+		if not IsValid(ply) or not ply:IsActive() or #args ~= 2 then return end
 
 		local eidx = tonumber(args[1])
 		local snd = tostring(args[2])

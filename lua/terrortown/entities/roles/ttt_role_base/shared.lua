@@ -59,7 +59,7 @@ end
 -- @return[default=0] number
 -- @realm shared
 function ROLE:GetStartingCredits()
-	if self.abbr == TRAITOR.abbr then
+	if self.abbr == roles.TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()
 	end
 
@@ -73,7 +73,7 @@ end
 -- @return[default=false] boolean
 -- @realm shared
 function ROLE:IsShoppingRole()
-	if self.subrole == ROLE_INNOCENT then
+	if self.subrole == ROLE_NONE then
 		return false
 	end
 

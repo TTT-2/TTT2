@@ -36,7 +36,7 @@ L.round_traitors_more = "Eres el Traidor. Estos son tus aliados: {names}"
 L.win_time = "Te has quedado sin tiempo. Los traidores pierden."
 L.win_traitors = "¡Los Traidores han ganado!"
 L.win_innocents = "¡Los Inocentes han ganado!"
-L.win_bees = "¡Las Abejas han ganado! (Empate)"
+L.win_nones = "¡Las Abejas han ganado! (Empate)"
 L.win_showreport = "Veamos el reporte de la ronda por {num} segundos."
 
 L.limit_round = "Límite de rondas alcanzado. El siguiente mapa se cargará pronto."
@@ -656,7 +656,7 @@ L.report_save_result = "El registro de eventos fue guardado en:"
 
 -- Big title window
 L.hilite_win_traitors = "LOS TRAIDORES GANAN"
-L.hilite_win_bees = "LAS ABEJAS GANAN"
+L.hilite_win_none = "LAS ABEJAS GANAN"
 L.hilite_win_innocents = "LOS INOCENTES GANAN"
 
 L.hilite_players1 = "{numplayers} tomaron parte, {numtraitors} eran traidores"
@@ -1293,3 +1293,6 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 --This translation is {coverage}% complete with the english language taken as a default reference.
 
 --Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+
+-- 2021-04-20
+--L.none = "No Role"

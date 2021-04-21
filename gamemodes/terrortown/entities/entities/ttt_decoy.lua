@@ -50,7 +50,7 @@ end
 -- @param Player activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if not IsValid(activator) or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
+	if not IsValid(activator) or not activator:HasTeam() or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
 
 	-- picks up weapon, switches if possible and needed, returns weapon if successful
 	local wep = activator:SafePickupWeaponClass("weapon_ttt_decoy", true)

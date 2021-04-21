@@ -182,15 +182,8 @@ end
 local function GetGiveLoadoutWeapons(ply)
 	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
 	local weps = GetLoadoutWeapons(subrole)
-	local tmp = {}
 
-	if weps then
-		for i = 1, #weps do
-			tmp[#tmp + 1] = weps[i]
-		end
-	end
-
-	return tmp
+	return table.Copy(weps)
 end
 
 local function GetResetLoadoutWeapons(ply)

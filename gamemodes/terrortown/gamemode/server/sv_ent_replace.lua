@@ -7,7 +7,11 @@ ents.TTT = {}
 local math = math
 local pairs = pairs
 local util = util
+local string = string
+local file = file
 local IsValid = IsValid
+local Vector = Vector
+local Angle = Angle
 
 ---
 -- @realm server
@@ -382,12 +386,15 @@ end
 -- entities of the classes given the table
 local function PlaceWeaponsAtEnts(spots_classes)
 	local spots = {}
+	local count = 0
 
 	for i = 1, #spots_classes do
 		local entsTbl = ents.FindByClass(spots_classes[i])
 
 		for k = 1, #entsTbl do
-			spots[#spots + 1] = entsTbl[k]
+			count = count + 1
+
+			spots[count] = entsTbl[k]
 		end
 	end
 

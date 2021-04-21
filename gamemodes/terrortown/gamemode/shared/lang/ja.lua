@@ -36,7 +36,7 @@ L.round_traitors_more = "Traitorよ、仲間は{names}だ。"
 L.win_time = "時間切れ。Traitorの負けだ。"
 L.win_traitors = "Traitorの勝利！"
 L.win_innocents = "Innocentの勝利！"
-L.win_bees = "蜂の勝利！（つまり引き分け）"
+L.win_nones = "蜂の勝利！（つまり引き分け）"
 L.win_showreport = "さあ{num}秒の間ラウンドレポートを見てみよう。"
 
 L.limit_round = "ラウンドリミットに達した。もうすぐロードされるだろう。"
@@ -657,7 +657,7 @@ L.report_save_result = "イベントログのデータが保存された:"
 
 -- Big title window
 L.hilite_win_traitors = "Traitor陣営の勝利"
-L.hilite_win_bees = "蜂側の勝利"
+L.hilite_win_none = "蜂側の勝利"
 L.hilite_win_innocent = "Innocent陣営の勝利"
 
 L.hilite_players1 = "{numplayers}人のプレイヤーが参加して、彼らの内{numtraitors}人がTraitorだった。"
@@ -1294,3 +1294,6 @@ L.help_lang_info = [[
 この翻訳は、英語が既定の参照として使用された {coverage}% です。
 
 これらの翻訳はコミュニティによって作成されています。何かが欠けているか、間違っている場合は、自由に貢献してください。]]
+
+-- 2021-04-20
+--L.none = "No Role"

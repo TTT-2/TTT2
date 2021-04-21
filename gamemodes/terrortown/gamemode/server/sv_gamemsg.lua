@@ -130,7 +130,7 @@ end
 -- @realm server
 function GetTeamFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
-		return team ~= TEAM_NONE and not TEAMS[team].alone and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
+		return team ~= TEAM_NONE and not TEAMS[team].alone and p:GetTeam() == team and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
 	end)
 end
 
@@ -215,7 +215,7 @@ end
 -- @realm server
 function GetTeamChatFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
-		return team ~= TEAM_NONE and not TEAMS[team].alone and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
+		return team ~= TEAM_NONE and not TEAMS[team].alone and p:GetTeam() == team and not p:GetSubRoleData().unknownTeam and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
 	end)
 end
 

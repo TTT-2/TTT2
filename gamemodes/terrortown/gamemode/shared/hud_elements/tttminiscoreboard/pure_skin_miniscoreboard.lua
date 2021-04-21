@@ -124,7 +124,7 @@ local function GetMSBColorForPlayer(ply)
 	local color = color_blacktrans -- not yet confirmed
 
 	if ply:OnceFound() then
-		if ply:RoleKnown() then
+		if ply:HasRole() then
 			local roleColor = ply:GetRoleColor()
 
 			color = Color(roleColor.r, roleColor.g, roleColor.b, 155) -- role known

@@ -36,7 +36,7 @@ L.round_traitors_more = "Verräter, dies sind die Namen deiner Verbündeten: {na
 L.win_time = "Die Zeit ist abgelaufen. Die Verräter haben verloren."
 L.win_traitors = "Die Verräter haben gewonnen!"
 L.win_innocents = "Die Innos haben gewonnen!"
-L.win_bees = "Die Bienen haben gewonnen! (Es ist ein Unentschieden)"
+L.win_nones = "Die Bienen haben gewonnen! (Es ist ein Unentschieden)"
 L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Sekunde(n) an."
 
 L.limit_round = "Rundenlimit erreicht. Die nächste Map wird bald geladen."
@@ -656,7 +656,7 @@ L.report_save_result = "Der Ereignis-Log wurde gespeichert:"
 
 -- Big title window
 L.hilite_win_traitors = "DIE VERRÄTER GEWINNEN!"
-L.hilite_win_bees = "UNENTSCHIEDEN!"
+L.hilite_win_none = "UNENTSCHIEDEN!"
 L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWINNEN!"
 
 L.hilite_players1 = "{numplayers} Spieler nahmen teil, davon waren {numtraitors} Verräter."
@@ -1293,3 +1293,6 @@ L.help_lang_info = [[
 Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
 
 Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
+
+-- 2021-04-20
+L.none = "Keine Rolle"
