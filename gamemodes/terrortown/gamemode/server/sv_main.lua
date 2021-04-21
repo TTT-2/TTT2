@@ -1533,13 +1533,10 @@ function GM:TTTCheckForWin()
 		if b == 2 then break end
 	end
 
-	if b > 1 then -- if >= 2 teams alive: no one wins
-		return WIN_NONE -- early out
-	elseif b == 1 then -- just 1 team is alive
+	if b == 1 then -- just 1 team is alive
 		return alive[1]
-	else -- rare case: nobody is alive, e.g. because of an explosion
-		--return WIN_NONE -- none_win
-		return WIN_TRAITOR -- TODO WIN_NONE?
+	else -- if b >= 2 teams alive or rare case: nobody is alive, e.g. because of an explosion
+		return WIN_NONE -- none_win
 	end
 end
 
