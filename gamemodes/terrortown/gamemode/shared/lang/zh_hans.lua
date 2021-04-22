@@ -1240,7 +1240,8 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 -- 2021-04-13
 --L.title_score_info = "Round End Info"
 --L.title_score_events = "Event Timeline"
---L.title_score_scores = "Score Table"
+
+--L.Rundenendeninfo = "Opend round end screen"
 
 --L.label_show_events = "Show events from"
 --L.button_show_events_you = "You"

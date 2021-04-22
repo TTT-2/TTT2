@@ -406,8 +406,7 @@ function CLSCORE:Toggle()
 	end
 end
 
--- TODO: Remove before release
-concommand.Add("scp", function()
-	CLSCORE:ClearPanel()
+bind.Register("toggle_clscore", function()
 	CLSCORE:Toggle()
-end)
+end,
+nil, "header_bindings_ttt2", "label_bind_clscore")

@@ -1230,7 +1230,8 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 -- 2021-04-13
 --L.title_score_info = "Round End Info"
 --L.title_score_events = "Event Timeline"
---L.title_score_scores = "Score Table"
+
+--L.Rundenendeninfo = "Opend round end screen"
 
 --L.label_show_events = "Show events from"
 --L.button_show_events_you = "You"

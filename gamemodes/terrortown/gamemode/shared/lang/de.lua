@@ -1230,7 +1230,8 @@ Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehl
 -- 2021-04-13
 L.title_score_info = "Rundenendeninfo"
 L.title_score_events = "Ereignistimeline"
-L.title_score_scores = "Punktetabelle"
+
+L.label_bind_clscore = "Öffne Rundenendeninfo"
 
 L.label_show_events = "Zeige Ereignisse von"
 L.button_show_events_you = "Dir"
