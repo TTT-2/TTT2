@@ -126,7 +126,7 @@ end
 
 ---
 -- Returns the raw score texts as a table with a `name` and a `score`. The name
--- should be a translate.
+-- should be a translation identifier.
 -- @param string ply64 The player's steamID64
 -- @return table A table with the scoring text
 -- @realm shared
