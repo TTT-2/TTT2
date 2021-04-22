@@ -227,6 +227,9 @@ function CLSCORE:ShowPanel()
 	self.panel:ShowFrame()
 end
 
+---
+-- Hides a @{Panel} without closing it.
+-- @realm client
 function CLSCORE:HidePanel()
 	if not IsValid(self.panel) then return end
 

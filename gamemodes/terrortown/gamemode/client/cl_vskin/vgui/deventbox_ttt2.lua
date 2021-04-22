@@ -86,9 +86,10 @@ function PANEL:GetFont()
 end
 
 ---
--- calculates the required content height based on the width.
+-- Calculates the required content height based on the width.
 -- @param number width The provided width
 -- @return number The calculated height
+-- @realm client
 function PANEL:GetContentHeight(width)
 	local size = 50 -- title height
 

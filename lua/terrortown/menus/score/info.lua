@@ -3,8 +3,6 @@
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 
-local materialNoTeam = Material("vgui/ttt/dynamic/roles/icon_no_team")
-
 local function MakePlayerRoleTooltip(parent, width, ply)
 	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64]
 	local height = 25
