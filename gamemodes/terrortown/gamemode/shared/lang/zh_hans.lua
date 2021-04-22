@@ -18,7 +18,7 @@ L.last_words = "遗言"
 L.terrorists = "恐怖分子"
 L.spectators = "观察者"
 
-L.noteam = "无阵营"
+L.nones = "无阵营"
 L.innocents = "无辜阵营"
 L.traitors = "叛徒阵营"
 

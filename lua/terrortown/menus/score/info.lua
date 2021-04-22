@@ -133,14 +133,6 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			local plys = teamPlayersList[k]
 			local teamData = TEAMS[teamNamesList[k]]
 
-			-- support roles without a team
-			if teamNamesList[k] == TEAM_NONE or not teamData or teamData.alone then
-				teamData = {
-					color = Color(91, 94, 99, 255),
-					iconMaterial = materialNoTeam
-				}
-			end
-
 			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
 			teamBox:SetDynamicColor(parent, 15)
 			teamBox:SetSize(widthColumn, sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall)

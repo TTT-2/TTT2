@@ -18,7 +18,7 @@ L.last_words = "遺言"
 L.terrorists = "テロリスト"
 L.spectators = "観戦者"
 
-L.noteam = "無所属"
+L.nones = "無所属"
 L.innocents = "Innocent陣営"
 L.traitors = "Traitor陣営"
 

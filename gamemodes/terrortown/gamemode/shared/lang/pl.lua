@@ -18,7 +18,7 @@ L.last_words = "Ostatnie słowa"
 L.terrorists = "Terroryści"
 L.spectators = "Obserwatorzy"
 
-L.noteam = "Brak Teamu"
+L.nones = "Brak Teamu"
 L.innocents = "Team Niewinni"
 L.traitors = "Team Zdrajcy"
 

@@ -18,7 +18,7 @@ L.last_words = "Последние слова"
 L.terrorists = "Террористы"
 L.spectators = "Наблюдатели"
 
-L.noteam = "Нет команды"
+L.nones = "Нет команды"
 L.innocents = "Команда невиновых"
 L.traitors = "Команда предателей"
 

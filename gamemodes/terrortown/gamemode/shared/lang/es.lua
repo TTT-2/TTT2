@@ -18,7 +18,7 @@ L.last_words = "Últimas Palabras"
 L.terrorists = "Terroristas"
 L.spectators = "Espectadores"
 
-L.noteam = "Sin Equipo"
+L.nones = "Sin Equipo"
 L.innocents = "Equipo Inocentes"
 L.traitors = "Equipo Traidores"
 
