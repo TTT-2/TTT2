@@ -206,7 +206,7 @@ end
 if CLIENT then
 	---
 	-- Generates the textparameters needed for the event timeline
-	-- @note This function should be overwritten but not not called.
+	-- @note This function should be overwritten but not be called.
 	-- @return table A table of identifier-param pairs
 	-- @realm client
 	function EVENT:GetText()
