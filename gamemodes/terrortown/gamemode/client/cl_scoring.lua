@@ -89,6 +89,10 @@ table.SortByMember(subMenusIndexed, "priority")
 CLSCORE = CLSCORE or {}
 CLSCORE.sizes = {}
 
+---
+-- Precalculates the sizes needed for the UI.
+-- @internal
+-- @realm client
 function CLSCORE:CalculateSizes()
 	self.sizes.width = 1200
 	self.sizes.height = 700
@@ -116,6 +120,10 @@ function CLSCORE:CalculateSizes()
 	self.sizes.heightMenuButton = 50
 end
 
+---
+-- Creates the score @{Panel} for the local @{Player}.
+-- @internal
+-- @realm client
 function CLSCORE:CreatePanel()
 	self:CalculateSizes()
 
@@ -208,8 +216,9 @@ function CLSCORE:CreatePanel()
 end
 
 ---
--- Displays the score @{Panel} for the local @{Player}
+-- Displays the score @{Panel} for the local @{Player}.
 -- @realm client
+-- @internal
 function CLSCORE:ShowPanel()
 	if not IsValid(self.panel) then
 		self.panel = CLSCORE:CreatePanel()
@@ -224,6 +233,10 @@ function CLSCORE:HidePanel()
 	self.panel:HideFrame()
 end
 
+---
+-- Checks if there is an existing @{Panel} hidden
+-- @return boolean Returns true if a @{Panel} is hidden
+-- @realm client
 function CLSCORE:IsPanelHidden()
 	if IsValid(self.panel) then
 		return self.panel:IsFrameHidden()
@@ -249,14 +262,6 @@ end
 -- @internal
 function CLSCORE:SaveLog()
 
-end
-
----
--- Resets the stored data of the current score @{Panel}, currently done in @{GM:TTTBeginRound}
--- @realm client
--- @internal
-function CLSCORE:Reset()
-	self:ClearPanel()
 end
 
 ---
@@ -314,12 +319,11 @@ function CLSCORE:Init()
 end
 
 ---
--- Resets the old score @{Panel}, initializes a new one and displays it to the local @{Player}
--- @param table eventTable A list of eventTable that should be reported
+-- ClearPanels the old score @{Panel}, initializes a new one and displays it to the local @{Player}
 -- @realm client
 -- @internal
 function CLSCORE:ReportEvents()
-	self:Reset()
+	self:ClearPanel()
 
 	self:Init()
 	self:ShowPanel()
@@ -367,31 +371,6 @@ end
 
 -- TODO: Remove before release
 concommand.Add("scp", function()
-	CLSCORE:Reset()
+	CLSCORE:ClearPanel()
 	CLSCORE:Toggle()
 end)
-
--- compatibbility for now
-CLSCORE.EventDisplay = {}
-
----
--- Tell CLSCORE how to display an event. See @{file/cl_scoring_events.lua} for examples.
--- @param number event_id
--- @param table event_fns The event table @{function}s. Pass an empty table to keep an event from showing up.
--- @realm client
--- @module CLSCORE
-function CLSCORE.DeclareEventDisplay(event_id, event_fns)
-	if not event_fns or not istable(event_fns) then
-		error(string.format("Event %d display: no display functions found.", event_id), 2)
-	end
-
-	if not event_fns.text then
-		error(string.format("Event %d display: no text display function found.", event_id), 2)
-	end
-
-	if not event_fns.icon then
-		error(string.format("Event %d display: no icon and tooltip display function found.", event_id), 2)
-	end
-
-	CLSCORE.EventDisplay[event_id] = event_fns
-end

@@ -67,6 +67,11 @@ function eventdata.GetPlayerEndRoles()
 	end
 end
 
+---
+-- Returns a table with the steamID64 of the player in the first layer that has
+-- all role changes per player included
+-- @return table A table with all rolechanges per player, each entry contains the new role and the new team
+-- @realm shared
 function eventdata.GetPlayerRoles()
 	local eventList = events.list
 	local plyRoles = {}
@@ -104,6 +109,10 @@ function eventdata.GetPlayerRoles()
 	return plyRoles
 end
 
+---
+-- Lists all events that grant scores to players. Sorts them by steamID64s.
+-- @return table Returns a table of all scored events per player
+-- @realm shared
 function eventdata.GetPlayerScores()
 	local eventList = events.list
 	local plyScores = {}

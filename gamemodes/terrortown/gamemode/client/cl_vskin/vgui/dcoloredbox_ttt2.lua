@@ -20,6 +20,7 @@ end
 
 ---
 -- @param Panel parent
+-- @param number shift
 -- @realm client
 function PANEL:SetDynamicColor(parent, shift)
 	self.contents.parent = parent

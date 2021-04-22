@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DColoredBoxTTT2
+-- @section DEventBoxTTT2
 
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
@@ -74,17 +74,21 @@ end
 ---
 -- @param string font
 -- @realm client
-function PANEL:SetTitleFont(font)
+function PANEL:SetFont(font)
 	self.contents.font = font or ""
 end
 
 ---
 -- @return string
 -- @realm client
-function PANEL:GetTitleFont()
+function PANEL:GetFont()
 	return self.contents.font
 end
 
+---
+-- calculates the required content height based on the width.
+-- @param number width The provided width
+-- @return number The calculated height
 function PANEL:GetContentHeight(width)
 	local size = 50 -- title height
 

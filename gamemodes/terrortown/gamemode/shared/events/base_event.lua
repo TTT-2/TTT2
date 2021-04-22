@@ -37,7 +37,8 @@ end
 
 ---
 -- Sets the affected players data table to the event.
--- @param table event The affected players data table that should be added
+-- @param table plys64 The affected players steamid64s table that should be added
+-- @param table plys The affected players nick name table that should be added
 -- @internal
 -- @realm shared
 function EVENT:SetPlayersTable(plys64, plys)
@@ -122,6 +123,12 @@ function EVENT:GetSummedPlayerScore(ply64)
 	return scoreSum
 end
 
+---
+-- Returns the raw score texts as a table with a `name` and a `score`. The name
+-- should be a translate.
+-- @param string ply64 The player's steamID64
+-- @return table A table with the scoring text
+-- @realm shared
 function EVENT:GetRawScoreText(ply64)
 	local rawTable = {}
 
@@ -153,6 +160,11 @@ function EVENT:GetAffectedPlayers()
 	return self.plys
 end
 
+---
+-- Returns the player's nick name based on their steamID64.
+-- @param string ply64 The player's steamID64
+-- @return string The player's nick name
+-- @realm shared
 function EVENT:GetNameFrom64(ply64)
 	local i = 1
 
