@@ -184,6 +184,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyNameBox:SetTooltipFixedSize(widthName, heightRolesTooltip)
 				plyRolesTooltipPanel:SetSize(widthName, heightRolesTooltip)
 
+				-- keeping thins in here so karma can be easily added to the menu
 				--[[local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
 				plyKarmaBox:SetColor(COLOR_BLUE)
