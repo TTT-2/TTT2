@@ -296,7 +296,7 @@ local function CreateEquipmentList(t)
 
 	-- make sure that the players old role is not used anymore
 	if t.notalive then
-		currole = t.role or ROLE_INNOCENT
+		currole = t.role or ROLE_NONE
 	end
 
 	-- Determine if we already have equipment
@@ -901,7 +901,7 @@ local function ReceiveEquipment()
 	local toRem = {}
 
 	for i = 1, eqAmount do
-		tmp[#tmp + 1] = net.ReadString()
+		tmp[i] = net.ReadString()
 	end
 
 	local equipItems = ply:GetEquipmentItems()

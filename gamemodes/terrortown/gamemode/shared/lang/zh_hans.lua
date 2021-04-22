@@ -36,7 +36,7 @@ L.round_traitors_more = "叛徒，你的队友是： {names} 。"
 L.win_time = "时间用尽，叛徒失败了。"
 L.win_traitor = "叛徒取得了胜利！"
 L.win_innocent = "叛徒们被击败了！"
-L.win_bees = "蜜蜂们胜利了！（平局）"
+L.win_nones = "蜜蜂们胜利了！（平局）"
 L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
 L.limit_round = "已达游戏回合上限，即将载入地图 {mapname}"
@@ -656,7 +656,7 @@ L.report_save_result = "事件记录已存在："
 
 -- Big title window
 L.hilite_win_traitors = "叛徒胜利"
-L.hilite_win_bees = "蜜蜂胜利"
+L.hilite_win_none = "蜜蜂胜利"
 L.hilite_win_innocent = "无辜者胜利"
 
 L.hilite_players1 = " {numplayers} 名玩家参与游戏，其中 {numtraitors} 人是叛徒"
@@ -1343,3 +1343,6 @@ L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({a
 
 L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 杀死。"
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 杀死。"
+
+-- 2021-04-20
+--L.none = "No Role"

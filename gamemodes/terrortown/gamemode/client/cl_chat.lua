@@ -92,7 +92,7 @@ end
 -- @param string text
 -- @realm client
 function AddDetectiveText(ply, text)
-	chat.AddText(DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
+	chat.AddText(roles.DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
 end
 
 ---

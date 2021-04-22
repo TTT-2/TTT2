@@ -596,7 +596,7 @@ local function TTTRagdollSearch()
 	for i = 1, eqAmount do
 		local eqStr = net.ReadString()
 
-		eq[#eq + 1] = eqStr
+		eq[i] = eqStr
 		search["eq_" .. eqStr] = true
 	end
 

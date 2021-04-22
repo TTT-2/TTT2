@@ -143,7 +143,7 @@ function plymeta:SetDefaultCredits()
 	local rd = self:GetSubRoleData()
 	local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
 
-	if not self:HasTeam(TEAM_TRAITOR) then
+	if self:GetTeam() ~= TEAM_TRAITOR then
 		self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
 
 		return
@@ -371,7 +371,7 @@ end
 -- Sets all flags (force_spec, etc) to their default
 -- @realm server
 function plymeta:ResetStatus()
-	self:SetRole(ROLE_INNOCENT) -- this will update the team automatically
+	self:SetRole(ROLE_NONE) -- this will update the team automatically
 	self:SetRagdollSpec(false)
 	self:SetForceSpec(false)
 	self:ResetRoundFlags()
@@ -658,7 +658,6 @@ function plymeta:InitialSpawn()
 	self:SetWalkSpeed(220)
 	self:SetMaxSpeed(220)
 
-	-- Always spawn innocent initially, traitor will be selected later
 	self:ResetStatus()
 
 	-- Always reset sprint

@@ -154,15 +154,7 @@ if CLIENT then
 		draw.RoundedBox(8, x, y, width, height, self.bg_colors.background_main)
 
 		-- main border, role based
-		local col = INNOCENT.color
-
-		if GAMEMODE.round_state ~= ROUND_ACTIVE then
-			col = self.bg_colors.noround
-		elseif client:IsSpecial() then
-			col = client:GetRoleColor()
-		end
-
-		draw.RoundedBox(8, x, y, tw, th, col)
+		draw.RoundedBox(8, x, y, tw, th, GAMEMODE.round_state ~= ROUND_ACTIVE and self.bg_colors.noround or client:GetRoleColor())
 	end
 
 	---

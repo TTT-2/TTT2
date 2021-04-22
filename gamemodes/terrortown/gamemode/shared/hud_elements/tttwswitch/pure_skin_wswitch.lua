@@ -66,7 +66,7 @@ if CLIENT then
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, active)
 		local ply = LocalPlayer()
-		local c = (active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
+		local c = active and ply:GetRoleColor() or ply:GetRoleDkColor()
 
 		-- draw bg and shadow
 		self.drawer:DrawBg(x, y, w, h, self.basecolor)

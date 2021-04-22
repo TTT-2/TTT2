@@ -36,7 +36,7 @@ L.round_traitors_more = "Traitre, voici vos alliés : {names}"
 L.win_time = "Temps écoulé. Les Traitres ont perdus."
 L.win_traitor = "Les Traitres ont gagnés !"
 L.win_innocent = "Les Traitres ont été vaincus !"
-L.win_bees = "Les Abeilles ont gagnés !"
+L.win_nones = "Les Abeilles ont gagnés !"
 L.win_showreport = "Regardons le rapport du round {num} secondes."
 
 L.limit_round = "Limite de round atteinte. {mapname} va bientôt charger."
@@ -657,7 +657,7 @@ L.report_save_result = "Le Journal a été sauvegardé dans :"
 
 -- Big title window
 L.hilite_win_traitors = "VICTOIRE DES TRAITRES !"
-L.hilite_win_bees = "VICTOIRE DES ABEILLES"
+L.hilite_win_none = "VICTOIRE DES ABEILLES"
 L.hilite_win_innocents = "VICTOIRE DES INNOCENTS !"
 
 L.hilite_players1 = "Vous étiez {numplayers}, dont {numtraitors} traitres"
@@ -1344,3 +1344,6 @@ L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) s'est fait broyé 
 
 L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker} ({arole} / {ateam})."
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker} ({arole} / {ateam}) avec {trap}."
+
+-- 2021-04-20
+--L.none = "No Role"

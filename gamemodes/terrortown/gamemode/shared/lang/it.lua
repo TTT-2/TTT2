@@ -36,7 +36,7 @@ L.round_traitors_more = "Traditore, questi sono i tuoi alleati: {names}"
 L.win_time = "Il tempo è finito. I Traditori hanno perso."
 L.win_traitors = "I Traditori hanno vinto!"
 L.win_innocents = "Gli Innocenti hanno vinto!"
-L.win_bees = "Pareggio!"
+L.win_nones = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
 L.limit_round = "Raggiunto il limite del tempo del round. la prossima mappa caricherà presto."
@@ -656,7 +656,7 @@ L.report_save_result = "Il Log degli eventi è stato salvato in:"
 
 -- Big title window
 L.hilite_win_traitors = "I TRADITORI HANNO VINTO"
-L.hilite_win_bees = "PAREGGIO"
+L.hilite_win_none = "PAREGGIO"
 L.hilite_win_innocents = "GLI INNOCENTI HANNO VINTO"
 
 L.hilite_players1 = "{numplayers} hanno partecipato, {numtraitors} erano traditori"
@@ -1343,3 +1343,6 @@ L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) è stato schiaccia
 
 L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) è stata ucciso da {attacker} ({arole} / {ateam})."
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da {attacker} ({arole} / {ateam}) con la trappola {trap}."
+
+-- 2021-04-20
+--L.none = "No Role"

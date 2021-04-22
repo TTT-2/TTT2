@@ -36,7 +36,7 @@ L.round_traitors_more = "Verräter, dies sind die Namen deiner Verbündeten: {na
 L.win_time = "Die Zeit ist abgelaufen. Die Verräter haben verloren."
 L.win_traitors = "Die Verräter haben gewonnen!"
 L.win_innocents = "Die Innos haben gewonnen!"
-L.win_bees = "Die Bienen haben gewonnen! (Es ist ein Unentschieden)"
+L.win_nones = "Die Bienen haben gewonnen! (Es ist ein Unentschieden)"
 L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Sekunde(n) an."
 
 L.limit_round = "Rundenlimit erreicht. Die nächste Map wird bald geladen."
@@ -1333,3 +1333,6 @@ L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) wurde durch {trap}
 
 L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) getötet."
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) durch {trap} getötet."
+
+-- 2021-04-20
+L.none = "Keine Rolle"

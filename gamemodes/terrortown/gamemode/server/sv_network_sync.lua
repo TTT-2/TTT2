@@ -155,9 +155,9 @@ end
 -- This will set the metadata for a specific path on a player and prepend needed keywords.
 -- For more information look at {@ttt2net.SetMetaData}.
 --
--- @param any path The path this meta data is associated with (already includes the needed keywords)
--- @param nil|table metadata The metadata table
--- @param Player ply The player
+-- @param any|table path The path this meta data is associated with (already includes the needed keywords)
+-- @param table|nil metadata The metadata table
+-- @param Player|Entity ply The player/entity to set the value on
 -- @realm server
 function ttt2net.SetMetaDataOnPlayer(path, metadata, ply)
 	local tmpPath
@@ -328,7 +328,7 @@ end
 -- it will do the same as {@ttt2net.RemoveOverrides}.
 --
 -- @param table path The path to clear out all overrides on.
--- @param Player ply The player
+-- @param Player|Entity ply The player/entity object that will be cleared
 -- @realm server
 function ttt2net.RemoveOverridesOnPlayer(path, ply)
 	local tmpPath
@@ -869,58 +869,63 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 ---
 -- Sets a bool value at the given path on the player.
 --
--- @param any path The path to set the value for
--- @param[opt] boolean value The value to set
+-- @param any|table path The path to set the value for
+-- @param[opt] bool value The value to set
+-- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
-function plymeta:TTT2NETSetBool(path, value)
-	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self)
+function plymeta:TTT2NETSetBool(path, value, client)
+	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self, client)
 end
 
 ---
--- Sets an int value at the given path on the player.
+-- Sets a number value at the given path on the player.
 --
--- @param any path The path to set the value for
+-- @param any|table path The path to set the value for
 -- @param[opt] number value The value to set
--- @param[optchain] number bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @param[optchain] number bits The bits that this number needs to be stored (optional, otherwise a default of 32 is used)
+-- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
-function plymeta:TTT2NETSetInt(path, value, bits)
+function plymeta:TTT2NETSetInt(path, value, bits, client)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
 		bits = bits
-	}, value, self)
+	}, value, self, client)
 end
 
 ---
--- Sets an unsigned int value at the given path on the player.
+-- Sets an unsigned number value at the given path on the player.
 --
--- @param any path The path to set the value for
--- @param[opt] number value The value (unsigned int) to set
--- @param[optchain] number bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @param any|table path The path to set the value for
+-- @param[opt] number value The unsigned number value to set
+-- @param[optchain] number bits The bits that this number needs to be stored (optional, otherwise a default of 32 is used)
+-- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
-function plymeta:TTT2NETSetUInt(path, value, bits)
+function plymeta:TTT2NETSetUInt(path, value, bits, client)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
 		unsigned = true,
 		bits = bits
-	}, value, self)
+	}, value, self, client)
 end
 
 ---
 -- Sets a float value at the given path on the player.
 --
--- @param any path The path to set the value for
+-- @param any|table path The path to set the value for
 -- @param[opt] float value The value to set
+-- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
-function plymeta:TTT2NETSetFloat(path, value)
-	ttt2net.SetOnPlayer(path, { type = "float" }, value, self)
+function plymeta:TTT2NETSetFloat(path, value, client)
+	ttt2net.SetOnPlayer(path, { type = "float" }, value, self, client)
 end
 
 ---
 -- Sets a string value at the given path on the player.
 --
--- @param any path The path to set the value for
+-- @param any|table path The path to set the value for
 -- @param[opt] string value The value to set
+-- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
-function plymeta:TTT2NETSetString(path, value)
-	ttt2net.SetOnPlayer(path, { type = "string" }, value, self)
+function plymeta:TTT2NETSetString(path, value, client)
+	ttt2net.SetOnPlayer(path, { type = "string" }, value, self, client)
 end

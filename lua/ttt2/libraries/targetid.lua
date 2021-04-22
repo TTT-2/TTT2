@@ -328,7 +328,7 @@ function targetid.HUDDrawTargetIDPlayers(tData)
 	local rstate = GetRoundState()
 	local target_role
 
-	if ent.GetSubRole and rstate == ROUND_ACTIVE and ent:IsSpecial() then
+	if rstate == ROUND_ACTIVE and ent.HasRole and ent:HasRole() then
 		target_role = ent:GetSubRoleData()
 	end
 
@@ -460,7 +460,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
-			DETECTIVE.ltcolor,
+			roles.DETECTIVE.ltcolor,
 			{materialDetective}
 		)
 	end

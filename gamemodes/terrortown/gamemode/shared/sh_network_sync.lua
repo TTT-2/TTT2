@@ -33,7 +33,7 @@ function plymeta:TTT2NETGetBool(path, fallback)
 end
 
 ---
--- Returns the current int value for a given path on the player.
+-- Returns the current number value for a given path on the player.
 --
 -- @param any path The path to return the value for
 -- @param number fallback The fallback value to return instead of nil
@@ -44,7 +44,7 @@ function plymeta:TTT2NETGetInt(path, fallback)
 end
 
 ---
--- Returns the current unsigned int value for a given path on the player.
+-- Returns the current unsigned number value for a given path on the player.
 --
 -- @param any path The path to return the value for
 -- @param number fallback The fallback value to return instead of nil

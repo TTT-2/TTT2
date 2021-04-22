@@ -7,9 +7,9 @@ ENT.Base = "base_point"
 
 local IsValid = IsValid
 
-ROLE_ANY = ROLE_ANY or 3
+ROLE_NONE = ROLE_NONE or 3
 
-ENT.Role = ROLE_ANY
+ENT.Role = ROLE_NONE
 
 ---
 -- @param string key
@@ -29,7 +29,7 @@ function ENT:KeyValue(key, value)
 		if not self.Role then
 			ErrorNoHalt("ttt_logic_role: bad value for Role key, not a number\n")
 
-			self.Role = ROLE_ANY
+			self.Role = ROLE_NONE
 		end
 	end
 end
@@ -44,7 +44,7 @@ function ENT:AcceptInput(name, activator)
 		if IsValid(activator) and activator:IsPlayer() then
 			local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or activator:GetBaseRole()
 
-			if self.Role == ROLE_ANY or self.Role == activator_role then
+			if self.Role == ROLE_NONE or self.Role == activator_role then
 				Dev(2, activator, "passed logic_role test of", self:GetName())
 
 				self:TriggerOutput("OnPass", activator)

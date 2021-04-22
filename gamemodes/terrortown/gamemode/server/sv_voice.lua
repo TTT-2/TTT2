@@ -211,7 +211,7 @@ end
 net.Receive("TTT2MuteTeam", NetMuteTeam)
 
 local function ConCommandMuteTeam(ply, cmd, args)
-	if not #args == 1 and tonumber(args[1]) then return end
+	if #args ~= 1 and tonumber(args[1]) then return end
 
 	local state = tonumber(args[1])
 

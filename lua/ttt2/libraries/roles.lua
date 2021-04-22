@@ -4,16 +4,17 @@
 -- @author saibotk
 -- @module roles
 
-module("roles", package.seeall)
-
 local baseclass = baseclass
 local pairs = pairs
+local CreateConVar = CreateConVar
 
 if SERVER then
 	AddCSLuaFile()
 end
 
 local RoleList = RoleList or {}
+
+roles = roles or {}
 
 ---
 -- Copies any missing data from base table to the target table
@@ -39,8 +40,8 @@ end
 -- @param table base base (fallback) table
 -- @return boolean returns whether name is based on base
 -- @realm shared
-function IsBasedOn(name, base)
-	local t = GetStored(name)
+function roles.IsBasedOn(name, base)
+	local t = roles.GetStored(name)
 
 	if not t then
 		return false
@@ -54,7 +55,7 @@ function IsBasedOn(name, base)
 		return true
 	end
 
-	return IsBasedOn(t.Base, base)
+	return roles.IsBasedOn(t.Base, base)
 end
 
 ---
@@ -66,6 +67,10 @@ local function SetupGlobals(roleData)
 	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 
 	local upStr = string.upper(roleData.name)
+
+	if _G[upStr] then
+		print("[TTT2][ROLE] Overwriting already existing global '" .. upStr .. "' ...")
+	end
 
 	_G["ROLE_" .. upStr] = roleData.index
 	_G[upStr] = roleData
@@ -179,7 +184,7 @@ end
 -- @param table t role table
 -- @param string name role name
 -- @realm shared
-function Register(t, name)
+function roles.Register(t, name)
 	name = string.lower(name)
 
 	local old = RoleList[name]
@@ -191,7 +196,7 @@ function Register(t, name)
 
 	if not t.isAbstract then
 		-- set id
-		t.index = t.index or GenerateNewRoleID()
+		t.index = t.index or roles.GenerateNewRoleID()
 
 		SetupGlobals(t)
 
@@ -199,13 +204,21 @@ function Register(t, name)
 	end
 
 	RoleList[name] = t
+
+	local upStr = string.upper(name)
+
+	if roles[upStr] then
+		print("[TTT2][ROLE] Role '" .. name .. "' interferes with the 'roles' table (function or role with same name is already registered)!")
+	end
+
+	roles[upStr] = t
 end
 
 ---
 -- All scripts have been loaded...
 -- @local
 -- @realm shared
-function OnLoaded()
+function roles.OnLoaded()
 
 	--
 	-- Once all the scripts are loaded we can set up the baseclass
@@ -213,7 +226,7 @@ function OnLoaded()
 	-- could cause some entities to load before their bases!
 	--
 	for k, v in pairs(RoleList) do
-		Get(k, v)
+		roles.Get(k, v)
 
 		baseclass.Set(k, v)
 
@@ -243,20 +256,16 @@ end
 -- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new role table
 -- @realm shared
-function Get(name, retTbl)
-	local Stored = GetStored(name)
-	if not Stored then return end
+function roles.Get(name, retTbl)
+	local stored = roles.GetStored(name)
+	if not stored then return end
 
 	-- Create/copy a new table
 	local retval = retTbl or {}
 
-	if retval ~= Stored then
-		for k, v in pairs(Stored) do
-			if istable(v) then
-				retval[k] = table.Copy(v)
-			else
-				retval[k] = v
-			end
+	if retval ~= stored then
+		for k, v in pairs(stored) do
+			retval[k] = istable(v) and table.Copy(v) or v
 		end
 	end
 
@@ -265,7 +274,7 @@ function Get(name, retTbl)
 	-- If we're not derived from ourselves (a base role)
 	-- then derive from our 'Base' role.
 	if retval.Base ~= name then
-		local base = Get(retval.Base)
+		local base = roles.Get(retval.Base)
 
 		if not base then
 			Msg("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
@@ -282,7 +291,7 @@ end
 -- @param string name role name
 -- @return table returns the real role table
 -- @realm shared
-function GetStored(name)
+function roles.GetStored(name)
 	return RoleList[name]
 end
 
@@ -290,12 +299,15 @@ end
 -- Returns a list of all the registered roles
 -- @return table all registered roles
 -- @realm shared
-function GetList()
+function roles.GetList()
 	local result = {}
+
+	local i = 0
 
 	for _, v in pairs(RoleList) do
 		if not v.isAbstract then
-			result[#result + 1] = v
+			i = i + 1
+			result[i] = v
 		end
 	end
 
@@ -304,57 +316,66 @@ end
 
 ---
 -- Generates a new subrole id.
--- starts with <code>1</code> to prevent incompatibilities with <code>ROLE_ANY</code> => new roles will start at the id: <code>7</code>
+-- New roles will start at the id: <code>7</code>
 -- <ul>
 -- <li><code>0</code> = <code>ROLE_INNOCENT</code></li>
 -- <li><code>1</code> = <code>ROLE_TRAITOR</code></li>
 -- <li><code>2</code> = <code>ROLE_DETECTIVE</code></li>
--- <li><code>3</code> = <code>ROLE_ANY</code></li>
+-- <li><code>3</code> = <code>ROLE_NONE</code></li>
 -- <li><code>4</code>, <code>5</code>, <code>6</code> = <code>nop</code></li>
 -- </ul>
 -- @return number new generated subrole id
 -- @realm shared
-function GenerateNewRoleID()
-	return 4 + #GetList()
+function roles.GenerateNewRoleID()
+	local id = 3 -- 3 nops (4, 5, 6)
+	local reservedList = {"INNOCENT", "TRAITOR", "DETECTIVE", "NONE"}
+
+	for i = 1, #reservedList do
+		if not roles[reservedList[i]] then
+			id = id + 1
+		end
+	end
+
+	return #roles.GetList() + id
 end
 
 ---
 -- Get the role table by the role id
 -- @param number index subrole id
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
-function GetByIndex(index)
+function roles.GetByIndex(index)
 	for _, v in pairs(RoleList) do
 		if not v.isAbstract and v.index == index then
 			return v
 		end
 	end
 
-	return INNOCENT
+	return roles.NONE
 end
 
 ---
 -- Get the role table by the role name
 -- @param string name role name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
-function GetByName(name)
-	return GetStored(name) or INNOCENT
+function roles.GetByName(name)
+	return roles.GetStored(name) or roles.NONE
 end
 
 ---
 -- Get the role table by the role abbreviation
 -- @param string abbr role abbreviation
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
-function GetByAbbr(abbr)
+function roles.GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
 		if not v.isAbstract and v.abbr == abbr then
 			return v
 		end
 	end
 
-	return INNOCENT
+	return roles.NONE
 end
 
 ---
@@ -363,7 +384,7 @@ end
 -- @param table data role team data
 -- @todo data table structure
 -- @realm shared
-function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
+function roles.InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	name = string.Trim(name)
 
 	local teamname = string.lower(name) .. "s"
@@ -379,7 +400,7 @@ end
 -- Sorts a role table
 -- @param table tbl table to sort
 -- @realm shared
-function SortTable(tbl)
+function roles.SortTable(tbl)
 	local _func = function(a, b)
 		return a.index < b.index
 	end
@@ -391,22 +412,22 @@ end
 -- Get a sorted list of roles that have access to a shop
 -- @return table list of roles that have access to a shop
 -- @realm shared
-function GetShopRoles()
+function roles.GetShopRoles()
 	local shopRoles = {}
 
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		if not v.isAbstract and v ~= INNOCENT then
-			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
-			if shopFallback ~= SHOP_DISABLED then
-				i = i + 1
-				shopRoles[i] = v
-			end
+		if v.isAbstract or v == roles.NONE then continue end
+
+		local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
+		if shopFallback ~= SHOP_DISABLED then
+			i = i + 1
+			shopRoles[i] = v
 		end
 	end
 
-	SortTable(shopRoles)
+	roles.SortTable(shopRoles)
 
 	return shopRoles
 end
@@ -414,29 +435,29 @@ end
 ---
 -- Get the default role table of a specific role team
 -- @param string team role team name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
-function GetDefaultTeamRole(team)
-	if team == TEAM_NONE then return end
+function roles.GetDefaultTeamRole(team)
+	if team == TEAM_NONE then
+		return roles.NONE
+	end
 
 	for _, v in pairs(RoleList) do
-		if not v.isAbstract and not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
+		if not v.isAbstract and v:IsBaseRole() and v.defaultTeam == team then
 			return v
 		end
 	end
 
-	return INNOCENT
+	return roles.NONE
 end
 
 ---
 -- Get the default role tables of a specific role team
 -- @param string team role team name
--- @return table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @return table returns the role tables. This will return the <code>NONE</code> role table as well as its subrole tables as fallback.
 -- @realm shared
-function GetDefaultTeamRoles(team)
-	if team == TEAM_NONE then return end
-
-	return GetDefaultTeamRole(team):GetSubRoles()
+function roles.GetDefaultTeamRoles(team)
+	return roles.GetDefaultTeamRole(team):GetSubRoles()
 end
 
 ---
@@ -444,15 +465,18 @@ end
 -- @param string team role team name
 -- @return table returns the member table of a role team.
 -- @realm shared
-function GetTeamMembers(team)
+function roles.GetTeamMembers(team)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local tmp = {}
 	local plys = player.GetAll()
 
+	local count = 0
+
 	for i = 1, #plys do
-		if plys[i]:HasTeam(team) then
-			tmp[#tmp + 1] = plys[i]
+		if plys[i]:GetTeam() == team then
+			count = count + 1
+			tmp[count] = plys[i]
 		end
 	end
 
@@ -463,12 +487,15 @@ end
 -- Get a list of all teams that are able to win
 -- @return table returns a list of all teams that are able to win
 -- @realm shared
-function GetWinTeams()
+function roles.GetWinTeams()
 	local winTeams = {}
+
+	local i = 0
 
 	for _, v in pairs(RoleList) do
 		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
-			winTeams[#winTeams + 1] = v.defaultTeam
+			i = i + 1
+			winTeams[i] = v.defaultTeam
 		end
 	end
 
@@ -479,12 +506,15 @@ end
 -- Get a list of all available teams
 -- @return table returns a list of all available teams
 -- @realm shared
-function GetAvailableTeams()
+function roles.GetAvailableTeams()
 	local availableTeams = {}
+
+	local i = 0
 
 	for _, v in pairs(RoleList) do
 		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
-			availableTeams[#availableTeams + 1] = v.defaultTeam
+			i = i + 1
+			availableTeams[i] = v.defaultTeam
 		end
 	end
 
@@ -495,7 +525,7 @@ end
 -- Get a sorted list of all roles
 -- @return table returns a list of all roles
 -- @realm shared
-function GetSortedRoles()
+function roles.GetSortedRoles()
 	local rls = {}
 
 	local i = 0
@@ -507,7 +537,7 @@ function GetSortedRoles()
 		end
 	end
 
-	SortTable(rls)
+	roles.SortTable(rls)
 
 	return rls
 end
@@ -518,7 +548,7 @@ end
 -- @param ROLE roleTable the role table (of the SubRole)
 -- @param ROLE baserole the BaseRole
 -- @realm shared
-function SetBaseRole(roleTable, baserole)
+function roles.SetBaseRole(roleTable, baserole)
 	if roleTable.baserole then
 		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. roleTable.name .. " already set (" .. roleTable.baserole .. ")!")
 	elseif roleTable.index == baserole then

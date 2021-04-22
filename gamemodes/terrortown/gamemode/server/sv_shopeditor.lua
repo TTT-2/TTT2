@@ -63,7 +63,7 @@ function ShopEditor.CreateShopDBs()
 	for i = 1, #rlsList do
 		local rd = rlsList[i]
 
-		if rd == INNOCENT then continue end
+		if rd.index == ROLE_NONE then continue end
 
 		ShopEditor.CreateShopDB(rd.name)
 	end
@@ -75,7 +75,7 @@ end
 -- @return table
 -- @realm server
 function ShopEditor.GetShopEquipments(roleData)
-	if roleData == INNOCENT then
+	if roleData.index == ROLE_NONE then
 		return {}
 	end
 

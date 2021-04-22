@@ -546,26 +546,22 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	table.insert(rls, 1, {name = SHOP_UNSET, abbr = "shop_default", color = roleData.color})
 	table.insert(rls, 1, {name = SHOP_DISABLED, abbr = "disable", color = roleData.color})
 
-	-- remove innocents
-	local key
+	-- remove none role and own shop (to change the position)
+	local i = 0
 
-	for k = 1, #rls do
-		if rls[k] == INNOCENT then
-			key = k
+	while i < #rls do
+		i = i + 1
+
+		local index = rls[i].index
+
+		if index == ROLE_NONE or index == roleData.index then
+			table.remove(rls, i)
+
+			i = i - 1
 		end
 	end
 
-	table.remove(rls, key)
-
-	-- change position of own shop
-	for k = 1, #rls do
-		if rls[k] == roleData then
-			key = k
-		end
-	end
-
-	table.remove(rls, key)
-
+	-- add the own shop into the first position
 	table.insert(rls, 1, roleData)
 
 	local dlist = ShopEditor.CreateRolesList(frame, w, h, rls, function(s)
@@ -654,15 +650,14 @@ function ShopEditor.CreateShopLinker()
 
 	local rls = roles.GetSortedRoles()
 
-	local key
-
+	-- remove none role
 	for k = 1, #rls do
-		if rls[k] == INNOCENT then
-			key = k
+		if rls[k].index == ROLE_NONE then
+			table.remove(rls, k)
+
+			break
 		end
 	end
-
-	table.remove(rls, key)
 
 	ShopEditor.CreateRolesList(frame, w, h, rls, function(s)
 		if IsValid(ply.shopeditor_frame) then
