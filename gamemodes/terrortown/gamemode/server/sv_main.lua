@@ -1470,7 +1470,7 @@ end
 ---
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
--- @realm client
+-- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
 	-- load all roles

@@ -8,7 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - All new roundend menu
   - new info panel that shows detailed role distribution during the round
-  - new timeline taht displays the events that happened during the round
+  - new timeline that displays the events that happened during the round
   - added two new round end conditions: `time up` and `no one wins`
 - Added `ROLE_NONE` (ID `3` by default)
   - Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`
