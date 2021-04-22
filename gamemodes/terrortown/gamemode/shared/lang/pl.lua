@@ -1241,7 +1241,7 @@ L.button_close = "Zamknij"
 --L.title_score_info = "Round End Info"
 --L.title_score_events = "Event Timeline"
 
---L.Rundenendeninfo = "Opend round end screen"
+--L.label_bind_clscore = "Opend round end screen"
 
 --L.label_show_events = "Show events from"
 --L.button_show_events_you = "You"

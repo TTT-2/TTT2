@@ -1241,7 +1241,7 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 --L.title_score_info = "Round End Info"
 --L.title_score_events = "Event Timeline"
 
---L.Rundenendeninfo = "Opend round end screen"
+--L.label_bind_clscore = "Opend round end screen"
 
 --L.label_show_events = "Show events from"
 --L.button_show_events_you = "You"

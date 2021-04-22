@@ -407,6 +407,7 @@ function CLSCORE:Toggle()
 end
 
 bind.Register("toggle_clscore", function()
+	CLSCORE:ClearPanel()
 	CLSCORE:Toggle()
 end,
 nil, "header_bindings_ttt2", "label_bind_clscore")

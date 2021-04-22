@@ -16,8 +16,8 @@ function PANEL:Init()
 	self:SetText("")
 
 	self.contents = {
-		title_font = "DermaTTT2TextLargest",
-		font = "DermaTTT2MenuButtonTitle",
+		title_font = "DermaTTT2TextLarger",
+		font = "DermaTTT2Text",
 		event = nil
 	}
 end
