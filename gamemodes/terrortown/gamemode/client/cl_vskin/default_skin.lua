@@ -1137,7 +1137,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 		drawRoundedBox(sizes.cornerRadius, offsetXText, posY, w - offsetXText - 2 * padding, height, colorBox)
 
 		drawSimpleText(
-			event:GetNameFrom64(ply64) .. ":",
+			ParT("title_player_score", {player = event:GetNameFrom64(ply64)}),
 			panel:GetFont(),
 			offsetXText + padding,
 			posY + padding,

@@ -1232,6 +1232,7 @@ L.title_score_info = "Rundenendeninfo"
 L.title_score_events = "Ereignistimeline"
 
 L.label_bind_clscore = "Öffne Rundenendeninfo"
+L.title_player_score = "Punkte von {player}:"
 
 L.label_show_events = "Zeige Ereignisse von"
 L.button_show_events_you = "Dir"

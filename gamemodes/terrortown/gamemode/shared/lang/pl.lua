@@ -1242,6 +1242,7 @@ L.button_close = "Zamknij"
 --L.title_score_events = "Event Timeline"
 
 --L.label_bind_clscore = "Opend round end screen"
+--L.title_player_score = "{player}' score:"
 
 --L.label_show_events = "Show events from"
 --L.button_show_events_you = "You"

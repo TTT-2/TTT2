@@ -88,7 +88,6 @@ ttt_include("cl_hudpickup")
 ttt_include("cl_keys")
 ttt_include("cl_wepswitch")
 ttt_include("cl_scoring")
-ttt_include("cl_scoring_events")
 ttt_include("cl_popups")
 ttt_include("cl_equip")
 ttt_include("cl_shopeditor")
@@ -315,16 +314,6 @@ function GM:InitPostEntity()
 end
 
 ---
--- Called after the gamemode has loaded
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
--- @local
-function GM:PostGamemodeLoaded()
-	ScoringEventSetup()
-end
-
----
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
 -- @realm client
@@ -346,8 +335,6 @@ function GM:OnReloaded()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
-
-	ScoringEventSetup()
 end
 
 ---

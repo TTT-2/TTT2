@@ -26,7 +26,6 @@ TTTFiles = {
 	cl_reroll = {file = "cl_reroll.lua", on = "client"},
 	cl_scoreboard = {file = "cl_scoreboard.lua", on = "client"},
 	cl_scoring = {file = "cl_scoring.lua", on = "client"},
-	cl_scoring_events = {file = "cl_scoring_events.lua", on = "client"},
 	cl_search = {file = "cl_search.lua", on = "client"},
 	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
 	cl_status = {file = "cl_status.lua", on = "client"},
