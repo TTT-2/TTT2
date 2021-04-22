@@ -93,6 +93,8 @@ function CLSCOREMENU:Populate(parent)
 		buttonBoxRowButton2.isActive = false
 
 		PopulateEventTable(scrollPanel, sizes, events, true)
+
+		scrollPanel:InvalidateLayout()
 	end
 
 	buttonBoxRowButton2.DoClick = function()
@@ -100,5 +102,7 @@ function CLSCOREMENU:Populate(parent)
 		buttonBoxRowButton2.isActive = true
 
 		PopulateEventTable(scrollPanel, sizes, events, false)
+
+		scrollPanel:InvalidateLayout()
 	end
 end
