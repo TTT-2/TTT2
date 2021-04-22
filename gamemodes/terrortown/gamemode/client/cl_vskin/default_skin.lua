@@ -1030,6 +1030,8 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintEventBoxTTT2(panel, w, h)
+	local event = panel:GetEvent()
+
 	local colorLine = ColorAlpha(colors.default, 25)
 	local colorText = ColorAlpha(colors.default, 200)
 
@@ -1041,6 +1043,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	local offsetYIcon = 20 + padding
 	local offsetYLine = offsetYIcon + padding + sizeIcon
 	local offsetXText = offsetXIcon + sizeIcon + padding
+	local offsetYTitle = offsetYIcon + 0.5 * sizeIcon
 
 	drawBox(offsetXLine, 0, widthLine, offsetYIcon - padding, colorLine)
 	drawBox(offsetXLine, offsetYLine, widthLine, h - offsetYLine, colorLine)
@@ -1051,11 +1054,25 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
 		offsetXText,
-		offsetYIcon + 0.5 * sizeIcon,
+		offsetYTitle,
 		colorText,
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER,
 		1
+	)
+
+	local time = event:GetTime()
+	local minutes = math.floor(time / 60)
+	local seconds = math.floor(time % 60)
+
+	drawSimpleText(
+		string.format("[%02d:%02d]", minutes, seconds),
+		panel:GetFont(),
+		w - 20,
+		offsetYTitle,
+		colorLine,
+		TEXT_ALIGN_RIGHT,
+		TEXT_ALIGN_CENTER
 	)
 
 	local posY = offsetYIcon + sizeIcon + padding
@@ -1098,8 +1115,6 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
 		posY = posY + 15
 	end
-
-	local event = panel:GetEvent()
 
 	if not event:HasScore() then return end
 
