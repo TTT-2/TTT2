@@ -256,6 +256,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return self.event.victim.nick .. " has died."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

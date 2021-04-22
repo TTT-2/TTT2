@@ -48,6 +48,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return self.event.finder.nick .. " has found " .. tostring(self.event.found.credits) .. " in the body of " .. self.event.found.nick .. "."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

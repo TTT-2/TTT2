@@ -30,6 +30,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return self.event.nick .. " just spawned."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

@@ -64,6 +64,14 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	if self.event.successful then
+		return self.event.disarmer.nick .. " has successfully disarmed the C4 charge placed by " .. self.event.owner.nick .. "."
+	else
+		return self.event.disarmer.nick .. " tried to disarm the C4 charge placed by " .. self.event.owner.nick .. ". They failed."
+	end
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

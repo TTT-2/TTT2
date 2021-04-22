@@ -5,6 +5,7 @@ local tableCount = table.Count
 local tableGetKeys = table.GetKeys
 local tableHasValue = table.HasValue
 local tableAdd = table.Add
+local mathRound = math.Round
 
 if CLIENT then
 	EVENT.icon = Material("vgui/ttt/vskin/events/base_event")
@@ -192,6 +193,14 @@ end
 -- @realm shared
 function EVENT:Serialize()
 
+end
+
+---
+-- Returns the events time in seconds after round begin
+-- @return number The event time
+-- @realm shared
+function EVENT:GetTime()
+	return mathRound(self.event.time / 1000, 0)
 end
 
 if CLIENT then

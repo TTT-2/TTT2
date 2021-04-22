@@ -44,6 +44,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return "The roles have been selected."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

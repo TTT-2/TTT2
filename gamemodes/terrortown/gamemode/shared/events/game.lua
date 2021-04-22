@@ -21,6 +21,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return "A new round has started."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

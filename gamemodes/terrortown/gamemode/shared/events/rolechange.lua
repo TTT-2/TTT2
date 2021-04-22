@@ -41,3 +41,7 @@ if SERVER then
 		})
 	end
 end
+
+function EVENT:Serialize()
+	return self.event.nick .. " just changed their tole."
+end

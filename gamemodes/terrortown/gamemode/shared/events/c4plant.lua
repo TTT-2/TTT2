@@ -35,6 +35,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return self.event.nick .. " placed a new C4 charge."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

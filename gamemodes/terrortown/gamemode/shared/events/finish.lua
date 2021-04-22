@@ -13,7 +13,7 @@ if CLIENT then
 			end
 		end
 
-		local time = math.Round(self.event.time / 1000, 0)
+		local time = self:GetTime()
 		local minutes = math.floor(time / 60)
 		local seconds = string.format("%02d", math.floor(time % 60))
 
@@ -108,6 +108,10 @@ function EVENT:CalculateScore()
 			score_timelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.score.timelimitMultiplier) or 0
 		})
 	end
+end
+
+function EVENT:Serialize()
+	return "The round has ended."
 end
 
 function EVENT:GetDeprecatedFormat()

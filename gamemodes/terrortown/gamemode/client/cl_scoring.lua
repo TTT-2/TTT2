@@ -5,6 +5,7 @@
 -- @author Mineotopia
 
 local vskin = vskin
+local TryT = LANG.TryTranslation
 
 local function CreateColumns(plys)
 	local teamsTbl = {}
@@ -264,7 +265,40 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:SaveLog()
+	local events = self.events
 
+	if not events or #events == 0 then
+		chat.AddText(COLOR_WHITE, TryT("report_save_error"))
+
+		return
+	end
+
+	local logdir = "ttt/logs"
+
+	if not file.IsDir(logdir, "DATA") then
+		file.CreateDir(logdir)
+	end
+
+	local logname = logdir .. "/ttt_events_" .. os.time() .. ".txt"
+	local log = "Trouble in Terrorist Town 2 - Round Events Log\n" .. string.rep("-", 50) .. "\n"
+
+	log = log .. string.format("%s | %-15s | %s\n", " TIME  ", "TYPE", "WHAT HAPPENED") .. string.rep("-", 50) .. "\n"
+
+	for i = 1, #events do
+		local event = events[i]
+
+		if event.event.roundState ~= ROUND_ACTIVE then continue end
+
+		local time = event:GetTime()
+		local minutes = math.floor(time / 60)
+		local seconds = math.floor(time % 60)
+
+		log = log .. string.format("[%02d:%02d] | %-15s | %s\n", minutes, seconds, event.type, event:Serialize() or "")
+	end
+
+	file.Write(logname, log)
+
+	chat.AddText(COLOR_WHITE, TryT("report_save_result"), COLOR_GREEN, " /garrysmod/data/" .. logname)
 end
 
 ---

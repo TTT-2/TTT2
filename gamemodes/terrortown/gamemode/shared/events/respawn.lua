@@ -29,3 +29,7 @@ if SERVER then
 		})
 	end
 end
+
+function EVENT:Serialize()
+	return self.event.nick .. " just respawned."
+end

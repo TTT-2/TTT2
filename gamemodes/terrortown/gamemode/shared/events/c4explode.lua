@@ -35,6 +35,10 @@ if SERVER then
 	end
 end
 
+function EVENT:Serialize()
+	return "The C4 charge placed by " .. self.event.nick .. " exploded."
+end
+
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 
