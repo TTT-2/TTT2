@@ -276,12 +276,32 @@ function CLSCORE:Init()
 		local event = self.events[i]
 
 		if event.type == EVENT_SELECTED then
-			self.eventsInfoPlayersStart = event.event.plys
+			self.eventsInfoPlayersStart = {}
+
+			local plys = event.event.plys
+
+			for k = 1, #plys do
+				local ply = plys[k]
+
+				if ply.role == ROLE_NONE then continue end
+
+				self.eventsInfoPlayersStart[#self.eventsInfoPlayersStart + 1] = ply
+			end
 		end
 
 		if event.type == EVENT_FINISH then
 			self.wintype = event.event.wintype
-			self.eventsInfoPlayersEnd = event.event.plys
+			self.eventsInfoPlayersEnd = {}
+
+			local plys = event.event.plys
+
+			for k = 1, #plys do
+				local ply = plys[k]
+
+				if ply.role == ROLE_NONE then continue end
+
+				self.eventsInfoPlayersEnd[#self.eventsInfoPlayersEnd + 1] = ply
+			end
 		end
 	end
 
