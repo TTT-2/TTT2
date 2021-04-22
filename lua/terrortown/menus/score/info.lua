@@ -84,7 +84,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 	local _, heightScroll = parent:GetSize()
 	local maxHeightColumn = heightScroll
 
-	-- DETETMINE THE SIZE FIRST TO TAKE THE SCROLLBAR SICE INTO ACCOUNT
+	-- DETERTMINE THE SIZE FIRST TO TAKE THE SCROLLBAR SIZE INTO ACCOUNT
 	for i = 1, 3 do
 		local teamPlayersList = columnData[i]
 		local heightColumn = 0
