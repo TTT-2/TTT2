@@ -23,6 +23,9 @@ end
 
 if SERVER then
 	function EVENT:Trigger(ply, oldRole, newRole, oldTeam, newTeam)
+		-- do not trigger events if the role or team is nil
+		if not oldRole or not newRole or not oldTeam or not newTeam then return end
+
 		self:AddAffectedPlayers(
 			{ply:SteamID64()},
 			{ply:Nick()}
