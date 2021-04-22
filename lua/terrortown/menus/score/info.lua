@@ -84,22 +84,40 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 	playerCoumns:SetSpaceY(sizes.padding)
 
 	local _, heightScroll = parent:GetSize()
+	local maxHeightColumn = heightScroll
 
-	local heightColumn = heightScroll
-	local widthColumn = (sizes.widthMainArea - 2 * sizes.padding - (heightScroll < heightColumn and 15 or 0) ) / 3
+	-- DETETMINE THE SIZE FIRST TO TAKE THE SCROLLBAR SICE INTO ACCOUNT
+	for i = 1, 3 do
+		local teamPlayersList = columnData[i]
+		local heightColumn = 0
 
+		for k = 1, #teamPlayersList do
+			local plys = teamPlayersList[k]
+
+			heightColumn = heightColumn + sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall
+
+			-- if there is a second team, add padding to size
+			if k > 1 then
+				heightColumn = heightColumn + sizes.padding
+			end
+		end
+
+		maxHeightColumn = math.max(maxHeightColumn, heightColumn)
+	end
+
+	local widthColumn = (sizes.widthMainArea - 2 * sizes.padding - (heightScroll < maxHeightColumn and 15 or 0)) / 3
 	local teamInfoBox = {}
 
 	teamInfoBox[1] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[1]:SetSize(widthColumn, heightColumn)
+	teamInfoBox[1]:SetSize(widthColumn, maxHeightColumn)
 	teamInfoBox[1]:SetDynamicColor(parent, 30)
 
 	teamInfoBox[2] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[2]:SetSize(widthColumn, heightColumn)
+	teamInfoBox[2]:SetSize(widthColumn, maxHeightColumn)
 	teamInfoBox[2]:SetDynamicColor(parent, 30)
 
 	teamInfoBox[3] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[3]:SetSize(widthColumn, heightColumn)
+	teamInfoBox[3]:SetSize(widthColumn, maxHeightColumn)
 	teamInfoBox[3]:SetDynamicColor(parent, 30)
 
 	-- FILL THE COLUMNS
@@ -124,7 +142,6 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			end
 
 			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
-			--teamBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
 			teamBox:SetDynamicColor(parent, 15)
 			teamBox:SetSize(widthColumn, sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall)
 
@@ -159,7 +176,6 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyNameBox:SetSize(widthName, sizes.heightRow)
 				plyNameBox:SetDynamicColor(parent, 15)
-				--plyNameBox:SetColor(util.GetChangedColor(vskin.GetBackgroundColor(), 15))
 				plyNameBox:SetTitle(ply.nick .. ((showDeath and not ply.alive) and " (†)" or ""))
 				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
