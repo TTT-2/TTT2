@@ -2,7 +2,7 @@
 
 if CLIENT then
 	EVENT.icon = nil
-	EVENT.description = "desc_event_kill"
+	EVENT.description = "desc_event_hurt"
 end
 
 if SERVER then
@@ -72,38 +72,6 @@ if SERVER then
 		return self:Add(event)
 	end
 
-	function EVENT:CalculateScore()
-		local event = self.event
-
-		-- the event is only counted if it happened while the round was active
-		if event.roundState ~= ROUND_ACTIVE then return end
-
-		local victim = event.victim
-		local attacker = event.attacker
-		local deathType = event.type
-
-		-- if there is no killer, it wasn't a suicide or a kill, therefore
-		-- no points should be granted to anyone
-		if not attacker then return end
-
-		-- the score is dependent of the teams/roles
-		local roleData = roles.GetByIndex(attacker.role)
-
-		if deathType == KILL_SUICIDE then
-			self:SetPlayerScore(victim.sid64, {
-				score = roleData.score.suicideMultiplier
-			})
-		elseif deathType == KILL_TEAM then
-			self:SetPlayerScore(attacker.sid64, {
-				score = roleData.score.teamKillsMultiplier
-			})
-		else
-			self:SetPlayerScore(attacker.sid64, {
-				score = roleData.score.killsMultiplier
-			})
-		end
-	end
-
 	function EVENT:CalculateKarma()
 		local event = self.event
 
@@ -114,7 +82,10 @@ if SERVER then
 		local attacker = event.attacker
 		local dmginfo = event.dmg.dmgInfo
 
-		KARMA.Killed(attacker, victim, dmginfo)
+		if IsValid(attacker) and attacker:IsPlayer() and victim ~= attacker and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
+			KARMA.Hurt(attacker, victim, dmginfo)
+		end
+
 
 
 		--[[ TODO Move Karma Change here?
@@ -141,38 +112,4 @@ if SERVER then
 		end
 		--]]
 	end
-end
-
-function EVENT:GetDeprecatedFormat()
-	local event = self.event
-
-	if event.roundState ~= ROUND_ACTIVE then return end
-
-	local attacker = event.attacker
-	local victim = event.victim
-	local dmg = event.dmg
-
-	return {
-		id = self.type,
-		t = event.time / 1000,
-		att = {
-			ni = attacker and attacker.nick or "",
-			sid64 = attacker and attacker.sid64 or -1,
-			r = attacker and attacker.role or -1,
-			t = attacker and attacker.team or ""
-		},
-		vic = {
-			ni = victim.nick,
-			sid64 = victim.sid64,
-			r = victim.role,
-			t = victim.team
-		},
-		dmg = {
-			t = dmg.type,
-			a = dmg.damage,
-			h = dmg.headshot,
-			g = dmg.weapon,
-			n = dmg.name
-		}
-	}
 end

@@ -168,7 +168,9 @@ if SERVER then
 
 		-- after the event is added, it should be passed on to the
 		-- scoring function to directly calculate the score
+		-- and calculate Karma
 		self:CalculateScore()
+		self:CalculateKarma()
 
 		return true
 	end
@@ -200,12 +202,23 @@ if SERVER then
 
 	---
 	-- This function calculates the score gained for this event. It should be
-	-- overwritte if the event should yield a score.
+	-- overwritten if the event should yield a score.
 	-- @note This function should be overwritten but not not called.
 	-- @note The event table can be accessed via `self.event`.
 	-- @internal
 	-- @realm server
 	function EVENT:CalculateScore()
+
+	end
+
+	---
+	-- This function calculates the Karma gained for this event. It should be
+	-- overwritten if the event should yield a Karma-Change.
+	-- @note This function should be overwritten but not not called.
+	-- @note The event table can be accessed via `self.event`.
+	-- @internal
+	-- @realm server
+	function EVENT:CalculateKarma()
 
 	end
 end

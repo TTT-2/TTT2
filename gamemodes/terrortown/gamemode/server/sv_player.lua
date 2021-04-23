@@ -746,8 +746,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		else
 			DamageLog(Format("KILL:\t <something/world> killed %s [%s]", ply:Nick(), ply:GetRoleString()))
 		end
-
-		KARMA.Killed(attacker, ply, dmginfo)
 	end
 
 	-- Clear out any weapon or equipment we still have
@@ -1400,11 +1398,14 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 		if ent ~= att then
 			-- process the effects of the damage on karma
-			KARMA.Hurt(att, ent, dmginfo)
+			--TODO Maybe move complete Hurt Code into event?
+			--KARMA.Hurt(att, ent, dmginfo)
 
 			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
 		end
 	end
+
+	events.Trigger(EVENT_HURT, ent, att, dmginfo)
 
 	-- send damage information to client
 	net.Start("ttt2_damage_received")

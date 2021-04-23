@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
+- Karma is now handled by the event system
 
 ### Breaking Changes
 - Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
