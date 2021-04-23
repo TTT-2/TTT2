@@ -115,31 +115,6 @@ if SERVER then
 		local dmginfo = event.dmg.dmgInfo
 
 		KARMA.Killed(attacker, victim, dmginfo)
-
-
-		--[[ TODO Move Karma Change here?
-		-- if there is no killer, it wasn't a suicide or a kill, therefore
-		-- no points should be granted to anyone
-		if not attacker then return end
-
-		-- the karma is dependent of the teams/roles
-		local roleData = roles.GetByIndex(attacker.role)
-
-
-		if deathType == KILL_SUICIDE then
-			self:SetPlayerKarma(victim.sid64, {
-				karma = roleData.karma.suicideMultiplier
-			})
-		elseif deathType == KILL_TEAM then
-			self:SetPlayerKarma(attacker.sid64, {
-				karma = roleData.karma.teamKillsMultiplier
-			})
-		else
-			self:SetPlayerKarma(attacker.sid64, {
-				karma = roleData.karma.killsMultiplier
-			})
-		end
-		--]]
 	end
 end
 

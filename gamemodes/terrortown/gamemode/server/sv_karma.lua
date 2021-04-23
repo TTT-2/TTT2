@@ -3,7 +3,8 @@
 -- @module KARMA
 
 KARMA = {
-	RememberedPlayers = {} -- ply steamid -> karma table for disconnected players who might reconnect
+	RememberedPlayers = {}, -- ply steamid -> karma table for disconnected players who might reconnect
+	KarmaChanges = {} -- ply steamid -> karma table for karma changes that aren't applied 
 }
 
 -- Convars, more convenient access than GetConVar
@@ -113,6 +114,27 @@ end
 -- @realm server
 function KARMA.IsEnabled()
 	return GetGlobalBool("ttt_karma", false)
+end
+
+KARMA_TEAMKILL = 1
+KARMA_TEAMHURT = 2
+KARMA_ENEMYKILL = 3
+KARMA_ENEMYHURT = 4
+KARMA_CLEAN = 5
+KARMA_ROUND = 6
+
+function KARMA.SaveKarmaChange(ply, karma, reason)
+	table.Add(KARMA.KarmaChanges[ply:SteamID64()][reason],karma)
+end
+
+function KARMA.ApplyAllChanges()
+	for plyID,reasonList in pairs(KARMA.KarmaChanges) do
+		local ply = player.GetBySteamID64(plyID)
+		print("PlayerID " .. ply:GetName())
+		for reason,karma in pairs(reasonList) do
+			print("Karma " .. karma .. " for the reason of " .. reason " will be applied.")
+		end
+	end
 end
 
 ---
@@ -249,6 +271,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 			local reward = KARMA.GetHurtReward(hurt_amount)
 
 			reward = KARMA.GiveReward(attacker, reward)
+			KARMA.SaveKarmaChange(attacker, reward, KARMA_ENEMYHURT)
 
 			print(Format("%s (%f) hurt %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
@@ -259,6 +282,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim)
+		KARMA.SaveKarmaChange(attacker, -penalty, KARMA_TEAMHURT)
 
 		attacker:SetCleanRound(false)
 
@@ -280,6 +304,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 			local reward = KARMA.GetKillReward()
 
 			reward = KARMA.GiveReward(attacker, reward)
+			KARMA.SaveKarmaChange(attacker, reward, KARMA_ENEMYKILL)
 
 			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
@@ -290,6 +315,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim)
+		KARMA.SaveKarmaChange(attacker, -penalty, KARMA_TEAMKILL)
 
 		attacker:SetCleanRound(false)
 
@@ -339,9 +365,12 @@ function KARMA.RoundIncrement()
 		local ply = plys[i]
 
 		if ply:IsDeadTerror() and ply.death_type ~= KILL_SUICIDE or not ply:IsSpec() then
-			local bonus = healbonus + (ply:GetCleanRound() and cleanbonus or 0)
+			local clean = ply:GetCleanRound() and cleanbonus or 0
+			local bonus = healbonus + clean
 
 			KARMA.GiveReward(ply, bonus)
+			KARMA.SaveKarmaChange(ply, healbonus, KARMA_ROUND)
+			KARMA.SaveKarmaChange(ply, clean, KARMA_CLEAN)
 
 			if IsDebug() then
 				print(ply, "gets roundincr ", incr)
@@ -402,6 +431,8 @@ end
 function KARMA.RoundEnd()
 	if KARMA.IsEnabled() then
 		KARMA.RoundIncrement()
+		KARMA.ApplyAllChanges()
+		KARMA.KarmaChanges = {}
 
 		-- if karma trend needs to be shown in round report, may want to delay
 		-- rebase until start of next round
