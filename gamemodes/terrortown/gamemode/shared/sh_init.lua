@@ -468,6 +468,13 @@ KILL_FALL = 2
 KILL_BURN = 3
 KILL_TEAM = 4
 
+-- Hurt types discerned by last words
+HURT_NORMAL = 0
+HURT_SELF = 1
+HURT_FALL = 2
+HURT_BURN = 3
+HURT_TEAM = 4
+
 -- Entity types a crowbar might open
 OPEN_NO = 0
 OPEN_DOOR = 1

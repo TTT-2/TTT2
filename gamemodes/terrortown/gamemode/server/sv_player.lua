@@ -1398,13 +1398,12 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 		if ent ~= att then
 			-- process the effects of the damage on karma
-			--TODO Maybe move complete Hurt Code into event?
-			--KARMA.Hurt(att, ent, dmginfo)
 
 			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
 		end
 	end
 
+	--TODO Maybe move complete Hurt Code into event?
 	events.Trigger(EVENT_HURT, ent, att, dmginfo)
 
 	-- send damage information to client

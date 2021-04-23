@@ -40,12 +40,12 @@ if SERVER then
 
 			-- set death type
 			if event.attacker.sid64 == event.victim.sid64 then
-				event.type = KILL_SUICIDE
+				event.type = HURT_SUICIDE
 			else
 				if event.attacker.team ~= TEAM_NONE and event.attacker.team == event.victim.team and not TEAMS[event.attacker.team].alone then
-					event.type = KILL_TEAM
+					event.type = HURT_TEAM
 				else
-					event.type = KILL_NORMAL
+					event.type = HURT_NORMAL
 				end
 			end
 		end
@@ -82,7 +82,7 @@ if SERVER then
 		local attacker = event.attacker
 		local dmginfo = event.dmg.dmgInfo
 
-		if IsValid(attacker) and attacker:IsPlayer() and victim ~= attacker and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
+		if IsValid(attacker) and attacker:IsPlayer() and victim ~= attacker and GetRoundState() == ROUND_ACTIVE and math.floor(event.dmg.damage) > 0 then
 			KARMA.Hurt(attacker, victim, dmginfo)
 		end
 
