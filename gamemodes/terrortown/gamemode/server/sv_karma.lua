@@ -90,13 +90,13 @@ KARMA_ROUND = 6
 KARMA_UNKNOWN = 7
 
 KARMA.Reason = {
-	[KARMA_TEAMKILL] = "desc_karma_teamkill",
-	[KARMA_TEAMHURT] = "desc_karma_teamhurt",
-	[KARMA_ENEMYKILL] = "desc_karma_enemykill",
-	[KARMA_ENEMYHURT] = "desc_karma_enemyhurt",
-	[KARMA_CLEAN] = "desc_karma_cleanround",
-	[KARMA_ROUND] = "desc_karma_roundheal",
-	[KARMA_UNKNOWN] = "desc_karma_unknown"
+	[KARMA_TEAMKILL] = "karma_teamkill_tooltip",
+	[KARMA_TEAMHURT] = "karma_teamhurt_tooltip",
+	[KARMA_ENEMYKILL] = "karma_enemykill_tooltip",
+	[KARMA_ENEMYHURT] = "karma_enemyhurt_tooltip",
+	[KARMA_CLEAN] = "karma_cleanround_tooltip",
+	[KARMA_ROUND] = "karma_roundheal_tooltip",
+	[KARMA_UNKNOWN] = "karma_unknown_tooltip"
 }
 
 local IsValid = IsValid

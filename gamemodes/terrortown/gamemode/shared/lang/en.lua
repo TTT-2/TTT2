@@ -50,6 +50,14 @@ L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 -- Karma
 L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
 L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
+-- Roundendscreen Tooltip
+L.karma_teamkill_tooltip = "Karma received by killing team member"
+L.karma_teamhurt_tooltip = "Karma received by damaging team member"
+L.karma_enemykill_tooltip = "Karma received by killing enemy"
+L.karma_enemyhurt_tooltip = "Karma received by damaging enemy"
+L.karma_cleanround_tooltip = "Karma received for clean round"
+L.karma_roundheal_tooltip = "Karma received at roundend"
+L.karma_unknown_tooltip = "Unknown Event"
 
 -- Body identification messages
 L.body_found = "{finder} found the body of {victim}. {role}"
