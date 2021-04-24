@@ -108,9 +108,9 @@ function EVENT:CalculateScore()
 		end
 
 		self:SetPlayerScore(ply.sid64, {
-			score_alive_teammates = (alive[team] or 0) * roleData.score.aliveTeammatesBonusMultiplier,
+			score_alive_teammates = wintype == team and ((alive[team] or 0) * roleData.score.aliveTeammatesBonusMultiplier) or 0,
 			score_alive_all = aliveAll * roleData.score.allSurviveBonusMultiplier,
-			score_dead_enemies = math.ceil(otherDeadPlayers * roleData.score.surviveBonusMultiplier),
+			score_dead_enemies = wintype == team and math.ceil(otherDeadPlayers * roleData.score.surviveBonusMultiplier) or 0,
 			score_timelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.score.timelimitMultiplier) or 0
 		})
 	end
