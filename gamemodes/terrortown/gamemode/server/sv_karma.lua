@@ -124,15 +124,25 @@ KARMA_CLEAN = 5
 KARMA_ROUND = 6
 
 function KARMA.SaveKarmaChange(ply, karma, reason)
-	table.Add(KARMA.KarmaChanges[ply:SteamID64()][reason],karma)
+	local plyID = ply:SteamID64()
+	if not KARMA.KarmaChanges[plyID] then
+		KARMA.KarmaChanges[plyID] = {}
+	end
+	if not KARMA.KarmaChanges[plyID][reason] then
+		KARMA.KarmaChanges[plyID][reason] = {}
+	end
+	table.Add(KARMA.KarmaChanges[plyID][reason],{karma})
 end
 
 function KARMA.ApplyAllChanges()
 	for plyID,reasonList in pairs(KARMA.KarmaChanges) do
 		local ply = player.GetBySteamID64(plyID)
-		print("PlayerID " .. ply:GetName())
-		for reason,karma in pairs(reasonList) do
-			print("Karma " .. karma .. " for the reason of " .. reason " will be applied.")
+		print("PlayerName " .. ply:GetName())
+		for reason,karmaList in pairs(reasonList) do
+			print("For the reason of " .. reason)
+			for k,karma in pairs(karmaList) do
+				print("Karma " .. karma .. " was dealt.")
+			end
 		end
 	end
 end
