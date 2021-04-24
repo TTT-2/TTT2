@@ -1365,7 +1365,7 @@ function PrintResultMessage(result)
 		ServerLog("Result: timelimit reached, traitors lose.\n")
 
 		return
-	elseif result == WIN_NONE then
+	elseif result == WIN_NONE or result == TEAM_NONE then
 		LANG.Msg("win_nones")
 		ServerLog("Result: No-one wins.\n")
 
@@ -1539,6 +1539,8 @@ function GM:TTTCheckForWin()
 	for i = 1, #alive do
 		local team = alive[i]
 
+		if team == TEAM_NONE then continue end
+
 		if not checkedTeams[team] or TEAMS[team].alone then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
@@ -1551,10 +1553,12 @@ function GM:TTTCheckForWin()
 		if b == 2 then break end
 	end
 
-	if b == 1 then -- just 1 team is alive
+	if b > 1 then -- if >= 2 teams alive: no one wins
+		return WIN_NONE -- early out
+	elseif b == 1 then -- just 1 team is alive
 		return alive[1]
-	else -- if b >= 2 teams alive or rare case: nobody is alive, e.g. because of an explosion
-		return WIN_NONE -- none_win
+	else -- rare case: nobody is alive, e.g. because of an explosion
+		return TEAM_NONE -- none_win
 	end
 end
 
