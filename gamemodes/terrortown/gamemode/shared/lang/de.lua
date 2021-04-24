@@ -1241,8 +1241,8 @@ L.label_show_roles = "Zeige Rollenverteilung vom"
 L.button_show_roles_begin = "Rundenbegin"
 L.button_show_roles_end = "Rundenende"
 
-L.hilite_win_traitors = "DIE VERRÄTER GEWANNEN"
-L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWANNEN"
+L.hilite_win_traitors = "TEAM VERRÄTER GEWANN"
+L.hilite_win_innocents = "TEAM UNSCHULDIGE GEWANN"
 L.hilite_win_tie = "UNENTSCHIEDEN"
 L.hilite_win_time = "ZEIT VORBEI"
 
