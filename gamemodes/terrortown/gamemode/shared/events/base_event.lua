@@ -168,9 +168,7 @@ if SERVER then
 
 		-- after the event is added, it should be passed on to the
 		-- scoring function to directly calculate the score
-		-- and calculate Karma
 		self:CalculateScore()
-		self:CalculateKarma()
 
 		return true
 	end

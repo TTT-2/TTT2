@@ -19,7 +19,6 @@ if SERVER then
 				team = victim:GetTeam()
 			},
 			dmg = {
-				dmgInfo = dmgInfo,
 				headshot = victim.was_headshot,
 				type = dmgInfo:GetDamageType(),
 				damage = dmgInfo:GetDamage()
