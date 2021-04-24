@@ -241,7 +241,7 @@ if SERVER then
 		local roleData = roles.GetByIndex(attacker.role)
 
 		if deathType == KILL_SUICIDE then
-			self:SetPlayerScore(victim.sid64, {
+			self:SetPlayerScore(attacker.sid64, {
 				score = roleData.score.suicideMultiplier
 			})
 		elseif deathType == KILL_TEAM then
