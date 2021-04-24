@@ -60,6 +60,15 @@ function EVENT:SetPlayerScore(ply64, score)
 end
 
 ---
+-- Returns a reference to the score of a player.
+-- @param string ply64 The player's steamID64
+-- @return table The score table for the player
+-- @realm shared
+function EVENT:GetPlayerScore(ply64)
+	return self.score[ply64]
+end
+
+---
 -- Returns the event data in the deprecated format. Shouldn't be used, is used
 -- internally.
 -- @note This function should be overwritten but not not called.
