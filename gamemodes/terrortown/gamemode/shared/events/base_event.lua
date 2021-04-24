@@ -103,6 +103,15 @@ function EVENT:HasPlayerScore(ply64)
 end
 
 ---
+-- Checks whether the given player's karma has changed in this event or not.
+-- @param string ply64 The steamID64 of the player that should be checked
+-- @return boolean Returns true if the player has a karma change table
+-- @realm shared
+function EVENT:HasPlayerKarmaChange(ply64)
+	return self.karma[ply64] ~= nil and self.karma[ply64].absolute ~= nil and self.karma[ply64].changes ~= nil
+end
+
+---
 -- Checks if this event has score at all.
 -- @return boolean Returns true if there is score added in this event
 -- @realm server
