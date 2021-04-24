@@ -42,43 +42,37 @@ end
 ---
 -- Sets the score data table to the event. If the score is nil, the existing score
 -- will be removed for this player.
--- @param string ply64 The steamID64 of the affected player
+-- @param string sid64 The steamID64 of the affected player
 -- @param[opt] table score The score data table that should be set
 -- @realm shared
-function EVENT:SetPlayerScore(ply64, score)
-	if not ply64 then return end
+function EVENT:SetPlayerScore(sid64, score)
+	if not sid64 then return end
 
-	self.score[ply64] = score
+	self.score[sid64] = score
 end
 
 ---
 -- Sets the karma changes data table to the event.
--- @param string ply64 The steamID64 of the affected player
+-- @param string sid64 The steamID64 of the affected player
 -- @param[opt] table karma The karma changes data table that should be set
 -- @realm shared
-function EVENT:SetPlayerKarmaChanges(ply64, karma)
-	if not ply64 then return end
+function EVENT:SetPlayerKarmaChanges(sid64, karma)
+	if not sid64 then return end
 
-	if not self.karma[ply64] then
-		self.karma[ply64] = {}
-	end
-
-	self.karma[ply64].changes = karma
+	self.karma[sid64] = self.karma[sid64] or {}
+	self.karma[sid64].changes = karma
 end
 
 ---
 -- Sets the absolute karma change data to the event. 
--- @param string ply64 The steamID64 of the affected player
+-- @param string sid64 The steamID64 of the affected player
 -- @param[opt] number karma The karma change that should be set
 -- @realm shared
-function EVENT:SetPlayerAbsoluteKarmaChange(ply64, karma)
-	if not ply64 then return end
+function EVENT:SetPlayerAbsoluteKarmaChange(sid64, karma)
+	if not sid64 then return end
 
-	if not self.karma[ply64] then
-		self.karma[ply64] = {}
-	end
-
-	self.karma[ply64].absolute = karma
+	self.karma[sid64] = self.karma[sid64] or {}
+	self.karma[sid64].absolute = karma
 end
 
 ---
@@ -95,20 +89,20 @@ end
 
 ---
 -- Checks whether the given player has scored in this event or not.
--- @param string ply64 The steamID64 of the player that should be checked
+-- @param string sid64 The steamID64 of the player that should be checked
 -- @return boolean Returns true if the player has a score table, they could still have received 0 points
 -- @realm shared
-function EVENT:HasPlayerScore(ply64)
-	return self.score[ply64] ~= nil
+function EVENT:HasPlayerScore(sid64)
+	return self.score[sid64] ~= nil
 end
 
 ---
 -- Checks whether the given player's karma has changed in this event or not.
--- @param string ply64 The steamID64 of the player that should be checked
+-- @param string sid64 The steamID64 of the player that should be checked
 -- @return boolean Returns true if the player has a karma change table
 -- @realm shared
-function EVENT:HasPlayerKarmaChange(ply64)
-	return self.karma[ply64] ~= nil and self.karma[ply64].absolute ~= nil and self.karma[ply64].changes ~= nil
+function EVENT:HasPlayerKarmaChange(sid64)
+	return self.karma[sid64] ~= nil and self.karma[sid64].absolute ~= nil and self.karma[sid64].changes ~= nil
 end
 
 ---
@@ -130,17 +124,17 @@ end
 ---
 -- Returns the complete score for the given player in this event. This takes care of
 -- events that give score for different things.
--- @param string ply64 The steamID64 of the player that should be checked
+-- @param string sid64 The steamID64 of the player that should be checked
 -- @return[default=0] number The amount of score gained by this player in this event
 -- @realm shared
-function EVENT:GetSummedPlayerScore(ply64)
-	if not self:HasPlayerScore(ply64) then
+function EVENT:GetSummedPlayerScore(sid64)
+	if not self:HasPlayerScore(sid64) then
 		return 0
 	end
 
 	local scoreSum = 0
 
-	for _, score in pairs(self.score[ply64]) do
+	for _, score in pairs(self.score[sid64]) do
 		scoreSum = scoreSum + score
 	end
 
@@ -157,11 +151,11 @@ end
 
 ---
 -- Checks if a given player was was affected by this event.
--- @param string ply64 The steamID64 of the player that should be checked
+-- @param string sid64 The steamID64 of the player that should be checked
 -- @return boolean Returns true if the player was affected by this event.
 -- @realm shared
-function EVENT:HasAffectedPlayer(ply64)
-	return tableHasValue(self.plys, ply64)
+function EVENT:HasAffectedPlayer(sid64)
+	return tableHasValue(self.plys, sid64)
 end
 
 ---
@@ -273,9 +267,9 @@ if SERVER then
 		local plys = self.event.plys
 
 		for i = 1, #plys do
-			local plyID = plys[i].sid64
-			self:SetPlayerKarmaChanges(plyID, KARMA.GetKarmaChangesBySteamID64(plyID))
-			self:SetPlayerAbsoluteKarmaChange(plyID, KARMA.GetAbsoluteKarmaChangeBySteamID64(plyID))
+			local sid64 = plys[i].sid64
+			self:SetPlayerKarmaChanges(sid64, KARMA.GetKarmaChangesBySteamID64(sid64))
+			self:SetPlayerAbsoluteKarmaChange(sid64, KARMA.GetAbsoluteKarmaChangeBySteamID64(sid64))
 		end
 	end
 end
