@@ -9,6 +9,7 @@ local tableAdd = table.Add
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
+EVENT.karma = {}
 EVENT.plys = {}
 
 ---
@@ -58,6 +59,10 @@ end
 function EVENT:SetPlayerKarmaChanges(ply64, karma)
 	if not ply64 then return end
 
+	if not self.karma[ply64] then
+		self.karma[ply64] = {}
+	end
+
 	self.karma[ply64].changes = karma
 end
 
@@ -68,6 +73,10 @@ end
 -- @realm shared
 function EVENT:SetPlayerAbsoluteKarmaChange(ply64, karma)
 	if not ply64 then return end
+
+	if not self.karma[ply64] then
+		self.karma[ply64] = {}
+	end
 
 	self.karma[ply64].absolute = karma
 end

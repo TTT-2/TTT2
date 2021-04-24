@@ -160,11 +160,11 @@ function KARMA.SaveKarmaChange(ply, amount, reason)
 	if amount == 0 then return end
 
 	local plyID = ply:SteamID64()
-	if not KARMA.KarmaChanges[plyID][reason] then
-		KARMA.KarmaChanges[plyID][reason] = 0
+	if not KARMA.KarmaChanges[plyID] then
+		KARMA.KarmaChanges[plyID] = {}
 	end
 
-	KARMA.KarmaChanges[plyID][reason] = KARMA.KarmaChanges[plyID][reason] + amount
+	KARMA.KarmaChanges[plyID][reason] = (KARMA.KarmaChanges[plyID][reason] or 0) + amount
 end
 
 ---
@@ -172,11 +172,11 @@ end
 -- @realm server
 -- @internal
 function KARMA.ResetRoundChanges()
-	KARMA.KarmaChangesOld = table.Copy(KarmaChanges)
+	KARMA.KarmaChangesOld = table.Copy(KARMA.KarmaChanges)
 	KARMA.KarmaChanges = {}
 
 	if IsDebug() then
-		for plyID,reasonList in pairs(KARMA.KarmaChanges) do
+		for plyID,reasonList in pairs(KARMA.KarmaChangesOld) do
 			local ply = player.GetBySteamID64(plyID)
 			print("\nFor Player " .. ply:GetName())
 			for reason,karma in pairs(reasonList) do
@@ -212,6 +212,8 @@ end
 function KARMA.GetAbsoluteKarmaChangeBySteamID64(plyID)
 	local amount = 0
 	local reasonList = KARMA.KarmaChanges[plyID]
+	if not reasonList then return nil end
+
 	for reason,karma in pairs(reasonList) do
 		amount = amount + karma
 	end
@@ -227,6 +229,8 @@ end
 function KARMA.GetAbsoluteOldKarmaChangeBySteamID64(plyID)
 	local amount = 0
 	local reasonList = KARMA.KarmaChangesOld[plyID]
+	if not reasonList then return nil end
+
 	for reason,karma in pairs(reasonList) do
 		amount = amount + karma
 	end
