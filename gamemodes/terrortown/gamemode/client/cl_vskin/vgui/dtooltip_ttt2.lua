@@ -62,6 +62,10 @@ end
 -- @return number
 -- @realm client
 function PANEL:GetArrowSize()
+	if not self.targetPanel.tooltip then
+		return 0
+	end
+
 	return self.targetPanel.tooltip.sizeArrow
 end
 
