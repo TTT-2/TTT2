@@ -65,12 +65,17 @@ function EVENT:CalculateScore()
 	local wintype = event.wintype
 	local alive = {}
 	local dead = {}
+	local aliveAll = 0
 
 	-- Check who is alive and who is dead on a teambased approach
 	for i = 1, #plys do
 		local ply = plys[i]
 		local state = ply.alive and alive or dead
 		local team = ply.team
+
+		if ply.alive then
+			aliveAll = aliveAll + 1
+		end
 
 		if team ~= TEAM_NONE then
 			state[team] = (state[team] or 0) + 1
@@ -103,7 +108,8 @@ function EVENT:CalculateScore()
 		end
 
 		self:SetPlayerScore(ply.sid64, {
-			score_alive_teammates = alive[team] or 0,
+			score_alive_teammates = (alive[team] or 0) * roleData.score.aliveTeammatesBonusMultiplier,
+			score_alive_all = aliveAll * roleData.score.allSurviveBonusMultiplier,
 			score_dead_enemies = math.ceil(otherDeadPlayers * roleData.score.surviveBonusMultiplier),
 			score_timelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.score.timelimitMultiplier) or 0
 		})

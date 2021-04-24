@@ -1262,12 +1262,14 @@ Gardez à l'esprit que les traductions sont réalisées par la communauté. N'h�
 --L.tooltip_roles_time = "Roles over time:"
 
 --L.tooltip_finish_score_alive_teammates = "Alive teammates: {score}"
+--L.tooltip_finish_score_alive_all = "Alive players: {score}"
 --L.tooltip_finish_score_timelimit = "Time is up: {score}"
 --L.tooltip_finish_score_dead_enemies = "Dead enemies: {score}"
 --L.tooltip_kill_score = "Kill: {score}"
 --L.tooltip_bodyfound_score = "Bodyfound: {score}"
 
 --L.finish_score_alive_teammates = "Alive teammates:"
+--L.finish_score_alive_all = "Alive players:"
 --L.finish_score_timelimit = "Time is up:"
 --L.finish_score_dead_enemies = "Dead enemies:"
 --L.kill_score = "Kill:"
