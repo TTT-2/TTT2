@@ -384,7 +384,7 @@ function CLSCORE:GetWinData()
 
 	if wintype == WIN_TIMELIMIT then
 		return "hilite_win_time", COLOR_LBROWN
-	elseif wintype == WIN_NONE then
+	elseif wintype == TEAM_NONE then -- make it a tie
 		return "hilite_win_tie", COLOR_LBROWN
 	else
 		return "hilite_win_" .. wintype, TEAMS[wintype].color
