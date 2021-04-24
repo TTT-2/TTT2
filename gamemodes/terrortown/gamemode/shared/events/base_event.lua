@@ -51,6 +51,28 @@ function EVENT:SetPlayerScore(ply64, score)
 end
 
 ---
+-- Sets the karma changes data table to the event.
+-- @param string ply64 The steamID64 of the affected player
+-- @param[opt] table karma The karma changes data table that should be set
+-- @realm shared
+function EVENT:SetPlayerKarmaChanges(ply64, karma)
+	if not ply64 then return end
+
+	self.karma[ply64].changes = karma
+end
+
+---
+-- Sets the absolute karma change data to the event. 
+-- @param string ply64 The steamID64 of the affected player
+-- @param[opt] number karma The karma change that should be set
+-- @realm shared
+function EVENT:SetPlayerAbsoluteKarmaChange(ply64, karma)
+	if not ply64 then return end
+
+	self.karma[ply64].absolute = karma
+end
+
+---
 -- Returns the event data in the deprecated format. Shouldn't be used, is used
 -- internally.
 -- @note This function should be overwritten but not not called.
@@ -170,6 +192,11 @@ if SERVER then
 		-- scoring function to directly calculate the score
 		self:CalculateScore()
 
+		-- Synchronize Karma Changes if needed
+		if self:ShouldKarmaChangeSynchronize() then
+			self:SynchronizeKarmaChanges()
+		end
+
 		return true
 	end
 
@@ -207,5 +234,30 @@ if SERVER then
 	-- @realm server
 	function EVENT:CalculateScore()
 
+	end
+
+	---
+	-- Return true if Karma shall be synchronized
+	-- @note This function should be overwritten but not called.
+	-- @note The event table can be accessed via `self.event`.
+	-- @internal
+	-- @realm server
+	function EVENT:ShouldKarmaChangeSynchronize()
+		return false
+	end
+
+	---
+	-- This function puts KarmaChanges into event-data 
+	-- @note The event table can be accessed via `self.event`.
+	-- @internal
+	-- @realm server
+	function EVENT:SynchronizeKarmaChanges()
+		local plys = self.event.plys
+
+		for i = 1, #plys do
+			local plyID = plys[i].sid64
+			self:SetPlayerKarmaChanges(plyID, KARMA.GetKarmaChangesBySteamID64(plyID))
+			self:SetPlayerAbsoluteKarmaChange(plyID, KARMA.GetAbsoluteKarmaChangeBySteamID64(plyID))
+		end
 	end
 end
