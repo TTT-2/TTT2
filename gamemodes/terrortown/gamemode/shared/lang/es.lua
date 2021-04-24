@@ -1232,7 +1232,7 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 --L.title_score_events = "Event Timeline"
 
 --L.label_bind_clscore = "Opend round end screen"
---L.title_player_score = "{player}' score:"
+--L.title_player_score = "{player}'s score:"
 
 --L.label_show_events = "Show events from"
 --L.button_show_events_you = "You"
