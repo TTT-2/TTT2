@@ -229,7 +229,6 @@ if SERVER then
 		-- the event is only counted if it happened while the round was active
 		if event.roundState ~= ROUND_ACTIVE then return end
 
-		local victim = event.victim
 		local attacker = event.attacker
 		local deathType = event.type
 
