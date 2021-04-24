@@ -138,6 +138,7 @@ end
 ---
 -- Allows to change the live KARMA from anywhere
 -- Use this function only if you want to influence KARMA per event or similar
+-- @note Reason is a string and will be displayed in the roundendscreen as tooltip, so use language localization or describe it properly
 -- @param Player ply
 -- @param number amount
 -- @param string reason 
