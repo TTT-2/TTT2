@@ -103,19 +103,6 @@ if SERVER then
 			})
 		end
 	end
-
-	function EVENT:CalculateKarma()
-		local event = self.event
-
-		-- the event is only counted if it happened while the round was active
-		if event.roundState ~= ROUND_ACTIVE then return end
-
-		local victim = event.victim
-		local attacker = event.attacker
-		local dmginfo = event.dmg.dmgInfo
-
-		KARMA.Killed(attacker, victim, dmginfo)
-	end
 end
 
 function EVENT:GetDeprecatedFormat()

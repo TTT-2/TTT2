@@ -746,6 +746,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		else
 			DamageLog(Format("KILL:\t <something/world> killed %s [%s]", ply:Nick(), ply:GetRoleString()))
 		end
+
+		KARMA.Killed(attacker, ply, dmginfo)
 	end
 
 	-- Clear out any weapon or equipment we still have

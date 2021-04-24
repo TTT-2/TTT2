@@ -82,10 +82,6 @@ function EVENT:CalculateScore()
 	end
 end
 
-function EVENT:CalculateKarma()
-
-end
-
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 

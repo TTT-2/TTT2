@@ -210,15 +210,4 @@ if SERVER then
 	function EVENT:CalculateScore()
 
 	end
-
-	---
-	-- This function calculates the Karma gained for this event. It should be
-	-- overwritten if the event should yield a Karma-Change.
-	-- @note This function should be overwritten but not not called.
-	-- @note The event table can be accessed via `self.event`.
-	-- @internal
-	-- @realm server
-	function EVENT:CalculateKarma()
-
-	end
 end
