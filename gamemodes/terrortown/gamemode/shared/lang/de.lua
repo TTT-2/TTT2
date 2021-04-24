@@ -50,14 +50,6 @@ L.credit_kill = "Dir wurde(n) {num} Credit(s) gegeben, da du einen {role} getöt
 -- Karma
 L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde vollen Schaden!"
 L.karma_dmg_other = "Dein Karma ist {amount}. Daher ist dein Schaden um {num}% reduziert!"
--- Roundendscreen Tooltip
-L.karma_teamkill_tooltip = "Karma erhalten durch Töten eines Team-Mitglieds"
-L.karma_teamhurt_tooltip = "Karma erhalten durch Verursachen von Schaden an einem Team-Mitglied"
-L.karma_enemykill_tooltip = "Karma erhalten durch Töten eines Feindes"
-L.karma_enemyhurt_tooltip = "Karma erhalten durch Verursachen von Schaden an einem Feind"
-L.karma_cleanround_tooltip = "Karma erhalten durch eine einwandfreie Runde"
-L.karma_roundheal_tooltip = "Karma erhalten am Rundenende"
-L.karma_unknown_tooltip = "Unbekanntes Ereignis"
 
 -- Body identification messages
 L.body_found = "{finder} fand den Körper von {victim}. {role}"
@@ -1304,3 +1296,12 @@ Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehl
 
 -- 2021-04-20
 L.none = "Keine Rolle"
+
+-- 2021-04-24
+L.karma_teamkill_tooltip = "Karma erhalten durch Töten eines Team-Mitglieds."
+L.karma_teamhurt_tooltip = "Karma erhalten durch Verursachen von Schaden an einem Team-Mitglied."
+L.karma_enemykill_tooltip = "Karma erhalten durch Töten eines Feindes."
+L.karma_enemyhurt_tooltip = "Karma erhalten durch Verursachen von Schaden an einem Feind."
+L.karma_cleanround_tooltip = "Karma erhalten durch eine einwandfreie Runde."
+L.karma_roundheal_tooltip = "Karma erhalten am Rundenende."
+L.karma_unknown_tooltip = "Unbekanntes Ereignis."
