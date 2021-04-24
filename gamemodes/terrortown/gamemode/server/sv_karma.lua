@@ -175,13 +175,12 @@ function KARMA.ResetRoundChanges()
 	KARMA.KarmaChangesOld = table.Copy(KarmaChanges)
 	KARMA.KarmaChanges = {}
 
-	for plyID,reasonList in pairs(KARMA.KarmaChanges) do
-		local ply = player.GetBySteamID64(plyID)
-		print("PlayerName " .. ply:GetName())
-		for reason,karmaList in pairs(reasonList) do
-			print("For the reason of " .. reason)
-			for k,karma in pairs(karmaList) do
-				print("Amount of " .. karma .. " was changed.")
+	if IsDebug() then
+		for plyID,reasonList in pairs(KARMA.KarmaChanges) do
+			local ply = player.GetBySteamID64(plyID)
+			print("\nFor Player " .. ply:GetName())
+			for reason,karma in pairs(reasonList) do
+				print("An amount of " .. karma .. " was changed for the reason of " .. reason)
 			end
 		end
 	end
@@ -203,6 +202,36 @@ end
 -- @realm server
 function KARMA.GetOldKarmaChangesBySteamID64(plyID)
 	return KARMA.KarmaChangesOld[plyID]
+end
+
+---
+-- Returns the total change in Karma of current round per player
+-- @param SteamID64 plyID
+-- @return number containing absolute karmachange per player
+-- @realm server
+function KARMA.GetAbsoluteKarmaChangeBySteamID64(plyID)
+	local amount = 0
+	local reasonList = KARMA.KarmaChanges[plyID]
+	for reason,karma in pairs(reasonList) do
+		amount = amount + karma
+	end
+
+	return amount
+end
+
+---
+-- Returns the total change in Karma of last round per player
+-- @param SteamID64 plyID
+-- @return number containing absolute karmachange per player
+-- @realm server
+function KARMA.GetAbsoluteOldKarmaChangeBySteamID64(plyID)
+	local amount = 0
+	local reasonList = KARMA.KarmaChangesOld[plyID]
+	for reason,karma in pairs(reasonList) do
+		amount = amount + karma
+	end
+
+	return amount
 end
 
 ---
