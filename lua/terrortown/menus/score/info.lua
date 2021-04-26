@@ -49,7 +49,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 	titleBox:SetTitle("tooltip_score_gained")
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
-	-- In a first Pass filter all scorevents and scores by name, positivy and number of Events
+	-- In a first Pass filter all scoreevents and scores by name, positivy and number of Events
 	local filteredPlyScores = {}
 	for i = 1, #plyScores do
 		local plyScoreEvent = plyScores[i]
@@ -59,19 +59,12 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			local rawScoreText = rawScoreTexts[k]
 			local scoreName = rawScoreText.name
 			local score = rawScoreText.score
+
+			filteredPlyScores[scoreName] = filteredPlyScores[scoreName] or {score = {0,0}, numEvents = {0,0}}
+
 			local posIndex = score < 0 and 1 or 2 -- first entry contains negative and second positive entries
-			local plyScoreIndexed = filteredPlyScores[scoreName]
-			if not filteredPlyScores[scoreName] then
-				plyScoreIndexed = {}
-				plyScoreIndexed.score = {0,0}
-				plyScoreIndexed.score[posIndex] = score
-				plyScoreIndexed.numEvents = {0,0}
-				plyScoreIndexed.numEvents[posIndex] = 1
-				filteredPlyScores[scoreName] = plyScoreIndexed
-			else
-				plyScoreIndexed.score[posIndex] = plyScoreIndexed.score[posIndex] + score
-				plyScoreIndexed.numEvents[posIndex] = plyScoreIndexed.numEvents[posIndex] + 1
-			end
+			filteredPlyScores[scoreName].score[posIndex] = filteredPlyScores[scoreName].score[posIndex] + score
+			filteredPlyScores[scoreName].numEvents[posIndex] = filteredPlyScores[scoreName].numEvents[posIndex] + 1
 		end
 	end
 
