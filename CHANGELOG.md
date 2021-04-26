@@ -15,6 +15,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed IsOffScreen function being global for compatibility
 - Fixed a German translation string (by @FaRLeZz)
+- Fixed a Polish translation by adding new lines (by @Wuker)
 - Fixed a data initialization bug that appeared on the first (initial) spawn
 
 ### Changed
