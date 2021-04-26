@@ -49,12 +49,46 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 	titleBox:SetTitle("tooltip_score_gained")
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
+	-- In a first Pass filter all scorevents and scores by name, positivy and number of Events
+	local filteredPlyScores = {}
 	for i = 1, #plyScores do
 		local plyScoreEvent = plyScores[i]
 		local rawScoreTexts = plyScoreEvent:GetRawScoreText(ply.sid64)
 
 		for k = 1, #rawScoreTexts do
 			local rawScoreText = rawScoreTexts[k]
+			local scoreName = rawScoreText.name
+			local score = rawScoreText.score
+			if not filteredPlyScores[scoreName] then
+				filteredPlyScores[scoreName] = {}
+				filteredPlyScores[scoreName].negativeScore = score < 0 and score or 0
+				filteredPlyScores[scoreName].positiveScore = score > 0 and score or 0
+				filteredPlyScores[scoreName].numberNegativeEvents = score < 0 and 1 or 0
+				filteredPlyScores[scoreName].numberPositiveEvents = score > 0 and 1 or 0
+			else
+				filteredPlyScores[scoreName].negativeScore = filteredPlyScores[scoreName].negativeScore + (score < 0 and score or 0)
+				filteredPlyScores[scoreName].positiveScore = filteredPlyScores[scoreName].positiveScore + (score > 0 and score or 0)
+				filteredPlyScores[scoreName].numberNegativeEvents = filteredPlyScores[scoreName].numberNegativeEvents + (score < 0 and 1 or 0)
+				filteredPlyScores[scoreName].numberPositiveEvents = filteredPlyScores[scoreName].numberPositiveEvents + (score > 0 and 1 or 0)
+			end
+		end
+	end
+
+	-- In a second pass we create the tooltip boxes with summarized scoreevents
+	for rawScoreTextName,scoreObj in pairs(filteredPlyScores) do
+		for i = 1,2 do
+			local score = 0
+			local numberEvents = 0
+
+			if i == 1 and scoreObj.negativeScore < 0 then
+				score = scoreObj.negativeScore
+				numberEvents = scoreObj.numberNegativeEvents
+			elseif i == 2 and scoreObj.positiveScore > 0 then
+				score = scoreObj.positiveScore
+				numberEvents = scoreObj.numberPositiveEvents
+			else
+				continue
+			end
 
 			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
 			plyRoleBox:SetSize(width, 20)
@@ -62,7 +96,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 			plyRoleBox.GetTitle = function()
-				return "- " .. ParT("tooltip_" .. rawScoreText.name, {score = rawScoreText.score})
+				return "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
 			end
 
 			height = height + 20
