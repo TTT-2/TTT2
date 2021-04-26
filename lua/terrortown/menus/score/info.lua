@@ -59,17 +59,17 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			local rawScoreText = rawScoreTexts[k]
 			local scoreName = rawScoreText.name
 			local score = rawScoreText.score
+			local posIndex = score < 0 and 1 or 2
+			local plyScoreIndexed = filteredPlyScores[scoreName]
 			if not filteredPlyScores[scoreName] then
-				filteredPlyScores[scoreName] = {}
-				filteredPlyScores[scoreName].negativeScore = score < 0 and score or 0
-				filteredPlyScores[scoreName].positiveScore = score > 0 and score or 0
-				filteredPlyScores[scoreName].numberNegativeEvents = score < 0 and 1 or 0
-				filteredPlyScores[scoreName].numberPositiveEvents = score > 0 and 1 or 0
+				plyScoreIndexed = {}
+				plyScoreIndexed.score = {0,0}
+				plyScoreIndexed.score[posIndex] = score
+				plyScoreIndexed.numEvents = {0,0}
+				plyScoreIndexed.numEvents[posIndex] = 1
 			else
-				filteredPlyScores[scoreName].negativeScore = filteredPlyScores[scoreName].negativeScore + (score < 0 and score or 0)
-				filteredPlyScores[scoreName].positiveScore = filteredPlyScores[scoreName].positiveScore + (score > 0 and score or 0)
-				filteredPlyScores[scoreName].numberNegativeEvents = filteredPlyScores[scoreName].numberNegativeEvents + (score < 0 and 1 or 0)
-				filteredPlyScores[scoreName].numberPositiveEvents = filteredPlyScores[scoreName].numberPositiveEvents + (score > 0 and 1 or 0)
+				plyScoreIndexed.score[posIndex] = plyScoreIndexed.score[posIndex] + score
+				plyScoreIndexed.numEvents[posIndex] = plyScoreIndexed.numEvents[posIndex] + 1
 			end
 		end
 	end
@@ -77,16 +77,10 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 	-- In a second pass we create the tooltip boxes with summarized scoreevents
 	for rawScoreTextName,scoreObj in pairs(filteredPlyScores) do
 		for i = 1,2 do
-			local score = 0
-			local numberEvents = 0
+			local score = scoreObj.score[i]
+			local numberEvents = scoreObj.numEvents[i]
 
-			if i == 1 and scoreObj.negativeScore < 0 then
-				score = scoreObj.negativeScore
-				numberEvents = scoreObj.numberNegativeEvents
-			elseif i == 2 and scoreObj.positiveScore > 0 then
-				score = scoreObj.positiveScore
-				numberEvents = scoreObj.numberPositiveEvents
-			else
+			if score == 0 then
 				continue
 			end
 
