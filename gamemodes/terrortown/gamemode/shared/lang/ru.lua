@@ -1304,4 +1304,4 @@ L.help_lang_info = [[
 --L.karma_enemyhurt_tooltip = "Karma received by damaging enemy."
 --L.karma_cleanround_tooltip = "Karma received for clean round."
 --L.karma_roundheal_tooltip = "Karma received at roundend."
---L.karma_unknown_tooltip = "Unknown Event."
+--L.karma_unknown_tooltip = "Unknown karma event."

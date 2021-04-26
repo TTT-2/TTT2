@@ -1304,4 +1304,4 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 --L.karma_enemyhurt_tooltip = "Karma received by damaging enemy."
 --L.karma_cleanround_tooltip = "Karma received for clean round."
 --L.karma_roundheal_tooltip = "Karma received at roundend."
---L.karma_unknown_tooltip = "Unknown Event."
+--L.karma_unknown_tooltip = "Unknown karma event."
