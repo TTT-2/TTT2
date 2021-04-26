@@ -6,7 +6,7 @@ local L = LANG.CreateLanguage("pl")
 -- the alias name is based on the original TTT language name:
 -- - does not exist -
 L.__alias = "polski"
-
+-- If you having problems with polish ó ł ż ź ą ę please use alias 	"extended = true," in vgui files that contains fonts, especially in surface.CreateFont
 L.lang_name = "Polski (Polish)"
 
 -- General text used in various places
@@ -88,7 +88,7 @@ L.equip_help_carry = "Możesz kupować jedynie przedmioty na, które masz miejsc
 L.equip_carry = "Możesz wziąć ten przedmiot."
 L.equip_carry_own = "Aktualnie posiadasz ten przedmiot."
 L.equip_carry_slot = "Posiadasz już inny przedmiot na slocie {slot}."
---L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
+L.equip_carry_minplayers = "Nie ma wystarczającej liczby graczy, aby odblokować tę broń."
 
 L.equip_help_stock = "Istnieją przedmioty, które możesz kupić tylko raz na rundę."
 L.equip_stock_deny = "Ten przedmiot nie jest już dłużej dostępny."
@@ -233,14 +233,14 @@ L.sb_tag_kill = "ZABIĆ"
 L.sb_tag_miss = "ZAGINIONY"
 
 -- Equipment actions, like buying and dropping
---L.buy_no_stock = "This weapon is out of stock: you already bought it this round."
---L.buy_pending = "You already have an order pending, wait until you receive it."
---L.buy_received = "You have received your special equipment."
+L.buy_no_stock = "Ta broń się skończyła: już kupiłeś ją w tej rundzie."
+L.buy_pending = "Masz już oczekujące zamówienie, poczekaj na jego odbiór"
+L.buy_received = "Otrzymałeś specjalne uzbrojenie."
 
---L.drop_no_room = "You have no room here to drop your weapon!"
+L.drop_no_room = "Nie ma tutaj mniejsca, aby wyrzucić broń!"
 
---L.disg_turned_on = "Disguise enabled!"
---L.disg_turned_off = "Disguise disabled."
+L.disg_turned_on = "Przebranie włączone!"
+L.disg_turned_off = "Przebranie wyłączone."
 
 -- Equipment item descriptions
 L.item_passive = "Pasywne"
@@ -248,10 +248,10 @@ L.item_active = "Aktywne"
 L.item_weapon = "Broń"
 
 L.item_armor = "Kamizelka kuloodporna"
---L.item_armor_desc = [[
---Reduces bullet, fire and explosion damage. Depletes over time.
+L.item_armor_desc = [[
+Zmniejsza obrażenia, zużywa się z czasem
 
---It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
+Można ją zakupić kilka razy. Po osiągnięciu odpowiedniej liczby punktów, kamizelka się wzmacnia!]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[
@@ -613,9 +613,9 @@ L.tip27 = "Jako detektyw trupy z lupą po nicku zostali przeszukani przez detekt
 
 L.tip28 = "Obserwatorzy mogą kliknąć {mutekey} by wyciszyć innych obserwatorów lub żywych graczy."
 
-L.tip29 = "If the server has installed additional languages, you can switch to a different language at any time in the Settings menu."
+L.tip29 = "Jeśli serwer ma zainstalowane dodatkowe języki, możesz je ustawić w menu ustawień."
 
-L.tip30 = "Quickchat albo komendy 'radia' mogą zostać użyte przez kliknięcie {zoomkey}."
+L.tip30 = "Szybki-chat albo komendy 'radia' mogą zostać użyte przez kliknięcie {zoomkey}."
 
 L.tip31 = "Jako obserwator, kliknij {duckkey} by odblokować twój kursor i kliknąć na tym panelu ciekawostek. Kliknij {duckkey} ponownie, aby powrócić."
 
@@ -680,68 +680,68 @@ L.col_total = "Punktów ogółem"
 L.something = "coś"
 
 -- Kill events
---L.ev_blowup = "{victim} blew themselves up"
---L.ev_blowup_trap = "{victim} was blown up by {trap}"
+L.ev_blowup = "{victim} wysadził się w powietrze"
+L.ev_blowup_trap = "{victim} został wysadzony przez {trap}"
 
---L.ev_tele_self = "{victim} telefragged themselves"
---L.ev_sui = "{victim} couldn't take it and killed themselves"
---L.ev_sui_using = "{victim} killed themselves using {tool}"
+L.ev_tele_self = "{victim} zabił się teleporterem"
+L.ev_sui = "{victim} nie mógł tego znieść i się zabił"
+L.ev_sui_using = "{victim} zabił się używając {tool}"
 
---L.ev_fall = "{victim} fell to their death"
---L.ev_fall_pushed = "{victim} fell to their death after {attacker} pushed them"
---L.ev_fall_pushed_using = "{victim} fell to their death after {attacker} used {trap} to push them"
+L.ev_fall = "{victim} spadł i się połamał"
+L.ev_fall_pushed = "{victim} spadł i się połamał po tym jak {attacker} go zrzucił"
+L.ev_fall_pushed_using = "{victim} spadł i się połamał po tym jak {attacker} użył {trap}, aby go popchnąć"
 
---L.ev_shot = "{victim} was shot by {attacker}"
---L.ev_shot_using = "{victim} was shot by {attacker} using a {weapon}"
+L.ev_shot = "{victim} został postrzelony przez {attacker}"
+L.ev_shot_using = "{victim} został postrzelony przez {attacker} używając {weapon}"
 
---L.ev_drown = "{victim} was drowned by {attacker}"
---L.ev_drown_using = "{victim} was drowned by {trap} triggered by {attacker}"
+L.ev_drown = "{victim} został utopiony przez {attacker}"
+L.ev_drown_using = "{victim} został utopiony przez {trap} aktywowaną przez {attacker}"
 
---L.ev_boom = "{victim} was exploded by {attacker}"
---L.ev_boom_using = "{victim} was blown up by {attacker} using {trap}"
+L.ev_boom = "{victim} został wysadzony w powietrze przez {attacker}"
+L.ev_boom_using = "{victim} został wysadzony w powietrze przez {attacker} używając {trap}"
 
---L.ev_burn = "{victim} was fried by {attacker}"
---L.ev_burn_using = "{victim} was burned by {trap} due to {attacker}"
+L.ev_burn = "{victim} został podpalony przez {attacker}"
+L.ev_burn_using = "{victim} został spalony przez {trap}, którą aktywował {attacker}"
 
---L.ev_club = "{victim} was beaten up by {attacker}"
---L.ev_club_using = "{victim} was pummeled to death by {attacker} using {trap}"
+L.ev_club = "{victim} został pobity przez {attacker}"
+L.ev_club_using = "{victim} został pobity na śmierć przez {attacker} używając {trap}"
 
---L.ev_slash = "{victim} was stabbed by {attacker}"
---L.ev_slash_using = "{victim} was cut up by {attacker} using {trap}"
+L.ev_slash = "{victim} został dźgnięty przez {attacker}"
+L.ev_slash_using = "{victim} został zadźgany przez {attacker} używając {trap}"
 
---L.ev_tele = "{victim} was telefragged by {attacker}"
---L.ev_tele_using = "{victim} was atomized by {trap} set by {attacker}"
+L.ev_tele = "{victim} został zabity teleporterem gracza {attacker}"
+-L.ev_tele_using = "{victim} został rozbity na atomy przez {trap} gracza {attacker}"
 
---L.ev_goomba = "{victim} was crushed by the massive bulk of {attacker}"
+L.ev_goomba = "{victim} został zmiażdżony przez masę {attacker}"
 
---L.ev_crush = "{victim} was crushed by {attacker}"
---L.ev_crush_using = "{victim} was crushed by {trap} of {attacker}"
+L.ev_crush = "{victim} został zmiażdżony  {attacker}"
+L.ev_crush_using = "{victim} został zmiażdżony przez {trap} gracza {attacker}"
 
---L.ev_other = "{victim} was killed by {attacker}"
---L.ev_other_using = "{victim} was killed by {attacker} using {trap}"
+L.ev_other = "{victim} został zabity przez {attacker}"
+L.ev_other_using = "{victim} został zabity przez {attacker} używając {trap}"
 
 -- Other events
---L.ev_body = "{finder} found the corpse of {victim}"
---L.ev_c4_plant = "{player} planted C4"
---L.ev_c4_boom = "The C4 planted by {player} exploded"
---L.ev_c4_disarm1 = "{player} disarmed C4 planted by {owner}"
---L.ev_c4_disarm2 = "{player} failed to disarm C4 planted by {owner}"
---L.ev_credit = "{finder} found {num} credit(s) on the corpse of {player}"
+L.ev_body = "{finder} znalazł ciało {victim}"
+L.ev_c4_plant = "{player} uzbroił C4"
+L.ev_c4_boom = "C4 uzbrojona przez {player} eksplodowała"
+L.ev_c4_disarm1 = "{player} rozbroił C4 gracza {owner}"
+L.ev_c4_disarm2 = "{player} poległ w rozbrajaniu C4 gracza {owner}"
+L.ev_credit = "{finder} znalazł {num} kredyt(ów) na ciele gracza {player}"
 
---L.ev_start = "The round started"
---L.ev_win_traitors = "The dastardly traitors won the round!"
---L.ev_win_innocents = "The lovable innocent terrorists won the round!"
---L.ev_win_time = "The traitors ran out of time and lost!"
+L.ev_start = "Runda się rozpoczęła!"
+L.ev_win_traitors = "Podli zdrajcy wygrali tę rudnę!"
+L.ev_win_innocents = "Kochani niewinni terroryści wygrali tę rundę!"
+L.ev_win_time = "Zdrajcy przekroczyli czas i przegrali!"
 
 -- Awards/highlights
 L.aw_sui1_title = "Lider Kultu SamobÓjstwa"
-L.aw_sui1_text = "pokazał innym samobójcom, jak to zrobić zabijąc się jako pierwszy."
+L.aw_sui1_text = "pokazał innym samobÓjcom, jak to zrobić zabijąc się jako pierwszy."
 
 L.aw_sui2_title = "Samotny i zdesperowany"
 L.aw_sui2_text = "był jedynym, który zabił samego siebie."
 
 L.aw_exp1_title = "Badania MateriaŁÓw Wybuchowych"
-L.aw_exp1_text = "został wyróżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
+L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
 
 L.aw_exp2_title = "Badania Terenowe"
 L.aw_exp2_text = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
@@ -958,7 +958,7 @@ L.knife_instant = "ZGON NA MIEJSCU"
 L.binoc_zoom_level = "Powiększenie"
 L.binoc_body = "WYKRYTO CIAŁO"
 
-L.idle_popup_title = "Idle"
+L.idle_popup_title = "Bezczynny"
 
 -- 2019-01-31
 L.create_own_shop = "Stwórz własny sklep"
@@ -1039,11 +1039,11 @@ L.corpse_binoculars = "Naciśnij [{key}] aby przeszukać ciało lornetką."
 L.binoc_progress = "Wyszukiwanie: {progress}%"
 
 L.pickup_no_room = "Nie masz już miejsca na ten przedmiot!"
---L.pickup_fail = "You cannot pick up this weapon"
---L.pickup_pending = "You already picked up a weapon, wait until you receive it"
+L.pickup_fail = "Nie możesz podnieść tej broni"
+L.pickup_pending = "Podniosłeś już broń! Poczekaj, aż ją otrzymasz!"
 
 -- 2020-01-07
-L.tbut_help_admin = "Edytuj ustawienia guzika treitora"
+L.tbut_help_admin = "Edytuj ustawienia guzika zdrajcy"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] aby włączyć ten przycisk dla roli {role}"
 L.tbut_role_config = "Rola: {current}"
 L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] aby włączyć ten guzik dla teamu {team}"
@@ -1144,10 +1144,10 @@ L.label_global_scale_factor = "Globalna Skala"
 L.label_hud_select = "Wybierz HUDa"
 L.label_vskin_select = "Wybierz VSkin"
 L.label_blur_enable = "Włącz blur dla tła VSkina"
---L.label_color_enable = "Enable VSkin background color"
+L.label_color_enable = "Zezwól na VSkin kolor tła"
 L.label_minimal_targetid = "Minimalistyczny status celu pod celownikiem (bez karmy, porad, itp)"
 L.label_shop_always_show = "Zawsze pokazuj sklep"
---L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
+L.label_shop_double_click_buy = "Zezwól na kupoanie przedmiotów poprzed podwtójne wciśnięcie"
 L.label_shop_num_col = "Liczba kolumn"
 L.label_shop_num_row = "Liczba rzędów"
 L.label_shop_item_size = "Liczba rzędów"
@@ -1164,7 +1164,7 @@ L.label_crosshair_thickness = "Grubość celownika"
 L.label_crosshair_thickness_outline = "Grubość otoczki celownika"
 L.label_crosshair_static_enable = "Umożliw statyczny celownik "
 L.label_crosshair_dot_enable = "Umożliw kropkę celownika"
---L.label_crosshair_lines_enable = "Enable crosshair lines"
+L.label_crosshair_lines_enable = "Zezwól na linie celownika"
 L.label_crosshair_scale_enable = "Umożliw różne wielkości"
 L.label_crosshair_ironsight_low_enabled = "Obniż broń podczas użycia celowniku mechanicznego"
 L.label_damage_indicator_enable = "Enable damage indicator"
@@ -1196,7 +1196,7 @@ L.label_bind_voice_team = "Teamowy Czat"
 
 L.label_hud_basecolor = "Kolor bazowy"
 
---L.label_menu_not_populated = "This submenu does not contain any content."
+L.label_menu_not_populated = "To menu nie ma w sobie nic."
 
 L.header_bindings_ttt2 = "Bindy TTT2"
 L.header_bindings_other = "Inne bindy"
@@ -1224,75 +1224,75 @@ L.button_press_key = "Naciśnij klawisz"
 L.button_save = "Zapisz"
 L.button_reset = "Reset"
 L.button_close = "Zamknij"
---L.button_hud_editor = "HUD Editor"
+L.button_hud_editor = "Edytor HUDa"
 
 -- 2020-04-20
---L.item_speedrun = "Speedrun"
---L.item_speedrun_desc = [[Makes you 50% faster!]]
---L.item_no_explosion_damage = "No Explosion Damage"
---L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
---L.item_no_fall_damage = "No Fall Damage"
---L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
---L.item_no_fire_damage = "No Fire Damage"
---L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
---L.item_no_hazard_damage = "No Hazard Damage"
---L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
---L.item_no_energy_damage = "No Energy Damage"
---L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
---L.item_no_prop_damage = "No Prop Damage"
---L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
---L.item_no_drown_damage = "No Drowning Damage"
---L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+L.item_speedrun = "Wyścig"
+L.item_speedrun_desc = [[Jesteś o 50% szybszy!]]
+L.item_no_explosion_damage = "Odporność Na Obrażenia"
+L.item_no_explosion_damage_desc = [[Stajesz się w pełni odporny na wybuchy.]]
+L.item_no_fall_damage = "Odporność Na Upadki"
+L.item_no_fall_damage_desc = [[Stajesz się odporny na upadki.]]
+L.item_no_fire_damage = "Ognioodporny"
+L.item_no_fire_damage_desc = [[Stajesz się odporny na ogień.]]
+L.item_no_hazard_damage = "Odporność Na Zatrucia"
+L.item_no_hazard_damage_desc = [[Stajesz się odporny na truciznę, radjacje itp.]]
+L.item_no_energy_damage = "Odporność Na Energię"
+L.item_no_energy_damage_desc = [[Stajesz się odporny na lasery, plazmę oraz pioruny.]]
+L.item_no_prop_damage = "Odporność Na Przedmioty"
+L.item_no_prop_damage_desc = [[Stajesz się odporny na obrażenia od przedmiotów.]]
+L.item_no_drown_damage = "Odporność Na Topienie Się"
+L.item_no_drown_damage_desc = [[Stajesz się odporny na wodę w płucach.]]
 
 -- 2020-04-21
---L.dna_tid_possible = "Scan possible"
---L.dna_tid_impossible = "No scan possible"
---L.dna_screen_ready = "No DNA"
---L.dna_screen_match = "Match"
+L.dna_tid_possible = "Możliwy skan"
+L.dna_tid_impossible = "Brak skanów"
+L.dna_screen_ready = "Brak DNA"
+L.dna_screen_match = "Dopasuj"
 
 -- 2020-04-30
---L.message_revival_canceled = "Revival canceled."
---L.message_revival_failed = "Revival failed."
---L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
---L.hud_revival_title = "Time left until revival:"
---L.hud_revival_time = "{time}s"
+L.message_revival_canceled = "Odrodzenie anulowane."
+L.message_revival_failed = "Odrodzenie nieudane."
+L.message_revival_failed_missing_body = "Nie zostałeś ożywiony, ponieważ twoje ciało już nie istnieje."
+L.hud_revival_title = "Czas pozostały do odrodzenia:"
+L.hud_revival_time = "{time}s"
 
 -- 2020-05-03
---L.door_destructible = "Door is destructible ({health}HP)"
+L.door_destructible = "Te drzwi da się zniszczyć ({health}PW)"
 
 -- 2020-05-28
---L.confirm_detective_only = "Only detectives can confirm bodies"
---L.inspect_detective_only = "Only detectives can inspect bodies"
---L.corpse_hint_no_inspect = "Only detectives can search this body."
---L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
---L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+L.confirm_detective_only = "Tylko detektywni mogą potwierdzić ciało"
+L.inspect_detective_only = "Tylko detektywni mogą sprawdzać ciało"
+L.corpse_hint_no_inspect = "Tylko detektywni mogą przeszukać ciało"
+L.corpse_hint_inspect_only = "Naciśnij [{usekey}] aby wyszukać. Tylko detektywni mogą potwierdzić ciało."
+L.corpse_hint_inspect_only_credits = "Naciśnij [{usekey}] aby otrzymać kredyty. Tylko detektywni mogą przeszukać ciało."
 
 -- 2020-06-04
---L.label_bind_disguiser = "Toggle disguiser"
+L.label_bind_disguiser = "Przełącz przebranie"
 
 -- 2020-06-24
---L.dna_help_primary = "Collect a DNA sample"
---L.dna_help_secondary = "Switch the DNA slot"
---L.dna_help_reload = "Delete a sample"
+L.dna_help_primary = "Zbierz próbkę DNA"
+L.dna_help_secondary = "Zmień slot DNA"
+L.dna_help_reload = "Usuń próbkę"
 
---L.binoc_help_pri = "Identify a body."
---L.binoc_help_sec = "Change zoom level."
+L.binoc_help_pri = "Rozpoznaj Ciało."
+L.binoc_help_sec = "Zmień Przybliżenie."
 
---L.vis_help_pri = "Drop the activated device."
+L.vis_help_pri = "Wyrzuć aktywne urządzenie."
 
---L.decoy_help_pri = "Plant the Decoy."
+L.decoy_help_pri = "Rozstaw Wabik."
 
 -- 2020-08-07
---L.pickup_error_spec = "You cannot pick this up as a spectator."
---L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
---L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+L.pickup_error_spec = "Nie możesz tego zrobić jako widz."
+L.pickup_error_owns = "Nie możesz tego podnieść, bo już masz tą broń."
+L.pickup_error_noslot = "Nie możesz tego podnieść, bo nie masz na to miejsca."
 
 -- 2020-11-02
---L.lang_server_default = "Server Default"
---L.help_lang_info = [[
---This translation is {coverage}% complete with the english language taken as a default reference.
+L.lang_server_default = "Ustawienie Serwera"
+L.help_lang_info = [[
+Te tłumaczenie ma w sobie {coverage}% angielskich tłumaczeń.
 
---Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+--Weż pod uwagę że tłumaczenia są robione przez społeczność, możesz pomóc je robić!]]
 
 -- 2021-04-20
---L.none = "No Role"
+L.none = "Brak Roli"
