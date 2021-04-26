@@ -59,7 +59,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			local rawScoreText = rawScoreTexts[k]
 			local scoreName = rawScoreText.name
 			local score = rawScoreText.score
-			local posIndex = score < 0 and 1 or 2
+			local posIndex = score < 0 and 1 or 2 -- first entry contains negative and second positive entries
 			local plyScoreIndexed = filteredPlyScores[scoreName]
 			if not filteredPlyScores[scoreName] then
 				plyScoreIndexed = {}
@@ -67,6 +67,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 				plyScoreIndexed.score[posIndex] = score
 				plyScoreIndexed.numEvents = {0,0}
 				plyScoreIndexed.numEvents[posIndex] = 1
+				filteredPlyScores[scoreName] = plyScoreIndexed
 			else
 				plyScoreIndexed.score[posIndex] = plyScoreIndexed.score[posIndex] + score
 				plyScoreIndexed.numEvents[posIndex] = plyScoreIndexed.numEvents[posIndex] + 1
