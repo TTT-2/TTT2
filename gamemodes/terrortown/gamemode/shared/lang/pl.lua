@@ -6,7 +6,7 @@ local L = LANG.CreateLanguage("pl")
 -- the alias name is based on the original TTT language name:
 -- - does not exist -
 L.__alias = "polski"
--- If you having problems with polish ó ł ż ź ą ę please use alias 	"extended = true," in vgui files that contains fonts, especially in surface.CreateFont
+
 L.lang_name = "Polski (Polish)"
 
 -- General text used in various places
@@ -680,58 +680,58 @@ L.col_total = "Punktów ogółem"
 L.something = "coś"
 
 -- Kill events
-L.ev_blowup = "{victim} wysadził się w powietrze"
-L.ev_blowup_trap = "{victim} został wysadzony przez {trap}"
+--L.ev_blowup = "{victim} blew themselves up"
+--L.ev_blowup_trap = "{victim} was blown up by {trap}"
 
-L.ev_tele_self = "{victim} zabił się teleporterem"
-L.ev_sui = "{victim} nie mógł tego znieść i się zabił"
-L.ev_sui_using = "{victim} zabił się używając {tool}"
+--L.ev_tele_self = "{victim} telefragged themselves"
+--L.ev_sui = "{victim} couldn't take it and killed themselves"
+--L.ev_sui_using = "{victim} killed themselves using {tool}"
 
-L.ev_fall = "{victim} spadł i się połamał"
-L.ev_fall_pushed = "{victim} spadł i się połamał po tym jak {attacker} go zrzucił"
-L.ev_fall_pushed_using = "{victim} spadł i się połamał po tym jak {attacker} użył {trap}, aby go popchnąć"
+--L.ev_fall = "{victim} fell to their death"
+--L.ev_fall_pushed = "{victim} fell to their death after {attacker} pushed them"
+--L.ev_fall_pushed_using = "{victim} fell to their death after {attacker} used {trap} to push them"
 
-L.ev_shot = "{victim} został postrzelony przez {attacker}"
-L.ev_shot_using = "{victim} został postrzelony przez {attacker} używając {weapon}"
+--L.ev_shot = "{victim} was shot by {attacker}"
+--L.ev_shot_using = "{victim} was shot by {attacker} using a {weapon}"
 
-L.ev_drown = "{victim} został utopiony przez {attacker}"
-L.ev_drown_using = "{victim} został utopiony przez {trap} aktywowaną przez {attacker}"
+--L.ev_drown = "{victim} was drowned by {attacker}"
+--L.ev_drown_using = "{victim} was drowned by {trap} triggered by {attacker}"
 
-L.ev_boom = "{victim} został wysadzony w powietrze przez {attacker}"
-L.ev_boom_using = "{victim} został wysadzony w powietrze przez {attacker} używając {trap}"
+--L.ev_boom = "{victim} was exploded by {attacker}"
+--L.ev_boom_using = "{victim} was blown up by {attacker} using {trap}"
 
-L.ev_burn = "{victim} został podpalony przez {attacker}"
-L.ev_burn_using = "{victim} został spalony przez {trap}, którą aktywował {attacker}"
+--L.ev_burn = "{victim} was fried by {attacker}"
+--L.ev_burn_using = "{victim} was burned by {trap} due to {attacker}"
 
-L.ev_club = "{victim} został pobity przez {attacker}"
-L.ev_club_using = "{victim} został pobity na śmierć przez {attacker} używając {trap}"
+--L.ev_club = "{victim} was beaten up by {attacker}"
+--L.ev_club_using = "{victim} was pummeled to death by {attacker} using {trap}"
 
-L.ev_slash = "{victim} został dźgnięty przez {attacker}"
-L.ev_slash_using = "{victim} został zadźgany przez {attacker} używając {trap}"
+--L.ev_slash = "{victim} was stabbed by {attacker}"
+--L.ev_slash_using = "{victim} was cut up by {attacker} using {trap}"
 
-L.ev_tele = "{victim} został zabity teleporterem gracza {attacker}"
--L.ev_tele_using = "{victim} został rozbity na atomy przez {trap} gracza {attacker}"
+--L.ev_tele = "{victim} was telefragged by {attacker}"
+--L.ev_tele_using = "{victim} was atomized by {trap} set by {attacker}"
 
-L.ev_goomba = "{victim} został zmiażdżony przez masę {attacker}"
+--L.ev_goomba = "{victim} was crushed by the massive bulk of {attacker}"
 
-L.ev_crush = "{victim} został zmiażdżony  {attacker}"
-L.ev_crush_using = "{victim} został zmiażdżony przez {trap} gracza {attacker}"
+--L.ev_crush = "{victim} was crushed by {attacker}"
+--L.ev_crush_using = "{victim} was crushed by {trap} of {attacker}"
 
-L.ev_other = "{victim} został zabity przez {attacker}"
-L.ev_other_using = "{victim} został zabity przez {attacker} używając {trap}"
+--L.ev_other = "{victim} was killed by {attacker}"
+--L.ev_other_using = "{victim} was killed by {attacker} using {trap}"
 
 -- Other events
-L.ev_body = "{finder} znalazł ciało {victim}"
-L.ev_c4_plant = "{player} uzbroił C4"
-L.ev_c4_boom = "C4 uzbrojona przez {player} eksplodowała"
-L.ev_c4_disarm1 = "{player} rozbroił C4 gracza {owner}"
-L.ev_c4_disarm2 = "{player} poległ w rozbrajaniu C4 gracza {owner}"
-L.ev_credit = "{finder} znalazł {num} kredyt(ów) na ciele gracza {player}"
+--L.ev_body = "{finder} found the corpse of {victim}"
+--L.ev_c4_plant = "{player} planted C4"
+--L.ev_c4_boom = "The C4 planted by {player} exploded"
+--L.ev_c4_disarm1 = "{player} disarmed C4 planted by {owner}"
+--L.ev_c4_disarm2 = "{player} failed to disarm C4 planted by {owner}"
+--L.ev_credit = "{finder} found {num} credit(s) on the corpse of {player}"
 
-L.ev_start = "Runda się rozpoczęła!"
-L.ev_win_traitors = "Podli zdrajcy wygrali tę rudnę!"
-L.ev_win_innocents = "Kochani niewinni terroryści wygrali tę rundę!"
-L.ev_win_time = "Zdrajcy przekroczyli czas i przegrali!"
+--L.ev_start = "The round started"
+--L.ev_win_traitors = "The dastardly traitors won the round!"
+--L.ev_win_innocents = "The lovable innocent terrorists won the round!"
+--L.ev_win_time = "The traitors ran out of time and lost!"
 
 -- Awards/highlights
 L.aw_sui1_title = "Lider Kultu SamobÓjstwa"
