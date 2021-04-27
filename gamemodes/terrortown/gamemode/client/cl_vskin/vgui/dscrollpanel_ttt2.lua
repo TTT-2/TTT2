@@ -157,4 +157,4 @@ function PANEL:Clear()
 	return self.pnlCanvas:Clear()
 end
 
-derma.DefineControl("DScrollPanelTTT2", "", PANEL, "DPanel")
+derma.DefineControl("DScrollPanelTTT2", "", PANEL, "DPanelTTT2")

@@ -293,6 +293,17 @@ function PANEL:ShowCloseButton(bShow)
 end
 
 ---
+-- @param function fn
+-- @realm client
+function PANEL:CloseButtonClickOverride(fn)
+	if not IsValid(self.btnClose) or not isfunction(fn) then return end
+
+	self.btnClose.DoClick = function(button)
+		fn(button)
+	end
+end
+
+---
 -- @param boolean bShow
 -- @realm client
 function PANEL:ShowBackButton(bShow)

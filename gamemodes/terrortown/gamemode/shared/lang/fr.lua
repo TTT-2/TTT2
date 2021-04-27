@@ -18,7 +18,7 @@ L.last_words = "Derniers mots"
 L.terrorists = "Terroristes"
 L.spectators = "Spectateurs"
 
-L.noteam = "Pas de Team"
+L.nones = "Pas de Team"
 L.innocents = "Team des Innocents"
 L.traitors = "Team des Traitres"
 
@@ -677,63 +677,6 @@ L.col_points = "Points"
 L.col_team = "Bonus d'équipe"
 L.col_total = "Points totaux"
 
--- Name of a trap that killed us that has not been named by the mapper
-L.something = "quelque chose"
-
--- Kill events
-L.ev_blowup = "{victim} s'est fait exploser"
-L.ev_blowup_trap = "{victim} s'est fait exploser par {trap}"
-
-L.ev_tele_self = "{victim} s'est téléfrag"
-L.ev_sui = "{victim} n'en pouvait plus et s'est tué"
-L.ev_sui_using = "{victim} s'est tué avec {tool}"
-
-L.ev_fall = "{victim} a fait une chute mortelle"
-L.ev_fall_pushed = "{victim} a fait une chute mortelle après que {attacker} l'a poussé"
-L.ev_fall_pushed_using = "{victim} a fait une chute mortelle après que {attacker} a utilisé {trap} pour le pousser"
-
-L.ev_shot = "{victim} s'est fait tiré dessus par {attacker}"
-L.ev_shot_using = "{victim} s'est fait tiré dessus par {attacker} avec un {weapon}"
-
-L.ev_drown = "{victim} s'est noyé à cause de {attacker}"
-L.ev_drown_using = "{victim} s'est noyé à cause de {trap} activé par {attacker}"
-
-L.ev_boom = "{victim} est mort d'une explosion causée par {attacker}"
-L.ev_boom_using = "{victim} est mort d'une explosion causée par {attacker} avec {trap}"
-
-L.ev_burn = "{victim} s'est fait grillé par {attacker}"
-L.ev_burn_using = "{victim} a brûlé de {trap} à cause de {attacker}"
-
-L.ev_club = "{victim} a été battu par {attacker}"
-L.ev_club_using = "{victim} a été roué de coups {attacker} avec {trap}"
-
-L.ev_slash = "{victim} a été poignardé par {attacker}"
-L.ev_slash_using = "{victim} s'est fait coupé par {attacker} avec {trap}"
-
-L.ev_tele = "{victim}s'est fait téléfrag par {attacker}"
-L.ev_tele_using = "{victim} s'est fait atomisé par {attacker} en utilisant {trap}"
-
-L.ev_goomba = "{victim} s'est fait écrasé par la masse imposante de {attacker}"
-
-L.ev_crush = "{victim} s'est fait broyé par {attacker}"
-L.ev_crush_using = "{victim} s'est fait broyé par {attacker} avec {trap}"
-
-L.ev_other = "{victim} est mort à cause de {attacker}"
-L.ev_other_using = "{victim} est mort à cause de {attacker} avec {trap}"
-
--- Other events
-L.ev_body = "{finder} a trouvé le corps de {victim}"
-L.ev_c4_plant = "{player} a planté un C4"
-L.ev_c4_boom = "Le C4 planté par {player} a explosé"
-L.ev_c4_disarm1 = "{player} a désamorcé le C4 planté par {owner}"
-L.ev_c4_disarm2 = "{player} a échoué au désamorçage du C4 planté par {owner}"
-L.ev_credit = "{finder} a trouvé {num} crédit(s) sur le corps de {player}"
-
-L.ev_start = "Le round a commencé"
-L.ev_win_traitor = "Les traitres remportent la victoire !"
-L.ev_win_inno = "Les innocents remportent la victoire !"
-L.ev_win_time = "Les traitres ont manqué de temps et ont perdu !"
-
 --- Awards/highlights
 L.aw_sui1_title = "Leader du Culte du Suicide"
 L.aw_sui1_text = "a montré les autres suicidaires comment on fait en y allant le premier."
@@ -1294,6 +1237,117 @@ L.help_lang_info = [[
 Cette traduction est complète à {coverage}%.
 
 Gardez à l'esprit que les traductions sont réalisées par la communauté. N'hésitez pas à y contribuer si il y a quelque chose qui manque ou si il y a des erreurs.]]
+
+-- 2021-04-13
+--L.title_score_info = "Round End Info"
+--L.title_score_events = "Event Timeline"
+
+--L.label_bind_clscore = "Opend round end screen"
+--L.title_player_score = "{player}'s score:"
+
+--L.label_show_events = "Show events from"
+--L.button_show_events_you = "You"
+--L.button_show_events_global = "Global"
+--L.label_show_roles = "Show role distribution from"
+--L.button_show_roles_begin = "Round Begin"
+--L.button_show_roles_end = "Round End"
+
+--L.hilite_win_traitors = "TEAM TRAITOR WON"
+--L.hilite_win_innocents = "TEAM INNOCENT WON"
+--L.hilite_win_tie = "IT IS A TIE"
+--L.hilite_win_time = "TIME IS UP"
+
+--L.tooltip_karma_gained = "Karma gained this round:"
+--L.tooltip_score_gained = "Score gained this round:"
+--L.tooltip_roles_time = "Roles over time:"
+
+--L.tooltip_finish_score_alive_teammates = "Alive teammates: {score}"
+--L.tooltip_finish_score_alive_all = "Alive players: {score}"
+--L.tooltip_finish_score_timelimit = "Time is up: {score}"
+--L.tooltip_finish_score_dead_enemies = "Dead enemies: {score}"
+--L.tooltip_kill_score = "Kill: {score}"
+--L.tooltip_bodyfound_score = "Bodyfound: {score}"
+
+--L.finish_score_alive_teammates = "Alive teammates:"
+--L.finish_score_alive_all = "Alive players:"
+--L.finish_score_timelimit = "Time is up:"
+--L.finish_score_dead_enemies = "Dead enemies:"
+--L.kill_score = "Kill:"
+--L.bodyfound_score = "Bodyfound:"
+
+--L.title_event_bodyfound = "A body was found"
+--L.title_event_c4_disarm = "A C4 charge was disarmed"
+--L.title_event_c4_explode = "A C4 charge exploded"
+--L.title_event_c4_plant = "A C4 charge was planted"
+--L.title_event_creditfound = "Equipment credits were found"
+--L.title_event_finish = "The round has ended"
+--L.title_event_game = "A new round has started"
+--L.title_event_kill = "A player was killed"
+--L.title_event_respawn = "A player respawned"
+--L.title_event_rolechange = "A player changed their role or team"
+--L.title_event_selected = "The roles were selected"
+--L.title_event_spawn = "A player spawned"
+
+--L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) has found the body of {found} ({forole} / {foteam}). The corpse has {credits} equipment credit(s)."
+--L.desc_event_bodyfound_headshot = "The dead player was killed by a headshot."
+--L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam}) successfully disarmed the C4 placed by {owner} ({orole} / {oteam})."
+--L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam}) tried to disarm the C4 placed by {owner} ({orole} / {oteam}). They failed."
+--L.desc_event_c4_explode = "The C4 placed by {owner} ({role} / {team}) exploded."
+--L.desc_event_c4_plant = "{owner} ({role} / {team}) placed an explosive C4."
+--L.desc_event_creditfound = "{finder} ({firole} / {fiteam}) has found {credits} equipment credit(s) in the corpse of {found} ({forole} / {foteam})."
+--L.desc_event_finish = "The round lasted {minutes}:{seconds}. There were {alive} player(s) alive in the end."
+--L.desc_event_game = "A new round has started."
+--L.desc_event_respawn = "{player} has respawned."
+--L.desc_event_rolechange = "{player} changed their role/team from {orole} ({oteam}) to {nrole} ({nteam})."
+--L.desc_event_selected = "The teams and roles were selected for all {amount} player(s)."
+--L.desc_event_spawn = "{player} has spawned."
+
+-- Name of a trap that killed us that has not been named by the mapper
+L.something = "quelque chose"
+
+-- Kill events
+--L.desc_event_kill_suicide = "It was suicide."
+--L.desc_event_kill_team = "It was a team kill."
+
+L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) s'est fait exploser."
+L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) s'est fait exploser par {trap}."
+
+L.desc_event_kill_tele_self = "{victim} ({vrole} / {vteam}) s'est téléfrag."
+L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) n'en pouvait plus et s'est tué."
+L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) s'est tué avec {tool}."
+
+L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) a fait une chute mortelle."
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) a fait une chute mortelle après que {attacker} ({arole} / {ateam}) l'a poussé."
+L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) a fait une chute mortelle après que {attacker} ({arole} / {ateam}) a utilisé {trap} pour le pousser."
+
+L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) s'est fait tiré dessus par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) s'est fait tiré dessus par {attacker} ({arole} / {ateam}) avec un {weapon}."
+
+L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) s'est noyé à cause de {attacker} ({arole} / {ateam})."
+L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) s'est noyé à cause de {trap} activé par {attacker} ({arole} / {ateam})."
+
+L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) est mort d'une explosion causée par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) est mort d'une explosion causée par {attacker} ({arole} / {ateam}) avec {trap}."
+
+L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) s'est fait grillé par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) a brûlé de {trap} à cause de {attacker} ({arole} / {ateam})."
+
+L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) a été battu par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) a été roué de coups {attacker} ({arole} / {ateam}) avec {trap}."
+
+L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) a été poignardé par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) s'est fait coupé par {attacker} ({arole} / {ateam}) avec {trap}."
+
+L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) s'est fait téléfrag par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) s'est fait atomisé par {attacker} ({arole} / {ateam}) en utilisant {trap}."
+
+L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) s'est fait écrasé par la masse imposante de {attacker} ({arole} / {ateam})."
+
+L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) s'est fait broyé par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) s'est fait broyé par {attacker} ({arole} / {ateam}) avec {trap}."
+
+L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker} ({arole} / {ateam})."
+L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker} ({arole} / {ateam}) avec {trap}."
 
 -- 2021-04-20
 --L.none = "No Role"

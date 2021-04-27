@@ -18,7 +18,7 @@ L.last_words = "遗言"
 L.terrorists = "恐怖分子"
 L.spectators = "观察者"
 
-L.noteam = "无阵营"
+L.nones = "无阵营"
 L.innocents = "无辜阵营"
 L.traitors = "叛徒阵营"
 
@@ -676,63 +676,6 @@ L.col_points = "点数"
 L.col_team = "团队奖励"
 L.col_total = "总分"
 
--- Name of a trap that killed us that has not been named by the mapper
-L.something = "某件物品"
-
--- Kill events
-L.ev_blowup = "{victim} 被自己炸飞"
-L.ev_blowup_trap = "{victim} 被 {trap} 炸飞"
-
-L.ev_tele_self = "{victim} 被自己给传送杀了"
-L.ev_sui = "{victim} 受不了然后自杀了！"
-L.ev_sui_using = "{victim} 用 {tool} 杀了自己"
-
-L.ev_fall = "{victim} 摔死了"
-L.ev_fall_pushed = "{victim} 因为 {attacker} 而摔死了"
-L.ev_fall_pushed_using = "{victim} 被 {attacker} 用 {trap} 推下摔死"
-
-L.ev_shot = "{victim} 被 {attacker} 射杀"
-L.ev_shot_using = "{victim} 被 {attacker} 用 {weapon} 射杀"
-
-L.ev_drown = "{victim} 被 {attacker} 推入水中溺死"
-L.ev_drown_using = "{victim} 被 {attacker} 用 {trap} 推入水中溺死"
-
-L.ev_boom = "{victim} 被 {attacker} 炸死"
-L.ev_boom_using = "{victim} 被 {attacker} 用 {trap} 炸烂"
-
-L.ev_burn = "{victim} 被 {attacker} 烧死"
-L.ev_burn_using = "{victim} 被 {attacker} 用 {trap} 烧成焦尸"
-
-L.ev_club = "{victim} 被 {attacker} 打死"
-L.ev_club_using = "{victim} 被 {attacker} 用 {trap} 打成烂泥"
-
-L.ev_slash = "{victim} 被 {attacker} 砍死"
-L.ev_slash_using = "{victim} 被 {attacker} 用 {trap} 砍成两半"
-
-L.ev_tele = "{victim} 被 {attacker} 传送杀"
-L.ev_tele_using = "{victim} 被 {attacker} 用 {trap} 传送时之能量分裂成原子"
-
-L.ev_goomba = "{victim} 被 {attacker} 用巨大物体压烂"
-
-L.ev_crush = "{victim} 被 {attacker} 压烂"
-L.ev_crush_using = "{victim} 被 {attacker} 用 {trap} 压碎"
-
-L.ev_other = "{victim} 被 {attacker} 杀死"
-L.ev_other_using = "{victim} 被 {attacker} 用 {trap} 杀死"
-
--- Other events
-L.ev_body = "{finder} 发现了 {victim} 的尸体"
-L.ev_c4_plant = "{player} 安装了C4"
-L.ev_c4_boom = "{player} 安装的C4爆炸了"
-L.ev_c4_disarm1 = "{player} 拆除了 {owner} 安装的C4"
-L.ev_c4_disarm2 = "{player} 因拆除失误而引爆了 {owner} 安装的C4"
-L.ev_credit = "{finder} 在 {player} 的尸体上找到 {num} 点积分"
-
-L.ev_start = "回合开始"
-L.ev_win_traitor = "卑鄙的叛徒赢了这回合！"
-L.ev_win_inno = "无辜的恐怖分子赢了这回合！"
-L.ev_win_time = "叛徒因为超过时间而输了这回合！"
-
 -- Awards/highlights
 L.aw_sui1_title = "自杀邪教教主"
 L.aw_sui1_text = "率先向其他自杀者展示如何自杀。"
@@ -1293,6 +1236,117 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 --This translation is {coverage}% complete with the english language taken as a default reference.
 
 --Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
+
+-- 2021-04-13
+--L.title_score_info = "Round End Info"
+--L.title_score_events = "Event Timeline"
+
+--L.label_bind_clscore = "Opend round end screen"
+--L.title_player_score = "{player}'s score:"
+
+--L.label_show_events = "Show events from"
+--L.button_show_events_you = "You"
+--L.button_show_events_global = "Global"
+--L.label_show_roles = "Show role distribution from"
+--L.button_show_roles_begin = "Round Begin"
+--L.button_show_roles_end = "Round End"
+
+--L.hilite_win_traitors = "TEAM TRAITOR WON"
+--L.hilite_win_innocents = "TEAM INNOCENT WON"
+--L.hilite_win_tie = "IT IS A TIE"
+--L.hilite_win_time = "TIME IS UP"
+
+--L.tooltip_karma_gained = "Karma gained this round:"
+--L.tooltip_score_gained = "Score gained this round:"
+--L.tooltip_roles_time = "Roles over time:"
+
+--L.tooltip_finish_score_alive_teammates = "Alive teammates: {score}"
+--L.tooltip_finish_score_alive_all = "Alive players: {score}"
+--L.tooltip_finish_score_timelimit = "Time is up: {score}"
+--L.tooltip_finish_score_dead_enemies = "Dead enemies: {score}"
+--L.tooltip_kill_score = "Kill: {score}"
+--L.tooltip_bodyfound_score = "Bodyfound: {score}"
+
+--L.finish_score_alive_teammates = "Alive teammates:"
+--L.finish_score_alive_all = "Alive players:"
+--L.finish_score_timelimit = "Time is up:"
+--L.finish_score_dead_enemies = "Dead enemies:"
+--L.kill_score = "Kill:"
+--L.bodyfound_score = "Bodyfound:"
+
+--L.title_event_bodyfound = "A body was found"
+--L.title_event_c4_disarm = "A C4 charge was disarmed"
+--L.title_event_c4_explode = "A C4 charge exploded"
+--L.title_event_c4_plant = "A C4 charge was planted"
+--L.title_event_creditfound = "Equipment credits were found"
+--L.title_event_finish = "The round has ended"
+--L.title_event_game = "A new round has started"
+--L.title_event_kill = "A player was killed"
+--L.title_event_respawn = "A player respawned"
+--L.title_event_rolechange = "A player changed their role or team"
+--L.title_event_selected = "The roles were selected"
+--L.title_event_spawn = "A player spawned"
+
+--L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) has found the body of {found} ({forole} / {foteam}). The corpse has {credits} equipment credit(s)."
+--L.desc_event_bodyfound_headshot = "The dead player was killed by a headshot."
+--L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam}) successfully disarmed the C4 placed by {owner} ({orole} / {oteam})."
+--L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam}) tried to disarm the C4 placed by {owner} ({orole} / {oteam}). They failed."
+--L.desc_event_c4_explode = "The C4 placed by {owner} ({role} / {team}) exploded."
+--L.desc_event_c4_plant = "{owner} ({role} / {team}) placed an explosive C4."
+--L.desc_event_creditfound = "{finder} ({firole} / {fiteam}) has found {credits} equipment credit(s) in the corpse of {found} ({forole} / {foteam})."
+--L.desc_event_finish = "The round lasted {minutes}:{seconds}. There were {alive} player(s) alive in the end."
+--L.desc_event_game = "A new round has started."
+--L.desc_event_respawn = "{player} has respawned."
+--L.desc_event_rolechange = "{player} changed their role/team from {orole} ({oteam}) to {nrole} ({nteam})."
+--L.desc_event_selected = "The teams and roles were selected for all {amount} player(s)."
+--L.desc_event_spawn = "{player} has spawned."
+
+-- Name of a trap that killed us that has not been named by the mapper
+L.something = "某件物品"
+
+-- Kill events
+--L.desc_event_kill_suicide = "It was suicide."
+--L.desc_event_kill_team = "It was a team kill."
+
+L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飞。"
+L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飞。"
+
+L.desc_event_kill_tele_self = "{victim} ({vrole} / {vteam}) 被自己给传送杀了。"
+L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) 受不了然后自杀了！"
+L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) 用 {tool} 杀了自己。"
+
+L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) 摔死了。"
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) 因为 {attacker} ({arole} / {ateam}) 而摔死了。"
+L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 推下摔死。"
+
+L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 射杀。"
+L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {weapon} 射杀。"
+
+L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 推入水中溺死。"
+L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 推入水中溺死。"
+
+L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 炸死。"
+L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 炸烂。"
+
+L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 烧死。"
+L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 烧成焦尸。"
+
+L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 打死。"
+L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 打成烂泥。"
+
+L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 砍死。"
+L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 砍成两半。"
+
+L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 传送杀。"
+L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 传送时之能量分裂成原子。"
+
+L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用巨大物体压烂。"
+
+L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 压烂。"
+L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 压碎。"
+
+L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 杀死。"
+L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 杀死。"
 
 -- 2021-04-20
 --L.none = "No Role"

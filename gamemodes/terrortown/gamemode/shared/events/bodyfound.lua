@@ -1,13 +1,42 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_bodyfound"
+	EVENT.icon = Material("vgui/ttt/vskin/events/bodyfound")
+	EVENT.title = "title_event_bodyfound"
+
+	function EVENT:GetText()
+		local text = {
+			{
+				string = "desc_event_bodyfound",
+				params = {
+					finder = self.event.finder.nick,
+					found = self.event.found.nick,
+					firole = roles.GetByIndex(self.event.finder.role).name,
+					fiteam = self.event.finder.team,
+					forole = roles.GetByIndex(self.event.found.role).name,
+					foteam = self.event.found.team,
+					credits = self.event.found.credits
+				},
+				translateParams = true
+			}
+		}
+
+		if self.event.found.headshot then
+			text[2] = {
+				string = "desc_event_bodyfound_headshot"
+			}
+		end
+
+		return text
+	end
 end
 
 if SERVER then
 	function EVENT:Trigger(finder, rag)
-		self:AddAffectedPlayers({finder:SteamID64(), CORPSE.GetPlayerSID64(rag)})
+		self:AddAffectedPlayers(
+			{finder:SteamID64(), CORPSE.GetPlayerSID64(rag)},
+			{finder:Nick(), CORPSE.GetPlayerNick(rag, "A Terrorist")}
+		)
 
 		return self:Add({
 			finder = {
@@ -36,6 +65,10 @@ if SERVER then
 			score = roles.GetByIndex(finder.role).score.bodyFoundMuliplier
 		})
 	end
+end
+
+function EVENT:Serialize()
+	return self.event.finder.nick .. " has found the body of " .. self.event.found.nick .. "."
 end
 
 function EVENT:GetDeprecatedFormat()

@@ -17,8 +17,17 @@ ROLE.score = {
 	-- The amount of score points gained by confirming a body.
 	bodyFoundMuliplier = 1,
 
-	-- The amount of score points gained by surviving a round.
+	-- The amount of score points gained by surviving a round,
+	-- based on the amount of dead enemy players.
 	surviveBonusMultiplier = 0,
+
+	-- The amount of scorepoints granted due to a survival of the
+	-- round for every teammate alive.
+	aliveTeammatesBonusMultiplier = 1,
+
+	-- Multiplier for a score for every player alive at the end of
+	-- the round. Can be negative for roles that should kill everyone.
+	allSurviveBonusMultiplier = 0,
 
 	-- The amount of score points gained by beeing alive if the
 	-- round ended with nobody winning, ususally a negative number.

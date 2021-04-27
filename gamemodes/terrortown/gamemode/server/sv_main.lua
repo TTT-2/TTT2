@@ -1468,6 +1468,24 @@ function EndRound(result)
 end
 
 ---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	-- load all roles
+	roles.OnLoaded()
+
+	---
+	-- @realm shared
+	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2BaseRoleInit")
+end
+
+---
 -- Called if the map triggers the end based on some defined win or end conditions
 -- @param string wintype
 -- @hook

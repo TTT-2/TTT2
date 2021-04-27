@@ -5,12 +5,19 @@ local tableCount = table.Count
 local tableGetKeys = table.GetKeys
 local tableHasValue = table.HasValue
 local tableAdd = table.Add
+local mathRound = math.Round
+
+if CLIENT then
+	EVENT.icon = Material("vgui/ttt/vskin/events/base_event")
+	EVENT.title = ""
+end
 
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
 EVENT.karma = {}
 EVENT.plys = {}
+EVENT.plys64 = {}
 
 ---
 -- Sets the event data table to the event.
@@ -32,11 +39,13 @@ end
 
 ---
 -- Sets the affected players data table to the event.
--- @param table event The affected players data table that should be added
+-- @param table plys64 The affected players steamid64s table that should be added
+-- @param table plys The affected players nick name table that should be added
 -- @internal
 -- @realm shared
-function EVENT:SetPlayersTable(players)
-	self.plys = players
+function EVENT:SetPlayersTable(plys64, plys)
+	self.plys64 = plys64
+	self.plys = plys
 end
 
 ---
@@ -76,6 +85,15 @@ function EVENT:SetPlayerAbsoluteKarmaChange(sid64, karma)
 end
 
 ---
+-- Returns a reference to the score of a player.
+-- @param string ply64 The player's steamID64
+-- @return table The score table for the player
+-- @realm shared
+function EVENT:GetPlayerScore(ply64)
+	return self.score[ply64]
+end
+
+---
 -- Returns the event data in the deprecated format. Shouldn't be used, is used
 -- internally.
 -- @note This function should be overwritten but not not called.
@@ -103,6 +121,14 @@ end
 -- @realm shared
 function EVENT:HasPlayerKarmaChange(sid64)
 	return self.karma[sid64] ~= nil and self.karma[sid64].absolute ~= nil and self.karma[sid64].changes ~= nil
+end
+
+---
+-- Returns the whole score table
+-- @return table The score table, indexed with sid64
+-- @realm shared
+function EVENT:GetScore()
+	return self.score
 end
 
 ---
@@ -142,11 +168,55 @@ function EVENT:GetSummedPlayerScore(sid64)
 end
 
 ---
+-- Returns the raw score texts as a table with a `name` and a `score`. The name
+-- should be a translation identifier.
+-- @param string ply64 The player's steamID64
+-- @return table A table with the scoring text
+-- @realm shared
+function EVENT:GetRawScoreText(ply64)
+	local rawTable = {}
+
+	for name, score in pairs(self.score[ply64]) do
+		if score == 0 then continue end
+
+		rawTable[#rawTable + 1] = {
+			name = self.type .. "_" .. name,
+			score = score
+		}
+	end
+
+	return rawTable
+end
+
+---
 -- Returns a list of all player steamID64s who were affected by this event.
 -- @return table A table of steamID64s
 -- @realm shared
-function EVENT:GetAffectedPlayer()
+function EVENT:GetAffectedPlayer64s()
+	return self.plys64
+end
+
+---
+-- Returns a list of all player names who were affected by this event.
+-- @return table A table of player names
+-- @realm shared
+function EVENT:GetAffectedPlayers()
 	return self.plys
+end
+
+---
+-- Returns the player's nick name based on their steamID64.
+-- @param string ply64 The player's steamID64
+-- @return string The player's nick name
+-- @realm shared
+function EVENT:GetNameFrom64(ply64)
+	local i = 1
+
+	while (self.plys64[i] ~= ply64) do
+		i = i + 1
+	end
+
+	return self.plys[i]
 end
 
 ---
@@ -154,8 +224,8 @@ end
 -- @param string sid64 The steamID64 of the player that should be checked
 -- @return boolean Returns true if the player was affected by this event.
 -- @realm shared
-function EVENT:HasAffectedPlayer(sid64)
-	return tableHasValue(self.plys, sid64)
+function EVENT:HasAffectedPlayer(ply64)
+	return tableHasValue(self.plys64, ply64)
 end
 
 ---
@@ -168,12 +238,33 @@ function EVENT:Serialize()
 
 end
 
+---
+-- Returns the events time in seconds after round begin
+-- @return number The event time
+-- @realm shared
+function EVENT:GetTime()
+	return mathRound(self.event.time / 1000, 0)
+end
+
+if CLIENT then
+	---
+	-- Generates the textparameters needed for the event timeline
+	-- @note This function should be overwritten but not be called.
+	-- @return table A table of identifier-param pairs
+	-- @realm client
+	function EVENT:GetText()
+		return {}
+	end
+end
+
 if SERVER then
 	---
 	-- Adds players that are affected by this event.
-	-- @param table plys A table of player steamID64
+	-- @param table plys64 A table of player steamID64
+	-- @param table plys A table of player namees
 	-- @realm server
-	function EVENT:AddAffectedPlayers(plys)
+	function EVENT:AddAffectedPlayers(plys64, plys)
+		tableAdd(self.plys64, plys64)
 		tableAdd(self.plys, plys)
 	end
 
@@ -223,6 +314,7 @@ if SERVER then
 			type = self.type,
 			event = self.event,
 			score = self.score,
+			plys64 = self.plys64,
 			plys = self.plys
 		}
 	end
