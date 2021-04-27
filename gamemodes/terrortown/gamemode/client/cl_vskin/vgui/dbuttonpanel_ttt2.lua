@@ -110,4 +110,4 @@ function PANEL:UpdateColours()
 
 end
 
-derma.DefineControl("DButtonPanelTTT2", "", PANEL, "DPanelTTT2")
+derma.DefineControl("DButtonPanelTTT2", "", PANEL, "Panel")

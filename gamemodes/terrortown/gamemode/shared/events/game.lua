@@ -1,16 +1,8 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("vgui/ttt/vskin/events/game")
-	EVENT.title = "title_event_game"
-
-	function EVENT:GetText()
-		return {
-			{
-				string = "desc_event_game",
-			}
-		}
-	end
+	EVENT.icon = nil
+	EVENT.description = "desc_event_game_state"
 end
 
 if SERVER then
@@ -19,10 +11,6 @@ if SERVER then
 			newstate = roundstate
 		})
 	end
-end
-
-function EVENT:Serialize()
-	return "A new round has started."
 end
 
 function EVENT:GetDeprecatedFormat()

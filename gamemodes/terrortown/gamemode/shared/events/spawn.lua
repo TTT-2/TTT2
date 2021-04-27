@@ -1,27 +1,13 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("vgui/ttt/vskin/events/spawn")
-	EVENT.title = "title_event_spawn"
-
-	function EVENT:GetText()
-		return {
-			{
-				string = "desc_event_spawn",
-				params = {
-					player = self.event.finder.nick,
-				}
-			}
-		}
-	end
+	EVENT.icon = nil
+	EVENT.description = "desc_event_spawn"
 end
 
 if SERVER then
 	function EVENT:Trigger(ply)
-		self:AddAffectedPlayers(
-			{ply:SteamID64()},
-			{ply:Nick()}
-		)
+		self:AddAffectedPlayers({ply:SteamID64()})
 
 		return self:Add({
 			nick = ply:Nick(),
@@ -30,14 +16,11 @@ if SERVER then
 	end
 end
 
-function EVENT:Serialize()
-	return self.event.nick .. " just spawned."
-end
-
 function EVENT:GetDeprecatedFormat()
 	local event = self.event
 
-	if event.roundState ~= ROUND_ACTIVE then return end
+	-- this will be readded with the new roundendscreen
+	--if event.roundState ~= ROUND_ACTIVE then return end
 
 	return {
 		id = self.type,

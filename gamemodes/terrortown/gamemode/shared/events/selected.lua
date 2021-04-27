@@ -1,19 +1,8 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("vgui/ttt/vskin/events/selected")
-	EVENT.title = "title_event_selected"
-
-	function EVENT:GetText()
-		return {
-			{
-				string = "desc_event_selected",
-				params = {
-					amount = #self.event.plys
-				}
-			}
-		}
-	end
+	EVENT.icon = nil
+	EVENT.description = "desc_event_selected"
 end
 
 if SERVER then
@@ -34,18 +23,11 @@ if SERVER then
 				team = ply:GetTeam()
 			}
 
-			self:AddAffectedPlayers(
-				{ply:SteamID64()},
-				{ply:Nick()}
-			)
+			self:AddAffectedPlayers({ply:SteamID64()})
 		end
 
 		return self:Add(event)
 	end
-end
-
-function EVENT:Serialize()
-	return "The roles have been selected."
 end
 
 function EVENT:GetDeprecatedFormat()
