@@ -904,19 +904,14 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintColoredBoxTTT2(panel, w, h)
-	local colorBackground
-
 	-- get the background color
 	if panel:HasDynamicColor() then
-		colorBackground = utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, 30)
+		panel.dynBaseColor = utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, 30)
 	else
-		colorBackground = panel:GetColor()
+		panel.dynBaseColor = panel:GetColor()
 	end
 
-	-- set the dynamic background color for the child elements
-	panel.dynBaseColor = colorBackground
-
-	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel.dynBaseColor)
 end
 
 ---

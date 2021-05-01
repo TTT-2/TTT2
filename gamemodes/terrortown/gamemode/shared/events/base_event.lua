@@ -173,16 +173,14 @@ end
 ---
 -- Returns the player's nick name based on their steamID64.
 -- @param string ply64 The player's steamID64
--- @return string The player's nick name
+-- @return nil|string The player's nick name
 -- @realm shared
 function EVENT:GetNameFrom64(ply64)
-	local i = 1
-
-	while (self.plys64[i] ~= ply64) do
-		i = i + 1
+	for i = 1, #self.plys64 do
+		if self.plys64[i] == ply64 then
+			return self.plys[i] 
+		end
 	end
-
-	return self.plys[i]
 end
 
 ---

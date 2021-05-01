@@ -26,9 +26,7 @@ local function CreateColumns(plys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if not teamsTbl[ply.team] then
-			teamsTbl[ply.team] = {}
-		end
+		teamsTbl[ply.team] = teamsTbl[ply.team] or {}
 
 		teamsTbl[ply.team][#teamsTbl[ply.team] + 1] = ply
 	end
@@ -116,8 +114,8 @@ function CLSCORE:CalculateSizes()
 	self.sizes.heightButton = 45
 	self.sizes.widthButton = 175
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
-	self.sizes.heightContent = self.sizes.heightMainArea - self.sizes.heightHeaderPanel - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
 	self.sizes.heightContentLarge = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
+	self.sizes.heightContent = self.sizes.heightContentLarge - self.sizes.heightHeaderPanel
 	self.sizes.heightMenuButton = 50
 end
 

@@ -320,9 +320,9 @@ function plymeta:UpdateTeam(team, suppressEvent)
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 
 		if SERVER and not suppressEvent then
-			local role = self:GetSubRole()
+			local subrole = self:GetSubRole()
 
-			events.Trigger(EVENT_ROLECHANGE, self, role, role, oldTeam, newTeam)
+			events.Trigger(EVENT_ROLECHANGE, self, subrole, subrole, oldTeam, newTeam)
 		end
 	end
 end
