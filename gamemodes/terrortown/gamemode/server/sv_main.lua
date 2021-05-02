@@ -27,7 +27,7 @@ ttt_include("sv_inventory")
 ttt_include("sh_scoring")
 
 ttt_include("sv_admin")
-ttt_include("sv_networking")
+ttt_include("sv_rolesyncing")
 ttt_include("sv_propspec")
 ttt_include("sv_shop")
 ttt_include("sv_weaponry")
@@ -224,9 +224,6 @@ util.AddNetworkString("TTT_PlayerDied")
 util.AddNetworkString("TTT_CorpseCall")
 util.AddNetworkString("TTT_ClearClientState")
 util.AddNetworkString("TTT_PerformGesture")
-util.AddNetworkString("TTT_Role")
-util.AddNetworkString("TTT_RoleList")
-util.AddNetworkString("TTT_RoleReset")
 util.AddNetworkString("TTT_ConfirmUseTButton")
 util.AddNetworkString("TTT_C4Config")
 util.AddNetworkString("TTT_C4DisarmResult")
@@ -1103,9 +1100,6 @@ function PrepareRound()
 	net.Start("TTT_ClearClientState")
 	net.Broadcast()
 
-	-- In case client's cleanup fails, make client set all players to innocent role
-	timer.Simple(1, SendRoleReset)
-
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
@@ -1117,7 +1111,12 @@ function PrepareRound()
 
 		ply:CancelRevival(nil, true)
 		ply:SendRevivalReason(nil)
+
+		ply:SetRole(ROLE_NONE, TEAM_NONE) -- reset roles
 	end
+
+	-- sync ROLE_NONE
+	SendFullStateUpdate()
 
 	---
 	-- Tell hooks and map we started prep
@@ -1301,12 +1300,8 @@ function BeginRound()
 
 	LANG.Msg("round_selected")
 
-	-- Edge case where a player joins just as the round starts and is picked as
-	-- traitor, but for whatever reason does not get the traitor state msg. So
-	-- re-send after a second just to make sure everyone is getting it.
-	-- TODO improve
-	timer.Simple(1, SendFullStateUpdate)
-	timer.Simple(10, SendFullStateUpdate)
+	-- sync roles
+	SendFullStateUpdate()
 
 	-- Give the StateUpdate messages ample time to arrive
 	timer.Simple(1.5, TellTraitorsAboutTraitors)
@@ -1441,11 +1436,7 @@ function EndRound(result)
 	StopWinChecks()
 
 	-- send each client the role setup, reveal every player
-	local rlsList = roles.GetList()
-
-	for i = 1, #rlsList do
-		SendSubRoleList(rlsList[i].index)
-	end
+	SendFullStateUpdate()
 
 	-- We may need to start a timer for a mapswitch, or start a vote
 	CheckForMapSwitch()

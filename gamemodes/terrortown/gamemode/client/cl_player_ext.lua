@@ -177,7 +177,7 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 -- @ref https://wiki.facepunch.com/gmod/GM:SetupMove
 -- @local
 function GM:SetupMove(ply, mv, cmd)
-	if not IsValid(ply) or ply:IsReady() then return end
+	if not IsValid(ply) or ply ~= LocalPlayer() or ply:IsReady() then return end
 
 	ply.isReady = true
 

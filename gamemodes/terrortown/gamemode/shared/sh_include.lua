@@ -119,7 +119,7 @@ if SERVER then
 		sv_karma = {file = "sv_karma.lua", on = "server"},
 		sv_loadingscreen = {file = "sv_loadingscreen.lua", on = "server"},
 		sv_main = {file = "sv_main.lua", on = "server"},
-		sv_networking = {file = "sv_networking.lua", on = "server"},
+		sv_rolesyncing = {file = "sv_rolesyncing.lua", on = "server"},
 		sv_network_sync = {file = "sv_network_sync.lua", on = "server"},
 		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},
 		sv_player = {file = "sv_player.lua", on = "server"},

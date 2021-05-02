@@ -940,7 +940,23 @@ end
 -- @hook
 -- @realm shared
 function GM:TTT2PlayerReady(ply)
+	if SERVER then
+		SendFullStateUpdate()
+	else -- CLIENT
+		local plys = player.GetAll()
 
+		for i = 1, #plys do
+			local target = plys[i]
+
+			ttt2net.OnUpdateOnPlayer("subrole", target, function(oldValue, newValue)
+				target:SetRole(newValue)
+			end)
+
+			ttt2net.OnUpdateOnPlayer("team", target, function(oldValue, newValue)
+				target:UpdateTeam(newValue)
+			end)
+		end
+	end
 end
 
 local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel

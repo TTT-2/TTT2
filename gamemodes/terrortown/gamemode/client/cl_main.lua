@@ -286,7 +286,7 @@ function GM:InitPostEntity()
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
-		self:ClearClientState()
+		hook.Run("ClearClientState")
 	end
 
 	-- cache players avatar
@@ -306,7 +306,6 @@ function GM:InitPostEntity()
 	end)
 
 	RunConsoleCommand("_ttt_request_serverlang")
-	RunConsoleCommand("_ttt_request_rolelist")
 end
 
 ---
@@ -367,8 +366,8 @@ local function RoundStateChange(o, n)
 
 	if n == ROUND_PREP then
 		-- prep starts
-		GAMEMODE:ClearClientState()
-		GAMEMODE:CleanUpMap()
+		hook.Run("ClearClientState")
+		hook.Run("CleanUpMap")
 
 		EPOP:Clear()
 
@@ -442,65 +441,18 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
+---
 -- usermessages
-
-local function ReceiveRole()
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
-
-	local subrole = net.ReadUInt(ROLE_BITS)
-	local team = net.ReadString()
-
-	-- after a mapswitch, server might have sent us this before we are even done
-	-- loading our code
-	if not isfunction(client.SetRole) then return end
-
-	client:SetRole(subrole, team)
-
-	Msg("You are: ")
-	MsgN(string.upper(roles.GetByIndex(subrole).name))
-end
-net.Receive("TTT_Role", ReceiveRole)
-
-local function ReceiveRoleReset()
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
-	end
-end
-net.Receive("TTT_RoleReset", ReceiveRoleReset)
 
 -- role test
 local function TTT2TestRole()
 	local client = LocalPlayer()
+
 	if not IsValid(client) then return end
 
 	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
 end
 net.Receive("TTT2TestRole", TTT2TestRole)
-
-local function ReceiveRoleList()
-	local subrole = net.ReadUInt(ROLE_BITS)
-	local team = net.ReadString()
-	local num_ids = net.ReadUInt(8)
-
-	for i = 1, num_ids do
-		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
-		local ply = player.GetByID(eidx)
-
-		if IsValid(ply) and ply.SetRole then
-			ply:SetRole(subrole, team)
-
-			local plyrd = ply:GetSubRoleData()
-
-			if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
-				ply[team .. "_gvoice"] = false -- assume role's chat by default
-			end
-		end
-	end
-end
-net.Receive("TTT_RoleList", ReceiveRoleList)
 
 -- Round state comm
 local function ReceiveRoundState()
@@ -525,9 +477,8 @@ function GM:ClearClientState()
 	self:HUDClear()
 
 	local client = LocalPlayer()
-	if not client.SetRole then return end -- code not loaded yet
 
-	client:SetRole(ROLE_NONE)
+	if not client.SetRole then return end -- code not loaded yet
 
 	client.equipmentItems = {}
 	client.equipment_credits = 0
@@ -545,12 +496,10 @@ function GM:ClearClientState()
 
 	for i = 1, #plys do
 		local pl = plys[i]
+
 		if not IsValid(pl) then continue end
 
 		pl.sb_tag = nil
-
-		pl:SetRole(ROLE_NONE)
-
 		pl.search_result = nil
 	end
 
@@ -562,8 +511,9 @@ function GM:ClearClientState()
 
 	gui.EnableScreenClicker(false)
 end
+
 net.Receive("TTT_ClearClientState", function()
-	GAMEMODE:ClearClientState()
+	hook.Run("ClearClientState")
 end)
 
 local color_trans = Color(0, 0, 0, 0)

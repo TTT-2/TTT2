@@ -32,3 +32,10 @@ function ROLE:PreInitialize()
 		togglable = true
 	}
 end
+
+hook.Add("TTT2SpecialRoleSyncing", "TTT2DetectiveVisible", function(ply, target)
+	if target:GetBaseRole() ~= ROLE_DETECTIVE then return end
+
+	ply:TTT2NETSetUInt("subrole", ROLE_DETECTIVE, ROLE_BITS, target)
+	ply:TTT2NETSetString("team", TEAM_INNOCENT, target)
+end)

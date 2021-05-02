@@ -124,7 +124,7 @@ local function IdentifyBody(ply, rag)
 		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
 			deadply:ConfirmPlayer(true)
 
-			SendPlayerToEveryone(deadply)
+			SendFullStateUpdate()
 		end
 
 		events.Trigger(EVENT_BODYFOUND, ply, rag)
