@@ -171,10 +171,8 @@ function eventdata.GetPlayerKarma()
 	local eventList = events.list
 	local plysKarma = {}
 
-	local count = #eventList
-
 	-- Go table from back to front as only the newest sync is relevant
-	for i = count, 1, -1 do
+	for i = #eventList, 1, -1 do
 		local event = eventList[i]
 
 		if not event:HasKarma() then continue end
@@ -196,10 +194,8 @@ function eventdata.GetPlayerTotalKarma()
 	local eventList = events.list
 	local plysKarma = {}
 
-	local count = #eventList
-
 	-- Go table from back to front as only the newest sync is relevant
-	for i = count, 1, -1 do
+	for i = #eventList, 1, -1 do
 		local event = eventList[i]
 
 		if not event:HasKarma() then continue end
