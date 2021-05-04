@@ -234,7 +234,7 @@ function KARMA.GetAbsoluteOldKarmaChangeBySteamID64(sid64)
 
 	if not reasonList then return end
 
-	for reason, karma in pairs(reasonList) do
+	for _, karma in pairs(reasonList) do
 		amount = amount + karma
 	end
 
