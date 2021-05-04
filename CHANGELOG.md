@@ -13,6 +13,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `ROLE_NONE` (ID `3` by default)
   - Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`
   - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
+- Karma now stores changes
+  - Is shown in roundend menu
 
 ### Fixed
 

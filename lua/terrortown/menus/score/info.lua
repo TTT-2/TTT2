@@ -72,6 +72,37 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 	return height
 end
 
+local function MakePlayerKarmaTooltip(parent, width, ply)
+	local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64]
+	local height = 25
+
+	local boxLayout = vgui.Create("DIconLayout", parent)
+	boxLayout:Dock(FILL)
+
+	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
+	titleBox:SetSize(width, 25)
+	titleBox:SetDynamicColor(parent, 0)
+	titleBox:SetTitle("tooltip_karma_gained")
+	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+
+	if not istable(plyKarmaList) then return height end
+
+	for karmaText, karma in pairs(plyKarmaList) do
+			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
+			plyRoleBox:SetSize(width, 20)
+			plyRoleBox:SetDynamicColor(parent, 0)
+			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+
+			plyRoleBox.GetTitle = function()
+				return "- " .. TryT(karmaText) .. ": " .. karma
+			end
+
+			height = height + 20
+	end
+
+	return height
+end
+
 local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDeath)
 	parent:Clear()
 
@@ -159,9 +190,9 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyRow:DockMargin(sizes.padding, 0, 0, 0)
 				plyRow:Dock(FILL)
 
-				local widthKarma = 0 --50
+				local widthKarma = 50
 				local widthScore = 35
-				local widthName = widthColumn - widthKarma - widthScore - 3 * sizes.padding -- 4 with karma
+				local widthName = widthColumn - widthKarma - widthScore - 4 * sizes.padding
 
 				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyNameBox:SetSize(widthName, sizes.heightRow)
@@ -184,14 +215,21 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyNameBox:SetTooltipFixedSize(widthName, heightRolesTooltip)
 				plyRolesTooltipPanel:SetSize(widthName, heightRolesTooltip)
 
-				-- keeping this in here so karma can be easily added to the menu
-				--[[local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
+				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
 				plyKarmaBox:SetColor(COLOR_BLUE)
-				plyKarmaBox:SetTitle("xx")
+				plyKarmaBox:SetTitle(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
 				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
 				plyKarmaBox:SetTooltip("tooltip_karma_gained")
-				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1) ]]
+
+				local plyKarmaTooltipPanel = vgui.Create("DPanelTTT2")
+
+				local heightKarmaTooltip = MakePlayerKarmaTooltip(plyKarmaTooltipPanel, 200, ply)
+
+				plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
+				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+				plyKarmaBox:SetTooltipFixedSize(200, heightKarmaTooltip)
+				plyKarmaTooltipPanel:SetSize(200, heightKarmaTooltip)
 
 				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyPointsBox:SetSize(widthScore, sizes.heightRow)

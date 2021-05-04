@@ -224,6 +224,7 @@ else --CLIENT
 			local newEvent = events.Create(eventData.type)
 			newEvent:SetEventTable(eventData.event)
 			newEvent:SetScoreTable(eventData.score)
+			newEvent:SetKarmaTable(eventData.karma)
 			newEvent:SetPlayersTable(eventData.plys64, eventData.plys)
 
 			events.list[i] = newEvent
