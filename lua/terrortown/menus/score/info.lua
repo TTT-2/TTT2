@@ -85,7 +85,9 @@ local function MakePlayerKarmaTooltip(parent, width, ply)
 	titleBox:SetTitle("tooltip_karma_gained")
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
-	if not istable(plyKarmaList) then return height end
+	if not istable(plyKarmaList) then
+		return height
+	end
 
 	for karmaText, karma in pairs(plyKarmaList) do
 			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")

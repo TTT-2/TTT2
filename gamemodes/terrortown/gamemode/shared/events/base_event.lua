@@ -77,6 +77,7 @@ end
 -- @realm shared
 function EVENT:SetPlayerKarma(sid64, karma)
 	if not sid64 then return end
+
 	self.karma[sid64] = karma
 end
 

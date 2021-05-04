@@ -144,7 +144,7 @@ end
 -- @param string reason 
 -- @realm server
 function KARMA.DoKarmaChange(ply, amount, reason)
-	ply:SetLiveKarma(math.max(math.min(ply:GetLiveKarma() + amount, config.max:GetFloat()), 0))
+	ply:SetLiveKarma(math.Clamp(ply:GetLiveKarma() + amount, 0, config.max:GetFloat()))
 	KARMA.SaveKarmaChange(ply, amount, isstring(reason) and reason or KARMA.reason[KARMA_UNKNOWN])
 end
 
@@ -160,6 +160,7 @@ function KARMA.SaveKarmaChange(ply, amount, reason)
 	if amount == 0 then return end
 
 	local sid64 = ply:SteamID64()
+
 	KARMA.karmaChanges[sid64] = KARMA.karmaChanges[sid64] or {}
 	KARMA.karmaChanges[sid64][reason] = (KARMA.karmaChanges[sid64][reason] or 0) + amount
 end
@@ -175,11 +176,12 @@ function KARMA.ResetRoundChanges()
 	if IsDebug() then
 		for sid64, reasonList in pairs(KARMA.karmaChangesOld) do
 			local ply = player.GetBySteamID64(sid64)
-			if IsValid(ply) then
-				print("\nFor Player " .. ply:GetName())
-				for reason, karma in pairs(reasonList) do
-					print("An amount of " .. karma .. " was changed for the reason of " .. reason)
-				end
+			if not IsValid(ply) then continue end
+
+			print("\nFor Player " .. ply:GetName())
+
+			for reason, karma in pairs(reasonList) do
+				print("An amount of " .. karma .. " was changed for the reason of " .. reason)
 			end
 		end
 	end
@@ -211,9 +213,10 @@ end
 function KARMA.GetAbsoluteKarmaChangeBySteamID64(sid64)
 	local amount = 0
 	local reasonList = KARMA.karmaChanges[sid64]
+
 	if not reasonList then return end
 
-	for reason, karma in pairs(reasonList) do
+	for _, karma in pairs(reasonList) do
 		amount = amount + karma
 	end
 
@@ -228,6 +231,7 @@ end
 function KARMA.GetAbsoluteOldKarmaChangeBySteamID64(sid64)
 	local amount = 0
 	local reasonList = KARMA.karmaChangesOld[sid64]
+
 	if not reasonList then return end
 
 	for reason, karma in pairs(reasonList) do
