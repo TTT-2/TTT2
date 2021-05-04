@@ -50,7 +50,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	-- In a first Pass filter all scoreevents and scores by name, positivy and number of Events
-	local filteredPlyScores = {}
+	local filteredPlyScoreList = {}
 	for i = 1, #plyScores do
 		local plyScoreEvent = plyScores[i]
 		local rawScoreTexts = plyScoreEvent:GetRawScoreText(ply.sid64)
@@ -60,23 +60,23 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			local scoreName = rawScoreText.name
 			local score = rawScoreText.score
 
-			filteredPlyScores[scoreName] = filteredPlyScores[scoreName] or {score = {0,0}, numEvents = {0,0}}
+			filteredPlyScoreList[scoreName] = filteredPlyScoreList[scoreName] or {score = {0,0}, numEvents = {0,0}}
 
 			local posIndex = score < 0 and 1 or 2 -- first entry contains negative and second positive entries
-			filteredPlyScores[scoreName].score[posIndex] = filteredPlyScores[scoreName].score[posIndex] + score
-			filteredPlyScores[scoreName].numEvents[posIndex] = filteredPlyScores[scoreName].numEvents[posIndex] + 1
+			local filteredPlyScore = filteredPlyScoreList[scoreName]
+
+			filteredPlyScore.score[posIndex] = filteredPlyScore.score[posIndex] + score
+			filteredPlyScore.numEvents[posIndex] = filteredPlyScore.numEvents[posIndex] + 1
 		end
 	end
 
 	-- In a second pass we create the tooltip boxes with summarized scoreevents
-	for rawScoreTextName,scoreObj in pairs(filteredPlyScores) do
-		for i = 1,2 do
+	for rawScoreTextName, scoreObj in pairs(filteredPlyScoreList) do
+		for i = 1, 2 do
 			local score = scoreObj.score[i]
 			local numberEvents = scoreObj.numEvents[i]
 
-			if score == 0 then
-				continue
-			end
+			if score == 0 then continue end
 
 			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
 			plyRoleBox:SetSize(width, 20)
