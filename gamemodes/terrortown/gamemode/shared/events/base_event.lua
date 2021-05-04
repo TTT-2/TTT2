@@ -2,7 +2,7 @@
 -- @class EVENT
 
 local tableCount = table.Count
-local tableEmpty = table.Empty
+local tableEmpty = table.IsEmpty
 local tableGetKeys = table.GetKeys
 local tableHasValue = table.HasValue
 local tableAdd = table.Add
