@@ -115,7 +115,7 @@ end
 -- @param string sid64 The steamID64 of the player that should be checked
 -- @return boolean Returns true if the player has a karma change table
 -- @realm shared
-function EVENT:HasPlayerKarmaChange(sid64)
+function EVENT:HasPlayerKarma(sid64)
 	return self.karma[sid64] ~= nil
 end
 
