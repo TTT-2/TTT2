@@ -5,6 +5,7 @@ local materialClose = Material("vgui/ttt/vskin/icon_close")
 local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
 local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
+local materialRhombus = Material("vgui/ttt/vskin/rhombus")
 
 local SKIN = {
 	Name = "ttt2_default"
@@ -12,6 +13,8 @@ local SKIN = {
 
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
+
+local mathRound = math.Round
 
 local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
@@ -57,6 +60,9 @@ surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, 
 surface.CreateAdvancedFont("DermaTTT2CatHeader", {font = "Trebuchet24", size = 16, weight = 900})
 surface.CreateAdvancedFont("DermaTTT2Text", {font = "Trebuchet24", size = 16, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 18, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2TextLargest", {font = "Trebuchet24", size = 24, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2TextHuge", {font = "Trebuchet24", size = 72, weight = 900})
 
 ---
 -- Updates the @{SKIN}
@@ -314,6 +320,9 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local colorBar = colors.background
 	local colorText = utilGetChangedColor(colors.default, 75)
 	local shift = 0
+	local pad = mathRound(0.3 * h)
+	local hasIcon = panel:HasIcon()
+	local sizeIcon = h - 2 * pad
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
 		colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
@@ -333,10 +342,14 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	drawBox(0, 0, sizes.border, h, colorBar)
 	drawBox(sizes.border, 0, w - sizes.border, h, colorBackground)
 
+	if hasIcon then
+		drawFilteredShadowedTexture(pad + sizes.border, pad + shift, sizeIcon, sizeIcon, panel:GetIcon(), colorText.a, colorText)
+	end
+
 	drawSimpleText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
-		sizes.border + 20,
+		sizes.border + pad + (hasIcon and (sizeIcon + pad) or pad),
 		0.5 * h + shift,
 		colorText,
 		TEXT_ALIGN_LEFT,
@@ -600,6 +613,23 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintLabelRightTTT2(panel, w, h)
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		w,
+		0.5 * h,
+		utilGetChangedColor(colors.default, 40),
+		TEXT_ALIGN_RIGHT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintFormLabelTTT2(panel, w, h)
 	local colorText = colors.settingsText
 	local colorBox = colors.settingsBox
@@ -816,6 +846,328 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER
 	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
+	local colorBackground
+
+	-- get the background color
+	if panel:HasDynamicColor() then
+		colorBackground = utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, panel:GetDynamicParentColorShift())
+	else
+		colorBackground = panel:GetColor()
+	end
+
+	-- set the dynamic background color for the child elements
+	panel.dynBaseColor = colorBackground
+
+	local colorText = utilGetDefaultColor(colorBackground)
+	local align = panel:GetTitleAlign()
+	local alpha = mathRound(colorText.a * panel:GetTitleOpacity())
+	local hasIcon = panel:HasIcon()
+	local pad = mathRound(0.1 * h)
+	local sizeIcon = h - 2 * pad
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+	if panel:HasFlashColor() then
+		local colorFlash = table.Copy(colorText)
+		colorFlash.a = math.Round(15 * (math.sin((CurTime() % 2 - 1) * math.pi) + 1.1))
+
+		drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorFlash)
+	end
+
+	drawShadowedText(
+		TryT(panel:GetTitle()),
+		panel:GetTitleFont(),
+		(align == TEXT_ALIGN_CENTER) and (0.5 * w) or (hasIcon and (sizeIcon + 4 * pad) or (2 * pad)),
+		0.5 * h,
+		ColorAlpha(colorText, alpha),
+		align,
+		TEXT_ALIGN_CENTER,
+		1
+	)
+
+	if hasIcon then
+		drawFilteredShadowedTexture(pad, pad, sizeIcon, sizeIcon, panel:GetIcon(), alpha, colorText)
+	end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintColoredBoxTTT2(panel, w, h)
+	-- get the background color
+	if panel:HasDynamicColor() then
+		panel.dynBaseColor = utilGetChangedColor(panel:GetDynamicParentColor() or colors.background, 30)
+	else
+		panel.dynBaseColor = panel:GetColor()
+	end
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel.dynBaseColor)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintVerticalBorderedBoxTTT2(panel, w, h)
+	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
+	local colorForeground = colors.accent
+	local shift = 0
+
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		shift = 1
+	elseif panel.Hovered then
+		colorForeground = colors.accentHover
+	elseif not panel.isActive then
+		colorForeground = colors.handle
+	end
+
+	local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, true, false, true, false)
+	drawRoundedBox(sizes.cornerRadius, 2, 2, w - 3, h - 4, colorForeground)
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h + shift,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
+	local colorForeground = colors.accent
+	local shift = 0
+
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		shift = 1
+	elseif panel.Hovered then
+		colorForeground = colors.accentHover
+	elseif not panel.isActive then
+		colorForeground = colors.handle
+	end
+
+	local colorText = ColorAlpha(utilGetDefaultColor(colorForeground), 220)
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, false, true, false, true)
+	drawRoundedBox(sizes.cornerRadius, 1, 2, w - 3, h - 4, colorForeground)
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h + shift,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintTooltipTTT2(panel, w, h)
+	local colorLine = ColorAlpha(colors.default, 100)
+
+	local sizeArrow = panel:GetArrowSize()
+	local sizeRhombus = 2 * sizeArrow
+
+	drawBox(0, sizeArrow, w, h - sizeArrow, colorLine)
+	drawFilteredTexture(sizeArrow, 0, sizeRhombus, sizeRhombus, materialRhombus, colorLine.a, colorLine)
+
+	drawBox(1, sizeArrow + 1, w - 2, h - sizeArrow - 2, colors.background)
+	drawFilteredTexture(sizeArrow, 1, sizeRhombus, sizeRhombus, materialRhombus, colors.background.a, colors.background)
+
+	if panel:HasText() then
+		drawSimpleText(
+			TryT(panel:GetText()),
+			panel:GetFont(),
+			0.5 * w,
+			0.5 * (h + sizeArrow),
+			utilGetDefaultColor(colors.background),
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER
+		)
+	end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintEventBoxTTT2(panel, w, h)
+	local event = panel:GetEvent()
+
+	local colorLine = ColorAlpha(colors.default, 25)
+	local colorText = ColorAlpha(colors.default, 200)
+
+	local sizeIcon = 30
+	local padding = 8
+	local widthLine = 4
+	local offsetXLine = 0.5 * sizeIcon + padding
+	local offsetXIcon = offsetXLine - 0.5 * (sizeIcon - widthLine)
+	local offsetYIcon = 20 + padding
+	local offsetYLine = offsetYIcon + padding + sizeIcon
+	local offsetXText = offsetXIcon + sizeIcon + padding
+	local offsetYTitle = offsetYIcon + 0.5 * sizeIcon
+	local widthScoreBox = w - offsetXText - 2 * padding
+
+	drawBox(offsetXLine, 0, widthLine, offsetYIcon - padding, colorLine)
+	drawBox(offsetXLine, offsetYLine, widthLine, h - offsetYLine, colorLine)
+
+	drawFilteredShadowedTexture(offsetXIcon, offsetYIcon, sizeIcon, sizeIcon, panel:GetIcon(), colorText.a, colorText)
+
+	drawShadowedText(
+		TryT(panel:GetTitle()),
+		panel:GetTitleFont(),
+		offsetXText,
+		offsetYTitle,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER,
+		1
+	)
+
+	local time = event:GetTime()
+	local minutes = math.floor(time / 60)
+	local seconds = math.floor(time % 60)
+
+	drawSimpleText(
+		string.format("[%02d:%02d]", minutes, seconds),
+		panel:GetFont(),
+		w - 20,
+		offsetYTitle,
+		colorLine,
+		TEXT_ALIGN_RIGHT,
+		TEXT_ALIGN_CENTER
+	)
+
+	local posY = offsetYIcon + sizeIcon + padding
+	local textTable = panel:GetText()
+	local _, heightText = drawGetTextSize("", panel:GetFont())
+
+	for i = 1, #textTable do
+		local text = textTable[i]
+		local params = {}
+
+		if text.translateParams then
+			for key, value in pairs(text.params) do
+				params[key] = TryT(value)
+			end
+		else
+			params = text.params
+		end
+
+		local textTranslated = ParT(text.string, params or {})
+
+		local textWrapped = drawGetWrappedText(
+			textTranslated,
+			w - offsetXText,
+			panel:GetFont()
+		)
+
+		for k = 1, #textWrapped do
+			drawSimpleText(
+				textWrapped[k],
+				panel:GetFont(),
+				offsetXText,
+				posY,
+				colorText,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+
+			posY = posY + heightText
+		end
+
+		posY = posY + 15
+	end
+
+	if not event:HasScore() then return end
+
+	local colorBox = ColorAlpha(colors.default, 10)
+	local scoredPlayers = event:GetScoredPlayers()
+	local sid64 = LocalPlayer():SteamID64()
+
+	for i = 1, #scoredPlayers do
+		local ply64 = scoredPlayers[i]
+
+		if event.onlyLocalPlayer and ply64 ~= sid64 then continue end
+
+		local rawScoreTexts = event:GetRawScoreText(ply64)
+		local scoreRows = #rawScoreTexts
+
+		if scoreRows == 0 then continue end
+
+		local height = (scoreRows + 1) * heightText + 2 * padding
+
+		drawRoundedBox(sizes.cornerRadius, offsetXText, posY, widthScoreBox, height, colorBox)
+
+		drawSimpleText(
+			ParT("title_player_score", {player = event:GetNameFrom64(ply64)}),
+			panel:GetFont(),
+			offsetXText + padding,
+			posY + padding,
+			colorText,
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_TOP
+		)
+
+		for k = 1, scoreRows do
+			local rawScoreText = rawScoreTexts[k]
+
+			drawSimpleText(
+				TryT(rawScoreText.name),
+				panel:GetFont(),
+				offsetXText + 2 * padding,
+				posY + padding + k * heightText,
+				colorText,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+
+			drawSimpleText(
+				rawScoreText.score,
+				panel:GetFont(),
+				offsetXText + 2 * padding + 175,
+				posY + padding + k * heightText,
+				colorText,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+		end
+
+		posY = posY + height + 15
+	end
 end
 
 -- REGISTER DERMA SKIN

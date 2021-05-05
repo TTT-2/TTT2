@@ -1421,6 +1421,8 @@ end
 function EndRound(result)
 	PrintResultMessage(result)
 
+	KARMA.RoundEnd()
+
 	events.Trigger(EVENT_FINISH, result)
 
 	SetRoundState(ROUND_POST)
@@ -1450,8 +1452,6 @@ function EndRound(result)
 	-- We may need to start a timer for a mapswitch, or start a vote
 	CheckForMapSwitch()
 
-	KARMA.RoundEnd()
-
 	events.UpdateScoreboard()
 
 	-- send the clients the round log, players will be shown the report
@@ -1465,6 +1465,24 @@ function EndRound(result)
 	hook.Run("TTTEndRound", result)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
+end
+
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	-- load all roles
+	roles.OnLoaded()
+
+	---
+	-- @realm shared
+	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2BaseRoleInit")
 end
 
 ---

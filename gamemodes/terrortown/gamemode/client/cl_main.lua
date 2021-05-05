@@ -43,6 +43,7 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_vskin__default_skin")
+ttt_include("cl_vskin__vgui__dpanel")
 ttt_include("cl_vskin__vgui__dframe")
 ttt_include("cl_vskin__vgui__dmenubutton")
 ttt_include("cl_vskin__vgui__dsubmenubutton")
@@ -61,6 +62,10 @@ ttt_include("cl_vskin__vgui__dnumslider")
 ttt_include("cl_vskin__vgui__dbinderpanel")
 ttt_include("cl_vskin__vgui__dscrollpanel")
 ttt_include("cl_vskin__vgui__dvscrollbar")
+ttt_include("cl_vskin__vgui__dcoloredbox")
+ttt_include("cl_vskin__vgui__dcoloredtextbox")
+ttt_include("cl_vskin__vgui__dtooltip")
+ttt_include("cl_vskin__vgui__deventbox")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_hud_editor")
@@ -83,7 +88,6 @@ ttt_include("cl_hudpickup")
 ttt_include("cl_keys")
 ttt_include("cl_wepswitch")
 ttt_include("cl_scoring")
-ttt_include("cl_scoring_events")
 ttt_include("cl_popups")
 ttt_include("cl_equip")
 ttt_include("cl_shopeditor")
@@ -310,28 +314,27 @@ function GM:InitPostEntity()
 end
 
 ---
--- Called after the gamemode has loaded
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
--- @local
-function GM:PostGamemodeLoaded()
-	ScoringEventSetup()
-end
-
----
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
+	-- load all roles
+	roles.OnLoaded()
+
+	---
+	-- @realm shared
+	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2BaseRoleInit")
+
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
-
-	ScoringEventSetup()
 end
 
 ---

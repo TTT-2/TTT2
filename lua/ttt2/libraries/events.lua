@@ -72,7 +72,7 @@ function events.SortByPlayerAndEvent()
 	for i = 1, #eventList do
 		local event = eventList[i]
 		local type = event.type
-		local plys64 = event:GetAffectedPlayer()
+		local plys64 = event:GetAffectedPlayer64s()
 
 		-- now that we have a list of all players affected by this event
 		-- each of those players should have this event added to their list
@@ -87,56 +87,6 @@ function events.SortByPlayerAndEvent()
 	end
 
 	return sortedList
-end
-
----
--- Returns a table with the player steamID64 as indexes and the score
--- for this specific player.
--- @note Players with zero score this round will not be included in this list.
--- @return table A table with the score per player
--- @realm shared
-function events.GetTotalPlayerScores()
-	local eventList = events.list
-	local scoreList = {}
-
-	for i = 1, #eventList do
-		local event = eventList[i]
-
-		if not event:HasScore() then continue end
-
-		local plys64 = event:GetScoredPlayers()
-
-		for k = 1, #plys64 do
-			local ply64 = plys64[k]
-
-			scoreList[ply64] = (scoreList[ply64] or 0) + event:GetSummedPlayerScore(ply64)
-		end
-	end
-
-	return scoreList
-end
-
----
--- Returns a table with the player steamID64 as indexes and a number of deaths
--- for this specific player.
--- @note Players with zero deaths this round will not be included in this list.
--- @return table A table with the amounts of deaths per player
--- @realm shared
-function events.GetTotalPlayerDeaths()
-	local eventList = events.list
-	local deathList = {}
-
-	for i = 1, #eventList do
-		local event = eventList[i]
-
-		if event.type ~= EVENT_KILL then continue end
-
-		local victim64 = event.event.victim.sid64
-
-		deathList[victim64] = (deathList[victim64] or 0) + 1
-	end
-
-	return deathList
 end
 
 ---
@@ -157,6 +107,14 @@ function events.GetDeprecatedEventList()
 	end
 
 	return deprecatedEvents
+end
+
+---
+-- Returns the events in a timed order.
+-- @return table The event list.
+-- @realm shared
+function events.GetEventList()
+	return events.list
 end
 
 if SERVER then
@@ -213,8 +171,8 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function events.UpdateScoreboard()
-		local scores = events.GetTotalPlayerScores()
-		local deaths = events.GetTotalPlayerDeaths()
+		local scores = eventdata.GetPlayerTotalScores()
+		local deaths = eventdata.GetPlayerTotalDeaths()
 
 		for ply64, score in pairs(scores) do
 			ply = player.GetBySteamID64(ply64)
@@ -266,16 +224,13 @@ else --CLIENT
 			local newEvent = events.Create(eventData.type)
 			newEvent:SetEventTable(eventData.event)
 			newEvent:SetScoreTable(eventData.score)
-			newEvent:SetPlayersTable(eventData.plys)
+			newEvent:SetKarmaTable(eventData.karma)
+			newEvent:SetPlayersTable(eventData.plys64, eventData.plys)
 
 			events.list[i] = newEvent
 		end
 
-		-- set old deprecated event table
-		local deprecatedEvents = events.GetDeprecatedEventList()
-
-		table.SortByMember(deprecatedEvents, "t", true)
-		CLSCORE:ReportEvents(deprecatedEvents, events.SortByPlayerAndEvent())
+		CLSCORE:ReportEvents()
 	end)
 end
 

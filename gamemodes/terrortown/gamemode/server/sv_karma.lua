@@ -3,7 +3,9 @@
 -- @module KARMA
 
 KARMA = {
-	RememberedPlayers = {} -- ply steamid -> karma table for disconnected players who might reconnect
+	rememberedPlayers = {}, -- ply steamid -> karma table for disconnected players who might reconnect
+	karmaChanges = {}, -- ply steamid -> karma table for karma changes that will get applied at roundend
+	karmaChangesOld = {} -- ply steamid -> karma table for old karma changes after roundend 
 }
 
 -- Convars, more convenient access than GetConVar
@@ -79,6 +81,24 @@ KARMA.cv = {
 
 local config = KARMA.cv
 
+local KARMA_TEAMKILL = 1
+local KARMA_TEAMHURT = 2
+local KARMA_ENEMYKILL = 3
+local KARMA_ENEMYHURT = 4
+local KARMA_CLEAN = 5
+local KARMA_ROUND = 6
+local KARMA_UNKNOWN = 7
+
+KARMA.reason = {
+	[KARMA_TEAMKILL] = "karma_teamkill_tooltip",
+	[KARMA_TEAMHURT] = "karma_teamhurt_tooltip",
+	[KARMA_ENEMYKILL] = "karma_enemykill_tooltip",
+	[KARMA_ENEMYHURT] = "karma_enemyhurt_tooltip",
+	[KARMA_CLEAN] = "karma_cleanround_tooltip",
+	[KARMA_ROUND] = "karma_roundheal_tooltip",
+	[KARMA_UNKNOWN] = "karma_unknown_tooltip"
+}
+
 local IsValid = IsValid
 local hook = hook
 
@@ -113,6 +133,115 @@ end
 -- @realm server
 function KARMA.IsEnabled()
 	return GetGlobalBool("ttt_karma", false)
+end
+
+---
+-- Allows to change the live KARMA from anywhere
+-- Use this function only if you want to influence KARMA per event or similar
+-- @note Reason is a string and will be displayed in the roundendscreen as tooltip, so use language localization or describe it properly
+-- @param Player ply
+-- @param number amount
+-- @param string reason 
+-- @realm server
+function KARMA.DoKarmaChange(ply, amount, reason)
+	ply:SetLiveKarma(math.Clamp(ply:GetLiveKarma() + amount, 0, config.max:GetFloat()))
+
+	KARMA.SaveKarmaChange(ply, amount, isstring(reason) and reason or KARMA.reason[KARMA_UNKNOWN])
+end
+
+---
+-- Saves changes to the live KARMA
+-- @param Player ply
+-- @param number amount
+-- @param string reason 
+-- @realm server
+-- @internal
+function KARMA.SaveKarmaChange(ply, amount, reason)
+	amount = math.Round(amount)
+
+	if amount == 0 then return end
+
+	local sid64 = ply:SteamID64()
+
+	KARMA.karmaChanges[sid64] = KARMA.karmaChanges[sid64] or {}
+	KARMA.karmaChanges[sid64][reason] = (KARMA.karmaChanges[sid64][reason] or 0) + amount
+end
+
+---
+-- Reset the changes and backups table content
+-- @realm server
+-- @internal
+function KARMA.ResetRoundChanges()
+	KARMA.karmaChangesOld = table.Copy(KARMA.karmaChanges)
+	KARMA.karmaChanges = {}
+
+	if not IsDebug() then return end
+
+	for sid64, reasonList in pairs(KARMA.karmaChangesOld) do
+		local ply = player.GetBySteamID64(sid64)
+
+		if not IsValid(ply) then continue end
+
+		print("\nFor Player " .. ply:GetName())
+
+		for reason, karma in pairs(reasonList) do
+			print("An amount of " .. karma .. " was changed for the reason of " .. reason)
+		end
+	end
+end
+
+---
+-- Returns table which contains all current karmachanges until next roundbegin for the given playerID
+-- @param SteamID64 sid64
+-- @return table containing karmachange per reason
+-- @realm server
+function KARMA.GetKarmaChangesBySteamID64(sid64)
+	return KARMA.karmaChanges[sid64]
+end
+
+---
+-- Returns table which contains all karmachanges of last round after roundbegin for the given playerID
+-- @param SteamID64 sid64
+-- @return table containing karmachange per reason
+-- @realm server
+function KARMA.GetOldKarmaChangesBySteamID64(sid64)
+	return KARMA.karmaChangesOld[sid64]
+end
+
+---
+-- Returns the total change in Karma of current round per player
+-- @param SteamID64 sid64
+-- @return number containing absolute karmachange per player
+-- @realm server
+function KARMA.GetAbsoluteKarmaChangeBySteamID64(sid64)
+	local amount = 0
+	local reasonList = KARMA.karmaChanges[sid64]
+
+	if not reasonList then return end
+
+	for _, karma in pairs(reasonList) do
+		amount = amount + karma
+	end
+
+	return amount
+end
+
+---
+-- Returns the total change in Karma of last round per player
+-- @param SteamID64 sid64
+-- @return number containing absolute karmachange per player
+-- @realm server
+function KARMA.GetAbsoluteOldKarmaChangeBySteamID64(sid64)
+	local amount = 0
+	local reasonList = KARMA.karmaChangesOld[sid64]
+
+	if not reasonList then return end
+
+	for _, karma in pairs(reasonList) do
+		amount = amount + karma
+	end
+
+	return amount
 end
 
 ---
@@ -157,12 +286,13 @@ end
 -- @param Player ply
 -- @param number penalty
 -- @param Player victim
+-- @param string reason
 -- @realm server
-function KARMA.GivePenalty(ply, penalty, victim)
+function KARMA.GivePenalty(ply, penalty, victim, reason)
 	---
 	-- @realm server
 	if not hook.Run("TTTKarmaGivePenalty", ply, penalty, victim) then
-		ply:SetLiveKarma(math.max(ply:GetLiveKarma() - penalty, 0))
+		KARMA.DoKarmaChange(ply, -penalty, reason)
 	end
 end
 
@@ -170,12 +300,13 @@ end
 -- Gives a @{Player} a KARMA reward
 -- @param Player ply
 -- @param number reward
+-- @param string reason
 -- @return number reward modified / reward
 -- @realm server
-function KARMA.GiveReward(ply, reward)
+function KARMA.GiveReward(ply, reward, reason)
 	reward = KARMA.DecayedMultiplier(ply) * reward
 
-	ply:SetLiveKarma(math.min(ply:GetLiveKarma() + reward, config.max:GetFloat()))
+	KARMA.DoKarmaChange(ply, reward, reason)
 
 	return reward
 end
@@ -248,7 +379,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		if attacker:GetSubRoleData().unknownTeam then
 			local reward = KARMA.GetHurtReward(hurt_amount)
 
-			reward = KARMA.GiveReward(attacker, reward)
+			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYHURT])
 
 			print(Format("%s (%f) hurt %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
@@ -258,7 +389,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
-		KARMA.GivePenalty(attacker, penalty, victim)
+		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMHURT])
 
 		attacker:SetCleanRound(false)
 
@@ -279,7 +410,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 		if attacker:GetSubRoleData().unknownTeam then
 			local reward = KARMA.GetKillReward()
 
-			reward = KARMA.GiveReward(attacker, reward)
+			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYKILL])
 
 			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
@@ -289,7 +420,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
 		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
-		KARMA.GivePenalty(attacker, penalty, victim)
+		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMKILL])
 
 		attacker:SetCleanRound(false)
 
@@ -339,9 +470,11 @@ function KARMA.RoundIncrement()
 		local ply = plys[i]
 
 		if ply:IsDeadTerror() and ply.death_type ~= KILL_SUICIDE or not ply:IsSpec() then
-			local bonus = healbonus + (ply:GetCleanRound() and cleanbonus or 0)
+			KARMA.GiveReward(ply, healbonus, KARMA.reason[KARMA_ROUND])
 
-			KARMA.GiveReward(ply, bonus)
+			if ply:GetCleanRound() then
+				KARMA.GiveReward(ply, cleanbonus, KARMA.reason[KARMA_CLEAN])
+			end
 
 			if IsDebug() then
 				print(ply, "gets roundincr ", incr)
@@ -423,6 +556,7 @@ end
 -- @realm server
 function KARMA.RoundBegin()
 	KARMA.InitState()
+	KARMA.ResetRoundChanges()
 
 	if KARMA.IsEnabled() then
 		local plys = player.GetAll()
@@ -471,7 +605,7 @@ function KARMA.Remember(ply)
 	end
 
 	-- if persist is on, this is purely a backup method
-	KARMA.RememberedPlayers[ply:SteamID64()] = ply:GetLiveKarma()
+	KARMA.rememberedPlayers[ply:SteamID64()] = ply:GetLiveKarma()
 end
 
 ---
@@ -491,7 +625,7 @@ function KARMA.Recall(ply)
 		end
 	end
 
-	return KARMA.RememberedPlayers[ply:SteamID64()]
+	return KARMA.rememberedPlayers[ply:SteamID64()]
 end
 
 ---
@@ -499,7 +633,7 @@ end
 -- @param Player ply
 -- @realm server
 function KARMA.LateRecallAndSet(ply)
-	local k = tonumber(ply:GetPData("karma_stored", KARMA.RememberedPlayers[ply:SteamID64()]))
+	local k = tonumber(ply:GetPData("karma_stored", KARMA.rememberedPlayers[ply:SteamID64()]))
 	if k and k < ply:GetLiveKarma() then
 		ply:SetBaseKarma(k)
 		ply:SetLiveKarma(k)
@@ -540,7 +674,7 @@ function KARMA.CheckAutoKick(ply)
 
 		ply:SetPData("karma_stored", k)
 
-		KARMA.RememberedPlayers[ply:SteamID64()] = k
+		KARMA.rememberedPlayers[ply:SteamID64()] = k
 	end
 
 	if config.autoban:GetBool() then

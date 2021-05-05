@@ -4,12 +4,18 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-
 ### Added
 
+- All new roundend menu
+  - new info panel that shows detailed role distribution during the round
+  - info panel also states detailed score events
+  - new timeline that displays the events that happened during the round
+  - added two new round end conditions: `time up` and `no one wins`
 - Added `ROLE_NONE` (ID `3` by default)
   - Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`
   - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
+- Karma now stores changes
+  - Is shown in roundend menu
 
 ### Fixed
 
@@ -19,6 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a data initialization bug that appeared on the first (initial) spawn
 
 ### Changed
+
 - Microoptimization to improve code performance
 - Converted `roles` module into a library
 - Code cleanup and removed silly negations
@@ -26,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed `bees` win to `nones` win
 
 ### Breaking Changes
+
 - Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
 - Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.
 

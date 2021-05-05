@@ -526,6 +526,7 @@ include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/roles.lua")
 include("ttt2/libraries/events.lua")
+include("ttt2/libraries/eventdata.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
 

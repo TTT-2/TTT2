@@ -27,6 +27,7 @@ function PANEL:Init()
 	self.contents = {
 		title = "",
 		title_font = "DermaTTT2SubMenuButtonTitle",
+		icon = nil,
 		selected = false
 	}
 end
@@ -67,10 +68,31 @@ function PANEL:GetTitleFont()
 end
 
 ---
+-- @param Material iconMat
+-- @realm client
+function PANEL:SetIcon(iconMat)
+	self.contents.icon = iconMat
+end
+
+---
+-- @return icon
+-- @realm client
+function PANEL:GetIcon()
+	return self.contents.icon
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasIcon()
+	return self.contents.icon ~= nil
+end
+
+---
 -- @param boolean
 -- @realm client
 function PANEL:SetActive(active)
-	self.contents.active = active == nil and true or false
+	self.contents.active = active == nil and true or active
 end
 
 ---

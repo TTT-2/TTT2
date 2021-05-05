@@ -288,6 +288,36 @@ function table.ExtractRandomEntry(tbl, filterFn)
 end
 
 ---
+-- Scans the given table for the subtable with the most entries. This then
+-- is returned and deleted from the source table. If there are multiple subtables with
+-- the same size, the first found will be returned.
+-- @note This function does not work recursivly. Therefore the size of the sub-subtables
+-- has no effect on the size of the subtables.
+-- @warning For number indexed tables the table has to be iterable.
+-- @param table The table whose biggest subtable should be found.
+-- @return[default={}] table The biggest subtable
+-- @return[default=0] number|string The index where the biggest subtable was found
+-- @realm shared
+function table.GetAndRemoveBiggestSubTable(tbl)
+	local subTbl = {}
+	local subIdx = 0
+
+	for i, t in pairs(tbl) do
+		if #t < #subTbl then continue end
+
+		subTbl = t
+		subIdx = i
+	end
+
+	if isnumber(subItx) then
+		table.remove(tbl, subIdx)
+	else
+		tbl[subIdx] = nil
+	end
+
+	return subTbl, subIdx
+end
+
 -- Returns an indexed table of indexes that exist in both tables.
 -- @note This function is most suitable for string indexed tables.
 -- @param table tbl The table to iterate over

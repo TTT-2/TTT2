@@ -1,8 +1,33 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = nil
-	EVENT.description = "desc_event_finished"
+	EVENT.icon = Material("vgui/ttt/vskin/events/finish")
+	EVENT.title = "title_event_finish"
+
+	function EVENT:GetText()
+		local alive = 0
+
+		for i = 1, #self.event.plys do
+			if self.event.plys[i].alive then
+				alive = alive + 1
+			end
+		end
+
+		local time = self:GetTime()
+		local minutes = math.floor(time / 60)
+		local seconds = string.format("%02d", math.floor(time % 60))
+
+		return {
+			{
+				string = "desc_event_finish",
+				params = {
+					alive = alive,
+					minutes = minutes,
+					seconds = seconds
+				}
+			}
+		}
+	end
 end
 
 if SERVER then
@@ -21,7 +46,10 @@ if SERVER then
 				alive = ply:Alive() and ply:IsTerror()
 			}
 
-			self:AddAffectedPlayers({ply:SteamID64()})
+			self:AddAffectedPlayers(
+				{ply:SteamID64()},
+				{ply:Nick()}
+			)
 		end
 
 		return self:Add({
@@ -37,12 +65,17 @@ function EVENT:CalculateScore()
 	local wintype = event.wintype
 	local alive = {}
 	local dead = {}
+	local aliveAll = 0
 
 	-- Check who is alive and who is dead on a teambased approach
 	for i = 1, #plys do
 		local ply = plys[i]
 		local state = ply.alive and alive or dead
 		local team = ply.team
+
+		if ply.alive then
+			aliveAll = aliveAll + 1
+		end
 
 		if team ~= TEAM_NONE then
 			state[team] = (state[team] or 0) + 1
@@ -75,11 +108,20 @@ function EVENT:CalculateScore()
 		end
 
 		self:SetPlayerScore(ply.sid64, {
-			scoreAliveTeamMates = alive[team] or 0,
-			scoreDeadEnemies = math.ceil(otherDeadPlayers * roleData.score.surviveBonusMultiplier),
-			scoreTimelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.score.timelimitMultiplier) or 0
+			score_alive_teammates = wintype == team and ((alive[team] or 0) * roleData.score.aliveTeammatesBonusMultiplier) or 0,
+			score_alive_all = aliveAll * roleData.score.allSurviveBonusMultiplier,
+			score_dead_enemies = wintype == team and math.ceil(otherDeadPlayers * roleData.score.surviveBonusMultiplier) or 0,
+			score_timelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.score.timelimitMultiplier) or 0
 		})
 	end
+end
+
+function EVENT:ShouldKarmaChangeSynchronize()
+	return true
+end
+
+function EVENT:Serialize()
+	return "The round has ended."
 end
 
 function EVENT:GetDeprecatedFormat()
