@@ -293,6 +293,7 @@ end
 -- the same size, the first found will be returned.
 -- @note This function does not work recursivly. Therefore the size of the sub-subtables
 -- has no effect on the size of the subtables.
+-- @warning For number indexed tables the table has to be iterable.
 -- @param table The table whose biggest subtable should be found.
 -- @return[default={}] table The biggest subtable
 -- @return[default=0] number|string The index where the biggest subtable was found

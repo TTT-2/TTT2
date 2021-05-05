@@ -1039,6 +1039,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	local offsetYLine = offsetYIcon + padding + sizeIcon
 	local offsetXText = offsetXIcon + sizeIcon + padding
 	local offsetYTitle = offsetYIcon + 0.5 * sizeIcon
+	local widthScoreBox = w - offsetXText - 2 * padding
 
 	drawBox(offsetXLine, 0, widthLine, offsetYIcon - padding, colorLine)
 	drawBox(offsetXLine, offsetYLine, widthLine, h - offsetYLine, colorLine)
@@ -1129,7 +1130,7 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
 		local height = (scoreRows + 1) * heightText + 2 * padding
 
-		drawRoundedBox(sizes.cornerRadius, offsetXText, posY, w - offsetXText - 2 * padding, height, colorBox)
+		drawRoundedBox(sizes.cornerRadius, offsetXText, posY, widthScoreBox, height, colorBox)
 
 		drawSimpleText(
 			ParT("title_player_score", {player = event:GetNameFrom64(ply64)}),

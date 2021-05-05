@@ -100,14 +100,16 @@ function CLSCORE:CalculateSizes()
 
 	self.sizes.widthMenu = 50 + vskin.GetBorderSize()
 
-	self.sizes.heightMainArea = self.sizes.height - 2 * self.sizes.padding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
-	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - 2 * self.sizes.padding
+	local doublePadding = 2 * self.sizes.padding
+
+	self.sizes.heightMainArea = self.sizes.height - doublePadding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - doublePadding
 
 	self.sizes.heightHeaderPanel = 120
 	self.sizes.widthTopButton = 140
 	self.sizes.heightTopButton = 30
 	self.sizes.widthTopLabel = 0.5 * self.sizes.widthMainArea - self.sizes.widthTopButton - self.sizes.padding
-	self.sizes.heightTopButtonPanel = self.sizes.heightTopButton + 2 * self.sizes.padding
+	self.sizes.heightTopButtonPanel = self.sizes.heightTopButton + doublePadding
 	self.sizes.heightRow = 25
 	self.sizes.heightTitleRow = 30
 
@@ -117,6 +119,9 @@ function CLSCORE:CalculateSizes()
 	self.sizes.heightContentLarge = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
 	self.sizes.heightContent = self.sizes.heightContentLarge - self.sizes.heightHeaderPanel
 	self.sizes.heightMenuButton = 50
+
+	self.sizes.widthKarma = 50
+	self.sizes.widthScore = 35
 end
 
 ---

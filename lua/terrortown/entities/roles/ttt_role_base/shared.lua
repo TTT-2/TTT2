@@ -7,7 +7,7 @@ ROLE.isAbstract = true
 
 ROLE.score = {
 	-- The multiplier that is used to calculate the score penalty
-	-- that is added if this role kills a teammember.
+	-- that is added if this role kills a team member.
 	teamKillsMultiplier = 0,
 
 	-- The multiplier that is used to calculate the gained score
@@ -21,7 +21,7 @@ ROLE.score = {
 	-- based on the amount of dead enemy players.
 	surviveBonusMultiplier = 0,
 
-	-- The amount of scorepoints granted due to a survival of the
+	-- The amount of score points granted due to a survival of the
 	-- round for every teammate alive.
 	aliveTeammatesBonusMultiplier = 1,
 
@@ -29,8 +29,8 @@ ROLE.score = {
 	-- the round. Can be negative for roles that should kill everyone.
 	allSurviveBonusMultiplier = 0,
 
-	-- The amount of score points gained by beeing alive if the
-	-- round ended with nobody winning, ususally a negative number.
+	-- The amount of score points gained by being alive if the
+	-- round ended with nobody winning, usually a negative number.
 	timelimitMultiplier = 0,
 
 	-- the amount of points gained by killing yourself. Should be a

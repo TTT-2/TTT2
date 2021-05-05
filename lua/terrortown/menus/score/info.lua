@@ -146,8 +146,9 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 		for k = 1, #teamPlayersList do
 			local plys = teamPlayersList[k]
+			local numPly = #plys
 
-			heightColumn = heightColumn + sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall
+			heightColumn = heightColumn + sizes.heightTitleRow + numPly * sizes.heightRow + (numPly + 1) * sizes.paddingSmall
 
 			-- if there is a second team, add padding to size
 			if k > 1 then
@@ -159,22 +160,18 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 	end
 
 	local widthColumn = (sizes.widthMainArea - 2 * sizes.padding - (heightScroll < maxHeightColumn and 15 or 0)) / 3
+	local widthName = widthColumn - sizes.widthKarma - sizes.widthScore - 4 * sizes.padding
+
 	local teamInfoBox = {}
 
-	teamInfoBox[1] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[1]:SetSize(widthColumn, maxHeightColumn)
-	teamInfoBox[1]:SetDynamicColor(parent, 30)
-
-	teamInfoBox[2] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[2]:SetSize(widthColumn, maxHeightColumn)
-	teamInfoBox[2]:SetDynamicColor(parent, 30)
-
-	teamInfoBox[3] = playerCoumns:Add("DColoredBoxTTT2")
-	teamInfoBox[3]:SetSize(widthColumn, maxHeightColumn)
-	teamInfoBox[3]:SetDynamicColor(parent, 30)
+	local localPly64 = LocalPlayer():SteamID64()
 
 	-- FILL THE COLUMNS
 	for i = 1, 3 do
+		teamInfoBox[i] = playerCoumns:Add("DColoredBoxTTT2")
+		teamInfoBox[i]:SetSize(widthColumn, maxHeightColumn)
+		teamInfoBox[i]:SetDynamicColor(parent, 30)
+
 		local teamPlayersList = columnData[i]
 		local teamNamesList = columnTeams[i]
 
@@ -184,11 +181,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 		for k = 1, #teamPlayersList do
 			local plys = teamPlayersList[k]
+			local numPly = #plys
 			local teamData = TEAMS[teamNamesList[k]]
 
 			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
 			teamBox:SetDynamicColor(parent, 15)
-			teamBox:SetSize(widthColumn, sizes.heightTitleRow + #plys * sizes.heightRow + (#plys + 1) * sizes.paddingSmall)
+			teamBox:SetSize(widthColumn, sizes.heightTitleRow + numPly * sizes.heightRow + (numPly + 1) * sizes.paddingSmall)
 
 			local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
 			teamPlayerBox:SetSpaceY(sizes.paddingSmall)
@@ -201,9 +199,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			teamNameBox:SetTitleFont("DermaTTT2TextLarger")
 			teamNameBox:SetIcon(teamData.iconMaterial)
 
-			local localPly64 = LocalPlayer():SteamID64()
-
-			for m = 1, #plys do
+			for m = 1, numPly do
 				local ply = plys[m]
 
 				local plyRowPanel = teamPlayerBox:Add("DPanelTTT2")
@@ -213,10 +209,6 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyRow:SetSpaceX(sizes.padding)
 				plyRow:DockMargin(sizes.padding, 0, 0, 0)
 				plyRow:Dock(FILL)
-
-				local widthKarma = 50
-				local widthScore = 35
-				local widthName = widthColumn - widthKarma - widthScore - 4 * sizes.padding
 
 				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyNameBox:SetSize(widthName, sizes.heightRow)
@@ -240,7 +232,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyRolesTooltipPanel:SetSize(widthName, heightRolesTooltip)
 
 				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
-				plyKarmaBox:SetSize(widthKarma, sizes.heightRow)
+				plyKarmaBox:SetSize(sizes.widthKarma, sizes.heightRow)
 				plyKarmaBox:SetColor(COLOR_BLUE)
 				plyKarmaBox:SetTitle(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
 				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
@@ -256,7 +248,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 				plyKarmaTooltipPanel:SetSize(200, heightKarmaTooltip)
 
 				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
-				plyPointsBox:SetSize(widthScore, sizes.heightRow)
+				plyPointsBox:SetSize(sizes.widthScore, sizes.heightRow)
 				plyPointsBox:SetColor(COLOR_ORANGE)
 				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64])
 				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
