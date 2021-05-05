@@ -2,6 +2,7 @@
 -- @class EVENT
 
 local tableCount = table.Count
+local tableEmpty = table.IsEmpty
 local tableGetKeys = table.GetKeys
 local tableHasValue = table.HasValue
 local tableAdd = table.Add
@@ -15,6 +16,7 @@ end
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
+EVENT.karma = {}
 EVENT.plys = {}
 EVENT.plys64 = {}
 
@@ -34,6 +36,15 @@ end
 -- @realm shared
 function EVENT:SetScoreTable(score)
 	self.score = score
+end
+
+---
+-- Sets the karma changes data table to the event.
+-- @param table event The karma changes data table that should be added
+-- @internal
+-- @realm shared
+function EVENT:SetKarmaTable(karma)
+	self.karma = karma
 end
 
 ---
@@ -57,6 +68,17 @@ function EVENT:SetPlayerScore(ply64, score)
 	if not ply64 then return end
 
 	self.score[ply64] = score
+end
+
+---
+-- Sets the karma changes data table to the event.
+-- @param string sid64 The steamID64 of the affected player
+-- @param[opt] table karma The karma changes data table that should be set
+-- @realm shared
+function EVENT:SetPlayerKarma(sid64, karma)
+	if not sid64 then return end
+
+	self.karma[sid64] = karma
 end
 
 ---
@@ -90,6 +112,15 @@ function EVENT:HasPlayerScore(ply64)
 end
 
 ---
+-- Checks whether the given player's karma has changed in this event or not.
+-- @param string sid64 The steamID64 of the player that should be checked
+-- @return boolean Returns true if the player has a karma change table
+-- @realm shared
+function EVENT:HasPlayerKarma(sid64)
+	return self.karma[sid64] ~= nil
+end
+
+---
 -- Returns the whole score table
 -- @return table The score table, indexed with sid64
 -- @realm shared
@@ -98,11 +129,27 @@ function EVENT:GetScore()
 end
 
 ---
+-- Returns the whole karma table
+-- @return table The karma table, indexed with sid64
+-- @realm shared
+function EVENT:GetKarma()
+	return self.karma
+end
+
+---
 -- Checks if this event has score at all.
 -- @return boolean Returns true if there is score added in this event
 -- @realm server
 function EVENT:HasScore()
 	return tableCount(self.score)
+end
+
+---
+-- Checks if this event has synced Karma at all.
+-- @return boolean Returns true if there is score added in this event
+-- @realm server
+function EVENT:HasKarma()
+	return not tableEmpty(self.karma)
 end
 
 ---
@@ -178,7 +225,7 @@ end
 function EVENT:GetNameFrom64(ply64)
 	for i = 1, #self.plys64 do
 		if self.plys64[i] == ply64 then
-			return self.plys[i] 
+			return self.plys[i]
 		end
 	end
 end
@@ -259,6 +306,11 @@ if SERVER then
 		-- scoring function to directly calculate the score
 		self:CalculateScore()
 
+		-- Synchronize Karma Changes
+		if self:ShouldKarmaChangeSynchronize() then
+			self:SynchronizeKarmaChanges()
+		end
+
 		return true
 	end
 
@@ -273,6 +325,7 @@ if SERVER then
 			type = self.type,
 			event = self.event,
 			score = self.score,
+			karma = self.karma,
 			plys64 = self.plys64,
 			plys = self.plys
 		}
@@ -290,12 +343,36 @@ if SERVER then
 
 	---
 	-- This function calculates the score gained for this event. It should be
-	-- overwritte if the event should yield a score.
+	-- overwritten if the event should yield a score.
 	-- @note This function should be overwritten but not not called.
 	-- @note The event table can be accessed via `self.event`.
 	-- @internal
 	-- @realm server
 	function EVENT:CalculateScore()
 
+	end
+
+	---
+	-- Return true if Karma should be synchronized
+	-- @note This function should be overwritten but not called.
+	-- @note The event table can be accessed via `self.event`.
+	-- @internal
+	-- @realm server
+	function EVENT:ShouldKarmaChangeSynchronize()
+		return false
+	end
+
+	---
+	-- This function puts KarmaChanges into event-data 
+	-- @note The event table can be accessed via `self.event`.
+	-- @internal
+	-- @realm server
+	function EVENT:SynchronizeKarmaChanges()
+		local plys = self.event.plys
+
+		for i = 1, #plys do
+			local sid64 = plys[i].sid64
+			self:SetPlayerKarma(sid64, KARMA.GetKarmaChangesBySteamID64(sid64))
+		end
 	end
 end

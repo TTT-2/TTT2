@@ -1340,3 +1340,12 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) wurde von {attacke
 
 -- 2021-04-20
 L.none = "Keine Rolle"
+
+-- 2021-04-24
+L.karma_teamkill_tooltip = "Teamkills"
+L.karma_teamhurt_tooltip = "Teamschaden"
+L.karma_enemykill_tooltip = "Kills"
+L.karma_enemyhurt_tooltip = "Schaden"
+L.karma_cleanround_tooltip = "Saubere Runde"
+L.karma_roundheal_tooltip = "Rundenheilung"
+L.karma_unknown_tooltip = "Unbekannt"

@@ -1421,6 +1421,8 @@ end
 function EndRound(result)
 	PrintResultMessage(result)
 
+	KARMA.RoundEnd()
+
 	events.Trigger(EVENT_FINISH, result)
 
 	SetRoundState(ROUND_POST)
@@ -1449,8 +1451,6 @@ function EndRound(result)
 
 	-- We may need to start a timer for a mapswitch, or start a vote
 	CheckForMapSwitch()
-
-	KARMA.RoundEnd()
 
 	events.UpdateScoreboard()
 

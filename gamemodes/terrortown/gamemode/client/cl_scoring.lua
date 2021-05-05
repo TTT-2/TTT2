@@ -307,8 +307,10 @@ function CLSCORE:Init()
 	self.events = events.GetEventList()
 	self.eventsSorted = events.SortByPlayerAndEvent()
 	self.eventsInfoScores = eventdata.GetPlayerTotalScores()
+	self.eventsInfoKarma = eventdata.GetPlayerTotalKarma()
 	self.eventsPlayerRoles = eventdata.GetPlayerRoles()
 	self.eventsPlayerScores = eventdata.GetPlayerScores()
+	self.eventsPlayerKarma = eventdata.GetPlayerKarma()
 
 	-- now iterate over the event table to get an instant access
 	-- to the important data
