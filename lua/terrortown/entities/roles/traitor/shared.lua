@@ -34,4 +34,6 @@ hook.Add("TTT2SpecialRoleSyncing", "TTT2TraitorSync", function(ply, target)
 
 	ply:TTT2NETSetUInt("subrole", ROLE_TRAITOR, ROLE_BITS, target)
 	ply:TTT2NETSetString("team", TEAM_TRAITOR, target)
+
+	return true
 end)

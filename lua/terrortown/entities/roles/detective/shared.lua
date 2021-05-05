@@ -38,4 +38,6 @@ hook.Add("TTT2SpecialRoleSyncing", "TTT2DetectiveVisible", function(ply, target)
 
 	ply:TTT2NETSetUInt("subrole", ROLE_DETECTIVE, ROLE_BITS, target)
 	ply:TTT2NETSetString("team", TEAM_INNOCENT, target)
+
+	return true
 end)
