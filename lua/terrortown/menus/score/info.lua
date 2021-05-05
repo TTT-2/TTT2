@@ -90,16 +90,16 @@ local function MakePlayerKarmaTooltip(parent, width, ply)
 	end
 
 	for karmaText, karma in pairs(plyKarmaList) do
-			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
-			plyRoleBox:SetSize(width, 20)
-			plyRoleBox:SetDynamicColor(parent, 0)
-			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
+		local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
+		plyRoleBox:SetSize(width, 20)
+		plyRoleBox:SetDynamicColor(parent, 0)
+		plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
-			plyRoleBox.GetTitle = function()
-				return "- " .. TryT(karmaText) .. ": " .. karma
-			end
+		plyRoleBox.GetTitle = function()
+			return "- " .. TryT(karmaText) .. ": " .. karma
+		end
 
-			height = height + 20
+		height = height + 20
 	end
 
 	return height
