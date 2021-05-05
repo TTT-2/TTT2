@@ -183,6 +183,9 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			local plys = teamPlayersList[k]
 			local numPly = #plys
 			local teamData = TEAMS[teamNamesList[k]]
+			local colorTeam = teamData.color
+			local colorTeamLight = util.ColorLighten(colorTeam, 35)
+			local colorTeamDark = util.ColorDarken(colorTeam, 20)
 
 			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
 			teamBox:SetDynamicColor(parent, 15)
@@ -194,7 +197,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 			local teamNameBox = teamPlayerBox:Add("DColoredTextBoxTTT2")
 			teamNameBox:SetSize(widthColumn, sizes.heightTitleRow)
-			teamNameBox:SetColor(teamData.color)
+			teamNameBox:SetColor(colorTeam)
 			teamNameBox:SetTitle(teamNamesList[k])
 			teamNameBox:SetTitleFont("DermaTTT2TextLarger")
 			teamNameBox:SetIcon(teamData.iconMaterial)
@@ -233,7 +236,7 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(sizes.widthKarma, sizes.heightRow)
-				plyKarmaBox:SetColor(COLOR_BLUE)
+				plyKarmaBox:SetColor(colorTeamLight)
 				plyKarmaBox:SetTitle(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
 				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
 				plyKarmaBox:SetTooltip("tooltip_karma_gained")
@@ -249,8 +252,8 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyPointsBox:SetSize(sizes.widthScore, sizes.heightRow)
-				plyPointsBox:SetColor(COLOR_ORANGE)
-				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64])
+				plyPointsBox:SetColor(colorTeamDark)
+				plyPointsBox:SetTitle(CLSCORE.eventsInfoScores[ply.sid64] or 0)
 				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
 				plyPointsBox:SetTooltip("tooltip_score_gained")
 
