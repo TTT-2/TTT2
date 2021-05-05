@@ -5,9 +5,9 @@ util.AddNetworkString("TTT2CreditTransferUpdate")
 
 local function RerollShop(ply)
 	if GetGlobalBool("ttt2_random_team_shops") then
-		ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shops"), true)
+		ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shop_items"), true)
 	else
-		UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shops"), false)
+		UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shop_items"), false)
 	end
 end
 
@@ -28,7 +28,7 @@ function GM:TTTCanOrderEquipment(ply, id, is_item)
 end
 
 local function IsPartOfShop(ply, cls)
-	if GetGlobalInt("ttt2_random_shops") == 0 or not RANDOMSHOP[ply] or #RANDOMSHOP[ply] == 0 then
+	if not GetGlobalBool("ttt2_random_shops") or not RANDOMSHOP[ply] or #RANDOMSHOP[ply] == 0 then
 		return true
 	end
 

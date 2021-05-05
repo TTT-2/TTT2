@@ -31,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
+- Shopeditor is now directly available in the F1 Menu
 
 ### Breaking Changes
 
