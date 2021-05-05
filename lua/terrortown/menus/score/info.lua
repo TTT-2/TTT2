@@ -146,9 +146,9 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 		for k = 1, #teamPlayersList do
 			local plys = teamPlayersList[k]
-			local numPly = #plys
+			local amountPly = #plys
 
-			heightColumn = heightColumn + sizes.heightTitleRow + numPly * sizes.heightRow + (numPly + 1) * sizes.paddingSmall
+			heightColumn = heightColumn + sizes.heightTitleRow + amountPly * sizes.heightRow + (amountPly + 1) * sizes.paddingSmall
 
 			-- if there is a second team, add padding to size
 			if k > 1 then
@@ -167,29 +167,29 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 	local localPly64 = LocalPlayer():SteamID64()
 
 	-- FILL THE COLUMNS
-	for i = 1, 3 do
-		teamInfoBox[i] = playerCoumns:Add("DColoredBoxTTT2")
-		teamInfoBox[i]:SetSize(widthColumn, maxHeightColumn)
-		teamInfoBox[i]:SetDynamicColor(parent, 30)
+	for numColumn = 1, 3 do
+		teamInfoBox[numColumn] = playerCoumns:Add("DColoredBoxTTT2")
+		teamInfoBox[numColumn]:SetSize(widthColumn, maxHeightColumn)
+		teamInfoBox[numColumn]:SetDynamicColor(parent, 30)
 
-		local teamPlayersList = columnData[i]
-		local teamNamesList = columnTeams[i]
+		local teamPlayersList = columnData[numColumn]
+		local teamNamesList = columnTeams[numColumn]
 
-		local columnBox = teamInfoBox[i]:Add("DIconLayout")
+		local columnBox = teamInfoBox[numColumn]:Add("DIconLayout")
 		columnBox:SetSpaceY(sizes.padding)
 		columnBox:Dock(FILL)
 
-		for k = 1, #teamPlayersList do
-			local plys = teamPlayersList[k]
-			local numPly = #plys
-			local teamData = TEAMS[teamNamesList[k]]
+		for numTeam = 1, #teamPlayersList do
+			local plys = teamPlayersList[numTeam]
+			local amountPly = #plys
+			local teamData = TEAMS[teamNamesList[numTeam]]
 			local colorTeam = teamData.color
 			local colorTeamLight = util.ColorLighten(colorTeam, 35)
 			local colorTeamDark = util.ColorDarken(colorTeam, 20)
 
 			local teamBox = columnBox:Add("DColoredTextBoxTTT2")
 			teamBox:SetDynamicColor(parent, 15)
-			teamBox:SetSize(widthColumn, sizes.heightTitleRow + numPly * sizes.heightRow + (numPly + 1) * sizes.paddingSmall)
+			teamBox:SetSize(widthColumn, sizes.heightTitleRow + amountPly * sizes.heightRow + (amountPly + 1) * sizes.paddingSmall)
 
 			local teamPlayerBox = vgui.Create("DIconLayout", teamBox)
 			teamPlayerBox:SetSpaceY(sizes.paddingSmall)
@@ -198,12 +198,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 			local teamNameBox = teamPlayerBox:Add("DColoredTextBoxTTT2")
 			teamNameBox:SetSize(widthColumn, sizes.heightTitleRow)
 			teamNameBox:SetColor(colorTeam)
-			teamNameBox:SetTitle(teamNamesList[k])
+			teamNameBox:SetTitle(teamNamesList[numTeam])
 			teamNameBox:SetTitleFont("DermaTTT2TextLarger")
 			teamNameBox:SetIcon(teamData.iconMaterial)
 
-			for m = 1, numPly do
-				local ply = plys[m]
+			for numPly = 1, amountPly do
+				local ply = plys[numPly]
 
 				local plyRowPanel = teamPlayerBox:Add("DPanelTTT2")
 				plyRowPanel:SetSize(widthColumn, sizes.heightRow)
