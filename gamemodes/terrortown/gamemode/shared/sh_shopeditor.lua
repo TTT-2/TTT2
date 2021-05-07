@@ -14,12 +14,30 @@ ShopEditor.savingKeys = {
 }
 
 ShopEditor.cvars = {
-	ttt2_random_shops = {typ = "bool"},
-	ttt2_random_shop_items = {typ = "number", bits = 8},
-	ttt2_random_team_shops = {typ = "bool"},
-	ttt2_random_shop_reroll = {typ = "bool"},
-	ttt2_random_shop_reroll_cost = {typ = "number", bits = 8},
-	ttt2_random_shop_reroll_per_buy = {typ = "bool"}
+	ttt2_random_shops = {
+		order = 1, typ = "bool", default = 0,
+		name = "random_shops"
+		},
+	ttt2_random_shop_items = {
+		order = 2, typ = "number", bits = 8, default = 10, min = 1, max = 60,
+		name = "random_shop_items"
+		},
+	ttt2_random_team_shops = {
+		order = 3, typ = "bool", default = 1,
+		name = "random_team_shops"
+		},
+	ttt2_random_shop_reroll = {
+		order = 4, typ = "bool", default = 1,
+		name = "random_shop_reroll"
+		},
+	ttt2_random_shop_reroll_cost = {
+		order = 5, typ = "number", bits = 8, default = 1, min = 0, max = 10,
+		name = "random_shop_reroll_cost"
+		},
+	ttt2_random_shop_reroll_per_buy = {
+		order = 6, typ = "bool", default = 0,
+		name = "random_shop_reroll_per_buy"
+		}
 }
 
 local net = net

@@ -573,7 +573,7 @@ if SERVER then
 		if GetGlobalBool("ttt2_random_shops") and tmp > 0 then
 			UpdateRandomShops(nil, tmp, GetGlobalBool("ttt2_random_team_shops", true))
 		end
-	end, "ttt2changeshops")
+	end, "ttt2changeshopitems")
 
 	cvars.AddChangeCallback("ttt2_random_team_shops", function(name, old, new)
 		local tmp = tobool(new)

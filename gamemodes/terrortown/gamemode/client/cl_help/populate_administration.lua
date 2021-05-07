@@ -77,7 +77,48 @@ ttt2net.OnUpdateGlobal({"hud_manager", "restrictedHUDs"}, function()
 end)
 
 local function PopulateRandomShopPanel(parent)
+	local form = vgui.CreateTTT2Form(parent, "header_random_shop_administration")
+	local form2 = vgui.CreateTTT2Form(parent, "header_random_shop_value_administration")
 
+	for convar, data in SortedPairsByMemberValue(ShopEditor.cvars, "order", false) do
+		local convarName = tostring(convar)
+		local name = "shopeditor_name_" .. data.name
+		local desc = "shopeditor_desc_" .. data.name
+		if data.typ == "bool" then
+			form:MakeHelp({
+				label = desc
+			})
+			form:MakeCheckBox({
+				label = name,
+				default = data.default,
+				initial = GetGlobalBool(convarName),
+				OnChange = function(_, value)
+					net.Start("TTT2UpdateCVar")
+					net.WriteString(convarName)
+					net.WriteString(tostring(value))
+					net.SendToServer()
+				end
+			})
+		elseif data.typ == "number" then
+			form2:MakeHelp({
+				label = desc
+			})
+			form2:MakeSlider({
+				label = name,
+				min = data.min,
+				max = data.max,
+				decimal = 0,
+				default = data.default,
+				initial = GetGlobalInt(convarName),
+				OnChange = function(_, value)
+					net.Start("TTT2UpdateCVar")
+					net.WriteString(convarName)
+					net.WriteString(tostring(value))
+					net.SendToServer()
+				end
+			})
+		end
+	end
 end
 
 HELPSCRN.populate["ttt2_administration"] = function(helpData, id)
