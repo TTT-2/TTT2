@@ -85,9 +85,11 @@ local function PopulateRandomShopPanel(parent)
 		local name = "shopeditor_name_" .. data.name
 		local desc = "shopeditor_desc_" .. data.name
 		if data.typ == "bool" then
-			form:MakeHelp({
-				label = desc
-			})
+			if data.b_desc then
+				form:MakeHelp({
+					label = desc
+				})
+			end
 			form:MakeCheckBox({
 				label = name,
 				default = data.default,
@@ -95,14 +97,16 @@ local function PopulateRandomShopPanel(parent)
 				OnChange = function(_, value)
 					net.Start("TTT2UpdateCVar")
 					net.WriteString(convarName)
-					net.WriteString(tostring(value))
+					net.WriteString(value and "1" or "0")
 					net.SendToServer()
 				end
 			})
 		elseif data.typ == "number" then
-			form2:MakeHelp({
-				label = desc
-			})
+			if data.b_desc then
+				form2:MakeHelp({
+					label = desc
+				})
+			end
 			form2:MakeSlider({
 				label = name,
 				min = data.min,

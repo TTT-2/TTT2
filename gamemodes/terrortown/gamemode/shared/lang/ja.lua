@@ -1360,3 +1360,16 @@ L.desc_event_kill_other_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/
 --L.karma_cleanround_tooltip = "Clean round"
 --L.karma_roundheal_tooltip = "Roundheal"
 --L.karma_unknown_tooltip = "Unknown"
+
+-- 2021-05-07
+--L.header_random_shop_administration = "Setup Random Shop"
+--L.header_random_shop_value_administration = "Balance Settings"
+
+--L.shopeditor_name_random_shops = "Enable random shops"
+--L.shopeditor_desc_random_shops = "Random shops give every player only a limited randomized set of all available equipments.\nTeam shops force all players in one team to have the same set instead of individual ones.\nRerolling allows you to get a new randomized set of equipment for credits."
+--L.shopeditor_name_random_shop_items = "Number of random equipments"
+--L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with .noRandom. So choose a high enough number or you only get those."
+--L.shopeditor_name_random_team_shops = "Enable team shops"
+--L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
+--L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
+--L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
