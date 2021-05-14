@@ -9,9 +9,9 @@ if CLIENT then
 			{
 				string = "desc_event_c4_explode",
 				params = {
-					owner = self.event.owner.nick,
-					role = roles.GetByIndex(self.event.owner.role).name,
-					team = self.event.owner.team
+					owner = self.event.nick,
+					role = roles.GetByIndex(self.event.role).name,
+					team = self.event.team
 				},
 				translateParams = true
 			}
