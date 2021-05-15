@@ -309,7 +309,7 @@ L.decoy_no_room = "Vous ne pouvez pas prendre ce leurre."
 L.decoy_broken = "Votre leurre a été détruit !"
 
 L.decoy_short_desc = "Ce leurre montre un faux signal radar visible par les autres teams"
-L.decoy_pickup_wrong_team = "Vous ne pouvez pas le ramasser , car il appartient à une autre team"
+L.decoy_pickup_wrong_team = "Vous ne pouvez pas le ramasser, car il appartient à une autre team"
 
 L.decoy_desc = [[
 Montre un faux signe sur le radar des autres teams, et fait que leur scanner ADN montre la position du leurre s'il cherche le vôtre.]]
