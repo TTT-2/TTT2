@@ -34,7 +34,7 @@ L.round_traitors_one = "Traitre, vous êtes seul."
 L.round_traitors_more = "Traitres, voici vos alliés: {names}"
 
 L.win_time = "Temps écoulé. Les Traitres ont perdu."
-L.win_traitor = "Les Traitres ont gagné !"
+L.win_traitor = "Les Traitres ont gagné!"
 L.win_innocent = "Les Traitres ont été vaincus !"
 L.win_nones = "Les Abeilles ont gagné !"
 L.win_showreport = "Regardons le rapport du round {num} secondes."
