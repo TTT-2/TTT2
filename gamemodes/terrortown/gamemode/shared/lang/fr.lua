@@ -504,7 +504,7 @@ L.mute_off = "Aucun mutés"
 
 -- Spectators and prop possession
 L.punch_title = "FRAPPE-O-METRE"
-L.punch_help = "Touche de déplacement ou saut: déplace l'objet. Accroupir: quitter l'objet."
+L.punch_help = "Touche de déplacement ou saut: déplace l'objet. S'accroupir: quitter l'objet."
 L.punch_bonus = "Votre mauvais score a baissé votre limite frappe-o-metre de {num}"
 L.punch_malus = "Votre bon score a augmenté votre limite frappe-o-metre de {num}!"
 
