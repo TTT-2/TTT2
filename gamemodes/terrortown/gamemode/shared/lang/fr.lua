@@ -210,7 +210,7 @@ L.search_time = "Il est mort {time} avant que vous fassiez l'enquête."
 L.search_dna = "Ramassez un échantillon de l'ADN du tueur avec un Scanner ADN. Cet échantillon va se décomposer dans à peu près {time}."
 
 L.search_kills1 = "Vous avez trouvé une liste de meurtres qui confirme la mort de {player}."
-L.search_kills2 = "Vous avez trouvé une liste de meurtres avec les noms suivants :"
+L.search_kills2 = "Vous avez trouvé une liste de meurtres avec les noms suivants:"
 L.search_eyes = "En utilisant vos compétences de détective, vous avez identifié la dernière personne qu'il a vue: {player}. Serait-ce le tueur, ou une coïncidence?"
 
 -- Scoreboard
