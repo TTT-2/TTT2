@@ -234,7 +234,7 @@ L.sb_tag_kill = "A TUER"
 L.sb_tag_miss = "PERDU"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "Cette arme est en rupture de stock : vous l'avez déjà acheté ce round."
+L.buy_no_stock = "Cette arme est en rupture de stock: vous l'avez déjà acheté ce round."
 L.buy_pending = "Vous avez déjà une commande en attente, attendez de la recevoir d'abord."
 L.buy_received = "Vous avez reçu votre équipement spécial."
 
@@ -277,13 +277,13 @@ L.c4_desc = "Explosif surpuissant à retardement.Utiliser le avec précaution."
 
 L.c4_arm = "Amorcer le C4"
 L.c4_arm_timer = "Minuteur"
-L.c4_arm_secondes = "Secondes avant détonation :"
+L.c4_arm_secondes = "Secondes avant détonation:"
 L.c4_arm_attempts = "Pendant le désamorçage, {num} des 6 fils va instantanément faire exploser le C4 quand il sera coupé."
 
 L.c4_remove_title = "Retrait"
 L.c4_remove_pickup = "Ramasser le C4"
 L.c4_remove_destroy1 = "Détruire le C4"
-L.c4_remove_destroy2 = "Confirmer : destruction"
+L.c4_remove_destroy2 = "Confirmer: destruction"
 
 L.c4_disarm = "Désamorcer le C4"
 L.c4_disarm_cut = "Couper le fil {num}"
@@ -504,7 +504,7 @@ L.mute_off = "Aucun mutés"
 
 -- Spectators and prop possession
 L.punch_title = "FRAPPE-O-METRE"
-L.punch_help = "Touche de déplacement ou saut : déplace l'objet. Accroupir : quitter l'objet."
+L.punch_help = "Touche de déplacement ou saut: déplace l'objet. Accroupir: quitter l'objet."
 L.punch_bonus = "Votre mauvais score a baissé votre limite frappe-o-metre de {num}"
 L.punch_malus = "Votre bon score a augmenté votre limite frappe-o-metre de {num}!"
 
@@ -517,7 +517,7 @@ Surveillez vos arrières, et bossez avec vos camarades pour vous sortir d'ici en
 
 L.info_popup_detective = [[
 Vous êtes un Détective! Terroriste QG vous a donné des ressources spéciales pour trouver les Traitres.
-Utilisez-les pour aider les innocent à survivre, mais attention :
+Utilisez-les pour aider les innocent à survivre, mais attention:
 les traitres chercheront à vous tuer en premier!
 
 Appuyez sur {menukey} pour recevoir votre équipement!]]
@@ -533,7 +533,7 @@ L.info_popup_traitor = [[
 Vous êtes un TRAITRE! Travaillez avec vos amis traitres pour tuer tout le monde.
 Mais faites attention, ou votre trahison pourrait sortir au grand jour...
 
-Voici vos camarades :
+Voici vos camarades:
 {traitorlist}
 
 Appuyez sur {menukey} pour recevoir votre équipement!]]
@@ -549,13 +549,13 @@ Vous pouvez Rejoindre/Quitter ce mode quand vous voulez en appuyant sur {helpkey
 L.idle_popup_close = "Ne rien faire"
 L.idle_popup_off = "Désactiver le mode Spectateur"
 
-L.idle_warning = "Attention : on dirait que vous n'êtes plus là, vous allez être déplacés en spectateurs sauf si vous montrez de l'activité!"
+L.idle_warning = "Attention: on dirait que vous n'êtes plus là, vous allez être déplacés en spectateurs sauf si vous montrez de l'activité!"
 
 L.spec_mode_warning = "Vous êtes en mode Spectateur et vous n'apparaîtrez pas quand un round commencera. Pour désactiver ce mode, appuyez sur F1, allez vers Jouabilité -> Général -> Paramètres de jeu -> 'Mode Spectateur'."
 
 -- Tips panel
 L.tips_panel_title = "Astuces"
-L.tips_panel_tip = "Astuce :"
+L.tips_panel_tip = "Astuce:"
 
 -- Tip texts
 L.tip1 = "Les traitres peuvent fouiller un corps silencieusement, sans confirmer la mort, en maintenant {walkkey} et en pressant {usekey} sur le corps."
@@ -653,7 +653,7 @@ L.report_tab_scores_tip = "Points marqués par chaque joueur dans ce round"
 L.report_save = "Sauv .txt"
 L.report_save_tip = "Sauvegarde les logs vers un fichier texte"
 L.report_save_error = "Aucune donnée des logs à sauvegarder."
-L.report_save_result = "Les logs ont été sauvegardé dans :"
+L.report_save_result = "Les logs ont été sauvegardé dans:"
 
 -- Big title window
 L.hilite_win_traitors = "VICTOIRE DES TRAITRES!"
@@ -883,7 +883,7 @@ L.drop_no_ammo = "Pas assez de munitions dans le chargeur de votre arme pour les
 L.hat_retrieve = "Vous avez ramassé le chapeau d'un Détective."
 
 --- 2017-09-03
-L.sb_sortby = "Trier Par :"
+L.sb_sortby = "Trier Par:"
 
 --- 2018-07-24
 L.equip_tooltip_main = "Menu d'Équipement"
