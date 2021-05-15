@@ -62,7 +62,7 @@ L.body_found_inno = "C'était un Innocent."
 
 L.body_confirm = "{finder} a confirmé la mort de {victim}."
 
-L.body_call = "{player} appelle un Détective sur le corps de {victim} !"
+L.body_call = "{player} appelle un Détective sur le corps de {victim}!"
 L.body_call_error = "Veuillez identifier le corps avant d'appeler un Détective !"
 
 L.body_burning = "Aie ! Ce cadavre est en feu !"
