@@ -27,7 +27,7 @@ L.round_minplayers = "Pas assez de joueurs pour commencer un nouveau round..."
 L.round_voting = "Un vote est en cours, le round est retardé de {num} secondes..."
 L.round_begintime = "Un nouveau round commencera dans {num} secondes. Préparez-vous."
 L.round_selected = "Les Traitres ont été choisis."
-L.round_started = "Le round a commencé !"
+L.round_started = "Le round a commencé!"
 L.round_restart = "Un admin a redémarré le round."
 
 L.round_traitors_one = "Traitre, vous êtes seul."
@@ -35,8 +35,8 @@ L.round_traitors_more = "Traitres, voici vos alliés: {names}"
 
 L.win_time = "Temps écoulé. Les Traitres ont perdu."
 L.win_traitor = "Les Traitres ont gagné!"
-L.win_innocent = "Les Traitres ont été vaincus !"
-L.win_nones = "Les Abeilles ont gagné !"
+L.win_innocent = "Les Traitres ont été vaincus!"
+L.win_nones = "Les Abeilles ont gagné!"
 L.win_showreport = "Regardons le rapport du round {num} secondes."
 
 L.limit_round = "Limite de round atteinte. {mapname} va bientôt charger."
@@ -56,17 +56,17 @@ L.body_found = "{finder} à trouvé le corps de {victim}. {role}"
 L.body_found_team = "{finder} à trouvé le corps de {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following :
-L.body_found_traitor = "C'était un Traitre !"
+L.body_found_traitor = "C'était un Traitre!"
 L.body_found_det = "C'était un Détective."
 L.body_found_inno = "C'était un Innocent."
 
 L.body_confirm = "{finder} a confirmé la mort de {victim}."
 
 L.body_call = "{player} appelle un Détective sur le corps de {victim}!"
-L.body_call_error = "Veuillez identifier le corps avant d'appeler un Détective !"
+L.body_call_error = "Veuillez identifier le corps avant d'appeler un Détective!"
 
-L.body_burning = "Aie ! Ce cadavre est en feu !"
-L.body_credits = "Vous avez trouvé {num} crédit(s) sur le corps !"
+L.body_burning = "Aie! Ce cadavre est en feu!"
+L.body_credits = "Vous avez trouvé {num} crédit(s) sur le corps!"
 
 --- Menus and windows
 L.close = "Fermer"
@@ -105,7 +105,7 @@ L.equip_confirm = "Acheter"
 -- Disguiser tab in equipment menu
 L.disg_name = "Déguisement"
 L.disg_menutitle = "Contrôle du déguisement"
-L.disg_not_owned = "Vous n'avez pas de Déguisement !"
+L.disg_not_owned = "Vous n'avez pas de Déguisement!"
 L.disg_enable = "Activer le déguisement"
 
 L.disg_help1 = "Lorsque votre déguisement est actif, votre nom, santé et karma ne sont pas visibles quand quelqu'un vous regarde. De plus, vous n'apparaîtrez pas sur le radar du Détective."
@@ -114,11 +114,11 @@ L.disg_help2 = "Appuyez sur Entrée du Pavé-Numérique pour activer/désactiver
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
 L.radar_menutitle = "Contrôle du radar"
-L.radar_not_owned = "Vous n'avez pas de Radar !"
+L.radar_not_owned = "Vous n'avez pas de Radar!"
 L.radar_scan = "Scanner"
 L.radar_auto = "Scanner à répétition"
 L.radar_help = "Les résultats du scan restent pendant {num} secondes, après cela le Radar devra recharger et pourra être utilisé de nouveau."
-L.radar_charging = "Votre Radar charge !"
+L.radar_charging = "Votre Radar charge!"
 
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfert"
@@ -151,20 +151,20 @@ L.radio_button_burn = "Bruits de feu"
 L.radio_button_steps = "Bruits de pas"
 
 -- Intro screen shown after joining
-L.intro_help = "Si vous êtes nouveau, appuyez sur F1 pour lire les instructions !"
+L.intro_help = "Si vous êtes nouveau, appuyez sur F1 pour lire les instructions!"
 
 -- Radiocommands/quickchat
 L.quick_title = "Touches de Tchat-rapide"
 
 L.quick_yes = "Oui."
 L.quick_no = "Non."
-L.quick_help = "À l'aide !"
+L.quick_help = "À l'aide!"
 L.quick_imwith = "Je suis avec {player}."
 L.quick_see = "Je vois {player}."
 L.quick_suspect = "{player} est suspect."
-L.quick_traitor = "{player} est un Traitre !"
+L.quick_traitor = "{player} est un Traitre!"
 L.quick_inno = "{player} est innocent."
-L.quick_check = "Quelqu'un est encore en vie ?"
+L.quick_check = "Quelqu'un est encore en vie?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below. Keep these lowercase.
@@ -199,8 +199,8 @@ L.search_dmg_boom = "Les blessures et les vêtements déchirés indiquent qu'une
 L.search_dmg_club = "Il est couvert d'ecchymoses et semble avoir été battu. Très clairement, il a été frappé à mort."
 L.search_dmg_drown = "Le corps montre les signes d'une inévitable noyade."
 L.search_dmg_stab = "Il s'est fait couper et poignarder avant de saigner à mort."
-L.search_dmg_burn = "Ça sent le terroriste grillé, non ?"
-L.search_dmg_tele = "On dirait que son ADN a été altéré par des émissions de tachyons !"
+L.search_dmg_burn = "Ça sent le terroriste grillé, non?"
+L.search_dmg_tele = "On dirait que son ADN a été altéré par des émissions de tachyons!"
 L.search_dmg_car = "Pendant que cette personne traversait la route, il s'est fait rouler dessus par un conducteur imprudent."
 L.search_dmg_other = "Vous n'arrivez pas à identifier la cause de sa mort."
 
@@ -238,9 +238,9 @@ L.buy_no_stock = "Cette arme est en rupture de stock : vous l'avez déjà achet�
 L.buy_pending = "Vous avez déjà une commande en attente, attendez de la recevoir d'abord."
 L.buy_received = "Vous avez reçu votre équipement spécial."
 
-L.drop_no_room = "Il n'y a pas la place pour jeter votre arme !"
+L.drop_no_room = "Il n'y a pas la place pour jeter votre arme!"
 
-L.disg_turned_on = "Déguisement activé !"
+L.disg_turned_on = "Déguisement activé!"
 L.disg_turned_off = "Déguisement désactivé."
 
 -- Equipment item descriptions
@@ -289,7 +289,7 @@ L.c4_disarm = "Désamorcer le C4"
 L.c4_disarm_cut = "Couper le fil {num}"
 
 L.c4_disarm_owned = "Coupez un fil pour désamorcer la bombe. C'est votre bombe, donc tous les fils fonctionneront."
-L.c4_disarm_other = "Coupez un fil pour désamorcer la bombe. Si vous vous trompez, ça va péter !"
+L.c4_disarm_other = "Coupez un fil pour désamorcer la bombe. Si vous vous trompez, ça va péter!"
 
 L.c4_statut_armed = "ARMÉE"
 L.c4_statut_disarmed = "DÉSARMÉE"
@@ -306,7 +306,7 @@ Analyse un corps pour montrer comment la victime a été tuée, mais seulement s
 -- Decoy
 L.decoy_name = "Leurre"
 L.decoy_no_room = "Vous ne pouvez pas prendre ce leurre."
-L.decoy_broken = "Votre leurre a été détruit !"
+L.decoy_broken = "Votre leurre a été détruit!"
 
 L.decoy_short_desc = "Ce leurre montre un faux signal radar visible par les autres teams"
 L.decoy_pickup_wrong_team = "Vous ne pouvez pas le ramasser, car il appartient à une autre team"
@@ -334,7 +334,7 @@ Brûler un corps fait un son distinct.]]
 -- Health station
 L.hstation_name = "Station de Soins"
 
-L.hstation_broken = "Votre Station de Soins a été détruite !"
+L.hstation_broken = "Votre Station de Soins a été détruite!"
 L.hstation_help = "{primaryfire} place la Station de Soins."
 
 L.hstation_desc = [[
@@ -358,7 +358,7 @@ Plante des pousseurs sur des objets pour les pousser violemment.
 Ces éclats d'énergie peuvent frapper les gens à proximité.]]
 
 -- Radio
-L.radio_broken = "Votre Radio a été détruite !"
+L.radio_broken = "Votre Radio a été détruite!"
 L.radio_help_pri = "{primaryfire} place la Radio."
 
 L.radio_desc = [[
@@ -402,9 +402,9 @@ L.dna_identify = "Le corps doit être identifié pour récupérer l'ADN du tueur
 L.dna_notfound = "Pas d'échantillon ADN trouvé sur la cible."
 L.dna_limit = "Limite de stockage atteint. Retirez les vieux échantillons pour en ajouter de nouveaux."
 L.dna_decayed = "L'échantillon ADN du tueur s'est décomposé."
-L.dna_killer = "Échantillon ADN du tueur récupéré sur le corps !"
-L.dna_no_killer = "L'ADN n'a pas pu être récupérée (le tueur s'est déconnecté ?)."
-L.dna_armed = "La bombe est amorcée ! Désamorcez-la d'abord !"
+L.dna_killer = "Échantillon ADN du tueur récupéré sur le corps!"
+L.dna_no_killer = "L'ADN n'a pas pu être récupérée (le tueur s'est déconnecté?)."
+L.dna_armed = "La bombe est amorcée! Désamorcez-la d'abord!"
 L.dna_object = "Vous avez collecté {num} échantillon(s) d'ADN sur cet objet."
 L.dna_gone = "Aucun ADN détecté dans la zone."
 
@@ -432,12 +432,12 @@ L.tele_name = "Téléporteur"
 L.tele_failed = "Téléportation ratée."
 L.tele_marked = "Position de téléportation marquée."
 
-L.tele_no_ground = "Impossible de se téléporter à moins d'être sur un sol solide !"
-L.tele_no_crouch = "Impossible de se téléporter en étant accroupi !"
+L.tele_no_ground = "Impossible de se téléporter à moins d'être sur un sol solide!"
+L.tele_no_crouch = "Impossible de se téléporter en étant accroupi!"
 L.tele_no_mark = "Aucune position marquée. Marquez une destination avant de vous téléporter."
 
-L.tele_no_mark_ground = "Impossible de marquer une position à moins d'être sur un sol solide !"
-L.tele_no_mark_crouch = "Impossible de marquer une position en étant accroupi !"
+L.tele_no_mark_ground = "Impossible de marquer une position à moins d'être sur un sol solide!"
+L.tele_no_mark_crouch = "Impossible de marquer une position en étant accroupi!"
 
 L.tele_help_pri = "{primaryfire} téléporte à la position marquée."
 L.tele_help_sec = "{secondaryfire} marque la position actuelle."
@@ -506,37 +506,37 @@ L.mute_off = "Aucun mutés"
 L.punch_title = "FRAPPE-O-METRE"
 L.punch_help = "Touche de déplacement ou saut : déplace l'objet. Accroupir : quitter l'objet."
 L.punch_bonus = "Votre mauvais score a baissé votre limite frappe-o-metre de {num}"
-L.punch_malus = "Votre bon score a augmenté votre limite frappe-o-metre de {num} !"
+L.punch_malus = "Votre bon score a augmenté votre limite frappe-o-metre de {num}!"
 
 --- Info popups shown when the round starts
 L.info_popup_innocent = [[
-Vous êtes un Terroriste Innocent ! Mais il y a des Traitres qui traînent...
-À qui pouvez-vous faire confiance, et qui cherche à vous remplir de balles ?
+Vous êtes un Terroriste Innocent! Mais il y a des Traitres qui traînent...
+À qui pouvez-vous faire confiance, et qui cherche à vous remplir de balles?
 
-Surveillez vos arrières, et bossez avec vos camarades pour vous sortir d'ici en vie !]]
+Surveillez vos arrières, et bossez avec vos camarades pour vous sortir d'ici en vie!]]
 
 L.info_popup_detective = [[
-Vous êtes un Détective ! Terroriste QG vous a donné des ressources spéciales pour trouver les Traitres.
+Vous êtes un Détective! Terroriste QG vous a donné des ressources spéciales pour trouver les Traitres.
 Utilisez-les pour aider les innocent à survivre, mais attention :
-les traitres chercheront à vous tuer en premier !
+les traitres chercheront à vous tuer en premier!
 
-Appuyez sur {menukey} pour recevoir votre équipement !]]
+Appuyez sur {menukey} pour recevoir votre équipement!]]
 
 L.info_popup_traitor_alone = [[
-Vous êtes un TRAITRE ! Vous n'avez pas d'amis traitres ce round.
+Vous êtes un TRAITRE! Vous n'avez pas d'amis traitres ce round.
 
 Tuez tout le monde pour gagner!
 
-Appuyez sur {menukey} pour recevoir votre équipement !]]
+Appuyez sur {menukey} pour recevoir votre équipement!]]
 
 L.info_popup_traitor = [[
-Vous êtes un TRAITRE ! Travaillez avec vos amis traitres pour tuer tout le monde.
+Vous êtes un TRAITRE! Travaillez avec vos amis traitres pour tuer tout le monde.
 Mais faites attention, ou votre trahison pourrait sortir au grand jour...
 
 Voici vos camarades :
 {traitorlist}
 
-Appuyez sur {menukey} pour recevoir votre équipement !]]
+Appuyez sur {menukey} pour recevoir votre équipement!]]
 
 --- Various other text
 L.name_kick = "Un joueur a été automatiquement expulsé pour avoir changé son nom pendant un round."
@@ -549,7 +549,7 @@ Vous pouvez Rejoindre/Quitter ce mode quand vous voulez en appuyant sur {helpkey
 L.idle_popup_close = "Ne rien faire"
 L.idle_popup_off = "Désactiver le mode Spectateur"
 
-L.idle_warning = "Attention : on dirait que vous n'êtes plus là, vous allez être déplacés en spectateurs sauf si vous montrez de l'activité !"
+L.idle_warning = "Attention : on dirait que vous n'êtes plus là, vous allez être déplacés en spectateurs sauf si vous montrez de l'activité!"
 
 L.spec_mode_warning = "Vous êtes en mode Spectateur et vous n'apparaîtrez pas quand un round commencera. Pour désactiver ce mode, appuyez sur F1, allez vers Jouabilité -> Général -> Paramètres de jeu -> 'Mode Spectateur'."
 
@@ -578,19 +578,19 @@ L.tip9 = "Le Poltergeist peut transformer n'importe quel objet physique en un pr
 
 L.tip10 = "Traitre ou Détective, gardez à l’œil les messages rouges en haut à droite. Ils sont importants pour vous."
 
-L.tip11 = "Traitre ou Détective, gardez en tête que vous récompensez de crédits d'équipement si vos camarades et vous vous débrouillez bien. Assurez-vous de les dépenser !"
+L.tip11 = "Traitre ou Détective, gardez en tête que vous récompensez de crédits d'équipement si vos camarades et vous vous débrouillez bien. Assurez-vous de les dépenser!"
 
-L.tip12 = "Le scanner ADN des Détectives peut-être utilisé pour collecter des échantillons ADN d'armes et d'objets puis les scanner pour localiser le joueur qui les a utilisés. Pratique quand vous venez d'obtenir un échantillon d'un corps ou d'un C4 désamorcé !"
+L.tip12 = "Le scanner ADN des Détectives peut-être utilisé pour collecter des échantillons ADN d'armes et d'objets puis les scanner pour localiser le joueur qui les a utilisés. Pratique quand vous venez d'obtenir un échantillon d'un corps ou d'un C4 désamorcé!"
 
-L.tip13 = "Quand vous êtes proches de quelqu'un quand vous le tuez, un peu de votre ADN est déposé sur le corps. Cet ADN peut être utilisé pour le Scanner ADN d'un Détective pour vous localiser. Vous feriez mieux de cacher le corps quand vous coupez quelqu'un !"
+L.tip13 = "Quand vous êtes proches de quelqu'un quand vous le tuez, un peu de votre ADN est déposé sur le corps. Cet ADN peut être utilisé pour le Scanner ADN d'un Détective pour vous localiser. Vous feriez mieux de cacher le corps quand vous coupez quelqu'un!"
 
 L.tip14 = "Plus vous étiez quand vous avez tué quelqu'un, plus vite votre échantillon d'ADN sur son corps se dégradera."
 
-L.tip15 = "Vous êtes Traitre et vous allez sniper ? Essayez le Déguisement. Si vous ratez voter coup, trouvez un endroit sécurisé, désactivez le Déguisement, et personne ne saura que c'était vous qui tiriez."
+L.tip15 = "Vous êtes Traitre et vous allez sniper? Essayez le Déguisement. Si vous ratez voter coup, trouvez un endroit sécurisé, désactivez le Déguisement, et personne ne saura que c'était vous qui tiriez."
 
 L.tip16 = "En tant que Traitre, le Téléporteur peut vous aider à vous enfuir quand on vous traque, et vous permet de voyager rapidement à travers une grande carte. Assurez-vous de marquer une position sécurisée avant."
 
-L.tip17 = "Les innocents sont tous groupés et vous n'arrivez pas à un en séparer un ? Pourquoi pas utiliser la Radio pour jouer des sons de C4 ou d'un coup de feu pour les mener ailleurs ?"
+L.tip17 = "Les innocents sont tous groupés et vous n'arrivez pas à un en séparer un? Pourquoi pas utiliser la Radio pour jouer des sons de C4 ou d'un coup de feu pour les mener ailleurs?"
 
 L.tip18 = "Avec la Radio, en tant que Traitre, vous pouvez jouer des sons dans votre Menu des Équipements après que la radio a été placée. Mettez en attente plusieurs sons en cliquant sur plusieurs boutons dans l'ordre dans lequel vous voulez qu'ils soient."
 
@@ -614,7 +614,7 @@ L.tip27 = "En tant que Détective, les corps avec une loupe après leur nom ont 
 
 L.tip28 = "Les Spectateurs peuvent appuyer sur {mutekey} pour choisir de mute les spectateurs et/ou les joueurs vivants."
 
-L.tip29 = "Si le serveur a installé des langues en plus, vous pouvez choisir une autre langue n'importe quand en appuyant sur F1 -> Langue ."
+L.tip29 = "Si le serveur a installé des langues en plus, vous pouvez choisir une autre langue n'importe quand en appuyant sur F1 -> Langue."
 
 L.tip30 = "Les commandes quickchat ou 'radio' sont accessibles avec {zoomkey}."
 
@@ -656,9 +656,9 @@ L.report_save_error = "Aucune donnée des logs à sauvegarder."
 L.report_save_result = "Les logs ont été sauvegardé dans :"
 
 -- Big title window
-L.hilite_win_traitors = "VICTOIRE DES TRAITRES !"
+L.hilite_win_traitors = "VICTOIRE DES TRAITRES!"
 L.hilite_win_none = "VICTOIRE DES ABEILLES"
-L.hilite_win_innocents = "VICTOIRE DES INNOCENTS !"
+L.hilite_win_innocents = "VICTOIRE DES INNOCENTS!"
 
 L.hilite_players1 = "Vous étiez {numplayers}, dont {numtraitors} traitres"
 L.hilite_players2 = "Vous étiez {numplayers}, dont un traitre"
@@ -708,8 +708,8 @@ L.aw_all1_text = "est responsable de tous les meurtres des innocents ce round."
 L.aw_all2_title = "Loup Solitaire"
 L.aw_all2_text = "est responsable de tous les meurtres des traitres ce round."
 
-L.aw_nkt1_title = "J'en Ai Eu Un, Patron !"
-L.aw_nkt1_text = "a réussi à tuer un seul innocent. Sympa !"
+L.aw_nkt1_title = "J'en Ai Eu Un, Patron!"
+L.aw_nkt1_text = "a réussi à tuer un seul innocent. Sympa!"
 
 L.aw_nkt2_title = "Une Balle Pour Deux"
 L.aw_nkt2_text = "a montré que le premier n'était pas un coup de feu chanceux en tuant un autre gaillard."
@@ -729,7 +729,7 @@ L.aw_nki1_text = "a trouvé un traitre. Puis il l'a buté. Facile."
 L.aw_nki2_title = "Postulé pour la Justice Squad"
 L.aw_nki2_text = "a escorté deux traitres dans l'au-delà."
 
-L.aw_nki3_title = "Est-ce Que Les Traitres Rêvent De Moutons Traitres ?"
+L.aw_nki3_title = "Est-ce Que Les Traitres Rêvent De Moutons Traitres?"
 L.aw_nki3_text = "a descendu trois traitres."
 
 L.aw_nki4_title = "Employé d'Affaires Internes"
@@ -774,7 +774,7 @@ L.aw_sgn2_text = "n'aimait pas vraiment son plomb, donc il a tout donné. {num} 
 L.aw_rfl1_title = "Point and Click"
 L.aw_rfl1_text = "montre que tout ce dont vous avez besoin pour descendre {num} cibles est un fusil et une bonne main."
 
-L.aw_rfl2_title = "Je Peux Voir Ta Tête D'ici !"
+L.aw_rfl2_title = "Je Peux Voir Ta Tête D'ici!"
 L.aw_rfl2_text = "connaît son fusil. Maintenant {num} autres le connaissent aussi."
 
 L.aw_dgl1_title = "C'est Comme Un, Un Petit Fusil"
@@ -787,7 +787,7 @@ L.aw_mac1_title = "Prier et Tuer"
 L.aw_mac1_text = "a tué {num} personnes avec le MAC10, mais ne compte pas dire combien de munitions il a utilisé."
 
 L.aw_mac2_title = "Mac 'n' Cheese"
-L.aw_mac2_text = "se demande ce qu'il se passerait s'il pouvait porter deux MAC10. {num} fois deux ça fait ?"
+L.aw_mac2_text = "se demande ce qu'il se passerait s'il pouvait porter deux MAC10. {num} fois deux ça fait?"
 
 L.aw_sip1_title = "Silence"
 L.aw_sip1_text = "a fermé le clapet à {num} piplette(s) avec un pistolet silencieux."
@@ -798,10 +798,10 @@ L.aw_sip2_text = "a tué {num} personnes qui ne se sont pas entendu mourir."
 L.aw_knf1_title = "Le Couteau Qui Te Connaît"
 L.aw_knf1_text = "a poignardé quelqu'un en pleine tête devant tout internet."
 
-L.aw_knf2_title = "Oû Est-Ce Que T'as Trouvé Ça ?"
+L.aw_knf2_title = "Oû Est-Ce Que T'as Trouvé Ça?"
 L.aw_knf2_text = "n'était pas un Traitre, mais a quand même terrassé quelqu'un avec un couteau."
 
-L.aw_knf3_title = "Regardez, C'est L'Homme Au Couteau !"
+L.aw_knf3_title = "Regardez, C'est L'Homme Au Couteau!"
 L.aw_knf3_text = "a trouvé {num} couteaux qui gisaient, et les a utilisés."
 
 L.aw_knf4_title = "Le Plus Gros Couteau Du Monde"
@@ -831,7 +831,7 @@ L.aw_tkl1_text = "a vu son doigt glisser quand il visait un copain."
 L.aw_tkl2_title = "Double Oups"
 L.aw_tkl2_text = "a cru qu'il a eu deux Traitres, mais s'est trompé deux fois."
 
-L.aw_tkl3_title = "Oû Est Mon Karma ?!"
+L.aw_tkl3_title = "Oû Est Mon Karma?!"
 L.aw_tkl3_text = "ne s'est pas arrêté après avoir buté deux coéquipiers. Trois c'est son nombre chanceux."
 
 L.aw_tkl4_title = "Équipocide"
@@ -853,7 +853,7 @@ L.aw_brn2_title = "Pyroïde"
 L.aw_brn2_text = "a été entendu rire aux éclats après avoir brûlé un paquet de ses victimes."
 
 L.aw_brn3_title = "Brûleur Pyrrhique"
-L.aw_brn3_text = "les a tous cramés, et maintenant il est à court de grenades incendiaires ! Comment va-t-il surmonter ça ! ?"
+L.aw_brn3_text = "les a tous cramés, et maintenant il est à court de grenades incendiaires! Comment va-t-il surmonter ça!?"
 
 L.aw_fnd1_title = "Médecin Légiste"
 L.aw_fnd1_text = "a trouvé {num} corps qui traînaient."
@@ -930,11 +930,11 @@ L.shop_edit_items = "Éditer Items"
 L.shop_edit_shop = "Éditer le shop"
 L.shop_create_shop = "Créer un shop personnalisée"
 L.shop_selected = "Sélectionné {role}"
-L.shop_settings_desc = "Changer les valeurs pour adapter les Random Shop ConVars . N'oubliez pas de sauvegarder vos modifications!"
+L.shop_settings_desc = "Changer les valeurs pour adapter les Random Shop ConVars. N'oubliez pas de sauvegarder vos modifications!"
 
 L.bindings_new = "Nouvelle touche choisis pour {name}: {key}"
 
-L.hud_default_failed = "Le HUD {hudname} n'a pas été défini comme nouveau paramètre par défaut. Vous n'avez pas la permission , ou bien ce HUD n'existe pas."
+L.hud_default_failed = "Le HUD {hudname} n'a pas été défini comme nouveau paramètre par défaut. Vous n'avez pas la permission, ou bien ce HUD n'existe pas."
 L.hud_forced_failed = "Échec du chargement du HUD {hudname}. Vous n'avez pas la permission, ou bien ce HUD n'existe pas."
 L.hud_restricted_failed = "Échec de la restriction du HUD {hudname}. Vous n'avez pas la permission."
 
