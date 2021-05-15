@@ -31,7 +31,7 @@ L.round_started = "Le round a commencé !"
 L.round_restart = "Un admin a redémarré le round."
 
 L.round_traitors_one = "Traitre, vous êtes seul."
-L.round_traitors_more = "Traitres, voici vos alliés : {names}"
+L.round_traitors_more = "Traitres, voici vos alliés: {names}"
 
 L.win_time = "Temps écoulé. Les Traitres ont perdu."
 L.win_traitor = "Les Traitres ont gagné !"
