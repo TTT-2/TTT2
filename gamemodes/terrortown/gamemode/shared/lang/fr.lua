@@ -186,7 +186,7 @@ L.search_role_traitor = "C'était un Traitre!"
 L.search_role_det = "C'était un Détective."
 L.search_role_inno = "C'était un Terroriste Innocent."
 
-L.search_words = "Quelque chose vous dit que quelques-unes des dernières paroles de cette personne étaient : '{lastwords}'"
+L.search_words = "Quelque chose vous dit que quelques-unes des dernières paroles de cette personne étaient: '{lastwords}'"
 L.search_armor = "Il avait une armure non-standard."
 L.search_disg = "Il portait un dispositif qui permet de cacher son identité."
 L.search_radar = "Il portait une sorte de radar. Ce radar ne fonctionne plus."
