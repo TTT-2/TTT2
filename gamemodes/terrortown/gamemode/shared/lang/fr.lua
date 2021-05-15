@@ -525,7 +525,7 @@ Appuyez sur {menukey} pour recevoir votre équipement !]]
 L.info_popup_traitor_alone = [[
 Vous êtes un TRAITRE ! Vous n'avez pas d'amis traitres ce round.
 
-Tuez tout le monde pour gagner !
+Tuez tout le monde pour gagner!
 
 Appuyez sur {menukey} pour recevoir votre équipement !]]
 
