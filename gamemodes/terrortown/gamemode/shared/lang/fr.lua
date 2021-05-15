@@ -1003,7 +1003,7 @@ L.tbut_default = "Par défaut"
 L.name_door = "Porte"
 L.door_open = "Appuyez sur [{usekey}] pour ouvrir la porte."
 L.door_close = "Appuyez sur [{usekey}] pour fermer la porte."
-L.door_locked = "Cette porte est verrouillée"
+L.door_locked = "Cette porte est verrouillée."
 
 -- 2020-02-11
 L.automoved_to_spec = "(MESSAGE AUTOMATIQUE) Vous avez été transféré dans la team Spectateur car vous était inactif/AFK."
