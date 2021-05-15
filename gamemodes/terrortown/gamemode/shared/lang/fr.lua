@@ -1289,7 +1289,7 @@ L.title_event_selected = "Les rôles ont été distribuer"
 L.title_event_spawn = "Un joueur est apparu"
 
 L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) a trouvé le corps de {found} ({forole} / {foteam}). Le cadavre avait {credits} crédit(s) d'équipement."
-L.desc_event_bodyfound_headshot = "Le joueur a été tué par un tir dans la tête.."
+L.desc_event_bodyfound_headshot = "Le joueur a été tué par un tir dans la tête."
 L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam}) a réussi à désamorcer le C4 placé par {owner} ({orole} / {oteam})."
 L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam}) a essayé de désamorcer le C4 placé par {owner} ({orole} / {oteam}). Il a échoué."
 L.desc_event_c4_explode = "Le C4 posé par {owner} ({role} / {team}) explose."
