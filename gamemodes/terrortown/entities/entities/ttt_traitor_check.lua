@@ -5,6 +5,8 @@
 ENT.Type = "brush"
 ENT.Base = "base_brush"
 
+if CLIENT then return end
+
 ---
 -- @realm server
 local cv_evil_roles = CreateConVar("ttt2_rolecheck_all_evil_roles", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The rolecheck on maps will always return true for every evil role if enabled")
