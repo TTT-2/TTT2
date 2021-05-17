@@ -16,6 +16,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
 - Karma now stores changes
   - Is shown in roundend menu
+- Added a new convar `ttt2_rolecheck_all_evil_roles` that counts all evil roles as traitor roles for map related entity checks if enabled
+- Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks
 
 ### Fixed
 
@@ -31,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
+- By default all evil roles are now counted as traitor roles for map related checks (with convar to disable)
 
 ### Breaking Changes
 
