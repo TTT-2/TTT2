@@ -16,6 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
 - Karma now stores changes
   - Is shown in roundend menu
+- Added a hook `ttt2_get_logic_check_role` that is called when a traitor test or logic role check is performed
 
 ### Fixed
 
