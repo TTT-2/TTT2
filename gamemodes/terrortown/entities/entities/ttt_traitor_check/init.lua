@@ -1,5 +1,13 @@
+---
+-- @class ENT
+-- @section ttt_traitor_check
+
 ENT.Type = "brush"
 ENT.Base = "base_brush"
+
+---
+-- @realm server
+local cv_evil_roles = CreateConVar("ttt2_rolecheck_all_evil_roles", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The rolecheck on maps will always return true for every evil role if enabled")
 
 ---
 -- Called when the engine sets a value for this scripted entity.
@@ -20,9 +28,13 @@ local function VectorInside(vec, mins, maxs)
 end
 
 ---
--- Counts the amount of traitors inside the entity
+-- Counts the amount of evil players inside the entity
+-- @param Entity|Player activator The initial cause for the input getting triggered
+-- @param Entity caller The entity that directly triggered the input
+-- @param string data The data passed
+-- @return[default=0] number The amount of evil valid players found
 -- @realm server
-function ENT:CountTraitors()
+function ENT:CountValidPlayers(activator, caller, data)
 	local mins = self:LocalToWorld(self:OBBMins())
 	local maxs = self:LocalToWorld(self:OBBMaxs())
 
@@ -32,8 +44,12 @@ function ENT:CountTraitors()
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if not IsValid(ply) or not ply:IsActiveTraitor() or not ply:Alive()
-			or not VectorInside(ply:GetPos(), mins, maxs)
+		if not IsValid(ply) or not ply:Alive() or not VectorInside(ply:GetPos(), mins, maxs) then continue end
+
+		local plyBaseRole = roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole()):GetBaseRole()
+
+		if cv_evil_roles:GetBool() and (plyBaseRole == ROLE_INNOCENT or plyBaseRole == ROLE_DETECTIVE)
+			or not cv_evil_roles:GetBool() and (plyBaseRole ~= ROLE_TRAITOR)
 		then continue end
 
 		count = count + 1
@@ -45,13 +61,14 @@ end
 ---
 -- Called when another entity fires an event to this entity.
 -- @param string name The name of the input that was triggered
--- @param Entity activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
+-- @param Entity|Player activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
 -- @param Entity caller The entity that directly triggered the input (e.g. the button that was pushed)
 -- @param string data The data passed
+-- @return[default=true] boolean Return true if the default action should be supressed
 -- @realm server
 function ENT:AcceptInput(name, activator, caller, data)
 	if name == "CheckForTraitor" then
-		local traitorCount = self:CountTraitors()
+		local traitorCount = self:CountValidPlayers(activator, caller, data)
 
 		self:TriggerOutput("TraitorsFound", activator, traitorCount)
 
