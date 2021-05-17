@@ -42,7 +42,7 @@ end
 function ENT:AcceptInput(name, activator)
 	if name == "TestActivator" then
 		if IsValid(activator) and activator:IsPlayer() then
-			local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or activator:GetBaseRole()
+			local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or hook.run("ttt2_get_logic_check_role",activator)
 
 			if self.Role == ROLE_NONE or self.Role == activator_role then
 				Dev(2, activator, "passed logic_role test of", self:GetName())
