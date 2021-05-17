@@ -51,6 +51,8 @@ function ENT:AcceptInput(name, activator, caller, data)
 		if not IsValid(activator) or not activator:IsPlayer() then return end
 
 		local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT
+			---
+			-- @realm server
 			or roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole()):GetBaseRole()
 
 		if self.Role == ROLE_TRAITOR

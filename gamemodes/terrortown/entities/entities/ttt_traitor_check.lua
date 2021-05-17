@@ -48,6 +48,8 @@ function ENT:CountValidPlayers(activator, caller, data)
 
 		if not IsValid(ply) or not ply:Alive() or not VectorInside(ply:GetPos(), mins, maxs) then continue end
 
+		---
+		-- @realm server
 		local plyBaseRole = roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole()):GetBaseRole()
 
 		if cv_evil_roles:GetBool() and (plyBaseRole == ROLE_INNOCENT or plyBaseRole == ROLE_DETECTIVE)
@@ -82,7 +84,7 @@ end
 -- A hook that is called when either the `ttt_logic_role` or `ttt_traitor_check` entity
 -- is triggered from the map. This hook can be used to modify the role used by the
 -- check on the map.
--- @paray Player ply The player whose role is checked
+-- @param Player ply The player whose role is checked
 -- @param Entity ent The entity that is used (either ttt_logic_role` or `ttt_traitor_check`)
 -- @param Entity|Player activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
 -- @param Entity caller The entity that directly triggered the input (e.g. the button that was pushed)
