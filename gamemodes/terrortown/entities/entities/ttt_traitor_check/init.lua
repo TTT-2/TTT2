@@ -1,6 +1,11 @@
 ENT.Type = "brush"
 ENT.Base = "base_brush"
 
+---
+-- Called when the engine sets a value for this scripted entity.
+-- @param string key The key that was affected
+-- @param string value The new value
+-- @realm server
 function ENT:KeyValue(key, value)
 	if key == "TraitorsFound" then
 		-- this is our output, so handle it as such
@@ -14,6 +19,9 @@ local function VectorInside(vec, mins, maxs)
 		and vec.z > mins.z and vec.z < maxs.z
 end
 
+---
+-- Counts the amount of traitors inside the entity
+-- @realm server
 function ENT:CountTraitors()
 	local mins = self:LocalToWorld(self:OBBMins())
 	local maxs = self:LocalToWorld(self:OBBMaxs())
@@ -34,7 +42,14 @@ function ENT:CountTraitors()
 	return count
 end
 
-function ENT:AcceptInput(name, activator, caller)
+---
+-- Called when another entity fires an event to this entity.
+-- @param string name The name of the input that was triggered
+-- @param Entity activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
+-- @param Entity caller The entity that directly triggered the input (e.g. the button that was pushed)
+-- @param string data The data passed
+-- @realm server
+function ENT:AcceptInput(name, activator, caller, data)
 	if name == "CheckForTraitor" then
 		local traitorCount = self:CountTraitors()
 
