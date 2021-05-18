@@ -107,10 +107,21 @@ function ROLE:IsBaseRole()
 	return self.baserole == nil
 end
 
+---
+-- Checks whether i is a special @{ROLE}.
+-- @note This just returns <code>false</code> if the role is Innocent!
+-- @return boolean Returns true if the player has a special role
+-- @realm shared
 function ROLE:HasSpecialRole()
 	return self.subrole ~= ROLE_INNOCENT
 end
 
+---
+-- Checks whether or not a player has an evil role. By default all roles with the `.isEvil` flag arre counted as evil.
+-- @note This depends on the convar `ttt2_rolecheck_all_evil_roles`, if it set to 0, only traitor subroles are counted as evil.
+-- @param[default=.defaultTeam] string team The team used for the check, uses the default team if not defined
+-- @return boolean Returns true if the role is evil
+-- @realm shared
 function ROLE:HasEvilRole(team)
 	team = team or self.defaultTeam
 	local baseRole = self:GetBaseRole()
