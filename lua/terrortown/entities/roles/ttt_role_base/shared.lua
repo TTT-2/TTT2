@@ -112,7 +112,7 @@ end
 -- @note This just returns <code>false</code> if the role is Innocent!
 -- @return boolean Returns true if the player has a special role
 -- @realm shared
-function ROLE:HasSpecialRole()
+function ROLE:IsSpecialRole()
 	return self.subrole ~= ROLE_INNOCENT
 end
 
@@ -122,7 +122,7 @@ end
 -- @param[default=.defaultTeam] string team The team used for the check, uses the default team if not defined
 -- @return boolean Returns true if the role is evil
 -- @realm shared
-function ROLE:HasEvilRole(team)
+function ROLE:IsEvilRole(team)
 	team = team or self.defaultTeam
 	local baseRole = self:GetBaseRole()
 
