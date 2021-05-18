@@ -56,8 +56,8 @@ function ENT:AcceptInput(name, activator, caller, data)
 			or roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", activator, self, activator, caller, data) or activator:GetSubRole()):GetBaseRole()
 
 		if self.Role == ROLE_TRAITOR
-			and (cv_evil_roles:GetBool() and (activator_role ~= ROLE_INNOCENT or activator_role ~= ROLE_DETECTIVE)
-				or not cv_evil_roles:GetBool() and (activator_role == ROLE_TRAITOR))
+			and (cv_evil_roles:GetBool() and (activator_role ~= ROLE_INNOCENT and activator_role ~= ROLE_DETECTIVE)
+				or not cv_evil_roles:GetBool() and activator_role == ROLE_TRAITOR)
 			or self.Role == ROLE_NONE or self.Role == activator_role
 		then
 			Dev(2, activator, "passed logic_role test of", self:GetName())
