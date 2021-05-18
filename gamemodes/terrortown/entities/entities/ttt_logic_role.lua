@@ -53,7 +53,7 @@ function ENT:AcceptInput(name, activator, caller, data)
 		local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT
 			---
 			-- @realm server
-			or roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole()):GetBaseRole()
+			or roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", activator, self, activator, caller, data) or activator:GetSubRole()):GetBaseRole()
 
 		if self.Role == ROLE_TRAITOR
 			and (cv_evil_roles:GetBool() and (activator_role ~= ROLE_INNOCENT or activator_role ~= ROLE_DETECTIVE)
