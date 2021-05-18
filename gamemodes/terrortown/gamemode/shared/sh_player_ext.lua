@@ -441,23 +441,32 @@ plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
 ---
--- Checks whether a @{Player} has a special @{ROLE}
+-- Checks whether a @{Player} has a special @{ROLE}.
 -- @note This just returns <code>false</code> if the @{Player} is an Innocent!
--- @return boolean
+-- @return boolean Returns true if the player has a special role
 -- @realm shared
-function plymeta:IsSpecialRole()
-	return self:GetSubRole() ~= ROLE_INNOCENT
+function plymeta:HasSpecialRole()
+	return self:GetSubRoleData():HasSpecialRole()
 end
 
 ---
--- Checks whether a @{Player} has a special @{ROLE}
+-- Checks whether a @{Player} has a special @{ROLE}.
 -- @note This just returns <code>false</code> if the @{Player} is an Innocent!
--- @return boolean
--- @see Player:IsSpecialRole
+-- @return boolean Returns true if the player has a special role
+-- @see Player:HasSpecialRole
 -- @realm shared
 -- @deprecated
 -- @function plymeta:IsSpecial()
-plymeta.IsSpecial = plymeta.IsSpecialRole
+plymeta.IsSpecial = plymeta.HasSpecialRole
+
+---
+-- Checks whether or not a player has an evil role. By default all roles with the `.isEvil` flag arre counted as evil.
+-- @note This depends on the convar `ttt2_rolecheck_all_evil_roles`, if it set to 0, only traitor subroles are counted as evil.
+-- @return boolean Returns true if the role is evil
+-- @realm shared
+function plymeta:HasEvilRole()
+	return self:GetBaseRoleData():HasEvilRole(self:GetTeam())
+end
 
 ---
 -- Checks whether a @{Player} is a terrorist and in an active round
@@ -532,9 +541,9 @@ end
 -- @return boolean
 -- @realm shared
 -- @see Player:IsActive
--- @see Player:IsSpecialRole
+-- @see Player:HasSpecialRole
 function plymeta:IsActiveSpecial()
-	return self:IsActive() and self:IsSpecialRole()
+	return self:IsActive() and self:HasSpecialRole()
 end
 
 ---

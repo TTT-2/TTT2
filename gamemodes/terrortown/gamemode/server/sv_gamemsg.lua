@@ -267,7 +267,7 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
 	or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
-	or not sTeam and (teamOnly and not sender:IsSpecialRole() or not teamOnly) -- If someone alive talks (and not a special role in teamchat's case)
+	or not sTeam and (teamOnly and not sender:HasSpecialRole() or not teamOnly) -- If someone alive talks (and not a special role in teamchat's case)
 	or not sTeam and teamOnly and (
 		sender:IsInTeam(reader)
 		and not sender:GetSubRoleData().unknownTeam
@@ -364,7 +364,7 @@ function GM:PlayerSay(ply, text, teamOnly)
 			table.insert(filtered, 1, "[MUMBLED]")
 
 			return table.concat(filtered, " ")
-		elseif teamOnly and not team_spec and ply:IsSpecialRole() then
+		elseif teamOnly and not team_spec and ply:HasSpecialRole() then
 			RoleChatMsg(ply, text)
 
 			return ""

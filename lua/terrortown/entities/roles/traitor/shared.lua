@@ -11,6 +11,8 @@ function ROLE:PreInitialize()
 
 	self.builtin = true
 
+	self.isEvil = true
+
 	self.defaultTeam = TEAM_TRAITOR
 	self.defaultEquipment = TRAITOR_EQUIPMENT
 	self.score.surviveBonusMultiplier = 0.5

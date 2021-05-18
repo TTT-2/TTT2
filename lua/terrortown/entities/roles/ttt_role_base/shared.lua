@@ -1,7 +1,10 @@
 ---
 -- @author Alf21
 -- @author saibotk
+-- @author Mineotopia
 -- @module ROLE
+
+local cvEvilRoles = GetConVar("ttt2_rolecheck_all_evil_roles")
 
 ROLE.isAbstract = true
 
@@ -37,6 +40,11 @@ ROLE.score = {
 	-- negative number for most roles.
 	suicideMultiplier = -1
 }
+
+-- Defines if a role is an evil role. By default roles in the innocent
+-- team are no evil roles, every other role is evil. Players without a
+-- team are neutral.
+ROLE.isEvil = true
 
 ---
 -- This function is called before initializing a @{ROLE}, but after all
@@ -97,6 +105,26 @@ end
 -- @realm shared
 function ROLE:IsBaseRole()
 	return self.baserole == nil
+end
+
+function ROLE:HasSpecialRole()
+	return self.subrole ~= ROLE_INNOCENT
+end
+
+function ROLE:HasEvilRole(team)
+	team = team or self.defaultTeam
+	local baseRole = self:GetBaseRole()
+
+	-- players without a team are counted as neutral
+	if not team or team == TEAM_NONE or TEAMS[team].alone then
+		return false
+	end
+
+	if cvEvilRoles:GetBool() then
+		return roles.GetByIndex(baseRole).isEvil
+	else
+		return baseRole == ROLE_TRAITOR
+	end
 end
 
 ---
