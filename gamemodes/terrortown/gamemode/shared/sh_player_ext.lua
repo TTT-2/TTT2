@@ -445,9 +445,19 @@ plymeta.IsDetective = plymeta.GetDetective
 -- @note This just returns <code>false</code> if the @{Player} is an Innocent!
 -- @return boolean
 -- @realm shared
-function plymeta:IsSpecial()
+function plymeta:IsSpecialRole()
 	return self:GetSubRole() ~= ROLE_INNOCENT
 end
+
+---
+-- Checks whether a @{Player} has a special @{ROLE}
+-- @note This just returns <code>false</code> if the @{Player} is an Innocent!
+-- @return boolean
+-- @see Player:IsSpecialRole
+-- @realm shared
+-- @deprecated
+-- @function plymeta:IsSpecial()
+plymeta.IsSpecial = plymeta.IsSpecialRole
 
 ---
 -- Checks whether a @{Player} is a terrorist and in an active round
@@ -522,9 +532,9 @@ end
 -- @return boolean
 -- @realm shared
 -- @see Player:IsActive
--- @see Player:IsSpecial
+-- @see Player:IsSpecialRole
 function plymeta:IsActiveSpecial()
-	return self:IsActive() and self:IsSpecial()
+	return self:IsActive() and self:IsSpecialRole()
 end
 
 ---

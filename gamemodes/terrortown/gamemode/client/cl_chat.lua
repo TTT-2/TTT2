@@ -125,7 +125,7 @@ function GM:OnPlayerChat(ply, text, teamChat, isDead)
 		isDead = true
 	end
 
-	if teamChat and (not team and not ply:IsSpecial() or team) then
+	if teamChat and (not team and not ply:IsSpecialRole() or team) then
 		teamChat = false
 	end
 
