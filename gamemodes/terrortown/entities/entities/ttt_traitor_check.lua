@@ -46,15 +46,15 @@ function ENT:CountValidPlayers(activator, caller, data)
 	for i = 1, #plys do
 		local ply = plys[i]
 
+		-- only count if it is a valid player that is in range
 		if not IsValid(ply) or not ply:Alive() or not VectorInside(ply:GetPos(), mins, maxs) then continue end
 
 		---
 		-- @realm server
-		local plyBaseRole = roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole()):GetBaseRole()
+		local baseRoleData = roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole())
 
-		if cv_evil_roles:GetBool() and (plyBaseRole == ROLE_INNOCENT or plyBaseRole == ROLE_DETECTIVE)
-			or not cv_evil_roles:GetBool() and (plyBaseRole ~= ROLE_TRAITOR)
-		then continue end
+		-- only count if it is a evil role
+		if not baseRoleData:IsEvilRole(ply:GetTeam()) then continue end
 
 		count = count + 1
 	end
