@@ -84,12 +84,14 @@ local function PopulateRandomShopPanel(parent)
 		local convarName = tostring(convar)
 		local name = "shopeditor_name_" .. data.name
 		local desc = "shopeditor_desc_" .. data.name
+
 		if data.typ == "bool" then
 			if data.b_desc then
 				form:MakeHelp({
 					label = desc
 				})
 			end
+
 			form:MakeCheckBox({
 				label = name,
 				default = data.default,
@@ -107,6 +109,7 @@ local function PopulateRandomShopPanel(parent)
 					label = desc
 				})
 			end
+
 			form2:MakeSlider({
 				label = name,
 				min = data.min,

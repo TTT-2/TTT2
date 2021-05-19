@@ -1355,7 +1355,9 @@ L.header_random_shop_administration = "Zufalls-Shop"
 L.header_random_shop_value_administration = "Balance Einstellungen"
 
 L.shopeditor_name_random_shops = "Aktiviere Zufalls-Shop"
-L.shopeditor_desc_random_shops = "Zufalls-Shops geben jedem Spieler eine zufällige Menge an Ausrüstung.\nTeam-Shops zwingen alle Spieler aus einem Team zu ein und demselben Shopinhalt.\nAuswürfeln erlaubt es ein gegebenes Set für Credits durch ein neues Zufallsset auszutauschen."
+L.shopeditor_desc_random_shops = [[Zufalls-Shops geben jedem Spieler eine zufällige Menge an Ausrüstung.
+Team-Shops zwingen alle Spieler aus einem Team zu ein und demselben Shopinhalt.
+Auswürfeln erlaubt es ein gegebenes Set für Credits durch ein neues Zufallsset auszutauschen.]]
 L.shopeditor_name_random_shop_items = "Anzahl zufälliger Equipments"
 L.shopeditor_desc_random_shop_items = "Dies enthält Equipments, welche mit .noRandom (immer enthalten) markiert sind. Also wähle die Anzahl hoch genug, damit nicht nur solches Equipment im Shop landet."
 L.shopeditor_name_random_team_shops = "Aktiviere Team-Shops"
