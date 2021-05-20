@@ -16,7 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
 - Karma now stores changes
   - Is shown in roundend menu
-- Added Convar `ttt2_random_shop_items` for the number of items in randomshop
+- Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop
 
 ### Fixed
 
@@ -32,7 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
-- Changed Convar `ttt2_random_shops` to only disable the random shop
+- Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)
 - Shopeditor settings are now available in the F1 Menu
 
 ### Breaking Changes
