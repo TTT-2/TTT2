@@ -20,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Updated French translation (by @MisterClems)
 - Fixed IsOffScreen function being global for compatibility
 - Fixed a German translation string (by @FaRLeZz)
 - Fixed a Polish translation by adding new lines (by @Wuker)
