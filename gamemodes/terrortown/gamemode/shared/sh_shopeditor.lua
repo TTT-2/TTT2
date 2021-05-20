@@ -19,7 +19,7 @@ ShopEditor.cvars = {
 		name = "random_shops", b_desc = true
 	},
 	ttt2_random_shop_items = {
-		order = 2, typ = "number", bits = 8, default = 10, min = 1, max = 60,
+		order = 2, typ = "number", bits = 6, default = 10, min = 1, max = 60,
 		name = "random_shop_items", b_desc = true
 	},
 	ttt2_random_team_shops = {
@@ -31,7 +31,7 @@ ShopEditor.cvars = {
 		name = "random_shop_reroll", b_desc = false
 	},
 	ttt2_random_shop_reroll_cost = {
-		order = 5, typ = "number", bits = 8, default = 1, min = 0, max = 10,
+		order = 5, typ = "number", bits = 4, default = 1, min = 0, max = 10,
 		name = "random_shop_reroll_cost", b_desc = false
 	},
 	ttt2_random_shop_reroll_per_buy = {
