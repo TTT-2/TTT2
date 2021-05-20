@@ -8,7 +8,7 @@ local UpdateSprint = UpdateSprint
 
 local MAX_DROWN_TIME = 8
 
-local sneakSpeedSquared = math.pow(150,2)
+local sneakSpeedSquared = math.pow(150, 2)
 
 ---
 -- Initializes TTT2
