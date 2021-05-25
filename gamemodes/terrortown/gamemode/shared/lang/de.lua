@@ -1292,7 +1292,7 @@ L.desc_event_selected = "Die Rollen und Teams wurden für alle {amount} Spieler 
 L.desc_event_spawn = "{player} ist erschienen."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something = "etwas"
+L.trap_something = "etwas"
 
 -- Kill events
 L.desc_event_kill_suicide = "Es war Selbstmord."
@@ -1306,36 +1306,36 @@ L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) hielt es nicht mehr aus un
 L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) brachte sich mit {tool} um."
 
 L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) fiel in den Tod."
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) fiel in den Tod nachdem {attacker} ({arole} / {ateam}) ihn schuppste."
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) fiel in den Tod nachdem {attacker} ihn schuppste."
 L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) fiel in den Tod nachdem {attacker} ({arole} / {ateam}) {trap} benutzte, um ihn zu schubsen."
 
-L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) erschossen."
+L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) wurde von {attacker} erschossen."
 L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) mit einer/m {weapon} erschossen."
 
-L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) ertränkt."
+L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) wurde von {attacker} ertränkt."
 L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) wurde durch {trap} von {attacker} ({arole} / {ateam}) ertränkt."
 
-L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) gesprengt."
+L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) wurde von {attacker} gesprengt."
 L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) durch {trap} gesprengt."
 
-L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) verbrannt."
+L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) wurde von {attacker} verbrannt."
 L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) wurde durch {trap} von {attacker} ({arole} / {ateam}) verbrannt."
 
-L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) zu Tode geprügelt."
+L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) wurde von {attacker} zu Tode geprügelt."
 L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) durch/mit {trap} zu Tode geprügelt."
 
-L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) erstochen."
+L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) wurde von {attacker} erstochen."
 L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) durch/mit {trap} aufgeschlitzt."
 
-L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) telefragged."
+L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) wurde von {attacker} telefragged."
 L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) wurde atomisiert durch {trap} von {attacker} ({arole} / {ateam})."
 
 L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) wurde unter der Masse von {attacker} ({arole} / {ateam}) zerquetscht."
 
-L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) zerquetscht."
+L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) wurde von {attacker} zerquetscht."
 L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) wurde durch {trap} von {attacker} ({arole} / {ateam}) zerquetscht."
 
-L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) getötet."
+L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) wurde von {attacker} getötet."
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) wurde von {attacker} ({arole} / {ateam}) durch {trap} getötet."
 
 -- 2021-04-20
