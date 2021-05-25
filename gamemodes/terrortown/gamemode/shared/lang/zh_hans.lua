@@ -1302,7 +1302,7 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 --L.desc_event_spawn = "{player} has spawned."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something = "某件物品"
+L.trap_something = "某件物品"
 
 -- Kill events
 --L.desc_event_kill_suicide = "It was suicide."
@@ -1316,36 +1316,36 @@ L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) 受不了然后自杀了�
 L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) 用 {tool} 杀了自己。"
 
 L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) 摔死了。"
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) 因为 {attacker} ({arole} / {ateam}) 而摔死了。"
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) 因为 {attacker} 而摔死了。"
 L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 推下摔死。"
 
-L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 射杀。"
+L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) 被 {attacker}射杀。"
 L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {weapon} 射杀。"
 
-L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 推入水中溺死。"
+L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) 被 {attacker} 推入水中溺死。"
 L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 推入水中溺死。"
 
-L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 炸死。"
+L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) 被 {attacker} 炸死。"
 L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 炸烂。"
 
-L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 烧死。"
+L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) 被 {attacker} 烧死。"
 L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 烧成焦尸。"
 
-L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 打死。"
+L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) 被 {attacker} 打死。"
 L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 打成烂泥。"
 
-L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 砍死。"
+L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) 被 {attacker} 砍死。"
 L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 砍成两半。"
 
-L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 传送杀。"
+L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) 被 {attacker} 传送杀。"
 L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 传送时之能量分裂成原子。"
 
 L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用巨大物体压烂。"
 
-L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 压烂。"
+L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) 被 {attacker} 压烂。"
 L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 压碎。"
 
-L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 杀死。"
+L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) 被 {attacker} 杀死。"
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({arole} / {ateam}) 用 {trap} 杀死。"
 
 -- 2021-04-20

@@ -1303,7 +1303,7 @@ L.help_lang_info = [[
 --L.desc_event_spawn = "{player} has spawned."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something = "何か"
+L.trap_something = "何か"
 
 -- Kill events
 --L.desc_event_kill_suicide = "It was suicide."
@@ -1317,36 +1317,36 @@ L.desc_event_kill_sui = "{victim}({vrole}/{vteam})は何かを受け入れられ
 L.desc_event_kill_sui_using = "{victim}({vrole}/{vteam})は{tool}を使用して自殺した。"
 
 L.desc_event_kill_fall = "{victim}({vrole}/{vteam})は転落死した。"
-L.desc_event_kill_fall_pushed = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})に押されて転落死。"
+L.desc_event_kill_fall_pushed = "{victim}({vrole}/{vteam})は{attacker}に押されて転落死。"
 L.desc_event_kill_fall_pushed_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})に{trap}で押されて転落死。"
 
-L.desc_event_kill_shot = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})に撃たれた。"
+L.desc_event_kill_shot = "{victim}({vrole}/{vteam})は{attacker}に撃たれた。"
 L.desc_event_kill_shot_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})に{weapon}で撃たれた。"
 
-L.desc_event_kill_drown = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})によって溺死させられた。"
+L.desc_event_kill_drown = "{victim}({vrole}/{vteam})は{attacker}によって溺死させられた。"
 L.desc_event_kill_drown_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})が{trap}を起動したことにより溺死させられた。"
 
-L.desc_event_kill_boom = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})によって爆破された。"
+L.desc_event_kill_boom = "{victim}({vrole}/{vteam})は{attacker}によって爆破された。"
 L.desc_event_kill_boom_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})の使用した{trap}によって吹き飛ばされた。"
 
-L.desc_event_kill_burn = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})によって焼かれた。"
+L.desc_event_kill_burn = "{victim}({vrole}/{vteam})は{attacker}によって焼かれた。"
 L.desc_event_kill_burn_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})の仕組んだ{trap}により燃やされた。"
 
-L.desc_event_kill_club = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})によって殴られた。"
+L.desc_event_kill_club = "{victim}({vrole}/{vteam})は{attacker}によって殴られた。"
 L.desc_event_kill_club_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})の{trap}でしたたかに殴り殺された。"
 
-L.desc_event_kill_slash = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})に刺された。"
+L.desc_event_kill_slash = "{victim}({vrole}/{vteam})は{attacker}に刺された。"
 L.desc_event_kill_slash_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})に{trap}で切り刻まれた。"
 
-L.desc_event_kill_tele = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})により手榴弾で爆殺された。"
+L.desc_event_kill_tele = "{victim}({vrole}/{vteam})は{attacker}により手榴弾で爆殺された。"
 L.desc_event_kill_tele_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})が仕掛けた{trap}により粉々にされた。"
 
 L.desc_event_kill_goomba = "{victim}({vrole}/{vteam})は巨大な{attacker}({arole}/{ateam})により踏み潰された。"
 
-L.desc_event_kill_crush = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})により押し潰された。"
+L.desc_event_kill_crush = "{victim}({vrole}/{vteam})は{attacker}により押し潰された。"
 L.desc_event_kill_crush_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})の{trap}により押し潰された。"
 
-L.desc_event_kill_other = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})により殺害された。"
+L.desc_event_kill_other = "{victim}({vrole}/{vteam})は{attacker}により殺害された。"
 L.desc_event_kill_other_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/{ateam})の使用した{trap}により殺害された。"
 
 -- 2021-04-20

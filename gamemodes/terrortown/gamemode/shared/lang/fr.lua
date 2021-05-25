@@ -1303,7 +1303,7 @@ L.desc_event_selected = "Les teams et les rôles ont été distribuer pour les {
 L.desc_event_spawn = "{player} est apparu."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something = "quelque chose"
+L.trap_something = "quelque chose"
 
 -- Kill events
 L.desc_event_kill_suicide = "C'était un suicide."
@@ -1317,36 +1317,36 @@ L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) n'en pouvait plus et s'est
 L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) s'est tué avec un(e) {tool}."
 
 L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) a fait une chute mortelle."
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) a fait une chute mortelle après que {attacker} ({arole} / {ateam}) l'est poussé."
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) a fait une chute mortelle après que {attacker} l'est poussé."
 L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) a fait une chute mortelle après que {attacker} ({arole} / {ateam}) est utilisé un {trap} pour le pousser."
 
-L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) s'est fait tirer dessus par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) s'est fait tirer dessus par {attacker}."
 L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) s'est fait tirer dessus par {attacker} ({arole} / {ateam}) avec un {weapon}."
 
-L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) s'est noyé à cause de {attacker} ({arole} / {ateam})."
+L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) s'est noyé à cause de {attacker}."
 L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) s'est noyé à cause de {trap} activé par {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) est mort d'une explosion causée par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) est mort d'une explosion causée par {attacker}."
 L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) est mort d'une explosion causée par {attacker} ({arole} / {ateam}) avec {trap}."
 
-L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) s'est fait griller par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) s'est fait griller par {attacker}."
 L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) a brûlé de {trap} à cause de {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) a été battu par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) a été battu par {attacker}."
 L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) a été roué de coups {attacker} ({arole} / {ateam}) avec {trap}."
 
-L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) a été poignardé par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) a été poignardé par {attacker}."
 L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) s'est fait coupé par {attacker} ({arole} / {ateam}) avec {trap}."
 
-L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) s'est fait téléfrag par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) s'est fait téléfrag par {attacker}."
 L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) s'est fait atomiser par {attacker} ({arole} / {ateam}) en utilisant {trap}."
 
 L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) s'est fait écrasé par la masse imposante de {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) s'est fait broyer par {attacker} ({arole} / {ateam})."
+L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) s'est fait broyer par {attacker}."
 L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) s'est fait broyer par {attacker} ({arole} / {ateam}) avec {trap}."
 
-L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker} ({arole} / {ateam})."
+L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker}."
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) est mort à cause de {attacker} ({arole} / {ateam}) avec {trap}."
 
 -- 2021-04-20
