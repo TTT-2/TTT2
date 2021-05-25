@@ -25,6 +25,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a Polish translation by adding new lines (by @Wuker)
 - Fixed a data initialization bug that appeared on the first (initial) spawn
 - Fixed silent Footsteps, while crouched bhopping
+- Fixed issue where base innocents could bypass the TTT2AvoidGeneralChat and TTT2AvoidTeamChat hooks with the team chat key
+- Fixed issue where roles with unknownTeam could see messages sent with the team chat key
 
 ### Changed
 

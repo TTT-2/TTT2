@@ -80,7 +80,7 @@ local function RoleChatMsg(sender, msg)
 
 	---
 	-- @realm server
-	if tm == TEAM_NONE or sender:GetSubRoleData().disabledTeamChat or TEAMS[tm].alone or hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
+	if tm == TEAM_NONE or sender:GetSubRoleData().unknownTeam or sender:GetSubRoleData().disabledTeamChat or TEAMS[tm].alone or hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
 
 	net.Start("TTT_RoleChat")
 	net.WriteEntity(sender)
@@ -267,8 +267,8 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
 	or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
-	or not sTeam and (teamOnly and not sender:IsSpecial() or not teamOnly) -- If someone alive talks (and not a special role in teamchat's case)
-	or not sTeam and teamOnly and (
+	or not sTeam and not teamOnly -- General Chat
+	or not sTeam and teamOnly and ( -- Team Chat
 		sender:IsInTeam(reader)
 		and not sender:GetSubRoleData().unknownTeam
 		and not sender:GetSubRoleData().disabledTeamChat
@@ -364,11 +364,11 @@ function GM:PlayerSay(ply, text, teamOnly)
 			table.insert(filtered, 1, "[MUMBLED]")
 
 			return table.concat(filtered, " ")
-		elseif teamOnly and not team_spec and ply:IsSpecial() then
+		elseif teamOnly and not team_spec then -- Team Chat handling
 			RoleChatMsg(ply, text)
 
 			return ""
-		elseif not teamOnly and not team_spec then
+		elseif not team_spec then -- General Chat handling
 			---
 			-- @realm server
 			if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
