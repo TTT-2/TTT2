@@ -29,6 +29,8 @@ local mathClamp = math.Clamp
 local mathRound = math.Round
 local mathFloor = math.floor
 
+local cvEvilRoles = GetConVar("ttt2_rolecheck_all_evil_roles")
+
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
@@ -453,6 +455,21 @@ end
 -- @see string.Capitalize
 -- @function util.Capitalize(str)
 util.Capitalize = string.Capitalize
+
+function util.IsEvilTeam(team)
+	-- players without a team are counted as neutral
+	if not team or team == TEAM_NONE or TEAMS[team].alone then
+		return false
+	end
+
+	if cvEvilRoles:GetBool() then
+		-- all non inno roles are counted as evil
+		return team ~= TEAM_INNOCENT
+	else
+		-- only traitor roles are counted as evil
+		return team == TEAM_TRAITOR
+	end
+end
 
 if CLIENT then
 	local colorsHealth = {

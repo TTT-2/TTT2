@@ -9,8 +9,6 @@ function ROLE:PreInitialize()
 
 	self.abbr = "inno"
 
-	self.isEvil = false
-
 	self.defaultTeam = TEAM_INNOCENT
 	self.defaultEquipment = SPECIAL_EQUIPMENT
 

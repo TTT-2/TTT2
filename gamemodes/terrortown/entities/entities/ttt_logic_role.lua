@@ -7,7 +7,7 @@ ENT.Base = "base_point"
 
 ROLE_NONE = ROLE_NONE or 3
 
-ENT.Role = ROLE_NONE
+ENT.checkingRole = ROLE_NONE
 
 if CLIENT then return end
 
@@ -26,12 +26,12 @@ function ENT:KeyValue(key, value)
 			value = _G[value] or value
 		end
 
-		self.Role = tonumber(value)
+		self.checkingRole = tonumber(value)
 
-		if not self.Role then
+		if not self.checkingRole then
 			ErrorNoHalt("ttt_logic_role: bad value for Role key, not a number\n")
 
-			self.Role = ROLE_NONE
+			self.checkingRole = ROLE_NONE
 		end
 	end
 end
@@ -45,20 +45,18 @@ end
 -- @return[default=true] boolean Return true if the default action should be supressed
 -- @realm server
 function ENT:AcceptInput(name, activator, caller, data)
-	local cv_evil_roles = GetConVar("ttt2_rolecheck_all_evil_roles")
-
 	if name == "TestActivator" then
 		if not IsValid(activator) or not activator:IsPlayer() then return end
 
-		local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT
-			---
-			-- @realm server
-			or roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", activator, self, activator, caller, data) or activator:GetSubRole()):GetBaseRole()
+		---
+		-- @realm server
+		local role, team = hook.Run("TTT2ModifyLogicRoleCheck", ply, self, activator, caller, data)
+		local activatorRole = roles.GetByIndex(role:GetBaseRole())
+		local acivatorTeam = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or team
 
-		if self.Role == ROLE_TRAITOR
-			and (cv_evil_roles:GetBool() and (activator_role ~= ROLE_INNOCENT and activator_role ~= ROLE_DETECTIVE)
-				or not cv_evil_roles:GetBool() and activator_role == ROLE_TRAITOR)
-			or self.Role == ROLE_NONE or self.Role == activator_role
+		if self.checkingRole == ROLE_TRAITOR and util.IsEvilTeam(acivatorTeam)
+			or self.checkingRole == ROLE_INNOCENT and not util.IsEvilTeam(acivatorTeam)
+			or self.checkingRole == activatorRole
 		then
 			Dev(2, activator, "passed logic_role test of", self:GetName())
 

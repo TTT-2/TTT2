@@ -51,10 +51,10 @@ function ENT:CountValidPlayers(activator, caller, data)
 
 		---
 		-- @realm server
-		local baseRoleData = roles.GetByIndex(hook.Run("TTT2ModifyLogicCheckRole", ply, self, activator, caller, data) or ply:GetSubRole())
+		local _, team = hook.Run("TTT2ModifyLogicRoleCheck", ply, self, activator, caller, data)
 
 		-- only count if it is a evil role
-		if not baseRoleData:IsEvilRole(ply:GetTeam()) then continue end
+		if not util.IsEvilTeam(team) then continue end
 
 		count = count + 1
 	end
@@ -85,13 +85,14 @@ end
 -- is triggered from the map. This hook can be used to modify the role used by the
 -- check on the map.
 -- @param Player ply The player whose role is checked
--- @param Entity ent The entity that is used (either ttt_logic_role` or `ttt_traitor_check`)
+-- @param Entity ent The entity that is used (either `ttt_logic_role` or `ttt_traitor_check`)
 -- @param Entity|Player activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
 -- @param Entity caller The entity that directly triggered the input (e.g. the button that was pushed)
 -- @param string data The data passed
--- @return[default=nil] Return the role of the player that should be used for this check
+-- @return Return the role of the player that should be used for this check
+-- @return Return the team of the player that should be used for this check
 -- @hook
 -- @realm server
-function GAMEMODE:TTT2ModifyLogicCheckRole(ply, ent, activator, caller, data)
-
+function GAMEMODE:TTT2ModifyLogicRoleCheck(ply, ent, activator, caller, data)
+	return ply:GetBaseRole(), ply:GetTeam()
 end

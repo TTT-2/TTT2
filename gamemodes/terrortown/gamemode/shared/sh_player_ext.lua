@@ -460,12 +460,12 @@ end
 plymeta.IsSpecial = plymeta.HasSpecialRole
 
 ---
--- Checks whether or not a player has an evil role. By default all roles with the `.isEvil` flag arre counted as evil.
+-- Checks whether or not a player has an evil team. By default all teams that aren't innocent or none are counted as evil.
 -- @note This depends on the convar `ttt2_rolecheck_all_evil_roles`, if it set to 0, only traitor subroles are counted as evil.
 -- @return boolean Returns true if the role is evil
 -- @realm shared
-function plymeta:HasEvilRole()
-	return self:GetBaseRoleData():IsEvilRole(self:GetTeam())
+function plymeta:HasEvilTeam()
+	return util.IsEvilTeam(self:GetTeam())
 end
 
 ---
