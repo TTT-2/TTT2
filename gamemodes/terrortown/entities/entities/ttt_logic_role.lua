@@ -56,7 +56,7 @@ function ENT:AcceptInput(name, activator, caller, data)
 
 		if self.checkingRole == ROLE_TRAITOR and util.IsEvilTeam(activatorTeam)
 			or self.checkingRole == ROLE_INNOCENT and not util.IsEvilTeam(activatorTeam)
-			or self.checkingRole == activatorRole
+			or self.checkingRole == activatorRole and not (self.checkingRole == ROLE_TRAITOR or self.checkingRole == ROLE_INNOCENT)
 			or self.checkingRole == ROLE_NONE
 		then
 			Dev(2, activator, "passed logic_role test of", self:GetName())
