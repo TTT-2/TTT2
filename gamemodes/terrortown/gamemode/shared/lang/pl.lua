@@ -1302,7 +1302,7 @@ Te tłumaczenie ma w sobie {coverage}% angielskich tłumaczeń.
 --L.desc_event_spawn = "{player} has spawned."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something = "coś"
+L.trap_something = "coś"
 
 -- Kill events
 --L.desc_event_kill_suicide = "It was suicide."
@@ -1316,36 +1316,36 @@ L.something = "coś"
 --L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) killed themselves using {tool}."
 
 --L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) fell to their death."
---L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} ({arole} / {ateam}) pushed them."
+--L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} pushed them."
 --L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} ({arole} / {ateam}) used {trap} to push them."
 
---L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) was shot by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) was shot by {attacker}."
 --L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) was shot by {attacker} ({arole} / {ateam}) using a {weapon}."
 
---L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) was drowned by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) was drowned by {attacker}."
 --L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) was drowned by {trap} triggered by {attacker} ({arole} / {ateam})."
 
---L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) was exploded by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) was exploded by {attacker}."
 --L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) was blown up by {attacker} ({arole} / {ateam}) using {trap}."
 
---L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) was fried by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) was fried by {attacker}."
 --L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) was burned by {trap} due to {attacker} ({arole} / {ateam})."
 
---L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) was beaten up by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) was beaten up by {attacker}."
 --L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) was pummeled to death by {attacker} ({arole} / {ateam}) using {trap}."
 
---L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) was stabbed by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) was stabbed by {attacker}."
 --L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) was cut up by {attacker} ({arole} / {ateam}) using {trap}."
 
---L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) was telefragged by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) was telefragged by {attacker}."
 --L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) was atomized by {trap} set by {attacker} ({arole} / {ateam})."
 
 --L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) was crushed by the massive bulk of {attacker} ({arole} / {ateam})."
 
---L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) was crushed by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) was crushed by {attacker}."
 --L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) was crushed by {trap} of {attacker} ({arole} / {ateam})."
 
---L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) was killed by {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) was killed by {attacker}."
 --L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) was killed by {attacker} ({arole} / {ateam}) using {trap}."
 
 -- 2021-04-20
@@ -1359,3 +1359,18 @@ L.none = "Brak Roli"
 --L.karma_cleanround_tooltip = "Clean round"
 --L.karma_roundheal_tooltip = "Roundheal"
 --L.karma_unknown_tooltip = "Unknown"
+
+-- 2021-05-07
+--L.header_random_shop_administration = "Setup Random Shop"
+--L.header_random_shop_value_administration = "Balance Settings"
+
+--L.shopeditor_name_random_shops = "Enable random shops"
+--L.shopeditor_desc_random_shops = [[Random shops give every player only a limited randomized set of all available equipments.
+--Team shops force all players in one team to have the same set instead of individual ones.
+--Rerolling allows you to get a new randomized set of equipment for credits.]]
+--L.shopeditor_name_random_shop_items = "Number of random equipments"
+--L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with .noRandom. So choose a high enough number or you only get those."
+--L.shopeditor_name_random_team_shops = "Enable team shops"
+--L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
+--L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
+--L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"

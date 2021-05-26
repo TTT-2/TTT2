@@ -18,13 +18,18 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Is shown in roundend menu
 - Added a new convar `ttt2_rolecheck_all_evil_roles` that counts all evil roles as traitor roles for map related entity checks if enabled
 - Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks
+- Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop
 
 ### Fixed
 
+- Updated French translation (by @MisterClems)
 - Fixed IsOffScreen function being global for compatibility
 - Fixed a German translation string (by @FaRLeZz)
 - Fixed a Polish translation by adding new lines (by @Wuker)
 - Fixed a data initialization bug that appeared on the first (initial) spawn
+- Fixed silent Footsteps, while crouched bhopping
+- Fixed issue where base innocents could bypass the TTT2AvoidGeneralChat and TTT2AvoidTeamChat hooks with the team chat key
+- Fixed issue where roles with unknownTeam could see messages sent with the team chat key
 
 ### Changed
 
@@ -34,6 +39,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
 - By default all evil roles are now counted as traitor roles for map related checks (with convar to disable)
+- Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)
+- Shopeditor settings are now available in the F1 Menu
 
 ### Breaking Changes
 

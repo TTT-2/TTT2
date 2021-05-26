@@ -78,7 +78,7 @@ local function KillText(event)
 	if not event.attacker then
 		attackerWasPlayer = false
 
-		params.attacker = trap or "something"
+		params.attacker = trap or "trap_something"
 	end
 
 	-- typically the "_using" strings are only for traps

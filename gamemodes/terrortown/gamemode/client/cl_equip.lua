@@ -547,7 +547,7 @@ function TraitorMenuPopup()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
-	if GetGlobalInt("ttt2_random_shops") > 0 then
+	if GetGlobalBool("ttt2_random_shops") then
 		name = name .. " (RANDOM)"
 	end
 
@@ -774,7 +774,7 @@ function TraitorMenuPopup()
 	end
 
 	-- Random Shop Rerolling
-	if GetGlobalInt("ttt2_random_shops") > 0 and GetGlobalBool("ttt2_random_shop_reroll") then
+	if GetGlobalBool("ttt2_random_shops") and GetGlobalBool("ttt2_random_shop_reroll") then
 		local dtransfer = CreateRerollMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))

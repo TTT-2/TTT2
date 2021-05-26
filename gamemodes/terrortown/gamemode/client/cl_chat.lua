@@ -119,13 +119,13 @@ function GM:OnPlayerChat(ply, text, teamChat, isDead)
 		return true
 	end
 
-	local team = ply:Team() == TEAM_SPEC
+	local sTeam = ply:Team() == TEAM_SPEC
 
-	if team and not isDead then
+	if sTeam and not isDead then
 		isDead = true
 	end
 
-	if teamChat and (not team and not ply:HasSpecialRole() or team) then
+	if teamChat and (sTeam or ply:GetSubRoleData().unknownTeam) then
 		teamChat = false
 	end
 

@@ -1302,7 +1302,7 @@ L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot l
 --L.desc_event_spawn = "{player} has spawned."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something = "qualcosa"
+L.trap_something = "qualcosa"
 
 -- Kill events
 --L.desc_event_kill_suicide = "It was suicide."
@@ -1316,36 +1316,36 @@ L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) non ce l'ha fatta e si è 
 L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) si è ucciso usando {tool}."
 
 L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) è morto di caduta."
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) è morto di caduta dopo essere stato spinto da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) è morto di caduta dopo essere stato spinto da {attacker}."
 L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) è morto di caduta dopo essere stato spinto da {attacker} ({arole} / {ateam}) con la trappola {trap}."
 
-L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) è stata ucciso con un arma da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) è stata ucciso con un arma da {attacker}."
 L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) è stata ucciso da {attacker} ({arole} / {ateam}) con l'arma {weapon}."
 
-L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) è stato affogato da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) è stato affogato da {attacker}."
 L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) è stato affogato da {trap} tramite {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) è stato fatto esplodere da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) è stato fatto esplodere da {attacker}."
 L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) è stato fatto esplodere da {attacker} ({arole} / {ateam}) con la trappola {trap}."
 
-L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) è stato bruciato da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) è stato bruciato da {attacker}."
 L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) è stato bruciato dalla trappola {trap} attivata da {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) è stato massacrato da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) è stato massacrato da {attacker}."
 L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) è stato massacrato da {attacker} ({arole} / {ateam}) usando la trappola {trap}."
 
-L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) è stato accoltellato da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) è stato accoltellato da {attacker}."
 L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) è stato accoltellato da {attacker} ({arole} / {ateam}) usando la trappola {trap}."
 
-L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) è stato telefraggato da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) è stato telefraggato da {attacker}."
 L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) è stato atomizzato dalla trappola {trap} attivata da {attacker} ({arole} / {ateam})."
 
 L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) è stata schiacciato dall'enorme masso di {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) è stato schiacciato da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) è stato schiacciato da {attacker}."
 L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) è stato schiacciato dalla trappola {trap} attivata da {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) è stata ucciso da {attacker} ({arole} / {ateam})."
+L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) è stata ucciso da {attacker}."
 L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da {attacker} ({arole} / {ateam}) con la trappola {trap}."
 
 -- 2021-04-20
@@ -1359,3 +1359,18 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.karma_cleanround_tooltip = "Clean round"
 --L.karma_roundheal_tooltip = "Roundheal"
 --L.karma_unknown_tooltip = "Unknown"
+
+-- 2021-05-07
+--L.header_random_shop_administration = "Setup Random Shop"
+--L.header_random_shop_value_administration = "Balance Settings"
+
+--L.shopeditor_name_random_shops = "Enable random shops"
+--L.shopeditor_desc_random_shops = [[Random shops give every player only a limited randomized set of all available equipments.
+--Team shops force all players in one team to have the same set instead of individual ones.
+--Rerolling allows you to get a new randomized set of equipment for credits.]]
+--L.shopeditor_name_random_shop_items = "Number of random equipments"
+--L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with .noRandom. So choose a high enough number or you only get those."
+--L.shopeditor_name_random_team_shops = "Enable team shops"
+--L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
+--L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
+--L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
