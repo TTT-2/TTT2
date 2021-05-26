@@ -50,7 +50,7 @@ function ENT:AcceptInput(name, activator, caller, data)
 
 		---
 		-- @realm server
-		local role, team = hook.Run("TTT2ModifyLogicRoleCheck", ply, self, activator, caller, data)
+		local role, team = hook.Run("TTT2ModifyLogicRoleCheck", activator, self, activator, caller, data)
 		local activatorRole = roles.GetByIndex(role:GetBaseRole())
 		local acivatorTeam = (GetRoundState() == ROUND_PREP) and TEAM_INNOCENT or team
 
