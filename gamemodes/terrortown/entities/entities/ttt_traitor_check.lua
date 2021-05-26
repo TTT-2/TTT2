@@ -8,10 +8,6 @@ ENT.Base = "base_brush"
 if CLIENT then return end
 
 ---
--- @realm server
-local cv_evil_roles = CreateConVar("ttt2_rolecheck_all_evil_roles", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The rolecheck on maps will always return true for every evil role if enabled")
-
----
 -- Called when the engine sets a value for this scripted entity.
 -- @param string key The key that was affected
 -- @param string value The new value
