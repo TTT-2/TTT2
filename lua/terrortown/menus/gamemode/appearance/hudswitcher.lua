@@ -115,7 +115,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	HELPSCRN.menuFrame.OnShow = function(slf)
-		if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
+		if HELPSCRN:GetOpenMenu() ~= "appearance_hudswitcher" then return end
 
 		HUDEditor.StopEditHUD()
 	end
@@ -158,7 +158,7 @@ function CLGAMEMODESUBMENU:HasButtonPanel()
 end
 
 hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function()
-	if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
+	if HELPSCRN:GetOpenMenu() ~= "appearance_hudswitcher" then return end
 
 	-- rebuild the content area so that data is refreshed
 	-- based on the newly selected HUD

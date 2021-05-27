@@ -74,7 +74,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 end
 
 ttt2net.OnUpdateGlobal({"hud_manager", "restrictedHUDs"}, function()
-	if HELPSCRN:GetOpenMenu() ~= "ttt2_administration_hud" then return end
+	if HELPSCRN:GetOpenMenu() ~= "administration_hud" then return end
 
 	-- rebuild the content area so that data is refreshed
 	-- based on the newly restricted HUDs

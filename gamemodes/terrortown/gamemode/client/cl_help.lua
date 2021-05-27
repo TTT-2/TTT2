@@ -235,18 +235,21 @@ end
 HELPSCRN.Show = HELPSCRN.ShowMainMenu
 
 ---
--- Returns the name of the currently opened menu, returns nil if no menu is opened
--- @return string The id of the opened menu or nil
+-- Returns the name of the currently opened menu, returns nil if no menu is opened.
+-- @return[default=nil] string The id of the opened menu or nil
 -- @realm client
 function HELPSCRN:GetOpenMenu()
-	-- `self.submenuClass.type` is not reset on close of the menu, therefore it has to be
-	-- checked if a menu is open at all. This is done by checking if `self.currentMenuId ~= nil`
-	-- since this variable is set to `nil` once the menu is closed
-	return self.currentMenuId and self.submenuClass.type
+	if not self:IsVisible() then return end
+
+	if self.currentMenuId == MAIN_MENU then
+		return MAIN_MENU
+	end
+
+	return self.currentMenuId .. "_" .. self.submenuClass.type
 end
 
 ---
--- Sets up the data for the content area without actually building the area
+-- Sets up the data for the content area without actually building the area.
 -- @param Panel parent The parent panel
 -- @param table submenuClass The submenu class
 -- @realm client
@@ -257,7 +260,7 @@ function HELPSCRN:SetupContentArea(parent, submenuClass)
 end
 
 ---
--- Builds the content area, the data has to be set previously
+-- Builds the content area, the data has to be set previously.
 -- @realm client
 function HELPSCRN:BuildContentArea()
 	local parent = self.parent
@@ -297,7 +300,7 @@ function HELPSCRN:BuildContentArea()
 end
 
 ---
--- Opens the help sub screen
+-- Opens the help sub screen.
 -- @param table menuClass The class of the submenu
 -- @realm client
 function HELPSCRN:ShowSubmenu(menuClass)
@@ -406,9 +409,13 @@ function HELPSCRN:Unhide()
 	self.menuFrame:ShowFrame()
 end
 
+function HELPSCRN:IsVisible()
+	return IsValid(self.menuFrame) and not self.menuFrame:IsFrameHidden()
+end
+
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if HELPSCRN.currentMenuId == MAIN_MENU and IsValid(HELPSCRN.menuFrame) and not HELPSCRN.menuFrame:IsFrameHidden() then
+	if HELPSCRN.currentMenuId == MAIN_MENU and HELPSCRN:IsVisible() then
 		HELPSCRN.menuFrame:CloseFrame()
 
 		return
