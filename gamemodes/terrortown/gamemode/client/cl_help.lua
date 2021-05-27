@@ -138,8 +138,6 @@ HELPSCRN.padding = 5
 
 -- define sizes
 local width, height = 1100, 700
-local cols = 3
-local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.padding * (cols + 1)) / cols)
 local heightMainMenuButton = 120
 
 local widthNav, heightNav = 300, 700
@@ -149,7 +147,7 @@ local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
 
-local function AddMenuButtons(menuTbl, parent)
+local function AddMenuButtons(menuTbl, parent, widthMainMenuButton)
 	for i = 1, #menuTbl do
 		local menuClass = menuTbl[i]
 
@@ -214,7 +212,13 @@ function HELPSCRN:ShowMainMenu()
 		end
 	end
 
-	AddMenuButtons(menusNormal, dsettings)
+	local rows = math.ceil(#menusNormal / 3) + math.ceil(#menusAdmin / 3)
+	local maxHeight = rows * heightMainMenuButton + (rows - 1) * self.padding + ((#menusAdmin == 0) and 0 or 35)
+	local heightScroll = height - vskin.GetHeaderHeight() - vskin.GetBorderSize() - 2 * self.padding
+
+	local widthMainMenuButton = (width - 4 * self.padding - (heightScroll < maxHeight and 20 or 0)) / 3
+
+	AddMenuButtons(menusNormal, dsettings, widthMainMenuButton)
 
 	-- only show admin section if player is admin and
 	-- there are menues to be shown
@@ -225,7 +229,7 @@ function HELPSCRN:ShowMainMenu()
 	labelSpacer:SetText("label_menu_admin_spacer")
 	labelSpacer:SetSize(w, 35)
 
-	AddMenuButtons(menusAdmin, dsettings)
+	AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton)
 end
 
 ---
