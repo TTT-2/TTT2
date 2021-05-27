@@ -15,6 +15,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 end
 
+function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
+
+end
+
 function CLGAMEMODESUBMENU:Initialize()
 
 end
