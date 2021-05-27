@@ -168,8 +168,6 @@ end
 -- since the main menu has no ID, it has this static ID
 local MAIN_MENU = "main"
 
-fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
-
 ---
 -- Opens the help screen
 -- @realm client
