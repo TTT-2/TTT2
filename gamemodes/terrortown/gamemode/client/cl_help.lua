@@ -27,6 +27,111 @@ local function MuteTeamCallback(cv, old, new)
 end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
 
+-- LOAD HELP MENU PAGE CLASSES
+
+local function ShouldInherit(t, base)
+	return t.base ~= t.type
+end
+
+-- callback function that is called once the submenu class is loaded
+local function OnSubMenuClassLoaded(class, path, name)
+	class.type = name
+	class.base = class.base or "base_gamemodesubmenu"
+
+	MsgN("Added TTT2 gamemode submenu file: ", path, name)
+end
+
+-- load submenu base from specific folder
+local subMenuBase = classbuilder.BuildFromFolder(
+	"terrortown/menus/gamemode/base_gamemodemenu/",
+	CLIENT_FILE,
+	"CLGAMEMODESUBMENU", -- class scope
+	OnSubMenuClassLoaded, -- on class loaded
+	true, -- should inherit
+	ShouldInherit -- special inheritance check
+)
+
+-- callback function that is called once the menu class is loaded;
+-- also used to load submenus for this menu
+local function OnMenuClassLoaded(class, path, name)
+	class.type = name
+	class.base = class.base or "base_gamemodemenu"
+
+	MsgN("Added TTT2 gamemode menu file: ", path, name)
+end
+
+-- once the classes are set up and inherited from their base, they
+-- are ready to be used, i.e. their submenus can be added
+local function LoadSubMenus(class, path, name)
+	-- do not load the submenu base again
+	if name == "base_gamemodemenu" then return end
+
+	-- now search for submenus in the corresponding folder
+	local subMenus = classbuilder.BuildFromFolder(
+		"terrortown/menus/gamemode/" .. name .. "/",
+		CLIENT_FILE,
+		"CLGAMEMODESUBMENU", -- class scope
+		OnSubMenuClassLoaded, -- on class loaded
+		true, -- should inherit
+		ShouldInherit, -- special inheritance check
+		subMenuBase -- passing through additional menu table for inheritance
+	)
+
+	-- transfer mnus into indexed table and sort by priority
+	local subMenusIndexed = {}
+
+	for _, subMenu in pairs(subMenus) do
+		if subMenu.type == "base_gamemodesubmenu" then continue end
+
+		subMenusIndexed[#subMenusIndexed + 1] = subMenu
+	end
+
+	table.SortByMember(subMenusIndexed, "priority")
+
+	class:SetSubMenuTable(subMenusIndexed)
+end
+
+local menus = classbuilder.BuildFromFolder(
+	"terrortown/menus/gamemode/",
+	CLIENT_FILE,
+	"CLGAMEMODEMENU", -- class scope
+	OnMenuClassLoaded, -- on class loaded
+	true, -- should inherit
+	ShouldInherit, -- special inheritance check
+	nil,
+	LoadSubMenus
+)
+
+-- transfer mnus into indexed table and sort by priority
+--local menusIndexed = {}
+menusIndexed = {}
+
+for _, menu in pairs(menus) do
+	if menu.type == "base_gamemodemenu" then continue end
+
+	menusIndexed[#menusIndexed + 1] = menu
+end
+
+table.SortByMember(menusIndexed, "priority")
+
+-- END load help menu classes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 local mainMenuOrder = {
 	"ttt2_changelog",
 	"ttt2_guide",
