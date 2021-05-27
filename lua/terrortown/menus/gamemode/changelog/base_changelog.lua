@@ -38,7 +38,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	header = header .. "</h1>"
 
 	local html = vgui.Create("DHTML", parent)
-	html:SetSize(500, 500)
+	html:SetSize(500, 640)
 	html:Dock(FILL)
 	html:SetHTML(htmlStart .. header .. self.change.text .. htmlEnd)
 end

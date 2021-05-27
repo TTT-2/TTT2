@@ -189,7 +189,7 @@ function CLSCORE:CreatePanel()
 	for i = 1, #subMenusIndexed do
 		local data = subMenusIndexed[i]
 
-		local menuButton = menuBoxGrid:Add("DSubMenuButtonTTT2")
+		local menuButton = menuBoxGrid:Add("DSubmenuButtonTTT2")
 		menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
 		menuButton:SetIcon(data.icon)
 		menuButton:SetTooltip(data.title)

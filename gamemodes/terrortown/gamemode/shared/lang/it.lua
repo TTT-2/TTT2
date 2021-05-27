@@ -1064,7 +1064,7 @@ L.submenu_gameplay_general_title = "Generale"
 L.submenu_gameplay_avoidroles_title = "Evita Selezione Ruoli"
 
 L.submenu_administration_hud_title = "Impostazioni HUD"
-L.submenu_administration_random_shop = "Shop Casuale"
+L.submenu_administration_random_shop_title = "Shop Casuale"
 
 L.help_color_desc = "Se questa impostazione è abilitata, un colore globale può essere scelto e quello verrà usato per il contorno del targetID e il mirino."
 L.help_scale_factor = "Questo numero influenza tutti gli elementi dell'interfaccia (HUD, vgui e targetID). Viene automaticamente aggiornato se viene modificata la risoluzione. Cambiare questo valore reimposterà l'HUD!"

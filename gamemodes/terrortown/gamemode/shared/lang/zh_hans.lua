@@ -1064,7 +1064,7 @@ L.submenu_gameplay_general_title = "通用"
 L.submenu_gameplay_avoidroles_title = "避免特定身份"
 
 L.submenu_administration_hud_title = "HUD 设置"
-L.submenu_administration_random_shop = "随机商店"
+L.submenu_administration_random_shop_title = "随机商店"
 
 L.help_color_desc = "此选项启用后，准星和目标高亮的外框会显示一个全局通用的颜色"
 L.help_scale_factor = "这个比例影响所有界面大小 (HUD, vgui 和目标高亮)。屏幕分辨率修改后会自动更新这个比例。改变此比例会重置 HUD！"

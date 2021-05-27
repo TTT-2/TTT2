@@ -19,6 +19,10 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 end
 
+function CLGAMEMODESUBMENU:HasButtonPanel()
+	return false
+end
+
 function CLGAMEMODESUBMENU:Initialize()
 
 end

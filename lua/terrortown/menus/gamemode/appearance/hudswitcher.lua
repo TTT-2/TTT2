@@ -153,6 +153,10 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonEditor:SetEnabled(not currentHUD.disableHUDEditor)
 end
 
+function CLGAMEMODESUBMENU:HasButtonPanel()
+	return true
+end
+
 hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function()
 	if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
 

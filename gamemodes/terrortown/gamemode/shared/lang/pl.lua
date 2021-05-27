@@ -1064,7 +1064,7 @@ L.submenu_gameplay_general_title = "Główne"
 L.submenu_gameplay_avoidroles_title = "Unikaj ról"
 
 L.submenu_administration_hud_title = "Ustawienia HUDa"
-L.submenu_administration_random_shop = "Losowy Sklep"
+L.submenu_administration_random_shop_title = "Losowy Sklep"
 
 L.help_color_desc = "Jeśli włączone, kolor globalny ustawiany dla obrysu (targetID) i koloru celownika."
 L.help_scale_factor = "Skaluje wszystkie elemnty UI (HUD, vgui i targetID). Dostosowuje się automatycznie do rozdzielczości. Zmiana tej wartości zresetuje HUD!"

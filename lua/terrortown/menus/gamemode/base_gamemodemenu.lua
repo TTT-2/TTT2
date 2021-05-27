@@ -9,8 +9,12 @@ CLGAMEMODEMENU.description = ""
 
 CLGAMEMODEMENU.submenus = {}
 
-function CLGAMEMODEMENU:IsVisible()
-	return true
+function CLGAMEMODEMENU:ShouldShow()
+	if not LocalPlayer():IsAdmin() and self:IsAdminMenu() then
+		return false
+	end
+
+	return #self:GetSubmenus() > 0
 end
 
 function CLGAMEMODEMENU:IsAdminMenu()
