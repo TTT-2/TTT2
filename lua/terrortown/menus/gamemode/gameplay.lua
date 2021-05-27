@@ -2,7 +2,7 @@
 
 CLGAMEMODEMENU.base = "base_gamemodemenu"
 
-CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/addons")
-CLGAMEMODEMENU.title = "menu_addons_title"
-CLGAMEMODEMENU.description = "menu_addons_description"
-CLGAMEMODEMENU.priority = 100
+CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/gameplay")
+CLGAMEMODEMENU.title = "menu_gameplay_title"
+CLGAMEMODEMENU.description = "menu_gameplay_description"
+CLGAMEMODEMENU.priority = 95
