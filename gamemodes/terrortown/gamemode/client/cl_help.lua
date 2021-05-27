@@ -409,6 +409,11 @@ function HELPSCRN:Unhide()
 	self.menuFrame:ShowFrame()
 end
 
+---
+-- Checks whether there is a valid menu frame object to see if the menu is visible.
+-- @note This also returns true if the menu is hidden but not destroyed (e.g. while using the HUD editor).
+-- @return boolean Returns true if the menu is visible
+-- @realm client
 function HELPSCRN:IsVisible()
 	return IsValid(self.menuFrame)
 end
