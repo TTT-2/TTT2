@@ -1055,7 +1055,7 @@ L.submenu_gameplay_general_title = "General"
 L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
 L.submenu_administration_hud_title = "HUD Settings"
-L.submenu_administration_random_shop_title = "Random Shop"
+L.submenu_administration_randomshop_title = "Random Shop"
 
 L.help_color_desc = "If this setting is enabled, you can choose a global color that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, VGUI and TargetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"

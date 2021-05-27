@@ -146,6 +146,6 @@ HELPSCRN.subPopulate["ttt2_administration"] = function(helpData, id)
 
 	local shopData = helpData:PopulateSubMenu(id .. "_random_shop")
 
-	shopData:SetTitle("submenu_administration_random_shop_title")
+	shopData:SetTitle("submenu_administration_randomshop_title")
 	shopData:PopulatePanel(PopulateRandomShopPanel)
 end

@@ -1054,7 +1054,7 @@ L.submenu_gameplay_general_title = "Allgemein"
 L.submenu_gameplay_avoidroles_title = "Vermeide Rollen"
 
 L.submenu_administration_hud_title = "HUD Einstellungen"
-L.submenu_administration_random_shop_title = "Zufälliger Shop"
+L.submenu_administration_randomshop_title = "Zufälliger Shop"
 
 L.help_color_desc = "Wenn diese Einstellung aktiviert ist, kann eine globale Farbe ausgesucht werden, die für targetID Umrandung und das Fadenkreuz verwendet wird."
 L.help_scale_factor = "Dieser Skalierungsfaktor beeinflusst alle UI Elmente (HUD, VGUI, targetID). Er wird automatisch aktualisiert, wenn die Auflösung sich ändert. Das Ändern dieses Wertes setzt das HUD zurück!"

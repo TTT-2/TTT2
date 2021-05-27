@@ -1065,7 +1065,7 @@ L.submenu_gameplay_general_title = "基本設定"
 L.submenu_gameplay_avoidroles_title = "役職設定"
 
 L.submenu_administration_hud_title = "HUD設定"
-L.submenu_administration_random_shop_title = "ランダムショップ"
+L.submenu_administration_randomshop_title = "ランダムショップ"
 
 L.help_color_desc = "この設定からは、ターゲットのID、アウトラインとクロスヘアに使用されるグローバルカラーを選択できます。"
 L.help_scale_factor = "この倍率は、すべてのUI要素に影響を与えます（例えばHUD、VguiやターゲットID）。画面の解像度が変更されると、自動的に更新されます。この値を変更するとHUDがリセットされます。"

@@ -68,9 +68,6 @@ end
 -- once the classes are set up and inherited from their base, they
 -- are ready to be used, i.e. their submenus can be added
 local function LoadSubmenus(class, path, name)
-	print("menu: " .. name)
-	print("path: " .. path)
-
 	-- do not load the submenu base again
 	if name == "base_gamemodemenu" then return end
 
@@ -85,11 +82,6 @@ local function LoadSubmenus(class, path, name)
 		submenuBase, -- passing through additional menu table for inheritance
 		InitSubmenu -- post inheritance callback
 	)
-
-	print("submenus: XXX")
-	if table.Count(submenus) then
-		PrintTable(submenus)
-	end
 
 	-- transfer mnus into indexed table and sort by priority
 	local submenusIndexed = {}
@@ -131,27 +123,6 @@ end
 table.SortByMember(menusIndexed, "priority")
 
 -- END load help menu classes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- SET UP HELPSCRN AND INCLUDE ADDITIONAL FILES
 HELPSCRN = HELPSCRN or {}
