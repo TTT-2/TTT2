@@ -410,12 +410,12 @@ function HELPSCRN:Unhide()
 end
 
 function HELPSCRN:IsVisible()
-	return IsValid(self.menuFrame) and not self.menuFrame:IsFrameHidden()
+	return IsValid(self.menuFrame)
 end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if HELPSCRN.currentMenuId == MAIN_MENU and HELPSCRN:IsVisible() then
+	if HELPSCRN.currentMenuId == MAIN_MENU and HELPSCRN:IsVisible() and not HELPSCRN.menuFrame:IsFrameHidden() then
 		HELPSCRN.menuFrame:CloseFrame()
 
 		return
