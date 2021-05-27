@@ -34,7 +34,7 @@ local function ShouldInherit(t, base)
 end
 
 -- callback function that is called once the submenu class is loaded
-local function OnSubMenuClassLoaded(class, path, name)
+local function OnSubmenuClassLoaded(class, path, name)
 	class.type = name
 	class.base = class.base or "base_gamemodesubmenu"
 
@@ -42,11 +42,11 @@ local function OnSubMenuClassLoaded(class, path, name)
 end
 
 -- load submenu base from specific folder
-local subMenuBase = classbuilder.BuildFromFolder(
+local submenuBase = classbuilder.BuildFromFolder(
 	"terrortown/menus/gamemode/base_gamemodemenu/",
 	CLIENT_FILE,
 	"CLGAMEMODESUBMENU", -- class scope
-	OnSubMenuClassLoaded, -- on class loaded
+	OnSubmenuClassLoaded, -- on class loaded
 	true, -- should inherit
 	ShouldInherit -- special inheritance check
 )
@@ -60,46 +60,54 @@ local function OnMenuClassLoaded(class, path, name)
 	MsgN("Added TTT2 gamemode menu file: ", path, name)
 end
 
+-- initialize the submenus after they were loaded
+local function InitSubmenu(class, path, name)
+	class:Initialize()
+end
+
 -- once the classes are set up and inherited from their base, they
 -- are ready to be used, i.e. their submenus can be added
-local function LoadSubMenus(class, path, name)
+local function LoadSubmenus(class, path, name)
+	class:Initialize()
+
 	-- do not load the submenu base again
 	if name == "base_gamemodemenu" then return end
 
 	-- now search for submenus in the corresponding folder
-	local subMenus = classbuilder.BuildFromFolder(
+	local submenus = classbuilder.BuildFromFolder(
 		"terrortown/menus/gamemode/" .. name .. "/",
 		CLIENT_FILE,
 		"CLGAMEMODESUBMENU", -- class scope
-		OnSubMenuClassLoaded, -- on class loaded
+		OnSubmenuClassLoaded, -- on class loaded
 		true, -- should inherit
 		ShouldInherit, -- special inheritance check
-		subMenuBase -- passing through additional menu table for inheritance
+		submenuBase, -- passing through additional menu table for inheritance
+		InitSubmenu -- post inheritance callback
 	)
 
 	-- transfer mnus into indexed table and sort by priority
-	local subMenusIndexed = {}
+	local submenusIndexed = {}
 
-	for _, subMenu in pairs(subMenus) do
-		if subMenu.type == "base_gamemodesubmenu" then continue end
+	for _, submenu in pairs(submenus) do
+		if submenu.type == "base_gamemodesubmenu" then continue end
 
-		subMenusIndexed[#subMenusIndexed + 1] = subMenu
+		submenusIndexed[#submenusIndexed + 1] = submenu
 	end
 
-	table.SortByMember(subMenusIndexed, "priority")
+	table.SortByMember(submenusIndexed, "priority")
 
-	class:SetSubMenuTable(subMenusIndexed)
+	class:SetSubmenuTable(submenusIndexed)
 end
 
 local menus = classbuilder.BuildFromFolder(
 	"terrortown/menus/gamemode/",
 	CLIENT_FILE,
 	"CLGAMEMODEMENU", -- class scope
-	OnMenuClassLoaded, -- on class loaded
+	OnMenuClassLoaded, -- on class loaded callback
 	true, -- should inherit
 	ShouldInherit, -- special inheritance check
-	nil,
-	LoadSubMenus
+	nil, -- don't pass through additional classes
+	LoadSubmenus -- post inheritance callback
 )
 
 -- transfer mnus into indexed table and sort by priority
@@ -165,7 +173,7 @@ local function InternalModifyHelpMainMenu(helpData)
 end
 
 -- Populate the sub menues
-local function InternalModifyHelpSubMenu(helpData, menuId)
+local function InternalModifyHelpSubmenu(helpData, menuId)
 	if not HELPSCRN.subPopulate[menuId] then return end
 
 	HELPSCRN.subPopulate[menuId](helpData, menuId)
@@ -207,7 +215,7 @@ local function AddMenuButtons(menuTbl, parent)
 		settingsButton:SetImage(data.iconMat)
 
 		settingsButton.DoClick = function(slf)
-			HELPSCRN:ShowSubMenu(data)
+			HELPSCRN:ShowSubmenu(data)
 		end
 	end
 end
@@ -315,7 +323,7 @@ function HELPSCRN:BuildContentArea()
 
 	---
 	-- @realm client
-	if hook.Run("TTT2OnHelpSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
+	if hook.Run("TTT2OnHelpSubmenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
 	parent:Clear()
 
@@ -351,7 +359,7 @@ end
 -- Opens the help sub screen
 -- @param table data The data of the submenu
 -- @realm client
-function HELPSCRN:ShowSubMenu(data)
+function HELPSCRN:ShowSubmenu(data)
 	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
@@ -400,15 +408,15 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = menuDataHandler.CreateNewHelpSubMenu()
+	local helpData = menuDataHandler.CreateNewHelpSubmenu()
 
 	helpData:BindData(menuTbl)
 
-	InternalModifyHelpSubMenu(helpData, data.id)
+	InternalModifyHelpSubmenu(helpData, data.id)
 
 	---
 	-- @realm client
-	hook.Run("TTT2ModifyHelpSubMenu", helpData, data.id)
+	hook.Run("TTT2ModifyHelpSubmenu", helpData, data.id)
 
 	-- cache reference to last active button
 	local lastActive
@@ -423,7 +431,7 @@ function HELPSCRN:ShowSubMenu(data)
 		for i = 1, #menuTbl do
 			local subData = menuTbl[i]
 
-			local settingsButton = navAreaScrollGrid:Add("DSubMenuButtonTTT2")
+			local settingsButton = navAreaScrollGrid:Add("DSubmenuButtonTTT2")
 			settingsButton:SetSize(widthNavButton, heightNavButton)
 			settingsButton:SetTitle(subData.title or subData.id)
 
@@ -496,7 +504,7 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 -- @param table menuData The menu data of the menu that will be opened
 -- @hook
 -- @realm client
-function GM:TTT2OnHelpSubMenuClear(parent, currentMenuId, lastMenuData, menuData)
+function GM:TTT2OnHelpSubmenuClear(parent, currentMenuId, lastMenuData, menuData)
 
 end
 
@@ -515,6 +523,6 @@ end
 -- @param string menuId The id of the currently opened menu
 -- @hook
 -- @realm client
-function GM:TTT2ModifyHelpSubMenu(helpData, menuId)
+function GM:TTT2ModifyHelpSubmenu(helpData, menuId)
 
 end

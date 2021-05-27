@@ -17,15 +17,25 @@ function CLGAMEMODEMENU:IsAdminMenu()
 	return false
 end
 
-function CLGAMEMODEMENU:GetSubMenus()
+function CLGAMEMODEMENU:GetSubmenus()
 	return self.submenus
 end
 
-function CLGAMEMODEMENU:SetSubMenuTable(submenuTable)
+function CLGAMEMODEMENU:GetSubmenuByName(name)
+	for i = 1, #self.submenus do
+		local submenu = self.submenus[i]
+
+		if submenu.type ~= name then continue end
+
+		return submenu
+	end
+end
+
+function CLGAMEMODEMENU:SetSubmenuTable(submenuTable)
 	self.submenus = submenuTable
 end
 
-function CLGAMEMODEMENU:AddSubMenu(submenu)
+function CLGAMEMODEMENU:AddSubmenu(submenu)
 	self.submenus[#self.submenus + 1] = submenu
 end
 
