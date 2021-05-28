@@ -610,7 +610,7 @@ function SKIN:PaintLabelSpacerTTT2(panel, w, h)
 	local barX2 = textX + widthText + padding
 	local widthBar2 = w - barX2
 
-	colorLine = utilGetChangedColor(colors.default, 170)
+	local colorLine = utilGetChangedColor(colors.default, 170)
 
 	drawBox(barX1, barY1, widthBar1, heightBar, colorLine)
 	drawBox(barX2, barY1, widthBar2, heightBar, colorLine)
