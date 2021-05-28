@@ -146,6 +146,7 @@ local widthNavContent, heightNavContent = 299, 685
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
+local heightAdminSeperator = 50
 
 local function AddMenuButtons(menuTbl, parent, widthMainMenuButton)
 	for i = 1, #menuTbl do
@@ -213,10 +214,12 @@ function HELPSCRN:ShowMainMenu()
 	end
 
 	local rows = math.ceil(#menusNormal / 3) + math.ceil(#menusAdmin / 3)
-	local maxHeight = rows * heightMainMenuButton + (rows - 1) * self.padding + ((#menusAdmin == 0) and 0 or 35)
+	local maxHeight = rows * heightMainMenuButton + (rows - 1) * self.padding + ((#menusAdmin == 0) and 0 or heightAdminSeperator)
 	local heightScroll = height - vskin.GetHeaderHeight() - vskin.GetBorderSize() - 2 * self.padding
 
-	local widthMainMenuButton = (width - 4 * self.padding - (heightScroll < maxHeight and 20 or 0)) / 3
+	local scrollSize = (heightScroll < maxHeight and 20 or 0)
+
+	local widthMainMenuButton = (width - 4 * self.padding - scrollSize) / 3
 
 	AddMenuButtons(menusNormal, dsettings, widthMainMenuButton)
 
@@ -227,7 +230,13 @@ function HELPSCRN:ShowMainMenu()
 	local labelSpacer = dsettings:Add("DLabelTTT2")
 	labelSpacer.OwnLine = true
 	labelSpacer:SetText("label_menu_admin_spacer")
-	labelSpacer:SetSize(w, 35)
+	labelSpacer:SetSize(width - 2 * self.padding - scrollSize, heightAdminSeperator)
+	labelSpacer:SetFont("DermaTTT2TextLarge")
+	labelSpacer.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "LabelSpacerTTT2", slf, w, h)
+
+		return true
+	end
 
 	AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton)
 end

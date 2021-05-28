@@ -596,6 +596,41 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintLabelSpacerTTT2(panel, w, h)
+	local text = TryT(panel:GetText())
+	local font = panel:GetFont()
+
+	local padding = 10
+	local heightBar = 5
+	local barX1 = 0
+	local barY1 = 0.5 * (h - heightBar) + 1
+	local widthBar1 = 20
+	local textX = barX1 + widthBar1 + padding
+	local widthText = drawGetTextSize(text, font)
+	local barX2 = textX + widthText + padding
+	local widthBar2 = w - barX2
+
+	colorLine = utilGetChangedColor(colors.default, 170)
+
+	drawBox(barX1, barY1, widthBar1, heightBar, colorLine)
+	drawBox(barX2, barY1, widthBar2, heightBar, colorLine)
+
+	drawSimpleText(
+		text,
+		font,
+		textX,
+		0.5 * h,
+		utilGetChangedColor(colors.default, 40),
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintLabelTTT2(panel, w, h)
 	drawSimpleText(
 		TryT(panel:GetText()),
