@@ -17,7 +17,7 @@ end
 
 ---
 -- This function is used to populate the button panel of a submenu on open/refresh.
--- @note This function should be overwritten but not not called.
+-- @note This function should be overwritten but not called.
 -- @note @{CLGAMEMODESUBMENU:HasButtonPanel} has to return true to display any button panel at all.
 -- @param Panel parent The parent panel
 -- @internal
