@@ -446,7 +446,7 @@ plymeta.IsDetective = plymeta.GetDetective
 -- @return boolean Returns true if the player has a special role
 -- @realm shared
 function plymeta:HasSpecialRole()
-	return self:GetSubRoleData():IsSpecialRole()
+	return self:GetSubRole() ~= ROLE_INNOCENT
 end
 
 ---

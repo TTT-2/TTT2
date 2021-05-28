@@ -101,15 +101,6 @@ function ROLE:IsBaseRole()
 end
 
 ---
--- Checks whether it is a special @{ROLE}.
--- @note This just returns <code>false</code> if the role is Innocent!
--- @return boolean Returns true if the player has a special role
--- @realm shared
-function ROLE:IsSpecialRole()
-	return self.subrole ~= ROLE_INNOCENT
-end
-
----
 -- Connects a SubRole with its BaseRole
 -- @param ROLE baserole the BaseRole
 -- @deprecated
