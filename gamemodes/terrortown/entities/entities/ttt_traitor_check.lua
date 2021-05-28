@@ -19,12 +19,6 @@ function ENT:KeyValue(key, value)
 	end
 end
 
-local function VectorInside(vec, mins, maxs)
-	return vec.x > mins.x and vec.x < maxs.x
-		and vec.y > mins.y and vec.y < maxs.y
-		and vec.z > mins.z and vec.z < maxs.z
-end
-
 ---
 -- Counts the amount of evil players inside the entity
 -- @param Entity|Player activator The initial cause for the input getting triggered
@@ -43,7 +37,7 @@ function ENT:CountValidPlayers(activator, caller, data)
 		local ply = plys[i]
 
 		-- only count if it is a valid player that is in range
-		if not IsValid(ply) or not ply:Alive() or not VectorInside(ply:GetPos(), mins, maxs) then continue end
+		if not IsValid(ply) or not ply:Alive() or not util.VectorInBounds(ply:GetPos(), mins, maxs) then continue end
 
 		---
 		-- @realm server

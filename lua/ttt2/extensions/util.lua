@@ -475,6 +475,19 @@ function util.IsEvilTeam(team)
 	end
 end
 
+---
+-- Checks whether a given vector is in bounds of the two other vectors.
+-- @param Vector vec The vector that is checked
+-- @param Vector lowerBound The lower bound vector
+-- @param Vector upperBound The upper bound vector
+-- @return boolean Returns true if the vector is bounded
+-- @realm shared
+function util.VectorInBounds(vec, lowerBound, upperBound)
+	return vec.x > lowerBound.x and vec.x < upperBound.x
+		and vec.y > lowerBound.y and vec.y < upperBound.y
+		and vec.z > lowerBound.z and vec.z < upperBound.z
+end
+
 if CLIENT then
 	local colorsHealth = {
 		healthy = Color(0, 255, 0, 255),
