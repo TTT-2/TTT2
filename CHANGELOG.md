@@ -28,6 +28,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed silent Footsteps, while crouched bhopping
 - Fixed issue where base innocents could bypass the TTT2AvoidGeneralChat and TTT2AvoidTeamChat hooks with the team chat key
 - Fixed issue where roles with unknownTeam could see messages sent with the team chat key
+- Fixed the admin section label not being visible in the main menu
+- Fixed the auto resizing of the buttons based on the availability of a scrollbar not working
 
 ### Changed
 
@@ -38,6 +40,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed `bees` win to `nones` win
 - Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)
 - Shopeditor settings are now available in the F1 Menu
+- Moved the F1 menu generating system from a hook based system to a file based system
+  - removed the hooks `TTT2ModifyHelpMainMenu` and `TTT2ModifyHelpSubMenu`
+  - menus are now generated based on files located in `lua/terrortown/menus/gamemode/`
+  - submenus are generated from files located in folders with the menu name
+- Menus without content are now always hidden in the main menu
 
 ### Breaking Changes
 
