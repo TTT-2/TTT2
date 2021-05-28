@@ -148,12 +148,12 @@ local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
 local heightAdminSeperator = 50
 
-local function AddMenuButtons(menuTbl, parent, widthMainMenuButton)
+local function AddMenuButtons(menuTbl, parent, widthButton, heightButton)
 	for i = 1, #menuTbl do
 		local menuClass = menuTbl[i]
 
 		local settingsButton = parent:Add("DMenuButtonTTT2")
-		settingsButton:SetSize(widthMainMenuButton, heightMainMenuButton)
+		settingsButton:SetSize(widthButton, heightButton)
 		settingsButton:SetTitle(menuClass.title or menuClass.type)
 		settingsButton:SetDescription(menuClass.description)
 		settingsButton:SetImage(menuClass.icon)
@@ -221,7 +221,7 @@ function HELPSCRN:ShowMainMenu()
 
 	local widthMainMenuButton = (width - 4 * self.padding - scrollSize) / 3
 
-	AddMenuButtons(menusNormal, dsettings, widthMainMenuButton)
+	AddMenuButtons(menusNormal, dsettings, widthMainMenuButton, heightMainMenuButton)
 
 	-- only show admin section if player is admin and
 	-- there are menues to be shown
@@ -238,7 +238,7 @@ function HELPSCRN:ShowMainMenu()
 		return true
 	end
 
-	AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton)
+	AddMenuButtons(menusAdmin, dsettings, widthMainMenuButton, heightMainMenuButton)
 end
 
 ---
