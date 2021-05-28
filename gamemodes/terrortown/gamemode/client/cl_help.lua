@@ -364,7 +364,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
 	contentArea:Dock(TOP)
 
 	-- GENERATE MENU CONTENT
-	local subMenuClasses = menuClass:GetSubmenus()
+	local subMenuClasses = menuClass:GetVisibleSubmenus()
 
 	-- cache reference to last active button
 	local lastActive

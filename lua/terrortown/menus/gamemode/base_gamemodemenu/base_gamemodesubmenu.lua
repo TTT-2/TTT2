@@ -44,3 +44,13 @@ end
 function CLGAMEMODESUBMENU:Initialize()
 
 end
+
+---
+-- Used to define whether this submenu should be shown at all.
+-- @note This function should be overwritten but not not called.
+-- @return[default=true] Returns true if this submenu should be visible
+-- @internal
+-- @realm client
+function CLGAMEMODESUBMENU:ShouldShow()
+	return true
+end

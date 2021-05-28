@@ -13,6 +13,7 @@ CLGAMEMODEMENU.submenus = {}
 -- Used to define whether a menu should be shown at all. By default this
 -- excludes admin menus for non admin players and menus without any content.
 -- @note This function should be overwritten but not not called.
+-- @return boolean Returns true if this menu should be visible
 -- @internal
 -- @realm client
 function CLGAMEMODEMENU:ShouldShow()
@@ -20,7 +21,37 @@ function CLGAMEMODEMENU:ShouldShow()
 		return false
 	end
 
-	return #self:GetSubmenus() > 0
+	return self:HasVisibleSubmenus()
+end
+
+---
+-- Checks if this menu has any visible submenus. They are visible if they are
+-- registered and @{CLGAMEMODEMENU:ShouldShow()} returns true.
+-- @return boolean Returns true if there is at least one visible submenu
+-- @realm client
+function CLGAMEMODEMENU:HasVisibleSubmenus()
+	return #self:GetVisibleSubmenus() > 0
+end
+
+---
+-- Returns a table with references to all registered and visible submenu classes
+-- of this menu. They are visible if they are registered and
+-- @{CLGAMEMODEMENU:ShouldShow()} returns true.
+-- @return table Returns a table of all registered and visible submenus
+-- @realm client
+function CLGAMEMODEMENU:GetVisibleSubmenus()
+	local visibleSubmenus = {}
+	local allSubmenus = self:GetSubmenus()
+
+	for i = 1, #allSubmenus do
+		local submenu = allSubmenus[i]
+
+		if not submenu:ShouldShow() then continue end
+
+		visibleSubmenus[#visibleSubmenus + 1] = submenu
+	end
+
+	return visibleSubmenus
 end
 
 ---
