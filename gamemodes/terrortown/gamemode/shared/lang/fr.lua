@@ -1065,7 +1065,7 @@ L.submenu_gameplay_general_title = "Général"
 L.submenu_gameplay_avoidroles_title = "Blacklistage de rôle"
 
 L.submenu_administration_hud_title = "Paramètres HUD"
-L.submenu_administration_random_shop = "Shop Aléatoire"
+L.submenu_administration_randomshop_title = "Shop Aléatoire"
 
 L.help_color_desc = "Si ce paramètre est activé, il est possible de choisir une couleur qui sera utilisée pour le contour du targetID et du réticule."
 L.help_scale_factor = "L'échelle influence tous les éléments de l'UI (HUD, vgui et targetID). Il est automatiquement mis à jour si la résolution de l'écran est modifiée. La modification de cette valeur entraîne la réinitialisation du HUD!"

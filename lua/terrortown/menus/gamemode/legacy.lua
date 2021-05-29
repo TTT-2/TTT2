@@ -1,4 +1,8 @@
-local materialIcon = Material("vgui/ttt/vskin/helpscreen/legacy")
+--- @ignore
+
+local tableCopy = table.Copy
+
+local virtualSubmenus = {}
 
 -- THIS IS A HACKY WORKAROUND TO KEEP SUPPORT FOR OLD TTT ADDONS
 -- The problem that is solved here is, that children get removed
@@ -81,41 +85,34 @@ local function CheckForLegacyTabs()
 	return amount > 0
 end
 
-HELPSCRN.populate["ttt2_legacy"] = function(helpData, id)
+CLGAMEMODEMENU.base = "base_gamemodemenu"
+
+CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/legacy")
+CLGAMEMODEMENU.title = "menu_legacy_title"
+CLGAMEMODEMENU.description = "menu_legacy_description"
+CLGAMEMODEMENU.priority = 94
+
+function CLGAMEMODEMENU:Initialize()
+	-- add "virtual" submenus that are treated as real one even without files
+
 	if not CheckForLegacyTabs() then return end
 
 	-- register legacy tab cache
 	RegisterLegacyTabCache()
 
-	-- there is at least one item, use this
-	local bindingsData = helpData:RegisterSubMenu(id)
-
-	bindingsData:SetTitle("menu_legacy_title")
-	bindingsData:SetDescription("menu_legacy_description")
-	bindingsData:SetIcon(materialIcon)
-end
-
-HELPSCRN.subPopulate["ttt2_legacy"] = function(helpData, id)
 	local legacyTabs = GetLegacyTabs()
+	local legacyMenuBase = self:GetSubmenuByName("base_legacy")
 
 	for i = 1, #legacyTabs do
 		local legacyTab = legacyTabs[i]
-		local name = legacyTab.name
-		local panel = legacyTab.panel
 
-		local convertedTab = helpData:PopulateSubMenu(id .. "_" .. name)
-
-		convertedTab:SetTitle(name)
-		convertedTab:PopulatePanel(function(parent)
-			local psizeX, psizeY = parent:GetSize()
-			local ppadLeft, _, ppadRight, _ = parent:GetDockPadding()
-
-			panel:SetParent(parent)
-			panel:SetSize(
-				psizeX - ppadLeft - ppadRight,
-				psizeY - 2 * HELPSCRN.padding
-			)
-			panel:Dock(FILL)
-		end)
+		virtualSubmenus[i] = tableCopy(legacyMenuBase)
+		virtualSubmenus[i].title = legacyTab.name
+		virtualSubmenus[i].panel = legacyTab.panel
 	end
+end
+
+-- overwrite the normal submenu function to return our custom virtual submenus
+function CLGAMEMODEMENU:GetSubmenus()
+	return virtualSubmenus
 end
