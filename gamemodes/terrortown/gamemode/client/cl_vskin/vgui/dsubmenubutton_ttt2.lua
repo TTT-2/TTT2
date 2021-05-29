@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DSubMenuButtonTTT2
+-- @section DSubmenuButtonTTT2
 
 local PANEL = {}
 
@@ -134,4 +134,4 @@ function PANEL:SizeToContents()
 	self:SetSize(w + 8, h + 4)
 end
 
-derma.DefineControl("DSubMenuButtonTTT2", "A standard Button", PANEL, "DLabel")
+derma.DefineControl("DSubmenuButtonTTT2", "A standard Button", PANEL, "DLabel")

@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/vskin/helpscreen/bindings")
+--- @ignore
 
 local function AddBindingCategory(category, parent)
 	local client = LocalPlayer()
@@ -47,23 +47,15 @@ local function AddBindingCategory(category, parent)
 	end
 end
 
-HELPSCRN.populate["ttt2_bindings"] = function(helpData, id)
-	local bindingsData = helpData:RegisterSubMenu(id)
+CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-	bindingsData:SetTitle("menu_bindings_title")
-	bindingsData:SetDescription("menu_bindings_description")
-	bindingsData:SetIcon(materialIcon)
-end
+CLGAMEMODESUBMENU.priority = 100
+CLGAMEMODESUBMENU.title = "submenu_bindings_bindings_title"
 
-HELPSCRN.subPopulate["ttt2_bindings"] = function(helpData, id)
-	local bindingsData = helpData:PopulateSubMenu(id .. "_bindings")
+function CLGAMEMODESUBMENU:Populate(parent)
+	local categories = bind.GetSettingsBindingsCategories()
 
-	bindingsData:SetTitle("submenu_bindings_bindings_title")
-	bindingsData:PopulatePanel(function(parent)
-		local categories = bind.GetSettingsBindingsCategories()
-
-		for i = 1, #categories do
-			AddBindingCategory(categories[i], parent)
-		end
-	end)
+	for i = 1, #categories do
+		AddBindingCategory(categories[i], parent)
+	end
 end
