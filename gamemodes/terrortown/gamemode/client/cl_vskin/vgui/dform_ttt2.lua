@@ -474,6 +474,20 @@ function PANEL:MakeColorMixer(data)
 	return right, left
 end
 
+-- Adds a panel to the form
+-- @return Panel The created panel
+-- @realm client
+function PANEL:MakePanel()
+	local panel = vgui.Create("DPanelTTT2", self)
+
+	--panel:Dock(TOP)
+	--panel:DockPadding(10, 10, 10, 10)
+
+	self:AddItem(panel)
+
+	return panel
+end
+
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 
 -- SIMPLE WRAPPER FUNCTION

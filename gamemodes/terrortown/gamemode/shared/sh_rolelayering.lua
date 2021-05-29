@@ -1,28 +1,31 @@
 --- @ignore
 -- @author Alf21
 
-local function SendLayersData(layerTbl)
-	local layerTblSize = #layerTbl
+rolelayering = {}
 
-	net.WriteUInt(layerTblSize, ROLE_BITS) -- can't be greater than the maximum amount of roles
+local function SendLayerData(layerTable)
+	local layerTableSize = #layerTable
 
-	for i = 1, layerTblSize do
-		local currentLayer = layerTbl[i]
+	net.WriteUInt(layerTableSize, ROLE_BITS)
+
+	for i = 1, layerTableSize do
+		local currentLayer = layerTable[i]
 		local layerDepth = #currentLayer
 
-		net.WriteUInt(layerDepth, ROLE_BITS) -- can't be greater than the maximum amount of roles
+		net.WriteUInt(layerDepth, ROLE_BITS)
 
 		for cDepth = 1, layerDepth do
-			net.WriteUInt(currentLayer[cDepth], ROLE_BITS) -- the role's index
+			-- the role's index
+			net.WriteUInt(currentLayer[cDepth], ROLE_BITS)
 		end
 	end
 end
 
-local function ReadLayersData()
-	local layerTbl = {}
-	local layerTblSize = net.ReadUInt(ROLE_BITS)
+local function ReadLayerData()
+	local layerTable = {}
+	local layerTableSize = net.ReadUInt(ROLE_BITS)
 
-	for i = 1, layerTblSize do
+	for i = 1, layerTableSize do
 		local currentLayer = {}
 		local layerDepth = net.ReadUInt(ROLE_BITS)
 
@@ -30,11 +33,163 @@ local function ReadLayersData()
 			currentLayer[cDepth] = net.ReadUInt(ROLE_BITS)
 		end
 
-		layerTbl[i] = currentLayer
+		layerTable[i] = currentLayer
 	end
 
-	return layerTbl
+	return layerTable
 end
+
+function rolelayering.GetLayerableBaserolesWithSubroles()
+	local availableBaseRolesTable = {}
+	local availableSubRolesTable = {}
+	local availableBaseRolesAmount = 0
+
+	local roleList = roles.GetList()
+
+	for i = 1, #roleList do
+		local roleData = roleList[i]
+
+		-- if the role was created with the intention of never getting selected without any special fulfilled condition, it should be excluded from the layering.
+		-- here, we don't care about server settings like whether all special roles were deactivated or similar things. Unselectable roles (because of server-related settings)
+		-- are automatically excluded in the selection process
+		-- But we could gray the roles that aren't selectable because of server settings, to simplify the layering process?
+		if roleData.notSelectable then continue end
+
+		if not roleData:IsBaseRole() then
+			local baserole = roleData:GetBaseRole()
+
+			availableSubRolesTable[baserole] = availableSubRolesTable[baserole] or {}
+			availableSubRolesTable[baserole][#availableSubRolesTable[baserole] + 1] = roleData.index
+		else
+			availableBaseRolesAmount = availableBaseRolesAmount + 1
+
+			availableBaseRolesTable[availableBaseRolesAmount] = roleData.index
+		end
+	end
+
+	-- now get the subroles if there are more than 1 subrole of a related baserole
+	for cBase = 1, availableBaseRolesAmount do
+		local baserole = availableBaseRolesTable[cBase]
+		local currentSubrolesTable = availableSubRolesTable[baserole]
+
+		if currentSubrolesTable == nil or #currentSubrolesTable < 2 then -- related subroles table
+			availableSubRolesTable[baserole] = nil -- reset if not enough related subroles so a layer wouldn't make any sense
+		end
+	end
+
+	-- all selectable baseroles, all selectable subroles with related baseroles
+	return availableBaseRolesTable, availableSubRolesTable
+end
+
+if SERVER then
+	util.AddNetworkString("TTT2SyncRolelayerData")
+
+	net.Receive("TTT2SyncRolelayerData", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		-- ROLE_NONE = 3 is reserved and here used to indicate a baserole request. If a valid baserole is given, the
+		-- subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+
+		-- requests are only sent back to the player, data updates are broadcasted
+		local isDataUpdated = net.ReadBit() == 1
+
+		-- read the table the client requested
+		local requestedRoleTable = net.ReadUInt(ROLE_BITS)
+
+		-- define a table of receivers for the netmessage
+		local receiverTable
+
+		if isDataUpdated then
+			if requestedRoleTable == ROLE_NONE then
+				roleselection.baseroleLayers = ReadLayerData()
+			else
+				roleselection.subroleLayers[requestedRoleTable] = ReadLayerData()
+			end
+
+			roleselection.SaveLayers()
+
+			-- send back to everyone but the person updating the data
+			local plys = player.GetAll()
+
+			for i = 1, #plys do
+				local p = plys[i]
+
+				if p == ply then continue end
+
+				receiverTable[#receiverTable + 1] = ply
+			end
+		else
+			receiverTable = {ply}
+		end
+
+		-- always send back data to the clients if something happened
+		local layerTable
+
+		if requestedRoleTable == ROLE_NONE then
+			layerTable = roleselection.baseroleLayers
+		else
+			layerTable = roleselection.subroleLayers[requestedRoleTable]
+		end
+
+		net.Start("TTT2SyncRolelayerData")
+		net.WriteUInt(requestedRoleTable, ROLE_BITS)
+
+		SendLayerData(layerTable or {})
+
+		net.Send(receiverTable)
+	end)
+end
+
+if CLIENT then
+	function rolelayering.RequestDataFromServer(role)
+		role = role or ROLE_NONE
+
+		net.Start("TTT2SyncRolelayerData")
+		net.WriteBit(0) -- Request data = 0, Send data = 1
+		net.WriteUInt(role, ROLE_BITS)
+		net.SendToServer()
+	end
+
+	net.Receive("TTT2SyncRolelayerData", function()
+		local roleIndex = net.ReadUInt(ROLE_BITS)
+
+		-- get the role-index value-based table and directly convert it into a role-data value-based table
+		local layerTable = ReadLayerData()
+
+		hook.Run("TTT2ReceivedRolelayerData", roleIndex, layerTable)
+	end)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if SERVER then
 	-- networkmessages for layer syncing
@@ -44,31 +199,31 @@ if SERVER then
 		if not IsValid(ply) or not ply:IsAdmin() then return end
 
 		local send = net.ReadBit() == 0
-		local requestedRoleTbl = net.ReadUInt(ROLE_BITS) -- read the table the client requested
+		local requestedRoleTable = net.ReadUInt(ROLE_BITS) -- read the table the client requested
 
 		if send then -- send data to the client
-			local layerTbl
+			local layerTable
 
 			-- ROLE_NONE = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
-			if requestedRoleTbl == ROLE_NONE then
-				layerTbl = roleselection.baseroleLayers
+			if requestedRoleTable == ROLE_NONE then
+				layerTable = roleselection.baseroleLayers
 			else
-				layerTbl = roleselection.subroleLayers[requestedRoleTbl]
+				layerTable = roleselection.subroleLayers[requestedRoleTable]
 			end
 
 			net.Start("TTT2SyncRolesLayer")
 
-			net.WriteUInt(requestedRoleTbl, ROLE_BITS)
+			net.WriteUInt(requestedRoleTable, ROLE_BITS)
 
-			SendLayersData(layerTbl or {})
+			SendLayerData(layerTable or {})
 
 			net.Send(ply)
 		else -- receive data from the client
 			-- ROLE_NONE = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
-			if requestedRoleTbl == ROLE_NONE then
-				roleselection.baseroleLayers = ReadLayersData()
+			if requestedRoleTable == ROLE_NONE then
+				roleselection.baseroleLayers = ReadLayerData()
 			else
-				roleselection.subroleLayers[requestedRoleTbl] = ReadLayersData()
+				roleselection.subroleLayers[requestedRoleTable] = ReadLayerData()
 			end
 
 			roleselection.SaveLayers()
@@ -242,7 +397,7 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
 	if not IsValid(self.senderPnl) then return end
 
-	self.senderPnl.cachedTbl[droppedPnl.subrole] = nil -- remove from sender's cached list
+	self.senderPnl.cachedTable[droppedPnl.subrole] = nil -- remove from sender's cached list
 end
 
 function PANEL:OnModified()
@@ -257,7 +412,7 @@ function PANEL:OnModified()
 
 		if not IsValid(self.senderPnl) then return end
 
-		self.senderPnl.cachedTbl[droppedPnl.subrole] = nil -- remove from sender's cached list
+		self.senderPnl.cachedTable[droppedPnl.subrole] = nil -- remove from sender's cached list
 
 		maxLayers = 1
 	end
@@ -275,10 +430,10 @@ end
 
 function PANEL:GetCurrentLayerDepth(subrole)
 	for layer = 1, #self.layerList do
-		local currentLayerTbl = self.layerList[layer]
+		local currentLayerTable = self.layerList[layer]
 
-		for depth = 1, #currentLayerTbl do
-			if currentLayerTbl[depth] == subrole then
+		for depth = 1, #currentLayerTable do
+			if currentLayerTable[depth] == subrole then
 				return layer, depth
 			end
 		end
@@ -313,10 +468,10 @@ function PANEL:InitRoles(layeredRoles)
 	local maxLayers = #layeredRoles
 
 	for layer = 1, maxLayers do
-		local currentLayerTbl = layeredRoles[layer]
+		local currentLayerTable = layeredRoles[layer]
 
-		for i = 1, #currentLayerTbl do
-			local subrole = currentLayerTbl[i]
+		for i = 1, #currentLayerTable do
+			local subrole = currentLayerTable[i]
 			local roleData = roles.GetByIndex(subrole)
 
 			-- create the role icon
@@ -357,7 +512,7 @@ PANEL = {}
 function PANEL:Init()
 	DHorizontalScroller.Init(self)
 
-	self.cachedTbl = {}
+	self.cachedTable = {}
 	self.m_iPadding = 0
 	self.m_iLeftMargin = 0
 
@@ -407,7 +562,7 @@ function PANEL:OnDragModified()
 	for i = 1, #children do
 		local child = children[i]
 
-		if not self.cachedTbl[child.subrole] then -- missing in the cache, so added
+		if not self.cachedTable[child.subrole] then -- missing in the cache, so added
 			-- remove from layer
 			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.subrole)
 			if dropLayer == nil then continue end -- not contained in layer
@@ -428,13 +583,13 @@ function PANEL:OnDragModified()
 	self.receiverPnl:InvalidateLayout()
 
 	-- update cache
-	self.cachedTbl = {}
+	self.cachedTable = {}
 
 	for i = 1, #children do
 		local child = children[i]
 
-		if not self.cachedTbl[child.subrole] then -- add
-			self.cachedTbl[child.subrole] = true
+		if not self.cachedTable[child.subrole] then -- add
+			self.cachedTable[child.subrole] = true
 		end
 	end
 
@@ -496,8 +651,8 @@ derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DHorizontalScrolle
 
 
 local function GetLayerableBaserolesWithSubroles()
-	local availableBaseRolesTbl = {}
-	local availableSubRolesTbl = {}
+	local availableBaseRolesTable = {}
+	local availableSubRolesTable = {}
 	local availableBaseRolesAmount = 0
 
 	local roleList = roles.GetList()
@@ -514,27 +669,27 @@ local function GetLayerableBaserolesWithSubroles()
 		if not roleData:IsBaseRole() then
 			local baserole = roleData:GetBaseRole()
 
-			availableSubRolesTbl[baserole] = availableSubRolesTbl[baserole] or {}
-			availableSubRolesTbl[baserole][#availableSubRolesTbl[baserole] + 1] = roleData.index
+			availableSubRolesTable[baserole] = availableSubRolesTable[baserole] or {}
+			availableSubRolesTable[baserole][#availableSubRolesTable[baserole] + 1] = roleData.index
 		else
 			availableBaseRolesAmount = availableBaseRolesAmount + 1
 
-			availableBaseRolesTbl[availableBaseRolesAmount] = roleData.index
+			availableBaseRolesTable[availableBaseRolesAmount] = roleData.index
 		end
 	end
 
 	-- now get the subroles if there are more than 1 subrole of a related baserole
 	for cBase = 1, availableBaseRolesAmount do
-		local baserole = availableBaseRolesTbl[cBase]
-		local currentSubrolesTbl = availableSubRolesTbl[baserole]
+		local baserole = availableBaseRolesTable[cBase]
+		local currentSubrolesTable = availableSubRolesTable[baserole]
 
-		if currentSubrolesTbl == nil or #currentSubrolesTbl < 2 then -- related subroles table
-			availableSubRolesTbl[baserole] = nil -- reset if not enough related subroles so a layer wouldn't make any sense
+		if currentSubrolesTable == nil or #currentSubrolesTable < 2 then -- related subroles table
+			availableSubRolesTable[baserole] = nil -- reset if not enough related subroles so a layer wouldn't make any sense
 		end
 	end
 
 	-- all selectable baseroles, all selectable subroles with related baseroles
-	return availableBaseRolesTbl, availableSubRolesTbl
+	return availableBaseRolesTable, availableSubRolesTable
 end
 
 local function CreateLayer(roleIndex, layers)
@@ -652,7 +807,7 @@ local function CreateLayer(roleIndex, layers)
 
 		net.WriteUInt(roleIndex, ROLE_BITS)
 
-		SendLayersData(layers)
+		SendLayerData(layers)
 
 		net.SendToServer()
 	end
@@ -675,8 +830,8 @@ net.Receive("TTT2SyncRolesLayer", function()
 	local roleIndex = net.ReadUInt(ROLE_BITS)
 
 	-- get the role-index value-based table and directly convert it into a role-data value-based table
-	local layerTbl = ReadLayersData()
+	local layerTable = ReadLayerData()
 
 	-- create the layering DnD-VGUI
-	CreateLayer(roleIndex, layerTbl)
+	CreateLayer(roleIndex, layerTable)
 end)
