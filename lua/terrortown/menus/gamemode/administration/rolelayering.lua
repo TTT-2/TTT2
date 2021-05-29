@@ -91,7 +91,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 
 	local basePanel = menuReference.forms[role]:MakePanel()
 
-	local dragbaseScrollPanel = vgui.Create("DScrollPanel", basePanel)
+	local dragbaseScrollPanel = vgui.Create("DIconLayout", basePanel)
 	dragbaseScrollPanel:Dock(FILL)
 
 	-- modify the canvas
@@ -106,7 +106,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	local draggableRolesBase = vgui.Create("DDragSenderTTT2", basePanel)
 	draggableRolesBase:SetLeftMargin(100)
 	draggableRolesBase:Dock(TOP)
-	draggableRolesBase:SetTall(rowAmount * 64 + (rowAmount + 1) * 5) -- iconsSize (64) + 2 * padding (5)
+	draggableRolesBase:SetTall(rowAmount * 64 + (rowAmount + 1) * 5)
 	draggableRolesBase:SetPadding(5)
 	draggableRolesBase:SetReceiver(canvas)
 
@@ -128,12 +128,12 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		ic:SetTooltip(LANG.TryTranslation(roleData.name))
 		ic:Droppable("layerPanel")
 
-		draggableRolesBase:AddPanel(ic)
+		draggableRolesBase:Add(ic)
 	end
 
 	canvas:SetSender(draggableRolesBase)
 
-	basePanel:SetTall(100)
+	basePanel:SetTall(500)
 
 	print("roles: " .. role)
 	print("ROLE LIST")

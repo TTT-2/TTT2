@@ -24,18 +24,19 @@ function PANEL:SetLeftMargin(leftMargin)
 end
 
 function PANEL:GetDnDs()
-	local dnds = {}
 	local children = self:GetChildren()
+	local validChildren = {}
 
 	for i = 1, #children do
 		local child = children[i]
 
-		if child.subrole then
-			dnds[#dnds + 1] = child
-		end
+		-- not a valid child with a subrole, skip
+		if not child.subrole then continue end
+
+		validChildren[#validChildren + 1] = child
 	end
 
-	return dnds
+	return validChildren
 end
 
 function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)

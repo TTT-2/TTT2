@@ -32,6 +32,11 @@ end
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.subrole)
 
+	print("dopped new element")
+	print(droppedPnl)
+	print(pos)
+	print(closestPnl)
+
 	if dropLayer then
 		-- remove dropped panel from old position
 		table.remove(self.layerList[dropLayer], dropDepth)
@@ -72,6 +77,8 @@ function PANEL:OnModified()
 	-- needed if the first element is dropped from sender's cached list
 	local children = self:GetDnDs()
 	local maxLayers = #self:GetLayers()
+
+	print("on modified receiver")
 
 	if #children == 1 and maxLayers == 0 then
 		local droppedPnl = children[1]
