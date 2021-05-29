@@ -95,7 +95,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	dragbaseScrollPanel:Dock(FILL)
 
 	-- modify the canvas
-	local canvas = dragbaseScrollPanel:Add("DDraggableRolesLayerReceiver")
+	local canvas = dragbaseScrollPanel:Add("DDragReceiverTTT2")
 	canvas:SetLeftMargin(100)
 	canvas:Dock(TOP)
 	canvas:InitRoles(layerTable)
@@ -103,7 +103,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	-- 9 icons per row
 	local rowAmount = math.ceil(#leftRoles / 9)
 
-	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", basePanel)
+	local draggableRolesBase = vgui.Create("DDragSenderTTT2", basePanel)
 	draggableRolesBase:SetLeftMargin(100)
 	draggableRolesBase:Dock(TOP)
 	draggableRolesBase:SetTall(rowAmount * 64 + (rowAmount + 1) * 5) -- iconsSize (64) + 2 * padding (5)

@@ -1,0 +1,127 @@
+---
+-- @class PANEL
+-- @section DDragBaseTTT2
+
+local PANEL = {}
+
+function PANEL:Init()
+	DDragBase.Init(self)
+
+	self:SetDropPos("2468")
+
+	-- set the unique name for the dropable receiver panel
+	self:MakeDroppable("layerPanel")
+
+	self.m_iLeftMargin = 0
+end
+
+function PANEL:GetLeftMargin()
+	return self.m_iLeftMargin
+end
+
+function PANEL:SetLeftMargin(leftMargin)
+	self.m_iLeftMargin = leftMargin
+end
+
+function PANEL:GetDnDs()
+	local dnds = {}
+	local children = self:GetChildren()
+
+	for i = 1, #children do
+		local child = children[i]
+
+		if child.subrole then
+			dnds[#dnds + 1] = child
+		end
+	end
+
+	return dnds
+end
+
+function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
+	local closest = self:GetClosestChild(x, y)
+
+	if not IsValid(closest) then
+		return self:DropAction_Simple(drops, bDoDrop, command, x, y)
+	end
+
+	-- This panel is only meant to be copied from, not editednot
+	if self:GetReadOnly() then return end
+
+	local h = closest:GetTall()
+	local w = closest:GetWide()
+
+	local disty = y - (closest.y + h * 0.5)
+	local distx = x - (closest.x + w * 0.5)
+
+	local drop = 0
+
+	if self.bDropCenter then
+		drop = 5
+	end
+
+	if disty < 0 and self.bDropTop and (drop == 0 or math.abs(disty) > h * 0.1) then
+		drop = 8
+	end
+
+	if disty >= 0 and self.bDropBottom and (drop == 0 or math.abs(disty) > h * 0.1) then
+		drop = 2
+	end
+
+	if distx < 0 and self.bDropLeft and (drop == 0 or math.abs(distx) > w * 0.1) then
+		drop = 4
+	end
+
+	if distx >= 0 and self.bDropRight and (drop == 0 or math.abs(distx) > w * 0.1) then
+		drop = 6
+	end
+
+	self:UpdateDropTarget(drop, closest)
+
+	if table.HasValue(drops, closest) or not bDoDrop and not self:GetUseLiveDrag() or #drops < 1 then return end
+
+	-- This keeps the drop order the same, whether we add it before an object or after
+	if drop == 6 or drop == 2 then
+		drops = table.Reverse(drops)
+	end
+
+	for i = 1, #drops do
+		local v = drops[i]
+
+		-- Don't drop one of our parents onto us because we'll be sucked into a vortex
+		if v:IsOurChild(self) then continue end
+
+		-- Copy the panel if we are told to from the DermaMenu(), or if we are moving from a read only panel to a not read only one.
+		if v.Copy and (command and command == "copy"
+			or (IsValid(v:GetParent()) and v:GetParent().GetReadOnly and v:GetParent():GetReadOnly() and v:GetParent():GetReadOnly() ~= self:GetReadOnly()))
+		then
+			v = v:Copy()
+		end
+
+		v = v:OnDrop(self)
+
+		if drop == 5 then
+			closest:DroppedOn(v)
+		end
+
+		if drop == 8 or drop == 4 then
+			v:SetParent(self)
+			v:MoveToBefore(closest)
+		end
+
+		if drop == 2 or drop == 6 then
+			v:SetParent(self)
+			v:MoveToAfter(closest)
+		end
+
+		self:OnDropped(v, drop, closest)
+	end
+
+	self:OnModified()
+end
+
+function PANEL:OnDropped(droppedPnl, pos, closestPnl)
+
+end
+
+derma.DefineControl("DDragBaseTTT2", "", PANEL, "DDragBase")
