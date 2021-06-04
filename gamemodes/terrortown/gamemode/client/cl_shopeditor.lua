@@ -273,7 +273,7 @@ function ShopEditor.EditItem(item)
 			end
 		end
 
-		ShopEditor.WriteItemData("TTT2SESaveItem", wTable.id, wTable)
+		ShopEditor.WriteItemData("TTT2SESaveItemOld", wTable.id, wTable)
 	end
 
 	frame:MakePopup()
@@ -281,6 +281,11 @@ function ShopEditor.EditItem(item)
 
 	ply.shopeditor_itemframes = frame
 end
+
+-- @deprecated
+net.Receive("TTT2SESaveItemOld", function()
+	ShopEditor.ReadItemDataOld()
+end)
 
 net.Receive("TTT2SESaveItem", function()
 	ShopEditor.ReadItemData()

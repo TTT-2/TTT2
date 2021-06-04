@@ -163,10 +163,27 @@ local function TTT2SESaveItem(len, ply)
 
 	if not item then return end
 
-	ShopEditor.WriteItemData("TTT2SESaveItem", name, item)
+	ShopEditor.WriteItemData("TTT2SESaveItemOld", name, item)
 	sql.Save("ttt2_items", name, item, ShopEditor.savingKeys)
 end
 net.Receive("TTT2SESaveItem", TTT2SESaveItem)
+
+-- @deprecated
+util.AddNetworkString("TTT2SESaveItemOld")
+
+-- @deprecated
+local function TTT2SESaveItemOld(len, ply)
+	if not IsValid(ply) or not ply:IsAdmin() then return end
+
+	local name, item = ShopEditor.ReadItemDataOld()
+
+	if not item then return end
+
+	ShopEditor.WriteItemData("TTT2SESaveItemOld", name, item)
+	sql.Save("ttt2_items", name, item, ShopEditor.savingKeys)
+end
+-- @deprecated
+net.Receive("TTT2SESaveItemOld", TTT2SESaveItemOld)
 
 util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")

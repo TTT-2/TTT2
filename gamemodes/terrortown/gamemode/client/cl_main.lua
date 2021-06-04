@@ -604,7 +604,7 @@ end
 net.Receive("TTT2SyncDBItems", function()
 	if not ShopEditor then return end
 
-	ShopEditor.ReadItemData()
+	ShopEditor.ReadItemDataOld()
 end)
 
 -- server tells us to call this when our LocalPlayer has spawned

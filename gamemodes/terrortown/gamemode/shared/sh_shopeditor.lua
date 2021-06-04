@@ -137,7 +137,8 @@ end
 -- @return string name of the equipment
 -- @return ITEM|Weapon equipment table
 -- @realm shared
-function ShopEditor.ReadItemData()
+-- @deprecated
+function ShopEditor.ReadItemDataOld()
 	local equip, name = GetEquipmentByName(net.ReadString())
 
 	if not equip then
@@ -152,6 +153,31 @@ function ShopEditor.ReadItemData()
 		else
 			equip[key] = net.ReadString()
 		end
+	end
+
+	return name, equip
+end
+
+---
+-- Reads the @{ITEM} or @{Weapon} data from the network
+-- @return string name of the equipment
+-- @return ITEM|Weapon equipment table
+-- @realm shared
+function ShopEditor.ReadItemData()
+	local equip, name = GetEquipmentByName(net.ReadString())
+
+	if not equip then
+		return name
+	end
+
+	local key = net.ReadString()
+	local data = ShopEditor.savingKeys[key]
+	if data.typ == "number" then
+		equip[key] = net.ReadUInt(data.bits or 16)
+	elseif data.typ == "bool" then
+		equip[key] = net.ReadBool()
+	else
+		equip[key] = net.ReadString()
 	end
 
 	return name, equip
