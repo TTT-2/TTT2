@@ -1360,8 +1360,22 @@ L.shopeditor_desc_random_shops = [[Random shops give every player only a limited
 Team shops force all players in one team to have the same set instead of individual ones.
 Rerolling allows you to get a new randomized set of equipment for credits.]]
 L.shopeditor_name_random_shop_items = "Number of random equipments"
-L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with .noRandom. So choose a high enough number or you only get those."
+L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with \"Not Random\". So choose a high enough number or you only get those."
 L.shopeditor_name_random_team_shops = "Enable team shops"
 L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+
+-- 2021-06-04
+L.header_equipment_setup = "Setup Equipment"
+L.header_equipment_value_setup = "Balance Settings"
+
+L.itemeditor_name_not_buyable = "Not Buyable"
+L.itemeditor_desc_not_buyable = [[Not Random Equipment will always be included in the random shop.
+Equipments can be limited to one buy. Either global, team-wise or just for a player themselves.]]
+L.itemeditor_name_not_random = "Not Random"
+L.itemeditor_name_global_limited = "Global limited"
+L.itemeditor_name_team_limited = "Team limited"
+L.itemeditor_name_player_limited = "Player limited"
+L.itemeditor_name_min_players = "Minimum playernumber"
+L.itemeditor_name_credits = "Credits"

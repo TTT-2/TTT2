@@ -4,13 +4,34 @@
 
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
-	credits = {typ = "number", bits = 8, default = 1}, -- from 0 to 255 (2^8 - 1)
-	minPlayers = {typ = "number", bits = 6}, -- from 0 to 63 (2^6 - 1)
-	globalLimited = {typ = "bool"}, -- 0 and 1
-	limited = {typ = "bool"}, -- 0 and 1
-	NoRandom = {typ = "bool"}, -- 0 and 1
-	notBuyable = {typ = "bool"}, -- 0 and 1
-	teamLimited = {typ = "bool"} -- 0 and 1
+	notBuyable = {
+		order = 1, typ = "bool", default = 0,
+		name = "not_buyable", b_desc = true
+	},
+	NoRandom = {
+		order = 2, typ = "bool", default = 0,
+		name = "not_random", b_desc = false
+	},
+	globalLimited = {
+		order = 3, typ = "bool", default = 0,
+		name = "global_limited", b_desc = false
+	},
+	teamLimited = {
+		order = 4, typ = "bool", default = 0,
+		name = "team_limited", b_desc = false
+	},
+	limited = {
+		order = 5, typ = "bool", default = 0,
+		name = "player_limited", b_desc = false
+	},
+	minPlayers = {
+		order = 6, typ = "number", bits = 6, default = 0, min = 0, max = 63,
+		name = "min_players", b_desc = false
+	},
+	credits = {
+		order = 7, typ = "number", bits = 5, default = 1, min = 1, max = 20,
+		name = "credits", b_desc = false
+	}
 }
 
 ShopEditor.cvars = {

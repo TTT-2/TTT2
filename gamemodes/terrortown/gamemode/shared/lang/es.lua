@@ -1364,3 +1364,17 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 --L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 --L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+
+-- 2021-06-04
+--L.header_equipment_setup = "Setup Equipment"
+--L.header_equipment_value_setup = "Balance Settings"
+
+--L.itemeditor_name_not_buyable = "Not Buyable"
+--L.itemeditor_desc_not_buyable = [[Not Random Equipment will always be included in the random shop.
+--Equipments can be limited to one buy. Either global, team-wise or just for a player themselves.]]
+--L.itemeditor_name_not_random = "Not Random"
+--L.itemeditor_name_global_limited = "Global limited"
+--L.itemeditor_name_team_limited = "Team limited"
+--L.itemeditor_name_player_limited = "Player limited"
+--L.itemeditor_name_min_players = "Minimum playernumber"
+--L.itemeditor_name_credits = "Credits"
