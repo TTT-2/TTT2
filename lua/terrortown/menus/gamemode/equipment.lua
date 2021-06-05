@@ -25,8 +25,7 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 	-- Assign all items to a virtual menu
 	local counter = 0
-	for i = 1, #items do
-		local item = items[i]
+	for _, item in ipairs(items) do
 
 		-- Only keep ttt-equipments that are cached
 		if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
@@ -47,7 +46,7 @@ function CLGAMEMODEMENU:TranslateAndSortMenus()
 	end
 
 	-- In a second pass we sort by their translated title
-	table.SortByMember(virtualSubmenus,"title",true)
+	table.SortByMember(virtualSubmenus, "title", true)
 end
 
 -- overwrite the normal submenu function to return our custom virtual submenus
