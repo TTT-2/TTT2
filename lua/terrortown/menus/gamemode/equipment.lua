@@ -40,9 +40,9 @@ function CLGAMEMODEMENU:TranslateAndSortMenus()
 	-- In a first Pass translate all item names and assign them to a title
 	for _, vMenu in ipairs(virtualSubmenus) do
 		local item = vMenu.item
-		local name = item.EquipMenuData and TryT(item.EquipMenuData.name)
+		local name = item.EquipMenuData and item.EquipMenuData.name
 
-		vMenu.title = item.EquipMenuData and name ~= item.EquipMenuData.name and name or TryT(item.PrintName) or item.id or "UNDEFINED"
+		vMenu.title = TryT(name) ~= name and TryT(name) or TryT(item.PrintName) or item.id or "UNDEFINED"
 	end
 
 	-- In a second pass we sort by their translated title
