@@ -5,59 +5,110 @@
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
 	notBuyable = {
-		order = 1, typ = "bool", default = 0,
-		name = "not_buyable", b_desc = true
+		order = 1,
+		typ = "bool",
+		default = 0,
+		name = "not_buyable",
+		b_desc = true
 	},
 	NoRandom = {
-		order = 2, typ = "bool", default = 0,
-		name = "not_random", b_desc = false
+		order = 2,
+		typ = "bool",
+		default = 0,
+		name = "not_random",
+		b_desc = false
 	},
 	globalLimited = {
-		order = 3, typ = "bool", default = 0,
-		name = "global_limited", b_desc = false
+		order = 3,
+		typ = "bool",
+		default = 0,
+		name = "global_limited",
+		b_desc = false
 	},
 	teamLimited = {
-		order = 4, typ = "bool", default = 0,
-		name = "team_limited", b_desc = false
+		order = 4,
+		typ = "bool",
+		default = 0,
+		name = "team_limited",
+		b_desc = false
 	},
 	limited = {
-		order = 5, typ = "bool", default = 0,
-		name = "player_limited", b_desc = false
+		order = 5,
+		typ = "bool",
+		default = 0,
+		name = "player_limited",
+		b_desc = false
 	},
 	minPlayers = {
-		order = 6, typ = "number", bits = 6, default = 0, min = 0, max = 63,
-		name = "min_players", b_desc = false
+		order = 6,
+		typ = "number",
+		bits = 6,
+		default = 0,
+		min = 0,
+		max = 63,
+		name = "min_players",
+		b_desc = false
 	},
 	credits = {
-		order = 7, typ = "number", bits = 5, default = 1, min = 1, max = 20,
-		name = "credits", b_desc = false
+		order = 7,
+		typ = "number",
+		bits = 5,
+		default = 1,
+		min = 1,
+		max = 20,
+		name = "credits",
+		b_desc = false
 	}
 }
 
 ShopEditor.cvars = {
 	ttt2_random_shops = {
-		order = 1, typ = "bool", default = 0,
-		name = "random_shops", b_desc = true
+		order = 1,
+		typ = "bool",
+		default = 0,
+		name = "random_shops",
+		b_desc = true
 	},
 	ttt2_random_shop_items = {
-		order = 2, typ = "number", bits = 6, default = 10, min = 1, max = 60,
-		name = "random_shop_items", b_desc = true
+		order = 2,
+		typ = "number",
+		bits = 6,
+		default = 10,
+		min = 1,
+		max = 60,
+		name = "random_shop_items",
+		b_desc = true
 	},
 	ttt2_random_team_shops = {
-		order = 3, typ = "bool", default = 1,
-		name = "random_team_shops", b_desc = false
+		order = 3,
+		typ = "bool",
+		default = 1,
+		name = "random_team_shops",
+		b_desc = false
 	},
 	ttt2_random_shop_reroll = {
-		order = 4, typ = "bool", default = 1,
-		name = "random_shop_reroll", b_desc = false
+		order = 4,
+		typ = "bool",
+		default = 1,
+		name = "random_shop_reroll",
+		b_desc = false
 	},
 	ttt2_random_shop_reroll_cost = {
-		order = 5, typ = "number", bits = 4, default = 1, min = 0, max = 10,
-		name = "random_shop_reroll_cost", b_desc = false
+		order = 5,
+		typ = "number",
+		bits = 4,
+		default = 1,
+		min = 0,
+		max = 10,
+		name = "random_shop_reroll_cost",
+		b_desc = false
 	},
 	ttt2_random_shop_reroll_per_buy = {
-		order = 6, typ = "bool", default = 0,
-		name = "random_shop_reroll_per_buy", b_desc = false
+		order = 6,
+		typ = "bool",
+		default = 0,
+		name = "random_shop_reroll_per_buy",
+		b_desc = false
 	}
 }
 

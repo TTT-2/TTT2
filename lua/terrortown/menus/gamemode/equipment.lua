@@ -26,7 +26,6 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 	-- Assign all items to a virtual menu
 	local counter = 0
 	for _, item in ipairs(items) do
-
 		-- Only keep ttt-equipments that are cached
 		if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
 		counter = counter + 1
