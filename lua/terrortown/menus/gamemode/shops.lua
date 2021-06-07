@@ -12,6 +12,7 @@ CLGAMEMODEMENU.description = "menu_shops_description"
 CLGAMEMODEMENU.priority = 48
 
 CLGAMEMODEMENU.isInitialized = false
+CLGAMEMODEMENU.roles = nil
 
 function CLGAMEMODEMENU:IsAdminMenu()
 	return true
@@ -21,18 +22,20 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 	-- add "virtual" submenus that are treated as real one even without files
 	virtualSubmenus = {}
 
-	local roles = roles.GetSortedRoles()
+	self.roles = roles.GetSortedRoles()
 	local shopsMenuBase = self:GetSubmenuByName("base_shops")
 
 	local counter = 0
-	for _, roleData in pairs(roles) do
-		if roleData.name == "none" then continue end
+	for _, roleData in pairs(self.roles) do
+
+		if roleData.index == ROLE_NONE then continue end
 		counter = counter + 1
 
 		virtualSubmenus[counter] = tableCopy(shopsMenuBase)
 		virtualSubmenus[counter].title = roleData.name
 		virtualSubmenus[counter].icon = roleData.iconMaterial
 		virtualSubmenus[counter].roleData = roleData
+		virtualSubmenus[counter].roles = self.roles
 	end
 end
 
