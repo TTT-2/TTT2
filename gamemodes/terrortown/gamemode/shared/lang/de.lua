@@ -1369,12 +1369,15 @@ L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach j
 L.header_equipment_setup = "Equipment Einstellungen"
 L.header_equipment_value_setup = "Balance Einstellungen"
 
-L.itemeditor_name_not_buyable = "Nicht kaufbar"
-L.itemeditor_desc_not_buyable = [[Nicht zufälliges Equipment wird im Zufalls-Shop immer enthalten sein.
-Equipments können auf einen Kauf limitiert werden. Entweder Global, im Team oder nur für einen Spieler.]]
-L.itemeditor_name_not_random = "Nicht zufällig"
+L.itemeditor_name_not_buyable = "Equipment kaufbar"
+L.itemeditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
+L.itemeditor_name_not_random = "Immer im Shop verfügbar"
+L.itemeditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
 L.itemeditor_name_global_limited = "Global limitierte Anzahl"
+L.itemeditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
 L.itemeditor_name_team_limited = "Team limitierte Anzahl"
+L.itemeditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
 L.itemeditor_name_player_limited = "Spieler limitierte Anzahl"
+L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
 L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
-L.itemeditor_name_credits = "Kosten"
+L.itemeditor_name_credits = "Kosten in Credits"

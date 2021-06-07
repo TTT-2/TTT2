@@ -9,6 +9,7 @@ ShopEditor.savingKeys = {
 		typ = "bool",
 		default = 0,
 		name = "not_buyable",
+		inverted = true,
 		b_desc = true
 	},
 	NoRandom = {
@@ -16,28 +17,32 @@ ShopEditor.savingKeys = {
 		typ = "bool",
 		default = 0,
 		name = "not_random",
-		b_desc = false
+		inverted = false,
+		b_desc = true
 	},
 	globalLimited = {
 		order = 3,
 		typ = "bool",
 		default = 0,
 		name = "global_limited",
-		b_desc = false
+		inverted = false,
+		b_desc = true
 	},
 	teamLimited = {
 		order = 4,
 		typ = "bool",
 		default = 0,
 		name = "team_limited",
-		b_desc = false
+		inverted = false,
+		b_desc = true
 	},
 	limited = {
 		order = 5,
 		typ = "bool",
 		default = 0,
 		name = "player_limited",
-		b_desc = false
+		inverted = false,
+		b_desc = true
 	},
 	minPlayers = {
 		order = 6,

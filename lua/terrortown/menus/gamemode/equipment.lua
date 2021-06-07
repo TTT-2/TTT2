@@ -25,9 +25,12 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 	-- Assign all items to a virtual menu
 	local counter = 0
-	for _, item in ipairs(items) do
+	for i = 1, #items do
+		local item = items[i]
+
 		-- Only keep ttt-equipments that are cached
 		if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
+
 		counter = counter + 1
 
 		virtualSubmenus[counter] = tableCopy(equipmentMenuBase)
@@ -36,8 +39,9 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 end
 
 function CLGAMEMODEMENU:TranslateAndSortMenus()
-	-- In a first Pass translate all item names and assign them to a title
-	for _, vMenu in ipairs(virtualSubmenus) do
+	-- In a first pass translate all item names and assign them to a title
+	for i = 1, #virtualSubmenus do
+		local vMenu = virtualSubmenus[i]
 		local item = vMenu.item
 		local name = item.EquipMenuData and item.EquipMenuData.name
 
