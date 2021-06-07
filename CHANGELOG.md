@@ -52,6 +52,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
 - Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.
+- Shopeditor function `ShopEditor.ReadItemData()` now only updates one key-parameter. Messages were changed accordingly (`TTT2SESaveItem`,`TTT2SyncDBItems`)
 
 
 ## [v0.8.2b](https://github.com/TTT-2/TTT2/tree/v0.8.2b) (2021-03-25)

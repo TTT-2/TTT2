@@ -147,10 +147,11 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 
 	if not name or not item then return end
 
-	net.Start(messageName)
-	net.WriteString(name)
-
 	for key, data in pairs(ShopEditor.savingKeys) do
+		net.Start(messageName)
+		net.WriteString(name)
+		net.WriteString(key)
+
 		if data.typ == "number" then
 			net.WriteUInt(item[key], data.bits or 16)
 		elseif data.typ == "bool" then
@@ -158,55 +159,29 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 		else
 			net.WriteString(item[key])
 		end
-	end
 
-	if SERVER then
-		local matched = false
+		if SERVER then
+			local matched = false
 
-		for k = 1, #CHANGED_EQUIPMENT do
-			if CHANGED_EQUIPMENT[k][1] ~= name then continue end
+			for k = 1, #CHANGED_EQUIPMENT do
+				if CHANGED_EQUIPMENT[k][1] ~= name then continue end
 
-			matched = true
-		end
+				matched = true
+			end
 
-		if not matched then
-			CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
-		end
+			if not matched then
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
+			end
 
-		if plys then
-			net.Send(plys)
+			if plys then
+				net.Send(plys)
+			else
+				net.Broadcast()
+			end
 		else
-			net.Broadcast()
-		end
-	else
-		net.SendToServer()
-	end
-end
-
----
--- Reads the @{ITEM} or @{Weapon} data from the network
--- @return string name of the equipment
--- @return ITEM|Weapon equipment table
--- @realm shared
--- @deprecated
-function ShopEditor.ReadItemDataOld()
-	local equip, name = GetEquipmentByName(net.ReadString())
-
-	if not equip then
-		return name
-	end
-
-	for key, data in pairs(ShopEditor.savingKeys) do
-		if data.typ == "number" then
-			equip[key] = net.ReadUInt(data.bits or 16)
-		elseif data.typ == "bool" then
-			equip[key] = net.ReadBool()
-		else
-			equip[key] = net.ReadString()
+			net.SendToServer()
 		end
 	end
-
-	return name, equip
 end
 
 ---
