@@ -13,6 +13,7 @@ CLGAMEMODEMENU.priority = 48
 
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil
+CLGAMEMODEMENU.fallback = {}
 
 function CLGAMEMODEMENU:IsAdminMenu()
 	return true
@@ -36,6 +37,7 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 		virtualSubmenus[counter].icon = roleData.iconMaterial
 		virtualSubmenus[counter].roleData = roleData
 		virtualSubmenus[counter].roles = self.roles
+		virtualSubmenus[counter].basemenu = self
 	end
 end
 
