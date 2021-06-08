@@ -1,0 +1,96 @@
+---
+-- @class PANEL
+-- @section DCardTTT2
+
+local PANEL = {}
+
+---
+-- @ignore
+function PANEL:Init()
+	self:SetContentAlignment(5)
+
+	self:SetTall(22)
+	self:SetMouseInputEnabled(true)
+	self:SetKeyboardInputEnabled(true)
+
+	self:SetCursor("hand")
+	self:SetFont("DermaTTT2TextLarge")
+
+	-- remove label and overwrite function
+	self:SetText("")
+	self.SetText = function(slf, text)
+		slf.data.text = text
+	end
+
+	self.data = {
+		title = "",
+		icon = nil,
+		mode = MODE_DEFAULT
+	}
+end
+
+---
+-- @return string
+-- @realm client
+function PANEL:GetText()
+	return self.data.text
+end
+
+function PANEL:SetIcon(icon)
+	self.data.icon = icon
+end
+
+function PANEL:GetIcon()
+	return self.data.icon
+end
+
+function PANEL:SetMode(mode, triggerFunction)
+	if triggerFunction then
+		self:OnModeChanged(self.data.mode or MODE_DEFAULT, mode or MODE_DEFAULT)
+	end
+
+	self.data.mode = mode or MODE_DEFAULT
+end
+
+function PANEL:GetMode()
+	return self.data.mode
+end
+
+function PANEL:OnMouseReleased(keyCode)
+	if keyCode == MOUSE_LEFT then
+		if self:GetMode() == MODE_DEFAULT then
+			self:SetMode(MODE_ADDED, true)
+		elseif self:GetMode() == MODE_INHERIT_REMOVED then
+			self:SetMode(MODE_INHERIT_ADDED, true)
+		end
+	elseif keyCode == MOUSE_RIGHT then
+		if self:GetMode() == MODE_ADDED then
+			self:SetMode(MODE_DEFAULT, true)
+		elseif self:GetMode() == MODE_INHERIT_ADDED then
+			self:SetMode(MODE_INHERIT_REMOVED, true)
+		end
+	end
+
+	self.BaseClass.OnMouseReleased(self, keyCode)
+end
+
+function PANEL:OnModeChanged(oldMode, newMode)
+
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:IsDown()
+	return self.Depressed
+end
+
+---
+-- @ignore
+function PANEL:Paint(w, h)
+	derma.SkinHook("Paint", "CardTTT2", self, w, h)
+
+	return false
+end
+
+derma.DefineControl("DCardTTT2", "A special button used for the shop editor", PANEL, "DLabelTTT2")

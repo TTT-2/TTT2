@@ -67,14 +67,57 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	table.SortByMember(sortedItemList, "shopTitle", true)
 
+	local base = form:MakeCardBase()
+
 	for i = 1, #sortedItemList do
 		local item = sortedItemList[i]
-		form:MakeCheckBox({
+
+		form:MakeCard({
 			label = item.shopTitle,
-			default = false,
-			initial = false,
-			OnChange = function(_, value)
+			icon = item.ttt2_cached_material,
+			initial = MODE_DEFAULT, -- todo: this should be the current mode
+			OnChange = function(_, _, newMode)
+
 			end
-		})
+		}, base)
 	end
+
+
+
+	-- todo remove this
+
+	local form2 = vgui.CreateTTT2Form(parent, "header_shop_linker")
+	local base2 = form2:MakeCardBase()
+
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun")
+	}, base2)
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun")
+	}, base2)
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun")
+	}, base2)
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun")
+	}, base2)
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun"),
+		initial = MODE_ADDED
+	}, base2)
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun"),
+		initial = MODE_INHERIT_ADDED
+	}, base2)
+	form2:MakeCard({
+		label = "Dancegun",
+		icon = Material("vgui/ttt/icon_dancegun"),
+		initial = MODE_INHERIT_REMOVED
+	}, base2)
 end

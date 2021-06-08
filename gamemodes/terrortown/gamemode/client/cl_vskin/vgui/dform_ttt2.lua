@@ -474,6 +474,34 @@ function PANEL:MakeColorMixer(data)
 	return right, left
 end
 
+function PANEL:MakeCardBase()
+	local panel = vgui.Create("DIconLayout", self)
+
+	panel:SetSpaceY(10)
+	panel:SetSpaceX(10)
+
+	self:AddItem(panel)
+
+	return panel
+end
+
+function PANEL:MakeCard(data, base)
+	local card = base:Add("DCardTTT2")
+
+	card:SetSize(238, 78)
+	card:SetIcon(data.icon)
+	card:SetText(data.label)
+	card:SetMode(data.initial)
+
+	card.OnModeChanged = function(slf, oldMode, newMode)
+		if data and isfunction(data.OnChange) then
+			data.OnChange(slf, oldMode, newMode)
+		end
+	end
+
+	return card
+end
+
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 
 -- SIMPLE WRAPPER FUNCTION
