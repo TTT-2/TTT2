@@ -16,6 +16,11 @@ local net = net
 local pairs = pairs
 local IsValid = IsValid
 
+ShopEditor = ShopEditor or {}
+
+-- Contains the basemenu where the linked shops save their data inbetween rebuilds
+ShopEditor.fallbackUI = nil
+
 ---
 -- Returns whether the given equipment is not an @{ITEM} (so whether it's a @{Weapon})
 -- @param ITEM|Weapon item
@@ -675,7 +680,7 @@ end
 
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
-	local fb = net.ReadString()
+	local fallback = net.ReadString()
 
 	-- reset everything
 	Equipment[subrole] = {}
@@ -702,7 +707,7 @@ local function shopFallbackAnsw(len)
 		canBuy[subrole] = nil
 	end
 
-	if fb == SHOP_UNSET then
+	if fallback == SHOP_UNSET then
 		local roleData = roles.GetByIndex(subrole)
 
 		local flbTbl = roleData.fallbackTable
@@ -721,6 +726,13 @@ local function shopFallbackAnsw(len)
 			Equipment[subrole][#Equipment[subrole] + 1] = eq
 		end
 	end
+
+	if ShopEditor.fallbackUI then
+		local roleData = roles.GetByIndex(subrole)
+		ShopEditor.fallbackUI.fallback = ShopEditor.fallbackUI.fallback or {}
+		ShopEditor.fallbackUI.fallback[roleData.name] = fallback
+	end
+
 end
 net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 

@@ -39,4 +39,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		if roleData.index == ROLE_NONE or roleData.index == self.roleData.index then continue end
 		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData, fallback == roleData.name)
 	end
+
+	-- Add all items for custom shop
+	if fallback == self.roleData.name then
+		
+	end
 end

@@ -45,6 +45,7 @@ end
 function CLGAMEMODEMENU:GetSubmenus()
 	if not self.isInitialized then
 		self.isInitialized = true
+		ShopEditor.fallbackUI = self
 
 		self:InitializeVirtualMenus()
 	end
