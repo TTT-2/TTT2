@@ -40,8 +40,41 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData, fallback == roleData.name)
 	end
 
-	-- Add all items for custom shop
-	if fallback == self.roleData.name then
-		
+	-- Add all items for custom shop if selected
+	if fallback ~= self.roleData.name then return end
+
+	local items = ShopEditor.GetEquipmentForRoleAll()
+
+	local counter = 0
+	local sortedItemList = {}
+	for i = 1, #items do
+		local item = items[i]
+
+		-- Only keep ttt-equipments that are cached
+		if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
+
+		counter = counter + 1
+
+		sortedItemList[counter] = item
+	end
+
+	for i = 1, #sortedItemList do
+		local item = sortedItemList[i]
+		local name = item.EquipMenuData and item.EquipMenuData.name
+
+		item.shopTitle = TryT(name) ~= name and TryT(name) or TryT(item.PrintName) or item.id or "UNDEFINED"
+	end
+
+	table.SortByMember(sortedItemList, "shopTitle", true)
+
+	for i = 1, #sortedItemList do
+		local item = sortedItemList[i]
+		form:MakeCheckBox({
+			label = item.shopTitle,
+			default = false,
+			initial = false,
+			OnChange = function(_, value)
+			end
+		})
 	end
 end
