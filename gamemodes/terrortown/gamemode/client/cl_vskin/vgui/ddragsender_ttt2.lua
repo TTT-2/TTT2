@@ -56,17 +56,11 @@ end
 function PANEL:OnModified()
 	if not IsValid(self.receiverPnl) then return end
 
-	print("modified sender")
-
 	local children = self:GetDnDs()
 
 	PrintTable(children)
 	for i = 1, #children do
 		local child = children[i]
-
-		print("child:")
-		print(child)
-		print("subrole: " .. tostring(child.subrole))
 
 		-- already cached, skipping
 		if self.cachedTable[child.subrole] then continue end
@@ -74,16 +68,11 @@ function PANEL:OnModified()
 		-- remove from layer
 		local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.subrole)
 
-		print("dropLayer, dropDepth")
-		print(dropLayer, dropDepth)
 
 		-- not contained in layer
 		if dropLayer == nil then continue end
 
 		local layerList = self.receiverPnl:GetLayers()
-
-		print("layerList")
-		PrintTable(layerList)
 
 		-- remove dropped panel from old position
 		table.remove(layerList[dropLayer], dropDepth)
@@ -93,9 +82,6 @@ function PANEL:OnModified()
 			table.remove(layerList, dropLayer)
 		end
 	end
-
-	print("cached Table1 ----")
-	PrintTable(self.cachedTable)
 
 	-- update receiver
 	self.receiverPnl:OnModified()
@@ -115,16 +101,7 @@ function PANEL:OnModified()
 		end
 	end
 
-	print("cached Table2 ----")
-	PrintTable(self.cachedTable)
-
 	self:InvalidateLayout()
-end
-
-function PANEL:Paint(w, h)
-	draw.Box(0, 0, w, h, COLOR_RED)
-
-	return false
 end
 
 function PANEL:PerformLayout(width, height)

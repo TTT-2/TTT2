@@ -133,10 +133,4 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	end
 
 	dragReceiver:SetSender(dragSender)
-
-	print("roles: " .. role)
-	print("ROLE LIST")
-	PrintTable(roleList or {})
-	print("LEFT ROLES")
-	PrintTable(leftRoles or {})
 end)
