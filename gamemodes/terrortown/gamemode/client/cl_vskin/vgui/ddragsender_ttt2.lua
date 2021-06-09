@@ -10,11 +10,6 @@ function PANEL:Init()
 	self.cachedTable = {}
 	self.m_iPadding = 0
 	self.m_iLeftMargin = 0
-
-	self.m_pLayerLabel = vgui.Create("DLabel", self)
-	self.m_pLayerLabel:SetText("Not\nlayered")
-	self.m_pLayerLabel:SetFont("DermaDefaultBold")
-	self.m_pLayerLabel:SetTall(28)
 end
 
 function PANEL:GetPadding()
@@ -137,8 +132,6 @@ function PANEL:PerformLayout(width, height)
 	end
 
 	self:SetTall((row + 1) * childH + (row + 2) * self.m_iPadding)
-
-	self.m_pLayerLabel:SetPos(5, 0.5 * (h - self.m_pLayerLabel:GetTall()))
 end
 
 function PANEL:OnDropChildCheck(closestChild, direction)
@@ -147,6 +140,14 @@ function PANEL:OnDropChildCheck(closestChild, direction)
 	else
 		return closestChild.subrole ~= nil
 	end
+end
+
+---
+-- @ignore
+function PANEL:Paint(w, h)
+	derma.SkinHook("Paint", "DragSenderTTT2", self, w, h)
+
+	return true
 end
 
 derma.DefineControl("DDragSenderTTT2", "", PANEL, "DDragBaseTTT2")

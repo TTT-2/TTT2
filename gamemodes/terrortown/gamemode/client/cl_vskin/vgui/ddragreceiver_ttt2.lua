@@ -8,31 +8,13 @@ function PANEL:Init()
 	DDragBaseTTT2.Init(self)
 
 	self.layerList = {}
-	self.layerLabels = {}
+	self.layerBoxes = {}
 
 	self.m_iPadding = 5
 end
 
 function PANEL:SetPadding(padding)
 	self.m_iPadding = padding
-end
-
-function PANEL:UpdateLayerLabels(layerCount)
-	for i = 1, layerCount do
-		if self.layerLabels[i] then continue end
-
-		self.layerLabels[i] = vgui.Create("DLabel", self)
-		self.layerLabels[i]:SetText("Layer " .. i)
-		self.layerLabels[i]:SetFont("DermaDefaultBold")
-	end
-
-	if #self.layerLabels <= layerCount then return end
-
-	for i = layerCount + 1, #self.layerLabels do
-		self.layerLabels[i]:Remove()
-
-		self.layerLabels[i] = nil
-	end
 end
 
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
@@ -92,8 +74,6 @@ function PANEL:OnModified()
 
 		layerCount = 1
 	end
-
-	self:UpdateLayerLabels(layerCount)
 end
 
 function PANEL:SetLayers(tbl)
@@ -128,6 +108,8 @@ function PANEL:PerformLayout(width, height)
 
 	local sortedChildren = {}
 
+	self.layerBoxes = {}
+
 	-- pre sort children so the rendering part is easier
 	for i = 1, #children do
 		local child = children[i]
@@ -141,6 +123,8 @@ function PANEL:PerformLayout(width, height)
 		local layerChildren = sortedChildren[i]
 
 		local yRow = y
+
+		y = y + self.m_iPadding
 
 		for k = 1, #layerChildren do
 			local child = layerChildren[k]
@@ -161,7 +145,13 @@ function PANEL:PerformLayout(width, height)
 		x = xStart
 		y = y + (childH + self.m_iPadding)
 
-		self.layerLabels[i]:SetPos(5, yRow + 0.5 * (y - yRow - self.layerLabels[i]:GetTall()))
+		self.layerBoxes[i] = {
+			y = yRow,
+			h = y - yRow,
+			label = yRow + 0.5 * (y - yRow)
+		}
+
+		y = y + self.m_iPadding
 	end
 
 	self:SetTall(y)
@@ -193,8 +183,6 @@ function PANEL:InitRoles(layeredRoles)
 			self:Add(ic)
 		end
 	end
-
-	self:UpdateLayerLabels(layerCount)
 end
 
 function PANEL:SetSender(senderPnl)
@@ -207,6 +195,14 @@ end
 
 function PANEL:OnDropChildCheck(closestChild)
 	return closestChild.subrole ~= nil
+end
+
+---
+-- @ignore
+function PANEL:Paint(w, h)
+	derma.SkinHook("Paint", "DragReceiverTTT2", self, w, h)
+
+	return true
 end
 
 derma.DefineControl("DDragReceiverTTT2", "", PANEL, "DDragBaseTTT2")
