@@ -695,6 +695,9 @@ end
 function PANEL:ScrollPlayerVolume(delta)
 	local ply = self:GetPlayer()
 
+	-- Bots return nil for the steamid64 on the client, so we need to improvise a bit
+	local identifier = ply:IsBot() and ply:Nick() or ply:SteamID64()
+
 	local cur_volume = ply:GetVoiceVolumeScale()
 	cur_volume = cur_volume ~= nil and cur_volume or 1
 
@@ -703,14 +706,14 @@ function PANEL:ScrollPlayerVolume(delta)
 
 	ply:SetVoiceVolumeScale(new_volume)
 
+	if self.voice.percentage_frame ~= nil and not self.voice.percentage_frame:IsVisible() then
+		self.voice.percentage_frame:Show()
+	end
+
 	local x, y = input.GetCursorPos()
 	local width = 60
 	local height = 40
 	local padding = 10
-
-	if self.voice.percentage_frame ~= nil and not self.voice.percentage_frame:IsVisible() then
-		self.voice.percentage_frame:Show()
-	end
 
 	-- Frame
 	local frame = self.voice.percentage_frame ~= nil and self.voice.percentage_frame or vgui.Create("DFrame")
@@ -735,20 +738,32 @@ function PANEL:ScrollPlayerVolume(delta)
 
 	self.voice.percentage_frame_label = label
 
-	timer.Remove("ttt_score_close_perc_frame")
+	timer.Remove("ttt_score_close_perc_frame_"..identifier)
 
-	timer.Create("ttt_score_close_perc_frame", 1.5, 1, function()
-		if self.voice.percentage_frame == nil or not self.voice.percentage_frame:IsVisible() then return end
+	timer.Create("ttt_score_close_perc_frame_"..identifier, 1.5, 1, function()
+		if not self.voice and frame ~= nil and frame:IsVisible() then
+			frame:Close()
+			frame = nil
+			return
+		end
+
+		if not self.voice or self.voice.percentage_frame == nil or not self.voice.percentage_frame:IsVisible() then return end
 
 		self.voice.percentage_frame:Hide()
 	end)
 
-	hook.Add("ScoreboardHide", "TTTCloseVolumeFrame", function()
+	hook.Add("ScoreboardHide", "TTTCloseVolumeFrame_"..identifier, function()
+		if not self.voice and frame ~= nil and frame:IsVisible() then
+			frame:Close()
+			frame = nil
+			return
+		end
+
 		if not self.voice or self.voice.percentage_frame == nil or not self.voice.percentage_frame:IsVisible() then return end
 
 		self.voice.percentage_frame:Hide()
 
-		timer.Remove("ttt_score_close_perc_frame")
+		timer.Remove("ttt_score_close_perc_frame_"..identifier)
 	end)
 
 end
