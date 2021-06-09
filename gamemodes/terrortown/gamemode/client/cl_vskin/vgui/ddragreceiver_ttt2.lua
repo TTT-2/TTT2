@@ -9,10 +9,16 @@ function PANEL:Init()
 
 	self.layerList = {}
 	self.layerLabels = {}
+
+	self.m_iPadding = 5
 end
 
-function PANEL:UpdateLayerLabels(maxLayers)
-	for i = 1, maxLayers do
+function PANEL:SetPadding(padding)
+	self.m_iPadding = padding
+end
+
+function PANEL:UpdateLayerLabels(layerCount)
+	for i = 1, layerCount do
 		if self.layerLabels[i] then continue end
 
 		self.layerLabels[i] = vgui.Create("DLabel", self)
@@ -20,9 +26,9 @@ function PANEL:UpdateLayerLabels(maxLayers)
 		self.layerLabels[i]:SetFont("DermaDefaultBold")
 	end
 
-	if #self.layerLabels <= maxLayers then return end
+	if #self.layerLabels <= layerCount then return end
 
-	for i = maxLayers + 1, #self.layerLabels do
+	for i = layerCount + 1, #self.layerLabels do
 		self.layerLabels[i]:Remove()
 
 		self.layerLabels[i] = nil
@@ -76,11 +82,11 @@ end
 function PANEL:OnModified()
 	-- needed if the first element is dropped from sender's cached list
 	local children = self:GetDnDs()
-	local maxLayers = #self:GetLayers()
+	local layerCount = #self:GetLayers()
 
 	print("on modified receiver")
 
-	if #children == 1 and maxLayers == 0 then
+	if #children == 1 and layerCount == 0 then
 		local droppedPnl = children[1]
 
 		-- insert dropped panel into a new layer
@@ -91,10 +97,10 @@ function PANEL:OnModified()
 		-- remove from sender's cached list
 		self.senderPnl.cachedTable[droppedPnl.subrole] = nil
 
-		maxLayers = 1
+		layerCount = 1
 	end
 
-	self:UpdateLayerLabels(maxLayers)
+	self:UpdateLayerLabels(layerCount)
 end
 
 function PANEL:SetLayers(tbl)
@@ -118,33 +124,62 @@ function PANEL:GetCurrentLayerDepth(subrole)
 end
 
 function PANEL:PerformLayout(width, height)
+	local w, h = self:GetSize()
+	local childW, childH = self:GetChildSize()
+
 	local children = self:GetDnDs()
-	local maxLayers = 0
 
+	local xStart = self:GetLeftMargin() + self.m_iPadding
+	local x = xStart
+	local y = self.m_iPadding
+
+	local sortedChildren = {}
+
+	-- pre sort children so the rendering part is easier
 	for i = 1, #children do
-		local v = children[i]
-		local layer, depth = self:GetCurrentLayerDepth(v.subrole)
+		local child = children[i]
+		local layer, depth = self:GetCurrentLayerDepth(child.subrole)
 
-		if maxLayers < layer then
-			maxLayers = layer
+		sortedChildren[layer] = sortedChildren[layer] or {}
+		sortedChildren[layer][depth] = child
+	end
+
+	for i = 1, #sortedChildren do
+		local layerChildren = sortedChildren[i]
+
+		local yRow = y
+
+		for k = 1, #layerChildren do
+			local child = layerChildren[k]
+
+			child:SetPos(x, y)
+
+			-- skip to next row if row is full
+			local xNext = x + child:GetWide() + self.m_iPadding
+
+			if xNext + childW > w and k < #layerChildren then
+				y = y + childH + self.m_iPadding
+				x = xStart
+			else
+				x = xNext
+			end
 		end
 
-		v:SetPos(self:GetLeftMargin() + 5 + (depth - 1) * 69, 5 + (layer - 1) * 69)
+		x = xStart
+		y = y + (childH + self.m_iPadding)
+
+		self.layerLabels[i]:SetPos(5, yRow + 0.5 * (y - yRow - self.layerLabels[i]:GetTall()))
 	end
 
-	for i = 1, #self.layerLabels do
-		self.layerLabels[i]:SetPos(5, 5 + (i - 1) * 69 + 20)
-	end
-
-	self:SetTall(10 + maxLayers * 69)
+	self:SetTall(y)
 end
 
 function PANEL:InitRoles(layeredRoles)
 	self:SetLayers(layeredRoles)
 
-	local maxLayers = #layeredRoles
+	local layerCount = #layeredRoles
 
-	for layer = 1, maxLayers do
+	for layer = 1, layerCount do
 		local currentLayerTable = layeredRoles[layer]
 
 		for i = 1, #currentLayerTable do
@@ -170,7 +205,7 @@ function PANEL:InitRoles(layeredRoles)
 		end
 	end
 
-	self:UpdateLayerLabels(maxLayers)
+	self:UpdateLayerLabels(layerCount)
 end
 
 function PANEL:SetSender(senderPnl)

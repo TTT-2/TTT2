@@ -136,54 +136,40 @@ function PANEL:Paint(w, h)
 end
 
 function PANEL:PerformLayout(width, height)
-	--local canvas = self.pnlCanvas
 	local w, h = self:GetSize()
-
-	--canvas:SetTall(h)
-
-	local x = self:GetLeftMargin() + self.m_iPadding
+	local childW, childH = self:GetChildSize()
 
 	local children = self:GetDnDs()
-	local childrenCount = #children
 
-	for i = 1, childrenCount do
-		local v = children[i]
+	local xStart = self:GetLeftMargin() + self.m_iPadding
+	local x = xStart
+	local row = 0
 
-		if not IsValid(v) or not v:IsVisible() then continue end
+	for i = 1, #children do
+		local child = children[i]
 
-		v:SetPos(x, self.m_iPadding)
-		v:SetTall(h - self.m_iPadding * 2)
+		if not IsValid(child) or not child:IsVisible() then continue end
 
-		if isfunction(v.ApplySchemeSettings) then
-			v:ApplySchemeSettings()
+		child:SetPos(x, self.m_iPadding + row * (childH + self.m_iPadding))
+
+		if isfunction(child.ApplySchemeSettings) then
+			child:ApplySchemeSettings()
 		end
 
-		--x = x + v:GetWide() - self.m_iOverlap + self.m_iPadding
-		x = x + v:GetWide() + self.m_iPadding
+		-- skip to next row if row is full
+		local xNext = x + child:GetWide() + self.m_iPadding
+
+		if xNext + childW > w and i < #children then
+			row = row + 1
+			x = xStart
+		else
+			x = xNext
+		end
 	end
 
-	--canvas:SetWide(math.max(x + self.m_iOverlap, w))
+	self:SetTall((row + 1) * childH + (row + 2) * self.m_iPadding)
 
-	--if w < canvas:GetWide() then
-	--	self.OffsetX = math.Clamp(self.OffsetX, 0, canvas:GetWide() - self:GetWide())
-	--else
-	--	self.OffsetX = 0
-	--end
---
-	--canvas.x = self.OffsetX * -1
-
-	--self.btnLeft:SetSize(15, 15)
-	--self.btnLeft:AlignLeft(4)
-	--self.btnLeft:AlignBottom(5)
-
-	--self.btnRight:SetSize(15, 15)
-	--self.btnRight:AlignRight(4)
-	--self.btnRight:AlignBottom(5)
-
-	--self.btnLeft:SetVisible(canvas.x < 0)
-	--self.btnRight:SetVisible(canvas.x + canvas:GetWide() > self:GetWide())
-
-	self.m_pLayerLabel:SetPos(5, 25)
+	self.m_pLayerLabel:SetPos(5, 0.5 * (h - self.m_pLayerLabel:GetTall()))
 end
 
 function PANEL:OnDropChildCheck(closestChild, direction)
@@ -194,5 +180,4 @@ function PANEL:OnDropChildCheck(closestChild, direction)
 	end
 end
 
--- .Panels in DHorizontalScroller seems to be useless
 derma.DefineControl("DDragSenderTTT2", "", PANEL, "DDragBaseTTT2")

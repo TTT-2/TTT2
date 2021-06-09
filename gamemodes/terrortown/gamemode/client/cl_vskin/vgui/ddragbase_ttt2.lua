@@ -15,6 +15,15 @@ function PANEL:Init()
 	self.m_iLeftMargin = 0
 end
 
+function PANEL:SetChildSize(w, h)
+	self.childW = w
+	self.childH = h
+end
+
+function PANEL:GetChildSize()
+	return self.childW or 64, self.childH or 64
+end
+
 function PANEL:GetLeftMargin()
 	return self.m_iLeftMargin
 end
@@ -39,15 +48,8 @@ function PANEL:GetDnDs()
 	return validChildren
 end
 
-function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
+function PANEL:GetDropMode(x, y)
 	local closest = self:GetClosestChild(x, y)
-
-	if not IsValid(closest) then
-		return self:DropAction_Simple(drops, bDoDrop, command, x, y)
-	end
-
-	-- This panel is only meant to be copied from, not edited
-	if self:GetReadOnly() then return end
 
 	local h = closest:GetTall()
 	local w = closest:GetWide()
@@ -76,6 +78,21 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 	if distx >= 0 and self.bDropRight and (drop == 0 or math.abs(distx) > w * 0.1) then
 		drop = 6
 	end
+
+	return drop
+end
+
+function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
+	local closest = self:GetClosestChild(x, y)
+
+	if not IsValid(closest) then
+		return self:DropAction_Simple(drops, bDoDrop, command, x, y)
+	end
+
+	-- This panel is only meant to be copied from, not edited
+	if self:GetReadOnly() then return end
+
+	local drop = self:GetDropMode(x, y)
 
 	if not self:OnDropChildCheck(closest, drop) then return end
 

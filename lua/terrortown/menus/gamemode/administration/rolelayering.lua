@@ -91,16 +91,6 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 
 	local basePanel = menuReference.forms[role]:MakeIconLayout()
 
-	--local dragbaseScrollPanel = basePanel:Add("DPanelTTT2")
-	--dragbaseScrollPanel:Dock(TOP)
-	--dragbaseScrollPanel:SetTall(150)
-	--dragbaseScrollPanel.Paint = function(slf, w, h)
-	--	draw.Box(0,0,w,h,COLOR_BLUE)
-	--end
-
-	--local testpanel = vgui.Create("DIconLayout", dragbaseScrollPanel)
-	--testpanel:Dock(FILL)
-
 	-- 9 icons per row
 	local rowAmount = math.ceil(#leftRoles / 9)
 
