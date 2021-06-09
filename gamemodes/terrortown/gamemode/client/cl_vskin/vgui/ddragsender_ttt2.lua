@@ -65,9 +65,9 @@ function PANEL:OnModified()
 	if not IsValid(self.receiverPnl) then return end
 
 	print("modified sender")
-	
+
 	local children = self:GetDnDs()
-	
+
 	PrintTable(children)
 	for i = 1, #children do
 		local child = children[i]
@@ -186,5 +186,13 @@ function PANEL:PerformLayout(width, height)
 	self.m_pLayerLabel:SetPos(5, 25)
 end
 
+function PANEL:OnDropChildCheck(closestChild, direction)
+	if #self:GetDnDs() == 0 and direction == 6 then
+		return true
+	else
+		return closestChild.subrole ~= nil
+	end
+end
+
 -- .Panels in DHorizontalScroller seems to be useless
-derma.DefineControl("DDragSenderTTT2", "", PANEL, "DIconLayout")
+derma.DefineControl("DDragSenderTTT2", "", PANEL, "DDragBaseTTT2")

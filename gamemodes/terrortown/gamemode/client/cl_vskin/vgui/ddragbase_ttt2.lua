@@ -46,7 +46,7 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 		return self:DropAction_Simple(drops, bDoDrop, command, x, y)
 	end
 
-	-- This panel is only meant to be copied from, not editednot
+	-- This panel is only meant to be copied from, not edited
 	if self:GetReadOnly() then return end
 
 	local h = closest:GetTall()
@@ -76,6 +76,8 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 	if distx >= 0 and self.bDropRight and (drop == 0 or math.abs(distx) > w * 0.1) then
 		drop = 6
 	end
+
+	if not self:OnDropChildCheck(closest, drop) then return end
 
 	self:UpdateDropTarget(drop, closest)
 
@@ -121,8 +123,12 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 	self:OnModified()
 end
 
+function PANEL:OnDropChildCheck(closestChild, direction)
+	return true
+end
+
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
 end
 
-derma.DefineControl("DDragBaseTTT2", "", PANEL, "DDragBase")
+derma.DefineControl("DDragBaseTTT2", "", PANEL, "DIconLayout")

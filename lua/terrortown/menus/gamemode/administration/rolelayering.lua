@@ -89,25 +89,33 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		leftRoles[#leftRoles + 1] = subrole
 	end
 
-	local basePanel = menuReference.forms[role]:MakePanel()
+	local basePanel = menuReference.forms[role]:MakeIconLayout()
 
-	local dragbaseScrollPanel = vgui.Create("DIconLayout", basePanel)
-	dragbaseScrollPanel:Dock(FILL)
+	--local dragbaseScrollPanel = basePanel:Add("DPanelTTT2")
+	--dragbaseScrollPanel:Dock(TOP)
+	--dragbaseScrollPanel:SetTall(150)
+	--dragbaseScrollPanel.Paint = function(slf, w, h)
+	--	draw.Box(0,0,w,h,COLOR_BLUE)
+	--end
 
-	-- modify the canvas
-	local canvas = dragbaseScrollPanel:Add("DDragReceiverTTT2")
-	canvas:SetLeftMargin(100)
-	canvas:Dock(TOP)
-	canvas:InitRoles(layerTable)
+	--local testpanel = vgui.Create("DIconLayout", dragbaseScrollPanel)
+	--testpanel:Dock(FILL)
 
 	-- 9 icons per row
 	local rowAmount = math.ceil(#leftRoles / 9)
 
-	local draggableRolesBase = vgui.Create("DDragSenderTTT2", basePanel)
+	local draggableRolesBase = basePanel:Add("DDragSenderTTT2")
 	draggableRolesBase:SetLeftMargin(100)
 	draggableRolesBase:Dock(TOP)
 	draggableRolesBase:SetTall(rowAmount * 64 + (rowAmount + 1) * 5)
 	draggableRolesBase:SetPadding(5)
+
+	-- modify the canvas
+	local canvas = basePanel:Add("DDragReceiverTTT2")
+	canvas:SetLeftMargin(100)
+	canvas:Dock(TOP)
+	canvas:InitRoles(layerTable)
+
 	draggableRolesBase:SetReceiver(canvas)
 
 	for i = 1, #leftRoles do
@@ -132,8 +140,6 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	end
 
 	canvas:SetSender(draggableRolesBase)
-
-	basePanel:SetTall(500)
 
 	print("roles: " .. role)
 	print("ROLE LIST")

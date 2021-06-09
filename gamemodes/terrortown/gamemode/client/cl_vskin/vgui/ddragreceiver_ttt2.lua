@@ -181,4 +181,8 @@ function PANEL:GetSender()
 	return self.senderPnl
 end
 
+function PANEL:OnDropChildCheck(closestChild)
+	return closestChild.subrole ~= nil
+end
+
 derma.DefineControl("DDragReceiverTTT2", "", PANEL, "DDragBaseTTT2")

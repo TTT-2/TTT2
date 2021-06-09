@@ -488,6 +488,17 @@ function PANEL:MakePanel()
 	return panel
 end
 
+function PANEL:MakeIconLayout(spacing)
+	local panel = vgui.Create("DIconLayout", self)
+
+	panel:SetSpaceY(spacing or 10)
+	panel:SetSpaceX(spacing or 10)
+
+	self:AddItem(panel)
+
+	return panel
+end
+
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 
 -- SIMPLE WRAPPER FUNCTION
