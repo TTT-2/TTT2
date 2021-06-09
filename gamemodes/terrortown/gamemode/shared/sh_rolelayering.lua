@@ -1,4 +1,6 @@
---- @ignore
+---
+-- Rolelayering module that mostly handles the communication between the UI and the server role cole.
+-- @section rolelayering
 -- @author Alf21
 -- @author Mineotopia
 
@@ -40,6 +42,11 @@ local function ReadLayerData()
 	return layerTable
 end
 
+---
+-- A helper function that returns two tables used to structure the UI.
+-- @return table A table with all base roles
+-- @return table A table with roles that have at least two subroles
+-- @realm shared
 function rolelayering.GetLayerableBaserolesWithSubroles()
 	local availableBaseRolesTable = {}
 	local availableSubRolesTable = {}
@@ -148,12 +155,31 @@ if SERVER then
 end
 
 if CLIENT then
+	---
+	-- A helper function to request role layering data from the server for a specific baserole.
+	-- @param[default=ROLE_NONE] number role The role to request the layer table of
+	-- @note The answer triggers @{GM:TTT2ReceivedRolelayerData}
+	-- @realm client
 	function rolelayering.RequestDataFromServer(role)
-		role = role or ROLE_NONE
-
 		net.Start("TTT2SyncRolelayerData")
 		net.WriteBit(0) -- Request data = 0, Send data = 1
-		net.WriteUInt(role, ROLE_BITS)
+		net.WriteUInt(role or ROLE_NONE, ROLE_BITS)
+		net.SendToServer()
+	end
+
+	---
+	-- A helper function to send updated role layers to the server.
+	-- @param[default=ROLE_NONE] number role The role to update the layer table of
+	-- @param table layers The new updated layer table
+	-- @realm client
+	function rolelayering.SendDataToServer(role, layers)
+		net.Start("TTT2SyncRolelayerData")
+		net.WriteBit(1) -- Request data = 0, Send data = 1
+
+		net.WriteUInt(role or ROLE_NONE, ROLE_BITS)
+
+		SendLayerData(layers)
+
 		net.SendToServer()
 	end
 
@@ -163,17 +189,18 @@ if CLIENT then
 		-- get the role-index value-based table and directly convert it into a role-data value-based table
 		local layerTable = ReadLayerData()
 
+		---
+		-- @realm client
 		hook.Run("TTT2ReceivedRolelayerData", roleIndex, layerTable)
 	end)
 
-	function rolelayering.SendDataToServer(roleIndex, layers)
-		net.Start("TTT2SyncRolelayerData")
-		net.WriteBit(1) -- Request data = 0, Send data = 1
+	---
+	-- This hook is called after the server sent a new updated layer table to the client.
+	-- @param number roleIndex The role whose layer table got updated
+	-- @param table layerTable The updated layer table
+	-- @hook
+	-- @realm client
+	function GM:TTT2ReceivedRolelayerData(roleIndex, layerTable)
 
-		net.WriteUInt(roleIndex, ROLE_BITS)
-
-		SendLayerData(layers)
-
-		net.SendToServer()
 	end
 end
