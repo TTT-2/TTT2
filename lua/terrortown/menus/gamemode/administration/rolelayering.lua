@@ -9,28 +9,34 @@ CLGAMEMODESUBMENU.title = "submenu_administration_rolelayering_title"
 -- save the forms indexed by role index here to access from hook
 CLGAMEMODESUBMENU.forms = {}
 
-local menuReference
-
 function CLGAMEMODESUBMENU:Populate(parent)
+	-- first add a tutorial form
+	local form = vgui.CreateTTT2Form(parent, "header_rolelayering_info")
+
+	form:MakeHelp({
+		label = "help_rolelayering_roleselection"
+	})
+
+	form:MakeHelp({
+		label = "help_rolelayering_layers"
+	})
+
 	self.baseroleList, self.subroleList = rolelayering.GetLayerableBaserolesWithSubroles()
 
 	-- clear the form table because there might be old data
 	self.forms = {}
 
-	self.forms[ROLE_NONE] = vgui.CreateTTT2Form(parent, "baserole_layer")
+	self.forms[ROLE_NONE] = vgui.CreateTTT2Form(parent, "header_rolelayering_baserole")
 
 	rolelayering.RequestDataFromServer(ROLE_NONE)
 
 	for subrole in pairs(self.subroleList) do
 		if subrole == roleIndex then continue end
 
-		self.forms[subrole] = vgui.CreateTTT2Form(parent, ParT("header_rolelayering_baserole", {role = TryT(roles.GetByIndex(subrole).name)}))
+		self.forms[subrole] = vgui.CreateTTT2Form(parent, ParT("header_rolelayering_role", {role = TryT(roles.GetByIndex(subrole).name)}))
 
 		rolelayering.RequestDataFromServer(subrole)
 	end
-
-	-- cache the menu reference
-	menuReference = self
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
@@ -52,7 +58,9 @@ end
 -- get reference over vgui handler
 -- check if open menu is the correct menu
 hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, layerTable)
-	if not menuReference then return end
+	local menuReference = HELPSCRN.submenuClass
+
+	if not menuReference or HELPSCRN:GetOpenMenu() ~= "administration_rolelayering" then return end
 
 	local roleList, leftRoles = {}, {}
 
@@ -123,6 +131,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		ic:SetMaterial(roleData.iconMaterial)
 		ic:SetColor(roleData.color)
 		ic:SetTooltip(LANG.TryTranslation(roleData.name))
+		ic:SetTooltipFixedPosition(0, 64)
 
 		ic.subrole = subrole
 

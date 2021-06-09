@@ -1234,8 +1234,6 @@ function SKIN:PaintDragReceiverTTT2(panel, w, h)
 	local colorBox = utilGetChangedColor(colors.background, 20)
 	local colorText = utilGetDefaultColor(colorBox)
 
-	PrintTable(panel.layerBoxes)
-
 	for i = 1, #panel.layerBoxes do
 		local layerBox = panel.layerBoxes[i]
 

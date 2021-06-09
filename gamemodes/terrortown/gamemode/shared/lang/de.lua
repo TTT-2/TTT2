@@ -1368,4 +1368,9 @@ L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach j
 -- 2021-06-09
 L.layering_not_layered = "Ohne Ebene"
 L.layering_layer = "Ebene {layer}"
-L.header_rolelayering_baserole = "{role} Ebene"
+L.header_rolelayering_role = "{role}ebene"
+L.header_rolelayering_baserole = "Grundrollenebene"
+L.submenu_administration_rolelayering_title = "Rollenebenen"
+L.header_rolelayering_info = "Rollenebeneninformationen"
+L.help_rolelayering_roleselection = "Die Rollenverteilung wird in zwei Durchgängen gemacht. Im ersten Durchgag werden die Grundrollen verteilt. Grundrollen sind Unschuldige, Verräter und die, die unten in den Boxen zu sehen sind. Im zweioten Durchgang werden diese Grundrollen dann zu Unterrollen hochgestuft."
+L.help_rolelayering_layers = "Von jeder Ebene wird immer nur eine Rolle ausgewählt. Zuerst werden die numerierten Ebenen durchlaufen, startend bei Ebene 1, bis die letzte Ebene erreicht wird, oder es keine Grundrollen zum Hochstufen mehr gibt. Was auch immer zuerst auftritt. Sind noch hochstufbare Grundrollen am Ende übrig, werden Rollen aus der Gruppe ohne Ebene verwendet."
