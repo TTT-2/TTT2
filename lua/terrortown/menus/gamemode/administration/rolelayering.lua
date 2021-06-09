@@ -31,8 +31,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	rolelayering.RequestDataFromServer(ROLE_NONE)
 
 	for subrole in pairs(self.subroleList) do
-		if subrole == roleIndex then continue end
-
 		self.forms[subrole] = vgui.CreateTTT2Form(parent, ParT("header_rolelayering_role", {role = TryT(roles.GetByIndex(subrole).name)}))
 
 		rolelayering.RequestDataFromServer(subrole)
@@ -45,8 +43,12 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonEditor:SetText("button_reset")
 	buttonEditor:SetSize(100, 45)
 	buttonEditor:SetPos(675, 20)
-	buttonEditor.DoClick = function(btn)
-		--todo
+	buttonEditor.DoClick = function()
+		rolelayering.SendDataToServer(ROLE_NONE, {})
+
+		for subrole in pairs(self.subroleList) do
+			rolelayering.SendDataToServer(subrole, {})
+		end
 	end
 end
 
@@ -54,13 +56,12 @@ function CLGAMEMODESUBMENU:HasButtonPanel()
 	return true
 end
 
--- todo:
--- get reference over vgui handler
--- check if open menu is the correct menu
 hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, layerTable)
 	local menuReference = HELPSCRN.submenuClass
 
 	if not menuReference or HELPSCRN:GetOpenMenu() ~= "administration_rolelayering" then return end
+
+	menuReference.forms[role]:Clear()
 
 	local roleList, leftRoles = {}, {}
 
@@ -102,23 +103,25 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 
 	local basePanel = menuReference.forms[role]:MakeIconLayout()
 
-	-- 9 icons per row
-	local rowAmount = math.ceil(#leftRoles / 9)
-
 	local dragSender = basePanel:Add("DDragSenderTTT2")
-	dragSender:SetLeftMargin(100)
+	dragSender:SetLeftMargin(108)
 	dragSender:Dock(TOP)
-	dragSender:SetTall(rowAmount * 64 + (rowAmount + 1) * 5)
 	dragSender:SetPadding(5)
 	dragSender:MakeDroppable("drop_group_" .. role)
 
 	-- modify the dragReceiver
 	local dragReceiver = basePanel:Add("DDragReceiverTTT2")
-	dragReceiver:SetLeftMargin(100)
+	dragReceiver:SetLeftMargin(108)
 	dragReceiver:Dock(TOP)
 	dragReceiver:SetPadding(5)
 	dragReceiver:MakeDroppable("drop_group_" .. role)
 	dragReceiver:InitRoles(layerTable)
+	dragReceiver.OnLayerUpdated = function(slf)
+		print("layerList:")
+		PrintTable(slf.layerList)
+
+		rolelayering.SendDataToServer(role, slf.layerList)
+	end
 
 	dragSender:SetReceiver(dragReceiver)
 
@@ -130,7 +133,7 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		ic:SetSize(64, 64)
 		ic:SetMaterial(roleData.iconMaterial)
 		ic:SetColor(roleData.color)
-		ic:SetTooltip(LANG.TryTranslation(roleData.name))
+		ic:SetTooltip(roleData.name)
 		ic:SetTooltipFixedPosition(0, 64)
 
 		ic.subrole = subrole

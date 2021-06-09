@@ -56,6 +56,10 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	self.senderPnl.cachedTable[droppedPnl.subrole] = nil
 end
 
+function PANEL:OnLayerUpdated()
+
+end
+
 function PANEL:OnModified()
 	-- needed if the first element is dropped from sender's cached list
 	local children = self:GetDnDs()
@@ -74,6 +78,8 @@ function PANEL:OnModified()
 
 		layerCount = 1
 	end
+
+	self:OnLayerUpdated()
 end
 
 function PANEL:SetLayers(tbl)
@@ -114,6 +120,8 @@ function PANEL:PerformLayout(width, height)
 	for i = 1, #children do
 		local child = children[i]
 		local layer, depth = self:GetCurrentLayerDepth(child.subrole)
+
+		if not layer or not depth then continue end
 
 		sortedChildren[layer] = sortedChildren[layer] or {}
 		sortedChildren[layer][depth] = child
@@ -174,7 +182,8 @@ function PANEL:InitRoles(layeredRoles)
 			ic:SetSize(64, 64)
 			ic:SetMaterial(roleData.iconMaterial)
 			ic:SetColor(roleData.color)
-			ic:SetTooltip(LANG.TryTranslation(roleData.name))
+			ic:SetTooltip(roleData.name)
+			ic:SetTooltipFixedPosition(0, 64)
 
 			ic.subrole = subrole
 

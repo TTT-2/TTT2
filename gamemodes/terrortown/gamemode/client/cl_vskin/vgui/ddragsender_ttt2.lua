@@ -53,7 +53,6 @@ function PANEL:OnModified()
 
 	local children = self:GetDnDs()
 
-	PrintTable(children)
 	for i = 1, #children do
 		local child = children[i]
 

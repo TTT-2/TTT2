@@ -98,26 +98,32 @@ if SERVER then
 		local requestedRoleTable = net.ReadUInt(ROLE_BITS)
 
 		-- define a table of receivers for the netmessage
-		local receiverTable
+		local receiverTable = {}
 
 		if isDataUpdated then
+			local layerData = ReadLayerData()
+
 			if requestedRoleTable == ROLE_NONE then
-				roleselection.baseroleLayers = ReadLayerData()
+				roleselection.baseroleLayers = layerData
 			else
-				roleselection.subroleLayers[requestedRoleTable] = ReadLayerData()
+				roleselection.subroleLayers[requestedRoleTable] = layerData
 			end
 
 			roleselection.SaveLayers()
 
-			-- send back to everyone but the person updating the data
-			local plys = player.GetAll()
+			if #layerData == 0 then -- is a reset
+				receiverTable = player.GetAll()
+			else
+				-- send back to everyone but the person updating the data
+				local plys = player.GetAll()
 
-			for i = 1, #plys do
-				local p = plys[i]
+				for i = 1, #plys do
+					local p = plys[i]
 
-				if p == ply then continue end
+					if p == ply then continue end
 
-				receiverTable[#receiverTable + 1] = ply
+					receiverTable[#receiverTable + 1] = ply
+				end
 			end
 		else
 			receiverTable = {ply}
@@ -159,6 +165,17 @@ if CLIENT then
 
 		hook.Run("TTT2ReceivedRolelayerData", roleIndex, layerTable)
 	end)
+
+	function rolelayering.SendDataToServer(roleIndex, layers)
+		net.Start("TTT2SyncRolelayerData")
+		net.WriteBit(1) -- Request data = 0, Send data = 1
+
+		net.WriteUInt(roleIndex, ROLE_BITS)
+
+		SendLayerData(layers)
+
+		net.SendToServer()
+	end
 end
 
 
