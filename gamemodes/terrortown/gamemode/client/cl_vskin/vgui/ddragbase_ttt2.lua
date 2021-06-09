@@ -9,9 +9,6 @@ function PANEL:Init()
 
 	self:SetDropPos("2468")
 
-	-- set the unique name for the dropable receiver panel
-	self:MakeDroppable("layerPanel")
-
 	self.m_iLeftMargin = 0
 end
 

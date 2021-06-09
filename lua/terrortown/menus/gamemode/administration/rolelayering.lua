@@ -94,25 +94,28 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	-- 9 icons per row
 	local rowAmount = math.ceil(#leftRoles / 9)
 
-	local draggableRolesBase = basePanel:Add("DDragSenderTTT2")
-	draggableRolesBase:SetLeftMargin(100)
-	draggableRolesBase:Dock(TOP)
-	draggableRolesBase:SetTall(rowAmount * 64 + (rowAmount + 1) * 5)
-	draggableRolesBase:SetPadding(5)
+	local dragSender = basePanel:Add("DDragSenderTTT2")
+	dragSender:SetLeftMargin(100)
+	dragSender:Dock(TOP)
+	dragSender:SetTall(rowAmount * 64 + (rowAmount + 1) * 5)
+	dragSender:SetPadding(5)
+	dragSender:MakeDroppable("drop_group_" .. role)
 
-	-- modify the canvas
-	local canvas = basePanel:Add("DDragReceiverTTT2")
-	canvas:SetLeftMargin(100)
-	canvas:Dock(TOP)
-	canvas:InitRoles(layerTable)
+	-- modify the dragReceiver
+	local dragReceiver = basePanel:Add("DDragReceiverTTT2")
+	dragReceiver:SetLeftMargin(100)
+	dragReceiver:Dock(TOP)
+	dragReceiver:InitRoles(layerTable)
+	dragReceiver:SetPadding(5)
+	dragReceiver:MakeDroppable("drop_group_" .. role)
 
-	draggableRolesBase:SetReceiver(canvas)
+	dragSender:SetReceiver(dragReceiver)
 
 	for i = 1, #leftRoles do
 		local subrole = leftRoles[i]
 		local roleData = roles.GetByIndex(subrole)
 
-		local ic = vgui.Create("DRoleImage", draggableRolesBase)
+		local ic = vgui.Create("DRoleImage", dragSender)
 		ic:SetSize(64, 64)
 		ic:SetImage("vgui/ttt/dynamic/icon_base")
 		ic:SetImageColor(roleData.color)
@@ -126,10 +129,10 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		ic:SetTooltip(LANG.TryTranslation(roleData.name))
 		ic:Droppable("layerPanel")
 
-		draggableRolesBase:Add(ic)
+		dragSender:Add(ic)
 	end
 
-	canvas:SetSender(draggableRolesBase)
+	dragReceiver:SetSender(dragSender)
 
 	print("roles: " .. role)
 	print("ROLE LIST")

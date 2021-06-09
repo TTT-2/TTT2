@@ -124,7 +124,7 @@ function PANEL:GetCurrentLayerDepth(subrole)
 end
 
 function PANEL:PerformLayout(width, height)
-	local w, h = self:GetSize()
+	local w = self:GetWide()
 	local childW, childH = self:GetChildSize()
 
 	local children = self:GetDnDs()

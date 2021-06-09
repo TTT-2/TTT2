@@ -11,18 +11,10 @@ function PANEL:Init()
 	self.m_iPadding = 0
 	self.m_iLeftMargin = 0
 
-	--local canvas = self:GetCanvas()
-	--canvas:SetDropPos("46")
-	--canvas:SetPaintBackground(true)
-	--canvas:SetBackgroundColor(Color(100, 100, 100))
-
 	self.m_pLayerLabel = vgui.Create("DLabel", self)
 	self.m_pLayerLabel:SetText("Not\nlayered")
 	self.m_pLayerLabel:SetFont("DermaDefaultBold")
 	self.m_pLayerLabel:SetTall(28)
-
-	self:MakeDroppable("layerPanel")
-	--self:SetShowDropTargets(true)
 end
 
 function PANEL:GetPadding()
