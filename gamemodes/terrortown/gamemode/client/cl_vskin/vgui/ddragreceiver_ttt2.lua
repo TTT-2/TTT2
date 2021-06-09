@@ -180,19 +180,15 @@ function PANEL:InitRoles(layeredRoles)
 			local roleData = roles.GetByIndex(subrole)
 
 			-- create the role icon
-			local ic = vgui.Create("DRoleImage", self)
+			local ic = vgui.Create("DRoleImageTTT2", self)
 			ic:SetSize(64, 64)
-			ic:SetImage("vgui/ttt/dynamic/icon_base")
-			ic:SetImageColor(roleData.color)
-
-			ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
-			ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+			ic:SetMaterial(roleData.iconMaterial)
+			ic:SetColor(roleData.color)
+			ic:SetTooltip(LANG.TryTranslation(roleData.name))
 
 			ic.subrole = subrole
 
-			ic:SetRoleIconImage(roleData.icon)
-			ic:SetTooltip(LANG.TryTranslation(roleData.name))
-			ic:Droppable("layerPanel")
+			ic:Droppable(self.dropGroupName)
 
 			self:Add(ic)
 		end

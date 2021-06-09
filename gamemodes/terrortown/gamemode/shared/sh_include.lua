@@ -83,6 +83,7 @@ TTTFiles = {
 	-- cl_vskin client files
 	cl_vskin__default_skin = {file = "cl_vskin/default_skin.lua", on = "client"},
 	cl_vskin__vgui__dpanel = {file = "cl_vskin/vgui/dpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__droleimage = {file = "cl_vskin/vgui/droleimage_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dframe = {file = "cl_vskin/vgui/dframe_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dmenubutton = {file = "cl_vskin/vgui/dmenubutton_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dsubmenubutton = {file = "cl_vskin/vgui/dsubmenubutton_ttt2.lua", on = "client"},

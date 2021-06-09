@@ -1205,5 +1205,13 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	end
 end
 
+function SKIN:PaintRoleImageTTT2(panel, w, h)
+	local colorBackground = panel:GetColor()
+	local colorIcon = utilGetDefaultColor(colorBackground)
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+	drawFilteredShadowedTexture(0, 0, w, h, panel:GetMaterial(), colorIcon.a, colorIcon)
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

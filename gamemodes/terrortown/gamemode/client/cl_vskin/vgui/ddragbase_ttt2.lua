@@ -10,6 +10,14 @@ function PANEL:Init()
 	self:SetDropPos("2468")
 
 	self.m_iLeftMargin = 0
+
+	local oldMakeDroppable = self.MakeDroppable
+
+	self.MakeDroppable = function(slf, name, allowCopy)
+		slf.dropGroupName = name
+
+		oldMakeDroppable(slf, name, allowCopy)
+	end
 end
 
 function PANEL:SetChildSize(w, h)

@@ -105,9 +105,9 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	local dragReceiver = basePanel:Add("DDragReceiverTTT2")
 	dragReceiver:SetLeftMargin(100)
 	dragReceiver:Dock(TOP)
-	dragReceiver:InitRoles(layerTable)
 	dragReceiver:SetPadding(5)
 	dragReceiver:MakeDroppable("drop_group_" .. role)
+	dragReceiver:InitRoles(layerTable)
 
 	dragSender:SetReceiver(dragReceiver)
 
@@ -115,19 +115,13 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		local subrole = leftRoles[i]
 		local roleData = roles.GetByIndex(subrole)
 
-		local ic = vgui.Create("DRoleImage", dragSender)
+		local ic = vgui.Create("DRoleImageTTT2", dragSender)
 		ic:SetSize(64, 64)
-		ic:SetImage("vgui/ttt/dynamic/icon_base")
-		ic:SetImageColor(roleData.color)
-
-		ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
-		ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+		ic:SetMaterial(roleData.iconMaterial)
+		ic:SetColor(roleData.color)
+		ic:SetTooltip(LANG.TryTranslation(roleData.name))
 
 		ic.subrole = subrole
-
-		ic:SetRoleIconImage(roleData.icon)
-		ic:SetTooltip(LANG.TryTranslation(roleData.name))
-		ic:Droppable("layerPanel")
 
 		dragSender:Add(ic)
 	end
