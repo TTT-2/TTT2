@@ -1368,3 +1368,4 @@ L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach j
 -- 2021-06-09
 L.layering_not_layered = "Ohne Ebene"
 L.layering_layer = "Ebene {layer}"
+L.header_rolelayering_baserole = "{role} Ebene"

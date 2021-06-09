@@ -1,3 +1,6 @@
+local TryT = LANG.TryTranslation
+local ParT = LANG.GetParamTranslation
+
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 98
@@ -21,7 +24,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	for subrole in pairs(self.subroleList) do
 		if subrole == roleIndex then continue end
 
-		self.forms[subrole] = vgui.CreateTTT2Form(parent, roles.GetByIndex(subrole).name .. "_layers")
+		self.forms[subrole] = vgui.CreateTTT2Form(parent, ParT("header_rolelayering_baserole", {role = TryT(roles.GetByIndex(subrole).name)}))
 
 		rolelayering.RequestDataFromServer(subrole)
 	end

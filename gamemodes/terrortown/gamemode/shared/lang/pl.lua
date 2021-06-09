@@ -1378,3 +1378,4 @@ L.none = "Brak Roli"
 -- 2021-06-09
 --L.layering_not_layered = "Not layered"
 --L.layering_layer = "Layer {layer}"
+--L.header_rolelayering_baserole = "{role} layer"
