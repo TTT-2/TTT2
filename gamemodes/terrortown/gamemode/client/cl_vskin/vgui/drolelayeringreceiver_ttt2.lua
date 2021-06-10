@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DDragReceiverTTT2
+-- @section DRoleLayeringReceiverTTT2
 
 local PANEL = {}
 
@@ -249,4 +249,4 @@ function PANEL:Paint(w, h)
 	return true
 end
 
-derma.DefineControl("DDragReceiverTTT2", "", PANEL, "DDragBaseTTT2")
+derma.DefineControl("DRoleLayeringReceiverTTT2", "", PANEL, "DDragBaseTTT2")

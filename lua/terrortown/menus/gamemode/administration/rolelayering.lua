@@ -105,14 +105,14 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 
 	local basePanel = menuReference.forms[role]:MakeIconLayout()
 
-	local dragSender = basePanel:Add("DDragSenderTTT2")
+	local dragSender = basePanel:Add("DRoleLayeringSenderTTT2")
 	dragSender:SetLeftMargin(108)
 	dragSender:Dock(TOP)
 	dragSender:SetPadding(5)
 	dragSender:MakeDroppable("drop_group_" .. role)
 
 	-- modify the dragReceiver
-	local dragReceiver = basePanel:Add("DDragReceiverTTT2")
+	local dragReceiver = basePanel:Add("DRoleLayeringReceiverTTT2")
 	dragReceiver:SetLeftMargin(108)
 	dragReceiver:Dock(TOP)
 	dragReceiver:SetPadding(5)

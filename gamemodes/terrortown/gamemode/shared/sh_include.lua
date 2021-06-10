@@ -107,8 +107,8 @@ TTTFiles = {
 	cl_vskin__vgui__dtooltip = {file = "cl_vskin/vgui/dtooltip_ttt2.lua", on = "client"},
 	cl_vskin__vgui__deventbox = {file = "cl_vskin/vgui/deventbox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__ddragbase = {file = "cl_vskin/vgui/ddragbase_ttt2.lua", on = "client"},
-	cl_vskin__vgui__ddragreceiver = {file = "cl_vskin/vgui/ddragreceiver_ttt2.lua", on = "client"},
-	cl_vskin__vgui__ddragsender = {file = "cl_vskin/vgui/ddragsender_ttt2.lua", on = "client"},
+	cl_vskin__vgui__drolelayeringreceiver = {file = "cl_vskin/vgui/drolelayeringreceiver_ttt2.lua", on = "client"},
+	cl_vskin__vgui__drolelayeringsender = {file = "cl_vskin/vgui/drolelayeringsender_ttt2.lua", on = "client"},
 }
 
 if SERVER then

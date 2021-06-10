@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DDragSenderTTT2
+-- @section DRoleLayeringSenderTTT2
 
 local PANEL = {}
 
@@ -179,4 +179,4 @@ function PANEL:Paint(w, h)
 	return true
 end
 
-derma.DefineControl("DDragSenderTTT2", "", PANEL, "DDragBaseTTT2")
+derma.DefineControl("DRoleLayeringSenderTTT2", "", PANEL, "DDragBaseTTT2")
