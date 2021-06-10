@@ -4,6 +4,8 @@
 
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	DDragBase.Init(self)
 
@@ -20,23 +22,42 @@ function PANEL:Init()
 	end
 end
 
+---
+-- Sets the size of the moveable children
+-- @param[default=64] number w The width
+-- @param[default=64] number h The height
+-- @realm client
 function PANEL:SetChildSize(w, h)
 	self.childW = w
 	self.childH = h
 end
 
+---
+-- @return number The child width
+-- @return number The child height
+-- @realm client
 function PANEL:GetChildSize()
 	return self.childW or 64, self.childH or 64
 end
 
+---
+-- @return number The left margin
+-- @realm client
 function PANEL:GetLeftMargin()
 	return self.m_iLeftMargin
 end
 
+---
+-- @param[default=0] number leftMargin The left margin
+-- @realm client
 function PANEL:SetLeftMargin(leftMargin)
 	self.m_iLeftMargin = leftMargin
 end
 
+---
+-- Gets the valid children that should be dragable
+-- @return table A table of valid children (@{PANEL})
+-- @realm client
 function PANEL:GetDnDs()
 	local children = self:GetChildren()
 	local validChildren = {}
@@ -53,6 +74,11 @@ function PANEL:GetDnDs()
 	return validChildren
 end
 
+---
+-- @param number x
+-- @param number y
+-- @return number
+-- @realm client
 function PANEL:GetDropMode(x, y)
 	local closest = self:GetClosestChild(x, y)
 
@@ -87,6 +113,13 @@ function PANEL:GetDropMode(x, y)
 	return drop
 end
 
+---
+-- @param table drops
+-- @param boolean bDoDrop
+-- @param string command
+-- @param number x
+-- @param number y
+-- @realm client
 function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 	local closest = self:GetClosestChild(x, y)
 
@@ -145,10 +178,22 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 	self:OnModified()
 end
 
+---
+-- Callback that checks if dropping on this child should be possible.
+-- @param PANEL closestChild
+-- @param number direct
+-- @return boolean
+-- @realm client
 function PANEL:OnDropChildCheck(closestChild, direction)
 	return true
 end
 
+---
+-- Callback that is called after the panel was dropped.
+-- @param PANEL droppedPnl
+-- @param number pos
+-- @param PANEL closestPnl
+-- @realm client
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
 end

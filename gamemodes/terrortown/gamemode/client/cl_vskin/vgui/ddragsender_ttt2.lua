@@ -4,6 +4,8 @@
 
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	DIconLayout.Init(self)
 
@@ -12,22 +14,38 @@ function PANEL:Init()
 	self.m_iLeftMargin = 0
 end
 
+---
+-- @return number
+-- @realm client
 function PANEL:GetPadding()
 	return self.m_iPadding
 end
 
+---
+-- @param[default=0] number padding
+-- @realm client
 function PANEL:SetPadding(padding)
 	self.m_iPadding = padding
 end
 
+---
+-- @return number
+-- @realm client
 function PANEL:GetLeftMargin()
 	return self.m_iLeftMargin
 end
 
+---
+-- @param[default=0] number leftMargin
+-- @realm client
 function PANEL:SetLeftMargin(leftMargin)
 	self.m_iLeftMargin = leftMargin
 end
 
+---
+-- Gets the valid children that should be dragable
+-- @return table A table of valid children (@{PANEL})
+-- @realm client
 function PANEL:GetDnDs()
 	local children = self:GetChildren()
 	local validChildren = {}
@@ -44,10 +62,15 @@ function PANEL:GetDnDs()
 	return validChildren
 end
 
+---
+-- @param PANEL receiverPnl
+-- @realm client
 function PANEL:SetReceiver(receiverPnl)
 	self.receiverPnl = receiverPnl
 end
 
+---
+-- @realm client
 function PANEL:OnModified()
 	if not IsValid(self.receiverPnl) then return end
 
@@ -98,6 +121,8 @@ function PANEL:OnModified()
 	self:InvalidateLayout()
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout(width, height)
 	local w = self:GetWide()
 	local childW, childH = self:GetChildSize()
@@ -133,6 +158,12 @@ function PANEL:PerformLayout(width, height)
 	self:SetTall((row + 1) * childH + (row + 2) * self.m_iPadding)
 end
 
+---
+-- Callback that checks if dropping on this child should be possible.
+-- @param PANEL closestChild
+-- @param number direct
+-- @return boolean
+-- @realm client
 function PANEL:OnDropChildCheck(closestChild, direction)
 	if #self:GetDnDs() == 0 and direction == 6 then
 		return true

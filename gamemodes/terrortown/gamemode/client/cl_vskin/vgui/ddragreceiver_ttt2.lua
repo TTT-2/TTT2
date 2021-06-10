@@ -4,6 +4,8 @@
 
 local PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	DDragBaseTTT2.Init(self)
 
@@ -13,10 +15,19 @@ function PANEL:Init()
 	self.m_iPadding = 5
 end
 
+---
+-- @param[default=5] number padding
+-- @realm client
 function PANEL:SetPadding(padding)
 	self.m_iPadding = padding
 end
 
+---
+-- Callback that is called after the panel was dropped.
+-- @param PANEL droppedPnl
+-- @param number pos
+-- @param PANEL closestPnl
+-- @realm client
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.subrole)
 
@@ -56,10 +67,14 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	self.senderPnl.cachedTable[droppedPnl.subrole] = nil
 end
 
+---
+-- @realm client
 function PANEL:OnLayerUpdated()
 
 end
 
+---
+-- @realm client
 function PANEL:OnModified()
 	-- needed if the first element is dropped from sender's cached list
 	local children = self:GetDnDs()
@@ -82,14 +97,24 @@ function PANEL:OnModified()
 	self:OnLayerUpdated()
 end
 
+---
+-- @param table tbl
+-- @realm client
 function PANEL:SetLayers(tbl)
 	self.layerList = tbl
 end
 
+---
+-- @return table
+-- @realm client
 function PANEL:GetLayers()
 	return self.layerList
 end
 
+---
+-- @param number subrole
+-- @return number
+-- @realm client
 function PANEL:GetCurrentLayerDepth(subrole)
 	for layer = 1, #self.layerList do
 		local currentLayerTable = self.layerList[layer]
@@ -102,6 +127,8 @@ function PANEL:GetCurrentLayerDepth(subrole)
 	end
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout(width, height)
 	local w = self:GetWide()
 	local childW, childH = self:GetChildSize()
@@ -165,6 +192,9 @@ function PANEL:PerformLayout(width, height)
 	self:SetTall(y)
 end
 
+---
+-- @param table layeredRoles
+-- @realm client
 function PANEL:InitRoles(layeredRoles)
 	self:SetLayers(layeredRoles)
 
@@ -194,14 +224,24 @@ function PANEL:InitRoles(layeredRoles)
 	end
 end
 
+---
+-- @param PANEL senderPnl
+-- @realm client
 function PANEL:SetSender(senderPnl)
 	self.senderPnl = senderPnl
 end
 
+---
+-- @return PANEL
+-- @realm client
 function PANEL:GetSender()
 	return self.senderPnl
 end
 
+---
+-- @param PANEL closestChild
+-- @return boolean
+-- @realm client
 function PANEL:OnDropChildCheck(closestChild)
 	return closestChild.subrole ~= nil
 end
