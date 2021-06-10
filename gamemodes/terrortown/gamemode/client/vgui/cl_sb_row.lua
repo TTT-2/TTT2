@@ -12,6 +12,7 @@ local table = table
 local IsValid = IsValid
 local surface = surface
 local vgui = vgui
+local drawRoundedBox = draw.RoundedBox
 
 local color_trans = Color(0, 0, 0, 0)
 
@@ -725,8 +726,8 @@ function PANEL:ScrollPlayerVolume(delta)
 	frame:ShowCloseButton(false)
 	frame:SetDraggable(false)
 	frame:SetSizable(false)
-	frame.Paint = function(self, w, h)
-		draw.RoundedBox(8, 0, 0, w, h, Color(24, 25, 28, 180))
+	frame.Paint = function(_, w, h)
+		drawRoundedBox(8, 0, 0, w, h, Color(24, 25, 28, 180))
 	end
 
 	self.voice.percentage_frame = frame
@@ -743,7 +744,7 @@ function PANEL:ScrollPlayerVolume(delta)
 	timer.Remove("ttt_score_close_perc_frame_" .. identifier)
 
 	timer.Create("ttt_score_close_perc_frame_" .. identifier, 1.5, 1, function()
-		if not self.voice and frame ~= nil and frame:IsVisible() then
+		if not self.voice and frame and frame:IsVisible() then
 			frame:Close()
 			frame = nil
 
@@ -756,7 +757,7 @@ function PANEL:ScrollPlayerVolume(delta)
 	end)
 
 	hook.Add("ScoreboardHide", "TTTCloseVolumeFrame_" .. identifier, function()
-		if not self.voice and frame ~= nil and frame:IsVisible() then
+		if not self.voice and frame and frame:IsVisible() then
 			frame:Close()
 			frame = nil
 
