@@ -1364,3 +1364,9 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 --L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 --L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+
+-- 2021-06-08
+--L.equip_not_added = "not added"
+--L.equip_added = "added"
+--L.equip_inherit_added = "added (inherit)"
+--L.equip_inherit_removed = "removed (inherit)"
