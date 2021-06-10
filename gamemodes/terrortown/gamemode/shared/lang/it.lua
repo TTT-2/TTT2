@@ -1374,3 +1374,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 --L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 --L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+
+--2021-06-09
+--L.scoreboard_voice_tooltip = "Scroll to change the volume"
