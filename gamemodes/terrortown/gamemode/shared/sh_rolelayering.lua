@@ -159,6 +159,9 @@ if CLIENT then
 	-- A helper function to request role layering data from the server for a specific baserole.
 	-- @param[default=ROLE_NONE] number role The role to request the layer table of
 	-- @note The answer triggers @{GM:TTT2ReceivedRolelayerData}
+	-- @note ROLE_NONE = 3 is reserved and here used to indicate a baserole request. If a valid
+	-- baserole is given, the subrole list is requested. For further information, see
+	-- @{roles.GenerateNewRoleID()} @{function}.
 	-- @realm client
 	function rolelayering.RequestDataFromServer(role)
 		net.Start("TTT2SyncRolelayerData")
@@ -171,6 +174,9 @@ if CLIENT then
 	-- A helper function to send updated role layers to the server.
 	-- @param[default=ROLE_NONE] number role The role to update the layer table of
 	-- @param table layers The new updated layer table
+	-- @note ROLE_NONE = 3 is reserved and here used to indicate a baserole request. If a valid
+	-- baserole is given, the subrole list is requested. For further information, see
+	-- @{roles.GenerateNewRoleID()} @{function}.
 	-- @realm client
 	function rolelayering.SendDataToServer(role, layers)
 		net.Start("TTT2SyncRolelayerData")

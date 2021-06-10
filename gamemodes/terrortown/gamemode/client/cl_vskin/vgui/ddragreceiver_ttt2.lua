@@ -29,7 +29,7 @@ end
 -- @param PANEL closestPnl
 -- @realm client
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
-	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.subrole)
+	local dropLayer, dropDepth = self:GetLayerAndDepthOfSubrole(droppedPnl.subrole)
 
 	if dropLayer then
 		-- remove dropped panel from old position
@@ -42,7 +42,7 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	end
 
 	if pos == 6 or pos == 4 then -- right or left
-		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.subrole)
+		local newLayer, newDepth = self:GetLayerAndDepthOfSubrole(closestPnl.subrole)
 
 		-- insert dropped panel into the existing layer
 		table.insert(
@@ -51,7 +51,7 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 			droppedPnl.subrole
 		)
 	elseif pos == 8 or pos == 2 then -- top or bottom
-		local newLayer = self:GetCurrentLayerDepth(closestPnl.subrole)
+		local newLayer = self:GetLayerAndDepthOfSubrole(closestPnl.subrole)
 
 		-- insert dropped panel into a new layer
 		table.insert(
@@ -65,12 +65,6 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
 	-- remove from sender's cached list
 	self.senderPnl.cachedTable[droppedPnl.subrole] = nil
-end
-
----
--- @realm client
-function PANEL:OnLayerUpdated()
-
 end
 
 ---
@@ -114,8 +108,9 @@ end
 ---
 -- @param number subrole
 -- @return number
+-- @return number
 -- @realm client
-function PANEL:GetCurrentLayerDepth(subrole)
+function PANEL:GetLayerAndDepthOfSubrole(subrole)
 	for layer = 1, #self.layerList do
 		local currentLayerTable = self.layerList[layer]
 
@@ -146,7 +141,7 @@ function PANEL:PerformLayout(width, height)
 	-- pre sort children so the rendering part is easier
 	for i = 1, #children do
 		local child = children[i]
-		local layer, depth = self:GetCurrentLayerDepth(child.subrole)
+		local layer, depth = self:GetLayerAndDepthOfSubrole(child.subrole)
 
 		if not layer or not depth then continue end
 

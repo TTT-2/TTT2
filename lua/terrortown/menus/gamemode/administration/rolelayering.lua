@@ -119,9 +119,6 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 	dragReceiver:MakeDroppable("drop_group_" .. role)
 	dragReceiver:InitRoles(layerTable)
 	dragReceiver.OnLayerUpdated = function(slf)
-		print("layerList:")
-		PrintTable(slf.layerList)
-
 		rolelayering.SendDataToServer(role, slf.layerList)
 	end
 

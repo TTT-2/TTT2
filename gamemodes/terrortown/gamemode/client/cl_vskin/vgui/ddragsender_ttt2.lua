@@ -83,8 +83,7 @@ function PANEL:OnModified()
 		if self.cachedTable[child.subrole] then continue end
 
 		-- remove from layer
-		local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.subrole)
-
+		local dropLayer, dropDepth = self.receiverPnl:GetLayerAndDepthOfSubrole(child.subrole)
 
 		-- not contained in layer
 		if dropLayer == nil then continue end
