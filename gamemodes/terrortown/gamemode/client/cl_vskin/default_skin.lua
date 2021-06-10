@@ -1205,6 +1205,11 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintRoleImageTTT2(panel, w, h)
 	local colorBackground = panel:GetColor()
 	local colorIcon = utilGetDefaultColor(colorBackground)
@@ -1213,6 +1218,11 @@ function SKIN:PaintRoleImageTTT2(panel, w, h)
 	drawFilteredShadowedTexture(0, 0, w, h, panel:GetMaterial(), colorIcon.a, colorIcon)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintDragSenderTTT2(panel, w, h)
 	local colorBox = utilGetChangedColor(colors.background, 40)
 	local colorText = utilGetDefaultColor(colorBox)
@@ -1230,6 +1240,11 @@ function SKIN:PaintDragSenderTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintDragReceiverTTT2(panel, w, h)
 	local colorBox = utilGetChangedColor(colors.background, 20)
 	local colorText = utilGetDefaultColor(colorBox)
