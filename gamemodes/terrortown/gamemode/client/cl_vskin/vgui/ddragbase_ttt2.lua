@@ -59,19 +59,7 @@ end
 -- @return table A table of valid children (@{PANEL})
 -- @realm client
 function PANEL:GetDnDs()
-	local children = self:GetChildren()
-	local validChildren = {}
-
-	for i = 1, #children do
-		local child = children[i]
-
-		-- not a valid child with a subrole, skip
-		if not child.subrole then continue end
-
-		validChildren[#validChildren + 1] = child
-	end
-
-	return validChildren
+	return {}
 end
 
 ---
