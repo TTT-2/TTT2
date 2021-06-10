@@ -344,7 +344,9 @@ function PANEL:SetPlayer(ply)
 	self.Player = ply
 	self.avatar:SetPlayer(ply)
 
-	if ply ~= LocalPlayer() then
+	local client = LocalPlayer()
+
+	if ply ~= client then
 		self.voice:SetTooltip(GetTranslation("scoreboard_voice_tooltip"))
 	end
 
@@ -369,13 +371,13 @@ function PANEL:SetPlayer(ply)
 	end
 
 	self.voice.DoClick = function()
-		if IsValid(ply) and ply ~= LocalPlayer() then
+		if IsValid(ply) and ply ~= client then
 			ply:SetMuted(not ply:IsMuted())
 		end
 	end
 
 	self.voice.OnMouseWheeled = function(label, delta)
-		if IsValid(ply) and ply ~= LocalPlayer() then
+		if IsValid(ply) and ply ~= client then
 			self:ScrollPlayerVolume(delta)
 		end
 	end
@@ -701,7 +703,7 @@ function PANEL:ScrollPlayerVolume(delta)
 	local cur_volume = ply:GetVoiceVolumeScale()
 	cur_volume = cur_volume ~= nil and cur_volume or 1
 
-	local new_volume = delta == -1 and math.max(0, cur_volume-0.01) or math.min(1, cur_volume+0.01)
+	local new_volume = delta == -1 and math.max(0, cur_volume - 0.01) or math.min(1, cur_volume + 0.01)
 	new_volume = math.Round(new_volume, 2)
 
 	ply:SetVoiceVolumeScale(new_volume)
@@ -717,14 +719,14 @@ function PANEL:ScrollPlayerVolume(delta)
 
 	-- Frame
 	local frame = self.voice.percentage_frame ~= nil and self.voice.percentage_frame or vgui.Create("DFrame")
-	frame:SetPos(x-10, y+25)
+	frame:SetPos(x - 10, y + 25)
 	frame:SetSize(width, height)
 	frame:SetTitle("")
 	frame:ShowCloseButton(false)
 	frame:SetDraggable(false)
 	frame:SetSizable(false)
 	frame.Paint = function(self, w, h)
-	  draw.RoundedBox(8, 0, 0, w, h, Color(24, 25, 28, 180))
+		draw.RoundedBox(8, 0, 0, w, h, Color(24, 25, 28, 180))
 	end
 
 	self.voice.percentage_frame = frame
@@ -734,38 +736,39 @@ function PANEL:ScrollPlayerVolume(delta)
 	label:SetFont("treb_small")
 	label:SetSize(width - padding * 2, 20)
 	label:SetColor(COLOR_WHITE)
-	label:SetText(tostring(math.Round(new_volume*100)) .. "%")
+	label:SetText(tostring(math.Round(new_volume * 100)) .. "%")
 
 	self.voice.percentage_frame_label = label
 
-	timer.Remove("ttt_score_close_perc_frame_"..identifier)
+	timer.Remove("ttt_score_close_perc_frame_" .. identifier)
 
-	timer.Create("ttt_score_close_perc_frame_"..identifier, 1.5, 1, function()
+	timer.Create("ttt_score_close_perc_frame_" .. identifier, 1.5, 1, function()
 		if not self.voice and frame ~= nil and frame:IsVisible() then
 			frame:Close()
 			frame = nil
+
 			return
 		end
 
-		if not self.voice or self.voice.percentage_frame == nil or not self.voice.percentage_frame:IsVisible() then return end
+		if not self.voice or not self.voice.percentage_frame or not self.voice.percentage_frame:IsVisible() then return end
 
 		self.voice.percentage_frame:Hide()
 	end)
 
-	hook.Add("ScoreboardHide", "TTTCloseVolumeFrame_"..identifier, function()
+	hook.Add("ScoreboardHide", "TTTCloseVolumeFrame_" .. identifier, function()
 		if not self.voice and frame ~= nil and frame:IsVisible() then
 			frame:Close()
 			frame = nil
+
 			return
 		end
 
-		if not self.voice or self.voice.percentage_frame == nil or not self.voice.percentage_frame:IsVisible() then return end
+		if not self.voice or not self.voice.percentage_frame or not self.voice.percentage_frame:IsVisible() then return end
 
 		self.voice.percentage_frame:Hide()
 
-		timer.Remove("ttt_score_close_perc_frame_"..identifier)
+		timer.Remove("ttt_score_close_perc_frame_" .. identifier)
 	end)
-
 end
 
 vgui.Register("TTTScorePlayerRow", PANEL, "DButton")
