@@ -36,14 +36,24 @@ function PANEL:GetText()
 	return self.data.text
 end
 
+---
+-- @param Material icon
+-- @realm client
 function PANEL:SetIcon(icon)
 	self.data.icon = icon
 end
 
+---
+-- @return Matieral
+-- @realm client
 function PANEL:GetIcon()
 	return self.data.icon
 end
 
+---
+-- @param number mode
+-- @param[default=false] boolean triggerFunction
+-- @realm client
 function PANEL:SetMode(mode, triggerFunction)
 	if triggerFunction then
 		self:OnModeChanged(self.data.mode or MODE_DEFAULT, mode or MODE_DEFAULT)
@@ -52,10 +62,16 @@ function PANEL:SetMode(mode, triggerFunction)
 	self.data.mode = mode or MODE_DEFAULT
 end
 
+---
+-- @return number
+-- @realm client
 function PANEL:GetMode()
 	return self.data.mode
 end
 
+---
+-- @param number keyCode
+-- @realm client
 function PANEL:OnMouseReleased(keyCode)
 	if keyCode == MOUSE_LEFT then
 		if self:GetMode() == MODE_DEFAULT then
@@ -74,6 +90,10 @@ function PANEL:OnMouseReleased(keyCode)
 	self.BaseClass.OnMouseReleased(self, keyCode)
 end
 
+---
+-- @param number oldMode
+-- @param number newMode
+-- @realm client
 function PANEL:OnModeChanged(oldMode, newMode)
 
 end
