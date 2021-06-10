@@ -174,7 +174,7 @@ end
 ---
 -- @ignore
 function PANEL:Paint(w, h)
-	derma.SkinHook("Paint", "DragSenderTTT2", self, w, h)
+	derma.SkinHook("Paint", "RoleLayeringSenderTTT2", self, w, h)
 
 	return true
 end

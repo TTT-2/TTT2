@@ -1223,7 +1223,7 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
-function SKIN:PaintDragSenderTTT2(panel, w, h)
+function SKIN:PaintRoleLayeringSenderTTT2(panel, w, h)
 	local colorBox = utilGetChangedColor(colors.background, 40)
 	local colorText = utilGetDefaultColor(colorBox)
 
@@ -1245,7 +1245,7 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
-function SKIN:PaintDragReceiverTTT2(panel, w, h)
+function SKIN:PaintRoleLayeringReceiverTTT2(panel, w, h)
 	local colorBox = utilGetChangedColor(colors.background, 20)
 	local colorText = utilGetDefaultColor(colorBox)
 
