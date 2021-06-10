@@ -1,3 +1,5 @@
+--- @ignore
+
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 

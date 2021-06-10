@@ -12,18 +12,30 @@ function PANEL:Init()
 	}
 end
 
+---
+-- @param Color color
+-- @realm client
 function PANEL:SetColor(color)
 	self.data.color = color
 end
 
+---
+-- @return Color
+-- @realm client
 function PANEL:GetColor()
 	return self.data.color
 end
 
+---
+-- @param Material material
+-- @realm client
 function PANEL:SetMaterial(material)
 	self.data.material = material
 end
 
+---
+-- @return Material
+-- @realm client
 function PANEL:GetMaterial()
 	return self.data.material
 end
