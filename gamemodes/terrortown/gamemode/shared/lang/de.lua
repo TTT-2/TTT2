@@ -1364,3 +1364,6 @@ L.shopeditor_name_random_team_shops = "Aktiviere Team-Shops"
 L.shopeditor_name_random_shop_reroll = "Aktiviere Möglichkeit Shop neu auszuwürfeln"
 L.shopeditor_name_random_shop_reroll_cost = "Kosten pro Auswürfeln"
 L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach jedem Kauf"
+
+--2021-06-09
+L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"

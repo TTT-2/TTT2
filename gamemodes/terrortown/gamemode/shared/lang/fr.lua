@@ -1375,3 +1375,6 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 --L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 --L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+
+--2021-06-09
+--L.scoreboard_voice_tooltip = "Scroll to change the volume"
