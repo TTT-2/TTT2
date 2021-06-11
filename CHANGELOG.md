@@ -47,6 +47,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - submenus are generated from files located in folders with the menu name
 - Menus without content are now always hidden in the main menu
 
+### Removed
+
+- Removed the custom loading screen (GMOD now only accepts http(s) URLs for sv_loadingurl)
+
 ### Breaking Changes
 
 - Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
