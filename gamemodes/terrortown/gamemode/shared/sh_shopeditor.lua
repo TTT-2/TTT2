@@ -66,6 +66,19 @@ ShopEditor.savingKeys = {
 	}
 }
 
+local function countSavingKeys()
+	local count = 0
+
+	for key, data in pairs(ShopEditor.savingKeys) do
+		count = count + 1
+	end
+
+	return count
+end
+
+ShopEditor.savingKeysCount = countSavingKeys()
+ShopEditor.savingKeysBitCount = math.ceil(math.log(ShopEditor.savingKeysCount, 2))
+
 ShopEditor.cvars = {
 	ttt2_random_shops = {
 		order = 1,
@@ -127,6 +140,8 @@ local pairs = pairs
 function ShopEditor.InitDefaultData(item)
 	if not item then return end
 
+	item.defaultValues = item.defaultValues or {}
+
 	for key, data in pairs(ShopEditor.savingKeys) do
 		if item[key] == nil then
 			if data.typ == "number" then
@@ -137,6 +152,8 @@ function ShopEditor.InitDefaultData(item)
 				item[key] = data.default or ""
 			end
 		end
+
+		item.defaultValues[key] = item[key]
 	end
 end
 
@@ -152,9 +169,11 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 
 	if not name or not item then return end
 
+	net.Start(messageName)
+	net.WriteString(name)
+	net.WriteUInt(ShopEditor.savingKeysCount, ShopEditor.savingKeysBitCount or 16)
+
 	for key, data in pairs(ShopEditor.savingKeys) do
-		net.Start(messageName)
-		net.WriteString(name)
 		net.WriteString(key)
 
 		if data.typ == "number" then
@@ -164,28 +183,28 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 		else
 			net.WriteString(item[key])
 		end
+	end
 
-		if SERVER then
-			local matched = false
+	if SERVER then
+		local matched = false
 
-			for k = 1, #CHANGED_EQUIPMENT do
-				if CHANGED_EQUIPMENT[k][1] ~= name then continue end
+		for k = 1, #CHANGED_EQUIPMENT do
+			if CHANGED_EQUIPMENT[k][1] ~= name then continue end
 
-				matched = true
-			end
-
-			if not matched then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
-			end
-
-			if plys then
-				net.Send(plys)
-			else
-				net.Broadcast()
-			end
-		else
-			net.SendToServer()
+			matched = true
 		end
+
+		if not matched then
+			CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
+		end
+
+		if plys then
+			net.Send(plys)
+		else
+			net.Broadcast()
+		end
+	else
+		net.SendToServer()
 	end
 end
 
@@ -201,14 +220,19 @@ function ShopEditor.ReadItemData()
 		return name
 	end
 
-	local key = net.ReadString()
-	local data = ShopEditor.savingKeys[key]
-	if data.typ == "number" then
-		equip[key] = net.ReadUInt(data.bits or 16)
-	elseif data.typ == "bool" then
-		equip[key] = net.ReadBool()
-	else
-		equip[key] = net.ReadString()
+	local keyCount = net.ReadUInt(ShopEditor.savingKeysBitCount or 16)
+
+	for i = 1, keyCount do
+		local key = net.ReadString()
+		local data = ShopEditor.savingKeys[key]
+
+		if data.typ == "number" then
+			equip[key] = net.ReadUInt(data.bits or 16)
+		elseif data.typ == "bool" then
+			equip[key] = net.ReadBool()
+		else
+			equip[key] = net.ReadString()
+		end
 	end
 
 	return name, equip

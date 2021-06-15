@@ -32,11 +32,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 			local cb = form:MakeCheckBox({
 				label = name,
-				default = Invert(data, data.default),
+				default = Invert(data, item.defaultValues[key]),
 				initial = Invert(data, item[key]),
 				OnChange = function(_, value)
 					net.Start("TTT2SESaveItem")
 					net.WriteString(item.id)
+					net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
 					net.WriteString(key)
 					net.WriteBool(Invert(data, tobool(value)))
 					net.SendToServer()
@@ -60,11 +61,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				min = data.min,
 				max = data.max,
 				decimal = 0,
-				default = data.default,
+				default = item.defaultValues[key],
 				initial = item[key],
 				OnChange = function(_, value)
 					net.Start("TTT2SESaveItem")
 					net.WriteString(item.id)
+					net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
 					net.WriteString(key)
 					net.WriteUInt(math.Round(value), data.bits or 16)
 					net.SendToServer()
