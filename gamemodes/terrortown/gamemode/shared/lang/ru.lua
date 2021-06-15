@@ -1381,7 +1381,15 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) был убит {a
 --L.equip_inherit_added = "added (inherit)"
 --L.equip_inherit_removed = "removed (inherit)"
 
---2021-06-09
+-- 2021-06-09
+--L.layering_not_layered = "Not layered"
+--L.layering_layer = "Layer {layer}"
+--L.header_rolelayering_role = "{role} layer"
+--L.header_rolelayering_baserole = "Baserole layer"
+--L.submenu_administration_rolelayering_title = "Role Layering"
+--L.header_rolelayering_info = "Role layering information"
+--L.help_rolelayering_roleselection = "TThe role selection process is split into two passes. In the first pass base roles are disctributed. Baseroles are innocent, traitor and those listed in the 'base role layer' box below. The second pass is used to upgrade those baseroles to a subrole."
+--L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first. If upgradeable slots are still available, the unlayered roles will be distributed as well."
 --L.scoreboard_voice_tooltip = "Scroll to change the volume"
 
 --2021-06-15

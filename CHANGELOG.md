@@ -47,6 +47,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - submenus are generated from files located in folders with the menu name
 - Menus without content are now always hidden in the main menu
 - Moved Custom Shopeditor and linking shop to roles to the F1 menu
+- Moved the role layering menu to the F1 menu (administration submenu)
+  - removed the command `ttt2_edit_rolelayering`
 
 ### Removed
 
