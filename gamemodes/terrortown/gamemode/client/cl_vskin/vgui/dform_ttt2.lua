@@ -474,6 +474,7 @@ function PANEL:MakeColorMixer(data)
 	return right, left
 end
 
+---
 -- Adds a panel to the form
 -- @return Panel The created panel
 -- @realm client
