@@ -486,6 +486,7 @@ function PANEL:MakePanel()
 	return panel
 end
 
+---
 -- Adds an icon layout to the form
 -- @param[default=10] number spacing The spacing between the elements
 -- @return Panel The created panel
