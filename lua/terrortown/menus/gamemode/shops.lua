@@ -12,9 +12,7 @@ CLGAMEMODEMENU.description = "menu_shops_description"
 CLGAMEMODEMENU.priority = 48
 
 CLGAMEMODEMENU.isInitialized = false
-CLGAMEMODEMENU.needsRefresh = false
 CLGAMEMODEMENU.roles = nil
-CLGAMEMODEMENU.fallback = {}
 
 function CLGAMEMODEMENU:IsAdminMenu()
 	return true
@@ -46,7 +44,6 @@ end
 function CLGAMEMODEMENU:GetSubmenus()
 	if not self.isInitialized then
 		self.isInitialized = true
-		ShopEditor.fallbackUI = self
 
 		self:InitializeVirtualMenus()
 	end

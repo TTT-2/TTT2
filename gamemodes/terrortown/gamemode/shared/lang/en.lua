@@ -1377,4 +1377,4 @@ L.scoreboard_voice_tooltip = "Scroll to change the volume"
 
 --2021-06-15
 L.header_shop_linker = "Settings"
-L.label_shop_linker_set = "Shopsetting"
+L.label_shop_linker_set = "Select shop type:"

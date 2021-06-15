@@ -18,8 +18,9 @@ local IsValid = IsValid
 
 ShopEditor = ShopEditor or {}
 
--- Contains the basemenu where the linked shops save their data inbetween rebuilds
-ShopEditor.fallbackUI = nil
+-- Contains fallback data inbetween rebuilds and if custom shop needs a refresh or data is updated
+ShopEditor.fallback = {}
+ShopEditor.customShopRefresh = false
 
 ---
 -- Returns whether the given equipment is not an @{ITEM} (so whether it's a @{Weapon})
@@ -681,6 +682,9 @@ end
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
+	local roleData = roles.GetByIndex(subrole)
+
+	ShopEditor.fallback[roleData.name] = fallback
 
 	-- reset everything
 	Equipment[subrole] = {}
@@ -708,9 +712,8 @@ local function shopFallbackAnsw(len)
 	end
 
 	if fallback == SHOP_UNSET then
-		local roleData = roles.GetByIndex(subrole)
-
 		local flbTbl = roleData.fallbackTable
+
 		if not flbTbl then return end
 
 		-- set everything
@@ -726,13 +729,6 @@ local function shopFallbackAnsw(len)
 			Equipment[subrole][#Equipment[subrole] + 1] = eq
 		end
 	end
-
-	if ShopEditor.fallbackUI then
-		local roleData = roles.GetByIndex(subrole)
-		ShopEditor.fallbackUI.fallback = ShopEditor.fallbackUI.fallback or {}
-		ShopEditor.fallbackUI.fallback[roleData.name] = fallback
-	end
-
 end
 net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
@@ -789,13 +785,13 @@ net.Receive("shopFallbackReset", shopFallbackReset)
 function ShopEditor.ShopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
-	-- Refresh F1 menu to show actual custom shop after Refresh
-	if ShopEditor.fallbackUI and ShopEditor.fallbackUI.needsRefresh then
-		ShopEditor.fallbackUI.fallback = ShopEditor.fallbackUI.fallback or {}
-		ShopEditor.fallbackUI.needsRefresh = false
+	-- Refresh F1 menu to show actual custom shop after ShopFallbackRefresh
+	if ShopEditor.customShopRefresh then
+		ShopEditor.customShopRefresh = false
 		vguihandler.Rebuild()
 	end
 
+	-- Old Shopeditor refresh
 	if not wshop or not wshop.GetItems or not wshop.selectedRole then return end
 
 	for _, v in pairs(wshop:GetItems()) do

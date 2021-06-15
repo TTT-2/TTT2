@@ -13,23 +13,26 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_shop_linker_set",
 		OnChange = function(slf, index, value, rawdata)
 
-			if self.basemenu.fallback[self.roleData.name] == rawdata.name then return end
-			self.basemenu.fallback[self.roleData.name] = rawdata.name
+			if ShopEditor.fallback[self.roleData.name] == rawdata.name then return end
+			ShopEditor.fallback[self.roleData.name] = rawdata.name
 
 			net.Start("shopFallback")
 			net.WriteUInt(self.roleData.index, ROLE_BITS)
 			net.WriteString(rawdata.name)
 			net.SendToServer()
 
-			self.basemenu.needsRefresh = true
+			ShopEditor.customShopRefresh = true
 			vguihandler.Rebuild()
 		end
 	})
+
 	shopLink:SetSortItems(false)
 
-	local fallback = self.basemenu.fallback[self.roleData.name] or GetGlobalString("ttt_" .. self.roleData.abbr .. "_shop_fallback")
 
-	-- Add own Data for creating own shop
+	ShopEditor.fallback[self.roleData.name] = ShopEditor.fallback[self.roleData.name] or GetGlobalString("ttt_" .. self.roleData.abbr .. "_shop_fallback")
+	local fallback = ShopEditor.fallback[self.roleData.name]
+
+	-- Add own data for creating own shop
 	shopLink:AddChoice(TryT("create_own_shop"), self.roleData, fallback == self.roleData.name)
 
 	-- Since these are no simple roles, the choices have to be added manually
@@ -41,12 +44,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData, fallback == roleData.name)
 	end
 
-	-- Add all items for custom shop if selected and shopFallback is refreshed
-	if fallback ~= self.roleData.name and self.basemenu.needsRefresh then return end
+	-- Display all items as cards for custom shop if selected and shopFallback is refreshed
+	if fallback ~= self.roleData.name or ShopEditor.customShopRefresh then return end
 
 	local sortedEquipmentList = ShopEditor.sortedEquipmentList[GetActiveLanguageName] or {}
 
-	-- If there is no language specific sorted equipment list, create a sorted one
+	-- If there is no language specific sorted equipment list, create one
 	if table.IsEmpty(sortedEquipmentList) then
 		local items = ShopEditor.GetEquipmentForRoleAll()
 
