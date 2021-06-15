@@ -120,11 +120,6 @@ resource.AddFile("materials/vgui/ttt/pickup/icon_extra.png")
 resource.AddFile("materials/vgui/ttt/pickup/icon_class.png")
 resource.AddFile("materials/vgui/ttt/pickup/icon_ammo.png")
 
--- loading screen
-resource.AddFile("materials/vgui/ttt/loadingscreen/loading.vtf")
-resource.AddFile("materials/vgui/ttt/loadingscreen/img/bg.jpg")
-resource.AddFile("materials/vgui/ttt/loadingscreen/img/ttt2_loading_logo.png")
-
 -- dmgindicator themes
 resource.AddFile("materials/vgui/ttt/dmgindicator/themes/default.png")
 resource.AddFile("materials/vgui/ttt/dmgindicator/themes/simple.png")
