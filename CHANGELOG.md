@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Karma now stores changes
   - Is shown in roundend menu
 - Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop
+- Added per-player voice control by hovering over the mute icon and scrolling
 
 ### Fixed
 
@@ -46,6 +47,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - submenus are generated from files located in folders with the menu name
 - Menus without content are now always hidden in the main menu
 - Moved Custom Shopeditor and linking shop to roles to the F1 menu
+
+### Removed
+
+- Removed the custom loading screen (GMOD now only accepts http(s) URLs for sv_loadingurl)
 
 ### Breaking Changes
 

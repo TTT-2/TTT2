@@ -1380,3 +1380,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({a
 --L.equip_added = "added"
 --L.equip_inherit_added = "added (inherit)"
 --L.equip_inherit_removed = "removed (inherit)"
+
+--2021-06-09
+--L.scoreboard_voice_tooltip = "Scroll to change the volume"

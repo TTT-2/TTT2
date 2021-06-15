@@ -12,6 +12,7 @@ local table = table
 local IsValid = IsValid
 local surface = surface
 local vgui = vgui
+local drawRoundedBox = draw.RoundedBox
 
 local color_trans = Color(0, 0, 0, 0)
 
@@ -344,6 +345,12 @@ function PANEL:SetPlayer(ply)
 	self.Player = ply
 	self.avatar:SetPlayer(ply)
 
+	local client = LocalPlayer()
+
+	if ply ~= client then
+		self.voice:SetTooltip(GetTranslation("scoreboard_voice_tooltip"))
+	end
+
 	if not self.info then
 		local g = ScoreGroup(ply)
 
@@ -365,8 +372,14 @@ function PANEL:SetPlayer(ply)
 	end
 
 	self.voice.DoClick = function()
-		if IsValid(ply) and ply ~= LocalPlayer() then
+		if IsValid(ply) and ply ~= client then
 			ply:SetMuted(not ply:IsMuted())
+		end
+	end
+
+	self.voice.OnMouseWheeled = function(label, delta)
+		if IsValid(ply) and ply ~= client then
+			self:ScrollPlayerVolume(delta)
 		end
 	end
 
@@ -677,6 +690,86 @@ function PANEL:DoRightClick()
 	end
 
 	menu:Open()
+end
+
+---
+-- @param number delta
+-- @realm client
+function PANEL:ScrollPlayerVolume(delta)
+	local ply = self:GetPlayer()
+
+	-- Bots return nil for the steamid64 on the client, so we need to improvise a bit
+	local identifier = ply:IsBot() and ply:Nick() or ply:SteamID64()
+
+	local cur_volume = ply:GetVoiceVolumeScale()
+	cur_volume = cur_volume ~= nil and cur_volume or 1
+
+	local new_volume = delta == -1 and math.max(0, cur_volume - 0.01) or math.min(1, cur_volume + 0.01)
+	new_volume = math.Round(new_volume, 2)
+
+	ply:SetVoiceVolumeScale(new_volume)
+
+	if self.voice.percentage_frame ~= nil and not self.voice.percentage_frame:IsVisible() then
+		self.voice.percentage_frame:Show()
+	end
+
+	local x, y = input.GetCursorPos()
+	local width = 60
+	local height = 40
+	local padding = 10
+
+	-- Frame
+	local frame = self.voice.percentage_frame ~= nil and self.voice.percentage_frame or vgui.Create("DFrame")
+	frame:SetPos(x - 10, y + 25)
+	frame:SetSize(width, height)
+	frame:SetTitle("")
+	frame:ShowCloseButton(false)
+	frame:SetDraggable(false)
+	frame:SetSizable(false)
+	frame.Paint = function(_, w, h)
+		drawRoundedBox(8, 0, 0, w, h, Color(24, 25, 28, 180))
+	end
+
+	self.voice.percentage_frame = frame
+
+	local label = self.voice.percentage_frame_label ~= nil and self.voice.percentage_frame_label or vgui.Create("DLabel", frame)
+	label:SetPos(padding, padding)
+	label:SetFont("treb_small")
+	label:SetSize(width - padding * 2, 20)
+	label:SetColor(COLOR_WHITE)
+	label:SetText(tostring(math.Round(new_volume * 100)) .. "%")
+
+	self.voice.percentage_frame_label = label
+
+	timer.Remove("ttt_score_close_perc_frame_" .. identifier)
+
+	timer.Create("ttt_score_close_perc_frame_" .. identifier, 1.5, 1, function()
+		if not self.voice and frame and frame:IsVisible() then
+			frame:Close()
+			frame = nil
+
+			return
+		end
+
+		if not self.voice or not self.voice.percentage_frame or not self.voice.percentage_frame:IsVisible() then return end
+
+		self.voice.percentage_frame:Hide()
+	end)
+
+	hook.Add("ScoreboardHide", "TTTCloseVolumeFrame_" .. identifier, function()
+		if not self.voice and frame and frame:IsVisible() then
+			frame:Close()
+			frame = nil
+
+			return
+		end
+
+		if not self.voice or not self.voice.percentage_frame or not self.voice.percentage_frame:IsVisible() then return end
+
+		self.voice.percentage_frame:Hide()
+
+		timer.Remove("ttt_score_close_perc_frame_" .. identifier)
+	end)
 end
 
 vgui.Register("TTTScorePlayerRow", PANEL, "DButton")

@@ -1380,3 +1380,6 @@ L.none = "Brak Roli"
 --L.equip_added = "added"
 --L.equip_inherit_added = "added (inherit)"
 --L.equip_inherit_removed = "removed (inherit)"
+
+--2021-06-09
+--L.scoreboard_voice_tooltip = "Scroll to change the volume"

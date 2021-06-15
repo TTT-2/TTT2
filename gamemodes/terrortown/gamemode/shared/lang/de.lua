@@ -1370,3 +1370,6 @@ L.equip_not_added = "nicht enthalten"
 L.equip_added = "enthalten"
 L.equip_inherit_added = "enthalten (geerbt)"
 L.equip_inherit_removed = "entfernt (geerbt)"
+
+--2021-06-09
+L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"
