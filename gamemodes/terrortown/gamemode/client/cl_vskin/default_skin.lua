@@ -1205,5 +1205,66 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintRoleImageTTT2(panel, w, h)
+	local colorBackground = panel:GetColor()
+	local colorIcon = utilGetDefaultColor(colorBackground)
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+	drawFilteredShadowedTexture(0, 0, w, h, panel:GetMaterial(), colorIcon.a, colorIcon)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintRoleLayeringSenderTTT2(panel, w, h)
+	local colorBox = utilGetChangedColor(colors.background, 40)
+	local colorText = utilGetDefaultColor(colorBox)
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBox)
+
+	drawSimpleText(
+		TryT("layering_not_layered"),
+		"DermaTTT2Text",
+		10,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintRoleLayeringReceiverTTT2(panel, w, h)
+	local colorBox = utilGetChangedColor(colors.background, 20)
+	local colorText = utilGetDefaultColor(colorBox)
+
+	for i = 1, #panel.layerBoxes do
+		local layerBox = panel.layerBoxes[i]
+
+		drawRoundedBox(sizes.cornerRadius, 0, layerBox.y, w, layerBox.h, colorBox)
+
+		drawSimpleText(
+			ParT("layering_layer", {layer = i}),
+			"DermaTTT2Text",
+			10,
+			layerBox.label,
+			colorText,
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_CENTER
+		)
+	end
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

@@ -46,6 +46,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - menus are now generated based on files located in `lua/terrortown/menus/gamemode/`
   - submenus are generated from files located in folders with the menu name
 - Menus without content are now always hidden in the main menu
+- Moved the role layering menu to the F1 menu (administration submenu)
+  - removed the command `ttt2_edit_rolelayering`
 
 ### Removed
 
