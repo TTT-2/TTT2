@@ -1,5 +1,6 @@
 --- @ignore
 
+local GetActiveLanguageName = LANG.GetActiveLanguageName
 local TryT = LANG.TryTranslation
 
 CLGAMEMODESUBMENU.priority = 0
@@ -20,7 +21,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			net.WriteString(rawdata.name)
 			net.SendToServer()
 
-			--vguihandler.InvalidateVSkin()
+			self.basemenu.needsRefresh = true
 			vguihandler.Rebuild()
 		end
 	})
@@ -40,84 +41,61 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData, fallback == roleData.name)
 	end
 
-	-- Add all items for custom shop if selected
-	if fallback ~= self.roleData.name then return end
+	-- Add all items for custom shop if selected and shopFallback is refreshed
+	if fallback ~= self.roleData.name and self.basemenu.needsRefresh then return end
 
-	local items = ShopEditor.GetEquipmentForRoleAll()
+	local sortedEquipmentList = ShopEditor.sortedEquipmentList[GetActiveLanguageName] or {}
 
-	local counter = 0
-	local sortedItemList = {}
-	for i = 1, #items do
-		local item = items[i]
+	-- If there is no language specific sorted equipment list, create a sorted one
+	if table.IsEmpty(sortedEquipmentList) then
+		local items = ShopEditor.GetEquipmentForRoleAll()
 
-		-- Only keep ttt-equipments that are cached
-		if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
+		local counter = 0
+		for i = 1, #items do
+			local item = items[i]
 
-		counter = counter + 1
+			-- Only keep ttt-equipments that are cached
+			if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
 
-		sortedItemList[counter] = item
+			counter = counter + 1
+
+			sortedEquipmentList[counter] = item
+		end
+
+		for i = 1, #sortedEquipmentList do
+			local item = sortedEquipmentList[i]
+			local name = item.EquipMenuData and item.EquipMenuData.name
+
+			item.shopTitle = TryT(name) ~= name and TryT(name) or TryT(item.PrintName) or item.id or "UNDEFINED"
+		end
+
+		table.SortByMember(sortedEquipmentList, "shopTitle", true)
+
+		-- Save the translated and sorted list
+		ShopEditor.sortedEquipmentList[GetActiveLanguageName] = sortedEquipmentList
 	end
 
-	for i = 1, #sortedItemList do
-		local item = sortedItemList[i]
-		local name = item.EquipMenuData and item.EquipMenuData.name
-
-		item.shopTitle = TryT(name) ~= name and TryT(name) or TryT(item.PrintName) or item.id or "UNDEFINED"
-	end
-
-	table.SortByMember(sortedItemList, "shopTitle", true)
-
+	-- Create toggelable cards to create a custom shop
 	local base = form:MakeCardBase()
 
-	for i = 1, #sortedItemList do
-		local item = sortedItemList[i]
+	for i = 1, #sortedEquipmentList do
+		local item = sortedEquipmentList[i]
 
 		form:MakeCard({
 			label = item.shopTitle,
 			icon = item.ttt2_cached_material,
-			initial = MODE_DEFAULT, -- todo: this should be the current mode
+			initial = item.CanBuy[self.roleData.index] and MODE_ADDED or MODE_DEFAULT, -- todo: this should be the current mode
 			OnChange = function(_, _, newMode)
+				local isAdded = newMode == MODE_ADDED or newMode == MODE_INHERIT_ADDED
 
+				item.CanBuy[self.roleData.index] = isAdded and self.roleData.index or nil
+
+				net.Start("shop")
+				net.WriteBool(isAdded)
+				net.WriteUInt(self.roleData.index, ROLE_BITS)
+				net.WriteString(item.id)
+				net.SendToServer()
 			end
 		}, base)
 	end
-
-
-
-	-- todo remove this
-
-	local form2 = vgui.CreateTTT2Form(parent, "header_shop_linker")
-	local base2 = form2:MakeCardBase()
-
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun")
-	}, base2)
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun")
-	}, base2)
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun")
-	}, base2)
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun")
-	}, base2)
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun"),
-		initial = MODE_ADDED
-	}, base2)
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun"),
-		initial = MODE_INHERIT_ADDED
-	}, base2)
-	form2:MakeCard({
-		label = "Dancegun",
-		icon = Material("vgui/ttt/icon_dancegun"),
-		initial = MODE_INHERIT_REMOVED
-	}, base2)
 end

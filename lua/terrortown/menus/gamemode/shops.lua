@@ -12,6 +12,7 @@ CLGAMEMODEMENU.description = "menu_shops_description"
 CLGAMEMODEMENU.priority = 48
 
 CLGAMEMODEMENU.isInitialized = false
+CLGAMEMODEMENU.needsRefresh = false
 CLGAMEMODEMENU.roles = nil
 CLGAMEMODEMENU.fallback = {}
 

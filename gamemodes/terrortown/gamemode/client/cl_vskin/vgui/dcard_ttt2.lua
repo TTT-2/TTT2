@@ -78,9 +78,7 @@ function PANEL:OnMouseReleased(keyCode)
 			self:SetMode(MODE_ADDED, true)
 		elseif self:GetMode() == MODE_INHERIT_REMOVED then
 			self:SetMode(MODE_INHERIT_ADDED, true)
-		end
-	elseif keyCode == MOUSE_RIGHT then
-		if self:GetMode() == MODE_ADDED then
+		elseif self:GetMode() == MODE_ADDED then
 			self:SetMode(MODE_DEFAULT, true)
 		elseif self:GetMode() == MODE_INHERIT_ADDED then
 			self:SetMode(MODE_INHERIT_REMOVED, true)

@@ -45,6 +45,9 @@ ShopEditor.cvars = {
 	}
 }
 
+-- Table which contains all equipment and is sorted by their translated equipment names
+ShopEditor.sortedEquipmentList = {}
+
 local net = net
 local pairs = pairs
 

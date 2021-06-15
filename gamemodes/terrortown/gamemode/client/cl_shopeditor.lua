@@ -789,6 +789,13 @@ net.Receive("shopFallbackReset", shopFallbackReset)
 function ShopEditor.ShopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
+	-- Refresh F1 menu to show actual custom shop after Refresh
+	if ShopEditor.fallbackUI and ShopEditor.fallbackUI.needsRefresh then
+		ShopEditor.fallbackUI.fallback = ShopEditor.fallbackUI.fallback or {}
+		ShopEditor.fallbackUI.needsRefresh = false
+		vguihandler.Rebuild()
+	end
+
 	if not wshop or not wshop.GetItems or not wshop.selectedRole then return end
 
 	for _, v in pairs(wshop:GetItems()) do
