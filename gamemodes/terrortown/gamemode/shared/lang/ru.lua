@@ -1383,3 +1383,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) был убит {a
 
 --2021-06-09
 --L.scoreboard_voice_tooltip = "Scroll to change the volume"
+
+--2021-06-15
+--L.header_shop_linker = "Settings"
+--L.label_shop_linker_set = "Shopsetting"

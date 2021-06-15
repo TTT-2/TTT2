@@ -1373,3 +1373,7 @@ L.equip_inherit_removed = "entfernt (geerbt)"
 
 --2021-06-09
 L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"
+
+--2021-06-15
+L.header_shop_linker = "Einstellungen"
+L.label_shop_linker_set = "Shop-Einstellung"
