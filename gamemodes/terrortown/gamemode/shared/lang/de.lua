@@ -1381,3 +1381,6 @@ L.itemeditor_name_player_limited = "Spieler limitierte Anzahl"
 L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
 L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
 L.itemeditor_name_credits = "Kosten in Credits"
+
+--2021-06-09
+L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"

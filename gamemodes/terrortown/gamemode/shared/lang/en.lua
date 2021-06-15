@@ -1382,3 +1382,6 @@ L.itemeditor_name_player_limited = "Player limited amount"
 L.itemeditor_desc_player_limited = "If equipment is player limited, it can be bought only once per player in the active round."
 L.itemeditor_name_min_players = "Minimum amount of players for selection"
 L.itemeditor_name_credits = "Price in credits"
+
+--2021-06-09
+L.scoreboard_voice_tooltip = "Scroll to change the volume"
