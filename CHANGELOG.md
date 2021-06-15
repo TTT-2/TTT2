@@ -48,6 +48,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Menus without content are now always hidden in the main menu
 - Moved inclusion of cl_help to the bottom as nothing depends on it, but menus created by it could depend on other client files
 - Shopeditor equipment is now available in F1 menu
+- Moved the role layering menu to the F1 menu (administration submenu)
+  - removed the command `ttt2_edit_rolelayering`
 
 ### Removed
 

@@ -474,6 +474,34 @@ function PANEL:MakeColorMixer(data)
 	return right, left
 end
 
+---
+-- Adds a panel to the form
+-- @return Panel The created panel
+-- @realm client
+function PANEL:MakePanel()
+	local panel = vgui.Create("DPanelTTT2", self)
+
+	self:AddItem(panel)
+
+	return panel
+end
+
+---
+-- Adds an icon layout to the form
+-- @param[default=10] number spacing The spacing between the elements
+-- @return Panel The created panel
+-- @realm client
+function PANEL:MakeIconLayout(spacing)
+	local panel = vgui.Create("DIconLayout", self)
+
+	panel:SetSpaceY(spacing or 10)
+	panel:SetSpaceX(spacing or 10)
+
+	self:AddItem(panel)
+
+	return panel
+end
+
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 
 -- SIMPLE WRAPPER FUNCTION
