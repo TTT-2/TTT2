@@ -474,20 +474,6 @@ function PANEL:MakeColorMixer(data)
 	return right, left
 end
 
----
--- Will be removed after #815 is merged
--- @ignore
-function PANEL:MakeCardBase()
-	local panel = vgui.Create("DIconLayout", self)
-
-	panel:SetSpaceY(10)
-	panel:SetSpaceX(10)
-
-	self:AddItem(panel)
-
-	return panel
-end
-
 -- Adds a panel to the form
 -- @return Panel The created panel
 -- @realm client

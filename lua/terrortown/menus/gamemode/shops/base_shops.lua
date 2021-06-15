@@ -79,7 +79,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	end
 
 	-- Create toggelable cards to create a custom shop
-	local base = form:MakeCardBase()
+	local base = form:MakeIconLayout()
 
 	for i = 1, #sortedEquipmentList do
 		local item = sortedEquipmentList[i]
