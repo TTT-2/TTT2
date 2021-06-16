@@ -31,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed issue where roles with unknownTeam could see messages sent with the team chat key
 - Fixed the admin section label not being visible in the main menu
 - Fixed the auto resizing of the buttons based on the availability of a scrollbar not working
+- Fixed reopening submenus of the legacy addons in F1 menu not working
 
 ### Changed
 
