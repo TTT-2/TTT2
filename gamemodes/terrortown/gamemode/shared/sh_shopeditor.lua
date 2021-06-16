@@ -66,17 +66,7 @@ ShopEditor.savingKeys = {
 	}
 }
 
-local function countSavingKeys()
-	local count = 0
-
-	for key, data in pairs(ShopEditor.savingKeys) do
-		count = count + 1
-	end
-
-	return count
-end
-
-ShopEditor.savingKeysCount = countSavingKeys()
+ShopEditor.savingKeysCount = table.Count(ShopEditor.savingKeys)
 ShopEditor.savingKeysBitCount = math.ceil(math.log(ShopEditor.savingKeysCount, 2))
 
 ShopEditor.cvars = {
