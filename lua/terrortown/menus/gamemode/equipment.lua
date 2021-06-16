@@ -35,6 +35,8 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 		virtualSubmenus[counter] = tableCopy(equipmentMenuBase)
 		virtualSubmenus[counter].item = item
+		virtualSubmenus[counter].icon = item.ttt2_cached_material
+		virtualSubmenus[counter].iconFullSize = true
 	end
 end
 

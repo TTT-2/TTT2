@@ -28,6 +28,7 @@ function PANEL:Init()
 		title = "",
 		title_font = "DermaTTT2SubMenuButtonTitle",
 		icon = nil,
+		iconFullSize = false,
 		selected = false
 	}
 end
@@ -69,9 +70,11 @@ end
 
 ---
 -- @param Material iconMat
+-- @param boolean iconFullSize
 -- @realm client
-function PANEL:SetIcon(iconMat)
+function PANEL:SetIcon(iconMat, iconFullSize)
 	self.contents.icon = iconMat
+	self.contents.iconFullSize = iconFullSize and true or false
 end
 
 ---
@@ -86,6 +89,13 @@ end
 -- @realm client
 function PANEL:HasIcon()
 	return self.contents.icon ~= nil
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:IsIconFullSize()
+	return self.contents.iconFullSize
 end
 
 ---
