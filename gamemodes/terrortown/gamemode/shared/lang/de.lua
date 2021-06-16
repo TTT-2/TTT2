@@ -1054,7 +1054,7 @@ L.submenu_gameplay_general_title = "Allgemein"
 L.submenu_gameplay_avoidroles_title = "Vermeide Rollen"
 
 L.submenu_administration_hud_title = "HUD Einstellungen"
-L.submenu_administration_random_shop = "Zufälliger Shop"
+L.submenu_administration_randomshop_title = "Zufälliger Shop"
 
 L.help_color_desc = "Wenn diese Einstellung aktiviert ist, kann eine globale Farbe ausgesucht werden, die für targetID Umrandung und das Fadenkreuz verwendet wird."
 L.help_scale_factor = "Dieser Skalierungsfaktor beeinflusst alle UI Elmente (HUD, VGUI, targetID). Er wird automatisch aktualisiert, wenn die Auflösung sich ändert. Das Ändern dieses Wertes setzt das HUD zurück!"
@@ -1359,8 +1359,46 @@ L.shopeditor_desc_random_shops = [[Zufalls-Shops geben jedem Spieler eine zufäl
 Team-Shops zwingen alle Spieler aus einem Team zu ein und demselben Shopinhalt.
 Auswürfeln erlaubt es ein gegebenes Set für Credits durch ein neues Zufallsset auszutauschen.]]
 L.shopeditor_name_random_shop_items = "Anzahl zufälliger Equipments"
-L.shopeditor_desc_random_shop_items = "Dies enthält Equipments, welche mit .noRandom (immer enthalten) markiert sind. Also wähle die Anzahl hoch genug, damit nicht nur solches Equipment im Shop landet."
+L.shopeditor_desc_random_shop_items = "Dies enthält Equipments, welche mit \"Nicht zufällig\" (immer enthalten) markiert sind. Also wähle die Anzahl hoch genug, damit nicht nur solches Equipment im Shop landet."
 L.shopeditor_name_random_team_shops = "Aktiviere Team-Shops"
 L.shopeditor_name_random_shop_reroll = "Aktiviere Möglichkeit Shop neu auszuwürfeln"
 L.shopeditor_name_random_shop_reroll_cost = "Kosten pro Auswürfeln"
 L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach jedem Kauf"
+
+-- 2021-06-04
+L.header_equipment_setup = "Equipment Einstellungen"
+L.header_equipment_value_setup = "Balance Einstellungen"
+
+L.itemeditor_name_not_buyable = "Equipment kaufbar"
+L.itemeditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
+L.itemeditor_name_not_random = "Immer im Shop verfügbar"
+L.itemeditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
+L.itemeditor_name_global_limited = "Global limitierte Anzahl"
+L.itemeditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
+L.itemeditor_name_team_limited = "Team limitierte Anzahl"
+L.itemeditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
+L.itemeditor_name_player_limited = "Spieler limitierte Anzahl"
+L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
+L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
+L.itemeditor_name_credits = "Kosten in Credits"
+
+-- 2021-06-08
+L.equip_not_added = "nicht enthalten"
+L.equip_added = "enthalten"
+L.equip_inherit_added = "enthalten (geerbt)"
+L.equip_inherit_removed = "entfernt (geerbt)"
+
+-- 2021-06-09
+L.layering_not_layered = "Ohne Ebene"
+L.layering_layer = "Ebene {layer}"
+L.header_rolelayering_role = "{role}ebene"
+L.header_rolelayering_baserole = "Grundrollenebene"
+L.submenu_administration_rolelayering_title = "Rollenebenen"
+L.header_rolelayering_info = "Rollenebeneninformationen"
+L.help_rolelayering_roleselection = "Die Rollenverteilung wird in zwei Durchgängen gemacht. Im ersten Durchgag werden die Grundrollen verteilt. Grundrollen sind Unschuldige, Verräter und die, die unten in der 'Grundrollenebene' zu sehen sind. Im zweioten Durchgang werden diese Grundrollen dann zu Unterrollen hochgestuft."
+L.help_rolelayering_layers = "Von jeder Ebene wird immer nur eine Rolle ausgewählt. Zuerst werden die numerierten Ebenen durchlaufen, startend bei Ebene 1, bis die letzte Ebene erreicht wird, oder es keine Grundrollen zum Hochstufen mehr gibt. Was auch immer zuerst auftritt. Sind noch hochstufbare Grundrollen am Ende übrig, werden Rollen aus der Gruppe ohne Ebene verwendet."
+L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"
+
+--2021-06-15
+L.header_shop_linker = "Einstellungen"
+L.label_shop_linker_set = "Wähle Shopart aus:"

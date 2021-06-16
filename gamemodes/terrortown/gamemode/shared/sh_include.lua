@@ -9,7 +9,6 @@ TTTFiles = {
 	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
-	cl_help_data = {file = "cl_help_data.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
 	cl_hud_manager = {file = "cl_hud_manager.lua", on = "client"},
@@ -84,11 +83,13 @@ TTTFiles = {
 	-- cl_vskin client files
 	cl_vskin__default_skin = {file = "cl_vskin/default_skin.lua", on = "client"},
 	cl_vskin__vgui__dpanel = {file = "cl_vskin/vgui/dpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__droleimage = {file = "cl_vskin/vgui/droleimage_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dframe = {file = "cl_vskin/vgui/dframe_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dmenubutton = {file = "cl_vskin/vgui/dmenubutton_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dsubmenubutton = {file = "cl_vskin/vgui/dsubmenubutton_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dnavpanel = {file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcontentpanel = {file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcard = {file = "cl_vskin/vgui/dcard_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dbuttonpanel = {file = "cl_vskin/vgui/dbuttonpanel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcategoryheader = {file = "cl_vskin/vgui/dcategoryheader_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcategorycollapse = {file = "cl_vskin/vgui/dcategorycollapse_ttt2.lua", on = "client"},
@@ -106,6 +107,9 @@ TTTFiles = {
 	cl_vskin__vgui__dcoloredtextbox = {file = "cl_vskin/vgui/dcoloredtextbox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dtooltip = {file = "cl_vskin/vgui/dtooltip_ttt2.lua", on = "client"},
 	cl_vskin__vgui__deventbox = {file = "cl_vskin/vgui/deventbox_ttt2.lua", on = "client"},
+	cl_vskin__vgui__ddragbase = {file = "cl_vskin/vgui/ddragbase_ttt2.lua", on = "client"},
+	cl_vskin__vgui__drolelayeringreceiver = {file = "cl_vskin/vgui/drolelayeringreceiver_ttt2.lua", on = "client"},
+	cl_vskin__vgui__drolelayeringsender = {file = "cl_vskin/vgui/drolelayeringsender_ttt2.lua", on = "client"},
 }
 
 if SERVER then
@@ -121,7 +125,6 @@ if SERVER then
 		sv_hud_manager = {file = "sv_hud_manager.lua", on = "server"},
 		sv_inventory = {file = "sv_inventory.lua", on = "server"},
 		sv_karma = {file = "sv_karma.lua", on = "server"},
-		sv_loadingscreen = {file = "sv_loadingscreen.lua", on = "server"},
 		sv_main = {file = "sv_main.lua", on = "server"},
 		sv_networking = {file = "sv_networking.lua", on = "server"},
 		sv_network_sync = {file = "sv_network_sync.lua", on = "server"},

@@ -37,7 +37,6 @@ ttt_include("sv_ent_replace")
 ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
-ttt_include("sv_loadingscreen")
 ttt_include("sv_eventpopup")
 
 ttt_include("sv_armor")
@@ -253,8 +252,12 @@ util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
-fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
+-- provide menu files by loading them from here:
+fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)
+fileloader.LoadFolder("terrortown/menus/gamemode/", false, CLIENT_FILE)
+fileloader.LoadFolder("terrortown/menus/gamemode/", true, CLIENT_FILE)
 
+-- provide and add autorun files
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Marked TTT2 client autorun file for distribution: ", path)
 end)

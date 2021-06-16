@@ -33,6 +33,9 @@ SWEP.Kind = WEAPON_NONE
 -- (just setting to nil here to document its existence, don't make this buyable)
 SWEP.CanBuy = nil
 
+-- By default a weapon is buyable. Set this to true if the weapon should not be buyable.
+SWEP.notBuyable = false
+
 if CLIENT then
 	-- If this is a buyable weapon (ie. CanBuy is not nil) EquipMenuData must be
 	-- a table containing some information to show in the Equipment Menu. See

@@ -19,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new convar `ttt2_rolecheck_all_evil_roles` that counts all evil roles as traitor roles for map related entity checks if enabled
 - Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks
 - Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop
+- Added per-player voice control by hovering over the mute icon and scrolling
 
 ### Fixed
 
@@ -30,6 +31,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed silent Footsteps, while crouched bhopping
 - Fixed issue where base innocents could bypass the TTT2AvoidGeneralChat and TTT2AvoidTeamChat hooks with the team chat key
 - Fixed issue where roles with unknownTeam could see messages sent with the team chat key
+- Fixed the admin section label not being visible in the main menu
+- Fixed the auto resizing of the buttons based on the availability of a scrollbar not working
+- Fixed reopening submenus of the legacy addons in F1 menu not working
 
 ### Changed
 
@@ -41,11 +45,26 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - By default all evil roles are now counted as traitor roles for map related checks (with convar to disable)
 - Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)
 - Shopeditor settings are now available in the F1 Menu
+- Moved the F1 menu generating system from a hook based system to a file based system
+  - removed the hooks `TTT2ModifyHelpMainMenu` and `TTT2ModifyHelpSubMenu`
+  - menus are now generated based on files located in `lua/terrortown/menus/gamemode/`
+  - submenus are generated from files located in folders with the menu name
+- Menus without content are now always hidden in the main menu
+- Moved Custom Shopeditor and linking shop to roles to the F1 menu
+- Moved inclusion of cl_help to the bottom as nothing depends on it, but menus created by it could depend on other client files
+- Shopeditor equipment is now available in F1 menu
+- Moved the role layering menu to the F1 menu (administration submenu)
+  - removed the command `ttt2_edit_rolelayering`
+
+### Removed
+
+- Removed the custom loading screen (GMOD now only accepts http(s) URLs for sv_loadingurl)
 
 ### Breaking Changes
 
 - Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
 - Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.
+- Shopeditor function `ShopEditor.ReadItemData()` now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (`TTT2SESaveItem`,`TTT2SyncDBItems`)
 
 
 ## [v0.8.2b](https://github.com/TTT-2/TTT2/tree/v0.8.2b) (2021-03-25)

@@ -25,9 +25,10 @@ classbuilder = classbuilder or {}
 -- @param[default=false] boolean shouldInherit Set this to true if this class should inherit from its base
 -- @param[opt] function SpecialCheck A function that makes a special check, inheritance is blocked if false is returned
 -- @param[opt] table passthrough A table that can be passed through if the classdata table should be extended
+-- @param[opt] function PostInherit A callback function that is called for all classes post inheritance
 -- @return table Returns a table of all the created classes
 -- @realm shared
-function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck, passthrough)
+function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck, passthrough, PostInherit)
 	-- In case this function is run on the server but the class should only exist
 	-- on the client, this function should work only as a proxy.
 	if SERVER and realm == CLIENT_FILE then
@@ -76,6 +77,14 @@ function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shou
 			if isfunction(SpecialCheck) and not SpecialCheck(class, base) then continue end
 
 			classTable[name] = tableDeepInherit(class, base)
+		end
+	end
+
+	-- call callback function for all classes once they are all set up and finished
+	-- their inheritance
+	if isfunction(PostInherit) then
+		for name, class in pairs(classTable) do
+			PostInherit(class, path, name)
 		end
 	end
 

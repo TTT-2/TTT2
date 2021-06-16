@@ -1055,7 +1055,7 @@ L.submenu_gameplay_general_title = "General"
 L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
 L.submenu_administration_hud_title = "HUD Settings"
-L.submenu_administration_random_shop = "Random Shop"
+L.submenu_administration_randomshop_title = "Random Shop"
 
 L.help_color_desc = "If this setting is enabled, you can choose a global color that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, VGUI and TargetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
@@ -1360,8 +1360,46 @@ L.shopeditor_desc_random_shops = [[Random shops give every player only a limited
 Team shops force all players in one team to have the same set instead of individual ones.
 Rerolling allows you to get a new randomized set of equipment for credits.]]
 L.shopeditor_name_random_shop_items = "Number of random equipments"
-L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with .noRandom. So choose a high enough number or you only get those."
+L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with \"Not Random\". So choose a high enough number or you only get those."
 L.shopeditor_name_random_team_shops = "Enable team shops"
 L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
 L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
 L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+
+-- 2021-06-04
+L.header_equipment_setup = "Setup Equipment"
+L.header_equipment_value_setup = "Balance Settings"
+
+L.itemeditor_name_not_buyable = "Equipment buyable"
+L.itemeditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
+L.itemeditor_name_not_random = "Aways available in shop"
+L.itemeditor_desc_not_random = "If enabled, the equipment is always available in the shop. This is relevant when using the random shop. It takes one available random slot and always reserves it for this equipment."
+L.itemeditor_name_global_limited = "Global limited amount"
+L.itemeditor_desc_global_limited = "If equipment is global limited, it can be bought only once on the server in the active round."
+L.itemeditor_name_team_limited = "Team limited amount"
+L.itemeditor_desc_team_limited = "If equipment is team limited, it can be bought only once per team in the active round."
+L.itemeditor_name_player_limited = "Player limited amount"
+L.itemeditor_desc_player_limited = "If equipment is player limited, it can be bought only once per player in the active round."
+L.itemeditor_name_min_players = "Minimum amount of players for selection"
+L.itemeditor_name_credits = "Price in credits"
+
+-- 2021-06-08
+L.equip_not_added = "not added"
+L.equip_added = "added"
+L.equip_inherit_added = "added (inherit)"
+L.equip_inherit_removed = "removed (inherit)"
+
+-- 2021-06-09
+L.layering_not_layered = "Not layered"
+L.layering_layer = "Layer {layer}"
+L.header_rolelayering_role = "{role} layer"
+L.header_rolelayering_baserole = "Base role layer"
+L.submenu_administration_rolelayering_title = "Role Layering"
+L.header_rolelayering_info = "Role layering information"
+L.help_rolelayering_roleselection = "The role selection process is split into two passes. In the first pass base roles are disctributed. Baseroles are innocent, traitor and those listed in the 'base role layer' box below. The second pass is used to upgrade those baseroles to a subrole."
+L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first. If upgradeable slots are still available, the unlayered roles will be distributed as well."
+L.scoreboard_voice_tooltip = "Scroll to change the volume"
+
+--2021-06-15
+L.header_shop_linker = "Settings"
+L.label_shop_linker_set = "Select shop type:"
