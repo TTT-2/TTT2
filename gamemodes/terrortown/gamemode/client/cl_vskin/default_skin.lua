@@ -1211,6 +1211,10 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 	end
 end
 
+local MODE_ADDED = ShopEditor.MODE_ADDED
+local MODE_INHERIT_ADDED = ShopEditor.MODE_INHERIT_ADDED
+local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
+
 ---
 -- @param Panel panel
 -- @param number w

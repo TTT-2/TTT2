@@ -4,6 +4,11 @@
 
 local PANEL = {}
 
+local MODE_DEFAULT = ShopEditor.MODE_DEFAULT
+local MODE_ADDED = ShopEditor.MODE_ADDED
+local MODE_INHERIT_ADDED = ShopEditor.MODE_INHERIT_ADDED
+local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
+
 ---
 -- @ignore
 function PANEL:Init()

@@ -2,12 +2,14 @@
 -- @author Alf21
 -- @module ShopEditor
 
-MODE_DEFAULT = 1
-MODE_ADDED = 2
-MODE_INHERIT_ADDED = 3
-MODE_INHERIT_REMOVED = 4
 
 ShopEditor = ShopEditor or {}
+
+ShopEditor.MODE_DEFAULT = 1
+ShopEditor.MODE_ADDED = 2
+ShopEditor.MODE_INHERIT_ADDED = 3
+ShopEditor.MODE_INHERIT_REMOVED = 4
+
 ShopEditor.savingKeys = {
 	credits = {typ = "number", bits = 8, default = 1}, -- from 0 to 255 (2^8 - 1)
 	minPlayers = {typ = "number", bits = 6}, -- from 0 to 63 (2^6 - 1)

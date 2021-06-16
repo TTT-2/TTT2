@@ -6,6 +6,10 @@ local IsEmpty = table.IsEmpty
 local SortByMember = table.SortByMember
 local net = net
 
+local MODE_DEFAULT = ShopEditor.MODE_DEFAULT
+local MODE_ADDED = ShopEditor.MODE_ADDED
+local MODE_INHERIT_ADDED = ShopEditor.MODE_INHERIT_ADDED
+
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
 
