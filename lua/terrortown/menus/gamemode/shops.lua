@@ -1,6 +1,7 @@
 --- @ignore
 
 local tableCopy = table.Copy
+local roles = roles
 
 local virtualSubmenus = {}
 
