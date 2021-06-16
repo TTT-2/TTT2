@@ -1359,11 +1359,28 @@ L.shopeditor_desc_random_shops = [[Zufalls-Shops geben jedem Spieler eine zufäl
 Team-Shops zwingen alle Spieler aus einem Team zu ein und demselben Shopinhalt.
 Auswürfeln erlaubt es ein gegebenes Set für Credits durch ein neues Zufallsset auszutauschen.]]
 L.shopeditor_name_random_shop_items = "Anzahl zufälliger Equipments"
-L.shopeditor_desc_random_shop_items = "Dies enthält Equipments, welche mit .noRandom (immer enthalten) markiert sind. Also wähle die Anzahl hoch genug, damit nicht nur solches Equipment im Shop landet."
+L.shopeditor_desc_random_shop_items = "Dies enthält Equipments, welche mit \"Nicht zufällig\" (immer enthalten) markiert sind. Also wähle die Anzahl hoch genug, damit nicht nur solches Equipment im Shop landet."
 L.shopeditor_name_random_team_shops = "Aktiviere Team-Shops"
 L.shopeditor_name_random_shop_reroll = "Aktiviere Möglichkeit Shop neu auszuwürfeln"
 L.shopeditor_name_random_shop_reroll_cost = "Kosten pro Auswürfeln"
 L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach jedem Kauf"
+
+-- 2021-06-04
+L.header_equipment_setup = "Equipment Einstellungen"
+L.header_equipment_value_setup = "Balance Einstellungen"
+
+L.itemeditor_name_not_buyable = "Equipment kaufbar"
+L.itemeditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
+L.itemeditor_name_not_random = "Immer im Shop verfügbar"
+L.itemeditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
+L.itemeditor_name_global_limited = "Global limitierte Anzahl"
+L.itemeditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
+L.itemeditor_name_team_limited = "Team limitierte Anzahl"
+L.itemeditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
+L.itemeditor_name_player_limited = "Spieler limitierte Anzahl"
+L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
+L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
+L.itemeditor_name_credits = "Kosten in Credits"
 
 -- 2021-06-09
 L.layering_not_layered = "Ohne Ebene"
