@@ -2,7 +2,14 @@
 -- @author Alf21
 -- @module ShopEditor
 
+
 ShopEditor = ShopEditor or {}
+
+ShopEditor.MODE_DEFAULT = 1
+ShopEditor.MODE_ADDED = 2
+ShopEditor.MODE_INHERIT_ADDED = 3
+ShopEditor.MODE_INHERIT_REMOVED = 4
+
 ShopEditor.savingKeys = {
 	notBuyable = {
 		order = 1,
@@ -119,6 +126,9 @@ ShopEditor.cvars = {
 		b_desc = false
 	}
 }
+
+-- Table which contains all equipment and is sorted by their translated equipment names
+ShopEditor.sortedEquipmentList = {}
 
 local net = net
 local pairs = pairs

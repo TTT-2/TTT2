@@ -16,6 +16,12 @@ local net = net
 local pairs = pairs
 local IsValid = IsValid
 
+ShopEditor = ShopEditor or {}
+
+-- Contains fallback data inbetween rebuilds and if custom shop needs a refresh or data is updated
+ShopEditor.fallback = {}
+ShopEditor.customShopRefresh = false
+
 ---
 -- Returns whether the given equipment is not an @{ITEM} (so whether it's a @{Weapon})
 -- @param ITEM|Weapon item
@@ -675,7 +681,10 @@ end
 
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
-	local fb = net.ReadString()
+	local fallback = net.ReadString()
+	local roleData = roles.GetByIndex(subrole)
+
+	ShopEditor.fallback[roleData.name] = fallback
 
 	-- reset everything
 	Equipment[subrole] = {}
@@ -702,10 +711,9 @@ local function shopFallbackAnsw(len)
 		canBuy[subrole] = nil
 	end
 
-	if fb == SHOP_UNSET then
-		local roleData = roles.GetByIndex(subrole)
-
+	if fallback == SHOP_UNSET then
 		local flbTbl = roleData.fallbackTable
+
 		if not flbTbl then return end
 
 		-- set everything
@@ -777,6 +785,13 @@ net.Receive("shopFallbackReset", shopFallbackReset)
 function ShopEditor.ShopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
+	-- Refresh F1 menu to show actual custom shop after ShopFallbackRefresh
+	if ShopEditor.customShopRefresh then
+		ShopEditor.customShopRefresh = false
+		vguihandler.Rebuild()
+	end
+
+	-- Old Shopeditor refresh
 	if not wshop or not wshop.GetItems or not wshop.selectedRole then return end
 
 	for _, v in pairs(wshop:GetItems()) do

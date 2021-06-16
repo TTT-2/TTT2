@@ -382,6 +382,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
 			local settingsButton = navAreaScrollGrid:Add("DSubmenuButtonTTT2")
 			settingsButton:SetSize(widthNavButton, heightNavButton)
 			settingsButton:SetTitle(subMenuClass.title or subMenuClass.type)
+			settingsButton:SetIcon(subMenuClass.icon)
 
 			settingsButton.DoClick = function(slf)
 				HELPSCRN:SetupContentArea(contentArea, subMenuClasses[i])

@@ -6,6 +6,12 @@ local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
 local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
 local materialRhombus = Material("vgui/ttt/vskin/rhombus")
+local materialCardAdded = Material("vgui/ttt/vskin/card_added")
+local materialCardRemoved = Material("vgui/ttt/vskin/card_removed")
+
+local colorCardAdded = Color(80, 190, 25)
+local colorCardInheritAdded = Color(25, 190, 175)
+local colorCardInheritRemoved = Color(185, 45, 25)
 
 local SKIN = {
 	Name = "ttt2_default"
@@ -1203,6 +1209,86 @@ function SKIN:PaintEventBoxTTT2(panel, w, h)
 
 		posY = posY + height + 15
 	end
+end
+
+local MODE_ADDED = ShopEditor.MODE_ADDED
+local MODE_INHERIT_ADDED = ShopEditor.MODE_INHERIT_ADDED
+local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintCardTTT2(panel, w, h)
+	local widthBorder = 2
+	local widthBorder2 = widthBorder * 2
+	local sizeIcon = 64
+	local padding = 5
+	local posIcon = widthBorder + padding
+	local posText = posIcon + sizeIcon + 2 * padding
+	local heightMode = 35
+	local widthMode = w - sizeIcon - 3 * padding
+	local posIconModeX = w - widthMode + 2 * padding
+	local posIconModeY = h - heightMode + 2 * padding
+	local sizeIconMode = heightMode - 4 * padding
+	local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
+	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
+
+	local colorBackground = colors.settingsBox
+	local colorText = colors.settingsText
+	local colorMode = utilGetChangedColor(colors.background, 75)
+
+	local materialMode = materialCardRemoved
+	local textMode = "equip_not_added"
+
+	if panel:GetMode() == MODE_ADDED then
+		colorMode = colorCardAdded
+		materialMode = materialCardAdded
+		textMode = "equip_added"
+	elseif panel:GetMode() == MODE_INHERIT_ADDED then
+		colorMode = colorCardInheritAdded
+		materialMode = materialCardAdded
+		textMode = "equip_inherit_added"
+	elseif panel:GetMode() == MODE_INHERIT_REMOVED then
+		colorMode = colorCardInheritRemoved
+		textMode = "equip_inherit_removed"
+	end
+
+	local colorTextMode = utilGetDefaultColor(colorMode)
+
+	if panel.Hovered then
+		colorBackground = colors.accentHover
+	end
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
+	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
+
+	drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		posText,
+		posIcon + padding,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_TOP
+	)
+
+	drawRoundedBoxEx(sizes.cornerRadius, w - widthMode, h - heightMode, widthMode, heightMode, colorMode, true, false, false, true)
+
+	drawFilteredTexture(posIconModeX, posIconModeY, sizeIconMode, sizeIconMode, materialMode, 175, colorTextMode)
+
+	drawSimpleText(
+		TryT(textMode),
+		"DermaTTT2Text",
+		posTextModeX,
+		posTextModeY,
+		colorTextMode,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 ---

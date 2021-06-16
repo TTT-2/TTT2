@@ -1382,6 +1382,12 @@ L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl
 L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
 L.itemeditor_name_credits = "Kosten in Credits"
 
+-- 2021-06-08
+L.equip_not_added = "nicht enthalten"
+L.equip_added = "enthalten"
+L.equip_inherit_added = "enthalten (geerbt)"
+L.equip_inherit_removed = "entfernt (geerbt)"
+
 -- 2021-06-09
 L.layering_not_layered = "Ohne Ebene"
 L.layering_layer = "Ebene {layer}"
@@ -1392,3 +1398,7 @@ L.header_rolelayering_info = "Rollenebeneninformationen"
 L.help_rolelayering_roleselection = "Die Rollenverteilung wird in zwei Durchgängen gemacht. Im ersten Durchgag werden die Grundrollen verteilt. Grundrollen sind Unschuldige, Verräter und die, die unten in der 'Grundrollenebene' zu sehen sind. Im zweioten Durchgang werden diese Grundrollen dann zu Unterrollen hochgestuft."
 L.help_rolelayering_layers = "Von jeder Ebene wird immer nur eine Rolle ausgewählt. Zuerst werden die numerierten Ebenen durchlaufen, startend bei Ebene 1, bis die letzte Ebene erreicht wird, oder es keine Grundrollen zum Hochstufen mehr gibt. Was auch immer zuerst auftritt. Sind noch hochstufbare Grundrollen am Ende übrig, werden Rollen aus der Gruppe ohne Ebene verwendet."
 L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"
+
+--2021-06-15
+L.header_shop_linker = "Einstellungen"
+L.label_shop_linker_set = "Wähle Shopart aus:"

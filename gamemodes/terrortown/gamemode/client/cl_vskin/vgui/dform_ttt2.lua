@@ -474,7 +474,6 @@ function PANEL:MakeColorMixer(data)
 	return right, left
 end
 
----
 -- Adds a panel to the form
 -- @return Panel The created panel
 -- @realm client
@@ -487,6 +486,28 @@ function PANEL:MakePanel()
 end
 
 ---
+-- Adds a new card to the form.
+-- @param table data The data for the card
+-- @param PANEL base The base Panel (DIconLayout) where this card will be added
+-- @return Panel The created card
+-- @realm client
+function PANEL:MakeCard(data, base)
+	local card = base:Add("DCardTTT2")
+
+	card:SetSize(238, 78)
+	card:SetIcon(data.icon)
+	card:SetText(data.label)
+	card:SetMode(data.initial)
+
+	card.OnModeChanged = function(slf, oldMode, newMode)
+		if data and isfunction(data.OnChange) then
+			data.OnChange(slf, oldMode, newMode)
+		end
+	end
+
+	return card
+end
+
 -- Adds an icon layout to the form
 -- @param[default=10] number spacing The spacing between the elements
 -- @return Panel The created panel

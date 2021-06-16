@@ -46,6 +46,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - menus are now generated based on files located in `lua/terrortown/menus/gamemode/`
   - submenus are generated from files located in folders with the menu name
 - Menus without content are now always hidden in the main menu
+- Moved Custom Shopeditor and linking shop to roles to the F1 menu
 - Moved inclusion of cl_help to the bottom as nothing depends on it, but menus created by it could depend on other client files
 - Shopeditor equipment is now available in F1 menu
 - Moved the role layering menu to the F1 menu (administration submenu)
