@@ -456,7 +456,7 @@ util.Capitalize = string.Capitalize
 
 ---
 -- Checks if the provided team is an evil team. By default all non innocents that aren't
--- `TEAM_NONE` are included. Can be disabled with the convar `ttt2_rolecheck_all_evil_roles`.
+-- `TEAM_NONE` are included.
 -- @param string team The team that should be tested
 -- @return boolean Returns if a team is evil
 -- @realm shared
@@ -466,13 +466,8 @@ function util.IsEvilTeam(team)
 		return false
 	end
 
-	if GetConVar("ttt2_rolecheck_all_evil_roles"):GetBool() then
-		-- all non inno roles are counted as evil
-		return team ~= TEAM_INNOCENT
-	else
-		-- only traitor roles are counted as evil
-		return team == TEAM_TRAITOR
-	end
+	-- all non inno roles are counted as evil
+	return team ~= TEAM_INNOCENT
 end
 
 ---
