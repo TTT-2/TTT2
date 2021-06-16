@@ -108,7 +108,8 @@ function CLGAMEMODEMENU:Initialize()
 
 		virtualSubmenus[i] = tableCopy(legacyMenuBase)
 		virtualSubmenus[i].title = legacyTab.name
-		virtualSubmenus[i].panel = legacyTab.panel
+		virtualSubmenus[i].elemStore = elemStore
+		virtualSubmenus[i].index = i
 	end
 end
 
