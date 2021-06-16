@@ -27,8 +27,8 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 	local counter = 0
 	for _, roleData in pairs(self.roles) do
-
 		if roleData.index == ROLE_NONE then continue end
+
 		counter = counter + 1
 
 		virtualSubmenus[counter] = tableCopy(shopsMenuBase)

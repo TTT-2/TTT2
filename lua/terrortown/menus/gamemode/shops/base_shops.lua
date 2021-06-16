@@ -11,9 +11,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	local shopLink = form:MakeComboBox({
 		label = "label_shop_linker_set",
-		OnChange = function(slf, index, value, rawdata)
-
+		OnChange = function(_, _, _, rawdata)
 			if ShopEditor.fallback[self.roleData.name] == rawdata.name then return end
+
 			ShopEditor.fallback[self.roleData.name] = rawdata.name
 
 			net.Start("shopFallback")
@@ -28,8 +28,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	shopLink:SetSortItems(false)
 
-
 	ShopEditor.fallback[self.roleData.name] = ShopEditor.fallback[self.roleData.name] or GetGlobalString("ttt_" .. self.roleData.abbr .. "_shop_fallback")
+
 	local fallback = ShopEditor.fallback[self.roleData.name]
 
 	-- Add own data for creating own shop
@@ -41,6 +41,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	for _, roleData in pairs(self.roles) do
 		if roleData.index == ROLE_NONE or roleData.index == self.roleData.index then continue end
+
 		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData, fallback == roleData.name)
 	end
 
