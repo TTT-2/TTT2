@@ -86,7 +86,6 @@ ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
-ttt_include("cl_help")
 ttt_include("cl_msgstack")
 ttt_include("cl_eventpopup")
 ttt_include("cl_hudpickup")
@@ -107,6 +106,8 @@ ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
+
+ttt_include("cl_help") -- Creates Menus which depend on other client files. Should be loaded as late as possible
 
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Added TTT2 client autorun file: ", path)
