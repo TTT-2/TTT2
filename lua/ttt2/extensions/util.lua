@@ -462,7 +462,7 @@ util.Capitalize = string.Capitalize
 -- @realm shared
 function util.IsEvilTeam(team)
 	-- players without a team are counted as neutral
-	if not team or team == TEAM_NONE or TEAMS[team].alone then
+	if not team or team == TEAM_NONE then
 		return false
 	end
 
