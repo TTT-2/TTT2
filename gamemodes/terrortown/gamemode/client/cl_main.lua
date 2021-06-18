@@ -71,6 +71,8 @@ ttt_include("cl_vskin__vgui__deventbox")
 ttt_include("cl_vskin__vgui__ddragbase")
 ttt_include("cl_vskin__vgui__drolelayeringreceiver")
 ttt_include("cl_vskin__vgui__drolelayeringsender")
+ttt_include("cl_vskin__vgui__dsearchbar")
+ttt_include("cl_vskin__vgui__dsubmenulist")
 
 ttt_include("cl_changes")
 ttt_include("cl_network_sync")

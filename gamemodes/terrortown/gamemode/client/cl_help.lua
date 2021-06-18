@@ -141,11 +141,8 @@ local width, height = 1100, 700
 local heightMainMenuButton = 120
 
 local widthNav, heightNav = 300, 700
-local heightNavHeader = 15
-local widthNavContent, heightNavContent = 299, 685
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
-local widthNavButton, heightNavButton = 299, 50
 local heightAdminSeperator = 50
 
 local function AddMenuButtons(menuTbl, parent, widthButton, heightButton)
@@ -334,6 +331,8 @@ function HELPSCRN:ShowSubmenu(menuClass)
 		self:ShowMainMenu()
 	end)
 
+	frame:SetKeyboardInputEnabled(true)
+
 	-- MARK AS SUBMENU
 	self.currentMenuId = menuClass.type
 
@@ -343,67 +342,17 @@ function HELPSCRN:ShowSubmenu(menuClass)
 	navArea:SetPos(0, 0)
 	navArea:Dock(LEFT)
 
-	local navAreaContent = vgui.Create("DPanel", navArea)
-	navAreaContent:SetPos(0, heightNavHeader)
-	navAreaContent:SetSize(widthNavContent, heightNavContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
-
-	-- MAKE NAV AREA SCROLLABLE
-	local navAreaScroll = vgui.Create("DScrollPanelTTT2", navAreaContent)
-	navAreaScroll:SetVerticalScrollbarEnabled(true)
-	navAreaScroll:Dock(FILL)
-
-	-- SPLIT NAV AREA INTO A GRID LAYOUT
-	local navAreaScrollGrid = vgui.Create("DIconLayout", navAreaScroll)
-	navAreaScrollGrid:Dock(FILL)
-	navAreaScrollGrid:SetSpaceY(self.padding)
-
 	local contentArea = vgui.Create("DContentPanelTTT2", frame)
 	contentArea:SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
 	contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
 	contentArea:Dock(TOP)
 
-	-- GENERATE MENU CONTENT
-	local subMenuClasses = menuClass:GetVisibleSubmenus()
-
-	-- cache reference to last active button
-	local lastActive
-
-	if #subMenuClasses == 0 then
-		local labelNoContent = vgui.Create("DLabelTTT2", contentArea)
-		labelNoContent:SetText("label_menu_not_populated")
-		labelNoContent:SetSize(widthContent - 40, 50)
-		labelNoContent:SetFont("DermaTTT2Title")
-		labelNoContent:SetPos(20, 0)
-	else
-		for i = 1, #subMenuClasses do
-			local subMenuClass = subMenuClasses[i]
-
-			local settingsButton = navAreaScrollGrid:Add("DSubmenuButtonTTT2")
-			settingsButton:SetSize(widthNavButton, heightNavButton)
-			settingsButton:SetTitle(subMenuClass.title or subMenuClass.type)
-			settingsButton:SetIcon(subMenuClass.icon, subMenuClass.iconFullSize)
-
-			settingsButton.DoClick = function(slf)
-				HELPSCRN:SetupContentArea(contentArea, subMenuClasses[i])
-				HELPSCRN:BuildContentArea()
-
-				-- handle the set/unset of active buttons for the draw process
-				lastActive:SetActive(false)
-				slf:SetActive()
-
-				lastActive = slf
-			end
-		end
-
-		HELPSCRN:SetupContentArea(contentArea, subMenuClasses[1])
-		HELPSCRN:BuildContentArea()
-
-		-- handle the set of active buttons for the draw process
-		navAreaScrollGrid:GetChild(0):SetActive()
-
-		lastActive = navAreaScrollGrid:GetChild(0)
-	end
+	local submenuList = vgui.Create("DSubmenuListTTT2", navArea)
+	submenuList:SetMainFrame(frame)
+	submenuList:SetPadding(self.padding)
+	submenuList:SetSubmenuClasses(menuClass:GetVisibleSubmenus(), contentArea)
+	submenuList:EnableSearchBar(true)
 
 	-- REGISTER REBUILD CALLBACK
 	frame.OnRebuild = function(slf)
