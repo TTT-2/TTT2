@@ -59,8 +59,8 @@ local serverSizeVar = GetConVar("ttt_bem_sv_size")
 -- @realm client
 local function CreateFavTable()
 	if not sql.TableExists("ttt_bem_fav") then
-		query = "CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT)"
-		result = sql.Query(query)
+		local query = "CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT)"
+		sql.Query(query)
 	end
 end
 
@@ -71,8 +71,8 @@ end
 -- @param string id the @{WEAPON} or @{ITEM} id
 -- @realm client
 local function AddFavorite(steamid, subrole, id)
-	query = ("INSERT INTO ttt_bem_fav VALUES('" .. steamid .. "','" .. subrole .. "','" .. id .. "')")
-	result = sql.Query(query)
+	local query = ("INSERT INTO ttt_bem_fav VALUES('" .. steamid .. "','" .. subrole .. "','" .. id .. "')")
+	sql.Query(query)
 end
 
 ---
@@ -82,8 +82,8 @@ end
 -- @param string id the @{WEAPON} or @{ITEM} id
 -- @realm client
 local function RemoveFavorite(steamid, subrole, id)
-	query = ("DELETE FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "' AND weapon_id = '" .. id .. "'")
-	result = sql.Query(query)
+	local query = ("DELETE FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "' AND weapon_id = '" .. id .. "'")
+	sql.Query(query)
 end
 
 ---
@@ -93,10 +93,9 @@ end
 -- @return table list of all favorites based on the subrole
 -- @realm client
 local function GetFavorites(steamid, subrole)
-	query = ("SELECT weapon_id FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "'")
-	result = sql.Query(query)
+	local query = ("SELECT weapon_id FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "'")
 
-	return result
+	return sql.Query(query)
 end
 
 ---
