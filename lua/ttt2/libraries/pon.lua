@@ -39,8 +39,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local pon = {}
-_G.pon = pon
+pon = pon or {}
+
 local type = type
 local tonumber = tonumber
 local format = string.format
