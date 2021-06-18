@@ -512,6 +512,7 @@ include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
 
 -- include libraries
+include("ttt2/libraries/bind.lua")
 include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/classbuilder.lua")
 include("ttt2/libraries/fonts.lua")
