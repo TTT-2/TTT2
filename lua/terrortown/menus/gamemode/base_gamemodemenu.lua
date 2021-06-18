@@ -1,6 +1,10 @@
 ---
 -- @class CLGAMEMODEMENU
 
+local TryT = LANG.TryTranslation
+local lowerString = string.lower
+local findString = string.find
+
 CLGAMEMODEMENU.type = "base_gamemodemenu"
 CLGAMEMODEMENU.priority = 0
 CLGAMEMODEMENU.icon = nil
@@ -100,6 +104,32 @@ end
 -- @realm client
 function CLGAMEMODEMENU:AddSubmenu(submenu)
 	self.submenus[#self.submenus + 1] = submenu
+end
+
+function CLGAMEMODEMENU:EnableSearchbar(active)
+	self.searchbar = active
+end
+
+function CLGAMEMODEMENU:HasSearchbar()
+	return self.searchbar or false
+end
+
+function CLGAMEMODEMENU:SetSearchFunction(searchFunction)
+	self.searchFunction = searchFunction
+end
+
+function CLGAMEMODEMENU:GetSearchFunction()
+	local searchFunction = self.searchFunction
+	if not isfunction(searchFunction) then
+		searchFunction = function(submenuClass, searchText)
+			local txt = lowerString(searchText)
+			local title = lowerString(TryT(submenuClass.title))
+			local start = findString(title, txt)
+
+			return start or false and true
+		end
+	end
+	return searchFunction
 end
 
 ---

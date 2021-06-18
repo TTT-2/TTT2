@@ -75,17 +75,15 @@ function PANEL:EnableSearchBar(active)
 	searchBarText:SetUpdateOnType(true)
 	searchBarText:Dock(FILL)
 	searchBarText.OnValueChange = function(slf,text)
-		local txt = string.lower(text)
 		local submenuClasses = self.submenuClasses or {}
 		local filteredSubmenuClasses = {}
+		local filterFunction = self:GetSearchFunction()
 
 		local counter = 0
 		for i = 1, #submenuClasses do
 			local submenuClass = submenuClasses[i]
-			local title = string.lower(LANG.TryTranslation(submenuClass.title))
-			local start = string.find(title, txt)
 
-			if start or text == "" then
+			if text == "" or filterFunction(submenuClass, text) then
 				counter = counter + 1
 				filteredSubmenuClasses[counter] = submenuClass
 			end
@@ -103,6 +101,14 @@ function PANEL:EnableSearchBar(active)
 	self.searchBarText = searchBarText
 end
 
+function PANEL:SetSearchFunction(searchFunction)
+	self.searchFunction = searchFunction
+end
+
+function PANEL:GetSearchFunction()
+	return self.searchFunction
+end
+
 function PANEL:AddSubmenuButton(submenuClass)
 	local settingsButton = self.navAreaScrollGrid:Add("DSubmenuButtonTTT2")
 	settingsButton:SetSize(widthNavButton, heightNavButton)
@@ -118,6 +124,7 @@ function PANEL:AddSubmenuButton(submenuClass)
 		slf:SetActive()
 
 		self.lastActive = slf
+		print("Button Clicked.")
 	end
 
 	return settingsButton
@@ -146,6 +153,7 @@ function PANEL:GenerateSubmenuList(submenuClasses)
 
 		-- handle the set of active buttons for the draw process
 		self.navAreaScrollGrid:GetChild(0):SetActive()
+		print("\nChild Active.")
 
 		self.lastActive = self.navAreaScrollGrid:GetChild(0)
 	end

@@ -15,6 +15,10 @@ CLGAMEMODEMENU.priority = 48
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil
 
+function CLGAMEMODEMENU:Initialize()
+	self:EnableSearchbar(true)
+end
+
 function CLGAMEMODEMENU:IsAdminMenu()
 	return true
 end

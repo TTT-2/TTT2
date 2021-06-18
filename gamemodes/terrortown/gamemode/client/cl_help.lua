@@ -331,8 +331,6 @@ function HELPSCRN:ShowSubmenu(menuClass)
 		self:ShowMainMenu()
 	end)
 
-	frame:SetKeyboardInputEnabled(true)
-
 	-- MARK AS SUBMENU
 	self.currentMenuId = menuClass.type
 
@@ -352,7 +350,8 @@ function HELPSCRN:ShowSubmenu(menuClass)
 	submenuList:SetMainFrame(frame)
 	submenuList:SetPadding(self.padding)
 	submenuList:SetSubmenuClasses(menuClass:GetVisibleSubmenus(), contentArea)
-	submenuList:EnableSearchBar(true)
+	submenuList:EnableSearchBar(menuClass:HasSearchbar())
+	submenuList:SetSearchFunction(menuClass:GetSearchFunction())
 
 	-- REGISTER REBUILD CALLBACK
 	frame.OnRebuild = function(slf)
