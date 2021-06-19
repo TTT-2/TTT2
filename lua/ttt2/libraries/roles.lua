@@ -342,16 +342,17 @@ end
 ---
 -- Get the role table by the role id
 -- @param number index subrole id
+-- @param[default=roles.NONE] table A fallback table that is used if the role is not found
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
-function roles.GetByIndex(index)
+function roles.GetByIndex(index, fallback)
 	for _, v in pairs(RoleList) do
 		if not v.isAbstract and v.index == index then
 			return v
 		end
 	end
 
-	return roles.NONE
+	return fallback or roles.NONE
 end
 
 ---
