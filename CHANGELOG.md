@@ -33,6 +33,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the admin section label not being visible in the main menu
 - Fixed the auto resizing of the buttons based on the availability of a scrollbar not working
 - Fixed reopening submenus of the legacy addons in F1 menu not working
+- TTT: Fixed karma autokick evasion
+- TTT: Fixed karma being applied to weapon damage even though karma is disabled
 
 ### Changed
 
