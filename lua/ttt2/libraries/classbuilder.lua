@@ -12,24 +12,32 @@ local stringSplit = string.Split
 local stringLower = string.lower
 local isfunction = isfunction
 
+---
+-- recursive inheritance function
 local function Inherit(class, classTable, passthrough, SpecialCheck)
+	-- do not do anything if the base has no base class name assigned
 	if not class.base then
 		return class
 	end
 
+	-- get the base class entry from the class table
 	local baseclass = classTable[class.base] or passthrough[class.base]
 
+	-- if the special inheritance check is failed, no inheritance should take place
 	if isfunction(SpecialCheck) and not SpecialCheck(class, baseclass) then
 		return class
 	end
 
 	local deepbaseclass = classTable[baseclass.base] or passthrough[baseclass.base]
 
+	-- assign a reference to the base class functions
 	class.BaseClass = baseclass
 
 	if not baseclass.base or (isfunction(SpecialCheck) and not SpecialCheck(baseclass, deepbaseclass)) then
+		-- the base of the baseclass is non-existent: only inherit one last time
 		return tableDeepInherit(class, baseclass)
 	else
+		-- the base of the baseclass exists: call inheritance function recursively
 		return tableDeepInherit(class, Inherit(baseclass, classTable, passthrough, SpecialCheck))
 	end
 end
