@@ -52,6 +52,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Shopeditor equipment is now available in F1 menu
 - Moved the role layering menu to the F1 menu (administration submenu)
   - removed the command `ttt2_edit_rolelayering`
+- moved the internal path of `lang/`, `vskin/` and `events/` (this doesn't change anything for addons)
 
 ### Removed
 
