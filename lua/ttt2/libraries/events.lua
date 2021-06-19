@@ -247,12 +247,11 @@ local function OnInitialization(class, path, name)
 	MsgN("Added TTT2 event file: ", path, name)
 end
 
-classbuilder.BuildFromFolder(
+eventTypes = classbuilder.BuildFromFolder(
 	"terrortown/events/",
 	SHARED_FILE,
 	"EVENT", -- class scope
 	OnInitialization, -- on class loaded
 	true, -- should inherit
-	ShouldInherit, -- special inheritance check
-	eventTypes
+	ShouldInherit -- special inheritance check
 )
