@@ -152,10 +152,6 @@ function GM:Initialize()
 	self.roundCount = 0
 
 	-- load vskin files
-	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
-
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
