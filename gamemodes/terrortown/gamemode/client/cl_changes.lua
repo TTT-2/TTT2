@@ -944,6 +944,13 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2021, month = 06, day = 19}))
 
+	AddChange("TTT2 Base - v0.9.1b", [[
+	  	<h2>Fixed</h2>
+		<ul>
+			<li>Fixed shop convars not being shared / breaking the shop</li>
+		</ul>
+	]], os.time({year = 2021, month = 06, day = 19}))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
