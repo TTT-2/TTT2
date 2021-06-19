@@ -351,9 +351,10 @@ end
 -- @note This function will not create a new table. It modifies the existing table.
 -- @param table t The target table that will be modified
 -- @param table base The (fallback) base table
+-- @param[default=false] boolean isSubTable Defines if this is a subtable or the top layer table
 -- @return table The modified target table
 -- @realm shared
-function table.DeepInherit(t, base)
+function table.DeepInherit(t, base, isSubTable)
 	if not base then
 		return t
 	end
@@ -362,11 +363,13 @@ function table.DeepInherit(t, base)
 		if t[k] == nil then
 			t[k] = v
 		elseif k ~= "BaseClass" and istable(t[k]) then
-			table.DeepInherit(t[k], v)
+			table.DeepInherit(t[k], v, true)
 		end
 	end
 
-	t.BaseClass = base
+	if not isSubTable then
+		t.BaseClass = base
+	end
 
 	return t
 end

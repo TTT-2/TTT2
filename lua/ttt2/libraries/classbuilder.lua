@@ -12,6 +12,26 @@ local stringSplit = string.Split
 local stringLower = string.lower
 local isfunction = isfunction
 
+local function Inherit(name, class, classTable, passthrough, SpecialCheck)
+	if not class.base then
+		return class
+	end
+
+	local baseclass = classTable[class.base] or passthrough[class.base]
+
+	if isfunction(SpecialCheck) and not SpecialCheck(class, baseclass) then
+		return class
+	end
+
+	local deepbaseclass = classTable[baseclass.base] or passthrough[baseclass.base]
+
+	if not baseclass.base or (isfunction(SpecialCheck) and not SpecialCheck(baseclass, deepbaseclass)) then
+		return tableDeepInherit(class, baseclass)
+	else
+		return tableDeepInherit(class, Inherit(name, baseclass, classTable, passthrough, SpecialCheck))
+	end
+end
+
 classbuilder = classbuilder or {}
 
 ---
@@ -70,13 +90,7 @@ function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shou
 	-- class if enabled.
 	if shouldInherit then
 		for name, class in pairs(classTable) do
-			if not class.base then continue end
-
-			local base = classTable[class.base] or passthrough[class.base]
-
-			if isfunction(SpecialCheck) and not SpecialCheck(class, base) then continue end
-
-			classTable[name] = tableDeepInherit(class, base)
+			classTable[name] = Inherit(name, class, classTable, passthrough, SpecialCheck)
 		end
 	end
 
