@@ -5,7 +5,7 @@
 KARMA = {
 	rememberedPlayers = {}, -- ply steamid -> karma table for disconnected players who might reconnect
 	karmaChanges = {}, -- ply steamid -> karma table for karma changes that will get applied at roundend
-	karmaChangesOld = {} -- ply steamid -> karma table for old karma changes after roundend 
+	karmaChangesOld = {} -- ply steamid -> karma table for old karma changes after roundend
 }
 
 -- Convars, more convenient access than GetConVar
@@ -141,7 +141,7 @@ end
 -- @note Reason is a string and will be displayed in the roundendscreen as tooltip, so use language localization or describe it properly
 -- @param Player ply
 -- @param number amount
--- @param string reason 
+-- @param string reason
 -- @realm server
 function KARMA.DoKarmaChange(ply, amount, reason)
 	ply:SetLiveKarma(math.Clamp(ply:GetLiveKarma() + amount, 0, config.max:GetFloat()))
@@ -153,7 +153,7 @@ end
 -- Saves changes to the live KARMA
 -- @param Player ply
 -- @param number amount
--- @param string reason 
+-- @param string reason
 -- @realm server
 -- @internal
 function KARMA.SaveKarmaChange(ply, amount, reason)
@@ -320,7 +320,7 @@ function KARMA.ApplyKarma(ply)
 
 	-- any karma at 1000 or over guarantees a df of 1, only when it's lower do we
 	-- need the penalty curve
-	if ply:GetBaseKarma() < 1000 then
+	if ply:GetBaseKarma() < 1000 and KARMA.IsEnabled() then
 		local k = ply:GetBaseKarma() - 1000
 
 		if config.strict:GetBool() then
