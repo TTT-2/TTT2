@@ -5,16 +5,18 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
-local IsValid = IsValid
-
 ROLE_NONE = ROLE_NONE or 3
 
-ENT.Role = ROLE_NONE
+ENT.checkingRole = ROLE_NONE
+
+if CLIENT then return end
+
+local IsValid = IsValid
 
 ---
 -- @param string key
 -- @param string|number value
--- @realm shared
+-- @realm server
 function ENT:KeyValue(key, value)
 	if key == "OnPass" or key == "OnFail" then
 		-- this is our output, so handle it as such
@@ -24,35 +26,46 @@ function ENT:KeyValue(key, value)
 			value = _G[value] or value
 		end
 
-		self.Role = tonumber(value)
+		self.checkingRole = tonumber(value)
 
-		if not self.Role then
+		if not self.checkingRole then
 			ErrorNoHalt("ttt_logic_role: bad value for Role key, not a number\n")
 
-			self.Role = ROLE_NONE
+			self.checkingRole = ROLE_NONE
 		end
 	end
 end
 
 ---
--- @param string name
--- @param Entity|Player activator
--- @return[default=true] boolean
--- @realm shared
-function ENT:AcceptInput(name, activator)
+-- Called when another entity fires an event to this entity.
+-- @param string name The name of the input that was triggered
+-- @param Entity|Player activator The initial cause for the input getting triggered (e.g. the player who pushed a button)
+-- @param Entity caller The entity that directly triggered the input (e.g. the button that was pushed)
+-- @param string data The data passed
+-- @return[default=true] boolean Return true if the default action should be supressed
+-- @realm server
+function ENT:AcceptInput(name, activator, caller, data)
 	if name == "TestActivator" then
-		if IsValid(activator) and activator:IsPlayer() then
-			local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or activator:GetBaseRole()
+		if not IsValid(activator) or not activator:IsPlayer() then return end
 
-			if self.Role == ROLE_NONE or self.Role == activator_role then
-				Dev(2, activator, "passed logic_role test of", self:GetName())
+		---
+		-- @realm server
+		local role, team = hook.Run("TTT2ModifyLogicRoleCheck", activator, self, activator, caller, data)
+		local activatorRole = roles.GetByIndex(role, roles.INNOCENT):GetBaseRole()
+		local activatorTeam = (GetRoundState() == ROUND_PREP) and TEAM_INNOCENT or team
 
-				self:TriggerOutput("OnPass", activator)
-			else
-				Dev(2, activator, "failed logic_role test of", self:GetName())
+		if self.checkingRole == ROLE_TRAITOR and util.IsEvilTeam(activatorTeam)
+			or self.checkingRole == ROLE_INNOCENT and not util.IsEvilTeam(activatorTeam)
+			or self.checkingRole == activatorRole and not (self.checkingRole == ROLE_TRAITOR or self.checkingRole == ROLE_INNOCENT)
+			or self.checkingRole == ROLE_NONE
+		then
+			Dev(2, activator, "passed logic_role test of", self:GetName())
 
-				self:TriggerOutput("OnFail", activator)
-			end
+			self:TriggerOutput("OnPass", activator)
+		else
+			Dev(2, activator, "failed logic_role test of", self:GetName())
+
+			self:TriggerOutput("OnFail", activator)
 		end
 
 		return true

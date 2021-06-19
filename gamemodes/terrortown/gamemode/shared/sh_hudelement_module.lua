@@ -1,5 +1,3 @@
-require("hudelements")
-
 local HUDELEMENTS_SHARED_FUNCTIONS_FOLDER = "shared_base"
 local HUDELEMENTS_ABSTRACT_FOLDER = "base_elements"
 

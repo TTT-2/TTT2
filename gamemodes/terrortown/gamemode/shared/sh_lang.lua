@@ -28,9 +28,8 @@ local table = table
 local pairs = pairs
 local string = string
 
--- load default TTT2 language files or mark them as downloadable on the server
-fileloader.LoadFolder((GM.FolderName or "terrortown") .. "/gamemode/shared/lang/", false, CLIENT_FILE, function(path)
-	MsgN("Added TTT2 gamemode language file: ", path)
+fileloader.LoadFolder("terrortown/lang/", false, CLIENT_FILE, function(path)
+	MsgN("Added TTT2 core language file: ", path)
 end)
 
 if SERVER then

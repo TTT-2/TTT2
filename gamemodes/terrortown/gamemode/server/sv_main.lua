@@ -290,21 +290,18 @@ function GM:Initialize()
 	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
-	-- check for language files to mark them as downloadable for clients
+	-- load default TTT2 language files or mark them as downloadable on the server
+	-- load addon language files in a second pass, the core language files are loaded earlier
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
 		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
-
 	-- load vskin files
-	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
-
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
@@ -1052,7 +1049,7 @@ function PrepareRound()
 	events.Reset()
 
 	-- Update damage scaling
-	KARMA.RoundBegin()
+	KARMA.RoundPrepare()
 
 	-- New look. Random if no forced model set.
 	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
@@ -1295,6 +1292,9 @@ function BeginRound()
 
 	-- remove decals
 	util.ClearDecals()
+
+	-- Check for low-karma players that weren't banned on round end
+	KARMA.RoundBegin()
 
 	if CheckForAbort() then return end
 

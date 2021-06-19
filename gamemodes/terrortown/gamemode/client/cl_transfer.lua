@@ -88,9 +88,14 @@ function CreateTransferMenu(parent)
 	end
 
 	dpick:SetWide(250)
+	dpick:SetSortItems(false)
 
 	-- fill combobox
 	local plys = player.GetAll()
+
+	table.sort(plys, function (a, b)
+		return a:IsInTeam(client) and not b:IsInTeam(client)
+	end)
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -99,7 +104,13 @@ function CreateTransferMenu(parent)
 		--SteamID64() returns nil for bots on the client, and so credits can't be transferred to them.
 		--Transfers can be made to players who have died (as the sender may not know if they're alive), but can't be made to spectators who joined in the middle of a match.
 		if ply ~= client and (ply:IsTerror() or ply:IsDeadTerror()) and sid then
-			dpick:AddChoice(ply:Nick(), sid)
+			local choiceText = ply:Nick()
+
+			if ply:IsInTeam(client) then
+				choiceText = choiceText .. " (" .. GetTranslation("xfer_team_indicator") .. ")"
+			end
+
+			dpick:AddChoice(choiceText, sid)
 		end
 	end
 

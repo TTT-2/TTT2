@@ -4,7 +4,7 @@
 -- @author saibotk
 -- @module items
 
-module("items", package.seeall)
+items = items or {}
 
 local baseclass = baseclass
 local pairs = pairs
@@ -41,8 +41,8 @@ end
 -- @param table base base (fallback) table
 -- @return boolean returns whether name is based on base
 -- @realm shared
-function IsBasedOn(name, base)
-	local t = GetStored(name)
+function items.IsBasedOn(name, base)
+	local t = items.GetStored(name)
 
 	if not t then
 		return false
@@ -56,7 +56,7 @@ function IsBasedOn(name, base)
 		return true
 	end
 
-	return IsBasedOn(t.Base, base)
+	return items.IsBasedOn(t.Base, base)
 end
 
 ---
@@ -65,7 +65,7 @@ end
 -- @param table t item table
 -- @param string name item name
 -- @realm shared
-function Register(t, name)
+function items.Register(t, name)
 	name = string.lower(name)
 
 	t.ClassName = name
@@ -79,7 +79,7 @@ end
 -- All scripts have been loaded...
 -- @local
 -- @realm shared
-function OnLoaded()
+function items.OnLoaded()
 
 	--
 	-- Once all the scripts are loaded we can set up the baseclass
@@ -87,7 +87,7 @@ function OnLoaded()
 	-- could cause some entities to load before their bases!
 	--
 	for k in pairs(ItemList) do
-		local newTable = Get(k)
+		local newTable = items.Get(k)
 		ItemList[k] = newTable
 
 		baseclass.Set(k, newTable)
@@ -100,8 +100,8 @@ end
 -- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new item table
 -- @realm shared
-function Get(name, retTbl)
-	local Stored = GetStored(name)
+function items.Get(name, retTbl)
+	local Stored = items.GetStored(name)
 	if not Stored then return end
 
 	-- Create/copy a new table
@@ -120,7 +120,7 @@ function Get(name, retTbl)
 	-- If we're not derived from ourselves (a base item)
 	-- then derive from our 'Base' item.
 	if retval.Base ~= name then
-		local base = Get(retval.Base)
+		local base = items.Get(retval.Base)
 
 		if not base then
 			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant item " .. tostring(retval.Base) .. "!\n")
@@ -137,7 +137,7 @@ end
 -- @param string name item name
 -- @return table returns the real item table
 -- @realm shared
-function GetStored(name)
+function items.GetStored(name)
 	return ItemList[name]
 end
 
@@ -146,7 +146,7 @@ end
 -- Get a list of all the registered items
 -- @return table all registered items
 -- @realm shared
-function GetList()
+function items.GetList()
 	local result = {}
 
 	for _, v in pairs(ItemList) do
@@ -161,7 +161,7 @@ end
 -- @param string|table|number val item name / table / id
 -- @return boolean returns true if the inserted table is an item
 -- @realm shared
-function IsItem(val)
+function items.IsItem(val)
 	if not val then
 		return false
 	end
@@ -189,7 +189,7 @@ end
 -- @param string|table|number val item name / table / id
 -- @return boolean whether the input table has a specific item
 -- @realm shared
-function TableHasItem(tbl, val)
+function items.TableHasItem(tbl, val)
 	if not tbl or not val then
 		return false
 	end
@@ -218,8 +218,8 @@ end
 -- @param number subrole subrole id
 -- @return table role items table
 -- @realm shared
-function GetRoleItems(subrole)
-	local itms = GetList()
+function items.GetRoleItems(subrole)
+	local itms = items.GetList()
 	local tbl = {}
 
 	for i = 1, #itms do
@@ -238,7 +238,7 @@ end
 -- @param number subrole subrole id
 -- @param string|number id item id / name
 -- @realm shared
-function GetRoleItem(subrole, id)
+function items.GetRoleItem(subrole, id)
 	if tonumber(id) then
 		for _, item in pairs(ItemList) do
 			if item.oldId and item.oldId == id then
@@ -251,7 +251,7 @@ function GetRoleItem(subrole, id)
 		if tonumber(id) then return end
 	end
 
-	local item = GetStored(id)
+	local item = items.GetStored(id)
 
 	if item and item.CanBuy and table.HasValue(item.CanBuy, subrole) then
 		return item
@@ -262,7 +262,7 @@ end
 -- Initialize old items and converts them to the new item system.
 -- @note This should be called after all entites have been loaded eg after InitPostEntity.
 -- @realm shared
-function MigrateLegacyItems()
+function items.MigrateLegacyItems()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
 		for i = 1, #tbl do
 			local v = tbl[i]

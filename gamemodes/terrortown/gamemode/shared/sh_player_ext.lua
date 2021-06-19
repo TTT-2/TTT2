@@ -441,12 +441,30 @@ plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
 ---
--- Checks whether a @{Player} has a special @{ROLE}
+-- Checks whether a @{Player} has a special @{ROLE}.
 -- @note This just returns <code>false</code> if the @{Player} is an Innocent!
--- @return boolean
+-- @return boolean Returns true if the player has a special role
 -- @realm shared
-function plymeta:IsSpecial()
+function plymeta:HasSpecialRole()
 	return self:GetSubRole() ~= ROLE_INNOCENT
+end
+
+---
+-- Checks whether a @{Player} has a special @{ROLE}.
+-- @note This just returns <code>false</code> if the @{Player} is an Innocent!
+-- @return boolean Returns true if the player has a special role
+-- @see Player:HasSpecialRole
+-- @realm shared
+-- @deprecated
+-- @function plymeta:IsSpecial()
+plymeta.IsSpecial = plymeta.HasSpecialRole
+
+---
+-- Checks whether or not a player has an evil team. By default all teams that aren't innocent or none are counted as evil.
+-- @return boolean Returns true if the role is evil
+-- @realm shared
+function plymeta:HasEvilTeam()
+	return util.IsEvilTeam(self:GetTeam())
 end
 
 ---
@@ -522,9 +540,9 @@ end
 -- @return boolean
 -- @realm shared
 -- @see Player:IsActive
--- @see Player:IsSpecial
+-- @see Player:HasSpecialRole
 function plymeta:IsActiveSpecial()
-	return self:IsActive() and self:IsSpecial()
+	return self:IsActive() and self:HasSpecialRole()
 end
 
 ---
