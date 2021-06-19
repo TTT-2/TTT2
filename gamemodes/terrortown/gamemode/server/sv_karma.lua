@@ -5,7 +5,7 @@
 KARMA = {
 	rememberedPlayers = {}, -- ply steamid -> karma table for disconnected players who might reconnect
 	karmaChanges = {}, -- ply steamid -> karma table for karma changes that will get applied at roundend
-	karmaChangesOld = {} -- ply steamid -> karma table for old karma changes after roundend 
+	karmaChangesOld = {} -- ply steamid -> karma table for old karma changes after roundend
 }
 
 -- Convars, more convenient access than GetConVar
@@ -141,7 +141,7 @@ end
 -- @note Reason is a string and will be displayed in the roundendscreen as tooltip, so use language localization or describe it properly
 -- @param Player ply
 -- @param number amount
--- @param string reason 
+-- @param string reason
 -- @realm server
 function KARMA.DoKarmaChange(ply, amount, reason)
 	ply:SetLiveKarma(math.Clamp(ply:GetLiveKarma() + amount, 0, config.max:GetFloat()))
@@ -153,7 +153,7 @@ end
 -- Saves changes to the live KARMA
 -- @param Player ply
 -- @param number amount
--- @param string reason 
+-- @param string reason
 -- @realm server
 -- @internal
 function KARMA.SaveKarmaChange(ply, amount, reason)
@@ -316,6 +316,8 @@ end
 -- @param Player ply
 -- @realm server
 function KARMA.ApplyKarma(ply)
+	if not KARMA.IsEnabled() then return end
+
 	local df = 1
 
 	-- any karma at 1000 or over guarantees a df of 1, only when it's lower do we
@@ -529,44 +531,63 @@ function KARMA.NotifyPlayer(ply)
 end
 
 ---
--- These generic fns will be called at round end and start, so that stuff can
--- easily be moved to a different phase
+-- Runs the karma related functions on round end.
 -- @realm server
 function KARMA.RoundEnd()
-	if KARMA.IsEnabled() then
-		KARMA.RoundIncrement()
+	if not KARMA.IsEnabled() then return end
 
-		-- if karma trend needs to be shown in round report, may want to delay
-		-- rebase until start of next round
-		KARMA.Rebase()
-		KARMA.RememberAll()
+	KARMA.RoundIncrement()
 
-		if config.autokick:GetBool() then
-			local plys = player.GetAll()
+	-- if karma trend needs to be shown in round report, may want to delay
+	-- rebase until start of next round
+	KARMA.Rebase()
+	KARMA.RememberAll()
 
-			for i = 1, #plys do
-				KARMA.CheckAutoKick(plys[i])
-			end
-		end
+	-- check if players should be kicked due to low karma
+	KARMA.CheckAutoKickAll()
+end
+
+---
+-- Runs the karma related functions on round begin.
+-- @realm server
+function KARMA.RoundBegin()
+	if not KARMA.IsEnabled() then return end
+
+	-- Check for low-karma players that weren't banned on round end
+	-- because they disconnected before the round ended.
+	KARMA.CheckAutoKickAll()
+end
+
+---
+-- Update / Reset the KARMA System after the previous round ended in prepare round.
+-- @realm server
+function KARMA.RoundPrepare()
+	KARMA.InitState()
+	KARMA.ResetRoundChanges()
+
+	if not KARMA.IsEnabled() then return end
+
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		KARMA.ApplyKarma(ply)
+		KARMA.NotifyPlayer(ply)
 	end
 end
 
 ---
--- Update / Reset the KARMA System if the round begins
+-- Checks if there is a player that should be kicked due to low karma.
+-- Usually called in @{GM:TTTBeginRound} and @{GM:TTTEndRound}.
 -- @realm server
-function KARMA.RoundBegin()
-	KARMA.InitState()
-	KARMA.ResetRoundChanges()
+function KARMA.CheckAutoKickAll()
+	if config.autokick:GetBool() then return end
 
-	if KARMA.IsEnabled() then
-		local plys = player.GetAll()
+	local plys = player.GetAll()
 
-		for i = 1, #plys do
-			local ply = plys[i]
-
-			KARMA.ApplyKarma(ply)
-			KARMA.NotifyPlayer(ply)
-		end
+	for i = 1, #plys do
+		KARMA.CheckAutoKick(plys[i])
 	end
 end
 
