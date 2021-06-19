@@ -44,6 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
+- By default all evil roles are now counted as traitor roles for map related checks
 - Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)
 - Shopeditor settings are now available in the F1 Menu
 - Moved the F1 menu generating system from a hook based system to a file based system
