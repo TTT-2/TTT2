@@ -4,6 +4,12 @@
 -- @author saibotk
 -- @module bind
 
+if SERVER then
+	AddCSLuaFile()
+
+	return
+end
+
 bind = {}
 
 local BIND_TABLE_NAME = "ttt2_bindings"
