@@ -247,16 +247,7 @@ local function OnInitialization(class, path, name)
 	MsgN("Added TTT2 event file: ", path, name)
 end
 
-eventTypes = classbuilder.BuildFromFolder(
-	"terrortown/gamemode/shared/events/",
-	SHARED_FILE,
-	"EVENT", -- class scope
-	OnInitialization, -- on class loaded
-	true, -- should inherit
-	ShouldInherit -- special inheritance check
-)
-
-table.Merge(eventTypes, classbuilder.BuildFromFolder(
+classbuilder.BuildFromFolder(
 	"terrortown/events/",
 	SHARED_FILE,
 	"EVENT", -- class scope
@@ -264,4 +255,4 @@ table.Merge(eventTypes, classbuilder.BuildFromFolder(
 	true, -- should inherit
 	ShouldInherit, -- special inheritance check
 	eventTypes
-))
+)
