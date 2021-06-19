@@ -4,7 +4,7 @@
 -- @author saibotk
 -- @module huds
 
-module("huds", package.seeall)
+huds = huds or {}
 
 local baseclass = baseclass
 local pairs = pairs
@@ -39,8 +39,8 @@ end
 -- @param table base base (fallback) table
 -- @return boolean returns whether name is based on base
 -- @realm shared
-function IsBasedOn(name, base)
-	local t = GetStored(name)
+function huds.IsBasedOn(name, base)
+	local t = huds.GetStored(name)
 
 	if not t then
 		return false
@@ -54,7 +54,7 @@ function IsBasedOn(name, base)
 		return true
 	end
 
-	return IsBasedOn(t.Base, base)
+	return huds.IsBasedOn(t.Base, base)
 end
 
 ---
@@ -63,7 +63,7 @@ end
 -- @param table t hud table
 -- @param string name hud name
 -- @realm shared
-function Register(t, name)
+function huds.Register(t, name)
 	name = string.lower(name)
 
 	t.ClassName = name
@@ -77,7 +77,7 @@ end
 -- All scripts have been loaded...
 -- @local
 -- @realm shared
-function OnLoaded()
+function huds.OnLoaded()
 
 	--
 	-- Once all the scripts are loaded we can set up the baseclass
@@ -85,7 +85,7 @@ function OnLoaded()
 	-- could cause some entities to load before their bases!
 	--
 	for k in pairs(HUDList) do
-		local newTable = Get(k)
+		local newTable = huds.Get(k)
 		HUDList[k] = newTable
 
 		baseclass.Set(k, newTable)
@@ -98,8 +98,8 @@ end
 -- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new hud table
 -- @realm shared
-function Get(name, retTbl)
-	local Stored = GetStored(name)
+function huds.Get(name, retTbl)
+	local Stored = huds.GetStored(name)
 	if not Stored then return end
 
 	-- Create/copy a new table
@@ -118,7 +118,7 @@ function Get(name, retTbl)
 	-- If we're not derived from ourselves (a base HUD element)
 	-- then derive from our 'Base' HUD element.
 	if retval.Base ~= name then
-		local base = Get(retval.Base)
+		local base = huds.Get(retval.Base)
 
 		if not base then
 			Msg("ERROR: Trying to derive HUD " .. tostring(name) .. " from non existant HUD " .. tostring(retval.Base) .. "!\n")
@@ -135,7 +135,7 @@ end
 -- @param string name hud name
 -- @return table returns the real hud table
 -- @realm shared
-function GetStored(name)
+function huds.GetStored(name)
 	return HUDList[name]
 end
 
@@ -143,7 +143,7 @@ end
 -- Get a list (copy) of all registered huds, that can be displayed (no abstract HUDs).
 -- @return table available huds
 -- @realm shared
-function GetList()
+function huds.GetList()
 	local result = {}
 
 	for _, v in pairs(HUDList) do
@@ -159,7 +159,7 @@ end
 -- Get a list (copy) of all the registered HUDs including abstract HUDs.
 -- @return table all registered huds
 -- @realm shared
-function GetRealList()
+function huds.GetRealList()
 	local result = {}
 
 	for _, v in pairs(HUDList) do
