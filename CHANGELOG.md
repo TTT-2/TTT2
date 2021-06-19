@@ -6,7 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Fixed mult-layer inheritance by introducing a recursion based approach
+- Fixed multi-layer inheritance by introducing a recursion based approach
 
 ## [v0.9.1b](https://github.com/TTT-2/TTT2/tree/v0.9.1b) (2021-06-19)
 
