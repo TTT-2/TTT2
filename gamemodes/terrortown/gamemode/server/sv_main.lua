@@ -1049,7 +1049,7 @@ function PrepareRound()
 	events.Reset()
 
 	-- Update damage scaling
-	KARMA.RoundBegin()
+	KARMA.RoundPrepare()
 
 	-- New look. Random if no forced model set.
 	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
@@ -1292,6 +1292,9 @@ function BeginRound()
 
 	-- remove decals
 	util.ClearDecals()
+
+	-- Check for low-karma players that weren't banned on round end
+	KARMA.RoundBegin()
 
 	if CheckForAbort() then return end
 

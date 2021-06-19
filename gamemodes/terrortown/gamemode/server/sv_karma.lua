@@ -533,40 +533,57 @@ end
 -- easily be moved to a different phase
 -- @realm server
 function KARMA.RoundEnd()
-	if KARMA.IsEnabled() then
-		KARMA.RoundIncrement()
+	if not KARMA.IsEnabled() then return end
 
-		-- if karma trend needs to be shown in round report, may want to delay
-		-- rebase until start of next round
-		KARMA.Rebase()
-		KARMA.RememberAll()
+	KARMA.RoundIncrement()
 
-		if config.autokick:GetBool() then
-			local plys = player.GetAll()
+	-- if karma trend needs to be shown in round report, may want to delay
+	-- rebase until start of next round
+	KARMA.Rebase()
+	KARMA.RememberAll()
 
-			for i = 1, #plys do
-				KARMA.CheckAutoKick(plys[i])
-			end
-		end
+	-- check if players should be kicked due to low karma
+	KARMA.CheckAutoKickAll()
+end
+
+function KARMA.RoundBegin()
+	if not KARMA.IsEnabled() then return end
+
+	-- Check for low-karma players that weren't banned on round end
+	-- because they disconnected before the round ended.
+	KARMA.CheckAutoKickAll()
+end
+
+---
+-- Update / Reset the KARMA System after the previous round ended.
+-- @realm server
+function KARMA.RoundPrepare()
+	KARMA.InitState()
+	KARMA.ResetRoundChanges()
+
+	if not KARMA.IsEnabled() then return end
+
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		KARMA.ApplyKarma(ply)
+		KARMA.NotifyPlayer(ply)
 	end
 end
 
 ---
--- Update / Reset the KARMA System if the round begins
+-- Checks if there is a player that should be kicked due to low karma.
+-- Usually called in @{GM:TTTBeginRound} and @{GM:TTTBeginRound}.
 -- @realm server
-function KARMA.RoundBegin()
-	KARMA.InitState()
-	KARMA.ResetRoundChanges()
+function KARMA.CheckAutoKickAll()
+	if config.autokick:GetBool() then return end
 
-	if KARMA.IsEnabled() then
-		local plys = player.GetAll()
+	local plys = player.GetAll()
 
-		for i = 1, #plys do
-			local ply = plys[i]
-
-			KARMA.ApplyKarma(ply)
-			KARMA.NotifyPlayer(ply)
-		end
+	for i = 1, #plys do
+		KARMA.CheckAutoKick(plys[i])
 	end
 end
 
