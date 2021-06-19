@@ -42,7 +42,7 @@ end
 -- @return boolean returns whether name is based on base
 -- @realm shared
 function items.IsBasedOn(name, base)
-	local t = GetStored(name)
+	local t = items.GetStored(name)
 
 	if not t then
 		return false
@@ -219,7 +219,7 @@ end
 -- @return table role items table
 -- @realm shared
 function items.GetRoleItems(subrole)
-	local itms = GetList()
+	local itms = items.GetList()
 	local tbl = {}
 
 	for i = 1, #itms do
