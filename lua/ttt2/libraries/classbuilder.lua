@@ -25,6 +25,8 @@ local function Inherit(class, classTable, passthrough, SpecialCheck)
 
 	local deepbaseclass = classTable[baseclass.base] or passthrough[baseclass.base]
 
+	class.BaseClass = baseclass
+
 	if not baseclass.base or (isfunction(SpecialCheck) and not SpecialCheck(baseclass, deepbaseclass)) then
 		return tableDeepInherit(class, baseclass)
 	else

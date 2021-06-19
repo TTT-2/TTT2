@@ -367,9 +367,5 @@ function table.DeepInherit(t, base, isSubTable)
 		end
 	end
 
-	if not isSubTable then
-		t.BaseClass = base
-	end
-
 	return t
 end
