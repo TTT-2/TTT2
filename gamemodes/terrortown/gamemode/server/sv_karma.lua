@@ -529,8 +529,7 @@ function KARMA.NotifyPlayer(ply)
 end
 
 ---
--- These generic fns will be called at round end and start, so that stuff can
--- easily be moved to a different phase
+-- Runs the karma related functions on round end.
 -- @realm server
 function KARMA.RoundEnd()
 	if not KARMA.IsEnabled() then return end
@@ -546,6 +545,9 @@ function KARMA.RoundEnd()
 	KARMA.CheckAutoKickAll()
 end
 
+---
+-- Runs the karma related functions on round begin.
+-- @realm server
 function KARMA.RoundBegin()
 	if not KARMA.IsEnabled() then return end
 
@@ -555,7 +557,7 @@ function KARMA.RoundBegin()
 end
 
 ---
--- Update / Reset the KARMA System after the previous round ended.
+-- Update / Reset the KARMA System after the previous round ended in prepare round.
 -- @realm server
 function KARMA.RoundPrepare()
 	KARMA.InitState()
@@ -575,7 +577,7 @@ end
 
 ---
 -- Checks if there is a player that should be kicked due to low karma.
--- Usually called in @{GM:TTTBeginRound} and @{GM:TTTBeginRound}.
+-- Usually called in @{GM:TTTBeginRound} and @{GM:TTTEndRound}.
 -- @realm server
 function KARMA.CheckAutoKickAll()
 	if config.autokick:GetBool() then return end
