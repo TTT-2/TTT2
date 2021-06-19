@@ -316,11 +316,13 @@ end
 -- @param Player ply
 -- @realm server
 function KARMA.ApplyKarma(ply)
+	if not KARMA.IsEnabled() then return end
+
 	local df = 1
 
 	-- any karma at 1000 or over guarantees a df of 1, only when it's lower do we
 	-- need the penalty curve
-	if ply:GetBaseKarma() < 1000 and KARMA.IsEnabled() then
+	if ply:GetBaseKarma() < 1000 then
 		local k = ply:GetBaseKarma() - 1000
 
 		if config.strict:GetBool() then
