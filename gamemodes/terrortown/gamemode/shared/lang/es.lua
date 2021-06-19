@@ -1402,3 +1402,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --2021-06-15
 --L.header_shop_linker = "Settings"
 --L.label_shop_linker_set = "Shopsetting"
+
+
+--2021-08-18
+--L.xfer_team_indicator = "Team"
