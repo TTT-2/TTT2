@@ -499,7 +499,8 @@ COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
 COLOR_WARMGRAY = Color(91, 94, 99, 255)
 
-include("includes/modules/pon.lua")
+-- include independent libraries (other extensions might require them)
+include("ttt2/libraries/pon.lua")
 
 -- include extensions
 include("ttt2/extensions/math.lua")
@@ -512,6 +513,10 @@ include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
 
 -- include libraries
+include("ttt2/libraries/huds.lua")
+include("ttt2/libraries/hudelements.lua")
+include("ttt2/libraries/items.lua")
+include("ttt2/libraries/bind.lua")
 include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/classbuilder.lua")
 include("ttt2/libraries/fonts.lua")
