@@ -290,16 +290,6 @@ function GM:Initialize()
 	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
-	-- check for language files to mark them as downloadable for clients
-	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
-		MsgN("Added TTT2 language file: ", path)
-	end)
-
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
-
 	-- load vskin files
 	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
