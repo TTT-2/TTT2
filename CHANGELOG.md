@@ -16,7 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
 - Karma now stores changes
   - Is shown in roundend menu
-- Count all evil roles as traitor roles for map related entity checks if enabled
+- Count all evil roles as traitor roles for map related entity checks
 - Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks
 - Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop
 - Added per-player voice control by hovering over the mute icon and scrolling
