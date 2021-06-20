@@ -883,7 +883,7 @@ function CreateChanges()
 			<li>Added per-player voice control by hovering over the mute icon and scrolling</li>
 		</ul>
 
-	  	<h2>Fixed</h2>
+		<h2>Fixed</h2>
 		<ul>
 			<li>Updated French translation (by @MisterClems)</li>
 			<li>Fixed IsOffScreen function being global for compatibility</li>
@@ -900,7 +900,7 @@ function CreateChanges()
 			<li>TTT: Fixed karma being applied to weapon damage even though karma is disabled</li>
 		</ul>
 
-	  	<h2>Changed</h2>
+		<h2>Changed</h2>
 		<ul>
 			<li>Microoptimization to improve code performance</li>
 			<li>Converted `roles`, `huds`, `hudelements`, `items` and `pon` modules into libraries</li>
@@ -930,12 +930,12 @@ function CreateChanges()
 			<li>Sort teammates first in credit transfer selection and add an indicator to them</li>
 		</ul>
 
-	  	<h2>Removed</h2>
+		<h2>Removed</h2>
 		<ul>
 			<li>Removed the custom loading screen (GMOD now only accepts http(s) URLs for sv_loadingurl)</li>
 		</ul>
 
-	  	<h2>Breaking Changes</h2>
+		<h2>Breaking Changes</h2>
 		<ul>
 			<li>Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)</li>
 			<li>Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.</li>
@@ -945,11 +945,19 @@ function CreateChanges()
 	]], os.time({year = 2021, month = 06, day = 19}))
 
 	AddChange("TTT2 Base - v0.9.1b", [[
-	  	<h2>Fixed</h2>
+		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed shop convars not being shared / breaking the shop</li>
 		</ul>
 	]], os.time({year = 2021, month = 06, day = 19}))
+
+	AddChange("TTT2 Base - v0.9.2b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed low karma autokick convar</li>
+			<li>Fixed multi-layer inheritance by introducing a recursion based approach</li>
+		</ul>
+	]], os.time({year = 2021, month = 06, day = 20}))
 
 	---
 	-- run hook for other addons to add their changelog as well
