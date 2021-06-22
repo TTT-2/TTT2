@@ -4,6 +4,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.9.2b](https://github.com/TTT-2/TTT2/tree/v0.9.2b) (2021-06-20)
+
+### Fixed
+
+- Fixed low karma autokick convar
+- Fixed multi-layer inheritance by introducing a recursion based approach
+
+## [v0.9.1b](https://github.com/TTT-2/TTT2/tree/v0.9.1b) (2021-06-19)
+
+### Fixed
+
+- Fixed shop convars not being shared / breaking the shop
+
 ## [v0.9.0b](https://github.com/TTT-2/TTT2/tree/v0.9.0b) (2021-06-19)
 
 ### Added

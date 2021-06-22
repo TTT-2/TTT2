@@ -366,7 +366,5 @@ function table.DeepInherit(t, base)
 		end
 	end
 
-	t.BaseClass = base
-
 	return t
 end
