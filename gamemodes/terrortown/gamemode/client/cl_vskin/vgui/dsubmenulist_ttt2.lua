@@ -5,14 +5,8 @@
 local PANEL = {}
 
 -- define sizes
-local heightNavHeader = 15
-local widthNavContent, heightNavContent = 299, 685
+local heightNavHeader = 10
 local heightNavButton = 50
-
-local function SetSubmenuListHeight(slf, yPos, heightList)
-	slf.navAreaScroll:SetPos(0, yPos)
-	slf.navAreaScroll:SetSize(widthNavContent, heightList)
-end
 
 local function getHighestParent(slf)
 	local parent = slf
@@ -32,8 +26,8 @@ function PANEL:Init()
 	-- MAKE NAV AREA SCROLLABLE
 	local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
 	navAreaScroll:SetVerticalScrollbarEnabled(true)
+	navAreaScroll:Dock(BOTTOM)
 	self.navAreaScroll = navAreaScroll
-	SetSubmenuListHeight(self, heightNavHeader, heightNavContent)
 
 	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
@@ -48,11 +42,13 @@ function PANEL:Init()
 	self:SetPaintBackground(false)
 end
 
+function PANEL:SetSearchBarSize(widthBar, heightBar)
+	if not self.searchBar then return end
+
+	self.searchBar:SetSize(widthBar, heightBar)
+end
+
 function PANEL:EnableSearchBar(active)
-	local heightShift = active and heightNavButton or 0
-
-	SetSubmenuListHeight(self, heightNavHeader + heightShift, heightNavContent - heightShift)
-
 	if not active then
 		if self.searchBar then self.searchBar:Clear() end
 		return
@@ -61,9 +57,8 @@ function PANEL:EnableSearchBar(active)
 	-- ADD SEARBACH ON TOP	
 	--self.searchBar = vgui.Create("DSearchBarTTT2", self)
 	local searchBar = vgui.Create("DTextEntry", self)
-	searchBar:SetPos(0, heightNavHeader )
-	searchBar:SetSize(widthNavContent, heightNavButton)
 	searchBar:SetUpdateOnType(true)
+	searchBar:SetPos(0, heightNavHeader)
 	searchBar.OnValueChange = function(slf,text)
 		local submenuClasses = self.submenuClasses or {}
 		local filteredSubmenuClasses = {}
@@ -101,9 +96,12 @@ end
 
 function PANEL:AddSubmenuButton(submenuClass)
 	local settingsButton = self.navAreaScrollGrid:Add("DSubmenuButtonTTT2")
-	settingsButton:SetSize(widthNavContent, heightNavButton)
 	settingsButton:SetTitle(submenuClass.title or submenuClass.type)
 	settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
+	settingsButton.PerformLayout = function(panel)
+		local width = panel:GetParent():GetSize()
+		panel:SetSize(width, heightNavButton)
+	end
 
 	settingsButton.DoClick = function(slf)
 		HELPSCRN:SetupContentArea(self.contentArea, submenuClass)
@@ -134,20 +132,20 @@ function PANEL:GenerateSubmenuList(submenuClasses)
 		for i = 1, #submenuClasses do
 			local submenuClass = submenuClasses[i]
 
-			self:AddSubmenuButton(submenuClass)
+			local settingsButton = self:AddSubmenuButton(submenuClass)
+
+			-- handle the set of active buttons for the draw process
+			if i == 1 then
+				settingsButton:SetActive()
+				self.lastActive = settingsButton
+			end
 		end
 
 		HELPSCRN:SetupContentArea(self.contentArea, submenuClasses[1])
 		HELPSCRN:BuildContentArea()
-
-		-- handle the set of active buttons for the draw process
-		self.navAreaScrollGrid:GetChild(0):SetActive()
-
-		self.lastActive = self.navAreaScrollGrid:GetChild(0)
 	end
 
-	self.navAreaScrollGrid:InvalidateLayout(true)
-	self.navAreaScroll:InvalidateLayout(true)
+	self:InvalidateLayout(true)
 end
 
 function PANEL:SetSubmenuClasses(submenuClasses, contentArea)
@@ -158,8 +156,6 @@ function PANEL:SetSubmenuClasses(submenuClasses, contentArea)
 end
 
 function PANEL:SetPadding(padding)
-	self:InvalidateParent(true)
-	widthNavContent, heightNavContent = self:GetSize()
 	self.padding = padding
 	self.navAreaScrollGrid:SetSpaceY(padding)
 end
@@ -171,6 +167,16 @@ end
 ---
 -- @ignore
 function PANEL:PerformLayout()
+	self:InvalidateParent(true)
+
+	local widthNavContent, heightNavContent = self:GetSize()
+	local heightShift = heightNavHeader + (self.searchBar and heightNavButton + self.padding or 0)
+
+	self:SetSearchBarSize(widthNavContent, heightNavButton)
+	self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightShift)
+
+	self.navAreaScrollGrid:InvalidateChildren(true)
+	self.navAreaScroll:InvalidateLayout(true)
 end
 
 ---

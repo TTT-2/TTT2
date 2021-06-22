@@ -336,7 +336,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
 
 	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
-	navArea:SetSize(widthNav, heightNav - vskin.GetHeaderHeight() - vskin.GetBorderSize() - 4 * self.padding)
+	navArea:SetSize(widthNav)
 	navArea:SetPos(0, 0)
 	navArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
 	navArea:Dock(LEFT)
@@ -354,6 +354,8 @@ function HELPSCRN:ShowSubmenu(menuClass)
 	submenuList:SetSubmenuClasses(menuClass:GetVisibleSubmenus(), contentArea)
 	submenuList:EnableSearchBar(menuClass:HasSearchbar())
 	submenuList:SetSearchFunction(menuClass:GetSearchFunction())
+
+	submenuList:InvalidateLayout(true)
 
 	-- REGISTER REBUILD CALLBACK
 	frame.OnRebuild = function(slf)
