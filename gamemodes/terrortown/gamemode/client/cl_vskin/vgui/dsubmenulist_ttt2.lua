@@ -7,22 +7,20 @@ local PANEL = {}
 -- define sizes
 local heightNavHeader = 15
 local widthNavContent, heightNavContent = 299, 685
-local widthNavButton, heightNavButton = 299, 50
+local heightNavButton = 50
 
 local function SetSubmenuListHeight(slf, yPos, heightList)
-	slf.navAreaContent:SetPos(0, yPos)
-	slf.navAreaContent:SetSize(widthNavContent, heightList)
+	slf.navAreaScroll:SetPos(0, yPos)
+	slf.navAreaScroll:SetSize(widthNavContent, heightList)
 end
 
 local function getHighestParent(slf)
 	local parent = slf
-	local checkParent = slf
+	local checkParent = slf:GetParent()
 
-	for i = 1, 100 do
-		checkParent = parent:GetParent()
-
-		if not checkParent then return parent end
+	while ispanel(checkParent) do
 		parent = checkParent
+		checkParent = parent:GetParent()
 	end
 
 	return parent
@@ -31,22 +29,18 @@ end
 ---
 -- @ignore
 function PANEL:Init()
-	-- CREATE NAVIGATIONSAREA
-	self.navAreaContent = vgui.Create("DPanel", self:GetParent())
-	SetSubmenuListHeight(self, heightNavHeader, heightNavContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
-
 	-- MAKE NAV AREA SCROLLABLE
-	local navAreaScroll = vgui.Create("DScrollPanelTTT2", self.navAreaContent)
+	local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
 	navAreaScroll:SetVerticalScrollbarEnabled(true)
-	navAreaScroll:Dock(FILL)
 	self.navAreaScroll = navAreaScroll
+	SetSubmenuListHeight(self, heightNavHeader, heightNavContent)
 
 	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
 	navAreaScrollGrid:Dock(FILL)
 	self.navAreaScrollGrid = navAreaScrollGrid
 
-	self.mainFrame = getHighestParent(self)
+	self.frame = getHighestParent(self)
 
 	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled(false)
@@ -57,7 +51,7 @@ end
 function PANEL:EnableSearchBar(active)
 	local heightShift = active and heightNavButton or 0
 
-	SetSubmenuListHeight(self, heightNavHeader + heightShift, heightNavContent - heightShift - vskin.GetHeaderHeight() - vskin.GetBorderSize())
+	SetSubmenuListHeight(self, heightNavHeader + heightShift, heightNavContent - heightShift)
 
 	if not active then
 		if self.searchBar then self.searchBar:Clear() end
@@ -66,15 +60,11 @@ function PANEL:EnableSearchBar(active)
 
 	-- ADD SEARBACH ON TOP	
 	--self.searchBar = vgui.Create("DSearchBarTTT2", self)
-	local searchBar = vgui.Create("DPanel", self:GetParent())
+	local searchBar = vgui.Create("DTextEntry", self)
 	searchBar:SetPos(0, heightNavHeader )
 	searchBar:SetSize(widthNavContent, heightNavButton)
-	self.searchBar = searchBar
-
-	local searchBarText = vgui.Create("DTextEntry", searchBar)
-	searchBarText:SetUpdateOnType(true)
-	searchBarText:Dock(FILL)
-	searchBarText.OnValueChange = function(slf,text)
+	searchBar:SetUpdateOnType(true)
+	searchBar.OnValueChange = function(slf,text)
 		local submenuClasses = self.submenuClasses or {}
 		local filteredSubmenuClasses = {}
 		local filterFunction = self:GetSearchFunction()
@@ -91,14 +81,14 @@ function PANEL:EnableSearchBar(active)
 
 		self:GenerateSubmenuList(filteredSubmenuClasses)
 	end
-	searchBarText.OnGetFocus = function(slf)
-		self.mainFrame:SetKeyboardInputEnabled(true)
+	searchBar.OnGetFocus = function(slf)
+		self.frame:SetKeyboardInputEnabled(true)
 	end
-	searchBarText.OnLoseFocus = function(slf)
-		self.mainFrame:SetKeyboardInputEnabled(false)
+	searchBar.OnLoseFocus = function(slf)
+		self.frame:SetKeyboardInputEnabled(false)
 	end
 
-	self.searchBarText = searchBarText
+	self.searchBar = searchBar
 end
 
 function PANEL:SetSearchFunction(searchFunction)
@@ -111,7 +101,7 @@ end
 
 function PANEL:AddSubmenuButton(submenuClass)
 	local settingsButton = self.navAreaScrollGrid:Add("DSubmenuButtonTTT2")
-	settingsButton:SetSize(widthNavButton, heightNavButton)
+	settingsButton:SetSize(widthNavContent, heightNavButton)
 	settingsButton:SetTitle(submenuClass.title or submenuClass.type)
 	settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
 
@@ -124,7 +114,6 @@ function PANEL:AddSubmenuButton(submenuClass)
 		slf:SetActive()
 
 		self.lastActive = slf
-		print("Button Clicked.")
 	end
 
 	return settingsButton
@@ -153,10 +142,12 @@ function PANEL:GenerateSubmenuList(submenuClasses)
 
 		-- handle the set of active buttons for the draw process
 		self.navAreaScrollGrid:GetChild(0):SetActive()
-		print("\nChild Active.")
 
 		self.lastActive = self.navAreaScrollGrid:GetChild(0)
 	end
+
+	self.navAreaScrollGrid:InvalidateLayout(true)
+	self.navAreaScroll:InvalidateLayout(true)
 end
 
 function PANEL:SetSubmenuClasses(submenuClasses, contentArea)
@@ -166,11 +157,9 @@ function PANEL:SetSubmenuClasses(submenuClasses, contentArea)
 	self:GenerateSubmenuList(submenuClasses)
 end
 
-function PANEL:SetMainFrame(frame)
-	self.mainFrame = frame
-end
-
 function PANEL:SetPadding(padding)
+	self:InvalidateParent(true)
+	widthNavContent, heightNavContent = self:GetSize()
 	self.padding = padding
 	self.navAreaScrollGrid:SetSpaceY(padding)
 end
@@ -180,28 +169,16 @@ function PANEL:GetPadding()
 end
 
 ---
--- @realm client
-function PANEL:Rebuild()
-	return
-end
-
----
--- @ignore
-function PANEL:PerformLayoutInternal()
-	self:Rebuild()
-end
-
----
 -- @ignore
 function PANEL:PerformLayout()
-	self:PerformLayoutInternal()
 end
 
 ---
 -- @return boolean
 -- @realm client
 function PANEL:Clear()
-	return self.searchBar:Clear() and self.navAreaContent:Clear()
+	self.searchBar:Clear()
+	self.navAreaScroll:Clear()
 end
 
 derma.DefineControl("DSubmenuListTTT2", "", PANEL, "DPanelTTT2")
