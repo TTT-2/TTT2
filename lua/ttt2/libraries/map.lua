@@ -26,26 +26,17 @@ function map.GetMapGameType()
 		return map.type
 	end
 
-	if #ents.FindByClass("info_player_deathmatch") ~= 0 then
-		map.type = MAP_TYPE_TERRORTOWN
-
-		return MAP_TYPE_TERRORTOWN
-	end
-
 	if #ents.FindByClass("info_player_counterterrorist") ~= 0 then
 		map.type = MAP_TYPE_COUNTERSTRIKE
-
-		return MAP_TYPE_COUNTERSTRIKE
-	end
-
-	if #ents.FindByClass("info_player_teamspawn") ~= 0 then
+	elseif #ents.FindByClass("info_player_teamspawn") ~= 0 then
 		map.type = MAP_TYPE_TEAMFORTRESS
-
-		return MAP_TYPE_TEAMFORTRESS
+	else
+		-- as a fallback use the terrortown map type since most maps are terrotown maps;
+		-- they are identified with the class 'info_player_deathmatch'
+		map.type = MAP_TYPE_TERRORTOWN
 	end
 
-	-- as a fallback use the terrortown map type
-	return MAP_TYPE_TERRORTOWN
+	return map.type
 end
 
 ---
