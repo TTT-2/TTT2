@@ -582,7 +582,7 @@ end
 -- Usually called in @{GM:TTTBeginRound} and @{GM:TTTEndRound}.
 -- @realm server
 function KARMA.CheckAutoKickAll()
-	if config.autokick:GetBool() then return end
+	if not config.autokick:GetBool() then return end
 
 	local plys = player.GetAll()
 
