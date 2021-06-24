@@ -13,7 +13,7 @@ ENT.Base = "base_point"
 ---
 -- @realm shared
 function ENT:Initialize()
-	local ammos = ents.TTT.GetSpawnableAmmo()
+	--[[local ammos = ents.TTT.GetSpawnableAmmo()
 	if not ammos then return end
 
 	local ent = ents.Create(ammos[math.random(#ammos)])
@@ -25,5 +25,5 @@ function ENT:Initialize()
 		ent:PhysWake()
 	end
 
-	self:Remove()
+	self:Remove()--]]
 end

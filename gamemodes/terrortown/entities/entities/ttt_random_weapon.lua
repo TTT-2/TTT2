@@ -25,7 +25,7 @@ end
 ---
 -- @realm shared
 function ENT:Initialize()
-	local weps = ents.TTT.GetSpawnableSWEPs()
+	--[[local weps = ents.TTT.GetSpawnableSWEPs()
 	if weps then
 		local w = weps[math.random(#weps)]
 		local ent = ents.Create(WEPS.GetClass(w))
@@ -54,5 +54,5 @@ function ENT:Initialize()
 		end
 
 		self:Remove()
-	end
+	end--]]
 end

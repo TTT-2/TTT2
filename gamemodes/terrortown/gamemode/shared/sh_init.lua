@@ -461,6 +461,29 @@ WEAPON_ROLE = WEAPON_EXTRA
 WEAPON_NONE = WEAPON_EXTRA
 WEAPON_EQUIP = WEAPON_SPECIAL
 
+-- weapon spawn type
+WEAPON_TYPE_RANDOM = 1
+WEAPON_TYPE_MELEE = 2
+WEAPON_TYPE_NADE = 3
+WEAPON_TYPE_SHOTGUN = 4
+WEAPON_TYPE_ASSAULT = 5
+WEAPON_TYPE_SNIPER = 6
+WEAPON_TYPE_PISTOL = 7
+WEAPON_TYPE_SPECIAL = 8
+
+-- ammo spawn type
+AMMO_TYPE_RANDOM = 1
+AMMO_TYPE_DEAGLE = 2
+AMMO_TYPE_PISTOL = 3
+AMMO_TYPE_MAC10 = 4
+AMMO_TYPE_RIFLE = 5
+AMMO_TYPE_SHOTGUN = 6
+
+-- spawn types
+SPAWN_TYPE_WEAPON = 1
+SPAWN_TYPE_AMMO = 2
+SPAWN_TYPE_PLAYER = 3
+
 -- Kill types discerned by last words
 KILL_NORMAL = 0
 KILL_SUICIDE = 1
@@ -534,6 +557,7 @@ include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
+include("ttt2/libraries/entspawnscript.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")

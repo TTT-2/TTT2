@@ -266,36 +266,6 @@ function ents.TTT.TriggerRoundStateOutputs(r, param)
 	end
 end
 
--- CS:S and TF2 maps have a bunch of ents we'd like to abuse for weapon spawns,
--- but to do that we need to register a SENT with their class name, else they
--- will just error out and we can't do anything with them.
-local dummify = {
-	-- CS:S
-	"hostage_entity",
-	-- TF2
-	"item_ammopack_full",
-	"item_ammopack_medium",
-	"item_ammopack_small",
-	"item_healthkit_full",
-	"item_healthkit_medium",
-	"item_healthkit_small",
-	"item_teamflag",
-	"game_intro_viewpoint",
-	"info_observer_point",
-	"team_control_point",
-	"team_control_point_master",
-	"team_control_point_round",
-	-- ZM
-	"item_ammo_revolver"
-}
-
-for _i = 1, #dummify do
-	scripted_ents.Register({
-		Type = "point",
-		IsWeaponDummy = true
-	}, dummify[_i], false)
-end
-
 -- Cache this, every ttt_random_weapon uses it in its Init
 local SpawnableSWEPs
 
