@@ -55,10 +55,11 @@ function PANEL:EnableSearchBar(active)
 	end
 
 	-- ADD SEARBACH ON TOP	
-	--self.searchBar = vgui.Create("DSearchBarTTT2", self)
-	local searchBar = vgui.Create("DTextEntry", self)
+	local searchBar = vgui.Create("DSearchBarTTT2", self)
+	searchBar:DockPadding(0, 0, 0, 0)
 	searchBar:SetUpdateOnType(true)
 	searchBar:SetPos(0, heightNavHeader)
+	searchBar:SetHeightMult(1)
 	searchBar.OnValueChange = function(slf,text)
 		local submenuClasses = self.submenuClasses or {}
 		local filteredSubmenuClasses = {}
@@ -158,6 +159,10 @@ end
 function PANEL:SetPadding(padding)
 	self.padding = padding
 	self.navAreaScrollGrid:SetSpaceY(padding)
+	self.navAreaScroll:DockPadding(0,0,0,0)
+
+	if not self.searchBar then return end
+	self.searchBar:DockPadding(0, 0, 0, 0)
 end
 
 function PANEL:GetPadding()

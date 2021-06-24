@@ -145,7 +145,8 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintNavPanelTTT2(panel, w, h)
-	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
+	local _, _, rightPad = panel:GetDockPadding()
+	drawBox(w - rightPad, 0, rightPad, h, ColorAlpha(colors.default, 200))
 end
 
 ---
@@ -1353,6 +1354,42 @@ function SKIN:PaintRoleLayeringReceiverTTT2(panel, w, h)
 			TEXT_ALIGN_CENTER
 		)
 	end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintSearchbar(panel, w, h)
+	local colorBox = colors.helpBox
+	local colorBar = colors.accentHover
+	local heightMult = panel:GetHeightMult()
+	local colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
+	local leftPad, topPad, rightPad, bottomPad = panel:GetDockPadding()
+	local widthPad = leftPad + rightPad
+	local heightPad = topPad + bottomPad
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
+	end
+
+	--drawRoundedBox(sizes.cornerRadius, 0, h * (1 - heightMult) / 2, w, h * heightMult, colorBox)
+	drawBox(leftPad, h * (1 - heightMult) / 2 + topPad, w - widthPad, h * heightMult - heightPad, colorBox)
+	drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
+
+	if panel:GetIsOnFocus() then return end
+
+	drawSimpleText(
+		TryT(panel:GetPlaceholderText()),
+		panel:GetFont(),
+		leftPad + w * 0.02,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 -- REGISTER DERMA SKIN
