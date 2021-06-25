@@ -101,7 +101,7 @@ function PANEL:GetValue()
 end
 
 ---
--- This function determines if PANEL:OnValueChange() is called on every typed letter or not.
+-- This function determines if @{PANEL:OnValueChange()} is called on every typed letter or not.
 -- @param bool enabled
 -- @realm client
 function PANEL:SetUpdateOnType(enabled)
@@ -110,24 +110,27 @@ end
 
 ---
 -- This function is called when the searchbar is focussed.
--- You can overwrite this with your own function.
+-- @note This function can be overwritten but not called.
 -- @realm client
 function PANEL:OnGetFocus()
+
 end
 
 ---
 -- This function is called when the searchbar is not focussed anymore.
--- You can overwrite this with your own function.
+-- @note This function can be overwritten but not called.
 -- @realm client
 function PANEL:OnLoseFocus()
+
 end
 
 ---
 -- This function is called by the searchbar when a text is entered/changed.
--- You can overwrite this with your own function.
+-- @note This function should be overwritten but not called.
 -- @param string value
 -- @realm client
 function PANEL:OnValueChange(value)
+
 end
 
 ---

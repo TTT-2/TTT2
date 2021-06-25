@@ -4,7 +4,6 @@
 
 local PANEL = {}
 
-
 ---
 -- @accessor function
 -- @realm client
@@ -225,6 +224,7 @@ end
 -- @realm client
 function PANEL:Clear()
 	local cleared = self.searchBar:Clear()
+
 	return tobool(cleared and self.navAreaScroll:Clear())
 end
 

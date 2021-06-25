@@ -355,6 +355,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
 	submenuList:EnableSearchBar(menuClass:HasSearchbar())
 	submenuList:SetSearchFunction(menuClass:GetSearchFunction())
 
+	-- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDET SIZE
 	submenuList:InvalidateLayout(true)
 
 	-- REGISTER REBUILD CALLBACK

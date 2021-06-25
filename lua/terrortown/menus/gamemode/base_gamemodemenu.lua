@@ -10,6 +10,7 @@ CLGAMEMODEMENU.priority = 0
 CLGAMEMODEMENU.icon = nil
 CLGAMEMODEMENU.title = ""
 CLGAMEMODEMENU.description = ""
+CLGAMEMODEMENU.searchbar = false
 
 CLGAMEMODEMENU.submenus = {}
 
@@ -106,21 +107,44 @@ function CLGAMEMODEMENU:AddSubmenu(submenu)
 	self.submenus[#self.submenus + 1] = submenu
 end
 
+---
+-- Enables searchbar for the menu.
+-- @param bool active
+-- @realm client
 function CLGAMEMODEMENU:EnableSearchbar(active)
 	self.searchbar = active
 end
 
+---
+-- Checks if the menu has a searchbar enabled.
+-- @return boolean Returns true if searchbar is set
+-- @realm client
 function CLGAMEMODEMENU:HasSearchbar()
-	return self.searchbar or false
+	return self.searchbar
 end
 
+---
+-- Sets the used searchfunction.
+-- Parameters for that function are submenuClasses and the searchText
+-- @param function searchFunction
+-- @realm client
 function CLGAMEMODEMENU:SetSearchFunction(searchFunction)
+	if not isfunction(searchFunction) then return end
+
 	self.searchFunction = searchFunction
 end
 
+---
+-- Gets the used searchfunction.
+-- Parameters for that function are submenuClasses and the searchText
+-- @return function Returns the given searchFunction or a default-function,
+-- which only searches the titles and compares strings in lowercase letters.
+-- @realm client
 function CLGAMEMODEMENU:GetSearchFunction()
 	local searchFunction = self.searchFunction
+
 	if not isfunction(searchFunction) then
+		-- Default searchfunction searches only titles in lowercase letters
 		searchFunction = function(submenuClass, searchText)
 			local txt = lowerString(searchText)
 			local title = lowerString(TryT(submenuClass.title))
@@ -129,6 +153,7 @@ function CLGAMEMODEMENU:GetSearchFunction()
 			return start or false and true
 		end
 	end
+
 	return searchFunction
 end
 
