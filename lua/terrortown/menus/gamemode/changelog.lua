@@ -16,21 +16,6 @@ CLGAMEMODEMENU.priority = 100
 
 
 function CLGAMEMODEMENU:Initialize()
-	self:EnableSearchbar(true)
-	self:SetSearchFunction(function(submenuClass, searchText)
-		local txt = stringLower(searchText)
-		local change = submenuClass.change
-
-		if stringFind(stringLower(TryT(submenuClass.title)), txt) then return true end
-
-		if change.date > 0
-		and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt) then return true end
-
-		if stringFind(stringLower(submenuClass.change.text), txt) then return true end
-
-		return false
-	end)
-
 	-- add "virtual" submenus that are treated as real one even without files
 	local changelog = GetSortedChanges()
 	local changelogMenuBase = self:GetSubmenuByName("base_changelog")
@@ -47,4 +32,26 @@ end
 -- overwrite the normal submenu function to return our custom virtual submenus
 function CLGAMEMODEMENU:GetSubmenus()
 	return virtualSubmenus
+end
+
+-- overwrite and return true to enable a searchbar
+function CLGAMEMODEMENU:HasSearchbar()
+	return true
+end
+
+-- overwrite and return custom searchfunction
+function CLGAMEMODEMENU:GetSearchFunction()
+	return function(submenuClass, searchText)
+			local txt = stringLower(searchText)
+			local change = submenuClass.change
+
+			if stringFind(stringLower(TryT(submenuClass.title)), txt) then return true end
+
+			if change.date > 0
+			and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt) then return true end
+
+			if stringFind(stringLower(submenuClass.change.text), txt) then return true end
+
+			return false
+		end
 end

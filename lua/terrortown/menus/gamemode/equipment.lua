@@ -16,10 +16,6 @@ CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.langConVar = nil
 CLGAMEMODEMENU.lang = nil
 
-function CLGAMEMODEMENU:Initialize()
-	self:EnableSearchbar(true)
-end
-
 function CLGAMEMODEMENU:InitializeVirtualMenus()
 	-- add "virtual" submenus that are treated as real one even without files
 	virtualSubmenus = {}
@@ -79,5 +75,10 @@ function CLGAMEMODEMENU:GetSubmenus()
 end
 
 function CLGAMEMODEMENU:IsAdminMenu()
+	return true
+end
+
+-- overwrite and return true to enable a searchbar
+function CLGAMEMODEMENU:HasSearchbar()
 	return true
 end

@@ -15,10 +15,6 @@ CLGAMEMODEMENU.priority = 48
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil
 
-function CLGAMEMODEMENU:Initialize()
-	self:EnableSearchbar(true)
-end
-
 function CLGAMEMODEMENU:IsAdminMenu()
 	return true
 end
@@ -54,4 +50,9 @@ function CLGAMEMODEMENU:GetSubmenus()
 	end
 
 	return virtualSubmenus
+end
+
+-- overwrite and return true to enable a searchbar
+function CLGAMEMODEMENU:HasSearchbar()
+	return true
 end

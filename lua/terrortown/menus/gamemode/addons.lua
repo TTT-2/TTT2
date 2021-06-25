@@ -7,6 +7,7 @@ CLGAMEMODEMENU.title = "menu_addons_title"
 CLGAMEMODEMENU.description = "menu_addons_description"
 CLGAMEMODEMENU.priority = 94
 
-function CLGAMEMODEMENU:Initialize()
-	self:EnableSearchbar(true)
+-- overwrite and return true to enable a searchbar
+function CLGAMEMODEMENU:HasSearchbar()
+	return true
 end

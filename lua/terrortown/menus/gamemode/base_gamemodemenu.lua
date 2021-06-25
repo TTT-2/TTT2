@@ -10,7 +10,6 @@ CLGAMEMODEMENU.priority = 0
 CLGAMEMODEMENU.icon = nil
 CLGAMEMODEMENU.title = ""
 CLGAMEMODEMENU.description = ""
-CLGAMEMODEMENU.searchbar = false
 
 CLGAMEMODEMENU.submenus = {}
 
@@ -108,53 +107,28 @@ function CLGAMEMODEMENU:AddSubmenu(submenu)
 end
 
 ---
--- Enables searchbar for the menu.
--- @param bool active
--- @realm client
-function CLGAMEMODEMENU:EnableSearchbar(active)
-	self.searchbar = active
-end
-
----
 -- Checks if the menu has a searchbar enabled.
--- @return boolean Returns true if searchbar is set
+-- @note This function should be overwritten and return true, if you want a searchbar.
+-- @return boolean Return true if searchbar should be available
 -- @realm client
 function CLGAMEMODEMENU:HasSearchbar()
-	return self.searchbar
-end
-
----
--- Sets the used searchfunction.
--- Parameters for that function are submenuClasses and the searchText
--- @param function searchFunction
--- @realm client
-function CLGAMEMODEMENU:SetSearchFunction(searchFunction)
-	if not isfunction(searchFunction) then return end
-
-	self.searchFunction = searchFunction
+	return false
 end
 
 ---
 -- Gets the used searchfunction.
 -- Parameters for that function are submenuClasses and the searchText
--- @return function Returns the given searchFunction or a default-function,
--- which only searches the titles and compares strings in lowercase letters.
+-- @note This function can be overwritten to return a custom searchfunction.
+-- @return function Returns the default-function, which only searches the titles and compares strings in lowercase letters.
 -- @realm client
 function CLGAMEMODEMENU:GetSearchFunction()
-	local searchFunction = self.searchFunction
-
-	if not isfunction(searchFunction) then
-		-- Default searchfunction searches only titles in lowercase letters
-		searchFunction = function(submenuClass, searchText)
+	return function(submenuClass, searchText)
 			local txt = stringLower(searchText)
 			local title = stringLower(TryT(submenuClass.title))
 			local start = stringFind(title, txt)
 
 			return start or false and true
 		end
-	end
-
-	return searchFunction
 end
 
 ---
