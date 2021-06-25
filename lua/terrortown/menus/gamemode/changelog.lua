@@ -49,7 +49,7 @@ function CLGAMEMODEMENU:MatchesSearchString(submenuClass, searchText)
 	end
 
 	if change.date > 0
-			and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt)
+		and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt)
 	then
 		return true
 	end

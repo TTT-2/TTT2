@@ -69,6 +69,7 @@ end
 function PANEL:EnableSearchBar(active)
 	if not active then
 		if self.searchBar then self.searchBar:Clear() end
+
 		return
 	end
 
@@ -105,8 +106,7 @@ function PANEL:AddSubmenuButton(submenuClass)
 	settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
 
 	settingsButton.PerformLayout = function(panel)
-		local width = panel:GetParent():GetSize()
-		panel:SetSize(width, heightNavButton)
+		panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
 	end
 
 	settingsButton.DoClick = function(slf)
@@ -114,9 +114,11 @@ function PANEL:AddSubmenuButton(submenuClass)
 		HELPSCRN:BuildContentArea()
 
 		-- handle the set/unset of active buttons for the draw process
-		if self.lastActive and self.lastActive.SetActive then self.lastActive:SetActive(false) end
-		slf:SetActive()
+		if self.lastActive and self.lastActive.SetActive then
+			self.lastActive:SetActive(false)
+		end
 
+		slf:SetActive()
 		self.lastActive = slf
 	end
 
