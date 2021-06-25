@@ -116,6 +116,34 @@ function CLGAMEMODEMENU:HasSearchbar()
 end
 
 ---
+-- Filters the list with a searchText and returns full list if nothing is entered.
+-- @note This function can be overwritten for a custom method to use the searchBar.
+-- @param string searchText
+-- @return menuClasses Returns a list of all matching submenus, needs to be indexed with ascending numbers
+-- @realm client
+function CLGAMEMODEMENU:GetMatchingSubmenus(searchText)
+	local submenuClasses = self:GetVisibleSubmenus()
+
+	if searchText == "" then
+		return submenuClasses
+	end
+
+	local filteredSubmenuClasses = {}
+
+	local counter = 0
+	for i = 1, #submenuClasses do
+		local submenuClass = submenuClasses[i]
+
+		if self:MatchesSearchString(submenuClass, searchText) then
+			counter = counter + 1
+			filteredSubmenuClasses[counter] = submenuClass
+		end
+	end
+
+	return filteredSubmenuClasses
+end
+
+---
 -- Determines the used searchfunction.
 -- Parameters for that function are submenuClasses and the searchText
 -- Per default only titles are searched and compared to the searchtext in lowercase letters.
@@ -124,7 +152,7 @@ end
 -- @param string searchText
 -- @return bool Returns 
 -- @realm client
-function CLGAMEMODEMENU:SearchFunction(submenuClass, searchText)
+function CLGAMEMODEMENU:MatchesSearchString(submenuClass, searchText)
 	local txt = stringLower(searchText)
 	local title = stringLower(TryT(submenuClass.title))
 	local start = stringFind(title, txt)

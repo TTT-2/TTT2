@@ -78,22 +78,8 @@ function PANEL:EnableSearchBar(active)
 	searchBar:SetPos(0, heightNavHeader)
 	searchBar:SetHeightMult(1)
 
-	searchBar.OnValueChange = function(slf,text)
-		local submenuClasses = self.submenuClasses or {}
-		local filteredSubmenuClasses = {}
-		local filterFunction = self:GetSearchFunction()
-
-		local counter = 0
-		for i = 1, #submenuClasses do
-			local submenuClass = submenuClasses[i]
-
-			if text == "" or filterFunction(submenuClass, text) then
-				counter = counter + 1
-				filteredSubmenuClasses[counter] = submenuClass
-			end
-		end
-
-		self:GenerateSubmenuList(filteredSubmenuClasses)
+	searchBar.OnValueChange = function(slf, searchText)
+		self:GenerateSubmenuList(self.basemenuClass:GetMatchingSubmenus(searchText))
 	end
 
 	searchBar.OnGetFocus = function(slf)
@@ -179,11 +165,11 @@ end
 -- @param menuClasses submenuClasses
 -- @param panel contenArea
 -- @realm client
-function PANEL:SetSubmenuClasses(submenuClasses, contentArea)
-	self.submenuClasses = submenuClasses
+function PANEL:SetBasemenuClass(basemenuClass, contentArea)
+	self.basemenuClass = basemenuClass
 	self.contentArea = contentArea
 
-	self:GenerateSubmenuList(submenuClasses)
+	self:GenerateSubmenuList(basemenuClass:GetVisibleSubmenus())
 end
 
 ---
