@@ -140,7 +140,7 @@ HELPSCRN.padding = 5
 local width, height = 1100, 700
 local heightMainMenuButton = 120
 
-local widthNav, heightNav = 300, 700
+local widthNav = 300
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local heightAdminSeperator = 50
