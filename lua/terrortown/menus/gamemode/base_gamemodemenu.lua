@@ -152,14 +152,14 @@ end
 -- @note This function can be overwritten to use a custom searchfunction.
 -- @param menuClass submenuClass
 -- @param string searchText
--- @return bool Returns 
+-- @return bool Returns if the searchText is somewhere matched inside the submenuClass
 -- @realm client
 function CLGAMEMODEMENU:MatchesSearchString(submenuClass, searchText)
 	local txt = stringLower(searchText)
 	local title = stringLower(TryT(submenuClass.title))
 	local start = stringFind(title, txt)
 
-	return start or false and true
+	return tobool(start)
 end
 
 ---

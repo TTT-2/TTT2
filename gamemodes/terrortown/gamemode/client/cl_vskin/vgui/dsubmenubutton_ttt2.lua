@@ -74,7 +74,7 @@ end
 -- @realm client
 function PANEL:SetIcon(iconMat, iconFullSize)
 	self.contents.icon = iconMat
-	self.contents.iconFullSize = iconFullSize
+	self.contents.iconFullSize = tobool(iconFullSize)
 end
 
 ---
