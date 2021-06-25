@@ -78,7 +78,6 @@ function PANEL:Init()
 end
 
 ---
--- This function sets the used font.
 -- @param string newFont
 -- @realm client
 function PANEL:SetFont(newFont)
@@ -87,7 +86,6 @@ function PANEL:SetFont(newFont)
 end
 
 ---
--- This function gets you the current used font.
 -- @return string
 -- @realm client
 function PANEL:GetFont()
@@ -148,6 +146,9 @@ function PANEL:PerformLayout()
 
 	self.textEntry:SetSize(width, height * heightMult)
 	self.textEntry:SetPos(0, height * (1 - heightMult) / 2)
+
+	-- React to skin changes in menu
+	self.textEntry:SetTextColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))
 
 	self.textEntry:InvalidateLayout(true)
 end
