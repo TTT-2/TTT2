@@ -132,6 +132,7 @@ function CLGAMEMODEMENU:GetMatchingSubmenus(searchText)
 	local filteredSubmenuClasses = {}
 
 	local counter = 0
+
 	for i = 1, #submenuClasses do
 		local submenuClass = submenuClasses[i]
 

@@ -82,6 +82,7 @@ end
 -- @realm client
 function PANEL:SetFont(newFont)
 	self.textEntry:SetFont(newFont)
+
 	font = newFont
 end
 
@@ -148,7 +149,7 @@ function PANEL:PerformLayout()
 	local heightMult = self:GetHeightMult()
 
 	self.textEntry:SetSize(width, height * heightMult)
-	self.textEntry:SetPos(0, height * (1 - heightMult) / 2)
+	self.textEntry:SetPos(0, height * (1 - heightMult) * 0.5)
 
 	-- React to skin changes in menu
 	self.textEntry:SetTextColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))

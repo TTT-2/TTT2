@@ -1378,7 +1378,7 @@ function SKIN:PaintSearchbar(panel, w, h)
 	end
 
 	-- Draw custom box background for the searchBar
-	drawBox(leftPad, h * (1 - heightMult) / 2 + topPad, w - widthPad, h * heightMult - heightPad, colorBox)
+	drawBox(leftPad, h * (1 - heightMult) * 0.5 + topPad, w - widthPad, h * heightMult - heightPad, colorBox)
 
 	-- Draw small blue bar on the bottom
 	drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)

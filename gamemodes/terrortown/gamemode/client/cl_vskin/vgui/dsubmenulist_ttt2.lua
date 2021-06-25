@@ -68,7 +68,9 @@ end
 -- @realm client
 function PANEL:EnableSearchBar(active)
 	if not active then
-		if self.searchBar then self.searchBar:Clear() end
+		if self.searchBar then
+			self.searchBar:Clear()
+		end
 
 		return
 	end
@@ -144,7 +146,6 @@ function PANEL:GenerateSubmenuList(submenuClasses)
 	else
 		for i = 1, #submenuClasses do
 			local submenuClass = submenuClasses[i]
-
 			local settingsButton = self:AddSubmenuButton(submenuClass)
 
 			-- Handle the set of active buttons for the draw process
