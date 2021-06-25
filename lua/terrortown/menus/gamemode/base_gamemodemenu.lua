@@ -117,7 +117,8 @@ end
 
 ---
 -- Filters the list with a searchText and returns full list if nothing is entered.
--- @note This function can be overwritten for a custom method to use the searchBar.
+-- @note Overwrite MatchesSearchString for a custom search! 
+-- This function can be overwritten, but probably shouldnt. 
 -- @param string searchText
 -- @return menuClasses Returns a list of all matching submenus, needs to be indexed with ascending numbers
 -- @realm client
@@ -144,7 +145,7 @@ function CLGAMEMODEMENU:GetMatchingSubmenus(searchText)
 end
 
 ---
--- Determines the used searchfunction.
+-- Determines the used searchfunction, when a HasSearchbar returns true.
 -- Parameters for that function are submenuClasses and the searchText
 -- Per default only titles are searched and compared to the searchtext in lowercase letters.
 -- @note This function can be overwritten to use a custom searchfunction.
