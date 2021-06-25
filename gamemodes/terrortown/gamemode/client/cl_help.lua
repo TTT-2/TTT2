@@ -353,7 +353,7 @@ function HELPSCRN:ShowSubmenu(menuClass)
 	submenuList:SetPadding(self.padding)
 	submenuList:SetSubmenuClasses(menuClass:GetVisibleSubmenus(), contentArea)
 	submenuList:EnableSearchBar(menuClass:HasSearchbar())
-	submenuList:SetSearchFunction(menuClass:GetSearchFunction())
+	submenuList:SetSearchFunction(menuClass.SearchFunction)
 
 	-- REFRESH SIZE OF SUBMENULIST FOR CORRECT SUBMENU DEPENDENT SIZE
 	submenuList:InvalidateLayout(true)

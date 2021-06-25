@@ -116,19 +116,20 @@ function CLGAMEMODEMENU:HasSearchbar()
 end
 
 ---
--- Gets the used searchfunction.
+-- Determines the used searchfunction.
 -- Parameters for that function are submenuClasses and the searchText
--- @note This function can be overwritten to return a custom searchfunction.
--- @return function Returns the default-function, which only searches the titles and compares strings in lowercase letters.
+-- Per default only titles are searched and compared to the searchtext in lowercase letters.
+-- @note This function can be overwritten to use a custom searchfunction.
+-- @param menuClass submenuClass
+-- @param string searchText
+-- @return bool Returns 
 -- @realm client
-function CLGAMEMODEMENU:GetSearchFunction()
-	return function(submenuClass, searchText)
-			local txt = stringLower(searchText)
-			local title = stringLower(TryT(submenuClass.title))
-			local start = stringFind(title, txt)
+function CLGAMEMODEMENU:SearchFunction(submenuClass, searchText)
+	local txt = stringLower(searchText)
+	local title = stringLower(TryT(submenuClass.title))
+	local start = stringFind(title, txt)
 
-			return start or false and true
-		end
+	return start or false and true
 end
 
 ---

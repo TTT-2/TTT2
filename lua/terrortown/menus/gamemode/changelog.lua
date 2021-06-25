@@ -39,19 +39,17 @@ function CLGAMEMODEMENU:HasSearchbar()
 	return true
 end
 
--- overwrite and return custom searchfunction
-function CLGAMEMODEMENU:GetSearchFunction()
-	return function(submenuClass, searchText)
-			local txt = stringLower(searchText)
-			local change = submenuClass.change
+-- overwrite and do a custom search inside title, date and content
+function CLGAMEMODEMENU:SearchFunction(submenuClass, searchText)
+	local txt = stringLower(searchText)
+	local change = submenuClass.change
 
-			if stringFind(stringLower(TryT(submenuClass.title)), txt) then return true end
+	if stringFind(stringLower(TryT(submenuClass.title)), txt) then return true end
 
-			if change.date > 0
-			and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt) then return true end
+	if change.date > 0
+	and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt) then return true end
 
-			if stringFind(stringLower(submenuClass.change.text), txt) then return true end
+	if stringFind(stringLower(submenuClass.change.text), txt) then return true end
 
-			return false
-		end
+	return false
 end
