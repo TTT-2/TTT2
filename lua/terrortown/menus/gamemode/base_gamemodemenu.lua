@@ -2,8 +2,8 @@
 -- @class CLGAMEMODEMENU
 
 local TryT = LANG.TryTranslation
-local lowerString = string.lower
-local findString = string.find
+local stringLower = string.lower
+local stringFind = string.find
 
 CLGAMEMODEMENU.type = "base_gamemodemenu"
 CLGAMEMODEMENU.priority = 0
@@ -146,9 +146,9 @@ function CLGAMEMODEMENU:GetSearchFunction()
 	if not isfunction(searchFunction) then
 		-- Default searchfunction searches only titles in lowercase letters
 		searchFunction = function(submenuClass, searchText)
-			local txt = lowerString(searchText)
-			local title = lowerString(TryT(submenuClass.title))
-			local start = findString(title, txt)
+			local txt = stringLower(searchText)
+			local title = stringLower(TryT(submenuClass.title))
+			local start = stringFind(title, txt)
 
 			return start or false and true
 		end

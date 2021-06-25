@@ -1,8 +1,8 @@
 --- @ignore
 
 local tableCopy = table.Copy
-local lowerString = string.lower
-local findString = string.find
+local stringLower = string.lower
+local stringFind = string.find
 local TryT = LANG.TryTranslation
 
 local virtualSubmenus = {}
@@ -18,15 +18,15 @@ CLGAMEMODEMENU.priority = 100
 function CLGAMEMODEMENU:Initialize()
 	self:EnableSearchbar(true)
 	self:SetSearchFunction(function(submenuClass, searchText)
-		local txt = lowerString(searchText)
+		local txt = stringLower(searchText)
 		local change = submenuClass.change
 
-		if findString(lowerString(TryT(submenuClass.title)), txt) then return true end
+		if stringFind(stringLower(TryT(submenuClass.title)), txt) then return true end
 
 		if change.date > 0
-		and findString(lowerString(os.date("%Y/%m/%d", change.date)), txt) then return true end
+		and stringFind(stringLower(os.date("%Y/%m/%d", change.date)), txt) then return true end
 
-		if findString(lowerString(submenuClass.change.text), txt) then return true end
+		if stringFind(stringLower(submenuClass.change.text), txt) then return true end
 
 		return false
 	end)
