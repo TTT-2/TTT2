@@ -124,7 +124,8 @@ local function FindSpawns(spawns, classes)
 
 			spawns[entType][#spawns[entType] + 1] = {
 				pos = wep:GetPos(),
-				ang = wep:GetAngles()
+				ang = wep:GetAngles(),
+				ammo = wep.autoAmmoAmount or 0
 			}
 		end
 	end

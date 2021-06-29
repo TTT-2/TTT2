@@ -32,7 +32,7 @@ SWEP.Primary.Recoil = 0
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Delay = 1
+SWEP.Primary.Delay = 0.5
 SWEP.Primary.Ammo = "none"
 
 SWEP.Secondary.Recoil = 0
@@ -42,9 +42,32 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Delay = 0.5
 
 if SERVER then
+	util.AddNetworkString("weapon_ttt_wepeditor_spawninfo_ent")
+
 	function SWEP:Deploy()
 		-- send the data of the existing spawn entities
 		entspawnscript.StreamToClient(self:GetOwner())
+
+		-- add entity which is used for the targetID integration
+		self.entSpawnInfo = ents.Create("ttt_spawninfo_ent")
+		self.entSpawnInfo:Spawn()
+
+		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(self.entSpawnInfo) then return end
+
+			net.Start("weapon_ttt_wepeditor_spawninfo_ent")
+			net.WriteEntity(self.entSpawnInfo)
+			net.Send(self:GetOwner())
+		end)
+
+		self.BaseClass.Deploy(self)
+	end
+
+	function SWEP:Holster(wep)
+		-- remove entity which is used for the targetID integration
+		self.entSpawnInfo:Remove()
+
+		return self.BaseClass.Holster(self, wep)
 	end
 end
 
@@ -59,9 +82,6 @@ if CLIENT then
 	local centerX = 0.5 * ScrW()
 	local centerY = 0.5 * ScrH()
 	local tolerance = 7800
-
-	local colorWeapon = Color(0, 175, 175, 100)
-	local colorAmmo = Color(175, 75, 75, 100)
 
 	local function IsHighlighted(pos, scPos)
 		local dist3d = LocalPlayer():EyePos():Distance(pos)
@@ -92,6 +112,9 @@ if CLIENT then
 		local scPos
 
 		renderSetColorMaterial()
+
+		local colorWeapon = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON), 100)
+		local colorAmmo = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO), 100)
 
 		for entType, spawns in pairs(weps) do
 			for i = 1, #spawns do
@@ -170,9 +193,9 @@ if CLIENT then
 			scPos = proximitySpawn.scPos
 
 			if spawnType == SPAWN_TYPE_WEAPON then
-				color = colorWeapon
+				color = entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON)
 			elseif spawnType == SPAWN_TYPE_AMMO then
-				color = colorAmmo
+				color = entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO)
 			end
 
 			if i == 1 then
@@ -180,7 +203,7 @@ if CLIENT then
 
 				entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
 			else
-				renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, color)
+				renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 100))
 			end
 		end
 	end
@@ -212,11 +235,17 @@ if CLIENT then
 	end
 
 	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("place / remove weapon", "place / remove ammo")
-		self:AddHUDHelpLine("change weapon", Key("+reload", "R"))
+		self:AddTTT2HUDHelp("place spawn", "remove spawn")
+		self:AddHUDHelpLine("change spawn type", Key("+reload", "R"))
+		self:AddHUDHelpLine("hold to edit ammo auto spawn on weapon spawns", Key("+walk", "WALK"))
 	end
+
+	net.Receive("weapon_ttt_wepeditor_spawninfo_ent", function()
+		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
+	end)
 end
 
+-- used to place / remove spawns
 function SWEP:PrimaryAttack()
 	if SERVER or not IsFirstTimePredicted() then return end
 
@@ -225,14 +254,49 @@ function SWEP:PrimaryAttack()
 
 	local focusedSpawn = entspawnscript.GetFocusedSpawn()
 
-	if focusedSpawn then
-		entspawnscript.RemoveSpawnById(focusedSpawn.spawnType, focusedSpawn.entType, focusedSpawn.id)
+	if input.IsBindingDown("+walk") then
+		if not focusedSpawn then return end
+
+		local spawnType = focusedSpawn.spawnType
+		local entType = focusedSpawn.entType
+		local id = focusedSpawn.id
+		local ammo = focusedSpawn.spawn.ammo
+
+		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, ammo + 1)
 	else
+		if focusedSpawn then return end
+
 		local client = LocalPlayer()
 		local trace = client:GetEyeTrace()
 
 		if not trace.Hit or trace.StartPos:Distance(trace.HitPos) > 150 then return end
 
-		entspawnscript.AddSpawn(SPAWN_TYPE_WEAPON, WEAPON_TYPE_SHOTGUN, trace.HitPos, client:GetAngles())
+		entspawnscript.AddSpawn(SPAWN_TYPE_WEAPON, WEAPON_TYPE_SHOTGUN, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0)
 	end
+end
+
+function SWEP:SecondaryAttack()
+	if SERVER or not IsFirstTimePredicted() then return end
+
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+
+	local focusedSpawn = entspawnscript.GetFocusedSpawn()
+
+	if not focusedSpawn then return end
+
+	local spawnType = focusedSpawn.spawnType
+	local entType = focusedSpawn.entType
+	local id = focusedSpawn.id
+	local ammo = focusedSpawn.spawn.ammo
+
+	if input.IsBindingDown("+walk") then
+		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, math.max(ammo - 1, 0))
+	else
+		entspawnscript.RemoveSpawnById(focusedSpawn.spawnType, focusedSpawn.entType, focusedSpawn.id)
+	end
+end
+
+function SWEP:Reload()
+	if SERVER or not IsFirstTimePredicted() then return end
 end

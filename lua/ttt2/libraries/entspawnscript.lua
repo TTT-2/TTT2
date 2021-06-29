@@ -17,11 +17,18 @@ local tableRemove = table.remove
 
 local spawnEntList = {}
 
+local spawnColors = {
+	[SPAWN_TYPE_WEAPON] = Color(0, 175, 175, 255),
+	[SPAWN_TYPE_AMMO] = Color(175, 75, 75, 255),
+	[SPAWN_TYPE_PLAYER] = Color(75, 175, 50, 255)
+}
+
 entspawnscript = entspawnscript or {}
 
 if SERVER then
 	util.AddNetworkString("ttt2_remove_spawn_ent")
 	util.AddNetworkString("ttt2_add_spawn_ent")
+	util.AddNetworkString("ttt2_update_spawn_ent")
 
 	local spawndir = "ttt/weaponspawnscripts/"
 
@@ -88,19 +95,26 @@ if SERVER then
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
 		if not IsValid(ply) or not ply:IsAdmin() then return end
 
-		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadInt(32))
+		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32))
 	end)
 
 	net.Receive("ttt2_add_spawn_ent", function(_, ply)
 		if not IsValid(ply) or not ply:IsAdmin() then return end
 
-		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle())
+		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8))
+	end)
+
+	net.Receive("ttt2_update_spawn_ent", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8))
 	end)
 end
 
 if CLIENT then
 	local isEditing = false
 	local focusedSpawn = nil
+	local spawnInfoEnt = nil
 
 	function entspawnscript.SetEditing(state)
 		isEditing = state
@@ -127,6 +141,40 @@ if CLIENT then
 		return focusedSpawn
 	end
 
+	function entspawnscript.SetSpawnInfoEntity(ent)
+		spawnInfoEnt = ent
+	end
+
+	function entspawnscript.GetSpawnInfoEntity()
+		return spawnInfoEnt
+	end
+
+	function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
+		if spawnType == SPAWN_TYPE_WEAPON then
+			if entType == WEAPON_TYPE_RANDOM then
+				return "spawn_weapon_random"
+			elseif entType == WEAPON_TYPE_MELEE then
+				return "spawn_weapon_melee"
+			elseif entType == WEAPON_TYPE_NADE then
+				return "spawn_weapon_nade"
+			elseif entType == WEAPON_TYPE_SHOTGUN then
+				return "spawn_weapon_shotgun"
+			elseif entType == WEAPON_TYPE_ASSAULT then
+				return "spawn_weapon_assault"
+			elseif entType == WEAPON_TYPE_SNIPER then
+				return "spawn_weapon_sniper"
+			elseif entType == WEAPON_TYPE_PISTOL then
+				return "spawn_weapon_pistol"
+			elseif entType == WEAPON_TYPE_SPECIAL then
+				return "spawn_weapon_special"
+			end
+		end
+	end
+
+	function entspawnscript.GetColorFromSpawnType(spawnType)
+		return spawnColors[spawnType]
+	end
+
 	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)
 		spawnEntList = spawnEnts
 	end)
@@ -147,12 +195,12 @@ function entspawnscript.RemoveSpawnById(spawnType, entType, id)
 		net.Start("ttt2_remove_spawn_ent")
 		net.WriteUInt(spawnType, 4)
 		net.WriteUInt(entType, 4)
-		net.WriteInt(id, 32)
+		net.WriteUInt(id, 32)
 		net.SendToServer()
 	end
 end
 
-function entspawnscript.AddSpawn(spawnType, entType, pos, ang)
+function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo)
 	spawnEntList = spawnEntList or {}
 	spawnEntList[spawnType] = spawnEntList[spawnType] or {}
 	spawnEntList[spawnType][entType] = spawnEntList[spawnType][entType] or {}
@@ -161,7 +209,8 @@ function entspawnscript.AddSpawn(spawnType, entType, pos, ang)
 
 	list[#list + 1] = {
 		pos = pos,
-		ang = ang
+		ang = ang,
+		ammo = ammo
 	}
 
 	if CLIENT then
@@ -170,6 +219,36 @@ function entspawnscript.AddSpawn(spawnType, entType, pos, ang)
 		net.WriteUInt(entType, 4)
 		net.WriteVector(pos)
 		net.WriteAngle(ang)
+		net.WriteUInt(ammo, 8)
+		net.SendToServer()
+	end
+end
+
+function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo)
+	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
+
+	local listEntry = spawnEntList[spawnType][entType]
+
+	if not listEntry[id] then return end
+
+	pos = pos or listEntry[id].pos
+	ang = ang or listEntry[id].ang
+	ammo = ammo or listEntry[id].ammo
+
+	listEntry[id] = {
+		pos = pos,
+		ang = ang,
+		ammo = ammo
+	}
+
+	if CLIENT then
+		net.Start("ttt2_update_spawn_ent")
+		net.WriteUInt(spawnType, 4)
+		net.WriteUInt(entType, 4)
+		net.WriteUInt(id, 32)
+		net.WriteVector(pos)
+		net.WriteAngle(ang)
+		net.WriteUInt(ammo, 8)
 		net.SendToServer()
 	end
 end

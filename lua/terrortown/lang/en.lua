@@ -1406,3 +1406,21 @@ L.label_shop_linker_set = "Select shop type:"
 
 --2021-08-18
 L.xfer_team_indicator = "Team"
+
+-- 2021-06-29
+L.spawn_weapon_random = "Random Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_melee = "Melee Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_nade = "Grenade Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_shotgun = "Shotgun Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_assault = "Assault Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_sniper = "Sniper Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_pistol = "Pistol Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_special = "Special Weapon Spawn (Ammo: {ammo})"
+
+L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
+
+L.spawn_type_weapon = "This is a weapon spawn"
+L.spawn_type_ammo = "This is an ammunition spawn"
+L.spawn_type_player = "This is a player spawn"
+
+L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"

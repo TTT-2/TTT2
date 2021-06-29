@@ -85,6 +85,10 @@ SWEP.AllowDrop = true
 -- Set to true if weapon kills silently (no death scream)
 SWEP.IsSilent = false
 
+-- Set this to a number greater than 0 if you want to autospawn random ammo
+-- in close proximity to this weapon when spawned.
+SWEP.autoAmmoAmount = 0
+
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
 --	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
