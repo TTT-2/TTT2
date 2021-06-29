@@ -1408,14 +1408,16 @@ L.label_shop_linker_set = "Select shop type:"
 L.xfer_team_indicator = "Team"
 
 -- 2021-06-29
-L.spawn_weapon_random = "Random Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_melee = "Melee Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_nade = "Grenade Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_shotgun = "Shotgun Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_assault = "Assault Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_sniper = "Sniper Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_pistol = "Pistol Weapon Spawn (Ammo: {ammo})"
-L.spawn_weapon_special = "Special Weapon Spawn (Ammo: {ammo})"
+L.spawn_weapon_random = "Random Weapon Spawn"
+L.spawn_weapon_melee = "Melee Weapon Spawn"
+L.spawn_weapon_nade = "Grenade Weapon Spawn"
+L.spawn_weapon_shotgun = "Shotgun Weapon Spawn"
+L.spawn_weapon_assault = "Assault Weapon Spawn"
+L.spawn_weapon_sniper = "Sniper Weapon Spawn"
+L.spawn_weapon_pistol = "Pistol Weapon Spawn"
+L.spawn_weapon_special = "Special Weapon Spawn"
+
+L.spawn_weapon_ammo = " (Ammo: {ammo})"
 
 L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 

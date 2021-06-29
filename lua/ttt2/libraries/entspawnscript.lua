@@ -23,6 +23,30 @@ local spawnColors = {
 	[SPAWN_TYPE_PLAYER] = Color(75, 175, 50, 255)
 }
 
+local materialSpawn = {
+	[SPAWN_TYPE_WEAPON] = {
+		[WEAPON_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random"),
+		[WEAPON_TYPE_MELEE] = Material("vgui/ttt/tid/tid_big_weapon_melee"),
+		[WEAPON_TYPE_NADE] = Material("vgui/ttt/tid/tid_big_weapon_nade"),
+		[WEAPON_TYPE_SHOTGUN] = Material("vgui/ttt/tid/tid_big_weapon_shotgun"),
+		[WEAPON_TYPE_ASSAULT] = Material("vgui/ttt/tid/tid_big_weapon_assault"),
+		[WEAPON_TYPE_SNIPER] = Material("vgui/ttt/tid/tid_big_weapon_sniper"),
+		[WEAPON_TYPE_PISTOL] = Material("vgui/ttt/tid/tid_big_weapon_pistol"),
+		[WEAPON_TYPE_SPECIAL] = Material("vgui/ttt/tid/tid_big_weapon_special")
+	},
+	[SPAWN_TYPE_AMMO] = {
+		[AMMO_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random"),
+		[AMMO_TYPE_DEAGLE] = Material("vgui/ttt/tid/tid_big_weapon_random"),
+		[AMMO_TYPE_PISTOL] = Material("vgui/ttt/tid/tid_big_weapon_random"),
+		[AMMO_TYPE_MAC10] = Material("vgui/ttt/tid/tid_big_weapon_random"),
+		[AMMO_TYPE_RIFLE] = Material("vgui/ttt/tid/tid_big_weapon_random"),
+		[AMMO_TYPE_SHOTGUN] = Material("vgui/ttt/tid/tid_big_weapon_random")
+	},
+	[SPAWN_TYPE_PLAYER] = {
+		[PLAYER_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random")
+	}
+}
+
 entspawnscript = entspawnscript or {}
 
 if SERVER then
@@ -173,6 +197,10 @@ if CLIENT then
 
 	function entspawnscript.GetColorFromSpawnType(spawnType)
 		return spawnColors[spawnType]
+	end
+
+	function entspawnscript.GetIconFromSpawnType(spawnType, entType)
+		return materialSpawn[spawnType][entType]
 	end
 
 	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)

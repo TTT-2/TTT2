@@ -1,7 +1,7 @@
 SWEP.Base = "weapon_tttbase"
 
 if CLIENT then
-	SWEP.ViewModelFOV = 78
+	SWEP.ViewModelFOV = 45
 	SWEP.DrawCrosshair = false
 	SWEP.ViewModelFlip = false
 
@@ -40,6 +40,73 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Delay = 0.5
+
+SWEP.lastReload = 0
+
+local modes = {
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_RANDOM
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_MELEE
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_NADE
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_SHOTGUN
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_ASSAULT
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_SNIPER
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_PISTOL
+	},
+	{
+		spawnType = SPAWN_TYPE_WEAPON,
+		entType = WEAPON_TYPE_SPECIAL
+	},
+	{
+		spawnType = SPAWN_TYPE_AMMO,
+		entType = AMMO_TYPE_RANDOM
+	},
+	{
+		spawnType = SPAWN_TYPE_AMMO,
+		entType = AMMO_TYPE_DEAGLE
+	},
+	{
+		spawnType = SPAWN_TYPE_AMMO,
+		entType = AMMO_TYPE_PISTOL
+	},
+	{
+		spawnType = SPAWN_TYPE_AMMO,
+		entType = AMMO_TYPE_MAC10
+	},
+	{
+		spawnType = SPAWN_TYPE_AMMO,
+		entType = AMMO_TYPE_RIFLE
+	},
+	{
+		spawnType = SPAWN_TYPE_AMMO,
+		entType = AMMO_TYPE_SHOTGUN
+	},
+	{
+		spawnType = SPAWN_TYPE_PLAYER,
+		entType = PLAYER_TYPE_RANDOM
+	}
+}
+
+local selectedMode = 1
 
 if SERVER then
 	util.AddNetworkString("weapon_ttt_wepeditor_spawninfo_ent")
@@ -240,6 +307,42 @@ if CLIENT then
 		self:AddHUDHelpLine("hold to edit ammo auto spawn on weapon spawns", Key("+walk", "WALK"))
 	end
 
+	local matScreen = Material("models/weapons/v_toolgun/screen")
+	local screenSize = 256
+	local iconSize = 64
+	local iconX = 0.5 * (256 - 64)
+	local iconY = 32
+	local textX = 0.5 * screenSize
+	local textY = iconY + iconSize + 16
+	local RTTexture = GetRenderTarget("TTT2SpawnPlacer", screenSize, screenSize)
+
+	function SWEP:RenderScreen()
+		-- Set the material of the screen to our render target
+		matScreen:SetTexture("$basetexture", RTTexture)
+
+		-- Set up our view for drawing to the texture
+		render.PushRenderTarget(RTTexture)
+
+		local mode = modes[selectedMode]
+
+		cam.Start2D()
+			draw.Box(0, 0, screenSize, screenSize, entspawnscript.GetColorFromSpawnType(mode.spawnType))
+			draw.FilteredShadowedTexture(iconX, iconY, iconSize, iconSize, entspawnscript.GetIconFromSpawnType(mode.spawnType, mode.entType), 255, COLOR_WHITE)
+
+			draw.ShadowedText(
+				LANG.TryTranslation(entspawnscript.GetLangIdentifierFromSpawnType(mode.spawnType, mode.entType)),
+				"DermaTTT2SubMenuButtonTitle",
+				textX,
+				textY,
+				COLOR_WHITE,
+				TEXT_ALIGN_CENTER,
+				TEXT_ALIGN_TOP
+			)
+		cam.End2D()
+
+		render.PopRenderTarget()
+	end
+
 	net.Receive("weapon_ttt_wepeditor_spawninfo_ent", function()
 		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
 	end)
@@ -271,7 +374,9 @@ function SWEP:PrimaryAttack()
 
 		if not trace.Hit or trace.StartPos:Distance(trace.HitPos) > 150 then return end
 
-		entspawnscript.AddSpawn(SPAWN_TYPE_WEAPON, WEAPON_TYPE_SHOTGUN, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0)
+		local mode = modes[selectedMode]
+
+		entspawnscript.AddSpawn(mode.spawnType, mode.entType, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0)
 	end
 end
 
@@ -299,4 +404,14 @@ end
 
 function SWEP:Reload()
 	if SERVER or not IsFirstTimePredicted() then return end
+
+	if self.lastReload + 0.25 > CurTime() then return end
+
+	self.lastReload = CurTime()
+
+	if selectedMode == #modes then
+		selectedMode = 1
+	else
+		selectedMode = selectedMode + 1
+	end
 end

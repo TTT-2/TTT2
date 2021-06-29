@@ -40,19 +40,6 @@ local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 
-local materialSpawn = {
-	[SPAWN_TYPE_WEAPON] = {
-		[WEAPON_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[WEAPON_TYPE_MELEE] = Material("vgui/ttt/tid/tid_big_weapon_melee"),
-		[WEAPON_TYPE_NADE] = Material("vgui/ttt/tid/tid_big_weapon_nade"),
-		[WEAPON_TYPE_SHOTGUN] = Material("vgui/ttt/tid/tid_big_weapon_shotgun"),
-		[WEAPON_TYPE_ASSAULT] = Material("vgui/ttt/tid/tid_big_weapon_assault"),
-		[WEAPON_TYPE_SNIPER] = Material("vgui/ttt/tid/tid_big_weapon_sniper"),
-		[WEAPON_TYPE_PISTOL] = Material("vgui/ttt/tid/tid_big_weapon_pistol"),
-		[WEAPON_TYPE_SPECIAL] = Material("vgui/ttt/tid/tid_big_weapon_special")
-	}
-}
-
 ---
 -- This function makes sure local variables, which use other libraries that are not yet initialized, are initialized later.
 -- It gets called after all libraries are included and `cl_targetid.lua` gets included.
@@ -153,8 +140,8 @@ function targetid.HUDDrawTargetIDSpawnEdit(tData)
 	-- enable targetID rendering
 	tData:EnableText()
 
-	tData:SetTitle(ParT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType), {ammo = ammoAmount}))
-	tData:AddIcon(materialSpawn[spawnType][entType])
+	tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)) .. ParT("spawn_weapon_ammo", {ammo = ammoAmount}))
+	tData:AddIcon(entspawnscript.GetIconFromSpawnType(spawnType, entType))
 
 	tData:SetSubtitle(ParT("spawn_remove", key_params))
 
