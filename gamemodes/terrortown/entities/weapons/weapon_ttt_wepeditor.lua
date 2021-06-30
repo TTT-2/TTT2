@@ -247,12 +247,21 @@ if CLIENT then
 
 	local matScreen = Material("models/weapons/v_toolgun/screen")
 	local screenSize = 256
+	local padding = 16
 	local iconSize = 64
 	local iconX = 0.5 * (256 - 64)
-	local iconY = 32
+	local iconY = 2 * padding
 	local textX = 0.5 * screenSize
-	local textY = iconY + iconSize + 16
+	local textY = iconY + iconSize + padding
+	local lineY = screenSize - 48
+	local lineW = screenSize - 2 * padding
+	local circleS = 6
+	local circleY = screenSize - 24
+
 	local RTTexture = GetRenderTarget("TTT2SpawnPlacer", screenSize, screenSize)
+
+	local colorBasic = Color(255, 255, 255, 100)
+	local colorSelect = Color(255, 255, 255, 235)
 
 	function SWEP:RenderScreen()
 		-- Set the material of the screen to our render target
@@ -276,6 +285,16 @@ if CLIENT then
 				TEXT_ALIGN_CENTER,
 				TEXT_ALIGN_TOP
 			)
+
+			draw.Box(padding, lineY, lineW, 2, colorBasic)
+
+			for i = 1, #self.modes do
+				if i == self.selectedMode then
+					draw.Circle(i * padding, circleY, circleS, colorSelect)
+				else
+					draw.Circle(i * padding, circleY, circleS, colorBasic)
+				end
+			end
 		cam.End2D()
 
 		render.PopRenderTarget()
@@ -343,13 +362,21 @@ end
 function SWEP:Reload()
 	if SERVER or not IsFirstTimePredicted() then return end
 
-	if self.lastReload + 0.25 > CurTime() then return end
+	if self.lastReload + 0.175 > CurTime() then return end
 
 	self.lastReload = CurTime()
 
-	if self.selectedMode == #self.modes then
-		self.selectedMode = 1
+	if input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT) then
+		if self.selectedMode == 1 then
+			self.selectedMode = #self.modes
+		else
+			self.selectedMode = self.selectedMode - 1
+		end
 	else
-		self.selectedMode = self.selectedMode + 1
+		if self.selectedMode == #self.modes then
+			self.selectedMode = 1
+		else
+			self.selectedMode = self.selectedMode + 1
+		end
 	end
 end

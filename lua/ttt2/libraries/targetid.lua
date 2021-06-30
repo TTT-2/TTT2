@@ -139,13 +139,12 @@ function targetid.HUDDrawTargetIDSpawnEdit(tData)
 
 	-- enable targetID rendering
 	tData:EnableText()
-
-	tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)) .. ParT("spawn_weapon_ammo", {ammo = ammoAmount}))
 	tData:AddIcon(entspawnscript.GetIconFromSpawnType(spawnType, entType))
-
 	tData:SetSubtitle(ParT("spawn_remove", key_params))
 
 	if spawnType == SPAWN_TYPE_WEAPON then
+		tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)) .. ParT("spawn_weapon_ammo", {ammo = ammoAmount}))
+
 		tData:AddDescriptionLine(
 			TryT("spawn_type_weapon"),
 			entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON)
@@ -154,6 +153,20 @@ function targetid.HUDDrawTargetIDSpawnEdit(tData)
 		tData:AddDescriptionLine()
 
 		tData:AddDescriptionLine(ParT("spawn_weapon_edit_ammo", key_params))
+	elseif spawnType == SPAWN_TYPE_AMMO then
+		tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)))
+
+		tData:AddDescriptionLine(
+			TryT("spawn_type_ammo"),
+			entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO)
+		)
+	elseif spawnType == SPAWN_TYPE_PLAYER then
+		tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)))
+
+		tData:AddDescriptionLine(
+			TryT("spawn_type_player"),
+			entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_PLAYER)
+		)
 	end
 end
 

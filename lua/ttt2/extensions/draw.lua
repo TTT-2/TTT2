@@ -155,41 +155,10 @@ function draw.OutlinedShadowedCircle(x, y, r, color, scale)
 	drawOutlinedCircle(x, y, r, color)
 end
 
-function draw.Circle(x, y, radius, seg, color)
-	color = color or COLOR_WHITE
+function draw.Circle(x, y, radius, color)
+	local radius2 = radius * 2
 
-	local cir = {}
-
-	cir[1] = {
-		x = x,
-		y = y,
-		u = 0.5,
-		v = 0.5
-	}
-
-	for i = 0, seg do
-		local a = math.rad((i / seg) * -360)
-
-		cir[i + 2] = {
-			x = x + math.sin(a) * radius,
-			y = y + math.cos(a) * radius,
-			u = math.sin(a) / 2 + 0.5,
-			v = math.cos(a) / 2 + 0.5
-		}
-	end
-
-	-- This is needed for non absolute segment counts
-	local a = math.rad(0)
-
-	cir[#cir + 1] = {
-		x = x + math.sin(a) * radius,
-		y = y + math.cos(a) * radius,
-		u = math.sin(a) / 2 + 0.5,
-		v = math.cos(a) / 2 + 0.5
-	}
-
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.DrawPoly(cir)
+	draw.RoundedBox(radius, x - radius, y - radius, radius2, radius2, color)
 end
 
 ---
