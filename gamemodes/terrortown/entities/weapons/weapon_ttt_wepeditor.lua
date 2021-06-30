@@ -245,11 +245,16 @@ if CLIENT then
 		self:AddHUDHelpLine("hold to edit ammo auto spawn on weapon spawns", Key("+walk", "WALK"))
 	end
 
+	local draw = draw
+	local camStart2D = cam.Start2D
+	local camEnd2D = cam.End2D
+	local renderPushRenderTarget = render.PushRenderTarget
+
 	local matScreen = Material("models/weapons/v_toolgun/screen")
 	local screenSize = 256
 	local padding = 16
 	local iconSize = 64
-	local iconX = 0.5 * (256 - 64)
+	local iconX = 0.5 * (screenSize - iconSize)
 	local iconY = 2 * padding
 	local textX = 0.5 * screenSize
 	local textY = iconY + iconSize + padding
@@ -268,11 +273,11 @@ if CLIENT then
 		matScreen:SetTexture("$basetexture", RTTexture)
 
 		-- Set up our view for drawing to the texture
-		render.PushRenderTarget(RTTexture)
+		renderPushRenderTarget(RTTexture)
 
 		local mode = self.modes[self.selectedMode]
 
-		cam.Start2D()
+		camStart2D()
 			draw.Box(0, 0, screenSize, screenSize, entspawnscript.GetColorFromSpawnType(mode.spawnType))
 			draw.FilteredShadowedTexture(iconX, iconY, iconSize, iconSize, entspawnscript.GetIconFromSpawnType(mode.spawnType, mode.entType), 255, COLOR_WHITE)
 
@@ -295,7 +300,7 @@ if CLIENT then
 					draw.Circle(i * padding, circleY, circleS, colorBasic)
 				end
 			end
-		cam.End2D()
+		camEnd2D()
 
 		render.PopRenderTarget()
 	end
