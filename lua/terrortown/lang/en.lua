@@ -1408,6 +1408,11 @@ L.label_shop_linker_set = "Select shop type:"
 L.xfer_team_indicator = "Team"
 
 -- 2021-06-29
+L.spawneditor_place = "Place spawn"
+L.spawneditor_remove = "Remove spawn"
+L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
+L.spawneditor_ammo_edit = "Hold to edit ammo auto spawn on weapon spawns"
+
 L.spawn_weapon_random = "Random Weapon Spawn"
 L.spawn_weapon_melee = "Melee Weapon Spawn"
 L.spawn_weapon_nade = "Grenade Weapon Spawn"
@@ -1426,3 +1431,8 @@ L.spawn_type_ammo = "This is an ammunition spawn"
 L.spawn_type_player = "This is a player spawn"
 
 L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
+
+L.submenu_administration_entspawn_title = "Spawn Editor"
+L.header_entspawn_settings = "Spawn Editor Settings"
+L.button_start_entspawn_edit = "Start Spawn Edit"
+L.button_stop_entspawn_edit = "Stop Spawn Edit"

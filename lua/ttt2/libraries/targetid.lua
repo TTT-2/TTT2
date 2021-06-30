@@ -80,7 +80,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(pos)
 
-	if entspawnscript.IsEditing() then
+	if entspawnscript.IsEditing(LocalPlayer()) then
 		local focusedSpawn = entspawnscript.GetFocusedSpawn()
 		local wepEditEnt = entspawnscript.GetSpawnInfoEntity()
 
@@ -125,7 +125,7 @@ function targetid.HUDDrawTargetIDSpawnEdit(tData)
 	local ent = tData:GetEntity()
 	local wep = client:GetActiveWeapon()
 
-	if not IsValid(client) or not IsValid(wep) or wep:GetClass() ~= "weapon_ttt_wepeditor"
+	if not IsValid(client) or not IsValid(wep) or wep:GetClass() ~= "weapon_ttt_spawneditor"
 		or not IsValid(ent) or ent:GetClass() ~= "ttt_spawninfo_ent"
 		or tData:GetEntityDistance() > 150
 	then

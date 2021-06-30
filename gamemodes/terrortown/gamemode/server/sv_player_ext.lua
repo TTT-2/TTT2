@@ -1427,3 +1427,46 @@ local function SetPlayerReady(_, ply)
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
+
+function plymeta:CacheAndStipWeapons()
+	local cachedWeaponInventory = {}
+
+	local weps = self:GetWeapons()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+
+		cachedWeaponInventory[#cachedWeaponInventory + 1] = {
+			cls = WEPS.GetClass(wep),
+			clip1 = wep:Clip1(),
+			clip2 = wep:Clip2()
+		}
+	end
+
+	self.cachedWeaponInventory = cachedWeaponInventory
+	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
+
+	self:StripWeapons()
+end
+
+function plymeta:RestoreCachedWeapons()
+	if not self.cachedWeaponInventory then return end
+
+	for i = 1, #self.cachedWeaponInventory do
+		local wep = self.cachedWeaponInventory[i]
+
+		local givenWep = self:Give(wep.cls)
+
+		if not IsValid(givenWep) then continue end
+
+		givenWep:SetClip1(wep.clip1 or 0)
+		givenWep:SetClip2(wep.clip2 or 0)
+	end
+
+	if not self.cachedWeaponSelected then return end
+
+	self:SelectWeapon(self.cachedWeaponSelected)
+
+	self.cachedWeaponInventory = nil
+	self.cachedWeaponSelected = nil
+end

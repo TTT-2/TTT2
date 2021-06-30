@@ -17,6 +17,7 @@ end
 SWEP.Kind = WEAPON_EQUIP2
 SWEP.CanBuy = {}
 SWEP.notBuyable = true
+SWEP.AutoSpawnable = false
 
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_toolgun.mdl"
@@ -44,7 +45,7 @@ SWEP.Secondary.Delay = 0.5
 SWEP.lastReload = 0
 
 if SERVER then
-	util.AddNetworkString("weapon_ttt_wepeditor_spawninfo_ent")
+	util.AddNetworkString("weapon_ttt_spawneditor_spawninfo_ent")
 
 	function SWEP:Deploy()
 		-- send the data of the existing spawn entities
@@ -57,7 +58,7 @@ if SERVER then
 		timer.Simple(0, function()
 			if not IsValid(self) or not IsValid(self.entSpawnInfo) then return end
 
-			net.Start("weapon_ttt_wepeditor_spawninfo_ent")
+			net.Start("weapon_ttt_spawneditor_spawninfo_ent")
 			net.WriteEntity(self.entSpawnInfo)
 			net.Send(self:GetOwner())
 		end)
@@ -78,8 +79,6 @@ if CLIENT then
 	local renderDrawSphere = render.DrawSphere
 	local camStart3D = cam.Start3D
 	local camEnd3D = cam.End3D
-
-	local weaponSpawnEditHookInstalled = false
 
 	local centerX = 0.5 * ScrW()
 	local centerY = 0.5 * ScrH()
@@ -210,39 +209,19 @@ if CLIENT then
 		end
 	end
 
-	local function WeaponSpawnEditStart()
-		if weaponSpawnEditHookInstalled then return end
-
-		hook.Add("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit", RenderHook)
-
-		weaponSpawnEditHookInstalled = true
-	end
-
-	local function WeaponSpawnEditStop()
+	function SWEP:OnRemove()
 		hook.Remove("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit")
-
-		weaponSpawnEditHookInstalled = false
-	end
-
-	function SWEP:Deploy()
-		WeaponSpawnEditStart()
-
-		entspawnscript.SetEditing(true)
-	end
-
-	function SWEP:Holster()
-		WeaponSpawnEditStop()
-
-		entspawnscript.SetEditing(false)
 	end
 
 	function SWEP:Initialize()
 		self.modes = entspawnscript.GetSpawnTypeList()
 		self.selectedMode = 1
 
-		self:AddTTT2HUDHelp("place spawn", "remove spawn")
-		self:AddHUDHelpLine("change spawn type", Key("+reload", "R"))
-		self:AddHUDHelpLine("hold to edit ammo auto spawn on weapon spawns", Key("+walk", "WALK"))
+		self:AddTTT2HUDHelp("spawneditor_place", "spawneditor_remove")
+		self:AddHUDHelpLine("spawneditor_change", Key("+reload", "R"))
+		self:AddHUDHelpLine("spawneditor_ammo_edit", Key("+walk", "WALK"))
+
+		hook.Add("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit", RenderHook)
 	end
 
 	local draw = draw
@@ -305,7 +284,7 @@ if CLIENT then
 		render.PopRenderTarget()
 	end
 
-	net.Receive("weapon_ttt_wepeditor_spawninfo_ent", function()
+	net.Receive("weapon_ttt_spawneditor_spawninfo_ent", function()
 		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
 	end)
 end

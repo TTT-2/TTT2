@@ -98,6 +98,8 @@ if SERVER then
 	util.AddNetworkString("ttt2_remove_spawn_ent")
 	util.AddNetworkString("ttt2_add_spawn_ent")
 	util.AddNetworkString("ttt2_update_spawn_ent")
+	util.AddNetworkString("ttt2_toggle_entspawn_editing")
+	util.AddNetworkString("ttt2_entspawn_init")
 
 	local spawndir = "ttt/weaponspawnscripts/"
 
@@ -149,12 +151,8 @@ if SERVER then
 		}
 	end
 
-	function entspawnscript.Init(forceReinit)
-		if forceReinit or not entspawnscript.Exists() then
-			spawnEntList = entspawnscript.InitMap()
-		else
-			spawnEntList = entspawnscript.ReadFile()
-		end
+	function entspawnscript.SetEditing(ply, state)
+		ply:SetNWBool("is_spawn_editing", state)
 	end
 
 	function entspawnscript.StreamToClient(ply)
@@ -178,20 +176,28 @@ if SERVER then
 
 		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8))
 	end)
+
+	net.Receive("ttt2_entspawn_init", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.Init(net.ReadBool())
+	end)
+
+	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		if net.ReadBool() then
+			entspawnscript.StartEditing(ply)
+		else
+			entspawnscript.StopEditing(ply)
+		end
+	end)
 end
 
 if CLIENT then
 	local isEditing = false
 	local focusedSpawn = nil
 	local spawnInfoEnt = nil
-
-	function entspawnscript.SetEditing(state)
-		isEditing = state
-	end
-
-	function entspawnscript.IsEditing()
-		return isEditing == true
-	end
 
 	function entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
 		if not spawnType then
@@ -221,6 +227,10 @@ if CLIENT then
 	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)
 		spawnEntList = spawnEnts
 	end)
+end
+
+function entspawnscript.IsEditing(ply)
+	return ply:GetNWBool("is_spawn_editing", false)
 end
 
 function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
@@ -320,5 +330,51 @@ function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo)
 		net.WriteAngle(ang)
 		net.WriteUInt(ammo, 8)
 		net.SendToServer()
+	end
+end
+
+function entspawnscript.StartEditing(ply)
+	if CLIENT then
+		net.Start("ttt2_toggle_entspawn_editing")
+		net.WriteBool(true)
+		net.SendToServer()
+	else
+		if entspawnscript.IsEditing(ply) then return end
+
+		ply:CacheAndStipWeapons()
+		local wep = ply:Give("weapon_ttt_spawneditor")
+
+		wep:Equip()
+
+		entspawnscript.SetEditing(ply, true)
+	end
+end
+
+function entspawnscript.StopEditing(ply)
+	if CLIENT then
+		net.Start("ttt2_toggle_entspawn_editing")
+		net.WriteBool(false)
+		net.SendToServer()
+	else
+		if not entspawnscript.IsEditing(ply) then return end
+
+		ply:RestoreCachedWeapons()
+		ply:StripWeapon("weapon_ttt_spawneditor")
+
+		entspawnscript.SetEditing(ply, false)
+	end
+end
+
+function entspawnscript.Init(forceReinit)
+	if CLIENT then
+		net.Start("ttt2_entspawn_init")
+		net.WriteBool(forceReinit or false)
+		net.SendToServer()
+	else
+		if forceReinit or not entspawnscript.Exists() then
+			spawnEntList = entspawnscript.InitMap()
+		else
+			spawnEntList = entspawnscript.ReadFile()
+		end
 	end
 end

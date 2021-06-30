@@ -12,11 +12,3 @@ function entspawn.PopulateWeapons()
 
 
 end
-
-concommand.Add("entspawn", function(ply, cmd, args)
-	if args[1] == "rebuild" then
-		print("rebuilding weapon spawn list...")
-
-		entspawnscript.Init(true)
-	end
-end)
