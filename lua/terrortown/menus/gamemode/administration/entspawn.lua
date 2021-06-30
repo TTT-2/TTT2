@@ -30,6 +30,8 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 			slf:SetText("button_stop_entspawn_edit")
 
 			entspawnscript.StartEditing()
+
+			HELPSCRN.menuFrame:HideFrame()
 		else
 			slf:SetText("button_start_entspawn_edit")
 

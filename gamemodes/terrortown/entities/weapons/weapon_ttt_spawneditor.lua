@@ -44,6 +44,8 @@ SWEP.Secondary.Delay = 0.5
 
 SWEP.lastReload = 0
 
+SWEP.AllowDrop = false
+
 if SERVER then
 	util.AddNetworkString("weapon_ttt_spawneditor_spawninfo_ent")
 
@@ -72,6 +74,10 @@ if SERVER then
 
 		return self.BaseClass.Holster(self, wep)
 	end
+
+	function SWEP:OnDrop()
+		self:Remove()
+	end
 end
 
 if CLIENT then
@@ -98,6 +104,40 @@ if CLIENT then
 		return true, dist3d
 	end
 
+	local function PaintSpawns(spawnType, entTable, color, proximitySpawns)
+		local scPos
+
+		for entType, spawns in pairs(entTable) do
+			for i = 1, #spawns do
+				local spawn = spawns[i]
+				local pos = spawn.pos
+
+				-- the scPos has to be calculatet inside a non modified cam3D space
+				-- to yield correct results
+				camStart3D()
+					scPos = pos:ToScreen()
+				camEnd3D()
+
+				local isHighlighted, dist3d = IsHighlighted(pos, scPos)
+
+				if util.IsOffScreen(scPos) or dist3d > 1500 then continue end
+
+				if not isHighlighted then
+					renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, color)
+				else
+					proximitySpawns[#proximitySpawns + 1] = {
+						entType = entType,
+						spawnType = spawnType,
+						spawn = spawn,
+						dist3d = dist3d,
+						scPos = scPos,
+						id = i
+					}
+				end
+			end
+		end
+	end
+
 	local function RenderHook()
 		entspawnscript.SetFocusedSpawn(nil)
 
@@ -107,80 +147,28 @@ if CLIENT then
 
 		local weps = spawnEntList[SPAWN_TYPE_WEAPON] or {}
 		local ammo = spawnEntList[SPAWN_TYPE_AMMO] or {}
+		local plys = spawnEntList[SPAWN_TYPE_PLAYER] or {}
 
 		local proximitySpawns = {}
-
-		local scPos
 
 		renderSetColorMaterial()
 
 		local colorWeapon = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON), 100)
 		local colorAmmo = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO), 100)
+		local colorPlayer = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_PLAYER), 100)
 
-		for entType, spawns in pairs(weps) do
-			for i = 1, #spawns do
-				local spawn = spawns[i]
-				local pos = spawn.pos
+		-- draw spawn bubbles and put bubbles that might be highlighted in
+		-- the 'proximitySpawns' table
+		PaintSpawns(SPAWN_TYPE_WEAPON, weps, colorWeapon, proximitySpawns)
+		PaintSpawns(SPAWN_TYPE_AMMO, ammo, colorAmmo, proximitySpawns)
+		PaintSpawns(SPAWN_TYPE_PLAYER, plys, colorPlayer, proximitySpawns)
 
-				-- the scPos has to be calculatet inside a non modified cam3D space
-				-- to yield correct results
-				camStart3D()
-					scPos = pos:ToScreen()
-				camEnd3D()
-
-				local isHighlighted, dist3d = IsHighlighted(pos, scPos)
-
-				if util.IsOffScreen(scPos) or dist3d > 1500 then continue end
-
-				if not isHighlighted then
-					renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, colorWeapon)
-				else
-					proximitySpawns[#proximitySpawns + 1] = {
-						entType = entType,
-						spawnType = SPAWN_TYPE_WEAPON,
-						spawn = spawn,
-						dist3d = dist3d,
-						scPos = scPos,
-						id = i
-					}
-				end
-			end
-		end
-
-		for entType, spawns in pairs(ammo) do
-			for i = 1, #spawns do
-				local spawn = spawns[i]
-				local pos = spawn.pos
-
-				-- the scPos has to be calculatet inside a non modified cam3D space
-				-- to yield correct results
-				camStart3D()
-					scPos = pos:ToScreen()
-				camEnd3D()
-
-				local isHighlighted, dist3d = IsHighlighted(pos, scPos)
-
-				if util.IsOffScreen(scPos) or dist3d > 1500 then continue end
-
-				if not isHighlighted then
-					renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, colorAmmo)
-				else
-					proximitySpawns[#proximitySpawns + 1] = {
-						entType = entType,
-						spawnType = SPAWN_TYPE_AMMO,
-						spawn = spawn,
-						dist3d = dist3d,
-						scPos = scPos,
-						id = i
-					}
-				end
-			end
-		end
-
+		-- sort the proximity spawns by distance
 		table.sort(proximitySpawns, function(a, b)
 			return a.dist3d < b.dist3d
 		end)
 
+		-- draw the proximity spawns and highlight teh first one
 		for i = 1, #proximitySpawns do
 			local proximitySpawn = proximitySpawns[i]
 			local spawn = proximitySpawn.spawn
@@ -194,9 +182,11 @@ if CLIENT then
 			scPos = proximitySpawn.scPos
 
 			if spawnType == SPAWN_TYPE_WEAPON then
-				color = entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON)
+				color = colorWeapon
 			elseif spawnType == SPAWN_TYPE_AMMO then
-				color = entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO)
+				color = colorAmmo
+			elseif spawnType == SPAWN_TYPE_PLAYER then
+				color = colorPlayer
 			end
 
 			if i == 1 then
