@@ -35,6 +35,8 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 		virtualSubmenus[counter] = tableCopy(equipmentMenuBase)
 		virtualSubmenus[counter].item = item
+		virtualSubmenus[counter].icon = item.ttt2_cached_material
+		virtualSubmenus[counter].iconFullSize = true
 	end
 end
 
@@ -73,5 +75,10 @@ function CLGAMEMODEMENU:GetSubmenus()
 end
 
 function CLGAMEMODEMENU:IsAdminMenu()
+	return true
+end
+
+-- overwrite and return true to enable a searchbar
+function CLGAMEMODEMENU:HasSearchbar()
 	return true
 end

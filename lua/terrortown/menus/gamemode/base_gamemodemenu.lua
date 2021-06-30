@@ -1,6 +1,10 @@
 ---
 -- @class CLGAMEMODEMENU
 
+local TryT = LANG.TryTranslation
+local stringLower = string.lower
+local stringFind = string.find
+
 CLGAMEMODEMENU.type = "base_gamemodemenu"
 CLGAMEMODEMENU.priority = 0
 CLGAMEMODEMENU.icon = nil
@@ -100,6 +104,62 @@ end
 -- @realm client
 function CLGAMEMODEMENU:AddSubmenu(submenu)
 	self.submenus[#self.submenus + 1] = submenu
+end
+
+---
+-- Checks if the menu has a searchbar enabled.
+-- @note This function should be overwritten and return true, if you want a searchbar.
+-- @return boolean Return true if searchbar should be available
+-- @realm client
+function CLGAMEMODEMENU:HasSearchbar()
+	return false
+end
+
+---
+-- Filters the list with a searchText and returns full list if nothing is entered.
+-- @note Overwrite MatchesSearchString for a custom search! 
+-- This function can be overwritten, but probably shouldnt. 
+-- @param string searchText
+-- @return menuClasses Returns a list of all matching submenus, needs to be indexed with ascending numbers
+-- @realm client
+function CLGAMEMODEMENU:GetMatchingSubmenus(searchText)
+	local submenuClasses = self:GetVisibleSubmenus()
+
+	if searchText == "" then
+		return submenuClasses
+	end
+
+	local filteredSubmenuClasses = {}
+
+	local counter = 0
+
+	for i = 1, #submenuClasses do
+		local submenuClass = submenuClasses[i]
+
+		if self:MatchesSearchString(submenuClass, searchText) then
+			counter = counter + 1
+			filteredSubmenuClasses[counter] = submenuClass
+		end
+	end
+
+	return filteredSubmenuClasses
+end
+
+---
+-- Determines the used searchfunction, when a HasSearchbar returns true.
+-- Parameters for that function are submenuClasses and the searchText
+-- Per default only titles are searched and compared to the searchtext in lowercase letters.
+-- @note This function can be overwritten to use a custom searchfunction.
+-- @param menuClass submenuClass
+-- @param string searchText
+-- @return bool Returns if the searchText is somewhere matched inside the submenuClass
+-- @realm client
+function CLGAMEMODEMENU:MatchesSearchString(submenuClass, searchText)
+	local txt = stringLower(searchText)
+	local title = stringLower(TryT(submenuClass.title))
+	local start = stringFind(title, txt)
+
+	return tobool(start)
 end
 
 ---
