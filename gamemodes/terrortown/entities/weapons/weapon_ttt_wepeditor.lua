@@ -43,71 +43,6 @@ SWEP.Secondary.Delay = 0.5
 
 SWEP.lastReload = 0
 
-local modes = {
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_RANDOM
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_MELEE
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_NADE
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_SHOTGUN
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_ASSAULT
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_SNIPER
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_PISTOL
-	},
-	{
-		spawnType = SPAWN_TYPE_WEAPON,
-		entType = WEAPON_TYPE_SPECIAL
-	},
-	{
-		spawnType = SPAWN_TYPE_AMMO,
-		entType = AMMO_TYPE_RANDOM
-	},
-	{
-		spawnType = SPAWN_TYPE_AMMO,
-		entType = AMMO_TYPE_DEAGLE
-	},
-	{
-		spawnType = SPAWN_TYPE_AMMO,
-		entType = AMMO_TYPE_PISTOL
-	},
-	{
-		spawnType = SPAWN_TYPE_AMMO,
-		entType = AMMO_TYPE_MAC10
-	},
-	{
-		spawnType = SPAWN_TYPE_AMMO,
-		entType = AMMO_TYPE_RIFLE
-	},
-	{
-		spawnType = SPAWN_TYPE_AMMO,
-		entType = AMMO_TYPE_SHOTGUN
-	},
-	{
-		spawnType = SPAWN_TYPE_PLAYER,
-		entType = PLAYER_TYPE_RANDOM
-	}
-}
-
-local selectedMode = 1
-
 if SERVER then
 	util.AddNetworkString("weapon_ttt_wepeditor_spawninfo_ent")
 
@@ -302,6 +237,9 @@ if CLIENT then
 	end
 
 	function SWEP:Initialize()
+		self.modes = entspawnscript.GetSpawnTypeList()
+		self.selectedMode = 1
+
 		self:AddTTT2HUDHelp("place spawn", "remove spawn")
 		self:AddHUDHelpLine("change spawn type", Key("+reload", "R"))
 		self:AddHUDHelpLine("hold to edit ammo auto spawn on weapon spawns", Key("+walk", "WALK"))
@@ -323,7 +261,7 @@ if CLIENT then
 		-- Set up our view for drawing to the texture
 		render.PushRenderTarget(RTTexture)
 
-		local mode = modes[selectedMode]
+		local mode = self.modes[self.selectedMode]
 
 		cam.Start2D()
 			draw.Box(0, 0, screenSize, screenSize, entspawnscript.GetColorFromSpawnType(mode.spawnType))
@@ -374,7 +312,7 @@ function SWEP:PrimaryAttack()
 
 		if not trace.Hit or trace.StartPos:Distance(trace.HitPos) > 150 then return end
 
-		local mode = modes[selectedMode]
+		local mode = self.modes[self.selectedMode]
 
 		entspawnscript.AddSpawn(mode.spawnType, mode.entType, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0)
 	end
@@ -409,9 +347,9 @@ function SWEP:Reload()
 
 	self.lastReload = CurTime()
 
-	if selectedMode == #modes then
-		selectedMode = 1
+	if self.selectedMode == #self.modes then
+		self.selectedMode = 1
 	else
-		selectedMode = selectedMode + 1
+		self.selectedMode = self.selectedMode + 1
 	end
 end

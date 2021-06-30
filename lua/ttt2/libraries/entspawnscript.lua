@@ -23,27 +23,72 @@ local spawnColors = {
 	[SPAWN_TYPE_PLAYER] = Color(75, 175, 50, 255)
 }
 
-local materialSpawn = {
+local spawnData = {
 	[SPAWN_TYPE_WEAPON] = {
-		[WEAPON_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[WEAPON_TYPE_MELEE] = Material("vgui/ttt/tid/tid_big_weapon_melee"),
-		[WEAPON_TYPE_NADE] = Material("vgui/ttt/tid/tid_big_weapon_nade"),
-		[WEAPON_TYPE_SHOTGUN] = Material("vgui/ttt/tid/tid_big_weapon_shotgun"),
-		[WEAPON_TYPE_ASSAULT] = Material("vgui/ttt/tid/tid_big_weapon_assault"),
-		[WEAPON_TYPE_SNIPER] = Material("vgui/ttt/tid/tid_big_weapon_sniper"),
-		[WEAPON_TYPE_PISTOL] = Material("vgui/ttt/tid/tid_big_weapon_pistol"),
-		[WEAPON_TYPE_SPECIAL] = Material("vgui/ttt/tid/tid_big_weapon_special")
+		[WEAPON_TYPE_RANDOM] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "spawn_weapon_random"
+		},
+		[WEAPON_TYPE_MELEE] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_melee"),
+			name = "spawn_weapon_melee"
+		},
+		[WEAPON_TYPE_NADE] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_nade"),
+			name = "spawn_weapon_nade"
+		},
+		[WEAPON_TYPE_SHOTGUN] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_shotgun"),
+			name = "spawn_weapon_shotgun"
+		},
+		[WEAPON_TYPE_ASSAULT] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_assault"),
+			name = "spawn_weapon_assault"
+		},
+		[WEAPON_TYPE_SNIPER] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_sniper"),
+			name = "spawn_weapon_sniper"
+		},
+		[WEAPON_TYPE_PISTOL] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_pistol"),
+			name = "spawn_weapon_pistol"
+		},
+		[WEAPON_TYPE_SPECIAL] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_special"),
+			name = "spawn_weapon_special"
+		}
 	},
 	[SPAWN_TYPE_AMMO] = {
-		[AMMO_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[AMMO_TYPE_DEAGLE] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[AMMO_TYPE_PISTOL] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[AMMO_TYPE_MAC10] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[AMMO_TYPE_RIFLE] = Material("vgui/ttt/tid/tid_big_weapon_random"),
-		[AMMO_TYPE_SHOTGUN] = Material("vgui/ttt/tid/tid_big_weapon_random")
+		[AMMO_TYPE_RANDOM] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "ammo_type_random"
+		},
+		[AMMO_TYPE_DEAGLE] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "ammo_type_deagle"
+		},
+		[AMMO_TYPE_PISTOL] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "ammo_type_pistol"
+		},
+		[AMMO_TYPE_MAC10] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "ammo_type_mac10"
+		},
+		[AMMO_TYPE_RIFLE] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "ammo_type_rifle"
+		},
+		[AMMO_TYPE_SHOTGUN] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "ammo_type_shotgun"
+		}
 	},
 	[SPAWN_TYPE_PLAYER] = {
-		[PLAYER_TYPE_RANDOM] = Material("vgui/ttt/tid/tid_big_weapon_random")
+		[PLAYER_TYPE_RANDOM] = {
+			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
+			name = "player_type_random"
+		}
 	}
 }
 
@@ -173,39 +218,36 @@ if CLIENT then
 		return spawnInfoEnt
 	end
 
-	function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
-		if spawnType == SPAWN_TYPE_WEAPON then
-			if entType == WEAPON_TYPE_RANDOM then
-				return "spawn_weapon_random"
-			elseif entType == WEAPON_TYPE_MELEE then
-				return "spawn_weapon_melee"
-			elseif entType == WEAPON_TYPE_NADE then
-				return "spawn_weapon_nade"
-			elseif entType == WEAPON_TYPE_SHOTGUN then
-				return "spawn_weapon_shotgun"
-			elseif entType == WEAPON_TYPE_ASSAULT then
-				return "spawn_weapon_assault"
-			elseif entType == WEAPON_TYPE_SNIPER then
-				return "spawn_weapon_sniper"
-			elseif entType == WEAPON_TYPE_PISTOL then
-				return "spawn_weapon_pistol"
-			elseif entType == WEAPON_TYPE_SPECIAL then
-				return "spawn_weapon_special"
-			end
-		end
-	end
-
-	function entspawnscript.GetColorFromSpawnType(spawnType)
-		return spawnColors[spawnType]
-	end
-
-	function entspawnscript.GetIconFromSpawnType(spawnType, entType)
-		return materialSpawn[spawnType][entType]
-	end
-
 	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)
 		spawnEntList = spawnEnts
 	end)
+end
+
+function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
+	return spawnData[spawnType][entType].name
+end
+
+function entspawnscript.GetColorFromSpawnType(spawnType)
+	return spawnColors[spawnType]
+end
+
+function entspawnscript.GetIconFromSpawnType(spawnType, entType)
+	return spawnData[spawnType][entType].material
+end
+
+function entspawnscript.GetSpawnTypeList()
+	local indexedTable = {}
+
+	for spawnType, spawns in pairs(spawnData) do
+		for entType in pairs(spawns) do
+			indexedTable[#indexedTable + 1] = {
+				spawnType = spawnType,
+				entType = entType
+			}
+		end
+	end
+
+	return indexedTable
 end
 
 function entspawnscript.GetSpawnEntities()
