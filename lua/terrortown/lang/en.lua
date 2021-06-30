@@ -1400,9 +1400,12 @@ L.help_rolelayering_roleselection = "The role selection process is split into tw
 L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first. If upgradeable slots are still available, the unlayered roles will be distributed as well."
 L.scoreboard_voice_tooltip = "Scroll to change the volume"
 
---2021-06-15
+-- 2021-06-15
 L.header_shop_linker = "Settings"
 L.label_shop_linker_set = "Select shop type:"
 
---2021-08-18
+-- 2021-06-18
 L.xfer_team_indicator = "Team"
+
+-- 2021-06-25
+L.searchbar_default_placeholder = "Search in list..."

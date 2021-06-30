@@ -51,3 +51,8 @@ function CLGAMEMODEMENU:GetSubmenus()
 
 	return virtualSubmenus
 end
+
+-- overwrite and return true to enable a searchbar
+function CLGAMEMODEMENU:HasSearchbar()
+	return true
+end

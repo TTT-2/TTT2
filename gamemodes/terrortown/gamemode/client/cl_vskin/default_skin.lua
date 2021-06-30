@@ -145,7 +145,8 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintNavPanelTTT2(panel, w, h)
-	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
+	local _, _, rightPad = panel:GetDockPadding()
+	drawBox(w - rightPad, 0, rightPad, h, ColorAlpha(colors.default, 200))
 end
 
 ---
@@ -328,7 +329,10 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local shift = 0
 	local pad = mathRound(0.3 * h)
 	local hasIcon = panel:HasIcon()
-	local sizeIcon = h - 2 * pad
+	local isIconFullSize = panel:IsIconFullSize()
+	local padIcon = isIconFullSize and 0 or pad
+	local iconAlpha = isIconFullSize and 255 or colorText.a
+	local sizeIcon = h - 2 * padIcon
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
 		colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
@@ -349,7 +353,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	drawBox(sizes.border, 0, w - sizes.border, h, colorBackground)
 
 	if hasIcon then
-		drawFilteredShadowedTexture(pad + sizes.border, pad + shift, sizeIcon, sizeIcon, panel:GetIcon(), colorText.a, colorText)
+		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorText)
 	end
 
 	drawSimpleText(
@@ -1350,6 +1354,47 @@ function SKIN:PaintRoleLayeringReceiverTTT2(panel, w, h)
 			TEXT_ALIGN_CENTER
 		)
 	end
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintSearchbar(panel, w, h)
+	local colorBox = colors.helpBox
+	local colorBar = colors.accentHover
+	local colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
+	local heightMult = panel:GetHeightMult()
+
+	local leftPad, topPad, rightPad, bottomPad = panel:GetDockPadding()
+	local widthPad = leftPad + rightPad
+	local heightPad = topPad + bottomPad
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorBar = ColorAlpha(colorBar, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	end
+
+	-- Draw custom box background for the searchBar
+	drawBox(leftPad, h * (1 - heightMult) * 0.5 + topPad, w - widthPad, h * heightMult - heightPad, colorBox)
+
+	-- Draw small blue bar on the bottom
+	drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
+
+	-- If not focussed draw placeholder text
+	if panel:GetIsOnFocus() then return end
+
+	drawSimpleText(
+		TryT(panel:GetCurrentPlaceholderText()),
+		panel:GetFont(),
+		leftPad + w * 0.02,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 -- REGISTER DERMA SKIN

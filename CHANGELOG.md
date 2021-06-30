@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added a searchbar to submenus
+- Added full-sized icons to the equipment-editor
+
 ### Fixed
 
 - Updated Japense translation (by @westooooo)

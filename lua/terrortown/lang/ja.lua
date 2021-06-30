@@ -1404,5 +1404,8 @@ L.scoreboard_voice_tooltip = "音量を変更"
 L.header_shop_linker = "設定"
 L.label_shop_linker_set = "ショップ設定"
 
---2021-08-18
+--2021-06-18
 L.xfer_team_indicator = "陣営"
+
+-- 2021-06-25
+--L.searchbar_default_placeholder = "Search in list..."
