@@ -132,11 +132,28 @@ if SERVER then
 	end
 
 	function entspawnscript.InitMap()
+		local spawnTable = {
+			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawnEntities(),
+			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawnEntities(),
+			[SPAWN_TYPE_PLAYER] = {}
+		}
+
+		entspawnscript.WriteFile(spawnTable)
+
+		return spawnTable
+	end
+
+	function entspawnscript.UpdateSpawnFile()
+		entspawnscript.WriteFile(spawnEntList)
+	end
+
+	function entspawnscript.WriteFile(spawnTable)
+		local weaponspawns = spawnTable[SPAWN_TYPE_WEAPON]
+		local ammospawns = spawnTable[SPAWN_TYPE_AMMO]
+		local playerspawns = spawnTable[SPAWN_TYPE_PLAYER]
+
 		local content = ""
 		local mapname = gameGetMap()
-		local weaponspawns = map.GetWeaponSpawnEntities()
-		local ammospawns = map.GetAmmoSpawnEntities()
-		local playerspawns = {}
 
 		fileCreateDir(spawndir)
 
@@ -175,13 +192,22 @@ if SERVER then
 			end
 		end
 
-		fileWrite(spawndir .. mapname .. ".txt", content)
+		content = content .. "\nSPAWN: SPAWN_TYPE_PLAYER\n"
 
-		return {
-			[SPAWN_TYPE_WEAPON] = weaponspawns,
-			[SPAWN_TYPE_AMMO] = ammospawns,
-			[SPAWN_TYPE_PLAYER] = playerspawns
-		}
+		for entType, spawns in pairs(playerspawns) do
+			local name = entspawnscript.GetVarNameFromSpawnType(SPAWN_TYPE_PLAYER, entType)
+
+			for i = 1, #spawns do
+				local spawn = spawns[i]
+
+				local pos = spawn.pos
+				local ang = spawn.ang
+
+				content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r) .. "\n"
+			end
+		end
+
+		fileWrite(spawndir .. mapname .. ".txt", content)
 	end
 
 	function entspawnscript.ReadFile()
@@ -206,7 +232,7 @@ if SERVER then
 
 			spawnType = newSpawnType or spawnType
 
-			if newSpawnType then continue end
+			if not spawnType or newSpawnType then continue end
 
 			-- read spawns
 			local stringEntType = stringMatch(line, "^TYPE: ([%w_]*)")
@@ -215,6 +241,8 @@ if SERVER then
 			local stringAmmo = stringMatch(line, "AMMO: ([%w]*)")
 
 			local entType = _G[stringEntType]
+
+			if not isnumber(entType) then continue end
 
 			spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
 

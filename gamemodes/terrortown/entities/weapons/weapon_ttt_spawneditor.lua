@@ -68,11 +68,19 @@ if SERVER then
 		self.BaseClass.Deploy(self)
 	end
 
-	function SWEP:Holster(wep)
-		-- remove entity which is used for the targetID integration
-		self.entSpawnInfo:Remove()
+	function SWEP:OnRemove()
+		-- using the on remove hook to store the updated spawns because it is called in the following scenarios:
+		-- * manual stop of the spawn edit process
+		-- * stop of the spawn edit process triggered by a death
+		-- * stop of the spawn edit process triggered by a new round
+		-- * stop of the spawn edit process triggered by a mapchange
 
-		return self.BaseClass.Holster(self, wep)
+		entspawnscript.UpdateSpawnFile()
+
+		-- remove entity which is used for the targetID integration
+		if not IsValid(self.entSpawnInfo) then return end
+
+		self.entSpawnInfo:Remove()
 	end
 
 	function SWEP:OnDrop()
@@ -251,7 +259,8 @@ if CLIENT then
 
 		camStart2D()
 			draw.Box(0, 0, screenSize, screenSize, entspawnscript.GetColorFromSpawnType(mode.spawnType))
-			draw.FilteredShadowedTexture(iconX, iconY, iconSize, iconSize, entspawnscript.GetIconFromSpawnType(mode.spawnType, mode.entType), 255, COLOR_WHITE)
+
+			draw.ShadowedTexture(iconX, iconY, iconSize, iconSize, entspawnscript.GetIconFromSpawnType(mode.spawnType, mode.entType), 255, COLOR_WHITE)
 
 			draw.ShadowedText(
 				LANG.TryTranslation(entspawnscript.GetLangIdentifierFromSpawnType(mode.spawnType, mode.entType)),

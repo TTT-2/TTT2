@@ -198,6 +198,56 @@ function draw.ShadowedLine(startX, startY, endX, endY, color)
 end
 
 ---
+-- Draws a textured rectangle / image / icon.
+-- @param number x The vertical position
+-- @param number y The horizontal position
+-- @param number w width The width in reference to the vertical position
+-- @param number h height The height in reference to the horizontal position
+-- @param Material material
+-- @param[default=255] number alpha
+-- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @2D
+-- @realm client
+function draw.Texture(x, y, w, h, material, alpha, color)
+	alpha = alpha or 255
+	color = color or COLOR_WHITE
+
+	surface.SetDrawColor(color.r, color.g, color.b, alpha)
+	surface.SetMaterial(material)
+
+	surface.DrawTexturedRect(x, y, w, h)
+end
+
+local drawTexture = draw.Texture
+
+---
+-- Draws a textured rectangle / image / icon with shadow.
+-- @param number x The vertical position
+-- @param number y The horizontal position
+-- @param number w width The width in reference to the vertical position
+-- @param number h height The height in reference to the horizontal position
+-- @param Material material
+-- @param[default=255] number alpha
+-- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param[default=1.0] number scale A scaling factor that is used for the shadows
+-- @2D
+-- @realm client
+function draw.ShadowedTexture(x, y, w, h, material, alpha, color, scale)
+	alpha = alpha or 255
+	color = color or COLOR_WHITE
+	scale = scale or 1
+
+	local tmpCol = GetShadowColor(color)
+
+	local shift_tex_1 = mathRound(scale)
+	local shift_tex_2 = mathRound(2 * scale)
+
+	drawTexture(x + shift_tex_2, y + shift_tex_2, w, h, material, tmpCol.a, tmpCol)
+	drawTexture(x + shift_tex_1, y + shift_tex_1, w, h, material, tmpCol.a, tmpCol)
+	drawTexture(x, y, w, h, material, alpha, color)
+end
+
+---
 -- Draws a filtered textured rectangle / image / icon.
 -- @param number x The vertical position
 -- @param number y The horizontal position
@@ -209,16 +259,10 @@ end
 -- @2D
 -- @realm client
 function draw.FilteredTexture(x, y, w, h, material, alpha, color)
-	alpha = alpha or 255
-	color = color or COLOR_WHITE
-
-	surface.SetDrawColor(color.r, color.g, color.b, alpha)
-	surface.SetMaterial(material)
-
 	render.PushFilterMag(TEXFILTER.LINEAR)
 	render.PushFilterMin(TEXFILTER.LINEAR)
 
-	surface.DrawTexturedRect(x, y, w, h)
+	drawTexture(x, y, w, h, material, alpha, color)
 
 	render.PopFilterMag()
 	render.PopFilterMin()

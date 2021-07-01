@@ -132,6 +132,9 @@ function targetid.HUDDrawTargetIDSpawnEdit(tData)
 	end
 
 	local focusedSpawn = entspawnscript.GetFocusedSpawn()
+
+	if not focusedSpawn then return end
+
 	local spawnType = focusedSpawn.spawnType
 	local entType = focusedSpawn.entType
 	local ammoAmount = focusedSpawn.spawn.ammo
