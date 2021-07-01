@@ -313,6 +313,9 @@ function GM:Initialize()
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
 
+	-- load entity spawns from file / map
+	entspawnscript.Init()
+
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")
 
@@ -1480,6 +1483,9 @@ end
 function GM:OnReloaded()
 	-- load all roles
 	roles.OnLoaded()
+
+	-- reload entity spawns from file
+	entspawnscript.Init()
 
 	---
 	-- @realm shared

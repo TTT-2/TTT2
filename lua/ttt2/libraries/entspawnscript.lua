@@ -10,10 +10,17 @@ end
 local fileExists = file.Exists
 local fileCreateDir = file.CreateDir
 local fileWrite = file.Write
+local fileRead = file.Read
+local stringExplode = string.Explode
 local gameGetMap = game.GetMap
 local stringFormat = string.format
+local stringMatch = string.match
+local stringByte = string.byte
 local pairs = pairs
+local unpack = unpack
 local tableRemove = table.remove
+local osDate = os.date
+local osTime = os.time
 
 local spawnEntList = {}
 
@@ -27,67 +34,82 @@ local spawnData = {
 	[SPAWN_TYPE_WEAPON] = {
 		[WEAPON_TYPE_RANDOM] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "spawn_weapon_random"
+			name = "spawn_weapon_random",
+			var = "WEAPON_TYPE_RANDOM"
 		},
 		[WEAPON_TYPE_MELEE] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_melee"),
-			name = "spawn_weapon_melee"
+			name = "spawn_weapon_melee",
+			var = "WEAPON_TYPE_MELEE"
 		},
 		[WEAPON_TYPE_NADE] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_nade"),
-			name = "spawn_weapon_nade"
+			name = "spawn_weapon_nade",
+			var = "WEAPON_TYPE_NADE"
 		},
 		[WEAPON_TYPE_SHOTGUN] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_shotgun"),
-			name = "spawn_weapon_shotgun"
+			name = "spawn_weapon_shotgun",
+			var = "WEAPON_TYPE_SHOTGUN"
 		},
 		[WEAPON_TYPE_ASSAULT] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_assault"),
-			name = "spawn_weapon_assault"
+			name = "spawn_weapon_assault",
+			var = "WEAPON_TYPE_ASSAULT"
 		},
 		[WEAPON_TYPE_SNIPER] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_sniper"),
-			name = "spawn_weapon_sniper"
+			name = "spawn_weapon_sniper",
+			var = "WEAPON_TYPE_SNIPER"
 		},
 		[WEAPON_TYPE_PISTOL] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_pistol"),
-			name = "spawn_weapon_pistol"
+			name = "spawn_weapon_pistol",
+			var = "WEAPON_TYPE_PISTOL"
 		},
 		[WEAPON_TYPE_SPECIAL] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_special"),
-			name = "spawn_weapon_special"
+			name = "spawn_weapon_special",
+			var = "WEAPON_TYPE_SPECIAL"
 		}
 	},
 	[SPAWN_TYPE_AMMO] = {
 		[AMMO_TYPE_RANDOM] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "ammo_type_random"
+			name = "ammo_type_random",
+			var = "AMMO_TYPE_RANDOM"
 		},
 		[AMMO_TYPE_DEAGLE] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "ammo_type_deagle"
+			name = "ammo_type_deagle",
+			var = "AMMO_TYPE_DEAGLE"
 		},
 		[AMMO_TYPE_PISTOL] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "ammo_type_pistol"
+			name = "ammo_type_pistol",
+			var = "AMMO_TYPE_PISTOL"
 		},
 		[AMMO_TYPE_MAC10] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "ammo_type_mac10"
+			name = "ammo_type_mac10",
+			var = "AMMO_TYPE_MAC10"
 		},
 		[AMMO_TYPE_RIFLE] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "ammo_type_rifle"
+			name = "ammo_type_rifle",
+			var = "AMMO_TYPE_RIFLE"
 		},
 		[AMMO_TYPE_SHOTGUN] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "ammo_type_shotgun"
+			name = "ammo_type_shotgun",
+			var = "AMMO_TYPE_SHOTGUN"
 		}
 	},
 	[SPAWN_TYPE_PLAYER] = {
 		[PLAYER_TYPE_RANDOM] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_random"),
-			name = "player_type_random"
+			name = "player_type_random",
+			var = "PLAYER_TYPE_RANDOM"
 		}
 	}
 }
@@ -114,32 +136,42 @@ if SERVER then
 		local mapname = gameGetMap()
 		local weaponspawns = map.GetWeaponSpawnEntities()
 		local ammospawns = map.GetAmmoSpawnEntities()
+		local playerspawns = {}
 
 		fileCreateDir(spawndir)
 
-		content = content .. "\n# weapons\n\n"
+		content = content .. "# Trouble in Terrorist Town 2 spawn entity placement file\n"
+		content = content .. "# map: " .. mapname .. "\n"
+		content = content .. "# date created: " .. osDate("%H:%M:%S - %d/%m/%Y" , osTime()) .. "\n"
+
+		content = content .. "\nSPAWN: SPAWN_TYPE_WEAPON\n"
 
 		for entType, spawns in pairs(weaponspawns) do
+			local name = entspawnscript.GetVarNameFromSpawnType(SPAWN_TYPE_WEAPON, entType)
+
 			for i = 1, #spawns do
 				local spawn = spawns[i]
 
 				local pos = spawn.pos
 				local ang = spawn.ang
+				local ammo = spawn.ammo
 
-				content = content .. stringFormat("%d\t%f %f %f\t%f %f %f", entType, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r) .. "\n"
+				content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f\tAMMO: %d", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r, ammo) .. "\n"
 			end
 		end
 
-		content = content .. "\n# ammo\n\n"
+		content = content .. "\nSPAWN: SPAWN_TYPE_AMMO\n"
 
 		for entType, spawns in pairs(ammospawns) do
+			local name = entspawnscript.GetVarNameFromSpawnType(SPAWN_TYPE_AMMO, entType)
+
 			for i = 1, #spawns do
 				local spawn = spawns[i]
 
 				local pos = spawn.pos
 				local ang = spawn.ang
 
-				content = content .. stringFormat("%d\t%f %f %f\t%f %f %f", entType, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r) .. "\n"
+				content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r) .. "\n"
 			end
 		end
 
@@ -147,8 +179,53 @@ if SERVER then
 
 		return {
 			[SPAWN_TYPE_WEAPON] = weaponspawns,
-			[SPAWN_TYPE_AMMO] = ammospawns
+			[SPAWN_TYPE_AMMO] = ammospawns,
+			[SPAWN_TYPE_PLAYER] = playerspawns
 		}
+	end
+
+	function entspawnscript.ReadFile()
+		local mapname = gameGetMap()
+		local lines = stringExplode("\n", fileRead(spawndir .. mapname .. ".txt", "DATA"))
+		local spawnType = nil
+
+		local spawnTable = {
+			[SPAWN_TYPE_WEAPON] = {},
+			[SPAWN_TYPE_AMMO] = {},
+			[SPAWN_TYPE_PLAYER] = {}
+		}
+
+		for i = 1, #lines do
+			local line = lines[i]
+
+			-- ignore comments or empty lines
+			if stringMatch(line, "^#") or line == "" or stringByte(line) == 0 then continue end
+
+			-- autodetect any spawn type change
+			local newSpawnType = _G[stringMatch(line, "^SPAWN: ([%w_]*)")]
+
+			spawnType = newSpawnType or spawnType
+
+			if newSpawnType then continue end
+
+			-- read spawns
+			local stringEntType = stringMatch(line, "^TYPE: ([%w_]*)")
+			local stringPos = stringMatch(line, "POS: ([%w.|%-]*)")
+			local stringAng = stringMatch(line, "ANG: ([%w.|%-]*)")
+			local stringAmmo = stringMatch(line, "AMMO: ([%w]*)")
+
+			local entType = _G[stringEntType]
+
+			spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
+
+			spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = {
+				pos = Vector(unpack(stringExplode("|", stringPos))),
+				ang = Angle(unpack(stringExplode("|", stringAng))),
+				ammo = tonumber(stringAmmo or 0)
+			}
+		end
+
+		return spawnTable
 	end
 
 	function entspawnscript.SetEditing(ply, state)
@@ -195,7 +272,6 @@ if SERVER then
 end
 
 if CLIENT then
-	local isEditing = false
 	local focusedSpawn = nil
 	local spawnInfoEnt = nil
 
@@ -235,6 +311,10 @@ end
 
 function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].name
+end
+
+function entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
+	return spawnData[spawnType][entType].var
 end
 
 function entspawnscript.GetColorFromSpawnType(spawnType)
