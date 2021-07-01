@@ -80,6 +80,8 @@ if SERVER then
 	end
 end
 
+local maxEditDistance = 1500
+
 if CLIENT then
 	local renderSetColorMaterial = render.SetColorMaterial
 	local renderDrawSphere = render.DrawSphere
@@ -88,16 +90,17 @@ if CLIENT then
 
 	local centerX = 0.5 * ScrW()
 	local centerY = 0.5 * ScrH()
-	local tolerance = 7800
+	local sphereRadius = 10
+	local tolerance = 32 * sphereRadius
 
 	local function IsHighlighted(pos, scPos)
 		local dist3d = LocalPlayer():EyePos():Distance(pos)
 
-		if dist3d > 150 then
+		if dist3d > maxEditDistance then
 			return false, dist3d
 		end
 
-		if math.Distance(scPos.x, scPos.y, centerX, centerY) > tolerance / dist3d then
+		if math.Distance(scPos.x, scPos.y, centerX, centerY) > tolerance * ScrW() / LocalPlayer():GetFOV() / dist3d then
 			return false, dist3d
 		end
 
@@ -120,7 +123,7 @@ if CLIENT then
 
 				local isHighlighted, dist3d = IsHighlighted(pos, scPos)
 
-				if util.IsOffScreen(scPos) or dist3d > 1500 then continue end
+				if util.IsOffScreen(scPos) or dist3d > maxEditDistance then continue end
 
 				if not isHighlighted then
 					renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, color)
@@ -190,11 +193,11 @@ if CLIENT then
 			end
 
 			if i == 1 then
-				renderDrawSphere(pos, 11, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 245))
+				renderDrawSphere(pos, sphereRadius * 1.1, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 245))
 
 				entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
 			else
-				renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 100))
+				renderDrawSphere(pos, sphereRadius, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 100))
 			end
 		end
 	end
@@ -303,7 +306,7 @@ function SWEP:PrimaryAttack()
 		local client = LocalPlayer()
 		local trace = client:GetEyeTrace()
 
-		if not trace.Hit or trace.StartPos:Distance(trace.HitPos) > 150 then return end
+		if not trace.Hit or trace.StartPos:Distance(trace.HitPos) > maxEditDistance then return end
 
 		local mode = self.modes[self.selectedMode]
 
