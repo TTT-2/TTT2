@@ -133,8 +133,8 @@ if SERVER then
 
 	function entspawnscript.InitMap()
 		local spawnTable = {
-			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawnEntities(),
-			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawnEntities(),
+			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawns(),
+			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawns(),
 			[SPAWN_TYPE_PLAYER] = {}
 		}
 

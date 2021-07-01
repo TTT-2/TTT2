@@ -900,6 +900,7 @@ function GM:PostCleanupMap()
 
 	entityOutputs.SetUp()
 
+	entspawn.HandleSpawns()
 	---
 	-- @realm server
 	hook.Run("TTT2PostCleanupMap")
@@ -1097,7 +1098,7 @@ function PrepareRound()
 	SetRoundState(ROUND_PREP)
 
 	-- Delay spawning until next frame to avoid ent overload
-	timer.Simple(0.01, SpawnEntities)
+	--timer.Simple(0.01, SpawnEntities)
 
 	-- Undo the roundrestart mute, though they will once again be muted for the
 	-- selectmute timer.

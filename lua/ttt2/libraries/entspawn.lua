@@ -5,10 +5,26 @@
 
 if CLIENT then return end -- this is a serverside-ony module
 
+local pairs = pairs
+
 entspawn = entspawn or {}
 
-function entspawn.PopulateWeapons()
-	-- TODO: Handle weapon spawn scrips
+local function RemoveEntities(entTable)
+	for _, ents in pairs(entTable) do
+		for i = 1, #ents do
+			print(ents[i])
+			ents[i]:Remove()
+		end
+	end
+end
 
+function entspawn.RemoveMapEntities()
+	RemoveEntities(map.GetWeaponSpawnEntities())
+	RemoveEntities(map.GetAmmoSpawnEntities())
+	--ToDo Player Spawns
+end
 
+function entspawn.HandleSpawns()
+	-- in a first pass, all weapon entities are removed
+	entspawn.RemoveMapEntities()
 end

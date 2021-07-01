@@ -8,6 +8,7 @@ if SERVER then
 end
 
 local scripedEntsRegister = scripted_ents.Register
+local tableAdd = table.Add
 
 local pairs = pairs
 
@@ -113,22 +114,32 @@ local tf2_weapon_spawns = {
 	["info_observer_point"] = WEAPON_TYPE_RANDOM
 }
 
-local function FindSpawns(spawns, classes)
+local function FindSpawnEntities(spawns, classes)
 	for class, entType in pairs(classes) do
-		local weps = ents.FindByClass(class)
+		spawns[entType] = spawns[entType] or {}
 
-		for i = 1, #weps do
-			local wep = weps[i]
+		tableAdd(spawns[entType], ents.FindByClass(class))
+	end
+end
 
-			spawns[entType] = spawns[entType] or {}
+local function DatafySpawnTable(spawnTable)
+	local spawnDataTable = {}
 
-			spawns[entType][#spawns[entType] + 1] = {
-				pos = wep:GetPos(),
-				ang = wep:GetAngles(),
-				ammo = wep.autoAmmoAmount or 0
+	for entType, spawns in pairs(spawnTable) do
+		for i = 1, #spawns do
+			local spn = spawns[i]
+
+			spawnDataTable[entType] = spawnDataTable[entType] or {}
+
+			spawnDataTable[entType][#spawnDataTable[entType] + 1] = {
+				pos = spn:GetPos(),
+				ang = spn:GetAngles(),
+				ammo = spn.autoAmmoAmount or 0
 			}
 		end
 	end
+
+	return spawnDataTable
 end
 
 map = map or {}
@@ -213,13 +224,13 @@ end
 function map.GetWeaponSpawnEntities()
 	local spawns = {}
 
-	FindSpawns(spawns, ttt_weapon_spawns)
-	FindSpawns(spawns, hl2_weapon_spawns)
+	FindSpawnEntities(spawns, ttt_weapon_spawns)
+	FindSpawnEntities(spawns, hl2_weapon_spawns)
 
 	if map.IsCounterStrikeMap() then
-		FindSpawns(spawns, css_weapon_spawns)
+		FindSpawnEntities(spawns, css_weapon_spawns)
 	elseif map.IsTeamFortressMap() then
-		FindSpawns(spawns, tf2_weapon_spawns)
+		FindSpawnEntities(spawns, tf2_weapon_spawns)
 	end
 
 	return spawns
@@ -228,8 +239,16 @@ end
 function map.GetAmmoSpawnEntities()
 	local spawns = {}
 
-	FindSpawns(spawns, ttt_ammo_spawns)
-	FindSpawns(spawns, hl2_ammo_spawns)
+	FindSpawnEntities(spawns, ttt_ammo_spawns)
+	FindSpawnEntities(spawns, hl2_ammo_spawns)
 
 	return spawns
+end
+
+function map.GetWeaponSpawns()
+	return DatafySpawnTable(map.GetWeaponSpawnEntities())
+end
+
+function map.GetAmmoSpawns()
+	return DatafySpawnTable(map.GetAmmoSpawnEntities())
 end
