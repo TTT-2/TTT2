@@ -12,7 +12,6 @@ entspawn = entspawn or {}
 local function RemoveEntities(entTable)
 	for _, ents in pairs(entTable) do
 		for i = 1, #ents do
-			print(ents[i])
 			ents[i]:Remove()
 		end
 	end
