@@ -341,7 +341,7 @@ function entspawnscript.StartEditing(ply)
 	else
 		if entspawnscript.IsEditing(ply) then return end
 
-		ply:CacheAndStipWeapons()
+		ply:CacheAndStripWeapons()
 		local wep = ply:Give("weapon_ttt_spawneditor")
 
 		wep:Equip()

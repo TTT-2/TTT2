@@ -127,7 +127,6 @@ function targetid.HUDDrawTargetIDSpawnEdit(tData)
 
 	if not IsValid(client) or not IsValid(wep) or wep:GetClass() ~= "weapon_ttt_spawneditor"
 		or not IsValid(ent) or ent:GetClass() ~= "ttt_spawninfo_ent"
-		or tData:GetEntityDistance() > 150
 	then
 		return
 	end

@@ -1428,7 +1428,7 @@ local function SetPlayerReady(_, ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
-function plymeta:CacheAndStipWeapons()
+function plymeta:CacheAndStripWeapons()
 	local cachedWeaponInventory = {}
 
 	local weps = self:GetWeapons()
