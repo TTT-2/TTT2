@@ -9,6 +9,7 @@ ENT.AmmoAmount = 12
 ENT.AmmoMax = 36
 ENT.Model = Model("models/items/357ammo.mdl")
 ENT.AutoSpawnable = true
+ENT.spawnType = AMMO_TYPE_DEAGLE
 
 function ENT:Initialize()
 	-- Differentiate from rifle ammo
