@@ -114,12 +114,36 @@ local tf2_weapon_spawns = {
 	["info_observer_point"] = WEAPON_TYPE_RANDOM
 }
 
+local ttt_player_spawns = {
+	["info_player_deathmatch"] = PLAYER_TYPE_RANDOM,
+	["info_player_combine"] = PLAYER_TYPE_RANDOM,
+	["info_player_rebel"] = PLAYER_TYPE_RANDOM,
+	["info_player_counterterrorist"] = PLAYER_TYPE_RANDOM,
+	["info_player_terrorist"] = PLAYER_TYPE_RANDOM,
+	["info_player_axis"] = PLAYER_TYPE_RANDOM,
+	["info_player_allies"] = PLAYER_TYPE_RANDOM,
+	["gmod_player_start"] = PLAYER_TYPE_RANDOM,
+	["info_player_teamspawn"] = PLAYER_TYPE_RANDOM
+}
+
+local ttt_player_spawns_fallback = {
+	["info_player_start"] = PLAYER_TYPE_RANDOM
+}
+
 local function FindSpawnEntities(spawns, classes)
+	local amount = 0
+
 	for class, entType in pairs(classes) do
 		spawns[entType] = spawns[entType] or {}
 
-		tableAdd(spawns[entType], ents.FindByClass(class))
+		local spawnsFound = ents.FindByClass(class)
+
+		tableAdd(spawns[entType], spawnsFound)
+
+		amount = amount + #spawnsFound
 	end
+
+	return amount
 end
 
 local function DatafySpawnTable(spawnTable)
@@ -245,10 +269,24 @@ function map.GetAmmoSpawnEntities()
 	return spawns
 end
 
+function map.GetPlayerSpawnEntities()
+	local spawns = {}
+
+	if FindSpawnEntities(spawns, ttt_player_spawns) == 0 then
+		FindSpawnEntities(spawns, ttt_player_spawns_fallback)
+	end
+
+	return spawns
+end
+
 function map.GetWeaponSpawns()
 	return DatafySpawnTable(map.GetWeaponSpawnEntities())
 end
 
 function map.GetAmmoSpawns()
 	return DatafySpawnTable(map.GetAmmoSpawnEntities())
+end
+
+function map.GetPlayerSpawns()
+	return DatafySpawnTable(map.GetPlayerSpawnEntities())
 end

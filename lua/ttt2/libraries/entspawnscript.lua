@@ -135,7 +135,7 @@ if SERVER then
 		local spawnTable = {
 			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawns(),
 			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawns(),
-			[SPAWN_TYPE_PLAYER] = {}
+			[SPAWN_TYPE_PLAYER] = map.GetPlayerSpawns()
 		}
 
 		entspawnscript.WriteFile(spawnTable)

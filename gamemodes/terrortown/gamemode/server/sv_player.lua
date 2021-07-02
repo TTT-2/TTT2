@@ -205,12 +205,13 @@ end
 ---
 -- Returns a list of all spawnable @{Entity}
 -- @param boolean shuffle whether the table should be shuffled
--- @param boolean force_all used unless absolutely necessary (includes info_player_start spawns)
+-- @param boolean forceAll used unless absolutely necessary (includes info_player_start spawns)
 -- @return table
 -- @deprecated Use @{spawn.GetPlayerSpawnEntities} instead
 -- @realm server
 function GetSpawnEnts(shouldShuffle, forceAll)
-	local spawnEntities = spawn.GetPlayerSpawnEntities(forceAll)
+	-- forceAll is ignored because the new system doesn't use it anymore
+	local spawnEntities = spawn.GetPlayerSpawnEntities()
 
 	if shouldShuffle then
 		table.Shuffle(spawnEntities)
@@ -228,7 +229,13 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSelectSpawn
 -- @local
 function GM:PlayerSelectSpawn(ply)
-	return spawn.GetRandomPlayerSpawnEntity(ply)
+	local spawnent = spawn.GetRandomPlayerSpawnEntity(ply)
+
+	print("selecting spawn point for: " .. ply:Nick())
+	print(spawnent:GetPos())
+	print(spawnent:GetAngles())
+
+	return spawnent
 end
 
 ---

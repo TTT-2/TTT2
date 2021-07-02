@@ -29,7 +29,7 @@ end
 function entspawn.RemoveMapEntities()
 	RemoveEntities(map.GetWeaponSpawnEntities())
 	RemoveEntities(map.GetAmmoSpawnEntities())
-	--ToDo Player Spawns
+	RemoveEntities(map.GetPlayerSpawnEntities())
 end
 
 function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
