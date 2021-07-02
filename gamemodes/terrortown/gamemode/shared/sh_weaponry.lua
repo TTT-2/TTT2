@@ -8,6 +8,7 @@
 WEPS = {}
 
 local IsValid = IsValid
+local wepGetList = weapons.GetList
 
 ---
 -- Get the type (<code>kind</code>) of a weapon class
@@ -40,6 +41,26 @@ function WEPS.GetClass(wep)
 	elseif IsValid(wep) then
 		return wep:GetClass()
 	end
+end
+
+function WEPS.GetWeaponsForSpawnTypes()
+	local wepsForSpawns = {}
+	local wepsTable = {}
+	local weps = wepGetList()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+		local spawnType = wep.spawnType
+
+		if not wep.AutoSpawnable or not spawnType then continue end
+
+		wepsForSpawns[spawnType] = wepsForSpawns[spawnType] or {}
+
+		wepsForSpawns[spawnType][#wepsForSpawns[spawnType] + 1] = wep
+		wepsTable[#wepsTable + 1] = wep
+	end
+
+	return wepsForSpawns, wepsTable
 end
 
 ---

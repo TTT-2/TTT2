@@ -372,6 +372,10 @@ function entspawnscript.GetSpawnEntities()
 	return spawnEntList
 end
 
+function entspawnscript.GetSpawnEntitiesForSpawnType(spawnType)
+	return spawnEntList[spawnType]
+end
+
 function entspawnscript.RemoveSpawnById(spawnType, entType, id)
 	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
 
