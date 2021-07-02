@@ -19,6 +19,7 @@ SWEP.Base = "weapon_tttbase"
 
 SWEP.Kind = WEAPON_PISTOL
 SWEP.WeaponID = AMMO_PISTOL
+SWEP.spawnType = WEAPON_TYPE_PISTOL
 
 SWEP.Primary.Recoil = 1.5
 SWEP.Primary.Damage = 25

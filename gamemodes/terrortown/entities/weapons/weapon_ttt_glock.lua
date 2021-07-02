@@ -31,8 +31,10 @@ SWEP.Primary.Sound = Sound("Weapon_Glock.Single")
 SWEP.AutoSpawnable = true
 
 SWEP.AmmoEnt = "item_ammo_pistol_ttt"
+
 SWEP.Kind = WEAPON_PISTOL
 SWEP.WeaponID = AMMO_GLOCK
+SWEP.spawnType = WEAPON_TYPE_PISTOL
 
 SWEP.HeadshotMultiplier = 1.75
 

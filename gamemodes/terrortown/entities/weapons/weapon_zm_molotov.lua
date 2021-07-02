@@ -19,6 +19,7 @@ SWEP.Base = "weapon_tttbasegrenade"
 
 SWEP.Kind = WEAPON_NADE
 SWEP.WeaponID = AMMO_MOLOTOV
+SWEP.spawnType = WEAPON_TYPE_NADE
 
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_eq_flashbang.mdl"

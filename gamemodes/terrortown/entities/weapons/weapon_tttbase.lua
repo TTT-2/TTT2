@@ -79,6 +79,11 @@ end
 -- random weapon by a ttt_random_weapon entity.
 SWEP.AutoSpawnable = false
 
+-- Set to one of the WEAPON_TYPE_ flags to define on which spawn this waeapon should
+-- spawn. The flag AutoSpawnable has to be true to make this weapon spawnable on
+-- the map.
+SWEP.spawnType = nil
+
 -- Set to true if weapon can be manually dropped by players (with Q)
 SWEP.AllowDrop = true
 

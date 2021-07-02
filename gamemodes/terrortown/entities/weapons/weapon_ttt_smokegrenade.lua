@@ -19,6 +19,7 @@ SWEP.Base = "weapon_tttbasegrenade"
 
 SWEP.WeaponID = AMMO_SMOKE
 SWEP.Kind = WEAPON_NADE
+SWEP.spawnType = WEAPON_TYPE_NADE
 
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_eq_smokegrenade.mdl"

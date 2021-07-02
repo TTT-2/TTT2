@@ -22,6 +22,7 @@ SWEP.AutoSpawnable = true
 
 SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_M249
+SWEP.spawnType = WEAPON_TYPE_ASSAULT
 
 SWEP.Primary.Damage = 7
 SWEP.Primary.Delay = 0.06
