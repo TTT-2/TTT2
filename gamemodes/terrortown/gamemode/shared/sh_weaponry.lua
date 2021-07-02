@@ -7,8 +7,10 @@
 
 WEPS = {}
 
+local pairs = pairs
 local IsValid = IsValid
 local wepGetList = weapons.GetList
+local scriptedEntsGetList = scripted_ents.GetList
 
 ---
 -- Get the type (<code>kind</code>) of a weapon class
@@ -52,15 +54,46 @@ function WEPS.GetWeaponsForSpawnTypes()
 		local wep = weps[i]
 		local spawnType = wep.spawnType
 
-		if not wep.AutoSpawnable or not spawnType then continue end
+		if not wep.AutoSpawnable then continue end
+
+		-- add these entities to the random weapon table even if they might
+		-- not have a spawn type defined
+		wepsTable[#wepsTable + 1] = wep
+
+		if not spawnType then continue end
 
 		wepsForSpawns[spawnType] = wepsForSpawns[spawnType] or {}
-
 		wepsForSpawns[spawnType][#wepsForSpawns[spawnType] + 1] = wep
-		wepsTable[#wepsTable + 1] = wep
 	end
 
 	return wepsForSpawns, wepsTable
+end
+
+function WEPS.GetAmmoForSpawnTypes()
+	local ammoForSpawns = {}
+	local ammoTable = {}
+
+	local allEnts = scriptedEntsGetList()
+
+	for _, entData in pairs(allEnts) do
+		if entData.Base ~= "base_ammo_ttt" then continue end
+
+		local ammo = entData.t
+		local spawnType = ammo.spawnType
+
+		if not ammo.AutoSpawnable then continue end
+
+		-- add these entities to the random ammo table even if they might
+		-- not have a spawn type defined
+		ammoTable[#ammoTable + 1] = ammo
+
+		if not spawnType then continue end
+
+		ammoForSpawns[spawnType] = ammoForSpawns[spawnType] or {}
+		ammoForSpawns[spawnType][#ammoForSpawns[spawnType] + 1] = ammo
+	end
+
+	return ammoForSpawns, ammoTable
 end
 
 ---

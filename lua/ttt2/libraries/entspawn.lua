@@ -20,10 +20,10 @@ local function RemoveEntities(entTable)
 	end
 end
 
-local function GetRandomWeaponFromTable(weps)
-	if not weps then return end
+local function GetRandomEntityFromTable(ents)
+	if not ents then return end
 
-	return weps[math.random(#weps)]
+	return ents[math.random(#ents)]
 end
 
 function entspawn.RemoveMapEntities()
@@ -32,23 +32,17 @@ function entspawn.RemoveMapEntities()
 	--ToDo Player Spawns
 end
 
-function entspawn.SpawnWeaponEntities()
-	local spawns = entspawnscript.GetSpawnEntitiesForSpawnType(SPAWN_TYPE_WEAPON)
-	-- This function returns two tables, the first is ordered by weapon spawn types,
-	-- the second is just a normal indexed list with all spawnable weapons. This is
-	-- done like this to improve the performance for random weapon spawns.
-	local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
-
+function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 	for entType, spawnTable in pairs(spawns) do
 		for i = 1, #spawnTable do
 			local spawn = spawnTable[i]
 
 			-- if the weapon spawn is a random weapon spawn, select any spawnable weapon
 			local selectedEnt
-			if entType == WEAPON_TYPE_RANDOM then
-				selectedEnt = GetRandomWeaponFromTable(weps)
+			if entType == randomType then
+				selectedEnt = GetRandomEntityFromTable(entTable)
 			else
-				selectedEnt = GetRandomWeaponFromTable(wepsForTypes[entType])
+				selectedEnt = GetRandomEntityFromTable(entsForTypes[entType])
 			end
 
 			if not selectedEnt then continue end
@@ -89,6 +83,20 @@ function entspawn.HandleSpawns()
 
 	-- in the next tick the new weapons are spawned
 	timer.Simple(0, function()
-		entspawn.SpawnWeaponEntities()
+		local wepSpawns = entspawnscript.GetSpawnEntitiesForSpawnType(SPAWN_TYPE_WEAPON)
+		-- This function returns two tables, the first is ordered by weapon spawn types,
+		-- the second is just a normal indexed list with all spawnable weapons. This is
+		-- done like this to improve the performance for random weapon spawns.
+		local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
+
+		entspawn.SpawnEntities(wepSpawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
+
+		local ammoSpawns = entspawnscript.GetSpawnEntitiesForSpawnType(SPAWN_TYPE_AMMO)
+		-- This function returns two tables, the first is ordered by weapon spawn types,
+		-- the second is just a normal indexed list with all spawnable weapons. This is
+		-- done like this to improve the performance for random weapon spawns.
+		local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
+
+		entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
 	end)
 end
