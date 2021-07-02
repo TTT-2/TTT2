@@ -24,6 +24,8 @@ local osTime = os.time
 
 local spawnEntList = {}
 
+local spawndir = "ttt/weaponspawnscripts/"
+
 local spawnColors = {
 	[SPAWN_TYPE_WEAPON] = Color(0, 175, 175, 255),
 	[SPAWN_TYPE_AMMO] = Color(175, 75, 75, 255),
@@ -123,8 +125,6 @@ if SERVER then
 	util.AddNetworkString("ttt2_toggle_entspawn_editing")
 	util.AddNetworkString("ttt2_entspawn_init")
 
-	local spawndir = "ttt/weaponspawnscripts/"
-
 	function entspawnscript.Exists()
 		local mapname = gameGetMap()
 
@@ -138,27 +138,27 @@ if SERVER then
 			[SPAWN_TYPE_PLAYER] = map.GetPlayerSpawns()
 		}
 
-		entspawnscript.WriteFile(spawnTable)
+		entspawnscript.WriteFile(spawnTable, spawndir .. gameGetMap() .. ".txt")
+		entspawnscript.WriteFile(spawnTable, spawndir .. gameGetMap() .. "_default.txt")
 
 		return spawnTable
 	end
 
 	function entspawnscript.UpdateSpawnFile()
-		entspawnscript.WriteFile(spawnEntList)
+		entspawnscript.WriteFile(spawnEntList, spawndir .. gameGetMap() .. ".txt")
 	end
 
-	function entspawnscript.WriteFile(spawnTable)
+	function entspawnscript.WriteFile(spawnTable, fileName)
 		local weaponspawns = spawnTable[SPAWN_TYPE_WEAPON]
 		local ammospawns = spawnTable[SPAWN_TYPE_AMMO]
 		local playerspawns = spawnTable[SPAWN_TYPE_PLAYER]
 
 		local content = ""
-		local mapname = gameGetMap()
 
 		fileCreateDir(spawndir)
 
 		content = content .. "# Trouble in Terrorist Town 2 spawn entity placement file\n"
-		content = content .. "# map: " .. mapname .. "\n"
+		content = content .. "# map: " .. gameGetMap() .. "\n"
 		content = content .. "# date created: " .. osDate("%H:%M:%S - %d/%m/%Y" , osTime()) .. "\n"
 
 		content = content .. "\nSPAWN: SPAWN_TYPE_WEAPON\n"
@@ -207,12 +207,11 @@ if SERVER then
 			end
 		end
 
-		fileWrite(spawndir .. mapname .. ".txt", content)
+		fileWrite(fileName, content)
 	end
 
-	function entspawnscript.ReadFile()
-		local mapname = gameGetMap()
-		local lines = stringExplode("\n", fileRead(spawndir .. mapname .. ".txt", "DATA"))
+	function entspawnscript.ReadFile(fileName)
+		local lines = stringExplode("\n", fileRead(fileName, "DATA"))
 		local spawnType = nil
 
 		local spawnTable = {
@@ -483,10 +482,18 @@ function entspawnscript.Init(forceReinit)
 		net.WriteBool(forceReinit or false)
 		net.SendToServer()
 	else
-		if forceReinit or not entspawnscript.Exists() then
+		if not entspawnscript.Exists() then
+			-- if the map should be initialized and was never loaded, the spawn files are created
 			spawnEntList = entspawnscript.InitMap()
+		elseif forceReinit then
+			-- if the map should be reinit, the spawns are loaded from the defaults file
+			spawnEntList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. "_default.txt")
+
+			-- also these spawns should be written to the file
+			entspawnscript.WriteFile(spawnEntList, spawndir .. gameGetMap() .. ".txt")
 		else
-			spawnEntList = entspawnscript.ReadFile()
+			-- in normal usecases the spawns are loaded from the current spawn file
+			spawnEntList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
 		end
 	end
 end
