@@ -23,7 +23,7 @@ local function GetPlayerSize(ply)
 	return top - bottom
 end
 
-spawn = spawn or {}
+plyspawn = plyspawn or {}
 
 ---
 -- Checks if a given spawn point is safe. Safe means that a player can spawn without
@@ -35,7 +35,7 @@ spawn = spawn or {}
 -- @param[opt] table|Entity filter A table of entities or an entity that should be ignored by this check
 -- @return boolean Returns if the spawn point is safe
 -- @realm server
-function spawn.IsSpawnPointSafe(ply, pos, force, filter)
+function plyspawn.IsSpawnPointSafe(ply, pos, force, filter)
 	local sizePlayer = GetPlayerSize(ply)
 
 	if not util.IsInWorld(pos) then
@@ -116,7 +116,7 @@ end
 -- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
 -- @return table A table of position vectors
 -- @realm server
-function spawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
+function plyspawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
 	local sizePlayer = GetPlayerSize(ply)
 
 	if not pos then return {} end
@@ -140,13 +140,13 @@ end
 -- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
 -- @return Vector|nil Returns the safe spawn position, nil if none was found
 -- @realm server
-function spawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
-	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
+function plyspawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
+	local spawnPoints = plyspawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
 
 	for i = 1, #spawnPoints do
 		local spawnPoint = spawnPoints[i]
 
-		if not spawn.IsSpawnPointSafe(ply, spawnPoint, false) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint, false) then continue end
 
 		return spawnPoint
 	end
@@ -161,34 +161,18 @@ end
 -- @deprecated Use @{map.GetPlayerSpawnEntities} instead
 -- @return table Returns a table of unsafe spawn entities
 -- @realm server
-function spawn.GetPlayerSpawnEntities()
+function plyspawn.GetPlayerSpawnPoints()
 	return entspawnscript.GetSpawnEntitiesForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
 end
 
 ---
--- Gets a table of spawnpoints on the map.
--- @note These spawn points are not shuffled.
--- @return table Returns a table of spawnpoints as @{Vector}s
--- @realm server
-function spawn.GetPlayerSpawnPointTable()
-	local spawnEnts = spawn.GetPlayerSpawnEntities()
-	local spawnPoints = {}
-
-	for i = 1, #spawnEnts do
-		spawnPoints[i] = spawnEnts[i]:GetPos()
-	end
-
-	return spawnPoints
-end
-
----
--- Gets a safe random player spawn entity. If no free and safe spawnpoint is found, it tries
+-- Gets a safe random player spawn point. If no free and safe spawnpoint is found, it tries
 -- to create its own by searching around existing ones.
 -- @param Player ply The player that should receive their spawn point
--- @return Entity A safe spawn entity
+-- @return table A safe spawn point
 -- @realm server
-function spawn.GetRandomPlayerSpawnEntity(ply)
-	local spawnEntities = spawn.GetPlayerSpawnEntities()
+function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
+	local spawnEntities = plyspawn.GetPlayerSpawnPoints()
 
 	if #spawnEntities == 0 then
 		Error("No spawn entity found!\n")
@@ -200,26 +184,16 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	table.Shuffle(spawnEntities)
 
 	if not IsValid(ply) or not ply:IsTerror() then
-		local spawnEnt = ents.Create("info_player_terrorist")
-
-		spawnEnt:SetPos(spawnEntities[1].pos)
-		spawnEnt:SetAngles(spawnEntities[1].ang)
-
-		return spawnEnt
+		return spawnEntities[1]
 	end
 
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is free
 	for i = 1, #spawnEntities do
 		local spawnEntity = spawnEntities[i]
 
-		if not spawn.IsSpawnPointSafe(ply, spawnEntity.pos, false) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnEntity.pos, false) then continue end
 
-		local spawnEnt = ents.Create("info_player_terrorist")
-
-		spawnEnt:SetPos(spawnEntity.pos)
-		spawnEnt:SetAngles(spawnEntity.ang)
-
-		return spawnEnt
+		return spawnEntity
 	end
 
 	-- That did not work, so now look around spawns
@@ -228,42 +202,29 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	for i = 1, #spawnEntities do
 		pickedSpawnEntity = spawnEntities[i]
 
-		local riggedSpawnPoint = spawn.MakeSpawnPointSafe(ply, pickedSpawnEntity.pos)
+		local riggedSpawnPoint = plyspawn.MakeSpawnPointSafe(ply, pickedSpawnEntity.pos)
 
 		if not riggedSpawnPoint then continue end
-
-		local riggedSpawnEntity = ents.Create("info_player_terrorist")
-
-		riggedSpawnEntity:SetPos(riggedSpawnPoint)
-		riggedSpawnEntity:SetAngles(pickedSpawnEntity.ang)
-		riggedSpawnEntity:Spawn()
 
 		ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
 
 		-- this is an old TTT flag that I will keep for compatibilities sake
 		GAMEMODE.HaveRiggedSpawn = true
 
-		return riggedSpawnEntity
+		return {
+			pos = riggedSpawnPoint,
+			ang = pickedSpawnEntity.ang
+		}
 	end
 
 	-- Last attempt, force one
 	for i = 1, #spawnEntities do
 		local spawnEntity = spawnEntities[i]
 
-		if not spawn.IsSpawnPointSafe(ply, spawnEntity.pos, true) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnEntity.pos, true) then continue end
 
-		local spawnEnt = ents.Create("info_player_terrorist")
-
-		spawnEnt:SetPos(spawnEntity.pos)
-		spawnEnt:SetAngles(spawnEntity.ang)
-
-		return spawnEnt
+		return spawnEntity
 	end
 
-	local spawnEnt = ents.Create("info_player_terrorist")
-
-	spawnEnt:SetPos(pickedSpawnEntity.pos)
-	spawnEnt:SetAngles(pickedSpawnEntity.ang)
-
-	return spawnEnt
+	return pickedSpawnEntity
 end

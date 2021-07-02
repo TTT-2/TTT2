@@ -199,7 +199,7 @@ function GM:IsSpawnpointSuitable(ply, spawnEntity, force)
 		return true
 	end
 
-	return spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
+	return plyspawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
 end
 
 ---
@@ -207,11 +207,11 @@ end
 -- @param boolean shuffle whether the table should be shuffled
 -- @param boolean forceAll used unless absolutely necessary (includes info_player_start spawns)
 -- @return table
--- @deprecated Use @{spawn.GetPlayerSpawnEntities} instead
+-- @deprecated Use @{plyspawn.GetPlayerSpawnPoints} instead
 -- @realm server
 function GetSpawnEnts(shouldShuffle, forceAll)
 	-- forceAll is ignored because the new system doesn't use it anymore
-	local spawnEntities = spawn.GetPlayerSpawnEntities()
+	local spawnEntities = plyspawn.GetPlayerSpawnPoints()
 
 	if shouldShuffle then
 		table.Shuffle(spawnEntities)
@@ -229,13 +229,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSelectSpawn
 -- @local
 function GM:PlayerSelectSpawn(ply)
-	local spawnent = spawn.GetRandomPlayerSpawnEntity(ply)
 
-	print("selecting spawn point for: " .. ply:Nick())
-	print(spawnent:GetPos())
-	print(spawnent:GetAngles())
-
-	return spawnent
 end
 
 ---
