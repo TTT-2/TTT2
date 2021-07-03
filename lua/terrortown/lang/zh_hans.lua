@@ -1355,8 +1355,8 @@ L.karma_teamkill_tooltip = "队友击杀数"
 L.karma_teamhurt_tooltip = "对队友造成的伤害"
 L.karma_enemykill_tooltip = "敌人击杀数"
 L.karma_enemyhurt_tooltip = "对敌人造成的伤害"
-L.karma_cleanround_tooltip = "未变动回合"
-L.karma_roundheal_tooltip = "回合恢复"
+L.karma_cleanround_tooltip = "绝对中立"
+L.karma_roundheal_tooltip = "完成回合奖励"
 L.karma_unknown_tooltip = "未知"
 
 -- 2021-05-07
