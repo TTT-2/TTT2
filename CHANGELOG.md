@@ -3,7 +3,8 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
-
+- Add Traditional Chinese Translation
+- Revise and additions simplified Chinese
 ### Added
 
 - Added a searchbar to submenus
