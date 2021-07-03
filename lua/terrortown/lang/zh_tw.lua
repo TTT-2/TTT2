@@ -1351,10 +1351,10 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) 被 {attacker} ({a
 L.none = "無角色"
 
 -- 2021-04-24
-L.karma_teamkill_tooltip = "隊友擊殺數"
-L.karma_teamhurt_tooltip = "對隊友造成的傷害"
-L.karma_enemykill_tooltip = "敵人擊殺數"
-L.karma_enemyhurt_tooltip = "對敵人造成的傷害"
+L.karma_teamkill_tooltip = "擊殺隊友"
+L.karma_teamhurt_tooltip = "對隊友造成傷害"
+L.karma_enemykill_tooltip = "擊殺敵人"
+L.karma_enemyhurt_tooltip = "對敵人造成傷害"
 L.karma_cleanround_tooltip = "絕對中立"
 L.karma_roundheal_tooltip = "完成回合獎勵"
 L.karma_unknown_tooltip = "未知"
