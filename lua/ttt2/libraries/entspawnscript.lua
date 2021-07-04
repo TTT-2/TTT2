@@ -19,6 +19,7 @@ local stringByte = string.byte
 local pairs = pairs
 local unpack = unpack
 local tableRemove = table.remove
+local tableAdd = table.Add
 local osDate = os.date
 local osTime = os.time
 
@@ -126,20 +127,56 @@ if SERVER then
 	util.AddNetworkString("ttt2_entspawn_init")
 
 	function entspawnscript.Exists()
-		local mapname = gameGetMap()
-
-		return fileExists(spawndir .. mapname .. ".txt", "DATA")
+		return fileExists(spawndir .. gameGetMap() .. ".txt", "DATA")
 	end
 
 	function entspawnscript.InitMap()
+		local mapName = gameGetMap()
+
+		-- read the entities from the map at first
 		local spawnTable = {
 			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawns(),
 			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawns(),
 			[SPAWN_TYPE_PLAYER] = map.GetPlayerSpawns()
 		}
 
-		entspawnscript.WriteFile(spawnTable, spawndir .. gameGetMap() .. ".txt")
-		entspawnscript.WriteFile(spawnTable, spawndir .. gameGetMap() .. "_default.txt")
+		-- now check if there is a deprectated ttt weapon spawn script and convert the data to
+		-- the new ttt2 system as well
+		if ents.TTT.CanImportEntities(mapName) then
+			local spawns, settings = ents.TTT.ImportEntities(mapName)
+
+			if settings.replacespawns == 1 then
+				spawnTable = {
+					[SPAWN_TYPE_WEAPON] = {},
+					[SPAWN_TYPE_AMMO] = {},
+					[SPAWN_TYPE_PLAYER] = {}
+				}
+			end
+
+			local wepSpawns, ammoSpawns, plySpawns = map.GetSpawnsFromClassTable(spawns)
+
+			-- add new spawns to existing table
+			for entType, addSpawns in pairs(wepSpawns) do
+				spawnTable[SPAWN_TYPE_WEAPON][entType] = spawnTable[SPAWN_TYPE_WEAPON][entType] or {}
+
+				tableAdd(spawnTable[SPAWN_TYPE_WEAPON][entType], addSpawns)
+			end
+
+			for entType, addSpawns in pairs(ammoSpawns) do
+				spawnTable[SPAWN_TYPE_AMMO][entType] = spawnTable[SPAWN_TYPE_AMMO][entType] or {}
+
+				tableAdd(spawnTable[SPAWN_TYPE_AMMO][entType], addSpawns)
+			end
+
+			for entType, addSpawns in pairs(plySpawns) do
+				spawnTable[SPAWN_TYPE_PLAYER][entType] = spawnTable[SPAWN_TYPE_PLAYER][entType] or {}
+
+				tableAdd(spawnTable[SPAWN_TYPE_PLAYER][entType], addSpawns)
+			end
+		end
+
+		entspawnscript.WriteFile(spawnTable, spawndir .. mapName .. ".txt")
+		entspawnscript.WriteFile(spawnTable, spawndir .. mapName .. "_default.txt")
 
 		return spawnTable
 	end

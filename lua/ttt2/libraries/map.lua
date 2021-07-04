@@ -8,6 +8,7 @@ if SERVER then
 end
 
 local scripedEntsRegister = scripted_ents.Register
+local weaponsGetStored = weapons.GetStored
 local tableAdd = table.Add
 
 local pairs = pairs
@@ -166,6 +167,16 @@ local function DatafySpawnTable(spawnTable)
 	return spawnDataTable
 end
 
+local function AddData(spawnTable, entType, spawn)
+	spawnTable[entType] = spawnTable[entType] or {}
+
+	spawnTable[entType][#spawnTable[entType] + 1] = {
+		pos = spawn.pos,
+		ang = spawn.ang,
+		ammo = spawn.ammo or 0
+	}
+end
+
 map = map or {}
 
 MAP_TYPE_TERRORTOWN = 1
@@ -289,4 +300,56 @@ end
 
 function map.GetPlayerSpawns()
 	return DatafySpawnTable(map.GetPlayerSpawnEntities())
+end
+
+function map.GetSpawnsFromClassTable(spawns)
+	local wepSpawns = {}
+	local ammoSpawns = {}
+	local plySpawns = {}
+
+	for i = 1, #spawns do
+		local spawn = spawns[i]
+		local cls = spawn.class
+
+		-- first check if is a player spawn, this is independant from the map type
+		local plyType = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
+
+		if plyType then
+			AddData(plySpawns, plyType, spawn)
+
+			continue
+		end
+
+		-- next check if it is an ammo spawn
+		local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
+
+		if ammoType then
+			AddData(ammoSpawns, ammoType, spawn)
+
+			continue
+		end
+
+		-- next check if it is a weapon spawn
+		local wepType = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
+
+		if wepType then
+			AddData(wepSpawns, wepType, spawn)
+
+			continue
+		end
+
+		-- if it is still not found, see it as a weapon and check if it has a spawn type flag
+		local wep = weaponsGetStored(cls)
+
+		if wep and wep.spawnType then
+			AddData(wepSpawns, wep.spawnType, spawn)
+
+			continue
+		end
+
+		-- as a last fallback assume that it is a random spawn for a weapon
+		AddData(wepSpawns, WEAPON_TYPE_RANDOM, spawn)
+	end
+
+	return wepSpawns, ammoSpawns, plySpawns
 end

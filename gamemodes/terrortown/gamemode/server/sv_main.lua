@@ -939,25 +939,6 @@ local function CleanUp()
 	hook.Remove("PlayerSay", "ULXMeCheck")
 end
 
-local function SpawnEntities()
-	local et = ents.TTT
-
-	-- Spawn weapons from script if there is one
-	local import = et.CanImportEntities(game.GetMap())
-	if import then
-		et.ProcessImportScript(game.GetMap())
-	else
-		-- Replace HL2DM/ZM ammo/weps with our own
-		et.ReplaceEntities()
-
-		-- Populate CS:S/TF2 maps with extra guns
-		et.PlaceExtraWeapons()
-	end
-
-	-- Finally, get players in there
-	SpawnWillingPlayers()
-end
-
 local function StopRoundTimers()
 	-- remove all timers
 	timer.Stop("wait2prep")
@@ -1031,13 +1012,6 @@ function PrepareRound()
 		timer.Create("delayedprep", delay_length, 1, PrepareRound)
 
 		return
-	end
-
-	-- Cleanup
-	if GAMEMODE.FirstRound then
-		-- if we are going to import entities, it's no use replacing HL2DM ones as
-		-- soon as they spawn, because they'll be removed anyway
-		ents.TTT.SetReplaceChecking(not ents.TTT.CanImportEntities(game.GetMap()))
 	end
 
 	CleanUp()
