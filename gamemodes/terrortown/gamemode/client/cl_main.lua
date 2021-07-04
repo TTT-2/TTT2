@@ -43,11 +43,14 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_vskin__default_skin")
+ttt_include("cl_vskin__vgui__dpanel")
 ttt_include("cl_vskin__vgui__dframe")
+ttt_include("cl_vskin__vgui__droleimage")
 ttt_include("cl_vskin__vgui__dmenubutton")
 ttt_include("cl_vskin__vgui__dsubmenubutton")
 ttt_include("cl_vskin__vgui__dnavpanel")
 ttt_include("cl_vskin__vgui__dcontentpanel")
+ttt_include("cl_vskin__vgui__dcard")
 ttt_include("cl_vskin__vgui__dbuttonpanel")
 ttt_include("cl_vskin__vgui__dcategoryheader")
 ttt_include("cl_vskin__vgui__dcategorycollapse")
@@ -61,7 +64,17 @@ ttt_include("cl_vskin__vgui__dnumslider")
 ttt_include("cl_vskin__vgui__dbinderpanel")
 ttt_include("cl_vskin__vgui__dscrollpanel")
 ttt_include("cl_vskin__vgui__dvscrollbar")
+ttt_include("cl_vskin__vgui__dcoloredbox")
+ttt_include("cl_vskin__vgui__dcoloredtextbox")
+ttt_include("cl_vskin__vgui__dtooltip")
+ttt_include("cl_vskin__vgui__deventbox")
+ttt_include("cl_vskin__vgui__ddragbase")
+ttt_include("cl_vskin__vgui__drolelayeringreceiver")
+ttt_include("cl_vskin__vgui__drolelayeringsender")
+ttt_include("cl_vskin__vgui__dsearchbar")
+ttt_include("cl_vskin__vgui__dsubmenulist")
 
+ttt_include("cl_changes")
 ttt_include("cl_network_sync")
 ttt_include("cl_hud_editor")
 ttt_include("cl_hud_manager")
@@ -75,22 +88,18 @@ ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
-ttt_include("cl_help_data")
-ttt_include("cl_help")
 ttt_include("cl_msgstack")
 ttt_include("cl_eventpopup")
 ttt_include("cl_hudpickup")
 ttt_include("cl_keys")
 ttt_include("cl_wepswitch")
 ttt_include("cl_scoring")
-ttt_include("cl_scoring_events")
 ttt_include("cl_popups")
 ttt_include("cl_equip")
 ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
 ttt_include("cl_radio")
 ttt_include("cl_voice")
-ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
 ttt_include("cl_player_ext")
@@ -99,6 +108,8 @@ ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
+
+ttt_include("cl_help") -- Creates Menus which depend on other client files. Should be loaded as late as possible
 
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Added TTT2 client autorun file: ", path)
@@ -142,21 +153,18 @@ function GM:Initialize()
 	self.round_state = ROUND_WAIT
 	self.roundCount = 0
 
-	-- load addon language files
+	-- load default TTT2 language files or mark them as downloadable on the server
+	-- load addon language files in a second pass, the core language files are loaded earlier
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
 		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
-
 	-- load vskin files
-	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
-
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
@@ -309,28 +317,27 @@ function GM:InitPostEntity()
 end
 
 ---
--- Called after the gamemode has loaded
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
--- @local
-function GM:PostGamemodeLoaded()
-	ScoringEventSetup()
-end
-
----
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
+	-- load all roles
+	roles.OnLoaded()
+
+	---
+	-- @realm shared
+	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2BaseRoleInit")
+
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
-
-	ScoringEventSetup()
 end
 
 ---

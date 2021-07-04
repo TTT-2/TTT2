@@ -3,31 +3,102 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
-
-
 ### Added
 
-- Added `ROLE_NONE` (ID `3` by default)
-  - Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`
-  - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
+- Add Traditional Chinese Translation (by @TEGTianFan)
+- Added a searchbar to submenus
+- Added full-sized icons to the equipment-editor
 
 ### Fixed
 
+- Updated Japense translation (by @westooooo)
+- Fixed text positioning in pure_skin bar (by @LukasMandok)
+
+### Changed
+- Revise and additions simplified Chinese (by @TEGTianFan)
+
+## [v0.9.2b](https://github.com/TTT-2/TTT2/tree/v0.9.2b) (2021-06-20)
+
+### Fixed
+
+- Fixed low karma autokick convar
+- Fixed multi-layer inheritance by introducing a recursion based approach
+
+## [v0.9.1b](https://github.com/TTT-2/TTT2/tree/v0.9.1b) (2021-06-19)
+
+### Fixed
+
+- Fixed shop convars not being shared / breaking the shop
+
+## [v0.9.0b](https://github.com/TTT-2/TTT2/tree/v0.9.0b) (2021-06-19)
+
+### Added
+
+- All new roundend menu
+  - new info panel that shows detailed role distribution during the round
+  - info panel also states detailed score events
+  - new timeline that displays the events that happened during the round
+  - added two new round end conditions: `time up` and `no one wins`
+- Added `ROLE_NONE` (ID `3` by default)
+  - Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`
+  - Enables the possibility to give Innocents access to a custom shop (`shopeditor`)
+- Karma now stores changes
+  - Is shown in roundend menu
+- Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks
+- Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop
+- Added per-player voice control by hovering over the mute icon and scrolling
+
+### Fixed
+
+- Updated French translation (by @MisterClems)
 - Fixed IsOffScreen function being global for compatibility
 - Fixed a German translation string (by @FaRLeZz)
 - Fixed a Polish translation by adding new lines (by @Wuker)
 - Fixed a data initialization bug that appeared on the first (initial) spawn
+- Fixed silent Footsteps, while crouched bhopping
+- Fixed issue where base innocents could bypass the TTT2AvoidGeneralChat and TTT2AvoidTeamChat hooks with the team chat key
+- Fixed issue where roles with unknownTeam could see messages sent with the team chat key
+- Fixed the admin section label not being visible in the main menu
+- Fixed the auto resizing of the buttons based on the availability of a scrollbar not working
+- Fixed reopening submenus of the legacy addons in F1 menu not working
+- TTT: Fixed karma autokick evasion
+- TTT: Fixed karma being applied to weapon damage even though karma is disabled
 
 ### Changed
+
 - Microoptimization to improve code performance
-- Converted `roles` module into a library
+- Converted `roles`, `huds`, `hudelements`, `items` and `pon` modules into libraries
+- Moved `bind` library to the libraries folder
+- Moved favorites functions for equipment to the equipment shop and made them local functions
 - Code cleanup and removed silly negations
 - Extended some ttt2net functions
 - Changed `bees` win to `nones` win
+- By default all evil roles are now counted as traitor roles for map related checks
+- Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)
+- Shopeditor settings are now available in the F1 Menu
+- Moved the F1 menu generating system from a hook based system to a file based system
+  - removed the hooks `TTT2ModifyHelpMainMenu` and `TTT2ModifyHelpSubMenu`
+  - menus are now generated based on files located in `lua/terrortown/menus/gamemode/`
+  - submenus are generated from files located in folders with the menu name
+- Menus without content are now always hidden in the main menu
+- Moved Custom Shopeditor and linking shop to roles to the F1 menu
+- Moved inclusion of cl_help to the bottom as nothing depends on it, but menus created by it could depend on other client files
+- Shopeditor equipment is now available in F1 menu
+- Moved the role layering menu to the F1 menu (administration submenu)
+  - removed the command `ttt2_edit_rolelayering`
+- moved the internal path of `lang/`, `vskin/` and `events/` (this doesn't change anything for addons)
+- Sort teammates first in credit transfer selection and add an indicator to them
+
+### Removed
+
+- Removed the custom loading screen (GMOD now only accepts http(s) URLs for sv_loadingurl)
 
 ### Breaking Changes
+
 - Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)
 - Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.
+- Shopeditor function `ShopEditor.ReadItemData()` now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (`TTT2SESaveItem`,`TTT2SyncDBItems`)
+- Equipment shop favorite functions are now local and not global anymore (`CreateFavTable`, `AddFavorite`, `RemoveFavorite`, `GetFavorites` & `IsFavorite`)
 
 
 ## [v0.8.2b](https://github.com/TTT-2/TTT2/tree/v0.8.2b) (2021-03-25)

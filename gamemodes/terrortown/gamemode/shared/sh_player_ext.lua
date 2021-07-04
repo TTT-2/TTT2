@@ -71,8 +71,9 @@ end
 -- @param number subrole subrole id of a @{ROLE}
 -- @param string team team of a @{ROLE}
 -- @param boolean forceHooks whether update hooks should be triggerd, even if the role didn't changed
+-- @param boolean suppressEvent Set this to true if no rolechange event should be triggered
 -- @realm shared
-function plymeta:SetRole(subrole, team, forceHooks)
+function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 	local oldBaseRole = self.role and self:GetBaseRole() or nil
 	local oldSubrole = self.subrole and self:GetSubRole() or nil
 	local oldTeam = self.roleteam and self:GetTeam() or nil
@@ -82,7 +83,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	self.role = roleData.baserole or subrole
 	self.subrole = subrole
 
-	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE)
+	-- this update team hook should suppress the event trigger
+	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE, true)
 
 	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
@@ -122,16 +124,16 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		---
 		-- @realm shared
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
-
-		if SERVER and subrole ~= ROLE_NONE then
-			events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole)
-		end
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
 		---
 		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
+	end
+
+	if SERVER and not suppressEvent and (oldRole ~= subrole or oldTeam ~= newTeam or forceHooks) then
+		events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole, oldTeam, newTeam)
 	end
 
 	-- ye olde hooks
@@ -301,8 +303,9 @@ end
 -- Updates the team of a @{Player}
 -- @warning @{plymeta:SetRole} should be used BEFORE calling this function!
 -- @param string team a @{ROLE}'s team
+-- @param boolean suppressEvent Set this to true if no rolechange event should be triggered
 -- @realm shared
-function plymeta:UpdateTeam(team)
+function plymeta:UpdateTeam(team, suppressEvent)
 	if team == TEAM_NOCHANGE then return end
 
 	local oldTeam = self:GetTeam()
@@ -316,8 +319,10 @@ function plymeta:UpdateTeam(team)
 		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 
-		if SERVER then
-			events.Trigger(EVENT_TEAMCHANGE, self, oldTeam, newTeam)
+		if SERVER and not suppressEvent then
+			local subrole = self:GetSubRole()
+
+			events.Trigger(EVENT_ROLECHANGE, self, subrole, subrole, oldTeam, newTeam)
 		end
 	end
 end
@@ -436,12 +441,30 @@ plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
 ---
--- Checks whether a @{Player} has a special @{ROLE}
+-- Checks whether a @{Player} has a special @{ROLE}.
 -- @note This just returns <code>false</code> if the @{Player} is an Innocent!
--- @return boolean
+-- @return boolean Returns true if the player has a special role
 -- @realm shared
-function plymeta:IsSpecial()
+function plymeta:HasSpecialRole()
 	return self:GetSubRole() ~= ROLE_INNOCENT
+end
+
+---
+-- Checks whether a @{Player} has a special @{ROLE}.
+-- @note This just returns <code>false</code> if the @{Player} is an Innocent!
+-- @return boolean Returns true if the player has a special role
+-- @see Player:HasSpecialRole
+-- @realm shared
+-- @deprecated
+-- @function plymeta:IsSpecial()
+plymeta.IsSpecial = plymeta.HasSpecialRole
+
+---
+-- Checks whether or not a player has an evil team. By default all teams that aren't innocent or none are counted as evil.
+-- @return boolean Returns true if the role is evil
+-- @realm shared
+function plymeta:HasEvilTeam()
+	return util.IsEvilTeam(self:GetTeam())
 end
 
 ---
@@ -517,9 +540,9 @@ end
 -- @return boolean
 -- @realm shared
 -- @see Player:IsActive
--- @see Player:IsSpecial
+-- @see Player:HasSpecialRole
 function plymeta:IsActiveSpecial()
-	return self:IsActive() and self:IsSpecial()
+	return self:IsActive() and self:HasSpecialRole()
 end
 
 ---

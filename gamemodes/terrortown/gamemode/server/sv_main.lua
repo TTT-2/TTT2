@@ -37,7 +37,6 @@ ttt_include("sv_ent_replace")
 ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
-ttt_include("sv_loadingscreen")
 ttt_include("sv_eventpopup")
 
 ttt_include("sv_armor")
@@ -250,8 +249,12 @@ util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
-fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
+-- provide menu files by loading them from here:
+fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)
+fileloader.LoadFolder("terrortown/menus/gamemode/", false, CLIENT_FILE)
+fileloader.LoadFolder("terrortown/menus/gamemode/", true, CLIENT_FILE)
 
+-- provide and add autorun files
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Marked TTT2 client autorun file for distribution: ", path)
 end)
@@ -284,21 +287,18 @@ function GM:Initialize()
 	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
-	-- check for language files to mark them as downloadable for clients
+	-- load default TTT2 language files or mark them as downloadable on the server
+	-- load addon language files in a second pass, the core language files are loaded earlier
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
 		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
-
 	-- load vskin files
-	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
-
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
@@ -1046,7 +1046,7 @@ function PrepareRound()
 	events.Reset()
 
 	-- Update damage scaling
-	KARMA.RoundBegin()
+	KARMA.RoundPrepare()
 
 	-- New look. Random if no forced model set.
 	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
@@ -1292,6 +1292,9 @@ function BeginRound()
 	-- remove decals
 	util.ClearDecals()
 
+	-- Check for low-karma players that weren't banned on round end
+	KARMA.RoundBegin()
+
 	if CheckForAbort() then return end
 
 	-- Select traitors & co. This is where things really start so we can't abort
@@ -1416,6 +1419,8 @@ end
 function EndRound(result)
 	PrintResultMessage(result)
 
+	KARMA.RoundEnd()
+
 	events.Trigger(EVENT_FINISH, result)
 
 	SetRoundState(ROUND_POST)
@@ -1441,8 +1446,6 @@ function EndRound(result)
 	-- We may need to start a timer for a mapswitch, or start a vote
 	CheckForMapSwitch()
 
-	KARMA.RoundEnd()
-
 	events.UpdateScoreboard()
 
 	-- send the clients the round log, players will be shown the report
@@ -1456,6 +1459,24 @@ function EndRound(result)
 	hook.Run("TTTEndRound", result)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
+end
+
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	-- load all roles
+	roles.OnLoaded()
+
+	---
+	-- @realm shared
+	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2BaseRoleInit")
 end
 
 ---

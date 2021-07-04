@@ -13,7 +13,7 @@ function ROLE:PreInitialize()
 	self.defaultEquipment = SPECIAL_EQUIPMENT
 
 	self.builtin = true
-	self.score.killsMultiplier = 6
+	self.score.killsMultiplier = 2
 	self.score.teamKillsMultiplier = -8
 	self.unknownTeam = true
 end
