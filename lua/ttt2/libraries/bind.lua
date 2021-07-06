@@ -21,7 +21,7 @@ local WasPressed = {}
 bind = bind or {}
 
 bind.bindings = bind.bindings or {}
-bind.registry = bind.redistry or {}
+bind.registry = bind.registry or {}
 bind.settingsBindings = bind.settingsBindings or {}
 bind.settingsBindingsCategories = bind.settingsBindingsCategories or {
 	"header_bindings_ttt2",
