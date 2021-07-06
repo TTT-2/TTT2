@@ -23,7 +23,7 @@ local const_defaults = {
 	minsize = {w = 0, h = 0}
 }
 
-local plysList = plysList
+local plysList = {}
 
 local function SortMiniscoreboardFunc(a, b)
 	if not a:OnceFound() then
