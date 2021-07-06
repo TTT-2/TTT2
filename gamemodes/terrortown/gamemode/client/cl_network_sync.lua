@@ -7,11 +7,13 @@
 -- @author saibotk
 
 -- The meta data table to store information about the type of the data
-local data_store_metadata = {}
+ttt2net.dataStoreMetadata = ttt2net.dataStoreMetadata or {}
+
 -- The value data table to store the actual data
-local data_store = {}
+ttt2net.dataStore = ttt2net.dataStore or {}
+
 -- The table that cotains all registered callback functions
-local data_listeners = {}
+ttt2net.dataListeners = ttt2net.dataListeners or {}
 
 ---
 -- Get the current value of a specific path. This path starts at the root of the data_storage table and thus does not include the
@@ -31,9 +33,9 @@ function ttt2net.Get(path)
 	end
 
 	-- Prevent wrong data being returned, when no metadata entry exists
-	if table.GetWithPath(data_store_metadata, tmpPath) == nil then return end
+	if table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath) == nil then return end
 
-	return table.GetWithPath(data_store, tmpPath)
+	return table.GetWithPath(ttt2net.dataStore, tmpPath)
 end
 
 ---
@@ -92,11 +94,11 @@ end
 function ttt2net.Debug()
 	print("[TTT2NET] Debug:")
 	print("Registered listeners:")
-	PrintTable(data_listeners)
+	PrintTable(ttt2net.dataListeners)
 	print("Meta data table:")
-	PrintTable(data_store_metadata)
+	PrintTable(ttt2net.dataStoreMetadata)
 	print("Data store table:")
-	PrintTable(data_store)
+	PrintTable(ttt2net.dataStore)
 end
 
 ---
@@ -108,7 +110,7 @@ end
 -- @realm client
 local function CallCallbacksOnTree(oldData, curPath)
 	local tmpPath = not istable(curPath) and { curPath } or table.Copy(curPath) or {}
-	local curNode = table.GetWithPath(data_store_metadata, tmpPath)
+	local curNode = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
 	-- Go through all keys that the current node has
 	for key in pairs(curNode) do
@@ -140,12 +142,12 @@ end
 -- @realm client
 local function ReceiveFullStateUpdate(result)
 	-- Temporarily save the old tables, to use let the update callbacks know of the previous value
-	local oldData = data_store
-	local oldMetaData = data_store_metadata
+	local oldData = ttt2net.dataStore
+	local oldMetaData = ttt2net.dataStoreMetadata
 
 	-- Replace tables with the result
-	data_store_metadata = result.meta
-	data_store = result.data
+	ttt2net.dataStoreMetadata = result.meta
+	ttt2net.dataStore = result.data
 
 	-- Call all callback functions for all paths
 	CallCallbacksOnTree(oldData, oldMetaData)
@@ -164,13 +166,13 @@ local function ReceiveMetaDataUpdate()
 	local metadata = ttt2net.NetReadMetaData()
 
 	-- Set the new metadata
-	table.SetWithPath(data_store_metadata, path, metadata)
+	table.SetWithPath(ttt2net.dataStoreMetadata, path, metadata)
 
 	-- Store the old value if there is any known
-	local oldval = table.GetWithPath(data_store, path)
+	local oldval = table.GetWithPath(ttt2net.dataStore, path)
 
 	-- Clear the saved value, as the metadata changed
-	table.SetWithPath(data_store, path, nil)
+	table.SetWithPath(ttt2net.dataStore, path, nil)
 
 	-- Call callbacks that registered on data updates
 	ttt2net.CallOnUpdate(path, oldval, nil)
@@ -188,7 +190,7 @@ local function ReceiveDataUpdate()
 	local path = ttt2net.NetReadPath()
 
 	-- Get the metadata for the path, this will also error if there is no metadata entry for the path
-	local metadata = table.GetWithPath(data_store_metadata, path)
+	local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, path)
 
 	-- Read the new value based on the metadata entry
 	local newval = ttt2net.NetReadData(metadata)
@@ -197,7 +199,7 @@ local function ReceiveDataUpdate()
 	local oldval = ttt2net.Get(path)
 
 	-- Save the new data
-	table.SetWithPath(data_store, path, newval)
+	table.SetWithPath(ttt2net.dataStore, path, newval)
 
 	-- Call the update listeners
 	ttt2net.CallOnUpdate(path, oldval, newval)
@@ -234,7 +236,7 @@ function ttt2net.CallOnUpdate(path, oldval, newval)
 		currentPath[#currentPath + 1] = "__callbacks"
 
 		-- Get all registered callbacks
-		local callbacks = table.GetWithPath(data_listeners, currentPath) or {}
+		local callbacks = table.GetWithPath(ttt2net.dataListeners, currentPath) or {}
 
 		-- Call all registered callbacks for the current path
 		for i = 1, #callbacks do
@@ -342,7 +344,7 @@ function ttt2net.OnUpdate(path, func)
 	tmpPath[#tmpPath + 1] = "__callbacks"
 
 	-- Get the registered callbacks table for the given path
-	local registeredCallbacks = table.GetWithPath(data_listeners, tmpPath) or {}
+	local registeredCallbacks = table.GetWithPath(ttt2net.dataListeners, tmpPath) or {}
 
 	-- Check if this function is not already registered, to avoid duplicates
 	if table.HasValue(registeredCallbacks, func) then return end
@@ -351,7 +353,7 @@ function ttt2net.OnUpdate(path, func)
 	registeredCallbacks[#registeredCallbacks + 1] = func
 
 	-- Set the callback table again
-	table.SetWithPath(data_listeners, tmpPath, registeredCallbacks)
+	table.SetWithPath(ttt2net.dataListeners, tmpPath, registeredCallbacks)
 end
 
 ---

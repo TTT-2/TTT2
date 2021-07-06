@@ -225,6 +225,12 @@ function GM:InitPostEntity()
 	items.MigrateLegacyItems()
 	items.OnLoaded()
 
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
+
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
@@ -333,6 +339,16 @@ function GM:OnReloaded()
 	---
 	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
+
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
+
+	-- re-request the HUD to be loaded
+	HUDManager.LoadAllHUDS()
+	HUDManager.SetHUD()
 
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
