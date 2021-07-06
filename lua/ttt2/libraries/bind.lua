@@ -10,25 +10,23 @@ if SERVER then
 	return
 end
 
-bind = {}
+local tableInsert = table.insert
 
 local BIND_TABLE_NAME = "ttt2_bindings"
 local BIND_FLAG_TABLE_NAME = "ttt2_bindings_initialized"
-local Bindings = {}
-local Registry = {}
+
 local FirstPressed = {}
 local WasPressed = {}
-local SettingsBindings = {}
-local SettingsBindingsCategories = {
+
+bind = bind or {}
+
+bind.bindings = bind.bindings or {}
+bind.registry = bind.redistry or {}
+bind.settingsBindings = bind.settingsBindings or {}
+bind.settingsBindingsCategories = bind.settingsBindingsCategories or {
 	"header_bindings_ttt2",
 	"header_bindings_other"
 }
-
---
---
--- INTERNAL FUNCTIONS
---
---
 
 ---
 -- @internal
@@ -125,9 +123,9 @@ local function TTT2LoadBindings()
 
 				bind.RemoveAll(tbl.name, false)
 
-				Bindings[tmp] = Bindings[tmp] or {}
+				bind.bindings[tmp] = bind.bindings[tmp] or {}
 
-				table.insert(Bindings[tmp], tbl.name)
+				tableInsert(bind.bindings[tmp], tbl.name)
 			end
 
 			print("[TTT2][BIND] Loaded bindings...")
@@ -135,8 +133,8 @@ local function TTT2LoadBindings()
 	end
 
 	-- Try assigning the default key bind once if none is defined
-	for name in pairs(Registry) do
-		local item = Registry[name]
+	for name in pairs(bind.registry) do
+		local item = bind.registry[name]
 
 		if item.defaultKey and not WasDefaultApplied(name) then
 			if bind.Find(name) == KEY_NONE then
@@ -156,21 +154,21 @@ local function TTT2BindCheckThink()
 	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
 	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or vguihandler.IsOpen() then return end
 
-	for btn, tbl in pairs(Bindings) do
+	for btn, tbl in pairs(bind.bindings) do
 		local cache = input.IsButtonDown(btn)
 
 		if cache and FirstPressed[btn] then
 			for _, name in pairs(tbl) do
-				if Registry[name] and isfunction(Registry[name].onPressed) then
-					Registry[name].onPressed()
+				if bind.registry[name] and isfunction(bind.registry[name].OnPressed) then
+					bind.registry[name].OnPressed()
 				end
 			end
 		end
 
 		if not cache and WasPressed[btn] then
 			for _, name in pairs(tbl) do
-				if Registry[name] and isfunction(Registry[name].onReleased) then
-					Registry[name].onReleased()
+				if bind.registry[name] and isfunction(bind.registry[name].OnReleased) then
+					bind.registry[name].OnReleased()
 				end
 			end
 		end
@@ -183,18 +181,12 @@ end
 hook.Add("Think", "TTT2CallBindings", TTT2BindCheckThink)
 hook.Add("InitPostEntity", "TTT2LoadBindings", TTT2LoadBindings)
 
---
---
--- END INTERNAL FUNCTIONS --
---
---
-
 ---
 -- Returns a table of all the bindings
 -- @return table
 -- @realm client
 function bind.GetTable()
-	return Bindings
+	return bind.bindings
 end
 
 ---
@@ -206,11 +198,11 @@ end
 function bind.Find(name)
 	if not name then return end
 
-	for btn, tbl in pairs(Bindings) do
+	for btn, tbl in pairs(bind.bindings) do
 		for _, id in pairs(tbl) do
-			if id == name then
-				return btn
-			end
+			if id ~= name then continue end
+
+			return btn
 		end
 	end
 
@@ -229,11 +221,11 @@ function bind.FindAll(name)
 
 	local bt = {}
 
-	for btn, tbl in pairs(Bindings) do
+	for btn, tbl in pairs(bind.bindings) do
 		for _, id in pairs(tbl) do
-			if id == name then
-				table.insert(bt, btn)
-			end
+			if id ~= name then continue end
+
+			tableInsert(bt, btn)
 		end
 	end
 
@@ -270,12 +262,12 @@ function bind.Remove(btn, name, persistent)
 		DBRemoveBinding(name, btn) -- Still try to delete from DB
 	end
 
-	if not Bindings[btn] then return end
+	if not bind.bindings[btn] then return end
 
-	for i, v in pairs(Bindings[btn]) do
-		if v == name then
-			Bindings[btn][i] = nil
-		end
+	for i, v in pairs(bind.bindings[btn]) do
+		if v ~= name then continue end
+
+		bind.bindings[btn][i] = nil
 	end
 end
 
@@ -295,7 +287,7 @@ function bind.RemoveAll(name, persistent)
 end
 
 ---
--- Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
+-- Adds an entry to the bind.settingsBindings table, to easily present them eg. in a GUI.
 -- @param string name
 -- @param string label
 -- @param[opt] string category
@@ -306,13 +298,13 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 		category = "header_bindings_other"
 	end
 
-	if not table.HasValue(SettingsBindingsCategories, category) then
-		SettingsBindingsCategories[#SettingsBindingsCategories + 1] = category
+	if not table.HasValue(bind.settingsBindingsCategories, category) then
+		bind.settingsBindingsCategories[#bind.settingsBindingsCategories + 1] = category
 	end
 
 	-- check if it already exists
-	for i = 1, #SettingsBindings do
-		local tbl = SettingsBindings[i]
+	for i = 1, #bind.settingsBindings do
+		local tbl = bind.settingsBindings[i]
 
 		if tbl.name == name then
 			tbl.label = label -- update
@@ -323,7 +315,7 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 		end
 	end
 
-	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label, category = category, defaultKey = defaultKey}
+	bind.settingsBindings[#bind.settingsBindings + 1] = {name = name, label = label, category = category, defaultKey = defaultKey}
 end
 
 ---
@@ -334,18 +326,18 @@ end
 -- You can set a default key as well, so players don't need to bind manually if they don't want to.
 --
 -- @param string name
--- @param function onPressedFunc
--- @param function onReleasedFunc
+-- @param function OnPressed
+-- @param function OnReleased
 -- @param[opt] string|boolean dontShowOrCategory
 -- @param[optchain] string settingsLabel
 -- @param[optchain] number defaultKey
 -- @realm client
-function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, settingsLabel, defaultKey)
-	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then return end
+function bind.Register(name, OnPressed, OnReleased, dontShowOrCategory, settingsLabel, defaultKey)
+	if not isfunction(OnPressed) and not isfunction(OnReleased) then return end
 
-	Registry[name] = {
-		onPressed  = onPressedFunc,
-		onReleased = onReleasedFunc,
+	bind.registry[name] = {
+		OnPressed = OnPressed,
+		OnReleased = OnReleased,
 		defaultKey = defaultKey
 	}
 
@@ -364,9 +356,9 @@ end
 function bind.Add(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
-	Bindings[btn] = Bindings[btn] or {}
+	bind.bindings[btn] = bind.bindings[btn] or {}
 
-	table.insert(Bindings[btn], name)
+	tableInsert(bind.bindings[btn], name)
 
 	if persistent then
 		SaveBinding(name, btn)
@@ -388,17 +380,17 @@ function bind.Set(btn, name, persistent)
 end
 
 ---
--- Returns the SettingsBindings table.
+-- Returns the bind.settingsBindings table.
 -- @return table
 -- @realm client
 function bind.GetSettingsBindings()
-	return SettingsBindings
+	return bind.settingsBindings
 end
 
 ---
--- Returns the SettingsBindingsCategories table.
+-- Returns the bind.settingsBindingsCategories table.
 -- @return table
 -- @realm client
 function bind.GetSettingsBindingsCategories()
-	return SettingsBindingsCategories
+	return bind.settingsBindingsCategories
 end
