@@ -13,6 +13,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated Japense translation (by @westooooo)
 - Fixed text positioning in pure_skin bar (by @LukasMandok)
+- Fixed data being not persistent after hot reloading
+  - HUDs are now still available
+  - ttt2net keeps its data
+  - bindings are not lost on reload
 
 ### Changed
 - Revise and additions simplified Chinese (by @TEGTianFan)
