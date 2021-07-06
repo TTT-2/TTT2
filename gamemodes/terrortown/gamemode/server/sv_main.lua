@@ -419,6 +419,12 @@ function GM:InitPostEntity()
 	items.MigrateLegacyItems()
 	items.OnLoaded()
 
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
+
 	InitDefaultEquipment()
 
 	local itms = items.GetList()
@@ -1478,6 +1484,12 @@ end
 function GM:OnReloaded()
 	-- load all roles
 	roles.OnLoaded()
+
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
 
 	---
 	-- @realm shared
