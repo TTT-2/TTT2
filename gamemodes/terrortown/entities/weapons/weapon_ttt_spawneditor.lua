@@ -152,7 +152,7 @@ if CLIENT then
 	local function RenderHook()
 		entspawnscript.SetFocusedSpawn(nil)
 
-		local spawnEntList = entspawnscript.GetSpawnEntities()
+		local spawnEntList = entspawnscript.GetSpawns()
 
 		if not spawnEntList then return end
 

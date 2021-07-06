@@ -24,6 +24,7 @@ local osDate = os.date
 local osTime = os.time
 
 local spawnEntList = {}
+local settingsList = {}
 
 local spawndir = "ttt/weaponspawnscripts/"
 
@@ -126,6 +127,10 @@ if SERVER then
 	util.AddNetworkString("ttt2_toggle_entspawn_editing")
 	util.AddNetworkString("ttt2_entspawn_init")
 
+	---
+	-- @realm server
+	local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
+
 	function entspawnscript.Exists()
 		return fileExists(spawndir .. gameGetMap() .. ".txt", "DATA")
 	end
@@ -175,17 +180,17 @@ if SERVER then
 			end
 		end
 
-		entspawnscript.WriteFile(spawnTable, spawndir .. mapName .. ".txt")
-		entspawnscript.WriteFile(spawnTable, spawndir .. mapName .. "_default.txt")
+		entspawnscript.WriteFile(spawnTable, {}, spawndir .. mapName .. ".txt")
+		entspawnscript.WriteFile(spawnTable, {}, spawndir .. mapName .. "_default.txt")
 
 		return spawnTable
 	end
 
 	function entspawnscript.UpdateSpawnFile()
-		entspawnscript.WriteFile(spawnEntList, spawndir .. gameGetMap() .. ".txt")
+		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
 	end
 
-	function entspawnscript.WriteFile(spawnTable, fileName)
+	function entspawnscript.WriteFile(spawnTable, settingsTable, fileName)
 		local weaponspawns = spawnTable[SPAWN_TYPE_WEAPON]
 		local ammospawns = spawnTable[SPAWN_TYPE_AMMO]
 		local playerspawns = spawnTable[SPAWN_TYPE_PLAYER]
@@ -197,6 +202,14 @@ if SERVER then
 		content = content .. "# Trouble in Terrorist Town 2 spawn entity placement file\n"
 		content = content .. "# map: " .. gameGetMap() .. "\n"
 		content = content .. "# date created: " .. osDate("%H:%M:%S - %d/%m/%Y" , osTime()) .. "\n"
+
+		content = content .. "\n# -- SETTINGS --\n"
+
+		for key, value in pairs(settingsTable) do
+			content = content .. "setting:\t" .. key .. " " .. value .. "\n"
+		end
+
+		content = content .. "\n# -- SPAWNS --\n"
 
 		content = content .. "\nSPAWN: SPAWN_TYPE_WEAPON\n"
 
@@ -256,12 +269,22 @@ if SERVER then
 			[SPAWN_TYPE_AMMO] = {},
 			[SPAWN_TYPE_PLAYER] = {}
 		}
+		local settingsTable = {}
 
 		for i = 1, #lines do
 			local line = lines[i]
 
 			-- ignore comments or empty lines
 			if stringMatch(line, "^#") or line == "" or stringByte(line) == 0 then continue end
+
+			-- attempt to find settings in the file
+			local key, val = stringMatch(line, "^setting:\t(%w*) ([0-9]*)")
+
+			if key and val then
+				settingsTable[key] = tonumber(val)
+
+				continue
+			end
 
 			-- autodetect any spawn type change
 			local newSpawnType = _G[stringMatch(line, "^SPAWN: ([%w_]*)")]
@@ -289,7 +312,57 @@ if SERVER then
 			}
 		end
 
-		return spawnTable
+		return spawnTable, settingsTable
+	end
+
+	function entspawnscript.GetSettings()
+		return settingsList
+	end
+
+	function entspawnscript.GetSetting(key)
+		return settingsList[key] or 0
+	end
+
+	function entspawnscript.SetSetting(key, value, omitSaving)
+		if isbool(value) then
+			value = value and 1 or 0
+		end
+
+		if not isnumber(value) then
+			ErrorNoHalt("WARNING: Only number and boolean values for map settings allowed.")
+
+			return
+		end
+
+		settingsList[key] = value
+
+		if not omitSaving then
+			local path = spawndir .. gameGetMap() .. ".txt"
+
+			-- since we can only write the whole file, but we still want to keep the spawns untouched, we have to
+			-- read those first to write them again. Depending on the spawn mode the cached spawns in this module
+			-- might be completely different than those in the file. We do not want to overwrite them!
+			local currentSpawns = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+
+			entspawnscript.WriteFile(currentSpawns, entspawnscript.GetSettings(), path)
+		end
+	end
+
+	function entspawnscript.SetUseCustomSpawns(state)
+		entspawnscript.SetSetting("blacklisted", not state, omitSaving)
+
+		-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
+		if state then
+			entspawnscript.SetSpawns(entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt"))
+		end
+	end
+
+	function entspawnscript.ShouldUseCustomSpawns()
+		return not tobool(entspawnscript.GetSetting("blacklisted")) and cvUseWeaponSpawnScript:GetBool()
+	end
+
+	function entspawnscript.SetSpawns(spawnEnts)
+		spawnEntList = spawnEnts
 	end
 
 	function entspawnscript.SetEditing(ply, state)
@@ -404,11 +477,11 @@ function entspawnscript.GetSpawnTypeList()
 	return indexedTable
 end
 
-function entspawnscript.GetSpawnEntities()
+function entspawnscript.GetSpawns()
 	return spawnEntList
 end
 
-function entspawnscript.GetSpawnEntitiesForSpawnType(spawnType)
+function entspawnscript.GetSpawnsForSpawnType(spawnType)
 	return spawnEntList[spawnType]
 end
 
@@ -524,13 +597,13 @@ function entspawnscript.Init(forceReinit)
 			spawnEntList = entspawnscript.InitMap()
 		elseif forceReinit then
 			-- if the map should be reinit, the spawns are loaded from the defaults file
-			spawnEntList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. "_default.txt")
+			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. "_default.txt")
 
 			-- also these spawns should be written to the file
-			entspawnscript.WriteFile(spawnEntList, spawndir .. gameGetMap() .. ".txt")
+			entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
 		else
 			-- in normal usecases the spawns are loaded from the current spawn file
-			spawnEntList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
 		end
 	end
 end

@@ -204,7 +204,7 @@ map.DummifyFallbackWeaponEnts()
 ---
 -- Returns the exptected type of the current map.
 -- @note This function uses caching to improve performance and only reads the
--- map entities on the first call of the funciton.
+-- map entities on the first call of the function.
 -- @return[default=MAP_TYPE_TERRORTOWN] number Returns the map type of the currently active map
 -- @realm shared
 function map.GetMapGameType()
@@ -229,7 +229,7 @@ end
 ---
 -- Checks if the currently selected map is a terrortown map.
 -- @note This function uses caching to improve performance and only reads the
--- map entities on the first call of the funciton.
+-- map entities on the first call of the function.
 -- @return boolean Returns true if it is a terrortown map
 -- @realm shared
 function map.IsTerrortownMap()
@@ -239,7 +239,7 @@ end
 ---
 -- Checks if the currently selected map is a counter strike source map.
 -- @note This function uses caching to improve performance and only reads the
--- map entities on the first call of the funciton.
+-- map entities on the first call of the function.
 -- @return boolean Returns true if it is a counter strike source map
 -- @realm shared
 function map.IsCounterStrikeMap()
@@ -249,7 +249,7 @@ end
 ---
 -- Checks if the currently selected map is a team fortress 2 map.
 -- @note This function uses caching to improve performance and only reads the
--- map entities on the first call of the funciton.
+-- map entities on the first call of the function.
 -- @return boolean Returns true if it is a team fortress 2 map
 -- @realm shared
 function map.IsTeamFortressMap()
@@ -352,4 +352,44 @@ function map.GetSpawnsFromClassTable(spawns)
 	end
 
 	return wepSpawns, ammoSpawns, plySpawns
+end
+
+function map.IsDefaultTerrortownMapEntity(ent)
+	local cls = ent:GetClass()
+
+	local type = ttt_weapon_spawns[cls] ~= nil or ttt_ammo_spawns[cls] ~= nil
+		or ttt_player_spawns[cls] ~= nil or ttt_player_spawns_fallback[cls] ~= nil
+
+	if not type or type == WEAPON_TYPE_RANDOM or AMMO_TYPE_RANDOM then
+		return false
+	end
+
+	return true
+end
+
+function map.GetDataFromSpawnEntity(ent)
+	local cls = ent:GetClass()
+	local data = {
+		pos = ent:GetPos(),
+		ang = ent:GetAngles(),
+		ammo = ent.autoAmmoAmount or 0
+	}
+
+	local wepSpawn = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
+
+	if wepSpawn then
+		return SPAWN_TYPE_WEAPON, wepSpawn, data
+	end
+
+	local ammoSpawn = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
+
+	if ammoSpawn then
+		return SPAWN_TYPE_AMMO, ammoSpawn, data
+	end
+
+	local plySpawn = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
+
+	if plySpawn then
+		return SPAWN_TYPE_PLAYER, plySpawn, data
+	end
 end

@@ -13,10 +13,6 @@ local tonum = tonumber
 local stringMatch = string.match
 
 ---
--- @realm server
---local use_weapon_spawn_scripts = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
-
----
 -- Remove ZM ragdolls that don't work, AND old player ragdolls.
 -- Exposed because it's also done at BeginRound
 -- @param boolean player_only

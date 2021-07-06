@@ -162,7 +162,7 @@ end
 -- @return table Returns a table of unsafe spawn entities
 -- @realm server
 function plyspawn.GetPlayerSpawnPoints()
-	return entspawnscript.GetSpawnEntitiesForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
+	return entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
 end
 
 ---
