@@ -480,6 +480,7 @@ function entspawnscript.GetEntTypeList(spawnType, excludeTypes)
 
 	for entType in pairs(spawns) do
 		if excludeTypes[entType] then continue end
+
 		indexedTable[#indexedTable + 1] = entType
 	end
 

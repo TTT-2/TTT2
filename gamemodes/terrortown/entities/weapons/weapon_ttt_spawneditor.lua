@@ -50,9 +50,6 @@ if SERVER then
 	util.AddNetworkString("weapon_ttt_spawneditor_spawninfo_ent")
 
 	function SWEP:Deploy()
-		-- send the data of the existing spawn entities
-		entspawnscript.StreamToClient(self:GetOwner())
-
 		-- add entity which is used for the targetID integration
 		self.entSpawnInfo = ents.Create("ttt_spawninfo_ent")
 		self.entSpawnInfo:Spawn()

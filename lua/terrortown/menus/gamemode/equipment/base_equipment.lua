@@ -71,7 +71,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
 					master = data.master and masterRefs[data.master]
 				})
 
-				for _, enum in ipairs(data.choices) do
+				local enum
+				for i = 1, #data.choices do
+					enum = data.choices[i]
 					option:AddChoice(TryT(data.lookupNamesFunc(enum)), enum, equipment[key] == enum)
 				end
 			else
