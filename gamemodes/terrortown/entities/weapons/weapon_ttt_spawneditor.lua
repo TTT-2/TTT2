@@ -212,9 +212,21 @@ if CLIENT then
 			end
 
 			if i == 1 then
-				renderDrawSphere(pos, sphereRadius * 1.1, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 245))
+				local client = LocalPlayer()
 
-				entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
+				-- make sure there is nothingin the way
+				local trace = util.TraceLine({
+					start = client:EyePos(),
+					endpos = pos,
+					filter = {client},
+					mask = MASK_SOLID
+				})
+
+				if not trace.HitWorld then
+					entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
+				end
+
+				renderDrawSphere(pos, sphereRadius * (trace.HitWorld and 1 or 1.1), 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 245))
 			else
 				renderDrawSphere(pos, sphereRadius, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 100))
 			end
@@ -248,8 +260,6 @@ if CLIENT then
 				draw.Box(-1, 0, 2, 4 * (previewData.heightShift or 0), colorPreview)
 
 			camEnd3D2D()
-
-			PrintTable(previewData)
 		else
 			colorSphere = colorPreview
 		end
