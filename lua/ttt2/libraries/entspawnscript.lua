@@ -27,6 +27,10 @@ local spawnEntList = {}
 local settingsList = {}
 local editingPlayers = {}
 
+local defaultSettings = {
+	["blacklisted"] = 0
+}
+
 local spawndir = "ttt/weaponspawnscripts/"
 
 local spawnColors = {
@@ -186,10 +190,10 @@ if SERVER then
 			end
 		end
 
-		entspawnscript.WriteFile(spawnTable, {}, spawndir .. mapName .. ".txt")
-		entspawnscript.WriteFile(spawnTable, {}, spawndir .. mapName .. "_default.txt")
+		entspawnscript.WriteFile(spawnTable, defaultSettings, spawndir .. mapName .. ".txt")
+		entspawnscript.WriteFile(spawnTable, defaultSettings, spawndir .. mapName .. "_default.txt")
 
-		return spawnTable
+		return spawnTable, defaultSettings
 	end
 
 	function entspawnscript.UpdateSpawnFile()
@@ -329,38 +333,8 @@ if SERVER then
 		return settingsList[key] or 0
 	end
 
-	function entspawnscript.SetSetting(key, value, omitSaving)
-		if isbool(value) then
-			value = value and 1 or 0
-		end
-
-		if not isnumber(value) then
-			ErrorNoHalt("WARNING: Only number and boolean values for map settings allowed.")
-
-			return
-		end
-
-		settingsList[key] = value
-
-		if not omitSaving then
-			local path = spawndir .. gameGetMap() .. ".txt"
-
-			-- since we can only write the whole file, but we still want to keep the spawns untouched, we have to
-			-- read those first to write them again. Depending on the spawn mode the cached spawns in this module
-			-- might be completely different than those in the file. We do not want to overwrite them!
-			local currentSpawns = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
-
-			entspawnscript.WriteFile(currentSpawns, entspawnscript.GetSettings(), path)
-		end
-	end
-
 	function entspawnscript.SetUseCustomSpawns(state)
-		entspawnscript.SetSetting("blacklisted", not state, omitSaving)
-
-		-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
-		if state then
-			entspawnscript.SetSpawns(entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt"))
-		end
+		entspawnscript.SetSetting("blacklisted", not state, false)
 	end
 
 	function entspawnscript.ShouldUseCustomSpawns()
@@ -376,8 +350,6 @@ if SERVER then
 
 		if state then
 			editingPlayers[#editingPlayers + 1] = ply
-
-			entspawnscript.UpdateSettingsOnClients()
 
 			net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, ply)
 		else
@@ -410,12 +382,16 @@ if SERVER then
 	end
 
 	function entspawnscript.UpdateSettingsOnClients()
-		for i = 1, #editingPlayers do
-			local ply = editingPlayers[i]
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			local ply = plys[i]
 
 			if not ply:IsAdmin() then continue end
 
-			ttt2net.Set({"entspawnscript", "settings"}, {type = "table"}, entspawnscript.GetSettings(), ply)
+			for key, value in pairs(settingsList) do
+				ttt2net.Set({"entspawnscript", "settings", key}, {type = "int", bits = 16}, entspawnscript.GetSetting(key), ply)
+			end
 		end
 	end
 end
@@ -447,6 +423,48 @@ if CLIENT then
 
 	function entspawnscript.GetSpawnInfoEntity()
 		return spawnInfoEnt
+	end
+end
+
+function entspawnscript.SetSetting(key, value, omitSaving)
+	if isbool(value) then
+		value = value and 1 or 0
+	end
+
+	if not isnumber(value) then
+		ErrorNoHalt("WARNING: Only number and boolean values for map settings allowed.")
+
+		return
+	end
+
+	if SERVER then
+		settingsList[key] = value
+
+		if not omitSaving then
+			local path = spawndir .. gameGetMap() .. ".txt"
+
+			-- since we can only write the whole file, but we still want to keep the spawns untouched, we have to
+			-- read those first to write them again. Depending on the spawn mode the cached spawns in this module
+			-- might be completely different than those in the file. We do not want to overwrite them!
+			local currentSpawns = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+
+			entspawnscript.WriteFile(currentSpawns, entspawnscript.GetSettings(), path)
+		end
+
+		-- trigger an update of the synced settings table
+		entspawnscript.UpdateSettingsOnClients()
+
+		-- special handling for some settings
+		if key == "blacklisted" and value == 0 then
+			-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
+			entspawnscript.SetSpawns(entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt"))
+		end
+	else -- CLIENT
+		net.Start("ttt2_entspawn_setting_update")
+		net.WriteString(key)
+		net.WriteInt(value, 16)
+		net.WriteBool(omitSaving)
+		net.SendToServer()
 	end
 end
 
@@ -636,7 +654,7 @@ function entspawnscript.OnLoaded(forceReinit)
 	else
 		if not entspawnscript.Exists() then
 			-- if the map should be initialized and was never loaded, the spawn files are created
-			spawnEntList = entspawnscript.InitMap()
+			spawnEntList, settingsList = entspawnscript.InitMap()
 		elseif forceReinit then
 			-- if the map should be reinit, the spawns are loaded from the defaults file
 			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. "_default.txt")
@@ -647,6 +665,9 @@ function entspawnscript.OnLoaded(forceReinit)
 			-- in normal usecases the spawns are loaded from the current spawn file
 			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
 		end
+
+		-- trigger a sync of the settings table
+		entspawnscript.UpdateSettingsOnClients()
 	end
 end
 
@@ -658,6 +679,7 @@ if SERVER then
 	util.AddNetworkString("ttt2_update_spawn_ent")
 	util.AddNetworkString("ttt2_toggle_entspawn_editing")
 	util.AddNetworkString("ttt2_entspawn_init")
+	util.AddNetworkString("ttt2_entspawn_setting_update")
 
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
 		if not IsValid(ply) or not ply:IsAdmin() then return end
@@ -675,6 +697,12 @@ if SERVER then
 		if not IsValid(ply) or not ply:IsAdmin() then return end
 
 		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
+	end)
+
+	net.Receive("ttt2_entspawn_setting_update", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.SetSetting(net.ReadString(), net.ReadInt(16), net.ReadBool())
 	end)
 
 	net.Receive("ttt2_entspawn_init", function(_, ply)
