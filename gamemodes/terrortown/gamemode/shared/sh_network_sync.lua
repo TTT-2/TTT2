@@ -3,7 +3,7 @@
 -- @author saibotk
 -- @module ttt2net
 
-ttt2net = {}
+ttt2net = ttt2net or {}
 
 -- Network message name constants
 ttt2net.NETMSG_META_UPDATE = "TTT2_NET_META_UPDATE"
