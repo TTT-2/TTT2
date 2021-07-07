@@ -77,10 +77,10 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	local buttonDelete = vgui.Create("DButtonTTT2", parent)
 
 	buttonDelete:SetText("button_delete_all_spawns")
-	buttonDelete:SetSize(200, 45)
+	buttonDelete:SetSize(195, 45)
 	buttonDelete:SetPos(220, 20)
 	buttonDelete.DoClick = function(slf)
-
+		entspawnscript.DeleteAllSpawns()
 	end
 	buttonDelete:SetEnabled(not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
 

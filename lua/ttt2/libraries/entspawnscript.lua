@@ -613,6 +613,23 @@ function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo, shou
 	end
 end
 
+function entspawnscript.DeleteAllSpawns()
+	if CLIENT then
+		net.Start("ttt2_delete_all_spawns")
+		net.SendToServer()
+	else
+		entspawnscript.SetSpawns({
+			[SPAWN_TYPE_WEAPON] = {},
+			[SPAWN_TYPE_AMMO] = {},
+			[SPAWN_TYPE_PLAYER] = {}
+		})
+
+		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
+
+		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, editingPlayers)
+	end
+end
+
 function entspawnscript.StartEditing(ply)
 	if CLIENT then
 		net.Start("ttt2_toggle_entspawn_editing")
@@ -677,6 +694,7 @@ if SERVER then
 	util.AddNetworkString("ttt2_remove_spawn_ent")
 	util.AddNetworkString("ttt2_add_spawn_ent")
 	util.AddNetworkString("ttt2_update_spawn_ent")
+	util.AddNetworkString("ttt2_delete_all_spawns")
 	util.AddNetworkString("ttt2_toggle_entspawn_editing")
 	util.AddNetworkString("ttt2_entspawn_init")
 	util.AddNetworkString("ttt2_entspawn_setting_update")
@@ -697,6 +715,12 @@ if SERVER then
 		if not IsValid(ply) or not ply:IsAdmin() then return end
 
 		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
+	end)
+
+	net.Receive("ttt2_delete_all_spawns", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.DeleteAllSpawns()
 	end)
 
 	net.Receive("ttt2_entspawn_setting_update", function(_, ply)
