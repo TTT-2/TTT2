@@ -25,7 +25,6 @@ local osTime = os.time
 
 local spawnEntList = {}
 local settingsList = {}
-local editingPlayers = {}
 
 local spawndir = "ttt/weaponspawnscripts/"
 
@@ -368,31 +367,10 @@ if SERVER then
 
 	function entspawnscript.SetEditing(ply, state)
 		ply:SetNWBool("is_spawn_editing", state)
-
-		if state then
-			editingPlayers[#editingPlayers + 1] = ply
-
-			entspawnscript.UpdateDataOnClients()
-		else
-			for i = 1, #editingPlayers do
-				if editingPlayers[i] ~= ply then continue end
-
-				tableRemove(editingPlayers, i)
-
-				break
-			end
-		end
 	end
 
-	function entspawnscript.UpdateDataOnClients()
-		for i = 1, editingPlayers do
-			local ply = editingPlayers[i]
-
-			if not ply:IsAdmin() then continue end
-
-			ttt2net.Set({"entspawnscript", "spawns"}, {type = "table"}, entspawnscript.GetSpawns(), ply)
-			ttt2net.Set({"entspawnscript", "settings"}, {type = "table"}, entspawnscript.GetSettings(), ply)
-		end
+	function entspawnscript.StreamToClient(ply)
+		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, ply)
 	end
 
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
@@ -514,9 +492,7 @@ function entspawnscript.RemoveSpawnById(spawnType, entType, id)
 
 	tableRemove(list, id)
 
-	if SERVER then
-		entspawnscript.UpdateDataOnClients()
-	else -- CLIENT
+	if CLIENT then
 		net.Start("ttt2_remove_spawn_ent")
 		net.WriteUInt(spawnType, 4)
 		net.WriteUInt(entType, 4)
@@ -538,9 +514,7 @@ function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo)
 		ammo = ammo
 	}
 
-	if SERVER then
-		entspawnscript.UpdateDataOnClients()
-	else -- CLIENT
+	if CLIENT then
 		net.Start("ttt2_add_spawn_ent")
 		net.WriteUInt(spawnType, 4)
 		net.WriteUInt(entType, 4)
@@ -568,9 +542,7 @@ function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo)
 		ammo = ammo
 	}
 
-	if SERVER then
-		entspawnscript.UpdateDataOnClients()
-	else -- CLIENT
+	if CLIENT then
 		net.Start("ttt2_update_spawn_ent")
 		net.WriteUInt(spawnType, 4)
 		net.WriteUInt(entType, 4)
@@ -591,7 +563,6 @@ function entspawnscript.StartEditing(ply)
 		if entspawnscript.IsEditing(ply) then return end
 
 		ply:CacheAndStripWeapons()
-
 		local wep = ply:Give("weapon_ttt_spawneditor")
 
 		wep:Equip()
