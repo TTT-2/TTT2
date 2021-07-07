@@ -17,7 +17,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonReset:SetSize(100, 45)
 	buttonReset:SetPos(675, 20)
 	buttonReset.DoClick = function()
-		entspawnscript.Init(true)
+		entspawnscript.OnLoaded(true)
 	end
 
 	local buttonToggle = vgui.Create("DButtonTTT2", parent)

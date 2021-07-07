@@ -308,7 +308,7 @@ function SWEP:PrimaryAttack()
 		local id = focusedSpawn.id
 		local ammo = focusedSpawn.spawn.ammo
 
-		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, ammo + 1)
+		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, ammo + 1, true)
 	else
 		if focusedSpawn then return end
 
@@ -319,7 +319,7 @@ function SWEP:PrimaryAttack()
 
 		local mode = self.modes[self.selectedMode]
 
-		entspawnscript.AddSpawn(mode.spawnType, mode.entType, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0)
+		entspawnscript.AddSpawn(mode.spawnType, mode.entType, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0, true)
 	end
 end
 
@@ -339,9 +339,9 @@ function SWEP:SecondaryAttack()
 	local ammo = focusedSpawn.spawn.ammo
 
 	if input.IsBindingDown("+walk") then
-		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, math.max(ammo - 1, 0))
+		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, math.max(ammo - 1, 0), true)
 	else
-		entspawnscript.RemoveSpawnById(focusedSpawn.spawnType, focusedSpawn.entType, focusedSpawn.id)
+		entspawnscript.RemoveSpawnById(focusedSpawn.spawnType, focusedSpawn.entType, focusedSpawn.id, true)
 	end
 end
 
