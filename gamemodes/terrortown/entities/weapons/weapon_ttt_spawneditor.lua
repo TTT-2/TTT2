@@ -89,6 +89,12 @@ end
 local maxEditDistance = 1500
 
 if CLIENT then
+	local draw = draw
+	local camStart2D = cam.Start2D
+	local camEnd2D = cam.End2D
+	local camStart3D2D = cam.Start3D2D
+	local camEnd3D2D = cam.End3D2D
+	local renderPushRenderTarget = render.PushRenderTarget
 	local renderSetColorMaterial = render.SetColorMaterial
 	local renderDrawSphere = render.DrawSphere
 	local camStart3D = cam.Start3D
@@ -97,6 +103,7 @@ if CLIENT then
 	local Vector = Vector
 	local mathPi = math.pi
 	local mathTan = math.tan
+	local ColorAlpha = ColorAlpha
 
 	local centerX = 0.5 * ScrW()
 	local centerY = 0.5 * ScrH()
@@ -219,6 +226,30 @@ if CLIENT then
 
 		if previewData.inPlacement then
 			colorSphere = ColorAlpha(entspawnscript.GetColorFromSpawnType(previewData.spawnType), 245)
+
+			-- render circle on ground
+			camStart3D2D(
+				previewData.posBase + previewData.surfaceNormal * 2,
+				previewData.surfaceNormal:Angle() + Angle(90, 0, 0),
+				0.25
+			)
+
+				draw.Circle(0, 0, 30, colorPreview)
+
+			camEnd3D2D()
+
+			-- render line that shows shift
+			camStart3D2D(
+				previewData.posBase + previewData.surfaceNormal * 2,
+				Angle(0, LocalPlayer():GetAngles().y - 90, 90),
+				0.25
+			)
+
+				draw.Box(-1, 0, 2, 4 * (previewData.heightShift or 0), colorPreview)
+
+			camEnd3D2D()
+
+			PrintTable(previewData)
 		else
 			colorSphere = colorPreview
 		end
@@ -246,11 +277,6 @@ if CLIENT then
 
 		hook.Add("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit", RenderHook)
 	end
-
-	local draw = draw
-	local camStart2D = cam.Start2D
-	local camEnd2D = cam.End2D
-	local renderPushRenderTarget = render.PushRenderTarget
 
 	local matScreen = Material("models/weapons/v_toolgun/screen")
 	local screenSize = 256
@@ -338,6 +364,7 @@ if CLIENT then
 
 			if not trace.Hit or distance3d > maxEditDistance then return end
 
+			previewData.surfaceNormal = trace.HitNormal
 			previewData.inPlacement = true
 			previewData.posBase = posBase
 			previewData.distance3d = distance3d
@@ -356,6 +383,7 @@ if CLIENT then
 
 			previewData.currentPos = Vector(posBase.x, posBase.y, posEye.z - diff)
 			previewData.distance3d = distance3d
+			previewData.heightShift = posBase.z - previewData.currentPos.z
 		elseif not input.IsBindingDown("+attack") and self.wasAttackDown then
 			-- attack key released: set spawn
 			self.wasAttackDown = false
@@ -365,6 +393,7 @@ if CLIENT then
 			entspawnscript.AddSpawn(mode.spawnType, mode.entType, previewData.currentPos, client:GetAngles(), 0, true)
 
 			previewData.inPlacement = false
+			previewData.heightShift = 0
 		else
 			-- just store current position for rendering of preview
 			local trace = client:GetEyeTrace()
@@ -373,6 +402,7 @@ if CLIENT then
 			local distance3d = posEye:Distance(posBase)
 
 			previewData.currentPos = trace.HitPos
+			previewData.surfaceNormal = trace.HitNormal
 			previewData.distance3d = distance3d
 			previewData.inRange = distance3d <= maxEditDistance and not focusedSpawn
 		end
