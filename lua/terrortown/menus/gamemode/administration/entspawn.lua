@@ -41,7 +41,18 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		default = true
 	})
 
+	form:MakeHelp({
+		label = "help_spawn_editor_hint"
+	})
+
 	updateCheckBoxes[1] = enableDynSpawns
+
+	-- REGISTER UNHIDE FUNCTION TO STOP SPAWN EDITOR
+	HELPSCRN.menuFrame.OnShow = function(slf)
+		if HELPSCRN:GetOpenMenu() ~= "administration_entspawn" then return end
+
+		entspawnscript.StopEditing()
+	end
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
@@ -56,21 +67,13 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	local buttonToggle = vgui.Create("DButtonTTT2", parent)
 
-	buttonToggle:SetText(entspawnscript.IsEditing(LocalPlayer()) and "button_stop_entspawn_edit" or "button_start_entspawn_edit")
+	buttonToggle:SetText("button_start_entspawn_edit")
 	buttonToggle:SetSize(180, 45)
 	buttonToggle:SetPos(20, 20)
 	buttonToggle.DoClick = function(slf)
-		if slf:GetText() == "button_start_entspawn_edit" then
-			slf:SetText("button_stop_entspawn_edit")
+		entspawnscript.StartEditing()
 
-			entspawnscript.StartEditing()
-
-			HELPSCRN.menuFrame:HideFrame()
-		else
-			slf:SetText("button_start_entspawn_edit")
-
-			entspawnscript.StopEditing()
-		end
+		HELPSCRN.menuFrame:HideFrame()
 	end
 	buttonToggle:SetEnabled(not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
 

@@ -1438,7 +1438,6 @@ L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
 L.submenu_administration_entspawn_title = "Spawn Editor"
 L.header_entspawn_settings = "Spawn Editor Settings"
 L.button_start_entspawn_edit = "Start Spawn Edit"
-L.button_stop_entspawn_edit = "Stop Spawn Edit"
 L.button_delete_all_spawns = "Delete all Spawns"
 
 L.help_spawn_editor_info = [[
@@ -1450,8 +1449,9 @@ It should be noted that this spawn system uses dynamic spawns. This is most inte
 
 Keep in mind that many changes only take effect after a new round has started.]]
 L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Disabling this checkbox only disables it for the currently active map. The dynamic system will still be used for every other map."
+L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
 
-L.label_dynamic_spawns_enable = "Enable dynamic weapon spawns"
+L.label_dynamic_spawns_enable = "Enable dynamic weapon spawns for this map"
 
 -- 2021-07-07
 L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
