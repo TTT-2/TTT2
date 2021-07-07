@@ -122,12 +122,6 @@ local spawnData = {
 entspawnscript = entspawnscript or {}
 
 if SERVER then
-	util.AddNetworkString("ttt2_remove_spawn_ent")
-	util.AddNetworkString("ttt2_add_spawn_ent")
-	util.AddNetworkString("ttt2_update_spawn_ent")
-	util.AddNetworkString("ttt2_toggle_entspawn_editing")
-	util.AddNetworkString("ttt2_entspawn_init")
-
 	---
 	-- @realm server
 	local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
@@ -372,7 +366,9 @@ if SERVER then
 		if state then
 			editingPlayers[#editingPlayers + 1] = ply
 
-			entspawnscript.UpdateDataOnClients()
+			entspawnscript.UpdateSettingsOnClients()
+
+			net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, ply)
 		else
 			for i = 1, #editingPlayers do
 				if editingPlayers[i] ~= ply then continue end
@@ -384,50 +380,33 @@ if SERVER then
 		end
 	end
 
-	function entspawnscript.UpdateDataOnClients()
-		for i = 1, editingPlayers do
+	function entspawnscript.GetEditingPlayers()
+		return editingPlayers
+	end
+
+	function entspawnscript.GetReceivingPlayers(ply)
+		local recPlys = {}
+
+		for i = 1, #editingPlayers do
+			local editPly = editingPlayers[i]
+
+			if editPly == ply then continue end
+
+			recPlys[#recPlys + 1] = editPly
+		end
+
+		return recPlys
+	end
+
+	function entspawnscript.UpdateSettingsOnClients()
+		for i = 1, #editingPlayers do
 			local ply = editingPlayers[i]
 
 			if not ply:IsAdmin() then continue end
 
-			ttt2net.Set({"entspawnscript", "spawns"}, {type = "table"}, entspawnscript.GetSpawns(), ply)
 			ttt2net.Set({"entspawnscript", "settings"}, {type = "table"}, entspawnscript.GetSettings(), ply)
 		end
 	end
-
-	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
-
-		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32))
-	end)
-
-	net.Receive("ttt2_add_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
-
-		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8))
-	end)
-
-	net.Receive("ttt2_update_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
-
-		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8))
-	end)
-
-	net.Receive("ttt2_entspawn_init", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
-
-		entspawnscript.Init(net.ReadBool())
-	end)
-
-	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
-
-		if net.ReadBool() then
-			entspawnscript.StartEditing(ply)
-		else
-			entspawnscript.StopEditing(ply)
-		end
-	end)
 end
 
 if CLIENT then
@@ -458,10 +437,6 @@ if CLIENT then
 	function entspawnscript.GetSpawnInfoEntity()
 		return spawnInfoEnt
 	end
-
-	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)
-		spawnEntList = spawnEnts
-	end)
 end
 
 function entspawnscript.IsEditing(ply)
@@ -507,25 +482,28 @@ function entspawnscript.GetSpawnsForSpawnType(spawnType)
 	return spawnEntList[spawnType]
 end
 
-function entspawnscript.RemoveSpawnById(spawnType, entType, id)
+function entspawnscript.RemoveSpawnById(spawnType, entType, id, shouldSync, ply)
 	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
 
 	local list = spawnEntList[spawnType][entType]
 
 	tableRemove(list, id)
 
+	if not shouldSync then return end
+
+	net.Start("ttt2_remove_spawn_ent")
+	net.WriteUInt(spawnType, 4)
+	net.WriteUInt(entType, 4)
+	net.WriteUInt(id, 32)
+
 	if SERVER then
-		entspawnscript.UpdateDataOnClients()
+		net.Send(entspawnscript.GetReceivingPlayers(ply))
 	else -- CLIENT
-		net.Start("ttt2_remove_spawn_ent")
-		net.WriteUInt(spawnType, 4)
-		net.WriteUInt(entType, 4)
-		net.WriteUInt(id, 32)
 		net.SendToServer()
 	end
 end
 
-function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo)
+function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo, shouldSync, ply)
 	spawnEntList = spawnEntList or {}
 	spawnEntList[spawnType] = spawnEntList[spawnType] or {}
 	spawnEntList[spawnType][entType] = spawnEntList[spawnType][entType] or {}
@@ -538,20 +516,23 @@ function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo)
 		ammo = ammo
 	}
 
+	if not shouldSync then return end
+
+	net.Start("ttt2_add_spawn_ent")
+	net.WriteUInt(spawnType, 4)
+	net.WriteUInt(entType, 4)
+	net.WriteVector(pos)
+	net.WriteAngle(ang)
+	net.WriteUInt(ammo, 8)
+
 	if SERVER then
-		entspawnscript.UpdateDataOnClients()
+		net.Send(entspawnscript.GetReceivingPlayers(ply))
 	else -- CLIENT
-		net.Start("ttt2_add_spawn_ent")
-		net.WriteUInt(spawnType, 4)
-		net.WriteUInt(entType, 4)
-		net.WriteVector(pos)
-		net.WriteAngle(ang)
-		net.WriteUInt(ammo, 8)
 		net.SendToServer()
 	end
 end
 
-function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo)
+function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo, shouldSync, ply)
 	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
 
 	local listEntry = spawnEntList[spawnType][entType]
@@ -568,16 +549,19 @@ function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo)
 		ammo = ammo
 	}
 
+	if not shouldSync then return end
+
+	net.Start("ttt2_update_spawn_ent")
+	net.WriteUInt(spawnType, 4)
+	net.WriteUInt(entType, 4)
+	net.WriteUInt(id, 32)
+	net.WriteVector(pos)
+	net.WriteAngle(ang)
+	net.WriteUInt(ammo, 8)
+
 	if SERVER then
-		entspawnscript.UpdateDataOnClients()
+		net.Send(entspawnscript.GetReceivingPlayers(ply))
 	else -- CLIENT
-		net.Start("ttt2_update_spawn_ent")
-		net.WriteUInt(spawnType, 4)
-		net.WriteUInt(entType, 4)
-		net.WriteUInt(id, 32)
-		net.WriteVector(pos)
-		net.WriteAngle(ang)
-		net.WriteUInt(ammo, 8)
 		net.SendToServer()
 	end
 end
@@ -615,7 +599,7 @@ function entspawnscript.StopEditing(ply)
 	end
 end
 
-function entspawnscript.Init(forceReinit)
+function entspawnscript.OnLoaded(forceReinit)
 	if CLIENT then
 		net.Start("ttt2_entspawn_init")
 		net.WriteBool(forceReinit or false)
@@ -635,4 +619,66 @@ function entspawnscript.Init(forceReinit)
 			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
 		end
 	end
+end
+
+-- SYNCING
+
+if SERVER then
+	util.AddNetworkString("ttt2_remove_spawn_ent")
+	util.AddNetworkString("ttt2_add_spawn_ent")
+	util.AddNetworkString("ttt2_update_spawn_ent")
+	util.AddNetworkString("ttt2_toggle_entspawn_editing")
+	util.AddNetworkString("ttt2_entspawn_init")
+
+	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), false, ply)
+	end)
+
+	net.Receive("ttt2_add_spawn_ent", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
+	end)
+
+	net.Receive("ttt2_update_spawn_ent", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
+	end)
+
+	net.Receive("ttt2_entspawn_init", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		entspawnscript.OnLoaded(net.ReadBool())
+	end)
+
+	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		if net.ReadBool() then
+			entspawnscript.StartEditing(ply)
+		else
+			entspawnscript.StopEditing(ply)
+		end
+	end)
+end
+
+if CLIENT then
+	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)
+		spawnEntList = spawnEnts
+	end)
+
+	net.Receive("ttt2_remove_spawn_ent", function()
+		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), false)
+	end)
+
+	net.Receive("ttt2_add_spawn_ent", function()
+		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false)
+	end)
+
+	net.Receive("ttt2_update_spawn_ent", function()
+		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false)
+	end)
 end
