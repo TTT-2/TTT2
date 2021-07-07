@@ -398,12 +398,14 @@ if CLIENT then
 			-- attack key released: set spawn
 			self.wasAttackDown = false
 
-			if not previewData.inPlacement or focusedSpawn then return end
-
-			entspawnscript.AddSpawn(mode.spawnType, mode.entType, previewData.currentPos, client:GetAngles(), 0, true)
+			if not previewData.inPlacement then return end
 
 			previewData.inPlacement = false
 			previewData.heightShift = 0
+
+			if focusedSpawn then return end
+
+			entspawnscript.AddSpawn(mode.spawnType, mode.entType, previewData.currentPos, client:GetAngles(), 0, true)
 		else
 			-- just store current position for rendering of preview
 			local trace = client:GetEyeTrace()
