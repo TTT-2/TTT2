@@ -71,7 +71,6 @@ if SERVER then
 		-- * stop of the spawn edit process triggered by a death
 		-- * stop of the spawn edit process triggered by a new round
 		-- * stop of the spawn edit process triggered by a mapchange
-
 		entspawnscript.UpdateSpawnFile()
 
 		-- remove entity which is used for the targetID integration

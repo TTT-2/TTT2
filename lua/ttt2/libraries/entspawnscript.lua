@@ -25,6 +25,7 @@ local osTime = os.time
 
 local spawnEntList = {}
 local settingsList = {}
+local editingPlayers = {}
 
 local spawndir = "ttt/weaponspawnscripts/"
 
@@ -603,6 +604,7 @@ function entspawnscript.StartEditing(ply)
 		if entspawnscript.IsEditing(ply) then return end
 
 		ply:CacheAndStripWeapons()
+
 		local wep = ply:Give("weapon_ttt_spawneditor")
 
 		wep:Equip()
