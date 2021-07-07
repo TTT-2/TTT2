@@ -46,6 +46,8 @@ SWEP.lastReload = 0
 
 SWEP.AllowDrop = false
 
+local previewData = {}
+
 if SERVER then
 	util.AddNetworkString("weapon_ttt_spawneditor_spawninfo_ent")
 
@@ -91,11 +93,17 @@ if CLIENT then
 	local renderDrawSphere = render.DrawSphere
 	local camStart3D = cam.Start3D
 	local camEnd3D = cam.End3D
+	local EyeAngles = EyeAngles
+	local Vector = Vector
+	local mathPi = math.pi
+	local mathTan = math.tan
 
 	local centerX = 0.5 * ScrW()
 	local centerY = 0.5 * ScrH()
 	local sphereRadius = 10
 	local tolerance = 32 * sphereRadius
+
+	local colorPreview = Color(255, 255, 255, 100)
 
 	local function IsHighlighted(pos, scPos)
 		local dist3d = LocalPlayer():EyePos():Distance(pos)
@@ -204,6 +212,24 @@ if CLIENT then
 				renderDrawSphere(pos, sphereRadius, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 100))
 			end
 		end
+
+		if not previewData.inRange then return end
+
+		local colorSphere
+
+		if previewData.inPlacement then
+			colorSphere = ColorAlpha(entspawnscript.GetColorFromSpawnType(previewData.spawnType), 245)
+		else
+			colorSphere = colorPreview
+		end
+
+		renderDrawSphere(
+			previewData.currentPos,
+			sphereRadius,
+			4 + 750 / previewData.distance3d,
+			4 + 750 / previewData.distance3d,
+			colorSphere
+		)
 	end
 
 	function SWEP:OnRemove()
@@ -285,6 +311,72 @@ if CLIENT then
 	net.Receive("weapon_ttt_spawneditor_spawninfo_ent", function()
 		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
 	end)
+
+	function SWEP:Think()
+		local client = LocalPlayer()
+
+		-- Make sure the user is currently not typing anything, to prevent unwanted execution of a placement
+		if vgui.GetKeyboardFocus() or client:IsTyping() or gui.IsConsoleVisible() or vguihandler.IsOpen() then return end
+
+		local focusedSpawn = entspawnscript.GetFocusedSpawn()
+		local mode = self.modes[self.selectedMode]
+
+		-- always set spawnType
+		previewData.spawnType = mode.spawnType
+
+		if input.IsBindingDown("+attack") and not self.wasAttackDown then
+			-- first key down of the attack button: get basepos
+			self.wasAttackDown = true
+
+			if focusedSpawn then return end
+
+			local trace = client:GetEyeTrace()
+
+			local posEye = client:EyePos()
+			local posBase = trace.HitPos
+			local distance3d = posEye:Distance(posBase)
+
+			if not trace.Hit or distance3d > maxEditDistance then return end
+
+			previewData.inPlacement = true
+			previewData.posBase = posBase
+			previewData.distance3d = distance3d
+		elseif input.IsBindingDown("+attack") and previewData.inPlacement then
+			-- hold attack key: update preview position
+			local posBase = previewData.posBase
+
+			local posEye = client:EyePos()
+			local posGround = Vector(posEye.x, posEye.y, posBase.z)
+
+			local distance2d = posGround:Distance(posBase)
+			local distance3d = posEye:Distance(posBase)
+
+			local angle = EyeAngles().p / 180 * mathPi -- angle in rad
+			local diff = distance2d * mathTan(angle)
+
+			previewData.currentPos = Vector(posBase.x, posBase.y, posEye.z - diff)
+			previewData.distance3d = distance3d
+		elseif not input.IsBindingDown("+attack") and self.wasAttackDown then
+			-- attack key released: set spawn
+			self.wasAttackDown = false
+
+			if not previewData.inPlacement or focusedSpawn then return end
+
+			entspawnscript.AddSpawn(mode.spawnType, mode.entType, previewData.currentPos, client:GetAngles(), 0, true)
+
+			previewData.inPlacement = false
+		else
+			-- just store current position for rendering of preview
+			local trace = client:GetEyeTrace()
+			local posEye = client:EyePos()
+			local posBase = trace.HitPos
+			local distance3d = posEye:Distance(posBase)
+
+			previewData.currentPos = trace.HitPos
+			previewData.distance3d = distance3d
+			previewData.inRange = distance3d <= maxEditDistance and not focusedSpawn
+		end
+	end
 end
 
 -- used to place / remove spawns
@@ -305,17 +397,6 @@ function SWEP:PrimaryAttack()
 		local ammo = focusedSpawn.spawn.ammo
 
 		entspawnscript.UpdateSpawn(spawnType, entType, id, nil, nil, ammo + 1, true)
-	else
-		if focusedSpawn then return end
-
-		local client = LocalPlayer()
-		local trace = client:GetEyeTrace()
-
-		if not trace.Hit or trace.StartPos:Distance(trace.HitPos) > maxEditDistance then return end
-
-		local mode = self.modes[self.selectedMode]
-
-		entspawnscript.AddSpawn(mode.spawnType, mode.entType, trace.HitPos + 7.5 * trace.HitNormal, client:GetAngles(), 0, true)
 	end
 end
 

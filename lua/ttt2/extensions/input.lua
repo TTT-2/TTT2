@@ -8,10 +8,10 @@ if SERVER then
 	return
 end
 
-local inputIsKeyDown = input.IsKeyDown
+local inputIsButtonDown = input.IsButtonDown
 local inputGetKeyCode = input.GetKeyCode
 local inputLookupBinding = input.LookupBinding
 
 function input.IsBindingDown(binding)
-	return inputIsKeyDown(inputGetKeyCode(inputLookupBinding(binding)))
+	return inputIsButtonDown(inputGetKeyCode(inputLookupBinding(binding)))
 end
