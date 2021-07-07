@@ -1379,18 +1379,18 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.header_equipment_setup = "Setup Equipment"
 --L.header_equipment_value_setup = "Balance Settings"
 
---L.itemeditor_name_not_buyable = "Equipment buyable"
---L.itemeditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
---L.itemeditor_name_not_random = "Aways available in shop"
---L.itemeditor_desc_not_random = "If enabled, the equipment is always available in the shop. This is relevant when using the random shop. It takes one available random slot and always reserves it for this equipment."
---L.itemeditor_name_global_limited = "Global limited amount"
---L.itemeditor_desc_global_limited = "If equipment is global limited, it can be bought only once on the server in the active round."
---L.itemeditor_name_team_limited = "Team limited amount"
---L.itemeditor_desc_team_limited = "If equipment is team limited, it can be bought only once per team in the active round."
---L.itemeditor_name_player_limited = "Player limited amount"
---L.itemeditor_desc_player_limited = "If equipment is player limited, it can be bought only once per player in the active round."
---L.itemeditor_name_min_players = "Minimum amount of players for selection"
---L.itemeditor_name_credits = "Price in credits"
+--L.equipmenteditor_name_not_buyable = "Equipment buyable"
+--L.equipmenteditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
+--L.equipmenteditor_name_not_random = "Aways available in shop"
+--L.equipmenteditor_desc_not_random = "If enabled, the equipment is always available in the shop. This is relevant when using the random shop. It takes one available random slot and always reserves it for this equipment."
+--L.equipmenteditor_name_global_limited = "Global limited amount"
+--L.equipmenteditor_desc_global_limited = "If equipment is global limited, it can be bought only once on the server in the active round."
+--L.equipmenteditor_name_team_limited = "Team limited amount"
+--L.equipmenteditor_desc_team_limited = "If equipment is team limited, it can be bought only once per team in the active round."
+--L.equipmenteditor_name_player_limited = "Player limited amount"
+--L.equipmenteditor_desc_player_limited = "If equipment is player limited, it can be bought only once per player in the active round."
+--L.equipmenteditor_name_min_players = "Minimum amount of players for selection"
+--L.equipmenteditor_name_credits = "Price in credits"
 
 -- 2021-06-08
 --L.equip_not_added = "not added"
@@ -1418,3 +1418,9 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 
 -- 2021-06-25
 --L.searchbar_default_placeholder = "Search in list..."
+
+-- 2021-07-07
+--L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+
+--L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly"
+--L.equipmenteditor_name_spawn_type = "Spawn type"

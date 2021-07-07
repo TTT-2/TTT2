@@ -118,6 +118,17 @@ local spawnData = {
 	}
 }
 
+local kindToSpawnType = {
+	[WEAPON_PISTOL] = WEAPON_TYPE_PISTOL,
+	[WEAPON_HEAVY] = WEAPON_TYPE_ASSAULT,
+	[WEAPON_NADE] = WEAPON_TYPE_NADE,
+	[WEAPON_EQUIP1] = WEAPON_TYPE_SPECIAL,
+	[WEAPON_EQUIP2] = WEAPON_TYPE_SPECIAL,
+	[WEAPON_ROLE] = WEAPON_TYPE_SPECIAL,
+	[WEAPON_MELEE] = WEAPON_TYPE_MELEE,
+	[WEAPON_CARRY] = WEAPON_TYPE_MELEE,
+}
+
 entspawnscript = entspawnscript or {}
 
 if SERVER then
@@ -462,6 +473,19 @@ function entspawnscript.GetIconFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].material
 end
 
+function entspawnscript.GetEntTypeList(spawnType, excludeTypes)
+	local indexedTable = {}
+
+	local spawns = spawnData[spawnType]
+
+	for entType in pairs(spawns) do
+		if excludeTypes[entType] then continue end
+		indexedTable[#indexedTable + 1] = entType
+	end
+
+	return indexedTable
+end
+
 function entspawnscript.GetSpawnTypeList()
 	local indexedTable = {}
 
@@ -475,6 +499,10 @@ function entspawnscript.GetSpawnTypeList()
 	end
 
 	return indexedTable
+end
+
+function entspawnscript.GetSpawnTypeFromKind(kind)
+	return kindToSpawnType[kind]
 end
 
 function entspawnscript.GetSpawns()

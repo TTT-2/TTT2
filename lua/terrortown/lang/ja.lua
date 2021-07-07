@@ -1370,18 +1370,18 @@ L.shopeditor_name_random_shop_reroll_per_buy = "購入直後の自動スロッ�
 L.header_equipment_setup = "セットアップ"
 L.header_equipment_value_setup = "バランス設定"
 
-L.itemeditor_name_not_buyable = "購入可能"
-L.itemeditor_desc_not_buyable = "もし無効にしたら、ショップに表示されないようになる。\nこのアイテムが割り当てられている役職は引き続きそれを受け取る。"
-L.itemeditor_name_not_random = "常時購入可能"
-L.itemeditor_desc_not_random = "もし有効にしたら、常時このアイテムがショップに表示されるようになる。ランダムショップの影響は受けない。\nそれは１つの利用可能なランダムスロットを取り、常にこのアイテムのためにそれを予約する。"
-L.itemeditor_name_global_limited = "全体的な使用制限"
-L.itemeditor_desc_global_limited = "もし有効にしたら、一つ買ったら次のラウンドまで他の者たちは買うことはできない。"
-L.itemeditor_name_team_limited = "陣営による使用制限"
-L.itemeditor_desc_team_limited = "もし有効にしたら、一つ買ったら次のラウンドまで他のチームメイトは買うことはできない。"
-L.itemeditor_name_player_limited = "使用制限"
-L.itemeditor_desc_player_limited = "もし有効にしたら、一つ買ったら次のラウンドまで買うことはできない。"
-L.itemeditor_name_min_players = "必要プレイヤー人数"
-L.itemeditor_name_credits = "クレジット消費数"
+L.equipmenteditor_name_not_buyable = "購入可能"
+L.equipmenteditor_desc_not_buyable = "もし無効にしたら、ショップに表示されないようになる。\nこのアイテムが割り当てられている役職は引き続きそれを受け取る。"
+L.equipmenteditor_name_not_random = "常時購入可能"
+L.equipmenteditor_desc_not_random = "もし有効にしたら、常時このアイテムがショップに表示されるようになる。ランダムショップの影響は受けない。\nそれは１つの利用可能なランダムスロットを取り、常にこのアイテムのためにそれを予約する。"
+L.equipmenteditor_name_global_limited = "全体的な使用制限"
+L.equipmenteditor_desc_global_limited = "もし有効にしたら、一つ買ったら次のラウンドまで他の者たちは買うことはできない。"
+L.equipmenteditor_name_team_limited = "陣営による使用制限"
+L.equipmenteditor_desc_team_limited = "もし有効にしたら、一つ買ったら次のラウンドまで他のチームメイトは買うことはできない。"
+L.equipmenteditor_name_player_limited = "使用制限"
+L.equipmenteditor_desc_player_limited = "もし有効にしたら、一つ買ったら次のラウンドまで買うことはできない。"
+L.equipmenteditor_name_min_players = "必要プレイヤー人数"
+L.equipmenteditor_name_credits = "クレジット消費数"
 
 -- 2021-06-08
 L.equip_not_added = "除外"
@@ -1409,3 +1409,9 @@ L.xfer_team_indicator = "陣営"
 
 -- 2021-06-25
 --L.searchbar_default_placeholder = "Search in list..."
+
+-- 2021-07-07
+--L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+
+--L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly"
+--L.equipmenteditor_name_spawn_type = "Spawn type"
