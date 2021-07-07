@@ -415,10 +415,16 @@ function GM:InitPostEntity()
 	hook.Run("TTTInitPostEntity")
 
 	-- load entity spawns from file / map
-	entspawnscript.Init()
+	entspawnscript.OnLoaded()
 
 	items.MigrateLegacyItems()
 	items.OnLoaded()
+
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
 
 	InitDefaultEquipment()
 
@@ -1384,7 +1390,13 @@ function GM:OnReloaded()
 	roles.OnLoaded()
 
 	-- reload entity spawns from file
-	entspawnscript.Init()
+	entspawnscript.OnLoaded()
+
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
 
 	---
 	-- @realm shared

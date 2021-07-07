@@ -26,12 +26,6 @@ function GM:TTT2Initialize()
 	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
 
-	-- load all HUDs
-	huds.OnLoaded()
-
-	-- load all HUD elements
-	hudelements.OnLoaded()
-
 	DefaultEquipment = GetDefaultEquipment()
 end
 
