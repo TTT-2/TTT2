@@ -24,7 +24,7 @@ ShopEditor.savingKeys = {
 		default = false,
 		name = "auto_spawnable",
 		inverted = false,
-		b_desc = false,
+		b_desc = true,
 		showForItem = false,
 		master = nil
 	},

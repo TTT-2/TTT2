@@ -1452,10 +1452,14 @@ L.help_spawn_editor_enable = "On some maps it might be advised to use the origin
 L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
 L.help_spawn_editor_spawn_amount = "There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount."
 
-L.label_dynamic_spawns_enable = "Enable dynamic weapon spawns for this map"
+L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
 
 -- 2021-07-07
 L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
 
-L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly"
-L.equipmenteditor_name_spawn_type = "Spawn type"
+L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
+L.equipmenteditor_name_spawn_type = "Select spawn type"
+L.equipmenteditor_desc_auto_spawnable = [[
+The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however these settings can be changed from within this menu.
+
+Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
