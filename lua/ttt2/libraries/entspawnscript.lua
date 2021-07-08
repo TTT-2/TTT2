@@ -381,8 +381,8 @@ if SERVER then
 		return recPlys
 	end
 
-	function entspawnscript.UpdateSettingsOnClients()
-		local plys = player.GetAll()
+	function entspawnscript.UpdateSettingsOnClients(plys)
+		plys = plys or player.GetAll()
 
 		for i = 1, #plys do
 			local ply = plys[i]
@@ -393,6 +393,42 @@ if SERVER then
 				ttt2net.Set({"entspawnscript", "settings", key}, {type = "int", bits = 16}, entspawnscript.GetSetting(key), ply)
 			end
 		end
+	end
+
+	function entspawnscript.UpdateSpawnCountOnClients(plys)
+		local amountSpawns = {
+			[SPAWN_TYPE_WEAPON] = 0,
+			[SPAWN_TYPE_AMMO] = 0,
+			[SPAWN_TYPE_PLAYER] = 0
+		}
+
+		local spawnList = entspawnscript.GetSpawns()
+
+		for spawnType, spawnTables in pairs(spawnList) do
+			for entType, spawns in pairs(spawnTables) do
+				amountSpawns[spawnType] = amountSpawns[spawnType] + #spawns
+			end
+		end
+
+		plys = plys or player.GetAll()
+
+		for i = 1, #plys do
+			local ply = plys[i]
+
+			if not ply:IsAdmin() then continue end
+
+			ttt2net.Set({"entspawnscript", "spawnamount", "weapon"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_WEAPON], ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammo"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_AMMO], ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "player"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_PLAYER], ply)
+		end
+	end
+
+	function entspawnscript.TransmitToPlayer(ply)
+		-- trigger a sync of the settings table
+		entspawnscript.UpdateSettingsOnClients({ply})
+
+		-- trigger a sync of the spawn amount info
+		entspawnscript.UpdateSpawnCountOnClients({ply})
 	end
 end
 
@@ -536,6 +572,11 @@ function entspawnscript.RemoveSpawnById(spawnType, entType, id, shouldSync, ply)
 
 	tableRemove(list, id)
 
+	if SERVER then
+		-- update amount of spawns on clients
+		entspawnscript.UpdateSpawnCountOnClients()
+	end
+
 	if not shouldSync then return end
 
 	net.Start("ttt2_remove_spawn_ent")
@@ -562,6 +603,11 @@ function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo, shouldSync,
 		ang = ang,
 		ammo = ammo
 	}
+
+	if SERVER then
+		-- update amount of spawns on clients
+		entspawnscript.UpdateSpawnCountOnClients()
+	end
 
 	if not shouldSync then return end
 
@@ -627,6 +673,9 @@ function entspawnscript.DeleteAllSpawns()
 		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
 
 		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, editingPlayers)
+
+		-- update amount of spawns on clients
+		entspawnscript.UpdateSpawnCountOnClients()
 	end
 end
 
@@ -683,8 +732,14 @@ function entspawnscript.OnLoaded(forceReinit)
 			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
 		end
 
+		-- Most of the time this set up is done before the player is ready. However to make sure the update
+		-- is called at least once after the data is generated, it is also called here.
+
 		-- trigger a sync of the settings table
 		entspawnscript.UpdateSettingsOnClients()
+
+		-- trigger a sync of the spawn amount info
+		entspawnscript.UpdateSpawnCountOnClients()
 	end
 end
 

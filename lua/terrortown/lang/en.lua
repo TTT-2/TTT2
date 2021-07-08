@@ -1450,6 +1450,7 @@ It should be noted that this spawn system uses dynamic spawns. This is most inte
 Keep in mind that many changes only take effect after a new round has started.]]
 L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Disabling this checkbox only disables it for the currently active map. The dynamic system will still be used for every other map."
 L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
+L.help_spawn_editor_spawn_amount = "There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount."
 
 L.label_dynamic_spawns_enable = "Enable dynamic weapon spawns for this map"
 

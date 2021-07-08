@@ -1431,6 +1431,8 @@ local function SetPlayerReady(_, ply)
 	-- Send full state update to client
 	ttt2net.SendFullStateUpdate(ply)
 
+	entspawnscript.TransmitToPlayer(ply)
+
 	---
 	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)

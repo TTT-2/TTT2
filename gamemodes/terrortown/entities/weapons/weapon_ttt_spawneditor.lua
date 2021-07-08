@@ -350,10 +350,6 @@ if CLIENT then
 		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
 	end)
 
-	local function VerifySpawnPosition()
-
-	end
-
 	function SWEP:Think()
 		local client = LocalPlayer()
 
