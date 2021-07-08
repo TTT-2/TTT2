@@ -110,6 +110,8 @@ if CLIENT then
 	local sphereRadius = 10
 	local tolerance = 32 * sphereRadius
 
+	local distWalls = 7.5
+
 	local colorPreview = Color(255, 255, 255, 100)
 
 	local function IsHighlighted(pos, scPos)
@@ -241,8 +243,8 @@ if CLIENT then
 
 			-- render circle on ground
 			camStart3D2D(
-				previewData.posBase + previewData.surfaceNormal * 2,
-				previewData.surfaceNormal:Angle() + Angle(90, 0, 0),
+				previewData.posBase + previewData.normalBase * 2,
+				previewData.normalBase:Angle() + Angle(90, 0, 0),
 				0.25
 			)
 
@@ -252,7 +254,7 @@ if CLIENT then
 
 			-- render line that shows shift
 			camStart3D2D(
-				previewData.posBase + previewData.surfaceNormal * 2,
+				previewData.posBase + previewData.normalBase * 2,
 				Angle(0, LocalPlayer():GetAngles().y - 90, 90),
 				0.25
 			)
@@ -348,6 +350,10 @@ if CLIENT then
 		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
 	end)
 
+	local function VerifySpawnPosition()
+
+	end
+
 	function SWEP:Think()
 		local client = LocalPlayer()
 
@@ -374,10 +380,29 @@ if CLIENT then
 
 			if not trace.Hit or distance3d > maxEditDistance then return end
 
-			previewData.surfaceNormal = trace.HitNormal
+			previewData.normalBase = trace.HitNormal
 			previewData.inPlacement = true
 			previewData.posBase = posBase
 			previewData.distance3d = distance3d
+
+			-- find limits for top and bottom
+			local traceLimitUpper = util.TraceLine({
+				start = posBase,
+				endpos = posBase + Vector(0, 0, maxEditDistance),
+				mask = MASK_PLAYERSOLID_BRUSHONLY
+			})
+
+			previewData.posLimitUpper = traceLimitUpper.HitPos
+			previewData.normalLimitUpper = traceLimitUpper.HitNormal
+
+			local traceLimitLower = util.TraceLine({
+				start = posBase,
+				endpos = posBase - Vector(0, 0, maxEditDistance),
+				mask = MASK_PLAYERSOLID_BRUSHONLY
+			})
+
+			previewData.posLimitLower = traceLimitLower.HitPos
+			previewData.normalLimitLower = traceLimitLower.HitNormal
 		elseif input.IsBindingDown("+attack") and previewData.inPlacement then
 			-- hold attack key: update preview position
 			local posBase = previewData.posBase
@@ -391,7 +416,13 @@ if CLIENT then
 			local angle = EyeAngles().p / 180 * mathPi -- angle in rad
 			local diff = distance2d * mathTan(angle)
 
-			previewData.currentPos = Vector(posBase.x, posBase.y, posEye.z - diff)
+			local currentPos = Vector(posBase.x, posBase.y, posEye.z - diff)
+
+			-- limit current position in between valid range
+			currentPos.z = math.min(currentPos.z, previewData.posLimitUpper.z - distWalls)
+			currentPos.z = math.max(currentPos.z, previewData.posLimitLower.z + distWalls)
+
+			previewData.currentPos = currentPos
 			previewData.distance3d = distance3d
 			previewData.heightShift = posBase.z - previewData.currentPos.z
 		elseif not input.IsBindingDown("+attack") and self.wasAttackDown then
@@ -414,7 +445,7 @@ if CLIENT then
 			local distance3d = posEye:Distance(posBase)
 
 			previewData.currentPos = trace.HitPos
-			previewData.surfaceNormal = trace.HitNormal
+			previewData.normalBase = trace.HitNormal
 			previewData.distance3d = distance3d
 			previewData.inRange = distance3d <= maxEditDistance and not focusedSpawn
 		end
