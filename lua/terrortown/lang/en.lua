@@ -1420,7 +1420,7 @@ L.spawn_weapon_random = "Random Weapon Spawn"
 L.spawn_weapon_melee = "Melee Weapon Spawn"
 L.spawn_weapon_nade = "Grenade Weapon Spawn"
 L.spawn_weapon_shotgun = "Shotgun Weapon Spawn"
-L.spawn_weapon_assault = "Assault Weapon Spawn"
+L.spawn_weapon_heavy = "Heavy Weapon Spawn"
 L.spawn_weapon_sniper = "Sniper Weapon Spawn"
 L.spawn_weapon_pistol = "Pistol Weapon Spawn"
 L.spawn_weapon_special = "Special Weapon Spawn"
@@ -1450,7 +1450,26 @@ It should be noted that this spawn system uses dynamic spawns. This is most inte
 Keep in mind that many changes only take effect after a new round has started.]]
 L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Disabling this checkbox only disables it for the currently active map. The dynamic system will still be used for every other map."
 L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
-L.help_spawn_editor_spawn_amount = "There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount."
+L.help_spawn_editor_spawn_amount = [[
+There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount.
+
+{weaponrandom}x random weapon spawn
+{weaponmelee}x melee weapon spawn
+{weaponnade}x grenade weapon spawn
+{weaponshotgun}x shotgun weapon spawn
+{weaponheavy}x heavy weapon spawn
+{weaponsniper}x sniper weapon spawn
+{weaponpistol}x pistol weapon spawn
+{weaponspecial}x special weapon spawn
+
+{ammorandom}x random ammo spawn
+{ammodeagle}x Deagle ammo spawn
+{ammopistol}x pistol ammo spawn
+{ammomac10}x Mac10 ammo spawn
+{ammorifle}x rifle ammo spawn
+{ammoshotgun}x shotgun ammo spawn
+
+{playerrandom}x random player spawn]]
 
 L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
 

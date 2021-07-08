@@ -61,10 +61,10 @@ local spawnData = {
 			name = "spawn_weapon_shotgun",
 			var = "WEAPON_TYPE_SHOTGUN"
 		},
-		[WEAPON_TYPE_ASSAULT] = {
+		[WEAPON_TYPE_HEAVY] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_assault"),
-			name = "spawn_weapon_assault",
-			var = "WEAPON_TYPE_ASSAULT"
+			name = "spawn_weapon_heavy",
+			var = "WEAPON_TYPE_HEAVY"
 		},
 		[WEAPON_TYPE_SNIPER] = {
 			material = Material("vgui/ttt/tid/tid_big_weapon_sniper"),
@@ -125,7 +125,7 @@ local spawnData = {
 
 local kindToSpawnType = {
 	[WEAPON_PISTOL] = WEAPON_TYPE_PISTOL,
-	[WEAPON_HEAVY] = WEAPON_TYPE_ASSAULT,
+	[WEAPON_HEAVY] = WEAPON_TYPE_HEAVY,
 	[WEAPON_NADE] = WEAPON_TYPE_NADE,
 	[WEAPON_EQUIP1] = WEAPON_TYPE_SPECIAL,
 	[WEAPON_EQUIP2] = WEAPON_TYPE_SPECIAL,
@@ -420,6 +420,24 @@ if SERVER then
 			ttt2net.Set({"entspawnscript", "spawnamount", "weapon"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_WEAPON], ply)
 			ttt2net.Set({"entspawnscript", "spawnamount", "ammo"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_AMMO], ply)
 			ttt2net.Set({"entspawnscript", "spawnamount", "player"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_PLAYER], ply)
+
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponrandom"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_RANDOM] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponmelee"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_MELEE] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponnade"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_NADE] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponshotgun"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_SHOTGUN] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponheavy"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_HEAVY] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponsniper"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_SNIPER] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponpistol"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_PISTOL] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "weaponspecial"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_WEAPON][WEAPON_TYPE_SPECIAL] or {}), ply)
+
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammorandom"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_AMMO][AMMO_TYPE_RANDOM] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammodeagle"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_AMMO][AMMO_TYPE_DEAGLE] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammopistol"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_AMMO][AMMO_TYPE_PISTOL] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammomac10"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_AMMO][AMMO_TYPE_MAC10] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammorifle"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_AMMO][AMMO_TYPE_RIFLE] or {}), ply)
+			ttt2net.Set({"entspawnscript", "spawnamount", "ammoshotgun"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_AMMO][AMMO_TYPE_SHOTGUN] or {}), ply)
+
+			ttt2net.Set({"entspawnscript", "spawnamount", "playerrandom"}, {type = "int", bits = 16}, #(spawnList[SPAWN_TYPE_PLAYER][PLAYER_TYPE_RANDOM] or {}), ply)
 		end
 	end
 

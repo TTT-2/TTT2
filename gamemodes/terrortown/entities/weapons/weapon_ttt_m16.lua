@@ -19,7 +19,7 @@ SWEP.Base = "weapon_tttbase"
 
 SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_M16
-SWEP.spawnType = WEAPON_TYPE_ASSAULT
+SWEP.spawnType = WEAPON_TYPE_HEAVY
 
 SWEP.Primary.Delay = 0.19
 SWEP.Primary.Recoil = 1.6

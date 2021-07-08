@@ -43,10 +43,10 @@ local ttt_weapon_spawns = {
 	["weapon_zm_molotov"] = WEAPON_TYPE_NADE,
 	["weapon_ttt_smokegrenade"] = WEAPON_TYPE_NADE,
 	["weapon_ttt_confgrenade"] = WEAPON_TYPE_NADE,
-	["weapon_zm_mac10"] = WEAPON_TYPE_ASSAULT,
+	["weapon_zm_mac10"] = WEAPON_TYPE_HEAVY,
 	["weapon_zm_revolver"] = WEAPON_TYPE_PISTOL,
-	["weapon_zm_sledge"] = WEAPON_TYPE_ASSAULT,
-	["weapon_ttt_m16"] = WEAPON_TYPE_ASSAULT,
+	["weapon_zm_sledge"] = WEAPON_TYPE_HEAVY,
+	["weapon_ttt_m16"] = WEAPON_TYPE_HEAVY,
 	["weapon_ttt_glock"] = WEAPON_TYPE_PISTOL
 }
 
@@ -60,18 +60,18 @@ local ttt_ammo_spawns = {
 }
 
 local hl2_weapon_spawns = {
-	["weapon_smg1"] = WEAPON_TYPE_ASSAULT,
+	["weapon_smg1"] = WEAPON_TYPE_HEAVY,
 	["weapon_shotgun"] = WEAPON_TYPE_SHOTGUN,
-	["weapon_ar2"] = WEAPON_TYPE_ASSAULT,
+	["weapon_ar2"] = WEAPON_TYPE_HEAVY,
 	["weapon_357"] = WEAPON_TYPE_SNIPER,
 	["weapon_crossbow"] = WEAPON_TYPE_PISTOL,
-	["weapon_rpg"] = WEAPON_TYPE_ASSAULT,
+	["weapon_rpg"] = WEAPON_TYPE_HEAVY,
 	["weapon_frag"] = WEAPON_TYPE_PISTOL,
 	["weapon_crowbar"] = WEAPON_TYPE_NADE,
 	["item_ammo_smg1_grenade"] = WEAPON_TYPE_PISTOL,
 	["item_healthkit"] = WEAPON_TYPE_SHOTGUN,
-	["item_suitcharger"] = WEAPON_TYPE_ASSAULT,
-	["item_ammo_ar2_altfire"] = WEAPON_TYPE_ASSAULT,
+	["item_suitcharger"] = WEAPON_TYPE_HEAVY,
+	["item_ammo_ar2_altfire"] = WEAPON_TYPE_HEAVY,
 	["item_healthvial"] = WEAPON_TYPE_NADE,
 	["item_ammo_crate"] = WEAPON_TYPE_NADE
 }

@@ -30,23 +30,14 @@ ttt2net.OnUpdate({"entspawnscript", "settings", "blacklisted"}, function(_, newv
 	end
 end)
 
-ttt2net.OnUpdate({"entspawnscript", "spawnamount", "weapon"}, function(_, newval)
-	if not IsValid(updateHelpBox) then return end
+ttt2net.OnUpdate({"entspawnscript", "spawnamount"}, function(_, newval, reversePath)
+	local paramType = reversePath[1]
 
-	updateHelpBox:GetParams().weapon = newval
+	if not IsValid(updateHelpBox) or not paramType then return end
+
+	updateHelpBox:GetParams()[paramType] = newval
 end)
 
-ttt2net.OnUpdate({"entspawnscript", "spawnamount", "ammo"}, function(_, newval)
-	if not IsValid(updateHelpBox) then return end
-
-	updateHelpBox:GetParams().ammo = newval
-end)
-
-ttt2net.OnUpdate({"entspawnscript", "spawnamount", "player"}, function(_, newval)
-	if not IsValid(updateHelpBox) then return end
-
-	updateHelpBox:GetParams().player = newval
-end)
 
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_entspawn_settings")
@@ -77,7 +68,22 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		params = {
 			weapon = ttt2net.Get({"entspawnscript", "spawnamount", "weapon"}) or 0,
 			ammo = ttt2net.Get({"entspawnscript", "spawnamount", "ammo"}) or 0,
-			player = ttt2net.Get({"entspawnscript", "spawnamount", "player"}) or 0
+			player = ttt2net.Get({"entspawnscript", "spawnamount", "player"}) or 0,
+			weaponrandom = ttt2net.Get({"entspawnscript", "spawnamount", "weaponrandom"}) or 0,
+			weaponmelee = ttt2net.Get({"entspawnscript", "spawnamount", "weaponmelee"}) or 0,
+			weaponnade = ttt2net.Get({"entspawnscript", "spawnamount", "weaponnade"}) or 0,
+			weaponshotgun = ttt2net.Get({"entspawnscript", "spawnamount", "weaponshotgun"}) or 0,
+			weaponheavy = ttt2net.Get({"entspawnscript", "spawnamount", "weaponheavy"}) or 0,
+			weaponsniper = ttt2net.Get({"entspawnscript", "spawnamount", "weaponsniper"}) or 0,
+			weaponpistol = ttt2net.Get({"entspawnscript", "spawnamount", "weaponpistol"}) or 0,
+			weaponspecial = ttt2net.Get({"entspawnscript", "spawnamount", "weaponspecial"}) or 0,
+			ammorandom = ttt2net.Get({"entspawnscript", "spawnamount", "ammorandom"}) or 0,
+			ammodeagle = ttt2net.Get({"entspawnscript", "spawnamount", "ammodeagle"}) or 0,
+			ammopistol = ttt2net.Get({"entspawnscript", "spawnamount", "ammopistol"}) or 0,
+			ammomac10 = ttt2net.Get({"entspawnscript", "spawnamount", "ammomac10"}) or 0,
+			ammorifle = ttt2net.Get({"entspawnscript", "spawnamount", "ammorifle"}) or 0,
+			ammoshotgun = ttt2net.Get({"entspawnscript", "spawnamount", "ammoshotgun"}) or 0,
+			playerrandom = ttt2net.Get({"entspawnscript", "spawnamount", "playerrandom"}) or 0
 		}
 	})
 
