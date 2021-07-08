@@ -598,12 +598,13 @@ function plymeta:ShouldSpawn()
 end
 
 ---
--- Preps a player for a new round, spawning them if they should
--- @param boolean dead_only If dead_only is
--- true, only spawns if player is dead, else just makes sure he is healed.
--- @return boolean
+-- Preps a player for a new round, spawning them if they should.
+-- @param boolean deadOnly If deadOnly is true, only spawns if player is dead, else just makes sure he is healed
+-- @param[opt] Vector pos The position of the player
+-- @param[opt] Angle ang The angles of the player
+-- @return boolean Returns true if player is spawned
 -- @realm server
-function plymeta:SpawnForRound(dead_only)
+function plymeta:SpawnForRound(deadOnly, pos, ang)
 	---
 	-- @realm server
 	hook.Run("PlayerSetModel", self)
@@ -614,7 +615,7 @@ function plymeta:SpawnForRound(dead_only)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
 	-- (and will therefore be "alive")
-	if dead_only and self:Alive() and not self:IsSpec() then
+	if deadOnly and self:Alive() and not self:IsSpec() then
 		-- if the player does not need respawn, make sure he has full health
 		self:SetHealth(self:GetMaxHealth())
 
@@ -636,6 +637,14 @@ function plymeta:SpawnForRound(dead_only)
 	self:StripAll()
 	self:SetTeam(TEAM_TERROR)
 	self:Spawn()
+
+	if pos then
+		self:SetPos(pos)
+	end
+
+	if ang then
+		self:SetAngles(ang)
+	end
 
 	-- tell caller that we spawned
 	return true
@@ -840,13 +849,13 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			end
 
 			spawnPos = spawnPos or self:GetDeathPosition()
-			spawnPos = spawn.MakeSpawnPointSafe(self, spawnPos)
+			spawnPos = plyspawn.MakeSpawnPointSafe(self, spawnPos)
 
 			if not spawnPos then
-				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(self)
+				local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-				spawnPos = spawnEntity:GetPos()
-				spawnEyeAngle = spawnEntity:EyeAngles()
+				spawnPos = spawnPoint.pos
+				spawnEyeAngle = spawnPoint.ang
 			end
 
 			self:SetPos(spawnPos)
@@ -1422,8 +1431,53 @@ local function SetPlayerReady(_, ply)
 	-- Send full state update to client
 	ttt2net.SendFullStateUpdate(ply)
 
+	entspawnscript.TransmitToPlayer(ply)
+
 	---
 	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
+
+function plymeta:CacheAndStripWeapons()
+	local cachedWeaponInventory = {}
+
+	local weps = self:GetWeapons()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+
+		cachedWeaponInventory[#cachedWeaponInventory + 1] = {
+			cls = WEPS.GetClass(wep),
+			clip1 = wep:Clip1(),
+			clip2 = wep:Clip2()
+		}
+	end
+
+	self.cachedWeaponInventory = cachedWeaponInventory
+	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
+
+	self:StripWeapons()
+end
+
+function plymeta:RestoreCachedWeapons()
+	if not self.cachedWeaponInventory then return end
+
+	for i = 1, #self.cachedWeaponInventory do
+		local wep = self.cachedWeaponInventory[i]
+
+		local givenWep = self:Give(wep.cls)
+
+		if not IsValid(givenWep) then continue end
+
+		givenWep:SetClip1(wep.clip1 or 0)
+		givenWep:SetClip2(wep.clip2 or 0)
+	end
+
+	if not self.cachedWeaponSelected then return end
+
+	self:SelectWeapon(self.cachedWeaponSelected)
+
+	self.cachedWeaponInventory = nil
+	self.cachedWeaponSelected = nil
+end
