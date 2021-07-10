@@ -182,6 +182,7 @@ local function IdentifyCorpse(pCorpse)
 			SendConfirmedTraitors(GetInnocentFilter(false))
 		end
 		]]--
+
 		SendFullStateUpdate()
 	else
 		local sSteamID = pCorpse.sid64
@@ -199,6 +200,7 @@ local function IdentifyCorpse(pCorpse)
 					SendConfirmedTraitors(GetInnocentFilter(false))
 				end
 				]]--
+
 				SendFullStateUpdate()
 			end
 		end
@@ -223,6 +225,7 @@ local function IdentifyCorpse(pCorpse)
 
 	if cv_ttt2_confirm_killlist:GetBool() then
 		local tKills = pCorpse.kills
+
 		if tKills then
 			for i = 1, #tKills do
 				local pVictim = player.GetBySteamID64(tKills[i])

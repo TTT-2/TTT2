@@ -43,17 +43,10 @@ function GM:PlayerInitialSpawn(ply)
 
 	local rstate = GetRoundState() or ROUND_WAIT
 
-	-- We should update the traitor list, if we are not about to send it
-	-- sending roles for spectators
-	if rstate <= ROUND_PREP then
-		SendFullStateUpdate() -- TODO needed?
-	end
-
 	-- Game has started, tell this guy (spec) where the round is at
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
-
-		timer.Simple(1, SendFullStateUpdate)
+		SendFullStateUpdate()
 	end
 
 	-- Handle spec bots
@@ -513,20 +506,17 @@ concommand.Add("ttt_spec_use", SpecUseKey)
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerDisconnected
 -- @local
 function GM:PlayerDisconnected(ply)
-	if IsValid(ply) then
-		-- Kill the player when necessary
-		if ply:IsTerror() and ply:Alive() then
-			ply:Kill()
-		end
+	if not IsValid(ply) then return end
 
-		-- TODO ?
-		-- Prevent the disconnected player from being in the resends
-		ply:SetRole(ROLE_NONE)
+	-- Kill the player when necessary
+	if ply:IsTerror() and ply:Alive() then
+		ply:Kill()
 	end
 
-	if GetRoundState() ~= ROUND_PREP then
-		TTT2NETTABLE[ply] = nil
+	-- Prevent the disconnected player from being in the resends
+	ply:SetRole(ROLE_NONE, TEAM_NONE)
 
+	if GetRoundState() >= ROUND_ACTIVE then
 		SendFullStateUpdate()
 	end
 

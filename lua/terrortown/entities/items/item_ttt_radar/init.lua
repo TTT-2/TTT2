@@ -151,11 +151,11 @@ local function GetDataForRadar(ply, ent)
 		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
 		if not subrole then
-			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
+			subrole = ply:TTT2NETGetUInt("subrole", ROLE_INNOCENT, ent)
 		end
 
 		if not team then
-			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
+			team = ply:TTT2NETGetUInt("team", TEAM_INNOCENT, ent)
 		end
 	end
 

@@ -28,3 +28,12 @@ function ROLE:PreInitialize()
 		traitorButton = 1
 	}
 end
+
+hook.Add("TTT2SpecialRoleSyncing", "TTT2TraitorSync", function(ply, target)
+	if target:GetTeam() ~= TEAM_TRAITOR || ply:GetTeam() ~= TEAM_TRAITOR then return end
+
+	ply:TTT2NETSetUInt("subrole", ROLE_TRAITOR, ROLE_BITS, target)
+	ply:TTT2NETSetString("team", TEAM_TRAITOR, target)
+
+	return true
+end)
