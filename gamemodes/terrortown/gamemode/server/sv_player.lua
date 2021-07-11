@@ -362,7 +362,10 @@ function GM:KeyPress(ply, key)
 	if not ply:IsSpec() or ply:GetRagdollSpec() then return end
 
 	-- Do not allow the spectator to gather information if they're about to revive.
-	if ply:IsReviving() then return end
+	if ply:IsReviving() then
+		LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
+		return
+	end
 
 	if ply.propspec then
 		return PROPSPEC.Key(ply, key)
@@ -488,7 +491,10 @@ local function SpecUseKey(ply, cmd, arg)
 	if not IsValid(ply) or not ply:IsSpec() then return end
 
 	-- Do not allow the spectator to gather information if they're about to revive.
-	if ply:IsReviving() then return end
+	if ply:IsReviving() then
+		LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
+		return
+	end
 
 	-- longer range than normal use
 	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 128, ply)
