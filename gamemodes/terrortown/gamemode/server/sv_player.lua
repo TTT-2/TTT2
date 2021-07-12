@@ -364,6 +364,7 @@ function GM:KeyPress(ply, key)
 	-- Do not allow the spectator to gather information if they're about to revive.
 	if ply:IsReviving() then
 		LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
+
 		return
 	end
 
@@ -493,6 +494,7 @@ local function SpecUseKey(ply, cmd, arg)
 	-- Do not allow the spectator to gather information if they're about to revive.
 	if ply:IsReviving() then
 		LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
+
 		return
 	end
 
