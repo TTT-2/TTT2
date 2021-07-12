@@ -1408,3 +1408,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 
 -- 2021-06-25
 --L.searchbar_default_placeholder = "Search in list..."
+
+-- 2021-07-11
+--L.spec_about_to_revive = "Spectating is limited during revival period."

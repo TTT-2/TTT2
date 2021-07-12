@@ -1408,3 +1408,6 @@ L.xfer_team_indicator = "Team"
 
 -- 2021-06-25
 L.searchbar_default_placeholder = "Durchsuche Liste..."
+
+-- 2021-07-11
+--L.spec_about_to_revive = "Spectating is limited during revival period."
