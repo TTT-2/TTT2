@@ -1453,23 +1453,23 @@ L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode
 L.help_spawn_editor_spawn_amount = [[
 There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount.
 
-{weaponrandom}x random weapon spawn
-{weaponmelee}x melee weapon spawn
-{weaponnade}x grenade weapon spawn
-{weaponshotgun}x shotgun weapon spawn
-{weaponheavy}x heavy weapon spawn
-{weaponsniper}x sniper weapon spawn
-{weaponpistol}x pistol weapon spawn
-{weaponspecial}x special weapon spawn
+{weaponrandom}x Random weapon spawn
+{weaponmelee}x Melee weapon spawn
+{weaponnade}x Grenade weapon spawn
+{weaponshotgun}x Shotgun weapon spawn
+{weaponheavy}x Heavy weapon spawn
+{weaponsniper}x Sniper weapon spawn
+{weaponpistol}x Pistol weapon spawn
+{weaponspecial}x Special weapon spawn
 
-{ammorandom}x random ammo spawn
+{ammorandom}x Random ammo spawn
 {ammodeagle}x Deagle ammo spawn
-{ammopistol}x pistol ammo spawn
+{ammopistol}x Pistol ammo spawn
 {ammomac10}x Mac10 ammo spawn
-{ammorifle}x rifle ammo spawn
-{ammoshotgun}x shotgun ammo spawn
+{ammorifle}x Rifle ammo spawn
+{ammoshotgun}x Shotgun ammo spawn
 
-{playerrandom}x random player spawn]]
+{playerrandom}x Random player spawn]]
 
 L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
 
