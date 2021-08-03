@@ -60,7 +60,7 @@ EquipmentItems = EquipmentItems or setmetatable(
 -- @param string name The classname this equipment shall have
 -- @param table eq Equipment, that you add the KeyValues to
 -- @internal
--- @real shared
+-- @realm shared
 function AddStandardKeyValues(eq, name)
 	local data = eq.EquipMenuData or {}
 
