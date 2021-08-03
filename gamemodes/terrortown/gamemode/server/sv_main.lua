@@ -461,21 +461,6 @@ function GM:InitPostEntity()
 		-- Insert data into role fallback tables
 		InitDefaultEquipment(eq)
 
-		/*ShopEditor.InitDefaultData(eq)
-
-		if isSqlTableCreated then
-			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
-
-			if not loaded then
-				sql.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
-			end
-		end
-
-		CreateEquipment(eq) -- init weapons*/
-
 		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 

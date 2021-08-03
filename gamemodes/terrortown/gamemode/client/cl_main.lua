@@ -259,9 +259,6 @@ function GM:InitPostEntity()
 		-- Insert data into role fallback tables
 		InitDefaultEquipment(eq)
 
-		/*ShopEditor.InitDefaultData(eq) -- init normal weapons equipment
-		CreateEquipment(eq) -- init weapons*/
-
 		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 

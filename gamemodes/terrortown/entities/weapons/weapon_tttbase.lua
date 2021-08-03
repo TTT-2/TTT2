@@ -85,8 +85,9 @@ SWEP.AllowDrop = true
 -- Set to true if weapon kills silently (no death scream)
 SWEP.IsSilent = false
 
--- Set Keys like {"HeadshotMultiplier","Weight"} if you want the data to be persistent after hotreloads
+-- Set Keys like { "HeadshotMultiplier", "Weight", { "Primary", "Recoil" }, { "Secondary", "Ammo" } } if you want the data to be persistent after hotreloads
 -- Empty it before a hotreload to reset data after a hotreload, otherwise this data keep persisting until you do a map reload or restart your server
+-- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
 SWEP.HotReloadableKeys = {}
 
 -- If this weapon should be given to players upon spawning, set a table of the
