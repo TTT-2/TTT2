@@ -55,6 +55,12 @@ EquipmentItems = EquipmentItems or setmetatable(
 	}
 )
 
+---
+-- Adds all needed parameters for TTT2
+-- @param string name The classname this equipment shall have
+-- @param table eq Equipment, that you add the KeyValues to
+-- @internal
+-- @real shared
 function AddStandardKeyValues(eq, name)
 	local data = eq.EquipMenuData or {}
 
@@ -818,6 +824,8 @@ end
 
 ---
 -- Initializes the default equipment for a role
+-- @param roleData roleData Role you initialize for
+-- @param table eq Equipment you initialize
 -- @internal
 -- @realm shared
 local function InitDefaultEquipmentForRole(roleData, eq)
@@ -844,6 +852,10 @@ end
 -- A table with structure tbl[key] = value is turned into tbl[value] = value by this function.
 -- This allows you to easily access the table using the value as an index.
 -- @warning This function is destructive! If you want to preserve the table, you have to copy it first.
+-- @param table tbl Table you want values transformed to keys
+-- @internal
+-- @realm shared
+-- @local
 local function ValueToKey(tbl)
 	local tmp = tmp or {}
 
@@ -858,11 +870,13 @@ local function ValueToKey(tbl)
 end
 
 ---
--- Cleans up the structure of the CanBuy table of all weapons and items.
+-- Cleans up the structure of the CanBuy table of the given equipment.
 -- After calling this, all keys will be equal to their value. This allows access in O(1) rather than O(n).
 -- table.HasValue is still supported, but please just check if the key is not nil instead.
+-- @param table eq Equipment you clean the buy indices from
 -- @internal
 -- @realm shared
+-- @local
 local function CleanUpDefaultCanBuyIndices(eq)
 	eq.CanBuy = eq.CanBuy or {}
 
@@ -871,6 +885,7 @@ end
 
 ---
 -- Initializes the default equipment for traitors and detectives
+-- @param table eq Equipment you initialize
 -- @internal
 -- @realm shared
 function InitDefaultEquipment(eq)
@@ -881,6 +896,8 @@ end
 
 ---
 -- Resets the default equipment for a role
+-- @param roleData roleData Role you reset for
+-- @param table eq Equipment you reset
 -- @internal
 -- @realm shared
 local function ResetDefaultEquipmentForRole(roleData, eq)
@@ -901,6 +918,7 @@ local function ResetDefaultEquipmentForRole(roleData, eq)
 		for i = 1, tblSize do
 			if tbl[i].id == base.id then
 				tableHasValue = true
+
 				break
 			end
 		end
@@ -912,9 +930,7 @@ local function ResetDefaultEquipmentForRole(roleData, eq)
 		local counter = 0
 
 		for i = 1, tblSize do
-			if tbl[i].id == base.id then
-				continue
-			end
+			if tbl[i].id == base.id then continue end
 
 			counter = counter + 1
 			tbl[counter] = tbl[i]
@@ -940,6 +956,7 @@ end
 ---
 -- Resets the default equipment for traitors and detectives
 -- After a hotreload this is necessary for example in case the default values changed
+-- @param table eq Equipment you initialize
 -- @internal
 -- @realm shared
 function ResetDefaultEquipment(eq)

@@ -1104,6 +1104,10 @@ function GM:OnContextMenuOpen()
 	end
 end
 
+---
+-- Caches the material or model
+-- @param table item
+-- @realm client
 function TTT2CacheEquipMaterials(item)
 	--if there is no material or model, the item should probably not be available in the shop
 	if item.material and item.material ~= "vgui/ttt/icon_id" then

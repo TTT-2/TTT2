@@ -51,6 +51,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 				for _, key in pairs(keys) do
 					if not isstring(key) or not oldKeyField then
 						continueOuterLoop = true
+
 						break
 					end
 
@@ -65,6 +66,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 						eqKeyField[key] = {}
 					elseif counter == #keys then
 						saveKey = key
+
 						break
 					end
 
@@ -83,32 +85,28 @@ local function TTT2PreRegisterSWEP(equipment, name)
 	end
 
 	if SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
-		if name == "weapon_ttt_demonicsheep" then print("3") end
 		local loaded, changed = sql.Load("ttt2_items", name, equipment, ShopEditor.savingKeys)
 
 		if not loaded then
-			if name == "weapon_ttt_demonicsheep" then print("4") end
 			sql.Init("ttt2_items", name, equipment, ShopEditor.savingKeys)
 		elseif changed then
-			if name == "weapon_ttt_demonicsheep" then print("5") end
 			local counter = #CHANGED_EQUIPMENT + 1
 
 			if isShopFallbackInitialized then
-				if name == "weapon_ttt_demonicsheep" then print("6") end
 				for i = 1, #CHANGED_EQUIPMENT do
 					if CHANGED_EQUIPMENT[i][1] == name then
 						counter = i
+
 						break
 					end
 				end
 			end
+
 			CHANGED_EQUIPMENT[counter] = {name, equipment}
 		end
 	end
 
 	if not isShopFallbackInitialized then return end
-
-	if name == "weapon_ttt_demonicsheep" then print("7") end
 
 	-- initialize fallback shops
 	InitFallbackShops()
