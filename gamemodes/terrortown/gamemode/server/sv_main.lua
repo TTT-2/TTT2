@@ -270,7 +270,7 @@ fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function
 	MsgN("Added TTT2 server autorun file: ", path)
 end)
 
-CHANGED_EQUIPMENT = {}
+CHANGED_EQUIPMENT = CHANGED_EQUIPMENT or {}
 
 ---
 -- Called after the gamemode loads and starts.
@@ -425,18 +425,17 @@ function GM:InitPostEntity()
 	-- load all HUD elements
 	hudelements.OnLoaded()
 
-	InitDefaultEquipment()
-
 	local itms = items.GetList()
-	local sweps = weapons.GetList()
 
-	-- load and initialize all SWEPs and all ITEMs from database
-	if sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
-		for i = 1, #itms do
-			local eq = itms[i]
+	local isSqlTableCreated = sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
 
-			ShopEditor.InitDefaultData(eq)
+	for i = 1, #itms do
+		local eq = itms[i]
 
+		InitDefaultEquipment(eq)
+		ShopEditor.InitDefaultData(eq)
+
+		if isSqlTableCreated then
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
 			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
@@ -447,38 +446,37 @@ function GM:InitPostEntity()
 			end
 		end
 
-		for i = 1, #sweps do
-			local wep = sweps[i]
+		CreateEquipment(eq) -- init items
 
-			ShopEditor.InitDefaultData(wep)
+		eq.CanBuy = {} -- reset normal items equipment
 
-			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = sql.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
-
-			if not loaded then
-				sql.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
-			end
-		end
+		eq:Initialize()
 	end
 
-	for i = 1, #itms do
-		local itm = itms[i]
-
-		CreateEquipment(itm) -- init items
-
-		itm.CanBuy = {} -- reset normal items equipment
-
-		itm:Initialize()
-	end
+	local sweps = weapons.GetList()
 
 	for i = 1, #sweps do
-		local wep = sweps[i]
+		local eq = sweps[i]
 
-		CreateEquipment(wep) -- init weapons
+		-- Insert data into role fallback tables
+		InitDefaultEquipment(eq)
 
-		wep.CanBuy = {} -- reset normal weapons equipment
+		/*ShopEditor.InitDefaultData(eq)
+
+		if isSqlTableCreated then
+			local name = GetEquipmentFileName(WEPS.GetClass(eq))
+			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
+
+			if not loaded then
+				sql.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
+			elseif changed then
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
+			end
+		end
+
+		CreateEquipment(eq) -- init weapons*/
+
+		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	-- init hudelements fns
@@ -522,6 +520,7 @@ function GM:InitPostEntity()
 	LoadShopsEquipment()
 
 	MsgN("[TTT2][INFO] Shops initialized...")
+	isShopFallbackInitialized = true
 
 	WEPS.ForcePrecache()
 

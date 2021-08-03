@@ -234,32 +234,35 @@ function GM:InitPostEntity()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
-	InitDefaultEquipment()
 
 	local itms = items.GetList()
 
 	-- load items
 	for i = 1, #itms do
-		local itm = itms[i]
+		local eq = itms[i]
 
-		ShopEditor.InitDefaultData(itm) -- initialize the default data
-		CreateEquipment(itm) -- init items
+		InitDefaultEquipment(eq)
+		ShopEditor.InitDefaultData(eq) -- initialize the default data
+		CreateEquipment(eq) -- init items
 
-		itm.CanBuy = {} -- reset normal items equipment
+		eq.CanBuy = {} -- reset normal items equipment
 
-		itm:Initialize()
+		eq:Initialize()
 	end
 
 	local sweps = weapons.GetList()
 
 	-- load sweps
 	for i = 1, #sweps do
-		local wep = sweps[i]
+		local eq = sweps[i]
 
-		ShopEditor.InitDefaultData(wep) -- init normal weapons equipment
-		CreateEquipment(wep) -- init weapons
+		-- Insert data into role fallback tables
+		InitDefaultEquipment(eq)
 
-		wep.CanBuy = {} -- reset normal weapons equipment
+		/*ShopEditor.InitDefaultData(eq) -- init normal weapons equipment
+		CreateEquipment(eq) -- init weapons*/
+
+		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	local roleList = roles.GetList()
@@ -286,6 +289,7 @@ function GM:InitPostEntity()
 
 	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
+	isShopFallbackInitialized = true
 
 	net.Start("TTT_Spectate")
 	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())

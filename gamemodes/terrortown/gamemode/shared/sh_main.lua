@@ -10,6 +10,137 @@ local MAX_DROWN_TIME = 8
 
 local sneakSpeedSquared = math.pow(150, 2)
 
+isShopFallbackInitialized = false
+
+---
+-- Initializes the equipment with necessary data for ttt2
+-- @internal
+-- @realm shared
+local function TTT2PreRegisterSWEP(equipment, name)
+	if isShopFallbackInitialized then
+		MsgN("[TTT2] Trying to hotreload ",  name, " .")
+	end
+
+	-- Initialize Equipment
+	AddStandardKeyValues(equipment, name)
+	ShopEditor.InitDefaultData(equipment)
+
+	if isShopFallbackInitialized then
+		local oldSWEP = weapons.GetStored(name)
+
+		-- Keep custom changed data from the old SWEP if hotReloadableKeys are given
+		if #equipment.HotReloadableKeys > 0 and oldSWEP then
+			MsgN("[TTT2] Hotreloading ",  #equipment.HotReloadableKeys, " given Keys from old SWEP-file.")
+
+			for _, keys in pairs(equipment.HotReloadableKeys) do
+				local eqKeyField = equipment
+				local oldKeyField = oldSWEP
+				local keyString = ""
+
+				-- If only a single key is given, not a table, convert it
+				if isstring(keys) then
+					keys = {keys}
+				end
+
+				if not istable(keys) then continue end
+
+				local continueOuterLoop = false
+				local counter = 0
+				local saveKey = keys[1]
+
+				for _, key in pairs(keys) do
+					if not isstring(key) or not oldKeyField then
+						continueOuterLoop = true
+						break
+					end
+
+
+					keyString = keyString .. "." .. key
+					counter = counter + 1
+					eqKeyField[key] = eqKeyField[key] or {}
+					oldKeyField = oldKeyField[key]
+
+					-- To keep eqKeyField as reference check for tables or create one
+					if counter < #keys and not istable(eqKeyField[key]) then
+						eqKeyField[key] = {}
+					elseif counter == #keys then
+						saveKey = key
+						break
+					end
+
+					eqKeyField = eqKeyField[key]
+				end
+
+				if continueOuterLoop then continue end
+
+				MsgN("[TTT2] Overwriting SWEP",  keyString, " = ", tostring(eqKeyField[saveKey]), " with ", tostring(oldKeyField))
+
+				eqKeyField[saveKey] = oldKeyField
+			end
+		end
+
+		ResetDefaultEquipment(equipment)
+	end
+
+	if SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
+		if name == "weapon_ttt_demonicsheep" then print("3") end
+		local loaded, changed = sql.Load("ttt2_items", name, equipment, ShopEditor.savingKeys)
+
+		if not loaded then
+			if name == "weapon_ttt_demonicsheep" then print("4") end
+			sql.Init("ttt2_items", name, equipment, ShopEditor.savingKeys)
+		elseif changed then
+			if name == "weapon_ttt_demonicsheep" then print("5") end
+			local counter = #CHANGED_EQUIPMENT + 1
+
+			if isShopFallbackInitialized then
+				if name == "weapon_ttt_demonicsheep" then print("6") end
+				for i = 1, #CHANGED_EQUIPMENT do
+					if CHANGED_EQUIPMENT[i][1] == name then
+						counter = i
+						break
+					end
+				end
+			end
+			CHANGED_EQUIPMENT[counter] = {name, equipment}
+		end
+	end
+
+	if not isShopFallbackInitialized then return end
+
+	if name == "weapon_ttt_demonicsheep" then print("7") end
+
+	-- initialize fallback shops
+	InitFallbackShops()
+
+	if SERVER then
+		LoadShopsEquipment()
+
+		-- Force Precache Models
+		if equipment.WorldModel then
+			util.PrecacheModel(equipment.WorldModel)
+		end
+
+		if equipment.ViewModel then
+			util.PrecacheModel(equipment.ViewModel)
+		end
+	elseif CLIENT then
+		TTT2CacheEquipMaterials(equipment)
+		net.Start("TTT2SyncShopsWithServer")
+		net.SendToServer()
+	end
+
+	MsgN("[TTT2] Hotreloading ", name, " was successful.")
+
+	return
+end
+
+---
+-- Runs before registering a weapon via the weapons module
+-- Also runs, when a SWEP-file is hotreloaded
+-- @realm shared
+hook.Add("PreRegisterSWEP", "TTT2PreRegisterSWEP", TTT2PreRegisterSWEP)
+
 ---
 -- Initializes TTT2
 -- @hook
