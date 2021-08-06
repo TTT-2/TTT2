@@ -58,10 +58,10 @@ EquipmentItems = EquipmentItems or setmetatable(
 ---
 -- Adds all needed parameters for TTT2
 -- @param string name The classname this equipment shall have
--- @param table eq Equipment, that you add the KeyValues to
+-- @param table eq Equipment, that you add the keyvalues to
 -- @internal
 -- @realm shared
-function AddStandardKeyValues(eq, name)
+function AddEquipmentKeyValues(eq, name)
 	local data = eq.EquipMenuData or {}
 
 	local tbl = {
@@ -112,7 +112,7 @@ function GetEquipmentBase(eq)
 		return
 	end
 
-	AddStandardKeyValues(eq, name)
+	AddEquipmentKeyValues(eq, name)
 
 	return eq
 end

@@ -22,7 +22,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 	end
 
 	-- Initialize Equipment
-	AddStandardKeyValues(equipment, name)
+	AddEquipmentKeyValues(equipment, name)
 	ShopEditor.InitDefaultData(equipment)
 
 	if isShopFallbackInitialized then
