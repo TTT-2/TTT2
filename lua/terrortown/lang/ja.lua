@@ -1412,4 +1412,3 @@ L.searchbar_default_placeholder = "検索中..."
 
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
-
