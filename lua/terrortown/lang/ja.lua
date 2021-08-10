@@ -1409,3 +1409,7 @@ L.xfer_team_indicator = "陣営"
 
 -- 2021-06-25
 L.searchbar_default_placeholder = "検索中..."
+
+-- 2021-07-11
+--L.spec_about_to_revive = "Spectating is limited during revival period."
+

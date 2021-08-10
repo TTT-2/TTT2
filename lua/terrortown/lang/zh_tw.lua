@@ -1417,3 +1417,6 @@ L.xfer_team_indicator = "陣營"
 
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
+
+-- 2021-07-11
+--L.spec_about_to_revive = "Spectating is limited during revival period."
