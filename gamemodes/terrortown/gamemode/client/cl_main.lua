@@ -286,7 +286,7 @@ function GM:InitPostEntity()
 
 	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
-	isShopFallbackInitialized = true
+	TTT2ShopFallbackInitialized = true
 
 	net.Start("TTT_Spectate")
 	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())

@@ -505,7 +505,7 @@ function GM:InitPostEntity()
 	LoadShopsEquipment()
 
 	MsgN("[TTT2][INFO] Shops initialized...")
-	isShopFallbackInitialized = true
+	TTT2ShopFallbackInitialized = true
 
 	WEPS.ForcePrecache()
 

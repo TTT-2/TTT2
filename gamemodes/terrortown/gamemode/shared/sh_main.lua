@@ -10,14 +10,14 @@ local MAX_DROWN_TIME = 8
 
 local sneakSpeedSquared = math.pow(150, 2)
 
-isShopFallbackInitialized = false
+TTT2ShopFallbackInitialized = false
 
 ---
 -- Initializes the equipment with necessary data for ttt2
 -- @internal
 -- @realm shared
 local function TTT2PreRegisterSWEP(equipment, name)
-	if isShopFallbackInitialized then
+	if TTT2ShopFallbackInitialized then
 		MsgN("[TTT2] Trying to hotreload ",  name, " .")
 	end
 
@@ -25,7 +25,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 	AddEquipmentKeyValues(equipment, name)
 	ShopEditor.InitDefaultData(equipment)
 
-	if isShopFallbackInitialized then
+	if TTT2ShopFallbackInitialized then
 		local oldSWEP = weapons.GetStored(name)
 
 		-- Keep custom changed data from the old SWEP if hotReloadableKeys are given
@@ -92,7 +92,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 		elseif changed then
 			local counter = #CHANGED_EQUIPMENT + 1
 
-			if isShopFallbackInitialized then
+			if TTT2ShopFallbackInitialized then
 				for i = 1, #CHANGED_EQUIPMENT do
 					if CHANGED_EQUIPMENT[i][1] == name then
 						counter = i
@@ -106,7 +106,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 		end
 	end
 
-	if not isShopFallbackInitialized then return end
+	if not TTT2ShopFallbackInitialized then return end
 
 	-- initialize fallback shops
 	InitFallbackShops()
