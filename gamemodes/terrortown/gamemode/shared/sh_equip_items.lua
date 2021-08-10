@@ -937,7 +937,7 @@ local function ResetDefaultEquipmentForRole(roleData, eq)
 
 			if counter == i then continue end
 
-			-- Replace skipped equipments with higher indeces
+			-- Replace skipped equipments with higher indices
 			tbl[counter] = tbl[i]
 		end
 
