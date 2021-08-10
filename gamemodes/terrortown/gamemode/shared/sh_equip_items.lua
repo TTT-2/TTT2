@@ -930,17 +930,23 @@ local function ResetDefaultEquipmentForRole(roleData, eq)
 		local counter = 0
 
 		for i = 1, tblSize do
+			-- Skip the equipment that should be removed
 			if tbl[i].id == base.id then continue end
 
 			counter = counter + 1
+
+			if counter == i then continue end
+
+			-- Replace skipped equipments with higher indeces
 			tbl[counter] = tbl[i]
 		end
 
 		local diff = tblSize - counter
 
+		-- Remove last table entries
 		if diff > 0 then
-			for i = 1, diff do
-				table.remove(tbl)
+			for i = 0, diff - 1 do
+				table.remove(tbl, tblSize - i)
 			end
 		end
 	end
