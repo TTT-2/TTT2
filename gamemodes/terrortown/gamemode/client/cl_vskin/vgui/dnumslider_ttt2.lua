@@ -146,6 +146,8 @@ function PANEL:SetValue(val)
 
 	if self.conVar then
 		self.conVar:SetFloat(self.m_fValue)
+	elseif self.serverConVar then
+		cvars.ChangeServerConVar(self.serverConVar.name, val)
 	end
 end
 
@@ -193,9 +195,26 @@ end
 function PANEL:SetConVar(cvar)
 	if not cvar or cvar == "" then return end
 
-	self.conVar = GetConVar(cvar)
+	if isstring(cvar) then
+		self.conVar = GetConVar(cvar)
 
-	self:SetValue(self.conVar:GetFloat())
+		self:SetValue(self.conVar:GetFloat())
+		return
+	end
+
+	if not istable(cvar) then return end
+
+	self.serverConVar = cvar
+
+	cvars.RegisterServerConVar(cvar.name, cvar.type or "float", cvar.bitCount)
+
+	local function OnReceiveFunc(wasSuccess, value)
+		if wasSuccess and value then
+			self:SetValue(value)
+		end
+	end
+
+	cvars.ServerConVarGetValue(cvar.name, OnReceiveFunc, cvar.type or "float", cvar.bitCount)
 end
 
 ---

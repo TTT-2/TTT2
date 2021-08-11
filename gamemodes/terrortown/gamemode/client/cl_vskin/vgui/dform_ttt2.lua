@@ -195,7 +195,9 @@ function PANEL:MakeSlider(data)
 	right:SetConVar(data.convar)
 	right:SizeToContents()
 
-	right:SetValue(data.initial)
+	if not data.convar and data.initial then
+		right:SetValue(data.initial)
+	end
 
 	right.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then
