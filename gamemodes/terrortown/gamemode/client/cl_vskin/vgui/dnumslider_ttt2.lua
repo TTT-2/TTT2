@@ -148,7 +148,9 @@ function PANEL:SetValue(val, ignoreConVar)
 
 	if self.conVar then
 		self.conVar:SetFloat(self.m_fValue)
-	elseif self.serverConVar then
+	end
+
+	if self.serverConVar then
 		cvars.ChangeServerConVar(self.serverConVar.name, val)
 	end
 end
@@ -199,7 +201,7 @@ function PANEL:SetConVar(cvar)
 
 	self.conVar = GetConVar(cvar)
 
-	self:SetValue(self.conVar:GetFloat())
+	self:SetValue(self.conVar:GetFloat(), true)
 end
 
 ---
