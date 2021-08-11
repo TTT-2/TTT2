@@ -195,28 +195,30 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
-	if not cvar or cvar == "" then return end
+	if not cvar or cvar == "" or istable(cvar) then return end
 
-	if isstring(cvar) then
-		self.conVar = GetConVar(cvar)
+	self.conVar = GetConVar(cvar)
 
-		self:SetValue(self.conVar:GetFloat())
-		return
-	end
+	self:SetValue(self.conVar:GetFloat())
+end
 
-	if not istable(cvar) then return end
+---
+-- @param string cvar
+-- @realm client
+function PANEL:SetServerConVar(cvar)
+	if not cvar or not istable(cvar) or not isstring(cvar.name) then return end
 
 	self.serverConVar = cvar
 
-	cvars.RegisterServerConVar(cvar.name, cvar.type or "float", cvar.bitCount)
+	cvars.RegisterServerConVar(cvar.name, cvar.type or "string", cvar.bitCount)
 
 	local function OnReceiveFunc(wasSuccess, value)
 		if wasSuccess and value then
-			self:SetValue(value, true)
+			self:SetValue(tonumber(value), true)
 		end
 	end
 
-	cvars.ServerConVarGetValue(cvar.name, OnReceiveFunc, cvar.type or "float", cvar.bitCount)
+	cvars.ServerConVarGetValue(cvar.name, OnReceiveFunc, cvar.type or "string", cvar.bitCount)
 end
 
 ---

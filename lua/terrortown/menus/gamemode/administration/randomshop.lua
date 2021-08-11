@@ -46,7 +46,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				decimal = 0,
 				default = data.default,
 				initial = GetGlobalInt(convarName),
-				convar = {name = convarName, type = "int", bitCount = data.bits}
+				serverConvar = {name = convarName, type = "int", bitCount = data.bits}
 			})
 		end
 	end

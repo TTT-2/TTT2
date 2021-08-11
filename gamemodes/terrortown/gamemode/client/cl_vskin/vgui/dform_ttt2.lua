@@ -193,9 +193,10 @@ function PANEL:MakeSlider(data)
 	end
 
 	right:SetConVar(data.convar)
+	right:SetServerConVar(data.serverConvar)
 	right:SizeToContents()
 
-	if not data.convar and data.initial then
+	if not data.convar and not data.serverConvar and data.initial then
 		right:SetValue(data.initial)
 	end
 
