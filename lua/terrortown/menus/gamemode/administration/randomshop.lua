@@ -46,12 +46,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				decimal = 0,
 				default = data.default,
 				initial = GetGlobalInt(convarName),
-				OnChange = function(_, value)
-					net.Start("TTT2UpdateCVar")
-					net.WriteString(convarName)
-					net.WriteString(tostring(value))
-					net.SendToServer()
-				end
+				convar = {name = convarName, type = "int", bitCount = data.bits}
 			})
 		end
 	end
