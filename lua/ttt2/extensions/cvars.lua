@@ -188,7 +188,7 @@ elseif SERVER then
 		local type = net.ReadString()
 		local bitCount = net.ReadUInt(identityBitCount)
 
-		if not IsAdmin(ply) and not ConVarExists(conVarName) then return end
+		if not IsValid(ply) or not IsAdmin(ply) or not ConVarExists(conVarName) then return end
 
 		if bitCount == 0 then
 			bitCount = nil
@@ -226,7 +226,7 @@ elseif SERVER then
 		net.Start("TTT2ChangeServerConVar")
 		net.WriteUInt(identifier, identityBitCount)
 
-		local isSuccess = IsAdmin(ply)
+		local isSuccess = IsValid(ply) and IsAdmin(ply)
 
 		net.WriteBool(isSuccess)
 		net.Send(ply)
@@ -257,7 +257,7 @@ elseif SERVER then
 		net.WriteUInt(identifier, identityBitCount)
 
 		local serverConVar = serverConVars[conVarName] or {type = type, bitCount = bitCount, conVar = GetConVar(conVarName)}
-		local isSuccess = IsAdmin(ply) and (serverConVar or additionalInfo)
+		local isSuccess = IsValid(ply) and IsAdmin(ply) and (serverConVar or additionalInfo)
 		net.WriteBool(isSuccess)
 
 		if isSuccess then
