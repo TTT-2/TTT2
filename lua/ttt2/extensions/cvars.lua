@@ -1,5 +1,5 @@
 ---
--- cvars exentsions
+-- cvars extensions
 -- @author ZenBreaker
 -- @module cvars
 
@@ -28,6 +28,38 @@ local netReader = {
 				}
 
 if CLIENT then
+	function cvars.RegisterServerConVar(conVarName, type, bitCount)
+		serverConVars[conVarName] = {type = type, bitCount = bitCount}
+
+		net.Start("TTT2RegisterConVarType")
+		net.WriteString(conVarName)
+		net.WriteString(type)
+		net.WriteUInt(bitCount or 0, identityBitCount)
+		net.SendToServer()
+	end
+
+	function cvars.ConVarExistsOnServer(conVarName, OnReceiveFunc)
+		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		functionCache[messageIdentifier] = OnReceiveFunc
+
+		net.Start("TTT2ConVarExistsOnServer")
+		net.WriteUInt(messageIdentifier, identityBitCount)
+		net.WriteString(conVarName)
+		net.SendToServer()
+	end
+
+	net.Receive("TTT2ConVarExistsOnServer", function(len)
+		if len <  1 then return end
+
+		local identifier = net.ReadUInt(identityBitCount)
+		local conVarExists = net.ReadBool()
+		local receiveFunc = functionCache[identifier]
+
+		if isfunction(receiveFunc) then
+			receiveFunc(conVarExists)
+		end
+	end)
+
 	local function ChangeServerConVar(conVarName, value, OnReceiveFunc)
 		local serverConVar = serverConVars[conVarName]
 		local netWrite = netWriter[serverConVar.type]
@@ -78,42 +110,42 @@ if CLIENT then
 			receiveFunc(wasSuccess)
 		end
 	end)
+elseif SERVER then
+	util.AddNetworkString("TTT2RegisterConVarType")
+	util.AddNetworkString("TTT2ConVarExistsOnServer")
+	util.AddNetworkString("TTT2ChangeServerConVar")
 
-	function cvars.ConVarExistsOnServer(conVarName, OnReceiveFunc)
-		messageIdentifier = (messageIdentifier + 1) % maxUInt
-		functionCache[messageIdentifier] = OnReceiveFunc
+	local function RegisterConVarType(len, ply)
+		if len < 1 then return end
 
-		net.Start("TTT2ConVarExistsOnServer")
-		net.WriteUInt(messageIdentifier, identityBitCount)
-		net.WriteString(conVarName)
-		net.SendToServer()
+		local conVarName = net.ReadString()
+		local type = net.ReadString()
+		local bitCount = net.ReadUInt(identityBitCount)
+
+		if not ply:IsAdmin() and not ConVarExists(conVarName) then return end
+
+		if bitCount == 0 then
+			bitCount = nil
+		end
+
+		serverConVars[conVarName] = {type = type, bitCount = bitCount}
 	end
 
-	net.Receive("TTT2ConVarExistsOnServer", function(len)
-		if len <  1 then return end
+	net.Receive("TTT2RegisterConVarType", RegisterConVarType)
+
+	local function ReceiveConVarExistsRequest(len, ply)
+		if len < 1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
-		local conVarExists = net.ReadBool()
-		local receiveFunc = functionCache[identifier]
+		local conVarName = net.ReadString()
 
-		if isfunction(receiveFunc) then
-			receiveFunc(conVarExists)
-		end
-	end)
-
-	function cvars.RegisterServerConVar(conVarName, type, bitCount)
-		serverConVars[conVarName] = {type = type, bitCount = bitCount}
-
-		net.Start("TTT2RegisterConVarType")
-		net.WriteString(conVarName)
-		net.WriteString(type)
-		net.WriteUInt(bitCount or 0, identityBitCount)
-		net.SendToServer()
+		net.Start("TTT2ConVarExistsOnServer")
+		net.WriteUInt(identifier, identityBitCount)
+		net.WriteBool(ConVarExists(conVarName))
+		net.Send(ply)
 	end
-elseif SERVER then
-	util.AddNetworkString("TTT2ChangeServerConVar")
-	util.AddNetworkString("TTT2ConVarExistsOnServer")
-	util.AddNetworkString("TTT2RegisterConVarType")
+
+	net.Receive("TTT2ConVarExistsOnServer", ReceiveConVarExistsRequest)
 
 	local function ReceiveChangeServerConVar(len, ply)
 		if len < 1 then return end
@@ -139,36 +171,4 @@ elseif SERVER then
 	end
 
 	net.Receive("TTT2ChangeServerConVar", ReceiveChangeServerConVar)
-
-	local function ReceiveConVarExistsRequest(len, ply)
-		if len < 1 then return end
-
-		local identifier = net.ReadUInt(identityBitCount)
-		local conVarName = net.ReadString()
-
-		net.Start("TTT2ConVarExistsOnServer")
-		net.WriteUInt(identifier, identityBitCount)
-		net.WriteBool(ConVarExists(conVarName))
-		net.Send(ply)
-	end
-
-	net.Receive("TTT2ConVarExistsOnServer", ReceiveConVarExistsRequest)
-
-	local function RegisterConVarType(len, ply)
-		if len < 1 then return end
-
-		local conVarName = net.ReadString()
-		local type = net.ReadString()
-		local bitCount = net.ReadUInt(identityBitCount)
-
-		if not ply:IsAdmin() and not ConVarExists(conVarName) then return end
-
-		if bitCount == 0 then
-			bitCount = nil
-		end
-
-		serverConVars[conVarName] = {type = type, bitCount = bitCount}
-	end
-
-	net.Receive("TTT2RegisterConVarType", RegisterConVarType)
 end
