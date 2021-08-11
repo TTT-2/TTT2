@@ -15,6 +15,7 @@ local maxUInt = 2 ^ identityBitCount
 local serverConVars = {}
 local conVarNameCache = {}
 local functionCache = {}
+
 local netWriter = {
 				["int"] = net.WriteInt,
 				["float"] = net.WriteFloat,
@@ -27,18 +28,26 @@ local netReader = {
 				["bool"] = net.ReadBool,
 				["string"] = net.ReadString,
 				}
-local conVarGetValue = {
-				["int"] = ConVar.GetInt,
-				["float"] = ConVar.GetFloat,
-				["bool"] = ConVar.GetBool,
-				["string"] = ConVar.GetString,
-				}
 
--- Determine necessary rights here, either .IsAdmin or .IsSuperAdmin
-local IsAdmin = Player.IsAdmin
+local getValueNames = {
+				["int"] = "GetInt",
+				["float"] = "GetFloat",
+				["bool"] = "GetBool",
+				["string"] = "GetString",
+				}
+local function GetConVarValue(conVar, type)
+	return conVar[getValueNames[type]](conVar)
+end
+
+-- Determine necessary rights here, either "IsAdmin" or "IsSuperAdmin"
+local adminFuncName = "IsAdmin"
+local function IsAdmin (ply)
+	return ply[adminFuncName](ply)
+end
 
 if CLIENT then
 	function cvars.RegisterServerConVar(conVarName, type, bitCount)
+		print("Register Server Convar")
 		serverConVars[conVarName] = {type = type, bitCount = bitCount}
 
 		net.Start("TTT2RegisterConVarType")
@@ -49,6 +58,7 @@ if CLIENT then
 	end
 
 	function cvars.ConVarExistsOnServer(conVarName, OnReceiveFunc)
+		print("Exists Server Convar?")
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		functionCache[messageIdentifier] = OnReceiveFunc
 
@@ -59,6 +69,7 @@ if CLIENT then
 	end
 
 	net.Receive("TTT2ConVarExistsOnServer", function(len)
+		print("Receive Exists Server Convar?")
 		if len <  1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
@@ -71,10 +82,11 @@ if CLIENT then
 	end)
 
 	local function ChangeServerConVar(conVarName, value, OnReceiveFunc)
+		print("Change Server Convar")
 		local serverConVar = serverConVars[conVarName]
 		local netWrite = netWriter[serverConVar.type]
 
-		if not isfunction(netWriter) then return end
+		if not isfunction(netWrite) then return end
 
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		functionCache[messageIdentifier] = OnReceiveFunc
@@ -110,6 +122,7 @@ if CLIENT then
 	end
 
 	net.Receive("TTT2ChangeServerConVar", function(len)
+		print("Receive Change Server Convar")
 		if len <  1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
@@ -122,6 +135,7 @@ if CLIENT then
 	end)
 
 	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc, type, bitCount)
+		print("Get Value of Server Convar")
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		conVarNameCache[messageIdentifier] = conVarName
 		functionCache[messageIdentifier] = OnReceiveFunc
@@ -148,6 +162,7 @@ if CLIENT then
 	end
 
 	net.Receive("TTT2ServerConVarGetValue", function(len)
+		print("Receive Get Value of Server Convar")
 		if len <  1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
@@ -174,6 +189,7 @@ elseif SERVER then
 	util.AddNetworkString("TTT2ServerConVarGetValue")
 
 	local function RegisterConVarTypeRequest(len, ply)
+		print("Requested Register Server Convar")
 		if len < 1 then return end
 
 		local conVarName = net.ReadString()
@@ -192,6 +208,7 @@ elseif SERVER then
 	net.Receive("TTT2RegisterConVarType", RegisterConVarTypeRequest)
 
 	local function ConVarExistsRequest(len, ply)
+		print("Requested Exist Server Convar")
 		if len < 1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
@@ -206,6 +223,7 @@ elseif SERVER then
 	net.Receive("TTT2ConVarExistsOnServer", ConVarExistsRequest)
 
 	local function ChangeServerConVarRequest(len, ply)
+		print("Requested Change Server Convar")
 		if len < 1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
@@ -231,14 +249,15 @@ elseif SERVER then
 	net.Receive("TTT2ChangeServerConVar", ChangeServerConVarRequest)
 
 	local function ConVarGetValueRequest(len, ply)
+		print("Requested GetValue Server Convar")
 		if len < 1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
 		local conVarName = net.ReadString()
 		local additionalInfo = net.ReadBool()
 
-		local type
-		local bitCount
+		local type = "string"
+		local bitCount = nil
 
 		if additionalInfo then
 			type = net.ReadString()
@@ -248,17 +267,17 @@ elseif SERVER then
 		net.Start("TTT2ServerConVarGetValue")
 		net.WriteUInt(identifier, identityBitCount)
 
-		local serverConVar = serverConVars[conVarName]
+		local serverConVar = serverConVars[conVarName] or {type = type, bitCount = bitCount, conVar = GetConVar(conVarName)}
 		local isSuccess = IsAdmin(ply) and (serverConVar or additionalInfo)
 		net.WriteBool(isSuccess)
 
 		if isSuccess then
-			local conVar = serverConVar and serverConVar.conVar or {type = type, bitCount = bitCount}
-			local getValue = conVarGetValue[serverConVar.type]
+			local conVar = serverConVar.conVar
+			type = serverConVar.type or type
 
-			local netWrite = netWriter[serverConVar.type]
+			local netWrite = netWriter[type]
 
-			netWrite(getValue(conVar), serverConVar.bitCount)
+			netWrite(GetConVarValue(conVar, type), serverConVar.bitCount)
 		end
 
 		net.Send(ply)

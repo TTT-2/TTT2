@@ -132,7 +132,7 @@ end
 ---
 -- @param any val
 -- @realm client
-function PANEL:SetValue(val)
+function PANEL:SetValue(val, ignoreConVar)
 	if not val then return end
 
 	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
@@ -143,6 +143,8 @@ function PANEL:SetValue(val)
 	self.m_fValue = val
 
 	self:ValueChanged(self.m_fValue)
+
+	if ignoreConVar then return end
 
 	if self.conVar then
 		self.conVar:SetFloat(self.m_fValue)
@@ -210,7 +212,7 @@ function PANEL:SetConVar(cvar)
 
 	local function OnReceiveFunc(wasSuccess, value)
 		if wasSuccess and value then
-			self:SetValue(value)
+			self:SetValue(value, true)
 		end
 	end
 

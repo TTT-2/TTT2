@@ -210,7 +210,7 @@ function PANEL:MakeSlider(data)
 
 	local reset = MakeReset(self)
 
-	if ConVarExists(data.convar or "") or data.default ~= nil then
+	if isstring(data.convar) and ConVarExists(data.convar or "") or data.default ~= nil then
 		reset.DoClick = function(slf)
 			local default = data.default
 			if default == nil then
