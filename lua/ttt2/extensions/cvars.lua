@@ -121,7 +121,7 @@ if CLIENT then
 		end
 	end)
 
-	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
+	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc, type, bitCount)
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		conVarNameCache[messageIdentifier] = conVarName
 		functionCache[messageIdentifier] = OnReceiveFunc
@@ -129,6 +129,21 @@ if CLIENT then
 		net.Start("TTT2ServerConVarGetValue")
 		net.WriteUInt(messageIdentifier, identityBitCount)
 		net.WriteString(conVarName)
+
+		local additionalInfo = type and not (type == "int" and not bitCount)
+		net.WriteBool(additionalInfo)
+
+		local serverConVar = serverConVars[conVarName]
+		if serverConVar then
+			type = serverConVar.type
+			bitCount = serverConVar.bitCount
+		end
+
+		if additionalInfo then
+			net.WriteString(type)
+			net.WriteUInt(bitCount or 0, identityBitCount)
+		end
+
 		net.SendToServer()
 	end
 
@@ -220,16 +235,25 @@ elseif SERVER then
 
 		local identifier = net.ReadUInt(identityBitCount)
 		local conVarName = net.ReadString()
+		local additionalInfo = net.ReadBool()
+
+		local type
+		local bitCount
+
+		if additionalInfo then
+			type = net.ReadString()
+			bitCount = net.ReadUInt(identityBitCount)
+		end
 
 		net.Start("TTT2ServerConVarGetValue")
 		net.WriteUInt(identifier, identityBitCount)
 
 		local serverConVar = serverConVars[conVarName]
-		local isSuccess = IsAdmin(ply) and serverConVar
+		local isSuccess = IsAdmin(ply) and (serverConVar or additionalInfo)
 		net.WriteBool(isSuccess)
 
 		if isSuccess then
-			local conVar = serverConVar.conVar
+			local conVar = serverConVar and serverConVar.conVar or {type = type, bitCount = bitCount}
 			local getValue = conVarGetValue[serverConVar.type]
 
 			local netWrite = netWriter[serverConVar.type]
