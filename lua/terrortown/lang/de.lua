@@ -1414,3 +1414,6 @@ L.header_equipment_weapon_spawn_setup = "Equipment Erscheinungs Einstellungen"
 
 L.equipmenteditor_name_auto_spawnable = "Equipment kann zufällig erscheinen"
 L.equipmenteditor_name_spawn_type = "Erscheinungstyp"
+
+-- 2021-07-11
+--L.spec_about_to_revive = "Spectating is limited during revival period."

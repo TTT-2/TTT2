@@ -1482,3 +1482,6 @@ L.equipmenteditor_desc_auto_spawnable = [[
 The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however these settings can be changed from within this menu.
 
 Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
+
+-- 2021-07-11
+L.spec_about_to_revive = "Spectating is limited during revival period."

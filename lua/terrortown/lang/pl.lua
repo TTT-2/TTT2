@@ -1424,3 +1424,6 @@ L.none = "Brak Roli"
 
 --L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly"
 --L.equipmenteditor_name_spawn_type = "Spawn type"
+
+-- 2021-07-11
+--L.spec_about_to_revive = "Spectating is limited during revival period."
