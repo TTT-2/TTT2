@@ -21,6 +21,11 @@ local function IsAdmin (ply)
 end
 
 if CLIENT then
+	---
+	-- Checks if the conVar exists on the server or was already cached
+	-- @param string conVarName
+	-- @param function OnReceiveFunc(conVarExists) The function that gets called with the result if the conVar exists
+	-- @realm client
 	function cvars.ConVarExistsOnServer(conVarName, OnReceiveFunc)
 		if serverConVars[conVarName] then
 			OnReceiveFunc(true)
@@ -49,6 +54,12 @@ if CLIENT then
 		end
 	end)
 
+	---
+	-- Changes the conVar on the server if it exists and the user has admin rights
+	-- @param string conVarName
+	-- @param any value 
+	-- @note ConVar values are saved as strings and are therefore converted
+	-- @realm client
 	function cvars.ChangeServerConVar(conVarName, value)
 		net.Start("TTT2ChangeServerConVar")
 		net.WriteString(conVarName)
@@ -68,6 +79,11 @@ if CLIENT then
 		cvars.OnConVarChanged(conVarName, oldValue, newValue)
 	end)
 
+	---
+	-- Get the value of the conVar if it exists on the server or was already cached
+	-- @param string conVarName
+	-- @param function OnReceiveFunc(conVarExists, value) The function that gets called with the results if the conVar exists
+	-- @realm client
 	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
 		if serverConVars[conVarName] then
 			OnReceiveFunc(true, serverConVars[conVarName])
