@@ -1234,10 +1234,16 @@ local plymeta_old_Give = plymeta.Give
 -- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
 	self.forcedPickup = true
+	self.forcedGive = true
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	self.forcedPickup = false
+	timer.Simple(0, function()
+		if not IsValid(self) then return end
+
+		self.forcedPickup = false
+		self.forcedGive = false
+	end)
 
 	return wep
 end
@@ -1341,6 +1347,8 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 			LANG.Msg(self, "pickup_error_owns")
 		elseif errCode == 3 then
 			LANG.Msg(self, "pickup_error_noslot")
+		elseif errCode == 6 then
+			LANG.Msg(self, "pickup_error_inv_cached")
 		end
 
 		return
@@ -1439,6 +1447,27 @@ local function SetPlayerReady(_, ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
+---
+-- Resets the cached weapons. This is automatically done on a weapon restore,
+-- but has to be triggered manually in scnarios where the inventory is reset
+-- without triggering the restore function, e.g. @{GM:PlayerSpawn}.
+-- @realm server
+function plymeta:ResetCachedWeapons()
+	self.cachedWeaponInventory = nil
+	self.cachedWeaponSelected = nil
+end
+
+---
+-- Checks wether a player has cached weapons that can be restored.
+function plymeta:HasCachedWeapons()
+	return self.cachedWeaponInventory ~= nil
+end
+
+---
+-- Caches the weapons currently in the player inventory and removes them.
+-- These weapons can be restored at any time.
+-- @note As long as a player has cached weapons, they are unable to pick up any weapon.
+-- @realm server
 function plymeta:CacheAndStripWeapons()
 	local cachedWeaponInventory = {}
 
@@ -1460,8 +1489,12 @@ function plymeta:CacheAndStripWeapons()
 	self:StripWeapons()
 end
 
+---
+-- Restores the cached weapons if there are any cached weapons. Does nothing if
+-- no weapons are cached.
+-- @realm server
 function plymeta:RestoreCachedWeapons()
-	if not self.cachedWeaponInventory then return end
+	if not self:HasCachedWeapons() then return end
 
 	for i = 1, #self.cachedWeaponInventory do
 		local wep = self.cachedWeaponInventory[i]
@@ -1478,6 +1511,5 @@ function plymeta:RestoreCachedWeapons()
 
 	self:SelectWeapon(self.cachedWeaponSelected)
 
-	self.cachedWeaponInventory = nil
-	self.cachedWeaponSelected = nil
+	self:ResetCachedWeapons()
 end

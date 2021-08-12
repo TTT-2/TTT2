@@ -76,6 +76,12 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 		return false, 5
 	end
 
+	-- if the player has cached their inventory, weapons should not be picked up with the
+	-- exception of weapons given by the ply:Give function
+	if ply:HasCachedWeapons() and not ply.forcedGive then
+		return false, 6
+	end
+
 	-- Who knows what happens here?!
 	local tr = util.TraceEntity({
 		start = wep:GetPos(),

@@ -1483,5 +1483,7 @@ The TTT2 spawn system allows every weapon to spawn in the world. By default only
 
 Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
 
+L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
+
 -- 2021-07-11
 L.spec_about_to_revive = "Spectating is limited during revival period."

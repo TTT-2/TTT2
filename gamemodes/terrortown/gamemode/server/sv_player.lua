@@ -102,6 +102,9 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	-- reset any cached weapons
+	ply:ResetCachedWeapons()
+
 	-- stop bleeding
 	util.StopBleeding(ply)
 
