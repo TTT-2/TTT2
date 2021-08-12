@@ -13,7 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Updated Japense translation (by @westooooo)
+- Updated Japanese translation (by @westooooo)
 - Fixed text positioning in pure_skin bar (by @LukasMandok)
 - Fixed data being not persistent after hot reloading
   - HUDs are now still available
