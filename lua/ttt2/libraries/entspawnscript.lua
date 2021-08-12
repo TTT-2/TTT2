@@ -25,7 +25,6 @@ local osTime = os.time
 
 local spawnEntList = {}
 local settingsList = {}
-local editingPlayers = {}
 
 local defaultSettings = {
 	["blacklisted"] = 0
@@ -135,6 +134,7 @@ local kindToSpawnType = {
 }
 
 entspawnscript = entspawnscript or {}
+entspawnscript.editingPlayers = entspawnscript.editingPlayers or {}
 
 if SERVER then
 	---
@@ -349,14 +349,14 @@ if SERVER then
 		ply:SetNWBool("is_spawn_editing", state)
 
 		if state then
-			editingPlayers[#editingPlayers + 1] = ply
+			entspawnscript.editingPlayers[#entspawnscript.editingPlayers + 1] = ply
 
 			net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, ply)
 		else
-			for i = 1, #editingPlayers do
-				if editingPlayers[i] ~= ply then continue end
+			for i = 1, #entspawnscript.editingPlayers do
+				if entspawnscript.editingPlayers[i] ~= ply then continue end
 
-				tableRemove(editingPlayers, i)
+				tableRemove(entspawnscript.editingPlayers, i)
 
 				break
 			end
@@ -364,14 +364,14 @@ if SERVER then
 	end
 
 	function entspawnscript.GetEditingPlayers()
-		return editingPlayers
+		return entspawnscript.editingPlayers
 	end
 
 	function entspawnscript.GetReceivingPlayers(ply)
 		local recPlys = {}
 
-		for i = 1, #editingPlayers do
-			local editPly = editingPlayers[i]
+		for i = 1, #entspawnscript.editingPlayers do
+			local editPly = entspawnscript.editingPlayers[i]
 
 			if editPly == ply then continue end
 
@@ -690,7 +690,7 @@ function entspawnscript.DeleteAllSpawns()
 
 		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
 
-		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, editingPlayers)
+		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, entspawnscript.editingPlayers)
 
 		-- update amount of spawns on clients
 		entspawnscript.UpdateSpawnCountOnClients()
