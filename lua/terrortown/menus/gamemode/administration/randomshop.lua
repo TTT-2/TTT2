@@ -24,13 +24,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			form:MakeCheckBox({
 				label = name,
 				default = data.default,
-				initial = GetGlobalBool(convarName),
-				OnChange = function(_, value)
-					net.Start("TTT2UpdateCVar")
-					net.WriteString(convarName)
-					net.WriteString(value and "1" or "0")
-					net.SendToServer()
-				end
+				serverConvar = convarName
 			})
 		elseif data.typ == "number" then
 			if data.b_desc then
@@ -45,8 +39,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				max = data.max,
 				decimal = 0,
 				default = data.default,
-				initial = GetGlobalInt(convarName),
-				serverConvar = {name = convarName, type = "int", bitCount = data.bits}
+				serverConvar = convarName
 			})
 		end
 	end

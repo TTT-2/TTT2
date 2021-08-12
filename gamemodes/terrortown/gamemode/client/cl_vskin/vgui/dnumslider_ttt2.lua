@@ -131,6 +131,7 @@ end
 
 ---
 -- @param any val
+-- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(val, ignoreConVar)
 	if not val then return end
@@ -151,7 +152,7 @@ function PANEL:SetValue(val, ignoreConVar)
 	end
 
 	if self.serverConVar then
-		cvars.ChangeServerConVar(self.serverConVar.name, val)
+		cvars.ChangeServerConVar(self.serverConVar, tostring(val))
 	end
 end
 
@@ -197,7 +198,7 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
-	if not cvar or cvar == "" or istable(cvar) then return end
+	if not cvar or cvar == "" then return end
 
 	self.conVar = GetConVar(cvar)
 
@@ -208,19 +209,26 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetServerConVar(cvar)
-	if not cvar or not istable(cvar) or not isstring(cvar.name) then return end
+	if not cvar or cvar == "" then return end
 
 	self.serverConVar = cvar
 
-	cvars.RegisterServerConVar(cvar.name, cvar.type or "string", cvar.bitCount)
-
-	local function OnReceiveFunc(wasSuccess, value)
+	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
 		if wasSuccess and value then
 			self:SetValue(tonumber(value), true)
 		end
+	end)
+
+	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
+		if not IsValid(self) then
+			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+			return
+		end
+
+		self:SetValue(tonumber(newValue), true)
 	end
 
-	cvars.ServerConVarGetValue(cvar.name, OnReceiveFunc, cvar.type or "string", cvar.bitCount)
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
 end
 
 ---

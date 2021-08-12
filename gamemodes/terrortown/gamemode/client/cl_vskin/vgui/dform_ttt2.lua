@@ -132,12 +132,15 @@ function PANEL:MakeCheckBox(data)
 
 	left:SetText(data.label)
 	left:SetConVar(data.convar)
+	left:SetServerConVar(data.serverConvar)
 
 	left:SetTall(32)
 
-	left:SetValue(data.initial)
+	if not data.convar and not data.serverConvar and data.initial then
+		left:SetValue(data.initial)
+	end
 
-	left.OnChange = function(slf, value)
+	left.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then
 			data.OnChange(slf, value)
 		end
@@ -211,7 +214,7 @@ function PANEL:MakeSlider(data)
 
 	local reset = MakeReset(self)
 
-	if isstring(data.convar) and ConVarExists(data.convar or "") or data.default ~= nil then
+	if ConVarExists(data.convar or "") or data.default ~= nil then
 		reset.DoClick = function(slf)
 			local default = data.default
 			if default == nil then
