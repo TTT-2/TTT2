@@ -1408,7 +1408,7 @@ L.label_shop_linker_set = "ショップ設定"
 L.xfer_team_indicator = "陣営"
 
 -- 2021-06-25
---L.searchbar_default_placeholder = "Search in list..."
+L.searchbar_default_placeholder = "検索中..."
 
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
