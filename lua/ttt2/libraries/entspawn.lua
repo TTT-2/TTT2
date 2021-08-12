@@ -118,7 +118,7 @@ function entspawn.SpawnPlayers(deadOnly)
 		end
 	else
 		-- wave method
-		local num_spawns = #plyspawn.GetPlayerSpawnPoints()
+		local amountSpawns = #plyspawn.GetPlayerSpawnPoints()
 		local toSpawn = {}
 
 		for _, ply in RandomPairs(plys) do
@@ -131,13 +131,14 @@ function entspawn.SpawnPlayers(deadOnly)
 
 		local sfn = function()
 			local c = 0
-			-- fill the available spawnpoints with players that need
-			-- spawning
+			-- fill the available spawnpoints with players that need spawning
 
-			while c < num_spawns and #toSpawn > 0 do
+			while c < amountSpawns and #toSpawn > 0 do
 				for k = 1, #toSpawn do
 					local ply = toSpawn[k]
-					local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(ply, spawnPoint.pos, spawnPoint.ang)
+					local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(ply)
+
+					ply:SpawnForRound(deadOnly, spawnPoint.pos, spawnPoint.ang)
 
 					if IsValid(ply) and ply:SpawnForRound(deadOnly) then
 						-- a spawn ent is now occupied
@@ -152,7 +153,7 @@ function entspawn.SpawnPlayers(deadOnly)
 
 					-- all spawn ents are occupied, so the rest will have
 					-- to wait for next wave
-					if c >= num_spawns then break end
+					if c >= amountSpawns then break end
 				end
 			end
 
@@ -167,7 +168,7 @@ function entspawn.SpawnPlayers(deadOnly)
 
 		MsgN("Spawn waves starting.")
 
-		timerCreate("spawnwave", wave_delay, 0, sfn)
+		timerCreate("spawnwave", waveDelay, 0, sfn)
 
 		-- already run one wave, which may stop the timer if everyone is spawned in one go
 		sfn()
