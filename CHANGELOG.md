@@ -8,6 +8,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Add Traditional Chinese Translation (by @TEGTianFan)
 - Added a searchbar to submenus
 - Added full-sized icons to the equipment-editor
+- Extended cvars library to support manipulation of serverside ConVars
+- Added possibility to manipulate serverside ConVars with Checkboxes and Sliders
+  - Just add .serverConvar with the conVarName to the given data similar to .convar
 
 ### Fixed
 
