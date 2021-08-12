@@ -1095,7 +1095,7 @@ function GM:OnContextMenuOpen()
 
 	---
 	-- @realm client
-	if hook.Run("TTT2PreventAccessShop", client) then return end
+	if hook.Run("TTT2PreventAccessShop", LocalPlayer()) then return end
 
 	if IsValid(eqframe) then
 		eqframe:Close()
