@@ -15,6 +15,10 @@ local maxUInt = 2 ^ identityBitCount
 
 local serverConVars = {}
 local functionCache = {}
+
+local requestCacheSize = 0
+local requestCache = {}
+
 local playersCache = {}
 local broadcastTable = {}
 
@@ -91,31 +95,53 @@ if CLIENT then
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		functionCache[messageIdentifier] = OnReceiveFunc
 
-		net.Start("TTT2ServerConVarGetValue")
-		net.WriteUInt(messageIdentifier, identityBitCount)
-		net.WriteString(conVarName)
-		net.SendToServer()
+		requestCacheSize = requestCacheSize + 1
+		requestCache[requestCacheSize] = {identifier = messageIdentifier, conVarName = conVarName}
 	end
+
+	hook.Add("Think", "TTT2CheckServerConVarRequests", function()
+		if requestCacheSize < 1 then return end
+
+		net.Start("TTT2ServerConVarGetValue")
+		net.WriteUInt(requestCacheSize, identityBitCount)
+
+		for i = 1, requestCacheSize do
+			local request = requestCache[i]
+
+			net.WriteUInt(request.identifier, identityBitCount)
+			net.WriteString(request.conVarName)
+		end
+
+		net.SendToServer()
+
+		requestCacheSize = 0
+		requestCache = {}
+	end)
 
 	net.Receive("TTT2ServerConVarGetValue", function(len)
 		if len <  1 then return end
 
-		local identifier = net.ReadUInt(identityBitCount)
-		local wasSuccess = net.ReadBool()
-		local value = nil
+		local requestSize = net.ReadUInt(identityBitCount)
 
-		if wasSuccess then
-			local conVarName = net.ReadString()
-			value = net.ReadString()
-			serverConVars[conVarName] = value
+		for i = 1, requestSize do
+			local identifier = net.ReadUInt(identityBitCount)
+			local wasSuccess = net.ReadBool()
+			local value = nil
+
+			if wasSuccess then
+				local conVarName = net.ReadString()
+				value = net.ReadString()
+				serverConVars[conVarName] = value
+			end
+
+			local receiveFunc = functionCache[identifier]
+
+			if isfunction(receiveFunc) then
+				receiveFunc(wasSuccess, value)
+				functionCache[identifier] = nil
+			end
 		end
 
-		local receiveFunc = functionCache[identifier]
-
-		if isfunction(receiveFunc) then
-			receiveFunc(wasSuccess, value)
-			functionCache[identifier] = nil
-		end
 	end)
 elseif SERVER then
 	util.AddNetworkString("TTT2ConVarExistsOnServer")
@@ -157,30 +183,46 @@ elseif SERVER then
 	net.Receive("TTT2ServerConVarGetValue", function(len, ply)
 		if len < 1 then return end
 
-		local identifier = net.ReadUInt(identityBitCount)
-		local conVarName = net.ReadString()
+		local isAdmin = IsValid(ply) and ply:IsSuperAdmin()
+
+		requestCacheSize = net.ReadUInt(identityBitCount)
+		requestCache = {}
+
+		for i = 1, requestCacheSize do
+			local identifier = net.ReadUInt(identityBitCount)
+			local conVarName = net.ReadString()
+
+			requestCache[i] = {identifier = identifier, conVarName = conVarName}
+		end
 
 		net.Start("TTT2ServerConVarGetValue")
-		net.WriteUInt(identifier, identityBitCount)
+		net.WriteUInt(requestCacheSize, identityBitCount)
 
-		local isSuccess = ConVarExists(conVarName) and IsValid(ply) and ply:IsSuperAdmin()
-		net.WriteBool(isSuccess)
+		for i = 1, requestCacheSize do
+			local request = requestCache[i]
+			local isSuccess = ConVarExists(request.conVarName) and isAdmin
 
-		if isSuccess then
-			net.WriteString(conVarName)
-			net.WriteString(GetConVar(conVarName):GetString())
+			net.WriteUInt(request.identifier, identityBitCount)
+			net.WriteBool(isSuccess)
 
+			if not isSuccess then continue end
+
+			net.WriteString(request.conVarName)
+			net.WriteString(GetConVar(request.conVarName):GetString())
+
+			cvars.AddChangeCallback(request.conVarName, BroadcastServerConVarChanges, "TTT2ServerConVarGetValueCallback")
+		end
+
+		net.Send(ply)
+
+		if isAdmin then
 			local plyId = ply:SteamID64()
 
 			if not playersCache[plyId] then
 				playersCache[plyId] = true
 				broadcastTable[#broadcastTable + 1] = ply
 			end
-
-			cvars.AddChangeCallback(conVarName, BroadcastServerConVarChanges, "TTT2ServerConVarGetValueCallback")
 		end
-
-		net.Send(ply)
 	end)
 
 	hook.Add("PlayerDisconnected", "TTT2RemovePlayerOfConVarBroadcastTable", function(ply)
