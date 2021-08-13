@@ -15,6 +15,8 @@ local maxUInt = 2 ^ identityBitCount
 
 local serverConVars = {}
 local functionCache = {}
+local playersCache = {}
+local broadcastTable = {}
 
 if CLIENT then
 	---
@@ -140,13 +142,17 @@ elseif SERVER then
 
 		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
-		net.Start("TTT2ChangeServerConVar")
-		net.WriteString(conVarName)
-		net.WriteString(value)
-		net.Broadcast()
-
 		RunConsoleCommand(conVarName, value)
 	end)
+
+	local function BroadcastServerConVarChanges(conVarName, oldValue, newValue)
+		if oldValue == newValue then return end
+
+		net.Start("TTT2ChangeServerConVar")
+		net.WriteString(conVarName)
+		net.WriteString(newValue)
+		net.Send(broadcastTable)
+	end
 
 	net.Receive("TTT2ServerConVarGetValue", function(len, ply)
 		if len < 1 then return end
@@ -163,8 +169,24 @@ elseif SERVER then
 		if isSuccess then
 			net.WriteString(conVarName)
 			net.WriteString(GetConVar(conVarName):GetString())
+
+			local plyId = ply:SteamID64()
+
+			if not playersCache[plyId] then
+				playersCache[plyId] = true
+				broadcastTable[#broadcastTable + 1] = ply
+			end
+
+			cvars.AddChangeCallback(conVarName, BroadcastServerConVarChanges, "TTT2ServerConVarGetValueCallback")
 		end
 
 		net.Send(ply)
+	end)
+
+	hook.Add("PlayerDisconnected", "TTT2RemovePlayerOfConVarBroadcastTable", function(ply)
+		if not IsValid(ply) or not playersCache[ply:SteamID64()] then return end
+
+		playersCache[ply:SteamID64()] = nil
+		table.RemoveByValue(broadcastTable, ply)
 	end)
 end
