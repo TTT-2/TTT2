@@ -16,10 +16,6 @@ local maxUInt = 2 ^ identityBitCount
 local serverConVars = {}
 local functionCache = {}
 
-local function IsAdmin (ply)
-	return ply["IsSuperAdmin"](ply)
-end
-
 if CLIENT then
 	---
 	-- Checks if the conVar exists on the server or was already cached
@@ -142,7 +138,7 @@ elseif SERVER then
 		local conVarName = net.ReadString()
 		local value = net.ReadString()
 
-		if not IsValid(ply) or not IsAdmin(ply) then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		net.Start("TTT2ChangeServerConVar")
 		net.WriteString(conVarName)
@@ -161,7 +157,7 @@ elseif SERVER then
 		net.Start("TTT2ServerConVarGetValue")
 		net.WriteUInt(identifier, identityBitCount)
 
-		local isSuccess = ConVarExists(conVarName) and IsValid(ply) and IsAdmin(ply)
+		local isSuccess = ConVarExists(conVarName) and IsValid(ply) and ply:IsSuperAdmin()
 		net.WriteBool(isSuccess)
 
 		if isSuccess then
