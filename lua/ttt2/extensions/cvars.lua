@@ -16,6 +16,7 @@ local maxUInt = 2 ^ identityBitCount
 local serverConVars = {}
 local functionCache = {}
 
+local sendRequestsNextUpdate = false
 local requestCacheSize = 0
 local requestCache = {}
 
@@ -81,25 +82,9 @@ if CLIENT then
 		cvars.OnConVarChanged(conVarName, oldValue, newValue)
 	end)
 
-	---
-	-- Get the value of the conVar if it exists on the server or was already cached
-	-- @param string conVarName
-	-- @param function OnReceiveFunc(conVarExists, value) The function that gets called with the results if the conVar exists
-	-- @realm client
-	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
-		if serverConVars[conVarName] then
-			OnReceiveFunc(true, serverConVars[conVarName])
-			return
-		end
+	local function SendAllServerConVarRequests()
+		sendRequestsNextUpdate = false
 
-		messageIdentifier = (messageIdentifier + 1) % maxUInt
-		functionCache[messageIdentifier] = OnReceiveFunc
-
-		requestCacheSize = requestCacheSize + 1
-		requestCache[requestCacheSize] = {identifier = messageIdentifier, conVarName = conVarName}
-	end
-
-	hook.Add("Think", "TTT2CheckServerConVarRequests", function()
 		if requestCacheSize < 1 then return end
 
 		net.Start("TTT2ServerConVarGetValue")
@@ -116,7 +101,31 @@ if CLIENT then
 
 		requestCacheSize = 0
 		requestCache = {}
-	end)
+	end
+
+	---
+	-- Get the value of the conVar if it exists on the server or was already cached
+	-- @param string conVarName
+	-- @param function OnReceiveFunc(conVarExists, value) The function that gets called with the results if the conVar exists
+	-- @realm client
+	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
+		if serverConVars[conVarName] then
+			OnReceiveFunc(true, serverConVars[conVarName])
+			return
+		end
+
+		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		functionCache[messageIdentifier] = OnReceiveFunc
+
+		requestCacheSize = requestCacheSize + 1
+		requestCache[requestCacheSize] = {identifier = messageIdentifier, conVarName = conVarName}
+
+		if not sendRequestsNextUpdate then
+			sendRequestsNextUpdate = true
+
+			timer.Simple(0, SendAllServerConVarRequests)
+		end
+	end
 
 	net.Receive("TTT2ServerConVarGetValue", function(len)
 		if len <  1 then return end
