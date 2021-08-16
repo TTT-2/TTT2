@@ -124,7 +124,6 @@ SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
--- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
 -- just compatibality functions
 
