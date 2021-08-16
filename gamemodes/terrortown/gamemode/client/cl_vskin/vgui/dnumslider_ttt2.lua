@@ -222,6 +222,7 @@ function PANEL:SetServerConVar(cvar)
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
 			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+
 			return
 		end
 

@@ -111,6 +111,7 @@ if CLIENT then
 	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
 		if serverConVars[conVarName] then
 			OnReceiveFunc(true, serverConVars[conVarName])
+
 			return
 		end
 
