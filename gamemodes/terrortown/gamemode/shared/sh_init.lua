@@ -124,7 +124,6 @@ SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
--- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
 -- just compatibality functions
 
@@ -538,6 +537,7 @@ include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
 include("ttt2/extensions/input.lua")
+include("ttt2/extensions/cvars.lua")
 
 -- include libraries
 include("ttt2/libraries/huds.lua")

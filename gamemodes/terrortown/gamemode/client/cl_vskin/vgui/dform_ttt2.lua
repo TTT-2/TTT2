@@ -132,12 +132,15 @@ function PANEL:MakeCheckBox(data)
 
 	left:SetText(data.label)
 	left:SetConVar(data.convar)
+	left:SetServerConVar(data.serverConvar)
 
 	left:SetTall(32)
 
-	left:SetValue(data.initial)
+	if not data.convar and not data.serverConvar and data.initial then
+		left:SetValue(data.initial)
+	end
 
-	left.OnChange = function(slf, value)
+	left.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then
 			data.OnChange(slf, value)
 		end
@@ -193,9 +196,12 @@ function PANEL:MakeSlider(data)
 	end
 
 	right:SetConVar(data.convar)
+	right:SetServerConVar(data.serverConvar)
 	right:SizeToContents()
 
-	right:SetValue(data.initial)
+	if not data.convar and not data.serverConvar and data.initial then
+		right:SetValue(data.initial)
+	end
 
 	right.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then

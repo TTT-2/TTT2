@@ -56,20 +56,13 @@ EquipmentItems = EquipmentItems or setmetatable(
 )
 
 ---
--- Returns the equipment base table merged with the given data
--- @param table data
--- @param table eq
--- @return table
--- @todo improve description
+-- Adds all needed parameters for TTT2
+-- @param string name The classname this equipment shall have
+-- @param table eq Equipment, that you add the keyvalues to
 -- @internal
 -- @realm shared
-function GetEquipmentBase(data, eq)
-	if not eq or eq.inited then
-		return eq
-	end
-
-	local name = WEPS.GetClass(eq)
-	if not name then return end
+function AddEquipmentKeyValues(eq, name)
+	local data = eq.EquipMenuData or {}
 
 	local tbl = {
 		id = name,
@@ -103,6 +96,28 @@ function GetEquipmentBase(data, eq)
 end
 
 ---
+-- Returns the equipment base table merged with the given data
+-- @param table eq
+-- @return table
+-- @todo improve description
+-- @internal
+-- @realm shared
+function GetEquipmentBase(eq)
+	if not eq or eq.inited then
+		return eq
+	end
+
+	local name = WEPS.GetClass(eq)
+	if not name then
+		return
+	end
+
+	AddEquipmentKeyValues(eq, name)
+
+	return eq
+end
+
+---
 -- Creates an equipment
 -- @param eq
 -- @return table equipment table
@@ -110,7 +125,7 @@ end
 -- @realm shared
 function CreateEquipment(eq)
 	if not eq.Doublicated then
-		return GetEquipmentBase(eq.EquipMenuData or {}, eq)
+		return GetEquipmentBase(eq)
 	end
 end
 
@@ -239,9 +254,7 @@ if CLIENT then
 				v = itms[i]
 
 				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
-					local data = v.EquipMenuData or {}
-
-					local base = GetEquipmentBase(data, v)
+					local base = GetEquipmentBase(v)
 					if base then
 						tbl[#tbl + 1] = base
 					end
@@ -255,9 +268,7 @@ if CLIENT then
 				v = weps[i]
 
 				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
-					local data = v.EquipMenuData or {}
-
-					local base = GetEquipmentBase(data, v)
+					local base = GetEquipmentBase(v)
 					if base then
 						tbl[#tbl + 1] = base
 					end
@@ -270,7 +281,7 @@ if CLIENT then
 
 				if not v or not v.id then continue end
 
-				v.custom = not table.HasValue(DefaultEquipment[fallback], v.id) -- TODO
+				v.custom = not table.HasValue(DefaultEquipment[fallback], v.id)
 			end
 
 			Equipment[fallback] = tbl
@@ -811,47 +822,26 @@ function AddToShopFallback(fallback, subrole, eq)
 	end
 end
 
-local function InitDefaultEquipmentForRole(roleData)
-	-- set default equipment tables
-	local itms = items.GetList()
-	local sweps = weapons.GetList()
+---
+-- Initializes the default equipment for a role
+-- @param roleData roleData Role you initialize for
+-- @param table eq Equipment you initialize
+-- @internal
+-- @realm shared
+local function InitDefaultEquipmentForRole(roleData, eq)
+	local tbl = roleData.fallbackTable or {}
 
-	-- TRAITOR
-	local tbl = {}
+	-- is a buyable equipment to load info from
+	if not eq or eq.Doublicated or not eq.CanBuy or not eq.CanBuy[roleData.index] then return end
 
-	-- find buyable items to load info from
-	for i = 1, #itms do
-		local v = itms[i]
+	local base = GetEquipmentBase(eq)
+	if not base then return end
 
-		if not v or v.Doublicated or not v.CanBuy or not v.CanBuy[roleData.index] then continue end
+	tbl[#tbl + 1] = base
 
-		local data = v.EquipMenuData or {}
-
-		local base = GetEquipmentBase(data, v)
-		if not base then continue end
-
-		tbl[#tbl + 1] = base
-	end
-
-	-- find buyable weapons to load info from
-	for i = 1, #sweps do
-		local v = sweps[i]
-
-		if not v or v.Doublicated or not v.CanBuy or not v.CanBuy[roleData.index] then continue end
-
-		local data = v.EquipMenuData or {}
-
-		local base = GetEquipmentBase(data, v)
-		if not base then continue end
-
-		tbl[#tbl + 1] = base
-	end
-
-	-- mark custom items
-	for _, i in pairs(tbl) do
-		if i and i.id then
-			i.custom = not table.HasValue(DefaultEquipment[roleData.index], i.id) -- TODO
-		end
+	-- mark custom equipment
+	if base and base.id then
+		base.custom = not table.HasValue(DefaultEquipment[roleData.index], base.id)
 	end
 
 	roleData.fallbackTable = tbl
@@ -862,6 +852,10 @@ end
 -- A table with structure tbl[key] = value is turned into tbl[value] = value by this function.
 -- This allows you to easily access the table using the value as an index.
 -- @warning This function is destructive! If you want to preserve the table, you have to copy it first.
+-- @param table tbl Table you want values transformed to keys
+-- @internal
+-- @realm shared
+-- @local
 local function ValueToKey(tbl)
 	local tmp = tmp or {}
 
@@ -876,43 +870,105 @@ local function ValueToKey(tbl)
 end
 
 ---
--- Cleans up the structure of the CanBuy table of all weapons and items.
+-- Cleans up the structure of the CanBuy table of the given equipment.
 -- After calling this, all keys will be equal to their value. This allows access in O(1) rather than O(n).
 -- table.HasValue is still supported, but please just check if the key is not nil instead.
+-- @param table eq Equipment you clean the buy indices from
 -- @internal
 -- @realm shared
-local function CleanUpDefaultCanBuyIndices()
-	local itms = items.GetList()
+-- @local
+local function CleanUpDefaultCanBuyIndices(eq)
+	eq.CanBuy = eq.CanBuy or {}
 
-	-- load items
-	for i = 1, #itms do
-		local itm = itms[i]
-
-		itm.CanBuy = itm.CanBuy or {}
-
-		ValueToKey(itm.CanBuy)
-	end
-
-	local sweps = weapons.GetList()
-
-	-- load sweps
-	for i = 1, #sweps do
-		local wep = sweps[i]
-
-		wep.CanBuy = wep.CanBuy or {}
-
-		ValueToKey(wep.CanBuy)
-	end
+	ValueToKey(eq.CanBuy)
 end
 
 ---
 -- Initializes the default equipment for traitors and detectives
+-- @param table eq Equipment you initialize
 -- @internal
 -- @realm shared
-function InitDefaultEquipment()
-	CleanUpDefaultCanBuyIndices()
-	InitDefaultEquipmentForRole(TRAITOR)
-	InitDefaultEquipmentForRole(DETECTIVE)
+function InitDefaultEquipment(eq)
+	CleanUpDefaultCanBuyIndices(eq)
+	InitDefaultEquipmentForRole(TRAITOR, eq)
+	InitDefaultEquipmentForRole(DETECTIVE, eq)
+end
+
+---
+-- Resets the default equipment for a role
+-- @param roleData roleData Role you reset for
+-- @param table eq Equipment you reset
+-- @internal
+-- @realm shared
+local function ResetDefaultEquipmentForRole(roleData, eq)
+	local tbl = roleData.fallbackTable or {}
+	local tblSize = #tbl
+
+	-- is a buyable equipment to load info from
+	if not eq or eq.Doublicated then return end
+
+	local base = GetEquipmentBase(eq)
+	if not base then return end
+
+	local addEquipment = tobool(eq.CanBuy and eq.CanBuy[roleData.index])
+
+	if addEquipment then
+		local tableHasValue = false
+
+		for i = 1, tblSize do
+			if tbl[i].id == base.id then
+				tableHasValue = true
+
+				break
+			end
+		end
+
+		if not tableHasValue then
+			tbl[tblSize + 1] = base
+		end
+	else
+		local counter = 0
+
+		for i = 1, tblSize do
+			-- Skip the equipment that should be removed
+			if tbl[i].id == base.id then continue end
+
+			counter = counter + 1
+
+			if counter == i then continue end
+
+			-- Replace skipped equipments with higher indices
+			tbl[counter] = tbl[i]
+		end
+
+		local diff = tblSize - counter
+
+		-- Remove last table entries
+		if diff > 0 then
+			for i = 0, diff - 1 do
+				table.remove(tbl, tblSize - i)
+			end
+		end
+	end
+
+	-- mark custom equipment
+	if base and base.id then
+		base.custom = not table.HasValue(DefaultEquipment[roleData.index], base.id)
+	end
+
+	roleData.fallbackTable = tbl
+end
+
+---
+-- Resets the default equipment for traitors and detectives
+-- After a hotreload this is necessary for example in case the default values changed
+-- @param table eq Equipment you initialize
+-- @internal
+-- @realm shared
+function ResetDefaultEquipment(eq)
+	CleanUpDefaultCanBuyIndices(eq)
+	ResetDefaultEquipmentForRole(TRAITOR, eq)
+	ResetDefaultEquipmentForRole(DETECTIVE, eq)
 end
 
 if SERVER then
@@ -1150,9 +1206,7 @@ else -- CLIENT
 		equip.CanBuy[subrole] = subrole
 
 		if equip and not equip.Doublicated then
-			local data = equip.EquipMenuData or {}
-
-			local base = GetEquipmentBase(data, equip)
+			local base = GetEquipmentBase(equip)
 			if base then
 				toadd = base
 			end
@@ -1160,7 +1214,7 @@ else -- CLIENT
 
 		-- mark custom items
 		if toadd and toadd.id then
-			toadd.custom = not table.HasValue(DefaultEquipment[subrole], toadd.id) -- TODO
+			toadd.custom = not table.HasValue(DefaultEquipment[subrole], toadd.id)
 		end
 
 		Equipment[subrole] = Equipment[subrole] or {}
