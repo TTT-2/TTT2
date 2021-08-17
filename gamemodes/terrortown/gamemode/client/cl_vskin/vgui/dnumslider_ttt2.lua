@@ -131,8 +131,9 @@ end
 
 ---
 -- @param any val
+-- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(val)
+function PANEL:SetValue(val, ignoreConVar)
 	if not val then return end
 
 	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
@@ -144,8 +145,14 @@ function PANEL:SetValue(val)
 
 	self:ValueChanged(self.m_fValue)
 
+	if ignoreConVar then return end
+
 	if self.conVar then
 		self.conVar:SetFloat(self.m_fValue)
+	end
+
+	if self.serverConVar then
+		cvars.ChangeServerConVar(self.serverConVar, tostring(val))
 	end
 end
 
@@ -195,7 +202,34 @@ function PANEL:SetConVar(cvar)
 
 	self.conVar = GetConVar(cvar)
 
-	self:SetValue(self.conVar:GetFloat())
+	self:SetValue(self.conVar:GetFloat(), true)
+end
+
+---
+-- @param string cvar
+-- @realm client
+function PANEL:SetServerConVar(cvar)
+	if not cvar or cvar == "" then return end
+
+	self.serverConVar = cvar
+
+	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
+		if wasSuccess and value then
+			self:SetValue(tonumber(value), true)
+		end
+	end)
+
+	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
+		if not IsValid(self) then
+			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+
+			return
+		end
+
+		self:SetValue(tonumber(newValue), true)
+	end
+
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
 end
 
 ---

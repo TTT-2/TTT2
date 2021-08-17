@@ -510,6 +510,7 @@ include("ttt2/extensions/table.lua")
 include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
+include("ttt2/extensions/cvars.lua")
 
 -- include libraries
 include("ttt2/libraries/huds.lua")

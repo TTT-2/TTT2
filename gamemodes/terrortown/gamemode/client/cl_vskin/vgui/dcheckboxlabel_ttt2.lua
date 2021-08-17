@@ -10,11 +10,16 @@ local PANEL = {}
 AccessorFunc(PANEL, "m_iIndent", "Indent")
 
 ---
+-- @accessor bool
+-- @realm client
+AccessorFunc(PANEL, "ignoreConVar", "IgnoreConVar", FORCE_BOOL)
+
+---
 -- @ignore
 function PANEL:Init()
 	self.Button = vgui.Create("DCheckBox", self)
 	self.Button.OnChange = function(_, val)
-		self:OnChange(val)
+		self:ValueChanged(val)
 
 		-- enable / disable slaves on change
 		self:UpdateSlaves(val)
@@ -66,9 +71,37 @@ function PANEL:SetConVar(cvar)
 end
 
 ---
--- @param any val
+-- @param string cvar
 -- @realm client
-function PANEL:SetValue(val)
+function PANEL:SetServerConVar(cvar)
+	if not cvar or cvar == "" then return end
+
+	self.serverConVar = cvar
+
+	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
+		if wasSuccess and value then
+			self:SetValue(tobool(value), true)
+		end
+	end)
+
+	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
+		if not IsValid(self) then
+			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+			return
+		end
+
+		self:SetValue(tobool(newValue), true)
+	end
+
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+end
+
+---
+-- @param any val
+-- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @realm client
+function PANEL:SetValue(val, ignoreConVar)
+	self:SetIgnoreConVar(ignoreConVar)
 	self.Button:SetValue(val)
 end
 
@@ -155,9 +188,23 @@ function PANEL:GetText()
 end
 
 ---
--- @param any bVal
+-- @param any val
 -- @realm client
-function PANEL:OnChange(bVal)
+function PANEL:ValueChanged(val)
+	if self.serverConVar and not self:GetIgnoreConVar() then
+		cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
+	else
+		self:SetIgnoreConVar(false)
+	end
+
+	self:OnValueChanged(val)
+end
+
+---
+-- overwrites the base function with an empty function
+-- @param any val
+-- @realm client
+function PANEL:OnValueChanged(val)
 
 end
 

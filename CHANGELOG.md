@@ -10,6 +10,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added full-sized icons to the equipment-editor
 - Hotreload functionality for weapons, they are now fully compatible to TTT2 after hotreload
 - Added experimental `SWEP.HotReloadableKeys` a list of strings to weapons, that makes data saved with `weapons.GetStored()` persistent across hotreloads
+- Extended cvars library to support manipulation of serverside ConVars
+- Added possibility to manipulate serverside ConVars with Checkboxes and Sliders
+  - Just add .serverConvar with the conVarName to the given data similar to .convar
 
 ### Fixed
 
