@@ -99,7 +99,6 @@ if CLIENT then
 	local renderDrawSphere = render.DrawSphere
 	local camStart3D = cam.Start3D
 	local camEnd3D = cam.End3D
-	local EyeAngles = EyeAngles
 	local Vector = Vector
 	local mathPi = math.pi
 	local mathTan = math.tan
