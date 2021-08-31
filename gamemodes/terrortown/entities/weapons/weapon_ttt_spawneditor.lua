@@ -383,7 +383,7 @@ if CLIENT then
 
 			-- find limits for top and bottom
 			local traceLimitUpper = util.TraceLine({
-				start = posBase,
+				start = posBase + trace.HitNormal,
 				endpos = posBase + Vector(0, 0, maxEditDistance),
 				mask = MASK_PLAYERSOLID_BRUSHONLY
 			})
@@ -392,7 +392,7 @@ if CLIENT then
 			previewData.normalLimitUpper = traceLimitUpper.HitNormal
 
 			local traceLimitLower = util.TraceLine({
-				start = posBase,
+				start = posBase + trace.HitNormal,
 				endpos = posBase - Vector(0, 0, maxEditDistance),
 				mask = MASK_PLAYERSOLID_BRUSHONLY
 			})
@@ -409,7 +409,7 @@ if CLIENT then
 			local distance2d = posGround:Distance(posBase)
 			local distance3d = posEye:Distance(posBase)
 
-			local angle = EyeAngles().p / 180 * mathPi -- angle in rad
+			local angle = LocalPlayer():EyeAngles().p / 180 * mathPi -- angle in rad
 			local diff = distance2d * mathTan(angle)
 
 			local currentPos = Vector(posBase.x, posBase.y, posEye.z - diff)
