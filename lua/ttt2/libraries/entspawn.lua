@@ -59,6 +59,14 @@ function entspawn.RemoveMapEntities()
 	return spawnTable
 end
 
+---
+-- Spawns weapon and ammo entities on provided spawn point table. The spawn point table already
+-- has the entity types defined.
+-- @param table spawns A table that contains the spawns where entities should be spawned
+-- @param table entsForTypes A table that assigns the ent types to a list of possible entities
+-- @param table entTable A single indexed list that contains all entites without type grouping
+-- @param number randomType The spawn type that should be used as random
+-- @realm server
 function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 	for entType, spawnTable in pairs(spawns) do
 		for i = 1, #spawnTable do
@@ -104,6 +112,10 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 	end
 end
 
+---
+-- Spawns all available players.
+-- @param[opt] boolean deadOnly Set to true to only respawn dead players
+-- @realm server
 function entspawn.SpawnPlayers(deadOnly)
 	local waveDelay = cvSpawnWaveInterval:GetFloat()
 	local plys = player.GetAll()
@@ -175,6 +187,11 @@ function entspawn.SpawnPlayers(deadOnly)
 	end
 end
 
+---
+-- Handles the spawn of player, ammo and weapon entites. Normaly called in
+-- @{GM:PostCleanupMap}.
+-- @internal
+-- @realm server
 function entspawn.HandleSpawns()
 	-- in a first pass, all weapon entities are removed; if in classic spawn mode, a few
 	-- spawn points that should be replaced are returned

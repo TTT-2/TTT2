@@ -141,10 +141,21 @@ if SERVER then
 	-- @realm server
 	local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
 
+	---
+	-- Checks wether a spawnfile for the currently selected map exists.
+	-- @return boolean Returns true if the spawnn script already exists
+	-- @realm server
 	function entspawnscript.Exists()
 		return fileExists(spawndir .. gameGetMap() .. ".txt", "DATA")
 	end
 
+	---
+	-- Initializes the map and generates all the needed spawn files. Called on first load of a map
+	-- if there is no existing spawn file.
+	-- @warning This can break the weapon spawn files if called at any time after the initial spawn wave.
+	-- @return table A table with the default spawn points provided by the map
+	-- @return table A table with the default settings provided by the map
+	-- @realm server
 	function entspawnscript.InitMap()
 		local mapName = gameGetMap()
 
@@ -196,10 +207,20 @@ if SERVER then
 		return spawnTable, defaultSettings
 	end
 
+	---
+	-- Updates the spawn file. Used to save changes done in the spawn editor
+	-- @realm server
 	function entspawnscript.UpdateSpawnFile()
 		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
 	end
 
+	---
+	-- Writes the spawn script data to the disc. Is used for the initial file, the default data
+	-- and to save changes done to the spawn data.
+	-- @param table spawnTable The table with the spawn points that should be stored
+	-- @param table settingsTable The table with the settings that should be stored
+	-- @parma string fileName The file name of the file, this includes the whole path and file ending
+	-- @realm server
 	function entspawnscript.WriteFile(spawnTable, settingsTable, fileName)
 		local weaponspawns = spawnTable[SPAWN_TYPE_WEAPON]
 		local ammospawns = spawnTable[SPAWN_TYPE_AMMO]
@@ -270,6 +291,12 @@ if SERVER then
 		fileWrite(fileName, content)
 	end
 
+	---
+	-- Reads the spawn file and returns the read data.
+	-- @param string fileName The file name of the file, this includes the whole path and file ending
+	-- @return table The table with the spawn points read from the file
+	-- @return table The table with the settings read from the file
+	-- @realm server
 	function entspawnscript.ReadFile(fileName)
 		local lines = stringExplode("\n", fileRead(fileName, "DATA"))
 		local spawnType = nil
@@ -325,26 +352,55 @@ if SERVER then
 		return spawnTable, settingsTable
 	end
 
+	---
+	-- Returns the table of all currently defined settins.
+	-- @return table The settings table
+	-- @realm server
 	function entspawnscript.GetSettings()
 		return settingsList
 	end
 
+	---
+	-- Returs a specific setting defined by the key.
+	-- @param string key The key of the requested setting
+	-- @return[default=0] number The setting value
+	-- @realm server
 	function entspawnscript.GetSetting(key)
 		return settingsList[key] or 0
 	end
 
+	---
+	-- Proxy function to directly set the `blacklisted` setting to disable custom spawns
+	-- for the currently loaded map.
+	-- @param boolean Set to true if custom spawns should be used
+	-- @realm server
 	function entspawnscript.SetUseCustomSpawns(state)
 		entspawnscript.SetSetting("blacklisted", not state, false)
 	end
 
+	---
+	-- Returns if the currently selected map should use custom spawns. Takes the map specific
+	-- setting `blacklisted` and the convar `ttt_use_weapon_spawn_scripts` into consideration.
+	-- @return boolean Returns true if custom spawns should be used for the map
+	-- @realm server
 	function entspawnscript.ShouldUseCustomSpawns()
 		return not tobool(entspawnscript.GetSetting("blacklisted")) and cvUseWeaponSpawnScript:GetBool()
 	end
 
+	---
+	-- Sets the spawn point list.
+	-- @param table spawnEnts The new spawnEnts table
+	-- @realm servre
 	function entspawnscript.SetSpawns(spawnEnts)
 		spawnEntList = spawnEnts
 	end
 
+	---
+	-- Sets the player editing state and syncs it to the client. Also, when setting the state to true,
+	-- the current spawn types are synced to the client.
+	-- @param Player ply The playser whose state should be changed
+	-- @param boolean state The new editing state
+	-- @relam server
 	function entspawnscript.SetEditing(ply, state)
 		ply:SetNWBool("is_spawn_editing", state)
 
@@ -363,10 +419,20 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Returns a list of all players that currently are in the spawn editing mode.
+	-- @return table Returns an indexed table of all players currently editing the spawn points
+	-- @realm server
 	function entspawnscript.GetEditingPlayers()
 		return entspawnscript.editingPlayers
 	end
 
+	---
+	-- Gets a list of all players that should receive a spawn point update. These are all
+	-- editing players besides the player that made the change.
+	-- @param Player ply The player that made the change
+	-- @return table An indexed list with all receiving players
+	-- @realm server
 	function entspawnscript.GetReceivingPlayers(ply)
 		local recPlys = {}
 
@@ -381,13 +447,18 @@ if SERVER then
 		return recPlys
 	end
 
+	---
+	-- Updates the map settings for the provided players. If no player table is
+	-- provided, the update is done on all clients.
+	-- @param table plys A table of players that should be updated
+	-- @realm server
 	function entspawnscript.UpdateSettingsOnClients(plys)
 		plys = plys or player.GetAll()
 
 		for i = 1, #plys do
 			local ply = plys[i]
 
-			if not ply:IsAdmin() then continue end
+			if not ply:IsSuperAdmin() then continue end
 
 			for key, value in pairs(settingsList) do
 				ttt2net.Set({"entspawnscript", "settings", key}, {type = "int", bits = 16}, entspawnscript.GetSetting(key), ply)
@@ -395,6 +466,11 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Updates the amount of spawns for the provided players. If no player table is
+	-- provided, the update is done on all clients.
+	-- @param table plys A table of players that should be updated
+	-- @realm server
 	function entspawnscript.UpdateSpawnCountOnClients(plys)
 		local amountSpawns = {
 			[SPAWN_TYPE_WEAPON] = 0,
@@ -415,7 +491,7 @@ if SERVER then
 		for i = 1, #plys do
 			local ply = plys[i]
 
-			if not ply:IsAdmin() then continue end
+			if not ply:IsSuperAdmin() then continue end
 
 			ttt2net.Set({"entspawnscript", "spawnamount", "weapon"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_WEAPON], ply)
 			ttt2net.Set({"entspawnscript", "spawnamount", "ammo"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_AMMO], ply)
@@ -441,6 +517,11 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Transmits the settings and the spawn point amount to the provided player.
+	-- This function is called in @{GM:TTT2PlayerReady}.
+	-- @param Player ply The player who should receive the update
+	-- @realm server
 	function entspawnscript.TransmitToPlayer(ply)
 		-- trigger a sync of the settings table
 		entspawnscript.UpdateSettingsOnClients({ply})
@@ -454,6 +535,13 @@ if CLIENT then
 	local focusedSpawn = nil
 	local spawnInfoEnt = nil
 
+	---
+	-- Sets the focused spawn point to be used elsewhere (like in targetID).
+	-- @param number spawnType The type of the spawn, set to nil to reset
+	-- @param number entType The specific entity type for the specific spawn type
+	-- @param number id The unique ID of the spawn point
+	-- @param table spawn The spawn point data table
+	-- @realm client
 	function entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
 		if not spawnType then
 			focusedSpawn = nil
@@ -467,20 +555,42 @@ if CLIENT then
 		end
 	end
 
+	---
+	-- Returns the table with the focused spawn data.
+	-- @return table Returns the focused spawn data table
+	-- @realm client
 	function entspawnscript.GetFocusedSpawn()
 		return focusedSpawn
 	end
 
+	---
+	-- Sets the spawn info entity that is used for all spawn points in tagetID.
+	-- @param Entity ent The spawn info entity
+	-- @realm client
 	function entspawnscript.SetSpawnInfoEntity(ent)
 		spawnInfoEnt = ent
 	end
 
+	---
+	-- Returns the spawn info entity that is used for all spawn points in tagetID.
+	-- @return Entity Returns the spawn info entity
+	-- @realm client
 	function entspawnscript.GetSpawnInfoEntity()
 		return spawnInfoEnt
 	end
 end
 
+---
+-- Updates a map specific setting. If called on the client, it will be automatically
+-- networked to the server. It then is stored on the server and updated on all connected
+-- clients.
+-- @param string key The key where the setting will be stored
+-- @param number|boolean value The value of the setting
+-- @param[default=false] boolean omitSaving If set to true, the setting will not be saved
+-- @realm shared
 function entspawnscript.SetSetting(key, value, omitSaving)
+	omitSaving = omitSaving or false
+
 	if isbool(value) then
 		value = value and 1 or 0
 	end
@@ -522,26 +632,61 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 	end
 end
 
+---
+-- Checks wether a given player is currently editing spawn points.
+-- @param Player ply The player who might be editing
+-- @return boolean Returns true if the player is editing
+-- @realm shared
 function entspawnscript.IsEditing(ply)
 	return ply:GetNWBool("is_spawn_editing", false)
 end
 
+---
+-- Returns the language identifier for a specific spawnType/entType comination.
+-- @param number spawnType The type of the spawn
+-- @param number entType The specific entity type for the specific spawn type
+-- @return string Returns the language identifer
+-- @realm shared
 function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].name
 end
 
+---
+-- Returns the storage var name for a specific spawnType/entType comination.
+-- @param number spawnType The type of the spawn
+-- @param number entType The specific entity type for the specific spawn type
+-- @return string Returns the storage variable name
+-- @realm shared
 function entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].var
 end
 
+---
+-- Returns the color for a specific spawnType.
+-- @param number spawnType The type of the spawn
+-- @return Color Returns the color for the spawn type
+-- @realm shared
 function entspawnscript.GetColorFromSpawnType(spawnType)
 	return spawnColors[spawnType]
 end
 
+---
+-- Returns the icon material for a specific spawnType/entType comination.
+-- @param number spawnType The type of the spawn
+-- @param number entType The specific entity type for the specific spawn type
+-- @return Material Returns the icon material
+-- @realm shared
 function entspawnscript.GetIconFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].material
 end
 
+---
+-- Returns a list of entity types for a given spawn type. Can exclude some
+-- predefined entity types.
+-- @param number spawnType The specidic spawn type
+-- @param table excludeTypes A key-boolean table with the excluded types
+-- @return table Returns an indexed table with the avaiblable entity Types
+-- @realm shared
 function entspawnscript.GetEntTypeList(spawnType, excludeTypes)
 	local indexedTable = {}
 
@@ -556,6 +701,10 @@ function entspawnscript.GetEntTypeList(spawnType, excludeTypes)
 	return indexedTable
 end
 
+---
+-- Returns a indexed table with all available spawn type / entity type combinations.
+-- @return table An indexed table with all available spawn type / entity type combinations
+-- @realm shared
 function entspawnscript.GetSpawnTypeList()
 	local indexedTable = {}
 
@@ -571,18 +720,46 @@ function entspawnscript.GetSpawnTypeList()
 	return indexedTable
 end
 
+---
+-- A compatibility feature for the weapon spawn type definition via the
+-- weapon kind. Is used as a default value if undefined.
+-- @param number kind The weapon kind
+-- @return number The weapon spawn type assosiated with a weapon kind
+-- @realm shared
 function entspawnscript.GetSpawnTypeFromKind(kind)
 	return kindToSpawnType[kind]
 end
 
+---
+-- Returns a table sorted by spawn types and ent types with indexed tables as sub tables with
+-- all spawn points defined on the map.
+-- @return table A table with all spawns
+-- @realm shared
 function entspawnscript.GetSpawns()
 	return spawnEntList
 end
 
+---
+-- Returns a table sorted by end types with indexed tables as sub tables with
+-- all spawn points defined on the map.
+-- @return table A table with all spawns
+-- @realm shared
 function entspawnscript.GetSpawnsForSpawnType(spawnType)
 	return spawnEntList[spawnType]
 end
 
+---
+-- Removes a specific spawn point from the spawn table. If enabled,
+-- it is automatically synced to the server / client.
+-- @note Changes are not automatically written to disk. This is done once the spawn edit is done. Use
+-- {entspawnscript.UpdateSpawnFile} to trigger it manually.
+-- @param number spawnType The spawn type of the spawn that should be removed
+-- @param number entType The entity type of the spawn that should be removed
+-- @param number id The numeric id of the spawn that should be removed
+-- @param boolean shouldSync Set to true if it should be synced, set to false if it shouldn't
+-- @param Player ply The player that attempts to delete the spawn. Only relevant if synced from
+-- the server to the client for net performance reasons
+-- @realm shared
 function entspawnscript.RemoveSpawnById(spawnType, entType, id, shouldSync, ply)
 	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
 
@@ -609,7 +786,24 @@ function entspawnscript.RemoveSpawnById(spawnType, entType, id, shouldSync, ply)
 	end
 end
 
+---
+-- Adds a new spawn point to the spawn type table. If enabled,
+-- it is automatically synced to the server / client.
+-- @note Changes are not automatically written to disk. This is done once the spawn edit is done. Use
+-- {entspawnscript.UpdateSpawnFile} to trigger it manually.
+-- @param number spawnType The spawn type of the spawn that should be added
+-- @param number entType The entity type of the spawn that should be added
+-- @param Vector pos The position vector of the spawn that should be added
+-- @param Angle ang The angle of the spawn that should be added
+-- @param[default=0] number ammo The amount of ammo of the spawn that should be added,
+-- only relevant to weapon spawns
+-- @param boolean shouldSync Set to true if it should be synced, set to false if it shouldn't
+-- @param Player ply The player that attempts to add the spawn. Only relevant if synced from
+-- the server to the client for net performance reasons
+-- @realm shared
 function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo, shouldSync, ply)
+	ammo = ammo or 0
+
 	spawnEntList = spawnEntList or {}
 	spawnEntList[spawnType] = spawnEntList[spawnType] or {}
 	spawnEntList[spawnType][entType] = spawnEntList[spawnType][entType] or {}
@@ -643,6 +837,22 @@ function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo, shouldSync,
 	end
 end
 
+---
+-- Updates an existing spawn point in the spawn point table. Does nothing if the
+-- spawn point does not exist. If enabled, it is automatically synced to the server / client.
+-- @note Changes are not automatically written to disk. This is done once the spawn edit is done. Use
+-- {entspawnscript.UpdateSpawnFile} to trigger it manually.
+-- @param number spawnType The spawn type of the spawn that should be updated
+-- @param number entType The entity type of the spawn that should be updated
+-- @param number id The numeric id of the spawn that should be removed
+-- @param Vector pos The position vector of the spawn that should be updated
+-- @param Angle ang The angle of the spawn that should be updated
+-- @param[default=0] number ammo The amount of ammo of the spawn that should be updated,
+-- only relevant to weapon spawns
+-- @param boolean shouldSync Set to true if it should be synced, set to false if it shouldn't
+-- @param Player ply The player that attempts to add the spawn. Only relevant if synced from
+-- the server to the client for net performance reasons
+-- @realm shared
 function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo, shouldSync, ply)
 	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
 
@@ -677,6 +887,10 @@ function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo, shou
 	end
 end
 
+---
+-- Deletes all spawn points on the map. Automatically syncs between client and server.
+-- @note Deleting all spawns does update the weapon spawn file immediately. Be careful.
+-- @realm shared
 function entspawnscript.DeleteAllSpawns()
 	if CLIENT then
 		net.Start("ttt2_delete_all_spawns")
@@ -697,6 +911,11 @@ function entspawnscript.DeleteAllSpawns()
 	end
 end
 
+---
+-- Called when a player starts the spawn editing mode. Sets everything up needed
+-- for the spawn editing. Can be called on client or server, it is automatically synced.
+-- @param Player ply The player that starts editing; only relevant on the server
+-- @realm shared
 function entspawnscript.StartEditing(ply)
 	if CLIENT then
 		net.Start("ttt2_toggle_entspawn_editing")
@@ -719,6 +938,11 @@ function entspawnscript.StartEditing(ply)
 	end
 end
 
+---
+-- Called when a player stops the spawn editing mode. Resets everything changed by the
+-- spawn editing. Can be called on client or server, it is automatically synced.
+-- @param Player ply The player that stops editing; only relevant on the server
+-- @realm shared
 function entspawnscript.StopEditing(ply)
 	if CLIENT then
 		net.Start("ttt2_toggle_entspawn_editing")
@@ -734,6 +958,11 @@ function entspawnscript.StopEditing(ply)
 	end
 end
 
+---
+-- Called when the entities on the map are available and the spawn entities can be read.
+-- Can be called on the server and the client as it is automatically synced.
+-- @param[default=false] boolean forceReinit If set to true, all spawns are reset to the default
+-- @realm shared
 function entspawnscript.OnLoaded(forceReinit)
 	if CLIENT then
 		net.Start("ttt2_entspawn_init")
@@ -777,43 +1006,43 @@ if SERVER then
 	util.AddNetworkString("ttt2_entspawn_setting_update")
 
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), false, ply)
 	end)
 
 	net.Receive("ttt2_add_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
 	end)
 
 	net.Receive("ttt2_update_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
 	end)
 
 	net.Receive("ttt2_delete_all_spawns", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		entspawnscript.DeleteAllSpawns()
 	end)
 
 	net.Receive("ttt2_entspawn_setting_update", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		entspawnscript.SetSetting(net.ReadString(), net.ReadInt(16), net.ReadBool())
 	end)
 
 	net.Receive("ttt2_entspawn_init", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		entspawnscript.OnLoaded(net.ReadBool())
 	end)
 
 	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		if net.ReadBool() then
 			entspawnscript.StartEditing(ply)
