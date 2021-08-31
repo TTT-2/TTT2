@@ -400,7 +400,7 @@ if SERVER then
 	-- the current spawn types are synced to the client.
 	-- @param Player ply The playser whose state should be changed
 	-- @param boolean state The new editing state
-	-- @relam server
+	-- @ream server
 	function entspawnscript.SetEditing(ply, state)
 		ply:SetNWBool("is_spawn_editing", state)
 

@@ -49,6 +49,13 @@ local function GetRandomEntityFromTable(ents)
 	return ents[math.random(#ents)]
 end
 
+---
+-- Removes all spawn entities that are found on the map. It also returns a table
+-- of all special entities that might be defined in a classic TTT spawn script if
+-- classic spawn mode is enabled. These retuned entities are then spawned with the
+-- new spawn system.
+-- @return table spawnTable A table of entities that should be spawned additionally
+-- @realm server
 function entspawn.RemoveMapEntities()
 	local spawnTable = {}
 

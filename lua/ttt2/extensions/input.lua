@@ -12,6 +12,11 @@ local inputIsButtonDown = input.IsButtonDown
 local inputGetKeyCode = input.GetKeyCode
 local inputLookupBinding = input.LookupBinding
 
+---
+-- Checks if a specified key associated with a binding is down.
+-- @param string binding The binding (e.g. "+attack") that should be checked
+-- @return boolean Returns true if the binding is pressed
+-- @realm client
 function input.IsBindingDown(binding)
 	return inputIsButtonDown(inputGetKeyCode(inputLookupBinding(binding)))
 end

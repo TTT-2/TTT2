@@ -155,10 +155,46 @@ function draw.OutlinedShadowedCircle(x, y, r, color, scale)
 	drawOutlinedCircle(x, y, r, color)
 end
 
+---
+-- Draws a circle around a provided center point with a given radius.
+-- @param number x The center x position to start the circle
+-- @param number y The center y position to start the circle
+-- @param number radius The radius of the circle
+-- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @2D
+-- @realm client
 function draw.Circle(x, y, radius, color)
-	local radius2 = radius * 2
+	color = color or COLOR_WHITE
 
-	draw.RoundedBox(radius, x - radius, y - radius, radius2, radius2, color)
+	local diameter = radius * 2
+
+	draw.RoundedBox(radius, x - radius, y - radius, diameter, diameter, color)
+end
+
+local drawCircle = draw.Circle
+
+---
+-- A function to draws a circle with a shadow.
+-- @param number x The center x position to start the circle
+-- @param number y The center y position to start the circle
+-- @param number r The radius of the circle
+-- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @param [default=1.0]number scale A scaling factor that is used for the shadows
+-- @2D
+-- @realm client
+function draw.ShadowedCircle(x, y, radius, color, scale)
+	color = color or COLOR_WHITE
+	scale = scale or 1
+
+	local shift1 = mathRound(scale)
+	local shift2 = mathRound(scale * 2)
+
+	local tmpCol = GetShadowColor(color)
+
+	drawCircle(x + shift2, y + shift2, radius, tmpCol)
+	drawCircle(x + shift1, y + shift1, radius, tmpCol)
+	drawCircle(x + shift1, y + shift1, radius, tmpCol)
+	drawCircle(x, y, radius, color)
 end
 
 ---
