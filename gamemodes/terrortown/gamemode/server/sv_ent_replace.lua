@@ -128,6 +128,14 @@ end
 
 local classremap = {ttt_playerspawn = "info_player_deathmatch"}
 
+---
+-- Imports spawns from old TTT-style map spawn scrips.
+-- @param string map The map name
+-- @deprecated Use the TTT2 ent spawn system instead
+-- @return table A table of spawns
+-- @return table A table of settings
+-- @internal
+-- @realm server
 function ents.TTT.ImportEntities(map)
 	local fname = "maps/" .. map .. "_ttt.txt"
 	local buf = file.Read(fname, "GAME")

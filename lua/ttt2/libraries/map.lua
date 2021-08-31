@@ -256,6 +256,11 @@ function map.IsTeamFortressMap()
 	return map.GetMapGameType() == MAP_TYPE_TEAMFORTRESS
 end
 
+---
+-- Finds and returns all weapon entities found on a map depending on the
+-- map type.
+-- @return table A table with all the weapon spawn entities grouped by ent types
+-- @realm shared
 function map.GetWeaponSpawnEntities()
 	local spawns = {}
 
@@ -271,6 +276,10 @@ function map.GetWeaponSpawnEntities()
 	return spawns
 end
 
+---
+-- Finds and returns all ammo entities found on a mape.
+-- @return table A table with all the ammo spawn entities grouped by ent types
+-- @realm shared
 function map.GetAmmoSpawnEntities()
 	local spawns = {}
 
@@ -280,6 +289,10 @@ function map.GetAmmoSpawnEntities()
 	return spawns
 end
 
+---
+-- Finds and returns player spawn entities found on a mape.
+-- @return table A table with all the player spawn entities grouped by ent types
+-- @realm shared
 function map.GetPlayerSpawnEntities()
 	local spawns = {}
 
@@ -290,18 +303,39 @@ function map.GetPlayerSpawnEntities()
 	return spawns
 end
 
+---
+-- Finds and returns all weapon spawns found on a map depending on the
+-- map type.
+-- @return table A table with all the weapon spawns grouped by ent types
+-- @realm shared
 function map.GetWeaponSpawns()
 	return DatafySpawnTable(map.GetWeaponSpawnEntities())
 end
 
+---
+-- Finds and returns all ammo spawns found on a mape.
+-- @return table A table with all the ammo spawns grouped by ent types
+-- @realm shared
 function map.GetAmmoSpawns()
 	return DatafySpawnTable(map.GetAmmoSpawnEntities())
 end
 
+---
+-- Finds and returns player spawns found on a mape.
+-- @return table A table with all the player spawns grouped by ent types
+-- @realm shared
 function map.GetPlayerSpawns()
 	return DatafySpawnTable(map.GetPlayerSpawnEntities())
 end
 
+---
+-- Is used to get a TTT2 style spawn table from the old TTT spawn script data.
+-- @param table spawns The spawn table that should be converted
+-- @return table A table with all weapon spawns sorted by ent types
+-- @return table A table with all ammo spawns sorted by ent types
+-- @return table A table with all player spawns sorted by ent types
+-- @internal
+-- @realm shared
 function map.GetSpawnsFromClassTable(spawns)
 	local wepSpawns = {}
 	local ammoSpawns = {}
@@ -354,6 +388,12 @@ function map.GetSpawnsFromClassTable(spawns)
 	return wepSpawns, ammoSpawns, plySpawns
 end
 
+---
+-- Checks if a given entity is a default terrortown map entity. Can be used to determin if an entity
+-- should be removed from the map prior to spawning with the custom spawn system.
+-- @param Entity ent The entity to check
+-- @return boolean Returns true if the given entity is default terrortown entity
+-- @realm shared
 function map.IsDefaultTerrortownMapEntity(ent)
 	local cls = ent:GetClass()
 
@@ -367,6 +407,13 @@ function map.IsDefaultTerrortownMapEntity(ent)
 	return true
 end
 
+---
+-- Get detailed data from a spawn entity.
+-- @param Entity ent The spawn entity
+-- @return number The spawn type
+-- @return number The ent type
+-- @return table The spawn data (pos, ang, ammo)
+-- @realm shared
 function map.GetDataFromSpawnEntity(ent)
 	local cls = ent:GetClass()
 	local data = {

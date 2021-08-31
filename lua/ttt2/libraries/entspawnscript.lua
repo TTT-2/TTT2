@@ -219,7 +219,7 @@ if SERVER then
 	-- and to save changes done to the spawn data.
 	-- @param table spawnTable The table with the spawn points that should be stored
 	-- @param table settingsTable The table with the settings that should be stored
-	-- @parma string fileName The file name of the file, this includes the whole path and file ending
+	-- @param string fileName The file name of the file, this includes the whole path and file ending
 	-- @realm server
 	function entspawnscript.WriteFile(spawnTable, settingsTable, fileName)
 		local weaponspawns = spawnTable[SPAWN_TYPE_WEAPON]
@@ -390,7 +390,7 @@ if SERVER then
 	---
 	-- Sets the spawn point list.
 	-- @param table spawnEnts The new spawnEnts table
-	-- @realm servre
+	-- @realm server
 	function entspawnscript.SetSpawns(spawnEnts)
 		spawnEntList = spawnEnts
 	end
@@ -742,6 +742,7 @@ end
 ---
 -- Returns a table sorted by end types with indexed tables as sub tables with
 -- all spawn points defined on the map.
+-- @param number spawnType The spawn type
 -- @return table A table with all spawns
 -- @realm shared
 function entspawnscript.GetSpawnsForSpawnType(spawnType)
