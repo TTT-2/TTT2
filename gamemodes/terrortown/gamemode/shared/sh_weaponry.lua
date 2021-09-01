@@ -45,6 +45,11 @@ function WEPS.GetClass(wep)
 	end
 end
 
+---
+-- Returns a table of weapons sorted by the available spawn types.
+-- @return table A table with all weapons sorted by their spawn type
+-- @return table An indexed table with all spawnable weapons with valid spawn types
+-- @realm shared
 function WEPS.GetWeaponsForSpawnTypes()
 	local wepsForSpawns = {}
 	local wepsTable = {}
@@ -69,6 +74,11 @@ function WEPS.GetWeaponsForSpawnTypes()
 	return wepsForSpawns, wepsTable
 end
 
+---
+-- Returns a table of ammo sorted by the available spawn types.
+-- @return table A table with all ammo sorted by their spawn type
+-- @return table An indexed table with all spawnable ammo with valid spawn types
+-- @realm shared
 function WEPS.GetAmmoForSpawnTypes()
 	local ammoForSpawns = {}
 	local ammoTable = {}

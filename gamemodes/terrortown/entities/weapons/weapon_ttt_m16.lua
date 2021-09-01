@@ -70,6 +70,8 @@ function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
+---
+-- @ignore
 function SWEP:PreDrop()
 	self:SetZoom(false)
 	self:SetIronsights(false)
@@ -77,6 +79,8 @@ function SWEP:PreDrop()
 	return self.BaseClass.PreDrop(self)
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
@@ -85,6 +89,8 @@ function SWEP:Reload()
 	self:SetZoom(false)
 end
 
+---
+-- @ignore
 function SWEP:Holster()
 	self:SetIronsights(false)
 	self:SetZoom(false)

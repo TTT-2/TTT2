@@ -1459,6 +1459,8 @@ end
 
 ---
 -- Checks wether a player has cached weapons that can be restored.
+-- @return boolean Returns wether the player has a cached inventory
+-- @realm server
 function plymeta:HasCachedWeapons()
 	return self.cachedWeaponInventory ~= nil
 end

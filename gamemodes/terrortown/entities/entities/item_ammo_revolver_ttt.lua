@@ -11,6 +11,8 @@ ENT.Model = Model("models/items/357ammo.mdl")
 ENT.AutoSpawnable = true
 ENT.spawnType = AMMO_TYPE_DEAGLE
 
+---
+-- @ignore
 function ENT:Initialize()
 	-- Differentiate from rifle ammo
 	self:SetColor(Color(255, 100, 100, 255))
