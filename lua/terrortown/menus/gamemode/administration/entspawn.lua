@@ -9,17 +9,8 @@ local updateButtons = {}
 local updateCheckBoxes = {}
 local updateHelpBox = nil
 
--- set up variable change callback
-ttt2net.OnUpdate({"entspawnscript", "settings", "blacklisted"}, function(_, newval)
-	local state = not tobool(newval)
-
-	for i = 1, #updateCheckBoxes do
-		local updateElem = updateCheckBoxes[i]
-
-		if not IsValid(updateElem) then continue end
-
-		updateElem:SetValue(state)
-	end
+local function UpdateButtons(state)
+	state = state and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"}))
 
 	for i = 1, #updateButtons do
 		local updateElem = updateButtons[i]
@@ -28,6 +19,24 @@ ttt2net.OnUpdate({"entspawnscript", "settings", "blacklisted"}, function(_, newv
 
 		updateElem:SetEnabled(state)
 	end
+end
+
+local function UpdateCheckBoxes(state)
+	for i = 1, #updateCheckBoxes do
+		local updateElem = updateCheckBoxes[i]
+
+		if not IsValid(updateElem) then continue end
+
+		updateElem:SetValue(state)
+	end
+end
+
+-- set up variable change callback
+ttt2net.OnUpdate({"entspawnscript", "settings", "blacklisted"}, function(_, newval)
+	local state = not tobool(newval)
+
+	UpdateButtons(state)
+	UpdateCheckBoxes(state)
 end)
 
 ttt2net.OnUpdate({"entspawnscript", "spawnamount"}, function(_, newval, reversePath)
@@ -41,6 +50,17 @@ end)
 
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_entspawn_settings")
+
+	-- store the reference to the checkbox in a variable
+	-- because the other settings are enabled based on
+	-- the state of this checkbox
+	local dynSpawnEnable = form:MakeCheckBox({
+		label = "label_dynamic_spawns_global_enable",
+		serverConvar = "ttt_use_weapon_spawn_scripts",
+		OnChange = function(_, value)
+			UpdateButtons(tobool(value))
+		end
+	})
 
 	form:MakeHelp({
 		label = "help_spawn_editor_info"
@@ -56,7 +76,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		OnChange = function(_, value)
 			entspawnscript.SetSetting("blacklisted", not value)
 		end,
-		default = true
+		default = true,
+		master = dynSpawnEnable
 	})
 
 	form:MakeHelp({
@@ -103,6 +124,8 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonReset:SetPos(675, 20)
 	buttonReset.DoClick = function()
 		entspawnscript.OnLoaded(true)
+
+		cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", true)
 	end
 
 	local buttonToggle = vgui.Create("DButtonTTT2", parent)
@@ -115,7 +138,6 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 		HELPSCRN.menuFrame:HideFrame()
 	end
-	buttonToggle:SetEnabled(not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
 
 	local buttonDelete = vgui.Create("DButtonTTT2", parent)
 
@@ -125,10 +147,17 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonDelete.DoClick = function(slf)
 		entspawnscript.DeleteAllSpawns()
 	end
-	buttonDelete:SetEnabled(not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
 
 	updateButtons[1] = buttonToggle
 	updateButtons[2] = buttonDelete
+
+	-- set initial value for buttons dependant on convar request
+	cvars.ServerConVarGetValue("ttt_use_weapon_spawn_scripts", function(wasSuccess, value)
+		if not wasSuccess or not value then return end
+
+		updateButtons[1]:SetEnabled(tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
+		updateButtons[2]:SetEnabled(tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
+	end)
 end
 
 function CLGAMEMODESUBMENU:HasButtonPanel()
