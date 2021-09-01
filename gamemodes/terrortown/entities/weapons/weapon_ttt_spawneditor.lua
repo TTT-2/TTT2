@@ -51,6 +51,8 @@ local previewData = {}
 if SERVER then
 	util.AddNetworkString("weapon_ttt_spawneditor_spawninfo_ent")
 
+	---
+	-- @ignore
 	function SWEP:Deploy()
 		-- add entity which is used for the targetID integration
 		self.entSpawnInfo = ents.Create("ttt_spawninfo_ent")
@@ -67,6 +69,8 @@ if SERVER then
 		self.BaseClass.Deploy(self)
 	end
 
+	---
+	-- @ignore
 	function SWEP:OnRemove()
 		-- using the on remove hook to store the updated spawns because it is called in the following scenarios:
 		-- * manual stop of the spawn edit process
@@ -81,6 +85,8 @@ if SERVER then
 		self.entSpawnInfo:Remove()
 	end
 
+	---
+	-- @ignore
 	function SWEP:OnDrop()
 		self:Remove()
 	end
@@ -274,10 +280,14 @@ if CLIENT then
 		)
 	end
 
+	---
+	-- @ignore
 	function SWEP:OnRemove()
 		hook.Remove("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit")
 	end
 
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self.modes = entspawnscript.GetSpawnTypeList()
 		self.selectedMode = 1
@@ -307,6 +317,8 @@ if CLIENT then
 	local colorBasic = Color(255, 255, 255, 100)
 	local colorSelect = Color(255, 255, 255, 235)
 
+	---
+	-- @ignore
 	function SWEP:RenderScreen()
 		-- Set the material of the screen to our render target
 		matScreen:SetTexture("$basetexture", RTTexture)
@@ -349,6 +361,8 @@ if CLIENT then
 		entspawnscript.SetSpawnInfoEntity(net.ReadEntity())
 	end)
 
+	---
+	-- @ignore
 	function SWEP:Think()
 		local client = LocalPlayer()
 
@@ -447,7 +461,8 @@ if CLIENT then
 	end
 end
 
--- used to place / remove spawns
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	if SERVER or not IsFirstTimePredicted() then return end
 
@@ -468,6 +483,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	if SERVER or not IsFirstTimePredicted() then return end
 
@@ -490,6 +507,8 @@ function SWEP:SecondaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	if SERVER or not IsFirstTimePredicted() then return end
 

@@ -29,7 +29,9 @@ SWEP.Weight = 5
 SWEP.AutoSpawnable = true
 SWEP.Spawnable = true
 
+---
 -- really the only difference between grenade weapons: the model and the thrown ent.
+-- @ignore
 function SWEP:GetGrenadeName()
 	return "ttt_smokegrenade_proj"
 end

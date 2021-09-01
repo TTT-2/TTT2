@@ -30,7 +30,9 @@ SWEP.WorldModel = "models/weapons/w_eq_fraggrenade.mdl"
 
 SWEP.Weight = 5
 
+---
 -- really the only difference between grenade weapons: the model and the thrown ent.
+-- @ignore
 function SWEP:GetGrenadeName()
 	return "ttt_confgrenade_proj"
 end

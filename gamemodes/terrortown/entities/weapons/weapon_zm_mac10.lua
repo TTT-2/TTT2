@@ -44,6 +44,8 @@ SWEP.IronSightsAng = Vector(0.699, -5.301, -7)
 
 SWEP.DeploySpeed = 3
 
+---
+-- @ignore
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 	local att = dmginfo:GetAttacker()
 

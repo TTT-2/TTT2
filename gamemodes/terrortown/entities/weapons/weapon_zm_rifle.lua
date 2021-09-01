@@ -47,6 +47,8 @@ SWEP.WorldModel = Model("models/weapons/w_snip_scout.mdl")
 SWEP.IronSightsPos = Vector(5, -15, -2)
 SWEP.IronSightsAng = Vector(2.6, 1.37, 3.5)
 
+---
+-- @ignore
 function SWEP:SetZoom(state)
 	local owner = self:GetOwner()
 
@@ -59,13 +61,17 @@ function SWEP:SetZoom(state)
 	end
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack(worldsnd)
 	self.BaseClass.PrimaryAttack(self, worldsnd)
 
 	self:SetNextSecondaryFire(CurTime() + 0.1)
 end
 
+---
 -- Add some zoom to ironsights for this gun
+-- @ignore
 function SWEP:SecondaryAttack()
 	if not self.IronSightsPos or self:GetNextSecondaryFire() > CurTime() then return end
 
@@ -81,6 +87,8 @@ function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
+---
+-- @ignore
 function SWEP:PreDrop()
 	self:SetZoom(false)
 	self:SetIronsights(false)
@@ -88,6 +96,8 @@ function SWEP:PreDrop()
 	return self.BaseClass.PreDrop(self)
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
@@ -96,7 +106,8 @@ function SWEP:Reload()
 	self:SetZoom(false)
 end
 
-
+---
+-- @ignore
 function SWEP:Holster()
 	self:SetIronsights(false)
 	self:SetZoom(false)
@@ -107,6 +118,8 @@ end
 if CLIENT then
 	local scope = surface.GetTextureID("sprites/scope")
 
+	---
+	-- @ignore
 	function SWEP:DrawHUD()
 		if self:GetIronsights() then
 			surface.SetDrawColor(0, 0, 0, 255)
@@ -160,6 +173,8 @@ if CLIENT then
 		end
 	end
 
+	---
+	-- @ignore
 	function SWEP:AdjustMouseSensitivity()
 		return self:GetIronsights() and 0.2 or nil
 	end

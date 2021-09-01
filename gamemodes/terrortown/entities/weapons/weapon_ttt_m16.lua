@@ -43,6 +43,8 @@ SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
 SWEP.IronSightsPos = Vector(-7.58, -9.2, 0.55)
 SWEP.IronSightsAng = Vector(2.599, -1.3, -3.6)
 
+---
+-- @ignore
 function SWEP:SetZoom(state)
 	local owner = self:GetOwner()
 
@@ -55,7 +57,9 @@ function SWEP:SetZoom(state)
 	end
 end
 
+---
 -- Add some zoom to ironsights for this gun
+-- @ignore
 function SWEP:SecondaryAttack()
 	if not self.IronSightsPos or self:GetNextSecondaryFire() > CurTime() then return end
 

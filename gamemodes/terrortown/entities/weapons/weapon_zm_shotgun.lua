@@ -44,6 +44,8 @@ SWEP.WorldModel = "models/weapons/w_shot_xm1014.mdl"
 SWEP.IronSightsPos = Vector(-6.881, -9.214, 2.66)
 SWEP.IronSightsAng = Vector(-0.101, -0.7, -0.201)
 
+---
+-- @ignore
 function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 0, "Reloading")
 	self:NetworkVar("Float", 0, "ReloadTimer")
@@ -51,6 +53,8 @@ function SWEP:SetupDataTables()
 	return self.BaseClass.SetupDataTables(self)
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	if self:GetReloading() or self:Clip1() > self.Primary.ClipSize
 		or self:GetOwner():GetAmmoCount(self.Primary.Ammo) < 0
@@ -59,6 +63,8 @@ function SWEP:Reload()
 	self:StartReload()
 end
 
+---
+-- @ignore
 function SWEP:StartReload()
 	if self:GetReloading() then
 		return false
@@ -84,6 +90,8 @@ function SWEP:StartReload()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:PerformReload()
 	local owner = self:GetOwner()
 
@@ -101,6 +109,8 @@ function SWEP:PerformReload()
 	self:SetReloadTimer(CurTime() + self:SequenceDuration())
 end
 
+---
+-- @ignore
 function SWEP:FinishReload()
 	self:SetReloading(false)
 	self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
@@ -108,6 +118,8 @@ function SWEP:FinishReload()
 	self:SetReloadTimer(CurTime() + self:SequenceDuration())
 end
 
+---
+-- @ignore
 function SWEP:CanPrimaryAttack()
 	if self:Clip1() <= 0 then
 		self:EmitSound("Weapon_Shotgun.Empty")
@@ -119,6 +131,8 @@ function SWEP:CanPrimaryAttack()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Think()
 	self.BaseClass.Think(self)
 
@@ -139,6 +153,8 @@ function SWEP:Think()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	self:SetReloading(false)
 	self:SetReloadTimer(0)
@@ -146,10 +162,12 @@ function SWEP:Deploy()
 	return self.BaseClass.Deploy(self)
 end
 
+---
 -- The shotgun's headshot damage multiplier is based on distance. The closer it
 -- is, the more damage it does. This reinforces the shotgun's role as short
 -- range weapon by reducing effectiveness at mid-range, where one could score
 -- lucky headshots relatively easily due to the spread.
+-- @ignore
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 	local att = dmginfo:GetAttacker()
 
@@ -166,6 +184,8 @@ function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 	return 1 + math.max(0, 1.0 - 0.002 * (d ^ 1.25))
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	if self.NoSights or (not self.IronSightsPos) or self:GetReloading() then return end
 
