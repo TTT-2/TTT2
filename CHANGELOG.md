@@ -13,6 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Extended cvars library to support manipulation of serverside ConVars
 - Added possibility to manipulate serverside ConVars with Checkboxes and Sliders
   - Just add .serverConvar with the conVarName to the given data similar to .convar
+- Added in game spawn editor system that can be found in F1->Administration
 
 ### Fixed
 
@@ -26,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - Revise and additions simplified Chinese (by @TEGTianFan)
 - Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)
+- Completely reworked how weapons, ammo and players spawn in the world
 
 ### Internal Breaking Changes
 - Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`
