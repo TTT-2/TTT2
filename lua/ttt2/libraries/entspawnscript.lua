@@ -84,39 +84,39 @@ local spawnData = {
 	[SPAWN_TYPE_AMMO] = {
 		[AMMO_TYPE_RANDOM] = {
 			material = Material("vgui/ttt/tid/tid_big_ammo_random"),
-			name = "ammo_type_random",
+			name = "spawn_ammo_random",
 			var = "AMMO_TYPE_RANDOM"
 		},
 		[AMMO_TYPE_DEAGLE] = {
 			material = Material("vgui/ttt/tid/tid_big_ammo_deagle"),
-			name = "ammo_type_deagle",
+			name = "spawn_ammo_deagle",
 			var = "AMMO_TYPE_DEAGLE"
 		},
 		[AMMO_TYPE_PISTOL] = {
 			material = Material("vgui/ttt/tid/tid_big_ammo_pistol"),
-			name = "ammo_type_pistol",
+			name = "spawn_ammo_pistol",
 			var = "AMMO_TYPE_PISTOL"
 		},
 		[AMMO_TYPE_MAC10] = {
 			material = Material("vgui/ttt/tid/tid_big_ammo_mac10"),
-			name = "ammo_type_mac10",
+			name = "spawn_ammo_mac10",
 			var = "AMMO_TYPE_MAC10"
 		},
 		[AMMO_TYPE_RIFLE] = {
 			material = Material("vgui/ttt/tid/tid_big_ammo_rifle"),
-			name = "ammo_type_rifle",
+			name = "spawn_ammo_rifle",
 			var = "AMMO_TYPE_RIFLE"
 		},
 		[AMMO_TYPE_SHOTGUN] = {
 			material = Material("vgui/ttt/tid/tid_big_ammo_shotgun"),
-			name = "ammo_type_shotgun",
+			name = "spawn_ammo_shotgun",
 			var = "AMMO_TYPE_SHOTGUN"
 		}
 	},
 	[SPAWN_TYPE_PLAYER] = {
 		[PLAYER_TYPE_RANDOM] = {
 			material = Material("vgui/ttt/tid/tid_big_player"),
-			name = "player_type_random",
+			name = "spawn_player_random",
 			var = "PLAYER_TYPE_RANDOM"
 		}
 	}

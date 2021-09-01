@@ -7,11 +7,9 @@ if CLIENT then
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
-		name = "xxx",
-		desc = "xxx"
+		name = "spawneditor_name",
+		desc = "spawneditor_desc"
 	}
-
-	--SWEP.Icon = "vgui/ttt/icon_doorlocker"
 end
 
 SWEP.Kind = WEAPON_EQUIP2

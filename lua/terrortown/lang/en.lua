@@ -1410,7 +1410,14 @@ L.xfer_team_indicator = "Team"
 -- 2021-06-25
 L.searchbar_default_placeholder = "Search in list..."
 
--- 2021-06-29
+-- 2021-07-11
+L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-09-01
+L.spawneditor_name = "Spawn Editor Tool"
+L.spawneditor_desc = [[
+Used to place weapon, ammo and player spawns in the world. Can only be used by super admin.]]
+
 L.spawneditor_place = "Place spawn"
 L.spawneditor_remove = "Remove spawn"
 L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
@@ -1424,6 +1431,13 @@ L.spawn_weapon_heavy = "Heavy Weapon Spawn"
 L.spawn_weapon_sniper = "Sniper Weapon Spawn"
 L.spawn_weapon_pistol = "Pistol Weapon Spawn"
 L.spawn_weapon_special = "Special Weapon Spawn"
+L.spawn_ammo_random = "Random ammo spawn"
+L.spawn_ammo_deagle = "Deagle ammo spawn"
+L.spawn_ammo_pistol = "Pistol ammo spawn"
+L.spawn_ammo_mac10 = "Mac10 ammo spawn"
+L.spawn_ammo_rifle = "Rifle ammo spawn"
+L.spawn_ammo_shotgun = "Shotgun ammo spawn"
+L.spawn_player_random = "Random player spawn"
 
 L.spawn_weapon_ammo = " (Ammo: {ammo})"
 
@@ -1439,6 +1453,11 @@ L.submenu_administration_entspawn_title = "Spawn Editor"
 L.header_entspawn_settings = "Spawn Editor Settings"
 L.button_start_entspawn_edit = "Start Spawn Edit"
 L.button_delete_all_spawns = "Delete all Spawns"
+
+L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
+L.label_dynamic_spawns_global_enable = "Enable custom spawns for all maps"
+
+L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
 
 L.help_spawn_editor_info = [[
 The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
@@ -1471,11 +1490,6 @@ There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player
 
 {playerrandom}x Random player spawn]]
 
-L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
-
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
-
 L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
 L.equipmenteditor_name_spawn_type = "Select spawn type"
 L.equipmenteditor_desc_auto_spawnable = [[
@@ -1484,6 +1498,3 @@ The TTT2 spawn system allows every weapon to spawn in the world. By default only
 Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
 
 L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
-
--- 2021-07-11
-L.spec_about_to_revive = "Spectating is limited during revival period."
