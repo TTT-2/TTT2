@@ -514,6 +514,28 @@ function PANEL:MakeCard(data, base)
 	return card
 end
 
+---
+-- Adds a new image check box to the form.
+-- @param table data The data for the image check box
+-- @param PANEL base The base Panel (DIconLayout) where this image check box will be added
+-- @return Panel The created image check box
+-- @realm client
+function PANEL:MakeImageCheckBox(data, base)
+	local box = base:Add("DImageCheckBoxTTT2")
+
+	box:SetSize(238, 175)
+	box:SetModel(data.model)
+	box:SetText(data.label)
+
+	box.OnSelected = function(slf, state)
+		if data and isfunction(data.OnSelected) then
+			data.OnSelected(slf, state)
+		end
+	end
+
+	return box
+end
+
 -- Adds an icon layout to the form
 -- @param[default=10] number spacing The spacing between the elements
 -- @return Panel The created panel

@@ -1397,5 +1397,131 @@ function SKIN:PaintSearchbar(panel, w, h)
 	)
 end
 
+function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
+	if not panel:HasModel() then return end
+
+	local widthBorder = 2
+	local widthBorder2 = widthBorder * 2
+	local padding = 5
+	local heightMode = 35
+	local widthMode = 175
+	local posIconModeX = w - widthMode + 2 * padding
+	local posIconModeY = h - heightMode + 2 * padding
+	local sizeIconMode = heightMode - 4 * padding
+	local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
+	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
+
+	local colorBackground = colors.settingsBox
+	local colorMode = utilGetChangedColor(colors.background, 75)
+
+	local materialMode = materialCardRemoved
+
+	if panel.Hovered then
+		colorBackground = colors.accentHover
+	end
+
+	if panel:IsSelected() then
+		colorMode = colorCardAdded
+		materialMode = materialCardAdded
+	end
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
+	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
+
+	panel:DrawModel()
+
+	drawRoundedBoxEx(sizes.cornerRadius, w - widthMode, h - heightMode, widthMode, heightMode, colorMode, true, false, false, true)
+	drawFilteredTexture(posIconModeX, posIconModeY, sizeIconMode, sizeIconMode, materialMode, 175, colorTextMode)
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		"DermaTTT2Text",
+		posTextModeX,
+		posTextModeY,
+		colorTextMode,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+
+
+
+
+
+
+
+
+
+	--[[
+	local widthBorder = 2
+	local widthBorder2 = widthBorder * 2
+	local sizeIcon = 64
+	local padding = 5
+	local posIcon = widthBorder + padding
+	local posText = posIcon + sizeIcon + 2 * padding
+	local heightMode = 35
+	local widthMode = w - sizeIcon - 3 * padding
+	local posIconModeX = w - widthMode + 2 * padding
+	local posIconModeY = h - heightMode + 2 * padding
+	local sizeIconMode = heightMode - 4 * padding
+	local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
+	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
+
+	local colorBackground = colors.settingsBox
+	local colorText = colors.settingsText
+	local colorMode = utilGetChangedColor(colors.background, 75)
+
+	local materialMode = materialCardRemoved
+	local textMode = "equip_not_added"
+
+	if panel:GetMode() == MODE_ADDED then
+		colorMode = colorCardAdded
+		materialMode = materialCardAdded
+		textMode = "equip_added"
+	elseif panel:GetMode() == MODE_INHERIT_ADDED then
+		colorMode = colorCardInheritAdded
+		materialMode = materialCardAdded
+		textMode = "equip_inherit_added"
+	elseif panel:GetMode() == MODE_INHERIT_REMOVED then
+		colorMode = colorCardInheritRemoved
+		textMode = "equip_inherit_removed"
+	end
+
+	local colorTextMode = utilGetDefaultColor(colorMode)
+
+	if panel.Hovered then
+		colorBackground = colors.accentHover
+	end
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
+	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
+
+	drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		posText,
+		posIcon + padding,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_TOP
+	)
+
+	drawRoundedBoxEx(sizes.cornerRadius, w - widthMode, h - heightMode, widthMode, heightMode, colorMode, true, false, false, true)
+
+	drawFilteredTexture(posIconModeX, posIconModeY, sizeIconMode, sizeIconMode, materialMode, 175, colorTextMode)
+
+	drawSimpleText(
+		TryT(textMode),
+		"DermaTTT2Text",
+		posTextModeX,
+		posTextModeY,
+		colorTextMode,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+	]]
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)
