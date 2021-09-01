@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added possibility to manipulate serverside ConVars with Checkboxes and Sliders
   - Just add .serverConvar with the conVarName to the given data similar to .convar
 - Added in game spawn editor system that can be found in F1->Administration
+- Moved all TTT weapons to this repository (with cleaned up code)
 
 ### Fixed
 
