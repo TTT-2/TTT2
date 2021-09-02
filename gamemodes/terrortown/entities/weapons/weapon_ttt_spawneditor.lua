@@ -145,9 +145,11 @@ if CLIENT then
 					scPos = pos:ToScreen()
 				camEnd3D()
 
+				if util.IsOffScreen(scPos) then continue end
+
 				local isHighlighted, dist3d = IsHighlighted(pos, scPos)
 
-				if util.IsOffScreen(scPos) or dist3d > maxEditDistance then continue end
+				if dist3d > maxEditDistance then continue end
 
 				if not isHighlighted then
 					renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, color)
