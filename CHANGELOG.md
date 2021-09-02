@@ -13,6 +13,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Extended cvars library to support manipulation of serverside ConVars
 - Added possibility to manipulate serverside ConVars with Checkboxes and Sliders
   - Just add .serverConvar with the conVarName to the given data similar to .convar
+- Added a new in-game player model selector
+- Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
 
 ### Fixed
 
