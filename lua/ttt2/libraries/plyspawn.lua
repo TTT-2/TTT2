@@ -153,13 +153,8 @@ function plyspawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
 end
 
 ---
--- Returns a list of all spawn entities found on the map that are valid to spawn players.
--- @warning Don't use 'info_player_start' unless absolutely necessary, because eg. TF2 uses
--- it for observer starts that are in places where players cannot really spawn well.
--- Therefore by default 'info_player_start' is not included in the search. However if 'forceAll'
--- is set to true or no other map spawn was found, these spawn entities will be included.
--- @deprecated Use @{map.GetPlayerSpawnEntities} instead
--- @return table Returns a table of unsafe spawn entities
+-- Returns a list of all spawn points found on the map that are valid to spawn players.
+-- @return table Returns a table of unsafe spawn points
 -- @realm server
 function plyspawn.GetPlayerSpawnPoints()
 	return entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
@@ -172,37 +167,37 @@ end
 -- @return table A safe spawn point
 -- @realm server
 function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
-	local spawnEntities = plyspawn.GetPlayerSpawnPoints()
+	local spawnPoints = plyspawn.GetPlayerSpawnPoints()
 
-	if #spawnEntities == 0 then
-		Error("No spawn entity found!\n")
+	if #spawnPoints == 0 then
+		Error("No spawn points found!\n")
 
 		return
 	end
 
 	-- the table should be shuffled for each spawn point calculation to improve randomness
-	table.Shuffle(spawnEntities)
+	table.Shuffle(spawnPoints)
 
 	if not IsValid(ply) or not ply:IsTerror() then
-		return spawnEntities[1]
+		return spawnPoints[1]
 	end
 
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is free
-	for i = 1, #spawnEntities do
-		local spawnEntity = spawnEntities[i]
+	for i = 1, #spawnPoints do
+		local spawnPoint = spawnPoints[i]
 
-		if not plyspawn.IsSpawnPointSafe(ply, spawnEntity.pos, false) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, false) then continue end
 
-		return spawnEntity
+		return spawnPoint
 	end
 
 	-- That did not work, so now look around spawns
-	local pickedSpawnEntity
+	local pickedSpawnPoint
 
-	for i = 1, #spawnEntities do
-		pickedSpawnEntity = spawnEntities[i]
+	for i = 1, #spawnPoints do
+		pickedSpawnPoint = spawnPoints[i]
 
-		local riggedSpawnPoint = plyspawn.MakeSpawnPointSafe(ply, pickedSpawnEntity.pos)
+		local riggedSpawnPoint = plyspawn.MakeSpawnPointSafe(ply, pickedSpawnPoint.pos)
 
 		if not riggedSpawnPoint then continue end
 
@@ -213,18 +208,18 @@ function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
 
 		return {
 			pos = riggedSpawnPoint,
-			ang = pickedSpawnEntity.ang
+			ang = pickedSpawnPoint.ang
 		}
 	end
 
 	-- Last attempt, force one
-	for i = 1, #spawnEntities do
-		local spawnEntity = spawnEntities[i]
+	for i = 1, #spawnPoints do
+		local spawnPoint = spawnPoints[i]
 
-		if not plyspawn.IsSpawnPointSafe(ply, spawnEntity.pos, true) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, true) then continue end
 
-		return spawnEntity
+		return spawnPoint
 	end
 
-	return pickedSpawnEntity
+	return pickedSpawnPoint
 end

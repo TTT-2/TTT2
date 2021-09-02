@@ -1057,9 +1057,6 @@ function PrepareRound()
 
 	SetRoundState(ROUND_PREP)
 
-	-- Delay spawning until next frame to avoid ent overload
-	--timer.Simple(0.01, SpawnEntities)
-
 	-- Undo the roundrestart mute, though they will once again be muted for the
 	-- selectmute timer.
 	timer.Create("restartmute", 1, 1, function()

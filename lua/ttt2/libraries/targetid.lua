@@ -122,6 +122,9 @@ end
 -- @realm client
 function targetid.HUDDrawTargetIDSpawnEdit(tData)
 	local client = LocalPlayer()
+
+	if not entspawnscript.IsEditing(client) then return end
+
 	local ent = tData:GetEntity()
 	local wep = client:GetActiveWeapon()
 

@@ -10,8 +10,6 @@ local updateCheckBoxes = {}
 local updateHelpBox = nil
 
 local function UpdateButtons(state)
-	state = state and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"}))
-
 	for i = 1, #updateButtons do
 		local updateElem = updateButtons[i]
 
@@ -58,7 +56,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_dynamic_spawns_global_enable",
 		serverConvar = "ttt_use_weapon_spawn_scripts",
 		OnChange = function(_, value)
-			UpdateButtons(tobool(value))
+			-- make sure that both the checkbox value and the map setting value are considered
+			UpdateButtons(tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
 		end
 	})
 
@@ -155,8 +154,10 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	cvars.ServerConVarGetValue("ttt_use_weapon_spawn_scripts", function(wasSuccess, value)
 		if not wasSuccess or not value then return end
 
-		updateButtons[1]:SetEnabled(tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
-		updateButtons[2]:SetEnabled(tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"})))
+		local state = tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"}))
+
+		updateButtons[1]:SetEnabled(state)
+		updateButtons[2]:SetEnabled(state)
 	end)
 end
 

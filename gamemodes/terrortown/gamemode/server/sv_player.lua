@@ -225,6 +225,7 @@ end
 
 ---
 -- Called to determine a spawn point for a @{Player} to spawn at.
+-- @note This hook is not used to determine the spawn point of the player.
 -- @param Player ply The @{Player} who needs a spawn point
 -- @return Entity The spawnpoint entity to spawn the @{Player} at
 -- @hook
