@@ -5,10 +5,6 @@
 if SERVER then
 	AddCSLuaFile()
 
-	---
-	-- @realm server
-	CreateConVar("ttt2_selected_playermodels", "css_phoenix,css_arctic,css_guerilla,css_leet", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
-
 	util.AddNetworkString("TTT2UpdateSelectedModels")
 end
 
@@ -16,37 +12,13 @@ local pairs = pairs
 local playerManagerAllValidModels = player_manager.AllValidModels
 local utilPrecacheModel = util.PrecacheModel
 local stringSplit = string.Split
-local GetConVar = GetConVar
 local tableRemove = table.remove
 local tableConcat = table.concat
 local tableHasValue = table.HasValue
 local RunConsoleCommand = RunConsoleCommand
-
-local callbackCache = {}
+local mathRandom = math.random
 
 playermodels = playermodels or {}
-
-local function Inernal_OnDataAvailable(_, modelString)
-	for i = 1, #callbackCache do
-		local Callback = callbackCache[i]
-
-		if not isfunction(Callback) then continue end
-
-		Callback(stringSplit(modelString, ","))
-	end
-
-	callbackCache = {}
-end
-
-function playermodels.GetSelectedModels(OnDataAvailable)
-	callbackCache[#callbackCache + 1] = OnDataAvailable
-
-	if CLIENT then
-		cvars.ServerConVarGetValue("ttt2_selected_playermodels", Inernal_OnDataAvailable)
-	else
-		Inernal_OnDataAvailable(nil, GetConVar("ttt2_selected_playermodels"):GetString())
-	end
-end
 
 function playermodels.AddSelectedModel(name)
 	net.Start("TTT2UpdateSelectedModels")
@@ -62,7 +34,37 @@ function playermodels.RemoveSelectedModel(name)
 	net.SendToServer()
 end
 
+if CLIENT then
+	local callbackCache = {}
+
+	local function Inernal_OnDataAvailable(_, modelString)
+		for i = 1, #callbackCache do
+			local Callback = callbackCache[i]
+
+			if not isfunction(Callback) then continue end
+
+			Callback(stringSplit(modelString, ","))
+		end
+
+		callbackCache = {}
+	end
+
+	function playermodels.GetSelectedModels(OnDataAvailable)
+		callbackCache[#callbackCache + 1] = OnDataAvailable
+
+		cvars.ServerConVarGetValue("ttt2_selected_playermodels", Inernal_OnDataAvailable)
+	end
+end
+
 if SERVER then
+	---
+	-- @realm server
+	local cvSelectPlayermodels = CreateConVar("ttt2_selected_playermodels", "css_phoenix,css_arctic,css_guerilla,css_leet", {FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
+	local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 	---
 	-- Precaches all valid playermodels to make sure that rendering the model can be done
 	-- without an initial lag. This is especially important for menus where multiple
@@ -75,10 +77,33 @@ if SERVER then
 		end
 	end
 
+	function playermodels.GetSelectedModels()
+		return stringSplit(cvSelectPlayermodels:GetString(), ",")
+	end
+
+	---
+	-- Selects a random playermodel from the available list of existing playermodels
+	-- @return Model model The selected playermodel
+	-- @realm server
+	function playermodels.GetRandomPlayerModel()
+		local availableModels = playermodels.GetSelectedModels()
+		local sizeAvailableModels = #availableModels
+
+		if cvCustomModels:GetBool() and sizeAvailableModels > 0 then
+			local modelPaths = playerManagerAllValidModels()
+			local randomModel = availableModels[mathRandom(sizeAvailableModels)]
+
+			return Model(modelPaths[randomModel])
+		else
+			return Model("models/player/phoenix.mdl")
+		end
+	end
+
 	net.Receive("TTT2UpdateSelectedModels", function(_, ply)
 		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
-		local currentModels = stringSplit(GetConVar("ttt2_selected_playermodels"):GetString(), ",")
+		local modelString = cvSelectPlayermodels:GetString()
+		local currentModels = modelString == "" and {} or stringSplit(modelString, ",")
 
 		if net.ReadBool() then
 			local toAdd = net.ReadString()

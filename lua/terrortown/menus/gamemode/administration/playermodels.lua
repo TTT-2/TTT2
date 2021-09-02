@@ -18,14 +18,32 @@ local function OnDataAvailable(data)
 end
 
 function CLGAMEMODESUBMENU:Populate(parent)
-	local form = vgui.CreateTTT2Form(parent, "header_random_shop_administration")
+	local form = vgui.CreateTTT2Form(parent, "header_playermodels_general")
 
-	local base = form:MakeIconLayout()
+	form:MakeHelp({
+		label = "help_enforce_playermodel"
+	})
 
+	form:MakeCheckBox({
+		label = "label_enforce_playermodel",
+		serverConvar = "ttt_enforce_playermodel"
+	})
+
+	form:MakeHelp({
+		label = "help_use_custom_models"
+	})
+
+	form:MakeCheckBox({
+		label = "label_use_custom_models",
+		serverConvar = "ttt2_use_custom_models"
+	})
+
+	local form2 = vgui.CreateTTT2Form(parent, "header_playermodels_selection")
+	local base = form2:MakeIconLayout()
 	local models = player_manager.AllValidModels()
 
 	for name, model in pairs(models) do
-		cachedBoxes[name] = form:MakeImageCheckBox({
+		cachedBoxes[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
 			OnSelected = function(slf, state)

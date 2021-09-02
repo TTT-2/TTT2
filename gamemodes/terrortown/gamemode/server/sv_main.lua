@@ -337,7 +337,7 @@ function GM:Initialize()
 
 	self.DamageLog = {}
 	self.LastRole = {}
-	self.playermodel = GetRandomPlayerModel()
+	self.playermodel = playermodels.GetRandomPlayerModel()
 	self.playercolor = COLOR_WHITE
 
 	-- Delay reading of cvars until config has definitely loaded
@@ -1045,7 +1045,7 @@ function PrepareRound()
 	KARMA.RoundPrepare()
 
 	-- New look. Random if no forced model set.
-	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
+	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and playermodels.GetRandomPlayerModel() or GAMEMODE.force_plymodel
 
 	---
 	-- @realm server

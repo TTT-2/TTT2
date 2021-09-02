@@ -1412,3 +1412,19 @@ L.searchbar_default_placeholder = "Search in list..."
 
 -- 2021-07-11
 L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-09-02
+L.submenu_administration_playermodels_title = "Player Models"
+L.header_playermodels_general = "General Player Model Settings"
+L.header_playermodels_selection = "Select Player Model Pool"
+
+L.label_enforce_playermodel = "Enforce role player model"
+L.label_use_custom_models = "Use a random selected player model"
+
+L.help_enforce_playermodel = [[
+Some roles have custom player models. This can be disabled which can be relevant for compatibility with some player model selectors.
+Random default models can still be selected, if this setting is disabled.]]
+L.help_use_custom_models = [[
+By default only the CSS Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
+
+This selection of models can be extended by installing more player models.]]
