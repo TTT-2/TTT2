@@ -7,15 +7,54 @@ local mathMin = math.min
 
 local PANEL = {}
 
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_fAnimSpeed", "AnimSpeed")
+
+---
+-- @accessor Entity
+-- @realm client
 AccessorFunc(PANEL, "Entity", "Entity")
+
+---
+-- @accessor Vector
+-- @realm client
 AccessorFunc(PANEL, "vCamPos", "CamPos")
+
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "fFOV", "FOV")
+
+---
+-- @accessor Vector
+-- @realm client
 AccessorFunc(PANEL, "vLookatPos", "LookAt")
+
+---
+-- @accessor Angle
+-- @realm client
 AccessorFunc(PANEL, "aLookAngle", "LookAng")
+
+---
+-- @accessor Color
+-- @realm client
 AccessorFunc(PANEL, "colAmbientLight", "AmbientLight")
+
+---
+-- @accessor Color
+-- @realm client
 AccessorFunc(PANEL, "colColor", "Color")
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "bAnimated", "Animated")
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "bRotating", "Rotating")
 
 ---
@@ -64,6 +103,10 @@ function PANEL:Init()
 	}
 end
 
+---
+-- @param number iDirections
+-- @param Color color
+-- @realm client
 function PANEL:SetDirectionalLight(iDirection, color)
 	self.directionalLight[iDirection] = color
 end
@@ -121,6 +164,8 @@ function PANEL:SetModel(model)
 	self.data.ent = ent
 end
 
+---
+-- @realm client
 function PANEL:DrawModel()
 	local ent = self.data.ent
 
@@ -178,10 +223,11 @@ function PANEL:DrawModel()
 	self.lastPaint = RealTime()
 end
 
+---
+-- This function is to be overriden
+-- @param Entity ent
+-- @realm client
 function PANEL:LayoutEntity(ent)
-	--
-	-- This function is to be overriden
-	--
 	if self.bAnimated then
 		self:RunAnimation()
 	end
