@@ -30,12 +30,27 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_use_custom_models"
+		label = "help_prefer_map_models"
 	})
 
 	form:MakeCheckBox({
+		label = "label_prefer_map_models",
+		serverConvar = "ttt2_prefer_map_models"
+	})
+
+	form:MakeHelp({
+		label = "help_use_custom_models"
+	})
+
+	local customModelsEnb = form:MakeCheckBox({
 		label = "label_use_custom_models",
 		serverConvar = "ttt2_use_custom_models"
+	})
+
+	form:MakeCheckBox({
+		label = "label_select_model_per_round",
+		serverConvar = "ttt2_select_model_per_round",
+		master = customModelsEnb
 	})
 
 	local form2 = vgui.CreateTTT2Form(parent, "header_playermodels_selection")

@@ -1420,7 +1420,13 @@ L.header_playermodels_selection = "Select Player Model Pool"
 
 L.label_enforce_playermodel = "Enforce role player model"
 L.label_use_custom_models = "Use a random selected player model"
+L.label_prefer_map_models = "Prefer map specific models over default models"
+L.label_select_model_per_round = "Select a new random model each round (only on mapchange if disabled)"
 
+L.help_prefer_map_models = [[
+Some maps define their own playermodels. By default these models have a higher priority then the models that are automatically assigned. By disabling this setting, map specific models are disabled.
+
+Role specific models always have a higher priority and are unaffected by this setting.]]
 L.help_enforce_playermodel = [[
 Some roles have custom player models. This can be disabled which can be relevant for compatibility with some player model selectors.
 Random default models can still be selected, if this setting is disabled.]]

@@ -171,6 +171,14 @@ local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR
 
 ---
 -- @realm server
+local cvPreferMapModels = CreateConVar("ttt2_prefer_map_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
 
 ---
@@ -1044,8 +1052,12 @@ function PrepareRound()
 	-- Update damage scaling
 	KARMA.RoundPrepare()
 
-	-- New look. Random if no forced model set.
-	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and playermodels.GetRandomPlayerModel() or GAMEMODE.force_plymodel
+	-- New look. Random if no forced model set
+	if cvPreferMapModels:GetBool() and GAMEMODE.force_plymodel and GAMEMODE.force_plymodel ~= "" then
+		GAMEMODE.playermodel = GAMEMODE.force_plymodel
+	elseif cvSelectModelPerRound:GetBool() then
+		GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
+	end
 
 	---
 	-- @realm server
