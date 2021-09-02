@@ -92,7 +92,7 @@ if SERVER then
 
 	---
 	-- Rerturns an indexed table with all the models that are in the selction pool.
-	-- @param function OnDataAvailable The callback function that is called once the data is available
+	-- @return table An indexed table with all selected player models
 	-- @realm server
 	function playermodels.GetSelectedModels()
 		return stringSplit(cvSelectPlayermodels:GetString(), ",")

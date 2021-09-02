@@ -112,8 +112,7 @@ function PANEL:SetDirectionalLight(iDirection, color)
 end
 
 ---
--- @return string
--- @realm client
+-- @ignore
 function PANEL:GetText()
 	return self.data.text
 end
@@ -237,6 +236,8 @@ function PANEL:LayoutEntity(ent)
 	end
 end
 
+---
+-- @realm client
 function PANEL:RunAnimation()
 	self.data.ent:FrameAdvance((RealTime() - self.lastPaint) * self.m_fAnimSpeed)
 end
@@ -284,8 +285,7 @@ function PANEL:IsSelected()
 end
 
 ---
--- @param number keyCode
--- @realm client
+-- @ignore
 function PANEL:OnMouseReleased(keyCode)
 	if keyCode == MOUSE_LEFT then
 		local state = not self:IsSelected()
@@ -298,14 +298,15 @@ function PANEL:OnMouseReleased(keyCode)
 end
 
 ---
+-- Is called when the selection state is updated. Should be overwritten.
+-- @param boolean state
 -- @realm client
 function PANEL:OnSelected(state)
 
 end
 
 ---
--- @return boolean
--- @realm client
+-- @ignore
 function PANEL:IsDown()
 	return self.Depressed
 end
