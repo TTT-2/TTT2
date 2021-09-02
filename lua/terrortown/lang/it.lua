@@ -1433,7 +1433,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.label_select_model_per_round = "Select a new random model each round (only on mapchange if disabled)"
 
 --L.help_prefer_map_models = [[
---Some maps define their own playermodels. By default these models have a higher priority then the models that are automatically assigned. By disabling this setting, map --specific models are disabled.
+--Some maps define their own player models. By default these models have a higher priority then the models that are automatically assigned. By disabling this setting, map --specific models are disabled.
 
 --Role specific models always have a higher priority and are unaffected by this setting.]]
 --L.help_enforce_playermodel = [[
