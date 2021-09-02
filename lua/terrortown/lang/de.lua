@@ -1411,3 +1411,25 @@ L.searchbar_default_placeholder = "Durchsuche Liste..."
 
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-09-02
+L.submenu_administration_playermodels_title = "Spielermodell"
+L.header_playermodels_general = "Allgemeine Spielermodelleinstellungen"
+L.header_playermodels_selection = "Wähle Spielermodellliste"
+
+L.label_enforce_playermodel = "Erzwinge rollenspezifisches Spielermodell"
+L.label_use_custom_models = "Nutze ein zufällig ausgewähltes Spielermodell"
+L.label_prefer_map_models = "Bevorzuge kartenspezifische Modelle über die Standardspielermodelle"
+L.label_select_model_per_round = "Wähle ein neues zufälliges Spielermodell in jeder Runde (nur zum Kartenwechsel, wenn deaktiviert)"
+
+L.help_prefer_map_models = [[
+Manche Karten haben ihre eigenen Spielermodelle. Standardmäßig haben diese Modelle eine höhere Priorität gegenüber den automatisch zugewiesenen. Durch das Deaktivieren dieser Einetllung haben kartenspezifische Spielermodelle keine höhere Priorität mehr.
+
+Rollenspezifische Spielermodelle haben immer die höchste Priorität und sind daher nicht von dieser Einstellung betroffen.]]
+L.help_enforce_playermodel = [[
+Manche Rollen haben spezfische Spielermodelle. Dies kann deaktiviert werden, um Kompatibilität zu gewissen Spielermodellauswahl-Tools zu gewährleisten.
+Zufällige Standardmodelle können noch immer ausgewählt werden, wenn diese Einstellung deaktiviert ist.]]
+L.help_use_custom_models = [[
+Standardmäßig bekommt jeder Spieler das Phoenix Spielermodell zugewiesen. Durch das Aktivieren dieser Option ist es jedoch möglich eine Spielermodellliste zu erstellen. Es bekommen noch immer alle Spieler ein zufälliges Spielermodell zugewiesen, jedoch ist es ein zufälliges aus der Liste der ausgewählten Spielermodelle.
+
+Diese Auswahl an Modellen kann erweitert werden, indem weitere Spielermodelle installiert werden.]]
