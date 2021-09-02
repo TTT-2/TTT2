@@ -20,6 +20,10 @@ local mathRandom = math.random
 
 playermodels = playermodels or {}
 
+---
+-- Adds a new model name to the list of the selected playermodes.
+-- @param string name The name of the model
+-- @realm shared
 function playermodels.AddSelectedModel(name)
 	net.Start("TTT2UpdateSelectedModels")
 	net.WriteBool(true)
@@ -27,6 +31,10 @@ function playermodels.AddSelectedModel(name)
 	net.SendToServer()
 end
 
+---
+-- Removes a model by its name from the list of the selected playermodes.
+-- @param string name The name of the model
+-- @realm shared
 function playermodels.RemoveSelectedModel(name)
 	net.Start("TTT2UpdateSelectedModels")
 	net.WriteBool(false)
@@ -49,6 +57,11 @@ if CLIENT then
 		callbackCache = {}
 	end
 
+	---
+	-- Rerturns an indexed table with all the models that are in the selction pool. Sends
+	-- a request to the server and the data is provided in the callback function.
+	-- @param function OnDataAvailable The callback function that is called once the data is available
+	-- @realm client
 	function playermodels.GetSelectedModels(OnDataAvailable)
 		callbackCache[#callbackCache + 1] = OnDataAvailable
 
@@ -77,6 +90,10 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Rerturns an indexed table with all the models that are in the selction pool.
+	-- @param function OnDataAvailable The callback function that is called once the data is available
+	-- @realm server
 	function playermodels.GetSelectedModels()
 		return stringSplit(cvSelectPlayermodels:GetString(), ",")
 	end
