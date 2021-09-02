@@ -509,6 +509,11 @@ function GM:InitPostEntity()
 
 	WEPS.ForcePrecache()
 
+	-- precache player models
+	for _, model in pairs(player_manager.AllValidModels()) do
+		util.PrecacheModel(model)
+	end
+
 	timer.Simple(0, function()
 		addonChecker.Check()
 	end)

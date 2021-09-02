@@ -111,6 +111,13 @@ function PANEL:SetModel(model)
 		ent:ResetSequence(iSeq)
 	end
 
+	-- before storing the ent, make sure that a possible old ent
+	-- is removed because clientside models are not garbage collected
+	if IsValid(self.data.ent) then
+		self.data.ent:Remove()
+		self.data.ent = nil
+	end
+
 	self.data.ent = ent
 end
 
