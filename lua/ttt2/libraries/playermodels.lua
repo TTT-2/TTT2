@@ -53,9 +53,7 @@ function playermodels.GetSelectedModels()
 		local playerModelPoolNames = {}
 
 		for i = 1, #playermodelPool do
-			if playermodelPool[i].name == playermodels.initializedFlag then continue end
-
-			playerModelPoolNames[#playerModelPoolNames + 1] = playermodelPool[i].name
+			playerModelPoolNames[i] = playermodelPool[i].name
 		end
 
 		return playerModelPoolNames
@@ -107,7 +105,6 @@ if SERVER then
 	playermodels.savingKeys = {
 		state = {typ = "bool", default = false}
 	}
-	playermodels.initializedFlag = "__INITIALIZED__"
 
 	playermodels.fallbackModel = "models/player/phoenix.mdl"
 
@@ -123,17 +120,12 @@ if SERVER then
 		end
 
 		local playermodelPoolModel = orm.Make(playermodels.sqltable)
-		local initializedFlag = playermodelPoolModel:Find(playermodels.initializedFlag)
-		local isNewTable = initializedFlag and (initializedFlag.state ~= true) or true
 
 		for name in pairs(playerManagerAllValidModels()) do
 			if playermodelPoolModel:Find(name) then continue end
 
-			playermodelPoolModel:New({name = name, state = (isNewTable and initialModels[name]) or false}):Save()
+			playermodelPoolModel:New({name = name, state = initialModels[name] or false}):Save()
 		end
-
-		-- mark table as initialized
-		playermodelPoolModel:New({name = playermodels.initializedFlag, state = true}):Save()
 
 		return true
 	end
