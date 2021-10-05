@@ -33,6 +33,8 @@ function playermodels.UpdateModelState(name, state)
 
 		playermodelObject.state = state or false
 		playermodelObject:Save()
+
+		playermodels.StreamToSelectedClients()
 	else -- CLIENT
 		net.Start("TTT2UpdateSelectedModels")
 		net.WriteString(name)
@@ -83,9 +85,19 @@ end
 
 
 if CLIENT then
+	local callbackCache = {}
+
 	net.ReceiveStream("TTT2StreamModelTable", function(data)
 		playermodels.selectedModels = data
+
+		for i = 1, #callbackCache do
+			callbackCache[i](data)
+		end
 	end)
+
+	function playermodels.AddChangeCallback(Callback)
+		callbackCache[#callbackCache + 1] = Callback
+	end
 end
 
 if SERVER then
@@ -176,7 +188,5 @@ if SERVER then
 		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 		playermodels.UpdateModelState(net.ReadString(), net.ReadBool())
-
-		playermodels.StreamToSelectedClients()
 	end)
 end

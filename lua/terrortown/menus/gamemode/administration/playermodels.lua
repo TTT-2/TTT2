@@ -5,6 +5,20 @@ CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 CLGAMEMODESUBMENU.priority = 96
 CLGAMEMODESUBMENU.title = "submenu_administration_playermodels_title"
 
+local boxCache = {}
+
+local function OnDataUpdated(data)
+	-- first iterate over all and disable them
+	for _, box in pairs(boxCache) do
+		box:SetSelected(false)
+	end
+
+	-- then enable the now selected ones
+	for i = 1, #data do
+		boxCache[data[i]]:SetSelected(true)
+	end
+end
+
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_playermodels_general")
 
@@ -46,7 +60,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	local models = player_manager.AllValidModels()
 
 	for name, model in pairs(models) do
-		form2:MakeImageCheckBox({
+		boxCache[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
 			initial = playermodels.HasSelectedModel(name),
@@ -55,4 +69,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			end
 		}, base)
 	end
+
+	playermodels.AddChangeCallback(OnDataUpdated)
 end
