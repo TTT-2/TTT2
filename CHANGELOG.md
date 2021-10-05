@@ -3,6 +3,11 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+
+
+
+## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
+
 ### Added
 
 - Add Traditional Chinese Translation (by @TEGTianFan)
@@ -28,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - Revise and additions simplified Chinese (by @TEGTianFan)
 - Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)
+- ROLE_NONE does not count as a special role anymore (by @TheNickSkater)
 
 ### Internal Breaking Changes
 - Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`
