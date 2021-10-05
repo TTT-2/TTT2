@@ -210,7 +210,7 @@ function PANEL:DrawModel()
 			end
 		end
 
-		-- make a mask to make sure the graphic is limted
+		-- make a mask to make sure the graphic is limited
 		render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
 
 		ent:DrawModel()
