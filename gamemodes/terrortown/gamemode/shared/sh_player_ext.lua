@@ -983,7 +983,6 @@ function plymeta:SetModel(mdlName)
 
 		if not checkModel(curMdl) then
 			if not checkModel(GAMEMODE.playermodel) then
-				--GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
 				GAMEMODE.playermodel = GAMEMODE.force_plymodel
 
 				if not checkModel(GAMEMODE.playermodel) then
