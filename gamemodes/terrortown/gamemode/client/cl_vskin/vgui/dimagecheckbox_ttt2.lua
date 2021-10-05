@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DCardTTT2
+-- @section ImageCheckBoxTTT2
 
 local mathMax = math.max
 local mathMin = math.min
