@@ -319,6 +319,9 @@ function GM:Initialize()
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
 
+	-- initialize playermodel database
+	playermodels.InitializeDatabase()
+
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")
 

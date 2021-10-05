@@ -526,6 +526,7 @@ function PANEL:MakeImageCheckBox(data, base)
 	box:SetSize(238, 175)
 	box:SetModel(data.model)
 	box:SetText(data.label)
+	box:SetSelected(data.initial)
 
 	box.OnSelected = function(slf, state)
 		if data and isfunction(data.OnSelected) then

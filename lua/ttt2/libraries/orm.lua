@@ -82,6 +82,9 @@ function ORMMODEL:All()
 
 	if objects == false then return end
 
+	-- nothing found, make it an empty table
+	objects = objects or {}
+
 	if not self._primaryKey then
 		return objects
 	end
@@ -92,7 +95,7 @@ function ORMMODEL:All()
 		objects[i].Refresh = self.Refresh
 	end
 
-	return objects or {}
+	return objects
 end
 
 ---
@@ -124,7 +127,7 @@ function ORMMODEL:Find(primaryValue)
 
 	if result == false then return end
 
-	return result and self:New(result) or {}
+	return result and self:New(result) or nil
 end
 
 ---
@@ -168,7 +171,7 @@ function ORMMODEL:Where(filters)
 	for i = 1, #filters do
 		local curFilter = filters[i]
 
-		whereList[i] = sql.SQLIdent(curFilter[column]) .. (curFilter[op] or "=") .. sql.SQLStr(curFilter[value]) .. (curFilter[concat] or "")
+		whereList[i] = sql.SQLIdent(curFilter.column) .. (curFilter.op or "=") .. sql.SQLStr(curFilter.value) .. (curFilter.concat or "")
 	end
 
 	whereList = table.concat(whereList)
@@ -178,6 +181,9 @@ function ORMMODEL:Where(filters)
 	local objects = sql.Query(query)
 
 	if objects == false then return end
+
+	-- nothing found, make it an empty table
+	objects = objects or {}
 
 	if not self._primaryKey then
 		return objects
@@ -189,7 +195,7 @@ function ORMMODEL:Where(filters)
 		objects[i].Refresh = ORMOBJECT.Refresh
 	end
 
-	return objects or {}
+	return objects
 end
 
 ---
