@@ -42,7 +42,7 @@ function playermodels.UpdateModelState(name, state)
 end
 
 ---
--- Rerturns an indexed table with all the models that are in the selction pool.
+-- Returns an indexed table with all the models that are in the selction pool.
 -- @return table An indexed table with all selected player models
 -- @realm server
 function playermodels.GetSelectedModels()
@@ -64,6 +64,13 @@ function playermodels.GetSelectedModels()
 	end
 end
 
+---
+-- Checks if a provided model is in the selection pool.
+-- @note While this function is shared, the data is only available for superadmin on the
+-- client, if no manual sync is triggered.
+-- @param string name The name of the model
+-- @return boolean Returns true, if the model is in the selection pool
+-- @realm shared
 function playermodels.HasSelectedModel(name)
 	local models = playermodels.GetSelectedModels()
 
@@ -102,6 +109,14 @@ if SERVER then
 	}
 	playermodels.initializedFlag = "__INITIALIZED__"
 
+	playermodels.fallbackModel = "models/player/phoenix.mdl"
+
+	---
+	-- Initializes the database. This adds all models and sets the default models to true, if it
+	-- is the first init on this server.
+	-- @return boolean Returns false, if it failed during the process
+	-- @internal
+	-- @realm server
 	function playermodels.InitializeDatabase()
 		if not sql.CreateSqlTable(playermodels.sqltable, playermodels.savingKeys) then
 			return false
@@ -123,6 +138,10 @@ if SERVER then
 		return true
 	end
 
+	---
+	-- Streams the playermodel selection pool to clients. By default the clients are all superadmin players.
+	-- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
+	-- @realm server
 	function playermodels.StreamToSelectedClients(plys)
 		plys = plys or util.GetFilteredPlayers(function(ply)
 			return ply:IsSuperAdmin()
@@ -157,7 +176,7 @@ if SERVER then
 
 			return Model(modelPaths[randomModel])
 		else
-			return Model("models/player/phoenix.mdl")
+			return Model(playermodels.fallbackModel)
 		end
 	end
 
