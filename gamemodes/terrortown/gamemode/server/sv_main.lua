@@ -1056,7 +1056,7 @@ function PrepareRound()
 	KARMA.RoundPrepare()
 
 	-- New look. Random if no forced model set
-	if cvPreferMapModels:GetBool() and GAMEMODE.force_plymodel and GAMEMODE.force_plymodel ~= "" then
+	if cvPreferMapModels:GetBool() and GAMEMODE.force_plymodel ~= "" then
 		GAMEMODE.playermodel = GAMEMODE.force_plymodel
 	elseif cvSelectModelPerRound:GetBool() then
 		GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
