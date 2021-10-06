@@ -241,7 +241,7 @@ if CLIENT then
 				-- make sure there is nothingin the way
 				local trace = util.TraceLine({
 					start = client:EyePos(),
-					endpos = pos,
+					endpos = client:EyePos() + client:EyeAngles():Forward() * dist3d,
 					filter = {client},
 					mask = MASK_SOLID
 				})
