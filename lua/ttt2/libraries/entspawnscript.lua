@@ -166,7 +166,7 @@ if SERVER then
 			[SPAWN_TYPE_PLAYER] = map.GetPlayerSpawns()
 		}
 
-		-- now check if there is a deprectated ttt weapon spawn script and convert the data to
+		-- now check if there is a deprecated ttt weapon spawn script and convert the data to
 		-- the new ttt2 system as well
 		if ents.TTT.CanImportEntities(mapName) then
 			local spawns, settings = ents.TTT.ImportEntities(mapName)
@@ -353,7 +353,7 @@ if SERVER then
 	end
 
 	---
-	-- Returns the table of all currently defined settins.
+	-- Returns the table of all currently defined settings.
 	-- @return table The settings table
 	-- @realm server
 	function entspawnscript.GetSettings()
@@ -361,7 +361,7 @@ if SERVER then
 	end
 
 	---
-	-- Returs a specific setting defined by the key.
+	-- Returns a specific setting defined by the key.
 	-- @param string key The key of the requested setting
 	-- @return[default=0] number The setting value
 	-- @realm server
@@ -564,7 +564,7 @@ if CLIENT then
 	end
 
 	---
-	-- Sets the spawn info entity that is used for all spawn points in tagetID.
+	-- Sets the spawn info entity that is used for all spawn points in targetID.
 	-- @param Entity ent The spawn info entity
 	-- @realm client
 	function entspawnscript.SetSpawnInfoEntity(ent)
@@ -572,7 +572,7 @@ if CLIENT then
 	end
 
 	---
-	-- Returns the spawn info entity that is used for all spawn points in tagetID.
+	-- Returns the spawn info entity that is used for all spawn points in targetID.
 	-- @return Entity Returns the spawn info entity
 	-- @realm client
 	function entspawnscript.GetSpawnInfoEntity()
@@ -642,7 +642,7 @@ function entspawnscript.IsEditing(ply)
 end
 
 ---
--- Returns the language identifier for a specific spawnType/entType comination.
+-- Returns the language identifier for a specific spawnType/entType combination.
 -- @param number spawnType The type of the spawn
 -- @param number entType The specific entity type for the specific spawn type
 -- @return string Returns the language identifer
@@ -652,7 +652,7 @@ function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
 end
 
 ---
--- Returns the storage var name for a specific spawnType/entType comination.
+-- Returns the storage var name for a specific spawnType/entType combination.
 -- @param number spawnType The type of the spawn
 -- @param number entType The specific entity type for the specific spawn type
 -- @return string Returns the storage variable name
@@ -671,7 +671,7 @@ function entspawnscript.GetColorFromSpawnType(spawnType)
 end
 
 ---
--- Returns the icon material for a specific spawnType/entType comination.
+-- Returns the icon material for a specific spawnType/entType combination.
 -- @param number spawnType The type of the spawn
 -- @param number entType The specific entity type for the specific spawn type
 -- @return Material Returns the icon material
@@ -685,7 +685,7 @@ end
 -- predefined entity types.
 -- @param number spawnType The specidic spawn type
 -- @param table excludeTypes A key-boolean table with the excluded types
--- @return table Returns an indexed table with the avaiblable entity Types
+-- @return table Returns an indexed table with the available entity Types
 -- @realm shared
 function entspawnscript.GetEntTypeList(spawnType, excludeTypes)
 	local indexedTable = {}

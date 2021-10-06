@@ -1454,7 +1454,7 @@ net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
 ---
 -- Resets the cached weapons. This is automatically done on a weapon restore,
--- but has to be triggered manually in scnarios where the inventory is reset
+-- but has to be triggered manually in scenarios where the inventory is reset
 -- without triggering the restore function, e.g. @{GM:PlayerSpawn}.
 -- @realm server
 function plymeta:ResetCachedWeapons()

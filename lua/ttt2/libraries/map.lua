@@ -277,7 +277,7 @@ function map.GetWeaponSpawnEntities()
 end
 
 ---
--- Finds and returns all ammo entities found on a mape.
+-- Finds and returns all ammo entities found on a map.
 -- @return table A table with all the ammo spawn entities grouped by ent types
 -- @realm shared
 function map.GetAmmoSpawnEntities()
@@ -290,7 +290,7 @@ function map.GetAmmoSpawnEntities()
 end
 
 ---
--- Finds and returns player spawn entities found on a mape.
+-- Finds and returns player spawn entities found on a map.
 -- @return table A table with all the player spawn entities grouped by ent types
 -- @realm shared
 function map.GetPlayerSpawnEntities()
@@ -313,7 +313,7 @@ function map.GetWeaponSpawns()
 end
 
 ---
--- Finds and returns all ammo spawns found on a mape.
+-- Finds and returns all ammo spawns found on a map.
 -- @return table A table with all the ammo spawns grouped by ent types
 -- @realm shared
 function map.GetAmmoSpawns()
@@ -321,7 +321,7 @@ function map.GetAmmoSpawns()
 end
 
 ---
--- Finds and returns player spawns found on a mape.
+-- Finds and returns player spawns found on a map.
 -- @return table A table with all the player spawns grouped by ent types
 -- @realm shared
 function map.GetPlayerSpawns()
@@ -345,7 +345,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		local spawn = spawns[i]
 		local cls = spawn.class
 
-		-- first check if is a player spawn, this is independant from the map type
+		-- first check if it is a player spawn, this is independant from the map type
 		local plyType = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
 
 		if plyType then
@@ -389,7 +389,7 @@ function map.GetSpawnsFromClassTable(spawns)
 end
 
 ---
--- Checks if a given entity is a default terrortown map entity. Can be used to determin if an entity
+-- Checks if a given entity is a default terrortown map entity. Can be used to determine if an entity
 -- should be removed from the map prior to spawning with the custom spawn system.
 -- @param Entity ent The entity to check
 -- @return boolean Returns true if the given entity is default terrortown entity

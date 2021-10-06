@@ -1452,7 +1452,7 @@ L.spawn_type_weapon = "Dies ist ein Waffenspawn"
 L.spawn_type_ammo = "Dies ist ein Munitionsspawn"
 L.spawn_type_player = "Dies ist ein Spielerspawn"
 
-L.spawn_remove = "Drücke [{secondaryfire}], um diesen Spanw zu entfernen"
+L.spawn_remove = "Drücke [{secondaryfire}], um diesen Spawn zu entfernen"
 
 L.submenu_administration_entspawn_title = "Spawn Editor"
 L.header_entspawn_settings = "Spawn Editor Einstellungen"

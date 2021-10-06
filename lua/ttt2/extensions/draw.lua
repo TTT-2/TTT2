@@ -174,7 +174,7 @@ end
 local drawCircle = draw.Circle
 
 ---
--- A function to draws a circle with a shadow.
+-- A function to draw a circle with a shadow.
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
