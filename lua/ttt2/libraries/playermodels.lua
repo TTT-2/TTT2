@@ -143,7 +143,7 @@ if SERVER then
 	end
 
 	---
-	-- Streams the playermodel selection pool to clients. By default the clients are all superadmin players.
+	-- Streams the playermodel selection pool to clients. By default streams to all superadmin players.
 	-- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
 	-- @realm server
 	function playermodels.StreamToSelectedClients(plys)
