@@ -1422,6 +1422,28 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) был убит {a
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
 
+-- 2021-09-02
+--L.submenu_administration_playermodels_title = "Player Models"
+--L.header_playermodels_general = "General Player Model Settings"
+--L.header_playermodels_selection = "Select Player Model Pool"
+
+--L.label_enforce_playermodel = "Enforce role player model"
+--L.label_use_custom_models = "Use a random selected player model"
+--L.label_prefer_map_models = "Prefer map specific models over default models"
+--L.label_select_model_per_round = "Select a new random model each round (only on mapchange if disabled)"
+
+--L.help_prefer_map_models = [[
+--Some maps define their own player models. By default these models have a higher priority then the models that are automatically assigned. By disabling this setting, map --specific models are disabled.
+
+--Role specific models always have a higher priority and are unaffected by this setting.]]
+--L.help_enforce_playermodel = [[
+--Some roles have custom player models. This can be disabled which can be relevant for compatibility with some player model selectors.
+--Random default models can still be selected, if this setting is disabled.]]
+--L.help_use_custom_models = [[
+--By default only the CSS Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting --enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
+
+--This selection of models can be extended by installing more player models.]]
+
 -- 2021-10-06
 --L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
 --L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"

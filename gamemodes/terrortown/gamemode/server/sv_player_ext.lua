@@ -1422,6 +1422,11 @@ local function SetPlayerReady(_, ply)
 	-- Send full state update to client
 	ttt2net.SendFullStateUpdate(ply)
 
+	-- update playermodels on the client
+	if ply:IsSuperAdmin() then
+		playermodels.StreamToSelectedClients(ply)
+	end
+
 	---
 	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)

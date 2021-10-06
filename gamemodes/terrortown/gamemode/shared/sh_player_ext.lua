@@ -149,7 +149,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 			hook.Run("PlayerLoadout", self, false)
 
 			-- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
-			if GetConVar("ttt_enforce_playermodel"):GetBool() and oldSubrole then
+			if oldSubrole and GetConVar("ttt_enforce_playermodel"):GetBool() then
 				-- update subroleModel
 				self:SetModel(self:GetSubRoleModel())
 			end
@@ -977,12 +977,13 @@ function plymeta:SetModel(mdlName)
 	local mdl
 
 	local curMdl = mdlName or self:GetModel()
+
 	if not checkModel(curMdl) then
 		curMdl = self.defaultModel
 
 		if not checkModel(curMdl) then
 			if not checkModel(GAMEMODE.playermodel) then
-				GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
+				GAMEMODE.playermodel = GAMEMODE.force_plymodel
 
 				if not checkModel(GAMEMODE.playermodel) then
 					GAMEMODE.playermodel = "models/player/phoenix.mdl"

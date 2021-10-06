@@ -1397,5 +1397,57 @@ function SKIN:PaintSearchbar(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
+	local widthBorder = 2
+	local widthBorder2 = widthBorder * 2
+	local padding = 5
+	local heightMode = 35
+	local widthMode = 175
+	local posIconModeX = w - widthMode + 2 * padding
+	local posIconModeY = h - heightMode + 2 * padding
+	local sizeIconMode = heightMode - 4 * padding
+	local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
+	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
+
+	local colorBackground = colors.settingsBox
+	local colorMode = utilGetChangedColor(colors.background, 75)
+
+	local materialMode = materialCardRemoved
+
+	if panel.Hovered then
+		colorBackground = colors.accentHover
+	end
+
+	if panel:IsSelected() then
+		colorMode = colorCardAdded
+		materialMode = materialCardAdded
+	end
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
+	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
+
+	if panel:HasModel() then
+		panel:DrawModel()
+	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, w - widthMode, h - heightMode, widthMode, heightMode, colorMode, true, false, false, true)
+	drawFilteredTexture(posIconModeX, posIconModeY, sizeIconMode, sizeIconMode, materialMode, 175, colorTextMode)
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		"DermaTTT2Text",
+		posTextModeX,
+		posTextModeY,
+		colorTextMode,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)
