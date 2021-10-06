@@ -3,6 +3,20 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+
+### Added
+
+- Added a new in-game player model selector
+  - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
+  - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
+
+### Breaking Changes
+
+- Removed the (unused?) ConVar `ttt2_custom_models`
+- Removed the function `GetRandomPlayerModel()`, use `playermodels.GetRandomPlayerModel()` instead
+
+## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
+
 ### Added
 
 - Add Traditional Chinese Translation (by @TEGTianFan)
@@ -28,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - Revise and additions simplified Chinese (by @TEGTianFan)
 - Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)
+- ROLE_NONE does not count as a special role anymore (by @TheNickSkater)
 - Completely reworked how weapons, ammo and players spawn in the world
 
 ### Internal Breaking Changes

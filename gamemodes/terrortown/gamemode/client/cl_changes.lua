@@ -959,6 +959,48 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2021, month = 06, day = 20}))
 
+	AddChange("TTT2 Base - v0.9.3b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Add Traditional Chinese Translation (by @TEGTianFan)</li>
+			<li>Added a searchbar to submenus</li>
+			<li>Added full-sized icons to the equipment-editor</li>
+			<li>Hotreload functionality for weapons, they are now fully compatible to TTT2 after hotreload</li>
+			<li>Added experimental `SWEP.HotReloadableKeys` a list of strings to weapons, that makes data saved with `weapons.GetStored()` persistent across hotreloads</li>
+			<li>Extended cvars library to support manipulation of serverside ConVars</li>
+			<li>Added possibility to manipulate serverside ConVars with Checkboxes and Sliders</li>
+			<ul>
+				<li>Just add .serverConvar with the conVarName to the given data similar to .convar</li>
+			</ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Updated Japanese translation (by @westooooo)</li>
+			<li>Fixed text positioning in pure_skin bar (by @LukasMandok)</li>
+			<li>Fixed data being not persistent after hot reloading</li>
+			<ul>
+				<li>HUDs are now still available</li>
+				<li>ttt2net keeps its data</li>
+				<li>bindings are not lost on reload</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Revise and additions simplified Chinese (by @TEGTianFan)</li>
+			<li>Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)</li>
+			<li>ROLE_NONE does not count as a special role anymore (by @TheNickSkater)</li>
+		</ul>
+
+		<h2>Internal Breaking Changes</h2>
+		<ul>
+			<li>Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`</li>
+			<li>Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`</li>
+			<li>Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`</li>
+		</ul>
+	]], os.time({ year = 2021, month = 09, day = 25 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

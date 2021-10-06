@@ -249,9 +249,7 @@ end
 function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
 
-	local mdl = ply.defaultModel or GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
-
-	ply:SetModel(mdl) -- this will call the overwritten internal function to modify the model
+	ply:SetModel(ply.defaultModel or GAMEMODE.playermodel) -- this will call the overwritten internal function to modify the model
 
 	-- Always clear color state, may later be changed in TTTPlayerSetColor
 	ply:SetColor(COLOR_WHITE)

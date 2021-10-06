@@ -2,10 +2,10 @@
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"
-GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek"
+GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.9.2b"
+GM.Version = "0.9.3b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -115,10 +115,6 @@ TEAMS = TEAMS or {
 }
 
 ACTIVEROLES = ACTIVEROLES or {}
-
----
--- @realm shared
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
@@ -561,6 +557,7 @@ include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
+include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
 
 -- include ttt required files
@@ -613,28 +610,6 @@ end
 -- Create teams
 TEAM_TERROR = 1
 TEAM_SPEC = TEAM_SPECTATOR
-
--- Everyone's model
-local ttt_playermodels = {
-	Model("models/player/phoenix.mdl"),
-	Model("models/player/arctic.mdl"),
-	Model("models/player/guerilla.mdl"),
-	Model("models/player/leet.mdl")
-}
-
-local ttt_playermodels_count = #ttt_playermodels
-
----
--- Returns a random player model
--- @return Model model
--- @realm shared
-function GetRandomPlayerModel()
-	if not ttt2_custom_models:GetBool() then
-		return ttt_playermodels[math.random(ttt_playermodels_count)]
-	else
-		return ttt_playermodels[1]
-	end
-end
 
 ---
 -- Returns the default equipment
