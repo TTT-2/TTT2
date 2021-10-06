@@ -13,7 +13,7 @@ local pairs = pairs
 local Vector = Vector
 local VectorRand = VectorRand
 local mathRand = math.Rand
-local tableRemove = table.remove
+local mathMin = math.min
 local timerCreate = timer.Create
 local timerRemove = timer.Remove
 
@@ -134,48 +134,34 @@ function entspawn.SpawnPlayers(deadOnly)
 		end
 	else
 		-- wave method
-		local amountSpawns = #plyspawn.GetPlayerSpawnPoints()
-		local toSpawn = {}
+		local amountSpawnPoints = #plyspawn.GetPlayerSpawnPoints()
+		local playersToSpawn = {}
 
 		for _, ply in RandomPairs(plys) do
 			if ply:ShouldSpawn() then
-				toSpawn[#toSpawn + 1] = ply
+				playersToSpawn[#playersToSpawn + 1] = ply
 
 				GAMEMODE:PlayerSpawnAsSpectator(ply)
 			end
 		end
 
-		local sfn = function()
-			local c = 0
+		local spawnFunction = function()
+			local sizePlayersToSpawn = #playersToSpawn
+			local sizeSpawnWave = mathMin(amountSpawnPoints, sizePlayersToSpawn)
+
 			-- fill the available spawnpoints with players that need spawning
+			for i = 1, sizeSpawnWave do
+				playersToSpawn[i]:SpawnForRound(deadOnly)
 
-			while c < amountSpawns and #toSpawn > 0 do
-				for k = 1, #toSpawn do
-					local ply = toSpawn[k]
-					local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(ply)
-
-					ply:SpawnForRound(deadOnly, spawnPoint.pos, spawnPoint.ang)
-
-					if IsValid(ply) and ply:SpawnForRound(deadOnly) then
-						-- a spawn ent is now occupied
-						c = c + 1
-					end
-					-- Few possible cases:
-					-- 1) player has now been spawned
-					-- 2) player should remain spectator after all
-					-- 3) player has disconnected
-					-- In all cases we don't need to spawn them again.
-					tableRemove(toSpawn, k)
-
-					-- all spawn ents are occupied, so the rest will have
-					-- to wait for next wave
-					if c >= amountSpawns then break end
-				end
+				playersToSpawn[i] = nil -- mark for deletion
 			end
 
-			MsgN("Spawned " .. c .. " players in spawn wave.")
+			-- clean up table
+			table.RemoveEmptyEntries(playersToSpawn, sizePlayersToSpawn)
 
-			if #toSpawn == 0 then
+			MsgN("Spawned " .. sizeSpawnWave .. " players in spawn wave.")
+
+			if #playersToSpawn == 0 then
 				timerRemove("spawnwave")
 
 				MsgN("Spawn waves ending, all players spawned.")
@@ -184,10 +170,10 @@ function entspawn.SpawnPlayers(deadOnly)
 
 		MsgN("Spawn waves starting.")
 
-		timerCreate("spawnwave", waveDelay, 0, sfn)
+		timerCreate("spawnwave", waveDelay, 0, spawnFunction)
 
 		-- already run one wave, which may stop the timer if everyone is spawned in one go
-		sfn()
+		spawnFunction()
 	end
 end
 
