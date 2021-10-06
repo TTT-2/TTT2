@@ -44,7 +44,7 @@ function playermodels.UpdateModelState(name, state)
 end
 
 ---
--- Returns an indexed table with all the models that are in the selction pool.
+-- Returns an indexed table with all the models that are in the selection pool.
 -- @return table An indexed table with all selected player models
 -- @realm server
 function playermodels.GetSelectedModels()
