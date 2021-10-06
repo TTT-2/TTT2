@@ -90,8 +90,6 @@ if SERVER then
 	end
 end
 
-local maxEditDistance = 1500
-
 if CLIENT then
 	local draw = draw
 	local camStart2D = cam.Start2D
@@ -113,9 +111,28 @@ if CLIENT then
 	local sphereRadius = 10
 	local tolerance = 32 * sphereRadius
 
+	local maxEditDistance = 1500
 	local distWalls = 7.5
 
 	local colorPreview = Color(255, 255, 255, 100)
+
+	local matScreen = Material("models/weapons/v_toolgun/screen")
+	local screenSize = 256
+	local padding = 16
+	local iconSize = 64
+	local iconX = 0.5 * (screenSize - iconSize)
+	local iconY = 2 * padding
+	local textX = 0.5 * screenSize
+	local textY = iconY + iconSize + padding
+	local lineY = screenSize - 48
+	local lineW = screenSize - 2 * padding
+	local circleS = 6
+	local circleY = screenSize - 24
+
+	local RTTexture = GetRenderTarget("TTT2SpawnPlacer", screenSize, screenSize)
+
+	local colorBasic = Color(255, 255, 255, 100)
+	local colorSelect = Color(255, 255, 255, 235)
 
 	local function IsHighlighted(pos, scPos)
 		local dist3d = LocalPlayer():EyePos():Distance(pos)
@@ -298,24 +315,6 @@ if CLIENT then
 
 		hook.Add("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit", RenderHook)
 	end
-
-	local matScreen = Material("models/weapons/v_toolgun/screen")
-	local screenSize = 256
-	local padding = 16
-	local iconSize = 64
-	local iconX = 0.5 * (screenSize - iconSize)
-	local iconY = 2 * padding
-	local textX = 0.5 * screenSize
-	local textY = iconY + iconSize + padding
-	local lineY = screenSize - 48
-	local lineW = screenSize - 2 * padding
-	local circleS = 6
-	local circleY = screenSize - 24
-
-	local RTTexture = GetRenderTarget("TTT2SpawnPlacer", screenSize, screenSize)
-
-	local colorBasic = Color(255, 255, 255, 100)
-	local colorSelect = Color(255, 255, 255, 235)
 
 	---
 	-- @ignore
