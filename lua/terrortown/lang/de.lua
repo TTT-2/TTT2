@@ -1435,6 +1435,9 @@ Standardmäßig bekommt jeder Spieler das Phoenix Spielermodell zugewiesen. Durc
 Diese Auswahl an Modellen kann erweitert werden, indem weitere Spielermodelle installiert werden.]]
 
 -- 2021-10-06
+L.menu_server_addons_title = "Server Addons"
+L.menu_server_addons_description = "Serverweite Adminsettings für Addons."
+
 L.tooltip_finish_score_penalty_alive_teammates = "Lebende Teammitglieder (Strafe): {score}"
 L.finish_score_penalty_alive_teammates = "Lebende Teammitglieder (Strafe):"
 L.tooltip_kill_score_suicide = "Selbstmord: {score}"

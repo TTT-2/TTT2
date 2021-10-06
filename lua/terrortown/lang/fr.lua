@@ -1447,6 +1447,9 @@ L.karma_unknown_tooltip = "Inconnu"
 --This selection of models can be extended by installing more player models.]]
 
 -- 2021-10-06
+--L.menu_server_addons_title = "Server Addons"
+--L.menu_server_addons_description = "Serverwide admin only settings for addons."
+
 --L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
 --L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
 --L.tooltip_kill_score_suicide = "Suicide: {score}"
