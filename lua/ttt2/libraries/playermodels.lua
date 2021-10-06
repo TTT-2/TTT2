@@ -17,7 +17,7 @@ playermodels = playermodels or {}
 
 ---
 -- Updates the selection state of a provided playermodel. If the state is `true` the model is
--- in the playermodel selction pool.
+-- in the playermodel selection pool.
 -- @param string name The name of the model
 -- @param boolean state The state, `true` to enable the model
 -- @realm shared
