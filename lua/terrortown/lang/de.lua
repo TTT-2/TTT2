@@ -1433,3 +1433,7 @@ L.help_use_custom_models = [[
 Standardmäßig bekommt jeder Spieler das Phoenix Spielermodell zugewiesen. Durch das Aktivieren dieser Option ist es jedoch möglich eine Spielermodellliste zu erstellen. Es bekommen noch immer alle Spieler ein zufälliges Spielermodell zugewiesen, jedoch ist es ein zufälliges aus der Liste der ausgewählten Spielermodelle.
 
 Diese Auswahl an Modellen kann erweitert werden, indem weitere Spielermodelle installiert werden.]]
+
+-- 2021-10-06
+L.menu_server_addons_title = "Server Addons"
+L.menu_server_addons_description = "Serverweite Adminsettings für Addons."

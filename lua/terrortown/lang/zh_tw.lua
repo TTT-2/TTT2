@@ -1442,3 +1442,7 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 --By default only the CSS Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting --enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
 
 --This selection of models can be extended by installing more player models.]]
+
+-- 2021-10-06
+--L.menu_server_addons_title = "Server Addons"
+--L.menu_server_addons_description = "Serverwide admin only settings for addons."
