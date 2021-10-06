@@ -15,6 +15,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
 
+### Changed
+
+- Decreased the minimum cost of equipment in the equipment editor to 0
+
 ### Breaking Changes
 
 - Removed the (unused?) ConVar `ttt2_custom_models`
