@@ -1411,3 +1411,11 @@ L.searchbar_default_placeholder = "Durchsuche Liste..."
 
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-10-06
+L.tooltip_finish_score_penalty_alive_teammates = "Lebende Teammitglieder (Strafe): {score}"
+L.finish_score_penalty_alive_teammates = "Lebende Teammitglieder (Strafe):"
+L.tooltip_kill_score_suicide = "Selbstmord: {score}"
+L.kill_score_suicide = "Selbstmord:"
+L.tooltip_kill_score_team = "Teammord: {score}"
+L.kill_score_team = "Teammord:"

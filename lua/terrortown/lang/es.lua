@@ -1411,3 +1411,11 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-10-06
+--L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
+--L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
+--L.tooltip_kill_score_suicide = "Suicide: {score}"
+--L.kill_score_suicide = "Suicide:"
+--L.tooltip_kill_score_team = "Team kill: {score}"
+--L.kill_score_team = "Team kill:"

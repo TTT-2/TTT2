@@ -19,8 +19,14 @@ ROLE.score = {
 	bodyFoundMuliplier = 1,
 
 	-- The amount of score points gained by surviving a round,
-	-- based on the amount of dead enemy players.
+	-- based on the amount of dead enemy players. Only applied when
+	-- in winning team.
 	surviveBonusMultiplier = 0,
+
+	-- The amount of score point lost by surviving a round, based
+	-- on the amount of surviving team players. Only applied when
+	-- not in winning team.
+	survivePenaltyMultiplier = 0,
 
 	-- The amount of score points granted due to a survival of the
 	-- round for every teammate alive.

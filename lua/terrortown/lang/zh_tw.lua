@@ -533,7 +533,7 @@ L.info_popup_traitor = [[
 但請小心，你的身份可能會暴露...
 
 你的同伴有:
-{traitorlist} 
+{traitorlist}
 
 按下{menukey}取得裝備！]]
 
@@ -1420,3 +1420,11 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-10-06
+--L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
+--L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
+--L.tooltip_kill_score_suicide = "Suicide: {score}"
+--L.kill_score_suicide = "Suicide:"
+--L.tooltip_kill_score_team = "Team kill: {score}"
+--L.kill_score_team = "Team kill:"
