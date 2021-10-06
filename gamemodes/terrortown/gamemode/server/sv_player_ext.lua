@@ -677,6 +677,12 @@ function plymeta:InitialSpawn()
 
 	-- We never have weapons here, but this inits our equipment state
 	self:StripAll()
+
+	-- set spawn position
+	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+
+	self:SetPos(spawnPoint.pos)
+	self:SetAngles(spawnPoint.ang)
 end
 
 ---
