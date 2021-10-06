@@ -222,9 +222,11 @@ if SERVER then
 	-- @param string fileName The file name of the file, this includes the whole path and file ending
 	-- @realm server
 	function entspawnscript.WriteFile(spawnTable, settingsTable, fileName)
-		local weaponspawns = spawnTable[SPAWN_TYPE_WEAPON]
-		local ammospawns = spawnTable[SPAWN_TYPE_AMMO]
-		local playerspawns = spawnTable[SPAWN_TYPE_PLAYER]
+		local spawnTypeTitles = {
+			[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
+			[SPAWN_TYPE_AMMO] = "SPAWN_TYPE_AMMO",
+			[SPAWN_TYPE_PLAYER] = "SPAWN_TYPE_PLAYER"
+		}
 
 		local content = ""
 
@@ -242,49 +244,21 @@ if SERVER then
 
 		content = content .. "\n# -- SPAWNS --\n"
 
-		content = content .. "\nSPAWN: SPAWN_TYPE_WEAPON\n"
+		for spawnType, title in pairs(spawnTypeTitles) do
+			content = content .. "\nSPAWN: " .. title .. "\n"
 
-		for entType, spawns in pairs(weaponspawns) do
-			local name = entspawnscript.GetVarNameFromSpawnType(SPAWN_TYPE_WEAPON, entType)
+			for entType, spawns in pairs(spawnTable[spawnType]) do
+				local name = entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
 
-			for i = 1, #spawns do
-				local spawn = spawns[i]
+				for i = 1, #spawns do
+					local spawn = spawns[i]
 
-				local pos = spawn.pos
-				local ang = spawn.ang
-				local ammo = spawn.ammo
+					local pos = spawn.pos
+					local ang = spawn.ang
+					local ammo = spawn.ammo
 
-				content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f\tAMMO: %d", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r, ammo) .. "\n"
-			end
-		end
-
-		content = content .. "\nSPAWN: SPAWN_TYPE_AMMO\n"
-
-		for entType, spawns in pairs(ammospawns) do
-			local name = entspawnscript.GetVarNameFromSpawnType(SPAWN_TYPE_AMMO, entType)
-
-			for i = 1, #spawns do
-				local spawn = spawns[i]
-
-				local pos = spawn.pos
-				local ang = spawn.ang
-
-				content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r) .. "\n"
-			end
-		end
-
-		content = content .. "\nSPAWN: SPAWN_TYPE_PLAYER\n"
-
-		for entType, spawns in pairs(playerspawns) do
-			local name = entspawnscript.GetVarNameFromSpawnType(SPAWN_TYPE_PLAYER, entType)
-
-			for i = 1, #spawns do
-				local spawn = spawns[i]
-
-				local pos = spawn.pos
-				local ang = spawn.ang
-
-				content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r) .. "\n"
+					content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f\tAMMO: %d", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r, ammo) .. "\n"
+				end
 			end
 		end
 
