@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
 
 ### Breaking Changes
+
 - Removed the (unused?) ConVar `ttt2_custom_models`
 - Removed the function `GetRandomPlayerModel()`, use `playermodels.GetRandomPlayerModel()` instead
 
