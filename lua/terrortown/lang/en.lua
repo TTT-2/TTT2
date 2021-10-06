@@ -1520,3 +1520,14 @@ L.help_use_custom_models = [[
 By default only the CSS Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
 
 This selection of models can be extended by installing more player models.]]
+
+-- 2021-10-06
+L.menu_server_addons_title = "Server Addons"
+L.menu_server_addons_description = "Serverwide admin only settings for addons."
+
+L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
+L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
+L.tooltip_kill_score_suicide = "Suicide: {score}"
+L.kill_score_suicide = "Suicide:"
+L.tooltip_kill_score_team = "Team kill: {score}"
+L.kill_score_team = "Team kill:"
