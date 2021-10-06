@@ -95,6 +95,12 @@ if CLIENT then
 		end
 	end)
 
+	---
+	-- Used to add a function to the callback stack that is called when a change
+	-- is made on the server. The first argument of the Callback function is the
+	-- new data.
+	-- @param function Callback The callback function that should be added
+	-- @realm client
 	function playermodels.AddChangeCallback(Callback)
 		callbackCache[#callbackCache + 1] = Callback
 	end
