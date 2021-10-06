@@ -4,7 +4,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
 
+- Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
+
+### Changed
+
+- Split up kill, suicide and teamkill in the round end screen to make it more clear
 
 ## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
 
@@ -29,11 +35,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - bindings are not lost on reload
 
 ### Changed
+
 - Revise and additions simplified Chinese (by @TEGTianFan)
 - Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)
 - ROLE_NONE does not count as a special role anymore (by @TheNickSkater)
 
 ### Internal Breaking Changes
+
 - Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`
 - Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`
 - Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`
