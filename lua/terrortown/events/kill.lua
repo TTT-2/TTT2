@@ -241,11 +241,11 @@ if SERVER then
 
 		if deathType == KILL_SUICIDE then
 			self:SetPlayerScore(attacker.sid64, {
-				score = roleData.score.suicideMultiplier
+				score_suicide = roleData.score.suicideMultiplier
 			})
 		elseif deathType == KILL_TEAM then
 			self:SetPlayerScore(attacker.sid64, {
-				score = roleData.score.teamKillsMultiplier
+				score_team = roleData.score.teamKillsMultiplier
 			})
 		else
 			self:SetPlayerScore(attacker.sid64, {
