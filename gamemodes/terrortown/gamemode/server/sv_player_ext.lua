@@ -600,11 +600,9 @@ end
 ---
 -- Preps a player for a new round, spawning them if they should.
 -- @param boolean deadOnly If deadOnly is true, only spawns if player is dead, else just makes sure he is healed
--- @param[opt] Vector pos The position of the player
--- @param[opt] Angle ang The angles of the player
 -- @return boolean Returns true if player is spawned
 -- @realm server
-function plymeta:SpawnForRound(deadOnly, pos, ang)
+function plymeta:SpawnForRound(deadOnly)
 	---
 	-- @realm server
 	hook.Run("PlayerSetModel", self)
@@ -638,13 +636,11 @@ function plymeta:SpawnForRound(deadOnly, pos, ang)
 	self:SetTeam(TEAM_TERROR)
 	self:Spawn()
 
-	if pos then
-		self:SetPos(pos)
-	end
+	-- set spawn position
+	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-	if ang then
-		self:SetAngles(ang)
-	end
+	self:SetPos(spawnPoint.pos)
+	self:SetAngles(spawnPoint.ang)
 
 	-- tell caller that we spawned
 	return true

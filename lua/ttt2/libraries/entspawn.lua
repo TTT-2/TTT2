@@ -130,10 +130,7 @@ function entspawn.SpawnPlayers(deadOnly)
 	-- simple method, spawn everybody at once
 	if waveDelay <= 0 or deadOnly then
 		for i = 1, #plys do
-			local ply = plys[i]
-			local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(ply)
-
-			ply:SpawnForRound(deadOnly, spawnPoint.pos, spawnPoint.ang)
+			plys[i]:SpawnForRound(deadOnly)
 		end
 	else
 		-- wave method
