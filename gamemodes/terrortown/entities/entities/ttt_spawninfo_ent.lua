@@ -9,12 +9,3 @@ end
 
 ENT.Type = "anim"
 ENT.Base = "base_anim"
-
----
--- @realm shared
-function ENT:Initialize()
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_BBOX)
-	self:SetCollisionGroup(COLLISION_GROUP_NONE)
-end
