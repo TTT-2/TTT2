@@ -6,10 +6,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
+
+### Changed
+
+- Split up kill, suicide and teamkill in the round end screen to make it more clear
 - Added a new in-game player model selector
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
 - Added a new admin only menu for server addon settings
+
+### Changed
+
+- Decreased the minimum cost of equipment in the equipment editor to 0
 
 ### Breaking Changes
 
@@ -39,11 +48,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - bindings are not lost on reload
 
 ### Changed
+
 - Revise and additions simplified Chinese (by @TEGTianFan)
 - Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)
 - ROLE_NONE does not count as a special role anymore (by @TheNickSkater)
 
 ### Internal Breaking Changes
+
 - Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`
 - Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`
 - Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`
