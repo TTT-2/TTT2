@@ -4,6 +4,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added a new in-game player model selector
+  - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
+  - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
+
+### Breaking Changes
+
+- Removed the (unused?) ConVar `ttt2_custom_models`
+- Removed the function `GetRandomPlayerModel()`, use `playermodels.GetRandomPlayerModel()` instead
 
 ## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
 
