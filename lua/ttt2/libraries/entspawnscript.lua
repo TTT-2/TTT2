@@ -39,6 +39,14 @@ local spawnTypes = {
 	SPAWN_TYPE_PLAYER
 }
 
+local spawnTypeNameKeys = {
+			[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
+			[SPAWN_TYPE_AMMO] = "SPAWN_TYPE_AMMO",
+			[SPAWN_TYPE_PLAYER] = "SPAWN_TYPE_PLAYER"
+}
+
+local settingsName = "SETTINGS"
+
 local spawnColors = {
 	[SPAWN_TYPE_WEAPON] = Color(0, 175, 175, 255),
 	[SPAWN_TYPE_AMMO] = Color(175, 75, 75, 255),
@@ -155,7 +163,7 @@ if SERVER then
 	-- @return boolean Returns true if the spawnn script already exists
 	-- @realm server
 	function entspawnscript.Exists()
-		return fileExists(spawndir .. gameGetMap() .. ".txt", "DATA")
+		return fileExists(spawndir .. gameGetMap() .. ".json", "DATA")
 	end
 
 	---
@@ -265,47 +273,14 @@ if SERVER then
 	-- @param table settingsTable The table with the settings that should be stored
 	-- @realm server
 	function entspawnscript.WriteFile(spawnTable, settingsTable)
-		local spawnTypeTitles = {
-			[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
-			[SPAWN_TYPE_AMMO] = "SPAWN_TYPE_AMMO",
-			[SPAWN_TYPE_PLAYER] = "SPAWN_TYPE_PLAYER"
-		}
+		local jsonSaveTable = {[settingsName] = settingsTable}
 
-		local content = ""
+		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
+			jsonSaveTable[spawnTypeName] = spawnTable[enumKey]
+		end
 
 		fileCreateDir(spawndir)
-
-		content = content .. "# Trouble in Terrorist Town 2 spawn entity placement file\n"
-		content = content .. "# map: " .. gameGetMap() .. "\n"
-		content = content .. "# date created: " .. osDate("%H:%M:%S - %d/%m/%Y" , osTime()) .. "\n"
-
-		content = content .. "\n# -- SETTINGS --\n"
-
-		for key, value in pairs(settingsTable) do
-			content = content .. "setting:\t" .. key .. " " .. value .. "\n"
-		end
-
-		content = content .. "\n# -- SPAWNS --\n"
-
-		for spawnType, title in pairs(spawnTypeTitles) do
-			content = content .. "\nSPAWN: " .. title .. "\n"
-
-			for entType, spawns in pairs(spawnTable[spawnType]) do
-				local name = entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
-
-				for i = 1, #spawns do
-					local spawn = spawns[i]
-
-					local pos = spawn.pos
-					local ang = spawn.ang
-					local ammo = spawn.ammo
-
-					content = content .. stringFormat("TYPE: %s\tPOS: %012f|%012f|%012f\tANG: %010f|%010f|%010f\tAMMO: %d", name, pos.x, pos.y, pos.z, ang.p, ang.y, ang.r, ammo) .. "\n"
-				end
-			end
-		end
-
-		fileWrite(spawndir .. gameGetMap() .. ".txt", content)
+		fileWrite(spawndir .. gameGetMap() .. ".json", util.TableToJSON(jsonSaveTable, true))
 	end
 
 	---
@@ -314,55 +289,14 @@ if SERVER then
 	-- @return table The table with the settings read from the file
 	-- @realm server
 	function entspawnscript.ReadFile()
-		local lines = stringExplode("\n", fileRead(spawndir .. gameGetMap() .. ".txt", "DATA"))
-		local spawnType = nil
+		local jsonSaveTable = util.JSONToTable(fileRead(spawndir .. gameGetMap() .. ".json", "DATA"))
 
-		local spawnTable = {
-			[SPAWN_TYPE_WEAPON] = {},
-			[SPAWN_TYPE_AMMO] = {},
-			[SPAWN_TYPE_PLAYER] = {}
-		}
-		local settingsTable = {}
+		local settingsTable = jsonSaveTable[settingsName]
 
-		for i = 1, #lines do
-			local line = lines[i]
+		local spawnTable = {}
 
-			-- ignore comments or empty lines
-			if stringMatch(line, "^#") or line == "" or stringByte(line) == 0 then continue end
-
-			-- attempt to find settings in the file
-			local key, val = stringMatch(line, "^setting:\t(%w*) ([0-9]*)")
-
-			if key and val then
-				settingsTable[key] = tonumber(val)
-
-				continue
-			end
-
-			-- autodetect any spawn type change
-			local newSpawnType = _G[stringMatch(line, "^SPAWN: ([%w_]*)")]
-
-			spawnType = newSpawnType or spawnType
-
-			if not spawnType or newSpawnType then continue end
-
-			-- read spawns
-			local stringEntType = stringMatch(line, "^TYPE: ([%w_]*)")
-			local stringPos = stringMatch(line, "POS: ([%w.|%-]*)")
-			local stringAng = stringMatch(line, "ANG: ([%w.|%-]*)")
-			local stringAmmo = stringMatch(line, "AMMO: ([%w]*)")
-
-			local entType = _G[stringEntType]
-
-			if not isnumber(entType) then continue end
-
-			spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
-
-			spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = {
-				pos = Vector(unpack(stringExplode("|", stringPos))),
-				ang = Angle(unpack(stringExplode("|", stringAng))),
-				ammo = tonumber(stringAmmo or 0)
-			}
+		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
+			 spawnTable[enumKey] = jsonSaveTable[spawnTypeName]
 		end
 
 		return spawnTable, settingsTable
@@ -375,7 +309,7 @@ if SERVER then
 		local fileExisted = entspawnscript.Exists()
 
 		if exists then
-			fileDelete(spawndir .. gameGetMap() .. ".txt")
+			fileDelete(spawndir .. gameGetMap() .. ".json")
 		end
 
 		return fileExisted
