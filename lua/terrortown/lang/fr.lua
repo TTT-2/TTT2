@@ -1432,8 +1432,7 @@ L.karma_unknown_tooltip = "Inconnu"
 
 -- 2021-09-01
 --L.spawneditor_name = "Spawn Editor Tool"
---L.spawneditor_desc = [[
---Used to place weapon, ammo and player spawns in the world. Can only be used by super admin.]]
+--L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world. Can only be used by super admin."
 
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"

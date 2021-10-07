@@ -1420,8 +1420,7 @@ L.spec_about_to_revive = "Zuschauen während der Widerbelebung nicht möglich."
 
 -- 2021-09-01
 L.spawneditor_name = "Spawneditor-Werkzeug"
-L.spawneditor_desc = [[
-Wird verwendet, um Waffen-, Munitions- und Spielerspawns in der Welt zu plazuieren. Kann nur von Superadmins verwendet werden.]]
+L.spawneditor_desc = "Wird verwendet, um Waffen-, Munitions- und Spielerspawns in der Welt zu plazuieren. Kann nur von Superadmins verwendet werden."
 
 L.spawneditor_place = "Platziere Spawn"
 L.spawneditor_remove = "Entferne Spawn"
