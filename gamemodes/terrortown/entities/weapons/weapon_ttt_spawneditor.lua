@@ -216,7 +216,7 @@ if CLIENT then
 			return a.dist3d < b.dist3d
 		end)
 
-		-- draw the proximity spawns and highlight teh first one
+		-- draw the proximity spawns and highlight the first one
 		for i = 1, #proximitySpawns do
 			local proximitySpawn = proximitySpawns[i]
 			local spawn = proximitySpawn.spawn
