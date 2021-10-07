@@ -33,9 +33,9 @@ local spawnTypes = {
 }
 
 local spawnTypeNameKeys = {
-			[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
-			[SPAWN_TYPE_AMMO] = "SPAWN_TYPE_AMMO",
-			[SPAWN_TYPE_PLAYER] = "SPAWN_TYPE_PLAYER"
+	[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
+	[SPAWN_TYPE_AMMO] = "SPAWN_TYPE_AMMO",
+	[SPAWN_TYPE_PLAYER] = "SPAWN_TYPE_PLAYER"
 }
 
 local settingsName = "SETTINGS"
@@ -213,34 +213,19 @@ if SERVER then
 		-- the new ttt2 system as well
 		if ents.TTT.CanImportEntities(mapName) then
 			local spawns, settings = ents.TTT.ImportEntities(mapName)
+			local importSpawnTable = map.GetSpawnsFromClassTable(spawns)
 
 			if settings.replacespawns == 1 then
-				spawnTable = {
-					[SPAWN_TYPE_WEAPON] = {},
-					[SPAWN_TYPE_AMMO] = {},
-					[SPAWN_TYPE_PLAYER] = {}
-				}
-			end
+				spawnTable = importSpawnTable
+			else
+				-- add new spawns to existing table
+				for spawnType, typeTable in pairs(importSpawnTable) do
+					for entType, addSpawns in pairs(typeTable) do
+						spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
 
-			local wepSpawns, ammoSpawns, plySpawns = map.GetSpawnsFromClassTable(spawns)
-
-			-- add new spawns to existing table
-			for entType, addSpawns in pairs(wepSpawns) do
-				spawnTable[SPAWN_TYPE_WEAPON][entType] = spawnTable[SPAWN_TYPE_WEAPON][entType] or {}
-
-				tableAdd(spawnTable[SPAWN_TYPE_WEAPON][entType], addSpawns)
-			end
-
-			for entType, addSpawns in pairs(ammoSpawns) do
-				spawnTable[SPAWN_TYPE_AMMO][entType] = spawnTable[SPAWN_TYPE_AMMO][entType] or {}
-
-				tableAdd(spawnTable[SPAWN_TYPE_AMMO][entType], addSpawns)
-			end
-
-			for entType, addSpawns in pairs(plySpawns) do
-				spawnTable[SPAWN_TYPE_PLAYER][entType] = spawnTable[SPAWN_TYPE_PLAYER][entType] or {}
-
-				tableAdd(spawnTable[SPAWN_TYPE_PLAYER][entType], addSpawns)
+						tableAdd(spawnTable[spawnType][entType], addSpawns)
+					end
+				end
 			end
 
 			-- save changes done by old scripts

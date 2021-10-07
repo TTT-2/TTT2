@@ -334,15 +334,15 @@ end
 ---
 -- Is used to get a TTT2 style spawn table from the old TTT spawn script data.
 -- @param table spawns The spawn table that should be converted
--- @return table A table with all weapon spawns sorted by ent types
--- @return table A table with all ammo spawns sorted by ent types
--- @return table A table with all player spawns sorted by ent types
+-- @return table A table with all weapon, ammo and player spawns sorted by ent types
 -- @internal
 -- @realm shared
 function map.GetSpawnsFromClassTable(spawns)
-	local wepSpawns = {}
-	local ammoSpawns = {}
-	local plySpawns = {}
+	local spawnTable = {
+		[SPAWN_TYPE_WEAPON] = {},
+		[SPAWN_TYPE_AMMO] = {},
+		[SPAWN_TYPE_PLAYER] = {}
+	}
 
 	for i = 1, #spawns do
 		local spawn = spawns[i]
@@ -352,7 +352,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		local plyType = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
 
 		if plyType then
-			AddData(plySpawns, plyType, spawn)
+			AddData(spawnTable[SPAWN_TYPE_PLAYER], plyType, spawn)
 
 			continue
 		end
@@ -361,7 +361,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
 
 		if ammoType then
-			AddData(ammoSpawns, ammoType, spawn)
+			AddData(spawnTable[SPAWN_TYPE_AMMO], ammoType, spawn)
 
 			continue
 		end
@@ -370,7 +370,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		local wepType = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
 
 		if wepType then
-			AddData(wepSpawns, wepType, spawn)
+			AddData(spawnTable[SPAWN_TYPE_WEAPON], wepType, spawn)
 
 			continue
 		end
@@ -379,16 +379,16 @@ function map.GetSpawnsFromClassTable(spawns)
 		local wep = weaponsGetStored(cls)
 
 		if wep and wep.spawnType then
-			AddData(wepSpawns, wep.spawnType, spawn)
+			AddData(spawnTable[SPAWN_TYPE_WEAPON], wep.spawnType, spawn)
 
 			continue
 		end
 
 		-- as a last fallback assume that it is a random spawn for a weapon
-		AddData(wepSpawns, WEAPON_TYPE_RANDOM, spawn)
+		AddData(spawnTable[SPAWN_TYPE_WEAPON], WEAPON_TYPE_RANDOM, spawn)
 	end
 
-	return wepSpawns, ammoSpawns, plySpawns
+	return spawnTable
 end
 
 ---
