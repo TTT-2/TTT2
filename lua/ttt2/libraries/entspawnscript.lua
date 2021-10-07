@@ -898,7 +898,7 @@ function entspawnscript.DeleteAllSpawns()
 			[SPAWN_TYPE_PLAYER] = {}
 		})
 
-		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
+		entspawnscript.UpdateSpawnFile()
 
 		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, entspawnscript.editingPlayers)
 
