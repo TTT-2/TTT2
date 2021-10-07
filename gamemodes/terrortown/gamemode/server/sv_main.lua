@@ -1,11 +1,6 @@
 ---
 -- Trouble in Terrorist Town 2
 
-include("ttt2/libraries/map.lua")
-include("ttt2/libraries/entspawn.lua")
-include("ttt2/libraries/plyspawn.lua")
-include("ttt2/libraries/entity_outputs.lua")
-
 ttt_include("sh_init")
 
 ttt_include("sh_cvar_handler")
@@ -53,6 +48,11 @@ ttt_include("sv_weapon_pickup")
 ttt_include("sv_addonchecker")
 ttt_include("sv_roleselection")
 ttt_include("sh_rolelayering")
+
+include("ttt2/libraries/map.lua")
+include("ttt2/libraries/entspawn.lua")
+include("ttt2/libraries/plyspawn.lua")
+include("ttt2/libraries/entity_outputs.lua")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
