@@ -186,30 +186,32 @@ if CLIENT then
 		end
 	end
 
+	local function RenderForType(spawnType, spawnEntList, proximitySpawns)
+		local spawnEnts = spawnEntList[spawnType] or {}
+		local colorEnt = ColorAlpha(entspawnscript.GetColorFromSpawnType(spawnType), 100)
+
+		-- draw spawn bubbles and put bubbles that might be highlighted in
+		-- the 'proximitySpawns' table
+		PaintSpawns(spawnType, spawnEnts, colorEnt, proximitySpawns)
+
+		return colorEnt
+	end
+
 	local function RenderHook()
 		entspawnscript.SetFocusedSpawn(nil)
 
 		local spawnEntList = entspawnscript.GetSpawns()
+		local proximitySpawns = {}
 
 		if not spawnEntList then return end
 
-		local weps = spawnEntList[SPAWN_TYPE_WEAPON] or {}
-		local ammo = spawnEntList[SPAWN_TYPE_AMMO] or {}
-		local plys = spawnEntList[SPAWN_TYPE_PLAYER] or {}
-
-		local proximitySpawns = {}
-
 		renderSetColorMaterial()
 
-		local colorWeapon = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON), 100)
-		local colorAmmo = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO), 100)
-		local colorPlayer = ColorAlpha(entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_PLAYER), 100)
-
-		-- draw spawn bubbles and put bubbles that might be highlighted in
-		-- the 'proximitySpawns' table
-		PaintSpawns(SPAWN_TYPE_WEAPON, weps, colorWeapon, proximitySpawns)
-		PaintSpawns(SPAWN_TYPE_AMMO, ammo, colorAmmo, proximitySpawns)
-		PaintSpawns(SPAWN_TYPE_PLAYER, plys, colorPlayer, proximitySpawns)
+		local colorSpawnTypes = {
+			[SPAWN_TYPE_WEAPON] = RenderForType(SPAWN_TYPE_WEAPON, spawnEntList, proximitySpawns),
+			[SPAWN_TYPE_AMMO] = RenderForType(SPAWN_TYPE_AMMO, spawnEntList, proximitySpawns),
+			[SPAWN_TYPE_PLAYER] = RenderForType(SPAWN_TYPE_PLAYER, spawnEntList, proximitySpawns)
+		}
 
 		-- sort the proximity spawns by distance
 		table.sort(proximitySpawns, function(a, b)
@@ -225,22 +227,15 @@ if CLIENT then
 			local entType = proximitySpawn.entType
 			local id = proximitySpawn.id
 			local dist3d = proximitySpawn.dist3d
-			local color
+			local color = colorSpawnTypes[spawnType]
 
 			screenPos = proximitySpawn.screenPos
 
-			if spawnType == SPAWN_TYPE_WEAPON then
-				color = colorWeapon
-			elseif spawnType == SPAWN_TYPE_AMMO then
-				color = colorAmmo
-			elseif spawnType == SPAWN_TYPE_PLAYER then
-				color = colorPlayer
-			end
-
+			-- only highlight the first in the table because this is the foucused spawn bubble
 			if i == 1 then
 				local client = LocalPlayer()
 
-				-- make sure there is nothingin the way
+				-- make sure there is nothing in the way
 				local trace = util.TraceLine({
 					start = client:EyePos(),
 					endpos = client:EyePos() + client:EyeAngles():Forward() * dist3d,
