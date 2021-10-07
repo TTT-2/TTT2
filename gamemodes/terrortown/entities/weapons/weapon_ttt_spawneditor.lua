@@ -153,6 +153,14 @@ if CLIENT then
 	local function PaintSpawns(spawnType, entTable, color, proximitySpawns)
 		local screenPos
 
+		-- While iterating over the table containing all spawn ents for one spawn
+		-- type most spheres are directly drawn. However a small selection of those
+		-- speres is stored in the proximity spawns table. These spawns spheres are
+		-- so close to the crosshair that they might be highligted right now. To
+		-- detect which one is highlighted right now, we later have to sort this table
+		-- by 3d distance. But since sorting is a heavy task, especially when done
+		-- in the rendering queue, only the selected minority is sorted.
+
 		for entType, spawns in pairs(entTable) do
 			for i = 1, #spawns do
 				local spawn = spawns[i]
