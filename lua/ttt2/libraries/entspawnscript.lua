@@ -255,9 +255,7 @@ if SERVER then
 	-- Updates the spawn file. Used to save changes done in the spawn editor
 	-- @realm server
 	function entspawnscript.UpdateSpawnFile()
-		if spawnEntList != entspawnscript.defaultSpawnTable then
-			entspawnscript.WriteFile(spawnEntList, settingsList)
-		end
+		entspawnscript.WriteFile(spawnEntList, settingsList)
 	end
 
 	---
