@@ -379,18 +379,24 @@ if SERVER then
 	function entspawnscript.SetEditing(ply, state)
 		ply:SetNWBool("is_spawn_editing", state)
 
+		local playerIndex = nil
+
+		for i = 1, #entspawnscript.editingPlayers do
+			if entspawnscript.editingPlayers[i] ~= ply then continue end
+
+			playerIndex = i
+
+			break
+		end
+
 		if state then
-			entspawnscript.editingPlayers[#entspawnscript.editingPlayers + 1] = ply
+			if not playerIndex then
+				entspawnscript.editingPlayers[#entspawnscript.editingPlayers + 1] = ply
+			end
 
 			net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, ply)
-		else
-			for i = 1, #entspawnscript.editingPlayers do
-				if entspawnscript.editingPlayers[i] ~= ply then continue end
-
-				tableRemove(entspawnscript.editingPlayers, i)
-
-				break
-			end
+		elseif playerIndex then
+			tableRemove(entspawnscript.editingPlayers, playerIndex)
 		end
 	end
 
