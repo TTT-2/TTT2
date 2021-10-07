@@ -1522,9 +1522,9 @@ function plymeta:RestoreCachedWeapons()
 		givenWep:SetClip2(wep.clip2 or 0)
 	end
 
-	if not self.cachedWeaponSelected then return end
-
-	self:SelectWeapon(self.cachedWeaponSelected)
+	if self.cachedWeaponSelected then
+		self:SelectWeapon(self.cachedWeaponSelected)
+	end
 
 	self:ResetCachedWeapons()
 end
