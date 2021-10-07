@@ -156,8 +156,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 		local state = tobool(value) and not tobool(ttt2net.Get({"entspawnscript", "settings", "blacklisted"}))
 
-		updateButtons[1]:SetEnabled(state)
-		updateButtons[2]:SetEnabled(state)
+		UpdateButtons(state)
 	end)
 end
 
