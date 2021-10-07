@@ -136,13 +136,14 @@ if CLIENT then
 	local colorSelect = Color(255, 255, 255, 235)
 
 	local function IsHighlighted(pos, scPos)
-		local dist3d = LocalPlayer():EyePos():Distance(pos)
+		local localPlayer = LocalPlayer()
+		local dist3d = localPlayer:EyePos():Distance(pos)
 
 		if dist3d > maxEditDistance then
 			return false, dist3d
 		end
 
-		if math.Distance(scPos.x, scPos.y, centerX, centerY) > tolerance * ScrW() / LocalPlayer():GetFOV() / dist3d then
+		if math.Distance(scPos.x, scPos.y, centerX, centerY) > tolerance * ScrW() / localPlayer:GetFOV() / dist3d then
 			return false, dist3d
 		end
 
