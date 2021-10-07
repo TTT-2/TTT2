@@ -85,7 +85,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 		local wepEditEnt = entspawnscript.GetSpawnInfoEntity()
 
 		if focusedSpawn and IsValid(wepEditEnt) then
-			return wepEditEnt, pos:Distance(entspawnscript.GetFocusedSpawn().spawn.pos)
+			return wepEditEnt, pos:Distance(focusedSpawn.spawn.pos)
 		end
 	end
 
