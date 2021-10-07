@@ -12,17 +12,10 @@ local fileCreateDir = file.CreateDir
 local fileWrite = file.Write
 local fileRead = file.Read
 local fileDelete = file.Delete
-local stringExplode = string.Explode
 local gameGetMap = game.GetMap
-local stringFormat = string.format
-local stringMatch = string.match
-local stringByte = string.byte
 local pairs = pairs
-local unpack = unpack
 local tableRemove = table.remove
 local tableAdd = table.Add
-local osDate = os.date
-local osTime = os.time
 
 local spawnEntList = {}
 local settingsList = {}
