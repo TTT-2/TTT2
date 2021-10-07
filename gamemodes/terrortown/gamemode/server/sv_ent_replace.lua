@@ -126,7 +126,9 @@ function ents.TTT.CanImportEntities(map)
 	return file.Exists(fname, "GAME")
 end
 
-local classremap = {ttt_playerspawn = "info_player_deathmatch"}
+local classremap = {
+	ttt_playerspawn = "info_player_deathmatch"
+}
 
 ---
 -- Imports spawns from old TTT-style map spawn scrips.
