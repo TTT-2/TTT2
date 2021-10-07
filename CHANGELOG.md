@@ -59,6 +59,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Breaking Changes
 - Renamed the `spawn` module to `plyspawn`
 - Hook `PlayerSelectSpawn` doesnt return a spawnEntity anymore
+- SpawnWillingPlayers is deleted and not available anymore
 
 
 ### Internal Breaking Changes
