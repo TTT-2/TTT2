@@ -170,10 +170,10 @@ if SERVER then
 
 		if not entspawnscript.Exists() then
 			-- if the map was never changed, check if there is an old spawn script and convert it to the new system
-			spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
+			entspawnscript.InitOldWeaponSpawnScript()
 		else
 			-- in normal usecases the spawns are loaded from the current spawn file
-			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+			spawnEntList, settingsList = entspawnscript.ReadFile()
 		end
 
 		-- Most of the time this set up is done before the player is ready. However to make sure the update
@@ -206,12 +206,12 @@ if SERVER then
 	-- @realm server
 	function entspawnscript.InitOldWeaponSpawnScript()
 		local mapName = gameGetMap()
-		local spawnTable = entspawnscript.defaultSpawnTable
 
 		-- check if there is a deprecated ttt weapon spawn script and convert the data to
 		-- the new ttt2 system as well
 		if ents.TTT.CanImportEntities(mapName) then
 			local spawns, settings = ents.TTT.ImportEntities(mapName)
+			local spawnTable = entspawnscript.defaultSpawnTable
 
 			if settings.replacespawns == 1 then
 				spawnTable = {
@@ -242,17 +242,18 @@ if SERVER then
 				tableAdd(spawnTable[SPAWN_TYPE_PLAYER][entType], addSpawns)
 			end
 
-			entspawnscript.WriteFile(spawnTable, defaultSettings, spawndir .. mapName .. ".txt")
+			-- save changes done by old scripts
+			spawnEntList = spawnTable
+			settingsList = defaultSettings
+			entspawnscript.UpdateSpawnFile()
 		end
-
-		return spawnTable, defaultSettings
 	end
 
 	---
 	-- Updates the spawn file. Used to save changes done in the spawn editor
 	-- @realm server
 	function entspawnscript.UpdateSpawnFile()
-		entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
+		entspawnscript.WriteFile(spawnEntList, settingsList)
 	end
 
 	---
@@ -260,9 +261,8 @@ if SERVER then
 	-- and to save changes done to the spawn data.
 	-- @param table spawnTable The table with the spawn points that should be stored
 	-- @param table settingsTable The table with the settings that should be stored
-	-- @param string fileName The file name of the file, this includes the whole path and file ending
 	-- @realm server
-	function entspawnscript.WriteFile(spawnTable, settingsTable, fileName)
+	function entspawnscript.WriteFile(spawnTable, settingsTable)
 		local spawnTypeTitles = {
 			[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
 			[SPAWN_TYPE_AMMO] = "SPAWN_TYPE_AMMO",
@@ -303,17 +303,16 @@ if SERVER then
 			end
 		end
 
-		fileWrite(fileName, content)
+		fileWrite(spawndir .. gameGetMap() .. ".txt", content)
 	end
 
 	---
 	-- Reads the spawn file and returns the read data.
-	-- @param string fileName The file name of the file, this includes the whole path and file ending
 	-- @return table The table with the spawn points read from the file
 	-- @return table The table with the settings read from the file
 	-- @realm server
-	function entspawnscript.ReadFile(fileName)
-		local lines = stringExplode("\n", fileRead(fileName, "DATA"))
+	function entspawnscript.ReadFile()
+		local lines = stringExplode("\n", fileRead(spawndir .. gameGetMap() .. ".txt", "DATA"))
 		local spawnType = nil
 
 		local spawnTable = {
@@ -365,6 +364,19 @@ if SERVER then
 		end
 
 		return spawnTable, settingsTable
+	end
+
+	---
+	-- Removes the spawn file of the current map and returns if it existed
+	-- @realm server
+	function entspawnscript.RemoveFile()
+		local fileExisted = entspawnscript.Exists()
+
+		if exists then
+			fileDelete(spawndir .. gameGetMap() .. ".txt")
+		end
+
+		return fileExisted
 	end
 
 	---
@@ -626,14 +638,13 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 		settingsList[key] = value
 
 		if not omitSaving then
-			local path = spawndir .. gameGetMap() .. ".txt"
 
 			-- since we can only write the whole file, but we still want to keep the spawns untouched, we have to
 			-- read those first to write them again. Depending on the spawn mode the cached spawns in this module
 			-- might be completely different than those in the file. We do not want to overwrite them!
-			local currentSpawns = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+			local currentSpawns = entspawnscript.ReadFile()
 
-			entspawnscript.WriteFile(currentSpawns, entspawnscript.GetSettings(), path)
+			entspawnscript.WriteFile(currentSpawns, entspawnscript.GetSettings())
 		end
 
 		-- trigger an update of the synced settings table
@@ -642,7 +653,7 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 		-- special handling for some settings
 		if key == "blacklisted" and value == 0 then
 			-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
-			entspawnscript.SetSpawns(entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt"))
+			entspawnscript.SetSpawns(entspawnscript.ReadFile())
 		end
 	else -- CLIENT
 		net.Start("ttt2_entspawn_setting_update")
@@ -998,10 +1009,8 @@ function entspawnscript.ResetMapToDefault()
 		net.Start("ttt2_entspawn_reset")
 		net.SendToServer()
 	else
-		-- delete the changed file if it exists
-		if entspawnscript.Exists() then
-			fileDelete(spawndir .. gameGetMap() .. ".txt")
-		end
+		-- delete the changed file
+		entspawnscript.RemoveFile()
 
 		-- load old weapon scripts and reset to default
 		spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
