@@ -467,8 +467,9 @@ end
 function SWEP:PrimaryAttack()
 	if SERVER or not IsFirstTimePredicted() then return end
 
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+	local nextUseTime = CurTime() + self.Primary.Delay
+	self:SetNextPrimaryFire(nextUseTime)
+	self:SetNextSecondaryFire(nextUseTime)
 
 	local focusedSpawn = entspawnscript.GetFocusedSpawn()
 
@@ -489,8 +490,9 @@ end
 function SWEP:SecondaryAttack()
 	if SERVER or not IsFirstTimePredicted() then return end
 
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+	local nextUseTime = CurTime() + self.Primary.Delay
+	self:SetNextPrimaryFire(nextUseTime)
+	self:SetNextSecondaryFire(nextUseTime)
 
 	local focusedSpawn = entspawnscript.GetFocusedSpawn()
 
