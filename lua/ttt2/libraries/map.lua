@@ -259,6 +259,9 @@ end
 ---
 -- Finds and returns all weapon entities found on a map depending on the
 -- map type.
+-- @note It always finds the spawns of TTT/HL2 weapons. If it is a Counter Strike
+-- Source map, those spawns are added to the aforementioned spawns. The same holds
+-- true to Team Fortress 2 maps.
 -- @return table A table with all the weapon spawn entities grouped by ent types
 -- @realm shared
 function map.GetWeaponSpawnEntities()
