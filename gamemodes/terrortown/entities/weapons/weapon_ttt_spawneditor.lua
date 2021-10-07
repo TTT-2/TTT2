@@ -56,6 +56,7 @@ if SERVER then
 		self.entSpawnInfo = ents.Create("ttt_spawninfo_ent")
 		self.entSpawnInfo:Spawn()
 
+		-- Send SpawnInfo-Entity next frame, so it can be created first
 		timer.Simple(0, function()
 			if not IsValid(self) or not IsValid(self.entSpawnInfo) then return end
 
