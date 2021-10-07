@@ -11,6 +11,7 @@ local fileExists = file.Exists
 local fileCreateDir = file.CreateDir
 local fileWrite = file.Write
 local fileRead = file.Read
+local fileDelete = file.Delete
 local stringExplode = string.Explode
 local gameGetMap = game.GetMap
 local stringFormat = string.format
@@ -140,8 +141,9 @@ local kindToSpawnType = {
 }
 
 entspawnscript = entspawnscript or {}
-
 if SERVER then
+	entspawnscript.defaultSpawnsSaved = entspawnscript.defaultSpawnsSaved or false
+	entspawnscript.defaultSpawnTable = entspawnscript.defaultSpawnTable or {}
 	entspawnscript.editingPlayers = entspawnscript.editingPlayers or {}
 
 	---
@@ -157,23 +159,56 @@ if SERVER then
 	end
 
 	---
+	-- Called when the entities on the map are available and the spawn entities can be read..
+	-- @realm server
+	function entspawnscript.OnLoaded()
+		-- save default map data in memory
+		if not entspawnscript.defaultSpawnsSaved then
+			entspawnscript.defaultSpawnsSaved = true
+			entspawnscript.SaveMapStateAsDefault()
+		end
+
+		if not entspawnscript.Exists() then
+			-- if the map was never changed, check if there is an old spawn script and convert it to the new system
+			spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
+		else
+			-- in normal usecases the spawns are loaded from the current spawn file
+			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+		end
+
+		-- Most of the time this set up is done before the player is ready. However to make sure the update
+		-- is called at least once after the data is generated, it is also called here.
+
+		-- trigger a sync of the settings table
+		entspawnscript.UpdateSettingsOnClients()
+
+		-- trigger a sync of the spawn amount info
+		entspawnscript.UpdateSpawnCountOnClients()
+	end
+
+	---
+	-- Saves the current map state as default map state in memory only
+	-- @realm server
+	function entspawnscript.SaveMapStateAsDefault()
+		entspawnscript.defaultSpawnTable = {
+			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawns(),
+			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawns(),
+			[SPAWN_TYPE_PLAYER] = map.GetPlayerSpawns()
+		}
+	end
+
+	---
 	-- Initializes the map and generates all the needed spawn files. Called on first load of a map
 	-- if there is no existing spawn file.
 	-- @warning This can break the weapon spawn files if called at any time after the initial spawn wave.
 	-- @return table A table with the default spawn points provided by the map
 	-- @return table A table with the default settings provided by the map
 	-- @realm server
-	function entspawnscript.InitMap()
+	function entspawnscript.InitOldWeaponSpawnScript()
 		local mapName = gameGetMap()
+		local spawnTable = entspawnscript.defaultSpawnTable
 
-		-- read the entities from the map at first
-		local spawnTable = {
-			[SPAWN_TYPE_WEAPON] = map.GetWeaponSpawns(),
-			[SPAWN_TYPE_AMMO] = map.GetAmmoSpawns(),
-			[SPAWN_TYPE_PLAYER] = map.GetPlayerSpawns()
-		}
-
-		-- now check if there is a deprecated ttt weapon spawn script and convert the data to
+		-- check if there is a deprecated ttt weapon spawn script and convert the data to
 		-- the new ttt2 system as well
 		if ents.TTT.CanImportEntities(mapName) then
 			local spawns, settings = ents.TTT.ImportEntities(mapName)
@@ -206,10 +241,9 @@ if SERVER then
 
 				tableAdd(spawnTable[SPAWN_TYPE_PLAYER][entType], addSpawns)
 			end
-		end
 
-		entspawnscript.WriteFile(spawnTable, defaultSettings, spawndir .. mapName .. ".txt")
-		entspawnscript.WriteFile(spawnTable, defaultSettings, spawndir .. mapName .. "_default.txt")
+			entspawnscript.WriteFile(spawnTable, defaultSettings, spawndir .. mapName .. ".txt")
+		end
 
 		return spawnTable, defaultSettings
 	end
@@ -955,29 +989,22 @@ function entspawnscript.StopEditing(ply)
 end
 
 ---
--- Called when the entities on the map are available and the spawn entities can be read.
+-- Call to reset the map to its default state.
 -- Can be called on the server and the client as it is automatically synced.
--- @param[default=false] boolean forceReinit If set to true, all spawns are reset to the default
+-- @note default state includes old weapon scripts
 -- @realm shared
-function entspawnscript.OnLoaded(forceReinit)
+function entspawnscript.ResetMapToDefault()
 	if CLIENT then
-		net.Start("ttt2_entspawn_init")
-		net.WriteBool(forceReinit or false)
+		net.Start("ttt2_entspawn_reset")
 		net.SendToServer()
 	else
-		if not entspawnscript.Exists() then
-			-- if the map should be initialized and was never loaded, the spawn files are created
-			spawnEntList, settingsList = entspawnscript.InitMap()
-		elseif forceReinit then
-			-- if the map should be reinit, the spawns are loaded from the defaults file
-			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. "_default.txt")
-
-			-- also these spawns should be written to the file
-			entspawnscript.WriteFile(spawnEntList, settingsList, spawndir .. gameGetMap() .. ".txt")
-		else
-			-- in normal usecases the spawns are loaded from the current spawn file
-			spawnEntList, settingsList = entspawnscript.ReadFile(spawndir .. gameGetMap() .. ".txt")
+		-- delete the changed file if it exists
+		if entspawnscript.Exists() then
+			fileDelete(spawndir .. gameGetMap() .. ".txt")
 		end
+
+		-- load old weapon scripts and reset to default
+		spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
 
 		-- Most of the time this set up is done before the player is ready. However to make sure the update
 		-- is called at least once after the data is generated, it is also called here.
@@ -998,7 +1025,7 @@ if SERVER then
 	util.AddNetworkString("ttt2_update_spawn_ent")
 	util.AddNetworkString("ttt2_delete_all_spawns")
 	util.AddNetworkString("ttt2_toggle_entspawn_editing")
-	util.AddNetworkString("ttt2_entspawn_init")
+	util.AddNetworkString("ttt2_entspawn_reset")
 	util.AddNetworkString("ttt2_entspawn_setting_update")
 
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
@@ -1031,10 +1058,10 @@ if SERVER then
 		entspawnscript.SetSetting(net.ReadString(), net.ReadInt(16), net.ReadBool())
 	end)
 
-	net.Receive("ttt2_entspawn_init", function(_, ply)
+	net.Receive("ttt2_entspawn_reset", function(_, ply)
 		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
-		entspawnscript.OnLoaded(net.ReadBool())
+		entspawnscript.ResetMapToDefault()
 	end)
 
 	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)

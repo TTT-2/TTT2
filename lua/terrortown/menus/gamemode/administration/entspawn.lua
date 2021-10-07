@@ -122,7 +122,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonReset:SetSize(100, 45)
 	buttonReset:SetPos(675, 20)
 	buttonReset.DoClick = function()
-		entspawnscript.OnLoaded(true)
+		entspawnscript.ResetMapToDefault()
 
 		cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", true)
 	end
