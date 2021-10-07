@@ -32,6 +32,12 @@ local defaultSettings = {
 
 local spawndir = "ttt/weaponspawnscripts/"
 
+local spawnTypes = {
+	SPAWN_TYPE_WEAPON,
+	SPAWN_TYPE_AMMO,
+	SPAWN_TYPE_PLAYER
+}
+
 local spawnColors = {
 	[SPAWN_TYPE_WEAPON] = Color(0, 175, 175, 255),
 	[SPAWN_TYPE_AMMO] = Color(175, 75, 75, 255),
@@ -623,13 +629,21 @@ function entspawnscript.IsEditing(ply)
 end
 
 ---
+-- Returns an indexed table of all available spawn types.
+-- @return table An indexed table of all spawn types
+-- @realm shared
+function entspawnscript.GetSpawnTypes()
+	return spawnTypes
+end
+
+---
 -- Returns the language identifier for a specific spawnType/entType combination.
 -- @param number spawnType The type of the spawn
 -- @param number entType The specific entity type for the specific spawn type
 -- @return string Returns the language identifer
 -- @realm shared
 function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
-	return spawnData[spawnType][entType].name
+	return spawnData[spawnType][entType].name or "undefined_lang_identifier"
 end
 
 ---
@@ -639,16 +653,16 @@ end
 -- @return string Returns the storage variable name
 -- @realm shared
 function entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
-	return spawnData[spawnType][entType].var
+	return spawnData[spawnType][entType].var or "UNDEFINED"
 end
 
 ---
 -- Returns the color for a specific spawnType.
 -- @param number spawnType The type of the spawn
--- @return Color Returns the color for the spawn type
+-- @return[default=COLOR_WHITE] Color Returns the color for the spawn type
 -- @realm shared
 function entspawnscript.GetColorFromSpawnType(spawnType)
-	return spawnColors[spawnType]
+	return spawnColors[spawnType] or COLOR_WHITE
 end
 
 ---

@@ -202,16 +202,19 @@ if CLIENT then
 
 		local spawnEntList = entspawnscript.GetSpawns()
 		local proximitySpawns = {}
+		local colorSpawnTypes = {}
 
 		if not spawnEntList then return end
 
 		renderSetColorMaterial()
 
-		local colorSpawnTypes = {
-			[SPAWN_TYPE_WEAPON] = RenderForType(SPAWN_TYPE_WEAPON, spawnEntList, proximitySpawns),
-			[SPAWN_TYPE_AMMO] = RenderForType(SPAWN_TYPE_AMMO, spawnEntList, proximitySpawns),
-			[SPAWN_TYPE_PLAYER] = RenderForType(SPAWN_TYPE_PLAYER, spawnEntList, proximitySpawns)
-		}
+		local spawnTypesTable = entspawnscript.GetSpawnTypes()
+
+		for i = 1, #spawnTypesTable do
+			local spawnType = spawnTypesTable[i]
+
+			colorSpawnTypes[spawnType] = RenderForType(spawnType, spawnEntList, proximitySpawns)
+		end
 
 		-- sort the proximity spawns by distance
 		table.sort(proximitySpawns, function(a, b)
