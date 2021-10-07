@@ -134,9 +134,10 @@ local kindToSpawnType = {
 }
 
 entspawnscript = entspawnscript or {}
-entspawnscript.editingPlayers = entspawnscript.editingPlayers or {}
 
 if SERVER then
+	entspawnscript.editingPlayers = entspawnscript.editingPlayers or {}
+
 	---
 	-- @realm server
 	local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
