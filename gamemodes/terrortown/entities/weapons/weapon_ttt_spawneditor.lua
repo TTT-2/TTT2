@@ -135,7 +135,7 @@ if CLIENT then
 	local colorBasic = Color(255, 255, 255, 100)
 	local colorSelect = Color(255, 255, 255, 235)
 
-	local function IsHighlighted(pos, scPos)
+	local function IsHighlighted(pos, screenPos)
 		local localPlayer = LocalPlayer()
 		local dist3d = localPlayer:EyePos():Distance(pos)
 
@@ -143,7 +143,7 @@ if CLIENT then
 			return false, dist3d
 		end
 
-		if math.Distance(scPos.x, scPos.y, centerX, centerY) > tolerance * ScrW() / localPlayer:GetFOV() / dist3d then
+		if math.Distance(screenPos.x, screenPos.y, centerX, centerY) > tolerance * ScrW() / localPlayer:GetFOV() / dist3d then
 			return false, dist3d
 		end
 
@@ -151,22 +151,22 @@ if CLIENT then
 	end
 
 	local function PaintSpawns(spawnType, entTable, color, proximitySpawns)
-		local scPos
+		local screenPos
 
 		for entType, spawns in pairs(entTable) do
 			for i = 1, #spawns do
 				local spawn = spawns[i]
 				local pos = spawn.pos
 
-				-- the scPos has to be calculatet inside a non modified cam3D space
+				-- the screenPos has to be calculatet inside a non modified cam3D space
 				-- to yield correct results
 				camStart3D()
-					scPos = pos:ToScreen()
+					screenPos = pos:ToScreen()
 				camEnd3D()
 
-				if util.IsOffScreen(scPos) then continue end
+				if util.IsOffScreen(screenPos) then continue end
 
-				local isHighlighted, dist3d = IsHighlighted(pos, scPos)
+				local isHighlighted, dist3d = IsHighlighted(pos, screenPos)
 
 				if dist3d > maxEditDistance then continue end
 
@@ -178,7 +178,7 @@ if CLIENT then
 						spawnType = spawnType,
 						spawn = spawn,
 						dist3d = dist3d,
-						scPos = scPos,
+						screenPos = screenPos,
 						id = i
 					}
 				end
@@ -227,7 +227,7 @@ if CLIENT then
 			local dist3d = proximitySpawn.dist3d
 			local color
 
-			scPos = proximitySpawn.scPos
+			screenPos = proximitySpawn.screenPos
 
 			if spawnType == SPAWN_TYPE_WEAPON then
 				color = colorWeapon
