@@ -170,7 +170,7 @@ if SERVER then
 
 		if not entspawnscript.Exists() then
 			-- if the map was never changed, check if there is an old spawn script and convert it to the new system
-			entspawnscript.InitOldWeaponSpawnScript()
+			spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
 		else
 			-- in normal usecases the spawns are loaded from the current spawn file
 			spawnEntList, settingsList = entspawnscript.ReadFile()
@@ -206,12 +206,12 @@ if SERVER then
 	-- @realm server
 	function entspawnscript.InitOldWeaponSpawnScript()
 		local mapName = gameGetMap()
+		local spawnTable = entspawnscript.defaultSpawnTable
 
 		-- check if there is a deprecated ttt weapon spawn script and convert the data to
 		-- the new ttt2 system as well
 		if ents.TTT.CanImportEntities(mapName) then
 			local spawns, settings = ents.TTT.ImportEntities(mapName)
-			local spawnTable = entspawnscript.defaultSpawnTable
 
 			if settings.replacespawns == 1 then
 				spawnTable = {
@@ -247,13 +247,17 @@ if SERVER then
 			settingsList = defaultSettings
 			entspawnscript.UpdateSpawnFile()
 		end
+
+		return spawnTable, defaultSettings
 	end
 
 	---
 	-- Updates the spawn file. Used to save changes done in the spawn editor
 	-- @realm server
 	function entspawnscript.UpdateSpawnFile()
-		entspawnscript.WriteFile(spawnEntList, settingsList)
+		if spawnEntList != entspawnscript.defaultSpawnTable then
+			entspawnscript.WriteFile(spawnEntList, settingsList)
+		end
 	end
 
 	---
