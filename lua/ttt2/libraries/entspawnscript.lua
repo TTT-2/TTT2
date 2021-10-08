@@ -28,7 +28,7 @@ local defaultSettings = {
 }
 
 local spawndir = "terrortown/entspawnscripts/"
-local configdir = "terrortown/entspawnconfig/"
+local settingsdir = "terrortown/entspawnsettings/"
 
 local spawnTypeNameKeys = {
 	[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
@@ -237,7 +237,7 @@ if SERVER then
 	end
 
 	---
-	-- Updates the spawn file. Used to save changes done in the spawn editor
+	-- Updates the spawn file. Used to save changes done in the spawn editor.
 	-- @realm server
 	function entspawnscript.UpdateSpawnFile()
 		local spawnPoints = entspawnscript.GetSpawns()
@@ -256,10 +256,18 @@ if SERVER then
 		entspawnscript.WriteFile(spawndir, jsonSaveTable)
 	end
 
+	---
+	-- Updates the settings file if some map settings were changed on the server.
+	-- @realm server
 	function entspawnscript.UpdateSettingsFile()
-		entspawnscript.WriteFile(configdir, entspawnscript.GetSettings())
+		entspawnscript.WriteFile(settingsdir, entspawnscript.GetSettings())
 	end
 
+	---
+	-- Reads the spawn point file on the server. Returns a table with the read data.
+	-- @note Make sure the file exists first.
+	-- @return table The spawn point table
+	-- @realm server
 	function entspawnscript.ReadSpawnFile()
 		local jsonSaveTable = entspawnscript.ReadFile(spawndir)
 		local spawnPoints = {}
@@ -277,24 +285,43 @@ if SERVER then
 		return spawnPoints
 	end
 
+	---
+	-- Reads the settings file on the server. Returns a table with the read data.
+	-- @note Make sure the file exists first.
+	-- @return table The settings table
+	-- @realm server
 	function entspawnscript.ReadSettingsFile()
-		return entspawnscript.ReadFile(configdir)
+		return entspawnscript.ReadFile(settingsdir)
 	end
 
+	---
+	-- Removes the spawn file from the spawn file directory.
+	-- @realm server
 	function entspawnscript.RemoveSpawnFile()
 		entspawnscript.RemoveFile(spawndir)
 	end
 
+	---
+	-- Removes the settings file from the settings file directory
+	-- @realm server
 	function entspawnscript.RemoveSettingsFile()
-		entspawnscript.RemoveFile(configdir)
+		entspawnscript.RemoveFile(settingsdir)
 	end
 
+	---
+	-- Checks whether a spawn file for the current map exists.
+	-- @return boolean Returns true if a spawn file exists
+	-- @realm server
 	function entspawnscript.SpawnFileExists()
 		return entspawnscript.Exists(spawndir)
 	end
 
+	---
+	-- Checks whether a settings file for the current map exists.
+	-- @return boolean Returns true if a settings file exists
+	-- @realm server
 	function entspawnscript.SettingsFileExists()
-		return entspawnscript.Exists(configdir)
+		return entspawnscript.Exists(settingsdir)
 	end
 
 	---
@@ -593,6 +620,9 @@ if CLIENT then
 		return spawnInfoEnt
 	end
 
+	---
+	-- Clears the local spawn point table cache.
+	-- @realm client
 	function entspawnscript.ClearLocalCache()
 		entspawnscript.SetSpawns({
 			[SPAWN_TYPE_WEAPON] = {},
@@ -694,6 +724,11 @@ function entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].var or "UNDEFINED"
 end
 
+---
+-- Returns the value of the global variable by passing the name of the variable.
+-- @param string typeName The spawnType or entType name
+-- @return number Returns the value of the global variable
+-- @realm shared
 function entspawnscript.GetValueFromVarName(typeName)
 	return _G[typeName]
 end
