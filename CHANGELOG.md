@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
+- Added a epop or chat message which gives the player information about the role (to which team the role belongs and what the role does)
 
 ### Changed
 
