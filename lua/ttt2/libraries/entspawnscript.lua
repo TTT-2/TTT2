@@ -243,8 +243,14 @@ if SERVER then
 		local spawnPoints = entspawnscript.GetSpawns()
 		local jsonSaveTable = {}
 
-		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
-			jsonSaveTable[spawnTypeName] = spawnPoints[enumKey]
+		for spawnType, spawnTypeName in pairs(spawnTypeNameKeys) do
+			jsonSaveTable[spawnTypeName] = {}
+
+			for entType, spawns in pairs(spawnPoints[spawnType]) do
+				local entTypeName = entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
+
+				jsonSaveTable[spawnTypeName][entTypeName] = spawns
+			end
 		end
 
 		entspawnscript.WriteFile(spawndir, jsonSaveTable)
@@ -258,8 +264,14 @@ if SERVER then
 		local jsonSaveTable = entspawnscript.ReadFile(spawndir)
 		local spawnPoints = {}
 
-		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
-			spawnPoints[enumKey] = jsonSaveTable[spawnTypeName]
+		for spawnType, spawnTypeName in pairs(spawnTypeNameKeys) do
+			spawnPoints[spawnType] = {}
+
+			for entTypeName, spawns in pairs(jsonSaveTable[spawnTypeName]) do
+				local entType = entspawnscript.GetValueFromVarName(entTypeName)
+
+				spawnPoints[spawnType][entType] = spawns
+			end
 		end
 
 		return spawnPoints
@@ -662,6 +674,10 @@ end
 -- @realm shared
 function entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].var or "UNDEFINED"
+end
+
+function entspawnscript.GetValueFromVarName(typeName)
+	return _G[typeName]
 end
 
 ---
