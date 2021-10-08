@@ -1,4 +1,8 @@
+---
+-- @realm shared
 local display_type = CreateConVar("ttt2_roleinfo_display_type", 1, FCVAR_NONE, "0 = Chat, 1 = EPops")
+---
+-- @realm shared
 local display_time = CreateConVar("ttt2_roleinfo_display_time", 15, FCVAR_NONE, "Duration in Seconds")
 
 if CLIENT then
@@ -35,8 +39,13 @@ if CLIENT then
             title = GetTranslation("roleinfo_belong_none")
         end
 
-        local desc = GetRoleDescription(new_role)
-        
+        local key = "roleinfo_text_" .. new_role.name
+        local desc = TryTranslation(key)
+
+        if desc == key then
+            desc = TryTranslation("info_popup_" .. new_role.name)
+        end
+
         if display_type:GetInt() == 0 then
             chat.AddText(new_role.color, title)
             chat.AddText(Color(255, 255, 255), desc)
@@ -44,16 +53,4 @@ if CLIENT then
             EPOP:AddMessage({text = title, color = new_role.color}, desc, display_time:GetInt())
         end
     end)
-
-    function GetRoleDescription(role) 
-        local key = "ttt2_roleinfo_" .. role.name
-
-        local desc = TryTranslation(key)
-
-        if desc == key then
-            return TryTranslation("info_popup_" .. role.name)
-        end
-
-        return desc
-    end
 end

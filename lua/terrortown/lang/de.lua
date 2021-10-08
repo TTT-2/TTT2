@@ -1445,8 +1445,10 @@ L.kill_score_suicide = "Selbstmord:"
 L.tooltip_kill_score_team = "Teammord: {score}"
 L.kill_score_team = "Teammord:"
 
-
 -- 2021-10-08
 L.roleinfo_belong_innoccent = "Du gehörst zu den Unschuldigen!"
 L.roleinfo_belong_traitor = "Du gehörst zu den Verrätern!"
 L.roleinfo_belong_none = "Du gehörst zu niemandem! DU bist und kämpfst alleine!"
+L.roleinfo_text_innocent = "Du hast keine besonderen Fähigkeiten. Finde alle bösen Mächte und eliminiere sie."
+L.roleinfo_text_traitor = "Töte alle Gegner, mithilfe des speziellen Equipments aus dem Verräter-Shop."
+L.roleinfo_text_detective = "Du bist die Vertrauensperson der Unschuldigen. Doch wer ist unschuldig? Greife auf deinen eigenen Shop zurück & töte alle Bösen."
