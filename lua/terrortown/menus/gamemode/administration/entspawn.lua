@@ -124,7 +124,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonReset.DoClick = function()
 		entspawnscript.ResetMapToDefault()
 
-		cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", true)
+		cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", "1")
 	end
 
 	local buttonToggle = vgui.Create("DButtonTTT2", parent)
