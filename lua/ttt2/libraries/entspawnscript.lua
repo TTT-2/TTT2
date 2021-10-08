@@ -282,11 +282,12 @@ if SERVER then
 
 	---
 	-- Removes the spawn file of the current map and returns if it existed
+	-- @return bool if the file existed and was therefore successfully deleted
 	-- @realm server
 	function entspawnscript.RemoveFile()
 		local fileExisted = entspawnscript.Exists()
 
-		if exists then
+		if fileExisted then
 			fileDelete(spawndir .. gameGetMap() .. ".json")
 		end
 
