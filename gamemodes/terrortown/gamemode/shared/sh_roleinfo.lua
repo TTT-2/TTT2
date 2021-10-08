@@ -3,6 +3,8 @@ local display_time = CreateConVar("ttt2_roleinfo_display_time", 15, FCVAR_NONE, 
 
 if CLIENT then
 
+    local TryTranslation = LANG.TryTranslation
+
     local is_round_running = false
 
     hook.Add("TTTPrepareRound", "TTT2AllowShowRoleInfo", function ()
@@ -22,17 +24,17 @@ if CLIENT then
         local new_role = roles.GetByIndex(new_role_id)
 
         local role_team = new_role.defaultTeam
-        local title = "You are "
+        local title = ""
 
         if role_team == TEAM_INNOCENT then
-            title = title .. "Innocent!"
+            title = TryTranslation("roleinfo_belong_innocent")
         elseif role_team == TEAM_TRAITOR then
-            title = title .. "Traitor!"
+            title = TryTranslation("roleinfo_belong_traitor")
         else
-            title = title .. "alone!"
+            title = TryTranslation("roleinfo_belong_none")
         end
 
-        local desc = "Lorem Ipsum dolo...."
+        local desc = GetRoleDescription(new_role)
         
         if display_type:GetInt() == 0 then
             chat.AddText(new_role.color, title)
@@ -42,4 +44,15 @@ if CLIENT then
         end
     end)
 
+    local function GetRoleDescription(role) 
+        local key = "ttt2_roleinfo_" .. role.name
+
+        local desc = TryTranslation(key)
+
+        if desc == key then
+            return TryTranslation("info_popup_" .. role.name)
+        end
+
+        return desc
+    end
 end

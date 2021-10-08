@@ -1444,3 +1444,9 @@ L.tooltip_kill_score_suicide = "Selbstmord: {score}"
 L.kill_score_suicide = "Selbstmord:"
 L.tooltip_kill_score_team = "Teammord: {score}"
 L.kill_score_team = "Teammord:"
+
+
+-- 2021-10-08
+L.roleinfo_belong_innoccent = "Du gehörst zu den Unschuldigen!"
+L.roleinfo_belong_traitor = "Du gehörst zu den Verrätern!"
+L.roleinfo_belong_none = "Du gehörst zu niemandem! DU bist und kämpfst alleine!"
