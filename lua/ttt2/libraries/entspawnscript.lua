@@ -360,6 +360,7 @@ if SERVER then
 
 	---
 	-- Removes the spawn file of the current map and returns if it existed
+	-- @param string dir The directory where the file is expected
 	-- @return bool if the file existed and was therefore successfully deleted
 	-- @internal
 	-- @realm server
@@ -390,6 +391,10 @@ if SERVER then
 		return settingsList[key] or 0
 	end
 
+	---
+	-- Sets the whole settings table to the provided table
+	-- @param table settings The new settings table
+	-- @realm server
 	function entspawnscript.SetSettings(settings)
 		settingsList = settings
 	end
@@ -553,6 +558,10 @@ if SERVER then
 		entspawnscript.UpdateSpawnCountOnClients({ply})
 	end
 
+	---
+	-- Reloads the spawn points from either the spawn files or from the defaults. Is mostly used after
+	-- switching from classic TTT weapon spawns to dynamic TTT2 weapons spawns.
+	-- @realm server
 	function entspawnscript.ReloadSpawns()
 		-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
 		if entspawnscript.SpawnFileExists() then
