@@ -14,10 +14,19 @@ TTT2ShopFallbackInitialized = false
 
 ---
 -- Initializes the equipment with necessary data for ttt2
+-- @param table equipment equipment to register
+-- @param string name equipment name
+-- @param bool lateInitialize should be lateInitialized and not hotreloaded?
 -- @internal
 -- @realm shared
-local function TTT2PreRegisterSWEP(equipment, name)
-	if TTT2ShopFallbackInitialized then
+local function TTT2RegisterSWEP(equipment, name, lateInitialize)
+	local doHotreload = TTT2ShopFallbackInitialized
+
+	if lateInitialize then
+		doHotreload = false
+	end
+
+	if doHotreload then
 		MsgN("[TTT2] Trying to hotreload ",  name, " .")
 	end
 
@@ -25,7 +34,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 	AddEquipmentKeyValues(equipment, name)
 	ShopEditor.InitDefaultData(equipment)
 
-	if TTT2ShopFallbackInitialized then
+	if doHotreload then
 		local oldSWEP = weapons.GetStored(name)
 
 		-- Keep custom changed data from the old SWEP if hotReloadableKeys are given
@@ -106,7 +115,7 @@ local function TTT2PreRegisterSWEP(equipment, name)
 		end
 	end
 
-	if not TTT2ShopFallbackInitialized then return end
+	if not doHotreload then return end
 
 	-- initialize fallback shops
 	InitFallbackShops()
@@ -137,7 +146,7 @@ end
 -- Runs before registering a weapon via the weapons module
 -- Also runs, when a SWEP-file is hotreloaded
 -- @realm shared
-hook.Add("PreRegisterSWEP", "TTT2PreRegisterSWEP", TTT2PreRegisterSWEP)
+hook.Add("PreRegisterSWEP", "TTT2RegisterSWEP", TTT2RegisterSWEP)
 
 ---
 -- Initializes TTT2
@@ -425,4 +434,41 @@ end
 -- @realm shared
 function GM:TTT2PostDoorSetup(doorsTable)
 
+end
+
+---
+-- Called to make sure everything has an id and was properly registered and if not registers it again.
+-- @param table eq the equipment copy to check
+-- @return bool if the eq has an id
+-- @hook
+-- @realm shared
+function GM:TTT2CheckWeaponForID(eq)
+		if not eq.id then
+			local class = WEPS.GetClass(eq)
+			local name = eq.PrintName or class
+
+			print("\n[TTT2] Equipment " .. name .. " has no id, trying to register it again.")
+
+			originalEq = weapons.GetStored(class)
+			TTT2RegisterSWEP(originalEq, class, true)
+
+			eq = weapons.Get(class)
+
+			if not eq.id then
+				if name then
+					print(name .. " has still no id.")
+				else
+					print("Has no id nor a name")
+				end
+
+				ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization.\n")
+				PrintTable(eq)
+
+				return false
+			else
+				print("[TTT2] Equipment " .. name .. " was successfully registered a second time.\n")
+			end
+		end
+
+		return true
 end

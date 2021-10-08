@@ -59,19 +59,19 @@ function ShopEditor.GetEquipmentForRoleAll()
 
 	-- find buyable items to load info from
 	for i = 1, #itms do
-		local v = itms[i]
-		local name = WEPS.GetClass(v)
+		local eq = itms[i]
+		local name = WEPS.GetClass(eq)
 
 		if name
-		and not v.Doublicated
+		and not eq.Doublicated
 		and not string.match(name, "base")
 		and not eject[name]
 		then
-			if v.id then
-				tbl[#tbl + 1] = v
+			if eq.id then
+				tbl[#tbl + 1] = eq
 			else
-				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Item without id:")
-				PrintTable(v)
+				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Item without id:\n")
+				PrintTable(eq)
 			end
 		end
 	end
@@ -80,20 +80,19 @@ function ShopEditor.GetEquipmentForRoleAll()
 	local weps = weapons.GetList()
 
 	for i = 1, #weps do
-		local v = weps[i]
-		local name = WEPS.GetClass(v)
+		local eq = weps[i]
+		local name = WEPS.GetClass(eq)
 
 		if name
-		and not v.Doublicated
+		and not eq.Doublicated
 		and not string.match(name, "base")
 		and not string.match(name, "event")
 		and not eject[name]
 		then
-			if v.id then
-				tbl[#tbl + 1] = v
+			if hook.Run("TTT2CheckWeaponForID", eq) then
+				tbl[#tbl + 1] = eq
 			else
-				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id:")
-				PrintTable(v)
+				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
 			end
 		end
 	end
