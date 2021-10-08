@@ -38,7 +38,7 @@ local function TTT2RegisterSWEP(equipment, name, lateInitialize)
 		local oldSWEP = weapons.GetStored(name)
 
 		-- Keep custom changed data from the old SWEP if hotReloadableKeys are given
-		if #equipment.HotReloadableKeys > 0 and oldSWEP then
+		if istable(equipment.HotReloadableKeys) and #equipment.HotReloadableKeys > 0 and oldSWEP then
 			MsgN("[TTT2] Hotreloading ",  #equipment.HotReloadableKeys, " given Keys from old SWEP-file.")
 
 			for _, keys in pairs(equipment.HotReloadableKeys) do
