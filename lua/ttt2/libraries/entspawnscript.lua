@@ -525,6 +525,27 @@ if SERVER then
 		-- trigger a sync of the spawn amount info
 		entspawnscript.UpdateSpawnCountOnClients({ply})
 	end
+
+	function entspawnscript.ReloadSpawns()
+		-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
+		if entspawnscript.SpawnFileExists() then
+			entspawnscript.SetSpawns(entspawnscript.ReadSpawnFile())
+		else
+			-- if the map was never changed, check if there is an old spawn script and convert it to the new system
+			local spawnPoints = entspawnscript.InitOldWeaponSpawnScript()
+
+			entspawnscript.SetSpawns(spawnPoints)
+		end
+	end
+
+	cvars.AddChangeCallback(cvUseWeaponSpawnScript:GetName(), function(_, _, new)
+		print("convar changed", new)
+
+		if tobool(new) then
+			print("reload spawns")
+			entspawnscript.ReloadSpawns()
+		end
+	end)
 end
 
 if CLIENT then
@@ -620,15 +641,7 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 
 		-- special handling for some settings
 		if key == "blacklisted" and value == 0 then
-			-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
-			if entspawnscript.SpawnFileExists() then
-				entspawnscript.SetSpawns(entspawnscript.ReadSpawnFile())
-			else
-				-- if the map was never changed, check if there is an old spawn script and convert it to the new system
-				local spawnPoints = entspawnscript.InitOldWeaponSpawnScript()
-
-				entspawnscript.SetSpawns(spawnPoints)
-			end
+			entspawnscript.ReloadSpawns()
 		end
 	else -- CLIENT
 		net.Start("ttt2_entspawn_setting_update")
