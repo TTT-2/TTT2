@@ -1,9 +1,10 @@
-local display_type = CreateConVar("ttt2_roleinfo_display_type", 0, FCVAR_NONE, "0 = Chat, 1 = EPops")
+local display_type = CreateConVar("ttt2_roleinfo_display_type", 1, FCVAR_NONE, "0 = Chat, 1 = EPops")
 local display_time = CreateConVar("ttt2_roleinfo_display_time", 15, FCVAR_NONE, "Duration in Seconds")
 
 if CLIENT then
 
     local TryTranslation = LANG.TryTranslation
+    local GetTranslation = LANG.GetTranslation
 
     local is_round_running = false
 
@@ -27,11 +28,11 @@ if CLIENT then
         local title = ""
 
         if role_team == TEAM_INNOCENT then
-            title = TryTranslation("roleinfo_belong_innocent")
+            title = GetTranslation("roleinfo_belong_innocent")
         elseif role_team == TEAM_TRAITOR then
-            title = TryTranslation("roleinfo_belong_traitor")
+            title = GetTranslation("roleinfo_belong_traitor")
         else
-            title = TryTranslation("roleinfo_belong_none")
+            title = GetTranslation("roleinfo_belong_none")
         end
 
         local desc = GetRoleDescription(new_role)
@@ -44,7 +45,7 @@ if CLIENT then
         end
     end)
 
-    local function GetRoleDescription(role) 
+    function GetRoleDescription(role) 
         local key = "ttt2_roleinfo_" .. role.name
 
         local desc = TryTranslation(key)
