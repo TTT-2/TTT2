@@ -309,6 +309,9 @@ if CLIENT then
 	-- @ignore
 	function SWEP:OnRemove()
 		hook.Remove("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit")
+
+		-- clear the local cache to prevent flickering after reset
+		entspawnscript.ClearLocalCache()
 	end
 
 	---

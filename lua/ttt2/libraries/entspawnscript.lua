@@ -539,10 +539,7 @@ if SERVER then
 	end
 
 	cvars.AddChangeCallback(cvUseWeaponSpawnScript:GetName(), function(_, _, new)
-		print("convar changed", new)
-
 		if tobool(new) then
-			print("reload spawns")
 			entspawnscript.ReloadSpawns()
 		end
 	end)
@@ -594,6 +591,14 @@ if CLIENT then
 	-- @realm client
 	function entspawnscript.GetSpawnInfoEntity()
 		return spawnInfoEnt
+	end
+
+	function entspawnscript.ClearLocalCache()
+		entspawnscript.SetSpawns({
+			[SPAWN_TYPE_WEAPON] = {},
+			[SPAWN_TYPE_AMMO] = {},
+			[SPAWN_TYPE_PLAYER] = {}
+		})
 	end
 end
 
