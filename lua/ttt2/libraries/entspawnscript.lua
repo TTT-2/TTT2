@@ -27,8 +27,8 @@ local defaultSettings = {
 	["blacklisted"] = 0
 }
 
-local spawndir = "terrortown/entspawnscripts/"
-local settingsdir = "terrortown/entspawnsettings/"
+local spawndir = "terrortown/entityspawns/spawnpoints/"
+local settingsdir = "terrortown/entityspawns/settings/"
 
 local spawnTypeNameKeys = {
 	[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
