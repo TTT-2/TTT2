@@ -16,6 +16,7 @@ local gameGetMap = game.GetMap
 local pairs = pairs
 local tableRemove = table.remove
 local tableAdd = table.Add
+local tableCopy = table.Copy
 
 local spawnEntList = {}
 local settingsList = {}
@@ -207,7 +208,7 @@ if SERVER then
 	-- @realm server
 	function entspawnscript.InitOldWeaponSpawnScript()
 		local mapName = gameGetMap()
-		local spawnTable = entspawnscript.defaultSpawnTable
+		local spawnTable = tableCopy(entspawnscript.defaultSpawnTable)
 
 		-- check if there is a deprecated ttt weapon spawn script and convert the data to
 		-- the new ttt2 system as well
