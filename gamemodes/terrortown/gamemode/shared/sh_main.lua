@@ -461,12 +461,12 @@ function GM:TTT2CheckWeaponForID(eq)
 				print("Has no id nor a name")
 			end
 
-			ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization.\n")
+			ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization attempt.\n")
 			PrintTable(eq)
 
 			return false
 		else
-			print("[TTT2] Equipment " .. name .. " was successfully registered a second time.\n")
+			print("[TTT2] Equipment " .. name .. " was successfully registered on second initialization attempt.\n")
 		end
 	end
 
