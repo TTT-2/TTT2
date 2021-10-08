@@ -89,6 +89,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		and not string.match(name, "event")
 		and not eject[name]
 		then
+			-- @realm client
 			if hook.Run("TTT2CheckWeaponForID", eq) then
 				tbl[#tbl + 1] = eq
 			else
