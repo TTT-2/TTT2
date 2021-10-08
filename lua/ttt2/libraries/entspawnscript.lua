@@ -445,8 +445,6 @@ if SERVER then
 			if not ply:IsSuperAdmin() then continue end
 
 			for key, value in pairs(entspawnscript.GetSettings()) do
-				print("update setting on client", key, value)
-
 				ttt2net.Set({"entspawnscript", "settings", key}, {type = "int", bits = 16}, entspawnscript.GetSetting(key), ply)
 			end
 		end
@@ -583,8 +581,6 @@ end
 -- @param[default=false] boolean omitSaving If set to true, the setting will not be saved
 -- @realm shared
 function entspawnscript.SetSetting(key, value, omitSaving)
-	print("Set Setting", key, value, omitSaving)
-
 	omitSaving = omitSaving or false
 
 	if isbool(value) then
@@ -598,6 +594,9 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 	end
 
 	if SERVER then
+		-- only continue if the value has changed
+		if settingsList[key] == value then return end
+
 		settingsList[key] = value
 
 		if not omitSaving then
