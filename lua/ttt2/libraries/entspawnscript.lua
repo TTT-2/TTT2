@@ -17,21 +17,18 @@ local pairs = pairs
 local tableRemove = table.remove
 local tableAdd = table.Add
 local tableCopy = table.Copy
+local utilTableToJSON = util.TableToJSON
+local utilJSONToTable = util.JSONToTable
 
-local spawnEntList = {}
+local spawnPointList = {}
 local settingsList = {}
 
 local defaultSettings = {
 	["blacklisted"] = 0
 }
 
-local spawndir = "ttt/weaponspawnscripts/"
-
-local spawnTypes = {
-	SPAWN_TYPE_WEAPON,
-	SPAWN_TYPE_AMMO,
-	SPAWN_TYPE_PLAYER
-}
+local spawndir = "terrortown/entspawnscripts/"
+local configdir = "terrortown/entspawnconfig/"
 
 local spawnTypeNameKeys = {
 	[SPAWN_TYPE_WEAPON] = "SPAWN_TYPE_WEAPON",
@@ -39,7 +36,11 @@ local spawnTypeNameKeys = {
 	[SPAWN_TYPE_PLAYER] = "SPAWN_TYPE_PLAYER"
 }
 
-local settingsName = "SETTINGS"
+local spawnTypes = {
+	SPAWN_TYPE_WEAPON,
+	SPAWN_TYPE_AMMO,
+	SPAWN_TYPE_PLAYER
+}
 
 local spawnColors = {
 	[SPAWN_TYPE_WEAPON] = Color(0, 175, 175, 255),
@@ -143,6 +144,7 @@ local kindToSpawnType = {
 }
 
 entspawnscript = entspawnscript or {}
+
 if SERVER then
 	entspawnscript.defaultSpawnsSaved = entspawnscript.defaultSpawnsSaved or false
 	entspawnscript.defaultSpawnTable = entspawnscript.defaultSpawnTable or {}
@@ -151,15 +153,6 @@ if SERVER then
 	---
 	-- @realm server
 	local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
-
-	---
-	-- Checks wether a spawnfile for the currently selected map exists.
-	-- @return boolean Returns true if the spawnn script already exists
-	-- @realm server
-	function entspawnscript.Exists()
-		return fileExists(spawndir .. gameGetMap() .. ".json", "DATA")
-	end
-
 	---
 	-- Called when the entities on the map are available and the spawn entities can be read..
 	-- @realm server
@@ -170,12 +163,20 @@ if SERVER then
 			entspawnscript.SaveMapStateAsDefault()
 		end
 
-		if not entspawnscript.Exists() then
+		if not entspawnscript.SpawnFileExists() or not entspawnscript.SettingsFileExists() then
 			-- if the map was never changed, check if there is an old spawn script and convert it to the new system
-			spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
-		else
-			-- in normal usecases the spawns are loaded from the current spawn file
-			spawnEntList, settingsList = entspawnscript.ReadFile()
+			local spawnPoints, settings = entspawnscript.InitOldWeaponSpawnScript()
+
+			entspawnscript.SetSpawns(spawnPoints)
+			entspawnscript.SetSettings(settings)
+		end
+
+		if entspawnscript.SpawnFileExists() then
+			entspawnscript.SetSpawns(entspawnscript.ReadSpawnFile())
+		end
+
+		if entspawnscript.SettingsFileExists() then
+			entspawnscript.SetSettings(entspawnscript.ReadSettingsFile())
 		end
 
 		-- Most of the time this set up is done before the player is ready. However to make sure the update
@@ -200,8 +201,9 @@ if SERVER then
 	end
 
 	---
-	-- Initializes the map and generates all the needed spawn files. Called on first load of a map
-	-- if there is no existing spawn file.
+	-- Initializes the map and generates all spawn points from the old weaponspawnscripts. This does
+	-- not save those values automatically, but returns the data to be saved.
+	-- @note Called on first load of a map if there is no existing spawn file.
 	-- @warning This can break the weapon spawn files if called at any time after the initial spawn wave.
 	-- @return table A table with the default spawn points provided by the map
 	-- @return table A table with the default settings provided by the map
@@ -209,6 +211,7 @@ if SERVER then
 	function entspawnscript.InitOldWeaponSpawnScript()
 		local mapName = gameGetMap()
 		local spawnTable = tableCopy(entspawnscript.defaultSpawnTable)
+		local settingsTable = tableCopy(defaultSettings)
 
 		-- check if there is a deprecated ttt weapon spawn script and convert the data to
 		-- the new ttt2 system as well
@@ -228,68 +231,104 @@ if SERVER then
 					end
 				end
 			end
-
-			-- save changes done by old scripts
-			spawnEntList = spawnTable
-			settingsList = defaultSettings
-			entspawnscript.UpdateSpawnFile()
-		end
-
-		return spawnTable, defaultSettings
-	end
-
-	---
-	-- Updates the spawn file. Used to save changes done in the spawn editor
-	-- @realm server
-	function entspawnscript.UpdateSpawnFile()
-		entspawnscript.WriteFile(spawnEntList, settingsList)
-	end
-
-	---
-	-- Writes the spawn script data to the disc. Is used for the initial file, the default data
-	-- and to save changes done to the spawn data.
-	-- @param table spawnTable The table with the spawn points that should be stored
-	-- @param table settingsTable The table with the settings that should be stored
-	-- @realm server
-	function entspawnscript.WriteFile(spawnTable, settingsTable)
-		local jsonSaveTable = {[settingsName] = settingsTable}
-
-		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
-			jsonSaveTable[spawnTypeName] = spawnTable[enumKey]
-		end
-
-		fileCreateDir(spawndir)
-		fileWrite(spawndir .. gameGetMap() .. ".json", util.TableToJSON(jsonSaveTable, true))
-	end
-
-	---
-	-- Reads the spawn file and returns the read data.
-	-- @return table The table with the spawn points read from the file
-	-- @return table The table with the settings read from the file
-	-- @realm server
-	function entspawnscript.ReadFile()
-		local jsonSaveTable = util.JSONToTable(fileRead(spawndir .. gameGetMap() .. ".json", "DATA"))
-
-		local settingsTable = jsonSaveTable[settingsName]
-
-		local spawnTable = {}
-
-		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
-			 spawnTable[enumKey] = jsonSaveTable[spawnTypeName]
 		end
 
 		return spawnTable, settingsTable
 	end
 
 	---
+	-- Updates the spawn file. Used to save changes done in the spawn editor
+	-- @realm server
+	function entspawnscript.UpdateSpawnFile()
+		local spawnPoints = entspawnscript.GetSpawns()
+		local jsonSaveTable = {}
+
+		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
+			jsonSaveTable[spawnTypeName] = spawnPoints[enumKey]
+		end
+
+		entspawnscript.WriteFile(spawndir, jsonSaveTable)
+	end
+
+	function entspawnscript.UpdateSettingsFile()
+		entspawnscript.WriteFile(configdir, entspawnscript.GetSettings())
+	end
+
+	function entspawnscript.ReadSpawnFile()
+		local jsonSaveTable = entspawnscript.ReadFile(spawndir)
+		local spawnPoints = {}
+
+		for enumKey, spawnTypeName in pairs(spawnTypeNameKeys) do
+			spawnPoints[enumKey] = jsonSaveTable[spawnTypeName]
+		end
+
+		return spawnPoints
+	end
+
+	function entspawnscript.ReadSettingsFile()
+		return entspawnscript.ReadFile(configdir)
+	end
+
+	function entspawnscript.RemoveSpawnFile()
+		entspawnscript.RemoveFile(spawndir)
+	end
+
+	function entspawnscript.RemoveSettingsFile()
+		entspawnscript.RemoveFile(configdir)
+	end
+
+	function entspawnscript.SpawnFileExists()
+		return entspawnscript.Exists(spawndir)
+	end
+
+	function entspawnscript.SettingsFileExists()
+		return entspawnscript.Exists(configdir)
+	end
+
+	---
+	-- Checks wether a file for the currently selected map exists.
+	-- @param string dir The directory where the file is expected
+	-- @return boolean Returns true if the spawnn script already exists
+	-- @realm server
+	function entspawnscript.Exists(dir)
+		return fileExists(dir .. gameGetMap() .. ".json", "DATA")
+	end
+
+
+	---
+	-- Writes the spawn script data to the disc. Is used for the initial file, the default data
+	-- and to save changes done to the spawn data.
+	-- @note If the directory does not already exist, it is automatically created.
+	-- @param string dir The directory where the file is expected
+	-- @param table dataTable The table with the data that should be stored
+	-- @internal
+	-- @realm server
+	function entspawnscript.WriteFile(dir, dataTable)
+		fileCreateDir(dir)
+
+		fileWrite(dir .. gameGetMap() .. ".json", utilTableToJSON(dataTable, true))
+	end
+
+	---
+	-- Reads the spawn file and returns the read data.
+	-- @param string dir The directory where the file is expected
+	-- @return table The table with the data read from the file
+	-- @internal
+	-- @realm server
+	function entspawnscript.ReadFile(dir)
+		return utilJSONToTable(fileRead(dir .. gameGetMap() .. ".json", "DATA"))
+	end
+
+	---
 	-- Removes the spawn file of the current map and returns if it existed
 	-- @return bool if the file existed and was therefore successfully deleted
+	-- @internal
 	-- @realm server
-	function entspawnscript.RemoveFile()
-		local fileExisted = entspawnscript.Exists()
+	function entspawnscript.RemoveFile(dir)
+		local fileExisted = entspawnscript.Exists(dir)
 
 		if fileExisted then
-			fileDelete(spawndir .. gameGetMap() .. ".json")
+			fileDelete(dir .. gameGetMap() .. ".json")
 		end
 
 		return fileExisted
@@ -312,6 +351,10 @@ if SERVER then
 		return settingsList[key] or 0
 	end
 
+	function entspawnscript.SetSettings(settings)
+		settingsList = settings
+	end
+
 	---
 	-- Proxy function to directly set the `blacklisted` setting to disable custom spawns
 	-- for the currently loaded map.
@@ -328,14 +371,6 @@ if SERVER then
 	-- @realm server
 	function entspawnscript.ShouldUseCustomSpawns()
 		return not tobool(entspawnscript.GetSetting("blacklisted")) and cvUseWeaponSpawnScript:GetBool()
-	end
-
-	---
-	-- Sets the spawn point list.
-	-- @param table spawnEnts The new spawnEnts table
-	-- @realm server
-	function entspawnscript.SetSpawns(spawnEnts)
-		spawnEntList = spawnEnts
 	end
 
 	---
@@ -362,7 +397,7 @@ if SERVER then
 				entspawnscript.editingPlayers[#entspawnscript.editingPlayers + 1] = ply
 			end
 
-			net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, ply)
+			net.SendStream("TTT2_WeaponSpawnEntities", entspawnscript.GetSpawns(), ply)
 		elseif playerIndex then
 			tableRemove(entspawnscript.editingPlayers, playerIndex)
 		end
@@ -409,7 +444,9 @@ if SERVER then
 
 			if not ply:IsSuperAdmin() then continue end
 
-			for key, value in pairs(settingsList) do
+			for key, value in pairs(entspawnscript.GetSettings()) do
+				print("update setting on client", key, value)
+
 				ttt2net.Set({"entspawnscript", "settings", key}, {type = "int", bits = 16}, entspawnscript.GetSetting(key), ply)
 			end
 		end
@@ -530,6 +567,14 @@ if CLIENT then
 end
 
 ---
+-- Sets the spawn point list.
+-- @param table spawnPoints The new spawnPoints table
+-- @realm server
+function entspawnscript.SetSpawns(spawnPoints)
+	spawnPointList = spawnPoints
+end
+
+---
 -- Updates a map specific setting. If called on the client, it will be automatically
 -- networked to the server. It then is stored on the server and updated on all connected
 -- clients.
@@ -538,6 +583,8 @@ end
 -- @param[default=false] boolean omitSaving If set to true, the setting will not be saved
 -- @realm shared
 function entspawnscript.SetSetting(key, value, omitSaving)
+	print("Set Setting", key, value, omitSaving)
+
 	omitSaving = omitSaving or false
 
 	if isbool(value) then
@@ -554,13 +601,7 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 		settingsList[key] = value
 
 		if not omitSaving then
-
-			-- since we can only write the whole file, but we still want to keep the spawns untouched, we have to
-			-- read those first to write them again. Depending on the spawn mode the cached spawns in this module
-			-- might be completely different than those in the file. We do not want to overwrite them!
-			local currentSpawns = entspawnscript.ReadFile()
-
-			entspawnscript.WriteFile(currentSpawns, entspawnscript.GetSettings())
+			entspawnscript.UpdateSettingsFile()
 		end
 
 		-- trigger an update of the synced settings table
@@ -569,7 +610,14 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 		-- special handling for some settings
 		if key == "blacklisted" and value == 0 then
 			-- if switched back to custom spawn loading, we want to load again the spawn file to restore the spawn points
-			entspawnscript.SetSpawns(entspawnscript.ReadFile())
+			if entspawnscript.SpawnFileExists() then
+				entspawnscript.SetSpawns(entspawnscript.ReadSpawnFile())
+			else
+				-- if the map was never changed, check if there is an old spawn script and convert it to the new system
+				local spawnPoints = entspawnscript.InitOldWeaponSpawnScript()
+
+				entspawnscript.SetSpawns(spawnPoints)
+			end
 		end
 	else -- CLIENT
 		net.Start("ttt2_entspawn_setting_update")
@@ -692,7 +740,7 @@ end
 -- @return table A table with all spawns
 -- @realm shared
 function entspawnscript.GetSpawns()
-	return spawnEntList
+	return spawnPointList
 end
 
 ---
@@ -702,7 +750,7 @@ end
 -- @return table A table with all spawns
 -- @realm shared
 function entspawnscript.GetSpawnsForSpawnType(spawnType)
-	return spawnEntList[spawnType]
+	return spawnPointList[spawnType]
 end
 
 ---
@@ -718,9 +766,11 @@ end
 -- the server to the client for net performance reasons
 -- @realm shared
 function entspawnscript.RemoveSpawnById(spawnType, entType, id, shouldSync, ply)
-	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
+	local spawnPoints = entspawnscript.GetSpawns()
 
-	local list = spawnEntList[spawnType][entType]
+	if not spawnPoints or not spawnPoints[spawnType] or not spawnPoints[spawnType][entType] then return end
+
+	local list = spawnPoints[spawnType][entType]
 
 	tableRemove(list, id)
 
@@ -759,13 +809,15 @@ end
 -- the server to the client for net performance reasons
 -- @realm shared
 function entspawnscript.AddSpawn(spawnType, entType, pos, ang, ammo, shouldSync, ply)
+	local spawnPoints = entspawnscript.GetSpawns()
+
 	ammo = ammo or 0
 
-	spawnEntList = spawnEntList or {}
-	spawnEntList[spawnType] = spawnEntList[spawnType] or {}
-	spawnEntList[spawnType][entType] = spawnEntList[spawnType][entType] or {}
+	spawnPoints = spawnPoints or {}
+	spawnPoints[spawnType] = spawnPoints[spawnType] or {}
+	spawnPoints[spawnType][entType] = spawnPoints[spawnType][entType] or {}
 
-	local list = spawnEntList[spawnType][entType]
+	local list = spawnPoints[spawnType][entType]
 
 	list[#list + 1] = {
 		pos = pos,
@@ -811,9 +863,11 @@ end
 -- the server to the client for net performance reasons
 -- @realm shared
 function entspawnscript.UpdateSpawn(spawnType, entType, id, pos, ang, ammo, shouldSync, ply)
-	if not spawnEntList or not spawnEntList[spawnType] or not spawnEntList[spawnType][entType] then return end
+	local spawnPoints = entspawnscript.GetSpawns()
 
-	local listEntry = spawnEntList[spawnType][entType]
+	if not spawnPoints or not spawnPoints[spawnType] or not spawnPoints[spawnType][entType] then return end
+
+	local listEntry = spawnPoints[spawnType][entType]
 
 	if not listEntry[id] then return end
 
@@ -861,7 +915,7 @@ function entspawnscript.DeleteAllSpawns()
 
 		entspawnscript.UpdateSpawnFile()
 
-		net.SendStream("TTT2_WeaponSpawnEntities", spawnEntList, entspawnscript.editingPlayers)
+		net.SendStream("TTT2_WeaponSpawnEntities", entspawnscript.GetSpawns(), entspawnscript.editingPlayers)
 
 		-- update amount of spawns on clients
 		entspawnscript.UpdateSpawnCountOnClients()
@@ -925,11 +979,15 @@ function entspawnscript.ResetMapToDefault()
 		net.Start("ttt2_entspawn_reset")
 		net.SendToServer()
 	else
-		-- delete the changed file
-		entspawnscript.RemoveFile()
+		-- delete the changed files
+		entspawnscript.RemoveSpawnFile()
+		entspawnscript.RemoveSettingsFile()
 
 		-- load old weapon scripts and reset to default
-		spawnEntList, settingsList = entspawnscript.InitOldWeaponSpawnScript()
+		local spawnPoints, settings = entspawnscript.InitOldWeaponSpawnScript()
+
+		entspawnscript.SetSpawns(spawnPoints)
+		entspawnscript.SetSettings(settings)
 
 		-- Most of the time this set up is done before the player is ready. However to make sure the update
 		-- is called at least once after the data is generated, it is also called here.
@@ -1001,8 +1059,8 @@ if SERVER then
 end
 
 if CLIENT then
-	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnEnts)
-		spawnEntList = spawnEnts
+	net.ReceiveStream("TTT2_WeaponSpawnEntities", function(spawnPoints)
+		entspawnscript.SetSpawns(spawnPoints)
 	end)
 
 	net.Receive("ttt2_remove_spawn_ent", function()

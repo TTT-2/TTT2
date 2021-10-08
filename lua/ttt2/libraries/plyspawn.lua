@@ -172,7 +172,7 @@ function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
 	local spawnPoints = plyspawn.GetPlayerSpawnPoints()
 
 	if not spawnPoints or #spawnPoints == 0 then
-		Error("[TTT2][PLYSPAWN] No spawn points found! make sure there is at least one spawn point on the map.\n")
+		Error("[TTT2][PLYSPAWN] No spawn points found! Make sure there is at least one spawn point on the map.\n")
 
 		return false
 	end
