@@ -163,16 +163,18 @@ end
 ---
 -- Gets a safe random player spawn point. If no free and safe spawnpoint is found, it tries
 -- to create its own by searching around existing ones.
+-- @note This function should never return false if there is at least one spawn point on the
+-- map.
 -- @param Player ply The player that should receive their spawn point
--- @return table A safe spawn point
+-- @return boolean|table A safe spawn point, false if no spawn point was found on the map
 -- @realm server
 function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
 	local spawnPoints = plyspawn.GetPlayerSpawnPoints()
 
-	if #spawnPoints == 0 then
-		Error("No spawn points found!\n")
+	if not spawnPoints or #spawnPoints == 0 then
+		Error("[TTT2][PLYSPAWN] No spawn points found! make sure there is at least one spawn point on the map.\n")
 
-		return
+		return false
 	end
 
 	-- the table should be shuffled for each spawn point calculation to improve randomness

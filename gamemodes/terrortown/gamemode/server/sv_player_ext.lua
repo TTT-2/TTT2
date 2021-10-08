@@ -645,6 +645,10 @@ function plymeta:SpawnForRound(deadOnly)
 	-- set spawn position
 	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
+	if not spawnPoint then
+		return false
+	end
+
 	self:SetPos(spawnPoint.pos)
 	self:SetAngles(spawnPoint.ang)
 
@@ -682,6 +686,8 @@ function plymeta:InitialSpawn()
 
 	-- set spawn position
 	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+
+	if not spawnPoint then return end
 
 	self:SetPos(spawnPoint.pos)
 	self:SetAngles(spawnPoint.ang)
@@ -861,6 +867,12 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 			if not spawnPos then
 				local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+
+				if not spawnPoint then
+					OnReviveFailed(self, "message_revival_failed")
+
+					return
+				end
 
 				spawnPos = spawnPoint.pos
 				spawnEyeAngle = spawnPoint.ang
