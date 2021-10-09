@@ -1450,3 +1450,67 @@ L.help_models_select = [[
 Linkskicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder.
 
 Das kleine Symbol oben links zeigt, ob ein Spielermodel eine Kopfschuss Hitbox hat.]]
+
+L.menu_roles_title = "Rollen Einstellungen"
+L.menu_roles_description = "Richte Rollenspawning, Ausrüsungspunkte und mehr ein."
+
+L.submenu_administration_roles_general_title = "Allgemeine Rolleneinstellungen"
+
+L.header_roles_info = "Roleninformationen"
+L.header_roles_selection = "Rollenauswahlparameter"
+L.header_roles_tbuttons = "Verräterknöpfe für Rolle"
+L.header_roles_credits = "Rollenausrüstungspunkte"
+L.header_roles_additional = "Weitere Rolleneinstellungen"
+L.header_roles_reward_credits = "Belohnungsausrüstungspunkte"
+
+L.help_roles_default_team = "Standardteam: {team}"
+L.help_roles_unselectable = "Diese Rolle kann nicht ausgewählt werden, was bedeutet, dass sie nicht in der Rollenverteilung verwendet wird. Meist liegt es daran, dass es eine Rolle ist, die manuell in der Runde Spielern zugewiesen wird, wie zum Beispiel durch eine Wiederbelebung oder eine Kumpanenpistole."
+L.help_roles_selectable = "Diese Rolle kann ausgewählt werden, daher wird sie, wenn alle Kriterien erfüllt sind, in der Rollenverteilung verwendet."
+L.help_roles_credits = "Ausrüstungspunkte werden verwendet um Ausrüstung im Shop zu kaufen. Meist macht es nur Sinn diese Punkte Rollen zu geben, welche auch einen Shop haben. Da es jedoch auch möglich ist von Leichen Punkte zu klauen, können Startpunkte auch als Belohnung für den Mörder dienen."
+L.help_roles_selection_short = "Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, die diese Rolle zugewiesen bekommen. Wenn zum Beispiel dieser Wert auf '0.2' gesetzt ist, dann bekommt jeder fünfte Spieler diese Rolle."
+L.help_roles_selection = [[
+Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, die diese Rolle zugewiesen bekommen. Wenn zum Beispiel dieser Wert auf '0.2' gesetzt ist, dann bekommt jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens fünf Spieler existieren müssen, damit diese Rolle verteilt wird.
+Bedenke, dass dies alles nur gilt, wenn die Rolle überhaupt zur Verteilung ausgewählt wurde.
+
+Die zuvor genannte Rollenverteilung hat eine spezielle Integration mit der Mindestzahl an Spielern. Wenn die Rolle zur Verteilung ausgewählt wurde und die gesetzte Mindestspielerzahl niederiger als die Zahl ist, welche aus dem Rollenverteilungsprozentsatz kommt, dann kann ein einzelner Spieler diese Rolle dennoch erhalten. Die prozentuale Rollenzuweisung gilt dann jedoch wieder ab dem zweiten Spieler.]]
+L.help_roles_award_info = "Einige Rollen (alle Verräter und ein paar andere Rollen) erhalten Ausrüstungsprunkte, wenn eine gewise Anzahl ihrer Gegenspieler stirbt. Diese Werte können hier eingestellt werden."
+L.help_roles_award_pct = "Wenn dieser Prozentsatz an anderen Spielern gestorben ist, dann erhalten Spieler Ausrüstungspunkte."
+L.help_roles_award_repeat = "Definiert, ob Belohnungen mehrfach ausgestellt werden können. Wenn aktiviert und der Prouentsatz zum Beispiel auf '0.25' steht, dann werden Ausrüstungspunkte bei '25%', '50%' und '75%' getötet verteilt."
+L.help_roles_advanced_warning = "WARNUNG: Diese Einstellungen sind nur für fortgeschrittene Nutzer geeignet, da sie die gesamte Rollenverteilung durcheinander bringen können. Wenn du unsicher bist, was du tun sollst, dann setze alle Werte auf '0'. Das bedeutet, dass der Rollenverteilung keine künstlichen Limits erteilt werden."
+L.help_roles_max_roles = [[
+Die Kategorie Rollen erhält jede verfügbare Rolle in TTT2. Standardmäßig gibt es kein Limit darauf wie viele verschiedene Rollen zugeteilt werden können. Allerdings gibt es zwei Möglichkeiten dies zu limitieren.
+
+1. Limitierung durch einen fixen Wert.
+2. Limitierung durch einen Prozentsatz.
+
+Letzteres wird nur verwendet, wenn der fixierte Wert auf 0 gesetzt ist und setzt dynamisch ein oberes Limit basierend auf dem Prozentsatz der verfügbaren Spieler.]]
+L.help_roles_max_baseroles = [[
+Basisrollen sind Rollen, von der andere erben. Ein Unschuldiger ist zum Beispiel eine Basisrolle, während ein Paharo eine Unterrolle dieser Rolle ist. Standardmäßig gibt es kein Limit darauf wie viele verschiedene Basisrollen zugeteilt werden können. Allerdings gibt es zwei Möglichkeiten dies zu limitieren.
+
+1. Limitierung durch einen fixen Wert.
+2. Limitierung durch einen Prozentsatz.
+
+Letzteres wird nur verwendet, wenn der fixierte Wert auf 0 gesetzt ist und setzt dynamisch ein oberes Limit basierend auf dem Prozentsatz der verfügbaren Spieler.]]
+
+L.label_roles_enabled = "Aktiviere Rolle"
+L.label_roles_min_inno_pct = "Unschuldigenverteilung pro Spieler"
+L.label_roles_pct = "Rollenverteilung pro Spieler"
+L.label_roles_max = "Oberes Limit von Spielern mit dieser Rolle"
+L.label_roles_random = "Wahrscheinlichkeit, dass diese Rolle gewählt wird"
+L.label_roles_min_players = "Mindespielerzahl für Auswahl der Rolle"
+L.label_roles_tbutton = "Rolle kann Verräterknöpfe nutzen"
+L.label_roles_credits_starting = "Ausrüstungspunkte zu Beginn"
+L.label_roles_credits_traitordead = "Belohnung für toten Verräter"
+L.label_roles_credits_award_pct = "Belohnungsspieleranteil"
+L.label_roles_credits_award_size = "Belohnungsgröße"
+L.label_roles_credits_award_repeat = "Mehrfache Belohnung"
+L.label_roles_credits_detectivekill = "Belohnung für Detektivermordung"
+L.label_roles_newroles_enabled = "Aktiviere eigene Rollen"
+L.label_roles_max_roles = "Obere Grenze für Rollen"
+L.label_roles_max_roles_pct = "Prozentuale obere Grenze für Rollen"
+L.label_baseroles_max_roles = "Obere Grenze für Basisrollen"
+L.label_baseroles_max_roles_pct = "Prozentuale obere Grenze für Basisrollen"
+
+L.ttt2_desc_innocent = "Ein Unschuldiger hat keine spzeiellen Fähigkeiten. Er muss die Bösen unter den Terroristen finden und umbringen. Aber dabei stets auf der Hut sein, um nicht seine Kollegen zu ermorden."
+L.ttt2_desc_traitor = "Der Verräter ist der Gegenspieler der unschuldigen. Sie haben einen Ausrüstungsshop, in dem sie Spezialausrüstung kaufen können. Sie müssen jeden außer ihre eigenen Teamkollegen ermorden."
+L.ttt2_desc_detective = "Der Detektiv ist derjenige, dem die Unschuldigen trauen können. Aber wer sind die Unschuldigen? Der Detektiv muss genau das herausfinden. Ihr Ausrüstungsshop hilft ihnen vielleicht dabei."

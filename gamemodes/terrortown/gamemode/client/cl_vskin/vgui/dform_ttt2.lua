@@ -396,7 +396,7 @@ function PANEL:MakeHelp(data)
 
 	-- make sure the height is based on the amount of text inside
 	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.GetParamTranslation(slf:GetText(), slf:GetParams())
+		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetParams()))
 
 		local textWrapped = draw.GetWrappedText(
 			textTranslated,

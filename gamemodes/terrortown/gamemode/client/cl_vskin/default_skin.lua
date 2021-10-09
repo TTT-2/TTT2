@@ -742,7 +742,7 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.helpBox)
 	drawBox(0, 0, 4, h, colors.helpBar)
 
-	local textTranslated = ParT(panel:GetText(), panel:GetParams())
+	local textTranslated = ParT(panel:GetText(), TryT(panel:GetParams()))
 	local textWrapped = drawGetWrappedText(
 		textTranslated,
 		w - 2 * panel.paddingX,

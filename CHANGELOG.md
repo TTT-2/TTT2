@@ -7,6 +7,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
+- Added a new submenu to the administration settings regarding basic role setup
+- Added a new menu to the F1 menu to set up and configure all installed menus
+- Added two new hooks to modify the contents of the newly added menu
+  - `ROLE:AddToSettingsMenu(parent)`
+  - `ROLE:AddToSettingsMenuCreditsForm(parent)`
 - Added a new in-game player model selector
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
