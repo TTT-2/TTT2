@@ -78,7 +78,7 @@ function PANEL:SetServerConVar(cvar)
 
 	self.serverConVar = cvar
 
-	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
+	cvars.ServerConVarGetValue(cvar, function(wasSuccess, value)
 		if wasSuccess and value then
 			self:SetValue(tobool(value), true)
 		end
@@ -87,6 +87,7 @@ function PANEL:SetServerConVar(cvar)
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
 			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+
 			return
 		end
 

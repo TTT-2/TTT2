@@ -102,6 +102,9 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	-- reset any cached weapons
+	ply:ResetCachedWeapons()
+
 	-- stop bleeding
 	util.StopBleeding(ply)
 
@@ -138,14 +141,6 @@ function GM:PlayerSpawn(ply)
 	---
 	-- @realm server
 	hook.Run("PlayerLoadout", ply, false)
-
-	---
-	-- @realm server
-	hook.Run("PlayerSetModel", ply)
-
-	---
-	-- @realm server
-	hook.Run("TTTPlayerSetColor", ply)
 
 	ply:SetupHands()
 
@@ -199,18 +194,19 @@ function GM:IsSpawnpointSuitable(ply, spawnEntity, force)
 		return true
 	end
 
-	return spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
+	return plyspawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
 end
 
 ---
 -- Returns a list of all spawnable @{Entity}
 -- @param boolean shuffle whether the table should be shuffled
--- @param boolean force_all used unless absolutely necessary (includes info_player_start spawns)
+-- @param boolean forceAll used unless absolutely necessary (includes info_player_start spawns)
 -- @return table
--- @deprecated Use @{spawn.GetPlayerSpawnEntities} instead
+-- @deprecated Use @{plyspawn.GetPlayerSpawnPoints} instead
 -- @realm server
 function GetSpawnEnts(shouldShuffle, forceAll)
-	local spawnEntities = spawn.GetPlayerSpawnEntities(forceAll)
+	-- forceAll is ignored because the new system doesn't use it anymore
+	local spawnEntities = plyspawn.GetPlayerSpawnPoints()
 
 	if shouldShuffle then
 		table.Shuffle(spawnEntities)
@@ -221,33 +217,18 @@ end
 
 ---
 -- Called to determine a spawn point for a @{Player} to spawn at.
+-- @note This hook is not used to determine the spawn point of the player.
 -- @param Player ply The @{Player} who needs a spawn point
+-- @param boolean transition If true, the player just spawned from a map transition (trigger_changelevel);
+-- you probably want to not return an entity for that case to not override player's position
 -- @return Entity The spawnpoint entity to spawn the @{Player} at
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSelectSpawn
 -- @local
-function GM:PlayerSelectSpawn(ply)
-	return spawn.GetRandomPlayerSpawnEntity(ply)
-end
-
----
--- Called whenever a @{Player} spawns and must choose a model.
--- A good place to assign a model to a @{Player}.
--- @note This function may not work in your custom gamemode if you have overridden
--- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
--- @param Player ply The @{Player} being chosen
--- @hook
--- @realm server
--- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetModel
--- @local
-function GM:PlayerSetModel(ply)
-	if not IsValid(ply) then return end
-
-	ply:SetModel(ply.defaultModel or GAMEMODE.playermodel) -- this will call the overwritten internal function to modify the model
-
-	-- Always clear color state, may later be changed in TTTPlayerSetColor
-	ply:SetColor(COLOR_WHITE)
+function GM:PlayerSelectSpawn(ply, transition)
+	-- this overwrite is needed to suppress the GMod warning if no spawn entities were found
+	-- "[PlayerSelectSpawn] Error! No spawn points!"
 end
 
 ---

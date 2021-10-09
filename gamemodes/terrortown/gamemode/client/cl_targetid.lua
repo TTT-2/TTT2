@@ -263,6 +263,7 @@ function GM:HUDDrawTargetID()
 	-- call internal targetID functions first so the data can be modified by addons
 	local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
 
+	targetid.HUDDrawTargetIDSpawnEdit(tData)
 	targetid.HUDDrawTargetIDTButtons(tData)
 	targetid.HUDDrawTargetIDWeapons(tData)
 	targetid.HUDDrawTargetIDPlayers(tData)

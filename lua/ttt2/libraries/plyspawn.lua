@@ -9,25 +9,12 @@ local Vector = Vector
 local table = table
 local mathSin = math.sin
 local mathCos = math.cos
-local entsFindByClass = ents.FindByClass
 
 local spawnPointVariations = {Vector(0, 0, 0)}
 
 for i = 0, 360, 22.5 do
 	spawnPointVariations[#spawnPointVariations + 1] = Vector(mathCos(i), mathSin(i), 0)
 end
-
-local spawnTypes = {
-	"info_player_deathmatch",
-	"info_player_combine",
-	"info_player_rebel",
-	"info_player_counterterrorist",
-	"info_player_terrorist",
-	"info_player_axis",
-	"info_player_allies",
-	"gmod_player_start",
-	"info_player_teamspawn"
-}
 
 -- returns the player size as a vector
 local function GetPlayerSize(ply)
@@ -36,8 +23,7 @@ local function GetPlayerSize(ply)
 	return top - bottom
 end
 
-spawn = spawn or {}
-spawn.cachedSpawnEntities = spawn.cachedSpawnEntities or {}
+plyspawn = plyspawn or {}
 
 ---
 -- Checks if a given spawn point is safe. Safe means that a player can spawn without
@@ -49,7 +35,7 @@ spawn.cachedSpawnEntities = spawn.cachedSpawnEntities or {}
 -- @param[opt] table|Entity filter A table of entities or an entity that should be ignored by this check
 -- @return boolean Returns if the spawn point is safe
 -- @realm server
-function spawn.IsSpawnPointSafe(ply, pos, force, filter)
+function plyspawn.IsSpawnPointSafe(ply, pos, force, filter)
 	local sizePlayer = GetPlayerSize(ply)
 
 	if not util.IsInWorld(pos) then
@@ -130,7 +116,7 @@ end
 -- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
 -- @return table A table of position vectors
 -- @realm server
-function spawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
+function plyspawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
 	local sizePlayer = GetPlayerSize(ply)
 
 	if not pos then return {} end
@@ -154,163 +140,88 @@ end
 -- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
 -- @return Vector|nil Returns the safe spawn position, nil if none was found
 -- @realm server
-function spawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
-	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
+function plyspawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
+	local spawnPoints = plyspawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
 
 	for i = 1, #spawnPoints do
 		local spawnPoint = spawnPoints[i]
 
-		if not spawn.IsSpawnPointSafe(ply, spawnPoint, false) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint, false) then continue end
 
 		return spawnPoint
 	end
 end
 
 ---
--- Returns a list of all spawn entities found on the map that are valid to spawn players.
--- @warning Don't use 'info_player_start' unless absolutely necessary, because eg. TF2 uses
--- it for observer starts that are in places where players cannot really spawn well.
--- Therefore by default 'info_player_start' is not included in the search. However if 'forceAll'
--- is set to true or no other map spawn was found, these spawn entities will be included.
--- @param boolean forceAll Shouldn't used unless absolutely necessary because it includes 'info_player_start' spawns
--- @return table Returns a table of unsafe spawn entities
+-- Returns a list of all spawn points found on the map that are valid to spawn players.
+-- @return table Returns a table of unsafe spawn points
 -- @realm server
-function spawn.GetPlayerSpawnEntities(forceAll)
-	local processedSpawnEntities = {}
-
-	for i = 1, #spawnTypes do
-		local classname = spawnTypes[i]
-		local spawnEntityTable = entsFindByClass(classname)
-
-		for k = 1, #spawnEntityTable do
-			local spawnEntityTableEntry = spawnEntityTable[k]
-
-			if spawnEntityTableEntry.markAsRemoved then continue end
-
-			processedSpawnEntities[#processedSpawnEntities + 1] = spawnEntityTableEntry
-		end
-	end
-
-	-- Don't use info_player_start unless absolutely necessary, because eg. TF2
-	-- uses it for observer starts that are in places where players cannot really
-	-- spawn well. At all.
-	if forceAll or #processedSpawnEntities == 0 then
-		local startEntityTable = entsFindByClass("info_player_start")
-
-		for k = 1, #startEntityTable do
-			local startEntityTableEntry = startEntityTable[k]
-
-			if startEntityTableEntry.markAsRemoved then continue end
-
-			processedSpawnEntities[#processedSpawnEntities + 1] = startEntityTableEntry
-		end
-	end
-
-	return processedSpawnEntities
+function plyspawn.GetPlayerSpawnPoints()
+	return entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
 end
 
 ---
--- Gets a table of spawnpoints on the map.
--- @note These spawn points are not shuffled.
--- @return table Returns a table of spawnpoints as @{Vector}s
--- @realm server
-function spawn.GetPlayerSpawnPointTable()
-	local spawnEnts = spawn.GetPlayerSpawnEntities(false)
-	local spawnPoints = {}
-
-	for i = 1, #spawnEnts do
-		spawnPoints[i] = spawnEnts[i]:GetPos()
-	end
-
-	return spawnPoints
-end
-
----
--- Gets a safe random player spawn entity. If no free and safe spawnpoint is found, it tries
+-- Gets a safe random player spawn point. If no free and safe spawnpoint is found, it tries
 -- to create its own by searching around existing ones.
+-- @note This function should never return false if there is at least one spawn point on the
+-- map.
 -- @param Player ply The player that should receive their spawn point
--- @return Entity A safe spawn entity
+-- @return boolean|table A safe spawn point, false if no spawn point was found on the map
 -- @realm server
-function spawn.GetRandomPlayerSpawnEntity(ply)
-	-- One might think that we have to regenerate our spawnpoint
-	-- cache. Otherwise, any riggedSpawnPoints spawn entities would not get reused, and
-	-- MORE new entities would be made instead. In reality, the map cleanup at
-	-- round start will remove our riggedSpawnPoints spawns, and we'll have to create new
-	-- ones anyway.
-	if #spawn.cachedSpawnEntities == 0 or not IsTableOfEntitiesValid(spawn.cachedSpawnEntities) then
-		spawn.cachedSpawnEntities = spawn.GetPlayerSpawnEntities(false)
-	end
+function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
+	local spawnPoints = plyspawn.GetPlayerSpawnPoints()
 
-	if #spawn.cachedSpawnEntities == 0 then
-		Error("No spawn entity found!\n")
+	if not spawnPoints or #spawnPoints == 0 then
+		Error("[TTT2][PLYSPAWN] No spawn points found! Make sure there is at least one spawn point on the map.\n")
 
-		return
+		return false
 	end
 
 	-- the table should be shuffled for each spawn point calculation to improve randomness
-	table.Shuffle(spawn.cachedSpawnEntities)
+	table.Shuffle(spawnPoints)
 
 	if not IsValid(ply) or not ply:IsTerror() then
-		return spawn.cachedSpawnEntities[1]
+		return spawnPoints[1]
 	end
 
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is free
-	for i = 1, #spawn.cachedSpawnEntities do
-		local spawnEntity = spawn.cachedSpawnEntities[i]
+	for i = 1, #spawnPoints do
+		local spawnPoint = spawnPoints[i]
 
-		if not spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), false) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, false) then continue end
 
-		return spawnEntity
+		return spawnPoint
 	end
 
 	-- That did not work, so now look around spawns
-	local pickedSpawnEntity
+	local pickedSpawnPoint
 
-	for i = 1, #spawn.cachedSpawnEntities do
-		pickedSpawnEntity = spawn.cachedSpawnEntities[i]
+	for i = 1, #spawnPoints do
+		pickedSpawnPoint = spawnPoints[i]
 
-		local riggedSpawnPoint = spawn.MakeSpawnPointSafe(ply, pickedSpawnEntity:GetPos())
+		local riggedSpawnPoint = plyspawn.MakeSpawnPointSafe(ply, pickedSpawnPoint.pos)
 
 		if not riggedSpawnPoint then continue end
-
-		local riggedSpawnEntity = ents.Create("info_player_terrorist")
-
-		riggedSpawnEntity:SetPos(riggedSpawnPoint)
-		riggedSpawnEntity:Spawn()
 
 		ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
 
 		-- this is an old TTT flag that I will keep for compatibilities sake
 		GAMEMODE.HaveRiggedSpawn = true
 
-		return riggedSpawnEntity
+		return {
+			pos = riggedSpawnPoint,
+			ang = pickedSpawnPoint.ang
+		}
 	end
 
 	-- Last attempt, force one
-	for i = 1, #spawn.cachedSpawnEntities do
-		local spawnEntity = spawn.cachedSpawnEntities[i]
+	for i = 1, #spawnPoints do
+		local spawnPoint = spawnPoints[i]
 
-		if not spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), true) then continue end
+		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, true) then continue end
 
-		return spawnEntity
+		return spawnPoint
 	end
 
-	return pickedSpawnEntity
-end
-
----
--- Removes all map spawn entities.
--- @warning Do not use this unless you know exactly what you are doing.
--- @realm server
-function spawn.RemovePlayerSpawnEntities()
-	local spawnableEnts = spawn.GetPlayerSpawnEntities(true)
-
-	for i = 1, #spawnableEnts do
-		local ent = spawnableEnts[i]
-
-		-- they're not gone til next tick
-		ent.markAsRemoved = true
-
-		ent:Remove()
-	end
+	return pickedSpawnPoint
 end

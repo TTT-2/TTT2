@@ -1,0 +1,11 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/ttt/tid/tid_big_weapon_random"
+	"$nocull" 1
+	"$nodecal" 1
+	"$nolod" 1
+	"$translucent" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+	"$ignorez" 1
+}

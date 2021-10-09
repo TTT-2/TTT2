@@ -129,7 +129,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonReset:SetText("button_reset")
 	buttonReset:SetSize(100, 45)
-	buttonReset:SetPos(475, 20)
+	buttonReset:SetPos(675, 20)
 	buttonReset.DoClick = function(btn)
 		if not currentHUD then return end
 
@@ -142,7 +142,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonEditor:SetText("button_hud_editor")
 	buttonEditor:SetSize(175, 45)
-	buttonEditor:SetPos(600, 20)
+	buttonEditor:SetPos(20, 20)
 	buttonEditor.DoClick = function(btn)
 		if not currentHUDName then return end
 
