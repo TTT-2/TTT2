@@ -7,9 +7,9 @@ local virtualSubmenus = {}
 
 CLGAMEMODEMENU.base = "base_gamemodemenu"
 
-CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/shops")
-CLGAMEMODEMENU.title = "menu_shops_title"
-CLGAMEMODEMENU.description = "menu_shops_description"
+CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/roles")
+CLGAMEMODEMENU.title = "menu_roles_title"
+CLGAMEMODEMENU.description = "menu_roles_description"
 CLGAMEMODEMENU.priority = 47
 
 CLGAMEMODEMENU.isInitialized = false
