@@ -34,7 +34,7 @@ function playermodels.UpdateModelState(name, state)
 		playermodelObject.state = state or false
 		playermodelObject:Save()
 
-		playermodels.StreamToSelectedClients()
+		playermodels.StreamSelectedModelsToSelectedClients()
 	else -- CLIENT
 		net.Start("TTT2UpdateSelectedModels")
 		net.WriteString(name)
@@ -65,6 +65,17 @@ function playermodels.GetSelectedModels()
 end
 
 ---
+-- Returns a table with key-value pairs of the model name and a boolean that
+-- specifies whether this model has a headshot hitbox or not.
+-- @note While this function is shared, the data is only available for superadmin on the
+-- client, if no manual sync is triggered.
+-- @return table A table with information about headshot hitboxes
+-- @realm shared
+function playermodels.GetHeadHitBoxModels()
+	return playermodels.modelHasHeadHitBox or {}
+end
+
+---
 -- Checks if a provided model is in the selection pool.
 -- @note While this function is shared, the data is only available for superadmin on the
 -- client, if no manual sync is triggered.
@@ -83,9 +94,14 @@ function playermodels.HasSelectedModel(name)
 	return false
 end
 
-
 if CLIENT then
 	local callbackCache = {}
+
+	-- cache those tables on the client, but not on the server
+	-- the server triggers a hotreload to update the data which then
+	-- is also updated on the client
+	playermodels.selectedModels = playermodels.selectedModels or {}
+	playermodels.modelHasHeadHitBox = playermodels.modelHasHeadHitBox or {}
 
 	net.ReceiveStream("TTT2StreamModelTable", function(data)
 		playermodels.selectedModels = data
@@ -93,6 +109,10 @@ if CLIENT then
 		for i = 1, #callbackCache do
 			callbackCache[i](data)
 		end
+	end)
+
+	net.ReceiveStream("TTT2StreamHeadHitBoxesTable", function(data)
+		playermodels.modelHasHeadHitBox = data
 	end)
 
 	---
@@ -149,15 +169,52 @@ if SERVER then
 	end
 
 	---
+	-- Tests each model for headshot hitboxes by applying it to a testing entity and then
+	-- checking all its bones.
+	-- @note Do not use before @{GM:InitPostEntity} has been called, otherwise the server will crash!
+	-- @realm server
+	function playermodels.InitializeHeadHitBoxes()
+		local testingEnt = ents.Create("ttt_model_tester")
+
+		for name, model in pairs(playerManagerAllValidModels()) do
+			testingEnt:SetModel(model)
+
+			for i = 1, testingEnt:GetHitBoxCount(0) do
+				if testingEnt:GetHitBoxHitGroup(i - 1, 0) == HITGROUP_HEAD then
+					playermodels.modelHasHeadHitBox[name] = true
+
+					break
+				end
+
+				playermodels.modelHasHeadHitBox[name] = false
+			end
+		end
+
+		testingEnt:Remove()
+	end
+
+	---
 	-- Streams the playermodel selection pool to clients. By default streams to all superadmin players.
 	-- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
 	-- @realm server
-	function playermodels.StreamToSelectedClients(plys)
+	function playermodels.StreamSelectedModelsToSelectedClients(plys)
 		plys = plys or util.GetFilteredPlayers(function(ply)
 			return ply:IsSuperAdmin()
 		end)
 
 		net.SendStream("TTT2StreamModelTable", playermodels.GetSelectedModels(), plys)
+	end
+
+	---
+	-- Streams the information about headshot hitboxes to clients. By default streams to all superadmin players.
+	-- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
+	-- @realm server
+	function playermodels.StreamHeadHitBoxesToSelectedClients(plys)
+		plys = plys or util.GetFilteredPlayers(function(ply)
+			return ply:IsSuperAdmin()
+		end)
+
+		net.SendStream("TTT2StreamHeadHitBoxesTable", playermodels.GetHeadHitBoxModels(), plys)
 	end
 
 	---
