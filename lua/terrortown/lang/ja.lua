@@ -1445,3 +1445,68 @@ L.searchbar_default_placeholder = "検索中..."
 --L.kill_score_suicide = "Suicide:"
 --L.tooltip_kill_score_team = "Team kill: {score}"
 --L.kill_score_team = "Team kill:"
+
+-- 2021-10-09
+--L.menu_roles_title = "Role Settings"
+--L.menu_roles_description = "Set up the spawning, equipment credits and more."
+
+--L.submenu_administration_roles_general_title = "General Role Settings"
+
+--L.header_roles_info = "Role Information"
+--L.header_roles_selection = "Role Selection Parameters"
+--L.header_roles_tbuttons = "Role Traitor Buttons"
+--L.header_roles_credits = "Role Equipment Credits"
+--L.header_roles_additional = "Additonal Role Settings"
+--L.header_roles_reward_credits = "Reward Equipment Credits"
+
+--L.help_roles_default_team = "Default team: {team}"
+--L.help_roles_unselectable = "This role is not selectable. This means it is not considered in the role selection. Most of the times this means that this is a role that is manually applied during the round through an event like a revival, a sidekick deagle or something similar."
+--L.help_roles_selectable = "This role is selectable. This means if all criteria is met, this role is considered in the role selection process."
+--L.help_roles_credits = "Equipment credits are used to buy equipment in the shop. It mostly makes sense to give only those roles that have access to the shop credits. However since it is possible to loot credits from corpses, it could also be an idea to give starting credits to roles as a reward for their killer."
+--L.help_roles_selection_short = "The role distribution per player defines the percentage of players that are assigned this role. If for example the value is set to '0.2' every fifth player receives this role."
+--L.help_roles_selection = [[
+--The role distribution per player defines the percentage of players that are assigned this role. If for example the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be selected at all.
+--Keep in mind that all of this only applies if the role is considered for selection.
+
+--The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for selection and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution setting then holds true again for the second player to receive this role.]]
+--L.help_roles_award_info = "Some roles (all Traitor roles and some other roles) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
+--L.help_roles_award_pct = "When this percentage of other players are dead, players are awarded more credits."
+--L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. If for example you set the percentage to '0.25', and enable this, players will be awarded credits at '25%' killed, '50%' killed, and '75%' killed."
+--L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up your role selection. When in doubt keep all values at '0'. This value means that no limits are applied and the role selection is trying to assign as many roles as possible."
+--L.help_roles_max_roles = [[
+--The roles category contains every role in TTT2. By default there is no limit on how many different roles can be assigned. However here are two different ways to limit them.
+
+--1. Limit them by a fixed amount.
+--2. Limit them by a percentage.
+
+--The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+--L.help_roles_max_baseroles = [[
+--Baseroles are only those role others inherit from. For example the Innocent role is a baserole, while a Pharaoh is a sub role of this role. By default there is no limit on how many different baseroles can be assigned. However here are two different ways to limit them.
+
+--1. Limit them by a fixed amount.
+--2. Limit them by a percentage.
+
+--The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+
+--L.label_roles_enabled = "Enable role"
+--L.label_roles_min_inno_pct = "Innocent distribution per player"
+--L.label_roles_pct = "Role distribution per player"
+--L.label_roles_max = "Upper limit of players assigned for this role"
+--L.label_roles_random = "Chance this role is selected"
+--L.label_roles_min_players = "Lower limit of players to consider selection"
+--L.label_roles_tbutton = "Role can use Traitor buttons"
+--L.label_roles_credits_starting = "Starting credits"
+--L.label_roles_credits_traitordead = "Credit reward for dead Traitor"
+--L.label_roles_credits_award_pct = "Credit reward percentage"
+--L.label_roles_credits_award_size = "Credit reward size"
+--L.label_roles_credits_award_repeat = "Credit reward repeat"
+--L.label_roles_credits_detectivekill = "Credit reward for Detective kill"
+--L.label_roles_newroles_enabled = "Enable custom roles"
+--L.label_roles_max_roles = "Upper role limit"
+--L.label_roles_max_roles_pct = "Upper role limit by percentage"
+--L.label_baseroles_max_roles = "Upper baserole limit"
+--L.label_baseroles_max_roles_pct = "Upper baserole limit by percentage"
+
+--L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
+--L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."
+--L.ttt2_desc_detective = "The Detective is the one whom the Innocents can trust. But who even is an Innocent? The mighty Detective has to find all the evil terrorists. The equipment in their shop may help them with this task."

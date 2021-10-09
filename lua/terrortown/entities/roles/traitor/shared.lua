@@ -28,3 +28,17 @@ function ROLE:PreInitialize()
 		traitorButton = 1
 	}
 end
+
+if CLIENT then
+	---
+	-- @ignore
+	function ROLE:AddToSettingsMenuCreditsForm(parent)
+		parent:MakeSlider({
+			serverConvar = "ttt_credits_detectivekill",
+			label = "label_roles_credits_detectivekill",
+			min = 0,
+			max = 5,
+			decimal = 0
+		})
+	end
+end
