@@ -67,6 +67,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "help_roles_award_info"
 	})
 
+	form2:MakeSlider({
+		serverConvar = "ttt_credits_award_size",
+		label = "label_roles_credits_award_size",
+		min = 0,
+		max = 5,
+		decimal = 0
+	})
+
 	form2:MakeHelp({
 		label = "help_roles_award_pct"
 	})
@@ -77,14 +85,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 1,
 		decimal = 2
-	})
-
-	form2:MakeSlider({
-		serverConvar = "ttt_credits_award_size",
-		label = "label_roles_credits_award_size",
-		min = 0,
-		max = 5,
-		decimal = 0
 	})
 
 	form2:MakeHelp({
