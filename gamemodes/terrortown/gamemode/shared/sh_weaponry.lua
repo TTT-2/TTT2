@@ -47,7 +47,7 @@ end
 -- @param Player ply
 -- @realm shared
 function WEPS.DisguiseToggle(ply)
-	if not IsValid(ply) or not ply:IsActiveTraitor() then return end
+	if not IsValid(ply) or not ply:IsActive() then return end
 
 	if not ply:GetNWBool("disguised", false) then
 		RunConsoleCommand("ttt_set_disguise", "1")
