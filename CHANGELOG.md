@@ -7,17 +7,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
-
-### Changed
-
-- Split up kill, suicide and teamkill in the round end screen to make it more clear
 - Added a new in-game player model selector
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
+  - Added indicator that shows if a model has a headshot hitbox
 - Added a new admin only menu for server addon settings
 
 ### Changed
 
+- Split up kill, suicide and teamkill in the round end screen to make it more clear
 - Decreased the minimum cost of equipment in the equipment editor to 0
 
 ### Breaking Changes
