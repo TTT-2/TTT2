@@ -443,32 +443,31 @@ end
 -- @hook
 -- @realm shared
 function GM:TTT2CheckWeaponForID(eq)
-	if not eq.id then
-		local class = WEPS.GetClass(eq)
-		local name = eq.PrintName or class
+	if eq.id then return true end
 
-		print("\n[TTT2] Equipment " .. name .. " has no id, trying to register it again.")
+	local class = WEPS.GetClass(eq)
+	local name = eq.PrintName or class
 
-		originalEq = weapons.GetStored(class)
-		TTT2RegisterSWEP(originalEq, class, true)
+	print("\n[TTT2] Equipment " .. name .. " has no id, trying to register it again.")
 
-		eq = weapons.Get(class)
+	originalEq = weapons.GetStored(class)
+	TTT2RegisterSWEP(originalEq, class, true)
 
-		if not eq.id then
-			if name then
-				print(name .. " has still no id.")
-			else
-				print("Has no id nor a name")
-			end
+	eq = weapons.Get(class)
 
-			ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization attempt.\n")
-			PrintTable(eq)
-
-			return false
-		else
-			print("[TTT2] Equipment " .. name .. " was successfully registered on second initialization attempt.\n")
-		end
+	if eq.id then
+		print("[TTT2] Equipment " .. name .. " was successfully registered on second initialization attempt.\n")
+		return true
 	end
 
-	return true
+	if name then
+		print(name .. " has still no id.")
+	else
+		print("Has no id nor a name")
+	end
+
+	ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization attempt.\n")
+	PrintTable(eq)
+
+	return false
 end
