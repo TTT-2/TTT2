@@ -1445,3 +1445,9 @@ L.tooltip_kill_score_suicide = "Suicide: {score}"
 L.kill_score_suicide = "Suicide:"
 L.tooltip_kill_score_team = "Team kill: {score}"
 L.kill_score_team = "Team kill:"
+
+-- 2021-10-09
+L.help_models_select = [[
+Left click on the models to add them to the player model pool. Left click again to remove them.
+
+The small indicator in the top left shows if the player model has a headshot hitbox.]]

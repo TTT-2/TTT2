@@ -14,6 +14,8 @@ local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
 
 playermodels = playermodels or {}
+playermodels.selectedModels = playermodels.selectedModels or {}
+playermodels.modelHasHeadHitBox = playermodels.modelHasHeadHitBox or {}
 
 ---
 -- Updates the selection state of a provided playermodel. If the state is `true` the model is
@@ -96,12 +98,6 @@ end
 
 if CLIENT then
 	local callbackCache = {}
-
-	-- cache those tables on the client, but not on the server
-	-- the server triggers a hotreload to update the data which then
-	-- is also updated on the client
-	playermodels.selectedModels = playermodels.selectedModels or {}
-	playermodels.modelHasHeadHitBox = playermodels.modelHasHeadHitBox or {}
 
 	net.ReceiveStream("TTT2StreamModelTable", function(data)
 		playermodels.selectedModels = data

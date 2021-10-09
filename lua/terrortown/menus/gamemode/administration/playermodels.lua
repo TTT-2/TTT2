@@ -56,6 +56,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	local form2 = vgui.CreateTTT2Form(parent, "header_playermodels_selection")
+
+	form2:MakeHelp({
+		label = "help_models_select"
+	})
+
 	local base = form2:MakeIconLayout()
 	local models = player_manager.AllValidModels()
 	local headBoxes = playermodels.GetHeadHitBoxModels()
