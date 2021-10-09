@@ -469,6 +469,12 @@ function GM:InitPostEntity()
 	for i = 1, #sweps do
 		local eq = sweps[i]
 
+		-- Check if an equipment has an id or ignore it
+		-- @realm server
+		if not hook.Run("TTT2CheckWeaponForID", eq) then
+			continue
+		end
+
 		-- Insert data into role fallback tables
 		InitDefaultEquipment(eq)
 

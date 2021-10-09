@@ -20,9 +20,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
 - Added a new admin only menu for server addon settings
-
-### Changed
-
 - Decreased the minimum cost of equipment in the equipment editor to 0
 
 ### Breaking Changes
@@ -51,6 +48,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - HUDs are now still available
   - ttt2net keeps its data
   - bindings are not lost on reload
+- Fixed id-errors of weapons registered before TTT2 was loaded
 
 ### Changed
 
