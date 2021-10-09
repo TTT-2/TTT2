@@ -14,6 +14,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - entspawn: A library that handles the spawning and spawns of all entity types
   - entspawnscript: A library that handles the new TTT2 entity spawn script to customize spawns
   - plyspawn: A library that builds on top of entspawn to handle the more complex player spawn (originally named spawn, see `Breaking changes`)
+- Added a new submenu to the administration settings regarding basic role setup
+- Added a new menu to the F1 menu to set up and configure all installed menus
+- Added two new hooks to modify the contents of the newly added menu
+  - `ROLE:AddToSettingsMenu(parent)`
+  - `ROLE:AddToSettingsMenuCreditsForm(parent)`
 
 ### Changed
 
