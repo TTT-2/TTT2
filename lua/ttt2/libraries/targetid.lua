@@ -44,8 +44,9 @@ local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 -- This function makes sure local variables, which use other libraries that are not yet initialized, are initialized later.
 -- It gets called after all libraries are included and `cl_targetid.lua` gets included.
 -- @note You don't need to call this if you want to use this library. It already gets called by `cl_targetid.lua`
--- @realm client
+-- @internal
 -- @local
+-- @realm client
 function targetid.Initialize()
 	if bIsInitialized then return end
 
@@ -53,6 +54,8 @@ function targetid.Initialize()
 	ParT = LANG.GetParamTranslation
 	TryT = LANG.TryTranslation
 	key_params = {
+		primaryfire = Key("+attack", "MOUSE1"),
+		secondaryfire = Key("+attack2", "MOUSE2"),
 		usekey = Key("+use", "USE"),
 		walkkey = Key("+walk", "WALK")
 	}
@@ -77,12 +80,21 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(pos)
 
-	local ent
+	if entspawnscript.IsEditing(LocalPlayer()) then
+		local focusedSpawn = entspawnscript.GetFocusedSpawn()
+		local wepEditEnt = entspawnscript.GetSpawnInfoEntity()
+
+		if focusedSpawn and IsValid(wepEditEnt) then
+			return wepEditEnt, pos:Distance(focusedSpawn.spawn.pos)
+		end
+	end
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
 	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent)
-	and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
-		ent = TBHUD.focus_but.ent
+		and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime()
+	then
+		local ent = TBHUD.focus_but.ent
+
 		return ent, pos:Distance(ent:GetPos())
 	end
 
@@ -94,7 +106,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 	})
 
 	-- this is the entity the player is looking at right now
-	ent = trace.Entity
+	local ent = trace.Entity
 
 	-- if a vehicle, we identify the driver instead
 	if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
@@ -102,6 +114,65 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 	end
 
 	return ent, trace.StartPos:Distance(trace.HitPos)
+end
+
+---
+-- This function handles looking at spawns and adds a description
+-- @param TARGET_DATA tData The object to be used in the hook
+-- @realm client
+function targetid.HUDDrawTargetIDSpawnEdit(tData)
+	local client = LocalPlayer()
+
+	if not entspawnscript.IsEditing(client) then return end
+
+	local ent = tData:GetEntity()
+	local wep = client:GetActiveWeapon()
+
+	if not IsValid(client) or not IsValid(wep) or wep:GetClass() ~= "weapon_ttt_spawneditor"
+		or not IsValid(ent) or ent:GetClass() ~= "ttt_spawninfo_ent"
+	then
+		return
+	end
+
+	local focusedSpawn = entspawnscript.GetFocusedSpawn()
+
+	if not focusedSpawn then return end
+
+	local spawnType = focusedSpawn.spawnType
+	local entType = focusedSpawn.entType
+	local ammoAmount = focusedSpawn.spawn.ammo
+
+	-- enable targetID rendering
+	tData:EnableText()
+	tData:AddIcon(entspawnscript.GetIconFromSpawnType(spawnType, entType))
+	tData:SetSubtitle(ParT("spawn_remove", key_params))
+
+	if spawnType == SPAWN_TYPE_WEAPON then
+		tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)) .. ParT("spawn_weapon_ammo", {ammo = ammoAmount}))
+
+		tData:AddDescriptionLine(
+			TryT("spawn_type_weapon"),
+			entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_WEAPON)
+		)
+
+		tData:AddDescriptionLine()
+
+		tData:AddDescriptionLine(ParT("spawn_weapon_edit_ammo", key_params))
+	elseif spawnType == SPAWN_TYPE_AMMO then
+		tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)))
+
+		tData:AddDescriptionLine(
+			TryT("spawn_type_ammo"),
+			entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_AMMO)
+		)
+	elseif spawnType == SPAWN_TYPE_PLAYER then
+		tData:SetTitle(TryT(entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)))
+
+		tData:AddDescriptionLine(
+			TryT("spawn_type_player"),
+			entspawnscript.GetColorFromSpawnType(SPAWN_TYPE_PLAYER)
+		)
+	end
 end
 
 ---
@@ -115,8 +186,9 @@ function targetid.HUDDrawTargetIDTButtons(tData)
 	local admin_mode = GetGlobalBool("ttt2_tbutton_admin_show", false)
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-	or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button"
-	or tData:GetEntityDistance() > ent:GetUsableRange() then
+		or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button"
+		or tData:GetEntityDistance() > ent:GetUsableRange()
+	then
 		return
 	end
 

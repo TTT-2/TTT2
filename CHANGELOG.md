@@ -7,6 +7,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
+- Added in game spawn editor system that can be found in F1->Administration
+- Moved all TTT weapons to this repository (with cleaned up code)
+- Added in four new libraries
+  - map: A library which handles map specific data
+  - entspawn: A library that handles the spawning and spawns of all entity types
+  - entspawnscript: A library that handles the new TTT2 entity spawn script to customize spawns
+  - plyspawn: A library that builds on top of entspawn to handle the more complex player spawn (originally named spawn, see `Breaking changes`)
 - Added a new submenu to the administration settings regarding basic role setup
 - Added a new menu to the F1 menu to set up and configure all installed menus
 - Added two new hooks to modify the contents of the newly added menu
@@ -21,11 +28,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
 - Added a new admin only menu for server addon settings
 - Decreased the minimum cost of equipment in the equipment editor to 0
+- Completely reworked how weapons, ammo and players spawn in the world
 
 ### Breaking Changes
 
 - Removed the (unused?) ConVar `ttt2_custom_models`
 - Removed the function `GetRandomPlayerModel()`, use `playermodels.GetRandomPlayerModel()` instead
+- Renamed the `spawn` module to `plyspawn`
+- Hook `PlayerSelectSpawn` doesnt return a spawnEntity anymore
+- SpawnWillingPlayers is deleted and not available anymore
 
 ## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
 

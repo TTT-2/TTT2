@@ -20,34 +20,35 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 	-- add "virtual" submenus that are treated as real one even without files
 	virtualSubmenus = {}
 
-	local items = ShopEditor.GetEquipmentForRoleAll()
+	local equipments = ShopEditor.GetEquipmentForRoleAll()
 	local equipmentMenuBase = self:GetSubmenuByName("base_equipment")
 
-	-- Assign all items to a virtual menu
+	-- Assign all equipments to a virtual menu
 	local counter = 0
-	for i = 1, #items do
-		local item = items[i]
+	for i = 1, #equipments do
+		local equipment = equipments[i]
 
 		-- Only keep ttt-equipments that are cached
-		if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
+		if not equipment.ttt2_cached_material and not equipment.ttt2_cached_model then continue end
 
 		counter = counter + 1
 
 		virtualSubmenus[counter] = tableCopy(equipmentMenuBase)
-		virtualSubmenus[counter].item = item
-		virtualSubmenus[counter].icon = item.ttt2_cached_material
+		virtualSubmenus[counter].equipment = equipment
+		virtualSubmenus[counter].isItem = items.IsItem(equipment)
+		virtualSubmenus[counter].icon = equipment.ttt2_cached_material
 		virtualSubmenus[counter].iconFullSize = true
 	end
 end
 
 function CLGAMEMODEMENU:TranslateAndSortMenus()
-	-- In a first pass translate all item names and assign them to a title
+	-- In a first pass translate all equipment names and assign them to a title
 	for i = 1, #virtualSubmenus do
 		local vMenu = virtualSubmenus[i]
-		local item = vMenu.item
-		local name = item.EquipMenuData and item.EquipMenuData.name
+		local equipment = vMenu.equipment
+		local name = equipment.EquipMenuData and equipment.EquipMenuData.name
 
-		vMenu.title = TryT(name) ~= name and TryT(name) or TryT(item.PrintName) or item.id or "UNDEFINED"
+		vMenu.title = TryT(name) ~= name and TryT(name) or TryT(equipment.PrintName) or equipment.id or "UNDEFINED"
 	end
 
 	-- In a second pass we sort by their translated title

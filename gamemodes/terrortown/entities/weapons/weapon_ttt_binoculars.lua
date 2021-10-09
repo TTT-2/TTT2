@@ -19,8 +19,8 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
-		type  = "item_weapon",
-		desc  = "binoc_desc"
+		type = "item_weapon",
+		desc = "binoc_desc"
 	}
 
 	SWEP.Icon = "vgui/ttt/icon_binoc"

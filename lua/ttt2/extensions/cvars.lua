@@ -32,6 +32,7 @@ if CLIENT then
 	function cvars.ConVarExistsOnServer(conVarName, OnReceiveFunc)
 		if serverConVars[conVarName] then
 			OnReceiveFunc(true)
+
 			return
 		end
 
@@ -45,7 +46,7 @@ if CLIENT then
 	end
 
 	net.Receive("TTT2ConVarExistsOnServer", function(len)
-		if len <  1 then return end
+		if len < 1 then return end
 
 		local identifier = net.ReadUInt(identityBitCount)
 		local conVarExists = net.ReadBool()
@@ -60,7 +61,7 @@ if CLIENT then
 	---
 	-- Changes the conVar on the server if it exists and the user has admin rights
 	-- @param string conVarName
-	-- @param any value 
+	-- @param any value
 	-- @note ConVar values are saved as strings and are therefore converted
 	-- @realm client
 	function cvars.ChangeServerConVar(conVarName, value)
@@ -71,7 +72,7 @@ if CLIENT then
 	end
 
 	net.Receive("TTT2ChangeServerConVar", function(len)
-		if len <  1 then return end
+		if len < 1 then return end
 
 		local conVarName = net.ReadString()
 		local oldValue = serverConVars[conVarName] or ""
@@ -129,7 +130,7 @@ if CLIENT then
 	end
 
 	net.Receive("TTT2ServerConVarGetValue", function(len)
-		if len <  1 then return end
+		if len < 1 then return end
 
 		local requestSize = net.ReadUInt(identityBitCount)
 
