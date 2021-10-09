@@ -58,11 +58,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	local form2 = vgui.CreateTTT2Form(parent, "header_playermodels_selection")
 	local base = form2:MakeIconLayout()
 	local models = player_manager.AllValidModels()
+	local headBoxes = playermodels.GetHeadHitBoxModels()
 
 	for name, model in pairs(models) do
 		boxCache[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
+			headbox = headBoxes[name],
 			initial = playermodels.HasSelectedModel(name),
 			OnSelected = function(slf, state)
 				playermodels.UpdateModelState(name, state)

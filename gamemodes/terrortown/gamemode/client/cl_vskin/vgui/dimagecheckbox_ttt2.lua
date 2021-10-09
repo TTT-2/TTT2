@@ -99,6 +99,7 @@ function PANEL:Init()
 		img = nil,
 		mdl = nil,
 		ent = nil,
+		headbox = false,
 		isSelected = false
 	}
 end
@@ -122,6 +123,20 @@ end
 -- @realm client
 function PANEL:SetImage(image)
 	self.data.img = image
+end
+
+---
+-- @param boolean state
+-- @realm client
+function PANEL:SetHeadBox(state)
+	self.data.headbox = state
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasHeadBox()
+	return self.data.headbox or false
 end
 
 ---

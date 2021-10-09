@@ -525,6 +525,7 @@ function PANEL:MakeImageCheckBox(data, base)
 
 	box:SetSize(238, 175)
 	box:SetModel(data.model)
+	box:SetHeadBox(data.headbox or false)
 	box:SetText(data.label)
 	box:SetSelected(data.initial)
 
