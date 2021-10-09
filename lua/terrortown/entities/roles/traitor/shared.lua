@@ -30,10 +30,7 @@ function ROLE:PreInitialize()
 end
 
 if CLIENT then
-	hook.Add("TTT2ModifyRoleSettingsMenu_Credits", "ttt2_add_role_menu_settings_traitor", function(role, roleData, parent)
-		-- only detective (sub-)roles have this convar
-		if role ~= ROLE_TRAITOR then return end
-
+	function ROLE:AddToSettingsMenuCreditsForm(parent)
 		parent:MakeSlider({
 			serverConvar = "ttt_credits_detectivekill",
 			label = "label_roles_credits_detectivekill",
@@ -41,5 +38,5 @@ if CLIENT then
 			max = 5,
 			decimal = 0
 		})
-	end)
+	end
 end

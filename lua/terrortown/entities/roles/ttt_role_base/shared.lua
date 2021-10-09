@@ -2,7 +2,7 @@
 -- @author Alf21
 -- @author saibotk
 -- @author Mineotopia
--- @module ROLE
+-- @class ROLE
 
 ROLE.isAbstract = true
 

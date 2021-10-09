@@ -10,8 +10,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new submenu to the administration settings regarding basic role setup
 - Added a new menu to the F1 menu to set up and configure all installed menus
 - Added two new hooks to modify the contents of the newly added menu
-  - `GM:TTT2ModifyRoleSettingsMenu`
-  - `GM:TTT2ModifyRoleSettingsMenu_Credits`
+  - `ROLE:AddToSettingsMenu(parent)`
+  - `ROLE:AddToSettingsMenuCreditsForm(parent)`
 
 ### Changed
 

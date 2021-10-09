@@ -868,29 +868,3 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	-- @realm shared
 	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
-
----
--- This hook can be used by role addons to populate the role settings page
--- with custom convars. The parent is the submenu, where a new form has to
--- be added.
--- @param number role The role index of the role whose menu should be changed
--- @param table roleData The role data table
--- @param DPanel parent The parent panel which is the submenu
--- @hook
--- @realm client
-function GM:TTT2ModifyRoleSettingsMenu(role, roleData, parent)
-
-end
-
----
--- This hook can be used by role addons to populate the role credit settings form
--- with custom convars. The parent is the credits form, where menu elements can be
--- directly added.
--- @param number role The role index of the role whose menu should be changed
--- @param table roleData The role data table
--- @param DPanel parent The parent panel which is the credits form
--- @hook
--- @realm client
-function GM:TTT2ModifyRoleSettingsMenu_Credits(role, roleData, parent)
-
-end
