@@ -32,3 +32,18 @@ function ROLE:PreInitialize()
 		togglable = true
 	}
 end
+
+if CLIENT then
+	hook.Add("TTT2ModifyRoleSettingsMenu_Credits", "ttt2_add_role_menu_settings_detective", function(role, roleData, parent)
+		-- only detective (sub-)roles have this convar
+		if role ~= ROLE_DETECTIVE and roleData.baserole ~= ROLE_DETECTIVE then return end
+
+		parent:MakeSlider({
+			serverConvar = "ttt_" .. roleData.abbr .. "_credits_traitordead",
+			label = "label_roles_credits_traitordead",
+			min = 0,
+			max = 10,
+			decimal = 0
+		})
+	end)
+end
