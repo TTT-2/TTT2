@@ -30,6 +30,8 @@ function ROLE:PreInitialize()
 end
 
 if CLIENT then
+	---
+	-- @ignore
 	function ROLE:AddToSettingsMenuCreditsForm(parent)
 		parent:MakeSlider({
 			serverConvar = "ttt_credits_detectivekill",
