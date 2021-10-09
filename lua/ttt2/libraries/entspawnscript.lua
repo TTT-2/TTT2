@@ -276,9 +276,7 @@ if SERVER then
 			spawnPoints[spawnType] = {}
 
 			for entTypeName, spawns in pairs(jsonSaveTable[spawnTypeName]) do
-				local entType = entspawnscript.GetValueFromVarName(entTypeName)
-
-				spawnPoints[spawnType][entType] = spawns
+				spawnPoints[spawnType][_G[entTypeName]] = spawns
 			end
 		end
 
@@ -731,15 +729,6 @@ end
 -- @realm shared
 function entspawnscript.GetVarNameFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].var or "UNDEFINED"
-end
-
----
--- Returns the value of the global variable by passing the name of the variable.
--- @param string typeName The spawnType or entType name
--- @return number Returns the value of the global variable
--- @realm shared
-function entspawnscript.GetValueFromVarName(typeName)
-	return _G[typeName]
 end
 
 ---
