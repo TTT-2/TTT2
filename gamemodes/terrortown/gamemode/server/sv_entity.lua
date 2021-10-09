@@ -45,3 +45,23 @@ end
 function entmeta:HasPassableCollisionGrup()
 	return safeCollisionGroups[self:GetCollisionGroup()]
 end
+
+local oldSpawn = plymeta.Spawn
+
+---
+-- Initializes the entity and starts its networking. If called on a player, it will respawn them.
+-- @note This extends the GMod Spawn function and spawns the player at a spawn point. Use @{Player:Respawn}
+-- or @{Player:SpawnForRound} if you want to (re-)spawn the player.
+-- @realm server
+function plymeta:Spawn()
+	if self:IsPlayer() then
+		local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+
+		if spawnPoint then
+			self:SetPos(spawnPoint.pos)
+			self:SetAngles(spawnPoint.ang)
+		end
+	end
+
+	oldSpawn(self)
+end
