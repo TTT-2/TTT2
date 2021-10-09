@@ -49,6 +49,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - HUDs are now still available
   - ttt2net keeps its data
   - bindings are not lost on reload
+- Fixed id-errors of weapons registered before TTT2 was loaded
 
 ### Changed
 
