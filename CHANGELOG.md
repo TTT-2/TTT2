@@ -19,15 +19,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added two new hooks to modify the contents of the newly added menu
   - `ROLE:AddToSettingsMenu(parent)`
   - `ROLE:AddToSettingsMenuCreditsForm(parent)`
-
-### Changed
-
-- Split up kill, suicide and teamkill in the round end screen to make it more clear
 - Added a new in-game player model selector
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
 - Added a new admin only menu for server addon settings
+
+### Changed
+
+- Split up kill, suicide and teamkill in the round end screen to make it more clear
 - Decreased the minimum cost of equipment in the equipment editor to 0
+- Changed disguise such that every role can now use the function
 - Completely reworked how weapons, ammo and players spawn in the world
 
 ### Breaking Changes
