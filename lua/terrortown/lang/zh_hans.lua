@@ -1378,18 +1378,18 @@ L.shopeditor_name_random_shop_reroll_per_buy = "购买后自动重选"
 L.header_equipment_setup = "设置装备"
 L.header_equipment_value_setup = "平衡性设置"
 
-L.itemeditor_name_not_buyable = "可购买的装备"
-L.itemeditor_desc_not_buyable = "如果禁用，该装备将不会显示在商店里。分配了这种装备的角色仍然会获得它。"
-L.itemeditor_name_not_random = "永远可用"
-L.itemeditor_desc_not_random = "如果启用，该装备会在商店里总是可用的。这在使用随机商店时会占用一个装备槽，并总是为这个装备保留。"
-L.itemeditor_name_global_limited = "全局限量"
-L.itemeditor_desc_global_limited = "如果装备是全局限量的，那么它只能在单次回合中购买一次。"
-L.itemeditor_name_team_limited = "阵营限量"
-L.itemeditor_desc_team_limited = "如果装备是阵营限量的，那么它在单次回合中每阵营只能买一次。"
-L.itemeditor_name_player_limited = "玩家限量"
-L.itemeditor_desc_player_limited = "如果装备是玩家限量的，那么它在单次回合中每人只能买一次。"
-L.itemeditor_name_min_players = "有多少玩家时可选择"
-L.itemeditor_name_credits = "价格以积分计算"
+L.equipmenteditor_name_not_buyable = "可购买的装备"
+L.equipmenteditor_desc_not_buyable = "如果禁用，该装备将不会显示在商店里。分配了这种装备的角色仍然会获得它。"
+L.equipmenteditor_name_not_random = "永远可用"
+L.equipmenteditor_desc_not_random = "如果启用，该装备会在商店里总是可用的。这在使用随机商店时会占用一个装备槽，并总是为这个装备保留。"
+L.equipmenteditor_name_global_limited = "全局限量"
+L.equipmenteditor_desc_global_limited = "如果装备是全局限量的，那么它只能在单次回合中购买一次。"
+L.equipmenteditor_name_team_limited = "阵营限量"
+L.equipmenteditor_desc_team_limited = "如果装备是阵营限量的，那么它在单次回合中每阵营只能买一次。"
+L.equipmenteditor_name_player_limited = "玩家限量"
+L.equipmenteditor_desc_player_limited = "如果装备是玩家限量的，那么它在单次回合中每人只能买一次。"
+L.equipmenteditor_name_min_players = "有多少玩家时可选择"
+L.equipmenteditor_name_credits = "价格以积分计算"
 
 -- 2021-06-08
 L.equip_not_added = "未添加"
@@ -1418,8 +1418,99 @@ L.xfer_team_indicator = "阵营"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
+-- 2021-07-07
+--L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+
+--L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly"
+--L.equipmenteditor_name_spawn_type = "Spawn type"
+
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-09-01
+--L.spawneditor_name = "Spawn Editor Tool"
+--L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world. Can only be used by super admin."
+
+--L.spawneditor_place = "Place spawn"
+--L.spawneditor_remove = "Remove spawn"
+--L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
+--L.spawneditor_ammo_edit = "Hold to edit ammo auto spawn on weapon spawns"
+
+--L.spawn_weapon_random = "Random Weapon Spawn"
+--L.spawn_weapon_melee = "Melee Weapon Spawn"
+--L.spawn_weapon_nade = "Grenade Weapon Spawn"
+--L.spawn_weapon_shotgun = "Shotgun Weapon Spawn"
+--L.spawn_weapon_heavy = "Heavy Weapon Spawn"
+--L.spawn_weapon_sniper = "Sniper Weapon Spawn"
+--L.spawn_weapon_pistol = "Pistol Weapon Spawn"
+--L.spawn_weapon_special = "Special Weapon Spawn"
+--L.spawn_ammo_random = "Random ammo spawn"
+--L.spawn_ammo_deagle = "Deagle ammo spawn"
+--L.spawn_ammo_pistol = "Pistol ammo spawn"
+--L.spawn_ammo_mac10 = "Mac10 ammo spawn"
+--L.spawn_ammo_rifle = "Rifle ammo spawn"
+--L.spawn_ammo_shotgun = "Shotgun ammo spawn"
+--L.spawn_player_random = "Random player spawn"
+
+--L.spawn_weapon_ammo = " (Ammo: {ammo})"
+
+--L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
+
+--L.spawn_type_weapon = "This is a weapon spawn"
+--L.spawn_type_ammo = "This is an ammunition spawn"
+--L.spawn_type_player = "This is a player spawn"
+
+--L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
+
+--L.submenu_administration_entspawn_title = "Spawn Editor"
+--L.header_entspawn_settings = "Spawn Editor Settings"
+--L.button_start_entspawn_edit = "Start Spawn Edit"
+--L.button_delete_all_spawns = "Delete all Spawns"
+
+--L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
+--L.label_dynamic_spawns_global_enable = "Enable custom spawns for all maps"
+
+--L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+
+--L.help_spawn_editor_info = [[
+--The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
+
+--These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to this state.
+
+--It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the equipment editor. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
+
+--Keep in mind that many changes only take effect after a new round has started.]]
+--L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Disabling this checkbox only disables it for the currently active map. The dynamic system will still be used for every other map."
+--L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
+--L.help_spawn_editor_spawn_amount = [[
+--There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount.
+
+--{weaponrandom}x Random weapon spawn
+--{weaponmelee}x Melee weapon spawn
+--{weaponnade}x Grenade weapon spawn
+--{weaponshotgun}x Shotgun weapon spawn
+--{weaponheavy}x Heavy weapon spawn
+--{weaponsniper}x Sniper weapon spawn
+--{weaponpistol}x Pistol weapon spawn
+--{weaponspecial}x Special weapon spawn
+
+--{ammorandom}x Random ammo spawn
+--{ammodeagle}x Deagle ammo spawn
+--{ammopistol}x Pistol ammo spawn
+--{ammomac10}x Mac10 ammo spawn
+--{ammorifle}x Rifle ammo spawn
+--{ammoshotgun}x Shotgun ammo spawn
+
+--{playerrandom}x Random player spawn]]
+
+--L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
+--L.equipmenteditor_name_spawn_type = "Select spawn type"
+--L.equipmenteditor_desc_auto_spawnable = [[
+--The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however these settings can be changed from within this menu.
+
+--Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
+
+--L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
 
 -- 2021-09-02
 --L.submenu_administration_playermodels_title = "Player Models"

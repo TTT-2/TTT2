@@ -1369,18 +1369,18 @@ L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach j
 L.header_equipment_setup = "Equipment Einstellungen"
 L.header_equipment_value_setup = "Balance Einstellungen"
 
-L.itemeditor_name_not_buyable = "Equipment kaufbar"
-L.itemeditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
-L.itemeditor_name_not_random = "Immer im Shop verfügbar"
-L.itemeditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
-L.itemeditor_name_global_limited = "Global limitierte Anzahl"
-L.itemeditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
-L.itemeditor_name_team_limited = "Team limitierte Anzahl"
-L.itemeditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
-L.itemeditor_name_player_limited = "Spieler limitierte Anzahl"
-L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
-L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
-L.itemeditor_name_credits = "Kosten in Credits"
+L.equipmenteditor_name_not_buyable = "Equipment kaufbar"
+L.equipmenteditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
+L.equipmenteditor_name_not_random = "Immer im Shop verfügbar"
+L.equipmenteditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
+L.equipmenteditor_name_global_limited = "Global limitierte Anzahl"
+L.equipmenteditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
+L.equipmenteditor_name_team_limited = "Team limitierte Anzahl"
+L.equipmenteditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
+L.equipmenteditor_name_player_limited = "Spieler limitierte Anzahl"
+L.equipmenteditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
+L.equipmenteditor_name_min_players = "Mindestspielerzahl für Freischaltung"
+L.equipmenteditor_name_credits = "Kosten in Credits"
 
 -- 2021-06-08
 L.equip_not_added = "nicht enthalten"
@@ -1409,8 +1409,99 @@ L.xfer_team_indicator = "Team"
 -- 2021-06-25
 L.searchbar_default_placeholder = "Durchsuche Liste..."
 
+-- 2021-07-07
+L.header_equipment_weapon_spawn_setup = "Equipment Erscheinungs Einstellungen"
+
+L.equipmenteditor_name_auto_spawnable = "Equipment kann zufällig erscheinen"
+L.equipmenteditor_name_spawn_type = "Erscheinungstyp"
+
 -- 2021-07-11
---L.spec_about_to_revive = "Spectating is limited during revival period."
+L.spec_about_to_revive = "Zuschauen während der Widerbelebung nicht möglich."
+
+-- 2021-09-01
+L.spawneditor_name = "Spawneditor-Werkzeug"
+L.spawneditor_desc = "Wird verwendet, um Waffen-, Munitions- und Spielerspawns in der Welt zu plazuieren. Kann nur von Superadmins verwendet werden."
+
+L.spawneditor_place = "Platziere Spawn"
+L.spawneditor_remove = "Entferne Spawn"
+L.spawneditor_change = "Ändere den Spawntyp (halte [SHIFT] zum Umkehren)"
+L.spawneditor_ammo_edit = "Halte gedrückt, um die Munition des Waffenspawns anzupassen"
+
+L.spawn_weapon_random = "Zufallswaffenspawn"
+L.spawn_weapon_melee = "Nahkampfwaffenspawn"
+L.spawn_weapon_nade = "Granatenspawn"
+L.spawn_weapon_shotgun = "Schrotflintenspawn"
+L.spawn_weapon_heavy = "Schwerewaffenspawn"
+L.spawn_weapon_sniper = "Sniperspawn"
+L.spawn_weapon_pistol = "Pistolenspawn"
+L.spawn_weapon_special = "Spezialwaffenspawn"
+L.spawn_ammo_random = "Zufallsmunitionsspawn"
+L.spawn_ammo_deagle = "Deaglemunitionsspawn"
+L.spawn_ammo_pistol = "Pistolenmunitionsspawn"
+L.spawn_ammo_mac10 = "Mac10-Munitionsspawn"
+L.spawn_ammo_rifle = "Gewehrmunitionsspawn"
+L.spawn_ammo_shotgun = "Schrotflintenmunitionsspawn"
+L.spawn_player_random = "Zufallsspielerspawn"
+
+L.spawn_weapon_ammo = " (Munition: {ammo})"
+
+L.spawn_weapon_edit_ammo = "Halte [{walkkey}] und drücke [{primaryfire} oder {secondaryfire}], um die Munition für diesen Waffenspawn zu erhöhen / reduzieren"
+
+L.spawn_type_weapon = "Dies ist ein Waffenspawn"
+L.spawn_type_ammo = "Dies ist ein Munitionsspawn"
+L.spawn_type_player = "Dies ist ein Spielerspawn"
+
+L.spawn_remove = "Drücke [{secondaryfire}], um diesen Spawn zu entfernen"
+
+L.submenu_administration_entspawn_title = "Spawn Editor"
+L.header_entspawn_settings = "Spawn Editor Einstellungen"
+L.button_start_entspawn_edit = "Starte Spawn Editor"
+L.button_delete_all_spawns = "Lösche alle Spawns"
+
+L.label_dynamic_spawns_enable = "Aktiviere dynamische Spawns für diese Map"
+L.label_dynamic_spawns_global_enable = "Aktiviere benutzerdefinierte Spawns für alle Maps"
+
+L.header_equipment_weapon_spawn_setup = "Waffenspawneinstellungen"
+
+L.help_spawn_editor_info = [[
+Der Spawneditor wird verwendet, um Waffen-, Munition- und Spielerspawns in der Welt zu platzieren, entfernen oder zu verändern.
+
+Diese Spawns werden in Dateien unter 'data/ttt/weaponspawnscripts/' gespeichert. Die Dateien können für einen Hardreset gelöscht werden. Die Standardwerte der Spawndateien werden basierend auf den Spawns, welche in der Map gefunden wurden und denen aus den klassischen TTT Spawnskripten, generiert. Das Drücken des Zurücksetzenknopfes setzt alles zu diesem Zustan zurück.
+
+Es sollte erwähnt werden, dass dieses Spawnsystem dynamische Spawns verwendet. Dies ist am interessantesten für Waffen, da nun nicht mehr spezifische Waffen, sondern allgemeine Waffentypen gesetzt werden. Beispielsweise gibt es nun keinen spezfischen TTT Schrotflintenspawn mehr, sondern einen Spawn für alle möglichen Schrotflintentypen. Der Spawntyp für die Waffen kann im Ausrüstungseditor gesetzt werden. Dies ermöglicht es jeder beliebigen Waffe auf der Karte zu spawnen, oder zu verhindern, dass ausgewählte Standardwaffen spawnen.
+
+Beachte, dass Änderungen erst in einer neuen Runde sichtbar werden.]]
+L.help_spawn_editor_enable = "Für manche Karten mag es empfohlen sein dynamische Waffenspawns zu deaktieren, sodass die originalen Waffen vorhanden bleiben. Das deaktivieren der Einstellung deaktiviert dies nur für diese spezifische Karte. Das dynamische Spawnsystem wird dann noch immer für alle anderen Karten verwendet."
+L.help_spawn_editor_hint = "Hinweis: Öffne das Gamemode Menü erneut, um den Spawneditor zu verlassen"
+L.help_spawn_editor_spawn_amount = [[
+Aktuell existieren {weapon} Waffenspawns, {ammo} Munitionssapawns und {player} Spielerspawns auf dieser Map. Drücke 'Starte Spawn Editor' um diese zu ändern.
+
+{weaponrandom}x Zufallswaffenspawn
+{weaponmelee}x Nahkampfwaffenspawn
+{weaponnade}x Granatenspawn
+{weaponshotgun}x Schrotflintenspawn
+{weaponheavy}x Schwerewaffenspawn
+{weaponsniper}x Sniperspawn
+{weaponpistol}x Pistolenspawn
+{weaponspecial}x Spezialwaffenspawn
+
+{ammorandom}x Zufallsmunitionsspawn
+{ammodeagle}x Deaglemunitionsspawn
+{ammopistol}x Pistolenmunitionsspawn
+{ammomac10}x Mac10-Munitionsspawn
+{ammorifle}x Gewehrmunitionsspawn
+{ammoshotgun}x Schrotflintenmunitionsspawn
+
+{playerrandom}x Zufallsspielerspawn]]
+
+L.equipmenteditor_name_auto_spawnable = "Ausrüstung spawnt zufällig in der Welt"
+L.equipmenteditor_name_spawn_type = "Wähle Spawntyp"
+L.equipmenteditor_desc_auto_spawnable = [[
+Das TTT2 Spawnsystem ermöglicht es allen Waffen in der Welt zu spawnen. Standardmäßig gilt dies nur für Waffen, welche vom Ersteller als 'AutoSpawnable' geflaggt wurden. Allerdings kann dies in diesem Menü manuell geändert werden.
+
+Die meiste Ausrüstung ist standardmäßig als 'Zufallswaffenspawn' gesetzt. Das bedeutet, dass diese Ausrüstung nur an Zufallswaffenspawns spawnt. Alledings ist es auch möglich Spezialwaffenspawns in der Welt zu platzieren, oder den Spawntyp der Ausrüstung zu ändern.]]
+
+L.pickup_error_inv_cached = "Du kannst dies im AUgenblick nicht aufheben, da dein Inventar gecached ist."
 
 -- 2021-09-02
 L.submenu_administration_playermodels_title = "Spielermodell"

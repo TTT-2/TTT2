@@ -62,7 +62,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) then
+	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) and not ply.forcedGive then
 		return false, 3
 	end
 
@@ -74,6 +74,12 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- if it is a dropped equipment item, it shouldn't be picked up automatically
 	if IsEquipment(wep) and wep.IsDropped and not ply.forcedPickup then
 		return false, 5
+	end
+
+	-- if the player has cached their inventory, weapons should not be picked up with the
+	-- exception of weapons given by the ply:Give function
+	if ply:HasCachedWeapons() and not ply.forcedGive then
+		return false, 6
 	end
 
 	-- Who knows what happens here?!

@@ -12,8 +12,8 @@ ttt2net.dataStoreMetadata = ttt2net.dataStoreMetadata or {}
 -- The value data table to store the actual data
 ttt2net.dataStore = ttt2net.dataStore or {}
 
--- The table that cotains all registered callback functions
-ttt2net.dataListeners = ttt2net.dataListeners or {}
+-- The table that cotains all registered callback functions (listeners are not persistent and reset on every reload)
+ttt2net.dataListeners = {}
 
 ---
 -- Get the current value of a specific path. This path starts at the root of the data_storage table and thus does not include the
