@@ -1,3 +1,5 @@
+--- @ignore
+
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
 
@@ -108,6 +110,9 @@ local function PopulateCredits(parent, roleData)
 	})
 
 	-- run a hook to add role specific custom credit convars
+
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyRoleSettingsMenu_Credits", roleData.index, roleData, parent)
 end
 
@@ -122,5 +127,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	PopulateCredits(vgui.CreateTTT2Form(parent, "header_roles_credits"), self.roleData)
 
 	-- run a hook to add role specific custom convars
+
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyRoleSettingsMenu", self.roleData.index, self.roleData, parent)
 end
