@@ -24,6 +24,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Decreased the minimum cost of equipment in the equipment editor to 0
+- Changed disguise such that every role can now use the function
 
 ### Breaking Changes
 
