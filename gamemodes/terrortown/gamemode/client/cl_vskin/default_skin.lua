@@ -1431,7 +1431,7 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 		colorBackground = colors.accentHover
 	end
 
-	if panel:IsSelected() then
+	if panel:IsModelSelected() then
 		colorMode = colorCardAdded
 		materialMode = materialCardAdded
 	end

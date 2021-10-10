@@ -527,11 +527,21 @@ function PANEL:MakeImageCheckBox(data, base)
 	box:SetModel(data.model)
 	box:SetHeadBox(data.headbox or false)
 	box:SetText(data.label)
-	box:SetSelected(data.initial)
+	box:SetModelSelected(data.initial)
 
-	box.OnSelected = function(slf, state)
-		if data and isfunction(data.OnSelected) then
-			data.OnSelected(slf, state)
+	if isfunction(data.OnModelSelected) then
+		box.OnModelSelected = function(slf, userTriggered, state)
+			if not userTriggered then return end
+
+			data.OnModelSelected(slf, state)
+		end
+	end
+
+	if isfunction(data.OnModelHattable) then
+		box.OnModelHattable = function(slf, userTriggered, state)
+			if not userTriggered then return end
+
+			data.OnModelHattable(slf, state)
 		end
 	end
 
