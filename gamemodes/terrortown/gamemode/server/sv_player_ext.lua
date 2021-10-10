@@ -636,20 +636,6 @@ function plymeta:SpawnForRound(deadOnly)
 	self:SetTeam(TEAM_TERROR)
 	self:Spawn()
 
-	-- this will call the overwritten internal function to modify the model
-	--self:SetModel(self.defaultModel or GAMEMODE.playermodel)
-
-	---
-	-- @realm server
-	--hook.Run("PlayerSetModel", self)
-
-	-- Always clear color state, may later be changed in TTTPlayerSetColor
-	--self:SetColor(COLOR_WHITE)
-
-	---
-	-- @realm server
-	--hook.Run("TTTPlayerSetColor", self)
-
 	-- set spawn position
 	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
