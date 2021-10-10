@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
   - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
   - Added indicator that shows if a model has a headshot hitbox
+  - Added possibility to enable/disable detective hats for individual player models
 - Added a new admin only menu for server addon settings
 
 ### Changed

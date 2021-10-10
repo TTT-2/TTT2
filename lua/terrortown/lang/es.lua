@@ -1538,9 +1538,9 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 
 -- 2021-10-09
 --L.help_models_select = [[
---Left click on the models to add them to the player model pool. Left click again to remove them.
+--Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
 
---The small indicator in the top left shows if the player model has a headshot hitbox.]]
+--The small indicator in the top left shows if the player model has a headshot hitbox. The icon below shows if this model is applicable for a detective hat.]]
 
 --L.menu_roles_title = "Role Settings"
 --L.menu_roles_description = "Set up the spawning, equipment credits and more."
@@ -1601,6 +1601,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_roles_max_roles_pct = "Upper role limit by percentage"
 --L.label_baseroles_max_roles = "Upper baserole limit"
 --L.label_baseroles_max_roles_pct = "Upper baserole limit by percentage"
+--L.label_detective_hats = "Enable hats for detectives (if player model allows hat)"
 
 --L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
 --L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."

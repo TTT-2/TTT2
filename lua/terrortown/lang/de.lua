@@ -1538,9 +1538,9 @@ L.kill_score_team = "Teammord:"
 
 -- 2021-10-09
 L.help_models_select = [[
-Linkskicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder.
+Linksklicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder. Rechtsklick wechselt zwischen aktivierter/deaktivierter Detektivsmütze.
 
-Das kleine Symbol oben links zeigt, ob ein Spielermodel eine Kopfschuss Hitbox hat.]]
+Das kleine Symbol oben links zeigt, ob ein Spielermodel eine Kopfschuss Hitbox hat. Das Symbol darunter zeigt, ob eine Detektivsmütze bei diesem Modell möglich ist.]]
 
 L.menu_roles_title = "Rollen Einstellungen"
 L.menu_roles_description = "Richte Rollenspawning, Ausrüsungspunkte und mehr ein."
@@ -1601,6 +1601,7 @@ L.label_roles_max_roles = "Obere Grenze für Rollen"
 L.label_roles_max_roles_pct = "Prozentuale obere Grenze für Rollen"
 L.label_baseroles_max_roles = "Obere Grenze für Basisrollen"
 L.label_baseroles_max_roles_pct = "Prozentuale obere Grenze für Basisrollen"
+L.label_detective_hats = "Aktiviere Mützen für Detektive (falls es das Spielermodell erlaubt)"
 
 L.ttt2_desc_innocent = "Ein Unschuldiger hat keine spzeiellen Fähigkeiten. Er muss die Bösen unter den Terroristen finden und umbringen. Aber dabei stets auf der Hut sein, um nicht seine Kollegen zu ermorden."
 L.ttt2_desc_traitor = "Der Verräter ist der Gegenspieler der unschuldigen. Sie haben einen Ausrüstungsshop, in dem sie Spezialausrüstung kaufen können. Sie müssen jeden außer ihre eigenen Teamkollegen ermorden."

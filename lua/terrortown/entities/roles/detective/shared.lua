@@ -45,4 +45,15 @@ if CLIENT then
 			decimal = 0
 		})
 	end
+
+	---
+	-- @ignore
+	function ROLE:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_detective_hats",
+			label = "label_detective_hats"
+		})
+	end
 end

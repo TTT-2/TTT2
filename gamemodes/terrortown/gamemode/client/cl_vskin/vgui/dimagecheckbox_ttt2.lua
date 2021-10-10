@@ -95,12 +95,13 @@ function PANEL:Init()
 	end
 
 	self.data = {
-		title = "",
+		text = "",
 		img = nil,
 		mdl = nil,
 		ent = nil,
 		headbox = false,
-		isSelected = false
+		hattable = false,
+		selected = false
 	}
 end
 
@@ -137,6 +138,23 @@ end
 -- @realm client
 function PANEL:HasHeadBox()
 	return self.data.headbox or false
+end
+
+---
+-- @param boolean state
+-- @param boolean userTriggered
+-- @realm client
+function PANEL:SetModelHattable(state, userTriggered)
+	self.data.hattable = state
+
+	self:OnModelHattable(userTriggered or false, state)
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:IsModelHattable()
+	return self.data.hattable or false
 end
 
 ---
@@ -287,15 +305,18 @@ end
 
 ---
 -- @param boolean selected
+-- @param boolean userTriggered
 -- @realm client
-function PANEL:SetSelected(selected)
+function PANEL:SetModelSelected(selected, userTriggered)
 	self.data.selected = selected
+
+	self:OnModelSelected(userTriggered or false, self.data.selected)
 end
 
 ---
 -- @return boolean
 -- @realm client
-function PANEL:IsSelected()
+function PANEL:IsModelSelected()
 	return self.data.selected or false
 end
 
@@ -303,20 +324,33 @@ end
 -- @ignore
 function PANEL:OnMouseReleased(keyCode)
 	if keyCode == MOUSE_LEFT then
-		local state = not self:IsSelected()
+		local state = not self:IsModelSelected()
 
-		self:SetSelected(state)
-		self:OnSelected(state)
+		self:SetModelSelected(state, true)
+	elseif keyCode == MOUSE_RIGHT then
+		local state = not self:IsModelHattable()
+
+		self:SetModelHattable(state, true)
 	end
 
 	self.BaseClass.OnMouseReleased(self, keyCode)
 end
 
 ---
--- Is called when the selection state is updated. Should be overwritten.
+-- Is called when the model selection state is updated. Should be overwritten.
+-- @param boolean userTriggered
 -- @param boolean state
 -- @realm client
-function PANEL:OnSelected(state)
+function PANEL:OnModelSelected(userTriggered, state)
+
+end
+
+---
+-- Is called when the hattable state is updated. Should be overwritten.
+-- @param boolean userTriggered
+-- @param boolean state
+-- @realm client
+function PANEL:OnModelHattable(userTriggered, state)
 
 end
 
