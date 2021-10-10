@@ -69,7 +69,7 @@ end
 function PANEL:SetConVar(cvar)
 	if not ConVarExists(cvar or "") then return end
 	self.Button:SetConVar(cvar)
-	self.default = tobool(GetConVar(data.convar):GetDefault())
+	self.default = tobool(GetConVar(cvar):GetDefault())
 end
 
 ---
@@ -159,9 +159,8 @@ end
 
 ---
 -- @param Panel reset
--- @param bool default
 -- @realm client
-function PANEL:SetResetButton(reset, default)
+function PANEL:SetResetButton(reset)
 	if not ispanel(reset) then return end
 
 	self.resetButton = reset

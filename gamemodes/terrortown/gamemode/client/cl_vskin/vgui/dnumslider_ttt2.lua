@@ -5,11 +5,6 @@
 local PANEL = {}
 
 ---
--- @accessor any
--- @realm client
-AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
-
----
 -- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DTextEntry")
@@ -164,6 +159,22 @@ function PANEL:GetValue()
 end
 
 ---
+-- @param number value
+-- @realm client
+function PANEL:SetDefaultValue(value)
+	if not isnumber(value) then return end
+
+	self.default = value
+end
+
+---
+-- @return number defaultValue
+-- @realm client
+function PANEL:GetDefaultValue()
+	return self.default
+end
+
+---
 -- @param number d
 -- @realm client
 function PANEL:SetDecimals(d)
@@ -198,11 +209,12 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
-	if not cvar or cvar == "" then return end
+	if not ConVarExists(cvar or "") then return end
 
 	self.conVar = GetConVar(cvar)
 
 	self:SetValue(self.conVar:GetFloat(), true)
+	self:SetDefaultValue(tonumber(GetConVar(cvar):GetDefault()))
 end
 
 ---
@@ -213,9 +225,22 @@ function PANEL:SetServerConVar(cvar)
 
 	self.serverConVar = cvar
 
-	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
-		if wasSuccess and value then
-			self:SetValue(tonumber(value), true)
+	-- Use a placeholder value to make sure the reset button is set later on
+	-- while waiting for the GetValue request to arrive
+	local oldDefault = self.default
+	self.default = oldDefault or 1
+
+	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
+		if wasSuccess then
+			if value then
+				self:SetValue(tonumber(value), true)
+			end
+			if default then
+				self:SetDefaultValue(tonumber(default))
+			end
+		else
+			-- If no value was sent, then reset to old default
+			self:SetDefaultValue(tonumber(oldDefault))
 		end
 	end)
 
@@ -230,6 +255,23 @@ function PANEL:SetServerConVar(cvar)
 	end
 
 	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+end
+
+---
+-- @param Panel reset
+-- @realm client
+function PANEL:SetResetButton(reset)
+	if not ispanel(reset) then return end
+
+	self.resetButton = reset
+
+	if self:GetDefaultValue() ~= nil then
+		reset.DoClick = function(slf)
+			self:SetValue(self:GetDefaultValue())
+		end
+	else
+		reset.noDefault = true
+	end
 end
 
 ---

@@ -131,6 +131,8 @@ function PANEL:MakeCheckBox(data)
 	local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
 	left:SetText(data.label)
+
+	-- Set default if possible even if the convar could still overwrite it
 	left:SetDefaultValue(data.default)
 	left:SetConVar(data.convar)
 	left:SetServerConVar(data.serverConvar)
@@ -184,6 +186,8 @@ function PANEL:MakeSlider(data)
 		right:SetDecimals(data.decimal)
 	end
 
+	-- Set default if possible even if the convar could still overwrite it
+	right:SetDefaultValue(data.default)
 	right:SetConVar(data.convar)
 	right:SetServerConVar(data.serverConvar)
 	right:SizeToContents()
@@ -202,19 +206,7 @@ function PANEL:MakeSlider(data)
 	right:Dock(TOP)
 
 	local reset = MakeReset(self)
-
-	if ConVarExists(data.convar or "") or data.default ~= nil then
-		reset.DoClick = function(slf)
-			local default = data.default
-			if default == nil then
-				default = tonumber(GetConVar(data.convar):GetDefault())
-			end
-
-			right:SetValue(default)
-		end
-	else
-		reset.noDefault = true
-	end
+	right:SetResetButton(reset)
 
 	self:AddItem(left, right, reset)
 
