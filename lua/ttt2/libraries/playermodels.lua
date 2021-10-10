@@ -7,6 +7,7 @@ if SERVER then
 
 	util.AddNetworkString("TTT2UpdatePlayerModelSelected")
 	util.AddNetworkString("TTT2UpdatePlayerModelHattable")
+	util.AddNetworkString("TTT2ResetPlayerModels")
 end
 
 local pairs = pairs
@@ -14,6 +15,7 @@ local playerManagerAllValidModels = player_manager.AllValidModels
 local playerManagerTranslateToPlayerModelName = player_manager.TranslateToPlayerModelName
 local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
+local stringLower = string.lower
 
 local function GetPlayerSize(ply)
 	local bottom, top = ply:GetHull()
@@ -108,6 +110,8 @@ function playermodels.GetModelStates()
 					hashableData[name][key] = entry[key]
 				end
 			end
+
+			hashableData[name].sortName = stringLower(name)
 		end
 
 		return hashableData
@@ -159,6 +163,22 @@ function playermodels.IsHattableModel(name)
 	end
 
 	return models[name].hattable or false
+end
+
+function playermodels.Reset()
+	if SERVER then
+		-- in the first step the database is deleted
+		sql.DropTable(playermodels.sqltable)
+
+		-- then the table is reinitialized
+		playermodels.InitializeDatabase()
+
+		-- this data then has to be synced to the client again
+		playermodels.StreamModelStateToSelectedClients()
+	else
+		net.Start("TTT2ResetPlayerModels")
+		net.SendToServer()
+	end
 end
 
 if CLIENT then
@@ -264,6 +284,8 @@ function playermodels.InitializeDatabase()
 
 	for name in pairs(playerManagerAllValidModels()) do
 		if playermodelPoolModel:Find(name) then continue end
+
+		print(name, initialModels[name], initialHattableModels[name])
 
 		playermodelPoolModel:New(
 			{name = name,
@@ -407,4 +429,10 @@ net.Receive("TTT2UpdatePlayerModelHattable", function(_, ply)
 	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
 	playermodels.UpdateModelHattable(net.ReadString(), net.ReadBool())
+end)
+
+net.Receive("TTT2ResetPlayerModels", function(_, ply)
+	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+
+	playermodels.Reset()
 end)
