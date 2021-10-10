@@ -113,7 +113,7 @@ if CLIENT then
 	-- @param function OnReceiveFunc(conVarExists, value, default) The function that gets called with the results if the conVar exists
 	-- @realm client
 	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
-		local conVar = serverConVars[conVarName]
+		local conVar = serverConVars[conVarName] or {}
 
 		if conVar.value and conVar.default then
 			OnReceiveFunc(true, conVar.value, conVar.default)
