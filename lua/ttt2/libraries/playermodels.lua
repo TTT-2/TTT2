@@ -288,8 +288,6 @@ function playermodels.InitializeDatabase()
 	for name in pairs(playerManagerAllValidModels()) do
 		if playermodelPoolModel:Find(name) then continue end
 
-		print(name, initialModels[name], initialHattableModels[name])
-
 		playermodelPoolModel:New(
 			{name = name,
 			selected = initialModels[name] or false,
