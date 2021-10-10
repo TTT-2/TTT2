@@ -142,6 +142,14 @@ function GM:PlayerSpawn(ply)
 	-- @realm server
 	hook.Run("PlayerLoadout", ply, false)
 
+	---
+	-- @realm server
+	hook.Run("PlayerSetModel", ply)
+
+	---
+	-- @realm server
+	hook.Run("TTTPlayerSetColor", ply)
+
 	ply:SetupHands()
 
 	ply:SetLastSpawnPosition(ply:GetPos())
