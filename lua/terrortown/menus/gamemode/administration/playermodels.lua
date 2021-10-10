@@ -63,7 +63,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	local base = form2:MakeIconLayout()
 	local models = player_manager.AllValidModels()
-	local headBoxes = playermodels.GetHeadHitBoxModels()
+	local headBoxes = playermodels.GetHeadHitBoxModelNameList()
 
 	for name, model in pairs(models) do
 		boxCache[name] = form2:MakeImageCheckBox({

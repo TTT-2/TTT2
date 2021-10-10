@@ -73,7 +73,7 @@ end
 -- client, if no manual sync is triggered.
 -- @return table A table with information about headshot hitboxes
 -- @realm shared
-function playermodels.GetHeadHitBoxModels()
+function playermodels.GetHeadHitBoxModelNameList()
 	return playermodels.modelHasHeadHitBox or {}
 end
 
@@ -210,7 +210,7 @@ if SERVER then
 			return ply:IsSuperAdmin()
 		end)
 
-		net.SendStream("TTT2StreamHeadHitBoxesTable", playermodels.GetHeadHitBoxModels(), plys)
+		net.SendStream("TTT2StreamHeadHitBoxesTable", playermodels.GetHeadHitBoxModelNameList(), plys)
 	end
 
 	---
