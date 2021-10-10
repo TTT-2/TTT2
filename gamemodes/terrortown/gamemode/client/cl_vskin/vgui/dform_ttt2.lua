@@ -147,7 +147,8 @@ function PANEL:MakeCheckBox(data)
 		end
 	end
 
-	left:SetResetButton(MakeReset(self), data.default)
+	local reset = MakeReset(self)
+	left:SetResetButton(reset, data.default)
 
 	self:AddItem(left, nil, reset)
 
