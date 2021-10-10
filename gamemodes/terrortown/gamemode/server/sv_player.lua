@@ -142,6 +142,14 @@ function GM:PlayerSpawn(ply)
 	-- @realm server
 	hook.Run("PlayerLoadout", ply, false)
 
+	---
+	-- @realm server
+	hook.Run("PlayerSetModel", ply)
+
+	---
+	-- @realm server
+	hook.Run("TTTPlayerSetColor", ply)
+
 	ply:SetupHands()
 
 	ply:SetLastSpawnPosition(ply:GetPos())
@@ -229,6 +237,29 @@ end
 function GM:PlayerSelectSpawn(ply, transition)
 	-- this overwrite is needed to suppress the GMod warning if no spawn entities were found
 	-- "[PlayerSelectSpawn] Error! No spawn points!"
+end
+
+---
+-- Called whenever a @{Player} spawns and must choose a model.
+-- A good place to assign a model to a @{Player}.
+-- @note This function may not work in your custom gamemode if you have overridden
+-- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
+-- @param Player ply The @{Player} being chosen
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetModel
+-- @local
+function GM:PlayerSetModel(ply)
+	-- The player modes has to be applied here since some player model selectors overwrite
+	-- this hook to suppress the TTT2 player models. If the model is assigned elsewhere, it
+	-- breaks with external model selectors.
+	if not IsValid(ply) then return end
+
+	-- this will call the overwritten internal function to modify the model
+	ply:SetModel(ply.defaultModel or GAMEMODE.playermodel)
+
+	-- Always clear color state, may later be changed in TTTPlayerSetColor
+	ply:SetColor(COLOR_WHITE)
 end
 
 ---
