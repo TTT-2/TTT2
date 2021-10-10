@@ -7,18 +7,6 @@ CLGAMEMODESUBMENU.title = "submenu_administration_playermodels_title"
 
 local boxCache = {}
 
-local function OnDataUpdated(data)
-	-- first iterate over all and disable them
-	for _, box in pairs(boxCache) do
-		box:SetSelected(false)
-	end
-
-	-- then enable the now selected ones
-	for i = 1, #data do
-		boxCache[data[i]]:SetSelected(true)
-	end
-end
-
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_playermodels_general")
 
@@ -70,12 +58,20 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			label = name,
 			model = model,
 			headbox = headBoxes[name],
-			initial = playermodels.HasSelectedModel(name),
-			OnSelected = function(slf, state)
-				playermodels.UpdateModelState(name, state)
+			initialModel = playermodels.IsSelectedModel(name),
+			initialHattable = playermodels.IsHattableModel(name),
+			OnModelSelected = function(_, state)
+				playermodels.UpdateModelSelected(name, state)
+			end,
+			OnModelHattable = function(_, state)
+				playermodels.UpdateModelHattable(name, state)
 			end
 		}, base)
 	end
 
-	playermodels.AddChangeCallback(OnDataUpdated)
+	playermodels.OnChange("PlayermodelsUpdateTrigger", function(data)
+		for name, entry in pairs(data) do
+			boxCache[name]:SetModelSelected(entry.selected)
+		end
+	end)
 end

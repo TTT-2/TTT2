@@ -10,6 +10,8 @@ local materialCardAdded = Material("vgui/ttt/vskin/card_added")
 local materialCardRemoved = Material("vgui/ttt/vskin/card_removed")
 local materialHeadboxYes = Material("vgui/ttt/vskin/icon_headbox_yes")
 local materialHeadboxNo = Material("vgui/ttt/vskin/icon_headbox_no")
+local materialHattableYes = Material("vgui/ttt/vskin/icon_hattable_yes")
+local materialHattableNo = Material("vgui/ttt/vskin/icon_hattable_no")
 
 local colorCardAdded = Color(80, 190, 25)
 local colorCardInheritAdded = Color(25, 190, 175)
@@ -1415,23 +1417,30 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	local sizeIconMode = heightMode - 4 * padding
 	local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
 	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
-	local posHeadIconBox = 8
-	local sizeHeadIconBox = 32
-	local posHeadIcon = posHeadIconBox + padding
-	local sizeHeadIcon = sizeHeadIconBox - 2 * padding
+	local posStatusIconBoxX = 8
+	local sizeStatusIconBox = 32
+	local sizeStatusIcon = sizeStatusIconBox - 2 * padding
+	local posStatusIconX = posStatusIconBoxX + padding
+
+	local posHeadIconBoxY = 8
+	local posHeadIconY = posHeadIconBoxY + padding
+	local posHattableIconBoxY = posHeadIconBoxY + sizeStatusIconBox + padding
+	local posHattableIconY = posHattableIconBoxY + padding
 
 	local colorBackground = colors.settingsBox
 	local colorMode = utilGetChangedColor(colors.background, 75)
 	local colorHeadIcon = colorCardInheritRemoved
+	local colorHattableIcon = colorCardInheritRemoved
 
 	local materialMode = materialCardRemoved
 	local materialHeadIcon = materialHeadboxNo
+	local materialHattableIcon = materialHattableNo
 
 	if panel.Hovered then
 		colorBackground = colors.accentHover
 	end
 
-	if panel:IsSelected() then
+	if panel:IsModelSelected() then
 		colorMode = colorCardAdded
 		materialMode = materialCardAdded
 	end
@@ -1439,6 +1448,11 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	if panel:HasHeadBox() then
 		colorHeadIcon = colorCardAdded
 		materialHeadIcon = materialHeadboxYes
+	end
+
+	if panel:IsModelHattable() then
+		colorHattableIcon = colorCardAdded
+		materialHattableIcon = materialHattableYes
 	end
 
 	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
@@ -1461,8 +1475,11 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 		TEXT_ALIGN_CENTER
 	)
 
-	drawRoundedBox(sizes.cornerRadius, posHeadIconBox, posHeadIconBox, sizeHeadIconBox, sizeHeadIconBox, colorHeadIcon)
-	drawFilteredTexture(posHeadIcon, posHeadIcon, sizeHeadIcon, sizeHeadIcon, materialHeadIcon, 200, COLOR_WHITE)
+	drawRoundedBox(sizes.cornerRadius, posStatusIconBoxX, posHeadIconBoxY, sizeStatusIconBox, sizeStatusIconBox, colorHeadIcon)
+	drawFilteredTexture(posStatusIconX, posHeadIconY, sizeStatusIcon, sizeStatusIcon, materialHeadIcon, 200, COLOR_WHITE)
+
+	drawRoundedBox(sizes.cornerRadius, posStatusIconBoxX, posHattableIconBoxY, sizeStatusIconBox, sizeStatusIconBox, colorHattableIcon)
+	drawFilteredTexture(posStatusIconX, posHattableIconY, sizeStatusIcon, sizeStatusIcon, materialHattableIcon, 200, COLOR_WHITE)
 end
 
 -- REGISTER DERMA SKIN

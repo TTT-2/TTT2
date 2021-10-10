@@ -1408,7 +1408,7 @@ function GM:OnReloaded()
 
 	-- reload everything from the playermodels
 	playermodels.InitializeHeadHitBoxes()
-	playermodels.StreamSelectedModelsToSelectedClients()
+	playermodels.StreamModelStateToSelectedClients()
 	playermodels.StreamHeadHitBoxesToSelectedClients()
 
 	---
