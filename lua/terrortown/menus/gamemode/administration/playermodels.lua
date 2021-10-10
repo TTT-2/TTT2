@@ -50,16 +50,21 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	local base = form2:MakeIconLayout()
+	local modelStates = playermodels.GetModelStates()
 	local models = player_manager.AllValidModels()
 	local headBoxes = playermodels.GetHeadHitBoxModelNameList()
 
-	for name, model in pairs(models) do
+	for name, data in SortedPairsByMemberValue(modelStates, "sortName") do
+		local model = models[name]
+
+		if not model then continue end
+
 		boxCache[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
 			headbox = headBoxes[name],
-			initialModel = playermodels.IsSelectedModel(name),
-			initialHattable = playermodels.IsHattableModel(name),
+			initialModel = data.selected,
+			initialHattable = data.hattable,
 			OnModelSelected = function(_, state)
 				playermodels.UpdateModelSelected(name, state)
 			end,
@@ -71,7 +76,25 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	playermodels.OnChange("PlayermodelsUpdateTrigger", function(data)
 		for name, entry in pairs(data) do
+			if not IsValid(boxCache[name]) then continue end
+
 			boxCache[name]:SetModelSelected(entry.selected)
+			boxCache[name]:SetModelHattable(entry.hattable)
 		end
 	end)
+end
+
+function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
+	local buttonReset = vgui.Create("DButtonTTT2", parent)
+
+	buttonReset:SetText("button_reset_models")
+	buttonReset:SetSize(225, 45)
+	buttonReset:SetPos(parent:GetWide() - 245, 20)
+	buttonReset.DoClick = function()
+		playermodels.Reset()
+	end
+end
+
+function CLGAMEMODESUBMENU:HasButtonPanel()
+	return true
 end

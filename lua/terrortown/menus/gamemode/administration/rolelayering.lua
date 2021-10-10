@@ -40,12 +40,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
-	local buttonEditor = vgui.Create("DButtonTTT2", parent)
+	local buttonReset = vgui.Create("DButtonTTT2", parent)
 
-	buttonEditor:SetText("button_reset")
-	buttonEditor:SetSize(100, 45)
-	buttonEditor:SetPos(675, 20)
-	buttonEditor.DoClick = function()
+	buttonReset:SetText("button_reset")
+	buttonReset:SetSize(100, 45)
+	buttonReset:SetPos(parent:GetWide() - 120, 20)
+	buttonReset.DoClick = function()
 		rolelayering.SendDataToServer(ROLE_NONE, {})
 
 		for subrole in pairs(self.subroleList) do
