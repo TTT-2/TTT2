@@ -67,7 +67,9 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
+	if not ConVarExists(cvar or "") then return end
 	self.Button:SetConVar(cvar)
+	self.default = tobool(GetConVar(data.convar):GetDefault())
 end
 
 ---
@@ -78,9 +80,22 @@ function PANEL:SetServerConVar(cvar)
 
 	self.serverConVar = cvar
 
-	cvars.ServerConVarGetValue(cvar, function(wasSuccess, value)
-		if wasSuccess and value then
-			self:SetValue(tobool(value), true)
+	-- Use a placeholder value to make sure the reset button is set later on
+	-- while waiting for the GetValue request to arrive
+	local oldDefault = self.default
+	self.default = oldDefault or false
+
+	cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
+		if wasSuccess then
+			if value then
+				self:SetValue(tobool(value), true)
+			end
+			if default then
+				self:SetDefaultValue(tobool(default))
+			end
+		else
+			-- If no value was sent, then reset to old default
+			self:SetDefaultValue(tobool(oldDefault))
 		end
 	end)
 
@@ -107,6 +122,22 @@ function PANEL:SetValue(val, ignoreConVar)
 end
 
 ---
+-- @param bool value
+-- @realm client
+function PANEL:SetDefaultValue(value)
+	if not isbool(value) then return end
+
+	self.default = value
+end
+
+---
+-- @return bool defaultValue
+-- @realm client
+function PANEL:GetDefaultValue()
+	return self.default
+end
+
+---
 -- @param any val
 -- @realm client
 function PANEL:SetChecked(val)
@@ -124,6 +155,24 @@ end
 -- @realm client
 function PANEL:Toggle()
 	self.Button:Toggle()
+end
+
+---
+-- @param Panel reset
+-- @param bool default
+-- @realm client
+function PANEL:SetResetButton(reset, default)
+	if not ispanel(reset) then return end
+
+	self.resetButton = reset
+
+	if self:GetDefaultValue() ~= nil then
+		reset.DoClick = function(slf)
+			self:SetValue(self:GetDefaultValue())
+		end
+	else
+		reset.noDefault = true
+	end
 end
 
 ---

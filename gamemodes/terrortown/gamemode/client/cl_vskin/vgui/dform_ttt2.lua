@@ -131,6 +131,7 @@ function PANEL:MakeCheckBox(data)
 	local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
 	left:SetText(data.label)
+	left:SetDefaultValue(data.default)
 	left:SetConVar(data.convar)
 	left:SetServerConVar(data.serverConvar)
 
@@ -146,20 +147,7 @@ function PANEL:MakeCheckBox(data)
 		end
 	end
 
-	local reset = MakeReset(self)
-
-	if ConVarExists(data.convar or "") or data.default ~= nil then
-		reset.DoClick = function(slf)
-			local default = data.default
-			if default == nil then
-				default = tobool(GetConVar(data.convar):GetDefault())
-			end
-
-			left:SetValue(default)
-		end
-	else
-		reset.noDefault = true
-	end
+	left:SetResetButton(MakeReset(self), data.default)
 
 	self:AddItem(left, nil, reset)
 

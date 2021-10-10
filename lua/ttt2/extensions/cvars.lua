@@ -75,10 +75,13 @@ if CLIENT then
 		if len < 1 then return end
 
 		local conVarName = net.ReadString()
-		local oldValue = serverConVars[conVarName] or ""
+		local conVar = serverConVars[conVarName] or {value = ""}
+
+		local oldValue = conVar.value
 		local newValue = net.ReadString()
 
-		serverConVars[conVarName] = newValue
+		conVar.value = newValue
+		serverConVars[conVarName] = conVar
 
 		cvars.OnConVarChanged(conVarName, oldValue, newValue)
 	end)
@@ -105,13 +108,15 @@ if CLIENT then
 	end
 
 	---
-	-- Get the value of the conVar if it exists on the server or was already cached
+	-- Get the current value and default of the conVar if it exists on the server or was already cached
 	-- @param string conVarName
-	-- @param function OnReceiveFunc(conVarExists, value) The function that gets called with the results if the conVar exists
+	-- @param function OnReceiveFunc(conVarExists, value, default) The function that gets called with the results if the conVar exists
 	-- @realm client
 	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
-		if serverConVars[conVarName] then
-			OnReceiveFunc(true, serverConVars[conVarName])
+		local conVar = serverConVars[conVarName]
+
+		if conVar.value and conVar.default then
+			OnReceiveFunc(true, conVar.value, conVar.default)
 
 			return
 		end
@@ -138,17 +143,22 @@ if CLIENT then
 			local identifier = net.ReadUInt(identityBitCount)
 			local wasSuccess = net.ReadBool()
 			local value = nil
+			local default = nil
 
 			if wasSuccess then
 				local conVarName = net.ReadString()
 				value = net.ReadString()
-				serverConVars[conVarName] = value
+				default = net.ReadString()
+				serverConVars[conVarName] = {
+					value = value,
+					default = default
+				}
 			end
 
 			local receiveFunc = functionCache[identifier]
 
 			if isfunction(receiveFunc) then
-				receiveFunc(wasSuccess, value)
+				receiveFunc(wasSuccess, value, default)
 				functionCache[identifier] = nil
 			end
 		end
@@ -219,7 +229,11 @@ elseif SERVER then
 			if not isSuccess then continue end
 
 			net.WriteString(request.conVarName)
-			net.WriteString(GetConVar(request.conVarName):GetString())
+
+			local conVar = GetConVar(request.conVarName)
+
+			net.WriteString(conVar:GetString())
+			net.WriteString(conVar:GetDefault())
 
 			cvars.AddChangeCallback(request.conVarName, BroadcastServerConVarChanges, "TTT2ServerConVarGetValueCallback")
 		end
