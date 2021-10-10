@@ -58,7 +58,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			label = name,
 			model = model,
 			headbox = headBoxes[name],
-			initial = playermodels.IsSelectedModel(name),
+			initialModel = playermodels.IsSelectedModel(name),
+			initialHattable = playermodels.IsHattableModel(name),
 			OnModelSelected = function(_, state)
 				print("update selection", state)
 				playermodels.UpdateModelSelected(name, state)

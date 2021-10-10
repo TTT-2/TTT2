@@ -1541,9 +1541,9 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 
 -- 2021-10-09
 --L.help_models_select = [[
---Left click on the models to add them to the player model pool. Left click again to remove them.
+--Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
 
---The small indicator in the top left shows if the player model has a headshot hitbox.]]
+--The small indicator in the top left shows if the player model has a headshot hitbox. The icon below shows if this model is applicable for a detective hat.]]
 
 --L.menu_roles_title = "Role Settings"
 --L.menu_roles_description = "Set up the spawning, equipment credits and more."

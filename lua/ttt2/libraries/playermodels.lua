@@ -11,8 +11,15 @@ end
 
 local pairs = pairs
 local playerManagerAllValidModels = player_manager.AllValidModels
+local playerManagerTranslateToPlayerModelName = player_manager.TranslateToPlayerModelName
 local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
+
+local function GetPlayerSize(ply)
+	local bottom, top = ply:GetHull()
+
+	return top - bottom
+end
 
 playermodels = playermodels or {}
 playermodels.modelStates = playermodels.modelStates or {}
@@ -52,7 +59,7 @@ end
 -- @param string name The name of the model
 -- @param boolean hattable The hattable state, `true` to enable hats for the model
 -- @realm shared
-function playermodels.UpdateModelHattable(name, selected)
+function playermodels.UpdateModelHattable(name, hattable)
 	if SERVER then
 		local playermodelPoolModel = orm.Make(playermodels.sqltable)
 
@@ -184,10 +191,6 @@ if SERVER then
 	---
 	-- @realm server
 	local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-	---
-	-- @realm server
-	local cvDetectiveHats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	local initialModels = {
 		["css_phoenix"] = true,
@@ -346,6 +349,34 @@ if SERVER then
 		else
 			return Model(playermodels.fallbackModel)
 		end
+	end
+
+	function playermodels.ApplyPlayerHat(ply, Filter)
+		if IsValid(ply.hat) or (isfunction(Filter) and not Filter(ply)) then return end
+
+		local hat = ents.Create("ttt_hat_deerstalker")
+
+		if not IsValid(hat) then return end
+
+		hat:SetPos(ply:GetPos() + Vector(0, 0, GetPlayerSize(ply).z))
+		hat:SetAngles(ply:GetAngles())
+		hat:SetParent(ply)
+
+		hat:Spawn()
+
+		ply.hat = hat
+	end
+
+	function playermodels.RemovePlayerHat(ply)
+		if not IsValid(ply.hat) then return end
+
+		SafeRemoveEntity(ply.hat)
+
+		ply.hat = nil
+	end
+
+	function playermodels.PlayerCanHaveHat(ply)
+		return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 	end
 
 	net.Receive("TTT2UpdatePlayerModelSelected", function(_, ply)

@@ -24,6 +24,10 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE
 local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
+-- @realm server
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
 -- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
@@ -315,40 +319,6 @@ local function ResetLoadoutItems(ply)
 	end
 end
 
-local function CanWearHat(ply)
-	local path = string.Explode("/", ply:GetModel())
-
-	if #path == 1 then
-		path = string.Explode("\\", path)
-	end
-
-	return table.HasValue(Hattables, path[3])
-end
-
--- Just hats right now
-local function GiveLoadoutSpecial(ply)
-	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE --[[or not cv_ttt_detective_hats:GetBool()]] or not CanWearHat(ply) then
-		SafeRemoveEntity(ply.hat)
-
-		ply.hat = nil
-
-		return
-	end
-
-	if IsValid(ply.hat) then return end
-
-	local hat = ents.Create("ttt_hat_deerstalker")
-	if not IsValid(hat) then return end
-
-	hat:SetPos(ply:GetPos() + Vector(0, 0, 70))
-	hat:SetAngles(ply:GetAngles())
-	hat:SetParent(ply)
-
-	ply.hat = hat
-
-	hat:Spawn()
-end
-
 ---
 -- Sometimes, in cramped map locations, giving players weapons fails. A timer
 -- calling this function is used to get them the weapons anyway as soon as
@@ -441,7 +411,11 @@ function GM:PlayerLoadout(ply, isRespawn)
 		GiveLoadoutWeapon(ply, give[i])
 	end
 
-	GiveLoadoutSpecial(ply)
+	playermodels.RemovePlayerHat(ply)
+	playermodels.ApplyPlayerHat(ply, function(p)
+		return ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE
+			and cv_ttt_detective_hats:GetBool() and playermodels.PlayerCanHaveHat(ply)
+	end)
 
 	if not HasLoadoutWeapons(ply) then
 		MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
