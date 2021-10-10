@@ -88,8 +88,8 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	local buttonReset = vgui.Create("DButtonTTT2", parent)
 
 	buttonReset:SetText("button_reset_models")
-	buttonReset:SetSize(175, 45)
-	buttonReset:SetPos(parent:GetWide() - 195, 20)
+	buttonReset:SetSize(225, 45)
+	buttonReset:SetPos(parent:GetWide() - 245, 20)
 	buttonReset.DoClick = function()
 		playermodels.Reset()
 	end
