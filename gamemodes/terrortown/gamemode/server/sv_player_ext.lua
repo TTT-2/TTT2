@@ -603,8 +603,6 @@ end
 -- @return boolean Returns true if player is spawned
 -- @realm server
 function plymeta:SpawnForRound(deadOnly)
-	self:SetModel(self.defaultModel or GAMEMODE.playermodel)
-
 	---
 	-- @realm server
 	hook.Run("PlayerSetModel", self)

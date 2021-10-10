@@ -240,6 +240,25 @@ function GM:PlayerSelectSpawn(ply, transition)
 end
 
 ---
+-- Called whenever a @{Player} spawns and must choose a model.
+-- A good place to assign a model to a @{Player}.
+-- @note This function may not work in your custom gamemode if you have overridden
+-- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
+-- @param Player ply The @{Player} being chosen
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetModel
+-- @local
+function GM:PlayerSetModel(ply)
+	if not IsValid(ply) then return end
+
+	ply:SetModel(ply.defaultModel or GAMEMODE.playermodel) -- this will call the overwritten internal function to modify the model
+
+	-- Always clear color state, may later be changed in TTTPlayerSetColor
+	ply:SetColor(COLOR_WHITE)
+end
+
+---
 -- Called when a @{Player} spawns and updates the @{Color}
 -- @param Player ply
 -- @hook
