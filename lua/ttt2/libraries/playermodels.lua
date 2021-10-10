@@ -180,6 +180,7 @@ if CLIENT then
 	-- Used to add a function to the callback stack that is called when a change
 	-- is made on the server. The first argument of the Callback function is the
 	-- new data.
+	-- @param string name The unique callback identifier
 	-- @param function Callback The callback function that should be added
 	-- @realm client
 	function playermodels.OnChange(name, Callback)
@@ -351,6 +352,12 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Applies a detective hat to the provided player. Doesn't check if the player's model
+	-- allows a hat. Use the Filter function for this.
+	-- @param Player ply The player that should receive the hat
+	-- @param[opt] function Filter The filter function that has to return true to apply a hat
+	-- @realm server
 	function playermodels.ApplyPlayerHat(ply, Filter)
 		if IsValid(ply.hat) or (isfunction(Filter) and not Filter(ply)) then return end
 
@@ -367,6 +374,10 @@ if SERVER then
 		ply.hat = hat
 	end
 
+	---
+	-- Removes the detective hat from the player.
+	-- @param Player ply The player whose hat should be removed
+	-- @realm server
 	function playermodels.RemovePlayerHat(ply)
 		if not IsValid(ply.hat) then return end
 
@@ -375,6 +386,11 @@ if SERVER then
 		ply.hat = nil
 	end
 
+	---
+	-- Checks whether a playermodel can have a hat.
+	-- @param Player ply The players whose model should be checked
+	-- @return boolean Returns true if the player's model can have a detective hat
+	-- @realm server
 	function playermodels.PlayerCanHaveHat(ply)
 		return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 	end
