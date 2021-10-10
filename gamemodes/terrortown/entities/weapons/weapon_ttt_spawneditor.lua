@@ -105,6 +105,7 @@ if CLIENT then
 	local Vector = Vector
 	local mathPi = math.pi
 	local mathTan = math.tan
+	local mathMax = math.max
 	local ColorAlpha = ColorAlpha
 
 	local centerX = 0.5 * ScrW()
@@ -178,8 +179,16 @@ if CLIENT then
 
 				if dist3d > maxEditDistance then continue end
 
+				local steps = mathMax(1, 4 + 750 / dist3d)
+
 				if not isHighlighted then
-					renderDrawSphere(pos, 10, 4 + 750 / dist3d, 4 + 750 / dist3d, color)
+					renderDrawSphere(
+						pos,
+						10,
+						steps,
+						steps,
+						color
+					)
 				else
 					proximitySpawns[#proximitySpawns + 1] = {
 						entType = entType,
@@ -239,6 +248,7 @@ if CLIENT then
 			local id = proximitySpawn.id
 			local dist3d = proximitySpawn.dist3d
 			local color = colorSpawnTypes[spawnType]
+			local steps = mathMax(1, 4 + 750 / dist3d)
 
 			screenPos = proximitySpawn.screenPos
 
@@ -258,9 +268,20 @@ if CLIENT then
 					entspawnscript.SetFocusedSpawn(spawnType, entType, id, spawn)
 				end
 
-				renderDrawSphere(pos, sphereRadius * (trace.HitWorld and 1 or 1.1), 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 245))
+				renderDrawSphere(
+					pos,
+					sphereRadius * (trace.HitWorld and 1 or 1.1),
+					steps,
+					steps,
+					ColorAlpha(color, 245)
+				)
 			else
-				renderDrawSphere(pos, sphereRadius, 4 + 750 / dist3d, 4 + 750 / dist3d, ColorAlpha(color, 100))
+				renderDrawSphere(
+					pos, sphereRadius,
+					steps,
+					steps,
+					ColorAlpha(color, 100)
+				)
 			end
 		end
 
@@ -296,11 +317,15 @@ if CLIENT then
 			colorSphere = colorPreview
 		end
 
+		local steps = mathMax(1, 4 + 750 / previewData.distance3d)
+
 		renderDrawSphere(
 			previewData.currentPos,
 			sphereRadius,
-			4 + 750 / previewData.distance3d,
-			4 + 750 / previewData.distance3d,
+			1,
+			1,
+			steps,
+			steps,
 			colorSphere
 		)
 	end
