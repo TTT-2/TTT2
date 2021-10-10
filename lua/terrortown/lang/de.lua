@@ -1538,7 +1538,7 @@ L.kill_score_team = "Teammord:"
 
 -- 2021-10-09
 L.help_models_select = [[
-Linkskicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder. Rechtsklick wechselt zwischen aktivieren/deaktivierten Detektivsmütze.
+Linksklicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder. Rechtsklick wechselt zwischen aktivierter/deaktivierter Detektivsmütze.
 
 Das kleine Symbol oben links zeigt, ob ein Spielermodel eine Kopfschuss Hitbox hat. Das Symbol darunter zeigt, ob eine Detektivsmütze bei diesem Modell möglich ist.]]
 
