@@ -1537,6 +1537,11 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.kill_score_team = "Team kill:"
 
 -- 2021-10-09
+--L.help_models_select = [[
+--Left click on the models to add them to the player model pool. Left click again to remove them.
+
+--The small indicator in the top left shows if the player model has a headshot hitbox.]]
+
 --L.menu_roles_title = "Role Settings"
 --L.menu_roles_description = "Set up the spawning, equipment credits and more."
 

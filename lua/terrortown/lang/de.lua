@@ -1537,6 +1537,11 @@ L.tooltip_kill_score_team = "Teammord: {score}"
 L.kill_score_team = "Teammord:"
 
 -- 2021-10-09
+L.help_models_select = [[
+Linkskicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder.
+
+Das kleine Symbol oben links zeigt, ob ein Spielermodel eine Kopfschuss Hitbox hat.]]
+
 L.menu_roles_title = "Rollen Einstellungen"
 L.menu_roles_description = "Richte Rollenspawning, Ausrüsungspunkte und mehr ein."
 

@@ -8,6 +8,8 @@ local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
 local materialRhombus = Material("vgui/ttt/vskin/rhombus")
 local materialCardAdded = Material("vgui/ttt/vskin/card_added")
 local materialCardRemoved = Material("vgui/ttt/vskin/card_removed")
+local materialHeadboxYes = Material("vgui/ttt/vskin/icon_headbox_yes")
+local materialHeadboxNo = Material("vgui/ttt/vskin/icon_headbox_no")
 
 local colorCardAdded = Color(80, 190, 25)
 local colorCardInheritAdded = Color(25, 190, 175)
@@ -1413,11 +1415,17 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	local sizeIconMode = heightMode - 4 * padding
 	local posTextModeX = posIconModeX + sizeIconMode + 2 * padding
 	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
+	local posHeadIconBox = 8
+	local sizeHeadIconBox = 32
+	local posHeadIcon = posHeadIconBox + padding
+	local sizeHeadIcon = sizeHeadIconBox - 2 * padding
 
 	local colorBackground = colors.settingsBox
 	local colorMode = utilGetChangedColor(colors.background, 75)
+	local colorHeadIcon = colorCardInheritRemoved
 
 	local materialMode = materialCardRemoved
+	local materialHeadIcon = materialHeadboxNo
 
 	if panel.Hovered then
 		colorBackground = colors.accentHover
@@ -1426,6 +1434,11 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	if panel:IsSelected() then
 		colorMode = colorCardAdded
 		materialMode = materialCardAdded
+	end
+
+	if panel:HasHeadBox() then
+		colorHeadIcon = colorCardAdded
+		materialHeadIcon = materialHeadboxYes
 	end
 
 	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
@@ -1447,6 +1460,9 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER
 	)
+
+	drawRoundedBox(sizes.cornerRadius, posHeadIconBox, posHeadIconBox, sizeHeadIconBox, sizeHeadIconBox, colorHeadIcon)
+	drawFilteredTexture(posHeadIcon, posHeadIcon, sizeHeadIcon, sizeHeadIcon, materialHeadIcon, 200, COLOR_WHITE)
 end
 
 -- REGISTER DERMA SKIN
