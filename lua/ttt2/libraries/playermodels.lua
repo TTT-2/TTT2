@@ -165,6 +165,9 @@ function playermodels.IsHattableModel(name)
 	return models[name].hattable or false
 end
 
+---
+-- Reset all selected playermodels, hattability and reinitialize the database.
+-- @realm shared
 function playermodels.Reset()
 	if SERVER then
 		-- in the first step the database is deleted
