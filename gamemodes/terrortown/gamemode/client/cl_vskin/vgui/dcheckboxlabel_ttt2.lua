@@ -68,8 +68,9 @@ end
 -- @realm client
 function PANEL:SetConVar(cvar)
 	if not ConVarExists(cvar or "") then return end
+
 	self.Button:SetConVar(cvar)
-	self.default = tobool(GetConVar(cvar):GetDefault())
+	self:SetDefaultValue(tobool(GetConVar(cvar):GetDefault()))
 end
 
 ---
