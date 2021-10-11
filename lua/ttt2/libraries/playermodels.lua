@@ -234,10 +234,6 @@ function playermodels.ReadChangedModelStatesSQL()
 
 	local sqlTable = orm.Make(playermodels.sqltable)
 
-	if not sqlTable then
-		return {}
-	end
-
 	local data = sqlTable:All()
 	local hashableData = {}
 
@@ -285,6 +281,10 @@ end
 -- @internal
 -- @realm server
 function playermodels.Initialize()
+	if not sql.CreateSqlTable(playermodels.sqltable, playermodels.savingKeys) then
+		return false
+	end
+
 	local data = playermodels.modelStates or {}
 	local defaultData = {}
 	local changedData = playermodels.ReadChangedModelStatesSQL()
@@ -314,6 +314,8 @@ function playermodels.Initialize()
 	playermodels.changedModelStates = changedData
 
 	playermodels.InitializeHeadHitBoxes()
+
+	return true
 end
 
 ---
