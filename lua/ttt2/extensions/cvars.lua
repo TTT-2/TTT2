@@ -108,7 +108,7 @@ if CLIENT then
 	end
 
 	---
-	-- Get the current value and default of the conVar if it exists on the server or was already cached
+	-- Get the conVar's current and default value of if it exists on the server or was already cached
 	-- @param string conVarName
 	-- @param function OnReceiveFunc(conVarExists, value, default) The function that gets called with the results if the conVar exists
 	-- @realm client
