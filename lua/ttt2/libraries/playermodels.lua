@@ -23,6 +23,47 @@ local function GetPlayerSize(ply)
 	return top - bottom
 end
 
+---
+-- @realm server
+local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+local initialModels = {
+	["css_phoenix"] = true,
+	["css_arctic"] = true,
+	["css_guerilla"] = true,
+	["css_leet"] = true
+}
+
+local initialHattableModels = {
+	["css_phoenix"] = true,
+	["css_arctic"] = true,
+	["monk"] = true,
+	["female01"] = true,
+	["female02"] = true,
+	["female03"] = true,
+	["female04"] = true,
+	["female05"] = true,
+	["female06"] = true,
+	["male01"] = true,
+	["male02"] = true,
+	["male03"] = true,
+	["male04"] = true,
+	["male05"] = true,
+	["male06"] = true,
+	["male07"] = true,
+	["male08"] = true,
+	["male09"] = true
+}
+
+-- extend the playermodels scope on the server
+playermodels.sqltable = "ttt2_playermodel_pool"
+playermodels.savingKeys = {
+	selected = {typ = "bool", default = false},
+	hattable = {typ = "bool", default = false}
+}
+
+playermodels.fallbackModel = "models/player/phoenix.mdl"
+
 playermodels = playermodels or {}
 playermodels.modelStates = playermodels.modelStates or {}
 playermodels.modelHasHeadHitBox = playermodels.modelHasHeadHitBox or {}
@@ -213,47 +254,6 @@ if CLIENT then
 	-- all the reamining functions are server only
 	return
 end
-
----
--- @realm server
-local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-local initialModels = {
-	["css_phoenix"] = true,
-	["css_arctic"] = true,
-	["css_guerilla"] = true,
-	["css_leet"] = true
-}
-
-local initialHattableModels = {
-	["css_phoenix"] = true,
-	["css_arctic"] = true,
-	["monk"] = true,
-	["female01"] = true,
-	["female02"] = true,
-	["female03"] = true,
-	["female04"] = true,
-	["female05"] = true,
-	["female06"] = true,
-	["male01"] = true,
-	["male02"] = true,
-	["male03"] = true,
-	["male04"] = true,
-	["male05"] = true,
-	["male06"] = true,
-	["male07"] = true,
-	["male08"] = true,
-	["male09"] = true
-}
-
--- extend the playermodels scope on the server
-playermodels.sqltable = "ttt2_playermodel_pool"
-playermodels.savingKeys = {
-	selected = {typ = "bool", default = false},
-	hattable = {typ = "bool", default = false}
-}
-
-playermodels.fallbackModel = "models/player/phoenix.mdl"
 
 ---
 -- Returns an indexed table with all the models that are in the selection pool.
