@@ -185,7 +185,7 @@ if CLIENT then
 
 	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
 		playermodels.defaultModelStates = data
-		playermodels.modelStates = data
+		playermodels.modelStates = table.Copy(data)
 
 		for _, Callback in pairs(callbackCache) do
 			Callback(data)
