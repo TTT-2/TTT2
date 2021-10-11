@@ -52,7 +52,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	local base = form2:MakeIconLayout()
 	local modelStates = playermodels.GetModelStates()
 	local models = player_manager.AllValidModels()
-	local headBoxes = playermodels.GetHeadHitBoxModelNameList()
 
 	for name, data in SortedPairsByMemberValue(modelStates, "sortName") do
 		local model = models[name]
@@ -62,7 +61,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		boxCache[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
-			headbox = headBoxes[name],
+			headbox = data.hasHeadHitBox,
 			initialModel = data.selected,
 			initialHattable = data.hattable,
 			OnModelSelected = function(_, state)

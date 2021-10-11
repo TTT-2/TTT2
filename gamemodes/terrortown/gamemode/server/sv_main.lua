@@ -318,10 +318,7 @@ function GM:Initialize()
 	ShopEditor.CreateShopDBs()
 
 	-- initialize playermodel database
-	playermodels.InitializeDatabase()
-
-	-- initialize playermodel head hit boxes
-	playermodels.InitializeHeadHitBoxes()
+	playermodels.Initialize()
 
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")
@@ -1407,9 +1404,8 @@ function GM:OnReloaded()
 	hudelements.OnLoaded()
 
 	-- reload everything from the playermodels
-	playermodels.InitializeHeadHitBoxes()
+	playermodels.Initialize()
 	playermodels.StreamModelStateToSelectedClients()
-	playermodels.StreamHeadHitBoxesToSelectedClients()
 
 	---
 	-- @realm shared
