@@ -25,6 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added indicator that shows if a model has a headshot hitbox
   - Added possibility to enable/disable detective hats for individual player models
 - Added a new admin only menu for server addon settings
+- Added automatic default values for serverConVars
 
 ### Changed
 
