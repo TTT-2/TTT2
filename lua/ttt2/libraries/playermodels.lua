@@ -97,7 +97,7 @@ function playermodels.UpdateModel(name, valueName, state)
 end
 
 ---
--- Returns an indexed table with all the models states that are stroed
+-- Returns an indexed table with all the models states that are stored
 -- in the database.
 -- @note While this function is shared, the data is only available for superadmin on the
 -- client, if no manual sync is triggered.
