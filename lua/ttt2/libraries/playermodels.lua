@@ -80,8 +80,10 @@ playermodels.headHitBoxesInitialized = playermodels.headHitBoxesInitialized or f
 function playermodels.UpdateModel(name, valueName, state)
 	if SERVER then
 		playermodels.modelStates[name][valueName] = state
+		playermodels.changedModelStates[name] = playermodels.changedModelStates[name] or {}
 
-		local changedData = playermodels.changedModelStates[name] or {}
+		local changedData = playermodels.changedModelStates[name]
+
 		local isDefaultState = playermodels.defaultModelStates[name][valueName] == state
 
 		if isDefaultState then
@@ -101,13 +103,13 @@ function playermodels.UpdateModel(name, valueName, state)
 
 		playermodelObject[valueName] = changedData[valueName]
 
-		if #changedData > 0 then
-			playermodelObject:Save()
-		else
+		if table.IsEmpty(changedData) then
 			playermodelObject:Delete()
+			playermodels.changedModelStates[name] = nil
+		else
+			playermodelObject:Save()
+			playermodels.changedModelStates[name] = changedData
 		end
-
-		playermodels.changedModelStates = changedData
 
 		playermodels.StreamModelStateToSelectedClients(nil, true)
 	else -- CLIENT
