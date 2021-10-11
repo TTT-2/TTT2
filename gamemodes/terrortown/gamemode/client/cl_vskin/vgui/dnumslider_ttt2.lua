@@ -5,11 +5,6 @@
 local PANEL = {}
 
 ---
--- @accessor any
--- @realm client
-AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
-
----
 -- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DTextEntry")
@@ -45,6 +40,9 @@ function PANEL:Init()
 	self.Slider:Dock(FILL)
 	self.Slider:SetHeight(16)
 
+	-- Handle ConVar Value Changes only on Mouse release
+	self.valueIsChanging = false
+
 	self.Slider.Knob.OnMousePressed = function(panel, mcode)
 		if mcode == MOUSE_MIDDLE then
 			self:ResetToDefaultValue()
@@ -52,7 +50,29 @@ function PANEL:Init()
 			return
 		end
 
+		if mcode == MOUSE_FIRST then
+			self.oldValue = self:GetValue()
+			self.valueIsChanging = true
+		end
+
 		self.Slider:OnMousePressed(mcode)
+	end
+
+	local sliderOnMouseReleasedFunc = self.Slider.OnMouseReleased
+
+	self.Slider.OnMouseReleased = function(panel, mcode)
+		if mcode == MOUSE_FIRST then
+			local newValue = self:GetValue()
+
+			if newValue ~= self.oldValue then
+				self:SetConVarValues(newValue)
+				self.oldValue = newValue
+			end
+
+			self.valueIsChanging = false
+		end
+
+		sliderOnMouseReleasedFunc(self.Slider, mcode)
 	end
 
 	-- make slider know a bit bigger
@@ -133,26 +153,34 @@ end
 -- @param any val
 -- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(val, ignoreConVar)
-	if not val then return end
+function PANEL:SetValue(value, ignoreConVar)
+	if not value then return end
 
-	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
-	val = math.Round(val, self:GetDecimals())
+	value = math.Clamp(tonumber(value) or 0, self:GetMin(), self:GetMax())
+	value = math.Round(value, self:GetDecimals())
 
-	if val == self:GetValue() then return end
+	if value == self:GetValue() then return end
 
-	self.m_fValue = val
+	self.m_fValue = value
 
-	self:ValueChanged(self.m_fValue)
+	self:ValueChanged(value)
 
-	if ignoreConVar then return end
+	-- Set ConVars only when Mouse is released
+	if ignoreConVar or self.valueIsChanging then return end
 
+	self:SetConVarValues(value)
+end
+
+---
+-- @param any val
+-- @realm client
+function PANEL:SetConVarValues(value)
 	if self.conVar then
-		self.conVar:SetFloat(self.m_fValue)
+		self.conVar:SetFloat(value)
 	end
 
 	if self.serverConVar then
-		cvars.ChangeServerConVar(self.serverConVar, tostring(val))
+		cvars.ChangeServerConVar(self.serverConVar, tostring(value))
 	end
 end
 
@@ -161,6 +189,26 @@ end
 -- @realm client
 function PANEL:GetValue()
 	return self.m_fValue or 0
+end
+
+---
+-- @param number value
+-- @realm client
+function PANEL:SetDefaultValue(value)
+	if isnumber(value) then
+		self.default = value
+		self:GetResetButton().noDefault = false
+	else
+		self.defaultValue = nil
+		self:GetResetButton().noDefault = true
+	end
+end
+
+---
+-- @return number defaultValue
+-- @realm client
+function PANEL:GetDefaultValue()
+	return self.default
 end
 
 ---
@@ -198,11 +246,12 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
-	if not cvar or cvar == "" then return end
+	if not ConVarExists(cvar or "") then return end
 
 	self.conVar = GetConVar(cvar)
 
 	self:SetValue(self.conVar:GetFloat(), true)
+	self:SetDefaultValue(tonumber(GetConVar(cvar):GetDefault()))
 end
 
 ---
@@ -213,9 +262,10 @@ function PANEL:SetServerConVar(cvar)
 
 	self.serverConVar = cvar
 
-	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
-		if wasSuccess and value then
+	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
+		if wasSuccess then
 			self:SetValue(tonumber(value), true)
+			self:SetDefaultValue(tonumber(default))
 		end
 	end)
 
@@ -230,6 +280,26 @@ function PANEL:SetServerConVar(cvar)
 	end
 
 	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+end
+
+---
+-- @param Panel reset
+-- @realm client
+function PANEL:SetResetButton(reset)
+	if not ispanel(reset) then return end
+
+	self.resetButton = reset
+
+	reset.DoClick = function(slf)
+		self:ResetToDefaultValue()
+	end
+end
+
+---
+-- @return Panel reset
+-- @realm client
+function PANEL:GetResetButton()
+	return self.resetButton
 end
 
 ---

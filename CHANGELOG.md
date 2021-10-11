@@ -25,6 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added indicator that shows if a model has a headshot hitbox
   - Added possibility to enable/disable detective hats for individual player models
 - Added a new admin only menu for server addon settings
+- Added automatic default values for serverConVars
 
 ### Changed
 
@@ -32,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Decreased the minimum cost of equipment in the equipment editor to 0
 - Changed disguise such that every role can now use the function
 - Completely reworked how weapons, ammo and players spawn in the world
+- Sliders only update ConVars on mouseRelease now
 - Playermodel Selection now only saves and sends changes to the default
 
 ### Breaking Changes
