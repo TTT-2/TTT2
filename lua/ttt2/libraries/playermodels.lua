@@ -188,7 +188,7 @@ end
 if CLIENT then
 	local callbackCache = {}
 
-	net.ReceiveStream("TTT2StreamModelTable", function(data)
+	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
 		playermodels.defaultModelStates = data
 
 		for _, Callback in pairs(callbackCache) do
@@ -211,6 +211,7 @@ if CLIENT then
 				end
 
 				playermodels.modelStates[name][valueName] = dataValue
+				playermodels.modelStates[name].sortName = stringLower(name)
 			end
 		end
 
@@ -262,8 +263,6 @@ function playermodels.ReadChangedModelStatesSQL()
 				hashableData[name][key] = entry[key]
 			end
 		end
-
-		hashableData[name].sortName = stringLower(name)
 	end
 
 	return hashableData
@@ -351,6 +350,8 @@ function playermodels.InitializeHeadHitBoxes()
 
 			playermodels.modelStates[name].hasHeadHitBox = false
 		end
+
+		playermodels.defaultModelStates[name].hasHeadHitBox = playermodels.modelStates[name].hasHeadHitBox
 	end
 
 	testingEnt:Remove()
@@ -366,7 +367,7 @@ function playermodels.StreamModelStateToSelectedClients(plys, onlyChanges)
 	end)
 
 	local data = onlyChanges and playermodels.changedModelStates or playermodels.defaultModelStates
-	local streamName = onlyChanges and "TTT2StreamChangedModelTable" or "TTT2StreamModelTable"
+	local streamName = onlyChanges and "TTT2StreamChangedModelTable" or "TTT2StreamDefaultModelTable"
 
 	print("\nSending stream " .. streamName)
 	PrintTable(data)
