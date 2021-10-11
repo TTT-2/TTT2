@@ -603,6 +603,14 @@ end
 -- @return boolean Returns true if player is spawned
 -- @realm server
 function plymeta:SpawnForRound(deadOnly)
+	---
+	-- @realm server
+	hook.Run("PlayerSetModel", self)
+
+	---
+	-- @realm server
+	hook.Run("TTTPlayerSetColor", self)
+
 	-- wrong alive status and not a willing spec who unforced after prep started
 	-- (and will therefore be "alive")
 	if deadOnly and self:Alive() and not self:IsSpec() then
@@ -627,20 +635,6 @@ function plymeta:SpawnForRound(deadOnly)
 	self:StripAll()
 	self:SetTeam(TEAM_TERROR)
 	self:Spawn()
-
-	-- this will call the overwritten internal function to modify the model
-	self:SetModel(self.defaultModel or GAMEMODE.playermodel)
-
-	---
-	-- @realm server
-	hook.Run("PlayerSetModel", self)
-
-	-- Always clear color state, may later be changed in TTTPlayerSetColor
-	self:SetColor(COLOR_WHITE)
-
-	---
-	-- @realm server
-	hook.Run("TTTPlayerSetColor", self)
 
 	-- set spawn position
 	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
