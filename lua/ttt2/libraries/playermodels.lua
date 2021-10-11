@@ -55,6 +55,8 @@ local initialHattableModels = {
 	["male09"] = true
 }
 
+playermodels = playermodels or {}
+
 -- extend the playermodels scope on the server
 playermodels.sqltable = "ttt2_playermodel_pool"
 playermodels.savingKeys = {
@@ -64,7 +66,6 @@ playermodels.savingKeys = {
 
 playermodels.fallbackModel = "models/player/phoenix.mdl"
 
-playermodels = playermodels or {}
 playermodels.modelStates = playermodels.modelStates or {}
 playermodels.defaultModelStates = playermodels.defaultModelStates or {}
 playermodels.changedModelStates = playermodels.changedModelStates or {}
@@ -275,8 +276,6 @@ end
 -- @internal
 -- @realm server
 function playermodels.Initialize()
-	playermodels.InitializeHeadHitBoxes()
-
 	local data = playermodels.modelStates or {}
 	local defaultData = {}
 	local changedData = playermodels.ReadChangedModelStatesSQL()
@@ -302,8 +301,10 @@ function playermodels.Initialize()
 	end
 
 	playermodels.modelStates = data
-	playermodel.defaultModelStates = defaultData
+	playermodels.defaultModelStates = defaultData
 	playermodels.changedModelStates = changedData
+
+	playermodels.InitializeHeadHitBoxes()
 end
 
 ---
