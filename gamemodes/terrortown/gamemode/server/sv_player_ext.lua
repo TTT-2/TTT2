@@ -1457,7 +1457,7 @@ local function SetPlayerReady(_, ply)
 
 	-- update playermodels on the client
 	if ply:IsSuperAdmin() then
-		playermodels.StreamModelStateToSelectedClients(ply)
+		playermodels.StreamModelStateToSelectedClients(false, ply)
 	end
 
 	---

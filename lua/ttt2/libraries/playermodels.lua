@@ -72,7 +72,7 @@ playermodels.changedModelStates = playermodels.changedModelStates or {}
 ---
 -- Updates the given value state of a provided playermodel.
 -- @param string name The name of the model
--- @param string valueName The name of the model
+-- @param string valueName The name of the variable to change
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
 function playermodels.UpdateModel(name, valueName, state)
@@ -107,7 +107,7 @@ function playermodels.UpdateModel(name, valueName, state)
 			playermodels.changedModelStates[name] = changedData
 		end
 
-		playermodels.StreamModelStateToSelectedClients(nil, true)
+		playermodels.StreamModelStateToSelectedClients(true)
 	else -- CLIENT
 		net.Start("TTT2UpdatePlayerModel")
 		net.WriteString(name)
@@ -232,7 +232,7 @@ end
 ---
 -- Returns an indexed table with all the changed models states that are stored
 -- in the database.
--- @return table An hashed table with all the model data stored in the database
+-- @return table A hashed table with all the model data stored in the database
 -- @realm server
 function playermodels.ReadChangedModelStatesSQL()
 	if not SERVER then return end
@@ -350,9 +350,10 @@ end
 
 ---
 -- Streams the playermodel selection pool to clients. By default streams to all superadmin players.
+-- @param bool onlyChanges if only changes should be sent, otherwise the default is sent too
 -- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
 -- @realm server
-function playermodels.StreamModelStateToSelectedClients(plys, onlyChanges)
+function playermodels.StreamModelStateToSelectedClients(onlyChanges, plys)
 	plys = plys or util.GetFilteredPlayers(function(ply)
 		return ply:IsSuperAdmin()
 	end)
