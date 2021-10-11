@@ -58,7 +58,7 @@ local initialHattableModels = {
 playermodels = playermodels or {}
 
 -- extend the playermodels scope on the server
-playermodels.sqltable = "ttt2_playermodel_pool"
+playermodels.sqltable = "ttt2_playermodel_pool_changes"
 playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
 	hattable = {typ = "bool", default = false}
@@ -194,6 +194,9 @@ if CLIENT then
 	end)
 
 	net.ReceiveStream("TTT2StreamChangedModelTable", function(data)
+		print("Received Changes")
+		PrintTable(data)
+
 		for name, values in pairs(data) do
 			for valueNames, value in pairs(values) do
 				playermodels.modelStates[name] = playermodels.modelStates[name] or {}
@@ -229,7 +232,13 @@ end
 function playermodels.ReadChangedModelStatesSQL()
 	if not SERVER then return end
 
-	local data = orm.Make(playermodels.sqltable):All()
+	local sqlTable = orm.Make(playermodels.sqltable)
+
+	if not sqlTable then
+		return {}
+	end
+
+	local data = sqlTable:All()
 	local hashableData = {}
 
 	for i = 1, #data do
@@ -346,6 +355,9 @@ function playermodels.StreamModelStateToSelectedClients(plys, onlyChanges)
 
 	local data = onlyChanges and playermodels.changedModelStates or playermodels.modelStates
 	local streamName = onlyChanges and "TTT2StreamChangedModelTable" or "TTT2StreamModelTable"
+
+	print("\nSending stream " .. streamName)
+	PrintTable(data)
 
 	net.SendStream(streamName, data, plys)
 end
