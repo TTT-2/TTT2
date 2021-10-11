@@ -130,6 +130,9 @@ end
 function PANEL:MakeCheckBox(data)
 	local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
+	local reset = MakeReset(self)
+	left:SetResetButton(reset)
+
 	left:SetText(data.label)
 
 	-- Set default if possible even if the convar could still overwrite it
@@ -149,8 +152,6 @@ function PANEL:MakeCheckBox(data)
 		end
 	end
 
-	local reset = MakeReset(self)
-	left:SetResetButton(reset, data.default)
 
 	self:AddItem(left, nil, reset)
 
@@ -180,6 +181,9 @@ function PANEL:MakeSlider(data)
 
 	local right = vgui.Create("DNumSliderTTT2", self)
 
+	local reset = MakeReset(self)
+	right:SetResetButton(reset)
+
 	right:SetMinMax(data.min, data.max)
 
 	if data.decimal ~= nil then
@@ -205,8 +209,6 @@ function PANEL:MakeSlider(data)
 	right:SetTall(32)
 	right:Dock(TOP)
 
-	local reset = MakeReset(self)
-	right:SetResetButton(reset)
 
 	self:AddItem(left, right, reset)
 
