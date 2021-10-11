@@ -45,6 +45,16 @@ ROLE.score = {
 	suicideMultiplier = -1
 }
 
+-- This variable can be used to add roles that can see the role of the
+-- player with the role defined in this file. While this table can be updated
+-- on runtime, it is strongly advised against. Use custom hook based
+-- syncing for specific syncing.
+ROLE.visibleForTeam = {}
+
+-- Set this flag to true to make a role public known. This results in a
+-- detective-like behavior.
+ROLE.isPublicRole = false
+
 ---
 -- This function is called before initializing a @{ROLE}, but after all
 -- global variables like "ROLE_TRAITOR" have been initialized.

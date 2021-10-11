@@ -18,6 +18,8 @@ function ROLE:PreInitialize()
 	self.fallbackTable = {}
 	self.unknownTeam = true
 
+	self.isPublicRole = true
+
 	-- conVarData
 	self.conVarData = {
 		pct = 0.13,
