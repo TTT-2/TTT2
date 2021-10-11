@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Decreased the minimum cost of equipment in the equipment editor to 0
 - Changed disguise such that every role can now use the function
 - Completely reworked how weapons, ammo and players spawn in the world
+- Playermodel Selection now only saves and sends changes to the default
 
 ### Breaking Changes
 

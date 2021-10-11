@@ -57,7 +57,6 @@ local initialHattableModels = {
 
 playermodels = playermodels or {}
 
--- extend the playermodels scope on the server
 playermodels.sqltable = "ttt2_playermodel_pool_changes"
 playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
@@ -69,7 +68,6 @@ playermodels.fallbackModel = "models/player/phoenix.mdl"
 playermodels.modelStates = playermodels.modelStates or {}
 playermodels.defaultModelStates = playermodels.defaultModelStates or {}
 playermodels.changedModelStates = playermodels.changedModelStates or {}
-playermodels.headHitBoxesInitialized = playermodels.headHitBoxesInitialized or false
 
 ---
 -- Updates the given value state of a provided playermodel.
@@ -84,16 +82,14 @@ function playermodels.UpdateModel(name, valueName, state)
 
 		local changedData = playermodels.changedModelStates[name]
 
-		local isDefaultState = playermodels.defaultModelStates[name][valueName] == state
-
-		if isDefaultState then
+		if playermodels.defaultModelStates[name][valueName] == state then
 			changedData[valueName] = nil
 		else
 			changedData[valueName] = state
 		end
 
 		local playermodelPoolModel = orm.Make(playermodels.sqltable)
-		playermodelObject = playermodelPoolModel:Find(name)
+		local playermodelObject = playermodelPoolModel:Find(name)
 
 		if not playermodelObject then
 			playermodelObject = playermodelPoolModel:New({
@@ -178,7 +174,6 @@ function playermodels.Reset()
 
 		-- this data then has to be synced to the client again
 		playermodels.StreamModelStateToSelectedClients()
-		playermodels.StreamModelStateToSelectedClients(nil, true)
 	else
 		net.Start("TTT2ResetPlayerModels")
 		net.SendToServer()
@@ -190,6 +185,7 @@ if CLIENT then
 
 	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
 		playermodels.defaultModelStates = data
+		playermodels.modelStates = data
 
 		for _, Callback in pairs(callbackCache) do
 			Callback(data)
@@ -197,10 +193,8 @@ if CLIENT then
 	end)
 
 	net.ReceiveStream("TTT2StreamChangedModelTable", function(data)
-		print("Received Changes")
-		PrintTable(data)
-
 		local dataValue
+
 		for name, values in pairs(playermodels.defaultModelStates) do
 			for valueName, value in pairs(values) do
 				playermodels.modelStates[name] = playermodels.modelStates[name] or {}
@@ -333,9 +327,6 @@ end
 -- @note Do not use before @{GM:InitPostEntity} has been called, otherwise the server will crash!
 -- @realm server
 function playermodels.InitializeHeadHitBoxes()
-	if playermodels.headHitBoxesInitialized then return end
-	playermodels.headHitBoxesInitialized = true
-
 	local testingEnt = ents.Create("ttt_model_tester")
 
 	for name, model in pairs(playerManagerAllValidModels()) do
@@ -366,13 +357,11 @@ function playermodels.StreamModelStateToSelectedClients(plys, onlyChanges)
 		return ply:IsSuperAdmin()
 	end)
 
-	local data = onlyChanges and playermodels.changedModelStates or playermodels.defaultModelStates
-	local streamName = onlyChanges and "TTT2StreamChangedModelTable" or "TTT2StreamDefaultModelTable"
+	if not onlyChanges then
+		net.SendStream("TTT2StreamDefaultModelTable", playermodels.defaultModelStates, plys)
+	end
 
-	print("\nSending stream " .. streamName)
-	PrintTable(data)
-
-	net.SendStream(streamName, data, plys)
+	net.SendStream("TTT2StreamChangedModelTable", playermodels.changedModelStates, plys)
 end
 
 ---
