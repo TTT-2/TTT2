@@ -5,11 +5,6 @@
 local PANEL = {}
 
 ---
--- @accessor any
--- @realm client
-AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
-
----
 -- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DTextEntry")
@@ -197,6 +192,26 @@ function PANEL:GetValue()
 end
 
 ---
+-- @param number value
+-- @realm client
+function PANEL:SetDefaultValue(value)
+	if isnumber(value) then
+		self.default = value
+		self:GetResetButton().noDefault = false
+	else
+		self.defaultValue = nil
+		self:GetResetButton().noDefault = true
+	end
+end
+
+---
+-- @return number defaultValue
+-- @realm client
+function PANEL:GetDefaultValue()
+	return self.default
+end
+
+---
 -- @param number d
 -- @realm client
 function PANEL:SetDecimals(d)
@@ -231,11 +246,12 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
-	if not cvar or cvar == "" then return end
+	if not ConVarExists(cvar or "") then return end
 
 	self.conVar = GetConVar(cvar)
 
 	self:SetValue(self.conVar:GetFloat(), true)
+	self:SetDefaultValue(tonumber(GetConVar(cvar):GetDefault()))
 end
 
 ---
@@ -246,9 +262,10 @@ function PANEL:SetServerConVar(cvar)
 
 	self.serverConVar = cvar
 
-	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value)
-		if wasSuccess and value then
+	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
+		if wasSuccess then
 			self:SetValue(tonumber(value), true)
+			self:SetDefaultValue(tonumber(default))
 		end
 	end)
 
@@ -263,6 +280,26 @@ function PANEL:SetServerConVar(cvar)
 	end
 
 	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+end
+
+---
+-- @param Panel reset
+-- @realm client
+function PANEL:SetResetButton(reset)
+	if not ispanel(reset) then return end
+
+	self.resetButton = reset
+
+	reset.DoClick = function(slf)
+		self:ResetToDefaultValue()
+	end
+end
+
+---
+-- @return Panel reset
+-- @realm client
+function PANEL:GetResetButton()
+	return self.resetButton
 end
 
 ---
