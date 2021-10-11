@@ -178,6 +178,7 @@ function playermodels.Reset()
 
 		-- this data then has to be synced to the client again
 		playermodels.StreamModelStateToSelectedClients()
+		playermodels.StreamModelStateToSelectedClients(nil, true)
 	else
 		net.Start("TTT2ResetPlayerModels")
 		net.SendToServer()
@@ -188,7 +189,7 @@ if CLIENT then
 	local callbackCache = {}
 
 	net.ReceiveStream("TTT2StreamModelTable", function(data)
-		playermodels.modelStates = data
+		playermodels.defaultModelStates = data
 
 		for _, Callback in pairs(callbackCache) do
 			Callback(data)
@@ -199,10 +200,17 @@ if CLIENT then
 		print("Received Changes")
 		PrintTable(data)
 
-		for name, values in pairs(data) do
-			for valueNames, value in pairs(values) do
+		local dataValue
+		for name, values in pairs(playermodels.defaultModelStates) do
+			for valueName, value in pairs(values) do
 				playermodels.modelStates[name] = playermodels.modelStates[name] or {}
-				playermodels.modelStates[name][valueNames] = value
+				dataValue = data[name] and data[name][valueName]
+
+				if dataValue == nil then
+					dataValue = value
+				end
+
+				playermodels.modelStates[name][valueName] = dataValue
 			end
 		end
 
@@ -357,7 +365,7 @@ function playermodels.StreamModelStateToSelectedClients(plys, onlyChanges)
 		return ply:IsSuperAdmin()
 	end)
 
-	local data = onlyChanges and playermodels.changedModelStates or playermodels.modelStates
+	local data = onlyChanges and playermodels.changedModelStates or playermodels.defaultModelStates
 	local streamName = onlyChanges and "TTT2StreamChangedModelTable" or "TTT2StreamModelTable"
 
 	print("\nSending stream " .. streamName)
