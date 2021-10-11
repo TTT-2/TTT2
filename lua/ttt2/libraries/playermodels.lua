@@ -318,6 +318,7 @@ function playermodels.InitializeHeadHitBoxes()
 
 			playermodels.modelHasHeadHitBox[name] = false
 		end
+		print("Model " .. name .. " HeadHitBox? " .. tostring(playermodels.modelHasHeadHitBox[name]))
 	end
 
 	testingEnt:Remove()
