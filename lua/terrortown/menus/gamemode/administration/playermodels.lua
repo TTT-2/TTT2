@@ -66,10 +66,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			initialModel = data.selected,
 			initialHattable = data.hattable,
 			OnModelSelected = function(_, state)
-				playermodels.UpdateModelSelected(name, state)
+				playermodels.UpdateModel(name, "selected", state)
 			end,
 			OnModelHattable = function(_, state)
-				playermodels.UpdateModelHattable(name, state)
+				playermodels.UpdateModel(name, "hattable", state)
 			end
 		}, base)
 	end

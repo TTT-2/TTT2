@@ -5,8 +5,7 @@
 if SERVER then
 	AddCSLuaFile()
 
-	util.AddNetworkString("TTT2UpdatePlayerModelSelected")
-	util.AddNetworkString("TTT2UpdatePlayerModelHattable")
+	util.AddNetworkString("TTT2UpdatePlayerModel")
 	util.AddNetworkString("TTT2ResetPlayerModels")
 end
 
@@ -69,12 +68,12 @@ playermodels.modelStates = playermodels.modelStates or {}
 playermodels.modelHasHeadHitBox = playermodels.modelHasHeadHitBox or {}
 
 ---
--- Updates the selection state of a provided playermodel. If the state is `true` the model is
--- in the playermodel selection pool.
+-- Updates the given value state of a provided playermodel.
 -- @param string name The name of the model
--- @param boolean selected The selection state, `true` to enable the model
+-- @param string valueName The name of the model
+-- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
-function playermodels.UpdateModelSelected(name, selected)
+function playermodels.UpdateModel(name, valueName, state)
 	if SERVER then
 		local playermodelPoolModel = orm.Make(playermodels.sqltable)
 
@@ -84,42 +83,15 @@ function playermodels.UpdateModelSelected(name, selected)
 
 		if not playermodelObject then return end
 
-		playermodelObject.selected = selected or false
+		playermodelObject[valueName] = state or false
 		playermodelObject:Save()
 
 		playermodels.StreamModelStateToSelectedClients()
 	else -- CLIENT
-		net.Start("TTT2UpdatePlayerModelSelected")
+		net.Start("TTT2UpdatePlayerModel")
 		net.WriteString(name)
-		net.WriteBool(selected or false)
-		net.SendToServer()
-	end
-end
-
----
--- Updates the hattable state of a provided playermodel. If the state is `true` the model is
--- able to receive a hat.
--- @param string name The name of the model
--- @param boolean hattable The hattable state, `true` to enable hats for the model
--- @realm shared
-function playermodels.UpdateModelHattable(name, hattable)
-	if SERVER then
-		local playermodelPoolModel = orm.Make(playermodels.sqltable)
-
-		if not playermodelPoolModel then return end
-
-		playermodelObject = playermodelPoolModel:Find(name)
-
-		if not playermodelObject then return end
-
-		playermodelObject.hattable = hattable or false
-		playermodelObject:Save()
-
-		playermodels.StreamModelStateToSelectedClients()
-	else -- CLIENT
-		net.Start("TTT2UpdatePlayerModelHattable")
-		net.WriteString(name)
-		net.WriteBool(hattable or false)
+		net.WriteString(valueName)
+		net.WriteBool(state or false)
 		net.SendToServer()
 	end
 end
@@ -420,16 +392,10 @@ function playermodels.PlayerCanHaveHat(ply)
 	return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 end
 
-net.Receive("TTT2UpdatePlayerModelSelected", function(_, ply)
+net.Receive("TTT2UpdatePlayerModel", function(_, ply)
 	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
-	playermodels.UpdateModelSelected(net.ReadString(), net.ReadBool())
-end)
-
-net.Receive("TTT2UpdatePlayerModelHattable", function(_, ply)
-	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
-
-	playermodels.UpdateModelHattable(net.ReadString(), net.ReadBool())
+	playermodels.UpdateModel(net.ReadString(), net.ReadString(), net.ReadBool())
 end)
 
 net.Receive("TTT2ResetPlayerModels", function(_, ply)
