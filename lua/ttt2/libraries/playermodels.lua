@@ -5,8 +5,8 @@
 if SERVER then
 	AddCSLuaFile()
 
-	util.AddNetworkString("TTT2UpdatePlayerModelSelected")
-	util.AddNetworkString("TTT2UpdatePlayerModelHattable")
+	util.AddNetworkString("TTT2UpdatePlayerModel")
+	util.AddNetworkString("TTT2UpdateChangedPlayerModel")
 	util.AddNetworkString("TTT2ResetPlayerModels")
 end
 
@@ -16,202 +16,12 @@ local playerManagerTranslateToPlayerModelName = player_manager.TranslateToPlayer
 local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
 local stringLower = string.lower
+local tableCopy = table.Copy
 
 local function GetPlayerSize(ply)
 	local bottom, top = ply:GetHull()
 
 	return top - bottom
-end
-
-playermodels = playermodels or {}
-playermodels.modelStates = playermodels.modelStates or {}
-playermodels.modelHasHeadHitBox = playermodels.modelHasHeadHitBox or {}
-
----
--- Updates the selection state of a provided playermodel. If the state is `true` the model is
--- in the playermodel selection pool.
--- @param string name The name of the model
--- @param boolean selected The selection state, `true` to enable the model
--- @realm shared
-function playermodels.UpdateModelSelected(name, selected)
-	if SERVER then
-		local playermodelPoolModel = orm.Make(playermodels.sqltable)
-
-		if not playermodelPoolModel then return end
-
-		playermodelObject = playermodelPoolModel:Find(name)
-
-		if not playermodelObject then return end
-
-		playermodelObject.selected = selected or false
-		playermodelObject:Save()
-
-		playermodels.StreamModelStateToSelectedClients()
-	else -- CLIENT
-		net.Start("TTT2UpdatePlayerModelSelected")
-		net.WriteString(name)
-		net.WriteBool(selected or false)
-		net.SendToServer()
-	end
-end
-
----
--- Updates the hattable state of a provided playermodel. If the state is `true` the model is
--- able to receive a hat.
--- @param string name The name of the model
--- @param boolean hattable The hattable state, `true` to enable hats for the model
--- @realm shared
-function playermodels.UpdateModelHattable(name, hattable)
-	if SERVER then
-		local playermodelPoolModel = orm.Make(playermodels.sqltable)
-
-		if not playermodelPoolModel then return end
-
-		playermodelObject = playermodelPoolModel:Find(name)
-
-		if not playermodelObject then return end
-
-		playermodelObject.hattable = hattable or false
-		playermodelObject:Save()
-
-		playermodels.StreamModelStateToSelectedClients()
-	else -- CLIENT
-		net.Start("TTT2UpdatePlayerModelHattable")
-		net.WriteString(name)
-		net.WriteBool(hattable or false)
-		net.SendToServer()
-	end
-end
-
----
--- Returns an indexed table with all the models states that are stroed
--- in the database.
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
--- @return table An hashed table with all the model data stored in the database
--- @realm shared
-function playermodels.GetModelStates()
-	if SERVER then
-		local data = orm.Make(playermodels.sqltable):All()
-		local hashableData = {}
-
-		for i = 1, #data do
-			local entry = data[i]
-			local name = entry.name
-
-			hashableData[name] = {}
-
-			for key, info in pairs(playermodels.savingKeys) do
-				if info.typ == "bool" then
-					hashableData[name][key] = tobool(entry[key])
-				elseif info.typ == "number" then
-					hashableData[name][key] = tonumber(entry[key])
-				else
-					hashableData[name][key] = entry[key]
-				end
-			end
-
-			hashableData[name].sortName = stringLower(name)
-		end
-
-		return hashableData
-	else
-		return playermodels.modelStates or {}
-	end
-end
-
----
--- Returns a table with key-value pairs of the model name and a boolean that
--- specifies whether this model has a headshot hitbox or not.
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
--- @return table A table with information about headshot hitboxes
--- @realm shared
-function playermodels.GetHeadHitBoxModelNameList()
-	return playermodels.modelHasHeadHitBox or {}
-end
-
----
--- Checks if a provided model is in the selection pool.
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
--- @param string name The name of the model
--- @return boolean Returns true, if the model is in the selection pool
--- @realm shared
-function playermodels.IsSelectedModel(name)
-	local models = playermodels.GetModelStates()
-
-	if not models or not models[name] then
-		return false
-	end
-
-	return models[name].selected or false
-end
-
----
--- Checks if a provided model is hattable.
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
--- @param string name The name of the model
--- @return boolean Returns true, if the model is hattable
--- @realm shared
-function playermodels.IsHattableModel(name)
-	local models = playermodels.GetModelStates()
-
-	if not models or not models[name] then
-		return false
-	end
-
-	return models[name].hattable or false
-end
-
----
--- Reset all selected playermodels, hattability and reinitialize the database.
--- @realm shared
-function playermodels.Reset()
-	if SERVER then
-		-- in the first step the database is deleted
-		sql.DropTable(playermodels.sqltable)
-
-		-- then the table is reinitialized
-		playermodels.InitializeDatabase()
-
-		-- this data then has to be synced to the client again
-		playermodels.StreamModelStateToSelectedClients()
-	else
-		net.Start("TTT2ResetPlayerModels")
-		net.SendToServer()
-	end
-end
-
-if CLIENT then
-	local callbackCache = {}
-
-	net.ReceiveStream("TTT2StreamModelTable", function(data)
-		playermodels.modelStates = data
-
-		for _, Callback in pairs(callbackCache) do
-			Callback(data)
-		end
-	end)
-
-	net.ReceiveStream("TTT2StreamHeadHitBoxesTable", function(data)
-		playermodels.modelHasHeadHitBox = data
-	end)
-
-	---
-	-- Used to add a function to the callback stack that is called when a change
-	-- is made on the server. The first argument of the Callback function is the
-	-- new data.
-	-- @param string name The unique callback identifier
-	-- @param function Callback The callback function that should be added
-	-- @realm client
-	function playermodels.OnChange(name, Callback)
-		callbackCache[name] = Callback
-	end
-
-	-- all the reamining functions are server only
-	return
 end
 
 ---
@@ -246,8 +56,13 @@ local initialHattableModels = {
 	["male09"] = true
 }
 
--- extend the playermodels scope on the server
-playermodels.sqltable = "ttt2_playermodel_pool"
+-- Increase this when more values are given
+-- (2 ^ bitCount) - 1 is the maximum number that can be sent
+local bitCount = 2
+
+playermodels = playermodels or {}
+
+playermodels.sqltable = "ttt2_playermodel_pool_changes"
 playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
 	hattable = {typ = "bool", default = false}
@@ -255,45 +70,284 @@ playermodels.savingKeys = {
 
 playermodels.fallbackModel = "models/player/phoenix.mdl"
 
+playermodels.modelStates = playermodels.modelStates or {}
+playermodels.defaultModelStates = playermodels.defaultModelStates or {}
+playermodels.changedModelStates = playermodels.changedModelStates or {}
+
+-- Enums for the states
+playermodels.state = {
+	selected = 1,
+	hattable = 2
+}
+
+-- Are automatically constructed on first use
+-- playermodels.stateNames = { [1] = "selected" ...}
+
+---
+-- Updates the given value state of a provided playermodel.
+-- @param string name The name of the model
+-- @param number valueEnum The enum of the variable to change. See `playermodels.state` for listed enums
+-- @param boolean state The selection state, `true` to enable the model
+-- @realm shared
+function playermodels.UpdateModel(name, valueEnum, state)
+	if SERVER then
+		local valueName = playermodels.GetStringFromEnum(valueEnum)
+
+		playermodels.modelStates[name][valueName] = state
+		playermodels.changedModelStates[name] = playermodels.changedModelStates[name] or {}
+
+		local changedData = playermodels.changedModelStates[name]
+
+		if playermodels.defaultModelStates[name][valueName] == state then
+			changedData[valueName] = nil
+		else
+			changedData[valueName] = state
+		end
+
+		local playermodelPoolModel = orm.Make(playermodels.sqltable)
+		local playermodelObject = playermodelPoolModel:Find(name)
+
+		if not playermodelObject then
+			playermodelObject = playermodelPoolModel:New({
+				name = name
+			})
+		end
+
+		playermodelObject[valueName] = changedData[valueName]
+
+		if table.IsEmpty(changedData) then
+			playermodelObject:Delete()
+			playermodels.changedModelStates[name] = nil
+		else
+			playermodelObject:Save()
+			playermodels.changedModelStates[name] = changedData
+		end
+
+		playermodels.StreamModelStateToSelectedClients(true)
+	else -- CLIENT
+		net.Start("TTT2UpdatePlayerModel")
+		net.WriteString(name)
+		net.WriteUInt(valueEnum, bitCount)
+		net.WriteBool(state or false)
+		net.SendToServer()
+	end
+end
+
+---
+-- Converts the given enum to a string and also creates a fast lookup table
+-- @param number stateEnum The enum to be converted. See `playermodels.state` for listed enums
+-- @return string stateName returns the name of the given enum
+-- @realm shared
+function playermodels.GetStringFromEnum(stateEnum)
+	if not playermodels.stateNames then
+		playermodels.stateNames = {}
+
+		for name, enum in pairs(playermodels.state) do
+			playermodels.stateNames[enum] = name
+		end
+	end
+
+	return playermodels.stateNames[stateEnum]
+end
+
+---
+-- Returns an indexed table with all the models states that are stored
+-- @note While this function is shared, the data is only available for superadmin on the
+-- client, if no manual sync is triggered.
+-- @return table An hashed table with all the model data stored in the database
+-- @realm shared
+function playermodels.GetModelStates()
+	return playermodels.modelStates or {}
+end
+
+---
+-- Checks if a provided model is in the selection pool.
+-- @note While this function is shared, the data is only available for superadmin on the
+-- client, if no manual sync is triggered.
+-- @param string name The name of the model
+-- @return boolean Returns true, if the model is in the selection pool
+-- @realm shared
+function playermodels.IsSelectedModel(name)
+	local models = playermodels.modelStates
+
+	if not models or not models[name] then
+		return false
+	end
+
+	return models[name].selected or false
+end
+
+---
+-- Checks if a provided model is hattable.
+-- @note While this function is shared, the data is only available for superadmin on the
+-- client, if no manual sync is triggered.
+-- @param string name The name of the model
+-- @return boolean Returns true, if the model is hattable
+-- @realm shared
+function playermodels.IsHattableModel(name)
+	local models = playermodels.modelStates
+
+	if not models or not models[name] then
+		return false
+	end
+
+	return models[name].hattable or false
+end
+
+---
+-- Reset all selected playermodels, hattability and reinitialize the database.
+-- @realm shared
+function playermodels.Reset()
+	if SERVER then
+		-- in the first step the database is deleted
+		sql.DropTable(playermodels.sqltable)
+
+		-- then the table is reinitialized
+		playermodels.Initialize()
+
+		-- this data then has to be synced to the client again
+		playermodels.StreamModelStateToSelectedClients()
+	else
+		net.Start("TTT2ResetPlayerModels")
+		net.SendToServer()
+	end
+end
+
+if CLIENT then
+	local callbackCache = {}
+
+	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
+		playermodels.defaultModelStates = data
+		playermodels.modelStates = tableCopy(data)
+
+		for _, Callback in pairs(callbackCache) do
+			Callback(data)
+		end
+	end)
+
+	net.ReceiveStream("TTT2StreamChangedModelTable", function(data)
+		local dataValue
+
+		for name, values in pairs(playermodels.defaultModelStates) do
+			for valueName, value in pairs(values) do
+				playermodels.modelStates[name] = playermodels.modelStates[name] or {}
+				dataValue = data[name] and data[name][valueName]
+
+				if dataValue == nil then
+					dataValue = value
+				end
+
+				playermodels.modelStates[name][valueName] = dataValue
+				playermodels.modelStates[name].sortName = stringLower(name)
+			end
+		end
+
+		for _, Callback in pairs(callbackCache) do
+			Callback(playermodels.modelStates)
+		end
+	end)
+
+	---
+	-- Used to add a function to the callback stack that is called when a change
+	-- is made on the server. The first argument of the Callback function is the
+	-- new data.
+	-- @param string name The unique callback identifier
+	-- @param function Callback The callback function that should be added
+	-- @realm client
+	function playermodels.OnChange(name, Callback)
+		callbackCache[name] = Callback
+	end
+
+	-- all the remaining functions are server only
+	return
+end
+
+---
+-- Returns an indexed table with all the changed models states that are stored
+-- in the database.
+-- @return table A hashed table with all the model data stored in the database
+-- @realm server
+function playermodels.ReadChangedModelStatesSQL()
+	local sqlTable = orm.Make(playermodels.sqltable)
+
+	local data = sqlTable:All()
+	local hashableData = {}
+
+	for i = 1, #data do
+		local entry = data[i]
+		local name = entry.name
+
+		hashableData[name] = {}
+
+		for key, info in pairs(playermodels.savingKeys) do
+			if info.typ == "bool" then
+				hashableData[name][key] = tobool(entry[key])
+			elseif info.typ == "number" then
+				hashableData[name][key] = tonumber(entry[key])
+			else
+				hashableData[name][key] = entry[key]
+			end
+		end
+	end
+
+	return hashableData
+end
+
 ---
 -- Returns an indexed table with all the models that are in the selection pool.
 -- @return table An indexed table with all selected player models
 -- @realm server
 function playermodels.GetSelectedModels()
-	local playermodelPoolModel = orm.Make(playermodels.sqltable)
-	local playermodelPool = playermodelPoolModel:Where({{column = "selected", value = true}}) or {}
 	local playerModelPoolNames = {}
 
-
-	for i = 1, #playermodelPool do
-		playerModelPoolNames[i] = playermodelPool[i].name
+	for name, values in pairs(playermodels.modelStates) do
+		if values.selected then
+			playerModelPoolNames[#playerModelPoolNames + 1] = name
+		end
 	end
 
 	return playerModelPoolNames
 end
 
 ---
--- Initializes the database. This adds all models and sets the default models to true, if it
+-- Initializes the modelstates. This adds all models and sets the default models to true, if it
 -- is the first init on this server.
--- @return boolean Returns false, if it failed during the process
 -- @internal
 -- @realm server
-function playermodels.InitializeDatabase()
+function playermodels.Initialize()
 	if not sql.CreateSqlTable(playermodels.sqltable, playermodels.savingKeys) then
 		return false
 	end
 
-	local playermodelPoolModel = orm.Make(playermodels.sqltable)
+	local data = playermodels.modelStates or {}
+	local defaultData = {}
+	local changedData = playermodels.ReadChangedModelStatesSQL()
 
 	for name in pairs(playerManagerAllValidModels()) do
-		if playermodelPoolModel:Find(name) then continue end
+		defaultData[name] = {}
+		defaultData[name].selected = initialModels[name] or false
+		defaultData[name].hattable = initialHattableModels[name] or false
 
-		playermodelPoolModel:New(
-			{name = name,
-			selected = initialModels[name] or false,
-			hattable = initialHattableModels[name] or false
-		}):Save()
+		data[name] = data[name] or {}
+
+		if changedData[name] and changedData[name].selected ~= nil then
+		 	data[name].selected = changedData[name].selected
+		else
+			data[name].selected = defaultData[name].selected
+		end
+
+		if changedData[name] and changedData[name].hattable ~= nil then
+		 	data[name].hattable = changedData[name].hattable
+		else
+			data[name].hattable  = defaultData[name].hattable
+		end
 	end
+
+	playermodels.modelStates = data
+	playermodels.defaultModelStates = defaultData
+	playermodels.changedModelStates = changedData
+
+	playermodels.InitializeHeadHitBoxes()
 
 	return true
 end
@@ -311,13 +365,15 @@ function playermodels.InitializeHeadHitBoxes()
 
 		for i = 1, testingEnt:GetHitBoxCount(0) do
 			if testingEnt:GetHitBoxHitGroup(i - 1, 0) == HITGROUP_HEAD then
-				playermodels.modelHasHeadHitBox[name] = true
+				playermodels.modelStates[name].hasHeadHitBox = true
 
 				break
 			end
 
-			playermodels.modelHasHeadHitBox[name] = false
+			playermodels.modelStates[name].hasHeadHitBox = false
 		end
+
+		playermodels.defaultModelStates[name].hasHeadHitBox = playermodels.modelStates[name].hasHeadHitBox
 	end
 
 	testingEnt:Remove()
@@ -325,26 +381,19 @@ end
 
 ---
 -- Streams the playermodel selection pool to clients. By default streams to all superadmin players.
+-- @param bool onlyChanges if only changes should be sent, otherwise the default is sent too
 -- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
 -- @realm server
-function playermodels.StreamModelStateToSelectedClients(plys)
+function playermodels.StreamModelStateToSelectedClients(onlyChanges, plys)
 	plys = plys or util.GetFilteredPlayers(function(ply)
 		return ply:IsSuperAdmin()
 	end)
 
-	net.SendStream("TTT2StreamModelTable", playermodels.GetModelStates(), plys)
-end
+	if not onlyChanges then
+		net.SendStream("TTT2StreamDefaultModelTable", playermodels.defaultModelStates, plys)
+	end
 
----
--- Streams the information about headshot hitboxes to clients. By default streams to all superadmin players.
--- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
--- @realm server
-function playermodels.StreamHeadHitBoxesToSelectedClients(plys)
-	plys = plys or util.GetFilteredPlayers(function(ply)
-		return ply:IsSuperAdmin()
-	end)
-
-	net.SendStream("TTT2StreamHeadHitBoxesTable", playermodels.GetHeadHitBoxModelNameList(), plys)
+	net.SendStream("TTT2StreamChangedModelTable", playermodels.changedModelStates, plys)
 end
 
 ---
@@ -420,16 +469,10 @@ function playermodels.PlayerCanHaveHat(ply)
 	return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 end
 
-net.Receive("TTT2UpdatePlayerModelSelected", function(_, ply)
+net.Receive("TTT2UpdatePlayerModel", function(_, ply)
 	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
-	playermodels.UpdateModelSelected(net.ReadString(), net.ReadBool())
-end)
-
-net.Receive("TTT2UpdatePlayerModelHattable", function(_, ply)
-	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
-
-	playermodels.UpdateModelHattable(net.ReadString(), net.ReadBool())
+	playermodels.UpdateModel(net.ReadString(), net.ReadUInt(bitCount), net.ReadBool())
 end)
 
 net.Receive("TTT2ResetPlayerModels", function(_, ply)
