@@ -27,7 +27,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
 	local roleDataVictim = victim:GetSubRoleData()
 
 	-- HANDLE CREDITS FOR KILL
-	if roleDataVictim.isPolicingRole and not victim:IsInTeam(attacker) and roleDataAttacker:IsAwardedCreditsForKill() then
+	if roleDataVictim.isPublicRole and not victim:IsInTeam(attacker) and roleDataAttacker:IsAwardedCreditsForKill() then
 		-- A high profile role, such as a policing role, is a dangerous target to kill.
 		-- If a player from a different team is able to kill them, they should be awarded
 		-- with a bonus to stock up their equipment.
