@@ -60,3 +60,29 @@ function ROLE:GetAvailableRoleCount(ply_count)
 	-- make sure there is at least 1 of the role
 	return math.Clamp(role_count, 1, maxAmount)
 end
+
+---
+-- Returns if the role can be awarded credits for a kill. Is is intended to award credits
+-- for the kill of a policing role such as the detective. This function only returns the
+-- state of the convar and does not check if the kill is a valid kill that would award credits.
+-- @return boolean Returns true if the player can be awarded with credits
+-- @realm server
+function ROLE:IsAwardedCreditsForKill()
+	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_award_kill_enb")
+
+	return cv and cv:GetBool() or false
+end
+
+---
+-- Checks if the role can be awarded for a certain amount of players from a different team
+-- being dead. This is designed to be used to award certain roles with credits if enough
+-- of their enemies were killed. This function only returns the state of the convar and does
+-- not check if the amount of dead players is enough such that it would award credits.
+-- @return boolean Returns true if the player can be awarded with credits
+-- @realm server
+function ROLE:IsAwardedCreditsForPlayerDead()
+	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_award_dead_enb")
+
+	return cv and cv:GetBool() or false
+end
+

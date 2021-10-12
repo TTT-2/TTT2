@@ -45,6 +45,25 @@ ROLE.score = {
 	suicideMultiplier = -1
 }
 
+ROLE.conVarData = {
+	-- The percentage of players that get this role.
+	pct = 0.4,
+	-- The maximum amount of players that get this role.
+	maximum = 32,
+	-- The minimum amount of players that have to be available fot this role to be selected.
+	minPlayers = 1,
+	-- Defines if the role has access to traitor buttons.
+	traitorButton = 1,
+	-- Sets the amount of credits the role is starting with.
+	credits = 0,
+	-- Defines if this role gains credits if a certain percentage of players
+	-- from other teams is dead.
+	creditsAwardDeadEnable = 0,
+	-- Defines if this role is awarded with credits for the kill of a high profile
+	-- policing role, such as a detective.
+	creditsAwardKillEnable = 0
+}
+
 -- This variable can be used to add roles that can see the role of the
 -- player with the role defined in this file. While this table can be updated
 -- on runtime, it is strongly advised against. Use custom hook based
@@ -54,6 +73,10 @@ ROLE.visibleForTeam = {}
 -- Set this flag to true to make a role public known. This results in a
 -- detective-like behavior.
 ROLE.isPublicRole = false
+
+-- A policing role is a role that works like a detective. They can be called to
+-- a corpse and evil roles can be rewarded more points for them being killed.
+ROLE.isPolicingRole = false
 
 ---
 -- This function is called before initializing a @{ROLE}, but after all
@@ -85,10 +108,6 @@ end
 -- @return[default=0] number
 -- @realm shared
 function ROLE:GetStartingCredits()
-	if self.abbr == roles.TRAITOR.abbr then
-		return GetConVar("ttt_credits_starting"):GetInt()
-	end
-
 	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_starting")
 
 	return cv and cv:GetInt() or 0
@@ -156,11 +175,11 @@ function ROLE:GetSubRoles()
 end
 
 ---
--- Returns whether a @{ROLE} can use traitor buttons
+-- Returns whether a @{ROLE} can use traitor buttons.
 -- @return boolean
 -- @realm shared
 function ROLE:CanUseTraitorButton()
 	local cv = GetConVar("ttt_" .. self.name .. "_traitor_button")
 
-	return cv and cv:GetBool()
+	return cv and cv:GetBool() or false
 end

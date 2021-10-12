@@ -141,7 +141,7 @@ function plymeta:SetDefaultCredits()
 	end
 
 	local rd = self:GetSubRoleData()
-	local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
+	local name = "ttt_" .. rd.abbr .. "_credits_starting"
 
 	if self:GetTeam() ~= TEAM_TRAITOR then
 		self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))

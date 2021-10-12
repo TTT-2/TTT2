@@ -25,20 +25,9 @@ function ROLE:PreInitialize()
 		pct = 0.4,
 		maximum = 32,
 		minPlayers = 1,
-		traitorButton = 1
+		traitorButton = 1,
+		credits = 2,
+		creditsAwardDeadEnable = 1,
+		creditsAwardKillEnable = 1
 	}
-end
-
-if CLIENT then
-	---
-	-- @ignore
-	function ROLE:AddToSettingsMenuCreditsForm(parent)
-		parent:MakeSlider({
-			serverConvar = "ttt_credits_detectivekill",
-			label = "label_roles_credits_detectivekill",
-			min = 0,
-			max = 5,
-			decimal = 0
-		})
-	end
 end

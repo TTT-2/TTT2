@@ -137,11 +137,11 @@ local function SetupData(roleData)
 
 		---
 		-- @realm server
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_dead_enb", tostring(conVarData.creditsAwardDeadEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		---
 		-- @realm server
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_kill_enb", tostring(conVarData.creditsAwardKillEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		local shopFallbackValue
 

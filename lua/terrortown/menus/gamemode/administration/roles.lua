@@ -95,4 +95,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		serverConvar = "ttt_credits_award_repeat",
 		label = "label_roles_credits_award_repeat"
 	})
+
+	form2:MakeSlider({
+		serverConvar = "ttt_credits_award_kill",
+		label = "label_roles_credits_award_kill",
+		min = 0,
+		max = 10,
+		decimal = 0
+	})
 end

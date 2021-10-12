@@ -28,26 +28,14 @@ function ROLE:PreInitialize()
 		minKarma = 600,
 
 		credits = 1,
-		creditsTraitorKill = 0,
-		creditsTraitorDead = 1,
+		creditsAwardDeadEnable = 1,
+		creditsAwardKillEnable = 0,
 
 		togglable = true
 	}
 end
 
 if CLIENT then
-	---
-	-- @ignore
-	function ROLE:AddToSettingsMenuCreditsForm(parent)
-		parent:MakeSlider({
-			serverConvar = "ttt_det_credits_traitordead",
-			label = "label_roles_credits_traitordead",
-			min = 0,
-			max = 10,
-			decimal = 0
-		})
-	end
-
 	---
 	-- @ignore
 	function ROLE:AddToSettingsMenu(parent)

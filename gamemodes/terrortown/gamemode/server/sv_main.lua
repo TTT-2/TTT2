@@ -53,6 +53,7 @@ include("ttt2/libraries/map.lua")
 include("ttt2/libraries/entspawn.lua")
 include("ttt2/libraries/plyspawn.lua")
 include("ttt2/libraries/entity_outputs.lua")
+include("ttt2/libraries/credits.lua")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -97,10 +98,6 @@ CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE}
 
 ---
 -- @realm server
-CreateConVar("ttt_credits_starting", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
 CreateConVar("ttt_credits_award_pct", "0.35", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -113,11 +110,7 @@ CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-CreateConVar("ttt_credits_detectivekill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
-CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -1265,6 +1258,8 @@ function BeginRound()
 		-- a player should be considered "was active in round" if they received a role
 		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
 	end
+
+	credits.ResetPlayertates()
 
 	---
 	-- @realm server
