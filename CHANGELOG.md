@@ -34,7 +34,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed disguise such that every role can now use the function
 - Completely reworked how weapons, ammo and players spawn in the world
 - Sliders only update ConVars on mouseRelease now
-- Playermodel Selection now only saves and sends changes to the default
 
 ### Breaking Changes
 
