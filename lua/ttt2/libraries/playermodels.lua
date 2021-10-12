@@ -135,6 +135,7 @@ end
 
 ---
 -- Converts the given enum to a string and also creates a fast lookup table
+-- @param number stateEnum The enum to be converted. See `playermodels.state` for listed enums
 -- @return string stateName returns the name of the given enum
 -- @realm shared
 function playermodels.GetStringFromEnum(stateEnum)
