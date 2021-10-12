@@ -55,6 +55,10 @@ local initialHattableModels = {
 	["male09"] = true
 }
 
+-- Increase this when more values are given
+-- (2 ^ bitCount) - 1 is the maximum number that can be sent
+local bitCount = 2
+
 playermodels = playermodels or {}
 
 playermodels.sqltable = "ttt2_playermodel_pool_changes"
@@ -69,14 +73,25 @@ playermodels.modelStates = playermodels.modelStates or {}
 playermodels.defaultModelStates = playermodels.defaultModelStates or {}
 playermodels.changedModelStates = playermodels.changedModelStates or {}
 
+-- Enums for the states
+playermodels.state = {
+	selected = 1,
+	hattable = 2
+}
+
+-- Are automatically constructed on first use
+-- playermodels.stateNames = { [1] = "selected" ...}
+
 ---
 -- Updates the given value state of a provided playermodel.
 -- @param string name The name of the model
--- @param string valueName The name of the variable to change
+-- @param number valueEnum The enum of the variable to change
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
-function playermodels.UpdateModel(name, valueName, state)
+function playermodels.UpdateModel(name, valueEnum, state)
 	if SERVER then
+		local valueName = playermodels.GetStringFromEnum(valueEnum)
+
 		playermodels.modelStates[name][valueName] = state
 		playermodels.changedModelStates[name] = playermodels.changedModelStates[name] or {}
 
@@ -111,10 +126,26 @@ function playermodels.UpdateModel(name, valueName, state)
 	else -- CLIENT
 		net.Start("TTT2UpdatePlayerModel")
 		net.WriteString(name)
-		net.WriteString(valueName)
+		net.WriteUInt(valueEnum, bitCount)
 		net.WriteBool(state or false)
 		net.SendToServer()
 	end
+end
+
+---
+-- Converts the given enum to a string and also creates a fast lookup table
+-- @return string stateName returns the name of the given enum
+-- @realm shared
+function playermodels.GetStringFromEnum(stateEnum)
+	if not playermodels.stateNames then
+		playermodels.stateNames = {}
+
+		for name, enum in pairs(playermodels.state) do
+			playermodels.stateNames[enum] = name
+		end
+	end
+
+	return playermodels.stateNames[stateEnum]
 end
 
 ---
@@ -439,7 +470,7 @@ end
 net.Receive("TTT2UpdatePlayerModel", function(_, ply)
 	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
 
-	playermodels.UpdateModel(net.ReadString(), net.ReadString(), net.ReadBool())
+	playermodels.UpdateModel(net.ReadString(), net.ReadUInt(bitCount), net.ReadBool())
 end)
 
 net.Receive("TTT2ResetPlayerModels", function(_, ply)
