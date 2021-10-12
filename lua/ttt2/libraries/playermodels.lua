@@ -86,7 +86,7 @@ playermodels.state = {
 ---
 -- Updates the given value state of a provided playermodel.
 -- @param string name The name of the model
--- @param number valueEnum The enum of the variable to change
+-- @param number valueEnum The enum of the variable to change. See `playermodels.state` for listed enums
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
 function playermodels.UpdateModel(name, valueEnum, state)
