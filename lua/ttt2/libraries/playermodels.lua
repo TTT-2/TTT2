@@ -235,8 +235,6 @@ end
 -- @return table A hashed table with all the model data stored in the database
 -- @realm server
 function playermodels.ReadChangedModelStatesSQL()
-	if not SERVER then return end
-
 	local sqlTable = orm.Make(playermodels.sqltable)
 
 	local data = sqlTable:All()
