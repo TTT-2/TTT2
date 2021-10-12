@@ -16,6 +16,7 @@ local playerManagerTranslateToPlayerModelName = player_manager.TranslateToPlayer
 local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
 local stringLower = string.lower
+local tableCopy = table.Copy
 
 local function GetPlayerSize(ply)
 	local bottom, top = ply:GetHull()
@@ -216,7 +217,7 @@ if CLIENT then
 
 	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
 		playermodels.defaultModelStates = data
-		playermodels.modelStates = table.Copy(data)
+		playermodels.modelStates = tableCopy(data)
 
 		for _, Callback in pairs(callbackCache) do
 			Callback(data)
