@@ -19,6 +19,7 @@ function ROLE:PreInitialize()
 	self.unknownTeam = true
 
 	self.isPublicRole = true
+	self.isPolicingRole = true
 
 	-- conVarData
 	self.conVarData = {
