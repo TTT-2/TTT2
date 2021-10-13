@@ -212,21 +212,22 @@ function SendFullStateUpdate()
 	for i = 1, plyCount do
 		local plySyncTo = players[i]
 		local tmp = {}
-		local team = plySyncTo:GetTeam()
+		local teamSyncTo = plySyncTo:GetTeam()
 		local roleDataSyncTo = plySyncTo:GetSubRoleData()
 
 		for k = 1, plyCount do
 			local plySyncFrom = players[k]
 			local roleDataSyncFrom = plySyncFrom:GetSubRoleData()
+			local teamSyncFrom = plySyncFrom:GetTeam()
 
-			if not roleDataSyncTo.unknownTeam and plySyncFrom:GetTeam() == team
+			if not roleDataSyncTo.unknownTeam and teamSyncFrom == teamSyncTo
 				or plySyncFrom:RoleKnown() -- TODO rework
-				or table.HasValue(roleDataSyncFrom.visibleForTeam, plySyncTo:GetTeam())
+				or table.HasValue(roleDataSyncFrom.visibleForTeam, teamSyncTo)
 				or roleDataSyncTo.networkRoles and table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
 				or roleDataSyncFrom.isPublicRole
 				or plySyncTo == plySyncFrom
 			then
-				tmp[plySyncFrom] = {plySyncFrom:GetSubRole() or ROLE_NONE, plySyncFrom:GetTeam() or TEAM_NONE}
+				tmp[plySyncFrom] = {plySyncFrom:GetSubRole() or ROLE_NONE, teamSyncFrom or TEAM_NONE}
 			else
 				tmp[plySyncFrom] = {ROLE_NONE, TEAM_NONE}
 			end
