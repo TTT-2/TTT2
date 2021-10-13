@@ -41,7 +41,7 @@ if SERVER then
 		ply:GiveEquipmentWeapon("weapon_ttt_wtester")
 	end
 
-	function ROLE:RemoveRoleLoadout(ply, isRoleChange)
+	function ROLE:RemoveRoleLoadout(ply)
 		ply:RemoveEquipmentWeapon("weapon_ttt_wtester")
 	end
 else

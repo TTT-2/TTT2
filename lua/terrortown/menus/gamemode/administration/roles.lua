@@ -96,6 +96,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_roles_credits_award_repeat"
 	})
 
+	form2:MakeHelp({
+		label = "help_roles_credits_award_kill"
+	})
+
 	form2:MakeSlider({
 		serverConvar = "ttt_credits_award_kill",
 		label = "label_roles_credits_award_kill",

@@ -1574,7 +1574,7 @@ L.none = "Brak Roli"
 --Keep in mind that all of this only applies if the role is considered for selection.
 
 --The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for selection and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution setting then holds true again for the second player to receive this role.]]
---L.help_roles_award_info = "Some roles (all Traitor roles and some other roles) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
+--L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
 --L.help_roles_award_pct = "When this percentage of other players are dead, players are awarded more credits."
 --L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. If for example you set the percentage to '0.25', and enable this, players will be awarded credits at '25%' killed, '50%' killed, and '75%' killed."
 --L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up your role selection. When in doubt keep all values at '0'. This value means that no limits are applied and the role selection is trying to assign as many roles as possible."
@@ -1617,3 +1617,18 @@ L.none = "Brak Roli"
 
 -- 2021-10-10
 --L.button_reset_models = "Reset Player Models"
+
+-- 2021-10-13
+--L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'policing role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
+--L.help_roles_credits_award = [[
+--There are two different ways to be awarded credits in base TTT2:
+
+--1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
+--2. If a player killed a high value play with a 'policing role' such as a Detective, the killer is awarded.
+
+--Please note that this still can be enabled/disabled for every role even if the whole team is awarded. If for example team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
+--The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
+
+--L.label_roles_credits_award_kill = "Credit reward for kill size"
+--L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
+--L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
