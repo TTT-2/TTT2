@@ -102,7 +102,7 @@ ROLE.preventFindCredits = false
 
 -- Normally a team can win if at least one role of the team is still alive, while no
 -- other role that is able to win is alive. If this convar is set to true, this role
--- is unable to bin by staying alive. A custom wincondition might be added.
+-- is unable to win by staying alive. A custom wincondition might be added.
 ROLE.preventWin = false
 
 -- If a player knows the role of their team mate, their role is shown overhead with
