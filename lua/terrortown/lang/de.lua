@@ -1609,12 +1609,12 @@ L.ttt2_desc_detective = "Der Detektiv ist derjenige, dem die Unschuldigen trauen
 L.button_reset_models = "Spielermodelle Zurücksetzen"
 
 -- 2021-10-13
-L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'Kontrollrollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
+L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'offenen Rollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
 L.help_roles_credits_award = [[
 In Standard-TTT2 gibt es zwei verschiedene Wege an Ausrüstungspunkte zu kommen:
 
 1. Wenn ein gewisser Prozentsatz der Spieler im Gegnerteam tot sind, dann wird das ganze Team mit Ausrüstungspunkten belohnt.
-2. Wenn ein Spieler einen wichtigen Spieler mit einer 'Kontrollrolle' (wie beispielsweise dem Detektiv), dann wird der Mörder belohnt.
+2. Wenn ein Spieler einen wichtigen Spieler mit einer 'offenen Rolle' (wie beispielsweise dem Detektiv), dann wird der Mörder belohnt.
 
 Beachte jedoch, dass dies trotzdem individuell für jede Rolle de-/aktiviert werden kann, auch wenn das ganze Team belohnt wird. Wenn beispielsweise das Team der Unschuldigen belohnt wird, aber die Rolle der Unschuldigen dies deaktiviert hat, dann bekommt nur der Detektiv seine Ausrüstungspunkte.
 Die Grundwerte können in 'Administration' -> 'Allgemeine Rolleneinstellungen' angepasst werden.]]
