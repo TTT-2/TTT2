@@ -530,7 +530,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	end
 
 	-- add info if searched by detectives
-	if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
+	if ent.search_result and ent.search_result.detective_search and roleDataClient.isPolicingRole then
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
 			roles.DETECTIVE.ltcolor,

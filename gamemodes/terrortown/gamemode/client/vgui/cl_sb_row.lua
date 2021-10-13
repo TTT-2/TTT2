@@ -477,7 +477,7 @@ function PANEL:UpdatePlayerData()
 	self.sresult:SetVisible(ply.search_result and ply.search_result.detective_search)
 
 	-- more blue if a detective searched them
-	if ply.search_result and (LocalPlayer():IsDetective() or not ply.search_result.show) then
+	if ply.search_result and (LocalPlayer():GetSubRoleData().isPolicingRole or not ply.search_result.show) then
 		self.sresult:SetImageColor(Color(200, 200, 255))
 	end
 

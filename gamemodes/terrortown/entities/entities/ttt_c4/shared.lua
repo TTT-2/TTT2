@@ -385,7 +385,7 @@ function ENT:IsDetectiveNear()
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if not ply:IsActiveDetective() then continue end
+		if not ply:IsActive() and not ply:GetSubRoleData().isPolicingRole then continue end
 
 		-- dot of the difference with itself is distance squared
 		diff = center - ply:GetPos()
