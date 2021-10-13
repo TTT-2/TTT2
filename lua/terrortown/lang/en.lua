@@ -1618,7 +1618,7 @@ Policing roles such as the Detective may wear hats to show their authority. They
 
 Some player models do not support hats by default. You can change this in 'Administration' -> 'Player Models']]
 
-L.label_roles_credits_award_kill = "Credit reward for kill size"
+L.label_roles_credits_award_kill = "Credit reward amount for kill"
 L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
 L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
 L.label_roles_min_karma = "Lower limit of Karma to consider selection"
