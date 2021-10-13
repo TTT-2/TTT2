@@ -118,7 +118,10 @@ function credits.HandleKillCreditsAward(victim, attacker)
 	end
 end
 
-function credits.ResetPlayertates()
+---
+-- Resets the team states that get set for the credits distributions.
+-- @realm server
+function credits.ResetTeamStates()
 	for _, teamTable in pairs(TEAMS) do
 		teamTable.wasAwardedCreditsDead = nil
 		teamTable.deadPlayersOnAward = nil

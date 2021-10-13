@@ -1256,7 +1256,7 @@ function BeginRound()
 		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
 	end
 
-	credits.ResetPlayertates()
+	credits.ResetTeamStates()
 
 	---
 	-- @realm server
