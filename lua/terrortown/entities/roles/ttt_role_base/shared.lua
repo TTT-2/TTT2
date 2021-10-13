@@ -48,33 +48,33 @@ ROLE.score = {
 ROLE.conVarData = {
 	-- The percentage of players that get this role.
 	pct = 0.4,
-	
+
 	-- The maximum amount of players that get this role.
 	maximum = 32,
-	
+
 	-- The minimum amount of players that have to be available fot this role to be selected.
 	minPlayers = 1,
-	
+
 	-- The minimum amount of Karma needed for selection.
 	minKarma = 0,
-	
+
 	-- Defines if the role has access to traitor buttons.
 	traitorButton = 1,
-	
+
 	-- Sets the amount of credits the role is starting with.
 	credits = 0,
-	
+
 	-- Defines if this role gains credits if a certain percentage of players
 	-- from other teams is dead.
 	creditsAwardDeadEnable = 0,
-	
+
 	-- Defines if this role is awarded with credits for the kill of a high profile.
 	-- policing role, such as a detective.
 	creditsAwardKillEnable = 0,
-	
+
 	-- Sets the shop for this role, by default roles have no shop set.
 	shopFallback = SHOP_DISABLED,
-	
+
 	-- If this is enabled the 'avoid role selection' can be toggled for this role.
 	togglable = true
 }
