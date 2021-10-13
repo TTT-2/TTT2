@@ -44,41 +44,50 @@ function credits.HandleKillCreditsAward(victim, attacker)
 	-- how many players are dead from different teams than their own team.
 	local plys = player.GetAll()
 	local plysAmount = #plys
+	local plysByTeams = {}
 
+	-- At first a table with players sorted by teams is created, because those rewards are teambased.
 	for i = 1, plysAmount do
-		-- iterate over every player and count the amount of dead players of their enemy team
+		local ply = plys[i]
 
-		local plyToAward = plys[i]
+		-- ignore foced spectator players
+		if ply:IsSpec() and ply:GetForceSpec() then continue end
 
-		-- first check that the player is actually alive
-		if not plyToAward:IsTerror() then continue end
+		local team = ply:GetTeam()
 
-		-- second make sure that the player's role can receive credits for dead players
-		if not plyToAward:GetSubRoleData():IsAwardedCreditsForPlayerDead() then continue end
+		plysByTeams[team] = plysByTeams[team] or {}
+		plysByTeams[team][#plysByTeams[team] + 1] = ply
+	end
 
-		-- then make sure that the team wasn't already rewarded and their reward is limited to once
-		if plyToAward.wasAwardedCreditsDead and not GetConVar("ttt_credits_award_repeat"):GetBool() then continue end
+	-- Now iterate over the team table and grant credits if limits are reached
+	for team, plysByTeam in pairs(plysByTeams) do
+		local teamTable = TEAMS[team]
 
+		-- make sure that the team wasn't already awarded and their award is limited to once
+		if teamTable.wasAwardedCreditsDead and not GetConVar("ttt_credits_award_repeat"):GetBool() then continue end
+
+		-- check if a reward should be issued
 		local plysEnemyAlive = 0
 		local plysEnemyDead = 0
 
-		for k = 1, plysAmount do
+		for i = 1, plysAmount do
 			-- now iterate over all players to count them
 
-			local plyToCheck = plys[k]
+			local plyToCheck = plys[i]
 
-			if not plyToCheck:IsInTeam(plyToAward) then
-				-- Note: The player that just died is still counted as alive, so check them specially.
+			if plyToCheck:GetTeam() ~= team then
 				if plyToCheck == victim or not plyToCheck:IsTerror() then
+					-- Note: The player that just died is still counted as alive, so check them specially.
 					plysEnemyDead = plysEnemyDead + 1
-				else
+				elseif not plyToCheck:GetForceSpec() then
+					-- if a player is not in the terror team, they could also be a forced spectator
 					plysEnemyAlive = plysEnemyAlive + 1
 				end
 			end
 		end
 
 		-- only repeat-award if we have reached the pct again since last time
-		local plysEnemyDeadModified = plysEnemyDead - (plyToAward.deadPlayersOnAward or 0)
+		local plysEnemyDeadModified = plysEnemyDead - (teamTable.deadPlayersOnAward or 0)
 
 		-- now calculate the percentage of dead players from the other teams
 		local pctDead = plysEnemyDeadModified / (plysEnemyDead + plysEnemyAlive)
@@ -86,25 +95,32 @@ function credits.HandleKillCreditsAward(victim, attacker)
 		-- only reward the player if the percentage of dead players is bigger than the threshold
 		if pctDead < GetConVar("ttt_credits_award_pct"):GetFloat() then continue end
 
+		-- now the team table is update since a new award was given
+		teamTable.wasAwardedCreditsDead = true
+		teamTable.deadPlayersOnAward = plysEnemyDead
+
 		local creditsAmount = GetConVar("ttt_credits_award_size"):GetInt()
 
-		-- now reward their player for their good game
-		plyToAward:AddCredits(creditsAmount)
-		LANG.Msg(plyToAward, "credit_all", {num = creditsAmount}, MSG_MSTACK_ROLE)
+		-- now give the award to the players
+		for i = 1, #plysByTeam do
+			local plyToAward = plysByTeam[i]
 
-		-- last but not least: update the data on the team
-		plyToAward.wasAwardedCreditsDead = true
-		plyToAward.deadPlayersOnAward = plysEnemyDead
+			-- first check that the player is actually alive
+			if not plyToAward:IsTerror() then continue end
+
+			-- second make sure that the player's role can receive credits for dead players
+			if not plyToAward:GetSubRoleData():IsAwardedCreditsForPlayerDead() then continue end
+
+			-- now reward their player for their good game
+			plyToAward:AddCredits(creditsAmount)
+			LANG.Msg(plyToAward, "credit_all", {num = creditsAmount}, MSG_MSTACK_ROLE)
+		end
 	end
 end
 
 function credits.ResetPlayertates()
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		local ply = plys[i]
-
-		ply.wasAwardedCreditsDead = nil
-		ply.deadPlayersOnAward = nil
+	for _, teamTable in pairs(TEAMS) do
+		teamTable.wasAwardedCreditsDead = nil
+		teamTable.deadPlayersOnAward = nil
 	end
 end
