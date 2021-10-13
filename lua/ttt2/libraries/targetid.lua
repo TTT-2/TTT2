@@ -482,6 +482,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	local role_found = corpse_found and ent.search_result and ent.search_result.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
 	local roleData = roles.GetByIndex(role_found and ent.search_result.role or ROLE_INNOCENT)
+	local roleDataClient = client:GetSubRoleData()
 
 	-- enable targetID rendering
 	tData:EnableText()
@@ -495,13 +496,13 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	)
 
 	if tData:GetEntityDistance() <= 100 then
-		if cvDeteOnlyInspect:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+		if cvDeteOnlyInspect:GetBool() and not roleDataClient.isPolicingRole then
 			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
 				tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
 			else
 				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
 			end
-		elseif cvDeteOnlyConfirm:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+		elseif cvDeteOnlyConfirm:GetBool() and not roleDataClient.isPolicingRole then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
 		else
 			tData:SetSubtitle(ParT("corpse_hint", key_params))
