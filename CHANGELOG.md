@@ -26,6 +26,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added possibility to enable/disable detective hats for individual player models
 - Added a new admin only menu for server addon settings
 - Added automatic default values for serverConVars
+- Added two new role variables:
+  - `isPublicRole`: This makes the role behave like a detective in such a way, that the role is public known and shown in the scoreboard. This means other roles can use this without special role syncing; additionally roles with that flag will be handled like a detective if killed by an 'evil' role, meaning that they will receive a credit bonus
+  - `isPolicingRole`: This rolevar adds all "detective-like" features to the detective, for example the ability to be called to a corpse etc.
+Added two new role conVar variables:
+  - `creditsAwardDeadEnable`: To award this role if a certain percentage of players from the enemy teams died
+  - `creditsAwardKillEnable`: To award this role if they killed a high value public role
 
 ### Changed
 
@@ -34,6 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed disguise such that every role can now use the function
 - Completely reworked how weapons, ammo and players spawn in the world
 - Sliders only update ConVars on mouseRelease now
+- Changed the way credits on kills are distributed in a way that non-default roles can easily use this as well
 
 ### Breaking Changes
 
@@ -42,6 +49,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Renamed the `spawn` module to `plyspawn`
 - Hook `PlayerSelectSpawn` doesnt return a spawnEntity anymore
 - SpawnWillingPlayers is deleted and not available anymore
+- renamed the `ttt_credits_starting` to `ttt_traitor_credits_starting` to be more in-line with all other roles
+  **WARNING:** This means that every traitor now starts with 0 credits until the convar reset button is pressed (on existing servers)
+- removed the `alone_bonus` convar because it only complicated the credits system further without adding much benefit
 
 ## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
 
