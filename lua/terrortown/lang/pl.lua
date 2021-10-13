@@ -1609,7 +1609,7 @@ L.none = "Brak Roli"
 --L.label_roles_max_roles_pct = "Upper role limit by percentage"
 --L.label_baseroles_max_roles = "Upper baserole limit"
 --L.label_baseroles_max_roles_pct = "Upper baserole limit by percentage"
---L.label_detective_hats = "Enable hats for polcing roles like the Detective (if player model allows hat)"
+--L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows hat)"
 
 --L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
 --L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."
