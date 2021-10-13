@@ -50,7 +50,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
 	for i = 1, plysAmount do
 		local ply = plys[i]
 
-		-- ignore foced spectator players
+		-- ignore forced spectator players
 		if ply:IsSpec() and ply:GetForceSpec() then continue end
 
 		local team = ply:GetTeam()
