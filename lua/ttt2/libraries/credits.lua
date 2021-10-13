@@ -3,7 +3,7 @@
 -- @author Mineotopia
 -- @module entspawn
 
-if CLIENT then return end -- this is a serverside-ony module
+if CLIENT then return end -- this is a serverside-only module
 
 credits = credits or {}
 
