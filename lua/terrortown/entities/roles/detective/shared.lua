@@ -37,10 +37,14 @@ function ROLE:PreInitialize()
 end
 
 if SERVER then
+	---
+	-- @ignore
 	function ROLE:GiveRoleLoadout(ply)
 		ply:GiveEquipmentWeapon("weapon_ttt_wtester")
 	end
 
+	---
+	-- @ignore
 	function ROLE:RemoveRoleLoadout(ply)
 		ply:RemoveEquipmentWeapon("weapon_ttt_wtester")
 	end
