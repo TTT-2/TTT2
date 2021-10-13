@@ -52,12 +52,6 @@ SWEP.Secondary.Delay = 5
 SWEP.Kind = WEAPON_MELEE
 SWEP.WeaponID = AMMO_CROWBAR
 
-SWEP.InLoadoutFor = {
-	ROLE_INNOCENT,
-	ROLE_TRAITOR,
-	ROLE_DETECTIVE
-}
-
 SWEP.NoSights = true
 SWEP.IsSilent = true
 

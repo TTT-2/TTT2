@@ -95,7 +95,9 @@ local function IdentifyBody(ply, rag)
 		return
 	end
 
-	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+	local roleData = ply:GetSubRoleData()
+
+	if cvDeteOnlyInspect:GetBool() and not roleData.isPolicingRole then
 		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
 
 		return false
@@ -113,7 +115,7 @@ local function IdentifyBody(ply, rag)
 	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
 
-		if cvDeteOnlyConfirm:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		if cvDeteOnlyConfirm:GetBool() and not roleData.isPolicingRole then
 			LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
 
 			return
@@ -245,7 +247,9 @@ local function ttt_call_detective(ply, cmd, args)
 
 	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 then
 		if CORPSE.GetFound(rag, false) then
-			local plyTable = GetRoleChatFilter(ROLE_DETECTIVE, true)
+			local plyTable = util.GetFilteredPlayers(function(p)
+				return p:GetSubRoleData().isPolicingRole
+			end)
 
 			---
 			-- @realm server
@@ -332,7 +336,9 @@ end
 function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
-	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+	local roleData = ply:GetSubRoleData()
+
+	if cvDeteOnlyInspect:GetBool() and not roleData.isPolicingRole then
 		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
 
 		GiveFoundCredits(ply, rag, isLongRange)
@@ -405,7 +411,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
 	local lastid = -1
 
-	if rag.lastid and ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
+	if rag.lastid and ply:IsActive() and roleData.isPolicingRole then
 		-- if the person this victim last id'd has since disconnected, send -1 to
 		-- indicate this
 		lastid = IsValid(rag.lastid.ent) and rag.lastid.ent:EntIndex() or - 1
@@ -452,7 +458,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	-- 200 + ?
 
 	-- workaround to make sure only detective searches are added to the scoreboard
-	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE) and not isCovert)
+	net.WriteBool(ply:IsActive() and roleData.isPolicingRole and not isCovert)
 
 	-- If searched publicly, send to all, else just the finder
 	if not isCovert then

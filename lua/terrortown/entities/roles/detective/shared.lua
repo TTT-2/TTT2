@@ -36,7 +36,15 @@ function ROLE:PreInitialize()
 	}
 end
 
-if CLIENT then
+if SERVER then
+	function ROLE:GiveRoleLoadout(ply)
+		plyply:GiveEquipmentWeapon("weapon_ttt_wtester")
+	end
+
+	function ROLE:RemoveRoleLoadout(ply, isRoleChange)
+		ply:StripWeapon("weapon_ttt_wtester")
+	end
+else
 	---
 	-- @ignore
 	function ROLE:AddToSettingsMenu(parent)
