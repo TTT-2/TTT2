@@ -107,4 +107,15 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		max = 10,
 		decimal = 0
 	})
+
+	local form3 = vgui.CreateTTT2Form(parent, "header_roles_special_settings")
+
+	form3:MakeHelp({
+		label = "help_detective_hats"
+	})
+
+	form3:MakeCheckBox({
+		serverConvar = "ttt_detective_hats",
+		label = "label_detective_hats"
+	})
 end

@@ -1599,7 +1599,7 @@ L.label_roles_max_roles = "Obere Grenze für Rollen"
 L.label_roles_max_roles_pct = "Prozentuale obere Grenze für Rollen"
 L.label_baseroles_max_roles = "Obere Grenze für Basisrollen"
 L.label_baseroles_max_roles_pct = "Prozentuale obere Grenze für Basisrollen"
-L.label_detective_hats = "Aktiviere Mützen für Detektive (falls es das Spielermodell erlaubt)"
+L.label_detective_hats = "Aktiviere Mützen für Kontrollrollen wie den Detektiv (falls es das Spielermodell erlaubt)"
 
 L.ttt2_desc_innocent = "Ein Unschuldiger hat keine spzeiellen Fähigkeiten. Er muss die Bösen unter den Terroristen finden und umbringen. Aber dabei stets auf der Hut sein, um nicht seine Kollegen zu ermorden."
 L.ttt2_desc_traitor = "Der Verräter ist der Gegenspieler der unschuldigen. Sie haben einen Ausrüstungsshop, in dem sie Spezialausrüstung kaufen können. Sie müssen jeden außer ihre eigenen Teamkollegen ermorden."
@@ -1618,6 +1618,10 @@ In Standard-TTT2 gibt es zwei verschiedene Wege an Ausrüstungspunkte zu kommen:
 
 Beachte jedoch, dass dies trotzdem individuell für jede Rolle de-/aktiviert werden kann, auch wenn das ganze Team belohnt wird. Wenn beispielsweise das Team der Unschuldigen belohnt wird, aber die Rolle der Unschuldigen dies deaktiviert hat, dann bekommt nur der Detektiv seine Ausrüstungspunkte.
 Die Grundwerte können in 'Administration' -> 'Allgemeine Rolleneinstellungen' angepasst werden.]]
+L.help_detective_hats = [[
+Kontrollrollen, wie der Detektiv, können Detektivmützen tragen, um ihre Authorität zu zeugen. Sie verlieren sie beim Tod, oder wenn sie Schaden am Kopf bekommen.
+
+Einige Spielermodelle unterstützen standardmäßig keine Detektivmützen. Du kannst dies unter 'Administration' -> 'Spielermodelle' ändern.]]
 
 L.label_roles_credits_award_kill = "Anzahl Ausrüstungspunkte für Mord"
 L.label_roles_credits_dead_award = "Aktiviere Ausrüstungspunktebelohnung für gewissen Anteil an toten Gegnern"

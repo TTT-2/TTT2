@@ -1609,7 +1609,7 @@ L.none = "Brak Roli"
 --L.label_roles_max_roles_pct = "Upper role limit by percentage"
 --L.label_baseroles_max_roles = "Upper baserole limit"
 --L.label_baseroles_max_roles_pct = "Upper baserole limit by percentage"
---L.label_detective_hats = "Enable hats for detectives (if player model allows hat)"
+--L.label_detective_hats = "Enable hats for polcing roles like the Detective (if player model allows hat)"
 
 --L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
 --L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."
@@ -1628,6 +1628,10 @@ L.none = "Brak Roli"
 
 --Please note that this still can be enabled/disabled for every role even if the whole team is awarded. If for example team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
 --The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
+--L.help_detective_hats = [[
+--Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
+
+--Some player models do not support hats by default. You can change this in 'Administration' -> 'Player Models']]
 
 --L.label_roles_credits_award_kill = "Credit reward for kill size"
 --L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
