@@ -1573,7 +1573,7 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 --Keep in mind that all of this only applies if the role is considered for selection.
 
 --The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for selection and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution setting then holds true again for the second player to receive this role.]]
---L.help_roles_award_info = "Some roles (all Traitor roles and some other roles) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
+--L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
 --L.help_roles_award_pct = "When this percentage of other players are dead, players are awarded more credits."
 --L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. If for example you set the percentage to '0.25', and enable this, players will be awarded credits at '25%' killed, '50%' killed, and '75%' killed."
 --L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up your role selection. When in doubt keep all values at '0'. This value means that no limits are applied and the role selection is trying to assign as many roles as possible."
@@ -1600,17 +1600,15 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 --L.label_roles_min_players = "Lower limit of players to consider selection"
 --L.label_roles_tbutton = "Role can use Traitor buttons"
 --L.label_roles_credits_starting = "Starting credits"
---L.label_roles_credits_traitordead = "Credit reward for dead Traitor"
 --L.label_roles_credits_award_pct = "Credit reward percentage"
 --L.label_roles_credits_award_size = "Credit reward size"
 --L.label_roles_credits_award_repeat = "Credit reward repeat"
---L.label_roles_credits_detectivekill = "Credit reward for Detective kill"
 --L.label_roles_newroles_enabled = "Enable custom roles"
 --L.label_roles_max_roles = "Upper role limit"
 --L.label_roles_max_roles_pct = "Upper role limit by percentage"
 --L.label_roles_max_baseroles = "Upper baserole limit"
 --L.label_roles_max_baseroles_pct = "Upper baserole limit by percentage"
---L.label_detective_hats = "Enable hats for detectives (if player model allows hat)"
+--L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows hat)"
 
 --L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
 --L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."
@@ -1618,3 +1616,23 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 
 -- 2021-10-10
 --L.button_reset_models = "Reset Player Models"
+
+-- 2021-10-13
+--L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'public role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
+--L.help_roles_credits_award = [[
+--There are two different ways to be awarded credits in base TTT2:
+
+--1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
+--2. If a player killed a high value play with a 'public role' such as a Detective, the killer is awarded.
+
+--Please note that this still can be enabled/disabled for every role even if the whole team is awarded. If for example team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
+--The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
+--L.help_detective_hats = [[
+--Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
+
+--Some player models do not support hats by default. You can change this in 'Administration' -> 'Player Models']]
+
+--L.label_roles_credits_award_kill = "Credit reward for kill size"
+--L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
+--L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
+--L.label_roles_min_karma = "Lower limit of Karma to consider selection"

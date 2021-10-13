@@ -413,7 +413,7 @@ function GM:PlayerLoadout(ply, isRespawn)
 
 	playermodels.RemovePlayerHat(ply)
 	playermodels.ApplyPlayerHat(ply, function(p)
-		return ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE
+		return ply:IsActive() and ply:GetSubRoleData().isPolicingRole
 			and cv_ttt_detective_hats:GetBool() and playermodels.PlayerCanHaveHat(ply)
 	end)
 

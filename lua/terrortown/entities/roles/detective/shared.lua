@@ -18,6 +18,9 @@ function ROLE:PreInitialize()
 	self.fallbackTable = {}
 	self.unknownTeam = true
 
+	self.isPublicRole = true
+	self.isPolicingRole = true
+
 	-- conVarData
 	self.conVarData = {
 		pct = 0.13,
@@ -26,34 +29,23 @@ function ROLE:PreInitialize()
 		minKarma = 600,
 
 		credits = 1,
-		creditsTraitorKill = 0,
-		creditsTraitorDead = 1,
+		creditsAwardDeadEnable = 1,
+		creditsAwardKillEnable = 0,
 
 		togglable = true
 	}
 end
 
-if CLIENT then
+if SERVER then
 	---
 	-- @ignore
-	function ROLE:AddToSettingsMenuCreditsForm(parent)
-		parent:MakeSlider({
-			serverConvar = "ttt_det_credits_traitordead",
-			label = "label_roles_credits_traitordead",
-			min = 0,
-			max = 10,
-			decimal = 0
-		})
+	function ROLE:GiveRoleLoadout(ply)
+		ply:GiveEquipmentWeapon("weapon_ttt_wtester")
 	end
 
 	---
 	-- @ignore
-	function ROLE:AddToSettingsMenu(parent)
-		local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
-
-		form:MakeCheckBox({
-			serverConvar = "ttt_detective_hats",
-			label = "label_detective_hats"
-		})
+	function ROLE:RemoveRoleLoadout(ply)
+		ply:RemoveEquipmentWeapon("weapon_ttt_wtester")
 	end
 end

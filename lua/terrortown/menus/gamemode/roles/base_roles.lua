@@ -87,6 +87,15 @@ local function PopulateSelection(parent, roleData)
 		decimal = 0,
 		master = masterEnb
 	})
+
+	parent:MakeSlider({
+		serverConvar = "ttt_" .. roleData.name .. "_karma_min",
+		label = "label_roles_min_karma",
+		min = 0,
+		max = 1000,
+		decimal = 0,
+		master = masterEnb
+	})
 end
 
 local function PopulateTButtons(parent, roleData)
@@ -102,11 +111,25 @@ local function PopulateCredits(parent, roleData)
 	})
 
 	parent:MakeSlider({
-		serverConvar = (roleData.index == ROLE_TRAITOR) and "ttt_credits_starting" or ("ttt_" .. roleData.abbr .. "_credits_starting"),
+		serverConvar = "ttt_" .. roleData.abbr .. "_credits_starting",
 		label = "label_roles_credits_starting",
 		min = 0,
 		max = 10,
 		decimal = 0
+	})
+
+	parent:MakeHelp({
+		label = "help_roles_credits_award"
+	})
+
+	parent:MakeCheckBox({
+		serverConvar = "ttt_" .. roleData.abbr .. "_credits_award_dead_enb",
+		label = "label_roles_credits_dead_award"
+	})
+
+	parent:MakeCheckBox({
+		serverConvar = "ttt_" .. roleData.abbr .. "_credits_award_kill_enb",
+		label = "label_roles_credits_kill_award"
 	})
 
 	-- run a hook to add role specific custom credit convars

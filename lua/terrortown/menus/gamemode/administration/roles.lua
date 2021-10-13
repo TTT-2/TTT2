@@ -95,4 +95,27 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		serverConvar = "ttt_credits_award_repeat",
 		label = "label_roles_credits_award_repeat"
 	})
+
+	form2:MakeHelp({
+		label = "help_roles_credits_award_kill"
+	})
+
+	form2:MakeSlider({
+		serverConvar = "ttt_credits_award_kill",
+		label = "label_roles_credits_award_kill",
+		min = 0,
+		max = 10,
+		decimal = 0
+	})
+
+	local form3 = vgui.CreateTTT2Form(parent, "header_roles_special_settings")
+
+	form3:MakeHelp({
+		label = "help_detective_hats"
+	})
+
+	form3:MakeCheckBox({
+		serverConvar = "ttt_detective_hats",
+		label = "label_detective_hats"
+	})
 end

@@ -1564,7 +1564,7 @@ Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, die dies
 Bedenke, dass dies alles nur gilt, wenn die Rolle überhaupt zur Verteilung ausgewählt wurde.
 
 Die zuvor genannte Rollenverteilung hat eine spezielle Integration mit der Mindestzahl an Spielern. Wenn die Rolle zur Verteilung ausgewählt wurde und die gesetzte Mindestspielerzahl niederiger als die Zahl ist, welche aus dem Rollenverteilungsprozentsatz kommt, dann kann ein einzelner Spieler diese Rolle dennoch erhalten. Die prozentuale Rollenzuweisung gilt dann jedoch wieder ab dem zweiten Spieler.]]
-L.help_roles_award_info = "Einige Rollen (alle Verräter und ein paar andere Rollen) erhalten Ausrüstungsprunkte, wenn eine gewise Anzahl ihrer Gegenspieler stirbt. Diese Werte können hier eingestellt werden."
+L.help_roles_award_info = "Einige Rollen (falls aktiviert in ihren Ausrüstungspunkteeinstellungen) erhalten Ausrüstungsprunkte, wenn eine gewise Anzahl ihrer Gegenspieler stirbt. Diese Werte können hier eingestellt werden."
 L.help_roles_award_pct = "Wenn dieser Prozentsatz an anderen Spielern gestorben ist, dann erhalten Spieler Ausrüstungspunkte."
 L.help_roles_award_repeat = "Definiert, ob Belohnungen mehrfach ausgestellt werden können. Wenn aktiviert und der Prouentsatz zum Beispiel auf '0.25' steht, dann werden Ausrüstungspunkte bei '25%', '50%' und '75%' getötet verteilt."
 L.help_roles_advanced_warning = "WARNUNG: Diese Einstellungen sind nur für fortgeschrittene Nutzer geeignet, da sie die gesamte Rollenverteilung durcheinander bringen können. Wenn du unsicher bist, was du tun sollst, dann setze alle Werte auf '0'. Das bedeutet, dass der Rollenverteilung keine künstlichen Limits erteilt werden."
@@ -1591,17 +1591,15 @@ L.label_roles_random = "Wahrscheinlichkeit, dass diese Rolle gewählt wird"
 L.label_roles_min_players = "Mindespielerzahl für Auswahl der Rolle"
 L.label_roles_tbutton = "Rolle kann Verräterknöpfe nutzen"
 L.label_roles_credits_starting = "Ausrüstungspunkte zu Beginn"
-L.label_roles_credits_traitordead = "Belohnung für toten Verräter"
 L.label_roles_credits_award_pct = "Belohnungsspieleranteil"
 L.label_roles_credits_award_size = "Belohnungsgröße"
 L.label_roles_credits_award_repeat = "Mehrfache Belohnung"
-L.label_roles_credits_detectivekill = "Belohnung für Detektivermordung"
 L.label_roles_newroles_enabled = "Aktiviere eigene Rollen"
 L.label_roles_max_roles = "Obere Grenze für Rollen"
 L.label_roles_max_roles_pct = "Prozentuale obere Grenze für Rollen"
 L.label_roles_max_baseroles = "Obere Grenze für Basisrollen"
 L.label_roles_max_baseroles_pct = "Prozentuale obere Grenze für Basisrollen"
-L.label_detective_hats = "Aktiviere Mützen für Detektive (falls es das Spielermodell erlaubt)"
+L.label_detective_hats = "Aktiviere Mützen für Kontrollrollen wie den Detektiv (falls es das Spielermodell erlaubt)"
 
 L.ttt2_desc_innocent = "Ein Unschuldiger hat keine spzeiellen Fähigkeiten. Er muss die Bösen unter den Terroristen finden und umbringen. Aber dabei stets auf der Hut sein, um nicht seine Kollegen zu ermorden."
 L.ttt2_desc_traitor = "Der Verräter ist der Gegenspieler der unschuldigen. Sie haben einen Ausrüstungsshop, in dem sie Spezialausrüstung kaufen können. Sie müssen jeden außer ihre eigenen Teamkollegen ermorden."
@@ -1609,3 +1607,23 @@ L.ttt2_desc_detective = "Der Detektiv ist derjenige, dem die Unschuldigen trauen
 
 -- 2021-10-10
 L.button_reset_models = "Spielermodelle Zurücksetzen"
+
+-- 2021-10-13
+L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'offenen Rollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
+L.help_roles_credits_award = [[
+In Standard-TTT2 gibt es zwei verschiedene Wege an Ausrüstungspunkte zu kommen:
+
+1. Wenn ein gewisser Prozentsatz der Spieler im Gegnerteam tot sind, dann wird das ganze Team mit Ausrüstungspunkten belohnt.
+2. Wenn ein Spieler einen wichtigen Spieler mit einer 'offenen Rolle' (wie beispielsweise dem Detektiv), dann wird der Mörder belohnt.
+
+Beachte jedoch, dass dies trotzdem individuell für jede Rolle de-/aktiviert werden kann, auch wenn das ganze Team belohnt wird. Wenn beispielsweise das Team der Unschuldigen belohnt wird, aber die Rolle der Unschuldigen dies deaktiviert hat, dann bekommt nur der Detektiv seine Ausrüstungspunkte.
+Die Grundwerte können in 'Administration' -> 'Allgemeine Rolleneinstellungen' angepasst werden.]]
+L.help_detective_hats = [[
+Kontrollrollen, wie der Detektiv, können Detektivmützen tragen, um ihre Authorität zu zeugen. Sie verlieren sie beim Tod, oder wenn sie Schaden am Kopf bekommen.
+
+Einige Spielermodelle unterstützen standardmäßig keine Detektivmützen. Du kannst dies unter 'Administration' -> 'Spielermodelle' ändern.]]
+
+L.label_roles_credits_award_kill = "Anzahl Ausrüstungspunkte für Mord"
+L.label_roles_credits_dead_award = "Aktiviere Ausrüstungspunktebelohnung für gewissen Anteil an toten Gegnern"
+L.label_roles_credits_kill_award = "Aktiviere Ausrüstungspunktebelohnung für Mord an wichtigem Spieler"
+L.label_roles_min_karma = "Untere Grenze für Karma für Auswahl der Rolle"
