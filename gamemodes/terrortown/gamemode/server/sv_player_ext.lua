@@ -150,11 +150,6 @@ function plymeta:SetDefaultCredits()
 	end
 
 	local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
-	local member_one = #roles.GetTeamMembers(TEAM_TRAITOR) == 1
-
-	if not rd.preventTraitorAloneCredits and member_one then
-		c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
-	end
 
 	---
 	-- @realm server
