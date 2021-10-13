@@ -1617,3 +1617,4 @@ The balancing values for this feature can be set in 'Administration' -> 'General
 L.label_roles_credits_award_kill = "Credit reward for kill size"
 L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
 L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
+L.label_roles_min_karma = "Lower limit of Karma to consider selection"

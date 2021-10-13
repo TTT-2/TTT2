@@ -1622,3 +1622,4 @@ Die Grundwerte können in 'Administration' -> 'Allgemeine Rolleneinstellungen' a
 L.label_roles_credits_award_kill = "Anzahl Ausrüstungspunkte für Mord"
 L.label_roles_credits_dead_award = "Aktiviere Ausrüstungspunktebelohnung für gewissen Anteil an toten Gegnern"
 L.label_roles_credits_kill_award = "Aktiviere Ausrüstungspunktebelohnung für Mord an wichtigem Spieler"
+L.label_roles_min_karma = "Untere Grenze für Karma für Auswahl der Rolle"

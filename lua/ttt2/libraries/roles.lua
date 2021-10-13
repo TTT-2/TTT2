@@ -108,13 +108,11 @@ local function SetupData(roleData)
 			-- @realm server
 			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-			if conVarData.minKarma then
+			if not roleData.builtin then
 				---
 				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-			end
+				CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-			if not roleData.builtin then
 				---
 				-- @realm server
 				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})

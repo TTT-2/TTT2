@@ -87,6 +87,15 @@ local function PopulateSelection(parent, roleData)
 		decimal = 0,
 		master = masterEnb
 	})
+
+	parent:MakeSlider({
+		serverConvar = "ttt_" .. roleData.name .. "_karma_min",
+		label = "label_roles_min_karma",
+		min = 0,
+		max = 1000,
+		decimal = 0,
+		master = masterEnb
+	})
 end
 
 local function PopulateTButtons(parent, roleData)
