@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed Playermodels not correctly loading changes on game start
+
 ## [v0.10.0b](https://github.com/TTT-2/TTT2/tree/v0.10.0b) (2021-10-14)
 
 ### Added
