@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed Playermodels not correctly loading changes on game start
+- Fixed setting defaults before assigning a resetButton not throwing an error anymore
 
 ## [v0.10.0b](https://github.com/TTT-2/TTT2/tree/v0.10.0b) (2021-10-14)
 

@@ -195,12 +195,19 @@ end
 -- @param number value
 -- @realm client
 function PANEL:SetDefaultValue(value)
-	if isnumber(value) then
+	local noDefault = true
+
+	if isbool(value) then
 		self.default = value
-		self:GetResetButton().noDefault = false
+		noDefault = false
 	else
-		self.defaultValue = nil
-		self:GetResetButton().noDefault = true
+		self.default = nil
+	end
+
+	local reset = self:GetResetButton()
+
+	if ispanel(reset) then
+		reset.noDefault = noDefault
 	end
 end
 
@@ -293,6 +300,8 @@ function PANEL:SetResetButton(reset)
 	reset.DoClick = function(slf)
 		self:ResetToDefaultValue()
 	end
+
+	reset.noDefault = self.default == nil
 end
 
 ---
