@@ -280,12 +280,16 @@ function playermodels.ReadChangedModelStatesSQL()
 		hashableData[name] = {}
 
 		for key, info in pairs(playermodels.savingKeys) do
+			local value = entry[key]
+
+			if value == "nil" or value == "NULL" then continue end
+
 			if info.typ == "bool" then
-				hashableData[name][key] = tobool(entry[key])
+				hashableData[name][key] = tobool(value)
 			elseif info.typ == "number" then
-				hashableData[name][key] = tonumber(entry[key])
+				hashableData[name][key] = tonumber(value)
 			else
-				hashableData[name][key] = entry[key]
+				hashableData[name][key] = value
 			end
 		end
 	end
