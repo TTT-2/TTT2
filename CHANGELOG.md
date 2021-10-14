@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.10.0b](https://github.com/TTT-2/TTT2/tree/v0.10.0b) (2021-10-14)
+
 ### Added
 
 - Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
@@ -29,7 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added two new role variables:
   - `isPublicRole`: This makes the role behave like a detective in such a way, that the role is public known and shown in the scoreboard. This means other roles can use this without special role syncing; additionally roles with that flag will be handled like a detective if killed by an 'evil' role, meaning that they will receive a credit bonus
   - `isPolicingRole`: This rolevar adds all "detective-like" features to the detective, for example the ability to be called to a corpse etc.
-Added two new role conVar variables:
+- Added two new role conVar variables:
   - `creditsAwardDeadEnable`: To award this role if a certain percentage of players from the enemy teams died
   - `creditsAwardKillEnable`: To award this role if they killed a high value public role
 
