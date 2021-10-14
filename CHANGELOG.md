@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed Playermodels not correctly loading changes on game start
 - Fixed setting defaults before assigning a resetButton not throwing an error anymore
 - Fixed invisible preview for entity spawn placements
 
