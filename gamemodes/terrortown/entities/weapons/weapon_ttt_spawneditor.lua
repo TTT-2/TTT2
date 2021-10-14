@@ -322,8 +322,6 @@ if CLIENT then
 		renderDrawSphere(
 			previewData.currentPos,
 			sphereRadius,
-			1,
-			1,
 			steps,
 			steps,
 			colorSphere
