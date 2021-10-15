@@ -1065,6 +1065,15 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 10, day = 14 }))
 
+AddChange("TTT2 Base - v0.10.1b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed Playermodels not correctly loading changes on game start</li>
+			<li>Fixed setting defaults before assigning a resetButton not throwing an error anymore</li>
+			<li>Fixed invisible preview for entity spawn placements</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 15 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
