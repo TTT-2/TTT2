@@ -1065,7 +1065,7 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 10, day = 14 }))
 
-AddChange("TTT2 Base - v0.10.1b", [[
+	AddChange("TTT2 Base - v0.10.1b", [[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed Playermodels not correctly loading changes on game start</li>
