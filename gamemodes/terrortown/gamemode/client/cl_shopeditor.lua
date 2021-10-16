@@ -12,15 +12,6 @@ ShopEditor.fallback = {}
 ShopEditor.customShopRefresh = false
 
 ---
--- Returns whether the given equipment is not an @{ITEM} (so whether it's a @{Weapon})
--- @param ITEM|Weapon item
--- @return boolean
--- @realm client
-function ShopEditor.ItemIsWeapon(item)
-	return not items.IsItem(item.id)
-end
-
----
 -- Returns a list of every available equipment
 -- @return table
 -- @realm client
@@ -195,15 +186,11 @@ local function shopFallbackReset(len)
 end
 net.Receive("shopFallbackReset", shopFallbackReset)
 
----
--- Refreshes the shop and toggles (de-/activates) the items
--- @realm client
--- @internal
-function ShopEditor.ShopFallbackRefresh()
+local function shopFallbackRefresh()
 	-- Refresh F1 menu to show actual custom shop after ShopFallbackRefresh
 	if ShopEditor.customShopRefresh then
 		ShopEditor.customShopRefresh = false
 		vguihandler.Rebuild()
 	end
 end
-net.Receive("shopFallbackRefresh", ShopEditor.ShopFallbackRefresh)
+net.Receive("shopFallbackRefresh", shopFallbackRefresh)
