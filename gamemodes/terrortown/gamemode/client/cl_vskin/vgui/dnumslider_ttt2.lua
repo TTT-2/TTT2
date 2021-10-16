@@ -197,7 +197,7 @@ end
 function PANEL:SetDefaultValue(value)
 	local noDefault = true
 
-	if isbool(value) then
+	if isnumber(value) then
 		self.default = value
 		noDefault = false
 	else
