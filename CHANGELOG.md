@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added a `database` library, that handles shared Interaction with the sql database
+
 ### Fixed
 
 - Fixed the reset button not working for Sliders in the F1 Menu
