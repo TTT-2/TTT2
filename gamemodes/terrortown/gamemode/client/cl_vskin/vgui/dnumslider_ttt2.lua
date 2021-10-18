@@ -40,9 +40,6 @@ function PANEL:Init()
 	self.Slider:Dock(FILL)
 	self.Slider:SetHeight(16)
 
-	-- Handle ConVar Value Changes only on Mouse release
-	self.valueIsChanging = false
-
 	self.Slider.Knob.OnMousePressed = function(panel, mcode)
 		if mcode == MOUSE_MIDDLE then
 			self:ResetToDefaultValue()
@@ -50,29 +47,14 @@ function PANEL:Init()
 			return
 		end
 
-		if mcode == MOUSE_FIRST then
-			self.oldValue = self:GetValue()
-			self.valueIsChanging = true
-		end
-
 		self.Slider:OnMousePressed(mcode)
 	end
 
-	local sliderOnMouseReleasedFunc = self.Slider.OnMouseReleased
+	local sliderSetDragging = self.Slider.SetDragging
 
-	self.Slider.OnMouseReleased = function(panel, mcode)
-		if mcode == MOUSE_FIRST then
-			local newValue = self:GetValue()
-
-			if newValue ~= self.oldValue then
-				self:SetConVarValues(newValue)
-				self.oldValue = newValue
-			end
-
-			self.valueIsChanging = false
-		end
-
-		sliderOnMouseReleasedFunc(self.Slider, mcode)
+	self.Slider.SetDragging = function(panel, setDragging)
+		sliderSetDragging(self.Slider, setDragging)
+		self:OnChangeDragging(setDragging)
 	end
 
 	-- make slider know a bit bigger
@@ -90,6 +72,21 @@ function PANEL:Init()
 	self:SetDecimals(2)
 	self:SetText("")
 	self:SetValue(0.5)
+end
+
+---
+-- This function is called, when the slider starts and ends being dragged
+-- Calls SetConVarValue only after the dragging ends to not sync every change
+-- @param bool setDragging the state it is changed to
+-- @realm client
+function PANEL:OnChangeDragging(setDragging)
+	local value = self:GetValue()
+
+	if setDragging then
+		self.valueBeforeDragging = value
+	elseif value ~= self.valueBeforeDragging then
+		self:SetConVarValues(value)
+	end
 end
 
 ---
@@ -166,7 +163,7 @@ function PANEL:SetValue(value, ignoreConVar)
 	self:ValueChanged(value)
 
 	-- Set ConVars only when Mouse is released
-	if ignoreConVar or self.valueIsChanging then return end
+	if ignoreConVar or self:IsEditing() then return end
 
 	self:SetConVarValues(value)
 end
