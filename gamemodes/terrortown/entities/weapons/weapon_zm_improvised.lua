@@ -280,7 +280,7 @@ function SWEP:OnDrop()
 	self:Remove()
 end
 
-if SEVER then
+if SERVER then
 	---
 	-- A cancelable hook that is called if a player tries to push another player.
 	-- @param Player ply The player that tries to push
