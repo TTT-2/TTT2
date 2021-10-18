@@ -12,6 +12,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging
 
+### Removed
+
+- Removed old concommand `shopeditor` and the old shopeditor
+
 ## [v0.10.1b](https://github.com/TTT-2/TTT2/tree/v0.10.1b) (2021-10-15)
 
 ### Fixed
