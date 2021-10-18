@@ -16,12 +16,12 @@ local drawRoundedBox = draw.RoundedBox
 
 local colorTransparent = Color(0, 0, 0, 0)
 
-local materialIndicatorDev = "vgui/ttt/materialIndicatorDev"
-local materialIndicatorVIP = "vgui/ttt/materialIndicatorVIP"
-local materialIndicatorAddonDev = "vgui/ttt/materialIndicatorAddonDev"
-local materialIndicatorAdmin = "vgui/ttt/materialIndicatorAdmin"
-local materialIndicatorStreamer = "vgui/ttt/materialIndicatorStreamer"
-local materialIndicatorHeroes = "vgui/ttt/materialIndicatorHeroes"
+local materialIndicatorDev = "vgui/ttt/ttt2_indicator_dev"
+local materialIndicatorVIP = "vgui/ttt/ttt2_indicator_vip"
+local materialIndicatorAddonDev = "vgui/ttt/ttt2_indicator_addondev"
+local materialIndicatorAdmin = "vgui/ttt/ttt2_indicator_admin"
+local materialIndicatorStreamer = "vgui/ttt/ttt2_indicator_streamer"
+local materialIndicatorHeroes = "vgui/ttt/ttt2_indicator_heroes"
 
 local materialNoTeam = "vgui/ttt/dynamic/roles/icon_no_team"
 
@@ -739,7 +739,7 @@ vgui.Register("TTTScorePlayerRow", PANEL, "DButton")
 -- @hook
 -- @realm client
 function GM:TTTScoreboardRowColorForPlayer(ply)
-	local col = color_trans
+	local col = colorTransparent
 
 	if IsValid(ply) and ply.HasRole and ply:HasRole() then
 		col = table.Copy(ply:GetRoleColor())
