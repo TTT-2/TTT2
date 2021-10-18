@@ -58,6 +58,19 @@ local playerID64Cache = {}
 
 -- Shared functions Part 1
 
+local function OnChange(index, itemName, key, newValue)
+	local storedData = registeredDatabases[index].storedData
+
+	local dataEntry = storedData[itemName] or {}
+	local oldValue = dataEntry[key]
+	dataEntry[key] = newValue
+	storedData[itemName] = dataEntry
+
+	-- TODO: Implement Callbacks
+	if oldValue == newValue then return end
+
+end
+
 function database.ConvertValueWithKeys(value, accessName, key)
 	if value == "nil" or value == "NULL" then return end
 
@@ -142,6 +155,14 @@ if CLIENT then
 				end
 
 				functionCache[identifier](isSuccess, value)
+			end,
+		SetValue = function()
+				local index = net.ReadUInt(uIntBits)
+				local itemName = net.ReadString()
+				local key = net.ReadString()
+				local value = net.ReadString()
+
+				OnChange(index, itemName, key, value)
 			end
 	}
 end
@@ -173,6 +194,13 @@ if SERVER then
 				if data.isSuccess then
 					net.WriteString(data.value)
 				end
+			end,
+		-- data contains index, itemName, key, value here
+		SetValue = function(data)
+				net.WriteUInt(data.index, uIntBits)
+				net.WriteString(data.itemName)
+				net.WriteString(data.key)
+				net.WriteString(data.value)
 			end
 	}
 
@@ -466,7 +494,8 @@ if SERVER then
 			accessName = accessName,
 			orm = orm.Make(databaseName),
 			keys = savingKeys,
-			data = additionalData
+			data = additionalData,
+			storedData = {}
 		}
 
 		nameToIndex[accessName] = databaseCount
@@ -535,6 +564,10 @@ if SERVER then
 		item[key] = value
 
 		itemPoolModel:Save()
+
+		OnChange(index, itemName, key, value)
+
+		SendUpdateNextTick(identifierStrings.SetValue, {index = index, itemName = itemName, key = key, value = value}, sendToPly.registered)
 	end
 
 	hook.Add("PlayerAuthed", "TTT2SyncDatabaseIndexTableToAuthorizedPlayers", function(ply, plyID64, uniqueID)
