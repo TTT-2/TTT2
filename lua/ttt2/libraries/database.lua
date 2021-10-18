@@ -40,6 +40,11 @@ local sendDataFunctions = {}
 local receiveDataFunctions = {}
 
 local sendRequestsNextUpdate = false
+
+local waitForRegisteredDatabases = false
+local triedToGetRegisteredDatabases = false
+local onWaitReceiveFunctionCache = {}
+
 local requestCacheSize = 0
 local requestCache = {}
 local functionCache = {}
@@ -52,19 +57,37 @@ local playerID64Cache = {}
 
 -- Shared functions Part 1
 
+function database.ConvertValueWithKeys(value, accessName, key)
+	if value == "nil" or value == "NULL" then return end
+
+	local index = nameToIndex[accessName]
+
+	if not index then return end
+
+	local info = registeredDatabases[index].keys[key]
+
+	if info.typ == "bool" then
+		value = tobool(value)
+	elseif info.typ == "number" then
+		value = tonumber(value)
+	end
+
+	return value
+end
+
 -- Client data and functions Part 1
 if CLIENT then
 	sendDataFunctions = {
+		-- data contains the messageIdentifier here
+		Register = function(data)
+				net.WriteUInt(data, uIntBits)
+			end,
 		-- data contains the syncCacheIndex here
 		GetValue = function(data)
 				local request = requestCache[data]
 
 				net.WriteUInt(request.identifier, uIntBits)
 				net.WriteUInt(request.index, uIntBits)
-
-				if request.index == 0 then
-					net.WriteString(request.accessName)
-				end
 
 				net.WriteString(request.name)
 				net.WriteString(request.key)
@@ -81,16 +104,35 @@ if CLIENT then
 				nameToIndex[accessName] = index
 				registeredDatabases[index] = {
 					name = accessName,
-					savingKeys = savingKeys,
-					additionalData = additionalData,
+					keys = savingKeys,
+					data = additionalData,
 					storedData = {}
 				}
+
+				local sentAdditionalInfo = net.ReadBool()
+
+				if sentAdditionalInfo then
+					local identifier = net.ReadUInt(uIntBits)
+					local tableCount = net.ReadUInt(uIntBits)
+
+					if table.Count(registeredDatabases) == tableCount then
+						functionCache[identifier]()
+					end
+				end
 			end,
 		GetValue = function()
 				local identifier = net.ReadUInt(uIntBits)
 				local isSuccess = net.ReadBool()
+				local value
 
-				functionCache[identifier](isSuccess, isSuccess and net.ReadString())
+				if isSuccess then
+					local request = requestCache[identifier]
+					value = net.ReadString()
+					value = database.ConvertValueWithKeys(value, request.accessName, request.key)
+					registeredDatabases[request.index].storedData[request.name] = value
+				end
+
+				functionCache[identifier](isSuccess, value)
 			end
 	}
 end
@@ -98,13 +140,21 @@ end
 -- Server data and functions Part 1
 if SERVER then
 	sendDataFunctions = {
-		-- data is the databaseIndex here
+		-- data contains identifier, tableCount, index here
 		Register = function(data)
 				local databaseInfo = registeredDatabases[data]
-				net.WriteUInt(data, uIntBits)
-				net.WriteString(databaseInfo.accessName)
-				net.WriteTable(databaseInfo.savingKeys)
-				net.WriteTable(databaseInfo.additionalData)
+				net.WriteUInt(data.index, uIntBits)
+				net.WriteString(databaseInfo.name)
+				net.WriteTable(databaseInfo.keys)
+				net.WriteTable(databaseInfo.data)
+
+				local sendAdditionalInfo = tobool(data.identifier)
+				net.WriteBool(sendAdditionalInfo)
+
+				if sendAdditionalInfo then
+					net.WriteUInt(data.identifier, uIntBits)
+					net.WriteUInt(data.tableCount, uIntBits)
+				end
 			end,
 		-- data contains identifier, isSuccess and value here
 		GetValue = function(data)
@@ -118,16 +168,15 @@ if SERVER then
 	}
 
 	receiveDataFunctions = {
+		Register = function(plyID64)
+				database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
+			end,
 		GetValue = function(plyID64)
 				local data = {
 					plyID64 = plyID64,
 					identifier = net.ReadUInt(uIntBits),
 					index = net.ReadUInt(uIntBits)
 				}
-
-				if data.index == 0 then
-					data.index = nameToIndex[net.ReadString()]
-				end
 
 				data.name = net.ReadString()
 				data.key = net.ReadString()
@@ -257,6 +306,28 @@ end
 
 -- Client data and functions Part 2
 if CLIENT then
+	function database.GetRegisteredDatabases(OnReceiveFunc)
+		waitForRegisteredDatabases = true
+
+		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		functionCache[messageIdentifier] = OnReceiveFunc
+
+		SendUpdateNextTick(identifierStrings.Register, messageIdentifier)
+	end
+
+	local function cleanUpWaitReceiveCache()
+		waitForRegisteredDatabases = false
+		triedToGetRegisteredDatabases = true
+
+		for i = 1, #onWaitReceiveFunctionCache do
+			local data = onWaitReceiveFunctionCache[i]
+
+			database.GetValue(data.accessName, data.name, data.key, data.OnReceiveFunc)
+		end
+
+		onWaitReceiveFunctionCache = {}
+	end
+
 	---
 	-- Get the stored key value of the given database if it exists on the server or was already cached
 	-- @param string accessName the chosen networkable name of the sql table
@@ -265,10 +336,33 @@ if CLIENT then
 	-- @realm client
 	function database.GetValue(accessName, name, key, OnReceiveFunc)
 		local index = nameToIndex[accessName]
-		local dataTable = index and registeredDatabases[index]
 
-		if dataTable and dataTable.storedData[key] then
-			OnReceiveFunc(true, dataTable.storedData[key])
+		if not index then
+			if triedToGetRegisteredDatabases then
+				OnReceiveFunc(false)
+
+				return
+			end
+
+			if not waitForRegisteredDatabases then
+				database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
+			end
+
+			onWaitReceiveFunctionCache[#onWaitReceiveFunctionCache + 1] = {
+				accessName = accessName,
+				name = name,
+				key = key,
+				OnReceiveFunc = OnReceiveFunc
+			}
+
+			return
+		end
+
+		local dataTable = index and registeredDatabases[index]
+		local storedValue = dataTable and dataTable.storedData[name] and dataTable.storedData[name][key]
+
+		if storedValue then
+			OnReceiveFunc(true, storedValue)
 
 			return
 		end
@@ -282,7 +376,7 @@ if CLIENT then
 			accessName = accessName,
 			name = name,
 			key = key,
-			index = index or 0
+			index = index
 		}
 
 		SendUpdateNextTick(identifierStrings.GetValue, requestCacheSize)
@@ -298,9 +392,17 @@ if SERVER then
 		end
 	end
 
-	function database.SyncRegisteredDatabases(plyIdentifier)
-		for databaseNumber = 1, #registeredDatabases do
-			SendUpdateNextTick(identifierStrings.Register, databaseNumber, plyIdentifier)
+	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
+		local tableCount = #registeredDatabases
+
+		local data = {
+			identifier = identifier,
+			tableCount = tableCount
+		}
+
+		for databaseNumber = 1, tableCount do
+			data.index = databaseNumber
+			SendUpdateNextTick(identifierStrings.Register, data, plyIdentifier)
 		end
 	end
 
@@ -324,7 +426,9 @@ if SERVER then
 
 		nameToIndex[accessName] = databaseCount
 
-		SendUpdateNextTick(identifierStrings.Register, databaseCount, sendToPly.all)
+		local data = {index = databaseCount}
+
+		SendUpdateNextTick(identifierStrings.Register, data, sendToPly.all)
 
 		return true
 	end
@@ -348,7 +452,7 @@ if SERVER then
 		isSuccess = isSuccess and istable(data.keys[requestData.key])
 
 		if isSuccess then
-			serverData.value = sqlData[requestData.key]
+			serverData.value = tostring(sqlData[requestData.key])
 		end
 
 		database.RegisterPlayer(requestData.plyID64)
