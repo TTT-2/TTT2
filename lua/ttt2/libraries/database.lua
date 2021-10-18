@@ -25,6 +25,14 @@ local identifierStrings = {
 	GetValue = "GetValue"
 }
 
+-- Identifier strings to determine which player gets the information
+local sendToPly = {
+	all = "all",
+	registered = "registered",
+	server = "server"
+}
+
+-- Stores the data and the players it is send to
 local dataStore = {}
 
 local sendDataFunctions = {}
@@ -35,6 +43,12 @@ local sendRequestsNextUpdate = false
 local requestCacheSize = 0
 local requestCache = {}
 local functionCache = {}
+
+local playersCache = {}
+local registeredPlayersTable = {}
+
+-- Saves all ID64 of players that sent a message
+local playerID64Cache = {}
 
 -- Shared functions Part 1
 
@@ -72,8 +86,7 @@ if CLIENT then
 					storedData = {}
 				}
 			end,
-		-- data contains identifier, isSuccess and value here
-		GetValue = function(data)
+		GetValue = function()
 				local identifier = net.ReadUInt(uIntBits)
 				local isSuccess = net.ReadBool()
 
@@ -105,8 +118,9 @@ if SERVER then
 	}
 
 	receiveDataFunctions = {
-		GetValue = function(ply)
+		GetValue = function(plyID64)
 				local data = {
+					plyID64 = plyID64,
 					identifier = net.ReadUInt(uIntBits),
 					index = net.ReadUInt(uIntBits)
 				}
@@ -128,7 +142,14 @@ end
 local function SynchronizeStates(len, ply)
 	if len < 1 then return end
 
-	if SERVER and not ply:IsValid() then return end
+	local plyID64
+
+	if SERVER and ply:IsValid() then
+		plyID64 = ply:SteamID64()
+		playerID64Cache[plyID64] = ply
+	elseif SERVER then
+		return
+	end
 
 	local bytesLeft = net.BytesLeft()
 
@@ -137,7 +158,7 @@ local function SynchronizeStates(len, ply)
 		local readNextValue = net.ReadBool()
 
 		while readNextValue do
-			receiveDataFunctions[identifier](SERVER and ply)
+			receiveDataFunctions[identifier](plyID64)
 			readNextValue = net.ReadBool()
 		end
 
@@ -148,62 +169,90 @@ net.Receive("TTT2SynchronizeDatabase", SynchronizeStates)
 
 local function SendUpdatesNow()
 	sendRequestsNextUpdate = false
-	local stopSending = false
-	local deleteIdentifiers = {}
 
 	if table.IsEmpty(dataStore) then return end
 
-	net.Start("TTT2SynchronizeDatabase")
+	local plyDeleteIdentifiers = {}
 
-	for identifier, indexedData in pairs(dataStore) do
-		net.WriteString(identifier)
-		net.WriteBool(#indexedData > 0)
+	for plyIdentifier, identifierList in pairs(dataStore) do
+		net.Start("TTT2SynchronizeDatabase")
 
-		for i = #indexedData, 1, -1 do
-			sendDataFunctions[identifier](indexedData[i])
-			indexedData[i] = nil
+		local stopSending = false
+		local deleteIdentifiers = {}
 
-			stopSending = net.BytesWritten() >= maxBytesPerMessage
+		for identifier, indexedData in pairs(identifierList) do
+			net.WriteString(identifier)
+			net.WriteBool(#indexedData > 0)
 
-			net.WriteBool( not (stopSending or i == 1))
+			for i = #indexedData, 1, -1 do
+				sendDataFunctions[identifier](indexedData[i])
+				indexedData[i] = nil
+
+				stopSending = net.BytesWritten() >= maxBytesPerMessage
+
+				net.WriteBool( not (stopSending or i == 1))
+
+				if stopSending then break end
+			end
+
+			if #indexedData <= 0 then
+				deleteIdentifiers[identifier] = true
+			end
 
 			if stopSending then break end
 		end
 
-		if #indexedData <= 0 then
-			deleteIdentifiers[identifier] = true
+		if SERVER then
+			if plyIdentifier == sendToPly.all then
+				net.Broadcast()
+			elseif plyIdentifier == sendToPly.registered then
+				net.Send(registeredPlayersTable)
+			elseif IsPlayer(playerID64Cache[plyIdentifier]) then
+				net.Send(playerID64Cache[plyIdentifier])
+			end
+		elseif CLIENT then
+			net.SendToServer()
 		end
 
-		if stopSending then break end
+		for identifier in pairs(deleteIdentifiers) do
+			dataStore[plyIdentifier][identifier] = nil
+		end
+
+		if #identifierList <= 0 then
+			plyDeleteIdentifiers[plyIdentifier] = true
+		end
+
+		if stopSending and not sendRequestsNextUpdate then
+			sendRequestsNextUpdate = true
+			timer.Simple(0, SendUpdatesNow())
+		end
 	end
 
-	if SERVER then
-		net.Broadcast()
-	elseif CLIENT then
-		net.SendToServer()
-	end
-
-	for identifier in pairs(deleteIdentifiers) do
-		dataStore[identifier] = nil
-	end
-
-	if stopSending then
-		sendRequestsNextUpdate = true
-		timer.Simple(0, SendUpdatesNow())
+	for plyIdentifier in pairs(plyDeleteIdentifiers) do
+		dataStore[plyIdentifier] = nil
 	end
 end
 
-local function SendUpdateNextTick(identifier, data)
+local function SendUpdateNextTick(identifier, data, plyIdentifier)
 	if not sendRequestsNextUpdate then
 		sendRequestsNextUpdate = true
 		timer.Simple(0, SendUpdatesNow())
 	end
 
-	-- Store data
-	local tempStore = dataStore[identifier] or {}
-	tempStore[#tempStore + 1] = data
+	if not isstring(plyIdentifier) then
+		if CLIENT then
+			plyIdentifier = sendToPly.server
+		elseif SERVER then
+			plyIdentifier = sendToPly.registered
+		end
+	end
 
-	dataStore[identifier] = tempStore
+	-- Store data
+	local tempStore = dataStore[plyIdentifier] or {}
+	tempStore[identifier] = tempStore[identifier] or {}
+	tempStore[identifier][#tempStore[identifier] + 1] = data
+
+	dataStore[plyIdentifier] = tempStore
 end
 
 -- Client data and functions Part 2
@@ -242,7 +291,20 @@ end
 
 -- Server data and functions Part 2
 if SERVER then
-	function database.Register(accessName, databaseName, savingKeys, additionalData)
+	function database.RegisterPlayer(plyID64)
+		if not playersCache[plyId] then
+			playersCache[plyId] = true
+			registeredPlayersTable[#registeredPlayersTable + 1] = playerID64Cache[plyID64]
+		end
+	end
+
+	function database.SyncRegisteredDatabases(plyIdentifier)
+		for databaseNumber = 1, #registeredDatabases do
+			SendUpdateNextTick(identifierStrings.Register, databaseNumber, plyIdentifier)
+		end
+	end
+
+	function database.RegisterDatabase(accessName, databaseName, savingKeys, additionalData)
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
 		end
@@ -262,7 +324,7 @@ if SERVER then
 
 		nameToIndex[accessName] = databaseCount
 
-		SendUpdateNextTick(identifierStrings.Register, databaseCount)
+		SendUpdateNextTick(identifierStrings.Register, databaseCount, sendToPly.all)
 
 		return true
 	end
@@ -289,6 +351,22 @@ if SERVER then
 			serverData.value = sqlData[requestData.key]
 		end
 
-		SendUpdateNextTick(identifierStrings.GetValue, serverData)
+		database.RegisterPlayer(requestData.plyID64)
+
+		SendUpdateNextTick(identifierStrings.GetValue, serverData, requestData.plyID64)
 	end
+
+	hook.Add("PlayerAuthed", "TTT2SyncDatabaseIndexTableToAuthorizedPlayers", function(ply, plyID64, uniqueID)
+		if not IsValid(ply) then return end
+
+		playerID64Cache[plyID64] = ply
+		database.SyncRegisteredDatabases(plyID64)
+	end)
+
+	hook.Add("PlayerDisconnected", "TTT2RemovePlayerOfRegisteredPlayersTable", function(ply)
+		if not IsValid(ply) or not playersCache[ply:SteamID64()] then return end
+
+		playersCache[ply:SteamID64()] = nil
+		table.RemoveByValue(registeredPlayersTable, ply)
+	end)
 end
