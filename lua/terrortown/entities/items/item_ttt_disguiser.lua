@@ -81,9 +81,7 @@ if CLIENT then
 	end)
 else -- SERVER
 	local function SetDisguise(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
-
-		if not ply:HasEquipmentItem("item_ttt_disguiser") then return end
+		if not IsValid(ply) or not ply:IsActive() or not ply:HasEquipmentItem("item_ttt_disguiser") then return end
 
 		local state = #args == 1 and tobool(args[1])
 

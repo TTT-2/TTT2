@@ -50,12 +50,6 @@ SWEP.Secondary.Delay = 0.1
 
 SWEP.Kind = WEAPON_CARRY
 
-SWEP.InLoadoutFor = {
-	ROLE_INNOCENT,
-	ROLE_TRAITOR,
-	ROLE_DETECTIVE
-}
-
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
@@ -666,6 +660,7 @@ function SWEP:SetupDataTables()
 	-- we've got these dt slots anyway, might as well use them instead of a
 	-- globalvar, probably cheaper
 	self:DTVar("Bool", 0, "can_rag_pin")
+	self:DTVar("Bool", 0, "can_rag_pin_inno")
 
 	-- client actually has no idea what we're holding, and almost never needs to
 	-- know
@@ -679,6 +674,7 @@ if SERVER then
 	-- @ignore
 	function SWEP:Initialize()
 		self.dt.can_rag_pin = GetGlobalBool("ttt_ragdoll_pinning")
+		self.dt.can_rag_pin_inno = GetGlobalBool("ttt_ragdoll_pinning_innocents")
 		self.dt.carried_rag = nil
 
 		return self.BaseClass.Initialize(self)
@@ -746,7 +742,7 @@ else -- CLIENT
 		if self.dt.can_rag_pin and IsValid(self.dt.carried_rag) then
 			local client = LocalPlayer()
 
-			if client:IsSpec() or not client:IsTraitor() then return end
+			if client:IsSpec() or not client:IsTraitor() and not self.dt.can_rag_pin_inno then return end
 
 			local tr = util.TraceLine({
 				start = client:EyePos(),

@@ -2,27 +2,204 @@
 -- @author Alf21
 -- @module ShopEditor
 
+
 ShopEditor = ShopEditor or {}
-ShopEditor.savingKeys = {
-	credits = {typ = "number", bits = 8, default = 1}, -- from 0 to 255 (2^8 - 1)
-	minPlayers = {typ = "number", bits = 6}, -- from 0 to 63 (2^6 - 1)
-	globalLimited = {typ = "bool"}, -- 0 and 1
-	limited = {typ = "bool"}, -- 0 and 1
-	NoRandom = {typ = "bool"}, -- 0 and 1
-	notBuyable = {typ = "bool"}, -- 0 and 1
-	teamLimited = {typ = "bool"} -- 0 and 1
+
+ShopEditor.MODE_DEFAULT = 1
+ShopEditor.MODE_ADDED = 2
+ShopEditor.MODE_INHERIT_ADDED = 3
+ShopEditor.MODE_INHERIT_REMOVED = 4
+
+ShopEditor.groupTitles = {
+	[1] = "header_equipment_weapon_spawn_setup",
+	[2] = "header_equipment_setup",
+	[3] = "header_equipment_value_setup"
 }
 
-ShopEditor.cvars = {
-	ttt2_random_shops = {typ = "number", bits = 8},
-	ttt2_random_team_shops = {typ = "bool"},
-	ttt2_random_shop_reroll = {typ = "bool"},
-	ttt2_random_shop_reroll_cost = {typ = "number", bits = 8},
-	ttt2_random_shop_reroll_per_buy = {typ = "bool"}
+ShopEditor.savingKeys = {
+	AutoSpawnable = {
+		group = 1,
+		order = 10,
+		typ = "bool",
+		default = false,
+		name = "auto_spawnable",
+		inverted = false,
+		b_desc = true,
+		showForItem = false,
+		master = nil
+	},
+	spawnType = {
+		group = 1,
+		order = 20,
+		typ = "number",
+		subtype = "enum",
+		bits = 5,
+		default = WEAPON_TYPE_SPECIAL,
+		choices = entspawnscript.GetEntTypeList(SPAWN_TYPE_WEAPON, {[WEAPON_TYPE_RANDOM] = true}),
+		lookupNamesFunc = function(entType)
+			return entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)
+		end,
+		name = "spawn_type",
+		b_desc = false,
+		showForItem = false,
+		master = "AutoSpawnable"
+	},
+	notBuyable = {
+		group = 2,
+		order = 30,
+		typ = "bool",
+		default = false,
+		name = "not_buyable",
+		inverted = true,
+		b_desc = true,
+		showForItem = true,
+		master = nil
+	},
+	NoRandom = {
+		group = 2,
+		order = 40,
+		typ = "bool",
+		default = false,
+		name = "not_random",
+		inverted = false,
+		b_desc = true,
+		showForItem = true,
+		master = "notBuyable"
+	},
+	globalLimited = {
+		group = 2,
+		order = 50,
+		typ = "bool",
+		default = false,
+		name = "global_limited",
+		inverted = false,
+		b_desc = true,
+		showForItem = true,
+		master = "notBuyable"
+	},
+	teamLimited = {
+		group = 2,
+		order = 60,
+		typ = "bool",
+		default = false,
+		name = "team_limited",
+		inverted = false,
+		b_desc = true,
+		showForItem = true,
+		master = "notBuyable"
+	},
+	limited = {
+		group = 2,
+		order = 70,
+		typ = "bool",
+		default = false,
+		name = "player_limited",
+		inverted = false,
+		b_desc = true,
+		showForItem = true,
+		master = "notBuyable"
+	},
+	minPlayers = {
+		group = 3,
+		order = 80,
+		typ = "number",
+		bits = 6,
+		default = 0,
+		min = 0,
+		max = 63,
+		name = "min_players",
+		b_desc = false,
+		showForItem = true,
+		master = "notBuyable"
+	},
+	credits = {
+		group = 3,
+		order = 90,
+		typ = "number",
+		bits = 5,
+		default = 1,
+		min = 0,
+		max = 20,
+		name = "credits",
+		b_desc = false,
+		showForItem = true,
+		master = "notBuyable"
+	}
 }
+
+ShopEditor.savingKeysCount = table.Count(ShopEditor.savingKeys)
+ShopEditor.savingKeysBitCount = math.ceil(math.log(ShopEditor.savingKeysCount + 1, 2))
+
+ShopEditor.cvars = {
+	ttt2_random_shops = {
+		order = 1,
+		typ = "bool",
+		default = 0,
+		name = "random_shops",
+		b_desc = true
+	},
+	ttt2_random_shop_items = {
+		order = 2,
+		typ = "number",
+		bits = 6,
+		default = 10,
+		min = 1,
+		max = 60,
+		name = "random_shop_items",
+		b_desc = true
+	},
+	ttt2_random_team_shops = {
+		order = 3,
+		typ = "bool",
+		default = 1,
+		name = "random_team_shops",
+		b_desc = false
+	},
+	ttt2_random_shop_reroll = {
+		order = 4,
+		typ = "bool",
+		default = 1,
+		name = "random_shop_reroll",
+		b_desc = false
+	},
+	ttt2_random_shop_reroll_cost = {
+		order = 5,
+		typ = "number",
+		bits = 4,
+		default = 1,
+		min = 0,
+		max = 10,
+		name = "random_shop_reroll_cost",
+		b_desc = false
+	},
+	ttt2_random_shop_reroll_per_buy = {
+		order = 6,
+		typ = "bool",
+		default = 0,
+		name = "random_shop_reroll_per_buy",
+		b_desc = false
+	}
+}
+
+-- Table which contains all equipment and is sorted by their translated equipment names
+ShopEditor.sortedEquipmentList = {}
 
 local net = net
 local pairs = pairs
+
+local function getDefaultValue(item, key, data)
+	if key == "spawnType" then
+		return entspawnscript.GetSpawnTypeFromKind(item.Kind) or data.default or WEAPON_TYPE_SPECIAL
+	end
+
+	if data.typ == "number" then
+		return data.default or 0
+	elseif data.typ == "bool" then
+		 return data.default or false
+	else
+		return data.default or ""
+	end
+end
 
 ---
 -- Initializes the default data for an @{ITEM} or @{Weapon}
@@ -31,16 +208,14 @@ local pairs = pairs
 function ShopEditor.InitDefaultData(item)
 	if not item then return end
 
+	item.defaultValues = item.defaultValues or {}
+
 	for key, data in pairs(ShopEditor.savingKeys) do
 		if item[key] == nil then
-			if data.typ == "number" then
-				item[key] = data.default or 0
-			elseif data.typ == "bool" then
-				item[key] = data.default or false
-			else
-				item[key] = data.default or ""
-			end
+			item[key] = getDefaultValue(item, key, data)
 		end
+
+		item.defaultValues[key] = item[key]
 	end
 end
 
@@ -58,8 +233,11 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 
 	net.Start(messageName)
 	net.WriteString(name)
+	net.WriteUInt(ShopEditor.savingKeysCount, ShopEditor.savingKeysBitCount or 16)
 
 	for key, data in pairs(ShopEditor.savingKeys) do
+		net.WriteString(key)
+
 		if data.typ == "number" then
 			net.WriteUInt(item[key], data.bits or 16)
 		elseif data.typ == "bool" then
@@ -104,7 +282,12 @@ function ShopEditor.ReadItemData()
 		return name
 	end
 
-	for key, data in pairs(ShopEditor.savingKeys) do
+	local keyCount = net.ReadUInt(ShopEditor.savingKeysBitCount or 16)
+
+	for i = 1, keyCount do
+		local key = net.ReadString()
+		local data = ShopEditor.savingKeys[key]
+
 		if data.typ == "number" then
 			equip[key] = net.ReadUInt(data.bits or 16)
 		elseif data.typ == "bool" then

@@ -394,6 +394,8 @@ function ENT:IsDefuserInRange()
 	for i = 1, #plys do
 		local ply = plys[i]
 
+		if not ply:IsActive() or not ply:GetSubRoleData().isPolicingRole then continue end
+
 		-- dot of the difference with itself is distance squared
 		diff = center - ply:GetPos()
 		d = diff:Dot(diff)
@@ -576,7 +578,7 @@ if SERVER then
 		local choices = {}
 
 		for i = 1, C4_WIRE_COUNT do
-			choices[#choices + 1] = i
+			choices[i] = i
 		end
 
 		-- random selection process, lot like traitor selection

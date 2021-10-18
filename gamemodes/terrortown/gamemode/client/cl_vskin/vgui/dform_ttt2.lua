@@ -130,33 +130,28 @@ end
 function PANEL:MakeCheckBox(data)
 	local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
+	local reset = MakeReset(self)
+	left:SetResetButton(reset)
+
 	left:SetText(data.label)
+
+	-- Set default if possible even if the convar could still overwrite it
+	left:SetDefaultValue(data.default)
 	left:SetConVar(data.convar)
+	left:SetServerConVar(data.serverConvar)
 
 	left:SetTall(32)
 
-	left:SetValue(data.initial)
+	if not data.convar and not data.serverConvar and data.initial then
+		left:SetValue(data.initial)
+	end
 
-	left.OnChange = function(slf, value)
+	left.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then
 			data.OnChange(slf, value)
 		end
 	end
 
-	local reset = MakeReset(self)
-
-	if ConVarExists(data.convar or "") or data.default ~= nil then
-		reset.DoClick = function(slf)
-			local default = data.default
-			if default == nil then
-				default = tobool(GetConVar(data.convar):GetDefault())
-			end
-
-			left:SetValue(default)
-		end
-	else
-		reset.noDefault = true
-	end
 
 	self:AddItem(left, nil, reset)
 
@@ -186,16 +181,24 @@ function PANEL:MakeSlider(data)
 
 	local right = vgui.Create("DNumSliderTTT2", self)
 
+	local reset = MakeReset(self)
+	right:SetResetButton(reset)
+
 	right:SetMinMax(data.min, data.max)
 
 	if data.decimal ~= nil then
 		right:SetDecimals(data.decimal)
 	end
 
+	-- Set default if possible even if the convar could still overwrite it
+	right:SetDefaultValue(data.default)
 	right:SetConVar(data.convar)
+	right:SetServerConVar(data.serverConvar)
 	right:SizeToContents()
 
-	right:SetValue(data.initial)
+	if not data.convar and not data.serverConvar and data.initial then
+		right:SetValue(data.initial)
+	end
 
 	right.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then
@@ -206,20 +209,6 @@ function PANEL:MakeSlider(data)
 	right:SetTall(32)
 	right:Dock(TOP)
 
-	local reset = MakeReset(self)
-
-	if ConVarExists(data.convar or "") or data.default ~= nil then
-		reset.DoClick = function(slf)
-			local default = data.default
-			if default == nil then
-				default = tonumber(GetConVar(data.convar):GetDefault())
-			end
-
-			right:SetValue(default)
-		end
-	else
-		reset.noDefault = true
-	end
 
 	self:AddItem(left, right, reset)
 
@@ -390,7 +379,7 @@ function PANEL:MakeHelp(data)
 
 	-- make sure the height is based on the amount of text inside
 	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.GetParamTranslation(slf:GetText(), slf:GetParams())
+		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetParams()))
 
 		local textWrapped = draw.GetWrappedText(
 			textTranslated,
@@ -472,6 +461,90 @@ function PANEL:MakeColorMixer(data)
 	end
 
 	return right, left
+end
+
+-- Adds a panel to the form
+-- @return Panel The created panel
+-- @realm client
+function PANEL:MakePanel()
+	local panel = vgui.Create("DPanelTTT2", self)
+
+	self:AddItem(panel)
+
+	return panel
+end
+
+---
+-- Adds a new card to the form.
+-- @param table data The data for the card
+-- @param PANEL base The base Panel (DIconLayout) where this card will be added
+-- @return Panel The created card
+-- @realm client
+function PANEL:MakeCard(data, base)
+	local card = base:Add("DCardTTT2")
+
+	card:SetSize(238, 78)
+	card:SetIcon(data.icon)
+	card:SetText(data.label)
+	card:SetMode(data.initial)
+
+	card.OnModeChanged = function(slf, oldMode, newMode)
+		if data and isfunction(data.OnChange) then
+			data.OnChange(slf, oldMode, newMode)
+		end
+	end
+
+	return card
+end
+
+---
+-- Adds a new image check box to the form.
+-- @param table data The data for the image check box
+-- @param PANEL base The base Panel (DIconLayout) where this image check box will be added
+-- @return Panel The created image check box
+-- @realm client
+function PANEL:MakeImageCheckBox(data, base)
+	local box = base:Add("DImageCheckBoxTTT2")
+
+	box:SetSize(238, 175)
+	box:SetModel(data.model)
+	box:SetHeadBox(data.headbox or false)
+	box:SetText(data.label)
+	box:SetModelSelected(data.initialModel)
+	box:SetModelHattable(data.initialHattable)
+
+	if isfunction(data.OnModelSelected) then
+		box.OnModelSelected = function(slf, userTriggered, state)
+			if not userTriggered then return end
+
+			data.OnModelSelected(slf, state)
+		end
+	end
+
+	if isfunction(data.OnModelHattable) then
+		box.OnModelHattable = function(slf, userTriggered, state)
+			if not userTriggered then return end
+
+			data.OnModelHattable(slf, state)
+		end
+	end
+
+	return box
+end
+
+-- Adds an icon layout to the form
+-- @param[default=10] number spacing The spacing between the elements
+-- @return Panel The created panel
+-- @realm client
+function PANEL:MakeIconLayout(spacing)
+	local panel = vgui.Create("DIconLayout", self)
+
+	panel:SetSpaceY(spacing or 10)
+	panel:SetSpaceX(spacing or 10)
+
+	self:AddItem(panel)
+
+	return panel
 end
 
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")

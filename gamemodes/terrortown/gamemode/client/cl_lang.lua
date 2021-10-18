@@ -486,9 +486,6 @@ function LANG.ProcessMsg(name, params, mode)
 			if isstring(v) then
 				local name2 = LANG.GetNameParam(v)
 
-				--if not name2 then
-				-- TODO test, string to bool?
-				--else
 				if name2 then
 					params[k] = LANG.GetTranslation(name2)
 				end

@@ -16,10 +16,6 @@ if not plymeta then
 	return
 end
 
-local defaultRoleDkColor = Color(28, 116, 10, 255)
-local defaultRoleLtColor = Color(110, 200, 70, 255)
-local defaultRoleBgColor = Color(200, 68, 81, 255)
-
 ---
 -- Checks whether a player is a available terrorist (not a spectator)
 -- @return boolean
@@ -49,7 +45,7 @@ end
 -- @return[default=0] number
 -- @realm shared
 function plymeta:GetSubRole()
-	return self.subrole or ROLE_INNOCENT
+	return self.subrole or ROLE_NONE
 end
 
 ---
@@ -57,7 +53,7 @@ end
 -- @return[default=0] number
 -- @realm shared
 function plymeta:GetBaseRole()
-	return self.role or ROLE_INNOCENT
+	return self.role or ROLE_NONE
 end
 
 ---
@@ -66,7 +62,7 @@ end
 -- @realm shared
 -- @see Player:GetBaseRole
 function plymeta:GetRole()
-	return self.role or ROLE_INNOCENT
+	return self.role or ROLE_NONE
 end
 
 ---
@@ -75,29 +71,28 @@ end
 -- @param number subrole subrole id of a @{ROLE}
 -- @param string team team of a @{ROLE}
 -- @param boolean forceHooks whether update hooks should be triggerd, even if the role didn't changed
+-- @param boolean suppressEvent Set this to true if no rolechange event should be triggered
 -- @realm shared
-function plymeta:SetRole(subrole, team, forceHooks)
-	local oldRole = self:GetBaseRole()
-	local oldSubrole = self:GetSubRole()
-	local oldRoleData = self:GetSubRoleData()
-	local oldTeam = self:GetTeam()
+function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
+	local oldBaseRole = self.role and self:GetBaseRole() or nil
+	local oldSubrole = self.subrole and self:GetSubRole() or nil
+	local oldTeam = self.roleteam and self:GetTeam() or nil
 
 	local roleData = roles.GetByIndex(subrole)
 
 	self.role = roleData.baserole or subrole
 	self.subrole = subrole
 
-	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE)
+	-- this update team hook should suppress the event trigger
+	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE, true)
 
 	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
 
 	if oldSubrole ~= subrole then
 		local activeRolesCount = GetActiveRolesCount(roleData) + 1
-		local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
 
 		SetActiveRolesCount(roleData, activeRolesCount)
-		SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
 
 		if activeRolesCount > 0 then
 			---
@@ -105,33 +100,40 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
-		if oldActiveRolesCount <= 0 then
-			---
-			-- @realm shared
-			hook.Run("TTT2ToggleRole", oldRoleData, false)
+		if oldSubrole then
+			local oldRoleData = roles.GetByIndex(oldSubrole)
+			local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
+
+			SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
+
+			if oldActiveRolesCount <= 0 then
+				---
+				-- @realm shared
+				hook.Run("TTT2ToggleRole", oldRoleData, false)
+			end
 		end
 	end
 
-	if oldRole ~= newBaseRole or forceHooks then
+	if oldBaseRole ~= newBaseRole or forceHooks then
 		---
 		-- @realm shared
-		hook.Run("TTT2UpdateBaserole", self, oldRole, newBaseRole)
+		hook.Run("TTT2UpdateBaserole", self, oldBaseRole, newBaseRole)
 	end
 
 	if oldSubrole ~= subrole or forceHooks then
 		---
 		-- @realm shared
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
-
-		if SERVER then
-			events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole)
-		end
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
 		---
 		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
+	end
+
+	if SERVER and not suppressEvent and (oldRole ~= subrole or oldTeam ~= newTeam or forceHooks) then
+		events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole, oldTeam, newTeam)
 	end
 
 	-- ye olde hooks
@@ -146,7 +148,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			-- @realm server
 			hook.Run("PlayerLoadout", self, false)
 
-			if GetConVar("ttt_enforce_playermodel"):GetBool() then
+			-- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
+			if oldSubrole and GetConVar("ttt_enforce_playermodel"):GetBool() then
 				-- update subroleModel
 				self:SetModel(self:GetSubRoleModel())
 			end
@@ -161,18 +164,21 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	if SERVER then
-		oldRoleData:RemoveRoleLoadout(self, true)
 		roleData:GiveRoleLoadout(self, true)
+
+		if oldSubrole then
+			roles.GetByIndex(oldSubrole):RemoveRoleLoadout(self, true)
+		end
 	end
 end
 
 ---
 -- Returns the current @{ROLE}'s color
--- @return[default=Color(80, 173, 59, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleColor()
 	if not self.roleColor then
-		self.roleColor = INNOCENT.color
+		self.roleColor = roles.NONE.color
 	end
 
 	return self.roleColor
@@ -190,10 +196,10 @@ end
 
 ---
 -- Returns the current @{ROLE}'s darker color
--- @return[default=Color(28, 116, 10, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleDkColor()
-	return self.roleDkColor or defaultRoleDkColor
+	return self.roleDkColor
 end
 
 ---
@@ -208,10 +214,10 @@ end
 
 ---
 -- Returns the current @{ROLE}'s lighter color
--- @return[default=Color(28, 116, 10, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleLtColor()
-	return self.roleLtColor or defaultRoleLtColor
+	return self.roleLtColor
 end
 
 ---
@@ -226,10 +232,10 @@ end
 
 ---
 -- Returns the current @{ROLE}'s background color
--- @return[default=Color(200, 68, 81, 255)] Color
+-- @return Color
 -- @realm shared
 function plymeta:GetRoleBgColor()
-	return self.roleBgColor or defaultRoleBgColor
+	return self.roleBgColor
 end
 
 ---
@@ -272,17 +278,34 @@ end
 ---
 -- Returns the current @{ROLE}'s team
 -- @return[default=TEAM_NONE] string
+-- @note If the real role has the flag `alone`, TEAM_NONE will be returned.
+-- Use @{Player:GetRealTeam()} instead if this behavior is not intended.
 -- @realm shared
 function plymeta:GetTeam()
-	return self.roleteam or TEAM_NONE
+	local tm = self.roleteam
+
+	if tm ~= nil and not TEAMS[tm].alone then
+		return tm
+	end
+
+	return TEAM_NONE
+end
+
+---
+-- Returns the real @{ROLE}'s team
+-- @return nil|string
+-- @realm shared
+function plymeta:GetRealTeam()
+	return self.roleteam
 end
 
 ---
 -- Updates the team of a @{Player}
 -- @warning @{plymeta:SetRole} should be used BEFORE calling this function!
 -- @param string team a @{ROLE}'s team
+-- @param boolean suppressEvent Set this to true if no rolechange event should be triggered
 -- @realm shared
-function plymeta:UpdateTeam(team)
+function plymeta:UpdateTeam(team, suppressEvent)
 	if team == TEAM_NOCHANGE then return end
 
 	local oldTeam = self:GetTeam()
@@ -296,19 +319,22 @@ function plymeta:UpdateTeam(team)
 		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 
-		if SERVER then
-			events.Trigger(EVENT_TEAMCHANGE, self, oldTeam, newTeam)
+		if SERVER and not suppressEvent then
+			local subrole = self:GetSubRole()
+
+			events.Trigger(EVENT_ROLECHANGE, self, subrole, subrole, oldTeam, newTeam)
 		end
 	end
 end
 
 ---
--- Checks whether a @{Player} has a certain team
--- @param string name a @{ROLE}' team name
+-- Checks whether a @{Player} has a team
 -- @return boolean
 -- @realm shared
-function plymeta:HasTeam(team)
-	return not team and self.roleteam ~= TEAM_NONE or team and self:GetTeam() == team
+function plymeta:HasTeam()
+	local tm = self:GetTeam()
+
+	return tm ~= TEAM_NONE and not TEAMS[tm].alone
 end
 
 ---
@@ -317,9 +343,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() ~= TEAM_NONE
-		and not TEAMS[self:GetTeam()].alone
-		and self:GetTeam() == ply:GetTeam()
+	return self:HasTeam() and self:GetTeam() == ply:GetTeam()
 end
 
 -- Role access
@@ -355,7 +379,7 @@ end
 
 ---
 -- Returns a @{Player} current SubRole @{ROLE}
--- @return[default=INNOCENT] ROLE
+-- @return[default=NONE] ROLE
 -- @realm shared
 function plymeta:GetSubRoleData()
 	local rlsList = roles.GetList()
@@ -367,12 +391,12 @@ function plymeta:GetSubRoleData()
 		return rlsList[i]
 	end
 
-	return INNOCENT
+	return roles.NONE
 end
 
 ---
 -- Returns a @{Player} current BaseRole (@{ROLE})
--- @return[default=INNOCENT] ROLE
+-- @return[default=NONE] ROLE
 -- @realm shared
 function plymeta:GetBaseRoleData()
 	local rlsList = roles.GetList()
@@ -384,7 +408,7 @@ function plymeta:GetBaseRoleData()
 		return rlsList[i]
 	end
 
-	return INNOCENT
+	return roles.NONE
 end
 
 ---
@@ -417,12 +441,30 @@ plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
 ---
--- Checks whether a @{Player} has a special @{ROLE}
--- @note This just returns <code>false</code> if the @{Player} is an Innocent!
--- @return boolean
+-- Checks whether a @{Player} has a special @{ROLE}.
+-- @note This just returns <code>false</code> if the @{Player} is an Innocent or has no role!
+-- @return boolean Returns true if the player has a special role
 -- @realm shared
-function plymeta:IsSpecial()
-	return self:GetSubRole() ~= ROLE_INNOCENT
+function plymeta:HasSpecialRole()
+	return self:GetSubRole() ~= ROLE_INNOCENT and self:GetSubRole() ~= ROLE_NONE
+end
+
+---
+-- Checks whether a @{Player} has a special @{ROLE}.
+-- @note This just returns <code>false</code> if the @{Player} is an Innocent!
+-- @return boolean Returns true if the player has a special role
+-- @see Player:HasSpecialRole
+-- @realm shared
+-- @deprecated
+-- @function plymeta:IsSpecial()
+plymeta.IsSpecial = plymeta.HasSpecialRole
+
+---
+-- Checks whether or not a player has an evil team. By default all teams that aren't innocent or none are counted as evil.
+-- @return boolean Returns true if the role is evil
+-- @realm shared
+function plymeta:HasEvilTeam()
+	return util.IsEvilTeam(self:GetTeam())
 end
 
 ---
@@ -445,6 +487,14 @@ function plymeta:IsRole(subrole)
 	local sr = self:GetSubRole()
 
 	return subrole == sr or subrole == br
+end
+
+---
+-- Checks whether a @{Player} has a valid @{ROLE}
+-- @return boolean
+-- @realm shared
+function plymeta:HasRole()
+	return self:GetSubRole() ~= ROLE_NONE
 end
 
 ---
@@ -490,9 +540,9 @@ end
 -- @return boolean
 -- @realm shared
 -- @see Player:IsActive
--- @see Player:IsSpecial
+-- @see Player:HasSpecialRole
 function plymeta:IsActiveSpecial()
-	return self:IsActive() and self:IsSpecial()
+	return self:IsActive() and self:HasSpecialRole()
 end
 
 ---
@@ -898,14 +948,6 @@ function plymeta:GetFirstFound()
 end
 
 ---
--- Returns whether a @{Player} was the last that was found this round
--- @return boolean
--- @realm shared
-function plymeta:GetLastFound()
-	return math.Round(self:TTT2NETGetFloat("t_last_found", -1))
-end
-
----
 -- Returns whether the player is ready. A player is ready when he is able to look
 -- around and move (first call of @{GM:SetupMove})
 -- @return boolean
@@ -935,12 +977,13 @@ function plymeta:SetModel(mdlName)
 	local mdl
 
 	local curMdl = mdlName or self:GetModel()
+
 	if not checkModel(curMdl) then
 		curMdl = self.defaultModel
 
 		if not checkModel(curMdl) then
 			if not checkModel(GAMEMODE.playermodel) then
-				GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
+				GAMEMODE.playermodel = GAMEMODE.force_plymodel
 
 				if not checkModel(GAMEMODE.playermodel) then
 					GAMEMODE.playermodel = "models/player/phoenix.mdl"

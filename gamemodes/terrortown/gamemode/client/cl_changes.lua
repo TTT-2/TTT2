@@ -801,6 +801,279 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 09, day = 28}))
 
+	AddChange("TTT2 Base - v0.8.0b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added new vgui system with new F1 menu</li>
+			<li>Introduced a global scale factor based on screen resolution to scale HUD elements accordingly</li>
+			<li>Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded</li>
+			<li>Added Drag&Drop role layering VGUI (preview), accessible with the console command <i>ttt2_edit_rolelayering</i></li>
+			<li>Added a new event system</li>
+			<li>Credits can now be transferred across teams and from roles whom the recipient does not know</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>TargetID text is now scaled with the global scale factor</li>
+			<li>Removed C4 defuse restriction for teammates</li>
+			<li>Changed the language identifiers to generic english names</li>
+			<li>Updated Simplified Chinese localization (by @TheOnly8Z)</li>
+			<li>Updated Italian localization (by @ThePlatynumGhost)</li>
+			<li>Updated English localization (by @Satton2)</li>
+			<li>Updated Russian localization (by @scientistnt and @Satton2)</li>
+			<li>Updated German translation (by @Creyox)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory</li>
+			<li>Fixed a roleselection bug, where forced roles would not be deducted from the available roles</li>
+			<li>Fixed a credit award bug, where detectives would receive a pointless notification about being awarded with 0 credits</li>
+			<li>Fixed a karma bug, where damage would still be reduced even though the karma system was disabled</li>
+			<li>Fixed a roleselection bug, where invalid layers led to skipping the next layer too</li>
+			<li>Fixed Magneto Stick ragdoll pinning instructions not showing for innocents when <i>ttt_ragdoll_pinning_innocents</i> is enabled</li>
+			<li>Fixed a bug where the targetID info broke if the pickup key is unbound</li>
+		</ul>
+	]], os.time({year = 2021, month = 02, day = 06}))
+
+	AddChange("TTT2 Base - v0.8.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed inheriting from the same base using the classbuilder in different folders</li>
+		</ul>
+	]], os.time({year = 2021, month = 02, day = 19}))
+
+	AddChange("TTT2 Base - v0.8.2b", [[
+		<h2>Improved:</h2>
+		<ul>
+			<li>Added global alias for IsOffScreen function to util.IsOffScreen</li>
+			<li>Updated Japanese localization (by @Westoon)</li>
+			<li>Moved rendering modules to libraries</li>
+			<li>Assigned PvP category to the gamemode.</li>
+		</ul>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>TTT: fix instant reload of dropped weapon (by @svdm)</li>
+			<li>TTT: fix ragdoll pinning HUD for innocents (by @Flapchik)</li>
+			<li>Fixed outline library not working</li>
+		</ul>
+	]], os.time({year = 2021, month = 03, day = 25}))
+
+	AddChange("TTT2 Base - v0.9.0b", [[
+		<h2>Added:</h2>
+		<ul>
+			<li>All new roundend menu</li>
+			<ul>
+				<li>new info panel that shows detailed role distribution during the round</li>
+				<li>info panel also states detailed score events</li>
+				<li>new timeline that displays the events that happened during the round</li>
+				<li>added two new round end conditions: `time up` and `no one wins`</li>
+			</ul>
+			<li>Added `ROLE_NONE` (ID `3` by default)</li>
+			<ul>
+				<li>Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`</li>
+				<li>Enables the possibility to give Innocents access to a custom shop (`shopeditor`)</li>
+			</ul>
+			<li>Karma now stores changes</li>
+			<ul>
+				<li>Is shown in roundend menu</li>
+			</ul>
+			<li>Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks</li>
+			<li>Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop</li>
+			<li>Added per-player voice control by hovering over the mute icon and scrolling</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Updated French translation (by @MisterClems)</li>
+			<li>Fixed IsOffScreen function being global for compatibility</li>
+			<li>Fixed a German translation string (by @FaRLeZz)</li>
+			<li>Fixed a Polish translation by adding new lines (by @Wuker)</li>
+			<li>Fixed a data initialization bug that appeared on the first (initial) spawn</li>
+			<li>Fixed silent Footsteps, while crouched bhopping</li>
+			<li>Fixed issue where base innocents could bypass the TTT2AvoidGeneralChat and TTT2AvoidTeamChat hooks with the team chat key</li>
+			<li>Fixed issue where roles with unknownTeam could see messages sent with the team chat key</li>
+			<li>Fixed the admin section label not being visible in the main menu</li>
+			<li>Fixed the auto resizing of the buttons based on the availability of a scrollbar not working</li>
+			<li>Fixed reopening submenus of the legacy addons in F1 menu not working</li>
+			<li>TTT: Fixed karma autokick evasion</li>
+			<li>TTT: Fixed karma being applied to weapon damage even though karma is disabled</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Microoptimization to improve code performance</li>
+			<li>Converted `roles`, `huds`, `hudelements`, `items` and `pon` modules into libraries</li>
+			<li>Moved `bind` library to the libraries folder</li>
+			<li>Moved favorites functions for equipment to the equipment shop and made them local functions</li>
+			<li>Code cleanup and removed silly negations</li>
+			<li>Extended some ttt2net functions</li>
+			<li>Changed `bees` win to `nones` win</li>
+			<li>By default all evil roles are now counted as traitor roles for map related checks</li>
+			<li>Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)</li>
+			<li>Shopeditor settings are now available in the F1 Menu</li>
+			<li>Moved the F1 menu generating system from a hook based system to a file based system</li>
+			<ul>
+				<li>removed the hooks `TTT2ModifyHelpMainMenu` and `TTT2ModifyHelpSubMenu`</li>
+				<li>menus are now generated based on files located in `lua/terrortown/menus/gamemode/`</li>
+				<li>submenus are generated from files located in folders with the menu name</li>
+			</ul>
+			<li>Menus without content are now always hidden in the main menu</li>
+			<li>Moved Custom Shopeditor and linking shop to roles to the F1 menu</li>
+			<li>Moved inclusion of cl_help to the bottom as nothing depends on it, but menus created by it could depend on other client files</li>
+			<li>Shopeditor equipment is now available in F1 menu</li>
+			<li>Moved the role layering menu to the F1 menu (administration submenu)</li>
+			<ul>
+				<li>removed the command `ttt2_edit_rolelayering`</li>
+			</ul>
+			<li>moved the internal path of `lang/`, `vskin/` and `events/` (this doesn't change anything for addons)</li>
+			<li>Sort teammates first in credit transfer selection and add an indicator to them</li>
+		</ul>
+
+		<h2>Removed</h2>
+		<ul>
+			<li>Removed the custom loading screen (GMOD now only accepts http(s) URLs for sv_loadingurl)</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)</li>
+			<li>Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.</li>
+			<li>Shopeditor function `ShopEditor.ReadItemData()` now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (`TTT2SESaveItem`,`TTT2SyncDBItems`)</li>
+			<li>Equipment shop favorite functions are now local and not global anymore (`CreateFavTable`, `AddFavorite`, `RemoveFavorite`, `GetFavorites` & `IsFavorite`)</li>
+		</ul>
+	]], os.time({year = 2021, month = 06, day = 19}))
+
+	AddChange("TTT2 Base - v0.9.1b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed shop convars not being shared / breaking the shop</li>
+		</ul>
+	]], os.time({year = 2021, month = 06, day = 19}))
+
+	AddChange("TTT2 Base - v0.9.2b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed low karma autokick convar</li>
+			<li>Fixed multi-layer inheritance by introducing a recursion based approach</li>
+		</ul>
+	]], os.time({year = 2021, month = 06, day = 20}))
+
+	AddChange("TTT2 Base - v0.9.3b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Add Traditional Chinese Translation (by @TEGTianFan)</li>
+			<li>Added a searchbar to submenus</li>
+			<li>Added full-sized icons to the equipment-editor</li>
+			<li>Hotreload functionality for weapons, they are now fully compatible to TTT2 after hotreload</li>
+			<li>Added experimental `SWEP.HotReloadableKeys` a list of strings to weapons, that makes data saved with `weapons.GetStored()` persistent across hotreloads</li>
+			<li>Extended cvars library to support manipulation of serverside ConVars</li>
+			<li>Added possibility to manipulate serverside ConVars with Checkboxes and Sliders</li>
+			<ul>
+				<li>Just add .serverConvar with the conVarName to the given data similar to .convar</li>
+			</ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Updated Japanese translation (by @westooooo)</li>
+			<li>Fixed text positioning in pure_skin bar (by @LukasMandok)</li>
+			<li>Fixed data being not persistent after hot reloading</li>
+			<ul>
+				<li>HUDs are now still available</li>
+				<li>ttt2net keeps its data</li>
+				<li>bindings are not lost on reload</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Revise and additions simplified Chinese (by @TEGTianFan)</li>
+			<li>Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)</li>
+			<li>ROLE_NONE does not count as a special role anymore (by @TheNickSkater)</li>
+		</ul>
+
+		<h2>Internal Breaking Changes</h2>
+		<ul>
+			<li>Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`</li>
+			<li>Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`</li>
+			<li>Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`</li>
+		</ul>
+	]], os.time({ year = 2021, month = 09, day = 25 }))
+
+	AddChange("TTT2 Base - v0.10.0b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new scoring variable named <code>score.survivePenaltyMultiplier</code> to punish surviving players of a losing team</li>
+			<li>Added in game spawn editor system that can be found in F1->Administration</li>
+			<li>Moved all TTT weapons to this repository (with cleaned up code)</li>
+			<li>Added in four new libraries</li>
+			<ul>
+				<li>map: A library which handles map specific data</li>
+				<li>entspawn: A library that handles the spawning and spawns of all entity types</li>
+				<li>entspawnscript: A library that handles the new TTT2 entity spawn script to customize spawns</li>
+				<li>plyspawn: A library that builds on top of entspawn to handle the more complex player spawn (originally named spawn, see <code>Breaking changes</code>)</li>
+			</ul>
+			<li>Added a new submenu to the administration settings regarding basic role setup</li>
+			<li>Added a new menu to the F1 menu to set up and configure all installed menus</li>
+			<li>Added two new hooks to modify the contents of the newly added menu</li>
+			<ul>
+				<li><code>ROLE:AddToSettingsMenu(parent)</code></li>
+				<li><code>ROLE:AddToSettingsMenuCreditsForm(parent)</code></li>
+			</ul>
+			<li>Added a new in-game player model selector</li>
+			<ul>
+				<li>Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)</li>
+				<li>Added a new ConVar <code>ttt2_use_custom_models</code> (def: 0) to enable the custom player model selector</li>
+				<li>Added indicator that shows if a model has a headshot hitbox</li>
+				<li>Added possibility to enable/disable detective hats for individual player models</li>
+			</ul>
+			<li>Added a new admin only menu for server addon settings</li>
+			<li>Added automatic default values for serverConVars</li>
+			<li>Added two new role variables:</li>
+			<ul>
+				<li><code>isPublicRole</code>: This makes the role behave like a detective in such a way, that the role is public known and shown in the scoreboard. This means other roles can use this without special role syncing; additionally roles with that flag will be handled like a detective if killed by an 'evil' role, meaning that they will receive a credit bonus</li>
+				<li><code>isPolicingRole</code>: This rolevar adds all "detective-like" features to the detective, for example the ability to be called to a corpse etc.</li>
+			</ul>
+			<li>Added two new role conVar variables:</li>
+			<ul>
+				<li><code>creditsAwardDeadEnable</code>: To award this role if a certain percentage of players from the enemy teams died</li>
+				<li><code>creditsAwardKillEnable</code>: To award this role if they killed a high value public role</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Split up kill, suicide and teamkill in the round end screen to make it more clear</li>
+			<li>Decreased the minimum cost of equipment in the equipment editor to 0</li>
+			<li>Changed disguise such that every role can now use the function</li>
+			<li>Completely reworked how weapons, ammo and players spawn in the world</li>
+			<li>Sliders only update ConVars on mouseRelease now</li>
+			<li>Changed the way credits on kills are distributed in a way that non-default roles can easily use this as well</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Removed the (unused?) ConVar <code>ttt2_custom_models</code></li>
+			<li>Removed the function <code>GetRandomPlayerModel()</code>, use <code>playermodels.GetRandomPlayerModel()</code> instead</li>
+			<li>Renamed the <code>spawn</code> module to <code>plyspawn</code></li>
+			<li>Hook <code>PlayerSelectSpawn</code> doesnt return a spawnEntity anymore</li>
+			<li>SpawnWillingPlayers is deleted and not available anymore</li>
+			<li>renamed the <code>ttt_credits_starting</code> to <code>ttt_traitor_credits_starting</code> to be more in-line with all other roles</li>
+			<li><b>WARNING:</b> This means that every traitor now starts with 0 credits until the convar reset button is pressed (on existing servers)</li>
+			<li>removed the <code>alone_bonus</code> convar because it only complicated the credits system further without adding much benefit</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 14 }))
+
+	AddChange("TTT2 Base - v0.10.1b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed Playermodels not correctly loading changes on game start</li>
+			<li>Fixed setting defaults before assigning a resetButton not throwing an error anymore</li>
+			<li>Fixed invisible preview for entity spawn placements</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 15 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

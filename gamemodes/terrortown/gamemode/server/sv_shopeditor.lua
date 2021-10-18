@@ -5,7 +5,6 @@ local net = net
 local sql = sql
 local util = util
 
-util.AddNetworkString("newshop")
 util.AddNetworkString("TTT2UpdateCVar")
 
 net.Receive("TTT2UpdateCVar", function(_, ply)
@@ -19,23 +18,6 @@ net.Receive("TTT2UpdateCVar", function(_, ply)
 end)
 
 ShopEditor.ShopTablePre = "ttt2_shop_"
-
----
--- Opens the ShopEditor for a specific @{Player}
--- @note Just admins are allowed to do so!
--- @param Player ply
--- @param string cmd
--- @param any args
--- @realm server
-function ShopEditor.ShopEditor(ply, cmd, args)
-	if ply:IsAdmin() then
-		net.Start("newshop")
-		net.Send(ply)
-	else
-		ply:ChatPrint("[TTT2][INFO] You need to be an admin to access the ShopEditor!")
-	end
-end
-concommand.Add("shopeditor", ShopEditor.ShopEditor)
 
 ---
 -- Initializes the SQL database for the ShopEditor
@@ -63,7 +45,7 @@ function ShopEditor.CreateShopDBs()
 	for i = 1, #rlsList do
 		local rd = rlsList[i]
 
-		if rd == INNOCENT then continue end
+		if rd.index == ROLE_NONE then continue end
 
 		ShopEditor.CreateShopDB(rd.name)
 	end
@@ -75,7 +57,7 @@ end
 -- @return table
 -- @realm server
 function ShopEditor.GetShopEquipments(roleData)
-	if roleData == INNOCENT then
+	if roleData.index == ROLE_NONE then
 		return {}
 	end
 

@@ -10,11 +10,16 @@ local PANEL = {}
 AccessorFunc(PANEL, "m_iIndent", "Indent")
 
 ---
+-- @accessor bool
+-- @realm client
+AccessorFunc(PANEL, "ignoreConVar", "IgnoreConVar", FORCE_BOOL)
+
+---
 -- @ignore
 function PANEL:Init()
 	self.Button = vgui.Create("DCheckBox", self)
 	self.Button.OnChange = function(_, val)
-		self:OnChange(val)
+		self:ValueChanged(val)
 
 		-- enable / disable slaves on change
 		self:UpdateSlaves(val)
@@ -62,14 +67,74 @@ end
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
+	if not ConVarExists(cvar or "") then return end
+
 	self.Button:SetConVar(cvar)
+	self:SetDefaultValue(tobool(GetConVar(cvar):GetDefault()))
+end
+
+---
+-- @param string cvar
+-- @realm client
+function PANEL:SetServerConVar(cvar)
+	if not cvar or cvar == "" then return end
+
+	self.serverConVar = cvar
+
+	cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
+		if wasSuccess then
+			self:SetValue(tobool(value), true)
+			self:SetDefaultValue(tobool(default))
+		end
+	end)
+
+	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
+		if not IsValid(self) then
+			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+
+			return
+		end
+
+		self:SetValue(tobool(newValue), true)
+	end
+
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
 end
 
 ---
 -- @param any val
+-- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(val)
+function PANEL:SetValue(val, ignoreConVar)
+	self:SetIgnoreConVar(ignoreConVar)
 	self.Button:SetValue(val)
+end
+
+---
+-- @param bool value
+-- @realm client
+function PANEL:SetDefaultValue(value)
+	local noDefault = true
+
+	if isbool(value) then
+		self.default = value
+		noDefault = false
+	else
+		self.default = nil
+	end
+
+	local reset = self:GetResetButton()
+
+	if ispanel(reset) then
+		reset.noDefault = noDefault
+	end
+end
+
+---
+-- @return bool defaultValue, if unset returns false
+-- @realm client
+function PANEL:GetDefaultValue()
+	return tobool(self.default)
 end
 
 ---
@@ -90,6 +155,28 @@ end
 -- @realm client
 function PANEL:Toggle()
 	self.Button:Toggle()
+end
+
+---
+-- @param Panel reset
+-- @realm client
+function PANEL:SetResetButton(reset)
+	if not ispanel(reset) then return end
+
+	self.resetButton = reset
+
+	reset.DoClick = function(slf)
+		self:SetValue(self:GetDefaultValue())
+	end
+
+	reset.noDefault = self.default == nil
+end
+
+---
+-- @return Panel reset
+-- @realm client
+function PANEL:GetResetButton()
+	return self.resetButton
 end
 
 ---
@@ -155,9 +242,23 @@ function PANEL:GetText()
 end
 
 ---
--- @param any bVal
+-- @param any val
 -- @realm client
-function PANEL:OnChange(bVal)
+function PANEL:ValueChanged(val)
+	if self.serverConVar and not self:GetIgnoreConVar() then
+		cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
+	else
+		self:SetIgnoreConVar(false)
+	end
+
+	self:OnValueChanged(val)
+end
+
+---
+-- overwrites the base function with an empty function
+-- @param any val
+-- @realm client
+function PANEL:OnValueChanged(val)
 
 end
 

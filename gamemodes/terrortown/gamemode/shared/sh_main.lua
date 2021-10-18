@@ -8,6 +8,146 @@ local UpdateSprint = UpdateSprint
 
 local MAX_DROWN_TIME = 8
 
+local sneakSpeedSquared = math.pow(150, 2)
+
+TTT2ShopFallbackInitialized = false
+
+---
+-- Initializes the equipment with necessary data for ttt2
+-- @param table equipment equipment to register
+-- @param string name equipment name
+-- @param bool lateInitialize should be lateInitialized and not hotreloaded?
+-- @internal
+-- @realm shared
+local function TTT2RegisterSWEP(equipment, name, lateInitialize)
+	local doHotreload = TTT2ShopFallbackInitialized
+
+	if lateInitialize then
+		doHotreload = false
+	end
+
+	if doHotreload then
+		MsgN("[TTT2] Trying to hotreload ",  name, " .")
+	end
+
+	-- Initialize Equipment
+	AddEquipmentKeyValues(equipment, name)
+	ShopEditor.InitDefaultData(equipment)
+
+	if doHotreload then
+		local oldSWEP = weapons.GetStored(name)
+
+		-- Keep custom changed data from the old SWEP if hotReloadableKeys are given
+		if istable(equipment.HotReloadableKeys) and #equipment.HotReloadableKeys > 0 and oldSWEP then
+			MsgN("[TTT2] Hotreloading ",  #equipment.HotReloadableKeys, " given Keys from old SWEP-file.")
+
+			for _, keys in pairs(equipment.HotReloadableKeys) do
+				local eqKeyField = equipment
+				local oldKeyField = oldSWEP
+				local keyString = ""
+
+				-- If only a single key is given, not a table, convert it
+				if isstring(keys) then
+					keys = {keys}
+				end
+
+				if not istable(keys) then continue end
+
+				local continueOuterLoop = false
+				local counter = 0
+				local saveKey = keys[1]
+
+				for _, key in pairs(keys) do
+					if not isstring(key) or not oldKeyField then
+						continueOuterLoop = true
+
+						break
+					end
+
+
+					keyString = keyString .. "." .. key
+					counter = counter + 1
+					eqKeyField[key] = eqKeyField[key] or {}
+					oldKeyField = oldKeyField[key]
+
+					-- To keep eqKeyField as reference check for tables or create one
+					if counter < #keys and not istable(eqKeyField[key]) then
+						eqKeyField[key] = {}
+					elseif counter == #keys then
+						saveKey = key
+
+						break
+					end
+
+					eqKeyField = eqKeyField[key]
+				end
+
+				if continueOuterLoop then continue end
+
+				MsgN("[TTT2] Overwriting SWEP",  keyString, " = ", tostring(eqKeyField[saveKey]), " with ", tostring(oldKeyField))
+
+				eqKeyField[saveKey] = oldKeyField
+			end
+		end
+
+		ResetDefaultEquipment(equipment)
+	end
+
+	if SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
+		local loaded, changed = sql.Load("ttt2_items", name, equipment, ShopEditor.savingKeys)
+
+		if not loaded then
+			sql.Init("ttt2_items", name, equipment, ShopEditor.savingKeys)
+		elseif changed then
+			local counter = #CHANGED_EQUIPMENT + 1
+
+			if TTT2ShopFallbackInitialized then
+				for i = 1, #CHANGED_EQUIPMENT do
+					if CHANGED_EQUIPMENT[i][1] == name then
+						counter = i
+
+						break
+					end
+				end
+			end
+
+			CHANGED_EQUIPMENT[counter] = {name, equipment}
+		end
+	end
+
+	if not doHotreload then return end
+
+	-- initialize fallback shops
+	InitFallbackShops()
+
+	if SERVER then
+		LoadShopsEquipment()
+
+		-- Force Precache Models
+		if equipment.WorldModel then
+			util.PrecacheModel(equipment.WorldModel)
+		end
+
+		if equipment.ViewModel then
+			util.PrecacheModel(equipment.ViewModel)
+		end
+	elseif CLIENT then
+		TTT2CacheEquipMaterials(equipment)
+		net.Start("TTT2SyncShopsWithServer")
+		net.SendToServer()
+	end
+
+	MsgN("[TTT2] Hotreloading ", name, " was successful.")
+
+	return
+end
+
+---
+-- Runs before registering a weapon via the weapons module
+-- Also runs, when a SWEP-file is hotreloaded
+-- @realm shared
+hook.Add("PreRegisterSWEP", "TTT2RegisterSWEP", TTT2RegisterSWEP)
+
 ---
 -- Called in @{GM:Initialize} as first call right before the TTT2 fileloader
 -- loads the vskin and language files.
@@ -24,12 +164,6 @@ function GM:TTT2Initialize()
 	---
 	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
-
-	-- load all HUDs
-	huds.OnLoaded()
-
-	-- load all HUD elements
-	hudelements.OnLoaded()
 
 	DefaultEquipment = GetDefaultEquipment()
 end
@@ -79,7 +213,7 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerFootstep
 function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
-	if IsValid(ply) and (ply:Crouching() or ply:GetMaxSpeed() < 150 or ply:IsSpec()) then
+	if IsValid(ply) and (ply:GetVelocity():LengthSqr() < sneakSpeedSquared or ply:IsSpec()) then
 		-- do not play anything, just prevent normal sounds from playing
 		return true
 	end
@@ -375,4 +509,40 @@ end
 -- @realm shared
 function GM:TTT2BaseRoleInit()
 
+end
+
+---
+-- Called to make sure everything has an id and was properly registered and if not registers it again.
+-- @param table eq the equipment copy to check
+-- @return bool if the eq has an id
+-- @hook
+-- @realm shared
+function GM:TTT2CheckWeaponForID(eq)
+	if eq.id then return true end
+
+	local class = WEPS.GetClass(eq)
+	local name = eq.PrintName or class
+
+	print("\n[TTT2] Equipment " .. name .. " has no id, trying to register it again.")
+
+	originalEq = weapons.GetStored(class)
+	TTT2RegisterSWEP(originalEq, class, true)
+
+	eq = weapons.Get(class)
+
+	if eq.id then
+		print("[TTT2] Equipment " .. name .. " was successfully registered on second initialization attempt.\n")
+		return true
+	end
+
+	if name then
+		print(name .. " has still no id.")
+	else
+		print("Has no id nor a name")
+	end
+
+	ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization attempt.\n")
+	PrintTable(eq)
+
+	return false
 end

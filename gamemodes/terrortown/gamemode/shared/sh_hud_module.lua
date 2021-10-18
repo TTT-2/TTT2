@@ -1,5 +1,3 @@
-require("huds")
-
 local HUDS_ABSTRACT_FOLDER = "base_huds"
 
 local function includeFoldersFiles(base, fld, fls)

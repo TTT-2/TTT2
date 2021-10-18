@@ -51,7 +51,7 @@ local function DB_GetStringTable(db_table)
 			local tab = {}
 
 			for i = 1, #res do
-				tab[#tab + 1] = res[i].name
+				tab[i] = res[i].name
 			end
 
 			return tab
@@ -78,7 +78,7 @@ function HUDManager.StoreData()
 	end
 
 	-- delete the table to recreate it again, to remove all values that might have been removed from the table
-	sql.Query("DROP TABLE " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE)
+	sql.DropTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE)
 
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE, "name TEXT PRIMARY KEY") then
 		local restrictedHuds = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})

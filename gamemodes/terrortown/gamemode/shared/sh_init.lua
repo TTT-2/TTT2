@@ -2,10 +2,10 @@
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"
-GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer"
+GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
-GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.7.4b"
+GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
+GM.Version = "0.10.1b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -78,9 +78,9 @@ TRAITOR_EQUIPMENT = {
 }
 
 -- role teams to have an identifier
-TEAM_NONE = "noteam"
 TEAM_INNOCENT = "innocents"
 TEAM_TRAITOR = "traitors"
+TEAM_NONE = "nones"
 
 -- never use this as a team, its just a const to check something
 TEAM_NOCHANGE = "nochange"
@@ -93,8 +93,7 @@ ROLE_BITS = 8
 ROLE_INNOCENT = 0
 ROLE_TRAITOR = 1
 ROLE_DETECTIVE = 2
-ROLE_ANY = 3
-ROLE_NONE = ROLE_INNOCENT
+ROLE_NONE = 3
 
 -- TEAM_ARRAY
 TEAMS = TEAMS or {
@@ -107,20 +106,20 @@ TEAMS = TEAMS or {
 		icon = "vgui/ttt/dynamic/roles/icon_traitor",
 		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_traitor"),
 		color = Color(209, 43, 39, 255)
+	},
+	[TEAM_NONE] = {
+		icon = "vgui/ttt/dynamic/roles/icon_no_team",
+		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_no_team"),
+		color = Color(91, 94, 99, 255)
 	}
 }
 
 ACTIVEROLES = ACTIVEROLES or {}
 
----
--- @realm shared
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
--- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
 -- just compatibality functions
 
@@ -148,7 +147,7 @@ end
 ---
 -- Get the role table by the role id
 -- @param number index subrole id
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @see roles.GetByIndex
 -- @realm shared
 -- @deprecated
@@ -159,7 +158,7 @@ end
 ---
 -- Get the role table by the role name
 -- @param string name role name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @see roles.GetByName
 -- @realm shared
 -- @deprecated
@@ -170,7 +169,7 @@ end
 ---
 -- Get the role table by the role abbreviation
 -- @param string abbr role abbreviation
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @see roles.GetByAbbr
 -- @realm shared
 -- @deprecated
@@ -267,7 +266,7 @@ end
 ---
 -- Get the default role table of a specific role team
 -- @param string team role team name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 -- @see roles.GetDefaultTeamRole
 -- @deprecated
@@ -278,7 +277,7 @@ end
 ---
 -- Get the default role tables of a specific role team
 -- @param string team role team name
--- @return table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @return table returns the role tables. This will return the <code>NONE</code> role table as well as its subrole tables as fallback.
 -- @realm shared
 -- @see roles.GetDefaultTeamRoles
 -- @deprecated
@@ -457,6 +456,32 @@ WEAPON_ROLE = WEAPON_EXTRA
 WEAPON_NONE = WEAPON_EXTRA
 WEAPON_EQUIP = WEAPON_SPECIAL
 
+-- weapon spawn type
+WEAPON_TYPE_RANDOM = 1
+WEAPON_TYPE_MELEE = 2
+WEAPON_TYPE_NADE = 3
+WEAPON_TYPE_SHOTGUN = 4
+WEAPON_TYPE_HEAVY = 5
+WEAPON_TYPE_SNIPER = 6
+WEAPON_TYPE_PISTOL = 7
+WEAPON_TYPE_SPECIAL = 8
+
+-- ammo spawn type
+AMMO_TYPE_RANDOM = 1
+AMMO_TYPE_DEAGLE = 2
+AMMO_TYPE_PISTOL = 3
+AMMO_TYPE_MAC10 = 4
+AMMO_TYPE_RIFLE = 5
+AMMO_TYPE_SHOTGUN = 6
+
+-- player spawn types
+PLAYER_TYPE_RANDOM = 1
+
+-- spawn types
+SPAWN_TYPE_WEAPON = 1
+SPAWN_TYPE_AMMO = 2
+SPAWN_TYPE_PLAYER = 3
+
 -- Kill types discerned by last words
 KILL_NORMAL = 0
 KILL_SUICIDE = 1
@@ -493,14 +518,10 @@ COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
+COLOR_WARMGRAY = Color(91, 94, 99, 255)
 
--- load non-wrapped modules directly
-require("marks")
-
--- TODO load modules that are currently not included in gmod but waiting for merge
-require("outline")
-
-include("includes/modules/pon.lua")
+-- include independent libraries (other extensions might require them)
+include("ttt2/libraries/pon.lua")
 
 -- include extensions
 include("ttt2/extensions/math.lua")
@@ -511,8 +532,14 @@ include("ttt2/extensions/table.lua")
 include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
+include("ttt2/extensions/input.lua")
+include("ttt2/extensions/cvars.lua")
 
 -- include libraries
+include("ttt2/libraries/huds.lua")
+include("ttt2/libraries/hudelements.lua")
+include("ttt2/libraries/items.lua")
+include("ttt2/libraries/bind.lua")
 include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/classbuilder.lua")
 include("ttt2/libraries/fonts.lua")
@@ -522,10 +549,16 @@ include("ttt2/libraries/vguihandler.lua")
 include("ttt2/libraries/vskin.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
+include("ttt2/libraries/marks.lua")
+include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
+include("ttt2/libraries/roles.lua")
 include("ttt2/libraries/events.lua")
+include("ttt2/libraries/eventdata.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
+include("ttt2/libraries/playermodels.lua")
+include("ttt2/libraries/entspawnscript.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
@@ -577,28 +610,6 @@ end
 -- Create teams
 TEAM_TERROR = 1
 TEAM_SPEC = TEAM_SPECTATOR
-
--- Everyone's model
-local ttt_playermodels = {
-	Model("models/player/phoenix.mdl"),
-	Model("models/player/arctic.mdl"),
-	Model("models/player/guerilla.mdl"),
-	Model("models/player/leet.mdl")
-}
-
-local ttt_playermodels_count = #ttt_playermodels
-
----
--- Returns a random player model
--- @return Model model
--- @realm shared
-function GetRandomPlayerModel()
-	if not ttt2_custom_models:GetBool() then
-		return ttt_playermodels[math.random(ttt_playermodels_count)]
-	else
-		return ttt_playermodels[1]
-	end
-end
 
 ---
 -- Returns the default equipment

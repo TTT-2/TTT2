@@ -12,7 +12,6 @@ if CLIENT then
 	local pad = 14
 	local element_margin = 6
 
-	local material_no_team = Material("vgui/ttt/dynamic/roles/icon_no_team")
 	local material_watching = Material("vgui/ttt/watching_icon")
 
 	local const_defaults = {
@@ -83,17 +82,12 @@ if CLIENT then
 		local iconSize = h - self.pad * 2
 		local icon, c
 
-		if LocalPlayer():Alive() and LocalPlayer():IsTerror() then
-			if (team == TEAM_NONE or not tm or tm.alone) then -- support roles without a team
-				icon = material_no_team
-				c = Color(91,94,99,255)
-			else -- normal role
-				icon = tm.iconMaterial
-				c = tm.color or Color(0, 0, 0, 255)
-			end
+		if client:Alive() and client:IsTerror() then
+			icon = tm.iconMaterial
+			c = tm.color or COLOR_BLACK
 		else -- player is dead and spectator
 			icon = material_watching
-			c = Color(91,94,99,255)
+			c = COLOR_WARMGRAY
 		end
 
 		-- draw dark bottom overlay

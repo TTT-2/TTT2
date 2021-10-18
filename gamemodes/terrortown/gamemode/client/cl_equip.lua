@@ -1,6 +1,6 @@
 ---
 -- Traitor equipment menu
--- @section stop_manager
+-- @section shop
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
@@ -51,8 +51,71 @@ local serverColsVar = GetConVar("ttt_bem_sv_cols")
 local serverRowsVar = GetConVar("ttt_bem_sv_rows")
 local serverSizeVar = GetConVar("ttt_bem_sv_size")
 
--- add favorites DB functions
-include("favorites_db.lua")
+---
+-- Some database functions of the shop
+
+---
+-- Creates the fav table if it not already exists
+-- @realm client
+local function CreateFavTable()
+	if not sql.TableExists("ttt_bem_fav") then
+		local query = "CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT)"
+		sql.Query(query)
+	end
+end
+
+---
+-- Adds a @{WEAPON} or an @{ITEM} into the fav table
+-- @param number steamid steamid of the @{Player}
+-- @param number subrole subrole id
+-- @param string id the @{WEAPON} or @{ITEM} id
+-- @realm client
+local function AddFavorite(steamid, subrole, id)
+	local query = ("INSERT INTO ttt_bem_fav VALUES('" .. steamid .. "','" .. subrole .. "','" .. id .. "')")
+	sql.Query(query)
+end
+
+---
+-- Removes a @{WEAPON} or an @{ITEM} into the fav table
+-- @param number steamid steamid of the @{Player}
+-- @param number subrole subrole id
+-- @param string id the @{WEAPON} or @{ITEM} id
+-- @realm client
+local function RemoveFavorite(steamid, subrole, id)
+	local query = ("DELETE FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "' AND weapon_id = '" .. id .. "'")
+	sql.Query(query)
+end
+
+---
+-- Get all favorites of a @{Player} based on the subrole
+-- @param number steamid steamid of the @{Player}
+-- @param number subrole subrole id
+-- @return table list of all favorites based on the subrole
+-- @realm client
+local function GetFavorites(steamid, subrole)
+	local query = ("SELECT weapon_id FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "'")
+
+	return sql.Query(query)
+end
+
+---
+-- Looks for weapon id in favorites table (result of GetFavorites)
+-- @param table favorites favorites table
+-- @param number id id of the @{WEAPON} or @{ITEM}
+-- @return boolean
+-- @realm client
+local function IsFavorite(favorites, id)
+	for _, value in pairs(favorites) do
+		local dbid = value["weapon_id"]
+
+		if dbid == tostring(id) then
+			return true
+		end
+	end
+
+	return false
+end
+
 
 local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
@@ -296,7 +359,7 @@ local function CreateEquipmentList(t)
 
 	-- make sure that the players old role is not used anymore
 	if t.notalive then
-		currole = t.role or ROLE_INNOCENT
+		currole = t.role or ROLE_NONE
 	end
 
 	-- Determine if we already have equipment
@@ -547,7 +610,7 @@ function TraitorMenuPopup()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
-	if GetGlobalInt("ttt2_random_shops") > 0 then
+	if GetGlobalBool("ttt2_random_shops") then
 		name = name .. " (RANDOM)"
 	end
 
@@ -774,7 +837,7 @@ function TraitorMenuPopup()
 	end
 
 	-- Random Shop Rerolling
-	if GetGlobalInt("ttt2_random_shops") > 0 and GetGlobalBool("ttt2_random_shop_reroll") then
+	if GetGlobalBool("ttt2_random_shops") and GetGlobalBool("ttt2_random_shop_reroll") then
 		local dtransfer = CreateRerollMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))
@@ -901,7 +964,7 @@ local function ReceiveEquipment()
 	local toRem = {}
 
 	for i = 1, eqAmount do
-		tmp[#tmp + 1] = net.ReadString()
+		tmp[i] = net.ReadString()
 	end
 
 	local equipItems = ply:GetEquipmentItems()
@@ -1032,7 +1095,7 @@ function GM:OnContextMenuOpen()
 
 	---
 	-- @realm client
-	if hook.Run("TTT2PreventAccessShop", client) then return end
+	if hook.Run("TTT2PreventAccessShop", LocalPlayer()) then return end
 
 	if IsValid(eqframe) then
 		eqframe:Close()
@@ -1041,23 +1104,31 @@ function GM:OnContextMenuOpen()
 	end
 end
 
+---
+-- Caches the material or model
+-- @param table item
+-- @realm client
+function TTT2CacheEquipMaterials(item)
+	--if there is no material or model, the item should probably not be available in the shop
+	if item.material and item.material ~= "vgui/ttt/icon_id" then
+		item.ttt2_cached_material = Material(item.material)
+		if item.ttt2_cached_material:IsError() then
+			-- Setting fallback material
+			item.ttt2_cached_material = fallback_mat
+		end
+	elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+		--do not use fallback mat and use model instead
+		item.ttt2_cached_material = nil
+		item.ttt2_cached_model = model
+	end
+end
+
 -- Preload materials for the shop
 hook.Add("PostInitPostEntity", "TTT2CacheEquipMaterials", function()
 	local itms = ShopEditor.GetEquipmentForRoleAll()
 
 	for _, item in pairs(itms) do
-		--if there is no material or model, the item should probably not be available in the shop
-		if item.material and item.material ~= "vgui/ttt/icon_id" then
-			item.ttt2_cached_material = Material(item.material)
-			if item.ttt2_cached_material:IsError() then
-				-- Setting fallback material
-				item.ttt2_cached_material = fallback_mat
-			end
-		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
-			--do not use fallback mat and use model instead
-			item.ttt2_cached_material = nil
-			item.ttt2_cached_model = model
-		end
+		TTT2CacheEquipMaterials(item)
 	end
 end)
 

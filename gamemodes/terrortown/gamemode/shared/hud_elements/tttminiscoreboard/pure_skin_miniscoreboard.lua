@@ -23,7 +23,7 @@ local const_defaults = {
 	minsize = {w = 0, h = 0}
 }
 
-local plysList = plysList or {}
+local plysList = {}
 
 local function SortMiniscoreboardFunc(a, b)
 	if not a:OnceFound() then
@@ -124,7 +124,7 @@ local function GetMSBColorForPlayer(ply)
 	local color = color_blacktrans -- not yet confirmed
 
 	if ply:OnceFound() then
-		if ply:RoleKnown() then
+		if ply:HasRole() then
 			local roleColor = ply:GetRoleColor()
 
 			color = Color(roleColor.r, roleColor.g, roleColor.b, 155) -- role known

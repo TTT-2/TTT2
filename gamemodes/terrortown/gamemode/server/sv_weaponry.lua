@@ -21,11 +21,11 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE
 
 ---
 -- @realm server
-local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -62,7 +62,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) then
+	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) and not ply.forcedGive then
 		return false, 3
 	end
 
@@ -74,6 +74,12 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- if it is a dropped equipment item, it shouldn't be picked up automatically
 	if IsEquipment(wep) and wep.IsDropped and not ply.forcedPickup then
 		return false, 5
+	end
+
+	-- if the player has cached their inventory, weapons should not be picked up with the
+	-- exception of weapons given by the ply:Give function
+	if ply:HasCachedWeapons() and not ply.forcedGive then
+		return false, 6
 	end
 
 	-- Who knows what happens here?!
@@ -182,15 +188,8 @@ end
 local function GetGiveLoadoutWeapons(ply)
 	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
 	local weps = GetLoadoutWeapons(subrole)
-	local tmp = {}
 
-	if weps then
-		for i = 1, #weps do
-			tmp[#tmp + 1] = weps[i]
-		end
-	end
-
-	return tmp
+	return table.Copy(weps)
 end
 
 local function GetResetLoadoutWeapons(ply)
@@ -320,48 +319,6 @@ local function ResetLoadoutItems(ply)
 	end
 end
 
--- Quick hack to limit hats to models that fit them well
-local Hattables = {
-	"phoenix.mdl",
-	"arctic.mdl",
-	"Group01",
-	"monk.mdl"
-}
-
-local function CanWearHat(ply)
-	local path = string.Explode("/", ply:GetModel())
-
-	if #path == 1 then
-		path = string.Explode("\\", path)
-	end
-
-	return table.HasValue(Hattables, path[3])
-end
-
--- Just hats right now
-local function GiveLoadoutSpecial(ply)
-	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not cv_ttt_detective_hats:GetBool() or not CanWearHat(ply) then
-		SafeRemoveEntity(ply.hat)
-
-		ply.hat = nil
-
-		return
-	end
-
-	if IsValid(ply.hat) then return end
-
-	local hat = ents.Create("ttt_hat_deerstalker")
-	if not IsValid(hat) then return end
-
-	hat:SetPos(ply:GetPos() + Vector(0, 0, 70))
-	hat:SetAngles(ply:GetAngles())
-	hat:SetParent(ply)
-
-	ply.hat = hat
-
-	hat:Spawn()
-end
-
 ---
 -- Sometimes, in cramped map locations, giving players weapons fails. A timer
 -- calling this function is used to get them the weapons anyway as soon as
@@ -454,7 +411,11 @@ function GM:PlayerLoadout(ply, isRespawn)
 		GiveLoadoutWeapon(ply, give[i])
 	end
 
-	GiveLoadoutSpecial(ply)
+	playermodels.RemovePlayerHat(ply)
+	playermodels.ApplyPlayerHat(ply, function(p)
+		return ply:IsActive() and ply:GetSubRoleData().isPolicingRole
+			and cv_ttt_detective_hats:GetBool() and playermodels.PlayerCanHaveHat(ply)
+	end)
 
 	if not HasLoadoutWeapons(ply) then
 		MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
@@ -668,15 +629,24 @@ function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 	-- auto-pickup when nearby.
 	wep.IsDropped = true
 
-	ply:DropWeapon(wep)
-
-	wep:PhysWake()
-
 	-- After dropping a weapon, always switch to holstered, so that traitors
-	-- will never accidentally pull out a traitor weapon
+	-- will never accidentally pull out a traitor weapon.
+	--
+	-- Perform this *before* the drop in order to abuse the fact that this
+	-- holsters the weapon, which in turn aborts any reload that's in
+	-- progress. We don't want a dropped weapon to be in a reloading state
+	-- because the relevant timer is reset when picking it up, making the
+	-- reload happen instantly. This allows one to dodge the delay by dropping
+	-- during reload. All of this is a workaround for not having access to
+	-- CBaseWeapon::AbortReload() (and that not being handled in
+	-- CBaseWeapon::Drop in the first place).
 	if not keepSelection then
 		ply:SelectWeapon("weapon_ttt_unarmed")
 	end
+
+	ply:DropWeapon(wep)
+
+	wep:PhysWake()
 end
 
 ---

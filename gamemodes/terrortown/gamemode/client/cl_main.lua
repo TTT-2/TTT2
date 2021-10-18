@@ -43,11 +43,15 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_vskin__default_skin")
+ttt_include("cl_vskin__vgui__dpanel")
 ttt_include("cl_vskin__vgui__dframe")
+ttt_include("cl_vskin__vgui__dimagecheckbox")
+ttt_include("cl_vskin__vgui__droleimage")
 ttt_include("cl_vskin__vgui__dmenubutton")
 ttt_include("cl_vskin__vgui__dsubmenubutton")
 ttt_include("cl_vskin__vgui__dnavpanel")
 ttt_include("cl_vskin__vgui__dcontentpanel")
+ttt_include("cl_vskin__vgui__dcard")
 ttt_include("cl_vskin__vgui__dbuttonpanel")
 ttt_include("cl_vskin__vgui__dcategoryheader")
 ttt_include("cl_vskin__vgui__dcategorycollapse")
@@ -61,7 +65,17 @@ ttt_include("cl_vskin__vgui__dnumslider")
 ttt_include("cl_vskin__vgui__dbinderpanel")
 ttt_include("cl_vskin__vgui__dscrollpanel")
 ttt_include("cl_vskin__vgui__dvscrollbar")
+ttt_include("cl_vskin__vgui__dcoloredbox")
+ttt_include("cl_vskin__vgui__dcoloredtextbox")
+ttt_include("cl_vskin__vgui__dtooltip")
+ttt_include("cl_vskin__vgui__deventbox")
+ttt_include("cl_vskin__vgui__ddragbase")
+ttt_include("cl_vskin__vgui__drolelayeringreceiver")
+ttt_include("cl_vskin__vgui__drolelayeringsender")
+ttt_include("cl_vskin__vgui__dsearchbar")
+ttt_include("cl_vskin__vgui__dsubmenulist")
 
+ttt_include("cl_changes")
 ttt_include("cl_network_sync")
 ttt_include("cl_hud_editor")
 ttt_include("cl_hud_manager")
@@ -75,22 +89,18 @@ ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
-ttt_include("cl_help_data")
-ttt_include("cl_help")
 ttt_include("cl_msgstack")
 ttt_include("cl_eventpopup")
 ttt_include("cl_hudpickup")
 ttt_include("cl_keys")
 ttt_include("cl_wepswitch")
 ttt_include("cl_scoring")
-ttt_include("cl_scoring_events")
 ttt_include("cl_popups")
 ttt_include("cl_equip")
 ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
 ttt_include("cl_radio")
 ttt_include("cl_voice")
-ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
 ttt_include("cl_player_ext")
@@ -99,6 +109,8 @@ ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
+
+ttt_include("cl_help") -- Creates Menus which depend on other client files. Should be loaded as late as possible
 
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Added TTT2 client autorun file: ", path)
@@ -142,21 +154,18 @@ function GM:Initialize()
 	self.round_state = ROUND_WAIT
 	self.roundCount = 0
 
-	-- load addon language files
+	-- load default TTT2 language files or mark them as downloadable on the server
+	-- load addon language files in a second pass, the core language files are loaded earlier
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
 		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
-
 	-- load vskin files
-	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
-
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
@@ -217,45 +226,54 @@ function GM:InitPostEntity()
 	items.MigrateLegacyItems()
 	items.OnLoaded()
 
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
+
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
-	InitDefaultEquipment()
 
 	local itms = items.GetList()
 
 	-- load items
 	for i = 1, #itms do
-		local itm = itms[i]
+		local eq = itms[i]
 
-		ShopEditor.InitDefaultData(itm) -- initialize the default data
-		CreateEquipment(itm) -- init items
+		InitDefaultEquipment(eq)
+		ShopEditor.InitDefaultData(eq) -- initialize the default data
+		CreateEquipment(eq) -- init items
 
-		itm.CanBuy = {} -- reset normal items equipment
+		eq.CanBuy = {} -- reset normal items equipment
 
-		itm:Initialize()
+		eq:Initialize()
 	end
 
 	local sweps = weapons.GetList()
 
 	-- load sweps
 	for i = 1, #sweps do
-		local wep = sweps[i]
+		local eq = sweps[i]
 
-		ShopEditor.InitDefaultData(wep) -- init normal weapons equipment
-		CreateEquipment(wep) -- init weapons
+		-- Check if an equipment has an id or ignore it
+		-- @realm server		
+		if not hook.Run("TTT2CheckWeaponForID", eq) then
+			continue
+		end
 
-		wep.CanBuy = {} -- reset normal weapons equipment
+		-- Insert data into role fallback tables
+		InitDefaultEquipment(eq)
+
+		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 
-	-- TODO why should Equipment be nil?
-	if istable(Equipment) then
-		local roleList = roles.GetList()
+	local roleList = roles.GetList()
 
-		-- reset normal equipment tables
-		for i = 1, #roleList do
-			Equipment[roleList[i].index] = {}
-		end
+	-- reset normal equipment tables
+	for i = 1, #roleList do
+		Equipment[roleList[i].index] = {}
 	end
 
 	-- initialize fallback shops
@@ -275,6 +293,7 @@ function GM:InitPostEntity()
 
 	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
+	TTT2ShopFallbackInitialized = true
 
 	net.Start("TTT_Spectate")
 	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
@@ -296,9 +315,12 @@ function GM:InitPostEntity()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		draw.CacheAvatar(plys[i]:SteamID64(), "small") -- caching
-		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
-		draw.CacheAvatar(plys[i]:SteamID64(), "large") -- caching
+		local plyid64 = plys[i]:SteamID64()
+
+		-- caching
+		draw.CacheAvatar(plyid64, "small")
+		draw.CacheAvatar(plyid64, "medium")
+		draw.CacheAvatar(plyid64, "large")
 	end
 
 	timer.Create("cache_ents", 1, 0, function()
@@ -310,28 +332,37 @@ function GM:InitPostEntity()
 end
 
 ---
--- Called after the gamemode has loaded
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
--- @local
-function GM:PostGamemodeLoaded()
-	ScoringEventSetup()
-end
-
----
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
+	-- load all roles
+	roles.OnLoaded()
+
+	---
+	-- @realm shared
+	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2BaseRoleInit")
+
+	-- load all HUDs
+	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
+
+	-- re-request the HUD to be loaded
+	HUDManager.LoadAllHUDS()
+	HUDManager.SetHUD()
+
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
-
-	ScoringEventSetup()
 end
 
 ---
@@ -466,7 +497,7 @@ local function ReceiveRoleReset()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetRole(ROLE_INNOCENT, TEAM_INNOCENT)
+		plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
 	end
 end
 net.Receive("TTT_RoleReset", ReceiveRoleReset)
@@ -527,7 +558,7 @@ function GM:ClearClientState()
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
 
-	client:SetRole(ROLE_INNOCENT)
+	client:SetRole(ROLE_NONE)
 
 	client.equipmentItems = {}
 	client.equipment_credits = 0
@@ -549,7 +580,7 @@ function GM:ClearClientState()
 
 		pl.sb_tag = nil
 
-		pl:SetRole(ROLE_INNOCENT)
+		pl:SetRole(ROLE_NONE)
 
 		pl.search_result = nil
 	end

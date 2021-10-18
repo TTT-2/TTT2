@@ -75,12 +75,15 @@ end
 
 ---
 -- Retrieves all saved objects of the model from the database.
--- @return table|nil Returns an array of all found objects or nil in case of an error.
+-- @return table|nil Returns an array of all found @{ORMOBJECT}s or nil in case of an error.
 -- @realm shared
 function ORMMODEL:All()
 	local objects = sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
 
 	if objects == false then return end
+
+	-- nothing found, make it an empty table
+	objects = objects or {}
 
 	if not self._primaryKey then
 		return objects
@@ -92,14 +95,14 @@ function ORMMODEL:All()
 		objects[i].Refresh = self.Refresh
 	end
 
-	return objects or {}
+	return objects
 end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
 -- @param string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
--- @return ORMOBJECT|nil Returns the table of the found object or nil in case of an error.
+-- @return table|nil Returns the table of the found @{ORMOBJECT}s or nil in case of an error.
 -- @realm shared
 function ORMMODEL:Find(primaryValue)
 	local where = {}
@@ -124,7 +127,7 @@ function ORMMODEL:Find(primaryValue)
 
 	if result == false then return end
 
-	return result and self:New(result) or {}
+	return result and self:New(result) or nil
 end
 
 ---
@@ -159,7 +162,7 @@ end
 ---
 -- Retrieves all saved objects of the model with the given filters from the database.
 -- @param table filters An array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
--- @return table|nil Returns an array of all found objects or nil in case of an error.
+-- @return table|nil Returns an array of all found @{ORMOBJECT}s or nil in case of an error.
 -- @realm shared
 function ORMMODEL:Where(filters)
 	local query = "SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE "
@@ -168,7 +171,7 @@ function ORMMODEL:Where(filters)
 	for i = 1, #filters do
 		local curFilter = filters[i]
 
-		whereList[i] = sql.SQLIdent(curFilter[column]) .. (curFilter[op] or "=") .. sql.SQLStr(curFilter[value]) .. (curFilter[concat] or "")
+		whereList[i] = sql.SQLIdent(curFilter.column) .. (curFilter.op or "=") .. sql.SQLStr(curFilter.value) .. (curFilter.concat or "")
 	end
 
 	whereList = table.concat(whereList)
@@ -178,6 +181,9 @@ function ORMMODEL:Where(filters)
 	local objects = sql.Query(query)
 
 	if objects == false then return end
+
+	-- nothing found, make it an empty table
+	objects = objects or {}
 
 	if not self._primaryKey then
 		return objects
@@ -189,7 +195,7 @@ function ORMMODEL:Where(filters)
 		objects[i].Refresh = ORMOBJECT.Refresh
 	end
 
-	return objects or {}
+	return objects
 end
 
 ---

@@ -426,7 +426,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 				end
 
 				subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-				break;
+
+				break
 			end
 		end
 
@@ -483,7 +484,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 					end
 
 					subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-					break;
+
+					break
 				end
 			end
 

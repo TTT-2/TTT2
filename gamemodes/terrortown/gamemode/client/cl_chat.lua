@@ -92,7 +92,7 @@ end
 -- @param string text
 -- @realm client
 function AddDetectiveText(ply, text)
-	chat.AddText(DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
+	chat.AddText(roles.DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
 end
 
 ---
@@ -119,13 +119,13 @@ function GM:OnPlayerChat(ply, text, teamChat, isDead)
 		return true
 	end
 
-	local team = ply:Team() == TEAM_SPEC
+	local sTeam = ply:Team() == TEAM_SPEC
 
-	if team and not isDead then
+	if sTeam and not isDead then
 		isDead = true
 	end
 
-	if teamChat and (not team and not ply:IsSpecial() or team) then
+	if teamChat and (sTeam or ply:GetSubRoleData().unknownTeam) then
 		teamChat = false
 	end
 

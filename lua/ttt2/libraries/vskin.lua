@@ -1,7 +1,7 @@
 ---
 -- A handler for the skin colors
 -- @author Mineotopia
--- @module skin
+-- @module vskin
 
 if SERVER then
 	AddCSLuaFile()
