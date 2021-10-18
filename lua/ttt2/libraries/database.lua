@@ -22,7 +22,8 @@ local nameToIndex = {}
 
 local identifierStrings = {
 	Register = "Register",
-	GetValue = "GetValue"
+	GetValue = "GetValue",
+	SetValue = "SetValue"
 }
 
 -- Identifier strings to determine which player gets the information
@@ -89,8 +90,16 @@ if CLIENT then
 				net.WriteUInt(request.identifier, uIntBits)
 				net.WriteUInt(request.index, uIntBits)
 
-				net.WriteString(request.name)
+				net.WriteString(request.itemName)
 				net.WriteString(request.key)
+			end,
+		-- data contains index, itemName, key and value here
+		SetValue = function(data)
+				net.WriteUInt(data.index, uIntBits)
+
+				net.WriteString(data.itemName)
+				net.WriteString(data.key)
+				net.WriteString(tostring(data.value))
 			end
 	}
 
@@ -103,7 +112,7 @@ if CLIENT then
 
 				nameToIndex[accessName] = index
 				registeredDatabases[index] = {
-					name = accessName,
+					accessName = accessName,
 					keys = savingKeys,
 					data = additionalData,
 					storedData = {}
@@ -129,7 +138,7 @@ if CLIENT then
 					local request = requestCache[identifier]
 					value = net.ReadString()
 					value = database.ConvertValueWithKeys(value, request.accessName, request.key)
-					registeredDatabases[request.index].storedData[request.name] = value
+					registeredDatabases[request.index].storedData[request.itemName] = value
 				end
 
 				functionCache[identifier](isSuccess, value)
@@ -142,9 +151,9 @@ if SERVER then
 	sendDataFunctions = {
 		-- data contains identifier, tableCount, index here
 		Register = function(data)
-				local databaseInfo = registeredDatabases[data]
+				local databaseInfo = registeredDatabases[data.index]
 				net.WriteUInt(data.index, uIntBits)
-				net.WriteString(databaseInfo.name)
+				net.WriteString(databaseInfo.accessName)
 				net.WriteTable(databaseInfo.keys)
 				net.WriteTable(databaseInfo.data)
 
@@ -178,10 +187,20 @@ if SERVER then
 					index = net.ReadUInt(uIntBits)
 				}
 
-				data.name = net.ReadString()
+				data.itemName = net.ReadString()
 				data.key = net.ReadString()
 
 				database.ReturnGetValue(data)
+			end,
+		SetValue = function(plyID64)
+				local data = {
+					index = net.ReadUInt(uIntBits),
+					itemName = net.ReadString(),
+					key = net.ReadString(),
+					value = net.ReadString()
+				}
+
+				database.SetValue(registeredDatabases[data.index].accessName, data.itemName, data.key, data.value, plyID64)
 			end
 	}
 end
@@ -322,7 +341,7 @@ if CLIENT then
 		for i = 1, #onWaitReceiveFunctionCache do
 			local data = onWaitReceiveFunctionCache[i]
 
-			database.GetValue(data.accessName, data.name, data.key, data.OnReceiveFunc)
+			database.GetValue(data.accessName, data.itemName, data.key, data.OnReceiveFunc)
 		end
 
 		onWaitReceiveFunctionCache = {}
@@ -331,14 +350,15 @@ if CLIENT then
 	---
 	-- Get the stored key value of the given database if it exists on the server or was already cached
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @param string name the name or primaryKey of the item inside of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
 	-- @realm client
-	function database.GetValue(accessName, name, key, OnReceiveFunc)
+	function database.GetValue(accessName, itemName, key, OnReceiveFunc)
 		local index = nameToIndex[accessName]
 
 		if not index then
 			if triedToGetRegisteredDatabases then
+				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
 				OnReceiveFunc(false)
 
 				return
@@ -350,7 +370,7 @@ if CLIENT then
 
 			onWaitReceiveFunctionCache[#onWaitReceiveFunctionCache + 1] = {
 				accessName = accessName,
-				name = name,
+				itemName = itemName,
 				key = key,
 				OnReceiveFunc = OnReceiveFunc
 			}
@@ -359,7 +379,14 @@ if CLIENT then
 		end
 
 		local dataTable = index and registeredDatabases[index]
-		local storedValue = dataTable and dataTable.storedData[name] and dataTable.storedData[name][key]
+
+		if not registeredDatabases.keys[key] then
+			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+
+			return
+		end
+
+		local storedValue = dataTable and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
 
 		if storedValue then
 			OnReceiveFunc(true, storedValue)
@@ -374,12 +401,30 @@ if CLIENT then
 		requestCache[requestCacheSize] = {
 			identifier = messageIdentifier,
 			accessName = accessName,
-			name = name,
+			itemName = itemName,
 			key = key,
 			index = index
 		}
 
 		SendUpdateNextTick(identifierStrings.GetValue, requestCacheSize)
+	end
+
+	function database.SetValue(accessName, itemName, key, value)
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
+
+			return
+		end
+
+		if not registeredDatabases.keys[key] then
+			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+
+			return
+		end
+
+		SendUpdateNextTick(identifierStrings.SetValue, {index = index, itemName = itemName, key = key, value = value})
 	end
 end
 
@@ -406,7 +451,7 @@ if SERVER then
 		end
 	end
 
-	function database.RegisterDatabase(accessName, databaseName, savingKeys, additionalData)
+	function database.RegisterDatabase(databaseName, accessName, savingKeys, additionalData)
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
 		end
@@ -418,7 +463,7 @@ if SERVER then
 		databaseCount = databaseCount + 1
 
 		registeredDatabases[databaseCount] = {
-			name = accessName,
+			accessName = accessName,
 			orm = orm.Make(databaseName),
 			keys = savingKeys,
 			data = additionalData
@@ -458,6 +503,38 @@ if SERVER then
 		database.RegisterPlayer(requestData.plyID64)
 
 		SendUpdateNextTick(identifierStrings.GetValue, serverData, requestData.plyID64)
+	end
+
+	function database.SetValue(accessName, itemName, key, value, plyID64)
+		if plyID64 and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
+
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not registered.")
+
+			return
+		end
+
+		if not registeredDatabases.keys[key] then
+			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+
+			return
+		end
+
+		local itemPoolModel = registeredDatabases[index].orm
+
+		local item = itemPoolModel:Find(itemName)
+
+		if not item then
+			item = itemPoolModel:New({
+				name = itemName,
+			})
+		end
+
+		item[key] = value
+
+		itemPoolModel:Save()
 	end
 
 	hook.Add("PlayerAuthed", "TTT2SyncDatabaseIndexTableToAuthorizedPlayers", function(ply, plyID64, uniqueID)
