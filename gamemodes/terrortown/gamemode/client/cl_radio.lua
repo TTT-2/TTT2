@@ -180,9 +180,9 @@ function RADIO:SendCommand(slotidx)
 end
 
 ---
--- Returns the target type of the local @{Player}
--- @return nil|string the cmd name
--- @return nil|boolean whether a custom cmd matches this situation
+-- Returns the target type of the local @{Player}.
+-- @return Entity|string The command name or the focused entity
+-- @return nil|boolean Whether a custom cmd matches this situation, if true the first return argument is a command string
 -- @realm client
 function RADIO:GetTargetType()
 	local client = LocalPlayer()
@@ -191,7 +191,10 @@ function RADIO:GetTargetType()
 	local trace = client:GetEyeTrace(MASK_SHOT)
 	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
 
-	local ent = trace.Entity
+	---
+	-- @hook
+	-- @realm client
+	local ent = hook.Run("TTT2ModifyRadioTarget", trace.Entity) or trace.Entity
 
 	if ent:IsPlayer() and ent:IsTerror() then
 		if ent:GetNWBool("disguised", false) then
@@ -414,5 +417,15 @@ end
 -- @hook
 -- @realm client
 function GM:TTT2ClientRadioCommand(cmd)
+
+end
+
+---
+-- Hook that can be used to modify the targeted entity for the radio commands.
+-- @param Entity ent The currently focused entity
+-- @return nil|Entity Return the entity that should be used, `nil` if kept unchanged
+-- @hook
+-- @realm client
+function GM:TTT2ModifyRadioTarget(ent)
 
 end
