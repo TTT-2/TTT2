@@ -99,4 +99,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 		masterRefs[key] = option
 	end
+
+	-- now add custom equipment settings
+	if not isfunction(equipment.AddToSettingsMenu) then
+		print(equipment.PrintName)
+
+		PrintTable(equipment)
+	else
+		equipment:AddToSettingsMenu(parent)
+	end
+
 end
