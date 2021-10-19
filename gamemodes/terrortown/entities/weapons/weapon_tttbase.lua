@@ -482,6 +482,7 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:PrimaryAttack
 -- @realm shared
 function SWEP:PrimaryAttack(worldsnd)
+	print("Primary attack of " .. self.ClassName)
 	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -696,6 +697,10 @@ function SWEP:Ammo1()
 end
 
 if SERVER then
+	function SWEP:Test()
+		print("\ntest-function\n")
+	end
+
 	---
 	-- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
 	-- does not occur when a drop happens for some reason. Hence this thing.

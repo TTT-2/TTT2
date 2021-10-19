@@ -61,6 +61,15 @@ end
 -- Add some zoom to ironsights for this gun
 -- @ignore
 function SWEP:SecondaryAttack()
+	if SERVER then
+		self:Test()
+
+		if not self.isTested then
+			self.isTested = true
+			PrintTable(weapons.Get(self.ClassName))
+		end
+	end
+
 	if not self.IronSightsPos or self:GetNextSecondaryFire() > CurTime() then return end
 
 	local bIronsights = not self:GetIronsights()
