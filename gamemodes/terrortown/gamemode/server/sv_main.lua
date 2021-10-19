@@ -462,9 +462,7 @@ function GM:InitPostEntity()
 
 		-- Check if an equipment has an id or ignore it
 		-- @realm server
-		if not hook.Run("TTT2RegisterWeaponID", eq) then
-			continue
-		end
+		if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
 
 		-- Insert data into role fallback tables
 		InitDefaultEquipment(eq)
