@@ -11,10 +11,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed the reset button not working for Sliders in the F1 Menu
+- Fixed defuser only working for detectives
 
 ### Changed
 
 - Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging
+- Changed `TTTCanPickupAmmo` hook, return `false` to cancel pickup
+- Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
+- Changed all C4 hooks to be cancelable
 
 ### Removed
 
@@ -255,9 +259,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
-- Changed `TTTCanPickupAmmo` hook, return `false` to cancel pickup
-- Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
-- Changed all C4 hooks to be cancelable
 - Changed the language identifiers to generic english names
 - moved functions from sh_util into their respective library files
 - Moved functions from sh_util into their respective library files
@@ -271,7 +272,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
-- Fixed defuser only working for detectives
 - Fixed a roleselection bug, where forced roles would not be deducted from the available roles
 - Fixed a credit award bug, where detectives would receive a pointless notification about being awarded with 0 credits
 - Fixed a karma bug, where damage would still be reduced even though the karma system was disabled
