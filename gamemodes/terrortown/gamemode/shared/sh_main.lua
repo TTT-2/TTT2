@@ -28,6 +28,7 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		equipment = weapons.GetStored(name)
 		doHotreload = false
 	elseif not doHotreload then
+		return
 	end
 
 	if doHotreload then
