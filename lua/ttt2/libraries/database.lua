@@ -162,12 +162,11 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 end
 
 ---
--- Adds a callback to be called when the given sql table entries change
--- @note itemName and key can both be `nil`. The callback function then gets called on a change of every item or every key
+-- Removes a callback if an identifier was registered
+-- @note itemName and key can both be `nil`. The callback function then gets removed for all items or keys with that identifier
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
--- @param string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
--- @param string key the name of the key in the database. Leave `nil` if you want a callback for every key
--- @param function The callback function(accessName, itemName, key, oldValue, newValue), its only called if the value actually changed
+-- @param string itemName the name of the item in the database. Leave `nil` if you want to remove callbacks for every item with given identifier
+-- @param string key the name of the key in the database. Leave `nil` if you want to remove callbacks for every key with given identifier
 -- @param string identifier a chosen identifier if you want to remove the callback
 -- @realm shared
 function database.RemoveChangeCallback(accessName, itemName, key, identifier)
