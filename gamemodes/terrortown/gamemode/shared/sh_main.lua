@@ -14,16 +14,21 @@ TTT2ShopFallbackInitialized = false
 
 ---
 -- Initializes the equipment with necessary data for ttt2
+-- Also handles hotreload when called with the `PreRegisterSWEP` hook
 -- @param table equipment equipment to register
 -- @param string name equipment name
--- @param bool lateInitialize should be lateInitialized and not hotreloaded?
+-- @param bool initialize should the real weapon table be initialized and not hotreloaded?
 -- @internal
 -- @realm shared
-local function TTT2RegisterSWEP(equipment, name, lateInitialize)
+local function TTT2RegisterSWEP(equipment, name, initialize)
 	local doHotreload = TTT2ShopFallbackInitialized
 
-	if lateInitialize then
+	-- Handle first initialization or do hotreload 
+	if initialize then
+		equipment = weapons.GetStored(name)
 		doHotreload = false
+	elseif not doHotreload then
+		return
 	end
 
 	if doHotreload then
@@ -437,36 +442,33 @@ function GM:TTT2PostDoorSetup(doorsTable)
 end
 
 ---
--- Called to make sure everything has an id and was properly registered and if not registers it again.
--- @param table eq the equipment copy to check
--- @return bool if the eq has an id
+-- Called to register equipment and assign an id. Returns true if it is successfully registered.
+-- @param table eq the equipment copy to register with an id
+-- @return bool if the eq is succesfully registered
 -- @hook
 -- @realm shared
-function GM:TTT2CheckWeaponForID(eq)
+function GM:TTT2RegisterWeaponID(eq)
 	if eq.id then return true end
 
 	local class = WEPS.GetClass(eq)
-	local name = eq.PrintName or class
 
-	print("\n[TTT2] Equipment " .. name .. " has no id, trying to register it again.")
-
-	originalEq = weapons.GetStored(class)
-	TTT2RegisterSWEP(originalEq, class, true)
+	TTT2RegisterSWEP(eq, class, true)
 
 	eq = weapons.Get(class)
 
 	if eq.id then
-		print("[TTT2] Equipment " .. name .. " was successfully registered on second initialization attempt.\n")
 		return true
 	end
 
+	local name = eq.PrintName or class
+
 	if name then
-		print(name .. " has still no id.")
+		print(name .. " cant be assigned an id.")
 	else
-		print("Has no id nor a name")
+		print("No id could be assigned. Equipment has no name.")
 	end
 
-	ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is still invalid after second initialization attempt.\n")
+	ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is invalid after registration attempt and has no id.\n")
 	PrintTable(eq)
 
 	return false
