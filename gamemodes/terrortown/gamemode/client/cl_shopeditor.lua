@@ -70,7 +70,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		and not eject[name]
 		then
 			-- @realm client
-			if hook.Run("TTT2CheckWeaponForID", eq) then
+			if hook.Run("TTT2RegisterWeaponID", eq) then
 				tbl[#tbl + 1] = eq
 			else
 				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
