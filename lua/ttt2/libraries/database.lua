@@ -42,8 +42,8 @@ local receiveDataFunctions = {}
 
 local sendRequestsNextUpdate = false
 
-local waitForRegisteredDatabases = false
-local triedToGetRegisteredDatabases = false
+local waitForRegisteredDatabases = {}
+local triedToGetRegisteredDatabases = {}
 local onWaitReceiveFunctionCache = {}
 
 local requestCacheSize = 0
@@ -403,7 +403,10 @@ end
 --
 
 ---
--- 
+-- The function to be called on received synchronisation messages between server and client
+-- @param number len length of the message
+-- @param Player ply player that the message is received, `nil` on the client
+-- @realm shared
 -- @internal
 local function SynchronizeStates(len, ply)
 	if len < 1 then return end
@@ -433,6 +436,10 @@ local function SynchronizeStates(len, ply)
 end
 net.Receive("TTT2SynchronizeDatabase", SynchronizeStates)
 
+---
+-- The function to call when synchronizing all messages between server and client
+-- @realm shared
+-- @internal
 local function SendUpdatesNow()
 	sendRequestsNextUpdate = false
 
@@ -499,18 +506,26 @@ local function SendUpdatesNow()
 	end
 end
 
+---
+-- The function to call when you want to queue a message to be sent next tick
+-- @note on the client plyIdentifier is unused and always sends to the server
+-- @param string identifier the identifiers used in send and receive messages, defined in `identifierStrings`
+-- @param any data the data for the send method. Can contain anything and is defined above each send or receive method itself
+-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `sendToPly` or can be a plyID64
+-- @realm shared
+-- @internal
 local function SendUpdateNextTick(identifier, data, plyIdentifier)
 	if not sendRequestsNextUpdate then
 		sendRequestsNextUpdate = true
 		timer.Simple(0, SendUpdatesNow())
 	end
 
-	if not isstring(plyIdentifier) then
-		if CLIENT then
-			plyIdentifier = sendToPly.server
-		elseif SERVER then
-			plyIdentifier = sendToPly.registered
-		end
+	if CLIENT then
+		plyIdentifier = sendToPly.server
+	end
+
+	if not isstring(plyIdentifier) and SERVER then
+		plyIdentifier = sendToPly.registered
 	end
 
 	-- Store data
@@ -523,21 +538,29 @@ end
 
 -- Client data and functions Part 2
 if CLIENT then
+	---
+	-- Is automatically called when a client joins, can be called by a player to force an update, but is normally not necessary
+	-- @param function OnReceiveFunc() the function that is called when the registered databases are received
+	-- @realm client
+	-- @internal
 	function database.GetRegisteredDatabases(OnReceiveFunc)
-		waitForRegisteredDatabases = true
-
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		functionCache[messageIdentifier] = OnReceiveFunc
 
 		SendUpdateNextTick(identifierStrings.Register, messageIdentifier)
 	end
 
+	---
+	-- Is called after databases are received. All pending getRequests are sent.
+	-- @realm client
+	-- @internal
 	local function cleanUpWaitReceiveCache()
-		waitForRegisteredDatabases = false
-		triedToGetRegisteredDatabases = true
 
 		for i = 1, #onWaitReceiveFunctionCache do
 			local data = onWaitReceiveFunctionCache[i]
+
+			waitForRegisteredDatabases[data.accessName] = false
+			triedToGetRegisteredDatabases[data.accessName] = true
 
 			database.GetValue(data.accessName, data.itemName, data.key, data.OnReceiveFunc)
 		end
@@ -549,20 +572,22 @@ if CLIENT then
 	-- Get the stored key value of the given database if it exists on the server or was already cached
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param string key the name of the key in the database
 	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
 	-- @realm client
 	function database.GetValue(accessName, itemName, key, OnReceiveFunc)
 		local index = nameToIndex[accessName]
 
 		if not index then
-			if triedToGetRegisteredDatabases then
+			if triedToGetRegisteredDatabases[accessName] then
 				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
 				OnReceiveFunc(false)
 
 				return
 			end
 
-			if not waitForRegisteredDatabases then
+			if not waitForRegisteredDatabases[accessName] then
+				waitForRegisteredDatabases[accessName] = true
 				database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
 			end
 
@@ -607,6 +632,12 @@ if CLIENT then
 		SendUpdateNextTick(identifierStrings.GetValue, requestCacheSize)
 	end
 
+	---
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param string key the name of the key in the database
+	-- @param any value the value you want to set in the database
+	-- @realm client
 	function database.SetValue(accessName, itemName, key, value)
 		local index = nameToIndex[accessName]
 
@@ -628,16 +659,29 @@ end
 
 -- Server data and functions Part 2
 if SERVER then
-	function database.RegisterPlayer(plyID64)
+	---
+	-- Registers players that are notified of all changes
+	-- @note this function is called when a player makes a request to the server
+	-- @param string plyID64 the player steam ID 64
+	-- @realm server
+	-- @internal
+	local function RegisterPlayer(plyID64)
 		if not playersCache[plyId] then
 			playersCache[plyId] = true
 			registeredPlayersTable[#registeredPlayersTable + 1] = playerID64Cache[plyID64]
 		end
 	end
 
+	---
+	-- Synchronizes all registered Databases with the given players defined by the plyIdentifier
+	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `sendToPly` or can be a plyID64
+	-- @param string identifier the identifier used to get correct onreceive functions
+	-- @realm server
+	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
 		local tableCount = #registeredDatabases
 
+		--contains additional data in case an identifier is given
 		local data = {
 			identifier = identifier,
 			tableCount = tableCount
@@ -649,6 +693,13 @@ if SERVER then
 		end
 	end
 
+	---
+	-- @param string databaseName the real name of the database
+	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
+	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
+	-- @param table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
+	-- @return bool isSuccessful if the database exists and is successfully registered
+	-- @realm server
 	function database.RegisterDatabase(databaseName, accessName, savingKeys, additionalData)
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
@@ -677,6 +728,12 @@ if SERVER then
 		return true
 	end
 
+	---
+	-- This is called upon receiving a get request from a player to send a value back
+	-- @warning Dont use this function if you want to get a value from the database, this is meant to be used internally
+	-- @param table requestData = {plyID64, identifier, index, itemName, key} contains player and the data they requested
+	-- @realm server
+	-- @internal
 	function database.ReturnGetValue(requestData)
 		local index = requestData.index
 		local data = index and registeredDatabases[index]
@@ -699,11 +756,18 @@ if SERVER then
 			serverData.value = tostring(sqlData[requestData.key])
 		end
 
-		database.RegisterPlayer(requestData.plyID64)
+		RegisterPlayer(requestData.plyID64)
 
 		SendUpdateNextTick(identifierStrings.GetValue, serverData, requestData.plyID64)
 	end
 
+	---
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param string key the name of the key in the database
+	-- @param any value the value you want to set in the database
+	-- @param string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
+	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
 		if plyID64 and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
 
@@ -740,6 +804,7 @@ if SERVER then
 		SendUpdateNextTick(identifierStrings.SetValue, {index = index, itemName = itemName, key = key, value = value}, sendToPly.registered)
 	end
 
+	-- Sync databases to all authenticated players
 	hook.Add("PlayerAuthed", "TTT2SyncDatabaseIndexTableToAuthorizedPlayers", function(ply, plyID64, uniqueID)
 		if not IsValid(ply) then return end
 
@@ -747,6 +812,7 @@ if SERVER then
 		database.SyncRegisteredDatabases(plyID64)
 	end)
 
+	-- Remove disconnected players, that were additionally registered due to requesting or setting data
 	hook.Add("PlayerDisconnected", "TTT2RemovePlayerOfRegisteredPlayersTable", function(ply)
 		if not IsValid(ply) or not playersCache[ply:SteamID64()] then return end
 
