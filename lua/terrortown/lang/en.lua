@@ -1372,7 +1372,7 @@ L.header_equipment_value_setup = "Balance Settings"
 
 L.itemeditor_name_not_buyable = "Equipment buyable"
 L.itemeditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
-L.itemeditor_name_not_random = "Aways available in shop"
+L.itemeditor_name_not_random = "Always available in shop"
 L.itemeditor_desc_not_random = "If enabled, the equipment is always available in the shop. This is relevant when using the random shop. It takes one available random slot and always reserves it for this equipment."
 L.itemeditor_name_global_limited = "Global limited amount"
 L.itemeditor_desc_global_limited = "If equipment is global limited, it can be bought only once on the server in the active round."
