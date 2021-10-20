@@ -60,8 +60,18 @@ local callbackIdentifiers = {}
 -- Saves all ID64 of players that sent a message
 local playerID64Cache = {}
 
+--
 -- Shared functions Part 1
+--
 
+---
+-- Called on change of values over the database-library
+-- @param number index the local index of the database
+-- @param string itemName the name of the item in the database
+-- @param string key the name of the key in the database
+-- @param any newValue the value it got changed to
+-- @realm shared
+-- @internal
 local function OnChange(index, itemName, key, newValue)
 	local tempDatabase = registeredDatabases[index]
 	local storedData = tempDatabase.storedData
@@ -109,6 +119,15 @@ local function OnChange(index, itemName, key, newValue)
 
 end
 
+---
+-- Adds a callback to be called when the given sql table entries change
+-- @note itemName and key can both be `nil`. The callback function then gets called on a change of every item or every key
+-- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
+-- @param string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
+-- @param string key the name of the key in the database. Leave `nil` if you want a callback for every key
+-- @param function The callback function(accessName, itemName, key, oldValue, newValue), its only called if the value actually changed
+-- @param string identifier a chosen identifier if you want to remove the callback
+-- @realm shared
 function database.AddChangeCallback(accessName, itemName, key, callback, identifier)
 	if not isstring(accessName) or not isfunction(callback) then return end
 
@@ -142,6 +161,15 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 	}
 end
 
+---
+-- Adds a callback to be called when the given sql table entries change
+-- @note itemName and key can both be `nil`. The callback function then gets called on a change of every item or every key
+-- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
+-- @param string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
+-- @param string key the name of the key in the database. Leave `nil` if you want a callback for every key
+-- @param function The callback function(accessName, itemName, key, oldValue, newValue), its only called if the value actually changed
+-- @param string identifier a chosen identifier if you want to remove the callback
+-- @realm shared
 function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 	callbacks = callbackIdentifiers[identifier]
 
@@ -195,6 +223,15 @@ function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 	end
 end
 
+---
+-- Converts the given value of a database with its key
+-- @warning this function shalle be removed and replaced with orm conversion. Or just use `sql.GetParsedData`
+-- @param string value the value to convert with a key
+-- @param string accessName the chosen accessName registered for a given database.
+-- @param string key the name of the key in the database
+-- @return any value after conversion, `nil` if not convertible or "nil" or "NULL"
+-- @realm shared
+-- @internal
 function database.ConvertValueWithKeys(value, accessName, key)
 	if value == "nil" or value == "NULL" then return end
 
@@ -213,8 +250,9 @@ function database.ConvertValueWithKeys(value, accessName, key)
 	return value
 end
 
--- Client data and functions Part 1
+-- Client send and receive functions
 if CLIENT then
+	-- The used functions to send Data from the client to server
 	sendDataFunctions = {
 		-- data contains the messageIdentifier here
 		Register = function(data)
@@ -240,6 +278,7 @@ if CLIENT then
 			end
 	}
 
+	-- The used functions to receive Data from the server on the client
 	receiveDataFunctions = {
 		Register = function()
 				local index = net.ReadUInt(uIntBits)
@@ -291,8 +330,9 @@ if CLIENT then
 	}
 end
 
--- Server data and functions Part 1
+-- Server send and receive functions
 if SERVER then
+	-- The used functions to send Data from the server to client
 	sendDataFunctions = {
 		-- data contains identifier, tableCount, index here
 		Register = function(data)
@@ -328,6 +368,7 @@ if SERVER then
 			end
 	}
 
+	-- The used functions to receive Data from the client on the server
 	receiveDataFunctions = {
 		Register = function(plyID64)
 				database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
@@ -357,8 +398,13 @@ if SERVER then
 	}
 end
 
+--
 -- Shared functions Part 2
+--
 
+---
+-- 
+-- @internal
 local function SynchronizeStates(len, ply)
 	if len < 1 then return end
 
