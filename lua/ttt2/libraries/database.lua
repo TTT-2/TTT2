@@ -53,13 +53,18 @@ local functionCache = {}
 local playersCache = {}
 local registeredPlayersTable = {}
 
+local allCallbackString = "__allCallbacks"
+local callbackCache = {}
+local callbackIdentifiers = {}
+
 -- Saves all ID64 of players that sent a message
 local playerID64Cache = {}
 
 -- Shared functions Part 1
 
 local function OnChange(index, itemName, key, newValue)
-	local storedData = registeredDatabases[index].storedData
+	local tempDatabase = registeredDatabases[index]
+	local storedData = tempDatabase.storedData
 
 	local dataEntry = storedData[itemName] or {}
 	local oldValue = dataEntry[key]
@@ -69,6 +74,125 @@ local function OnChange(index, itemName, key, newValue)
 	-- TODO: Implement Callbacks
 	if oldValue == newValue then return end
 
+	local accessName = tempDatabase.accessName
+
+	-- Call all callbacks
+	local cache = callbackCache[accessName]
+	if not cache then return end
+
+	local tempItemName = itemName
+	for i = 1, 2 do
+		if i == 2 then
+			tempItemName = allCallbackString
+		end
+
+		local funcCache = cache[tempItemName]
+
+		if not funcCache then continue end
+
+		local tempKey = key
+		for j = 1, 2 do
+			if j == 2 then
+				tempKey = allCallbackString
+			end
+
+			funcCache = funcCache[tempKey]
+
+			if not funcCache then continue end
+
+			-- Execute callbacks
+			for k = 1, #funcCache do
+				funcCache[k](accessName, itemName, key, oldValue, newValue)
+			end
+		end
+	end
+
+end
+
+function database.AddChangeCallback(accessName, itemName, key, callback, identifier)
+	if not isstring(accessName) or not isfunction(callback) then return end
+
+	-- If no itemName is given, subscribe to changes of all items
+	if not isstring(itemName) then
+		itemName = allCallbackString
+	end
+
+	-- If no key is given, subscribe to changes of all keys of the item	
+	if not isstring(key) then
+		key = allCallbackString
+	end
+
+	-- If no identifier is given just choose one	
+	if not isstring(identifier) then
+		identifier = allCallbackString
+	end
+
+	local cache = callbackCache[accessName] or {}
+	cache[itemName] = cache[itemName] or {}
+	cache[itemName][key] = cache[itemName][key] or {}
+	cache[itemName][key][identifier] = cache[itemName][key][identifier] or {}
+	cache[itemName][key][identifier][#cache[itemName][key][identifier] + 1] = callback
+
+	callbackCache[accessName] = cache
+	callbackIdentifiers[identifier] = callbackIdentifiers[identifier] or {}
+	callbackIdentifiers[identifier][#callbackIdentifiers[identifier] + 1] = {
+			accessName = accessName,
+			itemName = itemName,
+			key = key
+	}
+end
+
+function database.RemoveChangeCallback(accessName, itemName, key, identifier)
+	callbacks = callbackIdentifiers[identifier]
+
+	if not accessName or not callbacks then return end
+
+	local cache = callbackCache[accessName]
+
+	if not cache then return end
+
+	-- If no itemName is given, remove callbacks of all items
+	local skipItemName = false
+	if not isstring(itemName) then
+		skipItemName = true
+	end
+
+	-- If no key is given, remove callbacks of all keys of the item	
+	local skipKey = false
+	if not isstring(key) then
+		skipKey = true
+	end
+
+	for i = #callbacks, 1, -1  do
+		callback = callbacks[i]
+
+		-- AccesName has to be the same as registration for all sql tables is not allowed
+		if callback.accessName ~= accessName then continue end
+
+		-- If neither itemName nor the key fit, skip that callback
+		local cItemName = callback.itemName
+		if cItemName ~= itemName and not skipItemName then continue end
+
+		local cKey = callback.key
+		if cKey ~= key and not skipKey then continue end
+
+		cache[cItemName][cKey][identifier] = nil
+		table.remove(callbacks, i)
+
+		-- Delete empty table entries in callbackCache
+		if not table.IsEmpty(cache[callback.itemName][callback.key]) then continue end
+		cache[callback.itemName][callback.key] = nil
+
+		if not table.IsEmpty(cache[callback.itemName]) then continue end
+		cache[callback.itemName] = nil
+
+		if not table.IsEmpty(cache) then continue end
+		callbackCache[accessName] = nil
+	end
+
+	if #callbacks < 1 then
+		callbackIdentifiers[identifier] = nil
+	end
 end
 
 function database.ConvertValueWithKeys(value, accessName, key)
