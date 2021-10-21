@@ -420,7 +420,7 @@ local function SynchronizeStates(len, ply)
 	local bytesLeft = net.BytesLeft()
 
 	while bytesLeft > 0 do
-		local identifier = net.ReadString()
+		local identifier = net.ReadUInt(uIntBits)
 		local readNextValue = net.ReadBool()
 
 		while readNextValue do
@@ -451,7 +451,7 @@ local function SendUpdatesNow()
 		local deleteIdentifiers = {}
 
 		for identifier, indexedData in pairs(identifierList) do
-			net.WriteString(identifier)
+			net.WriteUInt(identifier, uIntBits)
 			net.WriteBool(#indexedData > 0)
 
 			for i = #indexedData, 1, -1 do
