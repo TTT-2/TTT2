@@ -129,8 +129,12 @@ end
 -- @param Entity ply The touching entity that is probably a player
 -- @realm shared
 function ENT:Touch(ply)
-	if CLIENT or self.tickRemoval or not ply:IsValid() or not ply:IsPlayer()
-		or not self:CheckForWeapon(ply) or not self:PlayerCanPickup(ply)
+	if CLIENT
+		or self.tickRemoval
+		or not ply:IsValid()
+		or not ply:IsPlayer()
+		or not self:CheckForWeapon(ply)
+		or not self:PlayerCanPickup(ply)
 	then return end
 
 	local ammo = ply:GetAmmoCount(self.AmmoType)

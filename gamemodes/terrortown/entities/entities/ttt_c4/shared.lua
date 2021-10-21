@@ -754,8 +754,10 @@ if SERVER then
 
 		local bomb = ents.GetByIndex(idx)
 
-		if not IsValid(bomb) or bomb:GetClass() ~= "ttt_c4"
-			or bomb:GetArmed() or bomb:GetPos():Distance(ply:GetPos()) > 256
+		if not IsValid(bomb)
+			or bomb:GetClass() ~= "ttt_c4"
+			or bomb:GetArmed()
+			or bomb:GetPos():Distance(ply:GetPos()) > 256
 		then return end
 
 		---
