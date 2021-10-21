@@ -115,7 +115,7 @@ else -- SERVER
 	-- @return nil|boolean Return true to cancel the state change
 	-- @hook
 	-- @realm server
-	function GAMEMODE:TTTToggleDisguiser(ply, state)
+	function GM:TTTToggleDisguiser(ply, state)
 
 	end
 end
