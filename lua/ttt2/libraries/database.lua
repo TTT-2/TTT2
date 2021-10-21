@@ -353,7 +353,7 @@ if SERVER then
 			net.WriteBool(data.isSuccess)
 
 			if data.isSuccess then
-				net.WriteString(data.value)
+				net.WriteString(tostring(data.value))
 			end
 		end,
 		-- data contains index, itemName, key, value here
@@ -732,29 +732,65 @@ if SERVER then
 	-- @internal
 	function database.ReturnGetValue(requestData)
 		local index = requestData.index
-		local data = index and registeredDatabases[index]
-		local sqlData
+		local accessName = index and registeredDatabases[index] and registeredDatabases[index].accessName
+		local value
+		local isSuccess = false
 
-		if data then
-			sqlData = data.orm:Find(requestData.name)
+		if accessName then
+			value, isSuccess = database.GetValue(accessName, requestData.itemName, requestData.key)
 		end
-
-		local isSuccess = tobool(sqlData)
 
 		local serverData = {
 			identifier = requestData.identifier,
-			isSuccess = isSuccess
+			isSuccess = isSuccess,
+			value = value
 		}
-
-		isSuccess = isSuccess and istable(data.keys[requestData.key])
-
-		if isSuccess then
-			serverData.value = tostring(sqlData[requestData.key])
-		end
 
 		RegisterPlayer(requestData.plyID64)
 
 		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, requestData.plyID64)
+	end
+
+	---
+	-- Get the stored key value of the given database if it exists and was registered
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param string key the name of the key in the database
+	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
+	-- @return any, bool value that was saved in the database and if it successfully reached the sql datatable
+	-- @realm server
+	function database.GetValue(accessName, itemName, key)
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not registered.")
+
+			return nil, false
+		end
+
+		local dataTable = index and registeredDatabases[index]
+
+		if not registeredDatabases.keys[key] then
+			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+
+			return nil, false
+		end
+
+		local storedValue = dataTable and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
+
+		if storedValue ~= nil then
+			return storedValue, true
+		end
+
+		local sqlData = data.orm:Find(itemName)
+
+		if not sqlData then
+			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " has no item named " .. itemName)
+
+			return nil, false
+		end
+
+		return database.ConvertValueWithKeys(sqlData[key], accessName, key), true
 	end
 
 	---
