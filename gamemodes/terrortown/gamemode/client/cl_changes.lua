@@ -1095,6 +1095,16 @@ function CreateChanges()
 			<li>Changed <code>TTTPlayerUsedHealthStation</code> hook, return <code>false</code> to cancel health regeneration tick</li>
 			<li>Changed all C4 hooks to be cancelable</li>
 		</ul>
+
+		<h2>Removed</h2>
+		<ul>
+			<li>Removed old concommand <code>shopeditor</code> and the old shopeditor</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Renamed hook <code>GM:TTT2CheckWeaponForID</code> to <code>GM:TTT2RegisterWeaponID</code> better fitting its purpose as its probably nowhere used yet anyway</li>
+		</ul>
 	]], os.time({ year = 2021, month = 10, day = 21 }))
 
 	---
