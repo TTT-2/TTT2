@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed the reset button not working for Sliders in the F1 Menu
 - Fixed defuser only working for detectives
+- Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the `InitPostEntity` hook
 
 ### Changed
 
@@ -23,6 +24,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed old concommand `shopeditor` and the old shopeditor
+
+### Breaking Changes
+
+- Renamed hook `TTT2CheckWeaponForID` to `TTT2RegisterWeaponID` better fitting its purpose as its probably nowhere used yet anyway
 
 ## [v0.10.1b](https://github.com/TTT-2/TTT2/tree/v0.10.1b) (2021-10-15)
 
