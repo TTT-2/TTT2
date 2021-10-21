@@ -1095,7 +1095,7 @@ function CreateChanges()
 			<li>Changed <code>TTTPlayerUsedHealthStation</code> hook, return <code>false</code> to cancel health regeneration tick</li>
 			<li>Changed all C4 hooks to be cancelable</li>
 		</ul>
-	]], os.time({ year = 2021, month = 10, day = 15 }))
+	]], os.time({ year = 2021, month = 10, day = 21 }))
 
 	---
 	-- run hook for other addons to add their changelog as well
