@@ -155,9 +155,9 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 	callbackCache[accessName] = cache
 	callbackIdentifiers[identifier] = callbackIdentifiers[identifier] or {}
 	callbackIdentifiers[identifier][#callbackIdentifiers[identifier] + 1] = {
-			accessName = accessName,
-			itemName = itemName,
-			key = key
+		accessName = accessName,
+		itemName = itemName,
+		key = key
 	}
 end
 
@@ -255,77 +255,77 @@ if CLIENT then
 	sendDataFunctions = {
 		-- data contains the messageIdentifier here
 		Register = function(data)
-				net.WriteUInt(data, uIntBits)
-			end,
+			net.WriteUInt(data, uIntBits)
+		end,
 		-- data contains the syncCacheIndex here
 		GetValue = function(data)
-				local request = requestCache[data]
+			local request = requestCache[data]
 
-				net.WriteUInt(request.identifier, uIntBits)
-				net.WriteUInt(request.index, uIntBits)
+			net.WriteUInt(request.identifier, uIntBits)
+			net.WriteUInt(request.index, uIntBits)
 
-				net.WriteString(request.itemName)
-				net.WriteString(request.key)
-			end,
+			net.WriteString(request.itemName)
+			net.WriteString(request.key)
+		end,
 		-- data contains index, itemName, key and value here
 		SetValue = function(data)
-				net.WriteUInt(data.index, uIntBits)
+			net.WriteUInt(data.index, uIntBits)
 
-				net.WriteString(data.itemName)
-				net.WriteString(data.key)
-				net.WriteString(tostring(data.value))
-			end
+			net.WriteString(data.itemName)
+			net.WriteString(data.key)
+			net.WriteString(tostring(data.value))
+		end
 	}
 
 	-- The used functions to receive Data from the server on the client
 	receiveDataFunctions = {
 		Register = function()
-				local index = net.ReadUInt(uIntBits)
-				local accessName = net.ReadString()
-				local savingKeys = net.ReadTable()
-				local additionalData = net.ReadTable()
+			local index = net.ReadUInt(uIntBits)
+			local accessName = net.ReadString()
+			local savingKeys = net.ReadTable()
+			local additionalData = net.ReadTable()
 
-				nameToIndex[accessName] = index
-				registeredDatabases[index] = {
-					accessName = accessName,
-					keys = savingKeys,
-					data = additionalData,
-					storedData = {}
-				}
+			nameToIndex[accessName] = index
+			registeredDatabases[index] = {
+				accessName = accessName,
+				keys = savingKeys,
+				data = additionalData,
+				storedData = {}
+			}
 
-				local sentAdditionalInfo = net.ReadBool()
+			local sentAdditionalInfo = net.ReadBool()
 
-				if sentAdditionalInfo then
-					local identifier = net.ReadUInt(uIntBits)
-					local tableCount = net.ReadUInt(uIntBits)
-
-					if table.Count(registeredDatabases) == tableCount then
-						functionCache[identifier]()
-					end
-				end
-			end,
-		GetValue = function()
+			if sentAdditionalInfo then
 				local identifier = net.ReadUInt(uIntBits)
-				local isSuccess = net.ReadBool()
-				local value
+				local tableCount = net.ReadUInt(uIntBits)
 
-				if isSuccess then
-					local request = requestCache[identifier]
-					value = net.ReadString()
-					value = database.ConvertValueWithKeys(value, request.accessName, request.key)
-					registeredDatabases[request.index].storedData[request.itemName] = value
+				if table.Count(registeredDatabases) == tableCount then
+					functionCache[identifier]()
 				end
-
-				functionCache[identifier](isSuccess, value)
-			end,
-		SetValue = function()
-				local index = net.ReadUInt(uIntBits)
-				local itemName = net.ReadString()
-				local key = net.ReadString()
-				local value = net.ReadString()
-
-				OnChange(index, itemName, key, value)
 			end
+		end,
+		GetValue = function()
+			local identifier = net.ReadUInt(uIntBits)
+			local isSuccess = net.ReadBool()
+			local value
+
+			if isSuccess then
+				local request = requestCache[identifier]
+				value = net.ReadString()
+				value = database.ConvertValueWithKeys(value, request.accessName, request.key)
+				registeredDatabases[request.index].storedData[request.itemName] = value
+			end
+
+			functionCache[identifier](isSuccess, value)
+		end,
+		SetValue = function()
+			local index = net.ReadUInt(uIntBits)
+			local itemName = net.ReadString()
+			local key = net.ReadString()
+			local value = net.ReadString()
+
+			OnChange(index, itemName, key, value)
+		end
 	}
 end
 
@@ -335,65 +335,65 @@ if SERVER then
 	sendDataFunctions = {
 		-- data contains identifier, tableCount, index here
 		Register = function(data)
-				local databaseInfo = registeredDatabases[data.index]
-				net.WriteUInt(data.index, uIntBits)
-				net.WriteString(databaseInfo.accessName)
-				net.WriteTable(databaseInfo.keys)
-				net.WriteTable(databaseInfo.data)
+			local databaseInfo = registeredDatabases[data.index]
+			net.WriteUInt(data.index, uIntBits)
+			net.WriteString(databaseInfo.accessName)
+			net.WriteTable(databaseInfo.keys)
+			net.WriteTable(databaseInfo.data)
 
-				local sendAdditionalInfo = tobool(data.identifier)
-				net.WriteBool(sendAdditionalInfo)
+			local sendAdditionalInfo = tobool(data.identifier)
+			net.WriteBool(sendAdditionalInfo)
 
-				if sendAdditionalInfo then
-					net.WriteUInt(data.identifier, uIntBits)
-					net.WriteUInt(data.tableCount, uIntBits)
-				end
-			end,
+			if sendAdditionalInfo then
+				net.WriteUInt(data.identifier, uIntBits)
+				net.WriteUInt(data.tableCount, uIntBits)
+			end
+		end,
 		-- data contains identifier, isSuccess and value here
 		GetValue = function(data)
-				net.WriteUInt(data.identifier, uIntBits)
-				net.WriteBool(data.isSuccess)
+			net.WriteUInt(data.identifier, uIntBits)
+			net.WriteBool(data.isSuccess)
 
-				if data.isSuccess then
-					net.WriteString(data.value)
-				end
-			end,
-		-- data contains index, itemName, key, value here
-		SetValue = function(data)
-				net.WriteUInt(data.index, uIntBits)
-				net.WriteString(data.itemName)
-				net.WriteString(data.key)
+			if data.isSuccess then
 				net.WriteString(data.value)
 			end
+		end,
+		-- data contains index, itemName, key, value here
+		SetValue = function(data)
+			net.WriteUInt(data.index, uIntBits)
+			net.WriteString(data.itemName)
+			net.WriteString(data.key)
+			net.WriteString(data.value)
+		end
 	}
 
 	-- The used functions to receive Data from the client on the server
 	receiveDataFunctions = {
 		Register = function(plyID64)
-				database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
-			end,
+			database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
+		end,
 		GetValue = function(plyID64)
-				local data = {
-					plyID64 = plyID64,
-					identifier = net.ReadUInt(uIntBits),
-					index = net.ReadUInt(uIntBits)
-				}
+			local data = {
+				plyID64 = plyID64,
+				identifier = net.ReadUInt(uIntBits),
+				index = net.ReadUInt(uIntBits)
+			}
 
-				data.itemName = net.ReadString()
-				data.key = net.ReadString()
+			data.itemName = net.ReadString()
+			data.key = net.ReadString()
 
-				database.ReturnGetValue(data)
-			end,
+			database.ReturnGetValue(data)
+		end,
 		SetValue = function(plyID64)
-				local data = {
-					index = net.ReadUInt(uIntBits),
-					itemName = net.ReadString(),
-					key = net.ReadString(),
-					value = net.ReadString()
-				}
+			local data = {
+				index = net.ReadUInt(uIntBits),
+				itemName = net.ReadString(),
+				key = net.ReadString(),
+				value = net.ReadString()
+			}
 
-				database.SetValue(registeredDatabases[data.index].accessName, data.itemName, data.key, data.value, plyID64)
-			end
+			database.SetValue(registeredDatabases[data.index].accessName, data.itemName, data.key, data.value, plyID64)
+		end
 	}
 end
 
@@ -554,7 +554,6 @@ if CLIENT then
 	-- @realm client
 	-- @internal
 	local function cleanUpWaitReceiveCache()
-
 		for i = 1, #onWaitReceiveFunctionCache do
 			local data = onWaitReceiveFunctionCache[i]
 
