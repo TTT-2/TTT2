@@ -59,7 +59,7 @@ local callbackIdentifiers = {}
 local playerID64Cache = {}
 
 --
--- Shared functions Part 1
+-- General Shared functions
 --
 
 ---
@@ -396,7 +396,7 @@ if SERVER then
 end
 
 --
--- Shared functions Part 2
+-- Shared combined send and receive functions
 --
 
 ---
@@ -533,7 +533,7 @@ local function SendUpdateNextTick(identifier, data, plyIdentifier)
 	dataStore[plyIdentifier] = tempStore
 end
 
--- Client data and functions Part 2
+-- Public Client only functions
 if CLIENT then
 	---
 	-- Is automatically called when a client joins, can be called by a player to force an update, but is normally not necessary
@@ -653,7 +653,7 @@ if CLIENT then
 	end
 end
 
--- Server data and functions Part 2
+-- Public Server only functions
 if SERVER then
 	---
 	-- Registers players that are notified of all changes
