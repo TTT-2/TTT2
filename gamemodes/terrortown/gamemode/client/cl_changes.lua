@@ -1074,6 +1074,29 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 10, day = 15 }))
 
+	AddChange("TTT2 Base - v0.10.2b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new hook <code>GM:TTT2ModifyRadioTarget</code> to modify the current radio target</li>
+			<li>Added documentation to all hooks</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the reset button not working for Sliders in the F1 Menu</li>
+			<li>Fixed defuser only working for detectives</li>
+			<li>Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the <code>InitPostEntity</code> hook<br>
+			<b>Note:</b> This might only take effect after a reinstall or a reset of the server; if you don't want to reset your server, you have to change the spawnability manually in the equipment editor</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging</li>
+			<li>Changed <code>TTTPlayerUsedHealthStation</code> hook, return <code>false</code> to cancel health regeneration tick</li>
+			<li>Changed all C4 hooks to be cancelable</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 15 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
