@@ -195,6 +195,8 @@ function GM:PlayerStartVoice(ply)
 		end
 	end
 
+	-- since detective (sub-) roles don't have their own team, they have a manual role color
+	-- handling here
 	if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
 		pnl.Color = roles.DETECTIVE.color
 	end

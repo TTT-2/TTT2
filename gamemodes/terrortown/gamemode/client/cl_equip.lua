@@ -1095,7 +1095,7 @@ function GM:OnContextMenuOpen()
 
 	---
 	-- @realm client
-	if hook.Run("TTT2PreventAccessShop", client) then return end
+	if hook.Run("TTT2PreventAccessShop", LocalPlayer()) then return end
 
 	if IsValid(eqframe) then
 		eqframe:Close()
@@ -1104,23 +1104,31 @@ function GM:OnContextMenuOpen()
 	end
 end
 
+---
+-- Caches the material or model
+-- @param table item
+-- @realm client
+function TTT2CacheEquipMaterials(item)
+	--if there is no material or model, the item should probably not be available in the shop
+	if item.material and item.material ~= "vgui/ttt/icon_id" then
+		item.ttt2_cached_material = Material(item.material)
+		if item.ttt2_cached_material:IsError() then
+			-- Setting fallback material
+			item.ttt2_cached_material = fallback_mat
+		end
+	elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+		--do not use fallback mat and use model instead
+		item.ttt2_cached_material = nil
+		item.ttt2_cached_model = model
+	end
+end
+
 -- Preload materials for the shop
 hook.Add("PostInitPostEntity", "TTT2CacheEquipMaterials", function()
 	local itms = ShopEditor.GetEquipmentForRoleAll()
 
 	for _, item in pairs(itms) do
-		--if there is no material or model, the item should probably not be available in the shop
-		if item.material and item.material ~= "vgui/ttt/icon_id" then
-			item.ttt2_cached_material = Material(item.material)
-			if item.ttt2_cached_material:IsError() then
-				-- Setting fallback material
-				item.ttt2_cached_material = fallback_mat
-			end
-		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
-			--do not use fallback mat and use model instead
-			item.ttt2_cached_material = nil
-			item.ttt2_cached_model = model
-		end
+		TTT2CacheEquipMaterials(item)
 	end
 end)
 

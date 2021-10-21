@@ -18,6 +18,9 @@ function ROLE:PreInitialize()
 	self.fallbackTable = {}
 	self.unknownTeam = true
 
+	self.isPublicRole = true
+	self.isPolicingRole = true
+
 	-- conVarData
 	self.conVarData = {
 		pct = 0.13,
@@ -26,9 +29,23 @@ function ROLE:PreInitialize()
 		minKarma = 600,
 
 		credits = 1,
-		creditsTraitorKill = 0,
-		creditsTraitorDead = 1,
+		creditsAwardDeadEnable = 1,
+		creditsAwardKillEnable = 0,
 
 		togglable = true
 	}
+end
+
+if SERVER then
+	---
+	-- @ignore
+	function ROLE:GiveRoleLoadout(ply)
+		ply:GiveEquipmentWeapon("weapon_ttt_wtester")
+	end
+
+	---
+	-- @ignore
+	function ROLE:RemoveRoleLoadout(ply)
+		ply:RemoveEquipmentWeapon("weapon_ttt_wtester")
+	end
 end

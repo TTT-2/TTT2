@@ -31,7 +31,8 @@ local dev_tbl = {
 	["76561198058039701"] = true, -- saibotk
 	["76561198047819379"] = true, -- Mineotopia
 	["76561198052323988"] = true, -- LeBroomer
-	["76561198076404571"] = true -- Histalek
+	["76561198076404571"] = true, -- Histalek
+	["76561198296468397"] = true -- ZenBre4ker
 }
 
 local vip_tbl = {
@@ -52,7 +53,8 @@ local vip_tbl = {
 	["76561198114719750"] = true, -- Reispfannenfresser
 	["76561198082931319"] = true, -- Henk
 	["76561198049910438"] = true, -- Zzzaaaccc13
-	["76561198296468397"] = true -- ZenBre4ker
+	["76561198296468397"] = true, -- ZenBre4ker
+	["76561198041170748"] = true -- Pytho | Paul
 }
 
 local addondev_tbl = {
@@ -475,7 +477,7 @@ function PANEL:UpdatePlayerData()
 	self.sresult:SetVisible(ply.search_result and ply.search_result.detective_search)
 
 	-- more blue if a detective searched them
-	if ply.search_result and (LocalPlayer():IsDetective() or not ply.search_result.show) then
+	if ply.search_result and (LocalPlayer():GetSubRoleData().isPolicingRole or not ply.search_result.show) then
 		self.sresult:SetImageColor(Color(200, 200, 255))
 	end
 

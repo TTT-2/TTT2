@@ -141,7 +141,7 @@ function plymeta:SetDefaultCredits()
 	end
 
 	local rd = self:GetSubRoleData()
-	local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
+	local name = "ttt_" .. rd.abbr .. "_credits_starting"
 
 	if self:GetTeam() ~= TEAM_TRAITOR then
 		self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
@@ -150,11 +150,6 @@ function plymeta:SetDefaultCredits()
 	end
 
 	local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
-	local member_one = #roles.GetTeamMembers(TEAM_TRAITOR) == 1
-
-	if not rd.preventTraitorAloneCredits and member_one then
-		c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
-	end
 
 	---
 	-- @realm server
@@ -598,12 +593,11 @@ function plymeta:ShouldSpawn()
 end
 
 ---
--- Preps a player for a new round, spawning them if they should
--- @param boolean dead_only If dead_only is
--- true, only spawns if player is dead, else just makes sure he is healed.
--- @return boolean
+-- Preps a player for a new round, spawning them if they should.
+-- @param boolean deadOnly If deadOnly is true, only spawns if player is dead, else just makes sure he is healed
+-- @return boolean Returns true if player is spawned
 -- @realm server
-function plymeta:SpawnForRound(dead_only)
+function plymeta:SpawnForRound(deadOnly)
 	---
 	-- @realm server
 	hook.Run("PlayerSetModel", self)
@@ -614,7 +608,7 @@ function plymeta:SpawnForRound(dead_only)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
 	-- (and will therefore be "alive")
-	if dead_only and self:Alive() and not self:IsSpec() then
+	if deadOnly and self:Alive() and not self:IsSpec() then
 		-- if the player does not need respawn, make sure he has full health
 		self:SetHealth(self:GetMaxHealth())
 
@@ -636,6 +630,16 @@ function plymeta:SpawnForRound(dead_only)
 	self:StripAll()
 	self:SetTeam(TEAM_TERROR)
 	self:Spawn()
+
+	-- set spawn position
+	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+
+	if not spawnPoint then
+		return false
+	end
+
+	self:SetPos(spawnPoint.pos)
+	self:SetAngles(spawnPoint.ang)
 
 	-- tell caller that we spawned
 	return true
@@ -668,6 +672,14 @@ function plymeta:InitialSpawn()
 
 	-- We never have weapons here, but this inits our equipment state
 	self:StripAll()
+
+	-- set spawn position
+	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+
+	if not spawnPoint then return end
+
+	self:SetPos(spawnPoint.pos)
+	self:SetAngles(spawnPoint.ang)
 end
 
 ---
@@ -840,13 +852,19 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			end
 
 			spawnPos = spawnPos or self:GetDeathPosition()
-			spawnPos = spawn.MakeSpawnPointSafe(self, spawnPos)
+			spawnPos = plyspawn.MakeSpawnPointSafe(self, spawnPos)
 
 			if not spawnPos then
-				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(self)
+				local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-				spawnPos = spawnEntity:GetPos()
-				spawnEyeAngle = spawnEntity:EyeAngles()
+				if not spawnPoint then
+					OnReviveFailed(self, "message_revival_failed")
+
+					return
+				end
+
+				spawnPos = spawnPoint.pos
+				spawnEyeAngle = spawnPoint.ang
 			end
 
 			self:SetPos(spawnPos)
@@ -1225,10 +1243,16 @@ local plymeta_old_Give = plymeta.Give
 -- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
 	self.forcedPickup = true
+	self.forcedGive = true
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	self.forcedPickup = false
+	timer.Simple(0, function()
+		if not IsValid(self) then return end
+
+		self.forcedPickup = false
+		self.forcedGive = false
+	end)
 
 	return wep
 end
@@ -1332,6 +1356,8 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 			LANG.Msg(self, "pickup_error_owns")
 		elseif errCode == 3 then
 			LANG.Msg(self, "pickup_error_noslot")
+		elseif errCode == 6 then
+			LANG.Msg(self, "pickup_error_inv_cached")
 		end
 
 		return
@@ -1422,8 +1448,84 @@ local function SetPlayerReady(_, ply)
 	-- Send full state update to client
 	ttt2net.SendFullStateUpdate(ply)
 
+	entspawnscript.TransmitToPlayer(ply)
+
+	-- update playermodels on the client
+	if ply:IsSuperAdmin() then
+		playermodels.StreamModelStateToSelectedClients(false, ply)
+	end
+
 	---
 	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
+
+---
+-- Resets the cached weapons. This is automatically done on a weapon restore,
+-- but has to be triggered manually in scenarios where the inventory is reset
+-- without triggering the restore function, e.g. @{GM:PlayerSpawn}.
+-- @realm server
+function plymeta:ResetCachedWeapons()
+	self.cachedWeaponInventory = nil
+	self.cachedWeaponSelected = nil
+end
+
+---
+-- Checks wether a player has cached weapons that can be restored.
+-- @return boolean Returns wether the player has a cached inventory
+-- @realm server
+function plymeta:HasCachedWeapons()
+	return self.cachedWeaponInventory ~= nil
+end
+
+---
+-- Caches the weapons currently in the player inventory and removes them.
+-- These weapons can be restored at any time.
+-- @note As long as a player has cached weapons, they are unable to pick up any weapon.
+-- @realm server
+function plymeta:CacheAndStripWeapons()
+	local cachedWeaponInventory = {}
+
+	local weps = self:GetWeapons()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+
+		cachedWeaponInventory[#cachedWeaponInventory + 1] = {
+			cls = WEPS.GetClass(wep),
+			clip1 = wep:Clip1(),
+			clip2 = wep:Clip2()
+		}
+	end
+
+	self.cachedWeaponInventory = cachedWeaponInventory
+	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
+
+	self:StripWeapons()
+end
+
+---
+-- Restores the cached weapons if there are any cached weapons. Does nothing if
+-- no weapons are cached.
+-- @realm server
+function plymeta:RestoreCachedWeapons()
+	if not self:HasCachedWeapons() then return end
+
+	for i = 1, #self.cachedWeaponInventory do
+		local wep = self.cachedWeaponInventory[i]
+
+		local givenWep = self:Give(wep.cls)
+
+		if not IsValid(givenWep) then continue end
+
+		givenWep:SetClip1(wep.clip1 or 0)
+		givenWep:SetClip2(wep.clip2 or 0)
+	end
+
+	if self.cachedWeaponSelected then
+		self:SelectWeapon(self.cachedWeaponSelected)
+	end
+
+	self:ResetCachedWeapons()
+end

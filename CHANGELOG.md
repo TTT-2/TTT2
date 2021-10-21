@@ -3,24 +3,121 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
+
+### Added
+
+- Added a new hook `GM:TTT2ModifyRadioTarget` to modify the current radio target
+
+### Fixed
+
+- Fixed the reset button not working for Sliders in the F1 Menu
+- Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the `InitPostEntity` hook
+
+### Changed
+
+- Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging
+
+### Removed
+
+- Removed old concommand `shopeditor` and the old shopeditor
+
+### Breaking Changes
+
+- Renamed hook `TTT2CheckWeaponForID` to `TTT2RegisterWeaponID` better fitting its purpose as its probably nowhere used yet anyway
+
+## [v0.10.1b](https://github.com/TTT-2/TTT2/tree/v0.10.1b) (2021-10-15)
+
+### Fixed
+
+- Fixed Playermodels not correctly loading changes on game start
+- Fixed setting defaults before assigning a resetButton not throwing an error anymore
+- Fixed invisible preview for entity spawn placements
+
+## [v0.10.0b](https://github.com/TTT-2/TTT2/tree/v0.10.0b) (2021-10-14)
+
+### Added
+
+- Added a new scoring variable named `score.survivePenaltyMultiplier` to punish surviving players of a losing team
+- Added in game spawn editor system that can be found in F1->Administration
+- Moved all TTT weapons to this repository (with cleaned up code)
+- Added in four new libraries
+  - map: A library which handles map specific data
+  - entspawn: A library that handles the spawning and spawns of all entity types
+  - entspawnscript: A library that handles the new TTT2 entity spawn script to customize spawns
+  - plyspawn: A library that builds on top of entspawn to handle the more complex player spawn (originally named spawn, see `Breaking changes`)
+- Added a new submenu to the administration settings regarding basic role setup
+- Added a new menu to the F1 menu to set up and configure all installed menus
+- Added two new hooks to modify the contents of the newly added menu
+  - `ROLE:AddToSettingsMenu(parent)`
+  - `ROLE:AddToSettingsMenuCreditsForm(parent)`
+- Added a new in-game player model selector
+  - Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)
+  - Added a new ConVar `ttt2_use_custom_models` (def: 0) to enable the custom player model selector
+  - Added indicator that shows if a model has a headshot hitbox
+  - Added possibility to enable/disable detective hats for individual player models
+- Added a new admin only menu for server addon settings
+- Added automatic default values for serverConVars
+- Added two new role variables:
+  - `isPublicRole`: This makes the role behave like a detective in such a way, that the role is public known and shown in the scoreboard. This means other roles can use this without special role syncing; additionally roles with that flag will be handled like a detective if killed by an 'evil' role, meaning that they will receive a credit bonus
+  - `isPolicingRole`: This rolevar adds all "detective-like" features to the detective, for example the ability to be called to a corpse etc.
+- Added two new role conVar variables:
+  - `creditsAwardDeadEnable`: To award this role if a certain percentage of players from the enemy teams died
+  - `creditsAwardKillEnable`: To award this role if they killed a high value public role
+
+### Changed
+
+- Split up kill, suicide and teamkill in the round end screen to make it more clear
+- Decreased the minimum cost of equipment in the equipment editor to 0
+- Changed disguise such that every role can now use the function
+- Completely reworked how weapons, ammo and players spawn in the world
+- Sliders only update ConVars on mouseRelease now
+- Changed the way credits on kills are distributed in a way that non-default roles can easily use this as well
+
+### Breaking Changes
+
+- Removed the (unused?) ConVar `ttt2_custom_models`
+- Removed the function `GetRandomPlayerModel()`, use `playermodels.GetRandomPlayerModel()` instead
+- Renamed the `spawn` module to `plyspawn`
+- Hook `PlayerSelectSpawn` doesnt return a spawnEntity anymore
+- SpawnWillingPlayers is deleted and not available anymore
+- renamed the `ttt_credits_starting` to `ttt_traitor_credits_starting` to be more in-line with all other roles
+  **WARNING:** This means that every traitor now starts with 0 credits until the convar reset button is pressed (on existing servers)
+- removed the `alone_bonus` convar because it only complicated the credits system further without adding much benefit
+
+## [v0.9.3b](https://github.com/TTT-2/TTT2/tree/v0.9.3b) (2021-09-25)
+
 ### Added
 
 - Add Traditional Chinese Translation (by @TEGTianFan)
 - Added a searchbar to submenus
 - Added full-sized icons to the equipment-editor
+- Hotreload functionality for weapons, they are now fully compatible to TTT2 after hotreload
+- Added experimental `SWEP.HotReloadableKeys` a list of strings to weapons, that makes data saved with `weapons.GetStored()` persistent across hotreloads
+- Extended cvars library to support manipulation of serverside ConVars
+- Added possibility to manipulate serverside ConVars with Checkboxes and Sliders
+  - Just add .serverConvar with the conVarName to the given data similar to .convar
 
 ### Fixed
 
-- Updated Japense translation (by @westooooo)
+- Updated Japanese translation (by @westooooo)
 - Fixed text positioning in pure_skin bar (by @LukasMandok)
 - Fixed data being not persistent after hot reloading
   - HUDs are now still available
   - ttt2net keeps its data
   - bindings are not lost on reload
+- Fixed id-errors of weapons registered before TTT2 was loaded
 
 ### Changed
+
 - Revise and additions simplified Chinese (by @TEGTianFan)
 - Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)
+- ROLE_NONE does not count as a special role anymore (by @TheNickSkater)
+
+### Internal Breaking Changes
+
+- Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`
+- Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`
+- Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`
 
 ## [v0.9.2b](https://github.com/TTT-2/TTT2/tree/v0.9.2b) (2021-06-20)
 

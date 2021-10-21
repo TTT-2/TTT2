@@ -959,6 +959,121 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2021, month = 06, day = 20}))
 
+	AddChange("TTT2 Base - v0.9.3b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Add Traditional Chinese Translation (by @TEGTianFan)</li>
+			<li>Added a searchbar to submenus</li>
+			<li>Added full-sized icons to the equipment-editor</li>
+			<li>Hotreload functionality for weapons, they are now fully compatible to TTT2 after hotreload</li>
+			<li>Added experimental `SWEP.HotReloadableKeys` a list of strings to weapons, that makes data saved with `weapons.GetStored()` persistent across hotreloads</li>
+			<li>Extended cvars library to support manipulation of serverside ConVars</li>
+			<li>Added possibility to manipulate serverside ConVars with Checkboxes and Sliders</li>
+			<ul>
+				<li>Just add .serverConvar with the conVarName to the given data similar to .convar</li>
+			</ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Updated Japanese translation (by @westooooo)</li>
+			<li>Fixed text positioning in pure_skin bar (by @LukasMandok)</li>
+			<li>Fixed data being not persistent after hot reloading</li>
+			<ul>
+				<li>HUDs are now still available</li>
+				<li>ttt2net keeps its data</li>
+				<li>bindings are not lost on reload</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Revise and additions simplified Chinese (by @TEGTianFan)</li>
+			<li>Prevent spectators from gathering info on players if they're about to revive (by @AaronMcKenney)</li>
+			<li>ROLE_NONE does not count as a special role anymore (by @TheNickSkater)</li>
+		</ul>
+
+		<h2>Internal Breaking Changes</h2>
+		<ul>
+			<li>Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`</li>
+			<li>Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`</li>
+			<li>Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`</li>
+		</ul>
+	]], os.time({ year = 2021, month = 09, day = 25 }))
+
+	AddChange("TTT2 Base - v0.10.0b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new scoring variable named <code>score.survivePenaltyMultiplier</code> to punish surviving players of a losing team</li>
+			<li>Added in game spawn editor system that can be found in F1->Administration</li>
+			<li>Moved all TTT weapons to this repository (with cleaned up code)</li>
+			<li>Added in four new libraries</li>
+			<ul>
+				<li>map: A library which handles map specific data</li>
+				<li>entspawn: A library that handles the spawning and spawns of all entity types</li>
+				<li>entspawnscript: A library that handles the new TTT2 entity spawn script to customize spawns</li>
+				<li>plyspawn: A library that builds on top of entspawn to handle the more complex player spawn (originally named spawn, see <code>Breaking changes</code>)</li>
+			</ul>
+			<li>Added a new submenu to the administration settings regarding basic role setup</li>
+			<li>Added a new menu to the F1 menu to set up and configure all installed menus</li>
+			<li>Added two new hooks to modify the contents of the newly added menu</li>
+			<ul>
+				<li><code>ROLE:AddToSettingsMenu(parent)</code></li>
+				<li><code>ROLE:AddToSettingsMenuCreditsForm(parent)</code></li>
+			</ul>
+			<li>Added a new in-game player model selector</li>
+			<ul>
+				<li>Added new convars that can change the way playermodels are selected (these can be found in the gamemode menu)</li>
+				<li>Added a new ConVar <code>ttt2_use_custom_models</code> (def: 0) to enable the custom player model selector</li>
+				<li>Added indicator that shows if a model has a headshot hitbox</li>
+				<li>Added possibility to enable/disable detective hats for individual player models</li>
+			</ul>
+			<li>Added a new admin only menu for server addon settings</li>
+			<li>Added automatic default values for serverConVars</li>
+			<li>Added two new role variables:</li>
+			<ul>
+				<li><code>isPublicRole</code>: This makes the role behave like a detective in such a way, that the role is public known and shown in the scoreboard. This means other roles can use this without special role syncing; additionally roles with that flag will be handled like a detective if killed by an 'evil' role, meaning that they will receive a credit bonus</li>
+				<li><code>isPolicingRole</code>: This rolevar adds all "detective-like" features to the detective, for example the ability to be called to a corpse etc.</li>
+			</ul>
+			<li>Added two new role conVar variables:</li>
+			<ul>
+				<li><code>creditsAwardDeadEnable</code>: To award this role if a certain percentage of players from the enemy teams died</li>
+				<li><code>creditsAwardKillEnable</code>: To award this role if they killed a high value public role</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Split up kill, suicide and teamkill in the round end screen to make it more clear</li>
+			<li>Decreased the minimum cost of equipment in the equipment editor to 0</li>
+			<li>Changed disguise such that every role can now use the function</li>
+			<li>Completely reworked how weapons, ammo and players spawn in the world</li>
+			<li>Sliders only update ConVars on mouseRelease now</li>
+			<li>Changed the way credits on kills are distributed in a way that non-default roles can easily use this as well</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Removed the (unused?) ConVar <code>ttt2_custom_models</code></li>
+			<li>Removed the function <code>GetRandomPlayerModel()</code>, use <code>playermodels.GetRandomPlayerModel()</code> instead</li>
+			<li>Renamed the <code>spawn</code> module to <code>plyspawn</code></li>
+			<li>Hook <code>PlayerSelectSpawn</code> doesnt return a spawnEntity anymore</li>
+			<li>SpawnWillingPlayers is deleted and not available anymore</li>
+			<li>renamed the <code>ttt_credits_starting</code> to <code>ttt_traitor_credits_starting</code> to be more in-line with all other roles</li>
+			<li><b>WARNING:</b> This means that every traitor now starts with 0 credits until the convar reset button is pressed (on existing servers)</li>
+			<li>removed the <code>alone_bonus</code> convar because it only complicated the credits system further without adding much benefit</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 14 }))
+
+	AddChange("TTT2 Base - v0.10.1b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed Playermodels not correctly loading changes on game start</li>
+			<li>Fixed setting defaults before assigning a resetButton not throwing an error anymore</li>
+			<li>Fixed invisible preview for entity spawn placements</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 15 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

@@ -45,6 +45,7 @@ ttt_include("vgui__cl_scrolllabel")
 ttt_include("cl_vskin__default_skin")
 ttt_include("cl_vskin__vgui__dpanel")
 ttt_include("cl_vskin__vgui__dframe")
+ttt_include("cl_vskin__vgui__dimagecheckbox")
 ttt_include("cl_vskin__vgui__droleimage")
 ttt_include("cl_vskin__vgui__dmenubutton")
 ttt_include("cl_vskin__vgui__dsubmenubutton")
@@ -234,32 +235,36 @@ function GM:InitPostEntity()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
-	InitDefaultEquipment()
 
 	local itms = items.GetList()
 
 	-- load items
 	for i = 1, #itms do
-		local itm = itms[i]
+		local eq = itms[i]
 
-		ShopEditor.InitDefaultData(itm) -- initialize the default data
-		CreateEquipment(itm) -- init items
+		InitDefaultEquipment(eq)
+		ShopEditor.InitDefaultData(eq) -- initialize the default data
+		CreateEquipment(eq) -- init items
 
-		itm.CanBuy = {} -- reset normal items equipment
+		eq.CanBuy = {} -- reset normal items equipment
 
-		itm:Initialize()
+		eq:Initialize()
 	end
 
 	local sweps = weapons.GetList()
 
 	-- load sweps
 	for i = 1, #sweps do
-		local wep = sweps[i]
+		local eq = sweps[i]
 
-		ShopEditor.InitDefaultData(wep) -- init normal weapons equipment
-		CreateEquipment(wep) -- init weapons
+		-- Check if an equipment has an id or ignore it
+		-- @realm server		
+		if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
 
-		wep.CanBuy = {} -- reset normal weapons equipment
+		-- Insert data into role fallback tables
+		InitDefaultEquipment(eq)
+
+		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	local roleList = roles.GetList()
@@ -286,6 +291,7 @@ function GM:InitPostEntity()
 
 	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
+	TTT2ShopFallbackInitialized = true
 
 	net.Start("TTT_Spectate")
 	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())

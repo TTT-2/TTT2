@@ -173,9 +173,9 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		local rd = ply:GetSubRoleData()
 
 		if ply:IsActive()
-		and ply:HasRole()
-		and (not client:IsActive() or ply:IsInTeam(client) or ply:IsDetective())
-		and not rd.avoidTeamIcons
+			and ply:HasRole()
+			and (not client:IsActive() or ply:IsInTeam(client) or rd.isPublicRole)
+			and not rd.avoidTeamIcons
 		then
 			DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
 		end
@@ -263,6 +263,7 @@ function GM:HUDDrawTargetID()
 	-- call internal targetID functions first so the data can be modified by addons
 	local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
 
+	targetid.HUDDrawTargetIDSpawnEdit(tData)
 	targetid.HUDDrawTargetIDTButtons(tData)
 	targetid.HUDDrawTargetIDWeapons(tData)
 	targetid.HUDDrawTargetIDPlayers(tData)

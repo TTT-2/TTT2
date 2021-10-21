@@ -1,9 +1,6 @@
 ---
 -- Trouble in Terrorist Town 2
 
-include("ttt2/libraries/spawn.lua")
-include("ttt2/libraries/entity_outputs.lua")
-
 ttt_include("sh_init")
 
 ttt_include("sh_cvar_handler")
@@ -52,6 +49,12 @@ ttt_include("sv_addonchecker")
 ttt_include("sv_roleselection")
 ttt_include("sh_rolelayering")
 
+include("ttt2/libraries/map.lua")
+include("ttt2/libraries/entspawn.lua")
+include("ttt2/libraries/plyspawn.lua")
+include("ttt2/libraries/entity_outputs.lua")
+include("ttt2/libraries/credits.lua")
+
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
 local table = table
@@ -91,15 +94,7 @@ local haste_starting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NO
 -- @realm server
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
----
--- @realm server
-local spawnwaveint = CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 -- Credits
-
----
--- @realm server
-CreateConVar("ttt_credits_starting", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -115,11 +110,7 @@ CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-CreateConVar("ttt_credits_detectivekill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
-CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -168,6 +159,14 @@ local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVA
 ---
 -- @realm server
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+local cvPreferMapModels = CreateConVar("ttt2_prefer_map_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -270,7 +269,7 @@ fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function
 	MsgN("Added TTT2 server autorun file: ", path)
 end)
 
-CHANGED_EQUIPMENT = {}
+CHANGED_EQUIPMENT = CHANGED_EQUIPMENT or {}
 
 ---
 -- Called after the gamemode loads and starts.
@@ -337,7 +336,7 @@ function GM:Initialize()
 
 	self.DamageLog = {}
 	self.LastRole = {}
-	self.playermodel = GetRandomPlayerModel()
+	self.playermodel = playermodels.GetRandomPlayerModel()
 	self.playercolor = COLOR_WHITE
 
 	-- Delay reading of cvars until config has definitely loaded
@@ -416,6 +415,9 @@ function GM:InitPostEntity()
 	-- @realm shared
 	hook.Run("TTTInitPostEntity")
 
+	-- load entity spawns from file / map
+	entspawnscript.OnLoaded()
+
 	items.MigrateLegacyItems()
 	items.OnLoaded()
 
@@ -425,18 +427,17 @@ function GM:InitPostEntity()
 	-- load all HUD elements
 	hudelements.OnLoaded()
 
-	InitDefaultEquipment()
-
 	local itms = items.GetList()
-	local sweps = weapons.GetList()
 
-	-- load and initialize all SWEPs and all ITEMs from database
-	if sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
-		for i = 1, #itms do
-			local eq = itms[i]
+	local isSqlTableCreated = sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
 
-			ShopEditor.InitDefaultData(eq)
+	for i = 1, #itms do
+		local eq = itms[i]
 
+		InitDefaultEquipment(eq)
+		ShopEditor.InitDefaultData(eq)
+
+		if isSqlTableCreated then
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
 			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
@@ -447,38 +448,26 @@ function GM:InitPostEntity()
 			end
 		end
 
-		for i = 1, #sweps do
-			local wep = sweps[i]
+		CreateEquipment(eq) -- init items
 
-			ShopEditor.InitDefaultData(wep)
+		eq.CanBuy = {} -- reset normal items equipment
 
-			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = sql.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
-
-			if not loaded then
-				sql.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
-			end
-		end
+		eq:Initialize()
 	end
 
-	for i = 1, #itms do
-		local itm = itms[i]
-
-		CreateEquipment(itm) -- init items
-
-		itm.CanBuy = {} -- reset normal items equipment
-
-		itm:Initialize()
-	end
+	local sweps = weapons.GetList()
 
 	for i = 1, #sweps do
-		local wep = sweps[i]
+		local eq = sweps[i]
 
-		CreateEquipment(wep) -- init weapons
+		-- Check if an equipment has an id or ignore it
+		-- @realm server
+		if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
 
-		wep.CanBuy = {} -- reset normal weapons equipment
+		-- Insert data into role fallback tables
+		InitDefaultEquipment(eq)
+
+		eq.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	-- init hudelements fns
@@ -522,8 +511,15 @@ function GM:InitPostEntity()
 	LoadShopsEquipment()
 
 	MsgN("[TTT2][INFO] Shops initialized...")
+	TTT2ShopFallbackInitialized = true
 
 	WEPS.ForcePrecache()
+
+	-- precache player models
+	playermodels.PrecacheModels()
+
+	-- initialize playermodel database
+	playermodels.Initialize()
 
 	timer.Simple(0, function()
 		addonChecker.Check()
@@ -901,6 +897,7 @@ function GM:PostCleanupMap()
 
 	entityOutputs.SetUp()
 
+	entspawn.HandleSpawns()
 	---
 	-- @realm server
 	hook.Run("TTT2PostCleanupMap")
@@ -941,25 +938,6 @@ local function CleanUp()
 
 	-- a different kind of cleanup
 	hook.Remove("PlayerSay", "ULXMeCheck")
-end
-
-local function SpawnEntities()
-	local et = ents.TTT
-
-	-- Spawn weapons from script if there is one
-	local import = et.CanImportEntities(game.GetMap())
-	if import then
-		et.ProcessImportScript(game.GetMap())
-	else
-		-- Replace HL2DM/ZM ammo/weps with our own
-		et.ReplaceEntities()
-
-		-- Populate CS:S/TF2 maps with extra guns
-		et.PlaceExtraWeapons()
-	end
-
-	-- Finally, get players in there
-	SpawnWillingPlayers()
 end
 
 local function StopRoundTimers()
@@ -1037,13 +1015,6 @@ function PrepareRound()
 		return
 	end
 
-	-- Cleanup
-	if GAMEMODE.FirstRound then
-		-- if we are going to import entities, it's no use replacing HL2DM ones as
-		-- soon as they spawn, because they'll be removed anyway
-		ents.TTT.SetReplaceChecking(not ents.TTT.CanImportEntities(game.GetMap()))
-	end
-
 	CleanUp()
 
 	GAMEMODE.roundCount = GAMEMODE.roundCount + 1
@@ -1057,8 +1028,12 @@ function PrepareRound()
 	-- Update damage scaling
 	KARMA.RoundPrepare()
 
-	-- New look. Random if no forced model set.
-	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
+	-- New look. Random if no forced model set
+	if cvPreferMapModels:GetBool() and GAMEMODE.force_plymodel and GAMEMODE.force_plymodel ~= "" then
+		GAMEMODE.playermodel = GAMEMODE.force_plymodel
+	elseif cvSelectModelPerRound:GetBool() then
+		GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
+	end
 
 	---
 	-- @realm server
@@ -1096,9 +1071,6 @@ function PrepareRound()
 	LANG.Msg("round_begintime", {num = ptime})
 
 	SetRoundState(ROUND_PREP)
-
-	-- Delay spawning until next frame to avoid ent overload
-	timer.Simple(0.01, SpawnEntities)
 
 	-- Undo the roundrestart mute, though they will once again be muted for the
 	-- selectmute timer.
@@ -1190,78 +1162,6 @@ function TellTraitorsAboutTraitors()
 	end
 end
 
----
--- Spawns all @{Player}s
--- @param boolean dead_only
--- @realm server
-function SpawnWillingPlayers(dead_only)
-	local plys = player.GetAll()
-	local wave_delay = spawnwaveint:GetFloat()
-
-	-- simple method, should make this a case of the other method once that has
-	-- been tested.
-	if wave_delay <= 0 or dead_only then
-		for i = 1, #plys do
-			plys[i]:SpawnForRound(dead_only)
-		end
-	else
-		-- wave method
-		local num_spawns = #spawn.GetPlayerSpawnEntities()
-		local to_spawn = {}
-
-		for _, ply in RandomPairs(plys) do
-			if ply:ShouldSpawn() then
-				to_spawn[#to_spawn + 1] = ply
-
-				GAMEMODE:PlayerSpawnAsSpectator(ply)
-			end
-		end
-
-		local sfn = function()
-			local c = 0
-			-- fill the available spawnpoints with players that need
-			-- spawning
-
-			while c < num_spawns and #to_spawn > 0 do
-				for k = 1, #to_spawn do
-					local ply = to_spawn[k]
-
-					if IsValid(ply) and ply:SpawnForRound() then
-						-- a spawn ent is now occupied
-						c = c + 1
-					end
-					-- Few possible cases:
-					-- 1) player has now been spawned
-					-- 2) player should remain spectator after all
-					-- 3) player has disconnected
-					-- In all cases we don't need to spawn them again.
-					table.remove(to_spawn, k)
-
-					-- all spawn ents are occupied, so the rest will have
-					-- to wait for next wave
-					if c >= num_spawns then break end
-				end
-			end
-
-			MsgN("Spawned " .. c .. " players in spawn wave.")
-
-			if #to_spawn == 0 then
-				timer.Remove("spawnwave")
-
-				MsgN("Spawn waves ending, all players spawned.")
-			end
-		end
-
-		MsgN("Spawn waves starting.")
-
-		timer.Create("spawnwave", wave_delay, 0, sfn)
-
-		-- already run one wave, which may stop the timer if everyone is spawned
-		-- in one go
-		sfn()
-	end
-end
-
 local function InitRoundEndTime()
 	-- Init round values
 	local endtime = CurTime() + roundtime:GetInt() * 60
@@ -1291,7 +1191,7 @@ function BeginRound()
 	if CheckForAbort() then return end
 
 	-- Respawn dumb people who died during prep
-	SpawnWillingPlayers(true)
+	entspawn.SpawnPlayers(true)
 
 	-- Remove their ragdolls
 	ents.TTT.RemoveRagdolls(true)
@@ -1353,6 +1253,8 @@ function BeginRound()
 		-- a player should be considered "was active in round" if they received a role
 		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
 	end
+
+	credits.ResetTeamStates()
 
 	---
 	-- @realm server
@@ -1485,11 +1387,18 @@ function GM:OnReloaded()
 	-- load all roles
 	roles.OnLoaded()
 
+	-- reload entity spawns from file
+	entspawnscript.OnLoaded()
+
 	-- load all HUDs
 	huds.OnLoaded()
 
 	-- load all HUD elements
 	hudelements.OnLoaded()
+
+	-- reload everything from the playermodels
+	playermodels.Initialize()
+	playermodels.StreamModelStateToSelectedClients()
 
 	---
 	-- @realm shared

@@ -26,12 +26,12 @@ function sql.GetParsedData(key, data, res)
 
 	local val = res[key]
 
+	if val == "NULL" then
+		return nil
+	end
+
 	if data.typ == "number" then
-		if val == "NULL" then
-			val = 0
-		else
-			val = tonumber(val)
-		end
+		val = tonumber(val)
 	elseif data.typ == "bool" then
 		val = val == "1"
 	elseif data.typ == "pos" then

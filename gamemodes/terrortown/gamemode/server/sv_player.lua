@@ -102,6 +102,9 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	-- reset any cached weapons
+	ply:ResetCachedWeapons()
+
 	-- stop bleeding
 	util.StopBleeding(ply)
 
@@ -199,18 +202,19 @@ function GM:IsSpawnpointSuitable(ply, spawnEntity, force)
 		return true
 	end
 
-	return spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
+	return plyspawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
 end
 
 ---
 -- Returns a list of all spawnable @{Entity}
 -- @param boolean shuffle whether the table should be shuffled
--- @param boolean force_all used unless absolutely necessary (includes info_player_start spawns)
+-- @param boolean forceAll used unless absolutely necessary (includes info_player_start spawns)
 -- @return table
--- @deprecated Use @{spawn.GetPlayerSpawnEntities} instead
+-- @deprecated Use @{plyspawn.GetPlayerSpawnPoints} instead
 -- @realm server
 function GetSpawnEnts(shouldShuffle, forceAll)
-	local spawnEntities = spawn.GetPlayerSpawnEntities(forceAll)
+	-- forceAll is ignored because the new system doesn't use it anymore
+	local spawnEntities = plyspawn.GetPlayerSpawnPoints()
 
 	if shouldShuffle then
 		table.Shuffle(spawnEntities)
@@ -221,14 +225,18 @@ end
 
 ---
 -- Called to determine a spawn point for a @{Player} to spawn at.
+-- @note This hook is not used to determine the spawn point of the player.
 -- @param Player ply The @{Player} who needs a spawn point
+-- @param boolean transition If true, the player just spawned from a map transition (trigger_changelevel);
+-- you probably want to not return an entity for that case to not override player's position
 -- @return Entity The spawnpoint entity to spawn the @{Player} at
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSelectSpawn
 -- @local
-function GM:PlayerSelectSpawn(ply)
-	return spawn.GetRandomPlayerSpawnEntity(ply)
+function GM:PlayerSelectSpawn(ply, transition)
+	-- this overwrite is needed to suppress the GMod warning if no spawn entities were found
+	-- "[PlayerSelectSpawn] Error! No spawn points!"
 end
 
 ---
@@ -242,11 +250,13 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetModel
 -- @local
 function GM:PlayerSetModel(ply)
+	-- The player modes has to be applied here since some player model selectors overwrite
+	-- this hook to suppress the TTT2 player models. If the model is assigned elsewhere, it
+	-- breaks with external model selectors.
 	if not IsValid(ply) then return end
 
-	local mdl = ply.defaultModel or GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
-
-	ply:SetModel(mdl) -- this will call the overwritten internal function to modify the model
+	-- this will call the overwritten internal function to modify the model
+	ply:SetModel(ply.defaultModel or GAMEMODE.playermodel)
 
 	-- Always clear color state, may later be changed in TTTPlayerSetColor
 	ply:SetColor(COLOR_WHITE)
@@ -598,98 +608,6 @@ local function PlayDeathSound(victim)
 end
 
 ---
--- See if we should award credits now
-local function CheckCreditAward(victim, attacker)
-	if GetRoundState() ~= ROUND_ACTIVE then return end
-
-	if not IsValid(victim) then return end
-
-	if not IsValid(attacker) or not attacker:IsPlayer() or not attacker:IsActive() then return end
-
-	---
-	-- @realm server
-	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
-	if ret == false then return end
-
-	local rd = attacker:GetSubRoleData()
-
-	-- DET KILLED ANOTHER TEAM AWARD
-	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
-		local amt = math.ceil(ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
-
-		if amt > 0 then
-			local plys = player.GetAll()
-
-			for i = 1, #plys do
-				local ply = plys[i]
-
-				if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then
-					ply:AddCredits(amt)
-				end
-			end
-
-			LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_all", {num = amt})
-		end
-	end
-
-	-- TRAITOR AWARD
-	if (attacker:GetTeam() == TEAM_TRAITOR or rd.traitorCreditAward) and not victim:IsInTeam(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
-		local terror_alive = 0
-		local terror_dead = 0
-		local terror_total = 0
-
-		local plys = player.GetAll()
-
-		for i = 1, #plys do
-			local ply = plys[i]
-
-			if ply:IsInTeam(attacker) then continue end
-
-			if ply:IsTerror() then
-				terror_alive = terror_alive + 1
-			elseif ply:IsDeadTerror() then
-				terror_dead = terror_dead + 1
-			end
-		end
-
-		-- we check this at the death of an innocent who is still technically
-		-- Alive(), so add one to dead count and sub one from living
-		terror_dead = terror_dead + 1
-		terror_alive = math.max(terror_alive - 1, 0)
-		terror_total = terror_dead + terror_alive
-
-		-- Only repeat-award if we have reached the pct again since last time
-		if GAMEMODE.AwardedCredits then
-			terror_dead = terror_dead - GAMEMODE.AwardedCreditsDead
-		end
-
-		local pct = terror_dead / terror_total
-
-		if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVar("ttt_credits_award_pct"):GetFloat() then
-			-- Traitors have killed sufficient people to get an award
-			local amt = math.ceil(ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetFloat() or 0)
-
-			-- If size is 0, awards are off
-			if amt > 0 then
-				for k = 1, #plys do
-					local ply = plys[k]
-
-					if ply:IsActive() and ply:IsShopper() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
-						ply:AddCredits(amt)
-
-						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
-						LANG.Msg(ply, "credit_all", {num = amt}, MSG_MSTACK_ROLE)
-					end
-				end
-			end
-
-			GAMEMODE.AwardedCredits = true
-			GAMEMODE.AwardedCreditsDead = terror_dead + GAMEMODE.AwardedCreditsDead
-		end
-	end
-end
-
----
 -- Handles the @{Player}'s death.<br />
 -- This hook is not called if the @{Player} is killed by @{Player:KillSilent}.
 -- See @{GM:PlayerSilentDeath} for that.
@@ -778,40 +696,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		PlayDeathSound(ply)
 	end
 
-	-- Credits
-	CheckCreditAward(ply, attacker)
-
-	-- Check for TEAM killing ANOTHER TEAM to send credit rewards
-	if IsValid(attacker) and attacker:IsPlayer() and attacker:IsShopper() then
-		local reward = 0
-		local rd = attacker:GetSubRoleData()
-
-		-- if traitor team kills another team
-		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsInTeam(ply) then
-			if attacker:GetTeam() == TEAM_TRAITOR then
-				reward = math.ceil(ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0)
-			else
-				local vrd = ply:GetSubRoleData()
-				local b = false
-
-				if vrd ~= TRAITOR then
-					b = ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill")
-				end
-
-				if b then -- special role killing award
-					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0)
-				else -- give traitor killing award if killing another role
-					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. roles.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. roles.TRAITOR.name .. "kill"):GetInt() or 0)
-				end
-			end
-		end
-
-		if reward > 0 then
-			attacker:AddCredits(reward)
-
-			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}, MSG_MSTACK_ROLE) -- TODO rework
-		end
-	end
+	credits.HandleKillCreditsAward(ply, attacker)
 end
 
 ---

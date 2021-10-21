@@ -1369,18 +1369,18 @@ L.shopeditor_name_random_shop_reroll_per_buy = "Automatisches Auswürfeln nach j
 L.header_equipment_setup = "Equipment Einstellungen"
 L.header_equipment_value_setup = "Balance Einstellungen"
 
-L.itemeditor_name_not_buyable = "Equipment kaufbar"
-L.itemeditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
-L.itemeditor_name_not_random = "Immer im Shop verfügbar"
-L.itemeditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
-L.itemeditor_name_global_limited = "Global limitierte Anzahl"
-L.itemeditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
-L.itemeditor_name_team_limited = "Team limitierte Anzahl"
-L.itemeditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
-L.itemeditor_name_player_limited = "Spieler limitierte Anzahl"
-L.itemeditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
-L.itemeditor_name_min_players = "Mindestspielerzahl für Freischaltung"
-L.itemeditor_name_credits = "Kosten in Credits"
+L.equipmenteditor_name_not_buyable = "Equipment kaufbar"
+L.equipmenteditor_desc_not_buyable = "Das Equipment ist in keinem Shop zu finden, wenn dies deaktiviert ist. Rollen, die dieses Equipment als Standardausrüstung bekommen sind davon jedoch nicht betroffen."
+L.equipmenteditor_name_not_random = "Immer im Shop verfügbar"
+L.equipmenteditor_desc_not_random = "Wenn aktiviert, dann ist das Equipment immer im Shop verfügbar. Das ist dann relevant, wenn der Zufalls-Shop verwendet wird. Dabei belegt dieses Equipment einen der verfügbaren Zufallsslots."
+L.equipmenteditor_name_global_limited = "Global limitierte Anzahl"
+L.equipmenteditor_desc_global_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es auf dem Server nur ein mal pro Runde gekauft werden."
+L.equipmenteditor_name_team_limited = "Team limitierte Anzahl"
+L.equipmenteditor_desc_team_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Team nur ein mal pro Runde gekauft werden."
+L.equipmenteditor_name_player_limited = "Spieler limitierte Anzahl"
+L.equipmenteditor_desc_player_limited = "Wenn equipment eine global limitierte Anzahl hat, dann kann es pro Spieler nur ein mal pro Runde gekauft werden.."
+L.equipmenteditor_name_min_players = "Mindestspielerzahl für Freischaltung"
+L.equipmenteditor_name_credits = "Kosten in Credits"
 
 -- 2021-06-08
 L.equip_not_added = "nicht enthalten"
@@ -1409,5 +1409,221 @@ L.xfer_team_indicator = "Team"
 -- 2021-06-25
 L.searchbar_default_placeholder = "Durchsuche Liste..."
 
+-- 2021-07-07
+L.header_equipment_weapon_spawn_setup = "Equipment Erscheinungs Einstellungen"
+
+L.equipmenteditor_name_auto_spawnable = "Equipment kann zufällig erscheinen"
+L.equipmenteditor_name_spawn_type = "Erscheinungstyp"
+
 -- 2021-07-11
---L.spec_about_to_revive = "Spectating is limited during revival period."
+L.spec_about_to_revive = "Zuschauen während der Widerbelebung nicht möglich."
+
+-- 2021-09-01
+L.spawneditor_name = "Spawneditor-Werkzeug"
+L.spawneditor_desc = "Wird verwendet, um Waffen-, Munitions- und Spielerspawns in der Welt zu plazuieren. Kann nur von Superadmins verwendet werden."
+
+L.spawneditor_place = "Platziere Spawn"
+L.spawneditor_remove = "Entferne Spawn"
+L.spawneditor_change = "Ändere den Spawntyp (halte [SHIFT] zum Umkehren)"
+L.spawneditor_ammo_edit = "Halte gedrückt, um die Munition des Waffenspawns anzupassen"
+
+L.spawn_weapon_random = "Zufallswaffenspawn"
+L.spawn_weapon_melee = "Nahkampfwaffenspawn"
+L.spawn_weapon_nade = "Granatenspawn"
+L.spawn_weapon_shotgun = "Schrotflintenspawn"
+L.spawn_weapon_heavy = "Schwerewaffenspawn"
+L.spawn_weapon_sniper = "Sniperspawn"
+L.spawn_weapon_pistol = "Pistolenspawn"
+L.spawn_weapon_special = "Spezialwaffenspawn"
+L.spawn_ammo_random = "Zufallsmunitionsspawn"
+L.spawn_ammo_deagle = "Deaglemunitionsspawn"
+L.spawn_ammo_pistol = "Pistolenmunitionsspawn"
+L.spawn_ammo_mac10 = "Mac10-Munitionsspawn"
+L.spawn_ammo_rifle = "Gewehrmunitionsspawn"
+L.spawn_ammo_shotgun = "Schrotflintenmunitionsspawn"
+L.spawn_player_random = "Zufallsspielerspawn"
+
+L.spawn_weapon_ammo = " (Munition: {ammo})"
+
+L.spawn_weapon_edit_ammo = "Halte [{walkkey}] und drücke [{primaryfire} oder {secondaryfire}], um die Munition für diesen Waffenspawn zu erhöhen / reduzieren"
+
+L.spawn_type_weapon = "Dies ist ein Waffenspawn"
+L.spawn_type_ammo = "Dies ist ein Munitionsspawn"
+L.spawn_type_player = "Dies ist ein Spielerspawn"
+
+L.spawn_remove = "Drücke [{secondaryfire}], um diesen Spawn zu entfernen"
+
+L.submenu_administration_entspawn_title = "Spawn Editor"
+L.header_entspawn_settings = "Spawn Editor Einstellungen"
+L.button_start_entspawn_edit = "Starte Spawn Editor"
+L.button_delete_all_spawns = "Lösche alle Spawns"
+
+L.label_dynamic_spawns_enable = "Aktiviere dynamische Spawns für diese Map"
+L.label_dynamic_spawns_global_enable = "Aktiviere benutzerdefinierte Spawns für alle Maps"
+
+L.header_equipment_weapon_spawn_setup = "Waffenspawneinstellungen"
+
+L.help_spawn_editor_info = [[
+Der Spawneditor wird verwendet, um Waffen-, Munition- und Spielerspawns in der Welt zu platzieren, entfernen oder zu verändern.
+
+Diese Spawns werden in Dateien unter 'data/ttt/weaponspawnscripts/' gespeichert. Die Dateien können für einen Hardreset gelöscht werden. Die Standardwerte der Spawndateien werden basierend auf den Spawns, welche in der Map gefunden wurden und denen aus den klassischen TTT Spawnskripten, generiert. Das Drücken des Zurücksetzenknopfes setzt alles zu diesem Zustan zurück.
+
+Es sollte erwähnt werden, dass dieses Spawnsystem dynamische Spawns verwendet. Dies ist am interessantesten für Waffen, da nun nicht mehr spezifische Waffen, sondern allgemeine Waffentypen gesetzt werden. Beispielsweise gibt es nun keinen spezfischen TTT Schrotflintenspawn mehr, sondern einen Spawn für alle möglichen Schrotflintentypen. Der Spawntyp für die Waffen kann im Ausrüstungseditor gesetzt werden. Dies ermöglicht es jeder beliebigen Waffe auf der Karte zu spawnen, oder zu verhindern, dass ausgewählte Standardwaffen spawnen.
+
+Beachte, dass Änderungen erst in einer neuen Runde sichtbar werden.]]
+L.help_spawn_editor_enable = "Für manche Karten mag es empfohlen sein dynamische Waffenspawns zu deaktieren, sodass die originalen Waffen vorhanden bleiben. Das deaktivieren der Einstellung deaktiviert dies nur für diese spezifische Karte. Das dynamische Spawnsystem wird dann noch immer für alle anderen Karten verwendet."
+L.help_spawn_editor_hint = "Hinweis: Öffne das Gamemode Menü erneut, um den Spawneditor zu verlassen"
+L.help_spawn_editor_spawn_amount = [[
+Aktuell existieren {weapon} Waffenspawns, {ammo} Munitionssapawns und {player} Spielerspawns auf dieser Map. Drücke 'Starte Spawn Editor' um diese zu ändern.
+
+{weaponrandom}x Zufallswaffenspawn
+{weaponmelee}x Nahkampfwaffenspawn
+{weaponnade}x Granatenspawn
+{weaponshotgun}x Schrotflintenspawn
+{weaponheavy}x Schwerewaffenspawn
+{weaponsniper}x Sniperspawn
+{weaponpistol}x Pistolenspawn
+{weaponspecial}x Spezialwaffenspawn
+
+{ammorandom}x Zufallsmunitionsspawn
+{ammodeagle}x Deaglemunitionsspawn
+{ammopistol}x Pistolenmunitionsspawn
+{ammomac10}x Mac10-Munitionsspawn
+{ammorifle}x Gewehrmunitionsspawn
+{ammoshotgun}x Schrotflintenmunitionsspawn
+
+{playerrandom}x Zufallsspielerspawn]]
+
+L.equipmenteditor_name_auto_spawnable = "Ausrüstung spawnt zufällig in der Welt"
+L.equipmenteditor_name_spawn_type = "Wähle Spawntyp"
+L.equipmenteditor_desc_auto_spawnable = [[
+Das TTT2 Spawnsystem ermöglicht es allen Waffen in der Welt zu spawnen. Standardmäßig gilt dies nur für Waffen, welche vom Ersteller als 'AutoSpawnable' geflaggt wurden. Allerdings kann dies in diesem Menü manuell geändert werden.
+
+Die meiste Ausrüstung ist standardmäßig als 'Zufallswaffenspawn' gesetzt. Das bedeutet, dass diese Ausrüstung nur an Zufallswaffenspawns spawnt. Alledings ist es auch möglich Spezialwaffenspawns in der Welt zu platzieren, oder den Spawntyp der Ausrüstung zu ändern.]]
+
+L.pickup_error_inv_cached = "Du kannst dies im AUgenblick nicht aufheben, da dein Inventar gecached ist."
+
+-- 2021-09-02
+L.submenu_administration_playermodels_title = "Spielermodell"
+L.header_playermodels_general = "Allgemeine Spielermodelleinstellungen"
+L.header_playermodels_selection = "Wähle Spielermodellliste"
+
+L.label_enforce_playermodel = "Erzwinge rollenspezifisches Spielermodell"
+L.label_use_custom_models = "Nutze ein zufällig ausgewähltes Spielermodell"
+L.label_prefer_map_models = "Bevorzuge kartenspezifische Modelle über die Standardspielermodelle"
+L.label_select_model_per_round = "Wähle ein neues zufälliges Spielermodell in jeder Runde (nur zum Kartenwechsel, wenn deaktiviert)"
+
+L.help_prefer_map_models = [[
+Manche Karten haben ihre eigenen Spielermodelle. Standardmäßig haben diese Modelle eine höhere Priorität gegenüber den automatisch zugewiesenen. Durch das Deaktivieren dieser Einetllung haben kartenspezifische Spielermodelle keine höhere Priorität mehr.
+
+Rollenspezifische Spielermodelle haben immer die höchste Priorität und sind daher nicht von dieser Einstellung betroffen.]]
+L.help_enforce_playermodel = [[
+Manche Rollen haben spezfische Spielermodelle. Dies kann deaktiviert werden, um Kompatibilität zu gewissen Spielermodellauswahl-Tools zu gewährleisten.
+Zufällige Standardmodelle können noch immer ausgewählt werden, wenn diese Einstellung deaktiviert ist.]]
+L.help_use_custom_models = [[
+Standardmäßig bekommt jeder Spieler das Phoenix Spielermodell zugewiesen. Durch das Aktivieren dieser Option ist es jedoch möglich eine Spielermodellliste zu erstellen. Es bekommen noch immer alle Spieler ein zufälliges Spielermodell zugewiesen, jedoch ist es ein zufälliges aus der Liste der ausgewählten Spielermodelle.
+
+Diese Auswahl an Modellen kann erweitert werden, indem weitere Spielermodelle installiert werden.]]
+
+-- 2021-10-06
+L.menu_server_addons_title = "Server Addons"
+L.menu_server_addons_description = "Serverweite Adminsettings für Addons."
+
+L.tooltip_finish_score_penalty_alive_teammates = "Lebende Teammitglieder (Strafe): {score}"
+L.finish_score_penalty_alive_teammates = "Lebende Teammitglieder (Strafe):"
+L.tooltip_kill_score_suicide = "Selbstmord: {score}"
+L.kill_score_suicide = "Selbstmord:"
+L.tooltip_kill_score_team = "Teammord: {score}"
+L.kill_score_team = "Teammord:"
+
+-- 2021-10-09
+L.help_models_select = [[
+Linksklicke auf die Modelle, um sie in den Spielermodellpool hinzuzufügen. Erneutes Linksklicken entfernt sie wieder. Rechtsklick wechselt zwischen aktivierter/deaktivierter Detektivsmütze.
+
+Das kleine Symbol oben links zeigt, ob ein Spielermodel eine Kopfschuss Hitbox hat. Das Symbol darunter zeigt, ob eine Detektivsmütze bei diesem Modell möglich ist.]]
+
+L.menu_roles_title = "Rollen Einstellungen"
+L.menu_roles_description = "Richte Rollenspawning, Ausrüsungspunkte und mehr ein."
+
+L.submenu_administration_roles_general_title = "Allgemeine Rolleneinstellungen"
+
+L.header_roles_info = "Roleninformationen"
+L.header_roles_selection = "Rollenauswahlparameter"
+L.header_roles_tbuttons = "Verräterknöpfe für Rolle"
+L.header_roles_credits = "Rollenausrüstungspunkte"
+L.header_roles_additional = "Weitere Rolleneinstellungen"
+L.header_roles_reward_credits = "Belohnungsausrüstungspunkte"
+
+L.help_roles_default_team = "Standardteam: {team}"
+L.help_roles_unselectable = "Diese Rolle kann nicht ausgewählt werden, was bedeutet, dass sie nicht in der Rollenverteilung verwendet wird. Meist liegt es daran, dass es eine Rolle ist, die manuell in der Runde Spielern zugewiesen wird, wie zum Beispiel durch eine Wiederbelebung oder eine Kumpanenpistole."
+L.help_roles_selectable = "Diese Rolle kann ausgewählt werden, daher wird sie, wenn alle Kriterien erfüllt sind, in der Rollenverteilung verwendet."
+L.help_roles_credits = "Ausrüstungspunkte werden verwendet um Ausrüstung im Shop zu kaufen. Meist macht es nur Sinn diese Punkte Rollen zu geben, welche auch einen Shop haben. Da es jedoch auch möglich ist von Leichen Punkte zu klauen, können Startpunkte auch als Belohnung für den Mörder dienen."
+L.help_roles_selection_short = "Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, die diese Rolle zugewiesen bekommen. Wenn zum Beispiel dieser Wert auf '0.2' gesetzt ist, dann bekommt jeder fünfte Spieler diese Rolle."
+L.help_roles_selection = [[
+Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, die diese Rolle zugewiesen bekommen. Wenn zum Beispiel dieser Wert auf '0.2' gesetzt ist, dann bekommt jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens fünf Spieler existieren müssen, damit diese Rolle verteilt wird.
+Bedenke, dass dies alles nur gilt, wenn die Rolle überhaupt zur Verteilung ausgewählt wurde.
+
+Die zuvor genannte Rollenverteilung hat eine spezielle Integration mit der Mindestzahl an Spielern. Wenn die Rolle zur Verteilung ausgewählt wurde und die gesetzte Mindestspielerzahl niederiger als die Zahl ist, welche aus dem Rollenverteilungsprozentsatz kommt, dann kann ein einzelner Spieler diese Rolle dennoch erhalten. Die prozentuale Rollenzuweisung gilt dann jedoch wieder ab dem zweiten Spieler.]]
+L.help_roles_award_info = "Einige Rollen (falls aktiviert in ihren Ausrüstungspunkteeinstellungen) erhalten Ausrüstungsprunkte, wenn eine gewise Anzahl ihrer Gegenspieler stirbt. Diese Werte können hier eingestellt werden."
+L.help_roles_award_pct = "Wenn dieser Prozentsatz an anderen Spielern gestorben ist, dann erhalten Spieler Ausrüstungspunkte."
+L.help_roles_award_repeat = "Definiert, ob Belohnungen mehrfach ausgestellt werden können. Wenn aktiviert und der Prouentsatz zum Beispiel auf '0.25' steht, dann werden Ausrüstungspunkte bei '25%', '50%' und '75%' getötet verteilt."
+L.help_roles_advanced_warning = "WARNUNG: Diese Einstellungen sind nur für fortgeschrittene Nutzer geeignet, da sie die gesamte Rollenverteilung durcheinander bringen können. Wenn du unsicher bist, was du tun sollst, dann setze alle Werte auf '0'. Das bedeutet, dass der Rollenverteilung keine künstlichen Limits erteilt werden."
+L.help_roles_max_roles = [[
+Die Kategorie Rollen erhält jede verfügbare Rolle in TTT2. Standardmäßig gibt es kein Limit darauf wie viele verschiedene Rollen zugeteilt werden können. Allerdings gibt es zwei Möglichkeiten dies zu limitieren.
+
+1. Limitierung durch einen fixen Wert.
+2. Limitierung durch einen Prozentsatz.
+
+Letzteres wird nur verwendet, wenn der fixierte Wert auf 0 gesetzt ist und setzt dynamisch ein oberes Limit basierend auf dem Prozentsatz der verfügbaren Spieler.]]
+L.help_roles_max_baseroles = [[
+Basisrollen sind Rollen, von der andere erben. Ein Unschuldiger ist zum Beispiel eine Basisrolle, während ein Paharo eine Unterrolle dieser Rolle ist. Standardmäßig gibt es kein Limit darauf wie viele verschiedene Basisrollen zugeteilt werden können. Allerdings gibt es zwei Möglichkeiten dies zu limitieren.
+
+1. Limitierung durch einen fixen Wert.
+2. Limitierung durch einen Prozentsatz.
+
+Letzteres wird nur verwendet, wenn der fixierte Wert auf 0 gesetzt ist und setzt dynamisch ein oberes Limit basierend auf dem Prozentsatz der verfügbaren Spieler.]]
+
+L.label_roles_enabled = "Aktiviere Rolle"
+L.label_roles_min_inno_pct = "Unschuldigenverteilung pro Spieler"
+L.label_roles_pct = "Rollenverteilung pro Spieler"
+L.label_roles_max = "Oberes Limit von Spielern mit dieser Rolle"
+L.label_roles_random = "Wahrscheinlichkeit, dass diese Rolle gewählt wird"
+L.label_roles_min_players = "Mindespielerzahl für Auswahl der Rolle"
+L.label_roles_tbutton = "Rolle kann Verräterknöpfe nutzen"
+L.label_roles_credits_starting = "Ausrüstungspunkte zu Beginn"
+L.label_roles_credits_award_pct = "Belohnungsspieleranteil"
+L.label_roles_credits_award_size = "Belohnungsgröße"
+L.label_roles_credits_award_repeat = "Mehrfache Belohnung"
+L.label_roles_newroles_enabled = "Aktiviere eigene Rollen"
+L.label_roles_max_roles = "Obere Grenze für Rollen"
+L.label_roles_max_roles_pct = "Prozentuale obere Grenze für Rollen"
+L.label_roles_max_baseroles = "Obere Grenze für Basisrollen"
+L.label_roles_max_baseroles_pct = "Prozentuale obere Grenze für Basisrollen"
+L.label_detective_hats = "Aktiviere Mützen für Kontrollrollen wie den Detektiv (falls es das Spielermodell erlaubt)"
+
+L.ttt2_desc_innocent = "Ein Unschuldiger hat keine spzeiellen Fähigkeiten. Er muss die Bösen unter den Terroristen finden und umbringen. Aber dabei stets auf der Hut sein, um nicht seine Kollegen zu ermorden."
+L.ttt2_desc_traitor = "Der Verräter ist der Gegenspieler der unschuldigen. Sie haben einen Ausrüstungsshop, in dem sie Spezialausrüstung kaufen können. Sie müssen jeden außer ihre eigenen Teamkollegen ermorden."
+L.ttt2_desc_detective = "Der Detektiv ist derjenige, dem die Unschuldigen trauen können. Aber wer sind die Unschuldigen? Der Detektiv muss genau das herausfinden. Ihr Ausrüstungsshop hilft ihnen vielleicht dabei."
+
+-- 2021-10-10
+L.button_reset_models = "Spielermodelle Zurücksetzen"
+
+-- 2021-10-13
+L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'offenen Rollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
+L.help_roles_credits_award = [[
+In Standard-TTT2 gibt es zwei verschiedene Wege an Ausrüstungspunkte zu kommen:
+
+1. Wenn ein gewisser Prozentsatz der Spieler im Gegnerteam tot sind, dann wird das ganze Team mit Ausrüstungspunkten belohnt.
+2. Wenn ein Spieler einen wichtigen Spieler mit einer 'offenen Rolle' (wie beispielsweise dem Detektiv), dann wird der Mörder belohnt.
+
+Beachte jedoch, dass dies trotzdem individuell für jede Rolle de-/aktiviert werden kann, auch wenn das ganze Team belohnt wird. Wenn beispielsweise das Team der Unschuldigen belohnt wird, aber die Rolle der Unschuldigen dies deaktiviert hat, dann bekommt nur der Detektiv seine Ausrüstungspunkte.
+Die Grundwerte können in 'Administration' -> 'Allgemeine Rolleneinstellungen' angepasst werden.]]
+L.help_detective_hats = [[
+Kontrollrollen, wie der Detektiv, können Detektivmützen tragen, um ihre Authorität zu zeugen. Sie verlieren sie beim Tod, oder wenn sie Schaden am Kopf bekommen.
+
+Einige Spielermodelle unterstützen standardmäßig keine Detektivmützen. Du kannst dies unter 'Administration' -> 'Spielermodelle' ändern.]]
+
+L.label_roles_credits_award_kill = "Anzahl Ausrüstungspunkte für Mord"
+L.label_roles_credits_dead_award = "Aktiviere Ausrüstungspunktebelohnung für gewissen Anteil an toten Gegnern"
+L.label_roles_credits_kill_award = "Aktiviere Ausrüstungspunktebelohnung für Mord an wichtigem Spieler"
+L.label_roles_min_karma = "Untere Grenze für Karma für Auswahl der Rolle"

@@ -2,10 +2,10 @@
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"
-GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek"
+GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.9.2b"
+GM.Version = "0.10.1b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -116,15 +116,10 @@ TEAMS = TEAMS or {
 
 ACTIVEROLES = ACTIVEROLES or {}
 
----
--- @realm shared
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
--- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
 -- just compatibality functions
 
@@ -461,6 +456,32 @@ WEAPON_ROLE = WEAPON_EXTRA
 WEAPON_NONE = WEAPON_EXTRA
 WEAPON_EQUIP = WEAPON_SPECIAL
 
+-- weapon spawn type
+WEAPON_TYPE_RANDOM = 1
+WEAPON_TYPE_MELEE = 2
+WEAPON_TYPE_NADE = 3
+WEAPON_TYPE_SHOTGUN = 4
+WEAPON_TYPE_HEAVY = 5
+WEAPON_TYPE_SNIPER = 6
+WEAPON_TYPE_PISTOL = 7
+WEAPON_TYPE_SPECIAL = 8
+
+-- ammo spawn type
+AMMO_TYPE_RANDOM = 1
+AMMO_TYPE_DEAGLE = 2
+AMMO_TYPE_PISTOL = 3
+AMMO_TYPE_MAC10 = 4
+AMMO_TYPE_RIFLE = 5
+AMMO_TYPE_SHOTGUN = 6
+
+-- player spawn types
+PLAYER_TYPE_RANDOM = 1
+
+-- spawn types
+SPAWN_TYPE_WEAPON = 1
+SPAWN_TYPE_AMMO = 2
+SPAWN_TYPE_PLAYER = 3
+
 -- Kill types discerned by last words
 KILL_NORMAL = 0
 KILL_SUICIDE = 1
@@ -511,6 +532,8 @@ include("ttt2/extensions/table.lua")
 include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
+include("ttt2/extensions/input.lua")
+include("ttt2/extensions/cvars.lua")
 
 -- include libraries
 include("ttt2/libraries/huds.lua")
@@ -534,6 +557,8 @@ include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
+include("ttt2/libraries/playermodels.lua")
+include("ttt2/libraries/entspawnscript.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
@@ -585,28 +610,6 @@ end
 -- Create teams
 TEAM_TERROR = 1
 TEAM_SPEC = TEAM_SPECTATOR
-
--- Everyone's model
-local ttt_playermodels = {
-	Model("models/player/phoenix.mdl"),
-	Model("models/player/arctic.mdl"),
-	Model("models/player/guerilla.mdl"),
-	Model("models/player/leet.mdl")
-}
-
-local ttt_playermodels_count = #ttt_playermodels
-
----
--- Returns a random player model
--- @return Model model
--- @realm shared
-function GetRandomPlayerModel()
-	if not ttt2_custom_models:GetBool() then
-		return ttt_playermodels[math.random(ttt_playermodels_count)]
-	else
-		return ttt_playermodels[1]
-	end
-end
 
 ---
 -- Returns the default equipment

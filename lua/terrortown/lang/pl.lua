@@ -1379,18 +1379,18 @@ L.none = "Brak Roli"
 --L.header_equipment_setup = "Setup Equipment"
 --L.header_equipment_value_setup = "Balance Settings"
 
---L.itemeditor_name_not_buyable = "Equipment buyable"
---L.itemeditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
---L.itemeditor_name_not_random = "Aways available in shop"
---L.itemeditor_desc_not_random = "If enabled, the equipment is always available in the shop. This is relevant when using the random shop. It takes one available random slot and always reserves it for this equipment."
---L.itemeditor_name_global_limited = "Global limited amount"
---L.itemeditor_desc_global_limited = "If equipment is global limited, it can be bought only once on the server in the active round."
---L.itemeditor_name_team_limited = "Team limited amount"
---L.itemeditor_desc_team_limited = "If equipment is team limited, it can be bought only once per team in the active round."
---L.itemeditor_name_player_limited = "Player limited amount"
---L.itemeditor_desc_player_limited = "If equipment is player limited, it can be bought only once per player in the active round."
---L.itemeditor_name_min_players = "Minimum amount of players for selection"
---L.itemeditor_name_credits = "Price in credits"
+--L.equipmenteditor_name_not_buyable = "Equipment buyable"
+--L.equipmenteditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
+--L.equipmenteditor_name_not_random = "Aways available in shop"
+--L.equipmenteditor_desc_not_random = "If enabled, the equipment is always available in the shop. This is relevant when using the random shop. It takes one available random slot and always reserves it for this equipment."
+--L.equipmenteditor_name_global_limited = "Global limited amount"
+--L.equipmenteditor_desc_global_limited = "If equipment is global limited, it can be bought only once on the server in the active round."
+--L.equipmenteditor_name_team_limited = "Team limited amount"
+--L.equipmenteditor_desc_team_limited = "If equipment is team limited, it can be bought only once per team in the active round."
+--L.equipmenteditor_name_player_limited = "Player limited amount"
+--L.equipmenteditor_desc_player_limited = "If equipment is player limited, it can be bought only once per player in the active round."
+--L.equipmenteditor_name_min_players = "Minimum amount of players for selection"
+--L.equipmenteditor_name_credits = "Price in credits"
 
 -- 2021-06-08
 --L.equip_not_added = "not added"
@@ -1419,5 +1419,221 @@ L.none = "Brak Roli"
 -- 2021-06-25
 --L.searchbar_default_placeholder = "Search in list..."
 
+-- 2021-07-07
+--L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+
+--L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly"
+--L.equipmenteditor_name_spawn_type = "Spawn type"
+
 -- 2021-07-11
 --L.spec_about_to_revive = "Spectating is limited during revival period."
+
+-- 2021-09-01
+--L.spawneditor_name = "Spawn Editor Tool"
+--L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world. Can only be used by super admin."
+
+--L.spawneditor_place = "Place spawn"
+--L.spawneditor_remove = "Remove spawn"
+--L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
+--L.spawneditor_ammo_edit = "Hold to edit ammo auto spawn on weapon spawns"
+
+--L.spawn_weapon_random = "Random Weapon Spawn"
+--L.spawn_weapon_melee = "Melee Weapon Spawn"
+--L.spawn_weapon_nade = "Grenade Weapon Spawn"
+--L.spawn_weapon_shotgun = "Shotgun Weapon Spawn"
+--L.spawn_weapon_heavy = "Heavy Weapon Spawn"
+--L.spawn_weapon_sniper = "Sniper Weapon Spawn"
+--L.spawn_weapon_pistol = "Pistol Weapon Spawn"
+--L.spawn_weapon_special = "Special Weapon Spawn"
+--L.spawn_ammo_random = "Random ammo spawn"
+--L.spawn_ammo_deagle = "Deagle ammo spawn"
+--L.spawn_ammo_pistol = "Pistol ammo spawn"
+--L.spawn_ammo_mac10 = "Mac10 ammo spawn"
+--L.spawn_ammo_rifle = "Rifle ammo spawn"
+--L.spawn_ammo_shotgun = "Shotgun ammo spawn"
+--L.spawn_player_random = "Random player spawn"
+
+--L.spawn_weapon_ammo = " (Ammo: {ammo})"
+
+--L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
+
+--L.spawn_type_weapon = "This is a weapon spawn"
+--L.spawn_type_ammo = "This is an ammunition spawn"
+--L.spawn_type_player = "This is a player spawn"
+
+--L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
+
+--L.submenu_administration_entspawn_title = "Spawn Editor"
+--L.header_entspawn_settings = "Spawn Editor Settings"
+--L.button_start_entspawn_edit = "Start Spawn Edit"
+--L.button_delete_all_spawns = "Delete all Spawns"
+
+--L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
+--L.label_dynamic_spawns_global_enable = "Enable custom spawns for all maps"
+
+--L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+
+--L.help_spawn_editor_info = [[
+--The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
+
+--These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to this state.
+
+--It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the equipment editor. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
+
+--Keep in mind that many changes only take effect after a new round has started.]]
+--L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Disabling this checkbox only disables it for the currently active map. The dynamic system will still be used for every other map."
+--L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
+--L.help_spawn_editor_spawn_amount = [[
+--There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount.
+
+--{weaponrandom}x Random weapon spawn
+--{weaponmelee}x Melee weapon spawn
+--{weaponnade}x Grenade weapon spawn
+--{weaponshotgun}x Shotgun weapon spawn
+--{weaponheavy}x Heavy weapon spawn
+--{weaponsniper}x Sniper weapon spawn
+--{weaponpistol}x Pistol weapon spawn
+--{weaponspecial}x Special weapon spawn
+
+--{ammorandom}x Random ammo spawn
+--{ammodeagle}x Deagle ammo spawn
+--{ammopistol}x Pistol ammo spawn
+--{ammomac10}x Mac10 ammo spawn
+--{ammorifle}x Rifle ammo spawn
+--{ammoshotgun}x Shotgun ammo spawn
+
+--{playerrandom}x Random player spawn]]
+
+--L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
+--L.equipmenteditor_name_spawn_type = "Select spawn type"
+--L.equipmenteditor_desc_auto_spawnable = [[
+--The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however these settings can be changed from within this menu.
+
+--Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
+
+--L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
+
+-- 2021-09-02
+--L.submenu_administration_playermodels_title = "Player Models"
+--L.header_playermodels_general = "General Player Model Settings"
+--L.header_playermodels_selection = "Select Player Model Pool"
+
+--L.label_enforce_playermodel = "Enforce role player model"
+--L.label_use_custom_models = "Use a random selected player model"
+--L.label_prefer_map_models = "Prefer map specific models over default models"
+--L.label_select_model_per_round = "Select a new random model each round (only on mapchange if disabled)"
+
+--L.help_prefer_map_models = [[
+--Some maps define their own player models. By default these models have a higher priority then the models that are automatically assigned. By disabling this setting, map --specific models are disabled.
+
+--Role specific models always have a higher priority and are unaffected by this setting.]]
+--L.help_enforce_playermodel = [[
+--Some roles have custom player models. This can be disabled which can be relevant for compatibility with some player model selectors.
+--Random default models can still be selected, if this setting is disabled.]]
+--L.help_use_custom_models = [[
+--By default only the CSS Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting --enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
+
+--This selection of models can be extended by installing more player models.]]
+
+-- 2021-10-06
+--L.menu_server_addons_title = "Server Addons"
+--L.menu_server_addons_description = "Serverwide admin only settings for addons."
+
+--L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
+--L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
+--L.tooltip_kill_score_suicide = "Suicide: {score}"
+--L.kill_score_suicide = "Suicide:"
+--L.tooltip_kill_score_team = "Team kill: {score}"
+--L.kill_score_team = "Team kill:"
+
+-- 2021-10-09
+--L.help_models_select = [[
+--Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
+
+--The small indicator in the top left shows if the player model has a headshot hitbox. The icon below shows if this model is applicable for a detective hat.]]
+
+--L.menu_roles_title = "Role Settings"
+--L.menu_roles_description = "Set up the spawning, equipment credits and more."
+
+--L.submenu_administration_roles_general_title = "General Role Settings"
+
+--L.header_roles_info = "Role Information"
+--L.header_roles_selection = "Role Selection Parameters"
+--L.header_roles_tbuttons = "Role Traitor Buttons"
+--L.header_roles_credits = "Role Equipment Credits"
+--L.header_roles_additional = "Additonal Role Settings"
+--L.header_roles_reward_credits = "Reward Equipment Credits"
+
+--L.help_roles_default_team = "Default team: {team}"
+--L.help_roles_unselectable = "This role is not selectable. This means it is not considered in the role selection. Most of the times this means that this is a role that is manually applied during the round through an event like a revival, a sidekick deagle or something similar."
+--L.help_roles_selectable = "This role is selectable. This means if all criteria is met, this role is considered in the role selection process."
+--L.help_roles_credits = "Equipment credits are used to buy equipment in the shop. It mostly makes sense to give only those roles that have access to the shop credits. However since it is possible to loot credits from corpses, it could also be an idea to give starting credits to roles as a reward for their killer."
+--L.help_roles_selection_short = "The role distribution per player defines the percentage of players that are assigned this role. If for example the value is set to '0.2' every fifth player receives this role."
+--L.help_roles_selection = [[
+--The role distribution per player defines the percentage of players that are assigned this role. If for example the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be selected at all.
+--Keep in mind that all of this only applies if the role is considered for selection.
+
+--The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for selection and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution setting then holds true again for the second player to receive this role.]]
+--L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
+--L.help_roles_award_pct = "When this percentage of other players are dead, players are awarded more credits."
+--L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. If for example you set the percentage to '0.25', and enable this, players will be awarded credits at '25%' killed, '50%' killed, and '75%' killed."
+--L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up your role selection. When in doubt keep all values at '0'. This value means that no limits are applied and the role selection is trying to assign as many roles as possible."
+--L.help_roles_max_roles = [[
+--The roles category contains every role in TTT2. By default there is no limit on how many different roles can be assigned. However here are two different ways to limit them.
+
+--1. Limit them by a fixed amount.
+--2. Limit them by a percentage.
+
+--The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+--L.help_roles_max_baseroles = [[
+--Baseroles are only those role others inherit from. For example the Innocent role is a baserole, while a Pharaoh is a sub role of this role. By default there is no limit on how many different baseroles can be assigned. However here are two different ways to limit them.
+
+--1. Limit them by a fixed amount.
+--2. Limit them by a percentage.
+
+--The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+
+--L.label_roles_enabled = "Enable role"
+--L.label_roles_min_inno_pct = "Innocent distribution per player"
+--L.label_roles_pct = "Role distribution per player"
+--L.label_roles_max = "Upper limit of players assigned for this role"
+--L.label_roles_random = "Chance this role is selected"
+--L.label_roles_min_players = "Lower limit of players to consider selection"
+--L.label_roles_tbutton = "Role can use Traitor buttons"
+--L.label_roles_credits_starting = "Starting credits"
+--L.label_roles_credits_award_pct = "Credit reward percentage"
+--L.label_roles_credits_award_size = "Credit reward size"
+--L.label_roles_credits_award_repeat = "Credit reward repeat"
+--L.label_roles_newroles_enabled = "Enable custom roles"
+--L.label_roles_max_roles = "Upper role limit"
+--L.label_roles_max_roles_pct = "Upper role limit by percentage"
+--L.label_roles_max_baseroles = "Upper baserole limit"
+--L.label_roles_max_baseroles_pct = "Upper baserole limit by percentage"
+--L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows hat)"
+
+--L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
+--L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."
+--L.ttt2_desc_detective = "The Detective is the one whom the Innocents can trust. But who even is an Innocent? The mighty Detective has to find all the evil terrorists. The equipment in their shop may help them with this task."
+
+-- 2021-10-10
+--L.button_reset_models = "Reset Player Models"
+
+-- 2021-10-13
+--L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'public role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
+--L.help_roles_credits_award = [[
+--There are two different ways to be awarded credits in base TTT2:
+
+--1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
+--2. If a player killed a high value play with a 'public role' such as a Detective, the killer is awarded.
+
+--Please note that this still can be enabled/disabled for every role even if the whole team is awarded. If for example team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
+--The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
+--L.help_detective_hats = [[
+--Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
+
+--Some player models do not support hats by default. You can change this in 'Administration' -> 'Player Models']]
+
+--L.label_roles_credits_award_kill = "Credit reward for kill size"
+--L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
+--L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
+--L.label_roles_min_karma = "Lower limit of Karma to consider selection"

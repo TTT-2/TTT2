@@ -21,7 +21,7 @@ CLGAMEMODEMENU.submenus = {}
 -- @internal
 -- @realm client
 function CLGAMEMODEMENU:ShouldShow()
-	if not LocalPlayer():IsAdmin() and self:IsAdminMenu() then
+	if not LocalPlayer():IsSuperAdmin() and self:IsAdminMenu() then
 		return false
 	end
 
