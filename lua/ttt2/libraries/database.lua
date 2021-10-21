@@ -79,7 +79,6 @@ local function OnChange(index, itemName, key, newValue)
 	dataEntry[key] = newValue
 	storedData[itemName] = dataEntry
 
-	-- TODO: Implement Callbacks
 	if oldValue == newValue then return end
 
 	local accessName = tempDatabase.accessName
@@ -222,29 +221,54 @@ end
 
 ---
 -- Converts the given value of a database with its key
--- @warning this function shalle be removed and replaced with orm conversion. Or just use `sql.GetParsedData`
+-- @warning this function should only be internally used and shall be removed and replaced with orm conversion. 
+-- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
+-- while the other uses "0" and "1" for booleans
 -- @param string value the value to convert with a key
 -- @param string accessName the chosen accessName registered for a given database.
 -- @param string key the name of the key in the database
 -- @return any value after conversion, `nil` if not convertible or "nil" or "NULL"
 -- @realm shared
 -- @internal
-function database.ConvertValueWithKeys(value, accessName, key)
+function database.ConvertValueWithKey(value, accessName, key)
 	if value == "nil" or value == "NULL" then return end
 
 	local index = nameToIndex[accessName]
 
 	if not index then return end
 
-	local info = registeredDatabases[index].keys[key]
+	local data = registeredDatabases[index].keys[key]
 
-	if info.typ == "bool" then
+	if data.typ == "bool" then
 		value = tobool(value)
-	elseif info.typ == "number" then
+	elseif data.typ == "number" then
 		value = tonumber(value)
 	end
 
 	return value
+end
+
+---
+-- Converts the given table of a database
+-- @warning this function should only be internally used and shall be removed and replaced with orm conversion. 
+-- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
+-- while the other uses "0" and "1" for booleans
+-- @param table dataTable the table to convert with their respective keys
+-- @param string accessName the chosen accessName registered for a given database.
+-- @realm shared
+-- @internal
+function database.ConvertTable(dataTable, accessName)
+	if not istable(dataTable) then return end
+
+	local index = nameToIndex[accessName]
+
+	if not index then return end
+
+	local keys = registeredDatabases[index].keys
+
+	for key, data in pairs(keys) do
+		dataTable[key] = database.ConvertValueWithKey(dataTable[key], accessName, key)
+	end
 end
 
 -- Client send and receive functions
@@ -310,7 +334,7 @@ if CLIENT then
 			if isSuccess then
 				local request = requestCache[identifier]
 				value = net.ReadString()
-				value = database.ConvertValueWithKeys(value, request.accessName, request.key)
+				value = database.ConvertValueWithKey(value, request.accessName, request.key)
 				registeredDatabases[request.index].storedData[request.itemName] = value
 			end
 
@@ -696,7 +720,7 @@ if SERVER then
 	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
-	function database.RegisterDatabase(databaseName, accessName, savingKeys, additionalData)
+	function database.Register(databaseName, accessName, savingKeys, additionalData)
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
 		end
@@ -754,8 +778,8 @@ if SERVER then
 	---
 	-- Get the stored key value of the given database if it exists and was registered
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @param string itemName the name or primaryKey of the item inside of the sql table
-	-- @param string key the name of the key in the database
+	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
+	-- @param string key the name of the key in the database, is ignored when no itemName is given
 	-- @return any, bool value that was saved in the database and if it successfully reached the sql datatable
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
@@ -769,27 +793,59 @@ if SERVER then
 
 		local dataTable = index and registeredDatabases[index]
 
-		if not registeredDatabases.keys[key] then
+		-- If itemName and key are given but the key not registered throw an error
+		if itemName and key and not registeredDatabases.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return nil, false
 		end
 
-		local storedValue = dataTable and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
+		local storedValue = itemName and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
 
 		if storedValue ~= nil then
 			return storedValue, true
 		end
 
-		local sqlData = data.orm:Find(itemName)
+		local sqlData
 
-		if not sqlData then
-			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " has no item named " .. itemName)
+		if itemName then
+			sqlData = data.orm:Find(itemName)
 
+			if not sqlData then
+				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " has no item named " .. itemName)
+
+				return nil, false
+			end
+
+			local value = database.ConvertValueWithKey(sqlData[key], accessName, key)
+			dataTable.storedData[itemName] = dataTable.storedData[itemName] or {}
+			dataTable.storedData[itemName][key] = value
+
+			return value, true
+		end
+
+		sqlData = data.orm:All()
+
+		if not istable(sqlData) then
 			return nil, false
 		end
 
-		return database.ConvertValueWithKeys(sqlData[key], accessName, key), true
+		for _, item in pairs(sqlData) do
+			database.ConvertTable(item, accessName)
+		end
+
+		dataTable.storedData = table.Copy(sqlData) or dataTable.storedData
+
+		return sqlData, true
+	end
+
+	---
+	-- Get the stored table database if it exists and was registered
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @return table, bool datatable that was saved and if it successfully reached the sql datatable
+	-- @realm server
+	function database.GetTable(accessName)
+		return database.GetValue(accessName)
 	end
 
 	---

@@ -62,6 +62,7 @@ local bitCount = 2
 
 playermodels = playermodels or {}
 
+playermodels.accessName = "Playermodel_Pool"
 playermodels.sqltable = "ttt2_playermodel_pool_changes"
 playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
@@ -263,41 +264,6 @@ if CLIENT then
 end
 
 ---
--- Returns an indexed table with all the changed models states that are stored
--- in the database.
--- @return table A hashed table with all the model data stored in the database
--- @realm server
-function playermodels.ReadChangedModelStatesSQL()
-	local sqlTable = orm.Make(playermodels.sqltable)
-
-	local data = sqlTable:All()
-	local hashableData = {}
-
-	for i = 1, #data do
-		local entry = data[i]
-		local name = entry.name
-
-		hashableData[name] = {}
-
-		for key, info in pairs(playermodels.savingKeys) do
-			local value = entry[key]
-
-			if value == "nil" or value == "NULL" then continue end
-
-			if info.typ == "bool" then
-				hashableData[name][key] = tobool(value)
-			elseif info.typ == "number" then
-				hashableData[name][key] = tonumber(value)
-			else
-				hashableData[name][key] = value
-			end
-		end
-	end
-
-	return hashableData
-end
-
----
 -- Returns an indexed table with all the models that are in the selection pool.
 -- @return table An indexed table with all selected player models
 -- @realm server
@@ -319,13 +285,13 @@ end
 -- @internal
 -- @realm server
 function playermodels.Initialize()
-	if not sql.CreateSqlTable(playermodels.sqltable, playermodels.savingKeys) then
+	if not database.Register(playermodels.sqltable, playermodels.accessName, playermodels.savingKeys) then
 		return false
 	end
 
 	local data = playermodels.modelStates or {}
 	local defaultData = {}
-	local changedData = playermodels.ReadChangedModelStatesSQL()
+	local changedData = database.GetTable(playermodels.accessName)
 
 	for name in pairs(playerManagerAllValidModels()) do
 		defaultData[name] = {}
