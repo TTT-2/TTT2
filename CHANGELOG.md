@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.10.2b](https://github.com/TTT-2/TTT2/tree/v0.10.2b) (2021-10-21)
+
 ### Added
 
 - Added a new hook `GM:TTT2ModifyRadioTarget` to modify the current radio target
@@ -27,7 +29,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Breaking Changes
 
-- Renamed hook `TTT2CheckWeaponForID` to `TTT2RegisterWeaponID` better fitting its purpose as its probably nowhere used yet anyway
+- Renamed hook `GM:TTT2CheckWeaponForID` to `GM:TTT2RegisterWeaponID` better fitting its purpose as its probably nowhere used yet anyway
 
 ## [v0.10.1b](https://github.com/TTT-2/TTT2/tree/v0.10.1b) (2021-10-15)
 
