@@ -1086,7 +1086,7 @@ function CreateChanges()
 			<li>Fixed the reset button not working for Sliders in the F1 Menu</li>
 			<li>Fixed defuser only working for detectives</li>
 			<li>Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the <code>InitPostEntity</code> hook<br>
-			<b>Note:</b> This might only take effect after a reinstall or a reset of the server; if you don't want to reset your server, you have to change the spawnability manually in the equipment editor</li>
+			<b>Note:</b> This might only take effect after a reinstall or a reset of the server; if you don't want to reset your server, you have to change the spawnability manually in the equipment editor or delete the sql table "ttt2_items" of the sv.db to force a reset only on equipment</li>
 		</ul>
 
 		<h2>Changed</h2>
