@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new hook `GM:TTT2ModifyRadioTarget` to modify the current radio target
+- Added documentation to all hooks
 
 ### Fixed
 
@@ -17,7 +18,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging
-- Changed `TTTCanPickupAmmo` hook, return `false` to cancel pickup
 - Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
 - Changed all C4 hooks to be cancelable
 

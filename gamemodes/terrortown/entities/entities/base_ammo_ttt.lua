@@ -63,6 +63,13 @@ function ENT:PlayerCanPickup(ply)
 		return false
 	end
 
+	---
+	-- @realm shared
+	local result = hook.Run("TTTCanPickupAmmo", ply, self)
+	if result then
+		return result
+	end
+
 	local phys = self:GetPhysicsObject()
 	local spos = phys:IsValid() and phys:GetPos() or self:OBBCenter()
 	local epos = ply:GetShootPos() -- equiv to EyePos in SDK
@@ -124,9 +131,6 @@ end
 function ENT:Touch(ply)
 	if CLIENT or self.tickRemoval or not ply:IsValid() or not ply:IsPlayer()
 		or not self:CheckForWeapon(ply) or not self:PlayerCanPickup(ply)
-		---
-		-- @realm shared
-		or hook.Run("TTTCanPickupAmmo", ply, self) == false
 	then return end
 
 	local ammo = ply:GetAmmoCount(self.AmmoType)
