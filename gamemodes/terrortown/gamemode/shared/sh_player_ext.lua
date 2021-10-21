@@ -1099,3 +1099,95 @@ end
 function plymeta:WasRevivedInRound()
 	return self:HasDiedInRound()
 end
+
+---
+-- A hook that is called on the change of a role. It is called once for the old role
+-- and once for the new role if some criteria are met.
+-- @param ROLE roleData The roledata of the rolechange
+-- @param boolean isNewRole True if it is the new role, false if it is the old role
+-- @hook
+-- @realm shared
+function GM:TTT2ToggleRole(roleData, isNewRole)
+
+end
+
+---
+-- This hook is called on the change of a player's base role.
+-- @param Player ply The player whose role is changed
+-- @param number oldBaserole The numeric identifier of the old role
+-- @param number newBaserole The numeric identifier of the new role
+-- @hook
+-- @realm shared
+function GM:TTT2UpdateBaserole(ply, oldBaserole, newBaserole)
+
+end
+
+---
+-- This hook is called on the change of a player's sub role.
+-- @param Player ply The player whose role is changed
+-- @param number oldSubrole The numeric identifier of the old role
+-- @param number newSubrole The numeric identifier of the new role
+-- @hook
+-- @realm shared
+function GM:TTT2UpdateSubrole(ply, oldSubrole, newSubrole)
+
+end
+
+---
+-- This hook is called on the change of a player's team.
+-- @param Player ply The player whose team is changed
+-- @param string oldTeam The identifier of the old team
+-- @param string newTeam The identifier of the new team
+-- @hook
+-- @realm shared
+function GM:TTT2UpdateTeam(ply, oldTeam, newTeam)
+
+end
+
+---
+-- This hook is called (mostly on rolechanges) when the player's role color
+-- is set and can be used to modify the color.
+-- @param Player ply The player whose role color is set
+-- @param Color clr The color that should be used
+-- @return nil|Color The new color that is intended for the player
+-- @hook
+-- @realm shared
+function GM:TTT2ModifyRoleColor(ply, clr)
+
+end
+
+---
+-- This hook is called (mostly on rolechanges) when the player's darkened role color
+-- is set and can be used to modify the color.
+-- @param Player ply The player whose role color is set
+-- @param Color clr The color that should be used
+-- @return nil|Color The new color that is intended for the player
+-- @hook
+-- @realm shared
+function GM:TTT2ModifyRoleDkColor(ply, clr)
+
+end
+
+---
+-- This hook is called (mostly on rolechanges) when the player's lightened role color
+-- is set and can be used to modify the color.
+-- @param Player ply The player whose role color is set
+-- @param Color clr The color that should be used
+-- @return nil|Color The new color that is intended for the player
+-- @hook
+-- @realm shared
+function GM:TTT2ModifyRoleLtColor(ply, clr)
+
+end
+
+---
+-- This hook is called (mostly on rolechanges) when the player's background role color
+-- is set and can be used to modify the color.
+-- @param Player ply The player whose role color is set
+-- @param Color clr The color that should be used
+-- @return nil|Color The new color that is intended for the player
+-- @hook
+-- @realm shared
+function GM:TTT2ModifyRoleBgColor(ply, clr)
+
+end

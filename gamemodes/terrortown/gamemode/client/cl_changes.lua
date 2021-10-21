@@ -1104,3 +1104,14 @@ net.Receive("TTT2DevChanges", function(len)
 
 	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)
+
+---
+-- This hook can be used to populate the changelog table. It is recommended
+-- to use @{AddChange} to add an entry to the changelog.
+-- @param table changesTbl The current changelog table
+-- @param string currentVersionNumber The current version number
+-- @hook
+-- @realm client
+function GM:TTT2AddChange(changesTbl, currentVersionNumber)
+
+end

@@ -708,7 +708,7 @@ end
 -- </ul>
 -- See @{Player:LastHitGroup} if you need to get the last hit hitgroup of the @{Player}.
 -- @note @{Player:Alive} will return true in this hook
--- @param Player victom The @{Player} who died
+-- @param Player victim The @{Player} who died
 -- @param Entity infl @{Entity} used to kill the victim
 -- @param Player|Entity attacker @{Player} or @{Entity} that killed the victim
 -- @hook
@@ -1085,17 +1085,6 @@ end
 local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
--- Returns whether PVP is allowed
--- @return boolean
--- @hook
--- @realm server
-function GM:AllowPVP()
-	local rs = GetRoundState()
-
-	return rs ~= ROUND_PREP and (rs ~= ROUND_POST or ttt_postdm:GetBool())
-end
-
----
 -- Called when an entity takes damage. You can modify all parts of the damage info in this hook.
 -- @param Entity ent The @{Entity} taking damage
 -- @param DamageInfo dmginfo Damage info
@@ -1412,4 +1401,49 @@ end
 -- @local
 function GM:PlayerShouldTaunt(ply, act)
 	return false
+end
+
+---
+-- Use this hook to prevent the check of the credit award completely.
+-- @param Player victim The player that died
+-- @param Player attacker The player that killed the victim and might receive a credit award
+-- @return nil|boolean Return false to prevent check
+-- @hook
+-- @realm server
+function GM:TTT2CheckCreditAward(victim, attacker)
+
+end
+
+---
+-- Use this hook to prevent the addition of time to the hastemode.
+-- @param Player victim The player that died
+-- @param Player attacker The player that killed the victim
+-- @return nil|boolean Return true to prevent haste addition
+-- @hook
+-- @realm server
+function GM:TTT2ShouldSkipHaste(victim, attacker)
+
+end
+
+---
+-- Called in @{GM:PlayeDeath} at the very end.
+-- @note @{Player:Alive} will return true in this hook.
+-- @param Player victim The @{Player} who died
+-- @param Entity inflictor @{Entity} used to kill the victim
+-- @param Player|Entity attacker @{Player} or @{Entity} that killed the victim
+-- @hook
+-- @realm server
+function GM:TTT2PostPlayerDeath(victim, inflictor, attacker)
+
+end
+
+---
+-- Returns whether PVP is allowed
+-- @return boolean
+-- @hook
+-- @realm server
+function GM:AllowPVP()
+	local rs = GetRoundState()
+
+	return rs ~= ROUND_PREP and (rs ~= ROUND_POST or ttt_postdm:GetBool())
 end

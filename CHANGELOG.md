@@ -7,15 +7,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new hook `GM:TTT2ModifyRadioTarget` to modify the current radio target
+- Added documentation to all hooks
 
 ### Fixed
 
 - Fixed the reset button not working for Sliders in the F1 Menu
+- Fixed defuser only working for detectives
 - Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the `InitPostEntity` hook
 
 ### Changed
 
 - Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging
+- Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
+- Changed all C4 hooks to be cancelable
 
 ### Removed
 

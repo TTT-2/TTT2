@@ -49,15 +49,6 @@ function ENT:Initialize()
 	end
 
 	self.tickRemoval = false
-
-	-- this made the ammo get physics'd too early, meaning it would fall
-	-- through physics surfaces it was lying on on the client, leading to
-	-- inconsistencies
-	--	local phys = self:GetPhysicsObject()
-	--	if (phys:IsValid()) then
-	--		phys:Wake()
-	--	end
-
 	self.AmmoEntMax = self.AmmoAmount
 end
 
@@ -79,15 +70,14 @@ function ENT:PlayerCanPickup(ply)
 		return result
 	end
 
-	local ent = self
-	local phys = ent:GetPhysicsObject()
-	local spos = phys:IsValid() and phys:GetPos() or ent:OBBCenter()
+	local phys = self:GetPhysicsObject()
+	local spos = phys:IsValid() and phys:GetPos() or self:OBBCenter()
 	local epos = ply:GetShootPos() -- equiv to EyePos in SDK
 
 	local tr = util.TraceLine({
 		start = spos,
 		endpos = epos,
-		filter = {ply, ent},
+		filter = {ply, self},
 		mask = MASK_SOLID
 	})
 
@@ -135,42 +125,62 @@ function ENT:CheckForWeapon(ply)
 end
 
 ---
--- @param Entity ent
+-- This entity function is called once another entity toruches it.
+-- @param Entity ply The touching entity that is probably a player
 -- @realm shared
-function ENT:Touch(ent)
-	if SERVER and not self.tickRemoval and ent:IsValid() and ent:IsPlayer() and self:CheckForWeapon(ent) and self:PlayerCanPickup(ent) then
-		local ammo = ent:GetAmmoCount(self.AmmoType)
+function ENT:Touch(ply)
+	if CLIENT
+		or self.tickRemoval
+		or not ply:IsValid()
+		or not ply:IsPlayer()
+		or not self:CheckForWeapon(ply)
+		or not self:PlayerCanPickup(ply)
+	then return end
 
-		-- need clipmax info and room for at least 1/4th
-		if self.AmmoMax >= ammo + math.ceil(self.AmmoAmount * 0.25) then
-			local given = math.min(self.AmmoAmount, self.AmmoMax - ammo)
+	local ammo = ply:GetAmmoCount(self.AmmoType)
 
-			ent:GiveAmmo(given, self.AmmoType)
+	-- need clipmax info and room for at least 1/4th
+	if self.AmmoMax < ammo + math.ceil(self.AmmoAmount * 0.25) then return end
 
-			self.AmmoAmount = self.AmmoAmount - given
+	local given = math.min(self.AmmoAmount, self.AmmoMax - ammo)
 
-			if self.AmmoAmount <= 0 or math.ceil(self.AmmoEntMax * 0.25) > self.AmmoAmount then
-				self.tickRemoval = true
+	ply:GiveAmmo(given, self.AmmoType)
 
-				self:Remove()
-			end
-		end
-	end
+	self.AmmoAmount = self.AmmoAmount - given
+
+	if self.AmmoAmount > 0 and math.ceil(self.AmmoEntMax * 0.25) <= self.AmmoAmount then return end
+
+	self.tickRemoval = true
+	self:Remove()
 end
 
--- Hack to force ammo to physwake
 if SERVER then
 	---
+	-- This Think hook is used as a hack to force ammo to physwake, because it can't be done
+	-- in init. If it is done in init, the entities will fall through the world on the client
+	-- but not on the server. This leads to inconsistencies between server and client.
 	-- @realm server
 	function ENT:Think()
-		if not self.first_think then
-			self:PhysWake()
+		if self.firstThinkDone then return end
 
-			self.first_think = true
+		self:PhysWake()
 
-			-- Immediately unhook the Think, save cycles. The first_think thing is
-			-- just there in case it still Thinks somehow in the future.
-			self.Think = nil
-		end
+		self.firstThinkDone = true
+
+		-- Immediately unhook the Think to save cycles. The firstThinkDone thing is
+		-- just there in case it still Thinks somehow in the future.
+		self.Think = nil
+	end
+
+	---
+	-- Hook that is called when an ammo entity is about to be picked up. With this hook
+	-- the pickup can be canceled. It is called after all previous checks have passed.
+	-- @param Player ply The player that attempts to pick up the entity
+	-- @param Entity ent The ammo entity that is about to be picked up
+	-- @return boolean Return false to cancel the pickup event
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTTCanPickupAmmo(ply, ent)
+
 	end
 end

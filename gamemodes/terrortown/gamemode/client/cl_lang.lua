@@ -560,3 +560,13 @@ for style, msgs in pairs(styledmessages) do
 		set_style(name, style)
 	end
 end
+
+---
+-- This hook is called after the language was changed.
+-- @param string oldLang The name of the old language
+-- @param string newLang The name of the new language
+-- @hook
+-- @realm client
+function GM:TTTLanguageChanged(oldLang, newLang)
+
+end

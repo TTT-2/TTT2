@@ -72,19 +72,6 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
----
--- Checks whether a @{Player} is able to identify a CORPSE
--- @note return true to allow corpse identification, false to disallow
--- @note removed b"was_traitor". Team is available with corpse.was_team
--- @param Player ply
--- @param Entity corpse
--- @return[default=true] boolean
--- @hook
--- @realm server
-function GM:TTTCanIdentifyCorpse(ply, corpse)
-	return true
-end
-
 local function IdentifyBody(ply, rag)
 	if not ply:IsTerror() or not ply:Alive() then return end
 
@@ -268,19 +255,6 @@ local function ttt_call_detective(ply, cmd, args)
 end
 concommand.Add("ttt_call_detective", ttt_call_detective)
 
----
--- This hook is called after a players pressed the "call detective" button and
--- all requirements were met. It can be used to modify the table of players that
--- should receive the corpse radar ping.
--- @param Player notifiedPlayers The table of players that will be notified
--- @param Entity ragdoll The ragdoll whose coordinates are about to be sent
--- @param Player ply The player that pressed the "call detective" button
--- @hook
--- @realm server
-function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, ragdoll, ply)
-
-end
-
 local function bitsRequired(num)
 	local bits, max = 0, 1
 
@@ -290,21 +264,6 @@ local function bitsRequired(num)
 	end
 
 	return bits
-end
-
----
--- Checks whether a @{Player} is able to search a CORPSE based on their position
--- @note return true to allow corpse search, false to disallow.
--- @note removed last param is_traitor -> accessable with corpse.was_team
--- @param Player ply
--- @param Entity corpse
--- @param boolean isCovert
--- @param boolean isLongRange
--- @return[default=true] boolean
--- @hook
--- @realm server
-function GM:TTTCanSearchCorpse(ply, corpse, isCovert, isLongRange)
-	return true
 end
 
 local function GiveFoundCredits(ply, rag, isLongRange)
@@ -729,3 +688,106 @@ hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
 		return false
 	end
 end)
+
+---
+-- Checks whether a @{Player} is able to identify a @{CORPSE}.
+-- @note removed boolean "was_traitor". Team is available with `corpse.was_team`
+-- @param Player ply The player that tries to identify the corpse
+-- @param Entity rag The ragdoll that was found
+-- @return[default=true] boolean Return true to allow corpse identification, false to block
+-- @hook
+-- @realm server
+function GM:TTTCanIdentifyCorpse(ply, rag)
+	return true
+end
+
+---
+-- Checks whether a player is able to confirm the role of a corpse after they
+-- inspected the dead body.
+-- @param Player ply The player that tries to confirm the corpse
+-- @param Entity rag The ragdoll that was found
+-- @param[default=nil] boolean Return false to block confirmation
+-- @hook
+-- @realm server
+function GM:TTT2ConfirmPlayer(ply, rag)
+
+end
+
+---
+-- Called when a player finds a ragdoll. They must be able to inspect the body
+-- (@{GM:TTTCanIdentifyCorpse}), but not to confirm it (@{GM:TTT2ConfirmPlayer}).
+-- @note The dead player may have disconnected after dying.
+-- @param Player ply The player that found the corpse
+-- @param Player deadply The player whose ragdoll was found
+-- @param Entity rag The ragdoll that was found
+-- @hook
+-- @realm server
+function GM:TTTBodyFound(ply, deadply, rag)
+
+end
+
+---
+-- Used to block updating the state of the corpse. Normally a confirmed
+-- body is globally broadcasted as deadplayer (as seen in the scoreboard
+-- for example).
+-- @note The dead player may have disconnected after dying.
+-- @param Player deadply The player whose ragdoll was found
+-- @param Player ply The player that found the corpse
+-- @param Entity rag The ragdoll that was found
+-- @return nil|boolean Return false to block the update of the shared
+-- corpse found variable
+-- @hook
+-- @realm server
+function GM:TTT2SetCorpseFound(deadply, ply, rag)
+
+end
+
+---
+-- This hook is called after a players pressed the "call detective" button and
+-- all requirements were met. It can be used to modify the table of players that
+-- should receive the corpse radar ping.
+-- @param Player notifiedPlayers The table of players that will be notified
+-- @param Entity rag The ragdoll whose coordinates are about to be sent
+-- @param Player ply The player that pressed the "call detective" button
+-- @hook
+-- @realm server
+function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, rag, ply)
+
+end
+
+---
+-- Checks whether a @{Player} is able to search a @{CORPSE} based on their position.
+-- The search opens a popup for the searching player with all of the player information.
+-- @note removed last param is_traitor -> accessable with `corpse.was_team`
+-- @param Player ply The player that tries to 
+-- @param Entity rag The ragdoll tgat should be searched
+-- @param boolean isCovert Is the search hidden
+-- @param boolean isLongRange Is the search performed from a long range
+-- @return[default=true] boolean Return false to block search
+-- @hook
+-- @realm server
+function GM:TTTCanSearchCorpse(ply, rag, isCovert, isLongRange)
+	return true
+end
+
+---
+-- Called after the ragdoll velocity is changed on the creation of the corpse.
+-- @param Player deadply The dead player whose corpse got created
+-- @param Entity rag The newly created corpse
+-- @param Vector velocity The velocity vector of the corpse
+-- @hook
+-- @realm server
+function GM:TTT2ModifyRagdollVelocity(deadply, rag, velocity)
+
+end
+
+---
+-- Called after a dead player's corpse has been created and initialized. Modify the corpse table
+-- to add/change corpse information, perhaps for use in search-related hooks.
+-- @param Entity rag The newly created ragdoll
+-- @param Player deadply The dead player whose ragdoll was created
+-- @hook
+-- @realm server
+function GM:TTTOnCorpseCreated(rag, deadply)
+
+end

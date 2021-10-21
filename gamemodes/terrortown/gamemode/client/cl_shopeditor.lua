@@ -43,9 +43,9 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local name = WEPS.GetClass(eq)
 
 		if name
-		and not eq.Doublicated
-		and not string.match(name, "base")
-		and not eject[name]
+			and not eq.Doublicated
+			and not string.match(name, "base")
+			and not eject[name]
 		then
 			if eq.id then
 				tbl[#tbl + 1] = eq
@@ -64,10 +64,10 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local name = WEPS.GetClass(eq)
 
 		if name
-		and not eq.Doublicated
-		and not string.match(name, "base")
-		and not string.match(name, "event")
-		and not eject[name]
+			and not eq.Doublicated
+			and not string.match(name, "base")
+			and not string.match(name, "event")
+			and not eject[name]
 		then
 			-- @realm client
 			if hook.Run("TTT2RegisterWeaponID", eq) then
@@ -194,3 +194,12 @@ local function shopFallbackRefresh()
 	end
 end
 net.Receive("shopFallbackRefresh", shopFallbackRefresh)
+
+---
+-- This hook can be used to hinder weapons from being rendered in the shopeditor.
+-- @param table blockedWeapons A hashtable with the classnames of blocked weapons
+-- @hook
+-- @realm client
+function GM:TTT2ModifyShopEditorIgnoreEquip(blockedWeapons)
+
+end

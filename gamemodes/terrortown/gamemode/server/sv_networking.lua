@@ -39,25 +39,25 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 			local eidx = sids[i]
 			local p = Entity(eidx)
 
-			if not TTT2NETTABLE[ply][p] or TTT2NETTABLE[ply][p][1] ~= subrole or TTT2NETTABLE[ply][p][2] ~= team then
-				TTT2NETTABLE[ply][p] = {subrole, team}
+			if TTT2NETTABLE[ply][p] and TTT2NETTABLE[ply][p][1] == subrole and TTT2NETTABLE[ply][p][2] == team then continue end
 
-				if p ~= ply then
-					local rs = GetRoundState()
+			TTT2NETTABLE[ply][p] = {subrole, team}
 
-					if p:GetSubRoleData().disableSync
+			if p ~= ply then
+				local rs = GetRoundState()
+
+				if p:GetSubRoleData().disableSync
 					and rs == ROUND_ACTIVE
 					-- TODO this has to be reworked
 					and not p:RoleKnown()
 					---
 					-- @realm server
 					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
-					then continue end
+				then continue end
 
-					adds[#adds + 1] = eidx
-				else
-					localPly = true
-				end
+				adds[#adds + 1] = eidx
+			else
+				localPly = true
 			end
 		end
 
@@ -483,3 +483,24 @@ local function ttt_roles_index(ply)
 	ply:ChatPrint("----------------")
 end
 concommand.Add("ttt_roles_index", ttt_roles_index)
+
+---
+-- @param Player ply
+-- @param Player p
+-- @hook
+-- @realm server
+function GM:TTT2OverrideDisabledSync(ply, p)
+
+end
+
+---
+-- Hook that is called in @{SendFullStateUpdate} that can be used
+-- to sync the roles info to custom defined teams as well.
+-- @param Player ply The player whose info might be broadcasted
+-- @param table syncTeamTbl The table with the already defined receipients
+-- of their role info; can be modified
+-- @hook
+-- @realm server
+function GM:TTT2SpecialRoleSyncing(ply, syncTeamTbl)
+
+end
