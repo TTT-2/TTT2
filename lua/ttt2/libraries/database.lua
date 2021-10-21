@@ -126,7 +126,7 @@ end
 -- @param string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
 -- @param string key the name of the key in the database. Leave `nil` if you want a callback for every key
 -- @param function The callback function(accessName, itemName, key, oldValue, newValue), its only called if the value actually changed
--- @param string identifier a chosen identifier if you want to remove the callback
+-- @param[opt] string identifier a chosen identifier if you want to remove the callback
 -- @realm shared
 function database.AddChangeCallback(accessName, itemName, key, callback, identifier)
 	if not isstring(accessName) or not isfunction(callback) then return end
@@ -167,7 +167,7 @@ end
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
 -- @param string itemName the name of the item in the database. Leave `nil` if you want to remove callbacks for every item with given identifier
 -- @param string key the name of the key in the database. Leave `nil` if you want to remove callbacks for every key with given identifier
--- @param string identifier a chosen identifier if you want to remove the callback
+-- @param[opt] string identifier a chosen identifier if you want to remove the callback
 -- @realm shared
 function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 	callbacks = callbackIdentifiers[identifier]
@@ -674,7 +674,7 @@ if SERVER then
 	---
 	-- Synchronizes all registered Databases with the given players defined by the plyIdentifier
 	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `sendToPly` or can be a plyID64
-	-- @param string identifier the identifier used to get correct onreceive functions
+	-- @param[opt] string identifier the identifier used to get correct onreceive functions
 	-- @realm server
 	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
@@ -696,7 +696,7 @@ if SERVER then
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
-	-- @param table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
+	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.RegisterDatabase(databaseName, accessName, savingKeys, additionalData)
@@ -765,7 +765,7 @@ if SERVER then
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
 	-- @param any value the value you want to set in the database
-	-- @param string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
+	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
 		if plyID64 and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
