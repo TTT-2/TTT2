@@ -756,7 +756,6 @@ if SERVER then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
-	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
 	-- @return any, bool value that was saved in the database and if it successfully reached the sql datatable
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
