@@ -20,18 +20,16 @@ local databaseCount = 0
 local registeredDatabases = {}
 local nameToIndex = {}
 
-local identifierStrings = {
-	Register = "Register",
-	GetValue = "GetValue",
-	SetValue = "SetValue"
-}
+-- Identifier enums to determine the message to send or receive
+local MESSAGE_REGISTER = 1
+local MESSAGE_GET_VALUE = 2
+local MESSAGE_SET_VALUE = 3
 
 -- Identifier strings to determine which player gets the information
-local sendToPly = {
-	all = "all",
-	registered = "registered",
-	server = "server"
-}
+local SEND_TO_PLY_ALL = "all"
+local SEND_TO_PLY_REGISTERED = "registered"
+local SEND_TO_PLY_SERVER = "server"
+
 
 -- Stores the data and the players it is send to
 local dataStore = {}
@@ -254,11 +252,11 @@ if CLIENT then
 	-- The used functions to send Data from the client to server
 	sendDataFunctions = {
 		-- data contains the messageIdentifier here
-		Register = function(data)
+		[MESSAGE_REGISTER] = function(data)
 			net.WriteUInt(data, uIntBits)
 		end,
 		-- data contains the syncCacheIndex here
-		GetValue = function(data)
+		[MESSAGE_GET_VALUE] = function(data)
 			local request = requestCache[data]
 
 			net.WriteUInt(request.identifier, uIntBits)
@@ -268,7 +266,7 @@ if CLIENT then
 			net.WriteString(request.key)
 		end,
 		-- data contains index, itemName, key and value here
-		SetValue = function(data)
+		[MESSAGE_SET_VALUE] = function(data)
 			net.WriteUInt(data.index, uIntBits)
 
 			net.WriteString(data.itemName)
@@ -279,7 +277,7 @@ if CLIENT then
 
 	-- The used functions to receive Data from the server on the client
 	receiveDataFunctions = {
-		Register = function()
+		[MESSAGE_REGISTER] = function()
 			local index = net.ReadUInt(uIntBits)
 			local accessName = net.ReadString()
 			local savingKeys = net.ReadTable()
@@ -304,7 +302,7 @@ if CLIENT then
 				end
 			end
 		end,
-		GetValue = function()
+		[MESSAGE_GET_VALUE] = function()
 			local identifier = net.ReadUInt(uIntBits)
 			local isSuccess = net.ReadBool()
 			local value
@@ -318,7 +316,7 @@ if CLIENT then
 
 			functionCache[identifier](isSuccess, value)
 		end,
-		SetValue = function()
+		[MESSAGE_SET_VALUE] = function()
 			local index = net.ReadUInt(uIntBits)
 			local itemName = net.ReadString()
 			local key = net.ReadString()
@@ -334,7 +332,7 @@ if SERVER then
 	-- The used functions to send Data from the server to client
 	sendDataFunctions = {
 		-- data contains identifier, tableCount, index here
-		Register = function(data)
+		[MESSAGE_REGISTER] = function(data)
 			local databaseInfo = registeredDatabases[data.index]
 			net.WriteUInt(data.index, uIntBits)
 			net.WriteString(databaseInfo.accessName)
@@ -350,7 +348,7 @@ if SERVER then
 			end
 		end,
 		-- data contains identifier, isSuccess and value here
-		GetValue = function(data)
+		[MESSAGE_GET_VALUE] = function(data)
 			net.WriteUInt(data.identifier, uIntBits)
 			net.WriteBool(data.isSuccess)
 
@@ -359,7 +357,7 @@ if SERVER then
 			end
 		end,
 		-- data contains index, itemName, key, value here
-		SetValue = function(data)
+		[MESSAGE_SET_VALUE] = function(data)
 			net.WriteUInt(data.index, uIntBits)
 			net.WriteString(data.itemName)
 			net.WriteString(data.key)
@@ -369,10 +367,10 @@ if SERVER then
 
 	-- The used functions to receive Data from the client on the server
 	receiveDataFunctions = {
-		Register = function(plyID64)
+		[MESSAGE_REGISTER] = function(plyID64)
 			database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
 		end,
-		GetValue = function(plyID64)
+		[MESSAGE_GET_VALUE] = function(plyID64)
 			local data = {
 				plyID64 = plyID64,
 				identifier = net.ReadUInt(uIntBits),
@@ -384,7 +382,7 @@ if SERVER then
 
 			database.ReturnGetValue(data)
 		end,
-		SetValue = function(plyID64)
+		[MESSAGE_SET_VALUE] = function(plyID64)
 			local data = {
 				index = net.ReadUInt(uIntBits),
 				itemName = net.ReadString(),
@@ -475,9 +473,9 @@ local function SendUpdatesNow()
 		end
 
 		if SERVER then
-			if plyIdentifier == sendToPly.all then
+			if plyIdentifier == SEND_TO_PLY_ALL then
 				net.Broadcast()
-			elseif plyIdentifier == sendToPly.registered then
+			elseif plyIdentifier == SEND_TO_PLY_REGISTERED then
 				net.Send(registeredPlayersTable)
 			elseif IsPlayer(playerID64Cache[plyIdentifier]) then
 				net.Send(playerID64Cache[plyIdentifier])
@@ -508,9 +506,9 @@ end
 ---
 -- The function to call when you want to queue a message to be sent next tick
 -- @note on the client plyIdentifier is unused and always sends to the server
--- @param string identifier the identifiers used in send and receive messages, defined in `identifierStrings`
+-- @param number identifier the identifiers used in send and receive messages, defined in `MESSAGE_`-enums
 -- @param any data the data for the send method. Can contain anything and is defined above each send or receive method itself
--- @param string plyIdentifier the player identifier to determine who receives the message, defined in `sendToPly` or can be a plyID64
+-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 -- @realm shared
 -- @internal
 local function SendUpdateNextTick(identifier, data, plyIdentifier)
@@ -520,11 +518,11 @@ local function SendUpdateNextTick(identifier, data, plyIdentifier)
 	end
 
 	if CLIENT then
-		plyIdentifier = sendToPly.server
+		plyIdentifier = SEND_TO_PLY_SERVER
 	end
 
 	if not isstring(plyIdentifier) and SERVER then
-		plyIdentifier = sendToPly.registered
+		plyIdentifier = SEND_TO_PLY_REGISTERED
 	end
 
 	-- Store data
@@ -546,7 +544,7 @@ if CLIENT then
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		functionCache[messageIdentifier] = OnReceiveFunc
 
-		SendUpdateNextTick(identifierStrings.Register, messageIdentifier)
+		SendUpdateNextTick(MESSAGE_REGISTER, messageIdentifier)
 	end
 
 	---
@@ -627,7 +625,7 @@ if CLIENT then
 			index = index
 		}
 
-		SendUpdateNextTick(identifierStrings.GetValue, requestCacheSize)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, requestCacheSize)
 	end
 
 	---
@@ -651,7 +649,7 @@ if CLIENT then
 			return
 		end
 
-		SendUpdateNextTick(identifierStrings.SetValue, {index = index, itemName = itemName, key = key, value = value})
+		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value})
 	end
 end
 
@@ -672,7 +670,7 @@ if SERVER then
 
 	---
 	-- Synchronizes all registered Databases with the given players defined by the plyIdentifier
-	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `sendToPly` or can be a plyID64
+	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 	-- @param[opt] string identifier the identifier used to get correct onreceive functions
 	-- @realm server
 	-- @internal
@@ -687,7 +685,7 @@ if SERVER then
 
 		for databaseNumber = 1, tableCount do
 			data.index = databaseNumber
-			SendUpdateNextTick(identifierStrings.Register, data, plyIdentifier)
+			SendUpdateNextTick(MESSAGE_REGISTER, data, plyIdentifier)
 		end
 	end
 
@@ -721,7 +719,7 @@ if SERVER then
 
 		local data = {index = databaseCount}
 
-		SendUpdateNextTick(identifierStrings.Register, data, sendToPly.all)
+		SendUpdateNextTick(MESSAGE_REGISTER, data, SEND_TO_PLY_ALL)
 
 		return true
 	end
@@ -756,7 +754,7 @@ if SERVER then
 
 		RegisterPlayer(requestData.plyID64)
 
-		SendUpdateNextTick(identifierStrings.GetValue, serverData, requestData.plyID64)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, requestData.plyID64)
 	end
 
 	---
@@ -799,7 +797,7 @@ if SERVER then
 
 		OnChange(index, itemName, key, value)
 
-		SendUpdateNextTick(identifierStrings.SetValue, {index = index, itemName = itemName, key = key, value = value}, sendToPly.registered)
+		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value}, SEND_TO_PLY_REGISTERED)
 	end
 
 	-- Sync databases to all authenticated players
