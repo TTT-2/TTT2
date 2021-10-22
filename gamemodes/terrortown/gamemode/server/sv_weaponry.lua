@@ -579,6 +579,11 @@ function GM:PlayerDroppedWeapon(ply, wep)
 
 	if not IsValid(wep) or not wep.Kind then return end
 
+	-- In case the weapon has something custom defined
+	if wep.SetZoom then
+		wep:SetZoom(false)
+	end
+
 	if wep.name_timer_pos then
 		timer.Remove(wep.name_timer_pos)
 	end
