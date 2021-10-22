@@ -572,7 +572,12 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
-	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
+	if not IsValid(ply) then return end
+
+	-- Fix zoom for weapons that dont reset themselves
+	ply:SetFOV(0)
+
+	if not IsValid(wep) or not wep.Kind then return end
 
 	if wep.name_timer_pos then
 		timer.Remove(wep.name_timer_pos)
