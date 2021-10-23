@@ -390,6 +390,9 @@ end
 ---
 -- Checks if a given entity is a default terrortown map entity. Can be used to determine if an entity
 -- should be removed from the map prior to spawning with the custom spawn system.
+-- @note Only spawn entities that spawn weapons or ammo (but no random weapons / ammo) are counted as
+-- default TTT spawn entites. While player spawns would fall into this category as well, we use our
+-- own custom palyer spawn system that relies on those entities being removed.
 -- @param Entity ent The entity to check
 -- @return boolean Returns true if the given entity is default terrortown entity
 -- @realm shared
@@ -397,9 +400,8 @@ function map.IsDefaultTerrortownMapEntity(ent)
 	local cls = ent:GetClass()
 
 	local type = ttt_weapon_spawns[cls] ~= nil or ttt_ammo_spawns[cls] ~= nil
-		or ttt_player_spawns[cls] ~= nil or ttt_player_spawns_fallback[cls] ~= nil
 
-	if not type or type == WEAPON_TYPE_RANDOM or AMMO_TYPE_RANDOM then
+	if not type or type == WEAPON_TYPE_RANDOM or type == AMMO_TYPE_RANDOM then
 		return false
 	end
 
