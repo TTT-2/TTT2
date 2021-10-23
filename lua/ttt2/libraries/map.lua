@@ -412,7 +412,7 @@ end
 -- Get detailed data from a spawn entity.
 -- @param Entity ent The spawn entity
 -- @param number spawnType The spawn type of the entity
--- @return numer The ent types
+-- @return number The ent type
 -- @return table The spawn data (pos, ang, ammo)
 -- @realm shared
 function map.GetDataFromSpawnEntity(ent, spawnType)
