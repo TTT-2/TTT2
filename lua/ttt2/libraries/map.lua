@@ -413,8 +413,8 @@ end
 ---
 -- Get detailed data from a spawn entity.
 -- @param Entity ent The spawn entity
--- @return number The spawn type
--- @return number The ent type
+-- @return table A table of all spawn spawn types
+-- @return table A table of all ent types
 -- @return table The spawn data (pos, ang, ammo)
 -- @realm shared
 function map.GetDataFromSpawnEntity(ent)
@@ -424,22 +424,29 @@ function map.GetDataFromSpawnEntity(ent)
 		ang = ent:GetAngles(),
 		ammo = ent.autoAmmoAmount or 0
 	}
+	local spawnTypes = {}
+	local entTypes = {}
 
 	local wepSpawn = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
 
 	if wepSpawn then
-		return SPAWN_TYPE_WEAPON, wepSpawn, data
+		spawnTypes[#spawnTypes + 1] = SPAWN_TYPE_WEAPON
+		entTypes[#entTypes + 1] = wepSpawn
 	end
 
 	local ammoSpawn = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
 
 	if ammoSpawn then
-		return SPAWN_TYPE_AMMO, ammoSpawn, data
+		spawnTypes[#spawnTypes + 1] = SPAWN_TYPE_AMMO
+		entTypes[#entTypes + 1] = ammoSpawn
 	end
 
 	local plySpawn = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
 
 	if plySpawn then
-		return SPAWN_TYPE_PLAYER, plySpawn, data
+		spawnTypes[#spawnTypes + 1] = SPAWN_TYPE_PLAYER
+		entTypes[#entTypes + 1] = plySpawn
 	end
+
+	return spawnTypes, entTypes, data
 end

@@ -30,12 +30,19 @@ local function RemoveEntities(entTable, spawnTable)
 			if useDefaultSpawns then
 				if map.IsDefaultTerrortownMapEntity(ent) then continue end
 
-				local spawnType, entType, data = map.GetDataFromSpawnEntity(ent)
+				-- since some obscure spawn entities are valid for multiple different spawn types,
+				-- they can be used to spawn different types of entities. Therefore this is an table.
+				local spawnTypes, entTypes, data = map.GetDataFromSpawnEntity(ent)
 
-				spawnTable[spawnType] = spawnTable[spawnType] or {}
-				spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
+				for k = 1, #spawnTypes do
+					local spawnType = spawnTypes[k]
+					local entType = entTypes[k]
 
-				spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = data
+					spawnTable[spawnType] = spawnTable[spawnType] or {}
+					spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
+
+					spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = data
+				end
 			end
 
 			ent:Remove()
@@ -75,6 +82,8 @@ end
 -- @param number randomType The spawn type that should be used as random
 -- @realm server
 function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
+	if not spawns then return end
+
 	for entType, spawnTable in pairs(spawns) do
 		for i = 1, #spawnTable do
 			local spawn = spawnTable[i]
