@@ -19,7 +19,7 @@ local timerRemove = timer.Remove
 
 entspawn = entspawn or {}
 
-local function RemoveEntities(entTable, spawnTable)
+local function RemoveEntities(entTable, spawnTable, spawnType)
 	local useDefaultSpawns = not entspawnscript.ShouldUseCustomSpawns()
 
 	for _, ents in pairs(entTable) do
@@ -32,17 +32,12 @@ local function RemoveEntities(entTable, spawnTable)
 
 				-- since some obscure spawn entities are valid for multiple different spawn types,
 				-- they can be used to spawn different types of entities. Therefore this is an table.
-				local spawnTypes, entTypes, data = map.GetDataFromSpawnEntity(ent)
+				local entType, data = map.GetDataFromSpawnEntity(ent, spawnType)
 
-				for k = 1, #spawnTypes do
-					local spawnType = spawnTypes[k]
-					local entType = entTypes[k]
+				spawnTable[spawnType] = spawnTable[spawnType] or {}
+				spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
 
-					spawnTable[spawnType] = spawnTable[spawnType] or {}
-					spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
-
-					spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = data
-				end
+				spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = data
 			end
 
 			ent:Remove()
@@ -66,9 +61,9 @@ end
 function entspawn.RemoveMapEntities()
 	local spawnTable = entspawnscript.GetEmptySpawnTableStrucure()
 
-	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable)
-	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable)
-	RemoveEntities(map.GetPlayerSpawnEntities(), spawnTable)
+	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable, SPAWN_TYPE_WEAPON)
+	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable, SPAWN_TYPE_AMMO)
+	RemoveEntities(map.GetPlayerSpawnEntities(), spawnTable, SPAWN_TYPE_PLAYER)
 
 	return spawnTable
 end

@@ -338,11 +338,7 @@ end
 -- @internal
 -- @realm shared
 function map.GetSpawnsFromClassTable(spawns)
-	local spawnTable = {
-		[SPAWN_TYPE_WEAPON] = {},
-		[SPAWN_TYPE_AMMO] = {},
-		[SPAWN_TYPE_PLAYER] = {}
-	}
+	local spawnTable = entspawnscript.GetEmptySpawnTableStrucure()
 
 	for i = 1, #spawns do
 		local spawn = spawns[i]
@@ -413,40 +409,27 @@ end
 ---
 -- Get detailed data from a spawn entity.
 -- @param Entity ent The spawn entity
--- @return table A table of all spawn spawn types
--- @return table A table of all ent types
+-- @param number spawnType The spawn type of the entity
+-- @return numer The ent types
 -- @return table The spawn data (pos, ang, ammo)
 -- @realm shared
-function map.GetDataFromSpawnEntity(ent)
+function map.GetDataFromSpawnEntity(ent, spawnType)
 	local cls = ent:GetClass()
 	local data = {
 		pos = ent:GetPos(),
 		ang = ent:GetAngles(),
 		ammo = ent.autoAmmoAmount or 0
 	}
-	local spawnTypes = {}
-	local entTypes = {}
 
-	local wepSpawn = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
-
-	if wepSpawn then
-		spawnTypes[#spawnTypes + 1] = SPAWN_TYPE_WEAPON
-		entTypes[#entTypes + 1] = wepSpawn
+	if spawnType == SPAWN_TYPE_WEAPON then
+		return ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls], data
 	end
 
-	local ammoSpawn = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
-
-	if ammoSpawn then
-		spawnTypes[#spawnTypes + 1] = SPAWN_TYPE_AMMO
-		entTypes[#entTypes + 1] = ammoSpawn
+	if spawnType == SPAWN_TYPE_AMMO then
+		return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls], data
 	end
 
-	local plySpawn = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
-
-	if plySpawn then
-		spawnTypes[#spawnTypes + 1] = SPAWN_TYPE_PLAYER
-		entTypes[#entTypes + 1] = plySpawn
+	if spawnType == SPAWN_TYPE_PLAYER then
+		return ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls], data
 	end
-
-	return spawnTypes, entTypes, data
 end
