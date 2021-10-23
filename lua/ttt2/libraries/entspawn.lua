@@ -64,7 +64,7 @@ end
 -- @return table spawnTable A table of entities that should be spawned additionally
 -- @realm server
 function entspawn.RemoveMapEntities()
-	local spawnTable = {}
+	local spawnTable = entspawnscript.GetEmptySpawnTableStrucure()
 
 	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable)
 	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable)
