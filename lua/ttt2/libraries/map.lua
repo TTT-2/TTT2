@@ -338,11 +338,7 @@ end
 -- @internal
 -- @realm shared
 function map.GetSpawnsFromClassTable(spawns)
-	local spawnTable = {
-		[SPAWN_TYPE_WEAPON] = {},
-		[SPAWN_TYPE_AMMO] = {},
-		[SPAWN_TYPE_PLAYER] = {}
-	}
+	local spawnTable = entspawnscript.GetEmptySpawnTableStructure()
 
 	for i = 1, #spawns do
 		local spawn = spawns[i]
@@ -394,6 +390,9 @@ end
 ---
 -- Checks if a given entity is a default terrortown map entity. Can be used to determine if an entity
 -- should be removed from the map prior to spawning with the custom spawn system.
+-- @note Only spawn entities that spawn weapons or ammo (but no random weapons / ammo) are counted as
+-- default TTT spawn entites. While player spawns would fall into this category as well, we use our
+-- own custom player spawn system that relies on those entities being removed.
 -- @param Entity ent The entity to check
 -- @return boolean Returns true if the given entity is default terrortown entity
 -- @realm shared
@@ -401,9 +400,8 @@ function map.IsDefaultTerrortownMapEntity(ent)
 	local cls = ent:GetClass()
 
 	local type = ttt_weapon_spawns[cls] ~= nil or ttt_ammo_spawns[cls] ~= nil
-		or ttt_player_spawns[cls] ~= nil or ttt_player_spawns_fallback[cls] ~= nil
 
-	if not type or type == WEAPON_TYPE_RANDOM or AMMO_TYPE_RANDOM then
+	if not type or type == WEAPON_TYPE_RANDOM or type == AMMO_TYPE_RANDOM then
 		return false
 	end
 
@@ -413,11 +411,11 @@ end
 ---
 -- Get detailed data from a spawn entity.
 -- @param Entity ent The spawn entity
--- @return number The spawn type
+-- @param number spawnType The spawn type of the entity
 -- @return number The ent type
 -- @return table The spawn data (pos, ang, ammo)
 -- @realm shared
-function map.GetDataFromSpawnEntity(ent)
+function map.GetDataFromSpawnEntity(ent, spawnType)
 	local cls = ent:GetClass()
 	local data = {
 		pos = ent:GetPos(),
@@ -425,21 +423,15 @@ function map.GetDataFromSpawnEntity(ent)
 		ammo = ent.autoAmmoAmount or 0
 	}
 
-	local wepSpawn = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
-
-	if wepSpawn then
-		return SPAWN_TYPE_WEAPON, wepSpawn, data
+	if spawnType == SPAWN_TYPE_WEAPON then
+		return ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls], data
 	end
 
-	local ammoSpawn = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
-
-	if ammoSpawn then
-		return SPAWN_TYPE_AMMO, ammoSpawn, data
+	if spawnType == SPAWN_TYPE_AMMO then
+		return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls], data
 	end
 
-	local plySpawn = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
-
-	if plySpawn then
-		return SPAWN_TYPE_PLAYER, plySpawn, data
+	if spawnType == SPAWN_TYPE_PLAYER then
+		return ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls], data
 	end
 end
