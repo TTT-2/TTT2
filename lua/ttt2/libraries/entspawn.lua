@@ -31,7 +31,7 @@ local function RemoveEntities(entTable, spawnTable, spawnType)
 				if map.IsDefaultTerrortownMapEntity(ent) then continue end
 
 				-- since some obscure spawn entities are valid for multiple different spawn types,
-				-- they can be used to spawn different types of entities. Therefore this is an table.
+				-- they can be used to spawn different types of entities. Therefore this is a table.
 				local entType, data = map.GetDataFromSpawnEntity(ent, spawnType)
 
 				spawnTable[spawnType] = spawnTable[spawnType] or {}
@@ -59,7 +59,7 @@ end
 -- @return table spawnTable A table of entities that should be spawned additionally
 -- @realm server
 function entspawn.RemoveMapEntities()
-	local spawnTable = entspawnscript.GetEmptySpawnTableStrucure()
+	local spawnTable = entspawnscript.GetEmptySpawnTableStructure()
 
 	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable, SPAWN_TYPE_WEAPON)
 	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable, SPAWN_TYPE_AMMO)

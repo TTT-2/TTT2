@@ -338,7 +338,7 @@ end
 -- @internal
 -- @realm shared
 function map.GetSpawnsFromClassTable(spawns)
-	local spawnTable = entspawnscript.GetEmptySpawnTableStrucure()
+	local spawnTable = entspawnscript.GetEmptySpawnTableStructure()
 
 	for i = 1, #spawns do
 		local spawn = spawns[i]
@@ -392,7 +392,7 @@ end
 -- should be removed from the map prior to spawning with the custom spawn system.
 -- @note Only spawn entities that spawn weapons or ammo (but no random weapons / ammo) are counted as
 -- default TTT spawn entites. While player spawns would fall into this category as well, we use our
--- own custom palyer spawn system that relies on those entities being removed.
+-- own custom player spawn system that relies on those entities being removed.
 -- @param Entity ent The entity to check
 -- @return boolean Returns true if the given entity is default terrortown entity
 -- @realm shared
