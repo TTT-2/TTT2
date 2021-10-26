@@ -201,7 +201,7 @@ function weaponMetaTable:SetNextPrimaryFire(nextTime, skipLagCompensation)
 		local curAtt = self:GetNextPrimaryFire() + self.Primary.Delay
 		local diff = nextTime - curAtt
 
-		if diff >= 0 and diff <= engine.TickInterval() then
+		if diff > 0 and diff < engine.TickInterval() then
 			nextTime = curAtt
 		end
 	end

@@ -8,6 +8,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed the hook scope in the disguiser causing an error
 - Fixed the classic entity spawn mode breaking on maps without all three spawn types
+- Fixed weapons not having their set firerate with a tickrate dependent lag compensation
+
+### Changed
+
+- Added new param `skipLagCompensation` to `SWEP:SetNextPrimaryFire(nextTime, skipLagCompensation)` to skip our inbuilt lag compensation
 
 ## [v0.10.2b](https://github.com/TTT-2/TTT2/tree/v0.10.2b) (2021-10-21)
 
