@@ -189,20 +189,22 @@ end
 
 -- The original SetNextPrimaryFire saved in the weaponMetaTable
 local oldSetNextPrimaryFire = weaponMetaTable.SetNextPrimaryFire
-
+local tickInterval = engine.TickInterval()
 ---
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
 -- @param number nextTime The time you want to have the next primary attack available
--- @param[opt] bool skipLagCompensation If you want to use the old function and just SetNextPrimaryFire without Lag Compensation
+-- @param[opt] bool skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
 -- @realm shared
-function weaponMetaTable:SetNextPrimaryFire(nextTime, skipLagCompensation)
-	if not skipLagCompensation and not shouldSkipWeapon(self) then
-		local curAtt = self:GetNextPrimaryFire() + self.Primary.Delay
-		local diff = nextTime - curAtt
+function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
+	if not skipTickrateFix and not shouldSkipWeapon(self) then
+		local curTime = CurTime()
+		local curAtt = self:GetNextPrimaryFire()
+		local diff = curTime - curAtt
 
-		if diff > 0 and diff < engine.TickInterval() then
-			nextTime = curAtt
+		if diff > 0 and diff < tickInterval then
+			local timeStep = nextTime - curTime
+			nextTime = curAtt  + timeStep
 		end
 	end
 
