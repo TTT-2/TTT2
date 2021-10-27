@@ -198,9 +198,7 @@ local tickInterval = engine.TickInterval()
 -- @realm shared
 function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
 	if not skipTickrateFix and not shouldSkipWeapon(self) then
-		local curTime = CurTime()
-		local curAtt = self:GetNextPrimaryFire()
-		local diff = curTime - curAtt
+		local diff = CurTime() - self:GetNextPrimaryFire()
 
 		if diff > 0 and diff < tickInterval then
 			nextTime = nextTime - diff
