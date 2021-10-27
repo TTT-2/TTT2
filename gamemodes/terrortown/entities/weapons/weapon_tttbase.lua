@@ -203,8 +203,7 @@ function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
 		local diff = curTime - curAtt
 
 		if diff > 0 and diff < tickInterval then
-			local timeStep = nextTime - curTime
-			nextTime = curAtt  + timeStep
+			nextTime = nextTime - diff
 		end
 	end
 
