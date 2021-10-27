@@ -190,6 +190,7 @@ end
 -- The original SetNextPrimaryFire saved in the weaponMetaTable
 local oldSetNextPrimaryFire = weaponMetaTable.SetNextPrimaryFire
 local tickInterval = engine.TickInterval()
+
 ---
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
