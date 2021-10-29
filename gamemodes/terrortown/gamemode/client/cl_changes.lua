@@ -1107,6 +1107,20 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 10, day = 21 }))
 
+	AddChange("TTT2 Base - v0.10.3b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the hook scope in the disguiser causing an error</li>
+			<li>Fixed the classic entity spawn mode breaking on maps without all three spawn types</li>
+			<li>Fixed weapons not using their average firerate with a tickrate dependent fix. Function <code>SWEP:SetNextPrimaryFire(nextTime)</code>  was overwritten with our fix <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code> 
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Added new param <code>skipTickrateFix</code> to <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code> to skip our inbuilt tickrate fix</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 29 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
