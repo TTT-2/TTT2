@@ -231,7 +231,7 @@ end
 -- @realm shared
 -- @internal
 function database.ConvertValueWithKey(value, accessName, key)
-	if value == "nil" or value == "NULL" then return end
+	if not value or value == "nil" or value == "NULL" then return end
 
 	local index = nameToIndex[accessName]
 
@@ -385,7 +385,7 @@ if SERVER then
 			net.WriteUInt(data.index, uIntBits)
 			net.WriteString(data.itemName)
 			net.WriteString(data.key)
-			net.WriteString(data.value)
+			net.WriteString(tostring(data.value))
 		end
 	}
 
@@ -799,7 +799,7 @@ if SERVER then
 		local dataTable = index and registeredDatabases[index]
 
 		-- If itemName and key are given but the key not registered throw an error
-		if itemName and key and not registeredDatabases.keys[key] then
+		if itemName and key and not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return nil, false
@@ -879,6 +879,7 @@ if SERVER then
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
+		print("\nSetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key) .. " with value " .. tostring(value))
 		if plyID64 and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
 
 		local index = nameToIndex[accessName]
@@ -889,13 +890,15 @@ if SERVER then
 			return
 		end
 
-		if not registeredDatabases.keys[key] then
+		local dataTable = registeredDatabases[index]
+
+		if not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
 
-		local itemPoolModel = registeredDatabases[index].orm
+		local itemPoolModel = dataTable.orm
 
 		local item = itemPoolModel:Find(itemName)
 
@@ -907,7 +910,27 @@ if SERVER then
 
 		item[key] = value
 
-		itemPoolModel:Save()
+		print("\nSet  itemData is: ")
+		PrintTable(item)
+		if value ~= nil then
+			item:Save()
+		else
+			database.ConvertTable(item, accessName)
+
+			local isNil = true
+
+			for curKey in pairs(dataTable.keys) do
+				if item[curKey] ~= nil then
+					isNil = false
+
+					break
+				end
+			end
+
+			if isNil then
+				item:Delete()
+			end
+		end
 
 		OnChange(index, itemName, key, value)
 

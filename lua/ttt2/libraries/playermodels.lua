@@ -105,24 +105,7 @@ function playermodels.UpdateModel(name, valueEnum, state)
 			changedData[valueName] = state
 		end
 
-		local playermodelPoolModel = orm.Make(playermodels.sqltable)
-		local playermodelObject = playermodelPoolModel:Find(name)
-
-		if not playermodelObject then
-			playermodelObject = playermodelPoolModel:New({
-				name = name
-			})
-		end
-
-		playermodelObject[valueName] = changedData[valueName]
-
-		if table.IsEmpty(changedData) then
-			playermodelObject:Delete()
-			playermodels.changedModelStates[name] = nil
-		else
-			playermodelObject:Save()
-			playermodels.changedModelStates[name] = changedData
-		end
+		database.SetValue(playermodels.accessName, name, valueName, changedData[valueName])
 
 		playermodels.StreamModelStateToSelectedClients(true)
 	else -- CLIENT
