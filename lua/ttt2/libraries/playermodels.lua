@@ -97,15 +97,13 @@ function playermodels.UpdateModel(name, valueEnum, state)
 		playermodels.modelStates[name][valueName] = state
 		playermodels.changedModelStates[name] = playermodels.changedModelStates[name] or {}
 
-		local changedData = playermodels.changedModelStates[name]
-
 		if playermodels.defaultModelStates[name][valueName] == state then
-			changedData[valueName] = nil
-		else
-			changedData[valueName] = state
+			state = nil
 		end
 
-		database.SetValue(playermodels.accessName, name, valueName, changedData[valueName])
+		playermodels.changedModelStates[name][valueName] = state
+
+		database.SetValue(playermodels.accessName, name, valueName, state)
 
 		playermodels.StreamModelStateToSelectedClients(true)
 	else -- CLIENT
