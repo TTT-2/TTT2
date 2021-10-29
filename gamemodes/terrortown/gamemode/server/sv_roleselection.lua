@@ -879,3 +879,38 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 	SendFullStateUpdate()
 end
+
+---
+-- @param table layeredBaseRolesTbl
+-- @param table availableBaseRolesTbl
+-- @hook
+-- @realm server
+function GM:TTT2ModifyLayeredBaseRoles(layeredBaseRolesTbl, availableBaseRolesTbl)
+
+end
+
+---
+-- @param table layeredSubRolesTbl
+-- @param table availableSubRolesTbl
+-- @hook
+-- @realm server
+function GM:TTT2ModifyLayeredSubRoles(layeredSubRolesTbl, availableSubRolesTbl)
+
+end
+
+---
+-- @param table selectableRoles
+-- @hook
+-- @realm server
+function GM:TTT2ModifySelectableRoles(selectableRoles)
+
+end
+
+---
+-- @param Player ply
+-- @param number subrole
+-- @hook
+-- @realm server
+function GM:TTT2ReceivedForcedRole(ply, subrole)
+
+end

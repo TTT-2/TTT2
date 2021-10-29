@@ -14,16 +14,16 @@ local surface = surface
 local vgui = vgui
 local drawRoundedBox = draw.RoundedBox
 
-local color_trans = Color(0, 0, 0, 0)
+local colorTransparent = Color(0, 0, 0, 0)
 
-local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
-local ttt2_indicator_vip = "vgui/ttt/ttt2_indicator_vip"
-local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
-local ttt2_indicator_admin = "vgui/ttt/ttt2_indicator_admin"
-local ttt2_indicator_streamer = "vgui/ttt/ttt2_indicator_streamer"
-local ttt2_indicator_heroes = "vgui/ttt/ttt2_indicator_heroes"
+local materialIndicatorDev = "vgui/ttt/ttt2_indicator_dev"
+local materialIndicatorVIP = "vgui/ttt/ttt2_indicator_vip"
+local materialIndicatorAddonDev = "vgui/ttt/ttt2_indicator_addondev"
+local materialIndicatorAdmin = "vgui/ttt/ttt2_indicator_admin"
+local materialIndicatorStreamer = "vgui/ttt/ttt2_indicator_streamer"
+local materialIndicatorHeroes = "vgui/ttt/ttt2_indicator_heroes"
 
-local material_no_team = "vgui/ttt/dynamic/roles/icon_no_team"
+local materialNoTeam = "vgui/ttt/dynamic/roles/icon_no_team"
 
 local dev_tbl = {
 	["76561197964193008"] = true, -- Bad King Urgrain
@@ -246,52 +246,6 @@ function PANEL:AddFakeColumn()
 
 end
 
----
--- Updates the @{Color} for a @{Player} in the scoreboard
--- @param Player ply
--- @return Color
--- @hook
--- @realm client
-function GM:TTTScoreboardColorForPlayer(ply)
-	if IsValid(ply) then
-		local steamid64 = ply:SteamID64()
-		if steamid64 then
-			steamid64 = tostring(steamid64)
-
-			if dev_tbl[steamid64] and GetGlobalBool("ttt_highlight_dev", true) then
-				return namecolor.dev
-			elseif vip_tbl[steamid64] and GetGlobalBool("ttt_highlight_vip", true) then
-				return namecolor.vip
-			elseif addondev_tbl[steamid64] and GetGlobalBool("ttt_highlight_addondev", true) then
-				return namecolor.addondev
-			end
-		end
-
-		if ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
-			return namecolor.admin
-		end
-	end
-
-	return namecolor.default
-end
-
----
--- Updates the row color for a @{Player} in the scoreboard
--- @param Player ply
--- @return Color
--- @hook
--- @realm client
-function GM:TTTScoreboardRowColorForPlayer(ply)
-	local col = color_trans
-
-	if IsValid(ply) and ply.HasRole and ply:HasRole() then
-		col = table.Copy(ply:GetRoleColor())
-		col.a = 255 -- old value: 30
-	end
-
-	return col
-end
-
 local function ColorForPlayer(ply)
 	if IsValid(ply) then
 		---
@@ -424,8 +378,8 @@ function PANEL:UpdatePlayerData()
 	if tm then
 		local tmData = TEAMS[tm]
 		if tm == TEAM_NONE or not tmData or tmData.alone then
-			self.team2:SetImage(material_no_team)
-			self.team:SetImage(material_no_team)
+			self.team2:SetImage(materialNoTeam)
+			self.team:SetImage(materialNoTeam)
 		else
 			local teamImageName = tmData.iconMaterial:GetName()
 
@@ -528,22 +482,22 @@ function PANEL:ApplySchemeSettings()
 	self.sresult:SetImage("icon16/magnifier.png")
 	self.sresult:SetImageColor(Color(170, 170, 170, 150))
 
-	self.dev:SetImage(ttt2_indicator_dev)
+	self.dev:SetImage(materialIndicatorDev)
 	self.dev:SetImageColor(namecolor.dev)
 
-	self.vip:SetImage(ttt2_indicator_vip)
+	self.vip:SetImage(materialIndicatorVIP)
 	self.vip:SetImageColor(namecolor.vip)
 
-	self.addondev:SetImage(ttt2_indicator_addondev)
+	self.addondev:SetImage(materialIndicatorAddonDev)
 	self.addondev:SetImageColor(namecolor.addondev)
 
-	self.admin:SetImage(ttt2_indicator_admin)
+	self.admin:SetImage(materialIndicatorAdmin)
 	self.admin:SetImageColor(namecolor.admin)
 
-	self.streamer:SetImage(ttt2_indicator_streamer)
+	self.streamer:SetImage(materialIndicatorStreamer)
 	self.streamer:SetImageColor(namecolor.streamer)
 
-	self.heroes:SetImage(ttt2_indicator_heroes)
+	self.heroes:SetImage(materialIndicatorHeroes)
 	self.heroes:SetImageColor(namecolor.heroes)
 end
 
@@ -775,3 +729,65 @@ function PANEL:ScrollPlayerVolume(delta)
 end
 
 vgui.Register("TTTScorePlayerRow", PANEL, "DButton")
+
+---
+-- Updates the row background color for a @{Player} in the scoreboard.
+-- @note TTT2 also uses this hook for the default colours, so you should return nil for players
+-- that you do not want to do anything special with.
+-- @param Player ply The player whose color should be changed
+-- @return nil|Color The color highlight for the row background in the scoreboard
+-- @hook
+-- @realm client
+function GM:TTTScoreboardRowColorForPlayer(ply)
+	local col = colorTransparent
+
+	if IsValid(ply) and ply.HasRole and ply:HasRole() then
+		col = table.Copy(ply:GetRoleColor())
+		col.a = 255 -- old value: 30
+	end
+
+	return col
+end
+
+---
+-- Called to determine what colour a player's name should be on the scoreboard.
+-- @note TTT2 also uses this hook for the default colours, so you should return nil for players
+-- that you do not want to do anything special with.
+-- @param Player ply The player whose color should be changed
+-- @return nil|Color The color highlight for the name in the scoreboard
+-- @hook
+-- @realm client
+function GM:TTTScoreboardColorForPlayer(ply)
+	if IsValid(ply) then
+		local steamid64 = ply:SteamID64()
+
+		if steamid64 then
+			steamid64 = tostring(steamid64)
+
+			if dev_tbl[steamid64] and GetGlobalBool("ttt_highlight_dev", true) then
+				return namecolor.dev
+			elseif vip_tbl[steamid64] and GetGlobalBool("ttt_highlight_vip", true) then
+				return namecolor.vip
+			elseif addondev_tbl[steamid64] and GetGlobalBool("ttt_highlight_addondev", true) then
+				return namecolor.addondev
+			end
+		end
+
+		if ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
+			return namecolor.admin
+		end
+	end
+
+	return namecolor.default
+end
+
+---
+-- Called to show a context menu when the player right-clicks a player in the scoreboard.
+-- @note By default there is no context menu when right clicking, it will only appear
+-- if you add options in this hook.
+-- @param DermaMenu menu A @{DermaMenu} that you can add options to that the player can click
+-- @hook
+-- @realm client
+function GM:TTTScoreboardMenu(menu)
+
+end

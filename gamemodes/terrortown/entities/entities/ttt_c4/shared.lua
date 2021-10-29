@@ -9,6 +9,8 @@ local table = table
 local net = net
 local IsValid = IsValid
 
+local defuserNearRadius = 90000
+
 if SERVER then
 	AddCSLuaFile("cl_init.lua")
 	AddCSLuaFile("shared.lua")
@@ -81,9 +83,8 @@ AccessorFuncDT(ENT, "explode_time", "ExplodeTime")
 -- @realm shared
 AccessorFuncDT(ENT, "armed", "Armed", FORCE_BOOL)
 
-ENT.Beep = 0
-ENT.DetectiveNearRadius = 300
-ENT.SafeWires = nil
+ENT.timeBeep = 0
+ENT.safeWires = nil
 
 ---
 -- Initializes the data
@@ -111,8 +112,8 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 	end
 
-	self.SafeWires = nil
-	self.Beep = 0
+	self.safeWires = nil
+	self.timeBeep = 0
 	self.DisarmCausedExplosion = false
 
 	self:SetTimerLength(0)
@@ -280,7 +281,15 @@ local c4boom = Sound("c4.explode")
 function ENT:Explode(tr)
 	---
 	-- @realm shared
-	hook.Run("TTTC4Explode", self)
+	local result, message = hook.Run("TTTC4Explode", self)
+
+	if result == false then
+		if SERVER and message then
+			LANG.Msg(self:GetThrower(), message, nil, MSG_MSTACK_WARN)
+		end
+
+		return
+	end
 
 	if SERVER then
 		self:SetNoDraw(true)
@@ -373,11 +382,11 @@ function ENT:Explode(tr)
 end
 
 ---
+-- Checks if a player with the defuser weapon is in range.
 -- @return[default=false] boolean
 -- @realm shared
-function ENT:IsDetectiveNear()
+function ENT:IsDefuserInRange()
 	local center = self:GetPos()
-	local r = self.DetectiveNearRadius * self.DetectiveNearRadius
 	local d = 0.0
 	local diff = nil
 	local plys = player.GetAll()
@@ -391,7 +400,7 @@ function ENT:IsDetectiveNear()
 		diff = center - ply:GetPos()
 		d = diff:Dot(diff)
 
-		if d < r and ply:HasWeapon("weapon_ttt_defuser") then
+		if d < defuserNearRadius and ply:HasWeapon("weapon_ttt_defuser") then
 			return true
 		end
 	end
@@ -399,7 +408,7 @@ function ENT:IsDetectiveNear()
 	return false
 end
 
-local beep = Sound("weapons/c4/c4_beep1.wav")
+local soundBeep = Sound("weapons/c4/c4_beep1.wav")
 local MAX_MOVE_RANGE = 1000000 -- sq of 1000
 
 ---
@@ -438,10 +447,10 @@ function ENT:Think()
 
 			ErrorNoHalt("ERROR CAUGHT: ttt_c4: " .. err .. "\n")
 		end
-	elseif self:GetArmed() and CurTime() > self.Beep then
+	elseif self:GetArmed() and CurTime() > self.timeBeep then
 		local amp = 48
 
-		if self:IsDetectiveNear() then
+		if self:IsDefuserInRange() then
 			amp = 65
 
 			local dlight = CLIENT and DynamicLight(self:EntIndex())
@@ -461,12 +470,12 @@ function ENT:Think()
 		end
 
 		if SERVER then
-			sound.Play(beep, self:GetPos(), amp, 100)
+			sound.Play(soundBeep, self:GetPos(), amp, 100)
 		end
 
 		local btime = (etime - CurTime()) / 30
 
-		self.Beep = CurTime() + btime
+		self.timeBeep = CurTime() + btime
 	end
 end
 
@@ -478,7 +487,7 @@ function ENT:Defusable()
 	return self:GetArmed()
 end
 
--- Timer configuration handlign
+-- Timer configuration handling
 
 if SERVER then
 	---
@@ -563,7 +572,7 @@ if SERVER then
 
 		-- Wire stuff:
 
-		self.SafeWires = {}
+		self.safeWires = {}
 
 		-- list of possible wires to make safe
 		local choices = {}
@@ -580,8 +589,8 @@ if SERVER then
 			local pick = math.random(#choices)
 			local w = choices[pick]
 
-			if not self.SafeWires[w] then
-				self.SafeWires[w] = true
+			if not self.safeWires[w] then
+				self.safeWires[w] = true
 
 				table.remove(choices, pick)
 
@@ -627,26 +636,38 @@ if SERVER then
 			elseif IsValid(bomb:GetPhysicsObject()) and bomb:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD) then
 				return
 			else
-				LANG.Msg(ply, "c4_armed")
-
-				bomb:Arm(ply, time)
-
 				---
 				-- @realm server
-				hook.Run("TTTC4Arm", bomb, ply)
+				local result, message = hook.Run("TTTC4Arm", bomb, ply)
+
+				if result ~= false then
+					LANG.Msg(ply, "c4_armed", nil, MSG_MSTACK_ROLE)
+
+					bomb:Arm(ply, time)
+				elseif message then
+					LANG.Msg(ply, message, nil, MSG_MSTACK_WARN)
+				end
 			end
 		end
 	end
 	concommand.Add("ttt_c4_config", ReceiveC4Config)
 
-	local function SendDisarmResult(ply, bomb, result)
+	local function SendDisarmResult(ply, bomb, disarmResult)
 		---
 		-- @realm server
-		hook.Run("TTTC4Disarm", bomb, result, ply)
+		local result, message = hook.Run("TTTC4Disarm", bomb, result, ply)
+
+		if result == false then
+			if message then
+				LANG.Msg(ply, message, nil, MSG_MSTACK_WARN)
+			end
+
+			return
+		end
 
 		net.Start("TTT_C4DisarmResult")
 		net.WriteEntity(bomb)
-		net.WriteBit(result) -- this way we can squeeze this bit into 16
+		net.WriteBit(disarmResult) -- this way we can squeeze this bit into 16
 		net.Send(ply)
 	end
 
@@ -663,7 +684,7 @@ if SERVER then
 		if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb.DisarmCausedExplosion and bomb:GetArmed() then
 			if bomb:GetPos():Distance(ply:GetPos()) > 256 then
 				return
-			elseif bomb.SafeWires[wire] or ply:IsTraitor() or ply == bomb:GetOwner() then
+			elseif bomb.safeWires[wire] or ply:IsTraitor() or ply == bomb:GetOwner() then
 				LANG.Msg(ply, "c4_disarmed")
 
 				bomb:Disarm(ply)
@@ -696,7 +717,15 @@ if SERVER then
 
 				---
 				-- @realm server
-				hook.Run("TTTC4Pickup", bomb, ply)
+				local result, message = hook.Run("TTTC4Pickup", bomb, ply)
+
+				if result == false then
+					if message then
+						LANG.Msg(ply, message, nil, MSG_MSTACK_WARN)
+					end
+
+					return
+				end
 
 				-- picks up weapon, switches if possible and needed, returns weapon if successful
 				local wep = ply:SafePickupWeaponClass("weapon_ttt_c4", true)
@@ -725,22 +754,83 @@ if SERVER then
 
 		local bomb = ents.GetByIndex(idx)
 
-		if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb:GetArmed() then
-			if bomb:GetPos():Distance(ply:GetPos()) > 256 then
-				return
-			else
-				-- spark to show onlookers we destroyed this bomb
-				util.EquipmentDestroyed(bomb:GetPos())
+		if not IsValid(bomb)
+			or bomb:GetClass() ~= "ttt_c4"
+			or bomb:GetArmed()
+			or bomb:GetPos():Distance(ply:GetPos()) > 256
+		then return end
 
-				---
-				-- @realm server
-				hook.Run("TTTC4Destroyed", bomb, ply)
+		---
+		-- @realm server
+		local result, message = hook.Run("TTTC4Destroyed", bomb, ply)
 
-				bomb:Remove()
+		if result == false then
+			if message then
+				LANG.Msg(ply, message, nil, MSG_MSTACK_WARN)
 			end
+
+			return
 		end
+
+		-- spark to show onlookers we destroyed this bomb
+		util.EquipmentDestroyed(bomb:GetPos())
+
+		bomb:Remove()
 	end
 	concommand.Add("ttt_c4_destroy", ReceiveC4Destroy)
+
+	---
+	-- This hook is run when the C4 is about to be armed.
+	-- @param Entity bomb The C4 bomb entity
+	-- @param Player ply The player that armed the C4
+	-- @return boolean Return false to cancel arming
+	-- @return string Return a string with a reason why the arming was canceled,
+	-- this message is send as a @{MSTACK} to the player that tried to arm the C4
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTTC4Arm(bomb, ply)
+
+	end
+
+	---
+	-- This hook is run when the C4 is about to be disarmed.
+	-- @param Entity bomb The C4 bomb entity
+	-- @param boolean result The disarming attempt result
+	-- @param Player ply The player that armed the C4
+	-- @return boolean Return false to cancel disarming
+	-- @return string Return a string with a reason why the disarming was canceled,
+	-- this message is send as a @{MSTACK} to the player that tried to disarm the C4
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTTC4Disarm(bomb, result, ply)
+
+	end
+
+	---
+	-- This hook is run when the C4 is about to be picked up.
+	-- @param Entity bomb The C4 bomb entity
+	-- @param Player ply The player that tries to picl up the C4
+	-- @return boolean Return false to cancel the pickup
+	-- @return string Return a string with a reason why the pickup was canceled,
+	-- this message is send as a @{MSTACK} to the player that tried to pickup the C4
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTTC4Pickup(bomb, ply)
+
+	end
+
+	---
+	-- This hook is run when the C4 is about to be armed.
+	-- @param Entity bomb The C4 bomb entity
+	-- @param Player ply The player that tries to destroy the C4
+	-- @return boolean Return false to cancel the destruction
+	-- @return string Return a string with a reason why the destruction was canceled,
+	-- this message is send as a @{MSTACK} to the player that tried to destroy the C4
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTTC4Destroyed(bomb, ply)
+
+	end
 else -- CLIENT
 	local TryT = LANG.TryTranslation
 	local GetPT = LANG.GetParamTranslation
@@ -828,4 +918,17 @@ else -- CLIENT
 		tData:SetKeyBinding(defuser_useable and "+attack" or "+use")
 		tData:AddDescriptionLine(TryT("c4_short_desc"))
 	end)
+end
+
+---
+-- This hook is called when the C4 is about to explode.
+-- @note To cancel a explosion, this hook has to be added on the
+-- server and on the client.
+-- @param Entity bomb The C4 bomb entity
+-- @return boolean Return false to cancel explosion
+-- @return string Return a string with a reason why the explosion was canceled
+-- @hook
+-- @realm shared
+function GAMEMODE:TTTC4Explode(bomb)
+
 end

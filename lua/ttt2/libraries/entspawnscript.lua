@@ -631,11 +631,7 @@ if CLIENT then
 	-- Clears the local spawn point table cache.
 	-- @realm client
 	function entspawnscript.ClearLocalCache()
-		entspawnscript.SetSpawns({
-			[SPAWN_TYPE_WEAPON] = {},
-			[SPAWN_TYPE_AMMO] = {},
-			[SPAWN_TYPE_PLAYER] = {}
-		})
+		entspawnscript.SetSpawns(entspawnscript.GetEmptySpawnTableStructure())
 	end
 end
 
@@ -973,11 +969,7 @@ function entspawnscript.DeleteAllSpawns()
 		net.Start("ttt2_delete_all_spawns")
 		net.SendToServer()
 	else
-		entspawnscript.SetSpawns({
-			[SPAWN_TYPE_WEAPON] = {},
-			[SPAWN_TYPE_AMMO] = {},
-			[SPAWN_TYPE_PLAYER] = {}
-		})
+		entspawnscript.SetSpawns(entspawnscript.GetEmptySpawnTableStructure())
 
 		entspawnscript.UpdateSpawnFile()
 
@@ -1064,6 +1056,19 @@ function entspawnscript.ResetMapToDefault()
 		-- trigger a sync of the spawn amount info
 		entspawnscript.UpdateSpawnCountOnClients()
 	end
+end
+
+---
+-- Returns a copy of the general spawn table structure. This is used for initialization
+-- of this table.
+-- @return table An empty spawn table
+-- @realm shared
+function entspawnscript.GetEmptySpawnTableStructure()
+	return tableCopy({
+		[SPAWN_TYPE_WEAPON] = {},
+		[SPAWN_TYPE_AMMO] = {},
+		[SPAWN_TYPE_PLAYER] = {}
+	})
 end
 
 -- SYNCING

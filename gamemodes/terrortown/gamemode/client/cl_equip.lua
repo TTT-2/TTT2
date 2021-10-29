@@ -1164,3 +1164,35 @@ local function loseKeyboardFocus(pnl)
 	eqframe:SetKeyboardInputEnabled(false)
 end
 hook.Add("OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus)
+
+---
+-- Called after TTT's settings window has been created. Used to add
+-- your own tab to the settings window.
+-- @param DPropertySheet dSheet The property sheet where contents can be added
+-- @hook
+-- @realm client
+function GM:TTTEquipmentTabs(dSheet)
+
+end
+
+---
+-- A clientside hook that is called on the client of the player
+-- that just bought an item. You probably don't want to use this as it
+-- is recommended to use @{ITEM:Bought}.
+-- @param boolean True if item, false if weapon
+-- @param string idOrCls The id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
+-- @hook
+-- @realm client
+function GM:TTTBoughtItem(isItem, idOrCls)
+
+end
+
+---
+-- Cancelable hook to prevent the usage of the shop on the client.
+-- @param Player ply The player that tries to access the shop
+-- @return boolean Return true to prevent shop access
+-- @hook
+-- @realm client
+function GM:TTT2PreventAccessShop(ply)
+
+end

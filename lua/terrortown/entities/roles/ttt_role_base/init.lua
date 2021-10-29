@@ -61,7 +61,6 @@ function ROLE:GetAvailableRoleCount(ply_count)
 	return math.Clamp(role_count, 1, maxAmount)
 end
 
----
 -- Returns if the role can be awarded credits for a kill. Is is intended to award credits
 -- for the kill of a policing role such as the detective. This function only returns the
 -- state of the convar and does not check if the kill is a valid kill that would award credits.
@@ -86,3 +85,12 @@ function ROLE:IsAwardedCreditsForPlayerDead()
 	return cv and cv:GetBool() or false
 end
 
+---
+-- Use this hook to make a role nonselectable.
+-- @param ROLE roleData The role data of the role that is considered for selection
+-- @return nil|boolean Return true to cancel selection
+-- @hook
+-- @realm server
+function GM:TTT2RoleNotSelectable(roleData)
+
+end

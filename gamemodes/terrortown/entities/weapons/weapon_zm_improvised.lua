@@ -279,3 +279,16 @@ end
 function SWEP:OnDrop()
 	self:Remove()
 end
+
+if SERVER then
+	---
+	-- A cancelable hook that is called if a player tries to push another player.
+	-- @param Player ply The player that tries to push
+	-- @param Player pushPly The player that is about to be pushed
+	-- @return boolean Return true to cancel the push
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTT2PlayerPreventPush(ply, pushPly)
+
+	end
+end
