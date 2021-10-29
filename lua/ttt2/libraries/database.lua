@@ -721,6 +721,9 @@ if SERVER then
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.Register(databaseName, accessName, savingKeys, additionalData)
+		print("\nRegistering " .. databaseName .. " as " .. accessName .. " with Keys:")
+		PrintTable(savingKeys)
+		PrintTable(additionalData or {})
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
 		end
@@ -738,7 +741,8 @@ if SERVER then
 			data = additionalData or {},
 			storedData = {}
 		}
-
+		print("\nCurrent registered Database")
+		PrintTable(registeredDatabases)
 		nameToIndex[accessName] = databaseCount
 
 		local data = {index = databaseCount}
@@ -779,12 +783,13 @@ if SERVER then
 	-- Get the stored key value of the given database if it exists and was registered
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
-	-- @param string key the name of the key in the database, is ignored when no itemName is given
+	-- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
 	-- @return any, bool value that was saved in the database and if it successfully reached the sql datatable
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
 		local index = nameToIndex[accessName]
 
+		print("\nGetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key))
 		if not index then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not registered.")
 
@@ -812,29 +817,47 @@ if SERVER then
 			sqlData = dataTable.orm:Find(itemName)
 
 			if not sqlData then
-				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " has no item named " .. itemName)
-
 				return nil, false
 			end
 
-			local value = database.ConvertValueWithKey(sqlData[key], accessName, key)
-			dataTable.storedData[itemName] = dataTable.storedData[itemName] or {}
-			dataTable.storedData[itemName][key] = value
+			if key then
+				local value = database.ConvertValueWithKey(sqlData[key], accessName, key)
+				dataTable.storedData[itemName] = dataTable.storedData[itemName] or {}
+				dataTable.storedData[itemName][key] = value
 
-			return value, true
+				print("\nFetched itemValue is: " .. tostring(value))
+				return value, true
+			end
+
+			database.ConvertTable(sqlData, accessName)
+			dataTable.storedData[itemName] = sqlData
+		else
+			sqlData = dataTable.orm:All()
+
+			if not istable(sqlData) then
+				return nil, false
+			end
+
+			for _, item in pairs(sqlData) do
+				database.ConvertTable(item, accessName)
+			end
+
+			-- Convert numerical indices to string indices with the itemName
+			local hashableData = {}
+
+			for i = 1, #sqlData do
+				local sqlTable = sqlData[i]
+				hashableData[sqlTable.name] = sqlTable
+				hashableData[sqlTable.name].name = nil
+			end
+
+			sqlData = hashableData
+
+			dataTable.storedData = table.Copy(sqlData)
 		end
 
-		sqlData = dataTable.orm:All()
-
-		if not istable(sqlData) then
-			return nil, false
-		end
-
-		for _, item in pairs(sqlData) do
-			database.ConvertTable(item, accessName)
-		end
-
-		dataTable.storedData = table.Copy(sqlData) or dataTable.storedData
+		print("\nFetched sqlData is: ")
+		PrintTable(sqlData)
 
 		return sqlData, true
 	end
@@ -842,7 +865,7 @@ if SERVER then
 	---
 	-- Get the stored table database if it exists and was registered
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @return table, bool datatable that was saved and if it successfully reached the sql datatable
+	-- @return table, bool datatable that was saved, and if it successfully reached the sql datatable
 	-- @realm server
 	function database.GetTable(accessName)
 		return database.GetValue(accessName)
