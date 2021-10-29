@@ -538,7 +538,7 @@ end
 local function SendUpdateNextTick(identifier, data, plyIdentifier)
 	if not sendRequestsNextUpdate then
 		sendRequestsNextUpdate = true
-		timer.Simple(0, SendUpdatesNow())
+		timer.Simple(0, SendUpdatesNow)
 	end
 
 	if CLIENT then
@@ -734,8 +734,8 @@ if SERVER then
 		registeredDatabases[databaseCount] = {
 			accessName = accessName,
 			orm = orm.Make(databaseName),
-			keys = savingKeys,
-			data = additionalData,
+			keys = savingKeys or {},
+			data = additionalData or {},
 			storedData = {}
 		}
 
@@ -809,7 +809,7 @@ if SERVER then
 		local sqlData
 
 		if itemName then
-			sqlData = data.orm:Find(itemName)
+			sqlData = dataTable.orm:Find(itemName)
 
 			if not sqlData then
 				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " has no item named " .. itemName)
@@ -824,7 +824,7 @@ if SERVER then
 			return value, true
 		end
 
-		sqlData = data.orm:All()
+		sqlData = dataTable.orm:All()
 
 		if not istable(sqlData) then
 			return nil, false
