@@ -239,27 +239,37 @@ function ENT:AcceptInput(name, activator)
 end
 
 ---
--- @param Entity ent
--- @param Player ply
--- @return[default=true] boolean
+-- Can be used to prevent a player from using this button.
+-- @param Entity ent The traitor button entity
+-- @param Player ply The player that tries to use this button
+-- @return[default=true] boolean Return false to prevent the button use
+-- @return string Return a string to show an error message if the usage was blocked
+-- @hook
 -- @realm server
 function GAMEMODE:TTTCanUseTraitorButton(ent, ply)
-	-- Can be used to prevent players from using this button.
-	-- Return a boolean and a message that can shows up if you can't use the button.
-	-- Example: return false, "Not allowed".
 	return true
 end
 
 ---
--- @param Entity ent
--- @param Player ply
--- @return[default=true] boolean
+-- Can be used to prevent admins from toggling modes this button.
+-- @param Entity ent The traitor button entity
+-- @param Player ply The player that tries to toggle this button
+-- @return[default=true] boolean Return false to prevent the button toggle
+-- @return string Return a string to show an error message if the toggle was blocked
+-- @hook
 -- @realm server
 function GAMEMODE:TTTCanToggleTraitorButton(ent, ply)
-	-- Can be used to prevent admins from toggling modes this button.
-	-- Return a boolean and a message that can shows up if you can't toggle the button.
-	-- Example: return false, "Not allowed".
 	return true
+end
+
+---
+-- This hook is called after a traitor button was used.
+-- @param Entity ent The traitor button entity that was used
+-- @param Player ply The player that used this button
+-- @hook
+-- @realm server
+function GAMEMODE:TTTTraitorButtonActivated(ent, ply)
+
 end
 
 ---

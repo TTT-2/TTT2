@@ -1461,7 +1461,6 @@ local function SetPlayerReady(_, ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
----
 -- Resets the cached weapons. This is automatically done on a weapon restore,
 -- but has to be triggered manually in scenarios where the inventory is reset
 -- without triggering the restore function, e.g. @{GM:PlayerSpawn}.
@@ -1528,4 +1527,26 @@ function plymeta:RestoreCachedWeapons()
 	end
 
 	self:ResetCachedWeapons()
+end
+
+---
+-- Called before the player receives their default credits.
+-- @param Player ply The player who should receive their default credits
+-- @return nil|boolean Return true to prevent the player from
+-- receiving their credits
+-- @hook
+-- @realm server
+function GM:TTT2SetDefaultCredits(ply)
+
+end
+
+---
+-- Hook that is used to modify the default credits of a traitor.
+-- @param Player ply The player whose credits should be changed
+-- @param number credits The amount of credits the player would normally receive
+-- @return nil|number The amound of credits the player should receive
+-- @hook
+-- @realm server
+function GM:TTT2ModifyDefaultTraitorCredits(ply, credits)
+
 end

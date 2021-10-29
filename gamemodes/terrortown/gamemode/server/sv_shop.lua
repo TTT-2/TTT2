@@ -16,15 +16,54 @@ local function HasPendingOrder(ply)
 end
 
 ---
--- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}
--- @param Player ply
+-- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}.
+-- @param Player ply The player that attempts to buy something
 -- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
--- @param boolean is_item is id an @{ITEM} or @{Weapon}
+-- @param boolean isItem True if item, false if weapon
 -- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
 -- @hook
 -- @realm server
-function GM:TTTCanOrderEquipment(ply, id, is_item)
+function GM:TTTCanOrderEquipment(ply, id, isItem)
 	return true
+end
+
+---
+-- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}.
+-- @param Player ply The player that attempts to buy something
+-- @param string cls The class of the @{ITEM} or @{Weapon}
+-- @param boolean isItem True if item, false if weapon
+-- @param number credits The purchase price of the @{ITEM} or @{Weapon}
+-- @return boolean Return false to block buying of an equipment item
+-- @return boolean Return true to make the purchase free
+-- @return string Return a string that is shown in a @{MSTACK} message
+-- @hook
+-- @realm server
+function GM:TTT2CanOrderEquipment(ply, cls, isItem, credits)
+
+end
+
+---
+-- Called whenever a @{Player} ordered an @{ITEM} or @{Weapon}.
+-- @param Player ply The player that bought something
+-- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
+-- @param boolean isItem True if item, false if weapon
+-- @hook
+-- @realm server
+function GM:TTTOrderedEquipment(ply, id, isItem)
+
+end
+
+---
+-- Called whenever a @{Player} ordered an @{ITEM} or @{Weapon}.
+-- @param Player ply The player that bought something
+-- @param string cls The class of the @{ITEM} or @{Weapon}
+-- @param boolean isItem True if item, false if weapon
+-- @param number credits The purchase price of the @{ITEM} or @{Weapon}
+-- @param boolean ignoreCost True if the cost was ignored and received for free
+-- @hook
+-- @realm server
+function GM:TTT2OrderedEquipment(ply, cls, isItem, credits, ignoreCost)
+
 end
 
 local function IsPartOfShop(ply, cls)
@@ -61,13 +100,13 @@ local function OrderEquipment(ply, cls)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end
 
-	local is_item = items.IsItem(cls)
+	local isItem = items.IsItem(cls)
 
 	-- The item/weapon might not even be part of the current shop
 	if not IsPartOfShop(ply, cls) then return end
 
 	-- we use weapons.GetStored to save time on an unnecessary copy, we will not be modifying it
-	local equip_table = not is_item and weapons.GetStored(cls) or items.GetStored(cls)
+	local equip_table = not isItem and weapons.GetStored(cls) or items.GetStored(cls)
 
 	if not equip_table then
 		print(ply, "tried to buy equip that doesn't exists", cls)
@@ -86,7 +125,7 @@ local function OrderEquipment(ply, cls)
 	end
 
 	-- still support old items
-	local idOrCls = (is_item and equip_table.oldId or nil) or cls
+	local idOrCls = (isItem and equip_table.oldId or nil) or cls
 
 	local credits = equip_table.credits or 1
 
@@ -99,12 +138,12 @@ local function OrderEquipment(ply, cls)
 	---
 	-- @note Keep compatibility with old addons
 	-- @realm server
-	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, is_item) then return end
+	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, isItem) then return end
 
 	---
 	-- @note Add our own hook with more consistent class parameter and some more information
 	-- @realm server
-	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, cls, is_item, credits)
+	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, cls, isItem, credits)
 
 	if message then
 		LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
@@ -120,7 +159,7 @@ local function OrderEquipment(ply, cls)
 
 	-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 	-- is whitelisted and carryable
-	if is_item then
+	if isItem then
 		local item = ply:GiveEquipmentItem(cls)
 
 		if isfunction(item.Bought) then
@@ -152,12 +191,12 @@ local function OrderEquipment(ply, cls)
 	---
 	-- @note Keep compatibility with old addons
 	-- @realm server
-	hook.Run("TTTOrderedEquipment", ply, idOrCls, is_item)
+	hook.Run("TTTOrderedEquipment", ply, idOrCls, isItem)
 
 	---
 	-- @note Add our own hook with more consistent class parameter
 	-- @realm server
-	hook.Run("TTT2OrderedEquipment", ply, cls, is_item, credits, ignoreCost or false)
+	hook.Run("TTT2OrderedEquipment", ply, cls, isItem, credits, ignoreCost or false)
 end
 
 local function NetOrderEquipment(len, ply)
@@ -173,18 +212,6 @@ local function ConCommandOrderEquipment(ply, cmd, args)
 	OrderEquipment(ply, args[1])
 end
 concommand.Add("ttt_order_equipment", ConCommandOrderEquipment)
-
----
--- Called whenever a @{Player} toggles the disguiser state
--- @note Can be used to prevent players from using this button.
--- @param Player ply
--- @param boolean state
--- @return boolean return true to prevent using this button.
--- @hook
--- @realm server
-function GM:TTTToggleDisguiser(ply, state)
-
-end
 
 local function CheatCredits(ply)
 	if not IsValid(ply) then return end

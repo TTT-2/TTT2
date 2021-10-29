@@ -19,7 +19,7 @@ local timerRemove = timer.Remove
 
 entspawn = entspawn or {}
 
-local function RemoveEntities(entTable, spawnTable)
+local function RemoveEntities(entTable, spawnTable, spawnType)
 	local useDefaultSpawns = not entspawnscript.ShouldUseCustomSpawns()
 
 	for _, ents in pairs(entTable) do
@@ -30,7 +30,9 @@ local function RemoveEntities(entTable, spawnTable)
 			if useDefaultSpawns then
 				if map.IsDefaultTerrortownMapEntity(ent) then continue end
 
-				local spawnType, entType, data = map.GetDataFromSpawnEntity(ent)
+				-- since some obscure spawn entities are valid for multiple different spawn types,
+				-- they can be used to spawn different types of entities. Therefore this is a table.
+				local entType, data = map.GetDataFromSpawnEntity(ent, spawnType)
 
 				spawnTable[spawnType] = spawnTable[spawnType] or {}
 				spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
@@ -57,11 +59,11 @@ end
 -- @return table spawnTable A table of entities that should be spawned additionally
 -- @realm server
 function entspawn.RemoveMapEntities()
-	local spawnTable = {}
+	local spawnTable = entspawnscript.GetEmptySpawnTableStructure()
 
-	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable)
-	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable)
-	RemoveEntities(map.GetPlayerSpawnEntities(), spawnTable)
+	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable, SPAWN_TYPE_WEAPON)
+	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable, SPAWN_TYPE_AMMO)
+	RemoveEntities(map.GetPlayerSpawnEntities(), spawnTable, SPAWN_TYPE_PLAYER)
 
 	return spawnTable
 end
@@ -75,6 +77,8 @@ end
 -- @param number randomType The spawn type that should be used as random
 -- @realm server
 function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
+	if not spawns then return end
+
 	for entType, spawnTable in pairs(spawns) do
 		for i = 1, #spawnTable do
 			local spawn = spawnTable[i]

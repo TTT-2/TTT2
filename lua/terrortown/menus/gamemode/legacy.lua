@@ -117,3 +117,13 @@ end
 function CLGAMEMODEMENU:GetSubmenus()
 	return virtualSubmenus
 end
+
+---
+-- This hook was used in TTT to populate the F1 settings menu. It shouldn't be used
+-- anymore as it is deprecated.
+-- @deprecated
+-- @hook
+-- @realm client
+function GM:TTTSettingsTabs()
+
+end

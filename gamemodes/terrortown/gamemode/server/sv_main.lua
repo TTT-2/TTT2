@@ -905,24 +905,6 @@ function GM:PostCleanupMap()
 	door.SetUp()
 end
 
----
--- Called if CheckForMapSwitch has determined that a map change should happen
--- @note Can be used for custom map voting system. Just hook this and return true to override.
--- @param string nextmap next map that would be loaded according to the file that is set by the mapcyclefile convar
--- @param number rounds_left number of rounds left before the next map switch
--- @param number time_left time left before the next map switch in seconds
--- @hook
--- @realm server
-function GM:TTT2LoadNextMap(nextmap, rounds_left, time_left)
-	if rounds_left <= 0 then
-		LANG.Msg("limit_round", {mapname = nextmap})
-	elseif time_left <= 0 then
-		LANG.Msg("limit_time", {mapname = nextmap})
-	end
-
-	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
-end
-
 local function CleanUp()
 	game.CleanUpMap()
 
@@ -979,18 +961,6 @@ end
 -- @internal
 function IncRoundEnd(incr)
 	SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
-end
-
----
--- Adds a delay before the round begings. This is called before @{hooks/GLOBAL/TTTPrepareRound}
--- @note Can be used for custom voting systems
--- @return boolean whether there should be a delay
--- @return number delay in seconds
--- @hook
--- @realm server
-function GM:TTTDelayRoundStartForVote()
-	--return true, 30
-	return false
 end
 
 ---
@@ -1305,22 +1275,22 @@ end
 -- @internal
 function CheckForMapSwitch()
 	-- Check for mapswitch
-	local rounds_left = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
+	local roundsLeft = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
 
-	SetGlobalInt("ttt_rounds_left", rounds_left)
+	SetGlobalInt("ttt_rounds_left", roundsLeft)
 
-	local time_left = math.max(0, time_limit:GetInt() * 60 - CurTime())
+	local timeLeft = math.max(0, time_limit:GetInt() * 60 - CurTime())
 	local nextmap = string.upper(game.GetMapNext())
 
-	if rounds_left <= 0 or time_left <= 0 then
+	if roundsLeft <= 0 or timeLeft <= 0 then
 		timer.Stop("end2prep")
 		SetRoundEnd(CurTime())
 
 		---
 		-- @realm server
-		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
+		hook.Run("TTT2LoadNextMap", nextmap, roundsLeft, timeLeft)
 	else
-		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60)})
+		LANG.Msg("limit_left", {num = roundsLeft, time = math.ceil(timeLeft / 60)})
 	end
 end
 
@@ -1423,9 +1393,140 @@ function GM:MapTriggeredEnd(wintype)
 	end
 end
 
+hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
+	net.Start("TTT2PlayerAuthedShared")
+	net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
+	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
+	net.Broadcast()
+end)
+
+local function ttt_roundrestart(ply, command, args)
+	-- ply is nil on dedicated server console
+	if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
+		LANG.Msg("round_restart")
+
+		StopRoundTimers()
+
+		-- do prep
+		PrepareRound()
+	else
+		ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
+	end
+end
+concommand.Add("ttt_roundrestart", ttt_roundrestart)
+
 ---
--- Win checker hook to add your own win conditions
--- @note The most basic win check is whether both sides have one dude alive
+-- Version announce also used in Initialize
+-- @param Player ply
+-- @realm server
+function ShowVersion(ply)
+	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n", GAMEMODE.Version)
+
+	if IsValid(ply) then
+		ply:PrintMessage(HUD_PRINTNOTIFY, text)
+	else
+		Msg(text)
+	end
+end
+concommand.Add("ttt_version", ShowVersion)
+
+local function ttt_toggle_newroles(ply)
+	if not ply:IsAdmin() then return end
+
+	local b = not ttt_newroles_enabled:GetBool()
+
+	ttt_newroles_enabled:SetBool(b)
+
+	local word = b and "enabled" or "disabled"
+
+	ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
+end
+concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
+
+---
+-- This hook is used to sync the global networked vars. It is run in @{GM:SyncGlobals} after the
+-- TTT2 globals are synced.
+-- @hook
+-- @realm server
+function GM:TTT2SyncGlobals()
+
+end
+
+---
+-- This hook is run before @{GM:TTTCheckForWin} and should be used for custom winconditions in
+-- roles. Because this hook will prevent the default hook from being run if a result is returned.
+-- @return nil|string The team identifier of the winning team
+-- @hook
+-- @realm server
+function GM:TTT2PreWinChecker()
+
+end
+
+---
+-- Called after a player changed their nickname.
+-- @param Player ply The player who changed their name
+-- @return nil|boolean Return true to prevent the kick of the player
+-- @hook
+-- @realm server
+function GM:TTTNameChangeKick(ply)
+
+end
+
+---
+-- A hook to prevent a traitor from receiving the list of their mates.
+-- @param table traitorNicks A table of all traitor nicknames
+-- @param Player ply The player who should be informed
+-- @return nil|boolean Return false to prevent the player from receiving the
+-- name of their mates
+-- @hook
+-- @realm server
+function GM:TTT2TellTraitors(traitorNicks, ply)
+
+end
+
+---
+-- Can be used to modify the table of teams with alive players. This hook is
+-- used in the default win condition.
+-- @param table alives The table of teams which have at least one player still alive
+-- @hook
+-- @realm server
+function GM:TTT2ModifyWinningAlives(alives)
+
+end
+
+---
+-- Called if CheckForMapSwitch has determined that a map change should happen.
+-- @note Can be used for custom map voting system. Just hook this and return true to override.
+-- @param string nextmap Next map that would be loaded according to the file that is set by the mapcyclefile convar
+-- @param number roundsLeft Number of rounds left before the next map switch
+-- @param number timeLeft Time left before the next map switch in seconds
+-- @hook
+-- @realm server
+function GM:TTT2LoadNextMap(nextmap, roundsLeft, timeLeft)
+	if roundsLeft <= 0 then
+		LANG.Msg("limit_round", {mapname = nextmap})
+	elseif timeLeft <= 0 then
+		LANG.Msg("limit_time", {mapname = nextmap})
+	end
+
+	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
+end
+
+---
+-- Adds a delay before the round begings. This is called before @{GM:TTTPrepareRound}.
+-- @note Can be used for custom voting systems
+-- @return[default=false] boolean Whether there should be a delay
+-- @return[default=nil] number Delay in seconds
+-- @hook
+-- @realm server
+function GM:TTTDelayRoundStartForVote()
+	return false
+end
+
+---
+-- Win checker hook to add your own win conditions.
+-- @note The most basic win check is whether both sides have one player alive.
+-- @return nil|string The team identifier of the winning team
 -- @hook
 -- @realm server
 function GM:TTTCheckForWin()
@@ -1485,57 +1586,3 @@ function GM:TTTCheckForWin()
 		return TEAM_NONE -- none_win
 	end
 end
-
-hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
-	net.Start("TTT2PlayerAuthedShared")
-	net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
-	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
-	net.Broadcast()
-end)
-
-local function ttt_roundrestart(ply, command, args)
-	-- ply is nil on dedicated server console
-	if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
-		LANG.Msg("round_restart")
-
-		StopRoundTimers()
-
-		-- do prep
-		PrepareRound()
-	else
-		ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
-	end
-end
-concommand.Add("ttt_roundrestart", ttt_roundrestart)
-
----
--- Version announce also used in Initialize
--- @param Player ply
--- @realm server
-function ShowVersion(ply)
-	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n", GAMEMODE.Version)
-
-	if IsValid(ply) then
-		ply:PrintMessage(HUD_PRINTNOTIFY, text)
-	else
-		Msg(text)
-	end
-end
-concommand.Add("ttt_version", ShowVersion)
-
-local function ttt_toggle_newroles(ply)
-	if not ply:IsAdmin() then return end
-
-	local b = not ttt_newroles_enabled:GetBool()
-
-	ttt_newroles_enabled:SetBool(b)
-
-	local word = "enabled"
-
-	if not b then
-		word = "disabled"
-	end
-
-	ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
-end
-concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)

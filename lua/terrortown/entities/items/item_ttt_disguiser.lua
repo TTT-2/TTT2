@@ -106,4 +106,16 @@ else -- SERVER
 			end
 		end)
 	end)
+
+	---
+	-- This hook is called once the disguiser state is about to be updated
+	-- and can be used to cancel this change.
+	-- @param Player ply The player whose disguising state should be changed
+	-- @param boolean state The state that should be set
+	-- @return nil|boolean Return true to cancel the state change
+	-- @hook
+	-- @realm server
+	function GM:TTTToggleDisguiser(ply, state)
+
+	end
 end

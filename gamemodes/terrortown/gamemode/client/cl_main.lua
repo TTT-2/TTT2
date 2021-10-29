@@ -872,3 +872,14 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	-- @realm shared
 	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
+
+---
+-- This hook is called once after the player authentificated. It is a mirror of
+-- @{GM:PlayerAuthed} that relays this information for every player to the client.
+-- @param string steamID64 The player's steamID64
+-- @param string name The player's name
+-- @hook
+-- @realm client
+function GM:TTT2PlayerAuthed(steamID64, name)
+
+end

@@ -344,11 +344,11 @@ function SWEP:AddItemSample(ent)
 			self.ItemSamples[index] = ply
 			self.CachedTargets[index] = self:GetScanTarget(ply)
 
-			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
+			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(ply) and ply:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
 			---
 			-- @realm shared
-			hook.Run("TTTFoundDNA", owner, p, ent)
+			hook.Run("TTTFoundDNA", owner, ply, ent)
 
 			self:Report(true, "dna_object")
 
@@ -440,6 +440,17 @@ if SERVER then
 				net.Send(self:GetOwner())
 			end
 		end
+	end
+
+	---
+	-- Hook that is called for each fingerprint found.
+	-- @param Player finder The finder that used the DNA scanner to find a fingerprint
+	-- @param Player toucher The player whose fingerprint was found, for example the killer
+	-- @param Entity ent The entity where the fingerprint was found
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTTFoundDNA(finder, toucher, ent)
+
 	end
 else -- CLIENT
 	local TryT = LANG.TryTranslation

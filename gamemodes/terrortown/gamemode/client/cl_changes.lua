@@ -1074,6 +1074,53 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 10, day = 15 }))
 
+	AddChange("TTT2 Base - v0.10.2b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new hook <code>GM:TTT2ModifyRadioTarget</code> to modify the current radio target</li>
+			<li>Added documentation to all hooks</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the reset button not working for Sliders in the F1 Menu</li>
+			<li>Fixed defuser only working for detectives</li>
+			<li>Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the <code>InitPostEntity</code> hook<br>
+			<b>Note:</b> This might only take effect after a reinstall or a reset of the server; if you don't want to reset your server, you have to change the spawnability manually in the equipment editor or delete the sql table "ttt2_items" of the sv.db to force a reset only on equipment</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging</li>
+			<li>Changed <code>TTTPlayerUsedHealthStation</code> hook, return <code>false</code> to cancel health regeneration tick</li>
+			<li>Changed all C4 hooks to be cancelable</li>
+		</ul>
+
+		<h2>Removed</h2>
+		<ul>
+			<li>Removed old concommand <code>shopeditor</code> and the old shopeditor</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Renamed hook <code>GM:TTT2CheckWeaponForID</code> to <code>GM:TTT2RegisterWeaponID</code> better fitting its purpose as its probably nowhere used yet anyway</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 21 }))
+
+	AddChange("TTT2 Base - v0.10.3b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the hook scope in the disguiser causing an error</li>
+			<li>Fixed the classic entity spawn mode breaking on maps without all three spawn types</li>
+			<li>Fixed weapons not using their average firerate with a tickrate dependent fix. Function <code>SWEP:SetNextPrimaryFire(nextTime)</code>  was overwritten with our fix <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code> 
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Added new param <code>skipTickrateFix</code> to <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code> to skip our inbuilt tickrate fix</li>
+		</ul>
+	]], os.time({ year = 2021, month = 10, day = 29 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
@@ -1104,3 +1151,14 @@ net.Receive("TTT2DevChanges", function(len)
 
 	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)
+
+---
+-- This hook can be used to populate the changelog table. It is recommended
+-- to use @{AddChange} to add an entry to the changelog.
+-- @param table changesTbl The current changelog table
+-- @param string currentVersionNumber The current version number
+-- @hook
+-- @realm client
+function GM:TTT2AddChange(changesTbl, currentVersionNumber)
+
+end
