@@ -1048,7 +1048,15 @@ end
 -- @return boolean The blocking status
 -- @realm shared
 function plymeta:IsBlockingRevival()
-	return self.isBlockingRevival or false
+	return self.revivalBlockMode and self.revivalBlockMode > REVIVAL_BLOCK_NONE
+end
+
+---
+-- Returns the blocking mode of the ongoing revival.
+-- @return number The blocking mode
+-- @realm shared
+function plymeta:GetRevivalBlockMode()
+	return self.revivalBlockMode or REVIVAL_BLOCK_NONE
 end
 
 ---
