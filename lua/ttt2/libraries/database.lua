@@ -7,6 +7,8 @@
 database = database or {}
 
 if SERVER then
+	AddCSLuaFile()
+
 	util.AddNetworkString("TTT2SynchronizeDatabase")
 end
 
@@ -430,6 +432,7 @@ end
 -- @realm shared
 -- @internal
 local function SynchronizeStates(len, ply)
+	print("\nReceived Synchronization with len of " .. len .. " from player: " .. tostring(ply))
 	if len < 1 then return end
 
 	local plyID64
@@ -441,18 +444,20 @@ local function SynchronizeStates(len, ply)
 		return
 	end
 
-	local bytesLeft = net.BytesLeft()
-
-	while bytesLeft > 0 do
+	local continueReading = net.ReadBool()
+	while continueReading do
 		local identifier = net.ReadUInt(uIntBits)
 		local readNextValue = net.ReadBool()
 
+		print("identifier is: " .. identifier .. " and readnextvalue? " .. tostring(readNextValue))
 		while readNextValue do
 			receiveDataFunctions[identifier](plyID64)
+			print("Readnextvalue? " .. tostring(readNextValue))
 			readNextValue = net.ReadBool()
 		end
 
-		bytesLeft = net.BytesLeft()
+		continueReading = net.ReadBool()
+		print("Continue reading? " .. tostring(continueReading) .. "\n")
 	end
 end
 net.Receive("TTT2SynchronizeDatabase", SynchronizeStates)
@@ -467,16 +472,19 @@ local function SendUpdatesNow()
 	if table.IsEmpty(dataStore) then return end
 
 	local plyDeleteIdentifiers = {}
-
+	print("\nSynchronize!")
 	for plyIdentifier, identifierList in pairs(dataStore) do
 		net.Start("TTT2SynchronizeDatabase")
+		print("Send to " .. plyIdentifier)
 
 		local stopSending = false
 		local deleteIdentifiers = {}
-
 		for identifier, indexedData in pairs(identifierList) do
+			net.WriteBool(true)
 			net.WriteUInt(identifier, uIntBits)
 			net.WriteBool(#indexedData > 0)
+			print("Sending identifier: " .. identifier)
+			print("Data available: " .. #indexedData)
 
 			for i = #indexedData, 1, -1 do
 				sendDataFunctions[identifier](indexedData[i])
@@ -492,9 +500,9 @@ local function SendUpdatesNow()
 			if #indexedData <= 0 then
 				deleteIdentifiers[identifier] = true
 			end
-
 			if stopSending then break end
 		end
+		net.WriteBool(false)
 
 		if SERVER then
 			if plyIdentifier == SEND_TO_PLY_ALL then

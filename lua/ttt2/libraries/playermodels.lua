@@ -144,36 +144,20 @@ end
 
 ---
 -- Checks if a provided model is in the selection pool.
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
 -- @param string name The name of the model
 -- @return boolean Returns true, if the model is in the selection pool
 -- @realm shared
 function playermodels.IsSelectedModel(name)
-	local models = playermodels.modelStates
-
-	if not models or not models[name] then
-		return false
-	end
-
-	return models[name].selected or false
+	return database.GetValue(playermodels.accessName, name, "selected") or initialModels[name] or false
 end
 
 ---
 -- Checks if a provided model is hattable.
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
 -- @param string name The name of the model
 -- @return boolean Returns true, if the model is hattable
 -- @realm shared
 function playermodels.IsHattableModel(name)
-	local models = playermodels.modelStates
-
-	if not models or not models[name] then
-		return false
-	end
-
-	return models[name].hattable or false
+	return database.GetValue(playermodels.accessName, name, "hattable") or initialHattableModels[name] or false
 end
 
 ---

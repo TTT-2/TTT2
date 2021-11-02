@@ -62,8 +62,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			label = name,
 			model = model,
 			headbox = data.hasHeadHitBox,
-			initialModel = data.selected,
-			initialHattable = data.hattable,
+			initialModel = playermodels.IsSelectedModel(name),
+			initialHattable = playermodels.IsHattableModel(name),
 			OnModelSelected = function(_, state)
 				playermodels.UpdateModel(name, playermodels.state.selected, state)
 			end,
