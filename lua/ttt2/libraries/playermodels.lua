@@ -144,20 +144,64 @@ end
 
 ---
 -- Checks if a provided model is in the selection pool.
+-- @warning As client you must give an OnReceiveFunction as data might be gathered from the server first
 -- @param string name The name of the model
+-- @param[opt] function OnReceiveFunc(value) only for the client the function to be called with the returned value
 -- @return boolean Returns true, if the model is in the selection pool
 -- @realm shared
-function playermodels.IsSelectedModel(name)
-	return database.GetValue(playermodels.accessName, name, "selected") or initialModels[name] or false
+function playermodels.IsSelectedModel(name, OnReceiveFunc)
+	local defaultValue = false
+
+	if initialModels[name] ~= nil then
+		defaultValue = initialModels[name]
+	end
+
+	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExist, value)
+		if not databaseExist then
+			value = defaultValue
+		end
+
+		OnReceiveFunc(value)
+	end)
+
+	if SERVER then
+		if isSelected == nil then
+			isSelected = defaultValue
+		end
+
+		return isSelected
+	end
 end
 
 ---
 -- Checks if a provided model is hattable.
+-- @warning As client you must give an OnReceiveFunction as data might be gathered from the server first
 -- @param string name The name of the model
+-- @param[opt] function OnReceiveFunc(value) only for the client  the function to be called with the returned value
 -- @return boolean Returns true, if the model is hattable
 -- @realm shared
-function playermodels.IsHattableModel(name)
-	return database.GetValue(playermodels.accessName, name, "hattable") or initialHattableModels[name] or false
+function playermodels.IsHattableModel(name, OnReceiveFunc)
+	local defaultValue = false
+
+	if initialHattableModels[name] ~= nil then
+		defaultValue = initialHattableModels[name]
+	end
+
+	local _, isHattable = database.GetValue(playermodels.accessName, name, "hattable", function(databaseExist, value)
+		if not databaseExist then
+			value = defaultValue
+		end
+
+		OnReceiveFunc(value)
+	end)
+
+	if SERVER then
+		if isHattable == nil then
+			isHattable = defaultValue
+		end
+
+		return isHattable
+	end
 end
 
 ---
@@ -256,7 +300,7 @@ function playermodels.Initialize()
 
 	local data = playermodels.modelStates or {}
 	local defaultData = {}
-	local changedData = database.GetTable(playermodels.accessName)
+	local _, changedData = database.GetTable(playermodels.accessName)
 
 	for name in pairs(playerManagerAllValidModels()) do
 		defaultData[name] = {}

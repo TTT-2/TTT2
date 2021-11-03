@@ -510,8 +510,14 @@ function PANEL:MakeImageCheckBox(data, base)
 	box:SetModel(data.model)
 	box:SetHeadBox(data.headbox or false)
 	box:SetText(data.label)
-	box:SetModelSelected(data.initialModel)
-	box:SetModelHattable(data.initialHattable)
+
+	playermodels.IsSelectedModel(data.label, function(value)
+		box:SetModelSelected(value, false)
+	end)
+
+	playermodels.IsHattableModel(data.label, function(value)
+		box:SetModelHattable(value, false)
+	end)
 
 	if isfunction(data.OnModelSelected) then
 		box.OnModelSelected = function(slf, userTriggered, state)

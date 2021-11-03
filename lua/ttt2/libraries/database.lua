@@ -281,11 +281,11 @@ if CLIENT then
 		[MESSAGE_REGISTER] = function(data)
 			net.WriteUInt(data, uIntBits)
 		end,
-		-- data contains the syncCacheIndex here
+		-- data contains the messageIdentifier here
 		[MESSAGE_GET_VALUE] = function(data)
 			local request = requestCache[data]
 
-			net.WriteUInt(request.identifier, uIntBits)
+			net.WriteUInt(data, uIntBits)
 			net.WriteUInt(request.index, uIntBits)
 
 			net.WriteString(request.itemName)
@@ -337,7 +337,7 @@ if CLIENT then
 				local request = requestCache[identifier]
 				value = net.ReadString()
 				value = database.ConvertValueWithKey(value, request.accessName, request.key)
-				registeredDatabases[request.index].storedData[request.itemName] = value
+				registeredDatabases[request.index].storedData[request.itemName] = {[request.key] = value}
 			end
 
 			functionCache[identifier](isSuccess, value)
@@ -629,9 +629,9 @@ if CLIENT then
 			return
 		end
 
-		local dataTable = index and registeredDatabases[index]
+		local dataTable = registeredDatabases[index]
 
-		if not registeredDatabases.keys[key] then
+		if not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
@@ -648,16 +648,14 @@ if CLIENT then
 		messageIdentifier = (messageIdentifier + 1) % maxUInt
 		functionCache[messageIdentifier] = OnReceiveFunc
 
-		requestCacheSize = requestCacheSize + 1
-		requestCache[requestCacheSize] = {
-			identifier = messageIdentifier,
+		requestCache[messageIdentifier] = {
 			accessName = accessName,
 			itemName = itemName,
 			key = key,
 			index = index
 		}
 
-		SendUpdateNextTick(MESSAGE_GET_VALUE, requestCacheSize)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, messageIdentifier)
 	end
 
 	---
@@ -694,8 +692,8 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	local function RegisterPlayer(plyID64)
-		if not playersCache[plyId] then
-			playersCache[plyId] = true
+		if not playersCache[plyID64] then
+			playersCache[plyID64] = true
 			registeredPlayersTable[#registeredPlayersTable + 1] = playerID64Cache[plyID64]
 		end
 	end
@@ -773,7 +771,7 @@ if SERVER then
 		local isSuccess = false
 
 		if accessName then
-			value, isSuccess = database.GetValue(accessName, requestData.itemName, requestData.key)
+			isSuccess, value = database.GetValue(accessName, requestData.itemName, requestData.key)
 		end
 
 		local serverData = {
@@ -792,7 +790,7 @@ if SERVER then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
 	-- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
-	-- @return any, bool value that was saved in the database and if it successfully reached the sql datatable
+	-- @return bool, any value that was saved in the database and if it successfully reached the sql datatable
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
 		local index = nameToIndex[accessName]
@@ -801,7 +799,7 @@ if SERVER then
 		if not index then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not registered.")
 
-			return nil, false
+			return false
 		end
 
 		local dataTable = index and registeredDatabases[index]
@@ -810,13 +808,13 @@ if SERVER then
 		if itemName and key and not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
-			return nil, false
+			return false
 		end
 
 		local storedValue = itemName and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
 
 		if storedValue ~= nil then
-			return storedValue, true
+			return true, storedValue
 		end
 
 		local sqlData
@@ -825,7 +823,7 @@ if SERVER then
 			sqlData = dataTable.orm:Find(itemName)
 
 			if not sqlData then
-				return nil, false
+				return false
 			end
 
 			if key then
@@ -834,7 +832,7 @@ if SERVER then
 				dataTable.storedData[itemName][key] = value
 
 				print("\nFetched itemValue is: " .. tostring(value))
-				return value, true
+				return true, value
 			end
 
 			database.ConvertTable(sqlData, accessName)
@@ -843,7 +841,7 @@ if SERVER then
 			sqlData = dataTable.orm:All()
 
 			if not istable(sqlData) then
-				return nil, false
+				return false
 			end
 
 			for _, item in pairs(sqlData) do
@@ -867,13 +865,13 @@ if SERVER then
 		print("\nFetched sqlData is: ")
 		PrintTable(sqlData)
 
-		return sqlData, true
+		return true, sqlData
 	end
 
 	---
 	-- Get the stored table database if it exists and was registered
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @return table, bool datatable that was saved, and if it successfully reached the sql datatable
+	-- @return bool, table datatable that was saved, and if it successfully reached the sql datatable
 	-- @realm server
 	function database.GetTable(accessName)
 		return database.GetValue(accessName)
