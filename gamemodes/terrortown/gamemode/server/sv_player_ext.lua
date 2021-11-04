@@ -956,7 +956,7 @@ function plymeta:SetRevivalBlockMode(revivalBlockMode)
 	self.revivalBlockMode = revivalBlockMode
 
 	net.Start("TTT2RevivalUpdate_RevivalBlockMode")
-	net.WriteUInt(self.revivalBlockMode, 2)
+	net.WriteUInt(self.revivalBlockMode, REVIVAL_BITS)
 	net.Send(self)
 end
 

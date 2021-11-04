@@ -247,7 +247,7 @@ net.Receive("TTT2RevivalUpdate_IsReviving", function()
 end)
 
 net.Receive("TTT2RevivalUpdate_RevivalBlockMode", function()
-	LocalPlayer().revivalBlockMode = net.ReadReadUInt(2)
+	LocalPlayer().revivalBlockMode = net.ReadUInt(REVIVAL_BITS)
 end)
 
 net.Receive("TTT2RevivalUpdate_RevivalStartTime", function()

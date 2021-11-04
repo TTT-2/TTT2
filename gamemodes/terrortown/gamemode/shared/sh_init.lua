@@ -126,6 +126,8 @@ REVIVAL_BLOCK_COUNT_AS_ALIVE = 1
 -- block the winning condition until the revival process is ended
 REVIVAL_BLOCK_UNTIL_ALIVE = 2
 
+REVIVAL_BITS = 2
+
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
 
 -- just compatibality functions
