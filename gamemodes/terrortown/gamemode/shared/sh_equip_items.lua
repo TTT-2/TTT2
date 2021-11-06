@@ -1164,6 +1164,15 @@ if SERVER then
 			end
 		end
 	end)
+
+	---
+	-- Called on the load of the single shop of a @{ROLE}.
+	-- @param ROLE roleData
+	-- @hook
+	-- @realm server
+	function GM:TTT2LoadSingleShopEquipment(roleData)
+
+	end
 else -- CLIENT
 	local function ReceiveTeambuyEquipment()
 		local s = net.ReadString()

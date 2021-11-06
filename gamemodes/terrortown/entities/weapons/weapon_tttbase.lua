@@ -11,6 +11,8 @@ local IsValid = IsValid
 local surface = surface
 local draw = draw
 
+local weaponMetaTable = FindMetaTable("Weapon")
+
 if SERVER then
 	AddCSLuaFile()
 else -- CLIENT
@@ -165,6 +167,47 @@ SWEP.IronSightTime = 0.25
 SWEP.IronSightPos = Vector(0, 0, 0)
 -- The rotational offset applied when entering the ironsight
 SWEP.IronSightsAng = Vector(0, 0, 0)
+
+local skipWeapons = {}
+
+---
+-- Checks if the weapon should be skipped. Skips all weapons not based on weapon_tttbase
+-- @param weapon swep the weapon to check
+-- @realm shared
+-- @internal
+local function shouldSkipWeapon(swep)
+	local className = swep:GetClass()
+	local skipWeapon = skipWeapons[className]
+
+	if skipWeapon == nil then
+		skipWeapon = not weapons.IsBasedOn(className, "weapon_tttbase")
+		skipWeapons[className] = skipWeapon
+	end
+
+	return skipWeapon
+end
+
+-- The original SetNextPrimaryFire saved in the weaponMetaTable
+local oldSetNextPrimaryFire = weaponMetaTable.SetNextPrimaryFire
+local tickInterval = engine.TickInterval()
+
+---
+-- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
+-- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
+-- @param number nextTime The time you want to have the next primary attack available
+-- @param[opt] bool skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
+-- @realm shared
+function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
+	if not skipTickrateFix and not shouldSkipWeapon(self) then
+		local diff = CurTime() - self:GetNextPrimaryFire()
+
+		if diff > 0 and diff < tickInterval then
+			nextTime = nextTime - diff
+		end
+	end
+
+	oldSetNextPrimaryFire(self, nextTime)
+end
 
 ---
 -- @realm client

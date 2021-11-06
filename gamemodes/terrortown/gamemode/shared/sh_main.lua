@@ -154,7 +154,8 @@ end
 hook.Add("PreRegisterSWEP", "TTT2RegisterSWEP", TTT2RegisterSWEP)
 
 ---
--- Initializes TTT2
+-- Called in @{GM:Initialize} as first call right before the TTT2 fileloader
+-- loads the vskin and language files.
 -- @hook
 -- @realm shared
 function GM:TTT2Initialize()
@@ -170,6 +171,21 @@ function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
 
 	DefaultEquipment = GetDefaultEquipment()
+end
+
+---
+-- @hook
+-- @realm shared
+function GM:TTT2FinishedLoading()
+
+end
+
+---
+-- Called after everything in the @{GM:Initialize} hook is called.
+-- @hook
+-- @realm shared
+function GM:PostInitialize()
+
 end
 
 ---
@@ -309,6 +325,17 @@ function GM:Think()
 	end
 end
 
+---
+-- Used to modify the player sprint speed modifier.
+-- @note This hook is predicted, it therefore hat to be run on the server and the client.
+-- @param Player ply The player whose sprint speed should be changed
+-- @param table sprintMultiplierModifier The modieable table with the sprint speed multiplier
+-- @hook
+-- @realm server
+function GM:TTT2PlayerSprintMultiplier(ply, sprintMultiplierModifier)
+
+end
+
 -- Drowning and such
 local tm, ply, plys
 
@@ -433,11 +460,59 @@ function GM:TTT2PostCleanupMap()
 end
 
 ---
+-- This hook is run inside @{GM:InitPostEntity} prior to the initialization of items,
+-- @hook
+-- @realm shared
+function GM:TTTInitPostEntity()
+
+end
+
+---
+-- This hook is run inside @{GM:InitPostEntity} after all items are initialized.
+-- @hook
+-- @realm shared
+function GM:PostInitPostEntity()
+
+end
+
+---
+-- This hook is run on the initialization of the fallback shops.
+-- @hook
+-- @realm shared
+function GM:InitFallbackShops()
+
+end
+
+---
+-- This hook is run after the initialization of the fallback shops.
+-- @hook
+-- @realm shared
+function GM:LoadedFallbackShops()
+
+end
+
+---
 -- Called right after all doors are initialized on the map.
 -- @param table doorsTable A table with the newly registered door entities
 -- @hook
 -- @realm shared
 function GM:TTT2PostDoorSetup(doorsTable)
+
+end
+
+-- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialize} were called
+-- and their convars were set up.
+-- @hook
+-- @realm shared
+function GM:TTT2RolesLoaded()
+
+end
+
+-- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialize} were called
+-- and their convars were set up.
+-- @hook
+-- @realm shared
+function GM:TTT2BaseRoleInit()
 
 end
 

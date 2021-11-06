@@ -184,3 +184,25 @@ function UpdateSprint()
 		end
 	end
 end
+
+---
+-- A hook that is called once every frame/tick to modify the stamina regeneration.
+-- @note This hook is predicted and should be therefore run on both server and client.
+-- @param Player ply The player whose modifier should be set
+-- @param table modifierTbl The table in which the modifier can be changed
+-- @hook
+-- @realm shared
+function GM:TTT2StaminaRegen(ply, modifierTbl)
+
+end
+
+---
+-- A hook that is called once every frame/tick to modify the stamina drain.
+-- @note This hook is predicted and should be therefore run on both server and client.
+-- @param Player ply The player whose modifier should be set
+-- @param table modifierTbl The table in which the modifier can be changed
+-- @hook
+-- @realm shared
+function GM:TTT2StaminaDrain(ply, modifierTbl)
+
+end

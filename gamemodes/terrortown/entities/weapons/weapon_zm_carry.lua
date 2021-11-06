@@ -715,7 +715,20 @@ function SWEP:OnDrop()
 	self:Remove()
 end
 
-if CLIENT then
+if SERVER then
+	---
+	-- A cancelable hook that is called once a player tries to pickup an entity.
+	-- @note This hook is not called if prior checks prevent the pickup already
+	-- @param Player ply The player that tries to pick up an entity
+	-- @param Entity ent The entity that is about to be picked up
+	-- @return boolean Return true to cancel the pickup
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTT2PlayerPreventPickupEnt(ply, ent)
+
+	end
+
+else -- CLIENT
 	local draw = draw
 
 	local PT = LANG.GetParamTranslation

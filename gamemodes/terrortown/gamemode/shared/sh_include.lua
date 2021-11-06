@@ -178,3 +178,13 @@ function ttt_include(filename)
 
 	include(file)
 end
+
+---
+-- Called after creating the filetable of files that should be loaded, can be used
+-- to modify which files should be loaded
+-- @param table fileTbl The table of files that should be loaded
+-- @hook
+-- @realm shared
+function GM:TTT2ModifyFiles(fileTbl)
+
+end

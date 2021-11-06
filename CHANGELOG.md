@@ -4,18 +4,36 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
+
+### Fixed
+
+- Fixed the hook scope in the disguiser causing an error
+- Fixed the classic entity spawn mode breaking on maps without all three spawn types
+- Fixed weapons not using their average firerate with a tickrate dependent fix. Function `SWEP:SetNextPrimaryFire(nextTime)` was overwritten with our fix `SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)`
+
+### Changed
+
+- Added new param `skipTickrateFix` to `SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)` to skip our inbuilt tickrate fix
+
+## [v0.10.2b](https://github.com/TTT-2/TTT2/tree/v0.10.2b) (2021-10-21)
+
 ### Added
 
 - Added a new hook `GM:TTT2ModifyRadioTarget` to modify the current radio target
+- Added documentation to all hooks
 
 ### Fixed
 
 - Fixed the reset button not working for Sliders in the F1 Menu
+- Fixed defuser only working for detectives
 - Fixed some weapon packs like ArcCW to be working again, weapons are now initialized with ttt2 variables after the `InitPostEntity` hook
 
 ### Changed
 
 - Changed the Sliders to only update after dragging ends, no matter where you clicked on the slider before dragging
+- Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
+- Changed all C4 hooks to be cancelable
 
 ### Removed
 
@@ -23,7 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Breaking Changes
 
-- Renamed hook `TTT2CheckWeaponForID` to `TTT2RegisterWeaponID` better fitting its purpose as its probably nowhere used yet anyway
+- Renamed hook `GM:TTT2CheckWeaponForID` to `GM:TTT2RegisterWeaponID` better fitting its purpose as its probably nowhere used yet anyway
 
 ## [v0.10.1b](https://github.com/TTT-2/TTT2/tree/v0.10.1b) (2021-10-15)
 

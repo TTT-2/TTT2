@@ -203,7 +203,7 @@ function GM:PlayerStartVoice(ply)
 
 	---
 	-- @realm client
-	pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply) or pnl.Color
+	pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply, pnl.Color) or pnl.Color
 
 	PlayerVoicePanels[ply] = pnl
 
@@ -474,4 +474,16 @@ function VOICE.Draw(client)
 
 	surface.SetDrawColor(0, 200, 0, 150)
 	surface.DrawRect(x, y, w * math.Clamp((client.voice_battery - 10) / 90, 0, 1), h)
+end
+
+---
+-- This hook can be used to modify the background color of the voice chat
+-- box that is rendered on the client.
+-- @param ply The player that started a voice chat
+-- @param Color clr The color that is used if this hook does not modify it
+-- @return Color The new and modified color
+-- @hook
+-- @realm client
+function GM:TTT2ModifyVoiceChatColor(ply, clr)
+
 end
