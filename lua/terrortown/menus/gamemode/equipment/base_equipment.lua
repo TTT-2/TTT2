@@ -101,12 +101,5 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	end
 
 	-- now add custom equipment settings
-	if not isfunction(equipment.AddToSettingsMenu) then
-		print(equipment.PrintName)
-
-		PrintTable(equipment)
-	else
-		equipment:AddToSettingsMenu(parent)
-	end
-
+	equipment:AddToSettingsMenu(parent)
 end

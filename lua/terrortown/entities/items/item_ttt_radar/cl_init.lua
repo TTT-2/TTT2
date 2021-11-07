@@ -91,7 +91,7 @@ end
 ---
 -- @ignore
 function ITEM:AddToSettingsMenu(parent)
-	local form = vgui.CreateTTT2Form(parent, "header_roleselection")
+	local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
 	form:MakeSlider({
 		serverConvar = "ttt2_radar_charge_time",
