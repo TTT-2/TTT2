@@ -65,7 +65,7 @@ function PlayerMsg(ply_or_rf, msg, traitor_only)
 end
 
 ---
--- Subrole-specific message that will appear in a special color
+-- Subrole-specific message that will appear in a special color.
 -- @param nil|Player|table ply_or_rfilter
 -- @param string msg
 -- @realm server
@@ -76,36 +76,42 @@ end
 
 -- Teamchat
 local function RoleChatMsg(sender, msg)
-	local tm = sender:GetTeam()
+	local senderIsSpectator = sender:GetTeam()
+	local senderRoleData = sender:GetSubRoleData()
 
-	---
-	-- @realm server
-	if tm == TEAM_NONE or sender:GetSubRoleData().unknownTeam or sender:GetSubRoleData().disabledTeamChat or TEAMS[tm].alone or hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
+	if senderIsSpectator == TEAM_NONE
+		or senderRoleData.unknownTeam
+		or senderRoleData.disabledTeamChat
+		or TEAMS[senderIsSpectator].alone
+		---
+		-- @realm server
+		or hook.Run("TTT2AvoidTeamChat", sender, senderIsSpectator, msg) == false
+	then return end
 
 	net.Start("TTT_RoleChat")
 	net.WriteEntity(sender)
 	net.WriteString(msg)
-	net.Send(GetTeamChatFilter(tm))
+	net.Send(GetTeamChatFilter(senderIsSpectator))
 end
 
 ---
--- Round start info popup
+-- Round start info popup.
 -- @realm server
 -- @internal
 function ShowRoundStartPopup()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		local v = plys[i]
+		local ply = plys[i]
 
-		if not IsValid(v) or v:Team() ~= TEAM_TERROR or not v:Alive() then continue end
+		if not IsValid(ply) or not ply:IsTerror() then continue end
 
-		v:ConCommand("ttt_cl_startpopup")
+		ply:ConCommand("ttt_cl_startpopup")
 	end
 end
 
 ---
--- Returns a list of filtered @{Player}s
+-- Returns a list of filtered @{Player}s.
 -- @param function pred
 -- @return table
 -- @realm server
@@ -114,16 +120,18 @@ function GetPlayerFilter(pred)
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		if not pred(plys[i]) then continue end
+		local ply = plys[i]
 
-		filter[#filter + 1] = plys[i]
+		if not pred(ply) then continue end
+
+		filter[#filter + 1] = ply
 	end
 
 	return filter
 end
 
 ---
--- Returns a list of filtered @{Player}s by the team
+-- Returns a list of filtered @{Player}s by the team.
 -- @param string team
 -- @param boolean alive_only
 -- @return table
@@ -135,7 +143,7 @@ function GetTeamFilter(team, alive_only)
 end
 
 ---
--- Returns a list of all @{Players} of the Innocent team
+-- Returns a list of all @{Players} of the Innocent team.
 -- @param boolean alive_only
 -- @return table
 -- @realm server
@@ -145,7 +153,7 @@ function GetInnocentFilter(alive_only)
 end
 
 ---
--- Returns a list of all @{Players} of the Traitor team
+-- Returns a list of all @{Players} of the Traitor team.
 -- @param boolean alive_only
 -- @return table
 -- @realm server
@@ -155,7 +163,7 @@ function GetTraitorFilter(alive_only)
 end
 
 ---
--- Returns a list of filtered @{Player}s by the @{ROLE}'s index
+-- Returns a list of filtered @{Player}s by the @{ROLE}'s index.
 -- @note If a BaseRole is given, this will return true for all its SubRoles.
 -- If you just want to filter for a specific SubRole, use @{GetSubRoleFilter} instead
 -- @param number subrole
@@ -170,7 +178,7 @@ function GetRoleFilter(subrole, alive_only)
 end
 
 ---
--- Returns a list of filtered @{Player}s by the @{ROLE}'s SubRole index
+-- Returns a list of filtered @{Player}s by the @{ROLE}'s SubRole index.
 -- @param number subrole
 -- @param boolean alive_only
 -- @return table
@@ -182,7 +190,7 @@ function GetSubRoleFilter(subrole, alive_only)
 end
 
 ---
--- Returns a list of all @{Players} of the Detective @{ROLE}'s index
+-- Returns a list of all @{Players} of the Detective @{ROLE}'s index.
 -- @param boolean alive_only
 -- @return table
 -- @realm server
@@ -192,7 +200,7 @@ function GetDetectiveFilter(alive_only)
 end
 
 ---
--- Returns a list of all @{Players} of a specific @{ROLE}'s index that are able to chat
+-- Returns a list of all @{Players} of a specific @{ROLE}'s index that are able to chat.
 -- @param number subrole
 -- @param boolean alive_only
 -- @return table
@@ -203,19 +211,28 @@ function GetRoleChatFilter(subrole, alive_only)
 	end
 
 	return GetPlayerFilter(function(p)
-		return p:IsRole(subrole) and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
+		return p:IsRole(subrole)
+			and not p:GetSubRoleData().v
+			and (not alive_only or p:IsTerror())
 	end)
 end
 
 ---
--- Returns a list of all @{Players} of a specific team that are able to chat
+-- Returns a list of all @{Players} of a specific team that are able to chat.
 -- @param string team
 -- @param boolean alive_only
 -- @return table
 -- @realm server
 function GetTeamChatFilter(team, alive_only)
-	return GetPlayerFilter(function(p)
-		return team ~= TEAM_NONE and not TEAMS[team].alone and p:GetTeam() == team and not p:GetSubRoleData().unknownTeam and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
+	return GetPlayerFilter(function(ply)
+		local plyRoleData = ply:GetSubRoleData()
+
+		return team ~= TEAM_NONE
+			and not TEAMS[team].alone
+			and ply:GetTeam() == team
+			and not plyRoleData.unknownTeam
+			and not plyRoleData.disabledTeamChatRecv
+			and (not alive_only or ply:IsTerror())
 	end)
 end
 
@@ -240,16 +257,16 @@ local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1"
 
 ---
 -- Returns whether or not the @{Player} can see the other @{Player}'s chat.
--- @param string text
--- @param boolean teamOnly
--- @param Player reader
--- @param Player sender
--- @return boolean
+-- @param string text The chat text
+-- @param boolean teamOnly If the message is team-only
+-- @param Player listener The player receiving the message
+-- @param Player sender The player sending the message.
+-- @return boolean Returns if a player can see the player's chat
 -- @hook
 -- @realm server
 -- @internal
-function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
-	if not IsValid(reader) then
+function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, sender)
+	if not IsValid(listener) then
 		return false
 	end
 
@@ -261,22 +278,24 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 		return false
 	end
 
-	local sTeam = sender:Team() == TEAM_SPEC
-	local lTeam = reader:Team() == TEAM_SPEC
+	local senderIsSpectator = sender:Team() == TEAM_SPEC
+	local listenerIsSpectator = listener:Team() == TEAM_SPEC
+	local senderRoleData = sender:GetSubRoleData()
 
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
-	or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
-	or not DetectiveMode() -- Mumbling
-	or not sTeam and not teamOnly -- General Chat
-	or not sTeam and teamOnly and ( -- Team Chat
-		sender:IsInTeam(reader)
-		and not sender:GetSubRoleData().unknownTeam
-		and not sender:GetSubRoleData().disabledTeamChat
-		and not reader:GetSubRoleData().disabledTeamChatRecv
-		---
-		-- @realm server
-		and hook.Run("TTT2CanSeeChat", reader, sender, teamOnly) ~= true
-	) or sTeam and lTeam then -- If the sender and reader are spectators
+		or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
+		or not DetectiveMode() -- Mumbling
+		or not senderIsSpectator and not teamOnly -- General Chat
+		or not senderIsSpectator and teamOnly and ( -- Team Chat
+			sender:IsInTeam(listener)
+			and not senderRoleData.unknownTeam
+			and not senderRoleData.disabledTeamChat
+			and not listener:GetSubRoleData().disabledTeamChatRecv
+			---
+			-- @realm server
+			and hook.Run("TTT2CanSeeChat", listener, sender, teamOnly) ~= true
+		) or senderIsSpectator and listenerIsSpectator -- If the sender and listener are spectators
+	then
 		return true
 	end
 
@@ -508,11 +527,11 @@ end
 -- Whether or not the @{Player} can receive the chat message.
 -- @param Player reader The @{Player} who can receive chat
 -- @param Player sender The @{Player} who sends the text message
--- @param boolean isTeam Are they trying to use the team chat
+-- @param boolean isenderIsSpectator Are they trying to use the team chat
 -- @return[default=true] boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
 -- @hook
 -- @realm server
-function GM:TTT2CanSeeChat(reader, sender, isTeam)
+function GM:TTT2CanSeeChat(reader, sender, isenderIsSpectator)
 	return true
 end
 
