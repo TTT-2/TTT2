@@ -4,6 +4,25 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added the hook `GM:TTT2CalledPolicingRole` that is called after all policing role players were called to a corpse
+
+### Fixed
+
+- Fixed that every policing player could be called to a corpse, this is now again restricted to alive only players
+- Fixed inconsistency between `.disabledTeamChatRecv` and `.disabledTeamChatRec`
+- Fixed non-public policing roles having hats and therefore confirming them
+
+### Changed
+
+- All public policing roles now appear as detectives in the chat
+- Change blocking revival mode from `true`/`false` to
+  - `REVIVAL_BLOCK_NONE`: don't block the winning condition during the revival process [default, previously `nil`/`false`]
+  - `REVIVAL_BLOCK_COUNT_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
+  - `REVIVAL_BLOCK_UNTIL_ALIVE`: block the winning condition until the revival process is ended
+  - the old arguments still work, they are automaticvally converted
+
 ## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
 
 ### Fixed

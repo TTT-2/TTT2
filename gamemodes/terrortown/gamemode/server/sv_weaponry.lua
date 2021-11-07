@@ -413,8 +413,13 @@ function GM:PlayerLoadout(ply, isRespawn)
 
 	playermodels.RemovePlayerHat(ply)
 	playermodels.ApplyPlayerHat(ply, function(p)
-		return ply:IsActive() and ply:GetSubRoleData().isPolicingRole
-			and cv_ttt_detective_hats:GetBool() and playermodels.PlayerCanHaveHat(ply)
+		local plyRoleData = ply:GetSubRoleData()
+
+		return ply:IsActive()
+			and plyRoleData.isPolicingRole
+			and plyRoleData.isPublicRole
+			and cv_ttt_detective_hats:GetBool()
+			and playermodels.PlayerCanHaveHat(ply)
 	end)
 
 	if not HasLoadoutWeapons(ply) then

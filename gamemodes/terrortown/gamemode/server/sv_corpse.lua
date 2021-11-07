@@ -235,7 +235,7 @@ local function ttt_call_detective(ply, cmd, args)
 	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 then
 		if CORPSE.GetFound(rag, false) then
 			local plyTable = util.GetFilteredPlayers(function(p)
-				return p:GetSubRoleData().isPolicingRole
+				return p:GetSubRoleData().isPolicingRole and p:IsTerror()
 			end)
 
 			---
@@ -248,6 +248,10 @@ local function ttt_call_detective(ply, cmd, args)
 			net.Send(plyTable)
 
 			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_CHAT_PLAIN)
+
+			---
+			-- @realm server
+			hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
 		else
 			LANG.Msg(ply, "body_call_error")
 		end
@@ -690,6 +694,20 @@ hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
 end)
 
 ---
+-- This hook is called after the policing players were called to a ragdoll.
+-- @note If you want to modify the called players, use the
+-- @{GM:TTT2ModifyCorpseCallRadarRecipients} hook.
+-- @param table policingPlys An indexed table of the players that are called to the corpse
+-- @param Player finder The player that called the policing players
+-- @param Entity ragdoll The body of the dead player
+-- @param Player deadply The dead player
+-- @hook
+-- @realm server
+function GM:TTT2CalledPolicingRole(policingPlys, finder, ragdoll, deadply)
+
+end
+
+---
 -- Checks whether a @{Player} is able to identify a @{CORPSE}.
 -- @note removed boolean "was_traitor". Team is available with `corpse.was_team`
 -- @param Player ply The player that tries to identify the corpse
@@ -759,8 +777,8 @@ end
 -- Checks whether a @{Player} is able to search a @{CORPSE} based on their position.
 -- The search opens a popup for the searching player with all of the player information.
 -- @note removed last param is_traitor -> accessable with `corpse.was_team`
--- @param Player ply The player that tries to 
--- @param Entity rag The ragdoll tgat should be searched
+-- @param Player ply The player that tries to search the corpse
+-- @param Entity rag The ragdoll that should be searched
 -- @param boolean isCovert Is the search hidden
 -- @param boolean isLongRange Is the search performed from a long range
 -- @return[default=true] boolean Return false to block search

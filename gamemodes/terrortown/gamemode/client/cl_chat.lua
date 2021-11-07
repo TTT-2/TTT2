@@ -113,7 +113,14 @@ function GM:OnPlayerChat(ply, text, teamChat, isDead)
 		return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
 	end
 
-	if ply:IsActiveRole(ROLE_DETECTIVE) then
+	local plyRoleData = ply:GetSubRoleData()
+
+	-- send detective-like message if role is public policing role
+	-- note: while it seems like is not nessecary to check if the role is public because
+	-- only a public role is synced, this is still checked here to make sure it works
+	-- well with revivals. A non-public role won't be counted as public policing role
+	-- if they were revived and their role is known.
+	if ply:IsActive() and plyRoleData.isPolicingRole and plyRoleData.isPublicRole then
 		AddDetectiveText(ply, text)
 
 		return true
