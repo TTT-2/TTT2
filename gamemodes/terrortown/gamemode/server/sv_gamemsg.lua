@@ -212,7 +212,7 @@ function GetRoleChatFilter(subrole, aliveOnly)
 
 	return GetPlayerFilter(function(p)
 		return p:IsRole(subrole)
-			and not p:GetSubRoleData().v
+			and not p:GetSubRoleData().disabledTeamChatRecv
 			and (not aliveOnly or p:IsTerror())
 	end)
 end
