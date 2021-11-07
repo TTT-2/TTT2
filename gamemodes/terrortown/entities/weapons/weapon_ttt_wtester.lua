@@ -565,6 +565,62 @@ else -- CLIENT
 		RADAR.samples_count = 1
 	end
 
+	---
+	-- @ignore
+	function SWEP:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		form:MakeHelp({
+			label = "help_killer_dna_range"
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt_killer_dna_range",
+			label = "label_killer_dna_range",
+			min = 0,
+			max = 1000,
+			decimal = 0
+		})
+
+		form:MakeHelp({
+			label = "help_killer_dna_basetime"
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt_killer_dna_basetime",
+			label = "label_killer_dna_basetime",
+			min = 0,
+			max = 200,
+			decimal = 0
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt2_dna_scanner_slots",
+			label = "label_dna_scanner_slots",
+			min = 0,
+			max = 10,
+			decimal = 0
+		})
+
+		form:MakeHelp({
+			label = "help_dna_radar"
+		})
+
+		local enb = form:MakeCheckBox({
+			serverConvar = "ttt2_dna_radar",
+			label = "label_dna_radar"
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt2_dna_radar_cooldown",
+			label = "label_dna_radar_cooldown",
+			min = 0,
+			max = 60,
+			decimal = 1,
+			master = enb
+		})
+	end
+
 	local function ScannerFeedback()
 		if not LocalPlayer():HasWeapon("weapon_ttt_wtester") then return end
 

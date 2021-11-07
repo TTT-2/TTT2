@@ -1622,3 +1622,18 @@ L.label_roles_credits_award_kill = "Credit reward amount for kill"
 L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
 L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
 L.label_roles_min_karma = "Lower limit of Karma to consider selection"
+
+-- 2021-11-07
+L.header_equipment_additional = "Additional Equipment Settings"
+
+L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
+L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
+L.help_dna_radar = "The TTT2 DNA scanner shows the exact distance and direction of the selected DNA sample if equipped. However, there is also a classic DNA scanner mode that updates the selected sample with an in-world rendering everytime the cooldown has passed."
+
+L.label_killer_dna_range = "Max kill range to leave DNA"
+L.label_killer_dna_basetime = "Sample life base time"
+L.label_dna_scanner_slots = "DNA sample slots"
+L.label_dna_radar = "Enable classic DNA scanner mode"
+L.label_dna_radar_cooldown = "DNA scanner cooldown"
+L.label_radar_charge_time = "Recharge time after a radar sample"
+L.label_crowbar_shove_delay = "Cooldown after crowbar push"

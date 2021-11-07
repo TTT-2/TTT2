@@ -292,3 +292,16 @@ if SERVER then
 
 	end
 end
+
+if CLIENT then
+---
+	-- @ignore
+	function SWEP:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		form:MakeCheckBox({
+			serverConvar = "ttt2_crowbar_shove_delay",
+			label = "label_crowbar_shove_delay"
+		})
+	end
+end
