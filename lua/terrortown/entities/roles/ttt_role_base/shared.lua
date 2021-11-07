@@ -84,15 +84,19 @@ ROLE.conVarData = {
 -- selection process.
 ROLE.notSelectable = false
 
--- This variable can be used to add roles that can see the role of the
+-- This variable can be used to add teams that can see the role of the
 -- player with the role defined in this file. While this table can be updated
 -- on runtime, it is strongly advised against. Use custom hook based
 -- syncing for specific syncing.
 ROLE.visibleForTeam = {}
 
+-- This variable can be used to add roles that can can be seen by the role
+-- defined in this file.
+ROLE.networkRoles = {}
+
 -- If set to true, this role doesn't know about their teammates. A normal innocent
 -- for example knows that they are in team innocent, but doesn't know who else is.
--- If set to false, this player knows about the role of all their teamm ates.
+-- If set to false, this player knows about the role of all their team mates.
 ROLE.unknownTeam = false
 
 -- This can be used to force prevent picking up credits from corpses. Keep in mind
@@ -120,6 +124,17 @@ ROLE.isPublicRole = false
 -- A policing role is a role that works like a detective. They can be called to
 -- a corpse and evil roles can be rewarded more points for them being killed.
 ROLE.isPolicingRole = false
+
+-- If this is set to true, the role is unable to send messages in the team chat. If this is
+-- set to false, it still could mean that the player is unable to use the team chat. If the
+-- role flag `.unknownTeam` is set, the team chat can't be used either.
+ROLE.disabledTeamChat = false
+
+-- If this is set to true, the geiven role is unable to receive team chat messages.
+ROLE.disabledTeamChatRecv = false
+
+-- By setting this to true, the role is unable to write in the general chat.
+ROLE.disabledGeneralChat = false
 
 ---
 -- This function is called before initializing a @{ROLE}, but after all

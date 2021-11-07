@@ -4,6 +4,20 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added the hook `GM:TTT2CalledPolicingRole` that is called after all policing role players were called to a corpse
+
+### Fixed
+
+- Fixed that every policing player could be called to a corpse, this is now again restricted to alive only players
+- Fixed inconsistency between `.disabledTeamChatRecv` and `.disabledTeamChatRec`
+- Fixed non-public policing roles having hats and therefore confirming them
+
+### Changed
+
+- All public policing roles now appear as detectives in the chat
+
 ## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
 
 ### Fixed
