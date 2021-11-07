@@ -11,7 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed that every policing player could be called to a corpse, this is now again restricted to alive only players
-- Fixed inconsistency between `.disabledTeamChatRecv` and ``.disabledTeamChatRec`
+- Fixed inconsistency between `.disabledTeamChatRecv` and `.disabledTeamChatRec`
 - Fixed non-public policing roles havin hats and therefore confirming them
 
 ### Changed
