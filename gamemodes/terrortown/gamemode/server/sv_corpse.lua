@@ -701,7 +701,7 @@ end)
 -- @param Player finder The player that called the policing players
 -- @param Entity ragdoll The body of the dead player
 -- @param Player deadply The dead player
--- @hook.
+-- @hook
 -- @realm server
 function GM:TTT2CalledPolicingRole(policingPlys, finder, ragdoll, deadply)
 
