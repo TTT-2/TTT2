@@ -133,33 +133,33 @@ end
 ---
 -- Returns a list of filtered @{Player}s by the team.
 -- @param string team
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
-function GetTeamFilter(team, alive_only)
+function GetTeamFilter(team, aliveOnly)
 	return GetPlayerFilter(function(p)
-		return team ~= TEAM_NONE and not TEAMS[team].alone and p:GetTeam() == team and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
+		return team ~= TEAM_NONE and not TEAMS[team].alone and p:GetTeam() == team and not p:GetSubRoleData().unknownTeam and (not aliveOnly or p:IsTerror())
 	end)
 end
 
 ---
 -- Returns a list of all @{Players} of the Innocent team.
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
 -- @see GetTeamFilter
-function GetInnocentFilter(alive_only)
-	return GetTeamFilter(TEAM_INNOCENT, alive_only)
+function GetInnocentFilter(aliveOnly)
+	return GetTeamFilter(TEAM_INNOCENT, aliveOnly)
 end
 
 ---
 -- Returns a list of all @{Players} of the Traitor team.
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
 -- @see GetTeamFilter
-function GetTraitorFilter(alive_only)
-	return GetTeamFilter(TEAM_TRAITOR, alive_only)
+function GetTraitorFilter(aliveOnly)
+	return GetTeamFilter(TEAM_TRAITOR, aliveOnly)
 end
 
 ---
@@ -167,45 +167,45 @@ end
 -- @note If a BaseRole is given, this will return true for all its SubRoles.
 -- If you just want to filter for a specific SubRole, use @{GetSubRoleFilter} instead
 -- @param number subrole
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
 -- @see Player:IsRole
-function GetRoleFilter(subrole, alive_only)
+function GetRoleFilter(subrole, aliveOnly)
 	return GetPlayerFilter(function(p)
-		return p:IsRole(subrole) and (not alive_only or p:IsTerror())
+		return p:IsRole(subrole) and (not aliveOnly or p:IsTerror())
 	end)
 end
 
 ---
 -- Returns a list of filtered @{Player}s by the @{ROLE}'s SubRole index.
 -- @param number subrole
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
-function GetSubRoleFilter(subrole, alive_only)
+function GetSubRoleFilter(subrole, aliveOnly)
 	return GetPlayerFilter(function(p)
-		return p:GetSubRole() == subrole and (not alive_only or p:IsTerror())
+		return p:GetSubRole() == subrole and (not aliveOnly or p:IsTerror())
 	end)
 end
 
 ---
 -- Returns a list of all @{Players} of the Detective @{ROLE}'s index.
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
 -- @see GetRoleFilter
-function GetDetectiveFilter(alive_only)
-	return GetRoleFilter(ROLE_DETECTIVE, alive_only)
+function GetDetectiveFilter(aliveOnly)
+	return GetRoleFilter(ROLE_DETECTIVE, aliveOnly)
 end
 
 ---
 -- Returns a list of all @{Players} of a specific @{ROLE}'s index that are able to chat.
 -- @param number subrole
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
-function GetRoleChatFilter(subrole, alive_only)
+function GetRoleChatFilter(subrole, aliveOnly)
 	if roles.GetByIndex(subrole).disabledTeamChat then
 		return {}
 	end
@@ -213,17 +213,17 @@ function GetRoleChatFilter(subrole, alive_only)
 	return GetPlayerFilter(function(p)
 		return p:IsRole(subrole)
 			and not p:GetSubRoleData().v
-			and (not alive_only or p:IsTerror())
+			and (not aliveOnly or p:IsTerror())
 	end)
 end
 
 ---
 -- Returns a list of all @{Players} of a specific team that are able to chat.
 -- @param string team
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
-function GetTeamChatFilter(team, alive_only)
+function GetTeamChatFilter(team, aliveOnly)
 	return GetPlayerFilter(function(ply)
 		local plyRoleData = ply:GetSubRoleData()
 
@@ -232,7 +232,7 @@ function GetTeamChatFilter(team, alive_only)
 			and ply:GetTeam() == team
 			and not plyRoleData.unknownTeam
 			and not plyRoleData.disabledTeamChatRecv
-			and (not alive_only or ply:IsTerror())
+			and (not aliveOnly or ply:IsTerror())
 	end)
 end
 
@@ -240,12 +240,12 @@ end
 -- Returns a list of filtered @{Player}s.
 -- This filters the team members of a given @{Player}
 -- @param Player ply
--- @param boolean alive_only
+-- @param boolean aliveOnly
 -- @return table
 -- @realm server
-function GetTeamMemberFilter(ply, alive_only)
+function GetTeamMemberFilter(ply, aliveOnly)
 	return GetPlayerFilter(function(p)
-		return p:IsInTeam(ply) and (not alive_only or p:IsTerror())
+		return p:IsInTeam(ply) and (not aliveOnly or p:IsTerror())
 	end)
 end
 
@@ -527,11 +527,11 @@ end
 -- Whether or not the @{Player} can receive the chat message.
 -- @param Player reader The @{Player} who can receive chat
 -- @param Player sender The @{Player} who sends the text message
--- @param boolean isenderIsSpectator Are they trying to use the team chat
+-- @param boolean isTeam Are they trying to use the team chat
 -- @return[default=true] boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
 -- @hook
 -- @realm server
-function GM:TTT2CanSeeChat(reader, sender, isenderIsSpectator)
+function GM:TTT2CanSeeChat(reader, sender, isTeam)
 	return true
 end
 
