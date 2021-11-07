@@ -76,22 +76,22 @@ end
 
 -- Teamchat
 local function RoleChatMsg(sender, msg)
-	local senderIsSpectator = sender:GetTeam()
+	local senderTeam = sender:GetTeam()
 	local senderRoleData = sender:GetSubRoleData()
 
-	if senderIsSpectator == TEAM_NONE
+	if senderTeam == TEAM_NONE
 		or senderRoleData.unknownTeam
 		or senderRoleData.disabledTeamChat
-		or TEAMS[senderIsSpectator].alone
+		or TEAMS[senderTeam].alone
 		---
 		-- @realm server
-		or hook.Run("TTT2AvoidTeamChat", sender, senderIsSpectator, msg) == false
+		or hook.Run("TTT2AvoidTeamChat", sender, senderTeam, msg) == false
 	then return end
 
 	net.Start("TTT_RoleChat")
 	net.WriteEntity(sender)
 	net.WriteString(msg)
-	net.Send(GetTeamChatFilter(senderIsSpectator))
+	net.Send(GetTeamChatFilter(senderTeam))
 end
 
 ---
