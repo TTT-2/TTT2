@@ -777,8 +777,8 @@ end
 -- Checks whether a @{Player} is able to search a @{CORPSE} based on their position.
 -- The search opens a popup for the searching player with all of the player information.
 -- @note removed last param is_traitor -> accessable with `corpse.was_team`
--- @param Player ply The player that tries to
--- @param Entity rag The ragdoll tgat should be searched
+-- @param Player ply The player that tries to search the corpse
+-- @param Entity rag The ragdoll that should be searched
 -- @param boolean isCovert Is the search hidden
 -- @param boolean isLongRange Is the search performed from a long range
 -- @return[default=true] boolean Return false to block search
