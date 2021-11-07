@@ -22,7 +22,7 @@ util.AddNetworkString("TTT2SetPlayerReady")
 util.AddNetworkString("TTT2SetRevivalReason")
 util.AddNetworkString("TTT2RevivalStopped")
 util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
-util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalBlockMode")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
@@ -806,7 +806,7 @@ end
 -- @param[opt] function OnRevive The @{function} that should be run if the @{Player} revives
 -- @param[opt] function DoCheck An additional checking @{function}
 -- @param[default=false] boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
--- @param[default=false] boolean blockRound Stops the round from ending if this is set to true until the player is alive again
+-- @param[default=REVIVAL_BLOCK_NONE] number blockRound Stops the round from ending if this is set to someting other than 0
 -- @param[opt] function OnFail This @{function} is called if the revive fails
 -- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
 -- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
@@ -818,8 +818,20 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 	delay = delay or 3
 
+	-- compatible mode for block round
+	if isbool(blockRound) then
+		MsgN("[DEPRECATION WARNING]: You should use the REVIVAL_BLOCK enum here.")
+		debug.Trace()
+	end
+
+	if blockRound == nil or blockRound == false then
+		blockRound = REVIVAL_BLOCK_NONE
+	elseif blockRound == true then
+		blockRound = REVIVAL_BLOCK_COUNT_AS_ALIVE
+	end
+
 	self:SetReviving(true)
-	self:SetBlockingRevival(blockRound)
+	self:SetRevivalBlockMode(blockRound)
 	self:SetRevivalStartTime(CurTime())
 	self:SetRevivalDuration(delay)
 
@@ -829,7 +841,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 		if not IsValid(self) then return end
 
 		self:SetReviving(false)
-		self:SetBlockingRevival(false)
+		self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
 		self:SendRevivalReason(nil)
 
 		if not isfunction(DoCheck) or DoCheck(self) then
@@ -903,7 +915,7 @@ function plymeta:CancelRevival(failMessage, silent)
 	if not self:IsReviving() then return end
 
 	self:SetReviving(false)
-	self:SetBlockingRevival(false)
+	self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
 	self:SendRevivalReason(nil)
 
 	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
@@ -933,18 +945,18 @@ end
 
 ---
 -- Sets the blocking revival state.
--- @param[default=false] boolean isBlockingRevival The blocking revival state
+-- @param[default=REVIVAL_BLOCK_NONE] number revivalBlockMode The blocking revival state
 -- @internal
 -- @realm server
-function plymeta:SetBlockingRevival(isBlockingRevival)
-	isBlockingRevival = isBlockingRevival or false
+function plymeta:SetRevivalBlockMode(revivalBlockMode)
+	revivalBlockMode = revivalBlockMode or REVIVAL_BLOCK_NONE
 
-	if self.isBlockingRevival == isBlockingRevival then return end
+	if self.revivalBlockMode == revivalBlockMode then return end
 
-	self.isBlockingRevival = isBlockingRevival
+	self.revivalBlockMode = revivalBlockMode
 
-	net.Start("TTT2RevivalUpdate_IsBlockingRevival")
-	net.WriteBool(self.isBlockingRevival)
+	net.Start("TTT2RevivalUpdate_RevivalBlockMode")
+	net.WriteUInt(self.revivalBlockMode, REVIVAL_BITS)
 	net.Send(self)
 end
 
