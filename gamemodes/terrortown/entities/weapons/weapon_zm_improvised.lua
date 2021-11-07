@@ -294,14 +294,17 @@ if SERVER then
 end
 
 if CLIENT then
----
+	---
 	-- @ignore
 	function SWEP:AddToSettingsMenu(parent)
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
-		form:MakeCheckBox({
+		form:MakeSlider({
 			serverConvar = "ttt2_crowbar_shove_delay",
-			label = "label_crowbar_shove_delay"
+			label = "label_crowbar_shove_delay",
+			min = 1,
+			max = 10,
+			decimal = 1
 		})
 	end
 end

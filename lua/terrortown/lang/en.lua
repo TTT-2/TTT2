@@ -1625,10 +1625,18 @@ L.label_roles_min_karma = "Lower limit of Karma to consider selection"
 
 -- 2021-11-07
 L.header_equipment_additional = "Additional Equipment Settings"
+L.header_administration_general = "General Administrative Settings"
+L.header_administration_logging = "Logging"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
 L.help_dna_radar = "The TTT2 DNA scanner shows the exact distance and direction of the selected DNA sample if equipped. However, there is also a classic DNA scanner mode that updates the selected sample with an in-world rendering everytime the cooldown has passed."
+L.help_idle = "The idle mode is used to move idle players into a forced spectator mode. To leave this mode again, they have to disable 'enforce spectator mode' in their 'gameplay' settings."
+L.help_namechange_kick = [[
+If a player changes their name during a round, this can be abused to evade being killed. Therefore it is prohibited to change the nickname during an active round.
+
+If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
+L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1637,3 +1645,9 @@ L.label_dna_radar = "Enable classic DNA scanner mode"
 L.label_dna_radar_cooldown = "DNA scanner cooldown"
 L.label_radar_charge_time = "Recharge time after a radar sample"
 L.label_crowbar_shove_delay = "Cooldown after crowbar push"
+L.label_idle = "Enable idle mode"
+L.label_idle_limit = "Maximal idle time in seconds"
+L.label_namechange_kick = "Enable name change kick"
+L.label_namechange_bantime = "Banned time in minutes after kick"
+L.label_log_damage_for_console = "Enable damage logging in console"
+L.label_damagelog_save = "Save damage log to disk"

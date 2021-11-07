@@ -264,7 +264,7 @@ end
 
 ---
 -- Saves the current score @{Panel}'s data into a log file
--- @note The logfiles are stored in <code>ttt/logs</code>
+-- @note The logfiles are stored in <code>terrortown/logs</code>
 -- @realm client
 -- @internal
 function CLSCORE:SaveLog()
@@ -276,7 +276,7 @@ function CLSCORE:SaveLog()
 		return
 	end
 
-	local logdir = "ttt/logs"
+	local logdir = "terrortown/logs"
 
 	if not file.IsDir(logdir, "DATA") then
 		file.CreateDir(logdir)

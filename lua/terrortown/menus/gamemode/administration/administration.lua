@@ -1,0 +1,62 @@
+--- @ignore
+
+CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
+
+CLGAMEMODESUBMENU.priority = 100
+CLGAMEMODESUBMENU.title = "submenu_administration_administration_title"
+
+function CLGAMEMODESUBMENU:Populate(parent)
+	local form = vgui.CreateTTT2Form(parent, "header_administration_general")
+
+	form:MakeHelp({
+		label = "help_idle"
+	})
+
+	local enbIdle = form:MakeCheckBox({
+		serverConvar = "ttt_idle",
+		label = "label_idle"
+	})
+
+	form:MakeSlider({
+		serverConvar = "ttt_idle_limit",
+		label = "label_idle_limit",
+		min = 0,
+		max = 300,
+		decimal = 0,
+		master = enbIdle
+	})
+
+	form:MakeHelp({
+		label = "help_namechange_kick"
+	})
+
+	local enbKick = form:MakeCheckBox({
+		serverConvar = "ttt_namechange_kick",
+		label = "label_namechange_kick"
+	})
+
+	form:MakeSlider({
+		serverConvar = "ttt_namechange_bantime",
+		label = "label_namechange_bantime",
+		min = 0,
+		max = 60,
+		decimal = 0,
+		master = enbKick
+	})
+
+	local form2 = vgui.CreateTTT2Form(parent, "header_administration_logging")
+
+	form2:MakeHelp({
+		label = "help_damage_log"
+	})
+
+	form2:MakeCheckBox({
+		serverConvar = "ttt_log_damage_for_console",
+		label = "label_log_damage_for_console"
+	})
+
+	form2:MakeCheckBox({
+		serverConvar = "ttt_damagelog_save",
+		label = "label_damagelog_save"
+	})
+end

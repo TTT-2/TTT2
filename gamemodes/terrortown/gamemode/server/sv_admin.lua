@@ -212,7 +212,7 @@ local function SaveDamageLog()
 		end
 	end
 
-	local fname = Format("ttt/logs/dmglog_%s_%d.txt", os.date("%d%b%Y_%H%M"), os.time())
+	local fname = Format("terrortown/logs/dmglog_%s_%d.txt", os.date("%d%b%Y_%H%M"), os.time())
 
 	file.Write(fname, text)
 end
