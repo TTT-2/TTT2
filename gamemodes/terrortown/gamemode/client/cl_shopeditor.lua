@@ -62,9 +62,6 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local eq = weps[i]
 		local name = WEPS.GetClass(eq)
 
-		-- Get Inheritable version
-		eq = weapons.Get(name)
-
 		if name
 			and not eq.Doublicated
 			and not string.match(name, "base")
