@@ -22,8 +22,9 @@ local allowForcedRandomSpawn = false
 entspawn = entspawn or {}
 
 ---
--- Enable or disable forced random spawns for 'env_entity_maker' 'https://developer.valvesoftware.com/wiki/Env_entity_maker'
--- spawning non available random spawns at map start
+-- Enable or disable forced random spawns for 'env_entity_maker' spawning non available
+-- random spawns at map start.
+-- @note see: https://developer.valvesoftware.com/wiki/Env_entity_maker
 -- @param bool enable The state to set it to
 -- @realm server
 function entspawn.SetForcedRandomSpawn(enable)
@@ -31,7 +32,7 @@ function entspawn.SetForcedRandomSpawn(enable)
 end
 
 ---
--- To check if forced random spawns are available
+-- To check if forced random spawns are available.
 -- @return bool if forced random spawns are enabled
 -- @realm server
 function entspawn.IsForcedRandomSpawnEnabled()
@@ -39,7 +40,7 @@ function entspawn.IsForcedRandomSpawnEnabled()
 end
 
 ---
--- Spawns a random weapon with the given data of the random spawn entity
+-- Spawns a random weapon with the given data of the random spawn entity.
 -- @param Entity ent the entity holding the random weapon data
 -- @realm server
 function entspawn.SpawnRandomWeapon(ent)
@@ -58,7 +59,7 @@ function entspawn.SpawnRandomWeapon(ent)
 end
 
 ---
--- Spawns a random ammo box with the given data of the random spawn entity
+-- Spawns a random ammo box with the given data of the random spawn entity.
 -- @param Entity ent the entity holding the random ammo data
 -- @realm server
 function entspawn.SpawnRandomAmmo(ent)
