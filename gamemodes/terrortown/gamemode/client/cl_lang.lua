@@ -535,23 +535,7 @@ end
 -- Styles of custom SWEP messages and such should use LANG.SetStyle in their
 -- script. The SWEP stuff here might be moved out to the SWEPS too.
 
--- TODO the remaining messages here are moved to their fitting ents as soon as
--- we move them all into our main repo
-
-local styledmessages = {
-	rolecolour = { -- TODO move to teleporter
-		"tele_failed",
-		"tele_no_mark",
-		"tele_marked"
-	},
-
-	chat_warn = { -- TODO move to teleporter
-		"tele_no_ground",
-		"tele_no_crouch",
-		"tele_no_mark_ground",
-		"tele_no_mark_crouch"
-	}
-}
+-- This is kept for compatibility reasons so that old addons may still use this.
 
 local set_style = LANG.SetStyle
 
