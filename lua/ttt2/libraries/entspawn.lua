@@ -25,7 +25,7 @@ entspawn = entspawn or {}
 -- Enable or disable forced random spawns for 'env_entity_maker' spawning non available
 -- random spawns at map start.
 -- @note see: https://developer.valvesoftware.com/wiki/Env_entity_maker
--- @param bool enable The state to set it to
+-- @param bool enable The state to set it to.
 -- @realm server
 function entspawn.SetForcedRandomSpawn(enable)
 	allowForcedRandomSpawn = enable
