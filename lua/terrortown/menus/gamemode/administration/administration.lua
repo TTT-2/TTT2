@@ -59,4 +59,21 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		serverConvar = "ttt_damagelog_save",
 		label = "label_damagelog_save"
 	})
+
+	local form3 = vgui.CreateTTT2Form(parent, "header_administration_misc")
+
+	form3:MakeCheckBox({
+		serverConvar = "ttt_debug_preventwin",
+		label = "label_debug_preventwin"
+	})
+
+	form3:MakeCheckBox({
+		serverConvar = "ttt_bots_are_spectators",
+		label = "label_bots_are_spectators"
+	})
+
+	form3:MakeCheckBox({
+		serverConvar = "ttt2_tbutton_admin_show",
+		label = "label_tbutton_admin_show"
+	})
 end

@@ -1624,9 +1624,12 @@ L.label_roles_credits_kill_award = "Enable credits award for high value player k
 L.label_roles_min_karma = "Lower limit of Karma to consider selection"
 
 -- 2021-11-07
+L.submenu_administration_administration_title = "Administration"
+
 L.header_equipment_additional = "Additional Equipment Settings"
 L.header_administration_general = "General Administrative Settings"
 L.header_administration_logging = "Logging"
+L.header_administration_misc = "Miscellaneous"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1651,3 +1654,6 @@ L.label_namechange_kick = "Enable name change kick"
 L.label_namechange_bantime = "Banned time in minutes after kick"
 L.label_log_damage_for_console = "Enable damage logging in console"
 L.label_damagelog_save = "Save damage log to disk"
+L.label_debug_preventwin = "Prevent any win condition [debug]"
+L.label_bots_are_spectators = "Bots are always spectators"
+L.tbutton_admin_show = "Show traitor buttons to admins"
