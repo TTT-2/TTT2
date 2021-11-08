@@ -26,7 +26,7 @@ entspawn = entspawn or {}
 -- spawning non available random spawns at map start
 -- @param bool enable The state to set it to
 -- @realm server
-function entspawn.EnableForcedRandomSpawn(enable)
+function entspawn.SetForcedRandomSpawn(enable)
 	allowForcedRandomSpawn = enable
 end
 
