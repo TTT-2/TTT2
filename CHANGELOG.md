@@ -13,6 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed that every policing player could be called to a corpse, this is now again restricted to alive only players
 - Fixed inconsistency between `.disabledTeamChatRecv` and `.disabledTeamChatRec`
 - Fixed non-public policing roles having hats and therefore confirming them
+- Fixed triggered spawns on maps like 'ttt_lttp_kakariko_a5' with the vases and 'ttt_mc_jondome' with the chests
 
 ### Changed
 
