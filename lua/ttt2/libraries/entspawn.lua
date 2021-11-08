@@ -17,18 +17,31 @@ local mathMin = math.min
 local timerCreate = timer.Create
 local timerRemove = timer.Remove
 
-local allowDirectRandomSpawn = false
+local allowForcedRandomSpawn = false
 
 entspawn = entspawn or {}
 
-function entspawn.EnableDirectRandomSpawn(enable)
-	allowDirectRandomSpawn = enable
+---
+-- Enable or disable forced random spawns for 'env_entity_maker' 'https://developer.valvesoftware.com/wiki/Env_entity_maker'
+-- spawning non available random spawns at map start
+-- @param bool enable The state to set it to
+-- @realm server
+function entspawn.EnableForcedRandomSpawn(enable)
+	allowForcedRandomSpawn = enable
 end
 
-function entspawn.IsDirectRandomSpawnEnabled()
-	return allowDirectRandomSpawn
+---
+-- To check if forced random spawns are available
+-- @return bool if forced random spawns are enabled
+-- @realm server
+function entspawn.IsForcedRandomSpawnEnabled()
+	return allowForcedRandomSpawn
 end
 
+---
+-- Spawns a random weapon with the given data of the random spawn entity
+-- @param Entity ent the entity holding the random weapon data
+-- @realm server
 function entspawn.SpawnRandomWeapon(ent)
 	local spawns = {
 		[SPAWN_TYPE_WEAPON] = {
@@ -44,13 +57,17 @@ function entspawn.SpawnRandomWeapon(ent)
 	entspawn.SpawnEntities(spawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
 end
 
+---
+-- Spawns a random ammo box with the given data of the random spawn entity
+-- @param Entity ent the entity holding the random ammo data
+-- @realm server
 function entspawn.SpawnRandomAmmo(ent)
 	local spawns = {
 		[SPAWN_TYPE_AMMO] = {
 			[1] = {
 				pos = ent:GetPos(),
 				ang = ent:GetAngles(),
-				ammo = ent.autoAmmoAmount or 0
+				ammo = 1
 				}
 			}
 		}

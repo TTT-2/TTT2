@@ -18,8 +18,12 @@ function ENT:KeyValue(key, value)
 	end
 end
 
+---
+-- @note Only used to forceSpawn weapons after map cleanup 
+-- otherwise these entities are only used to mark the spots for random weapon spawns
+-- @realm shared
 function ENT:Initialize()
-	if entspawn.IsDirectRandomSpawnEnabled() then
+	if entspawn.IsForcedRandomSpawnEnabled() then
 		entspawn.SpawnRandomWeapon(self)
 	end
 end
