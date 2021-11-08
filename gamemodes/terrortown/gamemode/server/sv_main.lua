@@ -884,6 +884,9 @@ function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
 
 	entityOutputs.CleanUp()
+
+	-- While cleaning up the map, disable random weapons directly spawning
+	entspawn.EnableDirectRandomSpawn(false)
 end
 
 ---
@@ -898,6 +901,11 @@ function GM:PostCleanupMap()
 	entityOutputs.SetUp()
 
 	entspawn.HandleSpawns()
+
+	-- After map cleanup enable 'env_entity_maker'-entities to force spawn random weapons and ammo
+	-- This is necessary for maps like 'ttt_lttp_kakariko_a5', that only initialize 'ttt_random_weapon'-entities
+	-- after destroying vases and were therefore not affected by our entspawn-system
+	entspawn.EnableDirectRandomSpawn(true)
 	---
 	-- @realm server
 	hook.Run("TTT2PostCleanupMap")

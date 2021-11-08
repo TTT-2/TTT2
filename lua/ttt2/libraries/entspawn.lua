@@ -17,7 +17,47 @@ local mathMin = math.min
 local timerCreate = timer.Create
 local timerRemove = timer.Remove
 
+local allowDirectRandomSpawn = false
+
 entspawn = entspawn or {}
+
+function entspawn.EnableDirectRandomSpawn(enable)
+	allowDirectRandomSpawn = enable
+end
+
+function entspawn.IsDirectRandomSpawnEnabled()
+	return allowDirectRandomSpawn
+end
+
+function entspawn.SpawnRandomWeapon(ent)
+	local spawns = {
+		[SPAWN_TYPE_WEAPON] = {
+			[1] = {
+				pos = ent:GetPos(),
+				ang = ent:GetAngles(),
+				ammo = ent.autoAmmoAmount or 0
+				}
+			}
+		}
+
+	local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
+	entspawn.SpawnEntities(spawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
+end
+
+function entspawn.SpawnRandomAmmo(ent)
+	local spawns = {
+		[SPAWN_TYPE_AMMO] = {
+			[1] = {
+				pos = ent:GetPos(),
+				ang = ent:GetAngles(),
+				ammo = ent.autoAmmoAmount or 0
+				}
+			}
+		}
+
+	local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
+	entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+end
 
 local function RemoveEntities(entTable, spawnTable, spawnType)
 	local useDefaultSpawns = not entspawnscript.ShouldUseCustomSpawns()

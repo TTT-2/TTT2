@@ -17,3 +17,9 @@ function ENT:KeyValue(key, value)
 		self.autoAmmoAmount = tonumber(value)
 	end
 end
+
+function ENT:Initialize()
+	if entspawn.IsDirectRandomSpawnEnabled() then
+		entspawn.SpawnRandomWeapon(self)
+	end
+end
