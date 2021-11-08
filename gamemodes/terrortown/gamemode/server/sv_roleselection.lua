@@ -814,7 +814,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 		}
 
 		-- insert selectable roles into the list. The order doesn't matter, players are chosen randomly and the roles are already filtered and limited
-		for subrole in pairs(selectableRoles) do
+		for subrole in RandomPairs(selectableRoles) do
 			if subrole == ROLE_TRAITOR or subrole == ROLE_INNOCENT then continue end
 
 			list[#list + 1] = subrole
