@@ -32,6 +32,8 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
+SWEP.notBuyable = true
+
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
 SWEP.WorldModel = "models/weapons/w_crowbar.mdl"

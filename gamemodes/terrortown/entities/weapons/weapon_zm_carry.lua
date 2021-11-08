@@ -25,6 +25,8 @@ if CLIENT then
 	SWEP.PrintName = "magnet_name"
 	SWEP.Slot = 4
 
+	SWEP.Icon = "vgui/ttt/icon_magneto_stick"
+
 	SWEP.DrawCrosshair = false
 	SWEP.ViewModelFlip = false
 end
@@ -32,6 +34,8 @@ end
 SWEP.Base = "weapon_tttbase"
 
 SWEP.AutoSpawnable = false
+
+SWEP.notBuyable = true
 
 SWEP.ViewModel = Model("models/weapons/v_stunbaton.mdl")
 SWEP.WorldModel = Model("models/weapons/w_stunbaton.mdl")
@@ -64,76 +68,76 @@ if SERVER then
 
 	---
 	-- @realm server
-	local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cvAllowRagCarry = CreateConVar("ttt_ragdoll_carrying", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @realm server
-	local prop_force = CreateConVar("ttt_prop_carrying_force", "60000", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cvPropForce = CreateConVar("ttt_prop_carrying_force", "60000", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @realm server
-	local no_throw = CreateConVar("ttt_no_prop_throwing", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cvPropThrow = CreateConVar("ttt_prop_throwing", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @realm server
-	local pin_rag = CreateConVar("ttt_ragdoll_pinning", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cvAllowRagPin = CreateConVar("ttt_ragdoll_pinning", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @realm server
-	local pin_rag_inno = CreateConVar("ttt_ragdoll_pinning_innocents", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-	---
-	-- @note Allowing weapon pickups can allow players to cause a crash in the physics
-	-- system (ie. not fixable). Tuning the range seems to make this more
-	-- difficult. Not sure why. It's that kind of crash.
-	-- @realm server
-	local allow_wep = CreateConVar("ttt_weapon_carrying", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cvAllowRagPinInno = CreateConVar("ttt_ragdoll_pinning_innocents", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @note Allowing weapon pickups can allow players to cause a crash in the physics
 	-- system (ie. not fixable). Tuning the range seems to make this more
 	-- difficult. Not sure why. It's that kind of crash.
 	-- @realm server
-	local wep_range = CreateConVar("ttt_weapon_carrying_range", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cvAllowWepCarry = CreateConVar("ttt_weapon_carrying", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @note Allowing weapon pickups can allow players to cause a crash in the physics
+	-- system (ie. not fixable). Tuning the range seems to make this more
+	-- difficult. Not sure why. It's that kind of crash.
+	-- @realm server
+	local cvWepCarryRange = CreateConVar("ttt_weapon_carrying_range", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	hook.Add("TTT2SyncGlobals", "TTT2SyncCarryGlobals", function()
-		SetGlobalBool(allow_rag:GetName(), allow_rag:GetBool())
-		SetGlobalInt(prop_force:GetName(), prop_force:GetInt())
-		SetGlobalBool(no_throw:GetName(), no_throw:GetBool())
-		SetGlobalBool(pin_rag:GetName(), pin_rag:GetBool())
-		SetGlobalBool(pin_rag_inno:GetName(), pin_rag_inno:GetBool())
+		SetGlobalBool(cvAllowRagCarry:GetName(), cvAllowRagCarry:GetBool())
+		SetGlobalInt(cvPropForce:GetName(), cvPropForce:GetInt())
+		SetGlobalBool(cvPropThrow:GetName(), cvPropThrow:GetBool())
+		SetGlobalBool(cvAllowRagPin:GetName(), cvAllowRagPin:GetBool())
+		SetGlobalBool(cvAllowRagPinInno:GetName(), cvAllowRagPinInno:GetBool())
 
-		SetGlobalBool(allow_wep:GetName(), allow_wep:GetBool())
-		SetGlobalInt(wep_range:GetName(), wep_range:GetInt())
+		SetGlobalBool(cvAllowWepCarry:GetName(), cvAllowWepCarry:GetBool())
+		SetGlobalInt(cvWepCarryRange:GetName(), cvWepCarryRange:GetInt())
 	end)
 
-	cvars.AddChangeCallback(allow_rag:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvAllowRagCarry:GetName(), function(name, _, new)
 		SetGlobalBool(name, tonumber(new) == 1)
-	end, allow_rag:GetName())
+	end, cvAllowRagCarry:GetName())
 
-	cvars.AddChangeCallback(prop_force:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvPropForce:GetName(), function(name, _, new)
 		SetGlobalInt(name, tonumber(new))
-	end, prop_force:GetName())
+	end, cvPropForce:GetName())
 
-	cvars.AddChangeCallback(no_throw:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvPropThrow:GetName(), function(name, _, new)
 		SetGlobalBool(name, tonumber(new) == 1)
-	end, no_throw:GetName())
+	end, cvPropThrow:GetName())
 
-	cvars.AddChangeCallback(pin_rag:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvAllowRagPin:GetName(), function(name, _, new)
 		SetGlobalBool(name, tonumber(new) == 1)
-	end, pin_rag:GetName())
+	end, cvAllowRagPin:GetName())
 
-	cvars.AddChangeCallback(pin_rag_inno:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvAllowRagPinInno:GetName(), function(name, _, new)
 		SetGlobalBool(name, tonumber(new) == 1)
-	end, pin_rag_inno:GetName())
+	end, cvAllowRagPinInno:GetName())
 
-	cvars.AddChangeCallback(allow_wep:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvAllowWepCarry:GetName(), function(name, _, new)
 		SetGlobalBool(name, tonumber(new) == 1)
-	end, allow_wep:GetName())
+	end, cvAllowWepCarry:GetName())
 
-	cvars.AddChangeCallback(wep_range:GetName(), function(name, _, new)
+	cvars.AddChangeCallback(cvWepCarryRange:GetName(), function(name, _, new)
 		SetGlobalInt(name, tonumber(new))
-	end, wep_range:GetName())
+	end, cvWepCarryRange:GetName())
 end
 
 local function SetSubPhysMotionEnabled(ent, enable)
@@ -201,7 +205,7 @@ function SWEP:Reset(keep_velocity)
 			phys:EnableMotion(true)
 		end
 
-		if not keep_velocity and (GetGlobalBool("ttt_no_prop_throwing") or self.EntHolding:GetClass() == "prop_ragdoll") then
+		if not keep_velocity and (not GetGlobalBool("ttt_prop_throwing") or self.EntHolding:GetClass() == "prop_ragdoll") then
 			KillVelocity(self.EntHolding)
 		end
 	end
@@ -574,7 +578,7 @@ function SWEP:Drop()
 		end
 
 		-- Try to limit ragdoll slinging
-		if GetGlobalBool("ttt_no_prop_throwing") or ent:GetClass() == "prop_ragdoll" then
+		if not GetGlobalBool("ttt_prop_throwing") or ent:GetClass() == "prop_ragdoll" then
 			KillVelocity(ent)
 		end
 
@@ -602,7 +606,10 @@ end
 ---
 -- @realm shared
 function SWEP:PinRagdoll()
-	if not GetGlobalBool("ttt_ragdoll_pinning") or not self:GetOwner():IsTraitor() and not GetGlobalBool("ttt_ragdoll_pinning_innocents") then return end
+	if not GetGlobalBool("ttt_ragdoll_pinning")
+		or self:GetOwner():GetTeam() == TEAM_INNOCENT
+		and not GetGlobalBool("ttt_ragdoll_pinning_innocents")
+	then return end
 
 	local rag = self.EntHolding
 	local ply = self:GetOwner()
@@ -620,7 +627,6 @@ function SWEP:PinRagdoll()
 	})
 
 	if tr.HitWorld and not tr.HitSky then
-
 		-- find bone we're holding the ragdoll by
 		local bone = self.Constr.Bone2
 
@@ -632,6 +638,7 @@ function SWEP:PinRagdoll()
 		end
 
 		local bonephys = rag:GetPhysicsObjectNum(bone)
+
 		if not IsValid(bonephys) then return end
 
 		local bonepos = bonephys:GetPos()
@@ -759,5 +766,55 @@ else -- CLIENT
 				draw.SimpleText(PT("magnet_help", key_params), "TabLarge", ScrW() * 0.5, ScrH() * 0.5 - 50, COLOR_RED, TEXT_ALIGN_CENTER)
 			end
 		end
+	end
+
+	---
+	-- @ignore
+	function SWEP:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		local enbRagCarry = form:MakeCheckBox({
+			serverConvar = "ttt_ragdoll_carrying",
+			label = "label_ragdoll_carrying"
+		})
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_ragdoll_pinning",
+			label = "label_ragdoll_pinning",
+			master = enbRagCarry
+		})
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_ragdoll_pinning_innocents",
+			label = "label_ragdoll_pinning_innocents",
+			master = enbRagCarry
+		})
+
+		local enbWepCarry = form:MakeCheckBox({
+			serverConvar = "ttt_weapon_carrying",
+			label = "label_weapon_carrying"
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt_weapon_carrying_range",
+			label = "label_weapon_carrying_range",
+			min = 0,
+			max = 150,
+			decimal = 0,
+			master = enbWepCarry
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt_prop_carrying_force",
+			label = "label_prop_carrying_force",
+			min = 0,
+			max = 250000,
+			decimal = 0
+		})
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_prop_throwing",
+			label = "label_prop_throwing"
+		})
 	end
 end
