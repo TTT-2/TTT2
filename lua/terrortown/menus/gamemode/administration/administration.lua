@@ -76,4 +76,31 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		serverConvar = "ttt2_tbutton_admin_show",
 		label = "label_tbutton_admin_show"
 	})
+
+	local form4 = vgui.CreateTTT2Form(parent, "header_administration_scoreboard")
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_highlight_admins",
+		label = "label_highlight_admins"
+	})
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_highlight_dev",
+		label = "label_highlight_dev"
+	})
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_highlight_vip",
+		label = "label_highlight_vip"
+	})
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_highlight_addondev",
+		label = "label_highlight_addondev"
+	})
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_highlight_supporter",
+		label = "label_highlight_supporter"
+	})
 end
