@@ -108,7 +108,7 @@ L.disg_menutitle = "Disguise control"
 L.disg_not_owned = "You are not carrying a Disguiser!"
 L.disg_enable = "Enable disguise"
 
-L.disg_help1 = "When your disguise is active, your name, health and karma do not show when someone looks at you. In addition, you will be hidden from a Detective's radar."
+L.disg_help1 = "When your disguise is active, your name, health and Karma do not show when someone looks at you. In addition, you will be hidden from a Detective's radar."
 L.disg_help2 = "Press Numpad Enter to toggle the disguise without using the menu. You can also bind a different key to 'ttt_toggle_disguise' using the console."
 
 -- Radar tab in equipment menu
@@ -473,7 +473,7 @@ L.hp_wounded = "Wounded"
 L.hp_badwnd = "Badly Wounded"
 L.hp_death = "Near Death"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Reputable"
 L.karma_high = "Crude"
 L.karma_med = "Trigger-happy"
@@ -1079,7 +1079,7 @@ L.label_hud_select = "Select HUD"
 L.label_vskin_select = "Select VSkin"
 L.label_blur_enable = "Enable VSkin background blur"
 L.label_color_enable = "Enable VSkin background color"
-L.label_minimal_targetid = "Minimalist Target ID under crosshair (no karma text, hints etc.)"
+L.label_minimal_targetid = "Minimalist Target ID under crosshair (no Karma text, hints etc.)"
 L.label_shop_always_show = "Always show the shop"
 L.label_shop_double_click_buy = "Enable an item purchase by double-clicking on it in the shop"
 L.label_shop_num_col = "Number of columns"
@@ -1628,6 +1628,9 @@ L.submenu_administration_administration_title = "Administration"
 L.submenu_administration_voicechat_title = "Voicechat / Textchat"
 L.submenu_administration_round_setup_title = "Round Setup"
 L.submenu_administration_mapentities_title = "Map Entities"
+L.submenu_administration_inventory_title = "Inventory"
+L.submenu_administration_karma_title = "Karma"
+L.submenu_administration_sprint_title = "Sprinting"
 
 L.header_roles_special_settings = "Special Role Settings"
 L.header_equipment_additional = "Additional Equipment Settings"
@@ -1649,6 +1652,9 @@ L.header_administration_scoreboard = "Scoreboard Settings"
 L.header_hud_toggleable = "Toggleable HUD Elements"
 L.header_mapentities_prop_possession = "Prop Possession"
 L.header_mapentities_doors = "Doors"
+L.header_karma_tweaking = "Karma Tweaking"
+L.header_karma_kick = "Karma Kick and Ban"
+L.header_karma_logging = "Karma Logging"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1687,6 +1693,16 @@ L.help_prop_possession = [[
 Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
 
 The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limmits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
+L.help_karma = "Karma is used to reduce random killing. Players start with a certain amount of Karma, and lose it when they damage/kill team mates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
+L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly teamkill."
+L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more that 1000 Karma. It can be used as a Karma buffer."
+L.help_karma_ratio = "The ratio of the damage that is used to compute how much of the victim's Karma is subtracted from the attacker's if both are in the same team. If a team kill happens, a further penalty is applied."
+L.help_karma_traitordmg_ratio = "The ratio of the damage that is used to compute how much of the victim's Karma is subtracted from the attacker's if both are in different teams. If a team kill happens, a further bonus is applied."
+L.help_karma_bonus = "There are also two different passive ways to gain Karma during a round. First a round heal is applied to every player. Then a secondary clean bonus is given if no teammates were hurt or killed."
+L.help_karma_clean_half = [[
+When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
+
+This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if a the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1768,3 +1784,20 @@ L.label_doors_locked_indestructible = "Initially locked doors are indestructible
 L.label_doors_health = "Door health"
 L.label_doors_prop_health = "Door prop health"
 L.label_minimum_players = "Minimum player amount to start round"
+L.label_karma = "Enable Karma"
+L.label_karma_strict = "Enable strict Karma"
+L.label_karma_starting = "Starting Karma"
+L.label_karma_max = "Maximum Karma"
+L.label_karma_ratio = "Penalty ratio for team damage"
+L.label_karma_kill_penalty = "Kill penalty for team kill"
+L.label_karma_round_increment = "Tound heal"
+L.label_karma_clean_bonus = "Clean round bonus"
+L.label_karma_traitordmg_ratio = "Bonus ratio for other team damage"
+L.label_karma_traitorkill_bonus = "Kill bonus for other team kill"
+L.label_karma_clean_half = "Clean bonus reduction"
+L.label_karma_persist = "Karma persists over map changes"
+L.label_karma_low_autokick = "Automatically kick players with low Karma"
+L.label_karma_low_amount = "Low Karma threshold"
+L.label_karma_low_ban = "Ban picked players with low Karma"
+L.label_karma_low_ban_minutes = "Ban time in minutes"
+L.label_karma_debugspam = "Enable debug output to console about Karma changes"

@@ -345,12 +345,15 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
 	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
+		local victimRoleData = victim:GetSubRoleData()
+
 		---
 		-- @realm server
-		local ret = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
-		if ret then
-			return ret
-		elseif victim:GetBaseRole() == ROLE_DETECTIVE then
+		local mutiplier = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
+
+		if mutiplier then
+			return mutiplier
+		elseif victimRoleData.isPublicRole and victimRoleData.isPolicingRole then
 			return 2
 		elseif not attacker:GetSubRoleData().unknownTeam then
 			return 1
