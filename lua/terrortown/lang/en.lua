@@ -1626,7 +1626,9 @@ L.label_roles_min_karma = "Lower limit of Karma to consider selection"
 -- 2021-11-07
 L.submenu_administration_administration_title = "Administration"
 L.submenu_administration_voicechat_title = "Voicechat"
+L.submenu_administration_round_setup_title = "Round Setup"
 
+L.header_roles_special_settings = "Special Role Settings"
 L.header_equipment_additional = "Additional Equipment Settings"
 L.header_administration_general = "General Administrative Settings"
 L.header_administration_logging = "Logging"
@@ -1635,6 +1637,11 @@ L.header_entspawn_plyspawn = "Player Spawn Settings"
 L.header_voicechat_general = "General Voicechat Settings"
 L.header_voicechat_battery = "Voicechat Battery"
 L.header_voicechat_locational = "Locational Voicechat"
+L.header_round_setup_plyspawn = "Player Spawn Settings"
+L.header_round_setup_prep = "Round: Preparing"
+L.header_round_setup_round = "Round: Active"
+L.header_round_setup_post = "Round: Post"
+L.header_round_setup_map_duration = "Map Session"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1650,6 +1657,12 @@ L.help_voicechat_battery = [[
 Voicechatting with enabled voice chat battery reduces this meter. When it's empty the player can't voicechat and must wait for a few seconds for it to recharge. This can help to prevent excessive voicechat usage.
 
 Note: 'Tick' refers to a game tick, ie. 1/66th of a second.]]
+L.help_ply_spawn = "Player parameters that are used on player (re-)spawn."
+L.help_haste_mode = [[
+Haste mode balances the game by increasing the round time with every dead player. Only roles that see missing in action players can see the real round time. Every other role can only see the haste mode starting time.
+
+If haste mode is enabled, the fixed round time is ignored.]]
+L.help_round_limit = "After one of the set limit conditions is met, a mapchange is triggered."
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1683,3 +1696,16 @@ L.label_voice_drain_normal = "Drain per tick for normal players"
 L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
 L.label_voice_drain_recharge = "Recharge rate per tick of not voicechatting"
 L.label_locational_voice = "Enable locational 3D voicechat sound for living players"
+L.label_armor_on_spawn = "Player armor on (re-)spawn"
+L.label_prep_respawn = "Enable instant respawn during preparing phase"
+L.label_preptime_seconds = "Preparing time in seconds"
+L.label_firstpreptime_seconds = "First preparing time in seconds"
+L.label_roundtime_minutes = "Fixed round time in minutes"
+L.label_haste = "Enable hase mode"
+L.label_haste_starting_minutes = "Hase mode starting time in minutes"
+L.label_haste_minutes_per_death = "Haste reward in minutes per death"
+L.label_posttime_seconds = "Postround time in seconds"
+L.label_round_limit = "Upper limit of rounds"
+L.label_time_limit_minutes = "Upper limit of playtime in minutes"
+L.label_nade_throw_during_prep = "Enable nade throwing during preparing time"
+L.label_postround_dm = "Enable deathmatch after round ended"

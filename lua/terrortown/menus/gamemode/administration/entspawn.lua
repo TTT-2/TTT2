@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 96
+CLGAMEMODESUBMENU.priority = 95
 CLGAMEMODESUBMENU.title = "submenu_administration_entspawn_title"
 
 local updateButtons = {}
