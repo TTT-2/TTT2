@@ -107,6 +107,20 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		}
 	})
 
+	local form2 = vgui.CreateTTT2Form(parent, "header_entspawn_plyspawn")
+
+	form2:MakeHelp({
+		label = "help_spawn_waves"
+	})
+
+	form2:MakeSlider({
+		serverConvar = "ttt_spawn_wave_interval",
+		label = "label_spawn_wave_interval",
+		min = 0,
+		max = 30,
+		decimal = 0
+	})
+
 	-- REGISTER UNHIDE FUNCTION TO STOP SPAWN EDITOR
 	HELPSCRN.menuFrame.OnShow = function(slf)
 		if HELPSCRN:GetOpenMenu() ~= "administration_entspawn" then return end

@@ -1630,6 +1630,7 @@ L.header_equipment_additional = "Additional Equipment Settings"
 L.header_administration_general = "General Administrative Settings"
 L.header_administration_logging = "Logging"
 L.header_administration_misc = "Miscellaneous"
+L.header_entspawn_plyspawn = "Player Spawn Settings"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1640,6 +1641,7 @@ If a player changes their name during a round, this can be abused to evade being
 
 If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
+L.help_spawn_waves = "If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points."
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1666,3 +1668,4 @@ L.label_weapon_carrying_range = "Weapon carry range"
 L.label_prop_carrying_force = "Prop pickup force"
 L.label_teleport_telefrags = "Kill blocking player(s) when teleporting (telefrag)"
 L.label_allow_discomb_jump = "Allow disco jump for grenade thrower"
+L.label_spawn_wave_interval = "Spawn wave interval in seconds"
