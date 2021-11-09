@@ -57,14 +57,20 @@ SWEP.NoSights = true
 local delay_beamup = 1
 local delay_beamdown = 1
 
+---
+-- @ignore
 function SWEP:SetTeleportMark(pos, ang)
 	self.teleport = {pos = pos, ang = ang}
 end
 
+---
+-- @ignore
 function SWEP:GetTeleportMark()
 	return self.teleport
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -85,6 +91,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
 
@@ -273,6 +281,8 @@ local function StartTeleport(ply, teleport, weapon)
 	util.Effect("teleport_beamdown", edata_dn)
 end
 
+---
+-- @ignore
 function SWEP:TeleportRecall()
 	local ply = self:GetOwner()
 
@@ -317,6 +327,8 @@ local function CanStoreTeleportPos(ply, pos)
 	return true, nil
 end
 
+---
+-- @ignore
 function SWEP:TeleportStore()
 	local ply = self:GetOwner()
 
@@ -335,11 +347,15 @@ function SWEP:TeleportStore()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddHUDHelp("tele_help_pri", "tele_help_sec", true)
 
@@ -358,6 +374,8 @@ if CLIENT then
 	end
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	if SERVER and IsValid(self:GetOwner()) then
 		self:GetOwner():DrawViewModel(false)
@@ -366,6 +384,8 @@ function SWEP:Deploy()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:ShootEffects()
 
 end

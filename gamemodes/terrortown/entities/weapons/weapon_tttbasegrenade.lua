@@ -56,11 +56,15 @@ AccessorFunc(SWEP, "det_time", "DetTime")
 -- @realm server
 CreateConVar("ttt_nade_throw_during_prep", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
+---
+-- @ignore
 function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 0, "Pin")
 	self:NetworkVar("Int", 0, "ThrowTime")
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -71,10 +75,14 @@ function SWEP:PrimaryAttack()
 	self:PullPin()
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 
 end
 
+---
+-- @ignore
 function SWEP:PullPin()
 	if self:GetPin() then return end
 
@@ -92,7 +100,8 @@ function SWEP:PullPin()
 	self:SetDetTime(CurTime() + self.detonate_timer)
 end
 
-
+---
+-- @ignore
 function SWEP:Think()
 	BaseClass.Think(self)
 
@@ -123,7 +132,8 @@ function SWEP:Think()
 	end
 end
 
-
+---
+-- @ignore
 function SWEP:BlowInFace()
 	local ply = self:GetOwner()
 	if not IsValid(ply) then return end
@@ -144,10 +154,14 @@ function SWEP:BlowInFace()
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:StartThrow()
 	self:SetThrowTime(CurTime() + 0.1)
 end
 
+---
+-- @ignore
 function SWEP:Throw()
 	if CLIENT then
 		self:SetThrowTime(0)
@@ -190,7 +204,8 @@ function SWEP:GetGrenadeName()
 	return "ttt_firegrenade_proj"
 end
 
-
+---
+-- @ignore
 function SWEP:CreateGrenade(src, ang, vel, angimp, ply)
 	local gren = ents.Create(self:GetGrenadeName())
 
@@ -219,6 +234,8 @@ function SWEP:CreateGrenade(src, ang, vel, angimp, ply)
 	return gren
 end
 
+---
+-- @ignore
 function SWEP:PreDrop()
 	-- if owner dies or drops us while the pin has been pulled, create the armed
 	-- grenade anyway
@@ -227,6 +244,8 @@ function SWEP:PreDrop()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	if self.SetHoldType then
 		self:SetHoldType(self.HoldNormal)
@@ -238,6 +257,8 @@ function SWEP:Deploy()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Holster()
 	if self:GetPin() then
 		return false -- no switching after pulling pin
@@ -249,10 +270,14 @@ function SWEP:Holster()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:Initialize()
 	if self.SetHoldType then
 		self:SetHoldType(self.HoldNormal)
@@ -266,6 +291,8 @@ function SWEP:Initialize()
 	self.was_thrown = false
 end
 
+---
+-- @ignore
 function SWEP:OnRemove()
 	local owner = self:GetOwner()
 

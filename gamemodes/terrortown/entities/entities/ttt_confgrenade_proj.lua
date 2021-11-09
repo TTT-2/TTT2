@@ -76,6 +76,8 @@ end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
+---
+-- @ignore
 function ENT:Explode(tr)
 	if SERVER then
 		self:SetNoDraw(true)
