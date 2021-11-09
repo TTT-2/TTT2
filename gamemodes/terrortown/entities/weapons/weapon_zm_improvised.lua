@@ -10,11 +10,11 @@ if SERVER then
 
 	---
 	-- @realm server
-	cv_crowbar_unlocks = CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
+	cv_crowbar_unlocks = CreateConVar("ttt_crowbar_unlocks", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 	---
 	-- @realm server
-	cv_crowbar_pushforce = CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
+	cv_crowbar_pushforce = CreateConVar("ttt_crowbar_pushforce", "395", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 end
 
 SWEP.HoldType = "melee"

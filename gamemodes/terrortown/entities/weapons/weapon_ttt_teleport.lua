@@ -2,8 +2,14 @@
 -- @class SWEP
 -- @section weapon_ttt_teleport
 
+local ttt_telefrags
+
 if SERVER then
 	AddCSLuaFile()
+
+	---
+	-- @realm server
+	ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 end
 
 SWEP.HoldType = "normal"
@@ -50,8 +56,6 @@ SWEP.NoSights = true
 
 local delay_beamup = 1
 local delay_beamdown = 1
-
-local ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1")
 
 function SWEP:SetTeleportMark(pos, ang)
 	self.teleport = {pos = pos, ang = ang}
