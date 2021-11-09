@@ -411,7 +411,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	for i = 1, availableBaseRolesAmount do
 		-- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
 		if currentlyAvailableRolesAmount >= maxPlys
-		    or maxRoles and maxRoles <= curRoles
+	    	or maxRoles and maxRoles <= curRoles
 			or maxBaseroles and maxBaseroles <= curBaseroles
 			or #availableBaseRolesTbl < 1
 		then
