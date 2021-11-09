@@ -130,6 +130,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_sherlock_mode"
 	})
 
+	form4:MakeSlider({
+		serverConvar = "ttt_minimum_players",
+		label = "label_minimum_players",
+		min = 0,
+		max = 15,
+		decimal = 0
+	})
+
 	local form5 = vgui.CreateTTT2Form(parent, "header_round_setup_post")
 
 	form5:MakeCheckBox({
