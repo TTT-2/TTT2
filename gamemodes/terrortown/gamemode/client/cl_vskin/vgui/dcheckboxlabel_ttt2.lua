@@ -221,6 +221,13 @@ function PANEL:SetText(text)
 end
 
 ---
+-- @param table params
+-- @realm client
+function PANEL:SetParams(params)
+	self.params = params
+end
+
+---
 -- @param string font
 -- @realm client
 function PANEL:SetFont(font)
@@ -239,6 +246,13 @@ end
 -- @realm client
 function PANEL:GetText()
 	return self.text or ""
+end
+
+---
+-- @return table
+-- @realm client
+function PANEL:GetParams()
+	return self.params
 end
 
 ---
