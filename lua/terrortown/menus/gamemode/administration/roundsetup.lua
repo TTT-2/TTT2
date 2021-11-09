@@ -121,6 +121,15 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		master = enbHaste
 	})
 
+	form4:MakeHelp({
+		label = "help_sherlock_mode"
+	})
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_sherlock_mode",
+		label = "label_sherlock_mode"
+	})
+
 	local form5 = vgui.CreateTTT2Form(parent, "header_round_setup_post")
 
 	form5:MakeCheckBox({

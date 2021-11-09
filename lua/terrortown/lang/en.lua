@@ -1674,6 +1674,7 @@ Dynamic armor is the TTT2 approach to make armor more interesting. The amount of
 When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
 
 If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
+L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlock mode is disabled, dead bodies can not be confirmed, the scoreboard shows everyone as alive and the spectators can talk to the living players."
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1736,3 +1737,4 @@ L.label_armor_damage_block_pct = "Damage percentage taken by armor"
 L.label_armor_damage_health_pct = "Damage percentage taken by player"
 L.label_armor_enable_reinforced = "Enable reinforced armor"
 L.label_armor_threshold_for_reinforced = "Reinforced armor threshold"
+L.label_sherlock_mode = "Enable sherlock mode"
