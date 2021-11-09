@@ -1666,6 +1666,14 @@ Haste mode balances the game by increasing the round time with every dead player
 If haste mode is enabled, the fixed round time is ignored.]]
 L.help_round_limit = "After one of the set limit conditions is met, a mapchange is triggered."
 L.help_hint_armor = "More armor settings can be found in the 'Edit Equipment' menu."
+L.help_armor_balancing = "The following values can be used to balance the armor."
+L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
+L.help_item_armor_dynamic = [[
+Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited and the armor value stacks. Getting damaged decreases the armor value.
+
+When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
+
+If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1720,3 +1728,11 @@ L.label_confirm_killlist = "Announce kill list of confirmed corpse"
 L.label_inspect_detective_only = "Limit corpse inspection to policing roles"
 L.label_confirm_detective_only = "Limit corpse confirmation to policing roles"
 L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
+L.label_armor_block_headshots = "Enable armor blocking headshots"
+L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
+L.label_armor_classic = "Enable classic armor"
+L.label_armor_value = "Armor given by the armor item"
+L.label_armor_damage_block_pct = "Damage percentage taken by armor"
+L.label_armor_damage_health_pct = "Damage percentage taken by player"
+L.label_armor_enable_reinforced = "Enable reinforced armor"
+L.label_armor_threshold_for_reinforced = "Reinforced armor threshold"
