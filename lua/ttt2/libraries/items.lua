@@ -92,6 +92,30 @@ function items.OnLoaded()
 
 		baseclass.Set(k, newTable)
 	end
+
+	local isSqlTableCreated = SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
+
+	for _, item in pairs(ItemList) do
+		InitDefaultEquipment(item)
+		ShopEditor.InitDefaultData(item) -- initialize the default data
+
+		if SERVER and isSqlTableCreated then
+			local name = GetEquipmentFileName(WEPS.GetClass(item))
+			local loaded, changed = sql.Load("ttt2_items", name, item, ShopEditor.savingKeys)
+
+			if not loaded then
+				sql.Init("ttt2_items", name, item, ShopEditor.savingKeys)
+			elseif changed then
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
+			end
+		end
+
+		CreateEquipment(item) -- init items
+
+		item.CanBuy = {} -- reset normal items equipment
+
+		item:Initialize()
+	end
 end
 
 ---
