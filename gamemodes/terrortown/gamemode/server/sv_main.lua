@@ -427,34 +427,6 @@ function GM:InitPostEntity()
 	-- load all HUD elements
 	hudelements.OnLoaded()
 
-	local itms = items.GetList()
-
-	local isSqlTableCreated = sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
-
-	for i = 1, #itms do
-		local eq = itms[i]
-
-		InitDefaultEquipment(eq)
-		ShopEditor.InitDefaultData(eq)
-
-		if isSqlTableCreated then
-			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
-
-			if not loaded then
-				sql.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
-			end
-		end
-
-		CreateEquipment(eq) -- init items
-
-		eq.CanBuy = {} -- reset normal items equipment
-
-		eq:Initialize()
-	end
-
 	local sweps = weapons.GetList()
 
 	for i = 1, #sweps do
@@ -884,6 +856,9 @@ function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
 
 	entityOutputs.CleanUp()
+
+	-- While cleaning up the map, disable random weapons directly spawning
+	entspawn.SetForcedRandomSpawn(false)
 end
 
 ---
@@ -898,6 +873,11 @@ function GM:PostCleanupMap()
 	entityOutputs.SetUp()
 
 	entspawn.HandleSpawns()
+
+	-- After map cleanup enable 'env_entity_maker'-entities to force spawn random weapons and ammo
+	-- This is necessary for maps like 'ttt_lttp_kakariko_a5', that only initialize 'ttt_random_weapon'-entities
+	-- after destroying vases and were therefore not affected by our entspawn-system
+	entspawn.SetForcedRandomSpawn(true)
 	---
 	-- @realm server
 	hook.Run("TTT2PostCleanupMap")
@@ -1359,6 +1339,9 @@ function GM:OnReloaded()
 
 	-- reload entity spawns from file
 	entspawnscript.OnLoaded()
+
+	-- load all items
+	items.OnLoaded()
 
 	-- load all HUDs
 	huds.OnLoaded()
