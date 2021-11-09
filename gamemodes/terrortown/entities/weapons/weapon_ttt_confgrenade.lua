@@ -36,3 +36,17 @@ SWEP.Weight = 5
 function SWEP:GetGrenadeName()
 	return "ttt_confgrenade_proj"
 end
+
+if CLIENT then
+	---
+	-- @ignore
+	function SWEP:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_allow_discomb_jump",
+			label = "label_allow_discomb_jump",
+		})
+	end
+end
+
