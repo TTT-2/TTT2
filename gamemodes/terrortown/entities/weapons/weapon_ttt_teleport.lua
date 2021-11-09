@@ -341,6 +341,17 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
+
+	---
+	-- @ignore
+	function SWEP:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_teleport_telefrags",
+			label = "label_teleport_telefrags"
+		})
+	end
 end
 
 function SWEP:Deploy()
