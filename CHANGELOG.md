@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed inconsistency between `.disabledTeamChatRecv` and `.disabledTeamChatRec`
 - Fixed non-public policing roles having hats and therefore confirming them
 - Fixed triggered spawns on maps like 'ttt_lttp_kakariko_a5' with the vases and 'ttt_mc_jondome' with the chests
+- Fixed roleselection layering with base roles to ensure layer order is considered correctly when selecting roles
 - Fixed hotreloading items
 
 ### Changed
