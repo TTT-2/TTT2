@@ -1663,6 +1663,7 @@ Haste mode balances the game by increasing the round time with every dead player
 
 If haste mode is enabled, the fixed round time is ignored.]]
 L.help_round_limit = "After one of the set limit conditions is met, a mapchange is triggered."
+L.help_hint_armor = "More armor settings can be found in the 'Edit Equipment' menu."
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1701,8 +1702,8 @@ L.label_prep_respawn = "Enable instant respawn during preparing phase"
 L.label_preptime_seconds = "Preparing time in seconds"
 L.label_firstpreptime_seconds = "First preparing time in seconds"
 L.label_roundtime_minutes = "Fixed round time in minutes"
-L.label_haste = "Enable hase mode"
-L.label_haste_starting_minutes = "Hase mode starting time in minutes"
+L.label_haste = "Enable haste mode"
+L.label_haste_starting_minutes = "Haste mode starting time in minutes"
 L.label_haste_minutes_per_death = "Haste reward in minutes per death"
 L.label_posttime_seconds = "Postround time in seconds"
 L.label_round_limit = "Upper limit of rounds"

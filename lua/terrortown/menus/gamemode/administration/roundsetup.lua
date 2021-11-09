@@ -20,6 +20,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 0
 	})
 
+	form:MakeHelp({
+		label = "help_hint_armor"
+	})
+
 	local form2 = vgui.CreateTTT2Form(parent, "header_round_setup_prep")
 
 	form2:MakeCheckBox({
