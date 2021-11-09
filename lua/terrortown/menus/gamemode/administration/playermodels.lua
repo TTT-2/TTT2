@@ -69,6 +69,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				playermodels.UpdateModel(name, playermodels.state.hattable, state)
 			end
 		}, base)
+
+		playermodels.IsSelectedModel(name, function(value)
+			boxCache[name]:SetModelSelected(value, false)
+		end)
+
+		playermodels.IsHattableModel(name, function(value)
+			boxCache[name]:SetModelHattable(value, false)
+		end)
 	end
 
 	playermodels.OnChange("PlayermodelsUpdateTrigger", function(data)

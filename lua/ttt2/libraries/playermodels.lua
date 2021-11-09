@@ -156,8 +156,8 @@ function playermodels.IsSelectedModel(name, OnReceiveFunc)
 		defaultValue = initialModels[name]
 	end
 
-	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExist, value)
-		if not databaseExist then
+	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExists, value)
+		if not databaseExists or value == nil then
 			value = defaultValue
 		end
 
@@ -187,8 +187,8 @@ function playermodels.IsHattableModel(name, OnReceiveFunc)
 		defaultValue = initialHattableModels[name]
 	end
 
-	local _, isHattable = database.GetValue(playermodels.accessName, name, "hattable", function(databaseExist, value)
-		if not databaseExist then
+	local _, isHattable = database.GetValue(playermodels.accessName, name, "hattable", function(databaseExists, value)
+		if not databaseExists or value == nil then
 			value = defaultValue
 		end
 

@@ -20,6 +20,7 @@ local maxUInt = 2 ^ uIntBits
 local databaseCount = 0
 
 local registeredDatabases = {}
+local receivedValues = {}
 local nameToIndex = {}
 
 -- Identifier enums to determine the message to send or receive
@@ -46,7 +47,6 @@ local waitForRegisteredDatabases = {}
 local triedToGetRegisteredDatabases = {}
 local onWaitReceiveFunctionCache = {}
 
-local requestCacheSize = 0
 local requestCache = {}
 local functionCache = {}
 
@@ -63,6 +63,22 @@ local playerID64Cache = {}
 --
 -- General Shared functions
 --
+
+local function valueReceived(accessName, itemName, key)
+	local receiver = receivedValues[accessName] or {}
+
+	receiver[itemName] = receiver[itemName] or {}
+	receiver[itemName][key] = true
+
+	receivedValues[accessName] = receiver
+end
+
+local function isValueReceived(accessName, itemName, key)
+	return receivedValues[accessName]
+		and receivedValues[accessName][itemName]
+		and receivedValues[accessName][itemName][key]
+		or false
+end
 
 ---
 -- Called on change of values over the database-library
@@ -116,6 +132,7 @@ local function OnChange(index, itemName, key, newValue)
 		end
 	end
 
+	valueReceived(accessName, itemName, key)
 end
 
 ---
@@ -331,15 +348,16 @@ if CLIENT then
 		[MESSAGE_GET_VALUE] = function()
 			local identifier = net.ReadUInt(uIntBits)
 			local isSuccess = net.ReadBool()
+			local request = requestCache[identifier]
 			local value
 
 			if isSuccess then
-				local request = requestCache[identifier]
 				value = net.ReadString()
 				value = database.ConvertValueWithKey(value, request.accessName, request.key)
-				registeredDatabases[request.index].storedData[request.itemName] = {[request.key] = value}
+				registeredDatabases[request.index].storedData = {[request.itemName] = {[request.key] = value}}
 			end
 
+			valueReceived(request.accessName, request.itemName, request.key)
 			functionCache[identifier](isSuccess, value)
 		end,
 		[MESSAGE_SET_VALUE] = function()
@@ -347,6 +365,8 @@ if CLIENT then
 			local itemName = net.ReadString()
 			local key = net.ReadString()
 			local value = net.ReadString()
+
+			value = database.ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
 
 			OnChange(index, itemName, key, value)
 		end
@@ -637,10 +657,8 @@ if CLIENT then
 			return
 		end
 
-		local storedValue = dataTable and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
-
-		if storedValue then
-			OnReceiveFunc(true, storedValue)
+		if isValueReceived(accessName, itemName, key) then
+			OnReceiveFunc(true, dataTable.storedData[itemName] and dataTable.storedData[itemName][key])
 
 			return
 		end
