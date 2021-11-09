@@ -1625,7 +1625,7 @@ L.label_roles_min_karma = "Lower limit of Karma to consider selection"
 
 -- 2021-11-07
 L.submenu_administration_administration_title = "Administration"
-L.submenu_administration_voicechat_title = "Voicechat"
+L.submenu_administration_voicechat_title = "Voicechat / Textchat"
 L.submenu_administration_round_setup_title = "Round Setup"
 
 L.header_roles_special_settings = "Special Role Settings"
@@ -1642,6 +1642,7 @@ L.header_round_setup_prep = "Round: Preparing"
 L.header_round_setup_round = "Round: Active"
 L.header_round_setup_post = "Round: Post"
 L.header_round_setup_map_duration = "Map Session"
+L.header_textchat = "Textchat"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1710,3 +1711,5 @@ L.label_round_limit = "Upper limit of rounds"
 L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 L.label_nade_throw_during_prep = "Enable nade throwing during preparing time"
 L.label_postround_dm = "Enable deathmatch after round ended"
+L.label_spectator_chat = "Enable spectators chatting with everybody"
+L.label_lastwords_chatprint = "Print last words to chat if killed while typing"

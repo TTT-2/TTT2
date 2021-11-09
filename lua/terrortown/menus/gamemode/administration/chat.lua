@@ -57,4 +57,16 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		serverConvar = "ttt_locational_voice",
 		label = "label_locational_voice"
 	})
+
+	local form4 = vgui.CreateTTT2Form(parent, "header_textchat")
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_spectator_chat",
+		label = "label_spectator_chat"
+	})
+
+	form4:MakeCheckBox({
+		serverConvar = "ttt_lastwords_chatprint",
+		label = "label_lastwords_chatprint"
+	})
 end
