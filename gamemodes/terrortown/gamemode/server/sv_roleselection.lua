@@ -405,9 +405,18 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		ROLE_INNOCENT
 	}
 
+	local currentlyAvailableRolesAmount = rolesAmountList[ROLE_TRAITOR] + rolesAmountList[ROLE_INNOCENT]
+
 	-- first of all, we need to select the baseroles. Otherwise, we would select subroles that never gonna be choosen because if the missing baserole
 	for i = 1, availableBaseRolesAmount do
-		if maxRoles and maxRoles <= curRoles or maxBaseroles and maxBaseroles <= curBaseroles or #availableBaseRolesTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
+		-- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
+		if currentlyAvailableRolesAmount >= maxPlys
+			or maxRoles and maxRoles <= curRoles
+			or maxBaseroles and maxBaseroles <= curBaseroles
+			or #availableBaseRolesTbl < 1
+		then
+			break
+		end
 
 		-- the selected role
 		local subrole = nil
@@ -439,11 +448,14 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			table.remove(availableBaseRolesTbl, rnd) -- selected subrole shouldn't get selected multiple times
 		end
 
-		selectableRoles[subrole] = rolesAmountList[subrole]
+		local amountForThisRole = math.min(rolesAmountList[subrole], maxPlys - currentlyAvailableRolesAmount)
+
+		selectableRoles[subrole] = amountForThisRole
 		baseroleLoopTbl[#baseroleLoopTbl + 1] = subrole
 
 		curRoles = curRoles + 1
 		curBaseroles = curBaseroles + 1
+		currentlyAvailableRolesAmount = currentlyAvailableRolesAmount + amountForThisRole
 	end
 
 	local layeredSubRolesTbl = table.Copy(roleselection.subroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
@@ -612,7 +624,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		end
 	end
 
-	local selectedForcedRoles = GetHardForcedBaseRoles() -- this gets the hardforced amount of baseroles that are taken by subroles 
+	local selectedForcedRoles = GetHardForcedBaseRoles() -- this gets the hardforced amount of baseroles that are taken by subroles
 
 	for subrole, forcedPlys in pairs(transformed) do
 		local roleCount = selectableRoles[subrole]
