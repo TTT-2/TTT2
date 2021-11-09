@@ -427,34 +427,6 @@ function GM:InitPostEntity()
 	-- load all HUD elements
 	hudelements.OnLoaded()
 
-	local itms = items.GetList()
-
-	local isSqlTableCreated = sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
-
-	for i = 1, #itms do
-		local eq = itms[i]
-
-		InitDefaultEquipment(eq)
-		ShopEditor.InitDefaultData(eq)
-
-		if isSqlTableCreated then
-			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
-
-			if not loaded then
-				sql.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
-			end
-		end
-
-		CreateEquipment(eq) -- init items
-
-		eq.CanBuy = {} -- reset normal items equipment
-
-		eq:Initialize()
-	end
-
 	local sweps = weapons.GetList()
 
 	for i = 1, #sweps do
@@ -1367,6 +1339,9 @@ function GM:OnReloaded()
 
 	-- reload entity spawns from file
 	entspawnscript.OnLoaded()
+
+	-- load all items
+	items.OnLoaded()
 
 	-- load all HUDs
 	huds.OnLoaded()
