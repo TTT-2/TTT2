@@ -438,8 +438,8 @@ L.tele_no_mark = "No hay ningún destino marcado. Marca uno antes de teleportart
 L.tele_no_mark_ground = "¡No puedes establecer un destino si no estás en una superficie sólida!"
 L.tele_no_mark_crouch = "¡No puedes establecer un destino mientras estás agachado!"
 
-L.tele_help_pri = "{primaryfire} teleportarte a la ubicación marcada."
-L.tele_help_sec = "{secondaryfire} marca la ubicación actual."
+L.tele_help_pri = "Teleportarte a la ubicación marcada"
+L.tele_help_sec = "Marca la ubicación actual"
 
 L.tele_desc = [[
 Lo teletransporta a una ubicación marcada previamente.

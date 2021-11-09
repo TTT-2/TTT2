@@ -438,8 +438,8 @@ L.tele_no_mark = "Brak zaznaczonej lokalizacji.Zaznacz miejsce przeznaczenia prz
 L.tele_no_mark_ground = "Nie można zaznaczyć lokalizacji, gdy nie jest się na stałym gruncie!"
 L.tele_no_mark_crouch = "Nie można zaznaczyć lokalizacji podczas skradania!"
 
-L.tele_help_pri = "{primaryfire} teleportuje do zaznaczonej lokalizacji."
-L.tele_help_sec = "{secondaryfire} zaznacza aktualną lokalizacje."
+L.tele_help_pri = "Teleportuje do zaznaczonej lokalizacji"
+L.tele_help_sec = "Zaznacza aktualną lokalizacje"
 
 L.tele_desc = [[
 Teleportuje do wcześniej zaznaczonego miejsca.

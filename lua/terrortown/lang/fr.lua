@@ -439,8 +439,8 @@ L.tele_no_mark = "Aucune position marquée. Marquez une destination avant de vou
 L.tele_no_mark_ground = "Impossible de marquer une position à moins d'être sur un sol solide!"
 L.tele_no_mark_crouch = "Impossible de marquer une position en étant accroupi!"
 
-L.tele_help_pri = "{primaryfire} téléporte à la position marquée."
-L.tele_help_sec = "{secondaryfire} marque la position actuelle."
+L.tele_help_pri = "Téléporte à la position marquée"
+L.tele_help_sec = "Marque la position actuelle"
 
 L.tele_desc = [[
 Téleporte vers un lieu marqué.

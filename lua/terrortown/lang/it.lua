@@ -438,8 +438,8 @@ L.tele_no_mark = "Nessuna posizione segnalata. Segnala una destinazione prima di
 L.tele_no_mark_ground = "Non puoi segnalare una posizione per il teletrasporto se non sei a terra!"
 L.tele_no_mark_crouch = "Non puoi segnalare una posizione per il teletrasporto mentre sei abbassato!"
 
-L.tele_help_pri = "{primaryfire} teletrasporta alla posizione segnalata."
-L.tele_help_sec = "{secondaryfire} segnala questa posizione."
+L.tele_help_pri = "Teletrasporta alla posizione segnalata"
+L.tele_help_sec = "Segnala questa posizione"
 
 L.tele_desc = [[
 Teletrasportati ad una posizione precedentemente segnalata.

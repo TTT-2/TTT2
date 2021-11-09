@@ -438,8 +438,8 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri = " {primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec = " {scondaryfire} 标记传送地点。"
+L.tele_help_pri = "传送到已标记的传送地点"
+L.tele_help_sec = "标记传送地点"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。

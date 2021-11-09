@@ -438,8 +438,8 @@ L.tele_no_mark = "設定した場所がないようだ。テレポートする�
 L.tele_no_mark_ground = "安定した足場に立つまではテレポート位置を設定することはできないぞ！"
 L.tele_no_mark_crouch = "しゃがんでいるとテレポート位置を設定することができないぞ！"
 
-L.tele_help_pri = "{primaryfire}で設定した場所にテレポートする"
-L.tele_help_sec = "{secondaryfire}で現在地を設定する"
+L.tele_help_pri = "で設定した場所にテレポートする"
+L.tele_help_sec = "で現在地を設定する"
 
 L.tele_desc = [[
 あらかじめ設定した地点にテレポートができる。
