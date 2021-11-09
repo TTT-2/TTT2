@@ -50,6 +50,9 @@ SWEP.was_thrown = false
 SWEP.detonate_timer = 5
 SWEP.DeploySpeed = 1.5
 
+---
+-- @accessor number
+-- @realm shared
 AccessorFunc(SWEP, "det_time", "DetTime")
 
 ---
@@ -197,7 +200,9 @@ function SWEP:Throw()
 	end
 end
 
--- subclasses must override with their own grenade ent
+---
+-- Subclasses must override with their own grenade ent.
+-- @realm shared
 function SWEP:GetGrenadeName()
 	ErrorNoHalt("SWEP BASEGRENADE ERROR: GetGrenadeName not overridden! This is probably wrong!\n")
 
