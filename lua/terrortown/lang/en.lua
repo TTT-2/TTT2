@@ -1627,6 +1627,7 @@ L.label_roles_min_karma = "Lower limit of Karma to consider selection"
 L.submenu_administration_administration_title = "Administration"
 L.submenu_administration_voicechat_title = "Voicechat / Textchat"
 L.submenu_administration_round_setup_title = "Round Setup"
+L.submenu_administration_mapentities_title = "Map Entities"
 
 L.header_roles_special_settings = "Special Role Settings"
 L.header_equipment_additional = "Additional Equipment Settings"
@@ -1646,6 +1647,8 @@ L.header_textchat = "Textchat"
 L.header_round_dead_players = "Dead Player Settings"
 L.header_administration_scoreboard = "Scoreboard Settings"
 L.header_hud_toggleable = "Toggleable HUD Elements"
+L.header_mapentities_prop_possession = "Prop Possession"
+L.header_mapentities_doors = "Doors"
 
 L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1677,6 +1680,10 @@ When taking damage, a certain percentage of this damage is converted into armor 
 
 If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
 L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlock mode is disabled, dead bodies can not be confirmed, the scoreboard shows everyone as alive and the spectators can talk to the living players."
+L.help_prop_possession = [[
+Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
+
+The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limmits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
 L.label_killer_dna_basetime = "Sample life base time"
@@ -1746,3 +1753,14 @@ L.label_highlight_vip = "Highlight VIP"
 L.label_highlight_addondev = "Highlight TTT2 addon developer"
 L.label_highlight_supporter = "Highlight other supporters"
 L.label_enable_hud_element = "Enable {elem} HUD element"
+L.label_spec_prop_control = "Enable prop possession"
+L.label_spec_prop_base = "Possession base value"
+L.label_spec_prop_maxpenalty = "Lower possession bonus limit"
+L.label_spec_prop_maxbonus = "Upper possession bonus limit"
+L.label_spec_prop_force = "Possession push force"
+L.label_spec_prop_rechargetime = "Recharge time in seconds"
+L.label_doors_force_pairs = "Force close-by doors as double doors"
+L.label_doors_destructible = "Enable destructible doors"
+L.label_doors_locked_indestructible = "Initially locked doors are indestructible"
+L.label_doors_health = "Door health"
+L.label_doors_prop_health = "Door prop health"
