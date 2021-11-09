@@ -1659,7 +1659,10 @@ If a player changes their name during a round, this can be abused to evade being
 
 If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
-L.help_spawn_waves = "If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points."
+L.help_spawn_waves = [[
+If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points.
+
+Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
 L.help_voicechat_battery = [[
 Voicechatting with enabled voice chat battery reduces this meter. When it's empty the player can't voicechat and must wait for a few seconds for it to recharge. This can help to prevent excessive voicechat usage.
 
