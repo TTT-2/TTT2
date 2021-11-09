@@ -409,7 +409,14 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	-- first of all, we need to select the baseroles. Otherwise, we would select subroles that never gonna be choosen because if the missing baserole
 	for i = 1, availableBaseRolesAmount do
-		if currentlyAvailableRolesAmount >= maxPlys or maxRoles and maxRoles <= curRoles or maxBaseroles and maxBaseroles <= curBaseroles or #availableBaseRolesTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
+		-- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
+		if currentlyAvailableRolesAmount >= maxPlys
+		    or maxRoles and maxRoles <= curRoles
+			or maxBaseroles and maxBaseroles <= curBaseroles
+			or #availableBaseRolesTbl < 1
+		then
+			break
+		end
 
 		-- the selected role
 		local subrole = nil
