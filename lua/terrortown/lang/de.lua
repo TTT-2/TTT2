@@ -439,7 +439,7 @@ L.tele_no_mark_ground = "Kann keine Teleportstelle markieren, während man nicht
 L.tele_no_mark_crouch = "Kann keine Teleportstelle markieren, während man geduckt ist!"
 
 L.tele_help_pri = "Teleportiert dich zur markierten Stelle"
-L.tele_help_sec = "{Markiert momentane Position"
+L.tele_help_sec = "Markiert momentane Position"
 
 L.tele_desc = [[
 Teleportiert dich zu einer zuvor markierten Stelle.
