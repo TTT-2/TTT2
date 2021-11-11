@@ -61,7 +61,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	local form4 = vgui.CreateTTT2Form(parent, "header_textchat")
 
 	form4:MakeCheckBox({
-		serverConvar = "ttt_spectator_chat",
+		serverConvar = "ttt_spectators_chat_globally",
 		label = "label_spectator_chat"
 	})
 
