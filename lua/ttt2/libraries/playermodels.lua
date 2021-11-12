@@ -5,7 +5,6 @@
 if SERVER then
 	AddCSLuaFile()
 
-	util.AddNetworkString("TTT2UpdatePlayerModel")
 	util.AddNetworkString("TTT2UpdateChangedPlayerModel")
 	util.AddNetworkString("TTT2ResetPlayerModels")
 end
@@ -56,10 +55,6 @@ local initialHattableModels = {
 	["male09"] = true
 }
 
--- Increase this when more values are given
--- (2 ^ bitCount) - 1 is the maximum number that can be sent
-local bitCount = 2
-
 playermodels = playermodels or {}
 
 playermodels.accessName = "Playermodel_Pool"
@@ -77,59 +72,23 @@ playermodels.changedModelStates = playermodels.changedModelStates or {}
 
 -- Enums for the states
 playermodels.state = {
-	selected = 1,
-	hattable = 2
+	selected = "selected",
+	hattable = "hattable"
 }
-
--- Are automatically constructed on first use
--- playermodels.stateNames = { [1] = "selected" ...}
 
 ---
 -- Updates the given value state of a provided playermodel.
 -- @param string name The name of the model
--- @param number valueEnum The enum of the variable to change. See `playermodels.state` for listed enums
+-- @param string valueName The name of the variable to change. See `playermodels.state` for listed names
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
-function playermodels.UpdateModel(name, valueEnum, state)
-	if SERVER then
-		local valueName = playermodels.GetStringFromEnum(valueEnum)
-
-		playermodels.modelStates[name][valueName] = state
-		playermodels.changedModelStates[name] = playermodels.changedModelStates[name] or {}
-
-		if playermodels.defaultModelStates[name][valueName] == state then
-			state = nil
-		end
-
-		playermodels.changedModelStates[name][valueName] = state
-
-		database.SetValue(playermodels.accessName, name, valueName, state)
-
-		playermodels.StreamModelStateToSelectedClients(true)
-	else -- CLIENT
-		net.Start("TTT2UpdatePlayerModel")
-		net.WriteString(name)
-		net.WriteUInt(valueEnum, bitCount)
-		net.WriteBool(state or false)
-		net.SendToServer()
-	end
-end
-
----
--- Converts the given enum to a string and also creates a fast lookup table
--- @param number stateEnum The enum to be converted. See `playermodels.state` for listed enums
--- @return string stateName returns the name of the given enum
--- @realm shared
-function playermodels.GetStringFromEnum(stateEnum)
-	if not playermodels.stateNames then
-		playermodels.stateNames = {}
-
-		for name, enum in pairs(playermodels.state) do
-			playermodels.stateNames[enum] = name
-		end
+function playermodels.UpdateModel(name, valueName, state)
+	print("Update model " .. name .. " for value " .. tostring(valueName) .. " with state " .. tostring(state) .. " on " .. (SERVER and "Server." or CLIENT and "Client."))
+	if playermodels.defaultModelStates[name][valueName] == state then
+		state = nil
 	end
 
-	return playermodels.stateNames[stateEnum]
+	database.SetValue(playermodels.accessName, name, valueName, state)
 end
 
 ---
@@ -146,8 +105,8 @@ end
 -- Checks if a provided model is in the selection pool.
 -- @warning As client you must give an OnReceiveFunction as data might be gathered from the server first
 -- @param string name The name of the model
--- @param[opt] function OnReceiveFunc(value) only for the client the function to be called with the returned value
--- @return boolean Returns true, if the model is in the selection pool
+-- @param[opt] function OnReceiveFunc(value) only for the client the function to be called with the returned value if the model is selectable
+-- @return[opt] boolean Returns true, if the model is in the selection pool on the server only
 -- @realm shared
 function playermodels.IsSelectedModel(name, OnReceiveFunc)
 	local defaultValue = false
@@ -177,8 +136,8 @@ end
 -- Checks if a provided model is hattable.
 -- @warning As client you must give an OnReceiveFunction as data might be gathered from the server first
 -- @param string name The name of the model
--- @param[opt] function OnReceiveFunc(value) only for the client  the function to be called with the returned value
--- @return boolean Returns true, if the model is hattable
+-- @param[opt] function OnReceiveFunc(value) only for the client  the function to be called with the returned value if the model is hattable
+-- @return[opt] boolean Returns true, if the model is hattable on the server only
 -- @realm shared
 function playermodels.IsHattableModel(name, OnReceiveFunc)
 	local defaultValue = false
@@ -447,12 +406,6 @@ end
 function playermodels.PlayerCanHaveHat(ply)
 	return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 end
-
-net.Receive("TTT2UpdatePlayerModel", function(_, ply)
-	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
-
-	playermodels.UpdateModel(net.ReadString(), net.ReadUInt(bitCount), net.ReadBool())
-end)
 
 net.Receive("TTT2ResetPlayerModels", function(_, ply)
 	if not IsValid(ply) or not ply:IsSuperAdmin() then return end

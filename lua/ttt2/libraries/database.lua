@@ -12,14 +12,14 @@ if SERVER then
 	util.AddNetworkString("TTT2SynchronizeDatabase")
 end
 
-local messageIdentifier = -1
+local messageIdentifier = 0
 local maxBytesPerMessage = 32 * 1000 -- Can be up to 65.533KB see: https://wiki.facepunch.com/gmod/net.Start
 local uIntBits = 8 -- we can synchronize up to 2 ^ uIntBits - 1 different sqlTables
-local maxUInt = 2 ^ uIntBits
+local maxUInt = 2 ^ uIntBits - 1
 
 local databaseCount = 0
 
-local registeredDatabases = {}
+registeredDatabases = {}
 local receivedValues = {}
 local nameToIndex = {}
 
@@ -354,7 +354,13 @@ if CLIENT then
 			if isSuccess then
 				value = net.ReadString()
 				value = database.ConvertValueWithKey(value, request.accessName, request.key)
-				registeredDatabases[request.index].storedData = {[request.itemName] = {[request.key] = value}}
+
+				local storedData = registeredDatabases[request.index].storedData
+
+				local storedItemData = storedData[request.itemName] or {}
+				storedItemData[request.key] = value
+
+				storedData[request.itemName] = storedItemData
 			end
 
 			valueReceived(request.accessName, request.itemName, request.key)
@@ -593,7 +599,7 @@ if CLIENT then
 	-- @realm client
 	-- @internal
 	function database.GetRegisteredDatabases(OnReceiveFunc)
-		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		messageIdentifier = messageIdentifier % maxUInt + 1
 		functionCache[messageIdentifier] = OnReceiveFunc
 
 		SendUpdateNextTick(MESSAGE_REGISTER, messageIdentifier)
@@ -663,7 +669,7 @@ if CLIENT then
 			return
 		end
 
-		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		messageIdentifier = messageIdentifier % maxUInt + 1
 		functionCache[messageIdentifier] = OnReceiveFunc
 
 		requestCache[messageIdentifier] = {
@@ -691,7 +697,7 @@ if CLIENT then
 			return
 		end
 
-		if not registeredDatabases.keys[key] then
+		if not registeredDatabases[index].keys[key] then
 			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
@@ -850,7 +856,7 @@ if SERVER then
 				dataTable.storedData[itemName][key] = value
 
 				print("\nFetched itemValue is: " .. tostring(value))
-				return true, value
+				return value ~= nil, value
 			end
 
 			database.ConvertTable(sqlData, accessName)
@@ -883,7 +889,7 @@ if SERVER then
 		print("\nFetched sqlData is: ")
 		PrintTable(sqlData)
 
-		return true, sqlData
+		return istable(sqlData), sqlData
 	end
 
 	---
