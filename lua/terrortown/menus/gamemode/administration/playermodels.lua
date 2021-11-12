@@ -77,16 +77,37 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		playermodels.IsHattableModel(name, function(value)
 			boxCache[name]:SetModelHattable(value, false)
 		end)
+
+		playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
+
+		playermodels.AddChangeCallback(name, playermodels.state.selected, function(value)
+			local box = boxCache[name]
+
+			if not IsValid(box) then
+				playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
+
+				return
+			end
+
+			box:SetModelSelected(value, false)
+		end,
+		"TTT2F1MenuPlayermodels")
+
+		playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
+
+		playermodels.AddChangeCallback(name, playermodels.state.hattable, function(value)
+			local box = boxCache[name]
+
+			if not IsValid(box) then
+				playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
+
+				return
+			end
+
+			box:SetModelHattable(value, false)
+		end,
+		"TTT2F1MenuPlayermodels")
 	end
-
-	playermodels.OnChange("PlayermodelsUpdateTrigger", function(data)
-		for name, entry in pairs(data) do
-			if not IsValid(boxCache[name]) then continue end
-
-			boxCache[name]:SetModelSelected(entry.selected)
-			boxCache[name]:SetModelHattable(entry.hattable)
-		end
-	end)
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)

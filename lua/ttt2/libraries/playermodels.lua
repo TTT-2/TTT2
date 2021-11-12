@@ -83,7 +83,6 @@ playermodels.state = {
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
 function playermodels.UpdateModel(name, valueName, state)
-	print("Update model " .. name .. " for value " .. tostring(valueName) .. " with state " .. tostring(state) .. " on " .. (SERVER and "Server." or CLIENT and "Client."))
 	if playermodels.defaultModelStates[name][valueName] == state then
 		state = nil
 	end
@@ -163,6 +162,21 @@ function playermodels.IsHattableModel(name, OnReceiveFunc)
 	end
 end
 
+function playermodels.AddChangeCallback(modelName, valueName, callback, identifier)
+	database.AddChangeCallback(playermodels.accessName, modelName, valueName, function(accessName, itemName, key, oldValue, newValue)
+		if newValue == nil then
+			newValue = playermodels.defaultModelStates[modelName][valueName]
+		end
+
+		callback(newValue)
+	end,
+	identifier)
+end
+
+function playermodels.RemoveChangeCallback(modelName, valueName, identifier)
+	database.RemoveChangeCallback(playermodels.accessName, modelName, valueName, identifier)
+end
+
 ---
 -- Reset all selected playermodels, hattability and reinitialize the database.
 -- @realm shared
@@ -188,10 +202,6 @@ if CLIENT then
 	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
 		playermodels.defaultModelStates = data
 		playermodels.modelStates = tableCopy(data)
-
-		for _, Callback in pairs(callbackCache) do
-			Callback(data)
-		end
 	end)
 
 	net.ReceiveStream("TTT2StreamChangedModelTable", function(data)
@@ -210,22 +220,7 @@ if CLIENT then
 				playermodels.modelStates[name].sortName = stringLower(name)
 			end
 		end
-
-		for _, Callback in pairs(callbackCache) do
-			Callback(playermodels.modelStates)
-		end
 	end)
-
-	---
-	-- Used to add a function to the callback stack that is called when a change
-	-- is made on the server. The first argument of the Callback function is the
-	-- new data.
-	-- @param string name The unique callback identifier
-	-- @param function Callback The callback function that should be added
-	-- @realm client
-	function playermodels.OnChange(name, Callback)
-		callbackCache[name] = Callback
-	end
 
 	-- all the remaining functions are server only
 	return

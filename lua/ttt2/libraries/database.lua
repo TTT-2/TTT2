@@ -19,7 +19,7 @@ local maxUInt = 2 ^ uIntBits - 1
 
 local databaseCount = 0
 
-registeredDatabases = {}
+local registeredDatabases = {}
 local receivedValues = {}
 local nameToIndex = {}
 
@@ -104,7 +104,6 @@ local function OnChange(index, itemName, key, newValue)
 	-- Call all callbacks
 	local cache = callbackCache[accessName]
 	if not cache then return end
-
 	local tempItemName = itemName
 	for i = 1, 2 do
 		if i == 2 then
@@ -126,8 +125,10 @@ local function OnChange(index, itemName, key, newValue)
 			if not funcCache then continue end
 
 			-- Execute callbacks
-			for k = 1, #funcCache do
-				funcCache[k](accessName, itemName, key, oldValue, newValue)
+			for identifier, functions in pairs(funcCache) do
+				for k = 1, #functions do
+					functions[k](accessName, itemName, key, oldValue, newValue)
+				end
 			end
 		end
 	end
@@ -163,12 +164,14 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 	end
 
 	local cache = callbackCache[accessName] or {}
+
 	cache[itemName] = cache[itemName] or {}
 	cache[itemName][key] = cache[itemName][key] or {}
 	cache[itemName][key][identifier] = cache[itemName][key][identifier] or {}
 	cache[itemName][key][identifier][#cache[itemName][key][identifier] + 1] = callback
 
 	callbackCache[accessName] = cache
+
 	callbackIdentifiers[identifier] = callbackIdentifiers[identifier] or {}
 	callbackIdentifiers[identifier][#callbackIdentifiers[identifier] + 1] = {
 		accessName = accessName,
@@ -219,15 +222,17 @@ function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 		local cKey = callback.key
 		if cKey ~= key and not skipKey then continue end
 
-		cache[cItemName][cKey][identifier] = nil
 		table.remove(callbacks, i)
 
-		-- Delete empty table entries in callbackCache
-		if not table.IsEmpty(cache[callback.itemName][callback.key]) then continue end
-		cache[callback.itemName][callback.key] = nil
+		if not istable(cache[cItemName]) or not istable(cache[cItemName][cKey]) then continue end
+		cache[cItemName][cKey][identifier] = nil
 
-		if not table.IsEmpty(cache[callback.itemName]) then continue end
-		cache[callback.itemName] = nil
+		-- Delete empty table entries in callbackCache
+		if not table.IsEmpty(cache[cItemName][cKey]) then continue end
+		cache[cItemName][cKey] = nil
+
+		if not table.IsEmpty(cache[cItemName]) then continue end
+		cache[cItemName] = nil
 
 		if not table.IsEmpty(cache) then continue end
 		callbackCache[accessName] = nil
