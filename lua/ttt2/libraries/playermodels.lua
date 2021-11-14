@@ -83,10 +83,6 @@ playermodels.state = {
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
 function playermodels.UpdateModel(name, valueName, state)
-	if playermodels.defaultModelStates[name][valueName] == state then
-		state = nil
-	end
-
 	database.SetValue(playermodels.accessName, name, valueName, state)
 end
 
@@ -108,21 +104,11 @@ end
 -- @return[opt] boolean Returns true, if the model is in the selection pool on the server only
 -- @realm shared
 function playermodels.IsSelectedModel(name, OnReceiveFunc)
-	local defaultValue = database.GetDefaultValue(playermodels.accessName, name, "selected")
-
 	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExists, value)
-		if not databaseExists or value == nil then
-			value = defaultValue
-		end
-
 		OnReceiveFunc(value)
 	end)
 
 	if SERVER then
-		if isSelected == nil then
-			isSelected = defaultValue
-		end
-
 		return isSelected
 	end
 end
@@ -135,31 +121,17 @@ end
 -- @return[opt] boolean Returns true, if the model is hattable on the server only
 -- @realm shared
 function playermodels.IsHattableModel(name, OnReceiveFunc)
-	local defaultValue = database.GetDefaultValue(playermodels.accessName, name, "hattable")
-
 	local _, isHattable = database.GetValue(playermodels.accessName, name, "hattable", function(databaseExists, value)
-		if not databaseExists or value == nil then
-			value = defaultValue
-		end
-
 		OnReceiveFunc(value)
 	end)
 
 	if SERVER then
-		if isHattable == nil then
-			isHattable = defaultValue
-		end
-
 		return isHattable
 	end
 end
 
 function playermodels.AddChangeCallback(modelName, valueName, callback, identifier)
 	database.AddChangeCallback(playermodels.accessName, modelName, valueName, function(accessName, itemName, key, oldValue, newValue)
-		if newValue == nil then
-			newValue = playermodels.defaultModelStates[modelName][valueName]
-		end
-
 		callback(newValue)
 	end,
 	identifier)

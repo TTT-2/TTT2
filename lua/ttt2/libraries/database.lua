@@ -1031,6 +1031,12 @@ if SERVER then
 			return
 		end
 
+		local saveValue = value
+
+		if saveValue == database.GetDefaultValue(accessName, itemName, key) then
+			saveValue = nil
+		end
+
 		local itemPoolModel = dataTable.orm
 
 		local item = itemPoolModel:Find(itemName)
@@ -1041,11 +1047,11 @@ if SERVER then
 			})
 		end
 
-		item[key] = value
+		item[key] = saveValue
 
 		print("\nSet  itemData is: ")
 		PrintTable(item)
-		if value ~= nil then
+		if saveValue ~= nil then
 			item:Save()
 		else
 			database.ConvertTable(item, accessName)
