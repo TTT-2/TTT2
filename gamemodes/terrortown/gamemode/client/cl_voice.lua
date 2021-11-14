@@ -363,7 +363,9 @@ local function GetDrainRate()
 		return 0
 	end
 
-	if ply:IsAdmin() or ply:IsDetective() then
+	local plyRoleData = ply:GetSubRoleData()
+
+	if ply:IsAdmin() or (plyRoleData.isPublicRole and plyRoleData.isPolicingRole) then
 		return GetGlobalFloat("ttt_voice_drain_admin", 0)
 	else
 		return GetGlobalFloat("ttt_voice_drain_normal", 0)
@@ -371,15 +373,15 @@ local function GetDrainRate()
 end
 
 local function IsRoleChatting(ply)
-	local tm = ply:GetTeam()
-	local plyrd = ply:GetSubRoleData()
+	local plyTeam = ply:GetTeam()
+	local plyRoleData = ply:GetSubRoleData()
 
 	return ply:IsActive()
-	and not plyrd.unknownTeam
-	and not plyrd.disabledTeamVoice
-	and not LocalPlayer():GetSubRoleData().disabledTeamVoiceRecv
-	and tm ~= TEAM_NONE and not TEAMS[tm].alone
-	and not ply[tm .. "_gvoice"]
+		and not plyRoleData.unknownTeam
+		and not plyRoleData.disabledTeamVoice
+		and not LocalPlayer():GetSubRoleData().disabledTeamVoiceRecv
+		and plyTeam ~= TEAM_NONE and not TEAMS[plyTeam].alone
+		and not ply[plyTeam .. "_gvoice"]
 end
 
 ---

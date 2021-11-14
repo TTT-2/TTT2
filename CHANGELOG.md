@@ -7,6 +7,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added the hook `GM:TTT2CalledPolicingRole` that is called after all policing role players were called to a corpse
+- Added all TTT2 convars into the F1 menu
+  - most convars are located in the 'administration' menu
+  - equipment specific settings can be found in the 'edit equipment' menu
+- Added icon to the magneto stick
+- Added the function `AddToSettingsMenu` to both `SWEP` and `ITEM` to add settings to the equipment menu
 
 ### Fixed
 
@@ -26,6 +31,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `REVIVAL_BLOCK_COUNT_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
   - `REVIVAL_BLOCK_UNTIL_ALIVE`: block the winning condition until the revival process is ended
   - the old arguments still work, they are automaticvally converted
+- Changed logs folder to `terrortown/logs/` to be inline with everything else
+- Added more role agnostics
+  - voice drain rate is now no longer bound to Detectives but to all public policing roles
+  - Karma multiplier is now no longer bound to Detectives but to all public policing roles
+  - all non-innocent roles are now able to pin ragdolls if enabled (previous only Traitors could do this)
+
+### Breaking Changes
+
+- Renamed some convars to be inline with our 'opt-in style', all values were changed so that the default value is kept
+  - `ttt_no_prop_throwing` is now `ttt_prop_throwing`
+  - `ttt_limit_spectator_chat` is now `ttt_spectators_chat_globally`
+  - `ttt_no_nade_throw_during_prep` is now `ttt_nade_throw_during_prep`
+  - `ttt_armor_classic` is now `ttt_armor_dynamic`
 
 ## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
 

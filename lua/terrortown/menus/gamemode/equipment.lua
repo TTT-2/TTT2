@@ -33,9 +33,16 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 		counter = counter + 1
 
+		local isItem = items.IsItem(equipment)
+
+		-- Get inheritable version for weapons
+		if not isItem then
+			equipment = weapons.Get(WEPS.GetClass(equipment))
+		end
+
 		virtualSubmenus[counter] = tableCopy(equipmentMenuBase)
 		virtualSubmenus[counter].equipment = equipment
-		virtualSubmenus[counter].isItem = items.IsItem(equipment)
+		virtualSubmenus[counter].isItem = isItem
 		virtualSubmenus[counter].icon = equipment.ttt2_cached_material
 		virtualSubmenus[counter].iconFullSize = true
 	end
