@@ -21,10 +21,6 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE
 
 ---
 -- @realm server
-local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
 local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -690,24 +686,6 @@ function WEPS.IsInstalled(cls)
 
 	return false
 end
-
--- manipulate shove attack for all crowbar alikes
-local function ChangeShoveDelay()
-	local weps = weapons.GetList()
-
-	for i = 1, #weps do
-		local wep = weps[i]
-
-		--all weapons on the WEAPON_MELEE slot should be Crowbars or Crowbar alikes
-		if not wep.Kind or wep.Kind ~= WEAPON_MELEE then continue end
-
-		wep.Secondary.Delay = crowbar_delay:GetFloat()
-	end
-end
-
-cvars.AddChangeCallback(crowbar_delay:GetName(), ChangeShoveDelay, "TTT2CrowbarShoveDelay")
-
-hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)
 
 ---
 -- Use this hook to modify the default loadout of a role.
