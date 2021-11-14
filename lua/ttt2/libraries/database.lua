@@ -1061,6 +1061,8 @@ if SERVER then
 			return
 		end
 
+		if value == dataTable.keys[key].default then return end
+
 		local defaultData = dataTable.defaultData
 		defaultData[itemName] = defaultData[itemName] or {}
 		defaultData[itemName][key] = value
