@@ -23,7 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Change blocking revival mode from `true`/`false` to
   - `REVIVAL_BLOCK_NONE`: don't block the winning condition during the revival process [default, previously `nil`/`false`]
   - `REVIVAL_BLOCK_COUNT_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
-  - `REVIVAL_BLOCK_UNTIL_ALIVE`: block the winning condition until the revival process is ended
+  - `REVIVAL_BLOCK_WHILE_REVIVING`: block the winning condition until the revival process is ended
   - the old arguments still work, they are automaticvally converted
 
 ## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
