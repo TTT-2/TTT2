@@ -114,6 +114,22 @@ function playermodels.IsHattableModel(name, OnReceiveFunc)
 	end
 end
 
+---
+-- Checks if a provided model has a head hitbox
+-- @param string name The name of the model
+-- @return bool Returns true, if the model has a head hitbox
+-- @realm shared
+function playermodels.HasHeadHitBox(name)
+	return ttt2net.Get({"playermodels", "hasHeadHitBox"})[name]
+end
+
+---
+-- Add a change callback to a model and a key that is called when the state of the model changes
+-- @param string modelName The name of the model
+-- @param string valueName The name of the variable that changes. See `playermodels.state` for listed names
+-- @param function callback The callback function(newValue) that is called with the newValue, when the value changes
+-- @param string identifier A chosen identifier to be able to remove the callback
+-- @realm shared
 function playermodels.AddChangeCallback(modelName, valueName, callback, identifier)
 	database.AddChangeCallback(playermodels.accessName, modelName, valueName, function(accessName, itemName, key, oldValue, newValue)
 		callback(newValue)
@@ -121,6 +137,12 @@ function playermodels.AddChangeCallback(modelName, valueName, callback, identifi
 	identifier)
 end
 
+---
+-- Remove a change callback of a model and a key
+-- @param string modelName The name of the model
+-- @param string valueName The name of the variable that changes. See `playermodels.state` for listed names
+-- @param string identifier The chosen identifier to remove the callback
+-- @realm shared
 function playermodels.RemoveChangeCallback(modelName, valueName, identifier)
 	database.RemoveChangeCallback(playermodels.accessName, modelName, valueName, identifier)
 end
