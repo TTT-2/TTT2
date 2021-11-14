@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 92
+CLGAMEMODESUBMENU.priority = 91
 CLGAMEMODESUBMENU.title = "submenu_administration_voicechat_title"
 
 function CLGAMEMODESUBMENU:Populate(parent)

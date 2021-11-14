@@ -28,7 +28,7 @@ if SERVER then
 else -- CLIENT
 	-- HANDLE ITEM CLASSIC MODE
 	hook.Add("TTTBeginRound", "ttt2_base_register_armor_text", function()
-		if not GetGlobalBool("ttt_armor_classic") then return end
+		if GetGlobalBool("ttt_armor_dynamic") then return end
 
 		local item = items.GetStored("item_ttt_armor")
 		if not item then return end
@@ -43,30 +43,7 @@ else -- CLIENT
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
 		form:MakeHelp({
-			label = "help_armor_balancing"
-		})
-
-		form:MakeCheckBox({
-			serverConvar = "ttt_item_armor_block_headshots",
-			label = "label_armor_block_headshots"
-		})
-
-		form:MakeCheckBox({
-			serverConvar = "ttt_item_armor_block_blastdmg",
-			label = "label_armor_block_blastdmg"
-		})
-
-		form:MakeHelp({
-			label = "help_item_armor_classic"
-		})
-
-		form:MakeCheckBox({
-			serverConvar = "ttt_armor_classic",
-			label = "label_armor_classic"
-		})
-
-		form:MakeHelp({
-			label = "help_item_armor_dynamic"
+			label = "help_item_armor_value"
 		})
 
 		form:MakeSlider({
@@ -77,34 +54,5 @@ else -- CLIENT
 			decimal = 0
 		})
 
-		form:MakeSlider({
-			serverConvar = "ttt_armor_damage_block_pct",
-			label = "label_armor_damage_block_pct",
-			min = 0,
-			max = 1,
-			decimal = 2
-		})
-
-		form:MakeSlider({
-			serverConvar = "ttt_armor_damage_health_pct",
-			label = "label_armor_damage_health_pct",
-			min = 0,
-			max = 1,
-			decimal = 2
-		})
-
-		local enbReInf = form:MakeCheckBox({
-			serverConvar = "ttt_armor_enable_reinforced",
-			label = "label_armor_enable_reinforced"
-		})
-
-		form:MakeSlider({
-			serverConvar = "ttt_armor_threshold_for_reinforced",
-			label = "label_armor_threshold_for_reinforced",
-			min = 0,
-			max = 100,
-			decimal = 0,
-			master = enbReInf
-		})
 	end
 end

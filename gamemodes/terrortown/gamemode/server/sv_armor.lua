@@ -38,7 +38,7 @@ ARMOR.cv = {
 
 	---
 	-- @realm server
-	armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+	armor_dynamic = CreateConVar("ttt_armor_dynamic", 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
 
 	---
 	-- @realm server
@@ -54,13 +54,13 @@ ARMOR.cv = {
 }
 
 hook.Add("TTT2SyncGlobals", "AddArmorGlobals", function()
-	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), ARMOR.cv.armor_classic:GetBool())
+	SetGlobalBool(ARMOR.cv.armor_dynamic:GetName(), ARMOR.cv.armor_dynamic:GetBool())
 	SetGlobalBool(ARMOR.cv.armor_enable_reinforced:GetName(), ARMOR.cv.armor_enable_reinforced:GetBool())
 	SetGlobalBool(ARMOR.cv.armor_threshold_for_reinforced:GetName(), ARMOR.cv.armor_threshold_for_reinforced:GetInt())
 end)
 
-cvars.AddChangeCallback(ARMOR.cv.armor_classic:GetName(), function(cv, old, new)
-	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), tobool(tonumber(new)))
+cvars.AddChangeCallback(ARMOR.cv.armor_dynamic:GetName(), function(cv, old, new)
+	SetGlobalBool(ARMOR.cv.armor_dynamic:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(ARMOR.cv.armor_enable_reinforced:GetName(), function(cv, old, new)
@@ -118,7 +118,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
 
 	-- fallback for players who prefer the vanilla armor
-	if self.cv.armor_classic:GetBool() then
+	if self.cv.armor_dynamic:GetBool() then
 		-- classic armor only shields from bullet/crowbar damage
 		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
 			dmginfo:ScaleDamage(0.7)

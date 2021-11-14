@@ -42,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `ttt_no_prop_throwing` is now `ttt_prop_throwing`
   - `ttt_limit_spectator_chat` is now `ttt_spectators_chat_globally`
   - `ttt_no_nade_throw_during_prep` is now `ttt_nade_throw_during_prep`
+  - `ttt_armor_classic` is now `ttt_armor_dynamic`
 
 ## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
 

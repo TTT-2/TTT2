@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 89
+CLGAMEMODESUBMENU.priority = 88
 CLGAMEMODESUBMENU.title = "submenu_administration_inventory_title"
 
 function CLGAMEMODESUBMENU:Populate(parent)

@@ -95,7 +95,7 @@ if CLIENT then
 			local health_y = y + margin
 			local health_string = health
 
-			if not GetGlobalBool("ttt_armor_classic", false) and client:GetArmor() > 0 then
+			if GetGlobalBool("ttt_armor_dynamic", false) and client:GetArmor() > 0 then
 				health_string = health_string .. " + " .. client:GetArmor()
 			end
 

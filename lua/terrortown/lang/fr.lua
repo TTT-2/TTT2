@@ -1648,6 +1648,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.submenu_administration_inventory_title = "Inventory"
 --L.submenu_administration_karma_title = "Karma"
 --L.submenu_administration_sprint_title = "Sprinting"
+--L.submenu_administration_playersettings_title = "Player Settings"
 
 --L.header_roles_special_settings = "Special Role Settings"
 --L.header_equipment_additional = "Additional Equipment Settings"
@@ -1658,7 +1659,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.header_voicechat_general = "General Voicechat Settings"
 --L.header_voicechat_battery = "Voicechat Battery"
 --L.header_voicechat_locational = "Locational Voicechat"
---L.header_round_setup_plyspawn = "Player Spawn Settings"
+--L.header_playersettings_plyspawn = "Player Spawn Settings"
 --L.header_round_setup_prep = "Round: Preparing"
 --L.header_round_setup_round = "Round: Active"
 --L.header_round_setup_post = "Round: Post"
@@ -1675,6 +1676,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.header_inventory_gernal = "Inventory Size"
 --L.header_inventory_pickup = "Inventory Weapon Pickup"
 --L.header_sprint_general = "Sprint Settings"
+--L.header_playersettings_armor = "Armor System Settings"
 
 --L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
 --L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
@@ -1699,11 +1701,10 @@ L.karma_unknown_tooltip = "Inconnu"
 
 --If haste mode is enabled, the fixed round time is ignored.]]
 --L.help_round_limit = "After one of the set limit conditions is met, a mapchange is triggered."
---L.help_hint_armor = "More armor settings can be found in the 'Edit Equipment' menu."
 --L.help_armor_balancing = "The following values can be used to balance the armor."
 --L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
 --L.help_item_armor_dynamic = [[
--- Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited and the armor value stacks. Getting damaged decreases the armor value.
+-- Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited and the armor value stacks. Getting damaged decreases the armor value. The armor value per baught armor item is set in the 'Equipment Settings' of said item.
 
 --When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
 
@@ -1724,6 +1725,7 @@ L.karma_unknown_tooltip = "Inconnu"
 
 --This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if a the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
 --L.help_max_slots = "Sets the maximum amount of weapons per slot. '-1' means that there is no limit."
+--L.help_item_armor_value = "This is the armor value given by a the armor item in dynamic mode. If classic mode is enabled (see 'Administration' -> 'Player Settings') then every value greater than 0 is counted as existing armor."
 
 --L.label_killer_dna_range = "Max kill range to leave DNA"
 --L.label_killer_dna_basetime = "Sample life base time"
@@ -1780,7 +1782,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
 --L.label_armor_block_headshots = "Enable armor blocking headshots"
 --L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
---L.label_armor_classic = "Enable classic armor"
+--L.label_armor_dynamic = "Enable dynamic armor"
 --L.label_armor_value = "Armor given by the armor item"
 --L.label_armor_damage_block_pct = "Damage percentage taken by armor"
 --L.label_armor_damage_health_pct = "Damage percentage taken by player"

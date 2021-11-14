@@ -31,7 +31,7 @@ local function HandleArmorStatusIcons(ply)
 	-- check if reinforced
 	local icon_id = 1
 
-	if not GetGlobalBool("ttt_armor_classic", false) then
+	if GetGlobalBool("ttt_armor_dynamic", false) then
 		icon_id = ply:ArmorIsReinforced() and 2 or 1
 	end
 
