@@ -29,7 +29,7 @@ local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOT
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
 -- @param Weapon wep The @{Weapon} entity in question
 -- @param[opt] number dropBlockingWeapon should the weapon stored in the same slot be dropped
--- @param[opt] boolean isPickupProble Set this to true to mark this hook run as probe
+-- @param[opt] boolean isPickupProbe Set this to true to mark this hook run as probe
 -- @return boolean Allowed pick up or not
 -- @return number errorCode
 -- 1 - Player is spectator
