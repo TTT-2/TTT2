@@ -28,6 +28,7 @@ local MESSAGE_REGISTER = 1
 local MESSAGE_GET_VALUE = 2
 local MESSAGE_SET_VALUE = 3
 local MESSAGE_GET_DEFAULTVALUE = 4
+local MESSAGE_RESET = 4
 
 -- Identifier strings to determine which player gets the information
 local SEND_TO_PLY_ALL = "all"
@@ -65,19 +66,24 @@ local playerID64Cache = {}
 -- General Shared functions
 --
 
-local function valueReceived(accessName, itemName, key)
-	local receiver = receivedValues[accessName] or {}
+local function ResetDatabase(index)
+	registeredDatabases[index].storedData = {}
+	receivedValues[index] = nil
+end
+
+local function ValueReceived(index, itemName, key)
+	local receiver = receivedValues[index] or {}
 
 	receiver[itemName] = receiver[itemName] or {}
 	receiver[itemName][key] = true
 
-	receivedValues[accessName] = receiver
+	receivedValues[index] = receiver
 end
 
-local function isValueReceived(accessName, itemName, key)
-	return receivedValues[accessName]
-		and receivedValues[accessName][itemName]
-		and receivedValues[accessName][itemName][key]
+local function IsValueReceived(index, itemName, key)
+	return receivedValues[index]
+		and receivedValues[index][itemName]
+		and receivedValues[index][itemName][key]
 		or false
 end
 
@@ -151,7 +157,7 @@ local function OnChange(index, itemName, key, newValue)
 		end
 	end
 
-	valueReceived(accessName, itemName, key)
+	ValueReceived(index, itemName, key)
 end
 
 ---
@@ -338,6 +344,10 @@ if CLIENT then
 			net.WriteString(data.itemName)
 			net.WriteString(data.key)
 			net.WriteString(tostring(data.value))
+		end,
+		-- data contains index
+		[MESSAGE_RESET] = function(data)
+			net.WriteUInt(data.index, uIntBits)
 		end
 	}
 
@@ -387,7 +397,7 @@ if CLIENT then
 				storedData[request.itemName] = storedItemData
 			end
 
-			valueReceived(request.accessName, request.itemName, request.key)
+			ValueReceived(request.index, request.itemName, request.key)
 			functionCache[identifier](isSuccess, value)
 		end,
 		[MESSAGE_SET_VALUE] = function()
@@ -416,6 +426,9 @@ if CLIENT then
 				defaultData[itemName] = defaultData[itemName] or {}
 				defaultData[itemName][key] = value
 			end
+		end,
+		[MESSAGE_RESET] = function()
+			ResetDatabase(net.ReadUInt(uIntBits))
 		end
 	}
 end
@@ -467,6 +480,10 @@ if SERVER then
 				net.WriteString(data.key)
 				net.WriteString(tostring(data.value))
 			end
+		end,
+		-- data contains index
+		[MESSAGE_RESET] = function(data)
+			net.WriteUInt(data.index, uIntBits)
 		end
 	}
 
@@ -496,6 +513,10 @@ if SERVER then
 			}
 
 			database.SetValue(registeredDatabases[data.index].accessName, data.itemName, data.key, data.value, plyID64)
+		end,
+		[MESSAGE_RESET] = function(plyID64)
+			local index = net.ReadUInt(uIntBits)
+			database.Reset(registeredDatabases[index].accessName, plyID64)
 		end
 	}
 end
@@ -716,7 +737,7 @@ if CLIENT then
 			return
 		end
 
-		if isValueReceived(accessName, itemName, key) then
+		if IsValueReceived(index, itemName, key) then
 			OnReceiveFunc(true, dataTable.storedData[itemName] and dataTable.storedData[itemName][key])
 
 			return
@@ -757,6 +778,18 @@ if CLIENT then
 		end
 
 		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value})
+	end
+
+	function database.Reset(accessName)
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
+
+			return
+		end
+
+		SendUpdateNextTick(MESSAGE_RESET, {index = index})
 	end
 end
 
@@ -829,6 +862,7 @@ if SERVER then
 
 		registeredDatabases[databaseCount] = {
 			accessName = accessName,
+			databaseName = databaseName,
 			orm = orm.Make(databaseName),
 			keys = savingKeys or {},
 			data = additionalData or {},
@@ -979,7 +1013,7 @@ if SERVER then
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
 		print("\nSetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key) .. " with value " .. tostring(value))
-		if plyID64 and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
+		if plyID64 and playerID64Cache[plyID64] and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
 
 		local index = nameToIndex[accessName]
 
@@ -1070,6 +1104,29 @@ if SERVER then
 		dataTable.defaultData = defaultData
 
 		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, SEND_TO_PLY_REGISTERED)
+	end
+
+	function database.Reset(accessName, plyID64)
+		if plyID64 and playerID64Cache[plyID64] and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
+
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
+
+			return
+		end
+
+		local dataTable = registeredDatabases[index]
+		local databaseName = dataTable.databaseName
+
+		sql.DropTable(databaseName)
+		sql.CreateSqlTable(databaseName, dataTable.keys)
+		dataTable.orm = orm.Make(databaseName)
+
+		ResetDatabase(index)
+
+		SendUpdateNextTick(MESSAGE_RESET, {index = index}, SEND_TO_PLY_REGISTERED)
 	end
 
 	-- Sync databases to all authenticated players

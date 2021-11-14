@@ -6,7 +6,6 @@ if SERVER then
 	AddCSLuaFile()
 
 	util.AddNetworkString("TTT2UpdateChangedPlayerModel")
-	util.AddNetworkString("TTT2ResetPlayerModels")
 end
 
 local pairs = pairs
@@ -174,19 +173,7 @@ end
 -- Reset all selected playermodels, hattability and reinitialize the database.
 -- @realm shared
 function playermodels.Reset()
-	if SERVER then
-		-- in the first step the database is deleted
-		sql.DropTable(playermodels.sqltable)
-
-		-- then the table is reinitialized
-		playermodels.Initialize()
-
-		-- this data then has to be synced to the client again
-		playermodels.StreamModelStateToSelectedClients()
-	else
-		net.Start("TTT2ResetPlayerModels")
-		net.SendToServer()
-	end
+	database.Reset(playermodels.accessName)
 end
 
 if CLIENT then
@@ -392,9 +379,3 @@ end
 function playermodels.PlayerCanHaveHat(ply)
 	return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 end
-
-net.Receive("TTT2ResetPlayerModels", function(_, ply)
-	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
-
-	playermodels.Reset()
-end)
