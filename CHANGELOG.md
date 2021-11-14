@@ -22,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed roleselection layering with base roles to ensure layer order is considered correctly when selecting roles
 - Fixed hotreloading items
 - Fixed random playermodel selection on map change not working
+- Fixed `ply:Give` sometimes picking up all surrounding weapon entities, if auto pickup is enabled
 
 ### Changed
 
