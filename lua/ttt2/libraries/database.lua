@@ -916,6 +916,11 @@ if SERVER then
 
 			if key then
 				local value = database.ConvertValueWithKey(sqlData[key], accessName, key)
+
+				if value == nil then
+					value = database.GetDefaultValue(accessName, itemName, key)
+				end
+
 				dataTable.storedData[itemName] = dataTable.storedData[itemName] or {}
 				dataTable.storedData[itemName][key] = value
 
