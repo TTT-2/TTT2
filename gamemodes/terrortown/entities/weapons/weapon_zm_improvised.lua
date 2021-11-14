@@ -2,19 +2,22 @@
 -- @class SWEP
 -- @section weapon_zm_improvised
 
-local cv_crowbar_unlocks
-local cv_crowbar_pushforce
+local cvCrowbarUnlocks, cvCrowbarPushForce, cvCrowbarDelay
 
 if SERVER then
 	AddCSLuaFile()
 
 	---
 	-- @realm server
-	cv_crowbar_unlocks = CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
+	cvCrowbarDelay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @realm server
-	cv_crowbar_pushforce = CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
+	cvCrowbarUnlocks = CreateConVar("ttt_crowbar_unlocks", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+
+	---
+	-- @realm server
+	cvCrowbarPushForce = CreateConVar("ttt_crowbar_pushforce", "395", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 end
 
 SWEP.HoldType = "melee"
@@ -31,6 +34,8 @@ if CLIENT then
 end
 
 SWEP.Base = "weapon_tttbase"
+
+SWEP.notBuyable = true
 
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
@@ -89,7 +94,7 @@ end
 -- @realm shared
 function SWEP:OpenEnt(hitEnt)
 	-- Get ready for some prototype-quality code, all ye who read this
-	if SERVER and cv_crowbar_unlocks:GetBool() then
+	if SERVER and cvCrowbarUnlocks:GetBool() then
 		local openable = OpenableEnt(hitEnt)
 
 		if openable == OPEN_DOOR or openable == OPEN_ROT then
@@ -250,7 +255,7 @@ function SWEP:SecondaryAttack()
 		---
 		-- @realm shared
 		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", owner, ply) then
-			local pushvel = tr.Normal * cv_crowbar_pushforce:GetFloat()
+			local pushvel = tr.Normal * cvCrowbarPushForce:GetFloat()
 			pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching
 
 			ply:SetVelocity(ply:GetVelocity() + pushvel)
@@ -290,5 +295,52 @@ if SERVER then
 	-- @realm server
 	function GAMEMODE:TTT2PlayerPreventPush(ply, pushPly)
 
+	end
+end
+
+if SERVER then
+	-- manipulate shove attack for all crowbar alikes
+	local function ChangeShoveDelay()
+		local weps = weapons.GetList()
+
+		for i = 1, #weps do
+			local wep = weps[i]
+
+			--all weapons on the WEAPON_MELEE slot should be Crowbars or Crowbar alikes
+			if not wep.Kind or wep.Kind ~= WEAPON_MELEE then continue end
+
+			wep.Secondary.Delay = cvCrowbarDelay:GetFloat()
+		end
+	end
+
+	cvars.AddChangeCallback(cvCrowbarDelay:GetName(), ChangeShoveDelay, "TTT2CrowbarShoveDelay")
+
+	hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)
+else -- CLIENT
+	---
+	-- @ignore
+	function SWEP:AddToSettingsMenu(parent)
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		form:MakeCheckBox({
+			serverConvar = "ttt_crowbar_unlocks",
+			label = "label_crowbar_unlocks"
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt_crowbar_pushforce",
+			label = "label_crowbar_pushforce",
+			min = 0,
+			max = 750,
+			decimal = 0
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt2_crowbar_shove_delay",
+			label = "label_crowbar_shove_delay",
+			min = 0,
+			max = 10,
+			decimal = 1
+		})
 	end
 end

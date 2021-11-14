@@ -228,7 +228,7 @@ if CLIENT then
 			self:DrawBar(nx, ty, bw, bh, color_health, health / client:GetMaxHealth(), t_scale, string.upper(L["hud_health"]) .. ": " .. health)
 
 			-- draw armor information
-			if not GetGlobalBool("ttt_armor_classic", false) and armor > 0 then
+			if GetGlobalBool("ttt_armor_dynamic", false) and armor > 0 then
 				local icon_mat = client:ArmorIsReinforced() and icon_armor_rei or icon_armor
 
 				local a_size = bh - math.Round(11 * t_scale)

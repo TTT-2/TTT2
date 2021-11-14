@@ -99,4 +99,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 		masterRefs[key] = option
 	end
+
+	-- now add custom equipment settings
+	equipment:AddToSettingsMenu(parent)
 end

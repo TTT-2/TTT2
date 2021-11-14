@@ -253,7 +253,7 @@ end
 
 ---
 -- @realm server
-local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_spectators_chat_globally = CreateConVar("ttt_spectators_chat_globally", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- Returns whether or not the @{Player} can see the other @{Player}'s chat.
@@ -283,7 +283,7 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, sender)
 	local senderRoleData = sender:GetSubRoleData()
 
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
-		or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
+		or cv_ttt_spectators_chat_globally:GetBool() -- Spectators can chat freely
 		or not DetectiveMode() -- Mumbling
 		or not senderIsSpectator and not teamOnly -- General Chat
 		or not senderIsSpectator and teamOnly and ( -- Team Chat

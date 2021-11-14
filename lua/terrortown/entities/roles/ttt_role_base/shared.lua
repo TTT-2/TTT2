@@ -136,6 +136,14 @@ ROLE.disabledTeamChatRecv = false
 -- By setting this to true, the role is unable to write in the general chat.
 ROLE.disabledGeneralChat = false
 
+-- If this is set to true, the role is unable to speak in the team voice chat. If this is
+-- set to false, it still could mean that the player is unable to use the team chat. If the
+-- role flag `.unknownTeam` is set, the team chat can't be used either.
+ROLE.disabledTeamVoice = false
+
+-- If this is set to true, the geiven role is unable to hear team voice chat.
+ROLE.disabledTeamVoiceRecv = false
+
 ---
 -- This function is called before initializing a @{ROLE}, but after all
 -- global variables like "ROLE_TRAITOR" have been initialized.

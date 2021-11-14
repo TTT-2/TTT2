@@ -41,7 +41,7 @@ if CLIENT then
 	-- equipment menu (if buyable), etc.
 	ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
 
-	-- set to false if item should no be shown in body search
+	-- set to false if item should not be shown in body search
 	ITEM.populateSearch = true
 
 	-- You can make your own @{ITEM} icon using the template in:
@@ -60,6 +60,17 @@ if CLIENT then
 	-- @hook
 	-- @realm client
 	function ITEM:DrawInfo()
+
+	end
+
+	---
+	-- This hook can be used by item addons to populate the equipment settings page
+	-- with custom convars. The parent is the submenu, where a new form has to
+	-- be added.
+	-- @param DPanel parent The parent panel which is the submenu
+	-- @hook
+	-- @realm client
+	function ITEM:AddToSettingsMenu(parent)
 
 	end
 end

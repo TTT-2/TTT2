@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 100
+CLGAMEMODESUBMENU.priority = 99
 CLGAMEMODESUBMENU.title = "submenu_administration_hud_title"
 
 function CLGAMEMODESUBMENU:Populate(parent)
@@ -10,6 +10,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	local restrictedHUDs = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})
 	local hudList = huds.GetList()
+	local hudElemList = hudelements.GetList()
 	local validHUDsDefault = {}
 	local validHUDsRestriction = {[1] = "None"}
 
@@ -69,6 +70,20 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				net.WriteBool(not value)
 				net.SendToServer()
 			end
+		})
+	end
+
+	local form3 = vgui.CreateTTT2Form(parent, "header_hud_toggleable")
+
+	for i = 1, #hudElemList do
+		local elem = hudElemList[i]
+
+		if not elem.togglable then continue end
+
+		form3:MakeCheckBox({
+			serverConvar = "ttt2_elem_toggled_" .. elem.id,
+			label = "label_enable_hud_element",
+			params = {elem = elem.id}
 		})
 	end
 end

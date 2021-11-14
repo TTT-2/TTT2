@@ -88,6 +88,22 @@ function ITEM:DrawInfo()
 	return math.ceil(math.max(0, (LocalPlayer().radarTime or 30) - (CurTime() - RADAR.startTime)))
 end
 
+---
+-- @ignore
+function ITEM:AddToSettingsMenu(parent)
+	local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+	form:MakeSlider({
+		serverConvar = "ttt2_radar_charge_time",
+		label = "label_radar_charge_time",
+		min = 0,
+		max = 60,
+		decimal = 0
+	})
+end
+
+
+
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
 	local sz = (util.IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size

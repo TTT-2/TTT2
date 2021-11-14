@@ -21,10 +21,6 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE
 
 ---
 -- @realm server
-local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
 local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -32,7 +28,8 @@ local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOT
 -- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
 -- @param Weapon wep The @{Weapon} entity in question
--- @param nil|number dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @param[opt] number dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @param[opt] boolean isPickupProbe Set this to true to mark this hook run as probe
 -- @return boolean Allowed pick up or not
 -- @return number errorCode
 -- 1 - Player is spectator
@@ -44,7 +41,7 @@ local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOT
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanPickupWeapon
 -- @local
-function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
+function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon, isPickupProbe)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	-- spectators are not allowed to pickup weapons
@@ -62,7 +59,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) and not ply.forcedGive then
+	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) and not ply.forcedPickup then
 		return false, 3
 	end
 
@@ -82,15 +79,18 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 		return false, 6
 	end
 
-	-- Who knows what happens here?!
-	local tr = util.TraceEntity({
-		start = wep:GetPos(),
-		endpos = ply:GetShootPos(),
-		mask = MASK_SOLID
-	}, wep)
+	-- make sure that the weapon is moved to the player if it should be automatically picked
+	-- up; this however should not happen for manual pickup and/or hook probing
+	if cv_auto_pickup:GetBool() and not ply.forcedPickup and not isPickupProbe then
+		local tr = util.TraceEntity({
+			start = wep:GetPos(),
+			endpos = ply:GetShootPos(),
+			mask = MASK_SOLID
+		}, wep)
 
-	if tr.Fraction == 1.0 or tr.Entity == ply then
-		wep:SetPos(ply:GetShootPos())
+		if tr.Fraction == 1.0 or tr.Entity == ply then
+			wep:SetPos(ply:GetShootPos())
+		end
 	end
 
 	return true
@@ -690,24 +690,6 @@ function WEPS.IsInstalled(cls)
 
 	return false
 end
-
--- manipulate shove attack for all crowbar alikes
-local function ChangeShoveDelay()
-	local weps = weapons.GetList()
-
-	for i = 1, #weps do
-		local wep = weps[i]
-
-		--all weapons on the WEAPON_MELEE slot should be Crowbars or Crowbar alikes
-		if not wep.Kind or wep.Kind ~= WEAPON_MELEE then continue end
-
-		wep.Secondary.Delay = crowbar_delay:GetFloat()
-	end
-end
-
-cvars.AddChangeCallback(crowbar_delay:GetName(), ChangeShoveDelay, "TTT2CrowbarShoveDelay")
-
-hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)
 
 ---
 -- Use this hook to modify the default loadout of a role.
