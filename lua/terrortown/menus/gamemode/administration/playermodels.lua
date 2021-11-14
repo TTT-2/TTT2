@@ -50,18 +50,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	local base = form2:MakeIconLayout()
-	local modelStates = playermodels.GetModelStates()
-	local models = player_manager.AllValidModels()
-
-	for name, data in SortedPairsByMemberValue(modelStates, "sortName") do
-		local model = models[name]
-
-		if not model then continue end
-
+	local hasheadHitBox = ttt2net.Get({"playermodels", "hasHeadHitBox"})
+	for name, model in SortedPairs(player_manager.AllValidModels()) do
 		boxCache[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
-			headbox = data.hasHeadHitBox,
+			headbox = hasheadHitBox[name] or false,
 			OnModelSelected = function(_, state)
 				playermodels.UpdateModel(name, playermodels.state.selected, state)
 			end,

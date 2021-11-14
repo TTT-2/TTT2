@@ -4,8 +4,6 @@
 
 if SERVER then
 	AddCSLuaFile()
-
-	util.AddNetworkString("TTT2UpdateChangedPlayerModel")
 end
 
 local pairs = pairs
@@ -13,8 +11,6 @@ local playerManagerAllValidModels = player_manager.AllValidModels
 local playerManagerTranslateToPlayerModelName = player_manager.TranslateToPlayerModelName
 local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
-local stringLower = string.lower
-local tableCopy = table.Copy
 
 local function GetPlayerSize(ply)
 	local bottom, top = ply:GetHull()
@@ -57,7 +53,7 @@ local initialDefaultStates = {
 
 playermodels = playermodels or {}
 
-playermodels.accessName = "Playermodel_Pool"
+playermodels.accessName = "Playermodels"
 playermodels.sqltable = "ttt2_playermodel_pool_changes"
 playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
@@ -66,9 +62,7 @@ playermodels.savingKeys = {
 
 playermodels.fallbackModel = "models/player/phoenix.mdl"
 
-playermodels.modelStates = playermodels.modelStates or {}
-playermodels.defaultModelStates = playermodels.defaultModelStates or {}
-playermodels.changedModelStates = playermodels.changedModelStates or {}
+playermodels.hasHeadHitBox = {}
 
 -- Enums for the states
 playermodels.state = {
@@ -84,16 +78,6 @@ playermodels.state = {
 -- @realm shared
 function playermodels.UpdateModel(name, valueName, state)
 	database.SetValue(playermodels.accessName, name, valueName, state)
-end
-
----
--- Returns an indexed table with all the models states that are stored
--- @note While this function is shared, the data is only available for superadmin on the
--- client, if no manual sync is triggered.
--- @return table An hashed table with all the model data stored in the database
--- @realm shared
-function playermodels.GetModelStates()
-	return playermodels.modelStates or {}
 end
 
 ---
@@ -148,33 +132,9 @@ function playermodels.Reset()
 	database.Reset(playermodels.accessName)
 end
 
-if CLIENT then
-	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
-		playermodels.defaultModelStates = data
-		playermodels.modelStates = tableCopy(data)
-	end)
-
-	net.ReceiveStream("TTT2StreamChangedModelTable", function(data)
-		local dataValue
-
-		for name, values in pairs(playermodels.defaultModelStates) do
-			for valueName, value in pairs(values) do
-				playermodels.modelStates[name] = playermodels.modelStates[name] or {}
-				dataValue = data[name] and data[name][valueName]
-
-				if dataValue == nil then
-					dataValue = value
-				end
-
-				playermodels.modelStates[name][valueName] = dataValue
-				playermodels.modelStates[name].sortName = stringLower(name)
-			end
-		end
-	end)
-
-	-- all the remaining functions are server only
-	return
-end
+---
+-- Server only functions from here on
+if CLIENT then return end
 
 ---
 -- Returns an indexed table with all the models that are in the selection pool.
@@ -183,8 +143,8 @@ end
 function playermodels.GetSelectedModels()
 	local playerModelPoolNames = {}
 
-	for name, values in pairs(playermodels.modelStates) do
-		if values.selected then
+	for name in pairs(playerManagerAllValidModels()) do
+		if playermodels.IsSelectedModel(name) then
 			playerModelPoolNames[#playerModelPoolNames + 1] = name
 		end
 	end
@@ -202,33 +162,15 @@ function playermodels.Initialize()
 		return false
 	end
 
-	local data = playermodels.modelStates or {}
-	local defaultData = {}
-	local _, changedData = database.GetTable(playermodels.accessName)
-
 	for name in pairs(playerManagerAllValidModels()) do
-		defaultData[name] = {}
-		data[name] = data[name] or {}
-
 		for key, defaultStates in pairs(initialDefaultStates) do
 			local state = defaultStates[name]
-			defaultData[name][key] = state or false
-
-			if changedData[name] and changedData[name][key] ~= nil then
-		 		data[name][key] = changedData[name][key]
-			else
-				data[name][key] = state or false
-			end
 
 			if state ~= nil then
 				database.SetDefaultValue(playermodels.accessName, name, key, state)
 			end
 		end
 	end
-
-	playermodels.modelStates = data
-	playermodels.defaultModelStates = defaultData
-	playermodels.changedModelStates = changedData
 
 	playermodels.InitializeHeadHitBoxes()
 
@@ -248,35 +190,18 @@ function playermodels.InitializeHeadHitBoxes()
 
 		for i = 1, testingEnt:GetHitBoxCount(0) do
 			if testingEnt:GetHitBoxHitGroup(i - 1, 0) == HITGROUP_HEAD then
-				playermodels.modelStates[name].hasHeadHitBox = true
+				playermodels.hasHeadHitBox[name] = true
 
 				break
 			end
 
-			playermodels.modelStates[name].hasHeadHitBox = false
+			playermodels.hasHeadHitBox[name] = false
 		end
-
-		playermodels.defaultModelStates[name].hasHeadHitBox = playermodels.modelStates[name].hasHeadHitBox
 	end
+
+	ttt2net.Set({"playermodels", "hasHeadHitBox"}, {type = "table"}, playermodels.hasHeadHitBox)
 
 	testingEnt:Remove()
-end
-
----
--- Streams the playermodel selection pool to clients. By default streams to all superadmin players.
--- @param bool onlyChanges if only changes should be sent, otherwise the default is sent too
--- @param[opt] table|Player plys The players that should receive the update, all superadmins if nil
--- @realm server
-function playermodels.StreamModelStateToSelectedClients(onlyChanges, plys)
-	plys = plys or util.GetFilteredPlayers(function(ply)
-		return ply:IsSuperAdmin()
-	end)
-
-	if not onlyChanges then
-		net.SendStream("TTT2StreamDefaultModelTable", playermodels.defaultModelStates, plys)
-	end
-
-	net.SendStream("TTT2StreamChangedModelTable", playermodels.changedModelStates, plys)
 end
 
 ---
