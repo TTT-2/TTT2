@@ -118,7 +118,7 @@ function DrawOverheadRoleIcon(ply, ricon, rcolor)
 
 	-- draw icon
 	render.SetMaterial(ricon)
-	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, COLOR_WHITE, 180)
+	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, util.GetDefaultColor(rcolor), 180)
 
 	-- stop linear filter
 	render.PopFilterMag()
