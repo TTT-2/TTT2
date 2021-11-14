@@ -1255,7 +1255,6 @@ local plymeta_old_Give = plymeta.Give
 -- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
 	self.forcedPickup = true
-	self.forcedGive = true
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
@@ -1263,7 +1262,6 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 		if not IsValid(self) then return end
 
 		self.forcedPickup = false
-		self.forcedGive = false
 	end)
 
 	return wep
@@ -1296,11 +1294,15 @@ end
 -- @param boolean keepSelection If set to true the current selection is kept if not dropped
 -- @realm server
 function plymeta:SafeDropWeapon(wep, keepSelection)
-	if not self:CanSafeDropWeapon(wep) then return end
+	if not self:CanSafeDropWeapon(wep) then
+		return false
+	end
 
 	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
 	WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
+
+	return true
 end
 
 ---
@@ -1313,12 +1315,14 @@ end
 -- @realm server
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 	self.forcedPickup = forcePickup
+	self.isPickupProbe = true
 
 	---
 	-- @realm server
 	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
 	self.forcedPickup = false
+	self.isPickupProbe = false
 
 	return ret, errCode
 end
@@ -1393,11 +1397,7 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
 		if dropWeapon == wep then return end
 
-		timer.Simple(0, function()
-			if not IsValid(self) or not IsValid(dropWeapon) then return end
-
-			self:SafeDropWeapon(dropWeapon, true)
-		end)
+		if not self:SafeDropWeapon(dropWeapon, true) then return end
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon

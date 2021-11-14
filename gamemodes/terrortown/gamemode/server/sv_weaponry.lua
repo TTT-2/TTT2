@@ -58,7 +58,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) and not ply.forcedGive then
+	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) and not ply.forcedPickup then
 		return false, 3
 	end
 
@@ -78,15 +78,18 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 		return false, 6
 	end
 
-	-- Who knows what happens here?!
-	local tr = util.TraceEntity({
-		start = wep:GetPos(),
-		endpos = ply:GetShootPos(),
-		mask = MASK_SOLID
-	}, wep)
+	-- make sure that the weapon is moved to the player if it should be automatically picked
+	-- up; this however should not happen for manual pickup and/or hook probing
+	if cv_auto_pickup:GetBool() and not ply.forcedGive and not ply.isPickupProbe then
+		local tr = util.TraceEntity({
+			start = wep:GetPos(),
+			endpos = ply:GetShootPos(),
+			mask = MASK_SOLID
+		}, wep)
 
-	if tr.Fraction == 1.0 or tr.Entity == ply then
-		wep:SetPos(ply:GetShootPos())
+		if tr.Fraction == 1.0 or tr.Entity == ply then
+			wep:SetPos(ply:GetShootPos())
+		end
 	end
 
 	return true
