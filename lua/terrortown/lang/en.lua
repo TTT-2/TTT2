@@ -1673,7 +1673,7 @@ If this variable is set to 0, all players are spawned at once. For servers with 
 
 Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
 L.help_voicechat_battery = [[
-Voicechatting with enabled voice chat battery reduces this meter. When it's empty the player can't voicechat and must wait for a few seconds for it to recharge. This can help to prevent excessive voicechat usage.
+Voicechatting with enabled voice chat battery reduces this meter. When it's empty the player can't voicechat and has to wait for a few seconds for it to recharge. This can help to prevent excessive voicechat usage.
 
 Note: 'Tick' refers to a game tick, ie. 1/66th of a second.]]
 L.help_ply_spawn = "Player parameters that are used on player (re-)spawn."
@@ -1695,7 +1695,7 @@ L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlo
 L.help_prop_possession = [[
 Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
 
-The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limmits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
+The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
 L.help_karma = "Karma is used to reduce random killing. Players start with a certain amount of Karma, and lose it when they damage/kill team mates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
 L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly teamkill."
 L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more that 1000 Karma. It can be used as a Karma buffer."
@@ -1705,7 +1705,7 @@ L.help_karma_bonus = "There are also two different passive ways to gain Karma du
 L.help_karma_clean_half = [[
 When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
 
-This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if a the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
+This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
 L.help_max_slots = "Sets the maximum amount of weapons per slot. '-1' means that there is no limit."
 
 L.label_killer_dna_range = "Max kill range to leave DNA"
@@ -1716,7 +1716,7 @@ L.label_dna_radar_cooldown = "DNA scanner cooldown"
 L.label_radar_charge_time = "Recharge time after a radar sample"
 L.label_crowbar_shove_delay = "Cooldown after crowbar push"
 L.label_idle = "Enable idle mode"
-L.label_idle_limit = "Maximal idle time in seconds"
+L.label_idle_limit = "Maximum idle time in seconds"
 L.label_namechange_kick = "Enable name change kick"
 L.label_namechange_bantime = "Banned time in minutes after kick"
 L.label_log_damage_for_console = "Enable damage logging in console"
