@@ -27,6 +27,7 @@ local nameToIndex = {}
 local MESSAGE_REGISTER = 1
 local MESSAGE_GET_VALUE = 2
 local MESSAGE_SET_VALUE = 3
+local MESSAGE_GET_DEFAULTVALUE = 4
 
 -- Identifier strings to determine which player gets the information
 local SEND_TO_PLY_ALL = "all"
@@ -78,6 +79,23 @@ local function isValueReceived(accessName, itemName, key)
 		and receivedValues[accessName][itemName]
 		and receivedValues[accessName][itemName][key]
 		or false
+end
+
+function database.GetDefaultValue(accessName, itemName, key)
+	local index = nameToIndex[accessName]
+
+	if not index then return end
+
+	local dataTable = registeredDatabases[index].defaultData
+	local defaultTable = dataTable.defaultData
+
+	local defaultValue = defaultTable[itemName] and defaultTable[itemName][key]
+
+	if defaultValue == nil then
+		defaultValue = dataTable.keys[key].default
+	end
+
+	return defaultValue
 end
 
 ---
@@ -336,7 +354,8 @@ if CLIENT then
 				accessName = accessName,
 				keys = savingKeys,
 				data = additionalData,
-				storedData = {}
+				storedData = {},
+				defaultData = {}
 			}
 
 			local sentAdditionalInfo = net.ReadBool()
@@ -380,6 +399,23 @@ if CLIENT then
 			value = database.ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
 
 			OnChange(index, itemName, key, value)
+		end,
+		[MESSAGE_GET_DEFAULTVALUE] = function()
+			local index = net.ReadUInt(uIntBits)
+			local dataTable = registeredDatabases[index]
+
+			local sentTable = net.ReadBool()
+
+			if sentTable then
+				dataTable.defaultData = net.ReadTable()
+			else
+				local itemName = net.ReadString()
+				local key = net.ReadString()
+				local value = database.ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
+				local defaultData = dataTable.defaultData
+				defaultData[itemName] = defaultData[itemName] or {}
+				defaultData[itemName][key] = value
+			end
 		end
 	}
 end
@@ -419,6 +455,18 @@ if SERVER then
 			net.WriteString(data.itemName)
 			net.WriteString(data.key)
 			net.WriteString(tostring(data.value))
+		end,
+		-- data contains index, itemName, key, value here
+		[MESSAGE_GET_DEFAULTVALUE] = function(data)
+			net.WriteUInt(data.index, uIntBits)
+			net.WriteBool(data.sendTable or false)
+			if data.sendTable then
+				net.WriteTable(data.defaultData)
+			else
+				net.WriteString(data.itemName)
+				net.WriteString(data.key)
+				net.WriteString(tostring(data.value))
+			end
 		end
 	}
 
@@ -736,15 +784,25 @@ if SERVER then
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
 		local tableCount = #registeredDatabases
 
-		--contains additional data in case an identifier is given
-		local data = {
-			identifier = identifier,
-			tableCount = tableCount
-		}
-
 		for databaseNumber = 1, tableCount do
-			data.index = databaseNumber
-			SendUpdateNextTick(MESSAGE_REGISTER, data, plyIdentifier)
+			--contains additional data in case an identifier is given
+			local dataRegister = {
+				index = databaseNumber,
+				identifier = identifier,
+				tableCount = tableCount
+			}
+			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, plyIdentifier)
+
+			local defaultData = registeredDatabases[databaseNumber].defaultData
+
+			if table.IsEmpty(defaultData) then continue end
+
+			local dataDefault = {
+				index = databaseNumber,
+				sendTable =  true,
+				defaultData = defaultData
+			}
+			SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, dataDefault, plyIdentifier)
 		end
 	end
 
@@ -774,7 +832,8 @@ if SERVER then
 			orm = orm.Make(databaseName),
 			keys = savingKeys or {},
 			data = additionalData or {},
-			storedData = {}
+			storedData = {},
+			defaultData = {}
 		}
 		print("\nCurrent registered Database")
 		PrintTable(registeredDatabases)
@@ -970,6 +1029,40 @@ if SERVER then
 		OnChange(index, itemName, key, value)
 
 		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value}, SEND_TO_PLY_REGISTERED)
+	end
+
+	---
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param string key the name of the key in the database
+	-- @param any value the value you want to set in the database
+	-- @realm server
+	function database.SetDefaultValue(accessName, itemName, key, value)
+		print("\nSetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key) .. " with default value " .. tostring(value))
+
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.SetDefaultValue failed. The registered Database of " .. accessName .. " is not registered.")
+
+			return
+		end
+
+		local dataTable = registeredDatabases[index]
+
+		if not dataTable.keys[key] then
+			ErrorNoHalt("[TTT2] database.SetDefaultValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+
+			return
+		end
+
+		local defaultData = dataTable.defaultData
+		defaultData[itemName] = defaultData[itemName] or {}
+		defaultData[itemName][key] = value
+
+		dataTable.defaultData = defaultData
+
+		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, SEND_TO_PLY_REGISTERED)
 	end
 
 	-- Sync databases to all authenticated players

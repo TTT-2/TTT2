@@ -27,32 +27,33 @@ end
 -- @realm server
 local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-local initialModels = {
-	["css_phoenix"] = true,
-	["css_arctic"] = true,
-	["css_guerilla"] = true,
-	["css_leet"] = true
-}
-
-local initialHattableModels = {
-	["css_phoenix"] = true,
-	["css_arctic"] = true,
-	["monk"] = true,
-	["female01"] = true,
-	["female02"] = true,
-	["female03"] = true,
-	["female04"] = true,
-	["female05"] = true,
-	["female06"] = true,
-	["male01"] = true,
-	["male02"] = true,
-	["male03"] = true,
-	["male04"] = true,
-	["male05"] = true,
-	["male06"] = true,
-	["male07"] = true,
-	["male08"] = true,
-	["male09"] = true
+local initialDefaultStates = {
+	selected = {
+		["css_phoenix"] = true,
+		["css_arctic"] = true,
+		["css_guerilla"] = true,
+		["css_leet"] = true
+	},
+	hattable = {
+		["css_phoenix"] = true,
+		["css_arctic"] = true,
+		["monk"] = true,
+		["female01"] = true,
+		["female02"] = true,
+		["female03"] = true,
+		["female04"] = true,
+		["female05"] = true,
+		["female06"] = true,
+		["male01"] = true,
+		["male02"] = true,
+		["male03"] = true,
+		["male04"] = true,
+		["male05"] = true,
+		["male06"] = true,
+		["male07"] = true,
+		["male08"] = true,
+		["male09"] = true
+	}
 }
 
 playermodels = playermodels or {}
@@ -108,11 +109,7 @@ end
 -- @return[opt] boolean Returns true, if the model is in the selection pool on the server only
 -- @realm shared
 function playermodels.IsSelectedModel(name, OnReceiveFunc)
-	local defaultValue = false
-
-	if initialModels[name] ~= nil then
-		defaultValue = initialModels[name]
-	end
+	local defaultValue = database.GetDefaultValue(playermodels.accessName, name, "selected")
 
 	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExists, value)
 		if not databaseExists or value == nil then
@@ -139,11 +136,7 @@ end
 -- @return[opt] boolean Returns true, if the model is hattable on the server only
 -- @realm shared
 function playermodels.IsHattableModel(name, OnReceiveFunc)
-	local defaultValue = false
-
-	if initialHattableModels[name] ~= nil then
-		defaultValue = initialHattableModels[name]
-	end
+	local defaultValue = database.GetDefaultValue(playermodels.accessName, name, "hattable")
 
 	local _, isHattable = database.GetValue(playermodels.accessName, name, "hattable", function(databaseExists, value)
 		if not databaseExists or value == nil then
@@ -197,8 +190,6 @@ function playermodels.Reset()
 end
 
 if CLIENT then
-	local callbackCache = {}
-
 	net.ReceiveStream("TTT2StreamDefaultModelTable", function(data)
 		playermodels.defaultModelStates = data
 		playermodels.modelStates = tableCopy(data)
@@ -258,21 +249,21 @@ function playermodels.Initialize()
 
 	for name in pairs(playerManagerAllValidModels()) do
 		defaultData[name] = {}
-		defaultData[name].selected = initialModels[name] or false
-		defaultData[name].hattable = initialHattableModels[name] or false
-
 		data[name] = data[name] or {}
 
-		if changedData[name] and changedData[name].selected ~= nil then
-		 	data[name].selected = changedData[name].selected
-		else
-			data[name].selected = defaultData[name].selected
-		end
+		for key, defaultStates in pairs(initialDefaultStates) do
+			local state = defaultStates[name]
+			defaultData[name][key] = state or false
 
-		if changedData[name] and changedData[name].hattable ~= nil then
-		 	data[name].hattable = changedData[name].hattable
-		else
-			data[name].hattable  = defaultData[name].hattable
+			if changedData[name] and changedData[name][key] ~= nil then
+		 		data[name][key] = changedData[name][key]
+			else
+				data[name][key] = state or false
+			end
+
+			if state ~= nil then
+				database.SetDefaultValue(playermodels.accessName, name, key, state)
+			end
 		end
 	end
 
