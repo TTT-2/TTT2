@@ -1292,6 +1292,7 @@ end
 -- Called to drop a weapon in a safe manner (e.g. preparing and space-check).
 -- @param Weapon wep The weapon that should be dropped
 -- @param boolean keepSelection If set to true the current selection is kept if not dropped
+-- @return boolean Returns if this weapon is dropped
 -- @realm server
 function plymeta:SafeDropWeapon(wep, keepSelection)
 	if not self:CanSafeDropWeapon(wep) then
@@ -1315,14 +1316,12 @@ end
 -- @realm server
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 	self.forcedPickup = forcePickup
-	self.isPickupProbe = true
 
 	---
 	-- @realm server
-	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
+	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon, true)
 
 	self.forcedPickup = false
-	self.isPickupProbe = false
 
 	return ret, errCode
 end

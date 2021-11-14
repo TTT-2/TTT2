@@ -28,7 +28,8 @@ local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOT
 -- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
 -- @param Weapon wep The @{Weapon} entity in question
--- @param nil|number dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @param[opt] number dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @param[opt] boolean isPickupProble Set this to true to mark this hook run as probe
 -- @return boolean Allowed pick up or not
 -- @return number errorCode
 -- 1 - Player is spectator
@@ -40,7 +41,7 @@ local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOT
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanPickupWeapon
 -- @local
-function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
+function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon, isPickupProbe)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	-- spectators are not allowed to pickup weapons
@@ -80,7 +81,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 
 	-- make sure that the weapon is moved to the player if it should be automatically picked
 	-- up; this however should not happen for manual pickup and/or hook probing
-	if cv_auto_pickup:GetBool() and not ply.forcedPickup and not ply.isPickupProbe then
+	if cv_auto_pickup:GetBool() and not ply.forcedPickup and not isPickupProbe then
 		local tr = util.TraceEntity({
 			start = wep:GetPos(),
 			endpos = ply:GetShootPos(),
