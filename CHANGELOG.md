@@ -23,7 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed hotreloading items
 - Fixed random playermodel selection on map change not working
 - Fixes weapon pickup sometimes causing floating weapons
-- Fixes weapon pickup sometimes failing if a weapon with the same class as a weapon in the invetory should be picked up
+- Fixes weapon pickup sometimes failing if a weapon with the same class as a weapon in the inventory should be picked up
 
 ### Changed
 
