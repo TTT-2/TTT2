@@ -35,6 +35,7 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 
 		local isItem = items.IsItem(equipment)
 
+		-- Get inheritable version for weapons
 		if not isItem then
 			equipment = weapons.Get(WEPS.GetClass(equipment))
 		end
