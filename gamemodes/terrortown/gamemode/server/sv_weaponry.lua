@@ -80,7 +80,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 
 	-- make sure that the weapon is moved to the player if it should be automatically picked
 	-- up; this however should not happen for manual pickup and/or hook probing
-	if cv_auto_pickup:GetBool() and not ply.forcedGive and not ply.isPickupProbe then
+	if cv_auto_pickup:GetBool() and not ply.forcedPickup and not ply.isPickupProbe then
 		local tr = util.TraceEntity({
 			start = wep:GetPos(),
 			endpos = ply:GetShootPos(),
