@@ -322,6 +322,19 @@ else -- CLIENT
 	function SWEP:AddToSettingsMenu(parent)
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
+		form:MakeCheckBox({
+			serverConvar = "ttt_crowbar_unlocks",
+			label = "label_crowbar_unlocks"
+		})
+
+		form:MakeSlider({
+			serverConvar = "ttt_crowbar_pushforce",
+			label = "label_crowbar_pushforce",
+			min = 0,
+			max = 750,
+			decimal = 0
+		})
+
 		form:MakeSlider({
 			serverConvar = "ttt2_crowbar_shove_delay",
 			label = "label_crowbar_shove_delay",

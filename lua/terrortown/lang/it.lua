@@ -1834,3 +1834,5 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.label_sprint_stamina_consumption = "Stamina consumtion factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
 --L.label_sprint_crosshair = "Show crosshair while sprinting"
+--L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
+--L.label_crowbar_pushforce = "Crowbar push force"
