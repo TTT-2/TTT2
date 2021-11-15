@@ -13,6 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added icon to the magneto stick
 - Added the function `AddToSettingsMenu` to both `SWEP` and `ITEM` to add settings to the equipment menu
 - Added the role flag `.isOmniscientRole`; if set to true the role is able to see missing in action players and the haste mode time
+- Added `GM:TTT2ModifyOverheadIcon` to add, remove or modify the overhead icons of players
 
 ### Fixed
 
