@@ -1344,7 +1344,7 @@ end
 -- handling all the needed calls.
 -- @param Weapon wep The weapon entity that should be picked up
 -- @param[opt] boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
--- @param[default=true] boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
+-- @param[default=false] boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
 -- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param[opt] boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @return Weapon if successful, nil if not
