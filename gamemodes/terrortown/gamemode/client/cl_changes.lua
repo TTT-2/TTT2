@@ -1133,6 +1133,7 @@ function CreateChanges()
 			<li>Added icon to the magneto stick</li>
 			<li>Added the function <code>AddToSettingsMenu</code> to both <code>SWEP</code> and <code>ITEM</code> to add settings to the equipment menu</li>
 			<li>Added the role flag <code>.isOmniscientRole</code>; if set to true the role is able to see missing in action players and the haste mode time</li>
+			<li>Added <code>GM:TTT2ModifyOverheadIcon</code> to add, remove or modify the overhead icons of players</li>
 		</ul>
 
 		<h2>Fixed</h2>
