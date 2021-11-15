@@ -125,6 +125,10 @@ ROLE.isPublicRole = false
 -- a corpse and evil roles can be rewarded more points for them being killed.
 ROLE.isPolicingRole = false
 
+-- Omniscient roles are able to see missing in action players and therefore the haste
+-- mode timer as well. This is mostly traitor-like behaviour.
+ROLE.isOmniscientRole = false
+
 -- If this is set to true, the role is unable to send messages in the team chat. If this is
 -- set to false, it still could mean that the player is unable to use the team chat. If the
 -- role flag `.unknownTeam` is set, the team chat can't be used either.

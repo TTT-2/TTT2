@@ -20,6 +20,8 @@ function ROLE:PreInitialize()
 	self.score.teamKillsMultiplier = -16
 	self.score.bodyFoundMuliplier = 0
 
+	self.isOmniscientRole = true
+
 	self.fallbackTable = {}
 
 	-- conVarData
