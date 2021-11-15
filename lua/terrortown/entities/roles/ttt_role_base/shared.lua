@@ -145,7 +145,7 @@ ROLE.disabledGeneralChat = false
 -- role flag `.unknownTeam` is set, the team chat can't be used either.
 ROLE.disabledTeamVoice = false
 
--- If this is set to true, the geiven role is unable to hear team voice chat.
+-- If this is set to true, the given role is unable to hear team voice chat.
 ROLE.disabledTeamVoiceRecv = false
 
 ---
