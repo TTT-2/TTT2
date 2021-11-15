@@ -1258,11 +1258,7 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	timer.Simple(0, function()
-		if not IsValid(self) then return end
-
-		self.forcedPickup = false
-	end)
+	self.forcedPickup = false
 
 	return wep
 end
