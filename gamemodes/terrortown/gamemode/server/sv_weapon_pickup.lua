@@ -20,5 +20,5 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- do not pickup weapon if too far away
 	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	ply:SafePickupWeapon(tracedWeapon, nil, nil, true) -- force pickup and drop blocking weapon as well
+	ply:SafePickupWeapon(tracedWeapon, false, true, true, nil) -- force pickup; drop blocking weapon, autoselect is set automatically
 end)

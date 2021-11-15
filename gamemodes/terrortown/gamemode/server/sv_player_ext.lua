@@ -1269,6 +1269,10 @@ end
 -- @return boolean Returns if this weapon can be dropped
 -- @realm server
 function plymeta:CanSafeDropWeapon(wep)
+	if not wep then
+		return true
+	end
+
 	if not IsValid(wep) or not wep.AllowDrop then
 		return false
 	end
@@ -1338,11 +1342,11 @@ end
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
--- @param Weapon wep The weapon object
--- @param nil|boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
--- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
--- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
--- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
+-- @param Weapon wep The weapon entity that should be picked up
+-- @param[opt] boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
+-- @param[default=true] boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[opt] boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
@@ -1358,7 +1362,7 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 	-- drop the weapon safely
 	if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then return end
 
-	local ret, errCode = self:CanPickupWeapon(wep, forcePickup or true, dropBlockingWeapon)
+	local ret, errCode = self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 
 	if not ret then
 		if errCode == 1 then
