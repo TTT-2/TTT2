@@ -1182,6 +1182,13 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 11, day = 15 }))
 
+	AddChange("TTT2 Base - v0.11.1b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Small Hotfixes</li>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 15 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
