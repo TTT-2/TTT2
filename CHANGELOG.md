@@ -40,6 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - voice drain rate is now no longer bound to Detectives but to all public policing roles
   - Karma multiplier is now no longer bound to Detectives but to all public policing roles
   - all non-innocent roles are now able to pin ragdolls if enabled (previous only Traitors could do this)
+- Overhead icons are now also either colored black or white depending on the role's color
 
 ### Breaking Changes
 
