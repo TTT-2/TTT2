@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.11.0b](https://github.com/TTT-2/TTT2/tree/v0.11.0b) (2021-11-15)
+
 ### Added
 
 - Added the hook `GM:TTT2CalledPolicingRole` that is called after all policing role players were called to a corpse
@@ -35,7 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `REVIVAL_BLOCK_NONE`: don't block the winning condition during the revival process [default, previously `nil`/`false`]
   - `REVIVAL_BLOCK_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
   - `REVIVAL_BLOCK_ALL`: block the winning condition until the revival process is ended
-  - the old arguments still work, they are automaticvally converted
+  - the old arguments still work, they are automatically converted
 - Changed logs folder to `terrortown/logs/` to be inline with everything else
 - Added more role agnostics
   - voice drain rate is now no longer bound to Detectives but to all public policing roles
