@@ -172,13 +172,18 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		local ply = plys[i]
 		local rd = ply:GetSubRoleData()
 
-		if ply:IsActive()
+		local shouldDrawDefault = ply:IsActive()
 			and ply:HasRole()
 			and (not client:IsActive() or ply:IsInTeam(client) or rd.isPublicRole)
 			and not rd.avoidTeamIcons
-		then
-			DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
-		end
+
+		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
+
+		if shouldDraw == false
+			or not shouldDrawDefault and not material and not color
+		then continue end
+
+		DrawOverheadRoleIcon(ply, material or rd.iconMaterial, color or ply:GetRoleColor())
 	end
 end
 
@@ -434,5 +439,18 @@ end
 -- @hook
 -- @realm client
 function GM:TTTModifyTargetTracedata(startpos, endpos)
+
+end
+
+---
+-- Can be used to modify, disable or add an overhead icon of a player.
+-- @param Player ply The player whose overhead icon should be modified
+-- @param boolean shouldDrawDefault Defines if the overhead icon would draw normally
+-- @return boolean Return false to prevent overhead icon draw
+-- @return Material The material for the overhead icon (normally the role icon)
+-- @return Color The color of the overhead icon backdrop
+-- @hook
+-- @realm client
+function GM:TTT2ModifyOverheadIcon(ply, shouldDrawDefault)
 
 end
