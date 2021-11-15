@@ -182,7 +182,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
 		if shouldDraw == false
-			or not shouldDrawDefault and not material and not color
+			or not shouldDrawDefault and not (material and color)
 		then continue end
 
 		DrawOverheadRoleIcon(ply, material or rd.iconMaterial, color or ply:GetRoleColor())
