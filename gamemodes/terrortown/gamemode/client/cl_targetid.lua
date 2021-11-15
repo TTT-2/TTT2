@@ -177,6 +177,8 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			and (not client:IsActive() or ply:IsInTeam(client) or rd.isPublicRole)
 			and not rd.avoidTeamIcons
 
+		---
+		-- @realm client
 		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
 		if shouldDraw == false
