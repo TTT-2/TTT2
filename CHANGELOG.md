@@ -31,8 +31,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - All public policing roles now appear as detectives in the chat
 - Change blocking revival mode from `true`/`false` to
   - `REVIVAL_BLOCK_NONE`: don't block the winning condition during the revival process [default, previously `nil`/`false`]
-  - `REVIVAL_BLOCK_COUNT_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
-  - `REVIVAL_BLOCK_WHILE_REVIVING`: block the winning condition until the revival process is ended
+  - `REVIVAL_BLOCK_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
+  - `REVIVAL_BLOCK_ALL`: block the winning condition until the revival process is ended
   - the old arguments still work, they are automaticvally converted
 - Changed logs folder to `terrortown/logs/` to be inline with everything else
 - Added more role agnostics

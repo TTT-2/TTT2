@@ -827,7 +827,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 	if blockRound == nil or blockRound == false then
 		blockRound = REVIVAL_BLOCK_NONE
 	elseif blockRound == true then
-		blockRound = REVIVAL_BLOCK_COUNT_AS_ALIVE
+		blockRound = REVIVAL_BLOCK_AS_ALIVE
 	end
 
 	self:SetReviving(true)
