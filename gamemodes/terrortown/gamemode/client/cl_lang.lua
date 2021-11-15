@@ -525,26 +525,6 @@ function LANG.GetActiveLanguageName()
 	return cv_ttt_language:GetString()
 end
 
--- Message style declarations
-
--- Rather than having a big list of LANG.SetStyle calls, we specify it the other
--- way around here and churn through it in code. This is convenient because
--- we're doing it en-masse for some random interface things spread out over the
--- place.
---
--- Styles of custom SWEP messages and such should use LANG.SetStyle in their
--- script. The SWEP stuff here might be moved out to the SWEPS too.
-
--- This is kept for compatibility reasons so that old addons may still use this.
-
-local set_style = LANG.SetStyle
-
-for style, msgs in pairs(styledmessages) do
-	for _, name in pairs(msgs) do
-		set_style(name, style)
-	end
-end
-
 ---
 -- This hook is called after the language was changed.
 -- @param string oldLang The name of the old language
