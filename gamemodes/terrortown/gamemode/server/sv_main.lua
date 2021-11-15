@@ -1545,7 +1545,7 @@ function GM:TTTCheckForWin()
 		end
 
 		-- special case: The revival blocks the round end
-		if ply:GetRevivalBlockMode() == REVIVAL_BLOCK_UNTIL_ALIVE then
+		if ply:GetRevivalBlockMode() == REVIVAL_BLOCK_ALL then
 			return WIN_NONE
 		end
 	end

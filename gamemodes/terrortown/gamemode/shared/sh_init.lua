@@ -122,9 +122,9 @@ SHOP_UNSET = "UNSET"
 -- don't block the winning condition during the revival process
 REVIVAL_BLOCK_NONE = 0
 -- only block the winning condition, if the player being alive would change the outcome
-REVIVAL_BLOCK_COUNT_AS_ALIVE = 1
+REVIVAL_BLOCK_AS_ALIVE = 1
 -- block the winning condition until the revival process is ended
-REVIVAL_BLOCK_UNTIL_ALIVE = 2
+REVIVAL_BLOCK_ALL = 2
 
 REVIVAL_BITS = 2
 
