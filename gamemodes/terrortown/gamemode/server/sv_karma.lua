@@ -389,7 +389,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 	-- team hurts another team
 	if not attacker:IsInTeam(victim) then
-		if attacker:GetSubRoleData().unknownTeam then
+		if attackerRoleData.unknownTeam then
 			local reward = KARMA.GetHurtReward(hurt_amount) * attackerRoleData.enemyHurtBonusMultiplier
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYHURT])
@@ -428,7 +428,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 
 	-- team kills another team
 	if not attacker:IsInTeam(victim) then
-		if attacker:GetSubRoleData().unknownTeam then
+		if attackerRoleData.unknownTeam then
 			local reward = KARMA.GetKillReward() * attackerRoleData.enemyKillBonusMultiplier
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYKILL])
