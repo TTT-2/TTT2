@@ -54,7 +54,7 @@ ROLE.karma = {
 	-- The multiplier that is used to calculate the Karma penalty for team damage.
 	-- Keep in mind that the game will increase the multiplier further if it was avoidable
 	-- like damage applied to a public policing role.
-	teamHurtPenalyMultiplier = 1,
+	teamHurtPenatlyMultiplier = 1,
 
 	-- The multiplier that is used to change the Karma given to the killer if a player
 	-- from an enemy team is killed.

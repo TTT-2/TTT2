@@ -4,6 +4,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added four new Karma multipliers. They are applied **after** all other Karma calculations are done_
+  - `ROLE.karma.teamKillPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for a team kill
+  - `ROLE.karma.teamHurtPenatlyMultiplier`: The multiplier that is used to calculate the Karma penalty for team damage
+  - `ROLE.karma.enemyKillBonusMultiplier`: The multiplier that is used to change the Karma given to the killer if a player from an enemy team is killed
+  - `ROLE.karma.enemyHurtBonusMulitplier`: The multiplier that is used to change the Karma given to the attacker if a player from an enemy team is damaged
+
 ### Fixed
 
 - Fixed `ply:Give(weapon)` to work again, when weapons are cached, fixing the spawneditor to work again
