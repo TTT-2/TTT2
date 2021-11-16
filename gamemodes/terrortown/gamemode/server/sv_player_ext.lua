@@ -1314,7 +1314,7 @@ end
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
--- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
 -- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
 -- @return boolean return of the PlayerCanPickupWeapon hook
 -- @return number errorCode that appeared. For the error, give a look into the specific hook
