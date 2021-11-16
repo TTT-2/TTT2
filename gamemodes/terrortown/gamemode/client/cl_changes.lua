@@ -1183,6 +1183,16 @@ function CreateChanges()
 	]], os.time({ year = 2021, month = 11, day = 15 }))
 
 	AddChange("TTT2 Base - v0.11.1b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done:</li>
+			<ul>
+				<li><code>ROLE.karma.teamKillPenaltyMultiplier</code>: The multiplier that is used to calculate the Karma penalty for a team kill</li>
+				<li><code>ROLE.karma.teamHurtPenaltyMultiplier</code>: The multiplier that is used to calculate the Karma penalty for team damage</li>
+				<li><code>ROLE.karma.enemyKillBonusMultiplier</code>: The multiplier that is used to calculate the Karma given to the killer if a player from an enemy team is killed</li>
+				<li><code>ROLE.karma.enemyHurtBonusMultiplier</code>: The multiplier that is used to calculate the Karma given to the attacker if a player from an enemy team is damaged</li>
+			</ul>
+		</ul>
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed <code>ply:Give(weapon)</code> to work again, when weapons are cached, fixing the spawneditor to work again</li>
