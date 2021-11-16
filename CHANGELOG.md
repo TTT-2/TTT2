@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed correct role Karma multipliers used in Karma-module
+
 ## [v0.11.1b](https://github.com/TTT-2/TTT2/tree/v0.11.1b) (2021-11-16)
 
 ### Added
