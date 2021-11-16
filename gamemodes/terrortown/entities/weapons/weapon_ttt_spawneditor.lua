@@ -106,6 +106,7 @@ if CLIENT then
 	local mathPi = math.pi
 	local mathTan = math.tan
 	local mathMax = math.max
+	local mathMin = math.min
 	local ColorAlpha = ColorAlpha
 
 	local centerX = 0.5 * ScrW()
@@ -135,6 +136,16 @@ if CLIENT then
 
 	local colorBasic = Color(255, 255, 255, 100)
 	local colorSelect = Color(255, 255, 255, 235)
+
+	local function GetSteps(distance3D)
+		if not isnumber(distance3D) then
+			return 10
+		end
+
+		-- Norm Steps to be the maximum 10 at 200 units and minimum of 5 at 400 units seems reasonable
+		-- Dont go below 5, as you wont recognize it as a sphere anymore
+		return mathMin(10, mathMax(5,  10 * 200 / distance3D))
+	end
 
 	local function IsHighlighted(pos, screenPos)
 		local localPlayer = LocalPlayer()
@@ -179,7 +190,7 @@ if CLIENT then
 
 				if dist3d > maxEditDistance then continue end
 
-				local steps = mathMax(1, 4 + 750 / dist3d)
+				local steps = GetSteps(dist3d)
 
 				if not isHighlighted then
 					renderDrawSphere(
@@ -248,7 +259,7 @@ if CLIENT then
 			local id = proximitySpawn.id
 			local dist3d = proximitySpawn.dist3d
 			local color = colorSpawnTypes[spawnType]
-			local steps = mathMax(1, 4 + 750 / dist3d)
+			local steps = GetSteps(dist3d)
 
 			screenPos = proximitySpawn.screenPos
 
@@ -317,7 +328,7 @@ if CLIENT then
 			colorSphere = colorPreview
 		end
 
-		local steps = mathMax(1, 4 + 750 / previewData.distance3d)
+		local steps = GetSteps(dist3d)
 
 		renderDrawSphere(
 			previewData.currentPos,
