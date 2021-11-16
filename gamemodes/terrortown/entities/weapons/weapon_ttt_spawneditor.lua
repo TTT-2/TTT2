@@ -115,7 +115,7 @@ if CLIENT then
 	local tolerance = 32 * sphereRadius
 
 	local maxEditDistance = 1500
-	local maxSphereQualitySteps = 100
+	local maxSphereQualitySteps = 10
 	local distWalls = 7.5
 
 	local colorPreview = Color(255, 255, 255, 100)
