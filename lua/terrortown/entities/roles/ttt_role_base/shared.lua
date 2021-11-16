@@ -62,7 +62,7 @@ ROLE.karma = {
 
 	-- The multiplier that is used to change the Karma given to the attacker if a player
 	-- from an enemy team is damaged.
-	enemyHurtBonusMulitplier = 1,
+	enemyHurtBonusMultiplier = 1,
 }
 
 ROLE.conVarData = {
