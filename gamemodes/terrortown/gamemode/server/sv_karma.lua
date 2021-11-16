@@ -399,7 +399,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	else -- team hurts own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.teamHurtPenatlyMultiplier
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.teamHurtPenaltyMultiplier
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMHURT])
