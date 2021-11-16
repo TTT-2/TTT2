@@ -1202,6 +1202,13 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 11, day = 16 }))
 
+	AddChange("TTT2 Base - v0.11.2b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed correct role Karma multipliers used in Karma-module</li>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 17 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
