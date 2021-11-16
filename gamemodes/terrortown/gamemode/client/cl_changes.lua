@@ -1186,6 +1186,7 @@ function CreateChanges()
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed <code>ply:Give(weapon)</code> to work again, when weapons are cached, fixing the spawneditor to work again</li>
+			<li>Fixed spawneditor not causing errors, when going through walls due to many steps</li>
 		</ul>
 	]], os.time({ year = 2021, month = 11, day = 16 }))
 
