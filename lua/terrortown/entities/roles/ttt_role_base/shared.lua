@@ -79,7 +79,7 @@ ROLE.conVarData = {
 	minKarma = 0,
 
 	-- Defines if the role has access to traitor buttons.
-	traitorButton = 1,
+	traitorButton = 0,
 
 	-- Sets the amount of credits the role is starting with.
 	credits = 0,
