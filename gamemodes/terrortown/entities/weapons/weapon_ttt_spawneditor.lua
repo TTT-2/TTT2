@@ -106,6 +106,7 @@ if CLIENT then
 	local mathPi = math.pi
 	local mathTan = math.tan
 	local mathMax = math.max
+	local mathMin = math.min
 	local ColorAlpha = ColorAlpha
 
 	local centerX = 0.5 * ScrW()
@@ -114,6 +115,7 @@ if CLIENT then
 	local tolerance = 32 * sphereRadius
 
 	local maxEditDistance = 1500
+	local maxSphereQualitySteps = 100
 	local distWalls = 7.5
 
 	local colorPreview = Color(255, 255, 255, 100)
@@ -179,7 +181,7 @@ if CLIENT then
 
 				if dist3d > maxEditDistance then continue end
 
-				local steps = mathMax(1, 4 + 750 / dist3d)
+				local steps = mathMin(maxSphereQualitySteps, mathMax(1, 4 + 750 / dist3d))
 
 				if not isHighlighted then
 					renderDrawSphere(
@@ -248,7 +250,7 @@ if CLIENT then
 			local id = proximitySpawn.id
 			local dist3d = proximitySpawn.dist3d
 			local color = colorSpawnTypes[spawnType]
-			local steps = mathMax(1, 4 + 750 / dist3d)
+			local steps = mathMin(maxSphereQualitySteps, mathMax(1, 4 + 750 / dist3d))
 
 			screenPos = proximitySpawn.screenPos
 
@@ -317,7 +319,7 @@ if CLIENT then
 			colorSphere = colorPreview
 		end
 
-		local steps = mathMax(1, 4 + 750 / previewData.distance3d)
+		local steps = mathMin(maxSphereQualitySteps, mathMax(1, 4 + 750 / previewData.distance3d))
 
 		renderDrawSphere(
 			previewData.currentPos,
