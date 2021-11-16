@@ -40,9 +40,29 @@ ROLE.score = {
 	-- round ended with nobody winning, usually a negative number.
 	timelimitMultiplier = 0,
 
-	-- the amount of points gained by killing yourself. Should be a
+	-- The amount of points gained by killing yourself. Should be a
 	-- negative number for most roles.
 	suicideMultiplier = -1
+}
+
+ROLE.karma = {
+	-- The multiplier that is used to calculate the Karma penalty for a team kill.
+	-- Keep in mind that the game will increase the multiplier further if it was avoidable
+	-- like a kill on a public policing role.
+	teamKillPenaltyMultiplier = 1,
+
+	-- The multiplier that is used to calculate the Karma penalty for team damage.
+	-- Keep in mind that the game will increase the multiplier further if it was avoidable
+	-- like damage applied to a public policing role.
+	teamHurtPenalyMultiplier = 1,
+
+	-- The multiplier that is used to change the Karma given to the killer if a player
+	-- from an enemy team is killed.
+	enemyKillBonusMultiplier = 1,
+
+	-- The multiplier that is used to change the Karma given to the attacker if a player
+	-- from an enemy team is damaged.
+	enemyHurtBonusMulitplier = 1,
 }
 
 ROLE.conVarData = {
