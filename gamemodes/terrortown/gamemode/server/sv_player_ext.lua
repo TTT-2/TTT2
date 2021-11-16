@@ -1254,11 +1254,16 @@ local plymeta_old_Give = plymeta.Give
 -- @return Weapon
 -- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
+	-- ForcedPickup needs to be used to be able to ignore the cv_auto_pickup cvar
 	self.forcedPickup = true
+
+	-- ForcedGive needs to be used to give weapons when there are cached ones, e.g. in use with the spawneditor
+	self.forcedGive = true
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
 	self.forcedPickup = false
+	self.forcedGive = false
 
 	return wep
 end

@@ -4,11 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-## [v0.11.1b](https://github.com/TTT-2/TTT2/tree/v0.11.1b) (2021-11-15)
+## [v0.11.1b](https://github.com/TTT-2/TTT2/tree/v0.11.1b) (2021-11-16)
 
 ### Fixed
 
-- Small Hotfixes
+- Fixed `ply:Give(weapon)` to work again, when weapons are cached, fixing the spawneditor to work again
 
 ## [v0.11.0b](https://github.com/TTT-2/TTT2/tree/v0.11.0b) (2021-11-15)
 
