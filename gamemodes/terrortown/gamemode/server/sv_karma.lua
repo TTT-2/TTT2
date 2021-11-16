@@ -390,7 +390,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	-- team hurts another team
 	if not attacker:IsInTeam(victim) then
 		if attacker:GetSubRoleData().unknownTeam then
-			local reward = KARMA.GetHurtReward(hurt_amount) * attackerRoleData.enemyHurtBonusMulitplier
+			local reward = KARMA.GetHurtReward(hurt_amount) * attackerRoleData.enemyHurtBonusMultiplier
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYHURT])
 
