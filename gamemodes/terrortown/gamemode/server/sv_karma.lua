@@ -399,7 +399,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	else -- team hurts own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.teamHurtBonusMulitplier
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.teamHurtPenatlyMultiplier
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMHURT])
@@ -438,7 +438,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.teamKillBonusMultiplier
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.teamKillPenaltyMultiplier
 		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMKILL])
