@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed `ply:Give(weapon)` to work again, when weapons are cached, fixing the spawneditor to work again
+- Fixed spawneditor not causing errors, when going through walls due to many steps
 
 ## [v0.11.0b](https://github.com/TTT-2/TTT2/tree/v0.11.0b) (2021-11-15)
 
