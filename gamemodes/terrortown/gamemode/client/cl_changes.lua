@@ -1187,7 +1187,7 @@ function CreateChanges()
 		<ul>
 			<li>Fixed <code>ply:Give(weapon)</code> to work again, when weapons are cached, fixing the spawneditor to work again</li>
 		</ul>
-	]], os.time({ year = 2021, month = 11, day = 15 }))
+	]], os.time({ year = 2021, month = 11, day = 16 }))
 
 	---
 	-- run hook for other addons to add their changelog as well
