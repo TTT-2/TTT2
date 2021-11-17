@@ -4,7 +4,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-## [v0.11.1b](https://github.com/TTT-2/TTT2/tree/v0.11.2b) (2021-11-17)
+## [v0.11.2b](https://github.com/TTT-2/TTT2/tree/v0.11.2b) (2021-11-17)
 
 ### Fixed
 
