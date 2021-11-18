@@ -4,10 +4,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
+
 ### Fixed
 
-- Fixed Equipment-Editor not showing the current synced values, but the cached ones 
-- Fix serverConVars indexing 0 at tables (could cause unpredictable issues)
+- Fixed Equipment-Editor not showing the current synced values, but the cached ones
+
+### Changed
+
+- Changed serverConVars not indexing with 0 in tables (could cause issues when iterating)
 
 ## [v0.11.2b](https://github.com/TTT-2/TTT2/tree/v0.11.2b) (2021-11-17)
 

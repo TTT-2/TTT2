@@ -1193,6 +1193,7 @@ function CreateChanges()
 				<li><code>ROLE.karma.enemyHurtBonusMultiplier</code>: The multiplier that is used to calculate the Karma given to the attacker if a player from an enemy team is damaged</li>
 			</ul>
 		</ul>
+
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed <code>ply:Give(weapon)</code> to work again, when weapons are cached, fixing the spawneditor to work again</li>
@@ -1208,6 +1209,18 @@ function CreateChanges()
 			<li>Fixed correct role Karma multipliers used in Karma-module</li>
 		</ul>
 	]], os.time({ year = 2021, month = 11, day = 17 }))
+
+	AddChange("TTT2 Base - v0.11.3b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed Equipment-Editor not showing the current synced values, but the cached ones</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Changed serverConVars not indexing with 0 in tables (could cause issues when iterating)</li>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 18 }))
 
 	---
 	-- run hook for other addons to add their changelog as well
