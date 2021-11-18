@@ -9,9 +9,9 @@ end
 
 local cvars = cvars
 
-local messageIdentifier = -1
+local messageIdentifier = 0
 local identityBitCount = 8
-local maxUInt = 2 ^ identityBitCount
+local maxUInt = 2 ^ identityBitCount - 1
 
 local serverConVars = {}
 local functionCache = {}
@@ -36,7 +36,7 @@ if CLIENT then
 			return
 		end
 
-		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		messageIdentifier = messageIdentifier % maxUInt + 1
 		functionCache[messageIdentifier] = OnReceiveFunc
 
 		net.Start("TTT2ConVarExistsOnServer")
@@ -121,7 +121,7 @@ if CLIENT then
 			return
 		end
 
-		messageIdentifier = (messageIdentifier + 1) % maxUInt
+		messageIdentifier = messageIdentifier % maxUInt + 1
 		functionCache[messageIdentifier] = OnReceiveFunc
 
 		requestCacheSize = requestCacheSize + 1
