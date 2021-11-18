@@ -100,6 +100,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		masterRefs[key] = option
 	end
 
+	-- Get inheritable version for weapons to access inherited functions
+	if not self.isItem then
+		equipment = weapons.Get(WEPS.GetClass(equipment))
+	end
+
 	-- now add custom equipment settings
 	equipment:AddToSettingsMenu(parent)
 end
