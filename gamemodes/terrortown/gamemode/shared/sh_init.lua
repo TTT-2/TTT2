@@ -5,7 +5,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.11.2b"
+GM.Version = "0.11.3b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
