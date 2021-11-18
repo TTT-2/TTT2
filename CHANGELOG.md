@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed Equipment-Editor not showing the current synced values, but the cached ones 
+
 ## [v0.11.2b](https://github.com/TTT-2/TTT2/tree/v0.11.2b) (2021-11-17)
 
 ### Fixed
