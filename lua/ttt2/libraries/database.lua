@@ -19,7 +19,7 @@ local maxUInt = 2 ^ uIntBits - 1
 
 local databaseCount = 0
 
-local registeredDatabases = {}
+registeredDatabases = {}
 local receivedValues = {}
 local nameToIndex = {}
 
@@ -516,14 +516,15 @@ if SERVER then
 			database.ReturnGetValue(data)
 		end,
 		[MESSAGE_SET_VALUE] = function(plyID64)
-			local data = {
-				index = net.ReadUInt(uIntBits),
-				itemName = net.ReadString(),
-				key = net.ReadString(),
-				value = net.ReadString()
-			}
+			local index = net.ReadUInt(uIntBits)
+			local itemName = net.ReadString()
+			local key = net.ReadString()
+			local value = net.ReadString()
 
-			database.SetValue(registeredDatabases[data.index].accessName, data.itemName, data.key, data.value, plyID64)
+			local accessName = registeredDatabases[index].accessName
+			value = database.ConvertValueWithKey(value, accessName, key)
+
+			database.SetValue(accessName, itemName, key, value, plyID64)
 		end,
 		[MESSAGE_RESET] = function(plyID64)
 			local index = net.ReadUInt(uIntBits)
@@ -954,9 +955,11 @@ if SERVER then
 
 		-- Get storedValues if a concrete item-key pair is given
 		if isstring(itemName) and isstring(key) then
+			print("ItemName and key given.")
 			local storedValue = dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
-
+			print("Stored value is: " .. tostring(storedValue))
 			if storedValue ~= nil then
+				print("Returning stored Value!\n")
 				return true, storedValue
 			end
 		end
