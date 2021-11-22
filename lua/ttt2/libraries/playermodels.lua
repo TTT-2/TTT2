@@ -88,13 +88,11 @@ end
 -- @return[opt] boolean Returns true, if the model is in the selection pool on the server only
 -- @realm shared
 function playermodels.IsSelectedModel(name, OnReceiveFunc)
-	print("Is Model " .. name .. " selected? ")
 	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExists, value)
 		OnReceiveFunc(value)
 	end)
 
 	if SERVER then
-		print("Is Selected?" .. tostring(isSelected))
 		return isSelected
 	end
 end
@@ -245,10 +243,7 @@ end
 -- @return Model model The selected playermodel
 -- @realm server
 function playermodels.GetRandomPlayerModel()
-	print("\nGetting random playermodel")
 	local availableModels = playermodels.GetSelectedModels()
-	print("Selected are: ")
-	PrintTable(availableModels)
 	local sizeAvailableModels = #availableModels
 
 	if cvCustomModels:GetBool() and sizeAvailableModels > 0 then
