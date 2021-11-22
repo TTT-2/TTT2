@@ -28,7 +28,7 @@ local MESSAGE_REGISTER = 1
 local MESSAGE_GET_VALUE = 2
 local MESSAGE_SET_VALUE = 3
 local MESSAGE_GET_DEFAULTVALUE = 4
-local MESSAGE_RESET = 4
+local MESSAGE_RESET = 5
 
 -- Identifier strings to determine which player gets the information
 local SEND_TO_PLY_ALL = "all"
@@ -66,11 +66,6 @@ local playerID64Cache = {}
 -- General Shared functions
 --
 
-local function ResetDatabase(index)
-	registeredDatabases[index].storedData = {}
-	receivedValues[index] = nil
-end
-
 local function ValueReceived(index, itemName, key)
 	local receiver = receivedValues[index] or {}
 
@@ -92,7 +87,7 @@ function database.GetDefaultValue(accessName, itemName, key)
 
 	if not index then return end
 
-	local dataTable = registeredDatabases[index].defaultData
+	local dataTable = registeredDatabases[index]
 	local defaultTable = dataTable.defaultData
 
 	local defaultValue = defaultTable[itemName] and defaultTable[itemName][key]
@@ -158,6 +153,18 @@ local function OnChange(index, itemName, key, newValue)
 	end
 
 	ValueReceived(index, itemName, key)
+end
+
+local function ResetDatabase(index)
+	local dataTable = registeredDatabases[index]
+
+	if dataTable and not table.IsEmpty(dataTable.storedData) then
+		for itemName, keys in pairs(dataTable.storedData) do
+			for key in pairs(keys) do
+				OnChange(index, itemName, key, database.GetDefaultValue(dataTable.accessName, itemName, key))
+			end
+		end
+	end
 end
 
 ---
@@ -411,13 +418,17 @@ if CLIENT then
 			OnChange(index, itemName, key, value)
 		end,
 		[MESSAGE_GET_DEFAULTVALUE] = function()
+			print("\nGetting default data")
 			local index = net.ReadUInt(uIntBits)
 			local dataTable = registeredDatabases[index]
+			print("Table: " .. dataTable.accessName)
 
 			local sentTable = net.ReadBool()
-
+			print("Got table? " .. tostring(sentTable))
+			print("Received data:")
 			if sentTable then
 				dataTable.defaultData = net.ReadTable()
+				PrintTable(dataTable.defaultData)
 			else
 				local itemName = net.ReadString()
 				local key = net.ReadString()
@@ -815,6 +826,7 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
+		print("\nSyncing Database for " .. tostring(plyIdentifier))
 		local tableCount = #registeredDatabases
 
 		for databaseNumber = 1, tableCount do
@@ -827,6 +839,8 @@ if SERVER then
 			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, plyIdentifier)
 
 			local defaultData = registeredDatabases[databaseNumber].defaultData
+			print("Printing default Data of " .. tostring(registeredDatabases[databaseNumber].accessName))
+			PrintTable(defaultData)
 
 			if table.IsEmpty(defaultData) then continue end
 
@@ -835,6 +849,8 @@ if SERVER then
 				sendTable =  true,
 				defaultData = defaultData
 			}
+
+			print("Sending default data now.")
 			SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, dataDefault, plyIdentifier)
 		end
 	end
@@ -909,10 +925,13 @@ if SERVER then
 
 	---
 	-- Get the stored key value of the given database if it exists and was registered
+	-- @note While itemName and key are optional, leaving them out only get the saved and converted sql Tables, they dont include every possible item with their default values.
+	-- So to get default Values you have to specify itemName and key.
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
 	-- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
-	-- @return bool, any value that was saved in the database and if it successfully reached the sql datatable
+	-- @return bool, if the requested item and/or key was successfully registered in the sql datatable
+	-- @return any, the value that was saved in the database or the default
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
 		local index = nameToIndex[accessName]
@@ -933,10 +952,13 @@ if SERVER then
 			return false
 		end
 
-		local storedValue = itemName and dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
+		-- Get storedValues if a concrete item-key pair is given
+		if isstring(itemName) and isstring(key) then
+			local storedValue = dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
 
-		if storedValue ~= nil then
-			return true, storedValue
+			if storedValue ~= nil then
+				return true, storedValue
+			end
 		end
 
 		local sqlData
@@ -944,12 +966,8 @@ if SERVER then
 		if itemName then
 			sqlData = dataTable.orm:Find(itemName)
 
-			if not sqlData then
-				return false
-			end
-
 			if key then
-				local value = database.ConvertValueWithKey(sqlData[key], accessName, key)
+				local value = sqlData and database.ConvertValueWithKey(sqlData[key], accessName, key)
 
 				if value == nil then
 					value = database.GetDefaultValue(accessName, itemName, key)
@@ -959,7 +977,7 @@ if SERVER then
 				dataTable.storedData[itemName][key] = value
 
 				print("\nFetched itemValue is: " .. tostring(value))
-				return value ~= nil, value
+				return true, value
 			end
 
 			database.ConvertTable(sqlData, accessName)
