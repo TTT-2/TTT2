@@ -490,7 +490,6 @@ function GM:InitPostEntity()
 
 	-- initialize playermodel database
 	playermodels.Initialize()
-	self.playermodel = playermodels.GetRandomPlayerModel()
 
 	-- set the default random playermodel
 	self.playermodel = playermodels.GetRandomPlayerModel()
