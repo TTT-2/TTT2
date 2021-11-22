@@ -336,7 +336,6 @@ function GM:Initialize()
 
 	self.DamageLog = {}
 	self.LastRole = {}
-	self.playermodel = playermodels.GetRandomPlayerModel()
 	self.playercolor = COLOR_WHITE
 
 	-- Delay reading of cvars until config has definitely loaded
@@ -520,6 +519,7 @@ function GM:InitPostEntity()
 
 	-- initialize playermodel database
 	playermodels.Initialize()
+	self.playermodel = playermodels.GetRandomPlayerModel()
 
 	timer.Simple(0, function()
 		addonChecker.Check()
@@ -1368,7 +1368,6 @@ function GM:OnReloaded()
 
 	-- reload everything from the playermodels
 	playermodels.Initialize()
-	playermodels.StreamModelStateToSelectedClients()
 
 	---
 	-- @realm shared
