@@ -19,7 +19,7 @@ local maxUInt = 2 ^ uIntBits - 1
 
 local databaseCount = 0
 
-registeredDatabases = {}
+local registeredDatabases = {}
 local receivedValues = {}
 local nameToIndex = {}
 
@@ -40,7 +40,6 @@ local SEND_TO_PLY_SERVER = "server"
 local dataStore = {}
 
 local sendDataFunctions = {}
-
 local receiveDataFunctions = {}
 
 local sendRequestsNextUpdate = false
@@ -66,6 +65,13 @@ local playerID64Cache = {}
 -- General Shared functions
 --
 
+---
+-- Call this function if a value was received
+-- @param number index the local index of the database
+-- @param string itemName the name of the item in the database
+-- @param string key the name of the key in the database
+-- @realm shared
+-- @internal
 local function ValueReceived(index, itemName, key)
 	local receiver = receivedValues[index] or {}
 
@@ -75,6 +81,13 @@ local function ValueReceived(index, itemName, key)
 	receivedValues[index] = receiver
 end
 
+---
+-- Check if a value was already received via network
+-- @param number index the local index of the database
+-- @param string itemName the name of the item in the database
+-- @param string key the name of the key in the database
+-- @realm shared
+-- @internal
 local function IsValueReceived(index, itemName, key)
 	return receivedValues[index]
 		and receivedValues[index][itemName]
@@ -82,6 +95,13 @@ local function IsValueReceived(index, itemName, key)
 		or false
 end
 
+---
+-- Gets either an item-specific or key-specific default value
+-- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
+-- @param string itemName the name of the item in the database
+-- @param string key the name of the key in the database
+-- @return any the defaultValue
+-- @realm shared
 function database.GetDefaultValue(accessName, itemName, key)
 	local index = nameToIndex[accessName]
 
@@ -100,7 +120,7 @@ function database.GetDefaultValue(accessName, itemName, key)
 end
 
 ---
--- Called on change of values over the database-library
+-- Called on change of values over the database-library and then calls all registered Callbacks if a change occured
 -- @param number index the local index of the database
 -- @param string itemName the name of the item in the database
 -- @param string key the name of the key in the database
@@ -155,6 +175,12 @@ local function OnChange(index, itemName, key, newValue)
 	ValueReceived(index, itemName, key)
 end
 
+---
+-- Resets the database by returning all values to the default
+-- This is called when a global reset for the given database is done.
+-- @param number index the local index of the database
+-- @realm shared
+-- @internal
 local function ResetDatabase(index)
 	local dataTable = registeredDatabases[index]
 
@@ -418,17 +444,13 @@ if CLIENT then
 			OnChange(index, itemName, key, value)
 		end,
 		[MESSAGE_GET_DEFAULTVALUE] = function()
-			print("\nGetting default data")
 			local index = net.ReadUInt(uIntBits)
 			local dataTable = registeredDatabases[index]
-			print("Table: " .. dataTable.accessName)
 
 			local sentTable = net.ReadBool()
-			print("Got table? " .. tostring(sentTable))
-			print("Received data:")
+
 			if sentTable then
 				dataTable.defaultData = net.ReadTable()
-				PrintTable(dataTable.defaultData)
 			else
 				local itemName = net.ReadString()
 				local key = net.ReadString()
@@ -544,7 +566,6 @@ end
 -- @realm shared
 -- @internal
 local function SynchronizeStates(len, ply)
-	print("\nReceived Synchronization with len of " .. len .. " from player: " .. tostring(ply))
 	if len < 1 then return end
 
 	local plyID64
@@ -561,15 +582,12 @@ local function SynchronizeStates(len, ply)
 		local identifier = net.ReadUInt(uIntBits)
 		local readNextValue = net.ReadBool()
 
-		print("identifier is: " .. identifier .. " and readnextvalue? " .. tostring(readNextValue))
 		while readNextValue do
 			receiveDataFunctions[identifier](plyID64)
-			print("Readnextvalue? " .. tostring(readNextValue))
 			readNextValue = net.ReadBool()
 		end
 
 		continueReading = net.ReadBool()
-		print("Continue reading? " .. tostring(continueReading) .. "\n")
 	end
 end
 net.Receive("TTT2SynchronizeDatabase", SynchronizeStates)
@@ -584,10 +602,8 @@ local function SendUpdatesNow()
 	if table.IsEmpty(dataStore) then return end
 
 	local plyDeleteIdentifiers = {}
-	print("\nSynchronize!")
 	for plyIdentifier, identifierList in pairs(dataStore) do
 		net.Start("TTT2SynchronizeDatabase")
-		print("Send to " .. plyIdentifier)
 
 		local stopSending = false
 		local deleteIdentifiers = {}
@@ -595,8 +611,6 @@ local function SendUpdatesNow()
 			net.WriteBool(true)
 			net.WriteUInt(identifier, uIntBits)
 			net.WriteBool(#indexedData > 0)
-			print("Sending identifier: " .. identifier)
-			print("Data available: " .. #indexedData)
 
 			for i = #indexedData, 1, -1 do
 				sendDataFunctions[identifier](indexedData[i])
@@ -792,6 +806,10 @@ if CLIENT then
 		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value})
 	end
 
+	---
+	-- Reset the database and send a message to the server
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @realm client
 	function database.Reset(accessName)
 		local index = nameToIndex[accessName]
 
@@ -827,7 +845,6 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
-		print("\nSyncing Database for " .. tostring(plyIdentifier))
 		local tableCount = #registeredDatabases
 
 		for databaseNumber = 1, tableCount do
@@ -840,8 +857,6 @@ if SERVER then
 			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, plyIdentifier)
 
 			local defaultData = registeredDatabases[databaseNumber].defaultData
-			print("Printing default Data of " .. tostring(registeredDatabases[databaseNumber].accessName))
-			PrintTable(defaultData)
 
 			if table.IsEmpty(defaultData) then continue end
 
@@ -851,7 +866,6 @@ if SERVER then
 				defaultData = defaultData
 			}
 
-			print("Sending default data now.")
 			SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, dataDefault, plyIdentifier)
 		end
 	end
@@ -864,9 +878,6 @@ if SERVER then
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.Register(databaseName, accessName, savingKeys, additionalData)
-		print("\nRegistering " .. databaseName .. " as " .. accessName .. " with Keys:")
-		PrintTable(savingKeys)
-		PrintTable(additionalData or {})
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
 		end
@@ -886,8 +897,6 @@ if SERVER then
 			storedData = {},
 			defaultData = {}
 		}
-		print("\nCurrent registered Database")
-		PrintTable(registeredDatabases)
 		nameToIndex[accessName] = databaseCount
 
 		local data = {index = databaseCount}
@@ -937,7 +946,6 @@ if SERVER then
 	function database.GetValue(accessName, itemName, key)
 		local index = nameToIndex[accessName]
 
-		print("\nGetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key))
 		if not index then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not registered.")
 
@@ -955,11 +963,9 @@ if SERVER then
 
 		-- Get storedValues if a concrete item-key pair is given
 		if isstring(itemName) and isstring(key) then
-			print("ItemName and key given.")
 			local storedValue = dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
-			print("Stored value is: " .. tostring(storedValue))
+
 			if storedValue ~= nil then
-				print("Returning stored Value!\n")
 				return true, storedValue
 			end
 		end
@@ -979,7 +985,6 @@ if SERVER then
 				dataTable.storedData[itemName] = dataTable.storedData[itemName] or {}
 				dataTable.storedData[itemName][key] = value
 
-				print("\nFetched itemValue is: " .. tostring(value))
 				return true, value
 			end
 
@@ -1010,9 +1015,6 @@ if SERVER then
 			dataTable.storedData = table.Copy(sqlData)
 		end
 
-		print("\nFetched sqlData is: ")
-		PrintTable(sqlData)
-
 		return istable(sqlData), sqlData
 	end
 
@@ -1033,7 +1035,6 @@ if SERVER then
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
-		print("\nSetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key) .. " with value " .. tostring(value))
 		if plyID64 and playerID64Cache[plyID64] and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
 
 		local index = nameToIndex[accessName]
@@ -1070,8 +1071,6 @@ if SERVER then
 
 		item[key] = saveValue
 
-		print("\nSet  itemData is: ")
-		PrintTable(item)
 		if saveValue ~= nil then
 			item:Save()
 		else
@@ -1104,8 +1103,6 @@ if SERVER then
 	-- @param any value the value you want to set in the database
 	-- @realm server
 	function database.SetDefaultValue(accessName, itemName, key, value)
-		print("\nSetting " .. accessName .. " database for item " .. tostring(itemName) .. " and key " .. tostring(key) .. " with default value " .. tostring(value))
-
 		local index = nameToIndex[accessName]
 
 		if not index then
@@ -1133,6 +1130,11 @@ if SERVER then
 		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, SEND_TO_PLY_REGISTERED)
 	end
 
+	---
+	-- Reset the database and send a message to the server
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
+	-- @realm server
 	function database.Reset(accessName, plyID64)
 		if plyID64 and playerID64Cache[plyID64] and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
 
