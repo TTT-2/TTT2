@@ -134,6 +134,7 @@ function PANEL:MakeCheckBox(data)
 	left:SetResetButton(reset)
 
 	left:SetText(data.label)
+	left:SetParams(data.params)
 
 	-- Set default if possible even if the convar could still overwrite it
 	left:SetDefaultValue(data.default)

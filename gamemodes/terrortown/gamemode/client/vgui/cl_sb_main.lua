@@ -79,8 +79,8 @@ function ScoreGroup(ply)
 
 			-- To terrorists, missing players show as alive
 			if client:IsSpec()
-			or client:IsActive() and client:GetTeam() == TEAM_TRAITOR
-			or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
+				or client:IsActive() and client:GetSubRoleData().isOmniscientRole
+				or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
 			then
 				return GROUP_NOTFOUND
 			else

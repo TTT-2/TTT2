@@ -429,8 +429,10 @@ function SKIN:PaintCheckBoxLabel(panel, w, h)
 
 	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
 
+	local params = panel:GetParams()
+
 	drawSimpleText(
-		TryT(panel:GetText()),
+		params and ParT(panel:GetText(), params) or TryT(panel:GetText()),
 		panel:GetFont(),
 		panel:GetTextPosition(),
 		0.5 * h,

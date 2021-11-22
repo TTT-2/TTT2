@@ -1121,6 +1121,107 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2021, month = 10, day = 29 }))
 
+	AddChange("TTT2 Base - v0.11.0b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added the hook <code>GM:TTT2CalledPolicingRole</code> that is called after all policing role players were called to a corpse</li>
+			<li>Added all TTT2 convars into the F1 menu</li>
+			<ul>
+				<li>most convars are located in the <code>administration</code> menu</li>
+				<li>equipment specific settings can be found in the <code>edit equipment</code> menu</li>
+			</ul>
+			<li>Added icon to the magneto stick</li>
+			<li>Added the function <code>AddToSettingsMenu</code> to both <code>SWEP</code> and <code>ITEM</code> to add settings to the equipment menu</li>
+			<li>Added the role flag <code>.isOmniscientRole</code>; if set to true the role is able to see missing in action players and the haste mode time</li>
+			<li>Added <code>GM:TTT2ModifyOverheadIcon</code> to add, remove or modify the overhead icons of players</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed that every policing player could be called to a corpse, this is now again restricted to alive only players</li>
+			<li>Fixed inconsistency between <code>.disabledTeamChatRecv</code> and <code>.disabledTeamChatRec</code></li>
+			<li>Fixed non-public policing roles having hats and therefore confirming them</li>
+			<li>Fixed triggered spawns on maps like <code>ttt_lttp_kakariko_a5</code> with the vases and <code>ttt_mc_jondome</code> with the chests</li>
+			<li>Fixed roleselection layering with base roles to ensure layer order is considered correctly when selecting roles</li>
+			<li>Fixed hotreloading items</li>
+			<li>Fixed random playermodel selection on map change not working</li>
+			<li>Fixed <code>ply:Give</code> sometimes picking up all surrounding weapon entities, if auto pickup is enabled</li>
+			<li>Fixes weapon pickup sometimes causing floating weapons</li>
+			<li>Fixes weapon pickup sometimes failing if a weapon with the same class as a weapon in the inventory should be picked up</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>All public policing roles now appear as detectives in the chat</li>
+			<li>Change blocking revival mode from <code>true</code>/<code>false</code> to</li>
+			<ul>
+				<li><code>REVIVAL_BLOCK_NONE</code>: don't block the winning condition during the revival process [default, previously <code>nil</code>/<code>false</code>]</li>
+				<li><code>REVIVAL_BLOCK_AS_ALIVE</code>: only block the winning condition, if the player being alive would change the outcome [previously <code>true</code>]</li>
+				<li><code>REVIVAL_BLOCK_ALL</code>: block the winning condition until the revival process is ended</li>
+				<li>the old arguments still work, they are automatically converted</li>
+			</ul>
+			<li>Changed logs folder to <code>terrortown/logs/</code> to be inline with everything else</li>
+			<li>Added more role agnostics</li>
+			<ul>
+				<li>voice drain rate is now no longer bound to Detectives but to all public policing roles</li>
+				<li>Karma multiplier is now no longer bound to Detectives but to all public policing roles</li>
+				<li>all non-innocent roles are now able to pin ragdolls if enabled (previous only Traitors could do this)</li>
+			</ul>
+			<li>Overhead icons are now also either colored black or white depending on the role's color</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Renamed some convars to be inline with our <code>opt-in style</code>, all values were changed so that the default value is kept</li>
+			<ul>
+				<li><code>ttt_no_prop_throwing</code> is now <code>ttt_prop_throwing</code></li>
+				<li><code>ttt_limit_spectator_chat</code> is now <code>ttt_spectators_chat_globally</code></li>
+				<li><code>ttt_no_nade_throw_during_prep</code> is now <code>ttt_nade_throw_during_prep</code></li>
+				<li><code>ttt_armor_classic</code> is now <code>ttt_armor_dynamic</code></li>
+			</ul>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 15 }))
+
+	AddChange("TTT2 Base - v0.11.1b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done:</li>
+			<ul>
+				<li><code>ROLE.karma.teamKillPenaltyMultiplier</code>: The multiplier that is used to calculate the Karma penalty for a team kill</li>
+				<li><code>ROLE.karma.teamHurtPenaltyMultiplier</code>: The multiplier that is used to calculate the Karma penalty for team damage</li>
+				<li><code>ROLE.karma.enemyKillBonusMultiplier</code>: The multiplier that is used to calculate the Karma given to the killer if a player from an enemy team is killed</li>
+				<li><code>ROLE.karma.enemyHurtBonusMultiplier</code>: The multiplier that is used to calculate the Karma given to the attacker if a player from an enemy team is damaged</li>
+			</ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed <code>ply:Give(weapon)</code> to work again, when weapons are cached, fixing the spawneditor to work again</li>
+			<li>Fixed spawneditor not causing errors, when going through walls due to many steps</li>
+			<li>Set default traitor button variable back to 0</li>
+			<li>Fixed unchanged or unscaled damage being sent to the client, leading to a wrongly working damage-overlay</li>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 16 }))
+
+	AddChange("TTT2 Base - v0.11.2b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed correct role Karma multipliers used in Karma-module</li>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 17 }))
+
+	AddChange("TTT2 Base - v0.11.3b", [[
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed Equipment-Editor not showing the current synced values, but the cached ones</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Changed serverConVars not indexing with 0 in tables (could cause issues when iterating)</li>
+		</ul>
+	]], os.time({ year = 2021, month = 11, day = 18 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

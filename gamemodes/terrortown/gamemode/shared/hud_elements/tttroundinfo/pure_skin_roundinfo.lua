@@ -61,8 +61,8 @@ if CLIENT then
 		-- draw haste / time
 		-- Draw round time
 
-		local is_haste = HasteMode() and round_state == ROUND_ACTIVE
-		local is_traitor = not client:IsActive() or client:GetTeam() == TEAM_TRAITOR
+		local isHaste = HasteMode() and round_state == ROUND_ACTIVE
+		local isOmniscient = not client:IsActive() or client:GetSubRoleData().isOmniscientRole
 		local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
 		local font = "PureSkinTimeLeft"
 		local color = util.GetDefaultColor(self.basecolor)
@@ -77,10 +77,10 @@ if CLIENT then
 
 		-- Time displays differently depending on whether haste mode is on,
 		-- whether the player is traitor or not, and whether it is overtime.
-		if is_haste then
+		if isHaste then
 			local hastetime = GetGlobalFloat("ttt_haste_end", 0) - CurTime()
 			if hastetime < 0 then
-				if not is_traitor or math.ceil(CurTime()) % 7 <= 2 then
+				if not isOmniscient or math.ceil(CurTime()) % 7 <= 2 then
 					-- innocent or blinking "overtime"
 					text = L.overtime
 					font = "PureSkinMSTACKMsg"
@@ -97,7 +97,7 @@ if CLIENT then
 				-- still in starting period
 				local t = hastetime
 
-				if is_traitor and math.ceil(CurTime()) % 6 < 2 then
+				if isOmniscient and math.ceil(CurTime()) % 6 < 2 then
 					t = endtime
 					color = COLOR_RED
 				end
@@ -113,7 +113,7 @@ if CLIENT then
 
 		draw.AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
 
-		if is_haste then
+		if isHaste then
 			draw.AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, self.pos.y + self.pad, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 

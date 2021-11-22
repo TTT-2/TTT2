@@ -8,6 +8,88 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a `database` library, that handles shared Interaction with the sql database
 
+## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
+
+### Fixed
+
+- Fixed Equipment-Editor not showing the current synced values, but the cached ones
+
+### Changed
+
+- Changed serverConVars not indexing with 0 in tables (could cause issues when iterating)
+
+## [v0.11.2b](https://github.com/TTT-2/TTT2/tree/v0.11.2b) (2021-11-17)
+
+### Fixed
+
+- Fixed correct role Karma multipliers used in Karma-module
+
+## [v0.11.1b](https://github.com/TTT-2/TTT2/tree/v0.11.1b) (2021-11-16)
+
+### Added
+
+- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done_
+  - `ROLE.karma.teamKillPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for a team kill
+  - `ROLE.karma.teamHurtPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for team damage
+  - `ROLE.karma.enemyKillBonusMultiplier`: The multiplier that is used to calculate the Karma given to the killer if a player from an enemy team is killed
+  - `ROLE.karma.enemyHurtBonusMultiplier`: The multiplier that is used to calculate the Karma given to the attacker if a player from an enemy team is damaged
+
+### Fixed
+
+- Fixed `ply:Give(weapon)` to work again, when weapons are cached, fixing the spawneditor to work again
+- Fixed spawneditor not causing errors, when going through walls due to many steps
+- Set default traitor button variable back to 0
+- Fixed unchanged or unscaled damage being sent to the client, leading to a wrongly working damage-overlay
+
+## [v0.11.0b](https://github.com/TTT-2/TTT2/tree/v0.11.0b) (2021-11-15)
+
+### Added
+
+- Added the hook `GM:TTT2CalledPolicingRole` that is called after all policing role players were called to a corpse
+- Added all TTT2 convars into the F1 menu
+  - most convars are located in the 'administration' menu
+  - equipment specific settings can be found in the 'edit equipment' menu
+- Added icon to the magneto stick
+- Added the function `AddToSettingsMenu` to both `SWEP` and `ITEM` to add settings to the equipment menu
+- Added the role flag `.isOmniscientRole`; if set to true the role is able to see missing in action players and the haste mode time
+- Added `GM:TTT2ModifyOverheadIcon` to add, remove or modify the overhead icons of players
+
+### Fixed
+
+- Fixed that every policing player could be called to a corpse, this is now again restricted to alive only players
+- Fixed inconsistency between `.disabledTeamChatRecv` and `.disabledTeamChatRec`
+- Fixed non-public policing roles having hats and therefore confirming them
+- Fixed triggered spawns on maps like 'ttt_lttp_kakariko_a5' with the vases and 'ttt_mc_jondome' with the chests
+- Fixed roleselection layering with base roles to ensure layer order is considered correctly when selecting roles
+- Fixed hotreloading items
+- Fixed random playermodel selection on map change not working
+- Fixed `ply:Give` sometimes picking up all surrounding weapon entities, if auto pickup is enabled
+- Fixes weapon pickup sometimes causing floating weapons
+- Fixes weapon pickup sometimes failing if a weapon with the same class as a weapon in the inventory should be picked up
+
+### Changed
+
+- All public policing roles now appear as detectives in the chat
+- Change blocking revival mode from `true`/`false` to
+  - `REVIVAL_BLOCK_NONE`: don't block the winning condition during the revival process [default, previously `nil`/`false`]
+  - `REVIVAL_BLOCK_AS_ALIVE`: only block the winning condition, if the player being alive would change the outcome [previously `true`]
+  - `REVIVAL_BLOCK_ALL`: block the winning condition until the revival process is ended
+  - the old arguments still work, they are automatically converted
+- Changed logs folder to `terrortown/logs/` to be inline with everything else
+- Added more role agnostics
+  - voice drain rate is now no longer bound to Detectives but to all public policing roles
+  - Karma multiplier is now no longer bound to Detectives but to all public policing roles
+  - all non-innocent roles are now able to pin ragdolls if enabled (previous only Traitors could do this)
+- Overhead icons are now also either colored black or white depending on the role's color
+
+### Breaking Changes
+
+- Renamed some convars to be inline with our 'opt-in style', all values were changed so that the default value is kept
+  - `ttt_no_prop_throwing` is now `ttt_prop_throwing`
+  - `ttt_limit_spectator_chat` is now `ttt_spectators_chat_globally`
+  - `ttt_no_nade_throw_during_prep` is now `ttt_nade_throw_during_prep`
+  - `ttt_armor_classic` is now `ttt_armor_dynamic`
+
 ## [v0.10.3b](https://github.com/TTT-2/TTT2/tree/v0.10.3b) (2021-10-29)
 
 ### Fixed

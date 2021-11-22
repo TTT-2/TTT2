@@ -223,7 +223,7 @@ function SendFullStateUpdate()
 			if not roleDataSyncTo.unknownTeam and teamSyncFrom == teamSyncTo
 				or plySyncFrom:RoleKnown() -- TODO rework
 				or table.HasValue(roleDataSyncFrom.visibleForTeam, teamSyncTo)
-				or roleDataSyncTo.networkRoles and table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
+				or table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
 				or roleDataSyncFrom.isPublicRole
 				or plySyncTo == plySyncFrom
 			then
@@ -317,7 +317,7 @@ local function ttt_request_rolelist(plySyncTo)
 			if not roleDataSyncTo.unknownTeam and plySyncFrom:GetTeam() == team
 				or plySyncFrom:RoleKnown() -- TODO rework
 				or table.HasValue(roleDataSyncFrom.visibleForTeam, plySyncTo:GetTeam())
-				or roleDataSyncTo.networkRoles and table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
+				or table.HasValue(roleDataSyncTo.networkRoles, roleDataSyncFrom)
 				or roleDataSyncFrom.isPublicRole
 				or plySyncTo == plySyncFrom
 			then

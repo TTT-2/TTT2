@@ -516,6 +516,17 @@ if CLIENT then
 		self.fCurrentTime = CurTime()
 		self.fCurrentSysTime = SysTime()
 	end
+
+	---
+	-- This hook can be used by swep addons to populate the equipment settings page
+	-- with custom convars. The parent is the submenu, where a new form has to
+	-- be added.
+	-- @param DPanel parent The parent panel which is the submenu
+	-- @hook
+	-- @realm client
+	function SWEP:AddToSettingsMenu(parent)
+
+	end
 end
 
 ---

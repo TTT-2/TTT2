@@ -1296,7 +1296,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 	-- send damage information to client
 	net.Start("ttt2_damage_received")
-	net.WriteFloat(amount)
+	net.WriteFloat(dmginfo:GetDamage())
 	net.Send(ent)
 end
 

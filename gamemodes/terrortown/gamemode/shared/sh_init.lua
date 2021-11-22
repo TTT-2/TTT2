@@ -5,7 +5,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.10.3b"
+GM.Version = "0.11.3b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -118,6 +118,15 @@ ACTIVEROLES = ACTIVEROLES or {}
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
+
+-- don't block the winning condition during the revival process
+REVIVAL_BLOCK_NONE = 0
+-- only block the winning condition, if the player being alive would change the outcome
+REVIVAL_BLOCK_AS_ALIVE = 1
+-- block the winning condition until the revival process is ended
+REVIVAL_BLOCK_ALL = 2
+
+REVIVAL_BITS = 2
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
 

@@ -22,7 +22,7 @@ util.AddNetworkString("TTT2SetPlayerReady")
 util.AddNetworkString("TTT2SetRevivalReason")
 util.AddNetworkString("TTT2RevivalStopped")
 util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
-util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalBlockMode")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
@@ -806,7 +806,7 @@ end
 -- @param[opt] function OnRevive The @{function} that should be run if the @{Player} revives
 -- @param[opt] function DoCheck An additional checking @{function}
 -- @param[default=false] boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
--- @param[default=false] boolean blockRound Stops the round from ending if this is set to true until the player is alive again
+-- @param[default=REVIVAL_BLOCK_NONE] number blockRound Stops the round from ending if this is set to someting other than 0
 -- @param[opt] function OnFail This @{function} is called if the revive fails
 -- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
 -- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
@@ -818,8 +818,20 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 	delay = delay or 3
 
+	-- compatible mode for block round
+	if isbool(blockRound) then
+		MsgN("[DEPRECATION WARNING]: You should use the REVIVAL_BLOCK enum here.")
+		debug.Trace()
+	end
+
+	if blockRound == nil or blockRound == false then
+		blockRound = REVIVAL_BLOCK_NONE
+	elseif blockRound == true then
+		blockRound = REVIVAL_BLOCK_AS_ALIVE
+	end
+
 	self:SetReviving(true)
-	self:SetBlockingRevival(blockRound)
+	self:SetRevivalBlockMode(blockRound)
 	self:SetRevivalStartTime(CurTime())
 	self:SetRevivalDuration(delay)
 
@@ -829,7 +841,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 		if not IsValid(self) then return end
 
 		self:SetReviving(false)
-		self:SetBlockingRevival(false)
+		self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
 		self:SendRevivalReason(nil)
 
 		if not isfunction(DoCheck) or DoCheck(self) then
@@ -903,7 +915,7 @@ function plymeta:CancelRevival(failMessage, silent)
 	if not self:IsReviving() then return end
 
 	self:SetReviving(false)
-	self:SetBlockingRevival(false)
+	self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
 	self:SendRevivalReason(nil)
 
 	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
@@ -933,18 +945,18 @@ end
 
 ---
 -- Sets the blocking revival state.
--- @param[default=false] boolean isBlockingRevival The blocking revival state
+-- @param[default=REVIVAL_BLOCK_NONE] number revivalBlockMode The blocking revival state
 -- @internal
 -- @realm server
-function plymeta:SetBlockingRevival(isBlockingRevival)
-	isBlockingRevival = isBlockingRevival or false
+function plymeta:SetRevivalBlockMode(revivalBlockMode)
+	revivalBlockMode = revivalBlockMode or REVIVAL_BLOCK_NONE
 
-	if self.isBlockingRevival == isBlockingRevival then return end
+	if self.revivalBlockMode == revivalBlockMode then return end
 
-	self.isBlockingRevival = isBlockingRevival
+	self.revivalBlockMode = revivalBlockMode
 
-	net.Start("TTT2RevivalUpdate_IsBlockingRevival")
-	net.WriteBool(self.isBlockingRevival)
+	net.Start("TTT2RevivalUpdate_RevivalBlockMode")
+	net.WriteUInt(self.revivalBlockMode, REVIVAL_BITS)
 	net.Send(self)
 end
 
@@ -1242,17 +1254,16 @@ local plymeta_old_Give = plymeta.Give
 -- @return Weapon
 -- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
+	-- ForcedPickup needs to be used to be able to ignore the cv_auto_pickup cvar
 	self.forcedPickup = true
+
+	-- ForcedGive needs to be used to give weapons when there are cached ones, e.g. in use with the spawneditor
 	self.forcedGive = true
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	timer.Simple(0, function()
-		if not IsValid(self) then return end
-
-		self.forcedPickup = false
-		self.forcedGive = false
-	end)
+	self.forcedPickup = false
+	self.forcedGive = false
 
 	return wep
 end
@@ -1263,6 +1274,10 @@ end
 -- @return boolean Returns if this weapon can be dropped
 -- @realm server
 function plymeta:CanSafeDropWeapon(wep)
+	if not wep then
+		return true
+	end
+
 	if not IsValid(wep) or not wep.AllowDrop then
 		return false
 	end
@@ -1282,13 +1297,18 @@ end
 -- Called to drop a weapon in a safe manner (e.g. preparing and space-check).
 -- @param Weapon wep The weapon that should be dropped
 -- @param boolean keepSelection If set to true the current selection is kept if not dropped
+-- @return boolean Returns if this weapon is dropped
 -- @realm server
 function plymeta:SafeDropWeapon(wep, keepSelection)
-	if not self:CanSafeDropWeapon(wep) then return end
+	if not self:CanSafeDropWeapon(wep) then
+		return false
+	end
 
 	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
 	WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
+
+	return true
 end
 
 ---
@@ -1304,7 +1324,7 @@ function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 
 	---
 	-- @realm server
-	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
+	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon, true)
 
 	self.forcedPickup = false
 
@@ -1327,11 +1347,11 @@ end
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
--- @param Weapon wep The weapon object
--- @param nil|boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
--- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
--- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
--- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
+-- @param Weapon wep The weapon entity that should be picked up
+-- @param[opt] boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
+-- @param[default=false] boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[opt] boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
@@ -1347,7 +1367,7 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 	-- drop the weapon safely
 	if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then return end
 
-	local ret, errCode = self:CanPickupWeapon(wep, forcePickup or true, dropBlockingWeapon)
+	local ret, errCode = self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 
 	if not ret then
 		if errCode == 1 then
@@ -1381,11 +1401,7 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
 		if dropWeapon == wep then return end
 
-		timer.Simple(0, function()
-			if not IsValid(self) or not IsValid(dropWeapon) then return end
-
-			self:SafeDropWeapon(dropWeapon, true)
-		end)
+		if not self:SafeDropWeapon(dropWeapon, true) then return end
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon

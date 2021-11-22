@@ -95,7 +95,7 @@ if CLIENT then
 			local health_y = y + margin
 			local health_string = health
 
-			if not GetGlobalBool("ttt_armor_classic", false) and client:GetArmor() > 0 then
+			if GetGlobalBool("ttt_armor_dynamic", false) and client:GetArmor() > 0 then
 				health_string = health_string .. " + " .. client:GetArmor()
 			end
 
@@ -153,8 +153,8 @@ if CLIENT then
 			end
 
 			-- Draw round time
-			local is_haste = HasteMode() and round_state == ROUND_ACTIVE
-			local is_traitor = client:IsActive() and client:GetTeam() == TEAM_TRAITOR
+			local isHaste = HasteMode() and round_state == ROUND_ACTIVE
+			local isOmniscient = client:IsActive() and client:GetSubRoleData().isOmniscientRole
 			local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
 			local font = "TimeLeft"
 			local color = COLOR_WHITE
@@ -166,10 +166,10 @@ if CLIENT then
 
 			-- Time displays differently depending on whether haste mode is on,
 			-- whether the player is traitor or not, and whether it is overtime.
-			if is_haste then
+			if isHaste then
 				local hastetime = GetGlobalFloat("ttt_haste_end", 0) - CurTime()
 				if hastetime < 0 then
-					if not is_traitor or math.ceil(CurTime()) % 7 <= 2 then
+					if not isOmniscient or math.ceil(CurTime()) % 7 <= 2 then
 
 						-- innocent or blinking "overtime"
 						text = L.overtime
@@ -187,7 +187,7 @@ if CLIENT then
 					-- still in starting period
 					local t = hastetime
 
-					if is_traitor and math.ceil(CurTime()) % 6 < 2 then
+					if isOmniscient and math.ceil(CurTime()) % 6 < 2 then
 						t = endtime
 						color = COLOR_RED
 					end
@@ -201,7 +201,7 @@ if CLIENT then
 
 			self:ShadowedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER)
 
-			if is_haste then
+			if isHaste then
 				draw.SimpleText(L.hastemode, "TabLarge", tmp, traitor_y - 8, COLOR_WHITE, TEXT_ALIGN_CENTER)
 			end
 		else

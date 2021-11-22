@@ -345,12 +345,15 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
 	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
+		local victimRoleData = victim:GetSubRoleData()
+
 		---
 		-- @realm server
-		local ret = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
-		if ret then
-			return ret
-		elseif victim:GetBaseRole() == ROLE_DETECTIVE then
+		local mutiplier = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
+
+		if mutiplier then
+			return mutiplier
+		elseif victimRoleData.isPublicRole and victimRoleData.isPolicingRole then
 			return 2
 		elseif not attacker:GetSubRoleData().unknownTeam then
 			return 1
@@ -371,24 +374,32 @@ end
 -- @param DamageInfo dmginfo
 -- @realm server
 function KARMA.Hurt(attacker, victim, dmginfo)
-	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() or dmginfo:GetDamage() <= 0 then return end
+	if attacker == victim
+		or not IsValid(attacker)
+		or not IsValid(victim)
+		or not attacker:IsPlayer()
+		or not victim:IsPlayer()
+		or dmginfo:GetDamage() <= 0
+	then return end
 
 	-- Ignore excess damage
 	local hurt_amount = math.min(victim:Health(), dmginfo:GetDamage())
 
-	-- team kills another team
+	local attackerRoleData = attacker:GetSubRoleData()
+
+	-- team hurts another team
 	if not attacker:IsInTeam(victim) then
-		if attacker:GetSubRoleData().unknownTeam then
-			local reward = KARMA.GetHurtReward(hurt_amount)
+		if attackerRoleData.unknownTeam then
+			local reward = KARMA.GetHurtReward(hurt_amount) * attackerRoleData.karma.enemyHurtBonusMultiplier
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYHURT])
 
 			print(Format("%s (%f) hurt %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
-	else -- team kills own team
+	else -- team hurts own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.karma.teamHurtPenaltyMultiplier
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMHURT])
@@ -406,11 +417,19 @@ end
 -- @param DamageInfo dmginfo
 -- @realm server
 function KARMA.Killed(attacker, victim, dmginfo)
-	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end
+	if attacker == victim
+		or not IsValid(attacker)
+		or not IsValid(victim)
+		or not victim:IsPlayer()
+		or not attacker:IsPlayer()
+	then return end
 
-	if not attacker:IsInTeam(victim) then -- team kills another team
-		if attacker:GetSubRoleData().unknownTeam then
-			local reward = KARMA.GetKillReward()
+	local attackerRoleData = attacker:GetSubRoleData()
+
+	-- team kills another team
+	if not attacker:IsInTeam(victim) then
+		if attackerRoleData.unknownTeam then
+			local reward = KARMA.GetKillReward() * attackerRoleData.karma.enemyKillBonusMultiplier
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYKILL])
 
@@ -419,7 +438,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.karma.teamKillPenaltyMultiplier
 		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMKILL])

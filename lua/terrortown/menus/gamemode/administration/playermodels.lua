@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 96
+CLGAMEMODESUBMENU.priority = 94
 CLGAMEMODESUBMENU.title = "submenu_administration_playermodels_title"
 
 local boxCache = {}

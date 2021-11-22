@@ -17,3 +17,13 @@ function ENT:KeyValue(key, value)
 		self.autoAmmoAmount = tonumber(value)
 	end
 end
+
+---
+-- @note Only used to forceSpawn weapons after map cleanup 
+-- otherwise these entities are only used to mark the spots for random weapon spawns
+-- @realm shared
+function ENT:Initialize()
+	if entspawn.IsForcedRandomSpawnEnabled() then
+		entspawn.SpawnRandomWeapon(self)
+	end
+end

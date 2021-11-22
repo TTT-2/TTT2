@@ -235,22 +235,6 @@ function GM:InitPostEntity()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
-
-	local itms = items.GetList()
-
-	-- load items
-	for i = 1, #itms do
-		local eq = itms[i]
-
-		InitDefaultEquipment(eq)
-		ShopEditor.InitDefaultData(eq) -- initialize the default data
-		CreateEquipment(eq) -- init items
-
-		eq.CanBuy = {} -- reset normal items equipment
-
-		eq:Initialize()
-	end
-
 	local sweps = weapons.GetList()
 
 	-- load sweps
@@ -258,7 +242,7 @@ function GM:InitPostEntity()
 		local eq = sweps[i]
 
 		-- Check if an equipment has an id or ignore it
-		-- @realm server		
+		-- @realm server
 		if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
 
 		-- Insert data into role fallback tables
@@ -345,6 +329,9 @@ function GM:OnReloaded()
 	---
 	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
+
+	-- load all items
+	items.OnLoaded()
 
 	-- load all HUDs
 	huds.OnLoaded()
