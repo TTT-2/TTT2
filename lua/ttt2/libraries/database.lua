@@ -715,7 +715,10 @@ local function SynchronizeStates(len, ply)
 		return
 	end
 
+	-- As size is unclear at start of the message and `net.BytesLeft` is not working
+	-- we instead always check if there is more to send with booleans
 	local continueReading = net.ReadBool()
+
 	while continueReading do
 		local identifier = net.ReadUInt(uIntBits)
 		local readNextValue = net.ReadBool()
@@ -739,10 +742,14 @@ local function SendUpdatesNow()
 
 	if table.IsEmpty(dataStore) then return end
 
+	-- Send one message per plyIdentifier
+	-- This can either be a limited playerList or just one player
 	local plyDeleteIdentifiers = {}
 	for plyIdentifier, identifierList in pairs(dataStore) do
 		net.Start("TTT2SynchronizeDatabase")
 
+		-- Then go through all message identifiers and their cached data
+		-- and send them accordingly
 		local stopSending = false
 		local deleteIdentifiers = {}
 		for identifier, indexedData in pairs(identifierList) do
@@ -750,6 +757,8 @@ local function SendUpdatesNow()
 			net.WriteUInt(identifier, uIntBits)
 			net.WriteBool(#indexedData > 0)
 
+			-- Add data to one message as long as `net.BytesWritten` are not exceeding the limit
+			-- Use bools to determine the end as `net.BytesLeft` is not working and we dont know the size before this loop
 			for i = #indexedData, 1, -1 do
 				sendDataFunctions[identifier](indexedData[i])
 				indexedData[i] = nil
@@ -764,6 +773,7 @@ local function SendUpdatesNow()
 			if #indexedData <= 0 then
 				deleteIdentifiers[identifier] = true
 			end
+
 			if stopSending then break end
 		end
 		net.WriteBool(false)
@@ -780,6 +790,7 @@ local function SendUpdatesNow()
 			net.SendToServer()
 		end
 
+		-- Delete the cache of data that was already sent
 		for identifier in pairs(deleteIdentifiers) do
 			dataStore[plyIdentifier][identifier] = nil
 		end
@@ -788,6 +799,7 @@ local function SendUpdatesNow()
 			plyDeleteIdentifiers[plyIdentifier] = true
 		end
 
+		-- If data was left, send them next frame
 		if stopSending and not sendRequestsNextUpdate then
 			sendRequestsNextUpdate = true
 			timer.Simple(0, SendUpdatesNow())
@@ -804,7 +816,7 @@ end
 -- @note on the client plyIdentifier is unused and always sends to the server
 -- @param number identifier the identifiers used in send and receive messages, defined in `MESSAGE_`-enums
 -- @param any data the data for the send method. Can contain anything and is defined above each send or receive method itself
--- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
+-- @param[opt] string plyIdentifier (serverside-only) the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 -- @realm shared
 -- @internal
 local function SendUpdateNextTick(identifier, data, plyIdentifier)
@@ -832,7 +844,7 @@ end
 -- Public Client only functions
 if CLIENT then
 	---
-	-- Is automatically called when a client joins, can be called by a player to force an update, but is normally not necessary
+	-- Is automatically called internally when a client joins, can be called by a player to force an update, but is normally not necessary
 	-- @param function OnReceiveFunc() the function that is called when the registered databases are received
 	-- @realm client
 	-- @internal
@@ -878,6 +890,7 @@ if CLIENT then
 				return
 			end
 
+			-- In case the database wasnt registered, try to get it and then send the requests again later
 			if not waitForRegisteredDatabases[accessName] then
 				waitForRegisteredDatabases[accessName] = true
 				database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
@@ -901,6 +914,7 @@ if CLIENT then
 			return
 		end
 
+		-- Use cached data if value was received from the server
 		if IsValueReceived(index, itemName, key) then
 			OnReceiveFunc(true, dataTable.storedData[itemName] and dataTable.storedData[itemName][key])
 
@@ -921,6 +935,7 @@ if CLIENT then
 	end
 
 	---
+	-- Request to set the value for a key of an item of an sql-table on the server
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
@@ -945,7 +960,7 @@ if CLIENT then
 	end
 
 	---
-	-- Reset the database and send a message to the server
+	-- Request to reset the database on the server
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @realm client
 	function database.Reset(accessName)
@@ -978,6 +993,7 @@ if SERVER then
 
 	---
 	-- Synchronizes all registered Databases with the given players defined by the plyIdentifier
+	-- @note This is used internally to sync between server and client, you dont need to call it manually
 	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 	-- @param[opt] string identifier the identifier used to get correct onreceive functions
 	-- @realm server
@@ -996,6 +1012,7 @@ if SERVER then
 
 			local defaultData = registeredDatabases[databaseNumber].defaultData
 
+			-- Also sync registered item-specific defaults if available
 			if table.IsEmpty(defaultData) then continue end
 
 			local dataDefault = {
@@ -1009,6 +1026,8 @@ if SERVER then
 	end
 
 	---
+	-- Call this when you want to setup a database that needs to be accessible by server and client
+	-- If you dont call this function before anything else, it wont work. Choose any name as accessName so that others can easily use it.
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
@@ -1016,10 +1035,12 @@ if SERVER then
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.Register(databaseName, accessName, savingKeys, additionalData)
+		-- Create Sql table if not already done
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
 		end
 
+		-- Return if already registered
 		if nameToIndex[accessName] then
 			return true
 		end
@@ -1046,7 +1067,7 @@ if SERVER then
 
 	---
 	-- This is called upon receiving a get request from a player to send a value back
-	-- @warning Dont use this function if you want to get a value from the database, this is meant to be used internally
+	-- @warning Dont use this function if you want to get a value from the database, this is meant to be used internally for a client request
 	-- @param table requestData = {plyID64, identifier, index, itemName, key} contains player and the data they requested
 	-- @realm server
 	-- @internal
@@ -1073,8 +1094,8 @@ if SERVER then
 
 	---
 	-- Get the stored key value of the given database if it exists and was registered
-	-- @note While itemName and key are optional, leaving them out only get the saved and converted sql Tables, they dont include every possible item with their default values.
-	-- So to get default Values you have to specify itemName and key.
+	-- @note While itemName and key are optional, leaving them out only gets the saved and converted sql Tables, they dont include every possible item with their default values.
+	-- So to get default Values you have to specify itemName and key. This is designed to be used for single requests.
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
 	-- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
@@ -1092,14 +1113,14 @@ if SERVER then
 
 		local dataTable = index and registeredDatabases[index]
 
-		-- If itemName and key are given but the key not registered throw an error
+		-- If itemName and key are given but the key is not registered, throw an error
 		if itemName and key and not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return false
 		end
 
-		-- Get storedValues if a concrete item-key pair is given
+		-- Get storedValues first if a concrete item-key pair is given
 		if isstring(itemName) and isstring(key) then
 			local storedValue = dataTable.storedData[itemName] and dataTable.storedData[itemName][key]
 
@@ -1111,11 +1132,14 @@ if SERVER then
 		local sqlData
 
 		if itemName then
+			-- Find saved item data
 			sqlData = dataTable.orm:Find(itemName)
 
 			if key then
+				-- Get the specific key data
 				local value = sqlData and database.ConvertValueWithKey(sqlData[key], accessName, key)
 
+				-- Get default values if no value was saved
 				if value == nil then
 					value = database.GetDefaultValue(accessName, itemName, key)
 				end
@@ -1129,6 +1153,7 @@ if SERVER then
 			database.ConvertTable(sqlData, accessName)
 			dataTable.storedData[itemName] = sqlData
 		else
+			-- Get all data, convert and return it
 			sqlData = dataTable.orm:All()
 
 			if not istable(sqlData) then
@@ -1158,14 +1183,18 @@ if SERVER then
 
 	---
 	-- Get the stored table database if it exists and was registered
+	-- @note Only gets the saved and converted sql Tables, they dont include every possible item with their default values.
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @return bool, table datatable that was saved, and if it successfully reached the sql datatable
+	-- @return bool, if the requested table was successfully registered in the sql datatable
+	-- @return table datatable that was saved
 	-- @realm server
 	function database.GetTable(accessName)
 		return database.GetValue(accessName)
 	end
 
 	---
+	-- Set the value for a key of an item of an sql-table
+	-- also sends it to the clients
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
@@ -1193,6 +1222,7 @@ if SERVER then
 
 		local saveValue = value
 
+		-- If the value is just the default, then delete it from the sql database by setting it nil
 		if saveValue == database.GetDefaultValue(accessName, itemName, key) then
 			saveValue = nil
 		end
@@ -1216,6 +1246,7 @@ if SERVER then
 
 			local isNil = true
 
+			-- Check if there is still a value saved for any of the keys
 			for curKey in pairs(dataTable.keys) do
 				if item[curKey] ~= nil then
 					isNil = false
@@ -1224,6 +1255,7 @@ if SERVER then
 				end
 			end
 
+			-- Delete the item if there is nothing to save
 			if isNil then
 				item:Delete()
 			end
@@ -1235,6 +1267,9 @@ if SERVER then
 	end
 
 	---
+	-- Use this to set item-specific defaults, to save storage space in the sql database
+	-- also syncs this to the clients
+	-- @note You dont need to check manually if it is a key-specific default. They are excluded anyways
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
@@ -1257,6 +1292,7 @@ if SERVER then
 			return
 		end
 
+		-- Ignore it if this is the key-default anyways
 		if value == dataTable.keys[key].default then return end
 
 		local defaultData = dataTable.defaultData
@@ -1269,7 +1305,7 @@ if SERVER then
 	end
 
 	---
-	-- Reset the database and send a message to the server
+	-- Reset the database and send a message to the client
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
 	-- @realm server
@@ -1287,6 +1323,7 @@ if SERVER then
 		local dataTable = registeredDatabases[index]
 		local databaseName = dataTable.databaseName
 
+		-- Drop the table and create a new one as well as an orm-object
 		sql.DropTable(databaseName)
 		sql.CreateSqlTable(databaseName, dataTable.keys)
 		dataTable.orm = orm.Make(databaseName)
