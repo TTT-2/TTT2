@@ -105,22 +105,36 @@ end
 function database.GetDefaultValue(accessName, itemName, key)
 	local index = nameToIndex[accessName]
 
-	if not index then return end
+	if not index then
+		ErrorNoHalt("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " is not available or synced.")
+
+		return
+	end
 
 	local dataTable = registeredDatabases[index]
 	local defaultTable = dataTable.defaultData
 
+	-- Try to get an item-specific default value
 	local defaultValue = defaultTable[itemName] and defaultTable[itemName][key]
 
+	-- Otherwise get the key-specific default value
 	if defaultValue == nil then
-		defaultValue = dataTable.keys[key].default
+		local savingKey = dataTable.keys[key]
+
+		if not istable(savingKey) then
+			ErrorNoHalt("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+
+			return
+		end
+
+		defaultValue = savingKey.default
 	end
 
 	return defaultValue
 end
 
 ---
--- Called on change of values over the database-library and then calls all registered Callbacks if a change occured
+-- Called internally on change of values over the database-library and then calls all registered Callbacks if a change occured
 -- @param number index the local index of the database
 -- @param string itemName the name of the item in the database
 -- @param string key the name of the key in the database
@@ -128,9 +142,10 @@ end
 -- @realm shared
 -- @internal
 local function OnChange(index, itemName, key, newValue)
-	local tempDatabase = registeredDatabases[index]
-	local storedData = tempDatabase.storedData
+	local dataTable = registeredDatabases[index]
 
+	-- Cache the old Value and store the newValue instead
+	local storedData = dataTable.storedData
 	local dataEntry = storedData[itemName] or {}
 	local oldValue = dataEntry[key]
 	dataEntry[key] = newValue
@@ -138,41 +153,41 @@ local function OnChange(index, itemName, key, newValue)
 
 	if oldValue == newValue then return end
 
-	local accessName = tempDatabase.accessName
+	-- Get all callbacks
+	local accessName = dataTable.accessName
+	local cache = callbackCache[accessName]
+
+	if not cache then return end
 
 	-- Call all callbacks
-	local cache = callbackCache[accessName]
-	if not cache then return end
-	local tempItemName = itemName
-	for i = 1, 2 do
-		if i == 2 then
-			tempItemName = allCallbackString
-		end
+	local itemNameTable = {itemName, allCallbackString}
+	for i = 1, #itemNameTable do
+		local tempItemName = itemNameTable[i]
 
 		local funcCache = cache[tempItemName]
 
-		if not funcCache then continue end
+		if not istable(funcCache) then continue end
 
-		local tempKey = key
-		for j = 1, 2 do
-			if j == 2 then
-				tempKey = allCallbackString
-			end
+		local keyTable = {key, allCallbackString}
+		for j = 1, #keyTable do
+			local tempKey = keyTable[j]
 
-			funcCache = funcCache[tempKey]
+			local funcKeyCache = funcCache[tempKey]
 
-			if not funcCache then continue end
+			if not istable(funcKeyCache) then continue end
 
 			-- Execute callbacks
-			for identifier, functions in pairs(funcCache) do
+			for identifier, functions in pairs(funcKeyCache) do
 				for k = 1, #functions do
-					functions[k](accessName, itemName, key, oldValue, newValue)
+					local func = functions[k]
+
+					if not isfunction(func) then continue end
+
+					func(accessName, itemName, key, oldValue, newValue)
 				end
 			end
 		end
 	end
-
-	ValueReceived(index, itemName, key)
 end
 
 ---
@@ -196,13 +211,14 @@ end
 ---
 -- Adds a callback to be called when the given sql table entries change
 -- @note itemName and key can both be `nil`. The callback function then gets called on a change of every item or every key
--- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
--- @param string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
--- @param string key the name of the key in the database. Leave `nil` if you want a callback for every key
+-- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name! And does not have to be registered yet!
+-- @param[opt] string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
+-- @param[opt] string key the name of the key in the database. Leave `nil` if you want a callback for every key
 -- @param function The callback function(accessName, itemName, key, oldValue, newValue), its only called if the value actually changed
 -- @param[opt] string identifier a chosen identifier if you want to remove the callback
 -- @realm shared
 function database.AddChangeCallback(accessName, itemName, key, callback, identifier)
+	-- Allow every accessName in case the database is only later registered
 	if not isstring(accessName) or not isfunction(callback) then return end
 
 	-- If no itemName is given, subscribe to changes of all items
@@ -220,6 +236,7 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 		identifier = allCallbackString
 	end
 
+	-- Save callback in cache
 	local cache = callbackCache[accessName] or {}
 
 	cache[itemName] = cache[itemName] or {}
@@ -229,6 +246,7 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 
 	callbackCache[accessName] = cache
 
+	-- Index identifiers for faster removal access later
 	callbackIdentifiers[identifier] = callbackIdentifiers[identifier] or {}
 	callbackIdentifiers[identifier][#callbackIdentifiers[identifier] + 1] = {
 		accessName = accessName,
@@ -241,43 +259,43 @@ end
 -- Removes a callback if an identifier was registered
 -- @note itemName and key can both be `nil`. The callback function then gets removed for all items or keys with that identifier
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
--- @param string itemName the name of the item in the database. Leave `nil` if you want to remove callbacks for every item with given identifier
--- @param string key the name of the key in the database. Leave `nil` if you want to remove callbacks for every key with given identifier
+-- @param[opt] string itemName the name of the item in the database. Leave `nil` if you want to remove callbacks for every item with given identifier
+-- @param[opt] string key the name of the key in the database. Leave `nil` if you want to remove callbacks for every key with given identifier
 -- @param[opt] string identifier a chosen identifier if you want to remove the callback
 -- @realm shared
 function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 	callbacks = callbackIdentifiers[identifier]
 
-	if not accessName or not callbacks then return end
+	if not accessName or not istable(callbacks) then return end
 
 	local cache = callbackCache[accessName]
 
-	if not cache then return end
+	if not istable(cache) then return end
 
 	-- If no itemName is given, remove callbacks of all items
-	local skipItemName = false
+	local skipWrongItemName = true
 	if not isstring(itemName) then
-		skipItemName = true
+		skipWrongItemName = false
 	end
 
 	-- If no key is given, remove callbacks of all keys of the item	
-	local skipKey = false
+	local skipWrongKey = true
 	if not isstring(key) then
-		skipKey = true
+		skipWrongKey = false
 	end
 
 	for i = #callbacks, 1, -1  do
 		callback = callbacks[i]
 
-		-- AccesName has to be the same as registration for all sql tables is not allowed
+		-- AccesName has to be the same, because registrating callbacks for all sql tables is not allowed
 		if callback.accessName ~= accessName then continue end
 
-		-- If neither itemName nor the key fit, skip that callback
+		-- If neither itemName nor the key fit, skip that callback unless you want to remove all
 		local cItemName = callback.itemName
-		if cItemName ~= itemName and not skipItemName then continue end
+		if cItemName ~= itemName and skipWrongItemName then continue end
 
 		local cKey = callback.key
-		if cKey ~= key and not skipKey then continue end
+		if cKey ~= key and skipWrongKey then continue end
 
 		table.remove(callbacks, i)
 
@@ -295,6 +313,7 @@ function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 		callbackCache[accessName] = nil
 	end
 
+	-- If no callbacks for that identifier are left, delete it
 	if #callbacks < 1 then
 		callbackIdentifiers[identifier] = nil
 	end
@@ -442,6 +461,8 @@ if CLIENT then
 			value = database.ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
 
 			OnChange(index, itemName, key, value)
+
+			ValueReceived(index, itemName, key)
 		end,
 		[MESSAGE_GET_DEFAULTVALUE] = function()
 			local index = net.ReadUInt(uIntBits)
