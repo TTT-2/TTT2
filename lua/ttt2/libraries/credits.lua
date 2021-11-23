@@ -1,7 +1,7 @@
 ---
 -- Functions that handle the distribution of credits for certain events.
 -- @author Mineotopia
--- @module entspawn
+-- @module credits
 
 if CLIENT then return end -- this is a serverside-only module
 
