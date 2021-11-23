@@ -371,209 +371,326 @@ function database.ConvertTable(dataTable, accessName)
 	end
 end
 
+---
+-- Send and receive functions ordered by message Enums
+-- To be able to directly see message sending- and receive-structure between server and client
+-- They are always paired by either client-Send and server-Receive or server-Send and client-Receive
+
 -- Client send and receive functions
-if CLIENT then
-	-- The used functions to send Data from the client to server
-	sendDataFunctions = {
-		-- data contains the messageIdentifier here
-		[MESSAGE_REGISTER] = function(data)
-			net.WriteUInt(data, uIntBits)
-		end,
-		-- data contains the messageIdentifier here
-		[MESSAGE_GET_VALUE] = function(data)
-			local request = requestCache[data]
-
-			net.WriteUInt(data, uIntBits)
-			net.WriteUInt(request.index, uIntBits)
-
-			net.WriteString(request.itemName)
-			net.WriteString(request.key)
-		end,
-		-- data contains index, itemName, key and value here
-		[MESSAGE_SET_VALUE] = function(data)
-			net.WriteUInt(data.index, uIntBits)
-
-			net.WriteString(data.itemName)
-			net.WriteString(data.key)
-			net.WriteString(tostring(data.value))
-		end,
-		-- data contains index
-		[MESSAGE_RESET] = function(data)
-			net.WriteUInt(data.index, uIntBits)
-		end
-	}
-
-	-- The used functions to receive Data from the server on the client
-	receiveDataFunctions = {
-		[MESSAGE_REGISTER] = function()
-			local index = net.ReadUInt(uIntBits)
-			local accessName = net.ReadString()
-			local savingKeys = net.ReadTable()
-			local additionalData = net.ReadTable()
-
-			nameToIndex[accessName] = index
-			registeredDatabases[index] = {
-				accessName = accessName,
-				keys = savingKeys,
-				data = additionalData,
-				storedData = {},
-				defaultData = {}
-			}
-
-			local sentAdditionalInfo = net.ReadBool()
-
-			if sentAdditionalInfo then
-				local identifier = net.ReadUInt(uIntBits)
-				local tableCount = net.ReadUInt(uIntBits)
-
-				if table.Count(registeredDatabases) == tableCount then
-					functionCache[identifier]()
-				end
-			end
-		end,
-		[MESSAGE_GET_VALUE] = function()
-			local identifier = net.ReadUInt(uIntBits)
-			local isSuccess = net.ReadBool()
-			local request = requestCache[identifier]
-			local value
-
-			if isSuccess then
-				value = net.ReadString()
-				value = database.ConvertValueWithKey(value, request.accessName, request.key)
-
-				local storedData = registeredDatabases[request.index].storedData
-
-				local storedItemData = storedData[request.itemName] or {}
-				storedItemData[request.key] = value
-
-				storedData[request.itemName] = storedItemData
-			end
-
-			ValueReceived(request.index, request.itemName, request.key)
-			functionCache[identifier](isSuccess, value)
-		end,
-		[MESSAGE_SET_VALUE] = function()
-			local index = net.ReadUInt(uIntBits)
-			local itemName = net.ReadString()
-			local key = net.ReadString()
-			local value = net.ReadString()
-
-			value = database.ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
-
-			OnChange(index, itemName, key, value)
-
-			ValueReceived(index, itemName, key)
-		end,
-		[MESSAGE_GET_DEFAULTVALUE] = function()
-			local index = net.ReadUInt(uIntBits)
-			local dataTable = registeredDatabases[index]
-
-			local sentTable = net.ReadBool()
-
-			if sentTable then
-				dataTable.defaultData = net.ReadTable()
-			else
-				local itemName = net.ReadString()
-				local key = net.ReadString()
-				local value = database.ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
-				local defaultData = dataTable.defaultData
-				defaultData[itemName] = defaultData[itemName] or {}
-				defaultData[itemName][key] = value
-			end
-		end,
-		[MESSAGE_RESET] = function()
-			ResetDatabase(net.ReadUInt(uIntBits))
-		end
-	}
-end
+local clientSendFunctions = {}
+local clientReceiveFunctions = {}
 
 -- Server send and receive functions
+local serverSendFunctions = {}
+local serverReceiveFunctions = {}
+
+---
+-- Send query for registered databases to server
+-- @param table data contains only the messageIdentifier here
+-- @realm client
+-- @internal
+clientSendFunctions[MESSAGE_REGISTER] = function(data)
+	net.WriteUInt(data, uIntBits)
+end
+
+---
+-- Receive query for registered databases from client
+-- and sync them
+-- @param string plyID64 the playerID64 of the player who sent the message
+-- @realm server
+-- @internal
+serverReceiveFunctions[MESSAGE_REGISTER] = function(plyID64)
+	database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
+end
+
+---
+-- Send requested registered databases to client
+-- @param table data contains identifier, tableCount, index here
+-- @realm server
+-- @internal
+serverSendFunctions[MESSAGE_REGISTER] = function(data)
+	local databaseInfo = registeredDatabases[data.index]
+	net.WriteUInt(data.index, uIntBits)
+	net.WriteString(databaseInfo.accessName)
+	net.WriteTable(databaseInfo.keys)
+	net.WriteTable(databaseInfo.data)
+
+	-- AdditionalInfo determines if there is more than one database registered and sent
+	-- This makes sure, that the client doesnt start to use the databases before all databases are received
+	local sendAdditionalInfo = data.identifier ~= nil
+	net.WriteBool(sendAdditionalInfo)
+
+	if sendAdditionalInfo then
+		net.WriteUInt(data.identifier, uIntBits)
+		net.WriteUInt(data.tableCount, uIntBits)
+	end
+end
+
+---
+-- Receive requested registered databases from server
+-- and cache them as well as call all cached functions, that are waiting for the databases
+-- @realm client
+-- @internal
+clientReceiveFunctions[MESSAGE_REGISTER] = function()
+	local index = net.ReadUInt(uIntBits)
+	local accessName = net.ReadString()
+	local savingKeys = net.ReadTable()
+	local additionalData = net.ReadTable()
+
+	nameToIndex[accessName] = index
+	registeredDatabases[index] = {
+		accessName = accessName,
+		keys = savingKeys,
+		data = additionalData,
+		storedData = {},
+		defaultData = {}
+	}
+
+	-- If more than one database will be send, then sentAdditionalInfo is true
+	local sentAdditionalInfo = net.ReadBool()
+
+	if sentAdditionalInfo then
+		local identifier = net.ReadUInt(uIntBits)
+		local tableCount = net.ReadUInt(uIntBits)
+
+		-- Only call the cached functions, when all databases are succesfully registered clientside
+		if table.Count(registeredDatabases) == tableCount then
+			functionCache[identifier]()
+		end
+	end
+end
+
+---
+-- Send query for getting a value to server
+-- @param table data contains only the messageIdentifier here
+-- @realm client
+-- @internal
+clientSendFunctions[MESSAGE_GET_VALUE] = function(data)
+	local request = requestCache[data]
+
+	net.WriteUInt(data, uIntBits)
+	net.WriteUInt(request.index, uIntBits)
+
+	net.WriteString(request.itemName)
+	net.WriteString(request.key)
+end
+
+---
+-- Receive query for getting a value from client
+-- and returning it
+-- @param string plyID64 the playerID64 of the player who sent the message
+-- @realm server
+-- @internal
+serverReceiveFunctions[MESSAGE_GET_VALUE] = function(plyID64)
+	local data = {
+		plyID64 = plyID64,
+		identifier = net.ReadUInt(uIntBits),
+		index = net.ReadUInt(uIntBits)
+	}
+
+	data.itemName = net.ReadString()
+	data.key = net.ReadString()
+
+	database.ReturnGetValue(data)
+end
+
+---
+-- Send requested value to client
+-- if available/isSuccess
+-- @param table data contains identifier, isSuccess and value here
+-- @realm server
+-- @internal
+serverSendFunctions[MESSAGE_GET_VALUE] = function(data)
+	net.WriteUInt(data.identifier, uIntBits)
+	net.WriteBool(data.isSuccess)
+
+	if data.isSuccess then
+		net.WriteString(tostring(data.value))
+	end
+end
+
+---
+-- Receive requested value from server
+-- Store it, mark value as received and call function cache
+-- @realm client
+-- @internal
+clientReceiveFunctions[MESSAGE_GET_VALUE] = function()
+	local identifier = net.ReadUInt(uIntBits)
+	local isSuccess = net.ReadBool()
+	local request = requestCache[identifier]
+	local value
+
+	if isSuccess then
+		value = net.ReadString()
+		value = database.ConvertValueWithKey(value, request.accessName, request.key)
+
+		local storedData = registeredDatabases[request.index].storedData
+
+		local storedItemData = storedData[request.itemName] or {}
+		storedItemData[request.key] = value
+
+		storedData[request.itemName] = storedItemData
+	end
+
+	ValueReceived(request.index, request.itemName, request.key)
+	functionCache[identifier](isSuccess, value)
+end
+
+---
+-- Send query for setting a value to server
+-- @param table data contains index, itemName, key and value here
+-- @realm client
+-- @internal
+clientSendFunctions[MESSAGE_SET_VALUE] = function(data)
+	net.WriteUInt(data.index, uIntBits)
+
+	net.WriteString(data.itemName)
+	net.WriteString(data.key)
+	net.WriteString(tostring(data.value))
+end
+
+---
+-- Receive query for setting a value from client
+-- and set that value in the database if player is a superadmin
+-- @param string plyID64 the playerID64 of the player who sent the message
+-- @realm server
+-- @internal
+serverReceiveFunctions[MESSAGE_SET_VALUE] = function(plyID64)
+	local index = net.ReadUInt(uIntBits)
+	local itemName = net.ReadString()
+	local key = net.ReadString()
+	local value = net.ReadString()
+
+	local accessName = registeredDatabases[index].accessName
+	value = database.ConvertValueWithKey(value, accessName, key)
+
+	database.SetValue(accessName, itemName, key, value, plyID64)
+end
+
+---
+-- Send set value to client
+-- @param table data contains index, itemName, key, value here
+-- @realm server
+-- @internal
+serverSendFunctions[MESSAGE_SET_VALUE] = function(data)
+	net.WriteUInt(data.index, uIntBits)
+	net.WriteString(data.itemName)
+	net.WriteString(data.key)
+	net.WriteString(tostring(data.value))
+end
+
+---
+-- Send query for resetting the database to server
+-- @param table data contains index
+-- @realm client
+-- @internal
+clientSendFunctions[MESSAGE_RESET] = function(data)
+	net.WriteUInt(data.index, uIntBits)
+end
+
+---
+-- Receive query for resetting the database from client
+-- @param string plyID64 the playerID64 of the player who sent the message
+-- @realm server
+-- @internal
+serverReceiveFunctions[MESSAGE_RESET] = function(plyID64)
+	database.Reset(registeredDatabases[net.ReadUInt(uIntBits)].accessName, plyID64)
+end
+
+---
+-- Send reset command to client
+-- To make sure the client resets all stored values to the default
+-- @param table data contains index
+-- @realm server
+-- @internal
+serverSendFunctions[MESSAGE_RESET] = function(data)
+	net.WriteUInt(data.index, uIntBits)
+end
+
+---
+-- Receive reset command from server
+-- Reset all stored values back to the defaults
+-- @realm client
+-- @internal
+clientReceiveFunctions[MESSAGE_RESET] = function()
+	ResetDatabase(net.ReadUInt(uIntBits))
+end
+
+---
+-- Send query for getting a default value to server
+-- @warning This function is not yet implemented
+-- as currently all key- and item-specific default values are automatically synced
+-- @param table data contains nothing yet
+-- @realm client
+-- @internal
+clientSendFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
+	ErrorNoHalt("[TTT2] MESSAGE_GET_DEFAULTVALUE as client send function to request default values is not implemented yet.")
+end
+
+---
+-- Receive query for getting a default value from client
+-- @warning This function is not yet implemented
+-- as currently all key- and item-specific default values are automatically synced
+-- @param string plyID64 the playerID64 of the player who sent the message
+-- @realm server
+-- @internal
+serverReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function(plyID64)
+	ErrorNoHalt("[TTT2] MESSAGE_GET_DEFAULTVALUE as server receive function for requested default values is not implemented yet.")
+end
+
+---
+-- Send requested default values to client
+-- Can either be a single value or a table
+-- @param table data contains index, itemName, key, value, sendTable and defaultData here
+-- @realm server
+-- @internal
+serverSendFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
+	net.WriteUInt(data.index, uIntBits)
+	net.WriteBool(data.sendTable or false)
+
+	if data.sendTable then
+		net.WriteTable(data.defaultData)
+	else
+		net.WriteString(data.itemName)
+		net.WriteString(data.key)
+		net.WriteString(tostring(data.value))
+	end
+end
+
+---
+-- Receive requested default values from server
+-- and cache it
+-- @realm client
+-- @internal
+clientReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function()
+	local index = net.ReadUInt(uIntBits)
+	local dataTable = registeredDatabases[index]
+
+	local sentTable = net.ReadBool()
+
+	if sentTable then
+		dataTable.defaultData = net.ReadTable()
+	else
+		local itemName = net.ReadString()
+		local key = net.ReadString()
+		local value = database.ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
+
+		local defaultData = dataTable.defaultData
+		defaultData[itemName] = defaultData[itemName] or {}
+		defaultData[itemName][key] = value
+	end
+end
+
+-- Put local functions into global table clientside
+if CLIENT then
+	sendDataFunctions = clientSendFunctions
+	receiveDataFunctions = clientRecvFunctions
+end
+
+-- Put local functions into global table serverside
 if SERVER then
-	-- The used functions to send Data from the server to client
-	sendDataFunctions = {
-		-- data contains identifier, tableCount, index here
-		[MESSAGE_REGISTER] = function(data)
-			local databaseInfo = registeredDatabases[data.index]
-			net.WriteUInt(data.index, uIntBits)
-			net.WriteString(databaseInfo.accessName)
-			net.WriteTable(databaseInfo.keys)
-			net.WriteTable(databaseInfo.data)
-
-			local sendAdditionalInfo = tobool(data.identifier)
-			net.WriteBool(sendAdditionalInfo)
-
-			if sendAdditionalInfo then
-				net.WriteUInt(data.identifier, uIntBits)
-				net.WriteUInt(data.tableCount, uIntBits)
-			end
-		end,
-		-- data contains identifier, isSuccess and value here
-		[MESSAGE_GET_VALUE] = function(data)
-			net.WriteUInt(data.identifier, uIntBits)
-			net.WriteBool(data.isSuccess)
-
-			if data.isSuccess then
-				net.WriteString(tostring(data.value))
-			end
-		end,
-		-- data contains index, itemName, key, value here
-		[MESSAGE_SET_VALUE] = function(data)
-			net.WriteUInt(data.index, uIntBits)
-			net.WriteString(data.itemName)
-			net.WriteString(data.key)
-			net.WriteString(tostring(data.value))
-		end,
-		-- data contains index, itemName, key, value here
-		[MESSAGE_GET_DEFAULTVALUE] = function(data)
-			net.WriteUInt(data.index, uIntBits)
-			net.WriteBool(data.sendTable or false)
-			if data.sendTable then
-				net.WriteTable(data.defaultData)
-			else
-				net.WriteString(data.itemName)
-				net.WriteString(data.key)
-				net.WriteString(tostring(data.value))
-			end
-		end,
-		-- data contains index
-		[MESSAGE_RESET] = function(data)
-			net.WriteUInt(data.index, uIntBits)
-		end
-	}
-
-	-- The used functions to receive Data from the client on the server
-	receiveDataFunctions = {
-		[MESSAGE_REGISTER] = function(plyID64)
-			database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
-		end,
-		[MESSAGE_GET_VALUE] = function(plyID64)
-			local data = {
-				plyID64 = plyID64,
-				identifier = net.ReadUInt(uIntBits),
-				index = net.ReadUInt(uIntBits)
-			}
-
-			data.itemName = net.ReadString()
-			data.key = net.ReadString()
-
-			database.ReturnGetValue(data)
-		end,
-		[MESSAGE_SET_VALUE] = function(plyID64)
-			local index = net.ReadUInt(uIntBits)
-			local itemName = net.ReadString()
-			local key = net.ReadString()
-			local value = net.ReadString()
-
-			local accessName = registeredDatabases[index].accessName
-			value = database.ConvertValueWithKey(value, accessName, key)
-
-			database.SetValue(accessName, itemName, key, value, plyID64)
-		end,
-		[MESSAGE_RESET] = function(plyID64)
-			local index = net.ReadUInt(uIntBits)
-			database.Reset(registeredDatabases[index].accessName, plyID64)
-		end
-	}
+	sendDataFunctions = serverSendFunctions
+	receiveDataFunctions = serverRecvFunctions
 end
 
 --
