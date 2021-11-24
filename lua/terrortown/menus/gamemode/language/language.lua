@@ -26,9 +26,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		convar = "ttt_language",
 		choices = choices,
 		OnChange = function(value)
-			if value == "auto" and GetActiveLanguageName() == "auto" then return end
-
-			if value == GetTranslatedLanguageName(GetActiveLanguageName()) then return end
+			if value == GetActiveLanguageName() then return end
 
 			vguihandler.InvalidateVSkin()
 			vguihandler.Rebuild()
