@@ -230,6 +230,7 @@ end
 -- conVar, serverConVar, selectId or selectTitle or selectValue,
 -- function OnChange(value, additionalData), master = { function AddSlave(self, slave) }
 -- }
+-- @note If ConVars are used the values are always strings, so make sure, that you used strings for values, when setting up choices
 -- @return Panel The created combobox
 -- @return Panel The created label
 -- @realm client

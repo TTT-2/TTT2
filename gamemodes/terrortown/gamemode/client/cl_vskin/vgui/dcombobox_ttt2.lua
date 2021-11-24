@@ -68,7 +68,7 @@ end
 
 ---
 -- @param number index the option id
--- @return number
+-- @return string/number a value that is indexable
 -- @realm client
 function PANEL:GetOptionValue(index)
 	return self.choices[index].value
@@ -83,7 +83,7 @@ function PANEL:GetOptionData(index)
 end
 
 ---
--- @param string value
+-- @param string/number value should be indexable
 -- @return number
 -- @realm client
 function PANEL:GetOptionId(value)
@@ -127,15 +127,15 @@ end
 
 ---
 -- @param string title
--- @param string value
+-- @param string/number value should be indexable
 -- @param bool select
 -- @param string icon
 -- @param any data additional data that you might want to use
 -- @return number index
 -- @realm client
 function PANEL:AddChoice(title, value, select, icon, data)
-	if not isstring(value) then
-		ErrorNoHalt("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any data use the last parameter, value has to be a string.\n")
+	if istable(value) then
+		ErrorNoHalt("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any table data use the last parameter.\n")
 
 		return
 	end
@@ -162,12 +162,12 @@ end
 
 ---
 -- Choose either value or index, title is set 
--- @param[opt] string value
+-- @param[opt] string/number value should be indexable
 -- @param[opt] number index the option id
 -- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOption(value, index, ignoreConVar)
-	if not isstring(value) and not isnumber(index) then return end
+	if not value and not isnumber(index) then return end
 
 	if not index then
 		index = self:GetOptionId(value)
@@ -184,7 +184,7 @@ function PANEL:ChooseOption(value, index, ignoreConVar)
 
 	if ignoreConVar then return end
 
-	self:SetConVarValues(value)
+	self:SetConVarValues(tostring(value))
 end
 
 ---
@@ -197,7 +197,7 @@ end
 
 ---
 -- @note this chooses the the set value like in the original DComboBox
--- @param string value e.g. the value used to set conVars 
+-- @param string/number value should be indexable e.g. the value used to set conVars 
 -- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionValue(value, ignoreConVar)
@@ -237,7 +237,7 @@ end
 
 ---
 -- @param number index
--- @param string value
+-- @param string/number value is indexable
 -- @param any data
 -- @realm client
 function PANEL:OnSelect(index, value, data)
@@ -327,7 +327,7 @@ end
 
 ---
 -- @warning this doesnt set the displayed text like before, but the value and selects an option
--- @param string value
+-- @param string/number value should be indexable
 -- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
