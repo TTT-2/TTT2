@@ -40,6 +40,14 @@ function PANEL:Init()
 end
 
 ---
+-- @ignore
+function PANEL:PerformLayout()
+	self.DropButton:SetSize(15, 15)
+	self.DropButton:AlignRight(4)
+	self.DropButton:CenterVertical()
+end
+
+---
 -- @realm client
 function PANEL:Clear()
 	self:SetText("")
@@ -86,7 +94,7 @@ end
 -- @param string/number value should be indexable
 -- @return number
 -- @realm client
-function PANEL:GetOptionId(value)
+function PANEL:GetOptionID(value)
 	return self.valueIndices[value] or 1
 end
 
@@ -94,7 +102,7 @@ end
 -- @param string title
 -- @return number
 -- @realm client
-function PANEL:GetOptionTitleId(title)
+function PANEL:GetOptionTitleID(title)
 	return self.titleIndices[title] or 1
 end
 
@@ -115,14 +123,6 @@ function PANEL:GetOptionTextByData(data)
 	end
 
 	return
-end
-
----
--- @ignore
-function PANEL:PerformLayout()
-	self.DropButton:SetSize(15, 15)
-	self.DropButton:AlignRight(4)
-	self.DropButton:CenterVertical()
 end
 
 ---
@@ -161,24 +161,25 @@ function PANEL:AddChoice(title, value, select, icon, data)
 end
 
 ---
--- Choose either value or index, title is set 
--- @param[opt] string/number value should be indexable
--- @param[opt] number index the option id
+-- @param number index the option id
 -- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:ChooseOption(value, index, ignoreConVar)
-	if not value and not isnumber(index) then return end
+function PANEL:ChooseOptionID(index, ignoreConVar)
+	local choices = self.choices
 
-	if not index then
-		index = self:GetOptionId(value)
+	if index > #choices then
+		ErrorNoHalt("[TTT2] PANEL:ChooseOptionId failed, exceeding index size of choices.")
 
-		if not isnumber(index) then return end
+		return
 	end
+
+	local choice = choices[index]
+	local value = choice.value
 
 	self.selected = index
 
-	self:SetText(self:GetOptionText(index))
-	self:OnSelect(index, self:GetOptionValue(index), self:GetOptionData(index))
+	self:SetText(choice.title)
+	self:OnSelect(index, value, choice.data)
 
 	self:CloseMenu()
 
@@ -188,20 +189,12 @@ function PANEL:ChooseOption(value, index, ignoreConVar)
 end
 
 ---
--- @param number index the option id
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:ChooseOptionId(index, ignoreConVar)
-	self:ChooseOption(nil, index, ignoreConVar)
-end
-
----
 -- @note this chooses the the set value like in the original DComboBox
 -- @param string/number value should be indexable e.g. the value used to set conVars 
 -- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionValue(value, ignoreConVar)
-	self:ChooseOption(value, nil, ignoreConVar)
+	self:ChooseOptionID(self:GetOptionID(value), ignoreConVar)
 end
 
 ---
@@ -211,9 +204,18 @@ end
 -- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionName(name, ignoreConVar)
-	local index = self:GetOptionTitleId(name)
+	self:ChooseOptionID(self:GetOptionTitleID(name), ignoreConVar)
+end
 
-	self:ChooseOption(nil, index, ignoreConVar)
+---
+-- Choose option by index, title is not settable 
+-- @param[opt] string title is unused as it cant be set anymore
+-- @param number index the option id
+-- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @realm client
+-- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionId` instead
+function PANEL:ChooseOption(title, index, ignoreConVar)
+	self:ChooseOptionID(index, ignoreConVar)
 end
 
 ---
