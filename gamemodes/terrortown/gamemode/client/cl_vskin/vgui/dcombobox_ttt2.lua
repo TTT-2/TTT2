@@ -318,7 +318,7 @@ end
 
 ---
 -- @realm client
-function PANEl:CloseMenu()
+function PANEL:CloseMenu()
 	if IsValid(self.menu) then
 		self.menu:Remove()
 		self.menu = nil

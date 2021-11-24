@@ -19,7 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `PANEL:AddChoice(title, value, select, icon, data)` now uses the second argument as value string for setting convars, use the fifth argument for special data instead
   - `PANEL:ChooseOption(value, index, ignoreConVar)` no longer chooses the displayed text, but the underlying value, which also sets conVars
 - Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
-  - `data.OnChange(value, additionalData)` is now only called with the two important arguments, the value that e.g. convars are set and the additionalData 
+  - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
 
 ## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
 
