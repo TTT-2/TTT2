@@ -154,7 +154,7 @@ function PANEL:AddChoice(title, value, select, icon, data)
 	self.valueIndices[value] = index
 
 	if select then
-		self:ChooseOption(nil, index, true)
+		self:ChooseOptionID(index, true)
 	end
 
 	return index
@@ -333,7 +333,7 @@ end
 -- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
-	self:ChooseOption(value, nil, ignoreConVar)
+	self:ChooseOptionValue(value, ignoreConVar)
 end
 
 ---
