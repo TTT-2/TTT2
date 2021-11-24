@@ -271,7 +271,7 @@ function PANEL:MakeComboBox(data)
 	right:SetServerConVar(serverConVar)
 
 	-- Only choose an option, if no conVars are set
-	if not isstring(conVar) or not isstring(serverConVar) then
+	if not isstring(conVar) and not isstring(serverConVar) then
 		if data.selectId then
 			right:ChooseOptionId(data.selectId, true)
 		elseif data.selectName or data.selectTitle then
