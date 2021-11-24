@@ -225,6 +225,11 @@ end
 ---
 -- Adds a combobox to the form
 -- @param table data The data for the combobox
+-- @note Structure of data = {
+-- label, default, choices = { [1] = {title, value, select, icon, additionalData}, [2] = ...},
+-- conVar, serverConVar, selectId or selectTitle or selectValue,
+-- function OnChange(value, additionalData), master = { function AddSlave(self, slave) }
+-- }
 -- @return Panel The created combobox
 -- @return Panel The created label
 -- @realm client
@@ -241,50 +246,48 @@ function PANEL:MakeComboBox(data)
 
 	local right = vgui.Create("DComboBoxTTT2", self)
 
+	local reset = MakeReset(self)
+	right:SetResetButton(reset)
+	right:SetDefaultValue(data.default) -- Set default if possible even if the convar could still overwrite it
+
 	if data.choices then
 		for i = 1, #data.choices do
-			right:AddChoice(data.choices[i])
-		end
-	end
+			local choice = data.choices[i]
 
-	if data.selectId then
-		right:ChooseOptionId(data.selectId)
-	elseif data.selectName then
-		right:ChooseOptionName(data.selectName)
-	end
-
-	right.OnSelect = function(slf, index, value, rawdata)
-		if slf.m_strConVar then
-			RunConsoleCommand(slf.m_strConVar, tostring(rawdata or value))
-		end
-
-		-- run the callback function in the next frame since it takes
-		-- one frame to update the convar if one is set.
-		timer.Simple(0, function()
-			if data and isfunction(data.OnChange) then
-				data.OnChange(slf, index, value, rawdata)
+			if istable(choice) then
+				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
+			else
+				-- Support old simple structure
+				right:AddChoice(choice, choice)
 			end
-		end)
+		end
 	end
 
-	right:SetConVar(data.convar)
+	local conVar = data.convar or data.conVar
+	right:SetConVar(conVar)
+
+	local serverConVar = data.serverConvar or data.serverConVar
+	right:SetServerConVar(serverConVar)
+
+	-- Only choose an option, if no conVars are set
+	if not isstring(conVar) or not isstring(serverConVar) then
+		if data.selectId then
+			right:ChooseOptionId(data.selectId, true)
+		elseif data.selectName or data.selectTitle then
+			right:ChooseOptionName(data.selectName or data.selectTitle, true)
+		elseif data.selectValue then
+			right:ChooseOptionValue(data.selectValue, true)
+		end
+	end
+
+	right.OnSelect = function(slf, index, value, additionalData)
+		if data and isfunction(data.OnChange) then
+			data.OnChange(value, additionalData)
+		end
+	end
+
 	right:SetTall(32)
 	right:Dock(TOP)
-
-	local reset = MakeReset(self)
-
-	if ConVarExists(data.convar or "") or data.default ~= nil then
-		reset.DoClick = function(slf)
-			local default = data.default
-			if default == nil then
-				default = GetConVar(data.convar):GetDefault()
-			end
-
-			right:ChooseOptionName(default)
-		end
-	else
-		reset.noDefault = true
-	end
 
 	self:AddItem(left, right, reset)
 

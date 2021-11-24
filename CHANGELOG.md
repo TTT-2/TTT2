@@ -6,8 +6,20 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added possibility to manipulate serverside ConVars with Dropdowns
-  - Just add .serverConvar with the conVarName to the given data similar to .convar
+- Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
+  - Added possibility to manipulate serverside ConVars with Dropdowns. Just add .serverConvar with the conVarName to the given data similar to .convar
+  - .serverConVar and .conVar are also supported
+  - data.choices can now be a table containing `{title, value, select, icon, additionalData}`
+  - data.selectValue is added, use it instead of data.selectName to choose the value you set
+  - data.selectTitle is added and shall replace data.selectName
+
+### Breaking Changes
+
+- Reworked Dropdowns Panel `DComboBoxTTT2` itself
+  - `PANEL:AddChoice(title, value, select, icon, data)` now uses the second argument as value string for setting convars, use the fifth argument for special data instead
+  - `PANEL:ChooseOption(value, index, ignoreConVar)` no longer chooses the displayed text, but the underlying value, which also sets conVars
+- Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
+  - `data.OnChange(value, additionalData)` is now only called with the two important arguments, the value that e.g. convars are set and the additionalData 
 
 ## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
 

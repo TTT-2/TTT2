@@ -126,6 +126,41 @@ function PANEL:PerformLayout()
 end
 
 ---
+-- @param string title
+-- @param string value
+-- @param bool select
+-- @param string icon
+-- @param any data additional data that you might want to use
+-- @return number index
+-- @realm client
+function PANEL:AddChoice(title, value, select, icon, data)
+	if not isstring(value) then
+		ErrorNoHalt("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any data use the last parameter, value has to be a string.\n")
+
+		return
+	end
+
+	local index = #self.choices + 1
+
+	self.choices[index] = {
+		title = title,
+		value = value,
+		icon = icon,
+		data = data
+	}
+
+	-- Index tables for fast access
+	self.titleIndices[title] = index
+	self.valueIndices[value] = index
+
+	if select then
+		self:ChooseOption(nil, index, true)
+	end
+
+	return index
+end
+
+---
 -- Choose either value or index, title is set 
 -- @param[opt] string value
 -- @param[opt] number index the option id
@@ -207,41 +242,6 @@ end
 -- @realm client
 function PANEL:OnSelect(index, value, data)
 
-end
-
----
--- @param string title
--- @param string value
--- @param bool select
--- @param string icon
--- @param any data additional data that you might want to use
--- @return number index
--- @realm client
-function PANEL:AddChoice(title, value, select, icon, data)
-	if not isstring(value) then
-		ErrorNoHalt("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any data use the last parameter, value has to be a string.\n")
-
-		return
-	end
-
-	local index = #self.choices + 1
-
-	self.choices[index] = {
-		title = title,
-		value = value,
-		icon = icon,
-		data = data
-	}
-
-	-- Index tables for fast access
-	self.titleIndices[title] = index
-	self.valueIndices[value] = index
-
-	if select then
-		self:ChooseOption(nil, index, true)
-	end
-
-	return index
 end
 
 ---
