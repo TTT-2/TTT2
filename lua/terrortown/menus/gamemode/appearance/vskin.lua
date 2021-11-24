@@ -16,7 +16,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_vskin_select",
 		choices = vskin.GetVSkinList(),
 		selectName = vskin.GetVSkinName(),
-		OnChange = function(_, _, value)
+		OnChange = function(value)
 			vskin.SelectVSkin(value)
 		end,
 		default = vskin.GetDefaultVSkinName()
