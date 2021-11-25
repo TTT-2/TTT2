@@ -342,10 +342,11 @@ local convarTracker = 0
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(menu, conVar)
 	convarTracker = convarTracker % 1023 + 1
+	local myIdentifierString = "TTT2F1MenuConVarChangeCallback" .. tostring(convarTracker)
 
 	local function OnConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(menu) then
-			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuConVarChangeCallback" .. tostring(convarTracker))
+			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
 
 			return
 		end
@@ -353,7 +354,7 @@ local function AddConVarChangeCallback(menu, conVar)
 		menu:SetValue(newValue, true)
 	end
 
-	cvars.AddChangeCallback(conVar, OnConVarChangeCallback, "TTT2F1MenuConVarChangeCallback"  .. tostring(convarTracker))
+	cvars.AddChangeCallback(conVar, OnConVarChangeCallback, myIdentifierString)
 end
 
 ---
