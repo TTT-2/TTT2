@@ -168,7 +168,7 @@ function PANEL:ChooseOptionID(index, ignoreConVar)
 	local choices = self.choices
 
 	if index > #choices then
-		ErrorNoHalt("[TTT2] PANEL:ChooseOptionId failed, exceeding index size of choices.")
+		ErrorNoHalt("[TTT2] PANEL:ChooseOptionID failed, exceeding index size of choices.")
 
 		return
 	end
@@ -213,7 +213,7 @@ end
 -- @param number index the option id
 -- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
--- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionId` instead
+-- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionID` instead
 function PANEL:ChooseOption(title, index, ignoreConVar)
 	self:ChooseOptionID(index, ignoreConVar)
 end
@@ -221,7 +221,7 @@ end
 ---
 -- @return number
 -- @realm client
-function PANEL:GetSelectedId()
+function PANEL:GetSelectedID()
 	return self.selected
 end
 
