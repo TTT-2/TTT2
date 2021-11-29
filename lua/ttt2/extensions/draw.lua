@@ -80,7 +80,7 @@ end
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param [default=COLOR_WHITE] Color color The color of the box
+-- @param[default=COLOR_WHITE] Color color The color of the box
 -- @2D
 -- @realm client
 function draw.Box(x, y, w, h, color)
@@ -120,7 +120,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param [default=COLOR_WHITE] Color color The color of the circle
+-- @param[default=COLOR_WHITE] Color color The color of the circle
 -- @2D
 -- @realm client
 function draw.OutlinedCircle(x, y, r, color)
@@ -136,8 +136,8 @@ local drawOutlinedCircle = draw.OutlinedCircle
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param [default=Color(255,255,255,255)]Color color The color of the circle
--- @param [default=1.0]number scale A scaling factor that is used for the shadows
+-- @param[default=Color(255,255,255,255)]Color color The color of the circle
+-- @param[default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function draw.OutlinedShadowedCircle(x, y, r, color, scale)
@@ -160,7 +160,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number radius The radius of the circle
--- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @param[default=Color(255,255,255,255)]Color color The color of the circle
 -- @2D
 -- @realm client
 function draw.Circle(x, y, radius, color)
@@ -178,8 +178,8 @@ local drawCircle = draw.Circle
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param [default=Color(255,255,255,255)]Color color The color of the circle
--- @param [default=1.0]number scale A scaling factor that is used for the shadows
+-- @param[default=Color(255,255,255,255)]Color color The color of the circle
+-- @param[default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function draw.ShadowedCircle(x, y, radius, color, scale)
@@ -395,7 +395,7 @@ local drawShadowedText = draw.ShadowedText
 -- Draws an advanced text (scalable)
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
 -- @param string text The text to be drawn
--- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
 -- @param number x The x coordinate
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
