@@ -79,7 +79,7 @@ local function VoiceTeamTryEnable()
 	then
 		VOICE.isTeam = true
 
-		permissions.EnableVoiceChat(false)
+		permissions.EnableVoiceChat(true)
 
 		return true
 	end
