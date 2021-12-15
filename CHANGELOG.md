@@ -4,7 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
 - Updated Japanese translation (by @westooooo)
+- Switched from the voicerecord commands to the GMod permission system due to a recent GMod update breaking the old voice chat
 
 ## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
 
