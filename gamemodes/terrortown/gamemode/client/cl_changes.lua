@@ -1112,7 +1112,7 @@ function CreateChanges()
 		<ul>
 			<li>Fixed the hook scope in the disguiser causing an error</li>
 			<li>Fixed the classic entity spawn mode breaking on maps without all three spawn types</li>
-			<li>Fixed weapons not using their average firerate with a tickrate dependent fix. Function <code>SWEP:SetNextPrimaryFire(nextTime)</code>  was overwritten with our fix <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code> 
+			<li>Fixed weapons not using their average firerate with a tickrate dependent fix. Function <code>SWEP:SetNextPrimaryFire(nextTime)</code>  was overwritten with our fix <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code>
 		</ul>
 
 		<h2>Changed</h2>
@@ -1221,6 +1221,14 @@ function CreateChanges()
 			<li>Changed serverConVars not indexing with 0 in tables (could cause issues when iterating)</li>
 		</ul>
 	]], os.time({ year = 2021, month = 11, day = 18 }))
+
+	AddChange("TTT2 Base - v0.11.4b", [[
+		<h2>Changed</h2>
+		<ul>
+			<li>Switched from the voicerecord commands to the GMod permission system due to a recent GMod update breaking the old voice chat</li>
+			<li>Updated Japanese translation (by @westooooo)</li>
+		</ul>
+	]], os.time({ year = 2021, month = 12, day = 17 }))
 
 	---
 	-- run hook for other addons to add their changelog as well
