@@ -21,6 +21,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
   - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
 
+### Fixed
+
+- Fixed addon compatibility checker fussing over disabled addons
+
+## [v0.11.4b](https://github.com/TTT-2/TTT2/tree/v0.11.4b) (2021-12-17)
+
+### Changed
+
+- Updated Japanese translation (by @westooooo)
+- Switched from the voicerecord commands to the GMod permission system due to a recent GMod update breaking the old voice chat
+
 ## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
 
 ### Fixed
