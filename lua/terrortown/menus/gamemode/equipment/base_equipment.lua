@@ -59,8 +59,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			if data.subtype == "enum" then
 				option = form:MakeComboBox({
 					label = name,
-					default = TryT(data.lookupNamesFunc(equipment.defaultValues[key])),
-					OnChange = function(_, _, _, enum)
+					default = equipment.defaultValues[key],
+					OnChange = function(enum)
 						net.Start("TTT2SESaveItem")
 						net.WriteString(equipment.id)
 						net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)

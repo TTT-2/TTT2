@@ -28,7 +28,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		choices = validHUDsDefault,
 		selectName = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "None",
 		default = "None",
-		OnChange = function(_, _, value)
+		OnChange = function(value)
 			net.Start("TTT2DefaultHUDRequest")
 			net.WriteString(value == "None" and "" or value)
 			net.SendToServer()
@@ -44,7 +44,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		choices = validHUDsRestriction,
 		selectName = ttt2net.GetGlobal({"hud_manager", "forcedHUD"}) or "None",
 		default = "None",
-		OnChange = function(_, _, value)
+		OnChange = function(value)
 			net.Start("TTT2ForceHUDRequest")
 			net.WriteString(value == "None" and "" or value)
 			net.SendToServer()

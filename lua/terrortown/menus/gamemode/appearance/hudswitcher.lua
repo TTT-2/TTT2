@@ -105,7 +105,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_hud_select",
 		choices = validHUDs,
 		selectName = currentHUDName,
-		OnChange = function(_, _, value)
+		OnChange = function(value)
 			HUDManager.SetHUD(value)
 		end,
 		default = ttt2net.GetGlobal({"hud_manager", "defaultHUD"})

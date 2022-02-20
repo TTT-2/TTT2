@@ -14,21 +14,21 @@ CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
 
 function CLGAMEMODESUBMENU:Populate(parent)
-	local roleName = self.roleData.name
+	local myRoleName = self.roleData.name
 	local roleIndex = self.roleData.index
 
 	local form = vgui.CreateTTT2Form(parent, "header_shop_linker")
 
 	local shopLink = form:MakeComboBox({
 		label = "label_shop_linker_set",
-		OnChange = function(_, _, _, rawdata)
-			if ShopEditor.fallback[roleName] == rawdata.name then return end
+		OnChange = function(roleName)
+			if ShopEditor.fallback[myRoleName] == roleName then return end
 
-			ShopEditor.fallback[roleName] = rawdata.name
+			ShopEditor.fallback[myRoleName] = roleName
 
 			net.Start("shopFallback")
 			net.WriteUInt(roleIndex, ROLE_BITS)
-			net.WriteString(rawdata.name)
+			net.WriteString(roleName)
 			net.SendToServer()
 
 			ShopEditor.customShopRefresh = true
@@ -38,25 +38,26 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	shopLink:SetSortItems(false)
 
-	ShopEditor.fallback[roleName] = ShopEditor.fallback[roleName] or GetGlobalString("ttt_" .. self.roleData.abbr .. "_shop_fallback")
+	ShopEditor.fallback[myRoleName] = ShopEditor.fallback[myRoleName] or GetGlobalString("ttt_" .. self.roleData.abbr .. "_shop_fallback")
 
-	local fallback = ShopEditor.fallback[roleName]
+	local fallback = ShopEditor.fallback[myRoleName]
+	local iconPlaceholder = nil
 
 	-- Add own data for creating own shop
-	shopLink:AddChoice(TryT("create_own_shop"), self.roleData, fallback == roleName)
+	shopLink:AddChoice(TryT("create_own_shop"), myRoleName, fallback == myRoleName, iconPlaceholder)
 
 	-- Since these are no simple roles, the choices have to be added manually
-	shopLink:AddChoice(TryT("shop_default"), {name = SHOP_UNSET, abbr = "shop_default", color = self.roleData.color}, fallback == SHOP_UNSET)
-	shopLink:AddChoice(TryT("shop_disabled"), {name = SHOP_DISABLED, abbr = "disable", color = self.roleData.color}, fallback == SHOP_DISABLED)
+	shopLink:AddChoice(TryT("shop_default"), SHOP_UNSET, fallback == SHOP_UNSET, iconPlaceholder)
+	shopLink:AddChoice(TryT("shop_disabled"), SHOP_DISABLED, fallback == SHOP_DISABLED, iconPlaceholder)
 
 	for _, roleData in pairs(self.roles) do
 		if roleData.index == ROLE_NONE or roleData.index == roleIndex then continue end
 
-		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData, fallback == roleData.name)
+		shopLink:AddChoice(TryT("shop_link") .. ": " .. TryT(roleData.name), roleData.name, fallback == roleData.name, iconPlaceholder)
 	end
 
 	-- Display all items as cards for custom shop if selected and shopFallback is refreshed
-	if fallback ~= roleName or ShopEditor.customShopRefresh then return end
+	if fallback ~= myRoleName or ShopEditor.customShopRefresh then return end
 
 	local sortedEquipmentList = ShopEditor.sortedEquipmentList[GetActiveLanguageName] or {}
 
