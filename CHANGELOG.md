@@ -12,6 +12,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - data.choices can now be a table containing `{title, value, select, icon, additionalData}`
   - data.selectValue is added, use it instead of data.selectName to choose the value you set
   - data.selectTitle is added and shall replace data.selectName
+- `CLGAMEMODEMENU:ShouldShow()` now checks for global table `adminMenuAccess` when `self:IsAdminMenu() == true`
+  - `adminMenuAccess` should contain a list of usergroups that can access admin menus
+  - This table must exist on the client, so ideally it should be kept in its own Lua script (eg. `lua/autorun/client/adminMenuAccess.lua`)
+  - If `adminMenuAccess` does not exist globally, then the function will fallback on `superadmin` as a default value
 
 ### Breaking Changes
 
