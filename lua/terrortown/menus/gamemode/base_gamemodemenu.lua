@@ -21,7 +21,13 @@ CLGAMEMODEMENU.submenus = {}
 -- @internal
 -- @realm client
 function CLGAMEMODEMENU:ShouldShow()
-	if not LocalPlayer():IsSuperAdmin() and self:IsAdminMenu() then
+	if self:IsAdminMenu() then
+		local adminMenuAccess = adminMenuAccess or {"superadmin"}
+		for _,usergroup in ipairs(adminMenuAccess) do
+			if LocalPlayer():IsUserGroup(usergroup) then
+				return self:HasVisibleSubmenus()
+			end
+		end
 		return false
 	end
 
