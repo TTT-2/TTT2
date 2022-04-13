@@ -215,6 +215,7 @@ L.search_eyes = "Using your detective skills, you identified the last person the
 -- Scoreboard
 L.sb_playing = "You are playing on..."
 L.sb_mapchange = "Map changes in {num} rounds or in {time}"
+L.sb_mapchange_disabled = "Session limits are disabled."
 
 L.sb_mia = "Missing In Action"
 L.sb_confirmed = "Confirmed Dead"
@@ -1755,6 +1756,7 @@ L.label_round_limit = "Upper limit of rounds"
 L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 L.label_nade_throw_during_prep = "Enable nade throwing during preparing time"
 L.label_postround_dm = "Enable deathmatch after round ended"
+L.label_session_limits_enabled = "Enable session limits"
 L.label_spectator_chat = "Enable spectators chatting with everybody"
 L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"

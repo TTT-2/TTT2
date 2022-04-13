@@ -137,6 +137,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	local form5 = vgui.CreateTTT2Form(parent, "header_round_setup_map_duration")
 
+	local enbSessionLimitsEnabled = form5:MakeCheckBox({
+		serverConvar = "ttt_session_limits_enabled",
+		label = "label_session_limits_enabled"
+	})
+
 	form5:MakeHelp({
 		label = "help_round_limit"
 	})
@@ -146,7 +151,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_round_limit",
 		min = 0,
 		max = 100,
-		decimal = 0
+		decimal = 0,
+		master = enbSessionLimitsEnabled
 	})
 
 	form5:MakeSlider({
@@ -154,6 +160,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_time_limit_minutes",
 		min = 0,
 		max = 175,
-		decimal = 0
+		decimal = 0,
+		master = enbSessionLimitsEnabled
 	})
 end
