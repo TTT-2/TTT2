@@ -114,7 +114,7 @@ CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-local session_limits_enabled = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local ttt_session_limits_enabled = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
@@ -528,7 +528,7 @@ end
 function GM:SyncGlobals()
 	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
 	SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
-	SetGlobalBool(session_limits_enabled:GetName(), session_limits_enabled:GetBool())
+	SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
 	SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
 	SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
 	SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
@@ -561,8 +561,8 @@ cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
 	SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
 end)
 
-cvars.AddChangeCallback(session_limits_enabled:GetName(), function(cv, old, new)
-	SetGlobalBool(session_limits_enabled:GetName(), tobool(tonumber(new)))
+cvars.AddChangeCallback(ttt_session_limits_enabled:GetName(), function(cv, old, new)
+	SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
