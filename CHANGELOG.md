@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - data.choices can now be a table containing `{title, value, select, icon, additionalData}`
   - data.selectValue is added, use it instead of data.selectName to choose the value you set
   - data.selectTitle is added and shall replace data.selectName
+- New setting to disable session limits entirely. (by @Reispfannenfresser)
 
 ### Breaking Changes
 
