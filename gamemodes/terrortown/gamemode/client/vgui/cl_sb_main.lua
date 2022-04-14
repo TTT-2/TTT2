@@ -179,9 +179,13 @@ function PANEL:Init()
 	self.mapchange:SetContentAlignment(9)
 
 	self.mapchange.Think = function (sf)
-		local r, t = UntilMapChange()
+		if GetGlobalBool("ttt_session_limits_enabled") then
+			local r, t = UntilMapChange()
+			sf:SetText(GetPTranslation("sb_mapchange", {num = r, time = t}))
+		else
+			sf:SetText(GetTranslation("sb_mapchange_disabled"))
+		end
 
-		sf:SetText(GetPTranslation("sb_mapchange", {num = r, time = t}))
 		sf:SizeToContents()
 	end
 

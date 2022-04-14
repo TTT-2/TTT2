@@ -1837,3 +1837,7 @@ L.searchbar_default_placeholder = "在列表中搜索..."
 --L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
+
+--2022-04-13
+--L.label_session_limits_enabled = "Enable session limits"
+--L.sb_mapchange_disabled = "Session limits are disabled."
