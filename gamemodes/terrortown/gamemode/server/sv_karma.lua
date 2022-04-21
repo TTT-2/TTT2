@@ -304,7 +304,7 @@ end
 -- @return number reward modified / reward
 -- @realm server
 function KARMA.GiveReward(ply, reward, reason)
-	local multiplier = hook.Run("TTTKarmaMultiplier", ply, reward)
+	local multiplier = hook.Run("TTT2KarmaRewardMultiplier", ply, reward)
 	reward = (multiplier or KARMA.DecayedMultiplier(ply)) * reward
 
 	KARMA.DoKarmaChange(ply, reward, reason)
@@ -766,6 +766,17 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2KarmaPenaltyMultiplier(attacker, victim, dmginfo)
+
+end
+
+---
+-- Modify the karma reward multiplier.
+-- @param Player player The player who receives reward
+-- @param number reward The size of reward
+-- @return nil|number Return the karma multiplier
+-- @hook
+-- @realm server
+function GM:TTT2KarmaRewardMultiplier(player, reward)
 
 end
 
