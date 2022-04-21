@@ -36,17 +36,11 @@ function ENT:Initialize()
 
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_BBOX)
+	self:AddSolidFlags(FSOLID_TRIGGER)
 
 	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
-	local b = 26
-
-	self:SetCollisionBounds(Vector(-b, -b, -b), Vector(b, b, b))
-
-	if SERVER then
-		self:SetTrigger(true)
-	end
+	self:UseTriggerBounds(true, 24)
 
 	self.tickRemoval = false
 	self.AmmoEntMax = self.AmmoAmount
