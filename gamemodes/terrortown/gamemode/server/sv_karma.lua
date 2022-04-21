@@ -304,7 +304,8 @@ end
 -- @return number reward modified / reward
 -- @realm server
 function KARMA.GiveReward(ply, reward, reason)
-	reward = KARMA.DecayedMultiplier(ply) * reward
+	local multiplier = hook.Run("TTTKarmaMultiplier", ply, reward)
+	reward = (multiplier or KARMA.DecayedMultiplier(ply)) * reward
 
 	KARMA.DoKarmaChange(ply, reward, reason)
 
