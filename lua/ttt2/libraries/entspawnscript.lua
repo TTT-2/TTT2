@@ -484,7 +484,9 @@ if SERVER then
 		for i = 1, #plys do
 			local ply = plys[i]
 
-			if not ply:IsSuperAdmin() then continue end
+			---
+			-- @realm server
+			if not hook.Run("TTT2AdminCheck", ply) then continue end
 
 			for key, value in pairs(entspawnscript.GetSettings()) do
 				ttt2net.Set({"entspawnscript", "settings", key}, {type = "int", bits = 16}, entspawnscript.GetSetting(key), ply)
@@ -517,7 +519,9 @@ if SERVER then
 		for i = 1, #plys do
 			local ply = plys[i]
 
-			if not ply:IsSuperAdmin() then continue end
+			---
+			-- @realm server
+			if not hook.Run("TTT2AdminCheck", ply) then continue end
 
 			ttt2net.Set({"entspawnscript", "spawnamount", "weapon"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_WEAPON], ply)
 			ttt2net.Set({"entspawnscript", "spawnamount", "ammo"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_AMMO], ply)
@@ -1083,43 +1087,57 @@ if SERVER then
 	util.AddNetworkString("ttt2_entspawn_setting_update")
 
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), false, ply)
 	end)
 
 	net.Receive("ttt2_add_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
 	end)
 
 	net.Receive("ttt2_update_spawn_ent", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
 	end)
 
 	net.Receive("ttt2_delete_all_spawns", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.DeleteAllSpawns()
 	end)
 
 	net.Receive("ttt2_entspawn_setting_update", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.SetSetting(net.ReadString(), net.ReadInt(16), net.ReadBool())
 	end)
 
 	net.Receive("ttt2_entspawn_reset", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.ResetMapToDefault()
 	end)
 
 	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		if net.ReadBool() then
 			entspawnscript.StartEditing(ply)

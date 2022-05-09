@@ -21,7 +21,9 @@ CLGAMEMODEMENU.submenus = {}
 -- @internal
 -- @realm client
 function CLGAMEMODEMENU:ShouldShow()
-	if not LocalPlayer():IsSuperAdmin() and self:IsAdminMenu() then
+	---
+	-- @realm client
+	if self:IsAdminMenu() and not hook.Run("TTT2AdminCheck", LocalPlayer()) then
 		return false
 	end
 
