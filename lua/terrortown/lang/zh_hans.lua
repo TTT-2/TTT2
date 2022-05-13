@@ -451,7 +451,7 @@ L.ammo_pistol = "手枪弹药"
 
 L.ammo_smg1 = "冲锋枪弹药"
 L.ammo_buckshot = "霰弹枪弹药"
-L.ammo_357 = "步枪弹药"
+L.ammo_357 = "狙击枪弹药"
 L.ammo_alyxgun = "沙漠之鹰弹药"
 L.ammo_ar2altfire = "信号弹药"
 L.ammo_gravity = "促狭鬼弹药"
@@ -1445,10 +1445,10 @@ L.spawn_weapon_sniper = "狙击武器生成"
 L.spawn_weapon_pistol = "手枪武器生成"
 L.spawn_weapon_special = "特殊武器生成"
 L.spawn_ammo_random = "随机弹药生成"
-L.spawn_ammo_deagle = "手枪弹药生成"
-L.spawn_ammo_pistol = "狙击枪弹药生成"
+L.spawn_ammo_deagle = "沙漠之鹰弹药生成"
+L.spawn_ammo_pistol = "手枪弹药生成"
 L.spawn_ammo_mac10 = "冲锋枪弹药生成"
-L.spawn_ammo_rifle = "步枪弹药生成"
+L.spawn_ammo_rifle = "狙击枪弹药生成"
 L.spawn_ammo_shotgun = "霰弹枪弹药生成"
 L.spawn_player_random = "随机玩家生成"
 
@@ -1495,10 +1495,10 @@ L.help_spawn_editor_spawn_amount = [[
 {weaponspecial}x 特殊武器生成
 
 {ammorandom}x 随机弹药生成
-{ammodeagle}x Deagle 弹药生成
+{ammodeagle}x 沙漠之鹰弹药生成
 {ammopistol}x 手枪弹药生成
 {ammomac10}x Mac10弹药生成器
-{ammorifle}x 步枪弹药生成
+{ammorifle}x 狙击枪弹药生成
 {ammoshotgun}x 霰弹枪弹药生成
 
 {playerrandom} x 随机玩家生成]]
