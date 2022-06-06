@@ -390,7 +390,9 @@ end
 -- @realm server
 function playermodels.StreamModelStateToSelectedClients(onlyChanges, plys)
 	plys = plys or util.GetFilteredPlayers(function(ply)
-		return ply:IsSuperAdmin()
+		---
+		-- @realm server
+		return hook.Run("TTT2AdminCheck", ply)
 	end)
 
 	if not onlyChanges then
@@ -474,13 +476,17 @@ function playermodels.PlayerCanHaveHat(ply)
 end
 
 net.Receive("TTT2UpdatePlayerModel", function(_, ply)
-	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+	---
+	-- @realm server
+	if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 	playermodels.UpdateModel(net.ReadString(), net.ReadUInt(bitCount), net.ReadBool())
 end)
 
 net.Receive("TTT2ResetPlayerModels", function(_, ply)
-	if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+	---
+	-- @realm server
+	if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 	playermodels.Reset()
 end)

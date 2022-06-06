@@ -187,7 +187,9 @@ elseif SERVER then
 		local conVarName = net.ReadString()
 		local value = net.ReadString()
 
-		if not IsValid(ply) or not ply:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		RunConsoleCommand(conVarName, value)
 	end)
@@ -204,7 +206,9 @@ elseif SERVER then
 	net.Receive("TTT2ServerConVarGetValue", function(len, ply)
 		if len < 1 then return end
 
-		local isAdmin = IsValid(ply) and ply:IsSuperAdmin()
+		---
+		-- @realm server
+		local isAdmin = IsValid(ply) and hook.Run("TTT2AdminCheck", ply)
 
 		requestCacheSize = net.ReadUInt(identityBitCount)
 		requestCache = {}

@@ -13,6 +13,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - data.selectValue is added, use it instead of data.selectName to choose the value you set
   - data.selectTitle is added and shall replace data.selectName
 - New setting to disable session limits entirely. (by @Reispfannenfresser)
+- Added `GM:TTT2AdminCheck` hook
+  - Replaced all `IsSuperAdmin()` checks with this hook
+  - This hook can be used to allow custom usergroups through these checks
 
 ### Breaking Changes
 

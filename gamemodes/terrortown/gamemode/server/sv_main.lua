@@ -1401,8 +1401,10 @@ hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, un
 end)
 
 local function ttt_roundrestart(ply, command, args)
+	---
 	-- ply is nil on dedicated server console
-	if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
+	-- @realm server
+	if not IsValid(ply) or ply:IsAdmin() or hook.Run("TTT2AdminCheck", ply) or cvars.Bool("sv_cheats", 0) then
 		LANG.Msg("round_restart")
 
 		StopRoundTimers()
