@@ -13,9 +13,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - data.selectValue is added, use it instead of data.selectName to choose the value you set
   - data.selectTitle is added and shall replace data.selectName
 - New setting to disable session limits entirely. (by @Reispfannenfresser)
-- Added `GM:TTT2AdminCheck` hook
-  - Replaced all `IsSuperAdmin()` checks with this hook
-  - This hook can be used to allow custom usergroups through these checks
 
 ### Breaking Changes
 
@@ -25,7 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
   - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
 ### Changed
-- - Updated Chinese translation (by @sbzl)
+- - Corrected incorrect translation (by @sbzlzh)
 
 ### Fixed
 
