@@ -1483,14 +1483,14 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地图上,可能会建议使用在地图上发现的原始生成点,而不用动态系统来取代它们.禁用这个复选框只对当前活动地图禁用.其他地图仍将使用动态系统."
 L.help_spawn_editor_hint = "提示:要离开生成编辑器,重新打开游戏模式菜单."
 L.help_spawn_editor_spawn_amount = [[
-目前在这张地图上有{weapon}武器产额,{ammo}弹药产额和{player}玩家产额.点击'开始生成编辑'来改变这个数额.
+目前在这张地图上有{weapon}武器生成,{ammo}弹药生成和{player}玩家生成.点击'开始生成编辑'来改变这个生成.
 
 {weaponrandom}x 随机武器生成
 {weaponmelee}x 近战武器生成
 {weaponnade}x 手榴弹武器生成
 {weaponshotgun}x 霰弹枪武器生成
 {weaponheavy}x 重型武器生成
-{weaponsniper}x 狙击手武器生成
+{weaponsniper}x 狙击武器生成
 {weaponpistol}x 手枪武器生成
 {weaponspecial}x 特殊武器生成
 
@@ -1501,7 +1501,7 @@ L.help_spawn_editor_spawn_amount = [[
 {ammorifle}x 狙击枪弹药生成
 {ammoshotgun}x 霰弹枪弹药生成
 
-{playerrandom} x 随机玩家生成]]
+{playerrandom} x 玩家随机位置生成]]
 
 L.equipmenteditor_name_auto_spawnable = "设备在世界范围内随机产生"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
