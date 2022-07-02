@@ -81,4 +81,33 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 0,
 		master = enbReInf
 	})
+
+	local formFallDmg = vgui.CreateTTT2Form(parent, "header_playersettings_falldmg")
+
+	local enbFallDmg = formFallDmg:MakeCheckBox({
+		serverConvar = "ttt2_falldmg_enable",
+		label = "label_falldmg_enable"
+	})
+
+	formFallDmg:MakeSlider({
+		serverConvar = "ttt2_falldmg_min_velocity",
+		label = "label_falldmg_min_velocity",
+		min = 0,
+		max = 1500,
+		decimal = 0,
+		parent = enbFallDmg
+	})
+
+	formFallDmg:MakeHelp({
+		label = "help_falldmg_exponent"
+	})
+
+	formFallDmg:MakeSlider({
+		serverConvar = "ttt2_falldmg_exponent",
+		label = "label_falldmg_exponent",
+		min = 0,
+		max = 5,
+		decimal = 2,
+		parent = enbFallDmg
+	})
 end
