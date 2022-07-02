@@ -25,7 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
   - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
 ### Changed
-- - Updated Chinese translation (by @sbzl)
+- - Corrected incorrect translation (by @sbzlzh)
 
 ### Fixed
 
