@@ -16,6 +16,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `GM:TTT2AdminCheck` hook
   - Replaced all `IsSuperAdmin()` checks with this hook
   - This hook can be used to allow custom usergroups through these checks
+- Added convars to modify how fall damage is applied:
+  - `ttt2_falldmg_enable (default: 1)` toggles whether or not to apply fall damage at all
+  - `ttt2_falldmg_min_velocity (default: 450)` sets the minimum velocity threshold for fall damage to occur
+  - `ttt2_falldmg_exponent (default: 1.75)` sets the exponent to increase fall damage in relation to velocity
+  - All these convars can also be adjusted in the F1->Administration->Player Settings menu
 
 ### Breaking Changes
 

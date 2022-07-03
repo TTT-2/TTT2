@@ -1825,3 +1825,15 @@ L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
 L.label_sprint_crosshair = "Show crosshair while sprinting"
 L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 L.label_crowbar_pushforce = "Crowbar push force"
+
+-- 2022-07-02
+L.header_playersettings_falldmg = "Fall Damage Settings"
+
+L.label_falldmg_enable = "Enable fall damage"
+L.label_falldmg_min_velocity = "Minimum velocity threshold for fall damage to occur"
+L.label_falldmg_exponent = "Exponent to increase fall damage in relation to velocity"
+
+L.help_falldmg_exponent = [[
+This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
+
+Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
