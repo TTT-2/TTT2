@@ -336,6 +336,18 @@ function GM:TTT2PlayerSprintMultiplier(ply, sprintMultiplierModifier)
 
 end
 
+---
+-- A hook that is called whenever the gamemode needs to check if the player is in the superadmin usergroup.
+-- This hook can be used to allow custom usergroups through these checks.
+-- @note This hook grants access to powerful functionality, such as the gamemode configuration, damage logs and player role information. Only allow usergroups that absolutely need such access.
+-- @param Player ply The player to be checked
+-- @return boolean if the player is a valid usergroup
+-- @hook
+-- @realm shared
+function GM:TTT2AdminCheck(ply)
+	return ply:IsSuperAdmin()
+end
+
 -- Drowning and such
 local tm, ply, plys
 

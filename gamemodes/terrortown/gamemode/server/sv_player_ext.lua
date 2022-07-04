@@ -1466,8 +1466,10 @@ local function SetPlayerReady(_, ply)
 
 	entspawnscript.TransmitToPlayer(ply)
 
+	---
 	-- update playermodels on the client
-	if ply:IsSuperAdmin() then
+	-- @realm server
+	if hook.Run("TTT2AdminCheck", ply) then
 		playermodels.StreamModelStateToSelectedClients(false, ply)
 	end
 

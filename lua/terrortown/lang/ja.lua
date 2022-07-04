@@ -1829,3 +1829,7 @@ L.label_sprint_stamina_regeneration = "スタミナ再生率"
 L.label_sprint_crosshair = "走行中のクロスヘアの表示"
 L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
+
+--2022-04-13
+--L.label_session_limits_enabled = "Enable session limits"
+--L.sb_mapchange_disabled = "Session limits are disabled."

@@ -1003,6 +1003,18 @@ local fallsounds = {
 local fallsounds_count = #fallsounds
 
 ---
+-- @realm server
+local falldmg_enable = CreateConVar("ttt2_falldmg_enable", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+local falldmg_min_vel = CreateConVar("ttt2_falldmg_min_velocity", "450", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+local falldmg_expo = CreateConVar("ttt2_falldmg_exponent", "1.75", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
 -- Called when a @{Player} makes contact with the ground.
 -- @predicted
 -- @param Player ply
@@ -1015,13 +1027,12 @@ local fallsounds_count = #fallsounds
 -- @ref https://wiki.facepunch.com/gmod/GM:OnPlayerHitGround
 -- @local
 function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
-	if in_water or speed < 450 or not IsValid(ply) then return end
+	if not falldmg_enable:GetBool() or not IsValid(ply) or in_water or speed < falldmg_min_vel:GetInt() then return end
 
 	-- Everything over a threshold hurts you, rising exponentially with speed
-	local damage = math.pow(0.05 * (speed - 420), 1.75)
+	local damage = math.pow(0.05 * (speed - (falldmg_min_vel:GetInt() - 30)), falldmg_expo:GetFloat())
 
-	-- I don't know exactly when on_floater is true, but it's probably when
-	-- landing on something that is in water.
+	-- Halve damage dealt if the impacted object is floating on water
 	if on_floater then
 		damage = damage * 0.5
 	end
