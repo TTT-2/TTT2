@@ -1,0 +1,30 @@
+name: CD
+
+# Run on Pull Requests to master and on manual interaction
+on:
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: histalek-dev-env
+      cancel-in-progress: true
+    environment:
+      name: histalek-dev-env
+      #url: https://example.com
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@5.2
+      with:
+        switches: -avzr --delete
+        remote_path: ${{ secrets.DEPLOY_PATH }}
+        remote_host: ${{ secrets.DEPLOY_HOST }}
+        remote_port: ${{ secrets.DEPLOY_PORT }}
+        remote_user: ${{ secrets.DEPLOY_USER }}
+        remote_key: ${{ secrets.DEPLOY_KEY }}
