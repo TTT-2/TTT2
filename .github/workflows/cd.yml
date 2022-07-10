@@ -14,7 +14,7 @@ jobs:
       cancel-in-progress: true
     environment:
       name: histalek-dev-env
-      #url: https://example.com
+      url: steam://connect/ttt2-dev-env.neoxult.histalek.dev
 
     steps:
     - uses: actions/checkout@v3
