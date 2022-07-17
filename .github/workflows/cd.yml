@@ -9,12 +9,16 @@ on:
 jobs:
   deploy-to-dev:
     runs-on: ubuntu-latest
+    # The concurrency group should match the environment name this deploys to.
+    # If set correctly this marks only one deployment on that env as 'active' in the GitHub UI.
     concurrency:
       group: histalek-dev-env
       cancel-in-progress: true
     environment:
       name: histalek-dev-env
-      url: steam://connect/ttt2-dev-env.neoxult.histalek.dev
+      # Sadly a 'steam://connect/<server_domain>' url is not allowed by github
+      # TODO deploy a redirect service on this domain, for now this is a placeholder
+      url: https://ttt2-dev-env.neoxult.histalek.dev
 
     steps:
     - uses: actions/checkout@v3
@@ -23,6 +27,8 @@ jobs:
       uses: burnett01/rsync-deployments@5.2
       with:
         switches: -avzr --delete
+        # The path should end in a directory in the garrysmod addons directory
+        # e.g. <garrysmod_install_dir>/garrysmod/addons/ttt2
         remote_path: ${{ secrets.DEPLOY_PATH }}
         remote_host: ${{ secrets.DEPLOY_HOST }}
         remote_port: ${{ secrets.DEPLOY_PORT }}
