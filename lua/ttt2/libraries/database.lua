@@ -1202,7 +1202,9 @@ if SERVER then
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
-		if plyID64 and playerID64Cache[plyID64] and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if plyID64 and playerID64Cache[plyID64] and not hook.Run("TTT2AdminCheck", playerID64Cache[plyID64]) then return end
 
 		local index = nameToIndex[accessName]
 
@@ -1310,7 +1312,9 @@ if SERVER then
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
 	-- @realm server
 	function database.Reset(accessName, plyID64)
-		if plyID64 and playerID64Cache[plyID64] and not playerID64Cache[plyID64]:IsSuperAdmin() then return end
+		---
+		-- @realm server
+		if plyID64 and playerID64Cache[plyID64] and not hook.Run("TTT2AdminCheck", playerID64Cache[plyID64]) then return end
 
 		local index = nameToIndex[accessName]
 
