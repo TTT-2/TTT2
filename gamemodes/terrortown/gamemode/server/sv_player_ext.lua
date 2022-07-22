@@ -1472,7 +1472,7 @@ local function SetPlayerReady(_, ply)
 	if hook.Run("TTT2AdminCheck", ply) then
 		playermodels.StreamModelStateToSelectedClients(false, ply)
 	end
-  
+
 	---
 	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)
