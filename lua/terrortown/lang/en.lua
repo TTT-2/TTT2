@@ -215,6 +215,7 @@ L.search_eyes = "Using your detective skills, you identified the last person the
 -- Scoreboard
 L.sb_playing = "You are playing on..."
 L.sb_mapchange = "Map changes in {num} rounds or in {time}"
+L.sb_mapchange_disabled = "Session limits are disabled."
 
 L.sb_mia = "Missing In Action"
 L.sb_confirmed = "Confirmed Dead"
@@ -1755,6 +1756,7 @@ L.label_round_limit = "Upper limit of rounds"
 L.label_time_limit_minutes = "Upper limit of playtime in minutes"
 L.label_nade_throw_during_prep = "Enable nade throwing during preparing time"
 L.label_postround_dm = "Enable deathmatch after round ended"
+L.label_session_limits_enabled = "Enable session limits"
 L.label_spectator_chat = "Enable spectators chatting with everybody"
 L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
@@ -1823,3 +1825,15 @@ L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
 L.label_sprint_crosshair = "Show crosshair while sprinting"
 L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 L.label_crowbar_pushforce = "Crowbar push force"
+
+-- 2022-07-02
+L.header_playersettings_falldmg = "Fall Damage Settings"
+
+L.label_falldmg_enable = "Enable fall damage"
+L.label_falldmg_min_velocity = "Minimum velocity threshold for fall damage to occur"
+L.label_falldmg_exponent = "Exponent to increase fall damage in relation to velocity"
+
+L.help_falldmg_exponent = [[
+This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
+
+Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]

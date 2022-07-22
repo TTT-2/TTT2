@@ -6,8 +6,44 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
+  - Added possibility to manipulate serverside ConVars with Dropdowns. Just add .serverConvar with the conVarName to the given data similar to .convar
+  - .serverConVar and .conVar are also supported
+  - data.choices can now be a table containing `{title, value, select, icon, additionalData}`
+  - data.selectValue is added, use it instead of data.selectName to choose the value you set
+  - data.selectTitle is added and shall replace data.selectName
+- New setting to disable session limits entirely. (by @Reispfannenfresser)
+- Added `GM:TTT2AdminCheck` hook
+  - Replaced all `IsSuperAdmin()` checks with this hook
+  - This hook can be used to allow custom usergroups through these checks
+- Added convars to modify how fall damage is applied:
+  - `ttt2_falldmg_enable (default: 1)` toggles whether or not to apply fall damage at all
+  - `ttt2_falldmg_min_velocity (default: 450)` sets the minimum velocity threshold for fall damage to occur
+  - `ttt2_falldmg_exponent (default: 1.75)` sets the exponent to increase fall damage in relation to velocity
+  - All these convars can also be adjusted in the F1->Administration->Player Settings menu
 - Added a `database` library, that handles shared Interaction with the sql database
+
+### Breaking Changes
+
+- Reworked Dropdowns Panel `DComboBoxTTT2` itself
+  - `PANEL:AddChoice(title, value, select, icon, data)` now uses the second argument as value string for setting convars, use the fifth argument for special data instead
+  - `PANEL:ChooseOption(title, index, ignoreConVar)` is deprecated and no longer chooses the displayed text, only per index
+- Reworked our simplified Dropdowns MakePanel `PANEL:MakeComboBox(data)` version
+  - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
+### Changed
+- - Corrected incorrect translation (by @sbzlzh)
+
+### Fixed
+
+- Fixed addon compatibility checker fussing over disabled addons
+- Fixed ammo entities blocking +use traces
+
+## [v0.11.4b](https://github.com/TTT-2/TTT2/tree/v0.11.4b) (2021-12-17)
+
+### Changed
+
 - Updated Japanese translation (by @westooooo)
+- Switched from the voicerecord commands to the GMod permission system due to a recent GMod update breaking the old voice chat
 
 ## [v0.11.3b](https://github.com/TTT-2/TTT2/tree/v0.11.3b) (2021-11-18)
 

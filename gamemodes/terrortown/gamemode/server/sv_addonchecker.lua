@@ -492,8 +492,9 @@ function addonChecker.Check()
 
 	for i = 1, #addonTable do
 		local addon = addonTable[i]
-		local detectedAddon = addonChecker.curatedList[tostring(addon.wsid)]
+		if not addon.mounted then continue end
 
+		local detectedAddon = addonChecker.curatedList[tostring(addon.wsid)]
 		if not detectedAddon then continue end
 
 		ErrorNoHalt(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")

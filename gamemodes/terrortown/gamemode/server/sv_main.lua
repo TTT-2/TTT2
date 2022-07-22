@@ -114,6 +114,10 @@ CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+local ttt_session_limits_enabled = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+
+---
+-- @realm server
 local round_limit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
@@ -524,6 +528,7 @@ end
 function GM:SyncGlobals()
 	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
 	SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
+	SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
 	SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
 	SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
 	SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
@@ -554,6 +559,10 @@ end)
 
 cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
 	SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(ttt_session_limits_enabled:GetName(), function(cv, old, new)
+	SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
@@ -1313,7 +1322,9 @@ function EndRound(result)
 	end
 
 	-- We may need to start a timer for a mapswitch, or start a vote
-	CheckForMapSwitch()
+	if GetGlobalBool("ttt_session_limits_enabled") then
+		CheckForMapSwitch()
+	end
 
 	events.UpdateScoreboard()
 
@@ -1389,8 +1400,10 @@ hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, un
 end)
 
 local function ttt_roundrestart(ply, command, args)
+	---
 	-- ply is nil on dedicated server console
-	if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
+	-- @realm server
+	if not IsValid(ply) or ply:IsAdmin() or hook.Run("TTT2AdminCheck", ply) or cvars.Bool("sv_cheats", 0) then
 		LANG.Msg("round_restart")
 
 		StopRoundTimers()
