@@ -583,6 +583,17 @@ serverSendFunctions[MESSAGE_SET_VALUE] = function(data)
 	net.WriteString(tostring(data.value))
 end
 
+clientReceiveFunctions[MESSAGE_SET_VALUE] = function()
+	local index = net.ReadUInt(uIntBits)
+	local itemName = net.ReadString()
+	local key = net.ReadString()
+	local value = net.ReadString()
+
+	value = database.ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
+	OnChange(index, itemName, key, value)
+	ValueReceived(index, itemName, key)
+end
+
 ---
 -- Send query for resetting the database to server
 -- @param table data contains index
@@ -688,13 +699,13 @@ end
 -- Put local functions into global table clientside
 if CLIENT then
 	sendDataFunctions = clientSendFunctions
-	receiveDataFunctions = clientRecvFunctions
+	receiveDataFunctions = clientReceiveFunctions
 end
 
 -- Put local functions into global table serverside
 if SERVER then
 	sendDataFunctions = serverSendFunctions
-	receiveDataFunctions = serverRecvFunctions
+	receiveDataFunctions = serverReceiveFunctions
 end
 
 --
