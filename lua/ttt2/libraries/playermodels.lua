@@ -59,6 +59,7 @@ playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
 	hattable = {typ = "bool", default = false}
 }
+playermodels.accessLevel = DATABASE_ACCESS_ANY
 
 playermodels.fallbackModel = "models/player/phoenix.mdl"
 
@@ -180,7 +181,7 @@ end
 -- @internal
 -- @realm server
 function playermodels.Initialize()
-	if not database.Register(playermodels.sqltable, playermodels.accessName, playermodels.savingKeys) then
+	if not database.Register(playermodels.sqltable, playermodels.accessName, playermodels.savingKeys, playermodels.accessLevel) then
 		return false
 	end
 

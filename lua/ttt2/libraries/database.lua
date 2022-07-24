@@ -1065,7 +1065,7 @@ if SERVER then
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
 	-- @param[default = DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
-	-- @note If accessLevel is set to DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access
+	-- @note If accessLevel is set to DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access, whereas DATABASE_ACCESS_ANY only gives read-, but not write-access to anyone
 	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
