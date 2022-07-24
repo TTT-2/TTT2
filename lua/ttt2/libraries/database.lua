@@ -23,6 +23,11 @@ local registeredDatabases = {}
 local receivedValues = {}
 local nameToIndex = {}
 
+-- Identifier enums to determine protection level of database-access
+DATABASE_ACCESS_ANY = 0
+DATABASE_ACCESS_ADMIN = 1
+DATABASE_ACCESS_SERVER = 2
+
 -- Identifier enums to determine the message to send or receive
 local MESSAGE_REGISTER = 1
 local MESSAGE_GET_VALUE = 2
@@ -34,7 +39,6 @@ local MESSAGE_RESET = 5
 local SEND_TO_PLY_ALL = "all"
 local SEND_TO_PLY_REGISTERED = "registered"
 local SEND_TO_PLY_SERVER = "server"
-
 
 -- Stores the data and the players it is send to
 local dataStore = {}
@@ -992,6 +996,35 @@ if SERVER then
 	end
 
 	---
+	-- Checks if the player has the necessary accessLevel
+	-- @note Only Admins can write to the database, no matter the accessLevel
+	-- @param number index the local index of the database
+	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
+	-- @return bool, bool hasReadAccess, hasWriteAccess, if the player can read from or write to the database
+	-- @realm server
+	-- @internal
+	local function hasAccessToDatabase(index, plyID64)
+		local isAdmin = false
+		local isServer = true
+
+		if plyID64 and playerID64Cache[plyID64] then
+			---
+			-- @realm server
+			isAdmin = hook.Run("TTT2AdminCheck", playerID64Cache[plyID64])
+			isServer = false
+		end
+
+		if isServer then return true, true end
+
+		local accessLevel = registeredDatabases[index].accessLevel
+
+		local hasAdminAccess = isAdmin and accessLevel == DATABASE_ACCESS_ADMIN
+		local hasReadAccess = accessLevel == DATABASE_ACCESS_ANY or hasAdminAccess
+
+		return hasReadAccess, hasAdminAccess
+	end
+
+	---
 	-- Synchronizes all registered Databases with the given players defined by the plyIdentifier
 	-- @note This is used internally to sync between server and client, you dont need to call it manually
 	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
@@ -1031,10 +1064,14 @@ if SERVER then
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
+	-- @param[default = DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
+	-- @note If accessLevel is set to DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access
 	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
-	function database.Register(databaseName, accessName, savingKeys, additionalData)
+	function database.Register(databaseName, accessName, savingKeys, accessLevel, additionalData)
+		accessLevel = accessLevel or DATABASE_ACCESS_ADMIN
+
 		-- Create Sql table if not already done
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
 			return false
@@ -1049,6 +1086,7 @@ if SERVER then
 
 		registeredDatabases[databaseCount] = {
 			accessName = accessName,
+			accessLevel = accessLevel,
 			databaseName = databaseName,
 			orm = orm.Make(databaseName),
 			keys = savingKeys or {},
@@ -1074,10 +1112,14 @@ if SERVER then
 	function database.ReturnGetValue(requestData)
 		local index = requestData.index
 		local accessName = index and registeredDatabases[index] and registeredDatabases[index].accessName
+
+		local plyID64 = requestData.plyID64
+		local hasReadAccess, _ = hasAccessToDatabase(index, plyID64)
+
 		local value
 		local isSuccess = false
 
-		if accessName then
+		if hasReadAccess and accessName then
 			isSuccess, value = database.GetValue(accessName, requestData.itemName, requestData.key)
 		end
 
@@ -1087,9 +1129,9 @@ if SERVER then
 			value = value
 		}
 
-		RegisterPlayer(requestData.plyID64)
+		RegisterPlayer(plyID64)
 
-		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, requestData.plyID64)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, plyID64)
 	end
 
 	---
@@ -1195,6 +1237,7 @@ if SERVER then
 	---
 	-- Set the value for a key of an item of an sql-table
 	-- also sends it to the clients
+	-- @note It is restricted to players with DATABASE_ACCESS_ADMIN or higher at all times
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
@@ -1202,14 +1245,19 @@ if SERVER then
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
-		---
-		-- @realm server
-		if plyID64 and playerID64Cache[plyID64] and not hook.Run("TTT2AdminCheck", playerID64Cache[plyID64]) then return end
 
 		local index = nameToIndex[accessName]
 
 		if not index then
 			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not registered.")
+
+			return
+		end
+
+		local _, hasWriteAccess = hasAccessToDatabase(index, plyID64)
+
+		if not hasWriteAccess then
+			ErrorNoHalt("[TTT2] database.SetValue failed. The player with the ID64 " .. plyID64 .. " has no write access to the database " .. accessName .. " .")
 
 			return
 		end
@@ -1308,18 +1356,23 @@ if SERVER then
 
 	---
 	-- Reset the database and send a message to the client
+	-- @note It is restricted to players with DATABASE_ACCESS_ADMIN or higher at all times
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
 	-- @realm server
 	function database.Reset(accessName, plyID64)
-		---
-		-- @realm server
-		if plyID64 and playerID64Cache[plyID64] and not hook.Run("TTT2AdminCheck", playerID64Cache[plyID64]) then return end
-
 		local index = nameToIndex[accessName]
 
 		if not index then
 			ErrorNoHalt("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
+
+			return
+		end
+
+		local _, hasWriteAccess = hasAccessToDatabase(index, plyID64)
+
+		if not hasWriteAccess then
+			ErrorNoHalt("[TTT2] database.Reset failed. The player with the ID64 " .. plyID64 .. " has no write access to the database " .. accessName .. " .")
 
 			return
 		end
