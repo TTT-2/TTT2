@@ -1029,8 +1029,8 @@ if SERVER then
 
 		local accessLevel = registeredDatabases[index].accessLevel
 
-		local hasAdminAccess = isAdmin and accessLevel == DATABASE_ACCESS_ADMIN
-		local hasReadAccess = accessLevel == DATABASE_ACCESS_ANY or hasAdminAccess
+		local hasAdminAccess = isAdmin and accessLevel <= DATABASE_ACCESS_ADMIN
+		local hasReadAccess = hasAdminAccess or accessLevel <= DATABASE_ACCESS_ANY
 
 		return hasReadAccess, hasAdminAccess
 	end
