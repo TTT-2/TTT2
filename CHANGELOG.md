@@ -31,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
 ### Changed
 - - Corrected incorrect translation (by @sbzlzh)
+- Optimized damage indicator vgui images to be smaller
 
 ### Fixed
 
