@@ -935,7 +935,7 @@ L.reroll_button = "Rolar"
 L.reroll_help = "Use {amount} crédito(s) para conseguir um novo item na loja!"
 
 -- 2019-05-06
-L.equip_not_alive = "Você consegue ver todos os items disponíveis selecionando pelo papel na direita. Não esqueça de marcar os eu favorito!" 
+L.equip_not_alive = "Você consegue ver todos os items disponíveis selecionando pelo papel na direita. Não esqueça de marcar os eu favorito!"
 
 -- 2019-06-27
 L.shop_editor_title = "Editor de loja"
@@ -947,11 +947,11 @@ L.shop_edit_items = "Editar items"
 L.shop_edit_shop = "Editar Loja"
 L.shop_create_shop = "Criar loja customizada"
 L.shop_selected = "Selecionar {role}"
-L.shop_settings_desc = "Mude o valor para se adaptar a randomização da ConVars da Loja. Não esqueça de salvar suas mudanças!" 
+L.shop_settings_desc = "Mude o valor para se adaptar a randomização da ConVars da Loja. Não esqueça de salvar suas mudanças!"
 
-L.bindings_new = "Nova chave vinculada para {name}: {key}"  
+L.bindings_new = "Nova chave vinculada para {name}: {key}"
 
-L.hud_default_failed = "Falha ao setar a nova HUD {hudname} como padrão. Você não tem permissão para fazer isso, ou essa HUD não existe." 
+L.hud_default_failed = "Falha ao setar a nova HUD {hudname} como padrão. Você não tem permissão para fazer isso, ou essa HUD não existe."
 L.hud_forced_failed = "Falha ao forçar a HUD {hudname}. Você não tem permissão para fazer isso, ou a HUD não existe.."
 L.hud_restricted_failed = "Falha ao restringir a HUD {hudname}. Você não tem permissão para isso.."
 
