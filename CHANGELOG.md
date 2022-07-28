@@ -21,6 +21,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `ttt2_falldmg_min_velocity (default: 450)` sets the minimum velocity threshold for fall damage to occur
   - `ttt2_falldmg_exponent (default: 1.75)` sets the exponent to increase fall damage in relation to velocity
   - All these convars can also be adjusted in the F1->Administration->Player Settings menu
+  - Added portuguese translation
 
 ### Breaking Changes
 
