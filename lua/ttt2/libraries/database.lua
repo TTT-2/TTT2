@@ -71,9 +71,9 @@ local playerID64Cache = {}
 
 ---
 -- Call this function if a value was received
--- @param number index the local index of the database
--- @param string itemName the name of the item in the database
--- @param string key the name of the key in the database
+-- @param number index The local index of the database
+-- @param string itemName The name of the item in the database
+-- @param string key The name of the key in the database
 -- @realm shared
 -- @internal
 local function ValueReceived(index, itemName, key)
@@ -216,10 +216,10 @@ end
 -- Adds a callback to be called when the given sql table entries change
 -- @note itemName and key can both be `nil`. The callback function then gets called on a change of every item or every key
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name! And does not have to be registered yet!
--- @param[opt] string itemName the name of the item in the database. Leave `nil` if you want a callback for every item
--- @param[opt] string key the name of the key in the database. Leave `nil` if you want a callback for every key
--- @param function The callback function(accessName, itemName, key, oldValue, newValue), its only called if the value actually changed
--- @param[opt] string identifier a chosen identifier if you want to remove the callback
+-- @param[opt] string itemName The name of the item in the database. Leave `nil` if you want a callback for every item
+-- @param[opt] string key The name of the key in the database. Leave `nil` if you want a callback for every key
+-- @param function The callback function(accessName, itemName, key, oldValue, newValue), it's only called if the value actually changed
+-- @param[opt] string identifier An identifier by which you can remove the callback more granular
 -- @realm shared
 function database.AddChangeCallback(accessName, itemName, key, callback, identifier)
 	-- Allow every accessName in case the database is only later registered
@@ -263,9 +263,9 @@ end
 -- Removes a callback if an identifier was registered
 -- @note itemName and key can both be `nil`. The callback function then gets removed for all items or keys with that identifier
 -- @param string accessName the chosen accessName registered for a given database. HAS NOT TO BE the real database-name!
--- @param[opt] string itemName the name of the item in the database. Leave `nil` if you want to remove callbacks for every item with given identifier
--- @param[opt] string key the name of the key in the database. Leave `nil` if you want to remove callbacks for every key with given identifier
--- @param[opt] string identifier a chosen identifier if you want to remove the callback
+-- @param[opt] string itemName The name of the item in the database. Leave `nil` if you want to remove callbacks for every item with the given identifier
+-- @param[opt] string key The name of the key in the database. Leave `nil` if you want to remove callbacks for every key with the given identifier
+-- @param[opt] string identifier The identifier by which the callbacks to remove are filtered
 -- @realm shared
 function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 	callbacks = callbackIdentifiers[identifier]
