@@ -24,9 +24,9 @@ local receivedValues = {}
 local nameToIndex = {}
 
 -- Identifier enums to determine protection level of database-access
-DATABASE_ACCESS_ANY = 10
-DATABASE_ACCESS_ADMIN = 0
-DATABASE_ACCESS_SERVER = -1
+TTT2_DATABASE_ACCESS_ANY = 10
+TTT2_DATABASE_ACCESS_ADMIN = 0
+TTT2_DATABASE_ACCESS_SERVER = -1
 
 -- Identifier enums to determine the message to send or receive
 local MESSAGE_REGISTER = 1
@@ -1030,8 +1030,8 @@ if SERVER then
 
 		local accessLevelNeeded = registeredDatabases[index].accessLevel
 
-		local hasAdminAccess = isAdmin and accessLevelNeeded >= DATABASE_ACCESS_ADMIN
-		local hasReadAccess = hasAdminAccess or accessLevelNeeded > DATABASE_ACCESS_ADMIN
+		local hasAdminAccess = isAdmin and accessLevelNeeded >= TTT2_DATABASE_ACCESS_ADMIN
+		local hasReadAccess = hasAdminAccess or accessLevelNeeded > TTT2_DATABASE_ACCESS_ADMIN
 
 		return hasReadAccess, hasAdminAccess
 	end
@@ -1076,13 +1076,13 @@ if SERVER then
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
-	-- @param[default = DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
-	-- @note If accessLevel is set to DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access, whereas DATABASE_ACCESS_ANY only gives read-, but not write-access to anyone
+	-- @param[default = TTT2_DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `TTT2_DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
+	-- @note If accessLevel is set to TTT2_DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access, whereas TTT2_DATABASE_ACCESS_ANY only gives read-, but not write-access to anyone
 	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
 	-- @return bool isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.Register(databaseName, accessName, savingKeys, accessLevel, additionalData)
-		accessLevel = accessLevel or DATABASE_ACCESS_ADMIN
+		accessLevel = accessLevel or TTT2_DATABASE_ACCESS_ADMIN
 
 		-- Create Sql table if not already done
 		if not sql.CreateSqlTable(databaseName, savingKeys) or not isstring(accessName) then
@@ -1249,7 +1249,7 @@ if SERVER then
 	---
 	-- Set the value for a key of an item of an sql-table
 	-- also sends it to the clients
-	-- @note It is restricted to players with DATABASE_ACCESS_ADMIN or higher at all times
+	-- @note It is restricted to players with TTT2_DATABASE_ACCESS_ADMIN or higher at all times
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
@@ -1367,7 +1367,7 @@ if SERVER then
 
 	---
 	-- Reset the database and send a message to the client
-	-- @note It is restricted to players with DATABASE_ACCESS_ADMIN or higher at all times
+	-- @note It is restricted to players with TTT2_DATABASE_ACCESS_ADMIN or higher at all times
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
 	-- @realm server

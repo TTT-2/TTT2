@@ -59,7 +59,7 @@ playermodels.savingKeys = {
 	selected = {typ = "bool", default = false},
 	hattable = {typ = "bool", default = false}
 }
-playermodels.accessLevel = DATABASE_ACCESS_ANY
+playermodels.accessLevel = TTT2_DATABASE_ACCESS_ANY
 
 playermodels.fallbackModel = "models/player/phoenix.mdl"
 
