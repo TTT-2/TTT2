@@ -1073,6 +1073,7 @@ if SERVER then
 	---
 	-- Call this when you want to setup a database that needs to be accessible by server and client
 	-- If you dont call this function before anything else, it wont work. Choose any name as accessName so that others can easily use it.
+	-- @note If the SqlTable does not exist, it will be created with the given savingKeys 
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
