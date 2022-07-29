@@ -334,7 +334,7 @@ end
 -- @return any value after conversion, `nil` if not convertible or "nil" or "NULL"
 -- @realm shared
 -- @internal
-function database.ConvertValueWithKey(value, accessName, key)
+local function ConvertValueWithKey(value, accessName, key)
 	if not value or value == "nil" or value == "NULL" then return end
 
 	local index = nameToIndex[accessName]
@@ -371,7 +371,7 @@ function database.ConvertTable(dataTable, accessName)
 	local keys = registeredDatabases[index].keys
 
 	for key, data in pairs(keys) do
-		dataTable[key] = database.ConvertValueWithKey(dataTable[key], accessName, key)
+		dataTable[key] = ConvertValueWithKey(dataTable[key], accessName, key)
 	end
 end
 
@@ -528,7 +528,7 @@ clientReceiveFunctions[MESSAGE_GET_VALUE] = function()
 
 	if isSuccess then
 		value = net.ReadString()
-		value = database.ConvertValueWithKey(value, request.accessName, request.key)
+		value = ConvertValueWithKey(value, request.accessName, request.key)
 
 		local storedData = registeredDatabases[request.index].storedData
 
@@ -567,7 +567,7 @@ serverReceiveFunctions[MESSAGE_SET_VALUE] = function(plyID64)
 	local value = net.ReadString()
 
 	local accessName = registeredDatabases[index].accessName
-	value = database.ConvertValueWithKey(value, accessName, key)
+	value = ConvertValueWithKey(value, accessName, key)
 
 	database.SetValue(accessName, itemName, key, value, plyID64)
 end
@@ -590,7 +590,7 @@ clientReceiveFunctions[MESSAGE_SET_VALUE] = function()
 	local key = net.ReadString()
 	local value = net.ReadString()
 
-	value = database.ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
+	value = ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
 	OnChange(index, itemName, key, value)
 	ValueReceived(index, itemName, key)
 end
@@ -689,7 +689,7 @@ clientReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function()
 	else
 		local itemName = net.ReadString()
 		local key = net.ReadString()
-		local value = database.ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
+		local value = ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
 
 		local defaultData = dataTable.defaultData
 		defaultData[itemName] = defaultData[itemName] or {}
@@ -1191,7 +1191,7 @@ if SERVER then
 
 			if key then
 				-- Get the specific key data
-				local value = sqlData and database.ConvertValueWithKey(sqlData[key], accessName, key)
+				local value = sqlData and ConvertValueWithKey(sqlData[key], accessName, key)
 
 				-- Get default values if no value was saved
 				if value == nil then
