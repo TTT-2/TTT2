@@ -110,7 +110,7 @@ function database.GetDefaultValue(accessName, itemName, key)
 	local index = nameToIndex[accessName]
 
 	if not index then
-		ErrorNoHalt("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " is not available or synced.")
+		ErrorNoHalt("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " is not available or is not synced.")
 
 		return
 	end
