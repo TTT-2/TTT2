@@ -414,6 +414,7 @@ end
 -- @internal
 serverSendFunctions[MESSAGE_REGISTER] = function(data)
 	local databaseInfo = registeredDatabases[data.index]
+
 	net.WriteUInt(data.index, uIntBits)
 	net.WriteString(databaseInfo.accessName)
 	net.WriteTable(databaseInfo.keys)
@@ -422,6 +423,7 @@ serverSendFunctions[MESSAGE_REGISTER] = function(data)
 	-- AdditionalInfo determines if there is more than one database registered and sent
 	-- This makes sure, that the client doesnt start to use the databases before all databases are received
 	local sendAdditionalInfo = data.identifier ~= nil
+
 	net.WriteBool(sendAdditionalInfo)
 
 	if sendAdditionalInfo then
@@ -547,7 +549,6 @@ end
 -- @internal
 clientSendFunctions[MESSAGE_SET_VALUE] = function(data)
 	net.WriteUInt(data.index, uIntBits)
-
 	net.WriteString(data.itemName)
 	net.WriteString(data.key)
 	net.WriteString(tostring(data.value))
@@ -1256,7 +1257,6 @@ if SERVER then
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.SetValue(accessName, itemName, key, value, plyID64)
-
 		local index = nameToIndex[accessName]
 
 		if not index then
