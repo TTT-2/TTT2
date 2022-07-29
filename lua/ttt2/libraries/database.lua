@@ -24,9 +24,9 @@ local receivedValues = {}
 local nameToIndex = {}
 
 -- Identifier enums to determine protection level of database-access
-DATABASE_ACCESS_ANY = 0
-DATABASE_ACCESS_ADMIN = 1
-DATABASE_ACCESS_SERVER = 2
+DATABASE_ACCESS_ANY = 10
+DATABASE_ACCESS_ADMIN = 0
+DATABASE_ACCESS_SERVER = -1
 
 -- Identifier enums to determine the message to send or receive
 local MESSAGE_REGISTER = 1
@@ -1028,10 +1028,10 @@ if SERVER then
 
 		if isServer then return true, true end
 
-		local accessLevel = registeredDatabases[index].accessLevel
+		local accessLevelNeeded = registeredDatabases[index].accessLevel
 
-		local hasAdminAccess = isAdmin and accessLevel <= DATABASE_ACCESS_ADMIN
-		local hasReadAccess = hasAdminAccess or accessLevel <= DATABASE_ACCESS_ANY
+		local hasAdminAccess = isAdmin and accessLevelNeeded >= DATABASE_ACCESS_ADMIN
+		local hasReadAccess = hasAdminAccess or accessLevelNeeded > DATABASE_ACCESS_ADMIN
 
 		return hasReadAccess, hasAdminAccess
 	end
