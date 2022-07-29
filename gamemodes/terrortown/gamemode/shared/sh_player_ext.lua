@@ -84,7 +84,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 	self.subrole = subrole
 
 	-- this update team hook should suppress the event trigger
-	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE, true)
+	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE, true, true)
 
 	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
@@ -304,8 +304,9 @@ end
 -- @warning @{plymeta:SetRole} should be used BEFORE calling this function!
 -- @param string team a @{ROLE}'s team
 -- @param boolean suppressEvent Set this to true if no rolechange event should be triggered
+-- @param boolean suppressHook Set this to true if no updateTeam hook should be triggered
 -- @realm shared
-function plymeta:UpdateTeam(team, suppressEvent)
+function plymeta:UpdateTeam(team, suppressEvent, suppressHook)
 	if team == TEAM_NOCHANGE then return end
 
 	local oldTeam = self:GetTeam()
@@ -314,16 +315,18 @@ function plymeta:UpdateTeam(team, suppressEvent)
 
 	local newTeam = self:GetTeam()
 
-	if oldTeam ~= newTeam then
+	if oldTeam == newTeam then return end
+
+	if not suppressHook then
 		---
 		-- @realm shared
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
+	end
 
-		if SERVER and not suppressEvent then
-			local subrole = self:GetSubRole()
+	if SERVER and not suppressEvent then
+		local subrole = self:GetSubRole()
 
-			events.Trigger(EVENT_ROLECHANGE, self, subrole, subrole, oldTeam, newTeam)
-		end
+		events.Trigger(EVENT_ROLECHANGE, self, subrole, subrole, oldTeam, newTeam)
 	end
 end
 

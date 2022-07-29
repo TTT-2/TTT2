@@ -21,7 +21,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `ttt2_falldmg_min_velocity (default: 450)` sets the minimum velocity threshold for fall damage to occur
   - `ttt2_falldmg_exponent (default: 1.75)` sets the exponent to increase fall damage in relation to velocity
   - All these convars can also be adjusted in the F1->Administration->Player Settings menu
-- Added a `database` library, that handles shared Interaction with the sql database
+  - Added portuguese translation
+  - Added a `database` library, that handles shared Interaction with the sql database
+
 
 ### Breaking Changes
 
@@ -32,11 +34,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `data.OnChange(value, additionalData, comboBoxPanel)` is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel
 ### Changed
 - - Corrected incorrect translation (by @sbzlzh)
+- Optimized damage indicator vgui images to be smaller
 
 ### Fixed
 
 - Fixed addon compatibility checker fussing over disabled addons
 - Fixed ammo entities blocking +use traces
+- Fixed double call of `GM:TTT2UpdateTeam`, when a role change leads to a team change
 
 ## [v0.11.4b](https://github.com/TTT-2/TTT2/tree/v0.11.4b) (2021-12-17)
 
