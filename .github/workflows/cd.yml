@@ -1,0 +1,37 @@
+name: CD
+
+# Run on Pull Requests to master and on manual interaction
+on:
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    # The concurrency group should match the environment name this deploys to.
+    # If set correctly this marks only one deployment on that env as 'active' in the GitHub UI.
+    concurrency:
+      group: histalek-dev-env
+      cancel-in-progress: true
+    environment:
+      name: histalek-dev-env
+      # Sadly a 'steam://connect/<server_domain>' url is not allowed by github
+      # Current workaround is a 'redirect webpage' on GitHub Pages
+      # Ref. https://github.com/TTT-2/ttt-2.github.io
+      url: https://ttt-2.github.io/redirect/ttt2-dev-env
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@5.2
+      with:
+        switches: -avzr --delete
+        # The path should end in a directory in the garrysmod addons directory
+        # e.g. <garrysmod_install_dir>/garrysmod/addons/ttt2
+        remote_path: ${{ secrets.DEPLOY_PATH }}
+        remote_host: ${{ secrets.DEPLOY_HOST }}
+        remote_port: ${{ secrets.DEPLOY_PORT }}
+        remote_user: ${{ secrets.DEPLOY_USER }}
+        remote_key: ${{ secrets.DEPLOY_KEY }}
