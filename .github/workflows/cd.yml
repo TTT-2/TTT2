@@ -17,8 +17,9 @@ jobs:
     environment:
       name: histalek-dev-env
       # Sadly a 'steam://connect/<server_domain>' url is not allowed by github
-      # TODO deploy a redirect service on this domain, for now this is a placeholder
-      url: https://ttt2-dev-env.neoxult.histalek.dev
+      # Current workaround is a 'redirect webpage' on GitHub Pages
+      # Ref. https://github.com/TTT-2/ttt-2.github.io
+      url: https://ttt-2.github.io/redirect/ttt2-dev-env
 
     steps:
     - uses: actions/checkout@v3
