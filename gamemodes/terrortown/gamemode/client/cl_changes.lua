@@ -867,19 +867,19 @@ function CreateChanges()
 				<li>new info panel that shows detailed role distribution during the round</li>
 				<li>info panel also states detailed score events</li>
 				<li>new timeline that displays the events that happened during the round</li>
-				<li>added two new round end conditions: `time up` and `no one wins`</li>
+				<li>added two new round end conditions: <code>time up </code>and <code>no one wins</code></li>
 			</ul>
-			<li>Added `ROLE_NONE` (ID `3` by default)</li>
+			<li>Added <code>ROLE_NONE</code> (ID <code>3</code> by default)</li>
 			<ul>
-				<li>Players now default to `ROLE_NONE` instead of `ROLE_INNOCENT`</li>
-				<li>Enables the possibility to give Innocents access to a custom shop (`shopeditor`)</li>
+				<li>Players now default to <code>ROLE_NONE</code> instead of <code>ROLE_INNOCENT</code></li>
+				<li>Enables the possibility to give Innocents access to a custom shop (<code>shopeditor</code>)</li>
 			</ul>
 			<li>Karma now stores changes</li>
 			<ul>
 				<li>Is shown in roundend menu</li>
 			</ul>
-			<li>Added a new hook `TTT2ModifyLogicCheckRole` that can be used to modify the tested role for map related role checks</li>
-			<li>Added the ConVar `ttt2_random_shop_items` for the number of items in the randomshop</li>
+			<li>Added a new hook <code>TTT2ModifyLogicCheckRole</code> that can be used to modify the tested role for map related role checks</li>
+			<li>Added the ConVar <code>ttt2_random_shop_items</code> for the number of items in the randomshop</li>
 			<li>Added per-player voice control by hovering over the mute icon and scrolling</li>
 		</ul>
 
@@ -903,19 +903,19 @@ function CreateChanges()
 		<h2>Changed</h2>
 		<ul>
 			<li>Microoptimization to improve code performance</li>
-			<li>Converted `roles`, `huds`, `hudelements`, `items` and `pon` modules into libraries</li>
-			<li>Moved `bind` library to the libraries folder</li>
+			<li>Converted <code>roles</code>, <code>huds</code>, <code>hudelements</code>, <code>items</code> and <code>pon</code> modules into libraries</li>
+			<li>Moved <code>bind</code> library to the libraries folder</li>
 			<li>Moved favorites functions for equipment to the equipment shop and made them local functions</li>
 			<li>Code cleanup and removed silly negations</li>
 			<li>Extended some ttt2net functions</li>
-			<li>Changed `bees` win to `nones` win</li>
+			<li>Changed <code>bees</code> win to <code>nones</code> win</li>
 			<li>By default all evil roles are now counted as traitor roles for map related checks</li>
-			<li>Changed the ConVar `ttt2_random_shops` to only disable the random shop (if set to `0`)</li>
+			<li>Changed the ConVar <code>ttt2_random_shops</code> to only disable the random shop (if set to <code>0</code>)</li>
 			<li>Shopeditor settings are now available in the F1 Menu</li>
 			<li>Moved the F1 menu generating system from a hook based system to a file based system</li>
 			<ul>
-				<li>removed the hooks `TTT2ModifyHelpMainMenu` and `TTT2ModifyHelpSubMenu`</li>
-				<li>menus are now generated based on files located in `lua/terrortown/menus/gamemode/`</li>
+				<li>removed the hooks <code>TTT2ModifyHelpMainMenu</code> and <code>TTT2ModifyHelpSubMenu</code></li>
+				<li>menus are now generated based on files located in <code>lua/terrortown/menus/gamemode/</code></li>
 				<li>submenus are generated from files located in folders with the menu name</li>
 			</ul>
 			<li>Menus without content are now always hidden in the main menu</li>
@@ -924,9 +924,9 @@ function CreateChanges()
 			<li>Shopeditor equipment is now available in F1 menu</li>
 			<li>Moved the role layering menu to the F1 menu (administration submenu)</li>
 			<ul>
-				<li>removed the command `ttt2_edit_rolelayering`</li>
+				<li>removed the command <code>ttt2_edit_rolelayering</code></li>
 			</ul>
-			<li>moved the internal path of `lang/`, `vskin/` and `events/` (this doesn't change anything for addons)</li>
+			<li>moved the internal path of <code>lang/</code>, <code>vskin/</code> and <code>events/</code> (this doesn't change anything for addons)</li>
 			<li>Sort teammates first in credit transfer selection and add an indicator to them</li>
 		</ul>
 
@@ -937,10 +937,10 @@ function CreateChanges()
 
 		<h2>Breaking Changes</h2>
 		<ul>
-			<li>Adjusted `Player:HasRole()` and `Player:HasTeam()` to support simplified role and team checks (no parameter are supported anymore, use `Player:GetRole()` or `Player:GetTeam()` instead)</li>
-			<li>Moved global roleData to the `roles` library (e.g. `INNOCENT` to `roles.INNOCENT`). `INNOCENT`, `TRAITOR` etc. is not supported anymore. `ROLE_<ROLENAME>` is still supported and won't be changed.</li>
-			<li>Shopeditor function `ShopEditor.ReadItemData()` now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (`TTT2SESaveItem`,`TTT2SyncDBItems`)</li>
-			<li>Equipment shop favorite functions are now local and not global anymore (`CreateFavTable`, `AddFavorite`, `RemoveFavorite`, `GetFavorites` & `IsFavorite`)</li>
+			<li>Adjusted <code>Player:HasRole()</code> and <code>Player:HasTeam()</code> to support simplified role and team checks (no parameter are supported anymore, use <code>Player:GetRole()</code> or <code>Player:GetTeam()</code> instead)</li>
+			<li>Moved global roleData to the <code>roles</code> library (e.g. <code>INNOCENT</code> to <code>roles.INNOCENT</code>). <code>INNOCENT</code>, <code>TRAITOR</code> etc. is not supported anymore. <code>ROLE_<ROLENAME></code> is still supported and won't be changed.</li>
+			<li>Shopeditor function <code>ShopEditor.ReadItemData()</code> now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (<code>TTT2SESaveItem</code>,<code>TTT2SyncDBItems</code>)</li>
+			<li>Equipment shop favorite functions are now local and not global anymore (<code>CreateFavTable</code>, <code>AddFavorite</code>, <code>RemoveFavorite</code>, <code>GetFavorites</code> & <code>IsFavorite</code>)</li>
 		</ul>
 	]], os.time({year = 2021, month = 06, day = 19}))
 
@@ -966,7 +966,7 @@ function CreateChanges()
 			<li>Added a searchbar to submenus</li>
 			<li>Added full-sized icons to the equipment-editor</li>
 			<li>Hotreload functionality for weapons, they are now fully compatible to TTT2 after hotreload</li>
-			<li>Added experimental `SWEP.HotReloadableKeys` a list of strings to weapons, that makes data saved with `weapons.GetStored()` persistent across hotreloads</li>
+			<li>Added experimental <code>SWEP.HotReloadableKeys</code> a list of strings to weapons, that makes data saved with <code>weapons.GetStored()</code> persistent across hotreloads</li>
 			<li>Extended cvars library to support manipulation of serverside ConVars</li>
 			<li>Added possibility to manipulate serverside ConVars with Checkboxes and Sliders</li>
 			<ul>
@@ -995,9 +995,9 @@ function CreateChanges()
 
 		<h2>Internal Breaking Changes</h2>
 		<ul>
-			<li>Removed first argument of `GetEquipmentBase(data, equipment)`, it only takes the equipment as argument now `GetEquipmentBase(equipment)` and generally merges it with `EquipMenuData`</li>
-			<li>Added equipment as argument to `InitDefaultEquipmentForRole(roleData)`, it now only initializes the given equipment not all `InitDefaultEquipmentForRole(roleData, equipment)`</li>
-			<li>Added equipment as argument to `CleanUpDefaultCanBuyIndices()`, it now only initializes the given equipment not all `CleanUpDefaultCanBuyIndices(equipment)`</li>
+			<li>Removed first argument of <code>GetEquipmentBase(data, equipment)</code>, it only takes the equipment as argument now <code>GetEquipmentBase(equipment)</code> and generally merges it with <code>EquipMenuData</code></li>
+			<li>Added equipment as argument to <code>InitDefaultEquipmentForRole(roleData)</code>, it now only initializes the given equipment not all <code>InitDefaultEquipmentForRole(roleData, equipment)</code></li>
+			<li>Added equipment as argument to <code>CleanUpDefaultCanBuyIndices()</code>, it now only initializes the given equipment not all <code>CleanUpDefaultCanBuyIndices(equipment)</code></li>
 		</ul>
 	]], os.time({ year = 2021, month = 09, day = 25 }))
 
@@ -1229,6 +1229,61 @@ function CreateChanges()
 			<li>Updated Japanese translation (by @westooooo)</li>
 		</ul>
 	]], os.time({ year = 2021, month = 12, day = 17 }))
+
+	AddChange("TTT2 Base - v0.11.5b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Reworked our simplified Dropdowns MakePanel <code>PANEL:MakeComboBox(data)</code> version</li>
+			<ul>
+				<li>Added possibility to manipulate serverside ConVars with Dropdowns. Just add .serverConvar with the conVarName to the given data similar to .convar</li>
+				<li>.serverConVar and .conVar are also supported</li>
+				<li>data.choices can now be a table containing <code>{title, value, select, icon, additionalData}</code></li>
+				<li>data.selectValue is added, use it instead of data.selectName to choose the value you set</li>
+				<li>data.selectTitle is added and shall replace data.selectName</li>
+			</ul>
+			<li>New setting to disable session limits entirely. (by @Reispfannenfresser)</li>
+			<li>Added <code>GM:TTT2AdminCheck</code> hook</li>
+			<ul>
+				<li>Replaced all <code>IsSuperAdmin()</code> checks with this hook</li>
+				<li>This hook can be used to allow custom usergroups through these checks</li>
+			</ul>
+			<li>Added convars to modify how fall damage is applied</li>
+			<ul>
+				<li><code>ttt2_falldmg_enable (default: 1)</code> toggles whether or not to apply fall damage at all</li>
+				<li><code>ttt2_falldmg_min_velocity (default: 450)</code> sets the minimum velocity threshold for fall damage to occur</li>
+				<li><code>ttt2_falldmg_exponent (default: 1.75)</code> sets the exponent to increase fall damage in relation to velocity</li>
+				<li>All these convars can also be adjusted in the F1->Administration->Player Settings menu</li>
+			</ul>
+			<li>Added portuguese translation</li>
+			<li>Added a <code>database</code> library, that handles shared Interaction with the sql database</li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li>Reworked Dropdowns Panel <code>DComboBoxTTT2</code> itself</li>
+			<ul>
+				<li><code>PANEL:AddChoice(title, value, select, icon, data)</code> now uses the second argument as value string for setting convars, use the fifth argument for special data instead</li>
+				<li><code>PANEL:ChooseOption(title, index, ignoreConVar)</code> is deprecated and no longer chooses the displayed text, only per index</li>
+			</ul>
+			<li>Reworked our simplified Dropdowns MakePanel <code>PANEL:MakeComboBox(data)</code> version</li>
+			<ul>
+				<li><code>data.OnChange(value, additionalData, comboBoxPanel)</code> is now called with the two important arguments at first. They are the value that e.g. convars are set, the additionalData and the Panel</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Corrected incorrect translation (by @sbzlzh)</li>
+			<li>Optimized damage indicator vgui images to be smaller</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed addon compatibility checker fussing over disabled addons</li>
+			<li>Fixed ammo entities blocking <code>+use</code> traces</li>
+			<li>Fixed double call of <code>GM:TTT2UpdateTeam</code>, when a role change leads to a team change</li>
+		</ul>
+	]], os.time({ year = 2022, month = 08, day = 05 }))
 
 	---
 	-- run hook for other addons to add their changelog as well
