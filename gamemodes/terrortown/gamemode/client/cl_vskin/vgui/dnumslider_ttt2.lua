@@ -148,9 +148,9 @@ end
 
 ---
 -- @param any val
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param bool ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(value, ignoreConVar)
+function PANEL:SetValue(value, ignoreNetworkedVars)
 	if not value then return end
 
 	value = math.Clamp(tonumber(value) or 0, self:GetMin(), self:GetMax())
@@ -163,21 +163,25 @@ function PANEL:SetValue(value, ignoreConVar)
 	self:ValueChanged(value)
 
 	-- Set ConVars only when Mouse is released
-	if ignoreConVar or self:IsEditing() then return end
+	if ignoreNetworkedVars or self:IsEditing() then return end
 
-	self:SetConVarValues(value)
+	self:SetNetworkedVarValues(value)
 end
 
 ---
 -- @param any val
 -- @realm client
-function PANEL:SetConVarValues(value)
+function PANEL:SetNetworkedVarValues(value)
 	if self.conVar then
 		self.conVar:SetFloat(value)
 	end
 
 	if self.serverConVar then
 		cvars.ChangeServerConVar(self.serverConVar, tostring(value))
+	end
+
+	if self.databaseInfo then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, val)
 	end
 end
 
@@ -284,6 +288,41 @@ function PANEL:SetServerConVar(cvar)
 	end
 
 	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+end
+
+---
+-- @param table databaseInfo containing {name, itemName, key}
+-- @realm client
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(database) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, "TTT2F1MenuDatabaseChangeCallback")
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, "TTT2F1MenuDatabaseChangeCallback")
 end
 
 ---

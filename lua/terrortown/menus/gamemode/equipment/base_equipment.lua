@@ -43,31 +43,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		if data.typ == "bool" then
 			option = form:MakeCheckBox({
 				label = name,
-				default = Invert(data, equipment.defaultValues[key]),
-				initial = Invert(data, equipment[key]),
-				OnChange = function(_, value)
-					net.Start("TTT2SESaveItem")
-					net.WriteString(equipment.id)
-					net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-					net.WriteString(key)
-					net.WriteBool(Invert(data, tobool(value)))
-					net.SendToServer()
-				end,
+				database = {name = ShopEditor.accessName, itemName = equipment.id, key = key},
 				master = data.master and masterRefs[data.master]
 			})
 		elseif data.typ == "number" then
 			if data.subtype == "enum" then
 				option = form:MakeComboBox({
 					label = name,
-					default = equipment.defaultValues[key],
-					OnChange = function(enum)
-						net.Start("TTT2SESaveItem")
-						net.WriteString(equipment.id)
-						net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-						net.WriteString(key)
-						net.WriteUInt(math.Round(enum), data.bits or 16)
-						net.SendToServer()
-					end,
+					database = {name = ShopEditor.accessName, itemName = equipment.id, key = key},
 					master = data.master and masterRefs[data.master]
 				})
 
@@ -82,16 +65,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 					min = data.min,
 					max = data.max,
 					decimal = 0,
-					default = equipment.defaultValues[key],
-					initial = equipment[key],
-					OnChange = function(_, value)
-						net.Start("TTT2SESaveItem")
-						net.WriteString(equipment.id)
-						net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-						net.WriteString(key)
-						net.WriteUInt(math.Round(value), data.bits or 16)
-						net.SendToServer()
-					end,
+					database = {name = ShopEditor.accessName, itemName = equipment.id, key = key},
 					master = data.master and masterRefs[data.master]
 				})
 			end

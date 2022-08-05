@@ -1262,6 +1262,39 @@ if SERVER then
 	end
 
 	---
+	-- Get the stored key values of the given database if it exists and was registered
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
+	-- @param[opt] table item The item table where all values get directly inserted if given
+	-- @return table, the requested stored values inserted into a table
+	-- @realm server
+	function database.GetStoredValues(accessName, itemName, item)
+		if not istable(item) then
+			item = {}
+		end
+
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.GetStoredValues failed. The registered Database of " .. accessName .. " is not registered.")
+
+			return item
+		end
+
+		local dataTable = index and registeredDatabases[index]
+
+		for key in pairs(dataTable.keys) do
+			local hasValue, value = database.GetValue(accessName, itemName, key)
+
+			if not hasValue then continue end
+
+			item[key] = value
+		end
+
+		return item
+	end
+
+	---
 	-- Get the stored table database if it exists and was registered
 	-- @note Only gets the saved and converted sql Tables, they dont include every possible item with their default values.
 	-- @param string accessName the chosen networkable name of the sql table
@@ -1405,6 +1438,39 @@ if SERVER then
 		end
 
 		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, registerIndex, SEND_TO_PLY_REGISTERED)
+	end
+
+	---
+	-- Use this to set item-specific defaults for all saved keys, to save storage space in the sql database
+	-- also syncs this to the clients
+	-- @param string accessName The chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param table item The item-table you want to set the default values from
+	-- @realm server
+	function database.SetDefaultValuesFromItem(accessName, itemName, item)
+		local index = nameToIndex[accessName]
+
+		if not index then
+			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The registered Database of " .. accessName .. " is not registered.")
+
+			return
+		end
+
+		if not istable(item) then
+			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The given item has no accessible values.")
+
+			return
+		end
+
+		local dataTable = registeredDatabases[index]
+
+		for key, keyData in pairs(dataTable.keys) do
+			local value = item[key]
+
+			if value == nil then continue end
+
+			database.SetDefaultValue(accessName, itemName, key, value)
+		end
 	end
 
 	---

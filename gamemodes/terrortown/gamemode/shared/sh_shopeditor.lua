@@ -10,6 +10,9 @@ ShopEditor.MODE_ADDED = 2
 ShopEditor.MODE_INHERIT_ADDED = 3
 ShopEditor.MODE_INHERIT_REMOVED = 4
 
+ShopEditor.sqlItemsName = "ttt2_items"
+ShopEditor.accessName = "Items"
+
 ShopEditor.groupTitles = {
 	[1] = "header_equipment_weapon_spawn_setup",
 	[2] = "header_equipment_setup",
@@ -217,85 +220,4 @@ function ShopEditor.InitDefaultData(item)
 
 		item.defaultValues[key] = item[key]
 	end
-end
-
----
--- Writes the @{ITEM} or @{Weapon} data to the network
--- @param string messageName
--- @param string name
--- @param ITEM|Weapon item
--- @param table|Player plys
--- @realm shared
-function ShopEditor.WriteItemData(messageName, name, item, plys)
-	name = GetEquipmentFileName(name)
-
-	if not name or not item then return end
-
-	net.Start(messageName)
-	net.WriteString(name)
-	net.WriteUInt(ShopEditor.savingKeysCount, ShopEditor.savingKeysBitCount or 16)
-
-	for key, data in pairs(ShopEditor.savingKeys) do
-		net.WriteString(key)
-
-		if data.typ == "number" then
-			net.WriteUInt(item[key], data.bits or 16)
-		elseif data.typ == "bool" then
-			net.WriteBool(item[key])
-		else
-			net.WriteString(item[key])
-		end
-	end
-
-	if SERVER then
-		local matched = false
-
-		for k = 1, #CHANGED_EQUIPMENT do
-			if CHANGED_EQUIPMENT[k][1] ~= name then continue end
-
-			matched = true
-		end
-
-		if not matched then
-			CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
-		end
-
-		if plys then
-			net.Send(plys)
-		else
-			net.Broadcast()
-		end
-	else
-		net.SendToServer()
-	end
-end
-
----
--- Reads the @{ITEM} or @{Weapon} data from the network
--- @return string name of the equipment
--- @return ITEM|Weapon equipment table
--- @realm shared
-function ShopEditor.ReadItemData()
-	local equip, name = GetEquipmentByName(net.ReadString())
-
-	if not equip then
-		return name
-	end
-
-	local keyCount = net.ReadUInt(ShopEditor.savingKeysBitCount or 16)
-
-	for i = 1, keyCount do
-		local key = net.ReadString()
-		local data = ShopEditor.savingKeys[key]
-
-		if data.typ == "number" then
-			equip[key] = net.ReadUInt(data.bits or 16)
-		elseif data.typ == "bool" then
-			equip[key] = net.ReadBool()
-		else
-			equip[key] = net.ReadString()
-		end
-	end
-
-	return name, equip
 end

@@ -162,9 +162,9 @@ end
 
 ---
 -- @param number index the option id
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] bool ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:ChooseOptionID(index, ignoreConVar)
+function PANEL:ChooseOptionID(index, ignoreNetworkedVars)
 	local choices = self.choices
 
 	if index > #choices then
@@ -183,9 +183,9 @@ function PANEL:ChooseOptionID(index, ignoreConVar)
 
 	self:CloseMenu()
 
-	if ignoreConVar then return end
+	if ignoreNetworkedVars then return end
 
-	self:SetConVarValues(tostring(value))
+	self:SetNetworkedVarValues(value)
 end
 
 ---
@@ -391,15 +391,54 @@ function PANEL:SetServerConVar(conVarName)
 end
 
 ---
+-- @param table databaseInfo containing {name, itemName, key}
+-- @realm client
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(database) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, "TTT2F1MenuDatabaseChangeCallback")
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, "TTT2F1MenuDatabaseChangeCallback")
+end
+
+---
 -- @param string value
 -- @realm client
-function PANEL:SetConVarValues(value)
+function PANEL:SetNetworkedVarValues(value)
 	if self.conVar then
-		self.conVar:SetString(value)
+		self.conVar:SetString(tostring(value))
 	end
 
 	if self.serverConVar then
-		cvars.ChangeServerConVar(self.serverConVar, value)
+		cvars.ChangeServerConVar(self.serverConVar, tostring(value))
+	end
+
+	if self.databaseInfo then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, value)
 	end
 end
 

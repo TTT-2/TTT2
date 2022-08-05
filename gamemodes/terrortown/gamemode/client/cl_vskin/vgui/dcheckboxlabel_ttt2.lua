@@ -12,7 +12,7 @@ AccessorFunc(PANEL, "m_iIndent", "Indent")
 ---
 -- @accessor bool
 -- @realm client
-AccessorFunc(PANEL, "ignoreConVar", "IgnoreConVar", FORCE_BOOL)
+AccessorFunc(PANEL, "ignoreNetworkedVar", "IgnoreNetworkedVar", FORCE_BOOL)
 
 ---
 -- @ignore
@@ -102,11 +102,46 @@ function PANEL:SetServerConVar(cvar)
 end
 
 ---
--- @param any val
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param table databaseInfo containing {name, itemName, key}
 -- @realm client
-function PANEL:SetValue(val, ignoreConVar)
-	self:SetIgnoreConVar(ignoreConVar)
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(database) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, "TTT2F1MenuDatabaseChangeCallback")
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, "TTT2F1MenuDatabaseChangeCallback")
+end
+
+---
+-- @param any val
+-- @param bool ignoreNetworkedVar To avoid endless loops, separated setting of networked vars and UI values
+-- @realm client
+function PANEL:SetValue(val, ignoreNetworkedVar)
+	self:SetIgnoreNetworkedVar(ignoreNetworkedVar)
 	self.Button:SetValue(val)
 end
 
@@ -259,10 +294,12 @@ end
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
-	if self.serverConVar and not self:GetIgnoreConVar() then
+	if self.serverConVar and not self:GetIgnoreNetworkedVar() then
 		cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
+	elseif self.databaseInfo and not self:GetIgnoreNetworkedVar() then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, val)
 	else
-		self:SetIgnoreConVar(false)
+		self:SetIgnoreNetworkedVar(false)
 	end
 
 	self:OnValueChanged(val)

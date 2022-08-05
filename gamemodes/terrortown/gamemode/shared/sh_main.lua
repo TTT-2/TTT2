@@ -98,26 +98,22 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		ResetDefaultEquipment(equipment)
 	end
 
-	if SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
-		local loaded, changed = sql.Load("ttt2_items", name, equipment, ShopEditor.savingKeys)
+	if SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY) then
+		database.SetDefaultValuesFromItem(ShopEditor.accessName, name, equipment)
+		database.GetStoredValues(ShopEditor.accessName, name, equipment)
 
-		if not loaded then
-			sql.Init("ttt2_items", name, equipment, ShopEditor.savingKeys)
-		elseif changed then
-			local counter = #CHANGED_EQUIPMENT + 1
+		-- Make sure that on hot reloads old callbacks are removed before adding the new one
+		local callbackIdentifier = "TTT2RegisteredSWEPCallback"
+		database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+		database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
+			if not istable(equipment) then
+				database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
 
-			if TTT2ShopFallbackInitialized then
-				for i = 1, #CHANGED_EQUIPMENT do
-					if CHANGED_EQUIPMENT[i][1] == name then
-						counter = i
-
-						break
-					end
-				end
+				return
 			end
 
-			CHANGED_EQUIPMENT[counter] = {name, equipment}
-		end
+			equipment[key] = newValue
+		end, callbackIdentifier)
 	end
 
 	if not doHotreload then return end

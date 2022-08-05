@@ -140,10 +140,11 @@ function PANEL:MakeCheckBox(data)
 	left:SetDefaultValue(data.default)
 	left:SetConVar(data.convar)
 	left:SetServerConVar(data.serverConvar)
+	left:SetDatabase(data.database)
 
 	left:SetTall(32)
 
-	if not data.convar and not data.serverConvar and data.initial then
+	if not data.convar and not data.serverConvar and not data.database and data.initial then
 		left:SetValue(data.initial)
 	end
 
@@ -195,9 +196,10 @@ function PANEL:MakeSlider(data)
 	right:SetDefaultValue(data.default)
 	right:SetConVar(data.convar)
 	right:SetServerConVar(data.serverConvar)
+	right:SetDatabase(data.database)
 	right:SizeToContents()
 
-	if not data.convar and not data.serverConvar and data.initial then
+	if not data.convar and not data.serverConvar and not data.database and data.initial then
 		right:SetValue(data.initial)
 	end
 
@@ -270,8 +272,10 @@ function PANEL:MakeComboBox(data)
 	local serverConVar = data.serverConvar or data.serverConVar
 	right:SetServerConVar(serverConVar)
 
+	right:SetDatabase(data.database)
+
 	-- Only choose an option, if no conVars are set
-	if not isstring(conVar) and not isstring(serverConVar) then
+	if not isstring(conVar) and not isstring(serverConVar) and not istable(data.database) then
 		if data.selectId then
 			right:ChooseOptionId(data.selectId, true)
 		elseif data.selectName or data.selectTitle then

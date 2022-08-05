@@ -93,7 +93,7 @@ function items.OnLoaded()
 		baseclass.Set(k, newTable)
 	end
 
-	local isSqlTableCreated = SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
+	local isSqlTableCreated = SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY)
 
 	for _, item in pairs(ItemList) do
 		InitDefaultEquipment(item)
@@ -101,13 +101,21 @@ function items.OnLoaded()
 
 		if SERVER and isSqlTableCreated then
 			local name = GetEquipmentFileName(WEPS.GetClass(item))
-			local loaded, changed = sql.Load("ttt2_items", name, item, ShopEditor.savingKeys)
+			database.SetDefaultValuesFromItem(ShopEditor.accessName, name, item)
+			database.GetStoredValues(ShopEditor.accessName, name, item)
 
-			if not loaded then
-				sql.Init("ttt2_items", name, item, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
-			end
+			-- Make sure that on hot reloads old callbacks are removed before adding the new one
+			local callbackIdentifier = "TTT2RegisteredItemsCallback"
+			database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+			database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
+				if not istable(item) then
+					database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+
+					return
+				end
+
+				item[key] = newValue
+			end, callbackIdentifier)
 		end
 
 		CreateEquipment(item) -- init items
