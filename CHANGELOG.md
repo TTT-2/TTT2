@@ -4,6 +4,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added sql database access to panel elements
+
+### Changed
+
+- Reworked shopeditor with database module
+
 ## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-05)
 
 ### Added
