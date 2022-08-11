@@ -181,7 +181,7 @@ function PANEL:SetNetworkedVarValues(value)
 	end
 
 	if self.databaseInfo then
-		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, val)
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, value)
 	end
 end
 
