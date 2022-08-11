@@ -13,11 +13,6 @@ ShopEditor.MODE_INHERIT_REMOVED = 4
 ShopEditor.sqlItemsName = "ttt2_items"
 ShopEditor.accessName = "Items"
 
-ShopEditor.groupTitles = {
-	[1] = "header_equipment_weapon_spawn_setup",
-	[2] = "header_equipment_setup",
-	[3] = "header_equipment_value_setup"
-}
 ShopEditor.savingKeys = {
 	AutoSpawnable = {
 		typ = "bool",
@@ -57,96 +52,6 @@ ShopEditor.savingKeys = {
 		typ = "number",
 		bits = 5,
 		default = 1
-	}
-}
-
-ShopEditor.F1Menu = {
-	AutoSpawnable = {
-		group = 1,
-		order = 10,
-		name = "auto_spawnable",
-		inverted = false,
-		b_desc = true,
-		showForItem = false,
-		master = nil
-	},
-	spawnType = {
-		group = 1,
-		order = 20,
-		subtype = "enum",
-		choices = entspawnscript.GetEntTypeList(SPAWN_TYPE_WEAPON, {[WEAPON_TYPE_RANDOM] = true}),
-		lookupNamesFunc = function(entType)
-			return entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)
-		end,
-		name = "spawn_type",
-		b_desc = false,
-		showForItem = false,
-		master = "AutoSpawnable"
-	},
-	notBuyable = {
-		group = 2,
-		order = 30,
-		name = "not_buyable",
-		inverted = true,
-		b_desc = true,
-		showForItem = true,
-		master = nil
-	},
-	NoRandom = {
-		group = 2,
-		order = 40,
-		name = "not_random",
-		inverted = false,
-		b_desc = true,
-		showForItem = true,
-		master = "notBuyable"
-	},
-	globalLimited = {
-		group = 2,
-		order = 50,
-		name = "global_limited",
-		inverted = false,
-		b_desc = true,
-		showForItem = true,
-		master = "notBuyable"
-	},
-	teamLimited = {
-		group = 2,
-		order = 60,
-		name = "team_limited",
-		inverted = false,
-		b_desc = true,
-		showForItem = true,
-		master = "notBuyable"
-	},
-	limited = {
-		group = 2,
-		order = 70,
-		name = "player_limited",
-		inverted = false,
-		b_desc = true,
-		showForItem = true,
-		master = "notBuyable"
-	},
-	minPlayers = {
-		group = 3,
-		order = 80,
-		min = 0,
-		max = 63,
-		name = "min_players",
-		b_desc = false,
-		showForItem = true,
-		master = "notBuyable"
-	},
-	credits = {
-		group = 3,
-		order = 90,
-		min = 0,
-		max = 20,
-		name = "credits",
-		b_desc = false,
-		showForItem = true,
-		master = "notBuyable"
 	}
 }
 

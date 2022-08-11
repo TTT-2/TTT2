@@ -15,64 +15,113 @@ end
 
 function CLGAMEMODESUBMENU:Populate(parent)
 	local equipment = self.equipment
-	local forms = {}
-	local form
-	local masterRefs = {}
+	local accessName = ShopEditor.accessName
+	local itemName = equipment.id
 
-	for key, data in SortedPairsByMemberValue(ShopEditor.savingKeys, "order", false) do
-		if self.isItem and not data.showForItem then continue end
+	if not self.isItem then
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_weapon_spawn_setup")
 
-		form = forms[data.group or 1]
+		form:MakeHelp({
+			label = "equipmenteditor_desc_auto_spawnable"
+		})
 
-		if not form then
-			form = vgui.CreateTTT2Form(parent, ShopEditor.groupTitles[data.group])
-			forms[data.group or 1] = form
+		local master = form:MakeCheckBox({
+			label = "equipmenteditor_name_auto_spawnable",
+			database = {name = accessName, itemName = itemName, key = "AutoSpawnable"}
+		})
+
+		local option = form:MakeComboBox({
+			label = "equipmenteditor_name_spawn_type",
+			database = {name = accessName, itemName = itemName, key = "spawnType"},
+			master = master
+		})
+
+		local entType
+		local entTypeList = entspawnscript.GetEntTypeList(SPAWN_TYPE_WEAPON, {[WEAPON_TYPE_RANDOM] = true})
+		for i = 1, #entTypeList do
+			entType = entTypeList[i]
+			option:AddChoice(TryT(entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)), entType)
 		end
-
-		local name = "equipmenteditor_name_" .. data.name
-		local desc = "equipmenteditor_desc_" .. data.name
-
-		if data.b_desc then
-			form:MakeHelp({
-				label = desc
-			})
-		end
-
-		local option
-
-		if data.typ == "bool" then
-			option = form:MakeCheckBox({
-				label = name,
-				database = {name = ShopEditor.accessName, itemName = equipment.id, key = key},
-				master = data.master and masterRefs[data.master]
-			})
-		elseif data.typ == "number" then
-			if data.subtype == "enum" then
-				option = form:MakeComboBox({
-					label = name,
-					database = {name = ShopEditor.accessName, itemName = equipment.id, key = key},
-					master = data.master and masterRefs[data.master]
-				})
-
-				local enum
-				for i = 1, #data.choices do
-					enum = data.choices[i]
-					option:AddChoice(TryT(data.lookupNamesFunc(enum)), enum, equipment[key] == enum)
-				end
-			else
-				option = form:MakeSlider({
-					label = name,
-					min = data.min,
-					max = data.max,
-					decimal = 0,
-					database = {name = ShopEditor.accessName, itemName = equipment.id, key = key},
-					master = data.master and masterRefs[data.master]
-				})
-			end
-		end
-
-		masterRefs[key] = option
 	end
+
+	local form = vgui.CreateTTT2Form(parent, "header_equipment_setup")
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_not_buyable"
+	})
+
+	local master = form:MakeCheckBox({
+		label = "equipmenteditor_name_not_buyable",
+		database = {name = accessName, itemName = itemName, key = "notBuyable"}
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_not_random"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_not_random",
+		database = {name = accessName, itemName = itemName, key = "NoRandom"},
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_global_limited"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_global_limited",
+		database = {name = accessName, itemName = itemName, key = "globalLimited"},
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_team_limited"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_team_limited",
+		database = {name = accessName, itemName = itemName, key = "teamLimited"},
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_player_limited"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_player_limited",
+		database = {name = accessName, itemName = itemName, key = "limited"},
+		master = master
+	})
+
+	form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_min_players"
+	})
+
+	form:MakeSlider({
+		label = "equipmenteditor_name_min_players",
+		min = 0,
+		max = 63,
+		decimal = 0,
+		database = {name = accessName, itemName = itemName, key = "minPlayers"},
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_credits"
+	})
+
+	form:MakeSlider({
+		label = "equipmenteditor_name_credits",
+		min = 0,
+		max = 20,
+		decimal = 0,
+		database = {name = accessName, itemName = itemName, key = "credits"},
+		master = master
+	})
 
 	-- Get inheritable version for weapons to access inherited functions
 	if not self.isItem then
