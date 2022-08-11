@@ -5,14 +5,6 @@ local TryT = LANG.TryTranslation
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
 
-local function Invert(data, value)
-	if data.inverted then
-		return not value
-	else
-		return value
-	end
-end
-
 function CLGAMEMODESUBMENU:Populate(parent)
 	local equipment = self.equipment
 	local accessName = ShopEditor.accessName
@@ -52,7 +44,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	local master = form:MakeCheckBox({
 		label = "equipmenteditor_name_not_buyable",
-		database = {name = accessName, itemName = itemName, key = "notBuyable"}
+		database = {name = accessName, itemName = itemName, key = "notBuyable"},
+		invert = true
 	})
 
 	form:MakeHelp({

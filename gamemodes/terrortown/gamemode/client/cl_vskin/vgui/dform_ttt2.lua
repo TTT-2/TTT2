@@ -135,6 +135,7 @@ function PANEL:MakeCheckBox(data)
 
 	left:SetText(data.label)
 	left:SetParams(data.params)
+	left:SetInverted(data.invert)
 
 	-- Set default if possible even if the convar could still overwrite it
 	left:SetDefaultValue(data.default)
@@ -153,7 +154,6 @@ function PANEL:MakeCheckBox(data)
 			data.OnChange(slf, value)
 		end
 	end
-
 
 	self:AddItem(left, nil, reset)
 

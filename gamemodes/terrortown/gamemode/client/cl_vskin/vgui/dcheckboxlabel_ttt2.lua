@@ -64,6 +64,13 @@ function PANEL:Paint(w, h)
 end
 
 ---
+-- @param bool invert
+-- @realm client
+function PANEL:SetInverted(invert)
+	self.inverted = tobool(invert)
+end
+
+---
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
@@ -142,6 +149,11 @@ end
 -- @realm client
 function PANEL:SetValue(val, ignoreNetworkedVar)
 	self:SetIgnoreNetworkedVar(ignoreNetworkedVar)
+
+	if self.inverted then
+		val = not val
+	end
+
 	self.Button:SetValue(val)
 end
 
