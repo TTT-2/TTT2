@@ -18,13 +18,52 @@ ShopEditor.groupTitles = {
 	[2] = "header_equipment_setup",
 	[3] = "header_equipment_value_setup"
 }
-
 ShopEditor.savingKeys = {
+	AutoSpawnable = {
+		typ = "bool",
+		default = false
+	},
+	spawnType = {
+		typ = "number",
+		bits = 5,
+		default = WEAPON_TYPE_SPECIAL
+	},
+	notBuyable = {
+		typ = "bool",
+		default = false
+	},
+	NoRandom = {
+		typ = "bool",
+		default = false
+	},
+	globalLimited = {
+		typ = "bool",
+		default = false
+	},
+	teamLimited = {
+		typ = "bool",
+		default = false
+	},
+	limited = {
+		typ = "bool",
+		default = false
+	},
+	minPlayers = {
+		typ = "number",
+		bits = 6,
+		default = 0
+	},
+	credits = {
+		typ = "number",
+		bits = 5,
+		default = 1
+	}
+}
+
+ShopEditor.F1Menu = {
 	AutoSpawnable = {
 		group = 1,
 		order = 10,
-		typ = "bool",
-		default = false,
 		name = "auto_spawnable",
 		inverted = false,
 		b_desc = true,
@@ -34,10 +73,7 @@ ShopEditor.savingKeys = {
 	spawnType = {
 		group = 1,
 		order = 20,
-		typ = "number",
 		subtype = "enum",
-		bits = 5,
-		default = WEAPON_TYPE_SPECIAL,
 		choices = entspawnscript.GetEntTypeList(SPAWN_TYPE_WEAPON, {[WEAPON_TYPE_RANDOM] = true}),
 		lookupNamesFunc = function(entType)
 			return entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)
@@ -50,8 +86,6 @@ ShopEditor.savingKeys = {
 	notBuyable = {
 		group = 2,
 		order = 30,
-		typ = "bool",
-		default = false,
 		name = "not_buyable",
 		inverted = true,
 		b_desc = true,
@@ -61,8 +95,6 @@ ShopEditor.savingKeys = {
 	NoRandom = {
 		group = 2,
 		order = 40,
-		typ = "bool",
-		default = false,
 		name = "not_random",
 		inverted = false,
 		b_desc = true,
@@ -72,8 +104,6 @@ ShopEditor.savingKeys = {
 	globalLimited = {
 		group = 2,
 		order = 50,
-		typ = "bool",
-		default = false,
 		name = "global_limited",
 		inverted = false,
 		b_desc = true,
@@ -83,8 +113,6 @@ ShopEditor.savingKeys = {
 	teamLimited = {
 		group = 2,
 		order = 60,
-		typ = "bool",
-		default = false,
 		name = "team_limited",
 		inverted = false,
 		b_desc = true,
@@ -94,8 +122,6 @@ ShopEditor.savingKeys = {
 	limited = {
 		group = 2,
 		order = 70,
-		typ = "bool",
-		default = false,
 		name = "player_limited",
 		inverted = false,
 		b_desc = true,
@@ -105,9 +131,6 @@ ShopEditor.savingKeys = {
 	minPlayers = {
 		group = 3,
 		order = 80,
-		typ = "number",
-		bits = 6,
-		default = 0,
 		min = 0,
 		max = 63,
 		name = "min_players",
@@ -118,9 +141,6 @@ ShopEditor.savingKeys = {
 	credits = {
 		group = 3,
 		order = 90,
-		typ = "number",
-		bits = 5,
-		default = 1,
 		min = 0,
 		max = 20,
 		name = "credits",
