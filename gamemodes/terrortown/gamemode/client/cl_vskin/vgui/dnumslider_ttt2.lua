@@ -76,7 +76,7 @@ end
 
 ---
 -- This function is called, when the slider starts and ends being dragged
--- Calls SetConVarValue only after the dragging ends to not sync every change
+-- Calls SetNetworkedVarValues only after the dragging ends to not sync every change
 -- @param bool setDragging the state it is changed to
 -- @realm client
 function PANEL:OnChangeDragging(setDragging)
@@ -85,7 +85,7 @@ function PANEL:OnChangeDragging(setDragging)
 	if setDragging then
 		self.valueBeforeDragging = value
 	elseif value ~= self.valueBeforeDragging then
-		self:SetConVarValues(value)
+		self:SetNetworkedVarValues(value)
 	end
 end
 
@@ -262,6 +262,7 @@ function PANEL:SetConVar(cvar)
 	self:SetDefaultValue(tonumber(GetConVar(cvar):GetDefault()))
 end
 
+local networkedVarTracker = 0
 ---
 -- @param string cvar
 -- @realm client
@@ -277,9 +278,12 @@ function PANEL:SetServerConVar(cvar)
 		end
 	end)
 
+	networkedVarTracker = networkedVarTracker % 1023 + 1
+	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(networkedVarTracker)
+
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
-			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
 
 			return
 		end
@@ -287,7 +291,7 @@ function PANEL:SetServerConVar(cvar)
 		self:SetValue(tonumber(newValue), true)
 	end
 
-	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, myIdentifierString)
 end
 
 ---
@@ -312,9 +316,12 @@ function PANEL:SetDatabase(databaseInfo)
 
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
+	networkedVarTracker = networkedVarTracker % 1023 + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(networkedVarTracker)
+
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then
-			database.RemoveChangeCallback(name, itemName, key, "TTT2F1MenuDatabaseChangeCallback")
+			database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
 
 			return
 		end
@@ -322,7 +329,7 @@ function PANEL:SetDatabase(databaseInfo)
 		self:SetValue(newValue, true)
 	end
 
-	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, "TTT2F1MenuDatabaseChangeCallback")
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
 end
 
 ---

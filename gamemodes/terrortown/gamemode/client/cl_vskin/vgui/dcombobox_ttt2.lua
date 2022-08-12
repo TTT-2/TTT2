@@ -336,13 +336,13 @@ function PANEL:SetValue(value, ignoreConVar)
 	self:ChooseOptionValue(value, ignoreConVar)
 end
 
-local convarTracker = 0
+local networkedVarTracker = 0
 ---
 -- @param Panel menu to set the value of
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(menu, conVar)
-	convarTracker = convarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuConVarChangeCallback" .. tostring(convarTracker)
+	networkedVarTracker = networkedVarTracker % 1023 + 1
+	local myIdentifierString = "TTT2F1MenuConVarChangeCallback" .. tostring(networkedVarTracker)
 
 	local function OnConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(menu) then
@@ -412,9 +412,12 @@ function PANEL:SetDatabase(databaseInfo)
 
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
+	networkedVarTracker = networkedVarTracker % 1023 + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(networkedVarTracker)
+
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then
-			database.RemoveChangeCallback(name, itemName, key, "TTT2F1MenuDatabaseChangeCallback")
+			database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
 
 			return
 		end
@@ -422,7 +425,7 @@ function PANEL:SetDatabase(databaseInfo)
 		self:SetValue(newValue, true)
 	end
 
-	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, "TTT2F1MenuDatabaseChangeCallback")
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
 end
 
 ---
