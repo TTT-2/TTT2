@@ -90,10 +90,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
 
-	form:MakeHelp({
-		label = "equipmenteditor_desc_min_players"
-	})
-
 	form:MakeSlider({
 		label = "equipmenteditor_name_min_players",
 		min = 0,
@@ -101,10 +97,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 0,
 		database = {name = accessName, itemName = itemName, key = "minPlayers"},
 		master = master
-	})
-
-	form:MakeHelp({
-		label = "equipmenteditor_desc_credits"
 	})
 
 	form:MakeSlider({
