@@ -171,6 +171,10 @@ function PANEL:SetDefaultValue(value)
 	local noDefault = true
 
 	if isbool(value) then
+		if self.inverted then
+			value = not value
+		end
+
 		self.default = value
 		noDefault = false
 	else
@@ -313,6 +317,10 @@ end
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
+	if self.inverted then
+		val = not val
+	end
+
 	if self.serverConVar and not self:GetIgnoreNetworkedVar() then
 		cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
 	elseif self.databaseInfo and not self:GetIgnoreNetworkedVar() then
