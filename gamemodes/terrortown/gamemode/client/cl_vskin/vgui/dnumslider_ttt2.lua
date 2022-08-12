@@ -294,7 +294,7 @@ end
 -- @param table databaseInfo containing {name, itemName, key}
 -- @realm client
 function PANEL:SetDatabase(databaseInfo)
-	if not istable(database) then return end
+	if not istable(databaseInfo) then return end
 
 	local name = databaseInfo.name
 	local itemName = databaseInfo.itemName

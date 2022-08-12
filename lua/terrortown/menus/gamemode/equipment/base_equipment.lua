@@ -22,18 +22,20 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			database = {name = accessName, itemName = itemName, key = "AutoSpawnable"}
 		})
 
-		local option = form:MakeComboBox({
-			label = "equipmenteditor_name_spawn_type",
-			database = {name = accessName, itemName = itemName, key = "spawnType"},
-			master = master
-		})
-
 		local entType
 		local entTypeList = entspawnscript.GetEntTypeList(SPAWN_TYPE_WEAPON, {[WEAPON_TYPE_RANDOM] = true})
+		local choices = {}
 		for i = 1, #entTypeList do
 			entType = entTypeList[i]
-			option:AddChoice(TryT(entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)), entType)
+			choices[i] = {title = TryT(entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)), value = entType}
 		end
+
+		form:MakeComboBox({
+			label = "equipmenteditor_name_spawn_type",
+			database = {name = accessName, itemName = itemName, key = "spawnType"},
+			choices = choices,
+			master = master
+		})
 	end
 
 	local form = vgui.CreateTTT2Form(parent, "header_equipment_setup")
