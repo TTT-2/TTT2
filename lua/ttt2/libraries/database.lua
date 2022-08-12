@@ -1301,26 +1301,30 @@ if SERVER then
 
 		item[key] = saveValue
 
-		if saveValue ~= nil then
-			item:Save()
-		else
+		local saveItem = true
+
+		if saveValue == nil then
 			database.ConvertTable(item, accessName)
 
-			local isNil = true
+			saveItem = false
 
 			-- Check if there is still a value saved for any of the keys
 			for curKey in pairs(dataTable.keys) do
 				if item[curKey] ~= nil then
-					isNil = false
+					saveItem = true
 
 					break
 				end
 			end
 
 			-- Delete the item if there is nothing to save
-			if isNil then
+			if not saveItem then
 				item:Delete()
 			end
+		end
+
+		if saveItem then
+			item:Save()
 		end
 
 		OnChange(index, itemName, key, value)
