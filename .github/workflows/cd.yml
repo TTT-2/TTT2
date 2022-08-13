@@ -9,11 +9,6 @@ on:
 jobs:
   deploy-to-dev:
     runs-on: ubuntu-latest
-    # The concurrency group should match the environment name this deploys to.
-    # If set correctly this marks only one deployment on that env as 'active' in the GitHub UI.
-    concurrency:
-      group: histalek-dev-env
-      cancel-in-progress: true
     environment:
       name: histalek-dev-env
       # Sadly a 'steam://connect/<server_domain>' url is not allowed by github
