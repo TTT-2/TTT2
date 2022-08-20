@@ -328,7 +328,7 @@ end
 
 ---
 -- Converts the given value of a database with its key
--- @warning this function should only be internally used and shall be removed and replaced with orm conversion. 
+-- @warning this function shall be removed and replaced with orm conversion. 
 -- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
 -- while the other uses "0" and "1" for booleans
 -- @param string value the value to convert with a key
@@ -357,14 +357,14 @@ end
 
 ---
 -- Converts the given table of a database
--- @warning this function should only be internally used and shall be removed and replaced with orm conversion. 
+-- @warning this function shall be removed and replaced with orm conversion. 
 -- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
 -- while the other uses "0" and "1" for booleans
 -- @param table dataTable the table to convert with their respective keys
 -- @param string accessName the chosen accessName registered for a given database.
 -- @realm shared
 -- @internal
-function database.ConvertTable(dataTable, accessName)
+local function ConvertTable(dataTable, accessName)
 	if not istable(dataTable) then return end
 
 	local index = nameToIndex[accessName]
@@ -633,28 +633,6 @@ end
 -- @internal
 clientReceiveFunctions[MESSAGE_RESET] = function()
 	ResetDatabase(net.ReadUInt(uIntBits))
-end
-
----
--- Send query for getting a default value to server
--- @warning This function is not yet implemented
--- as currently all key- and item-specific default values are automatically synced
--- @param table data contains nothing yet
--- @realm client
--- @internal
-clientSendFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
-	ErrorNoHalt("[TTT2] MESSAGE_GET_DEFAULTVALUE as client send function to request default values is not implemented yet.")
-end
-
----
--- Receive query for getting a default value from client
--- @warning This function is not yet implemented
--- as currently all key- and item-specific default values are automatically synced
--- @param string plyID64 the playerID64 of the player who sent the message
--- @realm server
--- @internal
-serverReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function(plyID64)
-	ErrorNoHalt("[TTT2] MESSAGE_GET_DEFAULTVALUE as server receive function for requested default values is not implemented yet.")
 end
 
 ---
@@ -1241,7 +1219,7 @@ if SERVER then
 				return true, value
 			end
 
-			database.ConvertTable(sqlData, accessName)
+			ConvertTable(sqlData, accessName)
 			dataTable.storedData[itemName] = sqlData
 		else
 			-- Get all data, convert and return it
@@ -1252,7 +1230,7 @@ if SERVER then
 			end
 
 			for _, item in pairs(sqlData) do
-				database.ConvertTable(item, accessName)
+				ConvertTable(item, accessName)
 			end
 
 			-- Convert numerical indices to string indices with the itemName
@@ -1340,7 +1318,7 @@ if SERVER then
 		local saveItem = true
 
 		if saveValue == nil then
-			database.ConvertTable(item, accessName)
+			ConvertTable(item, accessName)
 
 			saveItem = false
 
