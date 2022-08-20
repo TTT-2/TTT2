@@ -17,11 +17,14 @@ local maxBytesPerMessage = 32 * 1000 -- Can be up to 65.533KB see: https://wiki.
 local uIntBits = 8 -- we can synchronize up to 2 ^ uIntBits - 1 different sqlTables
 local maxUInt = 2 ^ uIntBits - 1
 
-local databaseCount = 0
+-- Save for hotreloadability
+database.registeredDatabases = database.registeredDatabases or {}
+database.receivedValues = database.receivedValues or {}
+database.nameToIndex = database.nameToIndex or {}
 
-local registeredDatabases = {}
-local receivedValues = {}
-local nameToIndex = {}
+local registeredDatabases = database.registeredDatabases
+local receivedValues = database.receivedValues
+local nameToIndex = database.nameToIndex
 
 -- Identifier enums to determine protection level of database-access
 TTT2_DATABASE_ACCESS_ANY = 10
@@ -58,15 +61,22 @@ local onWaitReceiveFunctionCache = {}
 local requestCache = {}
 local functionCache = {}
 
-local playersCache = {}
-local registeredPlayersTable = {}
+-- Save and restore for hotreloadability
+database.registeredPlayersCache = database.registeredPlayersCache or {}
+database.registeredPlayersIndexTable = database.registeredPlayersIndexTable or {}
+database.playerID64Cache = database.playerID64Cache or {}
+database.callbackCache = database.callbackCache or {}
+database.callbackIdentifiers = database.callbackIdentifiers or {}
 
-local allCallbackString = "__allCallbacks"
-local callbackCache = {}
-local callbackIdentifiers = {}
+local registeredPlayersCache = database.registeredPlayersCache
+local registeredPlayersIndexTable = database.registeredPlayersIndexTable
 
 -- Saves all ID64 of players that sent a message
-local playerID64Cache = {}
+local playerID64Cache = database.playerID64Cache
+
+local allCallbackString = "__allCallbacks"
+local callbackCache = database.callbackCache
+local callbackIdentifiers = database.callbackIdentifiers
 
 --
 -- General Shared functions
@@ -705,11 +715,12 @@ local function SynchronizeStates(len, ply)
 
 	local plyID64
 
-	if SERVER and ply:IsValid() then
+	if SERVER then
+		if not ply:IsValid() then return end
+
 		plyID64 = ply:SteamID64()
-		playerID64Cache[plyID64] = ply
-	elseif SERVER then
-		return
+
+		if not playerID64Cache[plyID64] then return end
 	end
 
 	-- As size is unclear at start of the message and `net.BytesLeft` is not working
@@ -781,9 +792,9 @@ local function SendUpdatesNow()
 				if plyIdentifier == SEND_TO_PLY_ALL then
 					net.Broadcast()
 				elseif plyIdentifier == SEND_TO_PLY_REGISTERED then
-					net.Send(registeredPlayersTable[index])
+					net.Send(registeredPlayersIndexTable[index] or {})
 				elseif IsPlayer(playerID64Cache[plyIdentifier]) then
-					net.Send(playerID64Cache[plyIdentifier])
+					net.Send(playerID64Cache[plyIdentifier] or {})
 				end
 			elseif CLIENT then
 				net.SendToServer()
@@ -998,21 +1009,21 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	local function RegisterPlayer(index, plyID64)
-		if playersCache[plyID64] and playersCache[plyID64][index] then return end
+		if registeredPlayersCache[plyID64] and registeredPlayersCache[plyID64][index] then return end
 
 		-- If player wasnt cached yet, add them to all registered Players
-		if not playersCache[plyID64] then
-			registeredPlayersTable[INDEX_NONE] = registeredPlayersTable[INDEX_NONE] or {}
-			registeredPlayersTable[INDEX_NONE][#registeredPlayersTable[INDEX_NONE] + 1] = playerID64Cache[plyID64]
+		if not registeredPlayersCache[plyID64] then
+			registeredPlayersIndexTable[INDEX_NONE] = registeredPlayersIndexTable[INDEX_NONE] or {}
+			registeredPlayersIndexTable[INDEX_NONE][#registeredPlayersIndexTable[INDEX_NONE] + 1] = playerID64Cache[plyID64]
 		end
 
-		playersCache[plyID64] = playersCache[plyID64] or {INDEX_NONE = true}
-		playersCache[plyID64][index] = true
+		registeredPlayersCache[plyID64] = registeredPlayersCache[plyID64] or {INDEX_NONE = true}
+		registeredPlayersCache[plyID64][index] = true
 
 		if index == INDEX_NONE then return end
 
-		registeredPlayersTable[index] = registeredPlayersTable[index] or {}
-		registeredPlayersTable[index][#registeredPlayersTable[index] + 1] = playerID64Cache[plyID64]
+		registeredPlayersIndexTable[index] = registeredPlayersIndexTable[index] or {}
+		registeredPlayersIndexTable[index][#registeredPlayersIndexTable[index] + 1] = playerID64Cache[plyID64]
 	end
 
 	---
@@ -1104,7 +1115,7 @@ if SERVER then
 			return true
 		end
 
-		databaseCount = databaseCount + 1
+		local databaseCount = #registeredDatabases + 1
 
 		registeredDatabases[databaseCount] = {
 			accessName = accessName,
@@ -1439,25 +1450,39 @@ if SERVER then
 	end
 
 	-- Sync databases to all authenticated players
-	hook.Add("PlayerAuthed", "TTT2SyncDatabaseIndexTableToAuthorizedPlayers", function(ply, plyID64, uniqueID)
+	hook.Add("PlayerAuthed", "TTT2SyncDatabaseIndexTableToAuthorizedPlayers", function(ply, steamID, uniqueID)
+		local plyID64 = ply:SteamID64()
+
 		if not IsValid(ply) then return end
 
 		playerID64Cache[plyID64] = ply
+
 		database.SyncRegisteredDatabases(plyID64)
 	end)
 
 	-- Remove disconnected players, that were additionally registered due to requesting or setting data
 	hook.Add("PlayerDisconnected", "TTT2RemovePlayerOfRegisteredPlayersTable", function(ply)
-		if not IsValid(ply) or not playersCache[ply:SteamID64()] then return end
+		if not IsValid(ply) then return end
 
-		playersCache[ply:SteamID64()] = nil
+		local plyID64 = ply:SteamID64()
+		playerID64Cache[plyID64] = nil
 
-		for index, players in pairs(registeredPlayersTable) do
+		if not registeredPlayersCache[plyID64] then return end
+
+		registeredPlayersCache[plyID64] = nil
+
+		local deleteIndices = {}
+
+		for index, players in pairs(registeredPlayersIndexTable) do
 			table.RemoveByValue(players, ply)
 
 			if table.IsEmpty(players) then
-				registeredPlayersTable[index] = nil
+				deleteIndices[#deleteIndices + 1] = index
 			end
+		end
+
+		for i = 1, #deleteIndices do
+			registeredPlayersIndexTable[deleteIndices[i]] = nil
 		end
 	end)
 end
