@@ -39,6 +39,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed addon compatibility checker fussing over disabled addons
 - Fixed ammo entities blocking +use traces
 - Fixed double call of `GM:TTT2UpdateTeam`, when a role change leads to a team change
+- Fixed hotreload of TTT2 due to roles library not global
 
 ## [v0.11.4b](https://github.com/TTT-2/TTT2/tree/v0.11.4b) (2021-12-17)
 
