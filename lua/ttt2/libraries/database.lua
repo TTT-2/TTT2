@@ -40,6 +40,9 @@ local SEND_TO_PLY_ALL = "all"
 local SEND_TO_PLY_REGISTERED = "registered"
 local SEND_TO_PLY_SERVER = "server"
 
+-- Placeholder string, when no actual index is needed
+local INDEX_NONE = "none"
+
 -- Stores the data and the players it is send to
 local dataStore = {}
 
@@ -758,67 +761,78 @@ local function SendUpdatesNow()
 
 	if table.IsEmpty(dataStore) then return end
 
-	-- Send one message per plyIdentifier
+	-- Send one message per plyIdentifier and index
 	-- This can either be a limited playerList or just one player
 	local plyDeleteIdentifiers = {}
-	for plyIdentifier, identifierList in pairs(dataStore) do
-		net.Start("TTT2SynchronizeDatabase")
+	for plyIdentifier, indexList in pairs(dataStore) do
+		local indexDeleteIdentifiers = {}
+		for index, identifierList in pairs(indexList) do
+			net.Start("TTT2SynchronizeDatabase")
 
-		-- Then go through all message identifiers and their cached data
-		-- and send them accordingly
-		local stopSending = false
-		local deleteIdentifiers = {}
-		for identifier, indexedData in pairs(identifierList) do
-			net.WriteBool(true)
-			net.WriteUInt(identifier, uIntBits)
-			net.WriteBool(#indexedData > 0)
+			-- Then go through all message identifiers and their cached data
+			-- and send them accordingly
+			local stopSending = false
+			local deleteIdentifiers = {}
+			for identifier, indexedData in pairs(identifierList) do
+				net.WriteBool(true)
+				net.WriteUInt(identifier, uIntBits)
+				net.WriteBool(#indexedData > 0)
 
-			-- Add data to one message as long as `net.BytesWritten` are not exceeding the limit
-			-- Use bools to determine the end as `net.BytesLeft` is not working and we dont know the size before this loop
-			for i = #indexedData, 1, -1 do
-				sendDataFunctions[identifier](indexedData[i])
-				indexedData[i] = nil
+				-- Add data to one message as long as `net.BytesWritten` are not exceeding the limit
+				-- Use bools to determine the end as `net.BytesLeft` is not working and we dont know the size before this loop
+				for i = #indexedData, 1, -1 do
+					sendDataFunctions[identifier](indexedData[i])
+					indexedData[i] = nil
 
-				stopSending = net.BytesWritten() >= maxBytesPerMessage
+					stopSending = net.BytesWritten() >= maxBytesPerMessage
 
-				net.WriteBool( not (stopSending or i == 1))
+					net.WriteBool( not (stopSending or i == 1))
+
+					if stopSending then break end
+				end
+
+				if #indexedData <= 0 then
+					deleteIdentifiers[identifier] = true
+				end
 
 				if stopSending then break end
 			end
+			net.WriteBool(false)
 
-			if #indexedData <= 0 then
-				deleteIdentifiers[identifier] = true
+			if SERVER then
+				if plyIdentifier == SEND_TO_PLY_ALL then
+					net.Broadcast()
+				elseif plyIdentifier == SEND_TO_PLY_REGISTERED then
+					net.Send(registeredPlayersTable[index])
+				elseif IsPlayer(playerID64Cache[plyIdentifier]) then
+					net.Send(playerID64Cache[plyIdentifier])
+				end
+			elseif CLIENT then
+				net.SendToServer()
 			end
 
-			if stopSending then break end
-		end
-		net.WriteBool(false)
-
-		if SERVER then
-			if plyIdentifier == SEND_TO_PLY_ALL then
-				net.Broadcast()
-			elseif plyIdentifier == SEND_TO_PLY_REGISTERED then
-				net.Send(registeredPlayersTable)
-			elseif IsPlayer(playerID64Cache[plyIdentifier]) then
-				net.Send(playerID64Cache[plyIdentifier])
+			-- Delete the cache of data that was already sent
+			for identifier in pairs(deleteIdentifiers) do
+				identifierList[identifier] = nil
 			end
-		elseif CLIENT then
-			net.SendToServer()
+
+			if table.IsEmpty(identifierList) then
+				indexDeleteIdentifiers[index] = true
+			end
+
+			-- If data was left, send them next frame
+			if stopSending and not sendRequestsNextUpdate then
+				sendRequestsNextUpdate = true
+				timer.Simple(0, SendUpdatesNow)
+			end
 		end
 
-		-- Delete the cache of data that was already sent
-		for identifier in pairs(deleteIdentifiers) do
-			dataStore[plyIdentifier][identifier] = nil
+		for index in pairs(indexDeleteIdentifiers) do
+			indexList[index] = nil
 		end
 
-		if #identifierList <= 0 then
+		if table.IsEmpty(indexList) then
 			plyDeleteIdentifiers[plyIdentifier] = true
-		end
-
-		-- If data was left, send them next frame
-		if stopSending and not sendRequestsNextUpdate then
-			sendRequestsNextUpdate = true
-			timer.Simple(0, SendUpdatesNow())
 		end
 	end
 
@@ -832,14 +846,17 @@ end
 -- @note on the client plyIdentifier is unused and always sends to the server
 -- @param number identifier the identifiers used in send and receive messages, defined in `MESSAGE_`-enums
 -- @param any data the data for the send method. Can contain anything and is defined above each send or receive method itself
+-- @param[opt] any registerIndex the index of the database you want to send an update for. INDEX_NONE when no index is given or every player registered player should receive the info
 -- @param[opt] string plyIdentifier (serverside-only) the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 -- @realm shared
 -- @internal
-local function SendUpdateNextTick(identifier, data, plyIdentifier)
+local function SendUpdateNextTick(identifier, data, registerIndex, plyIdentifier)
 	if not sendRequestsNextUpdate then
 		sendRequestsNextUpdate = true
 		timer.Simple(0, SendUpdatesNow)
 	end
+
+	registerIndex = registerIndex or INDEX_NONE
 
 	if CLIENT then
 		plyIdentifier = SEND_TO_PLY_SERVER
@@ -851,8 +868,9 @@ local function SendUpdateNextTick(identifier, data, plyIdentifier)
 
 	-- Store data
 	local tempStore = dataStore[plyIdentifier] or {}
-	tempStore[identifier] = tempStore[identifier] or {}
-	tempStore[identifier][#tempStore[identifier] + 1] = data
+	tempStore[registerIndex] = tempStore[registerIndex] or {}
+	tempStore[registerIndex][identifier] = tempStore[registerIndex][identifier] or {}
+	tempStore[registerIndex][identifier][#tempStore[registerIndex][identifier] + 1] = data
 
 	dataStore[plyIdentifier] = tempStore
 end
@@ -997,14 +1015,26 @@ if SERVER then
 	---
 	-- Registers players that are notified of all changes
 	-- @note this function is called when a player makes a request to the server
+	-- @param number index the index of the database you want to register a player for with access rights
 	-- @param string plyID64 the player steam ID 64
 	-- @realm server
 	-- @internal
-	local function RegisterPlayer(plyID64)
+	local function RegisterPlayer(index, plyID64)
+		if playersCache[plyID64] and playersCache[plyID64][index] then return end
+
+		-- If player wasnt cached yet, add them to all registered Players
 		if not playersCache[plyID64] then
-			playersCache[plyID64] = true
-			registeredPlayersTable[#registeredPlayersTable + 1] = playerID64Cache[plyID64]
+			registeredPlayersTable[INDEX_NONE] = registeredPlayersTable[INDEX_NONE] or {}
+			registeredPlayersTable[INDEX_NONE][#registeredPlayersTable[INDEX_NONE] + 1] = playerID64Cache[plyID64]
 		end
+
+		playersCache[plyID64] = playersCache[plyID64] or {INDEX_NONE = true}
+		playersCache[plyID64][index] = true
+
+		if index == INDEX_NONE then return end
+
+		registeredPlayersTable[index] = registeredPlayersTable[index] or {}
+		registeredPlayersTable[index][#registeredPlayersTable[index] + 1] = playerID64Cache[plyID64]
 	end
 
 	---
@@ -1053,7 +1083,8 @@ if SERVER then
 				identifier = identifier,
 				tableCount = tableCount
 			}
-			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, plyIdentifier)
+
+			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, plyIdentifier)
 
 			local defaultData = registeredDatabases[databaseNumber].defaultData
 
@@ -1066,7 +1097,7 @@ if SERVER then
 				defaultData = defaultData
 			}
 
-			SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, dataDefault, plyIdentifier)
+			SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, dataDefault, INDEX_NONE, plyIdentifier)
 		end
 	end
 
@@ -1111,7 +1142,7 @@ if SERVER then
 
 		local data = {index = databaseCount}
 
-		SendUpdateNextTick(MESSAGE_REGISTER, data, SEND_TO_PLY_ALL)
+		SendUpdateNextTick(MESSAGE_REGISTER, data, INDEX_NONE, SEND_TO_PLY_ALL)
 
 		return true
 	end
@@ -1142,9 +1173,14 @@ if SERVER then
 			value = value
 		}
 
-		RegisterPlayer(plyID64)
+		-- If accessLevel is the lowest, register the player for every callback on that database
+		local registerIndex = index
+		if registeredDatabases[index].accessLevel >= TTT2_DATABASE_ACCESS_ANY then
+			registerIndex = INDEX_NONE
+		end
+		RegisterPlayer(registerIndex, plyID64)
 
-		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, plyID64)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, INDEX_NONE, plyID64)
 	end
 
 	---
@@ -1329,7 +1365,13 @@ if SERVER then
 
 		OnChange(index, itemName, key, value)
 
-		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value}, SEND_TO_PLY_REGISTERED)
+		-- If accessLevel is the lowest, send database update to every player
+		local registerIndex = index
+		if dataTable.accessLevel >= TTT2_DATABASE_ACCESS_ANY then
+			registerIndex = INDEX_NONE
+		end
+
+		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value}, registerIndex, SEND_TO_PLY_REGISTERED)
 	end
 
 	---
@@ -1367,7 +1409,13 @@ if SERVER then
 
 		dataTable.defaultData = defaultData
 
-		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, SEND_TO_PLY_REGISTERED)
+		-- If accessLevel is the lowest, send database update to every player
+		local registerIndex = index
+		if dataTable.accessLevel >= TTT2_DATABASE_ACCESS_ANY then
+			registerIndex = INDEX_NONE
+		end
+
+		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, registerIndex, SEND_TO_PLY_REGISTERED)
 	end
 
 	---
@@ -1403,7 +1451,13 @@ if SERVER then
 
 		ResetDatabase(index)
 
-		SendUpdateNextTick(MESSAGE_RESET, {index = index}, SEND_TO_PLY_REGISTERED)
+		-- If accessLevel is the lowest, send database update to every player
+		local registerIndex = index
+		if dataTable.accessLevel >= TTT2_DATABASE_ACCESS_ANY then
+			registerIndex = INDEX_NONE
+		end
+
+		SendUpdateNextTick(MESSAGE_RESET, {index = index}, registerIndex, SEND_TO_PLY_REGISTERED)
 	end
 
 	-- Sync databases to all authenticated players
@@ -1419,6 +1473,13 @@ if SERVER then
 		if not IsValid(ply) or not playersCache[ply:SteamID64()] then return end
 
 		playersCache[ply:SteamID64()] = nil
-		table.RemoveByValue(registeredPlayersTable, ply)
+
+		for index, players in pairs(registeredPlayersTable) do
+			table.RemoveByValue(players, ply)
+
+			if table.IsEmpty(players) then
+				registeredPlayersTable[index] = nil
+			end
+		end
 	end)
 end
