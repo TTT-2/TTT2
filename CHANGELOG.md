@@ -35,6 +35,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - - Corrected incorrect translation (by @sbzlzh)
 - Optimized damage indicator vgui images to be smaller
+- Improved hotreload of TTT2 roles library with RoleList not being global
 
 ### Fixed
 

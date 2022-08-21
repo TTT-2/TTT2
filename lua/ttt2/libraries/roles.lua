@@ -12,9 +12,9 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local RoleList = RoleList or {}
-
 roles = roles or {}
+
+roles.roleList = roles.roleList or {}
 
 ---
 -- Copies any missing data from base table to the target table
@@ -185,7 +185,7 @@ end
 function roles.Register(t, name)
 	name = string.lower(name)
 
-	local old = RoleList[name]
+	local old = roles.roleList[name]
 	if old then return end
 
 	t.ClassName = name
@@ -201,7 +201,7 @@ function roles.Register(t, name)
 		t.id = t.index
 	end
 
-	RoleList[name] = t
+	roles.roleList[name] = t
 
 	local upStr = string.upper(name)
 
@@ -223,7 +223,7 @@ function roles.OnLoaded()
 	-- - we have to wait until they're all setup because load order
 	-- could cause some entities to load before their bases!
 	--
-	for k, v in pairs(RoleList) do
+	for k, v in pairs(roles.roleList) do
 		roles.Get(k, v)
 
 		baseclass.Set(k, v)
@@ -234,14 +234,14 @@ function roles.OnLoaded()
 	end
 
 	-- Setup data (eg. convars for all roles)
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract then
 			SetupData(v)
 		end
 	end
 
 	-- Call Initialize() on all roles
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract then
 			v:Initialize()
 		end
@@ -290,7 +290,7 @@ end
 -- @return table returns the real role table
 -- @realm shared
 function roles.GetStored(name)
-	return RoleList[name]
+	return roles.roleList[name]
 end
 
 ---
@@ -302,7 +302,7 @@ function roles.GetList()
 
 	local i = 0
 
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract then
 			i = i + 1
 			result[i] = v
@@ -344,7 +344,7 @@ end
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetByIndex(index, fallback)
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract and v.index == index then
 			return v
 		end
@@ -368,7 +368,7 @@ end
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetByAbbr(abbr)
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract and v.abbr == abbr then
 			return v
 		end
@@ -416,7 +416,7 @@ function roles.GetShopRoles()
 
 	local i = 0
 
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if v.isAbstract or v == roles.NONE then continue end
 
 		local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
@@ -441,7 +441,7 @@ function roles.GetDefaultTeamRole(team)
 		return roles.NONE
 	end
 
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract and v:IsBaseRole() and v.defaultTeam == team then
 			return v
 		end
@@ -491,7 +491,7 @@ function roles.GetWinTeams()
 
 	local i = 0
 
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			i = i + 1
 			winTeams[i] = v.defaultTeam
@@ -510,7 +510,7 @@ function roles.GetAvailableTeams()
 
 	local i = 0
 
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
 			i = i + 1
 			availableTeams[i] = v.defaultTeam
@@ -529,7 +529,7 @@ function roles.GetSortedRoles()
 
 	local i = 0
 
-	for _, v in pairs(RoleList) do
+	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract then
 			i = i + 1
 			rls[i] = v
