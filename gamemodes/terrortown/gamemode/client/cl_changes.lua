@@ -1283,7 +1283,7 @@ function CreateChanges()
 			<li>Fixed ammo entities blocking <code>+use</code> traces</li>
 			<li>Fixed double call of <code>GM:TTT2UpdateTeam</code>, when a role change leads to a team change</li>
 		</ul>
-	]], os.time({ year = 2022, month = 08, day = 05 }))
+	]], os.time({ year = 2022, month = 08, day = 21 }))
 
 	---
 	-- run hook for other addons to add their changelog as well
