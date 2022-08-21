@@ -1275,6 +1275,7 @@ function CreateChanges()
 		<ul>
 			<li>Corrected incorrect translation (by @sbzlzh)</li>
 			<li>Optimized damage indicator vgui images to be smaller</li>
+			<li>Improved hotreload of TTT2 roles library with RoleList not being global</li>
 		</ul>
 
 		<h2>Fixed</h2>
