@@ -1467,13 +1467,6 @@ local function SetPlayerReady(_, ply)
 	entspawnscript.TransmitToPlayer(ply)
 
 	---
-	-- update playermodels on the client
-	-- @realm server
-	if hook.Run("TTT2AdminCheck", ply) then
-		playermodels.StreamModelStateToSelectedClients(false, ply)
-	end
-
-	---
 	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)
 end

@@ -22,6 +22,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `ttt2_falldmg_exponent (default: 1.75)` sets the exponent to increase fall damage in relation to velocity
   - All these convars can also be adjusted in the F1->Administration->Player Settings menu
   - Added portuguese translation
+  - Added a `database` library, that handles shared Interaction with the sql database
+
 
 ### Breaking Changes
 

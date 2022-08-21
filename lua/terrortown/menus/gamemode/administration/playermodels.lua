@@ -50,20 +50,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	local base = form2:MakeIconLayout()
-	local modelStates = playermodels.GetModelStates()
-	local models = player_manager.AllValidModels()
-
-	for name, data in SortedPairsByMemberValue(modelStates, "sortName") do
-		local model = models[name]
-
-		if not model then continue end
-
+	for name, model in SortedPairs(player_manager.AllValidModels()) do
 		boxCache[name] = form2:MakeImageCheckBox({
 			label = name,
 			model = model,
-			headbox = data.hasHeadHitBox,
-			initialModel = data.selected,
-			initialHattable = data.hattable,
+			headbox = playermodels.HasHeadHitBox(name) or false,
 			OnModelSelected = function(_, state)
 				playermodels.UpdateModel(name, playermodels.state.selected, state)
 			end,
@@ -71,16 +62,45 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				playermodels.UpdateModel(name, playermodels.state.hattable, state)
 			end
 		}, base)
+
+		playermodels.IsSelectedModel(name, function(value)
+			boxCache[name]:SetModelSelected(value, false)
+		end)
+
+		playermodels.IsHattableModel(name, function(value)
+			boxCache[name]:SetModelHattable(value, false)
+		end)
+
+		playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
+
+		playermodels.AddChangeCallback(name, playermodels.state.selected, function(value)
+			local box = boxCache[name]
+
+			if not IsValid(box) then
+				playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
+
+				return
+			end
+
+			box:SetModelSelected(value, false)
+		end,
+		"TTT2F1MenuPlayermodels")
+
+		playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
+
+		playermodels.AddChangeCallback(name, playermodels.state.hattable, function(value)
+			local box = boxCache[name]
+
+			if not IsValid(box) then
+				playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
+
+				return
+			end
+
+			box:SetModelHattable(value, false)
+		end,
+		"TTT2F1MenuPlayermodels")
 	end
-
-	playermodels.OnChange("PlayermodelsUpdateTrigger", function(data)
-		for name, entry in pairs(data) do
-			if not IsValid(boxCache[name]) then continue end
-
-			boxCache[name]:SetModelSelected(entry.selected)
-			boxCache[name]:SetModelHattable(entry.hattable)
-		end
-	end)
 end
 
 function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)

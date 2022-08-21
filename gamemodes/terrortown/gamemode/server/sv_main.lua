@@ -1364,7 +1364,6 @@ function GM:OnReloaded()
 
 	-- reload everything from the playermodels
 	playermodels.Initialize()
-	playermodels.StreamModelStateToSelectedClients()
 
 	-- set the default random playermodel
 	self.playermodel = playermodels.GetRandomPlayerModel()
