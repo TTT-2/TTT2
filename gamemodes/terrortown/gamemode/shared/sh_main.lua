@@ -12,6 +12,27 @@ local sneakSpeedSquared = math.pow(150, 2)
 
 TTT2ShopFallbackInitialized = false
 
+local callbackIdentifier = "TTT2RegisteredSWEPCallback"
+
+---
+-- Add callback for equipment and insert changes in the given equipmentTable
+-- @param string name the database-name of the equipment
+-- @param table equipmentTable the table to insert changes to
+-- @realm shared
+local function AddCallbacks(name, equipmentTable)
+	-- Make sure that on hot reloads old callbacks are removed before adding the new one
+	database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+	database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
+		if not istable(equipmentTable) then
+			database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+
+			return
+		end
+
+		equipmentTable[key] = newValue
+	end, callbackIdentifier)
+end
+
 ---
 -- Initializes the equipment with necessary data for ttt2
 -- Also handles hotreload when called with the `PreRegisterSWEP` hook
@@ -98,30 +119,19 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		ResetDefaultEquipment(equipment)
 	end
 
-	local function AddCallbacks(equipmentTable)
-		-- Make sure that on hot reloads old callbacks are removed before adding the new one
-		local callbackIdentifier = "TTT2RegisteredSWEPCallback"
-		database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
-		database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
-			if not istable(equipmentTable) then
-				database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
-
-				return
-			end
-
-			equipmentTable[key] = newValue
-		end, callbackIdentifier)
-	end
-
 	if SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY) then
 		database.SetDefaultValuesFromItem(ShopEditor.accessName, name, equipment)
 		database.GetStoredValues(ShopEditor.accessName, name, equipment)
-		AddCallbacks(equipment)
+		AddCallbacks(name, equipment)
 	elseif CLIENT then
-		database.GetStoredValues(ShopEditor.accessName, name, function(databaseExists, equipmentInfo)
+		database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, equipmentInfo)
 			if not databaseExists then return end
 
-			AddCallbacks(equipment)
+			for key, value in pairs(equipmentInfo) do
+				equipment[key] = value
+			end
+
+			AddCallbacks(name, equipment)
 		end, equipment)
 	end
 

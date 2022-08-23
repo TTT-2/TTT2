@@ -86,14 +86,21 @@ local callbackIdentifiers = database.callbackIdentifiers
 -- Call this function if a value was received
 -- @param number index The local index of the database
 -- @param string itemName The name of the item in the database
--- @param string key The name of the key in the database
+-- @param[opt] string key The name of the key in the database, or all keys
 -- @realm shared
 -- @internal
 local function ValueReceived(index, itemName, key)
 	local receiver = receivedValues[index] or {}
 
 	receiver[itemName] = receiver[itemName] or {}
-	receiver[itemName][key] = true
+	if isstring(key) then
+		receiver[itemName][key] = true
+	else
+		local keys = registeredDatabases[index].keys
+		for checkKey in pairs(keys) do
+			receiver[itemName][checkKey] = true
+		end
+	end
 
 	receivedValues[index] = receiver
 end
@@ -102,14 +109,28 @@ end
 -- Check if a value was already received via network
 -- @param number index the local index of the database
 -- @param string itemName the name of the item in the database
--- @param string key the name of the key in the database
+-- @param[opt] string key the name of the key in the database, otherwise check all keys
 -- @realm shared
 -- @internal
 local function IsValueReceived(index, itemName, key)
-	return receivedValues[index]
-		and receivedValues[index][itemName]
-		and receivedValues[index][itemName][key]
-		or false
+	if not receivedValues[index] or not receivedValues[index][itemName] then
+		return false
+	end
+
+	local isReceived = true
+	if not isstring(key) then
+		local keys = registeredDatabases[index].keys
+		for checkKey in pairs(keys) do
+			if not receivedValues[index][itemName][checkKey] then
+				isReceived = false
+				break
+			end
+		end
+	elseif not receivedValues[index][itemName][key] then
+		isReceived = false
+	end
+
+	return isReceived
 end
 
 ---
@@ -491,6 +512,12 @@ clientSendFunctions[MESSAGE_GET_VALUE] = function(data)
 	net.WriteUInt(request.index, uIntBits)
 
 	net.WriteString(request.itemName)
+
+	local isKeyGiven = isstring(request.key)
+	net.WriteBool(isKeyGiven)
+
+	if not isKeyGiven then return end
+
 	net.WriteString(request.key)
 end
 
@@ -508,7 +535,7 @@ serverReceiveFunctions[MESSAGE_GET_VALUE] = function(plyID64)
 	}
 
 	data.itemName = net.ReadString()
-	data.key = net.ReadString()
+	data.key = net.ReadBool() and net.ReadString()
 
 	database.ReturnGetValue(data)
 end
@@ -524,7 +551,15 @@ serverSendFunctions[MESSAGE_GET_VALUE] = function(data)
 	net.WriteBool(data.isSuccess)
 
 	if data.isSuccess then
-		net.WriteString(tostring(data.value))
+		local isTable = istable(data.value)
+
+		net.WriteBool(isTable)
+
+		if isTable then
+			net.WriteTable(data.value)
+		else
+			net.WriteString(tostring(data.value))
+		end
 	end
 end
 
@@ -540,13 +575,18 @@ clientReceiveFunctions[MESSAGE_GET_VALUE] = function()
 	local value
 
 	if isSuccess then
-		value = net.ReadString()
-		value = ConvertValueWithKey(value, request.accessName, request.key)
-
 		local storedData = registeredDatabases[request.index].storedData
-
-		local storedItemData = storedData[request.itemName] or {}
-		storedItemData[request.key] = value
+		local storedItemData
+		local isTable = net.ReadBool()
+		if isTable then
+			value = net.ReadTable()
+			storedItemData = value
+		else
+			value = net.ReadString()
+			value = ConvertValueWithKey(value, request.accessName, request.key)
+			storedItemData = storedData[request.itemName] or {}
+			storedItemData[request.key] = value
+		end
 
 		storedData[request.itemName] = storedItemData
 	end
@@ -924,7 +964,7 @@ if CLIENT then
 	-- Get the stored key value of the given database if it exists on the server or was already cached
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
-	-- @param string key the name of the key in the database
+	-- @param[opt] string key the name of the key in the database, if `nil` gets the whole item
 	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
 	-- @realm client
 	function database.GetValue(accessName, itemName, key, OnReceiveFunc)
@@ -943,17 +983,19 @@ if CLIENT then
 
 		local dataTable = registeredDatabases[index]
 
-		if not dataTable.keys[key] then
+		if isstring(key) and not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
 
 		-- Use cached data if value was received from the server
-		if IsValueReceived(index, itemName, key) then
+		if isstring(key) and IsValueReceived(index, itemName, key) then
 			OnReceiveFunc(true, dataTable.storedData[itemName] and dataTable.storedData[itemName][key])
 
 			return
+		elseif IsValueReceived(index, itemName, key) then
+			OnReceiveFunc(true, dataTable.storedData[itemName])
 		end
 
 		messageIdentifier = messageIdentifier % maxUInt + 1
@@ -1000,7 +1042,6 @@ if CLIENT then
 		local numberOfReceivedKeys = 0
 		for key in pairs(dataTable.keys) do
 			numberOfSentKeys = numberOfSentKeys + 1
-
 			database.GetValue(accessName, itemName, key, function(databaseExists, value)
 				item[key] = value
 
@@ -1286,7 +1327,14 @@ if SERVER then
 				return true, value
 			end
 
+			local newTable = {}
+			for _key in pairs(dataTable.keys) do
+				newTable[key] = sqlData[key]
+			end
+
+			sqlData = newTable
 			ConvertTable(sqlData, accessName)
+
 			dataTable.storedData[itemName] = sqlData
 		else
 			-- Get all data, convert and return it
