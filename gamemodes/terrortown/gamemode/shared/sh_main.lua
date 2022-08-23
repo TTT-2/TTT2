@@ -98,22 +98,31 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		ResetDefaultEquipment(equipment)
 	end
 
-	if SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY) then
-		database.SetDefaultValuesFromItem(ShopEditor.accessName, name, equipment)
-		database.GetStoredValues(ShopEditor.accessName, name, equipment)
-
+	local function AddCallbacks(equipmentTable)
 		-- Make sure that on hot reloads old callbacks are removed before adding the new one
 		local callbackIdentifier = "TTT2RegisteredSWEPCallback"
 		database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
 		database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
-			if not istable(equipment) then
+			if not istable(equipmentTable) then
 				database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
 
 				return
 			end
 
-			equipment[key] = newValue
+			equipmentTable[key] = newValue
 		end, callbackIdentifier)
+	end
+
+	if SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY) then
+		database.SetDefaultValuesFromItem(ShopEditor.accessName, name, equipment)
+		database.GetStoredValues(ShopEditor.accessName, name, equipment)
+		AddCallbacks(equipment)
+	elseif CLIENT then
+		database.GetStoredValues(ShopEditor.accessName, name, function(databaseExists, equipmentInfo)
+			if not databaseExists then return end
+
+			AddCallbacks(equipment)
+		end, equipment)
 	end
 
 	if not doHotreload then return end
