@@ -889,10 +889,35 @@ if CLIENT then
 			waitForRegisteredDatabases[data.accessName] = false
 			triedToGetRegisteredDatabases[data.accessName] = true
 
-			database.GetValue(data.accessName, data.itemName, data.key, data.OnReceiveFunc)
+			data.OnWaitEndFunc()
 		end
 
 		onWaitReceiveFunctionCache = {}
+	end
+
+	---
+	-- Tries to get registered databases and caches the call until its confirmed that databases are registered or not
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param function OnWaitEndFunc() The function that gets called when the database is accessible
+	-- @return bool, if waiting for the database is still possible
+	-- @realm client
+	local function tryGetRegisteredDatabase(accessName, OnWaitEndFunc)
+		if triedToGetRegisteredDatabases[accessName] then
+			return false
+		end
+
+		-- In case the database wasnt registered, try to get it and then send the requests again later
+		if not waitForRegisteredDatabases[accessName] then
+			waitForRegisteredDatabases[accessName] = true
+			database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
+		end
+
+		onWaitReceiveFunctionCache[#onWaitReceiveFunctionCache + 1] = {
+			accessName = accessName,
+			OnWaitEndFunc = OnWaitEndFunc
+		}
+
+		return true
 	end
 
 	---
@@ -906,25 +931,12 @@ if CLIENT then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			if triedToGetRegisteredDatabases[accessName] then
+			local function OnWaitEndFunc() database.GetValue(accessName, itemName, key, OnReceiveFunc) end
+
+			if not tryGetRegisteredDatabase(accessName, OnWaitEndFunc) then
 				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
 				OnReceiveFunc(false)
-
-				return
 			end
-
-			-- In case the database wasnt registered, try to get it and then send the requests again later
-			if not waitForRegisteredDatabases[accessName] then
-				waitForRegisteredDatabases[accessName] = true
-				database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
-			end
-
-			onWaitReceiveFunctionCache[#onWaitReceiveFunctionCache + 1] = {
-				accessName = accessName,
-				itemName = itemName,
-				key = key,
-				OnReceiveFunc = OnReceiveFunc
-			}
 
 			return
 		end
@@ -956,6 +968,50 @@ if CLIENT then
 
 		SendUpdateNextTick(MESSAGE_GET_VALUE, messageIdentifier)
 	end
+
+	---
+	-- Get the stored key values of the given database if it exists and was registered
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
+	-- @param function OnReceiveFunc(databaseExists, item) The function that gets called with the results if the database exists
+	-- @param[opt] table item The item table where all values get directly inserted if given
+	-- @realm client
+	function database.GetStoredValues(accessName, itemName, OnReceiveFunc, item)
+		if not istable(item) then
+			item = {}
+		end
+
+		local index = nameToIndex[accessName]
+
+		if not index then
+			local function OnWaitEndFunc() database.GetStoredValues(accessName, itemName, OnReceiveFunc) end
+
+			if not tryGetRegisteredDatabase(accessName, OnWaitEndFunc) then
+				ErrorNoHalt("[TTT2] database.GetStoredValues failed. The registered Database of " .. accessName .. " is not available or synced.")
+				OnReceiveFunc(false, item)
+			end
+
+			return
+		end
+
+		local dataTable = index and registeredDatabases[index]
+
+		local numberOfSentKeys = 0
+		local numberOfReceivedKeys = 0
+		for key in pairs(dataTable.keys) do
+			numberOfSentKeys = numberOfSentKeys + 1
+
+			database.GetValue(accessName, itemName, key, function(databaseExists, value)
+				item[key] = value
+
+				numberOfReceivedKeys = numberOfReceivedKeys + 1
+				if numberOfReceivedKeys >= numberOfSentKeys then
+					OnReceiveFunc(true, item)
+				end
+			end)
+		end
+	end
+
 
 	---
 	-- Request to set the value for a key of an item of an sql-table on the server
@@ -1266,6 +1322,7 @@ if SERVER then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
 	-- @param[opt] table item The item table where all values get directly inserted if given
+	-- @return bool, if the requested item was successfully registered in the sql datatable
 	-- @return table, the requested stored values inserted into a table
 	-- @realm server
 	function database.GetStoredValues(accessName, itemName, item)
@@ -1278,7 +1335,7 @@ if SERVER then
 		if not index then
 			ErrorNoHalt("[TTT2] database.GetStoredValues failed. The registered Database of " .. accessName .. " is not registered.")
 
-			return item
+			return false, item
 		end
 
 		local dataTable = index and registeredDatabases[index]
@@ -1291,7 +1348,7 @@ if SERVER then
 			item[key] = value
 		end
 
-		return item
+		return true, item
 	end
 
 	---
