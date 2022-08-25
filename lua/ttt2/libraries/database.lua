@@ -442,7 +442,7 @@ end
 
 ---
 -- Send query for registered databases to server
--- @param table data contains only the messageIdentifier here
+-- @param table data = {identifier, extraBits} here
 -- @realm client
 -- @internal
 clientSendFunctions[MESSAGE_REGISTER] = function(data)
@@ -469,7 +469,7 @@ end
 
 ---
 -- Send requested registered databases to client
--- @param table data contains identifier, tableCount, index here
+-- @param table data = {identifier, tableCount, index, extraBits} here
 -- @realm server
 -- @internal
 serverSendFunctions[MESSAGE_REGISTER] = function(data)
@@ -538,20 +538,20 @@ end
 
 ---
 -- Send query for getting a value to server
--- @param table data contains only the messageIdentifier here
+-- @param table data = identifier here
 -- @realm client
 -- @internal
 clientSendFunctions[MESSAGE_GET_VALUE] = function(data)
 	local request = requestCache[data]
 
-	local sendExtra = extraBits > 0
+	local sendExtra = request.extraBits > 0
 	net.WriteBool(sendExtra)
 
 	if sendExtra then
-		net.WriteUInt(extraBits, uIntBits)
+		net.WriteUInt(request.extraBits, uIntBits)
 	end
 
-	net.WriteUInt(data, uIntBits + extraBits)
+	net.WriteUInt(data, uIntBits + request.extraBits)
 	net.WriteUInt(request.index, uIntBits)
 
 	net.WriteString(request.itemName)
@@ -574,13 +574,12 @@ serverReceiveFunctions[MESSAGE_GET_VALUE] = function(plyID64)
 	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
 	local data = {
 		plyID64 = plyID64,
-		extraBits = usedExtraBits,
 		identifier = net.ReadUInt(uIntBits + usedExtraBits),
-		index = net.ReadUInt(uIntBits)
+		index = net.ReadUInt(uIntBits),
+		itemName = net.ReadString(),
+		key = net.ReadBool() and net.ReadString(),
+		extraBits = usedExtraBits
 	}
-
-	data.itemName = net.ReadString()
-	data.key = net.ReadBool() and net.ReadString()
 
 	database.ReturnGetValue(data)
 end
@@ -588,7 +587,7 @@ end
 ---
 -- Send requested value to client
 -- if available/isSuccess
--- @param table data contains identifier, isSuccess and value here
+-- @param table data = {identifier, isSuccess, value, extraBits} here
 -- @realm server
 -- @internal
 serverSendFunctions[MESSAGE_GET_VALUE] = function(data)
@@ -1069,6 +1068,8 @@ if CLIENT then
 			return
 		elseif IsValueReceived(index, itemName, key) then
 			OnReceiveFunc(true, dataTable.storedData[itemName])
+
+			return
 		end
 
 		local identifier = getNextMessageIdentifier()
@@ -1078,7 +1079,8 @@ if CLIENT then
 			accessName = accessName,
 			itemName = itemName,
 			key = key,
-			index = index
+			index = index,
+			extraBits = extraBits
 		}
 
 		SendUpdateNextTick(MESSAGE_GET_VALUE, identifier)
@@ -1292,7 +1294,7 @@ if SERVER then
 	---
 	-- This is called upon receiving a get request from a player to send a value back
 	-- @warning Dont use this function if you want to get a value from the database, this is meant to be used internally for a client request
-	-- @param table requestData = {plyID64, identifier, index, itemName, key} contains player and the data they requested
+	-- @param table requestData = {plyID64, identifier, index, itemName, key, extraBits} contains player and the data they requested
 	-- @realm server
 	-- @internal
 	function database.ReturnGetValue(requestData)
@@ -1312,7 +1314,8 @@ if SERVER then
 		local serverData = {
 			identifier = requestData.identifier,
 			isSuccess = isSuccess,
-			value = value
+			value = value,
+			extraBits = requestData.extraBits
 		}
 
 		-- If accessLevel is the lowest, register the player for every callback on that database
@@ -1385,7 +1388,7 @@ if SERVER then
 
 			local newTable = {}
 			for _key in pairs(dataTable.keys) do
-				newTable[key] = sqlData[key]
+				newTable[_key] = sqlData[_key]
 			end
 
 			sqlData = newTable
