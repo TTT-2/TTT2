@@ -15,7 +15,10 @@ end
 local messageIdentifier = 0
 local maxBytesPerMessage = 32 * 1000 -- Can be up to 65.533KB see: https://wiki.facepunch.com/gmod/net.Start
 local uIntBits = 8 -- we can synchronize up to 2 ^ uIntBits - 1 different sqlTables
+local extraBits = 0
 local maxUInt = 2 ^ uIntBits - 1
+local newMaxUInt = maxUInt
+local identifiersReceived = 0
 
 -- Save for hotreloadability
 database.registeredDatabases = database.registeredDatabases or {}
@@ -423,12 +426,34 @@ local serverSendFunctions = {}
 local serverReceiveFunctions = {}
 
 ---
+-- An Identifier was received, checks if all sent identifiers were received and resets ExtraBits and the identifiers
+-- @realm client
+-- @internal
+local function receivedIdentifier()
+	identifiersReceived = identifiersReceived + 1
+
+	if identifiersReceived < messageIdentifier then return end
+
+	extraBits = 0
+	newMaxUInt = maxUInt
+	identifiersReceived = 0
+	messageIdentifier = 0
+end
+
+---
 -- Send query for registered databases to server
 -- @param table data contains only the messageIdentifier here
 -- @realm client
 -- @internal
 clientSendFunctions[MESSAGE_REGISTER] = function(data)
-	net.WriteUInt(data, uIntBits)
+	local sendExtra = data.extraBits > 0
+	net.WriteBool(sendExtra)
+
+	if sendExtra then
+		net.WriteUInt(data.extraBits, uIntBits)
+	end
+
+	net.WriteUInt(data.identifier, uIntBits + data.extraBits)
 end
 
 ---
@@ -438,7 +463,8 @@ end
 -- @realm server
 -- @internal
 serverReceiveFunctions[MESSAGE_REGISTER] = function(plyID64)
-	database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
+	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
+	database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits + usedExtraBits), usedExtraBits)
 end
 
 ---
@@ -461,6 +487,13 @@ serverSendFunctions[MESSAGE_REGISTER] = function(data)
 	net.WriteBool(sendAdditionalInfo)
 
 	if sendAdditionalInfo then
+		local sendExtra = data.extraBits > 0
+		net.WriteBool(sendExtra)
+
+		if sendExtra then
+			net.WriteUInt(data.extraBits, uIntBits)
+		end
+
 		net.WriteUInt(data.identifier, uIntBits)
 		net.WriteUInt(data.tableCount, uIntBits)
 	end
@@ -490,7 +523,10 @@ clientReceiveFunctions[MESSAGE_REGISTER] = function()
 	local sentAdditionalInfo = net.ReadBool()
 
 	if sentAdditionalInfo then
-		local identifier = net.ReadUInt(uIntBits)
+		local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
+
+		local identifier = net.ReadUInt(uIntBits + usedExtraBits)
+		receivedIdentifier()
 		local tableCount = net.ReadUInt(uIntBits)
 
 		-- Only call the cached functions, when all databases are succesfully registered clientside
@@ -508,7 +544,14 @@ end
 clientSendFunctions[MESSAGE_GET_VALUE] = function(data)
 	local request = requestCache[data]
 
-	net.WriteUInt(data, uIntBits)
+	local sendExtra = extraBits > 0
+	net.WriteBool(sendExtra)
+
+	if sendExtra then
+		net.WriteUInt(extraBits, uIntBits)
+	end
+
+	net.WriteUInt(data, uIntBits + extraBits)
 	net.WriteUInt(request.index, uIntBits)
 
 	net.WriteString(request.itemName)
@@ -528,9 +571,11 @@ end
 -- @realm server
 -- @internal
 serverReceiveFunctions[MESSAGE_GET_VALUE] = function(plyID64)
+	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
 	local data = {
 		plyID64 = plyID64,
-		identifier = net.ReadUInt(uIntBits),
+		extraBits = usedExtraBits,
+		identifier = net.ReadUInt(uIntBits + usedExtraBits),
 		index = net.ReadUInt(uIntBits)
 	}
 
@@ -547,7 +592,14 @@ end
 -- @realm server
 -- @internal
 serverSendFunctions[MESSAGE_GET_VALUE] = function(data)
-	net.WriteUInt(data.identifier, uIntBits)
+	local sendExtra = data.extraBits > 0
+	net.WriteBool(sendExtra)
+
+	if sendExtra then
+		net.WriteUInt(data.extraBits, uIntBits)
+	end
+
+	net.WriteUInt(data.identifier, uIntBits + data.extraBits)
 	net.WriteBool(data.isSuccess)
 
 	if data.isSuccess then
@@ -569,7 +621,9 @@ end
 -- @realm client
 -- @internal
 clientReceiveFunctions[MESSAGE_GET_VALUE] = function()
-	local identifier = net.ReadUInt(uIntBits)
+	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
+	local identifier = net.ReadUInt(uIntBits + usedExtraBits)
+	receivedIdentifier()
 	local isSuccess = net.ReadBool()
 	local request = requestCache[identifier]
 	local value
@@ -906,16 +960,35 @@ end
 
 -- Public Client only functions
 if CLIENT then
+
+	---
+	-- Gives the next messageIdentifier to identify functions on callback.
+	-- As they are limited to the given uIntBits, it's possible that the maximum number of identifier is reached
+	-- So it's checked that pending requests are using unique identifiers
+	-- @return number, the next messageIdentifier
+	-- @realm client
+	-- @internal
+	local function getNextMessageIdentifier()
+		messageIdentifier = messageIdentifier + 1
+
+		if messageIdentifier > newMaxUInt then
+			extraBits = math.log(messageIdentifier + 1, 2) - uIntBits
+			newMaxUInt = 2 ^ (uIntBits + extraBits) - 1
+		end
+
+		return messageIdentifier
+	end
+
 	---
 	-- Is automatically called internally when a client joins, can be called by a player to force an update, but is normally not necessary
 	-- @param function OnReceiveFunc() the function that is called when the registered databases are received
 	-- @realm client
 	-- @internal
 	function database.GetRegisteredDatabases(OnReceiveFunc)
-		messageIdentifier = messageIdentifier % maxUInt + 1
-		functionCache[messageIdentifier] = OnReceiveFunc
+		local identifier = getNextMessageIdentifier()
+		functionCache[identifier] = OnReceiveFunc
 
-		SendUpdateNextTick(MESSAGE_REGISTER, messageIdentifier)
+		SendUpdateNextTick(MESSAGE_REGISTER, {identifier = identifier, extraBits = extraBits})
 	end
 
 	---
@@ -998,17 +1071,17 @@ if CLIENT then
 			OnReceiveFunc(true, dataTable.storedData[itemName])
 		end
 
-		messageIdentifier = messageIdentifier % maxUInt + 1
-		functionCache[messageIdentifier] = OnReceiveFunc
+		local identifier = getNextMessageIdentifier()
+		functionCache[identifier] = OnReceiveFunc
 
-		requestCache[messageIdentifier] = {
+		requestCache[identifier] = {
 			accessName = accessName,
 			itemName = itemName,
 			key = key,
 			index = index
 		}
 
-		SendUpdateNextTick(MESSAGE_GET_VALUE, messageIdentifier)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, identifier)
 	end
 
 	---
@@ -1019,38 +1092,19 @@ if CLIENT then
 	-- @param[opt] table item The item table where all values get directly inserted if given
 	-- @realm client
 	function database.GetStoredValues(accessName, itemName, OnReceiveFunc, item)
-		if not istable(item) then
-			item = {}
-		end
-
-		local index = nameToIndex[accessName]
-
-		if not index then
-			local function OnWaitEndFunc() database.GetStoredValues(accessName, itemName, OnReceiveFunc) end
-
-			if not tryGetRegisteredDatabase(accessName, OnWaitEndFunc) then
-				ErrorNoHalt("[TTT2] database.GetStoredValues failed. The registered Database of " .. accessName .. " is not available or synced.")
-				OnReceiveFunc(false, item)
+		database.GetValue(accessName, itemName, nil, function(databaseExists, itemTable)
+			if not istable(item) then
+				item = {}
 			end
 
-			return
-		end
-
-		local dataTable = index and registeredDatabases[index]
-
-		local numberOfSentKeys = 0
-		local numberOfReceivedKeys = 0
-		for key in pairs(dataTable.keys) do
-			numberOfSentKeys = numberOfSentKeys + 1
-			database.GetValue(accessName, itemName, key, function(databaseExists, value)
-				item[key] = value
-
-				numberOfReceivedKeys = numberOfReceivedKeys + 1
-				if numberOfReceivedKeys >= numberOfSentKeys then
-					OnReceiveFunc(true, item)
+			if databaseExists then
+				for key, value in pairs(itemTable) do
+					item[key] = value
 				end
-			end)
-		end
+			end
+
+			OnReceiveFunc(databaseExists, item)
+		end)
 	end
 
 
@@ -1157,9 +1211,10 @@ if SERVER then
 	-- @note This is used internally to sync between server and client, you dont need to call it manually
 	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 	-- @param[opt] string identifier the identifier used to get correct onreceive functions
+	-- @param[opt] number usedExtraBits the extra Bits used to send correct identifier
 	-- @realm server
 	-- @internal
-	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
+	function database.SyncRegisteredDatabases(plyIdentifier, identifier, usedExtraBits)
 		local tableCount = #registeredDatabases
 
 		for databaseNumber = 1, tableCount do
@@ -1167,6 +1222,7 @@ if SERVER then
 			local dataRegister = {
 				index = databaseNumber,
 				identifier = identifier,
+				extraBits = usedExtraBits,
 				tableCount = tableCount
 			}
 
@@ -1378,25 +1434,15 @@ if SERVER then
 			item = {}
 		end
 
-		local index = nameToIndex[accessName]
+		local databaseExists, itemTable = database.GetValue(accessName, itemName)
 
-		if not index then
-			ErrorNoHalt("[TTT2] database.GetStoredValues failed. The registered Database of " .. accessName .. " is not registered.")
-
-			return false, item
+		if databaseExists then
+			for key, value in pairs(itemTable) do
+				item[key] = value
+			end
 		end
 
-		local dataTable = index and registeredDatabases[index]
-
-		for key in pairs(dataTable.keys) do
-			local hasValue, value = database.GetValue(accessName, itemName, key)
-
-			if not hasValue then continue end
-
-			item[key] = value
-		end
-
-		return true, item
+		return databaseExists, item
 	end
 
 	---

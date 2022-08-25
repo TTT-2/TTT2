@@ -124,15 +124,11 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		database.GetStoredValues(ShopEditor.accessName, name, equipment)
 		AddCallbacks(name, equipment)
 	elseif CLIENT then
-		database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, equipmentInfo)
-			if not databaseExists then return end
-
-			for key, value in pairs(equipmentInfo) do
-				equipment[key] = value
-			end
-
-			AddCallbacks(name, equipment)
-		end, equipment)
+		database.GetStoredValues(ShopEditor.accessName, name, nil, function(databaseExists, equipmentInfo)
+				if databaseExists then
+					AddCallbacks(name, equipment)
+				end
+			end, equipment)
 	end
 
 	if not doHotreload then return end

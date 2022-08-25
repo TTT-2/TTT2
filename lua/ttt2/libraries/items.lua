@@ -124,14 +124,10 @@ function items.OnLoaded()
 			database.GetStoredValues(ShopEditor.accessName, name, item)
 			AddCallbacks(name, item)
 		elseif CLIENT then
-			database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, equipmentInfo)
-				if not databaseExists then return end
-
-				for key, value in pairs(equipmentInfo) do
-					item[key] = value
+			database.GetStoredValues(ShopEditor.accessName, name, nil, function(databaseExists, equipmentInfo)
+				if databaseExists then
+					AddCallbacks(name, item)
 				end
-
-				AddCallbacks(name, item)
 			end, item)
 		end
 
