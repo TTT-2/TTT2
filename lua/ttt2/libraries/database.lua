@@ -426,7 +426,7 @@ local serverSendFunctions = {}
 local serverReceiveFunctions = {}
 
 ---
--- An Identifier was received, checks if all sent identifiers were received and resets ExtraBits and the identifiers
+-- An Identifier was received, checks if all sent identifiers were received and resets extraBits and the identifiers
 -- @realm client
 -- @internal
 local function receivedIdentifier()
@@ -849,7 +849,6 @@ local function SendUpdatesNow()
 	for plyIdentifier, indexList in pairs(dataStore) do
 		local indexDeleteIdentifiers = {}
 		for index, identifierList in pairs(indexList) do
-			net.Start("TTT2SynchronizeDatabase")
 
 			-- Then go through all message identifiers and their cached data
 			-- and send them accordingly
@@ -971,7 +970,7 @@ if CLIENT then
 		messageIdentifier = messageIdentifier + 1
 
 		if messageIdentifier > newMaxUInt then
-			extraBits = math.log(messageIdentifier + 1, 2) - uIntBits
+			extraBits = math.ceil(math.log(messageIdentifier + 1, 2)) - uIntBits
 			newMaxUInt = 2 ^ (uIntBits + extraBits) - 1
 		end
 
