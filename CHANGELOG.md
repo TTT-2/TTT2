@@ -4,8 +4,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-05)
-
 ### Added
 
 - Added new functions to database module
@@ -16,7 +14,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Changed syncing of database module
 - Replaced equipmenteditor syncing with database module
+- Replaced internal equipment syncing with database module
+
+### Fixed
+
+- net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 
 ## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-05)
 
