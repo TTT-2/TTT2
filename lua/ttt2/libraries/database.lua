@@ -13,11 +13,6 @@ if SERVER then
 end
 
 local messageIdentifier = 0
-local maxBytesPerMessage = 32 * 1000 -- Can be up to 65.533KB see: https://wiki.facepunch.com/gmod/net.Start
-local uIntBits = 8 -- we can synchronize up to 2 ^ uIntBits - 1 different sqlTables
-local extraBits = 0
-local maxUInt = 2 ^ uIntBits - 1
-local newMaxUInt = maxUInt
 local identifiersReceived = 0
 
 -- Save for hotreloadability
@@ -52,7 +47,6 @@ local INDEX_NONE = "none"
 -- Stores the data and the players it is send to
 local dataStore = {}
 
-local sendDataFunctions = {}
 local receiveDataFunctions = {}
 
 local sendRequestsNextUpdate = false
@@ -417,16 +411,13 @@ end
 -- To be able to directly see message sending- and receive-structure between server and client
 -- They are always paired by either client-Send and server-Receive or server-Send and client-Receive
 
--- Client send and receive functions
-local clientSendFunctions = {}
+-- Client and server receive functions
 local clientReceiveFunctions = {}
-
--- Server send and receive functions
-local serverSendFunctions = {}
 local serverReceiveFunctions = {}
 
 ---
--- An Identifier was received, checks if all sent identifiers were received and resets extraBits and the identifiers
+-- An Identifier was received, checks if all sent identifiers were received and resets the identifiers
+-- Should make sure, that it doesnt go to infinity
 -- @realm client
 -- @internal
 local function receivedIdentifier()
@@ -434,362 +425,151 @@ local function receivedIdentifier()
 
 	if identifiersReceived < messageIdentifier then return end
 
-	extraBits = 0
-	newMaxUInt = maxUInt
 	identifiersReceived = 0
 	messageIdentifier = 0
 end
 
 ---
--- Send query for registered databases to server
--- @param table data = {identifier, extraBits} here
--- @realm client
--- @internal
-clientSendFunctions[MESSAGE_REGISTER] = function(data)
-	local sendExtra = data.extraBits > 0
-	net.WriteBool(sendExtra)
-
-	if sendExtra then
-		net.WriteUInt(data.extraBits, uIntBits)
-	end
-
-	net.WriteUInt(data.identifier, uIntBits + data.extraBits)
-end
-
----
 -- Receive query for registered databases from client
 -- and sync them
+-- @param table data = {identifier}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_REGISTER] = function(plyID64)
-	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
-	database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits + usedExtraBits), usedExtraBits)
-end
-
----
--- Send requested registered databases to client
--- @param table data = {identifier, tableCount, index, extraBits} here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_REGISTER] = function(data)
-	local databaseInfo = registeredDatabases[data.index]
-
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteString(databaseInfo.accessName)
-	net.WriteTable(databaseInfo.keys)
-	net.WriteTable(databaseInfo.data)
-
-	-- AdditionalInfo determines if there is more than one database registered and sent
-	-- This makes sure, that the client doesnt start to use the databases before all databases are received
-	local sendAdditionalInfo = data.identifier ~= nil
-
-	net.WriteBool(sendAdditionalInfo)
-
-	if sendAdditionalInfo then
-		local sendExtra = data.extraBits > 0
-		net.WriteBool(sendExtra)
-
-		if sendExtra then
-			net.WriteUInt(data.extraBits, uIntBits)
-		end
-
-		net.WriteUInt(data.identifier, uIntBits)
-		net.WriteUInt(data.tableCount, uIntBits)
-	end
+serverReceiveFunctions[MESSAGE_REGISTER] = function(data, plyID64)
+	database.SyncRegisteredDatabases(plyID64, data.identifier)
 end
 
 ---
 -- Receive requested registered databases from server
 -- and cache them as well as call all cached functions, that are waiting for the databases
+-- @param table data = {index, accessName, savingKeys, additionalData, sentAdditionalInfo, identifier, tableCount}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_REGISTER] = function()
-	local index = net.ReadUInt(uIntBits)
-	local accessName = net.ReadString()
-	local savingKeys = net.ReadTable()
-	local additionalData = net.ReadTable()
-
-	nameToIndex[accessName] = index
-	registeredDatabases[index] = {
-		accessName = accessName,
-		keys = savingKeys,
-		data = additionalData,
+clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
+	nameToIndex[data.accessName] = data.index
+	registeredDatabases[data.index] = {
+		accessName = data.accessName,
+		keys = data.savingKeys,
+		data = data.additionalData,
 		storedData = {},
 		defaultData = {}
 	}
 
-	-- If more than one database will be send, then sentAdditionalInfo is true
-	local sentAdditionalInfo = net.ReadBool()
-
-	if sentAdditionalInfo then
-		local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
-
-		local identifier = net.ReadUInt(uIntBits + usedExtraBits)
-		receivedIdentifier()
-		local tableCount = net.ReadUInt(uIntBits)
-
+	if data.sentAdditionalInfo and table.Count(registeredDatabases) == data.tableCount then
 		-- Only call the cached functions, when all databases are succesfully registered clientside
-		if table.Count(registeredDatabases) == tableCount then
-			functionCache[identifier]()
-		end
+		functionCache[data.identifier]()
+		receivedIdentifier()
 	end
-end
-
----
--- Send query for getting a value to server
--- @param table data = identifier here
--- @realm client
--- @internal
-clientSendFunctions[MESSAGE_GET_VALUE] = function(data)
-	local request = requestCache[data]
-
-	local sendExtra = request.extraBits > 0
-	net.WriteBool(sendExtra)
-
-	if sendExtra then
-		net.WriteUInt(request.extraBits, uIntBits)
-	end
-
-	net.WriteUInt(data, uIntBits + request.extraBits)
-	net.WriteUInt(request.index, uIntBits)
-
-	net.WriteString(request.itemName)
-
-	local isKeyGiven = isstring(request.key)
-	net.WriteBool(isKeyGiven)
-
-	if not isKeyGiven then return end
-
-	net.WriteString(request.key)
 end
 
 ---
 -- Receive query for getting a value from client
 -- and returning it
+-- @param table data = {index, accessName, itemName, key, identifier}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_GET_VALUE] = function(plyID64)
-	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
-	local data = {
-		plyID64 = plyID64,
-		identifier = net.ReadUInt(uIntBits + usedExtraBits),
-		index = net.ReadUInt(uIntBits),
-		itemName = net.ReadString(),
-		key = net.ReadBool() and net.ReadString(),
-		extraBits = usedExtraBits
-	}
-
-	database.ReturnGetValue(data)
-end
-
----
--- Send requested value to client
--- if available/isSuccess
--- @param table data = {identifier, isSuccess, value, extraBits} here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_GET_VALUE] = function(data)
-	local sendExtra = data.extraBits > 0
-	net.WriteBool(sendExtra)
-
-	if sendExtra then
-		net.WriteUInt(data.extraBits, uIntBits)
-	end
-
-	net.WriteUInt(data.identifier, uIntBits + data.extraBits)
-	net.WriteBool(data.isSuccess)
-
-	if data.isSuccess then
-		local isTable = istable(data.value)
-
-		net.WriteBool(isTable)
-
-		if isTable then
-			net.WriteTable(data.value)
-		else
-			net.WriteString(tostring(data.value))
-		end
-	end
-end
+serverReceiveFunctions[MESSAGE_GET_VALUE] = database.ReturnGetValue
 
 ---
 -- Receive requested value from server
 -- Store it, mark value as received and call function cache
+-- @param table data = {isSuccess, value, identifier}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_GET_VALUE] = function()
-	local usedExtraBits = net.ReadBool() and net.ReadUInt(uIntBits) or 0
-	local identifier = net.ReadUInt(uIntBits + usedExtraBits)
-	receivedIdentifier()
-	local isSuccess = net.ReadBool()
-	local request = requestCache[identifier]
-	local value
+clientReceiveFunctions[MESSAGE_GET_VALUE] = function(data)
+	local request = requestCache[data.identifier]
 
-	if isSuccess then
+	if data.isSuccess then
 		local storedData = registeredDatabases[request.index].storedData
 		local storedItemData
-		local isTable = net.ReadBool()
-		if isTable then
-			value = net.ReadTable()
-			storedItemData = value
-		else
-			value = net.ReadString()
-			value = ConvertValueWithKey(value, request.accessName, request.key)
+
+		if request.key then
 			storedItemData = storedData[request.itemName] or {}
-			storedItemData[request.key] = value
+			storedItemData[request.key] = data.value
+		else
+			storedItemData = data.value
 		end
 
 		storedData[request.itemName] = storedItemData
 	end
 
 	ValueReceived(request.index, request.itemName, request.key)
-	functionCache[identifier](isSuccess, value)
-end
-
----
--- Send query for setting a value to server
--- @param table data contains index, itemName, key and value here
--- @realm client
--- @internal
-clientSendFunctions[MESSAGE_SET_VALUE] = function(data)
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteString(data.itemName)
-	net.WriteString(data.key)
-	net.WriteString(tostring(data.value))
+	functionCache[data.identifier](data.isSuccess, data.value)
+	receivedIdentifier()
 end
 
 ---
 -- Receive query for setting a value from client
--- and set that value in the database if player is a superadmin
+-- and set that value in the database if they have access-rights
+-- @param table data = {index, itemName, key, value}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_SET_VALUE] = function(plyID64)
-	local index = net.ReadUInt(uIntBits)
-	local itemName = net.ReadString()
-	local key = net.ReadString()
-	local value = net.ReadString()
-
-	local accessName = registeredDatabases[index].accessName
-	value = ConvertValueWithKey(value, accessName, key)
-
-	database.SetValue(accessName, itemName, key, value, plyID64)
+serverReceiveFunctions[MESSAGE_SET_VALUE] = function(data, plyID64)
+	local accessName = registeredDatabases[data.index].accessName
+	database.SetValue(accessName, data.itemName, data.key, data.value, plyID64)
 end
 
 ---
--- Send set value to client
--- @param table data contains index, itemName, key, value here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_SET_VALUE] = function(data)
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteString(data.itemName)
-	net.WriteString(data.key)
-	net.WriteString(tostring(data.value))
-end
-
-clientReceiveFunctions[MESSAGE_SET_VALUE] = function()
-	local index = net.ReadUInt(uIntBits)
-	local itemName = net.ReadString()
-	local key = net.ReadString()
-	local value = net.ReadString()
-
-	value = ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
-	OnChange(index, itemName, key, value)
-	ValueReceived(index, itemName, key)
-end
-
----
--- Send query for resetting the database to server
--- @param table data contains index
+-- Receives changed value from server
+-- Mark value as received and call OnChange-function
+-- @param table data = {index, itemName, key, value}
 -- @realm client
 -- @internal
-clientSendFunctions[MESSAGE_RESET] = function(data)
-	net.WriteUInt(data.index, uIntBits)
+clientReceiveFunctions[MESSAGE_SET_VALUE] = function(data)
+	OnChange(data.index, data.itemName, data.key, data.value)
+	ValueReceived(data.index, data.itemName, data.key)
 end
 
 ---
 -- Receive query for resetting the database from client
+-- @param table data = {index}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_RESET] = function(plyID64)
-	database.Reset(registeredDatabases[net.ReadUInt(uIntBits)].accessName, plyID64)
-end
-
----
--- Send reset command to client
--- To make sure the client resets all stored values to the default
--- @param table data contains index
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_RESET] = function(data)
-	net.WriteUInt(data.index, uIntBits)
+serverReceiveFunctions[MESSAGE_RESET] = function(data, plyID64)
+	database.Reset(registeredDatabases[data.index].accessName, plyID64)
 end
 
 ---
 -- Receive reset command from server
 -- Reset all stored values back to the defaults
+-- @param table data = {index}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_RESET] = function()
-	ResetDatabase(net.ReadUInt(uIntBits))
-end
-
----
--- Send requested default values to client
--- Can either be a single value or a table
--- @param table data contains index, itemName, key, value, sendTable and defaultData here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteBool(data.sendTable or false)
-
-	if data.sendTable then
-		net.WriteTable(data.defaultData)
-	else
-		net.WriteString(data.itemName)
-		net.WriteString(data.key)
-		net.WriteString(tostring(data.value))
-	end
+clientReceiveFunctions[MESSAGE_RESET] = function(data)
+	ResetDatabase(data.index)
 end
 
 ---
 -- Receive requested default values from server
 -- and cache it
+-- @param table data = {index, itemName, key, value, sentTable,}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function()
-	local index = net.ReadUInt(uIntBits)
-	local dataTable = registeredDatabases[index]
+clientReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
+	local dataTable = registeredDatabases[data.index]
 
-	local sentTable = net.ReadBool()
-
-	if sentTable then
-		dataTable.defaultData = net.ReadTable()
+	if data.sentDefaults then
+		dataTable.defaultData = data.defaultData
 	else
-		local itemName = net.ReadString()
-		local key = net.ReadString()
-		local value = ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
+		local itemName = data.itemName
 
 		local defaultData = dataTable.defaultData
 		defaultData[itemName] = defaultData[itemName] or {}
-		defaultData[itemName][key] = value
+		defaultData[itemName][data.key] = data.value
 	end
 end
 
 -- Put local functions into global table clientside
 if CLIENT then
-	sendDataFunctions = clientSendFunctions
 	receiveDataFunctions = clientReceiveFunctions
 end
 
 -- Put local functions into global table serverside
 if SERVER then
-	sendDataFunctions = serverSendFunctions
 	receiveDataFunctions = serverReceiveFunctions
 end
 
@@ -799,13 +579,11 @@ end
 
 ---
 -- The function to be called on received synchronisation messages between server and client
--- @param number len length of the message
--- @param Player ply player that the message is received, `nil` on the client
+-- @param table data Contains per messageIdentifier a number of Entries with the data
+-- @param Player ply player that the message has received, `nil` on the client
 -- @realm shared
 -- @internal
-local function SynchronizeStates(len, ply)
-	if len < 1 then return end
-
+local function SynchronizeStates(data, ply)
 	local plyID64
 
 	if SERVER then
@@ -816,111 +594,38 @@ local function SynchronizeStates(len, ply)
 		if not playerID64Cache[plyID64] then return end
 	end
 
-	-- As size is unclear at start of the message and `net.BytesLeft` is not working
-	-- we instead always check if there is more to send with booleans
-	local continueReading = net.ReadBool()
-
-	while continueReading do
-		local identifier = net.ReadUInt(uIntBits)
-		local readNextValue = net.ReadBool()
-
-		while readNextValue do
-			receiveDataFunctions[identifier](plyID64)
-			readNextValue = net.ReadBool()
+	for identifier, indexedData in pairs(data) do
+		for i = 1, #indexedData do
+			receiveDataFunctions[identifier](indexedData[i], plyID64)
 		end
-
-		continueReading = net.ReadBool()
 	end
 end
-net.Receive("TTT2SynchronizeDatabase", SynchronizeStates)
+net.ReceiveStream("TTT2SynchronizeDatabase", SynchronizeStates)
 
 ---
 -- The function to call when synchronizing all messages between server and client
 -- @realm shared
 -- @internal
 local function SendUpdatesNow()
-	sendRequestsNextUpdate = false
-
-	if table.IsEmpty(dataStore) then return end
-
 	-- Send one message per plyIdentifier and index
 	-- This can either be a limited playerList or just one player
-	local plyDeleteIdentifiers = {}
 	for plyIdentifier, indexList in pairs(dataStore) do
-		local indexDeleteIdentifiers = {}
 		for index, identifierList in pairs(indexList) do
-			net.Start("TTT2SynchronizeDatabase")
-
-			-- Then go through all message identifiers and their cached data
-			-- and send them accordingly
-			local stopSending = false
-			local deleteIdentifiers = {}
-			for identifier, indexedData in pairs(identifierList) do
-				net.WriteBool(true)
-				net.WriteUInt(identifier, uIntBits)
-				net.WriteBool(#indexedData > 0)
-
-				-- Add data to one message as long as `net.BytesWritten` are not exceeding the limit
-				-- Use bools to determine the end as `net.BytesLeft` is not working and we dont know the size before this loop
-				for i = #indexedData, 1, -1 do
-					sendDataFunctions[identifier](indexedData[i])
-					indexedData[i] = nil
-
-					stopSending = net.BytesWritten() >= maxBytesPerMessage
-
-					net.WriteBool( not (stopSending or i == 1))
-
-					if stopSending then break end
-				end
-
-				if #indexedData <= 0 then
-					deleteIdentifiers[identifier] = true
-				end
-
-				if stopSending then break end
-			end
-			net.WriteBool(false)
-
+			local plys
 			if SERVER then
-				if plyIdentifier == SEND_TO_PLY_ALL then
-					net.Broadcast()
-				elseif plyIdentifier == SEND_TO_PLY_REGISTERED then
-					net.Send(registeredPlayersIndexTable[index] or {})
+				if plyIdentifier == SEND_TO_PLY_REGISTERED then
+					plys = registeredPlayersIndexTable[index] or {}
 				elseif IsPlayer(playerID64Cache[plyIdentifier]) then
-					net.Send(playerID64Cache[plyIdentifier] or {})
+					plys = playerID64Cache[plyIdentifier] or {}
 				end
-			elseif CLIENT then
-				net.SendToServer()
 			end
 
-			-- Delete the cache of data that was already sent
-			for identifier in pairs(deleteIdentifiers) do
-				identifierList[identifier] = nil
-			end
-
-			if table.IsEmpty(identifierList) then
-				indexDeleteIdentifiers[index] = true
-			end
-
-			-- If data was left, send them next frame
-			if stopSending and not sendRequestsNextUpdate then
-				sendRequestsNextUpdate = true
-				timer.Simple(0, SendUpdatesNow)
-			end
-		end
-
-		for index in pairs(indexDeleteIdentifiers) do
-			indexList[index] = nil
-		end
-
-		if table.IsEmpty(indexList) then
-			plyDeleteIdentifiers[plyIdentifier] = true
+			net.SendStream("TTT2SynchronizeDatabase", identifierList, plys)
 		end
 	end
 
-	for plyIdentifier in pairs(plyDeleteIdentifiers) do
-		dataStore[plyIdentifier] = nil
-	end
+	dataStore = {}
+	sendRequestsNextUpdate = false
 end
 
 ---
@@ -962,18 +667,12 @@ if CLIENT then
 
 	---
 	-- Gives the next messageIdentifier to identify functions on callback.
-	-- As they are limited to the given uIntBits, it's possible that the maximum number of identifier is reached
-	-- So it's checked that pending requests are using unique identifiers
+	-- Its a placeholder in case a better way is needed
 	-- @return number, the next messageIdentifier
 	-- @realm client
 	-- @internal
 	local function getNextMessageIdentifier()
 		messageIdentifier = messageIdentifier + 1
-
-		if messageIdentifier > newMaxUInt then
-			extraBits = math.ceil(math.log(messageIdentifier + 1, 2)) - uIntBits
-			newMaxUInt = 2 ^ (uIntBits + extraBits) - 1
-		end
 
 		return messageIdentifier
 	end
@@ -987,7 +686,7 @@ if CLIENT then
 		local identifier = getNextMessageIdentifier()
 		functionCache[identifier] = OnReceiveFunc
 
-		SendUpdateNextTick(MESSAGE_REGISTER, {identifier = identifier, extraBits = extraBits})
+		SendUpdateNextTick(MESSAGE_REGISTER, {identifier = identifier})
 	end
 
 	---
@@ -1075,15 +774,15 @@ if CLIENT then
 		local identifier = getNextMessageIdentifier()
 		functionCache[identifier] = OnReceiveFunc
 
-		requestCache[identifier] = {
+		local data = {
 			accessName = accessName,
 			itemName = itemName,
 			key = key,
 			index = index,
-			extraBits = extraBits
+			identifier = identifier
 		}
 
-		SendUpdateNextTick(MESSAGE_GET_VALUE, identifier)
+		SendUpdateNextTick(MESSAGE_GET_VALUE, data)
 	end
 
 	---
@@ -1213,18 +912,22 @@ if SERVER then
 	-- @note This is used internally to sync between server and client, you dont need to call it manually
 	-- @param string plyIdentifier the player identifier to determine who receives the message, defined in `SEND_TO_PLY_`-enums or can be a plyID64
 	-- @param[opt] string identifier the identifier used to get correct onreceive functions
-	-- @param[opt] number usedExtraBits the extra Bits used to send correct identifier
 	-- @realm server
 	-- @internal
-	function database.SyncRegisteredDatabases(plyIdentifier, identifier, usedExtraBits)
+	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
 		local tableCount = #registeredDatabases
 
 		for databaseNumber = 1, tableCount do
+			local dataTable = registeredDatabases[databaseNumber]
+
 			--contains additional data in case an identifier is given
 			local dataRegister = {
 				index = databaseNumber,
+				accessName = dataTable.accessName,
+				savingKeys = dataTable.keys,
+				additionalData = dataTable.data,
+				sentAdditionalInfo = true,
 				identifier = identifier,
-				extraBits = usedExtraBits,
 				tableCount = tableCount
 			}
 
@@ -1237,7 +940,7 @@ if SERVER then
 
 			local dataDefault = {
 				index = databaseNumber,
-				sendTable =  true,
+				sentDefaults =  true,
 				defaultData = defaultData
 			}
 
@@ -1294,14 +997,14 @@ if SERVER then
 	---
 	-- This is called upon receiving a get request from a player to send a value back
 	-- @warning Dont use this function if you want to get a value from the database, this is meant to be used internally for a client request
-	-- @param table requestData = {plyID64, identifier, index, itemName, key, extraBits} contains player and the data they requested
+	-- @param table requestData = {identifier, index, itemName, key} contains player and the data they requested
+	-- @param string plyID64 the playerID64 of the player who sent the message
 	-- @realm server
 	-- @internal
-	function database.ReturnGetValue(requestData)
+	function database.ReturnGetValue(requestData, plyID64)
 		local index = requestData.index
 		local accessName = index and registeredDatabases[index] and registeredDatabases[index].accessName
 
-		local plyID64 = requestData.plyID64
 		local hasReadAccess, _ = hasAccessToDatabase(index, plyID64)
 
 		local value
@@ -1314,8 +1017,7 @@ if SERVER then
 		local serverData = {
 			identifier = requestData.identifier,
 			isSuccess = isSuccess,
-			value = value,
-			extraBits = requestData.extraBits
+			value = value
 		}
 
 		-- If accessLevel is the lowest, register the player for every callback on that database
@@ -1591,7 +1293,7 @@ if SERVER then
 			registerIndex = INDEX_NONE
 		end
 
-		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, registerIndex, SEND_TO_PLY_REGISTERED)
+		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendDefaults = false}, registerIndex, SEND_TO_PLY_REGISTERED)
 	end
 
 	---

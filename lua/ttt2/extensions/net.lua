@@ -20,6 +20,7 @@ if SERVER then
 end
 
 -- Size to split the network stream at (currently a bit lower than the max value, just to have some buffer)
+-- Can be up to 65.533KB see: https://wiki.facepunch.com/gmod/net.Start
 net.STREAM_FRAGMENTATION_SIZE = 65400
 
 -- Stream cache variables
@@ -68,7 +69,7 @@ end
 -- the data is reconstructed from all fragments.
 --
 -- @param string messageId a unique message id similar to the network strings
--- @param function callback This is the function that is called after the data was received.
+-- @param function callback(receivedTable, ply) This is the function that is called with the received table.
 -- @realm shared
 function net.ReceiveStream(messageId, callback)
 	-- has to be saved as string, otherwise the key lookups will fail on the table
@@ -82,7 +83,7 @@ end
 -- If all fragments have arrived, reconstruct the data and call
 -- the registered callback.
 -- @internal
-local function ReceiveStream()
+local function ReceiveStream(len, ply)
 	local messageId = tostring(net.ReadUInt(32))
 	local fragmented = net.ReadBool()
 	local data = net.ReadString()
@@ -103,7 +104,7 @@ local function ReceiveStream()
 
 		-- Check if a callback is registered
 		if isfunction(callback) then
-			callback(pon.decode(encodedStr))
+			callback(pon.decode(encodedStr, ply))
 		end
 	end
 end
