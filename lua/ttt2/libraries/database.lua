@@ -849,6 +849,7 @@ local function SendUpdatesNow()
 	for plyIdentifier, indexList in pairs(dataStore) do
 		local indexDeleteIdentifiers = {}
 		for index, identifierList in pairs(indexList) do
+			net.Start("TTT2SynchronizeDatabase")
 
 			-- Then go through all message identifiers and their cached data
 			-- and send them accordingly
