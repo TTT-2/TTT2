@@ -456,7 +456,7 @@ clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
 		defaultData = {}
 	}
 
-	if data.sentAdditionalInfo and table.Count(registeredDatabases) == data.tableCount then
+	if data.identifier and table.Count(registeredDatabases) == data.tableCount then
 		-- Only call the cached functions, when all databases are succesfully registered clientside
 		functionCache[data.identifier]()
 		receivedIdentifier()
@@ -470,7 +470,7 @@ end
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_GET_VALUE] = database.ReturnGetValue
+--serverReceiveFunctions[MESSAGE_GET_VALUE] = database.ReturnGetValue
 
 ---
 -- Receive requested value from server
@@ -782,6 +782,8 @@ if CLIENT then
 			identifier = identifier
 		}
 
+		requestCache[identifier] = data
+
 		SendUpdateNextTick(MESSAGE_GET_VALUE, data)
 	end
 
@@ -926,7 +928,6 @@ if SERVER then
 				accessName = dataTable.accessName,
 				savingKeys = dataTable.keys,
 				additionalData = dataTable.data,
-				sentAdditionalInfo = true,
 				identifier = identifier,
 				tableCount = tableCount
 			}
@@ -1029,6 +1030,8 @@ if SERVER then
 
 		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, INDEX_NONE, plyID64)
 	end
+
+	receiveDataFunctions[MESSAGE_GET_VALUE] = database.ReturnGetValue
 
 	---
 	-- Get the stored key value of the given database if it exists and was registered

@@ -104,7 +104,7 @@ local function ReceiveStream(len, ply)
 
 		-- Check if a callback is registered
 		if isfunction(callback) then
-			callback(pon.decode(encodedStr, ply))
+			callback(pon.decode(encodedStr), ply)
 		end
 	end
 end
