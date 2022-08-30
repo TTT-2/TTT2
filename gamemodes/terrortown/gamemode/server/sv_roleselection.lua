@@ -465,13 +465,18 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 
 	-- now we need to select the subroles
-	for cBase = 1, #baseroleLoopTbl do
-		if maxRoles and maxRoles <= curRoles then break end -- if the limit is reached, stop selection
+	while true do
+		if maxRoles and maxRoles <= curRoles or #baseroleLoopTbl < 1 then break end -- if the limit is reached, stop selection
 
+		local cBase = math.random(#baseroleLoopTbl)
 		local currentBaserole = baseroleLoopTbl[cBase]
 
 		local currentSubroleTbl = availableSubRolesTbl[currentBaserole]
-		if not currentSubroleTbl then continue end -- no subroles connected with this baserole
+		if not currentSubroleTbl or #currentSubroleTbl < 1 then
+			table.remove(baseroleLoopTbl, cBase)
+
+			continue
+		end -- no subroles connected with this baserole
 
 		local subroleTblCount = #currentSubroleTbl
 
@@ -483,7 +488,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			local currentSubroleLayers = layeredSubRolesTbl[currentBaserole]
 
 			-- if there are still defined layers
-			if currentSubroleLayers ~= nil and #currentSubroleLayers >= i then
+			if currentSubroleLayers and #currentSubroleLayers >= i then
 				for j = i, #currentSubroleLayers do
 					local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(currentSubroleTbl, currentSubroleLayers[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
 
@@ -496,6 +501,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 					end
 
 					subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+					table.RemoveByValue(currentSubroleTbl, subrole)
 
 					break
 				end
@@ -512,7 +518,12 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			selectableRoles[subrole] = rolesAmountList[subrole]
 
 			curRoles = curRoles + 1
+
+			break
 		end
+
+		-- If got to this point remove the subrole Table
+		table.remove(availableSubRolesTbl, currentBaserole)
 	end
 
 	---
