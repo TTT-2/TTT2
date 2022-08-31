@@ -522,8 +522,10 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			break
 		end
 
-		-- If got to this point remove the subrole Table
-		table.remove(availableSubRolesTbl, currentBaserole)
+		if #currentSubroleTbl < 1 then
+			-- If nothing left remove the subrole Table
+			table.remove(availableSubRolesTbl, currentBaserole)
+		end
 	end
 
 	---
