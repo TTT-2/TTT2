@@ -152,6 +152,7 @@ end
 -- @internal
 local function TTT2BindCheckThink()
 	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
+	-- TODO: Maybe send vguihandler the pressed button to close menus again or enable fast buys
 	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or vguihandler.IsOpen() then return end
 
 	for btn, tbl in pairs(bind.bindings) do

@@ -157,7 +157,238 @@ local function CanCarryWeapon(item)
 end
 
 --
--- Creates tabel of labels showing the status of ordering prerequisites
+--     Build Shop menu
+--
+
+-- load score menu pages
+local function ShouldInherit(t, base)
+	return t.base ~= t.type
+end
+
+local function OnInitialization(class, path, name)
+	class.type = name
+	class.base = class.base or "base_shopmenu"
+
+	MsgN("Added TTT2 shop menu file: ", path, name)
+end
+
+local subMenus = classbuilder.BuildFromFolder(
+	"terrortown/menus/shop/",
+	CLIENT_FILE,
+	"CLSHOPMENU", -- class scope
+	OnInitialization, -- on class loaded
+	true, -- should inherit
+	ShouldInherit -- special inheritance check
+)
+
+-- transfer subMenus into indexed table
+local subMenusIndexed = {}
+
+for _, subMenu in pairs(subMenus) do
+	if subMenu.type == "base_shopmenu" then continue end
+
+	subMenusIndexed[#subMenusIndexed + 1] = subMenu
+end
+
+table.SortByMember(subMenusIndexed, "priority")
+
+CLSHOP = CLSHOP or {}
+CLSHOP.sizes = {}
+
+---
+-- Precalculates the sizes needed for the UI.
+-- @internal
+-- @realm client
+function CLSHOP:CalculateSizes()
+	self.sizes.width = 1200
+	self.sizes.height = 700
+	self.sizes.padding = 10
+	self.sizes.paddingSmall = 0.5 * self.sizes.padding
+
+	self.sizes.widthMenu = 50 + vskin.GetBorderSize()
+
+	local doublePadding = 2 * self.sizes.padding
+
+	self.sizes.heightMainArea = self.sizes.height - doublePadding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - doublePadding
+
+	self.sizes.heightHeaderPanel = 120
+	self.sizes.widthTopButton = 140
+	self.sizes.heightTopButton = 30
+	self.sizes.widthTopLabel = 0.5 * self.sizes.widthMainArea - self.sizes.widthTopButton - self.sizes.padding
+	self.sizes.heightTopButtonPanel = self.sizes.heightTopButton + doublePadding
+	self.sizes.heightRow = 25
+	self.sizes.heightTitleRow = 30
+
+	self.sizes.heightButton = 45
+	self.sizes.widthButton = 175
+	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+	self.sizes.heightContentLarge = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
+	self.sizes.heightContent = self.sizes.heightContentLarge - self.sizes.heightHeaderPanel
+	self.sizes.heightMenuButton = 50
+
+	self.sizes.widthKarma = 50
+	self.sizes.widthScore = 35
+end
+
+---
+-- Creates the shop @{Panel} for the local @{Player}.
+-- @internal
+-- @realm client
+function CLSHOP:CreatePanel()
+	self:CalculateSizes()
+
+	local frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "shop_title", true)
+
+	frame:SetPadding(0, 0, 0, 0)
+	frame:CloseButtonClickOverride(function()
+		self:HidePanel()
+	end)
+
+	-- LEFT HAND MENU STRIP
+	local menuBox = vgui.Create("DPanelTTT2", frame)
+	menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
+	menuBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
+	menuBox:Dock(LEFT)
+	menuBox.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "VerticalBorderedBoxTTT2", slf, w, h)
+
+		return false
+	end
+
+	local menuBoxGrid = vgui.Create("DIconLayout", menuBox)
+	menuBoxGrid:Dock(FILL)
+	menuBoxGrid:SetSpaceY(self.sizes.padding)
+
+	-- RIGHT HAND MAIN AREA
+	local mainBox = vgui.Create("DPanelTTT2", frame)
+	mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	mainBox:DockMargin(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+	mainBox:Dock(RIGHT)
+
+	local contentBox = vgui.Create("DPanelTTT2", mainBox)
+	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	contentBox:Dock(TOP)
+
+	local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
+	buttonArea:SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
+	buttonArea:Dock(BOTTOM)
+
+	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
+	buttonClose:SetText("close")
+	buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonClose:SetPos(self.sizes.widthMainArea - 175, self.sizes.padding + 1)
+	buttonClose.DoClick = function(btn)
+		self:HidePanel()
+	end
+
+	-- POPULATE SIDEBAR PANEL
+	local lastActive
+
+	for i = 1, #subMenusIndexed do
+		local data = subMenusIndexed[i]
+
+		local menuButton = menuBoxGrid:Add("DSubmenuButtonTTT2")
+		menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
+		menuButton:SetIcon(data.icon)
+		menuButton:SetTooltip(data.title)
+		menuButton.DoClick = function(slf)
+			contentBox:Clear()
+			buttonPanel:Clear()
+
+			data:Populate(contentBox)
+			data:PopulateButtonPanel(buttonArea)
+
+			slf:SetActive(true)
+			lastActive:SetActive(false)
+			lastActive = slf
+		end
+
+		if i == 1 then
+			menuButton:SetActive(true)
+			lastActive = menuButton
+		end
+	end
+
+	-- load initial menu
+	local mainShop = subMenusIndexed[1]
+	mainShop:Populate(contentBox)
+	mainShop:PopulateButtonPanel(buttonArea)
+
+	return frame
+end
+
+---
+-- Displays the shop @{Panel} for the local @{Player}.
+-- @realm client
+-- @internal
+function CLSHOP:ShowPanel()
+	if not IsValid(self.panel) then
+		self.panel = CLSHOP:CreatePanel()
+	end
+
+	self.panel:ShowFrame()
+end
+
+---
+-- Hides a @{Panel} without closing it.
+-- @realm client
+function CLSHOP:HidePanel()
+	if not IsValid(self.panel) then return end
+
+	self.panel:HideFrame()
+end
+
+---
+-- Checks if there is an existing @{Panel} hidden
+-- @return boolean Returns true if a @{Panel} is hidden
+-- @realm client
+function CLSHOP:IsPanelHidden()
+	if IsValid(self.panel) then
+		return self.panel:IsFrameHidden()
+	else
+		return true
+	end
+end
+
+---
+-- Clears the current shop @{Panel} and removes it
+-- @realm client
+-- @internal
+function CLSHOP:ClearPanel()
+	if IsValid(self.panel) then
+		self.panel:CloseFrame()
+	end
+end
+
+---
+-- Initializes the shop @{Panel} and prepares the needed data
+-- @realm client
+-- @internal
+function CLSHOP:Init()
+
+end
+
+---
+-- Toggles the visibility of the current shop @{Panel}
+-- @realm client
+-- @internal
+function CLSHOP:Toggle()
+	if self:IsPanelHidden() then
+		self:ShowPanel()
+	else
+		self:HidePanel()
+	end
+end
+
+bind.Register("toggle_clshop", function()
+	CLSHOP:ClearPanel()
+	CLSHOP:Toggle()
+end,
+nil, "header_bindings_ttt2", "label_bind_clshop")
+
+--
+-- Creates table of labels showing the status of ordering prerequisites
 --
 
 local function PreqLabels(parent, x, y)

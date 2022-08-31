@@ -256,6 +256,7 @@ util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
 -- provide menu files by loading them from here:
+fileloader.LoadFolder("terrortown/menus/shop/", false, CLIENT_FILE)
 fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)
 fileloader.LoadFolder("terrortown/menus/gamemode/", false, CLIENT_FILE)
 fileloader.LoadFolder("terrortown/menus/gamemode/", true, CLIENT_FILE)
