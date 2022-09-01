@@ -464,68 +464,132 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	-- @realm server
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 
+	local maxSubroleCount = 0
+
+	-- Cleanup baseroles, that have no subrole, as the baseroleTable is only needed for that
+	for i = #baseroleLoopTbl, 1, -1 do
+		local baseRole = baseroleLoopTbl[i]
+		local subRoles = availableSubRolesTbl[baseRole]
+
+		-- Cleanup baseroles, that have no subrole, as the baseroleTable is only needed for that
+		if not subRoles or #subRoles < 1 then
+			table.remove(baseroleLoopTbl, i)
+
+			continue
+		end
+
+		-- Separate available subroles from already layered subroles, so that subRoles only contains unlayered ones
+		-- Cleanup layers from unavailable subroles
+		local subroleLayers = layeredSubRolesTbl[baseRole]
+
+		if not subroleLayers then
+			maxSubroleCount = maxSubroleCount + #subRoles
+
+			continue
+		end
+
+		lastSubroleCount = 0
+
+		for j = #subroleLayers, 1, -1 do
+			-- clean the currently indexed layer (so that it just includes selectable roles),
+			-- because we working with predefined layers that probably includes roles
+			-- that aren't selectable with the current amount of players, etc.
+			subroleLayers[j] = CleanupAvailableRolesLayerTbl(subRoles, subroleLayers[j])
+
+			if #subroleLayers[j] > 0 then
+				-- One subrole per layer
+				maxSubroleCount = maxSubroleCount + 1
+
+				continue
+			end
+
+			table.remove(subroleLayers, j)
+		end
+
+		-- Save left over unlayered subroles
+		maxSubroleCount = maxSubroleCount + #subRoles
+
+		if #subroleLayers > 0 then continue end
+
+		layeredSubRolesTbl[baseRole] = nil
+	end
+
+	print("\n\nEntering while loop in roleselection")
+	print("Overall Left Subroles are: " .. maxSubroleCount)
+	print("BaseroleloopTable:")
+	local basetbl = table.Copy(baseroleLoopTbl)
+	for i = 1,#basetbl do
+		basetbl[i] = roles.GetByIndex(basetbl[i]).name
+	end
+	PrintTable(basetbl)
+	print("\navailableSubRolesTbl:")
+	local subtbl = table.Copy(availableSubRolesTbl)
+	for i = 0,2 do
+		for j = 1, #subtbl[i] do
+			subtbl[i][j] = roles.GetByIndex(subtbl[i][j]).name
+		end
+	end
+	PrintTable(subtbl)
+	print("\nlayeredSubRolesTable:")
+	local layTbl = {}
+	for rl in pairs(layeredSubRolesTbl) do
+		local newTbl = {}
+		if istable(layeredSubRolesTbl[rl]) then
+			for j = 1, #layeredSubRolesTbl[rl] do
+				newTbl[j] = {}
+				for k = 1, #layeredSubRolesTbl[rl][j] do
+					newTbl[j][k] = roles.GetByIndex(layeredSubRolesTbl[rl][j][k]).name
+				end
+			end
+		end
+		layTbl[roles.GetByIndex(rl).name] = newTbl
+	end
+	PrintTable(layTbl)
+	print("\nEnter While Loop:")
 	-- now we need to select the subroles
-	while true do
+	for i = 1, maxSubroleCount do
 		if maxRoles and maxRoles <= curRoles or #baseroleLoopTbl < 1 then break end -- if the limit is reached, stop selection
 
 		local cBase = math.random(#baseroleLoopTbl)
 		local currentBaserole = baseroleLoopTbl[cBase]
+		print("Next " .. i .. ", Random baserole: " ..  roles.GetByIndex(currentBaserole).name)
 
+		local currentSubroleLayers = layeredSubRolesTbl[currentBaserole]
 		local currentSubroleTbl = availableSubRolesTbl[currentBaserole]
-		if not currentSubroleTbl or #currentSubroleTbl < 1 then
+
+		-- the selected role
+		local subrole = nil
+
+		-- if there are still defined layers check them first
+		if currentSubroleLayers and #currentSubroleLayers >= 1 then
+			print("Choosing from Layer")
+
+			subrole = currentSubroleLayers[1][math.random(#currentSubroleLayers[1])]
+
+			table.remove(currentSubroleLayers, 1) -- remove the current layer
+		elseif currentSubroleTbl and #currentSubroleTbl >= 1 then
+			-- If no layers left, choose random subrole
+			print("Choosing random.")
+			local rnd = math.random(#currentSubroleTbl)
+			subrole = currentSubroleTbl[rnd]
+
+			table.remove(currentSubroleTbl, rnd) -- selected subrole shouldn't get selected multiple times
+
+			-- If nothing left remove the baserole Table
+			if #currentSubroleTbl < 1 then
+				table.remove(baseroleLoopTbl, cBase)
+			end
+		else
+			print("Nothing to choose, removing baserole")
 			table.remove(baseroleLoopTbl, cBase)
 
 			continue
-		end -- no subroles connected with this baserole
-
-		local subroleTblCount = #currentSubroleTbl
-
-		for i = 1, subroleTblCount do
-			if maxRoles and maxRoles <= curRoles or #currentSubroleTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
-
-			-- the selected role
-			local subrole = nil
-			local currentSubroleLayers = layeredSubRolesTbl[currentBaserole]
-
-			-- if there are still defined layers
-			if currentSubroleLayers and #currentSubroleLayers >= i then
-				for j = i, #currentSubroleLayers do
-					local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(currentSubroleTbl, currentSubroleLayers[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
-
-					-- if there is no selectable role left in the current layer
-					if #cleanedLayerTbl < 1 then
-						table.remove(layeredSubRolesTbl, i) -- remove the current layer
-
-						-- redo the current loop with the same index
-						continue
-					end
-
-					subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-					table.RemoveByValue(currentSubroleTbl, subrole)
-
-					break
-				end
-			end
-
-			-- if no subrole was selected (no layer left or no layer defined)
-			if not subrole then
-				local rnd = math.random(#currentSubroleTbl)
-				subrole = currentSubroleTbl[rnd]
-
-				table.remove(currentSubroleTbl, rnd) -- selected subrole shouldn't get selected multiple times
-			end
-
-			selectableRoles[subrole] = rolesAmountList[subrole]
-
-			curRoles = curRoles + 1
-
-			break
 		end
 
-		if #currentSubroleTbl < 1 then
-			-- If nothing left remove the subrole Table
-			table.remove(availableSubRolesTbl, currentBaserole)
-		end
+		print("Chose subrole " .. roles.GetByIndex(subrole).name)
+		selectableRoles[subrole] = rolesAmountList[subrole]
+
+		curRoles = curRoles + 1
 	end
 
 	---
@@ -533,6 +597,13 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
 	roleselection.selectableRoles = selectableRoles
+	print("\n\nSelectable Roles:")
+	local selRol = {}
+	for roleN, number in pairs(selectableRoles) do
+		selRol[roles.GetByIndex(roleN).name] = number
+	end
+	PrintTable(selRol)
+	print("END\n\n")
 
 	return selectableRoles
 end
