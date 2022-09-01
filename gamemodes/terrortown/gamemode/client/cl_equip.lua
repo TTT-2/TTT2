@@ -200,16 +200,20 @@ CLSHOP.sizes = {}
 -- @internal
 -- @realm client
 function CLSHOP:CalculateSizes()
-	self.sizes.width = 1200
-	self.sizes.height = 700
+	self.sizes.width = 800
+	self.sizes.height = 550
 	self.sizes.padding = 10
 	self.sizes.paddingSmall = 0.5 * self.sizes.padding
+	local doublePadding = 2 * self.sizes.padding
+
+	self.sizes.heightButton = 35
+	self.sizes.widthButton = 150
+	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+	self.sizes.widthBottomButtonPanel = self.sizes.width - doublePadding
 
 	self.sizes.widthMenu = 50 + vskin.GetBorderSize()
 
-	local doublePadding = 2 * self.sizes.padding
-
-	self.sizes.heightMainArea = self.sizes.height - doublePadding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+	self.sizes.heightMainArea = self.sizes.height - self.sizes.heightBottomButtonPanel - doublePadding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
 	self.sizes.widthMainArea = self.sizes.width - self.sizes.widthMenu - doublePadding
 
 	self.sizes.heightHeaderPanel = 120
@@ -220,9 +224,6 @@ function CLSHOP:CalculateSizes()
 	self.sizes.heightRow = 25
 	self.sizes.heightTitleRow = 30
 
-	self.sizes.heightButton = 45
-	self.sizes.widthButton = 175
-	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
 	self.sizes.heightContentLarge = self.sizes.heightMainArea - self.sizes.heightBottomButtonPanel - self.sizes.heightTopButtonPanel - 3 * self.sizes.padding
 	self.sizes.heightContent = self.sizes.heightContentLarge - self.sizes.heightHeaderPanel
 	self.sizes.heightMenuButton = 50
@@ -245,10 +246,20 @@ function CLSHOP:CreatePanel()
 		self:HidePanel()
 	end)
 
+	-- UPPER HAND MAIN AREA
+	local mainBox = vgui.Create("DPanelTTT2", frame)
+	mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	mainBox:DockMargin(0, 0, 0, 0)
+	mainBox:Dock(TOP)
+
+	local contentBox = vgui.Create("DPanelTTT2", mainBox)
+	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	contentBox:Dock(RIGHT)
+
 	-- LEFT HAND MENU STRIP
-	local menuBox = vgui.Create("DPanelTTT2", frame)
+	local menuBox = vgui.Create("DPanelTTT2", mainBox)
 	menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
-	menuBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
+	menuBox:DockMargin(0, self.sizes.padding, 0, 0)
 	menuBox:Dock(LEFT)
 	menuBox.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "VerticalBorderedBoxTTT2", slf, w, h)
@@ -260,24 +271,20 @@ function CLSHOP:CreatePanel()
 	menuBoxGrid:Dock(FILL)
 	menuBoxGrid:SetSpaceY(self.sizes.padding)
 
-	-- RIGHT HAND MAIN AREA
-	local mainBox = vgui.Create("DPanelTTT2", frame)
-	mainBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-	mainBox:DockMargin(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
-	mainBox:Dock(RIGHT)
+	-- BOTTOM HAND BUTTON STRIP
+	local buttonBox = vgui.Create("DPanelTTT2", frame)
+	buttonBox:SetSize(self.sizes.widthBottomButtonPanel, self.sizes.heightBottomButtonPanel)
+	buttonBox:DockMargin(0, self.sizes.padding, 0, self.sizes.padding)
+	buttonBox:Dock(BOTTOM)
 
-	local contentBox = vgui.Create("DPanelTTT2", mainBox)
-	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
-	contentBox:Dock(TOP)
-
-	local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
-	buttonArea:SetSize(self.sizes.widthMainArea, self.sizes.heightBottomButtonPanel)
+	local buttonArea = vgui.Create("DButtonPanelTTT2", buttonBox)
+	buttonArea:SetSize(self.sizes.widthBottomButtonPanel, self.sizes.heightBottomButtonPanel)
 	buttonArea:Dock(BOTTOM)
 
 	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
 	buttonClose:SetText("close")
 	buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	buttonClose:SetPos(self.sizes.widthMainArea - 175, self.sizes.padding + 1)
+	buttonClose:SetPos(self.sizes.widthBottomButtonPanel - self.sizes.widthButton, self.sizes.padding + 1)
 	buttonClose.DoClick = function(btn)
 		self:HidePanel()
 	end
@@ -289,7 +296,7 @@ function CLSHOP:CreatePanel()
 		local data = subMenusIndexed[i]
 
 		local menuButton = menuBoxGrid:Add("DSubmenuButtonTTT2")
-		menuButton:SetSize(self.sizes.widthMenu - 1, self.sizes.heightMenuButton)
+		menuButton:SetSize(self.sizes.widthMenu, self.sizes.heightMenuButton)
 		menuButton:SetIcon(data.icon)
 		menuButton:SetTooltip(data.title)
 		menuButton.DoClick = function(slf)
@@ -323,9 +330,13 @@ end
 -- @realm client
 -- @internal
 function CLSHOP:ShowPanel()
-	if not IsValid(self.panel) then
-		self.panel = CLSHOP:CreatePanel()
+	if IsValid(self.panel) then
+		self.panel:HideFrame() -- Test hiding for always new creation
 	end
+
+	--if not IsValid(self.panel) then
+		self.panel = CLSHOP:CreatePanel()
+	--end
 
 	self.panel:ShowFrame()
 end
