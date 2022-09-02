@@ -4,6 +4,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+  Convert the newly added language into Chinese and fix some Chinese errors (by @sbzlzh)
+
 ## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-05)
 
 ### Added
