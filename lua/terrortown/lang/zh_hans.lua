@@ -39,9 +39,9 @@ L.win_innocent = "叛徒们被击败了!"
 L.win_nones = "蜜蜂们胜利了!(平局)"
 L.win_showreport = "来看一下 {num} 秒的回合总结吧!"
 
-L.limit_round = "已达游戏回合上限,即将载入地图 {mapname}"
-L.limit_time = "已达游戏时间上限,即将载入地图 {mapname}"
-L.limit_left = "在载入地图 {mapname} 前,还有 {num} 回合或者 {time} 分钟的剩余时间."
+L.limit_round = "已达到回合限制.下一张地图将很快加载."
+L.limit_time = "已达到时限.下一张地图将很快加载."
+L.limit_left = "地图更改前剩余{num}回合或{time}分钟."
 
 -- Credit awards
 L.credit_all = "你的阵营因为表现获得了 {num} 点积分."
@@ -150,7 +150,7 @@ L.radio_button_burn = "燃烧"
 L.radio_button_steps = "脚步声"
 
 -- Intro screen shown after joining
-L.intro_help = "若你是TTT新手,可按下F1查看游戏教学!"
+L.intro_help = "如果您是游戏新手,请按F1键获取说明!"
 
 -- Radiocommands/quickchat
 L.quick_title = "快速聊天"
@@ -205,7 +205,7 @@ L.search_dmg_other = "你无法找到这恐怖份子的具体死因."
 
 L.search_weapon = "死者是被 {weapon} 所杀."
 L.search_head = "最后一击打在头上.完全没机会叫喊."
-L.search_time = "他大约死于你进行搜索的 {time} 前."
+L.search_time = "他们大约在你进行搜索前{time}死亡."
 L.search_dna = "用DNA扫描器检索凶手的DNA标本,DNA样本大约在 {time} 前开始衰退."
 
 L.search_kills1 = "你找到一个名单,记载着他发现的死者: {player}"
@@ -346,7 +346,7 @@ L.knife_name = "刀子"
 L.knife_thrown = "飞刀"
 
 L.knife_desc = [[
-可以迅速、无声的杀死受伤的目标,但只能使用一次.
+可以迅速,无声的杀死受伤的目标,但只能使用一次.
 
 按下右键即可使用飞刀.]]
 
@@ -601,7 +601,7 @@ L.tip21 = "探长的医疗站可让受伤的玩家恢复健康,当然,其中也�
 
 L.tip22 = "治疗站将遗留每位前来治疗的人的DNA样本,探长可将其用在DNA扫描器上,寻找究竟谁曾受过治疗."
 
-L.tip23 = "与武器、C4不同,收音机并不会留下你的DNA样本,不用担心探长会在上头用DNA识破你的身分."
+L.tip23 = "与武器,C4不同,收音机并不会留下你的DNA样本,不用担心探长会在上头用DNA识破你的身分."
 
 L.tip24 = "按下 {helpkey} 阅读教学或变更设定,比如说,你可以永远关掉现在所看到的提示唷～"
 
@@ -1404,7 +1404,7 @@ L.header_rolelayering_role = "{role} 层"
 L.header_rolelayering_baserole = "基础层"
 L.submenu_administration_rolelayering_title = "角色分层"
 L.header_rolelayering_info = "角色分层信息"
-L.help_rolelayering_roleselection = "角色选择过程被分成两个阶段.在第一轮中,基础角色被分配.基本角色是无辜者、叛徒和那些列在“基本角色层”框中的角色.第二遍是用来将这些基础角色升级为子角色."
+L.help_rolelayering_roleselection = "角色选择过程被分成两个阶段.在第一轮中,基础角色被分配.基本角色是无辜者,叛徒和那些列在“基本角色层”框中的角色.第二遍是用来将这些基础角色升级为子角色."
 L.help_rolelayering_layers = "每个层中只有一个角色被选中.首先,来自自定义层的角色从第一层开始分配,直到到达最后一层或没有更多的角色可以被升级.无论哪种情况先发生.如果可升级的槽位仍然可用,未分层的角色也将被分配."
 L.scoreboard_voice_tooltip = "滚动以改变音量"
 
@@ -1428,11 +1428,11 @@ L.equipmenteditor_name_spawn_type = "生成类型"
 L.spec_about_to_revive = "再复活时间内,观赛人数有限."
 
 -- 2021-09-01
-L.spawneditor_name = "再生编辑工具"
+L.spawneditor_name = "生成编辑器工具"
 L.spawneditor_desc = "用于在世界范围内放置武器,弹药和玩家生成位置.只能由超级管理员使用.."
 
-L.spawneditor_place = "放置生成"
-L.spawneditor_remove = "删除生成"
+L.spawneditor_place = "左键放置生成"
+L.spawneditor_remove = "右键删除生成"
 L.spawneditor_change = "更改生成类型(按住 [SHIFT] 以反转)"
 L.spawneditor_ammo_edit = "按住以编辑武器生成时的弹药自动生成"
 
@@ -1536,8 +1536,8 @@ L.help_use_custom_models = [[
 这个模型的选择可以通过安装更多的播放器模型来扩展.]]
 
 -- 2021-10-06
-L.menu_server_addons_title = "服务器附加组件"
-L.menu_server_addons_description = "服务器范围内的管理员只对附加组件进行设置."
+L.menu_server_addons_title = "服务器插件"
+L.menu_server_addons_description = "服务器范围内插件,仅管理员可以设置."
 
 L.tooltip_finish_score_penalty_alive_teammates = "活着的队友们的惩罚: {score}"
 L.finish_score_penalty_alive_teammates = "活着的队友们的处罚:"
@@ -1576,7 +1576,7 @@ L.help_roles_selection = [[
 前面提到的角色分配与玩家的下限有一个特殊的结合.如果角色被考虑选择,并且最小值低于分配系数给定的值,但玩家数量等于或大于下限,单个玩家仍然可以得到这个角色.然后,对于第二个接受这个角色的玩家来说,分配设置再次成立.]]
 L.help_roles_award_info = "一些角色(如果在他们的积分设置中启用)在一定比例的对手死亡后会获得装备积分.这些数值可以在这里进行调整."
 L.help_roles_award_pct = "当这个百分比的其他玩家死亡后,玩家会获得更多的学分."
-L.help_roles_award_repeat = "学分奖励是否会多次发放.例如,如果你将百分比设置为'0.25',并启用此功能,玩家将在'25%'被杀、'50%'被杀、'75%'被杀时获得学分."
+L.help_roles_award_repeat = "学分奖励是否会多次发放.例如,如果你将百分比设置为'0.25',并启用此功能,玩家将在'25%'被杀,'50%'被杀,'75%'被杀时获得学分."
 L.help_roles_advanced_warning = "警告:这些是高级设置,可以完全扰乱你的角色选择.如果有疑问,请将所有的值保持在'0'.这个值意味着不应用任何限制,角色选择试图分配尽可能多的角色."
 L.help_roles_max_roles = [[
 角色类别包含TTT2中的每个角色.默认情况下,对于可以分配多少个不同的角色没有限制.然而,这里有两种不同的方法来限制它们.
@@ -1736,9 +1736,9 @@ L.label_crowbar_shove_delay = "撬棍推后的冷却时间"
 L.label_idle = "启用空闲模式"
 L.label_idle_limit = "最大空闲时间(秒)"
 L.label_namechange_kick = "启用改名踢"
-L.label_namechange_bantime = "踢球后禁止的时间,以分钟为单位"
-L.label_log_damage_for_console = "启用控制台的损害记录"
-L.label_damagelog_save = "将损害日志保存到磁盘上"
+L.label_namechange_bantime = "踢出后封禁的时间,以分钟为单位"
+L.label_log_damage_for_console = "启用控制台的伤害记录"
+L.label_damagelog_save = "将伤害日志保存到磁盘上"
 L.label_debug_preventwin = "防止任何胜利条件[debug]"
 L.label_bots_are_spectators = "机器人总是观众"
 L.label_tbutton_admin_show = "向管理员显示叛徒按钮"
@@ -1751,7 +1751,7 @@ L.label_weapon_carrying_range = "武器携带范围"
 L.label_prop_carrying_force = "道具拾取力量"
 L.label_teleport_telefrags = "传送时杀死阻挡的玩家(telefrag)"
 L.label_allow_discomb_jump = "允许手榴弹投掷者的迪斯科跳跃"
-L.label_spawn_wave_interval = "产卵波的间隔时间,以秒为单位"
+L.label_spawn_wave_interval = "生成的间隔时间,以秒为单位"
 L.label_voice_enable = "启用语音聊天"
 L.label_voice_drain = "启用语音聊天的电池功能"
 L.label_voice_drain_normal = "普通玩家的每滴答消耗量"
@@ -1820,8 +1820,8 @@ L.label_karma_clean_half = "清洁奖励减少"
 L.label_karma_persist = "业力值在地图变化中持续存在"
 L.label_karma_low_autokick = "自动踢掉低业力值的玩家"
 L.label_karma_low_amount = "低业力值阈值"
-L.label_karma_low_ban = "禁止选中的低业力值玩家"
-L.label_karma_low_ban_minutes = "禁言时间(分钟)"
+L.label_karma_low_ban = "封禁选中的最低业力值玩家"
+L.label_karma_low_ban_minutes = "封禁时间(分钟)"
 L.label_karma_debugspam = "启用关于业力值变化的调试输出到控制台"
 L.label_max_melee_slots = "最大近战槽位"
 L.label_max_secondary_slots = "最大辅助槽位"
@@ -1843,3 +1843,15 @@ L.label_crowbar_pushforce = "撬棍推力"
 --2022-04-13
 L.label_session_limits_enabled = "启用会话限制"
 L.sb_mapchange_disabled = "会话限制被禁用."
+
+-- 2022-07-02
+L.header_playersettings_falldmg = "摔落伤害设置"
+
+L.label_falldmg_enable = "启用摔落伤害"
+L.label_falldmg_min_velocity = "发生摔落伤害的最小速度阈值"
+L.label_falldmg_exponent = "与速度相关的摔落伤害增加指数"
+
+L.help_falldmg_exponent = [[
+该值修改了随着玩家撞击地面的速度而以指数方式增加的摔落伤害.
+
+更改此值时请小心.设置得太高,即使是最小的摔落也会致命,而设置得太低,会让玩家从极端高度摔落,几乎没有伤害.]]
