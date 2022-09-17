@@ -1830,6 +1830,10 @@ L.label_sprint_crosshair = "走行中のクロスヘアの表示"
 L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
 
+--2022-04-13
+L.label_session_limits_enabled = "セッションの制限を有効にする"
+L.sb_mapchange_disabled = "セッションの制限を無くしました。"
+
 -- 2022-07-02
 L.header_playersettings_falldmg = "落下ダメージ設定"
 
