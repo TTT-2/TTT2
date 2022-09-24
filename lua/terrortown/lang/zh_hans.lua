@@ -23,20 +23,20 @@ L.innocents = "无辜阵营"
 L.traitors = "叛徒阵营"
 
 -- Round status messages
-L.round_minplayers = "没有足够的玩家来开始新的回合…"
-L.round_voting = "投票进行中,新的回合将推迟到 {num} 秒后开始…"
+L.round_minplayers = "没有足够的玩家来开始新的回合..."
+L.round_voting = "投票进行中,新的回合将推迟到 {num} 秒后开始..."
 L.round_begintime = "新回合将在 {num} 秒后开始.请做好准备."
 L.round_selected = "叛徒玩家已选出"
 L.round_started = "回合开始!"
 L.round_restart = "游戏被管理员强制重新开始."
 
 L.round_traitors_one = "叛徒,你将孤身奋斗."
-L.round_traitors_more = "叛徒,你的队友是: {names} ."
+L.round_traitors_more = "叛徒,你的队友有: {names} ."
 
 L.win_time = "时间用尽,叛徒失败了."
 L.win_traitor = "叛徒取得了胜利!"
 L.win_innocent = "叛徒们被击败了!"
-L.win_nones = "蜜蜂们胜利了!(平局)"
+L.win_nones = "无人胜出!(平局)"
 L.win_showreport = "来看一下 {num} 秒的回合总结吧!"
 
 L.limit_round = "已达到回合限制.下一张地图将很快加载."
@@ -48,8 +48,8 @@ L.credit_all = "你的阵营因为表现获得了 {num} 点积分."
 L.credit_kill = "你杀死 {role} 获得了 {num} 点积分."
 
 -- Karma
-L.karma_dmg_full = "你的人品为 {amount} ,因此本回合你将造成正常伤害."
-L.karma_dmg_other = "你的人品为 {amount} ,因此本回合你造成的伤害将减少 {num} %"
+L.karma_dmg_full = "你的人品值为 {amount} ,因此本回合你将造成正常伤害."
+L.karma_dmg_other = "你的人品值为 {amount} ,因此本回合你造成的伤害将减少 {num} %"
 
 -- Body identification messages
 L.body_found = " {finder} 发现了 {victim} 的尸体.{role}"
@@ -656,7 +656,7 @@ L.report_save_result = "事件记录已存在:"
 
 -- Big title window
 L.hilite_win_traitors = "叛徒胜利"
-L.hilite_win_none = "蜜蜂胜利"
+L.hilite_win_none = "无人胜出"
 L.hilite_win_innocent = "无辜者胜利"
 
 L.hilite_players1 = " {numplayers} 名玩家参与游戏,其中 {numtraitors} 人是叛徒"
@@ -770,7 +770,7 @@ L.aw_sgn1_text = "用霰弹枪近距离杀了 {num} 名玩家.切."
 L.aw_sgn2_title = "一千颗小弹丸"
 L.aw_sgn2_text = "不喜欢自己的霰弹,打算送人.已经有 {num} 名受赠人接受了这个礼物."
 
-L.aw_rfl1_title = "把准心对准目标扣下扳机……"
+L.aw_rfl1_title = "把准心对准目标扣下扳机......"
 L.aw_rfl1_text = "用一把好枪和一个沉稳的手终结了 {num} 名玩家的生命."
 
 L.aw_rfl2_title = "你的脑袋冒出来了!"
@@ -1636,7 +1636,7 @@ L.help_detective_hats = [[
 L.label_roles_credits_award_kill = "对杀死的大小进行信用奖励"
 L.label_roles_credits_dead_award = "为一定比例的死敌提供学分奖励"
 L.label_roles_credits_kill_award = "启用对高价值玩家的杀戮的学分奖励"
-L.label_roles_min_karma = "考虑选择的业力值值下限"
+L.label_roles_min_karma = "考虑选择的业力值下限"
 
 -- 2021-11-07
 L.submenu_administration_administration_title = "管理"
@@ -1644,7 +1644,7 @@ L.submenu_administration_voicechat_title = "语音聊天/文本聊天"
 L.submenu_administration_round_setup_title = "回合设置"
 L.submenu_administration_mapentities_title = "地图实体"
 L.submenu_administration_inventory_title = "库存"
-L.submenu_administration_karma_title = "业力值值"
+L.submenu_administration_karma_title = "业力值"
 L.submenu_administration_sprint_title = "冲刺"
 L.submenu_administration_playersettings_title = "玩家设定"
 
@@ -1668,8 +1668,8 @@ L.header_administration_scoreboard = "记分牌设置"
 L.header_hud_toggleable = "可切换HUD元素"
 L.header_mapentities_prop_possession = "道具占有"
 L.header_mapentities_doors = "门"
-L.header_karma_tweaking = "业力值值调整"
-L.header_karma_kick = "业力值值踢出和封禁"
+L.header_karma_tweaking = "业力值调整"
+L.header_karma_kick = "业力值踢出和封禁"
 L.header_karma_logging = "业力值记录"
 L.header_inventory_gernal = "库存大小"
 L.header_inventory_pickup = "库存武器拾取"
@@ -1710,19 +1710,19 @@ L.help_item_armor_dynamic = [[
 如果强化装甲被启用,只要装甲值高于强化阈值,施加给玩家的伤害就会减少15%.]]
 L.help_sherlock_mode = "侦探模式是经典的TTT模式.如果神探模式被禁用,死尸就不能被确认,记分牌上显示每个人都活着,观众可以与活着的选手交谈."
 L.help_prop_possession = [[
-观众可以使用道具附身来附身于躺在世界中的道具,并使用缓慢充电的'打卡计'来移动上述道具.
+观众可以使用道具附身,附身在世界范围内的道具,并使用缓慢充电的 '飞击量表' 来移动上述道具.
 
-冲锋枪'的最大值由一个拥有的基础值组成,其中夹在两个定义的极限值之间的杀戮/死亡差值被加上.随着时间的推移,仪表会慢慢充电.设定的充电时间是为'冲床-O-表'中的一个点进行充电所需的时间.]]
-L.help_karma = "业力值是用来减少随机杀戮的.玩家开始时有一定数量的业力值,当他们伤害/杀死队友时就会失去业力值.他们失去的数量取决于他们伤害或杀死的人的业力值.较低的业力值值会减少给予的伤害."
-L.help_karma_strict = "如果严格的因果报应被启用,伤害惩罚会随着因果报应的减少而更快增加.当它关闭时,当人们保持在800以上时,伤害惩罚是非常低的.启用严格模式使卡尔玛在阻止任何不必要的杀戮方面发挥更大的作用,而禁用它则导致一个更'宽松'的游戏,卡尔玛只伤害那些不断进行团队杀戮的玩家."
-L.help_karma_max = "将最大业力值值设置为1000以上,不会给业力值值超过1000的玩家提供伤害奖励.它可以作为一个卡尔玛缓冲区."
-L.help_karma_ratio = "用于计算如果双方在同一个团队中,受害者的卡尔玛被减去多少的伤害比例.如果发生团队杀戮,会有进一步的惩罚."
+'飞击量表'的最大值由一个拥有的基础值组成,其中夹在两个定义的极限值之间的杀戮/死亡差值被加上.随着时间的推移,仪表会慢慢充电.设定的充电时间是为'飞击量表'中的一个点进行充电所需的时间.]]
+L.help_karma = "业力值是用来减少随机杀戮的.玩家开始时有一定数量的业力值,当他们伤害/杀死队友时就会失去业力值.他们失去的数量取决于他们伤害或杀死的人的业力值.较低的业力值会减少给予的伤害."
+L.help_karma_strict = "如果严格的因果报应被启用,伤害惩罚会随着因果报应的减少而更快增加.当它关闭时,当人们保持在800以上时,伤害惩罚是非常低的.启用严格模式使业力值在阻止任何不必要的杀戮方面发挥更大的作用,而禁用它则导致一个更'宽松'的游戏,业力值只伤害那些不断进行团队杀戮的玩家."
+L.help_karma_max = "将最大业力值设置为1000以上,不会给业力值超过1000的玩家提供伤害奖励.它可以作为一个业力值缓冲区."
+L.help_karma_ratio = "用于计算如果双方在同一个团队中,受害者的业力值被减去多少的伤害比例.如果发生团队杀戮,会有进一步的惩罚."
 L.help_karma_traitordmg_ratio = "如果双方在不同的队伍中,用来计算受害者的业力值被减去多少的伤害比率.如果发生团队杀戮,会有进一步的奖励."
-L.help_karma_bonus = "在一个回合中也有两种不同的被动方式来获得卡尔玛.首先,一个回合的治疗会应用于每个玩家.然后,如果没有队友受伤或被杀,会有一个二次清洁的奖励."
+L.help_karma_bonus = "在一个回合中也有两种不同的被动方式来获得业力值.首先,一个回合的治疗会应用于每个玩家.然后,如果没有队友受伤或被杀,会有一个二次清洁的奖励."
 L.help_karma_clean_half = [[
 当玩家的业力值高于起始水平时(意味着业力值最大值已被配置为高于该水平),他们所有的业力值增加将根据其业力值高于起始水平的程度而减少.因此,它越高,增加的速度就越慢.
 
-这种减少是以指数衰减的曲线进行的:最初速度很快,随着增量的变小,速度也会变慢.这个 convar 设定了奖金减半的时间点(即半衰期).在默认值为0.25的情况下,如果卡尔玛的起始金额为1000,最大金额为1500,而玩家有卡尔玛1125((1500-1000)*0.25=125),那么他的清洁轮奖励将是30/2=15.因此,为了使奖金下降得更快,你应该把这个信念设置得更低,为了使它下降得更慢,你应该把它增加到1.]]
+这种减少是以指数衰减的曲线进行的:最初速度很快,随着增量的变小,速度也会变慢.这个 convar 设定了奖金减半的时间点(即半衰期).在默认值为0.25的情况下,如果业力值的起始值为1000,最大金额为1500,而玩家有业力值1125((1500-1000)*0.25=125),那么他的清洁轮奖励将是30/2=15.因此,为了使奖金下降得更快,你应该把这个信念设置得更低,为了使它下降得更慢,你应该把它增加到1.]]
 L.help_max_slots = "设置每个插槽的最大武器数量.'-1'表示没有限制."
 L.help_item_armor_value = "这是动态模式下的盔甲项目给出的盔甲值.如果启用了经典模式(见'管理'->'玩家设置'),那么每一个大于0的值都被算作现有的护甲."
 
@@ -1749,7 +1749,7 @@ L.label_ragdoll_pinning_innocents = "为无辜的角色启用布娃娃夹击"
 L.label_weapon_carrying = "启用武器携带"
 L.label_weapon_carrying_range = "武器携带范围"
 L.label_prop_carrying_force = "道具拾取力量"
-L.label_teleport_telefrags = "传送时杀死阻挡的玩家(telefrag)"
+L.label_teleport_telefrags = "在传送的瞬间,自动杀死传送位置上的任何人."
 L.label_allow_discomb_jump = "允许手榴弹投掷者的迪斯科跳跃"
 L.label_spawn_wave_interval = "生成的间隔时间,以秒为单位"
 L.label_voice_enable = "启用语音聊天"
@@ -1769,8 +1769,8 @@ L.label_haste_minutes_per_death = "每次死亡的速度奖励(分钟)"
 L.label_posttime_seconds = "回合后时间,以秒为单位"
 L.label_round_limit = "回合数的上限"
 L.label_time_limit_minutes = "游戏时间的上限,以分钟为单位"
-L.label_nade_throw_during_prep = "在准备时间内启用投掷黑桃"
-L.label_postround_dm = "回合结束后启用死亡竞赛"
+L.label_nade_throw_during_prep = "在准备时间内启用投掷手榴弹"
+L.label_postround_dm = "结束时间内,启用死亡竞赛"
 L.label_spectator_chat = "启用观众与大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字时被杀,则打印最后一句话到聊天室"
 L.label_identify_body_woconfirm = "不按'确认'按钮识别尸体"
@@ -1811,12 +1811,12 @@ L.label_karma_strict = "启用严格的业力值"
 L.label_karma_starting = "开始业力值"
 L.label_karma_max = "最大业力值"
 L.label_karma_ratio = "团队伤害的惩罚比例"
-L.label_karma_kill_penalty = "团队杀戮的杀戮惩罚"
+L.label_karma_kill_penalty = "团队杀戮的业力减少百分比"
 L.label_karma_round_increment = "回合治疗"
-L.label_karma_clean_bonus = "清洁回合奖励"
-L.label_karma_traitordmg_ratio = "其他团队伤害的奖励比例"
-L.label_karma_traitorkill_bonus = "其他团队的杀戮奖励"
-L.label_karma_clean_half = "清洁奖励减少"
+L.label_karma_clean_bonus = "干净回合奖励"
+L.label_karma_traitordmg_ratio = "伤害敌人的奖励比例"
+L.label_karma_traitorkill_bonus = "杀敌奖励"
+L.label_karma_clean_half = "干净回合奖励减少"
 L.label_karma_persist = "业力值在地图变化中持续存在"
 L.label_karma_low_autokick = "自动踢掉低业力值的玩家"
 L.label_karma_low_amount = "低业力值阈值"
