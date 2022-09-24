@@ -39,7 +39,7 @@ L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
 L.limit_round = "已达到回合限制，即将下一张载入地图 {mapname}"
 L.limit_time = "已达到时限，即将下一张载入地图 {mapname}"
-L.limit_left = "在载入新地图 {mapname} 前，还剩下 {num} 个回合或 {time} 分钟。"
+L.limit_left = "新地图将在 {num} 回合或 {time} 分钟后切换。"
 
 -- Credit awards
 L.credit_all = "你的阵营因为表现获得了 {num} 点积分。"
