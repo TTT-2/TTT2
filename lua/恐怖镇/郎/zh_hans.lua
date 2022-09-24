@@ -452,8 +452,8 @@ L.ammo_smg1 = "冲锋枪弹药"
 L.ammo_buckshot = "霰弹枪弹药"
 L.ammo_357 = "步枪弹药"
 L.ammo_alyxgun = "沙漠之鹰弹药"
-L.ammo_ar2altfire = "信号弹药"
-L.ammo_gravity = "促狭鬼弹药"
+L.ammo_ar2altfire = "信号枪弹药"
+L.ammo_gravity = "捣蛋鬼弹药"
 
 -- Round status
 L.round_wait = "等待中"
