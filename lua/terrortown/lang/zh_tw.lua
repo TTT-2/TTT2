@@ -1,10 +1,8 @@
--- Traditional Chinese language strings
+-- Traditional Chinese language strings (by TEGTianFan)
+-- 如果你使用了谷歌翻譯、Deepl翻譯器等其他自動翻譯軟體，請不要提交翻譯至GitHub中！/ Don't use google translations!
 
 local L = LANG.CreateLanguage("zh_tw")
 
--- Compatibility language name that might be removed soon.
--- the alias name is based on the original TTT language name:
--- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/simpchinese.lua
 L.__alias = "正體中文"
 
 L.lang_name = "正體中文 (Traditional Chinese)"
@@ -287,6 +285,7 @@ L.c4_remove_destroy2 = "確認：銷毀"
 L.c4_disarm       = "拆除C4"
 L.c4_disarm_cut   = "點擊以剪斷 {num} 號引線"
 
+L.c4_disarm_t     = "剪斷引線以拆除C4。由於你是叛徒，任一條引線都可成功拆除。"
 L.c4_disarm_owned = "剪斷引線以拆除C4。你是裝置此C4的人，細節瞭然於胸，任一條引線都可成功拆除。"
 L.c4_disarm_other = "剪斷正確的引線以拆除C4。倘若你犯了錯，後果將不堪設想唷！"
 
@@ -1418,420 +1417,439 @@ L.xfer_team_indicator = "陣營"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
+-- 2021-07-07
+L.header_equipment_weapon_spawn_setup = "武器生成設置"
+
+L.equipmenteditor_name_auto_spawnable = "裝備隨機生成"
+L.equipmenteditor_name_spawn_type = "生成類型"
+
 -- 2021-07-11
---L.spec_about_to_revive = "Spectating is limited during revival period."
+L.spec_about_to_revive = "在復活時,觀察將被限製。"
 
 -- 2021-09-01
---L.spawneditor_name = "Spawn Editor Tool"
---L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world. Can only be used by super admin."
+L.spawneditor_name = "生成點編輯器工具"
+L.spawneditor_desc = "用於在地圖中放置武器，彈藥和玩家生成位置。只能由超級管理員使用。"
 
---L.spawneditor_place = "Place spawn"
---L.spawneditor_remove = "Remove spawn"
---L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit ammo auto spawn on weapon spawns"
+L.spawneditor_place = "左鍵放置生成點"
+L.spawneditor_remove = "右鍵刪除生成點"
+L.spawneditor_change = "更改生成類型(按住 [SHIFT] 以反轉)"
+L.spawneditor_ammo_edit = "按住以編輯武器生成時的默認備彈量"
 
---L.spawn_weapon_random = "Random Weapon Spawn"
---L.spawn_weapon_melee = "Melee Weapon Spawn"
---L.spawn_weapon_nade = "Grenade Weapon Spawn"
---L.spawn_weapon_shotgun = "Shotgun Weapon Spawn"
---L.spawn_weapon_heavy = "Heavy Weapon Spawn"
---L.spawn_weapon_sniper = "Sniper Weapon Spawn"
---L.spawn_weapon_pistol = "Pistol Weapon Spawn"
---L.spawn_weapon_special = "Special Weapon Spawn"
---L.spawn_ammo_random = "Random ammo spawn"
---L.spawn_ammo_deagle = "Deagle ammo spawn"
---L.spawn_ammo_pistol = "Pistol ammo spawn"
---L.spawn_ammo_mac10 = "Mac10 ammo spawn"
---L.spawn_ammo_rifle = "Rifle ammo spawn"
---L.spawn_ammo_shotgun = "Shotgun ammo spawn"
---L.spawn_player_random = "Random player spawn"
+L.spawn_weapon_random = "隨機武器生成"
+L.spawn_weapon_melee = "近戰武器生成"
+L.spawn_weapon_nade = "手榴彈武器生成"
+L.spawn_weapon_shotgun = "霰彈槍武器生成"
+L.spawn_weapon_heavy = "重武器生成"
+L.spawn_weapon_sniper = "狙擊武器生成"
+L.spawn_weapon_pistol = "手槍武器生成"
+L.spawn_weapon_special = "特殊武器生成"
+L.spawn_ammo_random = "隨機彈藥生成"
+L.spawn_ammo_deagle = "沙漠之鷹彈藥生成"
+L.spawn_ammo_pistol = "手槍彈藥生成"
+L.spawn_ammo_mac10 = "沖鋒槍彈藥生成"
+L.spawn_ammo_rifle = "狙擊槍彈藥生成"
+L.spawn_ammo_shotgun = "霰彈槍彈藥生成"
+L.spawn_player_random = "隨機玩家生成"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+L.spawn_weapon_ammo = " (彈藥: {ammo})"
 
---L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
+L.spawn_weapon_edit_ammo = "按住 [{walkkey}]並按 [{primaryfire} 或 {secondaryfire}] 以增加或減少此武器生成的彈藥量"
 
---L.spawn_type_weapon = "This is a weapon spawn"
---L.spawn_type_ammo = "This is an ammunition spawn"
---L.spawn_type_player = "This is a player spawn"
+L.spawn_type_weapon = "這是個武器生成點"
+L.spawn_type_ammo = "這是個彈藥生成點"
+L.spawn_type_player = "這是個玩家生成點"
 
---L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
+L.spawn_remove = "按 [{secondaryfire}] 刪除此生成點"
 
---L.submenu_administration_entspawn_title = "Spawn Editor"
---L.header_entspawn_settings = "Spawn Editor Settings"
---L.button_start_entspawn_edit = "Start Spawn Edit"
---L.button_delete_all_spawns = "Delete all Spawns"
+L.submenu_administration_entspawn_title = "生成點編輯器"
+L.header_entspawn_settings = "生成點編輯器設置"
+L.button_start_entspawn_edit = "開始生成點編輯"
+L.button_delete_all_spawns = "刪除所有生成點位置"
 
---L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
---L.label_dynamic_spawns_global_enable = "Enable custom spawns for all maps"
+L.label_dynamic_spawns_enable = "為該地圖啟用動態生成"
+L.label_dynamic_spawns_global_enable = "為所有地圖啟用自定義生成"
 
---L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+L.header_equipment_weapon_spawn_setup = "武器生成設置"
 
---L.help_spawn_editor_info = [[
---The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
+L.help_spawn_editor_info = [[
+生成編輯器是用來放置，移除和編輯世界上的生成點。這些生成點是為武器，彈藥和玩家準備的。
 
---These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to this state.
+這些生成點被保存在位於"data/ttt/weaponspawnscripts/"的文件中。它們可以被刪除以進行硬重置。最初的生成文件是由地圖上和原始TTT武器生成腳本中的生成創建的。按下重置按鈕總是會恢復到這個狀態。
 
---It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the equipment editor. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
+應該註意的是，這個生成系統使用動態生成。這將使武器生成系統更加有趣，因為它不再定義一個特定的武器。而是定義一種武器類型。例如，現在不是生成TTT自帶的霰彈槍，而是生成被分類成霰彈槍的武器，任何定義為霰彈槍的武器都可以生成。每個武器的生成類型可以在裝備編輯器中設置，這使得任何武器都可以在地圖上生成，或者禁用某些默認武器。
 
---Keep in mind that many changes only take effect after a new round has started.]]
---L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Disabling this checkbox only disables it for the currently active map. The dynamic system will still be used for every other map."
---L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
---L.help_spawn_editor_spawn_amount = [[
---There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map. Click 'start spawn edit' to change this amount.
+請記住，更改只有在新的一輪開始後才會生效]]
+L.help_spawn_editor_enable = "在某些地圖上，可能會建議使用在地圖自帶的原始生成點，而不用動態系統來取代它們。禁用這個復選框只對當前活動地圖禁用。其他地圖仍將使用動態系統。"
+L.help_spawn_editor_hint = "提示：要離開生成編輯器,重新打開遊戲模式菜單。"
+L.help_spawn_editor_spawn_amount = [[
+目前在這張地圖上有{weapon}武器生成，{ammo}彈藥生成和{player}玩家生成。點擊'開始編輯生成'來改變這個生成。
 
---{weaponrandom}x Random weapon spawn
---{weaponmelee}x Melee weapon spawn
---{weaponnade}x Grenade weapon spawn
---{weaponshotgun}x Shotgun weapon spawn
---{weaponheavy}x Heavy weapon spawn
---{weaponsniper}x Sniper weapon spawn
---{weaponpistol}x Pistol weapon spawn
---{weaponspecial}x Special weapon spawn
+{weaponrandom}x 隨機武器生成
+{weaponmelee}x 近戰類武器生成
+{weaponnade}x 爆炸物類武器生成
+{weaponshotgun}x 霰彈類武器生成
+{weaponheavy}x 重型類武器生成
+{weaponsniper}x 狙擊類武器生成
+{weaponpistol}x 手槍類武器生成
+{weaponspecial}x 特殊武器生成
 
---{ammorandom}x Random ammo spawn
---{ammodeagle}x Deagle ammo spawn
---{ammopistol}x Pistol ammo spawn
---{ammomac10}x Mac10 ammo spawn
---{ammorifle}x Rifle ammo spawn
---{ammoshotgun}x Shotgun ammo spawn
+{ammorandom}x 隨機彈藥生成
+{ammodeagle}x 沙漠之鷹彈藥生成
+{ammopistol}x 手槍彈藥生成
+{ammomac10}x Mac10彈藥生成器
+{ammorifle}x 狙擊槍彈藥生成
+{ammoshotgun}x 霰彈槍彈藥生成
 
---{playerrandom}x Random player spawn]]
+{playerrandom} x 玩家隨機位置生成]]
 
---L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
---L.equipmenteditor_name_spawn_type = "Select spawn type"
---L.equipmenteditor_desc_auto_spawnable = [[
---The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however these settings can be changed from within this menu.
+L.equipmenteditor_name_auto_spawnable = "設備在地圖中隨機產生"
+L.equipmenteditor_name_spawn_type = "選擇生成類型"
+L.equipmenteditor_desc_auto_spawnable = [[
+TTT2的生成系統允許每種武器在世界中生成，默認情況下，只有被創造者標記為'自動生成'的武器才會在世界中生成，但這些設置可以在該菜單中更改。
 
---Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
+大多數裝備在默認情況下被設置為'特殊武器生成'。這意味著它們只在隨機武器生成點上生成。然而，我們可以在地圖中放置特殊的武器生成點，或者改變生成點的生成類型，以使用其他現有的生成類型。]]
 
---L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
+L.pickup_error_inv_cached = "你現在不能拿起這個，因為你的庫存被緩存了。"
 
 -- 2021-09-02
---L.submenu_administration_playermodels_title = "Player Models"
---L.header_playermodels_general = "General Player Model Settings"
---L.header_playermodels_selection = "Select Player Model Pool"
+L.submenu_administration_playermodels_title = "玩家模型"
+L.header_playermodels_general = "通用玩家模型設置"
+L.header_playermodels_selection = "選擇玩家模型庫"
 
---L.label_enforce_playermodel = "Enforce role player model"
---L.label_use_custom_models = "Use a random selected player model"
---L.label_prefer_map_models = "Prefer map specific models over default models"
---L.label_select_model_per_round = "Select a new random model each round (only on mapchange if disabled)"
+L.label_enforce_playermodel = "強製設置玩家模型"
+L.label_use_custom_models = "使用一個隨機選擇的玩家模型"
+L.label_prefer_map_models = "優先選擇地圖特定模型而不是默認模型"
+L.label_select_model_per_round = "每輪選擇一個新的隨機模型(如果禁用，則僅在地圖變更時)"
 
---L.help_prefer_map_models = [[
---Some maps define their own player models. By default these models have a higher priority then the models that are automatically assigned. By disabling this setting, map --specific models are disabled.
+L.help_prefer_map_models = [[
+有些地圖定義了他們自己的玩家模型，默認情況下。這些模型的優先級比自動分配的模型高。如果禁用此設置。地圖自帶的玩家模型將被禁用，
 
---Role specific models always have a higher priority and are unaffected by this setting.]]
---L.help_enforce_playermodel = [[
---Some roles have custom player models. This can be disabled which can be relevant for compatibility with some player model selectors.
---Random default models can still be selected, if this setting is disabled.]]
---L.help_use_custom_models = [[
---By default only the CSS Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting --enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
+角色的特定模型總是有更高的優先權。不受這個設置的影響。]]
+L.help_enforce_playermodel = [[
+有些角色有自定義的玩家模型。但是它可以被禁用，可能會導致玩家模型選擇器的兼容出現問題。
 
---This selection of models can be extended by installing more player models.]]
+如果這個設置被禁用，仍然可以選擇默認的隨機模型。]]
+L.help_use_custom_models = [[
+默認情況下，只有CS起源版鳳凰戰士的模型被分配給所有玩家，然而，如果啟用這個選項，將使用玩家模型庫，啟用此設置後，每個玩家將被分配到相同的玩家模型，但這些模型將從模型庫中選擇。
+
+模型選擇可通過安裝更多的玩家模型來擴展。]]
 
 -- 2021-10-06
---L.menu_server_addons_title = "Server Addons"
---L.menu_server_addons_description = "Serverwide admin only settings for addons."
+L.menu_server_addons_title = "服務器插件"
+L.menu_server_addons_description = "服務器內插件，僅管理員可以設置。"
 
---L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
---L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
---L.tooltip_kill_score_suicide = "Suicide: {score}"
---L.kill_score_suicide = "Suicide:"
---L.tooltip_kill_score_team = "Team kill: {score}"
---L.kill_score_team = "Team kill:"
+L.tooltip_finish_score_penalty_alive_teammates = "存活隊友處罰：{score}"
+L.finish_score_penalty_alive_teammates = "存活隊友處罰："
+L.tooltip_kill_score_suicide = "自殺：{score}"
+L.kill_score_suicide = "自殺："
+L.tooltip_kill_score_team = "擊殺隊友：{score}"
+L.kill_score_team = "擊殺隊友："
 
 -- 2021-10-09
---L.help_models_select = [[
---Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
+L.help_models_select = [[
+左鍵點擊模型，將其添加到玩家模型庫中。再次左鍵以刪除它們.，右鍵可在所關註的模型的啟用和禁用偵探帽之間進行切換。
+	
+左上角的小指示器顯示玩家模型是否有頭部的命中箱，下面的圖標顯示了這個模型是否可佩戴偵探帽。]]
+L.menu_roles_title = "角色設置"
+L.menu_roles_description = "設置生成概率、裝備積分及更多。"
 
---The small indicator in the top left shows if the player model has a headshot hitbox. The icon below shows if this model is applicable for a detective hat.]]
+L.submenu_administration_roles_general_title = "通用角色設置"
 
---L.menu_roles_title = "Role Settings"
---L.menu_roles_description = "Set up the spawning, equipment credits and more."
+L.header_roles_info = "角色信息"
+L.header_roles_selection = "角色選擇概率"
+L.header_roles_tbuttons = "角色叛徒按鈕"
+L.header_roles_credits = "角色裝備積分"
+L.header_roles_additional = "附加角色設置"
+L.header_roles_reward_credits = "獎勵裝備積分"
 
---L.submenu_administration_roles_general_title = "General Role Settings"
+L.help_roles_default_team = "默認團隊：{team}"
+L.help_roles_unselectable = "這個角色是不可選擇的。這意味著它在角色選擇系統中不被考慮。大多數情況下，這意味著這是回合中通過某個事件（如復活為僵屍，副手老鷹或類似的東西）手動應用的角色。"
+L.help_roles_selectable = "這個角色是可選擇的，這意味著如果滿足所有的標準，這個角色在角色選擇過程中會被考慮。"
+L.help_roles_credits = "裝備積分用於在商店購買裝備。大多數情況下，只給那些可以進入商店的角色信用額度是有意義的。然而，由於可從屍體上偷取積分，也可以考慮給角色提供起始積分，作為給加害者的獎勵。"
+L.help_roles_selection_short = "每個玩家的角色分布定義了被分配到這個角色的玩家的百分比。例如，如果該值被設置為'0.2',那麽每五名玩家中就有一人會變為此角色。"
+L.help_roles_selection = [[
+每個玩家的角色分配定義了被分配到這個角色的玩家的百分比。例如，如果該值被設置為 "0.2"，那麽每五名玩家中就有一人會變為此角色。這也意味著，至少需要5名玩家才會啟用此角色。
+請記住，這些理論只適用於該角色為可被選擇的情況。
 
---L.header_roles_info = "Role Information"
---L.header_roles_selection = "Role Selection Parameters"
---L.header_roles_tbuttons = "Role Traitor Buttons"
---L.header_roles_credits = "Role Equipment Credits"
---L.header_roles_additional = "Additonal Role Settings"
---L.header_roles_reward_credits = "Reward Equipment Credits"
+前面提到的角色分配與玩家的下限有一個特殊的組合。如果角色可被選擇，並且最小值低於分配系數給定的值，但玩家數量等於或大於下限，單個玩家仍然可以變為該角色。隨後，對於第二個變為這個角色的玩家來說，分配設置將再次成立。]]
+L.help_roles_award_info = "部分角色（如果在他們的積分設置中啟用）在一定比例的對手死亡後會獲得裝備積分，該數值可在這裏進行調整。"
+L.help_roles_award_pct = "當其他玩家死亡人數超過該百分比後，玩家會獲得更多的積分。"
+L.help_roles_award_repeat = "積分獎勵是否會多次發放.例如，如果你將百分比設置為'0.25'，並啟用此功能，玩家將在死亡人數到達全玩家的'25%'、'50%'、'75%'時獲得積分。"
+L.help_roles_advanced_warning = "警告：這些是高級設置，將可能完全擾亂你的角色選擇。如果有疑問，請將所有值保持在'0'。這個值意味著不應用任何限製，角色選擇系統將試圖分配盡可能多的角色。"
+L.help_roles_max_roles = [[
+角色類別包含TTT2中的每個角色。默認情況下，對於可以分配多少個不同的角色沒有限製。然而，這裏有兩種不同的方法來限製它們。
 
---L.help_roles_default_team = "Default team: {team}"
---L.help_roles_unselectable = "This role is not selectable. This means it is not considered in the role selection. Most of the times this means that this is a role that is manually applied during the round through an event like a revival, a sidekick deagle or something similar."
---L.help_roles_selectable = "This role is selectable. This means if all criteria is met, this role is considered in the role selection process."
---L.help_roles_credits = "Equipment credits are used to buy equipment in the shop. It mostly makes sense to give only those roles that have access to the shop credits. However since it is possible to loot credits from corpses, it could also be an idea to give starting credits to roles as a reward for their killer."
---L.help_roles_selection_short = "The role distribution per player defines the percentage of players that are assigned this role. If for example the value is set to '0.2' every fifth player receives this role."
---L.help_roles_selection = [[
---The role distribution per player defines the percentage of players that are assigned this role. If for example the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be selected at all.
---Keep in mind that all of this only applies if the role is considered for selection.
+1.用一個固定的數值限製。
+2.通過百分比限製。
 
---The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for selection and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution setting then holds true again for the second player to receive this role.]]
---L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of adversaries has died. Those values can be tweaked here."
---L.help_roles_award_pct = "When this percentage of other players are dead, players are awarded more credits."
---L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. If for example you set the percentage to '0.25', and enable this, players will be awarded credits at '25%' killed, '50%' killed, and '75%' killed."
---L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up your role selection. When in doubt keep all values at '0'. This value means that no limits are applied and the role selection is trying to assign as many roles as possible."
---L.help_roles_max_roles = [[
---The roles category contains every role in TTT2. By default there is no limit on how many different roles can be assigned. However here are two different ways to limit them.
+後者僅在固定數值為'0'時使用，並根據設定的可用玩家百分比設置上限。]]
+L.help_roles_max_baseroles = [[
+基礎角色只是那些其他角色所繼承的角色陣營。例如,"無辜者"角色是一個基礎角色，而"法老"是這個角色的一個子角色。默認情況下，對於可以分配多少個不同的角色沒有限製。然而，這裏有兩種不同的方法來限製它們。
 
---1. Limit them by a fixed amount.
---2. Limit them by a percentage.
+1.用一個固定的數值限製。
+2.通過百分比限製。
 
---The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
---L.help_roles_max_baseroles = [[
---Baseroles are only those role others inherit from. For example the Innocent role is a baserole, while a Pharaoh is a sub role of this role. By default there is no limit on how many different baseroles can be assigned. However here are two different ways to limit them.
+後者只在固定數值為'0'時使用，並根據設定的可用玩家百分比設置上限。]]
 
---1. Limit them by a fixed amount.
---2. Limit them by a percentage.
+L.label_roles_enabled = "啟用角色"
+L.label_roles_min_inno_pct = "最少有多少無辜者角色"
+L.label_roles_pct = "每位玩家的角色分配"
+L.label_roles_max = "分配到該角色的玩家上限"
+L.label_roles_random = "分配到該角色的可能性"
+L.label_roles_min_players = "分配到該角色的下限"
+L.label_roles_tbutton = "是否可使用叛徒按鈕"
+L.label_roles_credits_starting = "初始裝備積分"
+L.label_roles_credits_award_pct = "積分獎勵報酬率"
+L.label_roles_credits_award_size = "積分獎勵比例"
+L.label_roles_credits_award_repeat = "重復學積分獎勵"
+L.label_roles_newroles_enabled = "啟用自定義角色"
+L.label_roles_max_roles = "角色上限"
+L.label_roles_max_roles_pct = "按百分比計算角色上限"
+L.label_roles_max_baseroles = "基礎角色上限"
+L.label_roles_max_baseroles_pct = "按百分比計算基礎角色上限"
+L.label_detective_hats = "為像偵探這樣的警察角色啟用帽子（如果玩家模型允許戴帽子）。"
 
---The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
-
---L.label_roles_enabled = "Enable role"
---L.label_roles_min_inno_pct = "Innocent distribution per player"
---L.label_roles_pct = "Role distribution per player"
---L.label_roles_max = "Upper limit of players assigned for this role"
---L.label_roles_random = "Chance this role is selected"
---L.label_roles_min_players = "Lower limit of players to consider selection"
---L.label_roles_tbutton = "Role can use Traitor buttons"
---L.label_roles_credits_starting = "Starting credits"
---L.label_roles_credits_award_pct = "Credit reward percentage"
---L.label_roles_credits_award_size = "Credit reward size"
---L.label_roles_credits_award_repeat = "Credit reward repeat"
---L.label_roles_newroles_enabled = "Enable custom roles"
---L.label_roles_max_roles = "Upper role limit"
---L.label_roles_max_roles_pct = "Upper role limit by percentage"
---L.label_roles_max_baseroles = "Upper baserole limit"
---L.label_roles_max_baseroles_pct = "Upper baserole limit by percentage"
---L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows hat)"
-
---L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their fellow team mates."
---L.ttt2_desc_traitor = "The Traitor is the adversary of the innocent. They have an equipment menu with which they are be able to buy special equipment. They have to kill everyone but their team mates."
---L.ttt2_desc_detective = "The Detective is the one whom the Innocents can trust. But who even is an Innocent? The mighty Detective has to find all the evil terrorists. The equipment in their shop may help them with this task."
+L.ttt2_desc_innocent = "無辜者沒有特殊能力，他們必須在恐怖分子中找到圖謀不軌的人並殺死他們。但他們得小心，不要誤殺自己的同伴。"
+L.ttt2_desc_traitor = "叛徒是無辜者中的內鬼。他們擁有裝備菜單，可以購買特殊裝備。叛徒們必須殺死除自己隊友之外的所有人。"
+L.ttt2_desc_detective = "偵探是無辜者們最信任的人。但誰是無辜者？強大的偵探必須要找到所有圖謀不軌恐怖分子。他們商店裏的設備可能會幫助他們完成這項任務。"
 
 -- 2021-10-10
---L.button_reset_models = "Reset Player Models"
+L.button_reset_models = "重置玩家模型"
 
 -- 2021-10-13
---L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'public role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
---L.help_roles_credits_award = [[
---There are two different ways to be awarded credits in base TTT2:
+L.help_roles_credits_award_kill = "另一種獲得積分的方式是通過殺死為'公開角色'(如偵探)的高價值玩家。如果非無辜者陣營的角色啟用了這個功能，他們就會獲得以下規定的積分。"
+L.help_roles_credits_award = [[
+在TTT2中，有兩種不同的方式可以獲得積分：
 
---1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
---2. If a player killed a high value play with a 'public role' such as a Detective, the killer is awarded.
+1.如果敵方隊伍中有一定比例的人死亡,整個隊伍將會獎勵積分。
+2.如果一個玩家用'公開角色'(如偵探)殺死了一個高價值的角色，那麽這位玩家就會得到獎勵.
 
---Please note that this still can be enabled/disabled for every role even if the whole team is awarded. If for example team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
---The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
---L.help_detective_hats = [[
---Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
+請註，,即使全隊都會獲得獎勵，這仍然可以為每個角色啟用/禁用。例如，如果'無辜者'陣營被獎勵，但無辜者角色的裝備商店被禁用，所以只有偵探會收到積分。
+這個功能的平衡值可以在'管理'->'通用角色設置'中設置。]]
+L.help_detective_hats = [[
+偵探等警察角色可以戴帽子以顯示其權威。他們在死亡時或頭部受損時將失去帽子。
 
---Some player models do not support hats by default. You can change this in 'Administration' -> 'Player Models']]
+部分玩家模型默認不支持帽子。你可以在'管理'->'玩家模型'中改變這一點。]]
 
---L.label_roles_credits_award_kill = "Credit reward for kill size"
---L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
---L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
---L.label_roles_min_karma = "Lower limit of Karma to consider selection"
+L.label_roles_credits_award_kill = "依據擊殺數提供積分獎勵"
+L.label_roles_credits_dead_award = "啟用對依據一定比例敵人死亡數提供積分獎勵"
+L.label_roles_credits_kill_award = "啟用對擊殺高價值角色時提供積分獎勵"
+L.label_roles_min_karma = "可變為該角色時玩家的最低業值"
 
 -- 2021-11-07
---L.submenu_administration_administration_title = "Administration"
---L.submenu_administration_voicechat_title = "Voicechat / Textchat"
---L.submenu_administration_round_setup_title = "Round Setup"
---L.submenu_administration_mapentities_title = "Map Entities"
---L.submenu_administration_inventory_title = "Inventory"
---L.submenu_administration_karma_title = "Karma"
---L.submenu_administration_sprint_title = "Sprinting"
---L.submenu_administration_playersettings_title = "Player Settings"
+L.submenu_administration_administration_title = "管理"
+L.submenu_administration_voicechat_title = "語音聊天/文本聊天"
+L.submenu_administration_round_setup_title = "回合設置"
+L.submenu_administration_mapentities_title = "地圖實體"
+L.submenu_administration_inventory_title = "庫存"
+L.submenu_administration_karma_title = "業值"
+L.submenu_administration_sprint_title = "沖刺"
+L.submenu_administration_playersettings_title = "玩家設定"
 
---L.header_roles_special_settings = "Special Role Settings"
---L.header_equipment_additional = "Additional Equipment Settings"
---L.header_administration_general = "General Administrative Settings"
---L.header_administration_logging = "Logging"
---L.header_administration_misc = "Miscellaneous"
---L.header_entspawn_plyspawn = "Player Spawn Settings"
---L.header_voicechat_general = "General Voicechat Settings"
---L.header_voicechat_battery = "Voicechat Battery"
---L.header_voicechat_locational = "Locational Voicechat"
---L.header_playersettings_plyspawn = "Player Spawn Settings"
---L.header_round_setup_prep = "Round: Preparing"
---L.header_round_setup_round = "Round: Active"
---L.header_round_setup_post = "Round: Post"
---L.header_round_setup_map_duration = "Map Session"
---L.header_textchat = "Textchat"
---L.header_round_dead_players = "Dead Player Settings"
---L.header_administration_scoreboard = "Scoreboard Settings"
---L.header_hud_toggleable = "Toggleable HUD Elements"
---L.header_mapentities_prop_possession = "Prop Possession"
---L.header_mapentities_doors = "Doors"
---L.header_karma_tweaking = "Karma Tweaking"
---L.header_karma_kick = "Karma Kick and Ban"
---L.header_karma_logging = "Karma Logging"
---L.header_inventory_gernal = "Inventory Size"
---L.header_inventory_pickup = "Inventory Weapon Pickup"
---L.header_sprint_general = "Sprint Settings"
---L.header_playersettings_armor = "Armor System Settings"
+L.header_roles_special_settings = "特殊角色設定"
+L.header_equipment_additional = "額外裝備設置"
+L.header_administration_general = "通用管理設置"
+L.header_administration_logging = "日誌"
+L.header_administration_misc = "雜項"
+L.header_entspawn_plyspawn = "玩家生成設置"
+L.header_voicechat_general = "通用語音聊天設置"
+L.header_voicechat_battery = "語音聊天電池"
+L.header_voicechat_locational = "基於玩家位置範圍語音"
+L.header_playersettings_plyspawn = "玩家生成設置"
+L.header_round_setup_prep = "回合：準備階段"
+L.header_round_setup_round = "回合：進行階段"
+L.header_round_setup_post = "回合：結束階段"
+L.header_round_setup_map_duration = "地圖持續時間"
+L.header_textchat = "文本聊天"
+L.header_round_dead_players = "死亡玩家設置"
+L.header_administration_scoreboard = "記分版設置"
+L.header_hud_toggleable = "可切換的HUD元素"
+L.header_mapentities_prop_possession = "Prop附體"
+L.header_mapentities_doors = "門"
+L.header_karma_tweaking = "業值調整"
+L.header_karma_kick = "業值踢出和封禁"
+L.header_karma_logging = "業值記錄"
+L.header_inventory_gernal = "庫存大小"
+L.header_inventory_pickup = "庫存武器拾取"
+L.header_sprint_general = "沖刺設置"
+L.header_playersettings_armor = "護甲系統設置"
 
---L.help_killer_dna_range = "When a player is killed by another player a DNA fingerprint is left on their body. The max range convar defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away, then no sample is left at the corpse."
---L.help_killer_dna_basetime = "The basetime in seconds until a DNA sample is decayed. A factor of the squared killer distance is substracted from this basetime."
---L.help_dna_radar = "The TTT2 DNA scanner shows the exact distance and direction of the selected DNA sample if equipped. However, there is also a classic DNA scanner mode that updates the selected sample with an in-world rendering everytime the cooldown has passed."
---L.help_idle = "The idle mode is used to move idle players into a forced spectator mode. To leave this mode again, they have to disable 'enforce spectator mode' in their 'gameplay' settings."
---L.help_namechange_kick = [[
---If a player changes their name during a round, this can be abused to evade being killed. Therefore it is prohibited to change the nickname during an active round.
+L.header_killer_dna_range = "當玩家被其他玩家殺死時，會在他們身上留下DNA指紋，最大範圍convar定義了留下DNA樣本的最大距離，以錘子編輯器為單位，如果殺手在更遠的地方，那麽就不會在屍體上留下樣本。"
+L.help_killer_dna_basetime = "直到DNA樣本衰變的基本時間，以秒為單位，從這個基準時間中減去一個殺手距離的平方系數。"
+L.help_dna_radar = "如果配備了TTT2 DNA掃描器，會顯示所選DNA樣本的確切距離和方向。然而，也有一種經典的DNA掃描器模式，每次冷卻時間過後都會用世界範圍的渲染來更新所選的樣本。"
+L.help_idle = "掛機模式是用來將掛機的玩家轉移到一個強製的旁觀者模式。要再次離開這個模式，他們必須在他們的'遊戲'設置中禁用'強製旁觀模式'。"
 
---If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
---L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
---L.help_spawn_waves = [[
---If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points.
+L.help_namechange_kick = [[
+如果玩家在回合中改變他們的名字，這可能會被濫用來提供信息。因此，禁止在進行中的回合改變昵稱。
 
---Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
---L.help_voicechat_battery = [[
---Voicechatting with enabled voice chat battery reduces this meter. When it's empty the player can't voicechat and must wait for a few seconds for it to recharge. This can help to prevent excessive voicechat usage.
+如果被封禁時間大於0，該玩家將無法重新連接到服務器，直到該時間結束。]]
+L.help_damage_log = "每次玩家受到傷害時，就會在控製臺中添加一個傷害日誌條目。這也可以在一個回合結束後存儲到磁盤上。該文件位於'data/terrortown/logs/'"
+L.help_spawn_waves = [[
+如果這個變量被設置為0，所有玩家將會同時生成。對於擁有大量玩家的服務器來說，一波一波地生成玩家可能是有益的。生成波的時間間隔是指每個生成波之間的時間，一個生成波總是產生與會生成與生成點相同數量的玩家。
 
---Note: 'Tick' refers to a game tick, ie. 1/66th of a second.]]
---L.help_ply_spawn = "Player parameters that are used on player (re-)spawn."
---L.help_haste_mode = [[
---Haste mode balances the game by increasing the round time with every dead player. Only roles that see missing in action players can see the real round time. Every other role can only see the haste mode starting time.
+註意：確保準備時間足夠長，以達到所需的生成波數量。]]
+L.help_voicechat_battery = [[
+在啟用語音聊天電池的情況下，語音聊天會減少電量。當電量耗盡時，玩家將不能語音聊天。必須等待幾秒鐘來充電。這可以幫助防止過度使用語音聊天。
 
---If haste mode is enabled, the fixed round time is ignored.]]
---L.help_round_limit = "After one of the set limit conditions is met, a mapchange is triggered."
---L.help_armor_balancing = "The following values can be used to balance the armor."
---L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
---L.help_item_armor_dynamic = [[
--- Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited and the armor value stacks. Getting damaged decreases the armor value. The armor value per baught armor item is set in the 'Equipment Settings' of said item.
+註意:'Tick'指的是遊戲中的Tick,即1/66秒的時間。]]
+L.help_ply_spawn = "在玩家(重新)生成時使用的玩家參數。"
+L.help_haste_mode = [[
+急速模式通過增加在玩家死亡時增加回合時間來平衡遊戲。只有看到回合中失蹤的玩家的角色才能看到真正的回合時間，其他角色只能看到急速模式的起始時間。
 
---When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
+如果急速模式被啟用，固定的回合時間將被忽略。]]
+L.help_round_limit = "在滿足設定的限製條件之一後，將會更換地圖。"
+L.help_armor_balancing = "以下數值可以用來平衡護甲。"
+L.help_item_armor_classic = "如果啟用了經典護甲模式，只有之前的設置才是生效的。經典護甲模式意味著玩家在一個回合中只能購買一次護甲，並且這個盔甲可以阻擋30%的子彈和撬棍的傷害，直到他們死亡。"
+L.help_item_armor_dynamic = [[
+動態護甲是TTT2的新系統，使護甲系統更加有趣。現在可以購買的護甲數量是無限的，而且護甲的效果可以疊加。受到傷害會降低護甲值，每件物品的護甲值是在該物品的"裝備設置"中設置的。
 
---If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
---L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlock mode is disabled, dead bodies can not be confirmed, the scoreboard shows everyone as alive and the spectators can talk to the living players."
---L.help_prop_possession = [[
---Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
+當受到傷害時。這個傷害的一定比例會轉化為護甲傷害，不同的比例仍然適用於玩家，其余的則會消失。
 
---The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limmits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
---L.help_karma = "Karma is used to reduce random killing. Players start with a certain amount of Karma, and lose it when they damage/kill team mates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
---L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly teamkill."
---L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more that 1000 Karma. It can be used as a Karma buffer."
---L.help_karma_ratio = "The ratio of the damage that is used to compute how much of the victim's Karma is subtracted from the attacker's if both are in the same team. If a team kill happens, a further penalty is applied."
---L.help_karma_traitordmg_ratio = "The ratio of the damage that is used to compute how much of the victim's Karma is subtracted from the attacker's if both are in different teams. If a team kill happens, a further bonus is applied."
---L.help_karma_bonus = "There are also two different passive ways to gain Karma during a round. First a round heal is applied to every player. Then a secondary clean bonus is given if no teammates were hurt or killed."
---L.help_karma_clean_half = [[
---When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
+如果強化護甲被啟用，只要護甲值高於強化閾值，施加給玩家的傷害就會減少15%。]]
+L.help_sherlock_mode = "偵探模式是經典的TTT模式。如果偵探模式被禁用，屍體將被確認，記分牌上顯示每個人都活著，觀察者可以與活著的玩家交談。"
+L.help_prop_possession = [[
+觀察者可以使用道具附身來附身於躺在世界中的道具,並使用緩慢充能的'重擊測量器'來移動上述道具.
 
---This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if a the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
---L.help_max_slots = "Sets the maximum amount of weapons per slot. '-1' means that there is no limit."
---L.help_item_armor_value = "This is the armor value given by a the armor item in dynamic mode. If classic mode is enabled (see 'Administration' -> 'Player Settings') then every value greater than 0 is counted as existing armor."
+'重擊測量器'的最大值由一個基礎值和其他判斷值組成,其中擊殺數/死亡數將影響該值.隨著時間的推移,能量條會慢慢充電.設定的充電時間是為'重擊測量器'中的一個點進行充電所需的時間.]]
+L.help_karma = "業值是用來減少無差別擊殺的。玩家開始時有一定量的業值，當他們傷害/殺死隊友時就會失去業值。他們失去的數值取決於他們傷害或殺死的人的業值。較低的業值會減少給予的傷害。"
+L.help_karma_strict = "如果更嚴格業值被啟用，傷害懲罰會隨著業值的減少而更快增加。當它關閉時，讓業值保持在800以上時的傷害懲罰是非常低的。啟用嚴格模式使業值在阻止任何不必要的擊殺方面發揮更大的作用。而禁用它則導致一個更'寬松'的遊戲範圍，業值只影響那些不斷擊殺隊友的玩家。"
+L.help_karma_max = "將最大業值設置為1000以上，不會給業值超過1000的玩家提供傷害加成，它可以作為一個業值緩沖區。"
+L.help_karma_ratio = "用於計算如果雙方在同一個團隊中，受害者的業值被減去多少的傷害比例。如果發生擊殺友軍事件，會有進一步的懲罰。"
+L.help_karma_traitordmg_ratio = "如果雙方在不同的隊伍中，用來計算受害者的業值被減去多少的傷害比率。如果發生擊殺事件,會有進一步的獎勵."
+L.help_karma_bonus = "在一個回合中也有兩種不同的被動方式來獲得業值。首先，一個回合的回復會應用於每個玩家。然後，如果沒有傷害隊友或擊殺，會有一個二次回復的獎勵。"
+L.help_karma_clean_half = [[
+當玩家的業值高於起始水平時(意味著業值最大值已被配置為高於該水平)，他們所有的業值增加將根據其業值高於起始水平的程度而減少。因此，它越高，增加的速度就越慢。
 
---L.label_killer_dna_range = "Max kill range to leave DNA"
---L.label_killer_dna_basetime = "Sample life base time"
---L.label_dna_scanner_slots = "DNA sample slots"
---L.label_dna_radar = "Enable classic DNA scanner mode"
---L.label_dna_radar_cooldown = "DNA scanner cooldown"
---L.label_radar_charge_time = "Recharge time after a radar sample"
---L.label_crowbar_shove_delay = "Cooldown after crowbar push"
---L.label_idle = "Enable idle mode"
---L.label_idle_limit = "Maximal idle time in seconds"
---L.label_namechange_kick = "Enable name change kick"
---L.label_namechange_bantime = "Banned time in minutes after kick"
---L.label_log_damage_for_console = "Enable damage logging in console"
---L.label_damagelog_save = "Save damage log to disk"
---L.label_debug_preventwin = "Prevent any win condition [debug]"
---L.label_bots_are_spectators = "Bots are always spectators"
---L.label_tbutton_admin_show = "Show traitor buttons to admins"
---L.label_ragdoll_carrying = "Enable ragdoll carrying"
---L.label_prop_throwing = "Enable prop throwing"
---L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
---L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
---L.label_weapon_carrying = "Enable weapon carrying"
---L.label_weapon_carrying_range = "Weapon carry range"
---L.label_prop_carrying_force = "Prop pickup force"
---L.label_teleport_telefrags = "Kill blocking player(s) when teleporting (telefrag)"
---L.label_allow_discomb_jump = "Allow disco jump for grenade thrower"
---L.label_spawn_wave_interval = "Spawn wave interval in seconds"
---L.label_voice_enable = "Enable voicechat"
---L.label_voice_drain = "Enable the voicechat battery feature"
---L.label_voice_drain_normal = "Drain per tick for normal players"
---L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
---L.label_voice_drain_recharge = "Recharge rate per tick of not voicechatting"
---L.label_locational_voice = "Enable locational 3D voicechat sound for living players"
---L.label_armor_on_spawn = "Player armor on (re-)spawn"
---L.label_prep_respawn = "Enable instant respawn during preparing phase"
---L.label_preptime_seconds = "Preparing time in seconds"
---L.label_firstpreptime_seconds = "First preparing time in seconds"
---L.label_roundtime_minutes = "Fixed round time in minutes"
---L.label_haste = "Enable haste mode"
---L.label_haste_starting_minutes = "Haste mode starting time in minutes"
---L.label_haste_minutes_per_death = "Haste reward in minutes per death"
---L.label_posttime_seconds = "Postround time in seconds"
---L.label_round_limit = "Upper limit of rounds"
---L.label_time_limit_minutes = "Upper limit of playtime in minutes"
---L.label_nade_throw_during_prep = "Enable nade throwing during preparing time"
---L.label_postround_dm = "Enable deathmatch after round ended"
---L.label_spectator_chat = "Enable spectators chatting with everybody"
---L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
---L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
---L.label_announce_body_found = "Announce that a body was found"
---L.label_confirm_killlist = "Announce kill list of confirmed corpse"
---L.label_inspect_detective_only = "Limit corpse inspection to policing roles"
---L.label_confirm_detective_only = "Limit corpse confirmation to policing roles"
---L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
---L.label_armor_block_headshots = "Enable armor blocking headshots"
---L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
---L.label_armor_dynamic = "Enable dynamic armor"
---L.label_armor_value = "Armor given by the armor item"
---L.label_armor_damage_block_pct = "Damage percentage taken by armor"
---L.label_armor_damage_health_pct = "Damage percentage taken by player"
---L.label_armor_enable_reinforced = "Enable reinforced armor"
---L.label_armor_threshold_for_reinforced = "Reinforced armor threshold"
---L.label_sherlock_mode = "Enable sherlock mode"
---L.label_highlight_admins = "Highlight server admins"
---L.label_highlight_dev = "Highlight TTT2 developer"
---L.label_highlight_vip = "Highlight VIP"
---L.label_highlight_addondev = "Highlight TTT2 addon developer"
---L.label_highlight_supporter = "Highlight other supporters"
---L.label_enable_hud_element = "Enable {elem} HUD element"
---L.label_spec_prop_control = "Enable prop possession"
---L.label_spec_prop_base = "Possession base value"
---L.label_spec_prop_maxpenalty = "Lower possession bonus limit"
---L.label_spec_prop_maxbonus = "Upper possession bonus limit"
---L.label_spec_prop_force = "Possession push force"
---L.label_spec_prop_rechargetime = "Recharge time in seconds"
---L.label_doors_force_pairs = "Force close-by doors as double doors"
---L.label_doors_destructible = "Enable destructible doors"
---L.label_doors_locked_indestructible = "Initially locked doors are indestructible"
---L.label_doors_health = "Door health"
---L.label_doors_prop_health = "Door prop health"
---L.label_minimum_players = "Minimum player amount to start round"
---L.label_karma = "Enable Karma"
---L.label_karma_strict = "Enable strict Karma"
---L.label_karma_starting = "Starting Karma"
---L.label_karma_max = "Maximum Karma"
---L.label_karma_ratio = "Penalty ratio for team damage"
---L.label_karma_kill_penalty = "Kill penalty for team kill"
---L.label_karma_round_increment = "Round heal"
---L.label_karma_clean_bonus = "Clean round bonus"
---L.label_karma_traitordmg_ratio = "Bonus ratio for other team damage"
---L.label_karma_traitorkill_bonus = "Kill bonus for other team kill"
---L.label_karma_clean_half = "Clean bonus reduction"
---L.label_karma_persist = "Karma persists over map changes"
---L.label_karma_low_autokick = "Automatically kick players with low Karma"
---L.label_karma_low_amount = "Low Karma threshold"
---L.label_karma_low_ban = "Ban picked players with low Karma"
---L.label_karma_low_ban_minutes = "Ban time in minutes"
---L.label_karma_debugspam = "Enable debug output to console about Karma changes"
---L.label_max_melee_slots = "Max melee slots"
---L.label_max_secondary_slots = "Max secondary slots"
---L.label_max_primary_slots = "Max primary slots"
---L.label_max_nade_slots = "Max nade slots"
---L.label_max_carry_slots = "Max carry slots"
---L.label_max_unarmed_slots = "Max unarmed slots"
---L.label_max_special_slots = "Max special slots"
---L.label_max_extra_slots = "Max extra slots"
---L.label_weapon_autopickup = "Enable automatic weapon pickup"
---L.label_sprint_enabled = "Enable sprinting"
---L.label_sprint_max = "Max sprinting stamina"
---L.label_sprint_stamina_consumption = "Stamina consumtion factor"
---L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
---L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
---L.label_crowbar_pushforce = "Crowbar push force"
+這種減少是以指數衰減的曲線進行的：最初速度很快，隨著增量的變小，速度也會變慢。這個控製臺指令設定了獎金減半的時間點(即半衰期)。在默認值為0.25的情況下，如果業值的起始值為1000，最大值為1500，而玩家有1125((1500-1000)*0.25=125)業值，那麽他的無誤殺輪獎勵將是30/2=15。因此，為了使值下降得更快，你應該把該設置得更低，為了使它下降得更慢，你應該把它增加到1。]]
+L.help_max_slots = "設置每個插槽的最大武器數量。'-1'表示沒有限製。"
+L.help_item_armor_value = "這是動態模式下的護甲項目給出的護甲值。如果啟用了經典模式(見'管理'->'玩家設置')，那麽每一個大於0的值都被算作護甲。"
+
+L.label_killer_dna_range = "留下DNA的最大擊殺範圍"
+L.label_killer_dna_basetime = "樣本存活基礎時間"
+L.label_dna_scanner_slots = "DNA樣本插槽"
+L.label_dna_radar = "啟用經典DNA掃描模式"
+L.label_dna_radar_cooldown = "DNA掃描儀的冷卻時間"
+L.label_radar_charge_time = "雷達采樣後的充電時間"
+L.label_crowbar_shove_delay = "撬棍推動玩家後的冷卻時間"
+L.label_idle = "啟用掛機模式"
+L.label_idle_limit = "最長可掛機時間(秒)"
+L.label_namechange_kick = "啟用改名踢出"
+L.label_namechange_bantime = "踢出後封禁的時間，以分鐘為單位"
+L.label_log_damage_for_console = "啟用控製臺的傷害記錄"
+L.label_damagelog_save = "將傷害日誌保存到磁盤上"
+L.label_debug_preventwin = "禁用回合結束[debug]"
+L.label_bots_are_spectators = "機器人永遠是觀察者"
+L.label_tbutton_admin_show = "向管理員顯示叛徒按鈕"
+L.label_ragdoll_carrying = "啟用布娃娃搬運"
+L.label_prop_throwing = "啟用道具投擲"
+L.label_ragdoll_pinning = "為非無辜者角色啟用布娃娃夾子"
+L.label_ragdoll_pinning_innocents = "為無辜者啟用布娃娃夾子"
+L.label_weapon_carrying = "啟用武器搬運"
+L.label_weapon_carrying_range = "武器搬運範圍"
+L.label_prop_carrying_force = "Prop推進力"
+L.label_teleport_telefrags = "在傳送時殺死被封禁的玩家"
+L.label_allow_discomb_jump = "允許手榴彈發射器進行迪斯科跳躍"
+L.label_spawn_wave_interval = "生成的間隔時間，以秒為單位"
+L.label_voice_enable = "啟用語音聊天"
+L.label_voice_drain = "啟用語音聊天的電池功能"
+L.label_voice_drain_normal = "普通玩家的每滴答消耗量"
+L.label_voice_drain_admin = "讓管理員和公共警察角色的電池會耗盡"
+L.label_voice_drain_recharge = "不進行語音聊天時每滴答的充能率"
+L.label_locational_voice = "為活著的玩家啟用3D語音聊天聲音"
+L.label_armor_on_spawn = "玩家在重生時的默認護甲量"
+L.label_prep_respawn = "在準備階段啟用即時重生"
+L.label_preptime_seconds = "準備時間(秒)"
+L.label_firstpreptime_seconds = "首局準備時間(秒)"
+L.label_roundtime_minutes = "固定回合時間(分鐘)"
+L.label_haste = "啟用急速模式"
+L.label_haste_starting_minutes = "急速模式開始時間(分鐘)"
+L.label_haste_minutes_per_death = "每位玩家死亡的時間獎勵(分鐘)"
+L.label_posttime_seconds = "回合後時間，以秒為單位"
+L.label_round_limit = "回合數上限"
+L.label_time_limit_minutes = "遊戲時間上限，以分鐘為單位"
+L.label_nade_throw_during_prep = "在準備時間內啟用投擲黑桃"
+L.label_postround_dm = "回合結束後啟用死亡競賽"
+L.label_spectator_chat = "啟用觀察者與大家聊天的功能"
+L.label_lastwords_chatprint = "如果在打字時被殺，則發出最後一句話至聊天室"
+L.label_identify_body_woconfirm = "不按'確認'按鈕識別屍體"
+L.label_announce_body_found = "宣布發現了一具屍體"
+L.label_confirm_killlist = "宣布確認屍體時，該屍體的擊殺名單"
+L.label_inspect_detective_only = "限製對警察角色的屍體檢查"
+L.label_confirm_detective_only = "只讓警察角色進行屍體確認"
+L.label_dyingshot = "如果玩家在瞄準中,則在死亡時開槍[試驗性]"
+L.label_armor_block_headshots = "啟用護甲阻擋爆頭傷害"
+L.label_armor_block_blastdmg = "啟用護甲阻擋爆炸傷害"
+L.label_armor_dynamic = "啟用動態裝甲"
+L.label_armor_value = "護甲物品所賦予的護甲"
+L.label_armor_damage_block_pct = "護甲承受的傷害百分比"
+L.label_armor_damage_health_pct = "玩家承受的傷害百分比"
+L.label_armor_enable_reinforced = "啟用強化護甲"
+L.label_armor_threshold_for_reinforced = "強化護甲閾值"
+L.label_sherlock_mode = "啟用偵探模式"
+L.label_highlight_admins = "突出服務器管理員"
+L.label_highlight_dev = "突出顯示TTT2開發者"
+L.label_highlight_vip = "突出顯示VIP"
+L.label_highlight_addondev = "突出顯示TTT2附加組件的開發者"
+L.label_highlight_supporter = "突出顯示其他支持者"
+L.label_enable_hud_element = "啟用{elem}HUD元素"
+L.label_spec_prop_control = "啟用Prop附體"
+L.label_spec_prop_base = "附體時的基礎值"
+L.label_spec_prop_maxpenalty = "降低附體獎金下限"
+L.label_spec_prop_maxbonus = "提高附體獎金上限"
+L.label_spec_prop_force = "附體時推動力"
+L.label_spec_prop_rechargetime = "充能時間(秒)"
+L.label_doors_force_pairs = "強迫讓只能關閉的門變為正常門"
+L.label_doors_destructible = "啟用破壞門系統"
+L.label_doors_locked_indestructible = "初始鎖定的門是不可摧毀的"
+L.label_doors_health = "門的生命值"
+L.label_doors_prop_health = "Prop門健康值"
+L.label_minimum_players = "開始遊戲的最低玩家數量"
+L.label_karma = "啟用業值"
+L.label_karma_strict = "啟用嚴格的業值"
+L.label_karma_starting = "初始業值"
+L.label_karma_max = "最大業值"
+L.label_karma_ratio = "團隊傷害的懲罰比例"
+L.label_karma_kill_penalty = "擊殺隊友的懲罰"
+L.label_karma_round_increment = "回合回復"
+L.label_karma_clean_bonus = "無誤殺回合獎勵"
+L.label_karma_traitordmg_ratio = "傷害其他團隊玩家的獎勵比例"
+L.label_karma_traitorkill_bonus = "擊殺其他團隊玩家的獎勵"
+L.label_karma_clean_half = "無誤殺獎勵減少"
+L.label_karma_persist = "業值在地圖更換後依然保留"
+L.label_karma_low_autokick = "自動踢掉低業值的玩家"
+L.label_karma_low_amount = "低業值閾值"
+L.label_karma_low_ban = "封禁選中的最低業值玩家"
+L.label_karma_low_ban_minutes = "封禁時間(分鐘)"
+L.label_karma_debugspam = "啟用關於業值變化的調試輸出到控製臺"
+L.label_max_melee_slots = "近戰槽位最多可攜帶"
+L.label_max_secondary_slots = "輔助槽位最多可攜帶"
+L.label_max_primary_slots = "主要插槽最多可攜帶"
+L.label_max_nade_slots = "Nade槽位最多可攜帶"
+L.label_max_carry_slots = "攜帶槽位最多可攜帶"
+L.label_max_unarmed_slots = "非武裝槽位最多可攜帶"
+L.label_max_special_slots = "特殊槽位最多可攜帶"
+L.label_max_extra_slots = "額外槽位最多可攜帶"
+L.label_weapon_autopickup = "啟用自動武器拾取"
+L.label_sprint_enabled = "啟用沖刺功能"
+L.label_sprint_max = "沖刺體力最大值"
+L.label_sprint_stamina_consumption = "體力消耗系數"
+L.label_sprint_stamina_regeneration = "體力恢復系數"
+L.label_sprint_crosshair = "沖刺時顯示準星"
+L.label_crowbar_unlocks = "主要攻擊鍵可以作為互動(即解鎖)使用"
+L.label_crowbar_pushforce = "撬棍推動力"
 
 --2022-04-13
---L.label_session_limits_enabled = "Enable session limits"
---L.sb_mapchange_disabled = "Session limits are disabled."
+L.label_session_limits_enabled = "啟用地圖更換"
+L.sb_mapchange_disabled = "地圖更換被禁用."
+
+-- 2022-07-02
+L.header_playersettings_falldmg = "摔落傷害設置"
+
+L.label_falldmg_enable = "啟用摔落傷害"
+L.label_falldmg_min_velocity = "發生摔落傷害的最小速度閾值"
+L.label_falldmg_exponent = "與速度相關的摔落傷害增加指數"
+
+L.help_falldmg_exponent = [[
+該值修改了隨著玩家撞擊地面的速度而以指數方式增加的摔落傷害。
+
+更改此值時請小心。設置得太高，即使是二階階梯的高度也會致命，而設置得太低，玩家從五樓跳下來時也安然無恙。]]
