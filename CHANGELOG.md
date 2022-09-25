@@ -5,13 +5,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ## Unreleased
 
 ### Changed
+
 - Fixed and updated the Chinese translation file (by @sbzlzh)
 - Updated Japanese translation (by @westooooo)
 - Updated Simplified and Traditional Chinese (by @TEGTianFan)
 
 ### Fixed
+
 - Fixed the spawn editor tool not having a TargetID in some scenarios by always rendering the 'ttt_spawninfo_ent' (by @NickCloudAT)
 - Roleselection for a lot of roles now considers all possible subroles one after another
+- Fixed portuguese translation of the equipment editor not working
 
 ## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-05)
 
@@ -360,7 +363,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Shopeditor function `ShopEditor.ReadItemData()` now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (`TTT2SESaveItem`,`TTT2SyncDBItems`)
 - Equipment shop favorite functions are now local and not global anymore (`CreateFavTable`, `AddFavorite`, `RemoveFavorite`, `GetFavorites` & `IsFavorite`)
 
-
 ## [v0.8.2b](https://github.com/TTT-2/TTT2/tree/v0.8.2b) (2021-03-25)
 
 ### Fixed
@@ -542,6 +544,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
 ### Fixed
+
 - Fixed max roles / max base roles interaction with the roleselection. Also does not crash with values != 0 anymore.
 
 ## [v0.7.0b](https://github.com/TTT-2/TTT2/tree/v0.7.0b) (2020-06-01)
