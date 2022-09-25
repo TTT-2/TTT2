@@ -1286,6 +1286,23 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2022, month = 08, day = 21 }))
 
+	AddChange("TTT2 Base - v0.11.6b", [[
+		<h2>Changed</h2>
+		<ul>
+			<li>Fixed and updated the Chinese translation file (by @sbzlzh)</li>
+			<li>Updated Japanese translation (by @westooooo)</li>
+			<li>Updated Simplified and Traditional Chinese (by @TEGTianFan)</li>
+			<li>Add placeholder message to the ingame ttt2 guide (F1 Menu)</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the spawn editor tool not having a TargetID in some scenarios by always rendering the 'ttt_spawninfo_ent' (by @NickCloudAT)</li>
+			<li>Roleselection for a lot of roles now considers all possible subroles one after another</li>
+			<li>Fixed portuguese translation of the equipment editor not working</li>
+		</ul>
+	]], os.time({ year = 2022, month = 09, day = 25 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
+
 ### Changed
 
 - Fixed and updated the Chinese translation file (by @sbzlzh)
@@ -17,7 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Roleselection for a lot of roles now considers all possible subroles one after another
 - Fixed portuguese translation of the equipment editor not working
 
-## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-05)
+## [v0.11.5b](https://github.com/TTT-2/TTT2/tree/v0.11.5b) (2022-08-21)
 
 ### Added
 
