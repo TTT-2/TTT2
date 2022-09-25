@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed and updated the Chinese translation file (by @sbzlzh)
 - Updated Japanese translation (by @westooooo)
 - Updated Simplified and Traditional Chinese (by @TEGTianFan)
+- Add placeholder message to the ingame ttt2 guide (F1 Menu)
 
 ### Fixed
 
