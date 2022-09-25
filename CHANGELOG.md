@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - Fixed and updated the Chinese translation file (by @sbzlzh)
 - Updated Japanese translation (by @westooooo)
+- Updated Simplified and Traditional Chinese (by @TEGTianFan)
 
 ### Fixed
 - Fixed the spawn editor tool not having a TargetID in some scenarios by always rendering the 'ttt_spawninfo_ent' (by @NickCloudAT)
