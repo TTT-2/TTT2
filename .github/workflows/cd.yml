@@ -4,8 +4,6 @@ name: CD
 on:
   pull_request_target:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
   workflow_dispatch:
 
 jobs:
