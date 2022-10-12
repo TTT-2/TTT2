@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed `SWEP.IronSightTime` and `SWEP.IronSightPos` to `SWEP.IronSightsTime` and `SWEP.IronSightsPos`, respectively, within `weapon_tttbase`
+  - This change was made for a) consistency with every other SWEP using the latter variable names, and b) because it was breaking the ironsights of any SWEP trying to use the values inherited from `weapon_tttbase`
+
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
 ### Changed
