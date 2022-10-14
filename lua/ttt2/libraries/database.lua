@@ -80,6 +80,19 @@ local callbackIdentifiers = database.callbackIdentifiers
 --
 
 ---
+-- Creates a databaseElement combining all infos necessary to make changes to the serverside sql database
+-- @param string accessName the networkable name of the sql table
+-- @param string itemName the name or primaryKey of the item inside of the sql table
+-- @param string key the name of the key in the database
+-- @return table Return all necessary infos for database access
+-- @realm shared
+function DatabaseElement(accessName, itemName, key)
+	if not accessName or not itemName or not key then return end
+
+	return {name = accessName, itemName = itemName, key = key}
+end
+
+---
 -- Call this function if a value was received
 -- @param number index The local index of the database
 -- @param string itemName The name of the item in the database

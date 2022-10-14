@@ -19,7 +19,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 		local master = form:MakeCheckBox({
 			label = "equipmenteditor_name_auto_spawnable",
-			database = {name = accessName, itemName = itemName, key = "AutoSpawnable"}
+			database = DatabaseElement(accessName, itemName, "AutoSpawnable")
 		})
 
 		local entType
@@ -32,7 +32,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 		form:MakeComboBox({
 			label = "equipmenteditor_name_spawn_type",
-			database = {name = accessName, itemName = itemName, key = "spawnType"},
+			database = DatabaseElement(accessName, itemName, "spawnType"),
 			choices = choices,
 			master = master
 		})
@@ -46,7 +46,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	local master = form:MakeCheckBox({
 		label = "equipmenteditor_name_not_buyable",
-		database = {name = accessName, itemName = itemName, key = "notBuyable"},
+		database = DatabaseElement(accessName, itemName, "notBuyable"),
 		invert = true
 	})
 
@@ -56,7 +56,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	form:MakeCheckBox({
 		label = "equipmenteditor_name_not_random",
-		database = {name = accessName, itemName = itemName, key = "NoRandom"},
+		database = DatabaseElement(accessName, itemName, "NoRandom"),
 		master = master
 	})
 
@@ -66,7 +66,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	form:MakeCheckBox({
 		label = "equipmenteditor_name_global_limited",
-		database = {name = accessName, itemName = itemName, key = "globalLimited"},
+		database = DatabaseElement(accessName, itemName, "globalLimited"),
 		master = master
 	})
 
@@ -76,7 +76,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	form:MakeCheckBox({
 		label = "equipmenteditor_name_team_limited",
-		database = {name = accessName, itemName = itemName, key = "teamLimited"},
+		database = DatabaseElement(accessName, itemName, "teamLimited"),
 		master = master
 	})
 
@@ -86,7 +86,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	form:MakeCheckBox({
 		label = "equipmenteditor_name_player_limited",
-		database = {name = accessName, itemName = itemName, key = "limited"},
+		database = DatabaseElement(accessName, itemName, "limited"),
 		master = master
 	})
 
@@ -97,7 +97,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 63,
 		decimal = 0,
-		database = {name = accessName, itemName = itemName, key = "minPlayers"},
+		database = DatabaseElement(accessName, itemName, "minPlayers"),
 		master = master
 	})
 
@@ -106,7 +106,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 20,
 		decimal = 0,
-		database = {name = accessName, itemName = itemName, key = "credits"},
+		database = DatabaseElement(accessName, itemName, "credits"),
 		master = master
 	})
 
