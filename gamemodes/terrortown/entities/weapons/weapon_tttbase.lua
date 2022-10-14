@@ -161,12 +161,12 @@ SWEP.ReloadAnim = ACT_VM_RELOAD
 
 SWEP.fingerprints = {}
 
--- Time needed to enter / leave the ironsight in seconds
-SWEP.IronSightTime = 0.25
--- The position offset applied when entering the ironsight
-SWEP.IronSightPos = Vector(0, 0, 0)
--- The rotational offset applied when entering the ironsight
-SWEP.IronSightsAng = Vector(0, 0, 0)
+--[[
+	-- The position offset applied when entering the ironsight
+	SWEP.IronSightsPos = Vector(0, 0, 0)
+	-- The rotational offset applied when entering the ironsight
+	SWEP.IronSightsAng = Vector(0, 0, 0)
+--]]
 
 local skipWeapons = {}
 
