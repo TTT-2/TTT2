@@ -4,11 +4,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-### Fixed
+### Changed
 
-- Slight fixes to `weapon_tttbase`:
-  - Removed `SWEP.IronSightTime` as it lacked any use within the gamemode, and was redundant as ironsight times are already managed with networked data tables
-  - Fixed `SWEP.IronSightPos` to `SWEP.IronSightsPos` for both a) consistency with literally every other SWEP and function using the latter variable names, and b) because it was breaking the ironsights of any SWEP trying to use the default values inherited from `weapon_tttbase`.
+- `weapon_tttbase`:
+  - Removal of `SWEP.IronSightsTime` as it was completely unused and conflicts with a networked value intended for the same purpose
+  - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
+    - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
