@@ -67,7 +67,7 @@ end
 -- @param bool invert
 -- @realm client
 function PANEL:SetInverted(invert)
-	self.inverted = tobool(invert)
+	self.inverted = invert
 end
 
 ---
