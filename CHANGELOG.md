@@ -11,6 +11,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
     - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
 
+### Fixed
+
+- Fixed hotreload of TTT2 roles library by a fresh reinitialization 
+
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
 ### Changed
