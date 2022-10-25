@@ -12,9 +12,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-roles = roles or {}
-
-roles.roleList = roles.roleList or {}
+roles = {}
+roles.roleList = {}
 
 ---
 -- Copies any missing data from base table to the target table
