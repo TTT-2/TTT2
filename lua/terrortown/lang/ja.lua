@@ -185,11 +185,11 @@ L.search_role_traitor = "こいつはTraitorだったな！"
 L.search_role_det = "こいつはDetectiveだった。"
 L.search_role_inno = "こいつはInnocentだった。"
 
-L.search_words = "遺言'{lastwords}'"
+L.search_words = "遺言:「{lastwords}」"
 L.search_armor = "ボディアーマーを着ていたようだ。"
 L.search_disg = "変装をしていたようだ。"
 L.search_radar = "レーダーを所持していたようだ。もう機能していないがな。"
-L.search_c4 = "ポケットからメモを見つけた。それには'爆弾を解除するには{num}番のワイヤーをカットしろ'と書かれている。"
+L.search_c4 = "ポケットからメモを見つけた。「爆弾を解除するには{num}番のワイヤーをカットしろ」と書かれている。"
 
 L.search_dmg_crush = "こいつの骨の多くが折れている。重たい物でもぶつかって死んだようだ。"
 L.search_dmg_bullet = "こいつは撃たれて死んだようだな。"
@@ -204,13 +204,13 @@ L.search_dmg_car = "このテロリストが道路を渡った際、野蛮なド
 L.search_dmg_other = "このテロリストの死因を特定できない。"
 
 L.search_weapon = "{weapon}によって殺されたようだな。"
-L.search_head = "致命的な傷はヘッドショットによるものだ。 叫ぶ間も無い。"
+L.search_head = "ヘッドショットされたのか。叫ぶ暇も無いな。"
 L.search_time = "こいつは調査のおおよそ{time}秒前に死んだな。"
-L.search_dna = "裏切り者のDNAサンプルをDNAスキャナーで回収しなくては。DNAサンプルは今からおおよそ{time}秒で腐敗するだろう。"
+L.search_dna = "殺害者のDNAサンプルをDNAスキャナーで回収しなくては。DNAサンプルは今からおおよそ{time}秒で腐敗するだろう。"
 
-L.search_kills1 = "{player}の死を立証する殺害リストを見つけた。"
+L.search_kills1 = "{player}の死を立証するための殺害リストを見つけた。"
 L.search_kills2 = "これらの名前の載った殺害リストを見つけた:"
-L.search_eyes = "探偵スキルを使用し、こいつの見た最後の人物を確認した: {player}. 裏切り者か、それとも偶然か？"
+L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か、それとも偶然か？"
 
 -- Scoreboard
 L.sb_playing = "サーバー名"
@@ -233,11 +233,11 @@ L.sb_tag_kill = "殺害対象"
 L.sb_tag_miss = "行方不明"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "この武器は品切れだ: 既にこのラウンドで購入済みだ。"
+L.buy_no_stock = "この武器は品切れだ。既にこのラウンドで購入済みだ。"
 L.buy_pending = "既に注文されている、受け取りまで待とう。"
 L.buy_received = "特殊装備を受け取った。"
 
-L.drop_no_room = "空きが無いから武器を捨てるしかない。"
+L.drop_no_room = "こんな狭い所じゃあ捨てれないぞ。"
 
 L.disg_turned_on = "変装完了。"
 L.disg_turned_off = "変装解除。"
@@ -247,18 +247,18 @@ L.item_passive = "パッシブ効果アイテム"
 L.item_active = "使用アイテム"
 L.item_weapon = "武器"
 
-L.item_armor = "Body Armor(ボディアーマー)"
+L.item_armor = "ボディアーマー"
 L.item_armor_desc = [[
 弾丸、炎、爆発によるダメージを軽減。延長時間になったら使い物にならない。
 複数の購入が可能。ある特定の装甲値に達した後、アーマーは強化される。]]
 
-L.item_radar = "Radar(レーダー)"
+L.item_radar = "レーダー"
 L.item_radar_desc = [[
 生命反応を捉えることができる。
 
 購入するとすぐに自動で探知してくれる。 設定はCキーのレーダーメニューから。]]
 
-L.item_disg = "Disguiser(変装装置)"
+L.item_disg = "変装装置"
 L.item_disg_desc = [[
 変装中はあなたのID情報を隠せます。 さらに、
 獲物が最期に目撃した人物になるのも避けれます。
@@ -293,7 +293,7 @@ L.c4_status_armed = "起動中"
 L.c4_status_disarmed = "解除済み"
 
 -- Visualizer
-L.vis_name = "Visualizer(可視化装置)"
+L.vis_name = "可視化装置"
 L.vis_hint = "{usekey}で拾う（探偵のみ）"
 
 L.vis_desc = [[
@@ -302,7 +302,7 @@ L.vis_desc = [[
 被害者が銃撃の傷で死亡した場合のみ。]]
 
 -- Decoy
-L.decoy_name = "Decoy(デコイ)"
+L.decoy_name = "デコイ"
 L.decoy_no_room = "この狭い所ではデコイは持てないようだ。"
 L.decoy_broken = "デコイが破壊された！"
 
@@ -313,7 +313,7 @@ L.decoy_desc = [[
 Detectiveに偽のレーダー反応を表示させ、彼らがあなたのDNAをスキャンしていた場合は彼らのDNAスキャナーがデコイの場所を表示するようにしてくれる。]]
 
 -- Defuser
-L.defuser_name = "Defuser(除去装置)"
+L.defuser_name = "C4除去装置"
 L.defuser_help = "{primaryfire}でC4除去"
 
 L.defuser_desc = [[
@@ -322,7 +322,7 @@ C4爆弾を即座に除去する。
 これさえ持っていればC4に気がつくのに容易でしょう。]]
 
 -- Flare gun
-L.flare_name = "Flare Gun(信号拳銃)"
+L.flare_name = "信号拳銃"
 
 L.flare_desc = [[
 死体を燃やすことができる拳銃。証拠隠滅に必須。
@@ -330,7 +330,7 @@ L.flare_desc = [[
 燃えている死体からは大きな燃焼音を発するので注意。]]
 
 -- Health station
-L.hstation_name = "Health Station(回復ステーション)"
+L.hstation_name = "回復ステーション"
 
 L.hstation_broken = "回復ステーションが破壊された！"
 L.hstation_help = "{primaryfire}で回復ステーション設置"
@@ -341,7 +341,7 @@ L.hstation_desc = [[
 使用者のDNAサンプルをチェックすることができます。]]
 
 -- Knife
-L.knife_name = "Knife(ナイフ)"
+L.knife_name = "ナイフ"
 L.knife_thrown = "ナイフ投擲"
 
 L.knife_desc = [[
@@ -365,21 +365,21 @@ L.radio_desc = [[
 ショップメニュー内のラジオメニューから音を再生できます。]]
 
 -- Silenced pistol
-L.sipistol_name = "Silenced Pistol(消音ピストル)"
+L.sipistol_name = "消音ピストル"
 
 L.sipistol_desc = [[
 サプレッサー付きのハンドガン。通常のピストルの弾丸を使用する。
 撃たれた犠牲者は悲鳴をあげることはないだろう。]]
 
 -- Newton launcher
-L.newton_name = "Newton Launcher(ニュートンランチャー)"
+L.newton_name = "ニュートンランチャー"
 
 L.newton_desc = [[
 遠距離からでも人を弾き飛ばせる弾を発射する。
 弾は無制限だが、次の弾を発射するのに時間がかかる。]]
 
 -- Binoculars
-L.binoc_name = "Binoculars(双眼鏡)"
+L.binoc_name = "双眼鏡"
 
 L.binoc_desc = [[
 遠く離れた距離から死体まで拡大し、確認することができる。
@@ -423,7 +423,7 @@ L.rifle_name = "スナイパーライフル"
 L.shotgun_name = "ショットガン"
 
 -- Teleporter
-L.tele_name = "Teleporter(テレポーター)"
+L.tele_name = "テレポーター"
 L.tele_failed = "テレポートに失敗した。"
 L.tele_marked = "テレポート位置を設定した。"
 
@@ -554,45 +554,45 @@ L.tips_panel_title = "ヒント"
 L.tips_panel_tip = "ヒント:"
 
 -- Tip texts
-L.tip1 = "Traitorは死体に対し{walkkey}を押しながら{usekey}を押すことにより死亡を確認することなく,静かに死体を調べることができます."
+L.tip1 = "Traitorは死体に向かって{walkkey}を押しながら{usekey}を押すと、死亡確認せずに静かに死体を調べることができます。"
 
-L.tip2 = "タイマーを長くしてC4爆弾を起動するとInnocentが解除を試みる際に即座に爆発するワイヤーの本数が増えます.　しばしば警告音も静かにかつ少なくなります."
+L.tip2 = "タイマーを長くしたC4爆弾を起動すると、解除する際のワイヤーの本数が増えます。また、警告音も静かになります。。"
 
-L.tip3 = "Detectiveは死体を探ってその人の'瞳に映された'者を知ることができます. これは死んだ者の見た最後の人物です. 被害者が後ろから撃たれていたのならその人物を殺害者と決め付けるのは早計です."
+L.tip3 = "Detectiveのみ死体を検査することでその人が最後に見た者を知ることができます。 ただし、被害者が後ろから撃たれていたのなら、その人物を殺害者と決め付けるのは早とちりです。"
 
-L.tip4 = "あなたの死体を発見し, 調査して確認するまではあなたの死は誰にもわかりません."
+L.tip4 = "死体確認されるまで、その人は行方不明扱いとなります。"
 
-L.tip5 = "TraitorがDetectiveを始末すると, 即座にクレジットの報酬を受け取ります."
+L.tip5 = "TraitorがDetectiveを始末することで、報酬としてクレジットを受け取ります。"
 
-L.tip6 = "Traitorが死亡すると, 全てのDetectiveはクレジットの報酬を獲得します."
+L.tip6 = "Traitorが死亡する時、全てのDetectiveは報酬としてクレジットを受け取ります。"
 
-L.tip7 = "TraitorはInnocentの始末を大きく進展させた際, 報酬としてクレジットを受け取ります."
+L.tip7 = "TraitorはInnocentをある程度始末したとき、 報酬としてクレジットを受け取ります。"
 
-L.tip8 = "TraitorとDetectiveは他のTraitorやDetectiveの死体から未使用クレジットを入手することができます."
+L.tip8 = "TraitorとDetectiveは他のTraitorやDetectiveの死体から未使用のクレジットを入手することができます。"
 
-L.tip9 = "Poltergeistは物理オブジェクトを危険な発射物に変えることができます. 各衝撃は近くにいる者を傷つけるエネルギー波が同時に生じます."
+L.tip9 = "Poltergeistはオブジェクトを危険な発射物に変えることができます。 その時の衝撃波は近くにいる者を傷つけていきます。"
 
-L.tip10 = "TraitorとDetectiveは右上の赤いメッセージを見逃さないでください. それらはあなたにとって重要でしょうから."
+L.tip10 = "TraitorとDetectiveは右上の赤いメッセージを見逃さないように。それらはあなたにとって重要でしょうから。"
 
-L.tip11 = "TraitorとDetectiveは覚えておいてください, あなたはあなたと仲間がうまく働けば追加クレジットの報酬を与えられます. 必ずそのクレジットを使うのを忘れないでくださいね!"
+L.tip11 = "TraitorとDetectiveは覚えておいてくんだ。仲間と共にうまく任務を遂行すれば報酬としてクレジットを与えられます。せっかく手に入れたクレジットをなるべく使うようにしましょう！"
 
-L.tip12 = "DetectiveのDNA scannerは武器とアイテムからDNAサンプルを集めることができるようになり, そしてスキャンでそのプレイヤーの居場所を捕捉します. 死体や解除したC4からサンプルを入手できて便利ですよ!"
+L.tip12 = "DetectiveのDNAスキャナーは武器とアイテムからDNAサンプルを集めることができ、そのサンプルが付着したプレイヤーの居場所を捕捉してくれます。死体や解除したC4からもサンプルを入手できる。"
 
-L.tip13 = "あなたが始末した相手の近くにいる時, あなたのDNAのいくつかは死体に残されています. そのDNAはDetectiveのDNA scannerであなたの居場所を見つけるのに使用されることがあります. ナイフで始末した後は死体を隠蔽すると良いでしょう!"
+L.tip13 = "もしあなたが始末した相手の近くにいた場合、あなたのDNAのいくつかは死体に残されています。そのDNAはDetectiveのDNAスキャナーにより居場所を補足されてしまう危険性があるため、死体はなるべく証拠隠滅しよう。"
 
-L.tip14 = "あなたが始末した相手から遠くに離れるにつれ, 死体に付着したあなたのDNAサンプルはより早く腐敗するでしょう."
+L.tip14 = "あなたが始末した相手から遠くに離れるにつれ、死体に付着したあなたのDNAサンプルはより早く腐敗するでしょう。"
 
-L.tip15 = "あなたはTraitorで, スナイプしようとしていますか? Disguiserを試してみることを検討してください. もし外しても, 安全な場所に逃げ, Disguiserを解除すれば撃ったのがあなただと気付く者はいないでしょう."
+L.tip15 = "誰かを狙撃しようとしていますか？それならば変装装置の出番。それがあれば、もし外してしまったとしても、安全な場所に逃げれさえすれば、狙撃手があなただとは気づかないでしょう。"
 
-L.tip16 = "Teleporterは追跡されている時にTraitorのあなたの逃走を手助けし, 大きなマップを素早く渡り歩くことができるようにします. 必ず常に安全な場所にマークしましょう."
+L.tip16 = "テレポーターは追跡を免れるのに大きく貢献するかつ、大きなマップさえも瞬時に渡り歩くことを可能とします。テレポートする位置は必ず安全な場所にセットしましょう。"
 
-L.tip17 = "Innocentが皆集まっていて孤立させるのは難しいですか? 何人かを引き離すためにRadioでC4の音か銃撃音の再生を試みることを検討してみてください."
+L.tip17 = "Innocentが皆集まっていて孤立させるのは難しいですか？それならば、何人かを引き離すためにラジオでC4の音か銃撃音を鳴らし、場を混乱させてみましょう。"
 
-L.tip18 = "TraitorがRadioを使用するには, Radioが置かれた後に装備メニューから音を再生することができます. 複数の音を再生したい場合はそこから複数のボタンをクリックして複数の音のキューを作ってください."
+L.tip18 = "ラジオは主に（ラジオが）置かれた後に装備メニューから音を再生することが可能です。複数の音を再生したい場合はそこから複数のボタンをクリックしてみよう。"
 
-L.tip19 = "Detectiveは, もしクレジットが余っているのなら信頼できるInnocentにDefuserを渡してしまってもかまいません. そうすればあなたは調査の方に時間を費やし, 爆弾の解除からは離れることができます."
+L.tip19 = "Detectiveは、もしクレジットが余っているのなら信頼できるInnocentにC4除去装置を渡してしまってもかまいません。そうすればあなたは調査の方に時間を費やし、C4の解除からは離れることができます。"
 
-L.tip20 = "DetectiveのBinocularsは長距離を調べ死体の確認をできるようになります. 悪いお知らせはTraitorが死体を餌として使用したいと思っていた場合です. 当然, Binoculars使用中のDetectiveは無防備で注意散漫ですから..."
+L.tip20 = "Detectiveの双眼鏡は遠い所にある死体の確認ができるようになります。しかし、Traitorが死体を餌として使用する場面には要注意。なぜなら、双眼鏡使用中のDetectiveは無防備で注意散漫ですから..."
 
 L.tip21 = "DetectiveのHealth Stationは負傷したプレイヤーを回復させます. もちろん, それらの負傷した人はTraitorかもしれないですけどね..."
 
@@ -665,16 +665,16 @@ L.col_total = "トータルポイント"
 
 -- Awards/highlights
 L.aw_sui1_title = "自殺カルトのリーダー"
-L.aw_sui1_text = "は最初の一歩を踏み出す者になることでどうすれば良いのかを他の自殺者達に示しました."
+L.aw_sui1_text = "は最初の一歩を踏み出す者になることでどうすれば良いのかを他の自殺者達に示しました。"
 
 L.aw_sui2_title = "孤独と憂鬱"
-L.aw_sui2_text = "は唯一の自殺者でした."
+L.aw_sui2_text = "は孤独な自殺者でした。"
 
 L.aw_exp1_title = "爆発物研究証"
-L.aw_exp1_text = "は爆発物の研究が認められました. {num}人の被験者を助け出しましたからね."
+L.aw_exp1_text = "は爆発物の研究が認められました。{num}人の被験者を助け出しましたからね。"
 
 L.aw_exp2_title = "フィールドリサーチ"
-L.aw_exp2_text = "は爆発への耐久力をテストしました. 耐久力は高くなかったようです."
+L.aw_exp2_text = "は爆発への耐久力をテストしました。耐久力は高くなかったようです。"
 
 L.aw_fst1_title = "まずは一匹"
 L.aw_fst1_text = "はTraitor達の手に最初のInnocentの死を届けました."
@@ -760,7 +760,7 @@ L.aw_sgn2_text = "はバックショット弾が大嫌いなので, 全部ばら
 L.aw_rfl1_title = "ポイントアンドクリック"
 L.aw_rfl1_text = "は{num}人を始末するにはライフルと安定した手が必要な全てだと示しました."
 
-L.aw_rfl2_title = "頭, 見えてますよ"
+L.aw_rfl2_title = "尻隠して頭隠さず"
 L.aw_rfl2_text = "はライフルを理解しています. 今, 他の{num}人もライフルを理解しました."
 
 L.aw_dgl1_title = "小さなライフルみたいだね"
@@ -775,16 +775,16 @@ L.aw_mac1_text = "はMAC10で{num}人を始末しましたが, どのくらい�
 L.aw_mac2_title = "マカロニ・アンド・チーズ"
 L.aw_mac2_text = "は2挺のMAC10を上手く扱うことができたらどうなるのか驚きました.　{num}回もを2挺で?"
 
-L.aw_sip1_title = "お静かに"
+L.aw_sip1_title = "静粛に"
 L.aw_sip1_text = "は消音ピストルで{num}人を黙らせました."
 
-L.aw_sip2_title = "静寂のアサシン"
+L.aw_sip2_title = "静寂の暗殺者"
 L.aw_sip2_text = "は{num}人を自身の死を聞き取らせずに始末しました."
 
 L.aw_knf1_title = "ナイフは知っている"
 L.aw_knf1_text = "はインターネット越しに面前の誰かを刺しました."
 
-L.aw_knf2_title = "どこから手に入れたんだい?"
+L.aw_knf2_title = "どこから手に入れたんだい？"
 L.aw_knf2_text = "はTraitorではありませんでしたが, それでも誰かをナイフで殺害しました."
 
 L.aw_knf3_title = "とんでもないナイフ使い"
@@ -806,7 +806,7 @@ L.aw_hug2_title = "忍耐強いパラ"
 L.aw_hug2_text = "はただただ撃ち続け, そしてH.U.G.Eの忍耐は{num}人の始末で報いるのを見ました."
 
 L.aw_msx1_title = "バタバタバタ"
-L.aw_msx1_text = "はM16で{num}人排除しました."
+L.aw_msx1_text = "はM16で{num}人殺害しました。"
 
 L.aw_msx2_title = "ミドルレンジマッドネス"
 L.aw_msx2_text = "が{num}人キル取っているということはM16でのターゲットの仕留め方を知っていますね."
@@ -821,7 +821,7 @@ L.aw_tkl3_title = "カルマ重視"
 L.aw_tkl3_text = "はチームメイトを2人始末した後も止められませんでした. 3はラッキーナンバーですから."
 
 L.aw_tkl4_title = "チームキラー"
-L.aw_tkl4_text = "はチーム全員を始末しました. BANしましょうよ!"
+L.aw_tkl4_text = "はチーム全員を始末しました。こんな奴BANしてしまおう！"
 
 L.aw_tkl5_title = "ロールプレイヤー"
 L.aw_tkl5_text = "は狂人のロールプレイをしていました, 本当にね. それはなぜならチームの多くを始末したからです."
@@ -969,7 +969,7 @@ L.corpse_binoculars = "[{key}]で双眼鏡を用いて死体を確認する。"
 L.binoc_progress = "検索の進行状況: {progress}%"
 
 L.pickup_fail = "これは拾えないようだ。"
-L.pickup_no_room = "この武器の種類のインベントリに空きがないようだ。"
+L.pickup_no_room = "ここじゃあ狭くて拾えやしない。"
 L.pickup_pending = "既に武器を拾っている、受け取りまで少し待とう。"
 
 -- 2020-01-07
@@ -1274,7 +1274,7 @@ L.title_event_rolechange = "プレイヤーの役職/陣営が変わった"
 L.title_event_selected = "役職が配布された"
 L.title_event_spawn = "プレイヤーが出現した"
 
-L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) has found the body of {found} ({forole} / {foteam}). The corpse has {credits} equipment credit(s)."
+L.desc_event_bodyfound = "{finder} ({firole} / {fiteam})が{found} ({forole} / {foteam})の死体を見つけ、その死体には{credits}個のクレジットがあった。"
 L.desc_event_bodyfound_headshot = "頭を撃ち抜かれて殺された。"
 L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam})は{owner} ({orole} / {oteam})が設置したC4の解除に成功した。"
 L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam})は{owner} ({orole} / {oteam})が設置したC4の解除に失敗した。"
@@ -1404,7 +1404,7 @@ L.label_shop_linker_set = "ショップ設定"
 L.xfer_team_indicator = "陣営"
 
 -- 2021-06-25
-L.searchbar_default_placeholder = "検索..."
+L.searchbar_default_placeholder = "検索"
 
 -- 2021-07-11
 L.spec_about_to_revive = "蘇生中のため行動が制限されています。"
@@ -1831,5 +1831,16 @@ L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
 
 --2022-04-13
---L.label_session_limits_enabled = "Enable session limits"
---L.sb_mapchange_disabled = "Session limits are disabled."
+L.label_session_limits_enabled = "セッションの制限を有効にする"
+L.sb_mapchange_disabled = "セッションの制限を無くしました。"
+
+-- 2022-07-02
+L.header_playersettings_falldmg = "落下ダメージ設定"
+
+L.label_falldmg_enable = "落下ダメージを有効にする。"
+L.label_falldmg_min_velocity = "落下ダメージが発生するまでの最小落下速度"
+L.label_falldmg_exponent = "落下速度に対する落下ダメージ増加指数"
+
+L.help_falldmg_exponent = [[
+この値は、プレイヤーが地面に当たる速度に応じて、落下ダメージが指数関数的に増加する方法を変更します。 
+この値を変更するときは注意してください。高すぎると、少し下っただけでも致命的になる可能性があり、低すぎると、プレイヤーは極端な高さから落下してもほとんどもしくは全くダメージを受けなくなってしまいます。]]
