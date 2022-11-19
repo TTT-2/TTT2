@@ -54,28 +54,26 @@ end
 function ENT:AcceptInput(name, activator)
 	if name == "Display" then
 		local recv = activator
+				
+		if IsValid(activator) and activator:IsPlayer() then
+			local receiver_tbl = { -- i think this is faster than chaining if/elseif
+				RECEIVE_ALL = nil,
+				RECEIVE_DETECTIVE = GetRoleChatFilter(ROLE_DETECTIVE),
+				RECEIVE_TRAITOR = GetRoleChatFilter(TEAM_TRAITOR),
+				RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
+			}
+			
+			recv = (self.teamReceiver) ? GetTeamChatFilter(self.teamReceiver) : receiver_tbl[self.Receiver]
 
-		local r = self.Receiver
-		if r == RECEIVE_ALL then
-			recv = nil
-		elseif r == RECEIVE_DETECTIVE then
-			recv = GetRoleChatFilter(ROLE_DETECTIVE)
-		elseif r == RECEIVE_TRAITOR then
-			recv = GetTeamChatFilter(TEAM_TRAITOR)
-		elseif r == RECEIVE_INNOCENT then
-			recv = GetTeamChatFilter(TEAM_INNOCENT)
-		elseif r == RECEIVE_ACTIVATOR then
-			if not IsValid(activator) or not activator:IsPlayer() then
+			CustomMsg(recv, self.Message, self.Color)
+
+			return true -- success
+			
+			else
 				ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
-
-				return true
-			end
-		elseif r == RECEIVE_CUSTOMROLE and self.teamReceiver then
-			recv = GetTeamChatFilter(self.teamReceiver)
+				return false -- failed, either invalid activator or activator was not a player
 		end
-
-		CustomMsg(recv, self.Message, self.Color)
-
-		return true
 	end
+	
+	return false -- failed, name wasn't "Display"
 end
