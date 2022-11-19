@@ -64,14 +64,11 @@ function ENT:AcceptInput(name, activator)
 			}
 			
 			recv = (self.teamReceiver) ? GetTeamChatFilter(self.teamReceiver) : receiver_tbl[self.Receiver]
-
 			CustomMsg(recv, self.Message, self.Color)
-
 			return true -- success
-			
-			else
-				ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
-				return false -- failed, either invalid activator or activator was not a player
+		else
+			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
+			return false -- failed, either invalid activator or activator was not a player
 		end
 	end
 	
