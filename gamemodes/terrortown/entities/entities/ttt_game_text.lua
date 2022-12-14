@@ -52,25 +52,28 @@ end
 -- @return[default=true] boolean
 -- @realm shared
 function ENT:AcceptInput(name, activator)
-	if name == "Display" then
-		local recv = activator
+	if name ~= "Display" then
+		return false
+	end
 				
-		if IsValid(activator) and activator:IsPlayer() then
-			local receiver_tbl = { -- i think this is faster than chaining if/elseif
-				RECEIVE_ALL = nil,
-				RECEIVE_DETECTIVE = GetRoleChatFilter(ROLE_DETECTIVE),
-				RECEIVE_TRAITOR = GetRoleChatFilter(TEAM_TRAITOR),
-				RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
-			}
+	if IsValid(activator) and activator:IsPlayer() then
+		local recv = activator
+		local receiver_tbl = {
+			RECEIVE_ALL = nil,
+			RECEIVE_DETECTIVE = GetRoleChatFilter(ROLE_DETECTIVE),
+			RECEIVE_TRAITOR = GetRoleChatFilter(TEAM_TRAITOR),
+			RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
+		}
 			
-			recv = (self.teamReceiver) ? GetTeamChatFilter(self.teamReceiver) : receiver_tbl[self.Receiver]
-			CustomMsg(recv, self.Message, self.Color)
-			return true -- success
-		else
-			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
-			return false -- failed, either invalid activator or activator was not a player
-		end
+		recv = (self.teamReceiver) ? GetTeamChatFilter(self.teamReceiver) : receiver_tbl[self.Receiver]
+		CustomMsg(recv, self.Message, self.Color)
+		
+		recv = nil
+		receiver_tbl = nil
+		
+		return true
 	end
 	
-	return false -- failed, name wasn't "Display"
+	ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
+	return false -- either invalid activator or activator was not a player
 end
