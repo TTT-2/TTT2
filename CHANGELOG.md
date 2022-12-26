@@ -15,10 +15,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 	- Marked outdated strings
 	- Removed some duplicated lines
 	- Added some missing strings
+- Added a new font in default_skin.lua to fit the localization (by @Satton2)
 
 ### Fixed
 
-- Fixed hotreload of TTT2 roles library by a fresh reinitialization 
+- Fixed hotreload of TTT2 roles library by a fresh reinitialization
+- Fixed a wrong localization line call in roles.lua (by Satton2)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
