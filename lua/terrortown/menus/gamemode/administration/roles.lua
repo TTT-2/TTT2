@@ -6,7 +6,7 @@ CLGAMEMODESUBMENU.priority = 97
 CLGAMEMODESUBMENU.title = "submenu_administration_roles_general_title"
 
 function CLGAMEMODESUBMENU:Populate(parent)
-	local form = vgui.CreateTTT2Form(parent, "header_roles_reward_credits")
+	local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
 
 	local masterEnb = form:MakeCheckBox({
 		serverConvar = "ttt_newroles_enabled",

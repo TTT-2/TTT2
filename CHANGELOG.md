@@ -10,6 +10,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removal of `SWEP.IronSightsTime` as it was completely unused and conflicts with a networked value intended for the same purpose
   - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
     - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
+- Updated Russian and English localization files (by @Satton2)
+- Updated all localization files (by @Satton2):
+	- Marked outdated strings
+	- Removed some duplicated lines
+	- Added some missing strings
 
 ### Fixed
 
