@@ -1397,7 +1397,7 @@ L.header_rolelayering_role = "{role} layering"
 L.header_rolelayering_baserole = "Base role layering"
 L.submenu_administration_rolelayering_title = "Role Layering"
 L.header_rolelayering_info = "Role layering information"
-L.help_rolelayering_roleselection = "The role distribution process is split into two passes. In the first pass base roles are distributed, which are innocent, traitor and those listed in the 'base role layer' box below. The second pass is used to upgrade those baseroles to a subrole."
+L.help_rolelayering_roleselection = "The role distribution process is split into two stages. In the first stage base roles are distributed, which are innocent, traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole."
 L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first, if upgradeable slots are still available, the unlayered roles will be distributed as well."
 L.scoreboard_voice_tooltip = "Scroll to change the volume"
 
@@ -1594,8 +1594,8 @@ L.label_roles_credits_award_repeat = "Credit reward repeat"
 L.label_roles_newroles_enabled = "Enable custom roles"
 L.label_roles_max_roles = "Upper role limit"
 L.label_roles_max_roles_pct = "Upper role limit by percentage"
-L.label_roles_max_baseroles = "Upper baserole limit"
-L.label_roles_max_baseroles_pct = "Upper baserole limit by percentage"
+L.label_roles_max_baseroles = "Upper base role limit"
+L.label_roles_max_baseroles_pct = "Upper base role limit by percentage"
 L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows to have them)"
 
 L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their teammates."
@@ -1643,7 +1643,7 @@ L.header_administration_misc = "Miscellaneous"
 L.header_entspawn_plyspawn = "Player Spawn Settings"
 L.header_voicechat_general = "General Voice chat Settings"
 L.header_voicechat_battery = "Voice chat Battery"
-L.header_voicechat_locational = "Local Voice chat"
+L.header_voicechat_locational = "Proximity Voice chat"
 L.header_playersettings_plyspawn = "Player Spawn Settings"
 L.header_round_setup_prep = "Round: Preparing"
 L.header_round_setup_round = "Round: Active"
@@ -1663,12 +1663,12 @@ L.header_inventory_pickup = "Inventory Weapon Pickup"
 L.header_sprint_general = "Sprint Settings"
 L.header_playersettings_armor = "Armor System Settings"
 
-L.help_killer_dna_range = "When a player is killed by another player, a DNA sample is left on their body. The setting below defines the maximum distance in hammer units for DNA samples to be left. If the killer will be further than this value when the victim dies, then no sample will be left on the corpse."
-L.help_killer_dna_basetime = "The base time in seconds until a DNA sample is decayed, if the killer was 0 Hammer units away. The farther the killer, the less time will be given to the DNA sample to decay."
+L.help_killer_dna_range = "When a player is killed by another player, a DNA sample is left on their body. The setting below defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away than this value when the victim dies, no sample will be left on the corpse."
+L.help_killer_dna_basetime = "The base time in seconds until a DNA sample decays, if the killer is 0 Hammer units away. The farther the killer is, the less time will be given to the DNA sample to decay."
 L.help_dna_radar = "The TTT2 DNA scanner shows the exact distance and direction of the selected DNA sample if equipped. However, there is also a classic DNA scanner mode that updates the selected sample with an in-world rendering every time the cooldown has passed."
 L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
 L.help_namechange_kick = [[
-Name change during an active round can be abused to evade being killed. Therefore, it is prohibited to change it by default.
+A name change during an active round could be abused. Therefore, this is prohibited by default and will lead to the offending player being kicked from the server.
 
 If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
@@ -1677,7 +1677,7 @@ If this variable is set to 0, all players are spawned at once. For servers with 
 
 Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
 L.help_voicechat_battery = [[
-Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for a few seconds for it to recharge. This can help to prevent excessive voice chat usage.
+Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
 
 Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
 L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
@@ -1743,7 +1743,7 @@ L.label_voice_drain = "Enable the voice chat battery feature"
 L.label_voice_drain_normal = "Drain per tick for normal players"
 L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
 L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
-L.label_locational_voice = "Enable local 3D voice chat sound for living players"
+L.label_locational_voice = "Enable proximity voice chat for living players"
 L.label_armor_on_spawn = "Player armor on (re-)spawn"
 L.label_prep_respawn = "Enable instant respawn during preparing phase"
 L.label_preptime_seconds = "Preparing time in seconds"
