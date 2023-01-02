@@ -1225,7 +1225,7 @@ L.pickup_error_noslot = "You cannot pick this up because you have no free slot a
 -- 2020-11-02
 L.lang_server_default = "Server Default"
 L.help_lang_info = [[
-This translation is {coverage}% complete with the english language taken as a default reference.
+This translation is {coverage}% complete with the English language taken as a default reference.
 
 Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
 
@@ -1268,7 +1268,7 @@ L.bodyfound_score = "Body found:"
 
 L.title_event_bodyfound = "A body was found"
 L.title_event_c4_disarm = "A C4 was disarmed"
-L.title_event_c4_explode = "A C4 exploded" 
+L.title_event_c4_explode = "A C4 exploded"
 L.title_event_c4_plant = "A C4 was armed"
 L.title_event_creditfound = "Equipment credits were found"
 L.title_event_finish = "The round has ended"

@@ -10,11 +10,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removal of `SWEP.IronSightsTime` as it was completely unused and conflicts with a networked value intended for the same purpose
   - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
     - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
-- Updated Russian and English localization files (by @Satton2)
+- Updated Russian and English localization files (by @Satton2):
+  - Updated strings in English localization file
+  - Localized outdated and new strings into Russian
 - Updated all localization files (by @Satton2):
+  - Added missing and new strings
   - Marked outdated strings
-  - Removed some duplicated lines
+  - Removed some duplicated strings
   - Added some missing strings
+  - Marked updated strings
+  - Fixed some broken source strings (line names)
 - Added a new font in default_skin.lua to fit the localization (by @Satton2)
 
 ### Fixed
