@@ -166,7 +166,7 @@ L.quick_inno = "{player}はInnocentだな。"
 L.quick_check = "まだ生きている奴はいるか？"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below. Keep these lowercase.
+-- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "いない奴"
 L.quick_disg = "変装中"
 L.quick_corpse = "死体"
@@ -215,6 +215,7 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 -- Scoreboard
 L.sb_playing = "サーバー名"
 L.sb_mapchange = "マップ変更まで{num}ラウンドか{time}秒"
+--L.sb_mapchange_disabled = "Session limits are disabled."
 
 L.sb_mia = "行方不明"
 L.sb_confirmed = "死亡確認"
@@ -877,7 +878,7 @@ L.equip_tooltip_radar = "レーダーメニュー"
 L.equip_tooltip_disguise = "変装メニュー"
 L.equip_tooltip_radio = "ラジオメニュー"
 L.equip_tooltip_xfer = "クレジット譲渡"
-L.equip_tooltip_reroll = "アイテムスロット"
+--L.equip_tooltip_reroll = "Reroll equipment"
 
 L.confgrenade_name = "ディスコンボビュレーター"
 L.polter_name = "Poltergeist(ポルターガイスト)"
@@ -898,10 +899,10 @@ L.shop_default = "デフォルトのショップを使用"
 
 -- 2019-05-05
 L.reroll_name = "スロット"
-L.reroll_menutitle = "スロットアイテム"
+--L.reroll_menutitle = "Reroll equipment"
 L.reroll_no_credits = "回すのに{amount}個のクレジットが必要だ"
 L.reroll_button = "スロット開始"
-L.reroll_help = "ショップから{amount}個のクレジットを使用し、新しいアイテムを得よう！"
+--L.reroll_help = "Use {amount} credits to get a new random set of equipment in your shop!"
 
 -- 2019-05-06
 L.equip_not_alive = "右から役職を選択し、使用可能なアイテムを閲覧できる。お気に入り登録を忘れずに！"
@@ -968,8 +969,8 @@ L.vis_short_desc = "被害者が射殺されたときのみ殺害現場を可視
 L.corpse_binoculars = "[{key}]で双眼鏡を用いて死体を確認する。"
 L.binoc_progress = "検索の進行状況: {progress}%"
 
-L.pickup_fail = "これは拾えないようだ。"
 L.pickup_no_room = "ここじゃあ狭くて拾えやしない。"
+L.pickup_fail = "これは拾えないようだ。"
 L.pickup_pending = "既に武器を拾っている、受け取りまで少し待とう。"
 
 -- 2020-01-07
@@ -1228,7 +1229,7 @@ L.help_lang_info = [[
 L.title_score_info = "ラウンド情報"
 L.title_score_events = "イベント履歴"
 
-L.label_bind_clscore = "ラウンドレポートを開く"
+--L.label_bind_clscore = "Open round report"
 L.title_player_score = "{player}'の得点:"
 
 L.label_show_events = "イベント範囲"
@@ -1243,16 +1244,16 @@ L.hilite_win_innocents = "Innocent陣営の勝利"
 L.hilite_win_tie = "引き分け"
 L.hilite_win_time = "時間切れ"
 
-L.tooltip_karma_gained = "このラウンドのカルマ上昇値:"
-L.tooltip_score_gained = "このラウンドの得点上昇値:"
-L.tooltip_roles_time = "役職の延長時間:"
+--L.tooltip_karma_gained = "Karma changes for this round:"
+--L.tooltip_score_gained = "Score changes for this round:"
+--L.tooltip_roles_time = "Role changes for this round:"
 
 L.tooltip_finish_score_alive_teammates = "生存したチームメイト:{score}"
 L.tooltip_finish_score_alive_all = "生存者:{score}"
 L.tooltip_finish_score_timelimit = "時間切れ:{score}"
 L.tooltip_finish_score_dead_enemies = "敵の死亡:{score}"
 L.tooltip_kill_score = "殺害:{score}"
-L.tooltip_bodyfound_score = "死体発見:{score}"
+--L.tooltip_bodyfound_score = "Body found: {score}"
 
 L.finish_score_alive_teammates = "生存したチームメイト:"
 L.finish_score_alive_all = "生存者:"
@@ -1262,30 +1263,30 @@ L.kill_score = "殺害:"
 L.bodyfound_score = "死体発見:"
 
 L.title_event_bodyfound = "死体が発見された"
-L.title_event_c4_disarm = "C4が解除された"
-L.title_event_c4_explode = "C4が起爆された"
-L.title_event_c4_plant = "C4が設置された"
+--L.title_event_c4_disarm = "A C4 was disarmed"
+--L.title_event_c4_explode = "A C4 exploded"
+--L.title_event_c4_plant = "A C4 was armed"
 L.title_event_creditfound = "クレジットを得た"
 L.title_event_finish = "ラウンド終了"
 L.title_event_game = "新しいラウンドの開始"
 L.title_event_kill = "プレイヤーが殺された"
 L.title_event_respawn = "プレイヤーが生き返った"
 L.title_event_rolechange = "プレイヤーの役職/陣営が変わった"
-L.title_event_selected = "役職が配布された"
+--L.title_event_selected = "The roles were distributed"
 L.title_event_spawn = "プレイヤーが出現した"
 
 L.desc_event_bodyfound = "{finder} ({firole} / {fiteam})が{found} ({forole} / {foteam})の死体を見つけ、その死体には{credits}個のクレジットがあった。"
-L.desc_event_bodyfound_headshot = "頭を撃ち抜かれて殺された。"
-L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam})は{owner} ({orole} / {oteam})が設置したC4の解除に成功した。"
-L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam})は{owner} ({orole} / {oteam})が設置したC4の解除に失敗した。"
-L.desc_event_c4_explode = "{owner} ({role} / {team})によって設置されたC4が爆発した。"
-L.desc_event_c4_plant = "{owner} ({role} / {team})はC4を設置した。"
+--L.desc_event_bodyfound_headshot = "The victim was killed by a headshot."
+--L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam}) successfully disarmed the C4 armed by {owner} ({orole} / {oteam})."
+--L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam}) tried to disarm the C4 armed by {owner} ({orole} / {oteam}). They failed."
+--L.desc_event_c4_explode = "The C4 armed by {owner} ({role} / {team}) exploded."
+--L.desc_event_c4_plant = "{owner} ({role} / {team}) armed an explosive C4."
 L.desc_event_creditfound = "{finder} ({firole} / {fiteam})は{credits}個のクレジットを{found} ({forole} / {foteam})から得た。"
 L.desc_event_finish = "ラウンド継続時間は{minutes}:{seconds}。生存者は{alive}人。"
 L.desc_event_game = "ラウンドが開始された。"
 L.desc_event_respawn = "{player}が生き返った。"
 L.desc_event_rolechange = "{player}が{orole} ({oteam})から{nrole} ({nteam})へと変わった。"
-L.desc_event_selected = "陣営と役職が全ての{amount}人のプレイヤーに配布された。"
+--L.desc_event_selected = "The teams and roles were distributed for all {amount} player(s)."
 L.desc_event_spawn = "{player}が出現した。"
 
 -- Name of a trap that killed us that has not been named by the mapper
@@ -1339,44 +1340,44 @@ L.desc_event_kill_other_using = "{victim}({vrole}/{vteam})は{attacker}({arole}/
 L.none = "無職"
 
 -- 2021-04-24
-L.karma_teamkill_tooltip = "チーム殺害数"
-L.karma_teamhurt_tooltip = "チームダメージ値"
-L.karma_enemykill_tooltip = "殺害数"
+--L.karma_teamkill_tooltip = "Teammate killed"
+--L.karma_teamhurt_tooltip = "Teammate damaged"
+--L.karma_enemykill_tooltip = "Enemy killed"
 L.karma_enemyhurt_tooltip = "ダメージ値"
 L.karma_cleanround_tooltip = "ラウンド整理"
-L.karma_roundheal_tooltip = "ラウンド復帰"
+--L.karma_roundheal_tooltip = "Karma restoration"
 L.karma_unknown_tooltip = "不明"
 
 -- 2021-05-07
-L.header_random_shop_administration = "ランダムショップセットアップ"
+--L.header_random_shop_administration = "Random Shop Settings"
 L.header_random_shop_value_administration = "バランス設定"
 
 L.shopeditor_name_random_shops = "ランダムショップ有効"
-L.shopeditor_desc_random_shops = [[ランダムショップは限られた、使用可能なランダムアイテムを付与する。
-陣営ショップは、一つの陣営の全てのプレイヤーに、個々のセットではなく同じセットを持つことを強制する。
-クレジットを使用することで回せる、スロットにより、新しくランダムなアイテムを得ることができる。]]
+--L.shopeditor_desc_random_shops = [[Random shops give every player a limited randomized set of all available equipments.
+--Team shops forcefully give the same set to all players in a team instead of individual ones.
+--Rerolling allows you to get a new randomized set of equipment for credits.]]
 L.shopeditor_name_random_shop_items = "ランダムアイテム数"
-L.shopeditor_desc_random_shop_items = "これがアイテムに含まれていたら、ランダム無効アイテムに含まれる。だから、十分に高い数を選択するか、あなただけが得る。"
+--L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with \"Always available in shop\". So choose a high enough number or you only get those."
 L.shopeditor_name_random_team_shops = "陣営ショップ有効"
 L.shopeditor_name_random_shop_reroll = "スロットショップ有効"
 L.shopeditor_name_random_shop_reroll_cost = "スロットコスト"
 L.shopeditor_name_random_shop_reroll_per_buy = "購入直後の自動スロット"
 
 -- 2021-06-04
-L.header_equipment_setup = "セットアップ"
+--L.header_equipment_setup = "Equipment Settings"
 L.header_equipment_value_setup = "バランス設定"
 
-L.equipmenteditor_name_not_buyable = "購入可能"
+--L.equipmenteditor_name_not_buyable = "Can be bought"
 L.equipmenteditor_desc_not_buyable = "無効の場合、ショップに表示されないようになる。\nこのアイテムが割り当てられている役職は引き続きそれを受け取ります。"
 L.equipmenteditor_name_not_random = "常時購入可能"
-L.equipmenteditor_desc_not_random = "有効の場合、常時このアイテムがショップに表示されるようになり、ランダムショップの影響は受けません。\n１つの使用可能なランダムスロットを取り、常にこのアイテムのためにそれが予約されます。"
+--L.equipmenteditor_desc_not_random = "If enabled, the equipment is always available in the shop. When the random shop is enabled, it takes one available random slot and always reserves it for this equipment."
 L.equipmenteditor_name_global_limited = "全体的な使用制限"
-L.equipmenteditor_desc_global_limited = "有効の場合、一つ買ったら次のラウンドまで他の者たちは買うことはできません。"
+--L.equipmenteditor_desc_global_limited = "If enabled, the equipment can be bought only once on the server in the active round."
 L.equipmenteditor_name_team_limited = "陣営による使用制限"
-L.equipmenteditor_desc_team_limited = "有効の場合、一つ買ったら次のラウンドまで他のチームメイトは買うことはできません。"
+--L.equipmenteditor_desc_team_limited = "If enabled, the equipment can be bought only once per team in the active round."
 L.equipmenteditor_name_player_limited = "使用制限"
-L.equipmenteditor_desc_player_limited = "有効の場合、一つ買ったら次のラウンドまで買うことはできません。"
-L.equipmenteditor_name_min_players = "必要プレイヤー人数"
+--L.equipmenteditor_desc_player_limited = "If enabled, the equipment can be bought only once per player in the active round."
+--L.equipmenteditor_name_min_players = "Minimum amount of players for buying"
 L.equipmenteditor_name_credits = "クレジット消費数"
 
 -- 2021-06-08
@@ -1388,12 +1389,12 @@ L.equip_inherit_removed = "(inherit)を除外した"
 -- 2021-06-09
 L.layering_not_layered = "ノンレイヤード"
 L.layering_layer = "レイヤー{layer}"
-L.header_rolelayering_role = "{role}レイヤー"
-L.header_rolelayering_baserole = "基本役職レイヤー"
+--L.header_rolelayering_role = "{role} layering"
+--L.header_rolelayering_baserole = "Base role layering"
 L.submenu_administration_rolelayering_title = "役職レイヤー"
 L.header_rolelayering_info = "役職レイヤー情報"
-L.help_rolelayering_roleselection = "役職の選択プロセスは、２つのパスに分割される。一つ目は基本役職が配布されている。\n基本役職とは、Innocent、Traitor、および下の「基本役職レイヤー」ボックスにリストされている役職のこと。\n二つ目は、これらの基本役職を副役職にアップグレードするために使用される。"
-L.help_rolelayering_layers = "各レイヤーから１つの役職のみが選択される。最初に、カスタムレイヤーの役職が、\n最初のレイヤーから最後のレイヤーに到達するまで、またはアップグレードできない役職まで配布される。どちらが最初に起ころうとも。\nアップグレード可能なスロットがまだ使用可能な場合は、階層化されていない役職も同様に配布される。"
+--L.help_rolelayering_roleselection = "The role distribution process is split into two stages. In the first stage base roles are distributed, which are innocent, traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole."
+--L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first, if upgradeable slots are still available, the unlayered roles will be distributed as well."
 L.scoreboard_voice_tooltip = "音量を変更"
 
 --2021-06-15
@@ -1416,7 +1417,7 @@ L.spawneditor_desc = "武器、弾薬やプレイヤーのスポーン位置を�
 L.spawneditor_place = "スポーン位置設置"
 L.spawneditor_remove = "スポーン位置削除"
 L.spawneditor_change = "スポーンタイプを変更([SHIFT]を押しながらだと逆になります)"
-L.spawneditor_ammo_edit = "押しながらだと位置を変更"
+--L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
 
 L.spawn_weapon_random = "おまかせ武器"
 L.spawn_weapon_melee = "近接武器"
@@ -1450,22 +1451,23 @@ L.button_start_entspawn_edit = "始める"
 L.button_delete_all_spawns = "全てのスポーン位置を削除"
 
 L.label_dynamic_spawns_enable = "このマップでの動的スポーンを有効"
-L.label_dynamic_spawns_global_enable = "全てのマップのカスタムスポーンを有効"
+--L.label_dynamic_spawns_global_enable = "Enable dynamic spawns for all maps"
 
 L.header_equipment_weapon_spawn_setup = "武器スポーン設定"
 
-L.help_spawn_editor_info = [[
-スポーンエディタとは、マップ上に武器、弾薬、またはプレイヤーのスポーン位置を自由に設置することができるツールです。
-このようなスポーン位置のデータは「data/ttt/weaponspawnscripts/」へ保存されます。ハード リセットの場合は削除できます。
-最初のスポーンファイルは、マップ上のスポーンとオリジナルのTTT武器スポーンスクリプトから作成されます。リセットボタンを押すことで元に戻せます。
-このスポーンシステムは動的スポーンを使用する点に注意してください。これは、特定の武器ではなく、武器の種類の方を優先します。
-例えば、デフォルトからあるショットガンの代わりに、ショットガン系武器がスポーンするようになります。
-各武器のスポーン種類は、装備編集で設定できます。これにより、任意の武器がマップ上でスポーンしたり、特定のデフォルトの武器を無効にすることが可能になります。
-多くの変更は、新しいラウンドが開始された後にのみ有効になります。]]
-L.help_spawn_editor_enable = "マップによっては、動的システムに置き換えることなく、マップに元々設定されてあるスポーン設定を使用することをお勧めします。\nこのチェックボックスを無効にすると、現在有効なマップに対してのみ無効になります。動的システムは、他の全てのマップに対して引き続き使用されます。"
+--L.help_spawn_editor_info = [[
+--The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
+
+--These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to the initial state.
+
+--It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the 'Edit Equipment' menu. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
+
+--Keep in mind that many changes only take effect after a new round has started.]]
+--L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
 L.help_spawn_editor_hint = "スポーンエディタを終了したい場合は設定画面を再度開いてください。"
 L.help_spawn_editor_spawn_amount = [[
-このマップには{weapon}個の武器、{ammo}個の弾薬と{player}人のスポーン位置が設定されています。変更したい場合は'始める'を押しましょう。
+このマップには{weapon}個の武器、{ammo}個の弾薬と{player}人のスポーン位置が設定されています。
+変更したい場合は'始める'を押しましょう。
 
 {weaponrandom}xおまかせ武器
 {weaponmelee}x近接武器
@@ -1487,12 +1489,10 @@ L.help_spawn_editor_spawn_amount = [[
 
 L.equipmenteditor_name_auto_spawnable = "ワールド内にランダムでスポーンするようにする"
 L.equipmenteditor_name_spawn_type = "スポーンタイプ選択"
-L.equipmenteditor_desc_auto_spawnable = [[
-TTT2スポーンシステムは、すべての武器がマップ上でスポーンすることを可能にします。
-デフォルトでは、その武器の製作者が「AutoSpawnable」とマークした武器だけマップに生成されますが、
-これらの設定はこのメニューから変更できます。ほとんどの装備は、デフォルトで「特殊武器」に設定されています。
-つまり、装備がランダム武器のスポーン位置にのみ生成されるということです。しかし、マップ上に特殊な武器のスポーンを配置したり、
-他の既存のスポーンタイプを使用するためにここでスポーンタイプを変更することは可能です。]]
+--L.equipmenteditor_desc_auto_spawnable = [[
+--The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however this can be changed from within this menu.
+
+--Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
 
 L.pickup_error_inv_cached = "インベントリに空きがないため拾うことはできません。"
 
@@ -1502,29 +1502,25 @@ L.header_playermodels_general = "プレイヤーモデル基本設定"
 L.header_playermodels_selection = "プレイヤーモデル選択"
 
 L.label_enforce_playermodel = "プレイヤーモデルを固定させる"
-L.label_use_custom_models = "おまかせなプレイヤーモデルを選択させる"
+--L.label_use_custom_models = "Use a randomly selected player model"
 L.label_prefer_map_models = "デフォルトプレイヤーモデルよりもマップ固有のプレイヤーモデルを優先"
-L.label_select_model_per_round = "新しいプレイヤーモデルを各ラウンドごとに選択(無効の場合はマップ変更時のみ)"
+--L.label_select_model_per_round = "Select a new random model each round (only on map change if disabled)"
 
-L.help_prefer_map_models = [[
-一部のマップは、専用のプレイヤーモデルを固定します。デフォルトでは、
-これらのモデルは自動的に割り当てられるモデルより高い優先順位を持ちます。この設定を無効にすると、
-マップ特有のモデルが無効になります。
-役職固有のモデルはこれらよりも高い優先度を持ち、この設定の影響を受けません。]]
+--L.help_prefer_map_models = [[
+--Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
 
-L.help_enforce_playermodel = [[
-一部の役職には、カスタムプレイヤーモデルが用意されています。これは、
-一部のプレイヤーモデル選択との互換性に関連する可能性があるモデルを無効にすることができます。
-この設定が無効になっている場合は、ランダムなデフォルトモデルを選択できます。]]
-L.help_use_custom_models = [[
-デフォルトでは、全てのプレイヤーに割り当てられるのは CSSフェニックスのプレイヤーモデルのみです。
-また、この設定を有効にすると、プレイヤーモデル選択を使用できます。この設定を有効にすると、
-全プレイヤーは同じプレイヤーモデルになりますが、固定されたモデルの内のモデルにおまかせでなります。
-このプレイヤーモデル選択は、より多くのプレイヤーモデルをインストールすることで拡張できます。]]
+--Role specific models always have a higher priority and are unaffected by this setting.]]
+--L.help_enforce_playermodel = [[
+--Some roles have custom player models. They can be disabled which can be relevant for compatibility with some player model selectors.
+--Random default models can still be selected, if this setting is disabled.]]
+--L.help_use_custom_models = [[
+--By default only the CS:S Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
+
+--This selection of models can be extended by installing more player models.]]
 
 -- 2021-10-06
 L.menu_server_addons_title = "サーバーアドオン"
-L.menu_server_addons_description = "管理者権限を所持する人専用の\nアドオン編集機能です。"
+--L.menu_server_addons_description = "Server-wide admin only settings for addons."
 
 L.tooltip_finish_score_penalty_alive_teammates = "生存チームメイトペナルティ:{score}"
 L.finish_score_penalty_alive_teammates = "生存チームメイトペナルティ:"
@@ -1534,11 +1530,10 @@ L.tooltip_kill_score_team = "チームキル:{score}"
 L.kill_score_team = "チームキル:"
 
 -- 2021-10-09
-L.help_models_select = [[
-モデルを左クリックして、プレイヤーモデル選択に追加します。それらを削除するにはもう一度左クリック。
-右クリックすると、特定のモデルの探偵帽子の有効/無効が切り替わります。
-左上の小さなインジケータは、プレーヤーモデルにヘッドショット判定があるかどうかを示します。
-下のアイコンは、このモデルが探偵帽子を装着できるのかどうかを示しています。]]
+--L.help_models_select = [[
+--Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
+
+--The small indicator in the top left shows if the player model has a head hitbox. The icon below shows if this model is applicable for a detective hat.]]
 
 L.menu_roles_title = "役職設定"
 L.menu_roles_description = "出現の有無、初期クレジット数などを\n役職ごとに設定できます。"
@@ -1547,51 +1542,46 @@ L.submenu_administration_roles_general_title = "役職基本設定"
 
 L.header_roles_info = "役職情報"
 L.header_roles_selection = "比率"
-L.header_roles_tbuttons = "Traitorトラップ"
+--L.header_roles_tbuttons = "Traitor Buttons Access"
 L.header_roles_credits = "初期クレジット数"
 L.header_roles_additional = "固有設定"
 L.header_roles_reward_credits = "クレジット報酬"
 
 L.help_roles_default_team = "デフォルト陣営:{team}"
-L.help_roles_unselectable = "この役職は選択不可能です。つまり、役職を配布するときには含まれていません。ほとんどの場合、復活、Sidekick Deagle、\nまたは似たようなイベントを通じてラウンド中に手動で適用される役職であることを意味します。"
-L.help_roles_selectable = "この役職は選択可能です。つまり、全ての基準が満たされている場合、ラウンド開始時にこの役職は配布されます。"
-L.help_roles_credits = "クレジットは、ショップでアイテムを購入するための物です。ショップを使用できる役職は限定されています。\nまた、死体からクレジットをもらうことができ、敵を倒すと報酬でクレジットが与えられます。"
-L.help_roles_selection_short = "プレイヤー一人あたりの役職配分は、この役職が割り当てられているプレイヤーの割合を定義します。\n例えば、値が'0.2'に設定されている場合、5番目のプレイヤーがこの役職を受け取ります。"
-L.help_roles_selection = [[
-プレイヤー一人あたりの役職配分は、この役職が割り当てられているプレイヤーの割合を定義します。
-例えば、値が'0.2'に設定されている場合、5番目のプレイヤーがこの役職を受け取ります。
-この役職が選択されるには、少なくとも5人のプレイヤーが必要です。
-このすべては、役職が選択対象と見なされる場合にのみ適用されます。
-前述の役職配布は、プレイヤーの下限との特別な統合を持っています。
-役職が選択対象と見なされ、最小値は分布係数によって指定された値を下回っていますが、
-プレイヤー人数が下限以上の場合、1人のプレイヤーがこの役職を引き続き受けることができます。
-この役職を受け取る2番目のプレイヤーの配布設定は、再度trueになります。]]
-L.help_roles_award_info = "一定の割合の敵が死亡した場合、一部の役職(クレジット設定で有効になっている場合)はクレジットを受け取ります。これらの値は、こちらで調整できます。"
-L.help_roles_award_pct = "他のプレイヤーの内この割合が死んでいるとき、プレイヤーはより多くのクレジットを授与されます。"
-L.help_roles_award_repeat = "クレジット報酬自体の回数。例えば、パーセンテージを「0.25」に設定してこれを有効にすると、\nプレイヤーは「25%」が死亡、「50%」が死亡、「75%」が死亡した時にクレジットが授与されます。"
-L.help_roles_advanced_warning = "警告:これらは、あなたの役職選択を完全に台無しにすることができる高度な設定です。疑わしい場合は、\nすべての値を'0'にすることをお勧めします。この値は、制限が適用されず、役職の選択ができるだけ多くの役職を割り当てようとしていることを意味します。"
-L.help_roles_max_roles = [[
-役職カテゴリには、TTT2のすべてのロールが含まれています。デフォルトでは、割り当て可能な、異なる役職の数に制限はありません。ただし、それらを制限する2つの異なる方法があります。
+--L.help_roles_unselectable = "This role is not distributable. It is not considered in the role distribution process. Most of the times this means that this is a role that is manually assigned during the round through an event like a revival, a sidekick deagle or something similar."
+--L.help_roles_selectable = "This role is distributable. If all criteria is met, this role is considered in the role distribution process."
+--L.help_roles_credits = "Equipment credits are used to buy equipment in the shop. It mostly makes sense to give them only for those roles that have access to the shops. However, since it is possible to find credits on corpses, you can also give starting credits to roles as a reward to their killer."
+--L.help_roles_selection_short = "The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role."
+--L.help_roles_selection = [[
+--The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be distributed at all.
+--Keep in mind that all of this only applies if the role is considered for distribution process.
 
-1. 固定数で制限
-2. パーセンテージで制限
+--The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for distribution and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution process then works as usual for the second player.]]
+--L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of enemies has died. Related values can be tweaked here."
+--L.help_roles_award_pct = "When this percentage of enemies are dead, specific roles are awarded equipment credits."
+--L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. For example, if the percentage is set to '0.25', and this setting is enabled, players will be awarded credits at '25%', '50%' and '75%' dead enemies respectively."
+--L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up the role distribution process. When in doubt keep all values at '0'. This value means that no limits are applied and the role distribution will try to assign as many roles as possible."
+--L.help_roles_max_roles = [[
+--The term roles here includes both the base roles and the subroles. By default, there is no limit on how many different roles can be assigned. However, here are two different ways to limit them.
 
-後者は、固定値が「0」の場合にのみ使用され、利用可能なプレイヤーの設定されたパーセンテージに基づいて上限を設定します。]]
-L.help_roles_max_baseroles = [[
-基本役職は、他のユーザーが継承する役職のみです。例えば、Innocentは基本役職ですが、Pharaohはこの役職のサブ役職です。
-デフォルトでは、割り当て可能な異なる基本役職の数に制限はありません。ただし、それらを制限する2つの異なる方法があります。
+--1. Limit them by a fixed amount.
+--2. Limit them by a percentage.
 
-1. 固定数で制限
-2. パーセンテージで制限
+--The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+--L.help_roles_max_baseroles = [[
+--Base roles are only those roles others inherit from. For example, the Innocent role is a base role, while a Pharaoh is a subrole of this role. By default, there is no limit on how many different base roles can be assigned. However, here are two different ways to limit them.
 
-後者は、固定値が「0」の場合にのみ使用され、利用可能なプレイヤーの設定されたパーセンテージに基づいて上限を設定します。]]
+--1. Limit them by a fixed amount.
+--2. Limit them by a percentage.
+
+--The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 
 L.label_roles_enabled = "追加する"
 L.label_roles_min_inno_pct = "比率"
 L.label_roles_pct = "比率"
 L.label_roles_max = "追加されるこの役職の数"
-L.label_roles_random = "選択確率"
-L.label_roles_min_players = "追加されるために必要な最低人数"
+--L.label_roles_random = "Chance this role is distributed"
+--L.label_roles_min_players = "Lower limit of players to consider distribution"
 L.label_roles_tbutton = "Traitorトラップ"
 L.label_roles_credits_starting = "初期クレジット数"
 L.label_roles_credits_award_pct = "報酬クレジット比率"
@@ -1600,12 +1590,12 @@ L.label_roles_credits_award_repeat = "報酬の回数"
 L.label_roles_newroles_enabled = "カスタム役職を有効"
 L.label_roles_max_roles = "役職上限"
 L.label_roles_max_roles_pct = "カスタム役職比率"
-L.label_roles_max_baseroles = "基本役職上限"
-L.label_roles_max_baseroles_pct = "基本役職比率"
-L.label_detective_hats = "探偵用帽子を装着(モデルによって無効になる時があります)"
+--L.label_roles_max_baseroles = "Upper base role limit"
+--L.label_roles_max_baseroles_pct = "Upper base role limit by percentage"
+--L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows to have them)"
 
-L.ttt2_desc_innocent = "何も特徴がなく、あるのは己の銃スキルと推理能力のみ。テロリストたちに紛れている裏切り者を探して殺しましょう！\nしかし、仲間は殺さないように注意が必要ですよ。"
-L.ttt2_desc_traitor = "テロリストたちに紛れている裏切者。専用のショップから特殊アイテムを購入することができます。\nそれを用いながら、仲間と力を合わせて敵を皆殺しにしましょう。"
+--L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their teammates."
+--L.ttt2_desc_traitor = "The Traitor is the enemy of the Innocent. They have an equipment menu with which they are being able to buy special equipment. They have to kill everyone but their teammates."
 L.ttt2_desc_detective = "Innocent陣営に所属し、唯一の確白。専用のショップから特殊アイテムを購入することができます。\nそれを用いながら、誰がTraitorなのか推理して勝利へ導きましょう。"
 
 -- 2021-10-10
@@ -1613,28 +1603,28 @@ L.button_reset_models = "リセット"
 
 -- 2021-10-13
 L.help_roles_credits_award_kill = "クレジットを獲得するもう一つの方法は、Detectiveのような確白の役職のプレイヤーを殺すことです。\nそうすることで、以下の設定されたクレジット数を得ます。"
-L.help_roles_credits_award = [[
-基本的に、TTT2でクレジットを得るには、次の2つの方法があります。
+--L.help_roles_credits_award = [[
+--There are two different ways to be awarded credits in base TTT2:
 
-1. 敵チームの一定の割合が死んだ場合、チーム全体にクレジットが与えられる
-2. プレイヤーがDetectiveのような確白の役職を殺した場合、殺害者に与えられる
+--1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
+--2. If a player killed a high value player with a 'public role' such as a Detective, the killer is awarded credits.
 
-チーム全体が授与された場合でも、この機能は、すべての役職で有効/無効にすることができます。例えば、
-Innocent陣営に授与される時、Innocentがこの設定で無効になっている場合、Detectiveだけがクレジットを受け取ります。
-この機能のバランスの値は、「管理者用設定」->「基本役職設定」で設定できます。]]
-L.help_detective_hats = [[
-Detectiveなどの役職は、彼らの権限を示すかのように帽子をかぶります。死亡、または頭に傷を負った場合に帽子を失います。
-一部のプレイヤーモデルは、デフォルトでは帽子装着には対応しておりません。「管理者用設定」->「プレイヤーモデル」から設定できます。]]
+--Please note, that this still can be enabled/disabled for every role, even if the whole team is awarded. For example, if team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
+--The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
+--L.help_detective_hats = [[
+--Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
 
-L.label_roles_credits_award_kill = "クレジット報酬"
+--Some player models do not support hats by default. This can be changed in 'Administration' -> 'Player Models']]
+
+--L.label_roles_credits_award_kill = "Credit reward amount for the kill"
 L.label_roles_credits_dead_award = "一定の割合の敵の死亡によるクレジット報酬を有効"
 L.label_roles_credits_kill_award = "Detectiveのような役職の殺害によるクレジット報酬を有効"
-L.label_roles_min_karma = "選択を検討するカルマの下限"
+--L.label_roles_min_karma = "Lower limit of Karma to consider distribution"
 
 -- 2021-11-07
 L.submenu_administration_administration_title = "管理"
-L.submenu_administration_voicechat_title = "ボイスチャット/テキストチャット"
-L.submenu_administration_round_setup_title = "ラウンドセットアップ"
+--L.submenu_administration_voicechat_title = "Voice chat / Text chat"
+--L.submenu_administration_round_setup_title = "Round Settings"
 L.submenu_administration_mapentities_title = "マップエンティティ"
 L.submenu_administration_inventory_title = "インベントリ"
 L.submenu_administration_karma_title = "カルマ"
@@ -1647,15 +1637,15 @@ L.header_administration_general = "管理基本設定"
 L.header_administration_logging = "記録"
 L.header_administration_misc = "その他"
 L.header_entspawn_plyspawn = "プレイヤースポーン設定"
-L.header_voicechat_general = "ボイスチャット基本設定"
-L.header_voicechat_battery = "ボイスチャットバッテリー"
-L.header_voicechat_locational = "ロケーションボイスチャット"
+--L.header_voicechat_general = "General Voice chat Settings"
+--L.header_voicechat_battery = "Voice chat Battery"
+--L.header_voicechat_locational = "Proximity Voice chat"
 L.header_playersettings_plyspawn = "プレイヤースポーン設定"
 L.header_round_setup_prep = "ラウンド:準備中"
 L.header_round_setup_round = "ラウンド:継続中"
 L.header_round_setup_post = "ラウンド:終了"
 L.header_round_setup_map_duration = "マップセッション"
-L.header_textchat = "テキストチャット"
+--L.header_textchat = "Text chat"
 L.header_round_dead_players = "死人設定"
 L.header_administration_scoreboard = "スコアボード設定"
 L.header_hud_toggleable = "切り替え可能なHUD要素"
@@ -1669,24 +1659,24 @@ L.header_inventory_pickup = "インベントリへの武器拾得"
 L.header_sprint_general = "走行設定"
 L.header_playersettings_armor = "アーマーシステム設定"
 
-L.help_killer_dna_range = "プレイヤーが他のプレイヤーに殺されると、DNAが自分の体に残されます。最大範囲の設定は、\n残されたDNAサンプルの最大距離をハンマー単位で定義します。殺人犯がさらに離れている場合、死体にサンプルは残っていません。"
-L.help_killer_dna_basetime = "DNAサンプルが消滅するまでの時間(秒)。殺害者までの距離の係数は、この基準時間により変化します。"
-L.help_dna_radar = "TTT2版DNAスキャナーは、選択したDNAサンプルの正確な距離と方向を示します(装備されている場合のみ)。\nただし、クールダウンが経過する度に、選択したサンプルをマップのレンダリングで更新する従来のDNAスキャナーモードもあります。"
-L.help_idle = "放置状態のプレイヤーを強制的に観戦状態に移動させるための機能です。この状態を再度終了するには、「ゲーム設定」の「観戦者モード」を無効にする必要があります。"
-L.help_namechange_kick = [[
-プレイヤーがラウンド中に名前を変更した場合、これは殺されるのを避けるために悪用される可能性があります。
-そのため、ラウンド開始中にニックネームを変更することは禁止されています。
-禁止時間が0より大きい場合、プレイヤーはその時間が経過するまでサーバーに再接続できません。]]
+--L.help_killer_dna_range = "When a player is killed by another player, a DNA sample is left on their body. The setting below defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away than this value when the victim dies, no sample will be left on the corpse."
+--L.help_killer_dna_basetime = "The base time in seconds until a DNA sample decays, if the killer is 0 Hammer units away. The farther the killer is, the less time will be given to the DNA sample to decay."
+--L.help_dna_radar = "The TTT2 DNA scanner shows the exact distance and direction of the selected DNA sample if equipped. However, there is also a classic DNA scanner mode that updates the selected sample with an in-world rendering every time the cooldown has passed."
+--L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
+--L.help_namechange_kick = [[
+--A name change during an active round could be abused. Therefore, this is prohibited by default and will lead to the offending player being kicked from the server.
+
+--If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 L.help_damage_log = "プレーヤーがダメージを受けるたびに、有効になっている場合は、ダメージログエントリがコンソールに追加されます。\nラウンド終了後にディスクに保存することもできます。ファイルは「data/terrortown/log/」に保存されています。"
 L.help_spawn_waves = [[
 0に設定すると、すべてのプレイヤーが一度にスポーンされます。大人数のプレイヤーがいるサーバーでは、ウェーブ間隔でプレイヤーをスポーンさせるのが良いでしょう。
 スポーンウェーブ間隔は、各スポーンウェーブの間の時間です。スポーンウェーブは、スポーンポイントの数だけプレイヤーをスポーンさせます。
 注意 : 準備時間が希望する量のスポーンウェーブに十分な長さであることを確認してください。]]
-L.help_voicechat_battery = [[
-音声チャットが有効な音声チャットバッテリーで、このメーターを減らします。空の場合、プレイヤーはチャットを音声にすることはできませんし、
-チャージするためには数秒待つ必要があります。これは主に過度のボイスチャットの使用を防ぐのに役立ちます。
-注意 :「チック」とは、ゲームのチックを指します(1/66秒)。]]
-L.help_ply_spawn = "プレイヤーリスポーンで使用されるプレイヤーのパラメータ。"
+--L.help_voicechat_battery = [[
+--Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
+
+--Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
+--L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
 L.help_haste_mode = [[
 HASTEモードは、プレイヤーが一人死亡するたびのラウンド時間追加により、ゲームのバランスを取ります。
 Traitor陣営の役職、又は観戦者のみが、実際のラウンド時間を見ることができます。他の役職は見れません。
@@ -1705,9 +1695,9 @@ L.help_prop_possession = [[
 ゆっくりとチャージされていく「パンチ・オー・メーター」を使用して、そのオブジェクトを操作できる機能です。
 「パンチ・オー・メーター」の最大値は、2つの定義された制限の間に遮断された死量/死の差が追加される基本的憑依値で構成されています。
 メーターは時間の経過とともにゆっくりチャージされます。セットの再チャージ時間は、「パンチ・オー・メーター」の単一ポイントをチャージするのに必要な時間です。]]
-L.help_karma = "カルマは無差別殺害を減らすための機能です。プレイヤーは一定のカルマから始まり、チームメイトにダメージを与える、又は殺すと減っていきます。\n減少量は、与えたダメージ量や、殺害数に応じて変化します。カルマが少ないほど与えるダメージが減っていきます。"
-L.help_karma_strict = "厳密なカルマが有効になっている場合、カルマが減少するとダメージペナルティが増加します。無効の場合、\nプレイヤーがカルマ値800を超えていると、ダメージペナルティはかなり低くなります。厳密なカルマモードを有効にすると、\nカルマは不必要なキルを阻止する上でより大きな役割を果たし、それを無効にすると、カルマは常にチームキルするプレイヤーを傷つけるだけの緩いゲームになります。"
-L.help_karma_max = "1000以上の最大値カルマの値を設定しても、その1000カルマ以上のプレイヤーにダメージボーナスは与えられません。カルマバッファーとして使用できます。"
+--L.help_karma = "Players start with a certain amount of Karma, and lose it when they damage/kill teammates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
+--L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly kill teammates."
+--L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more than 1000 Karma. It can be used as a Karma buffer."
 L.help_karma_ratio = "両者が同じ陣営にいる場合に、カルマを加害者から差し引く量を計算するためのダメージ比率。チームキルが発生した場合は、さらにペナルティが適用されます。"
 L.help_karma_traitordmg_ratio = "両者が異なる陣営にいる場合に、加害者のカルマの量を攻撃者から差し引く計算するためのダメージ比率。\nチームキルが発生した場合は、さらにボーナスが適用されます。"
 L.help_karma_bonus = "ラウンド中にカルマを獲得する2つの異なる受動的な方法もあります。まず、ラウンド復帰はすべてのプレイヤーに適用されます。\nその後、チームメイトがダメージを受けなかったり殺されたりしなかった場合、二次的な整理ボーナスが与えられます。"
@@ -1721,7 +1711,7 @@ L.label_killer_dna_basetime = "DNAサンプル基本的残存時間"
 L.label_dna_scanner_slots = "DNAサンプルスロット"
 L.label_dna_radar = "従来のDNAスキャナモード有効"
 L.label_dna_radar_cooldown = "DNAスキャナークールダウン"
-L.label_radar_charge_time = "レーダーサンプル後のチャージ時間"
+--L.label_radar_charge_time = "Recharge time after being used"
 L.label_crowbar_shove_delay = "再度バールで押せるまでのクールダウン"
 L.label_idle = "放置状態を有効"
 L.label_idle_limit = "放置時間になるまでの時間(秒)"
@@ -1742,12 +1732,12 @@ L.label_prop_carrying_force = "オブジェクト拾得力"
 L.label_teleport_telefrags = "テレポートした瞬間にテレポート位置にいる人を自動的に殺害"
 L.label_allow_discomb_jump = "ディスコンボビュレーターによるジャンプ"
 L.label_spawn_wave_interval = "スポーンウェーブインターバル(秒)"
-L.label_voice_enable = "ボイスチャットの有無"
-L.label_voice_drain = "ボイスチャットのバッテリーの有無"
+--L.label_voice_enable = "Enable voice chat"
+--L.label_voice_drain = "Enable the voice chat battery feature"
 L.label_voice_drain_normal = "通常プレイヤーのボイスチャットのバッテリーのチックあたりの減少値"
 L.label_voice_drain_admin = "管理者および確白役職のボイスチャットのバッテリーのチックあたりの減少値"
-L.label_voice_drain_recharge = "ボイスチャットではないチックあたりのチャージ率"
-L.label_locational_voice = "生存者の3Dボイスチャット音を有効"
+--L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
+--L.label_locational_voice = "Enable proximity voice chat for living players"
 L.label_armor_on_spawn = "全プレイヤーアーマー装着"
 L.label_prep_respawn = "ラウンド準備中時のリスポーンを有効"
 L.label_preptime_seconds = "ラウンド準備時間(秒)"
@@ -1755,24 +1745,24 @@ L.label_firstpreptime_seconds = "初めのラウンド準備時間(秒)"
 L.label_roundtime_minutes = "通常ラウンド時間(分)"
 L.label_haste = "Hasteモード有効"
 L.label_haste_starting_minutes = "Hasteモード有の場合のラウンド時間(分)"
-L.label_haste_minutes_per_death = "一人死ぬごとに追加される時間(分)"
+--L.label_haste_minutes_per_death = "Additional time in minutes per death"
 L.label_posttime_seconds = "ラウンド終了時間"
 L.label_round_limit = "ラウンド最大数"
 L.label_time_limit_minutes = "ラウンド時間の上限(分)"
-L.label_nade_throw_during_prep = "ラウンド準備時間中のグレネード投擲を可能にする"
+--L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
 L.label_postround_dm = "ラウンド終了時間中のデスマッチを有効"
 L.label_spectator_chat = "観戦者同士でのチャットの有無"
 L.label_lastwords_chatprint = "タイピング中に殺されたら遺言を送信する"
 L.label_identify_body_woconfirm = "'確認'ボタン無しで死体を特定"
 L.label_announce_body_found = "死体発見時の報告"
 L.label_confirm_killlist = "確認済みの死体のリストの報告"
-L.label_inspect_detective_only = "死体検査を確白役職にしかできないようにする"
-L.label_confirm_detective_only = "死体確認を確白役職にしかできないようにする"
+--L.label_inspect_detective_only = "Limit corpse search to policing roles only"
+--L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
 L.label_dyingshot = "アイアンサイト中で死に撃つ[実験的]"
 L.label_armor_block_headshots = "ヘッドショットへの耐久"
 L.label_armor_block_blastdmg = "爆破ダメージへの耐久"
 L.label_armor_dynamic = "動的アーマー"
-L.label_armor_value = "アーマーをショップの方のアーマーでもらえるようにする"
+--L.label_armor_value = "Amount of armor given by the armor item"
 L.label_armor_damage_block_pct = "アーマー自体がダメージ比率"
 L.label_armor_damage_health_pct = "プレイヤーが受けるダメージ比率"
 L.label_armor_enable_reinforced = "強化アーマーを有効"
@@ -1780,7 +1770,7 @@ L.label_armor_threshold_for_reinforced = "強化アーマーのしきい値"
 L.label_sherlock_mode = "シャーロックモードを有効"
 L.label_highlight_admins = "サーバー管理者のハイライト"
 L.label_highlight_dev = "TTT2開発者ハイライト"
-L.label_highlight_vip = "VIPのハイライト"
+--L.label_highlight_vip = "Highlight TTT2 VIP"
 L.label_highlight_addondev = "TTT2アドオン開発者のハイライト"
 L.label_highlight_supporter = "他のサポーターのハイライト"
 L.label_enable_hud_element = "{elem}のHUD要素を有効"
@@ -1794,7 +1784,7 @@ L.label_doors_force_pairs = "二重ドアとして強制的に閉じる"
 L.label_doors_destructible = "ドアの損傷を有効"
 L.label_doors_locked_indestructible = "鍵がかかっているドアへの破壊ができないようにする"
 L.label_doors_health = "ドアの体力"
-L.label_doors_prop_health = "ドア系オブジェクトの体力"
+--L.label_doors_prop_health = "Destructed door health"
 L.label_minimum_players = "ラウンド開始に必要な最低人数"
 L.label_karma = "カルマを有効"
 L.label_karma_strict = "厳密なカルマを有効にする"
@@ -1802,11 +1792,11 @@ L.label_karma_starting = "初期カルマ"
 L.label_karma_max = "カルマ最大値"
 L.label_karma_ratio = "チームへのダメージによるカルマ減少率"
 L.label_karma_kill_penalty = "チームキルによるカルマ減少率"
-L.label_karma_round_increment = "ラウンド復帰"
+--L.label_karma_round_increment = "Karma restoration"
 L.label_karma_clean_bonus = "ラウンド整理ボーナス"
-L.label_karma_traitordmg_ratio = "敵ダメージによるボーナス"
-L.label_karma_traitorkill_bonus = "敵のキルボーナス"
-L.label_karma_clean_half = "カルマ整理による削減"
+--L.label_karma_traitordmg_ratio = "Bonus ratio for enemy damage"
+--L.label_karma_traitorkill_bonus = "Kill bonus for enemy kill"
+--L.label_karma_clean_half = "Clean round bonus reduction"
 L.label_karma_persist = "カルマはマップの変更後でも持続"
 L.label_karma_low_autokick = "低カルマ値の人を自動でキック"
 L.label_karma_low_amount = "低カルマ値のしきい値"
@@ -1816,7 +1806,7 @@ L.label_karma_debugspam = "カルマの変更に関するコンソールへの�
 L.label_max_melee_slots = "近接武器スロット最大値"
 L.label_max_secondary_slots = "セカンダリー武器スロット最大値"
 L.label_max_primary_slots = "プライマリー武器スロット最大値"
-L.label_max_nade_slots = "グレネード系スロット最大値"
+--L.label_max_nade_slots = "Max grenade slots"
 L.label_max_carry_slots = "運搬系スロット最大値"
 L.label_max_unarmed_slots = "無防備スロット最大値"
 L.label_max_special_slots = "特殊アイテムスロット最大値"

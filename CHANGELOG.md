@@ -4,16 +4,29 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+- Added a new font in default_skin.lua to fit the localization (by @Satton2)
+
 ### Changed
 
 - `weapon_tttbase`:
   - Removal of `SWEP.IronSightsTime` as it was completely unused and conflicts with a networked value intended for the same purpose
   - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
     - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
+- Updated Russian and English localization files (by @Satton2):
+  - Updated strings in English localization file
+  - Localized outdated and new strings into Russian
+- Updated all localization files (by @Satton2):
+  - Added missing and new strings
+  - Marked (out-) updated strings
+  - Removed some duplicated strings
+  - Removed some old unused strings
+  - Fixed some broken source strings (line names)
 
 ### Fixed
 
-- Fixed hotreload of TTT2 roles library by a fresh reinitialization 
+- Fixed hotreload of TTT2 roles library by a fresh reinitialization
+- Fixed a wrong localization line call in roles.lua (by @Satton2)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
