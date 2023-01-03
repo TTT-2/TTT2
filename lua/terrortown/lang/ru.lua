@@ -1,5 +1,8 @@
 -- Russian language strings
 
+-- This localization file is being moderated and constantly updated by Satton(RU).
+-- Please, in case you are making some changes ping @Satton2 on GitHub, contact him on Steam (STEAM_0:0:85981967) or Discord (Satton(RU)#5794).
+
 local L = LANG.CreateLanguage("ru")
 
 -- Compatibility language name that might be removed soon.

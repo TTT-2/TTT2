@@ -4,6 +4,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+- Added a new font in default_skin.lua to fit the localization (by @Satton2)
+
 ### Changed
 
 - `weapon_tttbase`:
@@ -15,12 +18,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Localized outdated and new strings into Russian
 - Updated all localization files (by @Satton2):
   - Added missing and new strings
-  - Marked outdated strings
+  - Marked (out-) updated strings
   - Removed some duplicated strings
-  - Added some missing strings
-  - Marked updated strings
+  - Removed some old unused strings
   - Fixed some broken source strings (line names)
-- Added a new font in default_skin.lua to fit the localization (by @Satton2)
 
 ### Fixed
 
