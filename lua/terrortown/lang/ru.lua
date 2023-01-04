@@ -1252,7 +1252,7 @@ L.hilite_win_tie = "НИЧЬЯ"
 L.hilite_win_time = "ВРЕМЯ ВЫШЛО"
 
 L.tooltip_karma_gained = "Изменение кармы в этом раунде:"
-L.tooltip_score_gained = "Изменение счёта в этом раунде:" -- not enough space
+L.tooltip_score_gained = "Изменение счёта в этом раунде:"
 L.tooltip_roles_time = "Изменение роли в этом раунде:"
 
 L.tooltip_finish_score_alive_teammates = "Живые товарищи: {score}"
@@ -1288,7 +1288,7 @@ L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam}) успешно 
 L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam}) пытается обезвредить C4, заложенную {owner} ({orole} / {oteam}). Неудачно."
 L.desc_event_c4_explode = "C4, заложенная {owner} ({role} / {team}), взорвалась."
 L.desc_event_c4_plant = "{owner} ({role} / {team}) закладывает бомбу C4."
-L.desc_event_creditfound = "{finder} ({firole} / {fiteam}) находит несколько кредиты ({credits} на теле {found} ({forole} / {foteam})."
+L.desc_event_creditfound = "{finder} ({firole} / {fiteam}) находит несколько кредитов ({credits}) на теле {found} ({forole} / {foteam})."
 L.desc_event_finish = "Раунд длился {minutes}:{seconds}. Живых игроков по окончанию: {alive}."
 L.desc_event_game = "Новый раунд начался."
 L.desc_event_respawn = "{player} возрождается."
@@ -1504,7 +1504,7 @@ L.equipmenteditor_desc_auto_spawnable = [[
 L.pickup_error_inv_cached = "Сейчас вам нельзя это подобрать, поскольку ваш инвентарь кэширован."
 
 -- 2021-09-02
-L.submenu_administration_playermodels_title = "Модели игрока "
+L.submenu_administration_playermodels_title = "Модели игрока"
 L.header_playermodels_general = "Общие настройки модели игрока"
 L.header_playermodels_selection = "Выбор перечня моделей игрока"
 
