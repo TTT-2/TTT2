@@ -68,6 +68,7 @@ surface.CreateAdvancedFont("DermaTTT2MenuButtonDescription", {font = "Trebuchet2
 surface.CreateAdvancedFont("DermaTTT2SubMenuButtonTitle", {font = "Trebuchet24", size = 18, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2CatHeader", {font = "Trebuchet24", size = 16, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2TextSmall", {font = "Trebuchet24", size = 12, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2Text", {font = "Trebuchet24", size = 16, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 18, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
@@ -1292,7 +1293,7 @@ function SKIN:PaintCardTTT2(panel, w, h)
 
 	drawSimpleText(
 		TryT(textMode),
-		"DermaTTT2Text",
+		"DermaTTT2TextSmall",
 		posTextModeX,
 		posTextModeY,
 		colorTextMode,

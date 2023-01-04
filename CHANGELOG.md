@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   -`database.GetStoredValues(accessName, itemName, item)`
 - Added sql database access to panel elements
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
+- Added a new font in default_skin.lua to fit the localization (by @Satton2)
 
 ### Changed
 
@@ -25,6 +26,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed hotreload of TTT2 roles library by a fresh reinitialization 
+- Updated Russian and English localization files (by @Satton2):
+  - Updated strings in English localization file
+  - Localized outdated and new strings into Russian
+- Updated all localization files (by @Satton2):
+  - Added missing and new strings
+  - Marked (out-) updated strings
+  - Removed some duplicated strings
+  - Removed some old unused strings
+  - Fixed some broken source strings (line names)
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
