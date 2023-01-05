@@ -23,6 +23,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
 
+- Simplified Chinese localization update (by @sbzlzh)
+
 ### Fixed
 
 - Fixed hotreload of TTT2 roles library by a fresh reinitialization
