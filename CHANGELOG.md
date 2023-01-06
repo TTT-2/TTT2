@@ -19,13 +19,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removal of `SWEP.IronSightsTime` as it was completely unused and conflicts with a networked value intended for the same purpose
   - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
     - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
-- Changed syncing of database module
-- Replaced equipmenteditor syncing with database module
-- Replaced internal equipment syncing with database module
-
-### Fixed
-
-- Fixed hotreload of TTT2 roles library by a fresh reinitialization 
 - Updated Russian and English localization files (by @Satton2):
   - Updated strings in English localization file
   - Localized outdated and new strings into Russian
@@ -35,6 +28,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some duplicated strings
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
+- Changed syncing of database module
+- Replaced equipmenteditor syncing with database module
+- Replaced internal equipment syncing with database module
+
+### Fixed
+
+- Fixed hotreload of TTT2 roles library by a fresh reinitialization
+- Fixed a wrong localization line call in roles.lua (by @Satton2)
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
