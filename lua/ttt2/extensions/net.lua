@@ -128,7 +128,7 @@ local function CheckConfirmedSplit(len, ply)
 
 			-- If some players timeout or the given playerList is faulty, just send the next update after some time anyways
 			if not timer.Exists(timerName) then
-				timer.Create(timerName, 5, 1, function() SendNextSplit(messageId, splitId, true) end)
+				timer.Create(timerName, 5, 1, function() SendNextSplit(messageId, streamId, true) end)
 			end
 
 			return
