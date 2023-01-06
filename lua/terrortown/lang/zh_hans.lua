@@ -31,7 +31,7 @@ L.round_started = "回合开始！"
 L.round_restart = "游戏被管理员强制重新开始。"
 
 L.round_traitors_one = "叛徒，你将孤身奋斗。"
-L.round_traitors_more = "叛徒，你的队友是： {names} "
+L.round_traitors_more = "叛徒，你的队友是：{names}"
 
 L.win_time = "时间用尽，叛徒失败了。"
 L.win_traitor = "叛徒取得了胜利！"
@@ -48,8 +48,8 @@ L.credit_all = "你的阵营因为表现获得了 {num} 点积分。"
 L.credit_kill = "你杀死 {role} 获得了 {num} 点积分。"
 
 -- Karma
-L.karma_dmg_full = "你的人品为 {amount} ，因此本回合你将造成正常伤害。"
-L.karma_dmg_other = "你的人品为 {amount} ，因此本回合你造成的伤害将减少 {num} %"
+L.karma_dmg_full = "你的人品为 {amount}，因此本回合你将造成正常伤害。"
+L.karma_dmg_other = "你的人品为 {amount}，因此本回合你造成的伤害将减少 {num}%"
 
 -- Body identification messages
 L.body_found = " {finder} 发现了 {victim} 的尸体。{role}"
@@ -159,7 +159,7 @@ L.quick_yes = "是。"
 L.quick_no = "不是。"
 L.quick_help = "救命！"
 L.quick_imwith = "我和 {player} 在一起。"
-L.quick_see = "我看到了 {player} 。"
+L.quick_see = "我看到了 {player}。"
 L.quick_suspect = " {player} 行迹可疑。"
 L.quick_traitor = " {player} 是叛徒！"
 L.quick_inno = " {player} 是无辜者。"
@@ -209,8 +209,8 @@ L.search_time = "他大约在你搜索前的 {time} 死亡。"
 L.search_dna = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
 
 L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
-L.search_kills2 = "你找到了一个名单，记载着他杀的这些人:"
-L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player} 。凶手，还是巧合？"
+L.search_kills2 = "你找到了一个名单，记载着他杀的这些人："
+L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。凶手，还是巧合？"
 
 -- Scoreboard
 L.sb_playing = "你正在玩的服务器是..."
@@ -233,7 +233,7 @@ L.sb_tag_avoid = "躲避"
 L.sb_tag_kill = "死亡"
 L.sb_tag_miss = "失踪"
 
--- Equipment actions, like buying and dropping
+-- Equipment actions， like buying and dropping
 L.buy_no_stock = "无法购买此装备：你已拥有它了。"
 L.buy_pending = "你已订购此装备，请等待配送。"
 L.buy_received = "你已收到此装备。"
@@ -402,7 +402,7 @@ L.dna_notfound = "目标上没有DNA样本。"
 L.dna_limit = "已达最大采集额度，请先移除旧样本。"
 L.dna_decayed = "凶手的DNA样本已经消失。"
 L.dna_killer = "成功采集到凶手的DNA样本！"
-L.dna_duplicate = "匹配! 你的扫描仪里已经有这个DNA样本了。"
+L.dna_duplicate = "匹配！你的扫描仪里已经有这个DNA样本了。"
 L.dna_no_killer = "DNA样本无法检索（凶手已离线？）"
 L.dna_armed = "炸弹已启动！赶紧拆除它！"
 L.dna_object = "在目标上采集到 {num} 个新DNA样本。"
@@ -447,7 +447,7 @@ L.tele_desc = [[
 
 传送器会产生噪音，而且使用次数是有限的。]]
 
--- Ammo names, shown when picked up
+-- Ammo names， shown when picked up
 L.ammo_pistol = "手枪弹药"
 
 L.ammo_smg1 = "冲锋枪弹药"
@@ -463,7 +463,7 @@ L.round_prep = "准备中"
 L.round_active = "进行中"
 L.round_post = "回合结束"
 
--- Health, ammo and time area
+-- Health， ammo and time area
 L.overtime = "加时"
 L.hastemode = "急速模式"
 
@@ -506,7 +506,7 @@ L.mute_off = "取消静音"
 L.punch_title = "飞击量表" --"PUNCH-O-METER"
 L.punch_help = "按下行走键或跳跃键以推撞物品；按蹲下键则离开物品控制。"
 L.punch_bonus = "你的分数较低，飞击量表上限减少 {num}"
-L.punch_malus = "你的分数较高，飞击量表上限增加 {num} ！"
+L.punch_malus = "你的分数较高，飞击量表上限增加 {num}！"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
@@ -533,7 +533,7 @@ L.info_popup_traitor = [[
 你是位叛徒！和其他叛徒合作杀害其他所有人，以获得胜利。
 但请小心，你的身份可能会暴露...
 
-这些是你的同伴们:
+这些是你的同伴们：
 {traitorlist}
 
 按 {menukey} 取得装备！]]
@@ -863,8 +863,8 @@ L.aw_tod1_text = "在他的团队即将获得胜利的前几秒死去。"
 L.aw_tod2_title = "垃圾游戏！"
 L.aw_tod2_text = "在这回合刚开始不久即被杀害。"
 
--- New and modified pieces of text are placed below this point, marked with the
--- version in which they were added, to make updating translations easier.
+-- New and modified pieces of text are placed below this point， marked with the
+-- version in which they were added， to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
@@ -873,7 +873,7 @@ L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
 L.hat_retrieve = "你捡起了一顶探长的帽子。"
 
 -- 2017-09-03
-L.sb_sortby = "排序方法:"
+L.sb_sortby = "排序方法："
 
 -- 2018-07-24
 L.equip_tooltip_main = "装备菜单"
@@ -905,7 +905,7 @@ L.reroll_name = "重选"
 L.reroll_menutitle = "重选装备"
 L.reroll_no_credits = "你需要花费 {amount} 积分进行重选！"
 L.reroll_button = "重选"
-L.reroll_help = "使用 {amount} 积分在你的商店里获得新的随机装备"
+L.reroll_help = "使用 {amount} 积分在你的商店里获得新的随机装备！"
 
 -- 2019-05-06
 L.equip_not_alive = "在右侧选择身份来查看这个身份的全部装备。不要忘记标记最爱装备！"
@@ -962,7 +962,7 @@ L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
 L.hstation_subtitle = "按 [{usekey}] 恢复生命"
-L.hstation_charge = "剩余充能: {charge}"
+L.hstation_charge = "剩余充能：{charge}"
 L.hstation_empty = "这个医疗站没有剩余充能"
 L.hstation_maxhealth = "你的生命恢复已满"
 L.hstation_short_desc = "医疗站会逐渐回复充能"
@@ -970,7 +970,7 @@ L.hstation_short_desc = "医疗站会逐渐回复充能"
 -- 2019-11-03
 L.vis_short_desc = "还原被枪杀的尸体的犯罪现场"
 L.corpse_binoculars = "按 [{key}] 用望远镜搜查尸体"
-L.binoc_progress = "搜查进度: {progress}%"
+L.binoc_progress = "搜查进度：{progress}%"
 
 L.pickup_no_room = "你没有存放此类武器的空间"
 L.pickup_fail = "你无法捡起这个武器"
@@ -979,11 +979,11 @@ L.pickup_pending = "你已经捡起这个武器，请等捡起完成"
 -- 2020-01-07
 L.tbut_help_admin = "编辑叛徒按钮设定"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] 切换 {role} 的按钮权限"
-L.tbut_role_config = "身份: {current}"
+L.tbut_role_config = "身份：{current}"
 L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] 切换 {team} 的按钮权限"
-L.tbut_team_config = "阵营: {current}"
-L.tbut_current_config = "当前设定:"
-L.tbut_intended_config = "地图默认设定:"
+L.tbut_team_config = "阵营：{current}"
+L.tbut_current_config = "当前设定："
+L.tbut_intended_config = "地图默认设定："
 L.tbut_admin_mode_only = "只有你看得到这个，因为你是管理员而且 '{cv}' 目前被设为 '1'"
 L.tbut_allow = "允许"
 L.tbut_prohib = "禁止"
@@ -1058,11 +1058,11 @@ L.submenu_administration_hud_title = "HUD 设置"
 L.submenu_administration_randomshop_title = "随机商店"
 
 L.help_color_desc = "此选项启用后，准星和目标高亮的外框会显示一个全局通用的颜色"
-L.help_scale_factor = "这个比例影响所有界面大小（HUD, vgui 和目标高亮）。屏幕分辨率修改后会自动更新这个比例。改变此比例会重置 HUD！"
+L.help_scale_factor = "这个比例影响所有界面大小（HUD， vgui 和目标高亮）。屏幕分辨率修改后会自动更新这个比例。改变此比例会重置 HUD！"
 L.help_hud_game_reload = "这个 HUD 当前无法使用，必须先重新加载游戏。"
 L.help_hud_special_settings = "以下是当前 HUD 的专用设定。"
 L.help_vskin_info = "VSkin（vgui 皮肤）是应用在所有菜单界面（包括这个）的皮肤。皮肤可以用一个简单的 Lua 脚本创建，并能改变颜色，大小等参数。"
-L.help_targetid_info = "目标高亮(TargetID)是显示在实体和玩家下面的信息。可以在通用菜单启用全局颜色。"
+L.help_targetid_info = "目标高亮（TargetID）是显示在实体和玩家下面的信息。可以在通用菜单启用全局颜色。"
 L.help_hud_default_desc = "设置全体玩家的默认 HUD。未选择 HUD 的玩家会使用这个，但已经选择其他 HUD 的玩家不会受影响。"
 L.help_hud_forced_desc = "强制选择一个 HUD。这会阻止玩家选择其他 HUD。"
 L.help_hud_enabled_desc = "启用/禁用 HUD 来限制玩家选择它们。"
@@ -1247,16 +1247,16 @@ L.hilite_win_innocents = "无辜者获胜"
 L.hilite_win_tie = "达成共识"
 L.hilite_win_time = "时间已到"
 
-L.tooltip_karma_gained = "本局的人品值变化:"
-L.tooltip_score_gained = "本局得分变化:"
-L.tooltip_roles_time = "本局的角色变化:"
+L.tooltip_karma_gained = "本局的人品值变化："
+L.tooltip_score_gained = "本局得分变化："
+L.tooltip_roles_time = "本局的角色变化："
 
 L.tooltip_finish_score_alive_teammates = "存活的队友：{score}"
 L.tooltip_finish_score_alive_all = "存活的玩家：{score}"
 L.tooltip_finish_score_timelimit = "超时：{score}"
 L.tooltip_finish_score_dead_enemies = "死去的敌人：{score}"
 L.tooltip_kill_score = "击杀：{score}"
-L.tooltip_bodyfound_score = "发现尸体: {score}"
+L.tooltip_bodyfound_score = "发现尸体：{score}"
 
 L.finish_score_alive_teammates = "存活的队友："
 L.finish_score_alive_all = "存活的玩家："
@@ -1278,7 +1278,7 @@ L.title_event_rolechange = "一名玩家改变了它的角色或阵营"
 L.title_event_selected = "角色分配"
 L.title_event_spawn = "一名玩家生成了"
 
-L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) 发现了 {found} ({forole} / {foteam}) 的尸体 。尸体上有 {credits} 个积分。"
+L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) 发现了 {found} ({forole} / {foteam}) 的尸体。尸体上有 {credits} 个积分。"
 L.desc_event_bodyfound_headshot = "受害者被爆头致死。"
 L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam})成功解除了由{owner} ({orole} / {oteam})放置的C4。"
 L.desc_event_c4_disarm_failed = "{disarmer}({drole}/{dteam})试图解除{owner}({orole}/{oteam})武装的C4。他们失败了。"
@@ -1416,7 +1416,7 @@ L.equipmenteditor_name_auto_spawnable = "装备随机生成"
 L.equipmenteditor_name_spawn_type = "生成类型"
 
 -- 2021-07-11
-L.spec_about_to_revive = "在复活时,观察将被限制。"
+L.spec_about_to_revive = "在复活时，观察将被限制。"
 
 -- 2021-09-01
 L.spawneditor_name = "生成点编辑器工具"
@@ -1443,7 +1443,7 @@ L.spawn_ammo_rifle = "狙击枪弹药生成"
 L.spawn_ammo_shotgun = "霰弹枪弹药生成"
 L.spawn_player_random = "随机玩家生成"
 
-L.spawn_weapon_ammo = " （弹药: {ammo}）"
+L.spawn_weapon_ammo = " （弹药：{ammo}）"
 
 L.spawn_weapon_edit_ammo = "按住 [{walkkey}]并按 [{primaryfire} 或 {secondaryfire}] 以增加或减少此武器生成的弹药量"
 
@@ -1472,7 +1472,7 @@ L.help_spawn_editor_info = [[
 
 请记住，更改只有在新的一轮开始后才会生效。]]
 L.help_spawn_editor_enable = "在某些地图上，可能会建议使用在地图自带的原始生成点，而不用动态系统来取代它们。禁用这个复选框只对当前活动地图禁用。其他地图仍将使用动态系统。"
-L.help_spawn_editor_hint = "提示：要离开生成编辑器,重新打开游戏模式菜单。"
+L.help_spawn_editor_hint = "提示：要离开生成编辑器，重新打开游戏模式菜单。"
 L.help_spawn_editor_spawn_amount = [[
 目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 player} 个玩家生成点。
 点击'开始编辑生成'来改变这个生成。
@@ -1558,7 +1558,7 @@ L.help_roles_default_team = "默认团队：{team}"
 L.help_roles_unselectable = "这个角色是不可选择的。这意味着它在角色选择系统中不被考虑。大多数情况下，这意味着这是回合中通过某个事件（如复活为僵尸，副手老鹰或类似的东西）手动应用的角色。"
 L.help_roles_selectable = "这个角色是可选择的，这意味着如果满足所有的标准，这个角色在角色选择过程中会被考虑。"
 L.help_roles_credits = "装备积分用于在商店购买装备。大多数情况下，只给那些可以进入商店的角色信用额度是有意义的。然而，由于可从尸体上偷取积分，也可以考虑给角色提供起始积分，作为给加害者的奖励。"
-L.help_roles_selection_short = "每个玩家的角色分布定义了被分配到这个角色的玩家的百分比。例如，如果该值被设置为'0.2',那么每五名玩家中就有一人会变为此角色。"
+L.help_roles_selection_short = "每个玩家的角色分布定义了被分配到这个角色的玩家的百分比。例如，如果该值被设置为'0.2'，那么每五名玩家中就有一人会变为此角色。"
 L.help_roles_selection = [[
 每个玩家的角色分配定义了被分配到这个角色的玩家的百分比。例如，如果该值被设置为 "0.2"，那么每五个玩家就会得到这个角色。这也意味着，至少需要5名玩家才能分配到这个角色。
 请记住，所有这些都只适用于该角色被考虑分配过程。
@@ -1566,7 +1566,7 @@ L.help_roles_selection = [[
 前面提到的角色分配与玩家的下限有一个特殊的整合。如果该角色被考虑用于分配，且最小值低于分配系数所给的值，但玩家数量等于或大于下限，则单个玩家仍可获得该角色。然后分配过程对第二个玩家照常进行。]]
 L.help_roles_award_info = "部分角色（如果在他们的积分设置中启用）在一定比例的对手死亡后会获得装备积分，该数值可在这里进行调整。"
 L.help_roles_award_pct = "当这个百分比的敌人死亡后，特定的角色会获得积分。"
-L.help_roles_award_repeat = "积分奖励是否会多次发放.例如，如果你将百分比设置为'0.25'，并启用此功能，玩家将在死亡人数到达全玩家的'25%','50%'和'75%'时获得积分。"
+L.help_roles_award_repeat = "积分奖励是否会多次发放。例如，如果你将百分比设置为'0.25'，并启用此功能，玩家将在死亡人数到达全玩家的'25%'，'50%'和'75%'时获得积分。"
 L.help_roles_advanced_warning = "警告：这些是高级设置，可以完全扰乱角色分配过程。如果有疑问，请将所有值保持在 '0'。这个值意味着不应用任何限制，角色分配将尝试分配尽可能多的角色。"
 L.help_roles_max_roles = [[
 角色类别包含TTT2中的每个角色。默认情况下，对于可以分配多少个不同的角色没有限制。然而，这里有两种不同的方法来限制它们。
@@ -1576,12 +1576,12 @@ L.help_roles_max_roles = [[
 
 后者仅在固定数值为'0'时使用，并根据设定的可用玩家百分比设置上限。]]
 L.help_roles_max_baseroles = [[
-基础角色只是那些其他角色所继承的角色阵营。例如,"无辜者"角色是一个基础角色，而"法老"是这个角色的一个子角色。默认情况下，对于可以分配多少个不同的角色没有限制。然而，这里有两种不同的方法来限制它们。
+基础角色只是那些其他角色所继承的角色阵营。例如，"无辜者"角色是一个基础角色，而"法老"是这个角色的一个子角色。默认情况下，对于可以分配多少个不同的角色没有限制。然而，这里有两种不同的方法来限制它们。
 
 1.用一个固定的数值限制。
 2.通过百分比限制。
 
-后者只在固定数值为'0'时使用，并根据设定的可用玩家百分比设置上限]]
+后者只在固定数值为'0'时使用，并根据设定的可用玩家百分比设置上限。]]
 
 L.label_roles_enabled = "启用角色"
 L.label_roles_min_inno_pct = "每个玩家所分配的无辜者角色比例"
@@ -1613,10 +1613,10 @@ L.help_roles_credits_award_kill = "另一种获得积分的方式是通过杀死
 L.help_roles_credits_award = [[
 在TTT2中，有两种不同的方式可以获得积分：
 
-1.如果敌方队伍中有一定比例的人死亡,整个队伍将会奖励积分。
+1.如果敌方队伍中有一定比例的人死亡，整个队伍将会奖励积分。
 2.如果一个玩家用'公开角色'（如侦探）杀死了一个高价值的角色，那么这位玩家就会得到奖励。
 
-请注，,即使全队都会获得奖励，这仍然可以为每个角色启用/禁用。例如，如果'无辜者'阵营被奖励，但无辜者角色的装备商店被禁用，所以只有侦探会收到积分。
+请注，，即使全队都会获得奖励，这仍然可以为每个角色启用/禁用。例如，如果'无辜者'阵营被奖励，但无辜者角色的装备商店被禁用，所以只有侦探会收到积分。
 这个功能的平衡值可以在'管理'->'通用角色设置'中设置。]]
 L.help_detective_hats = [[
 侦探等警察角色可以戴帽子以显示其权威。他们在死亡时或头部受损时将失去帽子。
@@ -1682,7 +1682,7 @@ L.help_spawn_waves = [[
 L.help_voicechat_battery = [[
 在启用语音聊天电池的情况下，语音聊天会减少电量。当电量耗尽时，玩家将不能语音聊天。必须等待几秒钟来充电。这可以帮助防止过度使用语音聊天。
 
-注意:'Tick'指的是游戏中的Tick,即1/66秒的时间。]]
+注意：'Tick'指的是游戏中的Tick，即1/66秒的时间。]]
 L.help_ply_spawn = "在玩家（重新）产生时使用的玩家设定。"
 L.help_haste_mode = [[
 急速模式通过增加在玩家死亡时增加回合时间来平衡游戏。只有看到回合中失踪的玩家的角色才能看到真正的回合时间，其他角色只能看到急速模式的起始时间。
@@ -1699,14 +1699,14 @@ L.help_item_armor_dynamic = [[
 如果强化护甲被启用，只要护甲值高于强化阈值，施加给玩家的伤害就会减少15%。]]
 L.help_sherlock_mode = "侦探模式是经典的TTT模式。如果侦探模式被禁用，尸体将被确认，记分牌上显示每个人都活着，观察者可以与活着的玩家交谈。"
 L.help_prop_possession = [[
-观察者可以使用道具附身来附身于躺在世界中的道具,并使用缓慢充能的'飞击量表'来移动上述道具。
+观察者可以使用道具附身来附身于躺在世界中的道具，并使用缓慢充能的'飞击量表'来移动上述道具。
 
-'飞击量表'的最大值由一个基础值和其他判断值组成,其中击杀数/死亡数将影响该值。随着时间的推移,能量条会慢慢充电。设定的充电时间是为'飞击量表'中的一个点进行充电所需的时间。]]
-L.help_karma = "人品值是用来减少无差别击杀的。玩家开始时有一定量的人品值，当他们伤害/杀死队友时就会失去人品值。他们失去的数值取决于他们伤害或杀死的人的人品值。较低的人品值会减少给予的伤害。"
-L.help_karma_strict = "如果更严格人品值被启用，伤害惩罚会随着人品值的减少而更快增加。当它关闭时，让人品值保持在800以上时的伤害惩罚是非常低的。启用严格模式使人品值在阻止任何不必要的击杀方面发挥更大的作用。而禁用它则导致一个更'宽松'的游戏范围，人品值只影响那些不断击杀队友的玩家。"
+'飞击量表'的最大值由一个基础值和其他判断值组成，其中击杀数/死亡数将影响该值。随着时间的推移，能量条会慢慢充电。设定的充电时间是为'飞击量表'中的一个点进行充电所需的时间。]]
+L.help_karma = "玩家有一定量的初始人品值，伤害/杀死队友时会失去人品。失去的数值取决于他们伤害或杀死的人的人品值，对方人品越低，损失的人品越低。"
+L.help_karma_strict = "如果严格人品模式被启用，伤害惩罚会随着人品值的减少快速增加。非严格模式下，人品值保持在 800 以上时的伤害惩罚非常低。启用严格模式使人品值在阻止任何不必要的击杀方面发挥更大的作用，而禁用它则导致一个更宽松的游戏范围，人品系统只会影响不断击杀队友的玩家。"
 L.help_karma_max = "将最大人品值设置为1000以上，不会给人品值超过1000的玩家提供伤害加成，它可以作为一个人品值缓冲区。"
 L.help_karma_ratio = "用于计算如果双方在同一个团队中，受害者的人品值被减去多少的伤害比例。如果发生击杀友军事件，会有进一步的惩罚。"
-L.help_karma_traitordmg_ratio = "如果双方在不同的队伍中，用来计算受害者的人品值被减去多少的伤害比率。如果发生击杀事件,会有进一步的奖励。"
+L.help_karma_traitordmg_ratio = "如果双方在不同的队伍中，用来计算受害者的人品值被减去多少的伤害比率。如果发生击杀事件，会有进一步的奖励。"
 L.help_karma_bonus = "在一个回合中也有两种不同的被动方式来获得人品值。首先，一个回合的回复会应用于每个玩家。然后，如果没有伤害队友或击杀，会有一个二次回复的奖励。"
 L.help_karma_clean_half = [[
 当玩家的人品值高于起始水平时（意味着人品值最大值已被配置为高于该水平），他们所有的人品值增加将根据其人品值高于起始水平的程度而减少。因此，它越高，增加的速度就越慢。
@@ -1751,10 +1751,10 @@ L.label_armor_on_spawn = "玩家在重生时的默认护甲量"
 L.label_prep_respawn = "在准备阶段启用即时重生"
 L.label_preptime_seconds = "准备时间（秒）"
 L.label_firstpreptime_seconds = "首局准备时间（秒）"
-L.label_roundtime_minutes = "固定回合时间（分钟)"
+L.label_roundtime_minutes = "固定回合时间（分钟）"
 L.label_haste = "启用急速模式"
 L.label_haste_starting_minutes = "急速模式开始时间（分钟）"
-L.label_haste_minutes_per_death = "每位玩家死亡的时间奖励（分钟）"
+L.label_haste_minutes_per_death = "玩家死亡给予的额外时间（分钟）"
 L.label_posttime_seconds = "回合后时间，以秒为单位"
 L.label_round_limit = "回合数上限"
 L.label_time_limit_minutes = "游戏时间上限，以分钟为单位"
@@ -1765,9 +1765,9 @@ L.label_lastwords_chatprint = "如果在打字时被杀，则发出最后一句�
 L.label_identify_body_woconfirm = "不按'确认'按钮识别尸体"
 L.label_announce_body_found = "宣布发现了一具尸体"
 L.label_confirm_killlist = "宣布确认尸体时，该尸体的击杀名单"
-L.label_inspect_detective_only = "将搜尸的范围限定为只限于警察角色"
-L.label_confirm_detective_only = "限制尸体的确认只限于警察角色"
-L.label_dyingshot = "如果玩家在瞄准中,则在死亡时开枪[试验性]"
+L.label_inspect_detective_only = "只允许警察角色搜查尸体"
+L.label_confirm_detective_only = "只允许警察角色确认死者"
+L.label_dyingshot = "如果玩家在瞄准中，则在死亡时开枪[试验性]"
 L.label_armor_block_headshots = "启用护甲阻挡爆头伤害"
 L.label_armor_block_blastdmg = "启用护甲阻挡爆炸伤害"
 L.label_armor_dynamic = "启用动态装甲"
