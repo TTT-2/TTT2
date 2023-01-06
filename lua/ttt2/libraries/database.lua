@@ -87,8 +87,6 @@ local callbackIdentifiers = database.callbackIdentifiers
 -- @return table Return all necessary infos for database access
 -- @realm shared
 function DatabaseElement(accessName, itemName, key)
-	if not accessName or not itemName or not key then return end
-
 	return {name = accessName, itemName = itemName, key = key}
 end
 
