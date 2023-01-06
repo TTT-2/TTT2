@@ -163,7 +163,6 @@ function net.SendStream(messageId, data, plys)
 	current_split_id[messageId][streamId] = #splits
 
 	if istable(plys) and #plys > 1 then
-		PrintTable(plys)
 		local plyIDs64 = {}
 
 		for i = 1, #plys do
