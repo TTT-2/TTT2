@@ -10,7 +10,7 @@ local isfunction = isfunction
 
 -- Stream network message name constant
 local NETMSG_STREAM = "TTT2_NET_STREAM"
-local NETMSG_SPLIT_CONFIRM = "TTT2_NET_SPLIT_CONFIRM"
+local NETMSG_REQUEST_NEXT_SPLIT = "TTT2_NET_REQUEST_NEXT_SPLIT"
 
 if SERVER then
 	AddCSLuaFile()
@@ -18,7 +18,7 @@ if SERVER then
 	-- Add the network string for streaming data
 	util.AddNetworkString(NETMSG_STREAM)
 	-- Add the network string for confirming single splits
-	util.AddNetworkString(NETMSG_SPLIT_CONFIRM)
+	util.AddNetworkString(NETMSG_REQUEST_NEXT_SPLIT)
 end
 
 -- Size to split the network stream at (currently a bit lower than the max value, just to have some buffer)
@@ -27,9 +27,7 @@ net.STREAM_FRAGMENTATION_SIZE = 65400
 
 -- Stream cache variables
 local wait_stream_cache = {}
-local current_split_id = {}
-local backup_Plys = {}
-local waiting_Plys = {}
+local eligible_Players  = {}
 
 net.stream_cache = {}
 net.stream_callbacks = {}
@@ -43,24 +41,22 @@ net.stream_callbacks = {}
 -- It is done to save some calculations to see if the last entry is reached. 1 is the last in every stream
 -- @realm shared
 -- @internal
-local function sendNextStream(messageId, streamId, split)
+local function SendNextStream(messageId, streamId, split, plys)
 	net.Start(NETMSG_STREAM)
 	-- Write the messageId
 	net.WriteString(messageId)
 	-- Write the streamId
 	net.WriteUInt(streamId, 32)
-
-	local sendMoreSplits = split > 1
-	-- Write if there are still fragments coming after this one
-	net.WriteBool(sendMoreSplits)
+	-- Write the current split
+	net.WriteUInt(split, 8)
 
 	local data = wait_stream_cache[messageId][streamId]
 	-- Write the actual data fragment as a string, which internally will also send its size
-	net.WriteString(data.splits[#data.splits + 1 - split])
+	net.WriteString(data[#data + 1 - split])
 
 	if SERVER then
-		if data.plys then
-			net.Send(data.plys)
+		if plys then
+			net.Send(plys)
 		else
 			net.Broadcast()
 		end
@@ -68,78 +64,40 @@ local function sendNextStream(messageId, streamId, split)
 		net.SendToServer()
 	end
 
-	if not sendMoreSplits then
-		local confirmations = current_split_id[messageId]
-		confirmations[streamId] = 1
+	if split <= 1 then
+		local eligiblePlayerList = eligible_Players[messageId][streamId]
+		if SERVER and plys then
+			plys = istable(plys) and plys or {plys}
 
-		-- Check if all outstanding streams are handled before reset
-		for i = 1, #confirmations do
-			if confirmations[i] > 1 then return end
+			for i = 1, #plys do
+				eligiblePlayerList[plys[i]:SteamID64()] = nil
+			end
 		end
 
-		-- Reset all caches
-		wait_stream_cache[messageId] = {}
-		current_split_id[messageId] = {}
-		waiting_Plys[messageId] = {}
-		backup_Plys[messageId] = {}
+		if #eligiblePlayerList == 0 then
+			eligible_Players[messageId][streamId] = nil
+			wait_stream_cache[messageId][streamId] = nil
+		end
 	end
 end
 
 ---
--- Sends the next split and removes overrideTimers if given
--- @param string messageId a unique message id similar to the network strings
--- @param number streamId the current stream number the split is requested for
--- @param bool timerOverride if the timer called this function instead of the normal way
-local function SendNextSplit(messageId, streamId, timerOverride)
-	if timerOverride then
-		waiting_Plys[messageId][streamId] = table.Copy(backup_Plys[messageId][streamId])
-	else
-		local timerName = messageId .. streamId
-		if timer.Exists(timerName) then
-			timer.Remove(timerName)
-		end
-	end
-
-	local splitId = current_split_id[messageId][streamId] - 1
-	current_split_id[messageId][streamId] = splitId
-
-	sendNextStream(messageId, streamId, splitId)
-end
-
----
--- Checks if all players in the cached players list have received it before 
--- it sends the next part of the stream
+-- It sends the next requested part of the stream and checks if the player is eligible for it
 -- @param number len Length of message in Bits
 -- @param Player ply player that the message has received, `nil` on the client
 -- @realm shared
 -- @internal
-local function CheckConfirmedSplit(len, ply)
+local function SendNextSplit(len, ply)
 	local messageId = net.ReadString()
 	local streamId = net.ReadUInt(32)
+	local nextSplit = net.ReadUInt(8)
 
-	-- Check if all plys of the given list have the info received
-	local cPlys = waiting_Plys[messageId] and waiting_Plys[messageId][streamId]
-	if cPlys then
-		local plyID64 = ply:SteamID64()
-		table.RemoveByValue(cPlys, plyID64)
+	local eligiblePlayerList = eligible_Players[messageId][streamId]
+	if nextSplit < 1 or eligiblePlayerList and not eligiblePlayerList[ply:SteamID64()] then return end
 
-		if #cPlys > 0 then
-			local timerName = messageId .. streamId
-
-			-- If some players timeout or the given playerList is faulty, just send the next update after some time anyways
-			if not timer.Exists(timerName) then
-				timer.Create(timerName, 5, 1, function() SendNextSplit(messageId, streamId, true) end)
-			end
-
-			return
-		end
-
-		waiting_Plys[messageId][streamId] = table.Copy(backup_Plys[messageId][streamId])
-	end
-
-	SendNextSplit(messageId, streamId, false)
+	SendNextStream(messageId, streamId, nextSplit, ply)
 end
-net.Receive(NETMSG_SPLIT_CONFIRM, CheckConfirmedSplit)
+net.Receive(NETMSG_REQUEST_NEXT_SPLIT, SendNextSplit)
 
 ---
 -- Initiates a stream message, usually for data that can be longer than
@@ -148,49 +106,46 @@ net.Receive(NETMSG_SPLIT_CONFIRM, CheckConfirmedSplit)
 --
 -- @param string messageId A unique message id similar to the network strings
 -- @param table data The data table to send, this will be reconstructed at the player.
--- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players.
+-- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players otherwise it's broadcasted.
 -- @realm shared
 function net.SendStream(messageId, data, plys)
 	local encodedString = pon.encode(data)
 	local splits = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
 
 	wait_stream_cache[messageId] = wait_stream_cache[messageId] or {}
-	current_split_id[messageId] = current_split_id[messageId] or {}
+	eligible_Players[messageId] = eligible_Players[messageId] or {}
 
 	local streamId = #wait_stream_cache[messageId] + 1
 
-	wait_stream_cache[messageId][streamId] = {splits = splits, plys = plys}
-	current_split_id[messageId][streamId] = #splits
+	wait_stream_cache[messageId][streamId] = splits
+	eligible_Players[messageId][streamId] = {}
 
-	if istable(plys) and #plys > 1 then
-		local plyIDs64 = {}
+	if SERVER and plys then
+		plys = istable(plys) and plys or {plys}
 
 		for i = 1, #plys do
-			plyIDs64[i] = plys[i]:SteamID64()
+			eligible_Players[messageId][streamId][plys[i]:SteamID64()] = true
 		end
-
-		waiting_Plys[messageId] = waiting_Plys[messageId] or {}
-		waiting_Plys[messageId][streamId] = plyIDs64
-		backup_Plys[messageId] = backup_Plys[messageId] or {}
-		backup_Plys[messageId][streamId] = table.Copy(plyIDs64)
 	end
 
 	-- Send first stream directly
-	sendNextStream(messageId, streamId, #splits)
+	SendNextStream(messageId, streamId, #splits, plys)
 end
 
 ---
 -- Request the next part of the stream
 -- @param string messageId a unique message id similar to the network strings
 -- @param number streamId the current stream number the split is requested for
+-- @param number split the part of the Stream that should be sent
 -- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players.
 -- @realm shared
 -- @internal
-local function RequestNextSplit(messageId, streamId, plys)
-	net.Start(NETMSG_SPLIT_CONFIRM)
+local function RequestNextSplit(messageId, streamId, split, plys)
+	net.Start(NETMSG_REQUEST_NEXT_SPLIT)
 
 	net.WriteString(messageId)
 	net.WriteUInt(streamId, 32)
+	net.WriteUInt(split, 8)
 
 	if SERVER then
 		if plys then
@@ -230,7 +185,7 @@ end
 local function ReceiveStream(len, ply)
 	local messageId = net.ReadString()
 	local streamId = net.ReadUInt(32)
-	local fragmented = net.ReadBool()
+	local split = net.ReadUInt(8)
 	local data = net.ReadString()
 
 	-- Create cache table if it does not exist yet for this message
@@ -239,8 +194,8 @@ local function ReceiveStream(len, ply)
 	-- Write data to cache table
 	net.stream_cache[messageId][streamId][#net.stream_cache[messageId][streamId] + 1] = data
 
-	-- Check if there are still fragments on their way
-	if not fragmented then
+	-- Check if this was the last fragment
+	if split <= 1 then
 		-- Otherwise this was the last packet, so reconstruct the data
 		local encodedStr = table.concat(net.stream_cache[messageId][streamId])
 		local callback = net.stream_callbacks[messageId]
@@ -253,7 +208,7 @@ local function ReceiveStream(len, ply)
 			callback(pon.decode(encodedStr), ply)
 		end
 	else
-		RequestNextSplit(messageId, streamId, ply)
+		RequestNextSplit(messageId, streamId, split - 1, ply)
 	end
 end
 net.Receive(NETMSG_STREAM, ReceiveStream)
