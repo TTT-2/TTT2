@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some duplicated strings
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
+- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh)
 - Changed syncing of database module
 - Replaced equipmenteditor syncing with database module
 - Replaced internal equipment syncing with database module
