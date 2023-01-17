@@ -66,18 +66,20 @@ local function SendNextStream(messageId, streamId, split, plys)
 
 	if split <= 1 then
 		local eligiblePlayerList = eligible_Players[messageId][streamId]
-		if SERVER and plys then
+
+		if eligiblePlayerList then
 			plys = istable(plys) and plys or {plys}
 
 			for i = 1, #plys do
 				eligiblePlayerList[plys[i]:SteamID64()] = nil
 			end
+
+			if next(eligiblePlayerList) ~= nil then return end
+
+			eligible_Players[messageId][streamId] = nil
 		end
 
-		if #eligiblePlayerList == 0 then
-			eligible_Players[messageId][streamId] = nil
-			wait_stream_cache[messageId][streamId] = nil
-		end
+		wait_stream_cache[messageId][streamId] = nil
 	end
 end
 
@@ -118,9 +120,9 @@ function net.SendStream(messageId, data, plys)
 	local streamId = #wait_stream_cache[messageId] + 1
 
 	wait_stream_cache[messageId][streamId] = splits
-	eligible_Players[messageId][streamId] = {}
 
-	if SERVER and plys then
+	if SERVER and plys and #splits > 1 then
+		eligible_Players[messageId][streamId] = {}
 		plys = istable(plys) and plys or {plys}
 
 		for i = 1, #plys do
