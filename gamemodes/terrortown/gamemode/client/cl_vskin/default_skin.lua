@@ -12,6 +12,7 @@ local materialHeadboxYes = Material("vgui/ttt/vskin/icon_headbox_yes")
 local materialHeadboxNo = Material("vgui/ttt/vskin/icon_headbox_no")
 local materialHattableYes = Material("vgui/ttt/vskin/icon_hattable_yes")
 local materialHattableNo = Material("vgui/ttt/vskin/icon_hattable_no")
+local materialCoin = Material("vgui/ttt/equip/coin.png")
 
 local colorCardAdded = Color(80, 190, 25)
 local colorCardInheritAdded = Color(25, 190, 175)
@@ -1294,6 +1295,82 @@ function SKIN:PaintCardTTT2(panel, w, h)
 	drawSimpleText(
 		TryT(textMode),
 		"DermaTTT2TextSmall",
+		posTextModeX,
+		posTextModeY,
+		colorTextMode,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintCardShopTTT2(panel, w, h)
+	local widthBorder = 2
+	local widthBorder2 = widthBorder * 2
+	local sizeIcon = 60
+	local padding = 5
+	local posIcon = widthBorder + padding
+	local posText = posIcon + sizeIcon + 2 * padding
+	local heightMode = 25
+	local widthMode = w - sizeIcon
+	local posIconModeX = w - widthMode
+	local posIconModeY = h - heightMode
+	local sizeIconMode = heightMode
+	local posTextModeX = posIconModeX + sizeIconMode + padding
+	local posTextModeY = posIconModeY + 0.5 * sizeIconMode - 1
+
+	local colorBackground = colors.settingsBox
+	local colorText = colors.settingsText
+	local colorMode = utilGetChangedColor(colors.background, 75)
+
+	local materialMode = materialCardRemoved
+	local textMode = "equip_not_added"
+
+	if panel:GetMode() == MODE_ADDED then
+		colorMode = colorCardAdded
+		materialMode = materialCardAdded
+		textMode = "equip_added"
+	elseif panel:GetMode() == MODE_INHERIT_ADDED then
+		colorMode = colorCardInheritAdded
+		materialMode = materialCardAdded
+		textMode = "equip_inherit_added"
+	elseif panel:GetMode() == MODE_INHERIT_REMOVED then
+		colorMode = colorCardInheritRemoved
+		textMode = "equip_inherit_removed"
+	end
+
+	local colorTextMode = utilGetDefaultColor(colorMode)
+
+	if panel.Hovered then
+		colorBackground = colors.accentHover
+	end
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorMode)
+	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
+
+	drawFilteredTexture(0, h - sizeIcon , sizeIcon, sizeIcon, panel:GetIcon())
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		posIcon + 1,
+		widthBorder,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_TOP
+	)
+
+	drawRoundedBoxEx(sizes.cornerRadius, w - widthMode, h - heightMode, widthMode, heightMode, colorMode, true, false, false, true)
+
+	drawFilteredTexture(posIconModeX, posIconModeY, sizeIconMode, sizeIconMode, materialCoin, 175, colorTextMode)
+
+	drawSimpleText(
+		TryT(panel:GetCredits()),
+		panel:GetFont(),
 		posTextModeX,
 		posTextModeY,
 		colorTextMode,
