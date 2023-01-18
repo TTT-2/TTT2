@@ -9,3 +9,8 @@ end
 
 ENT.Type = "anim"
 ENT.Base = "base_anim"
+
+-- @realm server
+function ENT:UpdateTransmitState()
+	return TRANSMIT_ALWAYS
+end

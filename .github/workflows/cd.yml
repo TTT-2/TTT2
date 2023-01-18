@@ -2,7 +2,7 @@ name: CD
 
 # Run on Pull Requests to master and on manual interaction
 on:
-  pull_request:
+  pull_request_target:
     branches: [ master ]
   workflow_dispatch:
 
@@ -15,6 +15,8 @@ jobs:
       # Current workaround is a 'redirect webpage' on GitHub Pages
       # Ref. https://github.com/TTT-2/ttt-2.github.io
       url: https://ttt-2.github.io/redirect/ttt2-dev-env
+    permissions:
+      contents: read
 
     steps:
     - uses: actions/checkout@v3
