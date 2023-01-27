@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed hotreload of TTT2 roles library by a fresh reinitialization
 - Fixed a wrong localization line call in roles.lua (by @Satton2)
+- Fixed +zoom bind
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
