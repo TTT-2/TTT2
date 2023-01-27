@@ -89,7 +89,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 		end
 
 		return true
-	elseif string.find(bindName, "zoom") and pressed then
+	elseif bindName == "+zoom" and pressed then
 		-- open or close radio
 		RADIO:ShowRadioCommands(not RADIO.Show)
 
