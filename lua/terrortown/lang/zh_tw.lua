@@ -1779,9 +1779,9 @@ L.label_armor_threshold_for_reinforced = "強化護甲閾值"
 L.label_sherlock_mode = "啟用偵探模式"
 L.label_highlight_admins = "突出服務器管理員"
 L.label_highlight_dev = "突出顯示TTT2開發者"
-L.label_highlight_vip = "高亮顯示 TTT2 VIP"
+--L.label_highlight_vip = "Highlight TTT2 supporter"
 L.label_highlight_addondev = "突出顯示TTT2附加組件的開發者"
-L.label_highlight_supporter = "突出顯示其他支持者"
+--L.label_highlight_supporter = "Highlight others"
 L.label_enable_hud_element = "啟用{elem}HUD元素"
 L.label_spec_prop_control = "啟用Prop附體"
 L.label_spec_prop_base = "附體時的基礎值"
@@ -1843,3 +1843,25 @@ L.help_falldmg_exponent = [[
 該值修改了隨著玩家撞擊地面的速度而以指數方式增加的摔落傷害。
 
 更改此值時請小心。設置得太高，即使是二階階梯的高度也會致命，而設置得太低，玩家從五樓跳下來時也安然無恙。]]
+
+-- 2023-02-08
+--L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+--L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+--L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+--L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+--L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+--L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+--L.guide_nothing_title = "Nothing here yet!"
+--L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+--L.sb_rank_tooltip_developer = "TTT2 Developer"
+--L.sb_rank_tooltip_vip = "TTT2 Supporter"
+--L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+--L.sb_rank_tooltip_admin = "Server Admin"
+--L.sb_rank_tooltip_streamer = "Streamer"
+--L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+--L.sb_rank_tooltip_team = "Team"
+
+--L.tbut_adminarea = "ADMIN AREA:"
