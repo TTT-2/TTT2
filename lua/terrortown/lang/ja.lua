@@ -1770,9 +1770,9 @@ L.label_armor_threshold_for_reinforced = "強化アーマーのしきい値"
 L.label_sherlock_mode = "シャーロックモードを有効"
 L.label_highlight_admins = "サーバー管理者のハイライト"
 L.label_highlight_dev = "TTT2開発者ハイライト"
---L.label_highlight_vip = "Highlight TTT2 VIP"
+--L.label_highlight_vip = "Highlight TTT2 supporter"
 L.label_highlight_addondev = "TTT2アドオン開発者のハイライト"
-L.label_highlight_supporter = "他のサポーターのハイライト"
+--L.label_highlight_supporter = "Highlight others"
 L.label_enable_hud_element = "{elem}のHUD要素を有効"
 L.label_spec_prop_control = "オブジェクト憑依"
 L.label_spec_prop_base = "基本的憑依価値"
@@ -1834,3 +1834,25 @@ L.label_falldmg_exponent = "落下速度に対する落下ダメージ増加指�
 L.help_falldmg_exponent = [[
 この値は、プレイヤーが地面に当たる速度に応じて、落下ダメージが指数関数的に増加する方法を変更します。 
 この値を変更するときは注意してください。高すぎると、少し下っただけでも致命的になる可能性があり、低すぎると、プレイヤーは極端な高さから落下してもほとんどもしくは全くダメージを受けなくなってしまいます。]]
+
+-- 2023-02-08
+--L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+--L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+--L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+--L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+--L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+--L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+--L.guide_nothing_title = "Nothing here yet!"
+--L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+--L.sb_rank_tooltip_developer = "TTT2 Developer"
+--L.sb_rank_tooltip_vip = "TTT2 Supporter"
+--L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+--L.sb_rank_tooltip_admin = "Server Admin"
+--L.sb_rank_tooltip_streamer = "Streamer"
+--L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+--L.sb_rank_tooltip_team = "Team"
+
+--L.tbut_adminarea = "ADMIN AREA:"

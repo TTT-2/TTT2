@@ -238,7 +238,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
 	tData:AddDescriptionLine() -- adding empty line
 
 	tData:AddDescriptionLine(
-		"ADMIN AREA:",
+		TryT ("tbut_adminarea"),
 		COLOR_WHITE
 	)
 
