@@ -316,7 +316,7 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "拆弹器"
-L.defuser_help = " {primaryfire} 拆除目标炸弹。"
+L.defuser_help = "{primaryfire} 拆除目标炸弹。"
 
 L.defuser_desc = [[
 迅速拆除一个C4。
@@ -335,7 +335,7 @@ L.flare_desc = [[
 L.hstation_name = "医疗站"
 
 L.hstation_broken = "你的医疗站被摧毁了！"
-L.hstation_help = " {primaryfire} 安放了一个医疗站。"
+L.hstation_help = "{primaryfire} 安放了一个医疗站。"
 
 L.hstation_desc = [[
 安放后，允许人们用其治疗自己。
@@ -359,7 +359,7 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "你的收音机已被摧毁！"
-L.radio_help_pri = " {primaryfire} 安放了收音机。"
+L.radio_help_pri = "{primaryfire} 安放了收音机。"
 
 L.radio_desc = [[
 播放音效来误导或欺骗玩家。
@@ -415,7 +415,7 @@ L.dna_desc = [[
 
 -- Magneto stick
 L.magnet_name = "电磁棍"
-L.magnet_help = " {primaryfire} 将其定在墙上。"
+L.magnet_help = "{primaryfire} 将其定在墙上。"
 
 -- Grenades and misc
 L.grenade_smoke = "烟雾弹"
@@ -439,8 +439,8 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri = " {primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec = " {scondaryfire} 标记传送地点。"
+L.tele_help_pri = "{primaryfire} 传送到已标记的传送地点。"
+L.tele_help_sec = "{scondaryfire} 标记传送地点。"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。
@@ -1779,9 +1779,9 @@ L.label_armor_threshold_for_reinforced = "强化护甲阈值"
 L.label_sherlock_mode = "启用侦探模式"
 L.label_highlight_admins = "突出服务器管理员"
 L.label_highlight_dev = "突出显示TTT2开发者"
---L.label_highlight_vip = "Highlight TTT2 supporter"
+L.label_highlight_vip = "突出显示TTT2支持者"
 L.label_highlight_addondev = "突出显示TTT2附加组件的开发者"
---L.label_highlight_supporter = "Highlight others"
+L.label_highlight_supporter = "突出显示其他人"
 L.label_enable_hud_element = "启用{elem}HUD元素"
 L.label_spec_prop_control = "启用Prop附体"
 L.label_spec_prop_base = "附体时的基础值"
@@ -1846,23 +1846,23 @@ L.help_falldmg_exponent = [[
 更改此值时请小心。设置得太高，即使是二阶阶梯的高度也会致命，而设置得太低，玩家从五楼跳下来时也安然无恙。]]
 
 -- 2023-02-08
---L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
---L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+L.testpopup_title = "一个测试弹出窗口，现在有一个多行标题，多好啊！"
+L.testpopup_subtitle = "好吧，你好！这是一个带有一些特殊信息的花式弹出窗口。文字也可以是多行的，多好啊！呃，如果我有什么想法的话，我可以添加这么多的文字..."
 
---L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
---L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
---L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
---L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+L.hudeditor_chat_hint1 = "[TTT2][INFO] 将鼠标悬停在一个元素上，按住[LMB]并移动鼠标来移动或调整其大小。"
+L.hudeditor_chat_hint2 = "[TTT2][INFO] 按住ALT键进行对称调整大小。"
+L.hudeditor_chat_hint3 = "[TTT2][INFO] 按住SHIFT键，在轴上移动并保持长宽比。"
+L.hudeditor_chat_hint4 = "[TTT2][INFO] 按[RMB] -> 'Close'来退出HUD编辑器！"
 
---L.guide_nothing_title = "Nothing here yet!"
---L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+L.guide_nothing_title = "这里还没有消息!"
+L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub上为项目做贡献来帮助我们。"
 
---L.sb_rank_tooltip_developer = "TTT2 Developer"
---L.sb_rank_tooltip_vip = "TTT2 Supporter"
---L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
---L.sb_rank_tooltip_admin = "Server Admin"
---L.sb_rank_tooltip_streamer = "Streamer"
---L.sb_rank_tooltip_heroes = "TTT2 Heroes"
---L.sb_rank_tooltip_team = "Team"
+L.sb_rank_tooltip_developer = "TTT2开发者"
+L.sb_rank_tooltip_vip = "TTT2支持者"
+L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
+L.sb_rank_tooltip_admin = "服务器管理员"
+L.sb_rank_tooltip_streamer = "Streamer"
+L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+L.sb_rank_tooltip_team = "阵营"
 
---L.tbut_adminarea = "ADMIN AREA:"
+L.tbut_adminarea = "管理区:"
