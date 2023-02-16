@@ -1777,9 +1777,9 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.label_sherlock_mode = "Enable sherlock mode"
 --L.label_highlight_admins = "Highlight server admins"
 --L.label_highlight_dev = "Highlight TTT2 developer"
---L.label_highlight_vip = "Highlight TTT2 VIP"
+--L.label_highlight_vip = "Highlight TTT2 supporter"
 --L.label_highlight_addondev = "Highlight TTT2 addon developer"
---L.label_highlight_supporter = "Highlight other supporters"
+--L.label_highlight_supporter = "Highlight others"
 --L.label_enable_hud_element = "Enable {elem} HUD element"
 --L.label_spec_prop_control = "Enable prop possession"
 --L.label_spec_prop_base = "Possession base value"
@@ -1838,3 +1838,25 @@ L.karma_unknown_tooltip = "Inconnu"
 --This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
 
 --Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
+
+-- 2023-02-08
+--L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+--L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+--L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+--L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+--L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+--L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+--L.guide_nothing_title = "Nothing here yet!"
+--L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+--L.sb_rank_tooltip_developer = "TTT2 Developer"
+--L.sb_rank_tooltip_vip = "TTT2 Supporter"
+--L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+--L.sb_rank_tooltip_admin = "Server Admin"
+--L.sb_rank_tooltip_streamer = "Streamer"
+--L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+--L.sb_rank_tooltip_team = "Team"
+
+--L.tbut_adminarea = "ADMIN AREA:"
