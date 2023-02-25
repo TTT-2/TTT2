@@ -1852,17 +1852,17 @@ L.testpopup_subtitle = "好吧，你好！这是一个带有一些特殊信息�
 L.hudeditor_chat_hint1 = "[TTT2][INFO] 将鼠标悬停在一个元素上，按住[LMB]并移动鼠标来移动或调整其大小。"
 L.hudeditor_chat_hint2 = "[TTT2][INFO] 按住ALT键进行对称调整大小。"
 L.hudeditor_chat_hint3 = "[TTT2][INFO] 按住SHIFT键，在轴上移动并保持长宽比。"
-L.hudeditor_chat_hint4 = "[TTT2][INFO] 按[RMB] -> 'Close'来退出HUD编辑器！"
+L.hudeditor_chat_hint4 = "[TTT2][INFO] 按[RMB] -> 'Close' 来退出HUD编辑器！"
 
-L.guide_nothing_title = "这里还没有消息!"
+L.guide_nothing_title = "这里暂时什么都没有！"
 L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub上为项目做贡献来帮助我们。"
 
 L.sb_rank_tooltip_developer = "TTT2开发者"
 L.sb_rank_tooltip_vip = "TTT2支持者"
 L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
 L.sb_rank_tooltip_admin = "服务器管理员"
-L.sb_rank_tooltip_streamer = "Streamer"
-L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+L.sb_rank_tooltip_streamer = "主播"
+L.sb_rank_tooltip_heroes = "TTT2 英雄"
 L.sb_rank_tooltip_team = "阵营"
 
 L.tbut_adminarea = "管理区:"
