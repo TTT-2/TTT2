@@ -23,8 +23,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
 - Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh)
-  -Update Simplified Chinese Translation
-  -Improve translation(by @TheOnly8Z)
+  - Update Simplified Chinese Translation
+  - Improve translation(by @TheOnly8Z)
 
 ### Fixed
 
