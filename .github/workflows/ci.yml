@@ -1,7 +1,7 @@
 name: CI
 
 env:
-  GLUALINT_VERSION: 1.21.0
+  GLUALINT_VERSION: 1.24.1
   NEODOC_VERSION: 0.1.4
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -20,11 +20,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Download & extract glualint
       run: |
-        wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-linux.zip -O glualint.zip
+        wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-x86_64-linux.zip -O glualint.zip
         unzip -u glualint.zip
         rm glualint.zip
 
@@ -37,7 +37,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET Core
       run: sudo apt-get install -y mono-complete
