@@ -256,13 +256,13 @@ end
 local function QuickSlot(ply, cmd, args)
 	if not IsValid(ply) or not args or #args ~= 1 then return end
 
-	local slot = tonumber(args)
+	local slot = tonumber(args[1])
 	if not slot then return end
 
 	local wep = ply:GetActiveWeapon()
 	if not IsValid(wep) then return end
 
-	if MakeKindValid(wep.Kind) == slot - 1 then
+	if MakeKindValid(wep.Kind) == slot then
 		RunConsoleCommand("lastinv")
 	else
 		WSWITCH:SelectAndConfirm(slot)
