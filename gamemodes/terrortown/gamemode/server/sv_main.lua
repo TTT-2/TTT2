@@ -198,6 +198,10 @@ CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whe
 
 ---
 -- @realm server
+CreateConVar("ttt_enforce_playercolor", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playercolor. Set to 0 to not reset color on (re)spawn")
+
+---
+-- @realm server
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
