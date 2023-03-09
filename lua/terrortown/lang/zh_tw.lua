@@ -1865,3 +1865,8 @@ L.sb_rank_tooltip_heroes = "TTT2 英雄"
 L.sb_rank_tooltip_team = "陣營"
 
 L.tbut_adminarea = "管理區:"
+
+-- 2023-03-09
+--L.help_enforce_playercolor = [[
+--This sets all players to the same color on (re)spawn to prevent any distinction between playermodels and therefore the respective players.
+--If disabled this should allow colors from custom colorable playermodels to stick. Be aware that this might break (with) some appearance changing equipment e.g. make a disguise pretty obvious.]]
