@@ -140,7 +140,11 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 	for entType, spawnTable in pairs(spawns) do
 		for i = 1, #spawnTable do
 			local spawn = spawnTable[i]
-
+			--Check if spawn.pos is valid
+			if not spawn or not spawn.pos then
+				print("Error: Invalid spawn or spawn position")
+				continue
+			end
 			-- if the weapon spawn is a random weapon spawn, select any spawnable weapon
 			local selectedEnt
 			if entType == randomType then
@@ -180,7 +184,6 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 		end
 	end
 end
-
 ---
 -- Spawns all available players.
 -- @param[opt] boolean deadOnly Set to true to only respawn dead players
