@@ -22,9 +22,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some duplicated strings
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
-- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh)
+- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):
   - Update Simplified Chinese Translation
-  - Improve translation(by @TheOnly8Z)
+  - Improve translation (by @TheOnly8Z)
 
 ### Fixed
 
@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a wrong localization line call in roles.lua (by @Satton2)
 - Fixed +zoom bind
 - Fixed ttt_quickslot command
+- Fixed the error message in entspaw.lua and weapon_ttt_spawneditor.lua when the player is not respawned in the map tttt_submarine, and the inability to generate weapons and customize weapons under this map. And the language selection when pressing F1s suddenly shows an error. (by @sbzlzh)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
