@@ -325,6 +325,9 @@ end
 -- @return table A table with the keys that exist in both tables
 -- @realm shared
 function table.GetEqualEntryKeys(tbl, reference)
+    if not tbl then
+       return {} -- return an empty table if tbl is nil
+    end
 	local equalTbl = {}
 
 	for index in pairs(tbl) do
