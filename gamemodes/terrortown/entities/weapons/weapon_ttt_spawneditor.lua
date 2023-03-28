@@ -177,7 +177,8 @@ if CLIENT then
 			for i = 1, #spawns do
 				local spawn = spawns[i]
 				local pos = spawn.pos
-
+				--If pos is nil, continue to the next iteration
+                if not pos then continue end
 				-- the screenPos has to be calculatet inside a non modified cam3D space
 				-- to yield correct results
 				camStart3D()
