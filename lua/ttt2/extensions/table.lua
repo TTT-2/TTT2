@@ -328,6 +328,7 @@ function table.GetEqualEntryKeys(tbl, reference)
     if not tbl then
        return {} -- return an empty table if tbl is nil
     end
+	
 	local equalTbl = {}
 
 	for index in pairs(tbl) do
