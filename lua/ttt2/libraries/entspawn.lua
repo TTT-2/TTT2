@@ -142,7 +142,6 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 			local spawn = spawnTable[i]
 			--Check if spawn.pos is valid
 			if not spawn or not spawn.pos then
-				print("Error: Invalid spawn or spawn position")
 				continue
 			end
 			-- if the weapon spawn is a random weapon spawn, select any spawnable weapon
