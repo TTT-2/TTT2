@@ -325,8 +325,8 @@ end
 -- @return table A table with the keys that exist in both tables
 -- @realm shared
 function table.GetEqualEntryKeys(tbl, reference)
-    -- return an empty table if tbl is nil
-    if not tbl then return {} end
+	-- return an empty table if tbl is nil
+	if not tbl then return {} end
 
 	local equalTbl = {}
 
@@ -338,6 +338,7 @@ function table.GetEqualEntryKeys(tbl, reference)
 
 	return equalTbl
 end
+
 ---
 -- Returns the amount of table entries that exist in both tables.
 -- @note This function is most suitable for string indexed tables.
