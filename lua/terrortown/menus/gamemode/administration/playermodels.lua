@@ -20,6 +20,15 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
+		label = "help_enforce_playercolor"
+	})
+
+	form:MakeCheckBox({
+		label = "label_enforce_playercolor",
+		serverConvar = "ttt_enforce_playercolor"
+	})
+
+	form:MakeHelp({
 		label = "help_prefer_map_models"
 	})
 

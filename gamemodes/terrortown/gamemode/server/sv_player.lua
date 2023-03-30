@@ -268,6 +268,9 @@ end
 -- @hook
 -- @realm server
 function GM:TTTPlayerSetColor(ply)
+
+	if not GetConVar("ttt_enforce_playercolor"):GetBool() then return end
+
 	local c = COLOR_WHITE
 
 	if GAMEMODE.playercolor then
