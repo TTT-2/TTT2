@@ -22,9 +22,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some duplicated strings
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
-- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh)
+- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):
   - Update Simplified Chinese Translation
-  - Improve translation(by @TheOnly8Z)
+  - Improve translation (by @TheOnly8Z)
 
 ### Fixed
 
@@ -32,6 +32,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a wrong localization line call in roles.lua (by @Satton2)
 - Fixed +zoom bind
 - Fixed ttt_quickslot command
+- Fixed an issue in `table.GetEqualEntryKeys` when nil is provided instead of a table. (by @sbzlzh):
+  - This fixes spawn problems on maps with invalid spawn points
+  - This fixes errors in the F1 Menu language selection
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
