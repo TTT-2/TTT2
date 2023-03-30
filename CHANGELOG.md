@@ -32,7 +32,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a wrong localization line call in roles.lua (by @Satton2)
 - Fixed +zoom bind
 - Fixed ttt_quickslot command
-- Fixed the error message in entspaw.lua and weapon_ttt_spawneditor.lua when the player is not respawned in the map tttt_submarine, and the inability to generate weapons and customize weapons under this map. And the language selection when pressing F1s suddenly shows an error. (by @sbzlzh)
+- Fixed an issue in `table.GetEqualEntryKeys` when nil is provided instead of a table. (by @sbzlzh):
+  - This fixes spawn problems on maps with invalid spawn points
+  - This fixes errors in the F1 Menu language selection
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
