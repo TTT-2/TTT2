@@ -233,6 +233,18 @@ function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
 
 end
 
+---
+-- Called when a player has successfully transfered a credit to another player.
+-- @param Player sender Player that has sent the credits.
+-- @param Player recipient Player that has received the credits.
+-- @param number credits Amount of credits that have been transferred.
+-- @param boolean isRecipientDead If the recipient is dead or not.
+-- @hook
+-- @realm server
+function GM:TTT2TransferedCredits(sender, recipient, credits, isRecipientDead)
+
+end
+
 local function TransferCredits(ply, cmd, args)
 	if not IsValid(ply) then return end
 
@@ -271,12 +283,14 @@ local function TransferCredits(ply, cmd, args)
 	ply:SubtractCredits(credits)
 	if target:IsTerror() and target:Alive() then
 		target:AddCredits(credits)
+		hook.Run("TTT2TransferedCredits", ply, target, credits, false)
 	else
 		-- The would be recipient is dead, which the sender may not know.
 		-- Instead attempt to send the credits to the target's corpse, where they can be picked up.
 		local rag = target:FindCorpse()
 		if IsValid(rag) then
 			CORPSE.SetCredits(rag, CORPSE.GetCredits(rag, 0) + credits)
+			hook.Run("TTT2TransferedCredits", ply, target, credits, true)
 		end
 	end
 

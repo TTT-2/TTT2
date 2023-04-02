@@ -35,6 +35,9 @@ function credits.HandleKillCreditsAward(victim, attacker)
 		local creditsAmount = GetConVar("ttt_credits_award_kill"):GetInt()
 
 		attacker:AddCredits(creditsAmount)
+
+		hook.Run("TTT2ReceivedKillCredits", victim, attacker, creditsAmount)
+
 		LANG.Msg(attacker, "credit_kill", {num = creditsAmount, role = LANG.NameParam(victim:GetRoleString())}, MSG_MSTACK_ROLE)
 	end
 
@@ -113,6 +116,9 @@ function credits.HandleKillCreditsAward(victim, attacker)
 
 			-- now reward their player for their good game
 			plyToAward:AddCredits(creditsAmount)
+
+			hook.Run("TTT2ReceivedTeamAwardCredits", ply, creditsAmount)
+
 			LANG.Msg(plyToAward, "credit_all", {num = creditsAmount}, MSG_MSTACK_ROLE)
 		end
 	end
