@@ -117,7 +117,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
 			-- now reward their player for their good game
 			plyToAward:AddCredits(creditsAmount)
 
-			hook.Run("TTT2ReceivedTeamAwardCredits", ply, creditsAmount)
+			hook.Run("TTT2ReceivedTeamAwardCredits", plyToAward, creditsAmount)
 
 			LANG.Msg(plyToAward, "credit_all", {num = creditsAmount}, MSG_MSTACK_ROLE)
 		end

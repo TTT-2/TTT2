@@ -306,5 +306,6 @@ local function RerollShopForCredit(ply, cmd, args)
 
 	ply:SubtractCredits(GetGlobalInt("ttt2_random_shop_reroll_cost"))
 	RerollShop(ply)
+	hook.Run("TTT2OrderedEquipment", ply, "reroll_shop", false, GetGlobalInt("ttt2_random_shop_reroll_cost"), false)
 end
 concommand.Add("ttt2_reroll_shop", RerollShopForCredit)
