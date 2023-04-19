@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 - Added a new font in default_skin.lua to fit the localization (by @Satton2)
+- Fixed knife death effect being permanently applied on every following death
 
 ### Changed
 
