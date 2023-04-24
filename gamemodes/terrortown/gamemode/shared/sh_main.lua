@@ -239,19 +239,18 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
+	if client and client.isSprinting then
+		-- We abuse IN_BULLRUSH here to still be able to use our own binding system
+		moveData:AddKeys(IN_BULLRUSH)
+	end
+
+	if server and moveData:KeyDown(IN_BULLRUSH) then
+		ply.isSprinting = true
+	end
+
 	SPEED:HandleSpeedCalculation(ply, moveData)
 
 	local mul = ply:GetSpeedMultiplier()
-
-	if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
-		local sprintMultiplierModifier = {1}
-
-		---
-		-- @realm shared
-		hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
-
-		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
-	end
 
 	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
 	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)

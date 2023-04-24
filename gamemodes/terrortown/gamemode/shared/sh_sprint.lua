@@ -3,23 +3,15 @@ local function PlayerSprint(trySprinting, moveKey)
 
 	local client = LocalPlayer()
 
-	if trySprinting and not GetGlobalBool("ttt2_sprint_enabled", true) then return end
+	if not GetGlobalBool("ttt2_sprint_enabled", true) then return end
 	if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
 	if client.isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
 
-	client.oldSprintProgress = client.sprintProgress
-	client.sprintMultiplier = trySprinting and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 	client.isSprinting = trySprinting
 	client.moveKey = moveKey
-
-	net.Start("TTT2SprintToggle")
-	net.WriteBool(trySprinting)
-	net.SendToServer()
 end
 
 if SERVER then
-	util.AddNetworkString("TTT2SprintToggle")
-
 	-- Set ConVars
 
 	---
@@ -69,16 +61,6 @@ if SERVER then
 	cvars.AddChangeCallback(showCrosshair:GetName(), function(name, old, new)
 		SetGlobalBool(name, tobool(new))
 	end, "TTT2SprintCHChange")
-
-	net.Receive("TTT2SprintToggle", function(_, ply)
-		if not sprintEnabled:GetBool() or not IsValid(ply) then return end
-
-		local bool = net.ReadBool()
-
-		ply.oldSprintProgress = ply.sprintProgress
-		ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
-		ply.isSprinting = bool
-	end)
 else -- CLIENT
 	---
 	-- @realm client
@@ -172,15 +154,13 @@ function UpdateSprint()
 			-- @realm shared
 			hook.Run("TTT2StaminaRegen", ply, modifier)
 
-			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
-			ply.oldSprintProgress = ply.sprintProgress
+			ply.sprintProgress = math.min((ply.sprintProgress or 0) + FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 		elseif wantsToMove then
 			---
 			-- @realm shared
 			hook.Run("TTT2StaminaDrain", ply, modifier)
 
-			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
-			ply.oldSprintProgress = ply.sprintProgress
+			ply.sprintProgress = math.max((ply.sprintProgress or 0) - FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
 		end
 	end
 end

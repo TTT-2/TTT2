@@ -23,6 +23,14 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
 		baseMultiplier = 120 / 220
 		isSlowed = true
+	elseif ply.isSprinting and (ply.sprintProgress or 0) > 0 then
+		local sprintMultiplierModifier = {1}
+
+		---
+		-- @realm shared
+		hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
+
+		baseMultiplier = (1 + GetGlobalFloat("ttt2_sprint_max", 0)) * sprintMultiplierModifier[1]
 	end
 
 	local speedMultiplierModifier = {1}
