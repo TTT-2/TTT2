@@ -23,7 +23,7 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
 		baseMultiplier = 120 / 220
 		isSlowed = true
-	elseif ply.isSprinting and (ply.sprintProgress or 0) > 0 then
+	elseif ply:GetSprintingPredicted() and (ply.sprintProgress or 0) > 0 then
 		local sprintMultiplierModifier = {1}
 
 		---

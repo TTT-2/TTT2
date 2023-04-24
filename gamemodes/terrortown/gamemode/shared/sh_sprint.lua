@@ -2,12 +2,13 @@ local function PlayerSprint(trySprinting, moveKey)
 	if SERVER then return end
 
 	local client = LocalPlayer()
+	local isSprinting = client:GetSprintingPredicted()
 
 	if not GetGlobalBool("ttt2_sprint_enabled", true) then return end
-	if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
-	if client.isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
+	if not trySprinting and not isSprinting or trySprinting and isSprinting then return end
+	if isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
 
-	client.isSprinting = trySprinting
+	client:SetSprintingPredicted(trySprinting)
 	client.moveKey = moveKey
 end
 
@@ -80,7 +81,7 @@ else -- CLIENT
 	-- @realm client
 	function UpdateInputSprint(ply, key, pressed)
 		if pressed then
-			if ply.isSprinting or not enable_doubletap_sprint:GetBool() or ply.preventSprint then return end
+			if ply:GetSprintingPredicted() or not enable_doubletap_sprint:GetBool() or ply.preventSprint then return end
 
 			local time = CurTime()
 
@@ -91,7 +92,7 @@ else -- CLIENT
 			lastPressedMoveKey = key
 			lastPress = time
 		else
-			if not ply.isSprinting then return end
+			if not ply:GetSprintingPredicted() then return end
 
 			local moveKey = ply.moveKey
 			local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
@@ -133,8 +134,8 @@ function UpdateSprint()
 
 		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
 
-		if ply.sprintProgress == 1 and (not ply.isSprinting or not wantsToMove) then continue end
-		if ply.sprintProgress == 0 and ply.isSprinting and wantsToMove then
+		if ply.sprintProgress == 1 and (not ply:GetSprintingPredicted() or not wantsToMove) then continue end
+		if ply.sprintProgress == 0 and ply:GetSprintingPredicted() and wantsToMove then
 			ply.sprintResetDelayCounter = ply.sprintResetDelayCounter + FrameTime()
 
 			-- If the player keeps sprinting even though they have no stamina, start refreshing stamina after 1.5 seconds automatically
@@ -149,7 +150,7 @@ function UpdateSprint()
 
 		local modifier = {1} -- Multiple hooking support
 
-		if not ply.isSprinting or not wantsToMove then
+		if not ply:GetSprintingPredicted() or not wantsToMove then
 			---
 			-- @realm shared
 			hook.Run("TTT2StaminaRegen", ply, modifier)

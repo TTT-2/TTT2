@@ -239,15 +239,6 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
-	if client and client.isSprinting then
-		-- We abuse IN_BULLRUSH here to still be able to use our own binding system
-		moveData:AddKeys(IN_BULLRUSH)
-	end
-
-	if server and moveData:KeyDown(IN_BULLRUSH) then
-		ply.isSprinting = true
-	end
-
 	SPEED:HandleSpeedCalculation(ply, moveData)
 
 	local mul = ply:GetSpeedMultiplier()

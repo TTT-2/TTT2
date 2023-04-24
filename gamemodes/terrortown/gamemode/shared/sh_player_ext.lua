@@ -17,6 +17,29 @@ if not plymeta then
 end
 
 ---
+-- Dummy functions that will be replaced when SetupDataTables runs. These are
+-- here for when that does not happen (due to e.g. stacking base classes)
+-- @return[default=false] boolean
+-- @realm shared
+function plymeta:GetSprintingPredicted()
+	return false
+end
+
+---
+-- Dummy functions that will be replaced when SetupDataTables runs. These are
+-- here for when that does not happen (due to e.g. stacking base classes)
+-- @realm shared
+function plymeta:SetSprintingPredicted()
+
+end
+
+function plymeta:SetupDataTables()
+	self:NetworkVar("Bool", 3, "SprintingPredicted")
+
+	plymeta.SetupDataTables(self)
+end
+
+---
 -- Checks whether a player is a available terrorist (not a spectator)
 -- @return boolean
 -- @realm shared
