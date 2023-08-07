@@ -1409,6 +1409,73 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintTextAreaTTT3(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorText = colors.settingsText
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
+	end
+
+	draw.Box(0, 0, w, h, colorBox)
+	draw.SimpleText(
+		panel:GetText(),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintTextAreaTTT2(panel, w, h)
+	local colorBox = colors.helpBox
+	local colorBar = colors.accentHover
+	local colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
+	-- local heightMult = panel:GetHeightMult()
+
+	local leftPad, topPad, rightPad, bottomPad = panel:GetDockPadding()
+	-- local widthPad = leftPad + rightPad
+	-- local heightPad = topPad + bottomPad
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorBar = ColorAlpha(colorBar, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	end
+
+	-- Draw custom box background for the searchBar
+	-- drawBox(leftPad, h * (1 - heightMult) * 0.5 + topPad, w - widthPad, h * heightMult - heightPad, colorBox)
+
+	-- Draw small blue bar on the bottom
+	-- drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
+
+	-- If not focussed draw placeholder text
+	if panel:GetIsOnFocus() then return end
+
+	drawSimpleText(
+		TryT(panel:GetCurrentPlaceholderText()),
+		panel:GetFont(),
+		leftPad + w * 0.02,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	local widthBorder = 2
 	local widthBorder2 = widthBorder * 2
