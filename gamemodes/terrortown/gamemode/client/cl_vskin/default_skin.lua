@@ -1436,32 +1436,19 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintTextAreaTTT2(panel, w, h)
-	local colorBox = colors.helpBox
-	local colorBar = colors.accentHover
 	local colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
-	-- local heightMult = panel:GetHeightMult()
 
-	local leftPad, topPad, rightPad, bottomPad = panel:GetDockPadding()
-	-- local widthPad = leftPad + rightPad
-	-- local heightPad = topPad + bottomPad
+	local leftPad = panel:GetDockPadding()
 
 	if not panel:IsEnabled() then
-		colorBox = ColorAlpha(colorBox, alphaDisabled)
-		colorBar = ColorAlpha(colorBar, alphaDisabled)
 		colorText = ColorAlpha(colorText, alphaDisabled)
 	end
 
-	-- Draw custom box background for the searchBar
-	-- drawBox(leftPad, h * (1 - heightMult) * 0.5 + topPad, w - widthPad, h * heightMult - heightPad, colorBox)
-
-	-- Draw small blue bar on the bottom
-	-- drawBox(leftPad, h - sizes.border - bottomPad, w - widthPad, sizes.border, colorBar)
-
-	-- If not focussed draw placeholder text
+	-- If not focused draw textvalue
 	if panel:GetIsOnFocus() then return end
 
 	drawSimpleText(
-		TryT(panel:GetCurrentPlaceholderText()),
+		TryT(panel:GetTextValue()),
 		panel:GetFont(),
 		leftPad + w * 0.02,
 		0.5 * h,

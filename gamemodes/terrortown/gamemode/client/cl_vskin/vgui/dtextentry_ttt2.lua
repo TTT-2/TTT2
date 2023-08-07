@@ -17,27 +17,16 @@ AccessorFunc(PANEL, "heightMult", "HeightMult")
 AccessorFunc(PANEL, "isOnFocus", "IsOnFocus")
 
 ---
--- @accessor string
--- @realm client
-AccessorFunc(PANEL, "placeholderText", "PlaceholderText")
-
----
--- @accessor string
--- @realm client
-AccessorFunc(PANEL, "curPlaceholderText", "CurrentPlaceholderText")
-
----
 -- @ignore
 function PANEL:Init()
 	self.TextArea = vgui.Create("DTextEntry", self)
 	self.TextColor = util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25))
 
 	self.TextArea:SetFont(font)
-	self.TextArea:SetTextColor(textColor)
-	self.TextArea:SetCursorColor(textColor)
+	self.TextArea:SetTextColor(self.TextColor)
+	self.TextArea:SetCursorColor(self.TextColor)
 
 	self.TextArea.OnValueChange = function(slf,value)
-		-- print("ta.ovc:",slf,value)
 		self:SetValue(value)
 	end
 
@@ -49,12 +38,6 @@ function PANEL:Init()
 	self.TextArea.OnLoseFocus = function(slf)
 		self:SetIsOnFocus(false)
 		self:OnLoseFocus()
-
-		if slf:GetValue() == "" then
-			self:SetCurrentPlaceholderText(self:GetPlaceholderText())
-		else
-			self:SetCurrentPlaceholderText("")
-		end
 	end
 
 	-- This turns off the engine drawing for the text entry
@@ -70,8 +53,6 @@ function PANEL:Init()
 	-- Sets default values
 	self:SetHeightMult(1)
 	self:SetIsOnFocus(false)
-	self:SetPlaceholderText("searchbar_default_placeholder")
-	self:SetCurrentPlaceholderText("searchbar_default_placeholder")
 
 	self:PerformLayout()
 end
@@ -89,7 +70,6 @@ end
 -- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
-	-- print("p.sv:", self, value, self:GetValue())
 	if not value then return end
 
 	if value == self:GetValue() then return end
@@ -98,8 +78,7 @@ function PANEL:SetValue(value, ignoreConVar)
 
 	self:ValueChanged(value)
 
-	-- Set ConVars only when Mouse is released
-	if ignoreConVar --[[or self:IsEditing()]] then --[[print("no convar, editing")]] return end
+	if ignoreConVar then return end
 
 	self:SetConVarValues(value)
 end
@@ -108,7 +87,6 @@ end
 -- @param any val
 -- @realm client
 function PANEL:SetConVarValues(value)
-	-- print("p.scvv:", self, value)
 	if self.conVar then
 		self.conVar:SetString(value)
 	end
@@ -187,7 +165,6 @@ function PANEL:SetServerConVar(cvar)
 	self.serverConVar = cvar
 
 	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
-		-- print(wasSuccess, value, default)
 		if wasSuccess then
 			self:SetValue(tostring(value), true)
 			self:SetDefaultValue(tostring(default))
@@ -233,7 +210,6 @@ end
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
-	-- print("p.vc:", self, val)
 	if self.TextArea ~= vgui.GetKeyboardFocus() then
 		self.TextArea:SetText(val)
 	end
@@ -263,7 +239,6 @@ function PANEL:GetTextValue()
 	return self:GetValue()
 end
 
-
 ---
 -- @param string newFont
 -- @realm client
@@ -289,7 +264,7 @@ function PANEL:SetUpdateOnType(enabled)
 end
 
 ---
--- This function is called when the searchbar is focussed.
+-- This function is called when the textentry is focussed.
 -- @note This function can be overwritten but not called.
 -- @realm client
 function PANEL:OnGetFocus()
@@ -297,7 +272,7 @@ function PANEL:OnGetFocus()
 end
 
 ---
--- This function is called when the searchbar is not focussed anymore.
+-- This function is called when the textentry is not focussed anymore.
 -- @note This function can be overwritten but not called.
 -- @realm client
 function PANEL:OnLoseFocus()
@@ -305,7 +280,7 @@ function PANEL:OnLoseFocus()
 end
 
 ---
--- This function is called by the searchbar when a text is entered/changed.
+-- This function is called by the textentry when a text is entered/changed.
 -- @note This function should be overwritten but not called.
 -- @param string value
 -- @realm client
@@ -326,9 +301,6 @@ end
 function PANEL:PerformLayout()
 	local width, height = self:GetSize()
 	local heightMult = self:GetHeightMult()
-
-	-- local reset = self:GetResetButton()
-	-- width = width - 32
 
 	self.TextArea:SetSize(width, height * heightMult)
 	self.TextArea:SetPos(0, height * (1 - heightMult) * 0.5)

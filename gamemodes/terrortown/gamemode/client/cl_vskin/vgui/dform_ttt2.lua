@@ -25,6 +25,21 @@ local materialReset = Material("vgui/ttt/vskin/icon_reset")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 ---
+-- Checks recursively the parents until none is found and the highest parent is returned
+-- @ignore
+local function getHighestParent(slf)
+	local parent = slf
+	local checkParent = slf:GetParent()
+
+	while ispanel(checkParent) do
+		parent = checkParent
+		checkParent = parent:GetParent()
+	end
+
+	return parent
+end
+
+---
 -- @ignore
 function PANEL:Init()
 	self.items = {}
@@ -123,8 +138,8 @@ local function MakeReset(parent)
 end
 
 ---
--- Adds a slider to the form
--- @param table data The data for the slider
+-- Adds a textentry to the form
+-- @param table data The data for the textentry
 -- @note Structure of data = {
 -- label, default, convar, serverConVar, initial, function OnChange(value),
 -- master = { function AddSlave(self, slave) }
@@ -158,17 +173,10 @@ function PANEL:MakeTextEntry(data)
 		getHighestParent(self):SetKeyboardInputEnabled(false)
 	end
 
-
-
-	right:SetPlaceholderText("")
-	right:SetCurrentPlaceholderText("")
-
 	-- Set default if possible even if the convar could still overwrite it
 	right:SetDefaultValue(data.default)
 	right:SetConVar(data.convar)
 	right:SetServerConVar(data.serverConvar)
-	-- right:SizeToContents()
-	-- right:PerformLayout()
 
 	if not data.convar and not data.serverConvar and data.initial then
 		right:SetValue(data.initial)
@@ -176,14 +184,12 @@ function PANEL:MakeTextEntry(data)
 
 	right.OnValueChanged = function(slf, value)
 		if isfunction(data.OnChange) then
-			-- print("ovc:", slf, value)
 			data.OnChange(slf, value)
 		end
 	end
 
 	right:SetTall(32)
 	right:Dock(TOP)
-
 
 	self:AddItem(left, right, reset)
 
@@ -193,7 +199,7 @@ function PANEL:MakeTextEntry(data)
 		data.master:AddSlave(reset)
 	end
 
-	return left
+	return left, right
 end
 
 ---
@@ -226,7 +232,6 @@ function PANEL:MakeCheckBox(data)
 			data.OnChange(slf, value)
 		end
 	end
-
 
 	self:AddItem(left, nil, reset)
 
@@ -283,7 +288,6 @@ function PANEL:MakeSlider(data)
 
 	right:SetTall(32)
 	right:Dock(TOP)
-
 
 	self:AddItem(left, right, reset)
 
