@@ -1409,53 +1409,17 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
-function SKIN:PaintTextAreaTTT3(panel, w, h)
+function SKIN:PaintTextEntryTTT2(panel, w, h)
 	local colorBox = colors.settingsBox
-	local colorText = colors.settingsText
+	local colorHandle = colors.handle
 
 	if not panel:IsEnabled() then
 		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
-		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
+		colorHandle = ColorAlpha(colors.handle, alphaDisabled)
 	end
 
-	draw.Box(0, 0, w, h, colorBox)
-	draw.SimpleText(
-		panel:GetText(),
-		panel:GetFont(),
-		0.5 * w,
-		0.5 * h,
-		colorText,
-		TEXT_ALIGN_CENTER,
-		TEXT_ALIGN_CENTER
-	)
-end
-
----
--- @param Panel panel
--- @param number w
--- @param number h
--- @realm client
-function SKIN:PaintTextAreaTTT2(panel, w, h)
-	local colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
-
-	local leftPad = panel:GetDockPadding()
-
-	if not panel:IsEnabled() then
-		colorText = ColorAlpha(colorText, alphaDisabled)
-	end
-
-	-- If not focused draw textvalue
-	if panel:GetIsOnFocus() then return end
-
-	drawSimpleText(
-		TryT(panel:GetTextValue()),
-		panel:GetFont(),
-		leftPad + w * 0.02,
-		0.5 * h,
-		colorText,
-		TEXT_ALIGN_LEFT,
-		TEXT_ALIGN_CENTER
-	)
+	drawBox(0, 0, w, h, colorBox)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
 end
 
 ---
