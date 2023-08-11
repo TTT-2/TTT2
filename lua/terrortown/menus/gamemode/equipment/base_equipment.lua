@@ -55,6 +55,24 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				end,
 				master = data.master and masterRefs[data.master]
 			})
+		elseif data.typ == "float" then
+			option = form:MakeSlider({
+				label = name,
+				min = data.min,
+				max = data.max,
+				decimal = data.decimal,
+				default = equipment.defaultValues[key],
+				initial = equipment[key],
+				OnChange = function(_, value)
+					net.Start("TTT2SESaveItem")
+					net.WriteString(equipment.id)
+					net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
+					net.WriteString(key)
+					net.WriteFloat(value)
+					net.SendToServer()
+				end,
+				master = data.master and masterRefs[data.master]
+			})
 		elseif data.typ == "number" then
 			if data.subtype == "enum" then
 				option = form:MakeComboBox({

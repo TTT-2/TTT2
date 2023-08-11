@@ -124,6 +124,20 @@ ShopEditor.savingKeys = {
 		b_desc = false,
 		showForItem = true,
 		master = "notBuyable"
+	},
+	damageScaling = {
+		group = 3,
+		order = 100,
+		typ = "float",
+		bits = 8,
+		default = 1,
+		min = 0,
+		max = 8,
+		decimal = 2,
+		name = "damage_scaling",
+		b_desc = false,
+		showForItem = true,
+		master = nil
 	}
 }
 
@@ -192,7 +206,7 @@ local function getDefaultValue(item, key, data)
 		return entspawnscript.GetSpawnTypeFromKind(item.Kind) or data.default or WEAPON_TYPE_SPECIAL
 	end
 
-	if data.typ == "number" then
+	if data.typ == "number" or data.typ == "float" then
 		return data.default or 0
 	elseif data.typ == "bool" then
 		 return data.default or false
@@ -240,6 +254,8 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 
 		if data.typ == "number" then
 			net.WriteUInt(item[key], data.bits or 16)
+		elseif data.typ == "float" then
+			net.WriteFloat(data.decimal and math.Round(item[key], data.decimal or 0) or item[key])
 		elseif data.typ == "bool" then
 			net.WriteBool(item[key])
 		else
@@ -290,6 +306,8 @@ function ShopEditor.ReadItemData()
 
 		if data.typ == "number" then
 			equip[key] = net.ReadUInt(data.bits or 16)
+		elseif data.typ == "float" then
+			equip[key] = net.ReadFloat()
 		elseif data.typ == "bool" then
 			equip[key] = net.ReadBool()
 		else

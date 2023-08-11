@@ -1860,3 +1860,6 @@ L.sb_rank_tooltip_heroes = "TTT2 Heroes"
 L.sb_rank_tooltip_team = "Team"
 
 L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+L.equipmenteditor_name_damage_scaling = "Damage Scaling"
