@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed knife death effect being permanently applied on every following death
 - Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
 - Added `damageScaling` property to `weapon_tttbase`, adjustable per item via "Balance Settings" under "Edit Equipment" in the F1 Menu (by @EntranceJew)
+- Added ability for spectators to enter "Spawn Edit" mode. (by @EntranceJew)
 
 ### Changed
 

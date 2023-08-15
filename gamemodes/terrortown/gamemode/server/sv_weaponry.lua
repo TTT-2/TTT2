@@ -45,7 +45,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon, isPickupProbe)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	-- spectators are not allowed to pickup weapons
-	if ply:IsSpec() then
+	if ply:IsSpec() and WEPS.GetClass(wep) ~= "weapon_ttt_spawneditor" then
 		return false, 1
 	end
 
