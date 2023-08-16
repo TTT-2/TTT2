@@ -371,6 +371,10 @@ function GM:KeyPress(ply, key)
 	-- Spectator keys
 	if not ply:IsSpec() or ply:GetRagdollSpec() then return end
 
+	if entspawnscript.IsEditing(ply) then
+		return
+	end
+
 	-- Do not allow the spectator to gather information if they're about to revive.
 	if ply:IsReviving() then
 		LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
@@ -624,6 +628,10 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:DoPlayerDeath
 -- @local
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
+	if entspawnscript.IsEditing(ply) then
+		entspawnscript.StopEditing(ply)
+	end
+
 	if ply:IsSpec() then return end
 
 	-- Experimental: Fire a last shot if ironsighting and not headshot
