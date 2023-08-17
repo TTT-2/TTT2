@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
 - Added `damageScaling` property to `weapon_tttbase`, adjustable per item via "Balance Settings" under "Edit Equipment" in the F1 Menu (by @EntranceJew)
 - Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)
+- Added cvar `ttt2_bots_lock_on_death` (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)
 
 ### Changed
 

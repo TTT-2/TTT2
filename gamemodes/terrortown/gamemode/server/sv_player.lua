@@ -15,6 +15,10 @@ local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FC
 
 ---
 -- @realm server
+local ttt2_bots_lock_on_death = CreateConVar("ttt2_bots_lock_on_death", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -104,6 +108,9 @@ end
 function GM:PlayerSpawn(ply)
 	-- reset any cached weapons
 	ply:ResetCachedWeapons()
+
+	-- Allow bots to wander again.
+	if ply:IsBot() then ply:UnLock() end
 
 	-- stop bleeding
 	util.StopBleeding(ply)
@@ -631,6 +638,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	if entspawnscript.IsEditing(ply) then
 		entspawnscript.StopEditing(ply)
 	end
+
+	-- Prevent bots from wandering and creating logspam.
+	if ply:IsBot() and ttt2_bots_lock_on_death:GetBool() then ply:Lock() end
 
 	if ply:IsSpec() then return end
 
