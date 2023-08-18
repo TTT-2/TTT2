@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `damageScaling` property to `weapon_tttbase`, adjustable per item via "Balance Settings" under "Edit Equipment" in the F1 Menu (by @EntranceJew)
 - Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)
 - Added cvar `ttt2_bots_lock_on_death` (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)
+- Added `TTT2ModifyFinalRoles` hook for last minute opportunity to override role distribution prior to them being announced for the first time (by @EntranceJew)
 
 ### Changed
 
