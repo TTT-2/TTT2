@@ -8,10 +8,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new font in default_skin.lua to fit the localization (by @Satton2)
 - Fixed knife death effect being permanently applied on every following death
 - Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
-- Added `damageScaling` property to `weapon_tttbase`, adjustable per item via "Balance Settings" under "Edit Equipment" in the F1 Menu (by @EntranceJew)
 - Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)
 - Added cvar `ttt2_bots_lock_on_death` (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)
 - Added `TTT2ModifyFinalRoles` hook for last minute opportunity to override role distribution prior to them being announced for the first time (by @EntranceJew)
+- `weapon_tttbase`:
+  - Added `SWEP:ShouldRemove` to facilitate intercepting `SWEP:Remove` (by @EntranceJew)
+  - Added `SWEP.damageScaling` for weapons that utilize `ShootBullet` (by @EntranceJew)
+- Edit Equipment Menu
+  - `AllowDrop` can now be overridden per-weapon (by @EntranceJew)
+  - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
+  - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
 
 ### Changed
 

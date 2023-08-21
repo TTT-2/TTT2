@@ -621,6 +621,10 @@ end
 function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
+	-- Tag the weapon as having been dropped due to a player death so that
+	-- we can prevent it from dropping if we want.
+	wep.IsDroppedBecauseDeath = deathDrop
+
 	-- Hack to tell the weapon it's about to be dropped and should do what it
 	-- must right now
 	if wep.PreDrop then
@@ -649,9 +653,17 @@ function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 		ply:SelectWeapon("weapon_ttt_unarmed")
 	end
 
+	if deathDrop and wep.overrideDropOnDeath == DROP_ON_DEATH_TYPE_DENY then
+		wep:Remove()
+		return
+	end
+
 	ply:DropWeapon(wep)
 
 	wep:PhysWake()
+
+	-- Unset this, because we can't use it after this point.
+	wep.IsDroppedBecauseDeath = nil
 end
 
 ---

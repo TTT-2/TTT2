@@ -1863,3 +1863,14 @@ L.tbut_adminarea = "ADMIN AREA:"
 
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+-- 2023-08-11
+L.equipmenteditor_name_allow_drop = "Allow Drop"
+L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+L.drop_on_death_type_default = "Default (weapon-defined)"
+L.drop_on_death_type_force = "Force Drop on Death"
+L.drop_on_death_type_deny = "Deny Drop on Death"
