@@ -187,6 +187,25 @@ local function shouldSkipWeapon(swep)
 	return skipWeapon
 end
 
+-- The original Remove is not saved in the weaponMetaTable, it only exists on Entity.
+local oldRemove = FindMetaTable("Entity").Remove
+
+---
+-- This changes the function Remove of all weapons, but only affects ones that implement ShouldRemove
+-- This enables changing weapon drop behavior against a convention of being removed
+-- @param any ... A variable amount of arguments passed to this event
+-- @realm shared
+function weaponMetaTable:Remove(...)
+	if self.ShouldRemove and isfunction(self.ShouldRemove) then
+		local res = self:ShouldRemove(...)
+		if not res then
+			return res
+		end
+	end
+
+	return oldRemove(self, ...)
+end
+
 -- The original SetNextPrimaryFire saved in the weaponMetaTable
 local oldSetNextPrimaryFire = weaponMetaTable.SetNextPrimaryFire
 local tickInterval = engine.TickInterval()
@@ -750,6 +769,19 @@ function SWEP:Ammo1()
 end
 
 if SERVER then
+	---
+	-- This allows us to override behavior of PreDrop/OnDrop calls that request equipment be dropped.
+	-- @realm server
+	function SWEP:ShouldRemove()
+		local should_force = self.overrideDropOnDeath and self.overrideDropOnDeath == DROP_ON_DEATH_TYPE_FORCE
+		local deathDrop = self.IsDroppedBecauseDeath
+		if deathDrop and should_force then
+			return false
+		end
+
+		return true
+	end
+
 	---
 	-- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
 	-- does not occur when a drop happens for some reason. Hence this thing.

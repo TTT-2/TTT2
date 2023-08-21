@@ -138,7 +138,42 @@ ShopEditor.savingKeys = {
 		b_desc = false,
 		showForItem = true,
 		master = nil
-	}
+	},
+	AllowDrop = {
+		group = 2,
+		order = 110,
+		typ = "bool",
+		default = true,
+		name = "allow_drop",
+		inverted = false,
+		b_desc = true,
+		showForItem = true,
+		master = nil
+	},
+	overrideDropOnDeath = {
+		group = 2,
+		order = 120,
+		typ = "number",
+		subtype = "enum",
+		bits = 5,
+		default = DROP_ON_DEATH_TYPE_DEFAULT,
+		choices = {
+			DROP_ON_DEATH_TYPE_DEFAULT,
+			DROP_ON_DEATH_TYPE_FORCE,
+			DROP_ON_DEATH_TYPE_DENY,
+		},
+		lookupNamesFunc = function(dropOnDeathType)
+			return ({
+				[DROP_ON_DEATH_TYPE_DEFAULT] = "drop_on_death_type_default",
+				[DROP_ON_DEATH_TYPE_FORCE] = "drop_on_death_type_force",
+				[DROP_ON_DEATH_TYPE_DENY] = "drop_on_death_type_deny",
+			})[dropOnDeathType]
+		end,
+		name = "drop_on_death_type",
+		b_desc = true,
+		showForItem = true,
+		master = nil
+	},
 }
 
 ShopEditor.savingKeysCount = table.Count(ShopEditor.savingKeys)
