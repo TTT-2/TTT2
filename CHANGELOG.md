@@ -37,6 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):
   - Update Simplified Chinese Translation
   - Improve translation (by @TheOnly8Z)
+- Localization parameters for `{walkkey} + {usekey}` prompts made into the predominant style.
 
 ### Fixed
 
