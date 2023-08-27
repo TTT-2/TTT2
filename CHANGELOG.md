@@ -57,6 +57,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - This fixes errors in the F1 Menu language selection
 - Fixed two unmatched ConVars in performance menu (by @NickCloudAT)
 - Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
+- Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
