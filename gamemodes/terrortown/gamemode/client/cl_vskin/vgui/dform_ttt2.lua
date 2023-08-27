@@ -640,7 +640,7 @@ derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 -- @return Panel The created collapsable form
 -- @realm client
 function vgui.CreateTTT2Form(parent, name)
-	local form = vgui.Create("DFormTTT2", parent)
+	local form = vgui.Create("DFormTTT2", parent, name)
 
 	form:SetName(name)
 	form:Dock(TOP)
