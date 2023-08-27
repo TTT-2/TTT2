@@ -55,6 +55,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed an issue in `table.GetEqualEntryKeys` when nil is provided instead of a table. (by @sbzlzh):
   - This fixes spawn problems on maps with invalid spawn points
   - This fixes errors in the F1 Menu language selection
+- Fixed the check for dynamic armor being inverted (`1` disabled it, `0` enabled it)
 - Fixed two unmatched ConVars in performance menu (by @NickCloudAT)
 - Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
 - Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)

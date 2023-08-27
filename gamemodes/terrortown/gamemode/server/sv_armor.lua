@@ -118,7 +118,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
 
 	-- fallback for players who prefer the vanilla armor
-	if self.cv.armor_dynamic:GetBool() then
+	if not self.cv.armor_dynamic:GetBool() then
 		-- classic armor only shields from bullet/crowbar damage
 		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
 			dmginfo:ScaleDamage(0.7)
