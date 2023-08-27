@@ -174,6 +174,42 @@ ShopEditor.savingKeys = {
 		showForItem = true,
 		master = nil
 	},
+	Kind = {
+		group = 2,
+		order = 130,
+		typ = "number",
+		subtype = "enum",
+		bits = 5,
+		default = 3,
+		choices = {
+			WEAPON_MELEE,
+			WEAPON_PISTOL,
+			WEAPON_HEAVY,
+			WEAPON_NADE,
+			WEAPON_CARRY,
+			WEAPON_UNARMED,
+			WEAPON_SPECIAL,
+			WEAPON_EXTRA,
+			WEAPON_CLASS,
+		},
+		lookupNamesFunc = function(slotNum)
+			return ({
+				[WEAPON_MELEE] = "slot_weapon_melee",
+				[WEAPON_PISTOL] = "slot_weapon_pistol",
+				[WEAPON_HEAVY] = "slot_weapon_heavy",
+				[WEAPON_NADE] = "slot_weapon_nade",
+				[WEAPON_CARRY] = "slot_weapon_carry",
+				[WEAPON_UNARMED] = "slot_weapon_unarmed",
+				[WEAPON_SPECIAL] = "slot_weapon_special",
+				[WEAPON_EXTRA] = "slot_weapon_extra",
+				[WEAPON_CLASS] = "slot_weapon_class",
+			})[slotNum]
+		end,
+		name = "kind",
+		b_desc = true,
+		showForItem = false,
+		master = nil,
+	},
 }
 
 ShopEditor.savingKeysCount = table.Count(ShopEditor.savingKeys)
