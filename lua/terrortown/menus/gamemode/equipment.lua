@@ -83,3 +83,16 @@ end
 function CLGAMEMODEMENU:HasSearchbar()
 	return true
 end
+
+---
+-- This hook can be used by addons to populate the settings page of equipment addons
+-- with custom convars. The parent is the submenu, where a new form has to
+-- be added.
+-- This is for extending existing addons, role authors should use @{ITEM:AddToSettingsMenu}.
+-- @param ITEM equipment The @{ITEM} or @{Weapon} which the settings menu is for
+-- @param DPanel parent The parent panel which is the submenu
+-- @hook
+-- @realm client
+function GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)
+
+end

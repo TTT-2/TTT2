@@ -55,3 +55,16 @@ end
 function CLGAMEMODEMENU:HasSearchbar()
 	return true
 end
+
+---
+-- This hook can be used to extend role settings page of role addons
+-- with custom convars. The parent is the submenu, where a new form has to
+-- be added.
+-- This is for extending existing addons, role authors should use @{ROLE:AddToSettingsMenu}.
+-- @param ROLE role @{ROLE} data,
+-- @param DPanel parent The parent panel which is the submenu
+-- @hook
+-- @realm client
+function GM:TTT2OnRoleAddToSettingsMenu(role, parent)
+
+end

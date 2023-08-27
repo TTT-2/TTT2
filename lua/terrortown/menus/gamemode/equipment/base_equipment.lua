@@ -125,4 +125,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	-- now add custom equipment settings
 	equipment:AddToSettingsMenu(parent)
+
+	hook.Run("TTT2OnEquipmentAddToSettingsMenu", equipment, parent)
 end
