@@ -20,6 +20,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
   - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
 - `vgui.CreateTTT2Form` passes the name on so that it can be accessed via `Panel:GetName()`  (by @EntranceJew)
+- Added two GAMEMODE hooks to provide the ability for additional addons to extend role/equipment menus.
+  - `GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)`
+    - Called after `ITEM:AddToSettingsMenu(parent)`.
+  - `GM:TTT2OnRoleAddToSettingsMenu(role, parent)`
+    - Called after `ROLE:AddToSettingsMenu(parent)`
 
 ### Changed
 
