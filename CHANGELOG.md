@@ -6,6 +6,25 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 - Added a new font in default_skin.lua to fit the localization (by @Satton2)
+- Fixed knife death effect being permanently applied on every following death
+- Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
+- Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)
+- Added cvar `ttt2_bots_lock_on_death` (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)
+- Added `TTT2ModifyFinalRoles` hook for last minute opportunity to override role distribution prior to them being announced for the first time (by @EntranceJew)
+- `weapon_tttbase`:
+  - Added `SWEP:ShouldRemove` to facilitate intercepting `SWEP:Remove` (by @EntranceJew)
+  - Added `SWEP.damageScaling` for weapons that utilize `ShootBullet` (by @EntranceJew)
+- Edit Equipment Menu
+  - `AllowDrop` can now be overridden per-weapon (by @EntranceJew)
+  - `Kind` can now be overridden per-weapon (by @EntranceJew)
+  - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
+  - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
+- `vgui.CreateTTT2Form` passes the name on so that it can be accessed via `Panel:GetName()`  (by @EntranceJew)
+- Added two GAMEMODE hooks to provide the ability for additional addons to extend role/equipment menus.
+  - `GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)`
+    - Called after `ITEM:AddToSettingsMenu(parent)`.
+  - `GM:TTT2OnRoleAddToSettingsMenu(role, parent)`
+    - Called after `ROLE:AddToSettingsMenu(parent)`
 
 ### Changed
 
@@ -25,6 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):
   - Update Simplified Chinese Translation
   - Improve translation (by @TheOnly8Z)
+- Localization parameters for `{walkkey} + {usekey}` prompts made into the predominant style.
 
 ### Fixed
 
@@ -36,6 +56,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - This fixes spawn problems on maps with invalid spawn points
   - This fixes errors in the F1 Menu language selection
 - Fixed the check for dynamic armor being inverted (`1` disabled it, `0` enabled it)
+- Fixed two unmatched ConVars in performance menu (by @NickCloudAT)
+- Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
+- Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 

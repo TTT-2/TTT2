@@ -950,8 +950,8 @@ L.target_pickup = "Appuyez sur [{usekey}] pour ramasser"
 L.target_slot_info = "Emplacement: {slot}"
 L.target_pickup_weapon = "Appuyez sur [{usekey}] pour ramasser l'arme"
 L.target_switch_weapon = "Appuyez sur [{usekey}] pour changer d'arme"
-L.target_pickup_weapon_hidden = ", Appuyez sur [{usekey} + {walkkey}] pour ramasser discrètement"
-L.target_switch_weapon_hidden = ", Appuyez sur [{usekey} + {walkkey}] pour changer discrètement"
+L.target_pickup_weapon_hidden = ", Appuyez sur [{walkkey} + {usekey}] pour ramasser discrètement"
+L.target_switch_weapon_hidden = ", Appuyez sur [{walkkey} + {usekey}] pour changer discrètement"
 L.target_switch_weapon_nospace = "Il n'y a pas de place disponible dans l'inventaire  pour cette arme"
 L.target_switch_drop_weapon_info = "Lâcher {name} du slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "Il n'y a pas d'arme à lâcher dans ce slot {slot}"
@@ -1860,3 +1860,33 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.sb_rank_tooltip_team = "Team"
 
 --L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"

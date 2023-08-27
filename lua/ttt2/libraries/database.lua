@@ -358,7 +358,7 @@ local function ConvertValueWithKey(value, accessName, key)
 
 	if data.typ == "bool" then
 		value = tobool(value)
-	elseif data.typ == "number" then
+	elseif data.typ == "number" or data.typ == "float" then
 		value = tonumber(value)
 	end
 

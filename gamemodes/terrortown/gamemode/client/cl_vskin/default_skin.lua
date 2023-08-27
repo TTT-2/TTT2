@@ -1409,6 +1409,24 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintTextEntryTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorHandle = colors.handle
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorHandle = ColorAlpha(colors.handle, alphaDisabled)
+	end
+
+	drawBox(0, 0, w, h, colorBox)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	local widthBorder = 2
 	local widthBorder2 = widthBorder * 2

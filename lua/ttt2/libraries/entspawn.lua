@@ -45,7 +45,7 @@ end
 -- @realm server
 function entspawn.SpawnRandomWeapon(ent)
 	local spawns = {
-		[SPAWN_TYPE_WEAPON] = {
+		[WEAPON_TYPE_RANDOM] = {
 			[1] = {
 				pos = ent:GetPos(),
 				ang = ent:GetAngles(),
@@ -64,7 +64,7 @@ end
 -- @realm server
 function entspawn.SpawnRandomAmmo(ent)
 	local spawns = {
-		[SPAWN_TYPE_AMMO] = {
+		[AMMO_TYPE_RANDOM] = {
 			[1] = {
 				pos = ent:GetPos(),
 				ang = ent:GetAngles(),

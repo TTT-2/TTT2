@@ -950,8 +950,8 @@ L.target_pickup = "Pulsa [{usekey}] para recoger"
 L.target_slot_info = "Espacio: {slot}"
 L.target_pickup_weapon = "Pulsa [{usekey}] para recoger el arma"
 L.target_switch_weapon = "Pulsa [{usekey}] para intercambiar con tu arma actual"
-L.target_pickup_weapon_hidden = ", pulsa [{usekey} + {walkkey}] para recogerla silenciosamente"
-L.target_switch_weapon_hidden = ", pulsa [{usekey} + {walkkey}] para intercambiarla silenciosamente"
+L.target_pickup_weapon_hidden = ", pulsa [{walkkey} + {usekey}] para recogerla silenciosamente"
+L.target_switch_weapon_hidden = ", pulsa [{walkkey} + {usekey}] para intercambiarla silenciosamente"
 L.target_switch_weapon_nospace = "No hay espacio disponible para esta arma en tu inventario"
 L.target_switch_drop_weapon_info = "Soltando {name} del espacio {slot}"
 L.target_switch_drop_weapon_info_noslot = "No hay un arma que esté ocupando el espacio {slot}"
@@ -1860,3 +1860,33 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.sb_rank_tooltip_team = "Team"
 
 --L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"
