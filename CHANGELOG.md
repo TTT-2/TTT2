@@ -16,6 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added `SWEP.damageScaling` for weapons that utilize `ShootBullet` (by @EntranceJew)
 - Edit Equipment Menu
   - `AllowDrop` can now be overridden per-weapon (by @EntranceJew)
+  - `Kind` can now be overridden per-weapon (by @EntranceJew)
   - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
   - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
 
