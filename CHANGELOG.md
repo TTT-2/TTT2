@@ -4,7 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
+
 ### Added
+
 - Added a new font in default_skin.lua to fit the localization (by @Satton2)
 - Fixed knife death effect being permanently applied on every following death
 - Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
@@ -19,7 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `Kind` can now be overridden per-weapon (by @EntranceJew)
   - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
   - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
-- `vgui.CreateTTT2Form` passes the name on so that it can be accessed via `Panel:GetName()`  (by @EntranceJew)
+- `vgui.CreateTTT2Form` passes the name on so that it can be accessed via `Panel:GetName()` (by @EntranceJew)
 - Added two GAMEMODE hooks to provide the ability for additional addons to extend role/equipment menus.
   - `GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)`
     - Called after `ITEM:AddToSettingsMenu(parent)`.
@@ -144,7 +147,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done_
+- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done
   - `ROLE.karma.teamKillPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for a team kill
   - `ROLE.karma.teamHurtPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for team damage
   - `ROLE.karma.enemyKillBonusMultiplier`: The multiplier that is used to calculate the Karma given to the killer if a player from an enemy team is killed
@@ -611,8 +614,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added new convars to change the behavior of the armor
-	- `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
-	- `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
+  - `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
+  - `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added server proxy for `EPOP:AddMessage()`
 - Added `PrintMessage` overwrites so this function now uses TTT2 systems
