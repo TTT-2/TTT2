@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Confirmar: destruir"
 L.c4_disarm = "Desactivar C4"
 L.c4_disarm_cut = "Click para cortar el cable {num}"
 
+L.c4_disarm_t     = "Corta un cable para desactivar la bomba. Cualquiera vale, porque eres traidor. ¡Los inocentes no lo tienen tan fácil!"
 L.c4_disarm_owned = "Corta un cable para desactivar la bomba. Es tu bomba, así que cualquier cable la desactivará."
 L.c4_disarm_other = "Corta un cable para desactivar la bomba ¡Explotará si cortas el incorrecto!"
 

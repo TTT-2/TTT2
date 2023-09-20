@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "确认：销毁"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
+L.c4_disarm_t     = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
