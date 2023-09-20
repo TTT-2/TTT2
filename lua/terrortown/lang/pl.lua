@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Potwierdź: zniszcz"
 L.c4_disarm = "Rozbrój C4"
 L.c4_disarm_cut = "Kliknij, by przeciąć kabel {num}"
 
+L.c4_disarm_t     = "Przetnij kabel, aby rozbroić bombę. Jako że jesteś Zdrajcą, każdy kabel jest bezpieczny. Niewinni nie mają tak łatwo!"
 L.c4_disarm_owned = "Przetnij kabel, by rozbroić bombe. To twoja bomba, więc każdy kabel ją rozbraja"
 L.c4_disarm_other = "Przetnij odpowiedni kabel, by rozbroić bombe. Jak się pomylisz, to ona wybuchnie!"
 

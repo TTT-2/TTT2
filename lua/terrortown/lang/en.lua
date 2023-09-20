@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Confirm: destroy"
 L.c4_disarm = "Disarm C4"
 L.c4_disarm_cut = "Click to cut wire {num}"
 
+L.c4_disarm_t     = "Cut a wire to disarm the bomb. As you are Traitor, every wire is safe. Innocents don't have it so easy!"
 L.c4_disarm_owned = "Cut a wire to disarm the bomb. It's your bomb, so every wire will disarm it."
 L.c4_disarm_other = "Cut a safe wire to disarm the bomb. It will explode if you get it wrong!"
 

@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Conferma: distruggi"
 L.c4_disarm = "Disinnesca C4"
 L.c4_disarm_cut = "Clicca per tagliare il filo {num}"
 
+L.c4_disarm_t = "Taglia un filo per disinnescare la bomba. Come Traditore, ogni filo va bene. Per gli Innocenti non è così facile!"
 L.c4_disarm_owned = "Taglia un filo per disinnescare la bomba. È la tua bomba, quindi ogni filo la disinnescherà."
 L.c4_disarm_other = "Taglia un filo sicuro per disinnescare la bomba. Esploderà se tagli quello sbagliato!"
 

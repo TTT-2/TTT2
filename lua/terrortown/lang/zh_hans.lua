@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "确认：销毁"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
+L.c4_disarm_t     = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
@@ -1868,31 +1869,29 @@ L.sb_rank_tooltip_team = "阵营"
 L.tbut_adminarea = "管理区:"
 
 -- 2023-08-10
---L.equipmenteditor_name_damage_scaling = "Damage Scaling"
-
+L.equipmenteditor_name_damage_scaling = "伤害缩放"
 
 -- 2023-08-11
---L.equipmenteditor_name_allow_drop = "Allow Drop"
---L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+L.equipmenteditor_name_allow_drop = "允许丢弃"
+L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
 
---L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
---L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+L.equipmenteditor_name_drop_on_death_type = "死亡时丢弃"
+L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备是否被丢弃的操作。"
 
---L.drop_on_death_type_default = "Default (weapon-defined)"
---L.drop_on_death_type_force = "Force Drop on Death"
---L.drop_on_death_type_deny = "Deny Drop on Death"
-
+L.drop_on_death_type_default = "默认（由武器定义）"
+L.drop_on_death_type_force = "强制死亡时丢弃"
+L.drop_on_death_type_deny = "拒绝死亡时丢弃"
 
 -- 2023-08-26
---L.equipmenteditor_name_kind = "Equipment Slot"
---L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+L.equipmenteditor_name_kind = "装备槽"
+L.equipmenteditor_desc_kind = "装备将占用的库存槽。"
 
---L.slot_weapon_melee = "Melee Slot"
---L.slot_weapon_pistol = "Pistol Slot"
---L.slot_weapon_heavy = "Heavy Slot"
---L.slot_weapon_nade = "Grenade Slot"
---L.slot_weapon_carry = "Carry Slot"
---L.slot_weapon_unarmed = "Unarmed Slot"
---L.slot_weapon_special = "Special Slot"
---L.slot_weapon_extra = "Extra Slot"
---L.slot_weapon_class = "Class Slot"
+L.slot_weapon_melee = "近战槽"
+L.slot_weapon_pistol = "手枪槽"
+L.slot_weapon_heavy = "重型槽"
+L.slot_weapon_nade = "手雷槽"
+L.slot_weapon_carry = "携带槽"
+L.slot_weapon_unarmed = "空手槽"
+L.slot_weapon_special = "特殊槽"
+L.slot_weapon_extra = "额外槽"
+L.slot_weapon_class = "职业槽"
