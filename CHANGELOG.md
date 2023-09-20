@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
+- Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
+  - Add the missing `L.c4_disarm_t` translation in C4
+
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 
 ### Added
