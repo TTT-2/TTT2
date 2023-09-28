@@ -328,7 +328,8 @@ if SERVER then
 	-- @return boolean Returns true if the spawnn script already exists
 	-- @realm server
 	function entspawnscript.Exists(dir)
-		return fileExists(dir .. gameGetMap() .. ".json", "DATA")
+		local fullDir = dir .. gameGetMap() .. ".json"
+		return fileExists(fullDir, "DATA") or fileExists("data_static/" .. fullDir, "GAME")
 	end
 
 
@@ -353,7 +354,12 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function entspawnscript.ReadFile(dir)
-		return utilJSONToTable(fileRead(dir .. gameGetMap() .. ".json", "DATA"))
+		local fullDir = dir .. gameGetMap() .. ".json"
+		if fileExists(fullDir, "DATA") then
+			return utilJSONToTable( fileRead(fullDir, "GAME") )
+		else
+			return utilJSONToTable( fileRead("data_static/" .. fullDir, "GAME") )
+		end
 	end
 
 	---

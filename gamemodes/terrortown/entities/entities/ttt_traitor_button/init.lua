@@ -16,14 +16,15 @@ local path = dir .. "/" .. game.GetMap() .. ".json"
 local function ReadMapConfig()
 	file.CreateDir(dir)
 
-	local modTime = (not file.Exists(path, "DATA") and (lastRead + 1)) or file.Time(path, "DATA")
+	local modTime = (not file.Exists("data_static/" .. path, "GAME") and (lastRead + 1)) or file.Time("data_static/" .. path, "GAME")
+	modTime = modTime <= lastRead and (not file.Exists(path, "DATA") and (lastRead + 1)) or file.Time("data_static/" .. path, "DATA")
 
 	if modTime <= lastRead then
 		return TButtonMapConfig
 	end
 
 	lastRead = modTime
-	local content = file.Read(path, "DATA")
+	local content = (file.Exists(path, "DATA") and file.Read(path, "DATA")) or file.Read("data_static/" .. path, "GAME")
 
 	if not content then
 		return TButtonMapConfig
