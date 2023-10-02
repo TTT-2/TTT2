@@ -356,7 +356,7 @@ if SERVER then
 	function entspawnscript.ReadFile(dir)
 		local fullDir = dir .. gameGetMap() .. ".json"
 		if fileExists(fullDir, "DATA") then
-			return utilJSONToTable( fileRead(fullDir, "GAME") )
+			return utilJSONToTable( fileRead(fullDir, "DATA") )
 		else
 			return utilJSONToTable( fileRead("data_static/" .. fullDir, "GAME") )
 		end
