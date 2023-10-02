@@ -17,7 +17,7 @@ local function ReadMapConfig()
 	file.CreateDir(dir)
 
 	local modTime = (not file.Exists("data_static/" .. path, "GAME") and (lastRead + 1)) or file.Time("data_static/" .. path, "GAME")
-	modTime = modTime <= lastRead and (not file.Exists(path, "DATA") and (lastRead + 1)) or file.Time("data_static/" .. path, "DATA")
+	modTime = modTime <= lastRead and (not file.Exists(path, "DATA") and (lastRead + 1)) or file.Time(path, "DATA")
 
 	if modTime <= lastRead then
 		return TButtonMapConfig
