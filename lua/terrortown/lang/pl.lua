@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Potwierdź: zniszcz"
 L.c4_disarm = "Rozbrój C4"
 L.c4_disarm_cut = "Kliknij, by przeciąć kabel {num}"
 
+L.c4_disarm_t     = "Przetnij kabel, aby rozbroić bombę. Jako że jesteś Zdrajcą, każdy kabel jest bezpieczny. Niewinni nie mają tak łatwo!"
 L.c4_disarm_owned = "Przetnij kabel, by rozbroić bombe. To twoja bomba, więc każdy kabel ją rozbraja"
 L.c4_disarm_other = "Przetnij odpowiedni kabel, by rozbroić bombe. Jak się pomylisz, to ona wybuchnie!"
 
@@ -950,8 +951,8 @@ L.target_pickup = "Naciśnij [{usekey}] aby podnieść"
 L.target_slot_info = "Slot: {slot}"
 L.target_pickup_weapon = "Naciśnij [{usekey}] aby ponieść broń"
 L.target_switch_weapon = "Naciśnij [{usekey}] aby zamienić broń"
-L.target_pickup_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytego podniesienia"
-L.target_switch_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytej zamiany"
+L.target_pickup_weapon_hidden = ", Naciśnij [{walkkey} + {usekey}] dla ukrytego podniesienia"
+L.target_switch_weapon_hidden = ", Naciśnij [{walkkey} + {usekey}] dla ukrytej zamiany"
 L.target_switch_weapon_nospace = "Brak slotu!"
 L.target_switch_drop_weapon_info = "Upuszczanie {name} ze slotu {slot}"
 L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można wywalić"
@@ -1777,9 +1778,9 @@ L.none = "Brak Roli"
 --L.label_sherlock_mode = "Enable sherlock mode"
 --L.label_highlight_admins = "Highlight server admins"
 --L.label_highlight_dev = "Highlight TTT2 developer"
---L.label_highlight_vip = "Highlight TTT2 VIP"
+--L.label_highlight_vip = "Highlight TTT2 supporter"
 --L.label_highlight_addondev = "Highlight TTT2 addon developer"
---L.label_highlight_supporter = "Highlight other supporters"
+--L.label_highlight_supporter = "Highlight others"
 --L.label_enable_hud_element = "Enable {elem} HUD element"
 --L.label_spec_prop_control = "Enable prop possession"
 --L.label_spec_prop_base = "Possession base value"
@@ -1838,3 +1839,55 @@ L.none = "Brak Roli"
 --This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
 
 --Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
+
+-- 2023-02-08
+--L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+--L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+--L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+--L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+--L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+--L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+--L.guide_nothing_title = "Nothing here yet!"
+--L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+--L.sb_rank_tooltip_developer = "TTT2 Developer"
+--L.sb_rank_tooltip_vip = "TTT2 Supporter"
+--L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+--L.sb_rank_tooltip_admin = "Server Admin"
+--L.sb_rank_tooltip_streamer = "Streamer"
+--L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+--L.sb_rank_tooltip_team = "Team"
+
+--L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"

@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "确认：销毁"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
+L.c4_disarm_t     = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
@@ -316,7 +317,7 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "拆弹器"
-L.defuser_help = " {primaryfire} 拆除目标炸弹。"
+L.defuser_help = "{primaryfire} 拆除目标炸弹。"
 
 L.defuser_desc = [[
 迅速拆除一个C4。
@@ -335,7 +336,7 @@ L.flare_desc = [[
 L.hstation_name = "医疗站"
 
 L.hstation_broken = "你的医疗站被摧毁了！"
-L.hstation_help = " {primaryfire} 安放了一个医疗站。"
+L.hstation_help = "{primaryfire} 安放了一个医疗站。"
 
 L.hstation_desc = [[
 安放后，允许人们用其治疗自己。
@@ -359,7 +360,7 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "你的收音机已被摧毁！"
-L.radio_help_pri = " {primaryfire} 安放了收音机。"
+L.radio_help_pri = "{primaryfire} 安放了收音机。"
 
 L.radio_desc = [[
 播放音效来误导或欺骗玩家。
@@ -415,7 +416,7 @@ L.dna_desc = [[
 
 -- Magneto stick
 L.magnet_name = "电磁棍"
-L.magnet_help = " {primaryfire} 将其定在墙上。"
+L.magnet_help = "{primaryfire} 将其定在墙上。"
 
 -- Grenades and misc
 L.grenade_smoke = "烟雾弹"
@@ -439,8 +440,8 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri = " {primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec = " {scondaryfire} 标记传送地点。"
+L.tele_help_pri = "{primaryfire} 传送到已标记的传送地点。"
+L.tele_help_sec = "{scondaryfire} 标记传送地点。"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。
@@ -949,8 +950,8 @@ L.target_pickup = "按 [{usekey}] 捡起"
 L.target_slot_info = "槽位：{slot}"
 L.target_pickup_weapon = "按 [{usekey}] 捡起武器"
 L.target_switch_weapon = "按 [{usekey}] 和当前武器交换"
-L.target_pickup_weapon_hidden = "按 [{usekey} + {walkkey}] 隐秘地捡起"
-L.target_switch_weapon_hidden = "按 [{usekey} + {walkkey}] 隐秘地交换"
+L.target_pickup_weapon_hidden = "按 [{walkkey} + {usekey}] 隐秘地捡起"
+L.target_switch_weapon_hidden = "按 [{walkkey} + {usekey}] 隐秘地交换"
 L.target_switch_weapon_nospace = "没有提供给这个武器的槽位"
 L.target_switch_drop_weapon_info = "丢弃槽位 {slot} 的 {name}"
 L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 没有可丢弃的武器"
@@ -1540,7 +1541,7 @@ L.kill_score_team = "击杀队友："
 -- 2021-10-09
 L.help_models_select = [[
 左键点击模型，将其添加到玩家模型库中。再次以左键删除它们。右键可在所关注的模型的启用和禁用侦探帽之间进行切换。
-	
+
 左上角的小指示器显示玩家模型是否有头部的命中箱，下面的图标显示了这个模型是否可佩戴侦探帽。]]
 L.menu_roles_title = "角色设置"
 L.menu_roles_description = "设置生成概率、装备积分及更多。"
@@ -1779,9 +1780,9 @@ L.label_armor_threshold_for_reinforced = "强化护甲阈值"
 L.label_sherlock_mode = "启用侦探模式"
 L.label_highlight_admins = "突出服务器管理员"
 L.label_highlight_dev = "突出显示TTT2开发者"
-L.label_highlight_vip = "高亮显示 TTT2 VIP"
+L.label_highlight_vip = "突出显示TTT2支持者"
 L.label_highlight_addondev = "突出显示TTT2附加组件的开发者"
-L.label_highlight_supporter = "突出显示其他支持者"
+L.label_highlight_supporter = "突出显示其他人"
 L.label_enable_hud_element = "启用{elem}HUD元素"
 L.label_spec_prop_control = "启用Prop附体"
 L.label_spec_prop_base = "附体时的基础值"
@@ -1844,3 +1845,53 @@ L.help_falldmg_exponent = [[
 该值修改了随着玩家撞击地面的速度而以指数方式增加的摔落伤害。
 
 更改此值时请小心。设置得太高，即使是二阶阶梯的高度也会致命，而设置得太低，玩家从五楼跳下来时也安然无恙。]]
+
+-- 2023-02-08
+L.testpopup_title = "一个测试弹出窗口，现在有一个多行标题，多好啊！"
+L.testpopup_subtitle = "好吧，你好！这是一个带有一些特殊信息的花式弹出窗口。文字也可以是多行的，多好啊！呃，如果我有什么想法的话，我可以添加这么多的文字..."
+
+L.hudeditor_chat_hint1 = "[TTT2][INFO] 将鼠标悬停在一个元素上，按住[LMB]并移动鼠标来移动或调整其大小。"
+L.hudeditor_chat_hint2 = "[TTT2][INFO] 按住ALT键进行对称调整大小。"
+L.hudeditor_chat_hint3 = "[TTT2][INFO] 按住SHIFT键，在轴上移动并保持长宽比。"
+L.hudeditor_chat_hint4 = "[TTT2][INFO] 按[RMB] -> 'Close' 来退出HUD编辑器！"
+
+L.guide_nothing_title = "这里暂时什么都没有！"
+L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub上为项目做贡献来帮助我们。"
+
+L.sb_rank_tooltip_developer = "TTT2开发者"
+L.sb_rank_tooltip_vip = "TTT2支持者"
+L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
+L.sb_rank_tooltip_admin = "服务器管理员"
+L.sb_rank_tooltip_streamer = "主播"
+L.sb_rank_tooltip_heroes = "TTT2 英雄"
+L.sb_rank_tooltip_team = "阵营"
+
+L.tbut_adminarea = "管理区:"
+
+-- 2023-08-10
+L.equipmenteditor_name_damage_scaling = "伤害缩放"
+
+-- 2023-08-11
+L.equipmenteditor_name_allow_drop = "允许丢弃"
+L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
+
+L.equipmenteditor_name_drop_on_death_type = "死亡时丢弃"
+L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备是否被丢弃的操作。"
+
+L.drop_on_death_type_default = "默认（由武器定义）"
+L.drop_on_death_type_force = "强制死亡时丢弃"
+L.drop_on_death_type_deny = "拒绝死亡时丢弃"
+
+-- 2023-08-26
+L.equipmenteditor_name_kind = "装备槽"
+L.equipmenteditor_desc_kind = "装备将占用的库存槽。"
+
+L.slot_weapon_melee = "近战槽"
+L.slot_weapon_pistol = "手枪槽"
+L.slot_weapon_heavy = "重型槽"
+L.slot_weapon_nade = "手雷槽"
+L.slot_weapon_carry = "携带槽"
+L.slot_weapon_unarmed = "空手槽"
+L.slot_weapon_special = "特殊槽"
+L.slot_weapon_extra = "额外槽"
+L.slot_weapon_class = "职业槽"

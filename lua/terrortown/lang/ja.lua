@@ -287,6 +287,7 @@ L.c4_remove_destroy2 = "確認:破壊"
 L.c4_disarm = "C4を解除"
 L.c4_disarm_cut = "クリックして{num}本目のワイヤーを切断する"
 
+L.c4_disarm_t     = "ワイヤーを切って爆弾を解除するんだ。Traitorならどのワイヤーでも安全だが、Innocentならそう簡単にはいかないぞ！"
 L.c4_disarm_owned = "ワイヤーをカットして爆弾を解除してくれ。自分の爆弾だからどのワイヤーでも安全だ。"
 L.c4_disarm_other = "安全なワイヤーをカットして爆弾を解除するんだ。間違えたら即爆発だ！"
 
@@ -946,8 +947,8 @@ L.target_pickup = "[{usekey}]で拾う"
 L.target_slot_info = "スロット: {slot}"
 L.target_pickup_weapon = "[{usekey}]で武器を拾う"
 L.target_switch_weapon = "[{usekey}]で今手に持っている武器と交換"
-L.target_pickup_weapon_hidden = ", [{usekey} + {walkkey}]で隠密に拾う"
-L.target_switch_weapon_hidden = ", [{usekey} + {walkkey}]で隠密に交換"
+L.target_pickup_weapon_hidden = ", [{walkkey} + {usekey}]で隠密に拾う"
+L.target_switch_weapon_hidden = ", [{walkkey} + {usekey}]で隠密に交換"
 L.target_switch_weapon_nospace = "この武器のインベントリがないな。"
 L.target_switch_drop_weapon_info = "{name}をスロット{slot}から捨てる"
 L.target_switch_drop_weapon_info_noslot = "スロット{slot}には捨てるものがないな。"
@@ -1770,9 +1771,9 @@ L.label_armor_threshold_for_reinforced = "強化アーマーのしきい値"
 L.label_sherlock_mode = "シャーロックモードを有効"
 L.label_highlight_admins = "サーバー管理者のハイライト"
 L.label_highlight_dev = "TTT2開発者ハイライト"
---L.label_highlight_vip = "Highlight TTT2 VIP"
+--L.label_highlight_vip = "Highlight TTT2 supporter"
 L.label_highlight_addondev = "TTT2アドオン開発者のハイライト"
-L.label_highlight_supporter = "他のサポーターのハイライト"
+--L.label_highlight_supporter = "Highlight others"
 L.label_enable_hud_element = "{elem}のHUD要素を有効"
 L.label_spec_prop_control = "オブジェクト憑依"
 L.label_spec_prop_base = "基本的憑依価値"
@@ -1832,5 +1833,57 @@ L.label_falldmg_min_velocity = "落下ダメージが発生するまでの最小
 L.label_falldmg_exponent = "落下速度に対する落下ダメージ増加指数"
 
 L.help_falldmg_exponent = [[
-この値は、プレイヤーが地面に当たる速度に応じて、落下ダメージが指数関数的に増加する方法を変更します。 
+この値は、プレイヤーが地面に当たる速度に応じて、落下ダメージが指数関数的に増加する方法を変更します。
 この値を変更するときは注意してください。高すぎると、少し下っただけでも致命的になる可能性があり、低すぎると、プレイヤーは極端な高さから落下してもほとんどもしくは全くダメージを受けなくなってしまいます。]]
+
+-- 2023-02-08
+--L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+--L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+--L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+--L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+--L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+--L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+--L.guide_nothing_title = "Nothing here yet!"
+--L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+--L.sb_rank_tooltip_developer = "TTT2 Developer"
+--L.sb_rank_tooltip_vip = "TTT2 Supporter"
+--L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+--L.sb_rank_tooltip_admin = "Server Admin"
+--L.sb_rank_tooltip_streamer = "Streamer"
+--L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+--L.sb_rank_tooltip_team = "Team"
+
+--L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"

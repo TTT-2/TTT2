@@ -1303,6 +1303,90 @@ function CreateChanges()
 		</ul>
 	]], os.time({ year = 2022, month = 09, day = 25 }))
 
+	AddChange("TTT2 Base - v0.11.7b", [[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new font in default_skin.lua to fit the localization (by @Satton2)</li>
+			<li>Fixed knife death effect being permanently applied on every following death</li>
+			<li>Added <code>PANEL:MakeTextEntry(data)</code> to <code>DFormTTT2</code> for strings or string-backed cvars (by @EntranceJew)</li>
+			<li>Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)</li>
+			<li>Added cvar <code>ttt2_bots_lock_on_death</code> (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)</li>
+			<li>Added <code>TTT2ModifyFinalRoles</code> hook for last minute opportunity to override role distribution prior to them being announced for the first time (by @EntranceJew)</li>
+			<li><code>weapon_tttbase</code>:</li>
+			<ul>
+				<li>Added <code>SWEP:ShouldRemove</code> to facilitate intercepting <code>SWEP:Remove</code> (by @EntranceJew)</li>
+				<li>Added <code>SWEP.damageScaling</code> for weapons that utilize <code>ShootBullet</code> (by @EntranceJew)</li>
+			</ul>
+			<li>Edit Equipment Menu</li>
+			<ul>
+				<li><code>AllowDrop</code> can now be overridden per-weapon (by @EntranceJew)</li>
+				<li><code>Kind</code> can now be overridden per-weapon (by @EntranceJew)</li>
+				<li><code>overrideDropOnDeath</code> now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)</li>
+				<li>"Damage Scaling" editable under "Balance Settings" (by @EntranceJew)</li>
+			</ul>
+			<li><code>vgui.CreateTTT2Form</code> passes the name on so that it can be accessed via <code>Panel:GetName()</code> (by @EntranceJew)</li>
+			<li>Added two GAMEMODE hooks to provide the ability for additional addons to extend role/equipment menus.</li>
+			<ul>
+				<li><code>GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)</code></li>
+				<ul>
+					<li>Called after <code>ITEM:AddToSettingsMenu(parent)</code>.</li>
+				</ul>
+				<li><code>GM:TTT2OnRoleAddToSettingsMenu(role, parent)</code></li>
+				<ul>
+					<li>Called after <code>ROLE:AddToSettingsMenu(parent)</code></li>
+				</ul>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li><code>weapon_tttbase</code>:</li>
+			<ul>
+				<li>Removal of <code>SWEP.IronSightsTime</code> as it was completely unused and conflicts with a networked value intended for the same purpose</li>
+				<li>Commented-out default values for <code>SWEP.IronSightsPos</code> and <code>SWEP.IronSightsAng</code> to match vanilla TTT behaviour</li>
+				<ul>
+					<li>SWEPs can still use these names as normal, they just don't have a base value to inherit anymore</li>
+				</ul>
+			</ul>
+			<li>Updated Russian and English localization files (by @Satton2):</li>
+			<ul>
+				<li>Updated strings in English localization file</li>
+				<li>Localized outdated and new strings into Russian</li>
+			</ul>
+			<li>Updated all localization files (by @Satton2):</li>
+			<ul>
+				<li>Added missing and new strings</li>
+				<li>Marked (out-) updated strings</li>
+				<li>Removed some duplicated strings</li>
+				<li>Removed some old unused strings</li>
+				<li>Fixed some broken source strings (line names)</li>
+			</ul>
+			<li>Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):</li>
+			<ul>
+				<li>Update Simplified Chinese Translation</li>
+				<li>Improve translation (by @TheOnly8Z)</li>
+			</ul>
+			<li>Localization parameters for <code>{walkkey} + {usekey}</code> prompts made into the predominant style.</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed hotreload of TTT2 roles library by a fresh reinitialization</li>
+			<li>Fixed a wrong localization line call in roles.lua (by @Satton2)</li>
+			<li>Fixed +zoom bind</li>
+			<li>Fixed ttt_quickslot command</li>
+			<li>Fixed an issue in <code>table.GetEqualEntryKeys</code> when nil is provided instead of a table. (by @sbzlzh):</li>
+			<ul>
+				<li>This fixes spawn problems on maps with invalid spawn points</li>
+				<li>This fixes errors in the F1 Menu language selection</li>
+			</ul>
+			<li>Fixed the check for dynamic armor being inverted (<code>1</code> disabled it, <code>0</code> enabled it)</li>
+			<li>Fixed two unmatched ConVars in performance menu (by @NickCloudAT)</li>
+			<li>Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)</li>
+			<li>Fixed behavior of <code>entspawn.SpawnRandomAmmo</code> to produce non-deagle ammo. (by @NickCloudAT, mostly)</li>
+		</ul>
+	]], os.time({ year = 2023, month = 08, day = 27 }))
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

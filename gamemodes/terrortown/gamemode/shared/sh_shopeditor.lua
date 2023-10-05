@@ -124,7 +124,92 @@ ShopEditor.savingKeys = {
 		b_desc = false,
 		showForItem = true,
 		master = "notBuyable"
-	}
+	},
+	damageScaling = {
+		group = 3,
+		order = 100,
+		typ = "float",
+		bits = 8,
+		default = 1,
+		min = 0,
+		max = 8,
+		decimal = 2,
+		name = "damage_scaling",
+		b_desc = false,
+		showForItem = true,
+		master = nil
+	},
+	AllowDrop = {
+		group = 2,
+		order = 110,
+		typ = "bool",
+		default = true,
+		name = "allow_drop",
+		inverted = false,
+		b_desc = true,
+		showForItem = true,
+		master = nil
+	},
+	overrideDropOnDeath = {
+		group = 2,
+		order = 120,
+		typ = "number",
+		subtype = "enum",
+		bits = 5,
+		default = DROP_ON_DEATH_TYPE_DEFAULT,
+		choices = {
+			DROP_ON_DEATH_TYPE_DEFAULT,
+			DROP_ON_DEATH_TYPE_FORCE,
+			DROP_ON_DEATH_TYPE_DENY,
+		},
+		lookupNamesFunc = function(dropOnDeathType)
+			return ({
+				[DROP_ON_DEATH_TYPE_DEFAULT] = "drop_on_death_type_default",
+				[DROP_ON_DEATH_TYPE_FORCE] = "drop_on_death_type_force",
+				[DROP_ON_DEATH_TYPE_DENY] = "drop_on_death_type_deny",
+			})[dropOnDeathType]
+		end,
+		name = "drop_on_death_type",
+		b_desc = true,
+		showForItem = true,
+		master = nil
+	},
+	Kind = {
+		group = 2,
+		order = 130,
+		typ = "number",
+		subtype = "enum",
+		bits = 5,
+		default = 3,
+		choices = {
+			WEAPON_MELEE,
+			WEAPON_PISTOL,
+			WEAPON_HEAVY,
+			WEAPON_NADE,
+			WEAPON_CARRY,
+			WEAPON_UNARMED,
+			WEAPON_SPECIAL,
+			WEAPON_EXTRA,
+			WEAPON_CLASS,
+		},
+		lookupNamesFunc = function(slotNum)
+			return ({
+				[WEAPON_MELEE] = "slot_weapon_melee",
+				[WEAPON_PISTOL] = "slot_weapon_pistol",
+				[WEAPON_HEAVY] = "slot_weapon_heavy",
+				[WEAPON_NADE] = "slot_weapon_nade",
+				[WEAPON_CARRY] = "slot_weapon_carry",
+				[WEAPON_UNARMED] = "slot_weapon_unarmed",
+				[WEAPON_SPECIAL] = "slot_weapon_special",
+				[WEAPON_EXTRA] = "slot_weapon_extra",
+				[WEAPON_CLASS] = "slot_weapon_class",
+			})[slotNum]
+		end,
+		name = "kind",
+		b_desc = true,
+		showForItem = false,
+		master = nil,
+	},
 }
 
 ShopEditor.savingKeysCount = table.Count(ShopEditor.savingKeys)
@@ -192,7 +277,7 @@ local function getDefaultValue(item, key, data)
 		return entspawnscript.GetSpawnTypeFromKind(item.Kind) or data.default or WEAPON_TYPE_SPECIAL
 	end
 
-	if data.typ == "number" then
+	if data.typ == "number" or data.typ == "float" then
 		return data.default or 0
 	elseif data.typ == "bool" then
 		 return data.default or false
@@ -240,6 +325,8 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 
 		if data.typ == "number" then
 			net.WriteUInt(item[key], data.bits or 16)
+		elseif data.typ == "float" then
+			net.WriteFloat(data.decimal and math.Round(item[key], data.decimal or 0) or item[key])
 		elseif data.typ == "bool" then
 			net.WriteBool(item[key])
 		else
@@ -290,6 +377,8 @@ function ShopEditor.ReadItemData()
 
 		if data.typ == "number" then
 			equip[key] = net.ReadUInt(data.bits or 16)
+		elseif data.typ == "float" then
+			equip[key] = net.ReadFloat()
 		elseif data.typ == "bool" then
 			equip[key] = net.ReadBool()
 		else

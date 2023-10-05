@@ -30,7 +30,7 @@ function sql.GetParsedData(key, data, res)
 		return nil
 	end
 
-	if data.typ == "number" then
+	if data.typ == "number" or data.typ == "float" then
 		val = tonumber(val)
 	elseif data.typ == "bool" then
 		val = val == "1"
@@ -128,6 +128,8 @@ function sql.ParseDataString(key, data)
 
 	if data.typ == "bool" or data.typ == "number" then
 		return sanitizedKey .. " INTEGER"
+	elseif data.typ == "float" then
+		return sanitizedKey .. " REAL"
 	elseif data.typ == "pos" then
 		return sanitizedKey .. "_x INTEGER," .. sanitizedKey .. "_y INTEGER"
 	elseif data.typ == "size" then

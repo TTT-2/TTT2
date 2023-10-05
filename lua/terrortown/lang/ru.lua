@@ -291,6 +291,7 @@ L.c4_remove_destroy2 = "Подтвердить"
 L.c4_disarm = "Обезвредить"
 L.c4_disarm_cut = "Нажмите, чтобы перерезать {num}-й провод."
 
+L.c4_disarm_t     = "Перережьте провод, чтобы обезвредить бомбу. Для предателей любой провод безопасен. Невиновным это не так просто!"
 L.c4_disarm_owned = "Перережьте провод, чтобы обезвредить бомбу. Это ваша бомба, поэтому любой провод безопасен."
 L.c4_disarm_other = "Перережьте безопасный провод, чтобы обезвредить бомбу. Она взорвётся, если вы ошибётесь!"
 
@@ -953,8 +954,8 @@ L.target_pickup = "[{usekey}]: подобрать."
 L.target_slot_info = "Слот: {slot}"
 L.target_pickup_weapon = "[{usekey}]: подобрать оружие."
 L.target_switch_weapon = "[{usekey}]: заменить текущее оружие на это."
-L.target_pickup_weapon_hidden = " [{usekey} + {walkkey}]: подобрать незаметно."
-L.target_switch_weapon_hidden = " [{usekey} + {walkkey}]: заменить незаметно."
+L.target_pickup_weapon_hidden = " [{walkkey} + {usekey}]: подобрать незаметно."
+L.target_switch_weapon_hidden = " [{walkkey} + {usekey}]: заменить незаметно."
 L.target_switch_weapon_nospace = "Нет свободного слота для этого оружия."
 L.target_switch_drop_weapon_info = "Из слота {slot} будет выброшен (-а) {name}."
 L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбрасываемого оружия."
@@ -1780,9 +1781,9 @@ L.label_armor_threshold_for_reinforced = "Порог усиленной брон
 L.label_sherlock_mode = "Включить режим Шерлока"
 L.label_highlight_admins = "Выделять администраторов сервера"
 L.label_highlight_dev = "Выделять разработчиков TTT2"
-L.label_highlight_vip = "Выделять TTT2 VIP"
+L.label_highlight_vip = "Выделять помощников TTT2"
 L.label_highlight_addondev = "Выделять разработчиков дополнений к TTT2"
-L.label_highlight_supporter = "Выделять других помощников"
+L.label_highlight_supporter = "Выделять прочих"
 L.label_enable_hud_element = "Включить элемент интерфейса «{elem}»"
 L.label_spec_prop_control = "Включить вселение в предметы"
 L.label_spec_prop_base = "Базовое значение вселения"
@@ -1841,3 +1842,55 @@ L.help_falldmg_exponent = [[
 Это значение меняет то, как экспоненциально урон от падения увеличивается в зависимости от скорости, с которой падает игрок.
 
 Будьте осторожны при изменении этого значения. Слишком высокие значения могут сделать даже небольшие падения летальными, а маленькие — позволят игрокам падать с экстремальных высот и почти не получать урон.]]
+
+-- 2023-02-08
+L.testpopup_title = "Тестовое всплывающее окно теперь с многострочным заголовком. Как же классно!"
+L.testpopup_subtitle = "Что ж, привет! Это приятное всплывающее окно с особой информацией. Текст также может быть многострочным, как приятно! Ам-м... Я мог бы добавить ещё так много текста, если бы только были идеи..."
+
+L.hudeditor_chat_hint1 = "[TTT2][ИНФО] Наведите курсор на элемент, а затем удерживайте [ЛКМ] и двигайте мышкой для ПЕРЕМЕЩЕНИЯ или ИЗМЕНЕНИЯ РАЗМЕРА."
+L.hudeditor_chat_hint2 = "[TTT2][ИНФО] Удерживайте клавишу ALT для симметричного изменения размера."
+L.hudeditor_chat_hint3 = "[TTT2][ИНФО] Удерживайте клавишу SHIFT для перемещения по оси и сохранения соотношения сторон."
+L.hudeditor_chat_hint4 = "[TTT2][ИНФО] Нажмите [ПКМ] -> 'Закрыть', чтобы покинуть редактор интерфейса!"
+
+L.guide_nothing_title = "Пока ничего нет!"
+L.guide_nothing_desc = "В разработке. Помогите нам, внеся вклад в проект на GitHub."
+
+L.sb_rank_tooltip_developer = "Разработчик TTT2"
+L.sb_rank_tooltip_vip = "Помощник TTT2"
+L.sb_rank_tooltip_addondev = "Разработчик дополнений к TTT2"
+L.sb_rank_tooltip_admin = "Администратор сервера"
+L.sb_rank_tooltip_streamer = "Стример"
+L.sb_rank_tooltip_heroes = "Герои TTT2"
+L.sb_rank_tooltip_team = "Команда"
+
+L.tbut_adminarea = "Администраторская зона:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"

@@ -100,6 +100,7 @@ TTTFiles = {
 	cl_vskin__vgui__dcombobox = {file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcheckboxlabel = {file = "cl_vskin/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dnumslider = {file = "cl_vskin/vgui/dnumslider_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dtextentry = {file = "cl_vskin/vgui/dtextentry_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dbinderpanel = {file = "cl_vskin/vgui/dbinderpanel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dscrollpanel = {file = "cl_vskin/vgui/dscrollpanel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dvscrollbar = {file = "cl_vskin/vgui/dvscrollbar_ttt2.lua", on = "client"},

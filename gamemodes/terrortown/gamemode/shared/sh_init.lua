@@ -5,7 +5,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.11.6b"
+GM.Version = "0.11.7b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -510,6 +510,11 @@ MUTE_NONE = 0
 MUTE_TERROR = 1
 MUTE_ALL = 2
 MUTE_SPEC = 1002 -- TODO why not 3?
+
+-- Drop On Death override types
+DROP_ON_DEATH_TYPE_DEFAULT = 0
+DROP_ON_DEATH_TYPE_FORCE = 1
+DROP_ON_DEATH_TYPE_DENY = 2
 
 COLOR_WHITE = Color(255, 255, 255, 255)
 COLOR_BLACK = Color(0, 0, 0, 255)

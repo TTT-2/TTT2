@@ -26,7 +26,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				default = data.default,
 				serverConvar = convarName
 			})
-		elseif data.typ == "number" then
+		elseif data.typ == "number" or data.typ == "float" then
 			if data.b_desc then
 				form2:MakeHelp({
 					label = desc
@@ -37,7 +37,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				label = name,
 				min = data.min,
 				max = data.max,
-				decimal = 0,
+				decimal = data.decimal or 0,
 				default = data.default,
 				serverConvar = convarName
 			})
