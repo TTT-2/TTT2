@@ -1503,5 +1503,63 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 	drawFilteredTexture(posStatusIconX, posHattableIconY, sizeStatusIcon, sizeStatusIcon, materialHattableIcon, 200, COLOR_WHITE)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintProfilePanelTTT2(panel, w, h)
+	local padding = 5
+
+	local heightBottom = 100
+
+	local widthRender = w - 2 * padding
+	local heightRender = h - padding - heightBottom
+
+	local sizeRoleIcon = 64
+	local xRoleIcon = 0.5 * (widthRender - sizeRoleIcon) + padding
+	local yRoleIcon = heightRender + padding - 0.5 * sizeRoleIcon
+
+	local sizeRoleBox = sizeRoleIcon + 2 * padding
+	local xRoleBox = xRoleIcon - padding
+	local yRoleBox = yRoleIcon - padding
+
+	local yTextTeam = h - 26
+	local yTextRole = yTextTeam - 22
+	local xText = 0.5 * w
+
+	drawBox(0, 0, w, h, panel:GetPlayer():GetRoleColor())
+	drawBox(padding, padding, widthRender, heightRender, colors.background)
+
+	if panel:HasModel() then
+		panel:DrawModel(padding, padding, widthRender, heightRender)
+	end
+
+	drawBox(xRoleBox, yRoleBox, sizeRoleBox, sizeRoleBox, panel:GetPlayer():GetRoleColor())
+	drawFilteredTexture(xRoleIcon, yRoleIcon, sizeRoleIcon, sizeRoleIcon, panel:GetPlayerIcon(), 255, COLOR_WHITE)
+
+	drawFilteredShadowedTexture(2*padding, 2*padding, 32, 32, panel:GetPlayerRoleIcon(), 255, COLOR_WHITE)
+
+	drawShadowedText(
+		TryT("TRAITOR"),
+		"DermaTTT2TextLargest",
+		xText,
+		yTextRole,
+		COLOR_WHITE,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+
+	drawShadowedText(
+		TryT("Team Traitor"),
+		"DermaTTT2TextLarger",
+		xText,
+		yTextTeam,
+		COLOR_WHITE,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

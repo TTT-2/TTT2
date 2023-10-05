@@ -722,3 +722,106 @@ local function TTT2ConfirmMsg()
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 end
 net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)
+
+
+
+---
+-- @class SEARCHSCRN
+SEARCHSCRN = SEARCHSCRN or {}
+SEARCHSCRN.sizes = SEARCHSCRN.sizes or {}
+SEARCHSCRN.menuFrame = SEARCHSCRN.menuFrame or nil
+SEARCHSCRN.data = SEARCHSCRN.data or {}
+
+SEARCHSCRN.data.player = LocalPlayer() -- just for testing
+
+function SEARCHSCRN:CalculateSizes()
+	self.sizes.width = 500
+	self.sizes.height = 500
+	self.sizes.padding = 10
+
+	self.sizes.heightButton = 45
+	self.sizes.widthButton = 150
+	self.sizes.widthButtonClose = 100
+	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+
+	self.sizes.widthMainArea = self.sizes.width - 2 * self.sizes.padding
+	self.sizes.heightMainArea = self.sizes.height - self.sizes.heightBottomButtonPanel - 3 * self.sizes.padding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+
+	self.sizes.widthProfileArea = 200
+end
+
+function SEARCHSCRN:Show()
+	self:CalculateSizes()
+
+	local frame = self.menuFrame
+
+	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
+	if IsValid(frame) then
+		frame:ClearFrame(nil, nil, "search_title")
+	else
+		frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "search_title", true)
+	end
+
+	frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+
+	self.menuFrame = frame
+
+	local contentBox = vgui.Create("DPanelTTT2", frame)
+	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	contentBox:Dock(TOP)
+
+	local profileBox = vgui.Create("DProfilePanelTTT2", contentBox)
+	profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
+	profileBox:Dock(LEFT)
+
+	profileBox:SetModel(self.data.player:GetModel())
+	profileBox:SetPlayer(LocalPlayer())
+
+	-- BUTTONS --
+
+	local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
+	buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
+	buttonArea:Dock(BOTTOM)
+
+	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
+	buttonConfirm:SetText("confirm_corpse")
+	buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonConfirm:SetPos(0, self.sizes.padding + 1)
+	buttonConfirm.DoClick = function(btn)
+
+	end
+
+	local buttonCall = vgui.Create("DButtonTTT2", buttonArea)
+	buttonCall:SetText("call_detective")
+	buttonCall:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonCall:SetPos(self.sizes.widthButton + self.sizes.padding, self.sizes.padding + 1)
+	buttonCall.DoClick = function(btn)
+
+	end
+
+	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
+	buttonClose:SetText("close")
+	buttonClose:SetSize(self.sizes.widthButtonClose, self.sizes.heightButton)
+	buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonClose, self.sizes.padding + 1)
+	buttonClose.DoClick = function(btn)
+		self:Close()
+	end
+end
+
+function SEARCHSCRN:Close()
+	if not IsValid(self.menuFrame) then return end
+
+	self.menuFrame:CloseFrame()
+end
+
+
+
+
+concommand.Add("uitest", function()
+	if IsValid(SEARCHSCRN.menuFrame) then
+		SEARCHSCRN:Close()
+	else
+		SEARCHSCRN:Show()
+	end
+end)
+

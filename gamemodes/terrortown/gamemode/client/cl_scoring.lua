@@ -178,7 +178,7 @@ function CLSCORE:CreatePanel()
 	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
 	buttonClose:SetText("close")
 	buttonClose:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	buttonClose:SetPos(self.sizes.widthMainArea - 175, self.sizes.padding + 1)
+	buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	buttonClose.DoClick = function(btn)
 		self:HidePanel()
 	end
