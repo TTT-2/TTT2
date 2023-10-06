@@ -648,8 +648,6 @@ local RawToText = {
 				end
 			end
 
-			txt = txt .. table.concat(nicks, "\n", 1, #nicks)
-
 			return {
 				title = "title missing",
 				text = {{
