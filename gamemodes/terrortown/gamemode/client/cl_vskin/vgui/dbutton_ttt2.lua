@@ -28,6 +28,8 @@ function PANEL:Init()
 	self.SetText = function(slf, text)
 		slf.text = text
 	end
+
+	self.data = {}
 end
 
 ---
@@ -60,6 +62,20 @@ function PANEL:SetConsoleCommand(strName, strArgs)
 	self.DoClick = function(slf, val)
 		RunConsoleCommand(strName, strArgs)
 	end
+end
+
+---
+-- @param Color color
+-- @realm client
+function PANEL:SetColor(color)
+	self.data.color = color
+end
+
+---
+-- @return Color
+-- @realm client
+function PANEL:GetColor()
+	return self.data.color
 end
 
 ---

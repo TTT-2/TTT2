@@ -188,8 +188,29 @@ local function IdentifyBody(ply, rag)
 			net.WriteString(team)
 		end
 
+		net.WriteUInt(ply.search_id.eidx, 8)
+
 		net.Broadcast()
 	end
+end
+
+local function GiveFoundCredits(ply, rag, isLongRange)
+	local corpseNick = CORPSE.GetPlayerNick(rag)
+	local credits = CORPSE.GetCredits(rag, 0)
+
+	if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
+		or credits == 0 or isLongRange
+	then return end
+
+	LANG.Msg(ply, "body_credits", {num = credits})
+
+	ply:AddCredits(credits)
+
+	CORPSE.SetCredits(rag, 0)
+
+	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
+
+	events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
 end
 
 local function ttt_confirm_death(ply, cmd, args)
@@ -209,13 +230,15 @@ local function ttt_confirm_death(ply, cmd, args)
 		return
 	end
 
-	ply.search_id = nil
-
 	local rag = Entity(eidx)
 
 	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or isLongRange) and not CORPSE.GetFound(rag, false) then
 		IdentifyBody(ply, rag)
+
+		GiveFoundCredits(ply, rag, false)
 	end
+
+	ply.search_id = nil
 end
 concommand.Add("ttt_confirm_death", ttt_confirm_death)
 
@@ -268,25 +291,6 @@ local function bitsRequired(num)
 	end
 
 	return bits
-end
-
-local function GiveFoundCredits(ply, rag, isLongRange)
-	local corpseNick = CORPSE.GetPlayerNick(rag)
-	local credits = CORPSE.GetCredits(rag, 0)
-
-	if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
-		or credits == 0 or isLongRange
-	then return end
-
-	LANG.Msg(ply, "body_credits", {num = credits})
-
-	ply:AddCredits(credits)
-
-	CORPSE.SetCredits(rag, 0)
-
-	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
-
-	events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
 end
 
 ---
@@ -377,7 +381,13 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 		IdentifyBody(ply, rag)
 	end
 
-	GiveFoundCredits(ply, rag, isLongRange)
+	-- only give credits if body is also confirmed
+	if (not isCovert) then
+		GiveFoundCredits(ply, rag, isLongRange)
+	end
+
+	-- cache credits of corpse here, AFTER one might has taken them
+	local credits = CORPSE.GetCredits(rag, 0)
 
 	-- time of death relative to current time (saves bits)
 	if dtime ~= 0 then
@@ -385,7 +395,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	end
 
 	-- identifier so we know whether a ttt_confirm_death was legit
-	ply.search_id = {eidx = rag:EntIndex(), id = rag:EntIndex() + (dtime + CurTime())}
+	ply.search_id = {eidx = rag:EntIndex(), id = rag:EntIndex() + math.floor(dtime)}
 
 	-- time of dna sample decay relative to current time
 	local stime = 0
@@ -460,6 +470,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	net.WriteString(ply_model)
 	net.WriteVector(ply_model_color)
 	net.WriteString(ply_sid64)
+	net.WriteUInt(credits, 8)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?

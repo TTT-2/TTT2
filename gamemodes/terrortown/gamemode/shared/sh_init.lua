@@ -533,6 +533,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
 COLOR_WARMGRAY = Color(91, 94, 99, 255)
+COLOR_GOLD = Color(255, 215, 30)
 
 -- include independent libraries (other extensions might require them)
 include("ttt2/libraries/pon.lua")

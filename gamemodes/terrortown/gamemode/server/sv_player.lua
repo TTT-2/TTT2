@@ -698,8 +698,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	ply.server_ragdoll.scene.ply_model_color = ply:GetPlayerColor()
 	ply.server_ragdoll.scene.ply_sid64 = ply:SteamID64()
 
-	print(ply.server_ragdoll.scene.ply_model_color)
-
 	CreateDeathEffect(ply, false)
 
 	util.StartBleeding(rag, dmginfo:GetDamage(), 15)

@@ -542,7 +542,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
 		tData:AddDescriptionLine(
 			TryT("target_credits"),
-			COLOR_YELLOW,
+			COLOR_GOLD,
 			{materialCredits}
 		)
 	end

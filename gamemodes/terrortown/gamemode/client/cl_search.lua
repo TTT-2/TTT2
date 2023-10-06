@@ -410,6 +410,7 @@ local function TTTRagdollSearch()
 	search.ply_model = net.ReadString()
 	search.ply_model_color = net.ReadVector()
 	search.ply_sid64 = net.ReadString()
+	search.credits = net.ReadUInt(8)
 
 	-- searched by detective?
 	search.detective_search = net.ReadBool()
@@ -447,6 +448,8 @@ local function TTT2ConfirmMsg()
 		tbl.team = LANG.GetTranslation(net.ReadString())
 	end
 
+	eidx = net.ReadUInt(8)
+
 	-- checking for bots
 	if sid64 == "" then
 		sid64 = nil
@@ -459,6 +462,11 @@ local function TTT2ConfirmMsg()
 	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
+
+	if (IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.menuFrame.data.idx == edix) then
+		SEARCHSCRN.buttonConfirm:SetEnabled(false)
+		SEARCHSCRN.buttonConfirm:SetText("search_confirmed")
+	end
 end
 net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)
 
@@ -676,6 +684,17 @@ local RawToText = {
 				params = {}
 			}}
 		}
+	end,
+	credits = function(data)
+		if data.credits == 0 then return end
+
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_credits",
+				params = {data.credits}
+			}}
+		}
 	end
 }
 
@@ -714,6 +733,8 @@ function SEARCHSCRN:CalculateSizes()
 
 	self.sizes.heightButton = 45
 	self.sizes.widthButton = 150
+	self.sizes.widthButtonCredits = 1.5 * self.sizes.widthButton
+	self.sizes.shift = self.sizes.widthButtonCredits - self.sizes.widthButton
 	self.sizes.widthButtonClose = 100
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
 
@@ -744,6 +765,8 @@ function SEARCHSCRN:MakeInfoItem(parent, icon, raw_text, color, live_time)
 end
 
 function SEARCHSCRN:Show(data)
+	local client = LocalPlayer()
+
 	self:CalculateSizes()
 
 	local frame = self.menuFrame
@@ -757,10 +780,13 @@ function SEARCHSCRN:Show(data)
 
 	frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
 
-	frame.OnKeyCodePressed = util.BasicKeyHandler
+	-- any keypress closes the frame
 	frame:SetKeyboardInputEnabled(true)
+	frame.OnKeyCodePressed = util.BasicKeyHandler
 
 	self.menuFrame = frame
+
+	frame.data = data
 
 	local search_add = {}
 	---
@@ -802,9 +828,14 @@ function SEARCHSCRN:Show(data)
 	self:MakeInfoItem(contentAreaScroll, damage_icon, RawToText.dmg({dmg = data.dmg, ori = data.kill_angle, head = data.head}))
 	-- time information
 	self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_time"), RawToText.death_time({}), nil, data.dtime)
+	-- credit information
+	local credit_box
+	if (data.credits > 0) then
+		credit_box = self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_nades"), RawToText.credits({credits = data.credits}), COLOR_GOLD)
+	end
 	-- dna sample information
-	if (data.stime > 0) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_wtester"), RawToText.dna_time({}), roles.DETECTIVE.color, data.stime):SetLiveTimeInverted(true)
+	if (data.stime - CurTime() > 0) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_wtester"), RawToText.dna_time({}), roles.DETECTIVE.ltcolor, data.stime):SetLiveTimeInverted(true)
 	end
 	-- floor surface information
 	local floor_data = data.kill_floor_surface
@@ -848,20 +879,41 @@ function SEARCHSCRN:Show(data)
 	buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
 	buttonArea:Dock(BOTTOM)
 
+	local shift = 0
 	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
-	buttonConfirm:SetText("confirm_corpse")
-	buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	buttonConfirm:SetPos(0, self.sizes.padding + 1)
-	buttonConfirm.DoClick = function(btn)
 
+	if (client:IsSpec() or data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false)) then
+		buttonConfirm:SetEnabled(false)
+		buttonConfirm:SetText("search_confirmed")
+		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	elseif (data.credits > 0 and client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits) then
+		buttonConfirm:SetText("search_confirm_credits")
+		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
+		buttonConfirm:SetColor(COLOR_GOLD)
+
+		shift = self.sizes.shift
+	else
+		buttonConfirm:SetText("search_confirm")
+		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 	end
 
-	local buttonCall = vgui.Create("DButtonTTT2", buttonArea)
-	buttonCall:SetText("call_detective")
-	buttonCall:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	buttonCall:SetPos(self.sizes.widthButton + self.sizes.padding, self.sizes.padding + 1)
-	buttonCall.DoClick = function(btn)
+	buttonConfirm:SetPos(0, self.sizes.padding + 1)
+	buttonConfirm.DoClick = function(btn)
+		RunConsoleCommand("ttt_confirm_death", data.eidx, data.eidx + data.dtime, data.lrng)
 
+		if (IsValid(credit_box)) then
+			credit_box:Remove()
+		end
+	end
+
+	self.buttonConfirm = buttonConfirm
+
+	local buttonCall = vgui.Create("DButtonTTT2", buttonArea)
+	buttonCall:SetText("search_call")
+	buttonCall:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonCall:SetPos(self.sizes.widthButton + self.sizes.padding + shift, self.sizes.padding + 1)
+	buttonCall.DoClick = function(btn)
+		RunConsoleCommand("ttt_call_detective", data.eidx)
 	end
 
 	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)

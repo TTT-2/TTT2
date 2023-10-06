@@ -1596,9 +1596,10 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	xTime = posIcon + 0.5 * sizeIcon
 	yTime = posIcon + 0.75 * sizeIcon
 
-	local colorBackground = colors.settingsBox
-	local colorBorderDefault = panel:GetColor() or utilGetChangedColor(colors.background, 75)
-	local colorText = colors.settingsText
+	local colorLiveTimeBackground = colors.settingsBox
+	local colorBackground = panel:GetColor() or colors.settingsBox
+	local colorBorderDefault = utilGetChangedColor(colors.background, 75)
+	local colorText = utilGetDefaultColor(colorBackground)
 
 	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorderDefault)
 	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
@@ -1606,7 +1607,7 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
 
 	if (panel:HasLiveTime()) then
-		drawRoundedBox(sizes.cornerRadius, xTime - 24, yTime - 7, 48, 16, colorBackground)
+		drawRoundedBox(sizes.cornerRadius, xTime - 24, yTime - 7, 48, 16, colorLiveTimeBackground)
 
 		local time_string = ""
 
