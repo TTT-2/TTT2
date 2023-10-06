@@ -5,6 +5,21 @@
 local PANEL = {}
 
 ---
+-- Checks recursively the parents until none is found and the highest parent is returned
+-- @ignore
+local function getHighestParent(slf)
+	local parent = slf
+	local checkParent = slf:GetParent()
+
+	while ispanel(checkParent) do
+		parent = checkParent
+		checkParent = parent:GetParent()
+	end
+
+	return parent
+end
+
+---
 -- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DTextEntry")
@@ -13,14 +28,30 @@ function PANEL:Init()
 	self.TextArea:SetWide(45)
 	self.TextArea:SetNumeric(true)
 	self.TextArea:SetFont("DermaTTT2Text")
+	self.TextArea:SetDrawLanguageID(false)
+	self.TextArea:SetTextColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))
+	self.TextArea:SetCursorColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))
 
-	self.TextArea.OnChange = function(textarea, val)
-		self:SetValue(self.TextArea:GetText())
+	-- On focus of textbox, enable input and change to default paint function in EnableTextBox
+	self.TextArea.OnGetFocus = function(textarea)
+		getHighestParent(self):SetKeyboardInputEnabled(true)
+		self:EnableTextBox(true)
+	end
+
+	-- On focus loss, disable input and change to TTT2 paint function in EnableTextBox
+	self.TextArea.OnLoseFocus = function(textarea)
+		getHighestParent(self):SetKeyboardInputEnabled(false)
+		self:EnableTextBox(false)
+		self:SetValueFromTextBox()
+	end
+
+	-- On enter keypres, apply new values
+	self.TextArea.OnEnter = function(textarea, val)
+		self:SetValueFromTextBox()
 	end
 
 	self.TextArea.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
-
 		return true
 	end
 
@@ -169,6 +200,16 @@ function PANEL:SetValue(value, ignoreConVar)
 end
 
 ---
+-- @realm client
+function PANEL:SetValueFromTextBox()
+	local val = self.TextArea:GetText()
+	val = (val != "" and tonumber(val) >= self:GetMin()) and val or self:GetMin()
+	self:SetValue(self.TextArea:GetText())
+	self:SetConVarValues(val)
+	self.TextArea:SetText(val)
+end
+
+---
 -- @param any val
 -- @realm client
 function PANEL:SetConVarValues(value)
@@ -244,6 +285,32 @@ end
 -- @realm client
 function PANEL:IsHovered()
 	return self.TextArea:IsHovered() or self.Slider:IsHovered() or vgui.GetHoveredPanel() == self
+end
+
+---
+-- @param bool b Enable or disable text input of text field
+-- @realm client
+function PANEL:EnableTextBox(b)
+	if b then
+		self.TextArea.Paint = function(slf, w, h)
+			derma.SkinHook( "Paint", "TextEntry", slf, w, h )
+			return true
+		end
+		self.textBoxEnabled = b
+		return
+	end
+	self.TextArea.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
+		return true
+	end
+	self.textBoxEnabled = b
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:GetTextBoxEnabled()
+	return self.textBoxEnabled ~= nil and self.textBoxEnabled or false
 end
 
 ---
