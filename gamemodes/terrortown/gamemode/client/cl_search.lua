@@ -12,6 +12,7 @@ local util = util
 local IsValid = IsValid
 local hook = hook
 
+local utilBitSet = util.BitSet
 local is_dmg = util.BitSet
 
 local dtt = {
@@ -26,21 +27,6 @@ local dtt = {
 	search_dmg_tele = DMG_SONIC,
 	search_dmg_car = DMG_VEHICLE
 }
-
--- "From his body you can tell XXX"
-local function DmgToText(d)
-	for k, v in pairs(dtt) do
-		if is_dmg(d, v) then
-			return T(k)
-		end
-	end
-
-	if is_dmg(d, DMG_DIRECT) then
-		return T("search_dmg_burn")
-	end
-
-	return T("search_dmg_other")
-end
 
 -- Info type to icon mapping
 
@@ -58,268 +44,6 @@ local dtm = {
 	fire = DMG_BURN,
 	drown = DMG_DROWN
 }
-
-local function DmgToMat(d)
-	for k, v in pairs(dtm) do
-		if is_dmg(d, v) then
-			return k
-		end
-	end
-
-	if is_dmg(d, DMG_DIRECT) then
-		return "fire"
-	else
-		return "skull"
-	end
-end
-
-local function WeaponToIcon(d)
-	local wep = util.WeaponForClass(d)
-
-	return wep and wep.Icon or "vgui/ttt/icon_nades"
-end
-
-local TypeToMat = {
-	nick = "id",
-	words = "halp",
-	c4 = "code",
-	dmg = DmgToMat,
-	wep = WeaponToIcon,
-	head = "head",
-	dtime = "time",
-	stime = "wtester",
-	lastid = "lastid",
-	kills = "list",
-	role = {}
-}
-
--- Accessor for better fail handling
-local function IconForInfoType(t, data)
-	local base = "vgui/ttt/icon_"
-	local mat = TypeToMat[t]
-
-	if istable(mat) then
-		if t == "role" and not mat[data] then
-			TypeToMat[t][data] = roles.GetByIndex(data).icon
-		end
-
-		mat = mat[data]
-	elseif isfunction(mat) then
-		mat = mat(data)
-	end
-
-	if not mat then
-		mat = TypeToMat["nick"]
-	end
-
-	-- ugly special casing for weapons, because they are more likely to be
-	-- customized and hence need more freedom in their icon filename
-	if t == "wep" or t == "role" then
-		return mat
-	else
-		return base .. mat
-	end
-end
-
-local pfmc_tbl = {
-	nick = function(search, d, raw)
-		search.nick.text = PT("search_nick", {player = d})
-		search.nick.p = 1
-		search.nick.nick = d
-	end,
-	role = function(search, d, raw)
-		local rd = roles.GetByIndex(d)
-
-		search.role.text = T("search_role_" .. rd.abbr)
-		search.role.color = raw["role_color"] or rd.color
-		search.role.p = 2
-	end,
-	team = function(search, d, raw)
-		search.team.text = "Team: " .. d .. "." -- will be merged with role later
-	end,
-	words = function(search, d, raw)
-		if d == "" then return end
-
-		-- only append "--" if there's no ending interpunction
-		local final = string.match(d, "[\\.\\!\\?]$") ~= nil
-
-		search.words.text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
-	end,
-	c4 = function(search, d, raw)
-		if d <= 0 then return end
-
-		search.c4.text = PT("search_c4", {num = d})
-	end,
-	dmg = function(search, d, raw)
-		search.dmg.text = DmgToText(d)
-		search.dmg.p = 12
-	end,
-	wep = function(search, d, raw)
-		local wep = util.WeaponForClass(d)
-		local wname = wep and LANG.TryTranslation(wep.PrintName)
-
-		if not wname then return end
-
-		search.wep.text = PT("search_weapon", {weapon = wname})
-	end,
-	head = function(search, d, raw)
-		search.head.p = 15
-
-		if not d then return end
-
-		search.head.text = T("search_head")
-	end,
-	dtime = function(search, d, raw)
-		if d == 0 then return end
-
-		local ftime = util.SimpleTime(d, "%02i:%02i")
-
-		search.dtime.text = PT("search_time", {time = ftime})
-		search.dtime.text_icon = ftime
-		search.dtime.p = 8
-	end,
-	stime = function(search, d, raw)
-		if d <= 0 then return end
-
-		local ftime = util.SimpleTime(d, "%02i:%02i")
-
-		search.stime.text = PT("search_dna", {time = ftime})
-		search.stime.text_icon = ftime
-	end,
-	kills = function(search, d, raw)
-		local num = table.Count(d)
-
-		if num == 1 then
-			local vic = Entity(d[1])
-			local dc = d[1] == -1 -- disconnected
-
-			if dc or IsValid(vic) and vic:IsPlayer() then
-				search.kills.text = PT("search_kills1", {player = dc and "<Disconnected>" or vic:Nick()})
-			end
-		elseif num > 1 then
-			local txt = T("search_kills2") .. "\n"
-			local nicks = {}
-
-			for k, idx in pairs(d) do
-				local vic = Entity(idx)
-				local dc = idx == -1
-
-				if dc or IsValid(vic) and vic:IsPlayer() then
-					nicks[#nicks + 1] = dc and "<Disconnected>" or vic:Nick()
-				end
-			end
-
-			local last = #nicks
-
-			txt = txt .. table.concat(nicks, "\n", 1, last)
-			search.kills.text = txt
-		end
-
-		search.kills.p = 30
-	end,
-	lastid = function(search, d, raw)
-		if not d or d.idx == -1 then return end
-
-		local ent = Entity(d.idx)
-
-		if not IsValid(ent) or not ent:IsPlayer() then return end
-
-		search.lastid.text = PT("search_eyes", {player = ent:Nick()})
-		search.lastid.ply = ent
-	end,
-}
-
----
--- Creates a table with icons, text,... out of search_raw table
--- @param table raw
--- @return table a converted search data table
--- @realm client
-function PreprocSearch(raw)
-	local search = {}
-
-	for t, d in pairs(raw) do
-		search[t] = {
-			img = nil,
-			text = "",
-			p = 10 -- sorting number
-		}
-
-		if isfunction(pfmc_tbl[t]) then
-			pfmc_tbl[t](search, d, raw)
-		else
-			search[t] = nil
-		end
-
-		-- anything matching a type but not given a text should be removed
-		if search[t] and search[t].text == "" then
-			search[t] = nil
-		end
-
-		-- don't display an extra icon for the team. Merge with role desc
-		if search.role and search.team then
-			if GetGlobalBool("ttt2_confirm_team") then
-				search.role.text = search.role.text .. " " .. search.team.text
-			end
-
-			search.team = nil
-		end
-
-		-- if there's still something here, we'll be showing it, so find an icon
-		if search[t] then
-			search[t].img = IconForInfoType(t, d)
-		end
-	end
-
-	local itms = items.GetList()
-
-	for i = 1, #itms do
-		local item = itms[i]
-
-		if not item.noCorpseSearch and raw["eq_" .. item.id] then
-			local highest = 0
-
-			for _, v in pairs(search) do
-				highest = math.max(highest, v.p)
-			end
-
-			local text
-
-			if item.corpseDesc then
-				text = RT(item.corpseDesc) or item.corpseDesc
-			else
-				if item.desc then
-					text = RT(item.desc)
-				end
-
-				local tmpText
-
-				if not text and item.EquipMenuData and item.EquipMenuData.desc then
-					tmpText = item.EquipMenuData.desc
-					text = RT(tmpText)
-				end
-
-				if not text then
-					text = item.desc or tmpText or ""
-				end
-			end
-
-			-- add item to body search if flag is set
-			if item.populateSearch then
-				search["eq_" .. item.id] = {
-					img = item.corpseIcon or item.material,
-					text = text,
-					p = highest + 1
-				}
-			end
-		end
-	end
-
-	---
-	-- @realm client
-	hook.Run("TTTBodySearchPopulate", search, raw)
-
-	return search
-end
 
 ---
 -- This hook can be used to populate the body search panel.
@@ -571,6 +295,14 @@ local function ShowSearchScreen(search_raw)
 	dframe:MakePopup()
 end
 
+
+
+
+
+
+
+
+
 local function StoreSearchResult(search)
 	if not search.owner then return end
 
@@ -600,10 +332,8 @@ local function bitsRequired(num)
 	return bits
 end
 
-local search = {}
-
 local function TTTRagdollSearch()
-	search = {}
+	local search = {}
 
 	-- Basic info
 	search.eidx = net.ReadUInt(16)
@@ -672,6 +402,15 @@ local function TTTRagdollSearch()
 	-- long range
 	search.lrng = net.ReadBit()
 
+	search.kill_distance = net.ReadUInt(2)
+	search.kill_hitgroup = net.ReadUInt(8)
+	search.kill_floor_surface = net.ReadUInt(8)
+	search.kill_water_level = net.ReadUInt(2)
+	search.kill_angle = net.ReadUInt(2)
+	search.ply_model = net.ReadString()
+	search.ply_model_color = net.ReadVector()
+	search.ply_sid64 = net.ReadString()
+
 	-- searched by detective?
 	search.detective_search = net.ReadBool()
 
@@ -683,7 +422,7 @@ local function TTTRagdollSearch()
 	hook.Run("TTTBodySearchEquipment", search, eq)
 
 	if search.show then
-		ShowSearchScreen(search)
+		SEARCHSCRN:Show(search)
 	end
 
 	-- cache search result in rag.search_result, e.g. useful for scoreboard
@@ -725,6 +464,242 @@ net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)
 
 
 
+
+
+
+local distance_to_text = {
+	[CORPSE_KILL_POINT_BLANK] = "kill_distance_point_blank",
+	[CORPSE_KILL_CLOSE] = "kill_distance_close",
+	[CORPSE_KILL_FAR] = "kill_distance_far"
+}
+
+local orientation_to_text = {
+	[CORPSE_KILL_FRONT] = "kill_from_front",
+	[CORPSE_KILL_BACK] = "kill_from_back"
+}
+
+local floorid_to_text = {
+	[MAT_ANTLION] = "body_search_floor_antillions",
+	[MAT_BLOODYFLESH] = "body_search_floor_bloodyflesh",
+	[MAT_CONCRETE] = "body_search_floor_concrete",
+	[MAT_DIRT] = "body_search_floor_dirt",
+	[MAT_EGGSHELL] = "body_search_floor_eggshell",
+	[MAT_FLESH] = "body_search_floor_flesh",
+	[MAT_GRATE] = "body_search_floor_grate",
+	[MAT_ALIENFLESH] = "body_search_floor_alienflesh",
+	[MAT_SNOW] = "body_search_floor_snow",
+	[MAT_PLASTIC] = "body_search_floor_plastic",
+	[MAT_METAL] = "body_search_floor_metal",
+	[MAT_SAND] = "body_search_floor_sand",
+	[MAT_FOLIAGE] = "body_search_floor_foliage",
+	[MAT_COMPUTER] = "body_search_floor_computer",
+	[MAT_SLOSH] = "body_search_floor_slosh",
+	[MAT_TILE] = "body_search_floor_tile",
+	[MAT_GRASS] = "body_search_floor_grass",
+	[MAT_VENT] = "body_search_floor_vent",
+	[MAT_WOOD] = "body_search_floor_wood",
+	[MAT_DEFAULT] = "body_search_floor_default",
+	[MAT_GLASS] = "body_search_floor_glass",
+	[MAT_WARPSHIELD] = "body_search_floor_warpshield"
+}
+
+local function DamageToText(dmg)
+	for key, value in pairs(dtt) do
+		if is_dmg(dmg, value) then
+			return key
+		end
+	end
+
+	if is_dmg(dmg, DMG_DIRECT) then
+		return "search_dmg_burn"
+	end
+
+	return "search_dmg_other"
+end
+
+local RawToText = {
+	last_words = function(data)
+		if not data.words or data.words == "" then return end
+
+		-- only append "--" if there's no ending interpunction
+		local final = string.match(data.words, "[\\.\\!\\?]$") ~= nil
+
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_words",
+				params = {lastwords = d .. (final and "" or "--.")}
+			}}
+		}
+	end,
+	c4_disarm = function(data)
+		if data.c4wire <= 0 then return end
+
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_c4",
+				params = {num = data.c4wire}
+			}}
+		}
+	end,
+	dmg = function(data)
+		local ret_text = {
+			title = "title missing",
+			text = {{
+				body = DamageToText(data.dmg),
+				params = nil
+			}}
+		}
+
+		if (data.ori ~= CORPSE_KILL_NONE) then
+			ret_text.text[#ret_text.text + 1] = {
+				body = orientation_to_text[data.ori],
+				params = nil
+			}
+		end
+
+		if (data.head) then
+			ret_text.text[#ret_text.text + 1] = {
+				body = "search_head",
+				params = nil
+			}
+		end
+
+		return ret_text
+	end,
+	wep = function(data)
+		local wep = util.WeaponForClass(data.wep)
+
+		local wname = wep and wep.PrintName
+
+		if not wname then return end
+
+		local ret_text = {
+			title = wname,
+			text = {{
+				body = "search_weapon",
+				params = {weapon = wname}
+			}}
+		}
+
+		if (data.dist ~= CORPSE_KILL_NONE) then
+			ret_text.text[#ret_text.text + 1] = {
+				body = distance_to_text[data.dist],
+				params = nil
+			}
+		end
+
+		return ret_text
+	end,
+	death_time = function(data)
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_time",
+				params = nil
+			}}
+		}
+	end,
+	dna_time = function(data)
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_dna",
+				params = nil
+			}}
+		}
+	end,
+	kill_list = function(data)
+		if not data.kills then return end
+
+		local num = table.Count(data.kills)
+
+		if num == 1 then
+			local vic = Entity(data.kills[1])
+			local dc = data.kills[1] == -1 -- disconnected
+
+			if dc or IsValid(vic) and vic:IsPlayer() then
+				return {
+					title = "title missing",
+					text = {{
+						body = "search_kills1",
+						params = {player = dc and "<Disconnected>" or vic:Nick()}
+					}}
+				}
+			end
+		elseif num > 1 then
+			local nicks = {}
+
+			for k, idx in pairs(data.kills) do
+				local vic = Entity(idx)
+				local dc = idx == -1
+
+				if dc or IsValid(vic) and vic:IsPlayer() then
+					nicks[#nicks + 1] = dc and "<Disconnected>" or vic:Nick()
+				end
+			end
+
+			txt = txt .. table.concat(nicks, "\n", 1, #nicks)
+
+			return {
+				title = "title missing",
+				text = {{
+					body = "search_kills2",
+					params = {player = table.concat(nicks, "\n", 1, last)}
+				}}
+			}
+		end
+	end,
+	last_id = function(data)
+		if not data.idx or data.idx == -1 then return end
+
+		local ent = Entity(data.idx)
+
+		if not IsValid(ent) or not ent:IsPlayer() then return end
+
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_eyes",
+				params = {player = ent:Nick()}
+			}}
+		}
+	end,
+	floor_surface = function(data)
+		if data.floor == 0 or not floorid_to_text[data.floor] then return end
+
+		return {
+			title = "title missing",
+			text = {{
+				body = floorid_to_text[data.floor],
+				params = {}
+			}}
+		}
+	end
+}
+
+local function WeaponToIconMaterial(cls)
+	local wep = util.WeaponForClass(cls)
+
+	return (wep and wep.Icon) and Material(wep.Icon) or Material("vgui/ttt/missing_equip_icon")
+end
+
+local function DamageToIconMaterial(dmg)
+	for key, value in pairs(dtm) do
+		if utilBitSet(dmg, value) then
+			return Material("vgui/ttt/icon_" .. key)
+		end
+	end
+
+	if utilBitSet(dmg, DMG_DIRECT) then
+		return Material("vgui/ttt/icon_fire")
+	else
+		return Material("vgui/ttt/icon_skull")
+	end
+end
+
+
 ---
 -- @class SEARCHSCRN
 SEARCHSCRN = SEARCHSCRN or {}
@@ -732,10 +707,8 @@ SEARCHSCRN.sizes = SEARCHSCRN.sizes or {}
 SEARCHSCRN.menuFrame = SEARCHSCRN.menuFrame or nil
 SEARCHSCRN.data = SEARCHSCRN.data or {}
 
-SEARCHSCRN.data.player = LocalPlayer() -- just for testing
-
 function SEARCHSCRN:CalculateSizes()
-	self.sizes.width = 500
+	self.sizes.width = 600
 	self.sizes.height = 500
 	self.sizes.padding = 10
 
@@ -751,9 +724,26 @@ function SEARCHSCRN:CalculateSizes()
 
 	self.sizes.widthContentArea = self.sizes.width - self.sizes.widthProfileArea - 3 * self.sizes.padding
 	self.sizes.widthContentBox = self.sizes.widthContentArea - 2 * self.sizes.padding - 100
+
+	self.sizes.heightInfoItem = 78
 end
 
-function SEARCHSCRN:Show()
+function SEARCHSCRN:MakeInfoItem(parent, icon, raw_text, color, live_time)
+	local box = vgui.Create("DInfoItemTTT2", parent)
+	box:SetSize(self.sizes.widthContentBox, self.sizes.heightInfoItem)
+	box:Dock(TOP)
+	box:DockMargin(0, 0, 0, self.sizes.padding)
+
+	box:SetIcon(icon)
+	box:SetTitle(raw_text.title)
+	box:SetText(raw_text.text)
+	box:SetColor(color)
+	box:SetLiveTime(live_time)
+
+	return box
+end
+
+function SEARCHSCRN:Show(data)
 	self:CalculateSizes()
 
 	local frame = self.menuFrame
@@ -767,7 +757,17 @@ function SEARCHSCRN:Show()
 
 	frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
 
+	frame.OnKeyCodePressed = util.BasicKeyHandler
+	frame:SetKeyboardInputEnabled(true)
+
 	self.menuFrame = frame
+
+	local search_add = {}
+	---
+	-- @realm client
+	hook.Run("TTTBodySearchPopulate", search_add, search)
+
+	local rd = roles.GetByIndex(data.role)
 
 	local contentBox = vgui.Create("DPanelTTT2", frame)
 	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
@@ -776,9 +776,12 @@ function SEARCHSCRN:Show()
 	local profileBox = vgui.Create("DProfilePanelTTT2", contentBox)
 	profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
 	profileBox:Dock(LEFT)
-
-	profileBox:SetModel(self.data.player:GetModel())
-	profileBox:SetPlayer(LocalPlayer())
+	profileBox:SetModel(data.ply_model, data.ply_model_color)
+	profileBox:SetPlayerIconBySteamID64(data.ply_sid64)
+	profileBox:SetPlayerRoleColor(data.role_color)
+	profileBox:SetPlayerRoleIcon(rd.iconMaterial)
+	profileBox:SetPlayerRoleString(rd.name)
+	profileBox:SetPlayerTeamString(data.team)
 
 	-- ADD STATUS BOX AND ITS CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
@@ -786,99 +789,59 @@ function SEARCHSCRN:Show()
 	contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
 	contentAreaScroll:Dock(RIGHT)
 
-	--[[local scrollAreaIconLayout = vgui.Create("DIconLayout", contentAreaScroll)
-	scrollAreaIconLayout:SetSpaceY(0)
-	scrollAreaIconLayout:SetSpaceX(0)
+	-- weapon information
+	local wep_data = RawToText.wep({wep = data.wep, dist = data.kill_distance})
+	if (wep_data) then
+		self:MakeInfoItem(contentAreaScroll, WeaponToIconMaterial(data.wep), wep_data)
+	end
+	-- damage information
+	local damage_icon = DamageToIconMaterial(data.dmg)
+	if (data.head) then
+		damage_icon = Material("vgui/ttt/icon_head")
+	end
+	self:MakeInfoItem(contentAreaScroll, damage_icon, RawToText.dmg({dmg = data.dmg, ori = data.kill_angle, head = data.head}))
+	-- time information
+	self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_time"), RawToText.death_time({}), nil, data.dtime)
+	-- dna sample information
+	if (data.stime > 0) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_wtester"), RawToText.dna_time({}), roles.DETECTIVE.color, data.stime):SetLiveTimeInverted(true)
+	end
+	-- floor surface information
+	local floor_data = data.kill_floor_surface
+	if (floor_data) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_nades"), RawToText.floor_surface({floor = floor_data}))
+	end
+	-- c4 information
+	local c4_data = RawToText.c4_disarm({c4wire = data.c4})
+	if (c4_data) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_code"), c4_data)
+	end
+	-- last id information
+	local lastid_data = RawToText.last_id({idx = data.idx})
+	if (lastid_data) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_lastid"), lastid_data)
+	end
+	-- kill list information
+	local killlist_data = RawToText.kill_list({kills = data.kills})
+	if (killlist_data) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_list"), killlist_data)
+	end
 
-	local card1 = scrollAreaIconLayout:Add("DInfoItemTTT2")
-	card1:SetSize(300, 78)
-	card1:SetIcon(profileBox:GetPlayerIcon())
-	card1:SetText("data.label")
-	card1.color = COLOR_WHITE
+	-- last words information
+	local last_words_data = RawToText.last_words({words = data.words})
+	if (last_words_data) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_halp"), last_words_data)
+	end
 
-	local card2 = scrollAreaIconLayout:Add("DInfoItemTTT2")
-	card2:SetSize(self.sizes.widthContentArea, 78)
-	card2:SetIcon(profileBox:GetPlayerIcon())
-	card2:SetText("data.label")
-	card2.color = COLOR_RED
 
-	local card3 = scrollAreaIconLayout:Add("DInfoItemTTT2")
-	card3:SetSize(self.sizes.widthContentArea, 78)
-	card3:SetIcon(profileBox:GetPlayerIcon())
-	card3:SetText("data.label")
-	card3.color = COLOR_ORANGE
-
-	local card4 = scrollAreaIconLayout:Add("DInfoItemTTT2")
-	card4:SetSize(self.sizes.widthContentArea, 78)
-	card4:SetIcon(profileBox:GetPlayerIcon())
-	card4:SetText("data.label")
-	card4.color = COLOR_YELLOW
-
-	local card5 = scrollAreaIconLayout:Add("DInfoItemTTT2")
-	card5:SetSize(self.sizes.widthContentArea, 78)
-	card5:SetIcon(profileBox:GetPlayerIcon())
-	card5:SetText("data.label")
-	card5.color = COLOR_BLUE]]
-
-	local box1 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
-	box1:SetSize(self.sizes.widthContentBox, 78)
-	box1:Dock(TOP)
-	box1:DockMargin(0, 0, 0, 10)
-	box1.color = COLOR_YELLOW
-	local box2 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
-	box2:SetSize(self.sizes.widthContentBox, 78)
-	box2:Dock(TOP)
-	box2:DockMargin(0, 0, 0, 10)
-	box2.color = COLOR_RED
-	local box3 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
-	box3:SetSize(self.sizes.widthContentBox, 78)
-	box3:Dock(TOP)
-	box3:DockMargin(0, 0, 0, 10)
-	box3.color = COLOR_BLUE
-	local box4 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
-	box4:SetSize(self.sizes.widthContentBox, 78)
-	box4:Dock(TOP)
-	box4:DockMargin(0, 0, 0, 10)
-	box4.color = COLOR_ORANGE
-	--[[local box5 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
-	box5:SetSize(self.sizes.widthContentBox, 78)
-	box5:Dock(TOP)
-	--box5:SetPadding(0, 0, 0, 10)
-	box5.color = COLOR_GREEN]]
-
-	--[[
-	local form = vgui.CreateTTT2Form(contentAreaScroll, "Dead Player Info")
-	form:SetPadding(0)
-	form:SetSpacing(0)
-	form:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
-	form:Dock(TOP)
-
-	local base = form:MakeIconLayout()
-
-	form:MakeInfoItem({
-		label = "item.shopTitle",
-		icon = profileBox:GetPlayerIcon(),
-	}, base)
-	form:MakeInfoItem({
-		label = "item.shopTitle",
-		icon = profileBox:GetPlayerIcon(),
-	}, base)
-	form:MakeInfoItem({
-		label = "item.shopTitle",
-		icon = profileBox:GetPlayerIcon(),
-	}, base)
-	form:MakeInfoItem({
-		label = "item.shopTitle",
-		icon = profileBox:GetPlayerIcon(),
-	}, base)
-	form:MakeInfoItem({
-		label = "item.shopTitle",
-		icon = profileBox:GetPlayerIcon(),
-	}, base)
-	form:MakeInfoItem({
-		label = "item.shopTitle",
-		icon = profileBox:GetPlayerIcon(),
-	}, base)]]
+	-- additional information by other addons
+	for _, v in pairs(search_add) do
+		if (istable(v.text)) then
+			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = text})
+		else
+			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = {{body = v.text}}})
+		end
+	end
 
 	-- BUTTONS
 	local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
@@ -915,15 +878,3 @@ function SEARCHSCRN:Close()
 
 	self.menuFrame:CloseFrame()
 end
-
-
-
-
-concommand.Add("uitest", function()
-	if IsValid(SEARCHSCRN.menuFrame) then
-		SEARCHSCRN:Close()
-	else
-		SEARCHSCRN:Show()
-	end
-end)
-

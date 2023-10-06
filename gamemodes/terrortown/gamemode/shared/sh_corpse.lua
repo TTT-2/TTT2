@@ -4,6 +4,15 @@
 
 CORPSE = CORPSE or {}
 
+CORPSE_KILL_NONE = 0
+
+CORPSE_KILL_POINT_BLANK = 1
+CORPSE_KILL_CLOSE = 2
+CORPSE_KILL_FAR = 3
+
+CORPSE_KILL_FRONT = 1
+CORPSE_KILL_BACK = 2
+
 local IsValid = IsValid
 
 -- Manual datatable indexing

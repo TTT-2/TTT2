@@ -581,23 +581,6 @@ function PANEL:MakeCard(data, base)
 end
 
 ---
--- Adds a new info icon box to the form.
--- @param table data The data for the card
--- @param PANEL base The base Panel (DIconLayout) where this card will be added
--- @param[default=78] number height The height of the info icon box
--- @return Panel The created card
--- @realm client
-function PANEL:MakeInfoItem(data, base, height)
-	local card = base:Add("DInfoItemTTT2")
-
-	card:SetSize(base:GetWide(), height or 78)
-	card:SetIcon(data.icon)
-	card:SetText(data.label)
-
-	return card
-end
-
----
 -- Adds a new image check box to the form.
 -- @param table data The data for the image check box
 -- @param PANEL base The base Panel (DIconLayout) where this image check box will be added

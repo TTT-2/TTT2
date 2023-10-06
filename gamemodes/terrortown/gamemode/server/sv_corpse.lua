@@ -332,6 +332,41 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	local hshot = rag.was_headshot or false
 	local dtime = rag.time or 0
 
+	-- prepare additional corpse information
+	local kill_distance = CORPSE_KILL_NONE
+	if (rag.scene.hit_trace) then
+		local raw_kill_distance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
+		if (raw_kill_distance < 200) then
+			kill_distance = CORPSE_KILL_POINT_BLANK
+		elseif (raw_kill_distance >= 700) then
+			kill_distance = CORPSE_KILL_FAR
+		elseif (raw_kill_distance >= 200) then
+			kill_distance = CORPSE_KILL_CLOSE
+		end
+	end
+
+	local kill_hitgroup = HITGROUP_GENERIC
+	if (rag.scene.hit_group and rag.scene.hit_group > 0) then
+		kill_hitgroup = rag.scene.hit_group
+	end
+
+	local kill_floor_surface = rag.scene.ground_type or 0
+	local kill_water_level = rag.scene.water_level or 0
+
+	local kill_angle = CORPSE_KILL_NONE
+	if (rag.scene.hit_trace) then
+		local raw_kill_angle = math.abs(math.AngleDifference((rag.scene.hit_trace.HitPos - rag.scene.victim.pos):Angle().yaw, rag.scene.victim.aim_yaw))
+		if (raw_kill_angle < 180) then
+			kill_angle = CORPSE_KILL_FRONT
+		else
+			kill_angle = CORPSE_KILL_BACK
+		end
+	end
+
+	local ply_model = rag.scene.ply_model or ""
+	local ply_model_color = rag.scene.ply_model_color or COLOR_WHITE
+	local ply_sid64 = rag.scene.ply_sid64 or ""
+
 	local owner = player.GetBySteamID64(rag.sid64)
 	owner = IsValid(owner) and owner:EntIndex() or -1
 
@@ -346,17 +381,17 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
 	-- time of death relative to current time (saves bits)
 	if dtime ~= 0 then
-		dtime = math.Round(CurTime() - dtime)
+		dtime = dtime
 	end
 
 	-- identifier so we know whether a ttt_confirm_death was legit
-	ply.search_id = {eidx = rag:EntIndex(), id = rag:EntIndex() + dtime}
+	ply.search_id = {eidx = rag:EntIndex(), id = rag:EntIndex() + (dtime + CurTime())}
 
 	-- time of dna sample decay relative to current time
 	local stime = 0
 
 	if rag.killer_sample then
-		stime = math.max(0, rag.killer_sample.t - CurTime())
+		stime = rag.killer_sample.t
 	end
 
 	-- build list of people this player killed
@@ -416,6 +451,15 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	net.WriteString(words)
 
 	net.WriteBit(isLongRange)
+
+	net.WriteUInt(kill_distance, 2)
+	net.WriteUInt(kill_hitgroup, 8)
+	net.WriteUInt(kill_floor_surface, 8)
+	net.WriteUInt(kill_water_level, 2)
+	net.WriteUInt(kill_angle, 2)
+	net.WriteString(ply_model)
+	net.WriteVector(ply_model_color)
+	net.WriteString(ply_sid64)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?

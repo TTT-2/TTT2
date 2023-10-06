@@ -89,10 +89,7 @@ function PANEL:Init()
 
 	self:SetText("")
 
-	self.data = {
-		mdl = nil,
-		player = nil
-	}
+	self.data = {}
 end
 
 ---
@@ -106,11 +103,12 @@ end
 ---
 -- @param string model
 -- @realm client
-function PANEL:SetModel(model)
-	self.data.mdl = model
+function PANEL:SetModel(model, color)
+	self.data.mdl = Model(model)
 
 	-- set the entity
 	local ent = ClientsideModel(model, RENDERGROUP_OTHER)
+	--ent:SetColor(Color(color.r * 255, color.g * 255, color.b * 255))
 
 	if not IsValid(ent) then return end
 
@@ -216,20 +214,24 @@ function PANEL:HasModel()
 	return self.data.mdl ~= nil
 end
 
----
--- @param Player player
--- @realm client
-function PANEL:SetPlayer(player)
-	self.data.player = player
-	self.data.player_icon = draw.GetAvatarMaterial(player:SteamID64(), "medium", Material("vgui/ttt/icon_corpse"))
-	self.data.player_role_icon =  player:GetSubRoleData().iconMaterial
+function PANEL:SetPlayerIconBySteamID64(sid64)
+	self.data.player_icon = draw.GetAvatarMaterial(sid64, "medium", Material("vgui/ttt/icon_corpse"))
 end
 
----
--- @return Player
--- @realm client
-function PANEL:GetPlayer()
-	return self.data.player
+function PANEL:SetPlayerRoleIcon(material)
+	self.data.player_role_icon = material
+end
+
+function PANEL:SetPlayerRoleColor(color)
+	self.data.player_role_color = color
+end
+
+function PANEL:SetPlayerRoleString(role)
+	self.data.player_role_name = role
+end
+
+function PANEL:SetPlayerTeamString(team)
+	self.data.player_team_name = team
 end
 
 ---
@@ -244,6 +246,18 @@ end
 -- @realm client
 function PANEL:GetPlayerRoleIcon()
 	return self.data.player_role_icon
+end
+
+function PANEL:GetPlayerRoleColor()
+	return self.data.player_role_color
+end
+
+function PANEL:GetPlayerRoleString()
+	return self.data.player_role_name
+end
+
+function PANEL:GetPlayerTeamString()
+	return self.data.player_team_name
 end
 
 ---

@@ -25,6 +25,7 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 
 local mathRound = math.Round
+local mathMax = math.max
 
 local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
@@ -74,6 +75,7 @@ surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 1
 surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
 surface.CreateAdvancedFont("DermaTTT2TextLargest", {font = "Trebuchet24", size = 24, weight = 900})
 surface.CreateAdvancedFont("DermaTTT2TextHuge", {font = "Trebuchet24", size = 72, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2SmallBold", {font = "Trebuchet24", size = 14, weight = 900})
 
 ---
 -- Updates the @{SKIN}
@@ -1516,46 +1518,59 @@ function SKIN:PaintProfilePanelTTT2(panel, w, h)
 	local widthRender = w - 2 * padding
 	local heightRender = h - padding - heightBottom
 
-	local sizeRoleIcon = 64
-	local xRoleIcon = 0.5 * (widthRender - sizeRoleIcon) + padding
-	local yRoleIcon = heightRender + padding - 0.5 * sizeRoleIcon
+	local sizePlayerIcon = 64
+	local xRoleIcon = 0.5 * (widthRender - sizePlayerIcon) + padding
+	local yRoleIcon = heightRender + padding - 0.5 * sizePlayerIcon
 
-	local sizeRoleBox = sizeRoleIcon + 2 * padding
-	local xRoleBox = xRoleIcon - padding
-	local yRoleBox = yRoleIcon - padding
+	local sizePlayerIconBox = sizePlayerIcon + 2 * padding
+	local xPlayerIconBox = xRoleIcon - padding
+	local yPlayerIconBox = yRoleIcon - padding
+
+	local sizeRoleIcon = 32
+	local posRoleIcon = 2 * padding
 
 	local yTextTeam = h - 26
 	local yTextRole = yTextTeam - 22
 	local xText = 0.5 * w
 
-	drawBox(0, 0, w, h, panel:GetPlayer():GetRoleColor())
-	drawBox(padding, padding, widthRender, heightRender, colors.background)
+	-- cache colors
+	local colorBackground = colors.background
+	local colorRole = panel:GetPlayerRoleColor()
+	local colorRoleText = utilGetDefaultColor(colorRole)
+	local colorRoleIcon = utilGetDefaultColor(colorBackground)
+
+	-- cache materials
+	materialPlayerIcon = panel:GetPlayerIcon()
+	materialRole = panel:GetPlayerRoleIcon()
+
+	drawBox(0, 0, w, h, colorRole)
+	drawBox(padding, padding, widthRender, heightRender, colorBackground)
 
 	if panel:HasModel() then
 		panel:DrawModel(padding, padding, widthRender, heightRender)
 	end
 
-	drawBox(xRoleBox, yRoleBox, sizeRoleBox, sizeRoleBox, panel:GetPlayer():GetRoleColor())
-	drawFilteredTexture(xRoleIcon, yRoleIcon, sizeRoleIcon, sizeRoleIcon, panel:GetPlayerIcon(), 255, COLOR_WHITE)
+	drawBox(xPlayerIconBox, yPlayerIconBox, sizePlayerIconBox, sizePlayerIconBox, colorRole)
+	drawFilteredTexture(xRoleIcon, yRoleIcon, sizePlayerIcon, sizePlayerIcon, materialPlayerIcon, 255, COLOR_WHITE)
 
-	drawFilteredShadowedTexture(2*padding, 2*padding, 32, 32, panel:GetPlayerRoleIcon(), 255, COLOR_WHITE)
+	drawFilteredShadowedTexture(posRoleIcon, posRoleIcon, sizeRoleIcon, sizeRoleIcon, materialRole, 255, colorRoleIcon)
 
 	drawShadowedText(
-		TryT("TRAITOR"),
+		TryT(panel:GetPlayerRoleString()),
 		"DermaTTT2TextLargest",
 		xText,
 		yTextRole,
-		COLOR_WHITE,
+		colorRoleText,
 		TEXT_ALIGN_CENTER,
 		TEXT_ALIGN_CENTER
 	)
 
 	drawShadowedText(
-		TryT("Team Traitor"),
+		TryT(panel:GetPlayerTeamString()),
 		"DermaTTT2TextLarger",
 		xText,
 		yTextTeam,
-		COLOR_WHITE,
+		colorRoleText,
 		TEXT_ALIGN_CENTER,
 		TEXT_ALIGN_CENTER
 	)
@@ -1567,7 +1582,92 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintInfoItemTTT2(panel, w, h)
-	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel.color)
+	local padding = 5
+
+	local widthBorder = 2
+	local widthBorder2 = 2 * widthBorder
+
+	local sizeIcon = 64
+	local posIcon = widthBorder + padding
+
+	local posText = posIcon + sizeIcon + 2 * padding
+	local heightText = 15
+
+	xTime = posIcon + 0.5 * sizeIcon
+	yTime = posIcon + 0.75 * sizeIcon
+
+	local colorBackground = colors.settingsBox
+	local colorBorderDefault = panel:GetColor() or utilGetChangedColor(colors.background, 75)
+	local colorText = colors.settingsText
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorderDefault)
+	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
+
+	drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
+
+	if (panel:HasLiveTime()) then
+		drawRoundedBox(sizes.cornerRadius, xTime - 24, yTime - 7, 48, 16, colorBackground)
+
+		local time_string = ""
+
+		if (panel:GetLiveTimeInverted()) then
+			time_string = util.SimpleTime(mathMax(0, panel:GetLiveTime() - CurTime()), "%02i:%02i")
+		else
+			time_string = util.SimpleTime(CurTime() - panel:GetLiveTime(), "%02i:%02i")
+		end
+
+		drawShadowedText(
+			time_string,
+			"DermaTTT2SmallBold",
+			xTime,
+			yTime,
+			COLOR_ORANGE,
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER
+		)
+	end
+
+	drawSimpleText(
+		TryT(panel:GetTitle()),
+		"DermaTTT2TitleSmall",
+		posText,
+		posIcon,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_TOP
+	)
+
+	local text = panel:GetText()
+	local text_translated = ""
+	for i = 1, #text do
+		if (text[i].params) then
+			text_translated = text_translated .. ParT(text[i].body, text[i].params) .. " "
+		else
+			text_translated = text_translated .. TryT(text[i].body) .. " "
+		end
+	end
+
+	local text_wrapped = drawGetWrappedText(
+		text_translated,
+		w - posText - padding,
+		"DermaDefault"
+	)
+
+	local posY = posIcon + heightText + 4
+
+	for k = 1, #text_wrapped do
+		drawSimpleText(
+			text_wrapped[k],
+			"DermaDefault",
+			posText,
+			posY,
+			colorText,
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_TOP
+		)
+
+		posY = posY + heightText
+	end
 end
 
 -- REGISTER DERMA SKIN
