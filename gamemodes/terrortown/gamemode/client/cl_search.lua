@@ -748,6 +748,9 @@ function SEARCHSCRN:CalculateSizes()
 	self.sizes.heightMainArea = self.sizes.height - self.sizes.heightBottomButtonPanel - 3 * self.sizes.padding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
 
 	self.sizes.widthProfileArea = 200
+
+	self.sizes.widthContentArea = self.sizes.width - self.sizes.widthProfileArea - 3 * self.sizes.padding
+	self.sizes.widthContentBox = self.sizes.widthContentArea - 2 * self.sizes.padding - 100
 end
 
 function SEARCHSCRN:Show()
@@ -777,8 +780,107 @@ function SEARCHSCRN:Show()
 	profileBox:SetModel(self.data.player:GetModel())
 	profileBox:SetPlayer(LocalPlayer())
 
-	-- BUTTONS --
+	-- ADD STATUS BOX AND ITS CONTENT
+	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
+	contentAreaScroll:SetVerticalScrollbarEnabled(true)
+	contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
+	contentAreaScroll:Dock(RIGHT)
 
+	--[[local scrollAreaIconLayout = vgui.Create("DIconLayout", contentAreaScroll)
+	scrollAreaIconLayout:SetSpaceY(0)
+	scrollAreaIconLayout:SetSpaceX(0)
+
+	local card1 = scrollAreaIconLayout:Add("DInfoItemTTT2")
+	card1:SetSize(300, 78)
+	card1:SetIcon(profileBox:GetPlayerIcon())
+	card1:SetText("data.label")
+	card1.color = COLOR_WHITE
+
+	local card2 = scrollAreaIconLayout:Add("DInfoItemTTT2")
+	card2:SetSize(self.sizes.widthContentArea, 78)
+	card2:SetIcon(profileBox:GetPlayerIcon())
+	card2:SetText("data.label")
+	card2.color = COLOR_RED
+
+	local card3 = scrollAreaIconLayout:Add("DInfoItemTTT2")
+	card3:SetSize(self.sizes.widthContentArea, 78)
+	card3:SetIcon(profileBox:GetPlayerIcon())
+	card3:SetText("data.label")
+	card3.color = COLOR_ORANGE
+
+	local card4 = scrollAreaIconLayout:Add("DInfoItemTTT2")
+	card4:SetSize(self.sizes.widthContentArea, 78)
+	card4:SetIcon(profileBox:GetPlayerIcon())
+	card4:SetText("data.label")
+	card4.color = COLOR_YELLOW
+
+	local card5 = scrollAreaIconLayout:Add("DInfoItemTTT2")
+	card5:SetSize(self.sizes.widthContentArea, 78)
+	card5:SetIcon(profileBox:GetPlayerIcon())
+	card5:SetText("data.label")
+	card5.color = COLOR_BLUE]]
+
+	local box1 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
+	box1:SetSize(self.sizes.widthContentBox, 78)
+	box1:Dock(TOP)
+	box1:DockMargin(0, 0, 0, 10)
+	box1.color = COLOR_YELLOW
+	local box2 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
+	box2:SetSize(self.sizes.widthContentBox, 78)
+	box2:Dock(TOP)
+	box2:DockMargin(0, 0, 0, 10)
+	box2.color = COLOR_RED
+	local box3 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
+	box3:SetSize(self.sizes.widthContentBox, 78)
+	box3:Dock(TOP)
+	box3:DockMargin(0, 0, 0, 10)
+	box3.color = COLOR_BLUE
+	local box4 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
+	box4:SetSize(self.sizes.widthContentBox, 78)
+	box4:Dock(TOP)
+	box4:DockMargin(0, 0, 0, 10)
+	box4.color = COLOR_ORANGE
+	--[[local box5 = vgui.Create("DInfoItemTTT2", contentAreaScroll)
+	box5:SetSize(self.sizes.widthContentBox, 78)
+	box5:Dock(TOP)
+	--box5:SetPadding(0, 0, 0, 10)
+	box5.color = COLOR_GREEN]]
+
+	--[[
+	local form = vgui.CreateTTT2Form(contentAreaScroll, "Dead Player Info")
+	form:SetPadding(0)
+	form:SetSpacing(0)
+	form:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
+	form:Dock(TOP)
+
+	local base = form:MakeIconLayout()
+
+	form:MakeInfoItem({
+		label = "item.shopTitle",
+		icon = profileBox:GetPlayerIcon(),
+	}, base)
+	form:MakeInfoItem({
+		label = "item.shopTitle",
+		icon = profileBox:GetPlayerIcon(),
+	}, base)
+	form:MakeInfoItem({
+		label = "item.shopTitle",
+		icon = profileBox:GetPlayerIcon(),
+	}, base)
+	form:MakeInfoItem({
+		label = "item.shopTitle",
+		icon = profileBox:GetPlayerIcon(),
+	}, base)
+	form:MakeInfoItem({
+		label = "item.shopTitle",
+		icon = profileBox:GetPlayerIcon(),
+	}, base)
+	form:MakeInfoItem({
+		label = "item.shopTitle",
+		icon = profileBox:GetPlayerIcon(),
+	}, base)]]
+
+	-- BUTTONS
 	local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
 	buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
 	buttonArea:Dock(BOTTOM)

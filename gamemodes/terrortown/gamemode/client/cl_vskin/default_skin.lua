@@ -1561,5 +1561,14 @@ function SKIN:PaintProfilePanelTTT2(panel, w, h)
 	)
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintInfoItemTTT2(panel, w, h)
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel.color)
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

@@ -75,6 +75,7 @@ ttt_include("cl_vskin__vgui__drolelayeringreceiver")
 ttt_include("cl_vskin__vgui__drolelayeringsender")
 ttt_include("cl_vskin__vgui__dsearchbar")
 ttt_include("cl_vskin__vgui__dprofilepanel")
+ttt_include("cl_vskin__vgui__dinfoicon")
 ttt_include("cl_vskin__vgui__dsubmenulist")
 
 ttt_include("cl_changes")
