@@ -467,6 +467,7 @@ local function TTT2ConfirmMsg()
 	if (IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.menuFrame.data.idx == edix) then
 		SEARCHSCRN.buttonConfirm:SetEnabled(false)
 		SEARCHSCRN.buttonConfirm:SetText("search_confirmed")
+		SEARCHSCRN.buttonConfirm:SetIcon(nil)
 	end
 end
 net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)
