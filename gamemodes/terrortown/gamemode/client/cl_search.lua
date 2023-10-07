@@ -693,6 +693,17 @@ local RawToText = {
 				params = {data.credits}
 			}}
 		}
+	end,
+	water_level = function(data)
+		if not data.water_level or data.water_level == 0 then return end
+
+		return {
+			title = "title missing",
+			text = {{
+				body = "search_water_" .. data.water_level,
+				params = nil
+			}}
+		}
 	end
 }
 
@@ -730,8 +741,8 @@ function SEARCHSCRN:CalculateSizes()
 	self.sizes.padding = 10
 
 	self.sizes.heightButton = 45
-	self.sizes.widthButton = 150
-	self.sizes.widthButtonCredits = 1.5 * self.sizes.widthButton
+	self.sizes.widthButton = 160
+	self.sizes.widthButtonCredits = 230
 	self.sizes.shift = self.sizes.widthButtonCredits - self.sizes.widthButton
 	self.sizes.widthButtonClose = 100
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
@@ -818,38 +829,52 @@ function SEARCHSCRN:Show(data)
 	if (wep_data) then
 		self:MakeInfoItem(contentAreaScroll, WeaponToIconMaterial(data.wep), wep_data)
 	end
+
 	-- damage information
 	local damage_icon = DamageToIconMaterial(data.dmg)
 	if (data.head) then
 		damage_icon = Material("vgui/ttt/icon_head")
 	end
 	self:MakeInfoItem(contentAreaScroll, damage_icon, RawToText.dmg({dmg = data.dmg, ori = data.kill_angle, head = data.head}))
+
 	-- time information
 	self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_time"), RawToText.death_time({}), nil, data.dtime)
+
 	-- credit information
 	local credit_box
 	if (data.credits > 0) then
-		credit_box = self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_nades"), RawToText.credits({credits = data.credits}), COLOR_GOLD)
+		credit_box = self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_credits"), RawToText.credits({credits = data.credits}), COLOR_GOLD)
 	end
+
 	-- dna sample information
 	if (data.stime - CurTime() > 0) then
 		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_wtester"), RawToText.dna_time({}), roles.DETECTIVE.ltcolor, data.stime):SetLiveTimeInverted(true)
 	end
+
 	-- floor surface information
 	local floor_data = data.kill_floor_surface
 	if (floor_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_nades"), RawToText.floor_surface({floor = floor_data}))
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_floor"), RawToText.floor_surface({floor = floor_data}))
 	end
+
+	-- water death information
+	local water_data = RawToText.water_level({water_level = data.kill_water_level})
+	if (water_data) then
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_drown"), water_data)
+	end
+
 	-- c4 information
 	local c4_data = RawToText.c4_disarm({c4wire = data.c4})
 	if (c4_data) then
 		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_code"), c4_data)
 	end
+
 	-- last id information
 	local lastid_data = RawToText.last_id({idx = data.idx})
 	if (lastid_data) then
 		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_lastid"), lastid_data)
 	end
+
 	-- kill list information
 	local killlist_data = RawToText.kill_list({kills = data.kills})
 	if (killlist_data) then
@@ -861,7 +886,6 @@ function SEARCHSCRN:Show(data)
 	if (last_words_data) then
 		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_halp"), last_words_data)
 	end
-
 
 	-- additional information by other addons
 	for _, v in pairs(search_add) do
@@ -887,7 +911,9 @@ function SEARCHSCRN:Show(data)
 	elseif (data.credits > 0 and client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits) then
 		buttonConfirm:SetText("search_confirm_credits")
 		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
-		buttonConfirm:SetColor(COLOR_GOLD)
+		buttonConfirm:SetIcon(Material("vgui/ttt/icon_credits_transparent"))
+
+		buttonConfirm.player_can_take_credits = true
 
 		shift = self.sizes.shift
 	else
@@ -899,7 +925,7 @@ function SEARCHSCRN:Show(data)
 	buttonConfirm.DoClick = function(btn)
 		RunConsoleCommand("ttt_confirm_death", data.eidx, data.eidx + data.dtime, data.lrng)
 
-		if (IsValid(credit_box)) then
+		if (IsValid(credit_box) and btn.player_can_take_credits) then
 			credit_box:Remove()
 		end
 	end
@@ -913,6 +939,7 @@ function SEARCHSCRN:Show(data)
 	buttonCall.DoClick = function(btn)
 		RunConsoleCommand("ttt_call_detective", data.eidx)
 	end
+	buttonCall:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
 
 	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
 	buttonClose:SetText("close")

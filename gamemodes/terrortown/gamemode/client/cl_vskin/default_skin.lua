@@ -518,10 +518,31 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colorBox)
 	drawBox(0, h - sizes.border, w, sizes.border, colorLine)
 
+	local translatedText = string.upper(TryT(panel:GetText()))
+	local font = panel:GetFont()
+	local xText = 0.5 * w
+
+	if panel:HasIcon() then
+		local widthText = drawGetTextSize(translatedText, font)
+		local padding = 5
+		local sizeIcon = panel:GetIconSize()
+		local yIcon = 0.5 * (h - sizeIcon)
+
+		xText = 0.5 * (w + sizeIcon + padding)
+
+		local xIcon = xText - sizeIcon - padding - 0.5 * widthText
+
+		if panel:IsIconShadowed() then
+			drawFilteredShadowedTexture(xIcon, yIcon, sizeIcon, sizeIcon, panel:GetIcon(), 255, colorText)
+		else
+			drawFilteredTexture(xIcon, yIcon, sizeIcon, sizeIcon, panel:GetIcon(), 255, COLOR_WHITE)
+		end
+	end
+
 	drawShadowedText(
-		string.upper(TryT(panel:GetText())),
-		panel:GetFont(),
-		0.5 * w,
+		translatedText,
+		font,
+		xText,
 		0.5 * (h - sizes.border) + shift,
 		colorText,
 		TEXT_ALIGN_CENTER,
