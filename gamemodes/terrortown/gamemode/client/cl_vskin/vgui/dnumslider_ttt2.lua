@@ -5,21 +5,6 @@
 local PANEL = {}
 
 ---
--- Checks recursively the parents until none is found and the highest parent is returned
--- @ignore
-local function getHighestParent(slf)
-	local parent = slf
-	local checkParent = slf:GetParent()
-
-	while ispanel(checkParent) do
-		parent = checkParent
-		checkParent = parent:GetParent()
-	end
-
-	return parent
-end
-
----
 -- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DTextEntry")
@@ -29,18 +14,19 @@ function PANEL:Init()
 	self.TextArea:SetNumeric(true)
 	self.TextArea:SetFont("DermaTTT2Text")
 	self.TextArea:SetDrawLanguageID(false)
-	self.TextArea:SetTextColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))
-	self.TextArea:SetCursorColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))
+	local vguiColor = util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25))
+	self.TextArea:SetTextColor(vguiColor)
+	self.TextArea:SetCursorColor(vguiColor)
 
 	-- On focus of textbox, enable input and change to default paint function in EnableTextBox
 	self.TextArea.OnGetFocus = function(textarea)
-		getHighestParent(self):SetKeyboardInputEnabled(true)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
 		self:EnableTextBox(true)
 	end
 
 	-- On focus loss, disable input and change to TTT2 paint function in EnableTextBox
 	self.TextArea.OnLoseFocus = function(textarea)
-		getHighestParent(self):SetKeyboardInputEnabled(false)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
 		self:EnableTextBox(false)
 		self:SetValueFromTextBox()
 	end
@@ -203,7 +189,7 @@ end
 -- @realm client
 function PANEL:SetValueFromTextBox()
 	local val = self.TextArea:GetText()
-	val = (val != "" and tonumber(val) >= self:GetMin()) and val or self:GetMin()
+	val = val ~= "" and val or 0
 	self:SetValue(self.TextArea:GetText())
 	self:SetConVarValues(val)
 	self.TextArea:SetText(val)
@@ -291,18 +277,6 @@ end
 -- @param bool b Enable or disable text input of text field
 -- @realm client
 function PANEL:EnableTextBox(b)
-	if b then
-		self.TextArea.Paint = function(slf, w, h)
-			derma.SkinHook( "Paint", "TextEntry", slf, w, h )
-			return true
-		end
-		self.textBoxEnabled = b
-		return
-	end
-	self.TextArea.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
-		return true
-	end
 	self.textBoxEnabled = b
 end
 

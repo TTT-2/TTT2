@@ -14,21 +14,6 @@ local heightNavHeader = 10
 local heightNavButton = 50
 
 ---
--- Checks recursively the parents until none is found and the highest parent is returned
--- @ignore
-local function getHighestParent(slf)
-	local parent = slf
-	local checkParent = slf:GetParent()
-
-	while ispanel(checkParent) do
-		parent = checkParent
-		checkParent = parent:GetParent()
-	end
-
-	return parent
-end
-
----
 -- @ignore
 function PANEL:Init()
 	-- Make navArea scrollable
@@ -43,7 +28,7 @@ function PANEL:Init()
 	self.navAreaScrollGrid = navAreaScrollGrid
 
 	-- Get the frame to be able to enable keyboardinput on searchbar focus
-	self.frame = getHighestParent(self)
+	self.frame = util.getHighestPanelParent(self)
 
 	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled(false)
