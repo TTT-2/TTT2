@@ -518,7 +518,13 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colorBox)
 	drawBox(0, h - sizes.border, w, sizes.border, colorLine)
 
-	local translatedText = string.upper(TryT(panel:GetText()))
+	local translatedText = ""
+	if panel:HasParams() then
+		translatedText = string.upper(ParT(panel:GetText(), panel:GetParams()))
+	else
+		translatedText = string.upper(TryT(panel:GetText()))
+	end
+
 	local font = panel:GetFont()
 	local xText = 0.5 * w
 
@@ -1662,8 +1668,15 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	local text = panel:GetText()
 	local text_translated = ""
 	for i = 1, #text do
-		if (text[i].params) then
-			text_translated = text_translated .. ParT(text[i].body, text[i].params) .. " "
+		local par = text[i].params
+
+		if (par) then
+			-- process params (translation)
+			for k, v in pairs(par) do
+				par[k] = TryT(v)
+			end
+
+			text_translated = text_translated .. ParT(text[i].body, par) .. " "
 		else
 			text_translated = text_translated .. TryT(text[i].body) .. " "
 		end

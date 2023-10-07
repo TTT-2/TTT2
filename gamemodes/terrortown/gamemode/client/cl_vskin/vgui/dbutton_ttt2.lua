@@ -37,6 +37,27 @@ function PANEL:GetText()
 end
 
 ---
+-- @param table params
+-- @realm client
+function PANEL:SetParams(params)
+	self.data.params = params
+end
+
+---
+-- @return table
+-- @realm client
+function PANEL:GetParams()
+	return self.data.params
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasParams()
+	return self.data.params ~= nil
+end
+
+---
 -- @return boolean
 -- @realm client
 function PANEL:IsDown()

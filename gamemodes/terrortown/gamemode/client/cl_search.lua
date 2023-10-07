@@ -16,16 +16,16 @@ local utilBitSet = util.BitSet
 local is_dmg = util.BitSet
 
 local dtt = {
-	search_dmg_crush = DMG_CRUSH,
-	search_dmg_bullet = DMG_BULLET,
-	search_dmg_fall = DMG_FALL,
-	search_dmg_boom = DMG_BLAST,
-	search_dmg_club = DMG_CLUB,
-	search_dmg_drown = DMG_DROWN,
-	search_dmg_stab = DMG_SLASH,
-	search_dmg_burn = DMG_BURN,
-	search_dmg_tele = DMG_SONIC,
-	search_dmg_car = DMG_VEHICLE
+	crush = DMG_CRUSH,
+	bullet = DMG_BULLET,
+	fall = DMG_FALL,
+	boom = DMG_BLAST,
+	club = DMG_CLUB,
+	drown = DMG_DROWN,
+	stab = DMG_SLASH,
+	burn = DMG_BURN,
+	tele = DMG_SONIC,
+	car = DMG_VEHICLE
 }
 
 -- Info type to icon mapping
@@ -487,28 +487,39 @@ local orientation_to_text = {
 }
 
 local floorid_to_text = {
-	[MAT_ANTLION] = "body_search_floor_antillions",
-	[MAT_BLOODYFLESH] = "body_search_floor_bloodyflesh",
-	[MAT_CONCRETE] = "body_search_floor_concrete",
-	[MAT_DIRT] = "body_search_floor_dirt",
-	[MAT_EGGSHELL] = "body_search_floor_eggshell",
-	[MAT_FLESH] = "body_search_floor_flesh",
-	[MAT_GRATE] = "body_search_floor_grate",
-	[MAT_ALIENFLESH] = "body_search_floor_alienflesh",
-	[MAT_SNOW] = "body_search_floor_snow",
-	[MAT_PLASTIC] = "body_search_floor_plastic",
-	[MAT_METAL] = "body_search_floor_metal",
-	[MAT_SAND] = "body_search_floor_sand",
-	[MAT_FOLIAGE] = "body_search_floor_foliage",
-	[MAT_COMPUTER] = "body_search_floor_computer",
-	[MAT_SLOSH] = "body_search_floor_slosh",
-	[MAT_TILE] = "body_search_floor_tile",
-	[MAT_GRASS] = "body_search_floor_grass",
-	[MAT_VENT] = "body_search_floor_vent",
-	[MAT_WOOD] = "body_search_floor_wood",
-	[MAT_DEFAULT] = "body_search_floor_default",
-	[MAT_GLASS] = "body_search_floor_glass",
-	[MAT_WARPSHIELD] = "body_search_floor_warpshield"
+	[MAT_ANTLION] = "search_floor_antillions",
+	[MAT_BLOODYFLESH] = "search_floor_bloodyflesh",
+	[MAT_CONCRETE] = "search_floor_concrete",
+	[MAT_DIRT] = "search_floor_dirt",
+	[MAT_EGGSHELL] = "search_floor_eggshell",
+	[MAT_FLESH] = "search_floor_flesh",
+	[MAT_GRATE] = "search_floor_grate",
+	[MAT_ALIENFLESH] = "search_floor_alienflesh",
+	[MAT_SNOW] = "search_floor_snow",
+	[MAT_PLASTIC] = "search_floor_plastic",
+	[MAT_METAL] = "search_floor_metal",
+	[MAT_SAND] = "search_floor_sand",
+	[MAT_FOLIAGE] = "search_floor_foliage",
+	[MAT_COMPUTER] = "search_floor_computer",
+	[MAT_SLOSH] = "search_floor_slosh",
+	[MAT_TILE] = "search_floor_tile",
+	[MAT_GRASS] = "search_floor_grass",
+	[MAT_VENT] = "search_floor_vent",
+	[MAT_WOOD] = "search_floor_wood",
+	[MAT_DEFAULT] = "search_floor_default",
+	[MAT_GLASS] = "search_floor_glass",
+	[MAT_WARPSHIELD] = "search_floor_warpshield"
+}
+
+local hitgroup_to_text = {
+	[HITGROUP_HEAD] = "search_hitgroup_head",
+	[HITGROUP_CHEST] = "search_hitgroup_chest",
+	[HITGROUP_STOMACH] = "search_hitgroup_stomach",
+	[HITGROUP_RIGHTARM] = "search_hitgroup_rightarm",
+	[HITGROUP_LEFTARM] = "search_hitgroup_leftarm",
+	[HITGROUP_RIGHTLEG] = "search_hitgroup_rightleg",
+	[HITGROUP_LEFTLEG] = "search_hitgroup_leftleg",
+	[HITGROUP_GEAR] = "search_hitgroup_gear"
 }
 
 local function DamageToText(dmg)
@@ -519,10 +530,10 @@ local function DamageToText(dmg)
 	end
 
 	if is_dmg(dmg, DMG_DIRECT) then
-		return "search_dmg_burn"
+		return "burn"
 	end
 
-	return "search_dmg_other"
+	return "other"
 end
 
 local RawToText = {
@@ -533,7 +544,7 @@ local RawToText = {
 		local final = string.match(data.words, "[\\.\\!\\?]$") ~= nil
 
 		return {
-			title = "title missing",
+			title = "search_title_words",
 			text = {{
 				body = "search_words",
 				params = {lastwords = d .. (final and "" or "--.")}
@@ -544,7 +555,7 @@ local RawToText = {
 		if data.c4wire <= 0 then return end
 
 		return {
-			title = "title missing",
+			title = "search_title_c4",
 			text = {{
 				body = "search_c4",
 				params = {num = data.c4wire}
@@ -553,9 +564,9 @@ local RawToText = {
 	end,
 	dmg = function(data)
 		local ret_text = {
-			title = "title missing",
+			title = "search_title_dmg_" .. DamageToText(data.dmg),
 			text = {{
-				body = DamageToText(data.dmg),
+				body = "search_dmg_" .. DamageToText(data.dmg),
 				params = nil
 			}}
 		}
@@ -591,9 +602,16 @@ local RawToText = {
 			}}
 		}
 
-		if (data.dist ~= CORPSE_KILL_NONE) then
+		if data.dist ~= CORPSE_KILL_NONE then
 			ret_text.text[#ret_text.text + 1] = {
 				body = distance_to_text[data.dist],
+				params = nil
+			}
+		end
+
+		if data.hit_group > 0 then
+			ret_text.text[#ret_text.text + 1] = {
+				body = hitgroup_to_text[data.hit_group],
 				params = nil
 			}
 		end
@@ -602,7 +620,7 @@ local RawToText = {
 	end,
 	death_time = function(data)
 		return {
-			title = "title missing",
+			title = "search_title_time",
 			text = {{
 				body = "search_time",
 				params = nil
@@ -611,7 +629,7 @@ local RawToText = {
 	end,
 	dna_time = function(data)
 		return {
-			title = "title missing",
+			title = "search_title_dna",
 			text = {{
 				body = "search_dna",
 				params = nil
@@ -629,7 +647,7 @@ local RawToText = {
 
 			if dc or IsValid(vic) and vic:IsPlayer() then
 				return {
-					title = "title missing",
+					title = "search_title_kills",
 					text = {{
 						body = "search_kills1",
 						params = {player = dc and "<Disconnected>" or vic:Nick()}
@@ -649,7 +667,7 @@ local RawToText = {
 			end
 
 			return {
-				title = "title missing",
+				title = "search_title_kills",
 				text = {{
 					body = "search_kills2",
 					params = {player = table.concat(nicks, "\n", 1, last)}
@@ -665,7 +683,7 @@ local RawToText = {
 		if not IsValid(ent) or not ent:IsPlayer() then return end
 
 		return {
-			title = "title missing",
+			title = "search_title_eyes",
 			text = {{
 				body = "search_eyes",
 				params = {player = ent:Nick()}
@@ -676,7 +694,7 @@ local RawToText = {
 		if data.floor == 0 or not floorid_to_text[data.floor] then return end
 
 		return {
-			title = "title missing",
+			title = "search_title_floor",
 			text = {{
 				body = floorid_to_text[data.floor],
 				params = {}
@@ -687,10 +705,10 @@ local RawToText = {
 		if data.credits == 0 then return end
 
 		return {
-			title = "title missing",
+			title = "search_title_credits",
 			text = {{
 				body = "search_credits",
-				params = {data.credits}
+				params = {credits = data.credits}
 			}}
 		}
 	end,
@@ -698,7 +716,7 @@ local RawToText = {
 		if not data.water_level or data.water_level == 0 then return end
 
 		return {
-			title = "title missing",
+			title = "search_title_water",
 			text = {{
 				body = "search_water_" .. data.water_level,
 				params = nil
@@ -742,8 +760,7 @@ function SEARCHSCRN:CalculateSizes()
 
 	self.sizes.heightButton = 45
 	self.sizes.widthButton = 160
-	self.sizes.widthButtonCredits = 230
-	self.sizes.shift = self.sizes.widthButtonCredits - self.sizes.widthButton
+	self.sizes.widthButtonCredits = 210
 	self.sizes.widthButtonClose = 100
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
 
@@ -825,7 +842,7 @@ function SEARCHSCRN:Show(data)
 	contentAreaScroll:Dock(RIGHT)
 
 	-- weapon information
-	local wep_data = RawToText.wep({wep = data.wep, dist = data.kill_distance})
+	local wep_data = RawToText.wep({wep = data.wep, dist = data.kill_distance, hit_group = data.kill_hitgroup})
 	if (wep_data) then
 		self:MakeInfoItem(contentAreaScroll, WeaponToIconMaterial(data.wep), wep_data)
 	end
@@ -860,7 +877,7 @@ function SEARCHSCRN:Show(data)
 	-- water death information
 	local water_data = RawToText.water_level({water_level = data.kill_water_level})
 	if (water_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_drown"), water_data)
+		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_water_" .. data.kill_water_level), water_data)
 	end
 
 	-- c4 information
@@ -901,27 +918,45 @@ function SEARCHSCRN:Show(data)
 	buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
 	buttonArea:Dock(BOTTOM)
 
-	local shift = 0
+	local buttonCall = vgui.Create("DButtonTTT2", buttonArea)
+	buttonCall:SetText("search_call")
+	buttonCall:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonCall:SetPos(0, self.sizes.padding + 1)
+	buttonCall.DoClick = function(btn)
+		RunConsoleCommand("ttt_call_detective", data.eidx)
+	end
+	buttonCall:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+
 	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
 
-	if (client:IsSpec() or data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false)) then
+	if client:IsSpec() then
+		local text = "search_confirm"
+		if (data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false)) then
+			text = "search_confirmed"
+		end
+
+		buttonConfirm:SetEnabled(false)
+		buttonConfirm:SetText(text)
+		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+	elseif data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false) then
 		buttonConfirm:SetEnabled(false)
 		buttonConfirm:SetText("search_confirmed")
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	elseif (data.credits > 0 and client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits) then
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+	elseif data.credits > 0 and client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits then
 		buttonConfirm:SetText("search_confirm_credits")
+		buttonConfirm:SetParams({credits = data.credits})
 		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
 		buttonConfirm:SetIcon(Material("vgui/ttt/icon_credits_transparent"))
 
 		buttonConfirm.player_can_take_credits = true
-
-		shift = self.sizes.shift
 	else
 		buttonConfirm:SetText("search_confirm")
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	end
-
-	buttonConfirm:SetPos(0, self.sizes.padding + 1)
 	buttonConfirm.DoClick = function(btn)
 		RunConsoleCommand("ttt_confirm_death", data.eidx, data.eidx + data.dtime, data.lrng)
 
@@ -931,23 +966,6 @@ function SEARCHSCRN:Show(data)
 	end
 
 	self.buttonConfirm = buttonConfirm
-
-	local buttonCall = vgui.Create("DButtonTTT2", buttonArea)
-	buttonCall:SetText("search_call")
-	buttonCall:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	buttonCall:SetPos(self.sizes.widthButton + self.sizes.padding + shift, self.sizes.padding + 1)
-	buttonCall.DoClick = function(btn)
-		RunConsoleCommand("ttt_call_detective", data.eidx)
-	end
-	buttonCall:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
-
-	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
-	buttonClose:SetText("close")
-	buttonClose:SetSize(self.sizes.widthButtonClose, self.sizes.heightButton)
-	buttonClose:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonClose, self.sizes.padding + 1)
-	buttonClose.DoClick = function(btn)
-		self:Close()
-	end
 end
 
 function SEARCHSCRN:Close()

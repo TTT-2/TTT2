@@ -188,7 +188,7 @@ local function IdentifyBody(ply, rag)
 			net.WriteString(team)
 		end
 
-		net.WriteUInt(ply.search_id.eidx, 8)
+		net.WriteUInt(ply.search_id and ply.search_id.eidx or 0, 8)
 
 		net.Broadcast()
 	end
