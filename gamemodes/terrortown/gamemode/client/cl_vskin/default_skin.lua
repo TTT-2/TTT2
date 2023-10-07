@@ -836,16 +836,23 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
 	end
 
-	drawBox(0, 0, w, h, colorBox)
-	drawSimpleText(
-		panel:GetText(),
-		panel:GetFont(),
-		0.5 * w,
-		0.5 * h,
-		colorText,
-		TEXT_ALIGN_CENTER,
-		TEXT_ALIGN_CENTER
-	)
+	-- Draw normal text if currently not in input mode, otherwise draw the TTT2 Text Entry
+	if not panel:GetParent():GetTextBoxEnabled() then
+		drawBox(0, 0, w, h, colorBox)
+		drawSimpleText(
+			panel:GetText(),
+			panel:GetFont(),
+			0.5 * w,
+			0.5 * h,
+			colorText,
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER
+		)
+	else
+		self:PaintTextEntryTTT2(panel, w, h)
+		local vguiColor = utilGetActiveColor(utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 25))
+		panel:DrawTextEntryText(vguiColor, vguiColor, vguiColor)
+	end
 end
 
 ---

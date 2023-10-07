@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
+
 ### Changed
 
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):

@@ -25,21 +25,6 @@ local materialReset = Material("vgui/ttt/vskin/icon_reset")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 ---
--- Checks recursively the parents until none is found and the highest parent is returned
--- @ignore
-local function getHighestParent(slf)
-	local parent = slf
-	local checkParent = slf:GetParent()
-
-	while ispanel(checkParent) do
-		parent = checkParent
-		checkParent = parent:GetParent()
-	end
-
-	return parent
-end
-
----
 -- @ignore
 function PANEL:Init()
 	self.items = {}
@@ -166,11 +151,11 @@ function PANEL:MakeTextEntry(data)
 	right:SetHeightMult(1)
 
 	right.OnGetFocus = function(slf)
-		getHighestParent(self):SetKeyboardInputEnabled(true)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
 	end
 
 	right.OnLoseFocus = function(slf)
-		getHighestParent(self):SetKeyboardInputEnabled(false)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
 	end
 
 	-- Set default if possible even if the convar could still overwrite it
