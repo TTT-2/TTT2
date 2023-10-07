@@ -850,7 +850,7 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 		)
 	else
 		self:PaintTextEntryTTT2(panel, w, h)
-		local vguiColor = util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25))
+		local vguiColor = utilGetActiveColor(utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 25))
 		panel:DrawTextEntryText(vguiColor, vguiColor, vguiColor)
 	end
 end

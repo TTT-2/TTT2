@@ -18,13 +18,13 @@ function PANEL:Init()
 	self.TextArea:SetTextColor(vguiColor)
 	self.TextArea:SetCursorColor(vguiColor)
 
-	-- On focus of textbox, enable input and change to default paint function in EnableTextBox
+	-- On focus of textbox, enable input
 	self.TextArea.OnGetFocus = function(textarea)
 		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
 		self:EnableTextBox(true)
 	end
 
-	-- On focus loss, disable input and change to TTT2 paint function in EnableTextBox
+	-- On focus loss, disable input and set new values from textbox
 	self.TextArea.OnLoseFocus = function(textarea)
 		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
 		self:EnableTextBox(false)
