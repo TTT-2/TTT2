@@ -370,6 +370,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	local ply_model = rag.scene.ply_model or ""
 	local ply_model_color = rag.scene.ply_model_color or COLOR_WHITE
 	local ply_sid64 = rag.scene.ply_sid64 or ""
+	local last_damage = math.max(0, rag.scene.last_damage)
 
 	local owner = player.GetBySteamID64(rag.sid64)
 	owner = IsValid(owner) and owner:EntIndex() or -1
@@ -471,6 +472,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	net.WriteVector(ply_model_color)
 	net.WriteString(ply_sid64)
 	net.WriteUInt(credits, 8)
+	net.WriteUInt(last_damage, 16)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?

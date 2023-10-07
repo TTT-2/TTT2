@@ -697,6 +697,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	ply.server_ragdoll.scene.ply_model = ply:GetModel()
 	ply.server_ragdoll.scene.ply_model_color = ply:GetPlayerColor()
 	ply.server_ragdoll.scene.ply_sid64 = ply:SteamID64()
+	ply.server_ragdoll.scene.last_damage = dmginfo:GetDamage()
 
 	CreateDeathEffect(ply, false)
 

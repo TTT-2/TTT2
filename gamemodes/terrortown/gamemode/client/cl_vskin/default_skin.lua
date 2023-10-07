@@ -1655,8 +1655,17 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 		)
 	end
 
+	local title = panel:GetTitle()
+	local text_title = ""
+
+	if title.params then
+		text_title = ParT(title.body, title.params)
+	else
+		text_title = TryT(title.body)
+	end
+
 	drawSimpleText(
-		TryT(panel:GetTitle()),
+		text_title,
 		"DermaTTT2TitleSmall",
 		posText,
 		posIcon,

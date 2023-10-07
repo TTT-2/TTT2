@@ -411,6 +411,7 @@ local function TTTRagdollSearch()
 	search.ply_model_color = net.ReadVector()
 	search.ply_sid64 = net.ReadString()
 	search.credits = net.ReadUInt(8)
+	search.last_damage = net.ReadUInt(16)
 
 	-- searched by detective?
 	search.detective_search = net.ReadBool()
@@ -544,7 +545,10 @@ local RawToText = {
 		local final = string.match(data.words, "[\\.\\!\\?]$") ~= nil
 
 		return {
-			title = "search_title_words",
+			title = {
+				body = "search_title_words",
+				params = nil
+			},
 			text = {{
 				body = "search_words",
 				params = {lastwords = d .. (final and "" or "--.")}
@@ -555,7 +559,10 @@ local RawToText = {
 		if data.c4wire <= 0 then return end
 
 		return {
-			title = "search_title_c4",
+			title = {
+				body = "search_title_c4",
+				params = nil
+			},
 			text = {{
 				body = "search_c4",
 				params = {num = data.c4wire}
@@ -564,7 +571,10 @@ local RawToText = {
 	end,
 	dmg = function(data)
 		local ret_text = {
-			title = "search_title_dmg_" .. DamageToText(data.dmg),
+			title = {
+				body = "search_title_dmg_" .. DamageToText(data.dmg),
+				params = {amount = data.last_damage}
+			},
 			text = {{
 				body = "search_dmg_" .. DamageToText(data.dmg),
 				params = nil
@@ -595,7 +605,10 @@ local RawToText = {
 		if not wname then return end
 
 		local ret_text = {
-			title = wname,
+			title = {
+				body = wname,
+				params = nil
+			},
 			text = {{
 				body = "search_weapon",
 				params = {weapon = wname}
@@ -620,7 +633,10 @@ local RawToText = {
 	end,
 	death_time = function(data)
 		return {
-			title = "search_title_time",
+			title = {
+				body = "search_title_time",
+				params = nil
+			},
 			text = {{
 				body = "search_time",
 				params = nil
@@ -629,7 +645,10 @@ local RawToText = {
 	end,
 	dna_time = function(data)
 		return {
-			title = "search_title_dna",
+			title = {
+				body = "search_title_dna",
+				params = nil
+			},
 			text = {{
 				body = "search_dna",
 				params = nil
@@ -647,7 +666,10 @@ local RawToText = {
 
 			if dc or IsValid(vic) and vic:IsPlayer() then
 				return {
-					title = "search_title_kills",
+					title = {
+						body = "search_title_kills",
+						params = nil
+					},
 					text = {{
 						body = "search_kills1",
 						params = {player = dc and "<Disconnected>" or vic:Nick()}
@@ -667,7 +689,10 @@ local RawToText = {
 			end
 
 			return {
-				title = "search_title_kills",
+				title = {
+					body = "search_title_kills",
+					params = nil
+				},
 				text = {{
 					body = "search_kills2",
 					params = {player = table.concat(nicks, "\n", 1, last)}
@@ -683,7 +708,10 @@ local RawToText = {
 		if not IsValid(ent) or not ent:IsPlayer() then return end
 
 		return {
-			title = "search_title_eyes",
+			title = {
+				body = "search_title_eyes",
+				params = nil
+			},
 			text = {{
 				body = "search_eyes",
 				params = {player = ent:Nick()}
@@ -694,7 +722,10 @@ local RawToText = {
 		if data.floor == 0 or not floorid_to_text[data.floor] then return end
 
 		return {
-			title = "search_title_floor",
+			title = {
+				body = "search_title_floor",
+				params = nil
+			},
 			text = {{
 				body = floorid_to_text[data.floor],
 				params = {}
@@ -705,7 +736,10 @@ local RawToText = {
 		if data.credits == 0 then return end
 
 		return {
-			title = "search_title_credits",
+			title = {
+				body = "search_title_credits",
+				params = {credits = data.credits}
+			},
 			text = {{
 				body = "search_credits",
 				params = {credits = data.credits}
@@ -716,7 +750,10 @@ local RawToText = {
 		if not data.water_level or data.water_level == 0 then return end
 
 		return {
-			title = "search_title_water",
+			title = {
+				body = "search_title_water",
+				params = {level = data.water_level}
+			},
 			text = {{
 				body = "search_water_" .. data.water_level,
 				params = nil
@@ -852,7 +889,7 @@ function SEARCHSCRN:Show(data)
 	if (data.head) then
 		damage_icon = Material("vgui/ttt/icon_head")
 	end
-	self:MakeInfoItem(contentAreaScroll, damage_icon, RawToText.dmg({dmg = data.dmg, ori = data.kill_angle, head = data.head}))
+	self:MakeInfoItem(contentAreaScroll, damage_icon, RawToText.dmg({dmg = data.dmg, ori = data.kill_angle, head = data.head, last_damage = data.last_damage}))
 
 	-- time information
 	self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_time"), RawToText.death_time({}), nil, data.dtime)
