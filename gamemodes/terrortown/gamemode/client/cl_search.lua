@@ -15,293 +15,97 @@ local hook = hook
 local utilBitSet = util.BitSet
 local is_dmg = util.BitSet
 
-local dtt = {
-	crush = DMG_CRUSH,
-	bullet = DMG_BULLET,
-	fall = DMG_FALL,
-	boom = DMG_BLAST,
-	club = DMG_CLUB,
-	drown = DMG_DROWN,
-	stab = DMG_SLASH,
-	burn = DMG_BURN,
-	tele = DMG_SONIC,
-	car = DMG_VEHICLE
-}
-
--- Info type to icon mapping
-
--- Some icons have different appearances based on the data value. These have a
--- separate table inside the TypeToMat table.
-
--- Those that have a lot of possible data values are defined separately, either
--- as a function or a table.
-
-local dtm = {
-	bullet = DMG_BULLET,
-	rock = DMG_CRUSH,
-	splode = DMG_BLAST,
-	fall = DMG_FALL,
-	fire = DMG_BURN,
-	drown = DMG_DROWN
-}
-
 ---
--- This hook can be used to populate the body search panel.
--- @param table search The search data table
--- @param table raw The raw search data
--- @hook
+-- Creates a table with icons, text,... out of search_raw table
+-- @param table raw
+-- @return table a converted search data table
 -- @realm client
-function GM:TTTBodySearchPopulate(search, raw)
+function PreprocSearch(raw)
+	local search = {}
 
-end
+	for t, d in pairs(raw) do
+		search[t] = {
+			img = nil,
+			text = "",
+			p = 10 -- sorting number
+		}
 
----
--- This hook can be used to modify the equipment info of a corpse.
--- @param table search The search data table
--- @param table equip The raw equipment table
--- @hook
--- @realm client
-function GM:TTTBodySearchEquipment(search, equip)
-
-end
-
----
--- This hook is called right before the killer found @{MSTACK} notification
--- is added.
--- @param string finder The nickname of the finder
--- @param string victim The nickname of the victim
--- @hook
--- @realm client
-function GM:TTT2ConfirmedBody(finder, victim)
-
-end
-
----
--- Returns a function meant to override OnActivePanelChanged, which modifies
--- dactive and dtext based on the search information that is associated with the
--- newly selected panel
-local function SearchInfoController(search, dactive, dtext)
-	return function(s, pold, pnew)
-		local t = pnew.info_type
-
-		local data = search[t]
-		if not data then
-			ErrorNoHalt("Search: data not found", t, data, "\n")
-
-			return
-		end
-
-		-- If wrapping is on, the Label's SizeToContentsY misbehaves for
-		-- text that does not need wrapping. I long ago stopped wondering
-		-- "why" when it comes to VGUI. Apply hack, move on.
-		dtext:GetLabel():SetWrap(#data.text > 50)
-		dtext:SetText(data.text)
-
-		local icon = data.img
-
-		if t == "role" then
-			dactive:SetImage2("vgui/ttt/dynamic/icon_base_base")
-			dactive:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
-			dactive:SetRoleIconImage(icon)
-
-			icon = "vgui/ttt/dynamic/icon_base"
+		if isfunction(pfmc_tbl[t]) then
+			pfmc_tbl[t](search, d, raw)
 		else
-			dactive:UnloadImage2()
-			dactive:UnloadImageOverlay()
-			dactive:UnloadRoleIconImage()
+			search[t] = nil
 		end
 
-		dactive:SetImage(icon)
-		dactive:SetImageColor(data.color or COLOR_WHITE)
+		-- anything matching a type but not given a text should be removed
+		if search[t] and search[t].text == "" then
+			search[t] = nil
+		end
+
+		-- don't display an extra icon for the team. Merge with role desc
+		if search.role and search.team then
+			if GetGlobalBool("ttt2_confirm_team") then
+				search.role.text = search.role.text .. " " .. search.team.text
+			end
+
+			search.team = nil
+		end
+
+		-- if there's still something here, we'll be showing it, so find an icon
+		if search[t] then
+			search[t].img = IconForInfoType(t, d)
+		end
 	end
+
+	local itms = items.GetList()
+
+	for i = 1, #itms do
+		local item = itms[i]
+
+		if not item.noCorpseSearch and raw["eq_" .. item.id] then
+			local highest = 0
+
+			for _, v in pairs(search) do
+				highest = math.max(highest, v.p)
+			end
+
+			local text
+
+			if item.corpseDesc then
+				text = RT(item.corpseDesc) or item.corpseDesc
+			else
+				if item.desc then
+					text = RT(item.desc)
+				end
+
+				local tmpText
+
+				if not text and item.EquipMenuData and item.EquipMenuData.desc then
+					tmpText = item.EquipMenuData.desc
+					text = RT(tmpText)
+				end
+
+				if not text then
+					text = item.desc or tmpText or ""
+				end
+			end
+
+			-- add item to body search if flag is set
+			if item.populateSearch then
+				search["eq_" .. item.id] = {
+					img = item.corpseIcon or item.material,
+					text = text,
+					p = highest + 1
+				}
+			end
+		end
+	end
+
+	---
+	-- @realm client
+	hook.Run("TTTBodySearchPopulate", search, raw)
+
+	return search
 end
-
-local function ShowSearchScreen(search_raw)
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
-
-	local m = 8
-	local bw, bh = 100, 25
-	local bw_large = 125
-	local w, h = 425, 260
-
-	local rw, rh = (w - m * 2), (h - 25 - m * 2)
-	local rx, ry = 0, 0
-
-	local rows = 1
-	local listw, listh = rw, (64 * rows + 6)
-	local listx, listy = rx, ry
-
-	ry = ry + listh + m * 2
-	rx = m
-
-	local descw, desch = rw - m * 2, 80
-	local descx, descy = rx, ry
-
-	ry = ry + desch + m
-
-	--local butx, buty = rx, ry
-
-	local dframe = vgui.Create("DFrame")
-	dframe:SetSize(w, h)
-	dframe:Center()
-	dframe:SetTitle(T("search_title") .. " - " .. search_raw.nick or "???")
-	dframe:SetVisible(true)
-	dframe:ShowCloseButton(true)
-	dframe:SetMouseInputEnabled(true)
-	dframe:SetKeyboardInputEnabled(true)
-	dframe:SetDeleteOnClose(true)
-
-	dframe.OnKeyCodePressed = util.BasicKeyHandler
-
-	-- contents wrapper
-	local dcont = vgui.Create("DPanel", dframe)
-	dcont:SetPaintBackground(false)
-	dcont:SetSize(rw, rh)
-	dcont:SetPos(m, 25 + m)
-
-	-- icon list
-	local dlist = vgui.Create("DPanelSelect", dcont)
-	dlist:SetPos(listx, listy)
-	dlist:SetSize(listw, listh)
-	dlist:EnableHorizontal(true)
-	dlist:SetSpacing(1)
-	dlist:SetPadding(2)
-
-	if dlist.VBar then
-		dlist.VBar:Remove()
-
-		dlist.VBar = nil
-	end
-
-	-- description area
-	local dscroll = vgui.Create("DHorizontalScroller", dlist)
-	dscroll:StretchToParent(3, 3, 3, 3)
-
-	local ddesc = vgui.Create("ColoredBox", dcont)
-	ddesc:SetColor(Color(50, 50, 50))
-	ddesc:SetName(T("search_info"))
-	ddesc:SetPos(descx, descy)
-	ddesc:SetSize(descw, desch)
-
-	local dactive = vgui.Create("DRoleImage", ddesc)
-	dactive:SetImage("vgui/ttt/icon_id")
-	dactive:SetPos(m, m)
-	dactive:SetSize(64, 64)
-
-	local dtext = vgui.Create("ScrollLabel", ddesc)
-	dtext:SetSize(descw - 120, desch - m * 2)
-	dtext:MoveRightOf(dactive, m * 2)
-	dtext:AlignTop(m)
-	dtext:SetText("...")
-
-	-- buttons
-	local by = rh - bh - m * 0.5
-
-	local dconfirm = vgui.Create("DButton", dcont)
-	dconfirm:SetPos(m, by)
-	dconfirm:SetSize(bw_large, bh)
-	dconfirm:SetText(T("search_confirm"))
-
-	local id = search_raw.eidx + search_raw.dtime
-
-	dconfirm.DoClick = function(s)
-		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
-	end
-
-	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:TTT2NETGetBool("body_found", false))
-
-	local dcall = vgui.Create("DButton", dcont)
-	dcall:SetPos(m * 2 + bw_large, by)
-	dcall:SetSize(bw_large, bh)
-	dcall:SetText(T("search_call"))
-
-	dcall.DoClick = function(s)
-		client.called_corpses = client.called_corpses or {}
-		client.called_corpses[#client.called_corpses + 1] = search_raw.eidx
-
-		s:SetDisabled(true)
-
-		RunConsoleCommand("ttt_call_detective", search_raw.eidx)
-	end
-
-	dcall:SetDisabled(client:IsSpec() or table.HasValue(client.called_corpses or {}, search_raw.eidx))
-
-	local dclose = vgui.Create("DButton", dcont)
-	dclose:SetPos(rw - m - bw, by)
-	dclose:SetSize(bw, bh)
-	dclose:SetText(T("close"))
-
-	dclose.DoClick = function()
-		dframe:Close()
-	end
-
-	-- Finalize search data, prune stuff that won't be shown etc
-	-- search is a table of tables that have an img and text key
-	local search = PreprocSearch(search_raw)
-
-	-- Install info controller that will link up the icons to the text etc
-	dlist.OnActivePanelChanged = SearchInfoController(search, dactive, dtext)
-
-	-- Create table of SimpleIcons, each standing for a piece of search
-	-- information.
-	local start_icon
-
-	for t, info in SortedPairsByMemberValue(search, "p") do
-		local ic
-		local icon = info.img
-
-		-- Certain items need a special icon conveying additional information
-		if t == "nick" then
-			local avply = IsValid(search_raw.owner) and search_raw.owner or nil
-
-			ic = vgui.Create("SimpleIconAvatar", dlist)
-			ic:SetPlayer(avply)
-
-			start_icon = ic
-		elseif t == "lastid" then
-			ic = vgui.Create("SimpleIconAvatar", dlist)
-			ic:SetPlayer(info.ply)
-			ic:SetAvatarSize(24)
-		elseif info.text_icon then
-			ic = vgui.Create("SimpleIconLabelled", dlist)
-			ic:SetIconText(info.text_icon)
-		elseif t == "role" then
-			ic = vgui.Create("SimpleRoleIcon", dlist)
-
-			ic.Icon:SetImage2("vgui/ttt/dynamic/icon_base_base")
-			ic.Icon:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
-			ic.Icon:SetRoleIconImage(icon)
-
-			icon = "vgui/ttt/dynamic/icon_base"
-		else
-			ic = vgui.Create("SimpleIcon", dlist)
-		end
-
-		ic:SetIconSize(64)
-		ic:SetIcon(icon)
-
-		if info.color then
-			ic:SetIconColor(info.color)
-		end
-
-		ic.info_type = t
-
-		dlist:AddPanel(ic)
-		dscroll:AddPanel(ic)
-	end
-
-	dlist:SelectPanel(start_icon)
-	dframe:MakePopup()
-end
-
-
-
-
-
-
-
-
 
 local function StoreSearchResult(search)
 	if not search.owner then return end
@@ -332,7 +136,7 @@ local function bitsRequired(num)
 	return bits
 end
 
-local function TTTRagdollSearch()
+net.Receive("TTT_RagdollSearch", function()
 	local search = {}
 
 	-- Basic info
@@ -393,9 +197,7 @@ local function TTTRagdollSearch()
 	search.finder = net.ReadUInt(8)
 	search.show = LocalPlayer():EntIndex() == search.finder
 
-	--
 	-- last words
-	--
 	local words = net.ReadString()
 	search.words = (words ~= "") and words or nil
 
@@ -431,10 +233,9 @@ local function TTTRagdollSearch()
 	StoreSearchResult(search)
 
 	search = nil
-end
-net.Receive("TTT_RagdollSearch", TTTRagdollSearch)
+end)
 
-local function TTT2ConfirmMsg()
+net.Receive("TTT2SendConfirmMsg", function()
 	local msgName = net.ReadString()
 	local sid64 = net.ReadString()
 	local clr = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
@@ -469,13 +270,29 @@ local function TTT2ConfirmMsg()
 		SEARCHSCRN.buttonConfirm:SetText("search_confirmed")
 		SEARCHSCRN.buttonConfirm:SetIcon(nil)
 	end
-end
-net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)
+end)
 
+local damage_to_text = {
+	["crush"] = DMG_CRUSH,
+	["bullet"] = DMG_BULLET,
+	["fall"] = DMG_FALL,
+	["boom"] = DMG_BLAST,
+	["club"] = DMG_CLUB,
+	["drown"] = DMG_DROWN,
+	["stab"] = DMG_SLASH,
+	["burn"] = DMG_BURN,
+	["tele"] = DMG_SONIC,
+	["car"] = DMG_VEHICLE
+}
 
-
-
-
+local damage_to_material = {
+	["bullet"] = DMG_BULLET,
+	["rock"] = DMG_CRUSH,
+	["splode"] = DMG_BLAST,
+	["fall"] = DMG_FALL,
+	["fire"] = DMG_BURN,
+	["drown"] = DMG_DROWN
+}
 
 local distance_to_text = {
 	[CORPSE_KILL_POINT_BLANK] = "kill_distance_point_blank",
@@ -525,7 +342,7 @@ local hitgroup_to_text = {
 }
 
 local function DamageToText(dmg)
-	for key, value in pairs(dtt) do
+	for key, value in pairs(damage_to_text) do
 		if is_dmg(dmg, value) then
 			return key
 		end
@@ -770,7 +587,7 @@ local function WeaponToIconMaterial(cls)
 end
 
 local function DamageToIconMaterial(dmg)
-	for key, value in pairs(dtm) do
+	for key, value in pairs(damage_to_material) do
 		if utilBitSet(dmg, value) then
 			return Material("vgui/ttt/icon_" .. key)
 		end
@@ -782,7 +599,6 @@ local function DamageToIconMaterial(dmg)
 		return Material("vgui/ttt/icon_skull")
 	end
 end
-
 
 ---
 -- @class SEARCHSCRN
@@ -1010,4 +826,37 @@ function SEARCHSCRN:Close()
 	if not IsValid(self.menuFrame) then return end
 
 	self.menuFrame:CloseFrame()
+end
+
+-- HOOKS --
+
+---
+-- This hook can be used to populate the body search panel.
+-- @param table search The search data table
+-- @param table raw The raw search data
+-- @hook
+-- @realm client
+function GM:TTTBodySearchPopulate(search, raw)
+
+end
+
+---
+-- This hook can be used to modify the equipment info of a corpse.
+-- @param table search The search data table
+-- @param table equip The raw equipment table
+-- @hook
+-- @realm client
+function GM:TTTBodySearchEquipment(search, equip)
+
+end
+
+---
+-- This hook is called right before the killer found @{MSTACK} notification
+-- is added.
+-- @param string finder The nickname of the finder
+-- @param string victim The nickname of the victim
+-- @hook
+-- @realm client
+function GM:TTT2ConfirmedBody(finder, victim)
+
 end
