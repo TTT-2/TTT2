@@ -270,13 +270,13 @@ local function ttt_call_detective(ply, cmd, args)
 			net.WriteVector(rag:GetPos())
 			net.Send(plyTable)
 
-			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_CHAT_PLAIN)
+			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_MSTACK_PLAIN)
 
 			---
 			-- @realm server
 			hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
 		else
-			LANG.Msg(ply, "body_call_error")
+			LANG.Msg(ply, "body_call_error", nil, MSG_MSTACK_WARN)
 		end
 	end
 end
