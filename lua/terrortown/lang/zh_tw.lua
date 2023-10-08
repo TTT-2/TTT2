@@ -1894,3 +1894,11 @@ L.slot_weapon_unarmed = "空手槽"
 L.slot_weapon_special = "特殊槽"
 L.slot_weapon_extra = "額外槽"
 L.slot_weapon_class = "職業槽"
+
+-- 2023-10-04
+-- L.label_voice_duck_spectator = "Duck spectator voices"
+-- L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+-- L.label_voice_scaling = "Voice Volume Scaling Mode"
+-- L.label_voice_scaling_mode_linear = "Linear"
+-- L.label_voice_scaling_mode_power4 = "Power 4"
+-- L.label_voice_scaling_mode_log = "Logarithmic"

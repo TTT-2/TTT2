@@ -7,12 +7,22 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
+- Added a new way to alter player volume separately from the scoreboard (by @EntranceJew):
+  - `VOICE.(Get/Set)PreferredPlayerVoiceVolume` for setting the voice volume instead of `Player:SetVoiceVolumeScale`
+  - `VOICE.(Get/Set)PreferredPlayerVoiceMute` for setting the voice mute instead of `Player:SetMuted`
+  - `VOICE.UpdatePlayerVoiceVolume` commits / updates the voice setting according to player preferences
+- Added client submenu options for clients to change audio settings under `F1 > Gameplay > General` (by @EntranceJew):
+  - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
+  - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
+    - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
 
 ### Changed
 
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
+- Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
+  - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 
