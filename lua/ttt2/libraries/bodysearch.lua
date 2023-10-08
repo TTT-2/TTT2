@@ -393,7 +393,7 @@ if CLIENT then
 
 	local function TypeToMaterial(type, data)
 		if type == "wep" then
-			return util.WeaponForClass(data.wep).ttt2_cached_material
+			return util.WeaponForClass(data.wep).iconMaterial
 		elseif type == "dmg" then
 			return DamageToIconMaterial(data)
 		elseif type == "death_time" then
@@ -479,7 +479,8 @@ if CLIENT then
 		local search = {}
 
 		for i = 1, #bodysearch.searchResultOrder do
-			local searchData = bodysearch.GetContentFromData(bodysearch.searchResultOrder[i], raw)
+			local type = bodysearch.searchResultOrder[i]
+			local searchData = bodysearch.GetContentFromData(type, raw)
 
 			if not searchData then continue end
 
@@ -499,13 +500,16 @@ if CLIENT then
 			else
 				transText = transText .. LANG.TryTranslation(text[1].body) .. " "
 			end
-		end
 
-		search[bodysearch.searchResultOrder[i]] = {
-			img = searchData.iconMaterial:GetName(),
-			text = transText,
-			p = i -- sorting number
-		}
+			search[type] = {
+				img = searchData.iconMaterial:GetName(),
+				text = transText,
+				p = i -- sorting number
+			}
+
+			-- special cases with icon text
+			search[type].text_icon = TypeToIconText(type, raw)()
+		end
 
 		---
 		-- @realm client

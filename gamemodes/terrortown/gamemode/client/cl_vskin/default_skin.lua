@@ -25,7 +25,6 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 
 local mathRound = math.Round
-local mathMax = math.max
 
 local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
@@ -1684,7 +1683,7 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	for i = 1, #text do
 		local par = text[i].params
 
-		if (par) then
+		if par then
 			-- process params (translation)
 			for k, v in pairs(par) do
 				par[k] = TryT(v)

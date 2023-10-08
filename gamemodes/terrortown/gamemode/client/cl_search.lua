@@ -2,7 +2,6 @@
 -- Body search popup
 -- @section body_search_manager
 
-local RT = LANG.GetRawTranslation
 local net = net
 local pairs = pairs
 local util = util
