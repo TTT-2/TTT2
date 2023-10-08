@@ -331,7 +331,9 @@ function PANEL:SetPlayer(ply)
 
 	self.voice.DoClick = function()
 		if IsValid(ply) and ply ~= client then
-			ply:SetMuted(not ply:IsMuted())
+			local muted = VOICE.GetPreferredPlayerVoiceMuted(ply)
+			VOICE.SetPreferredPlayerVoiceMuted(ply, not muted)
+			VOICE.UpdatePlayerVoiceVolume(ply)
 		end
 	end
 
@@ -445,7 +447,7 @@ function PANEL:UpdatePlayerData()
 	end
 
 	if self.Player ~= LocalPlayer() then
-		local muted = self.Player:IsMuted()
+		local muted = VOICE.GetPreferredPlayerVoiceMuted(self.Player)
 
 		self.voice:SetImage(muted and "icon16/sound_mute.png" or "icon16/sound.png")
 	else
@@ -659,13 +661,14 @@ function PANEL:ScrollPlayerVolume(delta)
 	-- Bots return nil for the steamid64 on the client, so we need to improvise a bit
 	local identifier = ply:IsBot() and ply:Nick() or ply:SteamID64()
 
-	local cur_volume = ply:GetVoiceVolumeScale()
+	local cur_volume = VOICE.GetPreferredPlayerVoiceVolume(ply)
 	cur_volume = cur_volume ~= nil and cur_volume or 1
 
 	local new_volume = delta == -1 and math.max(0, cur_volume - 0.01) or math.min(1, cur_volume + 0.01)
 	new_volume = math.Round(new_volume, 2)
 
-	ply:SetVoiceVolumeScale(new_volume)
+	VOICE.SetPreferredPlayerVoiceVolume(ply, new_volume)
+	VOICE.UpdatePlayerVoiceVolume(ply)
 
 	if self.voice.percentage_frame ~= nil and not self.voice.percentage_frame:IsVisible() then
 		self.voice.percentage_frame:Show()
