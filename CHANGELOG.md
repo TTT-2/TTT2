@@ -4,10 +4,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
+
 ### Changed
 
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
+- Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 
