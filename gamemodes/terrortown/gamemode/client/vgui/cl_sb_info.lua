@@ -111,7 +111,7 @@ function PANEL:UpdatePlayerData()
 	local search_raw = self.Player.search_result
 
 	-- standard search result preproc
-	local search = PreprocSearch(search_raw)
+	local search = bodysearch.PreprocSearch(search_raw)
 
 	-- wipe some stuff we don't need, like id
 	search.nick = nil

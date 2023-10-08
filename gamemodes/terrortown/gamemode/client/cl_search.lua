@@ -3,104 +3,11 @@
 -- @section body_search_manager
 
 local RT = LANG.GetRawTranslation
-local table = table
 local net = net
 local pairs = pairs
 local util = util
 local IsValid = IsValid
 local hook = hook
-
----
--- Creates a table with icons, text,... out of search_raw table
--- @param table raw
--- @return table a converted search data table
--- @realm client
-function PreprocSearch(raw)
-	local search = {}
-
-	for t, d in pairs(raw) do
-		search[t] = {
-			img = nil,
-			text = "",
-			p = 10 -- sorting number
-		}
-
-		if isfunction(pfmc_tbl[t]) then
-			pfmc_tbl[t](search, d, raw)
-		else
-			search[t] = nil
-		end
-
-		-- anything matching a type but not given a text should be removed
-		if search[t] and search[t].text == "" then
-			search[t] = nil
-		end
-
-		-- don't display an extra icon for the team. Merge with role desc
-		if search.role and search.team then
-			if GetGlobalBool("ttt2_confirm_team") then
-				search.role.text = search.role.text .. " " .. search.team.text
-			end
-
-			search.team = nil
-		end
-
-		-- if there's still something here, we'll be showing it, so find an icon
-		if search[t] then
-			search[t].img = IconForInfoType(t, d)
-		end
-	end
-
-	local itms = items.GetList()
-
-	for i = 1, #itms do
-		local item = itms[i]
-
-		if not item.noCorpseSearch and raw["eq_" .. item.id] then
-			local highest = 0
-
-			for _, v in pairs(search) do
-				highest = math.max(highest, v.p)
-			end
-
-			local text
-
-			if item.corpseDesc then
-				text = RT(item.corpseDesc) or item.corpseDesc
-			else
-				if item.desc then
-					text = RT(item.desc)
-				end
-
-				local tmpText
-
-				if not text and item.EquipMenuData and item.EquipMenuData.desc then
-					tmpText = item.EquipMenuData.desc
-					text = RT(tmpText)
-				end
-
-				if not text then
-					text = item.desc or tmpText or ""
-				end
-			end
-
-			-- add item to body search if flag is set
-			if item.populateSearch then
-				search["eq_" .. item.id] = {
-					img = item.corpseIcon or item.material,
-					text = text,
-					p = highest + 1
-				}
-			end
-		end
-	end
-
-	---
-	-- @realm client
-	hook.Run("TTTBodySearchPopulate", search, raw)
-
-	return search
-end
 
 local function StoreSearchResult(search)
 	if not search.owner then return end
@@ -267,10 +174,6 @@ net.Receive("TTT2SendConfirmMsg", function()
 	end
 end)
 
-
-
-
-
 ---
 -- @class SEARCHSCRN
 SEARCHSCRN = SEARCHSCRN or {}
@@ -369,71 +272,6 @@ function SEARCHSCRN:Show(data)
 
 		self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
 	end
-
-
-	--[[
-	-- weapon information
-	local wep_data = bodysearch.GetDescriptionFromData("wep", {wep = data.wep, dist = data.kill_distance, hit_group = data.kill_hitgroup})
-	if (wep_data) then
-		self:MakeInfoItem(contentAreaScroll, WeaponToIconMaterial(data.wep), wep_data)
-	end
-
-	-- damage information
-	local damage_icon = DamageToIconMaterial(data.dmg)
-	if (data.head) then
-		damage_icon = Material("vgui/ttt/icon_head")
-	end
-	self:MakeInfoItem(contentAreaScroll, damage_icon, bodysearch.GetDescriptionFromData("dmg", {dmg = data.dmg, ori = data.kill_angle, head = data.head, last_damage = data.last_damage}))
-
-	-- time information
-	self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_time"), bodysearch.GetDescriptionFromData("death_time", {}), nil, data.dtime)
-
-	-- credit information
-	local credit_box
-	if (data.credits > 0) then
-		credit_box = self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_credits"), bodysearch.GetDescriptionFromData("credits", {credits = data.credits}), COLOR_GOLD)
-	end
-
-	-- dna sample information
-	if (data.stime - CurTime() > 0) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_wtester"), bodysearch.GetDescriptionFromData("dna_time", {}), roles.DETECTIVE.ltcolor, data.stime):SetLiveTimeInverted(true)
-	end
-
-	-- floor surface information
-	local floor_data = data.kill_floor_surface
-	if (floor_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_floor"), bodysearch.GetDescriptionFromData("floor_surface", {floor = floor_data}))
-	end
-
-	-- water death information
-	local water_data = bodysearch.GetDescriptionFromData("water_level", {water_level = data.kill_water_level})
-	if (water_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_water_" .. data.kill_water_level), water_data)
-	end
-
-	-- c4 information
-	local c4_data = bodysearch.GetDescriptionFromData("c4_disarm", {c4wire = data.c4})
-	if (c4_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_code"), c4_data)
-	end
-
-	-- last id information
-	local lastid_data = bodysearch.GetDescriptionFromData("last_id", {idx = data.idx})
-	if (lastid_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_lastid"), lastid_data)
-	end
-
-	-- kill list information
-	local killlist_data = bodysearch.GetDescriptionFromData("kill_list", {kills = data.kills})
-	if (killlist_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_list"), killlist_data)
-	end
-
-	-- last words information
-	local last_words_data = bodysearch.GetDescriptionFromData("last_words", {words = data.words})
-	if (last_words_data) then
-		self:MakeInfoItem(contentAreaScroll, Material("vgui/ttt/icon_halp"), last_words_data)
-	end]]
 
 	-- additional information by other addons
 	local search_add = {}

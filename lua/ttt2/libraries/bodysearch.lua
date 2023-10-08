@@ -27,6 +27,9 @@ if CLIENT then
 	local CurTime = CurTime
 	local utilBitSet = util.BitSet
 	local mathMax = math.max
+	local table = table
+	local IsValid = IsValid
+	local pairs = pairs
 
 	local damageToText = {
 		["crush"] = DMG_CRUSH,
@@ -449,6 +452,9 @@ if CLIENT then
 	}
 
 	function bodysearch.GetContentFromData(type, data)
+		-- make sure type is valid
+		if not isfunction(DataToText[type]) then return end
+
 		local text = DataToText[type](data)
 
 		-- DataToText checks if criteria for display is met, no box should be
@@ -461,6 +467,51 @@ if CLIENT then
 			colorBox = TypeToColor(type, data),
 			text = text
 		}
+	end
+
+	---
+	-- Creates a table with icons, text,... out of search_raw table
+	-- @param table raw
+	-- @return table a converted search data table
+	-- @note This function is old and should be redone on a scoreboard rework
+	-- @realm client
+	function bodysearch.PreprocSearch(raw)
+		local search = {}
+
+		for i = 1, #bodysearch.searchResultOrder do
+			local searchData = bodysearch.GetContentFromData(bodysearch.searchResultOrder[i], raw)
+
+			if not searchData then continue end
+
+			-- a workaround to build the rext for the scoreboard
+			local text = searchData.text.text
+			local transText = ""
+
+			-- only use the first text entry here
+			local par = text[1].params
+			if par then
+				-- process params (translation)
+				for k, v in pairs(par) do
+					par[k] = LANG.TryTranslation(v)
+				end
+
+				transText = transText .. LANG.GetParamTranslation(text[1].body, par) .. " "
+			else
+				transText = transText .. LANG.TryTranslation(text[1].body) .. " "
+			end
+		end
+
+		search[bodysearch.searchResultOrder[i]] = {
+			img = searchData.iconMaterial:GetName(),
+			text = transText,
+			p = i -- sorting number
+		}
+
+		---
+		-- @realm client
+		hook.Run("TTTBodySearchPopulate", search, raw)
+
+		return search
 	end
 
 	-- HOOKS --
