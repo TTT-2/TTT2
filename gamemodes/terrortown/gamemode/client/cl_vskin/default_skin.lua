@@ -132,7 +132,13 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 	drawBox(0, 0, w, sizes.header, colors.accent)
 	drawBox(0, sizes.header, w, sizes.border, colors.accentDark)
 
-	drawShadowedText(TryT(panel:GetTitle()), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+	local title = panel:GetTitle()
+
+	if istable(title) then
+		drawShadowedText(ParT(title.body, title.params), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+	else
+		drawShadowedText(TryT(title), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+	end
 end
 
 ---

@@ -1853,7 +1853,7 @@ L.slot_weapon_extra = "Extra Slot"
 L.slot_weapon_class = "Class Slot"
 
 -- 2023-10-07
-L.search_title = "Body Search Results"
+L.search_title = "Body Search Results - {player}"
 L.search_info = "Information"
 L.search_confirm = "Confirm Death"
 L.search_confirm_credits = "Confirm (+{credits} Credits)"
