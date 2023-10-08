@@ -1627,10 +1627,6 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	local posText = posIcon + sizeIcon + 2 * padding
 	local heightText = 15
 
-	xTime = posIcon + 0.5 * sizeIcon
-	yTime = posIcon + 0.75 * sizeIcon
-
-	local colorLiveTimeBackground = colors.settingsBox
 	local colorBackground = panel:GetColor() or colors.settingsBox
 	local colorBorderDefault = utilGetChangedColor(colors.background, 75)
 	local colorText = utilGetDefaultColor(colorBackground)
@@ -1640,22 +1636,24 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 
 	drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
 
-	if (panel:HasLiveTime()) then
-		drawRoundedBox(sizes.cornerRadius, xTime - 24, yTime - 7, 48, 16, colorLiveTimeBackground)
+	if (panel:HasIconTextFunction()) then
+		local textString = panel:GetIconText()
 
-		local time_string = ""
+		local widthIconText = drawGetTextSize(textString, "DermaTTT2SmallBold")
+		local xIconText = posIcon + 0.5 * sizeIcon
+		local yIconText = posIcon + 0.75 * sizeIcon
+		local widthIconTextBox = widthIconText + 8
+		local heightIconTextBox = 16
 
-		if (panel:GetLiveTimeInverted()) then
-			time_string = util.SimpleTime(mathMax(0, panel:GetLiveTime() - CurTime()), "%02i:%02i")
-		else
-			time_string = util.SimpleTime(CurTime() - panel:GetLiveTime(), "%02i:%02i")
-		end
+		local colorLiveTimeBackground = colors.settingsBox
+
+		drawRoundedBox(sizes.cornerRadius, xIconText - 0.5 * widthIconTextBox, yIconText - 7, widthIconTextBox, heightIconTextBox, colorLiveTimeBackground)
 
 		drawShadowedText(
-			time_string,
+			textString,
 			"DermaTTT2SmallBold",
-			xTime,
-			yTime,
+			xIconText,
+			yIconText,
 			COLOR_ORANGE,
 			TEXT_ALIGN_CENTER,
 			TEXT_ALIGN_CENTER
