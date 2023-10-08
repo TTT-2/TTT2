@@ -1935,6 +1935,8 @@ L.search_hitgroup_rightleg = "The projectile was found in their right leg."
 L.search_hitgroup_leftleg = "The projectile was found in their left leg."
 L.search_hitgroup_gear = "The projectile was found in their hip."
 
+L.search_detective_call_confirm = "A detective can only be called to a dead body after the corpse was confirmed dead."
+
 L.search_title_words = "Victim's last words"
 L.search_title_c4 = "Defusion mishap"
 L.search_title_dmg_crush = "Crush damage ({amount} HP)"
@@ -1955,3 +1957,4 @@ L.search_title_eyes = "The killer's shadow"
 L.search_title_floor = "Floor of the crime scene"
 L.search_title_credits = "{credits} Equipment credit(s)"
 L.search_title_water = "Water level {level}"
+L.search_title_detective_call_confirm = "Confirm to call detective"

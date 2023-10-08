@@ -309,7 +309,7 @@ if CLIENT then
 				},
 				text = {{
 					body = floorIDToText[data.floorSurface],
-					params = {}
+					params = nil
 				}}
 			}
 		end,

@@ -1621,6 +1621,8 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintInfoItemTTT2(panel, w, h)
+	local hasIcon = panel:HasIcon()
+
 	local padding = 5
 
 	local widthBorder = 2
@@ -1629,7 +1631,7 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	local sizeIcon = 64
 	local posIcon = widthBorder + padding
 
-	local posText = posIcon + sizeIcon + 2 * padding
+	local posText = hasIcon and (posIcon + sizeIcon + 2 * padding) or (posIcon + padding)
 	local heightText = 15
 
 	local colorBackground = panel:GetColor() or colors.settingsBox
@@ -1639,9 +1641,11 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBorderDefault)
 	drawRoundedBox(sizes.cornerRadius, widthBorder, widthBorder, w - widthBorder2, h - widthBorder2, colorBackground)
 
-	drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
+	if hasIcon then
+		drawFilteredTexture(posIcon, posIcon, sizeIcon, sizeIcon, panel:GetIcon())
+	end
 
-	if (panel:HasIconTextFunction()) then
+	if (hasIcon and panel:HasIconTextFunction()) then
 		local textString = panel:GetIconText()
 
 		local widthIconText = drawGetTextSize(textString, "DermaTTT2SmallBold")

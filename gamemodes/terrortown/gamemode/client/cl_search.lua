@@ -203,9 +203,9 @@ function SEARCHSCRN:CalculateSizes()
 	self.sizes.heightInfoItem = 78
 end
 
-function SEARCHSCRN:MakeInfoItem(parent, name, data)
+function SEARCHSCRN:MakeInfoItem(parent, name, data, height)
 	local box = vgui.Create("DInfoItemTTT2", parent)
-	box:SetSize(self.sizes.widthContentBox, self.sizes.heightInfoItem)
+	box:SetSize(self.sizes.widthContentBox, height or self.sizes.heightInfoItem)
 	box:Dock(TOP)
 	box:DockMargin(0, 0, 0, self.sizes.padding)
 	box:SetData(data)
@@ -262,6 +262,25 @@ function SEARCHSCRN:Show(data)
 	contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
 	contentAreaScroll:Dock(RIGHT)
 
+	-- POPULATE WITH SPECIAL INFORMATION
+	if data.owner and IsValid(data.owner) and not data.owner:TTT2NETGetBool("body_found", false) then
+		-- a detective can only be called AFTER a body was confirmed
+
+		self:MakeInfoItem(contentAreaScroll, "detective_call_confirm", {
+			text = {
+				title = {
+					body = "search_title_detective_call_confirm",
+					params = nil
+				},
+				text = {{
+					body = "search_detective_call_confirm",
+					params = nil
+				}}
+			},
+			colorBox = roles.DETECTIVE.ltcolor
+		}, 62)
+	end
+
 	-- POPULATE WITH INFORMATION
 	for i = 1, #bodysearch.searchResultOrder do
 		local searchResultName = bodysearch.searchResultOrder[i]
@@ -299,6 +318,10 @@ function SEARCHSCRN:Show(data)
 	end
 	buttonCall:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
 
+	if client:IsSpec() or data.owner and IsValid(data.owner) and not data.owner:TTT2NETGetBool("body_found", false) then
+		buttonCall:SetEnabled(false)
+	end
+
 	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
 
 	if client:IsSpec() then
@@ -333,9 +356,17 @@ function SEARCHSCRN:Show(data)
 		RunConsoleCommand("ttt_confirm_death", data.eidx, data.eidx + data.dtime, data.lrng)
 
 		local creditBox = self.infoBoxes["credits"]
-
-		if (IsValid(creditBox) and btn.player_can_take_credits) then
+		if IsValid(creditBox) and btn.player_can_take_credits then
 			creditBox:Remove()
+		end
+
+		local confirmBox = self.infoBoxes["detective_call_confirm"]
+		if IsValid(confirmBox) then
+			confirmBox:Remove()
+		end
+
+		if not client:IsSpec() then
+			buttonCall:SetEnabled(true)
 		end
 	end
 

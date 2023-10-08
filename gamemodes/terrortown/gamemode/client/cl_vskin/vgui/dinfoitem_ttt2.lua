@@ -45,6 +45,13 @@ function PANEL:GetIcon()
 end
 
 ---
+-- @return boolean
+-- @realm client
+function PANEL:HasIcon()
+	return self.data.iconMaterial ~= nil
+end
+
+---
 -- @return Color
 -- @realm client
 function PANEL:GetColor()
