@@ -405,17 +405,19 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 		stime = rag.killer_sample.t
 	end
 
-	-- build list of people this player killed
+	-- build list of people this player killed, but only if convar is enabled
 	local kill_entids = {}
-	local ragKills = rag.kills
+	if GetConVar("ttt2_confirm_killlist"):GetBool() then
+		local ragKills = rag.kills
 
-	for i = 1, #ragKills do
-		local vicsid = ragKills[i]
+		for i = 1, #ragKills do
+			local vicsid = ragKills[i]
 
-		-- also send disconnected players as a marker
-		local vic = player.GetBySteamID64(vicsid)
+			-- also send disconnected players as a marker
+			local vic = player.GetBySteamID64(vicsid)
 
-		kill_entids[#kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
+			kill_entids[#kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
+		end
 	end
 
 	local lastid = -1
