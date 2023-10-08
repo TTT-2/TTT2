@@ -493,7 +493,7 @@ L.target_disg = "(под маскировкой)"
 L.target_unid = "Неопознанное тело"
 L.target_unknown = "Террорист"
 
-L.target_credits = "Осмотрите тело, чтобы получить неиспользованные кредиты."
+--L.target_credits = "Confirm to receive unspent credits"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Одноразовое использование."

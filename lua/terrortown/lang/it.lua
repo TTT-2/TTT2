@@ -490,7 +490,7 @@ L.target_disg = "travestito"
 L.target_unid = "Corpo non identificato"
 --L.target_unknown = "A Terrorist"
 
-L.target_credits = "Identifica per ricevere i crediti non spesi"
+--L.target_credits = "Confirm to receive unspent credits"
 
 -- Traitor buttons (HUD buttons with hand icons that only traditori can see)
 L.tbut_single = "Uso singolo"

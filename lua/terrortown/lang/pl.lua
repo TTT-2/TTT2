@@ -490,7 +490,7 @@ L.target_disg = "przebrany"
 L.target_unid = "Niezidentyfikowane ciało"
 --L.target_unknown = "A Terrorist"
 
-L.target_credits = "Przeszukaj, aby otrzymywać niewykorzystane kredyty"
+--L.target_credits = "Confirm to receive unspent credits"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Jednorazowe"

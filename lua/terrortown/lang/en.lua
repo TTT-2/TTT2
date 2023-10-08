@@ -450,7 +450,7 @@ L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
 L.target_unknown = "A Terrorist"
 
-L.target_credits = "Search to receive unspent credits"
+L.target_credits = "Confirm to receive unspent credits"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"

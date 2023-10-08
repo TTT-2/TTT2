@@ -490,7 +490,7 @@ L.target_disg = "(Getarnt)"
 L.target_unid = "Unidentifizierter Körper"
 --L.target_unknown = "A Terrorist"
 
-L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
+L.target_credits = "Bestätige Toten, um ungenutzte Credits zu erhalten."
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Einmaliger Gebrauch"

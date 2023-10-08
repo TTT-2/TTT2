@@ -539,7 +539,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	end
 
 	-- add credits info when corpse has credits
-	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+	if client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits and CORPSE.GetCredits(ent, 0) > 0 then
 		tData:AddDescriptionLine(
 			TryT("target_credits"),
 			COLOR_GOLD,

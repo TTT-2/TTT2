@@ -517,7 +517,7 @@ L.target_disg = " (DISFARÇADO)"
 L.target_unid = "Corpo não identificado"
 L.target_unknown = "Um terrorista"
 
-L.target_credits = "Vasculhe para receber créditos não gastos"
+--L.target_credits = "Confirm to receive unspent credits"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Uso único"

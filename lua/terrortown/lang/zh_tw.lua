@@ -489,7 +489,7 @@ L.corpse_hint = "按下 [{usekey}] 來搜索，用 [{walkkey} + {usekey}] 進行
 L.target_disg = " （偽裝狀態）"
 L.target_unid = "未確認的屍體"
 
-L.target_credits = "搜索屍體以獲取未被消耗的信用點數"
+--L.target_credits = "Confirm to receive unspent credits"
 
 -- HUD buttons with hand icons that only traitors can see
 L.tbut_single = "單獨使用"

@@ -486,7 +486,7 @@ L.target_disg = "(変装中)"
 L.target_unid = "誰かの死体"
 L.target_unknown = "テロリスト"
 
-L.target_credits = "調べて未使用クレジットを入手する"
+--L.target_credits = "Confirm to receive unspent credits"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "一度きり"
