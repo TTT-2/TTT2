@@ -1924,6 +1924,7 @@ L.kill_distance_far = "The victim was shot from a long distance away."
 
 L.kill_from_front = "The victim was shot from the front."
 L.kill_from_back = "The victim was shot from behind."
+L.kill_from_side = "The victim was shot from the side."
 
 L.search_hitgroup_head = "The projectile was found in their head."
 L.search_hitgroup_chest = "The projectile was found in their chest."

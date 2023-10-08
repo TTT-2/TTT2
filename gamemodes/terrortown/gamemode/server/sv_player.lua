@@ -681,24 +681,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	ply.server_ragdoll = rag
 
-	-- add additional ragdoll info that depends on the kill
-	ply.server_ragdoll.scene = ply.server_ragdoll.scene or {}
-
-	ply.server_ragdoll.scene.water_level = ply.server_ragdoll:WaterLevel();
-	ply.server_ragdoll.scene.hit_group = ply:LastHitGroup()
-	ply.server_ragdoll.scene.ground_type = 0
-	local groundTrace = util.TraceLine({
-		start = ply:GetPos(),
-		endpos = ply:GetPos() + Vector(0, 0, -100)
-	})
-	if (groundTrace.Hit) then
-		ply.server_ragdoll.scene.ground_type = groundTrace.MatType
-	end
-	ply.server_ragdoll.scene.ply_model = ply:GetModel()
-	ply.server_ragdoll.scene.ply_model_color = ply:GetPlayerColor()
-	ply.server_ragdoll.scene.ply_sid64 = ply:SteamID64()
-	ply.server_ragdoll.scene.last_damage = dmginfo:GetDamage()
-
 	CreateDeathEffect(ply, false)
 
 	util.StartBleeding(rag, dmginfo:GetDamage(), 15)

@@ -337,40 +337,43 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	local dtime = rag.time or 0
 
 	-- prepare additional corpse information
-	local kill_distance = CORPSE_KILL_NONE
-	if (rag.scene.hit_trace) then
-		local raw_kill_distance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
-		if (raw_kill_distance < 200) then
-			kill_distance = CORPSE_KILL_POINT_BLANK
-		elseif (raw_kill_distance >= 700) then
-			kill_distance = CORPSE_KILL_FAR
-		elseif (raw_kill_distance >= 200) then
-			kill_distance = CORPSE_KILL_CLOSE
+	local killDistance = CORPSE_KILL_NONE
+	if rag.scene.hit_trace then
+		local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
+		if rawKillDistance < 200 then
+			killDistance = CORPSE_KILL_POINT_BLANK
+		elseif rawKillDistance >= 700 then
+			killDistance = CORPSE_KILL_FAR
+		elseif rawKillDistance >= 200 then
+			killDistance = CORPSE_KILL_CLOSE
 		end
 	end
 
-	local kill_hitgroup = HITGROUP_GENERIC
-	if (rag.scene.hit_group and rag.scene.hit_group > 0) then
-		kill_hitgroup = rag.scene.hit_group
+	local killHitGroup = HITGROUP_GENERIC
+	if rag.scene.hit_group and rag.scene.hit_group > 0 then
+		killHitGroup = rag.scene.hit_group
 	end
 
-	local kill_floor_surface = rag.scene.ground_type or 0
-	local kill_water_level = rag.scene.water_level or 0
+	local killFloorSurface = rag.scene.floorSurface or 0
+	local killWaterLevel = rag.scene.waterLevel or 0
 
-	local kill_angle = CORPSE_KILL_NONE
-	if (rag.scene.hit_trace) then
-		local raw_kill_angle = math.abs(math.AngleDifference((rag.scene.hit_trace.HitPos - rag.scene.victim.pos):Angle().yaw, rag.scene.victim.aim_yaw))
-		if (raw_kill_angle < 180) then
-			kill_angle = CORPSE_KILL_FRONT
+	local killAngle = CORPSE_KILL_NONE
+	if rag.scene.hit_trace then
+		local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
+
+		if rawKillAngle < 45 then
+			killAngle = CORPSE_KILL_BACK
+		elseif rawKillAngle < 135 then
+			killAngle = CORPSE_KILL_SIDE
 		else
-			kill_angle = CORPSE_KILL_BACK
+			killAngle = CORPSE_KILL_FRONT
 		end
 	end
 
-	local ply_model = rag.scene.ply_model or ""
-	local ply_model_color = rag.scene.ply_model_color or COLOR_WHITE
-	local ply_sid64 = rag.scene.ply_sid64 or ""
-	local last_damage = math.max(0, rag.scene.last_damage)
+	local plyModel = rag.scene.plyModel or ""
+	local plyModelColor = rag.scene.plyModelColor or COLOR_WHITE
+	local plySID64 = rag.scene.plySID64 or ""
+	local lastDamage = math.max(0, rag.scene.lastDamage)
 
 	local owner = player.GetBySteamID64(rag.sid64)
 	owner = IsValid(owner) and owner:EntIndex() or -1
@@ -383,7 +386,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	end
 
 	-- only give credits if body is also confirmed
-	if (not isCovert) then
+	if not isCovert then
 		GiveFoundCredits(ply, rag, isLongRange)
 	end
 
@@ -465,16 +468,16 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
 	net.WriteBit(isLongRange)
 
-	net.WriteUInt(kill_distance, 2)
-	net.WriteUInt(kill_hitgroup, 8)
-	net.WriteUInt(kill_floor_surface, 8)
-	net.WriteUInt(kill_water_level, 2)
-	net.WriteUInt(kill_angle, 2)
-	net.WriteString(ply_model)
-	net.WriteVector(ply_model_color)
-	net.WriteString(ply_sid64)
+	net.WriteUInt(killDistance, 2)
+	net.WriteUInt(killHitGroup, 8)
+	net.WriteUInt(killFloorSurface, 8)
+	net.WriteUInt(killWaterLevel, 2)
+	net.WriteUInt(killAngle, 2)
+	net.WriteString(plyModel)
+	net.WriteVector(plyModelColor)
+	net.WriteString(plySID64)
 	net.WriteUInt(credits, 8)
-	net.WriteUInt(last_damage, 16)
+	net.WriteUInt(lastDamage, 16)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
@@ -576,12 +579,33 @@ local function GetSceneData(victim, attacker, dmginfo)
 		local att = attacker:LookupAttachment("anim_attachment_RH")
 		local angpos = attacker:GetAttachment(att)
 
+		PrintTable(angpos)
+
 		if not angpos then
 			scene.hit_trace.StartPos = attacker:GetShootPos()
+			scene.hit_trace.StartAng = attacker:EyeAngles()
 		else
 			scene.hit_trace.StartPos = angpos.Pos
+			scene.hit_trace.StartAng = angpos.Ang
 		end
+
+		PrintTable(scene.hit_trace)
 	end
+
+	scene.waterLevel = victim:WaterLevel();
+	scene.hitGroup = victim:LastHitGroup()
+	scene.floorSurface = 0
+	local groundTrace = util.TraceLine({
+		start = victim:GetPos(),
+		endpos = victim:GetPos() + Vector(0, 0, -100)
+	})
+	if groundTrace.Hit then
+		scene.floorSurface = groundTrace.MatType
+	end
+	scene.plyModel = victim:GetModel()
+	scene.plyModelColor = victim:GetPlayerColor()
+	scene.plySID64 = victim:SteamID64()
+	scene.lastDamage = dmginfo:GetDamage()
 
 	return scene
 end

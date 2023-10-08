@@ -14,6 +14,7 @@ CORPSE_KILL_FAR = 3
 
 CORPSE_KILL_FRONT = 1
 CORPSE_KILL_BACK = 2
+CORPSE_KILL_SIDE = 3
 
 bodysearch = bodysearch or {}
 
@@ -61,7 +62,8 @@ if CLIENT then
 
 	local orientationToText = {
 		[CORPSE_KILL_FRONT] = "kill_from_front",
-		[CORPSE_KILL_BACK] = "kill_from_back"
+		[CORPSE_KILL_BACK] = "kill_from_back",
+		[CORPSE_KILL_SIDE] = "kill_from_side"
 	}
 
 	local floorIDToText = {
