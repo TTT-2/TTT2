@@ -131,7 +131,7 @@ if SERVER then
 		sData.rag = rag
 		sData.eq = rag.equipment or {}
 		sData.c4CutWire = rag.bomb_wire or - 1
-		sData.dmg = rag.dmgtype or DMG_GENERIC
+		sData.dmgType = rag.dmgtype or DMG_GENERIC
 		sData.wep = rag.dmgwep or ""
 		sData.lastWords = rag.last_words
 		sData.wasHeadshot = rag.was_headshot or false
@@ -217,8 +217,6 @@ if CLIENT then
 	local pairs = pairs
 
 	net.ReceiveStream("TTT2_BodySearchData", function(searchStreamData)
-		PrintTable(searchStreamData)
-
 		local eq = {} -- placeholder for the hook, not used right now
 		---
 		-- @realm shared
