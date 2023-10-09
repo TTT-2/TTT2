@@ -130,12 +130,12 @@ if SERVER then
 		sData.inspector = inspector
 		sData.rag = rag
 		sData.eq = rag.equipment or {}
-		sData.c4 = rag.bomb_wire or - 1
+		sData.c4CutWire = rag.bomb_wire or - 1
 		sData.dmg = rag.dmgtype or DMG_GENERIC
 		sData.wep = rag.dmgwep or ""
-		sData.words = rag.last_words
-		sData.hshot = rag.was_headshot or false
-		sData.dtime = rag.time or 0
+		sData.lastWords = rag.last_words
+		sData.wasHeadshot = rag.was_headshot or false
+		sData.deathTime = rag.time or 0
 		sData.playerModel = rag.scene.plyModel or ""
 		sData.sid64 = rag.scene.plySID64 or ""
 		sData.lastDamage = mathMax(0, rag.scene.lastDamage)
@@ -144,7 +144,7 @@ if SERVER then
 		sData.credits = CORPSE.GetCredits(rag, 0)
 		sData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 		sData.isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole and not isCovert
-		sData.searchUID = math.floor(rag:EntIndex() + sData.dtime)
+		sData.searchUID = math.floor(rag:EntIndex() + sData.deathTime)
 
 		sData.ragOwner = player.GetBySteamID64(rag.sid64)
 
@@ -178,9 +178,9 @@ if SERVER then
 			end
 		end
 
-		sData.stime = 0
+		sData.sampleDecayTime = 0
 		if rag.killer_sample then
-			sData.stime = rag.killer_sample.t
+			sData.sampleDecayTime = rag.killer_sample.t
 		end
 
 		-- build list of people this player killed, but only if convar is enabled
@@ -323,10 +323,10 @@ if CLIENT then
 
 	local DataToText = {
 		last_words = function(data)
-			if not data.words or data.words == "" then return end
+			if not data.lastWords or data.lastWords == "" then return end
 
 			-- only append "--" if there's no ending interpunction
-			local final = string.match(data.words, "[\\.\\!\\?]$") ~= nil
+			local final = string.match(data.lastWords, "[\\.\\!\\?]$") ~= nil
 
 			return {
 				title = {
@@ -335,12 +335,12 @@ if CLIENT then
 				},
 				text = {{
 					body = "search_words",
-					params = {lastwords = data.words .. (final and "" or "--.")}
+					params = {lastwords = data.lastWords .. (final and "" or "--.")}
 				}}
 			}
 		end,
 		c4_disarm = function(data)
-			if data.c4 <= 0 then return end
+			if data.c4CutWire <= 0 then return end
 
 			return {
 				title = {
@@ -349,30 +349,30 @@ if CLIENT then
 				},
 				text = {{
 					body = "search_c4",
-					params = {num = data.c4}
+					params = {num = data.c4CutWire}
 				}}
 			}
 		end,
 		dmg = function(data)
 			local rawText = {
 				title = {
-					body = "search_title_dmg_" .. DamageToText(data.dmg),
+					body = "search_title_dmg_" .. DamageToText(data.dmgType),
 					params = {amount = data.lastDamage}
 				},
 				text = {{
-					body = "search_dmg_" .. DamageToText(data.dmg),
+					body = "search_dmg_" .. DamageToText(data.dmgType),
 					params = nil
 				}}
 			}
 
-			if (data.ori ~= CORPSE_KILL_NONE) then
+			if data.killOrientation ~= CORPSE_KILL_NONE then
 				rawText.text[#rawText.text + 1] = {
 					body = orientationToText[data.killOrientation],
 					params = nil
 				}
 			end
 
-			if (data.head) then
+			if data.wasHeadshot then
 				rawText.text[#rawText.text + 1] = {
 					body = "search_head",
 					params = nil
@@ -428,7 +428,7 @@ if CLIENT then
 			}
 		end,
 		dna_time = function(data)
-			if data.stime - CurTime() <= 0 then return end
+			if data.sampleDecayTime - CurTime() <= 0 then return end
 
 			return {
 				title = {
@@ -572,12 +572,12 @@ if CLIENT then
 
 	local function DamageToIconMaterial(data)
 		-- handle headshots first
-		if data.head then
+		if data.wasHeadshot then
 			return materialHeadShot
 		end
 
 		-- the damage type
-		local dmg = data.dmg
+		local dmg = data.dmgType
 
 		-- handle most generic damage types
 		for key, value in pairs(damageFromType) do
@@ -623,11 +623,11 @@ if CLIENT then
 	local function TypeToIconText(type, data)
 		if type == "death_time" then
 			return function()
-				return utilSimpleTime(CurTime() - data.dtime, "%02i:%02i")
+				return utilSimpleTime(CurTime() - data.deathTime, "%02i:%02i")
 			end
 		elseif type == "dna_time" then
 			return function()
-				return utilSimpleTime(mathMax(0, data.stime - CurTime()), "%02i:%02i")
+				return utilSimpleTime(mathMax(0, data.sampleDecayTime - CurTime()), "%02i:%02i")
 			end
 		end
 	end

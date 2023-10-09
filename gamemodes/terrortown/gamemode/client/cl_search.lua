@@ -28,7 +28,7 @@ net.Receive("TTT2SendConfirmMsg", function()
 
 	-- update credits on victrim table
 	local victimEnt = player.GetBySteamID64(tbl.victim)
-	if IsValid(victimEnt) then
+	if IsValid(victimEnt) and victimEnt.searchResultData then
 		victimEnt.searchResultData.credits = credits
 	end
 
@@ -45,7 +45,7 @@ net.Receive("TTT2SendConfirmMsg", function()
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 
-	if (IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID) then
+	if IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID then
 		SEARCHSCRN:PlayerWasConfirmed(credits == 0)
 	end
 end)
@@ -195,7 +195,7 @@ function SEARCHSCRN:Show(data)
 	-- @realm client
 	hook.Run("TTTBodySearchPopulate", search_add, search)
 	for _, v in pairs(search_add) do
-		if (istable(v.text)) then
+		if istable(v.text) then
 			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = v.text})
 		else
 			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = {{body = v.text}}})
@@ -224,7 +224,7 @@ function SEARCHSCRN:Show(data)
 
 	if client:IsSpec() then
 		local text = "search_confirm"
-		if (data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false)) then
+		if data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false) then
 			text = "search_confirmed"
 		end
 
