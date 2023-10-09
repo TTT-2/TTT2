@@ -1852,6 +1852,14 @@ L.slot_weapon_special = "Special Slot"
 L.slot_weapon_extra = "Extra Slot"
 L.slot_weapon_class = "Class Slot"
 
+-- 2023-10-04
+L.label_voice_duck_spectator = "Duck spectator voices"
+L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+L.label_voice_scaling = "Voice Volume Scaling Mode"
+L.label_voice_scaling_mode_linear = "Linear"
+L.label_voice_scaling_mode_power4 = "Power 4"
+L.label_voice_scaling_mode_log = "Logarithmic"
+
 -- 2023-10-07
 L.search_title = "Body Search Results - {player}"
 L.search_info = "Information"
