@@ -27,9 +27,12 @@ bodysearch = bodysearch or {}
 
 if SERVER then
 	local mathMax = math.max
+	local mathRound = math.Round
+	local mathFloor = math.floor
 
 	util.AddNetworkString("ttt2_client_reports_corpse")
 	util.AddNetworkString("ttt2_client_confirm_corpse")
+	util.AddNetworkString("ttt2_credits_were_taken")
 
 	net.Receive("ttt2_client_confirm_corpse", function(_, ply)
 		if not IsValid(ply) then return end
@@ -37,6 +40,7 @@ if SERVER then
 		local rag = net.ReadEntity()
 		local searchUID = net.ReadUInt(16)
 		local isLongRange = net.ReadBool()
+		local creditsOnly = net.ReadBool()
 
 		if ply.searchID ~= searchUID then
 			ply.searchID = nil
@@ -44,13 +48,19 @@ if SERVER then
 			return
 		end
 
+		ply.searchID = nil
+
+		if creditsOnly then
+			bodysearch.GiveFoundCredits(ply, rag, false, searchUID)
+
+			return
+		end
+
 		if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or isLongRange) and not CORPSE.GetFound(rag, false) then
 			CORPSE.IdentifyBody(ply, rag, searchUID)
 
-			bodysearch.GiveFoundCredits(ply, rag, false)
+			bodysearch.GiveFoundCredits(ply, rag, false, searchUID)
 		end
-
-		ply.searchID = nil
 	end)
 
 	net.Receive("ttt2_client_reports_corpse", function(_, ply)
@@ -62,7 +72,8 @@ if SERVER then
 
 		if not IsValid(rag) or rag:GetPos():Distance(ply:GetPos()) > 128 then return end
 
-		if CORPSE.GetFound(rag, false) then
+		-- in mode 0 the body has to be confirmed to call a detective
+		if cvInspectConfirmMode:GetInt() ~= 0 or CORPSE.GetFound(rag, false) then
 			local plyTable = util.GetFilteredPlayers(function(p)
 				local roleData = p:GetSubRoleData()
 
@@ -88,7 +99,7 @@ if SERVER then
 		end
 	end)
 
-	function bodysearch.GiveFoundCredits(ply, rag, isLongRange)
+	function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
 		local corpseNick = CORPSE.GetPlayerNick(rag)
 		local credits = CORPSE.GetCredits(rag, 0)
 
@@ -105,6 +116,11 @@ if SERVER then
 		ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
 
 		events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
+
+		-- update clients so their UIs can be updated
+		net.Start("ttt2_credits_were_taken")
+		net.WriteUInt(searchUID or 0, 16)
+		net.Broadcast()
 	end
 
 	function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
@@ -138,13 +154,13 @@ if SERVER then
 		sData.deathTime = rag.time or 0
 		sData.playerModel = rag.scene.plyModel or ""
 		sData.sid64 = rag.scene.plySID64 or ""
-		sData.lastDamage = mathMax(0, rag.scene.lastDamage)
+		sData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage))
 		sData.killFloorSurface = rag.scene.floorSurface or 0
 		sData.killWaterLevel = rag.scene.waterLevel or 0
 		sData.credits = CORPSE.GetCredits(rag, 0)
 		sData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 		sData.isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole and not isCovert
-		sData.searchUID = math.floor(rag:EntIndex() + sData.deathTime)
+		sData.searchUID = mathFloor(rag:EntIndex() + sData.deathTime)
 
 		sData.ragOwner = player.GetBySteamID64(rag.sid64)
 
@@ -709,7 +725,10 @@ if CLIENT then
 			}
 
 			-- special cases with icon text
-			search[type].text_icon = TypeToIconText(type, raw)()
+			local iconTextFn = TypeToIconText(type, raw)
+			if isfunction(iconTextFn) then
+				search[type].text_icon = iconTextFn()
+			end
 		end
 
 		---
@@ -741,11 +760,12 @@ if CLIENT then
 		ply.bodySearchResult = nil
 	end
 
-	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange)
+	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange, creditsOnly)
 		net.Start("ttt2_client_confirm_corpse")
 		net.WriteEntity(rag)
 		net.WriteUInt(searchUID, 16)
 		net.WriteBool(isLongRange)
+		net.WriteBool(creditsOnly or false)
 		net.SendToServer()
 	end
 
@@ -753,6 +773,49 @@ if CLIENT then
 		net.Start("ttt2_client_reports_corpse")
 		net.WriteEntity(rag)
 		net.SendToServer()
+	end
+
+	function bodysearch.IsConfirmed(ragOwner)
+		return IsValid(ragOwner) and ragOwner:TTT2NETGetBool("body_found", false)
+	end
+
+	function bodysearch.CanConfirmBody(ragOwner)
+		local client = LocalPlayer()
+
+		if client:IsSpec() then
+			return false
+		end
+
+		-- in mode 0 everyone can confirm corpses
+		if cvInspectConfirmMode:GetInt() == 0 then
+			return true
+		end
+
+		local roleData = client:GetSubRoleData()
+
+		-- in mode 1 and 2 only public policing roles can confirm corpses
+		if roleData.isPolicingRole and roleData.isPublicRole then
+			return true
+		end
+
+		return false
+	end
+
+	function bodysearch.CanReportBody(ragOwner)
+		local client = LocalPlayer()
+
+		if client:IsSpec() then
+			return false
+		end
+
+		-- in mode 0 the ragdoll has to be found to report body
+		if cvInspectConfirmMode:GetInt() == 0
+			and IsValid(ragOwner) and not ragOwner:TTT2NETGetBool("body_found", false)
+		then
+			return false
+		end
+
+		return true
 	end
 
 	-- HOOKS --

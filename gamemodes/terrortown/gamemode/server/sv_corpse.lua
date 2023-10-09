@@ -5,7 +5,6 @@
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
 
-local math = math
 local table = table
 local net = net
 local player = player
@@ -191,9 +190,6 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		-- send searchUID to update UI buttons on client
 		net.WriteUInt(searchUID or 0, 16)
 
-		-- send new credit value as it might have changed
-		net.WriteUInt(CORPSE.GetCredits(rag, 0), 8)
-
 		net.Broadcast()
 	end
 end
@@ -225,7 +221,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
 	-- only give credits if body is also confirmed
 	if not isCovert then
-		bodysearch.GiveFoundCredits(ply, rag, isLongRange)
+		bodysearch.GiveFoundCredits(ply, rag, isLongRange, sData.searchUID)
 	end
 
 	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then

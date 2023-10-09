@@ -1866,9 +1866,12 @@ L.search_info = "Information"
 L.search_confirm = "Confirm Death"
 L.search_confirm_credit = "Confirm (+{credit} Credit)"
 L.search_confirm_credits = "Confirm (+{credits} Credits)"
+L.search_take_credit = "Take {credit} Credit"
+L.search_take_credits = "Take {credits} Credits"
+L.search_confirm_forbidden = "Confirm forbidden"
 L.search_confirmed = "Death Confirmed"
-L.search_call = "Call Detective"
-L.search_called = "Detective Called"
+L.search_call = "Report Death"--!
+L.search_called = "Death Reported"
 
 L.search_words = "Something tells you some of this person's last words were: '{lastwords}'"
 L.search_armor = "They were wearing nonstandard body armor."
@@ -1944,7 +1947,13 @@ L.search_hitgroup_rightleg = "The projectile was found in their right leg."
 L.search_hitgroup_leftleg = "The projectile was found in their left leg."
 L.search_hitgroup_gear = "The projectile was found in their hip."
 
-L.search_detective_call_confirm = "A detective can only be called to a dead body after the corpse was confirmed dead."
+L.search_policingrole_report_confirm = [[
+A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
+L.search_policingrole_confirm_disabled_1 = [[
+The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
+L.search_policingrole_confirm_disabled_2 = [[
+The corpse can only be confirmed by a public policing role. Report the body to let them know!
+You can see the information in here after they confirmed it.]]
 
 L.search_title_words = "Victim's last words"
 L.search_title_c4 = "Defusion mishap"
@@ -1966,4 +1975,5 @@ L.search_title_eyes = "The killer's shadow"
 L.search_title_floor = "Floor of the crime scene"
 L.search_title_credits = "{credits} Equipment credit(s)"
 L.search_title_water = "Water level {level}"
-L.search_title_detective_call_confirm = "Confirm to call detective"
+L.search_title_policingrole_report_confirm = "Confirm to report death"
+L.search_title_policingrole_confirm_disabled = "Report corpse"
