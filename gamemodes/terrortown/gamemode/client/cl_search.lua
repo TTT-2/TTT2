@@ -340,7 +340,11 @@ function SEARCHSCRN:Show(data)
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	elseif data.credits > 0 and client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits then
-		buttonConfirm:SetText("search_confirm_credits")
+		if data.credits == 1 then
+			buttonConfirm:SetText("search_confirm_credit")
+		else
+			buttonConfirm:SetText("search_confirm_credits")
+		end
 		buttonConfirm:SetParams({credits = data.credits})
 		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
