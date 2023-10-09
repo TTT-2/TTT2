@@ -579,8 +579,6 @@ local function GetSceneData(victim, attacker, dmginfo)
 		local att = attacker:LookupAttachment("anim_attachment_RH")
 		local angpos = attacker:GetAttachment(att)
 
-		PrintTable(angpos)
-
 		if not angpos then
 			scene.hit_trace.StartPos = attacker:GetShootPos()
 			scene.hit_trace.StartAng = attacker:EyeAngles()
@@ -588,8 +586,6 @@ local function GetSceneData(victim, attacker, dmginfo)
 			scene.hit_trace.StartPos = angpos.Pos
 			scene.hit_trace.StartAng = angpos.Ang
 		end
-
-		PrintTable(scene.hit_trace)
 	end
 
 	scene.waterLevel = victim:WaterLevel();
