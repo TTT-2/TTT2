@@ -411,7 +411,7 @@ local function RoundStateChange(o, n)
 
 		-- people may have died and been searched during prep
 		for i = 1, #plys do
-			plys[i].search_result = nil
+			bodysearch.ResetSearchResult(plys[i])
 		end
 
 		-- clear blood decals produced during prep
@@ -570,7 +570,7 @@ function GM:ClearClientState()
 
 		pl:SetRole(ROLE_NONE)
 
-		pl.search_result = nil
+		bodysearch.ResetSearchResult(pl)
 	end
 
 	VOICE.CycleMuteState(MUTE_NONE)

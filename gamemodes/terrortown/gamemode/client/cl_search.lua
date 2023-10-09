@@ -8,134 +8,6 @@ local util = util
 local IsValid = IsValid
 local hook = hook
 
-local function StoreSearchResult(search)
-	if not search.owner then return end
-
-	-- if existing result was not ours, it was detective's, and should not
-	-- be overwritten
-	local ply = search.owner
-
-	if ply.search_result and not ply.search_result.show then return end
-
-	ply.search_result = search
-
-	-- this is useful for targetid
-	local rag = Entity(search.eidx)
-	if not IsValid(rag) then return end
-
-	rag.search_result = search
-end
-
-local function bitsRequired(num)
-	local bits, max = 0, 1
-
-	while max <= num do
-		bits = bits + 1
-		max = max + max
-	end
-
-	return bits
-end
-
-net.Receive("TTT_RagdollSearch", function()
-	local search = {}
-
-	-- Basic info
-	search.eidx = net.ReadUInt(16)
-
-	local owner = Entity(net.ReadUInt(8))
-
-	search.owner = owner
-
-	if not IsValid(search.owner) or not search.owner:IsPlayer() or search.owner:IsTerror() then
-		search.owner = nil
-	end
-
-	search.nick = net.ReadString()
-	search.role_color = net.ReadColor()
-
-	-- Equipment
-	local eq = {}
-
-	local eqAmount = net.ReadUInt(16)
-
-	for i = 1, eqAmount do
-		local eqStr = net.ReadString()
-
-		eq[i] = eqStr
-		search["eq_" .. eqStr] = true
-	end
-
-	-- Traitor things
-	search.role = net.ReadUInt(ROLE_BITS)
-	search.team = net.ReadString()
-	search.c4 = net.ReadInt(bitsRequired(C4_WIRE_COUNT) + 1)
-
-	-- Kill info
-	search.dmg = net.ReadUInt(30)
-	search.wep = net.ReadString()
-	search.head = net.ReadBit() == 1
-	search.dtime = net.ReadInt(16)
-	search.stime = net.ReadInt(16)
-
-	-- Players killed
-	local num_kills = net.ReadUInt(8)
-	if num_kills > 0 then
-		local t_kills = {}
-
-		for i = 1, num_kills do
-			t_kills[i] = net.ReadUInt(8)
-		end
-
-		search.kills = t_kills
-	else
-		search.kills = nil
-	end
-
-	search.lastid = {idx = net.ReadUInt(8)}
-
-	-- should we show a menu for this result?
-	search.finder = net.ReadUInt(8)
-	search.show = LocalPlayer():EntIndex() == search.finder
-
-	-- last words
-	local words = net.ReadString()
-	search.words = (words ~= "") and words or nil
-
-	-- long range
-	search.lrng = net.ReadBit()
-
-	search.killDistance = net.ReadUInt(2)
-	search.hitGroup = net.ReadUInt(8)
-	search.floorSurface = net.ReadUInt(8)
-	search.waterLevel = net.ReadUInt(2)
-	search.killOrientation = net.ReadUInt(2)
-	search.plyModel = net.ReadString()
-	search.plyModelColor = net.ReadVector()
-	search.plySID64 = net.ReadString()
-	search.credits = net.ReadUInt(8)
-	search.lastDamage = net.ReadUInt(16)
-
-	-- searched by detective?
-	search.detective_search = net.ReadBool()
-
-	-- set search.show_sb based on detective_search or self search
-	search.show_sb = search.show or search.detective_search
-
-	---
-	-- @realm shared
-	hook.Run("TTTBodySearchEquipment", search, eq)
-
-	if search.show then
-		SEARCHSCRN:Show(search)
-	end
-
-	-- cache search result in rag.search_result, e.g. useful for scoreboard
-	StoreSearchResult(search)
-
-	search = nil
-end)
-
 net.Receive("TTT2SendConfirmMsg", function()
 	local msgName = net.ReadString()
 	local sid64 = net.ReadString()
@@ -151,7 +23,14 @@ net.Receive("TTT2SendConfirmMsg", function()
 		tbl.team = LANG.GetTranslation(net.ReadString())
 	end
 
-	eidx = net.ReadUInt(8)
+	local searchUID = net.ReadUInt(16)
+	local credits = net.ReadUInt(8)
+
+	-- update credits on victrim table
+	local victimEnt = player.GetBySteamID64(tbl.victim)
+	if IsValid(victimEnt) then
+		victimEnt.searchResultData.credits = credits
+	end
 
 	-- checking for bots
 	if sid64 == "" then
@@ -166,10 +45,8 @@ net.Receive("TTT2SendConfirmMsg", function()
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 
-	if (IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.menuFrame.data.idx == edix) then
-		SEARCHSCRN.buttonConfirm:SetEnabled(false)
-		SEARCHSCRN.buttonConfirm:SetText("search_confirmed")
-		SEARCHSCRN.buttonConfirm:SetIcon(nil)
+	if (IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID) then
+		SEARCHSCRN:PlayerWasConfirmed(credits == 0)
 	end
 end)
 
@@ -201,6 +78,28 @@ function SEARCHSCRN:CalculateSizes()
 	self.sizes.widthContentBox = self.sizes.widthContentArea - 2 * self.sizes.padding - 100
 
 	self.sizes.heightInfoItem = 78
+end
+
+function SEARCHSCRN:PlayerWasConfirmed(tookCredits)
+	self.buttonConfirm:SetEnabled(false)
+	self.buttonConfirm:SetText("search_confirmed")
+	self.buttonConfirm:SetIcon(nil)
+
+	if not LocalPlayer():IsSpec() then
+		self.buttonReport:SetEnabled(true)
+	end
+
+	-- remove hint about player needing to confirm corpse
+	local confirmBox = self.infoBoxes["detective_call_confirm"]
+	if IsValid(confirmBox) then
+		confirmBox:Remove()
+	end
+
+	-- if credits were taken, remove credit box
+	local creditBox = self.infoBoxes["credits"]
+	if IsValid(creditBox) and tookCredits then
+		creditBox:Remove()
+	end
 end
 
 function SEARCHSCRN:MakeInfoItem(parent, name, data, height)
@@ -236,11 +135,10 @@ function SEARCHSCRN:Show(data)
 	frame:SetKeyboardInputEnabled(true)
 	frame.OnKeyCodePressed = util.BasicKeyHandler
 
+	self.data = data
 	self.menuFrame = frame
 
-	frame.data = data
-
-	local rd = roles.GetByIndex(data.role)
+	local rd = roles.GetByIndex(data.subrole)
 
 	local contentBox = vgui.Create("DPanelTTT2", frame)
 	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
@@ -249,9 +147,9 @@ function SEARCHSCRN:Show(data)
 	local profileBox = vgui.Create("DProfilePanelTTT2", contentBox)
 	profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
 	profileBox:Dock(LEFT)
-	profileBox:SetModel(data.plyModel, data.plyModelColor)
-	profileBox:SetPlayerIconBySteamID64(data.plySID64)
-	profileBox:SetPlayerRoleColor(data.role_color)
+	profileBox:SetModel(data.playerModel)
+	profileBox:SetPlayerIconBySteamID64(data.sid64)
+	profileBox:SetPlayerRoleColor(data.roleColor)
 	profileBox:SetPlayerRoleIcon(rd.iconMaterial)
 	profileBox:SetPlayerRoleString(rd.name)
 	profileBox:SetPlayerTeamString(data.team)
@@ -263,7 +161,7 @@ function SEARCHSCRN:Show(data)
 	contentAreaScroll:Dock(RIGHT)
 
 	-- POPULATE WITH SPECIAL INFORMATION
-	if data.owner and IsValid(data.owner) and not data.owner:TTT2NETGetBool("body_found", false) then
+	if data.ragOwner and IsValid(data.ragOwner) and not data.ragOwner:TTT2NETGetBool("body_found", false) then
 		-- a detective can only be called AFTER a body was confirmed
 
 		self:MakeInfoItem(contentAreaScroll, "detective_call_confirm", {
@@ -298,7 +196,7 @@ function SEARCHSCRN:Show(data)
 	hook.Run("TTTBodySearchPopulate", search_add, search)
 	for _, v in pairs(search_add) do
 		if (istable(v.text)) then
-			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = text})
+			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = v.text})
 		else
 			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = {{body = v.text}}})
 		end
@@ -309,17 +207,17 @@ function SEARCHSCRN:Show(data)
 	buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
 	buttonArea:Dock(BOTTOM)
 
-	local buttonCall = vgui.Create("DButtonTTT2", buttonArea)
-	buttonCall:SetText("search_call")
-	buttonCall:SetSize(self.sizes.widthButton, self.sizes.heightButton)
-	buttonCall:SetPos(0, self.sizes.padding + 1)
-	buttonCall.DoClick = function(btn)
-		RunConsoleCommand("ttt_call_detective", data.eidx)
+	local buttonReport = vgui.Create("DButtonTTT2", buttonArea)
+	buttonReport:SetText("search_call")
+	buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonReport:SetPos(0, self.sizes.padding + 1)
+	buttonReport.DoClick = function(btn)
+		bodysearch.ClientReportsCorpse(data.rag)
 	end
-	buttonCall:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+	buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
 
-	if client:IsSpec() or data.owner and IsValid(data.owner) and not data.owner:TTT2NETGetBool("body_found", false) then
-		buttonCall:SetEnabled(false)
+	if client:IsSpec() or data.ragOwner and IsValid(data.ragOwner) and not data.ragOwner:TTT2NETGetBool("body_found", false) then
+		buttonReport:SetEnabled(false)
 	end
 
 	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
@@ -334,7 +232,7 @@ function SEARCHSCRN:Show(data)
 		buttonConfirm:SetText(text)
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
-	elseif data.owner and IsValid(data.owner) and data.owner:TTT2NETGetBool("body_found", false) then
+	elseif data.ragOwner and IsValid(data.ragOwner) and data.ragOwner:TTT2NETGetBool("body_found", false) then
 		buttonConfirm:SetEnabled(false)
 		buttonConfirm:SetText("search_confirmed")
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
@@ -357,23 +255,16 @@ function SEARCHSCRN:Show(data)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	end
 	buttonConfirm.DoClick = function(btn)
-		RunConsoleCommand("ttt_confirm_death", data.eidx, data.eidx + data.dtime, data.lrng)
+		bodysearch.ClientConfirmsCorpse(data.rag, data.searchUID, data.lrng)
 
-		local creditBox = self.infoBoxes["credits"]
-		if IsValid(creditBox) and btn.player_can_take_credits then
-			creditBox:Remove()
-		end
-
-		local confirmBox = self.infoBoxes["detective_call_confirm"]
-		if IsValid(confirmBox) then
-			confirmBox:Remove()
-		end
-
-		if not client:IsSpec() then
-			buttonCall:SetEnabled(true)
-		end
+		-- call this function locally to give the user an instant feedback
+		-- the same function will be called again after the server processed
+		-- the confirmation and reported back to the clients
+		self:PlayerWasConfirmed(btn.player_can_take_credits)
 	end
 
+	-- cache button references for external interaction
+	self.buttonReport = buttonReport
 	self.buttonConfirm = buttonConfirm
 end
 

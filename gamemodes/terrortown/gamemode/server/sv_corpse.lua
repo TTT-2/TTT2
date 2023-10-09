@@ -72,7 +72,7 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
-local function IdentifyBody(ply, rag)
+function CORPSE.IdentifyBody(ply, rag, searchUID)
 	if not ply:IsTerror() or not ply:Alive() then return end
 
 	-- simplified case for those who die and get found during prep
@@ -188,114 +188,19 @@ local function IdentifyBody(ply, rag)
 			net.WriteString(team)
 		end
 
-		net.WriteUInt(ply.search_id and ply.search_id.eidx or 0, 8)
+		-- send searchUID to update UI buttons on client
+		net.WriteUInt(searchUID or 0, 16)
+
+		-- send new credit value as it might have changed
+		net.WriteUInt(CORPSE.GetCredits(rag, 0), 8)
 
 		net.Broadcast()
 	end
 end
 
-local function GiveFoundCredits(ply, rag, isLongRange)
-	local corpseNick = CORPSE.GetPlayerNick(rag)
-	local credits = CORPSE.GetCredits(rag, 0)
-
-	if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
-		or credits == 0 or isLongRange
-	then return end
-
-	LANG.Msg(ply, "body_credits", {num = credits})
-
-	ply:AddCredits(credits)
-
-	CORPSE.SetCredits(rag, 0)
-
-	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
-
-	events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
-end
-
-local function ttt_confirm_death(ply, cmd, args)
-	if not IsValid(ply) then return end
-
-	if #args < 2 then return end
-
-	local eidx = tonumber(args[1])
-	local id = tonumber(args[2])
-	local isLongRange = (args[3] and tonumber(args[3]) == 1) and true or false
-
-	if not eidx or not id then return end
-
-	if not ply.search_id or ply.search_id.id ~= id or ply.search_id.eidx ~= eidx then
-		ply.search_id = nil
-
-		return
-	end
-
-	local rag = Entity(eidx)
-
-	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or isLongRange) and not CORPSE.GetFound(rag, false) then
-		IdentifyBody(ply, rag)
-
-		GiveFoundCredits(ply, rag, false)
-	end
-
-	ply.search_id = nil
-end
-concommand.Add("ttt_confirm_death", ttt_confirm_death)
-
--- Call detectives to a corpse
-local function ttt_call_detective(ply, cmd, args)
-	if not IsValid(ply) then return end
-
-	if #args ~= 1 then return end
-
-	if not ply:IsActive() then return end
-
-	local eidx = tonumber(args[1])
-	if not eidx then return end
-
-	local rag = Entity(eidx)
-
-	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 then
-		if CORPSE.GetFound(rag, false) then
-			local plyTable = util.GetFilteredPlayers(function(p)
-				return p:GetSubRoleData().isPolicingRole and p:IsTerror()
-			end)
-
-			---
-			-- @realm server
-			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
-
-			-- show indicator in radar to detectives
-			net.Start("TTT_CorpseCall")
-			net.WriteVector(rag:GetPos())
-			net.Send(plyTable)
-
-			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_MSTACK_PLAIN)
-
-			---
-			-- @realm server
-			hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
-		else
-			LANG.Msg(ply, "body_call_error", nil, MSG_MSTACK_WARN)
-		end
-	end
-end
-concommand.Add("ttt_call_detective", ttt_call_detective)
-
-local function bitsRequired(num)
-	local bits, max = 0, 1
-
-	while max <= num do
-		bits = bits + 1 -- increase
-		max = max + max -- double
-	end
-
-	return bits
-end
-
 ---
 -- Send a usermessage to client containing search results.
--- @param Player ply The player that is inspection the ragdoll
+-- @param Player ply The player that is inspecting the ragdoll
 -- @param Entity rag The ragdoll that is inspected
 -- @param boolean isCovert Is the search hidden
 -- @param boolean isLongRange Is the search performed from a long range
@@ -303,16 +208,7 @@ end
 function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
-	local roleData = ply:GetSubRoleData()
-
-	if cvDeteOnlyInspect:GetBool() and not roleData.isPolicingRole then
-		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
-
-		GiveFoundCredits(ply, rag, isLongRange)
-
-		return
-	end
-
+	-- prevent search for anyone if the body is burning
 	if rag:IsOnFire() then
 		LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
 
@@ -323,173 +219,30 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	-- @realm server
 	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
-	-- init a heap of data we'll be sending
-	local nick = CORPSE.GetPlayerNick(rag)
-	local subrole = rag.was_role
-	local role_color = rag.role_color
-	local team = rag.was_team
-	local eq = rag.equipment or {}
-	local c4 = rag.bomb_wire or - 1
-	local dmg = rag.dmgtype or DMG_GENERIC
-	local wep = rag.dmgwep or ""
-	local words = rag.last_words or ""
-	local hshot = rag.was_headshot or false
-	local dtime = rag.time or 0
+	local sData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
-	-- prepare additional corpse information
-	local killDistance = CORPSE_KILL_NONE
-	if rag.scene.hit_trace then
-		local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
-		if rawKillDistance < 200 then
-			killDistance = CORPSE_KILL_POINT_BLANK
-		elseif rawKillDistance >= 700 then
-			killDistance = CORPSE_KILL_FAR
-		elseif rawKillDistance >= 200 then
-			killDistance = CORPSE_KILL_CLOSE
-		end
-	end
-
-	local killHitGroup = HITGROUP_GENERIC
-	if rag.scene.hit_group and rag.scene.hit_group > 0 then
-		killHitGroup = rag.scene.hit_group
-	end
-
-	local killFloorSurface = rag.scene.floorSurface or 0
-	local killWaterLevel = rag.scene.waterLevel or 0
-
-	local killAngle = CORPSE_KILL_NONE
-	if rag.scene.hit_trace then
-		local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
-
-		if rawKillAngle < 45 then
-			killAngle = CORPSE_KILL_BACK
-		elseif rawKillAngle < 135 then
-			killAngle = CORPSE_KILL_SIDE
-		else
-			killAngle = CORPSE_KILL_FRONT
-		end
-	end
-
-	local plyModel = rag.scene.plyModel or ""
-	local plyModelColor = rag.scene.plyModelColor or COLOR_WHITE
-	local plySID64 = rag.scene.plySID64 or ""
-	local lastDamage = math.max(0, rag.scene.lastDamage)
-
-	local owner = player.GetBySteamID64(rag.sid64)
-	owner = IsValid(owner) and owner:EntIndex() or -1
-
-	-- basic sanity check
-	if not nick or not eq or not subrole or not team then return end
-
-	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
-		IdentifyBody(ply, rag)
-	end
+	if not sData then return end
 
 	-- only give credits if body is also confirmed
 	if not isCovert then
-		GiveFoundCredits(ply, rag, isLongRange)
+		bodysearch.GiveFoundCredits(ply, rag, isLongRange)
+	end
+
+	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
+		CORPSE.IdentifyBody(ply, rag, sData.searchUID)
 	end
 
 	-- cache credits of corpse here, AFTER one might has taken them
-	local credits = CORPSE.GetCredits(rag, 0)
-
-	-- time of death relative to current time (saves bits)
-	if dtime ~= 0 then
-		dtime = dtime
-	end
+	sData.credits = CORPSE.GetCredits(rag, 0)
 
 	-- identifier so we know whether a ttt_confirm_death was legit
-	ply.search_id = {eidx = rag:EntIndex(), id = rag:EntIndex() + math.floor(dtime)}
+	ply.searchID = sData.searchUID
 
-	-- time of dna sample decay relative to current time
-	local stime = 0
-
-	if rag.killer_sample then
-		stime = rag.killer_sample.t
-	end
-
-	-- build list of people this player killed, but only if convar is enabled
-	local kill_entids = {}
-	if GetConVar("ttt2_confirm_killlist"):GetBool() then
-		local ragKills = rag.kills
-
-		for i = 1, #ragKills do
-			local vicsid = ragKills[i]
-
-			-- also send disconnected players as a marker
-			local vic = player.GetBySteamID64(vicsid)
-
-			kill_entids[#kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
-		end
-	end
-
-	local lastid = -1
-
-	if rag.lastid and ply:IsActive() and roleData.isPolicingRole then
-		-- if the person this victim last id'd has since disconnected, send -1 to
-		-- indicate this
-		lastid = IsValid(rag.lastid.ent) and rag.lastid.ent:EntIndex() or - 1
-	end
-
-	-- Send a message with basic info
-	net.Start("TTT_RagdollSearch")
-	net.WriteUInt(rag:EntIndex(), 16) -- 16 bits
-	net.WriteUInt(owner, 8) -- 128 max players. (8 bits)
-	net.WriteString(nick)
-	net.WriteColor(role_color)
-
-	net.WriteUInt(#eq, 16) -- Equipment (16 = max.)
-
-	for i = 1, #eq do
-		net.WriteString(eq[i])
-	end
-
-	net.WriteUInt(subrole, ROLE_BITS) -- (... bits)
-	net.WriteString(team)
-	net.WriteInt(c4, bitsRequired(C4_WIRE_COUNT) + 1) -- -1 -> 2^bits (default c4: 4 bits)
-	net.WriteUInt(dmg, 30) -- DMG_BUCKSHOT is the highest. (30 bits)
-	net.WriteString(wep)
-	net.WriteBit(hshot) -- (1 bit)
-	net.WriteInt(dtime, 16)
-	net.WriteInt(stime, 16)
-
-	net.WriteUInt(#kill_entids, 8)
-
-	for i = 1, #kill_entids do
-		net.WriteUInt(kill_entids[i], 8) -- first game.MaxPlayers() of entities are for players.
-	end
-
-	net.WriteUInt(lastid, 8)
-
-	-- Who found this, so if we get this from a detective we can decide not to
-	-- show a window
-	net.WriteUInt(ply:EntIndex(), 8)
-	net.WriteString(words)
-
-	net.WriteBit(isLongRange)
-
-	net.WriteUInt(killDistance, 2)
-	net.WriteUInt(killHitGroup, 8)
-	net.WriteUInt(killFloorSurface, 8)
-	net.WriteUInt(killWaterLevel, 2)
-	net.WriteUInt(killAngle, 2)
-	net.WriteString(plyModel)
-	net.WriteVector(plyModelColor)
-	net.WriteString(plySID64)
-	net.WriteUInt(credits, 8)
-	net.WriteUInt(lastDamage, 16)
-
-	-- 133 + string data + #kill_entids * 8 + team + 1
-	-- 200 + ?
-
-	-- workaround to make sure only detective searches are added to the scoreboard
-	net.WriteBool(ply:IsActive() and roleData.isPolicingRole and not isCovert)
-
-	-- If searched publicly, send to all, else just the finder
-	if not isCovert then
-		net.Broadcast()
+	local roleData = ply:GetSubRoleData()
+	if ply:IsActive() and roleData.isPolicingRole and roleData.isPublicRole and not isCovert then
+		bodysearch.StreamSceneData(sData)
 	else
-		net.Send(ply)
+		bodysearch.StreamSceneData(sData, ply)
 	end
 end
 

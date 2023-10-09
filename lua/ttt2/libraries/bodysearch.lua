@@ -16,10 +16,194 @@ CORPSE_KILL_FRONT = 1
 CORPSE_KILL_BACK = 2
 CORPSE_KILL_SIDE = 3
 
+---
+-- @realm shared
+-- mode 0: normal behavior, everyone can search/confirm bodies
+-- mode 1: only public policing roles can confirm bodies, but everyone can still see all data in the menu
+-- mode 2: only public policing roles can confirm and search bodies
+local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
 bodysearch = bodysearch or {}
 
 if SERVER then
+	local mathMax = math.max
 
+	util.AddNetworkString("ttt2_client_reports_corpse")
+	util.AddNetworkString("ttt2_client_confirm_corpse")
+
+	net.Receive("ttt2_client_confirm_corpse", function(_, ply)
+		if not IsValid(ply) then return end
+
+		local rag = net.ReadEntity()
+		local searchUID = net.ReadUInt(16)
+		local isLongRange = net.ReadBool()
+
+		if ply.searchID ~= searchUID then
+			ply.searchID = nil
+
+			return
+		end
+
+		if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or isLongRange) and not CORPSE.GetFound(rag, false) then
+			CORPSE.IdentifyBody(ply, rag, searchUID)
+
+			bodysearch.GiveFoundCredits(ply, rag, false)
+		end
+
+		ply.searchID = nil
+	end)
+
+	net.Receive("ttt2_client_reports_corpse", function(_, ply)
+		if not IsValid(ply) then return end
+
+		if not ply:IsActive() then return end
+
+		local rag = net.ReadEntity()
+
+		if not IsValid(rag) or rag:GetPos():Distance(ply:GetPos()) > 128 then return end
+
+		if CORPSE.GetFound(rag, false) then
+			local plyTable = util.GetFilteredPlayers(function(p)
+				local roleData = p:GetSubRoleData()
+
+				return roleData.isPolicingRole and p.isPublicRole and p:IsTerror()
+			end)
+
+			---
+			-- @realm server
+			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
+
+			-- show indicator in radar to detectives
+			net.Start("TTT_CorpseCall")
+			net.WriteVector(rag:GetPos())
+			net.Send(plyTable)
+
+			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_MSTACK_PLAIN)
+
+			---
+			-- @realm server
+			hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
+		else
+			LANG.Msg(ply, "body_call_error", nil, MSG_MSTACK_WARN)
+		end
+	end)
+
+	function bodysearch.GiveFoundCredits(ply, rag, isLongRange)
+		local corpseNick = CORPSE.GetPlayerNick(rag)
+		local credits = CORPSE.GetCredits(rag, 0)
+
+		if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
+			or credits == 0 or isLongRange
+		then return end
+
+		LANG.Msg(ply, "body_credits", {num = credits})
+
+		ply:AddCredits(credits)
+
+		CORPSE.SetCredits(rag, 0)
+
+		ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
+
+		events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
+	end
+
+	function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
+		local sData = {}
+		local inspectorRoleData = inspector:GetSubRoleData()
+
+		-- if a non-public or non-policing role tries to search a body in mode 2, nothing happens
+		if cvInspectConfirmMode:GetInt() == 2 and not inspectorRoleData.isPolicingRole and not inspectorRoleData.isPublicRole then
+			LANG.Msg(inspector, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+
+			return
+		end
+
+		sData.nick = CORPSE.GetPlayerNick(rag)
+		sData.subrole = rag.was_role
+		sData.roleColor = rag.role_color
+		sData.team = rag.was_team
+
+		if not sData.nick or not sData.subrole or not sData.team then
+			return
+		end
+
+		sData.inspector = inspector
+		sData.rag = rag
+		sData.eq = rag.equipment or {}
+		sData.c4 = rag.bomb_wire or - 1
+		sData.dmg = rag.dmgtype or DMG_GENERIC
+		sData.wep = rag.dmgwep or ""
+		sData.words = rag.last_words
+		sData.hshot = rag.was_headshot or false
+		sData.dtime = rag.time or 0
+		sData.playerModel = rag.scene.plyModel or ""
+		sData.sid64 = rag.scene.plySID64 or ""
+		sData.lastDamage = mathMax(0, rag.scene.lastDamage)
+		sData.killFloorSurface = rag.scene.floorSurface or 0
+		sData.killWaterLevel = rag.scene.waterLevel or 0
+		sData.credits = CORPSE.GetCredits(rag, 0)
+		sData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
+		sData.isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole and not isCovert
+		sData.searchUID = math.floor(rag:EntIndex() + sData.dtime)
+
+		sData.ragOwner = player.GetBySteamID64(rag.sid64)
+
+		sData.killDistance = CORPSE_KILL_NONE
+		if rag.scene.hit_trace then
+			local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
+			if rawKillDistance < 200 then
+				sData.killDistance = CORPSE_KILL_POINT_BLANK
+			elseif rawKillDistance >= 700 then
+				sData.killDistance = CORPSE_KILL_FAR
+			elseif rawKillDistance >= 200 then
+				sData.killDistance = CORPSE_KILL_CLOSE
+			end
+		end
+
+		sData.killHitGroup = HITGROUP_GENERIC
+		if rag.scene.hit_group and rag.scene.hit_group > 0 then
+			sData.killHitGroup = rag.scene.hit_group
+		end
+
+		sData.killOrientation = CORPSE_KILL_NONE
+		if rag.scene.hit_trace then
+			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
+
+			if rawKillAngle < 45 then
+				sData.killOrientation = CORPSE_KILL_BACK
+			elseif rawKillAngle < 135 then
+				sData.killOrientation = CORPSE_KILL_SIDE
+			else
+				sData.killOrientation = CORPSE_KILL_FRONT
+			end
+		end
+
+		sData.stime = 0
+		if rag.killer_sample then
+			sData.stime = rag.killer_sample.t
+		end
+
+		-- build list of people this player killed, but only if convar is enabled
+		sData.kill_entids = {}
+		if GetConVar("ttt2_confirm_killlist"):GetBool() then
+			local ragKills = rag.kills
+
+			for i = 1, #ragKills do
+				local vicsid = ragKills[i]
+
+				-- also send disconnected players as a marker
+				local vic = player.GetBySteamID64(vicsid)
+
+				sData.kill_entids[#kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
+			end
+		end
+
+		return sData
+	end
+
+	function bodysearch.StreamSceneData(sData, client)
+		net.SendStream("TTT2_BodySearchData", sData, client)
+	end
 end
 
 if CLIENT then
@@ -31,6 +215,27 @@ if CLIENT then
 	local table = table
 	local IsValid = IsValid
 	local pairs = pairs
+
+	net.ReceiveStream("TTT2_BodySearchData", function(searchStreamData)
+		PrintTable(searchStreamData)
+
+		local eq = {} -- placeholder for the hook, not used right now
+		---
+		-- @realm shared
+		hook.Run("TTTBodySearchEquipment", searchStreamData, eq)
+
+		searchStreamData.show = LocalPlayer() == searchStreamData.inspector
+
+		if searchStreamData.show then
+			SEARCHSCRN:Show(searchStreamData)
+		end
+
+		-- add this hack here to keep compatibility to the old scoreboard
+		searchStreamData.show_sb = searchStreamData.show or searchStreamData.isPublicPolicingSearch
+
+		-- cache search result in rag.bodySearchResult, e.g. useful for scoreboard
+		bodysearch.StoreSearchResult(searchStreamData)
+	end)
 
 	local damageToText = {
 		["crush"] = DMG_CRUSH,
@@ -201,9 +406,9 @@ if CLIENT then
 				}
 			end
 
-			if data.hitGroup > 0 then
+			if data.killHitGroup > 0 then
 				rawText.text[#rawText.text + 1] = {
-					body = hitgroup_to_text[data.hitGroup],
+					body = hitgroup_to_text[data.killHitGroup],
 					params = nil
 				}
 			end
@@ -282,11 +487,7 @@ if CLIENT then
 			end
 		end,
 		last_id = function(data)
-			if not data.idx or data.idx == -1 then return end
-
-			local ent = Entity(data.idx)
-
-			if not IsValid(ent) or not ent:IsPlayer() then return end
+			if not IsValid(data.lastSeenEnt) or not data.lastSeenEnt:IsPlayer() then return end
 
 			return {
 				title = {
@@ -295,12 +496,12 @@ if CLIENT then
 				},
 				text = {{
 					body = "search_eyes",
-					params = {player = ent:Nick()}
+					params = {player = data.lastSeenEnt:Nick()}
 				}}
 			}
 		end,
 		floor_surface = function(data)
-			if data.floorSurface == 0 or not floorIDToText[data.floorSurface] then return end
+			if data.killFloorSurface == 0 or not floorIDToText[data.killFloorSurface] then return end
 
 			return {
 				title = {
@@ -308,7 +509,7 @@ if CLIENT then
 					params = nil
 				},
 				text = {{
-					body = floorIDToText[data.floorSurface],
+					body = floorIDToText[data.killFloorSurface],
 					params = nil
 				}}
 			}
@@ -328,15 +529,15 @@ if CLIENT then
 			}
 		end,
 		water_level = function(data)
-			if not data.waterLevel or data.waterLevel == 0 then return end
+			if not data.killWaterLevel or data.killWaterLevel == 0 then return end
 
 			return {
 				title = {
 					body = "search_title_water",
-					params = {level = data.waterLevel}
+					params = {level = data.killWaterLevel}
 				},
 				text = {{
-					body = "search_water_" .. data.waterLevel,
+					body = "search_water_" .. data.killWaterLevel,
 					params = nil
 				}}
 			}
@@ -518,6 +719,42 @@ if CLIENT then
 		hook.Run("TTTBodySearchPopulate", search, raw)
 
 		return search
+	end
+
+	function bodysearch.StoreSearchResult(sData)
+		if not sData.ragOwner then return end
+
+		-- if existing result was not ours, it was detective's, and should not
+		-- be overwritten
+		local ply = sData.ragOwner
+
+		-- if the currently stored search result is by a public policing role, it should be kept
+		-- it can be overwritten by another public policing role though
+		if ply.bodySearchResult and ply.bodySearchResult.isPublicPolicingSearch
+			and not sData.isPublicPolicingSearch
+		then return end
+
+		ply.bodySearchResult = sData
+	end
+
+	function bodysearch.ResetSearchResult(ply)
+		if not IsValid(ply) then return end
+
+		ply.bodySearchResult = nil
+	end
+
+	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange)
+		net.Start("ttt2_client_confirm_corpse")
+		net.WriteEntity(rag)
+		net.WriteUInt(searchUID, 16)
+		net.WriteBool(isLongRange)
+		net.SendToServer()
+	end
+
+	function bodysearch.ClientReportsCorpse(rag)
+		net.Start("ttt2_client_reports_corpse")
+		net.WriteEntity(rag)
+		net.SendToServer()
 	end
 
 	-- HOOKS --

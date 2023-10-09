@@ -94,7 +94,7 @@ end
 function PANEL:UpdatePlayerData()
 	if not IsValid(self.Player) then return end
 
-	if not self.Player.search_result or not self.Player.search_result.show_sb then
+	if not self.Player.bodySearchResult or not self.Player.bodySearchResult.show_sb then
 		self.Help:SetVisible(true)
 
 		return
@@ -102,13 +102,13 @@ function PANEL:UpdatePlayerData()
 
 	self.Help:SetVisible(false)
 
-	if self.Search == self.Player.search_result then return end
+	if self.Search == self.Player.bodySearchResult then return end
 
 	self.List:Clear(true)
 
 	self.Scroll.Panels = {}
 
-	local search_raw = self.Player.search_result
+	local search_raw = self.Player.bodySearchResult
 
 	-- standard search result preproc
 	local search = bodysearch.PreprocSearch(search_raw)
