@@ -491,15 +491,15 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	if tData:GetEntityDistance() <= 100 then
 		if client:IsSpec() then
 			tData:SetSubtitle(ParT("corpse_hint_spec", key_params))
-		elseif bodysearch.GetInspectConfirmMode() == 2 and not roleDataClient.isPolicingRole and not roleDataClient.isPublicRole then
+		elseif bodysearch.GetInspectConfirmMode() == 2 and not (roleDataClient.isPolicingRole and roleDataClient.isPublicRole) then
 			-- a detective added search results, this should change the targetID
-			if ent.bodySearchResult and ent.bodySearchResult.base and ent.bodySearchResult.base.isPublicPolicingSearch then
+			if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
 				tData:SetSubtitle(ParT("corpse_hint_public_policing_searched", key_params))
 			else
 				tData:SetSubtitle(ParT("corpse_hint_no_inspect", key_params))
 			end
 			tData:AddDescriptionLine(TryT("corpse_hint_no_inspect_details"))
-		elseif bodysearch.GetInspectConfirmMode() == 1 and not roleDataClient.isPolicingRole and not roleDataClient.isPublicRole then
+		elseif bodysearch.GetInspectConfirmMode() == 1 and not (roleDataClient.isPolicingRole and roleDataClient.isPublicRole) then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
 			tData:AddDescriptionLine(TryT("corpse_hint_inspect_only_details"))
 		else
@@ -528,7 +528,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	end
 
 	-- add info if searched by detectives
-	if ent.bodySearchResult and ent.bodySearchResult.base and ent.bodySearchResult.base.isPublicPolicingSearch then
+	if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
 			roles.DETECTIVE.ltcolor,

@@ -203,7 +203,7 @@ function SEARCHSCRN:Show(data)
 		}, 62)
 	elseif bodysearch.CanReportBody(data.ragOwner)
 		and not bodysearch.IsConfirmed(data.ragOwner)
-		and not clientRD.isPolicingRole and not clientRD.isPublicRole
+		and not (clientRD.isPolicingRole and clientRD.isPublicRole)
 	then
 		local searchMode = bodysearch.GetInspectConfirmMode()
 
@@ -320,7 +320,7 @@ function SEARCHSCRN:Show(data)
 	buttonConfirm.DoClick = function(btn)
 		local creditsOnly = playerCanTakeCredits
 			and GetConVar("ttt2_inspect_confirm_mode"):GetInt() > 0
-			and not clientRD.isPolicingRole and not clientRD.isPublicRole
+			and not (clientRD.isPolicingRole and clientRD.isPublicRole)
 
 		bodysearch.ClientConfirmsCorpse(data.rag, data.searchUID, data.lrng, creditsOnly)
 

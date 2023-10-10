@@ -78,14 +78,6 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		return
 	end
 
-	local roleData = ply:GetSubRoleData()
-
-	--if bodysearch.GetInspectConfirmMode() == 2 and not roleData.isPolicingRole and not roleData.isPublicRole then
-	--	LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
-
-	--	return false
-	--end
-
 	---
 	-- @realm server
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
