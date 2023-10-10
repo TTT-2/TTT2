@@ -444,13 +444,13 @@ L.karma_min = "Liability"
 
 -- TargetID misc
 L.corpse = "Corpse"
-L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
+L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly." ---!
 
 L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
 L.target_unknown = "A Terrorist"
 
-L.target_credits = "Confirm to receive unspent credits"
+L.target_credits = "Confirm to receive unspent credits" --!move to target_credits_on_confirm
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"
@@ -1157,11 +1157,13 @@ L.hud_revival_time = "{time}s"
 L.door_destructible = "This door is destructible ({health}HP)."
 
 -- 2020-05-28
-L.confirm_detective_only = "Only detectives can confirm bodies."
-L.inspect_detective_only = "Only detectives can search bodies."
-L.corpse_hint_no_inspect = "Only detectives can search this body."
-L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
-L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+L.confirm_detective_only = "Only public policing roles can confirm bodies." --!remove
+L.inspect_detective_only = "Only public policing roles can search bodies." --!remove
+
+L.corpse_hint_no_inspect = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI." --!
+L.corpse_hint_inspect_only = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI." --!
+
+L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only public policing roles can search this body." --!remove
 
 -- 2020-06-04
 L.label_bind_disguiser = "Toggle disguiser"
@@ -1930,13 +1932,13 @@ L.search_eyes = "Using your detective skills, you identified the last person the
 L.search_head = "There is a gaping hole right on their forehead. It looks like a headshot."
 L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
 
-L.kill_distance_point_blank = "It was a point blank shot."
-L.kill_distance_close = "The projectile came from a short distance."
-L.kill_distance_far = "The victim was shot from a long distance away."
+L.search_kill_distance_point_blank = "It was a point blank shot."
+L.search_kill_distance_close = "The projectile came from a short distance."
+L.search_kill_distance_far = "The victim was shot from a long distance away."
 
-L.kill_from_front = "The victim was shot from the front."
-L.kill_from_back = "The victim was shot from behind."
-L.kill_from_side = "The victim was shot from the side."
+L.search_kill_from_front = "The victim was shot from the front."
+L.search_kill_from_back = "The victim was shot from behind."
+L.search_kill_from_side = "The victim was shot from the side."
 
 L.search_hitgroup_head = "The projectile was found in their head."
 L.search_hitgroup_chest = "The projectile was found in their chest."
@@ -1977,3 +1979,9 @@ L.search_title_credits = "{credits} Equipment credit(s)"
 L.search_title_water = "Water level {level}"
 L.search_title_policingrole_report_confirm = "Confirm to report death"
 L.search_title_policingrole_confirm_disabled = "Report corpse"
+
+L.target_credits_on_confirm = "Confirm to receive unspent credits"
+L.target_credits_on_search = "Search to receive unspent credits"
+L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
+L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+L.corpse_hint_spec = "Press [{usekey}] to view corpse UI"

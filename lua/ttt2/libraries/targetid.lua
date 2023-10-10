@@ -22,10 +22,6 @@ local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 -- Key Parameters for doors
 local key_params = {}
 
--- Convars for targetid
-local cvDeteOnlyConfirm
-local cvDeteOnlyInspect
-
 -- Materials for targetid
 local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
 local materialRing = Material("effects/select_ring")
@@ -59,9 +55,6 @@ function targetid.Initialize()
 		usekey = Key("+use", "USE"),
 		walkkey = Key("+walk", "WALK")
 	}
-
-	cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
-	cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 end
 
 ---
@@ -496,14 +489,14 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	)
 
 	if tData:GetEntityDistance() <= 100 then
-		if cvDeteOnlyInspect:GetBool() and not roleDataClient.isPolicingRole then
-			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
-				tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
-			else
-				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
-			end
-		elseif cvDeteOnlyConfirm:GetBool() and not roleDataClient.isPolicingRole then
+		if client:IsSpec() then
+			tData:SetSubtitle(ParT("corpse_hint_spec", key_params))
+		elseif bodysearch.GetInspectConfirmMode() == 2 and not roleDataClient.isPolicingRole and not roleDataClient.isPublicRole then
+			tData:SetSubtitle(ParT("corpse_hint_no_inspect", key_params))
+			tData:AddDescriptionLine(TryT("corpse_hint_no_inspect_details"))
+		elseif bodysearch.GetInspectConfirmMode() == 1 and not roleDataClient.isPolicingRole and not roleDataClient.isPublicRole then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
+			tData:AddDescriptionLine(TryT("corpse_hint_inspect_only_details"))
 		else
 			tData:SetSubtitle(ParT("corpse_hint", key_params))
 		end
@@ -540,8 +533,13 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 
 	-- add credits info when corpse has credits
 	if client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits and CORPSE.GetCredits(ent, 0) > 0 then
+		local creditsHint = "target_credits_on_search"
+		if bodysearch.GetInspectConfirmMode() == 0 then
+			creditsHint = "target_credits_on_confirm"
+		end
+
 		tData:AddDescriptionLine(
-			TryT("target_credits"),
+			TryT(creditsHint),
 			COLOR_GOLD,
 			{materialCredits}
 		)

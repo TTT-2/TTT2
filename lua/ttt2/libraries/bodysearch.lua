@@ -25,6 +25,10 @@ local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCV
 
 bodysearch = bodysearch or {}
 
+function bodysearch.GetInspectConfirmMode()
+	return cvInspectConfirmMode:GetInt()
+end
+
 if SERVER then
 	local mathMax = math.max
 	local mathRound = math.Round
@@ -127,11 +131,20 @@ if SERVER then
 		local sData = {}
 		local inspectorRoleData = inspector:GetSubRoleData()
 
-		-- if a non-public or non-policing role tries to search a body in mode 2, nothing happens
-		if cvInspectConfirmMode:GetInt() == 2 and not inspectorRoleData.isPolicingRole and not inspectorRoleData.isPublicRole then
-			LANG.Msg(inspector, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+		-- hot-reloads can break the data, therefore we have to sanitize it
+		rag.scene = rag.scene or {}
 
-			return
+		-- data that is available to everyone
+		sData.searchUID = mathFloor(rag:EntIndex() + (rag.time or 0))
+		sData.inspector = inspector
+		sData.playerModel = rag.scene.plyModel or ""
+		sData.credits = CORPSE.GetCredits(rag, 0)
+		sData.ragOwner = player.GetBySteamID64(rag.sid64)
+		sData.isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole and not isCovert
+
+		-- if a non-public or non-policing role tries to search a body in mode 2, nothing happens
+		if cvInspectConfirmMode:GetInt() == 2 and not sData.isPublicPolicingSearch and not inspector:IsSpec() then
+			return sData
 		end
 
 		sData.nick = CORPSE.GetPlayerNick(rag)
@@ -143,7 +156,6 @@ if SERVER then
 			return
 		end
 
-		sData.inspector = inspector
 		sData.rag = rag
 		sData.eq = rag.equipment or {}
 		sData.c4CutWire = rag.bomb_wire or - 1
@@ -152,17 +164,11 @@ if SERVER then
 		sData.lastWords = rag.last_words
 		sData.wasHeadshot = rag.was_headshot or false
 		sData.deathTime = rag.time or 0
-		sData.playerModel = rag.scene.plyModel or ""
 		sData.sid64 = rag.scene.plySID64 or ""
-		sData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage))
+		sData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage or 0))
 		sData.killFloorSurface = rag.scene.floorSurface or 0
 		sData.killWaterLevel = rag.scene.waterLevel or 0
-		sData.credits = CORPSE.GetCredits(rag, 0)
 		sData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
-		sData.isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole and not isCovert
-		sData.searchUID = mathFloor(rag:EntIndex() + sData.deathTime)
-
-		sData.ragOwner = player.GetBySteamID64(rag.sid64)
 
 		sData.killDistance = CORPSE_KILL_NONE
 		if rag.scene.hit_trace then
@@ -202,7 +208,7 @@ if SERVER then
 		-- build list of people this player killed, but only if convar is enabled
 		sData.kill_entids = {}
 		if GetConVar("ttt2_confirm_killlist"):GetBool() then
-			local ragKills = rag.kills
+			local ragKills = rag.kills or {}
 
 			for i = 1, #ragKills do
 				local vicsid = ragKills[i]
@@ -210,7 +216,7 @@ if SERVER then
 				-- also send disconnected players as a marker
 				local vic = player.GetBySteamID64(vicsid)
 
-				sData.kill_entids[#kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
+				sData.kill_entids[#sData.kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
 			end
 		end
 
@@ -241,7 +247,16 @@ if CLIENT then
 		searchStreamData.show = LocalPlayer() == searchStreamData.inspector
 
 		if searchStreamData.show then
-			SEARCHSCRN:Show(searchStreamData)
+			-- if there is more elaborate data already available
+			-- confirming this body, then this should be used instead
+			print("is showing")
+			if bodysearch.PlayerHasDetailedSearchResult(searchStreamData.ragOwner) then
+				print("has better data")
+				SEARCHSCRN:Show(bodysearch.GetSearchResult(searchStreamData.ragOwner))
+			else
+				print("use new data")
+				SEARCHSCRN:Show(searchStreamData)
+			end
 		end
 
 		-- add this hack here to keep compatibility to the old scoreboard
@@ -274,15 +289,15 @@ if CLIENT then
 	}
 
 	local distanceToText = {
-		[CORPSE_KILL_POINT_BLANK] = "kill_distance_point_blank",
-		[CORPSE_KILL_CLOSE] = "kill_distance_close",
-		[CORPSE_KILL_FAR] = "kill_distance_far"
+		[CORPSE_KILL_POINT_BLANK] = "search_kill_distance_point_blank",
+		[CORPSE_KILL_CLOSE] = "search_kill_distance_close",
+		[CORPSE_KILL_FAR] = "search_kill_distance_far"
 	}
 
 	local orientationToText = {
-		[CORPSE_KILL_FRONT] = "kill_from_front",
-		[CORPSE_KILL_BACK] = "kill_from_back",
-		[CORPSE_KILL_SIDE] = "kill_from_side"
+		[CORPSE_KILL_FRONT] = "search_kill_from_front",
+		[CORPSE_KILL_BACK] = "search_kill_from_back",
+		[CORPSE_KILL_SIDE] = "search_kill_from_side"
 	}
 
 	local floorIDToText = {
@@ -354,7 +369,7 @@ if CLIENT then
 			}
 		end,
 		c4_disarm = function(data)
-			if data.c4CutWire <= 0 then return end
+			if not data.c4CutWire or data.c4CutWire <= 0 then return end
 
 			return {
 				title = {
@@ -368,6 +383,8 @@ if CLIENT then
 			}
 		end,
 		dmg = function(data)
+			if not data.dmgType then return end
+
 			local rawText = {
 				title = {
 					body = "search_title_dmg_" .. DamageToText(data.dmgType),
@@ -396,6 +413,8 @@ if CLIENT then
 			return rawText
 		end,
 		wep = function(data)
+			if not data.wep then return end
+
 			local wep = util.WeaponForClass(data.wep)
 
 			local wname = wep and wep.PrintName
@@ -430,6 +449,8 @@ if CLIENT then
 			return rawText
 		end,
 		death_time = function(data)
+			if not data.deathTime then return end
+
 			return {
 				title = {
 					body = "search_title_time",
@@ -442,7 +463,7 @@ if CLIENT then
 			}
 		end,
 		dna_time = function(data)
-			if data.sampleDecayTime - CurTime() <= 0 then return end
+			if not data.sampleDecayTime or data.sampleDecayTime - CurTime() <= 0 then return end
 
 			return {
 				title = {
@@ -515,7 +536,7 @@ if CLIENT then
 			}
 		end,
 		floor_surface = function(data)
-			if data.killFloorSurface == 0 or not floorIDToText[data.killFloorSurface] then return end
+			if not data.killFloorSurface or data.killFloorSurface == 0 or not floorIDToText[data.killFloorSurface] then return end
 
 			return {
 				title = {
@@ -529,7 +550,13 @@ if CLIENT then
 			}
 		end,
 		credits = function(data)
-			if data.credits == 0 then return end
+			if not data.credits or data.credits == 0 then return end
+
+			-- special case: mode 2, only shopping roles can see credits
+			local client = LocalPlayer()
+			if bodysearch.GetInspectConfirmMode() == 2
+				and (not client:IsActiveShopper() or client:GetSubRoleData().preventFindCredits)
+			then return end
 
 			return {
 				title = {
@@ -751,7 +778,19 @@ if CLIENT then
 			and not sData.isPublicPolicingSearch
 		then return end
 
+		-- do not store if searching player (client) is spectator
+		if LocalPlayer():IsSpec() then return end
+
 		ply.bodySearchResult = sData
+	end
+
+	function bodysearch.PlayerHasDetailedSearchResult(ply)
+		-- note: the nick is only transmitted if there is full search data available
+		return IsValid(ply) and ply.bodySearchResult and ply.bodySearchResult.nick ~= nil
+	end
+
+	function bodysearch.GetSearchResult(ply)
+		return ply.bodySearchResult or {}
 	end
 
 	function bodysearch.ResetSearchResult(ply)

@@ -8,6 +8,8 @@ local util = util
 local IsValid = IsValid
 local hook = hook
 
+local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
+
 net.Receive("TTT2SendConfirmMsg", function()
 	local msgName = net.ReadString()
 	local sid64 = net.ReadString()
@@ -159,6 +161,7 @@ function SEARCHSCRN:Show(data)
 	self.data = data
 	self.menuFrame = frame
 
+	local roleKnown = data.nick ~= nil
 	local rd = roles.GetByIndex(data.subrole)
 	local clientRD = client:GetSubRoleData()
 
@@ -171,10 +174,12 @@ function SEARCHSCRN:Show(data)
 	profileBox:Dock(LEFT)
 	profileBox:SetModel(data.playerModel)
 	profileBox:SetPlayerIconBySteamID64(data.sid64)
-	profileBox:SetPlayerRoleColor(data.roleColor)
-	profileBox:SetPlayerRoleIcon(rd.iconMaterial)
-	profileBox:SetPlayerRoleString(rd.name)
-	profileBox:SetPlayerTeamString(data.team)
+	profileBox:SetPlayerRoleColor(roleKnown and data.roleColor or COLOR_SLATEGRAY)
+	profileBox:SetPlayerRoleIcon(roleKnown and rd.iconMaterial or materialRoleUnknown)
+	if roleKnown then
+		profileBox:SetPlayerRoleString(rd.name)
+		profileBox:SetPlayerTeamString(data.team)
+	end
 
 	-- ADD STATUS BOX AND ITS CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
@@ -198,7 +203,7 @@ function SEARCHSCRN:Show(data)
 			},
 			colorBox = roles.DETECTIVE.ltcolor
 		}, 62)
-	elseif GetConVar("ttt2_inspect_confirm_mode"):GetInt() > 0
+	elseif bodysearch.CanReportBody(data.ragOwner)
 		and not bodysearch.IsConfirmed(data.ragOwner)
 		and not clientRD.isPolicingRole and not clientRD.isPublicRole
 	then
@@ -217,26 +222,28 @@ function SEARCHSCRN:Show(data)
 		}, 62)
 	end
 
-	-- POPULATE WITH INFORMATION
-	for i = 1, #bodysearch.searchResultOrder do
-		local searchResultName = bodysearch.searchResultOrder[i]
-		local searchResultData = bodysearch.GetContentFromData(searchResultName, data)
+		-- POPULATE WITH INFORMATION
+		for i = 1, #bodysearch.searchResultOrder do
+			local searchResultName = bodysearch.searchResultOrder[i]
+			local searchResultData = bodysearch.GetContentFromData(searchResultName, data)
 
-		if not searchResultData then continue end
+			if not searchResultData then continue end
 
-		self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
-	end
+			self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
+		end
 
-	-- additional information by other addons
-	local search_add = {}
-	---
-	-- @realm client
-	hook.Run("TTTBodySearchPopulate", search_add, search)
-	for _, v in pairs(search_add) do
-		if istable(v.text) then
-			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = v.text})
-		else
-			self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = {{body = v.text}}})
+	if roleKnown then
+		-- additional information by other addons
+		local search_add = {}
+		---
+		-- @realm client
+		hook.Run("TTTBodySearchPopulate", search_add, search)
+		for _, v in pairs(search_add) do
+			if istable(v.text) then
+				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = v.text})
+			else
+				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = {{body = v.text}}})
+			end
 		end
 	end
 
@@ -254,7 +261,7 @@ function SEARCHSCRN:Show(data)
 	end
 	buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
 
-	if not bodysearch.CanReportBody(data.ragOwner) or not bodysearch.IsConfirmed(data.ragOwner) then
+	if not bodysearch.CanReportBody(data.ragOwner) then
 		buttonReport:SetEnabled(false)
 	end
 

@@ -22,9 +22,6 @@ local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, 
 -- @realm server
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
-local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
-
 ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
@@ -83,11 +80,11 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 
 	local roleData = ply:GetSubRoleData()
 
-	if cvDeteOnlyInspect:GetBool() and not roleData.isPolicingRole then
-		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+	--if bodysearch.GetInspectConfirmMode() == 2 and not roleData.isPolicingRole and not roleData.isPublicRole then
+	--	LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
 
-		return false
-	end
+	--	return false
+	--end
 
 	---
 	-- @realm server
@@ -100,12 +97,6 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 	-- Register find
 	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
-
-		if cvDeteOnlyConfirm:GetBool() and not roleData.isPolicingRole then
-			LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
-
-			return
-		end
 
 		---
 		-- @realm server
@@ -217,15 +208,19 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
 	local sData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
-	if not sData then return end
+	-- only in mode 0 everyone can confirm by pressing E
+	if bodysearch.GetInspectConfirmMode() == 0 or sData.isPublicPolicingSearch then
+		-- only give credits if body is also confirmed
+		if not isCovert then
+			bodysearch.GiveFoundCredits(ply, rag, isLongRange, sData.searchUID)
+		end
 
-	-- only give credits if body is also confirmed
-	if not isCovert then
+		if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
+			CORPSE.IdentifyBody(ply, rag, sData.searchUID)
+		end
+	elseif ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and not isCovert then
+		-- in mode 1 and 2 every active shopping role can take credits
 		bodysearch.GiveFoundCredits(ply, rag, isLongRange, sData.searchUID)
-	end
-
-	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
-		CORPSE.IdentifyBody(ply, rag, sData.searchUID)
 	end
 
 	-- cache credits of corpse here, AFTER one might has taken them
