@@ -8,7 +8,9 @@ local util = util
 local IsValid = IsValid
 local hook = hook
 
+local materialCredits = Material("vgui/ttt/icon_credits_transparent")
 local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
+local materialPlayerIconUnknown = Material("vgui/ttt/b-draw/icon_avatar_default")
 
 net.Receive("TTT2SendConfirmMsg", function()
 	local msgName = net.ReadString()
@@ -173,7 +175,7 @@ function SEARCHSCRN:Show(data)
 	profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
 	profileBox:Dock(LEFT)
 	profileBox:SetModel(data.playerModel)
-	profileBox:SetPlayerIconBySteamID64(data.sid64)
+	profileBox:SetPlayerIcon(roleKnown and draw.GetAvatarMaterial(data.sid64, "medium") or materialPlayerIconUnknown)
 	profileBox:SetPlayerRoleColor(roleKnown and data.roleColor or COLOR_SLATEGRAY)
 	profileBox:SetPlayerRoleIcon(roleKnown and rd.iconMaterial or materialRoleUnknown)
 	profileBox:SetPlayerRoleString(roleKnown and rd.name or "search_team_role_unknown")
@@ -292,7 +294,7 @@ function SEARCHSCRN:Show(data)
 				buttonConfirm:SetText("search_take_credits")
 			end
 			buttonConfirm:SetParams({credits = data.credits})
-			buttonConfirm:SetIcon(Material("vgui/ttt/icon_credits_transparent"))
+			buttonConfirm:SetIcon(materialCredits)
 			buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
 			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
 		else
@@ -311,7 +313,7 @@ function SEARCHSCRN:Show(data)
 		end
 		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
-		buttonConfirm:SetIcon(Material("vgui/ttt/icon_credits_transparent"))
+		buttonConfirm:SetIcon(materialCredits)
 	else
 		buttonConfirm:SetText("search_confirm")
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)

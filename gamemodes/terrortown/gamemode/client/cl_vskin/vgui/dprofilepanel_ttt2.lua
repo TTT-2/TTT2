@@ -214,8 +214,8 @@ function PANEL:HasModel()
 	return self.data.mdl ~= nil
 end
 
-function PANEL:SetPlayerIconBySteamID64(sid64)
-	self.data.player_icon = draw.GetAvatarMaterial(sid64, "medium", Material("vgui/ttt/icon_corpse"))
+function PANEL:SetPlayerIcon(material)
+	self.data.player_icon = material
 end
 
 function PANEL:SetPlayerRoleIcon(material)

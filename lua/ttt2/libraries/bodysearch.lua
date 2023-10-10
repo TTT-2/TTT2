@@ -130,7 +130,7 @@ if SERVER then
 	function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
 		local sData = {}
 		local inspectorRoleData = inspector:GetSubRoleData()
-		local isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole
+		local isPublicPolicingSearch = inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole
 
 		-- hot-reloads can break the data, therefore we have to sanitize it
 		rag.scene = rag.scene or {}
@@ -138,7 +138,7 @@ if SERVER then
 		-- data that is available to everyone
 		sData.base = {}
 		sData.base.inspector = inspector
-		sData.base.isPublicPolicingSearch = isPublicPolicingSearch and not isCovert
+		sData.base.isPublicPolicingSearch = isPublicPolicingSearch and inspector:IsActive() and not isCovert
 
 		sData.playerModel = rag.scene.plyModel or ""
 		sData.ragOwner = player.GetBySteamID64(rag.sid64)
