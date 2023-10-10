@@ -290,10 +290,11 @@ function SEARCHSCRN:Show(data)
 		if data.credits > 0 and client:IsActiveShopper() and not clientRD.preventFindCredits then
 			if data.credits == 1 then
 				buttonConfirm:SetText("search_take_credit")
+				buttonConfirm:SetParams({credit = data.credits})
 			else
 				buttonConfirm:SetText("search_take_credits")
+				buttonConfirm:SetParams({credits = data.credits})
 			end
-			buttonConfirm:SetParams({credits = data.credits})
 			buttonConfirm:SetIcon(materialCredits)
 			buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
 			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
