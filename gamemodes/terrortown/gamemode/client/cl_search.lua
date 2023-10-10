@@ -77,6 +77,7 @@ function SEARCHSCRN:CalculateSizes()
 	self.sizes.heightButton = 45
 	self.sizes.widthButton = 160
 	self.sizes.widthButtonCredits = 210
+	self.sizes.widthButtonTakeCredits = 180
 	self.sizes.widthButtonClose = 100
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
 
@@ -296,8 +297,8 @@ function SEARCHSCRN:Show(data)
 				buttonConfirm:SetParams({credits = data.credits})
 			end
 			buttonConfirm:SetIcon(materialCredits)
-			buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
-			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
+			buttonConfirm:SetSize(self.sizes.widthButtonTakeCredits, self.sizes.heightButton)
+			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonTakeCredits, self.sizes.padding + 1)
 		else
 			buttonConfirm:SetText("search_confirm_forbidden")
 			buttonConfirm:SetEnabled(false)
