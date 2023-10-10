@@ -130,20 +130,23 @@ if SERVER then
 	function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
 		local sData = {}
 		local inspectorRoleData = inspector:GetSubRoleData()
+		local isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole
 
 		-- hot-reloads can break the data, therefore we have to sanitize it
 		rag.scene = rag.scene or {}
 
 		-- data that is available to everyone
-		sData.searchUID = mathFloor(rag:EntIndex() + (rag.time or 0))
-		sData.inspector = inspector
+		sData.base = {}
+		sData.base.inspector = inspector
+		sData.base.isPublicPolicingSearch = isPublicPolicingSearch and not isCovert
+
 		sData.playerModel = rag.scene.plyModel or ""
-		sData.credits = CORPSE.GetCredits(rag, 0)
 		sData.ragOwner = player.GetBySteamID64(rag.sid64)
-		sData.isPublicPolicingSearch = inspector:IsActive() and inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole and not isCovert
+		sData.credits = CORPSE.GetCredits(rag, 0)
+		sData.searchUID = mathFloor(rag:EntIndex() + (rag.time or 0))
 
 		-- if a non-public or non-policing role tries to search a body in mode 2, nothing happens
-		if cvInspectConfirmMode:GetInt() == 2 and not sData.isPublicPolicingSearch and not inspector:IsSpec() then
+		if cvInspectConfirmMode:GetInt() == 2 and not isPublicPolicingSearch and not inspector:IsSpec() then
 			return sData
 		end
 
@@ -244,7 +247,7 @@ if CLIENT then
 		-- @realm shared
 		hook.Run("TTTBodySearchEquipment", searchStreamData, eq)
 
-		searchStreamData.show = LocalPlayer() == searchStreamData.inspector
+		searchStreamData.show = LocalPlayer() == searchStreamData.base.inspector
 
 		if searchStreamData.show then
 			-- if there is more elaborate data already available
@@ -257,7 +260,7 @@ if CLIENT then
 		end
 
 		-- add this hack here to keep compatibility to the old scoreboard
-		searchStreamData.show_sb = searchStreamData.show or searchStreamData.isPublicPolicingSearch
+		searchStreamData.show_sb = searchStreamData.show or searchStreamData.base.isPublicPolicingSearch
 
 		-- cache search result in rag.bodySearchResult, e.g. useful for scoreboard
 		bodysearch.StoreSearchResult(searchStreamData)
@@ -770,20 +773,35 @@ if CLIENT then
 		local ply = sData.ragOwner
 		local rag = sData.rag
 
-		-- if the currently stored search result is by a public policing role, it should be kept
-		-- it can be overwritten by another public policing role though
-		if ply.bodySearchResult and ply.bodySearchResult.isPublicPolicingSearch
-			and not sData.isPublicPolicingSearch
-		then return end
-
 		-- do not store if searching player (client) is spectator
 		if LocalPlayer():IsSpec() then return end
 
-		ply.bodySearchResult = sData
+		-- if the currently stored search result is by a public policing role, it should be kept
+		-- it can be overwritten by another public policing role though
+		-- data can still be updated, but the original base is kept
+		local oldBase
+		if ply.bodySearchResult and ply.bodySearchResult.base and ply.bodySearchResult.base.isPublicPolicingSearch
+			and not sData.base.isPublicPolicingSearch
+		then
+			oldBase = sData.base
+		end
+
+		-- merge new data into old data
+		-- this is useful if a player had good data on a body from another source
+		-- and now gets updated info on it as it now only replaces the newly added
+		-- entries
+		local newData = ply.bodySearchResult or {}
+		table.Merge(newData, sData)
+
+		-- keep the original finder info if previously searched by public policing role
+		newData.base = oldBase or newData.base
+
+		ply.bodySearchResult = newData
 
 		-- also store data in the ragdoll for targetID
 		if not IsValid(rag) then return end
-		rag.bodySearchResult = sData
+
+		rag.bodySearchResult = newData
 	end
 
 	function bodysearch.PlayerHasDetailedSearchResult(ply)

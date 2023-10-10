@@ -432,7 +432,7 @@ function PANEL:UpdatePlayerData()
 	self.tag:SetText(ptag and GetTranslation(ptag.txt) or "")
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
 
-	self.sresult:SetVisible(ply.bodySearchResult and ply.bodySearchResult.isPublicPolicingSearch)
+	self.sresult:SetVisible(ply.bodySearchResult and ply.bodySearchResult.base.isPublicPolicingSearch)
 
 	-- more blue if a detective searched them
 	if ply.bodySearchResult and (LocalPlayer():GetSubRoleData().isPolicingRole or not ply.bodySearchResult.show) then

@@ -209,7 +209,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	local sData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
 	-- only in mode 0 everyone can confirm by pressing E
-	if bodysearch.GetInspectConfirmMode() == 0 or sData.isPublicPolicingSearch then
+	if bodysearch.GetInspectConfirmMode() == 0 or sData.base.isPublicPolicingSearch then
 		-- only give credits if body is also confirmed
 		if not isCovert then
 			bodysearch.GiveFoundCredits(ply, rag, isLongRange, sData.searchUID)

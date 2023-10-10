@@ -205,6 +205,8 @@ function SEARCHSCRN:Show(data)
 		and not bodysearch.IsConfirmed(data.ragOwner)
 		and not clientRD.isPolicingRole and not clientRD.isPublicRole
 	then
+		local searchMode = bodysearch.GetInspectConfirmMode()
+
 		self:MakeInfoItem(contentAreaScroll, "policingrole_confirm_disabled", {
 			text = {
 				title = {
@@ -212,12 +214,12 @@ function SEARCHSCRN:Show(data)
 					params = nil
 				},
 				text = {{
-					body = "search_policingrole_confirm_disabled_" .. GetConVar("ttt2_inspect_confirm_mode"):GetString(),
+					body = "search_policingrole_confirm_disabled_" .. tostring(searchMode),
 					params = nil
 				}}
 			},
 			colorBox = roles.DETECTIVE.ltcolor
-		}, 62)
+		}, (searchMode == 1) and 62 or 78)
 	end
 
 		-- POPULATE WITH INFORMATION
@@ -291,12 +293,14 @@ function SEARCHSCRN:Show(data)
 			end
 			buttonConfirm:SetParams({credits = data.credits})
 			buttonConfirm:SetIcon(Material("vgui/ttt/icon_credits_transparent"))
+			buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
+			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
 		else
 			buttonConfirm:SetText("search_confirm_forbidden")
 			buttonConfirm:SetEnabled(false)
+			buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 		end
-		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
-		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
 	elseif data.credits > 0 and playerCanTakeCredits then
 		if data.credits == 1 then
 			buttonConfirm:SetText("search_confirm_credit")
