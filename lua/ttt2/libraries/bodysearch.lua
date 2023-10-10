@@ -249,6 +249,9 @@ if CLIENT then
 
 		searchStreamData.show = LocalPlayer() == searchStreamData.base.inspector
 
+		-- cache search result in rag.bodySearchResult, e.g. useful for scoreboard
+		bodysearch.StoreSearchResult(searchStreamData)
+
 		if searchStreamData.show then
 			-- if there is more elaborate data already available
 			-- confirming this body, then this should be used instead
@@ -261,9 +264,6 @@ if CLIENT then
 
 		-- add this hack here to keep compatibility to the old scoreboard
 		searchStreamData.show_sb = searchStreamData.show or searchStreamData.base.isPublicPolicingSearch
-
-		-- cache search result in rag.bodySearchResult, e.g. useful for scoreboard
-		bodysearch.StoreSearchResult(searchStreamData)
 	end)
 
 	local damageToText = {
