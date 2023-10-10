@@ -304,16 +304,29 @@ local function GetSceneDataFromPlayer(ply)
 end
 
 local function GetSceneData(victim, attacker, dmginfo)
-	-- only for guns for now, hull traces don't work well etc
-	if not dmginfo:IsBulletDamage() then return end
-
 	local scene = {}
+
+	scene.dmginfo = dmginfo
 
 	if victim.hit_trace then
 		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
 	else
 		return scene
 	end
+
+	scene.waterLevel = victim:WaterLevel();
+	scene.hitGroup = victim:LastHitGroup()
+	scene.floorSurface = 0
+	local groundTrace = util.TraceLine({
+		start = victim:GetPos(),
+		endpos = victim:GetPos() + Vector(0, 0, -100)
+	})
+	if groundTrace.Hit then
+		scene.floorSurface = groundTrace.MatType
+	end
+	scene.plyModel = victim:GetModel()
+	scene.plySID64 = victim:SteamID64()
+	scene.lastDamage = dmginfo:GetDamage()
 
 	scene.victim = GetSceneDataFromPlayer(victim)
 
@@ -331,21 +344,6 @@ local function GetSceneData(victim, attacker, dmginfo)
 			scene.hit_trace.StartAng = angpos.Ang
 		end
 	end
-
-	scene.waterLevel = victim:WaterLevel();
-	scene.hitGroup = victim:LastHitGroup()
-	scene.floorSurface = 0
-	local groundTrace = util.TraceLine({
-		start = victim:GetPos(),
-		endpos = victim:GetPos() + Vector(0, 0, -100)
-	})
-	if groundTrace.Hit then
-		scene.floorSurface = groundTrace.MatType
-	end
-	scene.plyModel = victim:GetModel()
-	scene.plyModelColor = victim:GetPlayerColor()
-	scene.plySID64 = victim:SteamID64()
-	scene.lastDamage = dmginfo:GetDamage()
 
 	return scene
 end

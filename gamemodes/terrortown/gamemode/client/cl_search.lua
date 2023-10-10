@@ -147,9 +147,9 @@ function SEARCHSCRN:Show(data)
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	if IsValid(frame) then
-		frame:ClearFrame(nil, nil, "search_title")
+		frame:ClearFrame(nil, nil, {body = "search_title", params = {player = data.nick or "???"}})
 	else
-		frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, {body = "search_title", params = {player = data.nick}}, true)
+		frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, {body = "search_title", params = {player = data.nick or "???"}}, true)
 	end
 
 	frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
@@ -176,10 +176,8 @@ function SEARCHSCRN:Show(data)
 	profileBox:SetPlayerIconBySteamID64(data.sid64)
 	profileBox:SetPlayerRoleColor(roleKnown and data.roleColor or COLOR_SLATEGRAY)
 	profileBox:SetPlayerRoleIcon(roleKnown and rd.iconMaterial or materialRoleUnknown)
-	if roleKnown then
-		profileBox:SetPlayerRoleString(rd.name)
-		profileBox:SetPlayerTeamString(data.team)
-	end
+	profileBox:SetPlayerRoleString(roleKnown and rd.name or "search_team_role_unknown")
+	profileBox:SetPlayerTeamString(roleKnown and data.team or "search_team_role_unknown")
 
 	-- ADD STATUS BOX AND ITS CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
@@ -332,7 +330,6 @@ function SEARCHSCRN:Show(data)
 
 		if bodysearch.CanConfirmBody(data.ragOwner) then
 			self:PlayerWasConfirmed()
-			self:CreditsWereTaken()
 		end
 	end
 

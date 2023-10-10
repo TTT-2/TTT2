@@ -1692,6 +1692,9 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	local text_translated = ""
 	for i = 1, #text do
 		local par = text[i].params
+		local body = text[i].body
+
+		if not body then continue end
 
 		if par then
 			-- process params (translation)
@@ -1699,9 +1702,9 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 				par[k] = TryT(v)
 			end
 
-			text_translated = text_translated .. ParT(text[i].body, par) .. " "
+			text_translated = text_translated .. ParT(body, par) .. " "
 		else
-			text_translated = text_translated .. TryT(text[i].body) .. " "
+			text_translated = text_translated .. TryT(body) .. " "
 		end
 	end
 

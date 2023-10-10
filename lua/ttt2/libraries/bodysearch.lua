@@ -188,7 +188,7 @@ if SERVER then
 		end
 
 		sData.killOrientation = CORPSE_KILL_NONE
-		if rag.scene.hit_trace then
+		if rag.scene.hit_trace and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
@@ -249,12 +249,9 @@ if CLIENT then
 		if searchStreamData.show then
 			-- if there is more elaborate data already available
 			-- confirming this body, then this should be used instead
-			print("is showing")
 			if bodysearch.PlayerHasDetailedSearchResult(searchStreamData.ragOwner) then
-				print("has better data")
 				SEARCHSCRN:Show(bodysearch.GetSearchResult(searchStreamData.ragOwner))
 			else
-				print("use new data")
 				SEARCHSCRN:Show(searchStreamData)
 			end
 		end
@@ -771,6 +768,7 @@ if CLIENT then
 		-- if existing result was not ours, it was detective's, and should not
 		-- be overwritten
 		local ply = sData.ragOwner
+		local rag = sData.rag
 
 		-- if the currently stored search result is by a public policing role, it should be kept
 		-- it can be overwritten by another public policing role though
@@ -782,6 +780,10 @@ if CLIENT then
 		if LocalPlayer():IsSpec() then return end
 
 		ply.bodySearchResult = sData
+
+		-- also store data in the ragdoll for targetID
+		if not IsValid(rag) then return end
+		rag.bodySearchResult = sData
 	end
 
 	function bodysearch.PlayerHasDetailedSearchResult(ply)

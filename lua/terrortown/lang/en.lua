@@ -917,7 +917,7 @@ L.target_switch_weapon_nospace = "There is no inventory slot available for this 
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
-L.corpse_searched_by_detective = "This corpse was searched by a detective"
+L.corpse_searched_by_detective = "This corpse was searched by a public policing role"--!
 L.corpse_too_far_away = "The corpse is too far away."
 
 L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
@@ -1875,6 +1875,8 @@ L.search_confirmed = "Death Confirmed"
 L.search_call = "Report Death"--!
 L.search_called = "Death Reported"
 
+L.search_team_role_unknown = "???"
+
 L.search_words = "Something tells you some of this person's last words were: '{lastwords}'"
 L.search_armor = "They were wearing nonstandard body armor."
 L.search_disg = "They were carrying a device that could hide their identity."
@@ -1932,9 +1934,9 @@ L.search_eyes = "Using your detective skills, you identified the last person the
 L.search_head = "There is a gaping hole right on their forehead. It looks like a headshot."
 L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
 
-L.search_kill_distance_point_blank = "It was a point blank shot."
-L.search_kill_distance_close = "The projectile came from a short distance."
-L.search_kill_distance_far = "The victim was shot from a long distance away."
+L.search_kill_distance_point_blank = "It was a point blank attack."
+L.search_kill_distance_close = "The attack came from a short distance."
+L.search_kill_distance_far = "The victim was attacked from a long distance away."
 
 L.search_kill_from_front = "The victim was shot from the front."
 L.search_kill_from_back = "The victim was shot from behind."
