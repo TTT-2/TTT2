@@ -1991,8 +1991,8 @@ L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search result
 
 L.label_inspect_confirm_mode = "Select body search mode"
 L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
-L.choice_inspect_confirm_mode_0 = "mode 1: limited confirm"
-L.choice_inspect_confirm_mode_0 = "mode 2: limited search"
+L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
+L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
 L.help_inspect_confirm_mode = [[
 There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
 

@@ -35,7 +35,16 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	form:MakeComboBox({
 		label = "label_inspect_confirm_mode",
 		serverConvar = "ttt2_inspect_confirm_mode",
-		choices = {"choice_inspect_confirm_mode_0", "choice_inspect_confirm_mode_1" ,"choice_inspect_confirm_mode_2"}
+		choices = {{
+			value = 0,
+			title = "choice_inspect_confirm_mode_0"
+		},{
+			value = 1,
+			title = "choice_inspect_confirm_mode_1"
+		},{
+			value = 2,
+			title = "choice_inspect_confirm_mode_2"
+		}}
 	})
 
 	local form2 = vgui.CreateTTT2Form(parent, "header_round_setup_prep")
