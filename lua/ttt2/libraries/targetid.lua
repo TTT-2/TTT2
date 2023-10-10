@@ -492,7 +492,12 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 		if client:IsSpec() then
 			tData:SetSubtitle(ParT("corpse_hint_spec", key_params))
 		elseif bodysearch.GetInspectConfirmMode() == 2 and not roleDataClient.isPolicingRole and not roleDataClient.isPublicRole then
-			tData:SetSubtitle(ParT("corpse_hint_no_inspect", key_params))
+			-- a detective added search results, this should change the targetID
+			if ent.bodySearchResult and ent.bodySearchResult.isPublicPolicingSearch then
+				tData:SetSubtitle(ParT("corpse_hint_public_policing_searched", key_params))
+			else
+				tData:SetSubtitle(ParT("corpse_hint_no_inspect", key_params))
+			end
 			tData:AddDescriptionLine(TryT("corpse_hint_no_inspect_details"))
 		elseif bodysearch.GetInspectConfirmMode() == 1 and not roleDataClient.isPolicingRole and not roleDataClient.isPublicRole then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
