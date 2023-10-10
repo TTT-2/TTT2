@@ -1724,7 +1724,7 @@ L.label_session_limits_enabled = "Enable session limits"
 L.label_spectator_chat = "Enable spectators chatting with everybody"
 L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
-L.label_announce_body_found = "Announce that a body was found"
+L.label_announce_body_found = "Announce that a body was found when the body was confirmed"--!
 L.label_confirm_killlist = "Announce kill list of confirmed corpse"
 L.label_inspect_detective_only = "Limit corpse search to policing roles only"
 L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
@@ -1988,3 +1988,16 @@ L.corpse_hint_no_inspect_details = "Only public policing roles can find informat
 L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
 L.corpse_hint_spec = "Press [{usekey}] to view corpse UI"
 L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+
+L.label_inspect_confirm_mode = "Select body search mode"
+L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
+L.choice_inspect_confirm_mode_0 = "mode 1: limited confirm"
+L.choice_inspect_confirm_mode_0 = "mode 2: limited search"
+L.help_inspect_confirm_mode = [[
+There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
+
+mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
+
+mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
+
+mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]

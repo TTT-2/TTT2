@@ -24,18 +24,18 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeCheckBox({
-		serverConvar = "ttt2_inspect_detective_only",
-		label = "label_inspect_detective_only"
-	})
-
-	form:MakeCheckBox({
-		serverConvar = "ttt2_confirm_detective_only",
-		label = "label_confirm_detective_only"
-	})
-
-	form:MakeCheckBox({
 		serverConvar = "ttt_dyingshot",
 		label = "label_dyingshot"
+	})
+
+	form:MakeHelp({
+		label = "help_inspect_confirm_mode"
+	})
+
+	form:MakeComboBox({
+		label = "label_inspect_confirm_mode",
+		serverConvar = "ttt2_inspect_confirm_mode",
+		choices = {"choice_inspect_confirm_mode_0", "choice_inspect_confirm_mode_1" ,"choice_inspect_confirm_mode_2"}
 	})
 
 	local form2 = vgui.CreateTTT2Form(parent, "header_round_setup_prep")
