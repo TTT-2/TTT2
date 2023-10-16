@@ -689,7 +689,7 @@ function TraitorMenuPopup()
 	local dconfirm = vgui.Create("DButton", dbtnpnl)
 	dconfirm:SetPos(m, m)
 	dconfirm:SetSize(bw, bh)
-	dconfirm:SetDisabled(true)
+	dconfirm:SetEnabled(false)
 	dconfirm:SetText(GetTranslation("equip_confirm"))
 
 	--add a favorite button
@@ -697,7 +697,7 @@ function TraitorMenuPopup()
 	dfav:CopyPos(dconfirm)
 	dfav:MoveRightOf(dconfirm)
 	dfav:SetSize(bh, bh)
-	dfav:SetDisabled(false)
+	dfav:SetEnabled(true)
 	dfav:SetText("")
 	dfav:SetImage("icon16/star.png")
 
@@ -705,7 +705,7 @@ function TraitorMenuPopup()
 	local dcancel = vgui.Create("DButton", dframe)
 	dcancel:SetPos(w - m * 3 - bw, h - bh - m * 3)
 	dcancel:SetSize(bw, bh)
-	dcancel:SetDisabled(false)
+	dcancel:SetEnabled(true)
 	dcancel:SetText(GetTranslation("close"))
 
 	local _, bpy = dbtnpnl:GetPos()
@@ -874,7 +874,7 @@ function TraitorMenuPopup()
 		-- Easy accessable var for double-click buying
 		new.item.disabledBuy = not can_order
 
-		dconfirm:SetDisabled(not can_order)
+		dconfirm:SetEnabled(can_order)
 	end
 
 	-- select first
@@ -904,7 +904,7 @@ function TraitorMenuPopup()
 
 		dlist.SelectedPanel.item.disabledBuy = not can_order
 
-		dconfirm:SetDisabled(not can_order)
+		dconfirm:SetEnabled(can_order)
 	end
 
 	dcancel.DoClick = function()

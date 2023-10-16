@@ -32,7 +32,7 @@ function CreateRerollMenu(parent)
 
 	local dsubmit = vgui.Create("DButton", dform)
 	dsubmit:SetSize(bw, bh)
-	dsubmit:SetDisabled(false)
+	dsubmit:SetEnabled(true)
 	dsubmit:SetText(GetTranslation("reroll_button"))
 
 	dsubmit.DoClick = function(s)
@@ -46,7 +46,7 @@ function CreateRerollMenu(parent)
 
 	dsubmit.Think = function(s)
 		if client:GetCredits() < cost or not GetGlobalBool("ttt2_random_shop_reroll") then
-			s:SetDisabled(true)
+			s:SetEnabled(false)
 		end
 	end
 
