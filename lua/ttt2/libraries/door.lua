@@ -518,7 +518,7 @@ if SERVER then
 				end
 			end
 
-			data = string.Implode("||", dataTableCleared)
+			data = table.concat(dataTableCleared, "||")
 		end
 
 		local ply = player.GetBySteamID64(sid)
