@@ -23,24 +23,6 @@ function clr(color)
 end
 
 ---
--- This @{function} creates a getter and a setter @{function} based on the name and the prefix "Get" and "Set"
--- @param table tbl the @{table} that should receive the Getter and Setter @{function}
--- @param string varname the name the tbl @{table} should have as key value
--- @param string name the name that should be concatenated to the prefix "Get" and "Set"
--- @realm shared
-function AccessorFuncDT(tbl, varname, name)
-	tbl["Get" .. name] = function(s)
-		return s.dt and s.dt[varname]
-	end
-
-	tbl["Set" .. name] = function(s, v)
-		if s.dt then
-			s.dt[varname] = v
-		end
-	end
-end
-
----
 -- Short helper for input.LookupBinding, returns capitalised key or a default
 -- @param string binding
 -- @param string default
