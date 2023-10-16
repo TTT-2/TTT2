@@ -1119,7 +1119,7 @@ function TTT2CacheEquipMaterials(item)
 	elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
 		--do not use fallback mat and use model instead
 		item.ttt2_cached_material = nil
-		item.ttt2_cached_model = model
+		item.ttt2_cached_model = item.model
 	end
 end
 
