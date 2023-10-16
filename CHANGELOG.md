@@ -24,6 +24,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
 
+### Fixed
+
+- Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
+
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 
 ### Added
