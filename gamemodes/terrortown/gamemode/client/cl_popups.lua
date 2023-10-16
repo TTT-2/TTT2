@@ -24,7 +24,7 @@ local function GetTextForPlayer(ply)
 	else
 		local traitors = roles.GetTeamMembers(TEAM_TRAITOR)
 
-		if #traitors > 1 then
+		if traitors and #traitors > 1 then
 			local traitorlist = {}
 
 			for i = 1, #traitors do
