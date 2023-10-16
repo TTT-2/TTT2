@@ -26,8 +26,6 @@
 	},
 	"runtime.version": "Lua 5.1",
 	"runtime.nonstandardSymbol": [
-		"//",
-		"/**/",
 		"continue"
 	],
 	"workspace.checkThirdParty": false
