@@ -580,6 +580,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	rag.dmgtype = dmginfo:GetDamageType()
 
 	local wep = util.WeaponFromDamage(dmginfo)
+	---@cast wep -nil
 	rag.dmgwep = IsValid(wep) and wep:GetClass() or ""
 
 	rag.was_headshot = ply.was_headshot and dmginfo:IsBulletDamage()
