@@ -175,17 +175,19 @@ function PANEL:ChooseOptionID(index, ignoreConVar)
 
 	local choice = choices[index]
 	local value = choice.value
+	local oldValue = self.selected and choices[self.selected].value or nil
 
 	self.selected = index
 
 	self:SetText(choice.title)
-	self:OnSelect(index, value, choice.data)
 
 	self:CloseMenu()
 
-	if ignoreConVar then return end
+	if not ignoreConVar then
+		self:SetConVarValues(tostring(value))
+	end
 
-	self:SetConVarValues(tostring(value))
+	self:OnSelect(index, value, choice.data, oldValue)
 end
 
 ---
@@ -241,8 +243,9 @@ end
 -- @param number index
 -- @param string/number value is indexable
 -- @param any data
+-- @param string/number value is indexable
 -- @realm client
-function PANEL:OnSelect(index, value, data)
+function PANEL:OnSelect(index, value, data, oldValue)
 
 end
 
@@ -358,6 +361,22 @@ local function AddConVarChangeCallback(menu, conVar)
 end
 
 ---
+-- The game can not keep track of nil callbacks but does not
+-- remove them automatically. Here we go over all callbacks and delete them
+-- before they get used and throw an error
+local function CleanUpConVarCallbacks(conVar)
+	for k, v in ipairs(cvars.GetConVarCallbacks(conVar)) do
+		if not istable(v) then continue end
+
+		local identifier = v[2] or ""
+
+		if not string.find(identifier, "TTT2F1MenuConVarChangeCallback") or not isfunction(v[1]) then continue end
+
+		cvars.RemoveChangeCallback(conVar, identifier)
+	end
+end
+
+---
 -- @param string conVarName
 -- @realm client
 function PANEL:SetConVar(conVarName)
@@ -369,6 +388,7 @@ function PANEL:SetConVar(conVarName)
 	self:SetValue(conVar:GetString(), true)
 	self:SetDefaultValue(conVar:GetDefault())
 
+	CleanUpConVarCallbacks(conVarName)
 	AddConVarChangeCallback(self, conVarName)
 end
 
@@ -387,6 +407,7 @@ function PANEL:SetServerConVar(conVarName)
 		end
 	end)
 
+	CleanUpConVarCallbacks(conVarName)
 	AddConVarChangeCallback(self, conVarName)
 end
 

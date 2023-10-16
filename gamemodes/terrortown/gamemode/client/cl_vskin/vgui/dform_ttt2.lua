@@ -291,7 +291,7 @@ end
 -- @note Structure of data = {
 -- label, default, choices = { [1] = {title, value, select, icon, additionalData}, [2] = ...},
 -- conVar, serverConVar, selectId or selectTitle or selectValue,
--- function OnChange(value, additionalData, dropDownPanel), master = { function AddSlave(self, slave) }
+-- function OnChange(value, additionalData, oldValue, dropDownPanel), master = { function AddSlave(self, slave) }
 -- }
 -- @note If ConVars are used the values are always strings, so make sure, that you used strings for values, when setting up choices
 -- @return Panel The created combobox
@@ -344,9 +344,9 @@ function PANEL:MakeComboBox(data)
 		end
 	end
 
-	right.OnSelect = function(slf, index, value, additionalData)
+	right.OnSelect = function(slf, index, value, additionalData, oldValue)
 		if data and isfunction(data.OnChange) then
-			data.OnChange(value, additionalData, slf)
+			data.OnChange(value, additionalData, oldValue, slf)
 		end
 	end
 
