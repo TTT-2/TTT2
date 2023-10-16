@@ -55,5 +55,6 @@ Temporary Items
 todo.txt
 addon.json
 *.gma
+.luarc.json
 
 ttt2.jpg
