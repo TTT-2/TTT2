@@ -711,7 +711,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		selectedForcedRoles[subrole] = curCount
 
 		-- now assign amount of forced players per baserole if this is only a subrole
-		if not isBaseRole then
+		if not isBaseRole and baserole then
 			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + curCount
 		end
 	end
