@@ -445,7 +445,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 
 	if scaled then
-		cam.PopModelMatrix(mat)
+		cam.PopModelMatrix()
 
 		render.PopFilterMag()
 		render.PopFilterMin()
