@@ -1,6 +1,6 @@
 ---
 -- This table is used by the client to show items in the equipment menu, and by
--- the server to check if a certain role is allowed to buy a certain item.local math = math
+-- the server to check if a certain role is allowed to buy a certain item.
 -- @section Equipment
 
 local table = table
@@ -9,6 +9,7 @@ local player = player
 local pairs = pairs
 local util = util
 local hook = hook
+local math = math
 
 -- Details you shouldn't need:
 -- The number should increase by a factor of two for every item (ie. ids
