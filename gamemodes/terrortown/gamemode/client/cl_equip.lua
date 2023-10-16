@@ -449,7 +449,7 @@ local function CreateEquipmentList(t)
 				if ItemIsWeapon(item) and showSlotVar:GetBool() then
 					local slot = vgui.Create("SimpleIconLabelled")
 					slot:SetIcon("vgui/ttt/slotcap")
-					slot:SetIconColor(col or COLOR_GREY)
+					slot:SetIconColor(col or COLOR_LGRAY)
 					slot:SetIconSize(16)
 					slot:SetIconText(MakeKindValid(item.Kind))
 					slot:SetIconProperties(COLOR_WHITE,
