@@ -24,7 +24,7 @@ function AddChange(version, text, date)
 
 	-- adding entry to table
 	-- if no date is given, a negative index is stored as secondary sort parameter
-	table.insert(changes, 1, {version = version, text = text, date = date or -1 * (#changes + 1)})
+	table.insert(changes, 1, {version = version, text = text, date = date or (-1 * (#changes + 1))})
 
 	currentVersion = version
 end
