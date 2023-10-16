@@ -485,7 +485,7 @@ local function ShowSearchScreen(search_raw)
 		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
 	end
 
-	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:TTT2NETGetBool("body_found", false))
+	dconfirm:SetEnabled(not (client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:TTT2NETGetBool("body_found", false)))
 
 	local dcall = vgui.Create("DButton", dcont)
 	dcall:SetPos(m * 2 + bw_large, by)
@@ -496,12 +496,12 @@ local function ShowSearchScreen(search_raw)
 		client.called_corpses = client.called_corpses or {}
 		client.called_corpses[#client.called_corpses + 1] = search_raw.eidx
 
-		s:SetDisabled(true)
+		s:SetEnabled(false)
 
 		RunConsoleCommand("ttt_call_detective", search_raw.eidx)
 	end
 
-	dcall:SetDisabled(client:IsSpec() or table.HasValue(client.called_corpses or {}, search_raw.eidx))
+	dcall:SetEnabled(not (client:IsSpec() or table.HasValue(client.called_corpses or {}, search_raw.eidx)))
 
 	local dclose = vgui.Create("DButton", dcont)
 	dclose:SetPos(rw - m - bw, by)

@@ -31,7 +31,7 @@ local function UpdateTransferSubmitButton()
 	local client = LocalPlayer()
 	if client:GetCredits() <= 0 then
 		dhelp:SetText(GetTranslation("xfer_no_credits"))
-		dsubmit:SetDisabled(true)
+		dsubmit:SetEnabled(false)
 	elseif selected_sid then
 		local ply = player.GetBySteamID64(selected_sid)
 
@@ -40,9 +40,9 @@ local function UpdateTransferSubmitButton()
 		local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
 
 		if allow == false then
-			dsubmit:SetDisabled(true)
+			dsubmit:SetEnabled(false)
 		else
-			dsubmit:SetDisabled(false)
+			dsubmit:SetEnabled(true)
 		end
 
 		if isstring(msg) then
@@ -71,7 +71,7 @@ function CreateTransferMenu(parent)
 
 	dsubmit = vgui.Create("DButton", dform)
 	dsubmit:SetSize(bw, bh)
-	dsubmit:SetDisabled(true)
+	dsubmit:SetEnabled(false)
 	dsubmit:SetText(GetTranslation("xfer_send"))
 
 	--Add the help button. Change its text dynamically to match the situation.
