@@ -46,7 +46,7 @@ local function GetTextForPlayer(ply)
 			---
 			-- @realm client
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
-				return GetTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
+				return GetPTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
 			else
 				return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey, traitorlist = traitorlist})
 			end
