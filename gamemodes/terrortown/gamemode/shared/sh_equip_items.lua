@@ -759,7 +759,7 @@ end
 -- @internal
 -- @realm shared
 function InitFallbackShops()
-	local tbl = {TRAITOR, DETECTIVE}
+	local tbl = {roles.TRAITOR, roles.DETECTIVE}
 
 	for i = 1, #tbl do
 		local v = tbl[i]
@@ -857,7 +857,7 @@ end
 -- @realm shared
 -- @local
 local function ValueToKey(tbl)
-	local tmp = tmp or {}
+	local tmp = {}
 
 	for key, value in pairs(tbl) do
 		tmp[value] = value
@@ -890,8 +890,8 @@ end
 -- @realm shared
 function InitDefaultEquipment(eq)
 	CleanUpDefaultCanBuyIndices(eq)
-	InitDefaultEquipmentForRole(TRAITOR, eq)
-	InitDefaultEquipmentForRole(DETECTIVE, eq)
+	InitDefaultEquipmentForRole(roles.TRAITOR, eq)
+	InitDefaultEquipmentForRole(roles.DETECTIVE, eq)
 end
 
 ---
@@ -967,8 +967,8 @@ end
 -- @realm shared
 function ResetDefaultEquipment(eq)
 	CleanUpDefaultCanBuyIndices(eq)
-	ResetDefaultEquipmentForRole(TRAITOR, eq)
-	ResetDefaultEquipmentForRole(DETECTIVE, eq)
+	ResetDefaultEquipmentForRole(roles.TRAITOR, eq)
+	ResetDefaultEquipmentForRole(roles.DETECTIVE, eq)
 end
 
 if SERVER then
