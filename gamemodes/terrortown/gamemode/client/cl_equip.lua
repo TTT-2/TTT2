@@ -126,9 +126,9 @@ local fallback_mat = Material("vgui/ttt/missing_equip_icon")
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
-local eqframe = eqframe
-local dlist = dlist
-local curSearch = curSearch
+local eqframe = nil
+local dlist = nil
+local curSearch = nil
 
 --
 --     GENERAL HELPER FUNCTIONS
@@ -340,6 +340,7 @@ local function CreateEquipmentList(t)
 
 	-- icon size = 64 x 64
 	if IsValid(dlist) then
+		---@cast dlist -nil
 		dlist:Clear()
 	else
 		TraitorMenuPopup()
@@ -506,6 +507,7 @@ local function CreateEquipmentList(t)
 				net.WriteString(self.item.id)
 				net.SendToServer()
 
+				---@cast eqframe -nil
 				eqframe:Close()
 			end
 		end
@@ -590,7 +592,8 @@ function TraitorMenuPopup()
 	local h = dlisth + 75
 
 	-- Close shop if player clicks button again
-	if eqframe and IsValid(eqframe) then
+	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 
 		return
@@ -602,7 +605,8 @@ function TraitorMenuPopup()
 	end
 
 	-- Close any existing traitor menu
-	if eqframe and IsValid(eqframe) then
+	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 	end
 
@@ -946,6 +950,7 @@ concommand.Add("ttt_cl_traitorpopup", TraitorMenuPopup)
 
 local function ForceCloseTraitorMenu(ply, cmd, args)
 	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 	end
 end
@@ -1098,6 +1103,7 @@ function GM:OnContextMenuOpen()
 	if hook.Run("TTT2PreventAccessShop", LocalPlayer()) then return end
 
 	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 	else
 		RunConsoleCommand("ttt_cl_traitorpopup")
@@ -1136,6 +1142,7 @@ end)
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
 	if not IsValid(eqframe) then return end
 
+	---@cast eqframe -nil
 	eqframe:Close()
 end)
 
@@ -1143,12 +1150,14 @@ end)
 hook.Add("TTTEndRound", "TTTBEMCleanUp", function()
 	if not IsValid(eqframe) then return end
 
+	---@cast eqframe -nil
 	eqframe:Close()
 end)
 
 -- Search text field focus hooks
 local function getKeyboardFocus(pnl)
 	if IsValid(eqframe) and pnl:HasParent(eqframe) then
+		---@cast eqframe -nil
 		eqframe:SetKeyboardInputEnabled(true)
 	end
 
@@ -1161,6 +1170,7 @@ hook.Add("OnTextEntryGetFocus", "BEM_GetKeyboardFocus", getKeyboardFocus)
 local function loseKeyboardFocus(pnl)
 	if not IsValid(eqframe) or not pnl:HasParent(eqframe) then return end
 
+	---@cast eqframe -nil
 	eqframe:SetKeyboardInputEnabled(false)
 end
 hook.Add("OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus)
