@@ -76,12 +76,12 @@ AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 ---
 -- @accessor number
 -- @realm shared
-AccessorFuncDT(ENT, "explode_time", "ExplodeTime")
+AccessorFunc(ENT, "explode_time", "ExplodeTime", FORCE_NUMBER)
 
 ---
 -- @accessor boolean
 -- @realm shared
-AccessorFuncDT(ENT, "armed", "Armed", FORCE_BOOL)
+AccessorFunc(ENT, "armed", "Armed", FORCE_BOOL)
 
 ENT.timeBeep = 0
 ENT.safeWires = nil
