@@ -9,10 +9,6 @@ ENT.Message = ""
 ENT.Color = COLOR_WHITE
 
 local RECEIVE_ACTIVATOR = 0
-local RECEIVE_ALL = 1
-local RECEIVE_DETECTIVE = 2
-local RECEIVE_TRAITOR = 3
-local RECEIVE_INNOCENT = 4
 local RECEIVE_CUSTOMROLE = 5
 
 ENT.Receiver = RECEIVE_ACTIVATOR
@@ -65,7 +61,7 @@ function ENT:AcceptInput(name, activator)
 			RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
 		}
 
-		recv = (self.teamReceiver) and GetTeamChatFilter(self.teamReceiver) or receiver_tbl[self.Receiver]
+		recv = self.teamReceiver and GetTeamChatFilter(self.teamReceiver) or receiver_tbl[self.Receiver]
 		CustomMsg(recv, self.Message, self.Color)
 
 		recv = nil
