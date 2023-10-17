@@ -444,13 +444,11 @@ L.karma_min = "Liability"
 
 -- TargetID misc
 L.corpse = "Corpse"
-L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly." ---!
+L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly."
 
 L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
 L.target_unknown = "A Terrorist"
-
-L.target_credits = "Confirm to receive unspent credits" --!move to target_credits_on_confirm
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"
@@ -917,7 +915,7 @@ L.target_switch_weapon_nospace = "There is no inventory slot available for this 
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
-L.corpse_searched_by_detective = "This corpse was searched by a public policing role"--!
+L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "The corpse is too far away."
 
 L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
@@ -1157,13 +1155,8 @@ L.hud_revival_time = "{time}s"
 L.door_destructible = "This door is destructible ({health}HP)."
 
 -- 2020-05-28
-L.confirm_detective_only = "Only public policing roles can confirm bodies." --!remove
-L.inspect_detective_only = "Only public policing roles can search bodies." --!remove
-
-L.corpse_hint_no_inspect = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI." --!
-L.corpse_hint_inspect_only = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI." --!
-
-L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only public policing roles can search this body." --!remove
+L.corpse_hint_no_inspect = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
+L.corpse_hint_inspect_only = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "Toggle disguiser"
@@ -1724,10 +1717,8 @@ L.label_session_limits_enabled = "Enable session limits"
 L.label_spectator_chat = "Enable spectators chatting with everybody"
 L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
-L.label_announce_body_found = "Announce that a body was found when the body was confirmed"--!
+L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 L.label_confirm_killlist = "Announce kill list of confirmed corpse"
-L.label_inspect_detective_only = "Limit corpse search to policing roles only"
-L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
 L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
 L.label_armor_block_headshots = "Enable armor blocking headshots"
 L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
@@ -1872,7 +1863,7 @@ L.search_take_credit = "Take {credit} Credit"
 L.search_take_credits = "Take {credits} Credits"
 L.search_confirm_forbidden = "Confirm forbidden"
 L.search_confirmed = "Death Confirmed"
-L.search_call = "Report Death"--!
+L.search_call = "Report Death"
 L.search_called = "Death Reported"
 
 L.search_team_role_unknown = "???"
@@ -1924,14 +1915,13 @@ L.search_water_3 = "The whole body is wet and swollen. They probably died while 
 
 L.search_weapon = "It appears a {weapon} was used to kill them."
 L.search_head = "The fatal wound was a headshot. No time to scream."
-L.search_time = "They died a while before you conducted the search." --!
-L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while." --!
+L.search_time = "They died a while before you conducted the search."
+L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
 
 L.search_kills1 = "You found a list of kills that confirms the death of {player}."
-L.search_kills2 = "You found a list of kills with these names: {player}" --!
+L.search_kills2 = "You found a list of kills with these names: {player}"
 L.search_eyes = "Using your detective skills, you identified the last person they saw: {player}. The killer, or a coincidence?"
 
-L.search_head = "There is a gaping hole right on their forehead. It looks like a headshot."
 L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
 
 L.search_kill_distance_point_blank = "It was a point blank attack."
