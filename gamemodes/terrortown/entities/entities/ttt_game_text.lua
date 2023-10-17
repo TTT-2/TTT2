@@ -65,7 +65,7 @@ function ENT:AcceptInput(name, activator)
 			RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
 		}
 			
-		recv = (self.teamReceiver) ? GetTeamChatFilter(self.teamReceiver) : receiver_tbl[self.Receiver]
+		recv = (self.teamReceiver) and GetTeamChatFilter(self.teamReceiver) or receiver_tbl[self.Receiver]
 		CustomMsg(recv, self.Message, self.Color)
 		
 		recv = nil
