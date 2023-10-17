@@ -33,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - role info popup for traitors should now show teammembers again if the traitor shop is disabled
   - `pon` and `table` libraries got a small fix respectively
   - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
+  - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
 
 ### Removed
 
