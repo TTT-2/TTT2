@@ -55,7 +55,7 @@ function ENT:AcceptInput(name, activator)
 	if name ~= "Display" then
 		return false
 	end
-				
+
 	if IsValid(activator) and activator:IsPlayer() then
 		local recv = activator
 		local receiver_tbl = {
@@ -64,16 +64,16 @@ function ENT:AcceptInput(name, activator)
 			RECEIVE_TRAITOR = GetRoleChatFilter(TEAM_TRAITOR),
 			RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
 		}
-			
+
 		recv = (self.teamReceiver) and GetTeamChatFilter(self.teamReceiver) or receiver_tbl[self.Receiver]
 		CustomMsg(recv, self.Message, self.Color)
-		
+
 		recv = nil
 		receiver_tbl = nil
-		
+
 		return true
 	end
-	
+
 	ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
 	return false -- either invalid activator or activator was not a player
 end
