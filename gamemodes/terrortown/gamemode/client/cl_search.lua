@@ -123,7 +123,7 @@ function SEARCHSCRN:CreditsWereTaken()
 		creditBox:Remove()
 	end
 
-	if not bodysearch.CanConfirmBody(self.data.ragOwner) then
+	if not bodysearch.CanConfirmBody() then
 		self.buttonConfirm:SetText("search_confirm_forbidden")
 		self.buttonConfirm:SetEnabled(false)
 		self.buttonConfirm:SetIcon(nil)
@@ -304,7 +304,7 @@ function SEARCHSCRN:Show(data)
 		buttonConfirm:SetEnabled(false)
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
-	elseif not bodysearch.CanConfirmBody(data.ragOwner) then
+	elseif not bodysearch.CanConfirmBody() then
 		if data.credits > 0 and client:IsActiveShopper() and not clientRD.preventFindCredits then
 			if data.credits == 1 then
 				buttonConfirm:SetText("search_take_credit")
@@ -353,7 +353,7 @@ function SEARCHSCRN:Show(data)
 			self:CreditsWereTaken()
 		end
 
-		if bodysearch.CanConfirmBody(data.ragOwner) then
+		if bodysearch.CanConfirmBody() then
 			self:PlayerWasConfirmed()
 		end
 	end

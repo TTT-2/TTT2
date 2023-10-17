@@ -25,6 +25,11 @@ local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCV
 
 bodysearch = bodysearch or {}
 
+---
+-- Returns the current body inspect/confirm mode that is defined on the server.
+-- @note This is basically a wrapper for the convar `ttt2_inspect_confirm_mode`.
+-- @return number The body inspect/confirm mode
+-- @realm shared 
 function bodysearch.GetInspectConfirmMode()
 	return cvInspectConfirmMode:GetInt()
 end
@@ -77,32 +82,38 @@ if SERVER then
 		if not IsValid(rag) or rag:GetPos():Distance(ply:GetPos()) > 128 then return end
 
 		-- in mode 0 the body has to be confirmed to call a detective
-		if cvInspectConfirmMode:GetInt() ~= 0 or CORPSE.GetFound(rag, false) then
-			local plyTable = util.GetFilteredPlayers(function(p)
-				local roleData = p:GetSubRoleData()
+		if cvInspectConfirmMode:GetInt() == 0 and not CORPSE.GetFound(rag, false) then return end
 
-				return roleData.isPolicingRole and p.isPublicRole and p:IsTerror()
-			end)
+		local plyTable = util.GetFilteredPlayers(function(p)
+			local roleData = p:GetSubRoleData()
 
-			---
-			-- @realm server
-			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
+			return roleData.isPolicingRole and p.isPublicRole and p:IsTerror()
+		end)
 
-			-- show indicator in radar to detectives
-			net.Start("TTT_CorpseCall")
-			net.WriteVector(rag:GetPos())
-			net.Send(plyTable)
+		---
+		-- @realm server
+		hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
 
-			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_MSTACK_PLAIN)
+		-- show indicator in radar to detectives
+		net.Start("TTT_CorpseCall")
+		net.WriteVector(rag:GetPos())
+		net.Send(plyTable)
 
-			---
-			-- @realm server
-			hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
-		else
-			LANG.Msg(ply, "body_call_error", nil, MSG_MSTACK_WARN)
-		end
+		LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_MSTACK_PLAIN)
+
+		---
+		-- @realm server
+		hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
 	end)
 
+	---
+	-- Gives the credits from a ragdoll to a player that is searching the ragdoll. It checks
+	-- whether the player is able to take those credits or not.
+	-- @param Player ply The player that should receive those credits
+	-- @param Entity rag The ragdoll entity that is searched
+	-- @param[default=false] boolean isLongRange Whether the search is long or short range
+	-- @param[default=0] number searchUID The UID from this body search, can be ignored if not called from within UI
+	-- @realm server
 	function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
 		local corpseNick = CORPSE.GetPlayerNick(rag)
 		local credits = CORPSE.GetCredits(rag, 0)
@@ -127,6 +138,17 @@ if SERVER then
 		net.Broadcast()
 	end
 
+	---
+	-- Assimilates the scene data from the player death. Uses multiple sources of data collected in different
+	-- hooks and puts them all inside the sData table that is retuned. The table has a few entries that are
+	-- always present if scene data is collected. Some more in depth information might depend on the role of
+	-- the player that is currently searching the body.
+	-- @param Player inspector The player that searches the corpse
+	-- @param Entity rag The ragdoll entity that is searched
+	-- @param[default=false] boolen isCovert Whether the body search is covert or announced
+	-- @param[default=false] boolean isLongRange Whether the search is long or short range
+	-- @return table The scene data table
+	-- @realm server
 	function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
 		local sData = {}
 		local inspectorRoleData = inspector:GetSubRoleData()
@@ -226,6 +248,10 @@ if SERVER then
 		return sData
 	end
 
+	---
+	-- Streams the provided scene data to the given clients, is broadcasted if no client is defined.
+	-- @param table sData The scene data table that should be streamed to the client(s)
+	-- @param[opt] table|player client Optional, use it to send a stream to a single client or a group of clients
 	function bodysearch.StreamSceneData(sData, client)
 		net.SendStream("TTT2_BodySearchData", sData, client)
 	end
@@ -695,28 +721,36 @@ if CLIENT then
 		"last_words"
 	}
 
-	function bodysearch.GetContentFromData(type, data)
+	---
+	-- Generated the search box data from the provided data for a given type.
+	-- @note This function is used to populate the UI of the bodysearch menu. You probably don't want to use this.
+	-- @param string type The element type identifier
+	-- @param table sData The scene data that is provided to get the box contents
+	-- @return nil|table Returns `nil` if no data for given type is available, table with box content if available
+	-- @realm client
+	function bodysearch.GetContentFromData(type, sData)
 		-- make sure type is valid
 		if not isfunction(DataToText[type]) then return end
 
-		local text = DataToText[type](data)
+		local text = DataToText[type](sData)
 
 		-- DataToText checks if criteria for display is met, no box should be
 		-- shown if criteria is not met.
 		if not text then return end
 
 		return {
-			iconMaterial = TypeToMaterial(type, data),
-			iconText = TypeToIconText(type, data),
-			colorBox = TypeToColor(type, data),
+			iconMaterial = TypeToMaterial(type, sData),
+			iconText = TypeToIconText(type, sData),
+			colorBox = TypeToColor(type, sData),
 			text = text
 		}
 	end
 
 	---
-	-- Creates a table with icons, text,... out of search_raw table
-	-- @param table raw
-	-- @return table a converted search data table
+	-- Creates a table with icons, text,... out of raw table for the scoreboard
+	-- @param table raw The raw data
+	-- @return table A converted search data table
+	-- @deprecated This function only functions as a fallback for the old scoreboard. Do not use this!
 	-- @note This function is old and should be redone on a scoreboard rework
 	-- @realm client
 	function bodysearch.PreprocSearch(raw)
@@ -765,6 +799,15 @@ if CLIENT then
 		return search
 	end
 
+	---
+	-- This function handles the storing of the streamed search result data. It takes into account
+	-- who searched the body and with which role. Also new data is appended to existing data to only
+	-- improve what a player knows, but to never remove information on.
+	-- This functions considers the roles and the settings of the local player and the player that
+	-- inspected the body.
+	-- @param table sData The table of scene data that should be stored
+	-- @note The data is stored as `bodySearchResult` on the ragdoll and the owner of the ragdoll
+	-- @realm client
 	function bodysearch.StoreSearchResult(sData)
 		if not sData.ragOwner then return end
 
@@ -804,41 +847,85 @@ if CLIENT then
 		rag.bodySearchResult = newData
 	end
 
+	---
+	-- Checks if the local player has a detailed search result of a given player.
+	-- @param Player ply Then player whose search result should be checked
+	-- @return boolean Returns if the local player has a detailed search result
+	-- @note A detailed search result means that the player knows the name of the
+	-- searched body. This is only known if the full data was transmitted.
+	-- @realm client
 	function bodysearch.PlayerHasDetailedSearchResult(ply)
 		-- note: the nick is only transmitted if there is full search data available
 		return IsValid(ply) and ply.bodySearchResult and ply.bodySearchResult.nick ~= nil
 	end
 
+	---
+	-- Returns the reference to the search result of a given player
+	-- @param Player ply Then player whose search result should be returned
+	-- @return table The search result that is available for this player
+	-- @realm client
 	function bodysearch.GetSearchResult(ply)
-		return ply.bodySearchResult or {}
+		-- initialize the table if not set so that a valid reference can be returned
+		ply.bodySearchResult = ply.bodySearchResult or {}
+
+		return ply.bodySearchResult
 	end
 
+	---
+	-- Resets the body search result of a given player.
+	-- @param Player ply Then player whose search result should be reset
+	-- @realm client
 	function bodysearch.ResetSearchResult(ply)
 		if not IsValid(ply) then return end
 
 		ply.bodySearchResult = nil
 	end
 
+	---
+	-- Used to trigger the confirmation of a corpse. This might announce that a body was found to the
+	-- whole server, depending on the server settings. The server ignores this request if the player
+	-- is not allowed to confirm the corpse. The searching player receives credits if they are able to.
+	-- @param Entity rag The ragdoll entity whose owner should be confirmed
+	-- @param[default=0] number searchUID The UID of the search, used for keeping track of searches in the UI
+	-- @param[default=false] boolean isLongRange Whether the search is a long range search
+	-- @param[default=false] boolean creditsOnly If set to true, then the body won't be onfirmed and only credits will be transferred
+	-- @realm client
 	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange, creditsOnly)
 		net.Start("ttt2_client_confirm_corpse")
 		net.WriteEntity(rag)
-		net.WriteUInt(searchUID, 16)
-		net.WriteBool(isLongRange)
+		net.WriteUInt(searchUID or 0, 16)
+		net.WriteBool(isLongRange or false)
 		net.WriteBool(creditsOnly or false)
 		net.SendToServer()
 	end
 
+	---
+	-- Reports the body as dead. Functions as call for public poling roles so that they know where the corpse
+	-- can be found. The server ignores this request if the player is not allowed to report the corpse.
+	-- @param Entity rag The ragdoll entity which should be reported
+	-- @note: Reporting is what previously was called "call detective"
+	-- @realm client
 	function bodysearch.ClientReportsCorpse(rag)
 		net.Start("ttt2_client_reports_corpse")
 		net.WriteEntity(rag)
 		net.SendToServer()
 	end
 
+	---
+	-- Helper function that checks if the body of a given player was confirmed.
+	-- @param Player ragOwner The dead player whose body might be confirmed
+	-- @return boolean Returns if their corpse was confirmed
+	-- @realm client
 	function bodysearch.IsConfirmed(ragOwner)
 		return IsValid(ragOwner) and ragOwner:TTT2NETGetBool("body_found", false)
 	end
 
-	function bodysearch.CanConfirmBody(ragOwner)
+	---
+	-- Checks if the local player can confirm the body. Depends on the local player and the
+	-- current body search mode.
+	-- @return boolean Returns if the local player can confirm the body
+	-- @realm client
+	function bodysearch.CanConfirmBody()
 		local client = LocalPlayer()
 
 		if client:IsSpec() then
@@ -860,6 +947,13 @@ if CLIENT then
 		return false
 	end
 
+	---
+	-- Checks if the local player can report the body. Depends on the local player, the dead
+	-- player and the current body search mode.
+	-- @param Player ragOwner The dead player whose body might be reported 
+	-- @return boolean Returns if the local player can report the body
+	-- @note: Reporting is what previously was called "call detective"
+	-- @realm client
 	function bodysearch.CanReportBody(ragOwner)
 		local client = LocalPlayer()
 
