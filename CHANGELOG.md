@@ -15,6 +15,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
   - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
     - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
+- Added the option for `DButtonTTT2` to have an icon next to the title (by @TimGoll)
+- Added a cached equipment item icon to its table as `.iconMaterial` (by @TimGoll)
+- Added a new `bodysearch` library that handles the search (by @TimGoll)
+- Completely reworked the body search UI (by @TimGoll)
+  - new UI that fits the UI rework
+  - added player model to UI
+  - highlighted player role and team in the UI
+  - redesigned data list so that everything can be seen without clicking through a list
+  - added more details to list like: water level, ground type, kill distance, kill direction, hit group, last damage amount
+  - The UI is now more responsive, it is updated when the server changes states on the body and timers are updated live in the UI
 
 ### Changed
 
@@ -23,6 +33,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+- Changed the body search convars and reworked the UI accordingly (by @TimGoll)
+  - Moved `ttt2_confirm_detective_only` and `ttt2_inspect_detective_only` to a new covar: `ttt2_inspect_confirm_mode`
+    - mode 0: default mode, normal TTT. Everyone can search and identify corpses. However now a player has to be confirmed first to take credits
+    - mode 1: everyone can see information, but only public policing roles can actually confirm bodies
+    - mode 2: only public policing roles can see informatiom. They have to confirm bodies so that other people are able to see this information as well
+  - to comply with mode 1 and 2 now everyone is able to see in the targetID if a player was searched by a public policing role
+- ranmed `search_result` to `bodySearchResult` which contains the search result data
+- changed the credit text color from yellow to gold (by @TimGoll)
 
 ### Fixed
 
@@ -37,6 +55,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed `AccessorfuncDT()` in favor of using gmod's `Accessorfunc()`
+- Removed `ttt_confirm_death` and `ttt_call_detective` as they are now handled via proper net messages
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 
