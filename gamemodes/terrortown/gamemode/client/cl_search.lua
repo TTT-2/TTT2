@@ -2,12 +2,14 @@
 -- Body search popup
 -- @section body_search_manager
 
+-- cache global functions
 local net = net
 local pairs = pairs
 local util = util
 local IsValid = IsValid
 local hook = hook
 
+-- cache materials
 local materialCredits = Material("vgui/ttt/icon_credits_transparent")
 local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
 local materialPlayerIconUnknown = Material("vgui/ttt/b-draw/icon_avatar_default")
@@ -189,7 +191,22 @@ function SEARCHSCRN:Show(data)
 	contentAreaScroll:Dock(RIGHT)
 
 	-- POPULATE WITH SPECIAL INFORMATION
-	if GetConVar("ttt2_inspect_confirm_mode"):GetInt() == 0 and not bodysearch.IsConfirmed(data.ragOwner) then
+	if client:IsSpec() then
+		-- a spectator can see all information, but not interact with the UI
+		self:MakeInfoItem(contentAreaScroll, "sepc_search_info", {
+			text = {
+				title = {
+					body = "search_title_spec",
+					params = nil
+				},
+				text = {{
+					body = "search_spec",
+					params = nil
+				}}
+			},
+			colorBox = COLOR_SLATEGRAY
+		}, 62)
+	elseif GetConVar("ttt2_inspect_confirm_mode"):GetInt() == 0 and not bodysearch.IsConfirmed(data.ragOwner) then
 		-- a detective can only be called AFTER a body was confirmed
 		self:MakeInfoItem(contentAreaScroll, "policingrole_call_confirm", {
 			text = {

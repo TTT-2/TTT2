@@ -1958,6 +1958,8 @@ The corpse can only be confirmed by a public policing role. Report the body to l
 L.search_policingrole_confirm_disabled_2 = [[
 The corpse can only be confirmed by a public policing role. Report the body to let them know!
 You can see the information in here after they confirmed it.]]
+L.search_spec = [[
+As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
 
 L.search_title_words = "Victim's last words"
 L.search_title_c4 = "Defusion mishap"
@@ -1981,6 +1983,7 @@ L.search_title_credits = "{credits} Equipment credit(s)"
 L.search_title_water = "Water level {level}"
 L.search_title_policingrole_report_confirm = "Confirm to report death"
 L.search_title_policingrole_confirm_disabled = "Report corpse"
+L.search_title_spec = "You are spectator"
 
 L.target_credits_on_confirm = "Confirm to receive unspent credits"
 L.target_credits_on_search = "Search to receive unspent credits"
