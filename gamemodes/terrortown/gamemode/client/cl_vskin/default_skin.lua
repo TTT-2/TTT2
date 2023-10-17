@@ -68,6 +68,7 @@ surface.CreateAdvancedFont("DermaTTT2MenuButtonDescription", {font = "Trebuchet2
 surface.CreateAdvancedFont("DermaTTT2SubMenuButtonTitle", {font = "Trebuchet24", size = 18, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2CatHeader", {font = "Trebuchet24", size = 16, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2TextSmall", {font = "Trebuchet24", size = 12, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2Text", {font = "Trebuchet24", size = 16, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 18, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
@@ -835,16 +836,23 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
 	end
 
-	drawBox(0, 0, w, h, colorBox)
-	drawSimpleText(
-		panel:GetText(),
-		panel:GetFont(),
-		0.5 * w,
-		0.5 * h,
-		colorText,
-		TEXT_ALIGN_CENTER,
-		TEXT_ALIGN_CENTER
-	)
+	-- Draw normal text if currently not in input mode, otherwise draw the TTT2 Text Entry
+	if not panel:GetParent():GetTextBoxEnabled() then
+		drawBox(0, 0, w, h, colorBox)
+		drawSimpleText(
+			panel:GetText(),
+			panel:GetFont(),
+			0.5 * w,
+			0.5 * h,
+			colorText,
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER
+		)
+	else
+		self:PaintTextEntryTTT2(panel, w, h)
+		local vguiColor = utilGetActiveColor(utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 25))
+		panel:DrawTextEntryText(vguiColor, vguiColor, vguiColor)
+	end
 end
 
 ---
@@ -1292,7 +1300,7 @@ function SKIN:PaintCardTTT2(panel, w, h)
 
 	drawSimpleText(
 		TryT(textMode),
-		"DermaTTT2Text",
+		"DermaTTT2TextSmall",
 		posTextModeX,
 		posTextModeY,
 		colorTextMode,
@@ -1401,6 +1409,24 @@ function SKIN:PaintSearchbar(panel, w, h)
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER
 	)
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintTextEntryTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorHandle = colors.handle
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorHandle = ColorAlpha(colors.handle, alphaDisabled)
+	end
+
+	drawBox(0, 0, w, h, colorBox)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
 end
 
 ---

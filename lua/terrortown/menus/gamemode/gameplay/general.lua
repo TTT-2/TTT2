@@ -28,6 +28,31 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		convar = "ttt_mute_team_check"
 	})
 
+	form:MakeComboBox({
+		label = "label_voice_scaling",
+		convar = "ttt2_voice_scaling",
+		choices = VOICE.GetScalingFunctions(),
+		OnChange = function()
+			for _, ply in ipairs(player.GetAll()) do
+				VOICE.UpdatePlayerVoiceVolume(ply)
+			end
+		end,
+	})
+
+	local enbSpecDuck = form:MakeCheckBox({
+		label = "label_voice_duck_spectator",
+		convar = "ttt2_voice_duck_spectator"
+	})
+
+	form:MakeSlider({
+		label = "label_voice_duck_spectator_amount",
+		convar = "ttt2_voice_duck_spectator_amount",
+		min = 0,
+		max = 1,
+		decimal = 2,
+		master = enbSpecDuck,
+	})
+
 	local enbSprint = form:MakeCheckBox({
 		label = "label_gameplay_dtsprint_enable",
 		convar = "ttt2_enable_doubletap_sprint"

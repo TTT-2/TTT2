@@ -39,11 +39,11 @@ local vip_tbl = {
 	["76561198378608300"] = true, -- SirKadeeka / $rã£
 	["76561198102780049"] = true, -- Nick
 	["76561198020955880"] = true, -- V3kta
-	["76561198033468770"] = true, -- Dok441
+	["76561198033468770"] = true, -- dok441
 	["76561198208729341"] = true, -- eBBIS
 	["76561198152558244"] = true, -- Lost TheSuspect
 	["76561198162764168"] = true, -- DerJohn
-	["76561198132229662"] = true, -- Satton RU
+	["76561198132229662"] = true, -- Satton(RU)
 	["76561198007725535"] = true, -- Skatcat
 	["76561197989909602"] = true, -- Tobiti
 	["76561198150260014"] = true, -- Lunex
@@ -121,6 +121,8 @@ end
 ---
 -- @ignore
 function PANEL:Init()
+	local TryT = LANG.TryTranslation
+
 	-- cannot create info card until player state is known
 	self.info = nil
 	self.open = false
@@ -155,37 +157,37 @@ function PANEL:Init()
 	self.dev:SetSize(iconSizes, iconSizes)
 	self.dev:SetMouseInputEnabled(true)
 	self.dev:SetKeepAspect(true)
-	self.dev:SetTooltip("TTT2 Creator")
+	self.dev:SetTooltip(TryT("sb_rank_tooltip_developer"))
 
 	self.vip = vgui.Create("DImage", self)
 	self.vip:SetSize(iconSizes, iconSizes)
 	self.vip:SetMouseInputEnabled(true)
 	self.vip:SetKeepAspect(true)
-	self.vip:SetTooltip("TTT2 VIP")
+	self.vip:SetTooltip(TryT("sb_rank_tooltip_vip"))
 
 	self.addondev = vgui.Create("DImage", self)
 	self.addondev:SetSize(iconSizes, iconSizes)
 	self.addondev:SetMouseInputEnabled(true)
 	self.addondev:SetKeepAspect(true)
-	self.addondev:SetTooltip("TTT2 Addon Developer")
+	self.addondev:SetTooltip(TryT("sb_rank_tooltip_addondev"))
 
 	self.admin = vgui.Create("DImage", self)
 	self.admin:SetSize(iconSizes, iconSizes)
 	self.admin:SetMouseInputEnabled(true)
 	self.admin:SetKeepAspect(true)
-	self.admin:SetTooltip("Server Admin")
+	self.admin:SetTooltip(TryT("sb_rank_tooltip_admin"))
 
 	self.streamer = vgui.Create("DImage", self)
 	self.streamer:SetSize(iconSizes, iconSizes)
 	self.streamer:SetMouseInputEnabled(true)
 	self.streamer:SetKeepAspect(true)
-	self.streamer:SetTooltip("Streamer")
+	self.streamer:SetTooltip(TryT("sb_rank_tooltip_streamer"))
 
 	self.heroes = vgui.Create("DImage", self)
 	self.heroes:SetSize(iconSizes, iconSizes)
 	self.heroes:SetMouseInputEnabled(true)
 	self.heroes:SetKeepAspect(true)
-	self.heroes:SetTooltip("TTT2 Heroes")
+	self.heroes:SetTooltip(TryT("sb_rank_tooltip_heroes"))
 
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
@@ -209,7 +211,7 @@ function PANEL:Init()
 	self.team:SetSize(iconSizes, iconSizes)
 	self.team:SetMouseInputEnabled(true)
 	self.team:SetKeepAspect(true)
-	self.team:SetTooltip("Team")
+	self.team:SetTooltip(TryT("sb_rank_tooltip_team"))
 
 	self.voice = vgui.Create("DImageButton", self)
 	self.voice:SetSize(iconSizes, iconSizes)
@@ -329,7 +331,9 @@ function PANEL:SetPlayer(ply)
 
 	self.voice.DoClick = function()
 		if IsValid(ply) and ply ~= client then
-			ply:SetMuted(not ply:IsMuted())
+			local muted = VOICE.GetPreferredPlayerVoiceMuted(ply)
+			VOICE.SetPreferredPlayerVoiceMuted(ply, not muted)
+			VOICE.UpdatePlayerVoiceVolume(ply)
 		end
 	end
 
@@ -443,7 +447,7 @@ function PANEL:UpdatePlayerData()
 	end
 
 	if self.Player ~= LocalPlayer() then
-		local muted = self.Player:IsMuted()
+		local muted = VOICE.GetPreferredPlayerVoiceMuted(self.Player)
 
 		self.voice:SetImage(muted and "icon16/sound_mute.png" or "icon16/sound.png")
 	else
@@ -657,13 +661,14 @@ function PANEL:ScrollPlayerVolume(delta)
 	-- Bots return nil for the steamid64 on the client, so we need to improvise a bit
 	local identifier = ply:IsBot() and ply:Nick() or ply:SteamID64()
 
-	local cur_volume = ply:GetVoiceVolumeScale()
+	local cur_volume = VOICE.GetPreferredPlayerVoiceVolume(ply)
 	cur_volume = cur_volume ~= nil and cur_volume or 1
 
 	local new_volume = delta == -1 and math.max(0, cur_volume - 0.01) or math.min(1, cur_volume + 0.01)
 	new_volume = math.Round(new_volume, 2)
 
-	ply:SetVoiceVolumeScale(new_volume)
+	VOICE.SetPreferredPlayerVoiceVolume(ply, new_volume)
+	VOICE.UpdatePlayerVoiceVolume(ply)
 
 	if self.voice.percentage_frame ~= nil and not self.voice.percentage_frame:IsVisible() then
 		self.voice.percentage_frame:Show()

@@ -572,4 +572,19 @@ if CLIENT then
 
 		draw.FilteredTexture(x, y, w, h, material, alpha, col)
 	end
+
+	---
+	-- Checks recursively the parents until none is found and the highest parent is returned
+	-- @ignore
+	function util.getHighestPanelParent(panel)
+		local parent = panel
+		local checkParent = panel:GetParent()
+
+		while ispanel(checkParent) do
+			parent = checkParent
+			checkParent = parent:GetParent()
+		end
+
+		return parent
+	end
 end

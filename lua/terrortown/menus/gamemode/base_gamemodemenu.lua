@@ -166,7 +166,7 @@ end
 
 ---
 -- Called after the class is initialized and has finished inheriting.
--- @note This function should be overwritten but not not called.
+-- @note This function should be overwritten but not called.
 -- @internal
 -- @realm client
 function CLGAMEMODEMENU:Initialize()

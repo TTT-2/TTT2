@@ -4,16 +4,88 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
+- Added a new way to alter player volume separately from the scoreboard (by @EntranceJew):
+  - `VOICE.(Get/Set)PreferredPlayerVoiceVolume` for setting the voice volume instead of `Player:SetVoiceVolumeScale`
+  - `VOICE.(Get/Set)PreferredPlayerVoiceMute` for setting the voice mute instead of `Player:SetMuted`
+  - `VOICE.UpdatePlayerVoiceVolume` commits / updates the voice setting according to player preferences
+- Added client submenu options for clients to change audio settings under `F1 > Gameplay > General` (by @EntranceJew):
+  - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
+  - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
+    - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
+
+### Changed
+
+- Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
+  - Add the missing `L.c4_disarm_t` translation in C4
+- Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
+- Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
+  - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+
+### Fixed
+
+- Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
+
+## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
+
+### Added
+
+- Added a new font in default_skin.lua to fit the localization (by @Satton2)
+- Fixed knife death effect being permanently applied on every following death
+- Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
+- Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)
+- Added cvar `ttt2_bots_lock_on_death` (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)
+- Added `TTT2ModifyFinalRoles` hook for last minute opportunity to override role distribution prior to them being announced for the first time (by @EntranceJew)
+- `weapon_tttbase`:
+  - Added `SWEP:ShouldRemove` to facilitate intercepting `SWEP:Remove` (by @EntranceJew)
+  - Added `SWEP.damageScaling` for weapons that utilize `ShootBullet` (by @EntranceJew)
+- Edit Equipment Menu
+  - `AllowDrop` can now be overridden per-weapon (by @EntranceJew)
+  - `Kind` can now be overridden per-weapon (by @EntranceJew)
+  - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
+  - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
+- `vgui.CreateTTT2Form` passes the name on so that it can be accessed via `Panel:GetName()` (by @EntranceJew)
+- Added two GAMEMODE hooks to provide the ability for additional addons to extend role/equipment menus.
+  - `GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)`
+    - Called after `ITEM:AddToSettingsMenu(parent)`.
+  - `GM:TTT2OnRoleAddToSettingsMenu(role, parent)`
+    - Called after `ROLE:AddToSettingsMenu(parent)`
+
 ### Changed
 
 - `weapon_tttbase`:
   - Removal of `SWEP.IronSightsTime` as it was completely unused and conflicts with a networked value intended for the same purpose
   - Commented-out default values for `SWEP.IronSightsPos` and `SWEP.IronSightsAng` to match vanilla TTT behaviour
     - SWEPs can still use these names as normal, they just don't have a base value to inherit anymore
+- Updated Russian and English localization files (by @Satton2):
+  - Updated strings in English localization file
+  - Localized outdated and new strings into Russian
+- Updated all localization files (by @Satton2):
+  - Added missing and new strings
+  - Marked (out-) updated strings
+  - Removed some duplicated strings
+  - Removed some old unused strings
+  - Fixed some broken source strings (line names)
+- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):
+  - Update Simplified Chinese Translation
+  - Improve translation (by @TheOnly8Z)
+- Localization parameters for `{walkkey} + {usekey}` prompts made into the predominant style.
 
 ### Fixed
 
-- Fixed hotreload of TTT2 roles library by a fresh reinitialization 
+- Fixed hotreload of TTT2 roles library by a fresh reinitialization
+- Fixed a wrong localization line call in roles.lua (by @Satton2)
+- Fixed +zoom bind
+- Fixed ttt_quickslot command
+- Fixed an issue in `table.GetEqualEntryKeys` when nil is provided instead of a table. (by @sbzlzh):
+  - This fixes spawn problems on maps with invalid spawn points
+  - This fixes errors in the F1 Menu language selection
+- Fixed the check for dynamic armor being inverted (`1` disabled it, `0` enabled it)
+- Fixed two unmatched ConVars in performance menu (by @NickCloudAT)
+- Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
+- Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
@@ -99,7 +171,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done_
+- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done
   - `ROLE.karma.teamKillPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for a team kill
   - `ROLE.karma.teamHurtPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for team damage
   - `ROLE.karma.enemyKillBonusMultiplier`: The multiplier that is used to calculate the Karma given to the killer if a player from an enemy team is killed
@@ -566,8 +638,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added new convars to change the behavior of the armor
-	- `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
-	- `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
+  - `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
+  - `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added server proxy for `EPOP:AddMessage()`
 - Added `PrintMessage` overwrites so this function now uses TTT2 systems

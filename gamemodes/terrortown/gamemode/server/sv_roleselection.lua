@@ -907,6 +907,10 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 	GAMEMODE.LastRole = {}
 
+	---
+	-- @realm server
+	hook.Run("TTT2ModifyFinalRoles", roleselection.finalRoles)
+
 	for i = 1, #plys do
 		local ply = plys[i]
 		local subrole = roleselection.finalRoles[ply] or ROLE_INNOCENT
@@ -950,6 +954,14 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2ModifySelectableRoles(selectableRoles)
+
+end
+
+---
+-- @param table finalRoles
+-- @hook
+-- @realm server
+function GM:TTT2ModifyFinalRoles(finalRoles)
 
 end
 
