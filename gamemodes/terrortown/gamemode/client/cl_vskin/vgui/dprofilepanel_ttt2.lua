@@ -2,9 +2,6 @@
 -- @class PANEL
 -- @section ImageCheckBoxTTT2
 
-local mathMax = math.max
-local mathMin = math.min
-
 local PANEL = {}
 
 ---
