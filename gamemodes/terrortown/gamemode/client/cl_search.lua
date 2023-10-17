@@ -71,6 +71,9 @@ SEARCHSCRN.menuFrame = SEARCHSCRN.menuFrame or nil
 SEARCHSCRN.data = SEARCHSCRN.data or {}
 SEARCHSCRN.infoBoxes = {}
 
+---
+-- Calculates and caches the dimensions of the bodysearch UI.
+-- @realm client
 function SEARCHSCRN:CalculateSizes()
 	self.sizes.width = 600
 	self.sizes.height = 500
@@ -94,6 +97,9 @@ function SEARCHSCRN:CalculateSizes()
 	self.sizes.heightInfoItem = 78
 end
 
+---
+-- Updates the UI if the player, that is inspected right now, was confirmed.
+-- @realm client
 function SEARCHSCRN:PlayerWasConfirmed()
 	self.buttonConfirm:SetEnabled(false)
 	self.buttonConfirm:SetText("search_confirmed")
@@ -116,6 +122,9 @@ function SEARCHSCRN:PlayerWasConfirmed()
 	end
 end
 
+---
+-- Updates the UI if the player, that is inspected right now, lost their credits.
+-- @realm client
 function SEARCHSCRN:CreditsWereTaken()
 	-- if credits were taken, remove credit box
 	local creditBox = self.infoBoxes["credits"]
@@ -130,6 +139,14 @@ function SEARCHSCRN:CreditsWereTaken()
 	end
 end
 
+---
+-- Helper function to create an info item for the search UI.
+-- @param Panel parent The parent panel where it should be added to
+-- @param string name A unique name to keep a reference to the item
+-- @param table data The data that is added to the element
+-- @param[opt] number height The height of the element
+-- @return Panel The box element
+-- @realm client
 function SEARCHSCRN:MakeInfoItem(parent, name, data, height)
 	local box = vgui.Create("DInfoItemTTT2", parent)
 	box:SetSize(self.sizes.widthContentBox, height or self.sizes.heightInfoItem)
@@ -143,6 +160,10 @@ function SEARCHSCRN:MakeInfoItem(parent, name, data, height)
 	return box
 end
 
+---
+-- Show the searchscreen with the provided data. Generates the whole UI.
+-- @param table data The scene data that should be added
+-- @realm client
 function SEARCHSCRN:Show(data)
 	local client = LocalPlayer()
 
@@ -363,6 +384,9 @@ function SEARCHSCRN:Show(data)
 	self.buttonConfirm = buttonConfirm
 end
 
+---
+-- Closes the curren searchscreen window if open
+-- @realm client
 function SEARCHSCRN:Close()
 	if not IsValid(self.menuFrame) then return end
 

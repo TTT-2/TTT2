@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section ImageCheckBoxTTT2
+-- @section DProfilePanelTTT2
 
 local PANEL = {}
 
@@ -100,12 +100,11 @@ end
 ---
 -- @param string model
 -- @realm client
-function PANEL:SetModel(model, color)
+function PANEL:SetModel(model)
 	self.data.mdl = Model(model)
 
 	-- set the entity
 	local ent = ClientsideModel(model, RENDERGROUP_OTHER)
-	--ent:SetColor(Color(color.r * 255, color.g * 255, color.b * 255))
 
 	if not IsValid(ent) then return end
 
@@ -138,6 +137,10 @@ function PANEL:SetModel(model, color)
 end
 
 ---
+-- @param number x
+-- @param number y
+-- @param number w
+-- @param number h
 -- @realm client
 function PANEL:DrawModel(x, y, w, h)
 	local ent = self.data.ent
@@ -211,22 +214,37 @@ function PANEL:HasModel()
 	return self.data.mdl ~= nil
 end
 
+---
+-- @param string material
+-- @realm client
 function PANEL:SetPlayerIcon(material)
 	self.data.player_icon = material
 end
 
+---
+-- @param string material
+-- @realm client
 function PANEL:SetPlayerRoleIcon(material)
 	self.data.player_role_icon = material
 end
 
+---
+-- @param Color color
+-- @realm client
 function PANEL:SetPlayerRoleColor(color)
 	self.data.player_role_color = color
 end
 
+---
+-- @param string role
+-- @realm client
 function PANEL:SetPlayerRoleString(role)
 	self.data.player_role_name = role
 end
 
+---
+-- @param string team
+-- @realm client
 function PANEL:SetPlayerTeamString(team)
 	self.data.player_team_name = team
 end
@@ -239,20 +257,29 @@ function PANEL:GetPlayerIcon()
 end
 
 ---
--- @return number
+-- @return material
 -- @realm client
 function PANEL:GetPlayerRoleIcon()
 	return self.data.player_role_icon
 end
 
+---
+-- @return Color
+-- @realm client
 function PANEL:GetPlayerRoleColor()
 	return self.data.player_role_color
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetPlayerRoleString()
 	return self.data.player_role_name
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetPlayerTeamString()
 	return self.data.player_team_name
 end

@@ -252,6 +252,7 @@ if SERVER then
 	-- Streams the provided scene data to the given clients, is broadcasted if no client is defined.
 	-- @param table sData The scene data table that should be streamed to the client(s)
 	-- @param[opt] table|player client Optional, use it to send a stream to a single client or a group of clients
+	-- @realm server
 	function bodysearch.StreamSceneData(sData, client)
 		net.SendStream("TTT2_BodySearchData", sData, client)
 	end

@@ -68,6 +68,12 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
+---
+-- Identifies the corpse, registers it and announces it to the server, if possible.
+-- @param Player ply The player that tries to identify the body
+-- @param Entity rag The ragdoll entity that is searched
+-- @param[default=0] number searchUID The unique search ID that is used to keep track of the search for the UI
+-- @realm server
 function CORPSE.IdentifyBody(ply, rag, searchUID)
 	if not ply:IsTerror() or not ply:Alive() then return end
 
