@@ -28,7 +28,7 @@ ENT.HealFreq = 0.2
 ---
 -- @accessor number
 -- @realm shared
-AccessorFuncDT(ENT, "StoredHealth", "StoredHealth")
+AccessorFunc(ENT, "StoredHealth", "StoredHealth", FORCE_NUMBER)
 
 ---
 -- @accessor Player

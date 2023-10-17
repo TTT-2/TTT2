@@ -116,7 +116,7 @@ if CLIENT then
 			TEXT_ALIGN_CENTER
 		)
 
-		self:PaintBar(x + pad, posBarY, w - pad * 2, barHeight, self.sprint_colors, progress, 1)
+		self:PaintBar(x + pad, posBarY, w - pad * 2, barHeight, self.sprint_colors, progress)
 
 		if client:IsBlockingRevival() then
 			draw.FilteredShadowedTexture(

@@ -309,7 +309,7 @@ function table.GetAndRemoveBiggestSubTable(tbl)
 		subIdx = i
 	end
 
-	if isnumber(subItx) then
+	if isnumber(subIdx) then
 		table.remove(tbl, subIdx)
 	else
 		tbl[subIdx] = nil

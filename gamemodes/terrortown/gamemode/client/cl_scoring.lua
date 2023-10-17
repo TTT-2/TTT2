@@ -131,7 +131,7 @@ end
 function CLSCORE:CreatePanel()
 	self:CalculateSizes()
 
-	local frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "report_title", true)
+	local frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "report_title")
 
 	frame:SetPadding(0, 0, 0, 0)
 	frame:CloseButtonClickOverride(function()

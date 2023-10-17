@@ -518,7 +518,7 @@ function PANEL:MakeColorMixer(data)
 		end
 
 		-- update colormixer as well
-		colorMixer:SetDisabled(not enabled)
+		colorMixer:SetEnabled(enabled)
 	end
 
 	self:AddItem(left, right)

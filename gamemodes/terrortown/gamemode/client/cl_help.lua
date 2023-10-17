@@ -174,7 +174,7 @@ function HELPSCRN:ShowMainMenu()
 	if IsValid(frame) then
 		frame:ClearFrame(nil, nil, "help_title")
 	else
-		frame = vguihandler.GenerateFrame(width, height, "help_title", true)
+		frame = vguihandler.GenerateFrame(width, height, "help_title")
 	end
 
 	self.menuFrame = frame

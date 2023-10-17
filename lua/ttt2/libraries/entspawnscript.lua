@@ -372,7 +372,7 @@ if SERVER then
 		local fileExisted = entspawnscript.Exists(dir)
 
 		if fileExisted then
-			fileDelete(dir .. gameGetMap() .. ".json")
+			fileDelete(dir .. gameGetMap() .. ".json", "DATA")
 		end
 
 		return fileExisted

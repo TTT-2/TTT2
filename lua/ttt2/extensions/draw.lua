@@ -112,7 +112,7 @@ function draw.ShadowedBox(x, y, w, h, color, scale)
 	drawBox(x + shift2, y + shift2, w, h, tmpCol)
 	drawBox(x + shift1, y + shift1, w, h, tmpCol)
 	drawBox(x + shift1, y + shift1, w, h, tmpCol)
-	drawBox(x, y, w, h, t, color)
+	drawBox(x, y, w, h, color)
 end
 
 ---
@@ -445,7 +445,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 
 	if scaled then
-		cam.PopModelMatrix(mat)
+		cam.PopModelMatrix()
 
 		render.PopFilterMag()
 		render.PopFilterMin()
