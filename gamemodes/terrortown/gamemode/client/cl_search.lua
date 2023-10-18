@@ -175,7 +175,7 @@ function SEARCHSCRN:Show(data)
 	if IsValid(frame) then
 		frame:ClearFrame(nil, nil, {body = "search_title", params = {player = data.nick or "???"}})
 	else
-		frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, {body = "search_title", params = {player = data.nick or "???"}}, true)
+		frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, {body = "search_title", params = {player = data.nick or "???"}})
 	end
 
 	frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)

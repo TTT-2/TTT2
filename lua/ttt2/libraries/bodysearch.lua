@@ -543,7 +543,7 @@ if CLIENT then
 					},
 					text = {{
 						body = "search_kills2",
-						params = {player = table.concat(nicks, "\n", 1, last)}
+						params = {player = table.concat(nicks, "\n", 1)}
 					}}
 				}
 			end
