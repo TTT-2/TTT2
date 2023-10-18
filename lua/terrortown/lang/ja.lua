@@ -1608,7 +1608,7 @@ L.help_roles_credits_award_kill = "クレジットを獲得するもう一つの
 --There are two different ways to be awarded credits in base TTT2:
 
 --1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
---2. If a player killed a high value player with a 'public role' such as a Detective, the killer is awarded credits.
+--2. If a player killed a high value player with a 'public policing role' such as a Detective, the killer is awarded credits.
 
 --Please note, that this still can be enabled/disabled for every role, even if the whole team is awarded. For example, if team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
 --The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]

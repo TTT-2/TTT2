@@ -466,7 +466,7 @@ L.round_post = "Runde vorbei"
 
 -- Health, ammo and time area
 L.overtime = "VERLÄNGERUNG"
-L.hastemode = "HASTE MODUS"
+L.hastemode = "HAST MODUS"
 
 -- TargetID health status
 L.hp_healthy = "Gesund"
@@ -907,7 +907,7 @@ L.reroll_name = "Reroll"
 L.reroll_menutitle = "Ausrüstung auswürfeln"
 L.reroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
 L.reroll_button = "Reroll"
-L.reroll_help = "Verwende {amount} Credits, um ein neues zufälliges Set von Ausrüstung in deinem Shop zu erhalten!"
+L.reroll_help = "Verwende {amount} Credits, um ein neues zufälliges Set von Ausrüstungsgegenständen in deinem Shop zu erhalten!"
 
 -- 2019-05-06
 L.equip_not_alive = "Du kannst alle verfügbaren Items sehen, wenn du eine Rolle auf der rechten Seite auswählst. Denk dran, du kannst zu jeder Zeit Favoriten hinzufügen!"
@@ -1249,9 +1249,9 @@ L.hilite_win_innocents = "TEAM UNSCHULDIGE GEWANN"
 L.hilite_win_tie = "UNENTSCHIEDEN"
 L.hilite_win_time = "ZEIT VORBEI"
 
-L.tooltip_karma_gained = "Karma-Änderungen für diese Runde:"
-L.tooltip_score_gained = "Punkte-Änderungen für diese Runde:"
-L.tooltip_roles_time = "Rollen-Änderungen für diese Runde:"
+L.tooltip_karma_gained = "Karmaänderungen für diese Runde:"
+L.tooltip_score_gained = "Punkteänderungen für diese Runde:"
+L.tooltip_roles_time = "Rollenwechsel für diese Runde:"
 
 L.tooltip_finish_score_alive_teammates = "Lebende Teammitglieder: {score}"
 L.tooltip_finish_score_alive_all = "Lebende Spieler: {score}"
@@ -1398,7 +1398,7 @@ L.header_rolelayering_role = "{role}-Schichtung"
 L.header_rolelayering_baserole = "Basisrollenebenen"
 L.submenu_administration_rolelayering_title = "Rollenebenen"
 L.header_rolelayering_info = "Rollenebeneninformationen"
-L.help_rolelayering_roleselection = "Der Rollenverteilungsprozess ist in zwei Phasen unterteilt. In der ersten Phase werden Basisrollen verteilt, zu denen Unschuldige, Verräter und diejenigen welche in der 'Basisrollenebene' unten aufgeführt sind. Die zweite Phase dient dazu, diese Basisrollen zu Unterrollen aufzuwerten."
+L.help_rolelayering_roleselection = "Der Rollenverteilungsprozess ist in zwei Phasen unterteilt. In der ersten Phase werden Basisrollen verteilt, zu denen Unschuldige, Verräter und diejenigen gehören, welche in der 'Basisrollenebene' unten aufgeführt sind. Die zweite Phase dient dazu, diese Basisrollen zu Unterrollen aufzuwerten."
 L.help_rolelayering_layers = "Aus jeder Schicht wird nur eine Rolle ausgewählt. Zuerst werden die Rollen aus den benutzerdefinierten Schichten verteilt, beginnend mit der ersten Schicht, bis die letzte erreicht ist oder keine Rollen mehr aufgewertet werden können. Was auch immer zuerst passiert, wenn noch aufwertbare Slots verfügbar sind, werden auch die nicht geschichteten Rollen verteilt."
 L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"
 
@@ -1467,7 +1467,7 @@ Diese Spawns werden in Dateien im Verzeichnis 'data/ttt/weaponspawnscripts/' ges
     
 Es sollte beachtet werden, dass dieses Spawnsystem dynamische Spawns verwendet. Dies ist besonders interessant für Waffen, da es nicht mehr eine bestimmte Waffe definiert, sondern einen Typ von Waffen. Zum Beispiel gibt es anstelle eines TTT-Schrotgewehr-Spawns jetzt einen allgemeinen Schrotgewehr-Spawn, auf dem jede als Schrotgewehr definierte Waffe erscheinen kann. Der Spawntyp für jede Waffe kann im 'Ausrüstung bearbeiten'-Menü festgelegt werden. Dies ermöglicht es, dass jede Waffe auf der Karte erscheinen kann, oder bestimmte Standardwaffen zu deaktivieren.
     
-Beachten Sie, dass viele Änderungen erst nach Beginn einer neuen Runde wirksam werden.]]
+Beachte, dass viele Änderungen erst nach Beginn einer neuen Runde wirksam werden.]]
 L.help_spawn_editor_enable = "Auf einigen Karten kann es ratsam sein, die ursprünglichen Spawns auf der Karte zu verwenden, anstatt sie durch das dynamische System zu ersetzen. Die Änderung dieser Option unten betrifft nur die derzeit aktive Karte, sodass das dynamische System weiterhin für jede andere Karte verwendet wird."
 L.help_spawn_editor_hint = "Hinweis: Öffne das Gamemode Menü erneut, um den Spawneditor zu verlassen"
 L.help_spawn_editor_spawn_amount = [[
@@ -1497,7 +1497,7 @@ L.equipmenteditor_name_spawn_type = "Wähle Spawntyp"
 L.equipmenteditor_desc_auto_spawnable = [[
 Das TTT2-Spawnsystem ermöglicht es, dass jede Waffe in der Welt erscheint. Standardmäßig erscheinen nur Waffen, die vom Ersteller als 'AutoSpawnable' markiert wurden, in der Welt. Dies kann jedoch in diesem Menü geändert werden.
 
-Die meisten Ausrüstungen sind standardmäßig auf 'Spezialwaffenspawn' eingestellt. Das bedeutet, dass die Ausrüstung nur auf zufälligen Waffenspawns erscheint. Es ist jedoch möglich, spezielle Waffenspawns in der Welt zu platzieren oder den Spawntyp hier zu ändern, um andere vorhandene Spawntypen zu verwenden.]]
+Die meisten Ausrüstungsgegenstände sind standardmäßig auf 'Spezialwaffenspawn' eingestellt. Das bedeutet, dass die Ausrüstungsgegenstände nur auf zufälligen Waffenspawns erscheint. Es ist jedoch möglich, spezielle Waffenspawns in der Welt zu platzieren oder den Spawntyp hier zu ändern, um andere vorhandene Spawntypen zu verwenden.]]
 
 L.pickup_error_inv_cached = "Du kannst dies im AUgenblick nicht aufheben, da dein Inventar gecached ist."
 
@@ -1509,10 +1509,10 @@ L.header_playermodels_selection = "Wähle Spielermodellliste"
 L.label_enforce_playermodel = "Erzwinge rollenspezifisches Spielermodell"
 L.label_use_custom_models = "Verwende ein zufällig ausgewähltes Spielermodell"
 L.label_prefer_map_models = "Bevorzuge kartenspezifische Modelle über die Standardspielermodelle"
-L.label_select_model_per_round = "Wähle in jeder Runde ein neues zufälliges Modell aus (bei Deaktivierung nur bei Kartenwechsel)"
+L.label_select_model_per_round = "Wähle in jeder Runde ein neues zufälliges Modell aus (wenn deaktiviert, dann nur bei Kartenwechsel)"
 
 L.help_prefer_map_models = [[
-Einige Karten definieren ihre eigenen Spielermodelle. Standardmäßig haben diese Modelle eine höhere Priorität als die automatisch zugewiesenen Modelle. Durch Deaktivieren dieser Einstellung werden die kartenspezifischen Modelle deaktiviert.
+Einige Karten definieren ihre eigenen Spielermodelle. Standardmäßig haben diese Modelle eine höhere Priorität als die automatisch zugewiesenen Modelle. Durch das Deaktivieren dieser Einstellung werden die kartenspezifischen Modelle deaktiviert.
 
 Rollen-spezifische Modelle haben immer Vorrang und werden von dieser Einstellung nicht beeinflusst.]]
 L.help_enforce_playermodel = [[
@@ -1560,12 +1560,12 @@ L.help_roles_selection_short = "Die Rollenverteilung pro Spieler definiert den P
 L.help_roles_selection = [[
 Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens 5 Spieler benötigt werden, damit diese Rolle überhaupt verteilt wird.
 
-Beachten Sie, dass all dies nur gilt, wenn die Rolle für den Verteilungsprozess berücksichtigt wird.
+Beachte, dass all dies nur gilt, wenn die Rolle für den Verteilungsprozess berücksichtigt wird.
     
 Die oben genannte Rollenverteilung hat eine besondere Integration mit der unteren Spielerbegrenzung. Wenn die Rolle für die Verteilung in Betracht gezogen wird und der Mindestwert unter dem Wert liegt, der durch den Verteilungsfaktor angegeben wird, aber die Anzahl der Spieler gleich oder größer als die untere Begrenzung ist, kann immer noch ein einzelner Spieler diese Rolle erhalten. Der Verteilungsprozess funktioniert dann wie gewohnt für den zweiten Spieler.]]
 L.help_roles_award_info = "Einige Rollen (wenn in ihren Credit-Einstellungen aktiviert) erhalten Credits, wenn ein bestimmter Prozentsatz an Feinden gestorben ist. Die damit verbundenen Werte können hier angepasst werden."
 L.help_roles_award_pct = "Wenn dieser Prozentsatz der Feinde tot ist, erhalten bestimmte Rollen Credits als Belohnung."
-L.help_roles_award_repeat = "Ob die Creditvergabe mehrmals erfolgt. Zum Beispiel, wenn der Prozentsatz auf '0,25' eingestellt ist und diese Einstellung aktiviert ist, erhalten Spieler bei '25%', '50%' und '75%' toten Feinden jeweils Ausrüstungspunkte."
+L.help_roles_award_repeat = "Ob die Creditvergabe mehrmals erfolgt. Zum Beispiel, wenn der Prozentsatz auf '0.25' eingestellt ist und diese Einstellung aktiviert ist, erhalten Spieler bei '25%', '50%' und '75%' toten Feinden jeweils Ausrüstungspunkte."
 L.help_roles_advanced_warning = "WARNUNG: Dies sind fortgeschrittene Einstellungen, die den Rollenverteilungsprozess komplett durcheinander bringen können. Bei Unsicherheit sollten alle Werte auf '0' belassen werden. Dieser Wert bedeutet, dass keine Grenzen gelten und die Rollenverteilung versuchen wird, so viele Rollen wie möglich zuzuweisen."
 L.help_roles_max_roles = [[
 Der Begriff "Rollen" umfasst hier sowohl die Basisrollen als auch die Unterrollen. Standardmäßig gibt es keine Begrenzung, wie viele verschiedene Rollen zugewiesen werden können. Es gibt jedoch zwei verschiedene Möglichkeiten, sie zu beschränken:
@@ -1596,7 +1596,7 @@ L.label_roles_max_roles = "Obere Grenze für Rollen"
 L.label_roles_max_roles_pct = "Prozentuale obere Grenze für Rollen"
 L.label_roles_max_baseroles = "Obere Basisrollenbegrenzung"
 L.label_roles_max_baseroles_pct = "Obere Basisrollenbegrenzung in Prozent"
-L.label_detective_hats = "Aktiviere Hüte für Polizeirollen wie den Detektiv (sofern das Spielermodell dies zulässt)"
+L.label_detective_hats = "Aktiviere Hüte für öffentliche Ordnungsrollen wie den Detektiv (sofern das Spielermodell dies zulässt)"
 
 L.ttt2_desc_innocent = "Ein Unschuldiger hat keine besonderen Fähigkeiten. Sie müssen die bösen unter den Terroristen finden und sie töten. Dabei müssen sie jedoch vorsichtig sein, ihre Teammitglieder nicht zu töten."
 L.ttt2_desc_traitor = "Der Verräter ist der Feind der Unschuldigen. Sie verfügen über ein Ausrüstungsmenü, mit dem sie spezielle Ausrüstung kaufen können. Ihr Ziel ist es, jeden zu töten, außer ihre Teammitglieder."
@@ -1606,16 +1606,16 @@ L.ttt2_desc_detective = "Der Detektiv ist derjenige, dem die Unschuldigen trauen
 L.button_reset_models = "Spielermodelle Zurücksetzen"
 
 -- 2021-10-13
-L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'offenen Rollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
+L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'öffentlichen Ordnungsrollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
 L.help_roles_credits_award = [[
 Es gibt zwei verschiedene Möglichkeiten, um in Basis-TTT2 Credits zu erhalten:
 
-1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhaltet das gesamte Team Credits.
-2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Rolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
-Bitte beachten Sie, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Credits.
+1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhält das gesamte Team Credits.
+2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Ordnungsrolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
+Bitte beachte, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Credits.
 Die Balanceeinstellungen für diese Funktion können in 'Administration' -> 'Allgemeine Rolleneinstellungen' festgelegt werden.]]
 L.help_detective_hats = [[
-Polizeirollen wie der Detektiv können Hüte tragen, um ihre Autorität zu zeigen. Sie verlieren diese Hüte bei ihrem Tod oder wenn der Kopf beschädigt wird.
+Öffentliche Ordnungsrollen wie der Detektiv können Hüte tragen, um ihre Autorität zu zeigen. Sie verlieren diese Hüte bei ihrem Tod oder wenn der Kopf beschädigt wird.
 
 Einige Spielermodelle unterstützen standardmäßig keine Hüte. Dies kann in 'Administration' -> 'Spielermodell' geändert werden.]]
 
@@ -1676,17 +1676,17 @@ Wenn diese Variable auf 0 gesetzt ist, werden alle Spieler auf einmal gespawnt. 
 
 Hinweis: Stellen Sie sicher, dass die Vorbereitungszeit lang genug für die gewünschte Anzahl von Spawnwellen ist.]]
 L.help_voicechat_battery = [[
-Die Verwendung des Sprachchats mit aktivierter Sprachchat-Batterie reduziert die Batterieladung. Wenn die Batterie leer ist, kann der Spieler den Sprachchat nicht mehr verwenden und muss warten, bis sie sich wieder auflädt. Dies kann dazu beitragen, den übermäßigen Gebrauch des Sprachchats zu verhindern.
+Die Verwendung des Sprachchats mit aktivierter Sprachchat-Batterie reduziert dabei die Batterieladung. Wenn die Batterie leer ist, kann der Spieler den Sprachchat nicht mehr verwenden und muss warten, bis sie sich wieder auflädt. Dies kann dazu beitragen, den übermäßigen Gebrauch des Sprachchats zu verhindern.
 
 Hinweis: 'Tick' bezieht sich auf einen Spieltick. Wenn beispielsweise die Tickrate auf 66 eingestellt ist, entspricht dies 1/66 Sekunde.]]
 L.help_ply_spawn = "Spieler-Einstellungen, die beim Spieler (Neu-)Spawn verwendet werden."
 L.help_haste_mode = [[
-Der Haste-Modus balanciert das Spiel, indem er die Rundenzeit mit jedem getöteten Spieler erhöht. Nur Rollen, die tote Spieler sehen können, können die tatsächliche Rundenzeit sehen. Alle anderen Rollen können nur die Startzeit des Haste-Modus sehen.
+Der Hast-Modus balanciert das Spiel, indem er die Rundenzeit mit jedem getöteten Spieler erhöht. Nur Rollen, die tote Spieler sehen können, können die tatsächliche Rundenzeit sehen. Alle anderen Rollen können nur die Startzeit des Hast-Modus sehen.
 
-Wenn der Haste-Modus aktiviert ist, wird die festgelegte Rundenzeit ignoriert.]]
+Wenn der Hast-Modus aktiviert ist, wird die festgelegte Rundenzeit ignoriert.]]
 L.help_round_limit = "Nachdem eine der festgelegten Bedingungen erfüllt ist, wird ein Kartenwechsel ausgelöst."
 L.help_armor_balancing = "Die folgenden Werte können verwendet werden, um die Rüstung auszugleichen."
-L.help_item_armor_classic = "Wenn der klassische Rüstungsmodus aktiviert ist, sind nur die vorherigen Einstellungen relevant. Im klassischen Rüstungsmodus kann ein Spieler in einer Runde nur einmal Rüstung kaufen, und diese Rüstung blockiert 30% des eintreffenden Kugel- und Brechstangenschadens, bis sie sterben."
+L.help_item_armor_classic = "Wenn der klassische Rüstungsmodus aktiviert ist, sind nur die vorangegangenen Einstellungen relevant. Im klassischen Rüstungsmodus kann ein Spieler in einer Runde nur einmal Rüstung kaufen, und diese Rüstung blockiert 30% des eintreffenden Kugel- und Brechstangenschadens, bis sie sterben."
 L.help_item_armor_dynamic = [[
 Die dynamische Rüstung ist der Ansatz von TTT2, um Rüstung interessanter zu gestalten. Die Menge an Rüstung, die gekauft werden kann, ist jetzt unbegrenzt, und der Rüstungswert stapelt sich. Bei Verletzungen wird der Rüstungswert verringert. Der Rüstungswert pro gekauftem Rüstungsgegenstand wird in den 'Ausrüstungseinstellungen' dieses Gegenstands festgelegt.
 
@@ -1740,7 +1740,7 @@ L.label_spawn_wave_interval = "Intervall zwischen den Spawn-Wellen in Sekunden"
 L.label_voice_enable = "Aktiviere Sprachchat"
 L.label_voice_drain = "Aktiviere die Sprachchat Batterie"
 L.label_voice_drain_normal = "Entladung pro Tick für normale Spieler"
-L.label_voice_drain_admin = "Entladung pro Tick für Admins und öffentliche Polizeirollen"
+L.label_voice_drain_admin = "Entladung pro Tick für Admins und öffentliche Ordnungsrollen"
 L.label_voice_drain_recharge = "Aufladungsrate pro Tick wenn nicht gesprochen wird"
 L.label_locational_voice = "Aktiviere Proximity Sprachchat für lebende Spieler"
 L.label_armor_on_spawn = "Spielerrüstung beim (Neu-)Spawnen"
@@ -1748,8 +1748,8 @@ L.label_prep_respawn = "Enable instant respawn during preparing phase"
 L.label_preptime_seconds = "Vorbereitungszeit in Sekunden"
 L.label_firstpreptime_seconds = "Erste Vorbereitungszeit in Sekunden"
 L.label_roundtime_minutes = "Fixe Rundenzeit in Minuten"
-L.label_haste = "Aktiviere Haste Modus"
-L.label_haste_starting_minutes = "Haste Modus Startzeit in Minuten"
+L.label_haste = "Aktiviere Hast Modus"
+L.label_haste_starting_minutes = "Hast Modus Startzeit in Minuten"
 L.label_haste_minutes_per_death = "Zusätzliche Zeit pro Tod in Minuten"
 L.label_posttime_seconds = "Zeit nach der Runde in Sekunden"
 L.label_round_limit = "Rundenlimit"
@@ -1762,8 +1762,8 @@ L.label_lastwords_chatprint = "Gib die letzten Worte im Chat aus, wenn der Spiel
 L.label_identify_body_woconfirm = "Leichnam identifizieren, ohne die Schaltfläche 'Tod Bestätigen' drücken zu müssen."
 L.label_announce_body_found = "Verkünden, dass ein Körper gefunden wurde"
 L.label_confirm_killlist = "Die Todesliste des bestätigten Leichnams verkünden"
-L.label_inspect_detective_only = "Leichenuntersuchung auf Polizeirollen beschränken"
-L.label_confirm_detective_only = "Leichenbestätigung auf Polizeirollen beschränken"
+L.label_inspect_detective_only = "Leichenuntersuchung auf Ordnungsrollen beschränken"
+L.label_confirm_detective_only = "Leichenbestätigung auf Ordnungsrollen beschränken"
 L.label_dyingshot = "Beim Tod schießen, wenn Visier aktiv [experimentell]"
 L.label_armor_block_headshots = "Aktiviere das Blockieren von Kopfschüssen durch Rüstung"
 L.label_armor_block_blastdmg = "Aktiviere das Blockieren von Explosionsschaden durch Rüstung"
@@ -1821,7 +1821,7 @@ L.label_weapon_autopickup = "Aktiviere automatisches aufheben von Waffen"
 L.label_sprint_enabled = "Aktiviere Sprinten"
 L.label_sprint_max = "Maximale Sprint-Ausdauer"
 L.label_sprint_stamina_consumption = "Faktor für den Verbrauch von Ausdauer"
-L.label_sprint_stamina_regeneration = "Faktor für die regeneration von Ausdauer"
+L.label_sprint_stamina_regeneration = "Faktor für die Regeneration von Ausdauer"
 L.label_sprint_crosshair = "Zeige Fadenkreuz beim Sprinten"
 L.label_crowbar_unlocks = "Der Primärangriff kann als Interaktion (z. B. Entsperren) verwendet werden"
 L.label_crowbar_pushforce = "Brechstange Schubsstärke"
@@ -1836,7 +1836,7 @@ L.label_falldmg_exponent = "Exponent to increase fall damage in relation to velo
 L.help_falldmg_exponent = [[
 Dieser Wert verändert, wie exponentiell der Fallschaden mit der Geschwindigkeit zunimmt, mit der der Spieler auf den Boden aufprallt.
 
-Seien Sie vorsichtig bei der Änderung dieses Werts. Wenn er zu hoch eingestellt wird, kann selbst der kleinste Sturz tödlich sein, während ein zu niedriger Wert es Spielern ermöglicht, aus extremen Höhen zu fallen und nur wenig oder gar keinen Schaden zu erleiden.]]
+Sei vorsichtig bei der Änderung dieses Werts. Wenn er zu hoch eingestellt wird, kann selbst der kleinste Sturz tödlich sein, während ein zu niedriger Wert es Spielern ermöglicht, aus extremen Höhen zu fallen und nur wenig oder gar keinen Schaden zu erleiden.]]
 
 -- 2023-02-08
 L.testpopup_title = "Ein Test Popup, jetzt auch mit Mehrzeilen-Titel, wie cool!"
@@ -1848,7 +1848,7 @@ L.hudeditor_chat_hint3 = "[TTT2][INFO] Halten Sie die UMSCHALT-Taste gedrückt, 
 L.hudeditor_chat_hint4 = "[TTT2][INFO] Drücken Sie [RMB] -> 'Schließen' um den HUD Editor zu beenden!"
 
 L.guide_nothing_title = "Hier gibt es noch nichts zu sehen!"
-L.guide_nothing_desc = "Dieser Bereich ist noch in Arbeit. Hilf uns dabei, indem du auf Github dazu beiträgst."
+L.guide_nothing_desc = "Dieser Bereich ist noch in Arbeit. Hilf uns dabei, indem du auf GitHub dazu beiträgst."
 
 L.sb_rank_tooltip_developer = "TTT2 Entwickler"
 L.sb_rank_tooltip_vip = "TTT2 Supporter"
@@ -1866,18 +1866,18 @@ L.equipmenteditor_name_damage_scaling = "Schadensskalierung"
 
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Erlaube Fallenlassen"
-L.equipmenteditor_desc_allow_drop = "Wenn aktiviert, Ausrüstung kann beliebig vom Spieler fallengelassen werden"
+L.equipmenteditor_desc_allow_drop = "Wenn aktiviert, kann Ausrüstung beliebig vom Spieler fallengelassen werden"
 L.equipmenteditor_name_drop_on_death_type = "Fallenlassen beim Tod"
-L.equipmenteditor_desc_drop_on_death_type = "Versuch, die Aktion zu überschreiben, die festlegt, ob die Ausrüstung beim Tod des Spielers fallengelassen wird."
+L.equipmenteditor_desc_drop_on_death_type = "Versuche, die Aktion zu überschreiben, die festlegt, ob die Ausrüstung beim Tod des Spielers fallengelassen wird."
 
-L.drop_on_death_type_default = "Default (pro Waffe definitiert)"
+L.drop_on_death_type_default = "Standard (pro Waffe definiert)"
 L.drop_on_death_type_force = "Erzwinge Fallenlassen beim Tod"
 L.drop_on_death_type_deny = "Verbiete Fallenlassen beim Tod"
 
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "Ausrüstungs Slot"
-L.equipmenteditor_desc_kind = "Der Inventar Slot welcher von Ausrüstungsgegenständen verwendet wird"
+L.equipmenteditor_desc_kind = "Der Inventar Slot, welcher von Ausrüstungsgegenständen verwendet wird"
 
 L.slot_weapon_melee = "Nahrkampf Slot"
 L.slot_weapon_pistol = "Pistolen Slot"
