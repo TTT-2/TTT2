@@ -54,7 +54,8 @@ local vip_tbl = {
 	["76561198082931319"] = true, -- Henk
 	["76561198049910438"] = true, -- Zzzaaaccc13
 	["76561198296468397"] = true, -- ZenBre4ker
-	["76561198041170748"] = true -- Pytho | Paul
+	["76561198041170748"] = true, -- Pytho | Paul
+	["76561197999466165"] = true -- EntranceJew
 }
 
 local addondev_tbl = {
