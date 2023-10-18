@@ -25,3 +25,19 @@ end
 function ROLE:AddToSettingsMenuCreditsForm(parent)
 
 end
+
+-- todo change this so that users can overwrite this function
+function ROLE:AddSyncedSettingsToRoleInfo(info)
+    if self.name == "ttt_role_base" or self.name == "none" then return end
+
+    info:MakeSyncedEntry(
+        "ttt_" .. self.name .. "_pct",
+        Material(), -- an icon
+        function(value)
+            return {
+                body = "label_roleinfo_pct",
+                params = {value = math.floor(1 / tonumber(value))}
+            }
+        end
+    )
+end

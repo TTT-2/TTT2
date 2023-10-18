@@ -243,6 +243,14 @@ function roles.OnLoaded()
 	for _, v in pairs(roles.roleList) do
 		if not v.isAbstract then
 			v:Initialize()
+
+			-- after the role is initialized, the syced settings are
+			-- initialized on the client
+			if not CLIENT then continue end
+
+			local info = roleinfo.NewRoleInfo()
+
+			v:AddSyncedSettingsToRoleInfo(info)
 		end
 	end
 end
