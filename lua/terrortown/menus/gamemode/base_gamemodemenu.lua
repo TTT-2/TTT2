@@ -33,7 +33,7 @@ end
 ---
 -- Checks if this menu has any visible submenus. They are visible if they are
 -- registered and @{CLGAMEMODEMENU:ShouldShow()} returns true.
--- @note This function can be overwritten, but probably shouldnt. 
+-- @note This function can be overwritten, but probably shouldn't. 
 -- @return boolean Returns true if there is at least one visible submenu
 -- @hook
 -- @realm client
@@ -123,7 +123,7 @@ end
 ---
 -- Filters the list with a searchText and returns full list if nothing is entered.
 -- @note Overwrite MatchesSearchString for a custom search! 
--- This function can be overwritten, but probably shouldnt. 
+-- This function can be overwritten, but probably shouldn't. 
 -- @param string searchText
 -- @return menuClasses Returns a list of all matching submenus, needs to be indexed with ascending numbers
 -- @hook
