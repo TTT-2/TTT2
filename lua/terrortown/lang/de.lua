@@ -1606,12 +1606,12 @@ L.ttt2_desc_detective = "Der Detektiv ist derjenige, dem die Unschuldigen trauen
 L.button_reset_models = "Spielermodelle Zurücksetzen"
 
 -- 2021-10-13
-L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'öffentlichen Ordnungsrollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
+L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'öffentlichen Rollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
 L.help_roles_credits_award = [[
 Es gibt zwei verschiedene Möglichkeiten, um in Basis-TTT2 Credits zu erhalten:
 
 1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhält das gesamte Team Credits.
-2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Ordnungsrolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
+2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Rolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
 Bitte beachte, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Credits.
 Die Balanceeinstellungen für diese Funktion können in 'Administration' -> 'Allgemeine Rolleneinstellungen' festgelegt werden.]]
 L.help_detective_hats = [[
