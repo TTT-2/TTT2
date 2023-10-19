@@ -563,7 +563,6 @@ function GM:ClearClientState()
 	client.last_id = nil
 	client.radio = nil
 	client.called_corpses = {}
-	client.sprintProgress = 1
 
 	client:SetTargetPlayer(nil)
 

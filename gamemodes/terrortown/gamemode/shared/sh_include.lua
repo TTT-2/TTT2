@@ -53,6 +53,7 @@ TTTFiles = {
 	sh_main = {file = "sh_main.lua", on = "shared"},
 	sh_network_sync = {file = "sh_network_sync.lua", on = "shared"},
 	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
+	sh_playerclass = { file = "sh_playerclass.lua", on = "shared" },
 	sh_printmessage_override = {file = "sh_printmessage_override.lua", on = "shared"},
 	sh_cvar_handler = {file = "sh_cvar_handler.lua", on = "shared"},
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},

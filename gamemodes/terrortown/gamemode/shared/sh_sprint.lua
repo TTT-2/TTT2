@@ -1,169 +1,122 @@
-local function PlayerSprint(trySprinting, moveKey)
-	if SERVER then return end
+---
+---@class SPRINT
+SPRINT = {
+	-- Set up ConVars
+	convars = {
+		-- @realm shared
+		enabled = CreateConVar(
+			"ttt2_sprint_enabled",
+			"1",
+			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+			"Toggle Sprint (Def: 1)"
+		),
+		-- @realm shared
+		multiplier = CreateConVar(
+			"ttt2_sprint_max",
+			"0.5",
+			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+			"The speed modifier the player will receive. Will be added on top of 1, so 0.5 => 1.5 speed. (Def: 0.5)"
+		),
+		-- @realm shared
+		consumption = CreateConVar(
+			"ttt2_sprint_stamina_consumption",
+			"0.6",
+			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+			"The speed of the stamina consumption (per second; Def: 0.6)"
+		),
+		-- @realm shared
+		regeneration = CreateConVar(
+			"ttt2_sprint_stamina_regeneration",
+			"0.3",
+			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+			"The regeneration time of the stamina (per second; Def: 0.3)"
+		),
+		-- @realm shared
+		showCrosshair = CreateConVar(
+			"ttt2_sprint_crosshair",
+			"0",
+			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
+			"Should the Crosshair be visible while sprinting? (Def: 0)"
+		),
+	},
+}
 
-	local client = LocalPlayer()
-	local isSprinting = client:GetSprintingPredicted()
+---
+-- Checks if the player is pressing any movement keys and the sprint key at the same time.
+-- @param Player ply
+-- @return boolean
+-- @realm shared
+function SPRINT:PlayerWantsToSprint(ply)
+	local isSprinting = ply:KeyDown(IN_SPEED)
+	local inMovement = ply:KeyDown(IN_FORWARD)
+		or ply:KeyDown(IN_BACK)
+		or ply:KeyDown(IN_MOVERIGHT)
+		or ply:KeyDown(IN_MOVELEFT)
 
-	if not GetGlobalBool("ttt2_sprint_enabled", true) then return end
-	if not trySprinting and not isSprinting or trySprinting and isSprinting then return end
-	if isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
-
-	client:SetSprintingPredicted(trySprinting)
-	client.moveKey = moveKey
-end
-
-if SERVER then
-	-- Set ConVars
-
-	---
-	-- @realm server
-	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Toggle Sprint (Def: 1)")
-
-	---
-	-- @realm server
-	local maxSprintMul = CreateConVar("ttt2_sprint_max", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The maximum speed modifier the player will receive (Def: 0.5)")
-
-	---
-	-- @realm server
-	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (per second; Def: 0.6)")
-
-	---
-	-- @realm server
-	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 0.3)")
-
-	---
-	-- @realm server
-	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 0)")
-
-	hook.Add("TTT2SyncGlobals", "AddSprintGlobals", function()
-		SetGlobalBool(sprintEnabled:GetName(), sprintEnabled:GetBool())
-		SetGlobalFloat(maxSprintMul:GetName(), maxSprintMul:GetFloat())
-		SetGlobalFloat(consumption:GetName(), consumption:GetFloat())
-		SetGlobalFloat(stamreg:GetName(), stamreg:GetFloat())
-		SetGlobalBool(showCrosshair:GetName(), showCrosshair:GetBool())
-	end)
-
-	cvars.AddChangeCallback(sprintEnabled:GetName(), function(name, old, new)
-		SetGlobalBool(name, tobool(new))
-	end, "TTT2SprintENChange")
-
-	cvars.AddChangeCallback(maxSprintMul:GetName(), function(name, old, new)
-		SetGlobalFloat(name, new)
-	end, "TTT2SprintSMulChange")
-
-	cvars.AddChangeCallback(consumption:GetName(), function(name, old, new)
-		SetGlobalFloat(name, new)
-	end, "TTT2SprintSCChange")
-
-	cvars.AddChangeCallback(stamreg:GetName(), function(name, old, new)
-		SetGlobalFloat(name, new)
-	end, "TTT2SprintSRChange")
-
-	cvars.AddChangeCallback(showCrosshair:GetName(), function(name, old, new)
-		SetGlobalBool(name, tobool(new))
-	end, "TTT2SprintCHChange")
-else -- CLIENT
-	---
-	-- @realm client
-	local enable_doubletap_sprint = CreateConVar("ttt2_enable_doubletap_sprint", "1", {FCVAR_ARCHIVE})
-
-	---
-	-- @realm client
-	local doubletap_sprint_anykey = CreateConVar("ttt2_doubletap_sprint_anykey", "1", {FCVAR_ARCHIVE})
-
-	local lastPress = 0
-	local lastPressedMoveKey = nil
-
-	---
-	-- @param Player ply
-	-- @param number key
-	-- @param boolean pressed
-	-- @realm client
-	function UpdateInputSprint(ply, key, pressed)
-		if pressed then
-			if ply:GetSprintingPredicted() or not enable_doubletap_sprint:GetBool() or ply.preventSprint then return end
-
-			local time = CurTime()
-
-			if lastPressedMoveKey == key and time - lastPress < 0.4 then
-				PlayerSprint(true, key)
-			end
-
-			lastPressedMoveKey = key
-			lastPress = time
-		else
-			if not ply:GetSprintingPredicted() then return end
-
-			local moveKey = ply.moveKey
-			local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
-			local anyKey = doubletap_sprint_anykey:GetBool()
-
-			if not moveKey or anyKey and wantsToMove or not anyKey and key ~= moveKey then return end
-
-			PlayerSprint(false, key)
-		end
-	end
-
-	bind.Register("ttt2_sprint", function()
-		if not LocalPlayer().preventSprint then
-			PlayerSprint(true)
-		end
-	end,
-	function()
-		PlayerSprint(false)
-	end, "header_bindings_ttt2", "label_bind_sprint", KEY_LSHIFT)
+	return isSprinting and inMovement
 end
 
 ---
+-- Checks if the player wants to sprint and actually can sprint.
+-- @param Player ply
+-- @return boolean
 -- @realm shared
-function UpdateSprint()
-	local client
+function SPRINT:IsSprinting(ply)
+	return self.convars.enabled:GetBool() and self:PlayerWantsToSprint(ply) and ply:GetSprintStamina() > 0
+end
 
-	if CLIENT then
-		client = LocalPlayer()
+---
+-- Calculates the new stamina values for a given player.
+-- @param Player ply
+-- @realm shared
+function SPRINT:HandleStaminaCalculation(ply)
+	local staminaRegeneratonRate = self.convars.regeneration:GetFloat()
+	local staminaConsumptionRate = self.convars.consumption:GetFloat()
 
-		if not IsValid(client) then return end
+	local sprintStamina = ply:GetSprintStamina()
+	local playerWantsToSprint = self:PlayerWantsToSprint(ply)
+
+	if (sprintStamina == 1 and not playerWantsToSprint) or (sprintStamina == 0 and playerWantsToSprint) then
+		return
 	end
 
-	local plys = client and {client} or player.GetAll()
+	-- Note: This is a table, because it is passed by reference and multiple addons can adjust the value.
+	local rateModifier = { 1 }
+	local newStamina = 0
 
-	for i = 1, #plys do
-		local ply = plys[i]
+	if playerWantsToSprint then
+		---
+		-- @realm shared
+		hook.Run("TTT2StaminaDrain", ply, rateModifier)
 
-		if not ply:OnGround() then continue end
+		newStamina = math.max(sprintStamina - FrameTime() * rateModifier[1] * staminaConsumptionRate, 0)
+	else
+		---
+		-- @realm shared
+		hook.Run("TTT2StaminaRegen", ply, rateModifier)
 
-		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
-
-		if ply.sprintProgress == 1 and (not ply:GetSprintingPredicted() or not wantsToMove) then continue end
-		if ply.sprintProgress == 0 and ply:GetSprintingPredicted() and wantsToMove then
-			ply.sprintResetDelayCounter = ply.sprintResetDelayCounter + FrameTime()
-
-			-- If the player keeps sprinting even though they have no stamina, start refreshing stamina after 1.5 seconds automatically
-			if CLIENT and ply.sprintResetDelayCounter > 1.5 then
-				PlayerSprint(false, ply.moveKey)
-			end
-
-			continue
-		end
-
-		ply.sprintResetDelayCounter = 0
-
-		local modifier = {1} -- Multiple hooking support
-
-		if not ply:GetSprintingPredicted() or not wantsToMove then
-			---
-			-- @realm shared
-			hook.Run("TTT2StaminaRegen", ply, modifier)
-
-			ply.sprintProgress = math.min((ply.sprintProgress or 0) + FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
-		elseif wantsToMove then
-			---
-			-- @realm shared
-			hook.Run("TTT2StaminaDrain", ply, modifier)
-
-			ply.sprintProgress = math.max((ply.sprintProgress or 0) - FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
-		end
+		newStamina = math.min(sprintStamina + FrameTime() * rateModifier[1] * staminaRegeneratonRate, 1)
 	end
+
+	ply:SetSprintStamina(newStamina)
+end
+
+---
+-- Calculates the sprint speed multiplier value for a given player.
+-- @param Player ply
+-- @realm shared
+function SPRINT:HandleSpeedMultiplierCalculation(ply)
+	if not self:IsSprinting(ply) then
+		return 1
+	end
+
+	local sprintMultiplierModifier = { 1 }
+
+	---
+	-- @realm shared
+	hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
+
+	return (1 + self.convars.multiplier:GetFloat()) * sprintMultiplierModifier[1]
 end
 
 ---
@@ -173,9 +126,7 @@ end
 -- @param table modifierTbl The table in which the modifier can be changed
 -- @hook
 -- @realm shared
-function GM:TTT2StaminaRegen(ply, modifierTbl)
-
-end
+function GM:TTT2StaminaRegen(ply, modifierTbl) end
 
 ---
 -- A hook that is called once every frame/tick to modify the stamina drain.
@@ -184,6 +135,4 @@ end
 -- @param table modifierTbl The table in which the modifier can be changed
 -- @hook
 -- @realm shared
-function GM:TTT2StaminaDrain(ply, modifierTbl)
-
-end
+function GM:TTT2StaminaDrain(ply, modifierTbl) end

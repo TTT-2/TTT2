@@ -4,7 +4,6 @@
 local IsValid = IsValid
 local hook = hook
 local team = team
-local UpdateSprint = UpdateSprint
 
 local MAX_DROWN_TIME = 8
 
@@ -243,8 +242,20 @@ function GM:Move(ply, moveData)
 
 	local mul = ply:GetSpeedMultiplier()
 
+	mul = mul * SPRINT:HandleSpeedMultiplierCalculation(ply)
+
 	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
 	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
+end
+
+-- @param Player ply The player
+-- @param MoveData moveData Movement information
+-- @predicted
+-- @hook
+-- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:FinishMove
+function GM:FinishMove(ply, moveData)
+	SPRINT:HandleStaminaCalculation(ply)
 end
 
 local ttt_playercolors = {
@@ -308,8 +319,6 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:Think
 function GM:Think()
-	UpdateSprint()
-
 	if CLIENT then
 		EPOP:Think()
 	end
@@ -321,10 +330,8 @@ end
 -- @param Player ply The player whose sprint speed should be changed
 -- @param table sprintMultiplierModifier The modieable table with the sprint speed multiplier
 -- @hook
--- @realm server
-function GM:TTT2PlayerSprintMultiplier(ply, sprintMultiplierModifier)
-
-end
+-- @realm shared
+function GM:TTT2PlayerSprintMultiplier(ply, sprintMultiplierModifier) end
 
 ---
 -- A hook that is called whenever the gamemode needs to check if the player is in the superadmin usergroup.

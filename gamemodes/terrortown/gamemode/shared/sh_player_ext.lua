@@ -9,6 +9,7 @@ local IsValid = IsValid
 local hook = hook
 local math = math
 
+---@class Player
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
@@ -16,27 +17,10 @@ if not plymeta then
 	return
 end
 
----
--- Dummy functions that will be replaced when SetupDataTables runs. These are
--- here for when that does not happen (due to e.g. stacking base classes)
--- @return[default=false] boolean
--- @realm shared
-function plymeta:GetSprintingPredicted()
-	return false
-end
-
----
--- Dummy functions that will be replaced when SetupDataTables runs. These are
--- here for when that does not happen (due to e.g. stacking base classes)
--- @realm shared
-function plymeta:SetSprintingPredicted()
-
-end
-
 function plymeta:SetupDataTables()
-	self:NetworkVar("Bool", 3, "SprintingPredicted")
-
-	plymeta.SetupDataTables(self)
+	-- This has to be transferred, because we need the value when predicting the player movement
+	-- It turned out that this is the only reliable way to fix all prediction errors.
+	self:NetworkVar("Float", 0, "SprintStamina")
 end
 
 ---
