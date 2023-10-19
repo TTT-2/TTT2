@@ -410,7 +410,7 @@ function GM:HUDDrawTargetID()
 
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
-	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, Z)
+	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, COLOR_WHITE)
 end
 
 ---

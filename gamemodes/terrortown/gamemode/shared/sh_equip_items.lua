@@ -1,6 +1,6 @@
 ---
 -- This table is used by the client to show items in the equipment menu, and by
--- the server to check if a certain role is allowed to buy a certain item.local math = math
+-- the server to check if a certain role is allowed to buy a certain item.
 -- @section Equipment
 
 local table = table
@@ -9,6 +9,7 @@ local player = player
 local pairs = pairs
 local util = util
 local hook = hook
+local math = math
 
 -- Details you shouldn't need:
 -- The number should increase by a factor of two for every item (ie. ids
@@ -759,7 +760,7 @@ end
 -- @internal
 -- @realm shared
 function InitFallbackShops()
-	local tbl = {TRAITOR, DETECTIVE}
+	local tbl = {roles.TRAITOR, roles.DETECTIVE}
 
 	for i = 1, #tbl do
 		local v = tbl[i]
@@ -857,7 +858,7 @@ end
 -- @realm shared
 -- @local
 local function ValueToKey(tbl)
-	local tmp = tmp or {}
+	local tmp = {}
 
 	for key, value in pairs(tbl) do
 		tmp[value] = value
@@ -890,8 +891,8 @@ end
 -- @realm shared
 function InitDefaultEquipment(eq)
 	CleanUpDefaultCanBuyIndices(eq)
-	InitDefaultEquipmentForRole(TRAITOR, eq)
-	InitDefaultEquipmentForRole(DETECTIVE, eq)
+	InitDefaultEquipmentForRole(roles.TRAITOR, eq)
+	InitDefaultEquipmentForRole(roles.DETECTIVE, eq)
 end
 
 ---
@@ -967,8 +968,8 @@ end
 -- @realm shared
 function ResetDefaultEquipment(eq)
 	CleanUpDefaultCanBuyIndices(eq)
-	ResetDefaultEquipmentForRole(TRAITOR, eq)
-	ResetDefaultEquipmentForRole(DETECTIVE, eq)
+	ResetDefaultEquipmentForRole(roles.TRAITOR, eq)
+	ResetDefaultEquipmentForRole(roles.DETECTIVE, eq)
 end
 
 if SERVER then

@@ -188,7 +188,7 @@ do
 	encode['NextBot'] = encode['Entity']
 	encode['PhysObj'] = encode['Entity']
 
-	encode['nil'] = function()
+	encode['nil'] = function(self, val, output)
 		output[#output + 1] = '?'
 	end
 

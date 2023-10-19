@@ -54,12 +54,14 @@ function orm.Make(tableName, force)
 	local columnList = {nil, nil}
 
 	for i = 1, #primaryKey do
+		---@cast primaryKey -nil
 		columnList[i] = sql.SQLIdent(primaryKey[i])
 	end
 
 	model._primaryKeyList = table.concat(columnList, ",")
 
 	for i = 1, #dataStructure do
+		---@cast dataStructure -nil
 		columnList[i] = sql.SQLIdent(dataStructure[i])
 	end
 

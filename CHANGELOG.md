@@ -24,6 +24,21 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
 
+### Fixed
+
+- Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
+- Multiple internal fixes
+  - biggest teamkiller award should now work
+  - item model caching should now work properly
+  - role info popup for traitors should now show teammembers again if the traitor shop is disabled
+  - `pon` and `table` libraries got a small fix respectively
+  - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
+  - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
+
+### Removed
+
+- Removed `AccessorfuncDT()` in favor of using gmod's `Accessorfunc()`
+
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 
 ### Added

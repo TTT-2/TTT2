@@ -126,9 +126,9 @@ local fallback_mat = Material("vgui/ttt/missing_equip_icon")
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
-local eqframe = eqframe
-local dlist = dlist
-local curSearch = curSearch
+local eqframe = nil
+local dlist = nil
+local curSearch = nil
 
 --
 --     GENERAL HELPER FUNCTIONS
@@ -340,6 +340,7 @@ local function CreateEquipmentList(t)
 
 	-- icon size = 64 x 64
 	if IsValid(dlist) then
+		---@cast dlist -nil
 		dlist:Clear()
 	else
 		TraitorMenuPopup()
@@ -449,7 +450,7 @@ local function CreateEquipmentList(t)
 				if ItemIsWeapon(item) and showSlotVar:GetBool() then
 					local slot = vgui.Create("SimpleIconLabelled")
 					slot:SetIcon("vgui/ttt/slotcap")
-					slot:SetIconColor(col or COLOR_GREY)
+					slot:SetIconColor(col or COLOR_LGRAY)
 					slot:SetIconSize(16)
 					slot:SetIconText(MakeKindValid(item.Kind))
 					slot:SetIconProperties(COLOR_WHITE,
@@ -506,6 +507,7 @@ local function CreateEquipmentList(t)
 				net.WriteString(self.item.id)
 				net.SendToServer()
 
+				---@cast eqframe -nil
 				eqframe:Close()
 			end
 		end
@@ -590,7 +592,8 @@ function TraitorMenuPopup()
 	local h = dlisth + 75
 
 	-- Close shop if player clicks button again
-	if eqframe and IsValid(eqframe) then
+	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 
 		return
@@ -602,7 +605,8 @@ function TraitorMenuPopup()
 	end
 
 	-- Close any existing traitor menu
-	if eqframe and IsValid(eqframe) then
+	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 	end
 
@@ -689,7 +693,7 @@ function TraitorMenuPopup()
 	local dconfirm = vgui.Create("DButton", dbtnpnl)
 	dconfirm:SetPos(m, m)
 	dconfirm:SetSize(bw, bh)
-	dconfirm:SetDisabled(true)
+	dconfirm:SetEnabled(false)
 	dconfirm:SetText(GetTranslation("equip_confirm"))
 
 	--add a favorite button
@@ -697,7 +701,7 @@ function TraitorMenuPopup()
 	dfav:CopyPos(dconfirm)
 	dfav:MoveRightOf(dconfirm)
 	dfav:SetSize(bh, bh)
-	dfav:SetDisabled(false)
+	dfav:SetEnabled(true)
 	dfav:SetText("")
 	dfav:SetImage("icon16/star.png")
 
@@ -705,7 +709,7 @@ function TraitorMenuPopup()
 	local dcancel = vgui.Create("DButton", dframe)
 	dcancel:SetPos(w - m * 3 - bw, h - bh - m * 3)
 	dcancel:SetSize(bw, bh)
-	dcancel:SetDisabled(false)
+	dcancel:SetEnabled(true)
 	dcancel:SetText(GetTranslation("close"))
 
 	local _, bpy = dbtnpnl:GetPos()
@@ -874,7 +878,7 @@ function TraitorMenuPopup()
 		-- Easy accessable var for double-click buying
 		new.item.disabledBuy = not can_order
 
-		dconfirm:SetDisabled(not can_order)
+		dconfirm:SetEnabled(can_order)
 	end
 
 	-- select first
@@ -904,7 +908,7 @@ function TraitorMenuPopup()
 
 		dlist.SelectedPanel.item.disabledBuy = not can_order
 
-		dconfirm:SetDisabled(not can_order)
+		dconfirm:SetEnabled(can_order)
 	end
 
 	dcancel.DoClick = function()
@@ -946,6 +950,7 @@ concommand.Add("ttt_cl_traitorpopup", TraitorMenuPopup)
 
 local function ForceCloseTraitorMenu(ply, cmd, args)
 	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 	end
 end
@@ -1098,6 +1103,7 @@ function GM:OnContextMenuOpen()
 	if hook.Run("TTT2PreventAccessShop", LocalPlayer()) then return end
 
 	if IsValid(eqframe) then
+		---@cast eqframe -nil
 		eqframe:Close()
 	else
 		RunConsoleCommand("ttt_cl_traitorpopup")
@@ -1119,7 +1125,7 @@ function TTT2CacheEquipMaterials(item)
 	elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
 		--do not use fallback mat and use model instead
 		item.ttt2_cached_material = nil
-		item.ttt2_cached_model = model
+		item.ttt2_cached_model = item.model
 	end
 end
 
@@ -1136,6 +1142,7 @@ end)
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
 	if not IsValid(eqframe) then return end
 
+	---@cast eqframe -nil
 	eqframe:Close()
 end)
 
@@ -1143,12 +1150,14 @@ end)
 hook.Add("TTTEndRound", "TTTBEMCleanUp", function()
 	if not IsValid(eqframe) then return end
 
+	---@cast eqframe -nil
 	eqframe:Close()
 end)
 
 -- Search text field focus hooks
 local function getKeyboardFocus(pnl)
 	if IsValid(eqframe) and pnl:HasParent(eqframe) then
+		---@cast eqframe -nil
 		eqframe:SetKeyboardInputEnabled(true)
 	end
 
@@ -1161,6 +1170,7 @@ hook.Add("OnTextEntryGetFocus", "BEM_GetKeyboardFocus", getKeyboardFocus)
 local function loseKeyboardFocus(pnl)
 	if not IsValid(eqframe) or not pnl:HasParent(eqframe) then return end
 
+	---@cast eqframe -nil
 	eqframe:SetKeyboardInputEnabled(false)
 end
 hook.Add("OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus)

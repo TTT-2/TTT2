@@ -133,7 +133,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	buttonEditor.DoClick = function(btn)
 		if not currentHUDName then return end
 
-		HUDEditor.EditHUD(currentHUDName)
+		HUDEditor.EditHUD()
 
 		HELPSCRN.menuFrame:HideFrame()
 	end

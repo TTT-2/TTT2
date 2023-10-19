@@ -338,23 +338,29 @@ end
 
 local convarTracker = 0
 ---
--- @param Panel menu to set the value of
+-- @param Panel panel to set the value of
 -- @param string conVar name of the convar
-local function AddConVarChangeCallback(menu, conVar)
-	convarTracker = convarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuConVarChangeCallback" .. tostring(convarTracker)
+local function AddConVarChangeCallback(panel, conVar)
+	convarTracker = convarTracker + 1
+	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(convarTracker)
 
-	local function OnConVarChangeCallback(conVarName, oldValue, newValue)
-		if not IsValid(menu) then
-			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
+	local callback = function(conVarName, oldValue, newValue)
+		if not IsValid(panel) then
+			-- We need to remove the callback in a timer, because otherwise the ConVar change callback code
+			-- will throw an error while looping over the callbacks.
+			-- This happens, because the callback is removed from the same table that is iterated over.
+			-- Thus, the table size changes while iterating over it and leads to a nil callback as the last entry.
+			timer.Simple(0, function()
+				cvars.RemoveChangeCallback(conVarName, myIdentifierString)
+			end)
 
 			return
 		end
 
-		menu:SetValue(newValue, true)
+		panel:SetValue(newValue, true)
 	end
 
-	cvars.AddChangeCallback(conVar, OnConVarChangeCallback, myIdentifierString)
+	cvars.AddChangeCallback(conVar, callback, myIdentifierString)
 end
 
 ---
