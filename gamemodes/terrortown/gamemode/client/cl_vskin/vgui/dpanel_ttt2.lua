@@ -72,7 +72,7 @@ function PANEL:Init()
 end
 
 ---
--- @param boolean
+-- @param bDisabled boolean
 -- @realm client
 function PANEL:SetDisabled(bDisabled)
 	self.m_bDisabled = bDisabled
@@ -87,7 +87,7 @@ function PANEL:SetDisabled(bDisabled)
 end
 
 ---
--- @param boolean
+-- @param bEnabled boolean
 -- @realm client
 function PANEL:SetEnabled(bEnabled)
 	self:SetDisabled(not bEnabled)
@@ -101,7 +101,7 @@ function PANEL:IsEnabled()
 end
 
 ---
--- @param number
+-- @param mousecode number
 -- @realm client
 function PANEL:OnMousePressed(mousecode)
 	if self:IsSelectionCanvas() and not dragndrop.IsDragging() then
@@ -117,7 +117,7 @@ function PANEL:OnMousePressed(mousecode)
 end
 
 ---
--- @param number
+-- @param mousecode number
 -- @realm client
 function PANEL:OnMouseReleased(mousecode)
 	if self:EndBoxSelection() then return end
@@ -186,7 +186,7 @@ function PANEL:HasTooltipFixedSize()
 end
 
 ---
--- @param number
+-- @param delay number
 -- @realm client
 function PANEL:SetTooltipOpeningDelay(delay)
 	self.tooltip.delay = delay

@@ -272,7 +272,7 @@ end
 
 ---
 -- Resynces the list of @{Player}s for a given list of @{Player}s
--- @param nil|Player|table
+-- @param nil|Player|table ply_or_rf
 -- @realm server
 function SendRoleReset(ply_or_rf)
 	local players = player.GetAll()
