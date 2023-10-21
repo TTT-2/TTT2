@@ -29,7 +29,7 @@ function PANEL:Init()
 		title_font = "DermaTTT2SubMenuButtonTitle",
 		icon = nil,
 		iconFullSize = false,
-		selected = false
+		selected = false,
 	}
 end
 

@@ -8,7 +8,6 @@ local surface = surface
 local draw = draw
 local GetPlayers = player.GetAll
 local math = math
-local table = table
 local IsValid = IsValid
 local hook = hook
 local targetid = targetid
@@ -28,19 +27,19 @@ local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
-local cvEnableSpectatorsoutline = CreateConVar("ttt2_enable_spectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+local cvEnableSpectatorsoutline = CreateConVar("ttt2_enable_spectatorsoutline", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
 ---
 -- @realm client
-local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
-surface.CreateAdvancedFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
-surface.CreateAdvancedFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
-surface.CreateAdvancedFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
-surface.CreateAdvancedFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
+surface.CreateAdvancedFont("TargetID_Key", { font = "Trebuchet24", size = 26, weight = 900 })
+surface.CreateAdvancedFont("TargetID_Title", { font = "Trebuchet24", size = 20, weight = 900 })
+surface.CreateAdvancedFont("TargetID_Subtitle", { font = "Trebuchet24", size = 17, weight = 300 })
+surface.CreateAdvancedFont("TargetID_Description", { font = "Trebuchet24", size = 15, weight = 300 })
 
 -- keep this font for compatibility reasons
-surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
+surface.CreateFont("TargetIDSmall2", { font = "TargetID", size = 16, weight = 1000 })
 
 -- cache colors
 local colorBlacktrans = Color(0, 0, 0, 180)
@@ -52,29 +51,6 @@ local materialBase = Material("vgui/ttt/dynamic/sprite_base")
 local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 
 ---
--- Returns the localized ClassHint table
--- Access for servers to display hints using their own HUD/UI.
--- @return table
--- @hook
--- @realm client
-function GM:GetClassHints()
-	return ClassHint
-end
-
----
--- Sets an index of the localized ClassHint table
--- @note Basic access for servers to add/modify hints. They override hints stored on
--- the entities themselves.
--- @param string cls
--- @param table hint
--- @hook
--- @realm client
--- @local
-function GM:AddClassHint(cls, hint)
-	ClassHint[cls] = table.Copy(hint)
-end
-
----
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
 -- @param Player ply The player to receive an overhead icon
@@ -83,7 +59,9 @@ end
 -- @realm client
 function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
-	if ply == client then return end
+	if ply == client then
+		return
+	end
 
 	-- get position of player
 	local pos = ply:GetPos()
@@ -166,7 +144,9 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if not cvEnableOverheadicons:GetBool() then return end
+	if not cvEnableOverheadicons:GetBool() then
+		return
+	end
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -181,9 +161,9 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		-- @realm client
 		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
-		if shouldDraw == false
-			or not shouldDrawDefault and not (material and color)
-		then continue end
+		if shouldDraw == false or not shouldDrawDefault and not (material and color) then
+			continue
+		end
 
 		DrawOverheadRoleIcon(ply, material or rd.iconMaterial, color or ply:GetRoleColor())
 	end
@@ -192,7 +172,9 @@ end
 ---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
-	if not client:IsSpec() and GetRoundState() ~= ROUND_POST then return end
+	if not client:IsSpec() and GetRoundState() ~= ROUND_POST then
+		return
+	end
 
 	surface.SetFont("TabLarge")
 
@@ -223,7 +205,9 @@ local function DrawPropSpecLabels(client)
 			scrpos = scrpos:ToScreen()
 		end
 
-		if scrpos == nil or util.IsOffScreen(scrpos) then continue end
+		if scrpos == nil or util.IsOffScreen(scrpos) then
+			continue
+		end
 
 		text = ply:Nick()
 		w = surface.GetTextSize(text)
@@ -251,7 +235,7 @@ function GM:HUDDrawTargetID()
 	local ent, unchangedEnt, distance
 	local startpos = client:EyePos()
 	local direction = client:GetAimVector()
-	local filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+	local filter = client:GetObserverMode() == OBS_MODE_IN_EYE and { client, client:GetObserverTarget() } or client
 
 	ent, distance = targetid.FindEntityAlongView(startpos, direction, filter)
 
@@ -265,7 +249,9 @@ function GM:HUDDrawTargetID()
 	end
 
 	-- make sure it is a valid entity
-	if not IsValid(ent) or ent.NoTarget then return end
+	if not IsValid(ent) or ent.NoTarget then
+		return
+	end
 
 	-- call internal targetID functions first so the data can be modified by addons
 	local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
@@ -289,14 +275,12 @@ function GM:HUDDrawTargetID()
 
 	-- draws an outline around the entity if defined
 	if params.drawOutline and cvDrawHalo:GetBool() then
-		outline.Add(
-			data.ent,
-			appearance.SelectFocusColor(params.outlineColor),
-			OUTLINE_MODE_VISIBLE
-		)
+		outline.Add(data.ent, appearance.SelectFocusColor(params.outlineColor), OUTLINE_MODE_VISIBLE)
 	end
 
-	if not params.drawInfo then return end
+	if not params.drawInfo then
+		return
+	end
 
 	-- render on display text
 	local pad = 4
@@ -321,7 +305,15 @@ function GM:HUDDrawTargetID()
 		drawsc.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
 
 		drawsc.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-		drawsc.AdvancedShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		drawsc.AdvancedShadowedText(
+			key_string,
+			"TargetID_Key",
+			key_string_x,
+			key_string_y,
+			COLOR_WHITE,
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER
+		)
 	end
 
 	-- draw icon
@@ -351,12 +343,28 @@ function GM:HUDDrawTargetID()
 	local title_string_y = key_box_y + title_string_h - 4
 
 	for i = 1, #params.displayInfo.title.icons do
-		drawsc.FilteredShadowedTexture(title_string_x, title_string_y - 16, 14, 14, params.displayInfo.title.icons[i], params.displayInfo.title.color.a, params.displayInfo.title.color)
+		drawsc.FilteredShadowedTexture(
+			title_string_x,
+			title_string_y - 16,
+			14,
+			14,
+			params.displayInfo.title.icons[i],
+			params.displayInfo.title.color.a,
+			params.displayInfo.title.color
+		)
 
 		title_string_x = title_string_x + 18
 	end
 
-	drawsc.AdvancedShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	drawsc.AdvancedShadowedText(
+		title_string,
+		"TargetID_Title",
+		title_string_x,
+		title_string_y,
+		params.displayInfo.title.color,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_BOTTOM
+	)
 
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
@@ -365,12 +373,28 @@ function GM:HUDDrawTargetID()
 	local subtitle_string_y = key_box_y + key_box_h + 2
 
 	for i = 1, #params.displayInfo.subtitle.icons do
-		drawsc.FilteredShadowedTexture(subtitle_string_x, subtitle_string_y - 14, 12, 12, params.displayInfo.subtitle.icons[i], params.displayInfo.subtitle.color.a, params.displayInfo.subtitle.color)
+		drawsc.FilteredShadowedTexture(
+			subtitle_string_x,
+			subtitle_string_y - 14,
+			12,
+			12,
+			params.displayInfo.subtitle.icons[i],
+			params.displayInfo.subtitle.color.a,
+			params.displayInfo.subtitle.color
+		)
 
 		subtitle_string_x = subtitle_string_x + 16
 	end
 
-	drawsc.AdvancedShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	drawsc.AdvancedShadowedText(
+		subtitle_string,
+		"TargetID_Subtitle",
+		subtitle_string_x,
+		subtitle_string_y,
+		params.displayInfo.subtitle.color,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_BOTTOM
+	)
 
 	-- in cvMinimalisticTid mode, no descriptions should be shown
 	local desc_line_amount, desc_line_h = 0, 0
@@ -396,7 +420,15 @@ function GM:HUDDrawTargetID()
 				desc_string_x_loop = desc_string_x_loop + 14
 			end
 
-			drawsc.AdvancedShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			drawsc.AdvancedShadowedText(
+				text,
+				"TargetID_Description",
+				desc_string_x_loop,
+				desc_string_y,
+				color,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_BOTTOM
+			)
 			desc_string_y = desc_string_y + desc_line_h
 		end
 	end
@@ -406,7 +438,8 @@ function GM:HUDDrawTargetID()
 	local spacer_line_y = key_box_y
 
 	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
-	local spacer_line_text_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+	local spacer_line_text_l = key_box_h
+		+ ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
 
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
@@ -418,9 +451,7 @@ end
 -- @param TARGET_DATA tData The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
-function GM:TTTRenderEntityInfo(tData)
-
-end
+function GM:TTTRenderEntityInfo(tData) end
 
 ---
 -- Change the focused entity used for targetID.
@@ -429,9 +460,7 @@ end
 -- @return Entity The new entity to replace the real one
 -- @hook
 -- @realm client
-function GM:TTTModifyTargetedEntity(ent, distance)
-
-end
+function GM:TTTModifyTargetedEntity(ent, distance) end
 
 ---
 -- Change the starting position for the trace that looks for entites.
@@ -440,9 +469,7 @@ end
 -- @return Vector, Vector The new startpos for the trace, the new endpos for the trace
 -- @hook
 -- @realm client
-function GM:TTTModifyTargetTracedata(startpos, endpos)
-
-end
+function GM:TTTModifyTargetTracedata(startpos, endpos) end
 
 ---
 -- Can be used to modify, disable or add an overhead icon of a player.
@@ -453,6 +480,4 @@ end
 -- @return Color The color of the overhead icon backdrop
 -- @hook
 -- @realm client
-function GM:TTT2ModifyOverheadIcon(ply, shouldDrawDefault)
-
-end
+function GM:TTT2ModifyOverheadIcon(ply, shouldDrawDefault) end
