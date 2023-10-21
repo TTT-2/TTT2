@@ -99,7 +99,7 @@ function PANEL:IsIconFullSize()
 end
 
 ---
--- @param active boolean
+-- @param boolean active
 -- @realm client
 function PANEL:SetActive(active)
 	self.contents.active = active == nil and true or active
