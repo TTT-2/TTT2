@@ -120,12 +120,12 @@ end
 
 ---
 -- Creates an equipment
--- @param eq
+-- @param table eq
 -- @return table equipment table
 -- @internal
 -- @realm shared
 function CreateEquipment(eq)
-	if not eq.Doublicated then
+	if not eq.Duplicated then
 		return GetEquipmentBase(eq)
 	end
 end
@@ -254,7 +254,7 @@ if CLIENT then
 			for i = 1, #itms do
 				v = itms[i]
 
-				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
+				if v and not v.Duplicated and v.CanBuy and v.CanBuy[fallback] then
 					local base = GetEquipmentBase(v)
 					if base then
 						tbl[#tbl + 1] = base
@@ -268,7 +268,7 @@ if CLIENT then
 			for i = 1, #weps do
 				v = weps[i]
 
-				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
+				if v and not v.Duplicated and v.CanBuy and v.CanBuy[fallback] then
 					local base = GetEquipmentBase(v)
 					if base then
 						tbl[#tbl + 1] = base
@@ -833,7 +833,7 @@ local function InitDefaultEquipmentForRole(roleData, eq)
 	local tbl = roleData.fallbackTable or {}
 
 	-- is a buyable equipment to load info from
-	if not eq or eq.Doublicated or not eq.CanBuy or not eq.CanBuy[roleData.index] then return end
+	if not eq or eq.Duplicated or not eq.CanBuy or not eq.CanBuy[roleData.index] then return end
 
 	local base = GetEquipmentBase(eq)
 	if not base then return end
@@ -906,7 +906,7 @@ local function ResetDefaultEquipmentForRole(roleData, eq)
 	local tblSize = #tbl
 
 	-- is a buyable equipment to load info from
-	if not eq or eq.Doublicated then return end
+	if not eq or eq.Duplicated then return end
 
 	local base = GetEquipmentBase(eq)
 	if not base then return end
@@ -1215,7 +1215,7 @@ else -- CLIENT
 		equip.CanBuy = equip.CanBuy or {}
 		equip.CanBuy[subrole] = subrole
 
-		if equip and not equip.Doublicated then
+		if equip and not equip.Duplicated then
 			local base = GetEquipmentBase(equip)
 			if base then
 				toadd = base
