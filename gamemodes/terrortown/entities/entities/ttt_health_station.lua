@@ -5,7 +5,7 @@
 
 if SERVER then
 	AddCSLuaFile()
-else -- CLIENT
+else
 	-- this entity can be DNA-sampled so we need some display info
 	ENT.Icon = "vgui/ttt/icon_health"
 	ENT.PrintName = "hstation_name"
@@ -26,11 +26,6 @@ ENT.HealRate = 1
 ENT.HealFreq = 0.2
 
 ---
--- @accessor number
--- @realm shared
-AccessorFunc(ENT, "StoredHealth", "StoredHealth", FORCE_NUMBER)
-
----
 -- @accessor Player
 -- @realm shared
 AccessorFunc(ENT, "Placer", "Placer")
@@ -38,7 +33,7 @@ AccessorFunc(ENT, "Placer", "Placer")
 ---
 -- @realm shared
 function ENT:SetupDataTables()
-	self:DTVar("Int", 0, "StoredHealth")
+	self:NetworkVar("Int", 0, "StoredHealth")
 end
 
 ---
@@ -215,7 +210,7 @@ if SERVER then
 			LANG.Msg(self:GetPlacer(), "hstation_broken")
 		end
 	end
-else -- CLIENT
+else
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
