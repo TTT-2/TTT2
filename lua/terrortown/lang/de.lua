@@ -1258,7 +1258,7 @@ L.tooltip_finish_score_alive_all = "Lebende Spieler: {score}"
 L.tooltip_finish_score_timelimit = "Zeit vorbei: {score}"
 L.tooltip_finish_score_dead_enemies = "Tote Gegner: {score}"
 L.tooltip_kill_score = "Mord: {score}"
-L.tooltip_bodyfound_score = "Leiche gefunden: {score}"
+L.tooltip_bodyfound_score = "Leichenfund: {score}"
 
 L.finish_score_alive_teammates = "Lebende Teammitglieder:"
 L.finish_score_alive_all = "Lebende Spieler:"
@@ -1354,7 +1354,7 @@ L.karma_roundheal_tooltip = "Karma wiederhergestellt"
 L.karma_unknown_tooltip = "Unbekannt"
 
 -- 2021-05-07
-L.header_random_shop_administration = "Zufalls-Shop Einstellungen"
+L.header_random_shop_administration = "Zufallsshop Einstellungen"
 L.header_random_shop_value_administration = "Balance Einstellungen"
 
 L.shopeditor_name_random_shops = "Aktiviere Zufalls-Shop"
@@ -1362,7 +1362,7 @@ L.shopeditor_desc_random_shops = [[Zufallsshops geben jedem Spieler ein begrenzt
 Teamshops geben allen Spielern in einem Team zwangsweise dasselbe Set, anstelle von individuellen.
 Das Neuauswürfeln ermöglicht es dir, für Credits ein neues zufälliges Ausrüstungsset zu erhalten.]]
 L.shopeditor_name_random_shop_items = "Anzahl zufälliger Equipments"
-L.shopeditor_desc_random_shop_items = "Dies schließt Ausrüstungen ein, die mit \"Immer im Shop verfügbar\" markiert sind. Wähle also eine ausreichend hohe Zahl, oder du bekommst nur diese."
+L.shopeditor_desc_random_shop_items = "Dies schließt Ausrüstungsgegenstände ein, die mit \"Immer im Shop verfügbar\" markiert sind. Wähle also eine ausreichend hohe Zahl, oder du bekommst nur diese."
 L.shopeditor_name_random_team_shops = "Aktiviere Team-Shops"
 L.shopeditor_name_random_shop_reroll = "Aktiviere Möglichkeit Shop neu auszuwürfeln"
 L.shopeditor_name_random_shop_reroll_cost = "Kosten pro Auswürfeln"
@@ -1394,12 +1394,12 @@ L.equip_inherit_removed = "entfernt (geerbt)"
 -- 2021-06-09
 L.layering_not_layered = "Ohne Ebene"
 L.layering_layer = "Ebene {layer}"
-L.header_rolelayering_role = "{role}-Schichtung"
+L.header_rolelayering_role = "{role}-Ebene"
 L.header_rolelayering_baserole = "Basisrollenebenen"
 L.submenu_administration_rolelayering_title = "Rollenebenen"
 L.header_rolelayering_info = "Rollenebeneninformationen"
 L.help_rolelayering_roleselection = "Der Rollenverteilungsprozess ist in zwei Phasen unterteilt. In der ersten Phase werden Basisrollen verteilt, zu denen Unschuldige, Verräter und diejenigen gehören, welche in der 'Basisrollenebene' unten aufgeführt sind. Die zweite Phase dient dazu, diese Basisrollen zu Unterrollen aufzuwerten."
-L.help_rolelayering_layers = "Aus jeder Schicht wird nur eine Rolle ausgewählt. Zuerst werden die Rollen aus den benutzerdefinierten Schichten verteilt, beginnend mit der ersten Schicht, bis die letzte erreicht ist oder keine Rollen mehr aufgewertet werden können. Was auch immer zuerst passiert, wenn noch aufwertbare Slots verfügbar sind, werden auch die nicht geschichteten Rollen verteilt."
+L.help_rolelayering_layers = "Aus jeder Ebene wird nur eine Rolle ausgewählt. Zuerst werden die Rollen aus den benutzerdefinierten Ebenen verteilt, beginnend mit der ersten Ebene, bis die letzte erreicht ist oder keine Rollen mehr aufgewertet werden können. Was auch immer zuerst passiert, wenn noch aufwertbare Slots verfügbar sind, werden auch die nicht geschichteten Rollen verteilt."
 L.scoreboard_voice_tooltip = "Scrolle um die Lautstärke zu ändern"
 
 -- 2021-06-15
@@ -1691,7 +1691,7 @@ L.help_item_armor_dynamic = [[
 Die dynamische Rüstung ist der Ansatz von TTT2, um Rüstung interessanter zu gestalten. Die Menge an Rüstung, die gekauft werden kann, ist jetzt unbegrenzt, und der Rüstungswert stapelt sich. Bei Verletzungen wird der Rüstungswert verringert. Der Rüstungswert pro gekauftem Rüstungsgegenstand wird in den 'Ausrüstungseinstellungen' dieses Gegenstands festgelegt.
 
 Bei Schäden wird ein bestimmter Prozentsatz dieses Schadens in Rüstungsschaden umgewandelt, ein anderer Prozentsatz wird immer noch auf den Spieler angewendet und der Rest verschwindet.
-    
+
 Wenn verstärkte Rüstung aktiviert ist, wird der dem Spieler zugefügte Schaden um 15% verringert, solange der Rüstungswert über der Verstärkungsschwelle liegt.]]
 L.help_sherlock_mode = "Der Sherlock-Modus ist der klassische TTT-Modus. Wenn der Sherlock-Modus deaktiviert ist, können tote Körper nicht bestätigt werden, das Scoreboard zeigt jeden als lebendig an, und die Zuschauer können mit den lebenden Spielern sprechen."
 L.help_prop_possession = [[
