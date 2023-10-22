@@ -1857,7 +1857,7 @@ L.slot_weapon_class = "职业槽"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "尸体搜索结果"
 L.search_info = "信息"
 L.search_confirm = "确认死亡"

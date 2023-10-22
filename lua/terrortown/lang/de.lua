@@ -915,7 +915,7 @@ L.target_switch_weapon_nospace = "Es ist kein Invetarplatz frei für diese Waffe
 L.target_switch_drop_weapon_info = "Lasse {name} aus Inventarplatz {slot} fallen"
 L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine wegwerfbare Waffe"
 
-L.corpse_searched_by_detective = "Diese Leiche wurde von einer bekannten Kontrollrolle untersucht"
+L.corpse_searched_by_detective = "Diese Leiche wurde von einer öffentlichen Ordnungsrolle untersucht"
 L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
 
 L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
@@ -1715,10 +1715,8 @@ L.label_session_limits_enabled = "Aktiviere Sitzungs Limitierungen"
 L.label_spectator_chat = "Aktiviere, dass Zuschauer mit jedem chatten können"
 L.label_lastwords_chatprint = "Gib die letzten Worte im Chat aus, wenn der Spieler getötet wird, während er tippt"
 L.label_identify_body_woconfirm = "Leichnam identifizieren, ohne die Schaltfläche 'Tod Bestätigen' drücken zu müssen."
-L.label_announce_body_found = "Verkünden, dass ein Körper gefunden wurde"
+--L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 L.label_confirm_killlist = "Die Todesliste des bestätigten Leichnams verkünden"
-L.label_inspect_detective_only = "Leichenuntersuchung auf Ordnungsrollen beschränken"
-L.label_confirm_detective_only = "Leichenbestätigung auf Ordnungsrollen beschränken"
 L.label_dyingshot = "Beim Tod schießen, wenn Visier aktiv [experimentell]"
 L.label_armor_block_headshots = "Aktiviere das Blockieren von Kopfschüssen durch Rüstung"
 L.label_armor_block_blastdmg = "Aktiviere das Blockieren von Explosionsschaden durch Rüstung"
@@ -1852,7 +1850,7 @@ L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "Ergebnisse der Leichenuntersuchung"
 L.search_info = "Information"
 L.search_confirm = "Tod bestätigen"

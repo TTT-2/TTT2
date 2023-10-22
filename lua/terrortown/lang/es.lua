@@ -1853,7 +1853,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "Resultados de búsqueda"
 L.search_info = "Información"
 L.search_confirm = "Confirmar Muerte"

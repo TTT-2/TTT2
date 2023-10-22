@@ -1853,7 +1853,7 @@ L.karma_unknown_tooltip = "Inconnu"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "Résultats de la fouille"
 L.search_info = "Information"
 L.search_confirm = "Confirmer la mort"

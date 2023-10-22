@@ -1849,7 +1849,7 @@ L.help_falldmg_exponent = [[
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "調査結果"
 L.search_info = "情報"
 L.search_confirm = "確認済み"

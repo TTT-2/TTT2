@@ -1856,7 +1856,7 @@ L.tbut_adminarea = "Администраторская зона:"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "Результаты осмотра тела"
 L.search_info = "Информация"
 L.search_confirm = "Подтвердить смерть"

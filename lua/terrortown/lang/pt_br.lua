@@ -1881,7 +1881,7 @@ L.xfer_team_indicator = "Time"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "Resultados de investigação corporal"
 L.search_info = "Informação"
 L.search_confirm = "Confirmar Morte"

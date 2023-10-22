@@ -1853,7 +1853,7 @@ L.none = "Brak Roli"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
 
--- Body search window
+-- 2023-10-07
 L.search_title = "Rezultaty przeszukania ciała"
 L.search_info = "Informacje"
 L.search_confirm = "Potwierdź śmierć"
