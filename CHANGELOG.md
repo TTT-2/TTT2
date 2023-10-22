@@ -15,6 +15,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
   - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
     - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
+- Translated all strings still needed to german (by @NickCloudAT)
 - Added the option for `DButtonTTT2` to have an icon next to the title (by @TimGoll)
 - Added a cached equipment item icon to its table as `.iconMaterial` (by @TimGoll)
 - Added a new `bodysearch` library that handles the search (by @TimGoll)
