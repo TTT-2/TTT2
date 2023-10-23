@@ -161,7 +161,8 @@ local function SetupData(roleData)
 		roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
 
 		-- set a roledata icon material to prevent creating new materials each frame
-		roleData.iconMaterial = Material(roleData.icon)
+		--roleData.iconMaterial = Material(roleData.icon)
+		roleData.iconMaterial = svg.CreateSVGMaterial("test2.svg", 512, 512, 48)
 
 		-- set default colors
 		roleData.dkcolor = util.ColorDarken(roleData.color, 30)

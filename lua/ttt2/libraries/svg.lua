@@ -14,7 +14,6 @@ end
 local stringFormat = string.format
 local stringSub = string.sub
 local stringFind = string.find
-local stringLen = string.len
 local fileRead = file.Read
 local format = format
 local match = match
@@ -45,23 +44,23 @@ local function SetIfEmpty(haystack, needle, pos, needed)
 end
 
 local function GenerateHTMLElement(w, h, padding, strSVG)
-    -- make sure svg file has opening and closing tag
-	local open = string.find(strSVG, '<svg%s(.-)>')
-	local _, close = string.find(strSVG, '</svg>%s*$')
+	-- make sure svg file has opening and closing tag
+	local open = string.find(strSVG, "<svg%s(.-)>")
+	local _, close = string.find(strSVG, "</svg>%s*$")
 
-    if not open or not close then return end
+	if not open or not close then return end
 
 	strSVG = stringSub(strSVG, open, close)
 
-    -- todo make sure that the svg size in combination witht the padding works here
+	-- todo make sure that the svg size in combination witht the padding works here
 	strSVG = SetIfEmpty(strSVG, "width='(.-)'", 5, "width='' ")
 	strSVG = SetIfEmpty(strSVG, "height='(.-)'", 5, "height='' ")
 
 	strSVG = string.gsub(strSVG, "width='(.-)'", "width='" .. w - 2 * padding .. "'")
 	strSVG = string.gsub(strSVG, "height='(.-)'", "height='" .. h - 2 * padding .. "'")
 
-    htmlElement = vgui.Create("DHTML")
-    htmlElement:SetVisible(false)
+	local htmlElement = vgui.Create("DHTML")
+	htmlElement:SetVisible(false)
 	htmlElement:SetSize(w, h)
 	htmlElement:SetHTML(stringFormat(svgTemplate, padding, strSVG))
 
@@ -69,19 +68,26 @@ local function GenerateHTMLElement(w, h, padding, strSVG)
 end
 
 local materialAttributes = {
-    ["$translucent"] = 1,
-    ["$vertexalpha"] = 1,
-    ["$vertexcolor"] = 1
+	["$translucent"] = 1,
+	["$vertexalpha"] = 1,
+	["$vertexcolor"] = 1
 }
 
-local function SetupMaterial(id, name, width, height, mipmapping)
-    -- set individual material attributes
-    materialAttributes["$basetexture"] = name
-    materialAttributes["$mips"] = mipmapping -- does this work to create mipmaps?
+local function SetupMaterial(name, width, height, mipmapping)
+	-- set individual material attributes
+	materialAttributes["$basetexture"] = name
 
-    local uniqueName = format("%s,%s,%d,%d", id, match(name, "%d+"), width, height)
+	-- enable mipmapping if not explicitly disabled
+	if mipmapping ~= false then
+		materialAttributes["$mipmaps"] = 1
+		--materialAttributes["$flags"] = {
+		--	["bilinear"] = 1,
+		--	["mips"] = 1
+		--}
+	--materialAttributes["$mips"] = mipmapping -- does this work to create mipmaps?
+	end
 
-    return CreateMaterial(uniqueName, "UnlitGeneric", materialAttributes)
+	return CreateMaterial(name, "UnlitGeneric", materialAttributes)
 end
 
 svg = svg or {}
@@ -100,24 +106,27 @@ svg = svg or {}
 -- it from within a rendering hook. Caching of the returned matial is recommended.
 -- @realm client
 function svg.CreateSVGMaterial(path, width, height, padding, mipmapping)
-    width = width or 64
-    height = height or 64
-    mipmapping = (mipmapping ~= false) and 1 or 0 -- enable mipmaps if not set to false explicitly
-    padding = padding or 0
-    
-    local svgString = fileRead(path, "DATA") -- is data correct? probably not
+	width = width or 64
+	height = height or 64
+	padding = padding or 0
 
-    if not svgString then return end
+	local svgString = fileRead("materials/" .. path, "GAME")
 
-    local htmlElement = GenerateHTMLElement(width, height, svgString, padding)
+	if not svgString then return end
 
-    if not htmlElement then return end
+	local htmlElement = GenerateHTMLElement(width, height, padding, svgString)
 
-    -- maybe the HTML texture has to be updated once to get material?
+	--return htmlElement
 
-    local materialInternal = GetHTMLMaterial(htmlElement)
+	if not htmlElement then return end
 
-    -- todo: can the htmlElement be deleted after extracting the material?
+	-- the HTML element texture has to be updated once to generate a material
+	htmlElement:UpdateHTMLTexture()
 
-    return SetupMaterial(materialInternal:GetString(), materialInternal:GetName(), width, height, mipmapping)
+	-- then the material can be extracted from the HTML element
+	local materialInternal = htmlElement:GetHTMLMaterial()
+
+	-- todo: can the htmlElement be deleted after extracting the material?
+
+	return SetupMaterial(materialInternal:GetName(), width, height, 1)
 end
