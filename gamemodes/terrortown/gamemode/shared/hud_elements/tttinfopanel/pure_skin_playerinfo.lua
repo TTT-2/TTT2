@@ -138,16 +138,7 @@ if CLIENT then
 
 			if cactive then
 				if rd.iconMaterial then
-					--htmlElement:UpdateHTMLTexture()
-
-					--local mat = htmlElement:GetHTMLMaterial()
-					--local matSetup = SetupMaterial("svg" .. mat:GetName(), 512, 512, 1)
-
-					--draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, matSetup, 255, util.GetDefaultColor(c), t_scale)
-
-					--roles.iconHTML:UpdateHTMLTexture()
-					--draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial, 255, util.GetDefaultColor(c), t_scale)
-					draw.FilteredShadowedTexture(x2, y2 - 200, 512, 512, rd.iconMaterial, 255, util.GetDefaultColor(c), t_scale)
+					draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial, 255, util.GetDefaultColor(c), t_scale)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
 				draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon, 255, util.GetDefaultColor(c), t_scale)

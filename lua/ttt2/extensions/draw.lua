@@ -248,6 +248,9 @@ function draw.Texture(x, y, w, h, material, alpha, color)
 	alpha = alpha or 255
 	color = color or COLOR_WHITE
 
+	-- handle custom mipmaps, returns material if not set
+	material = svg.GetCustomMipmap(material, h)
+
 	surface.SetDrawColor(color.r, color.g, color.b, alpha)
 	surface.SetMaterial(material)
 

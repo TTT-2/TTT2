@@ -35,6 +35,26 @@ local svgTemplate = [[
 </html>
 ]]
 
+local materialAttributes = {
+	["$nodecal"] = 1,
+	["$nolod"] = 1,
+	["$smooth"] = 1,
+	["$translucent"] = 1,
+	["$vertexalpha"] = 1,
+	["$vertexcolor"] = 1
+}
+
+local mipmapSizes = {
+	[8] = true,
+	[16] = true,
+	[32] = true,
+	[64] = true,
+	[128] = true,
+	[256] = true,
+	[512] = true,
+	[1024] = true
+}
+
 local function SetIfEmpty(haystack, needle, pos, needed)
 	if not stringFind(haystack, needle) then
 		return string.sub(haystack, 1, pos) .. needed .. string.sub(haystack, pos + string.len(needed))
@@ -43,7 +63,14 @@ local function SetIfEmpty(haystack, needle, pos, needed)
 	return haystack
 end
 
-local function GenerateHTMLElement(w, h, padding, strSVG)
+local function SetupMaterial(name, width, height)
+	-- set individual material attributes
+	materialAttributes["$basetexture"] = name
+
+	return CreateMaterial(name, "UnlitGeneric", materialAttributes)
+end
+
+local function GenerateHTMLElement(width, height, padding, strSVG)
 	-- make sure svg file has opening and closing tag
 	local open = string.find(strSVG, "<svg%s(.-)>")
 	local _, close = string.find(strSVG, "</svg>%s*$")
@@ -56,41 +83,39 @@ local function GenerateHTMLElement(w, h, padding, strSVG)
 	strSVG = SetIfEmpty(strSVG, "width='(.-)'", 5, "width='' ")
 	strSVG = SetIfEmpty(strSVG, "height='(.-)'", 5, "height='' ")
 
-	strSVG = string.gsub(strSVG, "width='(.-)'", "width='" .. w - 2 * padding .. "'")
-	strSVG = string.gsub(strSVG, "height='(.-)'", "height='" .. h - 2 * padding .. "'")
+	strSVG = string.gsub(strSVG, "width='(.-)'", "width='" .. width - 2 * padding .. "'")
+	strSVG = string.gsub(strSVG, "height='(.-)'", "height='" .. height - 2 * padding .. "'")
 
 	local htmlElement = vgui.Create("DHTML")
 	htmlElement:SetVisible(false)
-	htmlElement:SetSize(w, h)
+	htmlElement:SetSize(width, height)
 	htmlElement:SetHTML(stringFormat(svgTemplate, padding, strSVG))
 
 	return htmlElement
 end
 
-local materialAttributes = {
-	["$translucent"] = 1,
-	["$vertexalpha"] = 1,
-	["$vertexcolor"] = 1
-}
+local function GenerateHTMLMaterial(width, height, padding, strSVG)
+	width = math.floor(width)
+	height = math.floor(height)
 
-local function SetupMaterial(name, width, height, mipmapping)
-	-- set individual material attributes
-	materialAttributes["$basetexture"] = name
+	local htmlElement = GenerateHTMLElement(width, height, padding, strSVG)
 
-	-- enable mipmapping if not explicitly disabled
-	if mipmapping ~= false then
-		materialAttributes["$mipmaps"] = 1
-		--materialAttributes["$flags"] = {
-		--	["bilinear"] = 1,
-		--	["mips"] = 1
-		--}
-	--materialAttributes["$mips"] = mipmapping -- does this work to create mipmaps?
-	end
+	if not htmlElement then return end
 
-	return CreateMaterial(name, "UnlitGeneric", materialAttributes)
+	-- the HTML element texture has to be updated once to generate a material
+	htmlElement:UpdateHTMLTexture()
+
+	-- then the material can be extracted from the HTML element
+	local materialInternal = htmlElement:GetHTMLMaterial()
+	local material = SetupMaterial(materialInternal:GetName(), width, height)
+
+	--htmlElement:Remove()
+
+	return material
 end
 
 svg = svg or {}
+svg.customMipmaps = svg.customMipmaps or {}
 
 ---
 -- Creates a material from an SVG file that can be used as any other material in GMod. Since normal
@@ -110,23 +135,58 @@ function svg.CreateSVGMaterial(path, width, height, padding, mipmapping)
 	height = height or 64
 	padding = padding or 0
 
-	local svgString = fileRead("materials/" .. path, "GAME")
+	local strSVG = fileRead("materials/" .. path .. ".svg", "GAME")
 
-	if not svgString then return end
+	if not strSVG then return end
 
-	local htmlElement = GenerateHTMLElement(width, height, padding, svgString)
+	-- generate base material
+	local material = GenerateHTMLMaterial(width, height, padding, strSVG)
+	local name = material:GetName()
 
-	--return htmlElement
+	svg.InitializeTable(name)
 
-	if not htmlElement then return end
+	-- if not explicitly disabled, mipmaps should be generated as well
+	if mipmapping ~= false then
+		for size in pairs(mipmapSizes) do
+			if size >= height then continue end
 
-	-- the HTML element texture has to be updated once to generate a material
-	htmlElement:UpdateHTMLTexture()
+			local mult = size / height
 
-	-- then the material can be extracted from the HTML element
-	local materialInternal = htmlElement:GetHTMLMaterial()
+			svg.AddCustomMipmap(name, size, GenerateHTMLMaterial(width * mult, size, padding * mult, strSVG))
+		end
+	end
 
-	-- todo: can the htmlElement be deleted after extracting the material?
+	return material
+end
 
-	return SetupMaterial(materialInternal:GetName(), width, height, 1)
+function svg.InitializeTable(name)
+	svg.customMipmaps[name] = svg.customMipmaps[name] or {}
+end
+
+function svg.AddCustomMipmap(name, height, material)
+	svg.customMipmaps[name][height] = material
+end
+
+function svg.GetCustomMipmap(material, height)
+	local name = material:GetName()
+
+	if not svg.IsSVGMaterial(name) then
+		return material
+	end
+
+	local nextSize = util.NextPowerOfTwo(height)
+
+	if not svg.customMipmaps[name][nextSize] then
+		return material
+	end
+
+	return svg.customMipmaps[name][nextSize]
+end
+
+function svg.FileExists(path)
+	return file.Exists("materials/" .. path .. ".svg", "GAME")
+end
+
+function svg.IsSVGMaterial(name)
+	return svg.customMipmaps[name] ~= nil
 end
