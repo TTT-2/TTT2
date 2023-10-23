@@ -18,7 +18,7 @@ CLGAMEMODEMENU.submenus = {}
 -- excludes admin menus for non admin players and menus without any content.
 -- @note This function should be overwritten but not not called.
 -- @return boolean Returns true if this menu should be visible
--- @internal
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:ShouldShow()
 	---
@@ -33,7 +33,9 @@ end
 ---
 -- Checks if this menu has any visible submenus. They are visible if they are
 -- registered and @{CLGAMEMODEMENU:ShouldShow()} returns true.
+-- @note This function can be overwritten, but probably shouldn't. 
 -- @return boolean Returns true if there is at least one visible submenu
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:HasVisibleSubmenus()
 	return #self:GetVisibleSubmenus() > 0
@@ -62,8 +64,8 @@ end
 
 ---
 -- Used to define whether this menu is available for all or only for admins.
--- @note This function should be overwritten but not not called.
--- @internal
+-- @note This function should be overwritten but not called.
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:IsAdminMenu()
 	return false
@@ -112,6 +114,7 @@ end
 -- Checks if the menu has a searchbar enabled.
 -- @note This function should be overwritten and return true, if you want a searchbar.
 -- @return boolean Return true if searchbar should be available
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:HasSearchbar()
 	return false
@@ -120,9 +123,10 @@ end
 ---
 -- Filters the list with a searchText and returns full list if nothing is entered.
 -- @note Overwrite MatchesSearchString for a custom search! 
--- This function can be overwritten, but probably shouldnt. 
+-- This function can be overwritten, but probably shouldn't. 
 -- @param string searchText
 -- @return menuClasses Returns a list of all matching submenus, needs to be indexed with ascending numbers
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:GetMatchingSubmenus(searchText)
 	local submenuClasses = self:GetVisibleSubmenus()
@@ -155,6 +159,7 @@ end
 -- @param menuClass submenuClass
 -- @param string searchText
 -- @return bool Returns if the searchText is somewhere matched inside the submenuClass
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:MatchesSearchString(submenuClass, searchText)
 	local txt = stringLower(searchText)
@@ -167,7 +172,7 @@ end
 ---
 -- Called after the class is initialized and has finished inheriting.
 -- @note This function should be overwritten but not called.
--- @internal
+-- @hook
 -- @realm client
 function CLGAMEMODEMENU:Initialize()
 
