@@ -45,6 +45,12 @@ function GM:HUDPaint()
 		HUDManager.DrawHUD()
 	end
 
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTT2KeyHelp") then
+		keyhelp.Draw()
+	end
+
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
 	---

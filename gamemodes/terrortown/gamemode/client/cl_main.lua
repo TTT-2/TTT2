@@ -236,6 +236,8 @@ function GM:InitPostEntity()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
+	keyhelp.InitializeBasicKeys()
+
 	local sweps = weapons.GetList()
 
 	-- load sweps
@@ -349,6 +351,8 @@ function GM:OnReloaded()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	keyhelp.InitializeBasicKeys()
 end
 
 ---
