@@ -483,6 +483,18 @@ function util.VectorInBounds(vec, lowerBound, upperBound)
 		and vec.z > lowerBound.z and vec.z < upperBound.z
 end
 
+function util.NextPowerOfTwo(value)
+	value = value - 1
+
+	value = bit.bor(value, bit.rshift(value, 1))
+	value = bit.bor(value, bit.rshift(value, 2))
+	value = bit.bor(value, bit.rshift(value, 4))
+	value = bit.bor(value, bit.rshift(value, 8))
+	value = bit.bor(value, bit.rshift(value, 16))
+
+	return value + 1
+end
+
 if CLIENT then
 	local colorsHealth = {
 		healthy = Color(0, 255, 0, 255),
