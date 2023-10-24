@@ -185,6 +185,8 @@ function GM:Initialize()
 
 	vskin.UpdatedVSkin(skinName, skinName)
 
+	keyhelp.InitializeBasicKeys()
+
 	---
 	-- @realm client
 	hook.Run("TTT2FinishedLoading")
@@ -235,8 +237,6 @@ function GM:InitPostEntity()
 
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
-
-	keyhelp.InitializeBasicKeys()
 
 	local sweps = weapons.GetList()
 
@@ -353,6 +353,10 @@ function GM:OnReloaded()
 	vskin.UpdatedVSkin(skinName, skinName)
 
 	keyhelp.InitializeBasicKeys()
+
+	---
+	-- @realm client
+	hook.Run("TTT2FinishedLoading")
 end
 
 ---
