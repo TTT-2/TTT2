@@ -26,7 +26,7 @@ local svgTemplate = [[
 				margin: 0;
 				padding: %dpx;
 				overflow: hidden;
-				background-color: rgba(255,0,0,0);
+				background-color: rgba(255,255,255,0);
 			}
 		</style>
 	</head>
