@@ -13,10 +13,10 @@ end
 
 local stringFormat = string.format
 local stringSub = string.sub
+local stringGSub = string.gsub
+local stringLen = string.len
 local stringFind = string.find
 local fileRead = file.Read
-local format = format
-local match = match
 
 local svgTemplate = [[
 <html>
@@ -26,6 +26,7 @@ local svgTemplate = [[
 				margin: 0;
 				padding: %dpx;
 				overflow: hidden;
+				background-color: rgba(255,0,0,0);
 			}
 		</style>
 	</head>
@@ -57,7 +58,7 @@ local mipmapSizes = {
 
 local function SetIfEmpty(haystack, needle, pos, needed)
 	if not stringFind(haystack, needle) then
-		return string.sub(haystack, 1, pos) .. needed .. string.sub(haystack, pos + string.len(needed))
+		return stringSub(haystack, 1, pos) .. needed .. stringSub(haystack, pos + stringLen(needed))
 	end
 
 	return haystack
@@ -72,8 +73,8 @@ end
 
 local function GenerateHTMLElement(width, height, padding, strSVG)
 	-- make sure svg file has opening and closing tag
-	local open = string.find(strSVG, "<svg%s(.-)>")
-	local _, close = string.find(strSVG, "</svg>%s*$")
+	local open = stringFind(strSVG, "<svg%s(.-)>")
+	local _, close = stringFind(strSVG, "</svg>%s*$")
 
 	if not open or not close then return end
 
@@ -83,8 +84,8 @@ local function GenerateHTMLElement(width, height, padding, strSVG)
 	strSVG = SetIfEmpty(strSVG, "width='(.-)'", 5, "width='' ")
 	strSVG = SetIfEmpty(strSVG, "height='(.-)'", 5, "height='' ")
 
-	strSVG = string.gsub(strSVG, "width='(.-)'", "width='" .. width - 2 * padding .. "'")
-	strSVG = string.gsub(strSVG, "height='(.-)'", "height='" .. height - 2 * padding .. "'")
+	strSVG = stringGSub(strSVG, "width='(.-)'", "width='" .. width - 2 * padding .. "'")
+	strSVG = stringGSub(strSVG, "height='(.-)'", "height='" .. height - 2 * padding .. "'")
 
 	local htmlElement = vgui.Create("DHTML")
 	htmlElement:SetVisible(false)
