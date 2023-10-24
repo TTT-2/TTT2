@@ -84,7 +84,7 @@ if CLIENT then
 		nil, "header_bindings_ttt2", "label_bind_disguiser", KEY_PAD_ENTER)
 
 		-- register keybind info box
-		keyhelp.RegisterKeyHelper("ttt2_disguiser_toggle", materialIconDisguiser, function(client)
+		keyhelp.RegisterKeyHelper("ttt2_disguiser_toggle", materialIconDisguiser, KEYHELP_EQUIPMENT, function(client)
 			if client:IsSpec() or not client:HasEquipmentItem("item_ttt_disguiser") then return end
 
 			return true

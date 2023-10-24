@@ -4,6 +4,10 @@ if SERVER then
 	return
 end
 
+KEYHELP_CORE = 1
+KEYHELP_EXTRA = 2
+KEYHELP_EQUIPMENT = 3
+
 local Key = Key
 local stringUpper = string.upper
 local inputGetKeyName = input.GetKeyName
@@ -19,13 +23,18 @@ local colorBox = Color(0, 0, 0, 100)
 local materialSettings = Material("vgui/ttt/hudhelp/settings")
 local materialShoppingRole = Material("vgui/ttt/hudhelp/shopping_role")
 
+local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
+local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
+local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR_ARCHIVE)
+
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
-function keyhelp.RegisterKeyHelper(binding, iconMaterial, callback)
+function keyhelp.RegisterKeyHelper(binding, iconMaterial, bindingType, callback)
 	keyhelp.keyHelpers[#keyhelp.keyHelpers + 1] = {
 		binding = binding,
 		iconMaterial = iconMaterial,
+		bindingType = bindingType,
 		callback = callback
 	}
 end
@@ -55,6 +64,11 @@ function keyhelp.Draw()
 	for i = 1, #keyhelp.keyHelpers do
 		local keyHelper = keyhelp.keyHelpers[i]
 
+		if keyHelper.bindingType == KEYHELP_CORE and not cvEnableCore:GetBool()
+			or keyHelper.bindingType == KEYHELP_EXTRA and not cvEnableExtra:GetBool()
+			or keyHelper.bindingType == KEYHELP_EQUIPMENT and not cvEnableEquipment:GetBool()
+		then continue end
+
 		if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then continue end
 
 		-- handles both internal GMod bindings and TTT2 bindings
@@ -65,10 +79,10 @@ function keyhelp.Draw()
 end
 
 function keyhelp.InitializeBasicKeys()
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, function(client)
+	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, function(client)
 		return true
 	end)
-	keyhelp.RegisterKeyHelper("+menu_context", materialShoppingRole, function(client)
+	keyhelp.RegisterKeyHelper("+menu_context", materialShoppingRole, KEYHELP_CORE, function(client)
 		if client:IsSpec() or not client:IsShopper() then return end
 
 		return true
