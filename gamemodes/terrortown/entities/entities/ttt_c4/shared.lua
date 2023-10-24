@@ -69,20 +69,6 @@ AccessorFunc(ENT, "arm_time", "ArmTime", FORCE_NUMBER)
 -- @realm shared
 AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 
--- Generate accessors for DT vars. This way all consumer code can keep accessing
--- the vars as they always did, the only difference is that behind the scenes
--- they are set up as DT vars.
-
----
--- @accessor number
--- @realm shared
-AccessorFunc(ENT, "explode_time", "ExplodeTime", FORCE_NUMBER)
-
----
--- @accessor boolean
--- @realm shared
-AccessorFunc(ENT, "armed", "Armed", FORCE_BOOL)
-
 ENT.timeBeep = 0
 ENT.safeWires = nil
 
@@ -90,8 +76,8 @@ ENT.safeWires = nil
 -- Initializes the data
 -- @realm shared
 function ENT:SetupDataTables()
-	self:DTVar("Int", 0, "explode_time")
-	self:DTVar("Bool", 0, "armed")
+	self:NetworkVar("Int", 0, "ExplodeTime")
+	self:NetworkVar("Bool", 0, "Armed")
 end
 
 ---
