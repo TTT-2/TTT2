@@ -76,8 +76,8 @@ ENT.safeWires = nil
 -- Initializes the data
 -- @realm shared
 function ENT:SetupDataTables()
-	self:NetworkVar("Int", 0, "explode_time")
-	self:NetworkVar("Bool", 0, "armed")
+	self:NetworkVar("Int", 0, "ExplodeTime")
+	self:NetworkVar("Bool", 0, "Armed")
 end
 
 ---
