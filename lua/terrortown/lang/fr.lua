@@ -506,7 +506,6 @@ L.mute_off = "Aucun mutés"
 
 -- Spectators and prop possession
 L.punch_title = "FRAPPE-O-METRE"
-L.punch_help = "Touche de déplacement ou saut: déplace l'objet. S'accroupir: quitter l'objet."
 L.punch_bonus = "Votre mauvais score a baissé votre limite frappe-o-metre de {num}"
 L.punch_malus = "Votre bon score a augmenté votre limite frappe-o-metre de {num}!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Échec de la restriction du HUD {hudname}. Vous n'ave
 L.shop_role_select = "Sélectionnez un rôle"
 L.shop_role_selected = "{role}'s shop a été sélectionné!"
 L.shop_search = "Recherche"
-
-L.spec_help = "Cliquez pour voir la vue du joueur, ou {usekey} sur un objet pour en prendre possession."
-L.spec_help2 = "Pour quitter le mode spectateur, ouvrez le menu en appuyant sur {helpkey}, allez vers Jouabilité -> Général -> Paramètres de jeu -> 'Mode Spectateur'."
 
 -- 2019-10-19
 --L.drop_ammo_prevented = "Something prevents you from dropping your ammo."

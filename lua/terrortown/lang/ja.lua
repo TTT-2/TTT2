@@ -502,7 +502,6 @@ L.mute_off = "ミュートを解除した"
 
 -- Spectators and prop possession
 L.punch_title = "パンチ・オー・メーター"
-L.punch_help = "移動キーもしくはジャンプ:オブジェクト移動。しゃがみ:オブジェクトを離れる。"
 L.punch_bonus = "スコアが低かったため、パンチ・オー・メーターの最大値が{num}下がった。"
 L.punch_malus = "スコアが高かったため、パンチ・オー・メーターの最大値が{num}上がった！"
 
@@ -929,9 +928,6 @@ L.hud_restricted_failed = " {hudname} を制限できなかった。あなたは
 L.shop_role_select = "役職選択"
 L.shop_role_selected = "{roles}のショップを選択した"
 L.shop_search = "検索"
-
-L.spec_help = "プレイヤー達を観戦する場合はクリックするか、{usekey}を押して、オブジェクトに憑依できる。"
-L.spec_help2 = "観戦者モードをやめるには、{helpkey}でメニューを開き、「ゲーム設定」から観戦者モードを切り替えよう。"
 
 -- 2019-10-19
 L.drop_ammo_prevented = "何かが弾を捨てるのを妨げているようだ。"

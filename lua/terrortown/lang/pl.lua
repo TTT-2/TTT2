@@ -506,7 +506,6 @@ L.mute_off = "None muted"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Klawisze ruchu lub skok: uderz obiekt. Skradanie: opuść obiekt."
 L.punch_bonus = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {num}"
 L.punch_malus = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Nie udało się nadać restrykcji HUDa {hudname}. Nie
 L.shop_role_select = "Wybierz rolę"
 L.shop_role_selected = "{roles} wybrano do sklepu!"
 L.shop_search = "Szukaj"
-
-L.spec_help = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizyczny, by go posiąść."
-L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Coś Cię powstrzymuje przed wyrzuceniem amunicji."

@@ -533,7 +533,6 @@ L.mute_off = "Ninguém emudecido"
 
 -- Spectators and prop possession
 L.punch_title = "SOCÔMETRO"
-L.punch_help = "Movimentar-se ou pular: soca o objeto. Agachar-se: sai do objeto."
 L.punch_bonus = "Sua má pontuação diminuiu seu limite do socômetro em {num}"
 L.punch_malus = "Sua boa pontuação aumentou seu limite do socômetro em {num}!"
 
@@ -960,9 +959,6 @@ L.hud_restricted_failed = "Falha ao restringir a HUD {hudname}. Você não tem p
 L.shop_role_select = "Selecione o papel"
 L.shop_role_selected = "Loja de {role} foi selecionada!"
 L.shop_search = "Procurar"
-
-L.spec_help = "Clique para espectar um jogador, ou pressione {usekey} em um objeto para possuir ele.."
-L.spec_help2 = "Para sair do modo espectador, abra o menu pressionando {helpkey}, vá em 'gameplay' e desative o modo espectador.."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Alguma coisa fez você soltar sua munição.."

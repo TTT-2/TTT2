@@ -506,7 +506,6 @@ L.mute_off = "None muted"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Move keys or jump: punch object. Crouch: leave object."
 L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
 L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have 
 L.shop_role_select = "Select a role"
 L.shop_role_selected = "{role}'s shop was selected!"
 L.shop_search = "Search"
-
-L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
-L.spec_help2 = "To leave the spectator mode, open the menu by pressing {helpkey}, go to 'gameplay' and toggle the spectator mode."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Something prevents you from dropping your ammo."

@@ -22,6 +22,16 @@ local colorBox = Color(0, 0, 0, 100)
 
 local materialSettings = Material("vgui/ttt/hudhelp/settings")
 local materialShoppingRole = Material("vgui/ttt/hudhelp/shopping_role")
+local materialPosessing = Material("vgui/ttt/hudhelp/possessing")
+local materialPlayer = Material("vgui/ttt/hudhelp/player")
+local materialPlayerPrev = Material("vgui/ttt/hudhelp/player_prev")
+local materialPlayerNext = Material("vgui/ttt/hudhelp/player_next")
+local materialPropJump = Material("vgui/ttt/hudhelp/prop_jump")
+local materialPropLeft = Material("vgui/ttt/hudhelp/prop_left")
+local materialPropRight = Material("vgui/ttt/hudhelp/prop_right")
+local materialPropFront = Material("vgui/ttt/hudhelp/prop_front")
+local materialPropBack = Material("vgui/ttt/hudhelp/prop_back")
+local materialLeaveTarget = Material("vgui/ttt/hudhelp/leave_target")
 
 local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
 local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
@@ -84,6 +94,89 @@ function keyhelp.InitializeBasicKeys()
 	end)
 	keyhelp.RegisterKeyHelper("+menu_context", materialShoppingRole, KEYHELP_CORE, function(client)
 		if client:IsSpec() or not client:IsShopper() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+use", materialPosessing, KEYHELP_CORE, function(client)
+		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+use", materialPlayer, KEYHELP_CORE, function(client)
+		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+attack", materialPlayerPrev, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or not target:IsPlayer() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+attack2", materialPlayerNext, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or not target:IsPlayer() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+attack2", materialPlayerNext, KEYHELP_CORE, function(client)
+		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+jump", materialPropJump, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+moveleft", materialPropLeft, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+moveright", materialPropRight, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+forward", materialPropFront, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+back", materialPropBack, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+duck", materialLeaveTarget, KEYHELP_CORE, function(client)
+		if not client:IsSpec() or not IsValid(client:GetObserverTarget()) then return end
 
 		return true
 	end)

@@ -506,7 +506,6 @@ L.mute_off = "Niemanden stumm gestellt"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Die Bewegungstasten oder Springen: Objekt bewegen. Ducken: Objekt verlassen."
 L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num} verringert."
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {role} Shop wurde gewählt!"
 L.shop_search = "Suche"
-
-L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
-L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."

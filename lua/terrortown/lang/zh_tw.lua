@@ -505,7 +505,6 @@ L.mute_off = "取消靜音"
 
 -- Spectators and prop possession
 L.punch_title = "重擊測量器 " --"PUNCH-O-METER"
-L.punch_help = "按下行走鍵或跳躍鍵以推撞物品；按蹲下鍵則離開物品控制。"
 L.punch_bonus = "你的分數較低，重擊測量器上限減少 {num}"
 L.punch_malus = "你的分數較高，重擊測量器上限增加 {num}！"
 
@@ -932,9 +931,6 @@ L.hud_restricted_failed = "未能將界面 {hudname} 設為限製。你沒有權
 L.shop_role_select = "選擇身份"
 L.shop_role_selected = "選中了 {role} 的商店！"
 L.shop_search = "搜索"
-
-L.spec_help = "點擊來觀察玩家，或對著物理道具按 {usekey} 來附身。"
-L.spec_help2 = "若想離開觀察者模式，用 {helpkey} 打開菜單，在“遊戲性”選項中勾選選項。"
 
 -- 2019-10-19
 L.drop_ammo_prevented = "有什麽東西阻擋你丟出子彈。"

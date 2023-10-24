@@ -506,7 +506,6 @@ L.mute_off = "Nadie silenciado"
 
 -- Spectators and prop possession
 L.punch_title = "PUÑÓMETRO"
-L.punch_help = "Teclas de movimiento o salto: golpea el objeto. Agacharse: dejar el objeto."
 L.punch_bonus = "Tu bajo puntaje redujo el límite de tu PUÑÓMETRO a {num}"
 L.punch_malus = "¡Tu alto puntaje incrementó el límite de tu PUÑÓMETRO por {num}!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Error al restringir el HUD {hudname}. No tienes permi
 L.shop_role_select = "Selecciona un rol"
 L.shop_role_selected = "La tienda de {role} fue seleccionada"
 L.shop_search = "Buscar"
-
-L.spec_help = "Click para ver o presiona {usekey} en un prop (physics) para controlarlo."
-L.spec_help2 = "Para salir del modo espectador, abre el menú presionando {helpkey}, ve a 'Jugabilidad' y desactiva el modo espectador."
 
 -- 2019-10-19
 --L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
