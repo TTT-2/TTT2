@@ -26,6 +26,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - redesigned data list so that everything can be seen without clicking through a list
   - added more details to list like: water level, ground type, kill distance, kill direction, hit group, last damage amount
   - The UI is now more responsive, it is updated when the server changes states on the body and timers are updated live in the UI
+- Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
+- Translated all strings still needed to german (by @NickCloudAT)
 
 ### Changed
 
