@@ -54,12 +54,15 @@ function keyhelp.DrawKey(x, y, size, keyString, iconMaterial)
 	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key")
 	local wBox = math.max(size, wKeyString) + 2 * padding
 	local xIcon = x + 0.5 * (wBox - size)
-	local yIcon = y + padding
+	local yIcon = y + padding + 2
 	local xKeyString = x + math.floor(0.5 * wBox)
-	local yKeyString = y + size + 2 * padding
+	local yKeyString = yIcon + size + padding
 
 	draw.BlurredBox(x, y, wBox, offsetHeight + padding)
-	draw.Box(x, y, wBox, offsetHeight + padding, colorBox)
+	draw.Box(x, y, wBox, offsetHeight + padding, colorBox) -- background color
+	draw.Box(x, y, wBox, 1, colorBox) -- top line shadow
+	draw.Box(x, y, wBox, 2, colorBox) -- top line shadow
+	draw.Box(x, y - 2, wBox, 2, COLOR_WHITE) -- white top line
 	draw.FilteredShadowedTexture(xIcon, yIcon, size, size, iconMaterial, 255, COLOR_WHITE)
 	draw.ShadowedText(keyString, "weapon_hud_help_key", xKeyString, yKeyString, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
