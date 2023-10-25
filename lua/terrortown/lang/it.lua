@@ -1895,3 +1895,18 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 -- L.label_voice_scaling_mode_linear = "Linear"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.]]
+
+--L.label_keyhelp_show_core = "Enable showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
