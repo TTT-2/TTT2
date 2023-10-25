@@ -7,6 +7,7 @@ end
 KEYHELP_CORE = 1
 KEYHELP_EXTRA = 2
 KEYHELP_EQUIPMENT = 3
+KEYHELP_INTERNAL = 4
 
 local Key = Key
 local stringUpper = string.upper
@@ -33,6 +34,13 @@ local materialPropRight = Material("vgui/ttt/hudhelp/prop_right")
 local materialPropFront = Material("vgui/ttt/hudhelp/prop_front")
 local materialPropBack = Material("vgui/ttt/hudhelp/prop_back")
 local materialLeaveTarget = Material("vgui/ttt/hudhelp/leave_target")
+local materialVoiceGlobal = Material("vgui/ttt/hudhelp/voice_global")
+local materialVoiceTeam = Material("vgui/ttt/hudhelp/voice_team")
+local materialChatGlobal = Material("vgui/ttt/hudhelp/chat_global")
+local materialChatTeam = Material("vgui/ttt/hudhelp/chat_team")
+local materialFlashlight = Material("vgui/ttt/hudhelp/flashlight")
+local materialQuickchat = Material("vgui/ttt/hudhelp/quickchat")
+local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
 
 local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
 local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
@@ -42,7 +50,9 @@ keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
 function keyhelp.RegisterKeyHelper(binding, iconMaterial, bindingType, callback)
-	keyhelp.keyHelpers[#keyhelp.keyHelpers + 1] = {
+	keyhelp.keyHelpers[bindingType] = keyhelp.keyHelpers[bindingType] or {}
+
+	keyhelp.keyHelpers[bindingType][#keyhelp.keyHelpers[bindingType] + 1] = {
 		binding = binding,
 		iconMaterial = iconMaterial,
 		bindingType = bindingType,
@@ -69,30 +79,52 @@ function keyhelp.DrawKey(x, y, size, keyString, iconMaterial)
 	return wBox
 end
 
+local function PrepareKeyDraw(client, xBase, yBase, keyHelper)
+	if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then return end
+
+	-- handles both internal GMod bindings and TTT2 bindings
+	local key = Key(keyHelper.binding) or inputGetKeyName(bindFind(keyHelper.binding))
+
+	if not key then return end
+
+	return xBase + padding + keyhelp.DrawKey(xBase, yBase, width, stringUpper(key), keyHelper.iconMaterial)
+end
+
 function keyhelp.Draw()
 	local client = LocalPlayer()
 
 	local xBase = 0.5 * ScrW() + offsetCenter
 	local yBase = ScrH() - offsetHeight
 
-	for i = 1, #keyhelp.keyHelpers do
-		local keyHelper = keyhelp.keyHelpers[i]
+	local scoreboardOpen = input.IsKeyDown(input.GetKeyCode(input.LookupBinding("+showscores")))
 
-		if keyHelper.bindingType == KEYHELP_CORE and not cvEnableCore:GetBool()
-			or keyHelper.bindingType == KEYHELP_EXTRA and not cvEnableExtra:GetBool()
-			or keyHelper.bindingType == KEYHELP_EQUIPMENT and not cvEnableEquipment:GetBool()
-		then continue end
+	if cvEnableCore:GetBool() or scoreboardOpen then
+		for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
+			xBase = PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i]) or xBase
+		end
+	end
 
-		if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then continue end
+	if cvEnableEquipment:GetBool() or scoreboardOpen then
+		for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
+			xBase = PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i]) or xBase
+		end
+	end
 
-		-- handles both internal GMod bindings and TTT2 bindings
-		local keyString = Key(keyHelper.binding) or stringUpper(inputGetKeyName(bindFind(keyHelper.binding))) or ""
+	if cvEnableExtra:GetBool() or scoreboardOpen then
+		for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
+			xBase = PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i]) or xBase
+		end
+	end
 
-		xBase = xBase + padding + keyhelp.DrawKey(xBase, yBase, width, keyString, keyHelper.iconMaterial)
+	-- if anyone of them is disabled, but not all, the show more option is shown
+	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
+	if not scoreboardOpen and enbCount > 0 and enbCount < 3 then
+		PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][1])
 	end
 end
 
 function keyhelp.InitializeBasicKeys()
+	-- core bindings that should be visible be default
 	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, function(client)
 		return true
 	end)
@@ -187,6 +219,43 @@ function keyhelp.InitializeBasicKeys()
 	keyhelp.RegisterKeyHelper("+duck", materialLeaveTarget, KEYHELP_CORE, function(client)
 		if not client:IsSpec() or not IsValid(client:GetObserverTarget()) then return end
 
+		return true
+	end)
+
+	-- extra bindings that are not that important but are there as well
+	keyhelp.RegisterKeyHelper("impulse 100", materialFlashlight, KEYHELP_EXTRA, function(client)
+		if client:IsSpec() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+zoom", materialQuickchat, KEYHELP_EXTRA, function(client)
+		if client:IsSpec() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("ttt2_voice", materialVoiceGlobal, KEYHELP_EXTRA, function(client)
+		if not VOICE.CanEnable() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("ttt2_voice_team", materialVoiceTeam, KEYHELP_EXTRA, function(client)
+		if not VOICE.CanTeamEnable() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("messagemode", materialChatGlobal, KEYHELP_EXTRA, function(client)
+		if not VOICE.CanEnable() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("messagemode2", materialChatTeam, KEYHELP_EXTRA, function(client)
+		if not VOICE.CanTeamEnable() then return end
+
+		return true
+	end)
+
+	-- internal bindings, there should only be this one
+	keyhelp.RegisterKeyHelper("+showscores", materialShowmore, KEYHELP_INTERNAL, function(client)
 		return true
 	end)
 end

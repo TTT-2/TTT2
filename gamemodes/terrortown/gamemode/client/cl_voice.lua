@@ -48,15 +48,7 @@ end
 CreateVoiceTable()
 
 local function VoiceTryEnable()
-	local client = LocalPlayer()
-
-	---
-	-- @realm client
-	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
-		return false
-	end
-
-	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanEnable() then
 		VOICE.isTeam = false
 		permissions.EnableVoiceChat(true)
 
@@ -77,27 +69,7 @@ local function VoiceTryDisable()
 end
 
 local function VoiceTeamTryEnable()
-	local client = LocalPlayer()
-
-	---
-	-- @realm client
-	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
-		return false
-	end
-
-	if not IsValid(client) then return false end
-
-	local clientrd = client:GetSubRoleData()
-	local tm = client:GetTeam()
-
-	if not VOICE.IsSpeaking()
-		and VOICE.CanSpeak()
-		and client:IsActive()
-		and tm ~= TEAM_NONE
-		and not TEAMS[tm].alone
-		and not clientrd.unknownTeam
-		and not clientrd.disabledTeamVoice
-	then
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
 		VOICE.isTeam = true
 
 		permissions.EnableVoiceChat(true)
@@ -116,6 +88,42 @@ local function VoiceTeamTryDisable()
 	end
 
 	return false
+end
+
+function VOICE.CanTeamEnable()
+	local client = LocalPlayer()
+
+	---
+	-- @realm client
+	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
+		return false
+	end
+
+	if not IsValid(client) then return false end
+
+	local clientrd = client:GetSubRoleData()
+	local tm = client:GetTeam()
+
+	if client:IsActive()
+		and tm ~= TEAM_NONE
+		and not TEAMS[tm].alone
+		and not clientrd.unknownTeam
+		and not clientrd.disabledTeamVoice
+	then
+		return true
+	end
+end
+
+function VOICE.CanEnable()
+	local client = LocalPlayer()
+
+	---
+	-- @realm client
+	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
+		return false
+	end
+
+	return true
 end
 
 -- register a binding for the general voicechat
