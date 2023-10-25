@@ -1,4 +1,4 @@
--- Simplified Chinese language strings (by 8z & TEGTianFan & 波と一緒に漂う)
+-- Simplified Chinese language strings (by 8z & TEGTianFan)
 
 local L = LANG.CreateLanguage("zh_hans")
 
@@ -233,7 +233,7 @@ L.sb_tag_avoid = "躲避"
 L.sb_tag_kill = "死亡"
 L.sb_tag_miss = "失踪"
 
--- Equipment actions， like buying and dropping
+-- Equipment actions, like buying and dropping
 L.buy_no_stock = "无法购买此装备：你已拥有它了。"
 L.buy_pending = "你已订购此装备，请等待配送。"
 L.buy_received = "你已收到此装备。"
@@ -488,6 +488,7 @@ L.corpse_hint = "按下 [{usekey}] 来搜索，用 [{walkkey} + {usekey}] 进行
 
 L.target_disg = "（伪装状态）"
 L.target_unid = "未确认的尸体"
+L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索尸体以获取未被消耗积分"
 
@@ -864,8 +865,8 @@ L.aw_tod1_text = "在他的团队即将获得胜利的前几秒死去。"
 L.aw_tod2_title = "垃圾游戏！"
 L.aw_tod2_text = "在这回合刚开始不久即被杀害。"
 
--- New and modified pieces of text are placed below this point， marked with the
--- version in which they were added， to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
@@ -1299,6 +1300,7 @@ L.trap_something = "某件物品"
 -- Kill events
 L.desc_event_kill_suicide = "是自杀的"
 L.desc_event_kill_team = "是被队友杀的"
+
 L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飞。"
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飞。"
 
@@ -1410,12 +1412,6 @@ L.xfer_team_indicator = "阵营"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "武器生成设置"
-
-L.equipmenteditor_name_auto_spawnable = "装备随机生成"
-L.equipmenteditor_name_spawn_type = "生成类型"
-
 -- 2021-07-11
 L.spec_about_to_revive = "在复活时，观察将被限制。"
 
@@ -1444,7 +1440,7 @@ L.spawn_ammo_rifle = "狙击枪弹药生成"
 L.spawn_ammo_shotgun = "霰弹枪弹药生成"
 L.spawn_player_random = "随机玩家生成"
 
-L.spawn_weapon_ammo = " （弹药：{ammo}）"
+L.spawn_weapon_ammo = "（弹药：{ammo}）"
 
 L.spawn_weapon_edit_ammo = "按住 [{walkkey}]并按 [{primaryfire} 或 {secondaryfire}] 以增加或减少此武器生成的弹药量"
 
@@ -1475,7 +1471,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地图上，可能会建议使用在地图自带的原始生成点，而不用动态系统来取代它们。禁用这个复选框只对当前活动地图禁用。其他地图仍将使用动态系统。"
 L.help_spawn_editor_hint = "提示：要离开生成编辑器，重新打开游戏模式菜单。"
 L.help_spawn_editor_spawn_amount = [[
-目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 player} 个玩家生成点。
+目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 {player} 个玩家生成点。
 点击'开始编辑生成'来改变这个生成。
 
 {weaponrandom}x 随机武器生成
@@ -1543,6 +1539,7 @@ L.help_models_select = [[
 左键点击模型，将其添加到玩家模型库中。再次以左键删除它们。右键可在所关注的模型的启用和禁用侦探帽之间进行切换。
 
 左上角的小指示器显示玩家模型是否有头部的命中箱，下面的图标显示了这个模型是否可佩戴侦探帽。]]
+
 L.menu_roles_title = "角色设置"
 L.menu_roles_description = "设置生成概率、装备积分及更多。"
 
@@ -1761,6 +1758,7 @@ L.label_round_limit = "回合数上限"
 L.label_time_limit_minutes = "游戏时间上限，以分钟为单位"
 L.label_nade_throw_during_prep = "在准备时间内允许投掷手榴弹"
 L.label_postround_dm = "回合结束后启用死亡竞赛"
+L.label_session_limits_enabled = "启用地图更换"
 L.label_spectator_chat = "启用观察者与大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字时被杀，则发出最后一句话至聊天室"
 L.label_identify_body_woconfirm = "不按'确认'按钮识别尸体"
@@ -1830,10 +1828,6 @@ L.label_sprint_crosshair = "冲刺时显示准星"
 L.label_crowbar_unlocks = "主要攻击键可以作为互动（即解锁）使用"
 L.label_crowbar_pushforce = "撬棍推动力"
 
---2022-04-13
-L.label_session_limits_enabled = "启用地图更换"
-
-
 -- 2022-07-02
 L.header_playersettings_falldmg = "摔落伤害设置"
 
@@ -1897,9 +1891,9 @@ L.slot_weapon_extra = "额外槽"
 L.slot_weapon_class = "职业槽"
 
 -- 2023-10-04
--- L.label_voice_duck_spectator = "Duck spectator voices"
--- L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
--- L.label_voice_scaling = "Voice Volume Scaling Mode"
--- L.label_voice_scaling_mode_linear = "Linear"
--- L.label_voice_scaling_mode_power4 = "Power 4"
--- L.label_voice_scaling_mode_log = "Logarithmic"
+L.label_voice_duck_spectator = "观众鸭子声音"
+L.label_voice_duck_spectator_amount = "观众鸭子声音百分比"
+L.label_voice_scaling = "语音音量缩放模式"
+L.label_voice_scaling_mode_linear = "线性"
+L.label_voice_scaling_mode_power4 = "四次方"
+L.label_voice_scaling_mode_log = "对数"
