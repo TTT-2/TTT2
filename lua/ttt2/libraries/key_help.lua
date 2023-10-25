@@ -21,6 +21,7 @@ local padding = 5
 local colorBox = Color(0, 0, 0, 100)
 
 local materialSettings = Material("vgui/ttt/hudhelp/settings")
+local materialMute = Material("vgui/ttt/hudhelp/mute")
 local materialShoppingRole = Material("vgui/ttt/hudhelp/shopping_role")
 local materialPosessing = Material("vgui/ttt/hudhelp/possessing")
 local materialPlayer = Material("vgui/ttt/hudhelp/player")
@@ -90,6 +91,11 @@ end
 
 function keyhelp.InitializeBasicKeys()
 	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, function(client)
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("gm_showteam", materialMute, KEYHELP_CORE, function(client)
+		if not client:IsSpec() then return end
+
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("+menu_context", materialShoppingRole, KEYHELP_CORE, function(client)
