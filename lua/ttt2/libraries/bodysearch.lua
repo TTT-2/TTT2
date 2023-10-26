@@ -565,7 +565,7 @@ if CLIENT then
 			}
 		end,
 		floor_surface = function(data)
-			if not data.killFloorSurface or data.killFloorSurface == 0 or not floorIDToText[data.killFloorSurface] then return end
+			if not data.killFloorSurface or not floorIDToText[data.killFloorSurface] then return end
 
 			return {
 				title = {
