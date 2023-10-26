@@ -31,7 +31,7 @@ net.Receive("TTT2SendConfirmMsg", function()
 
 	local searchUID = net.ReadUInt(16)
 
-	-- update credits on victrim table
+	-- update credits on victim table
 	local victimEnt = player.GetBySteamID64(tbl.victim)
 	if IsValid(victimEnt) and victimEnt.searchResultData then
 		victimEnt.searchResultData.credits = credits

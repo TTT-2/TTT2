@@ -90,7 +90,7 @@ function PANEL:SetColor(color)
 end
 
 ---
--- @return Color
+-- @return Color|nil
 -- @realm client
 function PANEL:GetColor()
 	return self.data.color
@@ -108,7 +108,7 @@ function PANEL:SetIcon(icon, is_shadowed, size)
 end
 
 ---
--- @return Matieral
+-- @return Material|nil
 -- @realm client
 function PANEL:GetIcon()
 	return self.data.icon
@@ -122,14 +122,14 @@ function PANEL:HasIcon()
 end
 
 ---
--- @return boolean
+-- @return boolean|nil
 -- @realm client
 function PANEL:IsIconShadowed()
 	return self.data.icon_shadow
 end
 
 ---
--- @return number
+-- @return number|nil
 -- @realm client
 function PANEL:GetIconSize()
 	return self.data.icon_size
