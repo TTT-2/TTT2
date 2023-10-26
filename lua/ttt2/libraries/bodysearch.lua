@@ -765,7 +765,7 @@ if CLIENT then
 
 			if not searchData then continue end
 
-			-- a workaround to build the rext for the scoreboard
+			-- a workaround to build the text for the scoreboard
 			local text = searchData.text.text
 
 			-- only use the first text entry here
