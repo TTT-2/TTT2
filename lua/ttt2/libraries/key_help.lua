@@ -43,8 +43,16 @@ local materialQuickchat = Material("vgui/ttt/hudhelp/quickchat")
 local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
 local materialPointer = Material("vgui/ttt/hudhelp/pointer")
 
+---
+-- @realm client
 local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
 local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
+
+---
+-- @realm client
 local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR_ARCHIVE)
 
 keyhelp = keyhelp or {}
