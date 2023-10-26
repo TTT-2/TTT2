@@ -1869,7 +1869,7 @@ L.search_called = "Death Reported"
 L.search_team_role_unknown = "???"
 
 L.search_words = "Something tells you some of this person's last words were: '{lastwords}'"
-L.search_armor = "They were wearing nonstandard body armor."
+L.search_armor = "They were wearing non-standard body armor."
 L.search_disg = "They were carrying a device that could hide their identity."
 L.search_radar = "They were carrying some sort of radar. It is no longer functioning."
 L.search_c4 = "In a pocket you found a note. It states that cutting wire {num} will safely disarm the bomb."
