@@ -367,7 +367,7 @@ function SEARCHSCRN:Show(data)
 		-- the confirmation and reported back to the clients
 
 		if playerCanTakeCredits then
-			self:UpdateUICreditsWereTaken()
+			self:UpdateUIWhenCreditsWereTaken()
 		end
 
 		if bodysearch.CanConfirmBody() then
