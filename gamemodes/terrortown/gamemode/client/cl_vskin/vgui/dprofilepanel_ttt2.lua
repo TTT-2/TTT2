@@ -257,7 +257,7 @@ function PANEL:GetPlayerIcon()
 end
 
 ---
--- @return material
+-- @return Material|nil
 -- @realm client
 function PANEL:GetPlayerRoleIcon()
 	return self.data.player_role_icon
