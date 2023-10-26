@@ -61,9 +61,9 @@ SWEP.ProcessingDelay = 5
 ---
 -- @ignore
 function SWEP:SetupDataTables()
-	self:DTVar("Bool", 0, "processing")
-	self:DTVar("Float", 0, "start_time")
-	self:DTVar("Int", 1, "zoom")
+	self:NetworkVar("Bool", 0, "Processing")
+	self:NetworkVar("Float", 0, "StartTime")
+	self:NetworkVar("Int", 0, "Zoom")
 
 	return self.BaseClass.SetupDataTables(self)
 end
@@ -73,13 +73,13 @@ end
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + 0.1)
 
-	if not self:IsTargetingCorpse() or self.dt.processing then return end
+	if not self:IsTargetingCorpse() or self:GetProcessing() then return end
 
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
 	if SERVER then
-		self.dt.processing = true
-		self.dt.start_time = CurTime()
+		self:SetProcessing(true)
+		self:SetStartTime(CurTime())
 	end
 end
 
@@ -96,8 +96,8 @@ function SWEP:SecondaryAttack()
 
 	self:CycleZoom()
 
-	self.dt.processing = false
-	self.dt.start_time = 0
+	self:SetProcessing(false)
+	self:SetStartTime(0)
 end
 
 ---
@@ -107,7 +107,7 @@ function SWEP:SetZoomLevel(level)
 
 	local owner = self:GetOwner()
 
-	self.dt.zoom = level
+	self:SetZoom(level)
 
 	owner:SetFOV(self.ZoomLevels[level], 0.3)
 	owner:DrawViewModel(false)
@@ -116,13 +116,13 @@ end
 ---
 -- @ignore
 function SWEP:CycleZoom()
-	self.dt.zoom = self.dt.zoom + 1
+	self:SetZoom(self:GetZoom() + 1)
 
-	if not self.ZoomLevels[self.dt.zoom] then
-		self.dt.zoom = 1
+	if not self.ZoomLevels[self:GetZoom()] then
+		self:SetZoom(1)
 	end
 
-	self:SetZoomLevel(self.dt.zoom)
+	self:SetZoomLevel(self:GetZoom())
 end
 
 ---
@@ -130,7 +130,7 @@ end
 function SWEP:PreDrop()
 	self:SetZoomLevel(1)
 
-	self.dt.processing = false
+	self:SetProcessing(false)
 
 	return self.BaseClass.PreDrop(self)
 end
@@ -140,7 +140,7 @@ end
 function SWEP:Holster()
 	self:SetZoomLevel(1)
 
-	self.dt.processing = false
+	self:SetProcessing(false)
 
 	return true
 end
@@ -194,20 +194,20 @@ end
 function SWEP:Think()
 	BaseClass.Think(self)
 
-	if not self.dt.processing then return end
+	if not self:GetProcessing() then return end
 
 	if not self:IsTargetingCorpse() then
-		self.dt.processing = false
-		self.dt.start_time = 0
+		self:SetProcessing(false)
+		self:SetStartTime(0)
 
 		return
 	end
 
-	if CurTime() > (self.dt.start_time + self.ProcessingDelay) then
+	if CurTime() > (self:GetStartTime() + self.ProcessingDelay) then
 		self:IdentifyCorpse()
 
-		self.dt.processing = false
-		self.dt.start_time = 0
+		self:SetProcessing(false)
+		self:SetStartTime(0)
 	end
 end
 
@@ -251,8 +251,8 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:AdjustMouseSensitivity()
-		if self.dt.zoom > 0 then
-			return 1 / self.dt.zoom
+		if self:GetZoom() > 0 then
+			return 1 / self:GetZoom()
 		end
 
 		return -1
@@ -271,9 +271,9 @@ if CLIENT then
 		if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
 
 		-- draw progress
-		if not c_wep.dt.processing then return end
+		if not c_wep:GetProcessing() then return end
 
-		local progress = mathRound(mathClamp((CurTime() - c_wep.dt.start_time) / c_wep.ProcessingDelay * 100, 0, 100))
+		local progress = mathRound(mathClamp((CurTime() - c_wep:GetStartTime()) / c_wep.ProcessingDelay * 100, 0, 100))
 
 		tData:AddDescriptionLine(
 			GetPT("binoc_progress", {progress = progress}),
@@ -306,6 +306,6 @@ if CLIENT then
 		surface.DrawRect(x - offset, y - length, thickness, length - gap)
 		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 
-		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self.dt.zoom, "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoom(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 end
