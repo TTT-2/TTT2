@@ -24,7 +24,7 @@ function PANEL:SetData(data)
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetText()
 	return self.data.text.text
