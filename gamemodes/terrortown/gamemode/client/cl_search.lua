@@ -275,15 +275,15 @@ function SEARCHSCRN:Show(data)
 
 	if playerDataKnown then
 		-- additional information by other addons
-		local search_add = {}
+		local searchAdd = {}
 		---
 		-- @realm client
-		hook.Run("TTTBodySearchPopulate", search_add, search)
-		for _, v in pairs(search_add) do
+		hook.Run("TTTBodySearchPopulate", searchAdd, search)
+		for _, v in pairs(searchAdd) do
 			if istable(v.text) then
-				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = v.text})
+				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title or "", text = v.text})
 			else
-				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title, text = {{body = v.text}}})
+				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = "", text = {{body = v.text}}})
 			end
 		end
 	end
