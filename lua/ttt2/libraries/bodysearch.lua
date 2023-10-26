@@ -958,7 +958,7 @@ if CLIENT then
 
 		-- in mode 0 the ragdoll has to be found to report body
 		if cvInspectConfirmMode:GetInt() == 0
-			and IsValid(ragOwner) and not ragOwner:TTT2NETGetBool("body_found", false)
+			and not self.IsConfirmed(ragOwner)
 		then
 			return false
 		end
