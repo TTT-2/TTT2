@@ -96,21 +96,19 @@ function keyhelp.Draw()
 	local xBase = 0.5 * ScrW() + offsetCenter
 	local yBase = ScrH() - offsetHeight
 
-	local scoreboardOpen = input.IsKeyDown(input.GetKeyCode(input.LookupBinding("+showscores")))
-
-	if cvEnableCore:GetBool() or scoreboardOpen then
+	if cvEnableCore:GetBool() or GM.ShowScoreboard then
 		for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
 			xBase = PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i]) or xBase
 		end
 	end
 
-	if cvEnableEquipment:GetBool() or scoreboardOpen then
+	if cvEnableEquipment:GetBool() or GM.ShowScoreboard then
 		for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
 			xBase = PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i]) or xBase
 		end
 	end
 
-	if cvEnableExtra:GetBool() or scoreboardOpen then
+	if cvEnableExtra:GetBool() or GM.ShowScoreboard then
 		for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
 			xBase = PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i]) or xBase
 		end
@@ -118,7 +116,7 @@ function keyhelp.Draw()
 
 	-- if anyone of them is disabled, but not all, the show more option is shown
 	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
-	if not scoreboardOpen and enbCount > 0 and enbCount < 3 then
+	if not GM.ShowScoreboard and enbCount > 0 and enbCount < 3 then
 		PrepareKeyDraw(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][1])
 	end
 end
