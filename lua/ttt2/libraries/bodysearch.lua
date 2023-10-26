@@ -23,7 +23,7 @@ CORPSE_KILL_SIDE = 3
 -- mode 2: only public policing roles can confirm and search bodies
 local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
-bodysearch = bodysearch or {}
+bodysearch = {}
 
 ---
 -- Returns the current body inspect/confirm mode that is defined on the server.
