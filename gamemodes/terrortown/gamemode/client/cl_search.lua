@@ -51,7 +51,7 @@ net.Receive("TTT2SendConfirmMsg", function()
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 
 	if IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID then
-		SEARCHSCRN:PlayerWasConfirmed()
+		SEARCHSCRN:UpdateUIWhenPlayerWasConfirmed()
 	end
 end)
 
@@ -59,7 +59,7 @@ net.Receive("ttt2_credits_were_taken", function()
 	local searchUID = net.ReadUInt(16)
 
 	if IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID then
-		SEARCHSCRN:CreditsWereTaken()
+		SEARCHSCRN:UpdateUIWhenCreditsWereTaken()
 	end
 end)
 
@@ -100,7 +100,7 @@ end
 ---
 -- Updates the UI if the player, that is inspected right now, was confirmed.
 -- @realm client
-function SEARCHSCRN:PlayerWasConfirmed()
+function SEARCHSCRN:UpdateUIWhenPlayerWasConfirmed()
 	self.buttonConfirm:SetEnabled(false)
 	self.buttonConfirm:SetText("search_confirmed")
 	self.buttonConfirm:SetIcon(nil)
@@ -125,7 +125,7 @@ end
 ---
 -- Updates the UI if the player, that is inspected right now, lost their credits.
 -- @realm client
-function SEARCHSCRN:CreditsWereTaken()
+function SEARCHSCRN:UpdateUIWhenCreditsWereTaken()
 	-- if credits were taken, remove credit box
 	local creditBox = self.infoBoxes["credits"]
 	if IsValid(creditBox) then
@@ -187,9 +187,9 @@ function SEARCHSCRN:Show(data)
 	self.data = data
 	self.menuFrame = frame
 
-	local roleKnown = data.nick ~= nil
+	local playerDataKnown = data.nick ~= nil
 	local rd = roles.GetByIndex(data.subrole)
-	local clientRD = client:GetSubRoleData()
+	local clientRoleData = client:GetSubRoleData()
 
 	local contentBox = vgui.Create("DPanelTTT2", frame)
 	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
@@ -199,11 +199,11 @@ function SEARCHSCRN:Show(data)
 	profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
 	profileBox:Dock(LEFT)
 	profileBox:SetModel(data.playerModel)
-	profileBox:SetPlayerIcon(roleKnown and draw.GetAvatarMaterial(data.sid64, "medium") or materialPlayerIconUnknown)
-	profileBox:SetPlayerRoleColor(roleKnown and data.roleColor or COLOR_SLATEGRAY)
-	profileBox:SetPlayerRoleIcon(roleKnown and rd.iconMaterial or materialRoleUnknown)
-	profileBox:SetPlayerRoleString(roleKnown and rd.name or "search_team_role_unknown")
-	profileBox:SetPlayerTeamString(roleKnown and data.team or "search_team_role_unknown")
+	profileBox:SetPlayerIcon(playerDataKnown and draw.GetAvatarMaterial(data.sid64, "medium") or materialPlayerIconUnknown)
+	profileBox:SetPlayerRoleColor(playerDataKnown and data.roleColor or COLOR_SLATEGRAY)
+	profileBox:SetPlayerRoleIcon(playerDataKnown and rd.iconMaterial or materialRoleUnknown)
+	profileBox:SetPlayerRoleString(playerDataKnown and rd.name or "search_team_role_unknown")
+	profileBox:SetPlayerTeamString(playerDataKnown and data.team or "search_team_role_unknown")
 
 	-- ADD STATUS BOX AND ITS CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
@@ -211,13 +211,15 @@ function SEARCHSCRN:Show(data)
 	contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
 	contentAreaScroll:Dock(RIGHT)
 
+	local searchMode = bodysearch.GetInspectConfirmMode()
+
 	-- POPULATE WITH SPECIAL INFORMATION
 	if client:IsSpec() then
 		-- a spectator can see all information, but not interact with the UI
 		self:MakeInfoItem(contentAreaScroll, "sepc_search_info", {
 			text = {
 				title = {
-					body = "search_title_spec",
+					body = "search_title_spectator",
 					params = nil
 				},
 				text = {{
@@ -227,7 +229,7 @@ function SEARCHSCRN:Show(data)
 			},
 			colorBox = COLOR_SLATEGRAY
 		}, 62)
-	elseif GetConVar("ttt2_inspect_confirm_mode"):GetInt() == 0 and not bodysearch.IsConfirmed(data.ragOwner) then
+	elseif searchMode == 0 and not bodysearch.IsConfirmed(data.ragOwner) then
 		-- a detective can only be called AFTER a body was confirmed
 		self:MakeInfoItem(contentAreaScroll, "policingrole_call_confirm", {
 			text = {
@@ -244,10 +246,8 @@ function SEARCHSCRN:Show(data)
 		}, 62)
 	elseif bodysearch.CanReportBody(data.ragOwner)
 		and not bodysearch.IsConfirmed(data.ragOwner)
-		and not (clientRD.isPolicingRole and clientRD.isPublicRole)
+		and not (clientRoleData.isPolicingRole and clientRoleData.isPublicRole)
 	then
-		local searchMode = bodysearch.GetInspectConfirmMode()
-
 		self:MakeInfoItem(contentAreaScroll, "policingrole_confirm_disabled", {
 			text = {
 				title = {
@@ -263,17 +263,17 @@ function SEARCHSCRN:Show(data)
 		}, (searchMode == 1) and 62 or 78)
 	end
 
-		-- POPULATE WITH INFORMATION
-		for i = 1, #bodysearch.searchResultOrder do
-			local searchResultName = bodysearch.searchResultOrder[i]
-			local searchResultData = bodysearch.GetContentFromData(searchResultName, data)
+	-- POPULATE WITH INFORMATION
+	for i = 1, #bodysearch.searchResultOrder do
+		local searchResultName = bodysearch.searchResultOrder[i]
+		local searchResultData = bodysearch.GetContentFromData(searchResultName, data)
 
-			if not searchResultData then continue end
+		if not searchResultData then continue end
 
-			self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
-		end
+		self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
+	end
 
-	if roleKnown then
+	if playerDataKnown then
 		-- additional information by other addons
 		local search_add = {}
 		---
@@ -306,7 +306,7 @@ function SEARCHSCRN:Show(data)
 		buttonReport:SetEnabled(false)
 	end
 
-	local playerCanTakeCredits = client:IsActiveShopper() and not clientRD.preventFindCredits
+	local playerCanTakeCredits = client:IsActiveShopper() and not clientRoleData.preventFindCredits
 
 	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
 
@@ -326,7 +326,7 @@ function SEARCHSCRN:Show(data)
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	elseif not bodysearch.CanConfirmBody() then
-		if data.credits > 0 and client:IsActiveShopper() and not clientRD.preventFindCredits then
+		if data.credits > 0 and client:IsActiveShopper() and not clientRoleData.preventFindCredits then
 			if data.credits == 1 then
 				buttonConfirm:SetText("search_take_credit")
 				buttonConfirm:SetParams({credit = data.credits})
@@ -360,22 +360,18 @@ function SEARCHSCRN:Show(data)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	end
 	buttonConfirm.DoClick = function(btn)
-		local creditsOnly = playerCanTakeCredits
-			and GetConVar("ttt2_inspect_confirm_mode"):GetInt() > 0
-			and not (clientRD.isPolicingRole and clientRD.isPublicRole)
-
-		bodysearch.ClientConfirmsCorpse(data.rag, data.searchUID, data.lrng, creditsOnly)
+		bodysearch.ClientConfirmsCorpse(data.rag, data.searchUID, data.isLongRange, playerCanTakeCredits)
 
 		-- call these functions locally to give the user an instant feedback
 		-- the same function will be called again after the server processed
 		-- the confirmation and reported back to the clients
 
 		if playerCanTakeCredits then
-			self:CreditsWereTaken()
+			self:UpdateUICreditsWereTaken()
 		end
 
 		if bodysearch.CanConfirmBody() then
-			self:PlayerWasConfirmed()
+			self:UpdateUIWhenPlayerWasConfirmed()
 		end
 	end
 

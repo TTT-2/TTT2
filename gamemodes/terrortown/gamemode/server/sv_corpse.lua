@@ -204,34 +204,34 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	-- @realm server
 	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
-	local sData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
+	local sceneData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
 	-- only in mode 0 everyone can confirm by pressing E
-	if bodysearch.GetInspectConfirmMode() == 0 or sData.base.isPublicPolicingSearch then
+	if bodysearch.GetInspectConfirmMode() == 0 or sceneData.base.isPublicPolicingSearch then
 		-- only give credits if body is also confirmed
 		if not isCovert then
-			bodysearch.GiveFoundCredits(ply, rag, isLongRange, sData.searchUID)
+			bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
 		end
 
 		if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
-			CORPSE.IdentifyBody(ply, rag, sData.searchUID)
+			CORPSE.IdentifyBody(ply, rag, sceneData.searchUID)
 		end
 	elseif ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and not isCovert then
 		-- in mode 1 and 2 every active shopping role can take credits
-		bodysearch.GiveFoundCredits(ply, rag, isLongRange, sData.searchUID)
+		bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
 	end
 
 	-- cache credits of corpse here, AFTER one might has taken them
-	sData.credits = CORPSE.GetCredits(rag, 0)
+	sceneData.credits = CORPSE.GetCredits(rag, 0)
 
 	-- identifier so we know whether a ttt_confirm_death was legit
-	ply.searchID = sData.searchUID
+	ply.searchID = sceneData.searchUID
 
 	local roleData = ply:GetSubRoleData()
 	if ply:IsActive() and roleData.isPolicingRole and roleData.isPublicRole and not isCovert then
-		bodysearch.StreamSceneData(sData)
+		bodysearch.StreamSceneData(sceneData)
 	else
-		bodysearch.StreamSceneData(sData, ply)
+		bodysearch.StreamSceneData(sceneData, ply)
 	end
 end
 

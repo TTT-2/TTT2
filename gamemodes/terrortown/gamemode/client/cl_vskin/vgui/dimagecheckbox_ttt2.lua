@@ -105,6 +105,13 @@ function PANEL:Init()
 	}
 end
 
+function PANEL:OnRemove()
+	-- old end is removed because clientside models are not garbage collected
+	if IsValid(self.data.ent) then
+		self.data.ent:Remove()
+	end
+end
+
 ---
 -- @param number iDirections
 -- @param Color color

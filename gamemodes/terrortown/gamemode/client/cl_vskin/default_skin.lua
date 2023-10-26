@@ -23,6 +23,7 @@ local SKIN = {
 
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
+local DynT = LANG.GetDynamicTranslation
 
 local mathRound = math.Round
 
@@ -133,12 +134,15 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 	drawBox(0, sizes.header, w, sizes.border, colors.accentDark)
 
 	local title = panel:GetTitle()
+	local text = ""
 
 	if istable(title) then
-		drawShadowedText(ParT(title.body, title.params), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		text = ParT(title.body, title.params)
 	else
-		drawShadowedText(TryT(title), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		text = TryT(title)
 	end
+
+	drawShadowedText(text, panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 end
 
 ---
@@ -1579,8 +1583,8 @@ function SKIN:PaintProfilePanelTTT2(panel, w, h)
 	local colorRoleIcon = utilGetDefaultColor(colorBackground)
 
 	-- cache materials
-	materialPlayerIcon = panel:GetPlayerIcon()
-	materialRole = panel:GetPlayerRoleIcon()
+	local materialPlayerIcon = panel:GetPlayerIcon()
+	local materialRole = panel:GetPlayerRoleIcon()
 
 	drawBox(0, 0, w, h, colorRole)
 	drawBox(padding, padding, widthRender, heightRender, colorBackground)
@@ -1691,21 +1695,12 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 	local text = panel:GetText()
 	local text_translated = ""
 	for i = 1, #text do
-		local par = text[i].params
+		local params = text[i].params
 		local body = text[i].body
 
 		if not body then continue end
 
-		if par then
-			-- process params (translation)
-			for k, v in pairs(par) do
-				par[k] = TryT(v)
-			end
-
-			text_translated = text_translated .. ParT(body, par) .. " "
-		else
-			text_translated = text_translated .. TryT(body) .. " "
-		end
+		text_translated = text_translated .. DynT(body, params, true) .. ""
 	end
 
 	local text_wrapped = drawGetWrappedText(

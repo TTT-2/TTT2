@@ -51,6 +51,8 @@ if SERVER then
 		local isLongRange = net.ReadBool()
 		local creditsOnly = net.ReadBool()
 
+		-- if the search ID doesn't match the ID cached on the player, this search is not
+		-- valid and should be discarded
 		if ply.searchID ~= searchUID then
 			ply.searchID = nil
 
@@ -140,7 +142,7 @@ if SERVER then
 
 	---
 	-- Assimilates the scene data from the player death. Uses multiple sources of data collected in different
-	-- hooks and puts them all inside the sData table that is retuned. The table has a few entries that are
+	-- hooks and puts them all inside the sceneData table that is retuned. The table has a few entries that are
 	-- always present if scene data is collected. Some more in depth information might depend on the role of
 	-- the player that is currently searching the body.
 	-- @param Player inspector The player that searches the corpse
@@ -150,111 +152,111 @@ if SERVER then
 	-- @return table The scene data table
 	-- @realm server
 	function bodysearch.AssimilateSceneData(inspector, rag, isCovert, isLongRange)
-		local sData = {}
+		local sceneData = {}
 		local inspectorRoleData = inspector:GetSubRoleData()
 		local isPublicPolicingSearch = inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole
 
-		-- hot-reloads can break the data, therefore we have to sanitize it
-		rag.scene = rag.scene or {}
-
 		-- data that is available to everyone
-		sData.base = {}
-		sData.base.inspector = inspector
-		sData.base.isPublicPolicingSearch = isPublicPolicingSearch and inspector:IsActive() and not isCovert
+		sceneData.base = {}
+		sceneData.base.inspector = inspector
+		sceneData.base.isPublicPolicingSearch = isPublicPolicingSearch and inspector:IsActive() and not isCovert
 
-		sData.playerModel = rag.scene.plyModel or ""
-		sData.ragOwner = player.GetBySteamID64(rag.sid64)
-		sData.credits = CORPSE.GetCredits(rag, 0)
-		sData.searchUID = mathFloor(rag:EntIndex() + (rag.time or 0))
+		sceneData.playerModel = rag.scene.plyModel or ""
+		sceneData.ragOwner = player.GetBySteamID64(rag.sid64)
+		sceneData.credits = CORPSE.GetCredits(rag, 0)
+		sceneData.searchUID = mathFloor(rag:EntIndex() + (rag.time or 0))
+
+		sceneData.isCovert = isCovert
+		sceneData.isLongRange = isLongRange
 
 		-- if a non-public or non-policing role tries to search a body in mode 2, nothing happens
 		if cvInspectConfirmMode:GetInt() == 2 and not isPublicPolicingSearch and not inspector:IsSpec() then
-			return sData
+			return sceneData
 		end
 
-		sData.nick = CORPSE.GetPlayerNick(rag)
-		sData.subrole = rag.was_role
-		sData.roleColor = rag.role_color
-		sData.team = rag.was_team
+		sceneData.nick = CORPSE.GetPlayerNick(rag)
+		sceneData.subrole = rag.was_role
+		sceneData.roleColor = rag.role_color
+		sceneData.team = rag.was_team
 
-		if not sData.nick or not sData.subrole or not sData.team then
+		if not sceneData.nick or not sceneData.subrole or not sceneData.team then
 			return
 		end
 
-		sData.rag = rag
-		sData.eq = rag.equipment or {}
-		sData.c4CutWire = rag.bomb_wire or - 1
-		sData.dmgType = rag.dmgtype or DMG_GENERIC
-		sData.wep = rag.dmgwep or ""
-		sData.lastWords = rag.last_words
-		sData.wasHeadshot = rag.was_headshot or false
-		sData.deathTime = rag.time or 0
-		sData.sid64 = rag.scene.plySID64 or ""
-		sData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage or 0))
-		sData.killFloorSurface = rag.scene.floorSurface or 0
-		sData.killWaterLevel = rag.scene.waterLevel or 0
-		sData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
+		sceneData.rag = rag
+		sceneData.eq = rag.equipment or {}
+		sceneData.c4CutWire = rag.bomb_wire or - 1
+		sceneData.dmgType = rag.dmgtype or DMG_GENERIC
+		sceneData.wep = rag.dmgwep or ""
+		sceneData.lastWords = rag.last_words
+		sceneData.wasHeadshot = rag.was_headshot or false
+		sceneData.deathTime = rag.time or 0
+		sceneData.sid64 = rag.scene.plySID64 or ""
+		sceneData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage or 0))
+		sceneData.killFloorSurface = rag.scene.floorSurface or 0
+		sceneData.killWaterLevel = rag.scene.waterLevel or 0
+		sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 
-		sData.killDistance = CORPSE_KILL_NONE
+		sceneData.killDistance = CORPSE_KILL_NONE
 		if rag.scene.hit_trace then
 			local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
 			if rawKillDistance < 200 then
-				sData.killDistance = CORPSE_KILL_POINT_BLANK
+				sceneData.killDistance = CORPSE_KILL_POINT_BLANK
 			elseif rawKillDistance >= 700 then
-				sData.killDistance = CORPSE_KILL_FAR
+				sceneData.killDistance = CORPSE_KILL_FAR
 			elseif rawKillDistance >= 200 then
-				sData.killDistance = CORPSE_KILL_CLOSE
+				sceneData.killDistance = CORPSE_KILL_CLOSE
 			end
 		end
 
-		sData.killHitGroup = HITGROUP_GENERIC
+		sceneData.killHitGroup = HITGROUP_GENERIC
 		if rag.scene.hit_group and rag.scene.hit_group > 0 then
-			sData.killHitGroup = rag.scene.hit_group
+			sceneData.killHitGroup = rag.scene.hit_group
 		end
 
-		sData.killOrientation = CORPSE_KILL_NONE
+		sceneData.killOrientation = CORPSE_KILL_NONE
 		if rag.scene.hit_trace and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
-				sData.killOrientation = CORPSE_KILL_BACK
+				sceneData.killOrientation = CORPSE_KILL_BACK
 			elseif rawKillAngle < 135 then
-				sData.killOrientation = CORPSE_KILL_SIDE
+				sceneData.killOrientation = CORPSE_KILL_SIDE
 			else
-				sData.killOrientation = CORPSE_KILL_FRONT
+				sceneData.killOrientation = CORPSE_KILL_FRONT
 			end
 		end
 
-		sData.sampleDecayTime = 0
+		sceneData.sampleDecayTime = 0
 		if rag.killer_sample then
-			sData.sampleDecayTime = rag.killer_sample.t
+			sceneData.sampleDecayTime = rag.killer_sample.t
 		end
 
 		-- build list of people this player killed, but only if convar is enabled
-		sData.kill_entids = {}
+		sceneData.kill_entids = {}
 		if GetConVar("ttt2_confirm_killlist"):GetBool() then
 			local ragKills = rag.kills or {}
 
 			for i = 1, #ragKills do
-				local vicsid = ragKills[i]
+				local victimSIDs = ragKills[i]
 
 				-- also send disconnected players as a marker
-				local vic = player.GetBySteamID64(vicsid)
+				local vic = player.GetBySteamID64(victimSIDs)
 
-				sData.kill_entids[#sData.kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
+				sceneData.kill_entids[#sceneData.kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
 			end
 		end
 
-		return sData
+		return sceneData
 	end
 
 	---
 	-- Streams the provided scene data to the given clients, is broadcasted if no client is defined.
-	-- @param table sData The scene data table that should be streamed to the client(s)
+	-- @param table sceneData The scene data table that should be streamed to the client(s)
 	-- @param[opt] table|player client Optional, use it to send a stream to a single client or a group of clients
 	-- @realm server
-	function bodysearch.StreamSceneData(sData, client)
-		net.SendStream("TTT2_BodySearchData", sData, client)
+	function bodysearch.StreamSceneData(sceneData, client)
+		net.SendStream("TTT2_BodySearchData", sceneData, client)
 	end
 end
 
@@ -302,7 +304,7 @@ if CLIENT then
 		["drown"] = DMG_DROWN,
 		["stab"] = DMG_SLASH,
 		["burn"] = DMG_BURN,
-		["tele"] = DMG_SONIC,
+		["teleport"] = DMG_SONIC,
 		["car"] = DMG_VEHICLE
 	}
 
@@ -328,7 +330,7 @@ if CLIENT then
 	}
 
 	local floorIDToText = {
-		[MAT_ANTLION] = "search_floor_antillions",
+		[MAT_ANTLION] = "search_floor_antlionss",
 		[MAT_BLOODYFLESH] = "search_floor_bloodyflesh",
 		[MAT_CONCRETE] = "search_floor_concrete",
 		[MAT_DIRT] = "search_floor_dirt",
@@ -510,9 +512,9 @@ if CLIENT then
 
 			if num == 1 then
 				local vic = Entity(data.kills[1])
-				local dc = data.kills[1] == -1 -- disconnected
+				local disconnected = data.kills[1] == -1
 
-				if dc or IsValid(vic) and vic:IsPlayer() then
+				if disconnected or IsValid(vic) and vic:IsPlayer() then
 					return {
 						title = {
 							body = "search_title_kills",
@@ -520,7 +522,7 @@ if CLIENT then
 						},
 						text = {{
 							body = "search_kills1",
-							params = {player = dc and "<Disconnected>" or vic:Nick()}
+							params = {player = disconnected and "<Disconnected>" or vic:Nick()}
 						}}
 					}
 				end
@@ -529,10 +531,10 @@ if CLIENT then
 
 				for k, idx in pairs(data.kills) do
 					local vic = Entity(idx)
-					local dc = idx == -1
+					local disconnected = idx == -1
 
-					if dc or IsValid(vic) and vic:IsPlayer() then
-						nicks[#nicks + 1] = dc and "<Disconnected>" or vic:Nick()
+					if disconnected or IsValid(vic) and vic:IsPlayer() then
+						nicks[#nicks + 1] = disconnected and "<Disconnected>" or vic:Nick()
 					end
 				end
 
@@ -581,7 +583,7 @@ if CLIENT then
 
 			-- special case: mode 2, only shopping roles can see credits
 			local client = LocalPlayer()
-			if bodysearch.GetInspectConfirmMode() == 2
+			if cvInspectConfirmMode:GetInt() == 2
 				and (not client:IsActiveShopper() or client:GetSubRoleData().preventFindCredits)
 			then return end
 
@@ -726,23 +728,23 @@ if CLIENT then
 	-- Generated the search box data from the provided data for a given type.
 	-- @note This function is used to populate the UI of the bodysearch menu. You probably don't want to use this.
 	-- @param string type The element type identifier
-	-- @param table sData The scene data that is provided to get the box contents
+	-- @param table sceneData The scene data that is provided to get the box contents
 	-- @return nil|table Returns `nil` if no data for given type is available, table with box content if available
 	-- @realm client
-	function bodysearch.GetContentFromData(type, sData)
+	function bodysearch.GetContentFromData(type, sceneData)
 		-- make sure type is valid
 		if not isfunction(DataToText[type]) then return end
 
-		local text = DataToText[type](sData)
+		local text = DataToText[type](sceneData)
 
 		-- DataToText checks if criteria for display is met, no box should be
 		-- shown if criteria is not met.
 		if not text then return end
 
 		return {
-			iconMaterial = TypeToMaterial(type, sData),
-			iconText = TypeToIconText(type, sData),
-			colorBox = TypeToColor(type, sData),
+			iconMaterial = TypeToMaterial(type, sceneData),
+			iconText = TypeToIconText(type, sceneData),
+			colorBox = TypeToColor(type, sceneData),
 			text = text
 		}
 	end
@@ -765,20 +767,9 @@ if CLIENT then
 
 			-- a workaround to build the rext for the scoreboard
 			local text = searchData.text.text
-			local transText = ""
 
 			-- only use the first text entry here
-			local par = text[1].params
-			if par then
-				-- process params (translation)
-				for k, v in pairs(par) do
-					par[k] = LANG.TryTranslation(v)
-				end
-
-				transText = transText .. LANG.GetParamTranslation(text[1].body, par) .. " "
-			else
-				transText = transText .. LANG.TryTranslation(text[1].body) .. " "
-			end
+			local transText = DynT(text[1].body, text[1].params, true)
 
 			search[type] = {
 				img = searchData.iconMaterial:GetName(),
@@ -806,16 +797,14 @@ if CLIENT then
 	-- improve what a player knows, but to never remove information on.
 	-- This functions considers the roles and the settings of the local player and the player that
 	-- inspected the body.
-	-- @param table sData The table of scene data that should be stored
+	-- @param table sceneData The table of scene data that should be stored
 	-- @note The data is stored as `bodySearchResult` on the ragdoll and the owner of the ragdoll
 	-- @realm client
-	function bodysearch.StoreSearchResult(sData)
-		if not sData.ragOwner then return end
+	function bodysearch.StoreSearchResult(sceneData)
+		if not sceneData.ragOwner then return end
 
-		-- if existing result was not ours, it was detective's, and should not
-		-- be overwritten
-		local ply = sData.ragOwner
-		local rag = sData.rag
+		local ply = sceneData.ragOwner
+		local rag = sceneData.rag
 
 		-- do not store if searching player (client) is spectator
 		if LocalPlayer():IsSpec() then return end
@@ -825,9 +814,9 @@ if CLIENT then
 		-- data can still be updated, but the original base is kept
 		local oldBase
 		if ply.bodySearchResult and ply.bodySearchResult.base and ply.bodySearchResult.base.isPublicPolicingSearch
-			and not sData.base.isPublicPolicingSearch
+			and not sceneData.base.isPublicPolicingSearch
 		then
-			oldBase = sData.base
+			oldBase = sceneData.base
 		end
 
 		-- merge new data into old data
@@ -835,7 +824,7 @@ if CLIENT then
 		-- and now gets updated info on it as it now only replaces the newly added
 		-- entries
 		local newData = ply.bodySearchResult or {}
-		table.Merge(newData, sData)
+		table.Merge(newData, sceneData)
 
 		-- keep the original finder info if previously searched by public policing role
 		newData.base = oldBase or newData.base
@@ -889,9 +878,14 @@ if CLIENT then
 	-- @param Entity rag The ragdoll entity whose owner should be confirmed
 	-- @param[default=0] number searchUID The UID of the search, used for keeping track of searches in the UI
 	-- @param[default=false] boolean isLongRange Whether the search is a long range search
-	-- @param[default=false] boolean creditsOnly If set to true, then the body won't be onfirmed and only credits will be transferred
+	-- @param[default=false] boolean playerCanTakeCredits Whether or not the player could be able to take credits
 	-- @realm client
-	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange, creditsOnly)
+	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange, playerCanTakeCredits)
+		local clientRoleData = LocalPlayer():GetSubRoleData()
+		local creditsOnly = playerCanTakeCredits
+			and GetConVar("ttt2_inspect_confirm_mode"):GetInt() > 0
+			and not (clientRoleData.isPolicingRole and clientRoleData.isPublicRole)
+
 		net.Start("ttt2_client_confirm_corpse")
 		net.WriteEntity(rag)
 		net.WriteUInt(searchUID or 0, 16)

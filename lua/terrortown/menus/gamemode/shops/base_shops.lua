@@ -69,7 +69,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		for i = 1, #items do
 			local item = items[i]
 
-			-- Only keep ttt-equipments that are cached
 			if not item.isEquipment then continue end
 
 			counter = counter + 1

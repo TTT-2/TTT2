@@ -28,8 +28,7 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 	for i = 1, #equipments do
 		local equipment = equipments[i]
 
-		-- Only keep ttt-equipments that are cached
-		if not equipment.iconMaterial and not equipment.itemModel then continue end
+		if not equipment.isEquipment then continue end
 
 		counter = counter + 1
 

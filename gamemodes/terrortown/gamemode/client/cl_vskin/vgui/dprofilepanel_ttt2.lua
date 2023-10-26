@@ -89,6 +89,13 @@ function PANEL:Init()
 	self.data = {}
 end
 
+function PANEL:OnRemove()
+	-- old end is removed because clientside models are not garbage collected
+	if IsValid(self.data.ent) then
+		self.data.ent:Remove()
+	end
+end
+
 ---
 -- @param number iDirections
 -- @param Color color
@@ -292,4 +299,4 @@ function PANEL:Paint(w, h)
 	return false
 end
 
-derma.DefineControl("DProfilePanelTTT2", "A special button with image or model that acts as a checkbox", PANEL, "DLabelTTT2")
+derma.DefineControl("DProfilePanelTTT2", "A special box with a 3D model or model", PANEL, "DLabelTTT2")

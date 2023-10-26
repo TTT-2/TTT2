@@ -82,4 +82,4 @@ function PANEL:Paint(w, h)
 	return false
 end
 
-derma.DefineControl("DInfoItemTTT2", "A special info box used for body search info", PANEL, "DPanelTTT2")
+derma.DefineControl("DInfoItemTTT2", "An info box that can contain an icon, a header text and a description area", PANEL, "DPanelTTT2")

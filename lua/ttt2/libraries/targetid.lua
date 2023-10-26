@@ -490,7 +490,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 
 	if tData:GetEntityDistance() <= 100 then
 		if client:IsSpec() then
-			tData:SetSubtitle(ParT("corpse_hint_spec", key_params))
+			tData:SetSubtitle(ParT("corpse_hint_spectator", key_params))
 		elseif bodysearch.GetInspectConfirmMode() == 2 and not (roleDataClient.isPolicingRole and roleDataClient.isPublicRole) then
 			-- a detective added search results, this should change the targetID
 			if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
