@@ -122,10 +122,10 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		local ragKills = rag.kills
 
 		for i = 1, #ragKills do
-			local vicsid = ragKills[i]
+			local victimSIDs = ragKills[i]
 
 			-- filter out disconnected (and bots !)
-			local vic = player.GetBySteamID64(vicsid)
+			local vic = player.GetBySteamID64(victimSIDs)
 
 			-- is this an unconfirmed dead?
 			if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then continue end

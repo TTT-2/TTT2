@@ -89,6 +89,8 @@ function PANEL:Init()
 	self.data = {}
 end
 
+---
+-- @realm client
 function PANEL:OnRemove()
 	-- old end is removed because clientside models are not garbage collected
 	if IsValid(self.data.ent) then

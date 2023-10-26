@@ -958,7 +958,7 @@ if CLIENT then
 
 		-- in mode 0 the ragdoll has to be found to report body
 		if cvInspectConfirmMode:GetInt() == 0
-			and not self.IsConfirmed(ragOwner)
+			and not bodysearch.IsConfirmed(ragOwner)
 		then
 			return false
 		end
