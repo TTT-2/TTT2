@@ -250,7 +250,7 @@ function PANEL:SetPlayerTeamString(team)
 end
 
 ---
--- @return Material
+-- @return Material|nil
 -- @realm client
 function PANEL:GetPlayerIcon()
 	return self.data.player_icon
