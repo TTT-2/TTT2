@@ -52,7 +52,7 @@ function PANEL:HasIcon()
 end
 
 ---
--- @return Color
+-- @return Color|nil
 -- @realm client
 function PANEL:GetColor()
 	return self.data.colorBox
