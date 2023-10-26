@@ -278,7 +278,7 @@ function PANEL:GetPlayerRoleString()
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetPlayerTeamString()
 	return self.data.player_team_name
