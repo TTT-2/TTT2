@@ -264,7 +264,7 @@ function PANEL:GetPlayerRoleIcon()
 end
 
 ---
--- @return Color
+-- @return Color|nil
 -- @realm client
 function PANEL:GetPlayerRoleColor()
 	return self.data.player_role_color
