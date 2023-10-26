@@ -38,7 +38,7 @@ function PANEL:GetTitle()
 end
 
 ---
--- @return Matieral
+-- @return Material|nil
 -- @realm client
 function PANEL:GetIcon()
 	return self.data.iconMaterial
