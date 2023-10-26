@@ -124,7 +124,7 @@ if CLIENT then
 
 			local name = item.EquipMenuData and item.EquipMenuData.name or (item.name or "")
 
-			-- alow dynamic status names
+			-- allow dynamic status names
 			if istable(name) then
 				name = name[item.active_icon]
 			end
