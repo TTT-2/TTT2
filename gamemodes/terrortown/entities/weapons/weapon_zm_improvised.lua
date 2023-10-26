@@ -316,7 +316,17 @@ if SERVER then
 	cvars.AddChangeCallback(cvCrowbarDelay:GetName(), ChangeShoveDelay, "TTT2CrowbarShoveDelay")
 
 	hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)
-else -- CLIENT
+end
+
+if CLIENT then
+	---
+	-- @ignore
+	function SWEP:Initialize()
+		self:AddTTT2HUDHelp("crowbar_help_primary", "crowbar_help_secondary")
+
+		return self.BaseClass.Initialize(self)
+	end
+
 	---
 	-- @ignore
 	function SWEP:AddToSettingsMenu(parent)

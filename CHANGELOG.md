@@ -27,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
 - Updated the disguiser to make it more clear in the HUD if it is enabled or not
+- Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 
 ### Fixed
 

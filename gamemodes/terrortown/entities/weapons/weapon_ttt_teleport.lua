@@ -357,7 +357,7 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:Initialize()
-		self:AddHUDHelp("tele_help_pri", "tele_help_sec", true)
+		self:AddTTT2HUDHelp("tele_help_pri", "tele_help_sec")
 
 		return self.BaseClass.Initialize(self)
 	end

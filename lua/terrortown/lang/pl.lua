@@ -1910,3 +1910,6 @@ L.none = "Brak Roli"
 
 --L.status_on = "on"
 --L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"

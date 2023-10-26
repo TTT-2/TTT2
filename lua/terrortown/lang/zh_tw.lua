@@ -1913,3 +1913,6 @@ L.slot_weapon_class = "職業槽"
 
 --L.status_on = "on"
 --L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"

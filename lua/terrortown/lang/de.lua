@@ -1907,3 +1907,6 @@ L.label_voice_scaling_mode_log = "Logarithmisch"
 
 --L.status_on = "on"
 --L.status_off = "off"
+
+L.crowbar_help_primary = "Zuschlagen"
+L.crowbar_help_secondary = "Spieler schubsen"
