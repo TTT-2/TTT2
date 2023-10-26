@@ -409,7 +409,7 @@ local drawShadowedText = draw.ShadowedText
 -- @param number scale The scale (float number)
 -- @2D
 -- @realm client
-function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
 	local scaleModifier = 1.0
 	local t_font = fonts.GetFont(font)
 
@@ -420,15 +420,17 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 
 	local scaled = isvector(scale) or scale ~= 1.0
+	local rotated = angle and angle ~= 0 and angle ~= 360
 	local mat
 
-	if scaled then
+	if scaled or rotated then
 		local hw = ScrW() * 0.5
 		local hh = ScrH() * 0.5
 
 		mat = Matrix()
 		mat:Translate(Vector(x, y))
 		mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+		mat:Rotate(Angle(0, angle, 0))
 		mat:Translate(-Vector(hw, hh))
 
 		render.PushFilterMag(TEXFILTER.LINEAR)
@@ -446,7 +448,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 		drawSimpleText(text, font, x, y, color, xalign, yalign)
 	end
 
-	if scaled then
+	if scaled or rotated then
 		cam.PopModelMatrix()
 
 		render.PopFilterMag()
