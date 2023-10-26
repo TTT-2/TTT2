@@ -201,7 +201,7 @@ function PANEL:RunAnimation()
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetModel()
 	return self.data.mdl
