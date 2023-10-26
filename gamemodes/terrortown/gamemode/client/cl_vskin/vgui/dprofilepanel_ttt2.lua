@@ -271,7 +271,7 @@ function PANEL:GetPlayerRoleColor()
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetPlayerRoleString()
 	return self.data.player_role_name
