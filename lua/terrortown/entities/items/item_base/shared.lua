@@ -38,7 +38,7 @@ if CLIENT then
 	-- }
 
 	-- A short description for the sidebar
-	ITEM.SidebarDescription = nil
+	ITEM.sidebarDescription = nil
 
 	-- This sets the icon shown for the @{ITEM} in the DNA sampler, search window,
 	-- equipment menu (if buyable), etc.

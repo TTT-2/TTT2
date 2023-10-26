@@ -94,7 +94,7 @@ if CLIENT then
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
 		if isfunction(item.DrawInfo) then
-			local info = item:DrawInfo()
+			local info = TryT(item:DrawInfo())
 			if info then
 				local infoW, infoH = draw.GetTextSize(info, "PureSkinItemInfo")
 				infoW = infoW * self.scale
@@ -122,18 +122,34 @@ if CLIENT then
 			local offsetTitle = -2 * self.scale
 			local offsetLines = {19 * self.scale, 33 * self.scale}
 
-			draw.AdvancedText(TryT(item.EquipMenuData.name), "PureSkinPopupText", xText, curY + offsetTitle, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
+			local name = item.EquipMenuData and item.EquipMenuData.name or (item.name or "")
 
-			local translatedText = TryT(item.SidebarDescription or item.EquipMenuData.desc or "")
+			-- alow dynamic status names
+			if istable(name) then
+				name = name[item.active_icon]
+			end
+
+			draw.AdvancedText(TryT(name), "PureSkinPopupText", xText, curY + offsetTitle, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
+
+			local translatedText = TryT((item.sidebarDescription or item.EquipMenuData and item.EquipMenuData.desc) or "")
 
 			local wrappedText = draw.GetWrappedText(
 				translatedText,
-				275 * self.scale,
+				285 * self.scale,
 				"PureSkinItemInfo"
 			)
 
-			for i = 1, math.min(2, #wrappedText) do
-				draw.AdvancedText(wrappedText[i], "PureSkinItemInfo", xText, curY + offsetLines[i], COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
+			local lineCount = #wrappedText
+
+			for i = 1, math.min(2, lineCount) do
+				local line = wrappedText[i]
+
+				-- if text is shortned, then this should be indicated
+				if i == 2 and lineCount > 2 then
+					line = line .. " [...]"
+				end
+
+				draw.AdvancedText(line, "PureSkinItemInfo", xText, curY + offsetLines[i], COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
 			end
 		end
 

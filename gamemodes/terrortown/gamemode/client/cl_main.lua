@@ -344,6 +344,9 @@ function GM:OnReloaded()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
+	ARMOR:Initialize()
+	SPEED:Initialize()
+
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
