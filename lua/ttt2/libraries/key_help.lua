@@ -178,7 +178,7 @@ function keyhelp.InitializeBasicKeys()
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("+duck", materialPointer, KEYHELP_CORE, "label_keyhelper_show_pointer", function(client)
-		if not client:IsSpec() then return end
+		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
 
 		return true
 	end)
@@ -247,7 +247,7 @@ function keyhelp.InitializeBasicKeys()
 
 		local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner") ~= client then return end
 
 		return true
 	end)
@@ -256,7 +256,7 @@ function keyhelp.InitializeBasicKeys()
 
 		local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner") ~= client then return end
 
 		return true
 	end)
