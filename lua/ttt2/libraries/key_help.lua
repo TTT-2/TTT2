@@ -41,6 +41,7 @@ local materialChatTeam = Material("vgui/ttt/hudhelp/chat_team")
 local materialFlashlight = Material("vgui/ttt/hudhelp/flashlight")
 local materialQuickchat = Material("vgui/ttt/hudhelp/quickchat")
 local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
+local materialPointer = Material("vgui/ttt/hudhelp/pointer")
 
 local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
 local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
@@ -148,6 +149,11 @@ function keyhelp.InitializeBasicKeys()
 	end)
 	keyhelp.RegisterKeyHelper("+menu_context", materialShoppingRole, KEYHELP_CORE, "label_keyhelper_shop", function(client)
 		if client:IsSpec() or not client:IsShopper() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+duck", materialPointer, KEYHELP_CORE, "label_keyhelper_show_pointer", function(client)
+		if not client:IsSpec() then return end
 
 		return true
 	end)
