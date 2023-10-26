@@ -208,7 +208,7 @@ function PANEL:RunAnimation()
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetModel()
 	return self.data.mdl
@@ -257,35 +257,35 @@ function PANEL:SetPlayerTeamString(team)
 end
 
 ---
--- @return Material
+-- @return Material|nil
 -- @realm client
 function PANEL:GetPlayerIcon()
 	return self.data.player_icon
 end
 
 ---
--- @return material
+-- @return Material|nil
 -- @realm client
 function PANEL:GetPlayerRoleIcon()
 	return self.data.player_role_icon
 end
 
 ---
--- @return Color
+-- @return Color|nil
 -- @realm client
 function PANEL:GetPlayerRoleColor()
 	return self.data.player_role_color
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetPlayerRoleString()
 	return self.data.player_role_name
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetPlayerTeamString()
 	return self.data.player_team_name

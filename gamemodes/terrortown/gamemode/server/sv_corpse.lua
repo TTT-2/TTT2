@@ -69,7 +69,7 @@ function CORPSE.SetCredits(rag, credits)
 end
 
 ---
--- Identifies the corpse, registers it and announces it to the server, if possible.
+-- Identifies the corpse, registers it and announces it to the players, if possible.
 -- @param Player ply The player that tries to identify the body
 -- @param Entity rag The ragdoll entity that is searched
 -- @param[default=0] number searchUID The unique search ID that is used to keep track of the search for the UI

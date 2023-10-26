@@ -42,7 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
     - mode 1: everyone can see information, but only public policing roles can actually confirm bodies
     - mode 2: only public policing roles can see informatiom. They have to confirm bodies so that other people are able to see this information as well
   - to comply with mode 1 and 2 now everyone is able to see in the targetID if a player was searched by a public policing role
-- ranmed `search_result` to `bodySearchResult` which contains the search result data
+- renamed `search_result` to `bodySearchResult` which contains the search result data
 - changed the credit text color from yellow to gold (by @TimGoll)
 
 ### Fixed

@@ -24,7 +24,7 @@ function PANEL:SetData(data)
 end
 
 ---
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetText()
 	return self.data.text.text
@@ -38,7 +38,7 @@ function PANEL:GetTitle()
 end
 
 ---
--- @return Matieral
+-- @return Material|nil
 -- @realm client
 function PANEL:GetIcon()
 	return self.data.iconMaterial
@@ -52,7 +52,7 @@ function PANEL:HasIcon()
 end
 
 ---
--- @return Color
+-- @return Color|nil
 -- @realm client
 function PANEL:GetColor()
 	return self.data.colorBox
