@@ -50,18 +50,6 @@ local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
-function keyhelp.RegisterKeyHelper(binding, iconMaterial, bindingType, bindingName, callback)
-	keyhelp.keyHelpers[bindingType] = keyhelp.keyHelpers[bindingType] or {}
-
-	keyhelp.keyHelpers[bindingType][#keyhelp.keyHelpers[bindingType] + 1] = {
-		binding = binding,
-		iconMaterial = iconMaterial,
-		bindingType = bindingType,
-		bindingName = bindingName,
-		callback = callback
-	}
-end
-
 local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, scoreboardShown)
 	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key")
 	local wBox = math.max(size, wKeyString) + 2 * padding
@@ -105,6 +93,31 @@ local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown)
 	return xBase + padding + DrawKeyContent(xBase, yBase, width, stringUpper(key), keyHelper.iconMaterial, keyHelper.bindingName, scoreboardShown)
 end
 
+---
+-- Registers a key helper that will be shown in the key helper area. Addon swill probaly set the
+-- binding type `KEYHELP_EQUIPMENT`.
+-- @param string binding The binding that is used here, it is either the gmod or TTT2 binding name
+-- @param Material iconMaterial The material for the icon used in the UI
+-- @param number bindingType The category in which this binding is sorted
+-- @param string bindingName The name for the binding, should be translateable
+-- @param function callback The callback function that checks if this binding should be rendered on screen
+-- @realm client
+function keyhelp.RegisterKeyHelper(binding, iconMaterial, bindingType, bindingName, callback)
+	keyhelp.keyHelpers[bindingType] = keyhelp.keyHelpers[bindingType] or {}
+
+	keyhelp.keyHelpers[bindingType][#keyhelp.keyHelpers[bindingType] + 1] = {
+		binding = binding,
+		iconMaterial = iconMaterial,
+		bindingType = bindingType,
+		bindingName = bindingName,
+		callback = callback
+	}
+end
+
+---
+-- Draws the keyhelpers to the screen, is called from within @{GM:HUDPaint}.
+-- @internal
+-- @realm client
 function keyhelp.Draw()
 	local client = LocalPlayer()
 	local scoreboardShown = GAMEMODE.ShowScoreboard
@@ -137,6 +150,10 @@ function keyhelp.Draw()
 	end
 end
 
+---
+-- Initializes the basic keys that should be registered. Called from within @{GM:Initialize} and @{GM:OnReloaded}.
+-- @internal
+-- @realm client
 function keyhelp.InitializeBasicKeys()
 	-- core bindings that should be visible be default
 	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, "label_keyhelper_help", function(client)

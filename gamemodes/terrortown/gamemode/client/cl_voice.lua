@@ -90,6 +90,10 @@ local function VoiceTeamTryDisable()
 	return false
 end
 
+---
+-- Checks if a player can enable the team voice chat.
+-- @return boolean Returns if the player is able to use the team voice chat
+-- @realm client
 function VOICE.CanTeamEnable()
 	local client = LocalPlayer()
 
@@ -114,6 +118,10 @@ function VOICE.CanTeamEnable()
 	end
 end
 
+---
+-- Checks if a player can enable the global voice chat.
+-- @return boolean Returns if the player is able to use the global voice chat
+-- @realm client
 function VOICE.CanEnable()
 	local client = LocalPlayer()
 

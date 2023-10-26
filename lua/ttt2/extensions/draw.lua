@@ -406,7 +406,8 @@ local drawShadowedText = draw.ShadowedText
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
--- @param number scale The scale (float number)
+-- @param[default=1.0] number scale The text scale (float number)
+-- @param[default=0] number angle The rotational angle in degree
 -- @2D
 -- @realm client
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
