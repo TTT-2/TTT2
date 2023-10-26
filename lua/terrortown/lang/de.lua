@@ -1896,3 +1896,7 @@ L.label_voice_scaling = "Skalierungsmodus der Lautstärke der Stimme"
 L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
+
+-- 2023-10-26
+L.crowbar_help_primary = "Zuschlagen"
+L.crowbar_help_secondary = "Spieler schubsen"

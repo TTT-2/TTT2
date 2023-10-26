@@ -1927,3 +1927,7 @@ L.xfer_team_indicator = "Time"
 -- L.label_voice_scaling_mode_linear = "Linear"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-26
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
