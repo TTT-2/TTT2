@@ -17,9 +17,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
     - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
 - Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
 - Translated all strings still needed to german (by @NickCloudAT)
-- added keybinding information to the bottom of the screen (by @TimGoll)
-  - can be disabled in Appearance->Interface
-  - shows binding name when scoreboard is opened
+- Added keybinding information to the bottom of the screen (by @TimGoll)
+  - Can be disabled in Appearance->Interface
+  - Shows binding name when scoreboard is opened
+- Added option to render rotated text on screen (by @TimGoll)
 
 ### Changed
 
