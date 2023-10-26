@@ -102,7 +102,7 @@ local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown)
 end
 
 ---
--- Registers a key helper that will be shown in the key helper area. Addon swill probaly set the
+-- Registers a key helper that will be shown in the key helper area. Addons will probaly set the
 -- binding type `KEYHELP_EQUIPMENT`.
 -- @param string binding The binding that is used here, it is either the gmod or TTT2 binding name
 -- @param Material iconMaterial The material for the icon used in the UI
