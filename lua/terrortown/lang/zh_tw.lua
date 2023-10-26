@@ -1891,8 +1891,8 @@ L.slot_weapon_extra = "額外槽"
 L.slot_weapon_class = "職業槽"
 
 -- 2023-10-04
-L.label_voice_duck_spectator = "觀眾鴨子聲音"
-L.label_voice_duck_spectator_amount = "觀眾鴨子聲音百分比"
+L.label_voice_duck_spectator = "降低觀察者語音"
+L.label_voice_duck_spectator_amount = "降低觀察者語音音量"
 L.label_voice_scaling = "語音音量縮放模式"
 L.label_voice_scaling_mode_linear = "線性"
 L.label_voice_scaling_mode_power4 = "四次方"
