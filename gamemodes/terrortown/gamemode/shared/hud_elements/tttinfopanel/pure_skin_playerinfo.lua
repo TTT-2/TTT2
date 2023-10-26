@@ -32,7 +32,6 @@ if CLIENT then
 	}
 
 	local healthPulsate = CreateConVar("ttt2_hud_pulsate_health", "1", FCVAR_ARCHIVE)
-	local healthPulsateRate = CreateConVar("ttt2_hud_pulsate_health_rate", "10", FCVAR_ARCHIVE)
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -227,16 +226,13 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 			local armor = client:GetArmor()
-
-			local factor = 1
 			local alpha = 255
 
-			if health <= client:GetMaxHealth()*0.25 and healthPulsate:GetBool() then
-				local frequency = util.mapToValue(health, 1, client:GetMaxHealth()*0.25+1, 1, healthPulsateRate:GetInt())
+			if health <= client:GetMaxHealth() * 0.25 and healthPulsate:GetBool() then
+				local frequency = util.mapToValue(health, 1, client:GetMaxHealth() * 0.25 + 1, 1, 6)
 
-				factor = math.abs(math.sin(CurTime()*(healthPulsateRate:GetInt() + 1 - frequency)))
+				local factor = math.abs(math.sin(CurTime() * (7 - frequency)))
 
-				print(frequency)
 				alpha = math.Round(factor*255)
 			end
 
