@@ -263,12 +263,14 @@ function keyhelp.InitializeBasicKeys()
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("messagemode", materialChatGlobal, KEYHELP_EXTRA, "label_keyhelper_chat_global", function(client)
-		if not VOICE.CanEnable() then return end
+		if client:GetSubRoleData().disabledGeneralChat then return end
 
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("messagemode2", materialChatTeam, KEYHELP_EXTRA, "label_keyhelper_chat_team", function(client)
-		if not VOICE.CanTeamEnable() then return end
+		local clientRoleData = client:GetSubRoleData()
+
+		if clientRoleData.unknownTeam or clientRoleData.disabledTeamChat then return end
 
 		return true
 	end)
