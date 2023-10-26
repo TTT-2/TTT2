@@ -293,6 +293,8 @@ function keyhelp.InitializeBasicKeys()
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("messagemode2", materialChatTeam, KEYHELP_EXTRA, "label_keyhelper_chat_team", function(client)
+		if client:IsSpec() then return end
+
 		local clientRoleData = client:GetSubRoleData()
 
 		if clientRoleData.unknownTeam or clientRoleData.disabledTeamChat then return end
