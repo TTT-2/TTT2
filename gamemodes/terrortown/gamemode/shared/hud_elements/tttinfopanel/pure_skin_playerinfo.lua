@@ -31,6 +31,9 @@ if CLIENT then
 		minsize = {w = 240, h = 146}
 	}
 
+	local healthPulsate = CreateConVar("ttt2_hud_pulsate_health", "1", FCVAR_ARCHIVE)
+	local healthPulsateRate = CreateConVar("ttt2_hud_pulsate_health_rate", "10", FCVAR_ARCHIVE)
+
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
@@ -224,6 +227,20 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 			local armor = client:GetArmor()
+
+			local factor = 1
+			local alpha = 255
+
+			if health <= client:GetMaxHealth()*0.25 and healthPulsate:GetBool() then
+				local frequency = util.mapToValue(health, 1, client:GetMaxHealth()*0.25+1, 1, healthPulsateRate:GetInt())
+
+				factor = math.abs(math.sin(CurTime()*(healthPulsateRate:GetInt() + 1 - frequency)))
+
+				print(frequency)
+				alpha = math.Round(factor*255)
+			end
+
+			color_health = ColorAlpha(color_health, alpha)
 
 			self:DrawBar(nx, ty, bw, bh, color_health, health / client:GetMaxHealth(), t_scale, string.upper(L["hud_health"]) .. ": " .. health)
 

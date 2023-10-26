@@ -483,6 +483,27 @@ function util.VectorInBounds(vec, lowerBound, upperBound)
 		and vec.z > lowerBound.z and vec.z < upperBound.z
 end
 
+---
+-- Maps one integer value to another in a different range
+-- @param number value The value that should be mapped
+-- @param number minValue The minimum value that 'value' can have
+-- @param number maxValue The maximum value that 'value' can have
+-- @param number minTargetValue The minimum value that the mapped value can have
+-- @param number maxTargetValue The maximum value that the mapped value can have
+-- @realm shared
+function util.mapToValue(value, minValue, maxValue, minTargetValue, maxTargetValue)
+	local minValue = minValue
+	local maxValue = maxValue
+	local minTargetValue = minTargetValue
+	local maxTargetValue = maxTargetValue
+
+	value = mathMax(minValue, mathMin(maxValue, value))
+
+	local targetValue = minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
+
+	return targetValue
+end
+
 if CLIENT then
 	local colorsHealth = {
 		healthy = Color(0, 255, 0, 255),
