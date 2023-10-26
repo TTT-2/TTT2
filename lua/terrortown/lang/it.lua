@@ -1899,3 +1899,14 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 -- L.label_voice_scaling_mode_linear = "Linear"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
