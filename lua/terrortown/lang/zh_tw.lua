@@ -422,7 +422,7 @@ L.magnet_help = "{primaryfire} 將其定在牆上。"
 L.grenade_smoke = "煙霧彈"
 L.grenade_fire = "燃燒彈"
 
-L.unarmed_name = "無武裝"
+L.unarmed_name = "收起武器"
 L.crowbar_name = "撬棍"
 L.pistol_name = "手槍"
 L.rifle_name = "狙擊槍"
