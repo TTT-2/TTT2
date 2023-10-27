@@ -194,7 +194,7 @@ function map.DummifyFallbackWeaponEnts()
 		scripedEntsRegister({
 			Type = "point",
 			IsWeaponDummy = true
-		}, fallbackWepSpawnEnts[i], false)
+		}, fallbackWepSpawnEnts[i])
 	end
 end
 

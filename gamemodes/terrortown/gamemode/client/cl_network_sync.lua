@@ -85,7 +85,7 @@ function ttt2net.GetOnPlayer(path, ply)
 	table.insert(tmpPath, 1, "players")
 	table.insert(tmpPath, 2, ply:EntIndex())
 
-	return ttt2net.Get(tmpPath, client)
+	return ttt2net.Get(tmpPath, ply)
 end
 
 ---

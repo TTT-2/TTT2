@@ -1256,8 +1256,6 @@ function PrintResultMessage(result)
 
 		return
 	end
-
-	ServerLog("Result: unknown victory condition!\n")
 end
 
 ---

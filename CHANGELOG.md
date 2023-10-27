@@ -15,6 +15,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
   - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
     - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
+- Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
+- Translated all strings still needed to german (by @NickCloudAT)
+- Added new sidebar information, when the scoreboard is open (by @TimGoll)
+- Added keybinding information to the bottom of the screen (by @TimGoll)
+  - Can be disabled in Appearance->Interface
+  - Shows binding name when scoreboard is opened
+- Added option to render rotated text on screen (by @TimGoll)
 
 ### Changed
 
@@ -23,10 +30,28 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+- Updated the disguiser to make it more clear in the HUD if it is enabled or not
+- Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 
 ### Fixed
 
 - Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
+- Multiple internal fixes
+  - biggest teamkiller award should now work
+  - item model caching should now work properly
+  - role info popup for traitors should now show teammembers again if the traitor shop is disabled
+  - `pon` and `table` libraries got a small fix respectively
+  - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
+  - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
+- Fixed disguiser breaking UI on hot reload (by @TimGoll)
+- Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
+- Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
+- Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
+
+### Removed
+
+- Removed `AccessorfuncDT()` in favor of using gmod's `Accessorfunc()`
+- Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 

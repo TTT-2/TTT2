@@ -807,7 +807,7 @@ function AWARDS.TeamKiller(events, scores, players, traitors)
 			local tmp = tbl.tk / tbl.k
 
 			if tmp > pct then
-				tker = id
+				tker = tk
 				tka = tbl.tk
 				pct = tmp
 			end

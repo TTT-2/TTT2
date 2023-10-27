@@ -496,10 +496,6 @@ function KARMA.RoundIncrement()
 			if ply:GetCleanRound() then
 				KARMA.GiveReward(ply, cleanbonus, KARMA.reason[KARMA_CLEAN])
 			end
-
-			if IsDebug() then
-				print(ply, "gets roundincr ", incr)
-			end
 		end
 	end
 
