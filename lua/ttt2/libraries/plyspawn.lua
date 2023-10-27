@@ -10,7 +10,7 @@ local table = table
 local mathSin = math.sin
 local mathCos = math.cos
 
-local spawnPointVariations = {vector_origin}
+local spawnPointVariations = {Vector(0, 0, 0)}
 
 for i = 0, 360, 22.5 do
 	spawnPointVariations[#spawnPointVariations + 1] = Vector(mathCos(i), mathSin(i), 0)
