@@ -187,7 +187,7 @@ L.search_role_inno = "这个人是无辜的恐怖分子。"
 
 L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
 L.search_armor = "他穿着非标准装甲。"
-L.search_disg = "他持有一个能隐匿身份的设备"
+L.search_disg = "他持有一个能隐匿身份的装备"
 L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
 L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
 
@@ -322,7 +322,7 @@ L.defuser_help = "{primaryfire} 拆除目标炸弹。"
 L.defuser_desc = [[
 迅速拆除一个C4。
 
-不限制使用次数。若你持有此设备，拆除C4时会轻松许多。]]
+不限制使用次数。若你持有此装备，拆除C4时会轻松许多。]]
 
 -- Flare gun
 L.flare_name = "信号枪"
@@ -505,7 +505,7 @@ L.mute_all = "全部静音"
 L.mute_off = "取消静音"
 
 -- Spectators and prop possession
-L.punch_title = "飞击量表" --"PUNCH-O-METER"
+L.punch_title = "飞击量表"
 L.punch_bonus = "你的分数较低，飞击量表上限减少 {num}"
 L.punch_malus = "你的分数较高，飞击量表上限增加 {num}！"
 
@@ -959,10 +959,10 @@ L.corpse_too_far_away = "这个尸体太远了。"
 L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
-L.hstation_subtitle = "按 [{usekey}] 恢复生命"
+L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
 L.hstation_charge = "剩余充能：{charge}"
 L.hstation_empty = "这个医疗站没有剩余充能"
-L.hstation_maxhealth = "你的生命恢复已满"
+L.hstation_maxhealth = "你的生命值恢复已满"
 L.hstation_short_desc = "医疗站会逐渐回复充能"
 
 -- 2019-11-03
@@ -1001,7 +1001,7 @@ L.mute_team = "静音 {team}"
 L.door_auto_closes = "此门会自动关闭"
 L.door_open_touch = "此门接触后会自动开启"
 L.door_open_touch_and_use = "接触门或按 [{usekey}] 开门。"
-L.hud_health = "生命"
+L.hud_health = "生命值"
 
 -- 2020-03-09
 L.help_title = "帮助和设定"
@@ -1210,7 +1210,7 @@ L.dna_help_reload = "删除当前样本"
 L.binoc_help_pri = "确认尸体"
 L.binoc_help_sec = "切换放大倍率"
 
-L.vis_help_pri = "丢弃当前设备。"
+L.vis_help_pri = "丢弃当前装备。"
 
 L.decoy_help_pri = "安放诱饵。"
 
@@ -1358,7 +1358,7 @@ L.shopeditor_desc_random_shops = [[随机商店只给每个玩家提供一套有
 阵营商店迫使一个阵营中的所有玩家拥有相同的套装，而不是定制化。
 重新投票可以让你用积分获得一套新的随机装备。]]
 L.shopeditor_name_random_shop_items = "随机装备的数量"
-L.shopeditor_desc_random_shop_items = "这包括那些标有“非随机”的设备。所以请选择一个足够高的数字，否则你只能得到这些。"
+L.shopeditor_desc_random_shop_items = "这包括那些标有“非随机”的装备。所以请选择一个足够高的数字，否则你只能得到这些。"
 L.shopeditor_name_random_team_shops = "启用阵营商店"
 L.shopeditor_name_random_shop_reroll = "启用商店重选功能"
 L.shopeditor_name_random_shop_reroll_cost = "每次重选的花费"
@@ -1488,7 +1488,7 @@ L.help_spawn_editor_spawn_amount = [[
 
 {playerrandom} x 玩家随机位置生成]]
 
-L.equipmenteditor_name_auto_spawnable = "设备在地图中随机产生"
+L.equipmenteditor_name_auto_spawnable = "装备在地图中随机产生"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
 L.equipmenteditor_desc_auto_spawnable = [[
 TTT2的生成系统允许每种武器在世界中生成，默认情况下，只有被创造者标记为'自动生成'的武器才会在世界中生成，但这些设置可以在该菜单中更改。
@@ -1597,7 +1597,7 @@ L.label_detective_hats = "为像侦探这样的警察角色启用帽子（如果
 
 L.ttt2_desc_innocent = "无辜者没有特殊能力。他们必须在恐怖分子中找到邪恶的人并杀死他们。但他们必须小心，不要误杀自己的同伴。"
 L.ttt2_desc_traitor = "叛徒是无辜者的敌人。他们有一个装备菜单，可以购买特殊装备。他们必须杀死所有的人，除了他们的队友。"
-L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜者？强大的侦探必须要找到所有图谋不轨恐怖分子。他们商店里的设备可能会帮助他们完成这项任务。"
+L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜者？强大的侦探必须要找到所有图谋不轨恐怖分子。他们商店里的装备可能会帮助他们完成这项任务。"
 
 -- 2021-10-10
 L.button_reset_models = "重置玩家模型"
@@ -1617,7 +1617,7 @@ L.help_detective_hats = [[
 
 部分玩家模型默认不支持帽子。你可以在'管理'->'玩家模型'中改变这一点。]]
 
-L.label_roles_credits_award_kill = "Credit reward amount for the kill"
+L.label_roles_credits_award_kill = "击杀后的积分奖励数量"
 L.label_roles_credits_dead_award = "启用对依据一定比例敌人死亡数提供积分奖励"
 L.label_roles_credits_kill_award = "启用对击杀高价值角色时提供积分奖励"
 L.label_roles_min_karma = "分配角色时玩家的最低人品值"
@@ -1895,47 +1895,47 @@ L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
 
 -- 2023-10-25
---L.help_keyhelp = [[
---Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+L.help_keyhelp = [[
+按键绑定帮助器是用户界面元素的一部分，它总是向玩家显示相关的按键绑定，这对新玩家特别有帮助。按键绑定有三种不同类型：
 
---Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
---Equipment: Some equipment items have their own bindings, these are shown in this category.
+核心：它们包含 TTT2 中最重要的绑定。没有它们，游戏就很难发挥其全部潜力。
+额外：与核心绑定类似，但并非总是需要。它们包含聊天、语音或手电筒等内容。启用这些功能可能会对新玩家有所帮助。
+装备：有些装备项目有自己的绑定，这些都显示在此类别中。
 
---Disabled categories are still shown when the scoreboard is visible]]
+当记分板可见时，已禁用的类别仍会显示]]
 
---L.label_keyhelp_show_core = "Enable always showing the core bindings"
---L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
---L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+L.label_keyhelp_show_core = "启用始终显示核心绑定"
+L.label_keyhelp_show_extra = "启用始终显示额外绑定"
+L.label_keyhelp_show_equipment = "启用始终显示装备绑定"
 
---L.header_interface_keys = "Key helper settings"
---L.header_interface_wepswitch = "Weapon switch UI settings"
+L.header_interface_keys = "按键绑定帮助器设置"
+L.header_interface_wepswitch = "武器切换UI设置"
 
---L.label_keyhelper_help = "open gamemode menu"
---L.label_keyhelper_mutespec = "cycle spectator voice mode"
---L.label_keyhelper_shop = "open equipment shop"
---L.label_keyhelper_show_pointer = "free mouse pointer"
---L.label_keyhelper_possess_focus_entity = "possess focused entity"
---L.label_keyhelper_spec_focus_player = "spectate focused player"
---L.label_keyhelper_spec_previous_player = "previous player"
---L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate player"
---L.label_keyhelper_possession_jump = "prop: jump"
---L.label_keyhelper_possession_left = "prop: left"
---L.label_keyhelper_possession_right = "prop: right"
---L.label_keyhelper_possession_forward = "prop: forward"
---L.label_keyhelper_possession_backward = "prop: backward"
---L.label_keyhelper_free_roam = "leave object and roam free"
---L.label_keyhelper_flashlight = "toggle flashlight"
---L.label_keyhelper_quickchat = "open quickchat"
---L.label_keyhelper_voice_global = "global voice chat"
---L.label_keyhelper_voice_team = "team voice chat"
---L.label_keyhelper_chat_global = "global chat"
---L.label_keyhelper_chat_team = "team chat"
---L.label_keyhelper_show_all = "show all"
---L.label_keyhelper_disguiser = "toggle disguiser"
---L.label_keyhelper_save_exit = "save and exit"
---L.label_keyhelper_spec_third_person = "toggle third person view"
+L.label_keyhelper_help = "打开游戏模式菜单"
+L.label_keyhelper_mutespec = "切换观看语音模式"
+L.label_keyhelper_shop = "打开装备商店"
+L.label_keyhelper_show_pointer = "显示鼠标指针"
+L.label_keyhelper_possess_focus_entity = "对Prop附体"
+L.label_keyhelper_spec_focus_player = "观看焦点玩家"
+L.label_keyhelper_spec_previous_player = "上一个玩家"
+L.label_keyhelper_spec_next_player = "下一个玩家"
+L.label_keyhelper_spec_player = "观看玩家"
+L.label_keyhelper_possession_jump = "Prop：跳跃"
+L.label_keyhelper_possession_left = "Prop：向左"
+L.label_keyhelper_possession_right = "Prop：向右"
+L.label_keyhelper_possession_forward = "Prop：向前"
+L.label_keyhelper_possession_backward = "Prop：向后"
+L.label_keyhelper_free_roam = "离开对象并自由漫游"
+L.label_keyhelper_flashlight = "切换手电筒"
+L.label_keyhelper_quickchat = "打开快聊"
+L.label_keyhelper_voice_global = "全局语音聊天"
+L.label_keyhelper_voice_team = "团队语音聊天"
+L.label_keyhelper_chat_global = "全局聊天"
+L.label_keyhelper_chat_team = "团队聊天"
+L.label_keyhelper_show_all = "显示全部"
+L.label_keyhelper_disguiser = "切换伪装"
+L.label_keyhelper_save_exit = "保存退出"
+L.label_keyhelper_spec_third_person = "切换第三人称视图"
 
 -- 2023-10-26
 L.crowbar_help_primary = "攻击"
