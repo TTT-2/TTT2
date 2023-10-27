@@ -145,7 +145,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	-- This might exceed the actual damage, so we need to limit this.
 	local damageReduced = math.min(damage, armor / self.cv.armor_factor)
 
-        dmginfo:SetDamage(damageReduced * self.cv.health_factor + damage - damageReduced)
+	dmginfo:SetDamage(damageReduced * self.cv.health_factor + damage - damageReduced)
 end
 
 ---
