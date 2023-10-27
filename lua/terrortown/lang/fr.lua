@@ -1440,7 +1440,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1864,7 +1864,6 @@ L.karma_unknown_tooltip = "Inconnu"
 
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
-
 
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"

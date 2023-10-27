@@ -1440,7 +1440,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1864,7 +1864,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
-
 
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"

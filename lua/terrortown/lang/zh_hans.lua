@@ -1897,3 +1897,7 @@ L.label_voice_scaling = "语音音量缩放模式"
 L.label_voice_scaling_mode_linear = "线性"
 L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
+
+-- 2023-10-26
+L.crowbar_help_primary = "攻击"
+L.crowbar_help_secondary = "推动玩家"

@@ -1440,7 +1440,7 @@ L.spawn_ammo_rifle = "Gewehrmunitionsspawn"
 L.spawn_ammo_shotgun = "Schrotflintenmunitionsspawn"
 L.spawn_player_random = "Zufallsspielerspawn"
 
-L.spawn_weapon_ammo = " (Munition: {ammo})"
+L.spawn_weapon_ammo = "(Munition: {ammo})"
 
 L.spawn_weapon_edit_ammo = "Halte [{walkkey}] und drücke [{primaryfire} oder {secondaryfire}], um die Munition für diesen Waffenspawn zu erhöhen / reduzieren"
 
@@ -1863,7 +1863,6 @@ L.tbut_adminarea = "ADMIN BEREICH:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "Schadensskalierung"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Erlaube Fallenlassen"
 L.equipmenteditor_desc_allow_drop = "Wenn aktiviert, kann Ausrüstung beliebig vom Spieler fallengelassen werden"
@@ -1873,7 +1872,6 @@ L.equipmenteditor_desc_drop_on_death_type = "Versuche, die Aktion zu überschrei
 L.drop_on_death_type_default = "Standard (pro Waffe definiert)"
 L.drop_on_death_type_force = "Erzwinge Fallenlassen beim Tod"
 L.drop_on_death_type_deny = "Verhindere Fallenlassen beim Tod"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "Ausrüstungs Slot"

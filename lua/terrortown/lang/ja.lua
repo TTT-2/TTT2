@@ -1436,7 +1436,7 @@ L.spawn_ammo_rifle = "ライフル弾"
 L.spawn_ammo_shotgun = "バックショット"
 L.spawn_player_random = "プレイヤースポーン"
 
-L.spawn_weapon_ammo = " (弾薬:{ammo})"
+L.spawn_weapon_ammo = "(弾薬:{ammo})"
 
 L.spawn_weapon_edit_ammo = "[{walkkey}]を押しながら[{primaryfire}又は{secondaryfire}]を押すとこちらのスポーンの弾薬を増加又は減少させることができます。"
 
@@ -1861,7 +1861,6 @@ L.help_falldmg_exponent = [[
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1872,7 +1871,6 @@ L.help_falldmg_exponent = [[
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"

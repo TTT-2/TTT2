@@ -17,13 +17,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
     - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
 - Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
 - Translated all strings still needed to german (by @NickCloudAT)
+- Add the required string translations (by @sbzlzh)
 
 ### Changed
 
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
-  - Remove redundant string translations and spaces. 
-  - Add the required string translations.
+  - Remove redundant string translations and spaces
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
