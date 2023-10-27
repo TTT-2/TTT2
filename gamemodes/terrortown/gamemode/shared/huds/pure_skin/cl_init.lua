@@ -23,6 +23,8 @@ include("cl_drawing_functions.lua")
 
 local base = "scalable_hud"
 
+local savingKeys
+
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
@@ -48,6 +50,28 @@ function HUD:Initialize()
 	self:ForceElement("pure_skin_teamindicator")
 
 	BaseClass.Initialize(self)
+end
+
+---
+-- This function will return a table containing all keys that will be stored by
+-- the @{HUD:SaveData} function.
+-- @return table
+-- @realm client
+function HUD:GetSavingKeys()
+	if not savingKeys then
+		savingKeys = BaseClass.GetSavingKeys(self)
+		savingKeys.healthPulsate = {
+			typ = "bool",
+			desc = "label_hud_pulsate_health_enable",
+			default = true,
+			OnChange = function(slf, bool)
+				slf:PerformLayout()
+				slf:SaveData()
+			end
+		}
+	end
+
+	return table.Copy(savingKeys)
 end
 
 -- Voice overriding

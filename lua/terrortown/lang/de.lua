@@ -1464,9 +1464,9 @@ L.help_spawn_editor_info = [[
 Der Spawndeditor wird verwendet, um Spawns in der Welt zu platzieren, zu entfernen und zu bearbeiten. Diese Spawns sind für Waffen, Munition und Spieler.
 
 Diese Spawns werden in Dateien im Verzeichnis 'data/ttt/weaponspawnscripts/' gespeichert. Sie können für einen harten Reset gelöscht werden. Die ursprünglichen Spawndateien werden aus den auf der Karte gefundenen Spawns und den ursprünglichen TTT-Waffenspawnskripten erstellt. Das Drücken der Zurücksetzen-Schaltfläche führt immer zur Ausgangsposition zurück.
-    
+
 Es sollte beachtet werden, dass dieses Spawnsystem dynamische Spawns verwendet. Dies ist besonders interessant für Waffen, da es nicht mehr eine bestimmte Waffe definiert, sondern einen Typ von Waffen. Zum Beispiel gibt es anstelle eines TTT-Schrotgewehr-Spawns jetzt einen allgemeinen Schrotgewehr-Spawn, auf dem jede als Schrotgewehr definierte Waffe erscheinen kann. Der Spawntyp für jede Waffe kann im 'Ausrüstung bearbeiten'-Menü festgelegt werden. Dies ermöglicht es, dass jede Waffe auf der Karte erscheinen kann, oder bestimmte Standardwaffen deaktiviert werden können.
-    
+
 Beachte, dass viele Änderungen erst nach Beginn einer neuen Runde wirksam werden.]]
 L.help_spawn_editor_enable = "Auf einigen Karten kann es ratsam sein, die ursprünglichen Spawns auf der Karte zu verwenden, anstatt sie durch das dynamische System zu ersetzen. Die Änderung dieser Option unten betrifft nur die derzeit aktive Karte, sodass das dynamische System weiterhin für jede andere Karte verwendet wird."
 L.help_spawn_editor_hint = "Hinweis: Öffne das Gamemode Menü erneut, um den Spawneditor zu verlassen"
@@ -1561,7 +1561,7 @@ L.help_roles_selection = [[
 Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens 5 Spieler benötigt werden, damit diese Rolle überhaupt verteilt wird.
 
 Beachte, dass all dies nur gilt, wenn die Rolle für den Verteilungsprozess berücksichtigt wird.
-    
+
 Die oben genannte Rollenverteilung hat eine besondere Integration mit der unteren Spielerbegrenzung. Wenn die Rolle für die Verteilung in Betracht gezogen wird und der Mindestwert unter dem Wert liegt, der durch den Verteilungsfaktor angegeben wird, aber die Anzahl der Spieler gleich oder größer als die untere Begrenzung ist, kann immer noch ein einzelner Spieler diese Rolle erhalten. Der Verteilungsprozess funktioniert dann wie gewohnt für den zweiten Spieler.]]
 L.help_roles_award_info = "Einige Rollen (wenn in ihren Credit-Einstellungen aktiviert) erhalten Credits, wenn ein bestimmter Prozentsatz an Feinden gestorben ist. Die damit verbundenen Werte können hier angepasst werden."
 L.help_roles_award_pct = "Wenn dieser Prozentsatz der Feinde tot ist, erhalten bestimmte Rollen Credits als Belohnung."
@@ -1896,3 +1896,7 @@ L.label_voice_scaling = "Skalierungsmodus der Lautstärke der Stimme"
 L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
+
+-- 2023-10-23
+L.header_miscellaneous_settings = "Verschiedene Einstellungen"
+L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"

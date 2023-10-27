@@ -1899,3 +1899,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 -- L.label_voice_scaling_mode_linear = "Linear"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"

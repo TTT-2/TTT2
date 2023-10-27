@@ -484,24 +484,17 @@ function util.VectorInBounds(vec, lowerBound, upperBound)
 end
 
 ---
--- Maps one integer value to another in a different range
+-- Adjusts a numeric value from one range to a different one in a relative transformation.
 -- @param number value The value that should be mapped
 -- @param number minValue The minimum value that 'value' can have
 -- @param number maxValue The maximum value that 'value' can have
 -- @param number minTargetValue The minimum value that the mapped value can have
 -- @param number maxTargetValue The maximum value that the mapped value can have
 -- @realm shared
-function util.mapToValue(value, minValue, maxValue, minTargetValue, maxTargetValue)
-	local minValue = minValue
-	local maxValue = maxValue
-	local minTargetValue = minTargetValue
-	local maxTargetValue = maxTargetValue
-
+function util.TransformToRange(value, minValue, maxValue, minTargetValue, maxTargetValue)
 	value = mathMax(minValue, mathMin(maxValue, value))
 
-	local targetValue = minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
-
-	return targetValue
+	return minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
 end
 
 if CLIENT then

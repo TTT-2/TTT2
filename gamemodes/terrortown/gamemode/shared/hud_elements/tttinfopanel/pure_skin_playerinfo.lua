@@ -31,8 +31,6 @@ if CLIENT then
 		minsize = {w = 240, h = 146}
 	}
 
-	local healthPulsate = CreateConVar("ttt2_hud_pulsate_health", "1", FCVAR_ARCHIVE)
-
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
@@ -40,6 +38,7 @@ if CLIENT then
 		self.lpw = lpw
 		self.sri_text_width_padding = sri_text_width_padding
 		--self.secondaryRoleInformationFunc = nil
+		self.healthpulsate = huds.GetStored(HUDManager.GetHUD()).healthPulsate
 
 		BaseClass.Initialize(self)
 	end
@@ -67,6 +66,7 @@ if CLIENT then
 		self.lpw = lpw * self.scale
 		self.pad = pad * self.scale
 		self.sri_text_width_padding = sri_text_width_padding * self.scale
+		self.healthpulsate = huds.GetStored(HUDManager.GetHUD()).healthPulsate
 
 		BaseClass.PerformLayout(self)
 	end
@@ -228,8 +228,8 @@ if CLIENT then
 			local armor = client:GetArmor()
 			local alpha = 255
 
-			if health <= client:GetMaxHealth() * 0.25 and healthPulsate:GetBool() then
-				local frequency = util.mapToValue(health, 1, client:GetMaxHealth() * 0.25 + 1, 1, 6)
+			if health <= client:GetMaxHealth() * 0.25 and self.healthpulsate then
+				local frequency = util.TransformToRange(health, 1, client:GetMaxHealth() * 0.25 + 1, 1, 6)
 
 				local factor = math.abs(math.sin(CurTime() * (7 - frequency)))
 

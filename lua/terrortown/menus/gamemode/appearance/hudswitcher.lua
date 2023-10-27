@@ -36,10 +36,10 @@ local hudSwicherSettings = {
 		})
 	end,
 
-	["boolean"] = function(parent, currentHUD, key, data)
+	["bool"] = function(parent, currentHUD, key, data)
 		parent:MakeCheckBox({
 			label = data.desc or key,
-			initial = math.Round(currentHUD[key] or 1, 1),
+			initial = currentHUD[key] == nil and true or currentHUD[key],
 			default = data.default,
 			OnChange = function(_, value)
 				value = value or false
