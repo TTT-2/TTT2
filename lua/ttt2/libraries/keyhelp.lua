@@ -153,7 +153,7 @@ function keyhelp.Draw()
 		end
 	end
 
-	if not util.EditingModeActive() then
+	if not util.EditingModeActive(client) then
 		if cvEnableCore:GetBool() or scoreboardShown then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
 				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
@@ -187,12 +187,12 @@ end
 function keyhelp.InitializeBasicKeys()
 	-- core bindings that should be visible be default
 	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_INTERNAL, "label_keyhelper_help", function(client)
-		if util.EditingModeActive() then return end
+		if util.EditingModeActive(client) then return end
 
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_INTERNAL, "label_keyhelper_save_exit", function(client)
-		if not util.EditingModeActive() then return end
+		if not util.EditingModeActive(client) then return end
 
 		return true
 	end)
