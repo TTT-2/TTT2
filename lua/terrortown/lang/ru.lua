@@ -2,6 +2,7 @@
 
 local L = LANG.CreateLanguage("ru")
 
+-- This localization file is being moderated and constantly updated by Satton(RU).
 -- Please, in case you are making some changes ping @Satton2 on GitHub, contact him on Steam (STEAM_0:0:85981967) or Discord (Satton(RU)#5794).
 L.__alias = "Русский"
 
