@@ -1,7 +1,7 @@
 -- Polish language strings
--- 
+
 local L = LANG.CreateLanguage("pl")
--- 
+
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name:
 -- - does not exist -

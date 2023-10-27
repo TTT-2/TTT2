@@ -1,10 +1,8 @@
 -- Russian language strings
--- 
+
 local L = LANG.CreateLanguage("ru")
+
 -- Please, in case you are making some changes ping @Satton2 on GitHub, contact him on Steam (STEAM_0:0:85981967) or Discord (Satton(RU)#5794).
--- 
--- local L = LANG.CreateLanguage("ru")
--- 
 L.__alias = "Русский"
 
 L.lang_name = "Русский (Russian)"

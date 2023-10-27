@@ -1,7 +1,7 @@
 -- Traditional Chinese language strings (by TEGTianFan)
--- 
+
 local L = LANG.CreateLanguage("zh_tw")
--- 
+
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name:
 -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/tradchinese.lua

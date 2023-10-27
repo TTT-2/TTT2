@@ -1,7 +1,7 @@
 -- Simplified Chinese language strings (by 8z & TEGTianFan & 波と一緒に漂う)
--- 
+
 local L = LANG.CreateLanguage("zh_hans")
--- 
+
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name:
 -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/simpchinese.lua

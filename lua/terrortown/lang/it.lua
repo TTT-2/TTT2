@@ -1,7 +1,7 @@
 -- Italian language strings (by AL24 & THEPLATYNUMGHOST)
--- 
+
 local L = LANG.CreateLanguage("it")
--- 
+
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name:
 -- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/italian.lua
