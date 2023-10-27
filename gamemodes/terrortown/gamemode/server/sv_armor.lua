@@ -141,11 +141,11 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	ply:DecreaseArmorValue(armorDamage)
 
-	-- The leftover damage is used to catch the damage that should be taken,
-	-- if the armor is not strong enough to take that many hitpoints.
-	-- It is zero as long as the armor is able to take the damage.
-	local leftoverDamage = math.max(0, armorDamage - armor) / self.cv.armor_factor
-	dmginfo:SetDamage(self.cv.health_factor * (damage - leftoverDamage) + leftoverDamage)
+	-- Describes the maximum amount of damage that our current armor can endure.
+	-- This might exceed the actual damage, so we need to limit this.
+	local damageReduced = math.min(damage, armor / self.cv.armor_factor)
+
+        dmginfo:SetDamage(damageReduced * self.cv.health_factor + damage - damageReduced)
 end
 
 ---
