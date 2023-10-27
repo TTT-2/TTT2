@@ -1939,3 +1939,7 @@ L.tbut_adminarea = "Администраторская зона:"
 --L.label_keyhelper_chat_team = "team chat"
 --L.label_keyhelper_show_all = "show all"
 --L.label_keyhelper_disguiser = "toggle disguiser"
+
+-- 2023-10-26
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"

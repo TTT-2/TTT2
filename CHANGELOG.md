@@ -29,6 +29,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+- Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 
 ### Fixed
 
