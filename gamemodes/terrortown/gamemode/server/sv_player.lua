@@ -417,7 +417,7 @@ function GM:KeyPress(ply, key)
 				ply:SpectateEntity(target)
 			end
 		else
-			-- when not focuesed yet, snap to random guy
+			-- when not focused yet, snap to random guy
 			ply:UnSpectate()
 			ply:Spectate(OBS_MODE_ROAMING)
 			ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
