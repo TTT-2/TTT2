@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你得自己頂住了。"
 L.round_traitors_more = "叛徒，你的隊友是：{names}"
 
 L.win_time = "時間用盡，叛徒失敗了。"
---L.win_traitors = "The Traitors have won!"
---L.win_innocents = "The Innos have won!"
+L.win_traitors = "叛徒取得了勝利！"
+L.win_innocents = "叛徒們被擊敗了！"
 L.win_nones = "無人勝出！（平局）"
 L.win_showreport = "一起觀看觀看 {num} 秒的回合總結吧！"
 
