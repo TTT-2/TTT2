@@ -1901,7 +1901,7 @@ L.help_keyhelp = [[
 Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
 
 Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
-Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
 Equipment: Some equipment items have their own bindings, these are shown in this category.
 
 Disabled categories are still shown when the scoreboard is visible]]
