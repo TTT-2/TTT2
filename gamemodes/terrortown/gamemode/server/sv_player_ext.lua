@@ -880,7 +880,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			end
 
 			self:SetPos(spawnPos)
-			self:SetEyeAngles(spawnEyeAngle or angle_zero)
+			self:SetEyeAngles(spawnEyeAngle or Angle(angle_zero))
 
 			---
 			-- @realm server

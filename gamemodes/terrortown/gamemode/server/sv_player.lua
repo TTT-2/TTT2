@@ -1097,7 +1097,7 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 		dmg:SetDamageType(DMG_FALL)
 		dmg:SetAttacker(game.GetWorld())
 		dmg:SetInflictor(game.GetWorld())
-		dmg:SetDamageForce(vector_up)
+		dmg:SetDamageForce(Vector(vector_up))
 		dmg:SetDamage(damage)
 
 		ply:TakeDamageInfo(dmg)

@@ -356,7 +356,7 @@ if SERVER then
 
 			doorProp.isDoorProp = true
 
-			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or vector_origin)
+			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(vector_origin))
 
 			---
 			-- @realm server
