@@ -77,7 +77,9 @@ if CLIENT then
 			type = "good",
 			DrawInfo = function()
 				return math.Round(LocalPlayer():GetSpeedMultiplier(), 1)
-			end
+			end,
+			name = "status_speed_name",
+			sidebarDescription = "status_speed_description_good"
 		})
 
 		STATUS:RegisterStatus("ttt_speed_status_bad", {
@@ -87,7 +89,9 @@ if CLIENT then
 			type = "bad",
 			DrawInfo = function()
 				return math.Round(LocalPlayer():GetSpeedMultiplier(), 1)
-			end
+			end,
+			name = "status_speed_name",
+			sidebarDescription = "status_speed_description_bad"
 		})
 	end
 end

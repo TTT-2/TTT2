@@ -13,7 +13,12 @@ function ARMOR:Initialize()
 			Material("vgui/ttt/perks/hud_armor.png"),
 			Material("vgui/ttt/perks/hud_armor_reinforced.png")
 		},
-		type = "good"
+		type = "good",
+		name = {
+			"item_armor",
+			"item_armor_reinforced"
+		},
+		sidebarDescription = "item_armor_sidebar"
 	})
 end
 
