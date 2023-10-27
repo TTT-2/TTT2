@@ -47,6 +47,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
 - Optimized allocations by using global Vector / Angle when possible.
 - Fixed the UI being unable to handle languages that do not use ASCII whitespaces and therefore making text unreadable by placing it out of screen
+- Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
 
 ### Removed
 
