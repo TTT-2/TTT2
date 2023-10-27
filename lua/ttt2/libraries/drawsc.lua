@@ -171,12 +171,13 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- @param[default=0] number angle The rotational angle in degree
 -- @2D
 -- @realm client
-function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign)
+function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign, angle)
 	local scale = GetGlobalScale()
 
-	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, false, scale)
+	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, false, scale, angle)
 end
 
 ---
@@ -191,12 +192,13 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- @param[default=0] number angle The rotational angle in degree
 -- @2D
 -- @realm client
-function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign)
+function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign, angle)
 	local scale = GetGlobalScale()
 
-	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, true, scale)
+	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, true, scale, angle)
 end
 
 ---

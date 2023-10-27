@@ -2,6 +2,8 @@
 -- Disguiser @{ITEM}
 -- @module DISGUISE
 
+local materialIconDisguiser = Material("vgui/ttt/hudhelp/item_disguiser")
+
 DISGUISE = CLIENT and {}
 
 if SERVER then
@@ -81,6 +83,12 @@ if CLIENT then
 			WEPS.DisguiseToggle(LocalPlayer())
 		end,
 		nil, "header_bindings_ttt2", "label_bind_disguiser", KEY_PAD_ENTER)
+
+		keyhelp.RegisterKeyHelper("ttt2_disguiser_toggle", materialIconDisguiser, KEYHELP_EQUIPMENT, "label_keyhelper_disguiser", function(client)
+			if client:IsSpec() or not client:HasEquipmentItem("item_ttt_disguiser") then return end
+
+			return true
+		end)
 	end)
 else -- SERVER
 	local function SetDisguise(ply, cmd, args)

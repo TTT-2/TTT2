@@ -18,6 +18,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
 - Translated all strings still needed to german (by @NickCloudAT)
 - Added new sidebar information, when the scoreboard is open (by @TimGoll)
+- Added keybinding information to the bottom of the screen (by @TimGoll)
+  - Can be disabled in Appearance->Interface
+  - Shows binding name when scoreboard is opened
+- Added option to render rotated text on screen (by @TimGoll)
 
 ### Changed
 
@@ -39,10 +43,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `pon` and `table` libraries got a small fix respectively
   - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
   - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
+- Fixed disguiser breaking UI on hot reload (by @TimGoll)
+- Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
 
 ### Removed
 
 - Removed `AccessorfuncDT()` in favor of using gmod's `Accessorfunc()`
+- Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 

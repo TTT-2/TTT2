@@ -185,6 +185,8 @@ function GM:Initialize()
 
 	vskin.UpdatedVSkin(skinName, skinName)
 
+	keyhelp.InitializeBasicKeys()
+
 	---
 	-- @realm client
 	hook.Run("TTT2FinishedLoading")
@@ -352,6 +354,12 @@ function GM:OnReloaded()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	keyhelp.InitializeBasicKeys()
+
+	---
+	-- @realm client
+	hook.Run("TTT2FinishedLoading")
 end
 
 ---
