@@ -57,6 +57,14 @@ local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE
 -- @realm client
 local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR_ARCHIVE)
 
+---
+-- @realm client
+local cvEnableBoxBlur = CreateConVar("ttt2_HUD_enable_box_blur", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvEnableDesciption = CreateConVar("ttt2_HUD_enable_description", "1", FCVAR_ARCHIVE)
+
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
@@ -68,15 +76,18 @@ local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, 
 	local xKeyString = x + math.floor(0.5 * wBox)
 	local yKeyString = yIcon + size + padding
 
-	draw.BlurredBox(x, y, wBox, offsetHeight + padding)
-	draw.Box(x, y, wBox, offsetHeight + padding, colorBox) -- background color
-	draw.Box(x, y, wBox, 1, colorBox) -- top line shadow
-	draw.Box(x, y, wBox, 2, colorBox) -- top line shadow
-	draw.Box(x, y - 2, wBox, 2, COLOR_WHITE) -- white top line
+	if cvEnableBoxBlur:GetBool() then
+		draw.BlurredBox(x, y, wBox, offsetHeight + padding)
+		draw.Box(x, y, wBox, offsetHeight + padding, colorBox) -- background color
+		draw.Box(x, y, wBox, 1, colorBox) -- top line shadow
+		draw.Box(x, y, wBox, 2, colorBox) -- top line shadow
+		draw.Box(x, y - 2, wBox, 2, COLOR_WHITE) -- white top line
+	end
+
 	draw.FilteredShadowedTexture(xIcon, yIcon, size, size, iconMaterial, 255, COLOR_WHITE)
 	draw.ShadowedText(keyString, "weapon_hud_help_key", xKeyString, yKeyString, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
-	if scoreboardShown then
+	if scoreboardShown and cvEnableDesciption:GetBool() then
 		draw.AdvancedText(
 			LANG.TryTranslation(bindingName),
 			"weapon_hud_help",

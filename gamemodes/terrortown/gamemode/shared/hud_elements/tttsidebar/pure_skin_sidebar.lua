@@ -117,7 +117,7 @@ if CLIENT then
 			end
 		end
 
-		if GAMEMODE.ShowScoreboard then
+		if GAMEMODE.ShowScoreboard and GetConVar("ttt2_HUD_enable_description"):GetBool() then
 			local xText = pos.x + size.w + self.padding
 			local offsetTitle = -2 * self.scale
 			local offsetLines = {19 * self.scale, 33 * self.scale}
