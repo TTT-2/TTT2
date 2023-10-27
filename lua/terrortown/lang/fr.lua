@@ -1876,7 +1876,6 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
 
-
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
 --L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
