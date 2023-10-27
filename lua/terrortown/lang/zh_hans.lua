@@ -1454,7 +1454,7 @@ L.button_delete_all_spawns = "删除所有生成点位置"
 L.label_dynamic_spawns_enable = "为该地图启用动态生成"
 L.label_dynamic_spawns_global_enable = "为所有地图启用自定义生成"
 
-L.header_equipment_weapon_spawn_setup = "武器生成设置"
+L.header_equipment_weapon_spawn_setup = "武器生成设定"
 
 L.help_spawn_editor_info = [[
 生成编辑器是用来放置，移除和编辑世界上的生成点。这些生成点是为武器，弹药和玩家准备的。
@@ -1488,8 +1488,8 @@ L.help_spawn_editor_spawn_amount = [[
 
 {playerrandom} x 玩家随机位置生成]]
 
-L.equipmenteditor_name_auto_spawnable = "装备随机生成"
-L.equipmenteditor_name_spawn_type = "生成类型"
+L.equipmenteditor_name_auto_spawnable = "设备在地图中随机产生"
+L.equipmenteditor_name_spawn_type = "选择生成类型"
 L.equipmenteditor_desc_auto_spawnable = [[
 TTT2的生成系统允许每种武器在世界中生成，默认情况下，只有被创造者标记为'自动生成'的武器才会在世界中生成，但这些设置可以在该菜单中更改。
 
