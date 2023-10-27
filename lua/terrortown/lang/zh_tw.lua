@@ -488,6 +488,7 @@ L.corpse_hint = "按下 [{usekey}] 來搜索，用 [{walkkey} + {usekey}] 進行
 
 L.target_disg = " （偽裝狀態）"
 L.target_unid = "未確認的屍體"
+L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索屍體以獲取未被消耗的信用點數"
 
@@ -1299,6 +1300,7 @@ L.trap_something = "某件物品"
 -- Kill events
 L.desc_event_kill_suicide = "是自殺的"
 L.desc_event_kill_team = "是被隊友殺的"
+
 L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飛。"
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飛。"
 
@@ -1410,12 +1412,6 @@ L.xfer_team_indicator = "陣營"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "武器生成設置"
-
-L.equipmenteditor_name_auto_spawnable = "裝備隨機生成"
-L.equipmenteditor_name_spawn_type = "生成類型"
-
 -- 2021-07-11
 L.spec_about_to_revive = "在復活時，觀察將被限製。"
 
@@ -1475,7 +1471,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地圖上，可能會建議使用在地圖自帶的原始生成點，而不用動態系統來取代它們。禁用這個複選框只對當前活動地圖禁用。其他地圖仍將使用動態系統。"
 L.help_spawn_editor_hint = "提示：要離開生成編輯器，重新打開遊戲模式菜單。"
 L.help_spawn_editor_spawn_amount = [[
-目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 player} 個玩家生成點。
+目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 {player} 個玩家生成點。
 點擊'開始編輯生成'來改變這個生成。
 
 {weaponrandom}x 隨機武器生成
@@ -1543,6 +1539,7 @@ L.help_models_select = [[
 左鍵點擊模型，將其添加到玩家模型庫中。再次以左鍵刪除它們。右鍵可在所關注的模型的啟用和禁用偵探帽之間進行切換。
 
 左上角的小指示器顯示玩家模型是否有頭部的命中箱，下面的圖標顯示了這個模型是否可佩戴偵探帽。]]
+
 L.menu_roles_title = "角色設置"
 L.menu_roles_description = "設置生成概率、裝備積分及更多。"
 
@@ -1761,6 +1758,7 @@ L.label_round_limit = "回合數上限"
 L.label_time_limit_minutes = "遊戲時間上限，以分鐘為單位"
 L.label_nade_throw_during_prep = "在準備時間內允許投擲手榴彈"
 L.label_postround_dm = "回合結束後啟用死亡競賽"
+L.label_session_limits_enabled = "啟用地圖更換"
 L.label_spectator_chat = "啟用觀察者與大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字時被殺，則發出最後一句話至聊天室"
 L.label_identify_body_woconfirm = "不按'確認'按鈕識別屍體"
@@ -1829,9 +1827,6 @@ L.label_sprint_stamina_regeneration = "體力恢復系數"
 L.label_sprint_crosshair = "沖刺時顯示準星"
 L.label_crowbar_unlocks = "主要攻擊鍵可以作為互動（即解鎖）使用"
 L.label_crowbar_pushforce = "撬棍推動力"
-
---2022-04-13
-L.label_session_limits_enabled = "啟用地圖更換"
 
 -- 2022-07-02
 L.header_playersettings_falldmg = "摔落傷害設置"
