@@ -42,6 +42,8 @@ local materialFlashlight = Material("vgui/ttt/hudhelp/flashlight")
 local materialQuickchat = Material("vgui/ttt/hudhelp/quickchat")
 local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
 local materialPointer = Material("vgui/ttt/hudhelp/pointer")
+local materialThirdPerson = Material("vgui/ttt/hudhelp/third_person")
+local materialSave = Material("vgui/ttt/hudhelp/save")
 
 ---
 -- @realm client
@@ -165,6 +167,13 @@ end
 function keyhelp.InitializeBasicKeys()
 	-- core bindings that should be visible be default
 	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, "label_keyhelper_help", function(client)
+		if HUDEditor.IsEditing or entspawnscript.IsEditing(client) then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_CORE, "label_keyhelper_save_exit", function(client)
+		if not HUDEditor.IsEditing and not entspawnscript.IsEditing(client) then return end
+
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("gm_showteam", materialMute, KEYHELP_CORE, "label_keyhelper_mutespec", function(client)
@@ -202,6 +211,15 @@ function keyhelp.InitializeBasicKeys()
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("+attack2", materialPlayerNext, KEYHELP_CORE, "label_keyhelper_spec_next_player", function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or not target:IsPlayer() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+reload", materialThirdPerson, KEYHELP_CORE, "label_keyhelper_spec_third_person", function(client)
 		if not client:IsSpec() then return end
 
 		local target = client:GetObserverTarget()
