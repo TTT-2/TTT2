@@ -1894,45 +1894,45 @@ L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
 
 -- 2023-10-25
---L.help_keyhelp = [[
---Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+L.help_keyhelp = [[
+Tastenhelfer sind ein UI Element, welches dauerhaft relevante Tastenbelegungen für den Spieler anzeigen. Gerade unerfahrene Spieler können hiervon profitieren. Es gibt drei unterschiedliche Kategorien von Tastenbelegungen:
 
---Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
---Equipment: Some equipment items have their own bindings, these are shown in this category.
+Core: Diese Kategorie enthält die wichtigsten Tastenbelegungen in TTT2. Ohne diese ist es schwer das volle Potential von TTT2 zu nutzen.
+Extra: Ähnlich zu 'core', enthält aber eher nicht durchgehend nötige Tastenbelegungen. Dinge wie der Chat, Sprachchat und Taschenlampe sind hier enthalten. Gerade für neue Spieler kann das aktivieren sinnvoll sein.
+Equipment: Ausrüstungsgegenstände können eigene Tastenbelegungen haben, diese werden in dieser Kategorie angezeigt.
 
---Disabled categories are still shown when the scoreboard is visible]]
+Deaktivierte Kategorien werden weiterhin angezeigt solange die Punktetafel geöffnet ist]]
 
---L.label_keyhelp_show_core = "Enable always showing the core bindings"
---L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
---L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+L.label_keyhelp_show_core = "Aktiviere dauerhaftes anzeigen der 'core' Tastenhelfer"
+L.label_keyhelp_show_extra = "Aktiviere dauerhaftes anzeigen der 'extra' Tastenhelfer"
+L.label_keyhelp_show_equipment = "Aktiviere dauerhaftes anzeigen der 'equipment' Tastenhelfer"
 
---L.header_interface_keys = "Key helper settings"
---L.header_interface_wepswitch = "Weapon switch UI settings"
+L.header_interface_keys = "Tastenhelfer Einstellungen"
+L.header_interface_wepswitch = "Waffenwechsel UI Einstellungen"
 
---L.label_keyhelper_help = "open gamemode menu"
---L.label_keyhelper_mutespec = "cycle spectator voice mode"
---L.label_keyhelper_shop = "open equipment shop"
+L.label_keyhelper_help = "öffne Spielmodus Menü"
+L.label_keyhelper_mutespec = "Wechsle Zuschauer Sprachmodus"
+L.label_keyhelper_shop = "öffne Ausrüstungsshop"
 --L.label_keyhelper_show_pointer = "free mouse pointer"
---L.label_keyhelper_possess_focus_entity = "possess focused entity"
---L.label_keyhelper_spec_focus_player = "spectate focused player"
---L.label_keyhelper_spec_previous_player = "previous player"
---L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate player"
---L.label_keyhelper_possession_jump = "prop: jump"
---L.label_keyhelper_possession_left = "prop: left"
---L.label_keyhelper_possession_right = "prop: right"
---L.label_keyhelper_possession_forward = "prop: forward"
---L.label_keyhelper_possession_backward = "prop: backward"
---L.label_keyhelper_free_roam = "leave object and roam free"
---L.label_keyhelper_flashlight = "toggle flashlight"
---L.label_keyhelper_quickchat = "open quickchat"
---L.label_keyhelper_voice_global = "global voice chat"
---L.label_keyhelper_voice_team = "team voice chat"
---L.label_keyhelper_chat_global = "global chat"
---L.label_keyhelper_chat_team = "team chat"
---L.label_keyhelper_show_all = "show all"
---L.label_keyhelper_disguiser = "toggle disguiser"
+L.label_keyhelper_possess_focus_entity = "fokusiertes Objekt übernehmen"
+L.label_keyhelper_spec_focus_player = "fokusiertem Spieler zuschauen"
+L.label_keyhelper_spec_previous_player = "vorheriger Spieler"
+L.label_keyhelper_spec_next_player = "nächster Spieler"
+L.label_keyhelper_spec_player = "Spieler zuschauen"
+L.label_keyhelper_possession_jump = "Objekt: springen"
+L.label_keyhelper_possession_left = "Objekt: links"
+L.label_keyhelper_possession_right = "Objekt: rechts"
+L.label_keyhelper_possession_forward = "Objekt: vorwärts"
+L.label_keyhelper_possession_backward = "Objekt: rückwärts"
+L.label_keyhelper_free_roam = "verlasse Objekt und bewege dich frei"
+L.label_keyhelper_flashlight = "Taschenlampe an-/ausschalten"
+L.label_keyhelper_quickchat = "Schnellchat öffnen"
+L.label_keyhelper_voice_global = "Globaler Sprachchat"
+L.label_keyhelper_voice_team = "Team Sprachchat"
+L.label_keyhelper_chat_global = "Globaler Chat"
+L.label_keyhelper_chat_team = "Team Chat"
+L.label_keyhelper_show_all = "Alle anzeigen"
+L.label_keyhelper_disguiser = "Tarnung an-/ausschalten"
 --L.label_keyhelper_save_exit = "save and exit"
 --L.label_keyhelper_spec_third_person = "toggle third person view"
 
