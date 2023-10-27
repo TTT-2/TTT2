@@ -508,12 +508,12 @@ function util.VectorInBounds(vec, lowerBound, upperBound)
 end
 
 ---
--- This is a helper function that checks if anyone of the current edit modes is active
+-- This is a helper function that checks if any of the current edit modes is active
 -- that has to be left by pressing F1.
 -- @param Player ply The player who might be editing
 -- @return boolean Returns if an editing mode is active
--- @note DUe to how the edit modes are implemented, some checks might only work in the client
--- realm. SO make sure to check it not only on the server.
+-- @note Due to how the edit modes are implemented, some checks might only work in the client
+-- realm. So make sure to check it not only on the server.
 -- @realm shared
 function util.EditingModeActive(ply)
 	return (HUDEditor and HUDEditor.IsEditing) or entspawnscript.IsEditing(ply)
