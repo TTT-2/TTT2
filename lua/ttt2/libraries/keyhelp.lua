@@ -29,6 +29,7 @@ local materialPosessing = Material("vgui/ttt/hudhelp/possessing")
 local materialPlayer = Material("vgui/ttt/hudhelp/player")
 local materialPlayerPrev = Material("vgui/ttt/hudhelp/player_prev")
 local materialPlayerNext = Material("vgui/ttt/hudhelp/player_next")
+local materialPlayerRandom = Material("vgui/ttt/hudhelp/player_random")
 local materialPropJump = Material("vgui/ttt/hudhelp/prop_jump")
 local materialPropLeft = Material("vgui/ttt/hudhelp/prop_left")
 local materialPropRight = Material("vgui/ttt/hudhelp/prop_right")
@@ -248,7 +249,7 @@ function keyhelp.InitializeBasicKeys()
 
 		return true
 	end)
-	keyhelp.RegisterKeyHelper("+attack2", materialPlayerNext, KEYHELP_CORE, "label_keyhelper_spec_player", function(client)
+	keyhelp.RegisterKeyHelper("+attack2", materialPlayerRandom, KEYHELP_CORE, "label_keyhelper_spec_player", function(client)
 		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
 
 		return true

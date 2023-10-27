@@ -85,7 +85,7 @@ function PROPSPEC.Clear(ply)
 
 	ply.propspec = nil
 
-	ply:SpectateEntity(nil)
+	ply:UnSpectate()
 end
 
 ---

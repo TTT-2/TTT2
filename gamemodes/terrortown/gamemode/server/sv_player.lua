@@ -405,11 +405,22 @@ function GM:KeyPress(ply, key)
 				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(target)
 			end
+		end
+	elseif key == IN_ATTACK2 then
+		local tgt = ply:GetObserverTarget()
+
+		if IsValid(tgt) and tgt:IsPlayer() then
+			local target = util.GetNextAlivePlayer(tgt)
+
+			if IsValid(target) then
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
 		else
 			-- when not focuesed yet, snap to random guy
+			ply:UnSpectate()
 			ply:Spectate(OBS_MODE_ROAMING)
 			ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
-			ply:SpectateEntity(nil)
 
 			local alive = util.GetAlivePlayers()
 
@@ -420,20 +431,6 @@ function GM:KeyPress(ply, key)
 
 			if IsValid(target) then
 				ply:Spectate(OBS_MODE_IN_EYE)
-				ply:SpectateEntity(target)
-			end
-		end
-	elseif key == IN_ATTACK2 then
-		local tgt = ply:GetObserverTarget()
-
-		print("RMB")
-		print(tgt)
-
-		if IsValid(tgt) and tgt:IsPlayer() then
-			local target = util.GetNextAlivePlayer(tgt)
-
-			if IsValid(target) then
-				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(target)
 			end
 		end
@@ -453,9 +450,6 @@ function GM:KeyPress(ply, key)
 		-- reset
 		ply:UnSpectate()
 		ply:Spectate(OBS_MODE_ROAMING)
-
-		print("leaving")
-		print(ply:GetObserverTarget())
 
 		ply:SetPos(pos)
 		ply:SetEyeAngles(ang)
@@ -907,8 +901,8 @@ function GM:SpectatorThink(ply)
 		if IsValid(tgt) and tgt:IsPlayer() then
 			if not tgt:IsTerror() or not tgt:Alive() then
 				-- stop speccing as soon as target dies
+				ply:UnSpectate()
 				ply:Spectate(OBS_MODE_ROAMING)
-				ply:SpectateEntity(nil)
 			elseif GetRoundState() == ROUND_ACTIVE then
 				-- Sync position to target. Uglier than parenting, but unlike
 				-- parenting this is less sensitive to breakage: if we are
