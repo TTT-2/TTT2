@@ -23,7 +23,7 @@ TTT2ShopFallbackInitialized = false
 local function TTT2RegisterSWEP(equipment, name, initialize)
 	local doHotreload = TTT2ShopFallbackInitialized
 
-	-- Handle first initialization or do hotreload 
+	-- Handle first initialization or do hotreload
 	if initialize then
 		equipment = weapons.GetStored(name)
 		doHotreload = false
@@ -392,7 +392,7 @@ function GM:Tick()
 						dmginfo:SetDamageType(DMG_DROWN)
 						dmginfo:SetAttacker(game.GetWorld())
 						dmginfo:SetInflictor(game.GetWorld())
-						dmginfo:SetDamageForce(Vector(0, 0, 1))
+						dmginfo:SetDamageForce(vector_up)
 
 						ply:TakeDamageInfo(dmginfo)
 

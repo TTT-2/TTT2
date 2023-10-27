@@ -45,6 +45,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
 - Fixed disguiser breaking UI on hot reload (by @TimGoll)
 - Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible.
 
 ### Removed
 
