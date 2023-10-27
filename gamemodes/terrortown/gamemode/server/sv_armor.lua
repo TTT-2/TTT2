@@ -145,7 +145,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	-- if the armor is not strong enough to take that many hitpoints.
 	-- It is zero as long as the armor is able to take the damage.
 	local leftoverDamage = math.max(0, armorDamage - armor) / self.cv.armor_factor
-	dmginfo:SetDamage(self.cv.health_factor * (damage - leftover_damage) + leftover_damage)
+	dmginfo:SetDamage(self.cv.health_factor * (damage - leftoverDamage) + leftoverDamage)
 end
 
 ---
