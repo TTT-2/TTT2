@@ -65,7 +65,7 @@ local cvEnableBoxBlur = CreateConVar("ttt2_HUD_enable_box_blur", "1", FCVAR_ARCH
 
 ---
 -- @realm client
-local cvEnableDesciption = CreateConVar("ttt2_HUD_enable_description", "1", FCVAR_ARCHIVE)
+local cvEnableDescription = CreateConVar("ttt2_HUD_enable_description", "1", FCVAR_ARCHIVE)
 
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
