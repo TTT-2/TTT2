@@ -496,22 +496,22 @@ local function InternalGetWrappedText(text, width, scale)
 		-- To improve performance, we don't want to iterate over every single
 		-- character. Therefore we assume the length based on an average first.
 
-		local charCount = string.len(text)
-		local wCharAverage = surface.GetTextSize(text) / charCount -- - 2 -- decrease some pixels to be on the safe side
-		local charCountPerLine = math.floor(width / wCharAverage)
+		local charCount = utf8.len(text)
+		local wCharAverage = surface.GetTextSize(text) / charCount
+		local charCountPerLine = math.floor(width / wCharAverage * 0.8) -- decreae a bit to have tolerance
 		local lastStartPos = 1
 		local lineNumber = 1
 
 		while true do
 			local nextStartPos = lastStartPos + charCountPerLine
-			lines[lineNumber] = string.sub(text, lastStartPos, nextStartPos -1)
+			lines[lineNumber] = utf8.sub(text, lastStartPos, nextStartPos -1)
 			lastStartPos = nextStartPos
 
 			local wLine
 
 			-- then iterate over further chars until line end is reached
 			for i = lastStartPos, charCount do
-				local added = lines[lineNumber] .. string.sub(text, i)
+				local added = lines[lineNumber] .. utf8.GetChar(text, i)
 
 				wLine = surface.GetTextSize(added)
 
