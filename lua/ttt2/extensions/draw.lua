@@ -465,29 +465,67 @@ local function InternalGetWrappedText(text, width, scale)
 		return {text}, w, h -- Nope, but wrap in table for uniformity
 	end
 
-	local words = string.Explode(" ", text) -- No spaces means you're screwed
+	local words = string.Explode(" ", text)
 	local lines = {""}
 
-	for i = 1, #words do
-		local wrd = words[i]
+	if #words > 1 then -- there were spaces to split the string at
+		for i = 1, #words do
+			local wrd = words[i]
 
-		if i == 1 then
-			-- add the first word whether or not it matches the size to prevent
-			-- weird empty first lines and ' ' in front of the first line
-			lines[1] = wrd
+			if i == 1 then
+				-- add the first word whether or not it matches the size to prevent
+				-- weird empty first lines and ' ' in front of the first line
+				lines[1] = wrd
 
-			continue
+				continue
+			end
+
+			local lns = #lines
+			local added = lines[lns] .. " " .. wrd
+
+			w = surface.GetTextSize(added)
+
+			if w > width then
+				lines[lns + 1] = wrd -- New line needed
+			else
+				lines[lns] = added -- Safe to tack it on
+			end
 		end
+	else
+		-- If there are no spaces, we have to cut the string at some point.
+		-- To improve performance, we don't want to iterate over every single
+		-- character. Therefore we assume the length based on an average first.
 
-		local lns = #lines
-		local added = lines[lns] .. " " .. wrd
+		local charCount = string.len(text)
+		local wCharAverage = surface.GetTextSize(text) / charCount -- - 2 -- decrease some pixels to be on the safe side
+		local charCountPerLine = math.floor(width / wCharAverage)
+		local lastStartPos = 1
+		local lineNumber = 1
 
-		w = surface.GetTextSize(added)
+		while true do
+			local nextStartPos = lastStartPos + charCountPerLine
+			lines[lineNumber] = string.sub(text, lastStartPos, nextStartPos -1)
+			lastStartPos = nextStartPos
 
-		if w > width then
-			lines[lns + 1] = wrd -- New line needed
-		else
-			lines[lns] = added -- Safe to tack it on
+			local wLine
+
+			-- then iterate over further chars until line end is reached
+			for i = lastStartPos, charCount do
+				local added = lines[lineNumber] .. string.sub(text, i)
+
+				wLine = surface.GetTextSize(added)
+
+				if wLine > width then
+					lineNumber = lineNumber + 1
+
+					break
+				else
+					lines[lineNumber] = added
+					lastStartPos = lastStartPos + 1
+				end
+			end
+
+			if lastStartPos >= charCount - 1 then break end
 		end
 	end
 
