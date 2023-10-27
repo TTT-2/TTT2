@@ -173,7 +173,7 @@ function PROPSPEC.Key(ply, key)
 	elseif key == IN_FORWARD then
 		phys:ApplyForceCenter(vectorAimPlanar * mf)
 	elseif key == IN_BACK then
-		phys:ApplyForceCenter(vectorAimPlanar * (mf * -1))
+		phys:ApplyForceCenter(-vectorAimPlanar * mf)
 	elseif key == IN_MOVELEFT then
 		phys:ApplyForceCenter(vectorPerpendicularLeft * mf * 0.33)
 	elseif key == IN_MOVERIGHT then
