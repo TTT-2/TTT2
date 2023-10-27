@@ -354,7 +354,9 @@ function draw.BlurredBox(x, y, w, h, fraction)
 
 		render.UpdateScreenEffectTexture()
 
-		surface.DrawTexturedRect(x, y, ScrW(), ScrH())
+		render.SetScissorRect(x, y, x + w, y + h, true)
+		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+		render.SetScissorRect(0, 0, 0, 0, false)
 	end
 end
 
