@@ -163,9 +163,9 @@ SWEP.fingerprints = {}
 
 --[[
 	-- The position offset applied when entering the ironsight
-	SWEP.IronSightsPos = Vector(0, 0, 0)
+	SWEP.IronSightsPos = vector_origin
 	-- The rotational offset applied when entering the ironsight
-	SWEP.IronSightsAng = Vector(0, 0, 0)
+	SWEP.IronSightsAng = vector_origin
 --]]
 
 local skipWeapons = {}
