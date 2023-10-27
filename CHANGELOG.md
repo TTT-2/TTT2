@@ -41,7 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `pon` and `table` libraries got a small fix respectively
   - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
   - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
-- Fixed disguiser breaking on UI on hot reload (by @TimGoll)
+- Fixed disguiser breaking UI on hot reload (by @TimGoll)
 - Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
 
 ### Removed
