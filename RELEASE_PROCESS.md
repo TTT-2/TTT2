@@ -40,7 +40,7 @@ The following steps will document our release process to prevent mistakes and co
 
         - Tool: https://github.com/TTT-2/ttt2-language_parser
         - Run from folder as: `python parse.py --in "../TTT2/lua/terrortown/lang" --out "../TTT2/lua/terrortown/lang" --base "en"`
-        - Makes sure all language files fit to the english translation
+        - Makes sure all language files align with the english translation
 
 1. Open a Pull-Request prefixed with `[Release]` with the changes from above.
 
