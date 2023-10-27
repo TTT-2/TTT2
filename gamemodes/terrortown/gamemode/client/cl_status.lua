@@ -11,6 +11,9 @@ STATUS.active = {}
 -- @param string id The index of the new status
 -- @param table data
 -- @return boolean whether the creation was successfully
+-- @note structure of data = {Material|table hud, string type, string|table name, string sidebarDescription, function DrawInfo()}
+-- Elements with the additional option of a table can be used to switch between different states
+-- of a given status @{STATUS:SetActiveIcon}.
 -- @realm client
 function STATUS:RegisterStatus(id, data)
 	if STATUS.registered[id] ~= nil then  -- name is not unique
