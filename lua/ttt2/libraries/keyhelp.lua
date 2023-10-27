@@ -89,7 +89,7 @@ local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, 
 	draw.FilteredShadowedTexture(xIcon, yIcon, size, size, iconMaterial, 255, COLOR_WHITE)
 	draw.ShadowedText(keyString, "weapon_hud_help_key", xKeyString, yKeyString, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
-	if scoreboardShown and cvEnableDesciption:GetBool() then
+	if scoreboardShown and cvEnableDescription:GetBool() then
 		draw.AdvancedText(
 			LANG.TryTranslation(bindingName),
 			"weapon_hud_help",
