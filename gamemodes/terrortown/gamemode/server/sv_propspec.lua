@@ -161,7 +161,7 @@ function PROPSPEC.Key(ply, key)
 	local vectorAimPlanar = Vector(vectorAim.x, vectorAim.y, 0)
 	vectorAimPlanar:Normalize()
 
-	local vectorPerpendicularLeft = Vector(-vectorAimPlanar.y, -vectorAimPlanar.x, 0)
+	local vectorPerpendicularLeft = Vector(-vectorAimPlanar.y, vectorAimPlanar.x, 0)
 	local vectorPerpendicularRight = Vector(vectorAimPlanar.y, -vectorAimPlanar.x, 0)
 
 	pSpec.t = CurTime() + 0.15
