@@ -271,6 +271,11 @@ local function bitsRequired(num)
 end
 
 local function GiveFoundCredits(ply, rag, isLongRange)
+
+	---
+	-- @realm server
+	if hook.Run("TTT2CheckFindCredits", ply, rag) == false then return end
+
 	local corpseNick = CORPSE.GetPlayerNick(rag)
 	local credits = CORPSE.GetCredits(rag, 0)
 

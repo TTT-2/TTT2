@@ -22,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Can be disabled in Appearance->Interface
   - Shows binding name when scoreboard is opened
 - Added option to render rotated text on screen (by @TimGoll)
+- Added `TTT2CheckFindCredits` hook for preventing the transfer of credits from a body to a player (by @Spanospy)
 
 ### Changed
 

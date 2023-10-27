@@ -1444,6 +1444,17 @@ function GM:TTT2CheckCreditAward(victim, attacker)
 end
 
 ---
+-- Use this hook to prevent the transfer of credits from a body to a player.
+-- @param Entity rag The ragdoll that is inspected
+-- @param Player ply The @{Player} attempting to find credits from ragdoll
+-- @return nil|boolean Return false to prevent transfer
+-- @hook
+-- @realm server
+function GM:TTT2CheckFindCredits(ply, rag)
+
+end
+
+---
 -- Use this hook to prevent the addition of time to the hastemode.
 -- @param Player victim The player that died
 -- @param Player attacker The player that killed the victim
