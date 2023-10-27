@@ -1937,15 +1937,15 @@ L.label_keyhelper_save_exit = "Speichern und Verlassen"
 L.label_keyhelper_spec_third_person = "Wechsle Ansicht aus dritter Person"
 
 -- 2023-10-26
---L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.status_speed_name = "Speed Multiplier"
---L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
---L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+L.item_armor_reinforced = "Verstärkte Rüstung"
+L.item_armor_sidebar = "Rüstung bietet dir etwas Schutz vor Kugelschüssen. Aber nicht auf Dauer."
+L.item_disguiser_sidebar = "Die Tarnung versteckt deine Identität vor anderen Spielern."
+L.status_speed_name = "Geschwindigkeits Faktor"
+L.status_speed_description_good = "Du bist schneller als normal. Gegenstände, Ausrüstung oder verschiedene Effekte können dies beeinflussen."
+L.status_speed_description_bad = "Du bist langsamer als normal. Gegenstände, Ausrüstung oder verschiedene Effekte können dies beeinflussen."
 
---L.status_on = "on"
---L.status_off = "off"
+L.status_on = "an"
+L.status_off = "aus"
 
 L.crowbar_help_primary = "Zuschlagen"
 L.crowbar_help_secondary = "Spieler schubsen"
