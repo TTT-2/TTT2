@@ -21,6 +21,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Can be disabled in Appearance->Interface
   - Shows binding name when scoreboard is opened
 - Added option to render rotated text on screen (by @TimGoll)
+- Added Ukrainian translation from base TTT (by @ErickMaksimets)
+- Added Swedish translation from base TTT (by @Kefta)
 
 ### Changed
 
