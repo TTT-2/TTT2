@@ -44,6 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - to comply with mode 1 and 2 now everyone is able to see in the targetID if a player was searched by a public policing role
 - renamed `search_result` to `bodySearchResult` which contains the search result data
 - changed the credit text color from yellow to gold (by @TimGoll)
+- Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 
 ### Fixed
 
@@ -120,7 +121,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
 - Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)
 
-## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
+## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2023-09-25)
 
 ### Changed
 

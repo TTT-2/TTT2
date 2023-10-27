@@ -2020,3 +2020,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
 
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-26
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
