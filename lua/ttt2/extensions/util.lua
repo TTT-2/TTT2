@@ -587,4 +587,13 @@ if CLIENT then
 
 		return parent
 	end
+
+	---
+	-- This is a helper function that checks if anyone of the current edit modes is active
+	-- that has to be left by pressing F1.
+	-- @return boolean Returns if an editing mode is active
+	-- @realm client
+	function util.EditingModeActive()
+		return HUDEditor.IsEditing or entspawnscript.IsEditing(LocalPlayer())
+	end
 end

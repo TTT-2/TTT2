@@ -4,17 +4,18 @@ if SERVER then
 	return
 end
 
-KEYHELP_CORE = 1
-KEYHELP_EXTRA = 2
-KEYHELP_EQUIPMENT = 3
-KEYHELP_INTERNAL = 4
+KEYHELP_INTERNAL = 1
+KEYHELP_CORE = 2
+KEYHELP_EXTRA = 3
+KEYHELP_EQUIPMENT = 4
+KEYHELP_SCOREBOARD = 5
 
 local Key = Key
 local stringUpper = string.upper
 local inputGetKeyName = input.GetKeyName
 local bindFind = bind.Find
 
-local offsetCenter = 220
+local offsetCenter = 230
 local offsetHeight = 48
 local width = 18
 local padding = 5
@@ -147,27 +148,35 @@ function keyhelp.Draw()
 	local yBase = ScrH() - offsetHeight
 
 	if cvEnableCore:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
+		for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do
+			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][i], scoreboardShown) or xBase
 		end
 	end
 
-	if cvEnableEquipment:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
+	if not util.EditingModeActive() then
+		if cvEnableCore:GetBool() or scoreboardShown then
+			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
+			end
 		end
-	end
 
-	if cvEnableExtra:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
+		if cvEnableEquipment:GetBool() or scoreboardShown then
+			for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
+			end
+		end
+
+		if cvEnableExtra:GetBool() or scoreboardShown then
+			for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
+			end
 		end
 	end
 
 	-- if anyone of them is disabled, but not all, the show more option is shown
 	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
 	if not scoreboardShown and enbCount > 0 and enbCount < 3 then
-		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][1], scoreboardShown)
+		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1], scoreboardShown)
 	end
 end
 
@@ -177,13 +186,13 @@ end
 -- @realm client
 function keyhelp.InitializeBasicKeys()
 	-- core bindings that should be visible be default
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, "label_keyhelper_help", function(client)
-		if HUDEditor.IsEditing or entspawnscript.IsEditing(client) then return end
+	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_INTERNAL, "label_keyhelper_help", function(client)
+		if util.EditingModeActive() then return end
 
 		return true
 	end)
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_CORE, "label_keyhelper_save_exit", function(client)
-		if not HUDEditor.IsEditing and not entspawnscript.IsEditing(client) then return end
+	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_INTERNAL, "label_keyhelper_save_exit", function(client)
+		if not util.EditingModeActive() then return end
 
 		return true
 	end)
@@ -332,7 +341,7 @@ function keyhelp.InitializeBasicKeys()
 	end)
 
 	-- internal bindings, there should only be this one
-	keyhelp.RegisterKeyHelper("+showscores", materialShowmore, KEYHELP_INTERNAL, "label_keyhelper_show_all", function(client)
+	keyhelp.RegisterKeyHelper("+showscores", materialShowmore, KEYHELP_SCOREBOARD, "label_keyhelper_show_all", function(client)
 		return true
 	end)
 end

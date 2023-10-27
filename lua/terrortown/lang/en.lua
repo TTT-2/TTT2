@@ -1418,7 +1418,7 @@ L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world.
 L.spawneditor_place = "Place spawn"
 L.spawneditor_remove = "Remove spawn"
 L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
-L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 L.spawn_weapon_random = "Random Weapon Spawn"
 L.spawn_weapon_melee = "Melee Weapon Spawn"

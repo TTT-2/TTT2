@@ -21,9 +21,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 0
 	})
 
-	form:MakeHelp([
+	form:MakeHelp({
 		label = "help_HUD_enable_description"
-	])
+	})
 
 	form:MakeCheckBox({
 		label = "label_HUD_enable_box_blur",
