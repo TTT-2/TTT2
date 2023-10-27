@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你将孤身奋斗。"
 L.round_traitors_more = "叛徒，你的队友是：{names}"
 
 L.win_time = "时间用尽，叛徒失败了。"
-L.win_traitor = "叛徒取得了胜利！"
-L.win_innocent = "叛徒们被击败了！"
+L.win_traitors = "叛徒取得了胜利！"
+L.win_innocents = "叛徒们被击败了！"
 L.win_nones = "无人胜出！（平局）"
 L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
@@ -233,7 +233,7 @@ L.sb_tag_avoid = "躲避"
 L.sb_tag_kill = "死亡"
 L.sb_tag_miss = "失踪"
 
--- Equipment actions， like buying and dropping
+-- Equipment actions, like buying and dropping
 L.buy_no_stock = "无法购买此装备：你已拥有它了。"
 L.buy_pending = "你已订购此装备，请等待配送。"
 L.buy_received = "你已收到此装备。"
@@ -288,7 +288,7 @@ L.c4_remove_destroy2 = "确认：销毁"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
-L.c4_disarm_t     = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
+L.c4_disarm_t = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
@@ -448,7 +448,7 @@ L.tele_desc = [[
 
 传送器会产生噪音，而且使用次数是有限的。]]
 
--- Ammo names， shown when picked up
+-- Ammo names, shown when picked up
 L.ammo_pistol = "手枪弹药"
 
 L.ammo_smg1 = "冲锋枪弹药"
@@ -464,7 +464,7 @@ L.round_prep = "准备中"
 L.round_active = "进行中"
 L.round_post = "回合结束"
 
--- Health， ammo and time area
+-- Health, ammo and time area
 L.overtime = "加时"
 L.hastemode = "急速模式"
 
@@ -475,7 +475,7 @@ L.hp_wounded = "受伤"
 L.hp_badwnd = "重伤"
 L.hp_death = "濒死"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "良好"
 L.karma_high = "粗鲁"
 L.karma_med = "不可靠"
@@ -488,10 +488,11 @@ L.corpse_hint = "按下 [{usekey}] 来搜索，用 [{walkkey} + {usekey}] 进行
 
 L.target_disg = "（伪装状态）"
 L.target_unid = "未确认的尸体"
+--L.target_unknown = "A Terrorist"
 
 L.target_credits = "搜索尸体以获取未被消耗积分"
 
--- HUD buttons with hand icons that only traitors can see
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "一次性"
 L.tbut_reuse = "重复使用"
 L.tbut_retime = "{num} 秒可后再次使用"
@@ -504,7 +505,7 @@ L.mute_all = "全部静音"
 L.mute_off = "取消静音"
 
 -- Spectators and prop possession
-L.punch_title = "飞击量表" --"PUNCH-O-METER"
+L.punch_title = "飞击量表"
 L.punch_bonus = "你的分数较低，飞击量表上限减少 {num}"
 L.punch_malus = "你的分数较高，飞击量表上限增加 {num}！"
 
@@ -863,8 +864,8 @@ L.aw_tod1_text = "在他的团队即将获得胜利的前几秒死去。"
 L.aw_tod2_title = "垃圾游戏！"
 L.aw_tod2_text = "在这回合刚开始不久即被杀害。"
 
--- New and modified pieces of text are placed below this point， marked with the
--- version in which they were added， to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
@@ -1295,6 +1296,7 @@ L.trap_something = "某件物品"
 -- Kill events
 L.desc_event_kill_suicide = "是自杀的"
 L.desc_event_kill_team = "是被队友杀的"
+
 L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飞。"
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飞。"
 
@@ -1405,12 +1407,6 @@ L.xfer_team_indicator = "阵营"
 
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
-
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "武器生成设置"
-
-L.equipmenteditor_name_auto_spawnable = "装备随机生成"
-L.equipmenteditor_name_spawn_type = "生成类型"
 
 -- 2021-07-11
 L.spec_about_to_revive = "在复活时，观察将被限制。"
@@ -1539,6 +1535,7 @@ L.help_models_select = [[
 左键点击模型，将其添加到玩家模型库中。再次以左键删除它们。右键可在所关注的模型的启用和禁用侦探帽之间进行切换。
 
 左上角的小指示器显示玩家模型是否有头部的命中箱，下面的图标显示了这个模型是否可佩戴侦探帽。]]
+
 L.menu_roles_title = "角色设置"
 L.menu_roles_description = "设置生成概率、装备积分及更多。"
 
@@ -1757,6 +1754,7 @@ L.label_round_limit = "回合数上限"
 L.label_time_limit_minutes = "游戏时间上限，以分钟为单位"
 L.label_nade_throw_during_prep = "在准备时间内允许投掷手榴弹"
 L.label_postround_dm = "回合结束后启用死亡竞赛"
+L.label_session_limits_enabled = "启用地图更换"
 L.label_spectator_chat = "启用观察者与大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字时被杀，则发出最后一句话至聊天室"
 L.label_identify_body_woconfirm = "不按'确认'按钮识别尸体"
@@ -1826,10 +1824,6 @@ L.label_sprint_crosshair = "冲刺时显示准星"
 L.label_crowbar_unlocks = "主要攻击键可以作为互动（即解锁）使用"
 L.label_crowbar_pushforce = "撬棍推动力"
 
---2022-04-13
-L.label_session_limits_enabled = "启用地图更换"
-
-
 -- 2022-07-02
 L.header_playersettings_falldmg = "摔落伤害设置"
 
@@ -1867,6 +1861,7 @@ L.tbut_adminarea = "管理区:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "伤害缩放"
 
+
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允许丢弃"
 L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
@@ -1877,6 +1872,7 @@ L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备�
 L.drop_on_death_type_default = "默认（由武器定义）"
 L.drop_on_death_type_force = "强制死亡时丢弃"
 L.drop_on_death_type_deny = "拒绝死亡时丢弃"
+
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "装备槽"
@@ -1893,21 +1889,21 @@ L.slot_weapon_extra = "额外槽"
 L.slot_weapon_class = "职业槽"
 
 -- 2023-10-04
--- L.label_voice_duck_spectator = "Duck spectator voices"
--- L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
--- L.label_voice_scaling = "Voice Volume Scaling Mode"
--- L.label_voice_scaling_mode_linear = "Linear"
--- L.label_voice_scaling_mode_power4 = "Power 4"
--- L.label_voice_scaling_mode_log = "Logarithmic"
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-25
 --L.help_keyhelp = [[
 --Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
-
+--
 --Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
 --Equipment: Some equipment items have their own bindings, these are shown in this category.
-
+--
 --Disabled categories are still shown when the scoreboard is visible]]
 
 --L.label_keyhelp_show_core = "Enable always showing the core bindings"
