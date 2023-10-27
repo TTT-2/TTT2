@@ -425,7 +425,7 @@ if CLIENT then
 		local yLine = yDividerStart + 10
 		local xDescription = xDivider + padding
 
-		if GetConVar("ttt2_HUD_enable_box_blur"):GetBool() then
+		if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
 			draw.BlurredBox(xBox, yBox, wBox, hBox)
 			draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
 			draw.Box(xBox, yBox, wBox, 1, colorBox) -- top line shadow
