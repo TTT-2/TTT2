@@ -1938,15 +1938,15 @@ L.label_keyhelper_save_exit = "保存退出"
 L.label_keyhelper_spec_third_person = "切换第三人称视图"
 
 -- 2023-10-26
---L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.status_speed_name = "Speed Multiplier"
---L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
---L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+L.item_armor_reinforced = "强化装甲"
+L.item_armor_sidebar = "盔甲保护你免受子弹穿透身体。但不是永远。"
+L.item_disguiser_sidebar = "盔甲可防止子弹穿透身体。但不是永远。"
+L.status_speed_name = "速度倍增器"
+L.status_speed_description_good = "你的速度快于常人。物品、装备或效果都会对此产生影响。"
+L.status_speed_description_bad = "您的速度比正常速度慢。物品、装备或效果会对此产生影响。"
 
---L.status_on = "on"
---L.status_off = "off"
+L.status_on = "开启"
+L.status_off = "关闭"
 
 L.crowbar_help_primary = "攻击"
 L.crowbar_help_secondary = "推动玩家"
