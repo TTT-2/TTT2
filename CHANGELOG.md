@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
     - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
 - Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
 - Translated all strings still needed to german (by @NickCloudAT)
+- Added new sidebar information, when the scoreboard is open (by @TimGoll)
 - Added keybinding information to the bottom of the screen (by @TimGoll)
   - Can be disabled in Appearance->Interface
   - Shows binding name when scoreboard is opened
@@ -29,6 +30,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+- Updated the disguiser to make it more clear in the HUD if it is enabled or not
 - Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 
 ### Fixed

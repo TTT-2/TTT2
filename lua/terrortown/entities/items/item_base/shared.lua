@@ -37,6 +37,9 @@ if CLIENT then
 	--     desc = "Text."
 	-- }
 
+	-- A short description for the sidebar
+	ITEM.sidebarDescription = nil
+
 	-- This sets the icon shown for the @{ITEM} in the DNA sampler, search window,
 	-- equipment menu (if buyable), etc.
 	ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
