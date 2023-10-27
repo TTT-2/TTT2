@@ -141,10 +141,11 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	ply:DecreaseArmorValue(armorDamage)
 
-	-- The armor offset is used to catch the damage that should be taken,
+	-- The leftover damage is used to catch the damage that should be taken,
 	-- if the armor is not strong enough to take that many hitpoints.
 	-- It is zero as long as the armor is able to take the damage.
-	dmginfo:SetDamage(self.cv.health_factor * damage - math.min(armor - armorDamage, 0))
+	local leftoverDamage = math.max(0, armorDamage - armor) / self.cv.armor_factor
+	dmginfo:SetDamage(self.cv.health_factor * (damage - leftover_damage) + leftover_damage)
 end
 
 ---
