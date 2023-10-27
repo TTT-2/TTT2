@@ -506,7 +506,6 @@ L.mute_off = "取消靜音"
 
 -- Spectators and prop possession
 L.punch_title = "重擊測量器 " --"PUNCH-O-METER"
-L.punch_help = "按下行走鍵或跳躍鍵以推撞物品；按蹲下鍵則離開物品控制。"
 L.punch_bonus = "你的分數較低，重擊測量器上限減少 {num}"
 L.punch_malus = "你的分數較高，重擊測量器上限增加 {num}！"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "未能將界面 {hudname} 設為限製。你沒有權
 L.shop_role_select = "選擇身份"
 L.shop_role_selected = "選中了 {role} 的商店！"
 L.shop_search = "搜索"
-
-L.spec_help = "點擊來觀察玩家，或對著物理道具按 {usekey} 來附身。"
-L.spec_help2 = "若想離開觀察者模式，用 {helpkey} 打開菜單，在“遊戲性”選項中勾選選項。"
 
 -- 2019-10-19
 L.drop_ammo_prevented = "有什麽東西阻擋你丟出子彈。"
@@ -1897,6 +1893,49 @@ L.slot_weapon_class = "職業槽"
 -- L.label_voice_scaling_mode_linear = "Linear"
 -- L.label_voice_scaling_mode_power4 = "Power 4"
 -- L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
 
 -- 2023-10-26
 --L.crowbar_help_primary = "Attack"

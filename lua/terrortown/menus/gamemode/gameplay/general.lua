@@ -68,4 +68,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_shop_double_click_buy",
 		convar = "ttt_bem_enable_doubleclick_buy"
 	})
+
+	form:MakeCheckBox({
+		label = "label_inferface_scues_enable",
+		convar = "ttt_cl_soundcues"
+	})
 end

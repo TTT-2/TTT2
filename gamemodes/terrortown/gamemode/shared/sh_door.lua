@@ -300,7 +300,7 @@ if SERVER then
 	-- (problems with area portals). If it is a double door, both doors will be destroyed by
 	-- default.
 	-- @param Player ply The player that wants to destroy the door
-	-- @param[default=Vector(0, 0, 0)] Vector pushForce The push force for the door
+	-- @param[default=vector_origin] Vector pushForce The push force for the door
 	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @return Entity Returns the entity of the created prop
 	-- @realm server
@@ -356,7 +356,7 @@ if SERVER then
 
 			doorProp.isDoorProp = true
 
-			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
+			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or vector_origin)
 
 			---
 			-- @realm server

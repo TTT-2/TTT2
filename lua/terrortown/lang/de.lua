@@ -506,7 +506,6 @@ L.mute_off = "Niemanden stumm gestellt"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Die Bewegungstasten oder Springen: Objekt bewegen. Ducken: Objekt verlassen."
 L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num} verringert."
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {role} Shop wurde gewählt!"
 L.shop_search = "Suche"
-
-L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
-L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
@@ -1894,6 +1890,49 @@ L.label_voice_scaling = "Skalierungsmodus der Lautstärke der Stimme"
 L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
+
+-- 2023-10-25
+L.help_keyhelp = [[
+Tastenhelfer sind ein UI Element, welches dauerhaft relevante Tastenbelegungen für den Spieler anzeigen. Gerade unerfahrene Spieler können hiervon profitieren. Es gibt drei unterschiedliche Kategorien von Tastenbelegungen:
+
+Core: Diese Kategorie enthält die wichtigsten Tastenbelegungen in TTT2. Ohne diese ist es schwer das volle Potential von TTT2 zu nutzen.
+Extra: Ähnlich zu 'core', enthält aber eher nicht durchgehend nötige Tastenbelegungen. Dinge wie der Chat, Sprachchat und Taschenlampe sind hier enthalten. Gerade für neue Spieler kann das aktivieren sinnvoll sein.
+Equipment: Ausrüstungsgegenstände können eigene Tastenbelegungen haben, diese werden in dieser Kategorie angezeigt.
+
+Deaktivierte Kategorien werden weiterhin angezeigt solange die Punktetafel geöffnet ist]]
+
+L.label_keyhelp_show_core = "Aktiviere dauerhaftes anzeigen der 'core' Tastenhelfer"
+L.label_keyhelp_show_extra = "Aktiviere dauerhaftes anzeigen der 'extra' Tastenhelfer"
+L.label_keyhelp_show_equipment = "Aktiviere dauerhaftes anzeigen der 'equipment' Tastenhelfer"
+
+L.header_interface_keys = "Tastenhelfer Einstellungen"
+L.header_interface_wepswitch = "Waffenwechsel UI Einstellungen"
+
+L.label_keyhelper_help = "öffne Spielmodus Menü"
+L.label_keyhelper_mutespec = "Wechsle Zuschauer Sprachmodus"
+L.label_keyhelper_shop = "öffne Ausrüstungsshop"
+L.label_keyhelper_show_pointer = "Befreie Mauszeiger"
+L.label_keyhelper_possess_focus_entity = "fokusiertes Objekt übernehmen"
+L.label_keyhelper_spec_focus_player = "fokusiertem Spieler zuschauen"
+L.label_keyhelper_spec_previous_player = "vorheriger Spieler"
+L.label_keyhelper_spec_next_player = "nächster Spieler"
+L.label_keyhelper_spec_player = "Spieler zuschauen"
+L.label_keyhelper_possession_jump = "Objekt: springen"
+L.label_keyhelper_possession_left = "Objekt: links"
+L.label_keyhelper_possession_right = "Objekt: rechts"
+L.label_keyhelper_possession_forward = "Objekt: vorwärts"
+L.label_keyhelper_possession_backward = "Objekt: rückwärts"
+L.label_keyhelper_free_roam = "verlasse Objekt und bewege dich frei"
+L.label_keyhelper_flashlight = "Taschenlampe an-/ausschalten"
+L.label_keyhelper_quickchat = "Schnellchat öffnen"
+L.label_keyhelper_voice_global = "Globaler Sprachchat"
+L.label_keyhelper_voice_team = "Team Sprachchat"
+L.label_keyhelper_chat_global = "Globaler Chat"
+L.label_keyhelper_chat_team = "Team Chat"
+L.label_keyhelper_show_all = "Alle anzeigen"
+L.label_keyhelper_disguiser = "Tarnung an-/ausschalten"
+L.label_keyhelper_save_exit = "Speichern und Verlassen"
+L.label_keyhelper_spec_third_person = "Wechsle Ansicht aus dritter Person"
 
 -- 2023-10-26
 L.crowbar_help_primary = "Zuschlagen"

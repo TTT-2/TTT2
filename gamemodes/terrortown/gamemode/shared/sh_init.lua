@@ -574,6 +574,7 @@ include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
 include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
+include("ttt2/libraries/keyhelp.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
