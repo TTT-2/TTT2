@@ -186,7 +186,7 @@ L.search_role_det = "这个人是探长。"
 L.search_role_inno = "这个人是无辜的恐怖分子。"
 
 L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
-L.search_armor = "他穿着非标准装甲。"
+L.search_armor = "他穿着非标准护甲。"
 L.search_disg = "他持有一个能隐匿身份的装备"
 L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
 L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
@@ -1684,7 +1684,7 @@ L.help_haste_mode = [[
 如果急速模式被启用，固定的回合时间将被忽略。]]
 L.help_round_limit = "在满足设定的限制条件之一后，将会更换地图。"
 L.help_armor_balancing = "以下数值可以用来平衡护甲。"
-L.help_item_armor_classic = "如果启用了经典护甲模式，只有之前的设置才是生效的。经典护甲模式意味着玩家在一个回合中只能购买一次护甲，并且这个盔甲可以阻挡30%的子弹和撬棍的伤害，直到他们死亡。"
+L.help_item_armor_classic = "如果启用了经典护甲模式，只有之前的设置才是生效的。经典护甲模式意味着玩家在一个回合中只能购买一次护甲，并且这个护甲可以阻挡30%的子弹和撬棍的伤害，直到他们死亡。"
 L.help_item_armor_dynamic = [[
 动态护甲是TTT2的新系统，使护甲系统更加有趣。现在可以购买的护甲数量是无限的，而且护甲的效果可以叠加。受到伤害会降低护甲值，每件物品的护甲值是在该物品的"装备设置"中设置的。
 
@@ -1765,7 +1765,7 @@ L.label_confirm_detective_only = "只允许警察角色确认死者"
 L.label_dyingshot = "如果玩家在瞄准中，则在死亡时开枪[试验性]"
 L.label_armor_block_headshots = "启用护甲阻挡爆头伤害"
 L.label_armor_block_blastdmg = "启用护甲阻挡爆炸伤害"
-L.label_armor_dynamic = "启用动态装甲"
+L.label_armor_dynamic = "启用动态护甲"
 L.label_armor_value = "护甲物品所赋予的护甲"
 L.label_armor_damage_block_pct = "护甲承受的伤害百分比"
 L.label_armor_damage_health_pct = "玩家承受的伤害百分比"
@@ -1938,9 +1938,9 @@ L.label_keyhelper_save_exit = "保存退出"
 L.label_keyhelper_spec_third_person = "切换第三人称视图"
 
 -- 2023-10-26
-L.item_armor_reinforced = "强化装甲"
-L.item_armor_sidebar = "盔甲保护你免受子弹穿透身体。但不是永远。"
-L.item_disguiser_sidebar = "盔甲可防止子弹穿透身体。但不是永远。"
+L.item_armor_reinforced = "强化护甲"
+L.item_armor_sidebar = "护甲保护你免受子弹穿透身体。但不是永久的。"
+L.item_disguiser_sidebar = "伪装者不会向其他玩家显示你的名字，从而保护你的身份。"
 L.status_speed_name = "移速倍率"
 L.status_speed_description_good = "你的移动速度高于普通。物品，装备或效果可能会影响此值。"
 L.status_speed_description_bad = "你的移动速度低于普通。物品，装备或效果可能会影响此值。"
