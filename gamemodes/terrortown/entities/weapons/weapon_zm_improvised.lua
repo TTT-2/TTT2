@@ -185,7 +185,7 @@ function SWEP:PrimaryAttack()
 					Num = 1,
 					Src = spos,
 					Dir = owner:GetAimVector(),
-					Spread = vector_origin,
+					Spread = Vector(0, 0, 0),
 					Tracer = 0,
 					Force = 1,
 					Damage = 0

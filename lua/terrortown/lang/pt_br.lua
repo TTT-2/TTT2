@@ -1948,7 +1948,7 @@ L.xfer_team_indicator = "Time"
 --L.label_keyhelper_spec_focus_player = "spectate focused player"
 --L.label_keyhelper_spec_previous_player = "previous player"
 --L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate player"
+--L.label_keyhelper_spec_player = "spectate random player"
 --L.label_keyhelper_possession_jump = "prop: jump"
 --L.label_keyhelper_possession_left = "prop: left"
 --L.label_keyhelper_possession_right = "prop: right"
@@ -1979,3 +1979,9 @@ L.xfer_team_indicator = "Time"
 
 --L.crowbar_help_primary = "Attack"
 --L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"

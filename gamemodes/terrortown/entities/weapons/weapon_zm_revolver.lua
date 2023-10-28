@@ -42,4 +42,4 @@ SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
 
 SWEP.IronSightsPos = Vector(-6.361, -3.701, 2.15)
-SWEP.IronSightsAng = vector_origin
+SWEP.IronSightsAng = Vector(0, 0, 0)
