@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
 - Updated the disguiser to make it more clear in the HUD if it is enabled or not
 - Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
+- Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
 
 ### Fixed
 
@@ -45,6 +46,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
 - Fixed disguiser breaking UI on hot reload (by @TimGoll)
 - Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible
+- Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible.
 - Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
 - Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
 

@@ -425,11 +425,14 @@ if CLIENT then
 		local yLine = yDividerStart + 10
 		local xDescription = xDivider + padding
 
-		draw.BlurredBox(xBox, yBox, wBox, hBox)
-		draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
-		draw.Box(xBox, yBox, wBox, 1, colorBox) -- top line shadow
-		draw.Box(xBox, yBox, wBox, 2, colorBox) -- top line shadow
-		draw.Box(xBox, yBox - 2, wBox, 2, COLOR_WHITE) -- white top line
+		if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
+			draw.BlurredBox(xBox, yBox, wBox, hBox)
+			draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
+			draw.Box(xBox, yBox, wBox, 1, colorBox) -- top line shadow
+			draw.Box(xBox, yBox, wBox, 2, colorBox) -- top line shadow
+			draw.Box(xBox, yBox - 2, wBox, 2, COLOR_WHITE) -- white top line
+		end
+
 		draw.ShadowedLine(xDivider, yDividerStart, xDivider, yDividerEnd, COLOR_WHITE)
 
 		for i = 1, #processedData do
