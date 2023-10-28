@@ -1419,7 +1419,7 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"
 --L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 --L.spawn_weapon_random = "Random Weapon Spawn"
 --L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1922,7 +1922,7 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.label_keyhelper_spec_focus_player = "spectate focused player"
 --L.label_keyhelper_spec_previous_player = "previous player"
 --L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate player"
+--L.label_keyhelper_spec_player = "spectate random player"
 --L.label_keyhelper_possession_jump = "prop: jump"
 --L.label_keyhelper_possession_left = "prop: left"
 --L.label_keyhelper_possession_right = "prop: right"
@@ -1941,5 +1941,21 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.label_keyhelper_spec_third_person = "toggle third person view"
 
 -- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
 --L.crowbar_help_primary = "Attack"
 --L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"

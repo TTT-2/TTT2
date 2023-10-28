@@ -1414,7 +1414,7 @@ L.spawneditor_desc = "武器、弾薬やプレイヤーのスポーン位置を�
 L.spawneditor_place = "スポーン位置設置"
 L.spawneditor_remove = "スポーン位置削除"
 L.spawneditor_change = "スポーンタイプを変更([SHIFT]を押しながらだと逆になります)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 L.spawn_weapon_random = "おまかせ武器"
 L.spawn_weapon_melee = "近接武器"
@@ -1934,8 +1934,8 @@ L.help_falldmg_exponent = [[
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
