@@ -406,7 +406,7 @@ L.dna_killer = "Échantillon ADN du tueur récupéré sur le corps!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "L'ADN n'a pas pu être récupérée (le tueur s'est déconnecté?)."
 L.dna_armed = "La bombe est amorcée! Désamorcez-la d'abord!"
-L.dna_object = "Vous avez collecté {num} échantillon(s) d'ADN sur cet objet."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "Aucun ADN détecté dans la zone."
 
 L.dna_desc = [[
@@ -1956,3 +1956,8 @@ L.karma_unknown_tooltip = "Inconnu"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

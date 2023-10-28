@@ -406,7 +406,7 @@ L.dna_killer = "成功採集到兇手的DNA樣本！"
 L.dna_duplicate = "匹配！你的掃描儀裡已經有這個DNA樣本了。"
 L.dna_no_killer = "DNA樣本無法檢索（兇手已斷線？）"
 L.dna_armed = "炸彈已啟動！趕緊拆除它！"
-L.dna_object = "在目標上採集到 {num} 個新DNA樣本。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "區域內沒偵測到可採集之DNA樣本。"
 
 L.dna_desc = [[
@@ -1956,3 +1956,8 @@ L.slot_weapon_class = "職業槽"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

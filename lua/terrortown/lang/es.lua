@@ -406,7 +406,7 @@ L.dna_killer = "¡Se ha encontrado una muestra de ADN del asesino en el cadáver
 L.dna_duplicate = "¡Duplicado! Ya tienes esta muestra de ADN en tu escáner."
 L.dna_no_killer = "El ADN no pudo ser analizado (¿Asesino desconectado?)."
 L.dna_armed = "¡Hay una bomba colocada! ¡Desactívala primero!"
-L.dna_object = "Se han encontrado {num} muestra(s) de ADN nueva(s) del objeto."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "No se han encontrado restos de ADN en esta zona."
 
 L.dna_desc = [[
@@ -1956,3 +1956,8 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

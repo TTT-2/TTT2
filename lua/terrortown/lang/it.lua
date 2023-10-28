@@ -406,7 +406,7 @@ L.dna_killer = "Preso un campione di DNA dell'assassino dal cadavere!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "Il DNA non può essere preso (assassino disconnesso?)."
 L.dna_armed = "La bomba è innescata! Disinnescala prima!"
-L.dna_object = "Preso {num} nuovo campione di DNA dall'oggetto."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA non rilevato nella zona."
 
 L.dna_desc = [[
@@ -496,7 +496,7 @@ L.target_credits = "Identifica per ricevere i crediti non spesi"
 L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
-L.tbut_help = "Premi {key} per attivare"
+L.tbut_help = "Premi {usekey} per attivare"
 
 -- Spectator muting of living/dead
 L.mute_living = "Giocatori in vita mutati"
@@ -904,7 +904,7 @@ L.shop_default = "Usa shop di default"
 -- 2019-05-05
 L.reroll_name = "Rimescola"
 --L.reroll_menutitle = "Reroll equipment"
-L.reroll_no_credits = "Non hai crediti per rimescolare!"
+--L.reroll_no_credits = "You need {amount} credits to reroll!"
 L.reroll_button = "Rimescola"
 --L.reroll_help = "Use {amount} credits to get a new random set of equipment in your shop!"
 
@@ -930,7 +930,7 @@ L.hud_forced_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin ed e
 L.hud_restricted_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin?"
 
 L.shop_role_select = "Seleziona un ruolo"
-L.shop_role_selected = "Lo shop del {roles} è stato selezionato!"
+L.shop_role_selected = "Lo shop del {role} è stato selezionato!"
 L.shop_search = "Cerca"
 
 -- 2019-10-19
@@ -1956,3 +1956,8 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
