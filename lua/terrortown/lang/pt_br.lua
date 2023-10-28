@@ -466,8 +466,8 @@ L.tele_no_mark = "Nenhum local marcado. Marque um local para teletransportar-se.
 L.tele_no_mark_ground = "Você não pode marcar um local para teletransportar-se se você não estiver em um chão sólido!"
 L.tele_no_mark_crouch = "Você não pode marcar um local para teletransportar-se enquanto estiver agachado!"
 
-L.tele_help_pri = "{primaryfire} teletransporta para o local marcado."
-L.tele_help_sec = "{secondaryfire} marca um local de teletransporte."
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
 Teletransporta para um local previamente marcado.
@@ -523,7 +523,7 @@ L.target_credits = "Vasculhe para receber créditos não gastos"
 L.tbut_single = "Uso único"
 L.tbut_reuse = "Reutilizável"
 L.tbut_retime = "Reutilizável após {num} seg"
-L.tbut_help = "Pressione {key} para ativar"
+L.tbut_help = "Pressione {usekey} para ativar"
 
 -- Spectator muting of living/dead
 L.mute_living = "Jogadores vivos emudecidos"
@@ -1022,7 +1022,7 @@ L.door_locked = "Esta porta esta trancada."
 
 -- 2020-02-11
 L.automoved_to_spec = "(MENSAGEM AUTOMATICA) Eu fui movimentado para o Espetador porque eu estava Parado/AFK."
-L.mute_team = "{time} mutado."
+L.mute_team = "{team} mutado."
 
 -- 2020-02-16
 L.door_auto_closes = "Esta porta fecha automaticamente.."
@@ -1445,7 +1445,7 @@ L.xfer_team_indicator = "Time"
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"
 --L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 --L.spawn_weapon_random = "Random Weapon Spawn"
 --L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1974,8 +1974,8 @@ L.xfer_team_indicator = "Time"
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
@@ -1991,3 +1991,8 @@ L.xfer_team_indicator = "Time"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

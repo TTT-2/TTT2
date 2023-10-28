@@ -1,1010 +1,1047 @@
--- Spanish language strings
+-- Swedish language strings
 
-local L = LANG.CreateLanguage("es")
+local L = LANG.CreateLanguage("sv")
 
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name:
--- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/spanish.lua
-L.__alias = "Español"
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/swedish.lua
+L.__alias = "Svenska"
 
-L.lang_name = "Español (Spanish)"
+L.lang_name = "Svenska (Swedish)"
 
 -- General text used in various places
-L.traitor = "Traidor"
-L.detective = "Detective"
-L.innocent = "Inocente"
-L.last_words = "Últimas Palabras"
+L.traitor = "Förrädare"
+L.detective = "Detektiv"
+L.innocent = "Oskyldig"
+L.last_words = "Sista Ord"
 
-L.terrorists = "Terroristas"
-L.spectators = "Espectadores"
+L.terrorists = "Terrorister"
+L.spectators = "Åskådare"
 
-L.nones = "Sin Equipo"
-L.innocents = "Equipo Inocentes"
-L.traitors = "Equipo Traidores"
+--L.nones = "No Team"
+--L.innocents = "Team Innocent"
+--L.traitors = "Team Traitor"
 
 -- Round status messages
-L.round_minplayers = "No hay jugadores suficientes para empezar la ronda..."
-L.round_voting = "Votación en curso, retrasando la nueva ronda {num} segundos..."
-L.round_begintime = "Una nueva ronda comenzará en {num} segundos ¡Preparate!"
-L.round_selected = "Los traidores han sido seleccionados."
-L.round_started = "¡La ronda ha comenzado!"
-L.round_restart = "La ronda fue reiniciada por un administrador."
+L.round_minplayers = "För få spelare för att påbörja ny runda..."
+L.round_voting = "Omröstning pågår, fördröjer ny runda med {num} sekunder..."
+L.round_begintime = "En ny runda påbörjas om {num} sekunder. Bered dig."
+L.round_selected = "Förrädarna har blivit utvalda."
+L.round_started = "Rundan har påbörjats!"
+L.round_restart = "Rundan har blivit omstartad av en admin."
 
-L.round_traitors_one = "Eres el Traidor, estás solo."
-L.round_traitors_more = "Eres el Traidor. Estos son tus aliados: {names}"
+L.round_traitors_one = "Förrädare, du står ensam"
+L.round_traitors_more = "Förrädare, detta är dina lagkamrater: {names}"
 
-L.win_time = "Te has quedado sin tiempo. Los traidores pierden."
-L.win_traitors = "¡Los Traidores han ganado!"
-L.win_innocents = "¡Los Inocentes han ganado!"
-L.win_nones = "¡Las Abejas han ganado! (Empate)"
-L.win_showreport = "Veamos el reporte de la ronda por {num} segundos."
+L.win_time = "Tiden har tagit slut. Förrädarna har förlorat."
+--L.win_traitors = "The Traitors have won!"
+--L.win_innocents = "The Innos have won!"
+--L.win_nones = "No-one won!"
+L.win_showreport = "Låt oss ta en titt på rund-rapporten i {num} sekunder."
 
-L.limit_round = "Límite de rondas alcanzado. El siguiente mapa se cargará pronto."
-L.limit_time = "Tiempo límite alcanzado. El siguiente mapa cargará pronto."
-L.limit_left = "{num} rondas o {time} minutos restantes para que el mapa cambie."
+--L.limit_round = "Round limit reached. The next map will load soon."
+--L.limit_time = "Time limit reached. The next map will load soon."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
-L.credit_all = "Tu equipo fue recompensado con {num} créditos por su desempeño."
-L.credit_kill = "Has recibido {num} crédito(s) por matar un {role}."
+--L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
+L.credit_kill = "Du har blivit tilldelad {num} kredit(er) för att ha dödat en {role}."
 
 -- Karma
-L.karma_dmg_full = "¡Tu karma es {amount}, por lo que harás todo el daño esta ronda!"
-L.karma_dmg_other = "¡Tu karma es {amount}. Como resultado, tu daño se ve reducido en {num}%"
+L.karma_dmg_full = "Din Karma är {amount}, så du utdelar full skada denna runda!"
+L.karma_dmg_other = "Din Karma är {amount}. Till följd av detta är skadan du utdelar reducerad med {num}%"
 
 -- Body identification messages
-L.body_found = "{finder} encontró el cuerpo de {victim}. {role}"
-L.body_found_team = "{finder} encontró el cuerpo de {victim}. {role} ({team})"
+L.body_found = "{finder} fann {victim}s kropp. {role}"
+--L.body_found_team = "{finder} found the body of {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_traitor = "¡Era un Traidor!"
-L.body_found_det = "Era un Detective."
-L.body_found_inno = "Era un Inocente."
+--L.body_found_traitor = "They were a Traitor!"
+--L.body_found_det = "They were a Detective."
+--L.body_found_inno = "They were Innocent."
 
-L.body_confirm = "{finder} confirmó la muerte de {victim}."
+L.body_confirm = "{finder} bekräftade att {victim} har dött."
 
-L.body_call = "¡{player} llamó a un detective al cuerpo de {victim}!"
-L.body_call_error = "¡Debes confirmar el cadáver antes de llamar a un detective!"
+L.body_call = "{player} kallade en Detektiv till {victim}s kropp!"
+L.body_call_error = "Du måste bekräfta denna spelarens död för att kunna kalla på en Detektiv!"
 
-L.body_burning = "¡Ouch! ¡Este cuerpo está incendiándose!"
-L.body_credits = "¡Has encontrado {num} créditos en este cuerpo!"
+L.body_burning = "Aj! Den här kroppen brinner!"
+L.body_credits = "Du fann {num} kredit(er) på kroppen!"
 
 -- Menus and windows
-L.close = "Cerrar"
-L.cancel = "Cancelar"
+L.close = "Stäng"
+L.cancel = "Avbryt"
 
 -- For navigation buttons
-L.next = "Siguiente"
-L.prev = "Atrás"
+L.next = "Nästa"
+L.prev = "Föregående"
 
 -- Equipment buying menu
-L.equip_title = "Equipamiento"
-L.equip_tabtitle = "Menú de compra"
+L.equip_title = "Verktyg"
+L.equip_tabtitle = "Beställ verktyg"
 
-L.equip_status = "Estado de la compra"
-L.equip_cost = "Tienes {num} crédito(s) restantes."
-L.equip_help_cost = "Cada pieza de equipamiento que compres cuesta cierta cantidad de créditos."
+L.equip_status = "Beställnings-status"
+L.equip_cost = "Du har {num} kredit(er) kvar."
+L.equip_help_cost = "Varje verktyg du köper kostar 1 kredit."
 
-L.equip_help_carry = "Sólo puedes comprar cosas para las que haya espacio en tu inventario."
-L.equip_carry = "Puedes equiparte este objeto."
-L.equip_carry_own = "Ya tienes ese objeto equipado."
-L.equip_carry_slot = "Ya estás llevando un arma en el espacio {slot}."
-L.equip_carry_minplayers = "No hay jugadores suficientes en el servidor para activar esta arma."
+L.equip_help_carry = "Du kan endast köpa verktyg för vilka du har rum."
+L.equip_carry = "Du kan bära detta verktyg."
+L.equip_carry_own = "Du bär redan detta verktyg."
+L.equip_carry_slot = "Du har redan ett vapen i nummer {slot}."
+--L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
 
-L.equip_help_stock = "Algunos objetos puedes comprarlos únicamente una vez por ronda."
-L.equip_stock_deny = "Este objeto no tiene stock."
-L.equip_stock_ok = "Este objeto está disponible."
+L.equip_help_stock = "Vissa verktyg kan du endast köpa en utav varje runda."
+L.equip_stock_deny = "Detta verktyg har tagit slut."
+L.equip_stock_ok = "Detta verktyg finns tillgängligt."
 
-L.equip_custom = "Objeto personalizado del servidor."
+L.equip_custom = "Egengjort verktyg tillagt av denna server."
 
-L.equip_spec_name = "Nombre"
-L.equip_spec_type = "Tipo"
-L.equip_spec_desc = "Descripción"
+L.equip_spec_name = "Namn:"
+L.equip_spec_type = "Typ:"
+L.equip_spec_desc = "Beskrivning:"
 
-L.equip_confirm = "Comprar equipamiento"
+L.equip_confirm = "Köp föremål"
 
 -- Disguiser tab in equipment menu
-L.disg_name = "Disfraz"
-L.disg_menutitle = "Control de Disfraz"
-L.disg_not_owned = "¡No estás llevando un disfraz!"
-L.disg_enable = "Activar disfraz"
+L.disg_name = "Förklädare"
+L.disg_menutitle = "Förklädningskontroll"
+L.disg_not_owned = "Du har ingen Förklädare!"
+L.disg_enable = "Aktivera förklädare"
 
-L.disg_help1 = "Cuando tu disfraz esté activo, tu nombre, vida y karma no se mostrarán cuando alguien te mire. Además, estarás oculto del radar del detective."
-L.disg_help2 = "Pulsa la telca Enter del Numpad para activar el disfraz sin tener que usar de menú. También puedes configurar una tecla bajo el comando 'ttt_toggle_disguise' usando la consola."
+L.disg_help1 = "När din förklädare är påslagen visas inte ditt namn, din hälsa eller din karma när någon tittar på dig. Du syns heller inte på en Detektivs radar."
+L.disg_help2 = "Tryck på Numpad Enter för att sätta på/stänga av förklädnaden utan att använda menyn. Du kan även binda en annan tangent till 'ttt_toggle_disguise' genom att använda konsollen."
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
-L.radar_menutitle = "Control del Radar"
-L.radar_not_owned = "¡No estás llevando un Radar!"
-L.radar_scan = "Realizar escaneo"
-L.radar_auto = "Repetir escaneo"
-L.radar_help = "Resultado del escaneo mostrándose durante {num} segundos. Luego de estos segundos el Radar se re-activará"
-L.radar_charging = "¡Tu radar todavia se está cargando!"
+L.radar_menutitle = "Radar-kontroll"
+L.radar_not_owned = "Du har ingen Radar!"
+L.radar_scan = "Utför skanning"
+L.radar_auto = "Auto-repetera skanning"
+L.radar_help = "Skannings-resultat visas i {num} sekunder. Efter detta laddas Radarn om och kan användas igen."
+L.radar_charging = "Din Radar laddar fortfarande!"
 
 -- Transfer tab in equipment menu
-L.xfer_name = "Transferir"
-L.xfer_menutitle = "Transferir créditos"
-L.xfer_send = "Envía un crédito"
+L.xfer_name = "Överför"
+L.xfer_menutitle = "Överför krediter"
+L.xfer_send = "Sänd en kredit"
 
-L.xfer_no_recip = "Receptor no válido, transferencia cancelada."
-L.xfer_no_credits = "Créditos insuficientes."
-L.xfer_success = "Transferencia de créditos a {player} completada."
-L.xfer_received = "{player} te ha dado {num} crédito(s)."
+L.xfer_no_recip = "Mottagare ej giltig avbryter kredit-överföring."
+L.xfer_no_credits = "Du har inga krediter att ge!"
+L.xfer_success = "Kredit-överföring till {player} utförd."
+L.xfer_received = "{player} har gett dig {num} krediter."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
-L.radio_help = "Haz clic un botón para que tu radio reproduzca sonido."
-L.radio_notplaced = "Debes colocar la radio para que suene."
+L.radio_help = "Tryck på en knapp för att spela det ljudet på Radion."
+L.radio_notplaced = "Du måste placera Radion för att kunna spela ljud på den."
 
 -- Radio soundboard buttons
-L.radio_button_scream = "Grito"
-L.radio_button_expl = "Explosión"
-L.radio_button_pistol = "Disparos de pistola"
-L.radio_button_m16 = "Disparos de M16"
-L.radio_button_deagle = "Disparos de Deagle"
-L.radio_button_mac10 = "Disparos de MAC10"
-L.radio_button_shotgun = "Disparos de Escopeta"
-L.radio_button_rifle = "Disparos de Rifle"
-L.radio_button_huge = "Ráfaga de H.U.G.E."
-L.radio_button_c4 = "Pitido de C4"
-L.radio_button_burn = "Fuego"
-L.radio_button_steps = "Pasos"
+L.radio_button_scream = "Skrik"
+L.radio_button_expl = "Explosion"
+L.radio_button_pistol = "Pistol-skott"
+L.radio_button_m16 = "M16-skott"
+L.radio_button_deagle = "Deagle-skott"
+L.radio_button_mac10 = "MAC10-skott"
+L.radio_button_shotgun = "Hagelgevär-skott"
+L.radio_button_rifle = "Gevärsskott"
+L.radio_button_huge = "H.U.G.E-salva"
+L.radio_button_c4 = "C4-pip"
+L.radio_button_burn = "Brand"
+L.radio_button_steps = "Fotsteg"
 
 -- Intro screen shown after joining
-L.intro_help = "¡Si eres nuevo en el juego pulsa F1 para ver el tutorial!"
+L.intro_help = "Om du är ny till detta spel, tryck F1 för att få instruktioner!"
 
 -- Radiocommands/quickchat
-L.quick_title = "Teclas de acceso rápido a chat"
+L.quick_title = "Snabb-knappar"
 
-L.quick_yes = "Si."
-L.quick_no = "No."
-L.quick_help = "¡Ayuda!"
-L.quick_imwith = "Estoy con {player}."
-L.quick_see = "Veo a {player}."
-L.quick_suspect = "{player} es sospechoso."
-L.quick_traitor = "¡{player} es un Traidor!"
-L.quick_inno = "{player} es Inocente."
-L.quick_check = "¿Queda alguien vivo?"
+L.quick_yes = "Ja."
+L.quick_no = "Nej."
+L.quick_help = "Hjälp!"
+L.quick_imwith = "Jag är med {player}."
+L.quick_see = "Jag ser {player}."
+L.quick_suspect = "{player} beter sig skumt."
+L.quick_traitor = "{player} är en Förrädare!"
+L.quick_inno = "{player} är oskyldig."
+L.quick_check = "Lever någon fortfarande?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
-L.quick_nobody = "nadie"
-L.quick_disg = "alguien disfrazado"
-L.quick_corpse = "un cuerpo sin identificar"
-L.quick_corpse_id = "el cadáver de {player}"
+L.quick_nobody = "ingen"
+L.quick_disg = "någon i förklädnad"
+L.quick_corpse = "ett oidentifierat lik"
+L.quick_corpse_id = "{player}s lik"
 
 -- Body search window
-L.search_title = "Resultados de búsqueda"
-L.search_info = "Información"
-L.search_confirm = "Confirmar Muerte"
-L.search_call = "Llamar a un Detective"
+L.search_title = "Resultat från Kroppsvisit"
+L.search_info = "Information"
+L.search_confirm = "Bekräfta Död"
+L.search_call = "Kalla på Detektiv"
 
 -- Descriptions of pieces of information found
-L.search_nick = "Este es el cuerpo de {player}."
+L.search_nick = "Detta är {player}s kropp."
 
-L.search_role_traitor = "¡Esta persona era un Traidor!"
-L.search_role_det = "Esta persona era Inocente."
-L.search_role_inno = "Esta persona era un terrorista inocente."
+--L.search_role_traitor = "This person was a Traitor!"
+--L.search_role_det = "This person was a Detective."
+--L.search_role_inno = "This person was an innocent terrorist."
 
-L.search_words = "Algo te dice una de las últimas palabras de esta persona fueron: '{lastwords}'"
-L.search_armor = "Estaba utilizando protección antibalas."
-L.search_disg = "Estaba utilizando un dispositivo para camuflar su identidad."
-L.search_radar = "Estaba llevando un radar. Pero ya no funciona."
-L.search_c4 = "En el bolsillo encuentras una nota. Pone que cortando el cable {num} se desactiva una bomba."
+L.search_words = "Någonting säger dig att en del av den här personens sista ord var: '{lastwords}'"
+L.search_armor = "Han bar skyddsutrustning som inte var av vanlig standard."
+L.search_disg = "Han bar utrustning som kunde dölja hans identitet."
+L.search_radar = "Han bar någon sorts radar. Den fungerar inte längre."
+L.search_c4 = "In en av fickorna hittar du en lapp. Det står att om sladd nummer {num} klipps av, kommer bomben att stängas av."
 
-L.search_dmg_crush = "Varios de sus huesos están rotos. Parece ser que ha muerto por el impacto de un objeto."
-L.search_dmg_bullet = "Es evidente que le han disparado hasta morir."
-L.search_dmg_fall = "Cayó directo hacia su muerte."
-L.search_dmg_boom = "Sus heridas y la ropa chamuscada indican que una explosión acabó con la vida de esta persona."
-L.search_dmg_club = "El cuerpo está golpeado y amorotonado. Fue apalizado hasta la muerte."
-L.search_dmg_drown = "El cuerpo muestra signos de axfisia. Ha muerto ahogado"
-L.search_dmg_stab = "Fue apuñalado y cortado para después desangrarse rápidamente hasta morir."
-L.search_dmg_burn = "Aquí huele a terrorista quemado..."
-L.search_dmg_tele = "¡Parece que su ADN fue alterado por partículas de taquión!"
-L.search_dmg_car = "Cuando este terrorista quiso crusar la calle, fue atropellado por un conductor descuidado."
-L.search_dmg_other = "No puedes determinar la causa de muerte de esta persona."
+L.search_dmg_crush = "Många av hans ben är brutna. Det verkar som att ett tungt föremål dödade honom."
+L.search_dmg_bullet = "Det är uppenbart att han blev ihjälskjuten."
+L.search_dmg_fall = "Han föll till sin död."
+L.search_dmg_boom = "Hans skador och svedda kläder antyder att en explosion blev slutet för honom."
+L.search_dmg_club = "Kroppen är alldeles blåslagen och mörbultad. Uppenbarligen blev han ihjälklubbad."
+L.search_dmg_drown = "Kroppen visar tecken på drunkning."
+L.search_dmg_stab = "Han blev stucken och förblödde hastigt."
+L.search_dmg_burn = "Det luktar grillad terrorist häromkring..."
+L.search_dmg_tele = "Vem kunde ana det? Att teleportera till en plats där någon redan står är inte så bra för den som står där!"
+L.search_dmg_car = "När den här terroristen gick över vägen, blev han överkörd av en hänsynslös bilförare."
+L.search_dmg_other = "Du kan inte hitta en specifik orsakt till den här terroristens död."
 
-L.search_weapon = "Parece que se uso un/una {weapon} para matarlo."
-L.search_head = "Murió de un solo disparo en la cabeza. No le dio tiempo a gritar."
-L.search_time = "Murió apróximadamente {time} antes de empezar la investigación."
-L.search_dna = "Recoge una muestra del ADN del asesino con un Escáner ADN. La muestra de ADN caducará en {time}."
+L.search_weapon = "En {weapon} användes för att döda den här terroristen."
+L.search_head = "Det slutgiltiga skottet var i huvudet. Det fanns ingen tid till att skrika."
+L.search_time = "Han dog ungefär {time} innan du utförde sökningen."
+L.search_dna = "Ta ett prov av mördarens DNA med hjälp av en DNA-Skanner. DNA-provet kommer att förruttna ungefär {time} från nu."
 
-L.search_kills1 = "Has encontrado una lista de asesinatos que confirman la muerte de {player}."
-L.search_kills2 = "Has encontrado una lista de asesinatos con los siguientes nombres:"
-L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la última persona a la que vio fue: {player}. ¿Es el asesino o sólo fue una coincidencia?"
+L.search_kills1 = "Du hittade en lista över mordoffer som bekräftar morden på {player}."
+L.search_kills2 = "Du hittade en lista över mordoffer med dessa namn:"
+L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera den sista personen han såg: {player}. Mördaren, eller ett sammanträffande?"
 
 -- Scoreboard
-L.sb_playing = "Estás jugando en..."
-L.sb_mapchange = "El mapa cambia en {num} rondas o en {time}"
+L.sb_playing = "Du spelar på..."
+L.sb_mapchange = "Kartan ändras om {num} rundor eller om {time}"
 --L.sb_mapchange_disabled = "Session limits are disabled."
 
-L.sb_mia = "Perdido en Acción"
-L.sb_confirmed = "Muerto confirmado"
+L.sb_mia = "Saknad I Strid"
+L.sb_confirmed = "Bekräftad Död"
 
 L.sb_ping = "Ping"
-L.sb_deaths = "Muertes"
-L.sb_score = "Punt."
+L.sb_deaths = "Döda"
+L.sb_score = "Poäng"
 L.sb_karma = "Karma"
 
-L.sb_info_help = "Investiga el cadáver de este jugador, puedes revisar los resultados aquí."
+L.sb_info_help = "Om du kollar igenom denna spelares lik kan du se resultaten här."
 
-L.sb_tag_friend = "AMIGO"
-L.sb_tag_susp = "SOSPECHOSO"
-L.sb_tag_avoid = "EVITAR"
-L.sb_tag_kill = "MATAR"
-L.sb_tag_miss = "PERDIDO"
+L.sb_tag_friend = "VÄN"
+L.sb_tag_susp = "MISSTÄNKT"
+L.sb_tag_avoid = "UNDVIK"
+L.sb_tag_kill = "DÖDA"
+L.sb_tag_miss = "SAKNAD"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "Esta arma ya no tiene stock: ya la has comprado en esta ronda."
-L.buy_pending = "Tienes una orden de compra pendiente, espera a recibirla."
-L.buy_received = "Has recibido tu equipamiento especial."
+L.buy_no_stock = "Det här vapnet finns inte tillgängligt: du har redan köpt det den här rundan."
+L.buy_pending = "Du har redan en beställning som väntar, vänta tills du får den."
+L.buy_received = "Du har fått ditt specialverktyg."
 
-L.drop_no_room = "¡No tienes espacio para arrojar tu arma!"
+L.drop_no_room = "Det finns ingen plats här för att släppa ditt vapen!"
 
-L.disg_turned_on = "¡Disfraz activado!"
-L.disg_turned_off = "Disfraz desactivado."
+L.disg_turned_on = "Förklädnad aktiverad!"
+L.disg_turned_off = "Förklädnad avaktiverad."
 
 -- Equipment item descriptions
-L.item_passive = "Objeto de uso pasivo"
-L.item_active = "Objeto de uso activo"
-L.item_weapon = "Arma"
+L.item_passive = "Passivt verktyg"
+L.item_active = "Aktiv användning-verktyg"
+L.item_weapon = "Vapen"
 
-L.item_armor = "Chaleco Antibalas"
+L.item_armor = "Kroppsrustning"
 L.item_armor_desc = [[
-Reduce el daño de bala, fuego y explosivo. Se desgasta con el uso.
+Reducerar skottskador med 30% när
+du blir träffad.
 
-Puede ser comprado múltiples veces. Tras alcanzar cierto valor de armadura, el chaleco se vuelve más resistente.]]
+Standard-verktyg för Detektiver.]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[
-Permite detectar señales de vida.
+Tillåter dig att skanna efter livstecken.
 
-Empieza por si solo luego de ser comprado. Configúrelo en la pestaña del radar.]]
+Startar automatiskt så fort du
+köper den. Konfigurera den i
+Radar-fliken i den här menyn.]]
 
-L.item_disg = "Disfraz"
+L.item_disg = "Förklädare"
 L.item_disg_desc = [[
-Esconde tu ID mientras está en uso. Además evita ser la última persona vista por una víctima.
+Döljer din identitet när den är
+påslagen. Hindrar även att man
+blir den sista sedda personen
+av ett offer.
 
-Actívalo en la pestaña disfraz de este menú o presiona el numpad Enter.]]
+Slå av/på i Förklädnads-fliken
+i den här menyn eller tryck
+Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Presiona {usekey} para activar o desactivar."
-L.c4_disarm_warn = "Un C4 que has plantado fue desactivado."
-L.c4_armed = "Has activado la bomba correctamente."
-L.c4_disarmed = "Has desactivado la bomba correctamente."
-L.c4_no_room = "No puedes llevar este C4 contigo."
+L.c4_hint = "Tryck på {usekey} för att armera eller desarmera."
+L.c4_disarm_warn = "En C4 som du har placerat har blivit desarmerad."
+L.c4_armed = "Du lyckades armera bomben."
+L.c4_disarmed = "Du lyckades desarmera bomben."
+L.c4_no_room = "Du kan ej bära denna C4."
 
-L.c4_desc = "Artefacto explosivo programado."
+L.c4_desc = "Kraftfullt tidsbestämt sprängämne."
 
-L.c4_arm = "Activar C4"
-L.c4_arm_timer = "Temporizador"
-L.c4_arm_seconds = "Segundos antes de la detonación:"
-L.c4_arm_attempts = "Al intentar desactivarlo, {num} de los 6 cables causarán una explosión instantánea al ser cortados."
+L.c4_arm = "Armera C4"
+L.c4_arm_timer = "Timer"
+L.c4_arm_seconds = "Sekunder tills detonering:"
+L.c4_arm_attempts = "Vid desarmeringsförsök kommer {num} av de 6 sladdarna att orsaka en omedelbar detonering vid avklippning."
 
-L.c4_remove_title = "Remover"
-L.c4_remove_pickup = "Recoger C4"
-L.c4_remove_destroy1 = "Destruir C4"
-L.c4_remove_destroy2 = "Confirmar: destruir"
+L.c4_remove_title = "Avlägsnande"
+L.c4_remove_pickup = "Plocka upp C4"
+L.c4_remove_destroy1 = "Förstör C4"
+L.c4_remove_destroy2 = "Bekräfta: förstör"
 
-L.c4_disarm = "Desactivar C4"
-L.c4_disarm_cut = "Click para cortar el cable {num}"
+L.c4_disarm = "Desarmera C4"
+L.c4_disarm_cut = "Klicka för att klippa av sladd nummer {num}"
 
-L.c4_disarm_t = "Corta un cable para desactivar la bomba. Cualquiera vale, porque eres traidor. ¡Los inocentes no lo tienen tan fácil!"
-L.c4_disarm_owned = "Corta un cable para desactivar la bomba. Es tu bomba, así que cualquier cable la desactivará."
-L.c4_disarm_other = "Corta un cable para desactivar la bomba ¡Explotará si cortas el incorrecto!"
+L.c4_disarm_t = "Klipp av en sladd för att desarmera bomben. Eftersom du är en Förrädare är varje sladd säker. De oskylda har det inte lika lätt!"
+L.c4_disarm_owned = "Klipp av en sladd för att desarmera bomben. Det är din bomb, så varje sladd kommer att desarmera den."
+L.c4_disarm_other = "Klipp av en säker sladd för att desarmera bomben. Den kommer att explodera om du klipper fel!"
 
-L.c4_status_armed = "ACTIVADA"
-L.c4_status_disarmed = "DESACTIVADA"
+L.c4_status_armed = "ARMERAD"
+L.c4_status_disarmed = "DESARMERAD"
 
 -- Visualizer
-L.vis_name = "Visualizador"
-L.vis_hint = "Pulsa {usekey} para recogerlo (Sólo detectives)."
+L.vis_name = "Visualiserare"
+L.vis_hint = "Tryck {usekey} för att plocka upp (endast Detektiver)."
 
 L.vis_desc = [[
-Dispositivo para visualizar crímenes.
+Verktyg för brottsscens-
+visualisering.
 
-Analiza el cuerpo para saber cómo la víctima fue aseinada, únicamente si murió por heridas de bala.]]
+Analyserar ett lik för att visa
+hur offret dog, men enbart om
+han dog av skottskador.]]
 
 -- Decoy
-L.decoy_name = "Señuelo"
-L.decoy_no_room = "No puedes llevar este señuelo."
-L.decoy_broken = "¡Tu señuelo fue destruído!"
+L.decoy_name = "Lockbete"
+L.decoy_no_room = "Du kan ej bära detta Lockbete."
+L.decoy_broken = "Ditt Lockbete har förstörts!"
 
-L.decoy_short_desc = "Este señuelo muestra una señal de vida falsa en el radar"
-L.decoy_pickup_wrong_team = "No puedes recogerlo porque pertenece a otro equipo"
+--L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
+--L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Muestra una señal falsa en el radar,y hace que el escáner ADN muestre una falsa localización del señuelo si alguien escanea tu ADN.]]
+Visar ett fejkat radar-spår för
+detektiver, och gör så att deras
+DNA-skanner visa platsen för
+Lockbetet om de skannar efter
+ditt DNA.]]
 
 -- Defuser
-L.defuser_name = "Kit de Desactivación"
-L.defuser_help = "{primaryfire} desactiva el C4."
+L.defuser_name = "Desarmerare"
+L.defuser_help = "{primaryfire} desarmerar C4 i siktet."
 
 L.defuser_desc = [[
-Desactiva instantáneamente un C4.
+Desarmerar C4 omedelbart.
 
-Usos ilimitados. El C4 será más fácil de ver si llevas esto.]]
+Kan användas oändligt många
+gånger. C4 märks tydligare
+om du bär detta verktyg.]]
 
 -- Flare gun
-L.flare_name = "Pistola de Bengalas"
+L.flare_name = "Signalpistol"
 
 L.flare_desc = [[
-Puede ser usada para quemar cadáveres para nunca ser encontrados. Munición limitada.
+Kan användas till att bränna lik
+så att de aldrig återfinns.
+Begränsad ammunition.
 
-Quemar un cuerpo hace un sonido distintivo.]]
+Att bränna ett lik gör ett
+tydligt ljud.]]
 
 -- Health station
-L.hstation_name = "Estación de salud"
+L.hstation_name = "Hälsostation"
 
-L.hstation_broken = "¡Tu estación de salud ha sido destruida!"
-L.hstation_help = "{primaryfire} coloca una estación de salud."
+L.hstation_broken = "Din Hälsostation har blivit förstörd!"
+L.hstation_help = "{primaryfire} placerar Hälsostationen."
 
 L.hstation_desc = [[
-Permite que las personas se curen.
+Tillåter spelare att helas när
+den är utplacerad.
 
-Recarga lenta. Cualquiera puede usarlo y puede ser dañada. Puede chequearse por el ADN de las personas que lo usen.]]
+Långsam omladdning. Vem som helst
+kan använda den, och den kan utsättas
+för skada. Kan kollas efter DNA-prov
+av dess användare.]]
 
 -- Knife
-L.knife_name = "Cuchillo"
-L.knife_thrown = "Cuchillo arrojado"
+L.knife_name = "Kniv"
+L.knife_thrown = "Kastkniv"
 
-L.knife_desc = [[
-Mata a los objetivos heridos instantáneamente y de manera silenciosa, pero tiene un solo uso.
-
-Puede ser arrojado con el disparo secundario.]]
+--L.knife_desc = [[
+--Kills wounded targets instantly and silently, but only has a single use.
+--
+--Can be thrown using alternate fire.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Planta proyectiles en entidades para sacarlas volando violentamente.
+Placerar enheter på föremål
+som knuffar omkring dem med
+våldsam kraft.
 
-El daño de energía daña a las personas en corta distancia.]]
+Explosionerna skadar spelare
+i närheten.]]
 
 -- Radio
-L.radio_broken = "¡Tu radio fue destruida!"
-L.radio_help_pri = "{primaryfire} coloca la Radio."
+L.radio_broken = "Din Radio har blivit förstörd!"
+L.radio_help_pri = "{primaryfire} placerar Radion."
 
 L.radio_desc = [[
-Reproduce sonidos para distraer o confundir.
+Spelar upp distraherande eller
+bedragande ljud.
 
-Coloca la radio y luego reproduce sonidos en la pestaña de Radio en este menú.]]
+Placera radion någonstans, och spela
+sedan upp ljud på den genom att använda
+Radio-fliken i den här menyn.]]
 
 -- Silenced pistol
-L.sipistol_name = "Pistola Silenciada"
+L.sipistol_name = "Ljuddämpad Pistol"
 
 L.sipistol_desc = [[
-Pistola equipada con un silenciador, usa munición de pistola estándar.
+Pistol med dämpade ljud. Använder
+vanlig pistol-ammunition.
 
-Las víctimas asesinadas con este arma no gritarán al morir.]]
+Offer skriker inte när de blir dödade.]]
 
 -- Newton launcher
-L.newton_name = "Cañón Newton"
+L.newton_name = "Avståndsknuffare"
 
 L.newton_desc = [[
-Empuja a las personas desde una distancia segura.
+Knuffa spelare från ett
+bekvämt avstånd.
 
-Munición infita pero disparo lento.]]
+Oändligt med ammunition, men
+laddar om långsamt.]]
 
 -- Binoculars
-L.binoc_name = "Binoculares"
+L.binoc_name = "Kikare"
 
 L.binoc_desc = [[
-Apunta a los cadáveres e identifícalos desde una distancia lejana.
+Zooma in på lik och identifiera dem
+från ett långt avstånd.
 
-Usos ilimitados pero la identificación toma unos segundos.]]
+Kan användas oändligt många gånger,
+men identifieringen tar några sekunder.]]
 
 -- UMP
 L.ump_desc = [[
-SMG Experimental que desorienta a tus objetivos.
+Experimentell k-pist som
+desorienterar målen.
 
-Usa la munición estándar de las SMGs.]]
+Använder vanlig k-pist-ammunition.]]
 
 -- DNA scanner
-L.dna_name = "Escáner de ADN"
-L.dna_notfound = "No se encontraron muestras de ADN en el cadáver."
-L.dna_limit = "Se ha alcanzado el límite de almacenamiento. Remueva muestras viejas para adquirir nuevas."
-L.dna_decayed = "La muestra de ADN del asesino se ha deteriorado."
-L.dna_killer = "¡Se ha encontrado una muestra de ADN del asesino en el cadáver!"
-L.dna_duplicate = "¡Duplicado! Ya tienes esta muestra de ADN en tu escáner."
-L.dna_no_killer = "El ADN no pudo ser analizado (¿Asesino desconectado?)."
-L.dna_armed = "¡Hay una bomba colocada! ¡Desactívala primero!"
+L.dna_name = "DNA-skanner"
+L.dna_notfound = "Inget DNA-prov kunde hittas på målet."
+L.dna_limit = "Lagringsbegränsningen nådd. Ta bort gamla prov för att lägga till nya."
+L.dna_decayed = "Mördarens DNA-prov har förruttnat."
+L.dna_killer = "Hittade ett prov av mördarens DNA på liket!"
+--L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
+L.dna_no_killer = "DNAt kunde inte återfås (har mördaren gått ur spelet?)"
+L.dna_armed = "Bomben går fortfarande! Desarmera den först!"
 --L.dna_object = "Collected a sample of the last owner from the object."
-L.dna_gone = "No se han encontrado restos de ADN en esta zona."
+L.dna_gone = "DNA kunde inte hittas i området. (Har mördaren gått ur spelet?)"
 
 L.dna_desc = [[
-Toma muestras de ADN a las cosas y úsalas para encontrar el dueño del ADN.
+Samla DNA-prov från saker
+och använd dem för att hitta
+dess ägare.
 
-Úsalo en cuerpos frescos para encontrar el ADN del asesino para así encontrarlo y capturarlo.]]
+Använd på färska lik för att få
+mördarens DNA och söka upp honom.]]
 
 -- Magneto stick
-L.magnet_name = "Magnetopalo"
-L.magnet_help = "{primaryfire} para colgar el cuerpo a una superficie."
+L.magnet_name = "Magnetstav"
+L.magnet_help = "{primaryfire} för att sätta fast kropp på ytan."
 
 -- Grenades and misc
-L.grenade_smoke = "Granada de Humo"
-L.grenade_fire = "Granada Incendiaria"
+L.grenade_smoke = "Rökgranat"
+L.grenade_fire = "Brandbomb"
 
-L.unarmed_name = "Sin nada"
-L.crowbar_name = "Palanca"
-L.pistol_name = "Pistola"
-L.rifle_name = "Rifle"
-L.shotgun_name = "Escopeta"
+L.unarmed_name = "Hölstrad"
+L.crowbar_name = "Kofot"
+L.pistol_name = "Pistol"
+L.rifle_name = "Gevär"
+L.shotgun_name = "Hagelgevär"
 
 -- Teleporter
-L.tele_name = "Teletransportador"
-L.tele_failed = "Teletransporte fallido."
-L.tele_marked = "Destino marcado."
+L.tele_name = "Teleportör"
+L.tele_failed = "Teleportering misslyckad."
+L.tele_marked = "Teleporteringsplats markerad."
 
-L.tele_no_ground = "¡No puedes teleportarte si no estás en una superficie sólida!"
-L.tele_no_crouch = "¡No puedes teleportarte mientras estás agachado!"
-L.tele_no_mark = "No hay ningún destino marcado. Marca uno antes de teleportarte."
+L.tele_no_ground = "Kan ej teleportera om du inte står på fast mark!"
+L.tele_no_crouch = "Kan ej teleportera när du duckar!"
+L.tele_no_mark = "Ingen plats markerad. Markera en destination innan du teleporterar."
 
-L.tele_no_mark_ground = "¡No puedes establecer un destino si no estás en una superficie sólida!"
-L.tele_no_mark_crouch = "¡No puedes establecer un destino mientras estás agachado!"
+L.tele_no_mark_ground = "Kan ej markera en teleporteringsplats om du inte står på fast mark!"
+L.tele_no_mark_crouch = "Kan ej markera en teleporteringsplats om du duckar!"
 
-L.tele_help_pri = "Teleportarte a la ubicación marcada"
-L.tele_help_sec = "Marca la ubicación actual"
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
-Lo teletransporta a una ubicación marcada previamente.
+Teleportera till en
+tidigare markerad plats.
 
-Teletransportarse hace ruido y el número de usos es limitado.]]
+Teleportering orsakar oljud,
+och antalet gånger den
+kan användas är begränsat.]]
 
 -- Ammo names, shown when picked up
-L.ammo_pistol = "Munición de 9mm"
+L.ammo_pistol = "9mm ammunition"
 
-L.ammo_smg1 = "Munición de SMG"
-L.ammo_buckshot = "Munición de Escopeta"
-L.ammo_357 = "Munición de Rifle"
-L.ammo_alyxgun = "Munición de Deagle"
-L.ammo_ar2altfire = "Munición de Bengalas"
-L.ammo_gravity = "Munición de Poltergeist"
+L.ammo_smg1 = "K-pist-ammunition"
+L.ammo_buckshot = "Hagelgevärsammunition"
+L.ammo_357 = "Gevärsammunition"
+L.ammo_alyxgun = "Deagle-ammunition"
+L.ammo_ar2altfire = "Signalammunition"
+L.ammo_gravity = "Poltergeist-ammunition"
 
 -- Round status
-L.round_wait = "Esperando"
-L.round_prep = "Preparando"
-L.round_active = "En progreso"
-L.round_post = "Ronda acabada"
+L.round_wait = "Väntar"
+L.round_prep = "Förbereder"
+L.round_active = "Pågår"
+L.round_post = "Runda över"
 
 -- Health, ammo and time area
-L.overtime = "PRÓRROGA"
-L.hastemode = "MODO PRISA"
+L.overtime = "ÖVERTID"
+L.hastemode = "HETSLÄGE"
 
 -- TargetID health status
-L.hp_healthy = "Saludable"
-L.hp_hurt = "Dañado"
-L.hp_wounded = "Herido"
-L.hp_badwnd = "Gravemente herido"
-L.hp_death = "Casi muerto"
+L.hp_healthy = "Frisk"
+L.hp_hurt = "Skadad"
+L.hp_wounded = "Ganska Skadad"
+L.hp_badwnd = "Svårt Skadad"
+L.hp_death = "Nära Döden"
 
 -- TargetID Karma status
-L.karma_max = "Respetable"
-L.karma_high = "Vulgar"
-L.karma_med = "Gatillo fácil"
-L.karma_low = "Peligroso"
-L.karma_min = "Responsable"
+L.karma_max = "Ansedd"
+L.karma_high = "Klumpig"
+L.karma_med = "Skjutglad"
+L.karma_low = "Farlig"
+L.karma_min = "Varning"
 
 -- TargetID misc
-L.corpse = "Cadáver"
-L.corpse_hint = "Pulsa [{usekey}] para inspeccionar. [{walkkey} + {usekey}] para inspeccionar silenciosamente."
+L.corpse = "Lik"
+L.corpse_hint = "Tryck {usekey} för att söka igenom. {usekey} + {walkkey} för att söka i smyg."
 
-L.target_disg = "(disfrazado)"
-L.target_unid = "Cuerpo sin identificar"
+L.target_disg = " (FÖRKLÄDD)"
+L.target_unid = "Oidentifierad kropp"
 --L.target_unknown = "A Terrorist"
 
-L.target_credits = "Inspecciona para recibir los créditos no usados"
+L.target_credits = "Sök igenom för att erhålla ospenderade krediter"
 
 -- HUD buttons with hand icons that only some roles can see and use
-L.tbut_single = "Un solo uso"
-L.tbut_reuse = "Reutilizable"
-L.tbut_retime = "Reutilizable después de {num} segundos"
-L.tbut_help = "Pulsa [{usekey}] para activarlo"
+L.tbut_single = "Engångsanvändning"
+L.tbut_reuse = "Omanvändningsbar"
+L.tbut_retime = "Omanvändningsbar efter {num} sekunder"
+L.tbut_help = "Tryck {usekey} för att aktivera"
 
 -- Spectator muting of living/dead
-L.mute_living = "Jugadores vivos silenciados"
-L.mute_specs = "Espectadores silenciados"
-L.mute_all = "Todos silenciados"
-L.mute_off = "Nadie silenciado"
+L.mute_living = "Levande spelare nedtystade"
+L.mute_specs = "Åskådare nedtystade"
+--L.mute_all = "All muted"
+L.mute_off = "Ingen nedtystad"
 
 -- Spectators and prop possession
-L.punch_title = "PUÑÓMETRO"
-L.punch_bonus = "Tu bajo puntaje redujo el límite de tu PUÑÓMETRO a {num}"
-L.punch_malus = "¡Tu alto puntaje incrementó el límite de tu PUÑÓMETRO por {num}!"
+L.punch_title = "KNUFF-MÄTARE"
+L.punch_bonus = "Din dåliga poäng har sänkt din knuff-mätargräns med {num}"
+L.punch_malus = "Din goda poäng har höjt din knuff-mätargräns med {num}!"
 
 -- Info popups shown when the round starts
-L.info_popup_innocent = [[
-¡Eres un terrorista inocente! Pero hay traidores cerca...
-¿En quién puedes confiar? ¿Quién estará dispuesto a llenarte de plomo?
+L.info_popup_innocent = [[Du är en oskyldig Terrorist! Men det finns förrädare omkring...
+Vem kan du lita på, och vem är ute för att mörda dig?
 
-¡Cuida de tu espalda y colabora con tus camaradas para salir vivo de esta!]]
+Var aktsam och arbeta med dina kamrater för att komma ut härifrån levande!]]
 
-L.info_popup_detective = [[
-¡Eres un detective! El cuartel general te ha dado herramientas para descubrir a los traidores.
-Úsalas para ayudar a los inocentes, pero ten cuidado:
-¡Es probable que los traidores intenten matarte primero!
+L.info_popup_detective = [[Du är en Detektiv! Terrorist-högkvarteren har givit dig speciella resurser för att finna förrädarna.
+Använd dem för att hjälpa de oskyldiga överleva, men var försiktig:
+förrädarna kommer att försöka ta ned dig först!
 
-¡Pulsa {menukey} para recibir tus herramientas!]]
+Tryck {menukey} för att få dina verktyg!]]
 
-L.info_popup_traitor_alone = [[
-¡Eres un traidor! No tienes compañeros en esta ronda.
+L.info_popup_traitor_alone = [[Du är en FÖRRÄDARE! Du har inga förrädarkamrater denna runda.
 
-¡Mata a los demás roles para ganar!
+Döda alla andra för att vinna!
 
-¡Presiona {menukey} para recibir tu equipamiento especial!]]
+Tryck {menukey} för att få dina verktyg!]]
 
-L.info_popup_traitor = [[
-¡Eres un traidor! Colabora con tus compañeros asesinando a todos los demás.
-Ten cuidado, tu traición puede ser descubierta...
+L.info_popup_traitor = [[Du är en FÖRRÄDARE! Arbeta med dina förrädarkamrater för att döda alla andra.
+Men var försiktig, annars kan ditt förräderi upptäckas...
 
-Estos son tus compañeros:
+Detta är dina kamrater:
 {traitorlist}
 
-¡Pulsa {menukey} para recibir tu equipamiento especial!]]
+Tryck {menukey} för att få dina verktyg!]]
 
 -- Various other text
-L.name_kick = "Un jugador fue automáticamente expulsado por cambiarse de nombre."
+L.name_kick = "En spelare blev utsparkad automatiskt för att ha bytt sitt namn under en runda."
 
-L.idle_popup = [[
-Estuviste quieto por {num} segundos y como consecuencia fuiste movido al modo Sólo-Espectador. Mientras estés en este modo, no reaparecerás la siguiente ronda.
+L.idle_popup = [[Du var borta i {num} sekunder och blev därför förflyttad till Åskådar-läge. Så länge du är i detta läge kommer du inte att kunna spela när en ny runda börjar.
 
-Siempre puedes entrar o salir del modo Sólo-Espectador usando el menú {helpkey} y desactivando la opción en la configuración. También puedes desactivarlo ahora mismo.]]
+Du kan slå av/på Åskådar-läge när som helst genom att trycka på {helpkey} och bocka av lådan i inställningsfliken. Du kan även välja att stänga av det nu medsamma.]]
 
-L.idle_popup_close = "No hacer nada"
-L.idle_popup_off = "Desactivar modo Sólo-Espectador ahora"
+L.idle_popup_close = "Gör ingenting"
+L.idle_popup_off = "Stäng av Åskådar-läge nu"
 
-L.idle_warning = "Cuidado: ¡Parece que estás ausente/AFK, serás movido a espectador a menos que muestres señales de vida!"
+L.idle_warning = "Varning: du verkar vara borta, och kommer att bli tvingad att åskåda om du inte gör någonting!"
 
-L.spec_mode_warning = "Estás en modo Sólo-Espectador y no reaparecerás cuando una nueva ronda comience. Para desactivar este modo, pulsa F1, ve a Configuración y desactiva el modo 'Sólo-Espectador'."
+L.spec_mode_warning = "Du är i Åskådar-läge och kommer inte att starta när en runda påbörjas. För att stänga av detta läge, tryck F1, gå till inställningar och bocka av 'Åskådar-läge'."
 
 -- Tips panel
-L.tips_panel_title = "Consejos"
-L.tips_panel_tip = "Consejo:"
+L.tips_panel_title = "Tips"
+L.tips_panel_tip = "Tips:"
 
 -- Tip texts
-L.tip1 = "Los traidores pueden inspeccionar los cuerpos silenciosamente, sin confirmar la muerte, manteniendo {walkkey} y presionando {usekey} en el cadáver."
+L.tip1 = "Förrädare kan söka igenom kroppar tyst, utan att bekräfta deras död, genom att hålla in {walkkey} och trycka {usekey} på liket."
 
-L.tip2 = "Activar un C4 con un temporizador largo incrementará el número de cables que causan explosión instantánea cuando un inocente intenta desactivarlo. Además, hará menos ruido."
+L.tip2 = "Genom att armera en C4 med en längre timer kommer antalet sladdar som orsakar omedelbar detonering att öka. Den kommer även att pipa svagare och med större mellanrum mellan pipen."
 
-L.tip3 = "Los detectives pueden inspeccionar un cadá ver y ver quién fue 'reflejo en sus ojos'. Esto es la última persona que vio. Si fueron asesinados de otro lado, no tiene por qué ser el asesino. De igual manera es información útil."
+L.tip3 = "Detektiver kan söka igenom lik för att se vem som 'reflekteras på näthinnan'. Detta är den sista personen som den döde snubben såg. Det är dock inte nödvändigtvis mördaren om han skjöts i ryggen."
 
-L.tip4 = "Nadie sabrá que has muerto hasta que inspeccionen tu cuerpo e identifiquen quién eras."
+L.tip4 = "Ingen kommer att veta om att du har dött förrän de har funnit din döda kropp och identifierat den genom att söka igenom den."
 
-L.tip5 = "Cuando un traidor mata a un detective, instantáneamente recibirán recompensa con créditos."
+L.tip5 = "När en Förrädare dödar en Detektiv får han omedelbart en kreditbelöning."
 
-L.tip6 = "Cuando un traidor muere, todos los detectives son recompensados con créditos."
+L.tip6 = "När en Förrädare dör får alla Detektiver kreditbelöning."
 
-L.tip7 = "Cuando un traidor haga un buen trabajo asesinado inocentes, recibirán un crédito como recompensa."
+L.tip7 = "När Förrädarna har dödat tillräckligt många får de en kreditbelöning."
 
-L.tip8 = "Los traidores y los detectives pueden recolectar créditos no gastados de otros traidores y detectives."
+L.tip8 = "Förrädare och Detektiver kan samla på sig oanvända verktygskrediter från döda Förrädar- och Detektiv-kroppar."
 
-L.tip9 = "El Poltergeist puede convertir cualquier objeto en un proyectil mortal. Cada golpe está acompañado de energía que hará daño a las personas cercanas."
+L.tip9 = "Poltergeisten kan förvandla vilket rörligt föremål som helst till en dödlig projektil. Varje knuff medför en stark smäll som skadar alla i närheten."
 
-L.tip10 = "Como traidor o detective, mantén un ojo en los mensajes rojos en la parte superior derecha de la pantalla. Comúnmente son información importante para tí."
+L.tip10 = "Som en Förrädare eller som en Detektiv bör du hålla ett öga på röda meddelanden i det övre högra hörnet av skärmen, då dessa innehåller viktig information."
 
-L.tip11 = "Como traidor o detective, recuerda que eres recompensado con créditos si cumples con tu trabajo ¡Recuerda utilizarlos!"
+L.tip11 = "Som en Förrädare eller som en Detektiv får du extra verktygskrediter om dina kamrater arbetar väl. Kom också ihåg att spendera dem!"
 
-L.tip12 = "El escáner ADN de los detectives puede ser usado para obtener muestras de ADN de armas y objetos y luego obtener la posición de la persona que las utilizó ¡Muy útil cuando puedes obtener ADN de un C4 o un cadáver!"
+L.tip12 = "Detektivernas DNA-skanner kan användas till att samla DNA-prov från vapen och föremål för att sedan skanna och finna dess användare. Detta är användbart när du kan hitta ett prov från ett lik eller en avstängd C4!"
 
-L.tip13 = "Cuando estés cerca de alguien que asesinaste, algo de tu ADN queda en el cuerpo. Este ADN puede ser usado para encontrar tu posición actual por el detective ¡Mejor esconde bien el cuerpo!"
+L.tip13 = "Om du är nära ditt mordoffer kommer ditt DNA att hamna på liket. DNAt kan sedan användas med Detektivernas DNA-skannrar för att hitta var du är. Du gör därför bäst i att gömma liken efter att du har knivhuggit det!"
 
-L.tip14 = "Mientras más lejos estés de la persona que asesinaste más rápido se deteriorará la muestra de ADN restante en su cadáver."
+L.tip14 = "Ju längre ifrån du är ditt mordoffer, desto kortare tid kommer ditt DNA finnas kvar på liket innan det förruttnar."
 
-L.tip15 = "¿Eres un traidor y atacás a la distancia? Considera usar el disfraz. Sino conectas un disparo, corre a una posición segura, desactiva el disfraz, y de esa manera nadie sabrá que el que intentó disparar eras tú."
+L.tip15 = "Tänkte du skjuta prick som Förrädare? Överväg att använda en Förklädare. Om du missar ett skott kan du springa till en säker plats, stänga av apparaten och komma ut som om ingenting hade hänt."
 
-L.tip16 = "Como traidor, el teletransportador puede ayudarte cuando te están persiguiendo y te permite desplazarte grandes distancias. Mantén siempre una posición segura seleccionada."
+L.tip16 = "Som Förrädare kan Teleportören hjälpa dig fly när du är jagad, och tillåter dig att komma från plats A till plats B på väldigt kort tid. Se bara till så att du har en säker plats markerad."
 
-L.tip17 = "¿Los inocentes están todos juntos y es difícil matarlos? Considera usar la radio con sonidos de C4 o Disparos para separarlos."
+L.tip17 = "Är de oskylda ihopklumpade och svåra att ha ihjäl? Prova att använda Radion och spela upp C4-pip eller ljud av en skottlossning för att splittra gruppen."
 
-L.tip18 = "Para usar la Radio como traidor, debes acceder al menú de equipamiento y reproducir los sonidos después de haberla puesto. Pon múltiples sonidos en cola clickeando cada uno de ellos."
+L.tip18 = "Genom att använda Radion som Förrädare kan du spela upp ljud genom din Verktygs-meny efter att Radion har blivit placerad. Köa flera ljud genom att klicka på flera knappar i den ordning du vill att de ska spelas upp i."
 
-L.tip19 = "Como detective, si te sobran créditos, puedes darle a un inocente un Kit de Desactivación. De esta manera puedes gastar tu tiempo en otra cosa, dejando a cargo a un inocente para los C4."
+L.tip19 = "Om du har krediter över kan du som Detektiv ge en Desarmerare till en oskyldig som du litar på. Då kan du spendera mer tid till att utreda och lämna den riskfulla bombdesarmeringen till dem."
 
-L.tip20 = "Los binoculares de los detectives permiten inspeccionar cuerpos a la distancia. Malas noticias si los traidores pensaban usar ese cuerpo como carnada. Claro, los detectives están desarmados al utilizar los binoculares..."
+L.tip20 = "Detektivernas Kikare tillåter likidentifiering från långa avstånd. Det är dåliga nyheter för Förrädarna, om de tänkte använda liket som lockbete. Å andra sidan är Detektiven distraherad och obeväpnad när han använder Kikaren..."
 
-L.tip21 = "La estación de salud de los detectives. Obviamente, esos curados pueden ser traidores..."
+L.tip21 = "Detektivernas Hälsostation tillåter skadade spelare att återhämta sig. Å andra sidan kan de skadade spelarna vara Förrädare..."
 
-L.tip22 = "La estación de salud toma una muestra de ADN de todo aquel que la use. Los detectives pueden usar un escáner ADN para analizar estas muestras."
+L.tip22 = "Genom att använda DNA-skannern på Hälsostationen kan man få fram DNA-prov från alla som använt den."
 
-L.tip23 = "A diferencia de las armas y el C4, la radio de traidores no deja marcas de ADN. No te preocupes si la encuentran y la rompen."
+L.tip23 = "Till skillnad från vapen och C4 lämnas inga DNA-spår på Radion, så Förrädare behöver inte oroa sig för att Detektiver hittar den och förstör deras dag."
 
-L.tip24 = "Pulsa {helpkey} para ver el tutorial o cambiar configuraciones. Por ejemplo, puedes desactivar estos consejos."
+L.tip24 = "Tryck på {helpkey} för att se en kort genomgång eller ändra några inställningar för TTT. Till exempel kan du stänga av dessa tips där för gott."
 
-L.tip25 = "Cuando un detective inspecciona un cuerpo, los resultados son visibles por cualquier persona en la tabla de puntuaciones haciendo click en la persona muerta."
+L.tip25 = "När en Detektiv söker igenom en kropp kan resultaten hittas för alla spelare på poängtavlan genom att klicka på den döde personens namn."
 
-L.tip26 = "En la tabla de puntuaciones, un ícono de lupa sale al lado del nombre de las personas si la inspeccionaste. Si el ícono brilla, significa que esa información viene de un detective y contiene datos adicionales."
+L.tip26 = "På poängtavlan betyder ett förstoringsglass bredvid någons namn att det finns sökinformation om den personen. Om ikonen är ljus kommer informationen från en Detektiv och kan innehålla mer information."
 
-L.tip27 = "Como detective, verás una lupa si el cuerpo fue inspeccionado por ti mismo en la tabla de puntuaciones. Además, esta información será visible para los demás jugadores."
+L.tip27 = "Som en Detektiv betyder ett förstoringsglas bredvid någons namn att kroppen har blivit genomsökt och att informationen finns tillgänglig för alla spelare via poängtavlan."
 
-L.tip28 = "Los espectadores pueden presionar {mutekey} para variar el estado de silenciado."
+L.tip28 = "Åskådare kan trycka på {mutekey} för att rotera mellan alternativ för att tysta ned åskådare eller levande spelare."
 
-L.tip29 = "Si el servidor tiene distintos idiomas instalados, puedes cambiarlo en el menú de configuraciones."
+L.tip29 = "If the server has installed additional languages, you can switch to a different language at any time in the Settings menu."
 
-L.tip30 = "El chat rápido o la 'radio' puede ser usada con {zoomkey}."
+L.tip30 = "Snabbknappar eller 'radio-kommandon' kan användas genom att trycka på {zoomkey}."
 
-L.tip31 = "Como espectador puedes presionar {duckkey} para desbloquear el cursor y ver los distintos consejos. Presiona {duckkey} de vuelta para volver al control de la cámara."
+L.tip31 = "Som en åskådare kan du trycka på {duckkey} för att låsa upp din muspekare och klicka på knapparna på den här panelen. Tryck på {duckkey} igen för att komma tillbaka till musstyrning."
 
-L.tip32 = "El click secundario de la Crowbar empuja a las personas."
+L.tip32 = "Kofotens alternativa avfyrningsläge knuffar andra spelare."
 
-L.tip33 = "Disparar a través de la mira aumenta la precisión y reduce el retroceso. Agacharse no ayuda."
+L.tip33 = "Genom att använda siktet på vapnen kommer träffsäkerheten att höjas något och rekylen minskas. Att ducka gör ingen skillnad."
 
-L.tip34 = "Las granadas de humo son útiles en espacios cerrados. Especialmente en las salas con laberintos o varios pasillos."
+L.tip34 = "Rökgranater är effektiva inomhus, särskilt för att skapa förvirring i ett rum proppfullt med folk."
 
-L.tip35 = "Como traidor, recuerda que puedes arrastrar los cuerpos para que nunca sean encontrados por un detective o inocente."
+L.tip35 = "Som en Förrädare bör du komma ihåg att du kan gömma kroppar från oskyldiga och Detektivers snokande ögon."
 
-L.tip36 = "El tutorial disponible con {helpkey} contiene información importante de la clave de este modo de juego."
+L.tip36 = "En genomgång av spelläget finns tillgängligt under {helpkey}. I den finns en översikt över viktiga element i spelet."
 
-L.tip37 = "En la tabla de puntuaciones, puedes etiquetar a las personas como 'sospechosos' o 'amigos'. Esta etiqueta te puede servir a la hora de combatir o apuntarles."
+L.tip37 = "På poängtavlan kan du klicka på någons namn och välja en tagg för dem, t.ex. 'misstänkt' eller 'vän'. Denna tagg dyker sedan upp om du siktar på spelaren."
 
-L.tip38 = "La mayoría de objetos que se pueden soltar son también acoplables a la pared usando el click secundario."
+--L.tip38 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
 
-L.tip39 = "Los C4 que explotan for una falla en la desactivación tienen un radio menor que los que explotan naturalmente."
+L.tip39 = "C4 som exploderar på grund av en misslyckad desarmering har mindre explosionsradie än en C4 där timern når noll."
 
-L.tip40 = "Si dice 'MODO PRISA' la ronda inicial tendrá menos tiempo que de lo común, pero con cada muerte el tiempo incrementa. Este modo presiona a los traidores a mantenerse activos."
+L.tip40 = "Om det står 'HETSLÄGE' ovanför rundtimern kommer rundan först bara att vara några minuter lång, men efter varje oskyldig död kommer tiden att ökas. Det här läget pressar Förrädarna att göra någonting och inte bara stå still hela rundan."
 
 -- Round report
-L.report_title = "Reporte de Ronda"
+L.report_title = "Rundrapport"
 
 -- Tabs
-L.report_tab_hilite = "Jugadas destacadas"
-L.report_tab_hilite_tip = "Jugadas de la ronda"
-L.report_tab_events = "Eventos"
-L.report_tab_events_tip = "Registro de eventos de esta ronda"
-L.report_tab_scores = "Puntajes"
-L.report_tab_scores_tip = "Puntaje por jugador durante esta ronda"
+L.report_tab_hilite = "Höjdpunkter"
+L.report_tab_hilite_tip = "Rund-höjdpunkter"
+L.report_tab_events = "Händelser"
+L.report_tab_events_tip = "Händelseloggen om vad som hände den här rundan"
+L.report_tab_scores = "Poäng"
+L.report_tab_scores_tip = "Varje spelares poäng den här rundan"
 
 -- Event log saving
-L.report_save = "Guardar Log .txt"
-L.report_save_tip = "Guarda los registros de evento en un archivo de texto"
-L.report_save_error = "No hay un registro de eventos para guardar."
-L.report_save_result = "El registro de eventos fue guardado en:"
+L.report_save = "Spara Log .txt"
+L.report_save_tip = "Sparar Händelseloggen i en textfil"
+L.report_save_error = "Ingen Händelselogg-data att spara."
+L.report_save_result = "Händelseloggen har sparats i:"
 
 -- Columns
-L.col_time = "Tiempo"
-L.col_event = "Evento"
-L.col_player = "Jugador"
-L.col_roles = "Rol(es)"
-L.col_teams = "Equipo(s)"
-L.col_kills1 = "Asesinatos"
-L.col_kills2 = "Asesinatos de equipo"
-L.col_points = "Puntos"
-L.col_team = "Bonus de Equipo"
-L.col_total = "Puntos totales"
+L.col_time = "Tid"
+L.col_event = "Händelse"
+L.col_player = "Spelare"
+--L.col_roles = "Role(s)"
+--L.col_teams = "Team(s)"
+L.col_kills1 = "Oskyldiga dödade"
+L.col_kills2 = "Förrädare dödade"
+L.col_points = "Poäng"
+L.col_team = "Lagbonus"
+L.col_total = "Totala poäng"
 
 -- Awards/highlights
-L.aw_sui1_title = "Líder del Culto Suicida"
-L.aw_sui1_text = "les ha mostrado el camino a los otros suicidas siendo el primero en hacerlo."
+L.aw_sui1_title = "Ledare av Själmordssekt"
+L.aw_sui1_text = "visade de andra självmördarna hur man gjorde genom att göra det själv först."
 
-L.aw_sui2_title = "Solo y deprimido"
-L.aw_sui2_text = "fue el único que se mató a sí mismo."
+L.aw_sui2_title = "Ensam och Deprimerad"
+L.aw_sui2_text = "var den ende som begick självmord."
 
-L.aw_exp1_title = "Beca para Investigación de Químicos"
-L.aw_exp1_text = "era reconocido por su gran investigación en el campo de la química, especialmente explosiva. {num} sujetos de investigación contribuyeron."
+L.aw_exp1_title = "Explosivt Forskningsbidrag"
+L.aw_exp1_text = "vart erkänd för sin forskning kring explosioner. {num} försöksobjekt hjälpte till."
 
-L.aw_exp2_title = "Investigación de Campo"
-L.aw_exp2_text = "probó su resistencia a los explosivos. Parece que no fue suficiente."
+L.aw_exp2_title = "Fältforskning"
+L.aw_exp2_text = "provade sin motståndskraft mot explosioner. Den var inte tillräckligt hög."
 
-L.aw_fst1_title = "Primera Sangre"
-L.aw_fst1_text = "llevó acabo el primer asesinato de un inocente."
+L.aw_fst1_title = "Första Förräderiet"
+L.aw_fst1_text = "levererade det första oskyldiga mordet genom en förrädares händer."
 
-L.aw_fst2_title = "Primera Sangre: Edición imbécil"
-L.aw_fst2_text = "logró la primera sangre matando a su compañero traidor. Muy buena, crack."
+L.aw_fst2_title = "Första Dumma DödandetFirst Bloody Stupid Kill"
+L.aw_fst2_text = "fick det första dödandet genom att skjuta en förrädarkamrat. Bra jobbat."
 
-L.aw_fst3_title = "Primer Error"
-L.aw_fst3_text = "fue el primero en matar. Una pena que haya sido su inocente compañero."
+L.aw_fst3_title = "Första Tabben"
+L.aw_fst3_text = "var den första att döda. Synd att det var en oskyldig kamrat."
 
-L.aw_fst4_title = "Primera victoria del día"
-L.aw_fst4_text = "logró consagrarse como el primer justiciero por hacer de la primera muerte la de un traidor."
+L.aw_fst4_title = "Första Slaget"
+L.aw_fst4_text = "slog det första slaget för de oskyldiga terroristerna genom att göra den första döden till en förrädares."
 
-L.aw_all1_title = "Oveja negra del grupo"
-L.aw_all1_text = "fue responsable de cada asesinato cometido por los inocentes."
+L.aw_all1_title = "Dödlig Bland Jämlikar"
+L.aw_all1_text = "var ansvarig för alla de oskyldigas dödande den här rundan."
 
-L.aw_all2_title = "Lobo Solitario"
-L.aw_all2_text = "fue responsable de cada asesinato cometido por los traidores."
+L.aw_all2_title = "Ensamvarg"
+L.aw_all2_text = "var ansvarig för alla förrädarnas dödande den här rundan."
 
-L.aw_nkt1_title = "Peor es nada"
-L.aw_nkt1_text = "se las arregló para matar un único inocente. Algo es algo."
+L.aw_nkt1_title = "Jag Fick En, Chefen!"
+L.aw_nkt1_text = "lyckades döda en enda oskyldig. Schysst!!"
 
-L.aw_nkt2_title = "Dos pájaros de un tiro"
-L.aw_nkt2_text = "demostró que se puede hacer más con una bala que matar una persona. En este caso, matar dos."
+L.aw_nkt2_title = "En Kula För Två"
+L.aw_nkt2_text = "visade att den första inte bara var tur genom att döda en till."
 
-L.aw_nkt3_title = "Traidor Serial"
-L.aw_nkt3_text = "acabó con tres vidas inocentes. Menos mal que eran terroristas."
+L.aw_nkt3_title = "Serie-Förrädare"
+L.aw_nkt3_text = "tog idag slut på tre oskyldiga terrorist-liv."
 
-L.aw_nkt4_title = "Lobo entre Lobos (Parecen más ovejas)"
-L.aw_nkt4_text = "se comió varios inocentes para la cena. Una cena de {num} platos."
+L.aw_nkt4_title = "En Varg i Fårakläder"
+L.aw_nkt4_text = "äter oskyldiga terrorister till middag. En middag bestående av {num} rätter."
 
-L.aw_nkt5_title = "Operación Contra-Terrorista"
-L.aw_nkt5_text = "le pagan por matar. Ahora podrá disfrutar de su yate con juegos de azar y mujerzuelas."
+L.aw_nkt5_title = "Kontra-Terroristisk Operation"
+L.aw_nkt5_text = "får betalt för varje dödad. Kan nu köpa ännu en lyxjakt."
 
-L.aw_nki1_title = "Traiciona esta"
-L.aw_nki1_text = "encuentra un traidor. Y le dispara a un Traidor. Fácil."
+L.aw_nki1_title = "Förräd detta"
+L.aw_nki1_text = "hittade en förrädare. Sköt en förrädare. Enkelt."
 
-L.aw_nki2_title = "Almas Corruptas"
-L.aw_nki2_text = "llevó a dos traidores al más allá."
+L.aw_nki2_title = "Ansökte till Rättvise-Patrullen"
+L.aw_nki2_text = "eskorterade två förrädare till den andra sidan."
 
-L.aw_nki3_title = "¿Sueñan los Traidores con Ovejas traidoras?"
-L.aw_nki3_text = "puso tres traidores a dormir."
+L.aw_nki3_title = "Drömmer Förrädare Om Förrädiska Får?"
+L.aw_nki3_text = "hjälpte tre förrädare till sömns."
 
-L.aw_nki4_title = "Empleado de Asuntos Internos"
-L.aw_nki4_text = "le pagan por cada asesinato. Ahora puede ir a comprarse su quinta piscina de lujo."
+L.aw_nki4_title = "Anställd på Interna Affärer"
+L.aw_nki4_text = "får betalt för varje dödad. Kan nu beställa sin femte simbassäng."
 
-L.aw_fal1_title = "No, señor Bond. Espero que muera"
-L.aw_fal1_text = "empujó a alguien desde una gran altura."
+L.aw_fal1_title = "Fia med Knuff"
+L.aw_fal1_text = "knuffade någon från en hög höjd."
 
-L.aw_fal2_title = "En Picada"
-L.aw_fal2_text = "dejó que su cuerpo se desplomara luego de haber viajado en picada."
+L.aw_fal2_title = "Däckad"
+L.aw_fal2_text = "föll från en väldigt hög höjd."
 
-L.aw_fal3_title = "El Meteorito Humano"
-L.aw_fal3_text = "aplastó a alguien cayendo sobre él desde una gran altura."
+L.aw_fal3_title = "Den Mänsklige Meteoriten"
+L.aw_fal3_text = "krossade en man med sin tyngd genom att falla på honom."
 
-L.aw_hed1_title = "Eficiencia"
-L.aw_hed1_text = "descubrió el placer de volarle la cabeza a la gente a y lo a hecho con {num} personas."
+L.aw_hed1_title = "Effektivitet"
+L.aw_hed1_text = "upptäckte nöjet med huvudskott och utförde {num}."
 
-L.aw_hed2_title = "Neurólogo"
-L.aw_hed2_text = "removió exitosamente el cerebro de {num} personas para examinarlos... en otra partida."
+L.aw_hed2_title = "Hjärnkirurg"
+L.aw_hed2_text = "avlägsnade {num} hjärnor från dess huvud för en närmare analys."
 
-L.aw_hed3_title = "Los videojuegos me hicieron hacerlo"
-L.aw_hed3_text = "puso en práctica su programa de entrenamiento virtual y encajó a {num} personas con un disparo en la cabeza."
+L.aw_hed3_title = "Jag Beskyller TV-Spelen"
+L.aw_hed3_text = "applicerade sin mordsimulerings-träning och placerade {num} dödliga huvudskott."
 
-L.aw_cbr1_title = "Palancazo"
-L.aw_cbr1_text = "Tiene el verdadero swing para agitar la palanca, cobrándose así {num} víctimas."
+L.aw_cbr1_title = "Dunk Dunk Dunk"
+L.aw_cbr1_text = "har en riktig bra svingarm med kofoten, vilket {num} offer fick reda på."
 
-L.aw_cbr2_title = "Freeman"
-L.aw_cbr2_text = "Terminó Half-Life machacando a {num} personas."
+L.aw_cbr2_title = "Martin Timell"
+L.aw_cbr2_text = "täckte sin kofot med inte mindre än {num} människors hjärnor."
 
-L.aw_pst1_title = "Pequeño pero poderoso"
-L.aw_pst1_text = "marcó {num} usando la pistola. Poderoso el chiquitín."
+L.aw_pst1_title = "Ihärdig Liten Rackare"
+L.aw_pst1_text = "dödade {num} spelare med hjälp av pistolen. Sedan gick han och kramade någon till döds."
 
-L.aw_pst2_title = "Masacre calibre 9mm"
-L.aw_pst2_text = "asesinó una pequeña armada de {num} personas con pistola."
+L.aw_pst2_title = "Slakt Med Låg Kaliber"
+L.aw_pst2_text = "dödade en liten armé på {num} med en pistol. Förmodligen har han ett litet hagelgevär i mynningen."
 
-L.aw_sgn1_title = "Modo fácil"
-L.aw_sgn1_text = "aplicó sus perdigones justo dónde duele, asesinando {num} objetivos."
+L.aw_sgn1_title = "Lätt Som En Plätt"
+L.aw_sgn1_text = "applicerade haglet där det gör som mest skada, och dödade {num} mål på kuppen."
 
-L.aw_sgn2_title = "Lluvia de Perdigones"
-L.aw_sgn2_text = "le disgustaba la lluvia así que le dio su estilo propio. {num} personas fueron 'mojadas' por esta."
+L.aw_sgn2_title = "Tusen Små Hagel"
+L.aw_sgn2_text = "gillade inte riktigt sitt hagel, så han gav bort allt. {num} mottagare levde inte länge nog för att ha kul med det."
 
-L.aw_rfl1_title = "Apunta y dispara"
-L.aw_rfl1_text = "demostró que para matar {num} personas sólo es necesario un rifle y una buena mano."
+L.aw_rfl1_title = "Peka och Klicka"
+L.aw_rfl1_text = "visar att allt du behöver för {num} döda är ett gevär och en stadig hand."
 
-L.aw_rfl2_title = "Puedo ver esa cabeza desde aquí"
-L.aw_rfl2_text = "conoce bien su rifle. Otras {num} personas lo conocieron bien también."
+L.aw_rfl2_title = "Jag Kan Se Ditt Huvud Härifrån"
+L.aw_rfl2_text = "kände sitt gevär utan och innan. Nu känner {num} andra också hans till det."
 
-L.aw_dgl1_title = "Es como un rifle pequeño"
-L.aw_dgl1_text = "le encontró el truco a la Desert Eagle y asesinó a {num} personas."
+L.aw_dgl1_title = "Gevär I Mini-Format"
+L.aw_dgl1_text = "börjar få grepp om sin Desert Eagle och dödade {num} människor."
 
-L.aw_dgl2_title = "Maestro de la Deagle"
-L.aw_dgl2_text = "reventó a {num} personas con su pequeño cañón de mano."
+L.aw_dgl2_title = "Deaglar'n"
+L.aw_dgl2_text = "blåste iväg {num} människor med sin handkanon."
 
-L.aw_mac1_title = "Reza y dispara"
-L.aw_mac1_text = "mató a {num} personas con la MAC10. No pregunten cuánta munición usó para lograrlo."
+L.aw_mac1_title = "Sikta(inte) och Skjut"
+L.aw_mac1_text = "dödade {num} människor med sin MAC10, men vägrar uppge hur många skott som krävdes."
 
-L.aw_mac2_title = "Máquina de matar"
-L.aw_mac2_text = "se cuestiona cuánto podría matar si pudiera llevar dos MAC10. ¿{num} multiplicado por dos?"
+L.aw_mac2_title = "Köttbullar med MACaroner"
+L.aw_mac2_text = "undrar vad som skulle hända om han kunde använda två MAC10 samtidigt. {num} gånger två?"
 
-L.aw_sip1_title = "SHHHH"
-L.aw_sip1_text = "le cerró la boca a {num} personas con la pistola silenciada."
+L.aw_sip1_title = "Var Tyst"
+L.aw_sip1_text = "fick tyst på {num} människor med den ljuddämpade pistolen."
 
-L.aw_sip2_title = "Asesino Silencioso"
-L.aw_sip2_text = "asesinó a {num} personas que no lograron oir su muerte."
+L.aw_sip2_title = "Tyst Men Dödlig"
+L.aw_sip2_text = "dödade {num} människor som inte kunde höra sig själv dö."
 
-L.aw_knf1_title = "Al filo del internet"
-L.aw_knf1_text = "nos ha mostrado como untar manteca en la cara de alguien y lo ha subido a internet."
+L.aw_knf1_title = "Knivig Situation"
+L.aw_knf1_text = "stack någon i ansiktet över internet."
 
-L.aw_knf2_title = "¿De dónde sacaste eso?"
-L.aw_knf2_text = "no era traidor, de igual manera logró cortar a alguien en pedacitos."
+L.aw_knf2_title = "Var Hittade Du Den Där?"
+L.aw_knf2_text = "var inte en Förrädare, men lyckades ändå döda någon med en kniv."
 
-L.aw_knf3_title = "Obseción con los cuchillos"
-L.aw_knf3_text = "encontró {num} cuchillos tirados por ahí... y los usó."
+L.aw_knf3_title = "En Knivig Situation"
+L.aw_knf3_text = "hittade {num} knivar, och gjorde det bästa med dem."
 
-L.aw_knf4_title = "Al Filo del Vacío"
-L.aw_knf4_text = "mató {num} personas con cuchillo. Nadie sabe cómo."
+L.aw_knf4_title = "En Knivslug Man"
+L.aw_knf4_text = "dödade {num} människor med knivar. Fråga mig inte hur."
 
-L.aw_flg1_title = "Al Rescate"
-L.aw_flg1_text = "usó sus bengalas para remarcar {num} muertes."
+L.aw_flg1_title = "Till Undsättning"
+L.aw_flg1_text = "använde sin signalpistol till att signalera {num} mord."
 
-L.aw_flg2_title = "Señales de... ¿fuego?"
-L.aw_flg2_text = "enseñó a {num} personas el peligro de usar ropa inflamable."
+L.aw_flg2_title = "Ingen Rök Utan Eld"
+L.aw_flg2_text = "lärde {num} män om faran med att ha lättantändliga kläder på sig."
 
-L.aw_hug1_title = "Ráfaga H.U.G.E"
-L.aw_hug1_text = "mantuvo su emoción disparando con la H.U.G.E, de alguna manera logró darle a {num} personas."
+L.aw_hug1_title = "HUGEnottkrig"
+L.aw_hug1_text = "gick ut i krig med sin H.U.G.E, och lyckades på något sätt skjuta ihjäl {num} människor."
 
-L.aw_hug2_title = "El Paciente más paciente"
-L.aw_hug2_text = "perseveró y triunfó. Su recompensa fueron {num} asesinatos con H.U.G.E."
+L.aw_hug2_title = "Fett Mycket Para"
+L.aw_hug2_text = "hade väldigt många skott, och investerade dem i {num} människor."
 
-L.aw_msx1_title = "Tap Tap Tap"
-L.aw_msx1_text = "se llevó con tiros limpios a {num} personas (M16)."
+L.aw_msx1_title = "Ett M16-Protokoll"
+L.aw_msx1_text = "prickade av {num} människor från listan med sin M16."
 
-L.aw_msx2_title = "Campeón de Cancha"
-L.aw_msx2_text = "sabe moverse en el campo de batalla. Su M16 se lo demostró a {num} personas."
+L.aw_msx2_title = "Galenskap På Medelavstånd"
+L.aw_msx2_text = "lyckades plocka ner {num} mål med sin M16."
 
-L.aw_tkl1_title = "Cagada"
-L.aw_tkl1_text = "se le resbaló el dedo justo cuándo le apuntaba a un compañero."
+L.aw_tkl1_title = "Aja-baja!"
+L.aw_tkl1_text = "slant med fingret när han siktade på en kompis."
 
-L.aw_tkl2_title = "Esta es la vencida"
-L.aw_tkl2_text = "pensó que atrapó a un traidor dos veces... las dos veces falló."
+L.aw_tkl2_title = "De Såg Ut Som Förrädare"
+L.aw_tkl2_text = "trodde att han lyckats döda en Förrädare två gånger, men hade fel båda gångerna."
 
-L.aw_tkl3_title = "Superstición"
-L.aw_tkl3_text = "no pudo parar luego de matar a dos compañeros. El tres es su número de la suerte."
+L.aw_tkl3_title = "Låg Karma"
+L.aw_tkl3_text = "kunde inte sluta efter att ha dödat två medspelare. Hans turnummer är tre."
 
-L.aw_tkl4_title = "Elba Neado"
-L.aw_tkl4_text = "asesinó a todo su equipo. Seguramente lo banean."
+L.aw_tkl4_title = "Lagslakt"
+L.aw_tkl4_text = "mördade hela sitt lag. Lyckligtvis är han nog inte kvar så länge till."
 
-L.aw_tkl5_title = "Sádico"
-L.aw_tkl5_text = "disfruta mucho de ver morir a los suyos. Una pisca de desesperación."
+L.aw_tkl5_title = "Rollspelare"
+L.aw_tkl5_text = "antog sig rollen som was roleplaying en blådåre. Det är därför han dödade merparten av sitt lag."
 
-L.aw_tkl6_title = "¡Aprende a leer!"
-L.aw_tkl6_text = "no entendió en qué equipo estaba y terminó matando a la mitad de sus compañeros."
+L.aw_tkl6_title = "Pucko"
+L.aw_tkl6_text = "förstod inte vilken sida han var på, så han dödade mer än hälften av sina lagkamrater."
 
-L.aw_tkl7_title = "Gangster Ciego"
-L.aw_tkl7_text = "tenía que proteger su territorio, pero no de los suyos."
+L.aw_tkl7_title = "Bondlurk"
+L.aw_tkl7_text = "försvarade sin mark genom att döda mer än en fjärdedel av sitt lag."
 
-L.aw_brn1_title = "Como en McDonald's"
-L.aw_brn1_text = "convirtió a varias personas en papas fritas."
+L.aw_brn1_title = "Precis Som Mormors"
+L.aw_brn1_text = "grillade flera människor tills de fått en fin yta."
 
-L.aw_brn2_title = "Fosforescente"
-L.aw_brn2_text = "inventó las balizas fosforescentes... con un cuerpo humano."
+L.aw_brn2_title = "Leker Med Elden"
+L.aw_brn2_text = "lärde sig tydligen inte vad mamma lärt honom, vilket flera människor får sota för."
 
-L.aw_brn3_title = "Parrillada al aire libre"
-L.aw_brn3_text = "hizo un gran parrillada y todos fueron invitados... lástima que estuvieron algo pasados de cocción."
+L.aw_brn3_title = "Pyrrhic Burnery"
+L.aw_brn3_text = "burned them all, but is now all out of incendiary grenades! How will he cope!?"
 
-L.aw_fnd1_title = "Forense"
-L.aw_fnd1_text = "encontró {num} cuerpos tirados por ahí."
+L.aw_fnd1_title = "Coroner"
+L.aw_fnd1_text = "found {num} bodies lying around."
 
-L.aw_fnd2_title = "¡Hazte con todos!"
-L.aw_fnd2_text = "capturó, digo, encontró {num} cuerpos y los llevó a su colección, digo, a la morgue."
+L.aw_fnd2_title = "Gotta Catch Em All"
+L.aw_fnd2_text = "found {num} corpses for his collection."
 
-L.aw_fnd3_title = "Olor a Muerte"
-L.aw_fnd3_text = "no puedo parar de encontrar cadáveres, {num} veces durante esta ronda."
+L.aw_fnd3_title = "Death Scent"
+L.aw_fnd3_text = "keeps stumbling on random corpses, {num} times this round."
 
-L.aw_crd1_title = "Reciclaje"
-L.aw_crd1_text = "recuperó {num} crédito(s) en cuerpos de otros jugadores."
+L.aw_crd1_title = "Recycler"
+L.aw_crd1_text = "scrounged up {num} leftover credits from corpses."
 
-L.aw_tod1_title = "Pérdida culposa"
-L.aw_tod1_text = "murió pocos segundos después de que su equipo ganara la ronda."
+L.aw_tod1_title = "Pyrrhusseger"
+L.aw_tod1_text = "dog bara några sekunder innan hans lag vann rundan."
 
-L.aw_tod2_title = "A Casa"
-L.aw_tod2_text = "murió justo después de que empezara la ronda."
+L.aw_tod2_title = "Jag Hatar Detta Spel"
+L.aw_tod2_text = "dog precis efter att rundan påbörjats."
 
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
 -- v24
-L.drop_no_ammo = "Munición insuficiente en tu cargador como para soltarla en una caja."
+L.drop_no_ammo = "Otillräcklig ammunition i vapnets klipp att släppa som en ammo låda."
 
 -- 2015-05-25
-L.hat_retrieve = "Has recogido el Sombrero del Detective."
+L.hat_retrieve = "Du plockade upp hatten av en detektiv."
 
 -- 2017-09-03
-L.sb_sortby = "Ordenar por:"
+--L.sb_sortby = "Sort By:"
 
 -- 2018-07-24
-L.equip_tooltip_main = "Menú de Equipamiento"
-L.equip_tooltip_radar = "Control del Radar"
-L.equip_tooltip_disguise = "Control del Disfraz"
-L.equip_tooltip_radio = "Control de la Radio"
-L.equip_tooltip_xfer = "Transferir Créditos"
+--L.equip_tooltip_main = "Equipment menu"
+--L.equip_tooltip_radar = "Radar control"
+--L.equip_tooltip_disguise = "Disguise control"
+--L.equip_tooltip_radio = "Radio control"
+--L.equip_tooltip_xfer = "Transfer credits"
 --L.equip_tooltip_reroll = "Reroll equipment"
 
-L.confgrenade_name = "Discombobulator"
-L.polter_name = "Poltergeist"
-L.stungun_name = "Prototipo UMP"
+--L.confgrenade_name = "Discombobulator"
+--L.polter_name = "Poltergeist"
+--L.stungun_name = "UMP Prototype"
 
-L.knife_instant = "ASESINATO INSTANTÁNEO"
+--L.knife_instant = "INSTANT KILL"
 
-L.binoc_zoom_level = "Nivel de Zoom"
-L.binoc_body = "CUERPO DETECTADO"
+--L.binoc_zoom_level = "Zoom Level"
+--L.binoc_body = "BODY DETECTED"
 
-L.idle_popup_title = "Ausente"
+--L.idle_popup_title = "Idle"
 
 -- 2019-01-31
-L.create_own_shop = "Crear tienda propia"
-L.shop_link = "Enlazar con"
-L.shop_disabled = "Desactivar tienda"
-L.shop_default = "Usar tienda predeterminada"
+--L.create_own_shop = "Create own shop"
+--L.shop_link = "Link with"
+--L.shop_disabled = "Disable shop"
+--L.shop_default = "Use default shop"
 
 -- 2019-05-05
-L.reroll_name = "Nueva tirada (Reroll)"
+--L.reroll_name = "Reroll"
 --L.reroll_menutitle = "Reroll equipment"
-L.reroll_no_credits = "¡Necesitas {amount} créditos para volver a tirar!"
-L.reroll_button = "Nueva tirada (Reroll)"
+--L.reroll_no_credits = "You need {amount} credits to reroll!"
+--L.reroll_button = "Reroll"
 --L.reroll_help = "Use {amount} credits to get a new random set of equipment in your shop!"
 
 -- 2019-05-06
-L.equip_not_alive = "Aquí puedes ver los objetos del rol que quieras. ¡No olvides de marcar tus favoritos!"
+--L.equip_not_alive = "You can view all available items by selecting a role on the right. Don't forget to mark your favorites!"
 
 -- 2019-06-27
-L.shop_editor_title = "Editor de la Tienda"
-L.shop_edit_items_weapong = "Editar objetos / armas"
-L.shop_edit = "Editar Tienda"
-L.shop_settings = "Configuración"
-L.shop_select_role = "Seleccionar Rol"
-L.shop_edit_items = "Editar Objetos"
-L.shop_edit_shop = "Editar Tienda"
-L.shop_create_shop = "Crear tienda personalizada"
-L.shop_selected = "Selccionado {role}"
-L.shop_settings_desc = "Cambia las ConVars de la tienda aleatoria. ¡No olvides guardar los cambios!"
+--L.shop_editor_title = "Shop Editor"
+--L.shop_edit_items_weapong = "Edit Items / Weapons"
+--L.shop_edit = "Edit Shops"
+--L.shop_settings = "Settings"
+--L.shop_select_role = "Select Role"
+--L.shop_edit_items = "Edit Items"
+--L.shop_edit_shop = "Edit Shop"
+--L.shop_create_shop = "Create Custom Shop"
+--L.shop_selected = "Selected {role}"
+--L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't forget to save your changes!"
 
-L.bindings_new = "Nuevo bind/atajo para {name}: {key}"
+--L.bindings_new = "New bound key for {name}: {key}"
 
-L.hud_default_failed = "Error al establecer el HUD {hudname} como el nuevo predeterminado. No tienes permiso o ese HUD no existe."
-L.hud_forced_failed = "Error al establecer el HUD {hudname}. No tienes permiso o ese HUD no existe."
-L.hud_restricted_failed = "Error al restringir el HUD {hudname}. No tienes permiso para hacer eso."
+--L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
+--L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
+--L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
-L.shop_role_select = "Selecciona un rol"
-L.shop_role_selected = "La tienda de {role} fue seleccionada"
-L.shop_search = "Buscar"
+--L.shop_role_select = "Select a role"
+--L.shop_role_selected = "{role}'s shop was selected!"
+--L.shop_search = "Search"
 
 -- 2019-10-19
 --L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 
 -- 2019-10-28
-L.target_c4 = "Pulsa [{usekey}] para abrir el menú de C4"
-L.target_c4_armed = "Pulsa [{usekey}] para desactivar el C4"
-L.target_c4_armed_defuser = "Pulsa [{usekey}] para usar el kit de desactivación"
-L.target_c4_not_disarmable = "No puedes desactivar el C4 de un compañero vivo"
-L.c4_short_desc = "Algo muy explosivo"
+--L.target_c4 = "Press [{usekey}] to open C4 menu"
+--L.target_c4_armed = "Press [{usekey}] to disarm C4"
+--L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
+--L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
+--L.c4_short_desc = "Something very explosive"
 
-L.target_pickup = "Pulsa [{usekey}] para recoger"
-L.target_slot_info = "Espacio: {slot}"
-L.target_pickup_weapon = "Pulsa [{usekey}] para recoger el arma"
-L.target_switch_weapon = "Pulsa [{usekey}] para intercambiar con tu arma actual"
-L.target_pickup_weapon_hidden = ", pulsa [{walkkey} + {usekey}] para recogerla silenciosamente"
-L.target_switch_weapon_hidden = ", pulsa [{walkkey} + {usekey}] para intercambiarla silenciosamente"
-L.target_switch_weapon_nospace = "No hay espacio disponible para esta arma en tu inventario"
-L.target_switch_drop_weapon_info = "Soltando {name} del espacio {slot}"
-L.target_switch_drop_weapon_info_noslot = "No hay un arma que esté ocupando el espacio {slot}"
+--L.target_pickup = "Press [{usekey}] to pick up"
+--L.target_slot_info = "Slot: {slot}"
+--L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
+--L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
+--L.target_pickup_weapon_hidden = ", press [{walkkey} + {usekey}] for hidden pickup"
+--L.target_switch_weapon_hidden = ", press [{walkkey} + {usekey}] for hidden switch"
+--L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
+--L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
+--L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
-L.corpse_searched_by_detective = "Este cadáver fue inspeccionado por un detective."
-L.corpse_too_far_away = "El cadáver está muy lejos."
+--L.corpse_searched_by_detective = "This corpse was searched by a detective"
+--L.corpse_too_far_away = "The corpse is too far away."
 
-L.radio_pickup_wrong_team = "No puedes recoger la radio de otro equipo."
-L.radio_short_desc = "Los sonidos de las armas son música para mis oídos"
+--L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
+--L.radio_short_desc = "Weapon sounds are music to me"
 
-L.hstation_subtitle = "Mantén presionado [{usekey}] para recibir curación."
-L.hstation_charge = "Carga restante de la estación: {charge}"
-L.hstation_empty = "No hay más carga en la estación"
-L.hstation_maxhealth = "Ya estás completamente curado"
-L.hstation_short_desc = "La estación de salud se recarga con el tiempo"
+--L.hstation_subtitle = "Press [{usekey}] to receive health."
+--L.hstation_charge = "Remaining charge of health station: {charge}"
+--L.hstation_empty = "There is no more charge left in this health station"
+--L.hstation_maxhealth = "Your health is full"
+--L.hstation_short_desc = "The heath station slowly recharges over time"
 
 -- 2019-11-03
-L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
-L.corpse_binoculars = "Pulsa [{key}] para inspeccionar el cadáver."
-L.binoc_progress = "Search progress: {progress}%"
+--L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
+--L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
+--L.binoc_progress = "Search progress: {progress}%"
 
-L.pickup_no_room = "No tienes espacio en tu inventario para este tipo de arma"
-L.pickup_fail = "No puedes agarrar esto"
-L.pickup_pending = "Ya has recogido un arma, espera a recibirla"
+--L.pickup_no_room = "You have no space in your inventory for this weapon kind."
+--L.pickup_fail = "You cannot pick up this weapon."
+--L.pickup_pending = "You already picked up a weapon, wait until you receive it."
 
 -- 2020-01-07
-L.tbut_help_admin = "Editar configuración de teclas para el Traidor"
-L.tbut_role_toggle = "[{walkkey} + {usekey}] para activar y desactivar esto para {role}"
-L.tbut_role_config = "Rol: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para activar este botón para el equipo {team}"
-L.tbut_team_config = "Equipo: {current}"
-L.tbut_current_config = "Configuración actual:"
-L.tbut_intended_config = "Configuración recomendada por el creador del mapa:"
-L.tbut_admin_mode_only = "Sólo visible para ti ya que eres un administrador y '{cv}' está establecido en '1'"
-L.tbut_allow = "Permitir"
-L.tbut_prohib = "Prohibir"
-L.tbut_default = "Predeterminado"
+--L.tbut_help_admin = "Edit traitor button settings"
+--L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+--L.tbut_role_config = "Role: {current}"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+--L.tbut_team_config = "Team: {current}"
+--L.tbut_current_config = "Current config:"
+--L.tbut_intended_config = "Intended config by map creator:"
+--L.tbut_admin_mode_only = "You see this button because you're an admin and '{cv}' is set to '1'."
+--L.tbut_allow = "Allow"
+--L.tbut_prohib = "Prohibit"
+--L.tbut_default = "Default"
 
 -- 2020-02-09
-L.name_door = "Puerta"
-L.door_open = "Pulsa [{usekey}] para abrir la puerta."
-L.door_close = "Pulsa [{usekey}] para cerrar la puerta."
-L.door_locked = "¡Esta puerta está bloqueada!"
+--L.name_door = "Door"
+--L.door_open = "Press [{usekey}] to open door."
+--L.door_close = "Press [{usekey}] to close door."
+--L.door_locked = "This door is locked."
 
 -- 2020-02-11
-L.automoved_to_spec = "(MENSAJE AUTOMÁTICO) Fuiste movido al modo espectador por estar ausente/AFK."
-L.mute_team = "{team} silenciado."
+--L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+--L.mute_team = "{team} muted."
 
 -- 2020-02-16
-L.door_auto_closes = "Esta puerta se cierra automáticamente."
-L.door_open_touch = "Acércate a la puerta para abrirla."
-L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrirla."
-L.hud_health = "Salud"
+--L.door_auto_closes = "This door closes automatically."
+--L.door_open_touch = "Walk into door to open."
+--L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
+--L.hud_health = "Health"
 
 -- 2020-03-09
---L.help_title = "Help and Settings"
+L.help_title = "Hjälp och Inställningar"
 
 --L.menu_changelog_title = "Changelog"
 --L.menu_guide_title = "TTT2 Guide"
@@ -1159,65 +1196,65 @@ L.hud_health = "Salud"
 --L.button_hud_editor = "HUD Editor"
 
 -- 2020-04-20
-L.item_speedrun = "Velocista"
-L.item_speedrun_desc = [[¡Te hace 50% más rápido!]]
-L.item_no_explosion_damage = "Negar daño por explosión"
-L.item_no_explosion_damage_desc = [[Te hace inmune al daño explosivo.]]
-L.item_no_fall_damage = "Negar daño por caída"
-L.item_no_fall_damage_desc = [[Te hace inmune al daño por caída.]]
-L.item_no_fire_damage = "Negar daño por fuego"
-L.item_no_fire_damage_desc = [[Te hace inmune al daño por quemaduras.]]
-L.item_no_hazard_damage = "Negar daño tóxico"
-L.item_no_hazard_damage_desc = [[Te hace inmune al veneno, radiación y ácido.]]
-L.item_no_energy_damage = "Negar daño por energía"
-L.item_no_energy_damage_desc = [[Te hace inmune a los láseres, plasma y rayos.]]
-L.item_no_prop_damage = "Negar daño por objetos"
-L.item_no_prop_damage_desc = [[Te hace inmune al daño por objetos arrojados hacia tí.]]
-L.item_no_drown_damage = "Negar daño por ahogo"
-L.item_no_drown_damage_desc = [[Te hace inmune al daño por agotamiento del oxígeno.]]
+--L.item_speedrun = "Speedrun"
+--L.item_speedrun_desc = [[Makes you 50% faster!]]
+--L.item_no_explosion_damage = "No Explosion Damage"
+--L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+--L.item_no_fall_damage = "No Fall Damage"
+--L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+--L.item_no_fire_damage = "No Fire Damage"
+--L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
+--L.item_no_hazard_damage = "No Hazard Damage"
+--L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as poison, radiation and acid.]]
+--L.item_no_energy_damage = "No Energy Damage"
+--L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
+--L.item_no_prop_damage = "No Prop Damage"
+--L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+--L.item_no_drown_damage = "No Drowning Damage"
+--L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
 
 -- 2020-04-21
-L.dna_tid_possible = "Se puede escanear"
-L.dna_tid_impossible = "No se puede escanear"
-L.dna_screen_ready = "Sin ADN"
-L.dna_screen_match = "Duplicado"
+--L.dna_tid_possible = "Scan possible."
+--L.dna_tid_impossible = "No scan possible."
+--L.dna_screen_ready = "No DNA"
+--L.dna_screen_match = "Match"
 
 -- 2020-04-30
-L.message_revival_canceled = "Reanimación cancelada."
-L.message_revival_failed = "Reanimación fallida."
-L.message_revival_failed_missing_body = "No has sido revivido porque tu cuerpo ya no existe."
-L.hud_revival_title = "Tiempo faltante para ser reanimado:"
-L.hud_revival_time = "{time}s"
+--L.message_revival_canceled = "Revival canceled."
+--L.message_revival_failed = "Revival failed."
+--L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+--L.hud_revival_title = "Time left until revival:"
+--L.hud_revival_time = "{time}s"
 
 -- 2020-05-03
-L.door_destructible = "La puerta es desctructible (VIDA {health})"
+--L.door_destructible = "This door is destructible ({health}HP)."
 
 -- 2020-05-28
-L.confirm_detective_only = "Sólo los detectives pueden confirmar cuerpos"
-L.inspect_detective_only = "Sólo los detectives pueden inspeccionar cuerpos"
-L.corpse_hint_no_inspect = "Sólo los detectives pueden inspeccionar este cuerpo."
-L.corpse_hint_inspect_only = "Pulsa [{usekey}] para inspeccionar. Sólo los detectives pueden confirmar este cuerpo."
-L.corpse_hint_inspect_only_credits = "Pulsa [{usekey}] para recibir los créditos. Sólo los detectives pueden inspeccionar este cuerpo."
+--L.confirm_detective_only = "Only detectives can confirm bodies."
+--L.inspect_detective_only = "Only detectives can search bodies."
+--L.corpse_hint_no_inspect = "Only detectives can search this body."
+--L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
 
 -- 2020-06-04
-L.label_bind_disguiser = "Disfraz"
+--L.label_bind_disguiser = "Toggle disguiser"
 
 -- 2020-06-24
-L.dna_help_primary = "Tomar muestra de ADN"
-L.dna_help_secondary = "Cambiar muestra de ADN"
-L.dna_help_reload = "Borrar muestra"
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
 
-L.binoc_help_pri = "Identificar el cuerpo."
-L.binoc_help_sec = "Cambiar nivel de zoom."
+--L.binoc_help_pri = "Search a body."
+--L.binoc_help_sec = "Change zoom level."
 
-L.vis_help_pri = "Soltar el dispositivo activo."
+--L.vis_help_pri = "Drop the activated device."
 
-L.decoy_help_pri = "Colocar el señuelo."
+--L.decoy_help_pri = "Plant the Decoy."
 
 -- 2020-08-07
-L.pickup_error_spec = "No puedes recoger esto como espectador."
-L.pickup_error_owns = "No puedes recoger esto porque ya lo tienes en el inventario."
-L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disponible en el inventario."
+--L.pickup_error_spec = "You cannot pick this up as a spectator."
+--L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
+--L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
 
 -- 2020-11-02
 --L.lang_server_default = "Server Default"
@@ -1240,7 +1277,7 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 --L.button_show_roles_begin = "Round Begin"
 --L.button_show_roles_end = "Round End"
 
---L.hilite_win_traitors = "TEAM TRAITOR WON"
+L.hilite_win_traitors = "FÖRRÄDISK VINST"
 --L.hilite_win_innocents = "TEAM INNOCENT WON"
 --L.hilite_win_tie = "IT IS A TIE"
 --L.hilite_win_time = "TIME IS UP"
@@ -1291,51 +1328,51 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 --L.desc_event_spawn = "{player} has spawned."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.trap_something = "Algo"
+--L.trap_something = "something"
 
 -- Kill events
 --L.desc_event_kill_suicide = "It was suicide."
 --L.desc_event_kill_team = "It was a team kill."
 
-L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) se reventó."
-L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) fue reventado por {trap}."
+--L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) blew themselves up."
+--L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) was blown up by {trap}."
 
-L.desc_event_kill_tele_self = "{victim} ({vrole} / {vteam}) se tele-mató."
-L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) no pudo soportarlo y se suicidó."
-L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) se suicidó usando {tool}."
+--L.desc_event_kill_tele_self = "{victim} ({vrole} / {vteam}) telefragged themselves."
+--L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) couldn't take it and killed themselves."
+--L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) killed themselves using {tool}."
 
-L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) cayó hacia su muerte."
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) cayó hacia su muerta luego de que {attacker} lo empujara."
-L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) cayó hacia su muerte luego de que {attacker} ({arole} / {ateam}) usara {trap} para empujarlo."
+--L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) fell to their death."
+--L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} pushed them."
+--L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} ({arole} / {ateam}) used {trap} to push them."
 
-L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) fue fusilado por {attacker}."
-L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) fue fusilado por {attacker} ({arole} / {ateam}) usando un/a {weapon}."
+--L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) was shot by {attacker}."
+--L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) was shot by {attacker} ({arole} / {ateam}) using a {weapon}."
 
-L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) fue asfixiado hasta la muerte por {attacker}."
-L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) fue asfixiado hasta la muerte con {trap} activado por {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) was drowned by {attacker}."
+--L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) was drowned by {trap} triggered by {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_boom = "{attacker} ({vrole} / {vteam}) hizo volar por los aires a {victim}."
-L.desc_event_kill_boom_using = "{attacker} ({vrole} / {vteam}) hizo volar por los aires a {victim} usando {trap} ({arole} / {ateam})."
+--L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) was exploded by {attacker}."
+--L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) was blown up by {attacker} ({arole} / {ateam}) using {trap}."
 
-L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) fue incinerado por {attacker}."
-L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) fue incinerado con {trap} por {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) was fried by {attacker}."
+--L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) was burned by {trap} due to {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) fue golpeado hasta la muerte por {attacker}."
-L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) fue golpeado hasta la muerte por {attacker} ({arole} / {ateam}) usando {trap}."
+--L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) was beaten up by {attacker}."
+--L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) was pummeled to death by {attacker} ({arole} / {ateam}) using {trap}."
 
-L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) fue apuñalado por {attacker}."
-L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) fue cortado en partes por {attacker} ({arole} / {ateam}) usando {trap}."
+--L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) was stabbed by {attacker}."
+--L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) was cut up by {attacker} ({arole} / {ateam}) using {trap}."
 
-L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) fue tele-asesinado por {attacker}."
-L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) a muerto con {trap} por {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) was telefragged by {attacker}."
+--L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) was atomized by {trap} set by {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) fue aplastado por una masa contundente de {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) was crushed by the massive bulk of {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) fue aplastado por {attacker}."
-L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) fue aplastado con {trap} por {attacker} ({arole} / {ateam})."
+--L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) was crushed by {attacker}."
+--L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) was crushed by {trap} of {attacker} ({arole} / {ateam})."
 
-L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) fue asesinado por {attacker}."
-L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por {attacker} ({arole} / {ateam}) usando {trap}."
+--L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) was killed by {attacker}."
+--L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) was killed by {attacker} ({arole} / {ateam}) using {trap}."
 
 -- 2021-04-20
 --L.none = "No Role"
@@ -1895,12 +1932,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
-
--- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
---L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
---L.header_hud_elements_customize = "Customize the HUD-Elements"
---L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[

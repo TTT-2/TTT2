@@ -408,7 +408,7 @@ L.dna_killer = "Вы собрали образец ДНК убийцы с это
 L.dna_duplicate = "Совпадение! У вас уже есть этот образец ДНК в сканере."
 L.dna_no_killer = "Образец ДНК не может быть собран (убийца покинул сервер?)."
 L.dna_armed = "Бомба все ещё работает! Сначала обезвредьте её!"
-L.dna_object = "Собрано новых образцов ДНК: {num}."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "ДНК не обнаружено в этой области."
 
 L.dna_desc = [[
@@ -807,7 +807,7 @@ L.aw_flg2_title = "Сигнальная ракета обозначает ого
 L.aw_flg2_text = "рассказал {num} людям об опасности ношения легковоспламеняющейся одежды."
 
 L.aw_hug1_title = "Большой разброс"
-L.aw_hug1_text = "был в гармонии со своим H.U.G.E, умудрившись как-то заставить свои пули убить 4 человек."
+--L.aw_hug1_text = "was in tune with their H.U.G.E, somehow managing to make their bullets hit {num} people."
 
 L.aw_hug2_title = "Терпеливая пара"
 L.aw_hug2_text = "продолжал стрелять из H.U.G.E. и обнаружил, что терпение вознаградило его {num} убийствами."
@@ -1949,8 +1949,8 @@ L.tbut_adminarea = "Администраторская зона:"
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
@@ -1966,3 +1966,8 @@ L.tbut_adminarea = "Администраторская зона:"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

@@ -41,7 +41,7 @@ L.win_showreport = "Spójrzmy na raport rundy na {num} sekund."
 
 --L.limit_round = "Round limit reached. The next map will load soon."
 --L.limit_time = "Time limit reached. The next map will load soon."
-L.limit_left = "{num} rund(a), albo {time} minut, do zmiany mapy na {mapname}."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Twój team został nagrodzony {num} kredytami na zakupy."
@@ -406,7 +406,7 @@ L.dna_killer = "Zebrano próbkę DNA zabójcy z trupa!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "Nie można było pobrać DNA (zabójca się rozłączył?)."
 L.dna_armed = "Ta bomba jest uzbrojona! Rozbrój ją najpierw!"
-L.dna_object = "Zebrano {num} nową próbkę DNA z obiektu."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA nie zostało znalezione na tym terenie."
 
 L.dna_desc = [[
@@ -676,7 +676,7 @@ L.aw_sui2_title = "Samotny i zdesperowany"
 L.aw_sui2_text = "był jedynym, który zabił samego siebie."
 
 L.aw_exp1_title = "Badania MateriaŁÓw Wybuchowych"
-L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
+L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu {num} obiektów."
 
 L.aw_exp2_title = "Badania Terenowe"
 L.aw_exp2_text = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
@@ -930,7 +930,7 @@ L.hud_forced_failed = "Nie udało się wymusić HUD {hudname}. Nie masz permisji
 L.hud_restricted_failed = "Nie udało się nadać restrykcji HUDa {hudname}. Nie masz permisji."
 
 L.shop_role_select = "Wybierz rolę"
-L.shop_role_selected = "{roles} wybrano do sklepu!"
+L.shop_role_selected = "{role} wybrano do sklepu!"
 L.shop_search = "Szukaj"
 
 -- 2019-10-19
@@ -1418,7 +1418,7 @@ L.none = "Brak Roli"
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"
 --L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 --L.spawn_weapon_random = "Random Weapon Spawn"
 --L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1947,8 +1947,8 @@ L.none = "Brak Roli"
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
@@ -1964,3 +1964,8 @@ L.none = "Brak Roli"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

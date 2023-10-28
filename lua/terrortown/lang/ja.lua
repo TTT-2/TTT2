@@ -402,7 +402,7 @@ L.dna_killer = "死体から殺害者のDNAサンプルを入手した！"
 L.dna_duplicate = "一致した！スキャナーにこのDNAが登録されたぞ。"
 L.dna_no_killer = "DNAは回収されることができないようだ (殺害者はゲームを退出したんだろうか?)."
 L.dna_armed = "この爆弾は稼働中だ！早く解除するんだ！"
-L.dna_object = "オブジェクトから{num}個の新しいDNAサンプルを入手した。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "このエリアにDNA反応はないようだ。"
 
 L.dna_desc = [[
@@ -926,7 +926,7 @@ L.hud_forced_failed = " {hudname} を固定できなかった。これを行う�
 L.hud_restricted_failed = " {hudname} を制限できなかった。あなたはそれを行う権限がないようだ。"
 
 L.shop_role_select = "役職選択"
-L.shop_role_selected = "{roles}のショップを選択した"
+L.shop_role_selected = "{role}のショップを選択した"
 L.shop_search = "検索"
 
 -- 2019-10-19
@@ -1414,7 +1414,7 @@ L.spawneditor_desc = "武器、弾薬やプレイヤーのスポーン位置を�
 L.spawneditor_place = "スポーン位置設置"
 L.spawneditor_remove = "スポーン位置削除"
 L.spawneditor_change = "スポーンタイプを変更([SHIFT]を押しながらだと逆になります)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 L.spawn_weapon_random = "おまかせ武器"
 L.spawn_weapon_melee = "近接武器"
@@ -1940,8 +1940,8 @@ L.help_falldmg_exponent = [[
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
@@ -1957,3 +1957,8 @@ L.help_falldmg_exponent = [[
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
