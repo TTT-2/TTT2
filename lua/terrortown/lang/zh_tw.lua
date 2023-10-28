@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你得自己頂住了。"
 L.round_traitors_more = "叛徒，你的隊友是：{names}"
 
 L.win_time = "時間用盡，叛徒失敗了。"
-L.win_traitor = "叛徒取得了勝利！"
-L.win_innocent = "叛徒們被擊敗了！"
+L.win_traitors = "叛徒取得了勝利！"
+L.win_innocents = "叛徒們被擊敗了！"
 L.win_nones = "無人勝出！（平局）"
 L.win_showreport = "一起觀看觀看 {num} 秒的回合總結吧！"
 
@@ -166,7 +166,7 @@ L.quick_inno = " {player} 是無辜者。"
 L.quick_check = "還有人活著嗎？"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below. Keep these lowercase.
+-- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "沒有人"
 L.quick_disg = "有人偽裝了"
 L.quick_corpse = "一具未搜索過的屍體"
@@ -233,7 +233,7 @@ L.sb_tag_avoid = "應迴避者"
 L.sb_tag_kill = "已死者"
 L.sb_tag_miss = "失蹤者"
 
--- Equipment actions， like buying and dropping
+-- Equipment actions, like buying and dropping
 L.buy_no_stock = "無法購買此裝備：你已擁有它了。"
 L.buy_pending = "你已訂購此裝備，請等待配送。"
 L.buy_received = "你已收到此裝備。"
@@ -288,7 +288,7 @@ L.c4_remove_destroy2 = "確認：銷毀"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "點擊以剪斷 {num} 號引線"
 
-L.c4_disarm_t     = "剪斷引線以拆除C4。您是叛徒，當然每條引線都是安全的，但其他人可就沒那麼容易了！"
+L.c4_disarm_t = "剪斷引線以拆除C4。您是叛徒，當然每條引線都是安全的，但其他人可就沒那麼容易了！"
 L.c4_disarm_owned = "剪斷引線以拆除C4。你是裝置此C4的人，細節瞭然於胸，任一條引線都可成功拆除。"
 L.c4_disarm_other = "剪斷正確的引線以拆除C4。倘若你犯了錯，後果將不堪設想唷！"
 
@@ -373,7 +373,6 @@ L.sipistol_name = "消音手槍"
 L.sipistol_desc = [[
 噪音極小的手槍。使用一般的手槍彈藥。
 被害者被射殺時不會喊叫。]]
-
 
 -- Newton launcher
 L.newton_name = "牛頓發射器"
@@ -475,7 +474,7 @@ L.hp_wounded = "輕重傷的"
 L.hp_badwnd = "重傷的"
 L.hp_death = "近乎死亡"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "名聲好"
 L.karma_high = "有點粗魯"
 L.karma_med = "扣扳機愛好者"
@@ -492,7 +491,7 @@ L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索屍體以獲取未被消耗的信用點數"
 
--- HUD buttons with hand icons that only traitors can see
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "單獨使用"
 L.tbut_reuse = "重複使用"
 L.tbut_retime = "在 {num} 秒後重複使用"
@@ -505,7 +504,7 @@ L.mute_all = "全部靜音"
 L.mute_off = "取消靜音"
 
 -- Spectators and prop possession
-L.punch_title = "重擊測量器 " --"PUNCH-O-METER"
+L.punch_title = "重擊測量器 "
 L.punch_bonus = "你的分數較低，重擊測量器上限減少 {num}"
 L.punch_malus = "你的分數較高，重擊測量器上限增加 {num}！"
 
@@ -864,8 +863,8 @@ L.aw_tod1_text = "在他的團隊即將獲得勝利的前幾秒死去。"
 L.aw_tod2_title = "人家不依啦！"
 L.aw_tod2_text = "在這回合剛開始不久即被殺害。"
 
--- New and modified pieces of text are placed below this point， marked with the
--- version in which they were added， to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你彈夾內的子彈不足以丟棄成彈藥盒。"
@@ -1861,6 +1860,7 @@ L.tbut_adminarea = "管理區:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "傷害縮放"
 
+
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允許丟棄"
 L.equipmenteditor_desc_allow_drop = "如果啟用，玩家可以自由地丟棄裝備。"
@@ -1871,6 +1871,7 @@ L.equipmenteditor_desc_drop_on_death_type = "嘗試覆蓋玩家死亡時裝備�
 L.drop_on_death_type_default = "默認（由武器定義）"
 L.drop_on_death_type_force = "強制死亡時丟棄"
 L.drop_on_death_type_deny = "拒絕死亡時丟棄"
+
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "裝備槽"
@@ -1887,21 +1888,21 @@ L.slot_weapon_extra = "額外槽"
 L.slot_weapon_class = "職業槽"
 
 -- 2023-10-04
--- L.label_voice_duck_spectator = "Duck spectator voices"
--- L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
--- L.label_voice_scaling = "Voice Volume Scaling Mode"
--- L.label_voice_scaling_mode_linear = "Linear"
--- L.label_voice_scaling_mode_power4 = "Power 4"
--- L.label_voice_scaling_mode_log = "Logarithmic"
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-25
 --L.help_keyhelp = [[
 --Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
-
+--
 --Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
 --Equipment: Some equipment items have their own bindings, these are shown in this category.
-
+--
 --Disabled categories are still shown when the scoreboard is visible]]
 
 --L.label_keyhelp_show_core = "Enable always showing the core bindings"

@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你将孤身奋斗。"
 L.round_traitors_more = "叛徒，你的队友是：{names}"
 
 L.win_time = "时间用尽，叛徒失败了。"
-L.win_traitor = "叛徒取得了胜利！"
-L.win_innocent = "叛徒们被击败了！"
+L.win_traitors = "叛徒取得了胜利！"
+L.win_innocents = "叛徒们被击败了！"
 L.win_nones = "无人胜出！（平局）"
 L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
@@ -288,7 +288,7 @@ L.c4_remove_destroy2 = "确认：销毁"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
-L.c4_disarm_t     = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
+L.c4_disarm_t = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
@@ -448,7 +448,7 @@ L.tele_desc = [[
 
 传送器会产生噪音，而且使用次数是有限的。]]
 
--- Ammo names， shown when picked up
+-- Ammo names, shown when picked up
 L.ammo_pistol = "手枪弹药"
 
 L.ammo_smg1 = "冲锋枪弹药"
@@ -464,7 +464,7 @@ L.round_prep = "准备中"
 L.round_active = "进行中"
 L.round_post = "回合结束"
 
--- Health， ammo and time area
+-- Health, ammo and time area
 L.overtime = "加时"
 L.hastemode = "急速模式"
 
@@ -475,7 +475,7 @@ L.hp_wounded = "受伤"
 L.hp_badwnd = "重伤"
 L.hp_death = "濒死"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "良好"
 L.karma_high = "粗鲁"
 L.karma_med = "不可靠"
@@ -492,7 +492,7 @@ L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索尸体以获取未被消耗积分"
 
--- HUD buttons with hand icons that only traitors can see
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "一次性"
 L.tbut_reuse = "重复使用"
 L.tbut_retime = "{num} 秒可后再次使用"
@@ -1861,6 +1861,7 @@ L.tbut_adminarea = "管理区:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "伤害缩放"
 
+
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允许丢弃"
 L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
@@ -1871,6 +1872,7 @@ L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备�
 L.drop_on_death_type_default = "默认（由武器定义）"
 L.drop_on_death_type_force = "强制死亡时丢弃"
 L.drop_on_death_type_deny = "拒绝死亡时丢弃"
+
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "装备槽"
