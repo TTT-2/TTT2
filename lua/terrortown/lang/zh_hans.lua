@@ -406,7 +406,7 @@ L.dna_killer = "成功采集到凶手的DNA样本！"
 L.dna_duplicate = "匹配！你的扫描仪里已经有这个DNA样本了。"
 L.dna_no_killer = "DNA样本无法检索（凶手已离线？）"
 L.dna_armed = "炸弹已启动！赶紧拆除它！"
---L.dna_object = "Collected a sample of the last owner from the object."
+L.dna_object = "从目标上采集了最后一位所有者的样本"
 L.dna_gone = "区域内没侦测到可采集之DNA样本。"
 
 L.dna_desc = [[
@@ -440,8 +440,8 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
---L.tele_help_pri = "Teleports to marked location"
---L.tele_help_sec = "Marks current location"
+L.tele_help_pri = "传送到标记位置"
+L.tele_help_sec = "标记当前位置"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。
@@ -1958,6 +1958,6 @@ L.label_HUD_enable_description = "打开记分板时启用描述"
 L.label_HUD_enable_box_blur = "启用用户界面框背景模糊"
 
 -- 2023-10-28
---L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
---L.header_soundeffect_settings = "Sound Effects"
---L.header_voiceandvolume_settings = "Voice & Volume Settings"
+L.submenu_gameplay_voiceandvolume_title = "声音和音量"
+L.header_soundeffect_settings = "声音效果"
+L.header_voiceandvolume_settings = "声音和音量设置"
