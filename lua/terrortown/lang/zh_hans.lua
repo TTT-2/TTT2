@@ -1889,7 +1889,7 @@ L.slot_weapon_class = "职业槽"
 -- 2023-10-04
 L.label_voice_duck_spectator = "观察者语音淡化"
 L.label_voice_duck_spectator_amount = "观察者语音淡化程度"
-L.label_voice_scaling = "语音音量缩放模式"
+L.label_voice_scaling = "语音淡化比例"
 L.label_voice_scaling_mode_linear = "线性"
 L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
@@ -1898,15 +1898,15 @@ L.label_voice_scaling_mode_log = "对数"
 L.help_keyhelp = [[
 按键绑定帮助器是用户界面元素的一部分，它总是向玩家显示相关的按键绑定，这对新玩家特别有帮助。按键绑定有三种不同类型：
 
-核心：它们包含 TTT2 中最重要的绑定。没有它们，游戏就很难发挥其全部潜力。
-额外：与核心绑定类似，但并非总是需要。它们包含聊天、语音或手电筒等内容。启用这些功能可能会对新玩家有所帮助。
-装备：有些装备项目有自己的绑定，这些都显示在此类别中。
+核心：包含 TTT2 中最重要的键位。不使用它们的话很难体验游戏的全部潜力。
+附加：类似核心键位，但并非必要使用。这包含聊天、语音或手电筒等功能。显示这些键位也许会对新玩家有所帮助。
+装备：部分装备有自己的键位，这些都显示在此类别中。
 
 当记分板可见时，已禁用的类别仍会显示]]
 
-L.label_keyhelp_show_core = "启用始终显示核心绑定"
-L.label_keyhelp_show_extra = "启用始终显示额外绑定"
-L.label_keyhelp_show_equipment = "启用始终显示装备绑定"
+L.label_keyhelp_show_core = "启用始终显示核心键位"
+L.label_keyhelp_show_extra = "启用始终显示额外键位"
+L.label_keyhelp_show_equipment = "启用始终显示装备键位"
 
 L.header_interface_keys = "键位助手设置"
 L.header_interface_wepswitch = "武器选择界面设置"
