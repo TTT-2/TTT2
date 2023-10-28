@@ -134,11 +134,16 @@ end
 -- Returns a list of filtered @{Player}s by the team.
 -- @param string team
 -- @param boolean aliveOnly
+-- @param boolean ignore UnknownTeam
 -- @return table
 -- @realm server
-function GetTeamFilter(team, aliveOnly)
+function GetTeamFilter(team, aliveOnly, ignoreUnknownTeam)
 	return GetPlayerFilter(function(p)
-		return team ~= TEAM_NONE and not TEAMS[team].alone and p:GetTeam() == team and not p:GetSubRoleData().unknownTeam and (not aliveOnly or p:IsTerror())
+		return team ~= TEAM_NONE
+			and not TEAMS[team].alone
+			and p:GetTeam() == team
+			and not (not ignoreUnknownTeam and p:GetSubRoleData().unknownTeam)
+			and (not aliveOnly or p:IsTerror())
 	end)
 end
 

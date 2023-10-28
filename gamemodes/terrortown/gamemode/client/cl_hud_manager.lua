@@ -61,6 +61,12 @@ function GM:HUDPaint()
 
 	---
 	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTBombVision") then
+		bombVision.Draw()
+	end
+
+	---
+	-- @realm client
 	if hook.Run("HUDShouldDraw", "TTTTButton") then
 		TBHUD:Draw(client)
 	end

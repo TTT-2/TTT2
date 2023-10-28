@@ -591,6 +591,8 @@ if SERVER then
 
 		-- send indicator to traitors
 		self:SendWarn(true)
+
+		bombVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
 	end
 
 	---
