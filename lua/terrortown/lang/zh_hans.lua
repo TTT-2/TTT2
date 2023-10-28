@@ -1,4 +1,4 @@
--- Simplified Chinese language strings (by 8z & TEGTianFan)
+-- Simplified Chinese language strings (by 8Z & TEGTianFan)
 
 local L = LANG.CreateLanguage("zh_hans")
 
