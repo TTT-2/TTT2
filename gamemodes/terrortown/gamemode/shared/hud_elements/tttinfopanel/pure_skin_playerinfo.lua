@@ -38,7 +38,6 @@ if CLIENT then
 		self.lpw = lpw
 		self.sri_text_width_padding = sri_text_width_padding
 		--self.secondaryRoleInformationFunc = nil
-		self.healthpulsate = hudelements.GetStored(self.id).healthPulsate
 
 		BaseClass.Initialize(self)
 	end
@@ -86,7 +85,6 @@ if CLIENT then
 		self.lpw = lpw * self.scale
 		self.pad = pad * self.scale
 		self.sri_text_width_padding = sri_text_width_padding * self.scale
-		self.healthpulsate = hudelements.GetStored(self.id).healthPulsate
 
 		BaseClass.PerformLayout(self)
 	end
@@ -248,7 +246,7 @@ if CLIENT then
 			local armor = client:GetArmor()
 			local alpha = 255
 
-			if health <= client:GetMaxHealth() * 0.25 and self.healthpulsate then
+			if health <= client:GetMaxHealth() * 0.25 and self.healthPulsate then
 				local frequency = util.TransformToRange(health, 1, client:GetMaxHealth() * 0.25 + 1, 1, 6)
 
 				local factor = math.abs(math.sin(CurTime() * (7 - frequency)))

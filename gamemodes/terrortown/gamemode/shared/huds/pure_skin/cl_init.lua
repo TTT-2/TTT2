@@ -50,17 +50,6 @@ function HUD:Initialize()
 	BaseClass.Initialize(self)
 end
 
----
--- This function will return a table containing all keys that will be stored by
--- the @{HUD:SaveData} function.
--- @return table
--- @realm client
-function HUD:GetSavingKeys()
-	local savingKeys = BaseClass.GetSavingKeys(self) or {}
-
-	return table.Copy(savingKeys)
-end
-
 -- Voice overriding
 include("cl_voice.lua")
 

@@ -730,6 +730,8 @@ function HUDELEMENT:LoadData()
 	end
 
 	for k, v in pairs(loadedData) do
-		self[k] = self[k] or v
+		if v ~= nil then
+			self[k] = v
+		end
 	end
 end
