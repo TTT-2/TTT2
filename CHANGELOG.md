@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Shows binding name when scoreboard is opened
 - Added option to render rotated text on screen (by @TimGoll)
 - Add the required string translations (by @sbzlzh)
+- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 
 ### Changed
 
