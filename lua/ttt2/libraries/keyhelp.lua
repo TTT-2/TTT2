@@ -4,17 +4,18 @@ if SERVER then
 	return
 end
 
-KEYHELP_CORE = 1
-KEYHELP_EXTRA = 2
-KEYHELP_EQUIPMENT = 3
-KEYHELP_INTERNAL = 4
+KEYHELP_INTERNAL = 1
+KEYHELP_CORE = 2
+KEYHELP_EXTRA = 3
+KEYHELP_EQUIPMENT = 4
+KEYHELP_SCOREBOARD = 5
 
 local Key = Key
 local stringUpper = string.upper
 local inputGetKeyName = input.GetKeyName
 local bindFind = bind.Find
 
-local offsetCenter = 220
+local offsetCenter = 230
 local offsetHeight = 48
 local width = 18
 local padding = 5
@@ -28,6 +29,7 @@ local materialPosessing = Material("vgui/ttt/hudhelp/possessing")
 local materialPlayer = Material("vgui/ttt/hudhelp/player")
 local materialPlayerPrev = Material("vgui/ttt/hudhelp/player_prev")
 local materialPlayerNext = Material("vgui/ttt/hudhelp/player_next")
+local materialPlayerRandom = Material("vgui/ttt/hudhelp/player_random")
 local materialPropJump = Material("vgui/ttt/hudhelp/prop_jump")
 local materialPropLeft = Material("vgui/ttt/hudhelp/prop_left")
 local materialPropRight = Material("vgui/ttt/hudhelp/prop_right")
@@ -57,6 +59,14 @@ local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE
 -- @realm client
 local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR_ARCHIVE)
 
+---
+-- @realm client
+local cvEnableBoxBlur = CreateConVar("ttt2_hud_enable_box_blur", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvEnableDescription = CreateConVar("ttt2_hud_enable_description", "1", FCVAR_ARCHIVE)
+
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
@@ -68,15 +78,18 @@ local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, 
 	local xKeyString = x + math.floor(0.5 * wBox)
 	local yKeyString = yIcon + size + padding
 
-	draw.BlurredBox(x, y, wBox, offsetHeight + padding)
-	draw.Box(x, y, wBox, offsetHeight + padding, colorBox) -- background color
-	draw.Box(x, y, wBox, 1, colorBox) -- top line shadow
-	draw.Box(x, y, wBox, 2, colorBox) -- top line shadow
-	draw.Box(x, y - 2, wBox, 2, COLOR_WHITE) -- white top line
+	if cvEnableBoxBlur:GetBool() then
+		draw.BlurredBox(x, y, wBox, offsetHeight + padding)
+		draw.Box(x, y, wBox, offsetHeight + padding, colorBox) -- background color
+		draw.Box(x, y, wBox, 1, colorBox) -- top line shadow
+		draw.Box(x, y, wBox, 2, colorBox) -- top line shadow
+		draw.Box(x, y - 2, wBox, 2, COLOR_WHITE) -- white top line
+	end
+
 	draw.FilteredShadowedTexture(xIcon, yIcon, size, size, iconMaterial, 255, COLOR_WHITE)
 	draw.ShadowedText(keyString, "weapon_hud_help_key", xKeyString, yKeyString, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
-	if scoreboardShown then
+	if scoreboardShown and cvEnableDescription:GetBool() then
 		draw.AdvancedText(
 			LANG.TryTranslation(bindingName),
 			"weapon_hud_help",
@@ -136,27 +149,35 @@ function keyhelp.Draw()
 	local yBase = ScrH() - offsetHeight
 
 	if cvEnableCore:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
+		for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do
+			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][i], scoreboardShown) or xBase
 		end
 	end
 
-	if cvEnableEquipment:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
+	if not util.EditingModeActive(client) then
+		if cvEnableCore:GetBool() or scoreboardShown then
+			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
+			end
 		end
-	end
 
-	if cvEnableExtra:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
+		if cvEnableEquipment:GetBool() or scoreboardShown then
+			for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
+			end
+		end
+
+		if cvEnableExtra:GetBool() or scoreboardShown then
+			for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
+			end
 		end
 	end
 
 	-- if anyone of them is disabled, but not all, the show more option is shown
 	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
 	if not scoreboardShown and enbCount > 0 and enbCount < 3 then
-		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][1], scoreboardShown)
+		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1], scoreboardShown)
 	end
 end
 
@@ -166,13 +187,13 @@ end
 -- @realm client
 function keyhelp.InitializeBasicKeys()
 	-- core bindings that should be visible be default
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_CORE, "label_keyhelper_help", function(client)
-		if HUDEditor.IsEditing or entspawnscript.IsEditing(client) then return end
+	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_INTERNAL, "label_keyhelper_help", function(client)
+		if util.EditingModeActive(client) then return end
 
 		return true
 	end)
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_CORE, "label_keyhelper_save_exit", function(client)
-		if not HUDEditor.IsEditing and not entspawnscript.IsEditing(client) then return end
+	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_INTERNAL, "label_keyhelper_save_exit", function(client)
+		if not util.EditingModeActive(client) then return end
 
 		return true
 	end)
@@ -228,7 +249,7 @@ function keyhelp.InitializeBasicKeys()
 
 		return true
 	end)
-	keyhelp.RegisterKeyHelper("+attack2", materialPlayerNext, KEYHELP_CORE, "label_keyhelper_spec_player", function(client)
+	keyhelp.RegisterKeyHelper("+attack2", materialPlayerRandom, KEYHELP_CORE, "label_keyhelper_spec_player", function(client)
 		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
 
 		return true
@@ -321,7 +342,7 @@ function keyhelp.InitializeBasicKeys()
 	end)
 
 	-- internal bindings, there should only be this one
-	keyhelp.RegisterKeyHelper("+showscores", materialShowmore, KEYHELP_INTERNAL, "label_keyhelper_show_all", function(client)
+	keyhelp.RegisterKeyHelper("+showscores", materialShowmore, KEYHELP_SCOREBOARD, "label_keyhelper_show_all", function(client)
 		return true
 	end)
 end
