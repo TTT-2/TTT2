@@ -962,7 +962,7 @@ L.radio_short_desc = "武器声音，悦耳动听"
 L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
 L.hstation_charge = "剩余充能：{charge}"
 L.hstation_empty = "这个医疗站没有剩余充能"
-L.hstation_maxhealth = "你的生命值恢复已满"
+L.hstation_maxhealth = "你的生命值已满"
 L.hstation_short_desc = "医疗站会逐渐回复充能"
 
 -- 2019-11-03
