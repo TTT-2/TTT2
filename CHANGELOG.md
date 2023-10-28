@@ -22,8 +22,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Can be disabled in Appearance->Interface
   - Shows binding name when scoreboard is opened
 - Added option to render rotated text on screen (by @TimGoll)
-- Add the required string translations (by @sbzlzh)
-- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 - Added Ukrainian translation from base TTT (by @ErickMaksimets)
 - Added Swedish translation from base TTT (by @Kefta)
 
@@ -32,12 +30,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
   - Remove redundant string translations and spaces
+  - Added all new translation strings
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
 - Updated the disguiser to make it more clear in the HUD if it is enabled or not
 - Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 - Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
+- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 
 ### Fixed
 

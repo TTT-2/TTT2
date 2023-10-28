@@ -1486,7 +1486,7 @@ L.help_spawn_editor_spawn_amount = [[
 {ammorifle}x 狙击枪弹药生成
 {ammoshotgun}x 霰弹枪弹药生成
 
-{playerrandom} x 玩家随机位置生成]]
+{playerrandom}x 玩家随机位置生成]]
 
 L.equipmenteditor_name_auto_spawnable = "装备可在地图中随机生成"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
