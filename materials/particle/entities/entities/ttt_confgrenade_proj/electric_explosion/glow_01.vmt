@@ -1,0 +1,7 @@
+"SpriteCard"
+{
+	"$basetexture" "particle/entities/entities/ttt_confgrenade_proj/electric_explosion/glow_01"
+	"$vertexcolor" 1
+	"$vertexalpha" 1
+	"$translucent" 1
+}

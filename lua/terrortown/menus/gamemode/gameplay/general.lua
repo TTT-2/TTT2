@@ -27,4 +27,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_shop_double_click_buy",
 		convar = "ttt_bem_enable_doubleclick_buy",
 	})
+
+	form:MakeCheckBox({
+		label = "label_grenade_fuse_meter_ui",
+		convar = "ttt2_grenade_fuse_meter_ui"
+	})
+
+	form:MakeCheckBox({
+		label = "label_grenade_trajectory_ui",
+		convar = "ttt2_grenade_trajectory_ui"
+	})
 end

@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	// Original shader: AdditiveTextureAndVertexColor
+	"$basetexture" "particle/entities/entities/ttt_confgrenade_proj/electric_explosion/fire"
+	"$additive" 1
+	"$vertexcolor" 1
+}

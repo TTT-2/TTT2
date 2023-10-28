@@ -1,0 +1,10 @@
+"SpriteCard"
+{
+	$basetexture 		"particle/entities/entities/ttt_confgrenade_proj/electric_explosion/beam_electrical"
+	$splinetype 		1
+//	$depthblend 		1
+//	$depthblendscale 	1
+//	$addself 			1
+	$overbrightfactor 	8
+	$additive 			1
+}

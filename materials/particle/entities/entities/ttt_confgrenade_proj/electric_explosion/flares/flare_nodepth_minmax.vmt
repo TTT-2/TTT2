@@ -1,0 +1,6 @@
+"SpriteCard"
+{
+	"$basetexture" "particle/entities/entities/ttt_confgrenade_proj/electric_explosion/flares/flare"
+	"$additive" 1
+	"$depthblend" 0
+}

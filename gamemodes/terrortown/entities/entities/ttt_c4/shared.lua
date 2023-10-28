@@ -282,7 +282,7 @@ function ENT:Explode(tr)
 		self:SetSolid(SOLID_NONE)
 
 		-- pull out of the surface
-		if tr.Fraction ~= 1.0 then
+		if tr.Hit then
 			self:SetPos(tr.HitPos + tr.HitNormal * 0.6)
 		end
 
@@ -321,7 +321,7 @@ function ENT:Explode(tr)
 		effect:SetRadius(r_outer)
 		effect:SetMagnitude(self:GetDmg())
 
-		if tr.Fraction ~= 1.0 then
+		if tr.Hit then
 			effect:SetNormal(tr.HitNormal)
 		end
 
@@ -345,7 +345,7 @@ function ENT:Explode(tr)
 
 		-- few fire bits to ignite things
 		timer.Simple(0.2, function()
-			StartFires(pos, tr, 4, 5, true, dmgowner)
+			gameEffects.StartFires(pos, tr, 4, 132, 5, 0, true, dmgowner, 500, false)
 		end)
 
 		self:SetExplodeTime(0)

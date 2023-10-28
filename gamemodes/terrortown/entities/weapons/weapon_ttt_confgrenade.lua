@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_confgrenade
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -11,7 +15,7 @@ if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 54
 
-	SWEP.Icon = "vgui/ttt/icon_nades"
+	SWEP.Icon = "vgui/ttt/icon_confgrenade"
 	SWEP.IconLetter = "h"
 end
 
@@ -32,15 +36,27 @@ SWEP.Weight = 5
 
 ---
 -- really the only difference between grenade weapons: the model and the thrown ent.
--- @ignore
+-- @return string
+-- @realm shared
 function SWEP:GetGrenadeName()
 	return "ttt_confgrenade_proj"
 end
 
+---
+-- @ignore
+function SWEP:CreateGrenade(...)
+	local grenade = self.BaseClass.CreateGrenade(self, ...)
+	grenade:SetDmg(grenade.explosionDamage * (self.damageScaling or 1))
+	return grenade
+end
+
 if CLIENT then
 	---
-	-- @ignore
+	-- @param Panel parent
+	-- @realm client
 	function SWEP:AddToSettingsMenu(parent)
+		self.BaseClass.AddToSettingsMenu(self, parent)
+
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
 		form:MakeCheckBox({
@@ -49,4 +65,3 @@ if CLIENT then
 		})
 	end
 end
-

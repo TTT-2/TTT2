@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	// Original shader: AddTexture
+	"$basetexture" "effects/entities/entities/ttt_confgrenade_proj/electric_explosion/energy_splash"
+	"$additive" 1
+	"$vertexcolor" 1
+}

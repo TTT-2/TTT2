@@ -1979,6 +1979,41 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
+--23-10-19
+--L.label_grenade_trajectory_ui = "Enable grenade trajectory indicator"
+--L.label_grenade_fuse_meter_ui = "Enable grenade detonation fuse meter"
+
+--L.label_ttt_firegrenade_proj_explosion_radius = "Explosion Radius"
+--L.help_ttt_firegrenade_proj_explosion_radius = "The range in which players will be damaged instantly upon the projectile exploding."
+--L.label_ttt_firegrenade_proj_explosion_damage = "Explosion Damage"
+--L.help_ttt_firegrenade_proj_explosion_damage = "The amount of damage to apply to players within range instantly upon the projectile exploding."
+--L.label_ttt_firegrenade_proj_fire_num = "Fires Quantity"
+--L.help_ttt_firegrenade_proj_fire_num = "The number of fires that should be spawned upon the projectile exploding."
+--L.label_ttt_firegrenade_proj_fire_lifetime = "Fires Lifetime"
+--L.help_ttt_firegrenade_proj_fire_lifetime = "How long fires should live upon the projectile exploding."
+
+--L.label_ttt_smokegrenade_proj_smoke_life_time = "Lifetime"
+--L.help_ttt_smokegrenade_proj_smoke_life_time = "The duration that a smoke will last for, not including the fade time."
+
+--L.menu_thirdparty_title = "Third-Party"
+--L.menu_thirdparty_description = "Features for third-party addons which are supported by TTT2."
+
+--L.submenu_thirdparty_general_title = "General"
+--L.header_thirdparty_general = "General"
+
+--L.label_thirdparty_enable_workshop = "Enable Workshop"
+--L.help_thirdparty_enable_workshop = "Allow TTT2 to AddWorkshop supported Third-Party addons, providing the ideal gameplay experience."
+
+--L.submenu_thirdparty_vfire_title = "vFire"
+--L.header_thirdparty_vfire = "vFire"
+
+
+--L.help_thirdparty_vfire = [[Allow replacing gameplay features with vFire's dynamic and growing fire system, including:
+--- Fireballs created by Incendiary Grenades.
+--- Flares produced by C4 explosions.
+--- Corpses may catch fire and burn from environmental fires.
+--- The flare gun may spread fire from a burnt corpse.]]
+
 -- 2023-10-23
 L.header_miscellaneous_settings = "Çeşitli Ayarlar"
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
