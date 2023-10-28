@@ -1939,7 +1939,7 @@ L.label_keyhelper_spec_third_person = "切换第三人称视图"
 
 -- 2023-10-26
 L.item_armor_reinforced = "强化护甲"
-L.item_armor_sidebar = "护甲保护你免受子弹穿透身体。但不是永久的。"
+L.item_armor_sidebar = "护甲可以保护你免受子弹穿透身体。但不是永久的。"
 L.item_disguiser_sidebar = "伪装者不会向其他玩家显示你的名字，从而保护你的身份。"
 L.status_speed_name = "移速倍率"
 L.status_speed_description_good = "你的移动速度高于普通。物品，装备或效果可能会影响此值。"
