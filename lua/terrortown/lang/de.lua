@@ -1894,6 +1894,12 @@ L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
 
+-- 2023-10-23
+L.header_miscellaneous_settings = "Verschiedene Einstellungen"
+L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"
+L.header_hud_elements_customize = "Passe die HUD-Elemente an"
+L.help_hud_elements_special_settings = "Dies sind die HUD-Element spezifischen Einstellungen."
+
 -- 2023-10-25
 L.help_keyhelp = [[
 Tastenhelfer sind ein UI Element, welches dauerhaft relevante Tastenbelegungen für den Spieler anzeigen. Gerade unerfahrene Spieler können hiervon profitieren. Es gibt drei unterschiedliche Kategorien von Tastenbelegungen:
