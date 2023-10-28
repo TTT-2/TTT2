@@ -1418,7 +1418,7 @@ L.spawneditor_desc = "Wird verwendet, um Waffen-, Munitions- und Spielerspawns i
 L.spawneditor_place = "Platziere Spawn"
 L.spawneditor_remove = "Entferne Spawn"
 L.spawneditor_change = "Ändere den Spawntyp (halte [SHIFT] zum Umkehren)"
-L.spawneditor_ammo_edit = "Halten, um die Menge an automatisch generierter Munition bei Waffen-Spawns zu bearbeiten"
+L.spawneditor_ammo_edit = "Halten bei Waffen-Spawns, um autogenerierte Munition zu bearbeiten"
 
 L.spawn_weapon_random = "Zufallswaffenspawn"
 L.spawn_weapon_melee = "Nahkampfwaffenspawn"
@@ -1948,3 +1948,9 @@ L.status_off = "aus"
 
 L.crowbar_help_primary = "Zuschlagen"
 L.crowbar_help_secondary = "Spieler schubsen"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"

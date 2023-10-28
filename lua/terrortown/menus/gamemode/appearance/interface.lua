@@ -21,6 +21,20 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 0
 	})
 
+	form:MakeHelp({
+		label = "help_HUD_enable_description"
+	})
+
+	form:MakeCheckBox({
+		label = "label_HUD_enable_box_blur",
+		convar = "ttt2_hud_enable_box_blur"
+	})
+
+	form:MakeCheckBox({
+		label = "label_HUD_enable_description",
+		convar = "ttt2_hud_enable_description"
+	})
+
 	local form2 = vgui.CreateTTT2Form(parent, "header_interface_keys")
 
 	form2:MakeHelp({

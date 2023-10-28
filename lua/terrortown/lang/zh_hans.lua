@@ -1919,7 +1919,7 @@ L.label_keyhelper_possess_focus_entity = "附体焦点中的Prop"
 L.label_keyhelper_spec_focus_player = "观看焦点中的玩家"
 L.label_keyhelper_spec_previous_player = "上一个玩家"
 L.label_keyhelper_spec_next_player = "下一个玩家"
-L.label_keyhelper_spec_player = "观看玩家"
+L.label_keyhelper_spec_player = "观看随机玩家"
 L.label_keyhelper_possession_jump = "Prop：跳跃"
 L.label_keyhelper_possession_left = "Prop：向左"
 L.label_keyhelper_possession_right = "Prop：向右"
@@ -1950,3 +1950,9 @@ L.status_off = "关闭"
 
 L.crowbar_help_primary = "攻击"
 L.crowbar_help_secondary = "推动玩家"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
