@@ -126,12 +126,8 @@ function SWEP:Initialize()
 
 		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
 
-		if isfunction(self.AddTTT2HUDHelp) then
-			self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
-			self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
-		else
-			ErrorNoHalt("[TTT2][ERROR] You are using an add-on that overwrites the 'weapon_tttbase.lua' file while not providing essential functions. That will lead to several incompatibilites.")
-		end
+		self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
+		self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
 	end
 
 	return self.BaseClass.Initialize(self)

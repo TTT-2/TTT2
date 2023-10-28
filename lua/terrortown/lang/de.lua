@@ -288,7 +288,7 @@ L.c4_remove_destroy2 = "Bestätigen: Vernichten"
 L.c4_disarm = "C4 entschärfen"
 L.c4_disarm_cut = "Klicke zum Durchschneiden von Kabel {num}"
 
-L.c4_disarm_t     = "Durchschneide ein Kabel zum Entschärfen der Bombe. Wenn du Verräter bist, ist jedes Kabel sicher. Unschuldige haben es da nicht so einfach!"
+L.c4_disarm_t = "Durchschneide ein Kabel zum Entschärfen der Bombe. Wenn du Verräter bist, ist jedes Kabel sicher. Unschuldige haben es da nicht so einfach!"
 L.c4_disarm_owned = "Durchschneide ein Kabel zum Entschärfen der Bombe. Es ist deine Bombe, also wird jedes Kabel sie sicher entschärfen."
 L.c4_disarm_other = "Durchschneide das richtige Kabel, um die Bombe zu entschärfen. Sie explodiert, wenn du das falsche triffst!"
 
@@ -475,7 +475,7 @@ L.hp_wounded = "Verwundet"
 L.hp_badwnd = "Schwer Verwundet"
 L.hp_death = "Dem Tode nah"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Verlässlich"
 L.karma_high = "Grob"
 L.karma_med = "Schießwütig"
@@ -506,7 +506,6 @@ L.mute_off = "Niemanden stumm gestellt"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Die Bewegungstasten oder Springen: Objekt bewegen. Ducken: Objekt verlassen."
 L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num} verringert."
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
 
@@ -933,9 +932,6 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {role} Shop wurde gewählt!"
 L.shop_search = "Suche"
-
-L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
-L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
@@ -1422,7 +1418,7 @@ L.spawneditor_desc = "Wird verwendet, um Waffen-, Munitions- und Spielerspawns i
 L.spawneditor_place = "Platziere Spawn"
 L.spawneditor_remove = "Entferne Spawn"
 L.spawneditor_change = "Ändere den Spawntyp (halte [SHIFT] zum Umkehren)"
-L.spawneditor_ammo_edit = "Halten, um die Menge an automatisch generierter Munition bei Waffen-Spawns zu bearbeiten"
+L.spawneditor_ammo_edit = "Halten bei Waffen-Spawns, um autogenerierte Munition zu bearbeiten"
 
 L.spawn_weapon_random = "Zufallswaffenspawn"
 L.spawn_weapon_melee = "Nahkampfwaffenspawn"
@@ -1867,6 +1863,7 @@ L.equipmenteditor_name_damage_scaling = "Schadensskalierung"
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Erlaube Fallenlassen"
 L.equipmenteditor_desc_allow_drop = "Wenn aktiviert, kann Ausrüstung beliebig vom Spieler fallengelassen werden"
+
 L.equipmenteditor_name_drop_on_death_type = "Fallenlassen beim Tod"
 L.equipmenteditor_desc_drop_on_death_type = "Versuche, die Aktion zu überschreiben, die festlegt, ob die Ausrüstung beim Tod des Spielers fallengelassen wird."
 
@@ -1900,3 +1897,66 @@ L.label_voice_scaling_mode_log = "Logarithmisch"
 -- 2023-10-23
 L.header_miscellaneous_settings = "Verschiedene Einstellungen"
 L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"
+
+-- 2023-10-25
+L.help_keyhelp = [[
+Tastenhelfer sind ein UI Element, welches dauerhaft relevante Tastenbelegungen für den Spieler anzeigen. Gerade unerfahrene Spieler können hiervon profitieren. Es gibt drei unterschiedliche Kategorien von Tastenbelegungen:
+
+Core: Diese Kategorie enthält die wichtigsten Tastenbelegungen in TTT2. Ohne diese ist es schwer das volle Potential von TTT2 zu nutzen.
+Extra: Ähnlich zu 'core', enthält aber eher nicht durchgehend nötige Tastenbelegungen. Dinge wie der Chat, Sprachchat und Taschenlampe sind hier enthalten. Gerade für neue Spieler kann das aktivieren sinnvoll sein.
+Equipment: Ausrüstungsgegenstände können eigene Tastenbelegungen haben, diese werden in dieser Kategorie angezeigt.
+
+Deaktivierte Kategorien werden weiterhin angezeigt solange die Punktetafel geöffnet ist]]
+
+L.label_keyhelp_show_core = "Aktiviere dauerhaftes anzeigen der 'core' Tastenhelfer"
+L.label_keyhelp_show_extra = "Aktiviere dauerhaftes anzeigen der 'extra' Tastenhelfer"
+L.label_keyhelp_show_equipment = "Aktiviere dauerhaftes anzeigen der 'equipment' Tastenhelfer"
+
+L.header_interface_keys = "Tastenhelfer Einstellungen"
+L.header_interface_wepswitch = "Waffenwechsel UI Einstellungen"
+
+L.label_keyhelper_help = "öffne Spielmodus Menü"
+L.label_keyhelper_mutespec = "Wechsle Zuschauer Sprachmodus"
+L.label_keyhelper_shop = "öffne Ausrüstungsshop"
+L.label_keyhelper_show_pointer = "Befreie Mauszeiger"
+L.label_keyhelper_possess_focus_entity = "fokusiertes Objekt übernehmen"
+L.label_keyhelper_spec_focus_player = "fokusiertem Spieler zuschauen"
+L.label_keyhelper_spec_previous_player = "vorheriger Spieler"
+L.label_keyhelper_spec_next_player = "nächster Spieler"
+L.label_keyhelper_spec_player = "Spieler zuschauen"
+L.label_keyhelper_possession_jump = "Objekt: springen"
+L.label_keyhelper_possession_left = "Objekt: links"
+L.label_keyhelper_possession_right = "Objekt: rechts"
+L.label_keyhelper_possession_forward = "Objekt: vorwärts"
+L.label_keyhelper_possession_backward = "Objekt: rückwärts"
+L.label_keyhelper_free_roam = "verlasse Objekt und bewege dich frei"
+L.label_keyhelper_flashlight = "Taschenlampe an-/ausschalten"
+L.label_keyhelper_quickchat = "Schnellchat öffnen"
+L.label_keyhelper_voice_global = "Globaler Sprachchat"
+L.label_keyhelper_voice_team = "Team Sprachchat"
+L.label_keyhelper_chat_global = "Globaler Chat"
+L.label_keyhelper_chat_team = "Team Chat"
+L.label_keyhelper_show_all = "Alle anzeigen"
+L.label_keyhelper_disguiser = "Tarnung an-/ausschalten"
+L.label_keyhelper_save_exit = "Speichern und Verlassen"
+L.label_keyhelper_spec_third_person = "Wechsle Ansicht aus dritter Person"
+
+-- 2023-10-26
+L.item_armor_reinforced = "Verstärkte Rüstung"
+L.item_armor_sidebar = "Rüstung bietet dir etwas Schutz vor Kugelschüssen. Aber nicht auf Dauer."
+L.item_disguiser_sidebar = "Die Tarnung versteckt deine Identität vor anderen Spielern."
+L.status_speed_name = "Geschwindigkeits Faktor"
+L.status_speed_description_good = "Du bist schneller als normal. Gegenstände, Ausrüstung oder verschiedene Effekte können dies beeinflussen."
+L.status_speed_description_bad = "Du bist langsamer als normal. Gegenstände, Ausrüstung oder verschiedene Effekte können dies beeinflussen."
+
+L.status_on = "an"
+L.status_off = "aus"
+
+L.crowbar_help_primary = "Zuschlagen"
+L.crowbar_help_secondary = "Spieler schubsen"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"

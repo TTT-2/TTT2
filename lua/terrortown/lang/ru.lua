@@ -2,7 +2,6 @@
 
 -- This localization file is being moderated and constantly updated by Satton(RU).
 -- Please, in case you are making some changes ping @Satton2 on GitHub, contact him on Steam (STEAM_0:0:85981967) or Discord (Satton(RU)#5794).
-
 local L = LANG.CreateLanguage("ru")
 
 -- Compatibility language name that might be removed soon.
@@ -291,7 +290,7 @@ L.c4_remove_destroy2 = "Подтвердить"
 L.c4_disarm = "Обезвредить"
 L.c4_disarm_cut = "Нажмите, чтобы перерезать {num}-й провод."
 
-L.c4_disarm_t     = "Перережьте провод, чтобы обезвредить бомбу. Для предателей любой провод безопасен. Невиновным это не так просто!"
+L.c4_disarm_t = "Перережьте провод, чтобы обезвредить бомбу. Для предателей любой провод безопасен. Невиновным это не так просто!"
 L.c4_disarm_owned = "Перережьте провод, чтобы обезвредить бомбу. Это ваша бомба, поэтому любой провод безопасен."
 L.c4_disarm_other = "Перережьте безопасный провод, чтобы обезвредить бомбу. Она взорвётся, если вы ошибётесь!"
 
@@ -478,7 +477,7 @@ L.hp_wounded = "Ранен"
 L.hp_badwnd = "Тяжело ранен"
 L.hp_death = "При смерти"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Уважаемый"
 L.karma_high = "Малоуважаемый"
 L.karma_med = "Легкомысленный"
@@ -495,7 +494,7 @@ L.target_unknown = "Террорист"
 
 L.target_credits = "Осмотрите тело, чтобы получить неиспользованные кредиты."
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Одноразовое использование."
 L.tbut_reuse = "Многоразовое использование."
 L.tbut_retime = "Можно использовать повторно через {num} сек."
@@ -509,7 +508,6 @@ L.mute_off = "Никто не заглушён"
 
 -- Spectators and prop possession
 L.punch_title = "ТОЛКОМЕТР"
-L.punch_help = "Клавиши управления или прыжок: толкнуть предмет. Клавиша приседания: покинуть предмет."
 L.punch_bonus = "Ваш плохой счёт понизил предел толкометра на {num}."
 L.punch_malus = "Ваш хороший счёт повысил предел толкометра на {num}!"
 
@@ -937,9 +935,6 @@ L.shop_role_select = "Выберите роль"
 L.shop_role_selected = "Выбран магазин роли {role}!"
 L.shop_search = "Поиск"
 
-L.spec_help = "Щёлкните мышью, чтобы наблюдать за игроками, или нажмите {usekey}, чтобы вселиться в предмет, на который вы смотрите."
-L.spec_help2 = "Чтобы покинуть режим наблюдения, откройте меню, нажав {helpkey}, перейдите в раздел «Игра» и уберите галочку с режима наблюдения."
-
 -- 2019-10-19
 L.drop_ammo_prevented = "Что-то не даёт вам выбросить боеприпасы."
 
@@ -1265,8 +1260,8 @@ L.tooltip_bodyfound_score = "Нахождение тела: {score}"
 
 L.finish_score_alive_teammates = "Живые товарищи:"
 L.finish_score_alive_all = "Живые игроки:"
-L.finish_score_dead_enemies = "Мёртвые противники:"
 L.finish_score_timelimit = "Истечение времени:"
+L.finish_score_dead_enemies = "Мёртвые противники:"
 L.kill_score = "Убийство:"
 L.bodyfound_score = "Нахождение тела:"
 
@@ -1906,3 +1901,73 @@ L.tbut_adminarea = "Администраторская зона:"
 -- 2023-10-23
 --L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
+
+-- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"

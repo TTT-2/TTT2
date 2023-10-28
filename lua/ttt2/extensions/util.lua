@@ -151,6 +151,30 @@ function util.GetNextAlivePlayer(ply)
 end
 
 ---
+-- Returns the previous available @{Player} based on the given @{Player} in the global list
+-- @param Player ply
+-- @return Player
+-- @realm shared
+function util.GetPreviousAlivePlayer(ply)
+	local alive = util.GetAlivePlayers()
+	if #alive < 1 then return end
+
+	if IsValid(ply) then
+		local prev = nil
+
+		for i = #alive, 1, -1 do
+			if prev == ply then
+				return alive[i]
+			end
+
+			prev = alive[i]
+		end
+	end
+
+	return alive[#alive]
+end
+
+---
 -- Darkens a given @{Color} value
 -- @param Color color The original color value
 -- @param number value The value to darken the color [0..255]
@@ -495,6 +519,17 @@ function util.TransformToRange(value, minValue, maxValue, minTargetValue, maxTar
 	value = mathMax(minValue, mathMin(maxValue, value))
 
 	return minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
+end
+
+-- This is a helper function that checks if any of the current edit modes is active
+-- that has to be left by pressing F1.
+-- @param Player ply The player who might be editing
+-- @return boolean Returns if an editing mode is active
+-- @note Due to how the edit modes are implemented, some checks might only work in the client
+-- realm. So make sure to check it not only on the server.
+-- @realm shared
+function util.EditingModeActive(ply)
+	return (HUDEditor and HUDEditor.IsEditing) or entspawnscript.IsEditing(ply)
 end
 
 if CLIENT then
