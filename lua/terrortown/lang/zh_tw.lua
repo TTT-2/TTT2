@@ -372,6 +372,7 @@ L.sipistol_name = "消音手槍"
 
 L.sipistol_desc = [[
 噪音極小的手槍。使用一般的手槍彈藥。
+
 被害者被射殺時不會喊叫。]]
 
 -- Newton launcher
@@ -1860,7 +1861,6 @@ L.tbut_adminarea = "管理區:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "傷害縮放"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允許丟棄"
 L.equipmenteditor_desc_allow_drop = "如果啟用，玩家可以自由地丟棄裝備。"
@@ -1871,7 +1871,6 @@ L.equipmenteditor_desc_drop_on_death_type = "嘗試覆蓋玩家死亡時裝備�
 L.drop_on_death_type_default = "默認（由武器定義）"
 L.drop_on_death_type_force = "強制死亡時丟棄"
 L.drop_on_death_type_deny = "拒絕死亡時丟棄"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "裝備槽"

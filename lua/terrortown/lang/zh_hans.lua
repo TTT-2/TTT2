@@ -1861,7 +1861,6 @@ L.tbut_adminarea = "管理区:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "伤害缩放"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允许丢弃"
 L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
@@ -1872,7 +1871,6 @@ L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备�
 L.drop_on_death_type_default = "默认（由武器定义）"
 L.drop_on_death_type_force = "强制死亡时丢弃"
 L.drop_on_death_type_deny = "拒绝死亡时丢弃"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "装备槽"
