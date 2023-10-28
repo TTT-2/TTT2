@@ -962,7 +962,7 @@ L.radio_short_desc = "武器声音，悦耳动听"
 L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
 L.hstation_charge = "剩余充能：{charge}"
 L.hstation_empty = "这个医疗站没有剩余充能"
-L.hstation_maxhealth = "你的生命值恢复已满"
+L.hstation_maxhealth = "你的生命值已满"
 L.hstation_short_desc = "医疗站会逐渐回复充能"
 
 -- 2019-11-03
@@ -1488,7 +1488,7 @@ L.help_spawn_editor_spawn_amount = [[
 
 {playerrandom} x 玩家随机位置生成]]
 
-L.equipmenteditor_name_auto_spawnable = "装备在地图中随机产生"
+L.equipmenteditor_name_auto_spawnable = "装备可在地图中随机生成"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
 L.equipmenteditor_desc_auto_spawnable = [[
 TTT2的生成系统允许每种武器在世界中生成，默认情况下，只有被创造者标记为'自动生成'的武器才会在世界中生成，但这些设置可以在该菜单中更改。
@@ -1617,7 +1617,7 @@ L.help_detective_hats = [[
 
 部分玩家模型默认不支持帽子。你可以在'管理'->'玩家模型'中改变这一点。]]
 
-L.label_roles_credits_award_kill = "击杀后的积分奖励数量"
+L.label_roles_credits_award_kill = "击杀获得的积分奖励"
 L.label_roles_credits_dead_award = "启用对依据一定比例敌人死亡数提供积分奖励"
 L.label_roles_credits_kill_award = "启用对击杀高价值角色时提供积分奖励"
 L.label_roles_min_karma = "分配角色时玩家的最低人品值"
@@ -1887,8 +1887,8 @@ L.slot_weapon_extra = "额外槽"
 L.slot_weapon_class = "职业槽"
 
 -- 2023-10-04
-L.label_voice_duck_spectator = "降低观察者语音"
-L.label_voice_duck_spectator_amount = "观察者语音淡化程度"
+L.label_voice_duck_spectator = "观察者语音淡化"
+L.label_voice_duck_spectator_amount = "降低观察者语音音量"
 L.label_voice_scaling = "语音音量缩放模式"
 L.label_voice_scaling_mode_linear = "线性"
 L.label_voice_scaling_mode_power4 = "四次方"
