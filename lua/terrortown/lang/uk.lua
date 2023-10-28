@@ -39,9 +39,9 @@ L.win_time = "Час вичерпано. Зрадники програли."
 --L.win_nones = "No-one won!"
 L.win_showreport = "Подивімось на звіт раунду протягом {num} секунд."
 
-L.limit_round = "Ліміт раундів досягнуто. {mapname} завантажиться скоро."
-L.limit_time = "Ліміт часу вичерпано. {mapname} завантажиться скоро."
-L.limit_left = "Залишилося {num} раундів чи {time} хвилин перед зміною мапи на {mapname}."
+--L.limit_round = "Round limit reached. The next map will load soon."
+--L.limit_time = "Time limit reached. The next map will load soon."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 --L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
@@ -418,7 +418,7 @@ L.dna_killer = "З тіла взято зразок ДНК вбивці!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "ДНК не вдалося відновити (вбивця вийшов з гри?)."
 L.dna_armed = "Ця бомба працює! Спочатку знешкодьте його!"
-L.dna_object = "Зібрано {num} нових зразків ДНК з об’єкта."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "ДНК поряд не виявлено."
 
 L.dna_desc = [[
@@ -453,8 +453,8 @@ L.tele_no_mark = "Локація телепортації не встановл�
 L.tele_no_mark_ground = "Неможливо позначити локацію телепортації поки під ногами немає поверхні!"
 L.tele_no_mark_crouch = "Неможливо позначити локацію телепортації навсидячки!"
 
-L.tele_help_pri = "Використовуйте {primaryfire}, щоб телепортуватися до позначеної локації."
-L.tele_help_sec = "Використовуйте {secondaryfire}, щоб позначити поточну локацію."
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
 Телепортація до попередньо позначеного місця.
@@ -509,7 +509,7 @@ L.target_credits = "Огляньте, щоб отримати невитраче
 L.tbut_single = "Одноразове використання"
 L.tbut_reuse = "Багаторазове використання"
 L.tbut_retime = "Можна використати ще раз через {num} секунд"
-L.tbut_help = "Натисніть {key}, щоб активувати"
+L.tbut_help = "Натисніть {usekey}, щоб активувати"
 
 -- Spectator muting of living/dead
 L.mute_living = "Живі гравці заглушені"
@@ -1204,16 +1204,16 @@ L.help_title = "Допомога та Налаштування"
 --L.label_bind_disguiser = "Toggle disguiser"
 
 -- 2020-06-24
-L.dna_help_primary = "Використовуйте {primaryfire}, щоб зібрати зразок ДНК"
-L.dna_help_secondary = "Використовуйте {secondaryfire}, щоб відкрити панель сканування"
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
 --L.dna_help_reload = "Delete a sample"
 
-L.binoc_help_pri = "{primaryfire} ідентифікувати тіло."
-L.binoc_help_sec = "{secondaryfire} змінити режим приближення."
+--L.binoc_help_pri = "Search a body."
+--L.binoc_help_sec = "Change zoom level."
 
-L.vis_help_pri = "{primaryfire} кинути активований пристрій."
+--L.vis_help_pri = "Drop the activated device."
 
-L.decoy_help_pri = "{primaryfire} встановити Приманку."
+--L.decoy_help_pri = "Plant the Decoy."
 
 -- 2020-08-07
 --L.pickup_error_spec = "You cannot pick this up as a spectator."

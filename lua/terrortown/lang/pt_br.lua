@@ -466,8 +466,8 @@ L.tele_no_mark = "Nenhum local marcado. Marque um local para teletransportar-se.
 L.tele_no_mark_ground = "Você não pode marcar um local para teletransportar-se se você não estiver em um chão sólido!"
 L.tele_no_mark_crouch = "Você não pode marcar um local para teletransportar-se enquanto estiver agachado!"
 
-L.tele_help_pri = "{primaryfire} teletransporta para o local marcado."
-L.tele_help_sec = "{secondaryfire} marca um local de teletransporte."
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
 Teletransporta para um local previamente marcado.
@@ -523,7 +523,7 @@ L.target_credits = "Vasculhe para receber créditos não gastos"
 L.tbut_single = "Uso único"
 L.tbut_reuse = "Reutilizável"
 L.tbut_retime = "Reutilizável após {num} seg"
-L.tbut_help = "Pressione {key} para ativar"
+L.tbut_help = "Pressione {usekey} para ativar"
 
 -- Spectator muting of living/dead
 L.mute_living = "Jogadores vivos emudecidos"
@@ -1022,7 +1022,7 @@ L.door_locked = "Esta porta esta trancada."
 
 -- 2020-02-11
 L.automoved_to_spec = "(MENSAGEM AUTOMATICA) Eu fui movimentado para o Espetador porque eu estava Parado/AFK."
-L.mute_team = "{time} mutado."
+L.mute_team = "{team} mutado."
 
 -- 2020-02-16
 L.door_auto_closes = "Esta porta fecha automaticamente.."

@@ -406,7 +406,7 @@ L.dna_killer = "成功采集到凶手的DNA样本！"
 L.dna_duplicate = "匹配！你的扫描仪里已经有这个DNA样本了。"
 L.dna_no_killer = "DNA样本无法检索（凶手已离线？）"
 L.dna_armed = "炸弹已启动！赶紧拆除它！"
-L.dna_object = "在目标上采集到 {num} 个新DNA样本。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "区域内没侦测到可采集之DNA样本。"
 
 L.dna_desc = [[
@@ -440,8 +440,8 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri = "{primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec = "{scondaryfire} 标记传送地点。"
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。
@@ -1467,7 +1467,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地图上，可能会建议使用在地图自带的原始生成点，而不用动态系统来取代它们。禁用这个复选框只对当前活动地图禁用。其他地图仍将使用动态系统。"
 L.help_spawn_editor_hint = "提示：要离开生成编辑器，重新打开游戏模式菜单。"
 L.help_spawn_editor_spawn_amount = [[
-目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 player} 个玩家生成点。
+目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 {player} 个玩家生成点。
 点击'开始编辑生成'来改变这个生成。
 
 {weaponrandom}x 随机武器生成
