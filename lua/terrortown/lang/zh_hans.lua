@@ -1488,7 +1488,7 @@ L.help_spawn_editor_spawn_amount = [[
 
 {playerrandom} x 玩家随机位置生成]]
 
-L.equipmenteditor_name_auto_spawnable = "装备在地图中随机产生"
+L.equipmenteditor_name_auto_spawnable = "装备可在地图中随机生成"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
 L.equipmenteditor_desc_auto_spawnable = [[
 TTT2的生成系统允许每种武器在世界中生成，默认情况下，只有被创造者标记为'自动生成'的武器才会在世界中生成，但这些设置可以在该菜单中更改。
