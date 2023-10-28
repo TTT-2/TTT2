@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture"	"effects/entities/entities/ttt_confgrenade_proj/electric_explosion/energy_electric"
+	"$additive"	1
+	"$vertexalpha"	1
+	"$vertexcolor"	1
+}

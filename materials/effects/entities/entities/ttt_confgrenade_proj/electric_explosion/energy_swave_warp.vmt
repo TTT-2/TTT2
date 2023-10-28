@@ -1,0 +1,12 @@
+"refract"
+{
+	"$normalmap" "effects/entities/entities/ttt_confgrenade_proj/electric_explosion/softwave_normal"
+	"$refractamount" "0.035"
+	"$forcerefract" 1
+	"$bluramount" "32"
+	"$nofog" "1"	
+//	"$modulate" "1"
+//	"$vertexalpha" "1"
+//	"$vertexcolor" 1
+	"$translucent" "1"
+}

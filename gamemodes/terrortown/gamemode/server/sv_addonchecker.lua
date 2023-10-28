@@ -629,6 +629,30 @@ addonChecker.curatedList = {
 		alternative = "2115945573",
 		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
 		type = ADDON_OUTDATED
+	},
+	["2849980147"] = { -- Grenade Trajectories by chibill
+		reason = "Grenade trajectories are already included in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["2926866690"] = { -- Grenade Indicators for TTT by Raf
+		reason = "Grenade Indicators are already included in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["2036561862"] = { -- TTT Base Grenade Update by Karate Walrus
+		reason = "These features are already included as options in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["2034376741"] = { -- TTT Better Discombobulator by Karate Walrus
+		reason = "These features are already included as options in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["2863673270"] = { -- TTT Base Grenade Fix & Rework by Emzatin.
+		reason = "These features are already included as options in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["2976373931"] = { -- TTT vfire replacer by A Homeless Man
+		reason = "Base TTT2 is already compatible with vFire.",
+		type = ADDON_INCOMPATIBLE
 	}
 }
 

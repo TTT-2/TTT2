@@ -1,0 +1,12 @@
+"SpriteCard"
+{
+	$BASETEXTURE "particle/entities/entities/ttt_confgrenade_proj/electric_explosion/fastsidesprites/fastSideSprite128_v2"
+
+	// Set this if you always want "additive over" blending (ONE:INVSRCALPHA)
+	$ADDOVERBLEND 0
+	$POWERFUNCTION "[1.0 2.5 5]"
+
+	$EXTRACTGREENALPHA 1
+	$ADDSELF 0.1
+	$DEPTHBLEND 1
+}

@@ -1,6 +1,17 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_smokegrenade
+
 if SERVER then
 	AddCSLuaFile()
 end
+
+local flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
+
+---
+-- @realm server
+CreateConVar("ttt_smokegrenade_proj_smoke_life_time", "60", flags)
+
 
 SWEP.HoldType = "grenade"
 
@@ -11,7 +22,7 @@ if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 54
 
-	SWEP.Icon = "vgui/ttt/icon_nades"
+	SWEP.Icon = "vgui/ttt/icon_smokegrenade"
 	SWEP.IconLetter = "Q"
 end
 
@@ -32,7 +43,30 @@ SWEP.Spawnable = true
 
 ---
 -- really the only difference between grenade weapons: the model and the thrown ent.
--- @ignore
+-- @return string
+-- @realm shared
 function SWEP:GetGrenadeName()
 	return "ttt_smokegrenade_proj"
+end
+
+if CLIENT then
+	---
+	-- @param Panel parent
+	-- @realm client
+	function SWEP:AddToSettingsMenu(parent)
+		self.BaseClass.AddToSettingsMenu(self, parent)
+
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
+
+		form:MakeHelp({
+			label = "help_ttt_smokegrenade_proj_smoke_life_time",
+		})
+		form:MakeSlider({
+			serverConvar = "ttt_smokegrenade_proj_smoke_life_time",
+			label = "label_ttt_smokegrenade_proj_smoke_life_time",
+			min = 0,
+			max = 300,
+			decimal = 0,
+		})
+	end
 end

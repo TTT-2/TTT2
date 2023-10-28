@@ -113,7 +113,7 @@ function LANG.TryTranslation(name)
 	return GetRaw(name) or name
 end
 
-local interp = string.Interp
+local interp = string.Interpolate
 
 ---
 -- Returns the translated @{string} text (if available).<br />String
