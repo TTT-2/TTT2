@@ -23,8 +23,6 @@ include("cl_drawing_functions.lua")
 
 local base = "scalable_hud"
 
-local savingKeys
-
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
@@ -58,18 +56,7 @@ end
 -- @return table
 -- @realm client
 function HUD:GetSavingKeys()
-	if not savingKeys then
-		savingKeys = BaseClass.GetSavingKeys(self)
-		savingKeys.healthPulsate = {
-			typ = "bool",
-			desc = "label_hud_pulsate_health_enable",
-			default = true,
-			OnChange = function(slf, bool)
-				slf:PerformLayout()
-				slf:SaveData()
-			end
-		}
-	end
+	local savingKeys = BaseClass.GetSavingKeys(self) or {}
 
 	return table.Copy(savingKeys)
 end

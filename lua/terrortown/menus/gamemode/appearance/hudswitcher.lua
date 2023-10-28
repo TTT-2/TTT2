@@ -61,6 +61,31 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 	})
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
+		if data.forElement then continue end
+		hudSwicherSettings[data.typ](parent, currentHUD, key, data)
+	end
+end
+
+local function PopulateHUDSwitcherPanelSettingsElements(parent, currentHUD)
+	parent:Clear()
+
+	parent:MakeHelp({
+		label = "help_hud_elements_special_settings"
+	})
+
+	local elems = {}
+	local elemTypes = hudelements.GetElementTypes()
+	for i = 1, #elemTypes do
+		local typ = elemTypes[i]
+
+		local el = currentHUD:GetElementByType(typ)
+		if not el then continue end
+
+		elems[el.ClassName] = 1
+	end
+
+	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
+		if not data.forElement or not elems[data.forElement] then continue end
 		hudSwicherSettings[data.typ](parent, currentHUD, key, data)
 	end
 end
@@ -112,6 +137,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	PopulateHUDSwitcherPanelSettings(vgui.CreateTTT2Form(parent, "header_hud_customize"), currentHUD)
+	PopulateHUDSwitcherPanelSettingsElements(vgui.CreateTTT2Form(parent, "header_hud_elements_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	HELPSCRN.menuFrame.OnShow = function(slf)

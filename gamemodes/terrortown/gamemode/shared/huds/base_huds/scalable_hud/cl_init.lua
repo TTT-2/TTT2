@@ -5,8 +5,6 @@
 
 local base = "hud_base"
 
-local savingKeys
-
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
@@ -30,17 +28,26 @@ end
 -- @return table
 -- @realm client
 function HUD:GetSavingKeys()
-	if not savingKeys then
-		savingKeys = BaseClass.GetSavingKeys(self)
-		savingKeys.basecolor = {
-			typ = "color",
-			desc = "label_hud_basecolor",
-			OnChange = function(slf, col)
-				slf:PerformLayout()
-				slf:SaveData()
-			end
-		}
-	end
+	local savingKeys = BaseClass.GetSavingKeys(self) or {}
+	savingKeys.basecolor = {
+		typ = "color",
+		desc = "label_hud_basecolor",
+		OnChange = function(slf, col)
+			slf:PerformLayout()
+			slf:SaveData()
+		end
+	}
+
+	savingKeys.healthPulsate = {
+		typ = "bool",
+		desc = "label_hud_pulsate_health_enable",
+		forElement = "pure_skin_playerinfo",
+		default = true,
+		OnChange = function(slf, bool)
+			slf:PerformLayout()
+			slf:SaveData()
+		end
+	}
 
 	return table.Copy(savingKeys)
 end
