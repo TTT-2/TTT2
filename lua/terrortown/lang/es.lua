@@ -1418,7 +1418,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"
 --L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 --L.spawn_weapon_random = "Random Weapon Spawn"
 --L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1939,8 +1939,8 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."

@@ -24,6 +24,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to render rotated text on screen (by @TimGoll)
 - Add the required string translations (by @sbzlzh)
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
+- Added Ukrainian translation from base TTT (by @ErickMaksimets)
+- Added Swedish translation from base TTT (by @Kefta)
 
 ### Changed
 
