@@ -405,7 +405,7 @@ L.dna_killer = "成功採集到兇手的DNA樣本！"
 L.dna_duplicate = "匹配！你的掃描儀裡已經有這個DNA樣本了。"
 L.dna_no_killer = "DNA樣本無法檢索（兇手已斷線？）"
 L.dna_armed = "炸彈已啟動！趕緊拆除它！"
-L.dna_object = "在目標上採集到 {num} 個新DNA樣本。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "區域內沒偵測到可採集之DNA樣本。"
 
 L.dna_desc = [[
@@ -1466,7 +1466,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地圖上，可能會建議使用在地圖自帶的原始生成點，而不用動態系統來取代它們。禁用這個複選框只對當前活動地圖禁用。其他地圖仍將使用動態系統。"
 L.help_spawn_editor_hint = "提示：要離開生成編輯器，重新打開遊戲模式菜單。"
 L.help_spawn_editor_spawn_amount = [[
-目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 player} 個玩家生成點。
+目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 {player} 個玩家生成點。
 點擊'開始編輯生成'來改變這個生成。
 
 {weaponrandom}x 隨機武器生成

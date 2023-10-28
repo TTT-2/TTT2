@@ -41,7 +41,7 @@ L.win_showreport = "Spójrzmy na raport rundy na {num} sekund."
 
 --L.limit_round = "Round limit reached. The next map will load soon."
 --L.limit_time = "Time limit reached. The next map will load soon."
-L.limit_left = "{num} rund(a), albo {time} minut, do zmiany mapy na {mapname}."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Twój team został nagrodzony {num} kredytami na zakupy."
@@ -406,7 +406,7 @@ L.dna_killer = "Zebrano próbkę DNA zabójcy z trupa!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "Nie można było pobrać DNA (zabójca się rozłączył?)."
 L.dna_armed = "Ta bomba jest uzbrojona! Rozbrój ją najpierw!"
-L.dna_object = "Zebrano {num} nową próbkę DNA z obiektu."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA nie zostało znalezione na tym terenie."
 
 L.dna_desc = [[
@@ -676,7 +676,7 @@ L.aw_sui2_title = "Samotny i zdesperowany"
 L.aw_sui2_text = "był jedynym, który zabił samego siebie."
 
 L.aw_exp1_title = "Badania MateriaŁÓw Wybuchowych"
-L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
+L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu {num} obiektów."
 
 L.aw_exp2_title = "Badania Terenowe"
 L.aw_exp2_text = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
@@ -930,7 +930,7 @@ L.hud_forced_failed = "Nie udało się wymusić HUD {hudname}. Nie masz permisji
 L.hud_restricted_failed = "Nie udało się nadać restrykcji HUDa {hudname}. Nie masz permisji."
 
 L.shop_role_select = "Wybierz rolę"
-L.shop_role_selected = "{roles} wybrano do sklepu!"
+L.shop_role_selected = "{role} wybrano do sklepu!"
 L.shop_search = "Szukaj"
 
 -- 2019-10-19
