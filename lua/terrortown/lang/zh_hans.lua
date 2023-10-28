@@ -1617,7 +1617,7 @@ L.help_detective_hats = [[
 
 部分玩家模型默认不支持帽子。你可以在'管理'->'玩家模型'中改变这一点。]]
 
-L.label_roles_credits_award_kill = "击杀后的积分奖励数量"
+L.label_roles_credits_award_kill = "击杀获得的积分奖励"
 L.label_roles_credits_dead_award = "启用对依据一定比例敌人死亡数提供积分奖励"
 L.label_roles_credits_kill_award = "启用对击杀高价值角色时提供积分奖励"
 L.label_roles_min_karma = "分配角色时玩家的最低人品值"
