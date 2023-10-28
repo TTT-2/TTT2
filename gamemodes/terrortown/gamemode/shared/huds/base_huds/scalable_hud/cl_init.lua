@@ -38,17 +38,6 @@ function HUD:GetSavingKeys()
 		end
 	}
 
-	savingKeys.healthPulsate = {
-		typ = "bool",
-		desc = "label_hud_pulsate_health_enable",
-		forElement = "pure_skin_playerinfo",
-		default = true,
-		OnChange = function(slf, bool)
-			slf:PerformLayout()
-			slf:SaveData()
-		end
-	}
-
 	return table.Copy(savingKeys)
 end
 

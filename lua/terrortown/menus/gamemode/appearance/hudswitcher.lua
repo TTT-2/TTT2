@@ -61,7 +61,6 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 	})
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
-		if data.forElement then continue end
 		hudSwicherSettings[data.typ](parent, currentHUD, key, data)
 	end
 end
@@ -73,20 +72,17 @@ local function PopulateHUDSwitcherPanelSettingsElements(parent, currentHUD)
 		label = "help_hud_elements_special_settings"
 	})
 
-	local elems = {}
-	local elemTypes = hudelements.GetElementTypes()
-	for i = 1, #elemTypes do
-		local typ = elemTypes[i]
+	local hudElements = huds.GetStored(HUDManager.GetHUD()):GetElements()
+	for i = 1, #hudElements do
+		local elemName = hudElements[i]
 
-		local el = currentHUD:GetElementByType(typ)
+		local el = hudelements.GetStored(elemName)
 		if not el then continue end
 
-		elems[el.ClassName] = 1
-	end
-
-	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
-		if not data.forElement or not elems[data.forElement] then continue end
-		hudSwicherSettings[data.typ](parent, currentHUD, key, data)
+		for key, data in pairs(el:GetSavingKeys() or {}) do
+			if not hudSwicherSettings[data.typ] then continue end
+			hudSwicherSettings[data.typ](parent, el, key, data)
+		end
 	end
 end
 

@@ -38,9 +38,29 @@ if CLIENT then
 		self.lpw = lpw
 		self.sri_text_width_padding = sri_text_width_padding
 		--self.secondaryRoleInformationFunc = nil
-		self.healthpulsate = huds.GetStored(HUDManager.GetHUD()).healthPulsate
+		self.healthpulsate = hudelements.GetStored(self.id).healthPulsate
 
 		BaseClass.Initialize(self)
+	end
+
+	---
+	-- This function will return a table containing all keys that will be stored by
+	-- the @{HUDELEMENT:SaveData} function.
+	-- @return table
+	-- @realm client
+	function HUDELEMENT:GetSavingKeys()
+		local savingKeys = BaseClass.GetSavingKeys(self) or {}
+		savingKeys.healthPulsate = {
+			typ = "bool",
+			desc = "label_hud_pulsate_health_enable",
+			default = true,
+			OnChange = function(slf, bool)
+				slf:PerformLayout()
+				slf:SaveData()
+			end
+		}
+
+		return table.Copy(savingKeys)
 	end
 
 	-- parameter overwrites
@@ -66,7 +86,7 @@ if CLIENT then
 		self.lpw = lpw * self.scale
 		self.pad = pad * self.scale
 		self.sri_text_width_padding = sri_text_width_padding * self.scale
-		self.healthpulsate = huds.GetStored(HUDManager.GetHUD()).healthPulsate
+		self.healthpulsate = hudelements.GetStored(self.id).healthPulsate
 
 		BaseClass.PerformLayout(self)
 	end

@@ -730,6 +730,6 @@ function HUDELEMENT:LoadData()
 	end
 
 	for k, v in pairs(loadedData) do
-		self[k] = v or self[k]
+		self[k] = self[k] or v
 	end
 end
