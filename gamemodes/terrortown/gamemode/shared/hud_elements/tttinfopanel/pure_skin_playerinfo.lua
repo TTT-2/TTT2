@@ -251,7 +251,7 @@ if CLIENT then
 
 				local factor = math.abs(math.sin(CurTime() * (7 - frequency)))
 
-				alpha = math.Round(factor*255)
+				alpha = math.Round(factor * 255)
 			end
 
 			color_health = ColorAlpha(color_health, alpha)

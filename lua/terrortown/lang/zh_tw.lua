@@ -1898,13 +1898,8 @@ L.slot_weapon_class = "職業槽"
 -- 2023-10-23
 --L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
-
---L.label_voice_duck_spectator = "Duck spectator voices"
---L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
---L.label_voice_scaling = "Voice Volume Scaling Mode"
---L.label_voice_scaling_mode_linear = "Linear"
---L.label_voice_scaling_mode_power4 = "Power 4"
---L.label_voice_scaling_mode_log = "Logarithmic"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
