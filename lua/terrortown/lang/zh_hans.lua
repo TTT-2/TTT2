@@ -1952,7 +1952,7 @@ L.crowbar_help_primary = "攻击"
 L.crowbar_help_secondary = "推动玩家"
 
 -- 2023-10-27
---L.help_HUD_enable_description = [[
---Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
---L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
---L.label_HUD_enable_box_blur = "Enable UI box background blur"
+L.help_HUD_enable_description = [[
+当记分板打开时，一些 HUD 元素（如键位助手或侧边栏）会显示详细信息。可以禁用此功能以减少杂乱。]]
+L.label_HUD_enable_description = "打开记分板时启用描述"
+L.label_HUD_enable_box_blur = "启用用户界面框背景模糊"
