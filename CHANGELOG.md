@@ -58,6 +58,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Optimized allocations by using global Vector / Angle when possible.
 - Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
 - Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
+- Fixed ComboBoxes not working with integer values (by @NickCloudAT)
 
 ### Removed
 
