@@ -58,10 +58,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Optimized allocations by using global Vector / Angle when possible.
 - Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
 - Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
+- Fixed ComboBoxes not working with integer values (by @NickCloudAT)
+
+### Deprecated
+
+- Deprecated `AccessorFuncDT()`, Addons should remove the function call and replace `DTVar()` calls with `NetworkVar()`
 
 ### Removed
 
-- Removed `AccessorfuncDT()` in favor of using gmod's `Accessorfunc()`
 - Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
