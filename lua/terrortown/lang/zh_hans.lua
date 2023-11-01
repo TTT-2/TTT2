@@ -172,46 +172,6 @@ L.quick_disg = "伪装着的人"
 L.quick_corpse = "一具未搜索过的尸体"
 L.quick_corpse_id = " {player} 的尸体"
 
--- Body search window
-L.search_title = "尸体搜索结果"
-L.search_info = "信息"
-L.search_confirm = "确认死亡"
-L.search_call = "呼叫探长"
-
--- Descriptions of pieces of information found
-L.search_nick = "这是 {player} 的尸体。"
-
-L.search_role_traitor = "这个人是叛徒！"
-L.search_role_det = "这个人是探长。"
-L.search_role_inno = "这个人是无辜的恐怖分子。"
-
-L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
-L.search_armor = "他穿着非标准护甲。"
-L.search_disg = "他持有一个能隐匿身份的装备"
-L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
-L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
-
-L.search_dmg_crush = "他多处骨折。看起来是某种重物的冲击撞死了他。"
-L.search_dmg_bullet = "他很明显是被射杀身亡的。"
-L.search_dmg_fall = "他是坠落身亡的。"
-L.search_dmg_boom = "他的伤口以及烧焦的衣物，应是爆炸导致其死亡。"
-L.search_dmg_club = "他的身体有许多擦伤打击痕迹，明显是被殴打致死的。"
-L.search_dmg_drown = "他身上的蛛丝马迹显示是溺死的。"
-L.search_dmg_stab = "他是被刺击与挥砍后，迅速失血致死的。"
-L.search_dmg_burn = "闻起来像烧焦的恐怖分子.."
-L.search_dmg_tele = "看起来他的DNA以超光速粒子之形式散乱在附近。"
-L.search_dmg_car = "他穿越马路时被一个粗心的驾驶碾死了。"
-L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
-
-L.search_weapon = "死者是被 {weapon} 所杀。"
-L.search_head = "最后一击打在头上。完全没机会叫喊。"
-L.search_time = "他大约在你搜索前的 {time} 死亡。"
-L.search_dna = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
-
-L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
-L.search_kills2 = "你找到了一个名单，记载着他杀的这些人："
-L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。凶手，还是巧合？"
-
 -- Scoreboard
 L.sb_playing = "你正在玩的服务器是..."
 L.sb_mapchange = "地图将于 {num} 个回合或是 {time} 后更换。"
@@ -489,9 +449,6 @@ L.corpse = "尸体"
 L.target_disg = "（伪装状态）"
 L.target_unid = "未确认的尸体"
 L.target_unknown = "一名恐怖分子"
-
--- HUD buttons with hand icons that only traitors can see
-L.target_credits = "搜索尸体以获取未被消耗积分"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "一次性"
@@ -1890,70 +1847,23 @@ L.label_voice_scaling_mode_linear = "线性"
 L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
 
--- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
---L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
---L.header_hud_elements_customize = "Customize the HUD-Elements"
---L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
-
--- 2023-10-25
-L.help_keyhelp = [[
-键位助手是一个向玩家显示相关键位的界面元素，对新玩家特别有帮助。键位分为三种类型：
-
-核心：包含 TTT2 中最重要的键位。不使用它们的话很难体验游戏的全部潜力。
-附加：类似核心键位，但并非必要使用。这包含聊天、语音或手电筒等功能。显示这些键位也许会对新玩家有所帮助。
-装备：部分装备有自己的键位，这些都显示在此类别中。
-
-当记分板可见时，已禁用的类别仍会显示]]
-
-L.label_keyhelp_show_core = "启用始终显示核心键位"
-L.label_keyhelp_show_extra = "启用始终显示额外键位"
-L.label_keyhelp_show_equipment = "启用始终显示装备键位"
-
-L.header_interface_keys = "键位助手设置"
-L.header_interface_wepswitch = "武器选择界面设置"
-
-L.label_keyhelper_help = "打开游戏模式菜单"
-L.label_keyhelper_mutespec = "切换观看语音模式"
-L.label_keyhelper_shop = "打开装备商店"
-L.label_keyhelper_show_pointer = "显示鼠标指针"
-L.label_keyhelper_possess_focus_entity = "附体焦点中的Prop"
-L.label_keyhelper_spec_focus_player = "观看焦点中的玩家"
-L.label_keyhelper_spec_previous_player = "上一个玩家"
-L.label_keyhelper_spec_next_player = "下一个玩家"
-L.label_keyhelper_spec_player = "观看随机玩家"
-L.label_keyhelper_possession_jump = "Prop：跳跃"
-L.label_keyhelper_possession_left = "Prop：向左"
-L.label_keyhelper_possession_right = "Prop：向右"
-L.label_keyhelper_possession_forward = "Prop：向前"
-L.label_keyhelper_possession_backward = "Prop：向后"
-L.label_keyhelper_free_roam = "离开对象并自由漫游"
-L.label_keyhelper_flashlight = "切换手电筒"
-L.label_keyhelper_quickchat = "打开快速聊天"
-L.label_keyhelper_voice_global = "全局语音聊天"
-L.label_keyhelper_voice_team = "团队语音聊天"
-L.label_keyhelper_chat_global = "全局聊天"
-L.label_keyhelper_chat_team = "团队聊天"
-L.label_keyhelper_show_all = "显示全部"
-L.label_keyhelper_disguiser = "切换伪装"
-L.label_keyhelper_save_exit = "保存退出"
-L.label_keyhelper_spec_third_person = "切换第三人称视图"
-
 -- 2023-10-07
 L.search_title = "尸体搜索结果"
 L.search_info = "信息"
 L.search_confirm = "确认死亡"
---L.search_call = "Report Death"
+--L.search_confirm_credit = "Confirm (+{credit} Credit)"
+--L.search_confirm_credits = "Confirm (+{credits} Credits)"
+--L.search_take_credit = "Take {credit} Credit"
+--L.search_take_credits = "Take {credits} Credits"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
+L.search_call = "呼叫探长"
+--L.search_called = "Death Reported"
 
--- Descriptions of pieces of information found
-L.search_nick = "这是 {player} 的尸体。"
-
-L.search_role_traitor = "这个人是叛徒！"
-L.search_role_det = "这个人是探长。"
-L.search_role_inno = "这个人是无辜的恐怖分子。"
+--L.search_team_role_unknown = "???"
 
 L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
-L.search_armor = "他穿着非标准装甲。"
+L.search_armor = "他穿着非标准护甲。"
 L.search_disguiser = "他持有一个能隐匿身份的设备"
 L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
 L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
@@ -1999,11 +1909,11 @@ L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
 
 L.search_weapon = "死者是被 {weapon} 所杀。"
 L.search_head = "最后一击打在头上。完全没机会叫喊。"
---L.search_time = "They died a while before you conducted the search."
---L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+L.search_time = "他大约在你搜索前的 {time} 死亡。"
+L.search_dna = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
 
 L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
-L.search_kills2 = "你找到了一个名单，记载着他杀的这些人： {player}"
+L.search_kills2 = "你找到了一个名单，记载着他杀的这些人："
 L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。凶手，还是巧合？"
 
 --L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
@@ -2072,12 +1982,61 @@ L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后
 --L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
 --L.help_inspect_confirm_mode = [[
 --There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
-
+--
 --mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
-
+--
 --mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
-
+--
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+L.help_keyhelp = [[
+键位助手是一个向玩家显示相关键位的界面元素，对新玩家特别有帮助。键位分为三种类型：
+
+核心：包含 TTT2 中最重要的键位。不使用它们的话很难体验游戏的全部潜力。
+附加：类似核心键位，但并非必要使用。这包含聊天、语音或手电筒等功能。显示这些键位也许会对新玩家有所帮助。
+装备：部分装备有自己的键位，这些都显示在此类别中。
+
+当记分板可见时，已禁用的类别仍会显示]]
+
+L.label_keyhelp_show_core = "启用始终显示核心键位"
+L.label_keyhelp_show_extra = "启用始终显示额外键位"
+L.label_keyhelp_show_equipment = "启用始终显示装备键位"
+
+L.header_interface_keys = "键位助手设置"
+L.header_interface_wepswitch = "武器选择界面设置"
+
+L.label_keyhelper_help = "打开游戏模式菜单"
+L.label_keyhelper_mutespec = "切换观看语音模式"
+L.label_keyhelper_shop = "打开装备商店"
+L.label_keyhelper_show_pointer = "显示鼠标指针"
+L.label_keyhelper_possess_focus_entity = "附体焦点中的Prop"
+L.label_keyhelper_spec_focus_player = "观看焦点中的玩家"
+L.label_keyhelper_spec_previous_player = "上一个玩家"
+L.label_keyhelper_spec_next_player = "下一个玩家"
+L.label_keyhelper_spec_player = "观看随机玩家"
+L.label_keyhelper_possession_jump = "Prop：跳跃"
+L.label_keyhelper_possession_left = "Prop：向左"
+L.label_keyhelper_possession_right = "Prop：向右"
+L.label_keyhelper_possession_forward = "Prop：向前"
+L.label_keyhelper_possession_backward = "Prop：向后"
+L.label_keyhelper_free_roam = "离开对象并自由漫游"
+L.label_keyhelper_flashlight = "切换手电筒"
+L.label_keyhelper_quickchat = "打开快速聊天"
+L.label_keyhelper_voice_global = "全局语音聊天"
+L.label_keyhelper_voice_team = "团队语音聊天"
+L.label_keyhelper_chat_global = "全局聊天"
+L.label_keyhelper_chat_team = "团队聊天"
+L.label_keyhelper_show_all = "显示全部"
+L.label_keyhelper_disguiser = "切换伪装"
+L.label_keyhelper_save_exit = "保存退出"
+L.label_keyhelper_spec_third_person = "切换第三人称视图"
 
 -- 2023-10-26
 L.item_armor_reinforced = "强化护甲"

@@ -1005,7 +1005,7 @@ L.hud_health = "Salud"
 --L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 --L.submenu_appearance_performance_title = "Performance"
 --L.submenu_appearance_interface_title = "Interface"
---L.submenu_appearance_miscellaneous_title = "Misellaneous"
+--L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 --L.submenu_gameplay_general_title = "General"
 --L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
@@ -1847,67 +1847,20 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
--- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
---L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
---L.header_hud_elements_customize = "Customize the HUD-Elements"
---L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
-
--- 2023-10-25
---L.help_keyhelp = [[
---Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
---
---Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
---Equipment: Some equipment items have their own bindings, these are shown in this category.
---
---Disabled categories are still shown when the scoreboard is visible]]
-
---L.label_keyhelp_show_core = "Enable always showing the core bindings"
---L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
---L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
-
---L.header_interface_keys = "Key helper settings"
---L.header_interface_wepswitch = "Weapon switch UI settings"
-
---L.label_keyhelper_help = "open gamemode menu"
---L.label_keyhelper_mutespec = "cycle spectator voice mode"
---L.label_keyhelper_shop = "open equipment shop"
---L.label_keyhelper_show_pointer = "free mouse pointer"
---L.label_keyhelper_possess_focus_entity = "possess focused entity"
---L.label_keyhelper_spec_focus_player = "spectate focused player"
---L.label_keyhelper_spec_previous_player = "previous player"
---L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate random player"
---L.label_keyhelper_possession_jump = "prop: jump"
---L.label_keyhelper_possession_left = "prop: left"
---L.label_keyhelper_possession_right = "prop: right"
---L.label_keyhelper_possession_forward = "prop: forward"
---L.label_keyhelper_possession_backward = "prop: backward"
---L.label_keyhelper_free_roam = "leave object and roam free"
---L.label_keyhelper_flashlight = "toggle flashlight"
---L.label_keyhelper_quickchat = "open quickchat"
---L.label_keyhelper_voice_global = "global voice chat"
---L.label_keyhelper_voice_team = "team voice chat"
---L.label_keyhelper_chat_global = "global chat"
---L.label_keyhelper_chat_team = "team chat"
---L.label_keyhelper_show_all = "show all"
---L.label_keyhelper_disguiser = "toggle disguiser"
---L.label_keyhelper_save_exit = "save and exit"
---L.label_keyhelper_spec_third_person = "toggle third person view"
-
 -- 2023-10-07
 L.search_title = "Resultados de búsqueda"
 L.search_info = "Información"
 L.search_confirm = "Confirmar Muerte"
+--L.search_confirm_credit = "Confirm (+{credit} Credit)"
+--L.search_confirm_credits = "Confirm (+{credits} Credits)"
+--L.search_take_credit = "Take {credit} Credit"
+--L.search_take_credits = "Take {credits} Credits"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
 --L.search_call = "Report Death"
+--L.search_called = "Death Reported"
 
--- Descriptions of pieces of information found
-L.search_nick = "Este es el cuerpo de {player}."
-
-L.search_role_traitor = "¡Esta persona era un Traidor!"
-L.search_role_det = "Esta persona era Inocente."
-L.search_role_inno = "Esta persona era un terrorista inocente."
+--L.search_team_role_unknown = "???"
 
 L.search_words = "Algo te dice una de las últimas palabras de esta persona fueron: '{lastwords}'"
 L.search_armor = "Estaba utilizando protección antibalas."
@@ -2029,12 +1982,61 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 --L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
 --L.help_inspect_confirm_mode = [[
 --There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
-
+--
 --mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
-
+--
 --mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
-
+--
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
