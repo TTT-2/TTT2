@@ -1848,7 +1848,7 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "Результати Огляду Тіла"
+L.search_title = "Результати Огляду Тіла - {player}"
 L.search_info = "Інформація"
 L.search_confirm = "Підтвердити Смерть"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"
@@ -1909,11 +1909,11 @@ L.search_dmg_other = "Ви не можете визначити конкретн
 
 L.search_weapon = "Ви дослідили, що для вбивства було використано {weapon}."
 L.search_head = "Смертельний постріл – постріл у голову. Навіть й немає часу закричати"
-L.search_time = "Ця особа померла приблизно за {time} перед тим, як ви її оглянули."
-L.search_dna = "Отримайте зразок ДНК вбивці за допомогою сканера ДНК. Зразок ДНК розпадеться приблизно через {time}."
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
 
 L.search_kills1 = "Ви знайшли список вбивств, який підтверджує смерть {player}."
-L.search_kills2 = "Ви знайшли список вбивств із цими іменами:"
+L.search_kills2 = "Ви знайшли список вбивств із цими іменами: {player}"
 L.search_eyes = "Використовуючи свої навички детектива, ви дізналися останнього, кого бачила ця особа: {player}. Убивця чи збіг обставин?"
 
 --L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"

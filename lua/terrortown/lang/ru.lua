@@ -1850,7 +1850,7 @@ L.tbut_adminarea = "Администраторская зона:"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "Результаты осмотра тела"
+L.search_title = "Результаты осмотра тела - {player}"
 L.search_info = "Информация"
 L.search_confirm = "Подтвердить смерть"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"

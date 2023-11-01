@@ -1848,7 +1848,7 @@ L.slot_weapon_class = "職業槽"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "屍體搜索結果"
+L.search_title = "屍體搜索結果 - {player}"
 L.search_info = "訊息"
 L.search_confirm = "確認死亡"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"

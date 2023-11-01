@@ -1848,7 +1848,7 @@ L.hilite_win_traitors = "FÖRRÄDISK VINST"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "Resultat från Kroppsvisit"
+L.search_title = "Resultat från Kroppsvisit - {player}"
 L.search_info = "Information"
 L.search_confirm = "Bekräfta Död"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"
@@ -1909,11 +1909,11 @@ L.search_dmg_other = "Du kan inte hitta en specifik orsakt till den här terrori
 
 L.search_weapon = "En {weapon} användes för att döda den här terroristen."
 L.search_head = "Det slutgiltiga skottet var i huvudet. Det fanns ingen tid till att skrika."
-L.search_time = "Han dog ungefär {time} innan du utförde sökningen."
-L.search_dna = "Ta ett prov av mördarens DNA med hjälp av en DNA-Skanner. DNA-provet kommer att förruttna ungefär {time} från nu."
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
 
 L.search_kills1 = "Du hittade en lista över mordoffer som bekräftar morden på {player}."
-L.search_kills2 = "Du hittade en lista över mordoffer med dessa namn:"
+L.search_kills2 = "Du hittade en lista över mordoffer med dessa namn: {player}"
 L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera den sista personen han såg: {player}. Mördaren, eller ett sammanträffande?"
 
 --L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"

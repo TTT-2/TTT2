@@ -1848,7 +1848,7 @@ L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
 
 -- 2023-10-07
-L.search_title = "尸体搜索结果"
+L.search_title = "尸体搜索结果 - {player}"
 L.search_info = "信息"
 L.search_confirm = "确认死亡"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"
@@ -1909,11 +1909,11 @@ L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
 
 L.search_weapon = "死者是被 {weapon} 所杀。"
 L.search_head = "最后一击打在头上。完全没机会叫喊。"
-L.search_time = "他大约在你搜索前的 {time} 死亡。"
-L.search_dna = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
 
-L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
-L.search_kills2 = "你找到了一个名单，记载着他杀的这些人："
+L.search_kills1 = "你找到一个名单，记载着他发现的死者：{player}"
+L.search_kills2 = "你找到了一个名单，记载着他杀的这些人：{player}"
 L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。凶手，还是巧合？"
 
 --L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"

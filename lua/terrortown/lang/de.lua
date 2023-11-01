@@ -1848,7 +1848,7 @@ L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
 
 -- 2023-10-07
-L.search_title = "Ergebnisse der Leichenuntersuchung"
+L.search_title = "Ergebnisse der Leichenuntersuchung - {player}"
 L.search_info = "Information"
 L.search_confirm = "Tod bestätigen"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"

@@ -1848,7 +1848,7 @@ L.help_falldmg_exponent = [[
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "調査結果"
+L.search_title = "調査結果 - {player}"
 L.search_info = "情報"
 L.search_confirm = "確認済み"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"

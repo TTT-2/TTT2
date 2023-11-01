@@ -1848,7 +1848,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "Résultats de la fouille"
+L.search_title = "Résultats de la fouille - {player}"
 L.search_info = "Information"
 L.search_confirm = "Confirmer la mort"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"

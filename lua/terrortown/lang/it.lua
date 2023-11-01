@@ -1848,7 +1848,7 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "Risultati ricerca"
+L.search_title = "Risultati ricerca - {player}"
 L.search_info = "Informazione"
 L.search_confirm = "Conferma morte"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"

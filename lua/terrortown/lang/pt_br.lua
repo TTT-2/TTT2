@@ -1848,7 +1848,7 @@ L.xfer_team_indicator = "Time"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
 -- 2023-10-07
-L.search_title = "Resultados de investigação corporal"
+L.search_title = "Resultados de investigação corporal - {player}"
 L.search_info = "Informação"
 L.search_confirm = "Confirmar Morte"
 --L.search_confirm_credit = "Confirm (+{credit} Credit)"
