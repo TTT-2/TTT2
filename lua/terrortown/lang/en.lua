@@ -1047,7 +1047,7 @@ L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Misellaneous"
+L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 L.submenu_gameplay_general_title = "General"
 L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
@@ -1418,7 +1418,7 @@ L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world.
 L.spawneditor_place = "Place spawn"
 L.spawneditor_remove = "Remove spawn"
 L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
-L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 L.spawn_weapon_random = "Random Weapon Spawn"
 L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1436,7 +1436,7 @@ L.spawn_ammo_rifle = "Rifle ammo spawn"
 L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 L.spawn_player_random = "Random player spawn"
 
-L.spawn_weapon_ammo = " (Ammo: {ammo})"
+L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1861,7 +1861,6 @@ L.tbut_adminarea = "ADMIN AREA:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Allow Drop"
 L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1872,7 +1871,6 @@ L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken
 L.drop_on_death_type_default = "Default (weapon-defined)"
 L.drop_on_death_type_force = "Force Drop on Death"
 L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1895,6 +1893,12 @@ L.label_voice_scaling = "Voice Volume Scaling Mode"
 L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Power 4"
 L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+L.header_miscellaneous_settings = "Miscellaneous Settings"
+L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+L.header_hud_elements_customize = "Customize the HUD-Elements"
+L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 L.help_keyhelp = [[
@@ -1921,7 +1925,7 @@ L.label_keyhelper_possess_focus_entity = "possess focused entity"
 L.label_keyhelper_spec_focus_player = "spectate focused player"
 L.label_keyhelper_spec_previous_player = "previous player"
 L.label_keyhelper_spec_next_player = "next player"
-L.label_keyhelper_spec_player = "spectate player"
+L.label_keyhelper_spec_player = "spectate random player"
 L.label_keyhelper_possession_jump = "prop: jump"
 L.label_keyhelper_possession_left = "prop: left"
 L.label_keyhelper_possession_right = "prop: right"
@@ -1952,3 +1956,14 @@ L.status_off = "off"
 
 L.crowbar_help_primary = "Attack"
 L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+L.help_HUD_enable_description = [[
+Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+L.header_soundeffect_settings = "Sound Effects"
+L.header_voiceandvolume_settings = "Voice & Volume Settings"

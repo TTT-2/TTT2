@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你得自己頂住了。"
 L.round_traitors_more = "叛徒，你的隊友是：{names}"
 
 L.win_time = "時間用盡，叛徒失敗了。"
-L.win_traitor = "叛徒取得了勝利！"
-L.win_innocent = "叛徒們被擊敗了！"
+L.win_traitors = "叛徒取得了勝利！"
+L.win_innocents = "叛徒們被擊敗了！"
 L.win_nones = "無人勝出！（平局）"
 L.win_showreport = "一起觀看觀看 {num} 秒的回合總結吧！"
 
@@ -166,7 +166,7 @@ L.quick_inno = " {player} 是無辜者。"
 L.quick_check = "還有人活著嗎？"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below. Keep these lowercase.
+-- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "沒有人"
 L.quick_disg = "有人偽裝了"
 L.quick_corpse = "一具未搜索過的屍體"
@@ -233,7 +233,7 @@ L.sb_tag_avoid = "應迴避者"
 L.sb_tag_kill = "已死者"
 L.sb_tag_miss = "失蹤者"
 
--- Equipment actions， like buying and dropping
+-- Equipment actions, like buying and dropping
 L.buy_no_stock = "無法購買此裝備：你已擁有它了。"
 L.buy_pending = "你已訂購此裝備，請等待配送。"
 L.buy_received = "你已收到此裝備。"
@@ -288,7 +288,7 @@ L.c4_remove_destroy2 = "確認：銷毀"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "點擊以剪斷 {num} 號引線"
 
-L.c4_disarm_t     = "剪斷引線以拆除C4。您是叛徒，當然每條引線都是安全的，但其他人可就沒那麼容易了！"
+L.c4_disarm_t = "剪斷引線以拆除C4。您是叛徒，當然每條引線都是安全的，但其他人可就沒那麼容易了！"
 L.c4_disarm_owned = "剪斷引線以拆除C4。你是裝置此C4的人，細節瞭然於胸，任一條引線都可成功拆除。"
 L.c4_disarm_other = "剪斷正確的引線以拆除C4。倘若你犯了錯，後果將不堪設想唷！"
 
@@ -372,8 +372,8 @@ L.sipistol_name = "消音手槍"
 
 L.sipistol_desc = [[
 噪音極小的手槍。使用一般的手槍彈藥。
-被害者被射殺時不會喊叫。]]
 
+被害者被射殺時不會喊叫。]]
 
 -- Newton launcher
 L.newton_name = "牛頓發射器"
@@ -406,7 +406,7 @@ L.dna_killer = "成功採集到兇手的DNA樣本！"
 L.dna_duplicate = "匹配！你的掃描儀裡已經有這個DNA樣本了。"
 L.dna_no_killer = "DNA樣本無法檢索（兇手已斷線？）"
 L.dna_armed = "炸彈已啟動！趕緊拆除它！"
-L.dna_object = "在目標上採集到 {num} 個新DNA樣本。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "區域內沒偵測到可採集之DNA樣本。"
 
 L.dna_desc = [[
@@ -475,7 +475,7 @@ L.hp_wounded = "輕重傷的"
 L.hp_badwnd = "重傷的"
 L.hp_death = "近乎死亡"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "名聲好"
 L.karma_high = "有點粗魯"
 L.karma_med = "扣扳機愛好者"
@@ -488,10 +488,11 @@ L.corpse_hint = "按下 [{usekey}] 來搜索，用 [{walkkey} + {usekey}] 進行
 
 L.target_disg = " （偽裝狀態）"
 L.target_unid = "未確認的屍體"
+L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索屍體以獲取未被消耗的信用點數"
 
--- HUD buttons with hand icons that only traitors can see
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "單獨使用"
 L.tbut_reuse = "重複使用"
 L.tbut_retime = "在 {num} 秒後重複使用"
@@ -504,7 +505,7 @@ L.mute_all = "全部靜音"
 L.mute_off = "取消靜音"
 
 -- Spectators and prop possession
-L.punch_title = "重擊測量器 " --"PUNCH-O-METER"
+L.punch_title = "重擊測量器 "
 L.punch_bonus = "你的分數較低，重擊測量器上限減少 {num}"
 L.punch_malus = "你的分數較高，重擊測量器上限增加 {num}！"
 
@@ -863,8 +864,8 @@ L.aw_tod1_text = "在他的團隊即將獲得勝利的前幾秒死去。"
 L.aw_tod2_title = "人家不依啦！"
 L.aw_tod2_text = "在這回合剛開始不久即被殺害。"
 
--- New and modified pieces of text are placed below this point， marked with the
--- version in which they were added， to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你彈夾內的子彈不足以丟棄成彈藥盒。"
@@ -1295,6 +1296,7 @@ L.trap_something = "某件物品"
 -- Kill events
 L.desc_event_kill_suicide = "是自殺的"
 L.desc_event_kill_team = "是被隊友殺的"
+
 L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飛。"
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飛。"
 
@@ -1406,12 +1408,6 @@ L.xfer_team_indicator = "陣營"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "武器生成設置"
-
-L.equipmenteditor_name_auto_spawnable = "裝備隨機生成"
-L.equipmenteditor_name_spawn_type = "生成類型"
-
 -- 2021-07-11
 L.spec_about_to_revive = "在復活時，觀察將被限製。"
 
@@ -1471,7 +1467,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地圖上，可能會建議使用在地圖自帶的原始生成點，而不用動態系統來取代它們。禁用這個複選框只對當前活動地圖禁用。其他地圖仍將使用動態系統。"
 L.help_spawn_editor_hint = "提示：要離開生成編輯器，重新打開遊戲模式菜單。"
 L.help_spawn_editor_spawn_amount = [[
-目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 player} 個玩家生成點。
+目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 {player} 個玩家生成點。
 點擊'開始編輯生成'來改變這個生成。
 
 {weaponrandom}x 隨機武器生成
@@ -1539,6 +1535,7 @@ L.help_models_select = [[
 左鍵點擊模型，將其添加到玩家模型庫中。再次以左鍵刪除它們。右鍵可在所關注的模型的啟用和禁用偵探帽之間進行切換。
 
 左上角的小指示器顯示玩家模型是否有頭部的命中箱，下面的圖標顯示了這個模型是否可佩戴偵探帽。]]
+
 L.menu_roles_title = "角色設置"
 L.menu_roles_description = "設置生成概率、裝備積分及更多。"
 
@@ -1757,6 +1754,7 @@ L.label_round_limit = "回合數上限"
 L.label_time_limit_minutes = "遊戲時間上限，以分鐘為單位"
 L.label_nade_throw_during_prep = "在準備時間內允許投擲手榴彈"
 L.label_postround_dm = "回合結束後啟用死亡競賽"
+L.label_session_limits_enabled = "啟用地圖更換"
 L.label_spectator_chat = "啟用觀察者與大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字時被殺，則發出最後一句話至聊天室"
 L.label_identify_body_woconfirm = "不按'確認'按鈕識別屍體"
@@ -1826,9 +1824,6 @@ L.label_sprint_crosshair = "沖刺時顯示準星"
 L.label_crowbar_unlocks = "主要攻擊鍵可以作為互動（即解鎖）使用"
 L.label_crowbar_pushforce = "撬棍推動力"
 
---2022-04-13
-L.label_session_limits_enabled = "啟用地圖更換"
-
 -- 2022-07-02
 L.header_playersettings_falldmg = "摔落傷害設置"
 
@@ -1892,21 +1887,27 @@ L.slot_weapon_extra = "額外槽"
 L.slot_weapon_class = "職業槽"
 
 -- 2023-10-04
--- L.label_voice_duck_spectator = "Duck spectator voices"
--- L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
--- L.label_voice_scaling = "Voice Volume Scaling Mode"
--- L.label_voice_scaling_mode_linear = "Linear"
--- L.label_voice_scaling_mode_power4 = "Power 4"
--- L.label_voice_scaling_mode_log = "Logarithmic"
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
 --Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
-
+--
 --Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to the core, but you don't always need them. Thery contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
 --Equipment: Some equipment items have their own bindings, these are shown in this category.
-
+--
 --Disabled categories are still shown when the scoreboard is visible]]
 
 --L.label_keyhelp_show_core = "Enable always showing the core bindings"
@@ -1924,7 +1925,7 @@ L.slot_weapon_class = "職業槽"
 --L.label_keyhelper_spec_focus_player = "spectate focused player"
 --L.label_keyhelper_spec_previous_player = "previous player"
 --L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate player"
+--L.label_keyhelper_spec_player = "spectate random player"
 --L.label_keyhelper_possession_jump = "prop: jump"
 --L.label_keyhelper_possession_left = "prop: left"
 --L.label_keyhelper_possession_right = "prop: right"
@@ -1944,8 +1945,8 @@ L.slot_weapon_class = "職業槽"
 
 -- 2023-10-26
 --L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
---L.item_disguiser_sidebar = "Armor protects you against bullets penetarating your body. But not forever."
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
 --L.status_speed_name = "Speed Multiplier"
 --L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
 --L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
@@ -1955,3 +1956,14 @@ L.slot_weapon_class = "職業槽"
 
 --L.crowbar_help_primary = "Attack"
 --L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
