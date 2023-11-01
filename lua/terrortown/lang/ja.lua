@@ -175,7 +175,7 @@ L.quick_corpse_id = "{player}の死体"
 -- Scoreboard
 L.sb_playing = "サーバー名"
 L.sb_mapchange = "マップ変更まで{num}ラウンドか{time}秒"
---L.sb_mapchange_disabled = "Session limits are disabled."
+L.sb_mapchange_disabled = "セッションの制限を無くしました。"
 
 L.sb_mia = "行方不明"
 L.sb_confirmed = "死亡確認"
@@ -211,6 +211,7 @@ L.item_weapon = "武器"
 L.item_armor = "ボディアーマー"
 L.item_armor_desc = [[
 弾丸、炎、爆発によるダメージを軽減。延長時間になったら使い物にならない。
+
 複数の購入が可能。ある特定の装甲値に達した後、アーマーは強化される。]]
 
 L.item_radar = "レーダー"
@@ -221,8 +222,8 @@ L.item_radar_desc = [[
 
 L.item_disg = "変装装置"
 L.item_disg_desc = [[
-変装中はあなたのID情報を隠せます。 さらに、
-獲物が最期に目撃した人物になるのも避けれます。
+変装中はあなたのID情報を隠せます。 さらに、獲物が最期に目撃した人物になるのも避けれます。
+
 このメニューの変装メニュー内かテンキーのEnterで切り替え。]]
 
 -- C4
@@ -247,7 +248,7 @@ L.c4_remove_destroy2 = "確認:破壊"
 L.c4_disarm = "C4を解除"
 L.c4_disarm_cut = "クリックして{num}本目のワイヤーを切断する"
 
-L.c4_disarm_t     = "ワイヤーを切って爆弾を解除するんだ。Traitorならどのワイヤーでも安全だが、Innocentならそう簡単にはいかないぞ！"
+L.c4_disarm_t = "ワイヤーを切って爆弾を解除するんだ。Traitorならどのワイヤーでも安全だが、Innocentならそう簡単にはいかないぞ！"
 L.c4_disarm_owned = "ワイヤーをカットして爆弾を解除してくれ。自分の爆弾だからどのワイヤーでも安全だ。"
 L.c4_disarm_other = "安全なワイヤーをカットして爆弾を解除するんだ。間違えたら即爆発だ！"
 
@@ -260,8 +261,8 @@ L.vis_hint = "{usekey}で拾う（探偵のみ）"
 
 L.vis_desc = [[
 殺害現場を可視化してくれる機械。
-死体を分析して被害者がどのように殺害されたかを表示しますが、
-被害者が銃撃の傷で死亡した場合のみ。]]
+
+死体を分析して被害者がどのように殺害されたかを表示しますが、被害者が銃撃の傷で死亡した場合のみ。]]
 
 -- Decoy
 L.decoy_name = "デコイ"
@@ -280,16 +281,16 @@ L.defuser_help = "{primaryfire}でC4除去"
 
 L.defuser_desc = [[
 C4爆弾を即座に除去する。
-使用回数は無制限。
-これさえ持っていればC4に気がつくのに容易でしょう。]]
+
+使用回数は無制限。これさえ持っていればC4に気がつくのに容易でしょう。]]
 
 -- Flare gun
 L.flare_name = "信号拳銃"
 
 L.flare_desc = [[
 死体を燃やすことができる拳銃。証拠隠滅に必須。
-弾は限られているので注意。
-燃えている死体からは大きな燃焼音を発するので注意。]]
+
+弾は限られているので注意。燃えている死体からは大きな燃焼音を発するので注意。]]
 
 -- Health station
 L.hstation_name = "回復ステーション"
@@ -299,22 +300,22 @@ L.hstation_help = "{primaryfire}で回復ステーション設置"
 
 L.hstation_desc = [[
 回復が可能な設置型の機械。チャージは遅く、
-誰でも使用することができますが、耐久力があるので注意。
-使用者のDNAサンプルをチェックすることができます。]]
+
+誰でも使用することができますが、耐久力があるので注意。使用者のDNAサンプルをチェックすることができます。]]
 
 -- Knife
 L.knife_name = "ナイフ"
 L.knife_thrown = "ナイフ投擲"
 
 L.knife_desc = [[
-怪我した者なら即座に静かに始末できますが、
-一度しか使用できません。
+怪我した者なら即座に静かに始末できますが、一度しか使用できません。
+
 オルトファイアで投擲できます。]]
 
 -- Poltergeist
 L.polter_desc = [[
-オブジェクトにThumperを設置すると、
-使用者の意志に関係なくそのオブジェクトが暴れまわり、
+オブジェクトにThumperを設置すると、使用者の意志に関係なくそのオブジェクトが暴れまわり、
+
 暴れ終わった後のThumperの爆発は近くの人間にダメージを与えます。]]
 
 -- Radio
@@ -323,14 +324,15 @@ L.radio_help_pri = "{primaryfire}でラジオを置く"
 
 L.radio_desc = [[
 注意を逸らしたり欺くために音を再生できる機械。
-どこか適当な場所にラジオを置いてから、
-ショップメニュー内のラジオメニューから音を再生できます。]]
+
+どこか適当な場所にラジオを置いてから、ショップメニュー内のラジオメニューから音を再生できます。]]
 
 -- Silenced pistol
 L.sipistol_name = "消音ピストル"
 
 L.sipistol_desc = [[
 サプレッサー付きのハンドガン。通常のピストルの弾丸を使用する。
+
 撃たれた犠牲者は悲鳴をあげることはないだろう。]]
 
 -- Newton launcher
@@ -338,6 +340,7 @@ L.newton_name = "ニュートンランチャー"
 
 L.newton_desc = [[
 遠距離からでも人を弾き飛ばせる弾を発射する。
+
 弾は無制限だが、次の弾を発射するのに時間がかかる。]]
 
 -- Binoculars
@@ -345,6 +348,7 @@ L.binoc_name = "双眼鏡"
 
 L.binoc_desc = [[
 遠く離れた距離から死体まで拡大し、確認することができる。
+
 無制限で使用できる、確認するのに数秒かかる。]]
 
 -- UMP
@@ -362,7 +366,7 @@ L.dna_killer = "死体から殺害者のDNAサンプルを入手した！"
 L.dna_duplicate = "一致した！スキャナーにこのDNAが登録されたぞ。"
 L.dna_no_killer = "DNAは回収されることができないようだ (殺害者はゲームを退出したんだろうか?)."
 L.dna_armed = "この爆弾は稼働中だ！早く解除するんだ！"
-L.dna_object = "オブジェクトから{num}個の新しいDNAサンプルを入手した。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "このエリアにDNA反応はないようだ。"
 
 L.dna_desc = [[
@@ -431,7 +435,7 @@ L.hp_wounded = "怪我"
 L.hp_badwnd = "重傷"
 L.hp_death = "瀕死"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "安全"
 L.karma_high = "粗野"
 L.karma_med = "トリガーハッピー"
@@ -460,7 +464,6 @@ L.mute_off = "ミュートを解除した"
 
 -- Spectators and prop possession
 L.punch_title = "パンチ・オー・メーター"
-L.punch_help = "移動キーもしくはジャンプ:オブジェクト移動。しゃがみ:オブジェクトを離れる。"
 L.punch_bonus = "スコアが低かったため、パンチ・オー・メーターの最大値が{num}下がった。"
 L.punch_malus = "スコアが高かったため、パンチ・オー・メーターの最大値が{num}上がった！"
 
@@ -885,11 +888,8 @@ L.hud_forced_failed = " {hudname} を固定できなかった。これを行う�
 L.hud_restricted_failed = " {hudname} を制限できなかった。あなたはそれを行う権限がないようだ。"
 
 L.shop_role_select = "役職選択"
-L.shop_role_selected = "{roles}のショップを選択した"
+L.shop_role_selected = "{role}のショップを選択した"
 L.shop_search = "検索"
-
-L.spec_help = "プレイヤー達を観戦する場合はクリックするか、{usekey}を押して、オブジェクトに憑依できる。"
-L.spec_help2 = "観戦者モードをやめるには、{helpkey}でメニューを開き、「ゲーム設定」から観戦者モードを切り替えよう。"
 
 -- 2019-10-19
 L.drop_ammo_prevented = "何かが弾を捨てるのを妨げているようだ。"
@@ -1353,11 +1353,11 @@ L.header_rolelayering_info = "役職レイヤー情報"
 --L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first, if upgradeable slots are still available, the unlayered roles will be distributed as well."
 L.scoreboard_voice_tooltip = "音量を変更"
 
---2021-06-15
+-- 2021-06-15
 L.header_shop_linker = "設定"
 L.label_shop_linker_set = "ショップ設定"
 
---2021-06-18
+-- 2021-06-18
 L.xfer_team_indicator = "陣営"
 
 -- 2021-06-25
@@ -1373,7 +1373,7 @@ L.spawneditor_desc = "武器、弾薬やプレイヤーのスポーン位置を�
 L.spawneditor_place = "スポーン位置設置"
 L.spawneditor_remove = "スポーン位置削除"
 L.spawneditor_change = "スポーンタイプを変更([SHIFT]を押しながらだと逆になります)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 L.spawn_weapon_random = "おまかせ武器"
 L.spawn_weapon_melee = "近接武器"
@@ -1391,7 +1391,7 @@ L.spawn_ammo_rifle = "ライフル弾"
 L.spawn_ammo_shotgun = "バックショット"
 L.spawn_player_random = "プレイヤースポーン"
 
-L.spawn_weapon_ammo = " (弾薬:{ammo})"
+L.spawn_weapon_ammo = "(弾薬:{ammo})"
 
 L.spawn_weapon_edit_ammo = "[{walkkey}]を押しながら[{primaryfire}又は{secondaryfire}]を押すとこちらのスポーンの弾薬を増加又は減少させることができます。"
 
@@ -1413,33 +1413,33 @@ L.header_equipment_weapon_spawn_setup = "武器スポーン設定"
 
 --L.help_spawn_editor_info = [[
 --The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
-
+--
 --These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to the initial state.
-
+--
 --It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the 'Edit Equipment' menu. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
-
+--
 --Keep in mind that many changes only take effect after a new round has started.]]
 --L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
 L.help_spawn_editor_hint = "スポーンエディタを終了したい場合は設定画面を再度開いてください。"
 L.help_spawn_editor_spawn_amount = [[
-このマップには{weapon}個の武器、{ammo}個の弾薬と{player}人のスポーン位置が設定されています。
+このマップには {weapon} 個の武器、{ammo} 個の弾薬と {player} 人のスポーン位置が設定されています。
 変更したい場合は'始める'を押しましょう。
 
-{weaponrandom}xおまかせ武器
-{weaponmelee}x近接武器
-{weaponnade}xグレネード
-{weaponshotgun}xショットガン
-{weaponheavy}x重機関銃
-{weaponsniper}xスナイパー
-{weaponpistol}xピストル
-{weaponspecial}x特殊武器
+{weaponrandom}x おまかせ武器
+{weaponmelee}x 近接武器
+{weaponnade}x グレネード
+{weaponshotgun}x ショットガン
+{weaponheavy}x 重機関銃
+{weaponsniper}x スナイパー
+{weaponpistol}x ピストル
+{weaponspecial}x 特殊武器
 
-{ammorandom}xおまかせ弾薬
-{ammodeagle}xマグナム弾
-{ammopistol}x9mm弾
-{ammomac10}xSMG弾
-{ammorifle}xライフル弾
-{ammoshotgun}xバックショット
+{ammorandom}x おまかせ弾薬
+{ammodeagle}x マグナム弾
+{ammopistol}x 9mm弾
+{ammomac10}x SMG弾
+{ammorifle}x ライフル弾
+{ammoshotgun}x バックショット
 
 {playerrandom}xプレイヤースポーン位置]]
 
@@ -1447,7 +1447,7 @@ L.equipmenteditor_name_auto_spawnable = "ワールド内にランダムでスポ
 L.equipmenteditor_name_spawn_type = "スポーンタイプ選択"
 --L.equipmenteditor_desc_auto_spawnable = [[
 --The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however this can be changed from within this menu.
-
+--
 --Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
 
 L.pickup_error_inv_cached = "インベントリに空きがないため拾うことはできません。"
@@ -1464,14 +1464,14 @@ L.label_prefer_map_models = "デフォルトプレイヤーモデルよりもマ
 
 --L.help_prefer_map_models = [[
 --Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
-
+--
 --Role specific models always have a higher priority and are unaffected by this setting.]]
 --L.help_enforce_playermodel = [[
 --Some roles have custom player models. They can be disabled which can be relevant for compatibility with some player model selectors.
 --Random default models can still be selected, if this setting is disabled.]]
 --L.help_use_custom_models = [[
 --By default only the CS:S Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
-
+--
 --This selection of models can be extended by installing more player models.]]
 
 -- 2021-10-06
@@ -1488,7 +1488,7 @@ L.kill_score_team = "チームキル:"
 -- 2021-10-09
 --L.help_models_select = [[
 --Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
-
+--
 --The small indicator in the top left shows if the player model has a head hitbox. The icon below shows if this model is applicable for a detective hat.]]
 
 L.menu_roles_title = "役職設定"
@@ -1511,7 +1511,7 @@ L.help_roles_default_team = "デフォルト陣営:{team}"
 --L.help_roles_selection = [[
 --The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be distributed at all.
 --Keep in mind that all of this only applies if the role is considered for distribution process.
-
+--
 --The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for distribution and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution process then works as usual for the second player.]]
 --L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of enemies has died. Related values can be tweaked here."
 --L.help_roles_award_pct = "When this percentage of enemies are dead, specific roles are awarded equipment credits."
@@ -1519,17 +1519,17 @@ L.help_roles_default_team = "デフォルト陣営:{team}"
 --L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up the role distribution process. When in doubt keep all values at '0'. This value means that no limits are applied and the role distribution will try to assign as many roles as possible."
 --L.help_roles_max_roles = [[
 --The term roles here includes both the base roles and the subroles. By default, there is no limit on how many different roles can be assigned. However, here are two different ways to limit them.
-
+--
 --1. Limit them by a fixed amount.
 --2. Limit them by a percentage.
-
+--
 --The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 --L.help_roles_max_baseroles = [[
 --Base roles are only those roles others inherit from. For example, the Innocent role is a base role, while a Pharaoh is a subrole of this role. By default, there is no limit on how many different base roles can be assigned. However, here are two different ways to limit them.
-
+--
 --1. Limit them by a fixed amount.
 --2. Limit them by a percentage.
-
+--
 --The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 
 L.label_roles_enabled = "追加する"
@@ -1561,15 +1561,15 @@ L.button_reset_models = "リセット"
 L.help_roles_credits_award_kill = "クレジットを獲得するもう一つの方法は、Detectiveのような確白の役職のプレイヤーを殺すことです。\nそうすることで、以下の設定されたクレジット数を得ます。"
 --L.help_roles_credits_award = [[
 --There are two different ways to be awarded credits in base TTT2:
-
+--
 --1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
 --2. If a player killed a high value player with a 'public role' such as a Detective, the killer is awarded credits.
-
+--
 --Please note, that this still can be enabled/disabled for every role, even if the whole team is awarded. For example, if team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
 --The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
 --L.help_detective_hats = [[
 --Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
-
+--
 --Some player models do not support hats by default. This can be changed in 'Administration' -> 'Player Models']]
 
 --L.label_roles_credits_award_kill = "Credit reward amount for the kill"
@@ -1621,36 +1621,36 @@ L.header_playersettings_armor = "アーマーシステム設定"
 --L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
 --L.help_namechange_kick = [[
 --A name change during an active round could be abused. Therefore, this is prohibited by default and will lead to the offending player being kicked from the server.
-
+--
 --If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 L.help_damage_log = "プレーヤーがダメージを受けるたびに、有効になっている場合は、ダメージログエントリがコンソールに追加されます。\nラウンド終了後にディスクに保存することもできます。ファイルは「data/terrortown/log/」に保存されています。"
 L.help_spawn_waves = [[
-0に設定すると、すべてのプレイヤーが一度にスポーンされます。大人数のプレイヤーがいるサーバーでは、ウェーブ間隔でプレイヤーをスポーンさせるのが良いでしょう。
-スポーンウェーブ間隔は、各スポーンウェーブの間の時間です。スポーンウェーブは、スポーンポイントの数だけプレイヤーをスポーンさせます。
+0に設定すると、すべてのプレイヤーが一度にスポーンされます。大人数のプレイヤーがいるサーバーでは、ウェーブ間隔でプレイヤーをスポーンさせるのが良いでしょう。スポーンウェーブ間隔は、各スポーンウェーブの間の時間です。スポーンウェーブは、スポーンポイントの数だけプレイヤーをスポーンさせます。
+
 注意 : 準備時間が希望する量のスポーンウェーブに十分な長さであることを確認してください。]]
 --L.help_voicechat_battery = [[
 --Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
-
+--
 --Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
 --L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
 L.help_haste_mode = [[
-HASTEモードは、プレイヤーが一人死亡するたびのラウンド時間追加により、ゲームのバランスを取ります。
-Traitor陣営の役職、又は観戦者のみが、実際のラウンド時間を見ることができます。他の役職は見れません。
+HASTEモードは、プレイヤーが一人死亡するたびのラウンド時間追加により、ゲームのバランスを取ります。Traitor陣営の役職、又は観戦者のみが、実際のラウンド時間を見ることができます。他の役職は見れません。
+
 HASTEモードが有効になっている場合、通常ラウンド時間は無視されます。]]
 L.help_round_limit = "設定された制限条件の1つが満たされると、マップ変更が開始されます。"
 L.help_armor_balancing = "アーマーのバランス調整ができる機能です。"
 L.help_item_armor_classic = "クラシックアーマーモードは、プレイヤーがラウンドで一度だけボディアーマーを購入することができ、\nアーマーは弾丸とバールによるダメージの30%を軽減できます。"
 L.help_item_armor_dynamic = [[
-動的アーマーモードは購入できるアーマーの量は無制限で、アーマー値の重複が可能なモードです。
-ダメージを受けると、アーマーの値が減少します。購入したアーマーの耐久値は、上記項目の「装備設定」に設定されています。
+動的アーマーモードは購入できるアーマーの量は無制限で、アーマー値の重複が可能なモードです。ダメージを受けると、アーマーの値が減少します。購入したアーマーの耐久値は、上記項目の「装備設定」に設定されています。
+
 ダメージを受けると、このダメージの一定の割合だけアーマーへのダメージに変換され、プレイヤーに対しては異なる割合が適用され、残りは消滅します。
+
 強化アーマーが有効な場合、耐久値が補強しきい値を超える限り、プレイヤーに与えるダメージは15%減少します。]]
 L.help_sherlock_mode = "シャーロックモードは、古典的なTTTモードです。シャーロックモードが無効になっている場合、\n死体は確認できず、スコアボードは生きている全ての人を示し、観戦者は生存者と会話が可能です。"
 L.help_prop_possession = [[
-オブジェクト憑依は、観戦者がマップに存在するオブジェクトに憑依し、
-ゆっくりとチャージされていく「パンチ・オー・メーター」を使用して、そのオブジェクトを操作できる機能です。
-「パンチ・オー・メーター」の最大値は、2つの定義された制限の間に遮断された死量/死の差が追加される基本的憑依値で構成されています。
-メーターは時間の経過とともにゆっくりチャージされます。セットの再チャージ時間は、「パンチ・オー・メーター」の単一ポイントをチャージするのに必要な時間です。]]
+オブジェクト憑依は、観戦者がマップに存在するオブジェクトに憑依し、ゆっくりとチャージされていく「パンチ・オー・メーター」を使用して、そのオブジェクトを操作できる機能です。
+
+「パンチ・オー・メーター」の最大値は、2つの定義された制限の間に遮断された死量/死の差が追加される基本的憑依値で構成されています。メーターは時間の経過とともにゆっくりチャージされます。セットの再チャージ時間は、「パンチ・オー・メーター」の単一ポイントをチャージするのに必要な時間です。]]
 --L.help_karma = "Players start with a certain amount of Karma, and lose it when they damage/kill teammates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
 --L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly kill teammates."
 --L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more than 1000 Karma. It can be used as a Karma buffer."
@@ -1658,7 +1658,9 @@ L.help_karma_ratio = "両者が同じ陣営にいる場合に、カルマを加�
 L.help_karma_traitordmg_ratio = "両者が異なる陣営にいる場合に、加害者のカルマの量を攻撃者から差し引く計算するためのダメージ比率。\nチームキルが発生した場合は、さらにボーナスが適用されます。"
 L.help_karma_bonus = "ラウンド中にカルマを獲得する2つの異なる受動的な方法もあります。まず、ラウンド復帰はすべてのプレイヤーに適用されます。\nその後、チームメイトがダメージを受けなかったり殺されたりしなかった場合、二次的な整理ボーナスが与えられます。"
 L.help_karma_clean_half = [[
-プレイヤーのカルマが開始レベルを超えている場合(カルマの最大値がそれより高く設定されている場合)、\nカルマがその開始レベルをどれだけ上回っているかによって、全てのカルマの増加が減少。高いほど遅く上がります。\nこの減少は指数的な減衰の曲線に入ります。最初は速く増分が小さくなるにつれて減速します。この設定は、ボーナスが半分になった時点で設定されます(所謂半減期)。\nデフォルト値が0.25だと、カルマの開始量が1000と最大1500 で、プレイヤーがカルマ 1125 ((1500 - 1000) * 0.25 = 125 を持つ場合、\nラウンド整理ボーナスは30/2 = 15になります。つまり、ボーナスをより速く下げるために、この設定を低く設定し、それが遅くなるように、1に向かってそれを増やすでしょう。]]
+プレイヤーのカルマが開始レベルを超えている場合(カルマの最大値がそれより高く設定されている場合)、カルマがその開始レベルをどれだけ上回っているかによって、全てのカルマの増加が減少。高いほど遅く上がります。
+
+この減少は指数的な減衰の曲線に入ります。最初は速く増分が小さくなるにつれて減速します。この設定は、ボーナスが半分になった時点で設定されます(所謂半減期)。\nデフォルト値が0.25だと、カルマの開始量が1000と最大1500 で、プレイヤーがカルマ 1125 ((1500 - 1000) * 0.25 = 125 を持つ場合、\nラウンド整理ボーナスは30/2 = 15になります。つまり、ボーナスをより速く下げるために、この設定を低く設定し、それが遅くなるように、1に向かってそれを増やすでしょう。]]
 L.help_max_slots = "スロットあたりの武器の最大量を設定します。'-1' は制限がないということです。"
 L.help_item_armor_value = "これは、ダイナミックモードでアーマーアイテムによって与えられるアーマー値です。クラシックモードが\n有効になっている場合(「管理」->'プレイヤー設定'を参照)、0より大きいすべての値が既存のアーマーとしてカウントされます。"
 
@@ -1707,6 +1709,7 @@ L.label_round_limit = "ラウンド最大数"
 L.label_time_limit_minutes = "ラウンド時間の上限(分)"
 --L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
 L.label_postround_dm = "ラウンド終了時間中のデスマッチを有効"
+L.label_session_limits_enabled = "セッションの制限を有効にする"
 L.label_spectator_chat = "観戦者同士でのチャットの有無"
 L.label_lastwords_chatprint = "タイピング中に殺されたら遺言を送信する"
 L.label_identify_body_woconfirm = "'確認'ボタン無しで死体を特定"
@@ -1774,10 +1777,6 @@ L.label_sprint_crosshair = "走行中のクロスヘアの表示"
 L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
 
---2022-04-13
-L.label_session_limits_enabled = "セッションの制限を有効にする"
-L.sb_mapchange_disabled = "セッションの制限を無くしました。"
-
 -- 2022-07-02
 L.header_playersettings_falldmg = "落下ダメージ設定"
 
@@ -1787,6 +1786,7 @@ L.label_falldmg_exponent = "落下速度に対する落下ダメージ増加指�
 
 L.help_falldmg_exponent = [[
 この値は、プレイヤーが地面に当たる速度に応じて、落下ダメージが指数関数的に増加する方法を変更します。
+
 この値を変更するときは注意してください。高すぎると、少し下っただけでも致命的になる可能性があり、低すぎると、プレイヤーは極端な高さから落下してもほとんどもしくは全くダメージを受けなくなってしまいます。]]
 
 -- 2023-02-08
@@ -1814,7 +1814,6 @@ L.help_falldmg_exponent = [[
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1825,7 +1824,6 @@ L.help_falldmg_exponent = [[
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1842,12 +1840,61 @@ L.help_falldmg_exponent = [[
 --L.slot_weapon_class = "Class Slot"
 
 -- 2023-10-04
--- L.label_voice_duck_spectator = "Duck spectator voices"
--- L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
--- L.label_voice_scaling = "Voice Volume Scaling Mode"
--- L.label_voice_scaling_mode_linear = "Linear"
--- L.label_voice_scaling_mode_power4 = "Power 4"
--- L.label_voice_scaling_mode_log = "Logarithmic"
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
 
 -- 2023-10-07
 L.search_title = "調査結果"
@@ -1990,5 +2037,26 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
 -- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
 --L.crowbar_help_primary = "Attack"
 --L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

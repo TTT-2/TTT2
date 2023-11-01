@@ -26,13 +26,24 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - redesigned data list so that everything can be seen without clicking through a list
   - added more details to list like: water level, ground type, kill distance, kill direction, hit group, last damage amount
   - The UI is now more responsive, it is updated when the server changes states on the body and timers are updated live in the UI
+- Added that the healthbar will pulsate when below 25% health. Toggleable in F1 Menu (by @NickCloudAT)
+- Added new menu section in F1 menu under `Appearance > Hud Switcher` for HudElement based features (by @NickCloudAT)
 - Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
 - Translated all strings still needed to german (by @NickCloudAT)
+- Added new sidebar information, when the scoreboard is open (by @TimGoll)
+- Added keybinding information to the bottom of the screen (by @TimGoll)
+  - Can be disabled in Appearance->Interface
+  - Shows binding name when scoreboard is opened
+- Added option to render rotated text on screen (by @TimGoll)
+- Added Ukrainian translation from base TTT (by @ErickMaksimets)
+- Added Swedish translation from base TTT (by @Kefta)
 
 ### Changed
 
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
+  - Remove redundant string translations and spaces
+  - Added all new translation strings
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
 - Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
   - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
@@ -44,7 +55,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - to comply with mode 1 and 2 now everyone is able to see in the targetID if a player was searched by a public policing role
 - renamed `search_result` to `bodySearchResult` which contains the search result data
 - changed the credit text color from yellow to gold (by @TimGoll)
+- Updated the disguiser to make it more clear in the HUD if it is enabled or not
 - Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
+- Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
+- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 
 ### Fixed
 
@@ -56,11 +70,24 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `pon` and `table` libraries got a small fix respectively
   - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
   - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
+- Fixed disguiser breaking UI on hot reload (by @TimGoll)
+- Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible
+- Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible.
+- Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
+- Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
+- Fixed ComboBoxes not working with integer values (by @NickCloudAT)
+
+### Deprecated
+
+- Deprecated `AccessorFuncDT()`, Addons should remove the function call and replace `DTVar()` calls with `NetworkVar()`
 
 ### Removed
 
 - Removed `AccessorfuncDT()` in favor of using gmod's `Accessorfunc()`
 - Removed `ttt_confirm_death` and `ttt_call_detective` as they are now handled via proper net messages
+- Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 

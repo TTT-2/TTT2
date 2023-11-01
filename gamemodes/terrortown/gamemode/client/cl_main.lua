@@ -187,6 +187,8 @@ function GM:Initialize()
 
 	vskin.UpdatedVSkin(skinName, skinName)
 
+	keyhelp.InitializeBasicKeys()
+
 	---
 	-- @realm client
 	hook.Run("TTT2FinishedLoading")
@@ -346,11 +348,20 @@ function GM:OnReloaded()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
+	ARMOR:Initialize()
+	SPEED:Initialize()
+
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	keyhelp.InitializeBasicKeys()
+
+	---
+	-- @realm client
+	hook.Run("TTT2FinishedLoading")
 end
 
 ---

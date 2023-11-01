@@ -373,7 +373,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
 -- @local
 function GM:KeyPress(ply, key)
-	if not IsValid(ply) then return end
+	if not IsValid(ply) or util.EditingModeActive(ply) then return end
 
 	-- Spectator keys
 	if not ply:IsSpec() or ply:GetRagdollSpec() then return end
@@ -396,31 +396,43 @@ function GM:KeyPress(ply, key)
 	ply:ResetViewRoll()
 
 	if key == IN_ATTACK then
-		-- snap to random guy
-		ply:Spectate(OBS_MODE_ROAMING)
-		ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
-		ply:SpectateEntity(nil)
+		local tgt = ply:GetObserverTarget()
 
-		local alive = util.GetAlivePlayers()
+		if IsValid(tgt) and tgt:IsPlayer() then
+			local target = util.GetPreviousAlivePlayer(tgt)
 
-		local alive_count = #alive
-		if alive_count < 1 then return end
-
-		local target = alive[math.random(alive_count)]
-
-		if IsValid(target) then
-			--ply:SetPos(target:EyePos())
-			--ply:SetEyeAngles(target:EyeAngles())
-			ply:Spectate(OBS_MODE_IN_EYE)
-			ply:SpectateEntity(target)
+			if IsValid(target) then
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
 		end
 	elseif key == IN_ATTACK2 then
-		-- spectate either the next guy or a random guy in chase
-		local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
+		local tgt = ply:GetObserverTarget()
 
-		if IsValid(target) then
-			ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
-			ply:SpectateEntity(target)
+		if IsValid(tgt) and tgt:IsPlayer() then
+			local target = util.GetNextAlivePlayer(tgt)
+
+			if IsValid(target) then
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
+		else
+			-- when not focused yet, snap to random guy
+			ply:UnSpectate()
+			ply:Spectate(OBS_MODE_ROAMING)
+			ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
+
+			local alive = util.GetAlivePlayers()
+
+			local alive_count = #alive
+			if alive_count < 1 then return end
+
+			local target = alive[math.random(alive_count)]
+
+			if IsValid(target) then
+				ply:Spectate(OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
 		end
 	elseif key == IN_DUCK then
 		local pos = ply:GetPos()
@@ -436,8 +448,8 @@ function GM:KeyPress(ply, key)
 		end
 
 		-- reset
+		ply:UnSpectate()
 		ply:Spectate(OBS_MODE_ROAMING)
-		ply:SpectateEntity(nil)
 
 		ply:SetPos(pos)
 		ply:SetEyeAngles(ang)
@@ -889,8 +901,8 @@ function GM:SpectatorThink(ply)
 		if IsValid(tgt) and tgt:IsPlayer() then
 			if not tgt:IsTerror() or not tgt:Alive() then
 				-- stop speccing as soon as target dies
+				ply:UnSpectate()
 				ply:Spectate(OBS_MODE_ROAMING)
-				ply:SpectateEntity(nil)
 			elseif GetRoundState() == ROUND_ACTIVE then
 				-- Sync position to target. Uglier than parenting, but unlike
 				-- parenting this is less sensitive to breakage: if we are

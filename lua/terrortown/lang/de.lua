@@ -248,7 +248,7 @@ L.c4_remove_destroy2 = "Bestätigen: Vernichten"
 L.c4_disarm = "C4 entschärfen"
 L.c4_disarm_cut = "Klicke zum Durchschneiden von Kabel {num}"
 
-L.c4_disarm_t     = "Durchschneide ein Kabel zum Entschärfen der Bombe. Wenn du Verräter bist, ist jedes Kabel sicher. Unschuldige haben es da nicht so einfach!"
+L.c4_disarm_t = "Durchschneide ein Kabel zum Entschärfen der Bombe. Wenn du Verräter bist, ist jedes Kabel sicher. Unschuldige haben es da nicht so einfach!"
 L.c4_disarm_owned = "Durchschneide ein Kabel zum Entschärfen der Bombe. Es ist deine Bombe, also wird jedes Kabel sie sicher entschärfen."
 L.c4_disarm_other = "Durchschneide das richtige Kabel, um die Bombe zu entschärfen. Sie explodiert, wenn du das falsche triffst!"
 
@@ -435,7 +435,7 @@ L.hp_wounded = "Verwundet"
 L.hp_badwnd = "Schwer Verwundet"
 L.hp_death = "Dem Tode nah"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Verlässlich"
 L.karma_high = "Grob"
 L.karma_med = "Schießwütig"
@@ -464,7 +464,6 @@ L.mute_off = "Niemanden stumm gestellt"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Die Bewegungstasten oder Springen: Objekt bewegen. Ducken: Objekt verlassen."
 L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num} verringert."
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
 
@@ -891,9 +890,6 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {role} Shop wurde gewählt!"
 L.shop_search = "Suche"
-
-L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
-L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
@@ -1377,7 +1373,7 @@ L.spawneditor_desc = "Wird verwendet, um Waffen-, Munitions- und Spielerspawns i
 L.spawneditor_place = "Platziere Spawn"
 L.spawneditor_remove = "Entferne Spawn"
 L.spawneditor_change = "Ändere den Spawntyp (halte [SHIFT] zum Umkehren)"
-L.spawneditor_ammo_edit = "Halten, um die Menge an automatisch generierter Munition bei Waffen-Spawns zu bearbeiten"
+L.spawneditor_ammo_edit = "Halten bei Waffen-Spawns, um autogenerierte Munition zu bearbeiten"
 
 L.spawn_weapon_random = "Zufallswaffenspawn"
 L.spawn_weapon_melee = "Nahkampfwaffenspawn"
@@ -1395,7 +1391,7 @@ L.spawn_ammo_rifle = "Gewehrmunitionsspawn"
 L.spawn_ammo_shotgun = "Schrotflintenmunitionsspawn"
 L.spawn_player_random = "Zufallsspielerspawn"
 
-L.spawn_weapon_ammo = " (Munition: {ammo})"
+L.spawn_weapon_ammo = "(Munition: {ammo})"
 
 L.spawn_weapon_edit_ammo = "Halte [{walkkey}] und drücke [{primaryfire} oder {secondaryfire}], um die Munition für diesen Waffenspawn zu erhöhen / reduzieren"
 
@@ -1419,9 +1415,9 @@ L.help_spawn_editor_info = [[
 Der Spawndeditor wird verwendet, um Spawns in der Welt zu platzieren, zu entfernen und zu bearbeiten. Diese Spawns sind für Waffen, Munition und Spieler.
 
 Diese Spawns werden in Dateien im Verzeichnis 'data/ttt/weaponspawnscripts/' gespeichert. Sie können für einen harten Reset gelöscht werden. Die ursprünglichen Spawndateien werden aus den auf der Karte gefundenen Spawns und den ursprünglichen TTT-Waffenspawnskripten erstellt. Das Drücken der Zurücksetzen-Schaltfläche führt immer zur Ausgangsposition zurück.
-    
+
 Es sollte beachtet werden, dass dieses Spawnsystem dynamische Spawns verwendet. Dies ist besonders interessant für Waffen, da es nicht mehr eine bestimmte Waffe definiert, sondern einen Typ von Waffen. Zum Beispiel gibt es anstelle eines TTT-Schrotgewehr-Spawns jetzt einen allgemeinen Schrotgewehr-Spawn, auf dem jede als Schrotgewehr definierte Waffe erscheinen kann. Der Spawntyp für jede Waffe kann im 'Ausrüstung bearbeiten'-Menü festgelegt werden. Dies ermöglicht es, dass jede Waffe auf der Karte erscheinen kann, oder bestimmte Standardwaffen deaktiviert werden können.
-    
+
 Beachte, dass viele Änderungen erst nach Beginn einer neuen Runde wirksam werden.]]
 L.help_spawn_editor_enable = "Auf einigen Karten kann es ratsam sein, die ursprünglichen Spawns auf der Karte zu verwenden, anstatt sie durch das dynamische System zu ersetzen. Die Änderung dieser Option unten betrifft nur die derzeit aktive Karte, sodass das dynamische System weiterhin für jede andere Karte verwendet wird."
 L.help_spawn_editor_hint = "Hinweis: Öffne das Gamemode Menü erneut, um den Spawneditor zu verlassen"
@@ -1514,9 +1510,8 @@ L.help_roles_credits = "Credits werden verwendet, um Ausrüstung im Shop zu kauf
 L.help_roles_selection_short = "Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle."
 L.help_roles_selection = [[
 Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens 5 Spieler benötigt werden, damit diese Rolle überhaupt verteilt wird.
-
 Beachte, dass all dies nur gilt, wenn die Rolle für den Verteilungsprozess berücksichtigt wird.
-    
+
 Die oben genannte Rollenverteilung hat eine besondere Integration mit der unteren Spielerbegrenzung. Wenn die Rolle für die Verteilung in Betracht gezogen wird und der Mindestwert unter dem Wert liegt, der durch den Verteilungsfaktor angegeben wird, aber die Anzahl der Spieler gleich oder größer als die untere Begrenzung ist, kann immer noch ein einzelner Spieler diese Rolle erhalten. Der Verteilungsprozess funktioniert dann wie gewohnt für den zweiten Spieler.]]
 L.help_roles_award_info = "Einige Rollen (wenn in ihren Credit-Einstellungen aktiviert) erhalten Credits, wenn ein bestimmter Prozentsatz an Feinden gestorben ist. Die damit verbundenen Werte können hier angepasst werden."
 L.help_roles_award_pct = "Wenn dieser Prozentsatz der Feinde tot ist, erhalten bestimmte Rollen Credits als Belohnung."
@@ -1527,12 +1522,14 @@ Der Begriff "Rollen" umfasst hier sowohl die Basisrollen als auch die Unterrolle
 
 1. Begrenzung durch eine feste Menge.
 2. Begrenzung durch einen Prozentsatz.
+
 Letzteres wird nur verwendet, wenn die feste Menge '0' beträgt und setzt eine Obergrenze auf Grundlage des festgelegten Prozentsatzes der verfügbaren Spieler.]]
 L.help_roles_max_baseroles = [[
 Basisrollen sind nur die Rollen, von denen andere erben. Zum Beispiel ist die Unschuldigen-Rolle eine Basisrolle, während ein Pharao eine Unterrolle dieser Rolle ist. Standardmäßig gibt es keine Begrenzung, wie viele verschiedene Basisrollen zugewiesen werden können. Es gibt jedoch zwei verschiedene Möglichkeiten, sie zu beschränken:
 
 1. Begrenzung durch eine feste Menge.
 2. Begrenzung durch einen Prozentsatz.
+
 Letzteres wird nur verwendet, wenn die feste Menge '0' beträgt und setzt eine Obergrenze auf Grundlage des festgelegten Prozentsatzes der verfügbaren Spieler.]]
 
 L.label_roles_enabled = "Aktiviere Rolle"
@@ -1567,6 +1564,7 @@ Es gibt zwei verschiedene Möglichkeiten, um in Basis-TTT2 Credits zu erhalten:
 
 1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhält das gesamte Team Credits.
 2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Rolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
+
 Bitte beachte, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Credits.
 Die Balanceeinstellungen für diese Funktion können in 'Administration' -> 'Allgemeine Rolleneinstellungen' festgelegt werden.]]
 L.help_detective_hats = [[
@@ -1816,17 +1814,16 @@ L.tbut_adminarea = "ADMIN BEREICH:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "Schadensskalierung"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Erlaube Fallenlassen"
 L.equipmenteditor_desc_allow_drop = "Wenn aktiviert, kann Ausrüstung beliebig vom Spieler fallengelassen werden"
+
 L.equipmenteditor_name_drop_on_death_type = "Fallenlassen beim Tod"
 L.equipmenteditor_desc_drop_on_death_type = "Versuche, die Aktion zu überschreiben, die festlegt, ob die Ausrüstung beim Tod des Spielers fallengelassen wird."
 
 L.drop_on_death_type_default = "Standard (pro Waffe definiert)"
 L.drop_on_death_type_force = "Erzwinge Fallenlassen beim Tod"
 L.drop_on_death_type_deny = "Verhindere Fallenlassen beim Tod"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "Ausrüstungs Slot"
@@ -1990,6 +1987,76 @@ L.target_credits_on_confirm = "Bestätige Toten, um ungenutzte Credits zu erhalt
 
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-23
+L.header_miscellaneous_settings = "Verschiedene Einstellungen"
+L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"
+L.header_hud_elements_customize = "Passe die HUD-Elemente an"
+L.help_hud_elements_special_settings = "Dies sind die HUD-Element spezifischen Einstellungen."
+
+-- 2023-10-25
+L.help_keyhelp = [[
+Tastenhelfer sind ein UI Element, welches dauerhaft relevante Tastenbelegungen für den Spieler anzeigen. Gerade unerfahrene Spieler können hiervon profitieren. Es gibt drei unterschiedliche Kategorien von Tastenbelegungen:
+
+Core: Diese Kategorie enthält die wichtigsten Tastenbelegungen in TTT2. Ohne diese ist es schwer das volle Potential von TTT2 zu nutzen.
+Extra: Ähnlich zu 'core', enthält aber eher nicht durchgehend nötige Tastenbelegungen. Dinge wie der Chat, Sprachchat und Taschenlampe sind hier enthalten. Gerade für neue Spieler kann das aktivieren sinnvoll sein.
+Equipment: Ausrüstungsgegenstände können eigene Tastenbelegungen haben, diese werden in dieser Kategorie angezeigt.
+
+Deaktivierte Kategorien werden weiterhin angezeigt solange die Punktetafel geöffnet ist]]
+
+L.label_keyhelp_show_core = "Aktiviere dauerhaftes anzeigen der 'core' Tastenhelfer"
+L.label_keyhelp_show_extra = "Aktiviere dauerhaftes anzeigen der 'extra' Tastenhelfer"
+L.label_keyhelp_show_equipment = "Aktiviere dauerhaftes anzeigen der 'equipment' Tastenhelfer"
+
+L.header_interface_keys = "Tastenhelfer Einstellungen"
+L.header_interface_wepswitch = "Waffenwechsel UI Einstellungen"
+
+L.label_keyhelper_help = "öffne Spielmodus Menü"
+L.label_keyhelper_mutespec = "Wechsle Zuschauer Sprachmodus"
+L.label_keyhelper_shop = "öffne Ausrüstungsshop"
+L.label_keyhelper_show_pointer = "Befreie Mauszeiger"
+L.label_keyhelper_possess_focus_entity = "fokusiertes Objekt übernehmen"
+L.label_keyhelper_spec_focus_player = "fokusiertem Spieler zuschauen"
+L.label_keyhelper_spec_previous_player = "vorheriger Spieler"
+L.label_keyhelper_spec_next_player = "nächster Spieler"
+L.label_keyhelper_spec_player = "Spieler zuschauen"
+L.label_keyhelper_possession_jump = "Objekt: springen"
+L.label_keyhelper_possession_left = "Objekt: links"
+L.label_keyhelper_possession_right = "Objekt: rechts"
+L.label_keyhelper_possession_forward = "Objekt: vorwärts"
+L.label_keyhelper_possession_backward = "Objekt: rückwärts"
+L.label_keyhelper_free_roam = "verlasse Objekt und bewege dich frei"
+L.label_keyhelper_flashlight = "Taschenlampe an-/ausschalten"
+L.label_keyhelper_quickchat = "Schnellchat öffnen"
+L.label_keyhelper_voice_global = "Globaler Sprachchat"
+L.label_keyhelper_voice_team = "Team Sprachchat"
+L.label_keyhelper_chat_global = "Globaler Chat"
+L.label_keyhelper_chat_team = "Team Chat"
+L.label_keyhelper_show_all = "Alle anzeigen"
+L.label_keyhelper_disguiser = "Tarnung an-/ausschalten"
+L.label_keyhelper_save_exit = "Speichern und Verlassen"
+L.label_keyhelper_spec_third_person = "Wechsle Ansicht aus dritter Person"
+
 -- 2023-10-26
+L.item_armor_reinforced = "Verstärkte Rüstung"
+L.item_armor_sidebar = "Rüstung bietet dir etwas Schutz vor Kugelschüssen. Aber nicht auf Dauer."
+L.item_disguiser_sidebar = "Die Tarnung versteckt deine Identität vor anderen Spielern."
+L.status_speed_name = "Geschwindigkeits Faktor"
+L.status_speed_description_good = "Du bist schneller als normal. Gegenstände, Ausrüstung oder verschiedene Effekte können dies beeinflussen."
+L.status_speed_description_bad = "Du bist langsamer als normal. Gegenstände, Ausrüstung oder verschiedene Effekte können dies beeinflussen."
+
+L.status_on = "an"
+L.status_off = "aus"
+
 L.crowbar_help_primary = "Zuschlagen"
 L.crowbar_help_secondary = "Spieler schubsen"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
