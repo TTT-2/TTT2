@@ -94,7 +94,7 @@ end
 ---
 -- This function is called, when the slider starts and ends being dragged
 -- Calls SetConVarValue only after the dragging ends to not sync every change
--- @param bool setDragging the state it is changed to
+-- @param boolean setDragging the state it is changed to
 -- @realm client
 function PANEL:OnChangeDragging(setDragging)
 	local value = self:GetValue()
@@ -165,7 +165,7 @@ end
 
 ---
 -- @param any val
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
 	if not value then return end
@@ -274,7 +274,7 @@ function PANEL:IsHovered()
 end
 
 ---
--- @param bool b Enable or disable text input of text field
+-- @param boolean b Enable or disable text input of text field
 -- @realm client
 function PANEL:EnableTextBox(b)
 	self.textBoxEnabled = b

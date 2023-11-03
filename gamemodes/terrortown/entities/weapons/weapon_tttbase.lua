@@ -214,7 +214,7 @@ local tickInterval = engine.TickInterval()
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
 -- @param number nextTime The time you want to have the next primary attack available
--- @param[opt] bool skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
+-- @param[opt] boolean skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
 -- @realm shared
 function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
 	if not skipTickrateFix and not shouldSkipWeapon(self) then
@@ -470,7 +470,7 @@ if CLIENT then
 	-- @deprecated TTT legacy function. Do not use for new addons!
 	-- @param[opt] string primary_text first line of the help text
 	-- @param[optchain] string secondary_text second line of the help text
-	-- @param[optchain][default=false] bool translate should the text get translated
+	-- @param[optchain][default=false] boolean translate should the text get translated
 	-- @param[optchain] table extraKeyParams parameters for @{Lang.GetParamTranslation}
 	-- @realm client
 	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extraKeyParams)
