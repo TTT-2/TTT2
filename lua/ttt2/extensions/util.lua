@@ -442,7 +442,7 @@ end
 -- This creates an infinite recursion problem (stack overflow). Registering the function with
 -- this helper function fixes the problem.
 -- @param string name The name of the original function
--- @return Function The pointer to the original functions
+-- @return function The pointer to the original functions
 -- @realm shared
 function util.OverwriteFunction(name)
 	local str = stringSplit(name, ".")

@@ -49,7 +49,7 @@ end
 
 ---
 -- This function enables or disables the searchBar.
--- @param bool active
+-- @param boolean active
 -- @realm client
 function PANEL:EnableSearchBar(active)
 	if not active then
@@ -60,7 +60,7 @@ function PANEL:EnableSearchBar(active)
 		return
 	end
 
-	-- Add searchbar on top	
+	-- Add searchbar on top
 	local searchBar = vgui.Create("DSearchBarTTT2", self)
 	searchBar:SetUpdateOnType(true)
 	searchBar:SetPos(0, heightNavHeader)

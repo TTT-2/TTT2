@@ -11,7 +11,7 @@ TARGET_DATA = {}
 -- @param entity ent The focused Entity
 -- @param entity unchangedEnt The original focused Entity if focus was changed by the hook
 -- @param number distance The distance to the focused Entity
--- @return @{TARGET_DATA} The object to be used in the hook
+-- @return TARGET_DATA The object to be used in the hook
 -- @internal
 -- @realm client
 function TARGET_DATA:Initialize(ent, unchangedEnt, distance)
@@ -127,7 +127,7 @@ end
 ---
 -- Returns the reference position of the targetID HUD element. The reference position
 -- is used to position the element on screen.
--- @return number, number Reference position x, reference position y
+-- @return number,number Reference position x, reference position y
 -- @realm client
 function TARGET_DATA:GetRefPosition()
 	return self.params.refPosition.x, self.params.refPosition.y
@@ -269,7 +269,7 @@ end
 
 ---
 -- Returns the raw data tables of the targetID element to me modified by experienced users
--- @return table, table The table of the entity data, the table of the targetID element parameters
+-- @return table,table The table of the entity data, the table of the targetID element parameters
 -- @realm client
 function TARGET_DATA:GetRaw()
 	return self.data, self.params

@@ -103,7 +103,7 @@ end
 
 ---
 -- This function determines if @{PANEL:OnValueChange()} is called on every typed letter or not.
--- @param bool enabled
+-- @param boolean enabled
 -- @realm client
 function PANEL:SetUpdateOnType(enabled)
 	self.textEntry:SetUpdateOnType(enabled)
