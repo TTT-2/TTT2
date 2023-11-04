@@ -372,6 +372,7 @@ L.sipistol_name = "消音手槍"
 
 L.sipistol_desc = [[
 噪音極小的手槍。使用一般的手槍彈藥。
+
 被害者被射殺時不會喊叫。]]
 
 -- Newton launcher
@@ -405,7 +406,7 @@ L.dna_killer = "成功採集到兇手的DNA樣本！"
 L.dna_duplicate = "匹配！你的掃描儀裡已經有這個DNA樣本了。"
 L.dna_no_killer = "DNA樣本無法檢索（兇手已斷線？）"
 L.dna_armed = "炸彈已啟動！趕緊拆除它！"
-L.dna_object = "在目標上採集到 {num} 個新DNA樣本。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "區域內沒偵測到可採集之DNA樣本。"
 
 L.dna_desc = [[
@@ -487,7 +488,7 @@ L.corpse_hint = "按下 [{usekey}] 來搜索，用 [{walkkey} + {usekey}] 進行
 
 L.target_disg = " （偽裝狀態）"
 L.target_unid = "未確認的屍體"
---L.target_unknown = "A Terrorist"
+L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索屍體以獲取未被消耗的信用點數"
 
@@ -1466,7 +1467,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地圖上，可能會建議使用在地圖自帶的原始生成點，而不用動態系統來取代它們。禁用這個複選框只對當前活動地圖禁用。其他地圖仍將使用動態系統。"
 L.help_spawn_editor_hint = "提示：要離開生成編輯器，重新打開遊戲模式菜單。"
 L.help_spawn_editor_spawn_amount = [[
-目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 player} 個玩家生成點。
+目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 {player} 個玩家生成點。
 點擊'開始編輯生成'來改變這個生成。
 
 {weaponrandom}x 隨機武器生成
@@ -1860,7 +1861,6 @@ L.tbut_adminarea = "管理區:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "傷害縮放"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允許丟棄"
 L.equipmenteditor_desc_allow_drop = "如果啟用，玩家可以自由地丟棄裝備。"
@@ -1871,7 +1871,6 @@ L.equipmenteditor_desc_drop_on_death_type = "嘗試覆蓋玩家死亡時裝備�
 L.drop_on_death_type_default = "默認（由武器定義）"
 L.drop_on_death_type_force = "強制死亡時丟棄"
 L.drop_on_death_type_deny = "拒絕死亡時丟棄"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "裝備槽"
@@ -1894,6 +1893,12 @@ L.slot_weapon_class = "職業槽"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
@@ -1957,3 +1962,8 @@ L.slot_weapon_class = "職業槽"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

@@ -1,4 +1,4 @@
--- Simplified Chinese language strings (by 8z & TEGTianFan & 波と一緒に漂う)
+-- Simplified Chinese language strings (by 8Z & TEGTianFan)
 
 local L = LANG.CreateLanguage("zh_hans")
 
@@ -186,8 +186,8 @@ L.search_role_det = "这个人是探长。"
 L.search_role_inno = "这个人是无辜的恐怖分子。"
 
 L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
-L.search_armor = "他穿着非标准装甲。"
-L.search_disg = "他持有一个能隐匿身份的设备"
+L.search_armor = "他穿着非标准护甲。"
+L.search_disg = "他持有一个能隐匿身份的装备"
 L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
 L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
 
@@ -322,7 +322,7 @@ L.defuser_help = "{primaryfire} 拆除目标炸弹。"
 L.defuser_desc = [[
 迅速拆除一个C4。
 
-不限制使用次数。若你持有此设备，拆除C4时会轻松许多。]]
+不限制使用次数。若你持有此装备，拆除C4时会轻松许多。]]
 
 -- Flare gun
 L.flare_name = "信号枪"
@@ -406,7 +406,7 @@ L.dna_killer = "成功采集到凶手的DNA样本！"
 L.dna_duplicate = "匹配！你的扫描仪里已经有这个DNA样本了。"
 L.dna_no_killer = "DNA样本无法检索（凶手已离线？）"
 L.dna_armed = "炸弹已启动！赶紧拆除它！"
-L.dna_object = "在目标上采集到 {num} 个新DNA样本。"
+L.dna_object = "从目标上采集了最后一位所有者的样本"
 L.dna_gone = "区域内没侦测到可采集之DNA样本。"
 
 L.dna_desc = [[
@@ -422,7 +422,7 @@ L.magnet_help = "{primaryfire} 将其定在墙上。"
 L.grenade_smoke = "烟雾弹"
 L.grenade_fire = "燃烧弹"
 
-L.unarmed_name = "无武装"
+L.unarmed_name = "收起武器"
 L.crowbar_name = "撬棍"
 L.pistol_name = "手枪"
 L.rifle_name = "狙击枪"
@@ -440,8 +440,8 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri = "{primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec = "{scondaryfire} 标记传送地点。"
+L.tele_help_pri = "传送到标记位置"
+L.tele_help_sec = "标记当前位置"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。
@@ -488,7 +488,7 @@ L.corpse_hint = "按下 [{usekey}] 来搜索，用 [{walkkey} + {usekey}] 进行
 
 L.target_disg = "（伪装状态）"
 L.target_unid = "未确认的尸体"
---L.target_unknown = "A Terrorist"
+L.target_unknown = "一名恐怖分子"
 
 L.target_credits = "搜索尸体以获取未被消耗积分"
 
@@ -959,10 +959,10 @@ L.corpse_too_far_away = "这个尸体太远了。"
 L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
-L.hstation_subtitle = "按 [{usekey}] 恢复生命"
+L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
 L.hstation_charge = "剩余充能：{charge}"
 L.hstation_empty = "这个医疗站没有剩余充能"
-L.hstation_maxhealth = "你的生命恢复已满"
+L.hstation_maxhealth = "你的生命值已满"
 L.hstation_short_desc = "医疗站会逐渐回复充能"
 
 -- 2019-11-03
@@ -1001,7 +1001,7 @@ L.mute_team = "静音 {team}"
 L.door_auto_closes = "此门会自动关闭"
 L.door_open_touch = "此门接触后会自动开启"
 L.door_open_touch_and_use = "接触门或按 [{usekey}] 开门。"
-L.hud_health = "生命"
+L.hud_health = "生命值"
 
 -- 2020-03-09
 L.help_title = "帮助和设定"
@@ -1210,7 +1210,7 @@ L.dna_help_reload = "删除当前样本"
 L.binoc_help_pri = "确认尸体"
 L.binoc_help_sec = "切换放大倍率"
 
-L.vis_help_pri = "丢弃当前设备。"
+L.vis_help_pri = "丢弃当前装备。"
 
 L.decoy_help_pri = "安放诱饵。"
 
@@ -1358,7 +1358,7 @@ L.shopeditor_desc_random_shops = [[随机商店只给每个玩家提供一套有
 阵营商店迫使一个阵营中的所有玩家拥有相同的套装，而不是定制化。
 重新投票可以让你用积分获得一套新的随机装备。]]
 L.shopeditor_name_random_shop_items = "随机装备的数量"
-L.shopeditor_desc_random_shop_items = "这包括那些标有“非随机”的设备。所以请选择一个足够高的数字，否则你只能得到这些。"
+L.shopeditor_desc_random_shop_items = "这包括那些标有“非随机”的装备。所以请选择一个足够高的数字，否则你只能得到这些。"
 L.shopeditor_name_random_team_shops = "启用阵营商店"
 L.shopeditor_name_random_shop_reroll = "启用商店重选功能"
 L.shopeditor_name_random_shop_reroll_cost = "每次重选的花费"
@@ -1436,7 +1436,7 @@ L.spawn_ammo_rifle = "狙击枪弹药生成"
 L.spawn_ammo_shotgun = "霰弹枪弹药生成"
 L.spawn_player_random = "随机玩家生成"
 
-L.spawn_weapon_ammo = " （弹药：{ammo}）"
+L.spawn_weapon_ammo = "（弹药：{ammo}）"
 
 L.spawn_weapon_edit_ammo = "按住 [{walkkey}]并按 [{primaryfire} 或 {secondaryfire}] 以增加或减少此武器生成的弹药量"
 
@@ -1454,7 +1454,7 @@ L.button_delete_all_spawns = "删除所有生成点位置"
 L.label_dynamic_spawns_enable = "为该地图启用动态生成"
 L.label_dynamic_spawns_global_enable = "为所有地图启用自定义生成"
 
-L.header_equipment_weapon_spawn_setup = "武器生成设定"
+L.header_equipment_weapon_spawn_setup = "武器生成设置"
 
 L.help_spawn_editor_info = [[
 生成编辑器是用来放置，移除和编辑世界上的生成点。这些生成点是为武器，弹药和玩家准备的。
@@ -1467,7 +1467,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地图上，可能会建议使用在地图自带的原始生成点，而不用动态系统来取代它们。禁用这个复选框只对当前活动地图禁用。其他地图仍将使用动态系统。"
 L.help_spawn_editor_hint = "提示：要离开生成编辑器，重新打开游戏模式菜单。"
 L.help_spawn_editor_spawn_amount = [[
-目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 player} 个玩家生成点。
+目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 {player} 个玩家生成点。
 点击'开始编辑生成'来改变这个生成。
 
 {weaponrandom}x 随机武器生成
@@ -1486,9 +1486,9 @@ L.help_spawn_editor_spawn_amount = [[
 {ammorifle}x 狙击枪弹药生成
 {ammoshotgun}x 霰弹枪弹药生成
 
-{playerrandom} x 玩家随机位置生成]]
+{playerrandom}x 玩家随机位置生成]]
 
-L.equipmenteditor_name_auto_spawnable = "设备在地图中随机产生"
+L.equipmenteditor_name_auto_spawnable = "装备可在地图中随机生成"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
 L.equipmenteditor_desc_auto_spawnable = [[
 TTT2的生成系统允许每种武器在世界中生成，默认情况下，只有被创造者标记为'自动生成'的武器才会在世界中生成，但这些设置可以在该菜单中更改。
@@ -1597,7 +1597,7 @@ L.label_detective_hats = "为像侦探这样的警察角色启用帽子（如果
 
 L.ttt2_desc_innocent = "无辜者没有特殊能力。他们必须在恐怖分子中找到邪恶的人并杀死他们。但他们必须小心，不要误杀自己的同伴。"
 L.ttt2_desc_traitor = "叛徒是无辜者的敌人。他们有一个装备菜单，可以购买特殊装备。他们必须杀死所有的人，除了他们的队友。"
-L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜者？强大的侦探必须要找到所有图谋不轨恐怖分子。他们商店里的设备可能会帮助他们完成这项任务。"
+L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜者？强大的侦探必须要找到所有图谋不轨恐怖分子。他们商店里的装备可能会帮助他们完成这项任务。"
 
 -- 2021-10-10
 L.button_reset_models = "重置玩家模型"
@@ -1617,7 +1617,7 @@ L.help_detective_hats = [[
 
 部分玩家模型默认不支持帽子。你可以在'管理'->'玩家模型'中改变这一点。]]
 
-L.label_roles_credits_award_kill = "Credit reward amount for the kill"
+L.label_roles_credits_award_kill = "击杀获得的积分奖励"
 L.label_roles_credits_dead_award = "启用对依据一定比例敌人死亡数提供积分奖励"
 L.label_roles_credits_kill_award = "启用对击杀高价值角色时提供积分奖励"
 L.label_roles_min_karma = "分配角色时玩家的最低人品值"
@@ -1684,7 +1684,7 @@ L.help_haste_mode = [[
 如果急速模式被启用，固定的回合时间将被忽略。]]
 L.help_round_limit = "在满足设定的限制条件之一后，将会更换地图。"
 L.help_armor_balancing = "以下数值可以用来平衡护甲。"
-L.help_item_armor_classic = "如果启用了经典护甲模式，只有之前的设置才是生效的。经典护甲模式意味着玩家在一个回合中只能购买一次护甲，并且这个盔甲可以阻挡30%的子弹和撬棍的伤害，直到他们死亡。"
+L.help_item_armor_classic = "如果启用了经典护甲模式，只有之前的设置才是生效的。经典护甲模式意味着玩家在一个回合中只能购买一次护甲，并且这个护甲可以阻挡30%的子弹和撬棍的伤害，直到他们死亡。"
 L.help_item_armor_dynamic = [[
 动态护甲是TTT2的新系统，使护甲系统更加有趣。现在可以购买的护甲数量是无限的，而且护甲的效果可以叠加。受到伤害会降低护甲值，每件物品的护甲值是在该物品的"装备设置"中设置的。
 
@@ -1765,7 +1765,7 @@ L.label_confirm_detective_only = "只允许警察角色确认死者"
 L.label_dyingshot = "如果玩家在瞄准中，则在死亡时开枪[试验性]"
 L.label_armor_block_headshots = "启用护甲阻挡爆头伤害"
 L.label_armor_block_blastdmg = "启用护甲阻挡爆炸伤害"
-L.label_armor_dynamic = "启用动态装甲"
+L.label_armor_dynamic = "启用动态护甲"
 L.label_armor_value = "护甲物品所赋予的护甲"
 L.label_armor_damage_block_pct = "护甲承受的伤害百分比"
 L.label_armor_damage_health_pct = "玩家承受的伤害百分比"
@@ -1861,7 +1861,6 @@ L.tbut_adminarea = "管理区:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "伤害缩放"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "允许丢弃"
 L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
@@ -1872,7 +1871,6 @@ L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备�
 L.drop_on_death_type_default = "默认（由武器定义）"
 L.drop_on_death_type_force = "强制死亡时丢弃"
 L.drop_on_death_type_deny = "拒绝死亡时丢弃"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "装备槽"
@@ -1889,72 +1887,83 @@ L.slot_weapon_extra = "额外槽"
 L.slot_weapon_class = "职业槽"
 
 -- 2023-10-04
---L.label_voice_duck_spectator = "Duck spectator voices"
---L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
---L.label_voice_scaling = "Voice Volume Scaling Mode"
---L.label_voice_scaling_mode_linear = "Linear"
---L.label_voice_scaling_mode_power4 = "Power 4"
---L.label_voice_scaling_mode_log = "Logarithmic"
+L.label_voice_duck_spectator = "观察者语音淡化"
+L.label_voice_duck_spectator_amount = "观察者语音淡化程度"
+L.label_voice_scaling = "语音淡化比例"
+L.label_voice_scaling_mode_linear = "线性"
+L.label_voice_scaling_mode_power4 = "四次方"
+L.label_voice_scaling_mode_log = "对数"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
---L.help_keyhelp = [[
---Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
---
---Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
---Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
---Equipment: Some equipment items have their own bindings, these are shown in this category.
---
---Disabled categories are still shown when the scoreboard is visible]]
+L.help_keyhelp = [[
+键位助手是一个向玩家显示相关键位的界面元素，对新玩家特别有帮助。键位分为三种类型：
 
---L.label_keyhelp_show_core = "Enable always showing the core bindings"
---L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
---L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+核心：包含 TTT2 中最重要的键位。不使用它们的话很难体验游戏的全部潜力。
+附加：类似核心键位，但并非必要使用。这包含聊天、语音或手电筒等功能。显示这些键位也许会对新玩家有所帮助。
+装备：部分装备有自己的键位，这些都显示在此类别中。
 
---L.header_interface_keys = "Key helper settings"
---L.header_interface_wepswitch = "Weapon switch UI settings"
+当记分板可见时，已禁用的类别仍会显示]]
 
---L.label_keyhelper_help = "open gamemode menu"
---L.label_keyhelper_mutespec = "cycle spectator voice mode"
---L.label_keyhelper_shop = "open equipment shop"
---L.label_keyhelper_show_pointer = "free mouse pointer"
---L.label_keyhelper_possess_focus_entity = "possess focused entity"
---L.label_keyhelper_spec_focus_player = "spectate focused player"
---L.label_keyhelper_spec_previous_player = "previous player"
---L.label_keyhelper_spec_next_player = "next player"
---L.label_keyhelper_spec_player = "spectate random player"
---L.label_keyhelper_possession_jump = "prop: jump"
---L.label_keyhelper_possession_left = "prop: left"
---L.label_keyhelper_possession_right = "prop: right"
---L.label_keyhelper_possession_forward = "prop: forward"
---L.label_keyhelper_possession_backward = "prop: backward"
---L.label_keyhelper_free_roam = "leave object and roam free"
---L.label_keyhelper_flashlight = "toggle flashlight"
---L.label_keyhelper_quickchat = "open quickchat"
---L.label_keyhelper_voice_global = "global voice chat"
---L.label_keyhelper_voice_team = "team voice chat"
---L.label_keyhelper_chat_global = "global chat"
---L.label_keyhelper_chat_team = "team chat"
---L.label_keyhelper_show_all = "show all"
---L.label_keyhelper_disguiser = "toggle disguiser"
---L.label_keyhelper_save_exit = "save and exit"
---L.label_keyhelper_spec_third_person = "toggle third person view"
+L.label_keyhelp_show_core = "启用始终显示核心键位"
+L.label_keyhelp_show_extra = "启用始终显示额外键位"
+L.label_keyhelp_show_equipment = "启用始终显示装备键位"
+
+L.header_interface_keys = "键位助手设置"
+L.header_interface_wepswitch = "武器选择界面设置"
+
+L.label_keyhelper_help = "打开游戏模式菜单"
+L.label_keyhelper_mutespec = "切换观看语音模式"
+L.label_keyhelper_shop = "打开装备商店"
+L.label_keyhelper_show_pointer = "显示鼠标指针"
+L.label_keyhelper_possess_focus_entity = "附体焦点中的Prop"
+L.label_keyhelper_spec_focus_player = "观看焦点中的玩家"
+L.label_keyhelper_spec_previous_player = "上一个玩家"
+L.label_keyhelper_spec_next_player = "下一个玩家"
+L.label_keyhelper_spec_player = "观看随机玩家"
+L.label_keyhelper_possession_jump = "Prop：跳跃"
+L.label_keyhelper_possession_left = "Prop：向左"
+L.label_keyhelper_possession_right = "Prop：向右"
+L.label_keyhelper_possession_forward = "Prop：向前"
+L.label_keyhelper_possession_backward = "Prop：向后"
+L.label_keyhelper_free_roam = "离开对象并自由漫游"
+L.label_keyhelper_flashlight = "切换手电筒"
+L.label_keyhelper_quickchat = "打开快速聊天"
+L.label_keyhelper_voice_global = "全局语音聊天"
+L.label_keyhelper_voice_team = "团队语音聊天"
+L.label_keyhelper_chat_global = "全局聊天"
+L.label_keyhelper_chat_team = "团队聊天"
+L.label_keyhelper_show_all = "显示全部"
+L.label_keyhelper_disguiser = "切换伪装"
+L.label_keyhelper_save_exit = "保存退出"
+L.label_keyhelper_spec_third_person = "切换第三人称视图"
 
 -- 2023-10-26
---L.item_armor_reinforced = "Reinforced Armor"
---L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
---L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
---L.status_speed_name = "Speed Multiplier"
---L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
---L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+L.item_armor_reinforced = "强化护甲"
+L.item_armor_sidebar = "护甲可以保护你免受子弹穿透身体。但不是永久的。"
+L.item_disguiser_sidebar = "伪装者不会向其他玩家显示你的名字，从而保护你的身份。"
+L.status_speed_name = "移速倍率"
+L.status_speed_description_good = "你的移动速度高于普通。物品，装备或效果可能会影响此值。"
+L.status_speed_description_bad = "你的移动速度低于普通。物品，装备或效果可能会影响此值。"
 
---L.status_on = "on"
---L.status_off = "off"
+L.status_on = "开启"
+L.status_off = "关闭"
 
---L.crowbar_help_primary = "Attack"
---L.crowbar_help_secondary = "Push players"
+L.crowbar_help_primary = "攻击"
+L.crowbar_help_secondary = "推动玩家"
 
 -- 2023-10-27
---L.help_HUD_enable_description = [[
---Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
---L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
---L.label_HUD_enable_box_blur = "Enable UI box background blur"
+L.help_HUD_enable_description = [[
+当记分板打开时，一些 HUD 元素（如键位助手或侧边栏）会显示详细信息。可以禁用此功能以减少杂乱。]]
+L.label_HUD_enable_description = "打开记分板时启用描述"
+L.label_HUD_enable_box_blur = "启用用户界面框背景模糊"
+
+-- 2023-10-28
+L.submenu_gameplay_voiceandvolume_title = "声音和音量"
+L.header_soundeffect_settings = "声音效果"
+L.header_voiceandvolume_settings = "声音和音量设置"

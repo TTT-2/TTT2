@@ -17,13 +17,13 @@ TTT2ShopFallbackInitialized = false
 -- Also handles hotreload when called with the `PreRegisterSWEP` hook
 -- @param table equipment equipment to register
 -- @param string name equipment name
--- @param bool initialize should the real weapon table be initialized and not hotreloaded?
+-- @param boolean initialize should the real weapon table be initialized and not hotreloaded?
 -- @internal
 -- @realm shared
 local function TTT2RegisterSWEP(equipment, name, initialize)
 	local doHotreload = TTT2ShopFallbackInitialized
 
-	-- Handle first initialization or do hotreload 
+	-- Handle first initialization or do hotreload
 	if initialize then
 		equipment = weapons.GetStored(name)
 		doHotreload = false
@@ -531,7 +531,7 @@ end
 ---
 -- Called to register equipment and assign an id. Returns true if it is successfully registered.
 -- @param table eq the equipment copy to register with an id
--- @return bool if the eq is succesfully registered
+-- @return boolean if the eq is succesfully registered
 -- @hook
 -- @realm shared
 function GM:TTT2RegisterWeaponID(eq)

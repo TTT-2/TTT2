@@ -67,7 +67,7 @@ end
 
 ---
 -- @param any val
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
 	if not value then return end
@@ -257,7 +257,7 @@ end
 
 ---
 -- This function determines if @{PANEL:OnValueChange()} is called on every typed letter or not.
--- @param bool enabled
+-- @param boolean enabled
 -- @realm client
 function PANEL:SetUpdateOnType(enabled)
 	self.TextArea:SetUpdateOnType(enabled)

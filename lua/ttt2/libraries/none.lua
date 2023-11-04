@@ -23,6 +23,28 @@ function clr(color)
 end
 
 ---
+-- This @{function} creates a getter and a setter @{function} for DTVars of an entity
+-- The create @{function} names are based on the var name and the prefix "Get" and "Set"
+-- @note Instead of using this function simply replace `ENT:DTVar()` calls with `ENT:NetworkVar()`.
+-- @param table tbl the @{table} that should receive the Getter and Setter @{function}
+-- @param string varname the name the tbl @{table} should have as key value
+-- @param string name the name that should be concatenated to the prefix "Get" and "Set"
+-- @deprecated
+-- @realm shared
+function AccessorFuncDT(tbl, varname, name)
+	MsgN("[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version.")
+	tbl["Get" .. name] = function(s)
+		return s.dt and s.dt[varname]
+	end
+
+	tbl["Set" .. name] = function(s, v)
+		if s.dt then
+			s.dt[varname] = v
+		end
+	end
+end
+
+---
 -- Short helper for input.LookupBinding, returns capitalised key or a default
 -- @param string binding
 -- @param string default

@@ -1436,7 +1436,7 @@ L.spawn_ammo_rifle = "Gewehrmunitionsspawn"
 L.spawn_ammo_shotgun = "Schrotflintenmunitionsspawn"
 L.spawn_player_random = "Zufallsspielerspawn"
 
-L.spawn_weapon_ammo = " (Munition: {ammo})"
+L.spawn_weapon_ammo = "(Munition: {ammo})"
 
 L.spawn_weapon_edit_ammo = "Halte [{walkkey}] und drücke [{primaryfire} oder {secondaryfire}], um die Munition für diesen Waffenspawn zu erhöhen / reduzieren"
 
@@ -1555,7 +1555,6 @@ L.help_roles_credits = "Credits werden verwendet, um Ausrüstung im Shop zu kauf
 L.help_roles_selection_short = "Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle."
 L.help_roles_selection = [[
 Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens 5 Spieler benötigt werden, damit diese Rolle überhaupt verteilt wird.
-
 Beachte, dass all dies nur gilt, wenn die Rolle für den Verteilungsprozess berücksichtigt wird.
 
 Die oben genannte Rollenverteilung hat eine besondere Integration mit der unteren Spielerbegrenzung. Wenn die Rolle für die Verteilung in Betracht gezogen wird und der Mindestwert unter dem Wert liegt, der durch den Verteilungsfaktor angegeben wird, aber die Anzahl der Spieler gleich oder größer als die untere Begrenzung ist, kann immer noch ein einzelner Spieler diese Rolle erhalten. Der Verteilungsprozess funktioniert dann wie gewohnt für den zweiten Spieler.]]
@@ -1568,12 +1567,14 @@ Der Begriff "Rollen" umfasst hier sowohl die Basisrollen als auch die Unterrolle
 
 1. Begrenzung durch eine feste Menge.
 2. Begrenzung durch einen Prozentsatz.
+
 Letzteres wird nur verwendet, wenn die feste Menge '0' beträgt und setzt eine Obergrenze auf Grundlage des festgelegten Prozentsatzes der verfügbaren Spieler.]]
 L.help_roles_max_baseroles = [[
 Basisrollen sind nur die Rollen, von denen andere erben. Zum Beispiel ist die Unschuldigen-Rolle eine Basisrolle, während ein Pharao eine Unterrolle dieser Rolle ist. Standardmäßig gibt es keine Begrenzung, wie viele verschiedene Basisrollen zugewiesen werden können. Es gibt jedoch zwei verschiedene Möglichkeiten, sie zu beschränken:
 
 1. Begrenzung durch eine feste Menge.
 2. Begrenzung durch einen Prozentsatz.
+
 Letzteres wird nur verwendet, wenn die feste Menge '0' beträgt und setzt eine Obergrenze auf Grundlage des festgelegten Prozentsatzes der verfügbaren Spieler.]]
 
 L.label_roles_enabled = "Aktiviere Rolle"
@@ -1608,6 +1609,7 @@ Es gibt zwei verschiedene Möglichkeiten, um in Basis-TTT2 Credits zu erhalten:
 
 1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhält das gesamte Team Credits.
 2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Rolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
+
 Bitte beachte, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Credits.
 Die Balanceeinstellungen für diese Funktion können in 'Administration' -> 'Allgemeine Rolleneinstellungen' festgelegt werden.]]
 L.help_detective_hats = [[
@@ -1859,7 +1861,6 @@ L.tbut_adminarea = "ADMIN BEREICH:"
 -- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "Schadensskalierung"
 
-
 -- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Erlaube Fallenlassen"
 L.equipmenteditor_desc_allow_drop = "Wenn aktiviert, kann Ausrüstung beliebig vom Spieler fallengelassen werden"
@@ -1870,7 +1871,6 @@ L.equipmenteditor_desc_drop_on_death_type = "Versuche, die Aktion zu überschrei
 L.drop_on_death_type_default = "Standard (pro Waffe definiert)"
 L.drop_on_death_type_force = "Erzwinge Fallenlassen beim Tod"
 L.drop_on_death_type_deny = "Verhindere Fallenlassen beim Tod"
-
 
 -- 2023-08-26
 L.equipmenteditor_name_kind = "Ausrüstungs Slot"
@@ -1893,6 +1893,12 @@ L.label_voice_scaling = "Skalierungsmodus der Lautstärke der Stimme"
 L.label_voice_scaling_mode_linear = "Linear"
 L.label_voice_scaling_mode_power4 = "Hoch 4"
 L.label_voice_scaling_mode_log = "Logarithmisch"
+
+-- 2023-10-23
+L.header_miscellaneous_settings = "Verschiedene Einstellungen"
+L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"
+L.header_hud_elements_customize = "Passe die HUD-Elemente an"
+L.help_hud_elements_special_settings = "Dies sind die HUD-Element spezifischen Einstellungen."
 
 -- 2023-10-25
 L.help_keyhelp = [[
@@ -1956,3 +1962,8 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

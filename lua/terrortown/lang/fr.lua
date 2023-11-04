@@ -406,7 +406,7 @@ L.dna_killer = "Échantillon ADN du tueur récupéré sur le corps!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "L'ADN n'a pas pu être récupérée (le tueur s'est déconnecté?)."
 L.dna_armed = "La bombe est amorcée! Désamorcez-la d'abord!"
-L.dna_object = "Vous avez collecté {num} échantillon(s) d'ADN sur cet objet."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "Aucun ADN détecté dans la zone."
 
 L.dna_desc = [[
@@ -1436,7 +1436,7 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1861,7 +1861,6 @@ L.karma_unknown_tooltip = "Inconnu"
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1872,7 +1871,6 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1895,6 +1893,12 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
@@ -1958,3 +1962,8 @@ L.karma_unknown_tooltip = "Inconnu"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

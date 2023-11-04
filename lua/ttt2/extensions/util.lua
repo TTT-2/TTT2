@@ -442,7 +442,7 @@ end
 -- This creates an infinite recursion problem (stack overflow). Registering the function with
 -- this helper function fixes the problem.
 -- @param string name The name of the original function
--- @return Function The pointer to the original functions
+-- @return function The pointer to the original functions
 -- @realm shared
 function util.OverwriteFunction(name)
 	local str = stringSplit(name, ".")
@@ -508,6 +508,19 @@ function util.VectorInBounds(vec, lowerBound, upperBound)
 end
 
 ---
+-- Adjusts a numeric value from one range to a different one in a relative transformation.
+-- @param number value The value that should be mapped
+-- @param number minValue The minimum value that 'value' can have
+-- @param number maxValue The maximum value that 'value' can have
+-- @param number minTargetValue The minimum value that the mapped value can have
+-- @param number maxTargetValue The maximum value that the mapped value can have
+-- @realm shared
+function util.TransformToRange(value, minValue, maxValue, minTargetValue, maxTargetValue)
+	value = mathMax(minValue, mathMin(maxValue, value))
+
+	return minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
+end
+
 -- This is a helper function that checks if any of the current edit modes is active
 -- that has to be left by pressing F1.
 -- @param Player ply The player who might be editing

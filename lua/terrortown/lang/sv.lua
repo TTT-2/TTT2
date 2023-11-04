@@ -39,9 +39,9 @@ L.win_time = "Tiden har tagit slut. Förrädarna har förlorat."
 --L.win_nones = "No-one won!"
 L.win_showreport = "Låt oss ta en titt på rund-rapporten i {num} sekunder."
 
-L.limit_round = "Gränsen för antalet rundor har nåtts. {mapname} kommer laddas snart."
-L.limit_time = "Tidsgränsen har tagit slut. {mapname} kommer laddas snart."
-L.limit_left = "{num} rundor eller {time} minuter återstår innan kartan ändras till {mapname}."
+--L.limit_round = "Round limit reached. The next map will load soon."
+--L.limit_time = "Time limit reached. The next map will load soon."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 --L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
@@ -250,8 +250,7 @@ L.item_weapon = "Vapen"
 
 L.item_armor = "Kroppsrustning"
 L.item_armor_desc = [[
-Reducerar skottskador med 30% när
-du blir träffad.
+Reducerar skottskador med 30% när du blir träffad.
 
 Standard-verktyg för Detektiver.]]
 
@@ -259,20 +258,13 @@ L.item_radar = "Radar"
 L.item_radar_desc = [[
 Tillåter dig att skanna efter livstecken.
 
-Startar automatiskt så fort du
-köper den. Konfigurera den i
-Radar-fliken i den här menyn.]]
+Startar automatiskt så fort du köper den. Konfigurera den i Radar-fliken i den här menyn.]]
 
 L.item_disg = "Förklädare"
 L.item_disg_desc = [[
-Döljer din identitet när den är
-påslagen. Hindrar även att man
-blir den sista sedda personen
-av ett offer.
+Döljer din identitet när den är påslagen. Hindrar även att man blir den sista sedda personen av ett offer.
 
-Slå av/på i Förklädnads-fliken
-i den här menyn eller tryck
-Numpad Enter.]]
+Slå av/på i Förklädnads-fliken i den här menyn eller tryck Numpad Enter.]]
 
 -- C4
 L.c4_hint = "Tryck på {usekey} för att armera eller desarmera."
@@ -308,12 +300,9 @@ L.vis_name = "Visualiserare"
 L.vis_hint = "Tryck {usekey} för att plocka upp (endast Detektiver)."
 
 L.vis_desc = [[
-Verktyg för brottsscens-
-visualisering.
+Verktyg för brottsscens-visualisering.
 
-Analyserar ett lik för att visa
-hur offret dog, men enbart om
-han dog av skottskador.]]
+Analyserar ett lik för att visa hur offret dog, men enbart om han dog av skottskador.]]
 
 -- Decoy
 L.decoy_name = "Lockbete"
@@ -324,11 +313,7 @@ L.decoy_broken = "Ditt Lockbete har förstörts!"
 --L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Visar ett fejkat radar-spår för
-detektiver, och gör så att deras
-DNA-skanner visa platsen för
-Lockbetet om de skannar efter
-ditt DNA.]]
+Visar ett fejkat radar-spår för detektiver, och gör så att deras DNA-skanner visa platsen för Lockbetet om de skannar efter ditt DNA.]]
 
 -- Defuser
 L.defuser_name = "Desarmerare"
@@ -337,20 +322,15 @@ L.defuser_help = "{primaryfire} desarmerar C4 i siktet."
 L.defuser_desc = [[
 Desarmerar C4 omedelbart.
 
-Kan användas oändligt många
-gånger. C4 märks tydligare
-om du bär detta verktyg.]]
+Kan användas oändligt många gånger. C4 märks tydligare om du bär detta verktyg.]]
 
 -- Flare gun
 L.flare_name = "Signalpistol"
 
 L.flare_desc = [[
-Kan användas till att bränna lik
-så att de aldrig återfinns.
-Begränsad ammunition.
+Kan användas till att bränna lik så att de aldrig återfinns. Begränsad ammunition.
 
-Att bränna ett lik gör ett
-tydligt ljud.]]
+Att bränna ett lik gör ett tydligt ljud.]]
 
 -- Health station
 L.hstation_name = "Hälsostation"
@@ -359,52 +339,39 @@ L.hstation_broken = "Din Hälsostation har blivit förstörd!"
 L.hstation_help = "{primaryfire} placerar Hälsostationen."
 
 L.hstation_desc = [[
-Tillåter spelare att helas när
-den är utplacerad.
+Tillåter spelare att helas när den är utplacerad.
 
-Långsam omladdning. Vem som helst
-kan använda den, och den kan utsättas
-för skada. Kan kollas efter DNA-prov
-av dess användare.]]
+Långsam omladdning. Vem som helst kan använda den, och den kan utsättas för skada. Kan kollas efter DNA-prov av dess användare.]]
 
 -- Knife
 L.knife_name = "Kniv"
 L.knife_thrown = "Kastkniv"
 
-L.knife_desc = [[
-Dödar ganska skadade mål
-omedelbart och tyst, men har
-endast ett användningsområde.
-
-Kan kastas med {secondaryfire}]]
+--L.knife_desc = [[
+--Kills wounded targets instantly and silently, but only has a single use.
+--
+--Can be thrown using alternate fire.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Placerar enheter på föremål
-som knuffar omkring dem med
-våldsam kraft.
+Placerar enheter på föremål som knuffar omkring dem med våldsam kraft.
 
-Explosionerna skadar spelare
-i närheten.]]
+Explosionerna skadar spelare i närheten.]]
 
 -- Radio
 L.radio_broken = "Din Radio har blivit förstörd!"
 L.radio_help_pri = "{primaryfire} placerar Radion."
 
 L.radio_desc = [[
-Spelar upp distraherande eller
-bedragande ljud.
+Spelar upp distraherande eller bedragande ljud.
 
-Placera radion någonstans, och spela
-sedan upp ljud på den genom att använda
-Radio-fliken i den här menyn.]]
+Placera radion någonstans, och spela sedan upp ljud på den genom att använda Radio-fliken i den här menyn.]]
 
 -- Silenced pistol
 L.sipistol_name = "Ljuddämpad Pistol"
 
 L.sipistol_desc = [[
-Pistol med dämpade ljud. Använder
-vanlig pistol-ammunition.
+Pistol med dämpade ljud. Använder vanlig pistol-ammunition.
 
 Offer skriker inte när de blir dödade.]]
 
@@ -412,26 +379,21 @@ Offer skriker inte när de blir dödade.]]
 L.newton_name = "Avståndsknuffare"
 
 L.newton_desc = [[
-Knuffa spelare från ett
-bekvämt avstånd.
+Knuffa spelare från ett bekvämt avstånd.
 
-Oändligt med ammunition, men
-laddar om långsamt.]]
+Oändligt med ammunition, men laddar om långsamt.]]
 
 -- Binoculars
 L.binoc_name = "Kikare"
 
 L.binoc_desc = [[
-Zooma in på lik och identifiera dem
-från ett långt avstånd.
+Zooma in på lik och identifiera dem från ett långt avstånd.
 
-Kan användas oändligt många gånger,
-men identifieringen tar några sekunder.]]
+Kan användas oändligt många gånger, men identifieringen tar några sekunder.]]
 
 -- UMP
 L.ump_desc = [[
-Experimentell k-pist som
-desorienterar målen.
+Experimentell k-pist som desorienterar målen.
 
 Använder vanlig k-pist-ammunition.]]
 
@@ -444,16 +406,13 @@ L.dna_killer = "Hittade ett prov av mördarens DNA på liket!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "DNAt kunde inte återfås (har mördaren gått ur spelet?)"
 L.dna_armed = "Bomben går fortfarande! Desarmera den först!"
-L.dna_object = "Samlade in {num} nya DNA-prov från föremålet."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA kunde inte hittas i området. (Har mördaren gått ur spelet?)"
 
 L.dna_desc = [[
-Samla DNA-prov från saker
-och använd dem för att hitta
-dess ägare.
+Samla DNA-prov från saker och använd dem för att hitta dess ägare.
 
-Använd på färska lik för att få
-mördarens DNA och söka upp honom.]]
+Använd på färska lik för att få mördarens DNA och söka upp honom.]]
 
 -- Magneto stick
 L.magnet_name = "Magnetstav"
@@ -481,16 +440,13 @@ L.tele_no_mark = "Ingen plats markerad. Markera en destination innan du teleport
 L.tele_no_mark_ground = "Kan ej markera en teleporteringsplats om du inte står på fast mark!"
 L.tele_no_mark_crouch = "Kan ej markera en teleporteringsplats om du duckar!"
 
-L.tele_help_pri = "{primaryfire} teleporterar till markerad plats."
-L.tele_help_sec = "{secondaryfire} markerar nuvarande plats."
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
-Teleportera till en
-tidigare markerad plats.
+Teleportera till en tidigare markerad plats.
 
-Teleportering orsakar oljud,
-och antalet gånger den
-kan användas är begränsat.]]
+Teleportering orsakar oljud, och antalet gånger den kan användas är begränsat.]]
 
 -- Ammo names, shown when picked up
 L.ammo_pistol = "9mm ammunition"
@@ -540,7 +496,7 @@ L.target_credits = "Sök igenom för att erhålla ospenderade krediter"
 L.tbut_single = "Engångsanvändning"
 L.tbut_reuse = "Omanvändningsbar"
 L.tbut_retime = "Omanvändningsbar efter {num} sekunder"
-L.tbut_help = "Tryck {key} för att aktivera"
+L.tbut_help = "Tryck {usekey} för att aktivera"
 
 -- Spectator muting of living/dead
 L.mute_living = "Levande spelare nedtystade"
@@ -554,24 +510,28 @@ L.punch_bonus = "Din dåliga poäng har sänkt din knuff-mätargräns med {num}"
 L.punch_malus = "Din goda poäng har höjt din knuff-mätargräns med {num}!"
 
 -- Info popups shown when the round starts
-L.info_popup_innocent = [[Du är en oskyldig Terrorist! Men det finns förrädare omkring...
+L.info_popup_innocent = [[
+Du är en oskyldig Terrorist! Men det finns förrädare omkring...
 Vem kan du lita på, och vem är ute för att mörda dig?
 
 Var aktsam och arbeta med dina kamrater för att komma ut härifrån levande!]]
 
-L.info_popup_detective = [[Du är en Detektiv! Terrorist-högkvarteren har givit dig speciella resurser för att finna förrädarna.
+L.info_popup_detective = [[
+Du är en Detektiv! Terrorist-högkvarteren har givit dig speciella resurser för att finna förrädarna.
 Använd dem för att hjälpa de oskyldiga överleva, men var försiktig:
 förrädarna kommer att försöka ta ned dig först!
 
 Tryck {menukey} för att få dina verktyg!]]
 
-L.info_popup_traitor_alone = [[Du är en FÖRRÄDARE! Du har inga förrädarkamrater denna runda.
+L.info_popup_traitor_alone = [[
+Du är en FÖRRÄDARE! Du har inga förrädarkamrater denna runda.
 
 Döda alla andra för att vinna!
 
 Tryck {menukey} för att få dina verktyg!]]
 
-L.info_popup_traitor = [[Du är en FÖRRÄDARE! Arbeta med dina förrädarkamrater för att döda alla andra.
+L.info_popup_traitor = [[
+Du är en FÖRRÄDARE! Arbeta med dina förrädarkamrater för att döda alla andra.
 Men var försiktig, annars kan ditt förräderi upptäckas...
 
 Detta är dina kamrater:
@@ -582,7 +542,8 @@ Tryck {menukey} för att få dina verktyg!]]
 -- Various other text
 L.name_kick = "En spelare blev utsparkad automatiskt för att ha bytt sitt namn under en runda."
 
-L.idle_popup = [[Du var borta i {num} sekunder och blev därför förflyttad till Åskådar-läge. Så länge du är i detta läge kommer du inte att kunna spela när en ny runda börjar.
+L.idle_popup = [[
+Du var borta i {num} sekunder och blev därför förflyttad till Åskådar-läge. Så länge du är i detta läge kommer du inte att kunna spela när en ny runda börjar.
 
 Du kan slå av/på Åskådar-läge när som helst genom att trycka på {helpkey} och bocka av lådan i inställningsfliken. Du kan även välja att stänga av det nu medsamma.]]
 
@@ -672,7 +633,7 @@ L.tip36 = "En genomgång av spelläget finns tillgängligt under {helpkey}. I de
 
 L.tip37 = "På poängtavlan kan du klicka på någons namn och välja en tagg för dem, t.ex. 'misstänkt' eller 'vän'. Denna tagg dyker sedan upp om du siktar på spelaren."
 
-L.tip38 = "Många placerbara verktyg (såsom C4, Radio) kan sättas fast på väggar genom att klicka på {secondaryfire}."
+--L.tip38 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
 
 L.tip39 = "C4 som exploderar på grund av en misslyckad desarmering har mindre explosionsradie än en C4 där timern når noll."
 
@@ -1242,16 +1203,16 @@ L.help_title = "Hjälp och Inställningar"
 --L.label_bind_disguiser = "Toggle disguiser"
 
 -- 2020-06-24
-L.dna_help_primary = "{primaryfire} för att ta DNA-prov"
-L.dna_help_secondary = "{secondaryfire} för att öppna skann-kontroller"
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
 --L.dna_help_reload = "Delete a sample"
 
-L.binoc_help_pri = "{primaryfire} identifirerar ett lik."
-L.binoc_help_sec = "{secondaryfire} ändrar inzoomnings-nivån."
+--L.binoc_help_pri = "Search a body."
+--L.binoc_help_sec = "Change zoom level."
 
-L.vis_help_pri = "{primaryfire} släpper det aktiverade redskapet."
+--L.vis_help_pri = "Drop the activated device."
 
-L.decoy_help_pri = "{primaryfire} riggar Lockbetet."
+--L.decoy_help_pri = "Plant the Decoy."
 
 -- 2020-08-07
 --L.pickup_error_spec = "You cannot pick this up as a spectator."
@@ -1475,7 +1436,7 @@ L.hilite_win_traitors = "FÖRRÄDISK VINST"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1900,7 +1861,6 @@ L.hilite_win_traitors = "FÖRRÄDISK VINST"
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1911,7 +1871,6 @@ L.hilite_win_traitors = "FÖRRÄDISK VINST"
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1997,3 +1956,8 @@ L.hilite_win_traitors = "FÖRRÄDISK VINST"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

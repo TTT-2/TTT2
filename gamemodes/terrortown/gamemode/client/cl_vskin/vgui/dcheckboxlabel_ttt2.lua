@@ -103,7 +103,7 @@ end
 
 ---
 -- @param any val
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(val, ignoreConVar)
 	self:SetIgnoreConVar(ignoreConVar)
@@ -111,7 +111,7 @@ function PANEL:SetValue(val, ignoreConVar)
 end
 
 ---
--- @param bool value
+-- @param boolean value
 -- @realm client
 function PANEL:SetDefaultValue(value)
 	local noDefault = true
@@ -131,7 +131,7 @@ function PANEL:SetDefaultValue(value)
 end
 
 ---
--- @return bool defaultValue, if unset returns false
+-- @return boolean defaultValue, if unset returns false
 -- @realm client
 function PANEL:GetDefaultValue()
 	return tobool(self.default)

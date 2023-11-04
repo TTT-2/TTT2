@@ -26,7 +26,7 @@ vguihandler = vguihandler or {
 -- @param number w The width of the panel
 -- @param number h The height of the panel
 -- @param string title The title of the panel
--- @return @{Panel} The created/cleared DFrameTTT2 object
+-- @return Panel The created/cleared DFrameTTT2 object
 -- @realm client
 function vguihandler.GenerateFrame(w, h, title)
 	local frame = vgui.Create("DFrameTTT2")

@@ -408,7 +408,7 @@ L.dna_killer = "Вы собрали образец ДНК убийцы с это
 L.dna_duplicate = "Совпадение! У вас уже есть этот образец ДНК в сканере."
 L.dna_no_killer = "Образец ДНК не может быть собран (убийца покинул сервер?)."
 L.dna_armed = "Бомба все ещё работает! Сначала обезвредьте её!"
-L.dna_object = "Собрано новых образцов ДНК: {num}."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "ДНК не обнаружено в этой области."
 
 L.dna_desc = [[
@@ -807,7 +807,7 @@ L.aw_flg2_title = "Сигнальная ракета обозначает ого
 L.aw_flg2_text = "рассказал {num} людям об опасности ношения легковоспламеняющейся одежды."
 
 L.aw_hug1_title = "Большой разброс"
-L.aw_hug1_text = "был в гармонии со своим H.U.G.E, умудрившись как-то заставить свои пули убить 4 человек."
+--L.aw_hug1_text = "was in tune with their H.U.G.E, somehow managing to make their bullets hit {num} people."
 
 L.aw_hug2_title = "Терпеливая пара"
 L.aw_hug2_text = "продолжал стрелять из H.U.G.E. и обнаружил, что терпение вознаградило его {num} убийствами."
@@ -1438,7 +1438,7 @@ L.spawn_ammo_rifle = "Точка боеприпасов: снайперские"
 L.spawn_ammo_shotgun = "Точка боеприпасов: дробовиков"
 L.spawn_player_random = "Точка случайного игрока"
 
-L.spawn_weapon_ammo = " (Боеприпасов: {ammo})"
+L.spawn_weapon_ammo = "(Боеприпасов: {ammo})"
 
 L.spawn_weapon_edit_ammo = "[{walkkey}] + [{primaryfire} или {secondaryfire}]: увеличить или уменьшить боеприпасы этой точки оружия"
 
@@ -1863,7 +1863,6 @@ L.tbut_adminarea = "Администраторская зона:"
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1874,7 +1873,6 @@ L.tbut_adminarea = "Администраторская зона:"
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1897,6 +1895,12 @@ L.tbut_adminarea = "Администраторская зона:"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
@@ -1960,3 +1964,8 @@ L.tbut_adminarea = "Администраторская зона:"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"

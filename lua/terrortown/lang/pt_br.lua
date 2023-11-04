@@ -250,8 +250,7 @@ L.item_weapon = "Arma"
 
 L.item_armor = "Colete Balístico"
 L.item_armor_desc = [[
-Reduz o dano das balas em 30%
-quando você é atingido.
+Reduz o dano das balas em 30% quando você é atingido.
 
 Equipamento padrão de Detetives.]]
 
@@ -259,16 +258,13 @@ L.item_radar = "Radar"
 L.item_radar_desc = [[
 Permite varrer sinais vitais.
 
-Varre automaticamente assim que você o compra.
-Configure-o na aba Radar deste menu.]]
+Varre automaticamente assim que você o compra. Configure-o na aba Radar deste menu.]]
 
 L.item_disg = "Disfarce"
 L.item_disg_desc = [[
-Oculta sua identidade enquanto habilitado. Também
-evita ser a última pessoa vista por uma vítima.
+Oculta sua identidade enquanto habilitado. Também evita ser a última pessoa vista por uma vítima.
 
-Habilite-o na aba Disfarce deste menu
-ou aperte a tecla Enter do teclado numérico.]]
+Habilite-o na aba Disfarce deste menu ou aperte a tecla Enter do teclado numérico.]]
 
 -- C4
 L.c4_hint = "Pressione {usekey} para armar ou desarmar."
@@ -306,9 +302,7 @@ L.vis_hint = "Pressione {usekey} para pegar (somente Detetives)."
 L.vis_desc = [[
 Permite visualizar uma cena de crime.
 
-Analisa um cadáver para mostrar como
-a vítima morreu, mas somente se
-ela tiver morrido por ferimentos de armas de fogo.]]
+Analisa um cadáver para mostrar como a vítima morreu, mas somente se ela tiver morrido por ferimentos de armas de fogo.]]
 
 -- Decoy
 L.decoy_name = "Isca"
@@ -319,10 +313,7 @@ L.decoy_short_desc = "Está isca, mostrará um radar falso para o outro time."
 L.decoy_pickup_wrong_team = "Você não pode pegar está isca, pertence ao time diferente!"
 
 L.decoy_desc = [[
-Mostra um sinal de radar falso para Detetives,
-e faz os scanners de DNA deles indicar a
-localização da sua Isca se eles procurarem
-a amostra do seu DNA.]]
+Mostra um sinal de radar falso para Detetives, e faz os scanners de DNA deles indicar a localização da sua Isca se eles procurarem a amostra do seu DNA.]]
 
 -- Defuser
 L.defuser_name = "Kit de Desarme"
@@ -331,15 +322,13 @@ L.defuser_help = "{primaryfire} desarma um C4 que está sob sua mira."
 L.defuser_desc = [[
 Instantaneamente desarma um explosivo C4.
 
-Usos ilimitados. Um C4 será mais fácil de
-ser notado se você estiver com isto equipado.]]
+Usos ilimitados. Um C4 será mais fácil de ser notado se você estiver com isto equipado.]]
 
 -- Flare gun
 L.flare_name = "Pistola Sinalizadora"
 
 L.flare_desc = [[
-Pode ser usado para queimar cadáveres para que
-eles nunca sejam encontrados. Munição limitada.
+Pode ser usado para queimar cadáveres para que eles nunca sejam encontrados. Munição limitada.
 
 Queimar um cadáver emite um som estranho.]]
 
@@ -352,28 +341,22 @@ L.hstation_help = "{primaryfire} posiciona a Estação de Cura."
 L.hstation_desc = [[
 Permite que as pessoas se curem quando posicionada.
 
-Seu tempo de recarga é lento. Qualquer um pode
-usá-la, e ela pode ser danificada. Pode ser usada
-para analisar o DNA de seus utilizadores.]]
+Seu tempo de recarga é lento. Qualquer um pode usá-la, e ela pode ser danificada. Pode ser usada para analisar o DNA de seus utilizadores.]]
 
 -- Knife
 L.knife_name = "Faca"
 L.knife_thrown = "Faca arremessada"
 
 L.knife_desc = [[
-Mata o alvo instantaneamente e de forma silenciosa,
-mas só pode ser usada uma vez.
+Mata o alvo instantaneamente e de forma silenciosa, mas só pode ser usada uma vez.
 
-Pode ser arremessada ao usar
-o botão de ataque alternativo.]]
+Pode ser arremessada ao usar o botão de ataque alternativo.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Planta batedores em objetos para empurrar pessoas
-à sua volta de maneira violenta.
+Planta batedores em objetos para empurrar pessoas à sua volta de maneira violenta.
 
-A energia causa dano em pessoas
-que estejam nas proximidades.]]
+A energia causa dano em pessoas que estejam nas proximidades.]]
 
 -- Radio
 L.radio_broken = "Seu Rádio foi destruído!"
@@ -382,16 +365,13 @@ L.radio_help_pri = "{primaryfire} posiciona o Rádio."
 L.radio_desc = [[
 Reproduz sons para distrair e/ou enganar.
 
-Posicione o Rádio em algum lugar, e então
-reproduza os sons nele utilizando a aba Rádio
-deste menu.]]
+Posicione o Rádio em algum lugar, e então reproduza os sons nele utilizando a aba Rádio deste menu.]]
 
 -- Silenced pistol
 L.sipistol_name = "Pistola Silenciada"
 
 L.sipistol_desc = [[
-Pistola de baixo ruído, usa munição
-de pistola normal.
+Pistola de baixo ruído, usa munição de pistola normal.
 
 As vítimas não gritarão quando forem mortas.]]
 
@@ -407,16 +387,13 @@ Sua munição é infinita, mas dispara lentamente.]]
 L.binoc_name = "Binóculos"
 
 L.binoc_desc = [[
-Permite dar zoom em cadáveres para identificá-los
-a partir de uma longa distância.
+Permite dar zoom em cadáveres para identificá-los a partir de uma longa distância.
 
-Seus usos são ilimitados, porém o processo
-de identificação demora alguns segundos.]]
+Seus usos são ilimitados, porém o processo de identificação demora alguns segundos.]]
 
 -- UMP
 L.ump_desc = [[
-SMG experimental que desorienta
-alvos.
+SMG experimental que desorienta alvos.
 
 Usa munição de SMG comum.]]
 
@@ -433,12 +410,9 @@ L.dna_object = "A mostra coletada para o dono deste objeto."
 L.dna_gone = "Não há nenhuma amostra de DNA nesta área."
 
 L.dna_desc = [[
-Colete amostras de DNA de objetos
-e analise-as para saber quem os usou.
+Colete amostras de DNA de objetos e analise-as para saber quem os usou.
 
-Utilize-o em terroristas recentemente mortos
-para coletar a amostra do DNA do assassino e assim
-poder rastreá-lo.]]
+Utilize-o em terroristas recentemente mortos para coletar a amostra do DNA do assassino e assim poder rastreá-lo.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -466,14 +440,13 @@ L.tele_no_mark = "Nenhum local marcado. Marque um local para teletransportar-se.
 L.tele_no_mark_ground = "Você não pode marcar um local para teletransportar-se se você não estiver em um chão sólido!"
 L.tele_no_mark_crouch = "Você não pode marcar um local para teletransportar-se enquanto estiver agachado!"
 
-L.tele_help_pri = "{primaryfire} teletransporta para o local marcado."
-L.tele_help_sec = "{secondaryfire} marca um local de teletransporte."
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
 Teletransporta para um local previamente marcado.
 
-Teletransportar-se faz barulho, e tem
-um número limitado de usos.]]
+Teletransportar-se faz barulho, e tem um número limitado de usos.]]
 
 -- Ammo names, shown when picked up
 L.ammo_pistol = "Munição de Pistola"
@@ -523,7 +496,7 @@ L.target_credits = "Vasculhe para receber créditos não gastos"
 L.tbut_single = "Uso único"
 L.tbut_reuse = "Reutilizável"
 L.tbut_retime = "Reutilizável após {num} seg"
-L.tbut_help = "Pressione {key} para ativar"
+L.tbut_help = "Pressione {usekey} para ativar"
 
 -- Spectator muting of living/dead
 L.mute_living = "Jogadores vivos emudecidos"
@@ -1022,7 +995,7 @@ L.door_locked = "Esta porta esta trancada."
 
 -- 2020-02-11
 L.automoved_to_spec = "(MENSAGEM AUTOMATICA) Eu fui movimentado para o Espetador porque eu estava Parado/AFK."
-L.mute_team = "{time} mutado."
+L.mute_team = "{team} mutado."
 
 -- 2020-02-16
 L.door_auto_closes = "Esta porta fecha automaticamente.."
@@ -1463,7 +1436,7 @@ L.xfer_team_indicator = "Time"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1888,7 +1861,6 @@ L.xfer_team_indicator = "Time"
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1899,7 +1871,6 @@ L.xfer_team_indicator = "Time"
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1922,6 +1893,12 @@ L.xfer_team_indicator = "Time"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
@@ -1985,3 +1962,8 @@ L.xfer_team_indicator = "Time"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
