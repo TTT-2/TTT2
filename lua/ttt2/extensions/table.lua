@@ -89,7 +89,7 @@ end
 ---
 -- Checks if a table has a value.
 -- @note For optimization, functions that look for a value by sorting the table should never be needed if you work on a table that you built yourself.
--- @note Override of the original <a href="https://wiki.garrysmod.com/page/table/HasValue">table.HasValue</a> check with nil check
+-- @note Override of the original <a href="https://wiki.facepunch.com/gmod/table.HasValue">table.HasValue</a> check with nil check
 -- @warning This function is very inefficient for large tables (O(n)) and should probably not be called in things that run each frame. Instead, consider a table structure such as example 2 below.
 -- @param table tbl Table to check
 -- @param any val Value to search for

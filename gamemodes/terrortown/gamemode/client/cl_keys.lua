@@ -136,11 +136,11 @@ end
 ---
 -- Called whenever a @{Player} pressed a key included within the IN keys.<br />
 -- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonDown}.
--- @warning Due to this being a predicted hook, <a href="https://wiki.garrysmod.com/page/Global/ParticleEffect">ParticleEffects</a>
+-- @warning Due to this being a predicted hook, <a href="https://wiki.facepunch.com/gmod/Global.ParticleEffect">ParticleEffects</a>
 -- created only serverside from this hook will not be networked to the client, so make sure to do that on both realms
 -- @predicted
 -- @param Player ply The @{Player} pressing the key. If running client-side, this will always be LocalPlayer
--- @param number key The key that the player pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the player pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @note Note that for some reason KeyPress and KeyRelease are called multiple times
 -- for the same key event in multiplayer.
 -- @hook
@@ -159,7 +159,7 @@ end
 -- Runs when a IN key was released by a player.<br />
 -- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonUp}.
 -- @param Player ply The @{Player} releasing the key. If running client-side, this will always be LocalPlayer
--- @param number key The key that the player released using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the player released using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @predicted
 -- @hook
 -- @realm client

@@ -50,7 +50,7 @@ end
 -- @param string default
 -- @return string
 -- @realm shared
--- @ref https://wiki.garrysmod.com/page/input/LookupBinding
+-- @ref https://wiki.facepunch.com/gmod/input.LookupBinding
 function Key(binding, default)
 	local b = input.LookupBinding(binding)
 	if not b then

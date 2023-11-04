@@ -233,7 +233,7 @@ end
 -- This hook is called after @{GM:PlayerTick}.
 -- See <a href="https://wiki.facepunch.com/gmod/Game_Movement">Game Movement</a> for an explanation on the move system.
 -- @param Player ply The player
--- @param MoveData moveData Movement information
+-- @param CMoveData moveData Movement information
 -- @predicted
 -- @hook
 -- @realm shared

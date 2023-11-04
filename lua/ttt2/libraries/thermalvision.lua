@@ -19,6 +19,11 @@ end
 
 thermalvision = {}
 
+---@alias thermalvision_mode
+---| `THERMALVISION_MODE_BOTH`
+---| `THERMALVISION_MODE_NOTVISIBLE`
+---| `THERMALVISION_MODE_VISIBLE`
+
 THERMALVISION_MODE_BOTH = 0
 THERMALVISION_MODE_NOTVISIBLE = 1
 THERMALVISION_MODE_VISIBLE = 2
@@ -232,7 +237,7 @@ end
 ---
 -- Adds entities into the @{Entity} list that should be rendered with thermalvision
 -- @param table ents list of @{Entity} that should be added
--- @param[default=THERMALVISION_MODE_BOTH] enum mode when should the entity be rendererd
+-- @param[default=THERMALVISION_MODE_BOTH] thermalvision_mode mode when should the entity be rendererd
 -- @realm client
 function thermalvision.Add(ents, mode)
 	ents = istable(ents) and ents or {ents}
@@ -263,7 +268,7 @@ end
 ---
 -- Sets entities of the @{Entity} list to the specified mode
 -- @param table ents list of @{Entity} that should be set
--- @param enum mode when should the entity be rendererd
+-- @param thermalvision_mode mode when should the entity be rendered
 -- @realm client
 function thermalvision.Set(ents, mode)
 	ents = istable(ents) and ents or {ents}

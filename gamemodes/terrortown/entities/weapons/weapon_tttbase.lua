@@ -1,7 +1,7 @@
 ---
 -- @class SWEP
 -- @desc Custom weapon base, used to derive from CS one, still very similar.
--- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
+-- See <a href="https://wiki.facepunch.com/gmod/Weapon">Weapon</a>
 -- @section weapon_tttbase
 
 local math = math
@@ -661,7 +661,7 @@ end
 
 ---
 -- A convenience function to shoot bullets
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
@@ -721,7 +721,7 @@ end
 
 ---
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return number
 -- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
