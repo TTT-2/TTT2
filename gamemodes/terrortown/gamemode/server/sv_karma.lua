@@ -371,7 +371,7 @@ end
 -- damage factor of the attacker.
 -- @param Player attacker
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm server
 function KARMA.Hurt(attacker, victim, dmginfo)
 	if attacker == victim
@@ -414,7 +414,7 @@ end
 -- Handle karma change due to one player killing another.
 -- @param Player attacker
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm server
 function KARMA.Killed(attacker, victim, dmginfo)
 	if attacker == victim
@@ -756,7 +756,7 @@ end
 -- Modify the karma penalty multiplier.
 -- @param Player attacker The player who attacked someone and should receive a penalty
 -- @param Player victim The player that was attacked
--- @param DamageInfo dmginfo The damage info from the attack
+-- @param CTakeDamageInfo dmginfo The damage info from the attack
 -- @return nil|number Return the karma multiplier
 -- @hook
 -- @realm server
