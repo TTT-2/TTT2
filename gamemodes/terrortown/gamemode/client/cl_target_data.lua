@@ -8,9 +8,9 @@ TARGET_DATA = {}
 
 ---
 -- Initializes the @{TARGET_DATA} object
--- @param entity ent The focused Entity
--- @param entity unchangedEnt The original focused Entity if focus was changed by the hook
--- @param number distance The distance to the focused Entity
+-- @param Entity ent The focused Entity
+-- @param Entity unchangedEnt The original focused entity if focus was changed by the hook
+-- @param number distance The distance to the focused entity
 -- @return TARGET_DATA The object to be used in the hook
 -- @internal
 -- @realm client

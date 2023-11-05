@@ -1,6 +1,6 @@
 ---
 -- Shared extensions to player table
--- @ref https://wiki.garrysmod.com/page/Category:Player
+-- @ref https://wiki.facepunch.com/gmod/Player
 -- @class Player
 
 local net = net
@@ -809,7 +809,7 @@ end
 -- never use cursor tracing anyway.
 -- @param MASK mask The trace mask. This determines what the trace should hit and what it shouldn't hit.
 -- A mask is a combination of CONTENTS_Enums - you can use these for more advanced masks.
--- @ref https://wiki.garrysmod.com/page/Structures/Trace
+-- @ref https://wiki.facepunch.com/gmod/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
 	mask = mask or MASK_SOLID

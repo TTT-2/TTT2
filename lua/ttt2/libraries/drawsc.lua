@@ -168,9 +168,9 @@ end
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
 -- @param number xalign The alignment of the x coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param[default=0] number angle The rotational angle in degree
 -- @2D
 -- @realm client
@@ -189,9 +189,9 @@ end
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
 -- @param number xalign The alignment of the x coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param[default=0] number angle The rotational angle in degree
 -- @2D
 -- @realm client

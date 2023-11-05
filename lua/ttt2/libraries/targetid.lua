@@ -69,10 +69,10 @@ end
 -- Use this in combination with the hook @GM:TTTModifyTargetedEntity to create your own Remote Camera with TargetIDs.
 -- e.g. This is used in @GM:HUDDrawTargetID before drawing the TargetIDs. Use that code as example.
 -- @note This finds the next Entity, that doesn't get filtered out and can get hit by a bullet, from a position in a direction.
--- @param vector pos Position of Ray Origin.
--- @param vector dir Direction of the Ray. Should be normalized.
+-- @param Vector pos Position of Ray Origin.
+-- @param Vector dir Direction of the Ray. Should be normalized.
 -- @param table filter List of all @{Entity}s that should be filtered out.
--- @return entity The Entity that got found
+-- @return Entity The Entity that got found
 -- @return number The Distance between the Origin and the Entity
 -- @realm client
 function targetid.FindEntityAlongView(pos, dir, filter)
