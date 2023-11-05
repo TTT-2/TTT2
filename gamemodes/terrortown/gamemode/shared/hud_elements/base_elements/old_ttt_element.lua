@@ -46,7 +46,6 @@ if CLIENT then
 
 	---
 	-- Draws a rounded bar
-	-- The bar painting is loosely based on: http://wiki.garrysmod.com/?title=Creating_a_HUD
 	-- @param number bs
 	-- @param number x
 	-- @param number y

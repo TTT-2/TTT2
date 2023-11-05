@@ -32,7 +32,7 @@ local mathFloor = math.floor
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
@@ -296,7 +296,7 @@ end
 ---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number t times
 -- @realm shared
 -- @todo improve description
@@ -416,7 +416,7 @@ end
 ---
 -- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
 -- @param number seconds
--- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
+-- @param string fmt the <a href="https://wiki.facepunch.com/gmod/string.format">format</a>
 -- @return string
 -- @realm shared
 function util.SimpleTime(seconds, fmt)
@@ -442,7 +442,7 @@ end
 -- This creates an infinite recursion problem (stack overflow). Registering the function with
 -- this helper function fixes the problem.
 -- @param string name The name of the original function
--- @return Function The pointer to the original functions
+-- @return function The pointer to the original functions
 -- @realm shared
 function util.OverwriteFunction(name)
 	local str = stringSplit(name, ".")

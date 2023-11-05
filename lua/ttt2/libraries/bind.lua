@@ -349,7 +349,7 @@ end
 ---
 -- Add a binding to run a command when the button is pressed. This function is not used to register a new binding shown in
 -- the UI, but to bind a specific key to a command
--- @param number btn The button ID, see: <a href="BUTTON_CODE_Enums">https://wiki.garrysmod.com/page/Enums/BUTTON_CODE</a>
+-- @param number btn The button ID, see: <a href="https://wiki.facepunch.com/gmod/Enums/BUTTON_CODE">BUTTON_CODE_Enums</a>
 -- @param string name The command that should be executed
 -- @param boolean persistent
 -- @realm client

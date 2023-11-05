@@ -243,12 +243,12 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 		itemName = allCallbackString
 	end
 
-	-- If no key is given, subscribe to changes of all keys of the item	
+	-- If no key is given, subscribe to changes of all keys of the item
 	if not isstring(key) then
 		key = allCallbackString
 	end
 
-	-- If no identifier is given just choose one	
+	-- If no identifier is given just choose one
 	if not isstring(identifier) then
 		identifier = allCallbackString
 	end
@@ -295,7 +295,7 @@ function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 		skipWrongItemName = false
 	end
 
-	-- If no key is given, remove callbacks of all keys of the item	
+	-- If no key is given, remove callbacks of all keys of the item
 	local skipWrongKey = true
 	if not isstring(key) then
 		skipWrongKey = false
@@ -338,7 +338,7 @@ end
 
 ---
 -- Converts the given value of a database with its key
--- @warning this function shall be removed and replaced with orm conversion. 
+-- @warning this function shall be removed and replaced with orm conversion.
 -- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
 -- while the other uses "0" and "1" for booleans
 -- @param string value the value to convert with a key
@@ -367,7 +367,7 @@ end
 
 ---
 -- Converts the given table of a database
--- @warning this function shall be removed and replaced with orm conversion. 
+-- @warning this function shall be removed and replaced with orm conversion.
 -- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
 -- while the other uses "0" and "1" for booleans
 -- @param table dataTable the table to convert with their respective keys
@@ -868,7 +868,7 @@ end
 if CLIENT then
 	---
 	-- Is automatically called internally when a client joins, can be called by a player to force an update, but is normally not necessary
-	-- @param function OnReceiveFunc() the function that is called when the registered databases are received
+	-- @param function OnReceiveFunc the function that is called when the registered databases are received
 	-- @realm client
 	-- @internal
 	function database.GetRegisteredDatabases(OnReceiveFunc)
@@ -900,7 +900,7 @@ if CLIENT then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
-	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
+	-- @param function OnReceiveFunc The function that gets called with the following parameters: boolean, whether the database table exists; any?, the value of the requested item
 	-- @realm client
 	function database.GetValue(accessName, itemName, key, OnReceiveFunc)
 		local index = nameToIndex[accessName]
@@ -1031,7 +1031,7 @@ if SERVER then
 	-- @note Only Admins can write to the database, no matter the accessLevel
 	-- @param number index the local index of the database
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
-	-- @return bool, bool hasReadAccess, hasWriteAccess, if the player can read from or write to the database
+	-- @return boolean,boolean hasReadAccess, hasWriteAccess, if the player can read from or write to the database
 	-- @realm server
 	-- @internal
 	local function hasAccessToDatabase(index, plyID64)
@@ -1093,14 +1093,14 @@ if SERVER then
 	---
 	-- Call this when you want to setup a database that needs to be accessible by server and client
 	-- If you dont call this function before anything else, it wont work. Choose any name as accessName so that others can easily use it.
-	-- @note If the SqlTable does not exist, it will be created with the given savingKeys 
+	-- @note If the SqlTable does not exist, it will be created with the given savingKeys
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
 	-- @param[default = TTT2_DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `TTT2_DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
 	-- @note If accessLevel is set to TTT2_DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access, whereas TTT2_DATABASE_ACCESS_ANY only gives read-, but not write-access to anyone
 	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
-	-- @return bool isSuccessful if the database exists and is successfully registered
+	-- @return boolean isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.Register(databaseName, accessName, savingKeys, accessLevel, additionalData)
 		accessLevel = accessLevel or TTT2_DATABASE_ACCESS_ADMIN
@@ -1179,7 +1179,7 @@ if SERVER then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
 	-- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
-	-- @return bool, if the requested item and/or key was successfully registered in the sql datatable
+	-- @return boolean if the requested item and/or key was successfully registered in the sql datatable
 	-- @return any, the value that was saved in the database or the default
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
@@ -1265,7 +1265,7 @@ if SERVER then
 	-- Get the stored table database if it exists and was registered
 	-- @note Only gets the saved and converted sql Tables, they dont include every possible item with their default values.
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @return bool, if the requested table was successfully registered in the sql datatable
+	-- @return boolean if the requested table was successfully registered in the sql datatable
 	-- @return table datatable that was saved
 	-- @realm server
 	function database.GetTable(accessName)
@@ -1411,7 +1411,7 @@ if SERVER then
 	-- Reset the database and send a message to the client
 	-- @note It is restricted to players with TTT2_DATABASE_ACCESS_ADMIN or higher at all times
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
+	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.Reset(accessName, plyID64)
 		local index = nameToIndex[accessName]

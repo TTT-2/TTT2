@@ -172,7 +172,7 @@ net.Receive("shopFallback", shopFallback)
 -- the shops if needed
 -- @param number subrole subrole id of a @{ROLE}
 -- @param string fallback the fallback @{ROLE}'s name
--- @param nil|Player|table if this is nil, it will be broadcasted to every available @{Player}
+-- @param nil|Player|table ply_or_rf if this is nil, it will be broadcasted to every available @{Player}
 -- @realm server
 -- @internal
 function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)

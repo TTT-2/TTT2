@@ -240,7 +240,7 @@ end
 -- else returns nil
 -- @param Player victim
 -- @param Player attacker
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @return table sample
 -- @realm server
 local function GetKillerSample(victim, attacker, dmg)
@@ -352,7 +352,7 @@ realdamageinfo = 0
 -- Creates client or server ragdoll depending on settings
 -- @param Player ply
 -- @param Player attacker
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return Entity the CORPSE
 -- @realm server
 function CORPSE.Create(ply, attacker, dmginfo)

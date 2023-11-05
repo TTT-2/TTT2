@@ -1,5 +1,5 @@
 ---
--- @ref https://wiki.garrysmod.com/page/Category:Entity
+-- @ref https://wiki.facepunch.com/gmod/Entity
 -- @class Entity
 
 local safeCollisionGroups = {

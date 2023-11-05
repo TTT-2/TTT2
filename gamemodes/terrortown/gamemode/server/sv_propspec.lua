@@ -112,7 +112,7 @@ local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY,
 ---
 -- Triggers an event based on the pressed key
 -- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
--- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @return boolean
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:KeyPress

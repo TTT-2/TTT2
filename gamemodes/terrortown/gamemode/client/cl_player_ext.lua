@@ -12,8 +12,8 @@ end
 -- @param ACT act The @{ACT} or sequence that should be played
 -- @param number weight The weight this slot should be set to. Value must be ranging from 0 to 1.
 -- @realm client
--- @see https://wiki.garrysmod.com/page/Player/AnimRestartGesture
--- @see https://wiki.garrysmod.com/page/Player/AnimSetGestureWeight
+-- @see https://wiki.facepunch.com/gmod/Player:AnimRestartGesture
+-- @see https://wiki.facepunch.com/gmod/Player:AnimSetGestureWeight
 function plymeta:AnimApplyGesture(act, weight)
 	self:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true) -- true = autokill
 	self:AnimSetGestureWeight(GESTURE_SLOT_CUSTOM, weight)
@@ -170,7 +170,7 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
 -- @param Player ply The @{Player} that sets up its movement
--- @param MoveData mv The move data to override/use
+-- @param CMoveData mv The move data to override/use
 -- @param CUserCmd cmd The command data
 -- @hook
 -- @realm client

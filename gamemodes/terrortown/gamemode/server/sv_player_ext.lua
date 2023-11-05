@@ -528,7 +528,7 @@ end
 
 ---
 -- Sends the last words based on the DamageInfo
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm server
 function plymeta:SendLastWords(dmginfo)
 	-- Use a pseudo unique id to prevent people from abusing the concmd

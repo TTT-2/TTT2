@@ -157,7 +157,7 @@ if SERVER then
 	---
 	-- greatly simplified version of SDK's game_shard/gamerules.cpp:RadiusDamage
 	-- does no block checking, radius should be very small
-	-- @param DamageInfo dmginfo The damage to inflict.
+	-- @param CTakeDamageInfo dmginfo The damage to inflict.
 	-- @param Vector pos The origin of the damage radius.
 	-- @param number radius The radius of the damage to inflict.
 	-- @param nil|Player inflictor The player responsible for the damage.
