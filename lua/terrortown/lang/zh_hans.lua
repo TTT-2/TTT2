@@ -1896,7 +1896,7 @@ L.label_voice_scaling_mode_log = "对数"
 
 -- 2023-10-23
 L.header_miscellaneous_settings = "其他设置"
-L.label_hud_pulsate_health_enable= "当生命值低于 25% 时，生命条会出现脉动"
+L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"
 L.header_hud_elements_customize = "自定义 HUD 元素"
 L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
 
