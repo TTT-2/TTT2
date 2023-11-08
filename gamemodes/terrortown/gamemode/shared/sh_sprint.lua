@@ -4,40 +4,15 @@ SPRINT = {
 	-- Set up ConVars
 	convars = {
 		-- @realm shared
-		enabled = CreateConVar(
-			"ttt2_sprint_enabled",
-			"1",
-			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
-			"Toggle Sprint (Def: 1)"
-		),
+		enabled = CreateConVar("ttt2_sprint_enabled", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "Toggle Sprint (Def: 1)"),
 		-- @realm shared
-		multiplier = CreateConVar(
-			"ttt2_sprint_max",
-			"0.5",
-			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
-			"The speed modifier the player will receive. Will be added on top of 1, so 0.5 => 1.5 speed. (Def: 0.5)"
-		),
+		multiplier = CreateConVar("ttt2_sprint_max", "0.5", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The speed modifier the player will receive. Will be added on top of 1, so 0.5 => 1.5 speed. (Def: 0.5)"),
 		-- @realm shared
-		consumption = CreateConVar(
-			"ttt2_sprint_stamina_consumption",
-			"0.6",
-			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
-			"The speed of the stamina consumption (per second; Def: 0.6)"
-		),
+		consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The speed of the stamina consumption (per second; Def: 0.6)"),
 		-- @realm shared
-		regeneration = CreateConVar(
-			"ttt2_sprint_stamina_regeneration",
-			"0.3",
-			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
-			"The regeneration time of the stamina (per second; Def: 0.3)"
-		),
+		regeneration = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The regeneration time of the stamina (per second; Def: 0.3)"),
 		-- @realm shared
-		showCrosshair = CreateConVar(
-			"ttt2_sprint_crosshair",
-			"0",
-			{ FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED },
-			"Should the Crosshair be visible while sprinting? (Def: 0)"
-		),
+		showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "Should the Crosshair be visible while sprinting? (Def: 0)"),
 	},
 }
 
