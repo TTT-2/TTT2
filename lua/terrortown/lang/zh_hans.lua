@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "观察者模式（永远观察）"
 L.label_gameplay_fastsw = "武器快速切换"
 L.label_gameplay_hold_aim = "启用持续瞄准"
 L.label_gameplay_mute = "死亡时静音存活玩家"
-L.label_gameplay_dtsprint_enable = "启用双击冲刺"
-L.label_gameplay_dtsprint_anykey = "冲刺时任何方向键都持续冲刺"
 L.label_hud_default = "默认 HUD"
 L.label_hud_force = "强制 HUD"
 
 L.label_bind_weaponswitch = "捡起武器"
-L.label_bind_sprint = "冲刺"
 L.label_bind_voice = "全局语言"
 L.label_bind_voice_team = "团队语言"
 
