@@ -9,6 +9,8 @@ PLAYER.CrouchedWalkSpeed = 0.3
 
 -- This is needed to allow adding custom networked variables to the player entity
 -- Can be useful for e.g. variables necessary for prediction like the stamina.
+-- @realm shared
+-- @internal
 function PLAYER:SetupDataTables()
 	self.Player:SetupDataTables()
 end

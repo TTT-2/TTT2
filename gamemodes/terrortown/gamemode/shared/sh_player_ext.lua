@@ -17,6 +17,9 @@ if not plymeta then
 	return
 end
 
+---
+-- @internal
+-- @realm shared
 function plymeta:SetupDataTables()
 	-- This has to be transferred, because we need the value when predicting the player movement
 	-- It turned out that this is the only reliable way to fix all prediction errors.
