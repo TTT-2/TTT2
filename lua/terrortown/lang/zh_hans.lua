@@ -1969,6 +1969,6 @@ L.header_soundeffect_settings = "声音效果"
 L.header_voiceandvolume_settings = "声音和音量设置"
 
 -- 2023-11-06
---L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
---L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
---L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+L.drop_reserve_prevented = "有东西阻止你丢弃后备弹药。"
+L.drop_no_reserve = "储备弹药不足，无法作为弹药箱投放。"
+L.drop_no_room_ammo = "这里没地方放弹药了！"
