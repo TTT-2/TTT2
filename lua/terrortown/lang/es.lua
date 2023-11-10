@@ -1047,7 +1047,7 @@ L.hud_health = "Salud"
 --L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 --L.submenu_appearance_performance_title = "Performance"
 --L.submenu_appearance_interface_title = "Interface"
---L.submenu_appearance_miscellaneous_title = "Misellaneous"
+--L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 --L.submenu_gameplay_general_title = "General"
 --L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
@@ -1967,3 +1967,8 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"

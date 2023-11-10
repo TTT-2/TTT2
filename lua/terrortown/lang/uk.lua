@@ -262,7 +262,7 @@ L.item_radar_desc = [[
 
 L.item_disg = "Маскування"
 L.item_disg_desc = [[
-При вмиканні приховує вашу інформацію. Також уникає бути людиною, яку востаннє бачила жертва. 
+При вмиканні приховує вашу інформацію. Також уникає бути людиною, яку востаннє бачила жертва.
 
 Перемикайте маскування у відповідній вкладці цього меню або натисніть клавішу Numpad Enter.]]
 
@@ -339,7 +339,7 @@ L.hstation_broken = "Вашу Оздоровчу Станцію знищено!"
 L.hstation_help = "{primaryfire}, щоб розташувати Оздоровчу Станцію."
 
 L.hstation_desc = [[
-Розташувавши це ви зможете лікувати інших людей. 
+Розташувавши це ви зможете лікувати інших людей.
 
 Повільна регенерація. Кожен може користуватися нею, та вона може бути зламана. Використовуйте її, щоб зібрати ДНК користувачів.]]
 
@@ -1047,7 +1047,7 @@ L.help_title = "Допомога та Налаштування"
 --L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 --L.submenu_appearance_performance_title = "Performance"
 --L.submenu_appearance_interface_title = "Interface"
---L.submenu_appearance_miscellaneous_title = "Misellaneous"
+--L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 --L.submenu_gameplay_general_title = "General"
 --L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
@@ -1894,6 +1894,12 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
 
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
 -- 2023-10-25
 --L.help_keyhelp = [[
 --Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
@@ -1961,3 +1967,8 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
