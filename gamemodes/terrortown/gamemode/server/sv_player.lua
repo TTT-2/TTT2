@@ -1462,7 +1462,7 @@ end
 -- @return nil|boolean Return false to prevent transfer
 -- @hook
 -- @realm server
-function GM:TTT2CheckFindCredits(ply, rag)
+function GM:TTT2GiveFoundCredits(ply, rag)
 
 end
 
