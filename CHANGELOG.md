@@ -26,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to render rotated text on screen (by @TimGoll)
 - Added Ukrainian translation from base TTT (by @ErickMaksimets)
 - Added Swedish translation from base TTT (by @Kefta)
+- Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
 
 ### Changed
 
@@ -40,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 - Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
+- Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
 
 ### Fixed
 
