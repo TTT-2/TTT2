@@ -9,11 +9,21 @@ local IsValid = IsValid
 local hook = hook
 local math = math
 
+---@class Player
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
 
 	return
+end
+
+---
+-- @internal
+-- @realm shared
+function plymeta:SetupDataTables()
+	-- This has to be transferred, because we need the value when predicting the player movement
+	-- It turned out that this is the only reliable way to fix all prediction errors.
+	self:NetworkVar("Float", 0, "SprintStamina")
 end
 
 ---

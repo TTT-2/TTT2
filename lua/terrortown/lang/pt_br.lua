@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "Ativar modo espectador (ficar sempre em modo espect
 L.label_gameplay_fastsw = "Troca de arma rápida"
 L.label_gameplay_hold_aim = "Ativar segurar para mirar"
 L.label_gameplay_mute = "Mutar jogadores vivos quando morrer"
-L.label_gameplay_dtsprint_enable = "Ativar apertar duas veze para correr"
-L.label_gameplay_dtsprint_anykey = "Continuar apertando duas vezes antes de você parar"
 L.label_hud_default = "HUD Padrão"
 L.label_hud_force = "HUD Forçada"
 
 L.label_bind_weaponswitch = "Pegar arma"
-L.label_bind_sprint = "Correr"
 L.label_bind_voice = "Microfone Global"
 L.label_bind_voice_team = "Microfone do Time"
 

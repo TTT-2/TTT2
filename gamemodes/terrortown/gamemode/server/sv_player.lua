@@ -106,6 +106,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	player_manager.SetPlayerClass(ply, "player_ttt")
+
 	-- reset any cached weapons
 	ply:ResetCachedWeapons()
 
