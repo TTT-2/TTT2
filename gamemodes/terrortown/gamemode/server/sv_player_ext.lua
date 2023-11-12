@@ -1308,6 +1308,137 @@ function plymeta:SafeDropWeapon(wep, keepSelection)
 	return true
 end
 
+local function TraceAmmoDrop(ply)
+	local pos, ang = ply:GetShootPos(), ply:EyeAngles()
+	local fwd, rgt, up = ang:Forward(), ang:Right(), ang:Up()
+
+	local dir = fwd * 32
+	rgt:Mul(6)
+	up:Mul(-5)
+	dir:Add(rgt)
+	dir:Add(up)
+
+	local tr = util.QuickTrace(pos, dir, ply)
+
+	return tr, pos, dir, fwd
+end
+
+---
+-- Checks if the ammo can be dropped in a safe manner.
+-- @param Weapon wep The weapon's ammo that should be dropped
+-- @return boolean Returns if this weapon's ammo can be dropped
+-- @realm server
+function plymeta:CanSafeDropAmmo(wep)
+	if not IsValid(self) or not (IsValid(wep) and wep.AmmoEnt) then
+		return false
+	end
+
+	local tr = TraceAmmoDrop(self)
+
+	if tr.HitWorld then
+		LANG.Msg(self, "drop_no_room_ammo", nil, MSG_MSTACK_WARN)
+
+		return false
+	end
+
+	return true
+end
+
+---
+-- Called to drop ammo in a safe manner (e.g. preparing and space-check).
+-- @param Weapon wep The weapon that should be referenced when dropping ammo.
+-- @param[default=false] boolean useClip If set to true the ammo is dropped from the clip, otherwise, from reserve ammo.
+-- @param[default=0] number amt The quantity of ammo to drop.
+-- @return boolean Returns if ammo is dropped
+-- @realm server
+function plymeta:SafeDropAmmo(wep, useClip, amt)
+	if not self:CanSafeDropAmmo(wep) then
+		return false
+	end
+
+	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+
+	self:DropAmmo(wep, useClip, amt)
+
+	return true
+end
+
+---
+-- Called to drop a weapon's ammo. Does no safety checks.
+-- @param Weapon wep The weapon's ammo that should be dropped
+-- @param[default=false] boolean useClip If set to true the ammo is dropped from the clip, otherwise, from reserve ammo.
+-- @param[default=0] number amt The quantity of ammo to drop.
+-- @return boolean Returns if this weapon's ammo is dropped.
+-- @realm server
+function plymeta:DropAmmo(wep, useClip, amt)
+	amt = amt or 0
+
+	local box = ents.Create(wep.AmmoEnt)
+
+	if not IsValid(box) then return end
+
+	-- most of this goes into computing ammo amount
+	if amt <= 0 then
+		if useClip then
+			amt = wep:Clip1()
+		else
+			amt = math.min(
+				wep.Primary.ClipSize,
+				self:GetAmmoCount(wep.Primary.Ammo)
+			)
+		end
+	end
+	local hook_data = {amt}
+
+	---
+	-- @realm server
+	if hook.Run("TTT2DropAmmo", self, hook_data) == false then
+		LANG.Msg(self, useClip and "drop_ammo_prevented" or "drop_reserve_prevented", nil, MSG_MSTACK_WARN)
+
+		return false
+	end
+	amt = hook_data[1]
+	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
+		LANG.Msg(self, useClip and "drop_no_ammo" or "drop_no_reserve", nil, MSG_MSTACK_WARN)
+
+		return false
+	end
+
+	local _, pos, dir, fwd = TraceAmmoDrop(self)
+
+	pos:Add(dir)
+
+	box:SetPos(pos)
+	box:SetOwner(self)
+	box:Spawn()
+	box:PhysWake()
+
+	local phys = box:GetPhysicsObject()
+
+	if IsValid(phys) then
+		fwd:Mul(1000)
+
+		phys:ApplyForceCenter(fwd)
+		phys:ApplyForceOffset(VectorRand(), vector_origin)
+	end
+
+	box.AmmoAmount = amt
+
+	timer.Simple(2, function()
+		if not IsValid(box) then return end
+
+		box:SetOwner(nil)
+	end)
+
+	if useClip then
+		wep:SetClip1( math.max(wep:Clip1() - amt, 0) )
+	else
+		self:RemoveAmmo(amt, wep.Primary.Ammo)
+	end
+
+	return true
+end
+
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object

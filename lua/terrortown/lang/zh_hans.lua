@@ -1964,3 +1964,8 @@ L.label_HUD_enable_box_blur = "启用用户界面框背景模糊"
 L.submenu_gameplay_voiceandvolume_title = "声音和音量"
 L.header_soundeffect_settings = "声音效果"
 L.header_voiceandvolume_settings = "声音和音量设置"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
