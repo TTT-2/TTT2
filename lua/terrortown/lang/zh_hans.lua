@@ -1850,7 +1850,7 @@ L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub�
 
 L.sb_rank_tooltip_developer = "TTT2开发者"
 L.sb_rank_tooltip_vip = "TTT2支持者"
-L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
+L.sb_rank_tooltip_addondev = "TTT2插件开发者"
 L.sb_rank_tooltip_admin = "服务器管理员"
 L.sb_rank_tooltip_streamer = "主播"
 L.sb_rank_tooltip_heroes = "TTT2 英雄"
