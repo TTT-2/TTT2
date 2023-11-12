@@ -1116,7 +1116,6 @@ L.hud_health = "Salud"
 --L.label_gameplay_fastsw = "Fast weapon switch"
 --L.label_gameplay_hold_aim = "Enable hold to aim"
 --L.label_gameplay_mute = "Mute living players when dead"
---L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
 --L.label_hud_default = "Default HUD"
 --L.label_hud_force = "Forced HUD"
 
