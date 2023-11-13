@@ -6,15 +6,15 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-CORPSE_KILL_NONE = 0
+CORPSE_KILL_NO_DATA = 0
 
-CORPSE_KILL_POINT_BLANK = 1
-CORPSE_KILL_CLOSE = 2
-CORPSE_KILL_FAR = 3
+CORPSE_KILL_DISTANCE_POINT_BLANK = 1
+CORPSE_KILL_DISTANCE_CLOSE = 2
+CORPSE_KILL_DISTANCE_FAR = 3
 
-CORPSE_KILL_FRONT = 1
-CORPSE_KILL_BACK = 2
-CORPSE_KILL_SIDE = 3
+CORPSE_KILL_DIRECTION_FRONT = 1
+CORPSE_KILL_DIRECTION_BACK = 2
+CORPSE_KILL_DIRECTION_SIDE = 3
 
 ---
 -- @realm shared
@@ -197,15 +197,15 @@ if SERVER then
 		sceneData.killWaterLevel = rag.scene.waterLevel or 0
 		sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 
-		sceneData.killDistance = CORPSE_KILL_NONE
+		sceneData.killDistance = CORPSE_KILL_NO_DATA
 		if rag.scene.hit_trace then
 			local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
 			if rawKillDistance < 200 then
-				sceneData.killDistance = CORPSE_KILL_POINT_BLANK
+				sceneData.killDistance = CORPSE_KILL_DISTANCE_POINT_BLANK
 			elseif rawKillDistance < 700 then
-				sceneData.killDistance = CORPSE_KILL_CLOSE
+				sceneData.killDistance = CORPSE_KILL_DISTANCE_CLOSE
 			else
-				sceneData.killDistance = CORPSE_KILL_FAR
+				sceneData.killDistance = CORPSE_KILL_DISTANCE_FAR
 
 			end
 		end
@@ -215,16 +215,16 @@ if SERVER then
 			sceneData.killHitGroup = rag.scene.hit_group
 		end
 
-		sceneData.killOrientation = CORPSE_KILL_NONE
+		sceneData.killOrientation = CORPSE_KILL_NO_DATA
 		if rag.scene.hit_trace and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
-				sceneData.killOrientation = CORPSE_KILL_BACK
+				sceneData.killOrientation = CORPSE_KILL_DIRECTION_BACK
 			elseif rawKillAngle < 135 then
-				sceneData.killOrientation = CORPSE_KILL_SIDE
+				sceneData.killOrientation = CORPSE_KILL_DIRECTION_SIDE
 			else
-				sceneData.killOrientation = CORPSE_KILL_FRONT
+				sceneData.killOrientation = CORPSE_KILL_DIRECTION_FRONT
 			end
 		end
 
@@ -320,15 +320,15 @@ if CLIENT then
 	}
 
 	local distanceToText = {
-		[CORPSE_KILL_POINT_BLANK] = "search_kill_distance_point_blank",
-		[CORPSE_KILL_CLOSE] = "search_kill_distance_close",
-		[CORPSE_KILL_FAR] = "search_kill_distance_far"
+		[CORPSE_KILL_DISTANCE_POINT_BLANK] = "search_kill_distance_point_blank",
+		[CORPSE_KILL_DISTANCE_CLOSE] = "search_kill_distance_close",
+		[CORPSE_KILL_DISTANCE_FAR] = "search_kill_distance_far"
 	}
 
 	local orientationToText = {
-		[CORPSE_KILL_FRONT] = "search_kill_from_front",
-		[CORPSE_KILL_BACK] = "search_kill_from_back",
-		[CORPSE_KILL_SIDE] = "search_kill_from_side"
+		[CORPSE_KILL_DIRECTION_FRONT] = "search_kill_from_front",
+		[CORPSE_KILL_DIRECTION_BACK] = "search_kill_from_back",
+		[CORPSE_KILL_DIRECTION_SIDE] = "search_kill_from_side"
 	}
 
 	local floorIDToText = {
@@ -427,7 +427,7 @@ if CLIENT then
 				}}
 			}
 
-			if data.killOrientation ~= CORPSE_KILL_NONE then
+			if data.killOrientation ~= CORPSE_KILL_NO_DATA then
 				rawText.text[#rawText.text + 1] = {
 					body = orientationToText[data.killOrientation],
 					params = nil
@@ -463,7 +463,7 @@ if CLIENT then
 				}}
 			}
 
-			if data.dist ~= CORPSE_KILL_NONE then
+			if data.dist ~= CORPSE_KILL_NO_DATA then
 				rawText.text[#rawText.text + 1] = {
 					body = distanceToText[data.killDistance],
 					params = nil
