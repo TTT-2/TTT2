@@ -223,7 +223,7 @@ end
 ---
 -- @param table params
 -- @realm client
-function PANEL:SetParams(params)
+function PANEL:SetTextParams(params)
 	self.params = params
 end
 
@@ -251,7 +251,7 @@ end
 ---
 -- @return table
 -- @realm client
-function PANEL:GetParams()
+function PANEL:GetTextParams()
 	return self.params
 end
 

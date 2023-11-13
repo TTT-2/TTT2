@@ -199,7 +199,7 @@ function PANEL:MakeCheckBox(data)
 	left:SetResetButton(reset)
 
 	left:SetText(data.label)
-	left:SetParams(data.params)
+	left:SetTextParams(data.params)
 
 	-- Set default if possible even if the convar could still overwrite it
 	left:SetDefaultValue(data.default)
@@ -433,7 +433,7 @@ function PANEL:MakeHelp(data)
 	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(data.label)
-	left:SetParams(data.params)
+	left:SetTextParams(data.params)
 	left:SetContentAlignment(7)
 	left:SetAutoStretchVertical(true)
 
@@ -448,7 +448,7 @@ function PANEL:MakeHelp(data)
 
 	-- make sure the height is based on the amount of text inside
 	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetParams()))
+		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
 
 		local textWrapped = draw.GetWrappedText(
 			textTranslated,

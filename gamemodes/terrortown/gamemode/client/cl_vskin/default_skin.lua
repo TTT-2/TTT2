@@ -441,7 +441,7 @@ function SKIN:PaintCheckBoxLabel(panel, w, h)
 
 	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
 
-	local params = panel:GetParams()
+	local params = panel:GetTextParams()
 
 	drawSimpleText(
 		params and ParT(panel:GetText(), params) or TryT(panel:GetText()),
@@ -528,8 +528,8 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	drawBox(0, h - sizes.border, w, sizes.border, colorLine)
 
 	local translatedText = ""
-	if panel:HasParams() then
-		translatedText = string.upper(ParT(panel:GetText(), panel:GetParams()))
+	if panel:HasTextParams() then
+		translatedText = string.upper(ParT(panel:GetText(), panel:GetTextParams()))
 	else
 		translatedText = string.upper(TryT(panel:GetText()))
 	end
@@ -785,7 +785,7 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.helpBox)
 	drawBox(0, 0, 4, h, colors.helpBar)
 
-	local textTranslated = ParT(panel:GetText(), TryT(panel:GetParams()))
+	local textTranslated = ParT(panel:GetText(), TryT(panel:GetTextParams()))
 	local textWrapped = drawGetWrappedText(
 		textTranslated,
 		w - 2 * panel.paddingX,

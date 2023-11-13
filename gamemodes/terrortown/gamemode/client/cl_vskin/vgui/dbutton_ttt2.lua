@@ -39,21 +39,21 @@ end
 ---
 -- @param table params
 -- @realm client
-function PANEL:SetParams(params)
+function PANEL:SetTextParams(params)
 	self.data.params = params
 end
 
 ---
 -- @return table
 -- @realm client
-function PANEL:GetParams()
+function PANEL:GetTextParams()
 	return self.data.params
 end
 
 ---
 -- @return boolean
 -- @realm client
-function PANEL:HasParams()
+function PANEL:HasTextParams()
 	return self.data.params ~= nil
 end
 
