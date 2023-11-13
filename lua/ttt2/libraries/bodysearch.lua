@@ -59,6 +59,8 @@ if SERVER then
 			return
 		end
 
+		-- the search ID should always be set back to nil after a body was confirmed
+		-- meaning that the search procedure was ended and the UID is no longer needed
 		ply.searchID = nil
 
 		if creditsOnly then
