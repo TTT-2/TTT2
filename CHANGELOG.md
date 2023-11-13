@@ -36,9 +36,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to render rotated text on screen (by @TimGoll)
 - Added Ukrainian translation from base TTT (by @ErickMaksimets)
 - Added Swedish translation from base TTT (by @Kefta)
+- Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
 
 ### Changed
 
+- Changed sprint stamina to also consume while in air
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
   - Remove redundant string translations and spaces
@@ -58,9 +60,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
 - Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
+- Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
 
 ### Fixed
 
+- Fixed prediction of the sprinting system, for high ping situations (by @saibotk, thanks to @wgetJane)
 - Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
 - Multiple internal fixes
   - biggest teamkiller award should now work
@@ -86,6 +90,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Removed `ttt_confirm_death` and `ttt_call_detective` as they are now handled via proper net messages
 - Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
+- Removed double tap sprinting, for easier prediction handling (by @saibotk)
+- Removed explicit "Sprint" key bind, please use the GMod native sprint key binding (by @saibotk)
+- Removed unused clientside `Player.preventSprint` flag (by @saibotk)
 
 ## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
 

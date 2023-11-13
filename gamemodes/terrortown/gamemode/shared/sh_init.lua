@@ -587,6 +587,7 @@ ttt_include("sh_hudelement_module")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
+ttt_include("sh_playerclass")
 
 ---
 -- Returns the equipment's file name

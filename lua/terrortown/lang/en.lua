@@ -1074,13 +1074,10 @@ L.label_gameplay_specmode = "Spectate-only mode (always stay spectator)"
 L.label_gameplay_fastsw = "Fast weapon switch"
 L.label_gameplay_hold_aim = "Enable hold to aim"
 L.label_gameplay_mute = "Mute living players when dead"
-L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
-L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
 L.label_hud_default = "Default HUD"
 L.label_hud_force = "Forced HUD"
 
 L.label_bind_weaponswitch = "Pickup Weapon"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Global Voice Chat"
 L.label_bind_voice_team = "Team Voice Chat"
 
@@ -2062,3 +2059,8 @@ L.label_HUD_enable_box_blur = "Enable UI box background blur"
 L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 L.header_soundeffect_settings = "Sound Effects"
 L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+L.drop_no_room_ammo = "You have no room here to drop your ammo!"

@@ -1074,13 +1074,10 @@ L.label_gameplay_specmode = "Tryb obserwatora (zawsze bądź obserwatorem)"
 L.label_gameplay_fastsw = "Szybkie przełącznie broni"
 L.label_gameplay_hold_aim = "Trzymaj aby celować"
 L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
-L.label_gameplay_dtsprint_enable = "Włącz 2x przód, aby sprintować"
-L.label_gameplay_dtsprint_anykey = "Sprintuj dopóki Ci się nie szkończy wytrzymałość"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
 L.label_bind_weaponswitch = "Zmień broń"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Globalny Czat"
 L.label_bind_voice_team = "Teamowy Czat"
 
@@ -2062,3 +2059,8 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"

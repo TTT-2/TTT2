@@ -1074,13 +1074,10 @@ L.label_gameplay_specmode = "Modalità solo spettatore (rimani sempre in spettat
 L.label_gameplay_fastsw = "Cambio armi veloce"
 L.label_gameplay_hold_aim = "Tieni premuto per mirare"
 L.label_gameplay_mute = "Muta tutti i giocatori vivi quando muori"
-L.label_gameplay_dtsprint_enable = "Abilita la corsa con il doppio tap"
-L.label_gameplay_dtsprint_anykey = "Continua la corsa finché non smette di muoverti"
 L.label_hud_default = "HUD di Default"
 L.label_hud_force = "Forza HUD"
 
 L.label_bind_weaponswitch = "Prendi Arma"
-L.label_bind_sprint = "Corsa"
 L.label_bind_voice = "Chat Vocale Globale"
 L.label_bind_voice_team = "Chat Vocale di Squadra"
 
@@ -2062,3 +2059,8 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"

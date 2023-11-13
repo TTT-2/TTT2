@@ -1074,13 +1074,10 @@ L.label_gameplay_specmode = "Ativar modo espectador (ficar sempre em modo espect
 L.label_gameplay_fastsw = "Troca de arma rápida"
 L.label_gameplay_hold_aim = "Ativar segurar para mirar"
 L.label_gameplay_mute = "Mutar jogadores vivos quando morrer"
-L.label_gameplay_dtsprint_enable = "Ativar apertar duas veze para correr"
-L.label_gameplay_dtsprint_anykey = "Continuar apertando duas vezes antes de você parar"
 L.label_hud_default = "HUD Padrão"
 L.label_hud_force = "HUD Forçada"
 
 L.label_bind_weaponswitch = "Pegar arma"
-L.label_bind_sprint = "Correr"
 L.label_bind_voice = "Microfone Global"
 L.label_bind_voice_team = "Microfone do Time"
 
@@ -2062,3 +2059,8 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
