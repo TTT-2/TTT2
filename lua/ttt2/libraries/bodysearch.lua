@@ -270,6 +270,7 @@ if CLIENT then
 	local table = table
 	local IsValid = IsValid
 	local pairs = pairs
+	local DynT = LANG.GetDynamicTranslation
 
 	net.ReceiveStream("TTT2_BodySearchData", function(searchStreamData)
 		local eq = {} -- placeholder for the hook, not used right now
