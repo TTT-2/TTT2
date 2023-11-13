@@ -142,8 +142,8 @@ if SERVER then
 
 	---
 	-- Assimilates the scene data from the player death. Uses multiple sources of data collected in different
-	-- hooks and puts them all inside the sceneData table that is retuned. The table has a few entries that are
-	-- always present if scene data is collected. Some more in depth information might depend on the role of
+	-- hooks and puts them all inside the sceneData table that is returned. The table has a few entries that are
+	-- always present if scene data is collected. Some more in-depth information might depend on the role of
 	-- the player that is currently searching the body.
 	-- @param Player inspector The player that searches the corpse
 	-- @param Entity rag The ragdoll entity that is searched
@@ -202,10 +202,11 @@ if SERVER then
 			local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
 			if rawKillDistance < 200 then
 				sceneData.killDistance = CORPSE_KILL_POINT_BLANK
-			elseif rawKillDistance >= 700 then
-				sceneData.killDistance = CORPSE_KILL_FAR
-			elseif rawKillDistance >= 200 then
+			elseif rawKillDistance < 700 then
 				sceneData.killDistance = CORPSE_KILL_CLOSE
+			else
+				sceneData.killDistance = CORPSE_KILL_FAR
+
 			end
 		end
 
@@ -725,11 +726,11 @@ if CLIENT then
 	}
 
 	---
-	-- Generated the search box data from the provided data for a given type.
+	-- Generate the search box data from the provided data for a given type.
 	-- @note This function is used to populate the UI of the bodysearch menu. You probably don't want to use this.
 	-- @param string type The element type identifier
 	-- @param table sceneData The scene data that is provided to get the box contents
-	-- @return nil|table Returns `nil` if no data for given type is available, table with box content if available
+	-- @return nil|table Returns `nil` if no data for the given type is available, table with box content if available
 	-- @realm client
 	function bodysearch.GetContentFromData(type, sceneData)
 		-- make sure type is valid
@@ -792,9 +793,8 @@ if CLIENT then
 	end
 
 	---
-	-- This function handles the storing of the streamed search result data. It takes into account
-	-- who searched the body and with which role. Also new data is appended to existing data to only
-	-- improve what a player knows, but to never remove information on.
+	-- This function handles the storing of the streamed search result data.
+	-- New data will append/overwrite existing data, but not remove it.
 	-- This functions considers the roles and the settings of the local player and the player that
 	-- inspected the body.
 	-- @param table sceneData The table of scene data that should be stored
@@ -883,7 +883,7 @@ if CLIENT then
 	function bodysearch.ClientConfirmsCorpse(rag, searchUID, isLongRange, playerCanTakeCredits)
 		local clientRoleData = LocalPlayer():GetSubRoleData()
 		local creditsOnly = playerCanTakeCredits
-			and GetConVar("ttt2_inspect_confirm_mode"):GetInt() > 0
+			and cvInspectConfirmMode:GetInt() > 0
 			and not (clientRoleData.isPolicingRole and clientRoleData.isPublicRole)
 
 		net.Start("ttt2_client_confirm_corpse")
