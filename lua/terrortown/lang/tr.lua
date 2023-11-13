@@ -967,8 +967,7 @@ L.hstation_short_desc = "Sağlık istasyonu zaman içinde yavaş yavaş şarj ol
 -- 2019-11-03
 L.vis_short_desc = "Kurban ateşli silahla yaralanarak öldüyse olay yerini gösterir"
 L.corpse_binoculars = "Cesedi dürbünle aramak için [{key}] tuşuna basın."
-|||UNTRANSLATED_CONTENT_START|||L.binoc_progress = "Search progress {progress}%|||UNTRANSLATED_CONTENT_END|||
-
+L.binoc_progress = "Aranıyor: %{progress}"
 L.pickup_no_room = "Bu silah türü için envanterinizde yer yok."
 L.pickup_fail = "Bu silahı alamazsın."
 L.pickup_pending = "Zaten bir silah aldın, alana kadar bekle."
@@ -1221,7 +1220,7 @@ L.pickup_error_noslot = "Boş alanın olmadığı için bunu alamazsın."
 -- 2020-11-02"
 L.lang_server_default = "Sunucu Varsayılanı"
 L.help_lang_info = [[
-|||UNTRANSLATED_CONTENT_START|||This translation is {coverage}% complete with the English language taken as a default reference.|||UNTRANSLATED_CONTENT_END|||
+Bu çeviri %{coverage} oranında tamamlandı ve İngilizce dili varsayılan referans olarak alındı.
 
 Bu çevirilerin topluluk tarafından yapıldığını unutmayın. Bir şey eksik veya yanlışsa katkıda bulunmaktan çekinmeyin.]]
 
