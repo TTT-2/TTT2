@@ -158,7 +158,7 @@ if SERVER then
 		local inspectorRoleData = inspector:GetSubRoleData()
 		local isPublicPolicingSearch = inspectorRoleData.isPolicingRole and inspectorRoleData.isPublicRole
 
-		-- data that is available to everyone
+		-- data that is available to everyone and is not overwritten on data update on the client
 		sceneData.base = {}
 		sceneData.base.inspector = inspector
 		sceneData.base.isPublicPolicingSearch = isPublicPolicingSearch and inspector:IsActive() and not isCovert
