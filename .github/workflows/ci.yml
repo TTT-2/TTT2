@@ -3,6 +3,7 @@ name: CI
 env:
   GLUALINT_VERSION: 1.26.0
   NEODOC_VERSION: 0.1.6
+  STYLUA_VERSION: 0.20.0
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -12,13 +13,10 @@ on:
   pull_request:
     branches: [master]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   lint:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v4
 
@@ -31,11 +29,21 @@ jobs:
       - name: Check code with glualint
         run: ./glualint .
 
-  doc-check:
-    # The type of runner that the job will run on
+  style:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: JohnnyMorganz/stylua-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ env.STYLUA_VERSION }}
+          args: --check .
+
+  doc-check:
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
