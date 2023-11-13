@@ -50,31 +50,31 @@ net.Receive("TTT2SendConfirmMsg", function()
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 
-	if IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID then
-		SEARCHSCRN:UpdateUIWhenPlayerWasConfirmed()
+	if IsValid(SEARCHSCREEN.menuFrame) and SEARCHSCREEN.data.searchUID == searchUID then
+		SEARCHSCREEN:UpdateUIWhenPlayerWasConfirmed()
 	end
 end)
 
 net.Receive("ttt2_credits_were_taken", function()
 	local searchUID = net.ReadUInt(16)
 
-	if IsValid(SEARCHSCRN.menuFrame) and SEARCHSCRN.data.searchUID == searchUID then
-		SEARCHSCRN:UpdateUIWhenCreditsWereTaken()
+	if IsValid(SEARCHSCREEN.menuFrame) and SEARCHSCREEN.data.searchUID == searchUID then
+		SEARCHSCREEN:UpdateUIWhenCreditsWereTaken()
 	end
 end)
 
 ---
--- @class SEARCHSCRN
-SEARCHSCRN = SEARCHSCRN or {}
-SEARCHSCRN.sizes = SEARCHSCRN.sizes or {}
-SEARCHSCRN.menuFrame = SEARCHSCRN.menuFrame or nil
-SEARCHSCRN.data = SEARCHSCRN.data or {}
-SEARCHSCRN.infoBoxes = {}
+-- @class SEARCHSCREEN
+SEARCHSCREEN = SEARCHSCREEN or {}
+SEARCHSCREEN.sizes = SEARCHSCREEN.sizes or {}
+SEARCHSCREEN.menuFrame = SEARCHSCREEN.menuFrame or nil
+SEARCHSCREEN.data = SEARCHSCREEN.data or {}
+SEARCHSCREEN.infoBoxes = {}
 
 ---
 -- Calculates and caches the dimensions of the bodysearch UI.
 -- @realm client
-function SEARCHSCRN:CalculateSizes()
+function SEARCHSCREEN:CalculateSizes()
 	self.sizes.width = 600
 	self.sizes.height = 500
 	self.sizes.padding = 10
@@ -100,7 +100,7 @@ end
 ---
 -- Updates the UI if the player, that is inspected right now, was confirmed.
 -- @realm client
-function SEARCHSCRN:UpdateUIWhenPlayerWasConfirmed()
+function SEARCHSCREEN:UpdateUIWhenPlayerWasConfirmed()
 	self.buttonConfirm:SetEnabled(false)
 	self.buttonConfirm:SetText("search_confirmed")
 	self.buttonConfirm:SetIcon(nil)
@@ -125,7 +125,7 @@ end
 ---
 -- Updates the UI if the player, that is inspected right now, lost their credits.
 -- @realm client
-function SEARCHSCRN:UpdateUIWhenCreditsWereTaken()
+function SEARCHSCREEN:UpdateUIWhenCreditsWereTaken()
 	-- if credits were taken, remove credit box
 	local creditBox = self.infoBoxes["credits"]
 	if IsValid(creditBox) then
@@ -147,7 +147,7 @@ end
 -- @param[opt] number height The height of the element
 -- @return Panel The box element
 -- @realm client
-function SEARCHSCRN:MakeInfoItem(parent, name, data, height)
+function SEARCHSCREEN:MakeInfoItem(parent, name, data, height)
 	local box = vgui.Create("DInfoItemTTT2", parent)
 	box:SetSize(self.sizes.widthContentBox, height or self.sizes.heightInfoItem)
 	box:Dock(TOP)
@@ -164,7 +164,7 @@ end
 -- Show the searchscreen with the provided data. Generates the whole UI.
 -- @param table data The scene data that should be added
 -- @realm client
-function SEARCHSCRN:Show(data)
+function SEARCHSCREEN:Show(data)
 	local client = LocalPlayer()
 
 	self:CalculateSizes()
@@ -383,7 +383,7 @@ end
 ---
 -- Closes the curren searchscreen window if open
 -- @realm client
-function SEARCHSCRN:Close()
+function SEARCHSCREEN:Close()
 	if not IsValid(self.menuFrame) then return end
 
 	self.menuFrame:CloseFrame()

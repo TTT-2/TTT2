@@ -286,9 +286,9 @@ if CLIENT then
 			-- if there is more elaborate data already available
 			-- confirming this body, then this should be used instead
 			if bodysearch.PlayerHasDetailedSearchResult(searchStreamData.ragOwner) then
-				SEARCHSCRN:Show(bodysearch.GetSearchResult(searchStreamData.ragOwner))
+				SEARCHSCREEN:Show(bodysearch.GetSearchResult(searchStreamData.ragOwner))
 			else
-				SEARCHSCRN:Show(searchStreamData)
+				SEARCHSCREEN:Show(searchStreamData)
 			end
 		end
 
