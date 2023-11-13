@@ -1877,7 +1877,7 @@ L.search_dmg_teleport = "It looks like their DNA was scrambled by tachyon emissi
 L.search_dmg_car = "When this terrorist crossed the road, they were run over by a reckless driver."
 L.search_dmg_other = "You cannot find a specific cause of this terrorist's death."
 
-L.search_floor_antlionss = "There are still antlions all over the body. The floor must be covered with them."
+L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
 L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
 L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
 L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
