@@ -44,6 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 - Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
+- Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
 
 ### Fixed
 
