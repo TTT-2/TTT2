@@ -293,8 +293,8 @@ if CLIENT then
 			-- sprint bar
 			ty = ty + bh + spc
 
-			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				self:DrawBar(nx, ty, bw, sbh, color_sprint, client.sprintProgress, t_scale, "")
+			if SPRINT.convars.enabled:GetBool() then
+				self:DrawBar(nx, ty, bw, sbh, color_sprint, client:GetSprintStamina(), t_scale, "")
 			end
 
 			-- coin info

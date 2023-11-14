@@ -243,7 +243,16 @@ net.Receive("TTT2RevivalStopped", function()
 end)
 
 net.Receive("TTT2RevivalUpdate_IsReviving", function()
-	LocalPlayer().isReviving = net.ReadBool()
+	local client = LocalPlayer()
+
+	client.isReviving = net.ReadBool()
+
+	if not client.isReviving then return end
+
+	if not system.HasFocus() then
+		system.FlashWindow()
+	end
+	client:EmitSound("items/smallmedkit1.wav")
 end)
 
 net.Receive("TTT2RevivalUpdate_RevivalBlockMode", function()

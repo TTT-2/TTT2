@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "観戦者モード（常時観戦者になれます
 L.label_gameplay_fastsw = "高速武器スイッチ"
 L.label_gameplay_hold_aim = "Aimの固定を有効"
 L.label_gameplay_mute = "死んだとき生存者のボイスチャットをミュートにする"
-L.label_gameplay_dtsprint_enable = "タブルタップ走行を有効"
-L.label_gameplay_dtsprint_anykey = "止まるまでダブルタップ走行を止めない"
 L.label_hud_default = "デフォルトHUD"
 L.label_hud_force = "強制的HUD"
 
 L.label_bind_weaponswitch = "武器を拾う"
-L.label_bind_sprint = "ダッシュ"
 L.label_bind_voice = "通常ボイスチャット"
 L.label_bind_voice_team = "チームボイスチャット"
 
