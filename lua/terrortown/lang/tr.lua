@@ -288,8 +288,8 @@ L.c4_disarm = "C4'ü devre dışı bırak"
 L.c4_disarm_cut = "{num} telini kesmek için tıklayın"
 
 L.c4_disarm_t = "Bombayı etkisiz hale getirmek için bir kablo kesin. Hain olduğun için her kablo güvende. Masumlar için iş o kadar kolay değil!"
---L.c4_disarm_owned = "Cut a wire to disarm the bomb. It's your bomb, so every wire will disarm it."
---L.c4_disarm_other = "Cut a safe wire to disarm the bomb. It will explode if you get it wrong!"
+L.c4_disarm_owned = "Bombayı etkisiz hale getirmek için bir kablo kesin. Bu senin bomban, bu yüzden her kablo onu etkisiz hale getirecek."
+L.c4_disarm_other = "Bombayı etkisiz hale getirmek için bir kablo kesin. Yanlış yaparsan patlar!"
 
 L.c4_status_armed = "DEVREYE ALINDI"
 L.c4_status_disarmed = "DEVRE DIŞI"
@@ -723,7 +723,7 @@ L.aw_nki3_title = "Hainler Hain Koyun Düşler mi"
 L.aw_nki3_text = "üç haine tatlı rüyalar gördür."
 
 L.aw_nki4_title = "İçişleri Çalışanı"
---L.aw_nki4_text = "gets paid per kill. Can now order their fifth swimming pool."
+L.aw_nki4_text = "öldürme başına ödeme alır. Artık beşinci yüzme havuzunu sipariş edebilir."
 
 L.aw_fal1_title = "Hayır Bay Bond, Düşmenizi Bekliyorum"
 L.aw_fal1_text = "birini büyük bir yükseklikten itti."
@@ -1168,7 +1168,7 @@ L.item_no_hazard_damage_desc = [[Zehir, radyasyon ve asit gibi tehlike hasarlar�
 L.item_no_energy_damage = "Enerji Hasarı Yok"
 L.item_no_energy_damage_desc = [[Lazer, plazma ve yıldırım gibi enerji hasarlarına karşı bağışıklık kazandırır.]]
 L.item_no_prop_damage = "Nesne Hasarı Yok"
---L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+L.item_no_prop_damage_desc = [[Nesne hasarına karşı bağışıklık kazandırır.]]
 L.item_no_drown_damage = "Boğulma Hasarı Yok"
 L.item_no_drown_damage_desc = [[Boğulma hasarına karşı bağışıklık kazandırır.]]
 
@@ -1280,7 +1280,7 @@ L.desc_event_c4_explode = "{owner} ({role} {team}) tarafından kurulan C4 patlad
 L.desc_event_c4_plant = "{owner} ({role} {team}), bir C4 patlayıcı kurdu."
 L.desc_event_creditfound = "{finder} ({firole} {fiteam}), {found} ({forole} {foteam}) cesedinde {credits} ekipman kredisi buldu."
 L.desc_event_finish = "Raunt {minutes}{seconds} sürdü. Sonunda {alive} oyuncu hayatta kaldı."
---L.desc_event_game = "A new round has started."
+L.desc_event_game = "Yeni bir raunt başladı."
 L.desc_event_respawn = "{player} yeniden canlandı."
 L.desc_event_rolechange = "{player}, {orole} ({oteam}) olan rol takımını {nrole} ({nteam}) olarak değiştirdi."
 L.desc_event_selected = "Takımlar ve roller tüm {amount} oyuncu için dağıtıldı."
@@ -1313,7 +1313,7 @@ L.desc_event_kill_drown_using = "{victim} ({vrole} {vteam}), {attacker} ({arole}
 L.desc_event_kill_boom = "{victim} ({vrole} {vteam}), {attacker} tarafından havaya uçuruldu."
 L.desc_event_kill_boom_using = "{victim} ({vrole} {vteam}), {trap} kullanılarak {attacker} ({arole} {ateam}) tarafından havaya uçuruldu."
 
---L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) was fried by {attacker}."
+L.desc_event_kill_burn = "{victim} ({vrole} {vteam}) / {attacker} tarafından vuruldu."
 L.desc_event_kill_burn_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) nedeniyle {trap} tarafından yakıldı."
 
 L.desc_event_kill_club = "{victim} ({vrole} {vteam}), {attacker} tarafından dövüldü."
@@ -1967,7 +1967,7 @@ L.header_voiceandvolume_settings = "Ses ve Ses Ayarları"
 -- 2023-11-06
 L.drop_reserve_prevented = "Bir şey yedek cephanenizi düşürmenizi engelliyor."
 L.drop_no_reserve = "Rezervinizde cephane kutusu olarak düşecek yeterli cephane yok."
---L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+L.drop_no_room_ammo = "Burada silahını bırakacak yerin yok!"
 
 -- 2023-11-14
---L.hat_deerstalker_name = "Detective's Hat"
+L.hat_deerstalker_name = "Dedektifin Şapkası"
