@@ -1115,13 +1115,10 @@ L.label_gameplay_specmode = "Yalnızca İzle modu (her zaman izleyici olarak kal
 L.label_gameplay_fastsw = "Hızlı silah değişme"
 L.label_gameplay_hold_aim = "Nişan almak için tutmayı etkinleştir"
 L.label_gameplay_mute = "Öldüğünde canlı oyuncuları sessize al"
-L.label_gameplay_dtsprint_enable = "Çift dokunuşla koşmayı etkinleştir"
-L.label_gameplay_dtsprint_anykey = "Hareketi durdurana kadar çift dokunarak koşmaya devam et"
 L.label_hud_default = "Varsayılan Arayüz"
 L.label_hud_force = "Zorunlu Arayüz"
 
 L.label_bind_weaponswitch = "Silahı Al"
-L.label_bind_sprint = "Koşma"
 L.label_bind_voice = "Genel Sesli Sohbet"
 L.label_bind_voice_team = "Takım Sesli Sohbeti"
 
@@ -1971,3 +1968,6 @@ L.header_voiceandvolume_settings = "Ses ve Ses Ayarları"
 L.drop_reserve_prevented = "Bir şey yedek cephanenizi düşürmenizi engelliyor."
 L.drop_no_reserve = "Rezervinizde cephane kutusu olarak düşecek yeterli cephane yok."
 --L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
