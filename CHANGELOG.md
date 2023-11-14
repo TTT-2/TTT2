@@ -27,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Ukrainian translation from base TTT (by @ErickMaksimets)
 - Added Swedish translation from base TTT (by @Kefta)
 - Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
+- Added window flash and noise to alert players they're being revived (by @EntranceJew)
 
 ### Changed
 
