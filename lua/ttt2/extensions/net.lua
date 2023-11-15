@@ -80,13 +80,13 @@ local function SendNextSplit(len, ply)
 	local streamId = net.ReadUInt(32)
 	local nextSplit = net.ReadUInt(8)
 
-	local eligiblePlayerList = net.receiving_players[messageId][streamId]
+	local receivingPlayerList = net.receiving_players[messageId][streamId]
 
-	if nextSplit < 1 or eligiblePlayerList and not eligiblePlayerList[ply:SteamID64()] then return end
+	if nextSplit < 1 or receivingPlayerList and not receivingPlayerList[ply:SteamID64()] then return end
 
 	-- Remove players that requested the last split
 	if nextSplit <= 1
-		eligiblePlayerList[ply:SteamID64()] = nil
+		receivingPlayerList[ply:SteamID64()] = nil
 	end
 
 	SendNextStream(messageId, streamId, nextSplit, ply)
