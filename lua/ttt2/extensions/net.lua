@@ -27,7 +27,7 @@ net.STREAM_FRAGMENTATION_SIZE = 65400
 
 -- Stream cache variables
 net.send_stream_cache  = {}
-net.eligible_players  = {}
+net.receiving_players  = {}
 net.receive_stream_cache = {}
 net.stream_callbacks = {}
 
@@ -64,7 +64,7 @@ local function SendNextStream(messageId, streamId, split, plys)
 	end
 
 	if split <= 1 then
-		local eligiblePlayerList = net.eligible_players[messageId][streamId]
+		local eligiblePlayerList = net.receiving_players[messageId][streamId]
 
 		if eligiblePlayerList then
 			plys = istable(plys) and plys or {plys}
@@ -75,7 +75,7 @@ local function SendNextStream(messageId, streamId, split, plys)
 
 			if next(eligiblePlayerList) ~= nil then return end
 
-			net.eligible_players[messageId][streamId] = nil
+			net.receiving_players[messageId][streamId] = nil
 		end
 
 		net.send_stream_cache[messageId][streamId] = nil
@@ -93,7 +93,7 @@ local function SendNextSplit(len, ply)
 	local streamId = net.ReadUInt(32)
 	local nextSplit = net.ReadUInt(8)
 
-	local eligiblePlayerList = net.eligible_players[messageId][streamId]
+	local eligiblePlayerList = net.receiving_players[messageId][streamId]
 
 	if nextSplit < 1 or eligiblePlayerList and not eligiblePlayerList[ply:SteamID64()] then return end
 
@@ -115,18 +115,18 @@ function net.SendStream(messageId, data, plys)
 	local splits = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
 
 	net.send_stream_cache[messageId] = net.send_stream_cache[messageId] or {}
-	net.eligible_players[messageId] = net.eligible_players[messageId] or {}
+	net.receiving_players[messageId] = net.receiving_players[messageId] or {}
 
 	local streamId = #net.send_stream_cache[messageId] + 1
 
 	net.send_stream_cache[messageId][streamId] = splits
 
 	if SERVER and plys and #splits > 1 then
-		net.eligible_players[messageId][streamId] = {}
+		net.receiving_players[messageId][streamId] = {}
 		plys = istable(plys) and plys or {plys}
 
 		for i = 1, #plys do
-			net.eligible_players[messageId][streamId][plys[i]:SteamID64()] = true
+			net.receiving_players[messageId][streamId][plys[i]:SteamID64()] = true
 		end
 	end
 
