@@ -46,6 +46,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 - Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
 - Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
+- Changed syncing of database module to use whole tables instead of custom method
 
 ### Fixed
 
