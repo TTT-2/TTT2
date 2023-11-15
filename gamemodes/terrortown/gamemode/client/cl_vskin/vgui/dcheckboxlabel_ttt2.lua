@@ -12,7 +12,7 @@ AccessorFunc(PANEL, "m_iIndent", "Indent")
 ---
 -- @accessor bool
 -- @realm client
-AccessorFunc(PANEL, "ignoreNetworkedVar", "IgnoreNetworkedVar", FORCE_BOOL)
+AccessorFunc(PANEL, "ignoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
 
 ---
 -- @ignore
@@ -80,7 +80,7 @@ function PANEL:SetConVar(cvar)
 	self:SetDefaultValue(tobool(GetConVar(cvar):GetDefault()))
 end
 
-local networkedVarTracker = 0
+local callbackEnabledVarTracker = 0
 ---
 -- @param string cvar
 -- @realm client
@@ -96,8 +96,8 @@ function PANEL:SetServerConVar(cvar)
 		end
 	end)
 
-	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(networkedVarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
@@ -134,8 +134,8 @@ function PANEL:SetDatabase(databaseInfo)
 
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
-	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(networkedVarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then
@@ -152,10 +152,10 @@ end
 
 ---
 -- @param any val
--- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(val, ignoreNetworkedVar)
-	self:SetIgnoreNetworkedVar(ignoreNetworkedVar)
+function PANEL:SetValue(val, ignoreCallbackEnabledVar)
+	self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
 
 	if self.inverted then
 		val = not val
@@ -321,12 +321,12 @@ function PANEL:ValueChanged(val)
 		val = not val
 	end
 
-	if self.serverConVar and not self:GetIgnoreNetworkedVar() then
+	if self.serverConVar and not self:GetIgnoreCallbackEnabledVar() then
 		cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
-	elseif self.databaseInfo and not self:GetIgnoreNetworkedVar() then
+	elseif self.databaseInfo and not self:GetIgnoreCallbackEnabledVar() then
 		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, val)
 	else
-		self:SetIgnoreNetworkedVar(false)
+		self:SetIgnoreCallbackEnabledVar(false)
 	end
 
 	self:OnValueChanged(val)
