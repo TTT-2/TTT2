@@ -36,8 +36,6 @@ net.stream_callbacks = {}
 -- @param string messageId a unique message id similar to the network strings
 -- @param number streamId the current stream number the split is requested for
 -- @param number split the part of the Stream that should be sent
--- @note This split number is inversed, so split = 1 of 4 is actually 4th and last entry of the data
--- It is done to save some calculations to see if the last entry is reached. 1 is the last in every stream
 -- @realm shared
 -- @internal
 local function SendNextStream(messageId, streamId, split, plys)
@@ -51,7 +49,7 @@ local function SendNextStream(messageId, streamId, split, plys)
 
 	local data = net.send_stream_cache[messageId][streamId]
 	-- Write the actual data fragment as a string, which internally will also send its size
-	net.WriteString(data[#data + 1 - split])
+	net.WriteString(data[split])
 
 	if SERVER then
 		if plys then
@@ -194,7 +192,7 @@ local function ReceiveStream(len, ply)
 	net.receive_stream_cache[messageId] = net.receive_stream_cache[messageId] or {}
 	net.receive_stream_cache[messageId][streamId] = net.receive_stream_cache[messageId][streamId] or {}
 	-- Write data to cache table
-	net.receive_stream_cache[messageId][streamId][#net.receive_stream_cache[messageId][streamId] + 1] = data
+	net.receive_stream_cache[messageId][streamId][split] = data
 
 	-- Check if this was the last fragment
 	if split <= 1 then
