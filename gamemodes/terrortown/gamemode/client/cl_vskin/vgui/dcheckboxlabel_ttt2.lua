@@ -100,9 +100,15 @@ function PANEL:SetServerConVar(cvar)
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
 	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
-	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
+	local callback = function(conVarName, oldValue, newValue)
 		if not IsValid(self) then
-			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
+			-- We need to remove the callback in a timer, because otherwise the ConVar change callback code
+			-- will throw an error while looping over the callbacks.
+			-- This happens, because the callback is removed from the same table that is iterated over.
+			-- Thus, the table size changes while iterating over it and leads to a nil callback as the last entry.
+			timer.Simple(0, function()
+				cvars.RemoveChangeCallback(conVarName, myIdentifierString)
+			end)
 
 			return
 		end
@@ -110,7 +116,7 @@ function PANEL:SetServerConVar(cvar)
 		self:SetValue(tobool(newValue), true)
 	end
 
-	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, myIdentifierString)
+	cvars.AddChangeCallback(cvar, callback, myIdentifierString)
 end
 
 ---
