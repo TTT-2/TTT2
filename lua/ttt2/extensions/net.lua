@@ -62,9 +62,9 @@ local function SendNextStream(messageId, streamId, split, plys)
 	end
 
 	-- Delete cache if all players requested the last split
-	if split <= 1 and (net.receiving_players[messageId][streamId] == nil or next(net.receiving_players[messageId][streamId]) == nil) then
+	local receivingPlayerList = net.receiving_players[messageId][streamId]
+	if split <= 1 and (receivingPlayerList == nil or next(receivingPlayerList) == nil) then
 		net.receiving_players[messageId][streamId] = nil
-		
 		net.send_stream_cache[messageId][streamId] = nil
 	end
 end
