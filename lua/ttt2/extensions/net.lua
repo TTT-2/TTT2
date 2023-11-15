@@ -85,7 +85,7 @@ local function SendNextSplit(len, ply)
 	if nextSplit < 1 or receivingPlayerList and not receivingPlayerList[ply:SteamID64()] then return end
 
 	-- Remove players that requested the last split
-	if nextSplit <= 1
+	if nextSplit <= 1 then
 		receivingPlayerList[ply:SteamID64()] = nil
 	end
 
