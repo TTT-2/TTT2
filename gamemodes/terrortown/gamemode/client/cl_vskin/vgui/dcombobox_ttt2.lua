@@ -162,9 +162,9 @@ end
 
 ---
 -- @param number index the option id
--- @param[default=false] boolean ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:ChooseOptionID(index, ignoreNetworkedVars)
+function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 	local choices = self.choices
 
 	if index > #choices then
@@ -183,9 +183,9 @@ function PANEL:ChooseOptionID(index, ignoreNetworkedVars)
 
 	self:CloseMenu()
 
-	if ignoreNetworkedVars then return end
+	if ignoreCallbackEnabledVars then return end
 
-	self:SetNetworkedVarValues(value)
+	self:SetCallbackEnabledValues(value)
 end
 
 ---
@@ -336,13 +336,13 @@ function PANEL:SetValue(value, ignoreConVar)
 	self:ChooseOptionValue(value, ignoreConVar)
 end
 
-local networkedVarTracker = 0
+local callbackEnabledVarTracker = 0
 ---
 -- @param Panel panel to set the value of
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(menu, conVar)
-	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(networkedVarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local callback = function(conVarName, oldValue, newValue)
 		if not IsValid(panel) then
@@ -418,8 +418,8 @@ function PANEL:SetDatabase(databaseInfo)
 
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
-	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(networkedVarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then
@@ -437,7 +437,7 @@ end
 ---
 -- @param string value
 -- @realm client
-function PANEL:SetNetworkedVarValues(value)
+function PANEL:SetCallbackEnabledVarValues(value)
 	if self.conVar then
 		self.conVar:SetString(tostring(value))
 	end
