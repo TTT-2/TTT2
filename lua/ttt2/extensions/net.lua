@@ -61,21 +61,10 @@ local function SendNextStream(messageId, streamId, split, plys)
 		net.SendToServer()
 	end
 
-	if split <= 1 then
-		local eligiblePlayerList = net.receiving_players[messageId][streamId]
-
-		if eligiblePlayerList then
-			plys = istable(plys) and plys or {plys}
-
-			for i = 1, #plys do
-				eligiblePlayerList[plys[i]:SteamID64()] = nil
-			end
-
-			if next(eligiblePlayerList) ~= nil then return end
-
-			net.receiving_players[messageId][streamId] = nil
-		end
-
+	-- Delete cache if all players requested the last split
+	if split <= 1 and (net.receiving_players[messageId][streamId] == nil or next(net.receiving_players[messageId][streamId]) == nil) then
+		net.receiving_players[messageId][streamId] = nil
+		
 		net.send_stream_cache[messageId][streamId] = nil
 	end
 end
@@ -94,6 +83,11 @@ local function SendNextSplit(len, ply)
 	local eligiblePlayerList = net.receiving_players[messageId][streamId]
 
 	if nextSplit < 1 or eligiblePlayerList and not eligiblePlayerList[ply:SteamID64()] then return end
+
+	-- Remove players that requested the last split
+	if nextSplit <= 1
+		eligiblePlayerList[ply:SteamID64()] = nil
+	end
 
 	SendNextStream(messageId, streamId, nextSplit, ply)
 end
