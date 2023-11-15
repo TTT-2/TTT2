@@ -17,7 +17,7 @@ if SERVER then
 
 	-- Add the network string for streaming data
 	util.AddNetworkString(NETMSG_STREAM)
-	-- Add the network string for confirming single splits
+	-- Add the network string for requesting single splits
 	util.AddNetworkString(NETMSG_REQUEST_NEXT_SPLIT)
 end
 
@@ -99,7 +99,7 @@ net.Receive(NETMSG_REQUEST_NEXT_SPLIT, SendNextSplit)
 -- smaller fragments. The data will be converted (with sPON) to an encoded string during this process.
 --
 -- @param string messageId A unique message id similar to the network strings
--- @param table data The data table to send, this will be reconstructed at the player.
+-- @param table data The data table to send, this will be reconstructed at the destination.
 -- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players otherwise it's broadcasted.
 -- @realm shared
 function net.SendStream(messageId, data, plys)
@@ -163,7 +163,7 @@ end
 -- @realm shared
 function net.ReceiveStream(messageId, callback)
 	-- has to be saved as string, otherwise the key lookups will fail on the table
-	local msg = messageId
+	local msg = tostring(messageId)
 
 	net.stream_callbacks[msg] = callback
 end
