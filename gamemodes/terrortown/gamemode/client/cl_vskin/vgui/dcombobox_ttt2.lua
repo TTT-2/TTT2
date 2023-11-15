@@ -340,7 +340,7 @@ local callbackEnabledVarTracker = 0
 ---
 -- @param Panel panel to set the value of
 -- @param string conVar name of the convar
-local function AddConVarChangeCallback(menu, conVar)
+local function AddConVarChangeCallback(panel, conVar)
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
 	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
