@@ -26,10 +26,9 @@ end
 net.STREAM_FRAGMENTATION_SIZE = 65400
 
 -- Stream cache variables
-local wait_stream_cache = {}
-local eligible_Players  = {}
-
-net.stream_cache = {}
+net.send_stream_cache  = {}
+net.eligible_players  = {}
+net.receive_stream_cache = {}
 net.stream_callbacks = {}
 
 --- 
@@ -50,7 +49,7 @@ local function SendNextStream(messageId, streamId, split, plys)
 	-- Write the current split
 	net.WriteUInt(split, 8)
 
-	local data = wait_stream_cache[messageId][streamId]
+	local data = net.send_stream_cache[messageId][streamId]
 	-- Write the actual data fragment as a string, which internally will also send its size
 	net.WriteString(data[#data + 1 - split])
 
@@ -65,7 +64,7 @@ local function SendNextStream(messageId, streamId, split, plys)
 	end
 
 	if split <= 1 then
-		local eligiblePlayerList = eligible_Players[messageId][streamId]
+		local eligiblePlayerList = net.eligible_players[messageId][streamId]
 
 		if eligiblePlayerList then
 			plys = istable(plys) and plys or {plys}
@@ -76,10 +75,10 @@ local function SendNextStream(messageId, streamId, split, plys)
 
 			if next(eligiblePlayerList) ~= nil then return end
 
-			eligible_Players[messageId][streamId] = nil
+			net.eligible_players[messageId][streamId] = nil
 		end
 
-		wait_stream_cache[messageId][streamId] = nil
+		net.send_stream_cache[messageId][streamId] = nil
 	end
 end
 
@@ -94,7 +93,7 @@ local function SendNextSplit(len, ply)
 	local streamId = net.ReadUInt(32)
 	local nextSplit = net.ReadUInt(8)
 
-	local eligiblePlayerList = eligible_Players[messageId][streamId]
+	local eligiblePlayerList = net.eligible_players[messageId][streamId]
 
 	if nextSplit < 1 or eligiblePlayerList and not eligiblePlayerList[ply:SteamID64()] then return end
 
@@ -115,19 +114,19 @@ function net.SendStream(messageId, data, plys)
 	local encodedString = pon.encode(data)
 	local splits = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
 
-	wait_stream_cache[messageId] = wait_stream_cache[messageId] or {}
-	eligible_Players[messageId] = eligible_Players[messageId] or {}
+	net.send_stream_cache[messageId] = net.send_stream_cache[messageId] or {}
+	net.eligible_players[messageId] = net.eligible_players[messageId] or {}
 
-	local streamId = #wait_stream_cache[messageId] + 1
+	local streamId = #net.send_stream_cache[messageId] + 1
 
-	wait_stream_cache[messageId][streamId] = splits
+	net.send_stream_cache[messageId][streamId] = splits
 
 	if SERVER and plys and #splits > 1 then
-		eligible_Players[messageId][streamId] = {}
+		net.eligible_players[messageId][streamId] = {}
 		plys = istable(plys) and plys or {plys}
 
 		for i = 1, #plys do
-			eligible_Players[messageId][streamId][plys[i]:SteamID64()] = true
+			net.eligible_players[messageId][streamId][plys[i]:SteamID64()] = true
 		end
 	end
 
@@ -192,19 +191,19 @@ local function ReceiveStream(len, ply)
 	local data = net.ReadString()
 
 	-- Create cache table if it does not exist yet for this message
-	net.stream_cache[messageId] = net.stream_cache[messageId] or {}
-	net.stream_cache[messageId][streamId] = net.stream_cache[messageId][streamId] or {}
+	net.receive_stream_cache[messageId] = net.receive_stream_cache[messageId] or {}
+	net.receive_stream_cache[messageId][streamId] = net.receive_stream_cache[messageId][streamId] or {}
 	-- Write data to cache table
-	net.stream_cache[messageId][streamId][#net.stream_cache[messageId][streamId] + 1] = data
+	net.receive_stream_cache[messageId][streamId][#net.receive_stream_cache[messageId][streamId] + 1] = data
 
 	-- Check if this was the last fragment
 	if split <= 1 then
 		-- Otherwise this was the last packet, so reconstruct the data
-		local encodedStr = table.concat(net.stream_cache[messageId][streamId])
+		local encodedStr = table.concat(net.receive_stream_cache[messageId][streamId])
 		local callback = net.stream_callbacks[messageId]
 
 		-- Clear cache
-		net.stream_cache[messageId][streamId] = nil
+		net.receive_stream_cache[messageId][streamId] = nil
 
 		-- Check if a callback is registered
 		if isfunction(callback) then
