@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "觀察者模式（永遠觀察）"
 L.label_gameplay_fastsw = "武器快速切換"
 L.label_gameplay_hold_aim = "啟用持續瞄準"
 L.label_gameplay_mute = "死亡時靜音存活玩家"
-L.label_gameplay_dtsprint_enable = "啟用雙擊沖刺"
-L.label_gameplay_dtsprint_anykey = "沖刺時任何方向鍵都持續沖刺"
 L.label_hud_default = "默認 HUD"
 L.label_hud_force = "強製 HUD"
 
 L.label_bind_weaponswitch = "撿起武器"
-L.label_bind_sprint = "沖刺"
 L.label_bind_voice = "全局語言"
 L.label_bind_voice_team = "團隊語言"
 
@@ -1972,3 +1969,6 @@ L.slot_weapon_class = "職業槽"
 --L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
 --L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
 --L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"

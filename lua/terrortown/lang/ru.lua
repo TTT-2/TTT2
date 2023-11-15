@@ -1118,13 +1118,10 @@ L.label_gameplay_specmode = "Режим наблюдения (всегда бы�
 L.label_gameplay_fastsw = "Быстрая смена оружия."
 L.label_gameplay_hold_aim = "Включить прицеливание при удерживании."
 L.label_gameplay_mute = "Заглушать живых игроков после смерти."
-L.label_gameplay_dtsprint_enable = "Включить ускорение двойным нажатием."
-L.label_gameplay_dtsprint_anykey = "Продолжать ускорение по двойному нажатию до прекращения движения."
 L.label_hud_default = "Интерфейс по умолчанию"
 L.label_hud_force = "Принудительно назначаемый интерфейс"
 
 L.label_bind_weaponswitch = "Смена оружия"
-L.label_bind_sprint = "Ускорение"
 L.label_bind_voice = "Глобальный голосовой чат"
 L.label_bind_voice_team = "Командный голосовой чат"
 
@@ -1974,3 +1971,6 @@ L.tbut_adminarea = "Администраторская зона:"
 --L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
 --L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
 --L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"

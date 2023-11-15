@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "Mode Spectateur (toujours resté en spectateur)"
 L.label_gameplay_fastsw = "Changement d'arme rapide"
 L.label_gameplay_hold_aim = "Permettre de maintenir pour viser"
 L.label_gameplay_mute = "Mettez en sourdine les joueurs vivants lorsqu'ils sont morts"
-L.label_gameplay_dtsprint_enable = "Permettre le sprint en appuyant deux fois sur la touche Avancer"
-L.label_gameplay_dtsprint_anykey = "Continuez à sprinter en appuyant deux fois sur la touche Avancer jusqu'à ce que vous arrêtiez de bouger"
 L.label_hud_default = "HUD par défaut"
 L.label_hud_force = "HUD Obligatoire"
 
 L.label_bind_weaponswitch = "Ramasser une arme"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Chat Vocal Global"
 L.label_bind_voice_team = "Chat Vocal de Team"
 
@@ -1972,3 +1969,6 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
 --L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
 --L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"

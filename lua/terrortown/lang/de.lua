@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "Nur-Zuschauer-Modus (bleibe immer Zuschauer)"
 L.label_gameplay_fastsw = "Schneller Waffenwechsel"
 L.label_gameplay_hold_aim = "Aktiviere Halten zum Anvisieren"
 L.label_gameplay_mute = "Stelle lebende Spieler stumm, wenn du tot bist"
-L.label_gameplay_dtsprint_enable = "Aktiviere Double-Tap Sprinten"
-L.label_gameplay_dtsprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
 L.label_hud_default = "Standard HUD"
 L.label_hud_force = "Erzwungenes HUD"
 
 L.label_bind_weaponswitch = "Waffe aufheben"
-L.label_bind_sprint = "Sprinten"
 L.label_bind_voice = "Globaler Sprachchat"
 L.label_bind_voice_team = "Team Sprachchat"
 
@@ -1972,3 +1969,6 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
 --L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
 --L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"

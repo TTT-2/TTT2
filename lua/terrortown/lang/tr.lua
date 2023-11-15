@@ -1,1969 +1,1973 @@
--- English language strings
+-- Turkish language strings
 
 local L = LANG.CreateLanguage("tr")
 
 -- Compatibility language name that might be removed soon.
--- the alias name is based on the original TTT language name:
--- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/english.lua
-L.__alias = "turkish"
+-- the alias name is based on the original TTT language name
+L.__alias = "türkçe"
 
-L.lang_name = "Turkish (turkish)"
+L.lang_name = "Türkçe (Turkish)"
 
 -- General text used in various places
-L.traitor = "Traitor"
-L.detective = "Detective"
-L.innocent = "Innocent"
-L.last_words = "Last Words"
+L.traitor = "Hain"
+L.detective = "Dedektif"
+L.innocent = "Masum"
+L.last_words = "Son Sözleri"
 
-L.terrorists = "Terrorists"
-L.spectators = "Spectators"
+L.terrorists = "Teröristler"
+L.spectators = "İzleyiciler"
 
-L.nones = "No Team"
-L.innocents = "Team Innocent"
-L.traitors = "Team Traitor"
+L.nones = "Takım Yok"
+L.innocents = "Masum Takımı"
+L.traitors = "Hain Takımı"
 
 -- Round status messages
-L.round_minplayers = "Not enough players to start a new round..."
-L.round_voting = "Vote in progress, delaying new round by {num} seconds..."
-L.round_begintime = "A new round begins in {num} seconds. Prepare yourself."
-L.round_selected = "The Traitors have been selected."
-L.round_started = "The round has begun!"
-L.round_restart = "The round has been forced to restart by an admin."
+L.round_minplayers = "Yeni raunda başlamak için yeterli sayıda oyuncu yok..."
+L.round_voting = "Oylama devam ediyor, yeni raunt {num} saniye geciktirilecek..."
+L.round_begintime = "Yeni raunt {num} saniyede başlayacak. Kendini hazırla."
+L.round_selected = "Hainler seçildi."
+L.round_started = "Raunt başladı!"
+L.round_restart = "Raunt bir admin tarafından yeniden başlatıldı."
 
-L.round_traitors_one = "Traitor, you stand alone."
-L.round_traitors_more = "Traitor, these are your allies: {names}"
+L.round_traitors_one = "Hey hain, yalnızsın."
+L.round_traitors_more = "Hey hain, bunlar senin müttefiklerin {names}"
 
-L.win_time = "Time has run out. The Traitors lose."
-L.win_traitors = "The Traitors have won!"
-L.win_innocents = "The Innos have won!"
-L.win_nones = "No-one won!"
-L.win_showreport = "Let's look at the round report for {num} seconds."
+L.win_time = "Süre doldu. Hainler kaybetti."
+L.win_traitors = "Hainler kazandı!"
+L.win_innocents = "Masumlar kazandı!"
+L.win_nones = "Kimse kazanamadı!"
+L.win_showreport = "{num} saniye boyunca raunt raporuna bakalım."
 
-L.limit_round = "Round limit reached. The next map will load soon."
-L.limit_time = "Time limit reached. The next map will load soon."
-L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
+L.limit_round = "Raunt sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
+L.limit_time = "Zaman sınırına ulaşıldı. Bir sonraki harita yakında yüklenecek."
+L.limit_left = "Harita değişmeden önce {num} raunt veya {time} dakika kaldı."
 
 -- Credit awards
-L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
-L.credit_kill = "You have received {num} credit(s) for killing a {role}."
+L.credit_all = "Takımınıza performansınız için {num} ekipman kredisi verildi."
+L.credit_kill = "Bir {role} öldürdüğünüz için {num} kredi aldınız."
 
 -- Karma
-L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
-L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
+L.karma_dmg_full = "Karman {amount}, bu yüzden bu raunt tam hasar veriyorsun!"
+L.karma_dmg_other = "Karman {amount}. Sonuç olarak, verdiğiniz tüm hasar ​%{num}​ azaltılır."
 
 -- Body identification messages
-L.body_found = "{finder} found the body of {victim}. {role}"
-L.body_found_team = "{finder} found the body of {victim}. {role} ({team})"
+L.body_found = "{finder}, {victim} adlı kişinin cesedini buldu. {role}"
+L.body_found_team = "{finder}, {victim} adlı kişinin cesedini buldu. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_traitor = "They were a Traitor!"
-L.body_found_det = "They were a Detective."
-L.body_found_inno = "They were Innocent."
+L.body_found_traitor = "Onlar bir Haindi!"
+L.body_found_det = "Onlar bir Dedektifti."
+L.body_found_inno = "Onlar bir Masumdu."
 
-L.body_confirm = "{finder} confirmed the death of {victim}."
+L.body_confirm = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 
-L.body_call = "{player} called a Detective to the body of {victim}!"
-L.body_call_error = "You must confirm the death of this player before calling a Detective!"
+L.body_call = "{player}, {victim} adlı kurbanın cesedine Dedektif çağırdı!"
+L.body_call_error = "Bir Dedektif çağırmadan önce bu oyuncunun ölümünü onaylamalısın!"
 
-L.body_burning = "Ouch! This corpse is on fire!"
-L.body_credits = "You found {num} credit(s) on the body!"
+L.body_burning = "Ah! Bu ceset yanıyor!"
+L.body_credits = "Cesette {num} kredi buldunuz!"
 
 -- Menus and windows
-L.close = "Close"
-L.cancel = "Cancel"
+L.close = "Kapat"
+L.cancel = "İptal"
 
 -- For navigation buttons
-L.next = "Next"
-L.prev = "Previous"
+L.next = "İleri"
+L.prev = "Önceki"
 
 -- Equipment buying menu
-L.equip_title = "Equipment"
-L.equip_tabtitle = "Order Equipment"
+L.equip_title = "Ekipman"
+L.equip_tabtitle = "Ekipman Sipariş Et"
 
-L.equip_status = "Ordering status"
-L.equip_cost = "You have {num} credit(s) remaining."
-L.equip_help_cost = "Every piece of equipment you buy costs 1 credit."
+L.equip_status = "Sipariş durumu"
+L.equip_cost = "{num} krediniz kaldı."
+L.equip_help_cost = "Satın aldığınız her ekipman parçası 1 krediye mal olur."
 
-L.equip_help_carry = "You can only buy things for which you have room."
-L.equip_carry = "You can carry this equipment."
-L.equip_carry_own = "You are already carrying this item."
-L.equip_carry_slot = "You are already carrying a weapon in slot {slot}."
-L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
+L.equip_help_carry = "Yalnızca yeriniz olan şeyleri satın alabilirsiniz."
+L.equip_carry = "Bu ekipmanı taşıyabilirsiniz."
+L.equip_carry_own = "Bu öğeyi zaten taşıyorsunuz."
+L.equip_carry_slot = "{slot} yuvasında zaten bir silah taşıyorsun."
+L.equip_carry_minplayers = "Sunucuda bu silahı etkinleştirmek için yeterli oyuncu yok."
 
-L.equip_help_stock = "Of certain items you can only buy one per round."
-L.equip_stock_deny = "This item is no longer in stock."
-L.equip_stock_ok = "This item is in stock."
+L.equip_help_stock = "Belirli öğelerden her rauntta yalnızca bir tane satın alabilirsiniz."
+L.equip_stock_deny = "Bu ürün artık stokta yok."
+L.equip_stock_ok = "Bu ürün stokta mevcut."
 
-L.equip_custom = "Custom item added by this server."
+L.equip_custom = "Bu sunucu tarafından eklenen özel öğe."
 
-L.equip_spec_name = "Name"
-L.equip_spec_type = "Type"
-L.equip_spec_desc = "Description"
+L.equip_spec_name = "Ad"
+L.equip_spec_type = "Tür"
+L.equip_spec_desc = "Açıklama"
 
-L.equip_confirm = "Buy equipment"
+L.equip_confirm = "Ekipman satın al"
 
 -- Disguiser tab in equipment menu
-L.disg_name = "Disguiser"
-L.disg_menutitle = "Disguise control"
-L.disg_not_owned = "You are not carrying a Disguiser!"
-L.disg_enable = "Enable disguise"
+L.disg_name = "Kılık Değiştirici"
+L.disg_menutitle = "Kılık değiştirme kontrolü"
+L.disg_not_owned = "Kılık Değiştirici taşımıyorsun!"
+L.disg_enable = "Kılık değiştirmeyi etkinleştir"
 
-L.disg_help1 = "When your disguise is active, your name, health and Karma do not show when someone looks at you. In addition, you will be hidden from a Detective's radar."
-L.disg_help2 = "Press Numpad Enter to toggle the disguise without using the menu. You can also bind a different key to 'ttt_toggle_disguise' using the console."
+L.disg_help1 = "Kılık değiştiğinde, biri sana baktığında adın, sağlığın ve Karman gösterilmez. Ayrıca, bir Dedektifin radarından gizleneceksiniz."
+L.disg_help2 = "Menüyü kullanmadan kılık değiştirmek için Numpad Enter tuşuna basın. Konsolu kullanarak farklı bir tuşa 'ttt_toggle_digguise' olarak da atayabilirsiniz."
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
-L.radar_menutitle = "Radar control"
-L.radar_not_owned = "You are not carrying a Radar!"
-L.radar_scan = "Perform scan"
-L.radar_auto = "Auto-repeat scan"
-L.radar_help = "Scan results show for {num} seconds, after which the Radar will have recharged and can be used again."
-L.radar_charging = "Your Radar is still charging!"
+L.radar_menutitle = "Radar kontrolü"
+L.radar_not_owned = "Radar taşımıyorsun!"
+L.radar_scan = "Tarama yap"
+L.radar_auto = "Otomatik tekrarlı tarama"
+L.radar_help = "Tarama sonuçları {num} saniye boyunca gösterilir, bundan sonra Radar yeniden yüklenir ve tekrar kullanılabilir."
+L.radar_charging = "Radarın hala şarj oluyor!"
 
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
-L.xfer_menutitle = "Transfer credits"
-L.xfer_send = "Send a credit"
+L.xfer_menutitle = "Kredi transferi"
+L.xfer_send = "Kredi gönder"
 
-L.xfer_no_recip = "Recipient not valid, credit transfer aborted."
-L.xfer_no_credits = "Insufficient credits for transfer."
-L.xfer_success = "Credit transfer to {player} completed."
-L.xfer_received = "{player} has given you {num} credit."
+L.xfer_no_recip = "Alıcı geçerli değil, kredi transferi iptal edildi."
+L.xfer_no_credits = "Transfer için yetersiz kredi."
+L.xfer_success = "{player} adlı oyuncuya kredi transferi tamamlandı."
+L.xfer_received = "{player} sana {num} kredi verdi."
 
 -- Radio tab in equipment menu
-L.radio_name = "Radio"
-L.radio_help = "Click a button to make your Radio play that sound."
-L.radio_notplaced = "You must place the Radio to play sound on it."
+L.radio_name = "Radyo"
+L.radio_help = "Radyonuzun bu sesi çalmasını sağlamak için bir düğmeye tıklayın."
+L.radio_notplaced = "Sesi çalmak için Radyoyu yerleştirmelisiniz."
 
 -- Radio soundboard buttons
-L.radio_button_scream = "Scream"
-L.radio_button_expl = "Explosion"
-L.radio_button_pistol = "Pistol shots"
-L.radio_button_m16 = "M16 shots"
-L.radio_button_deagle = "Deagle shots"
-L.radio_button_mac10 = "MAC10 shots"
-L.radio_button_shotgun = "Shotgun shots"
-L.radio_button_rifle = "Rifle shot"
-L.radio_button_huge = "H.U.G.E burst"
-L.radio_button_c4 = "C4 beeping"
-L.radio_button_burn = "Burning"
-L.radio_button_steps = "Footsteps"
+L.radio_button_scream = "Çığlık at"
+L.radio_button_expl = "Patlama"
+L.radio_button_pistol = "Tabanca atışları"
+L.radio_button_m16 = "M16 atışları"
+L.radio_button_deagle = "Deagle atışları"
+L.radio_button_mac10 = "MAC10 atışları"
+L.radio_button_shotgun = "Pompalı tüfek atışları"
+L.radio_button_rifle = "Tüfek atışı"
+L.radio_button_huge = "H.U.G.E. patlaması"
+L.radio_button_c4 = "C4 bip sesi"
+L.radio_button_burn = "Yanıyor"
+L.radio_button_steps = "Ayak sesleri"
 
 -- Intro screen shown after joining
-L.intro_help = "If you're new to the game, press F1 for instructions!"
+L.intro_help = "Oyunda yeniyseniz, talimatlar için F1'e basın!"
 
 -- Radiocommands/quickchat
-L.quick_title = "Quickchat keys"
+L.quick_title = "Hızlı sohbet tuşları"
 
-L.quick_yes = "Yes."
-L.quick_no = "No."
-L.quick_help = "Help!"
-L.quick_imwith = "I'm with {player}."
-L.quick_see = "I see {player}."
-L.quick_suspect = "{player} acts suspicious."
-L.quick_traitor = "{player} is a Traitor!"
-L.quick_inno = "{player} is innocent."
-L.quick_check = "Anyone still alive?"
+L.quick_yes = "Evet."
+L.quick_no = "Hayır."
+L.quick_help = "Yardım edin!"
+L.quick_imwith = "{player} ile birlikteyim."
+L.quick_see = "{player} adlı oyuncuyu görüyorum."
+L.quick_suspect = "{player} şüpheli davranıyor."
+L.quick_traitor = "{player} bir Hain!"
+L.quick_inno = "{player} masum."
+L.quick_check = "Kimse hayatta mı?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
-L.quick_nobody = "nobody"
-L.quick_disg = "someone in disguise"
-L.quick_corpse = "an unidentified body"
-L.quick_corpse_id = "{player}'s corpse"
+L.quick_nobody = "hiç kimse"
+L.quick_disg = "kılık değiştirmiş biri var"
+L.quick_corpse = "kimliği belirsiz bir ceset var"
+L.quick_corpse_id = "{player} oyuncusunun cesedi"
 
 -- Body search window
-L.search_title = "Body Search Results"
-L.search_info = "Information"
-L.search_confirm = "Confirm Death"
-L.search_call = "Call Detective"
+L.search_title = "Ceset Arama Sonuçları"
+L.search_info = "Bilgi"
+L.search_confirm = "Ölümü Onayla"
+L.search_call = "Dedektifi Ara"
 
 -- Descriptions of pieces of information found
-L.search_nick = "This is the body of {player}."
+L.search_nick = "Bu, {player} oyuncusunun cesedi."
 
-L.search_role_traitor = "This person was a Traitor!"
-L.search_role_det = "This person was a Detective."
-L.search_role_inno = "This person was an innocent terrorist."
+L.search_role_traitor = "Bu kişi bir Haindi!"
+L.search_role_det = "Bu kişi bir Dedektifti."
+L.search_role_inno = "Bu kişi masum bir teröristti."
 
-L.search_words = "Something tells you some of this person's last words were: '{lastwords}'"
-L.search_armor = "They were wearing nonstandard body armor."
-L.search_disg = "They were carrying a device that could hide their identity."
-L.search_radar = "They were carrying some sort of radar. It is no longer functioning."
-L.search_c4 = "In a pocket you found a note. It states that cutting wire {num} will safely disarm the bomb."
+L.search_words = "İçinizden bir ses bu kişinin son sözlerinden bazılarının '{lastwords}' olduğunu söylüyor."
+L.search_armor = "Standart olmayan vücut zırhı giyiyorlardı."
+L.search_disg = "Kimliklerini gizleyebilecek bir cihaz taşıyorlardı."
+L.search_radar = "Bir çeşit radar taşıyorlardı. Artık çalışmıyor."
+L.search_c4 = "Cebinde bir not buldun. Tel {num} kesmenin bombayı güvenli bir şekilde etkisiz hale getireceğini belirtiyor."
 
-L.search_dmg_crush = "Many of their bones are broken. It seems the impact of a heavy object killed them."
-L.search_dmg_bullet = "It is obvious they were shot to death."
-L.search_dmg_fall = "They fell to their death."
-L.search_dmg_boom = "Their wounds and singed clothes indicate an explosion caused their end."
-L.search_dmg_club = "The body is bruised and battered. Clearly they were clubbed to death."
-L.search_dmg_drown = "The body shows the telltale signs of drowning."
-L.search_dmg_stab = "They were stabbed and cut before quickly bleeding to death."
-L.search_dmg_burn = "Smells like roasted terrorist around here..."
-L.search_dmg_tele = "It looks like their DNA was scrambled by tachyon emissions!"
-L.search_dmg_car = "When this terrorist crossed the road, they were run over by a reckless driver."
-L.search_dmg_other = "You cannot find a specific cause of this terrorist's death."
+L.search_dmg_crush = "Kemiklerinin çoğu kırılmış. Ağır bir nesnenin çarpması onları öldürmüş gibi görünüyor."
+L.search_dmg_bullet = "Vurularak öldürüldükleri belli."
+L.search_dmg_fall = "Düşüp öldüler."
+L.search_dmg_boom = "Yaraları ve yanmış kıyafetleri bir patlamanın sonlarına neden olduğunu gösteriyor."
+L.search_dmg_club = "Ceset çürümüş ve hırpalanmış. Belli ki dövülerek öldürülmüşler."
+L.search_dmg_drown = "Ceset boğulma belirtileri gösteriyor."
+L.search_dmg_stab = "Kanamadan hızlı bir şekilde ölmeden önce bıçaklandılar ve kesildiler."
+L.search_dmg_burn = "Buralar kızartılmış terörist gibi kokuyor..."
+L.search_dmg_tele = "DNA'ları takyon emisyonları tarafından karıştırılmış gibi görünüyor!"
+L.search_dmg_car = "Bu terörist yolu geçtiğinde, dikkatsiz bir sürücü tarafından ezildi."
+L.search_dmg_other = "Bu teröristin ölümünün belirli bir nedenini bulamazsın."
 
-L.search_weapon = "It appears a {weapon} was used to kill them."
-L.search_head = "The fatal wound was a headshot. No time to scream."
-L.search_time = "They died roughly {time} before you conducted the search."
-L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay roughly {time} from now."
+L.search_weapon = "Görünüşe göre onları öldürmek için bir {weapon} kullanılmış."
+L.search_head = "Ölümcül yara bir kafa vuruşuymuş. Çığlık atacak zaman yok."
+L.search_time = "Siz aramayı yapmadan yaklaşık {time} önce öldüler."
+L.search_dna = "Bir DNA Tarayıcısı ile katilin DNA'sının bir örneğini alın. DNA örneği kabaca {time} sonra bozunacak."
 
-L.search_kills1 = "You found a list of kills that confirms the death of {player}."
-L.search_kills2 = "You found a list of kills with these names:"
-L.search_eyes = "Using your detective skills, you identified the last person they saw: {player}. The killer, or a coincidence?"
+L.search_kills1 = "{player} oyuncusunun ölümünü doğrulayan bir leş listesi buldun."
+L.search_kills2 = "Bu adlara sahip bir leş listesi buldunuz"
+L.search_eyes = "Dedektiflik becerilerini kullanarak, {player} adlı oyuncuyu gördükleri son kişiyi belirledin. Katil ya da bir tesadüf"
 
 -- Scoreboard
-L.sb_playing = "You are playing on..."
-L.sb_mapchange = "Map changes in {num} rounds or in {time}"
-L.sb_mapchange_disabled = "Session limits are disabled."
+L.sb_playing = "Şu anda oynuyorsunuz..."
+L.sb_mapchange = "{num} rauntta veya {time} içinde harita değişecektir."
+L.sb_mapchange_disabled = "Oturum sınırları devre dışı."
 
-L.sb_mia = "Missing In Action"
-L.sb_confirmed = "Confirmed Dead"
+L.sb_mia = "Eylem Eksik"
+L.sb_confirmed = "Onaylanmış Ölü"
 
-L.sb_ping = "Ping"
-L.sb_deaths = "Deaths"
-L.sb_score = "Score"
+L.sb_ping = "Gecikme"
+L.sb_deaths = "Ölümler"
+L.sb_score = "Puan"
 L.sb_karma = "Karma"
 
-L.sb_info_help = "Search this player's body, and you can review the results here."
+L.sb_info_help = "Bu oyuncunun cesedinde arama yapıp sonuçları buradan inceleyebilirsiniz."
 
-L.sb_tag_friend = "FRIEND"
-L.sb_tag_susp = "SUSPECT"
-L.sb_tag_avoid = "AVOID"
-L.sb_tag_kill = "KILL"
-L.sb_tag_miss = "MISSING"
+L.sb_tag_friend = "ARKADAŞ"
+L.sb_tag_susp = "ŞÜPHELİ"
+L.sb_tag_avoid = "KAÇIN"
+L.sb_tag_kill = "ÖLDÜR"
+L.sb_tag_miss = "KAYIP"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "This weapon is out of stock: you already bought it this round."
-L.buy_pending = "You already have an order pending, wait until you receive it."
-L.buy_received = "You have received your special equipment."
+L.buy_no_stock = "Silahı bu rauntta aldın ve stoğu tükendi."
+L.buy_pending = "Zaten bekleyen bir siparişiniz var, alana kadar bekleyin."
+L.buy_received = "Özel ekipmanınızı aldınız."
 
-L.drop_no_room = "You have no room here to drop your weapon!"
+L.drop_no_room = "Burada silahını bırakacak yerin yok!"
 
-L.disg_turned_on = "Disguise enabled!"
-L.disg_turned_off = "Disguise disabled."
+L.disg_turned_on = "Kılık değiştirme etkinleştirildi!"
+L.disg_turned_off = "Kılık değiştirme devre dışı."
 
 -- Equipment item descriptions
-L.item_passive = "Passive effect item"
-L.item_active = "Active use item"
-L.item_weapon = "Weapon"
+L.item_passive = "Pasif etki öğesi"
+L.item_active = "Aktif kullanım öğesi"
+L.item_weapon = "Silah"
 
-L.item_armor = "Body Armor"
+L.item_armor = "Vücut Zırhı"
 L.item_armor_desc = [[
-Reduces bullet, fire and explosion damage. Depletes over time.
+Mermi, ateş ve patlama hasarını azaltır. Zamanla tükenir.
 
-It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
+Birden çok kez satın alınabilir. Belirli bir zırh değerine ulaştıktan sonra, zırh güçlenir.]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[
-Allows you to scan for life signs.
+Yaşam belirtilerini taramanızı sağlar.
 
-Starts automatic scans as soon as you buy it. Configure it in Radar tab of this menu.]]
+Satın alır almaz otomatik taramaları başlatır. Bu menünün Radar sekmesinde yapılandırın.]]
 
-L.item_disg = "Disguiser"
+L.item_disg = "Kılık Değiştirici"
 L.item_disg_desc = [[
-Hides your ID info while on. Also avoids being the person last seen by a victim.
+Açıkken kimlik bilgilerinizi gizler. Ayrıca bir mağdur tarafından en son görülen kişi olmaktan korur.
 
-Toggle in the Disguise tab of this menu or press Numpad Enter.]]
+Bu menünün Kılık Değiştirme sekmesini açın veya Numpad Enter tuşuna basın.]]
 
 -- C4
-L.c4_hint = "Press {usekey} to arm or disarm."
-L.c4_disarm_warn = "A C4 explosive you planted has been disarmed."
-L.c4_armed = "You have successfully armed the bomb."
-L.c4_disarmed = "You have successfully disarmed the bomb."
-L.c4_no_room = "You cannot carry this C4."
+L.c4_hint = "Devreye almak veya devre dışı bırakmak için {usekey} tuşuna basın."
+L.c4_disarm_warn = "Yerleştirdiğiniz bir C4 patlayıcı etkisiz hale getirildi."
+L.c4_armed = "Bombayı başarıyla devreye aldınız."
+L.c4_disarmed = "Bombayı başarıyla etkisiz hale getirdiniz."
+L.c4_no_room = "Bu C4'ü taşıyamazsınız."
 
-L.c4_desc = "Powerful timed explosive."
+L.c4_desc = "Güçlü zaman ayarlı patlayıcı."
 
-L.c4_arm = "Arm C4"
-L.c4_arm_timer = "Timer"
-L.c4_arm_seconds = "Seconds until detonation:"
-L.c4_arm_attempts = "In disarm attempts, {num} of the 6 wires will cause instant detonation when cut."
+L.c4_arm = "C4 kuşan"
+L.c4_arm_timer = "Zamanlayıcı"
+L.c4_arm_seconds = "Patlamaya saniye kaldı"
+L.c4_arm_attempts = "Etkisiz hale getirme girişimlerinde, 6 telden {num} tanesi kesildiğinde anında patlamaya neden olur."
 
-L.c4_remove_title = "Removal"
-L.c4_remove_pickup = "Pick up C4"
-L.c4_remove_destroy1 = "Destroy C4"
-L.c4_remove_destroy2 = "Confirm: destroy"
+L.c4_remove_title = "Kaldırma"
+L.c4_remove_pickup = "C4'ü al"
+L.c4_remove_destroy1 = "C4'ü yok et"
+L.c4_remove_destroy2 = "İmhayı onayla"
 
-L.c4_disarm = "Disarm C4"
-L.c4_disarm_cut = "Click to cut wire {num}"
+L.c4_disarm = "C4'ü devre dışı bırak"
+L.c4_disarm_cut = "{num} telini kesmek için tıklayın"
 
-L.c4_disarm_t     = "Cut a wire to disarm the bomb. As you are Traitor, every wire is safe. Innocents don't have it so easy!"
-L.c4_disarm_owned = "Cut a wire to disarm the bomb. It's your bomb, so every wire will disarm it."
-L.c4_disarm_other = "Cut a safe wire to disarm the bomb. It will explode if you get it wrong!"
+L.c4_disarm_t = "Bombayı etkisiz hale getirmek için bir kablo kesin. Hain olduğun için her kablo güvende. Masumlar için iş o kadar kolay değil!"
+L.c4_disarm_owned = "Bombayı etkisiz hale getirmek için bir kablo kesin. Bu senin bomban, bu yüzden her kablo onu etkisiz hale getirecek."
+L.c4_disarm_other = "Bombayı etkisiz hale getirmek için bir kablo kesin. Yanlış yaparsan patlar!"
 
-L.c4_status_armed = "ARMED"
-L.c4_status_disarmed = "DISARMED"
+L.c4_status_armed = "DEVREYE ALINDI"
+L.c4_status_disarmed = "DEVRE DIŞI"
 
 -- Visualizer
-L.vis_name = "Visualizer"
-L.vis_hint = "Press {usekey} to pick up (Detectives only)."
+L.vis_name = "Görüntüleyici"
+L.vis_hint = "Açmak için {usekey} tuşuna basın (Yalnızca Dedektifler)."
 
 L.vis_desc = [[
-Crime scene visualization device.
+Olay yeri görüntüleme cihazı.
 
-Analyzes a corpse to show how the victim was killed, but only if they died of gunshot wounds.]]
+Kurbanın nasıl öldürüldüğünü göstermek için bir cesedi analiz eder, ancak sadece kurşun yaralarından ölmüşlerse.]]
 
 -- Decoy
-L.decoy_name = "Decoy"
-L.decoy_no_room = "You cannot carry this decoy."
-L.decoy_broken = "Your Decoy has been destroyed!"
+L.decoy_name = "Tuzak"
+L.decoy_no_room = "Bu tuzağı taşıyamazsınız."
+L.decoy_broken = "Tuzağınız yok edildi!"
 
-L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
-L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
+L.decoy_short_desc = "Bu tuzak, diğer takımlar tarafından görülebilen sahte bir radar işareti gösterir"
+L.decoy_pickup_wrong_team = "Farklı bir takıma ait olduğu için alamazsınız"
 
 L.decoy_desc = [[
-Shows a fake radar sign to other teams, and makes the DNA scanner show the location of the Decoy if someone scans for your DNA.]]
+Diğer takımlara sahte bir radar işareti gösterir ve biri DNA'nızı tararsa DNA tarayıcısının tuzağın yerini göstermesini sağlar.]]
 
 -- Defuser
-L.defuser_name = "Defuser"
-L.defuser_help = "{primaryfire} defuses targeted C4."
+L.defuser_name = "İmha Kiti"
+L.defuser_help = "{primaryfire}, hedef C4'ü etkisiz hale getirir."
 
 L.defuser_desc = [[
-Instantly defuse a C4 explosive.
+Bir C4 patlayıcısını anında etkisiz hale getirin.
 
-Unlimited uses. C4 will be easier to notice if you carry this.]]
+Sınırsız kullanım. Bunu taşırsanız C4'ün fark edilmesi daha kolay olacaktır.]]
 
 -- Flare gun
-L.flare_name = "Flare gun"
+L.flare_name = "İşaret fişeği tabancası"
 
 L.flare_desc = [[
-Can be used to burn corpses so that they are never found. Limited ammo.
+Cesetleri asla bulunamayacak şekilde yakmak için kullanılabilir. Sınırlı cephane.
 
-Burning a corpse makes a distinct sound.]]
+Bir cesedi yakmak belirgin bir ses çıkarır.]]
 
 -- Health station
-L.hstation_name = "Health Station"
+L.hstation_name = "Sağlık İstasyonu"
 
-L.hstation_broken = "Your Health Station has been destroyed!"
-L.hstation_help = "{primaryfire} places the Health Station."
+L.hstation_broken = "Sağlık İstasyonun yok edildi!"
+L.hstation_help = "{primaryfire} Sağlık İstasyonunu yerleştirir."
 
 L.hstation_desc = [[
-Allows people to heal when placed.
+Yerleştirildiğinde insanların iyileşmesini sağlar.
 
-Slow recharge. Anyone can use it, and it can be damaged. Can be checked for DNA samples of its users.]]
+Yavaş şarj. Herkes kullanabilir ve zarar görebilir. Kullanıcılarının DNA örnekleri için kontrol edilebilir.]]
 
 -- Knife
-L.knife_name = "Knife"
-L.knife_thrown = "Thrown knife"
+L.knife_name = "Bıçak"
+L.knife_thrown = "Fırlatılan bıçak"
 
 L.knife_desc = [[
-Kills wounded targets instantly and silently, but only has a single use.
+Yaralı hedefleri anında ve sessizce öldürür, ancak yalnızca tek bir kullanımı vardır.
 
-Can be thrown using alternate fire.]]
+Alternatif ateş kullanılarak atılabilir.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Plants thumpers on objects to shove them around violently.
+Katilleri nesneleri şiddetle itip kakmak için üzerlerine vururlar.
 
-The energy bursts damage people in close proximity.]]
+Enerji patlamaları yakındaki insanlara zarar verir.]]
 
 -- Radio
-L.radio_broken = "Your Radio has been destroyed!"
-L.radio_help_pri = "{primaryfire} places the Radio."
+L.radio_broken = "Radyonuz yok edildi!"
+L.radio_help_pri = "{primaryfire} radyoyu yerleştirir."
 
 L.radio_desc = [[
-Plays sounds to distract or deceive.
+Dikkat dağıtmak veya kandırmak için sesler çıkarır.
 
-Place the radio somewhere, and then play sounds on it using the Radio tab in this menu.]]
+Radyoyu bir yere yerleştirin ve ardından bu menüdeki Radyo sekmesini kullanarak üzerindeki sesleri çalın.]]
 
 -- Silenced pistol
-L.sipistol_name = "Silenced Pistol"
+L.sipistol_name = "Susturuculu Tabanca"
 
 L.sipistol_desc = [[
-Low-noise handgun, uses normal pistol ammo.
+Düşük gürültülü tabanca, normal tabanca mermisi kullanır.
 
-Victims will not scream when killed.]]
+Kurbanlar öldürüldüklerinde çığlık atmazlar.]]
 
 -- Newton launcher
-L.newton_name = "Newton launcher"
+L.newton_name = "Newton fırlatıcı"
 
 L.newton_desc = [[
-Push people from a safe distance.
+İnsanları güvenli bir mesafeden itin.
 
-Infinite ammo, but slow to fire.]]
+Sonsuz cephane, ama ateş etmesi yavaş.]]
 
 -- Binoculars
-L.binoc_name = "Binoculars"
+L.binoc_name = "Dürbün"
 
 L.binoc_desc = [[
-Zoom in on corpses and identify them from a long distance away.
+Cesetleri yakınlaştırın ve uzak mesafeden teşhis edin.
 
-Unlimited uses, but identification takes a few seconds.]]
+Sınırsız kullanım, ancak teşhis birkaç saniye sürer.]]
 
 -- UMP
 L.ump_desc = [[
-Experimental SMG that disorients targets.
+Hedeflerin yönünü şaşırtan deneysel bir SMG.
 
-Uses standard SMG ammo.]]
+Standart SMG cephanesi kullanır.]]
 
 -- DNA scanner
-L.dna_name = "DNA scanner"
-L.dna_notfound = "No DNA sample found on target."
-L.dna_limit = "Storage limit reached. Remove old samples to add new ones."
-L.dna_decayed = "DNA sample of the killer has decayed."
-L.dna_killer = "Collected a sample of the killer's DNA from the corpse!"
-L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
-L.dna_no_killer = "The DNA could not be retrieved (killer disconnected?)."
-L.dna_armed = "This bomb is live! Disarm it first!"
-L.dna_object = "Collected a sample of the last owner from the object."
-L.dna_gone = "DNA not detected in area."
+L.dna_name = "DNA tarayıcı"
+L.dna_notfound = "Hedefte DNA örneği bulunamadı."
+L.dna_limit = "Depolama sınırına ulaşıldı. Yenilerini eklemek için eski numuneleri kaldırın."
+L.dna_decayed = "Katilin DNA örneği çürümüş."
+L.dna_killer = "Cesetten katilin DNA'sından bir örnek toplandı!"
+L.dna_duplicate = "Eşleşme! Tarayıcınızda bu DNA örneği zaten var."
+L.dna_no_killer = "DNA alınamadı (katil bağlantısı kesildi)."
+L.dna_armed = "Bu bomba aktif! Önce onu etkisiz hale getir!"
+L.dna_object = "Nesneden son sahibin bir örneği toplandı."
+L.dna_gone = "Bölgede DNA tespit edilmedi."
 
 L.dna_desc = [[
-Collect DNA samples from things and use them to find the DNA's owner.
+Nesnelerden DNA örnekleri toplayın ve bunları DNA'nın sahibini bulmak için kullanın.
 
-Use on fresh corpses to get the killer's DNA and track them down.]]
+Katilin DNA'sını almak ve izini sürmek için taze cesetler üzerinde kullanın.]]
 
 -- Magneto stick
-L.magnet_name = "Magneto-stick"
-L.magnet_help = "{primaryfire} to attach body to surface."
+L.magnet_name = "Manyeto çubuğu"
+L.magnet_help = "Cesedi yüzeye tutturmak için {primaryfire}"
 
 -- Grenades and misc
-L.grenade_smoke = "Smoke grenade"
-L.grenade_fire = "Incendiary grenade"
+L.grenade_smoke = "Duman bombası"
+L.grenade_fire = "Yakıcı bomba"
 
-L.unarmed_name = "Holstered"
-L.crowbar_name = "Crowbar"
-L.pistol_name = "Pistol"
-L.rifle_name = "Rifle"
-L.shotgun_name = "Shotgun"
+L.unarmed_name = "Gizlendi"
+L.crowbar_name = "Levye"
+L.pistol_name = "Tabanca"
+L.rifle_name = "Tüfek"
+L.shotgun_name = "Pompalı tüfek"
 
 -- Teleporter
-L.tele_name = "Teleporter"
-L.tele_failed = "Teleport failed."
-L.tele_marked = "Teleport location marked."
+L.tele_name = "Işınlayıcı"
+L.tele_failed = "Işınlama başarısız oldu."
+L.tele_marked = "Işınlanma konumu işaretlendi."
 
-L.tele_no_ground = "Cannot teleport unless standing on solid ground!"
-L.tele_no_crouch = "Cannot teleport while crouched!"
-L.tele_no_mark = "No location marked. Mark a destination before teleporting."
+L.tele_no_ground = "Sağlam bir zemin üzerinde durmadan ışınlanamazsın!"
+L.tele_no_crouch = "Çömelmişken ışınlanamazsın!"
+L.tele_no_mark = "Konum işaretlenmedi. Işınlanmadan önce varış noktasını işaretleyin."
 
-L.tele_no_mark_ground = "Cannot mark a teleport location unless standing on solid ground!"
-L.tele_no_mark_crouch = "Cannot mark a teleport location while crouched!"
+L.tele_no_mark_ground = "Sağlam bir zemin üzerinde durmadan ışınlanamazsın!"
+L.tele_no_mark_crouch = "Çömelmişken ışınlanma konumu işaretlenemez!"
 
-L.tele_help_pri = "Teleports to marked location"
-L.tele_help_sec = "Marks current location"
+L.tele_help_pri = "İşaretli konuma ışınlanır"
+L.tele_help_sec = "Mevcut konumu işaretler"
 
 L.tele_desc = [[
-Teleport to a previously marked spot.
+Daha önce işaretlenmiş bir noktaya ışınlanın.
 
-Teleporting makes noise, and the number of uses is limited.]]
+Işınlanma gürültü yapar ve kullanım sayısı sınırlıdır.]]
 
 -- Ammo names, shown when picked up
-L.ammo_pistol = "9mm ammo"
+L.ammo_pistol = "9mm cephanesi"
 
-L.ammo_smg1 = "SMG ammo"
-L.ammo_buckshot = "Shotgun ammo"
-L.ammo_357 = "Rifle ammo"
-L.ammo_alyxgun = "Deagle ammo"
-L.ammo_ar2altfire = "Flare ammo"
-L.ammo_gravity = "Poltergeist ammo"
+L.ammo_smg1 = "SMG cephanesi"
+L.ammo_buckshot = "Pompalı tüfek cephanesi"
+L.ammo_357 = "Tüfek cephanesi"
+L.ammo_alyxgun = "Deagle cephanesi"
+L.ammo_ar2altfire = "İşaret fişeği cephanesi"
+L.ammo_gravity = "Poltergeist cephanesi"
 
 -- Round status
-L.round_wait = "Waiting"
-L.round_prep = "Preparing"
-L.round_active = "In progress"
-L.round_post = "Round over"
+L.round_wait = "Bekleniyor"
+L.round_prep = "Hazırlanıyor"
+L.round_active = "Devam ediyor"
+L.round_post = "Raunt bitti"
 
 -- Health, ammo and time area
-L.overtime = "OVERTIME"
-L.hastemode = "HASTE MODE"
+L.overtime = "UZATMA"
+L.hastemode = "HIZLI MOD"
 
 -- TargetID health status
-L.hp_healthy = "Healthy"
-L.hp_hurt = "Hurt"
-L.hp_wounded = "Wounded"
-L.hp_badwnd = "Badly Wounded"
-L.hp_death = "Near Death"
+L.hp_healthy = "Sağlıklı"
+L.hp_hurt = "Hasar Görmüş"
+L.hp_wounded = "Yaralı"
+L.hp_badwnd = "Kötü Yaralanmış"
+L.hp_death = "Ölüme Yakın"
 
 -- TargetID Karma status
-L.karma_max = "Reputable"
-L.karma_high = "Crude"
-L.karma_med = "Trigger-happy"
-L.karma_low = "Dangerous"
-L.karma_min = "Liability"
+L.karma_max = "Saygın"
+L.karma_high = "Ham"
+L.karma_med = "Tetik Çekmeye Hazır"
+L.karma_low = "Tehlikeli"
+L.karma_min = "Sorumsuz"
 
 -- TargetID misc
-L.corpse = "Corpse"
-L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
+L.corpse = "Ceset"
+L.corpse_hint = "Arama yapmak için [{usekey}] tuşuna basın. Gizlice arama yapmak için [{walkkey}+{usekey}]."
 
-L.target_disg = "(disguised)"
-L.target_unid = "Unidentified body"
-L.target_unknown = "A Terrorist"
+L.target_disg = "(gizlenmiş)"
+L.target_unid = "Tanımlanamayan ceset"
+L.target_unknown = "Terörist"
 
-L.target_credits = "Search to receive unspent credits"
+L.target_credits = "Harcanmamış kredileri almak için arama yapın"
 
 -- HUD buttons with hand icons that only some roles can see and use
-L.tbut_single = "Single use"
-L.tbut_reuse = "Reusable"
-L.tbut_retime = "Reusable after {num} sec"
-L.tbut_help = "Press [{usekey}] to activate"
+L.tbut_single = "Tek kullanımlık"
+L.tbut_reuse = "Yeniden kullanılabilir"
+L.tbut_retime = "{num} saniye sonra tekrar kullanılabilir"
+L.tbut_help = "Etkinleştirmek için [{usekey}] tuşuna basın"
 
 -- Spectator muting of living/dead
-L.mute_living = "Living players muted"
-L.mute_specs = "Spectators muted"
-L.mute_all = "All muted"
-L.mute_off = "None muted"
+L.mute_living = "Yaşayan oyuncular sessize alındı"
+L.mute_specs = "İzleyiciler sessize alındı"
+L.mute_all = "Tümü sessiz"
+L.mute_off = "Hiçbiri sessiz değil"
 
 -- Spectators and prop possession
-L.punch_title = "PUNCH-O-METER"
-L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
-L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
+L.punch_title = "GÜÇ ÖLÇER"
+L.punch_bonus = "Kötü puanınız güç ölçer sınırınızı {num} düşürdü."
+L.punch_malus = "İyi puanın güç ölçer sınırını {num} arttırdı!"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
-You are an innocent Terrorist! But there are traitors around...
-Who can you trust, and who is out to fill you with bullets?
+Sen masum bir teröristsin! Ama etrafta hainler var...
+Kime güvenebilirsin ve seni kurşuna dizmek isteyen kim olabilir?
 
-Watch your back and work with your comrades to get out of this alive!]]
+Arkanı kolla ve bu işten canlı çıkmak için yoldaşlarınla birlikte çalış!]]
 
 L.info_popup_detective = [[
-You are a Detective! Terrorist HQ has given you special resources to find the traitors.
-Use them to help the innocent survive, but be careful:
-the traitors will be looking to take you down first!
+Sen bir Dedektifsin! Terörist Karargahı, hainleri bulman için sana özel kaynaklar verdi.
+Masumların hayatta kalmasına yardımcı olmak için bunları kullanın, ancak dikkatli olun
+hainler önce seni alaşağı etmek isteyecekler!
 
-Press {menukey} to receive your equipment!]]
+Ekipmanınızı almak için {menukey} tuşuna basın!]]
 
 L.info_popup_traitor_alone = [[
-You are a TRAITOR! You have no fellow traitors this round.
+Sen bir HAİNSİN! Bu rauntta hain arkadaşın yok.
 
-Kill all others to win!
+Kazanmak için diğerlerini öldür!
 
-Press {menukey} to receive your special equipment!]]
+Ekipmanınızı almak için {menukey} tuşuna basın!]]
 
 L.info_popup_traitor = [[
-You are a TRAITOR! Work with fellow traitors to kill all others.
-But take care, or your treason may be discovered...
+Sen bir HAİNSİN! Diğerlerini öldürmek için diğer hainlerle birlikte çalışın.
+Kendine iyi bak, yoksa vatan hainliğin ortaya çıkabilir...
 
-These are your comrades:
+Bunlar senin yoldaşların
 {traitorlist}
 
-Press {menukey} to receive your special equipment!]]
+Ekipmanınızı almak için {menukey} tuşuna basın!]]
 
 -- Various other text
-L.name_kick = "A player was automatically kicked for changing their name during a round."
+L.name_kick = "Rauntta bir oyuncu ismini değiştirdiği için otomatik olarak atıldı."
 
 L.idle_popup = [[
-You were idle for {num} seconds and were moved into Spectator-only mode as a result. While you are in this mode, you will not spawn when a new round starts.
+{num} saniye boyunca boşta olduğun için İzleyici moduna aktarıldın. Bu moddayken, yeni bir raunt başladığında oyuna başlamayacaksın.
 
-You can toggle Spectator-only mode at any time by pressing {helpkey} and unchecking the box in the Settings tab. You can also choose to disable it right now.]]
+{helpkey} tuşuna basarak ve Ayarlar sekmesindeki kutunun işaretini kaldırarak istediğiniz zaman İzleyici modunu değiştirebilirsiniz. Ayrıca şu anda devre dışı bırakmayı da seçebilirsiniz.]]
 
-L.idle_popup_close = "Do nothing"
-L.idle_popup_off = "Disable Spectator-only mode now"
+L.idle_popup_close = "Hiçbir şey yapma"
+L.idle_popup_off = "İzleyici modunu şimdi devre dışı bırak"
 
-L.idle_warning = "Warning: you appear to be idle/AFK, and will be made to spectate unless you show activity!"
+L.idle_warning = "Uyarı! Boşta gibi görünüyorsunuz ve hareket etmediğiniz sürece izleyiciye alınacaksınız!"
 
-L.spec_mode_warning = "You are in Spectator Mode and will not spawn when a round starts. To disable this mode, press F1, go to 'Gameplay' and uncheck 'Spectate-only mode'."
+L.spec_mode_warning = "İzleyici modundasın ve bir raunt başladığında oyuna başlamayacaksın. Bu modu devre dışı bırakmak için F1'e basın, 'Oynanış'a gidin ve 'Yalnızca İzle modu'nun işaretini kaldırın."
 
 -- Tips panel
-L.tips_panel_title = "Tips"
-L.tips_panel_tip = "Tip:"
+L.tips_panel_title = "İpuçları"
+L.tips_panel_tip = "İpucu"
 
 -- Tip texts
-L.tip1 = "Traitors can search a corpse silently, without confirming the death, by holding {walkkey} and pressing {usekey} on the corpse."
+L.tip1 = "Hainler, {walkkey} tuşunu basılı tutarak ve {usekey} tuşuna basarak, ölümü onaylamadan bir cesedi sessizce arayabilirler."
 
-L.tip2 = "Arming a C4 explosive with a longer timer will increase the number of wires that cause it to explode instantly when an innocent attempts to disarm it. It will also beep softer and less often."
+L.tip2 = "Bir C4 patlayıcısını daha uzun bir zamanlayıcıyla donatmak, masum biri onu etkisiz hale getirmeye çalıştığında anında patlamasına neden olan tellerin sayısını artıracaktır. Ayrıca daha yumuşak ve daha az sıklıkta bip sesi çıkaracaktır."
 
-L.tip3 = "Detectives can search a corpse to find who is 'reflected in its eyes'. This is the last person the dead guy saw. That does not have to be the killer if they were shot in the back."
+L.tip3 = "Dedektifler, 'gözlerine yansıyanı' bulmak için bir cesedi arayabilirler. Bu, ölü adamın gördüğü son kişi. Arkadan vurulduysa katil olmak zorunda değil."
 
-L.tip4 = "No one will know you have died until they find your dead body and identify you by searching it."
+L.tip4 = "Kimse cesedinizi bulana ve sizi arayarak teşhis edene kadar öldüğünüzü bilmeyecek."
 
-L.tip5 = "When a Traitor kills a Detective, they instantly receive a credit reward."
+L.tip5 = "Bir Hain bir Dedektifi öldürdüğünde, anında bir kredi ödülü alır."
 
-L.tip6 = "When a Traitor dies, all Detectives are rewarded equipment credits."
+L.tip6 = "Bir Hain öldüğünde, tüm Dedektifler ekipman kredisi ile ödüllendirilir."
 
-L.tip7 = "When the Traitors have made significant progress in killing innocents, they will receive an equipment credit as reward."
+L.tip7 = "Hainler masumları öldürmede önemli ilerleme kaydettiklerinde, ödül olarak bir ekipman kredisi alacaklar."
 
-L.tip8 = "Traitors and Detectives can collect unspent equipment credits from the dead bodies of other Traitors and Detectives."
+L.tip8 = "Hainler ve Dedektifler, diğer Hainlerin ve Dedektiflerin cesetlerinden harcanmamış ekipman kredileri toplayabilir."
 
-L.tip9 = "The Poltergeist can turn any physics object into a deadly projectile. Each punch is accompanied by a blast of energy hurting anyone nearby."
+L.tip9 = "Afacan Peri herhangi bir fizik nesnesini ölümcül bir mermiye dönüştürebilir. Her yumruğa, yakındaki herkese zarar veren bir enerji patlaması eşlik eder."
 
-L.tip10 = "As Traitor or Detective, keep an eye on red messages in the top right. These will be important for you."
+L.tip10 = "Hain veya Dedektifseniz, sağ üstteki kırmızı mesajlara dikkat edin. Bunlar sizin için önemli olacak."
 
-L.tip11 = "As Traitor or Detective, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+L.tip11 = "Hain veya Dedektif olarak, siz ve yoldaşlarınız iyi performans gösterirseniz ekstra ekipman kredisi ile ödüllendirileceğinizi unutmayın. Harcamayı unutmayın!"
 
-L.tip12 = "The Detectives' DNA Scanner can be used to gather DNA samples from weapons and items and then scan to find the location of the player who used them. Useful when you can get a sample from a corpse or a disarmed C4!"
+L.tip12 = "Dedektiflerin DNA Tarayıcısı, silahlardan ve eşyalardan DNA örnekleri toplamak ve daha sonra bunları kullanan oyuncunun yerini bulmak için tarama yapmak için kullanılabilir. Bir cesetten veya etkisiz hale getirilmiş bir C4'ten numune alabildiğinizde kullanışlıdır!"
 
-L.tip13 = "When you are close to someone you kill, some of your DNA is left on the corpse. This DNA can be used with a Detective's DNA Scanner to find your current location. Better hide the body after you knife someone!"
+L.tip13 = "Öldürdüğünüz birine yakın olduğunuzda, DNA'nızın bir kısmı cesedin üzerinde kalır. Bu DNA, mevcut konumunuzu bulmak için bir Dedektifin DNA Tarayıcısı ile kullanılabilir. Birini bıçakladıktan sonra cesedi saklasan iyi olur!"
 
-L.tip14 = "The further you are away from someone you kill, the faster your DNA sample on their body will decay."
+L.tip14 = "Öldürdüğünüz birinden ne kadar uzaktaysanız, vücudundaki DNA örneğiniz o kadar hızlı bozulur."
 
-L.tip15 = "Are you Traitor and going sniping? Consider trying out the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+L.tip15 = "Hain misin ve keskin nişancılık mı yapıyorsun? Kılık Değiştiriciyi denemeyi düşün. Bir atışı kaçırırsan, güvenli bir yere kaç, Kılık Değiştiriciyi devre dışı bırak ve hiç kimse onlara ateş edenin sen olduğunu bilmeyecek."
 
-L.tip16 = "As Traitor, the Teleporter can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+L.tip16 = "Hain olarak Işınlayıcı, kovalandığında kaçmana yardımcı olabilir ve büyük bir harita üzerinde hızlı bir şekilde seyahat etmeni sağlar. Her zaman işaretli güvenli bir pozisyonunuz olduğundan emin olun."
 
-L.tip17 = "Are the innocents all grouped up and hard to pick off? Consider trying out the Radio to play sounds of C4 or a firefight to lead some of them away."
+L.tip17 = "Masumların hepsi gruplanmış ve öldürmesi zor mu? C4 seslerini çalmak için Radyoyu veya bazılarını uzaklaştırmak için ateş etmeyi düşünün."
 
-L.tip18 = "Using the Radio as Traitor, you can play sounds through your Equipment Menu after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
+L.tip18 = "Radyoyu Hainken, radyo yerleştirildikten sonra Ekipman Menünüzden sesleri çalabilirsiniz. İstediğiniz sırayla birden fazla düğmeye tıklayarak birden fazla sesi sıraya koyun."
 
-L.tip19 = "As Detective, if you have leftover credits you could give a trusted Innocent a Defuser. Then you can spend your time doing the serious investigative work and leave the risky bomb defusal to them."
+L.tip19 = "Dedektifken, kalan kredileriniz varsa, güvenilir bir Masuma İmha Kiti verebilirsiniz. O zaman zamanınızı ciddi araştırma çalışmaları yaparak geçirebilir ve riskli bomba imha işini onlara bırakabilirsiniz."
 
-L.tip20 = "The Detectives' Binoculars allow long-range searching and identifying of corpses. Bad news if the Traitors were hoping to use a corpse as bait. Of course, while using the Binoculars a Detective is unarmed and distracted..."
+L.tip20 = "Dedektiflerin Dürbünü, cesetlerin uzun menzilli aranmasına ve tanımlanmasına izin verir. Hainler bir cesedi yem olarak kullanmayı umuyorsa kötü haber. Elbette, Dürbünü kullanırken bir Dedektif silahsızdır ve dikkati dağılır..."
 
-L.tip21 = "The Detectives' Health Station lets wounded players recover. Of course, those wounded people could be Traitors..."
+L.tip21 = "Dedektiflerin Sağlık İstasyonu, yaralı oyuncuların iyileşmesini sağlar. Tabii o yaralılar da Hain olabilir..."
 
-L.tip22 = "The Health Station records a DNA sample of everyone who uses it. Detectives can use this with the DNA Scanner to find out who has been healing up."
+L.tip22 = "Sağlık İstasyonu, onu kullanan herkesin DNA örneğini kaydeder. Dedektifler bunu DNA Tarayıcısı ile kimin iyileştiğini bulmak için kullanabilirler."
 
-L.tip23 = "Unlike weapons and C4, the Radio equipment for Traitors does not contain a DNA sample of the person who planted it. Don't worry about Detectives finding it and blowing your cover."
+L.tip23 = "Silahlar ve C4'ten farklı olarak, Hainler için Radyo ekipmanı, onu yerleştiren kişinin DNA örneğini içermez. Dedektiflerin onu bulması ve kimliğini ifşa etmesi konusunda endişelenme."
 
-L.tip24 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings. For example, you can permanently disable these tips there."
+L.tip24 = "Kısa bir öğreticiyi görüntülemek veya TTT'ye özgü bazı ayarları değiştirmek için {helpkey} tuşuna basın. Örneğin, bu ipuçlarını kalıcı olarak devre dışı bırakabilirsiniz."
 
-L.tip25 = "When a Detective searches a body, the result is available to all players via the scoreboard by clicking on the name of the dead person."
+L.tip25 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan panosu aracılığıyla tüm oyuncuların kullanımına açıktır."
 
-L.tip26 = "In the scoreboard, a magnifying glass icon next to someone's name indicates you have search information about that person. If the icon is bright, the data comes from a Detective and may contain additional information."
+L.tip26 = "Skor tablosunda, birinin adının yanındaki büyüteç simgesi, o kişi hakkında arama bilgilerine sahip olduğunuzu gösterir. Simge parlaksa, veriler bir Dedektiften gelir ve ek bilgiler içerebilir."
 
-L.tip27 = "As Detective, corpses with a magnifying glass after the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+L.tip27 = "Dedektif olarak, takma addan sonra büyüteç takılan cesetler bir Dedektif tarafından arandı ve sonuçları skor tablosu aracılığıyla tüm oyunculara açıktır."
 
-L.tip28 = "Spectators can press {mutekey} to cycle through muting other spectators or living players."
+L.tip28 = "İzleyiciler, diğer izleyicileri veya yaşayan oyuncuları susturmak için {mutekey} tuşuna basabilir."
 
-L.tip29 = "If the server has installed additional languages, you can switch to a different language at any time in the Settings menu."
+L.tip29 = "Sunucu ek diller yüklediyse, Ayarlar menüsünden istediğiniz zaman farklı bir dile geçebilirsiniz."
 
-L.tip30 = "Quickchat or 'radio' commands can be used by pressing {zoomkey}."
+L.tip30 = "Hızlı sohbet veya 'radyo' komutları {zoomkey} tuşuna basılarak kullanılabilir."
 
-L.tip31 = "As Spectator, press {duckkey} to unlock your mouse cursor and click the buttons on this tips panel. Press {duckkey} again to go back to mouseview."
+L.tip31 = "İzleyiciyken, fare imlecinin kilidini açmak için {duckkey} tuşuna bas ve bu ipuçları panelindeki düğmelere tıkla. Fare görünümüne geri dönmek için {duckkey} tuşuna tekrar basın."
 
-L.tip32 = "The Crowbar's secondary fire will push other players."
+L.tip32 = "Levyenin ikincil ateşi diğer oyuncuları itecektir."
 
-L.tip33 = "Firing through the ironsights of a weapon will slightly increase your accuracy and decrease recoil. Crouching does not."
+L.tip33 = "Nişangahı kullanarak ateş etmek, isabetini biraz artıracak ve geri tepmeyi azaltacaktır. Çömelmek işe yaramaz."
 
-L.tip34 = "Smoke grenades are effective indoors, especially for creating confusion in crowded rooms."
+L.tip34 = "Duman bombaları, özellikle kalabalık odalarda kafa karışıklığı yaratmak için iç mekanlarda etkilidir."
 
-L.tip35 = "As Traitor, remember you can carry dead bodies and hide them from the prying eyes of the innocent and their Detectives."
+L.tip35 = "Hain olarak, cesetleri taşıyabileceğinizi ve onları masumların ve Dedektiflerinin meraklı gözlerinden saklayabileceğinizi unutmayın."
 
-L.tip36 = "The tutorial available under {helpkey} contains an overview of the most important keys of the game."
+L.tip36 = "{helpkey} altında bulunan öğretici, oyunun en önemli ince ayrıntılarına genel bir bakış içerir."
 
-L.tip37 = "On the scoreboard, click the name of a living player and you can select a tag for them such as 'suspect' or 'friend'. This tag will show up if you have them under your crosshair."
+L.tip37 = "Skor tablosunda, yaşayan bir oyuncunun adına tıklayıp 'şüpheli' veya 'arkadaş' gibi bir etiket seçebilirsiniz. Bu etiket, nişangahınızın altındaysa görünecektir."
 
-L.tip38 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
+L.tip38 = "Yerleştirilebilir ekipman öğelerinin çoğu (C4, Radyo gibi) ikincil ateş kullanılarak duvarlara yapıştırılabilir."
 
-L.tip39 = "C4 that explodes due to a mistake in disarming it has a smaller explosion than C4 that reaches zero on its timer."
+L.tip39 = "Etkisiz hale getirilirken bir hata nedeniyle patlayan C4, zamanlayıcısında sıfıra ulaşan C4'ten daha küçük bir patlamaya sahiptir."
 
-L.tip40 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases (like capturing a point in TF2). This mode puts the pressure on the traitors to keep things moving."
+L.tip40 = "Raunt zamanlayıcısının üzerinde 'HIZLI MOD' yazıyorsa, raunt ilk başta sadece birkaç dakika uzunluğunda olacaktır, ancak her ölümle birlikte mevcut süre artar (TF2'deki bir noktayı yakalamak gibi). Bu mod, hainlere işlerini devam ettirmeleri için baskı yapar."
 
 -- Round report
-L.report_title = "Round Report"
+L.report_title = "Raunt Raporu"
 
 -- Tabs
-L.report_tab_hilite = "Highlights"
-L.report_tab_hilite_tip = "Round highlights"
-L.report_tab_events = "Events"
-L.report_tab_events_tip = "Log of the events that happened this round"
-L.report_tab_scores = "Scores"
-L.report_tab_scores_tip = "Points scored by each player in this round alone"
+L.report_tab_hilite = "Önemli Noktalar"
+L.report_tab_hilite_tip = "Rauntta Öne Çıkanlar"
+L.report_tab_events = "Olaylar"
+L.report_tab_events_tip = "Bu raunt gerçekleşen olayların kaydı"
+L.report_tab_scores = "Puanlar"
+L.report_tab_scores_tip = "Sadece bu rauntta her oyuncunun aldığı puan"
 
 -- Event log saving
-L.report_save = "Save Log .txt"
-L.report_save_tip = "Saves the Event Log to a text file"
-L.report_save_error = "No Event Log data to save."
-L.report_save_result = "The Event Log has been saved to:"
+L.report_save = "Kaydı .txt olarak kaydet"
+L.report_save_tip = "Olay Kaydını bir metin dosyasına kaydeder"
+L.report_save_error = "Kaydedilecek Olay Kaydı verisi yok."
+L.report_save_result = "Olay Kaydı şuraya kaydedildi:"
 
 -- Columns
-L.col_time = "Time"
-L.col_event = "Event"
-L.col_player = "Player"
-L.col_roles = "Role(s)"
-L.col_teams = "Team(s)"
-L.col_kills1 = "Kills"
-L.col_kills2 = "Team kills"
-L.col_points = "Points"
-L.col_team = "Team bonus"
-L.col_total = "Total points"
+L.col_time = "Zaman"
+L.col_event = "Olay"
+L.col_player = "Oyuncu"
+L.col_roles = "Rol(ler)"
+L.col_teams = "Takım(lar)"
+L.col_kills1 = "Öldürmeler"
+L.col_kills2 = "Takım öldürmeleri"
+L.col_points = "Puanlar"
+L.col_team = "Takım bonusu"
+L.col_total = "Toplam puan"
 
 -- Awards/highlights
-L.aw_sui1_title = "Suicide Cult Leader"
-L.aw_sui1_text = "showed the other suiciders how to do it by being the first to go."
+L.aw_sui1_title = "İntihar Tarikatı Lideri"
+L.aw_sui1_text = "ilk giden olarak diğer intihar edenlere nasıl yapılacağını gösterdi."
 
-L.aw_sui2_title = "Lonely and Depressed"
-L.aw_sui2_text = "was the only one who killed themselves."
+L.aw_sui2_title = "Yalnız ve Depresyonda"
+L.aw_sui2_text = "kendini öldüren tek kişiydi."
 
-L.aw_exp1_title = "Explosives Research Grant"
-L.aw_exp1_text = "was recognized for their research on explosions. {num} test subjects helped out."
+L.aw_exp1_title = "Patlayıcı Araştırma Hibesi"
+L.aw_exp1_text = "patlamalar üzerine yaptıkları araştırmalarla tanındı. {num} denek yardımcı oldu."
 
-L.aw_exp2_title = "Field Research"
-L.aw_exp2_text = "tested their own resistance to explosions. It was not high enough."
+L.aw_exp2_title = "Saha Araştırması"
+L.aw_exp2_text = "patlamalara karşı kendi dirençlerini test etti. Yeterince yüksek değildi."
 
-L.aw_fst1_title = "First Blood"
-L.aw_fst1_text = "delivered the first innocent death at a traitor's hands."
+L.aw_fst1_title = "İlk Kan"
+L.aw_fst1_text = "bir hainin elindeki ilk masum ölümü teslim etti."
 
-L.aw_fst2_title = "First Bloody Stupid Kill"
-L.aw_fst2_text = "scored the first kill by shooting a fellow traitor. Good job."
+L.aw_fst2_title = "İlk Kanlı Aptal Öldürme"
+L.aw_fst2_text = "bir hain dostunu vurarak ilk cinayeti işledi. İyi iş."
 
-L.aw_fst3_title = "First Blooper"
-L.aw_fst3_text = "was the first to kill. Too bad it was an innocent comrade."
+L.aw_fst3_title = "İlk Hatacı"
+L.aw_fst3_text = "ilk öldüren oldu. Masum bir yoldaş olması çok kötü oldu."
 
-L.aw_fst4_title = "First Blow"
-L.aw_fst4_text = "struck the first blow for the innocent terrorists by making the first death a traitor's."
+L.aw_fst4_title = "İlk Darbe"
+L.aw_fst4_text = "ilk ölümü hainin yaparak masum teröristlere ilk darbeyi vurdu."
 
-L.aw_all1_title = "Deadliest Among Equals"
-L.aw_all1_text = "was responsible for every kill made by the innocent this round."
+L.aw_all1_title = "Eşitler Arasında En Ölümcül"
+L.aw_all1_text = "bu rauntta masumlar tarafından yapılan her cinayetten sorumluydu."
 
-L.aw_all2_title = "Lone Wolf"
-L.aw_all2_text = "was responsible for every kill made by a traitor this round."
+L.aw_all2_title = "Yalnız Kurt"
+L.aw_all2_text = "bu rauntta bir hain tarafından yapılan her cinayetten sorumluydu."
 
-L.aw_nkt1_title = "I Got One, Boss!"
-L.aw_nkt1_text = "managed to kill a single innocent. Sweet!"
+L.aw_nkt1_title = "Birini Aldım Patron!"
+L.aw_nkt1_text = "tek bir masumu öldürmeyi başardı. Güzel!"
 
-L.aw_nkt2_title = "A Bullet For Two"
-L.aw_nkt2_text = "showed the first one was not a lucky shot by killing another."
+L.aw_nkt2_title = "İki Kişilik Kurşun"
+L.aw_nkt2_text = "ilkinin bir başkasını öldürerek şanslı bir atış olmadığını gösterdi."
 
-L.aw_nkt3_title = "Serial Traitor"
-L.aw_nkt3_text = "ended three innocent lives of terrorism today."
+L.aw_nkt3_title = "Seri Hain"
+L.aw_nkt3_text = "bugün üç masum terörizm hayatına son verdi."
 
-L.aw_nkt4_title = "Wolf Among More Sheep-Like Wolves"
-L.aw_nkt4_text = "eats innocent terrorists for dinner. A dinner of {num} courses."
+L.aw_nkt4_title = "Daha Fazla Koyun Benzeri Kurt Arasında Kurt"
+L.aw_nkt4_text = "Masum teröristleri akşam yemeğinde yer. {num} yemekten oluşan bir akşam yemeği."
 
-L.aw_nkt5_title = "Counter-Terrorism Operative"
-L.aw_nkt5_text = "gets paid per kill. Can now buy another luxury yacht."
+L.aw_nkt5_title = "Terörle Mücadele Operatörü"
+L.aw_nkt5_text = "öldürme başına ödeme alır. Artık başka bir lüks yat satın alabilirim."
 
-L.aw_nki1_title = "Betray This"
-L.aw_nki1_text = "found a traitor. Shot a traitor. Easy."
+L.aw_nki1_title = "Buna İhanet Et"
+L.aw_nki1_text = "bir hain buldu. Bir haini vurdu. Kolaydı."
 
-L.aw_nki2_title = "Applied to the Justice Squad"
-L.aw_nki2_text = "escorted two traitors to the great beyond."
+L.aw_nki2_title = "Adalet Ekibine Müracaat Edildi"
+L.aw_nki2_text = "iki haine büyük öteye kadar eşlik etti."
 
-L.aw_nki3_title = "Do Traitors Dream Of Traitorous Sheep?"
-L.aw_nki3_text = "put three traitors to rest."
+L.aw_nki3_title = "Hainler Hain Koyun Düşler mi"
+L.aw_nki3_text = "üç haine tatlı rüyalar gördür."
 
-L.aw_nki4_title = "Internal Affairs Employee"
-L.aw_nki4_text = "gets paid per kill. Can now order their fifth swimming pool."
+L.aw_nki4_title = "İçişleri Çalışanı"
+L.aw_nki4_text = "öldürme başına ödeme alır. Artık beşinci yüzme havuzunu sipariş edebilir."
 
-L.aw_fal1_title = "No Mr. Bond, I Expect You To Fall"
-L.aw_fal1_text = "pushed someone off a great height."
+L.aw_fal1_title = "Hayır Bay Bond, Düşmenizi Bekliyorum"
+L.aw_fal1_text = "birini büyük bir yükseklikten itti."
 
-L.aw_fal2_title = "Floored"
-L.aw_fal2_text = "let their body hit the floor after falling from a significant altitude."
+L.aw_fal2_title = "Döşenmiş"
+L.aw_fal2_text = "kayda değer bir yükseklikten düştükten sonra bedenlerinin yere çarpmasına izin verin."
 
-L.aw_fal3_title = "The Human Meteorite"
-L.aw_fal3_text = "crushed someone by falling on them from a great height."
+L.aw_fal3_title = "İnsan Göktaşı"
+L.aw_fal3_text = "büyük bir yükseklikten birinin üstüne düşerek ezdi."
 
-L.aw_hed1_title = "Efficiency"
-L.aw_hed1_text = "discovered the joy of headshots and made {num}."
+L.aw_hed1_title = "Verimlilik"
+L.aw_hed1_text = "kafadan vurma sevincini keşfetti ve {num} kazandı."
 
-L.aw_hed2_title = "Neurology"
-L.aw_hed2_text = "removed the brains from {num} heads for a closer examination."
+L.aw_hed2_title = "Nöroloji"
+L.aw_hed2_text = "daha yakından incelemek için beyinleri {num} kafadan çıkardı."
 
-L.aw_hed3_title = "Videogames Made Me Do It"
-L.aw_hed3_text = "applied their murder simulation training and headshotted {num} foes."
+L.aw_hed3_title = "Video Oyunları Bana Zorla Yaptırdı"
+L.aw_hed3_text = "cinayet simülasyonu eğitimini uyguladı ve {num} düşmanı kafadan vurdu."
 
-L.aw_cbr1_title = "Thunk Thunk Thunk"
-L.aw_cbr1_text = "has a mean swing with the crowbar, as {num} victims found out."
+L.aw_cbr1_title = "Sırra Kadem Bas"
+L.aw_cbr1_text = "levyeyi gelişigüzel sallar ve bunu {num} kurban öğrenir."
 
 L.aw_cbr2_title = "Freeman"
-L.aw_cbr2_text = "covered their crowbar in the brains of no less than {num} people."
+L.aw_cbr2_text = "levyelerini en az {num} kişinin beynine sapladı."
 
-L.aw_pst1_title = "Persistent Little Bugger"
-L.aw_pst1_text = "scored {num} kills using the pistol. Then they went on to hug someone to death."
+L.aw_pst1_title = "Israrcı Küçük Alçak"
+L.aw_pst1_text = "tabancayı kullanarak {num} kişi öldürdü. Sonra birine ölümüne sarılmaya devam ettiler."
 
-L.aw_pst2_title = "Small Caliber Slaughter"
-L.aw_pst2_text = "killed a small army of {num} with a pistol. Presumably installed a tiny shotgun inside the barrel."
+L.aw_pst2_title = "Küçük Kalibreli Kesim"
+L.aw_pst2_text = "{num} kişilik küçük bir orduyu tabancayla öldürdü. Muhtemelen namlunun içine küçük bir av tüfeği yerleştirdi."
 
-L.aw_sgn1_title = "Easy Mode"
-L.aw_sgn1_text = "applies the buckshot where it hurts, murdering {num} targets."
+L.aw_sgn1_title = "Kolay Mod"
+L.aw_sgn1_text = "iri saçmayı acıdığı yere uygulayarak {num} hedefi öldürür."
 
-L.aw_sgn2_title = "A Thousand Little Pellets"
-L.aw_sgn2_text = "didn't really like their buckshot, so they gave it all away. {num} recipients did not live to enjoy it."
+L.aw_sgn2_title = "Bin Küçük Saçma Tanesi"
+L.aw_sgn2_text = "saçmalarını gerçekten beğenmedi, bu yüzden hepsini verdiler. {num} alıcı bundan zevk alacak kadar yaşamadı."
 
-L.aw_rfl1_title = "Point and Click"
-L.aw_rfl1_text = "shows all you need for {num} kills is a rifle and a steady hand."
+L.aw_rfl1_title = "İşaretle ve Tıkla"
+L.aw_rfl1_text = "{num} öldürme için ihtiyacın olan tek şeyin bir tüfek ve titremeyen bir el olduğunu gösterir."
 
-L.aw_rfl2_title = "I Can See Your Head From Here"
-L.aw_rfl2_text = "knows their rifle. Now {num} other people know the rifle too."
+L.aw_rfl2_title = "Kafanı Buradan Görebiliyorum"
+L.aw_rfl2_text = "tüfeğini biliyor. Şimdi {num} kişi daha tüfeği biliyor."
 
-L.aw_dgl1_title = "It's Like A Tiny Rifle"
-L.aw_dgl1_text = "is getting the hang of the Desert Eagle and killed {num} people."
+L.aw_dgl1_title = "Küçük Bir Tüfek Gibi"
+L.aw_dgl1_text = "Desert Eagle'a alışıp {num} kişiyi öldürdü."
 
-L.aw_dgl2_title = "Eagle Master"
-L.aw_dgl2_text = "blew away {num} people with the deagle."
+L.aw_dgl2_title = "Deagle Ustası"
+L.aw_dgl2_text = "{num} kişiyi deagle ile darmadağın etti."
 
-L.aw_mac1_title = "Pray and Slay"
-L.aw_mac1_text = "killed {num} people with the MAC10, but won't say how much ammo they needed."
+L.aw_mac1_title = "Dua Et ve Öldür"
+L.aw_mac1_text = "MAC10 ile {num} kişiyi öldürdü, ama öldürmek için ne kadar mermiye ihtiyaç duyduğunu söylemeyecek."
 
-L.aw_mac2_title = "Mac and Cheese"
-L.aw_mac2_text = "wonders what would happen if they could wield two MAC10s. {num} times two?"
+L.aw_mac2_title = "Gülümse ve Seyret"
+L.aw_mac2_text = "iki MAC10 kullanabilseler ne olacağını merak ediyor. {num} çarpı iki"
 
-L.aw_sip1_title = "Be Quiet"
-L.aw_sip1_text = "shut {num} people up with the silenced pistol."
+L.aw_sip1_title = "Sessiz Ol"
+L.aw_sip1_text = "{num} kişiyi susturulmuş tabancayla sustur."
 
-L.aw_sip2_title = "Silenced Assassin"
-L.aw_sip2_text = "killed {num} people who did not hear themselves die."
+L.aw_sip2_title = "Susturulmuş Suikastçı"
+L.aw_sip2_text = "kendini ölürken duymayan {num} kişiyi öldürdü."
 
-L.aw_knf1_title = "Knife Knowing You"
-L.aw_knf1_text = "stabbed someone in the face over the internet."
+L.aw_knf1_title = "Seni Bilen Bıçak"
+L.aw_knf1_text = "internet üzerinden birini yüzünden bıçakladı."
 
-L.aw_knf2_title = "Where Did You Get That From?"
-L.aw_knf2_text = "was not a Traitor, but still killed someone with a knife."
+L.aw_knf2_title = "Bunu Nereden Aldın"
+L.aw_knf2_text = "bir Hain değildi, ama yine de bıçakla birini öldürdü."
 
-L.aw_knf3_title = "Such A Knife Man"
-L.aw_knf3_text = "found {num} knives lying around, and made use of them."
+L.aw_knf3_title = "Böyle Bir Bıçak Adam"
+L.aw_knf3_text = "etrafta {num} bıçak buldu ve bunlardan faydalandı."
 
-L.aw_knf4_title = "World's Knifest Man"
-L.aw_knf4_text = "killed {num} people with a knife. Don't ask me how."
+L.aw_knf4_title = "Dünyanın En Bıçak Adamı"
+L.aw_knf4_text = "{num} kişiyi bıçakla öldürdü. Nasıl olduğunu sorma."
 
-L.aw_flg1_title = "To The Rescue"
-L.aw_flg1_text = "used their flares to signal for {num} deaths."
+L.aw_flg1_title = "Kurtarmaya"
+L.aw_flg1_text = "işaret fişeklerini {num} ölüm sinyali vermek için kullandı."
 
-L.aw_flg2_title = "Flare Indicates Fire"
-L.aw_flg2_text = "taught {num} men about the danger of wearing flammable clothing."
+L.aw_flg2_title = "İşaret Fişeği Yangını Gösterir"
+L.aw_flg2_text = "{num} erkeğe yanıcı kıyafet giymenin tehlikesini öğretti."
 
-L.aw_hug1_title = "A H.U.G.E Spread"
-L.aw_hug1_text = "was in tune with their H.U.G.E, somehow managing to make their bullets hit {num} people."
+L.aw_hug1_title = "H.U.G.E Felaketi"
+L.aw_hug1_text = "H.U.G.E.'leriyle uyumluydu, bir şekilde mermilerini {num} kişiye isabet ettirmeyi başardı."
 
-L.aw_hug2_title = "A Patient Para"
-L.aw_hug2_text = "just kept firing, and saw their H.U.G.E patience rewarded with {num} kills."
+L.aw_hug2_title = "Sabırlı Er"
+L.aw_hug2_text = "sadece ateş etmeye devam etti ve H.U.G.E.'nin sabrının {num} öldürme ile ödüllendirildiğini gördü."
 
-L.aw_msx1_title = "Putt Putt Putt"
-L.aw_msx1_text = "picked off {num} people with the M16."
+L.aw_msx1_title = "Bam Bam Bam"
+L.aw_msx1_text = "M16 ile {num} kişiyi öldürdü."
 
-L.aw_msx2_title = "Mid-range Madness"
-L.aw_msx2_text = "knows how to take down targets with the M16, scoring {num} kills."
+L.aw_msx2_title = "Orta Menzil Çılgınlığı"
+L.aw_msx2_text = "M16 ile hedefleri nasıl indireceğini bilir ve {num} düşman öldürür."
 
-L.aw_tkl1_title = "Made An Oopsie"
-L.aw_tkl1_text = "had their finger slip just when they were aiming at a buddy."
+L.aw_tkl1_title = "Sakar Şakir"
+L.aw_tkl1_text = "tam bir arkadaşa nişan alırken parmakları kaydı."
 
-L.aw_tkl2_title = "Double-Oops"
-L.aw_tkl2_text = "thought they got a Traitor twice, but was wrong both times."
+L.aw_tkl2_title = "Çifte Sakar Şakir"
+L.aw_tkl2_text = "iki kez Hain aldıklarını düşündüler, ancak her iki seferde de yanıldılar."
 
-L.aw_tkl3_title = "Karma-conscious"
-L.aw_tkl3_text = "couldn't stop after killing two teammates. Three is their lucky number."
+L.aw_tkl3_title = "Karma bilincine sahip"
+L.aw_tkl3_text = "iki takım arkadaşını öldürdükten sonra duramadı. Üç onların uğurlu sayısıdır."
 
-L.aw_tkl4_title = "Teamkiller"
-L.aw_tkl4_text = "murdered the entirety of their team. OMGBANBANBAN."
+L.aw_tkl4_title = "Takım Katili"
+L.aw_tkl4_text = "tüm takımını öldürdü. ALLAH'INI SEVEN BANLASIN."
 
-L.aw_tkl5_title = "Roleplayer"
-L.aw_tkl5_text = "was roleplaying a madman, honest. That's why they killed most of their team."
+L.aw_tkl5_title = "Rol Oyuncusu"
+L.aw_tkl5_text = "dürüstçe deli bir adamı canlandırıyordu. Bu yüzden takımlarının çoğunu öldürdüler."
 
-L.aw_tkl6_title = "Moron"
-L.aw_tkl6_text = "couldn't figure out which side they were on, and killed over half of their comrades."
+L.aw_tkl6_title = "Aptal"
+L.aw_tkl6_text = "hangi tarafta olduklarını anlayamadılar ve yoldaşlarının yarısından fazlasını öldürdüler."
 
-L.aw_tkl7_title = "Redneck"
-L.aw_tkl7_text = "protected their turf real good by killing over a quarter of their teammates."
+L.aw_tkl7_title = "Cahil"
+L.aw_tkl7_text = "takım arkadaşlarının dörtte birinden fazlasını öldürerek bölgelerini gerçekten iyi korudu."
 
-L.aw_brn1_title = "Like Grandma Used To Make Them"
-L.aw_brn1_text = "fried several people to a nice crisp."
+L.aw_brn1_title = "Eskiden Büyükannemin Yaptığı Gibi"
+L.aw_brn1_text = "birkaç kişiyi güzelce kızarttı."
 
-L.aw_brn2_title = "Pyroid"
-L.aw_brn2_text = "was heard cackling loudly after burning one of their many victims."
+L.aw_brn2_title = "Kundakçı"
+L.aw_brn2_text = "kurbanlarından birini yaktıktan sonra yüksek sesle kıkırdadığı duyuldu."
 
-L.aw_brn3_title = "Pyrrhic Burnery"
-L.aw_brn3_text = "burned them all, but is now all out of incendiary grenades! How will they cope!?"
+L.aw_brn3_title = "Kundakçının Ateşi Söner"
+L.aw_brn3_text = "hepsini yaktı, ama şimdi hiç yakıcı el bombası kalmadı! Nasıl başa çıkacaklar!"
 
-L.aw_fnd1_title = "Coroner"
-L.aw_fnd1_text = "found {num} bodies lying around."
+L.aw_fnd1_title = "Adli tabip"
+L.aw_fnd1_text = "etrafta {num} ceset bulundu."
 
-L.aw_fnd2_title = "Gotta Catch Em All"
-L.aw_fnd2_text = "found {num} corpses for their collection."
+L.aw_fnd2_title = "Hepsini Yakalamalıyım"
+L.aw_fnd2_text = "koleksiyonları için {num} ceset bulundu."
 
-L.aw_fnd3_title = "Death Scent"
-L.aw_fnd3_text = "keeps stumbling on random corpses, {num} times this round."
+L.aw_fnd3_title = "Ölüm Kokusu"
+L.aw_fnd3_text = "bu turda {num} kez rastgele cesetler üzerinde tökezler."
 
-L.aw_crd1_title = "Recycler"
-L.aw_crd1_text = "scrounged up {num} leftover credits from corpses."
+L.aw_crd1_title = "Geri Dönüştürücü"
+L.aw_crd1_text = "cesetlerden {num} kredi toplandı."
 
-L.aw_tod1_title = "Pyrrhic Victory"
-L.aw_tod1_text = "died only seconds before their team won the round."
+L.aw_tod1_title = "Kundakçının Zaferi"
+L.aw_tod1_text = "takımları raundu kazanmadan sadece saniyeler önce öldü."
 
-L.aw_tod2_title = "I Hate This Game"
-L.aw_tod2_text = "died right after the start of the round."
+L.aw_tod2_title = "Bu Oyundan Nefret Ediyorum"
+L.aw_tod2_text = "raundun başlamasından hemen sonra öldü."
 
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
 -- v24
-L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."
+L.drop_no_ammo = "Silahının şarjöründe cephane kutusu olarak düşecek yeterli cephane yok."
 
 -- 2015-05-25
-L.hat_retrieve = "You picked up a Detective's hat."
+L.hat_retrieve = "Bir Dedektif'in şapkasını aldın."
 
 -- 2017-09-03
-L.sb_sortby = "Sort By:"
+L.sb_sortby = "Sıralama Ölçütü"
 
 -- 2018-07-24
-L.equip_tooltip_main = "Equipment menu"
-L.equip_tooltip_radar = "Radar control"
-L.equip_tooltip_disguise = "Disguise control"
-L.equip_tooltip_radio = "Radio control"
-L.equip_tooltip_xfer = "Transfer credits"
-L.equip_tooltip_reroll = "Reroll equipment"
+L.equip_tooltip_main = "Ekipman menüsü"
+L.equip_tooltip_radar = "Radar kontrolü"
+L.equip_tooltip_disguise = "Kılık değiştirme kontrolü"
+L.equip_tooltip_radio = "Radyo kontrolü"
+L.equip_tooltip_xfer = "Kredileri aktar"
+L.equip_tooltip_reroll = "Ekipmanı yeniden dağıt"
 
-L.confgrenade_name = "Discombobulator"
-L.polter_name = "Poltergeist"
-L.stungun_name = "UMP Prototype"
+L.confgrenade_name = "Kafa Karıştırıcı"
+L.polter_name = "Afacan Peri"
+L.stungun_name = "UMP Prototipi"
 
-L.knife_instant = "INSTANT KILL"
+L.knife_instant = "ANINDA ÖLDÜRME"
 
-L.binoc_zoom_level = "Zoom Level"
-L.binoc_body = "BODY DETECTED"
+L.binoc_zoom_level = "Yakınlaştırma Seviyesi"
+L.binoc_body = "CESET ALGILANDI"
 
-L.idle_popup_title = "Idle"
+L.idle_popup_title = "Boşta"
 
 -- 2019-01-31
-L.create_own_shop = "Create own shop"
-L.shop_link = "Link with"
-L.shop_disabled = "Disable shop"
-L.shop_default = "Use default shop"
+L.create_own_shop = "Kendi mağazanı oluştur"
+L.shop_link = "Şununla bağlantı kur"
+L.shop_disabled = "Mağazayı devre dışı bırak"
+L.shop_default = "Varsayılan mağazayı kullan"
 
 -- 2019-05-05
-L.reroll_name = "Reroll"
-L.reroll_menutitle = "Reroll equipment"
-L.reroll_no_credits = "You need {amount} credits to reroll!"
-L.reroll_button = "Reroll"
-L.reroll_help = "Use {amount} credits to get a new random set of equipment in your shop!"
+L.reroll_name = "Yeniden dağıt"
+L.reroll_menutitle = "Ekipmanı yeniden dağıt"
+L.reroll_no_credits = "Yeniden dağıtmak için {amount} krediye ihtiyacınız var!"
+L.reroll_button = "Yeniden Dağıt"
+L.reroll_help = "Mağazanızda yeni bir rastgele ekipman seti almak için {amount} kredi kullanın!"
 
 -- 2019-05-06
-L.equip_not_alive = "You can view all available items by selecting a role on the right. Don't forget to mark your favorites!"
+L.equip_not_alive = "Sağdan bir rol seçerek mevcut tüm öğeleri görüntüleyebilirsiniz. Favorilerinizi işaretlemeyi unutmayın!"
 
 -- 2019-06-27
-L.shop_editor_title = "Shop Editor"
-L.shop_edit_items_weapong = "Edit Items / Weapons"
-L.shop_edit = "Edit Shops"
-L.shop_settings = "Settings"
-L.shop_select_role = "Select Role"
-L.shop_edit_items = "Edit Items"
-L.shop_edit_shop = "Edit Shop"
-L.shop_create_shop = "Create Custom Shop"
-L.shop_selected = "Selected {role}"
-L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't forget to save your changes!"
+L.shop_editor_title = "Mağaza Düzenleme"
+L.shop_edit_items_weapong = "Silahları Düzenle"
+L.shop_edit = "Mağazaları Düzenle"
+L.shop_settings = "Ayarlar"
+L.shop_select_role = "Rol Seç"
+L.shop_edit_items = "Öğeleri Düzenle"
+L.shop_edit_shop = "Mağazayı Düzenle"
+L.shop_create_shop = "Özel Mağaza Oluştur"
+L.shop_selected = "Seçili {role}"
+L.shop_settings_desc = "Rastgele Mağaza Konsol Değişkeni uyarlamak için değerleri değiştirin. Değişikliklerinizi kaydetmeyi unutmayın!"
 
-L.bindings_new = "New bound key for {name}: {key}"
+L.bindings_new = "{name} {key} için atanan yeni tuş"
 
-L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
-L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
-L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
+L.hud_default_failed = "{hudname} arayüzü varsayılan olarak ayarlanamadı. Bunu yapma izniniz yok veya bu arayüz mevcut değil."
+L.hud_forced_failed = "{hudname} arayüzü zorlanamadı. Bunu yapma izniniz yok veya bu arayüz mevcut değil."
+L.hud_restricted_failed = "{hudname} arayüzü kısıtlanamadı. Bunu yapmak için iznin yok."
 
-L.shop_role_select = "Select a role"
-L.shop_role_selected = "{role}'s shop was selected!"
-L.shop_search = "Search"
+L.shop_role_select = "Bir rol seçin"
+L.shop_role_selected = "{role} adlı rolün mağazası seçildi!"
+L.shop_search = "Ara"
 
 -- 2019-10-19
-L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
+L.drop_ammo_prevented = "Bir şey cephanenizi düşürmenizi engelliyor."
 
 -- 2019-10-28
-L.target_c4 = "Press [{usekey}] to open C4 menu"
-L.target_c4_armed = "Press [{usekey}] to disarm C4"
-L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
-L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
-L.c4_short_desc = "Something very explosive"
+L.target_c4 = "C4 menüsünü açmak için [{usekey}] tuşuna basın"
+L.target_c4_armed = "C4'ü devre dışı bırakmak için [{usekey}] tuşuna basın"
+L.target_c4_armed_defuser = "İmha kitini kullanmak için [{usekey}] tuşuna basın"
+L.target_c4_not_disarmable = "Yaşayan bir takım arkadaşının C4'ünü devre dışı bırakamazsın"
+L.c4_short_desc = "Çok patlayıcı bir şey"
 
-L.target_pickup = "Press [{usekey}] to pick up"
-L.target_slot_info = "Slot: {slot}"
-L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
-L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
-L.target_pickup_weapon_hidden = ", press [{walkkey} + {usekey}] for hidden pickup"
-L.target_switch_weapon_hidden = ", press [{walkkey} + {usekey}] for hidden switch"
-L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
-L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
-L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
+L.target_pickup = "Almak için [{usekey}] tuşuna basın"
+L.target_slot_info = "{slot} yuvası"
+L.target_pickup_weapon = "Silahı almak için [{usekey}] tuşuna basın"
+L.target_switch_weapon = "Mevcut silahınla değiştirmek için [{usekey}] tuşuna basın"
+L.target_pickup_weapon_hidden = "Gizli alım için [{walkkey} + {usekey}] tuşuna basın"
+L.target_switch_weapon_hidden = "Gizli anahtar için [{walkkey} + {usekey}] tuşuna basın"
+L.target_switch_weapon_nospace = "Bu silah için kullanılabilir envanter yuvası yok"
+L.target_switch_drop_weapon_info = "{name} {slot} yuvasından bırakılıyor"
+L.target_switch_drop_weapon_info_noslot = "{slot} yuvasında düşürülebilir silah yok"
 
-L.corpse_searched_by_detective = "This corpse was searched by a detective"
-L.corpse_too_far_away = "The corpse is too far away."
+L.corpse_searched_by_detective = "Bu ceset bir dedektif tarafından arandı"
+L.corpse_too_far_away = "Ceset çok uzakta."
 
-L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
-L.radio_short_desc = "Weapon sounds are music to me"
+L.radio_pickup_wrong_team = "Radyoyu başka bir takımdan alamazsın."
+L.radio_short_desc = "Silah sesleri benim için müziktir"
 
-L.hstation_subtitle = "Press [{usekey}] to receive health."
-L.hstation_charge = "Remaining charge of health station: {charge}"
-L.hstation_empty = "There is no more charge left in this health station"
-L.hstation_maxhealth = "Your health is full"
-L.hstation_short_desc = "The heath station slowly recharges over time"
+L.hstation_subtitle = "Sağlık almak için [{usekey}] tuşuna basın."
+L.hstation_charge = "Sağlık istasyonunun kalan şarjı {charge}"
+L.hstation_empty = "Bu sağlık istasyonunda daha fazla şarj kalmadı"
+L.hstation_maxhealth = "Sağlığınız tam"
+L.hstation_short_desc = "Sağlık istasyonu zaman içinde yavaş yavaş şarj olur"
 
 -- 2019-11-03
-L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
-L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
-L.binoc_progress = "Search progress: {progress}%"
+L.vis_short_desc = "Kurban ateşli silahla yaralanarak öldüyse olay yerini gösterir"
+L.corpse_binoculars = "Cesedi dürbünle aramak için [{key}] tuşuna basın."
+L.binoc_progress = "Aranıyor: %{progress}"
 
-L.pickup_no_room = "You have no space in your inventory for this weapon kind."
-L.pickup_fail = "You cannot pick up this weapon."
-L.pickup_pending = "You already picked up a weapon, wait until you receive it."
+L.pickup_no_room = "Bu silah türü için envanterinizde yer yok."
+L.pickup_fail = "Bu silahı alamazsın."
+L.pickup_pending = "Zaten bir silah aldın, alana kadar bekle."
 
 -- 2020-01-07
-L.tbut_help_admin = "Edit traitor button settings"
-L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
-L.tbut_role_config = "Role: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
-L.tbut_team_config = "Team: {current}"
-L.tbut_current_config = "Current config:"
-L.tbut_intended_config = "Intended config by map creator:"
-L.tbut_admin_mode_only = "You see this button because you're an admin and '{cv}' is set to '1'."
-L.tbut_allow = "Allow"
-L.tbut_prohib = "Prohibit"
-L.tbut_default = "Default"
+L.tbut_help_admin = "Hain düğmesi ayarlarını düzenle"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] düğmesi {role} için"
+L.tbut_role_config = "Rol {current}"
+L.tbut_team_toggle = "{team} takımı için bu düğmeyi değiştirmek için [SHIFT + {walkkey} + {usekey}]"
+L.tbut_team_config = "Takım {current}"
+L.tbut_current_config = "Geçerli yapılandırma"
+L.tbut_intended_config = "Harita oluşturucu tarafından tasarlanan yapılandırma"
+L.tbut_admin_mode_only = "Yönetici olduğunuz ve '{cv}' öğesi '1' olarak ayarlandığı için bu düğmeyi görüyorsunuz."
+L.tbut_allow = "İzin ver"
+L.tbut_prohib = "Yasakla"
+L.tbut_default = "Varsayılan"
 
 -- 2020-02-09
-L.name_door = "Door"
-L.door_open = "Press [{usekey}] to open door."
-L.door_close = "Press [{usekey}] to close door."
-L.door_locked = "This door is locked."
+L.name_door = "Kapı"
+L.door_open = "Kapıyı açmak için [{usekey}] tuşuna basın."
+L.door_close = "Kapıyı kapatmak için [{usekey}] tuşuna basın."
+L.door_locked = "Bu kapı kilitli."
 
 -- 2020-02-11
-L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
-L.mute_team = "{team} muted."
+L.automoved_to_spec = "(OTOMATİK MESAJ) Boşta olduğum için İzleyici takımına alındım."
+L.mute_team = "{team} sessize alındı."
 
 -- 2020-02-16
-L.door_auto_closes = "This door closes automatically."
-L.door_open_touch = "Walk into door to open."
-L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
-L.hud_health = "Health"
+L.door_auto_closes = "Bu kapı otomatik olarak kapanır."
+L.door_open_touch = "Açmak için kapıya doğru yürü."
+L.door_open_touch_and_use = "Kapıya doğru yürü veya açmak için [{usekey}] tuşuna bas."
+L.hud_health = "Sağlık"
 
 -- 2020-03-09
-L.help_title = "Help and Settings"
+L.help_title = "Yardım ve Ayarlar"
 
-L.menu_changelog_title = "Changelog"
-L.menu_guide_title = "TTT2 Guide"
-L.menu_bindings_title = "Key Bindings"
-L.menu_language_title = "Language"
-L.menu_appearance_title = "Appearance"
-L.menu_gameplay_title = "Gameplay"
-L.menu_addons_title = "Addons"
-L.menu_legacy_title = "Legacy Addons"
-L.menu_administration_title = "Administration"
-L.menu_equipment_title = "Edit Equipment"
-L.menu_shops_title = "Edit Shops"
+L.menu_changelog_title = "Değişiklik günlüğü"
+L.menu_guide_title = "TTT2 Kılavuzu"
+L.menu_bindings_title = "Tuş Atamaları"
+L.menu_language_title = "Dil"
+L.menu_appearance_title = "Görünüm"
+L.menu_gameplay_title = "Oynanış"
+L.menu_addons_title = "Eklentiler"
+L.menu_legacy_title = "Eski Eklentiler"
+L.menu_administration_title = "Yönetim"
+L.menu_equipment_title = "Ekipmanı Düzenle"
+L.menu_shops_title = "Mağazaları Düzenle"
 
-L.menu_changelog_description = "A list of changes and fixes in recent versions."
-L.menu_guide_description = "Helps you to get started with TTT2 and explains some things about gameplay, roles and other stuff."
-L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking."
-L.menu_language_description = "Select the language of the gamemode."
-L.menu_appearance_description = "Tweak the appearance and performance of the UI."
-L.menu_gameplay_description = "Avoid roles and tweak some features."
-L.menu_addons_description = "Configure local addons to your liking."
-L.menu_legacy_description = "A panel with converted tabs from the original TTT that should be ported over to the new system."
-L.menu_administration_description = "General settings for HUDs, shops etc."
-L.menu_equipment_description = "Set credits, limitations, availability and other stuff."
-L.menu_shops_description = "Add/Remove shops for roles and configure what equipment they have."
+L.menu_changelog_description = "Son sürümlerdeki değişikliklerin ve düzeltmelerin listesi."
+L.menu_guide_description = "TTT2'ye başlamanıza yardımcı olur ve oyun, roller ve diğer şeyler hakkında bazı şeyleri açıklar."
+L.menu_bindings_description = "TTT2'nin ve eklentilerinin belirli özelliklerini kendi beğeninize göre ayarlayın."
+L.menu_language_description = "Oyun modunun dilini seçin."
+L.menu_appearance_description = "Kullanıcı arayüzünün görünümünü ve performansını değiştirin."
+L.menu_gameplay_description = "Rollerden kaçının ve bazı özellikleri düzenleyin."
+L.menu_addons_description = "Yerel eklentileri istediğiniz gibi yapılandırın."
+L.menu_legacy_description = "Orijinal TTT'den dönüştürülen sekmelerin yeni sisteme taşınması gereken bir panel."
+L.menu_administration_description = "Arayüzler, mağazalar vb. için genel ayarlar"
+L.menu_equipment_description = "Kredileri, sınırlamaları, kullanılabilirliği ve diğer şeyleri ayarlayın."
+L.menu_shops_description = "Mağazaları istediğiniz roller için ekleyin ve hangi ekipmanlara sahip olduklarını yapılandırın."
 
-L.submenu_guide_gameplay_title = "Gameplay"
-L.submenu_guide_roles_title = "Roles"
-L.submenu_guide_equipment_title = "Equipment"
+L.submenu_guide_gameplay_title = "Oynanış"
+L.submenu_guide_roles_title = "Roller"
+L.submenu_guide_equipment_title = "Ekipman"
 
-L.submenu_bindings_bindings_title = "Bindings"
+L.submenu_bindings_bindings_title = "Atamalar"
 
-L.submenu_language_language_title = "Language"
+L.submenu_language_language_title = "Dil"
 
-L.submenu_appearance_general_title = "General"
-L.submenu_appearance_hudswitcher_title = "HUD Switcher"
-L.submenu_appearance_vskin_title = "VSkin"
-L.submenu_appearance_targetid_title = "TargetID"
-L.submenu_appearance_shop_title = "Shop Settings"
-L.submenu_appearance_crosshair_title = "Crosshair"
-L.submenu_appearance_dmgindicator_title = "Damage Indicator"
-L.submenu_appearance_performance_title = "Performance"
-L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Miscellaneous"
+L.submenu_appearance_general_title = "Genel"
+L.submenu_appearance_hudswitcher_title = "Arayüz Değiştirici"
+L.submenu_appearance_vskin_title = "Valve Arayüzü"
+L.submenu_appearance_targetid_title = "Hedef Kimliği"
+L.submenu_appearance_shop_title = "Mağaza Ayarları"
+L.submenu_appearance_crosshair_title = "Nişangah"
+L.submenu_appearance_dmgindicator_title = "Hasar Göstergesi"
+L.submenu_appearance_performance_title = "Performans"
+L.submenu_appearance_interface_title = "Arayüz"
+L.submenu_appearance_miscellaneous_title = "Çeşitli"
 
-L.submenu_gameplay_general_title = "General"
-L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
+L.submenu_gameplay_general_title = "Genel"
+L.submenu_gameplay_avoidroles_title = "Rol Seçiminden Kaçın"
 
-L.submenu_administration_hud_title = "HUD Settings"
-L.submenu_administration_randomshop_title = "Random Shop"
+L.submenu_administration_hud_title = "Arayüz Ayarları"
+L.submenu_administration_randomshop_title = "Rasgele Mağaza"
 
-L.help_color_desc = "If this setting is enabled, you can choose a global color that will be used for the targetID outline and the crosshair."
-L.help_scale_factor = "This scale factor influences all UI elements (HUD, VGUI and TargetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
-L.help_hud_game_reload = "The HUD is not available right now. Reconnect to the server or relaunch the game."
-L.help_hud_special_settings = "These are specific settings of this HUD."
-L.help_vskin_info = "VSkin (VGUI skin) is the skin applied to all menu elements like the current one. They can be easily created with a simple Lua script and can change colors and some size parameters."
-L.help_targetid_info = "TargetID is the information rendered when pointing your crosshair at an entity. Its color can be configured in the 'General' tab."
-L.help_hud_default_desc = "Sets the default HUD for all players. Players that have not yet selected a HUD will receive this HUD as their default. Changing this won't change the HUD for players that have already selected their HUD."
-L.help_hud_forced_desc = "Forces a HUD for all players. This disables the HUD selection feature for everyone."
-L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
-L.help_damage_indicator_desc = "The damage indicator is the overlay shown when the player is damaged. To add a new theme, place a png in 'materials/vgui/ttt/damageindicator/themes/'."
-L.help_shop_key_desc = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
+L.help_color_desc = "Bu ayar etkinleştirilirse, hedef kimliği dış çizgisi ve nişangah için kullanılacak genel bir renk seçebilirsiniz."
+L.help_scale_factor = "Bu ölçek faktörü tüm arayüz öğelerini (Arayüz, Valve Grafiksel Kullanıcı Arayüzü ve Hedef Kimliği) etkiler. Ekran çözünürlüğü değiştirilirse otomatik olarak güncellenir. Bu değerin değiştirilmesi arayüzü sıfırlayacaktır!"
+L.help_hud_game_reload = "Arayüz şu anda kullanılamıyor. Sunucuya yeniden bağlanın veya oyunu yeniden başlatın."
+L.help_hud_special_settings = "Bunlar bu arayüzün özel ayarlarıdır."
+L.help_vskin_info = "Valve Arayüzü (Valve Grafiksel Kullanıcı Arayüz görünümü), mevcut olan tüm menü öğelerine uygulanan görünümdür. Basit bir Lua komut dosyası ile kolayca oluşturulabilirler ve renkleri ve bazı boyut parametrelerini değiştirebilirler."
+L.help_targetid_info = "Hedef Kimliği, nişangahınızı bir varlığa yönlendirirken oluşturulan bilgilerdir. Rengi 'Genel' sekmesinde yapılandırılabilir."
+L.help_hud_default_desc = "Tüm oyuncular için varsayılan arayüz değerini ayarlar. Henüz bir arayüz seçmemiş olan oyuncular, varsayılan olarak bu arayüzü alacaklardır. Bunu değiştirmek, arayüzlerini zaten seçmiş olan oyuncuların arayüzlerini değiştirmez."
+L.help_hud_forced_desc = "Tüm oyuncular için bir arayüz zorlar. Bu, arayüz seçim özelliğini herkes için devre dışı bırakır."
+L.help_hud_enabled_desc = "Bu arayüzlerin seçimini kısıtlamak için etkinleştir veya devre dışı bırak."
+L.help_damage_indicator_desc = "Hasar göstergesi, oyuncu hasar gördüğünde gösterilen bir göstergedir. Yeni bir tema eklemek için 'materialsvguitttdamageindicatorthemes' içine bir png yerleştirin."
+L.help_shop_key_desc = "Bir raundun sonunda hazırlanırken skor menüsü yerine mağaza tuşuna basarak mağazayı açın"
 
-L.label_menu_menu = "MENU"
-L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
-L.label_language_set = "Select language"
-L.label_global_color_enable = "Enable global color"
-L.label_global_color = "Global color"
-L.label_global_scale_factor = "Global scale factor"
-L.label_hud_select = "Select HUD"
-L.label_vskin_select = "Select VSkin"
-L.label_blur_enable = "Enable VSkin background blur"
-L.label_color_enable = "Enable VSkin background color"
-L.label_minimal_targetid = "Minimalist Target ID under crosshair (no Karma text, hints etc.)"
-L.label_shop_always_show = "Always show the shop"
-L.label_shop_double_click_buy = "Enable an item purchase by double-clicking on it in the shop"
-L.label_shop_num_col = "Number of columns"
-L.label_shop_num_row = "Number of rows"
-L.label_shop_item_size = "Icon size"
-L.label_shop_show_slot = "Show slot marker"
-L.label_shop_show_custom = "Show custom item marker"
-L.label_shop_show_fav = "Show favourite item marker"
-L.label_crosshair_enable = "Enable crosshair"
-L.label_crosshair_gap_enable = "Enable custom crosshair gap"
-L.label_crosshair_gap = "Custom crosshair gap"
-L.label_crosshair_opacity = "Crosshair opacity"
-L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
-L.label_crosshair_size = "Crosshair size"
-L.label_crosshair_thickness = "Crosshair thickness"
-L.label_crosshair_thickness_outline = "Crosshair outline thickness"
-L.label_crosshair_static_enable = "Enable static crosshair"
-L.label_crosshair_dot_enable = "Enable crosshair dot"
-L.label_crosshair_lines_enable = "Enable crosshair lines"
-L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
-L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
-L.label_damage_indicator_enable = "Enable damage indicator"
-L.label_damage_indicator_mode = "Select damage indicator theme"
-L.label_damage_indicator_duration = "Fade time after getting hit (in seconds)"
-L.label_damage_indicator_maxdamage = "Damage needed for the maximum opacity"
-L.label_damage_indicator_maxalpha = "Maximum opacity"
-L.label_performance_halo_enable = "Draw an outline around some entities while looking at them"
-L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
-L.label_performance_ohicon_enable = "Enable role icons over players' heads"
-L.label_interface_tips_enable = "Show gameplay tips at the bottom of the screen while spectating"
-L.label_interface_popup = "Start of round info popup duration"
-L.label_interface_fastsw_menu = "Enable menu with fast weapon switch"
-L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
-L.label_inferface_scues_enable = "Play sound cue when a round begins or ends"
-L.label_gameplay_specmode = "Spectate-only mode (always stay spectator)"
-L.label_gameplay_fastsw = "Fast weapon switch"
-L.label_gameplay_hold_aim = "Enable hold to aim"
-L.label_gameplay_mute = "Mute living players when dead"
-L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
-L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
-L.label_hud_default = "Default HUD"
-L.label_hud_force = "Forced HUD"
+L.label_menu_menu = "MENÜ"
+L.label_menu_admin_spacer = "Admin Alanı (normal kullanıcılara gösterilmez)"
+L.label_language_set = "Dil seç"
+L.label_global_color_enable = "Genel rengi etkinleştir"
+L.label_global_color = "Genel renk"
+L.label_global_scale_factor = "Genel ölçek faktörü"
+L.label_hud_select = "Arayüz Seç"
+L.label_vskin_select = "Valve Arayüzü seçin"
+L.label_blur_enable = "Valve Arayüz arka plan bulanıklığını etkinleştir"
+L.label_color_enable = "Valve Arayüz arka plan rengini etkinleştir"
+L.label_minimal_targetid = "Nişangah altında minimalist Hedef Kimliği (Karma metni, ipuçları vb.)"
+L.label_shop_always_show = "Her zaman mağazayı göster"
+L.label_shop_double_click_buy = "Mağazada üzerine çift tıklayarak bir ürün satın almayı etkinleştir"
+L.label_shop_num_col = "Sütun sayısı"
+L.label_shop_num_row = "Satır sayısı"
+L.label_shop_item_size = "Simge boyutu"
+L.label_shop_show_slot = "Yuva işaretini göster"
+L.label_shop_show_custom = "Özel öğe işaretini göster"
+L.label_shop_show_fav = "Favori öğe işaretini göster"
+L.label_crosshair_enable = "Nişangahı etkinleştir"
+L.label_crosshair_gap_enable = "Özel nişangah boşluğunu etkinleştir"
+L.label_crosshair_gap = "Özel nişangah aralığı"
+L.label_crosshair_opacity = "Nişangah opaklığı"
+L.label_crosshair_ironsight_opacity = "Demir nişangah opaklığı"
+L.label_crosshair_size = "Nişangah boyutu"
+L.label_crosshair_thickness = "Nişangah kalınlığı"
+L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
+L.label_crosshair_static_enable = "Sabit nişangahı etkinleştir"
+L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
+L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
+L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
+L.label_crosshair_ironsight_low_enabled = "Demir nişangah kullanırken silahı indirin"
+L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
+L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
+L.label_damage_indicator_duration = "Vurulduktan sonra solma süresi (saniye olarak)"
+L.label_damage_indicator_maxdamage = "Maksimum opaklık için gereken hasar"
+L.label_damage_indicator_maxalpha = "Maksimum opaklık"
+L.label_performance_halo_enable = "Bazı varlıklara bakarken etrafına bir dış çizgi çizin"
+L.label_performance_spec_outline_enable = "Kontrol edilen nesnelerin dış çizgilerini etkinleştir"
+L.label_performance_ohicon_enable = "Oyuncuların başındaki rol simgelerini etkinleştir"
+L.label_interface_tips_enable = "İzlerken ekranın alt kısmında oyun ipuçlarını göster"
+L.label_interface_popup = "Raunt başlangıç bilgisini gösteren açılan pencerenin süresi"
+L.label_interface_fastsw_menu = "Hızlı silah değişme ile menüyü etkinleştir"
+L.label_inferface_wswitch_hide_enable = "Silah değişme menüsünün otomatik olarak kapanmasını etkinleştir"
+L.label_inferface_scues_enable = "Bir raunt başladığında veya bittiğinde ses işaretini çal"
+L.label_gameplay_specmode = "Yalnızca İzle modu (her zaman izleyici olarak kal)"
+L.label_gameplay_fastsw = "Hızlı silah değişme"
+L.label_gameplay_hold_aim = "Nişan almak için tutmayı etkinleştir"
+L.label_gameplay_mute = "Öldüğünde canlı oyuncuları sessize al"
+L.label_hud_default = "Varsayılan Arayüz"
+L.label_hud_force = "Zorunlu Arayüz"
 
-L.label_bind_weaponswitch = "Pickup Weapon"
-L.label_bind_sprint = "Sprint"
-L.label_bind_voice = "Global Voice Chat"
-L.label_bind_voice_team = "Team Voice Chat"
+L.label_bind_weaponswitch = "Silahı Al"
+L.label_bind_voice = "Genel Sesli Sohbet"
+L.label_bind_voice_team = "Takım Sesli Sohbeti"
 
-L.label_hud_basecolor = "Base Color"
+L.label_hud_basecolor = "Temel Renk"
 
-L.label_menu_not_populated = "This submenu does not contain any content."
+L.label_menu_not_populated = "Bu alt menü herhangi bir içerik içermiyor."
 
-L.header_bindings_ttt2 = "TTT2 Bindings"
-L.header_bindings_other = "Other Bindings"
-L.header_language = "Language Settings"
-L.header_global_color = "Select Global Color"
-L.header_hud_select = "Select a HUD"
-L.header_hud_customize = "Customize the HUD"
-L.header_vskin_select = "Select and Customize the VSkin"
-L.header_targetid = "TargetID Settings"
-L.header_shop_settings = "Equipment Shop Settings"
-L.header_shop_layout = "Item List Layout"
-L.header_shop_marker = "Item Marker Settings"
-L.header_crosshair_settings = "Crosshair Settings"
-L.header_damage_indicator = "Damage Indicator Settings"
-L.header_performance_settings = "Performance Settings"
-L.header_interface_settings = "Interface Settings"
-L.header_gameplay_settings = "Gameplay Settings"
-L.header_roleselection = "Select Avoiding Roles"
-L.header_hud_administration = "Select Default and Forced HUDs"
-L.header_hud_enabled = "Enable/Disable HUDs"
+L.header_bindings_ttt2 = "TTT2 Atamaları"
+L.header_bindings_other = "Diğer Atamalar"
+L.header_language = "Dil Ayarları"
+L.header_global_color = "Genel Rengi Seç"
+L.header_hud_select = "Bir arayüz seçin"
+L.header_hud_customize = "Arayüzü Özelleştir"
+L.header_vskin_select = "Valve Arayüzü Seç ve Özelleştir"
+L.header_targetid = "Hedef Kimliği Ayarları"
+L.header_shop_settings = "Ekipman Mağazası Ayarları"
+L.header_shop_layout = "Öğe Listesi Düzeni"
+L.header_shop_marker = "Öğe İşaretleyici Ayarları"
+L.header_crosshair_settings = "Nişangah Ayarları"
+L.header_damage_indicator = "Hasar Göstergesi Ayarları"
+L.header_performance_settings = "Performans Ayarları"
+L.header_interface_settings = "Arayüz Ayarları"
+L.header_gameplay_settings = "Oynanış Ayarları"
+L.header_roleselection = "Kaçınılan Rolleri Seç"
+L.header_hud_administration = "Varsayılan ve Zorunlu Arayüzleri Seç"
+L.header_hud_enabled = "Arayüzleri etkinleştir veya devre dışı bırak"
 
-L.button_menu_back = "Back"
-L.button_none = "None"
-L.button_press_key = "Press a key"
-L.button_save = "Save"
-L.button_reset = "Reset"
-L.button_close = "Close"
-L.button_hud_editor = "HUD Editor"
+L.button_menu_back = "Geri"
+L.button_none = "Yok"
+L.button_press_key = "Bir tuşa basın"
+L.button_save = "Kaydet"
+L.button_reset = "Sıfırla"
+L.button_close = "Kapat"
+L.button_hud_editor = "Arayüz Düzenleyici"
 
 -- 2020-04-20
-L.item_speedrun = "Speedrun"
-L.item_speedrun_desc = [[Makes you 50% faster!]]
-L.item_no_explosion_damage = "No Explosion Damage"
-L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
-L.item_no_fall_damage = "No Fall Damage"
-L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
-L.item_no_fire_damage = "No Fire Damage"
-L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
-L.item_no_hazard_damage = "No Hazard Damage"
-L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as poison, radiation and acid.]]
-L.item_no_energy_damage = "No Energy Damage"
-L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
-L.item_no_prop_damage = "No Prop Damage"
-L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
-L.item_no_drown_damage = "No Drowning Damage"
-L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+L.item_speedrun = "Hız"
+L.item_speedrun_desc = [[Sizi % 50 daha hızlı yapar!]]
+L.item_no_explosion_damage = "Patlama Hasarı Yok"
+L.item_no_explosion_damage_desc = [[Patlama hasarına karşı bağışıklık kazandırır.]]
+L.item_no_fall_damage = "Düşme Hasarı Yok"
+L.item_no_fall_damage_desc = [[Düşme hasarına karşı bağışıklık kazandırır.]]
+L.item_no_fire_damage = "Yangın Hasarı Yok"
+L.item_no_fire_damage_desc = [[Yangın hasarına karşı bağışıklık kazandırır.]]
+L.item_no_hazard_damage = "Tehlike Hasarı Yok"
+L.item_no_hazard_damage_desc = [[Zehir, radyasyon ve asit gibi tehlike hasarlarına karşı bağışıklık kazandırır.]]
+L.item_no_energy_damage = "Enerji Hasarı Yok"
+L.item_no_energy_damage_desc = [[Lazer, plazma ve yıldırım gibi enerji hasarlarına karşı bağışıklık kazandırır.]]
+L.item_no_prop_damage = "Nesne Hasarı Yok"
+L.item_no_prop_damage_desc = [[Nesne hasarına karşı bağışıklık kazandırır.]]
+L.item_no_drown_damage = "Boğulma Hasarı Yok"
+L.item_no_drown_damage_desc = [[Boğulma hasarına karşı bağışıklık kazandırır.]]
 
 -- 2020-04-21
-L.dna_tid_possible = "Scan possible."
-L.dna_tid_impossible = "No scan possible."
-L.dna_screen_ready = "No DNA"
-L.dna_screen_match = "Match"
+L.dna_tid_possible = "Tarama yapılabilir."
+L.dna_tid_impossible = "Tarama yapılamaz."
+L.dna_screen_ready = "DNA yok"
+L.dna_screen_match = "Eşleşme"
 
 -- 2020-04-30
-L.message_revival_canceled = "Revival canceled."
-L.message_revival_failed = "Revival failed."
-L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
-L.hud_revival_title = "Time left until revival:"
-L.hud_revival_time = "{time}s"
+L.message_revival_canceled = "Canlandırma iptal edildi."
+L.message_revival_failed = "Canlandırma başarısız oldu."
+L.message_revival_failed_missing_body = "Cesediniz artık mevcut olmadığı için diriltilemediniz."
+L.hud_revival_title = "Dirilişe kalan süre"
+L.hud_revival_time = "{time}sn"
 
 -- 2020-05-03
-L.door_destructible = "This door is destructible ({health}HP)."
+L.door_destructible = "Bu kapı yok edilebilir ({health}SP)."
 
 -- 2020-05-28
-L.confirm_detective_only = "Only detectives can confirm bodies."
-L.inspect_detective_only = "Only detectives can search bodies."
-L.corpse_hint_no_inspect = "Only detectives can search this body."
-L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
-L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+L.confirm_detective_only = "Sadece dedektifler cesetleri doğrulayabilir."
+L.inspect_detective_only = "Sadece dedektifler cesetleri arayabilir."
+L.corpse_hint_no_inspect = "Sadece dedektifler bu cesedi arayabilir."
+L.corpse_hint_inspect_only = "Aramak için [{usekey}] tuşuna basın. Cesedi sadece dedektifler doğrulayabilir."
+L.corpse_hint_inspect_only_credits = "Kredi almak için [{usekey}] tuşuna basın. Bu cesedi sadece dedektifler arayabilir."
 
 -- 2020-06-04
-L.label_bind_disguiser = "Toggle disguiser"
+L.label_bind_disguiser = "Kılık Değiştiriciyi aç/kapat"
 
 -- 2020-06-24
-L.dna_help_primary = "Collect a DNA sample"
-L.dna_help_secondary = "Switch the DNA slot"
-L.dna_help_reload = "Delete a sample"
+L.dna_help_primary = "DNA örneği al"
+L.dna_help_secondary = "DNA yuvasını değiştirin"
+L.dna_help_reload = "Numuneyi sil"
 
-L.binoc_help_pri = "Search a body."
-L.binoc_help_sec = "Change zoom level."
+L.binoc_help_pri = "Bir ceset ara."
+L.binoc_help_sec = "Yakınlaştırma seviyesini değiştirin."
 
-L.vis_help_pri = "Drop the activated device."
+L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
 
-L.decoy_help_pri = "Plant the Decoy."
+L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2020-08-07
-L.pickup_error_spec = "You cannot pick this up as a spectator."
-L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
-L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+L.pickup_error_spec = "Bunu izleyici olarak alamazsın."
+L.pickup_error_owns = "Bu silah zaten sende olduğu için bunu alamazsın."
+L.pickup_error_noslot = "Boş alanın olmadığı için bunu alamazsın."
 
 -- 2020-11-02
-L.lang_server_default = "Server Default"
+L.lang_server_default = "Sunucu Varsayılanı"
 L.help_lang_info = [[
-This translation is {coverage}% complete with the English language taken as a default reference.
+Bu çeviri %{coverage} oranında tamamlandı ve İngilizce dili varsayılan referans olarak alındı.
 
-Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
+Bu çevirilerin topluluk tarafından yapıldığını unutmayın. Bir şey eksik veya yanlışsa katkıda bulunmaktan çekinmeyin.]]
 
 -- 2021-04-13
-L.title_score_info = "Round End Info"
-L.title_score_events = "Event Timeline"
+L.title_score_info = "Raunt Sonu Bilgisi"
+L.title_score_events = "Olay Zaman Çizelgesi"
 
-L.label_bind_clscore = "Open round report"
-L.title_player_score = "{player}'s score:"
+L.label_bind_clscore = "Açık raunt raporu"
+L.title_player_score = "{player} puanı"
 
-L.label_show_events = "Show events from"
-L.button_show_events_you = "You"
-L.button_show_events_global = "Global"
-L.label_show_roles = "Show role distribution from"
-L.button_show_roles_begin = "Round Begin"
-L.button_show_roles_end = "Round End"
+L.label_show_events = "Şuradaki olayları göster"
+L.button_show_events_you = "Siz"
+L.button_show_events_global = "Genel"
+L.label_show_roles = "Rol dağılımını göster"
+L.button_show_roles_begin = "Raunt Başlangıcı"
+L.button_show_roles_end = "Raunt Sonu"
 
-L.hilite_win_traitors = "TEAM TRAITOR WON"
-L.hilite_win_innocents = "TEAM INNOCENT WON"
-L.hilite_win_tie = "IT IS A TIE"
-L.hilite_win_time = "TIME IS UP"
+L.hilite_win_traitors = "HAİN TAKIMI KAZANDI"
+L.hilite_win_innocents = "MASUM TAKIMI KAZANDI"
+L.hilite_win_tie = "BERABERE"
+L.hilite_win_time = "SÜRE DOLDU"
 
-L.tooltip_karma_gained = "Karma changes for this round:"
-L.tooltip_score_gained = "Score changes for this round:"
-L.tooltip_roles_time = "Role changes for this round:"
+L.tooltip_karma_gained = "Bu raunt için Karma değişiklikleri"
+L.tooltip_score_gained = "Bu raunt için puan değişiklikleri"
+L.tooltip_roles_time = "Bu raunt için rol değişiklikleri"
 
-L.tooltip_finish_score_alive_teammates = "Alive teammates: {score}"
-L.tooltip_finish_score_alive_all = "Alive players: {score}"
-L.tooltip_finish_score_timelimit = "Time is up: {score}"
-L.tooltip_finish_score_dead_enemies = "Dead enemies: {score}"
-L.tooltip_kill_score = "Kill: {score}"
-L.tooltip_bodyfound_score = "Body found: {score}"
+L.tooltip_finish_score_alive_teammates = "Canlı takım arkadaşları {score}"
+L.tooltip_finish_score_alive_all = "Canlı oyuncular {score}"
+L.tooltip_finish_score_timelimit = "Süre doldu {score}"
+L.tooltip_finish_score_dead_enemies = "Ölü düşmanlar {score}"
+L.tooltip_kill_score = "Öldürme {score}"
+L.tooltip_bodyfound_score = "Ceset bulundu {score}"
 
-L.finish_score_alive_teammates = "Alive teammates:"
-L.finish_score_alive_all = "Alive players:"
-L.finish_score_timelimit = "Time is up:"
-L.finish_score_dead_enemies = "Dead enemies:"
-L.kill_score = "Kill:"
-L.bodyfound_score = "Body found:"
+L.finish_score_alive_teammates = "Canlı takım arkadaşları"
+L.finish_score_alive_all = "Canlı oyuncular"
+L.finish_score_timelimit = "Süre doldu"
+L.finish_score_dead_enemies = "Ölü düşmanlar"
+L.kill_score = "Öldürme"
+L.bodyfound_score = "Ceset bulundu"
 
-L.title_event_bodyfound = "A body was found"
-L.title_event_c4_disarm = "A C4 was disarmed"
-L.title_event_c4_explode = "A C4 exploded"
-L.title_event_c4_plant = "A C4 was armed"
-L.title_event_creditfound = "Equipment credits were found"
-L.title_event_finish = "The round has ended"
-L.title_event_game = "A new round has started"
-L.title_event_kill = "A player was killed"
-L.title_event_respawn = "A player respawned"
-L.title_event_rolechange = "A player changed their role or team"
-L.title_event_selected = "The roles were distributed"
-L.title_event_spawn = "A player spawned"
+L.title_event_bodyfound = "Bir ceset bulundu"
+L.title_event_c4_disarm = "Bir C4 devre dışı bırakıldı"
+L.title_event_c4_explode = "Bir C4 patladı"
+L.title_event_c4_plant = "Bir C4 kuruldu"
+L.title_event_creditfound = "Ekipman kredileri bulundu"
+L.title_event_finish = "Raunt sona erdi"
+L.title_event_game = "Yeni bir raunt başladı"
+L.title_event_kill = "Bir oyuncu öldürüldü"
+L.title_event_respawn = "Bir oyuncu yeniden doğdu"
+L.title_event_rolechange = "Bir oyuncu rolünü veya takımını değiştirdi"
+L.title_event_selected = "Roller dağıtıldı"
+L.title_event_spawn = "Bir oyuncu doğdu"
 
-L.desc_event_bodyfound = "{finder} ({firole} / {fiteam}) has found the body of {found} ({forole} / {foteam}). The corpse has {credits} equipment credit(s)."
-L.desc_event_bodyfound_headshot = "The victim was killed by a headshot."
-L.desc_event_c4_disarm_success = "{disarmer} ({drole} / {dteam}) successfully disarmed the C4 armed by {owner} ({orole} / {oteam})."
-L.desc_event_c4_disarm_failed = "{disarmer} ({drole} / {dteam}) tried to disarm the C4 armed by {owner} ({orole} / {oteam}). They failed."
-L.desc_event_c4_explode = "The C4 armed by {owner} ({role} / {team}) exploded."
-L.desc_event_c4_plant = "{owner} ({role} / {team}) armed an explosive C4."
-L.desc_event_creditfound = "{finder} ({firole} / {fiteam}) has found {credits} equipment credit(s) in the corpse of {found} ({forole} / {foteam})."
-L.desc_event_finish = "The round lasted {minutes}:{seconds}. There were {alive} player(s) alive in the end."
-L.desc_event_game = "A new round has started."
-L.desc_event_respawn = "{player} has respawned."
-L.desc_event_rolechange = "{player} changed their role/team from {orole} ({oteam}) to {nrole} ({nteam})."
-L.desc_event_selected = "The teams and roles were distributed for all {amount} player(s)."
-L.desc_event_spawn = "{player} has spawned."
+L.desc_event_bodyfound = "{finder} ({firole} {fiteam}), {found} ({forole} {foteam}) adlı kişinin cesedini buldu. Cesedin {credits} ekipman kredisi var."
+L.desc_event_bodyfound_headshot = "Kurban kafadan vurularak öldürüldü."
+L.desc_event_c4_disarm_success = "{disarmer} ({drole} {dteam}), {owner} ({orole} {oteam}) tarafından kurulan C4'ü başarıyla etkisiz hale getirdi."
+L.desc_event_c4_disarm_failed = "{disarmer} ({drole} {dteam}), {owner} ({orole} {oteam}) tarafından kurulan C4'ü etkisiz hale getirmeye çalıştı. Başarısız oldular."
+L.desc_event_c4_explode = "{owner} ({role} {team}) tarafından kurulan C4 patladı."
+L.desc_event_c4_plant = "{owner} ({role} {team}), bir C4 patlayıcı kurdu."
+L.desc_event_creditfound = "{finder} ({firole} {fiteam}), {found} ({forole} {foteam}) cesedinde {credits} ekipman kredisi buldu."
+L.desc_event_finish = "Raunt {minutes}{seconds} sürdü. Sonunda {alive} oyuncu hayatta kaldı."
+L.desc_event_game = "Yeni bir raunt başladı."
+L.desc_event_respawn = "{player} yeniden canlandı."
+L.desc_event_rolechange = "{player}, {orole} ({oteam}) olan rol takımını {nrole} ({nteam}) olarak değiştirdi."
+L.desc_event_selected = "Takımlar ve roller tüm {amount} oyuncu için dağıtıldı."
+L.desc_event_spawn = "{player} doğdu."
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.trap_something = "something"
+L.trap_something = "bir şey"
 
 -- Kill events
-L.desc_event_kill_suicide = "It was suicide."
-L.desc_event_kill_team = "It was a team kill."
+L.desc_event_kill_suicide = "Bir intihar vakası."
+L.desc_event_kill_team = "Bu bir takım öldürmesiydi."
 
-L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) blew themselves up."
-L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) was blown up by {trap}."
+L.desc_event_kill_blowup = "{victim} ({vrole} {vteam}) kendini havaya uçurdu."
+L.desc_event_kill_blowup_trap = "{victim} ({vrole} {vteam}), {trap} tarafından havaya uçuruldu."
 
-L.desc_event_kill_tele_self = "{victim} ({vrole} / {vteam}) telefragged themselves."
-L.desc_event_kill_sui = "{victim} ({vrole} / {vteam}) couldn't take it and killed themselves."
-L.desc_event_kill_sui_using = "{victim} ({vrole} / {vteam}) killed themselves using {tool}."
+L.desc_event_kill_tele_self = "{victim} ({vrole} {vteam}) kendilerini ışınlanarak öldürdüler."
+L.desc_event_kill_sui = "{victim} ({vrole} {vteam}) bunu kaldıramadı ve kendini öldürdü."
+L.desc_event_kill_sui_using = "{victim} ({vrole} {vteam}), {tool} kullanarak kendini öldürdü."
 
-L.desc_event_kill_fall = "{victim} ({vrole} / {vteam}) fell to their death."
-L.desc_event_kill_fall_pushed = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} pushed them."
-L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} / {vteam}) fell to their death after {attacker} ({arole} / {ateam}) used {trap} to push them."
+L.desc_event_kill_fall = "{victim} ({vrole} {vteam}) ölümüne düştü."
+L.desc_event_kill_fall_pushed = "{victim} ({vrole} {vteam}, {attacker} onları ittikten sonra ölüme düştü."
+L.desc_event_kill_fall_pushed_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) onları itmek için {trap} kullandıktan sonra ölümüne düştü."
 
-L.desc_event_kill_shot = "{victim} ({vrole} / {vteam}) was shot by {attacker}."
-L.desc_event_kill_shot_using = "{victim} ({vrole} / {vteam}) was shot by {attacker} ({arole} / {ateam}) using a {weapon}."
+L.desc_event_kill_shot = "{victim} ({vrole} {vteam}), {attacker} tarafından vuruldu."
+L.desc_event_kill_shot_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) tarafından bir {weapon} kullanılarak vuruldu."
 
-L.desc_event_kill_drown = "{victim} ({vrole} / {vteam}) was drowned by {attacker}."
-L.desc_event_kill_drown_using = "{victim} ({vrole} / {vteam}) was drowned by {trap} triggered by {attacker} ({arole} / {ateam})."
+L.desc_event_kill_drown = "{victim} ({vrole} {vteam}), {attacker} tarafından boğuldu."
+L.desc_event_kill_drown_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) tarafından tetiklenen {trap} tarafından boğuldu."
 
-L.desc_event_kill_boom = "{victim} ({vrole} / {vteam}) was exploded by {attacker}."
-L.desc_event_kill_boom_using = "{victim} ({vrole} / {vteam}) was blown up by {attacker} ({arole} / {ateam}) using {trap}."
+L.desc_event_kill_boom = "{victim} ({vrole} {vteam}), {attacker} tarafından havaya uçuruldu."
+L.desc_event_kill_boom_using = "{victim} ({vrole} {vteam}), {trap} kullanılarak {attacker} ({arole} {ateam}) tarafından havaya uçuruldu."
 
-L.desc_event_kill_burn = "{victim} ({vrole} / {vteam}) was fried by {attacker}."
-L.desc_event_kill_burn_using = "{victim} ({vrole} / {vteam}) was burned by {trap} due to {attacker} ({arole} / {ateam})."
+L.desc_event_kill_burn = "{victim} ({vrole} {vteam}) / {attacker} tarafından vuruldu."
+L.desc_event_kill_burn_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) nedeniyle {trap} tarafından yakıldı."
 
-L.desc_event_kill_club = "{victim} ({vrole} / {vteam}) was beaten up by {attacker}."
-L.desc_event_kill_club_using = "{victim} ({vrole} / {vteam}) was pummeled to death by {attacker} ({arole} / {ateam}) using {trap}."
+L.desc_event_kill_club = "{victim} ({vrole} {vteam}), {attacker} tarafından dövüldü."
+L.desc_event_kill_club_using = "{victim} ({vrole} {vteam}), {trap} kullanılarak {attacker} ({arole} {ateam}) tarafından dövülerek öldürüldü."
 
-L.desc_event_kill_slash = "{victim} ({vrole} / {vteam}) was stabbed by {attacker}."
-L.desc_event_kill_slash_using = "{victim} ({vrole} / {vteam}) was cut up by {attacker} ({arole} / {ateam}) using {trap}."
+L.desc_event_kill_slash = "{victim} ({vrole} {vteam}), {attacker} tarafından bıçaklandı."
+L.desc_event_kill_slash_using = "{victim} ({vrole} {vteam}), {trap} kullanılarak {attacker} ({arole} {ateam}) tarafından havaya uçuruldu."
 
-L.desc_event_kill_tele = "{victim} ({vrole} / {vteam}) was telefragged by {attacker}."
-L.desc_event_kill_tele_using = "{victim} ({vrole} / {vteam}) was atomized by {trap} set by {attacker} ({arole} / {ateam})."
+L.desc_event_kill_tele = "{victim} ({vrole} {vteam}), {attacker} tarafından ışınlanarak öldürüldü."
+L.desc_event_kill_tele_using = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) tarafından ayarlanan {trap} tarafından atomlarına ayrıldı."
 
-L.desc_event_kill_goomba = "{victim} ({vrole} / {vteam}) was crushed by the massive bulk of {attacker} ({arole} / {ateam})."
+L.desc_event_kill_goomba = "{victim} ({vrole} {vteam}), {attacker} ({arole} {ateam}) kendi cüssesiyle onu ezdi."
 
-L.desc_event_kill_crush = "{victim} ({vrole} / {vteam}) was crushed by {attacker}."
-L.desc_event_kill_crush_using = "{victim} ({vrole} / {vteam}) was crushed by {trap} of {attacker} ({arole} / {ateam})."
+L.desc_event_kill_crush = "{victim} ({vrole} {vteam}), {attacker} tarafından ezildi."
+L.desc_event_kill_crush_using = "{victim} ({vrole} {vteam}), {trap} aracılıyla {attacker} ({arole} {ateam}) tarafından ezildi."
 
-L.desc_event_kill_other = "{victim} ({vrole} / {vteam}) was killed by {attacker}."
-L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) was killed by {attacker} ({arole} / {ateam}) using {trap}."
+L.desc_event_kill_other = "{victim} ({vrole} {vteam}), {attacker} tarafından öldürüldü."
+L.desc_event_kill_other_using = "{victim} ({vrole} {vteam}), {trap} kullanılarak {attacker} ({arole} {ateam}) tarafından havaya uçuruldu."
 
 -- 2021-04-20
-L.none = "No Role"
+L.none = "Rol Yok"
 
 -- 2021-04-24
-L.karma_teamkill_tooltip = "Teammate killed"
-L.karma_teamhurt_tooltip = "Teammate damaged"
-L.karma_enemykill_tooltip = "Enemy killed"
-L.karma_enemyhurt_tooltip = "Enemy damaged"
-L.karma_cleanround_tooltip = "Clean round"
-L.karma_roundheal_tooltip = "Karma restoration"
-L.karma_unknown_tooltip = "Unknown"
+L.karma_teamkill_tooltip = "Öldürülen takım arkadaşı"
+L.karma_teamhurt_tooltip = "Hasar verilen takım arkadaşı"
+L.karma_enemykill_tooltip = "Öldürülen düşman"
+L.karma_enemyhurt_tooltip = "Hasar verilen düşman"
+L.karma_cleanround_tooltip = "Raundu Temizle"
+L.karma_roundheal_tooltip = "Karma yenileme"
+L.karma_unknown_tooltip = "Bilinmiyor"
 
 -- 2021-05-07
-L.header_random_shop_administration = "Random Shop Settings"
-L.header_random_shop_value_administration = "Balance Settings"
+L.header_random_shop_administration = "Rastgele Mağaza Ayarları"
+L.header_random_shop_value_administration = "Bakiye Ayarları"
 
-L.shopeditor_name_random_shops = "Enable random shops"
-L.shopeditor_desc_random_shops = [[Random shops give every player a limited randomized set of all available equipments.
-Team shops forcefully give the same set to all players in a team instead of individual ones.
-Rerolling allows you to get a new randomized set of equipment for credits.]]
-L.shopeditor_name_random_shop_items = "Number of random equipments"
-L.shopeditor_desc_random_shop_items = "This includes equipments, which are marked with \"Always available in shop\". So choose a high enough number or you only get those."
-L.shopeditor_name_random_team_shops = "Enable team shops"
-L.shopeditor_name_random_shop_reroll = "Enable shop reroll availability"
-L.shopeditor_name_random_shop_reroll_cost = "Cost per reroll"
-L.shopeditor_name_random_shop_reroll_per_buy = "Auto reroll after buy"
+L.shopeditor_name_random_shops = "Rastgele mağazaları etkinleştir"
+L.shopeditor_desc_random_shops = [[Rastgele mağazalar, her oyuncuya mevcut tüm ekipmanların sınırlı bir rastgele setini verir."
+Takım mağazaları, aynı seti bireysel olanlar yerine bir takımdaki tüm oyunculara zorla verir."
+Yeniden dağıtma, yeni bir rastgele ekipman seti almanızı sağlar.]]
+L.shopeditor_name_random_shop_items = "Rastgele ekipman sayısı"
+L.shopeditor_desc_random_shop_items = "Bu, her zaman mağazada mevcut olarak işaretlenmiş ekipmanları içerir. Bu yüzden yeterince yüksek bir sayı seç yoksa sadece onları alırsın."
+L.shopeditor_name_random_team_shops = "Takım mağazalarını etkinleştir"
+L.shopeditor_name_random_shop_reroll = "Mağaza yeniden dağıtım kullanılabilirliğini etkinleştir"
+L.shopeditor_name_random_shop_reroll_cost = "Yeniden dağıtım başına maliyet"
+L.shopeditor_name_random_shop_reroll_per_buy = "Satın aldıktan sonra otomatik olarak yeniden dağıt"
 
 -- 2021-06-04
-L.header_equipment_setup = "Equipment Settings"
-L.header_equipment_value_setup = "Balance Settings"
+L.header_equipment_setup = "Ekipman Ayarları"
+L.header_equipment_value_setup = "Bakiye Ayarları"
 
-L.equipmenteditor_name_not_buyable = "Can be bought"
-L.equipmenteditor_desc_not_buyable = "If disabled the equipment will not show in the shop. Roles that have this equipment assigned will still receive it."
-L.equipmenteditor_name_not_random = "Always available in shop"
-L.equipmenteditor_desc_not_random = "If enabled, the equipment is always available in the shop. When the random shop is enabled, it takes one available random slot and always reserves it for this equipment."
-L.equipmenteditor_name_global_limited = "Global limited amount"
-L.equipmenteditor_desc_global_limited = "If enabled, the equipment can be bought only once on the server in the active round."
-L.equipmenteditor_name_team_limited = "Team limited amount"
-L.equipmenteditor_desc_team_limited = "If enabled, the equipment can be bought only once per team in the active round."
-L.equipmenteditor_name_player_limited = "Player limited amount"
-L.equipmenteditor_desc_player_limited = "If enabled, the equipment can be bought only once per player in the active round."
-L.equipmenteditor_name_min_players = "Minimum amount of players for buying"
-L.equipmenteditor_name_credits = "Price in credits"
+L.equipmenteditor_name_not_buyable = "Satın alınabilir"
+L.equipmenteditor_desc_not_buyable = "Devre dışı bırakılırsa ekipman mağazada gösterilmez. Bu ekipmanın atandığı roller yine de onu alacaktır."
+L.equipmenteditor_name_not_random = "Mağazada her zaman mevcuttur"
+L.equipmenteditor_desc_not_random = "Etkinleştirilirse, ekipman her zaman mağazada mevcuttur. Rastgele mağaza etkinleştirildiğinde, mevcut bir rastgele yuva alır ve her zaman bu ekipman için ayırır."
+L.equipmenteditor_name_global_limited = "Genel sınırlı miktar"
+L.equipmenteditor_desc_global_limited = "Etkinleştirilirse, ekipman aktif rauntta sunucuda yalnızca bir kez satın alınabilir."
+L.equipmenteditor_name_team_limited = "Takım sınırlı miktar"
+L.equipmenteditor_desc_team_limited = "Etkinleştirilirse, ekipman aktif rauntta takım başına yalnızca bir kez satın alınabilir."
+L.equipmenteditor_name_player_limited = "Oyuncu sınırlı miktarı"
+L.equipmenteditor_desc_player_limited = "Etkinleştirilirse, ekipman aktif rauntta oyuncu başına yalnızca bir kez satın alınabilir."
+L.equipmenteditor_name_min_players = "Satın almak için minimum oyuncu sayısı"
+L.equipmenteditor_name_credits = "Kredi cinsinden fiyat"
 
 -- 2021-06-08
-L.equip_not_added = "not added"
-L.equip_added = "added"
-L.equip_inherit_added = "added (inherit)"
-L.equip_inherit_removed = "removed (inherit)"
+L.equip_not_added = "eklenmedi"
+L.equip_added = "eklendi"
+L.equip_inherit_added = "eklendi (devralma)"
+L.equip_inherit_removed = "kaldırıldı (devral)"
 
 -- 2021-06-09
-L.layering_not_layered = "Not layered"
-L.layering_layer = "Layer {layer}"
-L.header_rolelayering_role = "{role} layering"
-L.header_rolelayering_baserole = "Base role layering"
-L.submenu_administration_rolelayering_title = "Role Layering"
-L.header_rolelayering_info = "Role layering information"
-L.help_rolelayering_roleselection = "The role distribution process is split into two stages. In the first stage base roles are distributed, which are innocent, traitor and those listed in the 'base role layer' box below. The second stage is used to upgrade those base roles to a subrole."
-L.help_rolelayering_layers = "From each layer only one role is selected. First the roles from the custom layers are distributed starting from the first layer until the last is reached or no more roles can be upgraded. Whichever happens first, if upgradeable slots are still available, the unlayered roles will be distributed as well."
-L.scoreboard_voice_tooltip = "Scroll to change the volume"
+L.layering_not_layered = "Katmanlı değil"
+L.layering_layer = "Katman {layer}"
+L.header_rolelayering_role = "{role} dağıtımı"
+L.header_rolelayering_baserole = "Temel rol dağıtma"
+L.submenu_administration_rolelayering_title = "Rol Dağıtma"
+L.header_rolelayering_info = "Rol dağıtma bilgileri"
+L.help_rolelayering_roleselection = "Rol dağılım süreci iki aşamaya ayrılmıştır. İlk aşamada masum, hain ve aşağıdaki 'temel rol dağıtımı' kutusunda listelenen temel roller dağıtılır. İkinci aşama, bu temel rolleri bir alt role yükseltmek için kullanılır."
+L.help_rolelayering_layers = "Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır."
+L.scoreboard_voice_tooltip = "Ses seviyesini değiştirmek için kaydırın"
 
 -- 2021-06-15
-L.header_shop_linker = "Settings"
-L.label_shop_linker_set = "Select shop type:"
+L.header_shop_linker = "Ayarlar"
+L.label_shop_linker_set = "Mağaza türünü seçin"
 
 -- 2021-06-18
-L.xfer_team_indicator = "Team"
+L.xfer_team_indicator = "Takım"
 
 -- 2021-06-25
-L.searchbar_default_placeholder = "Search in list..."
+L.searchbar_default_placeholder = "Listede ara..."
 
 -- 2021-07-11
-L.spec_about_to_revive = "Spectating is limited during revival period."
+L.spec_about_to_revive = "İzleme, canlanma sırasında sınırlıdır."
 
 -- 2021-09-01
-L.spawneditor_name = "Spawn Editor Tool"
-L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world. Can only be used by super admin."
+L.spawneditor_name = "Canlanma Noktası Düzenleyici Aracı"
+L.spawneditor_desc = "Dünyaya silah, cephane ve oyuncu canlanma noktası yerleştirmek için kullanılır. Yalnızca süper admin tarafından kullanılabilir."
 
-L.spawneditor_place = "Place spawn"
-L.spawneditor_remove = "Remove spawn"
-L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
-L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
+L.spawneditor_place = "Canlanma noktasını yerleştir"
+L.spawneditor_remove = "Canlanma noktasını kaldır"
+L.spawneditor_change = "Canlanma noktası türünü değiştirin (geri almak için [SHIFT] tuşunu basılı tutun)"
+L.spawneditor_ammo_edit = "Otomatik ortaya çıkan cephaneyi düzenlemek için silahın ortaya çıkmasını bekle"
 
-L.spawn_weapon_random = "Random Weapon Spawn"
-L.spawn_weapon_melee = "Melee Weapon Spawn"
-L.spawn_weapon_nade = "Grenade Weapon Spawn"
-L.spawn_weapon_shotgun = "Shotgun Weapon Spawn"
-L.spawn_weapon_heavy = "Heavy Weapon Spawn"
-L.spawn_weapon_sniper = "Sniper Weapon Spawn"
-L.spawn_weapon_pistol = "Pistol Weapon Spawn"
-L.spawn_weapon_special = "Special Weapon Spawn"
-L.spawn_ammo_random = "Random ammo spawn"
-L.spawn_ammo_deagle = "Deagle ammo spawn"
-L.spawn_ammo_pistol = "Pistol ammo spawn"
-L.spawn_ammo_mac10 = "Mac10 ammo spawn"
-L.spawn_ammo_rifle = "Rifle ammo spawn"
-L.spawn_ammo_shotgun = "Shotgun ammo spawn"
-L.spawn_player_random = "Random player spawn"
+L.spawn_weapon_random = "Rastgele Silah Çıkış Noktası"
+L.spawn_weapon_melee = "Yakın Dövüş Silahı Çıkış Noktası"
+L.spawn_weapon_nade = "Bomba Çıkış Noktası"
+L.spawn_weapon_shotgun = "Pompalı Çıkış Noktası"
+L.spawn_weapon_heavy = "Ağır Silah Çıkış Noktası"
+L.spawn_weapon_sniper = "Keskin Nişancı Silahı Çıkış Noktası"
+L.spawn_weapon_pistol = "Tabanca Silahı Çıkış Noktası"
+L.spawn_weapon_special = "Özel Silah Çıkış Noktası"
+L.spawn_ammo_random = "Rastgele Cephane Çıkış Noktası"
+L.spawn_ammo_deagle = "Deagle Cephanesi Çıkış Noktası"
+L.spawn_ammo_pistol = "Tabanca Cephanesi Çıkış Noktası"
+L.spawn_ammo_mac10 = "Mac10 Cephanesi Çıkış Noktası"
+L.spawn_ammo_rifle = "Tüfek Cephanesi Çıkış Noktası"
+L.spawn_ammo_shotgun = "Pompalı Cephanesi Çıkış Noktası"
+L.spawn_player_random = "Rastgele Oyuncu Canlanma Noktası"
 
-L.spawn_weapon_ammo = "(Ammo: {ammo})"
+L.spawn_weapon_ammo = "(Cephane {ammo})"
 
-L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
+L.spawn_weapon_edit_ammo = "Bu silahın çıkış noktasında cephaneyi artırmak veya azaltmak için [{walkkey}] tuşunu basılı tutun ve [{primaryfire} veya {secondaryfire}] tuşuna basın"
 
-L.spawn_type_weapon = "This is a weapon spawn"
-L.spawn_type_ammo = "This is an ammunition spawn"
-L.spawn_type_player = "This is a player spawn"
+L.spawn_type_weapon = "Bu bir silah çıkış noktasıdır"
+L.spawn_type_ammo = "Bu bir cephane çıkış noktasıdır"
+L.spawn_type_player = "Bu bir oyuncu canlanma noktasıdır"
 
-L.spawn_remove = "Press [{secondaryfire}] to remove this spawn"
+L.spawn_remove = "Bu çıkış noktasını kaldırmak için [{secondaryfire}] tuşuna basın"
 
-L.submenu_administration_entspawn_title = "Spawn Editor"
-L.header_entspawn_settings = "Spawn Editor Settings"
-L.button_start_entspawn_edit = "Start Spawn Edit"
-L.button_delete_all_spawns = "Delete all Spawns"
+L.submenu_administration_entspawn_title = "Çıkış Noktası Düzenleyici"
+L.header_entspawn_settings = "Çıkış Noktası Düzenleyici Ayarları"
+L.button_start_entspawn_edit = "Çıkış Noktası Düzenlemesini Başlat"
+L.button_delete_all_spawns = "Tüm Çıkış Noktalarını Sil"
 
-L.label_dynamic_spawns_enable = "Enable dynamic spawns for this map"
-L.label_dynamic_spawns_global_enable = "Enable dynamic spawns for all maps"
+L.label_dynamic_spawns_enable = "Bu harita için dinamik çıkış noktalarını etkinleştir"
+L.label_dynamic_spawns_global_enable = "Tüm haritalar için dinamik çıkış noktalarını etkinleştir"
 
-L.header_equipment_weapon_spawn_setup = "Weapon Spawn Settings"
+L.header_equipment_weapon_spawn_setup = "Silah Çıkış Ayarları"
 
 L.help_spawn_editor_info = [[
-The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
+Çıkış noktası düzenleyicisi, dünyadaki çıkış noktalarını yerleştirmek, kaldırmak ve düzenlemek için kullanılır. Bu çıkış noktaları silahlar, cephaneler ve oyuncular içindir.
 
-These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to the initial state.
+Bu çıkış noktaları, 'datatttweaponspawnscripts' içinde bulunan dosyalara kaydedilir. Donanım sıfırlaması için silinebilirler. İlk çıkış noktası dosyaları, haritada ve orijinal TTT silah çıkış noktası komut dosyalarında bulunan çıkış noktalarından oluşturulur. Sıfırlama düğmesine basıldığında her zaman başlangıç durumuna geri dönülür.
 
-It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the 'Edit Equipment' menu. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
+Bu çıkış noktası sisteminin dinamik çıkışları kullandığı unutulmamalıdır. Bu, silahlar için en ilginç olanıdır, çünkü artık belirli bir silahı değil, bir tür silahı tanımlar. Örneğin, bir TTT pompalı çıkış noktası yerine, artık pompalı olarak tanımlanan herhangi bir silahın çıkabileceği genel bir pompalı çıkış noktası var. Her silah için çıkış türü 'Ekipmanı Düzenle' menüsünden ayarlanabilir. Bu, herhangi bir silahın haritada ortaya çıkmasını veya belirli varsayılan silahları devre dışı bırakmasını mümkün kılar.
 
-Keep in mind that many changes only take effect after a new round has started.]]
-L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
-L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
+Birçok değişikliğin ancak yeni bir raunt başladıktan sonra yürürlüğe gireceğini unutmayın.]]
+L.help_spawn_editor_enable = "Bazı haritalarda, haritada bulunan orijinal çıkış noktalarının dinamik sistemle değiştirilmeden kullanılması önerilebilir. Aşağıdaki bu seçeneğin değiştirilmesi yalnızca şu anda etkin olan haritayı etkiler, bu nedenle dinamik sistem diğer tüm haritalar için kullanılmaya devam edecektir."
+L.help_spawn_editor_hint = "İpucu ÇN düzenleyicisinden çıkmak için oyun modu menüsünü yeniden açın."
 L.help_spawn_editor_spawn_amount = [[
-There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map.
-Click 'start spawn edit' to change this amount.
+Şu anda bu haritada {weapon} silah çıkışı, {ammo} cephane çıkışı ve {player} oyuncu canlanma noktaları var.
+Bu miktarı değiştirmek için 'ÇN düzenlemesini başlat'a tıklayın.
 
-{weaponrandom}x Random weapon spawn
-{weaponmelee}x Melee weapon spawn
-{weaponnade}x Grenade weapon spawn
-{weaponshotgun}x Shotgun weapon spawn
-{weaponheavy}x Heavy weapon spawn
-{weaponsniper}x Sniper weapon spawn
-{weaponpistol}x Pistol weapon spawn
-{weaponspecial}x Special weapon spawn
+{weaponrandom}x Rastgele Silah Çıkışı
+{weaponmelee}x Yakın Dövüş Silahı Çıkışı
+{weaponnade}x El Bombası Çıkışı
+{weaponshotgun}x Pompalı Silahı Çıkışı
+{weaponheavy}x Ağır Silah Çıkışı
+{weaponsniper}x Keskin Nişancı Silahı Çıkışı
+{weaponpistol}x Tabanca Silahı Çıkışı
+{weaponspecial}x Özel Silah Çıkışı
 
-{ammorandom}x Random ammo spawn
-{ammodeagle}x Deagle ammo spawn
-{ammopistol}x Pistol ammo spawn
-{ammomac10}x Mac10 ammo spawn
-{ammorifle}x Rifle ammo spawn
-{ammoshotgun}x Shotgun ammo spawn
+{ammorandom}x Rastgele Cephane Çıkışı
+{ammodeagle}x Deagle Cephane Çıkışı
+{ammopistol}x Tabanca Cephane Çıkışı
+{ammomac10}x Mac10 Cephane Çıkışı
+{ammorifle}x Tüfek Cephane Çıkışı
+{ammoshotgun}x Pompalı Cephane Çıkışı
 
-{playerrandom}x Random player spawn]]
+{playerrandom}x Rastgele Oyuncu Canlanması]]
 
-L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
-L.equipmenteditor_name_spawn_type = "Select spawn type"
+L.equipmenteditor_name_auto_spawnable = "Ekipman dünyada rastgele ortaya çıkar"
+L.equipmenteditor_name_spawn_type = "Canlanma türünü seçin"
 L.equipmenteditor_desc_auto_spawnable = [[
-The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however this can be changed from within this menu.
+TTT2 çıkış noktası sistemi, dünyadaki her silahın çıkmasına izin verir. Varsayılan olarak, yalnızca yaratıcı tarafından 'Otomatik Çıkabilir' olarak işaretlenen silahlar dünyada ortaya çıkacaktır, ancak bu menüden değiştirilebilir.
 
-Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
+Ekipmanın çoğu, varsayılan olarak 'özel silahların ortaya çıkmasına' ayarlanmıştır. Bu, ekipmanın yalnızca rastgele silah çıkışlarında ortaya çıktığı anlamına gelir. Bununla birlikte, mevcut diğer çıkış türlerini kullanmak için dünyaya özel silah çıkış noktaları yerleştirmek veya burada çıkış noktası türünü değiştirmek mümkündür.]]
 
-L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
+L.pickup_error_inv_cached = "Envanteriniz önbelleğe alındığı için şu anda bunu alamazsınız."
 
 -- 2021-09-02
-L.submenu_administration_playermodels_title = "Player Models"
-L.header_playermodels_general = "General Player Model Settings"
-L.header_playermodels_selection = "Select Player Model Pool"
+L.submenu_administration_playermodels_title = "Oyuncu Modelleri"
+L.header_playermodels_general = "Genel Oyuncu Modeli Ayarları"
+L.header_playermodels_selection = "Oyuncu Modeli Havuzunu Seçin"
 
-L.label_enforce_playermodel = "Enforce role player model"
-L.label_use_custom_models = "Use a randomly selected player model"
-L.label_prefer_map_models = "Prefer map specific models over default models"
-L.label_select_model_per_round = "Select a new random model each round (only on map change if disabled)"
+L.label_enforce_playermodel = "Rol oyuncu modelini uygula"
+L.label_use_custom_models = "Rastgele seçilen bir oyuncu modeli kullan"
+L.label_prefer_map_models = "Varsayılan modeller yerine haritaya özgü modelleri tercih edin"
+L.label_select_model_per_round = "Her rauntta yeni bir rastgele model seçin (devre dışı bırakılmışsa yalnızca harita değişikliğinde)"
 
 L.help_prefer_map_models = [[
-Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
+Bazı haritalar kendi oyuncu modellerini tanımlar. Varsayılan olarak, bu modeller otomatik olarak atananlardan daha yüksek bir önceliğe sahiptir. Bu ayar devre dışı bırakıldığında, haritaya özgü modeller devre dışı bırakılır.
 
-Role specific models always have a higher priority and are unaffected by this setting.]]
+Role özgü modeller her zaman daha yüksek önceliğe sahiptir ve bu ayardan etkilenmez.]]
 L.help_enforce_playermodel = [[
-Some roles have custom player models. They can be disabled which can be relevant for compatibility with some player model selectors.
-Random default models can still be selected, if this setting is disabled.]]
+Bazı rollerin özel oyuncu modelleri vardır. Bazı oyuncu modeli seçicileriyle uyumluluk için uygun olabilecek şekilde devre dışı bırakılabilirler.
+Bu ayar devre dışı bırakılırsa, rastgele varsayılan modeller yine de seçilebilir.]]
 L.help_use_custom_models = [[
-By default only the CS:S Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
+Varsayılan olarak tüm oyunculara yalnızca CSS Phoenix oyuncu modeli atanır. Ancak bu seçeneği etkinleştirerek bir oyuncu modeli havuzu seçmek mümkündür. Bu ayar etkinleştirildiğinde, her oyuncuya yine aynı oyuncu modeli atanacaktır, ancak tanımlanan model havuzundan rastgele bir modeldir.
 
-This selection of models can be extended by installing more player models.]]
+Model seçimleri daha fazla oyuncu modeli yükleyerek genişletilebilir.]]
 
 -- 2021-10-06
-L.menu_server_addons_title = "Server Addons"
-L.menu_server_addons_description = "Server-wide admin only settings for addons."
+L.menu_server_addons_title = "Sunucu Eklentileri"
+L.menu_server_addons_description = "Sunucu genelinde yalnızca eklentiler için admin ayarları."
 
-L.tooltip_finish_score_penalty_alive_teammates = "Alive teammates penalty: {score}"
-L.finish_score_penalty_alive_teammates = "Alive teammates penalty:"
-L.tooltip_kill_score_suicide = "Suicide: {score}"
-L.kill_score_suicide = "Suicide:"
-L.tooltip_kill_score_team = "Team kill: {score}"
-L.kill_score_team = "Team kill:"
+L.tooltip_finish_score_penalty_alive_teammates = "Canlı takım arkadaşlarının cezası {score}"
+L.finish_score_penalty_alive_teammates = "Canlı takım arkadaşlarının cezası"
+L.tooltip_kill_score_suicide = "İntihar {score}"
+L.kill_score_suicide = "İntihar"
+L.tooltip_kill_score_team = "Takım arkadaşı öldürme {score}"
+L.kill_score_team = "Takım arkadaşı öldürme"
 
 -- 2021-10-09
 L.help_models_select = [[
-Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
+Oyuncu modeli havuzuna eklemek için modellere sol tıklayın. Kaldırmak için tekrar sol tıklayın. Odaklanan model için etkin ve devre dışı dedektif şapkaları arasında sağ tıklama geçiş yapar.
 
-The small indicator in the top left shows if the player model has a head hitbox. The icon below shows if this model is applicable for a detective hat.]]
+Sol üstteki küçük gösterge, oyuncu modelinin bir kafa vuruş kutusuna sahip olup olmadığını gösterir. Aşağıdaki simge, bu modelin bir dedektif şapkası için geçerli olup olmadığını gösterir.]]
 
-L.menu_roles_title = "Role Settings"
-L.menu_roles_description = "Set up the spawning, equipment credits and more."
+L.menu_roles_title = "Rol Ayarları"
+L.menu_roles_description = "Çıkış noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
 
-L.submenu_administration_roles_general_title = "General Role Settings"
+L.submenu_administration_roles_general_title = "Genel Rol Ayarları"
 
-L.header_roles_info = "Role Information"
-L.header_roles_selection = "Role Selection Parameters"
-L.header_roles_tbuttons = "Traitor Buttons Access"
-L.header_roles_credits = "Role Equipment Credits"
-L.header_roles_additional = "Additional Role Settings"
-L.header_roles_reward_credits = "Reward Equipment Credits"
+L.header_roles_info = "Rol Bilgileri"
+L.header_roles_selection = "Rol Seçim Parametreleri"
+L.header_roles_tbuttons = "Hain Düğmelerine Erişim"
+L.header_roles_credits = "Rol Ekipmanı Kredileri"
+L.header_roles_additional = "Ek Rol Ayarları"
+L.header_roles_reward_credits = "Ödül Ekipmanı Kredileri"
 
-L.help_roles_default_team = "Default team: {team}"
-L.help_roles_unselectable = "This role is not distributable. It is not considered in the role distribution process. Most of the times this means that this is a role that is manually assigned during the round through an event like a revival, a sidekick deagle or something similar."
-L.help_roles_selectable = "This role is distributable. If all criteria is met, this role is considered in the role distribution process."
-L.help_roles_credits = "Equipment credits are used to buy equipment in the shop. It mostly makes sense to give them only for those roles that have access to the shops. However, since it is possible to find credits on corpses, you can also give starting credits to roles as a reward to their killer."
-L.help_roles_selection_short = "The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role."
+L.help_roles_default_team = "Varsayılan takım {team}"
+L.help_roles_unselectable = "Bu rol dağıtılamaz. Rol dağılım sürecinde dikkate alınmaz. Çoğu zaman bu, bunun bir canlanma, bir yardımcı deagle veya benzeri bir olay aracılığıyla raunt sırasında manuel olarak atanan bir rol olduğu anlamına gelir."
+L.help_roles_selectable = "Bu rol dağıtılabilir. Tüm kriterlerin karşılanması durumunda bu rol, rol dağılımı sürecinde dikkate alınır."
+L.help_roles_credits = "Ekipman kredileri, mağazadan ekipman satın almak için kullanılır. Onlara yalnızca mağazalara erişimi olan roller için vermek çoğunlukla mantıklıdır. Bununla birlikte, cesetler üzerinde kredi bulmak mümkün olduğundan, katillerine ödül olarak rollere başlangıç kredisi de verebilirsiniz."
+L.help_roles_selection_short = "Oyuncu başına rol dağılımı, bu role atanan oyuncuların yüzdesini tanımlar. Örneğin, değer '0.2' olarak ayarlanırsa, her beşinci oyuncu bu rolü alır."
 L.help_roles_selection = [[
-The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be distributed at all.
-Keep in mind that all of this only applies if the role is considered for distribution process.
+Oyuncu başına rol dağılımı, bu role atanan oyuncuların yüzdesini tanımlar. Örneğin, değer '0.2' olarak ayarlanırsa, her beşinci oyuncu bu rolü alır. Bu aynı zamanda bu rolün dağıtılması için en az 5 oyuncunun gerekli olduğu anlamına gelir.
+Tüm bunların yalnızca rolün dağıtım süreci için dikkate alınması durumunda geçerli olduğunu unutmayın.
 
-The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for distribution and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution process then works as usual for the second player.]]
-L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of enemies has died. Related values can be tweaked here."
-L.help_roles_award_pct = "When this percentage of enemies are dead, specific roles are awarded equipment credits."
-L.help_roles_award_repeat = "Whether the credit award is handed out multiple times. For example, if the percentage is set to '0.25', and this setting is enabled, players will be awarded credits at '25%', '50%' and '75%' dead enemies respectively."
-L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up the role distribution process. When in doubt keep all values at '0'. This value means that no limits are applied and the role distribution will try to assign as many roles as possible."
+Söz konusu rol dağılımı, oyuncuların alt sınırı ile özel bir entegrasyona sahiptir. Rol dağıtım için düşünülürse ve minimum değer dağıtım faktörünün verdiği değerin altındaysa, ancak oyuncu miktarı alt sınıra eşit veya daha büyükse, tek bir oyuncu yine de bu rolü alabilir. Dağıtım süreci daha sonra ikinci oyuncu için her zamanki gibi çalışır.]]
+L.help_roles_award_info = "Bazı roller (kredi ayarlarında etkinleştirilmişse), düşmanların belirli bir yüzdesi öldüğünde ekipman kredisi alır. İlgili değerler burada düzeltilebilir."
+L.help_roles_award_pct = "Düşmanların bu yüzdesi öldüğünde, belirli rollere ekipman kredisi verilir."
+L.help_roles_award_repeat = "Kredi ödülünün birden çok kez verilip verilmediği. Örneğin, yüzde '0.25' olarak ayarlanırsa ve bu ayar etkinleştirilirse, oyunculara sırasıyla '%25', '%50' ve '%75' ölü düşmanlarda kredi verilecektir."
+L.help_roles_advanced_warning = "UYARI Bunlar, rol dağıtım sürecini tamamen bozabilecek gelişmiş ayarlardır. Şüpheye düştüğünüzde tüm değerleri '0' da tutun. Bu değer, herhangi bir sınır uygulanmadığı ve rol dağılımının mümkün olduğunca çok rol atamaya çalışacağı anlamına gelir."
 L.help_roles_max_roles = [[
-The term roles here includes both the base roles and the subroles. By default, there is no limit on how many different roles can be assigned. However, here are two different ways to limit them.
+Buradaki roller terimi hem temel rolleri hem de alt rolleri içerir. Varsayılan olarak, kaç farklı rolün atanabileceği konusunda bir sınır yoktur. Ancak, bunları sınırlamanın iki farklı yolu vardır.
 
-1. Limit them by a fixed amount.
-2. Limit them by a percentage.
+1. Sabit bir miktarla sınırlayın.
+2. Onları bir yüzde ile sınırlayın.
 
-The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+İkincisi, yalnızca sabit miktar '0' ise ve mevcut oyuncuların ayarlanan yüzdesine göre bir üst sınır belirlerse kullanılır.]]
 L.help_roles_max_baseroles = [[
-Base roles are only those roles others inherit from. For example, the Innocent role is a base role, while a Pharaoh is a subrole of this role. By default, there is no limit on how many different base roles can be assigned. However, here are two different ways to limit them.
+Temel roller yalnızca başkalarının devraldığı rollerdir. Örneğin, Masum rolü temel bir roldür, Firavun ise bu rolün bir alt rolüdür. Varsayılan olarak, kaç farklı rolün atanabileceği konusunda bir sınır yoktur. Ancak, bunları sınırlamanın iki farklı yolu vardır.
 
-1. Limit them by a fixed amount.
-2. Limit them by a percentage.
+1. Sabit bir miktarla sınırlayın.
+2. Onları bir yüzde ile sınırlayın.
 
-The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
+İkincisi, yalnızca sabit miktar '0' ise ve mevcut oyuncuların ayarlanan yüzdesine göre bir üst sınır belirlerse kullanılır.]]
 
-L.label_roles_enabled = "Enable role"
-L.label_roles_min_inno_pct = "Innocent distribution per player"
-L.label_roles_pct = "Role distribution per player"
-L.label_roles_max = "Upper limit of players assigned for this role"
-L.label_roles_random = "Chance this role is distributed"
-L.label_roles_min_players = "Lower limit of players to consider distribution"
-L.label_roles_tbutton = "Role can use Traitor buttons"
-L.label_roles_credits_starting = "Starting credits"
-L.label_roles_credits_award_pct = "Credit reward percentage"
-L.label_roles_credits_award_size = "Credit reward size"
-L.label_roles_credits_award_repeat = "Credit reward repeat"
-L.label_roles_newroles_enabled = "Enable custom roles"
-L.label_roles_max_roles = "Upper role limit"
-L.label_roles_max_roles_pct = "Upper role limit by percentage"
-L.label_roles_max_baseroles = "Upper base role limit"
-L.label_roles_max_baseroles_pct = "Upper base role limit by percentage"
-L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows to have them)"
+L.label_roles_enabled = "Rolü etkinleştir"
+L.label_roles_min_inno_pct = "Oyuncu başına masum dağılımı"
+L.label_roles_pct = "Oyuncu başına rol dağılımı"
+L.label_roles_max = "Bu rol için atanan oyuncuların üst sınırı"
+L.label_roles_random = "Bu rolün dağıtılma şansı"
+L.label_roles_min_players = "Dağıtımı göz önünde bulundurmak için oyuncuların alt sınırı"
+L.label_roles_tbutton = "Rol, Hain düğmelerini kullanabilir"
+L.label_roles_credits_starting = "Başlangıç kredileri"
+L.label_roles_credits_award_pct = "Kredi ödül yüzdesi"
+L.label_roles_credits_award_size = "Kredi ödülü boyutu"
+L.label_roles_credits_award_repeat = "Kredi ödülü tekrarı"
+L.label_roles_newroles_enabled = "Özel rolleri etkinleştir"
+L.label_roles_max_roles = "Üst rol sınırı"
+L.label_roles_max_roles_pct = "Yüzde olarak üst rol sınırı"
+L.label_roles_max_baseroles = "Üst temel rol sınırı"
+L.label_roles_max_baseroles_pct = "Yüzde olarak üst temel rol sınırı"
+L.label_detective_hats = "Dedektif gibi polislik rolleri için şapkaları etkinleştir (oyuncu modeli izin veriyorsa)"
 
-L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their teammates."
-L.ttt2_desc_traitor = "The Traitor is the enemy of the Innocent. They have an equipment menu with which they are being able to buy special equipment. They have to kill everyone but their teammates."
-L.ttt2_desc_detective = "The Detective is the one whom the Innocents can trust. But who even is an Innocent? The mighty Detective has to find all the evil terrorists. The equipment in their shop may help them with this task."
+L.ttt2_desc_innocent = "Bir Masum, hiçbir özel yeteneğe sahip değildir. Teröristler arasında kötüleri bulup öldürmek zorundalar. Ama takım arkadaşlarını öldürmemeye dikkat etmek zorundalar."
+L.ttt2_desc_traitor = "Hain, Masumların düşmanıdır. Özel ekipman satın alabilecekleri bir ekipman menüsü vardır. Takım arkadaşları hariç herkesi öldürmek zorundalar."
+L.ttt2_desc_detective = "Masumların güvenebileceği kişi Dedektiftir. Ama Masum bile olsa, kudretli Dedektif tüm kötü teröristleri bulmak zorundadır. Mağazalarındaki ekipmanlar bu görevde onlara yardımcı olabilir."
 
 -- 2021-10-10
-L.button_reset_models = "Reset Player Models"
+L.button_reset_models = "Oynatıcı Modellerini Sıfırla"
 
 -- 2021-10-13
-L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'public role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
+L.help_roles_credits_award_kill = "Kredi kazanmanın bir başka yolu da Dedektif gibi 'herkese açık bir rolü' olan yüksek değerli oyuncuları öldürmektir. Eğer katilin rolü bunu etkinleştirdiyse, aşağıda tanımlanan miktarda kredi kazanır."
 L.help_roles_credits_award = [[
-There are two different ways to be awarded credits in base TTT2:
+Temel TTT2'de kredi almanın iki farklı yolu vardır
 
-1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
-2. If a player killed a high value player with a 'public role' such as a Detective, the killer is awarded credits.
+1. Düşman takımın belirli bir yüzdesi ölmüşse, tüm takıma kredi verilir.
+2. Bir oyuncu, Dedektif gibi 'herkese açık bir role' sahip yüksek değerli bir oyuncuyu öldürdüyse, katile kredi verilir.
 
-Please note, that this still can be enabled/disabled for every role, even if the whole team is awarded. For example, if team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
-The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
+Tüm takım ödüllendirilse bile bunun yine de her rol için etkinleştirilebileceğini lütfen unutmayın. Örneğin, Masum takımı ödüllendirilirse, ancak Masum rolünün bu özelliği devre dışı bırakılmışsa, kredilerini yalnızca Dedektif alacaktır.
+Bu özelliğin dengeleme değerleri 'Yönetim' - 'Genel Rol Ayarları' bölümünden ayarlanabilir.]]
 L.help_detective_hats = [[
-Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
+Dedektif gibi polislik rolleri, yetkilerini göstermek için şapka takabilir. Onları öldüklerinde veya kafadan hasar gördüklerinde kaybederler.
 
-Some player models do not support hats by default. This can be changed in 'Administration' -> 'Player Models']]
+Bazı oyuncu modelleri varsayılan olarak şapkaları desteklemez. Bu, 'Yönetim' - 'Oyuncu Modelleri' bölümünden değiştirilebilir]]
 
-L.label_roles_credits_award_kill = "Credit reward amount for the kill"
-L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
-L.label_roles_credits_kill_award = "Enable credits award for high value player kill"
-L.label_roles_min_karma = "Lower limit of Karma to consider distribution"
+L.label_roles_credits_award_kill = "Öldürme için kredi ödülü"
+L.label_roles_credits_dead_award = "Ölü düşmanların belirli bir yüzdesi için kredi ödülünü etkinleştir"
+L.label_roles_credits_kill_award = "Yüksek değerli oyuncu öldürme için kredi ödülünü etkinleştir"
+L.label_roles_min_karma = "Dağılımı göz önünde bulundurmak için Karma'nın alt sınırı"
 
 -- 2021-11-07
-L.submenu_administration_administration_title = "Administration"
-L.submenu_administration_voicechat_title = "Voice chat / Text chat"
-L.submenu_administration_round_setup_title = "Round Settings"
-L.submenu_administration_mapentities_title = "Map Entities"
-L.submenu_administration_inventory_title = "Inventory"
+L.submenu_administration_administration_title = "Yönetim"
+L.submenu_administration_voicechat_title = "Sesli sohbet Metin sohbeti"
+L.submenu_administration_round_setup_title = "Raunt Ayarları"
+L.submenu_administration_mapentities_title = "Harita Varlıkları"
+L.submenu_administration_inventory_title = "Envanter"
 L.submenu_administration_karma_title = "Karma"
-L.submenu_administration_sprint_title = "Sprinting"
-L.submenu_administration_playersettings_title = "Player Settings"
+L.submenu_administration_sprint_title = "Koşma"
+L.submenu_administration_playersettings_title = "Oyuncu Ayarları"
 
-L.header_roles_special_settings = "Special Role Settings"
-L.header_equipment_additional = "Additional Equipment Settings"
-L.header_administration_general = "General Administrative Settings"
-L.header_administration_logging = "Logging"
-L.header_administration_misc = "Miscellaneous"
-L.header_entspawn_plyspawn = "Player Spawn Settings"
-L.header_voicechat_general = "General Voice chat Settings"
-L.header_voicechat_battery = "Voice chat Battery"
-L.header_voicechat_locational = "Proximity Voice chat"
-L.header_playersettings_plyspawn = "Player Spawn Settings"
-L.header_round_setup_prep = "Round: Preparing"
-L.header_round_setup_round = "Round: Active"
-L.header_round_setup_post = "Round: Post"
-L.header_round_setup_map_duration = "Map Session"
-L.header_textchat = "Text chat"
-L.header_round_dead_players = "Dead Player Settings"
-L.header_administration_scoreboard = "Scoreboard Settings"
-L.header_hud_toggleable = "Toggleable HUD Elements"
-L.header_mapentities_prop_possession = "Prop Possession"
-L.header_mapentities_doors = "Doors"
-L.header_karma_tweaking = "Karma Tweaking"
-L.header_karma_kick = "Karma Kick and Ban"
-L.header_karma_logging = "Karma Logging"
-L.header_inventory_gernal = "Inventory Size"
-L.header_inventory_pickup = "Inventory Weapon Pickup"
-L.header_sprint_general = "Sprint Settings"
-L.header_playersettings_armor = "Armor System Settings"
+L.header_roles_special_settings = "Özel Rol Ayarları"
+L.header_equipment_additional = "Ek Ekipman Ayarları"
+L.header_administration_general = "Genel Yönetim Ayarları"
+L.header_administration_logging = "Günlük Kaydı"
+L.header_administration_misc = "Diğer"
+L.header_entspawn_plyspawn = "Oyuncu Canlanma Ayarları"
+L.header_voicechat_general = "Genel Sesli Sohbet Ayarları"
+L.header_voicechat_battery = "Sesli Sohbet Pili"
+L.header_voicechat_locational = "Sesli Sohbet Mesafesi"
+L.header_playersettings_plyspawn = "Oyuncu Canlanma Ayarları"
+L.header_round_setup_prep = "Raunt Hazırlığı"
+L.header_round_setup_round = "Raunt Aktif"
+L.header_round_setup_post = "Raunt Sonu"
+L.header_round_setup_map_duration = "Harita Oturumu"
+L.header_textchat = "Metin sohbeti"
+L.header_round_dead_players = "Ölü Oyuncu Ayarları"
+L.header_administration_scoreboard = "Puan Tablosu Ayarları"
+L.header_hud_toggleable = "Değiştirilebilir Arayüz Öğeleri"
+L.header_mapentities_prop_possession = "Nesne Kontrolü"
+L.header_mapentities_doors = "Kapılar"
+L.header_karma_tweaking = "Karma Düzenlemesi"
+L.header_karma_kick = "Sunucudan Atma ve Yasaklama Karması"
+L.header_karma_logging = "Karma Günlüğü"
+L.header_inventory_gernal = "Envanter Boyutu"
+L.header_inventory_pickup = "Envanter Silah Toplama"
+L.header_sprint_general = "Koşma Ayarları"
+L.header_playersettings_armor = "Zırh Sistemi Ayarları"
 
-L.help_killer_dna_range = "When a player is killed by another player, a DNA sample is left on their body. The setting below defines the maximum distance in hammer units for DNA samples to be left. If the killer is further away than this value when the victim dies, no sample will be left on the corpse."
-L.help_killer_dna_basetime = "The base time in seconds until a DNA sample decays, if the killer is 0 Hammer units away. The farther the killer is, the less time will be given to the DNA sample to decay."
-L.help_dna_radar = "The TTT2 DNA scanner shows the exact distance and direction of the selected DNA sample if equipped. However, there is also a classic DNA scanner mode that updates the selected sample with an in-world rendering every time the cooldown has passed."
-L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
+L.help_killer_dna_range = "Bir oyuncu başka bir oyuncu tarafından öldürüldüğünde, cesedinde bir DNA örneği kalır. Aşağıdaki ayar, bırakılacak DNA numuneleri için hammer ünitelerindeki maksimum mesafeyi tanımlar. Kurban öldüğünde katil bu değerden daha uzaktaysa, ceset üzerinde hiçbir örnek kalmayacaktır."
+L.help_killer_dna_basetime = "Katil 0 hammer birimi uzaktaysa, bir DNA örneği bozulana kadar saniye cinsinden baz süre. Katil ne kadar uzaktaysa, DNA örneğinin çürümesi için o kadar az zaman verilecektir."
+L.help_dna_radar = "TTT2 DNA tarayıcısı, varsa seçilen DNA örneğinin tam mesafesini ve yönünü gösterir. Bununla birlikte, bekleme süresi her geçtiğinde seçilen numuneyi bir dünya içi render ile güncelleyen klasik bir DNA tarayıcı modu da vardır."
+L.help_idle = "Boşta modu, boşta kalan oyuncuları izleyici moduna zorlamak için kullanılır. Bu moddan çıkmak için 'oyun' menüsünde devre dışı bırakmaları gerekir."
 L.help_namechange_kick = [[
-A name change during an active round could be abused. Therefore, this is prohibited by default and will lead to the offending player being kicked from the server.
+Aktif bir raunt sırasında isim değişikliği kötüye kullanılabilir. Bu nedenle, bu varsayılan olarak yasaktır ve suç işleyen oyuncunun sunucudan atılmasına neden olacaktır.
 
-If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
-L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
+Yasaklama süresi 0'dan büyükse, oyuncu bu süre geçene kadar sunucuya yeniden bağlanamaz.]]
+L.help_damage_log = "Bir oyuncu her hasar aldığında, etkinleştirilirse konsola bir hasar kaydı girişi eklenir. Bu, bir raunt sona erdikten sonra da diske kaydedilebilir. Dosya 'dataterrortownlogs' adresinde bulunur"
 L.help_spawn_waves = [[
-If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points.
+Bu değişken 0 olarak ayarlanırsa, tüm oyuncular bir kerede ortaya çıkar. Çok sayıda oyuncuya sahip sunucular için, oyuncuları dalgalar halinde canlandırmak faydalı olabilir. Canlandırma dalgası aralığı, her bir canlanma dalgası arasındaki süredir. Bir canlanma dalgası, geçerli canlanma noktaları olduğu sürece her zaman çok sayıda oyuncu canlandırır.
 
-Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
+Not: Hazırlama süresinin istenen miktarda canlanma dalgası için yeterince uzun olduğundan emin olun.]]
 L.help_voicechat_battery = [[
-Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
+Etkinleştirilmiş sesli sohbet pili ile sesli sohbet, pil şarjını azaltır. Bittiğinde, oyuncu sesli sohbeti kullanamaz ve şarj olmasını beklemek zorundadır. Bu, aşırı sesli sohbet kullanımını önlemeye yardımcı olabilir.
 
-Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
-L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
+Not: 'Tik' bir oyun tikini ifade eder. Örneğin, tik hızı 66 olarak ayarlanırsa, saniyenin 166'sı olacaktır.]]
+L.help_ply_spawn = "Oyuncu (yeniden) canlanışında kullanılan oyuncu ayarları."
 L.help_haste_mode = [[
-Haste mode balances the game by increasing the round time with every dead player. Only roles that see missing in action players can see the real round time. Every other role can only see the haste mode starting time.
+Hız modu, her ölü oyuncu ile raunt süresini artırarak oyunu dengeler. Yalnızca eylemsiz oyuncularda eksik olan roller gerçek raunt zamanını görebilir. Diğer tüm roller yalnızca hız modu başlangıç zamanını görebilir.
 
-If haste mode is enabled, the fixed round time is ignored.]]
-L.help_round_limit = "After one of the set limit conditions is met, a map change is triggered."
-L.help_armor_balancing = "The following values can be used to balance the armor."
-L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
+Hız modu etkinleştirilirse, sabit raunt süresi göz ardı edilir.]]
+L.help_round_limit = "Ayarlanan sınır koşullarından biri karşılandıktan sonra, bir harita değişikliği tetiklenir."
+L.help_armor_balancing = "Zırhı dengelemek için aşağıdaki değerler kullanılabilir."
+L.help_item_armor_classic = "Klasik zırh modu etkinleştirilmişse, yalnızca önceki ayarlar önemlidir. Klasik zırh modu, bir oyuncunun bir turda yalnızca bir kez zırh satın alabileceği ve bu zırhın gelen mermi ve levye hasarının %30'unu ölene kadar bloke ettiği anlamına gelir."
 L.help_item_armor_dynamic = [[
-Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited, and the armor value stacks. Getting damaged decreases the armor value. The armor value per bought armor item is set in the 'Equipment Settings' of said item.
+Dinamik zırh, zırhı daha ilginç hale getirmek için TTT2 yaklaşımıdır. Satın alınabilecek zırh miktarı artık sınırsızdır ve zırh değeri birikir. Hasar almak, zırh değerini azaltır. Satın alınan zırh öğesi başına zırh değeri, söz konusu öğenin 'Ekipman Ayarları'nda ayarlanır.
 
-When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
+Hasar alırken, bu hasarın belirli bir yüzdesi zırh hasarına dönüştürülür, oyuncuya hala farklı bir yüzde uygulanır ve geri kalanı kaybolur.
 
-If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
-L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlock mode is disabled, dead bodies can not be confirmed, the scoreboard shows everyone as alive and the spectators can talk to the living players."
+Güçlendirilmiş zırh etkinleştirilirse, zırh değeri takviye eşiğinin üzerinde olduğu sürece oyuncuya uygulanan hasar %15 azaltılır.]]
+L.help_sherlock_mode = "Sherlock modu klasik TTT modudur. Sherlock modu devre dışı bırakılırsa, cesetler onaylanamaz, puan tablosu herkesi canlı olarak gösterir ve izleyiciler yaşayan oyuncularla konuşabilir."
 L.help_prop_possession = [[
-Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
+Nesne kontrolü, izleyiciler tarafından dünyada bulunan nesneleri kontrol etmek için kullanılabilir ve söz konusu nesneyi hareket ettirmek için yavaş şarj olan 'güç ölçeri' kullanılabilir."
 
-The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
-L.help_karma = "Players start with a certain amount of Karma, and lose it when they damage/kill teammates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
-L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly kill teammates."
-L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more than 1000 Karma. It can be used as a Karma buffer."
-L.help_karma_ratio = "The ratio of the damage that is used to compute how much of the victim's Karma is subtracted from the attacker's if both are in the same team. If a team kill happens, a further penalty is applied."
-L.help_karma_traitordmg_ratio = "The ratio of the damage that is used to compute how much of the victim's Karma is added to the attacker's if both are in different teams. If an enemy kill happens, a further bonus is applied."
-L.help_karma_bonus = "There are also two different passive ways to gain Karma during a round. First is a karma restoration which applied to every player at the round end. Then a secondary clean round bonus is given if no teammates were hurt or killed by a player."
+'Güç Ölçeri'nin maksimum değeri, tanımlanmış iki sınır arasına sıkıştırılmış ölüm farkının eklendiği bir topa sahip olma temel değerinden oluşur. Sayaç zamanla yavaş yavaş şarj olur. Ayarlanan şarj süresi, 'güç ölçerde' tek bir noktayı şarj etmek için gereken süredir.]]
+L.help_karma = "Oyuncular belirli miktarda Karma ile başlar ve takım arkadaşlarına zarar verdiklerinde kaybederler. Kaybettikleri miktar, hasar verdikleri veya öldürdükleri kişinin Karmasına bağlıdır. Düşük Karma, verilen hasarı azaltır."
+L.help_karma_strict = "Katı Karma etkinleştirilirse, Karma düştükçe hasar cezası daha hızlı artar. Kapalı olduğunda, insanlar 800'ün üzerinde kaldığında hasar cezası çok düşüktür. Katı modu etkinleştirmek, Karma'nın gereksiz öldürmeleri caydırmada daha büyük bir rol oynamasını sağlarken, onu devre dışı bırakmak, Karma'nın yalnızca takım arkadaşlarını sürekli olarak öldüren oyunculara zarar verdiği daha \"gevşek\" bir oyunla sonuçlanır."
+L.help_karma_max = "Maks. Karmanın değerini 1000'in üzerine ayarlamak, 1000'den fazla Karmaya sahip oyunculara hasar bonusu vermez. Karma sınırı olarak kullanılabilir."
+L.help_karma_ratio = "Her ikisi de aynı takımdaysa, kurbanın Karmasının ne kadarının saldırgandan çıkarıldığını hesaplamak için kullanılan hasarın oranı. Bir takım öldürme gerçekleşirse, başka bir ceza uygulanır."
+L.help_karma_traitordmg_ratio = "Her ikisi de farklı takımlarda ise, kurbanın Karmasının ne kadarının saldırgana eklendiğini hesaplamak için kullanılan hasarın oranı. Eğer bir düşman öldürülürse, bir bonus daha uygulanır."
+L.help_karma_bonus = "Bir rauntta Karma kazanmanın iki farklı pasif yolu da vardır. Birincisi, raunt sonundaki her oyuncuya uygulanan bir karma restorasyonudur. Daha sonra, hiçbir takım arkadaşı bir oyuncu tarafından yaralanmamış veya öldürülmemişse, ikincil bir temiz raunt bonusu verilir."
 L.help_karma_clean_half = [[
-When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
+Bir oyuncunun Karması başlangıç seviyesinin üzerinde olduğunda (yani maksimum Karma bundan daha yüksek olacak şekilde yapılandırıldığında), tüm Karma artışları, Karmalarının başlangıç seviyesinin ne kadar üzerinde olduğuna bağlı olarak azaltılacaktır. Yani ne kadar yüksek olursa o kadar yavaş yükselir."
 
-This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
-L.help_max_slots = "Sets the maximum amount of weapons per slot. '-1' means that there is no limit."
-L.help_item_armor_value = "This is the armor value given by the armor item in dynamic mode. If classic mode is enabled (see 'Administration' -> 'Player Settings') then every value greater than 0 is counted as existing armor."
+Bu azalma, başlangıçta hızlı olan üstel bir bozunma eğrisine girer ve artış küçüldükçe yavaşlar. Bu konvar, bonusun hangi noktada yarıya indirildiğini (yani yarılanma ömrünü) belirler. Varsayılan değer 0.25 ile, Karma'nın başlangıç miktarı 1000 ve maksimum 1500 ise ve bir oyuncu Karma 1125'e ((1500 - 1000) 0.25 = "125) sahipse, temiz raunt bonusu 30 2 = "15 olacaktır. Böylece bonusu daha hızlı düşürmek için bu konvarı düşürürsünüz, daha yavaş düşürmek için 1'e yükseltirsiniz.]]
+L.help_max_slots = "Yuva başına maksimum silah miktarını ayarlar. '-1 ', sınır olmadığı anlamına gelir."
+L.help_item_armor_value = "Dinamik modda zırh ögesinin verdiği zırh değeridir. Klasik mod etkinleştirilirse (bkz. 'Yönetim' - 'Oyuncu Ayarları'), 0'dan büyük her değer mevcut zırh olarak sayılır."
 
-L.label_killer_dna_range = "Max kill range to leave DNA"
-L.label_killer_dna_basetime = "Sample life base time"
-L.label_dna_scanner_slots = "DNA sample slots"
-L.label_dna_radar = "Enable classic DNA scanner mode"
-L.label_dna_radar_cooldown = "DNA scanner cooldown"
-L.label_radar_charge_time = "Recharge time after being used"
-L.label_crowbar_shove_delay = "Cooldown after crowbar push"
-L.label_idle = "Enable idle mode"
-L.label_idle_limit = "Maximum idle time in seconds"
-L.label_namechange_kick = "Enable name change kick"
-L.label_namechange_bantime = "Banned time in minutes after kick"
-L.label_log_damage_for_console = "Enable damage logging in console"
-L.label_damagelog_save = "Save damage log to disk"
-L.label_debug_preventwin = "Prevent any win condition [debug]"
-L.label_bots_are_spectators = "Bots are always spectators"
-L.label_tbutton_admin_show = "Show traitor buttons to admins"
-L.label_ragdoll_carrying = "Enable ragdoll carrying"
-L.label_prop_throwing = "Enable prop throwing"
-L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
-L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
-L.label_weapon_carrying = "Enable weapon carrying"
-L.label_weapon_carrying_range = "Weapon carry range"
-L.label_prop_carrying_force = "Prop pickup force"
-L.label_teleport_telefrags = "Kill blocking player(s) when teleporting (telefrag)"
-L.label_allow_discomb_jump = "Allow disco jump for grenade thrower"
-L.label_spawn_wave_interval = "Spawn wave interval in seconds"
-L.label_voice_enable = "Enable voice chat"
-L.label_voice_drain = "Enable the voice chat battery feature"
-L.label_voice_drain_normal = "Drain per tick for normal players"
-L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
-L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
-L.label_locational_voice = "Enable proximity voice chat for living players"
-L.label_armor_on_spawn = "Player armor on (re-)spawn"
-L.label_prep_respawn = "Enable instant respawn during preparing phase"
-L.label_preptime_seconds = "Preparing time in seconds"
-L.label_firstpreptime_seconds = "First preparing time in seconds"
-L.label_roundtime_minutes = "Fixed round time in minutes"
-L.label_haste = "Enable haste mode"
-L.label_haste_starting_minutes = "Haste mode starting time in minutes"
-L.label_haste_minutes_per_death = "Additional time in minutes per death"
-L.label_posttime_seconds = "Postround time in seconds"
-L.label_round_limit = "Upper limit of rounds"
-L.label_time_limit_minutes = "Upper limit of playtime in minutes"
-L.label_nade_throw_during_prep = "Enable grenade throwing during preparing time"
-L.label_postround_dm = "Enable deathmatch after round ended"
-L.label_session_limits_enabled = "Enable session limits"
-L.label_spectator_chat = "Enable spectators chatting with everybody"
-L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
-L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
-L.label_announce_body_found = "Announce that a body was found"
-L.label_confirm_killlist = "Announce kill list of confirmed corpse"
-L.label_inspect_detective_only = "Limit corpse search to policing roles only"
-L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
-L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
-L.label_armor_block_headshots = "Enable armor blocking headshots"
-L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
-L.label_armor_dynamic = "Enable dynamic armor"
-L.label_armor_value = "Amount of armor given by the armor item"
-L.label_armor_damage_block_pct = "Damage percentage taken by armor"
-L.label_armor_damage_health_pct = "Damage percentage taken by player"
-L.label_armor_enable_reinforced = "Enable reinforced armor"
-L.label_armor_threshold_for_reinforced = "Reinforced armor threshold"
-L.label_sherlock_mode = "Enable sherlock mode"
-L.label_highlight_admins = "Highlight server admins"
-L.label_highlight_dev = "Highlight TTT2 developer"
-L.label_highlight_vip = "Highlight TTT2 supporter"
-L.label_highlight_addondev = "Highlight TTT2 addon developer"
-L.label_highlight_supporter = "Highlight others"
-L.label_enable_hud_element = "Enable {elem} HUD element"
-L.label_spec_prop_control = "Enable prop possession"
-L.label_spec_prop_base = "Possession base value"
-L.label_spec_prop_maxpenalty = "Lower possession bonus limit"
-L.label_spec_prop_maxbonus = "Upper possession bonus limit"
-L.label_spec_prop_force = "Possession push force"
-L.label_spec_prop_rechargetime = "Recharge time in seconds"
-L.label_doors_force_pairs = "Force close-by doors as double doors"
-L.label_doors_destructible = "Enable destructible doors"
-L.label_doors_locked_indestructible = "Initially locked doors are indestructible"
-L.label_doors_health = "Door health"
-L.label_doors_prop_health = "Destructed door health"
-L.label_minimum_players = "Minimum player amount to start round"
-L.label_karma = "Enable Karma"
-L.label_karma_strict = "Enable strict Karma"
-L.label_karma_starting = "Starting Karma"
-L.label_karma_max = "Maximum Karma"
-L.label_karma_ratio = "Penalty ratio for team damage"
-L.label_karma_kill_penalty = "Kill penalty for team kill"
-L.label_karma_round_increment = "Karma restoration"
-L.label_karma_clean_bonus = "Clean round bonus"
-L.label_karma_traitordmg_ratio = "Bonus ratio for enemy damage"
-L.label_karma_traitorkill_bonus = "Kill bonus for enemy kill"
-L.label_karma_clean_half = "Clean round bonus reduction"
-L.label_karma_persist = "Karma persists over map changes"
-L.label_karma_low_autokick = "Automatically kick players with low Karma"
-L.label_karma_low_amount = "Low Karma threshold"
-L.label_karma_low_ban = "Ban picked players with low Karma"
-L.label_karma_low_ban_minutes = "Ban time in minutes"
-L.label_karma_debugspam = "Enable debug output to console about Karma changes"
-L.label_max_melee_slots = "Max melee slots"
-L.label_max_secondary_slots = "Max secondary slots"
-L.label_max_primary_slots = "Max primary slots"
-L.label_max_nade_slots = "Max grenade slots"
-L.label_max_carry_slots = "Max carry slots"
-L.label_max_unarmed_slots = "Max unarmed slots"
-L.label_max_special_slots = "Max special slots"
-L.label_max_extra_slots = "Max extra slots"
-L.label_weapon_autopickup = "Enable automatic weapon pickup"
-L.label_sprint_enabled = "Enable sprinting"
-L.label_sprint_max = "Max sprinting stamina"
-L.label_sprint_stamina_consumption = "Stamina consumption factor"
-L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
-L.label_sprint_crosshair = "Show crosshair while sprinting"
-L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
-L.label_crowbar_pushforce = "Crowbar push force"
+L.label_killer_dna_range = "DNA bırakmak için maksimum öldürme aralığı"
+L.label_killer_dna_basetime = "Numune ömrü baz süresi"
+L.label_dna_scanner_slots = "DNA numune yuvaları"
+L.label_dna_radar = "Klasik DNA tarayıcı modunu etkinleştir"
+L.label_dna_radar_cooldown = "DNA tarayıcı bekleme süresi"
+L.label_radar_charge_time = "Kullanıldıktan sonra şarj süresi"
+L.label_crowbar_shove_delay = "Levye itme işleminden sonra bekleme süresi"
+L.label_idle = "Boşta modunu etkinleştir"
+L.label_idle_limit = "Saniye cinsinden maksimum boşta kalma süresi"
+L.label_namechange_kick = "İsim değiştirildiğinde atmayı etkinleştir"
+L.label_namechange_bantime = "Attıktan sonra dakika cinsinden yasaklanan süre"
+L.label_log_damage_for_console = "Konsolda hasar günlüğünü etkinleştir"
+L.label_damagelog_save = "Hasar kaydını diske kaydet"
+L.label_debug_preventwin = "Herhangi bir kazanma koşulunu önleyin [debug]"
+L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
+L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
+L.label_ragdoll_carrying = "Ragdoll taşımayı etkinleştir"
+L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
+L.label_ragdoll_pinning = "Masum olmayan roller için ragdoll sabitlemeyi etkinleştir"
+L.label_ragdoll_pinning_innocents = "Masum roller için ragdoll pinlemeyi etkinleştir"
+L.label_weapon_carrying = "Silah taşımayı etkinleştir"
+L.label_weapon_carrying_range = "Silah taşıma menzili"
+L.label_prop_carrying_force = "Nesne kaldırma gücü"
+L.label_teleport_telefrags = "Işınlanırken engelleyen oyuncuları öldür"
+L.label_allow_discomb_jump = "Bomba atıcı için disko sıçramasına izin ver"
+L.label_spawn_wave_interval = "Saniye cinsinden canlanma aralığı"
+L.label_voice_enable = "Sesli sohbeti etkinleştir"
+L.label_voice_drain = "Sesli sohbet pil özelliğini etkinleştir"
+L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
+L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
+L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
+L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
+L.label_armor_on_spawn = "(Yeniden) doğuşta oyuncu zırhı"
+L.label_prep_respawn = "Hazırlık aşamasında anında yeniden doğmayı etkinleştir"
+L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
+L.label_firstpreptime_seconds = "Saniye cinsinden ilk hazırlık süresi"
+L.label_roundtime_minutes = "Dakika cinsinden sabit raunt süresi"
+L.label_haste = "Hız modunu etkinleştir"
+L.label_haste_starting_minutes = "Dakika cinsinden hızlı mod başlangıç süresi"
+L.label_haste_minutes_per_death = "Ölüm başına dakika cinsinden ek süre"
+L.label_posttime_seconds = "Saniye cinsinden raunt sonu süresi"
+L.label_round_limit = "Rauntların üst sınırı"
+L.label_time_limit_minutes = "Oyun süresinin dakika cinsinden üst sınırı"
+L.label_nade_throw_during_prep = "Hazırlık süresi boyunca bomba atmayı etkinleştir"
+L.label_postround_dm = "Raunt bittikten sonra ölüm maçını etkinleştir"
+L.label_session_limits_enabled = "Oturum sınırlarını etkinleştir"
+L.label_spectator_chat = "İzleyicilerin herkesle sohbet etmesini sağla"
+L.label_lastwords_chatprint = "Yazarken öldürülürse sohbete son kelimelerini yazdır"
+L.label_identify_body_woconfirm = "'Onayla' düğmesine basmadan cesedi tanımla"
+L.label_announce_body_found = "Bir ceset bulunduğunu duyurun"
+L.label_confirm_killlist = "Onaylanmış cesedin ölüm listesini duyur"
+L.label_inspect_detective_only = "Ceset aramasını yalnızca polislik rolleriyle sınırla"
+L.label_confirm_detective_only = "Ceset onayını yalnızca polislik rolleriyle sınırlayın"
+L.label_dyingshot = "Demir nişangahta ölürken ateş et [deneysel]"
+L.label_armor_block_headshots = "Zırh engelleyici kafadan vuruşları etkinleştir"
+L.label_armor_block_blastdmg = "Patlama hasarını engelleyen zırhı etkinleştir"
+L.label_armor_dynamic = "Dinamik zırhı etkinleştir"
+L.label_armor_value = "Zırh öğesi tarafından verilen zırh miktarı"
+L.label_armor_damage_block_pct = "Zırhın aldığı hasar yüzdesi"
+L.label_armor_damage_health_pct = "Oyuncunun aldığı hasar yüzdesi"
+L.label_armor_enable_reinforced = "Güçlendirilmiş zırhı etkinleştir"
+L.label_armor_threshold_for_reinforced = "Güçlendirilmiş zırh eşiği"
+L.label_sherlock_mode = "Sherlock modunu etkinleştir"
+L.label_highlight_admins = "Sunucu yöneticilerini vurgula"
+L.label_highlight_dev = "TTT2 geliştiricisini vurgula"
+L.label_highlight_vip = "TTT2 destekçisini vurgula"
+L.label_highlight_addondev = "TTT2 eklenti geliştiricisini vurgula"
+L.label_highlight_supporter = "Diğerlerini vurgula"
+L.label_enable_hud_element = "{elem} arayüz öğesini etkinleştir"
+L.label_spec_prop_control = "Nesne kontrolünü etkinleştir"
+L.label_spec_prop_base = "Kontrol temel değeri"
+L.label_spec_prop_maxpenalty = "Daha düşük kontrol bonusu limiti"
+L.label_spec_prop_maxbonus = "Üst kontrole sahip olma bonus limiti"
+L.label_spec_prop_force = "Kontrol itme kuvveti"
+L.label_spec_prop_rechargetime = "Saniye cinsinden şarj süresi"
+L.label_doors_force_pairs = "Yakın kapıları çift kapı olarak zorla"
+L.label_doors_destructible = "Yok edilebilir kapıları etkinleştir"
+L.label_doors_locked_indestructible = "Başlangıçta kilitli kapılar yok edilemez"
+L.label_doors_health = "Kapı sağlığı"
+L.label_doors_prop_health = "Yok edilen kapı sağlığı"
+L.label_minimum_players = "Raunda başlamak için minimum oyuncu miktarı"
+L.label_karma = "Karmayı Etkinleştir"
+L.label_karma_strict = "Katı Karmayı etkinleştir"
+L.label_karma_starting = "Başlangıç Karması"
+L.label_karma_max = "Maksimum Karma"
+L.label_karma_ratio = "Takım hasarı için ceza oranı"
+L.label_karma_kill_penalty = "Takım öldürme için öldürme cezası"
+L.label_karma_round_increment = "Karma restorasyonu"
+L.label_karma_clean_bonus = "Temiz raunt bonusu"
+L.label_karma_traitordmg_ratio = "Düşman hasarı için bonus oranı"
+L.label_karma_traitorkill_bonus = "Düşman öldürme bonusu"
+L.label_karma_clean_half = "Temiz raunt bonus azaltımı"
+L.label_karma_persist = "Harita değişiklikleri üzerinde Karma devam etsin"
+L.label_karma_low_autokick = "Karması düşük olan oyuncuları otomatik olarak tekmele"
+L.label_karma_low_amount = "Düşük Karma eşiği"
+L.label_karma_low_ban = "Düşük Karmaya sahip oyuncuları yasakla"
+L.label_karma_low_ban_minutes = "Dakika cinsinden yasaklama süresi"
+L.label_karma_debugspam = "Karma değişiklikleri hakkında konsol kurmak için hata ayıklama çıkışını etkinleştir"
+L.label_max_melee_slots = "Maksimum yakın dövüş yuvası"
+L.label_max_secondary_slots = "Maksimum ikincil yuva"
+L.label_max_primary_slots = "Maksimum birincil yuva"
+L.label_max_nade_slots = "Maksimum bomba yuvası"
+L.label_max_carry_slots = "Maksimum taşıma yuvası"
+L.label_max_unarmed_slots = "Maksimum silahsız yuva"
+L.label_max_special_slots = "Maksimum özel yuva"
+L.label_max_extra_slots = "Maksimum ekstra yuva"
+L.label_weapon_autopickup = "Otomatik silah alımını etkinleştir"
+L.label_sprint_enabled = "Koşmayı etkinleştir"
+L.label_sprint_max = "Maksimum koşma dayanıklılığı"
+L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
+L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
+L.label_sprint_crosshair = "Koşarken nişangahı göster"
+L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
+L.label_crowbar_pushforce = "Levye itme kuvveti"
 
 -- 2022-07-02
-L.header_playersettings_falldmg = "Fall Damage Settings"
+L.header_playersettings_falldmg = "Düşme Hasarı Ayarları"
 
-L.label_falldmg_enable = "Enable fall damage"
-L.label_falldmg_min_velocity = "Minimum velocity threshold for fall damage to occur"
-L.label_falldmg_exponent = "Exponent to increase fall damage in relation to velocity"
+L.label_falldmg_enable = "Düşme hasarını etkinleştir"
+L.label_falldmg_min_velocity = "Düşme hasarının oluşması için minimum hız eşiği"
+L.label_falldmg_exponent = "Hıza bağlı olarak düşme hasarını artıran üs"
 
 L.help_falldmg_exponent = [[
-This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
+Bu değer, oyuncunun yere çarpma hızı ile katlanarak düşme hasarının ne kadar arttığını değiştirir.
 
-Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
+Bu değeri değiştirirken dikkatli olun. Çok yükseğe ayarlamak en küçük düşüşleri bile ölümcül hale getirebilirken, çok düşük ayarlamak oyuncuların aşırı yüksekliklerden düşmesine ve çok az hasar görmesine veya hiç hasar görmemesine izin verecektir.]]
 
 -- 2023-02-08
-L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
-L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+L.testpopup_title = "Çok satırlı bir başlık içeren bir test açılır penceresi, ne GÜZEL!"
+L.testpopup_subtitle = "Aa merhaba! Bu, bazı özel bilgiler içeren süslü bir açılır penceredir. Metin çok satırlı da olabilir, ne kadar süslü! Off, herhangi bir fikrim olsaydı çok daha fazla metin ekleyebilirdim..."
 
-L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
-L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
-L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
-L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+L.hudeditor_chat_hint1 = "[TTT2][BİLGİ] Bir öğenin üzerine gelin, [LMB] tuşuna basın ve basılı tutun ve TAŞIMAK veya YENİDEN BOYUTLANDIRMAK için fareyi hareket ettirin."
+L.hudeditor_chat_hint2 = "[TTT2][BİLGİ] Simetrik yeniden boyutlandırma için ALT tuşuna basın ve basılı tutun."
+L.hudeditor_chat_hint3 = "[TTT2][BİLGİ] Eksen üzerinde hareket etmek ve en boy oranını korumak için SHIFT tuşunu basılı tutun."
+L.hudeditor_chat_hint4 = "[TTT2][BİLGİ] Arayüz Düzenleyiciden çıkmak için [RMB] - 'Kapat'a bas!"
 
-L.guide_nothing_title = "Nothing here yet!"
-L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+L.guide_nothing_title = "Henüz burada bir şey yok!"
+L.guide_nothing_desc = "Bu devam eden bir çalışma, GitHub'daki projeye katkıda bulunarak bize yardımcı olun."
 
-L.sb_rank_tooltip_developer = "TTT2 Developer"
-L.sb_rank_tooltip_vip = "TTT2 Supporter"
-L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
-L.sb_rank_tooltip_admin = "Server Admin"
-L.sb_rank_tooltip_streamer = "Streamer"
-L.sb_rank_tooltip_heroes = "TTT2 Heroes"
-L.sb_rank_tooltip_team = "Team"
+L.sb_rank_tooltip_developer = "TTT2 Geliştirici"
+L.sb_rank_tooltip_vip = "TTT2 Destekçisi"
+L.sb_rank_tooltip_addondev = "TTT2 Eklenti Geliştirici"
+L.sb_rank_tooltip_admin = "Sunucu Yöneticisi"
+L.sb_rank_tooltip_streamer = "Yayıncı"
+L.sb_rank_tooltip_heroes = "TTT2 Kahramanları"
+L.sb_rank_tooltip_team = "Ekip"
 
-L.tbut_adminarea = "ADMIN AREA:"
+L.tbut_adminarea = "YÖNETİCİ ALANI"
 
 -- 2023-08-10
-L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+L.equipmenteditor_name_damage_scaling = "Hasar Boyutu"
 
 -- 2023-08-11
-L.equipmenteditor_name_allow_drop = "Allow Drop"
-L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+L.equipmenteditor_name_allow_drop = "Bırakmaya İzin Ver"
+L.equipmenteditor_desc_allow_drop = "Etkinleştirilirse, ekipman oyuncu tarafından serbestçe bırakılabilir."
 
-L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
-L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+L.equipmenteditor_name_drop_on_death_type = "Ölürken Bırak"
+L.equipmenteditor_desc_drop_on_death_type = "Oyuncunun ölümü üzerine ekipmanın düşürülüp düşürülmediğine ilişkin eylemi geçersiz kılmaya çalışır."
 
-L.drop_on_death_type_default = "Default (weapon-defined)"
-L.drop_on_death_type_force = "Force Drop on Death"
-L.drop_on_death_type_deny = "Deny Drop on Death"
+L.drop_on_death_type_default = "Varsayılan (silah tanımlı)"
+L.drop_on_death_type_force = "Ölürken Bırakmaya Zorla"
+L.drop_on_death_type_deny = "Ölürken Bırakmayı Reddet"
 
 -- 2023-08-26
-L.equipmenteditor_name_kind = "Equipment Slot"
-L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+L.equipmenteditor_name_kind = "Ekipman Yuvası"
+L.equipmenteditor_desc_kind = "Ekipmanın olduğu envanter yuvası."
 
-L.slot_weapon_melee = "Melee Slot"
-L.slot_weapon_pistol = "Pistol Slot"
-L.slot_weapon_heavy = "Heavy Slot"
-L.slot_weapon_nade = "Grenade Slot"
-L.slot_weapon_carry = "Carry Slot"
-L.slot_weapon_unarmed = "Unarmed Slot"
-L.slot_weapon_special = "Special Slot"
-L.slot_weapon_extra = "Extra Slot"
-L.slot_weapon_class = "Class Slot"
+L.slot_weapon_melee = "Yakın Dövüş Yuvası"
+L.slot_weapon_pistol = "Tabanca Yuvası"
+L.slot_weapon_heavy = "Ağır Silah Yuvası"
+L.slot_weapon_nade = "Bomba Yuvası"
+L.slot_weapon_carry = "Taşıma Yuvası"
+L.slot_weapon_unarmed = "Silahsız Yuva"
+L.slot_weapon_special = "Özel Yuva"
+L.slot_weapon_extra = "Ekstra Yuva"
+L.slot_weapon_class = "Sınıf Yuvası"
 
 -- 2023-10-04
-L.label_voice_duck_spectator = "Duck spectator voices"
-L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
-L.label_voice_scaling = "Voice Volume Scaling Mode"
-L.label_voice_scaling_mode_linear = "Linear"
-L.label_voice_scaling_mode_power4 = "Power 4"
-L.label_voice_scaling_mode_log = "Logarithmic"
+L.label_voice_duck_spectator = "İzleyici seslerini buğula"
+L.label_voice_duck_spectator_amount = "İzleyici seslerini buğulama miktarı"
+L.label_voice_scaling = "Ses Seviyesi Ölçekleme Modu"
+L.label_voice_scaling_mode_linear = "Doğrusal"
+L.label_voice_scaling_mode_power4 = "Güç 4"
+L.label_voice_scaling_mode_log = "Logaritmik"
 
 -- 2023-10-23
-L.header_miscellaneous_settings = "Miscellaneous Settings"
-L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
-L.header_hud_elements_customize = "Customize the HUD-Elements"
-L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+L.header_miscellaneous_settings = "Çeşitli Ayarlar"
+L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
+L.header_hud_elements_customize = "Arayüz Öğelerini Özelleştir"
+L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri için özel ayarlardır."
 
 -- 2023-10-25
 L.help_keyhelp = [[
-Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+Tuş atama yardımcıları, oyuncuya her zaman güncel tuş atamalarını gösteren ve özellikle yeni oyuncular için yararlı olan bir kullanıcı arayüzü öğesinin bir parçasıdır. Üç farklı türde tuş atama vardır
 
-Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
-Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
-Equipment: Some equipment items have their own bindings, these are shown in this category.
+Çekirdek: Bunlar, TTT2'de bulunan en önemli atamaları içerir. Onlar olmadan oyunu tam potansiyeliyle oynamak zordur.
+Ekstra Core'a benzer, ancak her zaman onlara ihtiyacınız yoktur. Sohbet, ses veya el feneri gibi şeyler içerirler. Yeni oyuncuların bunu etkinleştirmesi yararlı olabilir.
+Ekipman bazı ekipman öğelerinin kendi atamaları vardır, bunlar bu kategoride gösterilmiştir.
 
-Disabled categories are still shown when the scoreboard is visible]]
+Puan tablosu görünür olduğunda devre dışı kategoriler hala gösterilir]]
 
-L.label_keyhelp_show_core = "Enable always showing the core bindings"
-L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
-L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+L.label_keyhelp_show_core = "Her zaman çekirdek atamaları göstermeyi etkinleştir"
+L.label_keyhelp_show_extra = "Her zaman ekstra atamaları göstermeyi etkinleştir"
+L.label_keyhelp_show_equipment = "Ekipman atamalarını her zaman göstermeyi etkinleştir"
 
-L.header_interface_keys = "Key helper settings"
-L.header_interface_wepswitch = "Weapon switch UI settings"
+L.header_interface_keys = "Tuş yardımcısı ayarları"
+L.header_interface_wepswitch = "Silah değiştirme kullanıcı arayüzü ayarları"
 
-L.label_keyhelper_help = "open gamemode menu"
-L.label_keyhelper_mutespec = "cycle spectator voice mode"
-L.label_keyhelper_shop = "open equipment shop"
-L.label_keyhelper_show_pointer = "free mouse pointer"
-L.label_keyhelper_possess_focus_entity = "possess focused entity"
-L.label_keyhelper_spec_focus_player = "spectate focused player"
-L.label_keyhelper_spec_previous_player = "previous player"
-L.label_keyhelper_spec_next_player = "next player"
-L.label_keyhelper_spec_player = "spectate random player"
-L.label_keyhelper_possession_jump = "prop: jump"
-L.label_keyhelper_possession_left = "prop: left"
-L.label_keyhelper_possession_right = "prop: right"
-L.label_keyhelper_possession_forward = "prop: forward"
-L.label_keyhelper_possession_backward = "prop: backward"
-L.label_keyhelper_free_roam = "leave object and roam free"
-L.label_keyhelper_flashlight = "toggle flashlight"
-L.label_keyhelper_quickchat = "open quickchat"
-L.label_keyhelper_voice_global = "global voice chat"
-L.label_keyhelper_voice_team = "team voice chat"
-L.label_keyhelper_chat_global = "global chat"
-L.label_keyhelper_chat_team = "team chat"
-L.label_keyhelper_show_all = "show all"
-L.label_keyhelper_disguiser = "toggle disguiser"
-L.label_keyhelper_save_exit = "save and exit"
-L.label_keyhelper_spec_third_person = "toggle third person view"
+L.label_keyhelper_help = "oyun modu menüsünü aç"
+L.label_keyhelper_mutespec = "izleyici ses modunda dön"
+L.label_keyhelper_shop = "ekipman mağazasını aç"
+L.label_keyhelper_show_pointer = "serbest fare işaretçisi"
+L.label_keyhelper_possess_focus_entity = "odaklanılmış varlığı kontrol et"
+L.label_keyhelper_spec_focus_player = "odaklı oyuncuyu izle"
+L.label_keyhelper_spec_previous_player = "önceki oyuncu"
+L.label_keyhelper_spec_next_player = "sonraki oyuncu"
+L.label_keyhelper_spec_player = "rastgele oyuncu izle"
+L.label_keyhelper_possession_jump = "Nesne: Zıpla"
+L.label_keyhelper_possession_left = "Nesne: Sol"
+L.label_keyhelper_possession_right = "Nesne: Sağ"
+L.label_keyhelper_possession_forward = "Nesne: İleri"
+L.label_keyhelper_possession_backward = "Nesne: Geri"
+L.label_keyhelper_free_roam = "nesneyi bırakın ve serbest dolaşın"
+L.label_keyhelper_flashlight = "El fenerini aç/kapat"
+L.label_keyhelper_quickchat = "hızlı sohbeti aç"
+L.label_keyhelper_voice_global = "genel sesli sohbet"
+L.label_keyhelper_voice_team = "Takım Sesli Sohbeti"
+L.label_keyhelper_chat_global = "genel sohbet"
+L.label_keyhelper_chat_team = "takım sohbeti"
+L.label_keyhelper_show_all = "tümünü göster"
+L.label_keyhelper_disguiser = "Kılık Değiştiriciyi aç/kapat"
+L.label_keyhelper_save_exit = "kaydet ve çık"
+L.label_keyhelper_spec_third_person = "Üçüncü kişi görünümünü aç/kapat"
 
 -- 2023-10-26
-L.item_armor_reinforced = "Reinforced Armor"
-L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
-L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
-L.status_speed_name = "Speed Multiplier"
-L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
-L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+L.item_armor_reinforced = "Güçlendirilmiş Zırh"
+L.item_armor_sidebar = "Zırh sizi vücudunuza giren mermilere karşı korur. Ama sonsuza kadar değil."
+L.item_disguiser_sidebar = "Kılık değiştirici, adınızı diğer oyunculara göstermeyerek kimliğinizi korur."
+L.status_speed_name = "Hız Çarpanı"
+L.status_speed_description_good = "Normalden daha hızlısın. Eşyalar, ekipmanlar veya etkiler bunu etkileyebilir."
+L.status_speed_description_bad = "Normalden daha yavaşsınız. Eşyalar, ekipmanlar veya etkiler bunu etkileyebilir."
 
-L.status_on = "on"
-L.status_off = "off"
+L.status_on = "açık"
+L.status_off = "Kapalı"
 
-L.crowbar_help_primary = "Attack"
-L.crowbar_help_secondary = "Push players"
+L.crowbar_help_primary = "Saldır"
+L.crowbar_help_secondary = "Oyuncuları it"
 
 -- 2023-10-27
 L.help_HUD_enable_description = [[
-Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
-L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
-L.label_HUD_enable_box_blur = "Enable UI box background blur"
+Tuş yardımcısı veya kenar çubuğu gibi bazı arayüz öğeleri, puan tablosu açıkken ayrıntılı bilgi gösterir. Bu, dağınıklığı azaltmak için devre dışı bırakılabilir.]]
+L.label_HUD_enable_description = "Puan tablosu açıkken açıklamaları etkinleştir"
+L.label_HUD_enable_box_blur = "Arayüz kutusu arka plan bulanıklığını etkinleştir"
 
 -- 2023-10-28
-L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
-L.header_soundeffect_settings = "Sound Effects"
-L.header_voiceandvolume_settings = "Voice & Volume Settings"
+L.submenu_gameplay_voiceandvolume_title = "Ses ve Ses Düzeyi"
+L.header_soundeffect_settings = "Ses Efektleri"
+L.header_voiceandvolume_settings = "Ses ve Ses Ayarları"
+
+-- 2023-11-06
+L.drop_reserve_prevented = "Bir şey yedek cephanenizi düşürmenizi engelliyor."
+L.drop_no_reserve = "Rezervinizde cephane kutusu olarak düşecek yeterli cephane yok."
+L.drop_no_room_ammo = "Burada silahını bırakacak yerin yok!"
+
+-- 2023-11-14
+L.hat_deerstalker_name = "Dedektifin Şapkası"

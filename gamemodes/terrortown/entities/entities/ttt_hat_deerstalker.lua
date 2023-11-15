@@ -7,6 +7,7 @@ AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 
+ENT.PrintName = "hat_deerstalker_name"
 ENT.Model = Model("models/ttt/deerstalker.mdl")
 ENT.CanHavePrints = false
 ENT.CanUseKey = true
