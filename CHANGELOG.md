@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Turkish translation (by @NovaDiablox)
 - Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
 - Added window flash and noise to alert players they're being revived (by @EntranceJew)
+- Added sql database access to panel elements
+  - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 
 ### Changed
 

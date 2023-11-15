@@ -93,7 +93,7 @@ end
 
 ---
 -- This function is called, when the slider starts and ends being dragged
--- Calls SetConVarValue only after the dragging ends to not sync every change
+-- Calls SetCallbackEnabledVarValues only after the dragging ends to not sync every change
 -- @param boolean setDragging the state it is changed to
 -- @realm client
 function PANEL:OnChangeDragging(setDragging)
@@ -102,7 +102,7 @@ function PANEL:OnChangeDragging(setDragging)
 	if setDragging then
 		self.valueBeforeDragging = value
 	elseif value ~= self.valueBeforeDragging then
-		self:SetConVarValues(value)
+		self:SetCallbackEnabledVarValues(value)
 	end
 end
 
@@ -165,9 +165,9 @@ end
 
 ---
 -- @param any val
--- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(value, ignoreConVar)
+function PANEL:SetValue(value, ignoreCallbackEnabledVars)
 	if not value then return end
 
 	value = math.Clamp(tonumber(value) or 0, self:GetMin(), self:GetMax())
@@ -180,9 +180,9 @@ function PANEL:SetValue(value, ignoreConVar)
 	self:ValueChanged(value)
 
 	-- Set ConVars only when Mouse is released
-	if ignoreConVar or self:IsEditing() then return end
+	if ignoreCallbackEnabledVars or self:IsEditing() then return end
 
-	self:SetConVarValues(value)
+	self:SetCallbackEnabledVarValues(value)
 end
 
 ---
@@ -191,20 +191,24 @@ function PANEL:SetValueFromTextBox()
 	local val = self.TextArea:GetText()
 	val = val ~= "" and val or 0
 	self:SetValue(self.TextArea:GetText())
-	self:SetConVarValues(val)
+	self:SetCallbackEnabledVarValues(val)
 	self.TextArea:SetText(val)
 end
 
 ---
 -- @param any val
 -- @realm client
-function PANEL:SetConVarValues(value)
+function PANEL:SetCallbackEnabledVarValues(value)
 	if self.conVar then
 		self.conVar:SetFloat(value)
 	end
 
 	if self.serverConVar then
 		cvars.ChangeServerConVar(self.serverConVar, tostring(value))
+	end
+
+	if self.databaseInfo then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, value)
 	end
 end
 
@@ -299,6 +303,7 @@ function PANEL:SetConVar(cvar)
 	self:SetDefaultValue(tonumber(GetConVar(cvar):GetDefault()))
 end
 
+local callbackEnabledVarTracker = 0
 ---
 -- @param string cvar
 -- @realm client
@@ -314,9 +319,12 @@ function PANEL:SetServerConVar(cvar)
 		end
 	end)
 
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
+
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
-			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
 
 			return
 		end
@@ -324,7 +332,45 @@ function PANEL:SetServerConVar(cvar)
 		self:SetValue(tonumber(newValue), true)
 	end
 
-	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, myIdentifierString)
+end
+
+---
+-- @param table databaseInfo containing {name, itemName, key}
+-- @realm client
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(databaseInfo) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
 end
 
 ---

@@ -12,7 +12,7 @@ AccessorFunc(PANEL, "m_iIndent", "Indent")
 ---
 -- @accessor bool
 -- @realm client
-AccessorFunc(PANEL, "ignoreConVar", "IgnoreConVar", FORCE_BOOL)
+AccessorFunc(PANEL, "ignoreCallbackEnabledVar", "IgnoreCallbackEnabledVar", FORCE_BOOL)
 
 ---
 -- @ignore
@@ -64,6 +64,13 @@ function PANEL:Paint(w, h)
 end
 
 ---
+-- @param bool invert
+-- @realm client
+function PANEL:SetInverted(invert)
+	self.inverted = invert
+end
+
+---
 -- @param string cvar
 -- @realm client
 function PANEL:SetConVar(cvar)
@@ -73,6 +80,7 @@ function PANEL:SetConVar(cvar)
 	self:SetDefaultValue(tobool(GetConVar(cvar):GetDefault()))
 end
 
+local callbackEnabledVarTracker = 0
 ---
 -- @param string cvar
 -- @realm client
@@ -88,9 +96,12 @@ function PANEL:SetServerConVar(cvar)
 		end
 	end)
 
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
+
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
-			cvars.RemoveChangeCallback(conVarName, "TTT2F1MenuServerConVarChangeCallback")
+			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
 
 			return
 		end
@@ -98,15 +109,58 @@ function PANEL:SetServerConVar(cvar)
 		self:SetValue(tobool(newValue), true)
 	end
 
-	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, "TTT2F1MenuServerConVarChangeCallback")
+	cvars.AddChangeCallback(cvar, OnServerConVarChangeCallback, myIdentifierString)
+end
+
+---
+-- @param table databaseInfo containing {name, itemName, key}
+-- @realm client
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(databaseInfo) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
 end
 
 ---
 -- @param any val
--- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(val, ignoreConVar)
-	self:SetIgnoreConVar(ignoreConVar)
+function PANEL:SetValue(val, ignoreCallbackEnabledVar)
+	self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
+
+	if self.inverted then
+		val = not val
+	end
+
 	self.Button:SetValue(val)
 end
 
@@ -117,6 +171,10 @@ function PANEL:SetDefaultValue(value)
 	local noDefault = true
 
 	if isbool(value) then
+		if self.inverted then
+			value = not value
+		end
+
 		self.default = value
 		noDefault = false
 	else
@@ -259,10 +317,16 @@ end
 -- @param any val
 -- @realm client
 function PANEL:ValueChanged(val)
-	if self.serverConVar and not self:GetIgnoreConVar() then
+	if self.inverted then
+		val = not val
+	end
+
+	if self.serverConVar and not self:GetIgnoreCallbackEnabledVar() then
 		cvars.ChangeServerConVar(self.serverConVar, val and "1" or "0")
+	elseif self.databaseInfo and not self:GetIgnoreCallbackEnabledVar() then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, val)
 	else
-		self:SetIgnoreConVar(false)
+		self:SetIgnoreCallbackEnabledVar(false)
 	end
 
 	self:OnValueChanged(val)
