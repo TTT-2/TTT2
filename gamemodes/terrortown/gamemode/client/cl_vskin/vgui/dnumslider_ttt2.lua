@@ -93,7 +93,7 @@ end
 
 ---
 -- This function is called, when the slider starts and ends being dragged
--- Calls SetNetworkedVarValues only after the dragging ends to not sync every change
+-- Calls SetCallbackEnabledVarValues only after the dragging ends to not sync every change
 -- @param boolean setDragging the state it is changed to
 -- @realm client
 function PANEL:OnChangeDragging(setDragging)
@@ -102,7 +102,7 @@ function PANEL:OnChangeDragging(setDragging)
 	if setDragging then
 		self.valueBeforeDragging = value
 	elseif value ~= self.valueBeforeDragging then
-		self:SetNetworkedVarValues(value)
+		self:SetCallbackEnabledVarValues(value)
 	end
 end
 
@@ -165,9 +165,9 @@ end
 
 ---
 -- @param any val
--- @param boolean ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:SetValue(value, ignoreNetworkedVars)
+function PANEL:SetValue(value, ignoreCallbackEnabledVars)
 	if not value then return end
 
 	value = math.Clamp(tonumber(value) or 0, self:GetMin(), self:GetMax())
@@ -180,9 +180,9 @@ function PANEL:SetValue(value, ignoreNetworkedVars)
 	self:ValueChanged(value)
 
 	-- Set ConVars only when Mouse is released
-	if ignoreNetworkedVars or self:IsEditing() then return end
+	if ignoreCallbackEnabledVars or self:IsEditing() then return end
 
-	self:SetNetworkedVarValues(value)
+	self:SetCallbackEnabledVarValues(value)
 end
 
 ---
@@ -198,7 +198,7 @@ end
 ---
 -- @param any val
 -- @realm client
-function PANEL:SetNetworkedVarValues(value)
+function PANEL:SetCallbackEnabledVarValues(value)
 	if self.conVar then
 		self.conVar:SetFloat(value)
 	end
@@ -303,7 +303,7 @@ function PANEL:SetConVar(cvar)
 	self:SetDefaultValue(tonumber(GetConVar(cvar):GetDefault()))
 end
 
-local networkedVarTracker = 0
+local callbackEnabledVarTracker = 0
 ---
 -- @param string cvar
 -- @realm client
@@ -319,8 +319,8 @@ function PANEL:SetServerConVar(cvar)
 		end
 	end)
 
-	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(networkedVarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
@@ -357,8 +357,8 @@ function PANEL:SetDatabase(databaseInfo)
 
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
-	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(networkedVarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then
