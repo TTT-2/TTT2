@@ -1,6 +1,6 @@
 ---
 -- This table is used by the client to show items in the equipment menu, and by
--- the server to check if a certain role is allowed to buy a certain item.local math = math
+-- the server to check if a certain role is allowed to buy a certain item.
 -- @section Equipment
 
 local table = table
@@ -9,6 +9,7 @@ local player = player
 local pairs = pairs
 local util = util
 local hook = hook
+local math = math
 
 -- Details you shouldn't need:
 -- The number should increase by a factor of two for every item (ie. ids
@@ -119,12 +120,12 @@ end
 
 ---
 -- Creates an equipment
--- @param eq
+-- @param table eq
 -- @return table equipment table
 -- @internal
 -- @realm shared
 function CreateEquipment(eq)
-	if not eq.Doublicated then
+	if not eq.Duplicated then
 		return GetEquipmentBase(eq)
 	end
 end
@@ -253,7 +254,7 @@ if CLIENT then
 			for i = 1, #itms do
 				v = itms[i]
 
-				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
+				if v and not v.Duplicated and v.CanBuy and v.CanBuy[fallback] then
 					local base = GetEquipmentBase(v)
 					if base then
 						tbl[#tbl + 1] = base
@@ -267,7 +268,7 @@ if CLIENT then
 			for i = 1, #weps do
 				v = weps[i]
 
-				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
+				if v and not v.Duplicated and v.CanBuy and v.CanBuy[fallback] then
 					local base = GetEquipmentBase(v)
 					if base then
 						tbl[#tbl + 1] = base
@@ -759,7 +760,7 @@ end
 -- @internal
 -- @realm shared
 function InitFallbackShops()
-	local tbl = {TRAITOR, DETECTIVE}
+	local tbl = {roles.TRAITOR, roles.DETECTIVE}
 
 	for i = 1, #tbl do
 		local v = tbl[i]
@@ -832,7 +833,7 @@ local function InitDefaultEquipmentForRole(roleData, eq)
 	local tbl = roleData.fallbackTable or {}
 
 	-- is a buyable equipment to load info from
-	if not eq or eq.Doublicated or not eq.CanBuy or not eq.CanBuy[roleData.index] then return end
+	if not eq or eq.Duplicated or not eq.CanBuy or not eq.CanBuy[roleData.index] then return end
 
 	local base = GetEquipmentBase(eq)
 	if not base then return end
@@ -857,7 +858,7 @@ end
 -- @realm shared
 -- @local
 local function ValueToKey(tbl)
-	local tmp = tmp or {}
+	local tmp = {}
 
 	for key, value in pairs(tbl) do
 		tmp[value] = value
@@ -890,8 +891,8 @@ end
 -- @realm shared
 function InitDefaultEquipment(eq)
 	CleanUpDefaultCanBuyIndices(eq)
-	InitDefaultEquipmentForRole(TRAITOR, eq)
-	InitDefaultEquipmentForRole(DETECTIVE, eq)
+	InitDefaultEquipmentForRole(roles.TRAITOR, eq)
+	InitDefaultEquipmentForRole(roles.DETECTIVE, eq)
 end
 
 ---
@@ -905,7 +906,7 @@ local function ResetDefaultEquipmentForRole(roleData, eq)
 	local tblSize = #tbl
 
 	-- is a buyable equipment to load info from
-	if not eq or eq.Doublicated then return end
+	if not eq or eq.Duplicated then return end
 
 	local base = GetEquipmentBase(eq)
 	if not base then return end
@@ -967,8 +968,8 @@ end
 -- @realm shared
 function ResetDefaultEquipment(eq)
 	CleanUpDefaultCanBuyIndices(eq)
-	ResetDefaultEquipmentForRole(TRAITOR, eq)
-	ResetDefaultEquipmentForRole(DETECTIVE, eq)
+	ResetDefaultEquipmentForRole(roles.TRAITOR, eq)
+	ResetDefaultEquipmentForRole(roles.DETECTIVE, eq)
 end
 
 if SERVER then
@@ -1214,7 +1215,7 @@ else -- CLIENT
 		equip.CanBuy = equip.CanBuy or {}
 		equip.CanBuy[subrole] = subrole
 
-		if equip and not equip.Doublicated then
+		if equip and not equip.Duplicated then
 			local base = GetEquipmentBase(equip)
 			if base then
 				toadd = base

@@ -4,7 +4,7 @@ local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 
 local function MakePlayerRoleTooltip(parent, width, ply)
-	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64]
+	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
 	local height = 25
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
@@ -37,7 +37,7 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 end
 
 local function MakePlayerScoreTooltip(parent, width, ply)
-	local plyScores = CLSCORE.eventsPlayerScores[ply.sid64]
+	local plyScores = CLSCORE.eventsPlayerScores[ply.sid64] or {}
 	local height = 25
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
@@ -95,7 +95,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 end
 
 local function MakePlayerKarmaTooltip(parent, width, ply)
-	local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64]
+	local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
 	local height = 25
 
 	local boxLayout = vgui.Create("DIconLayout", parent)

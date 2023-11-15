@@ -25,7 +25,7 @@ entspawn = entspawn or {}
 -- Enable or disable forced random spawns for 'env_entity_maker' spawning non available
 -- random spawns at map start.
 -- @note see: https://developer.valvesoftware.com/wiki/Env_entity_maker
--- @param bool enable The state to set it to.
+-- @param boolean enable The state to set it to.
 -- @realm server
 function entspawn.SetForcedRandomSpawn(enable)
 	allowForcedRandomSpawn = enable
@@ -33,7 +33,7 @@ end
 
 ---
 -- To check if forced random spawns are available.
--- @return bool if forced random spawns are enabled
+-- @return boolean if forced random spawns are enabled
 -- @realm server
 function entspawn.IsForcedRandomSpawnEnabled()
 	return allowForcedRandomSpawn
@@ -45,7 +45,7 @@ end
 -- @realm server
 function entspawn.SpawnRandomWeapon(ent)
 	local spawns = {
-		[SPAWN_TYPE_WEAPON] = {
+		[WEAPON_TYPE_RANDOM] = {
 			[1] = {
 				pos = ent:GetPos(),
 				ang = ent:GetAngles(),
@@ -64,7 +64,7 @@ end
 -- @realm server
 function entspawn.SpawnRandomAmmo(ent)
 	local spawns = {
-		[SPAWN_TYPE_AMMO] = {
+		[AMMO_TYPE_RANDOM] = {
 			[1] = {
 				pos = ent:GetPos(),
 				ang = ent:GetAngles(),
@@ -140,7 +140,8 @@ function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
 	for entType, spawnTable in pairs(spawns) do
 		for i = 1, #spawnTable do
 			local spawn = spawnTable[i]
-
+			--Check if spawn.pos is valid
+			if not spawn or not spawn.pos then continue end
 			-- if the weapon spawn is a random weapon spawn, select any spawnable weapon
 			local selectedEnt
 			if entType == randomType then

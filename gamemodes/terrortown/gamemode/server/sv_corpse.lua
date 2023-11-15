@@ -436,7 +436,7 @@ end
 -- else returns nil
 -- @param Player victim
 -- @param Player attacker
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @return table sample
 -- @realm server
 local function GetKillerSample(victim, attacker, dmg)
@@ -533,11 +533,14 @@ realdamageinfo = 0
 -- Creates client or server ragdoll depending on settings
 -- @param Player ply
 -- @param Player attacker
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return Entity the CORPSE
 -- @realm server
 function CORPSE.Create(ply, attacker, dmginfo)
 	if not IsValid(ply) then return end
+
+	local efn = ply.effect_fn
+	ply.effect_fn = nil
 
 	local rag = ents.Create("prop_ragdoll")
 	if not IsValid(rag) then return end
@@ -577,6 +580,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	rag.dmgtype = dmginfo:GetDamageType()
 
 	local wep = util.WeaponFromDamage(dmginfo)
+	---@cast wep -nil
 	rag.dmgwep = IsValid(wep) and wep:GetClass() or ""
 
 	rag.was_headshot = ply.was_headshot and dmginfo:IsBulletDamage()
@@ -618,10 +622,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	end
 
 	-- create advanced death effects (knives)
-	if ply.effect_fn then
+	if efn then
 		-- next frame, after physics is happy for this ragdoll
-		local efn = ply.effect_fn
-
 		timer.Simple(0, function()
 			if not IsValid(rag) then return end
 

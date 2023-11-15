@@ -76,7 +76,7 @@ end
 
 ---
 -- @param number index the option id
--- @return string/number a value that is indexable
+-- @return string|number a value that is indexable
 -- @realm client
 function PANEL:GetOptionValue(index)
 	return self.choices[index].value
@@ -91,7 +91,7 @@ function PANEL:GetOptionData(index)
 end
 
 ---
--- @param string/number value should be indexable
+-- @param string|number value should be indexable
 -- @return number
 -- @realm client
 function PANEL:GetOptionID(value)
@@ -127,8 +127,8 @@ end
 
 ---
 -- @param string title
--- @param string/number value should be indexable
--- @param bool select
+-- @param string|number value should be indexable
+-- @param boolean select
 -- @param string icon
 -- @param any data additional data that you might want to use
 -- @return number index
@@ -162,7 +162,7 @@ end
 
 ---
 -- @param number index the option id
--- @param[default=false] bool ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionID(index, ignoreNetworkedVars)
 	local choices = self.choices
@@ -190,8 +190,8 @@ end
 
 ---
 -- @note this chooses the the set value like in the original DComboBox
--- @param string/number value should be indexable e.g. the value used to set conVars 
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param string|number value should be indexable e.g. the value used to set conVars
+-- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionValue(value, ignoreConVar)
 	self:ChooseOptionID(self:GetOptionID(value), ignoreConVar)
@@ -201,17 +201,17 @@ end
 -- @note this chooses the displayed text rather than the set value like in the original DComboBox
 -- So use `PANEL:ChooseOptionValue` for the old behaviour
 -- @param string name the displayed text
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionName(name, ignoreConVar)
 	self:ChooseOptionID(self:GetOptionTitleID(name), ignoreConVar)
 end
 
 ---
--- Choose option by index, title is not settable 
+-- Choose option by index, title is not settable
 -- @param[opt] string title is unused as it cant be set anymore
 -- @param number index the option id
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 -- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionID` instead
 function PANEL:ChooseOption(title, index, ignoreConVar)
@@ -239,7 +239,7 @@ end
 
 ---
 -- @param number index
--- @param string/number value is indexable
+-- @param string|number value is indexable
 -- @param any data
 -- @realm client
 function PANEL:OnSelect(index, value, data)
@@ -285,7 +285,7 @@ function PANEL:OpenMenu(pControlOpener)
 	self.menu = DermaMenu(false, self)
 
 	if sortItems then
-		-- Convert Gmod Strings 
+		-- Convert Gmod Strings
 		for i = 1, choicesSize do
 			local choice = choices[i]
 			local title = choice.title
@@ -329,8 +329,8 @@ end
 
 ---
 -- @warning this doesnt set the displayed text like before, but the value and selects an option
--- @param string/number value should be indexable
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param string|number value should be indexable
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
 	self:ChooseOptionValue(value, ignoreConVar)
@@ -338,23 +338,29 @@ end
 
 local networkedVarTracker = 0
 ---
--- @param Panel menu to set the value of
+-- @param Panel panel to set the value of
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(menu, conVar)
 	networkedVarTracker = networkedVarTracker % 1023 + 1
-	local myIdentifierString = "TTT2F1MenuConVarChangeCallback" .. tostring(networkedVarTracker)
+	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(networkedVarTracker)
 
-	local function OnConVarChangeCallback(conVarName, oldValue, newValue)
-		if not IsValid(menu) then
-			cvars.RemoveChangeCallback(conVarName, myIdentifierString)
+	local callback = function(conVarName, oldValue, newValue)
+		if not IsValid(panel) then
+			-- We need to remove the callback in a timer, because otherwise the ConVar change callback code
+			-- will throw an error while looping over the callbacks.
+			-- This happens, because the callback is removed from the same table that is iterated over.
+			-- Thus, the table size changes while iterating over it and leads to a nil callback as the last entry.
+			timer.Simple(0, function()
+				cvars.RemoveChangeCallback(conVarName, myIdentifierString)
+			end)
 
 			return
 		end
 
-		menu:SetValue(newValue, true)
+		panel:SetValue(newValue, true)
 	end
 
-	cvars.AddChangeCallback(conVar, OnConVarChangeCallback, myIdentifierString)
+	cvars.AddChangeCallback(conVar, callback, myIdentifierString)
 end
 
 ---

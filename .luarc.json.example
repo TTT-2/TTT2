@@ -1,0 +1,32 @@
+{
+	"$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+	"diagnostics.disable": [
+		"duplicate-set-field",
+		"unused-local",
+		"lowercase-global",
+		"inject-field",
+		"undefined-field",
+		"param-type-mismatch",
+		"cast-local-type"
+	],
+	"diagnostics.globals": [
+		"GM",
+		"BaseClass",
+		"CLGAMEMODEMENU",
+		"CLGAMEMODESUBMENU",
+		"CLSCOREMENU",
+		"EVENT",
+		"TEXFILTER"
+	],
+	"diagnostics.ignoredFiles": "Enable",
+	"format.enable": false,
+	"runtime.special": {
+		"include": "require",
+		"includeCS": "require"
+	},
+	"runtime.version": "Lua 5.1",
+	"runtime.nonstandardSymbol": [
+		"continue"
+	],
+	"workspace.checkThirdParty": false
+}

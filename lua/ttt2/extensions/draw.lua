@@ -112,7 +112,7 @@ function draw.ShadowedBox(x, y, w, h, color, scale)
 	drawBox(x + shift2, y + shift2, w, h, tmpCol)
 	drawBox(x + shift1, y + shift1, w, h, tmpCol)
 	drawBox(x + shift1, y + shift1, w, h, tmpCol)
-	drawBox(x, y, w, h, t, color)
+	drawBox(x, y, w, h, color)
 end
 
 ---
@@ -354,7 +354,9 @@ function draw.BlurredBox(x, y, w, h, fraction)
 
 		render.UpdateScreenEffectTexture()
 
-		surface.DrawTexturedRect(x, y, ScrW(), ScrH())
+		render.SetScissorRect(x, y, x + w, y + h, true)
+		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+		render.SetScissorRect(0, 0, 0, 0, false)
 	end
 end
 
@@ -363,17 +365,17 @@ end
 -- @2D
 -- @param string text The text to be drawn
 -- @param[default="DermaDefault"] nil|string font The font. See @{surface.CreateFont} to create your own,
--- or see <a href="https://wiki.garrysmod.com/page/Default_Fonts">Default</a>
+-- or see <a href="https://wiki.facepunch.com/gmod/Default_Fonts">Default</a>
 -- Fonts for a list of default fonts
 -- @param number x The X Coordinate
 -- @param number y The Y Coordinate
 -- @param Color color The color of the text. Uses the Color structure.
 -- @param number xalign The alignment of the X coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the Y coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number scale The scale (float number)
--- @ref https://wiki.garrysmod.com/page/draw/SimpleText
+-- @ref https://wiki.facepunch.com/gmod/draw.SimpleText
 -- @realm client
 function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scale)
 	scale = scale or 1.0
@@ -400,14 +402,15 @@ local drawShadowedText = draw.ShadowedText
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
 -- @param number xalign The alignment of the x coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
--- @param number scale The scale (float number)
+-- @param[default=1.0] number scale The text scale (float number)
+-- @param[default=0] number angle The rotational angle in degree
 -- @2D
 -- @realm client
-function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale, angle)
 	local scaleModifier = 1.0
 	local t_font = fonts.GetFont(font)
 
@@ -418,15 +421,17 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 
 	local scaled = isvector(scale) or scale ~= 1.0
+	local rotated = angle and angle ~= 0 and angle ~= 360
 	local mat
 
-	if scaled then
+	if scaled or rotated then
 		local hw = ScrW() * 0.5
 		local hh = ScrH() * 0.5
 
 		mat = Matrix()
 		mat:Translate(Vector(x, y))
 		mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+		mat:Rotate(Angle(0, angle, 0))
 		mat:Translate(-Vector(hw, hh))
 
 		render.PushFilterMag(TEXFILTER.LINEAR)
@@ -444,8 +449,8 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 		drawSimpleText(text, font, x, y, color, xalign, yalign)
 	end
 
-	if scaled then
-		cam.PopModelMatrix(mat)
+	if scaled or rotated then
+		cam.PopModelMatrix()
 
 		render.PopFilterMag()
 		render.PopFilterMin()
@@ -546,7 +551,7 @@ end
 -- @param string text The text that the length should be calculated
 -- @param[default="DefaultBold"] string font The font ID
 -- @warning This function changes the font to the passed font
--- @return number, number w, h The size of the given text
+-- @return number,number w, h The size of the given text
 -- @2D
 -- @realm client
 function draw.GetTextSize(text, font)

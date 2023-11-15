@@ -7,10 +7,10 @@ local TryT = LANG.TryTranslation
 
 local defaultMessage = {
 	title = {
-		text = "A Test Popup, now with a multiline title, how NICE."
+		text = LANG.TryTranslation("testpopup_title")
 	},
 	subtitle = {
-		text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+		text = LANG.TryTranslation("testpopup_subtitle")
 	},
 	iconTable = {},
 	time = CurTime() + 5

@@ -6,12 +6,110 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
+- Added a new way to alter player volume separately from the scoreboard (by @EntranceJew):
+  - `VOICE.(Get/Set)PreferredPlayerVoiceVolume` for setting the voice volume instead of `Player:SetVoiceVolumeScale`
+  - `VOICE.(Get/Set)PreferredPlayerVoiceMute` for setting the voice mute instead of `Player:SetMuted`
+  - `VOICE.UpdatePlayerVoiceVolume` commits / updates the voice setting according to player preferences
+- Added client submenu options for clients to change audio settings under `F1 > Gameplay > General` (by @EntranceJew):
+  - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
+  - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
+    - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
+- Added that the healthbar will pulsate when below 25% health. Toggleable in F1 Menu (by @NickCloudAT)
+- Added new menu section in F1 menu under `Appearance > Hud Switcher` for HudElement based features (by @NickCloudAT)
+- Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
+- Translated all strings still needed to german (by @NickCloudAT)
+- Added new sidebar information, when the scoreboard is open (by @TimGoll)
+- Added keybinding information to the bottom of the screen (by @TimGoll)
+  - Can be disabled in Appearance->Interface
+  - Shows binding name when scoreboard is opened
+- Added option to render rotated text on screen (by @TimGoll)
+- Added Ukrainian translation from base TTT (by @ErickMaksimets)
+- Added Swedish translation from base TTT (by @Kefta)
+- Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
+- Added window flash and noise to alert players they're being revived (by @EntranceJew)
 - Added new functions to database module
   -`database.SetDefaultValuesFromItem(accessName, itemName, item)` 
   -`database.GetStoredValues(accessName, itemName, item)`
 - Added sql database access to panel elements
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
+
+### Changed
+
+- Changed sprint stamina to also consume while in air
+- Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
+  - Add the missing `L.c4_disarm_t` translation in C4
+  - Remove redundant string translations and spaces
+  - Added all new translation strings
+- Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
+- Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
+  - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+- Updated the disguiser to make it more clear in the HUD if it is enabled or not
+- Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
+- Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
+- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
+- Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
+- Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
+- Changed syncing of database module
+- Replaced equipmenteditor syncing with database module
+- Replaced internal equipment syncing with database module
+
+### Fixed
+
+- Fixed prediction of the sprinting system, for high ping situations (by @saibotk, thanks to @wgetJane)
+- Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
+- Multiple internal fixes
+  - biggest teamkiller award should now work
+  - item model caching should now work properly
+  - role info popup for traitors should now show teammembers again if the traitor shop is disabled
+  - `pon` and `table` libraries got a small fix respectively
+  - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
+  - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
+- Fixed disguiser breaking UI on hot reload (by @TimGoll)
+- Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible
+- Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible.
+- Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
+- Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
+- Fixed ComboBoxes not working with integer values (by @NickCloudAT)
+- net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
+
+### Deprecated
+
+- Deprecated `AccessorFuncDT()`, Addons should remove the function call and replace `DTVar()` calls with `NetworkVar()`
+
+### Removed
+
+- Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
+- Removed double tap sprinting, for easier prediction handling (by @saibotk)
+- Removed explicit "Sprint" key bind, please use the GMod native sprint key binding (by @saibotk)
+- Removed unused clientside `Player.preventSprint` flag (by @saibotk)
+
+## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
+
+### Added
+
 - Added a new font in default_skin.lua to fit the localization (by @Satton2)
+- Fixed knife death effect being permanently applied on every following death
+- Added `PANEL:MakeTextEntry(data)` to `DFormTTT2` for strings or string-backed cvars (by @EntranceJew)
+- Allow admin spectators to enter "Spawn Edit" mode. (by @EntranceJew)
+- Added cvar `ttt2_bots_lock_on_death` (default: 0) to prevent bots from causing log-spam while wandering as spectators. (by @EntranceJew)
+- Added `TTT2ModifyFinalRoles` hook for last minute opportunity to override role distribution prior to them being announced for the first time (by @EntranceJew)
+- `weapon_tttbase`:
+  - Added `SWEP:ShouldRemove` to facilitate intercepting `SWEP:Remove` (by @EntranceJew)
+  - Added `SWEP.damageScaling` for weapons that utilize `ShootBullet` (by @EntranceJew)
+- Edit Equipment Menu
+  - `AllowDrop` can now be overridden per-weapon (by @EntranceJew)
+  - `Kind` can now be overridden per-weapon (by @EntranceJew)
+  - `overrideDropOnDeath` now permits forcing weapons to be dropped instead of removed on death (by @EntranceJew)
+  - "Damage Scaling" editable under "Balance Settings" (by @EntranceJew)
+- `vgui.CreateTTT2Form` passes the name on so that it can be accessed via `Panel:GetName()` (by @EntranceJew)
+- Added two GAMEMODE hooks to provide the ability for additional addons to extend role/equipment menus.
+  - `GM:TTT2OnEquipmentAddToSettingsMenu(equipment, parent)`
+    - Called after `ITEM:AddToSettingsMenu(parent)`.
+  - `GM:TTT2OnRoleAddToSettingsMenu(role, parent)`
+    - Called after `ROLE:AddToSettingsMenu(parent)`
 
 ### Changed
 
@@ -28,16 +126,24 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed some duplicated strings
   - Removed some old unused strings
   - Fixed some broken source strings (line names)
-- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh)
-- Changed syncing of database module
-- Replaced equipmenteditor syncing with database module
-- Replaced internal equipment syncing with database module
+- Simplified Chinese and Traditional Chinese localization updates (by @sbzlzh):
+  - Update Simplified Chinese Translation
+  - Improve translation (by @TheOnly8Z)
+- Localization parameters for `{walkkey} + {usekey}` prompts made into the predominant style.
 
 ### Fixed
 
 - Fixed hotreload of TTT2 roles library by a fresh reinitialization
 - Fixed a wrong localization line call in roles.lua (by @Satton2)
-- net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
+- Fixed +zoom bind
+- Fixed ttt_quickslot command
+- Fixed an issue in `table.GetEqualEntryKeys` when nil is provided instead of a table. (by @sbzlzh):
+  - This fixes spawn problems on maps with invalid spawn points
+  - This fixes errors in the F1 Menu language selection
+- Fixed the check for dynamic armor being inverted (`1` disabled it, `0` enabled it)
+- Fixed two unmatched ConVars in performance menu (by @NickCloudAT)
+- Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
+- Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)
 
 ## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
@@ -123,7 +229,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done_
+- Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done
   - `ROLE.karma.teamKillPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for a team kill
   - `ROLE.karma.teamHurtPenaltyMultiplier`: The multiplier that is used to calculate the Karma penalty for team damage
   - `ROLE.karma.enemyKillBonusMultiplier`: The multiplier that is used to calculate the Karma given to the killer if a player from an enemy team is killed
@@ -590,8 +696,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added new convars to change the behavior of the armor
-	- `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
-	- `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
+  - `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
+  - `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added server proxy for `EPOP:AddMessage()`
 - Added `PrintMessage` overwrites so this function now uses TTT2 systems

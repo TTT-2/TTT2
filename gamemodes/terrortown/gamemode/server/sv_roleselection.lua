@@ -265,8 +265,8 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
 	end
 
 	local rolesCountTbl = {
-		[ROLE_INNOCENT] = GetAvailableRoleAmount(INNOCENT, true, maxPlys),
-		[ROLE_TRAITOR] = GetAvailableRoleAmount(TRAITOR, true, maxPlys)
+		[ROLE_INNOCENT] = GetAvailableRoleAmount(roles.INNOCENT, true, maxPlys),
+		[ROLE_TRAITOR] = GetAvailableRoleAmount(roles.TRAITOR, true, maxPlys)
 	}
 
 	local checked = {}
@@ -281,7 +281,7 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
 		checked[roleData.index] = true
 
 		-- INNOCENT and TRAITOR are all the time selectable
-		if roleData == INNOCENT or roleData == TRAITOR or not roleData:IsSelectable() then continue end
+		if roleData == roles.INNOCENT or roleData == roles.TRAITOR or not roleData:IsSelectable() then continue end
 
 		-- if this is a subrole (a role that has a baserole is a subrole), check if the base role is available first
 		if roleData.baserole and roleData.baserole ~= ROLE_INNOCENT and roleData.baserole ~= ROLE_TRAITOR then
@@ -711,7 +711,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		selectedForcedRoles[subrole] = curCount
 
 		-- now assign amount of forced players per baserole if this is only a subrole
-		if not isBaseRole then
+		if not isBaseRole and baserole then
 			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + curCount
 		end
 	end
@@ -907,6 +907,10 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 	GAMEMODE.LastRole = {}
 
+	---
+	-- @realm server
+	hook.Run("TTT2ModifyFinalRoles", roleselection.finalRoles)
+
 	for i = 1, #plys do
 		local ply = plys[i]
 		local subrole = roleselection.finalRoles[ply] or ROLE_INNOCENT
@@ -950,6 +954,14 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2ModifySelectableRoles(selectableRoles)
+
+end
+
+---
+-- @param table finalRoles
+-- @hook
+-- @realm server
+function GM:TTT2ModifyFinalRoles(finalRoles)
 
 end
 

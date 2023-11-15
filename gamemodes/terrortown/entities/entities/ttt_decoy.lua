@@ -67,7 +67,7 @@ end
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
 ---
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm shared
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)

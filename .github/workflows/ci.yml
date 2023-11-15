@@ -1,16 +1,16 @@
 name: CI
 
 env:
-  GLUALINT_VERSION: 1.21.0
-  NEODOC_VERSION: 0.1.4
+  GLUALINT_VERSION: 1.26.0
+  NEODOC_VERSION: 0.1.5
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,16 +20,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Download & extract glualint
-      run: |
-        wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-linux.zip -O glualint.zip
-        unzip -u glualint.zip
-        rm glualint.zip
+      - name: Download & extract glualint
+        run: |
+          wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-x86_64-linux.zip -O glualint.zip
+          unzip -u glualint.zip
+          rm glualint.zip
 
-    - name: Check code with glualint
-      run: ./glualint .
+      - name: Check code with glualint
+        run: ./glualint .
 
   doc-check:
     # The type of runner that the job will run on
@@ -37,16 +37,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET Core
-      run: sudo apt-get install -y mono-complete
+      - name: Setup .NET Core
+        run: sudo apt-get install -y mono-complete
 
-    - name: Download & extract neodoc
-      run: |
-        wget -c https://github.com/TTT-2/NeoDoc/releases/download/v${NEODOC_VERSION}/NeoDoc-v${NEODOC_VERSION}.zip -O neodoc.zip
-        unzip -u neodoc.zip
-        rm neodoc.zip
+      - name: Download & extract neodoc
+        run: |
+          wget -c https://github.com/TTT-2/NeoDoc/releases/download/v${NEODOC_VERSION}/NeoDoc-v${NEODOC_VERSION}.zip -O neodoc.zip
+          unzip -u neodoc.zip
+          rm neodoc.zip
 
-    - name: Check code with neodoc
-      run: mono NeoDoc.exe .
+      - name: Check code with neodoc
+        run: mono NeoDoc.exe .

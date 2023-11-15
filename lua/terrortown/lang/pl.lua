@@ -41,7 +41,7 @@ L.win_showreport = "Spójrzmy na raport rundy na {num} sekund."
 
 --L.limit_round = "Round limit reached. The next map will load soon."
 --L.limit_time = "Time limit reached. The next map will load soon."
-L.limit_left = "{num} rund(a), albo {time} minut, do zmiany mapy na {mapname}."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Twój team został nagrodzony {num} kredytami na zakupy."
@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Potwierdź: zniszcz"
 L.c4_disarm = "Rozbrój C4"
 L.c4_disarm_cut = "Kliknij, by przeciąć kabel {num}"
 
+L.c4_disarm_t = "Przetnij kabel, aby rozbroić bombę. Jako że jesteś Zdrajcą, każdy kabel jest bezpieczny. Niewinni nie mają tak łatwo!"
 L.c4_disarm_owned = "Przetnij kabel, by rozbroić bombe. To twoja bomba, więc każdy kabel ją rozbraja"
 L.c4_disarm_other = "Przetnij odpowiedni kabel, by rozbroić bombe. Jak się pomylisz, to ona wybuchnie!"
 
@@ -405,7 +406,7 @@ L.dna_killer = "Zebrano próbkę DNA zabójcy z trupa!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "Nie można było pobrać DNA (zabójca się rozłączył?)."
 L.dna_armed = "Ta bomba jest uzbrojona! Rozbrój ją najpierw!"
-L.dna_object = "Zebrano {num} nową próbkę DNA z obiektu."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA nie zostało znalezione na tym terenie."
 
 L.dna_desc = [[
@@ -474,7 +475,7 @@ L.hp_wounded = "Ranny"
 L.hp_badwnd = "Bardzo ranny"
 L.hp_death = "Bliski śmierci"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Renomowany"
 L.karma_high = "Szorski"
 L.karma_med = "Brutalny"
@@ -505,7 +506,6 @@ L.mute_off = "None muted"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Klawisze ruchu lub skok: uderz obiekt. Skradanie: opuść obiekt."
 L.punch_bonus = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {num}"
 L.punch_malus = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
 
@@ -676,7 +676,7 @@ L.aw_sui2_title = "Samotny i zdesperowany"
 L.aw_sui2_text = "był jedynym, który zabił samego siebie."
 
 L.aw_exp1_title = "Badania MateriaŁÓw Wybuchowych"
-L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
+L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu {num} obiektów."
 
 L.aw_exp2_title = "Badania Terenowe"
 L.aw_exp2_text = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
@@ -930,11 +930,8 @@ L.hud_forced_failed = "Nie udało się wymusić HUD {hudname}. Nie masz permisji
 L.hud_restricted_failed = "Nie udało się nadać restrykcji HUDa {hudname}. Nie masz permisji."
 
 L.shop_role_select = "Wybierz rolę"
-L.shop_role_selected = "{roles} wybrano do sklepu!"
+L.shop_role_selected = "{role} wybrano do sklepu!"
 L.shop_search = "Szukaj"
-
-L.spec_help = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizyczny, by go posiąść."
-L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Coś Cię powstrzymuje przed wyrzuceniem amunicji."
@@ -950,8 +947,8 @@ L.target_pickup = "Naciśnij [{usekey}] aby podnieść"
 L.target_slot_info = "Slot: {slot}"
 L.target_pickup_weapon = "Naciśnij [{usekey}] aby ponieść broń"
 L.target_switch_weapon = "Naciśnij [{usekey}] aby zamienić broń"
-L.target_pickup_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytego podniesienia"
-L.target_switch_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytej zamiany"
+L.target_pickup_weapon_hidden = ", Naciśnij [{walkkey} + {usekey}] dla ukrytego podniesienia"
+L.target_switch_weapon_hidden = ", Naciśnij [{walkkey} + {usekey}] dla ukrytej zamiany"
 L.target_switch_weapon_nospace = "Brak slotu!"
 L.target_switch_drop_weapon_info = "Upuszczanie {name} ze slotu {slot}"
 L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można wywalić"
@@ -1119,13 +1116,10 @@ L.label_gameplay_specmode = "Tryb obserwatora (zawsze bądź obserwatorem)"
 L.label_gameplay_fastsw = "Szybkie przełącznie broni"
 L.label_gameplay_hold_aim = "Trzymaj aby celować"
 L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
-L.label_gameplay_dtsprint_enable = "Włącz 2x przód, aby sprintować"
-L.label_gameplay_dtsprint_anykey = "Sprintuj dopóki Ci się nie szkończy wytrzymałość"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
 L.label_bind_weaponswitch = "Zmień broń"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Globalny Czat"
 L.label_bind_voice_team = "Teamowy Czat"
 
@@ -1226,7 +1220,7 @@ L.pickup_error_noslot = "Nie możesz tego podnieść, bo nie masz na to miejsca.
 L.lang_server_default = "Ustawienie Serwera"
 --L.help_lang_info = [[
 --This translation is {coverage}% complete with the English language taken as a default reference.
-
+--
 --Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
 
 -- 2021-04-13
@@ -1421,7 +1415,7 @@ L.none = "Brak Roli"
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"
 --L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 --L.spawn_weapon_random = "Random Weapon Spawn"
 --L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1439,7 +1433,7 @@ L.none = "Brak Roli"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1461,18 +1455,18 @@ L.none = "Brak Roli"
 
 --L.help_spawn_editor_info = [[
 --The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
-
+--
 --These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to the initial state.
-
+--
 --It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the 'Edit Equipment' menu. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
-
+--
 --Keep in mind that many changes only take effect after a new round has started.]]
 --L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
 --L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
 --L.help_spawn_editor_spawn_amount = [[
 --There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map.
 --Click 'start spawn edit' to change this amount.
-
+--
 --{weaponrandom}x Random weapon spawn
 --{weaponmelee}x Melee weapon spawn
 --{weaponnade}x Grenade weapon spawn
@@ -1481,21 +1475,21 @@ L.none = "Brak Roli"
 --{weaponsniper}x Sniper weapon spawn
 --{weaponpistol}x Pistol weapon spawn
 --{weaponspecial}x Special weapon spawn
-
+--
 --{ammorandom}x Random ammo spawn
 --{ammodeagle}x Deagle ammo spawn
 --{ammopistol}x Pistol ammo spawn
 --{ammomac10}x Mac10 ammo spawn
 --{ammorifle}x Rifle ammo spawn
 --{ammoshotgun}x Shotgun ammo spawn
-
+--
 --{playerrandom}x Random player spawn]]
 
 --L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
 --L.equipmenteditor_name_spawn_type = "Select spawn type"
 --L.equipmenteditor_desc_auto_spawnable = [[
 --The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however this can be changed from within this menu.
-
+--
 --Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
 
 --L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
@@ -1512,14 +1506,14 @@ L.none = "Brak Roli"
 
 --L.help_prefer_map_models = [[
 --Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
-
+--
 --Role specific models always have a higher priority and are unaffected by this setting.]]
 --L.help_enforce_playermodel = [[
 --Some roles have custom player models. They can be disabled which can be relevant for compatibility with some player model selectors.
 --Random default models can still be selected, if this setting is disabled.]]
 --L.help_use_custom_models = [[
 --By default only the CS:S Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
-
+--
 --This selection of models can be extended by installing more player models.]]
 
 -- 2021-10-06
@@ -1536,7 +1530,7 @@ L.none = "Brak Roli"
 -- 2021-10-09
 --L.help_models_select = [[
 --Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
-
+--
 --The small indicator in the top left shows if the player model has a head hitbox. The icon below shows if this model is applicable for a detective hat.]]
 
 --L.menu_roles_title = "Role Settings"
@@ -1559,7 +1553,7 @@ L.none = "Brak Roli"
 --L.help_roles_selection = [[
 --The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be distributed at all.
 --Keep in mind that all of this only applies if the role is considered for distribution process.
-
+--
 --The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for distribution and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution process then works as usual for the second player.]]
 --L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of enemies has died. Related values can be tweaked here."
 --L.help_roles_award_pct = "When this percentage of enemies are dead, specific roles are awarded equipment credits."
@@ -1567,17 +1561,17 @@ L.none = "Brak Roli"
 --L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up the role distribution process. When in doubt keep all values at '0'. This value means that no limits are applied and the role distribution will try to assign as many roles as possible."
 --L.help_roles_max_roles = [[
 --The term roles here includes both the base roles and the subroles. By default, there is no limit on how many different roles can be assigned. However, here are two different ways to limit them.
-
+--
 --1. Limit them by a fixed amount.
 --2. Limit them by a percentage.
-
+--
 --The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 --L.help_roles_max_baseroles = [[
 --Base roles are only those roles others inherit from. For example, the Innocent role is a base role, while a Pharaoh is a subrole of this role. By default, there is no limit on how many different base roles can be assigned. However, here are two different ways to limit them.
-
+--
 --1. Limit them by a fixed amount.
 --2. Limit them by a percentage.
-
+--
 --The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 
 --L.label_roles_enabled = "Enable role"
@@ -1609,15 +1603,15 @@ L.none = "Brak Roli"
 --L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'public role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
 --L.help_roles_credits_award = [[
 --There are two different ways to be awarded credits in base TTT2:
-
+--
 --1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
 --2. If a player killed a high value player with a 'public role' such as a Detective, the killer is awarded credits.
-
+--
 --Please note, that this still can be enabled/disabled for every role, even if the whole team is awarded. For example, if team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
 --The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
 --L.help_detective_hats = [[
 --Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
-
+--
 --Some player models do not support hats by default. This can be changed in 'Administration' -> 'Player Models']]
 
 --L.label_roles_credits_award_kill = "Credit reward amount for the kill"
@@ -1669,35 +1663,35 @@ L.none = "Brak Roli"
 --L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
 --L.help_namechange_kick = [[
 --A name change during an active round could be abused. Therefore, this is prohibited by default and will lead to the offending player being kicked from the server.
-
+--
 --If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 --L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
 --L.help_spawn_waves = [[
 --If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points.
-
+--
 --Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
 --L.help_voicechat_battery = [[
 --Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
-
+--
 --Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
 --L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
 --L.help_haste_mode = [[
 --Haste mode balances the game by increasing the round time with every dead player. Only roles that see missing in action players can see the real round time. Every other role can only see the haste mode starting time.
-
+--
 --If haste mode is enabled, the fixed round time is ignored.]]
 --L.help_round_limit = "After one of the set limit conditions is met, a map change is triggered."
 --L.help_armor_balancing = "The following values can be used to balance the armor."
 --L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
 --L.help_item_armor_dynamic = [[
 --Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited, and the armor value stacks. Getting damaged decreases the armor value. The armor value per bought armor item is set in the 'Equipment Settings' of said item.
-
+--
 --When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
-
+--
 --If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
 --L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlock mode is disabled, dead bodies can not be confirmed, the scoreboard shows everyone as alive and the spectators can talk to the living players."
 --L.help_prop_possession = [[
 --Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
-
+--
 --The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
 --L.help_karma = "Players start with a certain amount of Karma, and lose it when they damage/kill teammates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
 --L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly kill teammates."
@@ -1707,7 +1701,7 @@ L.none = "Brak Roli"
 --L.help_karma_bonus = "There are also two different passive ways to gain Karma during a round. First is a karma restoration which applied to every player at the round end. Then a secondary clean round bonus is given if no teammates were hurt or killed by a player."
 --L.help_karma_clean_half = [[
 --When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
-
+--
 --This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
 --L.help_max_slots = "Sets the maximum amount of weapons per slot. '-1' means that there is no limit."
 --L.help_item_armor_value = "This is the armor value given by the armor item in dynamic mode. If classic mode is enabled (see 'Administration' -> 'Player Settings') then every value greater than 0 is counted as existing armor."
@@ -1777,9 +1771,9 @@ L.none = "Brak Roli"
 --L.label_sherlock_mode = "Enable sherlock mode"
 --L.label_highlight_admins = "Highlight server admins"
 --L.label_highlight_dev = "Highlight TTT2 developer"
---L.label_highlight_vip = "Highlight TTT2 VIP"
+--L.label_highlight_vip = "Highlight TTT2 supporter"
 --L.label_highlight_addondev = "Highlight TTT2 addon developer"
---L.label_highlight_supporter = "Highlight other supporters"
+--L.label_highlight_supporter = "Highlight others"
 --L.label_enable_hud_element = "Enable {elem} HUD element"
 --L.label_spec_prop_control = "Enable prop possession"
 --L.label_spec_prop_base = "Possession base value"
@@ -1836,5 +1830,142 @@ L.none = "Brak Roli"
 
 --L.help_falldmg_exponent = [[
 --This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
-
+--
 --Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
+
+-- 2023-02-08
+--L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+--L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+--L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+--L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+--L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+--L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+--L.guide_nothing_title = "Nothing here yet!"
+--L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+--L.sb_rank_tooltip_developer = "TTT2 Developer"
+--L.sb_rank_tooltip_vip = "TTT2 Supporter"
+--L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+--L.sb_rank_tooltip_admin = "Server Admin"
+--L.sb_rank_tooltip_streamer = "Streamer"
+--L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+--L.sb_rank_tooltip_team = "Team"
+
+--L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"
+
+-- 2023-10-04
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
+
+-- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"

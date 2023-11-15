@@ -90,6 +90,40 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		master = master
 	})
 
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_allow_drop",
+		database = DatabaseElement(accessName, itemName, "AllowDrop"),
+		master = nil
+	})
+
+	form:MakeComboBox({
+		label = "equipmenteditor_name_drop_on_death_type",
+		database = DatabaseElement(accessName, itemName, "overrideDropOnDeath"),
+		choices = {
+			{title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT},
+			{title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE},
+			{title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY}
+		},
+		master = nil
+	})
+
+	form:MakeComboBox({
+		label = "equipmenteditor_name_kind",
+		database = DatabaseElement(accessName, itemName, "Kind"),
+		choices = {
+			{title = TryT("slot_weapon_melee"), value = WEAPON_MELEE},
+			{title = TryT("slot_weapon_pistol"), value = WEAPON_PISTOL},
+			{title = TryT("slot_weapon_heavy"), value = WEAPON_HEAVY},
+			{title = TryT("slot_weapon_nade"), value = WEAPON_NADE},
+			{title = TryT("slot_weapon_carry"), value = WEAPON_CARRY},
+			{title = TryT("slot_weapon_unarmed"), value = WEAPON_UNARMED},
+			{title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL},
+			{title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA},
+			{title = TryT("slot_weapon_class"), value = WEAPON_CLASS}
+		},
+		master = nil
+	})
+
 	form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
 
 	form:MakeSlider({
@@ -110,6 +144,16 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		master = master
 	})
 
+	form:MakeSlider({
+		label = "equipmenteditor_name_damage_scaling",
+		min = 0,
+		max = 8,
+		decimal = 2,
+		database = DatabaseElement(accessName, itemName, "damageScaling"),
+		master = nil
+	})
+
+
 	-- Get inheritable version for weapons to access inherited functions
 	if not self.isItem then
 		equipment = weapons.Get(WEPS.GetClass(equipment))
@@ -117,4 +161,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	-- now add custom equipment settings
 	equipment:AddToSettingsMenu(parent)
+
+	hook.Run("TTT2OnEquipmentAddToSettingsMenu", equipment, parent)
 end

@@ -13,14 +13,31 @@ function PANEL:Init()
 	self.TextArea:SetWide(45)
 	self.TextArea:SetNumeric(true)
 	self.TextArea:SetFont("DermaTTT2Text")
+	self.TextArea:SetDrawLanguageID(false)
+	local vguiColor = util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25))
+	self.TextArea:SetTextColor(vguiColor)
+	self.TextArea:SetCursorColor(vguiColor)
 
-	self.TextArea.OnChange = function(textarea, val)
-		self:SetValue(self.TextArea:GetText())
+	-- On focus of textbox, enable input
+	self.TextArea.OnGetFocus = function(textarea)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+		self:EnableTextBox(true)
+	end
+
+	-- On focus loss, disable input and set new values from textbox
+	self.TextArea.OnLoseFocus = function(textarea)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+		self:EnableTextBox(false)
+		self:SetValueFromTextBox()
+	end
+
+	-- On enter keypres, apply new values
+	self.TextArea.OnEnter = function(textarea, val)
+		self:SetValueFromTextBox()
 	end
 
 	self.TextArea.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
-
 		return true
 	end
 
@@ -77,7 +94,7 @@ end
 ---
 -- This function is called, when the slider starts and ends being dragged
 -- Calls SetNetworkedVarValues only after the dragging ends to not sync every change
--- @param bool setDragging the state it is changed to
+-- @param boolean setDragging the state it is changed to
 -- @realm client
 function PANEL:OnChangeDragging(setDragging)
 	local value = self:GetValue()
@@ -148,7 +165,7 @@ end
 
 ---
 -- @param any val
--- @param bool ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
+-- @param boolean ignoreNetworkedVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreNetworkedVars)
 	if not value then return end
@@ -166,6 +183,16 @@ function PANEL:SetValue(value, ignoreNetworkedVars)
 	if ignoreNetworkedVars or self:IsEditing() then return end
 
 	self:SetNetworkedVarValues(value)
+end
+
+---
+-- @realm client
+function PANEL:SetValueFromTextBox()
+	local val = self.TextArea:GetText()
+	val = val ~= "" and val or 0
+	self:SetValue(self.TextArea:GetText())
+	self:SetConVarValues(val)
+	self.TextArea:SetText(val)
 end
 
 ---
@@ -248,6 +275,20 @@ end
 -- @realm client
 function PANEL:IsHovered()
 	return self.TextArea:IsHovered() or self.Slider:IsHovered() or vgui.GetHoveredPanel() == self
+end
+
+---
+-- @param boolean b Enable or disable text input of text field
+-- @realm client
+function PANEL:EnableTextBox(b)
+	self.textBoxEnabled = b
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:GetTextBoxEnabled()
+	return self.textBoxEnabled ~= nil and self.textBoxEnabled or false
 end
 
 ---

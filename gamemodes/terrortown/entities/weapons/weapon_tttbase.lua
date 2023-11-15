@@ -1,7 +1,7 @@
 ---
 -- @class SWEP
 -- @desc Custom weapon base, used to derive from CS one, still very similar.
--- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
+-- See <a href="https://wiki.facepunch.com/gmod/Weapon">Weapon</a>
 -- @section weapon_tttbase
 
 local math = math
@@ -17,7 +17,7 @@ if SERVER then
 	AddCSLuaFile()
 else -- CLIENT
 	-- hud help font
-	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 17, weight = 600})
+	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 16, weight = 600})
 	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
 end
 
@@ -187,6 +187,25 @@ local function shouldSkipWeapon(swep)
 	return skipWeapon
 end
 
+-- The original Remove is not saved in the weaponMetaTable, it only exists on Entity.
+local oldRemove = FindMetaTable("Entity").Remove
+
+---
+-- This changes the function Remove of all weapons, but only affects ones that implement ShouldRemove
+-- This enables changing weapon drop behavior against a convention of being removed
+-- @param any ... A variable amount of arguments passed to this event
+-- @realm shared
+function weaponMetaTable:Remove(...)
+	if self.ShouldRemove and isfunction(self.ShouldRemove) then
+		local res = self:ShouldRemove(...)
+		if not res then
+			return res
+		end
+	end
+
+	return oldRemove(self, ...)
+end
+
 -- The original SetNextPrimaryFire saved in the weaponMetaTable
 local oldSetNextPrimaryFire = weaponMetaTable.SetNextPrimaryFire
 local tickInterval = engine.TickInterval()
@@ -195,7 +214,7 @@ local tickInterval = engine.TickInterval()
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
 -- @param number nextTime The time you want to have the next primary attack available
--- @param[opt] bool skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
+-- @param[opt] boolean skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
 -- @realm shared
 function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
 	if not skipTickrateFix and not shouldSkipWeapon(self) then
@@ -270,8 +289,8 @@ if CLIENT then
 	-- @realm client
 	local enable_crosshair_lines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
 
-	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
-	local icon_help_secondary = Material("vgui/ttt/hudhelp/rmb")
+	local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
+	local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
 
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
@@ -283,7 +302,13 @@ if CLIENT then
 
 		local client = LocalPlayer()
 
-		if not enable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
+		if
+			not enable_crosshair:GetBool()
+			or not IsValid(client)
+			or SPRINT:IsSprinting(client) and not SPRINT.convars.showCrosshair:GetBool()
+		then
+			return
+		end
 
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() * 0.5)
@@ -336,85 +361,111 @@ if CLIENT then
 		end
 	end
 
-	---
-	-- @param number x
-	-- @param number y
-	-- @param string key
-	-- @realm client
-	function SWEP:DrawKeyBox(x, y, key)
-		local pad = 3
-		local pad2 = pad * 2
+	local colorBox = Color(0, 0, 0, 100)
+	local colorDarkBox = Color(0, 0, 0, 150)
 
-		x = x - pad + 1
-		y = y - pad2 * 0.5 + 1
+	local padding = 10
+	local sizeIcon = 16
+	local padYKey = 3
+	local padXKey = 5
+	local hLine = 23
 
-		local key_box_w, key_box_h = draw.GetTextSize(key, "weapon_hud_help_key")
+	local function ProcessHelpText(lines)
+		local width, center = 0, 0
+		local processedData = {}
 
-		key_box_w = key_box_w + 3 * pad
-		key_box_h = key_box_h + pad2
+		for i = 1, #lines do
+			local line = lines[i]
+			local binding = line.binding -- can be an icon or key
+			local description = line.text
 
-		local key_box_x = x - key_box_w + 1.5 * pad
-		local key_box_y = y - key_box_h + 0.5 * pad2
+			local wBinding, hBinding = 0
+			local isIcon = false
 
-		surface.SetDrawColor(0, 0, 0, 150)
-		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
-		draw.ShadowedText(key, "weapon_hud_help_key", x, y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-	end
+			if isstring(binding) then
+				local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key")
 
-	---
-	-- Draws a line on the screen
-	-- @param number x x coordinate of the line
-	-- @param number y y coordinate of the line
-	-- @param string text text for the line
-	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
-	-- @realm client
-	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
-		local icon_size = 18
-		local valid_icon = true
+				wBinding = wKey + 2 * padXKey
+				hBinding = hKey + 2 * padYKey
+				isIcon = false
+			elseif binding then
+				wBinding = sizeIcon
+				hBinding = sizeIcon
+				isIcon = true
+			else
+				continue
+			end
 
-		if isstring(icon_or_key) then
-			self:DrawKeyBox(x, y, icon_or_key)
-		elseif icon_or_key then
-			draw.FilteredShadowedTexture(x - icon_size + 2, y - 17, icon_size, icon_size, icon_or_key, 255, COLOR_WHITE)
-		else
-			valid_icon = false
+			local translatedDescription = TryT(description)
+			local wDescription = draw.GetTextSize(translatedDescription, "weapon_hud_help")
+
+			processedData[i] = {
+				w = wBinding,
+				h = hBinding,
+				isIcon = isIcon,
+				binding = binding,
+				description = translatedDescription,
+				wDescription = wDescription
+			}
+
+			width = math.max(width, wBinding + wDescription)
+			center = math.max(center, wBinding)
 		end
 
-		draw.ShadowedText(TryT(text), "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
-		return valid_icon
+		return width, center, processedData
 	end
 
 	---
 	-- Draws the help text to the bottom of the screen
 	-- @realm client
 	function SWEP:DrawHelp()
-		local data = self.HUDHelp
-		local additional_lines = data.additional_lines
-		local x = ScrW() * 0.5 - data.max_length * 0.5
-		local y_start = ScrH() - 25
-		local y = y_start
-		local delta_y = 25
-		local valid_icon = false
+		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines)
 
-		for i = #additional_lines, 1, -1 do
-			local line = additional_lines[i]
-			local drawn_icon = self:DrawHelpLine(x, y, line.text, line.icon)
+		local wBox = baseWidth + 5 * padding
+		local hBox = hLine * #processedData + 2 * padding
+		local xBox = 0.5 * (ScrW() - wBox)
+		local yBox = ScrH() - hBox
+		local xDivider = xBox + baseCenter + 2.5 * padding
+		local yDividerStart = yBox + padding
+		local yDividerEnd = yBox + hBox - padding
+		local yLine = yDividerStart + 10
+		local xDescription = xDivider + padding
 
-			valid_icon = valid_icon or drawn_icon
-			y = y - delta_y
+		if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
+			draw.BlurredBox(xBox, yBox, wBox, hBox)
+			draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
+			draw.Box(xBox, yBox, wBox, 1, colorBox) -- top line shadow
+			draw.Box(xBox, yBox, wBox, 2, colorBox) -- top line shadow
+			draw.Box(xBox, yBox - 2, wBox, 2, COLOR_WHITE) -- white top line
 		end
 
-		if valid_icon then
-			local line_x = x + 10
+		draw.ShadowedLine(xDivider, yDividerStart, xDivider, yDividerEnd, COLOR_WHITE)
 
-			draw.ShadowedLine(line_x, y_start + 2, line_x, y + 8, COLOR_WHITE)
+		for i = 1, #processedData do
+			local line = processedData[i]
+
+			local w = line.w
+			local h = line.h
+			local xBinding = xDivider - padding - w
+			local yBinding = yLine - 0.5 * h
+
+			if line.isIcon then
+				draw.FilteredShadowedTexture(xBinding, yBinding, w, h, line.binding, 255, COLOR_WHITE)
+			else
+				draw.Box(xBinding, yBinding + 1, w, h, colorDarkBox)
+				draw.OutlinedShadowedBox(xBinding, yBinding + 1, w, h, 1, COLOR_WHITE)
+
+				draw.ShadowedText(line.binding, "weapon_hud_help_key", xBinding + 0.5 * w, yLine, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			draw.ShadowedText(line.description, "weapon_hud_help", xDescription, yLine, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+			yLine = yLine + hLine
 		end
 	end
 
 	-- mousebuttons are enough for most weapons
-	local default_key_params = {
+	local defaultKeyParams = {
 		primaryfire = Key("+attack", "MOUSE1"),
 		secondaryfire = Key("+attack2", "MOUSE2"),
 		usekey = Key("+use", "USE")
@@ -422,19 +473,19 @@ if CLIENT then
 
 	---
 	-- Adds a help text for the weapon to the HUD.
-	-- TTT legacy function.
+	-- @deprecated TTT legacy function. Do not use for new addons!
 	-- @param[opt] string primary_text first line of the help text
 	-- @param[optchain] string secondary_text second line of the help text
-	-- @param[optchain][default=false] bool translate should the text get translated
-	-- @param[optchain] table extra_params parameters for @{Lang.GetParamTranslation}
+	-- @param[optchain][default=false] boolean translate should the text get translated
+	-- @param[optchain] table extraKeyParams parameters for @{Lang.GetParamTranslation}
 	-- @realm client
-	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
+	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extraKeyParams)
 		local primary = primary_text
 		local secondary = secondary_text
 
 		if translate then
-			extra_params = extra_params or {}
-			translate_params = table.Merge(extra_params, default_key_params)
+			extraKeyParams = extraKeyParams or {}
+			translate_params = table.Merge(extraKeyParams, defaultKeyParams)
 			primary = primary and GetPTranslation(primary, translate_params)
 			secondary = secondary and GetPTranslation(secondary, translate_params)
 		end
@@ -461,7 +512,7 @@ if CLIENT then
 	-- @realm client
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
 		self.HUDHelp = {
-			additional_lines = {},
+			bindingLines = {},
 			max_length = 0
 		}
 
@@ -478,23 +529,23 @@ if CLIENT then
 	-- Adds an additional line to the help text.
 	-- @{SWEP:AddTTT2HUDHelp} needs to be called first
 	-- @param string text text to be displayed on the line
-	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
+	-- @param[opt] Material|string materialOrBinding icon or description for the concerning key
 	-- @realm client
-	function SWEP:AddHUDHelpLine(text, icon_or_key)
+	function SWEP:AddHUDHelpLine(text, materialOrBinding)
 		if not self.HUDHelp then return end
 
 		--replace MOUSE1/MOUSE2 strings with respective icons
-		if isstring(icon_or_key) then
-			if icon_or_key == "MOUSE1" then
-				icon_or_key = icon_help_primary
-			elseif icon_or_key == "MOUSE2" then
-				icon_or_key = icon_help_secondary
+		if isstring(materialOrBinding) then
+			if materialOrBinding == "MOUSE1" then
+				materialOrBinding = materialKeyLMB
+			elseif materialOrBinding == "MOUSE2" then
+				materialOrBinding = materialKeyRMB
 			end
 		end
 
 		local width = draw.GetTextSize(text, "weapon_hud_help")
 
-		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
+		self.HUDHelp.bindingLines[#self.HUDHelp.bindingLines + 1] = {text = text, binding = materialOrBinding}
 		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
 	end
 
@@ -616,7 +667,7 @@ end
 
 ---
 -- A convenience function to shoot bullets
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
@@ -641,7 +692,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	bullet.Tracer = 4
 	bullet.TracerName = self.Tracer or "Tracer"
 	bullet.Force = 10
-	bullet.Damage = dmg
+	bullet.Damage = dmg * (self.damageScaling or 1)
 
 	if CLIENT and sparkle:GetBool() then
 		bullet.Callback = Sparklies
@@ -676,7 +727,7 @@ end
 
 ---
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return number
 -- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
@@ -750,6 +801,19 @@ function SWEP:Ammo1()
 end
 
 if SERVER then
+	---
+	-- This allows us to override behavior of PreDrop/OnDrop calls that request equipment be dropped.
+	-- @realm server
+	function SWEP:ShouldRemove()
+		local should_force = self.overrideDropOnDeath and self.overrideDropOnDeath == DROP_ON_DEATH_TYPE_FORCE
+		local deathDrop = self.IsDroppedBecauseDeath
+		if deathDrop and should_force then
+			return false
+		end
+
+		return true
+	end
+
 	---
 	-- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
 	-- does not occur when a drop happens for some reason. Hence this thing.

@@ -42,6 +42,26 @@ if CLIENT then
 		BaseClass.Initialize(self)
 	end
 
+	---
+	-- This function will return a table containing all keys that will be stored by
+	-- the @{HUDELEMENT:SaveData} function.
+	-- @return table
+	-- @realm client
+	function HUDELEMENT:GetSavingKeys()
+		local savingKeys = BaseClass.GetSavingKeys(self) or {}
+		savingKeys.healthPulsate = {
+			typ = "bool",
+			desc = "label_hud_pulsate_health_enable",
+			default = true,
+			OnChange = function(slf, bool)
+				slf:PerformLayout()
+				slf:SaveData()
+			end
+		}
+
+		return table.Copy(savingKeys)
+	end
+
 	-- parameter overwrites
 	function HUDELEMENT:IsResizable()
 		return true, true
@@ -224,6 +244,17 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 			local armor = client:GetArmor()
+			local alpha = 255
+
+			if health <= client:GetMaxHealth() * 0.25 and self.healthPulsate then
+				local frequency = util.TransformToRange(health, 1, client:GetMaxHealth() * 0.25 + 1, 1, 6)
+
+				local factor = math.abs(math.sin(CurTime() * (7 - frequency)))
+
+				alpha = math.Round(factor * 255)
+			end
+
+			color_health = ColorAlpha(color_health, alpha)
 
 			self:DrawBar(nx, ty, bw, bh, color_health, health / client:GetMaxHealth(), t_scale, string.upper(L["hud_health"]) .. ": " .. health)
 
@@ -262,8 +293,8 @@ if CLIENT then
 			-- sprint bar
 			ty = ty + bh + spc
 
-			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				self:DrawBar(nx, ty, bw, sbh, color_sprint, client.sprintProgress, t_scale, "")
+			if SPRINT.convars.enabled:GetBool() then
+				self:DrawBar(nx, ty, bw, sbh, color_sprint, client:GetSprintStamina(), t_scale, "")
 			end
 
 			-- coin info

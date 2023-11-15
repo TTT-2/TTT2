@@ -2,7 +2,6 @@
 
 -- This localization file is being moderated and constantly updated by Satton(RU).
 -- Please, in case you are making some changes ping @Satton2 on GitHub, contact him on Steam (STEAM_0:0:85981967) or Discord (Satton(RU)#5794).
-
 local L = LANG.CreateLanguage("ru")
 
 -- Compatibility language name that might be removed soon.
@@ -291,6 +290,7 @@ L.c4_remove_destroy2 = "Подтвердить"
 L.c4_disarm = "Обезвредить"
 L.c4_disarm_cut = "Нажмите, чтобы перерезать {num}-й провод."
 
+L.c4_disarm_t = "Перережьте провод, чтобы обезвредить бомбу. Для предателей любой провод безопасен. Невиновным это не так просто!"
 L.c4_disarm_owned = "Перережьте провод, чтобы обезвредить бомбу. Это ваша бомба, поэтому любой провод безопасен."
 L.c4_disarm_other = "Перережьте безопасный провод, чтобы обезвредить бомбу. Она взорвётся, если вы ошибётесь!"
 
@@ -408,7 +408,7 @@ L.dna_killer = "Вы собрали образец ДНК убийцы с это
 L.dna_duplicate = "Совпадение! У вас уже есть этот образец ДНК в сканере."
 L.dna_no_killer = "Образец ДНК не может быть собран (убийца покинул сервер?)."
 L.dna_armed = "Бомба все ещё работает! Сначала обезвредьте её!"
-L.dna_object = "Собрано новых образцов ДНК: {num}."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "ДНК не обнаружено в этой области."
 
 L.dna_desc = [[
@@ -477,7 +477,7 @@ L.hp_wounded = "Ранен"
 L.hp_badwnd = "Тяжело ранен"
 L.hp_death = "При смерти"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Уважаемый"
 L.karma_high = "Малоуважаемый"
 L.karma_med = "Легкомысленный"
@@ -494,7 +494,7 @@ L.target_unknown = "Террорист"
 
 L.target_credits = "Осмотрите тело, чтобы получить неиспользованные кредиты."
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Одноразовое использование."
 L.tbut_reuse = "Многоразовое использование."
 L.tbut_retime = "Можно использовать повторно через {num} сек."
@@ -508,7 +508,6 @@ L.mute_off = "Никто не заглушён"
 
 -- Spectators and prop possession
 L.punch_title = "ТОЛКОМЕТР"
-L.punch_help = "Клавиши управления или прыжок: толкнуть предмет. Клавиша приседания: покинуть предмет."
 L.punch_bonus = "Ваш плохой счёт понизил предел толкометра на {num}."
 L.punch_malus = "Ваш хороший счёт повысил предел толкометра на {num}!"
 
@@ -808,7 +807,7 @@ L.aw_flg2_title = "Сигнальная ракета обозначает ого
 L.aw_flg2_text = "рассказал {num} людям об опасности ношения легковоспламеняющейся одежды."
 
 L.aw_hug1_title = "Большой разброс"
-L.aw_hug1_text = "был в гармонии со своим H.U.G.E, умудрившись как-то заставить свои пули убить 4 человек."
+--L.aw_hug1_text = "was in tune with their H.U.G.E, somehow managing to make their bullets hit {num} people."
 
 L.aw_hug2_title = "Терпеливая пара"
 L.aw_hug2_text = "продолжал стрелять из H.U.G.E. и обнаружил, что терпение вознаградило его {num} убийствами."
@@ -936,9 +935,6 @@ L.shop_role_select = "Выберите роль"
 L.shop_role_selected = "Выбран магазин роли {role}!"
 L.shop_search = "Поиск"
 
-L.spec_help = "Щёлкните мышью, чтобы наблюдать за игроками, или нажмите {usekey}, чтобы вселиться в предмет, на который вы смотрите."
-L.spec_help2 = "Чтобы покинуть режим наблюдения, откройте меню, нажав {helpkey}, перейдите в раздел «Игра» и уберите галочку с режима наблюдения."
-
 -- 2019-10-19
 L.drop_ammo_prevented = "Что-то не даёт вам выбросить боеприпасы."
 
@@ -953,8 +949,8 @@ L.target_pickup = "[{usekey}]: подобрать."
 L.target_slot_info = "Слот: {slot}"
 L.target_pickup_weapon = "[{usekey}]: подобрать оружие."
 L.target_switch_weapon = "[{usekey}]: заменить текущее оружие на это."
-L.target_pickup_weapon_hidden = " [{usekey} + {walkkey}]: подобрать незаметно."
-L.target_switch_weapon_hidden = " [{usekey} + {walkkey}]: заменить незаметно."
+L.target_pickup_weapon_hidden = " [{walkkey} + {usekey}]: подобрать незаметно."
+L.target_switch_weapon_hidden = " [{walkkey} + {usekey}]: заменить незаметно."
 L.target_switch_weapon_nospace = "Нет свободного слота для этого оружия."
 L.target_switch_drop_weapon_info = "Из слота {slot} будет выброшен (-а) {name}."
 L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбрасываемого оружия."
@@ -1122,13 +1118,10 @@ L.label_gameplay_specmode = "Режим наблюдения (всегда бы�
 L.label_gameplay_fastsw = "Быстрая смена оружия."
 L.label_gameplay_hold_aim = "Включить прицеливание при удерживании."
 L.label_gameplay_mute = "Заглушать живых игроков после смерти."
-L.label_gameplay_dtsprint_enable = "Включить ускорение двойным нажатием."
-L.label_gameplay_dtsprint_anykey = "Продолжать ускорение по двойному нажатию до прекращения движения."
 L.label_hud_default = "Интерфейс по умолчанию"
 L.label_hud_force = "Принудительно назначаемый интерфейс"
 
 L.label_bind_weaponswitch = "Смена оружия"
-L.label_bind_sprint = "Ускорение"
 L.label_bind_voice = "Глобальный голосовой чат"
 L.label_bind_voice_team = "Командный голосовой чат"
 
@@ -1264,8 +1257,8 @@ L.tooltip_bodyfound_score = "Нахождение тела: {score}"
 
 L.finish_score_alive_teammates = "Живые товарищи:"
 L.finish_score_alive_all = "Живые игроки:"
-L.finish_score_dead_enemies = "Мёртвые противники:"
 L.finish_score_timelimit = "Истечение времени:"
+L.finish_score_dead_enemies = "Мёртвые противники:"
 L.kill_score = "Убийство:"
 L.bodyfound_score = "Нахождение тела:"
 
@@ -1442,7 +1435,7 @@ L.spawn_ammo_rifle = "Точка боеприпасов: снайперские"
 L.spawn_ammo_shotgun = "Точка боеприпасов: дробовиков"
 L.spawn_player_random = "Точка случайного игрока"
 
-L.spawn_weapon_ammo = " (Боеприпасов: {ammo})"
+L.spawn_weapon_ammo = "(Боеприпасов: {ammo})"
 
 L.spawn_weapon_edit_ammo = "[{walkkey}] + [{primaryfire} или {secondaryfire}]: увеличить или уменьшить боеприпасы этой точки оружия"
 
@@ -1780,9 +1773,9 @@ L.label_armor_threshold_for_reinforced = "Порог усиленной брон
 L.label_sherlock_mode = "Включить режим Шерлока"
 L.label_highlight_admins = "Выделять администраторов сервера"
 L.label_highlight_dev = "Выделять разработчиков TTT2"
-L.label_highlight_vip = "Выделять TTT2 VIP"
+L.label_highlight_vip = "Выделять помощников TTT2"
 L.label_highlight_addondev = "Выделять разработчиков дополнений к TTT2"
-L.label_highlight_supporter = "Выделять других помощников"
+L.label_highlight_supporter = "Выделять прочих"
 L.label_enable_hud_element = "Включить элемент интерфейса «{elem}»"
 L.label_spec_prop_control = "Включить вселение в предметы"
 L.label_spec_prop_base = "Базовое значение вселения"
@@ -1841,3 +1834,140 @@ L.help_falldmg_exponent = [[
 Это значение меняет то, как экспоненциально урон от падения увеличивается в зависимости от скорости, с которой падает игрок.
 
 Будьте осторожны при изменении этого значения. Слишком высокие значения могут сделать даже небольшие падения летальными, а маленькие — позволят игрокам падать с экстремальных высот и почти не получать урон.]]
+
+-- 2023-02-08
+L.testpopup_title = "Тестовое всплывающее окно теперь с многострочным заголовком. Как же классно!"
+L.testpopup_subtitle = "Что ж, привет! Это приятное всплывающее окно с особой информацией. Текст также может быть многострочным, как приятно! Ам-м... Я мог бы добавить ещё так много текста, если бы только были идеи..."
+
+L.hudeditor_chat_hint1 = "[TTT2][ИНФО] Наведите курсор на элемент, а затем удерживайте [ЛКМ] и двигайте мышкой для ПЕРЕМЕЩЕНИЯ или ИЗМЕНЕНИЯ РАЗМЕРА."
+L.hudeditor_chat_hint2 = "[TTT2][ИНФО] Удерживайте клавишу ALT для симметричного изменения размера."
+L.hudeditor_chat_hint3 = "[TTT2][ИНФО] Удерживайте клавишу SHIFT для перемещения по оси и сохранения соотношения сторон."
+L.hudeditor_chat_hint4 = "[TTT2][ИНФО] Нажмите [ПКМ] -> 'Закрыть', чтобы покинуть редактор интерфейса!"
+
+L.guide_nothing_title = "Пока ничего нет!"
+L.guide_nothing_desc = "В разработке. Помогите нам, внеся вклад в проект на GitHub."
+
+L.sb_rank_tooltip_developer = "Разработчик TTT2"
+L.sb_rank_tooltip_vip = "Помощник TTT2"
+L.sb_rank_tooltip_addondev = "Разработчик дополнений к TTT2"
+L.sb_rank_tooltip_admin = "Администратор сервера"
+L.sb_rank_tooltip_streamer = "Стример"
+L.sb_rank_tooltip_heroes = "Герои TTT2"
+L.sb_rank_tooltip_team = "Команда"
+
+L.tbut_adminarea = "Администраторская зона:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"
+
+-- 2023-10-04
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
+
+-- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"

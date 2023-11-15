@@ -328,7 +328,8 @@ if SERVER then
 	-- @return boolean Returns true if the spawnn script already exists
 	-- @realm server
 	function entspawnscript.Exists(dir)
-		return fileExists(dir .. gameGetMap() .. ".json", "DATA")
+		local fullDir = dir .. gameGetMap() .. ".json"
+		return fileExists(fullDir, "DATA") or fileExists("data_static/" .. fullDir, "GAME")
 	end
 
 
@@ -353,20 +354,25 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function entspawnscript.ReadFile(dir)
-		return utilJSONToTable(fileRead(dir .. gameGetMap() .. ".json", "DATA"))
+		local fullDir = dir .. gameGetMap() .. ".json"
+		if fileExists(fullDir, "DATA") then
+			return utilJSONToTable( fileRead(fullDir, "DATA") )
+		else
+			return utilJSONToTable( fileRead("data_static/" .. fullDir, "GAME") )
+		end
 	end
 
 	---
 	-- Removes the spawn file of the current map and returns if it existed
 	-- @param string dir The directory where the file is expected
-	-- @return bool if the file existed and was therefore successfully deleted
+	-- @return boolean if the file existed and was therefore successfully deleted
 	-- @internal
 	-- @realm server
 	function entspawnscript.RemoveFile(dir)
 		local fileExisted = entspawnscript.Exists(dir)
 
 		if fileExisted then
-			fileDelete(dir .. gameGetMap() .. ".json")
+			fileDelete(dir .. gameGetMap() .. ".json", "DATA")
 		end
 
 		return fileExisted

@@ -123,6 +123,71 @@ local function MakeReset(parent)
 end
 
 ---
+-- Adds a textentry to the form
+-- @param table data The data for the textentry
+-- @note Structure of data = {
+-- label, default, convar, serverConVar, initial, function OnChange(value),
+-- master = { function AddSlave(self, slave) }
+-- }
+-- @return Panel The created textentry
+-- @realm client
+function PANEL:MakeTextEntry(data)
+	local left = vgui.Create("DLabelTTT2", self)
+
+	left:SetText(data.label)
+
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
+	end
+
+	local right = vgui.Create("DTextEntryTTT2", self)
+
+	local reset = MakeReset(self)
+	right:SetResetButton(reset)
+
+	right:SetUpdateOnType(false)
+	right:SetHeightMult(1)
+
+	right.OnGetFocus = function(slf)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+	end
+
+	right.OnLoseFocus = function(slf)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+	end
+
+	-- Set default if possible even if the convar could still overwrite it
+	right:SetDefaultValue(data.default)
+	right:SetConVar(data.convar)
+	right:SetServerConVar(data.serverConvar)
+
+	if not data.convar and not data.serverConvar and data.initial then
+		right:SetValue(data.initial)
+	end
+
+	right.OnValueChanged = function(slf, value)
+		if isfunction(data.OnChange) then
+			data.OnChange(slf, value)
+		end
+	end
+
+	right:SetTall(32)
+	right:Dock(TOP)
+
+	self:AddItem(left, right, reset)
+
+	if IsValid(data.master) and isfunction(data.master.AddSlave) then
+		data.master:AddSlave(left)
+		data.master:AddSlave(right)
+		data.master:AddSlave(reset)
+	end
+
+	return left, right
+end
+
+---
 -- Adds a checkbox to the form
 -- @param table data The data for the checkbox
 -- @return Panel The created checkbox
@@ -212,7 +277,6 @@ function PANEL:MakeSlider(data)
 	right:SetTall(32)
 	right:Dock(TOP)
 
-
 	self:AddItem(left, right, reset)
 
 	if IsValid(data.master) and isfunction(data.master.AddSlave) then
@@ -258,9 +322,10 @@ function PANEL:MakeComboBox(data)
 			local choice = data.choices[i]
 
 			if istable(choice) then
-				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
+				right:AddChoice(choice.title, tostring(choice.value), choice.select, choice.icon, choice.data)
 			else
 				-- Support old simple structure
+				choice = tostring(choice)
 				right:AddChoice(choice, choice)
 			end
 		end
@@ -459,7 +524,7 @@ function PANEL:MakeColorMixer(data)
 		end
 
 		-- update colormixer as well
-		colorMixer:SetDisabled(not enabled)
+		colorMixer:SetEnabled(enabled)
 	end
 
 	self:AddItem(left, right)
@@ -566,7 +631,7 @@ derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 -- @return Panel The created collapsable form
 -- @realm client
 function vgui.CreateTTT2Form(parent, name)
-	local form = vgui.Create("DFormTTT2", parent)
+	local form = vgui.Create("DFormTTT2", parent, name)
 
 	form:SetName(name)
 	form:Dock(TOP)

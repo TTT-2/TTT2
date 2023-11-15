@@ -42,7 +42,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local name = WEPS.GetClass(eq)
 
 		if name
-			and not eq.Doublicated
+			and not eq.Duplicated
 			and not string.match(name, "base")
 			and not eject[name]
 		then
@@ -63,7 +63,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		local name = WEPS.GetClass(eq)
 
 		if name
-			and not eq.Doublicated
+			and not eq.Duplicated
 			and not string.match(name, "base")
 			and not string.match(name, "event")
 			and not eject[name]

@@ -51,7 +51,26 @@ ShopEditor.savingKeys = {
 	credits = {
 		typ = "number",
 		bits = 5,
-		default = 1
+		default = 1,
+	},
+	damageScaling = {
+		typ = "float",
+		bits = 8,
+		default = 1,
+	},
+	AllowDrop = {
+		typ = "bool",
+		default = true,
+	},
+	overrideDropOnDeath = {
+		typ = "number",
+		bits = 5,
+		default = DROP_ON_DEATH_TYPE_DEFAULT,
+	},
+	Kind = {
+		typ = "number",
+		bits = 5,
+		default = 3,
 	}
 }
 
@@ -119,7 +138,7 @@ local function getDefaultValue(item, key, data)
 		return entspawnscript.GetSpawnTypeFromKind(item.Kind) or data.default or WEAPON_TYPE_SPECIAL
 	end
 
-	if data.typ == "number" then
+	if data.typ == "number" or data.typ == "float" then
 		return data.default or 0
 	elseif data.typ == "bool" then
 		 return data.default or false

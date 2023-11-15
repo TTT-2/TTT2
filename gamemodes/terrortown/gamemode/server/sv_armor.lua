@@ -97,7 +97,7 @@ end
 -- @param Entity infl The inflictor
 -- @param Player|Entity att The attacker
 -- @param number amount Amount of damage
--- @param DamageInfo dmginfo Damage info
+-- @param CTakeDamageInfo dmginfo Damage info
 -- @realm server
 -- @internal
 function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
@@ -118,7 +118,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
 
 	-- fallback for players who prefer the vanilla armor
-	if self.cv.armor_dynamic:GetBool() then
+	if not self.cv.armor_dynamic:GetBool() then
 		-- classic armor only shields from bullet/crowbar damage
 		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
 			dmginfo:ScaleDamage(0.7)
@@ -141,10 +141,11 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	ply:DecreaseArmorValue(armorDamage)
 
-	-- The armor offset is used to catch the damage that should be taken,
-	-- if the armor is not strong enough to take that many hitpoints.
-	-- It is zero as long as the armor is able to take the damage.
-	dmginfo:SetDamage(self.cv.health_factor * damage - math.min(armor - armorDamage, 0))
+	-- Describes the maximum amount of damage that our current armor can endure.
+	-- This might exceed the actual damage, so we need to limit this.
+	local damageReduced = math.min(damage, armor / self.cv.armor_factor)
+
+	dmginfo:SetDamage(damageReduced * self.cv.health_factor + damage - damageReduced)
 end
 
 ---

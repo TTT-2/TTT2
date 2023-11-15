@@ -26,16 +26,29 @@ local MutedState
 
 g_VoicePanelList = nil
 
-local function VoiceTryEnable()
-	local client = LocalPlayer()
+---
+-- @realm client
+local duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE})
 
-	---
-	-- @realm client
-	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
-		return false
+---
+-- @realm client
+local duck_spectator_amount = CreateConVar("ttt2_voice_duck_spectator_amount", "0", {FCVAR_ARCHIVE})
+
+---
+-- @realm client
+local scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE})
+
+local function CreateVoiceTable()
+	if not sql.TableExists("ttt2_voice") then
+		local query = "CREATE TABLE ttt2_voice (guid TEXT PRIMARY KEY, mute INTEGER DEFAULT 0, volume REAL DEFAULT 1)"
+		sql.Query(query)
 	end
+end
 
-	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
+CreateVoiceTable()
+
+local function VoiceTryEnable()
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanEnable() then
 		VOICE.isTeam = false
 		permissions.EnableVoiceChat(true)
 
@@ -56,27 +69,7 @@ local function VoiceTryDisable()
 end
 
 local function VoiceTeamTryEnable()
-	local client = LocalPlayer()
-
-	---
-	-- @realm client
-	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
-		return false
-	end
-
-	if not IsValid(client) then return false end
-
-	local clientrd = client:GetSubRoleData()
-	local tm = client:GetTeam()
-
-	if not VOICE.IsSpeaking()
-		and VOICE.CanSpeak()
-		and client:IsActive()
-		and tm ~= TEAM_NONE
-		and not TEAMS[tm].alone
-		and not clientrd.unknownTeam
-		and not clientrd.disabledTeamVoice
-	then
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
 		VOICE.isTeam = true
 
 		permissions.EnableVoiceChat(true)
@@ -97,11 +90,55 @@ local function VoiceTeamTryDisable()
 	return false
 end
 
+---
+-- Checks if a player can enable the team voice chat.
+-- @return boolean Returns if the player is able to use the team voice chat
+-- @realm client
+function VOICE.CanTeamEnable()
+	local client = LocalPlayer()
+
+	---
+	-- @realm client
+	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
+		return false
+	end
+
+	if not IsValid(client) then return false end
+
+	local clientrd = client:GetSubRoleData()
+	local tm = client:GetTeam()
+
+	if client:IsActive()
+		and tm ~= TEAM_NONE
+		and not TEAMS[tm].alone
+		and not clientrd.unknownTeam
+		and not clientrd.disabledTeamVoice
+	then
+		return true
+	end
+end
+
+---
+-- Checks if a player can enable the global voice chat.
+-- @return boolean Returns if the player is able to use the global voice chat
+-- @realm client
+function VOICE.CanEnable()
+	local client = LocalPlayer()
+
+	---
+	-- @realm client
+	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
+		return false
+	end
+
+	return true
+end
+
 -- register a binding for the general voicechat
 bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "header_bindings_ttt2", "label_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
 
 -- register a binding for the team voicechat
-bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "header_bindings_ttt2", "label_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
+bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "header_bindings_ttt2", "label_bind_voice_team", KEY_T)
 
 -- 255 at 100
 -- 5 at 5000
@@ -135,6 +172,8 @@ function GM:PlayerStartVoice(ply)
 	if not IsValid(ply) then return end
 
 	local client = LocalPlayer()
+
+	VOICE.UpdatePlayerVoiceVolume(ply)
 
 	if not IsValid(g_VoicePanelList) or not IsValid(client) then return end
 
@@ -345,6 +384,122 @@ end
 
 VOICE.battery_max = 100
 VOICE.battery_min = 10
+
+---
+-- Scales a linear volume into a Power 4 value.
+-- @param number volume
+-- @realm client
+function VOICE.LinearToPower4(volume)
+	return math.Clamp( math.pow(volume, 4), 0, 1)
+end
+
+---
+-- Scales a linear volume into a Log value.
+-- @param number volume
+-- @realm client
+function VOICE.LinearToLog(volume)
+	local rolloff_cutoff = 0.1
+	local log_a = math.pow(1 / 10, 60 / 20)
+	local log_b = math.log(1 / log_a)
+
+	local vol = log_a * math.exp(log_b * volume)
+	if volume < rolloff_cutoff then
+		local log_rolloff = 10 * log_a * math.exp(log_b * rolloff_cutoff)
+		vol = volume * log_rolloff
+	end
+
+	return math.Clamp(vol, 0, 1)
+end
+
+---
+-- Passes along the input linear volume value.
+-- @param number volume
+-- @realm client
+function VOICE.LinearToLinear(volume)
+	return volume
+end
+
+VOICE.ScalingFunctions = {
+	power4 = VOICE.LinearToPower4,
+	log = VOICE.LinearToLog,
+	linear = VOICE.LinearToLinear,
+}
+
+VOICE.GetScalingFunctions = function()
+	local opts = {}
+	for mode in pairs(VOICE.ScalingFunctions) do
+		opts[#opts + 1] = {
+			title = LANG.TryTranslation("label_voice_scaling_mode_" .. mode),
+			value = mode,
+			select = mode == scaling_mode:GetString(),
+		}
+	end
+	return opts
+end
+
+---
+-- Gets the stored volume for the player's voice.
+-- @param Player ply
+-- @realm client
+function VOICE.GetPreferredPlayerVoiceVolume(ply)
+	local val = sql.QueryValue( "SELECT volume FROM ttt2_voice WHERE guid = " .. SQLStr( ply:SteamID64() ) .. " LIMIT 1" )
+	if ( val == nil ) then return 1 end
+	return tonumber(val)
+end
+
+---
+-- Sets the stored volume for the player's voice.
+-- @param Player ply
+-- @param number volume
+-- @realm client
+function VOICE.SetPreferredPlayerVoiceVolume(ply, volume)
+	return sql.Query( "REPLACE INTO ttt2_voice ( guid, volume ) VALUES ( " .. SQLStr( ply:SteamID64() ) .. ", " .. SQLStr( volume ) .. " )" )
+end
+
+---
+-- Gets the stored mute state for the player's voice.
+-- @param Player ply
+-- @realm client
+function VOICE.GetPreferredPlayerVoiceMuted(ply)
+	local val = sql.QueryValue( "SELECT mute FROM ttt2_voice WHERE guid = " .. SQLStr( ply:SteamID64() ) .. " LIMIT 1" )
+	if ( val == nil ) then return false end
+	return tobool(val)
+end
+
+---
+-- Sets the stored mute state for the player's voice.
+-- @param Player ply
+-- @param boolean is_muted
+-- @realm client
+function VOICE.SetPreferredPlayerVoiceMuted(ply, is_muted)
+	return sql.Query( "REPLACE INTO ttt2_voice ( guid, mute ) VALUES ( " .. SQLStr( ply:SteamID64() ) .. ", " .. SQLStr( is_muted and 1 or 0 ) .. " )" )
+end
+
+---
+-- Refreshes and applies the preferred volume and mute state for a player's voice.
+-- @param Player ply
+-- @realm client
+function VOICE.UpdatePlayerVoiceVolume(ply)
+	local mute = VOICE.GetPreferredPlayerVoiceMuted(ply)
+	if ply.SetMute then
+		ply:SetMute(mute)
+	end
+
+	local vol = VOICE.GetPreferredPlayerVoiceVolume(ply)
+	if duck_spectator:GetBool() and ply:IsSpec() then
+		vol = vol * (1 - duck_spectator_amount:GetFloat())
+	end
+	local out_vol = vol
+
+	local func = VOICE.ScalingFunctions[scaling_mode:GetString()]
+	if isfunction(func) then
+		out_vol = func( vol )
+	end
+
+	ply:SetVoiceVolumeScale( out_vol )
+
+	return out_vol, mute
+end
 
 ---
 -- Initializes the voice battery

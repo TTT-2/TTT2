@@ -18,7 +18,7 @@ local function GetDataString(ply, data)
 		dataTable[#dataTable + 1] = data
 	end
 
-	return string.Implode("||", dataTable)
+	return table.concat(dataTable, "||")
 end
 
 ---

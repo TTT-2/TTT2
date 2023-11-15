@@ -45,7 +45,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon, isPickupProbe)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	-- spectators are not allowed to pickup weapons
-	if ply:IsSpec() then
+	if ply:IsSpec() and WEPS.GetClass(wep) ~= "weapon_ttt_spawneditor" then
 		return false, 1
 	end
 
@@ -113,7 +113,7 @@ local function GetLoadoutWeapons(subrole)
 	for i = 1, #weps do
 		local w = weps[i]
 
-		if not istable(w.InLoadoutFor) or w.Doublicated then continue end
+		if not istable(w.InLoadoutFor) or w.Duplicated then continue end
 
 		local cls = WEPS.GetClass(w)
 
@@ -251,7 +251,7 @@ local function GetLoadoutItems(subrole)
 	for i = 1, #itms do
 		local w = itms[i]
 
-		if not istable(w.InLoadoutFor) or w.Doublicated then continue end
+		if not istable(w.InLoadoutFor) or w.Duplicated then continue end
 
 		local cls = w.id
 
@@ -455,67 +455,16 @@ local function DropActiveWeapon(ply)
 	ply:SafeDropWeapon(ply:GetActiveWeapon(), false)
 end
 concommand.Add("ttt_dropweapon", DropActiveWeapon)
-
-local function DropActiveAmmo(ply)
+concommand.Add("ttt_dropammo", function(ply)
+	if not IsValid(ply) then return end
+	local wep = ply:GetActiveWeapon()
+	ply:SafeDropAmmo(wep, false)
+end)
+concommand.Add("ttt_dropclip", function(ply)
 	if not IsValid(ply) then return end
 
-	local wep = ply:GetActiveWeapon()
-
-	if not IsValid(wep) or not wep.AmmoEnt then return end
-
-	local hook_data = {wep:Clip1()}
-
-	---
-	-- @realm server
-	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
-		LANG.Msg(ply, "drop_ammo_prevented", nil, MSG_CHAT_WARN)
-
-		return
-	end
-
-	local amt = hook_data[1]
-
-	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
-		LANG.Msg(ply, "drop_no_ammo", nil, MSG_CHAT_WARN)
-
-		return
-	end
-
-	local pos, ang = ply:GetShootPos(), ply:EyeAngles()
-	local dir = ang:Forward() * 32 + ang:Right() * 6 + ang:Up() * -5
-	local tr = util.QuickTrace(pos, dir, ply)
-
-	if tr.HitWorld then return end
-
-	wep:SetClip1(0)
-
-	ply:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
-
-	local box = ents.Create(wep.AmmoEnt)
-
-	if not IsValid(box) then return end
-
-	box:SetPos(pos + dir)
-	box:SetOwner(ply)
-	box:Spawn()
-	box:PhysWake()
-
-	local phys = box:GetPhysicsObject()
-
-	if IsValid(phys) then
-		phys:ApplyForceCenter(ang:Forward() * 1000)
-		phys:ApplyForceOffset(VectorRand(), vector_origin)
-	end
-
-	box.AmmoAmount = amt
-
-	timer.Simple(2, function()
-		if not IsValid(box) then return end
-
-		box:SetOwner(nil)
-	end)
-end
-concommand.Add("ttt_dropammo", DropActiveAmmo)
+	ply:SafeDropAmmo(ply:GetActiveWeapon(), true)
+end)
 
 ---
 -- Called as a @{Weapon} entity is picked up by a @{Player}.<br />
@@ -621,6 +570,10 @@ end
 function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
+	-- Tag the weapon as having been dropped due to a player death so that
+	-- we can prevent it from dropping if we want.
+	wep.IsDroppedBecauseDeath = deathDrop
+
 	-- Hack to tell the weapon it's about to be dropped and should do what it
 	-- must right now
 	if wep.PreDrop then
@@ -649,9 +602,17 @@ function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 		ply:SelectWeapon("weapon_ttt_unarmed")
 	end
 
+	if deathDrop and wep.overrideDropOnDeath == DROP_ON_DEATH_TYPE_DENY then
+		wep:Remove()
+		return
+	end
+
 	ply:DropWeapon(wep)
 
 	wep:PhysWake()
+
+	-- Unset this, because we can't use it after this point.
+	wep.IsDroppedBecauseDeath = nil
 end
 
 ---

@@ -288,6 +288,7 @@ L.c4_remove_destroy2 = "Confirm: destroy"
 L.c4_disarm = "Disarm C4"
 L.c4_disarm_cut = "Click to cut wire {num}"
 
+L.c4_disarm_t     = "Cut a wire to disarm the bomb. As you are Traitor, every wire is safe. Innocents don't have it so easy!"
 L.c4_disarm_owned = "Cut a wire to disarm the bomb. It's your bomb, so every wire will disarm it."
 L.c4_disarm_other = "Cut a safe wire to disarm the bomb. It will explode if you get it wrong!"
 
@@ -505,7 +506,6 @@ L.mute_off = "None muted"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Move keys or jump: punch object. Crouch: leave object."
 L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
 L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
 
@@ -933,9 +933,6 @@ L.shop_role_select = "Select a role"
 L.shop_role_selected = "{role}'s shop was selected!"
 L.shop_search = "Search"
 
-L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
-L.spec_help2 = "To leave the spectator mode, open the menu by pressing {helpkey}, go to 'gameplay' and toggle the spectator mode."
-
 -- 2019-10-19
 L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 
@@ -950,8 +947,8 @@ L.target_pickup = "Press [{usekey}] to pick up"
 L.target_slot_info = "Slot: {slot}"
 L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
 L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
-L.target_pickup_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden pickup"
-L.target_switch_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden switch"
+L.target_pickup_weapon_hidden = ", press [{walkkey} + {usekey}] for hidden pickup"
+L.target_switch_weapon_hidden = ", press [{walkkey} + {usekey}] for hidden switch"
 L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
@@ -1050,7 +1047,7 @@ L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Misellaneous"
+L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 L.submenu_gameplay_general_title = "General"
 L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
@@ -1119,13 +1116,10 @@ L.label_gameplay_specmode = "Spectate-only mode (always stay spectator)"
 L.label_gameplay_fastsw = "Fast weapon switch"
 L.label_gameplay_hold_aim = "Enable hold to aim"
 L.label_gameplay_mute = "Mute living players when dead"
-L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
-L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
 L.label_hud_default = "Default HUD"
 L.label_hud_force = "Forced HUD"
 
 L.label_bind_weaponswitch = "Pickup Weapon"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Global Voice Chat"
 L.label_bind_voice_team = "Team Voice Chat"
 
@@ -1421,7 +1415,7 @@ L.spawneditor_desc = "Used to place weapon, ammo and player spawns in the world.
 L.spawneditor_place = "Place spawn"
 L.spawneditor_remove = "Remove spawn"
 L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
-L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 L.spawn_weapon_random = "Random Weapon Spawn"
 L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1439,7 +1433,7 @@ L.spawn_ammo_rifle = "Rifle ammo spawn"
 L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 L.spawn_player_random = "Random player spawn"
 
-L.spawn_weapon_ammo = " (Ammo: {ammo})"
+L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1777,9 +1771,9 @@ L.label_armor_threshold_for_reinforced = "Reinforced armor threshold"
 L.label_sherlock_mode = "Enable sherlock mode"
 L.label_highlight_admins = "Highlight server admins"
 L.label_highlight_dev = "Highlight TTT2 developer"
-L.label_highlight_vip = "Highlight TTT2 VIP"
+L.label_highlight_vip = "Highlight TTT2 supporter"
 L.label_highlight_addondev = "Highlight TTT2 addon developer"
-L.label_highlight_supporter = "Highlight other supporters"
+L.label_highlight_supporter = "Highlight others"
 L.label_enable_hud_element = "Enable {elem} HUD element"
 L.label_spec_prop_control = "Enable prop possession"
 L.label_spec_prop_base = "Possession base value"
@@ -1838,3 +1832,143 @@ L.help_falldmg_exponent = [[
 This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
 
 Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
+
+-- 2023-02-08
+L.testpopup_title = "A Test Popup, now with a multiline title, how NICE!"
+L.testpopup_subtitle = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+L.hudeditor_chat_hint1 = "[TTT2][INFO] Hover over an element, press and hold [LMB] and move the mouse to MOVE or RESIZE it."
+L.hudeditor_chat_hint2 = "[TTT2][INFO] Press and hold the ALT key for symmetric resizing."
+L.hudeditor_chat_hint3 = "[TTT2][INFO] Press and hold the SHIFT key to move on axis and to keep the aspect ratio."
+L.hudeditor_chat_hint4 = "[TTT2][INFO] Press [RMB] -> 'Close' to exit the HUD Editor!"
+
+L.guide_nothing_title = "Nothing here yet!"
+L.guide_nothing_desc = "This is work in progress, help us by contributing to the project on GitHub."
+
+L.sb_rank_tooltip_developer = "TTT2 Developer"
+L.sb_rank_tooltip_vip = "TTT2 Supporter"
+L.sb_rank_tooltip_addondev = "TTT2 Addon Developer"
+L.sb_rank_tooltip_admin = "Server Admin"
+L.sb_rank_tooltip_streamer = "Streamer"
+L.sb_rank_tooltip_heroes = "TTT2 Heroes"
+L.sb_rank_tooltip_team = "Team"
+
+L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+-- 2023-08-11
+L.equipmenteditor_name_allow_drop = "Allow Drop"
+L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+L.drop_on_death_type_default = "Default (weapon-defined)"
+L.drop_on_death_type_force = "Force Drop on Death"
+L.drop_on_death_type_deny = "Deny Drop on Death"
+
+-- 2023-08-26
+L.equipmenteditor_name_kind = "Equipment Slot"
+L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+L.slot_weapon_melee = "Melee Slot"
+L.slot_weapon_pistol = "Pistol Slot"
+L.slot_weapon_heavy = "Heavy Slot"
+L.slot_weapon_nade = "Grenade Slot"
+L.slot_weapon_carry = "Carry Slot"
+L.slot_weapon_unarmed = "Unarmed Slot"
+L.slot_weapon_special = "Special Slot"
+L.slot_weapon_extra = "Extra Slot"
+L.slot_weapon_class = "Class Slot"
+
+-- 2023-10-04
+L.label_voice_duck_spectator = "Duck spectator voices"
+L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+L.label_voice_scaling = "Voice Volume Scaling Mode"
+L.label_voice_scaling_mode_linear = "Linear"
+L.label_voice_scaling_mode_power4 = "Power 4"
+L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-23
+L.header_miscellaneous_settings = "Miscellaneous Settings"
+L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+L.header_hud_elements_customize = "Customize the HUD-Elements"
+L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+L.help_keyhelp = [[
+Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+
+Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+Equipment: Some equipment items have their own bindings, these are shown in this category.
+
+Disabled categories are still shown when the scoreboard is visible]]
+
+L.label_keyhelp_show_core = "Enable always showing the core bindings"
+L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+L.header_interface_keys = "Key helper settings"
+L.header_interface_wepswitch = "Weapon switch UI settings"
+
+L.label_keyhelper_help = "open gamemode menu"
+L.label_keyhelper_mutespec = "cycle spectator voice mode"
+L.label_keyhelper_shop = "open equipment shop"
+L.label_keyhelper_show_pointer = "free mouse pointer"
+L.label_keyhelper_possess_focus_entity = "possess focused entity"
+L.label_keyhelper_spec_focus_player = "spectate focused player"
+L.label_keyhelper_spec_previous_player = "previous player"
+L.label_keyhelper_spec_next_player = "next player"
+L.label_keyhelper_spec_player = "spectate random player"
+L.label_keyhelper_possession_jump = "prop: jump"
+L.label_keyhelper_possession_left = "prop: left"
+L.label_keyhelper_possession_right = "prop: right"
+L.label_keyhelper_possession_forward = "prop: forward"
+L.label_keyhelper_possession_backward = "prop: backward"
+L.label_keyhelper_free_roam = "leave object and roam free"
+L.label_keyhelper_flashlight = "toggle flashlight"
+L.label_keyhelper_quickchat = "open quickchat"
+L.label_keyhelper_voice_global = "global voice chat"
+L.label_keyhelper_voice_team = "team voice chat"
+L.label_keyhelper_chat_global = "global chat"
+L.label_keyhelper_chat_team = "team chat"
+L.label_keyhelper_show_all = "show all"
+L.label_keyhelper_disguiser = "toggle disguiser"
+L.label_keyhelper_save_exit = "save and exit"
+L.label_keyhelper_spec_third_person = "toggle third person view"
+
+-- 2023-10-26
+L.item_armor_reinforced = "Reinforced Armor"
+L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+L.status_speed_name = "Speed Multiplier"
+L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+L.status_on = "on"
+L.status_off = "off"
+
+L.crowbar_help_primary = "Attack"
+L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+L.help_HUD_enable_description = [[
+Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+L.header_soundeffect_settings = "Sound Effects"
+L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+L.hat_deerstalker_name = "Detective's Hat"

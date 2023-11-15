@@ -28,11 +28,11 @@ local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
-local cvEnableSpectatorsoutline = CreateConVar("ttt2_cvEnableSpectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+local cvEnableSpectatorsoutline = CreateConVar("ttt2_enable_spectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 ---
 -- @realm client
-local cvEnableOverheadicons = CreateConVar("ttt2_cvEnableOverheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 surface.CreateAdvancedFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateAdvancedFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
@@ -410,7 +410,7 @@ function GM:HUDDrawTargetID()
 
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
-	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, Z)
+	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, COLOR_WHITE)
 end
 
 ---

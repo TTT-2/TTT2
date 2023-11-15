@@ -85,7 +85,7 @@ function PROPSPEC.Clear(ply)
 
 	ply.propspec = nil
 
-	ply:SpectateEntity(nil)
+	ply:UnSpectate()
 end
 
 ---
@@ -112,7 +112,7 @@ local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY,
 ---
 -- Triggers an event based on the pressed key
 -- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
--- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @return boolean
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
@@ -147,42 +147,44 @@ function PROPSPEC.Key(ply, key)
 		return true
 	end
 
-	local pr = ply.propspec
+	local pSpec = ply.propspec
 
-	if pr.t > CurTime() or pr.punches < 1 then
+	if pSpec.t > CurTime() or pSpec.punches < 1 then
 		return true
 	end
 
-	local m = math.min(150, phys:GetMass())
+	local mass = math.min(150, phys:GetMass())
 	local force = propspec_force:GetInt()
-	local aim = ply:GetAimVector()
-	local mf = m * force
+	local mf = mass * force
+	local vectorAim = ply:GetAimVector()
 
-	pr.t = CurTime() + 0.15
+	local vectorAimPlanar = Vector(vectorAim.x, vectorAim.y, 0)
+	vectorAimPlanar:Normalize()
+
+	local vectorPerpendicularLeft = Vector(-vectorAimPlanar.y, vectorAimPlanar.x, 0)
+	local vectorPerpendicularRight = Vector(vectorAimPlanar.y, -vectorAimPlanar.x, 0)
+
+	pSpec.t = CurTime() + 0.15
 
 	if key == IN_JUMP then
-		-- upwards bump
 		phys:ApplyForceCenter(Vector(0, 0, mf))
 
-		pr.t = CurTime() + 0.05
+		pSpec.t = CurTime() + 0.05
 	elseif key == IN_FORWARD then
-		-- bump away from player
-		phys:ApplyForceCenter(aim * mf)
+		phys:ApplyForceCenter(vectorAimPlanar * mf)
 	elseif key == IN_BACK then
-		phys:ApplyForceCenter(aim * (mf * -1))
+		phys:ApplyForceCenter(-vectorAimPlanar * mf)
 	elseif key == IN_MOVELEFT then
-		phys:AddAngleVelocity(Vector(0, 0, 200))
-		phys:ApplyForceCenter(Vector(0, 0, mf / 3))
+		phys:ApplyForceCenter(vectorPerpendicularLeft * mf * 0.33)
 	elseif key == IN_MOVERIGHT then
-		phys:AddAngleVelocity(Vector(0, 0, -200))
-		phys:ApplyForceCenter(Vector(0, 0, mf / 3))
+		phys:ApplyForceCenter(vectorPerpendicularRight * mf * 0.33)
 	else
 		return true -- eat other keys, and do not decrement punches
 	end
 
-	pr.punches = math.max(pr.punches - 1, 0)
+	pSpec.punches = math.max(pSpec.punches - 1, 0)
 
-	ply:SetNWFloat("specpunches", pr.punches / pr.max)
+	ply:SetNWFloat("specpunches", pSpec.punches / pSpec.max)
 
 	return true
 end

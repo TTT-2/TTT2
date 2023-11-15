@@ -152,7 +152,7 @@ end
 
 ---
 -- @param any val
--- @param bool ignoreNetworkedVar To avoid endless loops, separated setting of networked vars and UI values
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(val, ignoreNetworkedVar)
 	self:SetIgnoreNetworkedVar(ignoreNetworkedVar)
@@ -165,7 +165,7 @@ function PANEL:SetValue(val, ignoreNetworkedVar)
 end
 
 ---
--- @param bool value
+-- @param boolean value
 -- @realm client
 function PANEL:SetDefaultValue(value)
 	local noDefault = true
@@ -189,7 +189,7 @@ function PANEL:SetDefaultValue(value)
 end
 
 ---
--- @return bool defaultValue, if unset returns false
+-- @return boolean defaultValue, if unset returns false
 -- @realm client
 function PANEL:GetDefaultValue()
 	return tobool(self.default)

@@ -870,7 +870,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 -- Sets a bool value at the given path on the player.
 --
 -- @param any|table path The path to set the value for
--- @param[opt] bool value The value to set
+-- @param[opt] boolean value The value to set
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetBool(path, value, client)
@@ -912,7 +912,7 @@ end
 -- Sets a float value at the given path on the player.
 --
 -- @param any|table path The path to set the value for
--- @param[opt] float value The value to set
+-- @param[opt] number value The value to set
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetFloat(path, value, client)
