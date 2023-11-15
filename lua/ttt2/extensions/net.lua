@@ -95,6 +95,7 @@ local function SendNextSplit(len, ply)
 	local nextSplit = net.ReadUInt(8)
 
 	local eligiblePlayerList = eligible_Players[messageId][streamId]
+
 	if nextSplit < 1 or eligiblePlayerList and not eligiblePlayerList[ply:SteamID64()] then return end
 
 	SendNextStream(messageId, streamId, nextSplit, ply)
