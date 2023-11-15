@@ -2064,3 +2064,6 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
 --L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
 --L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"

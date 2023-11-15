@@ -36,7 +36,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added option to render rotated text on screen (by @TimGoll)
 - Added Ukrainian translation from base TTT (by @ErickMaksimets)
 - Added Swedish translation from base TTT (by @Kefta)
+- Added Turkish translation (by @NovaDiablox)
 - Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
+- Added window flash and noise to alert players they're being revived (by @EntranceJew)
 
 ### Changed
 
@@ -61,6 +63,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 - Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
+- Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
 
 ### Fixed
 
