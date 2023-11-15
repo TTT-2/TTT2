@@ -342,7 +342,7 @@ local callbackEnabledVarTracker = 0
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(panel, conVar)
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
-	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
+	local myIdentifierString = "TTT2ComboboxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local callback = function(conVarName, oldValue, newValue)
 		if not IsValid(panel) then
@@ -419,7 +419,7 @@ function PANEL:SetDatabase(databaseInfo)
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
-	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
+	local myIdentifierString = "TTT2DatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then

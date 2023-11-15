@@ -320,7 +320,7 @@ function PANEL:SetServerConVar(cvar)
 	end)
 
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
-	local myIdentifierString = "TTT2F1MenuServerConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
+	local myIdentifierString = "TTT2SliderConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnServerConVarChangeCallback(conVarName, oldValue, newValue)
 		if not IsValid(self) then
@@ -358,7 +358,7 @@ function PANEL:SetDatabase(databaseInfo)
 	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
 
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
-	local myIdentifierString = "TTT2F1MenuDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
+	local myIdentifierString = "TTT2DatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
 		if not IsValid(self) then
