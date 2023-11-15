@@ -64,6 +64,7 @@ function PANEL:Paint(w, h)
 end
 
 ---
+-- This is only used temporarily to enable old values for Settings, that we internally inverted
 -- @param bool invert
 -- @realm client
 function PANEL:SetInverted(invert)
