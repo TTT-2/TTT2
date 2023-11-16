@@ -216,7 +216,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 		if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
 			CORPSE.IdentifyBody(ply, rag, sceneData.searchUID)
 		end
-	elseif ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and not isCovert then
+	elseif not isCovert then
 		-- in mode 1 and 2 every active shopping role can take credits
 		bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
 	end

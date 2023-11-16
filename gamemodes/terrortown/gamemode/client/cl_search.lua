@@ -306,7 +306,7 @@ function SEARCHSCREEN:Show(data)
 		buttonReport:SetEnabled(false)
 	end
 
-	local playerCanTakeCredits = client:IsActiveShopper() and not clientRoleData.preventFindCredits
+	local playerCanTakeCredits = bodysearch.CanTakeCredits(client, data.rag)
 
 	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
 
@@ -326,7 +326,7 @@ function SEARCHSCREEN:Show(data)
 		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	elseif not bodysearch.CanConfirmBody() then
-		if data.credits > 0 and client:IsActiveShopper() and not clientRoleData.preventFindCredits then
+		if playerCanTakeCredits then
 			if data.credits == 1 then
 				buttonConfirm:SetText("search_take_credit")
 				buttonConfirm:SetTextParams({credit = data.credits})
@@ -343,7 +343,7 @@ function SEARCHSCREEN:Show(data)
 			buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
 			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 		end
-	elseif data.credits > 0 and playerCanTakeCredits then
+	elseif playerCanTakeCredits then
 		if data.credits == 1 then
 			buttonConfirm:SetText("search_confirm_credit")
 			buttonConfirm:SetTextParams({credit = data.credits})

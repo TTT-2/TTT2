@@ -640,7 +640,7 @@ if CLIENT then
 			-- special case: mode 2, only shopping roles can see credits
 			local client = LocalPlayer()
 			if cvInspectConfirmMode:GetInt() == 2
-				and (not client:IsActiveShopper() or client:GetSubRoleData().preventFindCredits)
+				and not bodysearch.CanTakeCredits(client, data.rag)
 			then return end
 
 			return {
@@ -1063,6 +1063,6 @@ end
 -- @return nil|boolean Return false to prevent transfer
 -- @hook
 -- @realm shared
-function GM:TTT2GiveFoundCredits(ply, rag)
+function GM:TTT2CheckFindCredits(ply, rag)
 
 end
