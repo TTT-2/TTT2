@@ -162,9 +162,9 @@ end
 
 ---
 -- @param number index the option id
--- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:ChooseOptionID(index, ignoreConVar)
+function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 	local choices = self.choices
 
 	if index > #choices then
@@ -183,9 +183,9 @@ function PANEL:ChooseOptionID(index, ignoreConVar)
 
 	self:CloseMenu()
 
-	if ignoreConVar then return end
+	if ignoreCallbackEnabledVars then return end
 
-	self:SetConVarValues(tostring(value))
+	self:SetCallbackEnabledVarValues(value)
 end
 
 ---
@@ -336,13 +336,13 @@ function PANEL:SetValue(value, ignoreConVar)
 	self:ChooseOptionValue(value, ignoreConVar)
 end
 
-local convarTracker = 0
+local callbackEnabledVarTracker = 0
 ---
 -- @param Panel panel to set the value of
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(panel, conVar)
-	convarTracker = convarTracker + 1
-	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(convarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2ComboboxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local callback = function(conVarName, oldValue, newValue)
 		if not IsValid(panel) then
@@ -397,15 +397,57 @@ function PANEL:SetServerConVar(conVarName)
 end
 
 ---
+-- @param table databaseInfo containing {name, itemName, key}
+-- @realm client
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(databaseInfo) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2ComboboxDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
+end
+
+---
 -- @param string value
 -- @realm client
-function PANEL:SetConVarValues(value)
+function PANEL:SetCallbackEnabledVarValues(value)
 	if self.conVar then
-		self.conVar:SetString(value)
+		self.conVar:SetString(tostring(value))
 	end
 
 	if self.serverConVar then
-		cvars.ChangeServerConVar(self.serverConVar, value)
+		cvars.ChangeServerConVar(self.serverConVar, tostring(value))
+	end
+
+	if self.databaseInfo then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, value)
 	end
 end
 
