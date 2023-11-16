@@ -1979,6 +1979,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --
 --This variable is a multiplier of the push force.]]
 --L.label_spec_prop_dash = "Dash force multiplier"
---L.label_keyhelper_possession_dash = "Prop: Dash in view direction"
---L.label_keyhelper_weapon_drop = "Drop selected weapon if possible"
---L.label_keyhelper_ammo_drop = "Drop ammo from selected weapon out of clip"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
