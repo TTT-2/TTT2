@@ -324,7 +324,6 @@ if CLIENT then
 	local table = table
 	local IsValid = IsValid
 	local pairs = pairs
-	local DynT = LANG.GetDynamicTranslation
 
 	net.ReceiveStream("TTT2_BodySearchData", function(searchStreamData)
 		local eq = {} -- placeholder for the hook, not used right now
@@ -825,7 +824,7 @@ if CLIENT then
 			local text = searchData.text.text
 
 			-- only use the first text entry here
-			local transText = DynT(text[1].body, text[1].params, true)
+			local transText = LANG.GetDynamicTranslation(text[1].body, text[1].params, true)
 
 			search[type] = {
 				img = searchData.iconMaterial:GetName(),

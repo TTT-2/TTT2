@@ -537,7 +537,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	end
 
 	-- add credits info when corpse has credits
-	if bodysearch.CanTakeCredits(ply, ent) then
+	if bodysearch.CanTakeCredits(client, ent) then
 		local creditsHint = "target_credits_on_search"
 		if bodysearch.GetInspectConfirmMode() == 0 then
 			creditsHint = "target_credits_on_confirm"
