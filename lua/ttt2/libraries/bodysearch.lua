@@ -1054,3 +1054,15 @@ if CLIENT then
 
 	end
 end
+
+---
+-- Use this hook to prevent the transfer of credits from a body to a player. Is also used
+-- on the client to check if the player is able to take the credits and update the UI.
+-- @param Entity rag The ragdoll that is inspected
+-- @param Player ply The player attempting to find credits from ragdoll
+-- @return nil|boolean Return false to prevent transfer
+-- @hook
+-- @realm shared
+function GM:TTT2GiveFoundCredits(ply, rag)
+
+end
