@@ -6,6 +6,7 @@
 local net = net
 local util = util
 local table = table
+local tostring = tostring
 local isfunction = isfunction
 
 -- Stream network message name constant
