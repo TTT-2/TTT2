@@ -515,7 +515,6 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 
 	drawBox(0, 0, w, h, colorBox)
 	drawBox(0, h - sizes.border, w, sizes.border, colorLine)
-
 	drawShadowedText(
 		string.upper(TryT(panel:GetText())),
 		panel:GetFont(),
@@ -1457,6 +1456,7 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 
 	local colorBackground = colors.settingsBox
 	local colorMode = utilGetChangedColor(colors.background, 75)
+	local colorTextMode = utilGetDefaultColor(colorMode)
 	local colorHeadIcon = colorCardInheritRemoved
 	local colorHattableIcon = colorCardInheritRemoved
 

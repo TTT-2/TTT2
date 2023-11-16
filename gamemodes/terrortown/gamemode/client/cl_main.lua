@@ -563,7 +563,6 @@ function GM:ClearClientState()
 	client.last_id = nil
 	client.radio = nil
 	client.called_corpses = {}
-	client.sprintProgress = 1
 
 	client:SetTargetPlayer(nil)
 
@@ -659,7 +658,7 @@ net.Receive("TTT_PlayerDied", PlayerDeath)
 -- Called to determine if the LocalPlayer should be drawn.
 -- @note If you're using this hook to draw a @{Player} for a @{GM:CalcView} hook,
 -- then you may want to consider using the drawviewer variable you can use in your
--- <a href="https://wiki.garrysmod.com/page/Structures/CamData">CamData structure</a>
+-- <a href="https://wiki.facepunch.com/gmod/Structures/CamData">CamData structure</a>
 -- table instead.
 -- @important You should visit the linked reference, there could be related issues
 -- @param Player ply The @{Player}
@@ -683,7 +682,7 @@ local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 -- @param number znear Distance to near clipping plane
 -- @param number zfar Distance to far clipping plane
 -- @return table View data table. See
--- <a href="https://wiki.garrysmod.com/page/Structures/CamData">CamData structure</a>
+-- <a href="https://wiki.facepunch.com/gmod/Structures/CamData">CamData structure</a>
 -- structure
 -- @hook
 -- @realm client

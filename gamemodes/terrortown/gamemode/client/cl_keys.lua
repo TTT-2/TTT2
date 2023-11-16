@@ -3,7 +3,6 @@
 -- @section key_manager
 
 local IsValid = IsValid
-local UpdateInputSprint = UpdateInputSprint
 local cv_sv_cheats = GetConVar("sv_cheats")
 
 local function SendWeaponDrop()
@@ -38,7 +37,9 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerBindPress
 -- @local
 function GM:PlayerBindPress(ply, bindName, pressed)
-	if not IsValid(ply) then return end
+	if not IsValid(ply) then
+		return
+	end
 
 	if bindName == "invnext" and pressed then
 		if ply:IsSpec() then
@@ -79,7 +80,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 			end
 		end
 	elseif string.sub(bindName, 1, 4) == "slot" and pressed then
-		local idx = tonumber(string.sub(bindName, 5, - 1)) or 1
+		local idx = tonumber(string.sub(bindName, 5, -1)) or 1
 
 		-- if radiomenu is open, override weapon select
 		if RADIO.Show then
@@ -130,45 +131,5 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 		return true
 	elseif bindName == "phys_swap" and pressed then
 		RunConsoleCommand("ttt_quickslot", "5")
-	end
-end
-
----
--- Called whenever a @{Player} pressed a key included within the IN keys.<br />
--- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonDown}.
--- @warning Due to this being a predicted hook, <a href="https://wiki.garrysmod.com/page/Global/ParticleEffect">ParticleEffects</a>
--- created only serverside from this hook will not be networked to the client, so make sure to do that on both realms
--- @predicted
--- @param Player ply The @{Player} pressing the key. If running client-side, this will always be LocalPlayer
--- @param number key The key that the player pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
--- @note Note that for some reason KeyPress and KeyRelease are called multiple times
--- for the same key event in multiplayer.
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
--- @local
-function GM:KeyPress(ply, key)
-	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
-
-	if key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
-		UpdateInputSprint(ply, key, true)
-	end
-end
-
----
--- Runs when a IN key was released by a player.<br />
--- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonUp}.
--- @param Player ply The @{Player} releasing the key. If running client-side, this will always be LocalPlayer
--- @param number key The key that the player released using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
--- @predicted
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:KeyRelease
--- @local
-function GM:KeyRelease(ply, key)
-	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
-
-	if key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
-		UpdateInputSprint(ply, key, false)
 	end
 end

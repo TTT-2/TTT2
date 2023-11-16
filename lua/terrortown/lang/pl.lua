@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "Tryb obserwatora (zawsze bądź obserwatorem)"
 L.label_gameplay_fastsw = "Szybkie przełącznie broni"
 L.label_gameplay_hold_aim = "Trzymaj aby celować"
 L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
-L.label_gameplay_dtsprint_enable = "Włącz 2x przód, aby sprintować"
-L.label_gameplay_dtsprint_anykey = "Sprintuj dopóki Ci się nie szkończy wytrzymałość"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
 L.label_bind_weaponswitch = "Zmień broń"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Globalny Czat"
 L.label_bind_voice_team = "Teamowy Czat"
 
@@ -1967,3 +1964,21 @@ L.none = "Brak Roli"
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"

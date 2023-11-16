@@ -365,17 +365,17 @@ end
 -- @2D
 -- @param string text The text to be drawn
 -- @param[default="DermaDefault"] nil|string font The font. See @{surface.CreateFont} to create your own,
--- or see <a href="https://wiki.garrysmod.com/page/Default_Fonts">Default</a>
+-- or see <a href="https://wiki.facepunch.com/gmod/Default_Fonts">Default</a>
 -- Fonts for a list of default fonts
 -- @param number x The X Coordinate
 -- @param number y The Y Coordinate
 -- @param Color color The color of the text. Uses the Color structure.
 -- @param number xalign The alignment of the X coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the Y coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number scale The scale (float number)
--- @ref https://wiki.garrysmod.com/page/draw/SimpleText
+-- @ref https://wiki.facepunch.com/gmod/draw.SimpleText
 -- @realm client
 function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scale)
 	scale = scale or 1.0
@@ -402,9 +402,9 @@ local drawShadowedText = draw.ShadowedText
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
 -- @param number xalign The alignment of the x coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
--- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- <a href="https://wiki.facepunch.com/gmod/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
 -- @param[default=1.0] number scale The text scale (float number)
 -- @param[default=0] number angle The rotational angle in degree

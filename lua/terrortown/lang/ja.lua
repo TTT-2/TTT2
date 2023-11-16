@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "観戦者モード（常時観戦者になれます
 L.label_gameplay_fastsw = "高速武器スイッチ"
 L.label_gameplay_hold_aim = "Aimの固定を有効"
 L.label_gameplay_mute = "死んだとき生存者のボイスチャットをミュートにする"
-L.label_gameplay_dtsprint_enable = "タブルタップ走行を有効"
-L.label_gameplay_dtsprint_anykey = "止まるまでダブルタップ走行を止めない"
 L.label_hud_default = "デフォルトHUD"
 L.label_hud_force = "強制的HUD"
 
 L.label_bind_weaponswitch = "武器を拾う"
-L.label_bind_sprint = "ダッシュ"
 L.label_bind_voice = "通常ボイスチャット"
 L.label_bind_voice_team = "チームボイスチャット"
 
@@ -1967,3 +1964,21 @@ L.help_falldmg_exponent = [[
 --L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
 --L.header_soundeffect_settings = "Sound Effects"
 --L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"

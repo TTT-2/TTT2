@@ -177,6 +177,11 @@ addonChecker.curatedList = {
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
+	["375989005"] = { -- Jihad bomb by Roy301
+		alternative = "254177214",
+		reason = "Breaks the equipment shop.",
+		type = ADDON_INCOMPATIBLE
+	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
@@ -469,6 +474,11 @@ addonChecker.curatedList = {
 	["1132650862"] = { -- Door Locker by Saiyajin ByTayro
 		alternative = "2115945573",
 		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
+		type = ADDON_OUTDATED
+	},
+	["672173225"] = { -- Second Chance by Hagen
+		alternative = "2143268505",
+		reason = "Doesn't use the TTT2 spawn and UI system.",
 		type = ADDON_OUTDATED
 	},
 	["1361100842"] = { -- Door Locker by Altamas

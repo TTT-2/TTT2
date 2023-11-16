@@ -24,7 +24,7 @@ fonts.scales = {1, 1.5, 2, 2.5}
 -- Gets the scale modifer based on a given scale. This function tries to find one of
 -- the given steps defined in `fonts.scales` that fits best to the given scale. If it
 -- fails to find a fitting scale, it returns the largest available.
--- @param number|vector scale The font scale
+-- @param number|Vector scale The font scale
 -- @return number The font scale
 -- @internal
 -- @realm client

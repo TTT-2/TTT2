@@ -1,7 +1,7 @@
 ---
 -- @class SWEP
 -- @desc Custom weapon base, used to derive from CS one, still very similar.
--- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
+-- See <a href="https://wiki.facepunch.com/gmod/Weapon">Weapon</a>
 -- @section weapon_tttbase
 
 local math = math
@@ -302,7 +302,13 @@ if CLIENT then
 
 		local client = LocalPlayer()
 
-		if not enable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
+		if
+			not enable_crosshair:GetBool()
+			or not IsValid(client)
+			or SPRINT:IsSprinting(client) and not SPRINT.convars.showCrosshair:GetBool()
+		then
+			return
+		end
 
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() * 0.5)
@@ -661,7 +667,7 @@ end
 
 ---
 -- A convenience function to shoot bullets
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
@@ -721,7 +727,7 @@ end
 
 ---
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return number
 -- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)

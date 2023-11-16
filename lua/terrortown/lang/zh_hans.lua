@@ -1116,13 +1116,10 @@ L.label_gameplay_specmode = "观察者模式（永远观察）"
 L.label_gameplay_fastsw = "武器快速切换"
 L.label_gameplay_hold_aim = "启用持续瞄准"
 L.label_gameplay_mute = "死亡时静音存活玩家"
-L.label_gameplay_dtsprint_enable = "启用双击冲刺"
-L.label_gameplay_dtsprint_anykey = "冲刺时任何方向键都持续冲刺"
 L.label_hud_default = "默认 HUD"
 L.label_hud_force = "强制 HUD"
 
 L.label_bind_weaponswitch = "捡起武器"
-L.label_bind_sprint = "冲刺"
 L.label_bind_voice = "全局语言"
 L.label_bind_voice_team = "团队语言"
 
@@ -1967,3 +1964,21 @@ L.label_HUD_enable_box_blur = "启用用户界面框背景模糊"
 L.submenu_gameplay_voiceandvolume_title = "声音和音量"
 L.header_soundeffect_settings = "声音效果"
 L.header_voiceandvolume_settings = "声音和音量设置"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
