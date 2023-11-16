@@ -67,6 +67,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
 - Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
 - Fixed ComboBoxes not working with integer values (by @NickCloudAT)
+- net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 
 ### Deprecated
 
