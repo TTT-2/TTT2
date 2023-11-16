@@ -1966,7 +1966,7 @@ L.search_eyes = "Используя свои детективные навыки
 --L.search_title_water = "Water level {level}"
 --L.search_title_policingrole_report_confirm = "Confirm to report death"
 --L.search_title_policingrole_confirm_disabled = "Report corpse"
---L.search_title_spectator = "You are spectator"
+--L.search_title_spectator = "You are a spectator"
 
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
