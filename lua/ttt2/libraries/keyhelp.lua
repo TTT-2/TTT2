@@ -42,6 +42,7 @@ local materialVoiceTeam = Material("vgui/ttt/hudhelp/voice_team")
 local materialChatGlobal = Material("vgui/ttt/hudhelp/chat_global")
 local materialChatTeam = Material("vgui/ttt/hudhelp/chat_team")
 local materialFlashlight = Material("vgui/ttt/hudhelp/flashlight")
+local materialWeaponDrop = Material("vgui/ttt/hudhelp/weapon_drop")
 local materialQuickchat = Material("vgui/ttt/hudhelp/quickchat")
 local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
 local materialPointer = Material("vgui/ttt/hudhelp/pointer")
@@ -317,6 +318,11 @@ function keyhelp.InitializeBasicKeys()
 
 	-- extra bindings that are not that important but are there as well
 	keyhelp.RegisterKeyHelper("impulse 100", materialFlashlight, KEYHELP_EXTRA, "label_keyhelper_flashlight", function(client)
+		if client:IsSpec() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+menu", materialWeaponDrop, KEYHELP_EXTRA, "label_keyhelper_weapon_drop", function(client)
 		if client:IsSpec() then return end
 
 		return true
