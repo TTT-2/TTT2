@@ -2,6 +2,41 @@
 -- Handling body search data and data processing. Is shared between the server and client
 -- @author Mineotopia
 
+---@class BaseData
+---@field Player inspector The player that inspected the body
+---@field boolean isPublicPolicingSearch Whether to inspector is a public policing role (this check here also includes if the player was not a spectator and the search was not covered)
+
+---@class SceneData
+---@field BaseData base The base data that is not overwritten, even if the data is merged
+---@field string playerModel The string to the player model of the dead player
+---@field Player ragOwner The owner of the ragdoll, in general the dead player
+---@field number credits The amount of credits stored in the body
+---@field number searchUID The search UID that is sued to track search requests
+---@field boolean isCovert Whether the search was covered (ALT + search)
+---@field boolean isLongRange Whether the search was long range (e.g. binoculars)
+---@field string nick The dead player's nick
+---@field number subrole The dead player's role ID
+---@field Color roleColor The dead player's role color
+---@field string team The dead player's team
+---@field Entity rag The ragdoll that is searched
+---@field[default={}] table eq The equipment that the player carried before dying
+---@field[default=-1] number c4CutWire The c4 wire the player cut, if they cut any
+---@field[default=DMG_GENERIC] number dmgType The damage type that killed the player
+---@field string weo The weapon that killed the player
+---@field string lastWords The last words that were typed in the chat while being killed
+---@field boolean wasHeadshot Whether the killing shot was a head shot
+---@field number deathTime The death time
+---@field string sid64 The dead player's SteamID64
+---@field number lastDamage The last damage amount the player took before dying
+---@field number killFloorSurface The ground surface where the player died
+---@field number killWaterLevel The water level of the player when they were killed
+---@field Player lastSeenEnt The last seen player entity
+---@field[default=CORPSE_KILL_NO_DATA] number killDistance The distance to the killer when it happened as an obscured enum
+---@field[default=HITGROUP_GENERIC] number killHitGroup The damage hitgroup of the killing blow
+---@field[default=CORPSE_KILL_NO_DATA] number killOrientation The orientation to the killer when it happened as an obscured enum
+---@field[default=0] number sampleDecayTime The DNA sample decay time
+---@field table kill_entids A table of the ent indexes of all the player the dead player killed
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -255,7 +290,7 @@ if SERVER then
 
 	---
 	-- Streams the provided scene data to the given clients, is broadcasted if no client is defined.
-	-- @param table sceneData The scene data table that should be streamed to the client(s)
+	-- @param SceneData sceneData The scene data table that should be streamed to the client(s)
 	-- @param[opt] table|player client Optional, use it to send a stream to a single client or a group of clients
 	-- @realm server
 	function bodysearch.StreamSceneData(sceneData, client)
@@ -732,7 +767,7 @@ if CLIENT then
 	-- Generate the search box data from the provided data for a given type.
 	-- @note This function is used to populate the UI of the bodysearch menu. You probably don't want to use this.
 	-- @param string type The element type identifier
-	-- @param table sceneData The scene data that is provided to get the box contents
+	-- @param SceneData sceneData The scene data that is provided to get the box contents
 	-- @return nil|table Returns `nil` if no data for the given type is available, table with box content if available
 	-- @realm client
 	function bodysearch.GetContentFromData(type, sceneData)
@@ -800,7 +835,7 @@ if CLIENT then
 	-- New data will append/overwrite existing data, but not remove it.
 	-- This functions considers the roles and the settings of the local player and the player that
 	-- inspected the body.
-	-- @param table sceneData The table of scene data that should be stored
+	-- @param SceneData sceneData The table of scene data that should be stored
 	-- @note The data is stored as `bodySearchResult` on the ragdoll and the owner of the ragdoll
 	-- @realm client
 	function bodysearch.StoreSearchResult(sceneData)
