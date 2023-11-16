@@ -64,7 +64,7 @@ function PANEL:Paint(w, h)
 end
 
 ---
--- This is only used temporarily to enable old values for Settings, that we internally inverted
+-- This is only used temporarily to keep old variables without breaking the style of "no enable to disable" checkboxes
 -- @param bool invert
 -- @realm client
 function PANEL:SetInverted(invert)
