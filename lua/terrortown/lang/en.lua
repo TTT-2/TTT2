@@ -1972,3 +1972,10 @@ L.drop_no_room_ammo = "You have no room here to drop your ammo!"
 
 -- 2023-11-14
 L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+L.help_prop_spec_dash = [[
+Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+
+This variable is a multiplier of the push force.]]
+L.label_spec_prop_dash = "Dash force multiplier"
