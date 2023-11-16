@@ -120,6 +120,7 @@ local function IsValueReceived(index, itemName, key)
 		for checkKey in pairs(keys) do
 			if not receivedValues[index][itemName][checkKey] then
 				isReceived = false
+
 				break
 			end
 		end
@@ -416,7 +417,7 @@ local clientReceiveFunctions = {}
 local serverReceiveFunctions = {}
 
 ---
--- An Identifier was received, checks if all sent identifiers were received and resets the identifiers
+-- An identifier was received, checks if all sent identifiers were received and resets the identifiers
 -- Should make sure, that it doesnt go to infinity
 -- @realm client
 -- @internal
@@ -509,6 +510,7 @@ end
 -- @internal
 serverReceiveFunctions[MESSAGE_SET_VALUE] = function(data, plyID64)
 	local accessName = registeredDatabases[data.index].accessName
+
 	database.SetValue(accessName, data.itemName, data.key, data.value, plyID64)
 end
 
