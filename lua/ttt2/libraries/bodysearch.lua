@@ -69,6 +69,25 @@ function bodysearch.GetInspectConfirmMode()
 	return cvInspectConfirmMode:GetInt()
 end
 
+---
+-- Checks if a given player is allowed to take credits from a given corpse-
+-- @param Payer ply The player that tries to take credits
+-- @param Entity rag The ragdoll where the credits should be taken from
+-- @param[default=false] isLongRange Whether the search is a long range search
+-- @return boolean Returns if the player is able to take credits
+-- @realm shared
+function bodysearch.CanTakeCredits(ply, rag, isLongRange)
+	---
+	-- @realm server
+	if hook.Run("TTT2CheckFindCredits", ply, rag) == false then
+		return false
+	end
+
+	local credits = CORPSE.GetCredits(rag, 0)
+
+	return ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and credits > 0 and not isLongRange
+end
+
 if SERVER then
 	local mathMax = math.max
 	local mathRound = math.Round
@@ -154,16 +173,10 @@ if SERVER then
 	-- @param[default=0] number searchUID The UID from this body search, can be ignored if not called from within UI
 	-- @realm server
 	function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
-		---
-		-- @realm server
-		if hook.Run("TTT2CheckFindCredits", ply, rag) == false then return end
+		if bodysearch.CanTakeCredits(ply, rag, isLongRange) == false then return end
 
 		local corpseNick = CORPSE.GetPlayerNick(rag)
 		local credits = CORPSE.GetCredits(rag, 0)
-
-		if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
-			or credits == 0 or isLongRange
-		then return end
 
 		LANG.Msg(ply, "body_credits", {num = credits})
 
