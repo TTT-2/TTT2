@@ -457,6 +457,54 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 end
 
+-- If there are no spaces, we have to cut the string at some point.
+-- To improve performance, we don't want to iterate over every single
+-- character. Therefore we assume the length based on an average first.
+local function InternalSplitLongWord(word, width, widthWord)
+	local charCount = utf8.len(word)
+	local wCharAverage = widthWord / charCount
+	local charCountPerLine = math.floor(width / wCharAverage * 0.8) -- decreae a bit to have tolerance
+	local lastStartPos = 1
+	local lineNumber = 1
+
+	local lines = {""}
+
+	while true do
+		local nextStartPos = lastStartPos + charCountPerLine
+		lines[lineNumber] = utf8.sub(word, lastStartPos, nextStartPos -1)
+		lastStartPos = nextStartPos
+
+		local wLine
+
+		-- then iterate over further chars until line end is reached
+		for i = lastStartPos, charCount do
+			local added = lines[lineNumber] .. utf8.GetChar(word, i)
+
+			wLine = surface.GetTextSize(added)
+
+			if wLine > width then
+				lineNumber = lineNumber + 1
+
+				break
+			else
+				lines[lineNumber] = added
+				lastStartPos = lastStartPos + 1
+			end
+		end
+
+		if lastStartPos >= charCount - 1 then
+			-- put the remainder into the next line in this special case
+			if lastStartPos <= charCount then
+				lines[lineNumber] = utf8.sub(word, lastStartPos, charCount)
+			end
+
+			break
+		end
+	end
+
+	return lines
+end
+
 local function InternalGetWrappedText(text, width, scale)
 	-- Any wrapping required?
 	local w, h = surface.GetTextSize(text)
@@ -466,66 +514,36 @@ local function InternalGetWrappedText(text, width, scale)
 	end
 
 	local words = string.Explode(" ", text)
-	local lines = {""}
+	local lines = {}
 
-	if #words > 1 then -- there were spaces to split the string at
-		for i = 1, #words do
-			local wrd = words[i]
+	for i = 1, #words do
+		local word = words[i]
 
-			if i == 1 then
-				-- add the first word whether or not it matches the size to prevent
-				-- weird empty first lines and ' ' in front of the first line
-				lines[1] = wrd
+		-- first, check the length of the word; if it is longer than a line, then
+		-- it has to be split as well
+		local widthWord = surface.GetTextSize(word)
 
-				continue
-			end
+		if widthWord > width then
+			table.Add(lines, InternalSplitLongWord(word, width, widthWord))
 
-			local lns = #lines
-			local added = lines[lns] .. " " .. wrd
-
-			w = surface.GetTextSize(added)
-
-			if w > width then
-				lines[lns + 1] = wrd -- New line needed
-			else
-				lines[lns] = added -- Safe to tack it on
-			end
+			continue
 		end
-	else
-		-- If there are no spaces, we have to cut the string at some point.
-		-- To improve performance, we don't want to iterate over every single
-		-- character. Therefore we assume the length based on an average first.
 
-		local charCount = utf8.len(text)
-		local wCharAverage = surface.GetTextSize(text) / charCount
-		local charCountPerLine = math.floor(width / wCharAverage * 0.8) -- decreae a bit to have tolerance
-		local lastStartPos = 1
-		local lineNumber = 1
+		local amountLines = #lines
+		local combinedString = ""
 
-		while true do
-			local nextStartPos = lastStartPos + charCountPerLine
-			lines[lineNumber] = utf8.sub(text, lastStartPos, nextStartPos -1)
-			lastStartPos = nextStartPos
+		if i == 1 then
+			combinedString = word
+		else
+			combinedString = lines[amountLines] .. " " .. word
+		end
 
-			local wLine
+		w = surface.GetTextSize(combinedString)
 
-			-- then iterate over further chars until line end is reached
-			for i = lastStartPos, charCount do
-				local added = lines[lineNumber] .. utf8.GetChar(text, i)
-
-				wLine = surface.GetTextSize(added)
-
-				if wLine > width then
-					lineNumber = lineNumber + 1
-
-					break
-				else
-					lines[lineNumber] = added
-					lastStartPos = lastStartPos + 1
-				end
-			end
-
-			if lastStartPos >= charCount - 1 then break end
+		if w > width then
+			lines[amountLines + 1] = word -- New line needed
+		else
+			lines[amountLines] = combinedString -- Safe to tack it on
 		end
 	end
 
