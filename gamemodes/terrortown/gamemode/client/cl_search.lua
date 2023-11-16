@@ -82,7 +82,7 @@ function SEARCHSCREEN:CalculateSizes()
 	self.sizes.heightButton = 45
 	self.sizes.widthButton = 160
 	self.sizes.widthButtonCredits = 210
-	self.sizes.widthButtonTakeCredits = 180
+	self.sizes.widthButtonTakeCredits = 190
 	self.sizes.widthButtonClose = 100
 	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
 
@@ -327,13 +327,8 @@ function SEARCHSCREEN:Show(data)
 		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
 	elseif not bodysearch.CanConfirmBody() then
 		if playerCanTakeCredits then
-			if data.credits == 1 then
-				buttonConfirm:SetText("search_take_credit")
-				buttonConfirm:SetTextParams({credit = data.credits})
-			else
-				buttonConfirm:SetText("search_take_credits")
-				buttonConfirm:SetTextParams({credits = data.credits})
-			end
+			buttonConfirm:SetText("search_take_credits")
+			buttonConfirm:SetTextParams({credits = data.credits})
 			buttonConfirm:SetIcon(materialCredits)
 			buttonConfirm:SetSize(self.sizes.widthButtonTakeCredits, self.sizes.heightButton)
 			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonTakeCredits, self.sizes.padding + 1)
