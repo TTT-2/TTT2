@@ -177,6 +177,11 @@ addonChecker.curatedList = {
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
+	["375989005"] = { -- Jihad bomb by Roy301
+		alternative = "254177214",
+		reason = "Breaks the equipment shop.",
+		type = ADDON_INCOMPATIBLE
+	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
