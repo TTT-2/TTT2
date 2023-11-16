@@ -476,6 +476,11 @@ addonChecker.curatedList = {
 		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
 		type = ADDON_OUTDATED
 	},
+	["672173225"] = { -- Second Chance by Hagen
+		alternative = "2143268505",
+		reason = "Doesn't use the TTT2 spawn and UI system.",
+		type = ADDON_OUTDATED
+	},
 	["1361100842"] = { -- Door Locker by Altamas
 		alternative = "2115945573",
 		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
