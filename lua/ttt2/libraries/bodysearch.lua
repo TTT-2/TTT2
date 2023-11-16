@@ -35,7 +35,7 @@
 ---@field killHitGroup number The damage hitgroup of the killing blow. Default to HITGROUP_GENERIC
 ---@field killOrientation number The orientation to the killer when it happened as an obscured enum. Defaults to CORPSE_KILL_NO_DATA
 ---@field sampleDecayTime number The DNA sample decay time. Defaults to 0
----@field kill_entids table A table of the entity indexes of all the player the dead player killed
+---@field killEntityIDList table A table of the entity indexes of all the player the dead player killed
 
 if SERVER then
 	AddCSLuaFile()
@@ -271,7 +271,7 @@ if SERVER then
 		end
 
 		-- build list of people this player killed, but only if convar is enabled
-		sceneData.kill_entids = {}
+		sceneData.killEntityIDList = {}
 		if GetConVar("ttt2_confirm_killlist"):GetBool() then
 			local ragKills = rag.kills or {}
 
@@ -281,7 +281,7 @@ if SERVER then
 				-- also send disconnected players as a marker
 				local vic = player.GetBySteamID64(victimSIDs)
 
-				sceneData.kill_entids[#sceneData.kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
+				sceneData.killEntityIDList[#sceneData.killEntityIDList + 1] = IsValid(vic) and vic:EntIndex() or -1
 			end
 		end
 
