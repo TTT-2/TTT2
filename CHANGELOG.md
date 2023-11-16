@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Turkish translation (by @NovaDiablox)
 - Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
 - Added window flash and noise to alert players they're being revived (by @EntranceJew)
+- Added sql database access to panel elements
+  - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 
 ### Changed
 
@@ -50,7 +52,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed prediction of the sprinting system, for high ping situations (by @saibotk, thanks to @wgetJane)
-- Fixed removing the convar change callback in `DComboboxTTT2` (by @saibotk)
+- Fixed removing the convar change callback in `DComboboxTTT2`, `DCheckBoxLabelTTT2`, `DNumSliderTTT2` (by @saibotk)
 - Multiple internal fixes
   - biggest teamkiller award should now work
   - item model caching should now work properly
