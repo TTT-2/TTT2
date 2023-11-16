@@ -3,39 +3,39 @@
 -- @author Mineotopia
 
 ---@class BaseData
----@field Player inspector The player that inspected the body
----@field boolean isPublicPolicingSearch Whether to inspector is a public policing role (this check here also includes if the player was not a spectator and the search was not covered)
+---@field inspector Player The player that inspected the body
+---@field isPublicPolicingSearch boolean Whether to inspector is a public policing role (this check here also includes if the player was not a spectator and the search was not covered)
 
 ---@class SceneData
----@field BaseData base The base data that is not overwritten, even if the data is merged
----@field string playerModel The string to the player model of the dead player
----@field Player ragOwner The owner of the ragdoll, in general the dead player
----@field number credits The amount of credits stored in the body
----@field number searchUID The search UID that is sued to track search requests
----@field boolean isCovert Whether the search was covered (ALT + search)
----@field boolean isLongRange Whether the search was long range (e.g. binoculars)
----@field string nick The dead player's nick
----@field number subrole The dead player's role ID
----@field Color roleColor The dead player's role color
----@field string team The dead player's team
----@field Entity rag The ragdoll that is searched
----@field[default={}] table eq The equipment that the player carried before dying
----@field[default=-1] number c4CutWire The c4 wire the player cut, if they cut any
----@field[default=DMG_GENERIC] number dmgType The damage type that killed the player
----@field string weo The weapon that killed the player
----@field string lastWords The last words that were typed in the chat while being killed
----@field boolean wasHeadshot Whether the killing shot was a head shot
----@field number deathTime The death time
----@field string sid64 The dead player's SteamID64
----@field number lastDamage The last damage amount the player took before dying
----@field number killFloorSurface The ground surface where the player died
----@field number killWaterLevel The water level of the player when they were killed
----@field Player lastSeenEnt The last seen player entity
----@field[default=CORPSE_KILL_NO_DATA] number killDistance The distance to the killer when it happened as an obscured enum
----@field[default=HITGROUP_GENERIC] number killHitGroup The damage hitgroup of the killing blow
----@field[default=CORPSE_KILL_NO_DATA] number killOrientation The orientation to the killer when it happened as an obscured enum
----@field[default=0] number sampleDecayTime The DNA sample decay time
----@field table kill_entids A table of the ent indexes of all the player the dead player killed
+---@field base BaseData The base data that is not overwritten, even if the data is merged
+---@field playerModel string The string to the player model of the dead player
+---@field ragOwner Player The owner of the ragdoll, in general the dead player
+---@field credits number The amount of credits stored in the body
+---@field searchUID number The search UID that is sued to track search requests
+---@field isCovert boolean Whether the search was covered (ALT + search)
+---@field isLongRange boolean Whether the search was long range (e.g. binoculars)
+---@field nick string The dead player's nick
+---@field subrole number The dead player's role ID
+---@field roleColor Color The dead player's role color
+---@field team string The dead player's team
+---@field rag Entity The ragdoll that is searched
+---@field eq table The equipment that the player carried before dying. Defaults to {}
+---@field c4CutWire number The c4 wire the player cut, if they cut any. Defaults to -1
+---@field dmgType number The damage type that killed the player. Defaults to DMG_GENERIC
+---@field wep string The weapon that killed the player
+---@field lastWords string The last words that were typed in the chat while being killed
+---@field wasHeadshot boolean Whether the killing shot was a head shot
+---@field deathTime number The death time
+---@field sid64 string The dead player's SteamID64
+---@field lastDamage number The last damage amount the player took before dying
+---@field killFloorSurface number The ground surface where the player died
+---@field killWaterLevel number The water level of the player when they were killed
+---@field lastSeenEnt Player The last seen player entity
+---@field killDistance number The distance to the killer when it happened as an obscured enum. Defaults to CORPSE_KILL_NO_DATA
+---@field killHitGroup number The damage hitgroup of the killing blow. Default to HITGROUP_GENERIC
+---@field killOrientation number The orientation to the killer when it happened as an obscured enum. Defaults to CORPSE_KILL_NO_DATA
+---@field sampleDecayTime number The DNA sample decay time. Defaults to 0
+---@field kill_entids table A table of the entity indexes of all the player the dead player killed
 
 if SERVER then
 	AddCSLuaFile()
