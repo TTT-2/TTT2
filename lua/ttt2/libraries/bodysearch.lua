@@ -154,6 +154,10 @@ if SERVER then
 	-- @param[default=0] number searchUID The UID from this body search, can be ignored if not called from within UI
 	-- @realm server
 	function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
+		---
+		-- @realm server
+		if hook.Run("TTT2CheckFindCredits", ply, rag) == false then return end
+
 		local corpseNick = CORPSE.GetPlayerNick(rag)
 		local credits = CORPSE.GetCredits(rag, 0)
 
