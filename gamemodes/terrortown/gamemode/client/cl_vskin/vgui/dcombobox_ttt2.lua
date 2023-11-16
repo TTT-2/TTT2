@@ -185,7 +185,7 @@ function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 
 	if ignoreCallbackEnabledVars then return end
 
-	self:SetCallbackEnabledValues(value)
+	self:SetCallbackEnabledVarValues(value)
 end
 
 ---
