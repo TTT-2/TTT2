@@ -35,6 +35,7 @@ local materialPropLeft = Material("vgui/ttt/hudhelp/prop_left")
 local materialPropRight = Material("vgui/ttt/hudhelp/prop_right")
 local materialPropFront = Material("vgui/ttt/hudhelp/prop_front")
 local materialPropBack = Material("vgui/ttt/hudhelp/prop_back")
+local materialPropDash = Material("vgui/ttt/hudhelp/prop_dash")
 local materialLeaveTarget = Material("vgui/ttt/hudhelp/leave_target")
 local materialVoiceGlobal = Material("vgui/ttt/hudhelp/voice_global")
 local materialVoiceTeam = Material("vgui/ttt/hudhelp/voice_team")
@@ -296,6 +297,15 @@ function keyhelp.InitializeBasicKeys()
 		local target = client:GetObserverTarget()
 
 		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner") ~= client then return end
+
+		return true
+	end)
+		keyhelp.RegisterKeyHelper("+speed", materialPropDash, KEYHELP_CORE, "label_keyhelper_possession_dash", function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
 
 		return true
 	end)

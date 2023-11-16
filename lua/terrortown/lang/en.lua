@@ -1979,3 +1979,4 @@ Propspec dashes are movements into the direction of the aim vector. They can be 
 
 This variable is a multiplier of the push force.]]
 L.label_spec_prop_dash = "Dash force multiplier"
+L.label_keyhelper_possession_dash = "Prop: Dash in view direction"
