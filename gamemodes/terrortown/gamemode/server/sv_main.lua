@@ -206,7 +206,6 @@ local ttt_newroles_enabled = CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NO
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
-util.AddNetworkString("TTT_RagdollSearch")
 util.AddNetworkString("TTT_GameMsg")
 util.AddNetworkString("TTT_GameMsgColor")
 util.AddNetworkString("TTT_RoleChat")

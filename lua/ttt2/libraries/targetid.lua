@@ -22,10 +22,6 @@ local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 -- Key Parameters for doors
 local key_params = {}
 
--- Convars for targetid
-local cvDeteOnlyConfirm
-local cvDeteOnlyInspect
-
 -- Materials for targetid
 local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
 local materialRing = Material("effects/select_ring")
@@ -59,9 +55,6 @@ function targetid.Initialize()
 		usekey = Key("+use", "USE"),
 		walkkey = Key("+walk", "WALK")
 	}
-
-	cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
-	cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 end
 
 ---
@@ -69,10 +62,10 @@ end
 -- Use this in combination with the hook @GM:TTTModifyTargetedEntity to create your own Remote Camera with TargetIDs.
 -- e.g. This is used in @GM:HUDDrawTargetID before drawing the TargetIDs. Use that code as example.
 -- @note This finds the next Entity, that doesn't get filtered out and can get hit by a bullet, from a position in a direction.
--- @param vector pos Position of Ray Origin.
--- @param vector dir Direction of the Ray. Should be normalized.
+-- @param Vector pos Position of Ray Origin.
+-- @param Vector dir Direction of the Ray. Should be normalized.
 -- @param table filter List of all @{Entity}s that should be filtered out.
--- @return entity The Entity that got found
+-- @return Entity The Entity that got found
 -- @return number The Distance between the Origin and the Entity
 -- @realm client
 function targetid.FindEntityAlongView(pos, dir, filter)
@@ -479,9 +472,9 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	if not CORPSE.GetPlayerNick(ent, false) then return end
 
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
-	local role_found = corpse_found and ent.search_result and ent.search_result.role
+	local role_found = corpse_found and ent.bodySearchResult and ent.bodySearchResult.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
-	local roleData = roles.GetByIndex(role_found and ent.search_result.role or ROLE_INNOCENT)
+	local roleData = roles.GetByIndex(role_found and ent.bodySearchResult.role or ROLE_INNOCENT)
 	local roleDataClient = client:GetSubRoleData()
 
 	-- enable targetID rendering
@@ -496,14 +489,19 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	)
 
 	if tData:GetEntityDistance() <= 100 then
-		if cvDeteOnlyInspect:GetBool() and not roleDataClient.isPolicingRole then
-			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
-				tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
+		if client:IsSpec() then
+			tData:SetSubtitle(ParT("corpse_hint_spectator", key_params))
+		elseif bodysearch.GetInspectConfirmMode() == 2 and not (roleDataClient.isPolicingRole and roleDataClient.isPublicRole) then
+			-- a detective added search results, this should change the targetID
+			if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
+				tData:SetSubtitle(ParT("corpse_hint_public_policing_searched", key_params))
 			else
-				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
+				tData:SetSubtitle(ParT("corpse_hint_no_inspect", key_params))
 			end
-		elseif cvDeteOnlyConfirm:GetBool() and not roleDataClient.isPolicingRole then
+			tData:AddDescriptionLine(TryT("corpse_hint_no_inspect_details"))
+		elseif bodysearch.GetInspectConfirmMode() == 1 and not (roleDataClient.isPolicingRole and roleDataClient.isPublicRole) then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
+			tData:AddDescriptionLine(TryT("corpse_hint_inspect_only_details"))
 		else
 			tData:SetSubtitle(ParT("corpse_hint", key_params))
 		end
@@ -530,7 +528,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	end
 
 	-- add info if searched by detectives
-	if ent.search_result and ent.search_result.detective_search and roleDataClient.isPolicingRole then
+	if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
 			roles.DETECTIVE.ltcolor,
@@ -539,10 +537,15 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	end
 
 	-- add credits info when corpse has credits
-	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+	if client:IsActiveShopper() and not client:GetSubRoleData().preventFindCredits and CORPSE.GetCredits(ent, 0) > 0 then
+		local creditsHint = "target_credits_on_search"
+		if bodysearch.GetInspectConfirmMode() == 0 then
+			creditsHint = "target_credits_on_confirm"
+		end
+
 		tData:AddDescriptionLine(
-			TryT("target_credits"),
-			COLOR_YELLOW,
+			TryT(creditsHint),
+			COLOR_GOLD,
 			{materialCredits}
 		)
 	end

@@ -2,698 +2,19 @@
 -- Body search popup
 -- @section body_search_manager
 
-local T = LANG.GetTranslation
-local PT = LANG.GetParamTranslation
-local RT = LANG.GetRawTranslation
-local table = table
+-- cache global functions
 local net = net
 local pairs = pairs
 local util = util
 local IsValid = IsValid
 local hook = hook
 
-local is_dmg = util.BitSet
-
-local dtt = {
-	search_dmg_crush = DMG_CRUSH,
-	search_dmg_bullet = DMG_BULLET,
-	search_dmg_fall = DMG_FALL,
-	search_dmg_boom = DMG_BLAST,
-	search_dmg_club = DMG_CLUB,
-	search_dmg_drown = DMG_DROWN,
-	search_dmg_stab = DMG_SLASH,
-	search_dmg_burn = DMG_BURN,
-	search_dmg_tele = DMG_SONIC,
-	search_dmg_car = DMG_VEHICLE
-}
-
--- "From his body you can tell XXX"
-local function DmgToText(d)
-	for k, v in pairs(dtt) do
-		if is_dmg(d, v) then
-			return T(k)
-		end
-	end
-
-	if is_dmg(d, DMG_DIRECT) then
-		return T("search_dmg_burn")
-	end
-
-	return T("search_dmg_other")
-end
-
--- Info type to icon mapping
-
--- Some icons have different appearances based on the data value. These have a
--- separate table inside the TypeToMat table.
-
--- Those that have a lot of possible data values are defined separately, either
--- as a function or a table.
-
-local dtm = {
-	bullet = DMG_BULLET,
-	rock = DMG_CRUSH,
-	splode = DMG_BLAST,
-	fall = DMG_FALL,
-	fire = DMG_BURN,
-	drown = DMG_DROWN
-}
-
-local function DmgToMat(d)
-	for k, v in pairs(dtm) do
-		if is_dmg(d, v) then
-			return k
-		end
-	end
-
-	if is_dmg(d, DMG_DIRECT) then
-		return "fire"
-	else
-		return "skull"
-	end
-end
-
-local function WeaponToIcon(d)
-	local wep = util.WeaponForClass(d)
-
-	return wep and wep.Icon or "vgui/ttt/icon_nades"
-end
-
-local TypeToMat = {
-	nick = "id",
-	words = "halp",
-	c4 = "code",
-	dmg = DmgToMat,
-	wep = WeaponToIcon,
-	head = "head",
-	dtime = "time",
-	stime = "wtester",
-	lastid = "lastid",
-	kills = "list",
-	role = {}
-}
-
--- Accessor for better fail handling
-local function IconForInfoType(t, data)
-	local base = "vgui/ttt/icon_"
-	local mat = TypeToMat[t]
-
-	if istable(mat) then
-		if t == "role" and not mat[data] then
-			TypeToMat[t][data] = roles.GetByIndex(data).icon
-		end
-
-		mat = mat[data]
-	elseif isfunction(mat) then
-		mat = mat(data)
-	end
-
-	if not mat then
-		mat = TypeToMat["nick"]
-	end
-
-	-- ugly special casing for weapons, because they are more likely to be
-	-- customized and hence need more freedom in their icon filename
-	if t == "wep" or t == "role" then
-		return mat
-	else
-		return base .. mat
-	end
-end
-
-local pfmc_tbl = {
-	nick = function(search, d, raw)
-		search.nick.text = PT("search_nick", {player = d})
-		search.nick.p = 1
-		search.nick.nick = d
-	end,
-	role = function(search, d, raw)
-		local rd = roles.GetByIndex(d)
-
-		search.role.text = T("search_role_" .. rd.abbr)
-		search.role.color = raw["role_color"] or rd.color
-		search.role.p = 2
-	end,
-	team = function(search, d, raw)
-		search.team.text = "Team: " .. d .. "." -- will be merged with role later
-	end,
-	words = function(search, d, raw)
-		if d == "" then return end
-
-		-- only append "--" if there's no ending interpunction
-		local final = string.match(d, "[\\.\\!\\?]$") ~= nil
-
-		search.words.text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
-	end,
-	c4 = function(search, d, raw)
-		if d <= 0 then return end
-
-		search.c4.text = PT("search_c4", {num = d})
-	end,
-	dmg = function(search, d, raw)
-		search.dmg.text = DmgToText(d)
-		search.dmg.p = 12
-	end,
-	wep = function(search, d, raw)
-		local wep = util.WeaponForClass(d)
-		local wname = wep and LANG.TryTranslation(wep.PrintName)
-
-		if not wname then return end
-
-		search.wep.text = PT("search_weapon", {weapon = wname})
-	end,
-	head = function(search, d, raw)
-		search.head.p = 15
-
-		if not d then return end
-
-		search.head.text = T("search_head")
-	end,
-	dtime = function(search, d, raw)
-		if d == 0 then return end
-
-		local ftime = util.SimpleTime(d, "%02i:%02i")
-
-		search.dtime.text = PT("search_time", {time = ftime})
-		search.dtime.text_icon = ftime
-		search.dtime.p = 8
-	end,
-	stime = function(search, d, raw)
-		if d <= 0 then return end
-
-		local ftime = util.SimpleTime(d, "%02i:%02i")
-
-		search.stime.text = PT("search_dna", {time = ftime})
-		search.stime.text_icon = ftime
-	end,
-	kills = function(search, d, raw)
-		local num = table.Count(d)
-
-		if num == 1 then
-			local vic = Entity(d[1])
-			local dc = d[1] == -1 -- disconnected
-
-			if dc or IsValid(vic) and vic:IsPlayer() then
-				search.kills.text = PT("search_kills1", {player = dc and "<Disconnected>" or vic:Nick()})
-			end
-		elseif num > 1 then
-			local txt = T("search_kills2") .. "\n"
-			local nicks = {}
-
-			for k, idx in pairs(d) do
-				local vic = Entity(idx)
-				local dc = idx == -1
-
-				if dc or IsValid(vic) and vic:IsPlayer() then
-					nicks[#nicks + 1] = dc and "<Disconnected>" or vic:Nick()
-				end
-			end
-
-			local last = #nicks
-
-			txt = txt .. table.concat(nicks, "\n", 1, last)
-			search.kills.text = txt
-		end
-
-		search.kills.p = 30
-	end,
-	lastid = function(search, d, raw)
-		if not d or d.idx == -1 then return end
-
-		local ent = Entity(d.idx)
-
-		if not IsValid(ent) or not ent:IsPlayer() then return end
-
-		search.lastid.text = PT("search_eyes", {player = ent:Nick()})
-		search.lastid.ply = ent
-	end,
-}
-
----
--- Creates a table with icons, text,... out of search_raw table
--- @param table raw
--- @return table a converted search data table
--- @realm client
-function PreprocSearch(raw)
-	local search = {}
-
-	for t, d in pairs(raw) do
-		search[t] = {
-			img = nil,
-			text = "",
-			p = 10 -- sorting number
-		}
-
-		if isfunction(pfmc_tbl[t]) then
-			pfmc_tbl[t](search, d, raw)
-		else
-			search[t] = nil
-		end
-
-		-- anything matching a type but not given a text should be removed
-		if search[t] and search[t].text == "" then
-			search[t] = nil
-		end
-
-		-- don't display an extra icon for the team. Merge with role desc
-		if search.role and search.team then
-			if GetGlobalBool("ttt2_confirm_team") then
-				search.role.text = search.role.text .. " " .. search.team.text
-			end
-
-			search.team = nil
-		end
-
-		-- if there's still something here, we'll be showing it, so find an icon
-		if search[t] then
-			search[t].img = IconForInfoType(t, d)
-		end
-	end
-
-	local itms = items.GetList()
-
-	for i = 1, #itms do
-		local item = itms[i]
-
-		if not item.noCorpseSearch and raw["eq_" .. item.id] then
-			local highest = 0
-
-			for _, v in pairs(search) do
-				highest = math.max(highest, v.p)
-			end
-
-			local text
-
-			if item.corpseDesc then
-				text = RT(item.corpseDesc) or item.corpseDesc
-			else
-				if item.desc then
-					text = RT(item.desc)
-				end
-
-				local tmpText
-
-				if not text and item.EquipMenuData and item.EquipMenuData.desc then
-					tmpText = item.EquipMenuData.desc
-					text = RT(tmpText)
-				end
-
-				if not text then
-					text = item.desc or tmpText or ""
-				end
-			end
-
-			-- add item to body search if flag is set
-			if item.populateSearch then
-				search["eq_" .. item.id] = {
-					img = item.corpseIcon or item.material,
-					text = text,
-					p = highest + 1
-				}
-			end
-		end
-	end
-
-	---
-	-- @realm client
-	hook.Run("TTTBodySearchPopulate", search, raw)
-
-	return search
-end
-
----
--- This hook can be used to populate the body search panel.
--- @param table search The search data table
--- @param table raw The raw search data
--- @hook
--- @realm client
-function GM:TTTBodySearchPopulate(search, raw)
-
-end
-
----
--- This hook can be used to modify the equipment info of a corpse.
--- @param table search The search data table
--- @param table equip The raw equipment table
--- @hook
--- @realm client
-function GM:TTTBodySearchEquipment(search, equip)
-
-end
-
----
--- This hook is called right before the killer found @{MSTACK} notification
--- is added.
--- @param string finder The nickname of the finder
--- @param string victim The nickname of the victim
--- @hook
--- @realm client
-function GM:TTT2ConfirmedBody(finder, victim)
-
-end
-
----
--- Returns a function meant to override OnActivePanelChanged, which modifies
--- dactive and dtext based on the search information that is associated with the
--- newly selected panel
-local function SearchInfoController(search, dactive, dtext)
-	return function(s, pold, pnew)
-		local t = pnew.info_type
-
-		local data = search[t]
-		if not data then
-			ErrorNoHalt("Search: data not found", t, data, "\n")
-
-			return
-		end
-
-		-- If wrapping is on, the Label's SizeToContentsY misbehaves for
-		-- text that does not need wrapping. I long ago stopped wondering
-		-- "why" when it comes to VGUI. Apply hack, move on.
-		dtext:GetLabel():SetWrap(#data.text > 50)
-		dtext:SetText(data.text)
-
-		local icon = data.img
-
-		if t == "role" then
-			dactive:SetImage2("vgui/ttt/dynamic/icon_base_base")
-			dactive:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
-			dactive:SetRoleIconImage(icon)
-
-			icon = "vgui/ttt/dynamic/icon_base"
-		else
-			dactive:UnloadImage2()
-			dactive:UnloadImageOverlay()
-			dactive:UnloadRoleIconImage()
-		end
-
-		dactive:SetImage(icon)
-		dactive:SetImageColor(data.color or COLOR_WHITE)
-	end
-end
-
-local function ShowSearchScreen(search_raw)
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
-
-	local m = 8
-	local bw, bh = 100, 25
-	local bw_large = 125
-	local w, h = 425, 260
-
-	local rw, rh = (w - m * 2), (h - 25 - m * 2)
-	local rx, ry = 0, 0
-
-	local rows = 1
-	local listw, listh = rw, (64 * rows + 6)
-	local listx, listy = rx, ry
-
-	ry = ry + listh + m * 2
-	rx = m
-
-	local descw, desch = rw - m * 2, 80
-	local descx, descy = rx, ry
-
-	ry = ry + desch + m
-
-	--local butx, buty = rx, ry
-
-	local dframe = vgui.Create("DFrame")
-	dframe:SetSize(w, h)
-	dframe:Center()
-	dframe:SetTitle((T("search_title") .. " - " .. search_raw.nick) or "???")
-	dframe:SetVisible(true)
-	dframe:ShowCloseButton(true)
-	dframe:SetMouseInputEnabled(true)
-	dframe:SetKeyboardInputEnabled(true)
-	dframe:SetDeleteOnClose(true)
-
-	dframe.OnKeyCodePressed = util.BasicKeyHandler
-
-	-- contents wrapper
-	local dcont = vgui.Create("DPanel", dframe)
-	dcont:SetPaintBackground(false)
-	dcont:SetSize(rw, rh)
-	dcont:SetPos(m, 25 + m)
-
-	-- icon list
-	local dlist = vgui.Create("DPanelSelect", dcont)
-	dlist:SetPos(listx, listy)
-	dlist:SetSize(listw, listh)
-	dlist:EnableHorizontal(true)
-	dlist:SetSpacing(1)
-	dlist:SetPadding(2)
-
-	if dlist.VBar then
-		dlist.VBar:Remove()
-
-		dlist.VBar = nil
-	end
-
-	-- description area
-	local dscroll = vgui.Create("DHorizontalScroller", dlist)
-	dscroll:StretchToParent(3, 3, 3, 3)
-
-	local ddesc = vgui.Create("ColoredBox", dcont)
-	ddesc:SetColor(Color(50, 50, 50))
-	ddesc:SetName(T("search_info"))
-	ddesc:SetPos(descx, descy)
-	ddesc:SetSize(descw, desch)
-
-	local dactive = vgui.Create("DRoleImage", ddesc)
-	dactive:SetImage("vgui/ttt/icon_id")
-	dactive:SetPos(m, m)
-	dactive:SetSize(64, 64)
-
-	local dtext = vgui.Create("ScrollLabel", ddesc)
-	dtext:SetSize(descw - 120, desch - m * 2)
-	dtext:MoveRightOf(dactive, m * 2)
-	dtext:AlignTop(m)
-	dtext:SetText("...")
-
-	-- buttons
-	local by = rh - bh - m * 0.5
-
-	local dconfirm = vgui.Create("DButton", dcont)
-	dconfirm:SetPos(m, by)
-	dconfirm:SetSize(bw_large, bh)
-	dconfirm:SetText(T("search_confirm"))
-
-	local id = search_raw.eidx + search_raw.dtime
-
-	dconfirm.DoClick = function(s)
-		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
-	end
-
-	dconfirm:SetEnabled(not (client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:TTT2NETGetBool("body_found", false)))
-
-	local dcall = vgui.Create("DButton", dcont)
-	dcall:SetPos(m * 2 + bw_large, by)
-	dcall:SetSize(bw_large, bh)
-	dcall:SetText(T("search_call"))
-
-	dcall.DoClick = function(s)
-		client.called_corpses = client.called_corpses or {}
-		client.called_corpses[#client.called_corpses + 1] = search_raw.eidx
-
-		s:SetEnabled(false)
-
-		RunConsoleCommand("ttt_call_detective", search_raw.eidx)
-	end
-
-	dcall:SetEnabled(not (client:IsSpec() or table.HasValue(client.called_corpses or {}, search_raw.eidx)))
-
-	local dclose = vgui.Create("DButton", dcont)
-	dclose:SetPos(rw - m - bw, by)
-	dclose:SetSize(bw, bh)
-	dclose:SetText(T("close"))
-
-	dclose.DoClick = function()
-		dframe:Close()
-	end
-
-	-- Finalize search data, prune stuff that won't be shown etc
-	-- search is a table of tables that have an img and text key
-	local search = PreprocSearch(search_raw)
-
-	-- Install info controller that will link up the icons to the text etc
-	dlist.OnActivePanelChanged = SearchInfoController(search, dactive, dtext)
-
-	-- Create table of SimpleIcons, each standing for a piece of search
-	-- information.
-	local start_icon
-
-	for t, info in SortedPairsByMemberValue(search, "p") do
-		local ic
-		local icon = info.img
-
-		-- Certain items need a special icon conveying additional information
-		if t == "nick" then
-			local avply = IsValid(search_raw.owner) and search_raw.owner or nil
-
-			ic = vgui.Create("SimpleIconAvatar", dlist)
-			ic:SetPlayer(avply)
-
-			start_icon = ic
-		elseif t == "lastid" then
-			ic = vgui.Create("SimpleIconAvatar", dlist)
-			ic:SetPlayer(info.ply)
-			ic:SetAvatarSize(24)
-		elseif info.text_icon then
-			ic = vgui.Create("SimpleIconLabelled", dlist)
-			ic:SetIconText(info.text_icon)
-		elseif t == "role" then
-			ic = vgui.Create("SimpleRoleIcon", dlist)
-
-			ic.Icon:SetImage2("vgui/ttt/dynamic/icon_base_base")
-			ic.Icon:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
-			ic.Icon:SetRoleIconImage(icon)
-
-			icon = "vgui/ttt/dynamic/icon_base"
-		else
-			ic = vgui.Create("SimpleIcon", dlist)
-		end
-
-		ic:SetIconSize(64)
-		ic:SetIcon(icon)
-
-		if info.color then
-			ic:SetIconColor(info.color)
-		end
-
-		ic.info_type = t
-
-		dlist:AddPanel(ic)
-		dscroll:AddPanel(ic)
-	end
-
-	dlist:SelectPanel(start_icon)
-	dframe:MakePopup()
-end
-
-local function StoreSearchResult(search)
-	if not search.owner then return end
-
-	-- if existing result was not ours, it was detective's, and should not
-	-- be overwritten
-	local ply = search.owner
-
-	if ply.search_result and not ply.search_result.show then return end
-
-	ply.search_result = search
-
-	-- this is useful for targetid
-	local rag = Entity(search.eidx)
-	if not IsValid(rag) then return end
-
-	rag.search_result = search
-end
-
-local function bitsRequired(num)
-	local bits, max = 0, 1
-
-	while max <= num do
-		bits = bits + 1
-		max = max + max
-	end
-
-	return bits
-end
-
-local search = {}
-
-local function TTTRagdollSearch()
-	search = {}
-
-	-- Basic info
-	search.eidx = net.ReadUInt(16)
-
-	local owner = Entity(net.ReadUInt(8))
-
-	search.owner = owner
-
-	if not IsValid(search.owner) or not search.owner:IsPlayer() or search.owner:IsTerror() then
-		search.owner = nil
-	end
-
-	search.nick = net.ReadString()
-	search.role_color = net.ReadColor()
-
-	-- Equipment
-	local eq = {}
-
-	local eqAmount = net.ReadUInt(16)
-
-	for i = 1, eqAmount do
-		local eqStr = net.ReadString()
-
-		eq[i] = eqStr
-		search["eq_" .. eqStr] = true
-	end
-
-	-- Traitor things
-	search.role = net.ReadUInt(ROLE_BITS)
-	search.team = net.ReadString()
-	search.c4 = net.ReadInt(bitsRequired(C4_WIRE_COUNT) + 1)
-
-	-- Kill info
-	search.dmg = net.ReadUInt(30)
-	search.wep = net.ReadString()
-	search.head = net.ReadBit() == 1
-	search.dtime = net.ReadInt(16)
-	search.stime = net.ReadInt(16)
-
-	-- Players killed
-	local num_kills = net.ReadUInt(8)
-	if num_kills > 0 then
-		local t_kills = {}
-
-		for i = 1, num_kills do
-			t_kills[i] = net.ReadUInt(8)
-		end
-
-		search.kills = t_kills
-	else
-		search.kills = nil
-	end
-
-	search.lastid = {idx = net.ReadUInt(8)}
-
-	-- should we show a menu for this result?
-	search.finder = net.ReadUInt(8)
-	search.show = LocalPlayer():EntIndex() == search.finder
-
-	--
-	-- last words
-	--
-	local words = net.ReadString()
-	search.words = (words ~= "") and words or nil
-
-	-- long range
-	search.lrng = net.ReadBit()
-
-	-- searched by detective?
-	search.detective_search = net.ReadBool()
-
-	-- set search.show_sb based on detective_search or self search
-	search.show_sb = search.show or search.detective_search
-
-	---
-	-- @realm shared
-	hook.Run("TTTBodySearchEquipment", search, eq)
-
-	if search.show then
-		ShowSearchScreen(search)
-	end
-
-	-- cache search result in rag.search_result, e.g. useful for scoreboard
-	StoreSearchResult(search)
-
-	search = nil
-end
-net.Receive("TTT_RagdollSearch", TTTRagdollSearch)
-
-local function TTT2ConfirmMsg()
+-- cache materials
+local materialCredits = Material("vgui/ttt/icon_credits_transparent")
+local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
+local materialPlayerIconUnknown = Material("vgui/ttt/b-draw/icon_avatar_default")
+
+net.Receive("TTT2SendConfirmMsg", function()
 	local msgName = net.ReadString()
 	local sid64 = net.ReadString()
 	local clr = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
@@ -708,6 +29,14 @@ local function TTT2ConfirmMsg()
 		tbl.team = LANG.GetTranslation(net.ReadString())
 	end
 
+	local searchUID = net.ReadUInt(16)
+
+	-- update credits on victim table
+	local victimEnt = player.GetBySteamID64(tbl.victim)
+	if IsValid(victimEnt) and victimEnt.searchResultData then
+		victimEnt.searchResultData.credits = credits
+	end
+
 	-- checking for bots
 	if sid64 == "" then
 		sid64 = nil
@@ -720,5 +49,342 @@ local function TTT2ConfirmMsg()
 	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
+
+	if IsValid(SEARCHSCREEN.menuFrame) and SEARCHSCREEN.data.searchUID == searchUID then
+		SEARCHSCREEN:UpdateUIWhenPlayerWasConfirmed()
+	end
+end)
+
+net.Receive("ttt2_credits_were_taken", function()
+	local searchUID = net.ReadUInt(16)
+
+	if IsValid(SEARCHSCREEN.menuFrame) and SEARCHSCREEN.data.searchUID == searchUID then
+		SEARCHSCREEN:UpdateUIWhenCreditsWereTaken()
+	end
+end)
+
+---
+-- @class SEARCHSCREEN
+SEARCHSCREEN = SEARCHSCREEN or {}
+SEARCHSCREEN.sizes = SEARCHSCREEN.sizes or {}
+SEARCHSCREEN.menuFrame = SEARCHSCREEN.menuFrame or nil
+SEARCHSCREEN.data = SEARCHSCREEN.data or {}
+SEARCHSCREEN.infoBoxes = {}
+
+---
+-- Calculates and caches the dimensions of the bodysearch UI.
+-- @realm client
+function SEARCHSCREEN:CalculateSizes()
+	self.sizes.width = 600
+	self.sizes.height = 500
+	self.sizes.padding = 10
+
+	self.sizes.heightButton = 45
+	self.sizes.widthButton = 160
+	self.sizes.widthButtonCredits = 210
+	self.sizes.widthButtonTakeCredits = 180
+	self.sizes.widthButtonClose = 100
+	self.sizes.heightBottomButtonPanel = self.sizes.heightButton + self.sizes.padding + 1
+
+	self.sizes.widthMainArea = self.sizes.width - 2 * self.sizes.padding
+	self.sizes.heightMainArea = self.sizes.height - self.sizes.heightBottomButtonPanel - 3 * self.sizes.padding - vskin.GetHeaderHeight() - vskin.GetBorderSize()
+
+	self.sizes.widthProfileArea = 200
+
+	self.sizes.widthContentArea = self.sizes.width - self.sizes.widthProfileArea - 3 * self.sizes.padding
+	self.sizes.widthContentBox = self.sizes.widthContentArea - 2 * self.sizes.padding - 100
+
+	self.sizes.heightInfoItem = 78
 end
-net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)
+
+---
+-- Updates the UI if the player, that is inspected right now, was confirmed.
+-- @realm client
+function SEARCHSCREEN:UpdateUIWhenPlayerWasConfirmed()
+	self.buttonConfirm:SetEnabled(false)
+	self.buttonConfirm:SetText("search_confirmed")
+	self.buttonConfirm:SetIcon(nil)
+
+	if not LocalPlayer():IsSpec() then
+		self.buttonReport:SetEnabled(true)
+	end
+
+	-- remove hint about player needing to confirm corpse
+	local confirmBox = self.infoBoxes["policingrole_call_confirm"]
+	if IsValid(confirmBox) then
+		confirmBox:Remove()
+	end
+
+	-- remove hint about player unable to confirm
+	local confirmDisabledBox = self.infoBoxes["policingrole_confirm_disabled"]
+	if IsValid(confirmDisabledBox) then
+		confirmDisabledBox:Remove()
+	end
+end
+
+---
+-- Updates the UI if the player, that is inspected right now, lost their credits.
+-- @realm client
+function SEARCHSCREEN:UpdateUIWhenCreditsWereTaken()
+	-- if credits were taken, remove credit box
+	local creditBox = self.infoBoxes["credits"]
+	if IsValid(creditBox) then
+		creditBox:Remove()
+	end
+
+	if not bodysearch.CanConfirmBody() then
+		self.buttonConfirm:SetText("search_confirm_forbidden")
+		self.buttonConfirm:SetEnabled(false)
+		self.buttonConfirm:SetIcon(nil)
+	end
+end
+
+---
+-- Helper function to create an info item for the search UI.
+-- @param Panel parent The parent panel where it should be added to
+-- @param string name A unique name to keep a reference to the item
+-- @param table data The data that is added to the element
+-- @param[opt] number height The height of the element
+-- @return Panel The box element
+-- @realm client
+function SEARCHSCREEN:MakeInfoItem(parent, name, data, height)
+	local box = vgui.Create("DInfoItemTTT2", parent)
+	box:SetSize(self.sizes.widthContentBox, height or self.sizes.heightInfoItem)
+	box:Dock(TOP)
+	box:DockMargin(0, 0, 0, self.sizes.padding)
+	box:SetData(data)
+
+	-- cache reference to box
+	self.infoBoxes[name] = box
+
+	return box
+end
+
+---
+-- Show the searchscreen with the provided data. Generates the whole UI.
+-- @param table data The scene data that should be added
+-- @realm client
+function SEARCHSCREEN:Show(data)
+	local client = LocalPlayer()
+
+	self:CalculateSizes()
+
+	local frame = self.menuFrame
+
+	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
+	if IsValid(frame) then
+		frame:ClearFrame(nil, nil, {body = "search_title", params = {player = data.nick or "???"}})
+	else
+		frame = vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, {body = "search_title", params = {player = data.nick or "???"}})
+	end
+
+	frame:SetPadding(self.sizes.padding, self.sizes.padding, self.sizes.padding, self.sizes.padding)
+
+	-- any keypress closes the frame
+	frame:SetKeyboardInputEnabled(true)
+	frame.OnKeyCodePressed = util.BasicKeyHandler
+
+	self.data = data
+	self.menuFrame = frame
+
+	local playerDataKnown = data.nick ~= nil
+	local rd = roles.GetByIndex(data.subrole)
+	local clientRoleData = client:GetSubRoleData()
+
+	local contentBox = vgui.Create("DPanelTTT2", frame)
+	contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+	contentBox:Dock(TOP)
+
+	local profileBox = vgui.Create("DProfilePanelTTT2", contentBox)
+	profileBox:SetSize(self.sizes.widthProfileArea, self.sizes.heightMainArea)
+	profileBox:Dock(LEFT)
+	profileBox:SetModel(data.playerModel)
+	profileBox:SetPlayerIcon(playerDataKnown and draw.GetAvatarMaterial(data.sid64, "medium") or materialPlayerIconUnknown)
+	profileBox:SetPlayerRoleColor(playerDataKnown and data.roleColor or COLOR_SLATEGRAY)
+	profileBox:SetPlayerRoleIcon(playerDataKnown and rd.iconMaterial or materialRoleUnknown)
+	profileBox:SetPlayerRoleString(playerDataKnown and rd.name or "search_team_role_unknown")
+	profileBox:SetPlayerTeamString(playerDataKnown and data.team or "search_team_role_unknown")
+
+	-- ADD STATUS BOX AND ITS CONTENT
+	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
+	contentAreaScroll:SetVerticalScrollbarEnabled(true)
+	contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
+	contentAreaScroll:Dock(RIGHT)
+
+	local searchMode = bodysearch.GetInspectConfirmMode()
+
+	-- POPULATE WITH SPECIAL INFORMATION
+	if client:IsSpec() then
+		-- a spectator can see all information, but not interact with the UI
+		self:MakeInfoItem(contentAreaScroll, "sepc_search_info", {
+			text = {
+				title = {
+					body = "search_title_spectator",
+					params = nil
+				},
+				text = {{
+					body = "search_spec",
+					params = nil
+				}}
+			},
+			colorBox = COLOR_SLATEGRAY
+		}, 62)
+	elseif searchMode == 0 and not bodysearch.IsConfirmed(data.ragOwner) then
+		-- a detective can only be called AFTER a body was confirmed
+		self:MakeInfoItem(contentAreaScroll, "policingrole_call_confirm", {
+			text = {
+				title = {
+					body = "search_title_policingrole_report_confirm",
+					params = nil
+				},
+				text = {{
+					body = "search_policingrole_report_confirm",
+					params = nil
+				}}
+			},
+			colorBox = roles.DETECTIVE.ltcolor
+		}, 62)
+	elseif bodysearch.CanReportBody(data.ragOwner)
+		and not bodysearch.IsConfirmed(data.ragOwner)
+		and not (clientRoleData.isPolicingRole and clientRoleData.isPublicRole)
+	then
+		self:MakeInfoItem(contentAreaScroll, "policingrole_confirm_disabled", {
+			text = {
+				title = {
+					body = "search_title_policingrole_confirm_disabled",
+					params = nil
+				},
+				text = {{
+					body = "search_policingrole_confirm_disabled_" .. tostring(searchMode),
+					params = nil
+				}}
+			},
+			colorBox = roles.DETECTIVE.ltcolor
+		}, (searchMode == 1) and 62 or 78)
+	end
+
+	-- POPULATE WITH INFORMATION
+	for i = 1, #bodysearch.searchResultOrder do
+		local searchResultName = bodysearch.searchResultOrder[i]
+		local searchResultData = bodysearch.GetContentFromData(searchResultName, data)
+
+		if not searchResultData then continue end
+
+		self:MakeInfoItem(contentAreaScroll, searchResultName, searchResultData)
+	end
+
+	if playerDataKnown then
+		-- additional information by other addons
+		local searchAdd = {}
+		---
+		-- @realm client
+		hook.Run("TTTBodySearchPopulate", searchAdd, search)
+		for _, v in pairs(searchAdd) do
+			if istable(v.text) then
+				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = v.title or "", text = v.text})
+			else
+				self:MakeInfoItem(contentAreaScroll, Material(v.img), {title = "", text = {{body = v.text}}})
+			end
+		end
+	end
+
+	-- BUTTONS
+	local buttonArea = vgui.Create("DButtonPanelTTT2", frame)
+	buttonArea:SetSize(self.sizes.width, self.sizes.heightBottomButtonPanel)
+	buttonArea:Dock(BOTTOM)
+
+	local buttonReport = vgui.Create("DButtonTTT2", buttonArea)
+	buttonReport:SetText("search_call")
+	buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+	buttonReport:SetPos(0, self.sizes.padding + 1)
+	buttonReport.DoClick = function(btn)
+		bodysearch.ClientReportsCorpse(data.rag)
+	end
+	buttonReport:SetIcon(roles.DETECTIVE.iconMaterial, true, 16)
+
+	if not bodysearch.CanReportBody(data.ragOwner) then
+		buttonReport:SetEnabled(false)
+	end
+
+	local playerCanTakeCredits = client:IsActiveShopper() and not clientRoleData.preventFindCredits
+
+	local buttonConfirm = vgui.Create("DButtonTTT2", buttonArea)
+
+	if client:IsSpec() then
+		local text = "search_confirm"
+		if bodysearch.IsConfirmed(data.ragOwner) then
+			text = "search_confirmed"
+		end
+
+		buttonConfirm:SetEnabled(false)
+		buttonConfirm:SetText(text)
+		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+	elseif bodysearch.IsConfirmed(data.ragOwner) then
+		buttonConfirm:SetText("search_confirmed")
+		buttonConfirm:SetEnabled(false)
+		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+	elseif not bodysearch.CanConfirmBody() then
+		if data.credits > 0 and client:IsActiveShopper() and not clientRoleData.preventFindCredits then
+			if data.credits == 1 then
+				buttonConfirm:SetText("search_take_credit")
+				buttonConfirm:SetTextParams({credit = data.credits})
+			else
+				buttonConfirm:SetText("search_take_credits")
+				buttonConfirm:SetTextParams({credits = data.credits})
+			end
+			buttonConfirm:SetIcon(materialCredits)
+			buttonConfirm:SetSize(self.sizes.widthButtonTakeCredits, self.sizes.heightButton)
+			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonTakeCredits, self.sizes.padding + 1)
+		else
+			buttonConfirm:SetText("search_confirm_forbidden")
+			buttonConfirm:SetEnabled(false)
+			buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+			buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+		end
+	elseif data.credits > 0 and playerCanTakeCredits then
+		if data.credits == 1 then
+			buttonConfirm:SetText("search_confirm_credit")
+			buttonConfirm:SetTextParams({credit = data.credits})
+		else
+			buttonConfirm:SetText("search_confirm_credits")
+			buttonConfirm:SetTextParams({credits = data.credits})
+		end
+		buttonConfirm:SetSize(self.sizes.widthButtonCredits, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButtonCredits, self.sizes.padding + 1)
+		buttonConfirm:SetIcon(materialCredits)
+	else
+		buttonConfirm:SetText("search_confirm")
+		buttonConfirm:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+		buttonConfirm:SetPos(self.sizes.widthMainArea - self.sizes.widthButton, self.sizes.padding + 1)
+	end
+	buttonConfirm.DoClick = function(btn)
+		bodysearch.ClientConfirmsCorpse(data.rag, data.searchUID, data.isLongRange, playerCanTakeCredits)
+
+		-- call these functions locally to give the user an instant feedback
+		-- the same function will be called again after the server processed
+		-- the confirmation and reported back to the clients
+
+		if playerCanTakeCredits then
+			self:UpdateUIWhenCreditsWereTaken()
+		end
+
+		if bodysearch.CanConfirmBody() then
+			self:UpdateUIWhenPlayerWasConfirmed()
+		end
+	end
+
+	-- cache button references for external interaction
+	self.buttonReport = buttonReport
+	self.buttonConfirm = buttonConfirm
+end
+
+---
+-- Closes the curren searchscreen window if open
+-- @realm client
+function SEARCHSCREEN:Close()
+	if not IsValid(self.menuFrame) then return end
+
+	self.menuFrame:CloseFrame()
+end

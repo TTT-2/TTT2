@@ -69,8 +69,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		for i = 1, #items do
 			local item = items[i]
 
-			-- Only keep ttt-equipments that are cached
-			if not item.ttt2_cached_material and not item.ttt2_cached_model then continue end
+			if not item.isEquipment then continue end
 
 			counter = counter + 1
 
@@ -98,7 +97,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 		form:MakeCard({
 			label = item.shopTitle,
-			icon = item.ttt2_cached_material,
+			icon = item.iconMaterial,
 			initial = item.CanBuy[roleIndex] and MODE_ADDED or MODE_DEFAULT, -- todo: this should be the current mode
 			OnChange = function(_, _, newMode)
 				local isAdded = newMode == MODE_ADDED or newMode == MODE_INHERIT_ADDED

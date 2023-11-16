@@ -97,7 +97,7 @@ end
 -- @param Entity infl The inflictor
 -- @param Player|Entity att The attacker
 -- @param number amount Amount of damage
--- @param DamageInfo dmginfo Damage info
+-- @param CTakeDamageInfo dmginfo Damage info
 -- @realm server
 -- @internal
 function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)

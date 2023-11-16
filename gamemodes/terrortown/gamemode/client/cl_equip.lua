@@ -409,7 +409,7 @@ local function CreateEquipmentList(t)
 			local ic = nil
 
 			-- Create icon panel
-			if item.ttt2_cached_material then
+			if item.iconMaterial then
 				ic = vgui.Create("LayeredIcon", dlist)
 
 				if item.custom and showCustomVar:GetBool() then
@@ -464,10 +464,10 @@ local function CreateEquipmentList(t)
 				end
 
 				ic:SetIconSize(itemSize or 64)
-				ic:SetMaterial(item.ttt2_cached_material)
-			elseif item.ttt2_cached_model then
+				ic:SetMaterial(item.iconMaterial)
+			elseif item.itemModel then
 				ic = vgui.Create("SpawnIcon", dlist)
-				ic:SetModel(item.ttt2_cached_model)
+				ic:SetModel(item.itemModel)
 			else
 				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 
@@ -1115,17 +1115,23 @@ end
 -- @param table item
 -- @realm client
 function TTT2CacheEquipMaterials(item)
-	--if there is no material or model, the item should probably not be available in the shop
-	if item.material and item.material ~= "vgui/ttt/icon_id" then
-		item.ttt2_cached_material = Material(item.material)
-		if item.ttt2_cached_material:IsError() then
-			-- Setting fallback material
-			item.ttt2_cached_material = fallback_mat
+	item.isEquipment = true
+
+	if item.material then
+		item.iconMaterial = Material(item.material)
+
+		if item.iconMaterial:IsError() then
+			-- setting fallback error material
+			item.iconMaterial = fallback_mat
 		end
-	elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
-		--do not use fallback mat and use model instead
-		item.ttt2_cached_material = nil
-		item.ttt2_cached_model = item.model
+	elseif item.model then
+		-- do not use fallback mat and use model instead
+		item.itemModel = item.model
+	end
+
+	--if there is no sensible material or model, the item should probably not be available in the shop
+	if item.material == "vgui/ttt/icon_id" or item.model == "models/weapons/w_bugbait.mdl" then
+		item.isEquipment = false
 	end
 end
 
