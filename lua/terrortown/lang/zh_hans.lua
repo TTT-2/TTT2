@@ -1847,7 +1847,7 @@ L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub�
 
 L.sb_rank_tooltip_developer = "TTT2开发者"
 L.sb_rank_tooltip_vip = "TTT2支持者"
-L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
+L.sb_rank_tooltip_addondev = "TTT2插件开发者"
 L.sb_rank_tooltip_admin = "服务器管理员"
 L.sb_rank_tooltip_streamer = "主播"
 L.sb_rank_tooltip_heroes = "TTT2 英雄"
@@ -1892,10 +1892,10 @@ L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
 
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
---L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
---L.header_hud_elements_customize = "Customize the HUD-Elements"
---L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+L.header_miscellaneous_settings = "其他设置"
+L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"
+L.header_hud_elements_customize = "自定义 HUD 元素"
+L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
 
 -- 2023-10-25
 L.help_keyhelp = [[
@@ -1966,19 +1966,19 @@ L.header_soundeffect_settings = "声音效果"
 L.header_voiceandvolume_settings = "声音和音量设置"
 
 -- 2023-11-06
---L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
---L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
---L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+L.drop_reserve_prevented = "有东西阻止您丢弃储备弹药。"
+L.drop_no_reserve = "你的储备弹药不足，无法作为弹药箱投放。"
+L.drop_no_room_ammo = "您没有地方放置弹药！"
 
 -- 2023-11-14
---L.hat_deerstalker_name = "Detective's Hat"
+L.hat_deerstalker_name = "侦探帽"
 
 -- 2023-11-16
---L.help_prop_spec_dash = [[
---Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
---
---This variable is a multiplier of the push force.]]
---L.label_spec_prop_dash = "Dash force multiplier"
---L.label_keyhelper_possession_dash = "prop: dash in view direction"
---L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
---L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+L.help_prop_spec_dash = [[
+Propspec 冲刺是向目标矢量方向的移动。它们可以比正常移动的力度更大。更高的力度也意味着更高的基础值消耗。
+
+该变量是推力的乘数。]]
+L.label_spec_prop_dash ="冲刺力倍增器"
+L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
+L.label_keyhelper_weapon_drop = "尽可能丢弃所选武器"
+L.label_keyhelper_ammo_drop = "丢弃弹夹中选定武器的弹药"
