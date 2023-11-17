@@ -1979,6 +1979,6 @@ Propspec 冲刺是向目标矢量方向的移动。它们可以比正常移动�
 
 该变量是推力的乘数。]]
 L.label_spec_prop_dash = "冲刺力倍增器"
-L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
+L.label_keyhelper_possession_dash = "Prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢弃所选武器"
 L.label_keyhelper_ammo_drop = "丢弃弹夹中选定武器的弹药"
