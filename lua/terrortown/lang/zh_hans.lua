@@ -108,7 +108,7 @@ L.disg_menutitle = "伪装器控制"
 L.disg_not_owned = "你没有伪装器！"
 L.disg_enable = "执行伪装"
 
-L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命以及人品。除此之外，你也能躲避探长的雷达。"
+L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命值以及人品。除此之外，你也能躲避探长的雷达。"
 L.disg_help2 = "可直接在主选单外，使用数字键来切换伪装。你也可以用控制台指令绑定指令 ttt_toggle_disguise。"
 
 -- Radar tab in equipment menu
@@ -1187,7 +1187,7 @@ L.hud_revival_title = "复活剩余时间："
 L.hud_revival_time = "{time}秒"
 
 -- 2020-05-03
-L.door_destructible = "此门不可摧毁 （{health}生命）"
+L.door_destructible = "此门不可摧毁 （{health}生命值）"
 
 -- 2020-05-28
 L.confirm_detective_only = "只有侦探能确认死亡。"
