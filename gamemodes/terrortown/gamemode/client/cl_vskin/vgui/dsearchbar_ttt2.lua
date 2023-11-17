@@ -98,7 +98,7 @@ end
 -- @return string
 -- @realm client
 function PANEL:GetValue()
-	return textEntry:GetValue()
+	return self.textEntry:GetValue()
 end
 
 ---
