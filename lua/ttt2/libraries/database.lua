@@ -444,7 +444,7 @@ end
 ---
 -- Receive requested registered databases from server
 -- and cache them as well as call all cached functions, that are waiting for the databases
--- @param table data = {index, accessName, savingKeys, additionalData, sentAdditionalInfo, identifier, tableSize}
+-- @param table data = {index, accessName, savingKeys, additionalData, sentAdditionalInfo, identifier, databaseSize}
 -- @realm client
 -- @internal
 clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
@@ -457,7 +457,7 @@ clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
 		defaultData = {}
 	}
 
-	if data.identifier and table.Count(registeredDatabases) == data.tableSize then
+	if data.identifier and table.Count(registeredDatabases) == data.databaseSize then
 		-- Only call the cached functions, when all databases are succesfully registered clientside
 		functionCache[data.identifier]()
 		receivedIdentifier()
@@ -895,9 +895,9 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
-		local tableSize = #registeredDatabases
+		local databaseSize = #registeredDatabases
 
-		for databaseNumber = 1, tableSize do
+		for databaseNumber = 1, databaseSize do
 			local dataTable = registeredDatabases[databaseNumber]
 
 			--contains additional data in case an identifier is given
@@ -907,7 +907,7 @@ if SERVER then
 				savingKeys = dataTable.keys,
 				additionalData = dataTable.data,
 				identifier = identifier,
-				tableSize = tableSize
+				databaseSize = databaseSize
 			}
 
 			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, plyIdentifier)
@@ -974,7 +974,7 @@ if SERVER then
 			savingKeys = dataTable.keys,
 			additionalData = dataTable.data,
 			identifier = nil,
-			tableSize = databaseCount
+			databaseSize = databaseCount
 		}
 
 		SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, SEND_TO_PLY_ALL)
