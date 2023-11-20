@@ -444,7 +444,7 @@ end
 ---
 -- Receive requested registered databases from server
 -- and cache them as well as call all cached functions, that are waiting for the databases
--- @param table data = {index, accessName, savingKeys, additionalData, sentAdditionalInfo, identifier, tableCount}
+-- @param table data = {index, accessName, savingKeys, additionalData, sentAdditionalInfo, identifier, tableSize}
 -- @realm client
 -- @internal
 clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
@@ -457,7 +457,7 @@ clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
 		defaultData = {}
 	}
 
-	if data.identifier and table.Count(registeredDatabases) == data.tableCount then
+	if data.identifier and table.Count(registeredDatabases) == data.tableSize then
 		-- Only call the cached functions, when all databases are succesfully registered clientside
 		functionCache[data.identifier]()
 		receivedIdentifier()
@@ -895,9 +895,9 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
-		local tableCount = #registeredDatabases
+		local tableSize = #registeredDatabases
 
-		for databaseNumber = 1, tableCount do
+		for databaseNumber = 1, tableSize do
 			local dataTable = registeredDatabases[databaseNumber]
 
 			--contains additional data in case an identifier is given
@@ -907,7 +907,7 @@ if SERVER then
 				savingKeys = dataTable.keys,
 				additionalData = dataTable.data,
 				identifier = identifier,
-				tableCount = tableCount
+				tableSize = tableSize
 			}
 
 			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, plyIdentifier)
@@ -966,7 +966,16 @@ if SERVER then
 		}
 		nameToIndex[accessName] = databaseCount
 
-		local data = {index = databaseCount}
+		local dataTable = registeredDatabases[databaseCount]
+
+		local dataRegister = {
+			index = databaseCount
+			accessName = dataTable.accessName,
+			savingKeys = dataTable.keys,
+			additionalData = dataTable.data,
+			identifier = nil,
+			tableSize = databaseCount
+		}
 
 		SendUpdateNextTick(MESSAGE_REGISTER, data, INDEX_NONE, SEND_TO_PLY_ALL)
 
