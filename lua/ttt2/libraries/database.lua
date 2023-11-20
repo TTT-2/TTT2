@@ -969,7 +969,7 @@ if SERVER then
 		local dataTable = registeredDatabases[databaseCount]
 
 		local dataRegister = {
-			index = databaseCount
+			index = databaseCount,
 			accessName = dataTable.accessName,
 			savingKeys = dataTable.keys,
 			additionalData = dataTable.data,
