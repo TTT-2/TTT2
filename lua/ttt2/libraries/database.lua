@@ -977,7 +977,7 @@ if SERVER then
 			tableSize = databaseCount
 		}
 
-		SendUpdateNextTick(MESSAGE_REGISTER, data, INDEX_NONE, SEND_TO_PLY_ALL)
+		SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, SEND_TO_PLY_ALL)
 
 		return true
 	end
