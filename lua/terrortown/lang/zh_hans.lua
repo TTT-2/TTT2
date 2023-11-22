@@ -1982,3 +1982,4 @@ L.label_spec_prop_dash = "冲刺力倍增器"
 L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
+
