@@ -72,6 +72,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			playermodels.IsHattableModel(name, function(value)
 				boxCache[name]:SetModelHattable(value, false)
 			end)
+		end
 
 			playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
 
@@ -102,7 +103,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 				box:SetModelHattable(value, false)
 			end,
 			"TTT2F1MenuPlayermodels")
-		end
 	end
 end
 
