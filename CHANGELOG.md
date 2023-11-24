@@ -70,7 +70,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
 - Fixed ComboBoxes not working with integer values (by @NickCloudAT)
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
-- Fix nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
+- Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 
 ### Deprecated
 
