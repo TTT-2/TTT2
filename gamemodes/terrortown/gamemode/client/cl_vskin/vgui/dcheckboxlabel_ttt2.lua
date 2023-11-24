@@ -92,8 +92,11 @@ function PANEL:SetServerConVar(cvar)
 
 	cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
 		if wasSuccess then
-			self:SetValue(tobool(value), true)
-			self:SetDefaultValue(tobool(default))
+			-- Check if self is valid before calling SetValue.
+			if IsValid(self) then
+				self:SetValue(tobool(value), true)
+				self:SetDefaultValue(tobool(default))
+			end
 		end
 	end)
 

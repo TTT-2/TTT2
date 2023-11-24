@@ -63,43 +63,46 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			end
 		}, base)
 
-		playermodels.IsSelectedModel(name, function(value)
-			boxCache[name]:SetModelSelected(value, false)
-		end)
+		-- Add additional checks to ensure boxCache[name] exists
+		if boxCache[name] then
+			playermodels.IsSelectedModel(name, function(value)
+				boxCache[name]:SetModelSelected(value, false)
+			end)
 
-		playermodels.IsHattableModel(name, function(value)
-			boxCache[name]:SetModelHattable(value, false)
-		end)
+			playermodels.IsHattableModel(name, function(value)
+				boxCache[name]:SetModelHattable(value, false)
+			end)
 
-		playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
+			playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
 
-		playermodels.AddChangeCallback(name, playermodels.state.selected, function(value)
-			local box = boxCache[name]
+			playermodels.AddChangeCallback(name, playermodels.state.selected, function(value)
+				local box = boxCache[name]
 
-			if not IsValid(box) then
-				playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
+				if not IsValid(box) then
+					playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
 
-				return
-			end
+					return
+				end
 
-			box:SetModelSelected(value, false)
-		end,
-		"TTT2F1MenuPlayermodels")
+				box:SetModelSelected(value, false)
+			end,
+			"TTT2F1MenuPlayermodels")
 
-		playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
+			playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
 
-		playermodels.AddChangeCallback(name, playermodels.state.hattable, function(value)
-			local box = boxCache[name]
+			playermodels.AddChangeCallback(name, playermodels.state.hattable, function(value)
+				local box = boxCache[name]
 
-			if not IsValid(box) then
-				playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
+				if not IsValid(box) then
+					playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
 
-				return
-			end
+					return
+				end
 
-			box:SetModelHattable(value, false)
-		end,
-		"TTT2F1MenuPlayermodels")
+				box:SetModelHattable(value, false)
+			end,
+			"TTT2F1MenuPlayermodels")
+		end
 	end
 end
 
