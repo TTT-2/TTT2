@@ -65,13 +65,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 		playermodels.IsSelectedModel(name, function(value)
 			if not boxCache[name] then return end
-			
+
 			boxCache[name]:SetModelSelected(value, false)
 		end)
 
 		playermodels.IsHattableModel(name, function(value)
 			if not boxCache[name] then return end
-			
+
 			boxCache[name]:SetModelHattable(value, false)
 		end)
 
