@@ -91,14 +91,12 @@ function PANEL:SetServerConVar(cvar)
 	self.serverConVar = cvar
 
 	-- Check if self is valid before calling SetValue.
-	if IsValid(self) then
-		cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
-			if wasSuccessn then
-				self:SetValue(tobool(value), true)
-				self:SetDefaultValue(tobool(default))
-			end
-		end)
-	end
+	cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
+		if wasSuccess and IsValid(self) then
+			self:SetValue(tobool(value), true)
+			self:SetDefaultValue(tobool(default))
+		end
+	end)
 
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
 	local myIdentifierString = "TTT2CheckBoxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
