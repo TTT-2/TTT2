@@ -63,13 +63,17 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			end
 		}, base)
 
-		playermodels.IsSelectedModel(name, function(value)
-			boxCache[name]:SetModelSelected(value, false)
-		end)
+		-- The anonymous function internally checks if boxCache[name] exists.
+		local box = boxCache[name]
+		if box then
+			playermodels.IsSelectedModel(name, function(value)
+				boxCache[name]:SetModelSelected(value, false)
+			end)
 
-		playermodels.IsHattableModel(name, function(value)
-			boxCache[name]:SetModelHattable(value, false)
-		end)
+			playermodels.IsHattableModel(name, function(value)
+				boxCache[name]:SetModelHattable(value, false)
+			end)
+		end
 
 		playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
 
@@ -83,8 +87,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			end
 
 			box:SetModelSelected(value, false)
-		end,
-		"TTT2F1MenuPlayermodels")
+		end, "TTT2F1MenuPlayermodels")
 
 		playermodels.RemoveChangeCallback(name, playermodels.state.hattable, "TTT2F1MenuPlayermodels")
 
@@ -98,8 +101,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			end
 
 			box:SetModelHattable(value, false)
-		end,
-		"TTT2F1MenuPlayermodels")
+		end, "TTT2F1MenuPlayermodels")
 	end
 end
 
