@@ -312,12 +312,15 @@ function PANEL:SetServerConVar(cvar)
 
 	self.serverConVar = cvar
 
-	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
-		if wasSuccess then
-			self:SetValue(tonumber(value), true)
-			self:SetDefaultValue(tonumber(default))
-		end
-	end)
+	-- Check if self is valid before calling SetValue.
+	if IsValid(self) then
+		cvars.ServerConVarGetValue(cvar, function(wasSuccess, value, default)
+			if wasSuccess then
+				self:SetValue(tonumber(value), true)
+				self:SetDefaultValue(tonumber(default))
+			end
+		end)
+	end
 
 	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
 	local myIdentifierString = "TTT2SliderConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
