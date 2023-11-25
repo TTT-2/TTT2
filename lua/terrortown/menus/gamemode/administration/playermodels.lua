@@ -63,17 +63,17 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			end
 		}, base)
 
-		-- The anonymous function internally checks if boxCache[name] exists.
-		local outerBox = boxCache[name]
-		if outerBox then
-			playermodels.IsSelectedModel(name, function(value)
-				boxCache[name]:SetModelSelected(value, false)
-			end)
+		playermodels.IsSelectedModel(name, function(value)
+			if not boxCache[name] then return end
+			
+			boxCache[name]:SetModelSelected(value, false)
+		end)
 
-			playermodels.IsHattableModel(name, function(value)
-				boxCache[name]:SetModelHattable(value, false)
-			end)
-		end
+		playermodels.IsHattableModel(name, function(value)
+			if not boxCache[name] then return end
+			
+			boxCache[name]:SetModelHattable(value, false)
+		end)
 
 		playermodels.RemoveChangeCallback(name, playermodels.state.selected, "TTT2F1MenuPlayermodels")
 
