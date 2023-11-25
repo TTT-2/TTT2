@@ -313,8 +313,7 @@ function PANEL:SetServerConVar(cvar)
 	self.serverConVar = cvar
 
 	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
-		-- Check if self is valid before calling SetValue.
-		if wasSuccess and IsValid(self) then
+		if wasSuccess then
 			self:SetValue(tonumber(value), true)
 			self:SetDefaultValue(tonumber(default))
 		end
