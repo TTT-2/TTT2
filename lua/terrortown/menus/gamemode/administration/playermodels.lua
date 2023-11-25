@@ -64,8 +64,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		}, base)
 
 		-- The anonymous function internally checks if boxCache[name] exists.
-		local box = boxCache[name]
-		if box then
+		local outerBox = boxCache[name]
+		if outerBox then
 			playermodels.IsSelectedModel(name, function(value)
 				boxCache[name]:SetModelSelected(value, false)
 			end)
