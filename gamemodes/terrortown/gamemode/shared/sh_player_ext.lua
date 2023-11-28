@@ -142,7 +142,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 
-	if SERVER and not suppressEvent and (oldRole ~= subrole or oldTeam ~= newTeam or forceHooks) then
+	if SERVER and not suppressEvent and (oldSubrole ~= subrole or oldTeam ~= newTeam or forceHooks) then
 		events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole, oldTeam, newTeam)
 	end
 

@@ -108,7 +108,7 @@ L.disg_menutitle = "伪装器控制"
 L.disg_not_owned = "你没有伪装器！"
 L.disg_enable = "执行伪装"
 
-L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命以及人品。除此之外，你也能躲避探长的雷达。"
+L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命值以及人品。除此之外，你也能躲避探长的雷达。"
 L.disg_help2 = "可直接在主选单外，使用数字键来切换伪装。你也可以用控制台指令绑定指令 ttt_toggle_disguise。"
 
 -- Radar tab in equipment menu
@@ -1145,7 +1145,7 @@ L.hud_revival_title = "复活剩余时间："
 L.hud_revival_time = "{time}秒"
 
 -- 2020-05-03
-L.door_destructible = "此门不可摧毁 （{health}生命）"
+L.door_destructible = "此门不可摧毁 （{health}生命值）"
 
 -- 2020-05-28
 --L.corpse_hint_no_inspect = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
@@ -1800,7 +1800,7 @@ L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub�
 
 L.sb_rank_tooltip_developer = "TTT2开发者"
 L.sb_rank_tooltip_vip = "TTT2支持者"
-L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
+L.sb_rank_tooltip_addondev = "TTT2插件开发者"
 L.sb_rank_tooltip_admin = "服务器管理员"
 L.sb_rank_tooltip_streamer = "主播"
 L.sb_rank_tooltip_heroes = "TTT2 英雄"
@@ -1985,10 +1985,10 @@ L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
---L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
---L.header_hud_elements_customize = "Customize the HUD-Elements"
---L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+L.header_miscellaneous_settings = "其他设置"
+L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"
+L.header_hud_elements_customize = "自定义 HUD 元素"
+L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
 
 -- 2023-10-25
 L.help_keyhelp = [[
@@ -2059,9 +2059,19 @@ L.header_soundeffect_settings = "声音效果"
 L.header_voiceandvolume_settings = "声音和音量设置"
 
 -- 2023-11-06
---L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
---L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
---L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+L.drop_reserve_prevented = "有东西阻止您丢弃储备弹药。"
+L.drop_no_reserve = "你的储备弹药不足，无法作为弹药箱投放。"
+L.drop_no_room_ammo = "您没有地方放置弹药！"
 
 -- 2023-11-14
---L.hat_deerstalker_name = "Detective's Hat"
+L.hat_deerstalker_name = "侦探帽"
+
+-- 2023-11-16
+L.help_prop_spec_dash = [[
+Propspec 冲刺是向目标矢量方向的移动。它们可以比正常移动的力度更大。更高的力度也意味着更高的基础值消耗。
+
+该变量是推力的乘数。]]
+L.label_spec_prop_dash = "冲刺力倍增器"
+L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
+L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
+L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"

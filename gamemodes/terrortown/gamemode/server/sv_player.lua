@@ -429,6 +429,7 @@ function GM:KeyPress(ply, key)
 			local alive_count = #alive
 			if alive_count < 1 then return end
 
+			---@cast alive -nil
 			local target = alive[math.random(alive_count)]
 
 			if IsValid(target) then
@@ -724,6 +725,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	-- headshots, knife damage, and weapons tagged as silent all prevent death
 	-- sound from occurring
+	---@cast killwep -nil
 	if not ply.was_headshot and not dmginfo:IsDamageType(DMG_SLASH) and not (IsValid(killwep) and killwep.IsSilent) then
 		PlayDeathSound(ply)
 	end
@@ -988,6 +990,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 		local wep = util.WeaponFromDamage(dmginfo)
 
 		if IsValid(wep) then
+			---@cast wep -nil
 			local s = wep:GetHeadshotMultiplier(ply, dmginfo) or 2
 
 			dmginfo:ScaleDamage(s)

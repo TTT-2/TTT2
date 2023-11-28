@@ -165,7 +165,7 @@ function PANEL:SetServerConVar(cvar)
 	self.serverConVar = cvar
 
 	cvars.ServerConVarGetValue(cvar, function (wasSuccess, value, default)
-		if wasSuccess then
+		if wasSuccess and IsValid(self) then
 			self:SetValue(tostring(value), true)
 			self:SetDefaultValue(tostring(default))
 		end

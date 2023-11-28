@@ -2064,3 +2064,13 @@ L.drop_no_room_ammo = "Burada silahını bırakacak yerin yok!"
 
 -- 2023-11-14
 L.hat_deerstalker_name = "Dedektifin Şapkası"
+
+-- 2023-11-16
+L.help_prop_spec_dash = [[
+Normal hareketten daha yüksek kuvvette olabilirler. Daha yüksek kuvvet aynı zamanda daha yüksek temel değer tüketimi anlamına gelir.
+
+Bu değişken itme kuvvetinin bir çarpanıdır.]]
+L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
+L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
+L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
+L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"

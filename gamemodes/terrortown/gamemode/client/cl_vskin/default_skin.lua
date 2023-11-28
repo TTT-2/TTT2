@@ -1495,6 +1495,7 @@ function SKIN:PaintImageCheckBoxTTT2(panel, w, h)
 
 	local colorBackground = colors.settingsBox
 	local colorMode = utilGetChangedColor(colors.background, 75)
+	local colorTextMode = utilGetDefaultColor(colorMode)
 	local colorHeadIcon = colorCardInheritRemoved
 	local colorHattableIcon = colorCardInheritRemoved
 
