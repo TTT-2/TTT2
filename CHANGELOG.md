@@ -49,6 +49,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 - Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
 - Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
+- Changed syncing of database module to use whole tables instead of custom method
 
 ### Fixed
 
@@ -71,6 +72,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
 - Fixed ComboBoxes not working with integer values (by @NickCloudAT)
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
+- Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 
 ### Deprecated
 
