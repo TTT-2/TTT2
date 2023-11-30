@@ -120,14 +120,18 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 
 	if SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY) then
 		database.SetDefaultValuesFromItem(ShopEditor.accessName, name, equipment)
-		database.GetStoredValues(ShopEditor.accessName, name, equipment)
+		local databaseExists, itemTable = database.GetValue(ShopEditor.accessName, name)
+		if databaseExists then
+			table.Merge(equipment, itemTable)
+		end
 		AddCallbacks(name, equipment)
 	elseif CLIENT then
-		database.GetStoredValues(ShopEditor.accessName, name, function(databaseExists, equipmentInfo)
-				if databaseExists then
-					AddCallbacks(name, equipment)
-				end
-			end, equipment)
+		database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, itemTable)
+			if databaseExists then
+				table.Merge(equipment, itemTable)
+				AddCallbacks(name, equipment)
+			end
+		end)
 	end
 
 	if not doHotreload then return end

@@ -801,27 +801,6 @@ if CLIENT then
 	end
 
 	---
-	-- Get the stored key values of the given database if it exists and was registered
-	-- @param string accessName the chosen networkable name of the sql table
-	-- @param string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
-	-- @param function OnReceiveFunc(databaseExists, item) The function that gets called with the results if the database exists
-	-- @param[opt] table item The item table where all values get directly inserted if given
-	-- @realm client
-	function database.GetStoredValues(accessName, itemName, OnReceiveFunc, item)
-		database.GetValue(accessName, itemName, nil, function(databaseExists, itemTable)
-			if not istable(item) then
-				item = {}
-			end
-			if databaseExists then
-				for key, value in pairs(itemTable) do
-					item[key] = value
-				end
-			end
-			OnReceiveFunc(databaseExists, item)
-		end)
-	end
-
-	---
 	-- Request to set the value for a key of an item of an sql-table on the server
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
@@ -1146,27 +1125,6 @@ if SERVER then
 		end
 
 		return istable(sqlData), sqlData
-	end
-
-	---
-	-- Get the stored key values of the given database if it exists and was registered
-	-- @param string accessName the chosen networkable name of the sql table
-	-- @param string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
-	-- @param[opt] table item The item table where all values get directly inserted if given
-	-- @return bool, if the requested item was successfully registered in the sql datatable
-	-- @return table, the requested stored values inserted into a table
-	-- @realm server
-	function database.GetStoredValues(accessName, itemName, item)
-		if not istable(item) then
-			item = {}
-		end
-		local databaseExists, itemTable = database.GetValue(accessName, itemName)
-		if databaseExists then
-			for key, value in pairs(itemTable) do
-				item[key] = value
-			end
-		end
-		return databaseExists, item
 	end
 
 	---

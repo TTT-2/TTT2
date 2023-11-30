@@ -121,14 +121,18 @@ function items.OnLoaded()
 
 		if isSqlTableCreated then
 			database.SetDefaultValuesFromItem(ShopEditor.accessName, name, item)
-			database.GetStoredValues(ShopEditor.accessName, name, item)
+			local databaseExists, itemTable = database.GetValue(ShopEditor.accessName, name)
+			if databaseExists then
+				table.Merge(item, itemTable)
+			end
 			AddCallbacks(name, item)
 		elseif CLIENT then
-			database.GetStoredValues(ShopEditor.accessName, name, function(databaseExists, equipmentInfo)
+			database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, itemTable)
 				if databaseExists then
+					table.Merge(item, itemTable)
 					AddCallbacks(name, item)
 				end
-			end, item)
+			end)
 		end
 
 		CreateEquipment(item) -- init items
