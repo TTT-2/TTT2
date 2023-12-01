@@ -136,20 +136,6 @@ local function shop(len, ply)
 end
 net.Receive("shop", shop)
 
-util.AddNetworkString("TTT2SESaveItem")
-
-local function TTT2SESaveItem(len, ply)
-	if not IsValid(ply) or not ply:IsAdmin() then return end
-
-	local name, item = ShopEditor.ReadItemData()
-
-	if not item then return end
-
-	ShopEditor.WriteItemData("TTT2SESaveItem", name, item)
-	sql.Save("ttt2_items", name, item, ShopEditor.savingKeys)
-end
-net.Receive("TTT2SESaveItem", TTT2SESaveItem)
-
 util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackReset")

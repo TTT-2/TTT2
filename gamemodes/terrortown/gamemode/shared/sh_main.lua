@@ -11,6 +11,27 @@ local sneakSpeedSquared = math.pow(150, 2)
 
 TTT2ShopFallbackInitialized = false
 
+local callbackIdentifier = "TTT2RegisteredSWEPCallback"
+
+---
+-- Add callback for equipment and insert changes in the given equipmentTable
+-- @param string name the database-name of the equipment
+-- @param table equipmentTable the table to insert changes to
+-- @realm shared
+local function AddCallbacks(name, equipmentTable)
+	-- Make sure that on hot reloads old callbacks are removed before adding the new one
+	database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+	database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
+		if not istable(equipmentTable) then
+			database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+
+			return
+		end
+
+		equipmentTable[key] = newValue
+	end, callbackIdentifier)
+end
+
 ---
 -- Initializes the equipment with necessary data for ttt2
 -- Also handles hotreload when called with the `PreRegisterSWEP` hook
@@ -97,26 +118,20 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		ResetDefaultEquipment(equipment)
 	end
 
-	if SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
-		local loaded, changed = sql.Load("ttt2_items", name, equipment, ShopEditor.savingKeys)
-
-		if not loaded then
-			sql.Init("ttt2_items", name, equipment, ShopEditor.savingKeys)
-		elseif changed then
-			local counter = #CHANGED_EQUIPMENT + 1
-
-			if TTT2ShopFallbackInitialized then
-				for i = 1, #CHANGED_EQUIPMENT do
-					if CHANGED_EQUIPMENT[i][1] == name then
-						counter = i
-
-						break
-					end
-				end
-			end
-
-			CHANGED_EQUIPMENT[counter] = {name, equipment}
+	if SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY) then
+		database.SetDefaultValuesFromItem(ShopEditor.accessName, name, equipment)
+		local databaseExists, itemTable = database.GetValue(ShopEditor.accessName, name)
+		if databaseExists then
+			table.Merge(equipment, itemTable)
 		end
+		AddCallbacks(name, equipment)
+	elseif CLIENT then
+		database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, itemTable)
+			if databaseExists then
+				table.Merge(equipment, itemTable)
+				AddCallbacks(name, equipment)
+			end
+		end)
 	end
 
 	if not doHotreload then return end
