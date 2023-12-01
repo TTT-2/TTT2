@@ -82,10 +82,6 @@ function ShopEditor.GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-net.Receive("TTT2SESaveItem", function()
-	ShopEditor.ReadItemData()
-end)
-
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()

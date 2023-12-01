@@ -5,118 +5,166 @@ local TryT = LANG.TryTranslation
 CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
 
-local function Invert(data, value)
-	if data.inverted then
-		return not value
-	else
-		return value
-	end
-end
-
 function CLGAMEMODESUBMENU:Populate(parent)
 	local equipment = self.equipment
-	local forms = {}
-	local form
-	local masterRefs = {}
+	local accessName = ShopEditor.accessName
+	local itemName = equipment.id
 
-	for key, data in SortedPairsByMemberValue(ShopEditor.savingKeys, "order", false) do
-		if self.isItem and not data.showForItem then continue end
+	if not self.isItem then
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_weapon_spawn_setup")
 
-		form = forms[data.group or 1]
+		form:MakeHelp({
+			label = "equipmenteditor_desc_auto_spawnable"
+		})
 
-		if not form then
-			form = vgui.CreateTTT2Form(parent, ShopEditor.groupTitles[data.group])
-			forms[data.group or 1] = form
+		local master = form:MakeCheckBox({
+			label = "equipmenteditor_name_auto_spawnable",
+			database = DatabaseElement(accessName, itemName, "AutoSpawnable")
+		})
+
+		local entType
+		local entTypeList = entspawnscript.GetEntTypeList(SPAWN_TYPE_WEAPON, {[WEAPON_TYPE_RANDOM] = true})
+		local choices = {}
+		for i = 1, #entTypeList do
+			entType = entTypeList[i]
+			choices[i] = {title = TryT(entspawnscript.GetLangIdentifierFromSpawnType(SPAWN_TYPE_WEAPON, entType)), value = entType}
 		end
 
-		local name = "equipmenteditor_name_" .. data.name
-		local desc = "equipmenteditor_desc_" .. data.name
-
-		if data.b_desc then
-			form:MakeHelp({
-				label = desc
-			})
-		end
-
-		local option
-
-		if data.typ == "bool" then
-			option = form:MakeCheckBox({
-				label = name,
-				default = Invert(data, equipment.defaultValues[key]),
-				initial = Invert(data, equipment[key]),
-				OnChange = function(_, value)
-					net.Start("TTT2SESaveItem")
-					net.WriteString(equipment.id)
-					net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-					net.WriteString(key)
-					net.WriteBool(Invert(data, tobool(value)))
-					net.SendToServer()
-				end,
-				master = data.master and masterRefs[data.master]
-			})
-		elseif data.typ == "float" then
-			option = form:MakeSlider({
-				label = name,
-				min = data.min,
-				max = data.max,
-				decimal = data.decimal,
-				default = equipment.defaultValues[key],
-				initial = equipment[key],
-				OnChange = function(_, value)
-					net.Start("TTT2SESaveItem")
-					net.WriteString(equipment.id)
-					net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-					net.WriteString(key)
-					net.WriteFloat(value)
-					net.SendToServer()
-				end,
-				master = data.master and masterRefs[data.master]
-			})
-		elseif data.typ == "number" then
-			if data.subtype == "enum" then
-				option = form:MakeComboBox({
-					label = name,
-					default = equipment.defaultValues[key],
-					OnChange = function(enum)
-						net.Start("TTT2SESaveItem")
-						net.WriteString(equipment.id)
-						net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-						net.WriteString(key)
-						net.WriteUInt(math.Round(enum), data.bits or 16)
-						net.SendToServer()
-					end,
-					master = data.master and masterRefs[data.master]
-				})
-
-				local enum
-				for i = 1, #data.choices do
-					enum = data.choices[i]
-					option:AddChoice(TryT(data.lookupNamesFunc(enum)), enum, equipment[key] == enum)
-				end
-			else
-				option = form:MakeSlider({
-					label = name,
-					min = data.min,
-					max = data.max,
-					decimal = 0,
-					default = equipment.defaultValues[key],
-					initial = equipment[key],
-					OnChange = function(_, value)
-						net.Start("TTT2SESaveItem")
-						net.WriteString(equipment.id)
-						net.WriteUInt(1, ShopEditor.savingKeysBitCount or 16)
-						net.WriteString(key)
-						net.WriteUInt(math.Round(value), data.bits or 16)
-						net.SendToServer()
-					end,
-					master = data.master and masterRefs[data.master]
-				})
-			end
-		end
-
-		masterRefs[key] = option
+		form:MakeComboBox({
+			label = "equipmenteditor_name_spawn_type",
+			database = DatabaseElement(accessName, itemName, "spawnType"),
+			choices = choices,
+			master = master
+		})
 	end
+
+	local form = vgui.CreateTTT2Form(parent, "header_equipment_setup")
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_kind"
+	})
+
+	form:MakeComboBox({
+		label = "equipmenteditor_name_kind",
+		database = DatabaseElement(accessName, itemName, "Kind"),
+		choices = {
+			{title = TryT("slot_weapon_melee"), value = WEAPON_MELEE},
+			{title = TryT("slot_weapon_pistol"), value = WEAPON_PISTOL},
+			{title = TryT("slot_weapon_heavy"), value = WEAPON_HEAVY},
+			{title = TryT("slot_weapon_nade"), value = WEAPON_NADE},
+			{title = TryT("slot_weapon_carry"), value = WEAPON_CARRY},
+			{title = TryT("slot_weapon_unarmed"), value = WEAPON_UNARMED},
+			{title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL},
+			{title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA},
+			{title = TryT("slot_weapon_class"), value = WEAPON_CLASS}
+		},
+		master = nil
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_not_buyable"
+	})
+
+	local master = form:MakeCheckBox({
+		label = "equipmenteditor_name_not_buyable",
+		database = DatabaseElement(accessName, itemName, "notBuyable"),
+		invert = true
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_not_random"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_not_random",
+		database = DatabaseElement(accessName, itemName, "NoRandom"),
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_global_limited"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_global_limited",
+		database = DatabaseElement(accessName, itemName, "globalLimited"),
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_team_limited"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_team_limited",
+		database = DatabaseElement(accessName, itemName, "teamLimited"),
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_player_limited"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_player_limited",
+		database = DatabaseElement(accessName, itemName, "limited"),
+		master = master
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_allow_drop"
+	})
+
+	form:MakeCheckBox({
+		label = "equipmenteditor_name_allow_drop",
+		database = DatabaseElement(accessName, itemName, "AllowDrop"),
+		master = nil
+	})
+
+	form:MakeHelp({
+		label = "equipmenteditor_desc_drop_on_death_type"
+	})
+
+	form:MakeComboBox({
+		label = "equipmenteditor_name_drop_on_death_type",
+		database = DatabaseElement(accessName, itemName, "overrideDropOnDeath"),
+		choices = {
+			{title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT},
+			{title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE},
+			{title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY}
+		},
+		master = nil
+	})
+
+	form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
+
+	form:MakeSlider({
+		label = "equipmenteditor_name_min_players",
+		min = 0,
+		max = 63,
+		decimal = 0,
+		database = DatabaseElement(accessName, itemName, "minPlayers"),
+		master = master
+	})
+
+	form:MakeSlider({
+		label = "equipmenteditor_name_credits",
+		min = 0,
+		max = 20,
+		decimal = 0,
+		database = DatabaseElement(accessName, itemName, "credits"),
+		master = master
+	})
+
+	form:MakeSlider({
+		label = "equipmenteditor_name_damage_scaling",
+		min = 0,
+		max = 8,
+		decimal = 2,
+		database = DatabaseElement(accessName, itemName, "damageScaling"),
+		master = nil
+	})
+
 
 	-- Get inheritable version for weapons to access inherited functions
 	if not self.isItem then

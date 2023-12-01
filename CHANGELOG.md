@@ -43,6 +43,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added sql database access to panel elements
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 - Added dashing to propspec (by @TimGoll)
+- Added new functions to database module
+  -`database.SetDefaultValuesFromItem(accessName, itemName, item)` 
 
 ### Changed
 
@@ -69,6 +71,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
 - Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
 - Changed syncing of database module to use whole tables instead of custom method
+- Replaced equipmenteditor syncing with database module
+- Replaced internal equipment syncing with database module
 
 ### Fixed
 

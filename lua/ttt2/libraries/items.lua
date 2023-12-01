@@ -74,13 +74,32 @@ function items.Register(t, name)
 	ItemList[name] = t
 end
 
+local callbackIdentifier = "TTT2RegisteredItemsCallback"
+
+---
+-- Add callback for item and insert changes in the given equipmentTable
+-- @param string name the database-name of the item
+-- @param table equipmentTable the table to insert changes to
+-- @realm shared
+local function AddCallbacks(name, equipmentTable)
+	-- Make sure that on hot reloads old callbacks are removed before adding the new one
+	database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+	database.AddChangeCallback(ShopEditor.accessName, name, nil, function(accessName, itemName, key, oldValue, newValue)
+		if not istable(equipmentTable) then
+			database.RemoveChangeCallback(ShopEditor.accessName, name, nil, callbackIdentifier)
+
+			return
+		end
+
+		equipmentTable[key] = newValue
+	end, callbackIdentifier)
+end
 
 ---
 -- All scripts have been loaded...
 -- @local
 -- @realm shared
 function items.OnLoaded()
-
 	--
 	-- Once all the scripts are loaded we can set up the baseclass
 	-- - we have to wait until they're all setup because load order
@@ -93,21 +112,27 @@ function items.OnLoaded()
 		baseclass.Set(k, newTable)
 	end
 
-	local isSqlTableCreated = SERVER and sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys)
+	local isSqlTableCreated = SERVER and database.Register(ShopEditor.sqlItemsName, ShopEditor.accessName, ShopEditor.savingKeys, TTT2_DATABASE_ACCESS_ANY)
 
 	for _, item in pairs(ItemList) do
 		InitDefaultEquipment(item)
 		ShopEditor.InitDefaultData(item) -- initialize the default data
+		local name = GetEquipmentFileName(WEPS.GetClass(item))
 
-		if SERVER and isSqlTableCreated then
-			local name = GetEquipmentFileName(WEPS.GetClass(item))
-			local loaded, changed = sql.Load("ttt2_items", name, item, ShopEditor.savingKeys)
-
-			if not loaded then
-				sql.Init("ttt2_items", name, item, ShopEditor.savingKeys)
-			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
+		if isSqlTableCreated then
+			database.SetDefaultValuesFromItem(ShopEditor.accessName, name, item)
+			local databaseExists, itemTable = database.GetValue(ShopEditor.accessName, name)
+			if databaseExists then
+				table.Merge(item, itemTable)
 			end
+			AddCallbacks(name, item)
+		elseif CLIENT then
+			database.GetValue(ShopEditor.accessName, name, nil, function(databaseExists, itemTable)
+				if databaseExists then
+					table.Merge(item, itemTable)
+					AddCallbacks(name, item)
+				end
+			end)
 		end
 
 		CreateEquipment(item) -- init items

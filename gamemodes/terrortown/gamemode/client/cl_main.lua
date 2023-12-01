@@ -627,12 +627,6 @@ function GM:CleanUpMap()
 	game.CleanUpMap()
 end
 
-net.Receive("TTT2SyncDBItems", function()
-	if not ShopEditor then return end
-
-	ShopEditor.ReadItemData()
-end)
-
 -- server tells us to call this when our LocalPlayer has spawned
 local function PlayerSpawn()
 	local as_spec = net.ReadBit() == 1
