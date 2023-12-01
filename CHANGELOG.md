@@ -34,7 +34,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added dashing to propspec (by @TimGoll)
 - Added new functions to database module
   -`database.SetDefaultValuesFromItem(accessName, itemName, item)` 
-  -`database.GetStoredValues(accessName, itemName, item)`
 
 ### Changed
 
