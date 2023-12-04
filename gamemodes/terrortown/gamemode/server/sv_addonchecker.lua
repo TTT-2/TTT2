@@ -315,6 +315,46 @@ addonChecker.curatedList = {
 		alternative = "842302491",
 		type = ADDON_OUTDATED
 	},
+	["671603913"] = { -- Space and Time manipulator by Hagen
+		alternative = "2237612513",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1558020463"] = { -- TTT - Thanos Snap by Pocable
+		alternative = "1837434311",
+		reason = "Improved integration into TTT2 systems and viewmodels.",
+		type = ADDON_OUTDATED
+	},
+	["1466843055"] = { -- [TTT] - Teleport Gun - Fixed version by cookie
+		alternative = "931856840",
+		reason = "Jazz fixed their original addon.",
+		type = ADDON_OUTDATED,
+	},
+	["590909626"] = { -- Handcuffs by porter
+		alternative = "2401563697",
+		reason = "Broken handcuffs that don't do anything or make the game unplayable.",
+		type = ADDON_OUTDATED,
+	},
+	["2249861635"] = { -- Handcuffs by Malivil
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
+	["2124909686"] = { -- Handcuffs by DJ Bat
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
+	["1667876426"] = { -- Handcuffs by Wokki
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
+	["1190286764"] = { -- Handcuffs 2 by porter
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
 	["310403937"] = { -- Prop Disguiser by Exho
 		alternative = "1662844145",
 		type = ADDON_OUTDATED
