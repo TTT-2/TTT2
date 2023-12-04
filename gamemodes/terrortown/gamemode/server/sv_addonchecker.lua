@@ -182,6 +182,18 @@ addonChecker.curatedList = {
 		reason = "Breaks the equipment shop.",
 		type = ADDON_INCOMPATIBLE
 	},
+	["1729451064"] = { -- TTT - More Melee Weapons by Solrob
+		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		type = ADDON_INCOMPATIBLE,
+	},
+	["2912756384"] = { -- TTT ProofOfConcept InnocentTasks by Emzatin.
+		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		type = ADDON_INCOMPATIBLE,
+	},
+	["1961869471"] = { -- [TTT/2] Crowbar to throwable Crowbar by GengarDC
+		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		type = ADDON_INCOMPATIBLE,
+	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
