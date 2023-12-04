@@ -327,6 +327,36 @@ addonChecker.curatedList = {
 		alternative = "842302491",
 		type = ADDON_OUTDATED
 	},
+	["662342819"] = { -- randomat by hagen
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["1398629839"] = { -- randomat by GhostPhanom
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["1244828603"] = { -- randomat by SnowSoulAngel
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["2037019426"] = { -- randomat by HyruleKrieger
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["1406495040"] = { -- randomat 2.0 by Abi
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["2055805086"] = { -- randomat 2.0 for CR by Malivil
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
 	["671603913"] = { -- Space and Time manipulator by Hagen
 		alternative = "2237612513",
 		reason = "Improved integration into TTT2 systems.",
