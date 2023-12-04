@@ -398,27 +398,31 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED,
 	},
 	["310403937"] = { -- Prop Disguiser by Exho
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["843092697"] = { -- Prop Disguiser by Soren
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["937535488"] = { -- Prop Disguiser by St Addi
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["1168304202"] = { -- Prop Disguiser by Izellix
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["1361103159"] = { -- Prop Disguiser by Derp altamas
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["1301826793"] = { -- Prop Disguiser by Akechi
-		alternative = "1662844145",
+		alternative = "2127939503",
+		type = ADDON_OUTDATED
+	},
+	["1662844145"] = { -- Prop Disguiser by TeamAlgee
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["254779132"] = { -- Dead Ringer by Porter
