@@ -69,7 +69,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		for i = 1, #items do
 			local item = items[i]
 
-			if not item.isEquipment then continue end
+			if not item.isEditableEquipment then continue end
 
 			counter = counter + 1
 
