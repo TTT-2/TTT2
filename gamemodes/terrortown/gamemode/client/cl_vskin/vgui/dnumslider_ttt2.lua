@@ -31,11 +31,6 @@ function PANEL:Init()
 		self:SetValueFromTextBox()
 	end
 
-	-- On enter keypres, apply new values
-	self.TextArea.OnEnter = function(textarea, val)
-		self:SetValueFromTextBox()
-	end
-
 	self.TextArea.Paint = function(slf, w, h)
 		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
 		return true
@@ -178,7 +173,6 @@ function PANEL:SetValue(value, ignoreCallbackEnabledVars)
 	self.m_fValue = value
 
 	self:ValueChanged(value)
-
 	-- Set ConVars only when Mouse is released
 	if ignoreCallbackEnabledVars or self:IsEditing() then return end
 
@@ -190,8 +184,7 @@ end
 function PANEL:SetValueFromTextBox()
 	local val = self.TextArea:GetText()
 	val = val ~= "" and val or 0
-	self:SetValue(self.TextArea:GetText())
-	self:SetCallbackEnabledVarValues(val)
+	self:SetValue(val)
 	self.TextArea:SetText(val)
 end
 
@@ -267,7 +260,7 @@ end
 -- @return boolean
 -- @realm client
 function PANEL:IsEditing()
-	return self.TextArea:IsEditing() or self.Slider:IsEditing()
+	return self.textBoxEnabled or self.Slider:IsEditing()
 end
 
 ---
