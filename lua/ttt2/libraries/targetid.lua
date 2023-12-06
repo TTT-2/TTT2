@@ -496,12 +496,12 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 			if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
 				tData:SetSubtitle(ParT("corpse_hint_public_policing_searched", key_params))
 			else
-				tData:SetSubtitle(ParT("corpse_hint_no_inspect", key_params))
+				tData:SetSubtitle(ParT("corpse_hint_inspect_limited", key_params))
 			end
-			tData:AddDescriptionLine(TryT("corpse_hint_no_inspect_details"))
+			tData:AddDescriptionLine(TryT("corpse_hint_inspect_limited_details"))
 		elseif bodysearch.GetInspectConfirmMode() == 1 and not (roleDataClient.isPolicingRole and roleDataClient.isPublicRole) then
-			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
-			tData:AddDescriptionLine(TryT("corpse_hint_inspect_only_details"))
+			tData:SetSubtitle(ParT("corpse_hint_inspect_limited", key_params))
+			tData:AddDescriptionLine(TryT("corpse_hint_inspect_limited_details"))
 		else
 			tData:SetSubtitle(ParT("corpse_hint", key_params))
 		end

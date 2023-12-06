@@ -1148,8 +1148,7 @@ L.hud_revival_time = "{time}秒"
 L.door_destructible = "ドアが破損している({health}HP)"
 
 -- 2020-05-28
---L.corpse_hint_no_inspect = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
---L.corpse_hint_inspect_only = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
+--L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "変装する"
