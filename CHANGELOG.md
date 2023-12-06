@@ -108,7 +108,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed explicit "Sprint" key bind, please use the GMod native sprint key binding (by @saibotk)
 - Removed unused clientside `Player.preventSprint` flag (by @saibotk)
 
-## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
+## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2023-08-27)
 
 ### Added
 
@@ -167,7 +167,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)
 - Fixed behavior of `entspawn.SpawnRandomAmmo` to produce non-deagle ammo. (by @NickCloudAT, mostly)
 
-## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2023-09-25)
+## [v0.11.6b](https://github.com/TTT-2/TTT2/tree/v0.11.6b) (2022-09-25)
 
 ### Changed
 
