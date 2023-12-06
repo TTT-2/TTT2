@@ -78,7 +78,7 @@ end
 -- @realm shared
 function bodysearch.CanTakeCredits(ply, rag, isLongRange)
 	---
-	-- @realm server
+	-- @realm shared
 	if hook.Run("TTT2CheckFindCredits", ply, rag) == false then
 		return false
 	end
