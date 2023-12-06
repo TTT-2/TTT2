@@ -489,7 +489,6 @@ local function InternalSplitLongWord(word, width, widthWord)
 		end
 
 		local nextLine = utf8.sub(word, currentStartPos, currentEndPos)
-		local countNextLine = currentEndPos - currentStartPos + 1
 		local widthNextLine = surface.GetTextSize(nextLine)
 
 		-- Check if our estimated cut needs adjustment and does not fit
