@@ -332,6 +332,8 @@ if CLIENT then
 		hook.Run("TTTBodySearchEquipment", searchStreamData, eq)
 
 		searchStreamData.show = LocalPlayer() == searchStreamData.base.inspector
+		-- add this hack here to keep compatibility to the old scoreboard
+		searchStreamData.show_sb = searchStreamData.show or searchStreamData.base.isPublicPolicingSearch
 
 		-- cache search result in rag.bodySearchResult, e.g. useful for scoreboard
 		bodysearch.StoreSearchResult(searchStreamData)
@@ -345,9 +347,6 @@ if CLIENT then
 				SEARCHSCREEN:Show(searchStreamData)
 			end
 		end
-
-		-- add this hack here to keep compatibility to the old scoreboard
-		searchStreamData.show_sb = searchStreamData.show or searchStreamData.base.isPublicPolicingSearch
 	end)
 
 	local damageToText = {
