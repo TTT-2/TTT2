@@ -28,7 +28,7 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 	for i = 1, #equipments do
 		local equipment = equipments[i]
 
-		if not equipment.isEditableEquipment then continue end
+		if not equipment.isValidEquipment then continue end
 
 		counter = counter + 1
 

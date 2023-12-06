@@ -1115,7 +1115,7 @@ end
 -- @param table item
 -- @realm client
 function TTT2CacheEquipMaterials(item)
-	item.isEditableEquipment = true
+	item.isValidEquipment = true
 
 	if item.material then
 		item.iconMaterial = Material(item.material)
@@ -1131,7 +1131,7 @@ function TTT2CacheEquipMaterials(item)
 
 	--if there is no sensible material and model, the item should probably not be editable in the equipment Editor
 	if item.material == "vgui/ttt/icon_id" and item.model == "models/weapons/w_bugbait.mdl" then
-		item.isEditableEquipment = false
+		item.isValidEquipment = false
 	end
 end
 
