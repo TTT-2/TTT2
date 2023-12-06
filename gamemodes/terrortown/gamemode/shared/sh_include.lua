@@ -112,7 +112,9 @@ TTTFiles = {
 	cl_vskin__vgui__drolelayeringreceiver = {file = "cl_vskin/vgui/drolelayeringreceiver_ttt2.lua", on = "client"},
 	cl_vskin__vgui__drolelayeringsender = {file = "cl_vskin/vgui/drolelayeringsender_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dsearchbar = {file = "cl_vskin/vgui/dsearchbar_ttt2.lua", on = "client"},
-	cl_vskin__vgui__dsubmenulist = {file = "cl_vskin/vgui/dsubmenulist_ttt2.lua", on = "client"}
+	cl_vskin__vgui__dsubmenulist = {file = "cl_vskin/vgui/dsubmenulist_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dinfoitem = {file = "cl_vskin/vgui/dinfoitem_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dprofilepanel = {file = "cl_vskin/vgui/dprofilepanel_ttt2.lua", on = "client"}
 }
 
 if SERVER then

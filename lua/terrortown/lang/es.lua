@@ -172,46 +172,6 @@ L.quick_disg = "alguien disfrazado"
 L.quick_corpse = "un cuerpo sin identificar"
 L.quick_corpse_id = "el cadáver de {player}"
 
--- Body search window
-L.search_title = "Resultados de búsqueda"
-L.search_info = "Información"
-L.search_confirm = "Confirmar Muerte"
-L.search_call = "Llamar a un Detective"
-
--- Descriptions of pieces of information found
-L.search_nick = "Este es el cuerpo de {player}."
-
-L.search_role_traitor = "¡Esta persona era un Traidor!"
-L.search_role_det = "Esta persona era Inocente."
-L.search_role_inno = "Esta persona era un terrorista inocente."
-
-L.search_words = "Algo te dice una de las últimas palabras de esta persona fueron: '{lastwords}'"
-L.search_armor = "Estaba utilizando protección antibalas."
-L.search_disg = "Estaba utilizando un dispositivo para camuflar su identidad."
-L.search_radar = "Estaba llevando un radar. Pero ya no funciona."
-L.search_c4 = "En el bolsillo encuentras una nota. Pone que cortando el cable {num} se desactiva una bomba."
-
-L.search_dmg_crush = "Varios de sus huesos están rotos. Parece ser que ha muerto por el impacto de un objeto."
-L.search_dmg_bullet = "Es evidente que le han disparado hasta morir."
-L.search_dmg_fall = "Cayó directo hacia su muerte."
-L.search_dmg_boom = "Sus heridas y la ropa chamuscada indican que una explosión acabó con la vida de esta persona."
-L.search_dmg_club = "El cuerpo está golpeado y amorotonado. Fue apalizado hasta la muerte."
-L.search_dmg_drown = "El cuerpo muestra signos de axfisia. Ha muerto ahogado"
-L.search_dmg_stab = "Fue apuñalado y cortado para después desangrarse rápidamente hasta morir."
-L.search_dmg_burn = "Aquí huele a terrorista quemado..."
-L.search_dmg_tele = "¡Parece que su ADN fue alterado por partículas de taquión!"
-L.search_dmg_car = "Cuando este terrorista quiso crusar la calle, fue atropellado por un conductor descuidado."
-L.search_dmg_other = "No puedes determinar la causa de muerte de esta persona."
-
-L.search_weapon = "Parece que se uso un/una {weapon} para matarlo."
-L.search_head = "Murió de un solo disparo en la cabeza. No le dio tiempo a gritar."
-L.search_time = "Murió apróximadamente {time} antes de empezar la investigación."
-L.search_dna = "Recoge una muestra del ADN del asesino con un Escáner ADN. La muestra de ADN caducará en {time}."
-
-L.search_kills1 = "Has encontrado una lista de asesinatos que confirman la muerte de {player}."
-L.search_kills2 = "Has encontrado una lista de asesinatos con los siguientes nombres:"
-L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la última persona a la que vio fue: {player}. ¿Es el asesino o sólo fue una coincidencia?"
-
 -- Scoreboard
 L.sb_playing = "Estás jugando en..."
 L.sb_mapchange = "El mapa cambia en {num} rondas o en {time}"
@@ -484,13 +444,11 @@ L.karma_min = "Responsable"
 
 -- TargetID misc
 L.corpse = "Cadáver"
-L.corpse_hint = "Pulsa [{usekey}] para inspeccionar. [{walkkey} + {usekey}] para inspeccionar silenciosamente."
+--L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly."
 
 L.target_disg = "(disfrazado)"
 L.target_unid = "Cuerpo sin identificar"
 --L.target_unknown = "A Terrorist"
-
-L.target_credits = "Inspecciona para recibir los créditos no usados"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Un solo uso"
@@ -953,7 +911,7 @@ L.target_switch_weapon_nospace = "No hay espacio disponible para esta arma en tu
 L.target_switch_drop_weapon_info = "Soltando {name} del espacio {slot}"
 L.target_switch_drop_weapon_info_noslot = "No hay un arma que esté ocupando el espacio {slot}"
 
-L.corpse_searched_by_detective = "Este cadáver fue inspeccionado por un detective."
+--L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "El cadáver está muy lejos."
 
 L.radio_pickup_wrong_team = "No puedes recoger la radio de otro equipo."
@@ -1190,11 +1148,7 @@ L.hud_revival_time = "{time}s"
 L.door_destructible = "La puerta es desctructible (VIDA {health})"
 
 -- 2020-05-28
-L.confirm_detective_only = "Sólo los detectives pueden confirmar cuerpos"
-L.inspect_detective_only = "Sólo los detectives pueden inspeccionar cuerpos"
-L.corpse_hint_no_inspect = "Sólo los detectives pueden inspeccionar este cuerpo."
-L.corpse_hint_inspect_only = "Pulsa [{usekey}] para inspeccionar. Sólo los detectives pueden confirmar este cuerpo."
-L.corpse_hint_inspect_only_credits = "Pulsa [{usekey}] para recibir los créditos. Sólo los detectives pueden inspeccionar este cuerpo."
+--L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "Disfraz"
@@ -1755,10 +1709,8 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_spectator_chat = "Enable spectators chatting with everybody"
 --L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 --L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
---L.label_announce_body_found = "Announce that a body was found"
+--L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 --L.label_confirm_killlist = "Announce kill list of confirmed corpse"
---L.label_inspect_detective_only = "Limit corpse search to policing roles only"
---L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
 --L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
 --L.label_armor_block_headshots = "Enable armor blocking headshots"
 --L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
@@ -1890,6 +1842,146 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-07
+L.search_title = "Resultados de búsqueda - {player}"
+L.search_info = "Información"
+L.search_confirm = "Confirmar Muerte"
+--L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
+--L.search_take_credits = "Take {credits} Credit(s)"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
+--L.search_call = "Report Death"
+--L.search_called = "Death Reported"
+
+--L.search_team_role_unknown = "???"
+
+L.search_words = "Algo te dice una de las últimas palabras de esta persona fueron: '{lastwords}'"
+L.search_armor = "Estaba utilizando protección antibalas."
+L.search_disguiser = "Estaba utilizando un dispositivo para camuflar su identidad."
+L.search_radar = "Estaba llevando un radar. Pero ya no funciona."
+L.search_c4 = "En el bolsillo encuentras una nota. Pone que cortando el cable {num} se desactiva una bomba."
+
+L.search_dmg_crush = "Varios de sus huesos están rotos. Parece ser que ha muerto por el impacto de un objeto."
+L.search_dmg_bullet = "Es evidente que le han disparado hasta morir."
+L.search_dmg_fall = "Cayó directo hacia su muerte."
+L.search_dmg_boom = "Sus heridas y la ropa chamuscada indican que una explosión acabó con la vida de esta persona."
+L.search_dmg_club = "El cuerpo está golpeado y amorotonado. Fue apalizado hasta la muerte."
+L.search_dmg_drown = "El cuerpo muestra signos de axfisia. Ha muerto ahogado"
+L.search_dmg_stab = "Fue apuñalado y cortado para después desangrarse rápidamente hasta morir."
+L.search_dmg_burn = "Aquí huele a terrorista quemado..."
+L.search_dmg_teleport = "¡Parece que su ADN fue alterado por partículas de taquión!"
+L.search_dmg_car = "Cuando este terrorista quiso crusar la calle, fue atropellado por un conductor descuidado."
+L.search_dmg_other = "No puedes determinar la causa de muerte de esta persona."
+
+--L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
+--L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
+--L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
+--L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
+--L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
+--L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
+--L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
+--L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
+--L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
+--L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
+--L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
+--L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
+--L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
+--L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
+--L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
+--L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
+--L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
+--L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
+--L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+
+--L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
+--L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
+--L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+
+L.search_weapon = "Parece que se uso un/una {weapon} para matarlo."
+L.search_head = "Murió de un solo disparo en la cabeza. No le dio tiempo a gritar."
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+
+L.search_kills1 = "Has encontrado una lista de asesinatos que confirman la muerte de {player}."
+L.search_kills2 = "Has encontrado una lista de asesinatos con los siguientes nombres: {player}"
+L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la última persona a la que vio fue: {player}. ¿Es el asesino o sólo fue una coincidencia?"
+
+--L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+
+--L.search_kill_distance_point_blank = "It was a point blank attack."
+--L.search_kill_distance_close = "The attack came from a short distance."
+--L.search_kill_distance_far = "The victim was attacked from a long distance away."
+
+--L.search_kill_from_front = "The victim was shot from the front."
+--L.search_kill_from_back = "The victim was shot from behind."
+--L.search_kill_from_side = "The victim was shot from the side."
+
+--L.search_hitgroup_head = "The projectile was found in their head."
+--L.search_hitgroup_chest = "The projectile was found in their chest."
+--L.search_hitgroup_stomach = "The projectile was found in their stomach."
+--L.search_hitgroup_rightarm = "The projectile was found in their right arm."
+--L.search_hitgroup_leftarm = "The projectile was found in their left arm."
+--L.search_hitgroup_rightleg = "The projectile was found in their right leg."
+--L.search_hitgroup_leftleg = "The projectile was found in their left leg."
+--L.search_hitgroup_gear = "The projectile was found in their hip."
+
+--L.search_policingrole_report_confirm = [[
+--A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
+--L.search_policingrole_confirm_disabled_1 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
+--L.search_policingrole_confirm_disabled_2 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!
+--You can see the information in here after they confirmed it.]]
+--L.search_spec = [[
+--As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+
+--L.search_title_words = "Victim's last words"
+--L.search_title_c4 = "Defusion mishap"
+--L.search_title_dmg_crush = "Crush damage ({amount} HP)"
+--L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
+--L.search_title_dmg_fall = "Fall damage ({amount} HP)"
+--L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
+--L.search_title_dmg_club = "Club damage ({amount} HP)"
+--L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
+--L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
+--L.search_title_dmg_burn = "Burning damage ({amount} HP)"
+--L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
+--L.search_title_dmg_car = "Car accident ({amount} HP)"
+--L.search_title_dmg_other = "Unknown damage ({amount} HP)"
+--L.search_title_time = "Death time"
+--L.search_title_dna = "DNA sample decay"
+--L.search_title_kills = "The victim's kill list"
+--L.search_title_eyes = "The killer's shadow"
+--L.search_title_floor = "Floor of the crime scene"
+--L.search_title_credits = "{credits} Equipment credit(s)"
+--L.search_title_water = "Water level {level}"
+--L.search_title_policingrole_report_confirm = "Confirm to report death"
+--L.search_title_policingrole_confirm_disabled = "Report corpse"
+--L.search_title_spectator = "You are a spectator"
+
+--L.target_credits_on_confirm = "Confirm to receive unspent credits"
+--L.target_credits_on_search = "Search to receive unspent credits"
+--L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
+--L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+
+--L.label_inspect_confirm_mode = "Select body search mode"
+--L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
+--L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
+--L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
+--L.help_inspect_confirm_mode = [[
+--There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
+--
+--mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
+--
+--mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
+--
+--mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
 -- 2023-10-23
 --L.header_miscellaneous_settings = "Miscellaneous Settings"

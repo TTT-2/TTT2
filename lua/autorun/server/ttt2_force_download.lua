@@ -240,3 +240,11 @@ resource.AddFile("materials/vgui/ttt/hudhelp/voice_team.vmt")
 resource.AddFile("materials/vgui/ttt/hudhelp/ammo_drop.vmt")
 resource.AddFile("materials/vgui/ttt/hudhelp/weapon_drop.vmt")
 resource.AddFile("materials/vgui/ttt/hudhelp/prop_das.vmt")
+
+-- bodysearch icons
+resource.AddFile("materials/vgui/ttt/icon_credits.vmt")
+resource.AddFile("materials/vgui/ttt/icon_credits_transparent.vmt")
+resource.AddFile("materials/vgui/ttt/icon_floor.vmt")
+resource.AddFile("materials/vgui/ttt/icon_water_1.vmt")
+resource.AddFile("materials/vgui/ttt/icon_water_2.vmt")
+resource.AddFile("materials/vgui/ttt/icon_water_3.vmt")

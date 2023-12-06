@@ -42,7 +42,7 @@ ttt2net.OnUpdate({"entspawnscript", "spawnamount"}, function(_, newval, reverseP
 
 	if not IsValid(updateHelpBox) or not paramType then return end
 
-	updateHelpBox:GetParams()[paramType] = newval
+	updateHelpBox:GetTextParams()[paramType] = newval
 end)
 
 

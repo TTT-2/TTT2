@@ -106,13 +106,13 @@ end
 -- Sets the param table used for the param translation.
 -- @param table params
 -- @realm client
-function PANEL:SetParams(params)
+function PANEL:SetTextParams(params)
 	self.params = params
 end
 
 ---
 -- @realm client
-function PANEL:GetParams()
+function PANEL:GetTextParams()
 	return self.params or {}
 end
 

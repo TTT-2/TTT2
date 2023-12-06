@@ -1,9 +1,6 @@
 ---
 -- @class PANEL
--- @section DImageCheckBoxTTT2
-
-local mathMax = math.max
-local mathMin = math.min
+-- @section DProfilePanelTTT2
 
 local PANEL = {}
 
@@ -70,11 +67,10 @@ function PANEL:Init()
 	self:SetMouseInputEnabled(true)
 	self:SetKeyboardInputEnabled(true)
 
-	self:SetCursor("hand")
 	self:SetFont("DermaTTT2TextLarge")
 
-	self:SetCamPos(Vector(55, 55, 55))
-	self:SetLookAt(Vector(0, 0, 55))
+	self:SetCamPos(Vector(42, -1, 70))
+	self:SetLookAt(Vector(0, -1, 58))
 	self:SetFOV(35)
 
 	self:SetAnimSpeed(0.5)
@@ -88,21 +84,9 @@ function PANEL:Init()
 
 	self:SetColor(COLOR_WHITE)
 
-	-- remove label and overwrite function
 	self:SetText("")
-	self.SetText = function(slf, text)
-		slf.data.text = text
-	end
 
-	self.data = {
-		text = "",
-		img = nil,
-		mdl = nil,
-		ent = nil,
-		headbox = false,
-		hattable = false,
-		selected = false
-	}
+	self.data = {}
 end
 
 ---
@@ -123,54 +107,10 @@ function PANEL:SetDirectionalLight(iDirection, color)
 end
 
 ---
--- @ignore
-function PANEL:GetText()
-	return self.data.text
-end
-
----
--- @param Material image
--- @realm client
-function PANEL:SetImage(image)
-	self.data.img = image
-end
-
----
--- @param boolean state
--- @realm client
-function PANEL:SetHeadBox(state)
-	self.data.headbox = state
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasHeadBox()
-	return self.data.headbox or false
-end
-
----
--- @param boolean state
--- @param boolean userTriggered
--- @realm client
-function PANEL:SetModelHattable(state, userTriggered)
-	self.data.hattable = state
-
-	self:OnModelHattable(userTriggered or false, state)
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:IsModelHattable()
-	return self.data.hattable or false
-end
-
----
 -- @param string model
 -- @realm client
 function PANEL:SetModel(model)
-	self.data.mdl = model
+	self.data.mdl = Model(model)
 
 	-- set the entity
 	local ent = ClientsideModel(model, RENDERGROUP_OTHER)
@@ -206,32 +146,17 @@ function PANEL:SetModel(model)
 end
 
 ---
+-- @param number x
+-- @param number y
+-- @param number w
+-- @param number h
 -- @realm client
-function PANEL:DrawModel()
+function PANEL:DrawModel(x, y, w, h)
 	local ent = self.data.ent
 
 	if not IsValid(ent) then return end
 
-	local w, h = self:GetSize()
-	local xBaseStart, yBaseStart = self:LocalToScreen(0, 0)
-
-	local xLimitStart, yLimitStart = xBaseStart, yBaseStart
-	local xLimitEnd, yLimitEnd = self:LocalToScreen(self:GetWide(), self:GetTall())
-
-	local curparent = self
-
-	-- iterate till the top is found to make sure the image is not out of bounds
-	while curparent:GetParent() do
-		curparent = curparent:GetParent()
-
-		local x1, y1 = curparent:LocalToScreen(0, 0)
-		local x2, y2 = curparent:LocalToScreen(curparent:GetWide(), curparent:GetTall())
-
-		xLimitStart = mathMax(xLimitStart, x1)
-		yLimitStart = mathMax(yLimitStart, y1)
-		xLimitEnd = mathMin(xLimitEnd, x2)
-		yLimitEnd = mathMin(yLimitEnd, y2)
-	end
+	local xBaseStart, yBaseStart = self:LocalToScreen(x, y)
 
 	self:LayoutEntity(ent)
 
@@ -253,7 +178,7 @@ function PANEL:DrawModel()
 		end
 
 		-- make a mask to make sure the graphic is limited
-		render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
+		render.SetScissorRect(xBaseStart, yBaseStart, xBaseStart + w, yBaseStart + h, true)
 
 		ent:DrawModel()
 
@@ -285,24 +210,10 @@ function PANEL:RunAnimation()
 end
 
 ---
--- @return Material
--- @realm client
-function PANEL:GetImage()
-	return self.data.img
-end
-
----
--- @return string
+-- @return string|nil
 -- @realm client
 function PANEL:GetModel()
 	return self.data.mdl
-end
-
----
--- @return boolean
--- @realm client
-function PANEL:HasImage()
-	return self.data.img ~= nil
 end
 
 ---
@@ -313,68 +224,81 @@ function PANEL:HasModel()
 end
 
 ---
--- @param boolean selected
--- @param boolean userTriggered
+-- @param string material
 -- @realm client
-function PANEL:SetModelSelected(selected, userTriggered)
-	self.data.selected = selected
-
-	self:OnModelSelected(userTriggered or false, self.data.selected)
+function PANEL:SetPlayerIcon(material)
+	self.data.player_icon = material
 end
 
 ---
--- @return boolean
+-- @param string material
 -- @realm client
-function PANEL:IsModelSelected()
-	return self.data.selected or false
+function PANEL:SetPlayerRoleIcon(material)
+	self.data.player_role_icon = material
 end
 
 ---
--- @ignore
-function PANEL:OnMouseReleased(keyCode)
-	if keyCode == MOUSE_LEFT then
-		local state = not self:IsModelSelected()
-
-		self:SetModelSelected(state, true)
-	elseif keyCode == MOUSE_RIGHT then
-		local state = not self:IsModelHattable()
-
-		self:SetModelHattable(state, true)
-	end
-
-	self.BaseClass.OnMouseReleased(self, keyCode)
-end
-
----
--- Is called when the model selection state is updated. Should be overwritten.
--- @param boolean userTriggered
--- @param boolean state
+-- @param Color color
 -- @realm client
-function PANEL:OnModelSelected(userTriggered, state)
-
+function PANEL:SetPlayerRoleColor(color)
+	self.data.player_role_color = color
 end
 
 ---
--- Is called when the hattable state is updated. Should be overwritten.
--- @param boolean userTriggered
--- @param boolean state
+-- @param string role
 -- @realm client
-function PANEL:OnModelHattable(userTriggered, state)
-
+function PANEL:SetPlayerRoleString(role)
+	self.data.player_role_name = role
 end
 
 ---
--- @ignore
-function PANEL:IsDown()
-	return self.Depressed
+-- @param string team
+-- @realm client
+function PANEL:SetPlayerTeamString(team)
+	self.data.player_team_name = team
+end
+
+---
+-- @return Material|nil
+-- @realm client
+function PANEL:GetPlayerIcon()
+	return self.data.player_icon
+end
+
+---
+-- @return Material|nil
+-- @realm client
+function PANEL:GetPlayerRoleIcon()
+	return self.data.player_role_icon
+end
+
+---
+-- @return Color|nil
+-- @realm client
+function PANEL:GetPlayerRoleColor()
+	return self.data.player_role_color
+end
+
+---
+-- @return string|nil
+-- @realm client
+function PANEL:GetPlayerRoleString()
+	return self.data.player_role_name
+end
+
+---
+-- @return string|nil
+-- @realm client
+function PANEL:GetPlayerTeamString()
+	return self.data.player_team_name
 end
 
 ---
 -- @ignore
 function PANEL:Paint(w, h)
-	derma.SkinHook("Paint", "ImageCheckBoxTTT2", self, w, h)
+	derma.SkinHook("Paint", "ProfilePanelTTT2", self, w, h)
 
 	return false
 end
 
-derma.DefineControl("DImageCheckBoxTTT2", "A special button with image or model that acts as a checkbox", PANEL, "DLabelTTT2")
+derma.DefineControl("DProfilePanelTTT2", "A special box with a 3D model or model", PANEL, "DLabelTTT2")

@@ -20,21 +20,41 @@ function PANEL:Init()
 
 	self:SetCursor("hand")
 	self:SetFont("DermaTTT2Button")
-
-	self.text = ""
-
 	-- remove label and overwrite function
 	self:SetText("")
 	self.SetText = function(slf, text)
-		slf.text = text
+		slf.data.text = text
 	end
+
+	self.data = {}
 end
 
 ---
 -- @return string
 -- @realm client
 function PANEL:GetText()
-	return self.text
+	return self.data.text
+end
+
+---
+-- @param table params
+-- @realm client
+function PANEL:SetTextParams(params)
+	self.data.params = params
+end
+
+---
+-- @return table
+-- @realm client
+function PANEL:GetTextParams()
+	return self.data.params
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasTextParams()
+	return self.data.params ~= nil
 end
 
 ---
@@ -60,6 +80,59 @@ function PANEL:SetConsoleCommand(strName, strArgs)
 	self.DoClick = function(slf, val)
 		RunConsoleCommand(strName, strArgs)
 	end
+end
+
+---
+-- @param Color color
+-- @realm client
+function PANEL:SetColor(color)
+	self.data.color = color
+end
+
+---
+-- @return Color|nil
+-- @realm client
+function PANEL:GetColor()
+	return self.data.color
+end
+
+---
+-- @param Material icon
+-- @param[default=false] boolean is_shadowed
+-- @param[default=32] number size
+-- @realm client
+function PANEL:SetIcon(icon, is_shadowed, size)
+	self.data.icon = icon
+	self.data.icon_shadow = is_shadowed or false
+	self.data.icon_size = size or 32
+end
+
+---
+-- @return Material|nil
+-- @realm client
+function PANEL:GetIcon()
+	return self.data.icon
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:HasIcon()
+	return self.data.icon ~= nil
+end
+
+---
+-- @return boolean|nil
+-- @realm client
+function PANEL:IsIconShadowed()
+	return self.data.icon_shadow
+end
+
+---
+-- @return number|nil
+-- @realm client
+function PANEL:GetIconSize()
+	return self.data.icon_size
 end
 
 ---
