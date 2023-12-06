@@ -864,12 +864,12 @@ if CLIENT then
 
 		-- if the currently stored search result is by a public policing role, it should be kept
 		-- it can be overwritten by another public policing role though
-		-- data can still be updated, but the original base is kept
-		local oldBase
+		-- data can still be updated, but the previous base is kept
+		local previousSceneDataBase
 		if ply.bodySearchResult and ply.bodySearchResult.base and ply.bodySearchResult.base.isPublicPolicingSearch
 			and not sceneData.base.isPublicPolicingSearch
 		then
-			oldBase = sceneData.base
+			previousSceneDataBase = table.Copy(sceneData.base)
 		end
 
 		-- merge new data into old data
@@ -880,7 +880,7 @@ if CLIENT then
 		table.Merge(newData, sceneData)
 
 		-- keep the original finder info if previously searched by public policing role
-		newData.base = oldBase or newData.base
+		newData.base = previousSceneDataBase or newData.base
 
 		ply.bodySearchResult = newData
 
