@@ -463,43 +463,69 @@ end
 local function InternalSplitLongWord(word, width, widthWord)
 	local charCount = utf8.len(word)
 	local wCharAverage = widthWord / charCount
-	local charCountPerLine = math.floor(width / wCharAverage * 0.8) -- decreae a bit to have tolerance
-	local lastStartPos = 1
-	local lineNumber = 1
+	-- decrease a bit to have tolerance & limit to at least 1, to prevent infinite loops
+	local charCountPerLine = math.max(1, math.floor(width / wCharAverage * 0.8))
 
-	local lines = {""}
+	local lines = { "" }
+
+	local currentStartPos = 1
+	local currentLineNumber = 1
 
 	while true do
-		local nextStartPos = lastStartPos + charCountPerLine
-		lines[lineNumber] = utf8.sub(word, lastStartPos, nextStartPos -1)
-		lastStartPos = nextStartPos
+		local nextStartPos = currentStartPos + charCountPerLine
+		local currentEndPos = nextStartPos - 1
 
-		local wLine
-
-		-- then iterate over further chars until line end is reached
-		for i = lastStartPos, charCount do
-			local added = lines[lineNumber] .. utf8.GetChar(word, i)
-
-			wLine = surface.GetTextSize(added)
-
-			if wLine > width then
-				lineNumber = lineNumber + 1
-
-				break
-			else
-				lines[lineNumber] = added
-				lastStartPos = lastStartPos + 1
-			end
-		end
-
-		if lastStartPos >= charCount - 1 then
+		-- Check if we need to end the algorithm and can finish
+		if nextStartPos > charCount then
 			-- put the remainder into the next line in this special case
-			if lastStartPos <= charCount then
-				lines[lineNumber] = utf8.sub(word, lastStartPos, charCount)
+			-- this case is reached when calculating the last line and we
+			-- overshoot the end of the word, so we need to put the rest
+			-- into the next line
+			if currentStartPos <= charCount then
+				lines[currentLineNumber] = utf8.sub(word, currentStartPos, charCount)
 			end
 
 			break
 		end
+
+		local nextLine = utf8.sub(word, currentStartPos, currentEndPos)
+		local countNextLine = currentEndPos - currentStartPos + 1
+		local widthNextLine = surface.GetTextSize(nextLine)
+
+		-- Check if our estimated cut needs adjustment and does not fit
+		if widthNextLine > width then
+			-- We need to keep removing characters until the line fits
+			local charsToRemove = 0
+			-- We keep track of the width of the removed chars
+			-- to not use the expensive utf8.sub function for each char
+			local widthOfRemovedChars = 0
+
+			-- Iterate from the end of the new line to the start
+			-- To never remove the last char, we add +1 to the start pos,
+			-- so we prevent infinite loops
+			for i = currentEndPos, currentStartPos + 1, -1 do
+				widthOfRemovedChars = widthOfRemovedChars + surface.GetTextSize(utf8.GetChar(word, i))
+				charsToRemove = charsToRemove + 1
+
+				if widthNextLine - widthOfRemovedChars <= width then
+					break
+				end
+			end
+
+			-- Only do something if we actually removed chars
+			if charsToRemove > 0 then
+				-- Remove the chars from the line & shift the next start position
+				nextStartPos = nextStartPos - charsToRemove
+				nextLine = utf8.sub(word, currentStartPos, nextStartPos - 1)
+			end
+		end
+
+		-- Add the line to the table
+		lines[currentLineNumber] = nextLine
+
+		-- Set the index to the new start position
+		currentStartPos = nextStartPos
+		currentLineNumber = currentLineNumber + 1
 	end
 
 	return lines
@@ -510,7 +536,7 @@ local function InternalGetWrappedText(text, width, scale)
 	local w, h = surface.GetTextSize(text)
 
 	if w <= width then
-		return {text}, w, h -- Nope, but wrap in table for uniformity
+		return { text }, w, h -- Nope, but wrap in table for uniformity
 	end
 
 	local words = string.Explode(" ", text)
