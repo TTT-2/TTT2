@@ -3,7 +3,6 @@
 All notable changes to TTT2 will be documented here. Inspired by [keep a changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Unreleased
-- Moved reset buttons onto the left (by @a7f3)
 
 ### Added
 
@@ -74,6 +73,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed syncing of database module to use whole tables instead of custom method
 - Replaced equipmenteditor syncing with database module
 - Replaced internal equipment syncing with database module
+- Moved reset buttons onto the left (by @a7f3)
 
 ### Fixed
 
