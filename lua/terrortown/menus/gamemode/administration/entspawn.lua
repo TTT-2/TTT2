@@ -134,7 +134,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonReset:SetText("button_reset")
 	buttonReset:SetSize(100, 45)
-	buttonReset:SetPos(parent:GetWide() - 120, 20)
+	buttonReset:SetPos(20, 20)
 	buttonReset.DoClick = function()
 		entspawnscript.ResetMapToDefault()
 
@@ -145,7 +145,9 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonToggle:SetText("button_start_entspawn_edit")
 	buttonToggle:SetSize(180, 45)
-	buttonToggle:SetPos(20, 20)
+
+	-- Don't really like the way the offset is done here, though I guess is better than a magic number
+	buttonToggle:SetPos(parent:GetWide() - (180 + 20 + 195 + 20), 20)
 	buttonToggle.DoClick = function(slf)
 		entspawnscript.StartEditing()
 
@@ -156,7 +158,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonDelete:SetText("button_delete_all_spawns")
 	buttonDelete:SetSize(195, 45)
-	buttonDelete:SetPos(220, 20)
+	buttonDelete:SetPos(parent:GetWide() - (195 + 20), 20)
 	buttonDelete.DoClick = function(slf)
 		entspawnscript.DeleteAllSpawns()
 	end

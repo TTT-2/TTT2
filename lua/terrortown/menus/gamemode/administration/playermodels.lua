@@ -110,7 +110,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonReset:SetText("button_reset_models")
 	buttonReset:SetSize(225, 45)
-	buttonReset:SetPos(parent:GetWide() - 245, 20)
+	buttonReset:SetPos(20, 20)
 	buttonReset.DoClick = function()
 		playermodels.Reset()
 	end
