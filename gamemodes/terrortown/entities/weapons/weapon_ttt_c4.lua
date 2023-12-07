@@ -160,9 +160,19 @@ function SWEP:Reload()
 	return false
 end
 
-function SWEP:OnRemove()
-	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
-		RunConsoleCommand("lastinv")
+if CLIENT then
+	function SWEP:Initialize()
+		self:AddTTT2HUDHelp("c4_help_primary", "c4_help_secondary")
+
+		return self.BaseClass.Initialize(self)
+	end
+
+	function SWEP:OnRemove()
+		if IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 end
+
+
 
