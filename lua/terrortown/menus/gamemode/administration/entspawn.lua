@@ -141,26 +141,25 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 		cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", "1")
 	end
 
+	local buttonDelete = vgui.Create("DButtonTTT2", parent)
+
+	buttonDelete:SetText("button_delete_all_spawns")
+	buttonDelete:SetSize(195, 45)
+	buttonDelete:SetPos(parent:GetWide() - (195 + 20 + 180 + 20), 20)
+	buttonDelete.DoClick = function(slf)
+		entspawnscript.DeleteAllSpawns()
+	end
+
 	local buttonToggle = vgui.Create("DButtonTTT2", parent)
 
 	buttonToggle:SetText("button_start_entspawn_edit")
 	buttonToggle:SetSize(180, 45)
 
-	-- Don't really like the way the offset is done here, though I guess is better than a magic number
-	buttonToggle:SetPos(parent:GetWide() - (180 + 20 + 195 + 20), 20)
+	buttonToggle:SetPos(parent:GetWide() - (180 + 20), 20)
 	buttonToggle.DoClick = function(slf)
 		entspawnscript.StartEditing()
 
 		HELPSCRN.menuFrame:HideFrame()
-	end
-
-	local buttonDelete = vgui.Create("DButtonTTT2", parent)
-
-	buttonDelete:SetText("button_delete_all_spawns")
-	buttonDelete:SetSize(195, 45)
-	buttonDelete:SetPos(parent:GetWide() - (195 + 20), 20)
-	buttonDelete.DoClick = function(slf)
-		entspawnscript.DeleteAllSpawns()
 	end
 
 	updateButtons[1] = buttonToggle
