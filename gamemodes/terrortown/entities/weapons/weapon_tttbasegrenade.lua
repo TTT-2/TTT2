@@ -43,7 +43,7 @@ SWEP.throwForce = 1
 SWEP.detonate_timer = 5
 -- The radius of the physics sphere.
 -- If 0, the projectile's physics will be based off its model rather than a sphere.
-SWEP.sphericalPhysicsRadius = false
+SWEP.sphericalPhysicsRadius = 0
 -- If enabled, players hit by this grenade's projectile in-flight will drop their current weapon and unscope if possible.
 SWEP.disarmHitPlayers = false
 -- Controls how loose throwables react to being damaged.
@@ -62,7 +62,6 @@ SWEP.preventDamageChainReaction = true
 SWEP.useAnimationTimers = false
 SWEP.animPinPullOffset = 0.36
 SWEP.animThrowOffset = 0.36
-SWEP.animTimer = 0
 SWEP.pinSound = Sound("Default.PullPin_Grenade")
 
 ---
@@ -231,13 +230,12 @@ function SWEP:PullPin()
 	if self:GetPin() or (self.useAnimationTimers and self:GetAnimTimer() > 0) then return end
 	local ply = self:GetOwner()
 	if not IsValid(ply) then return end
-	if SERVER then
-		self:SendWeaponAnim(ACT_VM_PULLPIN)
-		local anim_duration = ply:GetViewModel():SequenceDuration() * ply:GetPlaybackRate()
-		self:SetAnimTimer((anim_duration - (anim_duration * self.animPinPullOffset)) + CurTime())
-		if self.SetHoldType then
-			self:SetHoldType(self.HoldReady)
-		end
+
+	self:SendWeaponAnim(ACT_VM_PULLPIN)
+	local anim_duration = ply:GetViewModel():SequenceDuration() * ply:GetPlaybackRate()
+	self:SetAnimTimer((anim_duration - (anim_duration * self.animPinPullOffset)) + CurTime())
+	if self.SetHoldType then
+		self:SetHoldType(self.HoldReady)
 	end
 
 	self:SetPin(true)
@@ -461,7 +459,7 @@ function SWEP:Initialize()
 	self:SetPin(false)
 	self:SetShotToActivate(false)
 	self.was_thrown = false
-	self.animTimer = 0
+	self:SetAnimTimer(0)
 end
 
 ---

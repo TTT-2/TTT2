@@ -33,10 +33,10 @@ AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 -- @realm shared
 function ENT:Initialize()
 	if not self:GetRadius() then
-		self:SetRadius(GetConVar("ttt_firegrenade_proj_explosion_radius"):GetFloat())
+		self:SetRadius(GetConVar("ttt2_firegrenade_proj_explosion_radius"):GetFloat())
 	end
 	if not self:GetDmg() then
-		self:SetDmg(GetConVar("ttt_firegrenade_proj_explosion_damage"):GetFloat())
+		self:SetDmg(GetConVar("ttt2_firegrenade_proj_explosion_damage"):GetFloat())
 	end
 
 	self.BaseClass.Initialize(self)
@@ -94,9 +94,9 @@ function ENT:Explode(tr)
 		gameEffects.StartFires(
 			pos,
 			tr,
-			GetConVar("ttt_firegrenade_proj_fire_num"):GetInt(),
+			GetConVar("ttt2_firegrenade_proj_fire_num"):GetInt(),
 			self.fireSize,
-			GetConVar("ttt_firegrenade_proj_fire_lifetime"):GetFloat(),
+			GetConVar("ttt2_firegrenade_proj_fire_lifetime"):GetFloat(),
 			self.lifetimeVariance,
 			false,
 			self:GetThrower(),
