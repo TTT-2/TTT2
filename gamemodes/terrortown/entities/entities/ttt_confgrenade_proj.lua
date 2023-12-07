@@ -39,12 +39,6 @@ ENT.bounceMomentumLoss = 0.6
 -- @realm shared
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
----
--- @realm shared
-function ENT:Initialize()
-	self.BaseClass.Initialize(self)
-end
-
 if SERVER then
 	---
 	-- Called whenever a ConfGrenade (discombob) detonates.
@@ -100,5 +94,4 @@ function ENT:Explode(tr)
 		end
 		util.PaintDown(self:GetPos(), "SmallScorch", self)
 	end
-	return true
 end

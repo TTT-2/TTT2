@@ -10,7 +10,7 @@ local flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 
 ---
 -- @realm server
-CreateConVar("ttt_smokegrenade_proj_smoke_life_time", "60", flags)
+CreateConVar("ttt2_smokegrenade_proj_smoke_life_time", "60", flags)
 
 
 SWEP.HoldType = "grenade"
@@ -59,11 +59,11 @@ if CLIENT then
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
 		form:MakeHelp({
-			label = "help_ttt_smokegrenade_proj_smoke_life_time",
+			label = "help_ttt2_smokegrenade_proj_smoke_life_time",
 		})
 		form:MakeSlider({
-			serverConvar = "ttt_smokegrenade_proj_smoke_life_time",
-			label = "label_ttt_smokegrenade_proj_smoke_life_time",
+			serverConvar = "ttt2_smokegrenade_proj_smoke_life_time",
+			label = "label_ttt2_smokegrenade_proj_smoke_life_time",
 			min = 0,
 			max = 300,
 			decimal = 0,

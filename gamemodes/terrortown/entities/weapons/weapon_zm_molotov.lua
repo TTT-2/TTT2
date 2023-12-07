@@ -10,19 +10,19 @@ local flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 
 ---
 -- @realm server
-CreateConVar("ttt_firegrenade_proj_explosion_radius", "256", flags)
+CreateConVar("ttt2_firegrenade_proj_explosion_radius", "256", flags)
 
 ---
 -- @realm server
-CreateConVar("ttt_firegrenade_proj_explosion_damage", "25", flags)
+CreateConVar("ttt2_firegrenade_proj_explosion_damage", "25", flags)
 
 ---
 -- @realm server
-CreateConVar("ttt_firegrenade_proj_fire_num", "10", flags)
+CreateConVar("ttt2_firegrenade_proj_fire_num", "10", flags)
 
 ---
 -- @realm server
-CreateConVar("ttt_firegrenade_proj_fire_lifetime", "20", flags)
+CreateConVar("ttt2_firegrenade_proj_fire_lifetime", "20", flags)
 
 SWEP.HoldType = "grenade"
 
@@ -64,7 +64,7 @@ end
 -- @ignore
 function SWEP:CreateGrenade(...)
 	local grenade = self.BaseClass.CreateGrenade(self, ...)
-	grenade:SetDmg(GetConVar("ttt_firegrenade_proj_explosion_damage"):GetFloat() * (self.damageScaling or 1))
+	grenade:SetDmg(GetConVar("ttt2_firegrenade_proj_explosion_damage"):GetFloat() * (self.damageScaling or 1))
 	return grenade
 end
 
@@ -78,44 +78,44 @@ if CLIENT then
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_additional")
 
 		form:MakeHelp({
-			label = "help_ttt_firegrenade_proj_explosion_radius",
+			label = "help_ttt2_firegrenade_proj_explosion_radius",
 		})
 		form:MakeSlider({
-			serverConvar = "ttt_firegrenade_proj_explosion_radius",
-			label = "label_ttt_firegrenade_proj_explosion_radius",
+			serverConvar = "ttt2_firegrenade_proj_explosion_radius",
+			label = "label_ttt2_firegrenade_proj_explosion_radius",
 			min = 0,
 			max = 2048,
 			decimal = 0,
 		})
 
 		form:MakeHelp({
-			label = "help_ttt_firegrenade_proj_explosion_damage",
+			label = "help_ttt2_firegrenade_proj_explosion_damage",
 		})
 		form:MakeSlider({
-			serverConvar = "ttt_firegrenade_proj_explosion_damage",
-			label = "label_ttt_firegrenade_proj_explosion_damage",
+			serverConvar = "ttt2_firegrenade_proj_explosion_damage",
+			label = "label_ttt2_firegrenade_proj_explosion_damage",
 			min = 0,
 			max = 200,
 			decimal = 0,
 		})
 
 		form:MakeHelp({
-			label = "help_ttt_firegrenade_proj_fire_num",
+			label = "help_ttt2_firegrenade_proj_fire_num",
 		})
 		form:MakeSlider({
-			serverConvar = "ttt_firegrenade_proj_fire_num",
-			label = "label_ttt_firegrenade_proj_fire_num",
+			serverConvar = "ttt2_firegrenade_proj_fire_num",
+			label = "label_ttt2_firegrenade_proj_fire_num",
 			min = 0,
 			max = 32,
 			decimal = 0,
 		})
 
 		form:MakeHelp({
-			label = "help_ttt_firegrenade_proj_fire_lifetime",
+			label = "help_ttt2_firegrenade_proj_fire_lifetime",
 		})
 		form:MakeSlider({
-			serverConvar = "ttt_firegrenade_proj_fire_lifetime",
-			label = "label_ttt_firegrenade_proj_fire_lifetime",
+			serverConvar = "ttt2_firegrenade_proj_fire_lifetime",
+			label = "label_ttt2_firegrenade_proj_fire_lifetime",
 			min = 0,
 			max = 300,
 			decimal = 0,

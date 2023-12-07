@@ -47,7 +47,7 @@ function ENT:Explode(tr)
 
 	self:EmitSound(self.ExplodeSound, 120, 100, 1)
 
-	local life_time = GetConVar("ttt_smokegrenade_proj_smoke_life_time"):GetFloat()
+	local life_time = GetConVar("ttt2_smokegrenade_proj_smoke_life_time"):GetFloat()
 	local data = {
 		position = self:GetPos(),
 		shared_seed = tostring(CurTime()),
