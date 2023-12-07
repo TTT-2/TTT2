@@ -1,9 +1,9 @@
--- traitor equipment: c4 bomb
-AddCSLuaFile()
-
-SWEP.HoldType = "slam"
-
-if CLIENT then
+---
+-- @class SWEP
+-- @section weapon_ttt_c4
+if SERVER then
+	AddCSLuaFile()
+else -- CLIENT
 	SWEP.PrintName = "C4"
 	SWEP.Slot = 6
 
@@ -22,6 +22,8 @@ if CLIENT then
 end
 
 SWEP.Base = "weapon_tttbase"
+
+SWEP.HoldType = "slam"
 
 SWEP.Kind = WEAPON_EQUIP
 SWEP.CanBuy = {ROLE_TRAITOR} -- only traitors can buy
