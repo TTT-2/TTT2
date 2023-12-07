@@ -1089,18 +1089,15 @@ if SERVER then
 				return true, value
 			end
 
-			if sqlData then
-				local newTable = {}
-				for _key in pairs(dataTable.keys) do
-					newTable[_key] = sqlData[_key]
-				end
-
-				sqlData = newTable
-				ConvertTable(sqlData, accessName)
-
-				dataTable.storedData[itemName] = sqlData
+			local newTable = {}
+			for _key in pairs(dataTable.keys) do
+				newTable[_key] = sqlData[_key]
 			end
 
+			sqlData = newTable
+			ConvertTable(sqlData, accessName)
+
+			dataTable.storedData[itemName] = sqlData
 		else
 			-- Get all data, convert and return it
 			sqlData = dataTable.orm:All()
