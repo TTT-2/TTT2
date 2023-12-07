@@ -959,7 +959,6 @@ L.hat_retrieve = "Du plockade upp hatten av en detektiv."
 --L.door_auto_closes = "This door closes automatically."
 --L.door_open_touch = "Walk into door to open."
 --L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
---L.hud_health = "Health"
 
 -- 2020-03-09
 L.help_title = "Hjälp och Inställningar"
