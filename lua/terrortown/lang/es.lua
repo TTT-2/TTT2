@@ -959,7 +959,6 @@ L.mute_team = "{team} silenciado."
 L.door_auto_closes = "Esta puerta se cierra automáticamente."
 L.door_open_touch = "Acércate a la puerta para abrirla."
 L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrirla."
-L.hud_health = "Salud"
 
 -- 2020-03-09
 --L.help_title = "Help and Settings"

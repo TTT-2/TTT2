@@ -958,7 +958,6 @@ L.mute_team = "{team} sessize alındı."
 L.door_auto_closes = "Bu kapı otomatik olarak kapanır."
 L.door_open_touch = "Açmak için kapıya doğru yürü."
 L.door_open_touch_and_use = "Kapıya doğru yürü veya açmak için [{usekey}] tuşuna bas."
-L.hud_health = "Sağlık"
 
 -- 2020-03-09
 L.help_title = "Yardım ve Ayarlar"
