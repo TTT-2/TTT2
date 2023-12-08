@@ -310,31 +310,36 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED
 	},
 	["273623128"] = { -- zombie perk bottles by Hoff
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1387914296"] = { -- zombie perk bottles by Schmitler
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1371596971"] = { -- zombie perk bottles by Amenius
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["860794236"] = { -- zombie perk bottles by Menzek
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1198504029"] = { -- zombie perk bottles by RedocPlays
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["911658617"] = { -- zombie perk bottles by Luchix
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["869353740"] = { -- zombie perk bottles by Railroad Engineer 111
-		alternative = "842302491",
+		alternative = "2243578658",
+		type = ADDON_OUTDATED
+	},
+	["842302491"] = { -- zombie perk bottles by Hagen
+		alternative = "2243578658",
+		reason = "Rebalancing, fixing stamin-up, UI integration.",
 		type = ADDON_OUTDATED
 	},
 	["662342819"] = { -- randomat by hagen
