@@ -194,6 +194,16 @@ addonChecker.curatedList = {
 		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
 		type = ADDON_INCOMPATIBLE,
 	},
+	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
+		alternative = "2150924507",
+		reason = "Addon is broken and doesn't do anything.",
+		type = ADDON_OUTDATED,
+	},
+	["1125892999"] = { -- TTT Coffee-Cup Hunt by Niandra!
+		alternative = "2150924507",
+		reason = "Addon is broken and doesn't do anything.",
+		type = ADDON_OUTDATED,
+	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
@@ -300,31 +310,36 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED
 	},
 	["273623128"] = { -- zombie perk bottles by Hoff
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1387914296"] = { -- zombie perk bottles by Schmitler
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1371596971"] = { -- zombie perk bottles by Amenius
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["860794236"] = { -- zombie perk bottles by Menzek
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1198504029"] = { -- zombie perk bottles by RedocPlays
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["911658617"] = { -- zombie perk bottles by Luchix
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["869353740"] = { -- zombie perk bottles by Railroad Engineer 111
-		alternative = "842302491",
+		alternative = "2243578658",
+		type = ADDON_OUTDATED
+	},
+	["842302491"] = { -- zombie perk bottles by Hagen
+		alternative = "2243578658",
+		reason = "Rebalancing, fixing stamin-up, UI integration.",
 		type = ADDON_OUTDATED
 	},
 	["662342819"] = { -- randomat by hagen
@@ -426,15 +441,38 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED
 	},
 	["254779132"] = { -- Dead Ringer by Porter
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
+		type = ADDON_OUTDATED
+	},
+	["922459145"] = { -- Explosive Corpse by Bocciardo Light
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
+	["359372950"] = { -- Explosive Corpse by Daywalker
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1553970745"] = { -- Explosive Corpse by DasNerdwork
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
 		type = ADDON_OUTDATED
 	},
 	["1315377462"] = { -- Dead Ringer by MuratYilderimTM
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["240281783"] = { -- Dead Ringer by Niandra
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
+		type = ADDON_OUTDATED
+	},
+	["810154456"] = { -- Dead Ringer by Hagen
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["284419411"] = { -- Minifier by Lykrast
@@ -475,6 +513,36 @@ addonChecker.curatedList = {
 	["863963592"] = { -- Super Soda by ---
 		alternative = "1815518231",
 		reason = "Less bottles, no integration in TTT2 systems, generally buggy.",
+		type = ADDON_OUTDATED
+	},
+	["284419411"] = { -- Minifier by Lykrast
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1338887971"] = { -- Minifier by Hudson
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1354031183"] = { -- Minifier by SnowSoulAngel
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["2672799157"] = { -- Minifier by The Stig
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
+		type = ADDON_OUTDATED
+	},
+	["1551396306"] = { -- Minifier by FaBe2$tRonK
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
+		type = ADDON_OUTDATED
+	},
+	["1599819393"] = { -- Minifier by Coe
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
 		type = ADDON_OUTDATED
 	},
 	["801433502"] = { -- Defibrillator by Minty
