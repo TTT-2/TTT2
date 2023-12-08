@@ -426,15 +426,23 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED
 	},
 	["254779132"] = { -- Dead Ringer by Porter
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["1315377462"] = { -- Dead Ringer by MuratYilderimTM
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["240281783"] = { -- Dead Ringer by Niandra
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
+		type = ADDON_OUTDATED
+	},
+	["810154456"] = { -- Dead Ringer by Hagen
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["284419411"] = { -- Minifier by Lykrast
