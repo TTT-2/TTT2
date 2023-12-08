@@ -430,6 +430,21 @@ addonChecker.curatedList = {
 		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
+	["922459145"] = { -- Explosive Corpse by Bocciardo Light
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
+	["359372950"] = { -- Explosive Corpse by Daywalker
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1553970745"] = { -- Explosive Corpse by DasNerdwork
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
 	["1315377462"] = { -- Dead Ringer by MuratYilderimTM
 		alternative = "3074845055",
 		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
