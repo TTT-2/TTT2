@@ -98,6 +98,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed ComboBoxes not working with integer values (by @NickCloudAT)
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
+- Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 
 ### Deprecated
 
