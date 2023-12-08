@@ -194,6 +194,16 @@ addonChecker.curatedList = {
 		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
 		type = ADDON_INCOMPATIBLE,
 	},
+	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
+		alternative = "2150924507",
+		reason = "Addon is broken and doesn't do anything.",
+		type = ADDON_INCOMPATIBLE,
+	},
+	["1125892999"] = { -- TTT Coffee-Cup Hunt by Niandra!
+		alternative = "2150924507",
+		reason = "Addon is broken and doesn't do anything.",
+		type = ADDON_INCOMPATIBLE,
+	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
