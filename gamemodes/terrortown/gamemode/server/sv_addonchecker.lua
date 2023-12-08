@@ -197,12 +197,12 @@ addonChecker.curatedList = {
 	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
 		alternative = "2150924507",
 		reason = "Addon is broken and doesn't do anything.",
-		type = ADDON_INCOMPATIBLE,
+		type = ADDON_OUTDATED,
 	},
 	["1125892999"] = { -- TTT Coffee-Cup Hunt by Niandra!
 		alternative = "2150924507",
 		reason = "Addon is broken and doesn't do anything.",
-		type = ADDON_INCOMPATIBLE,
+		type = ADDON_OUTDATED,
 	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
@@ -508,6 +508,36 @@ addonChecker.curatedList = {
 	["863963592"] = { -- Super Soda by ---
 		alternative = "1815518231",
 		reason = "Less bottles, no integration in TTT2 systems, generally buggy.",
+		type = ADDON_OUTDATED
+	},
+	["284419411"] = { -- Minifier by Lykrast
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1338887971"] = { -- Minifier by Hudson
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1354031183"] = { -- Minifier by SnowSoulAngel
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["2672799157"] = { -- Minifier by The Stig
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
+		type = ADDON_OUTDATED
+	},
+	["1551396306"] = { -- Minifier by FaBe2$tRonK
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
+		type = ADDON_OUTDATED
+	},
+	["1599819393"] = { -- Minifier by Coe
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
 		type = ADDON_OUTDATED
 	},
 	["801433502"] = { -- Defibrillator by Minty
