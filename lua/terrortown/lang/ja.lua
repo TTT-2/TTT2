@@ -959,7 +959,6 @@ L.mute_team = "{team}がミュートされた。"
 L.door_auto_closes = "このドアは自動で閉まるようだ。"
 L.door_open_touch = "触れるとドアが開くようだ。"
 L.door_open_touch_and_use = "このドアは触れるか、[{usekey}] で開くようだ。"
-L.hud_health = "HP"
 
 -- 2020-03-09
 L.help_title = "ヘルプと設定"

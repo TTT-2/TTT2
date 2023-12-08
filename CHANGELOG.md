@@ -74,6 +74,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Replaced equipmenteditor syncing with database module
 - Replaced internal equipment syncing with database module
 - Moved reset buttons onto the left (by @a7f3)
+- Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 
 ### Fixed
 

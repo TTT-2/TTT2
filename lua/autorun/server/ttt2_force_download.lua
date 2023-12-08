@@ -90,6 +90,8 @@ resource.AddFile("materials/vgui/ttt/perks/hud_armor.png") -- armor HUD
 resource.AddFile("materials/vgui/ttt/perks/hud_armor_reinforced.png") -- armor reinforced HUD
 resource.AddFile("materials/vgui/ttt/hud_armor.vmt") -- playerinfo armor
 resource.AddFile("materials/vgui/ttt/hud_armor_reinforced.vmt") -- playerinfo armor reinforced
+resource.AddFile("materials/vgui/ttt/hud_health.vmt") -- playerinfo health
+resource.AddFile("materials/vgui/ttt/hud_health_low.vmt") -- playerinfo health low
 
 resource.AddFile("materials/vgui/ttt/hud_blocking_revival.vmt")
 
@@ -154,6 +156,19 @@ resource.AddFile("materials/vgui/ttt/tid/tid_detective.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_destructible.vmt")
+
+-- ammo icons
+resource.AddFile("materials/vgui/ttt/ammo/box_357.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_AlyxGun.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_Buckshot.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_Pistol.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_SMG1.vmt")
+
+resource.AddFile("materials/vgui/ttt/ammo/bullet_357.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_AlyxGun.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_Buckshot.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_Pistol.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_SMG1.vmt")
 
 -- derma skin graphics
 resource.AddFile("materials/vgui/ttt/vskin/icon_close.vmt")
