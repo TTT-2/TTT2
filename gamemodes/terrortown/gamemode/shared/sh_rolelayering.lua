@@ -6,6 +6,10 @@
 
 rolelayering = {}
 
+---
+-- @realm shared
+CreateConVar("ttt2_roles_allow_avoiding", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "If enabled, players will be allowed to avoid specific roles.")
+
 local function SendLayerData(layerTable)
 	local layerTableSize = #layerTable
 

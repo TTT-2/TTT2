@@ -29,9 +29,13 @@ function ROLE:PreInitialize()
 		pct = 0.4,
 		maximum = 32,
 		minPlayers = 1,
+
 		traitorButton = 1,
+
 		credits = 2,
 		creditsAwardDeadEnable = 1,
-		creditsAwardKillEnable = 1
+		creditsAwardKillEnable = 1,
+
+		togglable = true
 	}
 end

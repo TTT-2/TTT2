@@ -16,6 +16,7 @@ roleselection.finalRoles = {}
 roleselection.selectableRoles = nil
 roleselection.baseroleLayers = {}
 roleselection.subroleLayers = {}
+roleselection.trickleDownRate = 0
 
 -- Convars
 roleselection.cv = {
@@ -33,7 +34,7 @@ roleselection.cv = {
 
 	---
 	-- @realm server
-	ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+	ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0"),
 }
 
 -- saving and loading
@@ -572,10 +573,14 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
 	local plysAmount = #plys
 	local availableRolesAmount = #availableRoles
 	local tmpSelectableRoles = table.Copy(selectableRoles)
+	-- plys are already shuffled, continue with existing priority
+	local newPlys = table.Copy(plys)
 
-	while plysAmount > 0 and availableRolesAmount > 0 do
-		local pick = math.random(plysAmount)
-		local ply = plys[pick]
+	for i = #newPlys, 1, -1 do
+		if not (plysAmount > 0 and availableRolesAmount > 0) then
+			break
+		end
+		local ply = plys[i]
 
 		local rolePick = math.random(availableRolesAmount)
 		local subrole = availableRoles[rolePick]
@@ -586,16 +591,8 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
 			roleCount = roleCount - selectedForcedRoles[subrole]
 		end
 
-		local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
-		local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
-
-		-- give this player the role if
-		if plysAmount <= roleCount -- or there aren't enough players anymore to have a greater role variety
-			or ply:GetBaseKarma() > minKarma -- or the player has enough karma
-				and not ply:GetAvoidRole(subrole) -- and the player doesn't avoid this role
-			or math.random(3) == 2 -- or if the randomness decides
-		then
-			table.remove(plys, pick)
+		if ply:CanSelectRole(roleData, plysAmount, availableRolesAmount) then
+			table.remove(newPlys, i)
 
 			roleselection.finalRoles[ply] = subrole
 
@@ -782,30 +779,22 @@ end
 local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 	local curRoles = 0
 	local plysList = {}
+	local roleData = roles.GetByIndex(subrole)
 
-	local minKarmaCVar = GetConVar("ttt_" .. roles.GetByIndex(subrole).name .. "_karma_min")
-	local min_karmas = minKarmaCVar and minKarmaCVar:GetInt() or 0
-
-	while curRoles < roleAmount and #plys > 0 do
-		-- select random index in plys table
-		local pick = math.random(#plys)
-
+	for i = #plys, 1, -1 do
 		-- the player we consider
-		local ply = plys[pick]
+		local ply = plys[i]
+		-- do not unbrace this
+		if not (curRoles < roleAmount and #plys > 0) then break end
 
-		-- give this player the role if
-		if subrole == ROLE_INNOCENT -- this role is an innocent role
-			or #plys <= roleAmount -- or there aren't enough players anymore to have a greater role variety
-			or ply:GetBaseKarma() > min_karmas -- or the player has enough karma
-				and not ply:GetAvoidRole(subrole) -- and the player doesn't avoid this role
-			or math.random(3) == 2 -- or if the randomness decides
-		then
-			table.remove(plys, pick)
-
+		if subrole == ROLE_INNOCENT or ply:CanSelectRole(roleData, #plys, roleAmount) then
 			curRoles = curRoles + 1
 			plysList[curRoles] = ply
 
-			roleselection.finalRoles[ply] = subrole -- give the player the final baserole (maybe he will receive his subrole later)
+			-- give the player the final baserole (maybe he will receive his subrole later)
+			roleselection.finalRoles[ply] = subrole
+
+			table.remove(plys, i)
 		end
 	end
 
@@ -825,6 +814,9 @@ function roleselection.SelectRoles(plys, maxPlys)
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
 	plys = roleselection.GetSelectablePlayers(plys or player.GetAll())
+
+	-- Randomize role assignment by shuffling the list early.
+	table.Shuffle(plys)
 
 	maxPlys = maxPlys or #plys
 
