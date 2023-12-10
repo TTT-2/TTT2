@@ -44,7 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 - Added dashing to propspec (by @TimGoll)
 - Added new functions to database module
-  -`database.SetDefaultValuesFromItem(accessName, itemName, item)` 
+  -`database.SetDefaultValuesFromItem(accessName, itemName, item)`
 
 ### Changed
 
@@ -99,6 +99,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
+- Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
 
 ### Deprecated
 
