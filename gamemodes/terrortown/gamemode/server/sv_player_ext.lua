@@ -661,7 +661,6 @@ function plymeta:InitialSpawn()
 	self:SetRunSpeed(220)
 	self:SetWalkSpeed(220)
 	self:SetMaxSpeed(220)
-	self:SetSprintStamina(1)
 
 	self:ResetStatus()
 
