@@ -2074,6 +2074,11 @@ L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 -- 2023-11-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
 
+-- 2023-11-20
+L.help_ttt_role_avoid_disabled = "WARNING! Role avoidance is disabled on this server, but you can still change your settings here."
+L.label_roles_allow_avoiding = "Allow Avoiding Roles"
+L.help_roles_allow_avoiding = "If enabled, allows players to opt out of specific roles from within the Avoid Role Selection menu."
+
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmed the death of {victim}."
 L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

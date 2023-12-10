@@ -108,6 +108,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
+- Role selection RNG improvements (by @EntranceJew):
+  - Uses `Player:CanSelectRole()` now instead of duplicating logic.
+  - Option for server to disregard player role selection preferences.
+  - Players can choose to avoid Traitor, in addition to the other base classes.
 
 ### Fixed
 

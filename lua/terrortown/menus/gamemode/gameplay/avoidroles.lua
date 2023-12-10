@@ -8,6 +8,13 @@ CLGAMEMODESUBMENU.title = "submenu_gameplay_avoidroles_title"
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_roleselection")
 
+	if GetConVar("ttt2_roles_allow_avoiding"):GetBool() then
+		form:MakeHelp({
+			label = "help_ttt_role_avoid_disabled"
+		})
+	end
+
+
 	local roles = roles.GetList()
 
 	for i = 1, #roles do

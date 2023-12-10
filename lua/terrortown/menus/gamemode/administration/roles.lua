@@ -61,6 +61,15 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		master = masterEnb
 	})
 
+	form:MakeHelp({
+		label = "help_roles_allow_avoiding"
+	})
+
+	form:MakeCheckBox({
+		serverConvar = "ttt2_roles_allow_avoiding",
+		label = "label_roles_allow_avoiding"
+	})
+
 	local form2 = vgui.CreateTTT2Form(parent, "header_roles_reward_credits")
 
 	form2:MakeHelp({
