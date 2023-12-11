@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
+
 ### Added
 
 - Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
