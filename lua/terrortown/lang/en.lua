@@ -2075,6 +2075,10 @@ L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
-
+-- 2023-12-07
 L.c4_help_primary = "Throw"
 L.c4_help_secondary = "Stick C4"
+
+-- 2023-12-11
+L.magneto_help_primary = "Push entity"
+L.magneto_help_secondary= "Pickup entity"
