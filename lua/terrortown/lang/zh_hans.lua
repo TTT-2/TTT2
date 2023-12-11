@@ -959,7 +959,6 @@ L.mute_team = "静音 {team}"
 L.door_auto_closes = "此门会自动关闭"
 L.door_open_touch = "此门接触后会自动开启"
 L.door_open_touch_and_use = "接触门或按 [{usekey}] 开门。"
-L.hud_health = "生命值"
 
 -- 2020-03-09
 L.help_title = "帮助和设定"

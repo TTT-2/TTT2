@@ -44,7 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 - Added dashing to propspec (by @TimGoll)
 - Added new functions to database module
-  -`database.SetDefaultValuesFromItem(accessName, itemName, item)` 
+  -`database.SetDefaultValuesFromItem(accessName, itemName, item)`
 
 ### Changed
 
@@ -74,6 +74,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Replaced equipmenteditor syncing with database module
 - Replaced internal equipment syncing with database module
 - Moved reset buttons onto the left (by @a7f3)
+- Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
+- Changed the disguiser icon to be more fitting (by @TimGoll)
 
 ### Fixed
 
@@ -96,6 +98,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed ComboBoxes not working with integer values (by @NickCloudAT)
 - net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
+- Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
+- Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
 
 ### Deprecated
 
