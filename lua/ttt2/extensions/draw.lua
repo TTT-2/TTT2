@@ -461,10 +461,10 @@ end
 -- To improve performance, we don't want to iterate over every single
 -- character. Therefore we assume the length based on an average first.
 local function InternalSplitLongWord(word, width, widthWord)
-	local charCount = utf8.len(word)
+	local charCount = fastutf8.len(word)
 	local wCharAverage = widthWord / charCount
 	-- decrease a bit to have tolerance & limit to at least 1, to prevent infinite loops
-	local charCountPerLine = math.max(1, math.floor(width / wCharAverage * 0.8))
+	local charCountPerLine = math.max(1, math.floor(width / wCharAverage * 0.9))
 
 	local lines = { "" }
 
@@ -482,13 +482,13 @@ local function InternalSplitLongWord(word, width, widthWord)
 			-- overshoot the end of the word, so we need to put the rest
 			-- into the next line
 			if currentStartPos <= charCount then
-				lines[currentLineNumber] = utf8.sub(word, currentStartPos, charCount)
+				lines[currentLineNumber] = fastutf8.sub(word, currentStartPos, charCount)
 			end
 
 			break
 		end
 
-		local nextLine = utf8.sub(word, currentStartPos, currentEndPos)
+		local nextLine = fastutf8.sub(word, currentStartPos, currentEndPos)
 		local widthNextLine = surface.GetTextSize(nextLine)
 
 		-- Check if our estimated cut needs adjustment and does not fit
@@ -503,7 +503,7 @@ local function InternalSplitLongWord(word, width, widthWord)
 			-- To never remove the last char, we add +1 to the start pos,
 			-- so we prevent infinite loops
 			for i = currentEndPos, currentStartPos + 1, -1 do
-				widthOfRemovedChars = widthOfRemovedChars + surface.GetTextSize(utf8.GetChar(word, i))
+				widthOfRemovedChars = widthOfRemovedChars + surface.GetTextSize(fastutf8.GetChar(word, i))
 				charsToRemove = charsToRemove + 1
 
 				if widthNextLine - widthOfRemovedChars <= width then
@@ -515,7 +515,7 @@ local function InternalSplitLongWord(word, width, widthWord)
 			if charsToRemove > 0 then
 				-- Remove the chars from the line & shift the next start position
 				nextStartPos = nextStartPos - charsToRemove
-				nextLine = utf8.sub(word, currentStartPos, nextStartPos - 1)
+				nextLine = fastutf8.sub(word, currentStartPos, nextStartPos - 1)
 			end
 		end
 
