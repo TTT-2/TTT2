@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-    "$basetexture" "vgui/ttt/ammo/box_SMG1"
+    "$basetexture" "vgui/ttt/ammo/box_alyxgun"
     "$nocull" 1
     "$nodecal" 1
     "$nolod" 1
