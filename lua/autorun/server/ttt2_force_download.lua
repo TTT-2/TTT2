@@ -159,16 +159,16 @@ resource.AddFile("materials/vgui/ttt/tid/tid_destructible.vmt")
 
 -- ammo icons
 resource.AddFile("materials/vgui/ttt/ammo/box_357.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/box_AlyxGun.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/box_Buckshot.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/box_Pistol.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/box_SMG1.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_alyxgun.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_buckshot.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_pistol.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_smg1.vmt")
 
 resource.AddFile("materials/vgui/ttt/ammo/bullet_357.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/bullet_AlyxGun.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/bullet_Buckshot.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/bullet_Pistol.vmt")
-resource.AddFile("materials/vgui/ttt/ammo/bullet_SMG1.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_alyxgun.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_buckshot.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_pistol.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_smg1.vmt")
 
 -- derma skin graphics
 resource.AddFile("materials/vgui/ttt/vskin/icon_close.vmt")
