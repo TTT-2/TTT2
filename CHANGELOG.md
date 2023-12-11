@@ -4,6 +4,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+
+### Fixed
+
+- Fixed the UI being unable to handle wrapping text with non-utf8 languages that do not use ASCII whitespaces (by @TimGoll & @saibotk)
+
 ## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
 
 ### Added
@@ -46,7 +54,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 - Added dashing to propspec (by @TimGoll)
 - Added new functions to database module
-  -`database.SetDefaultValuesFromItem(accessName, itemName, item)`
+  - `database.SetDefaultValuesFromItem(accessName, itemName, item)`
 
 ### Changed
 
