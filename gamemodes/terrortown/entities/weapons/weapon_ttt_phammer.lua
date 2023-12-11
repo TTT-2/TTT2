@@ -2,7 +2,9 @@
 -- @class SWEP
 -- @section weapon_ttt_phammer
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 DEFINE_BASECLASS "weapon_tttbase"
 
@@ -91,6 +93,7 @@ function SWEP:Initialize()
 
 			self.Ghost = ghost
 		end
+		self:AddTTT2HUDHelp("polter_help_primary", "polter_help_secondary")
 	end
 
 	self.IsCharging = false
