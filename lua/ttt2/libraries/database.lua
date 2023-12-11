@@ -80,6 +80,17 @@ local callbackIdentifiers = database.callbackIdentifiers
 --
 
 ---
+-- Creates a databaseElement combining all infos necessary to make changes to the serverside sql database
+-- @param string accessName the networkable name of the sql table
+-- @param string itemName the name or primaryKey of the item inside of the sql table
+-- @param string key the name of the key in the database
+-- @return table Return all necessary infos for database access
+-- @realm shared
+function DatabaseElement(accessName, itemName, key)
+	return {name = accessName, itemName = itemName, key = key}
+end
+
+---
 -- Call this function if a value was received
 -- @param number index The local index of the database
 -- @param string itemName The name of the item in the database
@@ -1061,7 +1072,7 @@ if SERVER then
 
 		if itemName then
 			-- Find saved item data
-			sqlData = dataTable.orm:Find(itemName)
+			sqlData = dataTable.orm:Find(itemName) or {}
 
 			if key then
 				-- Get the specific key data
@@ -1260,6 +1271,31 @@ if SERVER then
 		end
 
 		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendDefaults = false}, registerIndex, SEND_TO_PLY_REGISTERED)
+	end
+
+	---
+	-- Use this to set item-specific defaults for all saved keys, to save storage space in the sql database
+	-- also syncs this to the clients
+	-- @param string accessName The chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param table item The item-table you want to set the default values from
+	-- @realm server
+	function database.SetDefaultValuesFromItem(accessName, itemName, item)
+		local index = nameToIndex[accessName]
+		if not index then
+			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The registered Database of " .. accessName .. " is not registered.")
+			return
+		end
+		if not istable(item) then
+			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The given item has no accessible values.")
+			return
+		end
+		local dataTable = registeredDatabases[index]
+		for key, keyData in pairs(dataTable.keys) do
+			local value = item[key]
+			if value == nil then continue end
+			database.SetDefaultValue(accessName, itemName, key, value)
+		end
 	end
 
 	---

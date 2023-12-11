@@ -74,6 +74,8 @@ ttt_include("cl_vskin__vgui__ddragbase")
 ttt_include("cl_vskin__vgui__drolelayeringreceiver")
 ttt_include("cl_vskin__vgui__drolelayeringsender")
 ttt_include("cl_vskin__vgui__dsearchbar")
+ttt_include("cl_vskin__vgui__dprofilepanel")
+ttt_include("cl_vskin__vgui__dinfoitem")
 ttt_include("cl_vskin__vgui__dsubmenulist")
 
 ttt_include("cl_changes")
@@ -420,7 +422,7 @@ local function RoundStateChange(o, n)
 
 		-- people may have died and been searched during prep
 		for i = 1, #plys do
-			plys[i].search_result = nil
+			bodysearch.ResetSearchResult(plys[i])
 		end
 
 		-- clear blood decals produced during prep
@@ -578,7 +580,7 @@ function GM:ClearClientState()
 
 		pl:SetRole(ROLE_NONE)
 
-		pl.search_result = nil
+		bodysearch.ResetSearchResult(pl)
 	end
 
 	VOICE.CycleMuteState(MUTE_NONE)
@@ -624,12 +626,6 @@ function GM:CleanUpMap()
 
 	game.CleanUpMap()
 end
-
-net.Receive("TTT2SyncDBItems", function()
-	if not ShopEditor then return end
-
-	ShopEditor.ReadItemData()
-end)
 
 -- server tells us to call this when our LocalPlayer has spawned
 local function PlayerSpawn()

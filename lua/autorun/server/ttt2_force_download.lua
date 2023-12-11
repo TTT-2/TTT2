@@ -90,6 +90,8 @@ resource.AddFile("materials/vgui/ttt/perks/hud_armor.png") -- armor HUD
 resource.AddFile("materials/vgui/ttt/perks/hud_armor_reinforced.png") -- armor reinforced HUD
 resource.AddFile("materials/vgui/ttt/hud_armor.vmt") -- playerinfo armor
 resource.AddFile("materials/vgui/ttt/hud_armor_reinforced.vmt") -- playerinfo armor reinforced
+resource.AddFile("materials/vgui/ttt/hud_health.vmt") -- playerinfo health
+resource.AddFile("materials/vgui/ttt/hud_health_low.vmt") -- playerinfo health low
 
 resource.AddFile("materials/vgui/ttt/hud_blocking_revival.vmt")
 
@@ -154,6 +156,19 @@ resource.AddFile("materials/vgui/ttt/tid/tid_detective.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_destructible.vmt")
+
+-- ammo icons
+resource.AddFile("materials/vgui/ttt/ammo/box_357.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_alyxgun.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_buckshot.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_pistol.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/box_smg1.vmt")
+
+resource.AddFile("materials/vgui/ttt/ammo/bullet_357.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_alyxgun.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_buckshot.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_pistol.vmt")
+resource.AddFile("materials/vgui/ttt/ammo/bullet_smg1.vmt")
 
 -- derma skin graphics
 resource.AddFile("materials/vgui/ttt/vskin/icon_close.vmt")
@@ -240,3 +255,11 @@ resource.AddFile("materials/vgui/ttt/hudhelp/voice_team.vmt")
 resource.AddFile("materials/vgui/ttt/hudhelp/ammo_drop.vmt")
 resource.AddFile("materials/vgui/ttt/hudhelp/weapon_drop.vmt")
 resource.AddFile("materials/vgui/ttt/hudhelp/prop_das.vmt")
+
+-- bodysearch icons
+resource.AddFile("materials/vgui/ttt/icon_credits.vmt")
+resource.AddFile("materials/vgui/ttt/icon_credits_transparent.vmt")
+resource.AddFile("materials/vgui/ttt/icon_floor.vmt")
+resource.AddFile("materials/vgui/ttt/icon_water_1.vmt")
+resource.AddFile("materials/vgui/ttt/icon_water_2.vmt")
+resource.AddFile("materials/vgui/ttt/icon_water_3.vmt")

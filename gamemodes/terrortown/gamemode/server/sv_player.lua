@@ -694,7 +694,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	-- Create ragdoll and hook up marking effects
 	local rag = CORPSE.Create(ply, attacker, dmginfo)
 
-	ply.server_ragdoll = rag -- nil if clientside
+	ply.server_ragdoll = rag
 
 	CreateDeathEffect(ply, false)
 
@@ -1457,6 +1457,17 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2CheckCreditAward(victim, attacker)
+
+end
+
+---
+-- Use this hook to prevent the transfer of credits from a body to a player.
+-- @param Entity rag The ragdoll that is inspected
+-- @param Player ply The @{Player} attempting to find credits from ragdoll
+-- @return nil|boolean Return false to prevent transfer
+-- @hook
+-- @realm server
+function GM:TTT2GiveFoundCredits(ply, rag)
 
 end
 

@@ -182,6 +182,28 @@ addonChecker.curatedList = {
 		reason = "Breaks the equipment shop.",
 		type = ADDON_INCOMPATIBLE
 	},
+	["1729451064"] = { -- TTT - More Melee Weapons by Solrob
+		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		type = ADDON_INCOMPATIBLE,
+	},
+	["2912756384"] = { -- TTT ProofOfConcept InnocentTasks by Emzatin.
+		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		type = ADDON_INCOMPATIBLE,
+	},
+	["1961869471"] = { -- [TTT/2] Crowbar to throwable Crowbar by GengarDC
+		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		type = ADDON_INCOMPATIBLE,
+	},
+	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
+		alternative = "2150924507",
+		reason = "Addon is broken and doesn't do anything.",
+		type = ADDON_OUTDATED,
+	},
+	["1125892999"] = { -- TTT Coffee-Cup Hunt by Niandra!
+		alternative = "2150924507",
+		reason = "Addon is broken and doesn't do anything.",
+		type = ADDON_OUTDATED,
+	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
 		reason = "Does not use the TTT2 sidebar system.",
@@ -288,67 +310,169 @@ addonChecker.curatedList = {
 		type = ADDON_OUTDATED
 	},
 	["273623128"] = { -- zombie perk bottles by Hoff
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1387914296"] = { -- zombie perk bottles by Schmitler
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1371596971"] = { -- zombie perk bottles by Amenius
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["860794236"] = { -- zombie perk bottles by Menzek
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["1198504029"] = { -- zombie perk bottles by RedocPlays
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["911658617"] = { -- zombie perk bottles by Luchix
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
 	["869353740"] = { -- zombie perk bottles by Railroad Engineer 111
-		alternative = "842302491",
+		alternative = "2243578658",
 		type = ADDON_OUTDATED
 	},
+	["842302491"] = { -- zombie perk bottles by Hagen
+		alternative = "2243578658",
+		reason = "Rebalancing, fixing stamin-up, UI integration.",
+		type = ADDON_OUTDATED
+	},
+	["662342819"] = { -- randomat by hagen
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["1398629839"] = { -- randomat by GhostPhanom
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["1244828603"] = { -- randomat by SnowSoulAngel
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["2037019426"] = { -- randomat by HyruleKrieger
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["1406495040"] = { -- randomat 2.0 by Abi
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["2055805086"] = { -- randomat 2.0 for CR by Malivil
+		alternative = "2266894222",
+		reason = "TTT2 Minigames randomat is more powerful, streamlined and cleaned up. Use TTT2 minigames, minigame packs and the TTT2 Randomat.",
+		type = ADDON_OUTDATED
+	},
+	["671603913"] = { -- Space and Time manipulator by Hagen
+		alternative = "2237612513",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1558020463"] = { -- TTT - Thanos Snap by Pocable
+		alternative = "1837434311",
+		reason = "Improved integration into TTT2 systems and viewmodels.",
+		type = ADDON_OUTDATED
+	},
+	["1466843055"] = { -- [TTT] - Teleport Gun - Fixed version by cookie
+		alternative = "931856840",
+		reason = "Jazz fixed their original addon.",
+		type = ADDON_OUTDATED,
+	},
+	["590909626"] = { -- Handcuffs by porter
+		alternative = "2401563697",
+		reason = "Broken handcuffs that don't do anything or make the game unplayable.",
+		type = ADDON_OUTDATED,
+	},
+	["2249861635"] = { -- Handcuffs by Malivil
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
+	["2124909686"] = { -- Handcuffs by DJ Bat
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
+	["1667876426"] = { -- Handcuffs by Wokki
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
+	["1190286764"] = { -- Handcuffs 2 by porter
+		alternative = "2401563697",
+		reason = "Doesn't use the targetID system of TTT2",
+		type = ADDON_OUTDATED,
+	},
 	["310403937"] = { -- Prop Disguiser by Exho
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["843092697"] = { -- Prop Disguiser by Soren
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["937535488"] = { -- Prop Disguiser by St Addi
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["1168304202"] = { -- Prop Disguiser by Izellix
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["1361103159"] = { -- Prop Disguiser by Derp altamas
-		alternative = "1662844145",
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["1301826793"] = { -- Prop Disguiser by Akechi
-		alternative = "1662844145",
+		alternative = "2127939503",
+		type = ADDON_OUTDATED
+	},
+	["1662844145"] = { -- Prop Disguiser by TeamAlgee
+		alternative = "2127939503",
 		type = ADDON_OUTDATED
 	},
 	["254779132"] = { -- Dead Ringer by Porter
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
+		type = ADDON_OUTDATED
+	},
+	["922459145"] = { -- Explosive Corpse by Bocciardo Light
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
+	["359372950"] = { -- Explosive Corpse by Daywalker
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1553970745"] = { -- Explosive Corpse by DasNerdwork
+		alternative = "2664879356",
+		reason = "Corpse integration with TargetID, correct key input detection, teammates see where boombodies are located, etc.",
 		type = ADDON_OUTDATED
 	},
 	["1315377462"] = { -- Dead Ringer by MuratYilderimTM
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["240281783"] = { -- Dead Ringer by Niandra
-		alternative = "810154456",
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
+		type = ADDON_OUTDATED
+	},
+	["810154456"] = { -- Dead Ringer by Hagen
+		alternative = "3074845055",
+		reason = "HUD elements clash with TTT2 HUD on certain scales, doesn't integrate with TTT2 features such as corpses, UI, bindings.",
 		type = ADDON_OUTDATED
 	},
 	["284419411"] = { -- Minifier by Lykrast
@@ -389,6 +513,36 @@ addonChecker.curatedList = {
 	["863963592"] = { -- Super Soda by ---
 		alternative = "1815518231",
 		reason = "Less bottles, no integration in TTT2 systems, generally buggy.",
+		type = ADDON_OUTDATED
+	},
+	["284419411"] = { -- Minifier by Lykrast
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1338887971"] = { -- Minifier by Hudson
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["1354031183"] = { -- Minifier by SnowSoulAngel
+		alternative = "1896918348",
+		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
+		type = ADDON_OUTDATED
+	},
+	["2672799157"] = { -- Minifier by The Stig
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
+		type = ADDON_OUTDATED
+	},
+	["1551396306"] = { -- Minifier by FaBe2$tRonK
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
+		type = ADDON_OUTDATED
+	},
+	["1599819393"] = { -- Minifier by Coe
+		alternative = "1896918348",
+		reason = "TTT2 integration.",
 		type = ADDON_OUTDATED
 	},
 	["801433502"] = { -- Defibrillator by Minty

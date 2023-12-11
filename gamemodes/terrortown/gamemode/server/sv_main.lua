@@ -206,7 +206,6 @@ local ttt_newroles_enabled = CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NO
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
-util.AddNetworkString("TTT_RagdollSearch")
 util.AddNetworkString("TTT_GameMsg")
 util.AddNetworkString("TTT_GameMsgColor")
 util.AddNetworkString("TTT_RoleChat")
@@ -241,7 +240,6 @@ util.AddNetworkString("TTT_Spectate")
 util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
 util.AddNetworkString("TTT2DevChanges")
-util.AddNetworkString("TTT2SyncDBItems")
 util.AddNetworkString("TTT2ReceiveTBEq")
 util.AddNetworkString("TTT2ReceiveGBEq")
 util.AddNetworkString("TTT2ResetTBEq")
@@ -272,8 +270,6 @@ end)
 fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function(path)
 	MsgN("Added TTT2 server autorun file: ", path)
 end)
-
-CHANGED_EQUIPMENT = CHANGED_EQUIPMENT or {}
 
 ---
 -- Called after the gamemode loads and starts.
@@ -612,13 +608,6 @@ function LoadShopsEquipment()
 end
 
 local function TTT2SyncShopsWithServer(len, ply)
-	-- at first, sync items
-	for i = 1, #CHANGED_EQUIPMENT do
-		local tbl = CHANGED_EQUIPMENT[i]
-
-		ShopEditor.WriteItemData("TTT2SyncDBItems", tbl[1], tbl[2])
-	end
-
 	-- reset and set if it's a fallback
 	net.Start("shopFallbackReset")
 	net.Send(ply)
