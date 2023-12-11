@@ -1072,7 +1072,7 @@ if SERVER then
 
 		if itemName then
 			-- Find saved item data
-			sqlData = dataTable.orm:Find(itemName)
+			sqlData = dataTable.orm:Find(itemName) or {}
 
 			if key then
 				-- Get the specific key data

@@ -19,14 +19,6 @@ if CLIENT then
 	local pad = 8
 	local color_tip = Color(205, 155, 0, 255)
 
-	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/pickup/icon_heavy.png"),
-		[WEAPON_PISTOL] = Material("vgui/ttt/pickup/icon_pistol.png"),
-		[WEAPON_NADE] = Material("vgui/ttt/pickup/icon_nades.png"),
-		[WEAPON_SPECIAL] = Material("vgui/ttt/pickup/icon_special.png"),
-		[WEAPON_EXTRA] = Material("vgui/ttt/pickup/icon_extra.png"),
-		[WEAPON_CLASS] = Material("vgui/ttt/pickup/icon_class.png")
-	}
-
 	HUDELEMENT.icon_item = Material("vgui/ttt/pickup/icon_special.png")
 	HUDELEMENT.icon_ammo = Material("vgui/ttt/pickup/icon_ammo.png")
 
@@ -84,7 +76,7 @@ if CLIENT then
 
 		if item.type == PICKUP_WEAPON then
 			tipColor = LocalPlayer():GetRoleColor()
-			icon = self.SlotIcons[item.kind] or self.icon_item
+			icon = self.drawer.SlotIcons[item.kind] or self.icon_item
 		elseif item.type == PICKUP_AMMO then
 			tipColor = color_tip
 			icon = self.icon_ammo
