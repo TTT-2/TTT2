@@ -500,7 +500,7 @@ local function InternalSplitLongWord(word, width, widthWord)
 			local widthOfRemovedChars = 0
 
 			-- Iterate from the end of the new line to the start
-			-- To never remove the last char, we add +1 to the start pos,
+			-- To never remove the first char of a line, we add +1 to the start pos,
 			-- so we prevent infinite loops
 			for i = currentEndPos, currentStartPos + 1, -1 do
 				widthOfRemovedChars = widthOfRemovedChars + surface.GetTextSize(fastutf8.GetChar(word, i))
@@ -530,12 +530,12 @@ local function InternalSplitLongWord(word, width, widthWord)
 	return lines
 end
 
-local function InternalGetWrappedText(text, width, scale)
+local function InternalGetWrappedText(text, allowedWidth, scale)
 	-- Any wrapping required?
-	local w, h = surface.GetTextSize(text)
+	local width, height = surface.GetTextSize(text)
 
-	if w <= width then
-		return { text }, w, h -- Nope, but wrap in table for uniformity
+	if width <= allowedWidth then
+		return { text }, width, height -- Nope, but wrap in table for uniformity
 	end
 
 	local words = string.Explode(" ", text)
@@ -548,7 +548,7 @@ local function InternalGetWrappedText(text, width, scale)
 		-- it has to be split as well
 		local widthWord = surface.GetTextSize(word)
 
-		if widthWord > width then
+		if widthWord > allowedWidth then
 			table.Add(lines, InternalSplitLongWord(word, width, widthWord))
 
 			continue
@@ -563,9 +563,9 @@ local function InternalGetWrappedText(text, width, scale)
 			combinedString = lines[amountLines] .. " " .. word
 		end
 
-		w = surface.GetTextSize(combinedString)
+		width = surface.GetTextSize(combinedString)
 
-		if w > width then
+		if width > allowedWidth then
 			lines[amountLines + 1] = word -- New line needed
 		else
 			lines[amountLines] = combinedString -- Safe to tack it on
