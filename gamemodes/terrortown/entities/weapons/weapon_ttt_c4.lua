@@ -107,53 +107,53 @@ end
 
 -- again replicating slam, now its attach fn
 function SWEP:BombStick()
-	if SERVER then
-		local ply = self:GetOwner()
-		if not IsValid(ply) then return end
+	if CLIENT then return end
 
-		if self.Planted then return end
+	local ply = self:GetOwner()
+	if not IsValid(ply) then return end
 
-		local ignore = {ply, self}
-		local spos = ply:GetShootPos()
-		local epos = spos + ply:GetAimVector() * 80
-		local tr = util.TraceLine({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID})
+	if self.Planted then return end
 
-		if tr.HitWorld then
-			local bomb = ents.Create("ttt_c4")
-			if IsValid(bomb) then
-				bomb:PointAtEntity(ply)
+	local ignore = {ply, self}
+	local spos = ply:GetShootPos()
+	local epos = spos + ply:GetAimVector() * 80
+	local tr = util.TraceLine({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID})
 
-				local tr_ent = util.TraceEntity({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID}, bomb)
+	if not tr.HitWorld then return end
 
-				if tr_ent.HitWorld then
-					local ang = tr_ent.HitNormal:Angle()
-					ang:RotateAroundAxis(ang:Right(), -90)
-					ang:RotateAroundAxis(ang:Up(), 180)
+	local bomb = ents.Create("ttt_c4")
+	if not IsValid(bomb) then return end
 
-					bomb:SetPos(tr_ent.HitPos)
-					bomb:SetAngles(ang)
-					bomb:SetOwner(ply)
-					bomb:SetThrower(ply)
-					bomb:Spawn()
+	bomb:PointAtEntity(ply)
 
-					bomb.fingerprints = self.fingerprints
+	local tr_ent = util.TraceEntity({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID}, bomb)
 
-					local phys = bomb:GetPhysicsObject()
-					if IsValid(phys) then
-						phys:EnableMotion(false)
-					end
+	if tr_ent.HitWorld then
+		local ang = tr_ent.HitNormal:Angle()
+		ang:RotateAroundAxis(ang:Right(), -90)
+		ang:RotateAroundAxis(ang:Up(), 180)
 
-					bomb.IsOnWall = true
+		bomb:SetPos(tr_ent.HitPos)
+		bomb:SetAngles(ang)
+		bomb:SetOwner(ply)
+		bomb:SetThrower(ply)
+		bomb:Spawn()
 
-					self:Remove()
+		bomb.fingerprints = self.fingerprints
 
-					self.Planted = true
-				end
-			end
-
-			ply:SetAnimation(PLAYER_ATTACK1)
+		local phys = bomb:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:EnableMotion(false)
 		end
+
+		bomb.IsOnWall = true
+
+		self:Remove()
+
+		self.Planted = true
 	end
+
+	ply:SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:Reload()
