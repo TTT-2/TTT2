@@ -549,7 +549,7 @@ local function InternalGetWrappedText(text, allowedWidth, scale)
 		local widthWord = surface.GetTextSize(word)
 
 		if widthWord > allowedWidth then
-			table.Add(lines, InternalSplitLongWord(word, width, widthWord))
+			table.Add(lines, InternalSplitLongWord(word, allowedWidth, widthWord))
 
 			continue
 		end
@@ -585,10 +585,7 @@ local function InternalGetWrappedText(text, allowedWidth, scale)
 		end
 	end
 
-	-- get height of lines
-	local _, line_h = surface.GetTextSize(text)
-
-	return lines, length * scale, line_h * lns * scale
+	return lines, length * scale, height * lns * scale
 end
 
 ---
