@@ -43,7 +43,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsSpec()
-    if not IsValid(self) then return false end
+	if not IsValid(self) then return false end
 	return self:Team() == TEAM_SPEC
 end
 
