@@ -953,7 +953,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:WasRevivedAndConfirmed()
-	return IsValid(self) and not ply:IsSpec() and not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
+	return not self:IsSpec() and not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
 end
 
 ---
