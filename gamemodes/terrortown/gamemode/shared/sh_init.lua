@@ -551,6 +551,7 @@ include("ttt2/extensions/input.lua")
 include("ttt2/extensions/cvars.lua")
 
 -- include libraries
+include("ttt2/libraries/fastutf8.lua")
 include("ttt2/libraries/huds.lua")
 include("ttt2/libraries/hudelements.lua")
 include("ttt2/libraries/items.lua")
