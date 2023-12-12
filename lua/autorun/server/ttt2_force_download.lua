@@ -157,6 +157,8 @@ resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_destructible.vmt")
 
+resource.AddFile("materials/vgui/ttt/tid/tid_ammo.vmt")
+
 -- ammo icons
 resource.AddFile("materials/vgui/ttt/ammo/box_357.vmt")
 resource.AddFile("materials/vgui/ttt/ammo/box_alyxgun.vmt")

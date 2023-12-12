@@ -12,7 +12,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed the UI being unable to handle wrapping text with non-utf8 languages that do not use ASCII whitespaces (by @TimGoll & @saibotk)
 - Fixed ttt_game_text not working due to a refactor
+- Fixed dete call HUD being invisible
 - Fixed edgecase where undefined killer angle or pos were accessed
+- Fixed fallback ammo icon missing
+- Fixed a null entity error in the miniscoreboard
 - Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit
 
 ## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
