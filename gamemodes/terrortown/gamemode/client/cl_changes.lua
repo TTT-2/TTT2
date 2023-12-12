@@ -1698,7 +1698,6 @@ function CreateChanges()
 			<ul>
 			<li>Fixed disguiser breaking UI on hot reload (by @TimGoll)</li>
 			<li>Fixed blurred box rendering for boxes not starting at <code>0,0</code> (by @TimGoll)</li>
-			<li>Optimized allocations by using global Vector / Angle when possible</li>
 			<li>Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)</li>
 			<li>Optimized allocations by using global Vector / Angle when possible.</li>
 			<li>Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced</li>
@@ -1725,6 +1724,32 @@ function CreateChanges()
 		</ul>
 	]],
 		os.time({ year = 2023, month = 12, day = 11 })
+	)
+
+	AddChange(
+		"TTT2 Base - v0.12.1b",
+		[[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the UI being unable to handle wrapping text with non-utf8 languages that do not use ASCII whitespaces (by @TimGoll & @saibotk)</li>
+			<li>Fixed ttt_game_text not working due to a refactor</li>
+			<li>Fixed dete call HUD being invisible</li>
+			<li>Fixed edgecase where undefined killer angle or pos were accessed</li>
+			<li>Fixed fallback ammo icon missing</li>
+			<li>Fixed a null entity error in the miniscoreboard</li>
+			<li>Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit</li>
+		</ul>
+	]],
+		os.time({ year = 2023, month = 12, day = 12})
 	)
 	---
 	-- run hook for other addons to add their changelog as well
