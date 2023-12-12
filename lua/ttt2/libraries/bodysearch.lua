@@ -130,10 +130,8 @@ if SERVER then
 		end
 	end)
 
-	net.Receive("ttt2_client_reports_corpse", function(_, ply)
-		if not IsValid(ply) then return end
-
-		if not ply:IsActive() then return end
+net.Receive("ttt2_client_reports_corpse", function(_, ply)
+		if not IsValid(ply) or not ply:IsActive() then return end
 
 		local rag = net.ReadEntity()
 
@@ -145,7 +143,7 @@ if SERVER then
 		local plyTable = util.GetFilteredPlayers(function(p)
 			local roleData = p:GetSubRoleData()
 
-			return roleData.isPolicingRole and p.isPublicRole and p:IsTerror()
+			return roleData.isPolicingRole and roleData.isPublicRole and p:IsTerror()
 		end)
 
 		---
