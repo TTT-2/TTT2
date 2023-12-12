@@ -232,7 +232,7 @@ if SERVER then
 	function entmeta:SetDoorCanTouchOpen(state, surpressPair)
 		door.SetPlayerCanTouch(self, state)
 
-		self:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(self))
+		self:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(self))
 
 		-- if the door is grouped as a pair, call the other one as well
 		if not surpressPair and IsValid(self.otherPairDoor) then
@@ -248,7 +248,7 @@ if SERVER then
 	function entmeta:SetDoorCanUseOpen(state, surpressPair)
 		door.SetPlayerCanUse(self, state)
 
-		self:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(self))
+		self:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(self))
 
 		-- if the door is grouped as a pair, call the other one as well
 		if not surpressPair and IsValid(self.otherPairDoor) then
@@ -264,7 +264,7 @@ if SERVER then
 	function entmeta:SetDoorAutoCloses(state, surpressPair)
 		door.SetAutoClose(self, state)
 
-		self:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(self))
+		self:SetNWBool("ttt2_door_auto_close", door.AutoCloses(self))
 
 		-- if the door is grouped as a pair, call the other one as well
 		if not surpressPair and IsValid(self.otherPairDoor) then

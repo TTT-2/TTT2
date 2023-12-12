@@ -178,7 +178,7 @@ function GM:PlayerStartVoice(ply)
 	if not IsValid(g_VoicePanelList) or not IsValid(client) then return end
 
 	-- There'd be an extra one if voice_loopback is on, so remove it.
-	GAMEMODE:PlayerEndVoice(ply, true)
+	GM:PlayerEndVoice(ply, true)
 
 	-- Tell server this is global
 	if client == ply then
@@ -297,7 +297,7 @@ local function VoiceClean()
 	for ply, pnl in pairs(PlayerVoicePanels) do
 		if IsValid(pnl) and IsValid(ply) then continue end
 
-		GAMEMODE:PlayerEndVoice(ply)
+		GM:PlayerEndVoice(ply)
 	end
 end
 timer.Create("VoiceClean", 10, 0, VoiceClean)

@@ -322,7 +322,7 @@ function SWEP:AddItemSample(ent)
 
 	local owner = self:GetOwner()
 
-	for i = #ent.fingerprints, 1 do
+	for i = #ent.fingerprints, 1, -1 do
 		local ply = ent.fingerprints[i]
 
 		if ply == self:GetOwner() then continue end

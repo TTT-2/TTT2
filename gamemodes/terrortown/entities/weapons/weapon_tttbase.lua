@@ -379,7 +379,7 @@ if CLIENT then
 			local binding = line.binding -- can be an icon or key
 			local description = line.text
 
-			local wBinding, hBinding = 0
+			local wBinding, hBinding = 0, 0
 			local isIcon = false
 
 			if isstring(binding) then
