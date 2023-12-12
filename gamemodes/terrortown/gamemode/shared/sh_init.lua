@@ -577,6 +577,7 @@ include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
 include("ttt2/libraries/bodysearch.lua")
 include("ttt2/libraries/keyhelp.lua")
+include("ttt2/libraries/fastutf8.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
