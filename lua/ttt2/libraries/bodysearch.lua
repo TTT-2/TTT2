@@ -270,7 +270,7 @@ if SERVER then
 		end
 
 		sceneData.killOrientation = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace and rag.scene.dmginfo:IsBulletDamage() then
+		if rag.scene.hit_trace and rag.scene.hit_trace.StartAng and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
