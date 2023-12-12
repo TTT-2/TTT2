@@ -463,8 +463,8 @@ end
 local function InternalSplitLongWord(word, width, widthWord)
 	local charCount = fastutf8.len(word)
 	local wCharAverage = widthWord / charCount
-	-- decrease a bit to have tolerance & limit to at least 1, to prevent infinite loops
-	local charCountPerLine = math.max(1, math.floor(width / wCharAverage * 0.9))
+	-- limit to at least 1, to prevent infinite loops
+	local charCountPerLine = math.max(1, math.floor(width / wCharAverage))
 
 	local lines = { "" }
 
@@ -515,6 +515,32 @@ local function InternalSplitLongWord(word, width, widthWord)
 			if charsToRemove > 0 then
 				-- Remove the chars from the line & shift the next start position
 				nextStartPos = nextStartPos - charsToRemove
+				nextLine = fastutf8.sub(word, currentStartPos, nextStartPos - 1)
+			end
+		elseif widthNextLine < width then
+			-- We need to add characters until the line does not fit anymore
+			local charsToAdd = 0
+			-- We keep track of the width of the added chars
+			-- to not use the expensive utf8.sub function for each char
+			local widthOfAddedChars = 0
+
+			-- Iterate from the end of the current position to the end of the word
+			for i = currentEndPos, charCount, 1 do
+				widthOfAddedChars = widthOfAddedChars + surface.GetTextSize(fastutf8.GetChar(word, i))
+
+				-- Break if the next char would not fit into the line
+				if widthNextLine + widthOfAddedChars >= width then
+					break
+				end
+
+				-- Only add a char that still fits into the line
+				charsToAdd = charsToAdd + 1
+			end
+
+			-- Only do something if we actually added chars
+			if charsToAdd > 0 then
+				-- Add the chars to the line & shift the next start position
+				nextStartPos = nextStartPos + charsToAdd
 				nextLine = fastutf8.sub(word, currentStartPos, nextStartPos - 1)
 			end
 		end
