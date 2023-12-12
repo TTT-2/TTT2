@@ -252,7 +252,7 @@ if SERVER then
 		sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 
 		sceneData.killDistance = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace then
+		if rag.scene.hit_trace and isvector(rag.scene.hit_trace.StartPos) then
 			local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
 			if rawKillDistance < 200 then
 				sceneData.killDistance = CORPSE_KILL_DISTANCE_POINT_BLANK
@@ -270,7 +270,7 @@ if SERVER then
 		end
 
 		sceneData.killOrientation = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace and rag.scene.hit_trace.StartAng and rag.scene.dmginfo:IsBulletDamage() then
+		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
