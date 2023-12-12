@@ -551,6 +551,7 @@ include("ttt2/extensions/input.lua")
 include("ttt2/extensions/cvars.lua")
 
 -- include libraries
+include("ttt2/libraries/fastutf8.lua")
 include("ttt2/libraries/huds.lua")
 include("ttt2/libraries/hudelements.lua")
 include("ttt2/libraries/items.lua")
@@ -577,7 +578,6 @@ include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
 include("ttt2/libraries/bodysearch.lua")
 include("ttt2/libraries/keyhelp.lua")
-include("ttt2/libraries/fastutf8.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
