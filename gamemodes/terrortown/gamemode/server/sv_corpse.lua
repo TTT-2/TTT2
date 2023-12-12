@@ -308,8 +308,6 @@ local function GetSceneData(victim, attacker, dmginfo)
 
 	if victim.hit_trace then
 		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
-	else
-		return scene
 	end
 
 	scene.waterLevel = victim:WaterLevel();
@@ -330,6 +328,8 @@ local function GetSceneData(victim, attacker, dmginfo)
 
 	if IsValid(attacker) and attacker:IsPlayer() then
 		scene.killer = GetSceneDataFromPlayer(attacker)
+
+		if not scene.hit_trace then return scene end
 
 		local att = attacker:LookupAttachment("anim_attachment_RH")
 		local angpos = attacker:GetAttachment(att)
