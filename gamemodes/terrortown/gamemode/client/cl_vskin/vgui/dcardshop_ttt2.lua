@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DCardTTT2
+-- @section DCardShopTTT2
 
 local PANEL = {}
 
