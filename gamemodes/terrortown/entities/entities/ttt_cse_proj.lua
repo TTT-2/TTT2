@@ -1,3 +1,9 @@
+---
+-- @class ENT
+-- @desc Visualizer projective thrown in the world
+-- @section CSEProj
+
+
 if SERVER then
 	AddCSLuaFile()
 end
