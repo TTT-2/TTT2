@@ -75,6 +75,8 @@ ttt_include("cl_vskin__vgui__ddragbase")
 ttt_include("cl_vskin__vgui__drolelayeringreceiver")
 ttt_include("cl_vskin__vgui__drolelayeringsender")
 ttt_include("cl_vskin__vgui__dsearchbar")
+ttt_include("cl_vskin__vgui__dprofilepanel")
+ttt_include("cl_vskin__vgui__dinfoitem")
 ttt_include("cl_vskin__vgui__dsubmenulist")
 
 ttt_include("cl_changes")
@@ -185,6 +187,8 @@ function GM:Initialize()
 	local skinName = vskin.GetVSkinName()
 
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	keyhelp.InitializeBasicKeys()
 
 	---
 	-- @realm client
@@ -345,11 +349,20 @@ function GM:OnReloaded()
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
+	ARMOR:Initialize()
+	SPEED:Initialize()
+
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	keyhelp.InitializeBasicKeys()
+
+	---
+	-- @realm client
+	hook.Run("TTT2FinishedLoading")
 end
 
 ---
@@ -410,7 +423,7 @@ local function RoundStateChange(o, n)
 
 		-- people may have died and been searched during prep
 		for i = 1, #plys do
-			plys[i].search_result = nil
+			bodysearch.ResetSearchResult(plys[i])
 		end
 
 		-- clear blood decals produced during prep
@@ -553,7 +566,6 @@ function GM:ClearClientState()
 	client.last_id = nil
 	client.radio = nil
 	client.called_corpses = {}
-	client.sprintProgress = 1
 
 	client:SetTargetPlayer(nil)
 
@@ -569,7 +581,7 @@ function GM:ClearClientState()
 
 		pl:SetRole(ROLE_NONE)
 
-		pl.search_result = nil
+		bodysearch.ResetSearchResult(pl)
 	end
 
 	VOICE.CycleMuteState(MUTE_NONE)
@@ -616,12 +628,6 @@ function GM:CleanUpMap()
 	game.CleanUpMap()
 end
 
-net.Receive("TTT2SyncDBItems", function()
-	if not ShopEditor then return end
-
-	ShopEditor.ReadItemData()
-end)
-
 -- server tells us to call this when our LocalPlayer has spawned
 local function PlayerSpawn()
 	local as_spec = net.ReadBit() == 1
@@ -649,7 +655,7 @@ net.Receive("TTT_PlayerDied", PlayerDeath)
 -- Called to determine if the LocalPlayer should be drawn.
 -- @note If you're using this hook to draw a @{Player} for a @{GM:CalcView} hook,
 -- then you may want to consider using the drawviewer variable you can use in your
--- <a href="https://wiki.garrysmod.com/page/Structures/CamData">CamData structure</a>
+-- <a href="https://wiki.facepunch.com/gmod/Structures/CamData">CamData structure</a>
 -- table instead.
 -- @important You should visit the linked reference, there could be related issues
 -- @param Player ply The @{Player}
@@ -673,7 +679,7 @@ local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 -- @param number znear Distance to near clipping plane
 -- @param number zfar Distance to far clipping plane
 -- @return table View data table. See
--- <a href="https://wiki.garrysmod.com/page/Structures/CamData">CamData structure</a>
+-- <a href="https://wiki.facepunch.com/gmod/Structures/CamData">CamData structure</a>
 -- structure
 -- @hook
 -- @realm client

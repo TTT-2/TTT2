@@ -25,21 +25,6 @@ local materialReset = Material("vgui/ttt/vskin/icon_reset")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 ---
--- Checks recursively the parents until none is found and the highest parent is returned
--- @ignore
-local function getHighestParent(slf)
-	local parent = slf
-	local checkParent = slf:GetParent()
-
-	while ispanel(checkParent) do
-		parent = checkParent
-		checkParent = parent:GetParent()
-	end
-
-	return parent
-end
-
----
 -- @ignore
 function PANEL:Init()
 	self.items = {}
@@ -166,11 +151,11 @@ function PANEL:MakeTextEntry(data)
 	right:SetHeightMult(1)
 
 	right.OnGetFocus = function(slf)
-		getHighestParent(self):SetKeyboardInputEnabled(true)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
 	end
 
 	right.OnLoseFocus = function(slf)
-		getHighestParent(self):SetKeyboardInputEnabled(false)
+		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
 	end
 
 	-- Set default if possible even if the convar could still overwrite it
@@ -214,16 +199,18 @@ function PANEL:MakeCheckBox(data)
 	left:SetResetButton(reset)
 
 	left:SetText(data.label)
-	left:SetParams(data.params)
+	left:SetTextParams(data.params)
+	left:SetInverted(data.invert)
 
 	-- Set default if possible even if the convar could still overwrite it
 	left:SetDefaultValue(data.default)
 	left:SetConVar(data.convar)
 	left:SetServerConVar(data.serverConvar)
+	left:SetDatabase(data.database)
 
 	left:SetTall(32)
 
-	if not data.convar and not data.serverConvar and data.initial then
+	if not data.convar and not data.serverConvar and not data.database and data.initial then
 		left:SetValue(data.initial)
 	end
 
@@ -274,9 +261,10 @@ function PANEL:MakeSlider(data)
 	right:SetDefaultValue(data.default)
 	right:SetConVar(data.convar)
 	right:SetServerConVar(data.serverConvar)
+	right:SetDatabase(data.database)
 	right:SizeToContents()
 
-	if not data.convar and not data.serverConvar and data.initial then
+	if not data.convar and not data.serverConvar and not data.database and data.initial then
 		right:SetValue(data.initial)
 	end
 
@@ -334,9 +322,10 @@ function PANEL:MakeComboBox(data)
 			local choice = data.choices[i]
 
 			if istable(choice) then
-				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
+				right:AddChoice(choice.title, tostring(choice.value), choice.select, choice.icon, choice.data)
 			else
 				-- Support old simple structure
+				choice = tostring(choice)
 				right:AddChoice(choice, choice)
 			end
 		end
@@ -348,8 +337,10 @@ function PANEL:MakeComboBox(data)
 	local serverConVar = data.serverConvar or data.serverConVar
 	right:SetServerConVar(serverConVar)
 
+	right:SetDatabase(data.database)
+
 	-- Only choose an option, if no conVars are set
-	if not isstring(conVar) and not isstring(serverConVar) then
+	if not isstring(conVar) and not isstring(serverConVar) and not istable(data.database) then
 		if data.selectId then
 			right:ChooseOptionId(data.selectId, true)
 		elseif data.selectName or data.selectTitle then
@@ -447,7 +438,7 @@ function PANEL:MakeHelp(data)
 	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(data.label)
-	left:SetParams(data.params)
+	left:SetTextParams(data.params)
 	left:SetContentAlignment(7)
 	left:SetAutoStretchVertical(true)
 
@@ -462,7 +453,7 @@ function PANEL:MakeHelp(data)
 
 	-- make sure the height is based on the amount of text inside
 	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetParams()))
+		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
 
 		local textWrapped = draw.GetWrappedText(
 			textTranslated,
@@ -533,7 +524,7 @@ function PANEL:MakeColorMixer(data)
 		end
 
 		-- update colormixer as well
-		colorMixer:SetDisabled(not enabled)
+		colorMixer:SetEnabled(enabled)
 	end
 
 	self:AddItem(left, right)

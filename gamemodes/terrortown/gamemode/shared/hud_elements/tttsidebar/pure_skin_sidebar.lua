@@ -10,6 +10,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	local TryT = LANG.TryTranslation
+
 	local padding = 10
 	local color_badstatus = Color(183, 54, 47)
 	local color_goodstatus = Color(36, 115, 51)
@@ -92,28 +94,62 @@ if CLIENT then
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
 		if isfunction(item.DrawInfo) then
-			local info = item:DrawInfo()
+			local info = TryT(item:DrawInfo())
 			if info then
-				-- right bottom corner
-				local tx = pos.x + size.w - 5
-				local ty = curY +  size.w - 1
-				local pad = 5 * self.scale
-
-				surface.SetFont("PureSkinItemInfo")
-
-				local infoW, infoH = surface.GetTextSize(info)
+				local infoW, infoH = draw.GetTextSize(info, "PureSkinItemInfo")
 				infoW = infoW * self.scale
-				infoH = (infoH + 2) * self.scale
+				infoH = (infoH + 3) * self.scale
 
-				local bx = tx - infoW * 0.5 - pad
+				-- right bottom corner
+				local pad = 4 * self.scale
+				local tx = pos.x + size.w - 1 * self.scale - 0.5 * infoW
+				local ty = curY + size.w + 4 * self.scale - 0.5 * infoH
+
+				local bx = tx - 0.5 * infoW - pad
 				local by = ty - infoH * 0.5
 				local bw = infoW + pad * 2
 
 				self:DrawBg(bx, by, bw, infoH, item.hud_color)
 
-				draw.AdvancedText(info, "PureSkinItemInfo", tx, ty, fontColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+				draw.AdvancedText(info, "PureSkinItemInfo", tx, ty, fontColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 				self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
+			end
+		end
+
+		if GAMEMODE.ShowScoreboard and GetConVar("ttt2_hud_enable_description"):GetBool() then
+			local xText = pos.x + size.w + self.padding
+			local offsetTitle = -2 * self.scale
+			local offsetLines = {19 * self.scale, 33 * self.scale}
+
+			local name = item.EquipMenuData and item.EquipMenuData.name or (item.name or "")
+
+			-- allow dynamic status names
+			if istable(name) then
+				name = name[item.active_icon]
+			end
+
+			draw.AdvancedText(TryT(name), "PureSkinPopupText", xText, curY + offsetTitle, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
+
+			local translatedText = TryT((item.sidebarDescription or item.EquipMenuData and item.EquipMenuData.desc) or "")
+
+			local wrappedText = draw.GetWrappedText(
+				translatedText,
+				285 * self.scale,
+				"PureSkinItemInfo"
+			)
+
+			local lineCount = #wrappedText
+
+			for i = 1, math.min(2, lineCount) do
+				local line = wrappedText[i]
+
+				-- if text is shortned, then this should be indicated
+				if i == 2 and lineCount > 2 then
+					line = line .. " [...]"
+				end
+
+				draw.AdvancedText(line, "PureSkinItemInfo", xText, curY + offsetLines[i], COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
 			end
 		end
 

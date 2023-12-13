@@ -42,7 +42,7 @@ ttt2net.OnUpdate({"entspawnscript", "spawnamount"}, function(_, newval, reverseP
 
 	if not IsValid(updateHelpBox) or not paramType then return end
 
-	updateHelpBox:GetParams()[paramType] = newval
+	updateHelpBox:GetTextParams()[paramType] = newval
 end)
 
 
@@ -134,31 +134,32 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonReset:SetText("button_reset")
 	buttonReset:SetSize(100, 45)
-	buttonReset:SetPos(parent:GetWide() - 120, 20)
+	buttonReset:SetPos(20, 20)
 	buttonReset.DoClick = function()
 		entspawnscript.ResetMapToDefault()
 
 		cvars.ChangeServerConVar("ttt_use_weapon_spawn_scripts", "1")
 	end
 
-	local buttonToggle = vgui.Create("DButtonTTT2", parent)
-
-	buttonToggle:SetText("button_start_entspawn_edit")
-	buttonToggle:SetSize(180, 45)
-	buttonToggle:SetPos(20, 20)
-	buttonToggle.DoClick = function(slf)
-		entspawnscript.StartEditing()
-
-		HELPSCRN.menuFrame:HideFrame()
-	end
-
 	local buttonDelete = vgui.Create("DButtonTTT2", parent)
 
 	buttonDelete:SetText("button_delete_all_spawns")
 	buttonDelete:SetSize(195, 45)
-	buttonDelete:SetPos(220, 20)
+	buttonDelete:SetPos(parent:GetWide() - (195 + 20 + 180 + 20), 20)
 	buttonDelete.DoClick = function(slf)
 		entspawnscript.DeleteAllSpawns()
+	end
+
+	local buttonToggle = vgui.Create("DButtonTTT2", parent)
+
+	buttonToggle:SetText("button_start_entspawn_edit")
+	buttonToggle:SetSize(180, 45)
+
+	buttonToggle:SetPos(parent:GetWide() - (180 + 20), 20)
+	buttonToggle.DoClick = function(slf)
+		entspawnscript.StartEditing()
+
+		HELPSCRN.menuFrame:HideFrame()
 	end
 
 	updateButtons[1] = buttonToggle

@@ -360,11 +360,7 @@ function RADAR.CreateMenu(parent, frame)
 	dform:AddItem(dcheck)
 
 	dform.Think = function(s)
-		if RADAR.repeating or not owned then
-			dscan:SetDisabled(true)
-		else
-			dscan:SetDisabled(false)
-		end
+		dscan:SetEnabled(not RADAR.repeating and owned)
 	end
 
 	dform:SetVisible(true)

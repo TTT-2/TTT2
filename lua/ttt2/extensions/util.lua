@@ -32,7 +32,7 @@ local mathFloor = math.floor
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
@@ -148,6 +148,30 @@ function util.GetNextAlivePlayer(ply)
 	end
 
 	return alive[1]
+end
+
+---
+-- Returns the previous available @{Player} based on the given @{Player} in the global list
+-- @param Player ply
+-- @return Player
+-- @realm shared
+function util.GetPreviousAlivePlayer(ply)
+	local alive = util.GetAlivePlayers()
+	if #alive < 1 then return end
+
+	if IsValid(ply) then
+		local prev = nil
+
+		for i = #alive, 1, -1 do
+			if prev == ply then
+				return alive[i]
+			end
+
+			prev = alive[i]
+		end
+	end
+
+	return alive[#alive]
 end
 
 ---
@@ -272,7 +296,7 @@ end
 ---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number t times
 -- @realm shared
 -- @todo improve description
@@ -392,7 +416,7 @@ end
 ---
 -- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
 -- @param number seconds
--- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
+-- @param string fmt the <a href="https://wiki.facepunch.com/gmod/string.format">format</a>
 -- @return string
 -- @realm shared
 function util.SimpleTime(seconds, fmt)
@@ -418,7 +442,7 @@ end
 -- This creates an infinite recursion problem (stack overflow). Registering the function with
 -- this helper function fixes the problem.
 -- @param string name The name of the original function
--- @return Function The pointer to the original functions
+-- @return function The pointer to the original functions
 -- @realm shared
 function util.OverwriteFunction(name)
 	local str = stringSplit(name, ".")
@@ -481,6 +505,31 @@ function util.VectorInBounds(vec, lowerBound, upperBound)
 	return vec.x > lowerBound.x and vec.x < upperBound.x
 		and vec.y > lowerBound.y and vec.y < upperBound.y
 		and vec.z > lowerBound.z and vec.z < upperBound.z
+end
+
+---
+-- Adjusts a numeric value from one range to a different one in a relative transformation.
+-- @param number value The value that should be mapped
+-- @param number minValue The minimum value that 'value' can have
+-- @param number maxValue The maximum value that 'value' can have
+-- @param number minTargetValue The minimum value that the mapped value can have
+-- @param number maxTargetValue The maximum value that the mapped value can have
+-- @realm shared
+function util.TransformToRange(value, minValue, maxValue, minTargetValue, maxTargetValue)
+	value = mathMax(minValue, mathMin(maxValue, value))
+
+	return minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
+end
+
+-- This is a helper function that checks if any of the current edit modes is active
+-- that has to be left by pressing F1.
+-- @param Player ply The player who might be editing
+-- @return boolean Returns if an editing mode is active
+-- @note Due to how the edit modes are implemented, some checks might only work in the client
+-- realm. So make sure to check it not only on the server.
+-- @realm shared
+function util.EditingModeActive(ply)
+	return (HUDEditor and HUDEditor.IsEditing) or entspawnscript.IsEditing(ply)
 end
 
 if CLIENT then
@@ -571,5 +620,20 @@ if CLIENT then
 		--print("[TTT2][DEPRECATION][util.DrawFilteredTexturedRect] draw.FilteredTexture should be used instead")
 
 		draw.FilteredTexture(x, y, w, h, material, alpha, col)
+	end
+
+	---
+	-- Checks recursively the parents until none is found and the highest parent is returned
+	-- @ignore
+	function util.getHighestPanelParent(panel)
+		local parent = panel
+		local checkParent = panel:GetParent()
+
+		while ispanel(checkParent) do
+			parent = checkParent
+			checkParent = parent:GetParent()
+		end
+
+		return parent
 	end
 end

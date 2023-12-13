@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section ImageCheckBoxTTT2
+-- @section DImageCheckBoxTTT2
 
 local mathMax = math.max
 local mathMin = math.min
@@ -103,6 +103,15 @@ function PANEL:Init()
 		hattable = false,
 		selected = false
 	}
+end
+
+---
+-- @realm client
+function PANEL:OnRemove()
+	-- old ent is removed because clientside models are not garbage collected
+	if IsValid(self.data.ent) then
+		self.data.ent:Remove()
+	end
 end
 
 ---

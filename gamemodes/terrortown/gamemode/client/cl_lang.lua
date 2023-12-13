@@ -133,6 +133,29 @@ function LANG.GetParamTranslation(name, params)
 end
 
 ---
+-- Translates a given string and automatically decides between param translation and normal
+-- translation based on the given data. Can also translate the params if so desired.
+-- @param string name string key identifier for the translated @{string}
+-- @param[opt] table params The params that can be insterted into the translated string
+-- @param[opt] boolean translateParams Whether the params should be translated as well
+-- @return string The translated string
+-- @realm client
+function LANG.GetDynamicTranslation(name, params, translateParams)
+	-- process params (translation)
+	if params and translateParams then
+		for k, v in pairs(params) do
+			params[k] = LANG.TryTranslation(v)
+		end
+	end
+
+	if params then
+		return LANG.GetParamTranslation(name, params)
+	else
+		return LANG.TryTranslation(name)
+	end
+end
+
+---
 -- Returns the translated @{string} text (if available).<br />String
 -- <a href="http://lua-users.org/wiki/StringInterpolation">interpolation</a> is allowed<br />
 -- Parameterised version, performs string interpolation. Slower than

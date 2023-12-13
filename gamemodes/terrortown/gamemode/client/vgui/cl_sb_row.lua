@@ -54,7 +54,8 @@ local vip_tbl = {
 	["76561198082931319"] = true, -- Henk
 	["76561198049910438"] = true, -- Zzzaaaccc13
 	["76561198296468397"] = true, -- ZenBre4ker
-	["76561198041170748"] = true -- Pytho | Paul
+	["76561198041170748"] = true, -- Pytho | Paul
+	["76561197999466165"] = true -- EntranceJew
 }
 
 local addondev_tbl = {
@@ -331,7 +332,9 @@ function PANEL:SetPlayer(ply)
 
 	self.voice.DoClick = function()
 		if IsValid(ply) and ply ~= client then
-			ply:SetMuted(not ply:IsMuted())
+			local muted = VOICE.GetPreferredPlayerVoiceMuted(ply)
+			VOICE.SetPreferredPlayerVoiceMuted(ply, not muted)
+			VOICE.UpdatePlayerVoiceVolume(ply)
 		end
 	end
 
@@ -430,10 +433,10 @@ function PANEL:UpdatePlayerData()
 	self.tag:SetText(ptag and GetTranslation(ptag.txt) or "")
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
 
-	self.sresult:SetVisible(ply.search_result and ply.search_result.detective_search)
+	self.sresult:SetVisible(ply.bodySearchResult and ply.bodySearchResult.base.isPublicPolicingSearch)
 
 	-- more blue if a detective searched them
-	if ply.search_result and (LocalPlayer():GetSubRoleData().isPolicingRole or not ply.search_result.show) then
+	if ply.bodySearchResult and (LocalPlayer():GetSubRoleData().isPolicingRole or not ply.bodySearchResult.show) then
 		self.sresult:SetImageColor(Color(200, 200, 255))
 	end
 
@@ -445,7 +448,7 @@ function PANEL:UpdatePlayerData()
 	end
 
 	if self.Player ~= LocalPlayer() then
-		local muted = self.Player:IsMuted()
+		local muted = VOICE.GetPreferredPlayerVoiceMuted(self.Player)
 
 		self.voice:SetImage(muted and "icon16/sound_mute.png" or "icon16/sound.png")
 	else
@@ -659,13 +662,14 @@ function PANEL:ScrollPlayerVolume(delta)
 	-- Bots return nil for the steamid64 on the client, so we need to improvise a bit
 	local identifier = ply:IsBot() and ply:Nick() or ply:SteamID64()
 
-	local cur_volume = ply:GetVoiceVolumeScale()
+	local cur_volume = VOICE.GetPreferredPlayerVoiceVolume(ply)
 	cur_volume = cur_volume ~= nil and cur_volume or 1
 
 	local new_volume = delta == -1 and math.max(0, cur_volume - 0.01) or math.min(1, cur_volume + 0.01)
 	new_volume = math.Round(new_volume, 2)
 
-	ply:SetVoiceVolumeScale(new_volume)
+	VOICE.SetPreferredPlayerVoiceVolume(ply, new_volume)
+	VOICE.UpdatePlayerVoiceVolume(ply)
 
 	if self.voice.percentage_frame ~= nil and not self.voice.percentage_frame:IsVisible() then
 		self.voice.percentage_frame:Show()

@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你得自己頂住了。"
 L.round_traitors_more = "叛徒，你的隊友是：{names}"
 
 L.win_time = "時間用盡，叛徒失敗了。"
-L.win_traitor = "叛徒取得了勝利！"
-L.win_innocent = "叛徒們被擊敗了！"
+L.win_traitors = "叛徒取得了勝利！"
+L.win_innocents = "叛徒們被擊敗了！"
 L.win_nones = "無人勝出！（平局）"
 L.win_showreport = "一起觀看觀看 {num} 秒的回合總結吧！"
 
@@ -166,51 +166,11 @@ L.quick_inno = " {player} 是無辜者。"
 L.quick_check = "還有人活著嗎？"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below. Keep these lowercase.
+-- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "沒有人"
 L.quick_disg = "有人偽裝了"
 L.quick_corpse = "一具未搜索過的屍體"
 L.quick_corpse_id = " {player} 的屍體"
-
--- Body search window
-L.search_title = "屍體搜索結果"
-L.search_info = "訊息"
-L.search_confirm = "確認死亡"
-L.search_call = "呼叫探長"
-
--- Descriptions of pieces of information found
-L.search_nick = "這是 {player} 的屍體。"
-
-L.search_role_traitor = "這個人是叛徒！"
-L.search_role_det = "這個人是探長。"
-L.search_role_inno = "這個人是無辜的恐怖分子。"
-
-L.search_words = "某些事物讓你了解到此人的遺言： {lastwords}"
-L.search_armor = "他穿戴非標準裝甲。"
-L.search_disg = "他持有一個能隱匿身份的設備"
-L.search_radar = "他持有像是雷達的物品。已經無法使用了。"
-L.search_c4 = "你在他口袋中找到了一本筆記。記載著線路 {num} 是解除炸彈須剪除的一條。"
-
-L.search_dmg_crush = "他多處骨折。看起來是某種重物的衝擊撞死了他。"
-L.search_dmg_bullet = "他很明顯是被射殺身亡的。"
-L.search_dmg_fall = "他是墜落身亡的。"
-L.search_dmg_boom = "他的傷口以及燒焦的衣物，應是爆炸導致其死亡。"
-L.search_dmg_club = "他的身體有許多擦傷打擊痕跡，明顯是被毆打致死的。"
-L.search_dmg_drown = "他身上的蛛絲馬跡顯示是溺死的。"
-L.search_dmg_stab = "他是被刺擊與揮砍後，迅速失血致死的。"
-L.search_dmg_burn = "聞起來有燒焦的恐怖分子在附近.."
-L.search_dmg_tele = "看起來他的DNA以超光速粒子之形式散亂在附近。"
-L.search_dmg_car = "他穿越馬路時被一個粗心的駕駛碾死了。"
-L.search_dmg_other = "你無法找到這恐怖份子的具體死因。"
-
-L.search_weapon = "這顯示死者是被 {weapon} 所殺。"
-L.search_head = "最嚴重的傷口在頭部。完全沒機會叫喊。"
-L.search_time = "他大約死於你進行搜索的 {time} 前。"
-L.search_dna = "用DNA掃描器檢索兇手的DNA標本，DNA樣本大約在 {time} 前開始衰退。"
-
-L.search_kills1 = "你找到一個名單，記載著他發現的死者：{player}"
-L.search_kills2 = "你找到了一個名單，記載著他殺的這些人："
-L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後一個人： {player}。是兇手，還是巧合？"
 
 -- Scoreboard
 L.sb_playing = "你正在玩的伺服是.."
@@ -233,7 +193,7 @@ L.sb_tag_avoid = "應迴避者"
 L.sb_tag_kill = "已死者"
 L.sb_tag_miss = "失蹤者"
 
--- Equipment actions， like buying and dropping
+-- Equipment actions, like buying and dropping
 L.buy_no_stock = "無法購買此裝備：你已擁有它了。"
 L.buy_pending = "你已訂購此裝備，請等待配送。"
 L.buy_received = "你已收到此裝備。"
@@ -288,7 +248,7 @@ L.c4_remove_destroy2 = "確認：銷毀"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "點擊以剪斷 {num} 號引線"
 
-L.c4_disarm_t     = "剪斷引線以拆除C4。您是叛徒，當然每條引線都是安全的，但其他人可就沒那麼容易了！"
+L.c4_disarm_t = "剪斷引線以拆除C4。您是叛徒，當然每條引線都是安全的，但其他人可就沒那麼容易了！"
 L.c4_disarm_owned = "剪斷引線以拆除C4。你是裝置此C4的人，細節瞭然於胸，任一條引線都可成功拆除。"
 L.c4_disarm_other = "剪斷正確的引線以拆除C4。倘若你犯了錯，後果將不堪設想唷！"
 
@@ -372,8 +332,8 @@ L.sipistol_name = "消音手槍"
 
 L.sipistol_desc = [[
 噪音極小的手槍。使用一般的手槍彈藥。
-被害者被射殺時不會喊叫。]]
 
+被害者被射殺時不會喊叫。]]
 
 -- Newton launcher
 L.newton_name = "牛頓發射器"
@@ -406,7 +366,7 @@ L.dna_killer = "成功採集到兇手的DNA樣本！"
 L.dna_duplicate = "匹配！你的掃描儀裡已經有這個DNA樣本了。"
 L.dna_no_killer = "DNA樣本無法檢索（兇手已斷線？）"
 L.dna_armed = "炸彈已啟動！趕緊拆除它！"
-L.dna_object = "在目標上採集到 {num} 個新DNA樣本。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "區域內沒偵測到可採集之DNA樣本。"
 
 L.dna_desc = [[
@@ -475,7 +435,7 @@ L.hp_wounded = "輕重傷的"
 L.hp_badwnd = "重傷的"
 L.hp_death = "近乎死亡"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "名聲好"
 L.karma_high = "有點粗魯"
 L.karma_med = "扣扳機愛好者"
@@ -484,14 +444,13 @@ L.karma_min = "負人命債累累"
 
 -- TargetID misc
 L.corpse = "屍體"
-L.corpse_hint = "按下 [{usekey}] 來搜索，用 [{walkkey} + {usekey}] 進行無聲搜索。"
+--L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly."
 
 L.target_disg = " （偽裝狀態）"
 L.target_unid = "未確認的屍體"
+L.target_unknown = "一名恐怖分子"
 
-L.target_credits = "搜索屍體以獲取未被消耗的信用點數"
-
--- HUD buttons with hand icons that only traitors can see
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "單獨使用"
 L.tbut_reuse = "重複使用"
 L.tbut_retime = "在 {num} 秒後重複使用"
@@ -504,8 +463,7 @@ L.mute_all = "全部靜音"
 L.mute_off = "取消靜音"
 
 -- Spectators and prop possession
-L.punch_title = "重擊測量器 " --"PUNCH-O-METER"
-L.punch_help = "按下行走鍵或跳躍鍵以推撞物品；按蹲下鍵則離開物品控制。"
+L.punch_title = "重擊測量器 "
 L.punch_bonus = "你的分數較低，重擊測量器上限減少 {num}"
 L.punch_malus = "你的分數較高，重擊測量器上限增加 {num}！"
 
@@ -864,8 +822,8 @@ L.aw_tod1_text = "在他的團隊即將獲得勝利的前幾秒死去。"
 L.aw_tod2_title = "人家不依啦！"
 L.aw_tod2_text = "在這回合剛開始不久即被殺害。"
 
--- New and modified pieces of text are placed below this point， marked with the
--- version in which they were added， to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你彈夾內的子彈不足以丟棄成彈藥盒。"
@@ -933,9 +891,6 @@ L.shop_role_select = "選擇身份"
 L.shop_role_selected = "選中了 {role} 的商店！"
 L.shop_search = "搜索"
 
-L.spec_help = "點擊來觀察玩家，或對著物理道具按 {usekey} 來附身。"
-L.spec_help2 = "若想離開觀察者模式，用 {helpkey} 打開菜單，在“遊戲性”選項中勾選選項。"
-
 -- 2019-10-19
 L.drop_ammo_prevented = "有什麽東西阻擋你丟出子彈。"
 
@@ -956,7 +911,7 @@ L.target_switch_weapon_nospace = "沒有提供給這個武器的槽位"
 L.target_switch_drop_weapon_info = "丟棄槽位 {slot} 的 {name}"
 L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 沒有可丟棄的武器"
 
-L.corpse_searched_by_detective = "這個屍體被探長搜查過"
+--L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "這個屍體太遠了。"
 
 L.radio_pickup_wrong_team = "你不能撿起其他隊伍的收音機"
@@ -1004,7 +959,6 @@ L.mute_team = "靜音 {team}"
 L.door_auto_closes = "此門會自動關閉"
 L.door_open_touch = "此門接觸後會自動開啟"
 L.door_open_touch_and_use = "接觸門或按 [{usekey}] 開門。"
-L.hud_health = "生命"
 
 -- 2020-03-09
 L.help_title = "幫助和設定"
@@ -1119,13 +1073,10 @@ L.label_gameplay_specmode = "觀察者模式（永遠觀察）"
 L.label_gameplay_fastsw = "武器快速切換"
 L.label_gameplay_hold_aim = "啟用持續瞄準"
 L.label_gameplay_mute = "死亡時靜音存活玩家"
-L.label_gameplay_dtsprint_enable = "啟用雙擊沖刺"
-L.label_gameplay_dtsprint_anykey = "沖刺時任何方向鍵都持續沖刺"
 L.label_hud_default = "默認 HUD"
 L.label_hud_force = "強製 HUD"
 
 L.label_bind_weaponswitch = "撿起武器"
-L.label_bind_sprint = "沖刺"
 L.label_bind_voice = "全局語言"
 L.label_bind_voice_team = "團隊語言"
 
@@ -1196,11 +1147,7 @@ L.hud_revival_time = "{time}秒"
 L.door_destructible = "此門不可摧毀（{health}生命）"
 
 -- 2020-05-28
-L.confirm_detective_only = "只有偵探能確認死亡。"
-L.inspect_detective_only = "只有偵探能檢查屍體。"
-L.corpse_hint_no_inspect = "只有偵探能檢查這個屍體。"
-L.corpse_hint_inspect_only = "按 [{usekey}] 搜索。只有偵探能確認死亡。"
-L.corpse_hint_inspect_only_credits = "按 [{usekey}] 獲取信用點數。只有偵探能確認死亡。"
+--L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "切換偽裝器"
@@ -1299,6 +1246,7 @@ L.trap_something = "某件物品"
 -- Kill events
 L.desc_event_kill_suicide = "是自殺的"
 L.desc_event_kill_team = "是被隊友殺的"
+
 L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飛。"
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飛。"
 
@@ -1410,12 +1358,6 @@ L.xfer_team_indicator = "陣營"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "武器生成設置"
-
-L.equipmenteditor_name_auto_spawnable = "裝備隨機生成"
-L.equipmenteditor_name_spawn_type = "生成類型"
-
 -- 2021-07-11
 L.spec_about_to_revive = "在復活時，觀察將被限製。"
 
@@ -1475,7 +1417,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地圖上，可能會建議使用在地圖自帶的原始生成點，而不用動態系統來取代它們。禁用這個複選框只對當前活動地圖禁用。其他地圖仍將使用動態系統。"
 L.help_spawn_editor_hint = "提示：要離開生成編輯器，重新打開遊戲模式菜單。"
 L.help_spawn_editor_spawn_amount = [[
-目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 player} 個玩家生成點。
+目前在這張地圖上有 {weapon} 個武器生成點，{ammo} 個彈藥生成點和 {player} 個玩家生成點。
 點擊'開始編輯生成'來改變這個生成。
 
 {weaponrandom}x 隨機武器生成
@@ -1543,6 +1485,7 @@ L.help_models_select = [[
 左鍵點擊模型，將其添加到玩家模型庫中。再次以左鍵刪除它們。右鍵可在所關注的模型的啟用和禁用偵探帽之間進行切換。
 
 左上角的小指示器顯示玩家模型是否有頭部的命中箱，下面的圖標顯示了這個模型是否可佩戴偵探帽。]]
+
 L.menu_roles_title = "角色設置"
 L.menu_roles_description = "設置生成概率、裝備積分及更多。"
 
@@ -1761,13 +1704,12 @@ L.label_round_limit = "回合數上限"
 L.label_time_limit_minutes = "遊戲時間上限，以分鐘為單位"
 L.label_nade_throw_during_prep = "在準備時間內允許投擲手榴彈"
 L.label_postround_dm = "回合結束後啟用死亡競賽"
+L.label_session_limits_enabled = "啟用地圖更換"
 L.label_spectator_chat = "啟用觀察者與大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字時被殺，則發出最後一句話至聊天室"
 L.label_identify_body_woconfirm = "不按'確認'按鈕識別屍體"
-L.label_announce_body_found = "宣布發現了一具屍體"
+--L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 L.label_confirm_killlist = "宣布確認屍體時，該屍體的擊殺名單"
-L.label_inspect_detective_only = "只允許警察角色搜查屍體"
-L.label_confirm_detective_only = "只允許警察角色確認死者"
 L.label_dyingshot = "如果玩家在瞄準中，則在死亡時開槍[試驗性]"
 L.label_armor_block_headshots = "啟用護甲阻擋爆頭傷害"
 L.label_armor_block_blastdmg = "啟用護甲阻擋爆炸傷害"
@@ -1830,9 +1772,6 @@ L.label_sprint_crosshair = "沖刺時顯示準星"
 L.label_crowbar_unlocks = "主要攻擊鍵可以作為互動（即解鎖）使用"
 L.label_crowbar_pushforce = "撬棍推動力"
 
---2022-04-13
-L.label_session_limits_enabled = "啟用地圖更換"
-
 -- 2022-07-02
 L.header_playersettings_falldmg = "摔落傷害設置"
 
@@ -1894,3 +1833,243 @@ L.slot_weapon_unarmed = "空手槽"
 L.slot_weapon_special = "特殊槽"
 L.slot_weapon_extra = "額外槽"
 L.slot_weapon_class = "職業槽"
+
+-- 2023-10-04
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-07
+L.search_title = "屍體搜索結果 - {player}"
+L.search_info = "訊息"
+L.search_confirm = "確認死亡"
+--L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
+--L.search_take_credits = "Take {credits} Credit(s)"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
+--L.search_call = "Report Death"
+--L.search_called = "Death Reported"
+
+--L.search_team_role_unknown = "???"
+
+L.search_words = "某些事物讓你了解到此人的遺言： {lastwords}"
+L.search_armor = "他穿戴非標準裝甲。"
+L.search_disguiser = "他持有一個能隱匿身份的設備"
+L.search_radar = "他持有像是雷達的物品。已經無法使用了。"
+L.search_c4 = "你在他口袋中找到了一本筆記。記載著線路 {num} 是解除炸彈須剪除的一條。"
+
+L.search_dmg_crush = "他多處骨折。看起來是某種重物的衝擊撞死了他。"
+L.search_dmg_bullet = "他很明顯是被射殺身亡的。"
+L.search_dmg_fall = "他是墜落身亡的。"
+L.search_dmg_boom = "他的傷口以及燒焦的衣物，應是爆炸導致其死亡。"
+L.search_dmg_club = "他的身體有許多擦傷打擊痕跡，明顯是被毆打致死的。"
+L.search_dmg_drown = "他身上的蛛絲馬跡顯示是溺死的。"
+L.search_dmg_stab = "他是被刺擊與揮砍後，迅速失血致死的。"
+L.search_dmg_burn = "聞起來有燒焦的恐怖分子在附近.."
+L.search_dmg_teleport = "看起來他的DNA以超光速粒子之形式散亂在附近。"
+L.search_dmg_car = "他穿越馬路時被一個粗心的駕駛碾死了。"
+L.search_dmg_other = "你無法找到這恐怖份子的具體死因。"
+
+--L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
+--L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
+--L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
+--L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
+--L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
+--L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
+--L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
+--L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
+--L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
+--L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
+--L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
+--L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
+--L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
+--L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
+--L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
+--L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
+--L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
+--L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
+--L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+
+--L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
+--L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
+--L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+
+L.search_weapon = "這顯示死者是被 {weapon} 所殺。"
+L.search_head = "最嚴重的傷口在頭部。完全沒機會叫喊。"
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+
+L.search_kills1 = "你找到一個名單，記載著他發現的死者：{player}"
+L.search_kills2 = "你找到了一個名單，記載著他殺的這些人：{player}"
+L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後一個人： {player}。是兇手，還是巧合？"
+
+--L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+
+--L.search_kill_distance_point_blank = "It was a point blank attack."
+--L.search_kill_distance_close = "The attack came from a short distance."
+--L.search_kill_distance_far = "The victim was attacked from a long distance away."
+
+--L.search_kill_from_front = "The victim was shot from the front."
+--L.search_kill_from_back = "The victim was shot from behind."
+--L.search_kill_from_side = "The victim was shot from the side."
+
+--L.search_hitgroup_head = "The projectile was found in their head."
+--L.search_hitgroup_chest = "The projectile was found in their chest."
+--L.search_hitgroup_stomach = "The projectile was found in their stomach."
+--L.search_hitgroup_rightarm = "The projectile was found in their right arm."
+--L.search_hitgroup_leftarm = "The projectile was found in their left arm."
+--L.search_hitgroup_rightleg = "The projectile was found in their right leg."
+--L.search_hitgroup_leftleg = "The projectile was found in their left leg."
+--L.search_hitgroup_gear = "The projectile was found in their hip."
+
+--L.search_policingrole_report_confirm = [[
+--A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
+--L.search_policingrole_confirm_disabled_1 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
+--L.search_policingrole_confirm_disabled_2 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!
+--You can see the information in here after they confirmed it.]]
+--L.search_spec = [[
+--As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+
+--L.search_title_words = "Victim's last words"
+--L.search_title_c4 = "Defusion mishap"
+--L.search_title_dmg_crush = "Crush damage ({amount} HP)"
+--L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
+--L.search_title_dmg_fall = "Fall damage ({amount} HP)"
+--L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
+--L.search_title_dmg_club = "Club damage ({amount} HP)"
+--L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
+--L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
+--L.search_title_dmg_burn = "Burning damage ({amount} HP)"
+--L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
+--L.search_title_dmg_car = "Car accident ({amount} HP)"
+--L.search_title_dmg_other = "Unknown damage ({amount} HP)"
+--L.search_title_time = "Death time"
+--L.search_title_dna = "DNA sample decay"
+--L.search_title_kills = "The victim's kill list"
+--L.search_title_eyes = "The killer's shadow"
+--L.search_title_floor = "Floor of the crime scene"
+--L.search_title_credits = "{credits} Equipment credit(s)"
+--L.search_title_water = "Water level {level}"
+--L.search_title_policingrole_report_confirm = "Confirm to report death"
+--L.search_title_policingrole_confirm_disabled = "Report corpse"
+--L.search_title_spectator = "You are a spectator"
+
+--L.target_credits_on_confirm = "Confirm to receive unspent credits"
+--L.target_credits_on_search = "Search to receive unspent credits"
+--L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
+--L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+
+--L.label_inspect_confirm_mode = "Select body search mode"
+--L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
+--L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
+--L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
+--L.help_inspect_confirm_mode = [[
+--There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
+--
+--mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
+--
+--mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
+--
+--mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
+
+-- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"

@@ -17,8 +17,13 @@ if CLIENT then
 	local credits_default = Material("vgui/ttt/equip/credits_default")
 	local credits_zero = Material("vgui/ttt/equip/credits_zero")
 
+	local icon_health = Material("vgui/ttt/hud_health.vmt")
+	local icon_health_low = Material("vgui/ttt/hud_health_low.vmt")
+
 	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
 	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
+
+	local mat_tid_ammo = Material("vgui/ttt/tid/tid_ammo")
 
 	local color_sprint = Color(36, 154, 198)
 	local color_defaultgrey = Color(100, 100, 100, 200)
@@ -40,6 +45,26 @@ if CLIENT then
 		--self.secondaryRoleInformationFunc = nil
 
 		BaseClass.Initialize(self)
+	end
+
+	---
+	-- This function will return a table containing all keys that will be stored by
+	-- the @{HUDELEMENT:SaveData} function.
+	-- @return table
+	-- @realm client
+	function HUDELEMENT:GetSavingKeys()
+		local savingKeys = BaseClass.GetSavingKeys(self) or {}
+		savingKeys.healthPulsate = {
+			typ = "bool",
+			desc = "label_hud_pulsate_health_enable",
+			default = true,
+			OnChange = function(slf, bool)
+				slf:PerformLayout()
+				slf:SaveData()
+			end
+		}
+
+		return table.Copy(savingKeys)
 	end
 
 	-- parameter overwrites
@@ -80,8 +105,9 @@ if CLIENT then
 		local ammo_inv = weap.Ammo1 and weap:Ammo1() or 0
 		local ammo_clip = weap:Clip1() or 0
 		local ammo_max = weap.Primary.ClipSize or 0
+		local ammo_type = weap.Primary.Ammo
 
-		return ammo_clip, ammo_max, ammo_inv
+		return ammo_clip, ammo_max, ammo_inv, ammo_type
 	end
 
 	--[[
@@ -224,21 +250,41 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 			local armor = client:GetArmor()
+			local alpha = 255
+			local health_icon = icon_health
 
-			self:DrawBar(nx, ty, bw, bh, color_health, health / client:GetMaxHealth(), t_scale, string.upper(L["hud_health"]) .. ": " .. health)
+			if health <= client:GetMaxHealth() * 0.25 and self.healthPulsate then
+				local frequency = util.TransformToRange(health, 1, client:GetMaxHealth() * 0.25 + 1, 1, 6)
+				health_icon = icon_health_low
+
+				local factor = math.abs(math.sin(CurTime() * (7 - frequency)))
+
+				alpha = math.Round(factor * 255)
+			end
+
+			color_health = ColorAlpha(color_health, alpha)
+
+
+			self:DrawBar(nx, ty, bw, bh, color_health, health / client:GetMaxHealth(), t_scale)
+
+			local a_size = bh - math.Round(11 * t_scale)
+			local a_pad = math.Round(5 * t_scale)
+
+			local a_pos_y = ty + a_pad
+			local a_pos_x = nx + (a_size / 2)
+
+			local at_pos_y = ty + 1
+			local at_pos_x = a_pos_x + a_size + a_pad
+
+			draw.FilteredShadowedTexture(a_pos_x, a_pos_y, a_size, a_size, health_icon, 255, COLOR_WHITE, t_scale)
+			draw.AdvancedText(health, "PureSkinBar", at_pos_x, at_pos_y, util.GetDefaultColor(color_health), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
 
 			-- draw armor information
 			if GetGlobalBool("ttt_armor_dynamic", false) and armor > 0 then
 				local icon_mat = client:ArmorIsReinforced() and icon_armor_rei or icon_armor
 
-				local a_size = bh - math.Round(11 * t_scale)
-				local a_pad = math.Round(5 * t_scale)
-
-				local a_pos_y = ty + a_pad
-				local a_pos_x = nx + bw - math.Round(65 * t_scale)
-
-				local at_pos_y = ty + 1
-				local at_pos_x = a_pos_x + a_size + a_pad
+				a_pos_x = nx + bw - math.Round(65 * t_scale)
+				at_pos_x = a_pos_x + a_size + a_pad
 
 				draw.FilteredShadowedTexture(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE, t_scale)
 
@@ -247,23 +293,33 @@ if CLIENT then
 
 			-- ammo bar
 			ty = ty + bh + spc
+			a_pos_y = ty + a_pad
 
 			-- Draw ammo
 			if client:GetActiveWeapon().Primary then
-				local ammo_clip, ammo_max, ammo_inv = self:GetAmmo(client)
+				local ammo_clip, ammo_max, ammo_inv, ammo_type = self:GetAmmo(client)
 
 				if ammo_clip ~= -1 then
 					local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-					self:DrawBar(nx, ty, bw, bh, color_ammoBar, ammo_clip / ammo_max, t_scale, text)
+					self:DrawBar(nx, ty, bw, bh, color_ammoBar, ammo_clip / ammo_max, t_scale)
+
+					local icon_mat = BaseClass.BulletIcons[ammo_type] or mat_tid_ammo
+
+					a_pos_x = nx + (a_size / 2)
+					at_pos_y = ty + 1
+					at_pos_x = a_pos_x + a_size + a_pad
+
+					draw.FilteredShadowedTexture(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE, t_scale)
+					draw.AdvancedText(text, "PureSkinBar", at_pos_x, at_pos_y, util.GetDefaultColor(color_ammoBar), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
 				end
 			end
 
 			-- sprint bar
 			ty = ty + bh + spc
 
-			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				self:DrawBar(nx, ty, bw, sbh, color_sprint, client.sprintProgress, t_scale, "")
+			if SPRINT.convars.enabled:GetBool() then
+				self:DrawBar(nx, ty, bw, sbh, color_sprint, client:GetSprintStamina(), t_scale, "")
 			end
 
 			-- coin info

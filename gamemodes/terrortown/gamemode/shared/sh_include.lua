@@ -53,6 +53,7 @@ TTTFiles = {
 	sh_main = {file = "sh_main.lua", on = "shared"},
 	sh_network_sync = {file = "sh_network_sync.lua", on = "shared"},
 	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
+	sh_playerclass = { file = "sh_playerclass.lua", on = "shared" },
 	sh_printmessage_override = {file = "sh_printmessage_override.lua", on = "shared"},
 	sh_cvar_handler = {file = "sh_cvar_handler.lua", on = "shared"},
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
@@ -112,7 +113,9 @@ TTTFiles = {
 	cl_vskin__vgui__drolelayeringreceiver = {file = "cl_vskin/vgui/drolelayeringreceiver_ttt2.lua", on = "client"},
 	cl_vskin__vgui__drolelayeringsender = {file = "cl_vskin/vgui/drolelayeringsender_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dsearchbar = {file = "cl_vskin/vgui/dsearchbar_ttt2.lua", on = "client"},
-	cl_vskin__vgui__dsubmenulist = {file = "cl_vskin/vgui/dsubmenulist_ttt2.lua", on = "client"}
+	cl_vskin__vgui__dsubmenulist = {file = "cl_vskin/vgui/dsubmenulist_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dinfoitem = {file = "cl_vskin/vgui/dinfoitem_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dprofilepanel = {file = "cl_vskin/vgui/dprofilepanel_ttt2.lua", on = "client"}
 }
 
 if SERVER then

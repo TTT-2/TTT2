@@ -2,23 +2,33 @@
 -- Disguiser @{ITEM}
 -- @module DISGUISE
 
+local materialIconDisguiser = Material("vgui/ttt/hudhelp/item_disguiser")
+
 DISGUISE = CLIENT and {}
 
 if SERVER then
 	AddCSLuaFile()
 end
 
-ITEM.EquipMenuData = {
-	type = "item_active",
-	name = "item_disg",
-	desc = "item_disg_desc"
-}
-ITEM.material = "vgui/ttt/icon_disguise"
 ITEM.CanBuy = {ROLE_TRAITOR}
 ITEM.oldId = EQUIP_DISGUISE or 4
 
 if CLIENT then
 	local trans
+
+	ITEM.EquipMenuData = {
+		type = "item_active",
+		name = "item_disg",
+		desc = "item_disg_desc"
+	}
+	ITEM.material = "vgui/ttt/icon_disguise"
+	ITEM.hud = Material("vgui/ttt/perks/hud_disguiser.png")
+
+	---
+	-- @ignore
+	function ITEM:DrawInfo()
+		return LocalPlayer():GetNWBool("disguised") and "status_on" or "status_off"
+	end
 
 	---
 	-- Creates the Disguiser menu on the parent panel
@@ -68,16 +78,17 @@ if CLIENT then
 		dsheet:AddSheet(trans("disg_name"), ddisguise, "icon16/user.png", false, false, trans("equip_tooltip_disguise"))
 	end)
 
-	hook.Add("Initialize", "TTTItemDisguiserInitStatus", function()
-		STATUS:RegisterStatus("item_disguiser_status", {
-			hud = Material("vgui/ttt/perks/hud_disguiser.png"),
-			type = "good"
-		})
-
+	hook.Add("TTT2FinishedLoading", "TTTItemDisguiserInitStatus", function()
 		bind.Register("ttt2_disguiser_toggle", function()
 			WEPS.DisguiseToggle(LocalPlayer())
 		end,
 		nil, "header_bindings_ttt2", "label_bind_disguiser", KEY_PAD_ENTER)
+
+		keyhelp.RegisterKeyHelper("ttt2_disguiser_toggle", materialIconDisguiser, KEYHELP_EQUIPMENT, "label_keyhelper_disguiser", function(client)
+			if client:IsSpec() or not client:HasEquipmentItem("item_ttt_disguiser") then return end
+
+			return true
+		end)
 	end)
 else -- SERVER
 	local function SetDisguise(ply, cmd, args)

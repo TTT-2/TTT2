@@ -4,13 +4,133 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
+
+### Added
+
+- Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+
+### Fixed
+
+- Fixed the UI being unable to handle wrapping text with non-utf8 languages that do not use ASCII whitespaces (by @TimGoll & @saibotk)
+- Fixed ttt_game_text not working due to a refactor
+- Fixed dete call HUD being invisible
+- Fixed edgecase where undefined killer angle or pos were accessed
+- Fixed fallback ammo icon missing
+- Fixed a null entity error in the miniscoreboard
+- Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit
+
+## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
+
+### Added
+
+- Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
+- Added a new way to alter player volume separately from the scoreboard (by @EntranceJew):
+  - `VOICE.(Get/Set)PreferredPlayerVoiceVolume` for setting the voice volume instead of `Player:SetVoiceVolumeScale`
+  - `VOICE.(Get/Set)PreferredPlayerVoiceMute` for setting the voice mute instead of `Player:SetMuted`
+  - `VOICE.UpdatePlayerVoiceVolume` commits / updates the voice setting according to player preferences
+- Added client submenu options for clients to change audio settings under `F1 > Gameplay > General` (by @EntranceJew):
+  - Added a convar `ttt2_voice_scaling` to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.
+  - Added convars `ttt2_voice_duck_spectator` and `ttt2_voice_duck_spectator_amount` to lower spectator voice volume automatically.
+    - A value of `0.13` ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.
+- Added the option for `DButtonTTT2` to have an icon next to the title (by @TimGoll)
+- Added a cached equipment item icon to its table as `.iconMaterial` (by @TimGoll)
+- Added a new `bodysearch` library that handles the search (by @TimGoll)
+- Completely reworked the body search UI (by @TimGoll)
+  - new UI that fits the UI rework
+  - added player model to UI
+  - highlighted player role and team in the UI
+  - redesigned data list so that everything can be seen without clicking through a list
+  - added more details to list like: water level, ground type, kill distance, kill direction, hit group, last damage amount
+  - The UI is now more responsive, it is updated when the server changes states on the body and timers are updated live in the UI
+- Added that the healthbar will pulsate when below 25% health. Toggleable in F1 Menu (by @NickCloudAT)
+- Added new menu section in F1 menu under `Appearance > Hud Switcher` for HudElement based features (by @NickCloudAT)
+- Brought in code files for `ttt_hat_deerstalker`, `weapon_ttt_phammer`, `ttt_flame`, and `weapon_ttt_push`.
+- Translated all strings still needed to german (by @NickCloudAT)
+- Added new sidebar information, when the scoreboard is open (by @TimGoll)
+- Added keybinding information to the bottom of the screen (by @TimGoll)
+  - Can be disabled in Appearance->Interface
+  - Shows binding name when scoreboard is opened
+- Added option to render rotated text on screen (by @TimGoll)
+- Added `TTT2GiveFoundCredits` hook for preventing / overriding the transfer of credits from a body to a player (by @Spanospy)
+- Added Ukrainian translation from base TTT (by @ErickMaksimets)
+- Added Swedish translation from base TTT (by @Kefta)
+- Added Turkish translation (by @NovaDiablox)
+- Added `ttt_dropclip` to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)
+- Added window flash and noise to alert players they're being revived (by @EntranceJew)
+- Added sql database access to panel elements
+  - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
+- Added dashing to propspec (by @TimGoll)
+- Added new functions to database module
+  - `database.SetDefaultValuesFromItem(accessName, itemName, item)`
+
 ### Changed
 
+- Changed sprint stamina to also consume while in air
 - Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):
   - Add the missing `L.c4_disarm_t` translation in C4
+  - Remove redundant string translations and spaces
+  - Added all new translation strings
 - Updated file code to read from `data_static` as fallback in new location allowed in .gma (by @EntranceJew)
+- Scoreboard now sets preferred player volume and mute state in client's new `ttt2_voice` table (by @EntranceJew)
+  - Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.
+- Changed the body search convars and reworked the UI accordingly (by @TimGoll)
+  - Moved `ttt2_confirm_detective_only` and `ttt2_inspect_detective_only` to a new covar: `ttt2_inspect_confirm_mode`
+    - mode 0: default mode, normal TTT. Everyone can search and identify corpses. However now a player has to be confirmed first to take credits
+    - mode 1: everyone can see information, but only public policing roles can actually confirm bodies
+    - mode 2: only public policing roles can see informatiom. They have to confirm bodies so that other people are able to see this information as well
+  - to comply with mode 1 and 2 now everyone is able to see in the targetID if a player was searched by a public policing role
+- renamed `search_result` to `bodySearchResult` which contains the search result data
+- changed the credit text color from yellow to gold (by @TimGoll)
+- Updated the disguiser to make it more clear in the HUD if it is enabled or not
+- Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)
+- Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)
+- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
+- Dropping ammo with `ttt_dropammo` drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)
+- Added item name for `ttt_hat_deerstalker` (by @EntranceJew)
+- Changed syncing of database module to use whole tables instead of custom method
+- Replaced equipmenteditor syncing with database module
+- Replaced internal equipment syncing with database module
+- Moved reset buttons onto the left (by @a7f3)
+- Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
+- Changed the disguiser icon to be more fitting (by @TimGoll)
 
-## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2022-08-27)
+### Fixed
+
+- Fixed prediction of the sprinting system, for high ping situations (by @saibotk, thanks to @wgetJane)
+- Fixed removing the convar change callback in `DComboboxTTT2`, `DCheckBoxLabelTTT2`, `DNumSliderTTT2` (by @saibotk)
+- Multiple internal fixes
+  - biggest teamkiller award should now work
+  - item model caching should now work properly
+  - role info popup for traitors should now show teammembers again if the traitor shop is disabled
+  - `pon` and `table` libraries got a small fix respectively
+  - the shop and roleselection now reference `roles.INNOCENT` instead of the removed `INNOCENT` global, same for `TRAITOR` and `DETECTIVE`
+  - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
+- Fixed disguiser breaking UI on hot reload (by @TimGoll)
+- Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
+- Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)
+- Optimized allocations by using global Vector / Angle when possible.
+- Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced
+- Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)
+- Fixed ComboBoxes not working with integer values (by @NickCloudAT)
+- net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer
+- Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
+- Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
+- Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
+
+### Deprecated
+
+- Deprecated `AccessorFuncDT()`, Addons should remove the function call and replace `DTVar()` calls with `NetworkVar()`
+
+### Removed
+
+- Removed `ttt_confirm_death` and `ttt_call_detective` as they are now handled via proper net messages
+- Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)
+- Removed double tap sprinting, for easier prediction handling (by @saibotk)
+- Removed explicit "Sprint" key bind, please use the GMod native sprint key binding (by @saibotk)
+- Removed unused clientside `Player.preventSprint` flag (by @saibotk)
+
+## [v0.11.7b](https://github.com/TTT-2/TTT2/tree/v0.11.7b) (2023-08-27)
 
 ### Added
 

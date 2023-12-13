@@ -44,7 +44,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 
 	buttonReset:SetText("button_reset")
 	buttonReset:SetSize(100, 45)
-	buttonReset:SetPos(parent:GetWide() - 120, 20)
+	buttonReset:SetPos(20, 20)
 	buttonReset.DoClick = function()
 		rolelayering.SendDataToServer(ROLE_NONE, {})
 

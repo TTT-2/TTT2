@@ -210,7 +210,7 @@ function SWEP:Reset(keep_velocity)
 		end
 	end
 
-	self.dt.carried_rag = nil
+	self:SetCarriedRag(nil)
 	self.EntHolding = nil
 	self.CarryHack = nil
 	self.Constr = nil
@@ -515,11 +515,11 @@ function SWEP:Pickup()
 			local max_force = GetGlobalInt("ttt_prop_carrying_force")
 
 			if ent:GetClass() == "prop_ragdoll" then
-				self.dt.carried_rag = ent
+				self:SetCarriedRag(ent)
 				bone = trace.PhysicsBone
 				max_force = 0
 			else
-				self.dt.carried_rag = nil
+				self:SetCarriedRag(nil)
 			end
 
 			self.Constr = constraint.Weld(carryHack, ent, 0, bone, max_force, true)
@@ -666,12 +666,11 @@ end
 function SWEP:SetupDataTables()
 	-- we've got these dt slots anyway, might as well use them instead of a
 	-- globalvar, probably cheaper
-	self:DTVar("Bool", 0, "can_rag_pin")
-	self:DTVar("Bool", 0, "can_rag_pin_inno")
+	self:NetworkVar("Bool", 0, "CanRagPin")
+	self:NetworkVar("Bool", 1, "CanRagPinInno")
 
-	-- client actually has no idea what we're holding, and almost never needs to
-	-- know
-	self:DTVar("Entity", 0, "carried_rag")
+	-- client actually has no idea what we're holding, and almost never needs to know
+	self:NetworkVar("Entity", 0, "CarriedRag")
 
 	return self.BaseClass.SetupDataTables(self)
 end
@@ -680,9 +679,9 @@ if SERVER then
 	---
 	-- @ignore
 	function SWEP:Initialize()
-		self.dt.can_rag_pin = GetGlobalBool("ttt_ragdoll_pinning")
-		self.dt.can_rag_pin_inno = GetGlobalBool("ttt_ragdoll_pinning_innocents")
-		self.dt.carried_rag = nil
+		self:SetCanRagPin(GetGlobalBool("ttt_ragdoll_pinning"))
+		self:SetCanRagPinInno(GetGlobalBool("ttt_ragdoll_pinning_innocents"))
+		self:SetCarriedRag(nil)
 
 		return self.BaseClass.Initialize(self)
 	end
@@ -735,7 +734,7 @@ if SERVER then
 
 	end
 
-else -- CLIENT
+else
 	local draw = draw
 
 	local PT = LANG.GetParamTranslation
@@ -746,10 +745,10 @@ else -- CLIENT
 	function SWEP:DrawHUD()
 		self.BaseClass.DrawHUD(self)
 
-		if self.dt.can_rag_pin and IsValid(self.dt.carried_rag) then
+		if self:GetCanRagPin() and IsValid(self:GetCarriedRag()) then
 			local client = LocalPlayer()
 
-			if client:IsSpec() or not client:IsTraitor() and not self.dt.can_rag_pin_inno then return end
+			if client:IsSpec() or not client:IsTraitor() and not self:GetCanRagPinInno() then return end
 
 			local tr = util.TraceLine({
 				start = client:EyePos(),
@@ -757,7 +756,7 @@ else -- CLIENT
 				filter = {
 					client,
 					self,
-					self.dt.carried_rag
+					self:GetCarriedRag()
 				},
 				mask = MASK_SOLID
 			})

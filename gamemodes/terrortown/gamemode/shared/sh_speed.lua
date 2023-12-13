@@ -1,18 +1,18 @@
 ---
--- @class SPEED
+---@class SPEED
 
-local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND ENTITY TABLE")
-
-SPEED = SPEED or {}
+SPEED = {}
 
 ---
 -- Handles the speed calculation based on the @{GM:TTTPlayerSpeedModifier} hook
 -- @param Player ply The player whose speed should be changed
--- @param MoveData moveData The move data
+-- @param CMoveData moveData The move data
 -- @internal
 -- @realm shared
 function SPEED:HandleSpeedCalculation(ply, moveData)
-	if not ply:IsTerror() then return end
+	if not ply:IsTerror() then
+		return
+	end
 
 	local baseMultiplier = 1
 	local isSlowed = false
@@ -25,7 +25,7 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 		isSlowed = true
 	end
 
-	local speedMultiplierModifier = {1}
+	local speedMultiplierModifier = { 1 }
 
 	---
 	-- @realm shared
@@ -34,7 +34,9 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	local oldval = ply:GetSpeedMultiplier()
 	ply.speedModifier = baseMultiplier * returnMultiplier * speedMultiplierModifier[1]
 
-	if SERVER then return end
+	if SERVER then
+		return
+	end
 
 	local newval = math.Round(ply.speedModifier, 1)
 
@@ -55,14 +57,12 @@ end
 -- @note This hook is predicted and should be therefore added on both server and client.
 -- @param Player ply The player whose speed should be modified
 -- @param boolean isSlowed Is true if the player uses iron sights
--- @param MoveData moveData The move data
+-- @param CMoveData moveData The move data
 -- @param table speedMultiplierModifier The speed modifier table. Modify the first table entry to change the player speed
 -- @return[deprecated] number The deprecated way of changing the player speed
 -- @hook
 -- @realm shared
-function GM:TTTPlayerSpeedModifier(ply, isSlowed, moveData, speedMultiplierModifier)
-
-end
+function GM:TTTPlayerSpeedModifier(ply, isSlowed, moveData, speedMultiplierModifier) end
 
 if CLIENT then
 	---
@@ -72,28 +72,33 @@ if CLIENT then
 	function SPEED:Initialize()
 		STATUS:RegisterStatus("ttt_speed_status_good", {
 			hud = {
-				Material("vgui/ttt/perks/hud_speedrun.png")
+				Material("vgui/ttt/perks/hud_speedrun.png"),
 			},
 			type = "good",
 			DrawInfo = function()
 				return math.Round(LocalPlayer():GetSpeedMultiplier(), 1)
-			end
+			end,
+			name = "status_speed_name",
+			sidebarDescription = "status_speed_description_good",
 		})
 
 		STATUS:RegisterStatus("ttt_speed_status_bad", {
 			hud = {
-				Material("vgui/ttt/perks/hud_speedrun.png")
+				Material("vgui/ttt/perks/hud_speedrun.png"),
 			},
 			type = "bad",
 			DrawInfo = function()
 				return math.Round(LocalPlayer():GetSpeedMultiplier(), 1)
-			end
+			end,
+			name = "status_speed_name",
+			sidebarDescription = "status_speed_description_bad",
 		})
 	end
 end
 
 ---
--- @class Player
+---@class Player
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND ENTITY TABLE")
 
 ---
 -- Returns the current player speed modifier

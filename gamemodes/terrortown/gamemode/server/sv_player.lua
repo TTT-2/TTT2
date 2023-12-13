@@ -106,6 +106,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	player_manager.SetPlayerClass(ply, "player_ttt")
+
 	-- reset any cached weapons
 	ply:ResetCachedWeapons()
 
@@ -367,13 +369,13 @@ end
 -- from this hook will not be networked to the client, so make sure to do that on both realms
 -- @predicted
 -- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
--- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
 -- @local
 function GM:KeyPress(ply, key)
-	if not IsValid(ply) then return end
+	if not IsValid(ply) or util.EditingModeActive(ply) then return end
 
 	-- Spectator keys
 	if not ply:IsSpec() or ply:GetRagdollSpec() then return end
@@ -396,31 +398,44 @@ function GM:KeyPress(ply, key)
 	ply:ResetViewRoll()
 
 	if key == IN_ATTACK then
-		-- snap to random guy
-		ply:Spectate(OBS_MODE_ROAMING)
-		ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
-		ply:SpectateEntity(nil)
+		local tgt = ply:GetObserverTarget()
 
-		local alive = util.GetAlivePlayers()
+		if IsValid(tgt) and tgt:IsPlayer() then
+			local target = util.GetPreviousAlivePlayer(tgt)
 
-		local alive_count = #alive
-		if alive_count < 1 then return end
-
-		local target = alive[math.random(alive_count)]
-
-		if IsValid(target) then
-			--ply:SetPos(target:EyePos())
-			--ply:SetEyeAngles(target:EyeAngles())
-			ply:Spectate(OBS_MODE_IN_EYE)
-			ply:SpectateEntity(target)
+			if IsValid(target) then
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
 		end
 	elseif key == IN_ATTACK2 then
-		-- spectate either the next guy or a random guy in chase
-		local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
+		local tgt = ply:GetObserverTarget()
 
-		if IsValid(target) then
-			ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
-			ply:SpectateEntity(target)
+		if IsValid(tgt) and tgt:IsPlayer() then
+			local target = util.GetNextAlivePlayer(tgt)
+
+			if IsValid(target) then
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
+		else
+			-- when not focused yet, snap to random guy
+			ply:UnSpectate()
+			ply:Spectate(OBS_MODE_ROAMING)
+			ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
+
+			local alive = util.GetAlivePlayers()
+
+			local alive_count = #alive
+			if alive_count < 1 then return end
+
+			---@cast alive -nil
+			local target = alive[math.random(alive_count)]
+
+			if IsValid(target) then
+				ply:Spectate(OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
+			end
 		end
 	elseif key == IN_DUCK then
 		local pos = ply:GetPos()
@@ -436,8 +451,8 @@ function GM:KeyPress(ply, key)
 		end
 
 		-- reset
+		ply:UnSpectate()
 		ply:Spectate(OBS_MODE_ROAMING)
-		ply:SpectateEntity(nil)
 
 		ply:SetPos(pos)
 		ply:SetEyeAngles(ang)
@@ -469,7 +484,7 @@ end
 -- For a more general purpose @{function} that handles all kinds of input, see @{GM:PlayerButtonUp}
 -- @predicted
 -- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
--- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:KeyRelease
@@ -541,7 +556,7 @@ end
 concommand.Add("ttt_spec_use", SpecUseKey)
 
 ---
--- Called when a @{Player} leaves the server. See the <a href="https://wiki.garrysmod.com/page/Game_Events">player_disconnect gameevent</a> for a shared version of this hook.
+-- Called when a @{Player} leaves the server. See the <a href="https://wiki.facepunch.com/gmod/gameevent/player_disconnect">player_disconnect gameevent</a> for a shared version of this hook.
 -- @param Player ply
 -- @hook
 -- @realm server
@@ -629,7 +644,7 @@ end
 -- @note @{Player:Alive} returns true when this is called
 -- @param Player ply
 -- @param Player|Entity attacker @{Player} or @{Entity} that killed the @{Player}
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:DoPlayerDeath
@@ -679,7 +694,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	-- Create ragdoll and hook up marking effects
 	local rag = CORPSE.Create(ply, attacker, dmginfo)
 
-	ply.server_ragdoll = rag -- nil if clientside
+	ply.server_ragdoll = rag
 
 	CreateDeathEffect(ply, false)
 
@@ -710,6 +725,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	-- headshots, knife damage, and weapons tagged as silent all prevent death
 	-- sound from occurring
+	---@cast killwep -nil
 	if not ply.was_headshot and not dmginfo:IsDamageType(DMG_SLASH) and not (IsValid(killwep) and killwep.IsSilent) then
 		PlayDeathSound(ply)
 	end
@@ -889,8 +905,8 @@ function GM:SpectatorThink(ply)
 		if IsValid(tgt) and tgt:IsPlayer() then
 			if not tgt:IsTerror() or not tgt:Alive() then
 				-- stop speccing as soon as target dies
+				ply:UnSpectate()
 				ply:Spectate(OBS_MODE_ROAMING)
-				ply:SpectateEntity(nil)
 			elseif GetRoundState() == ROUND_ACTIVE then
 				-- Sync position to target. Uglier than parenting, but unlike
 				-- parenting this is less sensitive to breakage: if we are
@@ -914,10 +930,10 @@ GM.PlayerDeathThink = GM.SpectatorThink
 -- Called when a @{Player} has been hit by a trace and damaged (such as from a bullet).
 -- Returning true overrides the damage handling and prevents @{GM:ScalePlayerDamage} from being called.
 -- @param Player ply The @{Player} that has been hit
--- @param DamageInfo dmginfo The damage info of the bullet
+-- @param CTakeDamageInfo dmginfo The damage info of the bullet
 -- @param Vector dir Normalized vector direction of the bullet's path
 -- @param table trace The trace of the bullet's path, see
--- <a href="https://wiki.garrysmod.com/page/Structures/TraceResult">TraceResult structure</a>
+-- <a href="https://wiki.facepunch.com/gmod/Structures/TraceResult">TraceResult structure</a>
 -- @return boolean Override engine handling
 -- @hook
 -- @realm server
@@ -936,7 +952,7 @@ end
 ---
 -- Called when a @{Player} has been hurt by an explosion. Override to disable default sound effect.
 -- @param Player ply @{Player} who has been hurt
--- @param DamageInfo dmginfo Damage info from explsion
+-- @param CTakeDamageInfo dmginfo Damage info from explsion
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:OnDamagedByExplosion
@@ -951,8 +967,8 @@ end
 -- so you should use @{GM:EntityTakeDamage} instead if you need to detect ALL damage.
 -- @param Player ply The @{Player} taking damage
 -- @param number hitgroup The hitgroup where the @{Player} took damage. See
--- <a href="https://wiki.garrysmod.com/page/Enums/HITGROUP">HITGROUP_Enums</a>
--- @param DamageInfo dmginfo The damage info
+-- <a href="https://wiki.facepunch.com/gmod/Enums/HITGROUP">HITGROUP_Enums</a>
+-- @param CTakeDamageInfo dmginfo The damage info
 -- @return boolean Return true to prevent damage that this hook is called for, stop blood particle effects and blood decals.<br />
 -- It is possible to return true only on client ( This will work only in multiplayer ) to stop the effects but still take damage.
 -- @hook
@@ -974,6 +990,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 		local wep = util.WeaponFromDamage(dmginfo)
 
 		if IsValid(wep) then
+			---@cast wep -nil
 			local s = wep:GetHeadshotMultiplier(ply, dmginfo) or 2
 
 			dmginfo:ScaleDamage(s)
@@ -1116,7 +1133,7 @@ local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_AR
 ---
 -- Called when an entity takes damage. You can modify all parts of the damage info in this hook.
 -- @param Entity ent The @{Entity} taking damage
--- @param DamageInfo dmginfo Damage info
+-- @param CTakeDamageInfo dmginfo Damage info
 -- @return boolean Return true to completely block the damage event
 -- @note e.g. no damage during prep, etc
 -- @hook
@@ -1169,7 +1186,7 @@ end
 -- @param Entity infl the inflictor
 -- @param Player|Entity att the attacker
 -- @param number amount amount of damage
--- @param DamageInfo dmginfo Damage info
+-- @param CTakeDamageInfo dmginfo Damage info
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:EntityTakeDamage
@@ -1422,7 +1439,7 @@ end
 -- @note Disable taunts, we don't have a system for them (camera freezing etc).<br />
 -- Mods/plugins that add such a system should override this.
 -- @param Player ply @{Player} who tried to taunt
--- @param number act Act ID of the taunt player tries to do, see <a href="https://wiki.garrysmod.com/page/Enums/ACT">ACT_Enums</a>
+-- @param number act Act ID of the taunt player tries to do, see <a href="https://wiki.facepunch.com/gmod/Enums/ACT">ACT_Enums</a>
 -- @return[default=false] boolean Return false to disallow player taunting
 -- @hook
 -- @realm server
@@ -1440,6 +1457,17 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2CheckCreditAward(victim, attacker)
+
+end
+
+---
+-- Use this hook to prevent the transfer of credits from a body to a player.
+-- @param Entity rag The ragdoll that is inspected
+-- @param Player ply The @{Player} attempting to find credits from ragdoll
+-- @return nil|boolean Return false to prevent transfer
+-- @hook
+-- @realm server
+function GM:TTT2GiveFoundCredits(ply, rag)
 
 end
 

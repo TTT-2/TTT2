@@ -13,9 +13,7 @@ if SERVER then
 end
 
 local messageIdentifier = 0
-local maxBytesPerMessage = 32 * 1000 -- Can be up to 65.533KB see: https://wiki.facepunch.com/gmod/net.Start
-local uIntBits = 8 -- we can synchronize up to 2 ^ uIntBits - 1 different sqlTables
-local maxUInt = 2 ^ uIntBits - 1
+local identifiersReceived = 0
 
 -- Save for hotreloadability
 database.registeredDatabases = database.registeredDatabases or {}
@@ -49,7 +47,6 @@ local INDEX_NONE = "none"
 -- Stores the data and the players it is send to
 local dataStore = {}
 
-local sendDataFunctions = {}
 local receiveDataFunctions = {}
 
 local sendRequestsNextUpdate = false
@@ -83,17 +80,35 @@ local callbackIdentifiers = database.callbackIdentifiers
 --
 
 ---
+-- Creates a databaseElement combining all infos necessary to make changes to the serverside sql database
+-- @param string accessName the networkable name of the sql table
+-- @param string itemName the name or primaryKey of the item inside of the sql table
+-- @param string key the name of the key in the database
+-- @return table Return all necessary infos for database access
+-- @realm shared
+function DatabaseElement(accessName, itemName, key)
+	return {name = accessName, itemName = itemName, key = key}
+end
+
+---
 -- Call this function if a value was received
 -- @param number index The local index of the database
 -- @param string itemName The name of the item in the database
--- @param string key The name of the key in the database
+-- @param[opt] string key The name of the key in the database, or all keys
 -- @realm shared
 -- @internal
 local function ValueReceived(index, itemName, key)
 	local receiver = receivedValues[index] or {}
 
 	receiver[itemName] = receiver[itemName] or {}
-	receiver[itemName][key] = true
+	if isstring(key) then
+		receiver[itemName][key] = true
+	else
+		local keys = registeredDatabases[index].keys
+		for checkKey in pairs(keys) do
+			receiver[itemName][checkKey] = true
+		end
+	end
 
 	receivedValues[index] = receiver
 end
@@ -102,14 +117,29 @@ end
 -- Check if a value was already received via network
 -- @param number index the local index of the database
 -- @param string itemName the name of the item in the database
--- @param string key the name of the key in the database
+-- @param[opt] string key the name of the key in the database, otherwise check all keys
 -- @realm shared
 -- @internal
 local function IsValueReceived(index, itemName, key)
-	return receivedValues[index]
-		and receivedValues[index][itemName]
-		and receivedValues[index][itemName][key]
-		or false
+	if not receivedValues[index] or not receivedValues[index][itemName] then
+		return false
+	end
+
+	local isReceived = true
+	if not isstring(key) then
+		local keys = registeredDatabases[index].keys
+		for checkKey in pairs(keys) do
+			if not receivedValues[index][itemName][checkKey] then
+				isReceived = false
+
+				break
+			end
+		end
+	elseif not receivedValues[index][itemName][key] then
+		isReceived = false
+	end
+
+	return isReceived
 end
 
 ---
@@ -243,12 +273,12 @@ function database.AddChangeCallback(accessName, itemName, key, callback, identif
 		itemName = allCallbackString
 	end
 
-	-- If no key is given, subscribe to changes of all keys of the item	
+	-- If no key is given, subscribe to changes of all keys of the item
 	if not isstring(key) then
 		key = allCallbackString
 	end
 
-	-- If no identifier is given just choose one	
+	-- If no identifier is given just choose one
 	if not isstring(identifier) then
 		identifier = allCallbackString
 	end
@@ -295,7 +325,7 @@ function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 		skipWrongItemName = false
 	end
 
-	-- If no key is given, remove callbacks of all keys of the item	
+	-- If no key is given, remove callbacks of all keys of the item
 	local skipWrongKey = true
 	if not isstring(key) then
 		skipWrongKey = false
@@ -338,7 +368,7 @@ end
 
 ---
 -- Converts the given value of a database with its key
--- @warning this function shall be removed and replaced with orm conversion. 
+-- @warning this function shall be removed and replaced with orm conversion.
 -- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
 -- while the other uses "0" and "1" for booleans
 -- @param string value the value to convert with a key
@@ -367,7 +397,7 @@ end
 
 ---
 -- Converts the given table of a database
--- @warning this function shall be removed and replaced with orm conversion. 
+-- @warning this function shall be removed and replaced with orm conversion.
 -- `sql.GetParsedData` is not compatible with orm as sql.SQLStr is used (e.g. converts `false` => "false"
 -- while the other uses "0" and "1" for booleans
 -- @param table dataTable the table to convert with their respective keys
@@ -393,310 +423,166 @@ end
 -- To be able to directly see message sending- and receive-structure between server and client
 -- They are always paired by either client-Send and server-Receive or server-Send and client-Receive
 
--- Client send and receive functions
-local clientSendFunctions = {}
+-- Client and server receive functions
 local clientReceiveFunctions = {}
-
--- Server send and receive functions
-local serverSendFunctions = {}
 local serverReceiveFunctions = {}
 
 ---
--- Send query for registered databases to server
--- @param table data contains only the messageIdentifier here
+-- An identifier was received, checks if all sent identifiers were received and resets the identifiers
+-- Should make sure, that it doesnt go to infinity
 -- @realm client
 -- @internal
-clientSendFunctions[MESSAGE_REGISTER] = function(data)
-	net.WriteUInt(data, uIntBits)
+local function receivedIdentifier()
+	identifiersReceived = identifiersReceived + 1
+
+	if identifiersReceived < messageIdentifier then return end
+
+	identifiersReceived = 0
+	messageIdentifier = 0
 end
 
 ---
 -- Receive query for registered databases from client
 -- and sync them
+-- @param table data = {identifier}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_REGISTER] = function(plyID64)
-	database.SyncRegisteredDatabases(plyID64, net.ReadUInt(uIntBits))
-end
-
----
--- Send requested registered databases to client
--- @param table data contains identifier, tableCount, index here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_REGISTER] = function(data)
-	local databaseInfo = registeredDatabases[data.index]
-
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteString(databaseInfo.accessName)
-	net.WriteTable(databaseInfo.keys)
-	net.WriteTable(databaseInfo.data)
-
-	-- AdditionalInfo determines if there is more than one database registered and sent
-	-- This makes sure, that the client doesnt start to use the databases before all databases are received
-	local sendAdditionalInfo = data.identifier ~= nil
-
-	net.WriteBool(sendAdditionalInfo)
-
-	if sendAdditionalInfo then
-		net.WriteUInt(data.identifier, uIntBits)
-		net.WriteUInt(data.tableCount, uIntBits)
-	end
+serverReceiveFunctions[MESSAGE_REGISTER] = function(data, plyID64)
+	database.SyncRegisteredDatabases(plyID64, data.identifier)
 end
 
 ---
 -- Receive requested registered databases from server
 -- and cache them as well as call all cached functions, that are waiting for the databases
+-- @param table data = {index, accessName, savingKeys, additionalData, sentAdditionalInfo, identifier, databaseSize}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_REGISTER] = function()
-	local index = net.ReadUInt(uIntBits)
-	local accessName = net.ReadString()
-	local savingKeys = net.ReadTable()
-	local additionalData = net.ReadTable()
-
-	nameToIndex[accessName] = index
-	registeredDatabases[index] = {
-		accessName = accessName,
-		keys = savingKeys,
-		data = additionalData,
+clientReceiveFunctions[MESSAGE_REGISTER] = function(data)
+	nameToIndex[data.accessName] = data.index
+	registeredDatabases[data.index] = {
+		accessName = data.accessName,
+		keys = data.savingKeys,
+		data = data.additionalData,
 		storedData = {},
 		defaultData = {}
 	}
 
-	-- If more than one database will be send, then sentAdditionalInfo is true
-	local sentAdditionalInfo = net.ReadBool()
-
-	if sentAdditionalInfo then
-		local identifier = net.ReadUInt(uIntBits)
-		local tableCount = net.ReadUInt(uIntBits)
-
+	if data.identifier and table.Count(registeredDatabases) == data.databaseSize then
 		-- Only call the cached functions, when all databases are succesfully registered clientside
-		if table.Count(registeredDatabases) == tableCount then
-			functionCache[identifier]()
-		end
+		functionCache[data.identifier]()
+		receivedIdentifier()
 	end
-end
-
----
--- Send query for getting a value to server
--- @param table data contains only the messageIdentifier here
--- @realm client
--- @internal
-clientSendFunctions[MESSAGE_GET_VALUE] = function(data)
-	local request = requestCache[data]
-
-	net.WriteUInt(data, uIntBits)
-	net.WriteUInt(request.index, uIntBits)
-
-	net.WriteString(request.itemName)
-	net.WriteString(request.key)
 end
 
 ---
 -- Receive query for getting a value from client
 -- and returning it
+-- @param table data = {index, accessName, itemName, key, identifier}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_GET_VALUE] = function(plyID64)
-	local data = {
-		plyID64 = plyID64,
-		identifier = net.ReadUInt(uIntBits),
-		index = net.ReadUInt(uIntBits)
-	}
-
-	data.itemName = net.ReadString()
-	data.key = net.ReadString()
-
-	database.ReturnGetValue(data)
-end
-
----
--- Send requested value to client
--- if available/isSuccess
--- @param table data contains identifier, isSuccess and value here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_GET_VALUE] = function(data)
-	net.WriteUInt(data.identifier, uIntBits)
-	net.WriteBool(data.isSuccess)
-
-	if data.isSuccess then
-		net.WriteString(tostring(data.value))
-	end
-end
+--serverReceiveFunctions[MESSAGE_GET_VALUE] = database.ReturnGetValue
 
 ---
 -- Receive requested value from server
 -- Store it, mark value as received and call function cache
+-- @param table data = {isSuccess, value, identifier}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_GET_VALUE] = function()
-	local identifier = net.ReadUInt(uIntBits)
-	local isSuccess = net.ReadBool()
-	local request = requestCache[identifier]
-	local value
+clientReceiveFunctions[MESSAGE_GET_VALUE] = function(data)
+	local request = requestCache[data.identifier]
 
-	if isSuccess then
-		value = net.ReadString()
-		value = ConvertValueWithKey(value, request.accessName, request.key)
-
+	if data.isSuccess then
 		local storedData = registeredDatabases[request.index].storedData
+		local storedItemData
 
-		local storedItemData = storedData[request.itemName] or {}
-		storedItemData[request.key] = value
+		if request.key then
+			storedItemData = storedData[request.itemName] or {}
+			storedItemData[request.key] = data.value
+		else
+			storedItemData = data.value
+		end
 
 		storedData[request.itemName] = storedItemData
 	end
 
 	ValueReceived(request.index, request.itemName, request.key)
-	functionCache[identifier](isSuccess, value)
-end
-
----
--- Send query for setting a value to server
--- @param table data contains index, itemName, key and value here
--- @realm client
--- @internal
-clientSendFunctions[MESSAGE_SET_VALUE] = function(data)
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteString(data.itemName)
-	net.WriteString(data.key)
-	net.WriteString(tostring(data.value))
+	functionCache[data.identifier](data.isSuccess, data.value)
+	receivedIdentifier()
 end
 
 ---
 -- Receive query for setting a value from client
--- and set that value in the database if player is a superadmin
+-- and set that value in the database if they have access-rights
+-- @param table data = {index, itemName, key, value}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_SET_VALUE] = function(plyID64)
-	local index = net.ReadUInt(uIntBits)
-	local itemName = net.ReadString()
-	local key = net.ReadString()
-	local value = net.ReadString()
+serverReceiveFunctions[MESSAGE_SET_VALUE] = function(data, plyID64)
+	local accessName = registeredDatabases[data.index].accessName
 
-	local accessName = registeredDatabases[index].accessName
-	value = ConvertValueWithKey(value, accessName, key)
-
-	database.SetValue(accessName, itemName, key, value, plyID64)
+	database.SetValue(accessName, data.itemName, data.key, data.value, plyID64)
 end
 
 ---
--- Send set value to client
--- @param table data contains index, itemName, key, value here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_SET_VALUE] = function(data)
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteString(data.itemName)
-	net.WriteString(data.key)
-	net.WriteString(tostring(data.value))
-end
-
-clientReceiveFunctions[MESSAGE_SET_VALUE] = function()
-	local index = net.ReadUInt(uIntBits)
-	local itemName = net.ReadString()
-	local key = net.ReadString()
-	local value = net.ReadString()
-
-	value = ConvertValueWithKey(value, registeredDatabases[index].accessName, key)
-	OnChange(index, itemName, key, value)
-	ValueReceived(index, itemName, key)
-end
-
----
--- Send query for resetting the database to server
--- @param table data contains index
+-- Receives changed value from server
+-- Mark value as received and call OnChange-function
+-- @param table data = {index, itemName, key, value}
 -- @realm client
 -- @internal
-clientSendFunctions[MESSAGE_RESET] = function(data)
-	net.WriteUInt(data.index, uIntBits)
+clientReceiveFunctions[MESSAGE_SET_VALUE] = function(data)
+	OnChange(data.index, data.itemName, data.key, data.value)
+	ValueReceived(data.index, data.itemName, data.key)
 end
 
 ---
 -- Receive query for resetting the database from client
+-- @param table data = {index}
 -- @param string plyID64 the playerID64 of the player who sent the message
 -- @realm server
 -- @internal
-serverReceiveFunctions[MESSAGE_RESET] = function(plyID64)
-	database.Reset(registeredDatabases[net.ReadUInt(uIntBits)].accessName, plyID64)
-end
-
----
--- Send reset command to client
--- To make sure the client resets all stored values to the default
--- @param table data contains index
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_RESET] = function(data)
-	net.WriteUInt(data.index, uIntBits)
+serverReceiveFunctions[MESSAGE_RESET] = function(data, plyID64)
+	database.Reset(registeredDatabases[data.index].accessName, plyID64)
 end
 
 ---
 -- Receive reset command from server
 -- Reset all stored values back to the defaults
+-- @param table data = {index}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_RESET] = function()
-	ResetDatabase(net.ReadUInt(uIntBits))
-end
-
----
--- Send requested default values to client
--- Can either be a single value or a table
--- @param table data contains index, itemName, key, value, sendTable and defaultData here
--- @realm server
--- @internal
-serverSendFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
-	net.WriteUInt(data.index, uIntBits)
-	net.WriteBool(data.sendTable or false)
-
-	if data.sendTable then
-		net.WriteTable(data.defaultData)
-	else
-		net.WriteString(data.itemName)
-		net.WriteString(data.key)
-		net.WriteString(tostring(data.value))
-	end
+clientReceiveFunctions[MESSAGE_RESET] = function(data)
+	ResetDatabase(data.index)
 end
 
 ---
 -- Receive requested default values from server
 -- and cache it
+-- @param table data = {index, itemName, key, value, sentTable,}
 -- @realm client
 -- @internal
-clientReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function()
-	local index = net.ReadUInt(uIntBits)
-	local dataTable = registeredDatabases[index]
+clientReceiveFunctions[MESSAGE_GET_DEFAULTVALUE] = function(data)
+	local dataTable = registeredDatabases[data.index]
 
-	local sentTable = net.ReadBool()
-
-	if sentTable then
-		dataTable.defaultData = net.ReadTable()
+	if data.sentDefaults then
+		dataTable.defaultData = data.defaultData
 	else
-		local itemName = net.ReadString()
-		local key = net.ReadString()
-		local value = ConvertValueWithKey(net.ReadString(), dataTable.accessName, key)
+		local itemName = data.itemName
 
 		local defaultData = dataTable.defaultData
 		defaultData[itemName] = defaultData[itemName] or {}
-		defaultData[itemName][key] = value
+		defaultData[itemName][data.key] = data.value
 	end
 end
 
 -- Put local functions into global table clientside
 if CLIENT then
-	sendDataFunctions = clientSendFunctions
 	receiveDataFunctions = clientReceiveFunctions
 end
 
 -- Put local functions into global table serverside
 if SERVER then
-	sendDataFunctions = serverSendFunctions
 	receiveDataFunctions = serverReceiveFunctions
 end
 
@@ -706,13 +592,11 @@ end
 
 ---
 -- The function to be called on received synchronisation messages between server and client
--- @param number len length of the message
--- @param Player ply player that the message is received, `nil` on the client
+-- @param table data Contains per messageIdentifier a number of Entries with the data
+-- @param Player ply player that the message has received, `nil` on the client
 -- @realm shared
 -- @internal
-local function SynchronizeStates(len, ply)
-	if len < 1 then return end
-
+local function SynchronizeStates(data, ply)
 	local plyID64
 
 	if SERVER then
@@ -723,111 +607,38 @@ local function SynchronizeStates(len, ply)
 		if not playerID64Cache[plyID64] then return end
 	end
 
-	-- As size is unclear at start of the message and `net.BytesLeft` is not working
-	-- we instead always check if there is more to send with booleans
-	local continueReading = net.ReadBool()
-
-	while continueReading do
-		local identifier = net.ReadUInt(uIntBits)
-		local readNextValue = net.ReadBool()
-
-		while readNextValue do
-			receiveDataFunctions[identifier](plyID64)
-			readNextValue = net.ReadBool()
+	for identifier, indexedData in pairs(data) do
+		for i = 1, #indexedData do
+			receiveDataFunctions[identifier](indexedData[i], plyID64)
 		end
-
-		continueReading = net.ReadBool()
 	end
 end
-net.Receive("TTT2SynchronizeDatabase", SynchronizeStates)
+net.ReceiveStream("TTT2SynchronizeDatabase", SynchronizeStates)
 
 ---
 -- The function to call when synchronizing all messages between server and client
 -- @realm shared
 -- @internal
 local function SendUpdatesNow()
-	sendRequestsNextUpdate = false
-
-	if table.IsEmpty(dataStore) then return end
-
 	-- Send one message per plyIdentifier and index
 	-- This can either be a limited playerList or just one player
-	local plyDeleteIdentifiers = {}
 	for plyIdentifier, indexList in pairs(dataStore) do
-		local indexDeleteIdentifiers = {}
 		for index, identifierList in pairs(indexList) do
-			net.Start("TTT2SynchronizeDatabase")
-
-			-- Then go through all message identifiers and their cached data
-			-- and send them accordingly
-			local stopSending = false
-			local deleteIdentifiers = {}
-			for identifier, indexedData in pairs(identifierList) do
-				net.WriteBool(true)
-				net.WriteUInt(identifier, uIntBits)
-				net.WriteBool(#indexedData > 0)
-
-				-- Add data to one message as long as `net.BytesWritten` are not exceeding the limit
-				-- Use bools to determine the end as `net.BytesLeft` is not working and we dont know the size before this loop
-				for i = #indexedData, 1, -1 do
-					sendDataFunctions[identifier](indexedData[i])
-					indexedData[i] = nil
-
-					stopSending = net.BytesWritten() >= maxBytesPerMessage
-
-					net.WriteBool( not (stopSending or i == 1))
-
-					if stopSending then break end
-				end
-
-				if #indexedData <= 0 then
-					deleteIdentifiers[identifier] = true
-				end
-
-				if stopSending then break end
-			end
-			net.WriteBool(false)
-
+			local plys
 			if SERVER then
-				if plyIdentifier == SEND_TO_PLY_ALL then
-					net.Broadcast()
-				elseif plyIdentifier == SEND_TO_PLY_REGISTERED then
-					net.Send(registeredPlayersIndexTable[index] or {})
+				if plyIdentifier == SEND_TO_PLY_REGISTERED then
+					plys = registeredPlayersIndexTable[index] or {}
 				elseif IsPlayer(playerID64Cache[plyIdentifier]) then
-					net.Send(playerID64Cache[plyIdentifier] or {})
+					plys = playerID64Cache[plyIdentifier] or {}
 				end
-			elseif CLIENT then
-				net.SendToServer()
 			end
 
-			-- Delete the cache of data that was already sent
-			for identifier in pairs(deleteIdentifiers) do
-				identifierList[identifier] = nil
-			end
-
-			if table.IsEmpty(identifierList) then
-				indexDeleteIdentifiers[index] = true
-			end
-
-			-- If data was left, send them next frame
-			if stopSending and not sendRequestsNextUpdate then
-				sendRequestsNextUpdate = true
-				timer.Simple(0, SendUpdatesNow)
-			end
-		end
-
-		for index in pairs(indexDeleteIdentifiers) do
-			indexList[index] = nil
-		end
-
-		if table.IsEmpty(indexList) then
-			plyDeleteIdentifiers[plyIdentifier] = true
+			net.SendStream("TTT2SynchronizeDatabase", identifierList, plys)
 		end
 	end
 
-	for plyIdentifier in pairs(plyDeleteIdentifiers) do
-		dataStore[plyIdentifier] = nil
-	end
+	dataStore = {}
+	sendRequestsNextUpdate = false
 end
 
 ---
@@ -866,16 +677,29 @@ end
 
 -- Public Client only functions
 if CLIENT then
+
+	---
+	-- Gives the next messageIdentifier to identify functions on callback.
+	-- Its a placeholder in case a better way is needed
+	-- @return number, the next messageIdentifier
+	-- @realm client
+	-- @internal
+	local function getNextMessageIdentifier()
+		messageIdentifier = messageIdentifier + 1
+
+		return messageIdentifier
+	end
+
 	---
 	-- Is automatically called internally when a client joins, can be called by a player to force an update, but is normally not necessary
-	-- @param function OnReceiveFunc() the function that is called when the registered databases are received
+	-- @param function OnReceiveFunc the function that is called when the registered databases are received
 	-- @realm client
 	-- @internal
 	function database.GetRegisteredDatabases(OnReceiveFunc)
-		messageIdentifier = messageIdentifier % maxUInt + 1
-		functionCache[messageIdentifier] = OnReceiveFunc
+		local identifier = getNextMessageIdentifier()
+		functionCache[identifier] = OnReceiveFunc
 
-		SendUpdateNextTick(MESSAGE_REGISTER, messageIdentifier)
+		SendUpdateNextTick(MESSAGE_REGISTER, {identifier = identifier})
 	end
 
 	---
@@ -889,10 +713,35 @@ if CLIENT then
 			waitForRegisteredDatabases[data.accessName] = false
 			triedToGetRegisteredDatabases[data.accessName] = true
 
-			database.GetValue(data.accessName, data.itemName, data.key, data.OnReceiveFunc)
+			data.OnWaitEndFunc()
 		end
 
 		onWaitReceiveFunctionCache = {}
+	end
+
+	---
+	-- Tries to get registered databases and caches the call until its confirmed that databases are registered or not
+	-- @param string accessName the chosen networkable name of the sql table
+	-- @param function OnWaitEndFunc() The function that gets called when the database is accessible
+	-- @return bool, if waiting for the database is still possible
+	-- @realm client
+	local function tryGetRegisteredDatabase(accessName, OnWaitEndFunc)
+		if triedToGetRegisteredDatabases[accessName] then
+			return false
+		end
+
+		-- In case the database wasnt registered, try to get it and then send the requests again later
+		if not waitForRegisteredDatabases[accessName] then
+			waitForRegisteredDatabases[accessName] = true
+			database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
+		end
+
+		onWaitReceiveFunctionCache[#onWaitReceiveFunctionCache + 1] = {
+			accessName = accessName,
+			OnWaitEndFunc = OnWaitEndFunc
+		}
+
+		return true
 	end
 
 	---
@@ -900,61 +749,55 @@ if CLIENT then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param string itemName the name or primaryKey of the item inside of the sql table
 	-- @param string key the name of the key in the database
-	-- @param function OnReceiveFunc(databaseExists, value) The function that gets called with the results if the database exists
+	-- @param function OnReceiveFunc The function that gets called with the following parameters: boolean, whether the database table exists; any?, the value of the requested item
 	-- @realm client
 	function database.GetValue(accessName, itemName, key, OnReceiveFunc)
 		local index = nameToIndex[accessName]
 
 		if not index then
-			if triedToGetRegisteredDatabases[accessName] then
+			local function OnWaitEndFunc() database.GetValue(accessName, itemName, key, OnReceiveFunc) end
+
+			if not tryGetRegisteredDatabase(accessName, OnWaitEndFunc) then
 				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
 				OnReceiveFunc(false)
-
-				return
 			end
-
-			-- In case the database wasnt registered, try to get it and then send the requests again later
-			if not waitForRegisteredDatabases[accessName] then
-				waitForRegisteredDatabases[accessName] = true
-				database.GetRegisteredDatabases(cleanUpWaitReceiveCache)
-			end
-
-			onWaitReceiveFunctionCache[#onWaitReceiveFunctionCache + 1] = {
-				accessName = accessName,
-				itemName = itemName,
-				key = key,
-				OnReceiveFunc = OnReceiveFunc
-			}
 
 			return
 		end
 
 		local dataTable = registeredDatabases[index]
 
-		if not dataTable.keys[key] then
+		if isstring(key) and not dataTable.keys[key] then
 			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
 
 		-- Use cached data if value was received from the server
-		if IsValueReceived(index, itemName, key) then
+		if isstring(key) and IsValueReceived(index, itemName, key) then
 			OnReceiveFunc(true, dataTable.storedData[itemName] and dataTable.storedData[itemName][key])
+
+			return
+		elseif IsValueReceived(index, itemName, key) then
+			OnReceiveFunc(true, dataTable.storedData[itemName])
 
 			return
 		end
 
-		messageIdentifier = messageIdentifier % maxUInt + 1
-		functionCache[messageIdentifier] = OnReceiveFunc
+		local identifier = getNextMessageIdentifier()
+		functionCache[identifier] = OnReceiveFunc
 
-		requestCache[messageIdentifier] = {
+		local data = {
 			accessName = accessName,
 			itemName = itemName,
 			key = key,
-			index = index
+			index = index,
+			identifier = identifier
 		}
 
-		SendUpdateNextTick(MESSAGE_GET_VALUE, messageIdentifier)
+		requestCache[identifier] = data
+
+		SendUpdateNextTick(MESSAGE_GET_VALUE, data)
 	end
 
 	---
@@ -1031,7 +874,7 @@ if SERVER then
 	-- @note Only Admins can write to the database, no matter the accessLevel
 	-- @param number index the local index of the database
 	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
-	-- @return bool, bool hasReadAccess, hasWriteAccess, if the player can read from or write to the database
+	-- @return boolean,boolean hasReadAccess, hasWriteAccess, if the player can read from or write to the database
 	-- @realm server
 	-- @internal
 	local function hasAccessToDatabase(index, plyID64)
@@ -1063,14 +906,19 @@ if SERVER then
 	-- @realm server
 	-- @internal
 	function database.SyncRegisteredDatabases(plyIdentifier, identifier)
-		local tableCount = #registeredDatabases
+		local databaseSize = #registeredDatabases
 
-		for databaseNumber = 1, tableCount do
+		for databaseNumber = 1, databaseSize do
+			local dataTable = registeredDatabases[databaseNumber]
+
 			--contains additional data in case an identifier is given
 			local dataRegister = {
 				index = databaseNumber,
+				accessName = dataTable.accessName,
+				savingKeys = dataTable.keys,
+				additionalData = dataTable.data,
 				identifier = identifier,
-				tableCount = tableCount
+				databaseSize = databaseSize
 			}
 
 			SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, plyIdentifier)
@@ -1082,7 +930,7 @@ if SERVER then
 
 			local dataDefault = {
 				index = databaseNumber,
-				sendTable =  true,
+				sentDefaults =  true,
 				defaultData = defaultData
 			}
 
@@ -1093,14 +941,14 @@ if SERVER then
 	---
 	-- Call this when you want to setup a database that needs to be accessible by server and client
 	-- If you dont call this function before anything else, it wont work. Choose any name as accessName so that others can easily use it.
-	-- @note If the SqlTable does not exist, it will be created with the given savingKeys 
+	-- @note If the SqlTable does not exist, it will be created with the given savingKeys
 	-- @param string databaseName the real name of the database
 	-- @param string accessName the name to quickly access databases and differentiate between a pseudo used accessName and the migrated actual databaseName
 	-- @param table savingKeys the savingKeys = {keyName = {typ, bits, default, ..}, ..} defining the keyNames and their information
 	-- @param[default = TTT2_DATABASE_ACCESS_ADMIN] number accessLevel the access level needed to get values of a database, defined in `TTT2_DATABASE_ACCESS_`-enums (_ANY, _ADMIN, _SERVER)
 	-- @note If accessLevel is set to TTT2_DATABASE_ACCESS_SERVER it fully prevents any client read- and write-access, whereas TTT2_DATABASE_ACCESS_ANY only gives read-, but not write-access to anyone
 	-- @param[opt] table additionalData the data that doesnt belong to a database but might be needed for other purposes like enums
-	-- @return bool isSuccessful if the database exists and is successfully registered
+	-- @return boolean isSuccessful if the database exists and is successfully registered
 	-- @realm server
 	function database.Register(databaseName, accessName, savingKeys, accessLevel, additionalData)
 		accessLevel = accessLevel or TTT2_DATABASE_ACCESS_ADMIN
@@ -1129,9 +977,18 @@ if SERVER then
 		}
 		nameToIndex[accessName] = databaseCount
 
-		local data = {index = databaseCount}
+		local dataTable = registeredDatabases[databaseCount]
 
-		SendUpdateNextTick(MESSAGE_REGISTER, data, INDEX_NONE, SEND_TO_PLY_ALL)
+		local dataRegister = {
+			index = databaseCount,
+			accessName = dataTable.accessName,
+			savingKeys = dataTable.keys,
+			additionalData = dataTable.data,
+			identifier = nil,
+			databaseSize = databaseCount
+		}
+
+		SendUpdateNextTick(MESSAGE_REGISTER, dataRegister, INDEX_NONE, SEND_TO_PLY_ALL)
 
 		return true
 	end
@@ -1139,14 +996,14 @@ if SERVER then
 	---
 	-- This is called upon receiving a get request from a player to send a value back
 	-- @warning Dont use this function if you want to get a value from the database, this is meant to be used internally for a client request
-	-- @param table requestData = {plyID64, identifier, index, itemName, key} contains player and the data they requested
+	-- @param table requestData = {identifier, index, itemName, key} contains player and the data they requested
+	-- @param string plyID64 the playerID64 of the player who sent the message
 	-- @realm server
 	-- @internal
-	function database.ReturnGetValue(requestData)
+	function database.ReturnGetValue(requestData, plyID64)
 		local index = requestData.index
 		local accessName = index and registeredDatabases[index] and registeredDatabases[index].accessName
 
-		local plyID64 = requestData.plyID64
 		local hasReadAccess, _ = hasAccessToDatabase(index, plyID64)
 
 		local value
@@ -1172,6 +1029,8 @@ if SERVER then
 		SendUpdateNextTick(MESSAGE_GET_VALUE, serverData, INDEX_NONE, plyID64)
 	end
 
+	receiveDataFunctions[MESSAGE_GET_VALUE] = database.ReturnGetValue
+
 	---
 	-- Get the stored key value of the given database if it exists and was registered
 	-- @note While itemName and key are optional, leaving them out only gets the saved and converted sql Tables, they dont include every possible item with their default values.
@@ -1179,7 +1038,7 @@ if SERVER then
 	-- @param string accessName the chosen networkable name of the sql table
 	-- @param[opt] string itemName the name or primaryKey of the item inside of the sql table, if not given selects whole sql table
 	-- @param[opt] string key the name of the key in the database, is ignored when no itemName is given, if not given selects whole item
-	-- @return bool, if the requested item and/or key was successfully registered in the sql datatable
+	-- @return boolean if the requested item and/or key was successfully registered in the sql datatable
 	-- @return any, the value that was saved in the database or the default
 	-- @realm server
 	function database.GetValue(accessName, itemName, key)
@@ -1213,7 +1072,7 @@ if SERVER then
 
 		if itemName then
 			-- Find saved item data
-			sqlData = dataTable.orm:Find(itemName)
+			sqlData = dataTable.orm:Find(itemName) or {}
 
 			if key then
 				-- Get the specific key data
@@ -1230,7 +1089,14 @@ if SERVER then
 				return true, value
 			end
 
+			local newTable = {}
+			for _key in pairs(dataTable.keys) do
+				newTable[_key] = sqlData[_key]
+			end
+
+			sqlData = newTable
 			ConvertTable(sqlData, accessName)
+
 			dataTable.storedData[itemName] = sqlData
 		else
 			-- Get all data, convert and return it
@@ -1265,7 +1131,7 @@ if SERVER then
 	-- Get the stored table database if it exists and was registered
 	-- @note Only gets the saved and converted sql Tables, they dont include every possible item with their default values.
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @return bool, if the requested table was successfully registered in the sql datatable
+	-- @return boolean if the requested table was successfully registered in the sql datatable
 	-- @return table datatable that was saved
 	-- @realm server
 	function database.GetTable(accessName)
@@ -1404,14 +1270,39 @@ if SERVER then
 			registerIndex = INDEX_NONE
 		end
 
-		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendTable = false}, registerIndex, SEND_TO_PLY_REGISTERED)
+		SendUpdateNextTick(MESSAGE_GET_DEFAULTVALUE, {index = index, itemName = itemName, key = key, value = value, sendDefaults = false}, registerIndex, SEND_TO_PLY_REGISTERED)
+	end
+
+	---
+	-- Use this to set item-specific defaults for all saved keys, to save storage space in the sql database
+	-- also syncs this to the clients
+	-- @param string accessName The chosen networkable name of the sql table
+	-- @param string itemName the name or primaryKey of the item inside of the sql table
+	-- @param table item The item-table you want to set the default values from
+	-- @realm server
+	function database.SetDefaultValuesFromItem(accessName, itemName, item)
+		local index = nameToIndex[accessName]
+		if not index then
+			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The registered Database of " .. accessName .. " is not registered.")
+			return
+		end
+		if not istable(item) then
+			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The given item has no accessible values.")
+			return
+		end
+		local dataTable = registeredDatabases[index]
+		for key, keyData in pairs(dataTable.keys) do
+			local value = item[key]
+			if value == nil then continue end
+			database.SetDefaultValue(accessName, itemName, key, value)
+		end
 	end
 
 	---
 	-- Reset the database and send a message to the client
 	-- @note It is restricted to players with TTT2_DATABASE_ACCESS_ADMIN or higher at all times
 	-- @param string accessName the chosen networkable name of the sql table
-	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins 
+	-- @param[opt] string plyID64 the player steam ID 64. Leave this empty when calling on the server. This only makes sure values are only set by superadmins
 	-- @realm server
 	function database.Reset(accessName, plyID64)
 		local index = nameToIndex[accessName]

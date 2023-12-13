@@ -109,7 +109,7 @@ if SERVER then
 	-- @warning This functions has to be either run on both server and client, or inside a hook that is called
 	-- after all files are loaded, e.g. @{GM:Initialize}
 	-- @param string decalName The name of the decal
-	-- @param string decalName The material to be used for the decal. May also be a list of material names,
+	-- @param string materialName The material to be used for the decal. May also be a list of material names,
 	-- in which case a random material from that list will be chosen every time the decal is placed.
 	-- @realm server
 	function game.AddDecal(decalName, materialName)

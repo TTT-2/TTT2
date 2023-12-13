@@ -23,12 +23,16 @@ function clr(color)
 end
 
 ---
--- This @{function} creates a getter and a setter @{function} based on the name and the prefix "Get" and "Set"
+-- This @{function} creates a getter and a setter @{function} for DTVars of an entity
+-- The create @{function} names are based on the var name and the prefix "Get" and "Set"
+-- @note Instead of using this function simply replace `ENT:DTVar()` calls with `ENT:NetworkVar()`.
 -- @param table tbl the @{table} that should receive the Getter and Setter @{function}
 -- @param string varname the name the tbl @{table} should have as key value
 -- @param string name the name that should be concatenated to the prefix "Get" and "Set"
+-- @deprecated
 -- @realm shared
 function AccessorFuncDT(tbl, varname, name)
+	MsgN("[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version.")
 	tbl["Get" .. name] = function(s)
 		return s.dt and s.dt[varname]
 	end
@@ -46,7 +50,7 @@ end
 -- @param string default
 -- @return string
 -- @realm shared
--- @ref https://wiki.garrysmod.com/page/input/LookupBinding
+-- @ref https://wiki.facepunch.com/gmod/input.LookupBinding
 function Key(binding, default)
 	local b = input.LookupBinding(binding)
 	if not b then

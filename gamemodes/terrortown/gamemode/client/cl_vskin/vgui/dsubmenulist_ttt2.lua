@@ -14,21 +14,6 @@ local heightNavHeader = 10
 local heightNavButton = 50
 
 ---
--- Checks recursively the parents until none is found and the highest parent is returned
--- @ignore
-local function getHighestParent(slf)
-	local parent = slf
-	local checkParent = slf:GetParent()
-
-	while ispanel(checkParent) do
-		parent = checkParent
-		checkParent = parent:GetParent()
-	end
-
-	return parent
-end
-
----
 -- @ignore
 function PANEL:Init()
 	-- Make navArea scrollable
@@ -43,7 +28,7 @@ function PANEL:Init()
 	self.navAreaScrollGrid = navAreaScrollGrid
 
 	-- Get the frame to be able to enable keyboardinput on searchbar focus
-	self.frame = getHighestParent(self)
+	self.frame = util.getHighestPanelParent(self)
 
 	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled(false)
@@ -64,7 +49,7 @@ end
 
 ---
 -- This function enables or disables the searchBar.
--- @param bool active
+-- @param boolean active
 -- @realm client
 function PANEL:EnableSearchBar(active)
 	if not active then
@@ -75,7 +60,7 @@ function PANEL:EnableSearchBar(active)
 		return
 	end
 
-	-- Add searchbar on top	
+	-- Add searchbar on top
 	local searchBar = vgui.Create("DSearchBarTTT2", self)
 	searchBar:SetUpdateOnType(true)
 	searchBar:SetPos(0, heightNavHeader)

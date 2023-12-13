@@ -29,7 +29,7 @@ function PANEL:Init()
 		title_font = "DermaTTT2SubMenuButtonTitle",
 		icon = nil,
 		iconFullSize = false,
-		selected = false
+		selected = false,
 	}
 end
 
@@ -99,7 +99,7 @@ function PANEL:IsIconFullSize()
 end
 
 ---
--- @param boolean
+-- @param boolean active
 -- @realm client
 function PANEL:SetActive(active)
 	self.contents.active = active == nil and true or active

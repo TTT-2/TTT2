@@ -28,15 +28,14 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 	for i = 1, #equipments do
 		local equipment = equipments[i]
 
-		-- Only keep ttt-equipments that are cached
-		if not equipment.ttt2_cached_material and not equipment.ttt2_cached_model then continue end
+		if not equipment.isValidEquipment then continue end
 
 		counter = counter + 1
 
 		virtualSubmenus[counter] = tableCopy(equipmentMenuBase)
 		virtualSubmenus[counter].equipment = equipment
 		virtualSubmenus[counter].isItem = items.IsItem(equipment)
-		virtualSubmenus[counter].icon = equipment.ttt2_cached_material
+		virtualSubmenus[counter].icon = equipment.iconMaterial
 		virtualSubmenus[counter].iconFullSize = true
 	end
 end
