@@ -277,7 +277,6 @@ Shows a fake radar sign to other teams, and makes the DNA scanner show the locat
 
 -- Defuser
 L.defuser_name = "Defuser"
-L.defuser_help = "{primaryfire} defuses targeted C4."
 
 L.defuser_desc = [[
 Instantly defuse a C4 explosive.
@@ -2083,3 +2082,6 @@ L.magneto_help_primary = "Push entity"
 L.magneto_help_secondary = "Pickup entity"
 L.knife_help_primary = "Stab"
 L.knife_help_secondary = "Throw knife"
+
+-- 2023-12-13
+L.defuser_help_primary = "Defuses targeted C4"

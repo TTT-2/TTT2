@@ -1,4 +1,6 @@
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 SWEP.HoldType = "slam"
 
@@ -69,7 +71,7 @@ end
 
 if CLIENT then
 	function SWEP:Initialize()
-		self:AddHUDHelp("defuser_help", nil, true)
+		self:AddTTT2HUDHelp("defuser_help_primary")
 
 		return self.BaseClass.Initialize(self)
 	end
