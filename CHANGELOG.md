@@ -4,6 +4,24 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
+
+### Added
+
+- Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+
+### Fixed
+
+- Fixed the UI being unable to handle wrapping text with non-utf8 languages that do not use ASCII whitespaces (by @TimGoll & @saibotk)
+- Fixed ttt_game_text not working due to a refactor
+- Fixed dete call HUD being invisible
+- Fixed edgecase where undefined killer angle or pos were accessed
+- Fixed fallback ammo icon missing
+- Fixed a null entity error in the miniscoreboard
+- Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit
+
+## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
+
 ### Added
 
 - Added the ability to edit slider numbers directly via an input field by clicking on the number (by @NickCloudAT)
@@ -44,7 +62,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `DNumSliderTTT2`, `DCheckBoxLabelTTT2`, `DComboBoxTTT2`
 - Added dashing to propspec (by @TimGoll)
 - Added new functions to database module
-  -`database.SetDefaultValuesFromItem(accessName, itemName, item)`
+  - `database.SetDefaultValuesFromItem(accessName, itemName, item)`
 
 ### Changed
 
@@ -90,7 +108,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)
 - Fixed disguiser breaking UI on hot reload (by @TimGoll)
 - Fixed blurred box rendering for boxes not starting at `0,0` (by @TimGoll)
-- Optimized allocations by using global Vector / Angle when possible
 - Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)
 - Optimized allocations by using global Vector / Angle when possible.
 - Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced

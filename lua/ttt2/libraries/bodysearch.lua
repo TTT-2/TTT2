@@ -130,10 +130,8 @@ if SERVER then
 		end
 	end)
 
-	net.Receive("ttt2_client_reports_corpse", function(_, ply)
-		if not IsValid(ply) then return end
-
-		if not ply:IsActive() then return end
+net.Receive("ttt2_client_reports_corpse", function(_, ply)
+		if not IsValid(ply) or not ply:IsActive() then return end
 
 		local rag = net.ReadEntity()
 
@@ -145,7 +143,7 @@ if SERVER then
 		local plyTable = util.GetFilteredPlayers(function(p)
 			local roleData = p:GetSubRoleData()
 
-			return roleData.isPolicingRole and p.isPublicRole and p:IsTerror()
+			return roleData.isPolicingRole and roleData.isPublicRole and p:IsTerror()
 		end)
 
 		---
@@ -252,7 +250,7 @@ if SERVER then
 		sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 
 		sceneData.killDistance = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace then
+		if rag.scene.hit_trace and isvector(rag.scene.hit_trace.StartPos) then
 			local rawKillDistance = rag.scene.hit_trace.StartPos:Distance(rag.scene.hit_trace.HitPos)
 			if rawKillDistance < 200 then
 				sceneData.killDistance = CORPSE_KILL_DISTANCE_POINT_BLANK
@@ -270,7 +268,7 @@ if SERVER then
 		end
 
 		sceneData.killOrientation = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace and rag.scene.dmginfo:IsBulletDamage() then
+		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then

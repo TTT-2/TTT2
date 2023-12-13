@@ -39,7 +39,7 @@ The following steps will document our release process to prevent mistakes and co
     1. Clean up the language files with our leanguage cleanup tool
 
         - Tool: https://github.com/TTT-2/ttt2-language_parser
-        - Run from folder as: `python parse.py --in "../TTT2/lua/terrortown/lang" --out "../TTT2/lua/terrortown/lang" --base "en"`
+        - Run from folder as: `python parse.py --in "../TTT2/lua/terrortown/lang" --out "../TTT2/lua/terrortown/lang" --base "en" --ignore "chef"`
         - Makes sure all language files align with the english translation
 
 1. Open a Pull-Request prefixed with `[Release]` with the changes from above.

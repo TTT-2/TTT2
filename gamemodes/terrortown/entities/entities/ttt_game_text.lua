@@ -9,6 +9,10 @@ ENT.Message = ""
 ENT.Color = COLOR_WHITE
 
 local RECEIVE_ACTIVATOR = 0
+local RECEIVE_ALL = 1
+local RECEIVE_DETECTIVE = 2
+local RECEIVE_TRAITOR = 3
+local RECEIVE_INNOCENT = 4
 local RECEIVE_CUSTOMROLE = 5
 
 ENT.Receiver = RECEIVE_ACTIVATOR
@@ -35,7 +39,7 @@ function ENT:KeyValue(key, value)
 		self.Receiver = tonumber(value)
 
 		if not self.Receiver or self.Receiver < 0 or self.Receiver > 5 then
-			ErrorNoHalt("ERROR: ttt_game_text has invalid receiver value\n")
+			ErrorNoHalt("ERROR: ttt_game_text has invalid inputReceiver value\n")
 
 			self.Receiver = RECEIVE_ACTIVATOR
 		end
@@ -52,24 +56,28 @@ function ENT:AcceptInput(name, activator)
 		return false
 	end
 
-	if IsValid(activator) and activator:IsPlayer() then
-		local recv = activator
-		local receiver_tbl = {
-			RECEIVE_ALL = nil,
-			RECEIVE_DETECTIVE = GetRoleChatFilter(ROLE_DETECTIVE),
-			RECEIVE_TRAITOR = GetRoleChatFilter(TEAM_TRAITOR),
-			RECEIVE_INNOCENT = GetRoleChatFilter(TEAM_INNOCENT)
-		}
+	local inputReceiver = self.Receiver
+	local messageReceiver = activator
 
-		recv = self.teamReceiver and GetTeamChatFilter(self.teamReceiver) or receiver_tbl[self.Receiver]
-		CustomMsg(recv, self.Message, self.Color)
+	if inputReceiver == RECEIVE_ALL then
+		messageReceiver = nil
+	elseif inputReceiver == RECEIVE_DETECTIVE then
+		messageReceiver = GetRoleChatFilter(ROLE_DETECTIVE)
+	elseif inputReceiver == RECEIVE_TRAITOR then
+		messageReceiver = GetTeamChatFilter(TEAM_TRAITOR)
+	elseif inputReceiver == RECEIVE_INNOCENT then
+		messageReceiver = GetTeamChatFilter(TEAM_INNOCENT)
+	elseif inputReceiver == RECEIVE_ACTIVATOR then
+		if not IsValid(activator) or not activator:IsPlayer() then
+			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
 
-		recv = nil
-		receiver_tbl = nil
-
-		return true
+			return true
+		end
+	elseif inputReceiver == RECEIVE_CUSTOMROLE and self.teamReceiver then
+		messageReceiver = GetTeamChatFilter(self.teamReceiver)
 	end
 
-	ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
-	return false -- either invalid activator or activator was not a player
+	CustomMsg(messageReceiver, self.Message, self.Color)
+
+	return true
 end
