@@ -1875,7 +1875,7 @@ L.search_dmg_other = "Bu teröristin ölümünün belirli bir nedenini bulamazs�
 
 L.search_floor_antlions = "Vücudun her yerinde hala antlionlar var. Zemin onlarla kaplı olmalı."
 L.search_floor_bloodyflesh = "Bu vücuttaki kan eski ve iğrenç görünüyor. Ayakkabılarına yapışmış küçük kanlı et parçaları bile var."
-L.search_floor_concrete = "Ayakkabılarını ve dizlerini gri toz kaplar. Olay yerinin beton zemini varmış gibi görünüyor.”
+L.search_floor_concrete = "Ayakkabılarını ve dizlerini gri toz kaplamış. Olay yerinin beton zemini varmış gibi görünüyor."
 L.search_floor_dirt = "Toprak gibi kokuyor. Muhtemelen kurbanın ayakkabılarına yapışan topraktan kaynaklanıyor."
 L.search_floor_eggshell = "İğrenç görünümlü beyaz lekeler kurbanın vücudunu kaplamış. Yumurta kabuğuna benziyor."
 L.search_floor_flesh = "Kurbanın giysileri biraz nemli geliyor. Sanki ıslak bir yüzeye düşmüş gibi. Etli bir yüzey veya bir su kütlesinin kumlu zemini gibi."
