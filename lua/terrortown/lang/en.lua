@@ -257,7 +257,6 @@ L.c4_status_disarmed = "DISARMED"
 
 -- Visualizer
 L.vis_name = "Visualizer"
-L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
 L.vis_desc = [[
 Crime scene visualization device.
@@ -2073,3 +2072,6 @@ L.label_spec_prop_dash = "Dash force multiplier"
 L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
