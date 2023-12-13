@@ -1359,7 +1359,7 @@ function SKIN:PaintCardShopTTT2(panel, w, h)
 	local sizeIcon = 60
 	local padding = 5
 	local posIcon = widthBorder + padding
-	local posText = posIcon + sizeIcon + 2 * padding
+	--local posText = posIcon + sizeIcon + 2 * padding
 	local heightMode = 25
 	local widthMode = w - sizeIcon
 	local posIconModeX = w - widthMode
@@ -1372,8 +1372,8 @@ function SKIN:PaintCardShopTTT2(panel, w, h)
 	local colorText = colors.settingsText
 	local colorMode = utilGetChangedColor(colors.background, 75)
 
-	local materialMode = materialCardRemoved
-	local textMode = "equip_not_added"
+	--local materialMode = materialCardRemoved
+	--local textMode = "equip_not_added"
 
 	if panel:GetMode() == MODE_ADDED then
 		colorMode = colorCardAdded
