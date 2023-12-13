@@ -2082,6 +2082,7 @@ L.magneto_help_primary = "Push entity"
 L.magneto_help_secondary = "Pickup entity"
 L.knife_help_primary = "Stab"
 L.knife_help_secondary = "Throw knife"
+L.polter_help_primary = "Fire thumper"
 
 -- 2023-12-13
 L.defuser_help_primary = "Defuses targeted C4"
