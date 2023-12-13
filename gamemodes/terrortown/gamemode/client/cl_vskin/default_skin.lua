@@ -1372,22 +1372,6 @@ function SKIN:PaintCardShopTTT2(panel, w, h)
 	local colorText = colors.settingsText
 	local colorMode = utilGetChangedColor(colors.background, 75)
 
-	--local materialMode = materialCardRemoved
-	--local textMode = "equip_not_added"
-
-	if panel:GetMode() == MODE_ADDED then
-		colorMode = colorCardAdded
-		materialMode = materialCardAdded
-		textMode = "equip_added"
-	elseif panel:GetMode() == MODE_INHERIT_ADDED then
-		colorMode = colorCardInheritAdded
-		materialMode = materialCardAdded
-		textMode = "equip_inherit_added"
-	elseif panel:GetMode() == MODE_INHERIT_REMOVED then
-		colorMode = colorCardInheritRemoved
-		textMode = "equip_inherit_removed"
-	end
-
 	local colorTextMode = utilGetDefaultColor(colorMode)
 
 	if panel.Hovered then
