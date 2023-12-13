@@ -70,7 +70,7 @@ function ENT:PlayerRoleCanUse(ply)
 		if TButtonMapConfig[mapID].Override.Role then
 			overrideRole = TButtonMapConfig[mapID].Override.Role[curRol]
 		end
-		
+
 		if TButtonMapConfig[mapID].Override.Team then
 			overrideTeam = TButtonMapConfig[mapID].Override.Team[curTeam]
 		end
