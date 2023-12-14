@@ -2089,3 +2089,6 @@ L.radio_help_secondary = "Stick to surface"
 L.hstation_help_primary = "Place the Health Station"
 L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "Stick to surface"
+
+L.newton_help_primary = "Knockback shot"
+L.newton_help_secondary = "Charged knockback shot"
