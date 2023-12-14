@@ -2,9 +2,9 @@
 -- @class SWEP
 -- @section weapon_ttt_push
 
-AddCSLuaFile()
-
-DEFINE_BASECLASS "weapon_tttbase"
+if SERVER then
+	AddCSLuaFile()
+end
 
 SWEP.HoldType               = "physgun"
 
@@ -238,6 +238,10 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:DrawHUD()
+		if self.DrawHelp then
+			self:DrawHelp()
+		end
+
 		local x = ScrW() / 2.0
 		local y = ScrH() / 2.0
 
