@@ -52,32 +52,102 @@ SWEP.Spawnable = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
+---
+-- @realm shared
 function SWEP:OnDrop()
 	self:Remove()
 end
 
+---
+-- @realm shared
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	if self:CanPrimaryAttack() then
+	if SERVER and self:CanPrimaryAttack() then
 		self:BeaconDrop()
 	end
 end
 
+---
+-- @realm shared
 function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	if self:CanPrimaryAttack() then
+	if SERVER and self:CanPrimaryAttack() then
 		self:BeaconStick()
 	end
 end
 
-local throwsound = Sound( "Weapon_SLAM.SatchelThrow" )
+---
+-- @realm shared
+function SWEP:PlacedBeacon()
+	self:TakePrimaryAmmo(1)
 
--- might be able to move this drop/stick stuff into something more general now
--- that a number of weapons use it
-function SWEP:BeaconDrop()
-	if SERVER then
+	if not self:CanPrimaryAttack() then
+		self:Remove()
+	end
+end
+
+---
+-- @realm shared
+function SWEP:PickupBeacon()
+	if self:Clip1() >= self.Primary.ClipSize then
+		return false
+	else
+		self:SetClip1(self:Clip1() + 1)
+		return true
+	end
+end
+
+---
+-- @param Player buyer
+-- @realm shared
+function SWEP:WasBought(buyer)
+	self:SetClip1(self:Clip1() + 2)
+end
+
+---
+-- @realm shared
+function SWEP:Reload()
+	return false
+end
+
+---
+-- @realm shared
+function SWEP:OnRemove()
+	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():IsTerror() then
+		RunConsoleCommand("lastinv")
+	end
+end
+
+---
+-- @realm shared
+function SWEP:Deploy()
+	self:GetOwner():DrawViewModel(false)
+
+	return true
+end
+
+---
+-- @realm shared
+function SWEP:DrawWorldModel()
+	if not IsValid(self:GetOwner()) then
+		self:DrawModel()
+	end
+end
+
+---
+-- @realm shared
+function SWEP:DrawWorldModelTranslucent()
+
+end
+
+if SERVER then
+	local throwsound = Sound("Weapon_SLAM.SatchelThrow")
+
+	---
+	-- @realm server
+	function SWEP:BeaconDrop()
 		local ply = self:GetOwner()
 
 		if not IsValid(ply) then return end
@@ -85,10 +155,9 @@ function SWEP:BeaconDrop()
 		local vsrc = ply:GetShootPos()
 		local vang = ply:GetAimVector()
 		local vvel = ply:GetVelocity()
-
 		local vthrow = vvel + vang * 200
-
 		local beacon = ents.Create("ttt_beacon")
+
 		if IsValid(beacon) then
 			beacon:SetPos(vsrc + vang * 10)
 			beacon:SetOwner(ply)
@@ -108,13 +177,13 @@ function SWEP:BeaconDrop()
 
 			self:PlacedBeacon()
 		end
+
+		self:EmitSound(throwsound)
 	end
 
-	self:EmitSound(throwsound)
-end
-
-function SWEP:BeaconStick()
-	if SERVER then
+	---
+	-- @realm server
+	function SWEP:BeaconStick()
 		local ply = self:GetOwner()
 
 		if not IsValid(ply) then return end
@@ -129,73 +198,44 @@ function SWEP:BeaconStick()
 			mask = MASK_SOLID
 		})
 
-		if tr.HitWorld then
-			local beacon = ents.Create("ttt_beacon")
-			if IsValid(beacon) then
-				beacon:PointAtEntity(ply)
+		if not tr.HitWorld then return end
 
-				local tr_ent = util.TraceEntity({
-					start = spos,
-					endpos = epos,
-					filter = ignore,
-					mask = MASK_SOLID
-				}, beacon)
+		local beacon = ents.Create("ttt_beacon")
 
-				if tr_ent.HitWorld then
-					local ang = tr_ent.HitNormal:Angle()
+		if not IsValid(beacon) then return end
 
-					beacon:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
-					beacon:SetAngles(ang)
-					beacon:SetOwner(ply)
-					beacon:Spawn()
+		beacon:PointAtEntity(ply)
 
-					local phys = beacon:GetPhysicsObject()
-					if IsValid(phys) then
-						phys:EnableMotion(false)
-					end
+		local tr_ent = util.TraceEntity({
+			start = spos,
+			endpos = epos,
+			filter = ignore,
+			mask = MASK_SOLID
+		}, beacon)
 
-					beacon.IsOnWall = true
+		if not tr_ent.HitWorld then return end
 
-					self:PlacedBeacon()
-				end
-			end
+		local ang = tr_ent.HitNormal:Angle()
+
+		beacon:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
+		beacon:SetAngles(ang)
+		beacon:SetOwner(ply)
+		beacon:Spawn()
+
+		local phys = beacon:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:EnableMotion(false)
 		end
-	end
-end
 
-function SWEP:PlacedBeacon()
-	self:TakePrimaryAmmo(1)
+		beacon.IsOnWall = true
 
-	if not self:CanPrimaryAttack() then
-		self:Remove()
-	end
-end
-
-function SWEP:PickupBeacon()
-	if self:Clip1() >= self.Primary.ClipSize then
-		return false
-	else
-		self:SetClip1(self:Clip1() + 1)
-		return true
-	end
-end
-
--- Ammo hackery after getting bought
-function SWEP:WasBought(buyer)
-	self:SetClip1(self:Clip1() + 2)
-end
-
-function SWEP:Reload()
-	return false
-end
-
-function SWEP:OnRemove()
-	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():IsTerror() then
-		RunConsoleCommand("lastinv")
+		self:PlacedBeacon()
 	end
 end
 
 if CLIENT then
+	---
+	-- @realm client
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("visualizer_help_pri", "visualizer_help_sec")
 
@@ -203,18 +243,3 @@ if CLIENT then
 	end
 end
 
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
-end
-
-function SWEP:DrawWorldModel()
-	if not IsValid(self:GetOwner()) then
-		self:DrawModel()
-	end
-end
-
-function SWEP:DrawWorldModelTranslucent()
-
-end

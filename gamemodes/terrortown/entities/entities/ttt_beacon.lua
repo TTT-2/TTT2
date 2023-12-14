@@ -21,6 +21,8 @@ local beaconDetectionRange = 135
 local soundZap = Sound("npc/assassin/ball_zap1.wav")
 local soundBeep = Sound("weapons/c4/cc4_beep1.wav")
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -43,6 +45,9 @@ function ENT:Initialize()
 	end
 end
 
+---
+-- @param Entity activator
+-- @realm shared
 function ENT:UseOverride(activator)
 	if not IsValid(activator) or self:GetOwner() ~= activator then return end
 
@@ -59,6 +64,8 @@ function ENT:UseOverride(activator)
 	self:Remove()
 end
 
+---
+-- @realm shared
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
@@ -79,6 +86,8 @@ function ENT:OnTakeDamage(dmginfo)
 	end
 end
 
+---
+-- @realm shared
 function ENT:Think()
 	if SERVER then
 		sound.Play(soundBeep, self:GetPos(), 100, 80)
@@ -107,6 +116,8 @@ function ENT:Think()
 end
 
 if SERVER then
+	---
+	-- @realm server
 	function ENT:UpdateTransmitState()
 		return TRANSMIT_ALWAYS
 	end
