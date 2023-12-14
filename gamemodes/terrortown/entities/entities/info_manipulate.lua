@@ -6,6 +6,8 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
+---
+-- @realm server
 function ENT:Think()
 	if not self.Replaced then
 		self:CreateReplacement()
@@ -14,6 +16,11 @@ function ENT:Think()
 	end
 end
 
+---
+-- Sets Hammer key values on an entity.
+-- @param string key The internal key name
+-- @param string value The value to set
+-- @realm server
 function ENT:KeyValue(key, value)
 	if key == "OnPressed" then
 		-- store raw, will be feeding this into the replacement's StoreOutput()
@@ -29,7 +36,8 @@ function ENT:KeyValue(key, value)
 	end
 end
 
-
+---
+-- @realm server
 function ENT:CreateReplacement()
 	local tgt = ents.Create("ttt_traitor_button")
 

@@ -3,13 +3,17 @@
 -- @desc Map event damage owner
 -- @section DamageOwner
 
-
 ENT.Type = "point"
 ENT.Base = "base_point"
 
 ENT.Damager = nil
 ENT.KillName = nil
 
+---
+-- Sets Hammer key values on an entity.
+-- @param string key The internal key name
+-- @param string value The value to set
+-- @realm server
 function ENT:KeyValue(key, value)
 	if key == "damager" then
 		self.Damager = tostring(value)
@@ -18,6 +22,13 @@ function ENT:KeyValue(key, value)
 	end
 end
 
+---
+-- Called when another entity fires an event to this entity.
+-- @param string name The name of the input that was triggered
+-- @param Entity activator The initial cause for the input getting triggered; e.g. the player who pushed a button
+-- @param Entity caller The entity that directly triggered the input; e.g. the button that was pushed
+-- @param string data The data passed
+-- @realm server
 function ENT:AcceptInput(name, activator, caller, data)
 	if name == "SetActivatorAsDamageOwner" then
 		if not self.Damager then return end

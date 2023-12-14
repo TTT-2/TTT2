@@ -6,47 +6,61 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
+---
+-- @realm server
 function ENT:Initialize()
 	timer.Simple(0, function()
 		self:TriggerOutput("MapSettingsSpawned", self)
 	end)
 end
 
-function ENT:KeyValue(k, v)
-	if k == "cbar_doors" then
-		Dev(2, "ttt_map_settings: crowbar door unlocking = " .. v)
+---
+-- Sets Hammer key values on an entity.
+-- @param string key The internal key name
+-- @param string value The value to set
+-- @realm server
+function ENT:KeyValue(key, value)
+	if key == "cbar_doors" then
+		Dev(2, "ttt_map_settings: crowbar door unlocking = " .. value)
 
-		local opens = (v == "1")
+		local opens = (value == "1")
 
 		GAMEMODE.crowbar_unlocks[OPEN_DOOR] = opens
 		GAMEMODE.crowbar_unlocks[OPEN_ROT] = opens
-	elseif k == "cbar_buttons" then
-		Dev(2, "ttt_map_settings: crowbar button unlocking = " .. v)
+	elseif key == "cbar_buttons" then
+		Dev(2, "ttt_map_settings: crowbar button unlocking = " .. value)
 
-		GAMEMODE.crowbar_unlocks[OPEN_BUT] = (v == "1")
-	elseif k == "cbar_other" then
-		Dev(2, "ttt_map_settings: crowbar movelinear unlocking = " .. v)
+		GAMEMODE.crowbar_unlocks[OPEN_BUT] = (value == "1")
+	elseif key == "cbar_other" then
+		Dev(2, "ttt_map_settings: crowbar movelinear unlocking = " .. value)
 
-		GAMEMODE.crowbar_unlocks[OPEN_NOTOGGLE] = (v == "1")
-	elseif k == "plymodel" and v ~= "" then -- can ignore if empty
-		if util.IsValidModel(v) then
-			Dev(2, "ttt_map_settings: set player model to be " .. v)
+		GAMEMODE.crowbar_unlocks[OPEN_NOTOGGLE] = (value == "1")
+	elseif key == "plymodel" and value ~= "" then -- can ignore if empty
+		if util.IsValidModel(value) then
+			Dev(2, "ttt_map_settings: set player model to be " .. value)
 
-			util.PrecacheModel(v)
+			util.PrecacheModel(value)
 
-			GAMEMODE.force_plymodel = v
+			GAMEMODE.force_plymodel = value
 		else
-			Dev(2, "ttt_map_settings: FAILED to set player model due to invalid path: " .. v)
+			Dev(2, "ttt_map_settings: FAILED to set player model due to invalid path: " .. value)
 		end
-	elseif k == "propspec_named" or k == "propspec_allow_named" then
-		Dev(2, "ttt_map_settings: propspec possessing named props = " .. v)
+	elseif key == "propspec_named" or key == "propspec_allow_named" then
+		Dev(2, "ttt_map_settings: propspec possessing named props = " .. value)
 
-		GAMEMODE.propspec_allow_named = (v == "1")
-	elseif k == "MapSettingsSpawned" or k == "RoundEnd" or k == "RoundPreparation" or k == "RoundStart" then
-		self:StoreOutput(k, v)
+		GAMEMODE.propspec_allow_named = (value == "1")
+	elseif key == "MapSettingsSpawned" or key == "RoundEnd" or key == "RoundPreparation" or key == "RoundStart" then
+		self:StoreOutput(key, value)
 	end
 end
 
+---
+-- Called when another entity fires an event to this entity.
+-- @param string name The name of the input that was triggered
+-- @param Entity activator The initial cause for the input getting triggered; e.g. the player who pushed a button
+-- @param Entity caller The entity that directly triggered the input; e.g. the button that was pushed
+-- @param string data The data passed
+-- @realm server
 function ENT:AcceptInput(name, activator, caller, data)
 	if name == "SetPlayerModels" then
 		local mdlname = tostring(data)
@@ -69,13 +83,17 @@ function ENT:AcceptInput(name, activator, caller, data)
 	end
 end
 
--- Fire an output when the round changes
-function ENT:RoundStateTrigger(r, data)
-	if r == ROUND_PREP then
+---
+-- Fire an output when the round changes.
+-- @param number roundState
+-- @param any data
+-- @realm server
+function ENT:RoundStateTrigger(roundState, data)
+	if roundState == ROUND_PREP then
 		self:TriggerOutput("RoundPreparation", self)
-	elseif r == ROUND_ACTIVE then
+	elseif roundState == ROUND_ACTIVE then
 		self:TriggerOutput("RoundStart", self)
-	elseif r == ROUND_POST then
+	elseif roundState == ROUND_POST then
 		-- RoundEnd has the type of win condition as param
 		self:TriggerOutput("RoundEnd", self, tostring(data))
 	end

@@ -11,6 +11,8 @@ ENT.Weaponised = false
 ENT.PunchMax = 6
 ENT.PunchRemaining = 6
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -31,6 +33,9 @@ function ENT:Initialize()
 	self.PunchRemaining = self.PunchMax
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function ENT:StickTo(ent)
 	if not IsValid(ent) or ent:IsPlayer() or ent:GetMoveType() ~= MOVETYPE_VPHYSICS then
 		return false
@@ -54,6 +59,9 @@ function ENT:StickTo(ent)
 	return true
 end
 
+---
+-- @hook
+-- @realm shared
 function ENT:OnRemove()
 	if IsValid(self.BallSprite) then
 		self.BallSprite:Remove()
@@ -65,6 +73,8 @@ function ENT:OnRemove()
 	end
 end
 
+---
+-- @realm shared
 function ENT:StartEffects()
 	local sprite = ents.Create("env_sprite")
 	if IsValid(sprite) then
@@ -106,6 +116,8 @@ if SERVER then
 	local diesound = Sound("weapons/physcannon/energy_disintegrate4.wav")
 	local punchsound = Sound("weapons/ar2/ar2_altfire.wav")
 
+	---
+	-- @realm server
 	function ENT:Think()
 		if not self.Stuck then return end
 

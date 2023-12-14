@@ -3,7 +3,6 @@
 -- @desc Visualizer projective thrown in the world
 -- @section CSEProj
 
-
 if SERVER then
 	AddCSLuaFile()
 end
@@ -21,6 +20,8 @@ ENT.PulseDelay    = 10
 
 ENT.CanUseKey = true
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
 
@@ -34,6 +35,8 @@ function ENT:Initialize()
 	self:SetHealth(50)
 end
 
+---
+-- @realm shared
 function ENT:GetNearbyCorpses()
 	local pos = self:GetPos()
 
@@ -54,21 +57,11 @@ function ENT:GetNearbyCorpses()
 end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
-function ENT:OnTakeDamage(dmginfo)
-	self:TakePhysicsDamage(dmginfo)
-
-	self:SetHealth(self:Health() - dmginfo:GetDamage())
-	if self:Health() < 0 then
-		self:Remove()
-
-		local effect = EffectData()
-		effect:SetOrigin(self:GetPos())
-		util.Effect("cball_explode", effect)
-		sound.Play(zapsound, self:GetPos())
-	end
-end
-
+local scanloop = Sound("weapons/gauss/chargeloop.wav")
 local dummy_keys = {"victim", "killer"}
+
+---
+-- @realm shared
 function ENT:ShowSceneForCorpse(corpse)
 	local scene = corpse.scene
 	local hit = scene.hit_trace
@@ -110,7 +103,8 @@ function ENT:ShowSceneForCorpse(corpse)
 	end
 end
 
-local scanloop = Sound("weapons/gauss/chargeloop.wav")
+---
+-- @realm shared
 function ENT:StartScanSound()
 	if not self.ScanSound then
 		self.ScanSound = CreateSound(self, scanloop)
@@ -121,6 +115,8 @@ function ENT:StartScanSound()
 	end
 end
 
+---
+-- @realm shared
 function ENT:StopScanSound(force)
 	if self.ScanSound and self.ScanSound:IsPlaying() then
 		self.ScanSound:FadeOut(0.5)
@@ -131,16 +127,8 @@ function ENT:StopScanSound(force)
 	end
 end
 
-
-if CLIENT then
-	local glow = Material("sprites/blueglow2")
-	function ENT:DrawTranslucent()
-		render.SetMaterial(glow)
-
-		render.DrawSprite(self:LocalToWorld(self:OBBCenter()), 32, 32, COLOR_WHITE)
-	end
-end
-
+---
+-- @realm shared
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() then
 		if activator:IsActiveDetective() and activator:CanCarryType(WEAPON_EQUIP) then
@@ -154,14 +142,16 @@ function ENT:UseOverride(activator)
 	end
 end
 
-
+---
+-- @realm shared
 function ENT:OnRemove()
 	self:StopScanSound(true)
 end
 
+---
+-- @realm shared
 function ENT:Explode(tr)
 	if SERVER then
-
 		-- prevent starting effects when round is about to restart
 		if GetRoundState() == ROUND_POST then return end
 
@@ -182,8 +172,9 @@ function ENT:Explode(tr)
 		-- show scenes for nearest corpses
 		for i = 1, self.MaxScenesPerPulse do
 			local corpse = corpses[i]
+
 			if corpse and IsValid(corpse.ent) then
-			self:ShowSceneForCorpse(corpse.ent)
+				self:ShowSceneForCorpse(corpse.ent)
 			end
 		end
 
@@ -195,13 +186,42 @@ function ENT:Explode(tr)
 
 		-- "schedule" next show pulse
 		self:SetDetonateTimer(self.PulseDelay)
+	end
+end
 
+if SERVER then
+	---
+	-- Called when the entity is taking damage.
+	-- @param CTakeDamageInfo damage The damage to be applied to the entity
+	-- @realm server
+	function ENT:OnTakeDamage(dmginfo)
+		self:TakePhysicsDamage(dmginfo)
+		self:SetHealth(self:Health() - dmginfo:GetDamage())
+
+		if self:Health() < 0 then
+			self:Remove()
+
+			local effect = EffectData()
+			effect:SetOrigin(self:GetPos())
+			util.Effect("cball_explode", effect)
+			sound.Play(zapsound, self:GetPos())
+		end
 	end
 end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
+
+	local glow = Material("sprites/blueglow2")
+
+	---
+	-- @realm client
+	function ENT:DrawTranslucent()
+		render.SetMaterial(glow)
+
+		render.DrawSprite(self:LocalToWorld(self:OBBCenter()), 32, 32, COLOR_WHITE)
+	end
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(tData)
 		local client = LocalPlayer()

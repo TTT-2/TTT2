@@ -23,6 +23,8 @@ ENT.WeaponID = AMMO_KNIFE
 
 ENT.Damage = 50
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 	self:PhysicsInit(SOLID_VPHYSICS)
@@ -41,6 +43,10 @@ function ENT:Initialize()
 	self.Stuck = false
 end
 
+---
+-- @param table other
+-- @param table tr
+-- @realm shared
 function ENT:HitPlayer(other, tr)
 	local range_dmg = math.max(self.Damage, self.StartPos:Distance(self:GetPos()) / 3)
 
@@ -70,6 +76,10 @@ function ENT:HitPlayer(other, tr)
 	self.HitPlayer = util.noop
 end
 
+---
+-- @param table other
+-- @param table tr
+-- @realm shared
 function ENT:KillPlayer(other, tr)
 	local dmg = DamageInfo()
 	dmg:SetDamage(2000)
@@ -121,6 +131,8 @@ function ENT:KillPlayer(other, tr)
 end
 
 if SERVER then
+	---
+	-- @realm server
 	function ENT:Think()
 		if self.Stuck then return end
 
@@ -147,8 +159,10 @@ if SERVER then
 		return true
 	end
 
+	---
 	-- When this entity touches anything that is not a player, it should turn into a
 	-- weapon ent again. If it touches a player it sticks in it.
+	-- @realm server
 	function ENT:BecomeWeapon()
 		self.Weaponised = true
 
@@ -169,6 +183,8 @@ if SERVER then
 		return wep
 	end
 
+	---
+	-- @realm server
 	function ENT:BecomeWeaponDelayed()
 		-- delay the weapon-replacement a tick because Source gets very angry
 		-- if you do fancy stuff in a physics callback
@@ -180,6 +196,11 @@ if SERVER then
 		end)
 	end
 
+	---
+	-- @param table data
+	-- @param table phys
+	-- @param 
+	-- @realm server
 	function ENT:PhysicsCollide(data, phys)
 		if self.Stuck then return false end
 
