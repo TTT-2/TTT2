@@ -730,7 +730,7 @@ if CLIENT then
 		elseif type == "floor_surface" then
 			return materialFloor
 		elseif type == "water_level" then
-			return materialWaterLevel[data.water_level]
+			return materialWaterLevel[data.killWaterLevel]
 		elseif type == "c4_disarm" then
 			return materialC4Disarm
 		elseif type == "last_id" then
