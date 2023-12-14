@@ -319,7 +319,6 @@ The energy bursts damage people in close proximity.]]
 
 -- Radio
 L.radio_broken = "Your Radio has been destroyed!"
-L.radio_help_pri = "{primaryfire} places the Radio."
 
 L.radio_desc = [[
 Plays sounds to distract or deceive.
@@ -2087,3 +2086,5 @@ L.polter_help_secondary = "Charge long range shot"
 
 -- 2023-12-13
 L.defuser_help_primary = "Defuses targeted C4"
+L.radio_help_primary = "Throw Radio"
+L.radio_help_secondary = "Stick"
