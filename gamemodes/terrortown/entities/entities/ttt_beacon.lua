@@ -65,6 +65,7 @@ function ENT:UseOverride(activator)
 end
 
 ---
+-- @param CTakeDamageInfo dmginfo
 -- @realm shared
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
@@ -156,6 +157,8 @@ if CLIENT then
 	local baseOpacity = 35
 	local factorRenderDistance = 3
 
+	---
+	-- @realm client
 	function ENT:OnRemove()
 		marks.Remove(self.lastPlysFound or {})
 	end
