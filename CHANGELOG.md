@@ -8,6 +8,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated the Turkish localization file (by @NovaDiablox)
 
+### Fixed
+
+- Binoculars scan no longer gets interrupted when changing zoom level
+- Fixed missing water level icon breaking scoreboard
+- DNA Tester works now with more than one fingerprint on a weapon
+- TraitorButton config files should now actually work
+
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
 ### Added
