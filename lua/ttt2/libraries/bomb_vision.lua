@@ -21,19 +21,13 @@ bombVision = {}
 
 bombVision.registry = {}
 
-function bombVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
-	bombVision.registry[ent] = {
-		owner = owner,
-		visibleFor = visibleFor,
-		color = color,
-		data = passThroughData
-	}
-
+function bombVision.RegisterEntity(ent, owner, visibleFor, type, color, receiverList, passThroughData)
 	if SERVER then
 		local streamTable = {
 			ent = ent,
 			owner = owner,
 			visibleFor = visibleFor,
+			type = type,
 			color = color,
 			data = passThroughData
 		}
@@ -58,6 +52,14 @@ function bombVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, 
 
 		marks.Add({ent}, color)
 	end
+
+	bombVision.registry[ent] = {
+		owner = owner,
+		visibleFor = visibleFor,
+		type = type,
+		color = color,
+		data = passThroughData
+	}
 end
 
 function bombVision.RemoveEntity(ent, receiverList)
@@ -107,7 +109,6 @@ end
 if SERVER then
 	function bombVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
 		for ent, data in pairs(bombVision.registry) do
-			print(ent)
 			if data.owner ~= ply or data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
 
 			bombVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
@@ -116,25 +117,71 @@ if SERVER then
 end
 
 if CLIENT then
+	surface.CreateAdvancedFont("BombVision_Title", { font = "Trebuchet24", size = 20, weight = 600 })
+	surface.CreateAdvancedFont("BombVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
+
+	bombVision.typeRegistry = {}
+
 	net.ReceiveStream("ttt2_register_entity_added", function(streamData)
-		bombVision.RegisterEntity(streamData.ent, streamData.owner, streamData.visibleFor, streamData.color, nil, streamData.data)
+		bombVision.RegisterEntity(streamData.ent, streamData.owner, streamData.visibleFor, streamData.type, streamData.color, nil, streamData.data)
 	end)
 
 	net.Receive("ttt2_register_entity_removed", function()
 		bombVision.RemoveEntity(net.ReadEntity())
 	end)
 
+	function bombVision.RegisterType(name, iconMaterial, renderCallback)
+		bombVision.typeRegistry[name] = {
+			iconMaterial = iconMaterial,
+			renderCallback = renderCallback
+		}
+	end
+
 	function bombVision.Draw()
+		local scale = appearance.GetGlobalScale()
+
+		local padding = 3 * scale
+
+		local sizeIcon = 32 * scale
+		local sizeIconOffScreen = 24 * scale
+
+		local offsetIcon = 0.5 * sizeIcon
+		local offsetIconOffScreen = 0.5 * sizeIconOffScreen
+
 		for ent, data in pairs(bombVision.registry) do
 			if not IsValid(ent) then continue end
 
 			local screenPos = ent:GetPos():ToScreen()
 			local isOffScreen = util.IsOffScreen(screenPos)
 
-			screenPos.x = math.Clamp(screenPos.x, 0, ScrW())
-			screenPos.y = math.Clamp(screenPos.y, 0, ScrH())
+			local materialIcon = bombVision.typeRegistry[data.type].iconMaterial
 
-			draw.Box(screenPos.x, screenPos.y, 20, 20, COLOR_BLACK)
+			if isOffScreen then
+				screenPos.x = math.Clamp(screenPos.x + 50 * scale, offsetIconOffScreen, ScrW() - offsetIconOffScreen)
+				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen, ScrH() - offsetIconOffScreen)
+
+				draw.FilteredShadowedTexture(screenPos.x - offsetIconOffScreen, screenPos.y - offsetIconOffScreen, sizeIconOffScreen, sizeIconOffScreen, materialIcon, 255, COLOR_WHITE)
+			else
+				draw.FilteredShadowedTexture(screenPos.x - offsetIcon, screenPos.y - offsetIcon, sizeIcon, sizeIcon, materialIcon, 255, COLOR_WHITE, scale)
+
+				draw.AdvancedText(
+					LANG.TryTranslation(ent.PrintName),
+					"BombVision_Title",
+					screenPos.x + offsetIcon + padding,
+					screenPos.y,
+					COLOR_WHITE,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_CENTER,
+					true,
+					scale
+				)
+
+				local disctanceEntity = ent:GetPos():Distance(LocalPlayer():GetPos())
+
+				if isfunction(bombVision.typeRegistry[data.type].renderCallback) then
+					bombVision.typeRegistry[data.type].renderCallback(ent, disctanceEntity, disctanceEntity < 500, screenPos.x + offsetIcon + padding, screenPos.y + 18 * scale, scale)
+				end
+			end
 		end
 	end
 end

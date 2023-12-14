@@ -21,14 +21,14 @@ if CLIENT then
 	ENT.Icon = "vgui/ttt/icon_c4"
 	ENT.PrintName = "C4"
 
-	local GetPTranslation = LANG.GetParamTranslation
+	local ParTranslation = LANG.GetParamTranslation
 	local hint_params = {usekey = Key("+use", "USE")}
 
 	ENT.TargetIDHint = {
 		name = "C4",
 		hint = "c4_hint",
 		fmt  = function(ent, txt)
-			return GetPTranslation(txt, hint_params)
+			return ParTranslation(txt, hint_params)
 		end
 	}
 end
@@ -590,9 +590,9 @@ if SERVER then
 		events.Trigger(EVENT_C4PLANT, ply)
 
 		-- send indicator to traitors
-		self:SendWarn(true)
+		--self:SendWarn(true)
 
-		bombVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
+		bombVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM, "c4")
 	end
 
 	---
@@ -821,7 +821,7 @@ if SERVER then
 	end
 else -- CLIENT
 	local TryT = LANG.TryTranslation
-	local GetPT = LANG.GetParamTranslation
+	local ParT = LANG.GetParamTranslation
 
 	local key_params = {
 		usekey = Key("+use", "USE"),
@@ -896,15 +896,59 @@ else -- CLIENT
 		tData:SetTitle(TryT(ent.PrintName))
 
 		if ent:GetArmed() and defuser_useable then
-			tData:SetSubtitle(GetPT("target_c4_armed_defuser", key_params))
+			tData:SetSubtitle(ParT("target_c4_armed_defuser", key_params))
 		elseif ent:GetArmed() then
-			tData:SetSubtitle(GetPT("target_c4_armed", key_params))
+			tData:SetSubtitle(ParT("target_c4_armed", key_params))
 		else
-			tData:SetSubtitle(GetPT("target_c4", key_params))
+			tData:SetSubtitle(ParT("target_c4", key_params))
 		end
 
 		tData:SetKeyBinding(defuser_useable and "+attack" or "+use")
 		tData:AddDescriptionLine(TryT("c4_short_desc"))
+	end)
+
+	hook.Add("TTT2FinishedLoading", "TTTC4RegisterRadarRenderer", function()
+		bombVision.RegisterType("c4", Material("vgui/ttt/radar/c4"), function(ent, distance, shouldShowDetails, x, y, scale)
+			local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
+
+			if shouldShowDetails then
+				draw.AdvancedText(
+					ParT("c4_bombvision_time", {time = time}),
+					"BombVision_Text",
+					x,
+					y,
+					COLOR_WHITE,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_CENTER,
+					true,
+					scale
+				)
+
+				draw.AdvancedText(
+					ParT("c4_bombvision_distance", {dist = math.Round(distance, 0)}),
+					"BombVision_Text",
+					x,
+					y + 14 * scale,
+					COLOR_WHITE,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_CENTER,
+					true,
+					scale
+				)
+			else
+				draw.AdvancedText(
+					time .. " / " .. math.Round(distance, 0),
+					"BombVision_Text",
+					x,
+					y,
+					COLOR_WHITE,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_CENTER,
+					true,
+					scale
+				)
+			end
+		end)
 	end)
 end
 

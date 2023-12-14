@@ -33,6 +33,24 @@ function GM:HUDPaint()
 
 	---
 	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTBombVision") then
+		bombVision.Draw()
+	end
+
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTRadar") then
+		RADAR:Draw(client)
+	end
+
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTTButton") then
+		TBHUD:Draw(client)
+	end
+
+	---
+	-- @realm client
 	if hook.Run("HUDShouldDraw", "TTTTargetID") then
 		---
 		-- @realm client
@@ -52,24 +70,6 @@ function GM:HUDPaint()
 	end
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
-
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTRadar") then
-		RADAR:Draw(client)
-	end
-
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTBombVision") then
-		bombVision.Draw()
-	end
-
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTTButton") then
-		TBHUD:Draw(client)
-	end
 
 	---
 	-- @realm client
