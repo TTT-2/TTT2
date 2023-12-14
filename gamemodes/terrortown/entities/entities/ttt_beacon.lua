@@ -16,7 +16,7 @@ ENT.Model = Model("models/props_lab/reciever01b.mdl")
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
 
-local beaconDetectionRange = 150
+local beaconDetectionRange = 135
 
 local soundZap = Sound("npc/assassin/ball_zap1.wav")
 local soundBeep = Sound("weapons/c4/c4_soundBeep1.wav")
@@ -141,6 +141,9 @@ end
 if CLIENT then
 	local TryT = LANG.TryTranslation
 
+	local baseOpacity = 35
+	local factorRenderDistance = 3
+
 	function ENT:OnRemove()
 		marks.Remove(self.lastPlysFound or {})
 	end
@@ -163,5 +166,35 @@ if CLIENT then
 
 		tData:SetKeyBinding("+use")
 		--tData:AddDescriptionLine(TryT("c4_short_desc"))
+	end)
+
+	hook.Add("PostDrawTranslucentRenderables", "BeaconRenderRadius", function(_, bSkybox)
+		if bSkybox then return end
+
+		local client = LocalPlayer()
+
+		if not client:GetSubRoleData().isPolicingRole then return end
+
+		local maxRenderDistance = beaconDetectionRange * factorRenderDistance
+		local entities = ents.FindInSphere(client:GetPos(), maxRenderDistance)
+
+		local colorSphere = util.ColorLighten(roles.DETECTIVE.color, 120)
+
+		for i = 1, #entities do
+			local ent = entities[i]
+
+			if ent:GetClass() ~= "ttt_beacon" or ent:GetOwner() ~= client then continue end
+
+			local distance = math.max(beaconDetectionRange, client:GetPos():Distance(ent:GetPos()))
+			colorSphere.a = baseOpacity * math.max(maxRenderDistance - distance, 0) / maxRenderDistance
+
+			render.SetColorMaterial()
+
+			render.DrawSphere(ent:GetPos(), beaconDetectionRange, 30, 30, colorSphere)
+			render.CullMode(MATERIAL_CULLMODE_CW)
+
+			render.DrawSphere(ent:GetPos(), beaconDetectionRange, 30, 30, colorSphere)
+			render.CullMode(MATERIAL_CULLMODE_CCW)
+		end
 	end)
 end

@@ -2077,8 +2077,8 @@ L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 -- 2023-12-14
 L.beacon_name = "Beacon"
 L.beacon_desc = [[
-Broadcasts a location to everyone.
+Broadcasts player locations to everyone in a sphere around this beacon.
 
-Use to warn or group innocents.]]
+Use to keep track of locations on the map that are hard to see.]]
 
 L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
