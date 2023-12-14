@@ -916,7 +916,6 @@ L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбр�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Тело слишком далеко."
 
-L.radio_pickup_wrong_team = "Вы не можете подобрать Радио другой команды."
 L.radio_short_desc = "Звуки выстрелов для меня словно музыка"
 
 L.hstation_subtitle = "[{usekey}]: восстановить здоровье."

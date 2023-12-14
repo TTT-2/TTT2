@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "スロット{slot}には捨てるも�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "その死体から遠すぎる。"
 
-L.radio_pickup_wrong_team = "別陣営が所有するラジオは使えないようだ。"
 L.radio_short_desc = "銃声こそ音楽だ"
 
 L.hstation_subtitle = "[{usekey}]で回復する."

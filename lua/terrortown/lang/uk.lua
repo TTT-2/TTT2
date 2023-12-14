@@ -914,7 +914,6 @@ L.idle_popup_title = "Бездіяльність"
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 --L.corpse_too_far_away = "The corpse is too far away."
 
---L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
 --L.radio_short_desc = "Weapon sounds are music to me"
 
 --L.hstation_subtitle = "Press [{usekey}] to receive health."

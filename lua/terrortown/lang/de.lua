@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine weg
 L.corpse_searched_by_detective = "Diese Leiche wurde von einer öffentlichen Ordnungsrolle untersucht"
 L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
 
-L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
 L.radio_short_desc = "Waffengeräusche sind Musik für mich"
 
 L.hstation_subtitle = "Drücke [{usekey}] um Leben zu regenerieren."
