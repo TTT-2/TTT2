@@ -57,7 +57,7 @@ end
 -- @param Player activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:IsInTeam(self:GetOwner()) then
+	if IsValid(activator) and activator:IsPlayer() then
 		local prints = self.fingerprints or {}
 
 		-- picks up weapon, switches if possible and needed, returns weapon if successful
@@ -70,8 +70,6 @@ function ENT:UseOverride(activator)
 		wep.fingerprints = wep.fingerprints or {}
 
 		table.Add(wep.fingerprints, prints)
-	else
-		LANG.Msg(activator, "radio_pickup_wrong_team")
 	end
 end
 
