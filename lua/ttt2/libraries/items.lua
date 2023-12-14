@@ -13,7 +13,7 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local ItemList = ItemList or {}
+local ItemList = {}
 
 ---
 -- Copies any missing data from base table to the target table
