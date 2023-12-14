@@ -19,7 +19,7 @@ ENT.CanUseKey = true
 local beaconDetectionRange = 135
 
 local soundZap = Sound("npc/assassin/ball_zap1.wav")
-local soundBeep = Sound("weapons/c4/c4_soundBeep1.wav")
+local soundBeep = Sound("weapons/c4/cc4_beep1.wav")
 
 function ENT:Initialize()
 	self:SetModel(self.Model)
@@ -140,6 +140,7 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
 
 	local baseOpacity = 35
 	local factorRenderDistance = 3
@@ -148,7 +149,7 @@ if CLIENT then
 		marks.Remove(self.lastPlysFound or {})
 	end
 
-	-- handle looking at C4
+	-- handle looking at Beacon
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBeacon", function(tData)
 		local client = LocalPlayer()
 		local ent = tData:GetEntity()
@@ -164,8 +165,15 @@ if CLIENT then
 
 		tData:SetTitle(TryT(ent.PrintName))
 
-		tData:SetKeyBinding("+use")
-		--tData:AddDescriptionLine(TryT("c4_short_desc"))
+		if ent:GetOwner() == client then
+			tData:SetKeyBinding("+use")
+			tData:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
+		else
+			tData:AddIcon(roles.DETECTIVE.iconMaterial)
+			tData:SetSubtitle(TryT("beacon_pickup_disabled"))
+		end
+
+		tData:AddDescriptionLine(TryT("beacon_short_desc"))
 	end)
 
 	hook.Add("PostDrawTranslucentRenderables", "BeaconRenderRadius", function(_, bSkybox)

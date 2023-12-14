@@ -79,9 +79,8 @@ local throwsound = Sound( "Weapon_SLAM.SatchelThrow" )
 function SWEP:BeaconDrop()
 	if SERVER then
 		local ply = self:GetOwner()
-		if not IsValid(ply) then return end
 
-		if self.Planted then return end
+		if not IsValid(ply) then return end
 
 		local vsrc = ply:GetShootPos()
 		local vang = ply:GetAimVector()
@@ -118,7 +117,7 @@ function SWEP:BeaconStick()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		if not IsValid(ply) or not self.Planted then return end
+		if not IsValid(ply) then return end
 
 		local ignore = {ply, self}
 		local spos = ply:GetShootPos()
@@ -133,36 +132,32 @@ function SWEP:BeaconStick()
 		if tr.HitWorld then
 			local beacon = ents.Create("ttt_beacon")
 			if IsValid(beacon) then
-			beacon:PointAtEntity(ply)
+				beacon:PointAtEntity(ply)
 
-			local tr_ent = util.TraceEntity({
-				start = spos,
-				endpos = epos,
-				filter = ignore,
-				mask = MASK_SOLID
-			}, beacon)
+				local tr_ent = util.TraceEntity({
+					start = spos,
+					endpos = epos,
+					filter = ignore,
+					mask = MASK_SOLID
+				}, beacon)
 
-			if tr_ent.HitWorld then
+				if tr_ent.HitWorld then
+					local ang = tr_ent.HitNormal:Angle()
 
-				local ang = tr_ent.HitNormal:Angle()
-				--ang:RotateAroundAxis(ang:Right(), -90)
-				--ang:RotateAroundAxis(ang:Up(), -180)
-				--ang:RotateAroundAxis(ang:Forward(), 90)
+					beacon:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
+					beacon:SetAngles(ang)
+					beacon:SetOwner(ply)
+					beacon:Spawn()
 
-				beacon:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
-				beacon:SetAngles(ang)
-				beacon:SetOwner(ply)
-				beacon:Spawn()
+					local phys = beacon:GetPhysicsObject()
+					if IsValid(phys) then
+						phys:EnableMotion(false)
+					end
 
-				local phys = beacon:GetPhysicsObject()
-				if IsValid(phys) then
-					phys:EnableMotion(false)
+					beacon.IsOnWall = true
+
+					self:PlacedBeacon()
 				end
-
-				beacon.IsOnWall = true
-
-				self:PlacedBeacon()
-			end
 			end
 		end
 	end
@@ -173,8 +168,6 @@ function SWEP:PlacedBeacon()
 
 	if not self:CanPrimaryAttack() then
 		self:Remove()
-
-		self.Planted = true
 	end
 end
 
@@ -204,7 +197,7 @@ end
 
 if CLIENT then
 	function SWEP:Initialize()
-		self:AddHUDHelp("Click to place the beacon")
+		self:AddTTT2HUDHelp("visualizer_help_pri", "visualizer_help_sec")
 
 		return self.BaseClass.Initialize(self)
 	end
