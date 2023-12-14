@@ -2072,8 +2072,8 @@ L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-12-07
-L.c4_help_primary = "Throw"
-L.c4_help_secondary = "Stick C4"
+L.c4_help_primary = "Throw C4"
+L.c4_help_secondary = "Stick to surface"
 
 -- 2023-12-11
 L.magneto_help_primary = "Push entity"
@@ -2084,8 +2084,8 @@ L.polter_help_primary = "Fire thumper"
 L.polter_help_secondary = "Charge long range shot"
 
 -- 2023-12-13
-L.defuser_help_primary = "Defuses targeted C4"
+L.defuser_help_primary = "Defuse targeted C4"
 L.radio_help_primary = "Throw Radio"
-L.radio_help_secondary = "Stick"
+L.radio_help_secondary = "Stick to surface"
 L.hstation_help_primary = "Place the Health Station"
 L.flaregun_help_primary = "Burn body/entity"
