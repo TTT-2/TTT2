@@ -2,62 +2,69 @@
 -- @class SWEP
 -- @section weapon_ttt_phammer
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 DEFINE_BASECLASS "weapon_tttbase"
 
-SWEP.HoldType              = "ar2"
+SWEP.HoldType = "ar2"
 
 if CLIENT then
-	SWEP.PrintName          = "polter_name"
-	SWEP.Slot               = 7
+	SWEP.PrintName = "polter_name"
+	SWEP.Slot = 7
 
-	SWEP.ViewModelFlip      = false
-	SWEP.ViewModelFOV       = 54
+	SWEP.ViewModelFlip = false
+	SWEP.ViewModelFOV = 54
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
 		desc = "polter_desc"
-	};
+	}
 
-	SWEP.Icon               = "vgui/ttt/icon_polter"
+	SWEP.Icon = "vgui/ttt/icon_polter"
 end
 
-SWEP.Base                  = "weapon_tttbase"
+SWEP.Base = "weapon_tttbase"
 
-SWEP.Primary.Recoil        = 0.1
-SWEP.Primary.Delay         = 12.0
-SWEP.Primary.Cone          = 0.02
-SWEP.Primary.ClipSize      = 6
-SWEP.Primary.DefaultClip   = 6
-SWEP.Primary.ClipMax       = 6
-SWEP.Primary.Ammo          = "Gravity"
-SWEP.Primary.Automatic     = false
-SWEP.Primary.Sound         = Sound( "weapons/airboat/airboat_gun_energy1.wav" )
+SWEP.Primary.Recoil = 0.1
+SWEP.Primary.Delay = 12.0
+SWEP.Primary.Cone = 0.02
+SWEP.Primary.ClipSize = 6
+SWEP.Primary.DefaultClip = 6
+SWEP.Primary.ClipMax = 6
+SWEP.Primary.Ammo = "Gravity"
+SWEP.Primary.Automatic = false
+SWEP.Primary.Sound = Sound("weapons/airboat/airboat_gun_energy1.wav")
 
-SWEP.Secondary.Automatic   = false
+SWEP.Secondary.Automatic = false
 
-SWEP.Kind                  = WEAPON_EQUIP2
-SWEP.CanBuy                = {ROLE_TRAITOR} -- only traitors can buy
-SWEP.WeaponID              = AMMO_POLTER
+SWEP.Kind = WEAPON_EQUIP2
+SWEP.CanBuy = {ROLE_TRAITOR} -- only traitors can buy
+SWEP.WeaponID = AMMO_POLTER
 
-SWEP.UseHands              = true
-SWEP.ViewModel             = "models/weapons/c_irifle.mdl"
-SWEP.WorldModel            = "models/weapons/w_IRifle.mdl"
+SWEP.UseHands = true
+SWEP.ViewModel = "models/weapons/c_irifle.mdl"
+SWEP.WorldModel = "models/weapons/w_IRifle.mdl"
 
-SWEP.NoSights              = true
+SWEP.NoSights = true
 
-SWEP.IsCharging            = false
-SWEP.NextCharge            = 0
-SWEP.MaxRange              = 800
+SWEP.IsCharging = false
+SWEP.NextCharge = 0
+SWEP.MaxRange = 800
 
 local math = math
 
 -- Returns if an entity is a valid physhammer punching target. Does not take
 -- distance into account.
 local function ValidTarget(ent)
-	return IsValid(ent) and ent:GetMoveType() == MOVETYPE_VPHYSICS and ent:GetPhysicsObject() and (not ent:IsWeapon()) and (not ent:GetNWBool("punched", false)) and (not ent:IsPlayer())
 	-- NOTE: cannot check for motion disabled on client
+	return IsValid(ent)
+		and ent:GetMoveType() == MOVETYPE_VPHYSICS
+		and ent:GetPhysicsObject()
+		and not ent:IsWeapon()
+		and not ent:GetNWBool("punched", false)
+		and not ent:IsPlayer()
 end
 
 ---
@@ -81,7 +88,6 @@ function SWEP:Initialize()
 			-- PhysPropClientside whines here about not being able to parse the
 			-- physmodel. This is not important as we won't use that anyway, and it
 			-- happens in sandbox as well for the ghosted ents used there.
-
 			ghost:SetSolid(SOLID_NONE)
 			ghost:SetMoveType(MOVETYPE_NONE)
 			ghost:SetNotSolid(true)
@@ -151,7 +157,7 @@ end
 function SWEP:SecondaryAttack()
 	if self.IsCharging then return end
 
-	self:SetNextSecondaryFire( CurTime() + 0.1 )
+	self:SetNextSecondaryFire(CurTime() + 0.1)
 
 	if not (self:CanPrimaryAttack() and (self:GetNextPrimaryFire() - CurTime()) <= 0) then return end
 	if IsValid(self.hammer) then return end
@@ -197,7 +203,9 @@ function SWEP:CreateHammer(tgt, pos)
 
 	local stuck = hammer:StickTo(tgt)
 
-	if not stuck then hammer:Remove() end
+	if not stuck then
+		hammer:Remove()
+	end
 
 	self.hammer = hammer
 end
@@ -228,7 +236,6 @@ end
 
 
 if SERVER then
-
 	local CHARGE_AMOUNT = 0.015
 	local CHARGE_DELAY = 0.025
 
@@ -236,12 +243,13 @@ if SERVER then
 	-- @ignore
 	function SWEP:Think()
 		self.BaseClass.Think(self)
+
 		if not IsValid(self:GetOwner()) then return end
 
 		if self.IsCharging and self:GetOwner():KeyDown(IN_ATTACK2) then
 			local tr = self:GetOwner():GetEyeTrace(MASK_SOLID)
-			if tr.HitNonWorld and ValidTarget(tr.Entity) then
 
+			if tr.HitNonWorld and ValidTarget(tr.Entity) then
 				if self:GetCharge() >= 1 then
 					self:CreateHammer(tr.Entity, tr.HitPos)
 
@@ -253,6 +261,7 @@ if SERVER then
 
 					self.IsCharging = false
 					self:SetCharge(0)
+
 					return true
 				elseif self.NextCharge < CurTime() then
 					local d = tr.Entity:GetPos():Distance(self:GetOwner():GetPos())
@@ -275,8 +284,8 @@ if SERVER then
 	end
 end
 
-local function around( val )
-	return math.Round( val * (10 ^ 3) ) / (10 ^ 3);
+local function around(val)
+	return math.Round(val * (10 ^ 3)) / (10 ^ 3)
 end
 
 if CLIENT then
@@ -301,6 +310,7 @@ if CLIENT then
 	local linex = 0
 	local liney = 0
 	local laser = Material("trails/laser")
+
 	---
 	-- @ignore
 	function SWEP:ViewModelDrawn()
@@ -387,7 +397,6 @@ if CLIENT then
 		local x = ScrW() / 2.0
 		local y = ScrH() / 2.0
 
-
 		local charge = self:GetCharge()
 
 		if charge > 0 then
@@ -407,7 +416,7 @@ if CLIENT then
 
 			surface.SetFont("TabLarge")
 			surface.SetTextColor(255, 255, 255, 180)
-			surface.SetTextPos( (x - w / 2) + 3, y - h - 15)
+			surface.SetTextPos((x - w / 2) + 3, y - h - 15)
 			surface.DrawText("CHARGE")
 		end
 	end
