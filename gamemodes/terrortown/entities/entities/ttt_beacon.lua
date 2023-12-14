@@ -16,6 +16,11 @@ ENT.Model = Model("models/props_lab/reciever01b.mdl")
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
 
+local beaconDetectionRange = 150
+
+local soundZap = Sound("npc/assassin/ball_zap1.wav")
+local soundBeep = Sound("weapons/c4/c4_soundBeep1.wav")
+
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -24,8 +29,8 @@ function ENT:Initialize()
 	end
 
 	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE)
+	self:SetSolid(SOLID_BBOX)
+	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	if SERVER then
 		self:SetMaxHealth(100)
@@ -39,60 +44,63 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if IsValid(activator) and self:GetOwner() == activator then
-		local wep = activator:GetWeapon("weapon_ttt_beacon")
+	if not IsValid(activator) or self:GetOwner() ~= activator then return end
 
-		if IsValid(wep) then
-			local pickup = wep:PickupBeacon()
+	local wep = activator:GetWeapon("weapon_ttt_beacon")
 
-			if not pickup then return end
-			-- else pickup successful, continue with print transfer and removal
-		else
-			wep = activator:Give("weapon_ttt_beacon")
-		end
+	if IsValid(wep) then
+		local pickup = wep:PickupBeacon()
 
-		self:Remove()
+		if not pickup then return end
+	else
+		wep = activator:GiveEquipmentWeapon("weapon_ttt_beacon")
 	end
+
+	self:Remove()
 end
 
-local zapsound = Sound("npc/assassin/ball_zap1.wav")
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
-
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
 
-	if self:Health() < 0 then
+	if self:Health() <= 0 then
 		self:Remove()
 
 		local effect = EffectData()
 		effect:SetOrigin(self:GetPos())
+
 		util.Effect("cball_explode", effect)
-		sound.Play(zapsound, self:GetPos())
+
+		sound.Play(soundZap, self:GetPos())
 
 		if IsValid(self:GetOwner()) then
-			TraitorMsg(self:GetOwner(), "ONE OF YOUR BEACONS HAS BEEN DESTROYED!")
+			LANG.Msg(self:GetOwner(), "msg_beacon_destroyed", nil, MSG_MSTACK_WARN)
 		end
 	end
 end
 
-local beep = Sound("weapons/c4/c4_beep1.wav")
 function ENT:Think()
 	if SERVER then
-		sound.Play(beep, self:GetPos(), 100, 80)
+		sound.Play(soundBeep, self:GetPos(), 100, 80)
 	else
-		local dlight = DynamicLight(self:EntIndex())
-		if dlight then
-			dlight.Pos = self:GetPos()
-			dlight.r = 0
-			dlight.g = 0
-			dlight.b = 255
-			dlight.Brightness = 1
-			dlight.Size = 128
-			dlight.Decay = 500
-			dlight.DieTime = CurTime() + 0.1
+		local entsFound = ents.FindInSphere(self:GetPos(), beaconDetectionRange)
+		local plysFound = {}
+
+		for i = 1, #entsFound do
+			local ent = entsFound[i]
+
+			if not IsValid(ent) or not ent:IsPlayer() then continue end
+
+			plysFound[#plysFound + 1] = ent
 		end
+
+		marks.Remove(self.lastPlysFound or {})
+		marks.Add(plysFound, roles.DETECTIVE.color)
+
+		self.lastPlysFound = plysFound
 	end
 
+	-- only sets the next think on the server
 	self:NextThink(CurTime() + 5)
 
 	return true
@@ -102,4 +110,58 @@ if SERVER then
 	function ENT:UpdateTransmitState()
 		return TRANSMIT_ALWAYS
 	end
+
+	hook.Add("PlayerDeath", "BeaconTrackPlayerDeath", function(victim)
+		local entsFound = ents.FindInSphere(victim:GetPos(), beaconDetectionRange)
+		local beaconsFound = {}
+		local playersNotified = {}
+
+		for i = 1, #entsFound do
+			local ent = entsFound[i]
+
+			if not IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then continue end
+
+			beaconsFound[#beaconsFound + 1] = ent
+		end
+
+		for i = 1, #beaconsFound do
+			local beacon = beaconsFound[i]
+			local beaconOwner = beacon:GetOwner()
+
+			if not IsValid(beaconOwner) or table.HasValue(playersNotified, beaconOwner) then continue end
+
+			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)
+
+			-- make sure a player is only notified once, even if multiple beacons are triggered
+			playersNotified[#playersNotified + 1] = beaconOwner
+		end
+	end)
+end
+
+if CLIENT then
+	local TryT = LANG.TryTranslation
+
+	function ENT:OnRemove()
+		marks.Remove(self.lastPlysFound or {})
+	end
+
+	-- handle looking at C4
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBeacon", function(tData)
+		local client = LocalPlayer()
+		local ent = tData:GetEntity()
+
+		if not IsValid(client) or not client:IsTerror() or not client:Alive()
+			or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_beacon"
+		then return end
+
+		-- enable targetID rendering
+		tData:EnableText()
+		tData:EnableOutline()
+		tData:SetOutlineColor(client:GetRoleColor())
+
+		tData:SetTitle(TryT(ent.PrintName))
+
+		tData:SetKeyBinding("+use")
+		--tData:AddDescriptionLine(TryT("c4_short_desc"))
+	end)
 end

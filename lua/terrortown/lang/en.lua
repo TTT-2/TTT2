@@ -2080,3 +2080,5 @@ L.beacon_desc = [[
 Broadcasts a location to everyone.
 
 Use to warn or group innocents.]]
+
+L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
