@@ -57,8 +57,21 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		serverConvar = "ttt_spec_prop_rechargetime",
 		label = "label_spec_prop_rechargetime",
 		min = 0,
-		max = 10,
+		max = 5,
 		decimal = 1,
+		master = enbPP
+	})
+
+	form:MakeHelp({
+		label = "help_prop_spec_dash"
+	})
+
+	form:MakeSlider({
+		serverConvar = "ttt_spec_prop_dash",
+		label = "label_spec_prop_dash",
+		min = 1,
+		max = 10,
+		decimal = 0,
 		master = enbPP
 	})
 

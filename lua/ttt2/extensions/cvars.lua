@@ -27,7 +27,7 @@ if CLIENT then
 	---
 	-- Checks if the conVar exists on the server or was already cached
 	-- @param string conVarName
-	-- @param function OnReceiveFunc(conVarExists) The function that gets called with the result if the conVar exists
+	-- @param function OnReceiveFunc The function that gets called with a boolean whether the conVar exists
 	-- @realm client
 	function cvars.ConVarExistsOnServer(conVarName, OnReceiveFunc)
 		if serverConVars[conVarName] then
@@ -110,7 +110,7 @@ if CLIENT then
 	---
 	-- Get the conVar's current and default value of if it exists on the server or was already cached
 	-- @param string conVarName
-	-- @param function OnReceiveFunc(conVarExists, value, default) The function that gets called with the results if the conVar exists
+	-- @param function OnReceiveFunc The function that gets called with the following parameters: boolean, whether the convar exists; any, the value of the convar; any, the default of the convar
 	-- @realm client
 	function cvars.ServerConVarGetValue(conVarName, OnReceiveFunc)
 		local conVar = serverConVars[conVarName] or {}

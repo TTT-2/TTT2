@@ -76,7 +76,7 @@ end
 
 ---
 -- @param number index the option id
--- @return string/number a value that is indexable
+-- @return string|number a value that is indexable
 -- @realm client
 function PANEL:GetOptionValue(index)
 	return self.choices[index].value
@@ -91,7 +91,7 @@ function PANEL:GetOptionData(index)
 end
 
 ---
--- @param string/number value should be indexable
+-- @param string|number value should be indexable
 -- @return number
 -- @realm client
 function PANEL:GetOptionID(value)
@@ -127,8 +127,8 @@ end
 
 ---
 -- @param string title
--- @param string/number value should be indexable
--- @param bool select
+-- @param string|number value should be indexable
+-- @param boolean select
 -- @param string icon
 -- @param any data additional data that you might want to use
 -- @return number index
@@ -162,9 +162,9 @@ end
 
 ---
 -- @param number index the option id
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
 -- @realm client
-function PANEL:ChooseOptionID(index, ignoreConVar)
+function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 	local choices = self.choices
 
 	if index > #choices then
@@ -183,15 +183,15 @@ function PANEL:ChooseOptionID(index, ignoreConVar)
 
 	self:CloseMenu()
 
-	if ignoreConVar then return end
+	if ignoreCallbackEnabledVars then return end
 
-	self:SetConVarValues(tostring(value))
+	self:SetCallbackEnabledVarValues(value)
 end
 
 ---
 -- @note this chooses the the set value like in the original DComboBox
--- @param string/number value should be indexable e.g. the value used to set conVars 
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param string|number value should be indexable e.g. the value used to set conVars
+-- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionValue(value, ignoreConVar)
 	self:ChooseOptionID(self:GetOptionID(value), ignoreConVar)
@@ -201,17 +201,17 @@ end
 -- @note this chooses the displayed text rather than the set value like in the original DComboBox
 -- So use `PANEL:ChooseOptionValue` for the old behaviour
 -- @param string name the displayed text
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:ChooseOptionName(name, ignoreConVar)
 	self:ChooseOptionID(self:GetOptionTitleID(name), ignoreConVar)
 end
 
 ---
--- Choose option by index, title is not settable 
+-- Choose option by index, title is not settable
 -- @param[opt] string title is unused as it cant be set anymore
 -- @param number index the option id
--- @param[default=false] bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 -- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionID` instead
 function PANEL:ChooseOption(title, index, ignoreConVar)
@@ -239,7 +239,7 @@ end
 
 ---
 -- @param number index
--- @param string/number value is indexable
+-- @param string|number value is indexable
 -- @param any data
 -- @realm client
 function PANEL:OnSelect(index, value, data)
@@ -285,7 +285,7 @@ function PANEL:OpenMenu(pControlOpener)
 	self.menu = DermaMenu(false, self)
 
 	if sortItems then
-		-- Convert Gmod Strings 
+		-- Convert Gmod Strings
 		for i = 1, choicesSize do
 			local choice = choices[i]
 			local title = choice.title
@@ -329,20 +329,20 @@ end
 
 ---
 -- @warning this doesnt set the displayed text like before, but the value and selects an option
--- @param string/number value should be indexable
--- @param bool ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @param string|number value should be indexable
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
 -- @realm client
 function PANEL:SetValue(value, ignoreConVar)
 	self:ChooseOptionValue(value, ignoreConVar)
 end
 
-local convarTracker = 0
+local callbackEnabledVarTracker = 0
 ---
 -- @param Panel panel to set the value of
 -- @param string conVar name of the convar
 local function AddConVarChangeCallback(panel, conVar)
-	convarTracker = convarTracker + 1
-	local myIdentifierString = "TTT2F1MenuComboboxConVarChangeCallback" .. tostring(convarTracker)
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2ComboboxConVarChangeCallback" .. tostring(callbackEnabledVarTracker)
 
 	local callback = function(conVarName, oldValue, newValue)
 		if not IsValid(panel) then
@@ -387,7 +387,7 @@ function PANEL:SetServerConVar(conVarName)
 	self.serverConVar = conVarName
 
 	cvars.ServerConVarGetValue(conVarName, function (wasSuccess, value, default)
-		if wasSuccess then
+		if wasSuccess and IsValid(self) then
 			self:SetValue(value, true)
 			self:SetDefaultValue(default)
 		end
@@ -397,15 +397,57 @@ function PANEL:SetServerConVar(conVarName)
 end
 
 ---
+-- @param table databaseInfo containing {name, itemName, key}
+-- @realm client
+function PANEL:SetDatabase(databaseInfo)
+	if not istable(databaseInfo) then return end
+
+	local name = databaseInfo.name
+	local itemName = databaseInfo.itemName
+	local key = databaseInfo.key
+
+	if not name or not itemName or not key then return end
+
+	self.databaseInfo = databaseInfo
+
+	database.GetValue(name, itemName, key, function(databaseExists, value)
+		if databaseExists then
+			self:SetValue(value, true)
+		end
+	end)
+
+	self:SetDefaultValue(database.GetDefaultValue(name, itemName, key))
+
+	callbackEnabledVarTracker = callbackEnabledVarTracker + 1
+	local myIdentifierString = "TTT2ComboboxDatabaseChangeCallback" .. tostring(callbackEnabledVarTracker)
+
+	local function OnDatabaseChangeCallback(_name, _itemName, _key, oldValue, newValue)
+		if not IsValid(self) then
+			database.RemoveChangeCallback(name, itemName, key, myIdentifierString)
+
+			return
+		end
+
+		self:SetValue(newValue, true)
+	end
+
+	database.AddChangeCallback(name, itemName, key, OnDatabaseChangeCallback, myIdentifierString)
+end
+
+---
 -- @param string value
 -- @realm client
-function PANEL:SetConVarValues(value)
+function PANEL:SetCallbackEnabledVarValues(value)
 	if self.conVar then
-		self.conVar:SetString(value)
+		self.conVar:SetString(tostring(value))
 	end
 
 	if self.serverConVar then
-		cvars.ChangeServerConVar(self.serverConVar, value)
+		cvars.ChangeServerConVar(self.serverConVar, tostring(value))
+	end
+
+	if self.databaseInfo then
+		database.SetValue(self.databaseInfo.name, self.databaseInfo.itemName, self.databaseInfo.key, value)
 	end
 end
 

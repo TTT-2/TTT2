@@ -1,7 +1,7 @@
 ---
 -- @class SWEP
 -- @desc Custom weapon base, used to derive from CS one, still very similar.
--- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
+-- See <a href="https://wiki.facepunch.com/gmod/Weapon">Weapon</a>
 -- @section weapon_tttbase
 
 local math = math
@@ -214,7 +214,7 @@ local tickInterval = engine.TickInterval()
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
 -- @param number nextTime The time you want to have the next primary attack available
--- @param[opt] bool skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
+-- @param[opt] boolean skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
 -- @realm shared
 function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
 	if not skipTickrateFix and not shouldSkipWeapon(self) then
@@ -302,7 +302,13 @@ if CLIENT then
 
 		local client = LocalPlayer()
 
-		if not enable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
+		if
+			not enable_crosshair:GetBool()
+			or not IsValid(client)
+			or SPRINT:IsSprinting(client) and not SPRINT.convars.showCrosshair:GetBool()
+		then
+			return
+		end
 
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() * 0.5)
@@ -373,7 +379,7 @@ if CLIENT then
 			local binding = line.binding -- can be an icon or key
 			local description = line.text
 
-			local wBinding, hBinding = 0
+			local wBinding, hBinding = 0, 0
 			local isIcon = false
 
 			if isstring(binding) then
@@ -470,7 +476,7 @@ if CLIENT then
 	-- @deprecated TTT legacy function. Do not use for new addons!
 	-- @param[opt] string primary_text first line of the help text
 	-- @param[optchain] string secondary_text second line of the help text
-	-- @param[optchain][default=false] bool translate should the text get translated
+	-- @param[optchain][default=false] boolean translate should the text get translated
 	-- @param[optchain] table extraKeyParams parameters for @{Lang.GetParamTranslation}
 	-- @realm client
 	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extraKeyParams)
@@ -661,7 +667,7 @@ end
 
 ---
 -- A convenience function to shoot bullets
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
@@ -695,7 +701,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	self:GetOwner():FireBullets(bullet)
 
 	-- Owner can die after firebullets
-	if not IsValid(self:GetOwner()) or not self:GetOwner():Alive() or self:GetOwner():IsNPC() then return end
+	if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then return end
 
 	if game.SinglePlayer() and SERVER
 	or not game.SinglePlayer() and CLIENT and IsFirstTimePredicted() then
@@ -721,7 +727,7 @@ end
 
 ---
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return number
 -- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)

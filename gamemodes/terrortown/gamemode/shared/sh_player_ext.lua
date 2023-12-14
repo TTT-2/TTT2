@@ -1,6 +1,6 @@
 ---
 -- Shared extensions to player table
--- @ref https://wiki.garrysmod.com/page/Category:Player
+-- @ref https://wiki.facepunch.com/gmod/Player
 -- @class Player
 
 local net = net
@@ -9,11 +9,25 @@ local IsValid = IsValid
 local hook = hook
 local math = math
 
+---@class Player
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
 
 	return
+end
+
+---
+-- @internal
+-- @realm shared
+function plymeta:SetupDataTables()
+	-- This has to be transferred, because we need the value when predicting the player movement
+	-- It turned out that this is the only reliable way to fix all prediction errors.
+	self:NetworkVar("Float", 0, "SprintStamina")
+
+	if SERVER then
+		self:SetSprintStamina(1)
+	end
 end
 
 ---
@@ -132,7 +146,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 
-	if SERVER and not suppressEvent and (oldRole ~= subrole or oldTeam ~= newTeam or forceHooks) then
+	if SERVER and not suppressEvent and (oldSubrole ~= subrole or oldTeam ~= newTeam or forceHooks) then
 		events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole, oldTeam, newTeam)
 	end
 
@@ -813,7 +827,7 @@ end
 -- never use cursor tracing anyway.
 -- @param MASK mask The trace mask. This determines what the trace should hit and what it shouldn't hit.
 -- A mask is a combination of CONTENTS_Enums - you can use these for more advanced masks.
--- @ref https://wiki.garrysmod.com/page/Structures/Trace
+-- @ref https://wiki.facepunch.com/gmod/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
 	mask = mask or MASK_SOLID
@@ -943,7 +957,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:WasRevivedAndConfirmed()
-	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
+	return not self:IsSpec() and not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
 end
 
 ---

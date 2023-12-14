@@ -24,7 +24,7 @@ function AddChange(version, text, date)
 
 	-- adding entry to table
 	-- if no date is given, a negative index is stored as secondary sort parameter
-	table.insert(changes, 1, {version = version, text = text, date = date or (-1 * (#changes + 1))})
+	table.insert(changes, 1, { version = version, text = text, date = date or (-1 * (#changes + 1)) })
 
 	currentVersion = version
 end
@@ -38,16 +38,21 @@ function CreateChanges()
 
 	changes = {}
 
-	AddChange("TTT2 Base - v0.3.5.6b", [[
+	AddChange(
+		"TTT2 Base - v0.3.5.6b",
+		[[
 		<ul>
 			<li><b>many fixes</b></li>
 			<li>enabled picking up grenades in prep time</li>
 			<li>roundend scoreboard fix</li>
 			<li>disabled useless prints that have spammed the console</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.5.7b", [[
+	AddChange(
+		"TTT2 Base - v0.3.5.7b",
+		[[
 		<ul>
 			<li><b>code optimization</b></li>
 			<br />
@@ -58,9 +63,12 @@ function CreateChanges()
 			<br />
 			<li>removed <code>PLAYER:UpdateRole()</code> function and hook <code>TTT2RoleTypeSet</code></li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.5.8b", [[
+	AddChange(
+		"TTT2 Base - v0.3.5.8b",
+		[[
 		<ul>
 			<li><b>selection system update</b></li>
 			<br />
@@ -69,9 +77,12 @@ function CreateChanges()
 			<br />
 			<li>bugfixes</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.6b", [[
+	AddChange(
+		"TTT2 Base - v0.3.6b",
+		[[
 		<ul>
 			<li>new <b>networking system</b></li>
 			<br />
@@ -86,9 +97,12 @@ function CreateChanges()
 			<li>karma system improvement</li>
 			<li>huge amount of bugfixes</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.7b", [[
+	AddChange(
+		"TTT2 Base - v0.3.7b",
+		[[
 		<ul>
 			<li>added hook <code>TTT2ToggleRole</code></li>
 			<li>added <code>GetActiveRoles()</code></li>
@@ -98,9 +112,12 @@ function CreateChanges()
 			<li>renamed hook <code>TTT_UseCustomPlayerModels</code> into <code>TTTUseCustomPlayerModels</code></li>
 			<li>removed <code>Player:SetSubRole()</code> and <code>Player:SetBaseRole()</code></li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.7.1b", [[
+	AddChange(
+		"TTT2 Base - v0.3.7.1b",
+		[[
 		<ul>
 			<li>added possibility to disable roundend if a player is reviving</li>
 			<li>added own Item Info functions</li>
@@ -125,9 +142,12 @@ function CreateChanges()
 			<li>fixed Disguiser</li>
 			<li>Some more small fixes</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.7.2b", [[
+	AddChange(
+		"TTT2 Base - v0.3.7.2b",
+		[[
 		<ul>
 			<li>reworked the <b>credit system</b> (Thanks to Nick!)</li>
 			<li>added possibility to override the init.lua and cl_init.lua file in TTT2</li>
@@ -135,9 +155,12 @@ function CreateChanges()
 			<li>fixed server errors in combination with TTT Totem (now, TTT2 will just not work)</li>
 			<li>fixed ragdoll collision server crash (issue is still in the normal TTT)</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.7.3b", [[
+	AddChange(
+		"TTT2 Base - v0.3.7.3b",
+		[[
 		<ul>
 			<li>reworked the <b>selection system</b> (balancing and bugfixes)</li>
 			<br />
@@ -145,9 +168,12 @@ function CreateChanges()
 			<li>fixed toggling role issue</li>
 			<li>fixed loadout doubling issue</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.7.4b", [[
+	AddChange(
+		"TTT2 Base - v0.3.7.4b",
+		[[
 		<ul>
 			<li>fixed playermodel reset bug (+ compatibility with PointShop 1)</li>
 			<li>fixed external HUD support</li>
@@ -155,9 +181,12 @@ function CreateChanges()
 			<li>fixed detective hat bug</li>
 			<li>fixed selection and jester selection bug</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.8b", [[
+	AddChange(
+		"TTT2 Base - v0.3.8b",
+		[[
 		<ul>
 			<li>added new TTT2 Logo</li>
 			<li>added ShopEditor missing icons (by Mineotopia)</li>
@@ -165,9 +194,12 @@ function CreateChanges()
 			<li><b>reworked weaponshop → ShopEditor</b></li>
 			<li>changed file based shopsystem into sql</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.8.1b", [[
+	AddChange(
+		"TTT2 Base - v0.3.8.1b",
+		[[
 		<ul>
 			<li>fixed credit issue in ShopEditor (all Data will load and save correct now)</li>
 			<li>fixed item credits and minPlayers issue</li>
@@ -179,25 +211,34 @@ function CreateChanges()
 			<li>removed <code>ALL_WEAPONS</code> table (SWEP will cache the initialized data now in it's own table / entity data)</li>
 			<li>some function renaming</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.8.2b", [[
+	AddChange(
+		"TTT2 Base - v0.3.8.2b",
+		[[
 		<ul>
 			<li>added <b>russian translation</b> (by Satton2)</li>
 			<li>added <code>.minPlayers</code> indicator for the shop</li>
 			<br />
 			<li>replaced <code>.globalLimited</code> param with <code>.limited</code> param to toggle whether an item is just one time per round buyable for each player</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.8.3b", [[
+	AddChange(
+		"TTT2 Base - v0.3.8.3b",
+		[[
 		<ul>
 			<li>ammoboxes will store the correct amount of ammo now
 			<li>connected <b>radio commands</b> with <b>scoreboard #tagging</b> (https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua)</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.3.9b", [[
+	AddChange(
+		"TTT2 Base - v0.3.9b",
+		[[
 		<ul>
 			<li>reimplemented all these nice unaccepted PullRequest for TTT on GitHub:
 				<ul>
@@ -209,9 +250,12 @@ function CreateChanges()
 			<li>added possibility to use <b>random shops!</b> (<code>ShopEditor → Options</code>)</li>
 			<li>balanced karma system (Roles that are aware of their teammates can't earn karma anymore. This will lower teamkilling)</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.4.0b", [[
+	AddChange(
+		"TTT2 Base - v0.4.0b",
+		[[
 		<ul>
 			<li>ShopEditor:
 				<ul>
@@ -236,9 +280,12 @@ function CreateChanges()
 			<li>implemented <b>new item system!</b> TTT2 now supports more than 16 passive items!</li>
 			<li>huge amount of fixes</li>
 		</ul>
-	]])
+	]]
+	)
 
-	AddChange("TTT2 Base - v0.5.0b", [[
+	AddChange(
+		"TTT2 Base - v0.5.0b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added new <b>HUD system</b></li>
@@ -310,9 +357,13 @@ function CreateChanges()
 			<li>Fixed shop item being displayed as unbuyable when the items price is set to 0 credits</li>
 			<li>Other small bugfixes</li>
 		</ul>
-	]], os.time({year = 2019, month = 03, day = 03}))
+	]],
+		os.time({ year = 2019, month = 03, day = 03 })
+	)
 
-	AddChange("TTT2 Base - v0.5.1b", [[
+	AddChange(
+		"TTT2 Base - v0.5.1b",
+		[[
 		<h2>Improved:</h2>
 		<ul>
 			<li>Improved the binding library and extended the functions</li>
@@ -330,9 +381,13 @@ function CreateChanges()
 			<li>Fixed render order</li>
 			<li>Fixed "player has no SteamID64" bug</li>
 		</ul>
-	]], os.time({year = 2019, month = 03, day = 05}))
+	]],
+		os.time({ year = 2019, month = 03, day = 05 })
+	)
 
-	AddChange("TTT2 Base - v0.5.2b", [[
+	AddChange(
+		"TTT2 Base - v0.5.2b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added spectator indicator in the Miniscoreboard</li>
@@ -369,9 +424,13 @@ function CreateChanges()
 			<li>Fixed spectator bug with Roundtime and Haste Mode</li>
 			<li>Fixed many small HUD bugs</li>
 		</ul>
-	]], os.time({year = 2019, month = 04, day = 32}))
+	]],
+		os.time({ year = 2019, month = 04, day = 32 })
+	)
 
-	AddChange("TTT2 Base - v0.5.3b", [[
+	AddChange(
+		"TTT2 Base - v0.5.3b",
+		[[
 		<h2>New:</h2>
 		<li>Added a <b>Reroll System</b> for the <b>Random Shop</b></li>
 		<ul>
@@ -391,9 +450,13 @@ function CreateChanges()
 		<ul>
 			<li>Fixed critical crash issue (ty to @nick)</li>
 		</ul>
-	]], os.time({year = 2019, month = 05, day = 09}))
+	]],
+		os.time({ year = 2019, month = 05, day = 09 })
+	)
 
-	AddChange("TTT2 Base - v0.5.4b", [[
+	AddChange(
+		"TTT2 Base - v0.5.4b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added a noTeam indicator to the HUD</li>
@@ -413,9 +476,13 @@ function CreateChanges()
 			<li>Fixed the team indicator when in spectator mode</li>
 			<li>Credits now can be transfered to everyone, this fixes a bug with the spy</li>
 		</ul>
-	]], os.time({year = 2019, month = 06, day = 18}))
+	]],
+		os.time({ year = 2019, month = 06, day = 18 })
+	)
 
-	AddChange("TTT2 Base - v0.5.5b", [[
+	AddChange(
+		"TTT2 Base - v0.5.5b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added convars to hide scoreboard badges</li>
@@ -437,9 +504,13 @@ function CreateChanges()
 			<li>Fixed the outline border of the sidebar beeing wrong</li>
 			<li>Fixed problem with the element restriction</li>
 		</ul>
-	]], os.time({year = 2019, month = 07, day = 07}))
+	]],
+		os.time({ year = 2019, month = 07, day = 07 })
+	)
 
-	AddChange("TTT2 Base - v0.5.6b", [[
+	AddChange(
+		"TTT2 Base - v0.5.6b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Marks module</li>
@@ -478,18 +549,26 @@ function CreateChanges()
 			<li>Fixed an error in the shadow rendering of a font</li>
 			<li>Small bugfixes</li>
 		</ul>
-	]], os.time({year = 2019, month = 09, day = 03}))
+	]],
+		os.time({ year = 2019, month = 09, day = 03 })
+	)
 
-	AddChange("TTT2 Base - v0.5.6b-h1 (Hotfix)", [[
+	AddChange(
+		"TTT2 Base - v0.5.6b-h1 (Hotfix)",
+		[[
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Traitor shop bug (caused by the september'19 GMod update)</li>
 			<li>ShopEditor bugs and added a response for non-admins</li>
 			<li>Glitching head icons</li>
 		</ul>
-	]], os.time({year = 2019, month = 09, day = 06}))
+	]],
+		os.time({ year = 2019, month = 09, day = 06 })
+	)
 
-	AddChange("TTT2 Base - v0.5.7b", [[
+	AddChange(
+		"TTT2 Base - v0.5.7b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>New Loadout Give/Remove functions to cleanup role code and fix item raceconditions</li>
@@ -529,9 +608,13 @@ function CreateChanges()
 			<li>Reset radar timer on item remove, fixes problems with rolechanges</li>
 			<li>Fixed an exploitable vulnerability</li>
 		</ul>
-	]], os.time({year = 2019, month = 10, day = 06}))
+	]],
+		os.time({ year = 2019, month = 10, day = 06 })
+	)
 
-	AddChange("TTT2 Base - v0.6b", [[
+	AddChange(
+		"TTT2 Base - v0.6b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added new weapon switch system</li>
@@ -599,23 +682,35 @@ function CreateChanges()
 			<li>Fix confirmation of players with no team</li>
 			<li>Fix voice still sending after death</li>
 		</ul>
-	]], os.time({year = 2020, month = 02, day = 16}))
+	]],
+		os.time({ year = 2020, month = 02, day = 16 })
+	)
 
-	AddChange("TTT2 Base - v0.6.1b", [[
+	AddChange(
+		"TTT2 Base - v0.6.1b",
+		[[
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Fixed a bug with the spawn wave interval</li>
 		</ul>
-	]], os.time({year = 2020, month = 02, day = 17}))
+	]],
+		os.time({ year = 2020, month = 02, day = 17 })
+	)
 
-	AddChange("TTT2 Base - v0.6.2b", [[
+	AddChange(
+		"TTT2 Base - v0.6.2b",
+		[[
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Increased the maximum number of roles that can be used. (Fixes weird role issues with many roles installed)</li>
 		</ul>
-	]], os.time({year = 2020, month = 03, day = 1}))
+	]],
+		os.time({ year = 2020, month = 03, day = 1 })
+	)
 
-	AddChange("TTT2 Base - v0.6.3b", [[
+	AddChange(
+		"TTT2 Base - v0.6.3b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added a Polish translation (Thanks @Wukerr)</li>
@@ -627,9 +722,13 @@ function CreateChanges()
 			<li>Fix <i>body_found</i> for bots</li>
 			<li>Fix NWVarSyncing when using <i>TTT2NET:Set()</i></li>
 		</ul>
-	]], os.time({year = 2020, month = 03, day = 05}))
+	]],
+		os.time({ year = 2020, month = 03, day = 05 })
+	)
 
-	AddChange("TTT2 Base - v0.6.4b", [[
+	AddChange(
+		"TTT2 Base - v0.6.4b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added an Italian translation (Thanks @PinoMartirio)</li>
@@ -642,9 +741,13 @@ function CreateChanges()
 			<li>Fixed a bug that happened when TTT2 is installed but not the active gamemode</li>
 			<li>Fixed a few Polish language strings</li>
 		</ul>
-	]], os.time({year = 2020, month = 04, day = 03}))
+	]],
+		os.time({ year = 2020, month = 04, day = 03 })
+	)
 
-	AddChange("TTT2 Base - v0.7.0b", [[
+	AddChange(
+		"TTT2 Base - v0.7.0b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added two new convars to change the behavior of the armor</li>
@@ -689,16 +792,24 @@ function CreateChanges()
 			<li>Fixed roles having sometimes the wrong radar color</li>
 			<li>Fixed miniscoreboard update issue and players not getting shown when entering force-spec mode</li>
 		</ul>
-	]], os.time({year = 2020, month = 06, day = 01}))
+	]],
+		os.time({ year = 2020, month = 06, day = 01 })
+	)
 
-	AddChange("TTT2 Base - v0.7.1b", [[
+	AddChange(
+		"TTT2 Base - v0.7.1b",
+		[[
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Fixed max roles / max base roles interaction with the roleselection. Also does not crash with values != 0 anymore.</li>
 		</ul>
-	]], os.time({year = 2020, month = 06, day = 02}))
+	]],
+		os.time({ year = 2020, month = 06, day = 02 })
+	)
 
-	AddChange("TTT2 Base - v0.7.2b", [[
+	AddChange(
+		"TTT2 Base - v0.7.2b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added Hooks to the targetID system to modify the displayed data</li>
@@ -732,9 +843,13 @@ function CreateChanges()
 			<li>Fixed missing role column translation</li>
 			<li>Fixed viewmodel not showing correct hands on model change</li>
 		</ul>
-	]], os.time({year = 2020, month = 06, day = 26}))
+	]],
+		os.time({ year = 2020, month = 06, day = 26 })
+	)
 
-	AddChange("TTT2 Base - v0.7.3b", [[
+	AddChange(
+		"TTT2 Base - v0.7.3b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added a new custom file loader that loads lua files from <i>lua/terrortown/autorun/</i></li>
@@ -771,9 +886,13 @@ function CreateChanges()
 			<li>Fixed shop refresh activated even not buyable equipments</li>
 			<li>Fixed wrong shop view displayed as forced spectator</li>
 		</ul>
-	]], os.time({year = 2020, month = 08, day = 09}))
+	]],
+		os.time({ year = 2020, month = 08, day = 09 })
+	)
 
-	AddChange("TTT2 Base - v0.7.4b", [[
+	AddChange(
+		"TTT2 Base - v0.7.4b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added ConVar to toggle double-click buying</li>
@@ -799,9 +918,13 @@ function CreateChanges()
 			<li>Fixed DNA scanner crash if using an old/different weapon base</li>
 			<li>Fixed rare initialization bug in the speed calculation when joining as a spectator</li>
 		</ul>
-	]], os.time({year = 2020, month = 09, day = 28}))
+	]],
+		os.time({ year = 2020, month = 09, day = 28 })
+	)
 
-	AddChange("TTT2 Base - v0.8.0b", [[
+	AddChange(
+		"TTT2 Base - v0.8.0b",
+		[[
 		<h2>New:</h2>
 		<ul>
 			<li>Added new vgui system with new F1 menu</li>
@@ -834,16 +957,24 @@ function CreateChanges()
 			<li>Fixed Magneto Stick ragdoll pinning instructions not showing for innocents when <i>ttt_ragdoll_pinning_innocents</i> is enabled</li>
 			<li>Fixed a bug where the targetID info broke if the pickup key is unbound</li>
 		</ul>
-	]], os.time({year = 2021, month = 02, day = 06}))
+	]],
+		os.time({ year = 2021, month = 02, day = 06 })
+	)
 
-	AddChange("TTT2 Base - v0.8.1b", [[
+	AddChange(
+		"TTT2 Base - v0.8.1b",
+		[[
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Fixed inheriting from the same base using the classbuilder in different folders</li>
 		</ul>
-	]], os.time({year = 2021, month = 02, day = 19}))
+	]],
+		os.time({ year = 2021, month = 02, day = 19 })
+	)
 
-	AddChange("TTT2 Base - v0.8.2b", [[
+	AddChange(
+		"TTT2 Base - v0.8.2b",
+		[[
 		<h2>Improved:</h2>
 		<ul>
 			<li>Added global alias for IsOffScreen function to util.IsOffScreen</li>
@@ -857,9 +988,13 @@ function CreateChanges()
 			<li>TTT: fix ragdoll pinning HUD for innocents (by @Flapchik)</li>
 			<li>Fixed outline library not working</li>
 		</ul>
-	]], os.time({year = 2021, month = 03, day = 25}))
+	]],
+		os.time({ year = 2021, month = 03, day = 25 })
+	)
 
-	AddChange("TTT2 Base - v0.9.0b", [[
+	AddChange(
+		"TTT2 Base - v0.9.0b",
+		[[
 		<h2>Added:</h2>
 		<ul>
 			<li>All new roundend menu</li>
@@ -942,24 +1077,36 @@ function CreateChanges()
 			<li>Shopeditor function <code>ShopEditor.ReadItemData()</code> now only updates a number of key-parameters, must be given as UInt. Messages were changed accordingly (<code>TTT2SESaveItem</code>,<code>TTT2SyncDBItems</code>)</li>
 			<li>Equipment shop favorite functions are now local and not global anymore (<code>CreateFavTable</code>, <code>AddFavorite</code>, <code>RemoveFavorite</code>, <code>GetFavorites</code> & <code>IsFavorite</code>)</li>
 		</ul>
-	]], os.time({year = 2021, month = 06, day = 19}))
+	]],
+		os.time({ year = 2021, month = 06, day = 19 })
+	)
 
-	AddChange("TTT2 Base - v0.9.1b", [[
+	AddChange(
+		"TTT2 Base - v0.9.1b",
+		[[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed shop convars not being shared / breaking the shop</li>
 		</ul>
-	]], os.time({year = 2021, month = 06, day = 19}))
+	]],
+		os.time({ year = 2021, month = 06, day = 19 })
+	)
 
-	AddChange("TTT2 Base - v0.9.2b", [[
+	AddChange(
+		"TTT2 Base - v0.9.2b",
+		[[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed low karma autokick convar</li>
 			<li>Fixed multi-layer inheritance by introducing a recursion based approach</li>
 		</ul>
-	]], os.time({year = 2021, month = 06, day = 20}))
+	]],
+		os.time({ year = 2021, month = 06, day = 20 })
+	)
 
-	AddChange("TTT2 Base - v0.9.3b", [[
+	AddChange(
+		"TTT2 Base - v0.9.3b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Add Traditional Chinese Translation (by @TEGTianFan)</li>
@@ -999,9 +1146,13 @@ function CreateChanges()
 			<li>Added equipment as argument to <code>InitDefaultEquipmentForRole(roleData)</code>, it now only initializes the given equipment not all <code>InitDefaultEquipmentForRole(roleData, equipment)</code></li>
 			<li>Added equipment as argument to <code>CleanUpDefaultCanBuyIndices()</code>, it now only initializes the given equipment not all <code>CleanUpDefaultCanBuyIndices(equipment)</code></li>
 		</ul>
-	]], os.time({ year = 2021, month = 09, day = 25 }))
+	]],
+		os.time({ year = 2021, month = 09, day = 25 })
+	)
 
-	AddChange("TTT2 Base - v0.10.0b", [[
+	AddChange(
+		"TTT2 Base - v0.10.0b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Added a new scoring variable named <code>score.survivePenaltyMultiplier</code> to punish surviving players of a losing team</li>
@@ -1063,18 +1214,26 @@ function CreateChanges()
 			<li><b>WARNING:</b> This means that every traitor now starts with 0 credits until the convar reset button is pressed (on existing servers)</li>
 			<li>removed the <code>alone_bonus</code> convar because it only complicated the credits system further without adding much benefit</li>
 		</ul>
-	]], os.time({ year = 2021, month = 10, day = 14 }))
+	]],
+		os.time({ year = 2021, month = 10, day = 14 })
+	)
 
-	AddChange("TTT2 Base - v0.10.1b", [[
+	AddChange(
+		"TTT2 Base - v0.10.1b",
+		[[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed Playermodels not correctly loading changes on game start</li>
 			<li>Fixed setting defaults before assigning a resetButton not throwing an error anymore</li>
 			<li>Fixed invisible preview for entity spawn placements</li>
 		</ul>
-	]], os.time({ year = 2021, month = 10, day = 15 }))
+	]],
+		os.time({ year = 2021, month = 10, day = 15 })
+	)
 
-	AddChange("TTT2 Base - v0.10.2b", [[
+	AddChange(
+		"TTT2 Base - v0.10.2b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Added a new hook <code>GM:TTT2ModifyRadioTarget</code> to modify the current radio target</li>
@@ -1105,9 +1264,13 @@ function CreateChanges()
 		<ul>
 			<li>Renamed hook <code>GM:TTT2CheckWeaponForID</code> to <code>GM:TTT2RegisterWeaponID</code> better fitting its purpose as its probably nowhere used yet anyway</li>
 		</ul>
-	]], os.time({ year = 2021, month = 10, day = 21 }))
+	]],
+		os.time({ year = 2021, month = 10, day = 21 })
+	)
 
-	AddChange("TTT2 Base - v0.10.3b", [[
+	AddChange(
+		"TTT2 Base - v0.10.3b",
+		[[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed the hook scope in the disguiser causing an error</li>
@@ -1119,9 +1282,13 @@ function CreateChanges()
 		<ul>
 			<li>Added new param <code>skipTickrateFix</code> to <code>SWEP:SetNextPrimaryFire(nextTime, skipTickrateFix)</code> to skip our inbuilt tickrate fix</li>
 		</ul>
-	]], os.time({ year = 2021, month = 10, day = 29 }))
+	]],
+		os.time({ year = 2021, month = 10, day = 29 })
+	)
 
-	AddChange("TTT2 Base - v0.11.0b", [[
+	AddChange(
+		"TTT2 Base - v0.11.0b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Added the hook <code>GM:TTT2CalledPolicingRole</code> that is called after all policing role players were called to a corpse</li>
@@ -1180,9 +1347,13 @@ function CreateChanges()
 				<li><code>ttt_armor_classic</code> is now <code>ttt_armor_dynamic</code></li>
 			</ul>
 		</ul>
-	]], os.time({ year = 2021, month = 11, day = 15 }))
+	]],
+		os.time({ year = 2021, month = 11, day = 15 })
+	)
 
-	AddChange("TTT2 Base - v0.11.1b", [[
+	AddChange(
+		"TTT2 Base - v0.11.1b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Added four new Karma multipliers as role variables. They are applied **after** all other Karma calculations are done:</li>
@@ -1201,16 +1372,24 @@ function CreateChanges()
 			<li>Set default traitor button variable back to 0</li>
 			<li>Fixed unchanged or unscaled damage being sent to the client, leading to a wrongly working damage-overlay</li>
 		</ul>
-	]], os.time({ year = 2021, month = 11, day = 16 }))
+	]],
+		os.time({ year = 2021, month = 11, day = 16 })
+	)
 
-	AddChange("TTT2 Base - v0.11.2b", [[
+	AddChange(
+		"TTT2 Base - v0.11.2b",
+		[[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed correct role Karma multipliers used in Karma-module</li>
 		</ul>
-	]], os.time({ year = 2021, month = 11, day = 17 }))
+	]],
+		os.time({ year = 2021, month = 11, day = 17 })
+	)
 
-	AddChange("TTT2 Base - v0.11.3b", [[
+	AddChange(
+		"TTT2 Base - v0.11.3b",
+		[[
 		<h2>Fixed</h2>
 		<ul>
 			<li>Fixed Equipment-Editor not showing the current synced values, but the cached ones</li>
@@ -1220,17 +1399,25 @@ function CreateChanges()
 		<ul>
 			<li>Changed serverConVars not indexing with 0 in tables (could cause issues when iterating)</li>
 		</ul>
-	]], os.time({ year = 2021, month = 11, day = 18 }))
+	]],
+		os.time({ year = 2021, month = 11, day = 18 })
+	)
 
-	AddChange("TTT2 Base - v0.11.4b", [[
+	AddChange(
+		"TTT2 Base - v0.11.4b",
+		[[
 		<h2>Changed</h2>
 		<ul>
 			<li>Switched from the voicerecord commands to the GMod permission system due to a recent GMod update breaking the old voice chat</li>
 			<li>Updated Japanese translation (by @westooooo)</li>
 		</ul>
-	]], os.time({ year = 2021, month = 12, day = 17 }))
+	]],
+		os.time({ year = 2021, month = 12, day = 17 })
+	)
 
-	AddChange("TTT2 Base - v0.11.5b", [[
+	AddChange(
+		"TTT2 Base - v0.11.5b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Reworked our simplified Dropdowns MakePanel <code>PANEL:MakeComboBox(data)</code> version</li>
@@ -1284,9 +1471,13 @@ function CreateChanges()
 			<li>Fixed ammo entities blocking <code>+use</code> traces</li>
 			<li>Fixed double call of <code>GM:TTT2UpdateTeam</code>, when a role change leads to a team change</li>
 		</ul>
-	]], os.time({ year = 2022, month = 08, day = 21 }))
+	]],
+		os.time({ year = 2022, month = 08, day = 21 })
+	)
 
-	AddChange("TTT2 Base - v0.11.6b", [[
+	AddChange(
+		"TTT2 Base - v0.11.6b",
+		[[
 		<h2>Changed</h2>
 		<ul>
 			<li>Fixed and updated the Chinese translation file (by @sbzlzh)</li>
@@ -1301,9 +1492,13 @@ function CreateChanges()
 			<li>Roleselection for a lot of roles now considers all possible subroles one after another</li>
 			<li>Fixed portuguese translation of the equipment editor not working</li>
 		</ul>
-	]], os.time({ year = 2022, month = 09, day = 25 }))
+	]],
+		os.time({ year = 2022, month = 09, day = 25 })
+	)
 
-	AddChange("TTT2 Base - v0.11.7b", [[
+	AddChange(
+		"TTT2 Base - v0.11.7b",
+		[[
 		<h2>Added</h2>
 		<ul>
 			<li>Added a new font in default_skin.lua to fit the localization (by @Satton2)</li>
@@ -1385,8 +1580,177 @@ function CreateChanges()
 			<li>Fixed Round End Scoreboard (Round Begin) error if a player disconnected while round with no score events (by @NickCloudAT)</li>
 			<li>Fixed behavior of <code>entspawn.SpawnRandomAmmo</code> to produce non-deagle ammo. (by @NickCloudAT, mostly)</li>
 		</ul>
-	]], os.time({ year = 2023, month = 08, day = 27 }))
+	]],
+		os.time({ year = 2023, month = 08, day = 27 })
+	)
 
+	AddChange(
+		"TTT2 Base - v0.12.0b",
+		[[
+		<h2>Added</h2>
+		<ul>
+			<li>added the ability to edit slider numbers directly via an input field by clicking on the number (by @nickcloudat)</li>
+			<li>Added a new way to alter player volume separately from the scoreboard (by @EntranceJew):</li>
+			<ul>
+				<li><code>VOICE.(Get/Set)PreferredPlayerVoiceVolume</code> for setting the voice volume instead of <code>Player:SetVoiceVolumeScale</code></li>
+				<li><code>VOICE.(Get/Set)PreferredPlayerVoiceMute</code> for setting the voice mute instead of <code>Player:SetMuted</code></li>
+				<li><code>VOICE.UpdatePlayerVoiceVolume</code> commits / updates the voice setting according to player preferences</li>
+			</ul>
+			<ul>
+				<li>Added a convar <code>ttt2_voice_scaling</code> to control voice volume scaling, options like "power4" or "log" cause the volume scaling to have a greater perceptual impact between discrete volume settings.</li>
+				<li>Added convars <code>ttt2_voice_duck_spectator</code> and <code>ttt2_voice_duck_spectator_amount</code> to lower spectator voice volume automatically.</li>
+				<ul>
+					<li>A value of <code>0.13</code> ducks someone's volume at 90% down to effectively 78%, according to the client's scaling mode.</li>
+				</ul>
+			</ul>
+			<li>Added the option for <code>DButtonTTT2</code> to have an icon next to the title (by @TimGoll)</li>
+			<li>Added a cached equipment item icon to its table as <code>.iconMaterial</code> (by @TimGoll)</li>
+			<li>Added a new <code>bodysearch</code> library that handles the search (by @TimGoll)</li>
+			<li>Completely reworked the body search UI (by @TimGoll)</li>
+			<ul>
+				<li>new UI that fits the UI rework</li>
+				<li>added player model to UI</li>
+				<li>highlighted player role and team in the UI</li>
+				<li>redesigned data list so that everything can be seen without clicking through a list</li>
+				<li>added more details to list like: water level, ground type, kill distance, kill direction, hit group, last damage amount</li>
+				<li>The UI is now more responsive, it is updated when the server changes states on the body and timers are updated live in the UI</li>
+			</ul>
+			<li>Added that the healthbar will pulsate when below 25% health. Toggleable in F1 Menu (by @NickCloudAT)</li>
+			<li>Added new menu section in F1 menu under <code>Appearance > Hud Switcher</code> for HudElement based features (by @NickCloudAT)</li>
+			<li>Brought in code files for <code>ttt_hat_deerstalker</code>, <code>weapon_ttt_phammer</code>, <code>ttt_flame</code>, and <code>weapon_ttt_push</code>.</li>
+			<li>Translated all strings still needed to german (by @NickCloudAT)</li>
+			<li>Added new sidebar information, when the scoreboard is open (by @TimGoll)</li>
+			<li>Added keybinding information to the bottom of the screen (by @TimGoll)</li>
+			<ul>
+				<li>Can be disabled in Appearance->Interface</li>
+				<li>Shows binding name when scoreboard is opened</li>
+			</ul>
+			<li>Added option to render rotated text on screen (by @TimGoll)</li>
+			<li>Added <code>TTT2GiveFoundCredits</code> hook for preventing / overriding the transfer of credits from a body to a player (by @Spanospy)</li>
+			<li>Added Ukrainian translation from base TTT (by @ErickMaksimets)</li>
+			<li>Added Swedish translation from base TTT (by @Kefta)</li>
+			<li>Added Turkish translation (by @NovaDiablox)</li>
+			<li>Added <code>ttt_dropclip</code> to drop loaded ammo from your active weapon. (by @wgetJane, implemented by @EntranceJew)</li>
+			<li>Added window flash and noise to alert players they're being revived (by @EntranceJew)</li>
+			<li>Added sql database access to panel elements</li>
+			<ul>
+				<li><code>DNumSliderTTT2</code>, <code>DCheckBoxLabelTTT2</code>, <code>DComboBoxTTT2</code></li>
+			</ul>
+			<li>Added dashing to propspec (by @TimGoll)</li>
+			<li>Added new functions to database module</li>
+			<ul>
+				<li><code>database.SetDefaultValuesFromItem(accessName, itemName, item)</code></li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Changed sprint stamina to also consume while in air</li>
+			<li>Updated Simplified Chinese and Traditional Chinese localization files (by @sbzlzh):</li>
+			<ul>
+				<li>Add the missing <code>L.c4_disarm_t</code> translation in C4</li>
+				<li>Remove redundant string translations and spaces</li>
+				<li>Added all new translation strings</li>
+			</ul>
+			<li>Updated file code to read from <code>data_static</code> as fallback in new location allowed in .gma (by @EntranceJew)</li>
+			<li>Scoreboard now sets preferred player volume and mute state in client's new <code>ttt2_voice</code> table (by @EntranceJew)</li>
+			<ul>
+				<li>Keyed by steamid64, making it more reliable than UniqueID or the per-session mute and volume levels.</li>
+			</ul>
+			<li>Changed the body search convars and reworked the UI accordingly (by @TimGoll)</li>
+			<ul>
+				<li>Moved <code>ttt2_confirm_detective_only</code> and <code>ttt2_inspect_detective_only</code> to a new covar: <code>ttt2_inspect_confirm_mode</code></li>
+				<ul>
+					<li>mode 0: default mode, normal TTT. Everyone can search and identify corpses. However now a player has to be confirmed first to take credits</li>
+					<li>mode 1: everyone can see information, but only public policing roles can actually confirm bodies</li>
+					<li>mode 2: only public policing roles can see informatiom. They have to confirm bodies so that other people are able to see this information as well</li>
+				</ul>
+				<li>to comply with mode 1 and 2 now everyone is able to see in the targetID if a player was searched by a public policing role</li>
+			</ul>
+			<li>renamed <code>search_result</code> to <code>bodySearchResult</code> which contains the search result data</li>
+			<li>changed the credit text color from yellow to gold (by @TimGoll)</li>
+			<li>Updated the disguiser to make it more clear in the HUD if it is enabled or not</li>
+			<li>Updated the equipment HUD help boxes in a new style and added missing help boxes (by @TimGoll)</li>
+			<li>Changed LMB press behavior in observer mode to iterate backwards through player list instead of slecting a random player (by @TimGoll)</li>
+			<li>Improved translation of some Simplified Chinese strings (by @TheOnly8Z)</li>
+			<li>Dropping ammo with <code>ttt_dropammo</code> drops from reserve ammo instead of your active weapon's clip (by @wgetJane, implemented by @EntranceJew)</li>
+			<li>Added item name for <code>ttt_hat_deerstalker</code> (by @EntranceJew)</li>
+			<li>Changed syncing of database module to use whole tables instead of custom method</li>
+			<li>Replaced equipmenteditor syncing with database module</li>
+			<li>Replaced internal equipment syncing with database module</li>
+			<li>Moved reset buttons onto the left (by @a7f3)</li>
+			<li>Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)</li>
+			<li>Changed the disguiser icon to be more fitting (by @TimGoll)</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed prediction of the sprinting system, for high ping situations (by @saibotk, thanks to @wgetJane)</li>
+			<li>Fixed removing the convar change callback in <code>DComboboxTTT2</code>, <code>DCheckBoxLabelTTT2</code>, <code>DNumSliderTTT2</code> (by @saibotk)</li>
+			<li>Multiple internal fixes</li>
+			<ul>
+				<li>biggest teamkiller award should now work</li>
+				<li>item model caching should now work properly</li>
+				<li>role info popup for traitors should now show teammembers again if the traitor shop is disabled</li>
+				<li><code>pon</code> and <code>table</code> libraries got a small fix respectively</li>
+				<li>the shop and roleselection now reference <code>roles.INNOCENT</code> instead of the removed <code>INNOCENT</code> global, same for <code>TRAITOR</code> and <code>DETECTIVE</code></li>
+				<li>Fixed wrong translation % in F1-Menu when changing language (by @NickCloudAT)</li>
+			<ul>
+			<li>Fixed disguiser breaking UI on hot reload (by @TimGoll)</li>
+			<li>Fixed blurred box rendering for boxes not starting at <code>0,0</code> (by @TimGoll)</li>
+			<li>Fixed spectated entity not being reset properly which can cause issues (by @TimGoll)</li>
+			<li>Optimized allocations by using global Vector / Angle when possible.</li>
+			<li>Fixed the dynamic armor damage calculation being wrong when damage can only get partially reduced</li>
+			<li>Fixed propspec inputs behaving sometimes unexpectedly (by @TimGoll)</li>
+			<li>Fixed ComboBoxes not working with integer values (by @NickCloudAT)</li>
+			<li>net.SendStream() can now also handle tables larger than 256kB, which exceeded the maximum net receive buffer</li>
+			<li>Fixed nil value of SetValue in <code>DNumSliderTTT2</code> , <code>DCheckBoxLabelTTT2</code>. And fix nil value for boxCache[name] in <code>PlayerModels</code> (by @sbzlzh)</li>
+			<li>Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)</li>
+			<li>Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)</li>
+		</ul>
+
+		<h2>Deprecated</h2>
+		<ul>
+			<li>Deprecated <code>AccessorFuncDT()</code>, Addons should remove the function call and replace <code>DTVar()</code> calls with <code>NetworkVar()</code></li>
+		</ul>
+
+		<h2>Removed</h2>
+		<ul>
+			<li>Removed <code>ttt_confirm_death</code> and <code>ttt_call_detective</code> as they are now handled via proper net messages</li>
+			<li>Removed spectator texts from the UI in favor of the new key binding information (by @TimGoll)</li>
+			<li>Removed double tap sprinting, for easier prediction handling (by @saibotk)</li>
+			<li>Removed explicit "Sprint" key bind, please use the GMod native sprint key binding (by @saibotk)</li>
+			<li>Removed unused clientside <code>Player.preventSprint</code> flag (by @saibotk)</li>
+		</ul>
+	]],
+		os.time({ year = 2023, month = 12, day = 11 })
+	)
+
+	AddChange(
+		"TTT2 Base - v0.12.1b",
+		[[
+		<h2>Added</h2>
+		<ul>
+			<li>Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed the UI being unable to handle wrapping text with non-utf8 languages that do not use ASCII whitespaces (by @TimGoll & @saibotk)</li>
+			<li>Fixed ttt_game_text not working due to a refactor</li>
+			<li>Fixed dete call HUD being invisible</li>
+			<li>Fixed edgecase where undefined killer angle or pos were accessed</li>
+			<li>Fixed fallback ammo icon missing</li>
+			<li>Fixed a null entity error in the miniscoreboard</li>
+			<li>Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit</li>
+		</ul>
+	]],
+		os.time({ year = 2023, month = 12, day = 12})
+	)
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

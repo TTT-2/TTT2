@@ -36,10 +36,10 @@ local hudSwicherSettings = {
 		})
 	end,
 
-	["boolean"] = function(parent, currentHUD, key, data)
+	["bool"] = function(parent, currentHUD, key, data)
 		parent:MakeCheckBox({
 			label = data.desc or key,
-			initial = math.Round(currentHUD[key] or 1, 1),
+			initial = currentHUD[key] == nil and true or currentHUD[key],
 			default = data.default,
 			OnChange = function(_, value)
 				value = value or false
@@ -62,6 +62,27 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
 		hudSwicherSettings[data.typ](parent, currentHUD, key, data)
+	end
+end
+
+local function PopulateHUDSwitcherPanelSettingsElements(parent, currentHUD)
+	parent:Clear()
+
+	parent:MakeHelp({
+		label = "help_hud_elements_special_settings"
+	})
+
+	local hudElements = huds.GetStored(HUDManager.GetHUD()):GetElements()
+	for i = 1, #hudElements do
+		local elemName = hudElements[i]
+
+		local el = hudelements.GetStored(elemName)
+		if not el then continue end
+
+		for key, data in pairs(el:GetSavingKeys() or {}) do
+			if not hudSwicherSettings[data.typ] then continue end
+			hudSwicherSettings[data.typ](parent, el, key, data)
+		end
 	end
 end
 
@@ -112,6 +133,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	PopulateHUDSwitcherPanelSettings(vgui.CreateTTT2Form(parent, "header_hud_customize"), currentHUD)
+	PopulateHUDSwitcherPanelSettingsElements(vgui.CreateTTT2Form(parent, "header_hud_elements_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	HELPSCRN.menuFrame.OnShow = function(slf)
@@ -125,11 +147,24 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	local currentHUDName = HUDManager.GetHUD()
 	local currentHUD = huds.GetStored(currentHUDName)
 
+	local buttonReset = vgui.Create("DButtonTTT2", parent)
+
+	buttonReset:SetText("button_reset")
+	buttonReset:SetSize(100, 45)
+	buttonReset:SetPos(20, 20)
+	buttonReset.DoClick = function(btn)
+		if not currentHUD then return end
+
+		currentHUD:Reset()
+		currentHUD:SaveData()
+	end
+	buttonReset:SetEnabled(not currentHUD.disableHUDEditor)
+
 	local buttonEditor = vgui.Create("DButtonTTT2", parent)
 
 	buttonEditor:SetText("button_hud_editor")
 	buttonEditor:SetSize(175, 45)
-	buttonEditor:SetPos(20, 20)
+	buttonEditor:SetPos(parent:GetWide() - 195, 20)
 	buttonEditor.DoClick = function(btn)
 		if not currentHUDName then return end
 
@@ -139,18 +174,7 @@ function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
 	end
 	buttonEditor:SetEnabled(not currentHUD.disableHUDEditor)
 
-	local buttonReset = vgui.Create("DButtonTTT2", parent)
 
-	buttonReset:SetText("button_reset")
-	buttonReset:SetSize(100, 45)
-	buttonReset:SetPos(parent:GetWide() - 120, 20)
-	buttonReset.DoClick = function(btn)
-		if not currentHUD then return end
-
-		currentHUD:Reset()
-		currentHUD:SaveData()
-	end
-	buttonReset:SetEnabled(not currentHUD.disableHUDEditor)
 end
 
 function CLGAMEMODESUBMENU:HasButtonPanel()

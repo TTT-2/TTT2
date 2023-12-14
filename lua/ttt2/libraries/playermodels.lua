@@ -118,7 +118,7 @@ end
 ---
 -- Checks if a provided model has a head hitbox
 -- @param string name The name of the model
--- @return bool Returns true, if the model has a head hitbox
+-- @return boolean Returns true, if the model has a head hitbox
 -- @realm shared
 function playermodels.HasHeadHitBox(name)
 	return ttt2net.Get({"playermodels", "hasHeadHitBox"})[name]

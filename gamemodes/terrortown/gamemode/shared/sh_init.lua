@@ -1,11 +1,11 @@
 ---
 -- This file contains all shared vars, tables and functions
 
-GM.Name = "TTT2 (Advanced Update)"
+GM.Name = "TTT2"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.11.7b"
+GM.Version = "0.12.1b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -533,6 +533,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
 COLOR_WARMGRAY = Color(91, 94, 99, 255)
+COLOR_GOLD = Color(255, 215, 30)
 
 -- include independent libraries (other extensions might require them)
 include("ttt2/libraries/pon.lua")
@@ -550,6 +551,7 @@ include("ttt2/extensions/input.lua")
 include("ttt2/extensions/cvars.lua")
 
 -- include libraries
+include("ttt2/libraries/fastutf8.lua")
 include("ttt2/libraries/huds.lua")
 include("ttt2/libraries/hudelements.lua")
 include("ttt2/libraries/items.lua")
@@ -574,6 +576,7 @@ include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
 include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
+include("ttt2/libraries/bodysearch.lua")
 include("ttt2/libraries/keyhelp.lua")
 include("ttt2/libraries/bomb_vision.lua")
 
@@ -586,6 +589,7 @@ ttt_include("sh_hudelement_module")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
+ttt_include("sh_playerclass")
 
 ---
 -- Returns the equipment's file name

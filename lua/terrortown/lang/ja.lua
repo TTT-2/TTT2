@@ -172,46 +172,6 @@ L.quick_disg = "変装中"
 L.quick_corpse = "死体"
 L.quick_corpse_id = "{player}の死体"
 
--- Body search window
-L.search_title = "調査結果"
-L.search_info = "情報"
-L.search_confirm = "確認済み"
-L.search_call = "探偵を呼ぶ"
-
--- Descriptions of pieces of information found
-L.search_nick = "こいつは{player}の死体だ。"
-
-L.search_role_traitor = "こいつはTraitorだったな！"
-L.search_role_det = "こいつはDetectiveだった。"
-L.search_role_inno = "こいつはInnocentだった。"
-
-L.search_words = "遺言:「{lastwords}」"
-L.search_armor = "ボディアーマーを着ていたようだ。"
-L.search_disg = "変装をしていたようだ。"
-L.search_radar = "レーダーを所持していたようだ。もう機能していないがな。"
-L.search_c4 = "ポケットからメモを見つけた。「爆弾を解除するには{num}番のワイヤーをカットしろ」と書かれている。"
-
-L.search_dmg_crush = "こいつの骨の多くが折れている。重たい物でもぶつかって死んだようだ。"
-L.search_dmg_bullet = "こいつは撃たれて死んだようだな。"
-L.search_dmg_fall = "こいつは転落死したようだな。"
-L.search_dmg_boom = "こいつの傷と焼けた衣服から見ると、爆発で死んだように思えるな。"
-L.search_dmg_club = "死体には打撲傷と殴られた跡がある。殴られて死んだようだな。"
-L.search_dmg_drown = "死因は溺死のようだ。"
-L.search_dmg_stab = "こいつは刃物に刺されて出血死したようだ。。"
-L.search_dmg_burn = "この辺りにはテロリストが焼けたような臭いがするな..."
-L.search_dmg_tele = "こいつのDNAはタキオン粒子の放出によってかき混ぜられたように見えるな。"
-L.search_dmg_car = "このテロリストが道路を渡った際、野蛮なドライバーにでも轢かれたのか。"
-L.search_dmg_other = "このテロリストの死因を特定できない。"
-
-L.search_weapon = "{weapon}によって殺されたようだな。"
-L.search_head = "ヘッドショットされたのか。叫ぶ暇も無いな。"
-L.search_time = "こいつは調査のおおよそ{time}秒前に死んだな。"
-L.search_dna = "殺害者のDNAサンプルをDNAスキャナーで回収しなくては。DNAサンプルは今からおおよそ{time}秒で腐敗するだろう。"
-
-L.search_kills1 = "{player}の死を立証するための殺害リストを見つけた。"
-L.search_kills2 = "これらの名前の載った殺害リストを見つけた:"
-L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か、それとも偶然か？"
-
 -- Scoreboard
 L.sb_playing = "サーバー名"
 L.sb_mapchange = "マップ変更まで{num}ラウンドか{time}秒"
@@ -251,6 +211,7 @@ L.item_weapon = "武器"
 L.item_armor = "ボディアーマー"
 L.item_armor_desc = [[
 弾丸、炎、爆発によるダメージを軽減。延長時間になったら使い物にならない。
+
 複数の購入が可能。ある特定の装甲値に達した後、アーマーは強化される。]]
 
 L.item_radar = "レーダー"
@@ -261,8 +222,8 @@ L.item_radar_desc = [[
 
 L.item_disg = "変装装置"
 L.item_disg_desc = [[
-変装中はあなたのID情報を隠せます。 さらに、
-獲物が最期に目撃した人物になるのも避けれます。
+変装中はあなたのID情報を隠せます。 さらに、獲物が最期に目撃した人物になるのも避けれます。
+
 このメニューの変装メニュー内かテンキーのEnterで切り替え。]]
 
 -- C4
@@ -300,8 +261,8 @@ L.vis_hint = "{usekey}で拾う（探偵のみ）"
 
 L.vis_desc = [[
 殺害現場を可視化してくれる機械。
-死体を分析して被害者がどのように殺害されたかを表示しますが、
-被害者が銃撃の傷で死亡した場合のみ。]]
+
+死体を分析して被害者がどのように殺害されたかを表示しますが、被害者が銃撃の傷で死亡した場合のみ。]]
 
 -- Decoy
 L.decoy_name = "デコイ"
@@ -320,16 +281,16 @@ L.defuser_help = "{primaryfire}でC4除去"
 
 L.defuser_desc = [[
 C4爆弾を即座に除去する。
-使用回数は無制限。
-これさえ持っていればC4に気がつくのに容易でしょう。]]
+
+使用回数は無制限。これさえ持っていればC4に気がつくのに容易でしょう。]]
 
 -- Flare gun
 L.flare_name = "信号拳銃"
 
 L.flare_desc = [[
 死体を燃やすことができる拳銃。証拠隠滅に必須。
-弾は限られているので注意。
-燃えている死体からは大きな燃焼音を発するので注意。]]
+
+弾は限られているので注意。燃えている死体からは大きな燃焼音を発するので注意。]]
 
 -- Health station
 L.hstation_name = "回復ステーション"
@@ -339,22 +300,22 @@ L.hstation_help = "{primaryfire}で回復ステーション設置"
 
 L.hstation_desc = [[
 回復が可能な設置型の機械。チャージは遅く、
-誰でも使用することができますが、耐久力があるので注意。
-使用者のDNAサンプルをチェックすることができます。]]
+
+誰でも使用することができますが、耐久力があるので注意。使用者のDNAサンプルをチェックすることができます。]]
 
 -- Knife
 L.knife_name = "ナイフ"
 L.knife_thrown = "ナイフ投擲"
 
 L.knife_desc = [[
-怪我した者なら即座に静かに始末できますが、
-一度しか使用できません。
+怪我した者なら即座に静かに始末できますが、一度しか使用できません。
+
 オルトファイアで投擲できます。]]
 
 -- Poltergeist
 L.polter_desc = [[
-オブジェクトにThumperを設置すると、
-使用者の意志に関係なくそのオブジェクトが暴れまわり、
+オブジェクトにThumperを設置すると、使用者の意志に関係なくそのオブジェクトが暴れまわり、
+
 暴れ終わった後のThumperの爆発は近くの人間にダメージを与えます。]]
 
 -- Radio
@@ -363,14 +324,15 @@ L.radio_help_pri = "{primaryfire}でラジオを置く"
 
 L.radio_desc = [[
 注意を逸らしたり欺くために音を再生できる機械。
-どこか適当な場所にラジオを置いてから、
-ショップメニュー内のラジオメニューから音を再生できます。]]
+
+どこか適当な場所にラジオを置いてから、ショップメニュー内のラジオメニューから音を再生できます。]]
 
 -- Silenced pistol
 L.sipistol_name = "消音ピストル"
 
 L.sipistol_desc = [[
 サプレッサー付きのハンドガン。通常のピストルの弾丸を使用する。
+
 撃たれた犠牲者は悲鳴をあげることはないだろう。]]
 
 -- Newton launcher
@@ -378,6 +340,7 @@ L.newton_name = "ニュートンランチャー"
 
 L.newton_desc = [[
 遠距離からでも人を弾き飛ばせる弾を発射する。
+
 弾は無制限だが、次の弾を発射するのに時間がかかる。]]
 
 -- Binoculars
@@ -385,6 +348,7 @@ L.binoc_name = "双眼鏡"
 
 L.binoc_desc = [[
 遠く離れた距離から死体まで拡大し、確認することができる。
+
 無制限で使用できる、確認するのに数秒かかる。]]
 
 -- UMP
@@ -402,7 +366,7 @@ L.dna_killer = "死体から殺害者のDNAサンプルを入手した！"
 L.dna_duplicate = "一致した！スキャナーにこのDNAが登録されたぞ。"
 L.dna_no_killer = "DNAは回収されることができないようだ (殺害者はゲームを退出したんだろうか?)."
 L.dna_armed = "この爆弾は稼働中だ！早く解除するんだ！"
-L.dna_object = "オブジェクトから{num}個の新しいDNAサンプルを入手した。"
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "このエリアにDNA反応はないようだ。"
 
 L.dna_desc = [[
@@ -480,13 +444,11 @@ L.karma_min = "どうしようもない"
 
 -- TargetID misc
 L.corpse = "死体"
-L.corpse_hint = "{usekey}を押して調査。{walkkey} + {usekey}で密かに調査。"
+--L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly."
 
 L.target_disg = "(変装中)"
 L.target_unid = "誰かの死体"
 L.target_unknown = "テロリスト"
-
-L.target_credits = "調べて未使用クレジットを入手する"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "一度きり"
@@ -926,7 +888,7 @@ L.hud_forced_failed = " {hudname} を固定できなかった。これを行う�
 L.hud_restricted_failed = " {hudname} を制限できなかった。あなたはそれを行う権限がないようだ。"
 
 L.shop_role_select = "役職選択"
-L.shop_role_selected = "{roles}のショップを選択した"
+L.shop_role_selected = "{role}のショップを選択した"
 L.shop_search = "検索"
 
 -- 2019-10-19
@@ -949,7 +911,7 @@ L.target_switch_weapon_nospace = "この武器のインベントリがないな�
 L.target_switch_drop_weapon_info = "{name}をスロット{slot}から捨てる"
 L.target_switch_drop_weapon_info_noslot = "スロット{slot}には捨てるものがないな。"
 
-L.corpse_searched_by_detective = "Detectiveにより調査済み"
+--L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "その死体から遠すぎる。"
 
 L.radio_pickup_wrong_team = "別陣営が所有するラジオは使えないようだ。"
@@ -997,7 +959,6 @@ L.mute_team = "{team}がミュートされた。"
 L.door_auto_closes = "このドアは自動で閉まるようだ。"
 L.door_open_touch = "触れるとドアが開くようだ。"
 L.door_open_touch_and_use = "このドアは触れるか、[{usekey}] で開くようだ。"
-L.hud_health = "HP"
 
 -- 2020-03-09
 L.help_title = "ヘルプと設定"
@@ -1112,13 +1073,10 @@ L.label_gameplay_specmode = "観戦者モード（常時観戦者になれます
 L.label_gameplay_fastsw = "高速武器スイッチ"
 L.label_gameplay_hold_aim = "Aimの固定を有効"
 L.label_gameplay_mute = "死んだとき生存者のボイスチャットをミュートにする"
-L.label_gameplay_dtsprint_enable = "タブルタップ走行を有効"
-L.label_gameplay_dtsprint_anykey = "止まるまでダブルタップ走行を止めない"
 L.label_hud_default = "デフォルトHUD"
 L.label_hud_force = "強制的HUD"
 
 L.label_bind_weaponswitch = "武器を拾う"
-L.label_bind_sprint = "ダッシュ"
 L.label_bind_voice = "通常ボイスチャット"
 L.label_bind_voice_team = "チームボイスチャット"
 
@@ -1189,11 +1147,7 @@ L.hud_revival_time = "{time}秒"
 L.door_destructible = "ドアが破損している({health}HP)"
 
 -- 2020-05-28
-L.confirm_detective_only = "Detectiveにしか死体を確認できないようだ。"
-L.inspect_detective_only = "Detectiveにしか死体を検査できないようだ。"
-L.corpse_hint_no_inspect = "Detectiveにしかこの死体を探せないようだ。"
-L.corpse_hint_inspect_only = "[{usekey}] で探す。Detectiveにしか死体を確認できないようだ。"
-L.corpse_hint_inspect_only_credits = "[{usekey}] でクレジットを受け取る。Detectiveにしかこの死体を探せないようだ。"
+--L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "変装する"
@@ -1432,7 +1386,7 @@ L.spawn_ammo_rifle = "ライフル弾"
 L.spawn_ammo_shotgun = "バックショット"
 L.spawn_player_random = "プレイヤースポーン"
 
-L.spawn_weapon_ammo = " (弾薬:{ammo})"
+L.spawn_weapon_ammo = "(弾薬:{ammo})"
 
 L.spawn_weapon_edit_ammo = "[{walkkey}]を押しながら[{primaryfire}又は{secondaryfire}]を押すとこちらのスポーンの弾薬を増加又は減少させることができます。"
 
@@ -1463,24 +1417,24 @@ L.header_equipment_weapon_spawn_setup = "武器スポーン設定"
 --L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
 L.help_spawn_editor_hint = "スポーンエディタを終了したい場合は設定画面を再度開いてください。"
 L.help_spawn_editor_spawn_amount = [[
-このマップには{weapon}個の武器、{ammo}個の弾薬と{player}人のスポーン位置が設定されています。
+このマップには {weapon} 個の武器、{ammo} 個の弾薬と {player} 人のスポーン位置が設定されています。
 変更したい場合は'始める'を押しましょう。
 
-{weaponrandom}xおまかせ武器
-{weaponmelee}x近接武器
-{weaponnade}xグレネード
-{weaponshotgun}xショットガン
-{weaponheavy}x重機関銃
-{weaponsniper}xスナイパー
-{weaponpistol}xピストル
-{weaponspecial}x特殊武器
+{weaponrandom}x おまかせ武器
+{weaponmelee}x 近接武器
+{weaponnade}x グレネード
+{weaponshotgun}x ショットガン
+{weaponheavy}x 重機関銃
+{weaponsniper}x スナイパー
+{weaponpistol}x ピストル
+{weaponspecial}x 特殊武器
 
-{ammorandom}xおまかせ弾薬
-{ammodeagle}xマグナム弾
-{ammopistol}x9mm弾
-{ammomac10}xSMG弾
-{ammorifle}xライフル弾
-{ammoshotgun}xバックショット
+{ammorandom}x おまかせ弾薬
+{ammodeagle}x マグナム弾
+{ammopistol}x 9mm弾
+{ammomac10}x SMG弾
+{ammorifle}x ライフル弾
+{ammoshotgun}x バックショット
 
 {playerrandom}xプレイヤースポーン位置]]
 
@@ -1666,8 +1620,8 @@ L.header_playersettings_armor = "アーマーシステム設定"
 --If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 L.help_damage_log = "プレーヤーがダメージを受けるたびに、有効になっている場合は、ダメージログエントリがコンソールに追加されます。\nラウンド終了後にディスクに保存することもできます。ファイルは「data/terrortown/log/」に保存されています。"
 L.help_spawn_waves = [[
-0に設定すると、すべてのプレイヤーが一度にスポーンされます。大人数のプレイヤーがいるサーバーでは、ウェーブ間隔でプレイヤーをスポーンさせるのが良いでしょう。
-スポーンウェーブ間隔は、各スポーンウェーブの間の時間です。スポーンウェーブは、スポーンポイントの数だけプレイヤーをスポーンさせます。
+0に設定すると、すべてのプレイヤーが一度にスポーンされます。大人数のプレイヤーがいるサーバーでは、ウェーブ間隔でプレイヤーをスポーンさせるのが良いでしょう。スポーンウェーブ間隔は、各スポーンウェーブの間の時間です。スポーンウェーブは、スポーンポイントの数だけプレイヤーをスポーンさせます。
+
 注意 : 準備時間が希望する量のスポーンウェーブに十分な長さであることを確認してください。]]
 --L.help_voicechat_battery = [[
 --Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
@@ -1675,23 +1629,23 @@ L.help_spawn_waves = [[
 --Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
 --L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
 L.help_haste_mode = [[
-HASTEモードは、プレイヤーが一人死亡するたびのラウンド時間追加により、ゲームのバランスを取ります。
-Traitor陣営の役職、又は観戦者のみが、実際のラウンド時間を見ることができます。他の役職は見れません。
+HASTEモードは、プレイヤーが一人死亡するたびのラウンド時間追加により、ゲームのバランスを取ります。Traitor陣営の役職、又は観戦者のみが、実際のラウンド時間を見ることができます。他の役職は見れません。
+
 HASTEモードが有効になっている場合、通常ラウンド時間は無視されます。]]
 L.help_round_limit = "設定された制限条件の1つが満たされると、マップ変更が開始されます。"
 L.help_armor_balancing = "アーマーのバランス調整ができる機能です。"
 L.help_item_armor_classic = "クラシックアーマーモードは、プレイヤーがラウンドで一度だけボディアーマーを購入することができ、\nアーマーは弾丸とバールによるダメージの30%を軽減できます。"
 L.help_item_armor_dynamic = [[
-動的アーマーモードは購入できるアーマーの量は無制限で、アーマー値の重複が可能なモードです。
-ダメージを受けると、アーマーの値が減少します。購入したアーマーの耐久値は、上記項目の「装備設定」に設定されています。
+動的アーマーモードは購入できるアーマーの量は無制限で、アーマー値の重複が可能なモードです。ダメージを受けると、アーマーの値が減少します。購入したアーマーの耐久値は、上記項目の「装備設定」に設定されています。
+
 ダメージを受けると、このダメージの一定の割合だけアーマーへのダメージに変換され、プレイヤーに対しては異なる割合が適用され、残りは消滅します。
+
 強化アーマーが有効な場合、耐久値が補強しきい値を超える限り、プレイヤーに与えるダメージは15%減少します。]]
 L.help_sherlock_mode = "シャーロックモードは、古典的なTTTモードです。シャーロックモードが無効になっている場合、\n死体は確認できず、スコアボードは生きている全ての人を示し、観戦者は生存者と会話が可能です。"
 L.help_prop_possession = [[
-オブジェクト憑依は、観戦者がマップに存在するオブジェクトに憑依し、
-ゆっくりとチャージされていく「パンチ・オー・メーター」を使用して、そのオブジェクトを操作できる機能です。
-「パンチ・オー・メーター」の最大値は、2つの定義された制限の間に遮断された死量/死の差が追加される基本的憑依値で構成されています。
-メーターは時間の経過とともにゆっくりチャージされます。セットの再チャージ時間は、「パンチ・オー・メーター」の単一ポイントをチャージするのに必要な時間です。]]
+オブジェクト憑依は、観戦者がマップに存在するオブジェクトに憑依し、ゆっくりとチャージされていく「パンチ・オー・メーター」を使用して、そのオブジェクトを操作できる機能です。
+
+「パンチ・オー・メーター」の最大値は、2つの定義された制限の間に遮断された死量/死の差が追加される基本的憑依値で構成されています。メーターは時間の経過とともにゆっくりチャージされます。セットの再チャージ時間は、「パンチ・オー・メーター」の単一ポイントをチャージするのに必要な時間です。]]
 --L.help_karma = "Players start with a certain amount of Karma, and lose it when they damage/kill teammates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
 --L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly kill teammates."
 --L.help_karma_max = "Setting the value of the max Karma above 1000 doesn't give a damage bonus to players with more than 1000 Karma. It can be used as a Karma buffer."
@@ -1699,7 +1653,9 @@ L.help_karma_ratio = "両者が同じ陣営にいる場合に、カルマを加�
 L.help_karma_traitordmg_ratio = "両者が異なる陣営にいる場合に、加害者のカルマの量を攻撃者から差し引く計算するためのダメージ比率。\nチームキルが発生した場合は、さらにボーナスが適用されます。"
 L.help_karma_bonus = "ラウンド中にカルマを獲得する2つの異なる受動的な方法もあります。まず、ラウンド復帰はすべてのプレイヤーに適用されます。\nその後、チームメイトがダメージを受けなかったり殺されたりしなかった場合、二次的な整理ボーナスが与えられます。"
 L.help_karma_clean_half = [[
-プレイヤーのカルマが開始レベルを超えている場合(カルマの最大値がそれより高く設定されている場合)、\nカルマがその開始レベルをどれだけ上回っているかによって、全てのカルマの増加が減少。高いほど遅く上がります。\nこの減少は指数的な減衰の曲線に入ります。最初は速く増分が小さくなるにつれて減速します。この設定は、ボーナスが半分になった時点で設定されます(所謂半減期)。\nデフォルト値が0.25だと、カルマの開始量が1000と最大1500 で、プレイヤーがカルマ 1125 ((1500 - 1000) * 0.25 = 125 を持つ場合、\nラウンド整理ボーナスは30/2 = 15になります。つまり、ボーナスをより速く下げるために、この設定を低く設定し、それが遅くなるように、1に向かってそれを増やすでしょう。]]
+プレイヤーのカルマが開始レベルを超えている場合(カルマの最大値がそれより高く設定されている場合)、カルマがその開始レベルをどれだけ上回っているかによって、全てのカルマの増加が減少。高いほど遅く上がります。
+
+この減少は指数的な減衰の曲線に入ります。最初は速く増分が小さくなるにつれて減速します。この設定は、ボーナスが半分になった時点で設定されます(所謂半減期)。\nデフォルト値が0.25だと、カルマの開始量が1000と最大1500 で、プレイヤーがカルマ 1125 ((1500 - 1000) * 0.25 = 125 を持つ場合、\nラウンド整理ボーナスは30/2 = 15になります。つまり、ボーナスをより速く下げるために、この設定を低く設定し、それが遅くなるように、1に向かってそれを増やすでしょう。]]
 L.help_max_slots = "スロットあたりの武器の最大量を設定します。'-1' は制限がないということです。"
 L.help_item_armor_value = "これは、ダイナミックモードでアーマーアイテムによって与えられるアーマー値です。クラシックモードが\n有効になっている場合(「管理」->'プレイヤー設定'を参照)、0より大きいすべての値が既存のアーマーとしてカウントされます。"
 
@@ -1752,10 +1708,8 @@ L.label_session_limits_enabled = "セッションの制限を有効にする"
 L.label_spectator_chat = "観戦者同士でのチャットの有無"
 L.label_lastwords_chatprint = "タイピング中に殺されたら遺言を送信する"
 L.label_identify_body_woconfirm = "'確認'ボタン無しで死体を特定"
-L.label_announce_body_found = "死体発見時の報告"
+--L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 L.label_confirm_killlist = "確認済みの死体のリストの報告"
---L.label_inspect_detective_only = "Limit corpse search to policing roles only"
---L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
 L.label_dyingshot = "アイアンサイト中で死に撃つ[実験的]"
 L.label_armor_block_headshots = "ヘッドショットへの耐久"
 L.label_armor_block_blastdmg = "爆破ダメージへの耐久"
@@ -1827,6 +1781,7 @@ L.label_falldmg_exponent = "落下速度に対する落下ダメージ増加指�
 
 L.help_falldmg_exponent = [[
 この値は、プレイヤーが地面に当たる速度に応じて、落下ダメージが指数関数的に増加する方法を変更します。
+
 この値を変更するときは注意してください。高すぎると、少し下っただけでも致命的になる可能性があり、低すぎると、プレイヤーは極端な高さから落下してもほとんどもしくは全くダメージを受けなくなってしまいます。]]
 
 -- 2023-02-08
@@ -1854,7 +1809,6 @@ L.help_falldmg_exponent = [[
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1865,7 +1819,6 @@ L.help_falldmg_exponent = [[
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1888,6 +1841,152 @@ L.help_falldmg_exponent = [[
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-07
+L.search_title = "調査結果 - {player}"
+L.search_info = "情報"
+L.search_confirm = "確認済み"
+--L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
+--L.search_take_credits = "Take {credits} Credit(s)"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
+--L.search_call = "Report Death"
+--L.search_called = "Death Reported"
+
+--L.search_team_role_unknown = "???"
+
+L.search_words = "遺言:「{lastwords}」"
+L.search_armor = "ボディアーマーを着ていたようだ。"
+L.search_disguiser = "変装をしていたようだ。"
+L.search_radar = "レーダーを所持していたようだ。もう機能していないがな。"
+L.search_c4 = "ポケットからメモを見つけた。「爆弾を解除するには{num}番のワイヤーをカットしろ」と書かれている。"
+
+L.search_dmg_crush = "こいつの骨の多くが折れている。重たい物でもぶつかって死んだようだ。"
+L.search_dmg_bullet = "こいつは撃たれて死んだようだな。"
+L.search_dmg_fall = "こいつは転落死したようだな。"
+L.search_dmg_boom = "こいつの傷と焼けた衣服から見ると、爆発で死んだように思えるな。"
+L.search_dmg_club = "死体には打撲傷と殴られた跡がある。殴られて死んだようだな。"
+L.search_dmg_drown = "死因は溺死のようだ。"
+L.search_dmg_stab = "こいつは刃物に刺されて出血死したようだ。。"
+L.search_dmg_burn = "この辺りにはテロリストが焼けたような臭いがするな..."
+L.search_dmg_teleport = "こいつのDNAはタキオン粒子の放出によってかき混ぜられたように見えるな。"
+L.search_dmg_car = "このテロリストが道路を渡った際、野蛮なドライバーにでも轢かれたのか。"
+L.search_dmg_other = "このテロリストの死因を特定できない。"
+
+--L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
+--L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
+--L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
+--L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
+--L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
+--L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
+--L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
+--L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
+--L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
+--L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
+--L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
+--L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
+--L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
+--L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
+--L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
+--L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
+--L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
+--L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
+--L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+
+--L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
+--L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
+--L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+
+L.search_weapon = "{weapon}によって殺されたようだな。"
+L.search_head = "ヘッドショットされたのか。叫ぶ暇も無いな。"
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+
+L.search_kills1 = "{player}の死を立証するための殺害リストを見つけた。"
+L.search_kills2 = "これらの名前の載った殺害リストを見つけた:{player}"
+L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か、それとも偶然か？"
+
+--L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+
+--L.search_kill_distance_point_blank = "It was a point blank attack."
+--L.search_kill_distance_close = "The attack came from a short distance."
+--L.search_kill_distance_far = "The victim was attacked from a long distance away."
+
+--L.search_kill_from_front = "The victim was shot from the front."
+--L.search_kill_from_back = "The victim was shot from behind."
+--L.search_kill_from_side = "The victim was shot from the side."
+
+--L.search_hitgroup_head = "The projectile was found in their head."
+--L.search_hitgroup_chest = "The projectile was found in their chest."
+--L.search_hitgroup_stomach = "The projectile was found in their stomach."
+--L.search_hitgroup_rightarm = "The projectile was found in their right arm."
+--L.search_hitgroup_leftarm = "The projectile was found in their left arm."
+--L.search_hitgroup_rightleg = "The projectile was found in their right leg."
+--L.search_hitgroup_leftleg = "The projectile was found in their left leg."
+--L.search_hitgroup_gear = "The projectile was found in their hip."
+
+--L.search_policingrole_report_confirm = [[
+--A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
+--L.search_policingrole_confirm_disabled_1 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
+--L.search_policingrole_confirm_disabled_2 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!
+--You can see the information in here after they confirmed it.]]
+--L.search_spec = [[
+--As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+
+--L.search_title_words = "Victim's last words"
+--L.search_title_c4 = "Defusion mishap"
+--L.search_title_dmg_crush = "Crush damage ({amount} HP)"
+--L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
+--L.search_title_dmg_fall = "Fall damage ({amount} HP)"
+--L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
+--L.search_title_dmg_club = "Club damage ({amount} HP)"
+--L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
+--L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
+--L.search_title_dmg_burn = "Burning damage ({amount} HP)"
+--L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
+--L.search_title_dmg_car = "Car accident ({amount} HP)"
+--L.search_title_dmg_other = "Unknown damage ({amount} HP)"
+--L.search_title_time = "Death time"
+--L.search_title_dna = "DNA sample decay"
+--L.search_title_kills = "The victim's kill list"
+--L.search_title_eyes = "The killer's shadow"
+--L.search_title_floor = "Floor of the crime scene"
+--L.search_title_credits = "{credits} Equipment credit(s)"
+--L.search_title_water = "Water level {level}"
+--L.search_title_policingrole_report_confirm = "Confirm to report death"
+--L.search_title_policingrole_confirm_disabled = "Report corpse"
+--L.search_title_spectator = "You are a spectator"
+
+--L.target_credits_on_confirm = "Confirm to receive unspent credits"
+--L.target_credits_on_search = "Search to receive unspent credits"
+--L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
+--L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+
+--L.label_inspect_confirm_mode = "Select body search mode"
+--L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
+--L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
+--L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
+--L.help_inspect_confirm_mode = [[
+--There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
+--
+--mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
+--
+--mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
+--
+--mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
@@ -1951,3 +2050,26 @@ L.help_falldmg_exponent = [[
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"

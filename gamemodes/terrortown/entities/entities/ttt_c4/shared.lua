@@ -643,7 +643,7 @@ if SERVER then
 	local function SendDisarmResult(ply, bomb, disarmResult)
 		---
 		-- @realm server
-		local result, message = hook.Run("TTTC4Disarm", bomb, result, ply)
+		local result, message = hook.Run("TTTC4Disarm", bomb, disarmResult, ply)
 
 		if result == false then
 			if message then

@@ -172,46 +172,6 @@ L.quick_disg = "alguém disfarçado"
 L.quick_corpse = "um corpo não identificado"
 L.quick_corpse_id = "o cadáver de {player}"
 
--- Body search window
-L.search_title = "Resultados de investigação corporal"
-L.search_info = "Informação"
-L.search_confirm = "Confirmar Morte"
-L.search_call = "Chamar Detetive"
-
--- Descriptions of pieces of information found
-L.search_nick = "Este é o corpo de {player}."
-
-L.search_role_traitor = "Este jogador era um Traidor!"
-L.search_role_det = "Este jogador era um Detetive."
-L.search_role_inno = "Este jogador era um terrorista inocente."
-
-L.search_words = "Algo lhe diz que algumas das últimas palavras desta pessoa foram: '{lastwords}'"
-L.search_armor = "Ele estava vestindo um colete balístico atípico."
-L.search_disg = "Ele estava carregando um dispositivo que podia ocultar sua identidade."
-L.search_radar = "Ele estava carregando algum tipo de radar. Não está mais funcionando."
-L.search_c4 = "Você encontrou uma nota em um bolso. Ela diz que ao cortar o fio {num}, a bomba será desarmada com segurança."
-
-L.search_dmg_crush = "A maioria dos ossos dele estão quebrados. Parece que ele foi esmagado por algo pesado."
-L.search_dmg_bullet = "É óbvio que ele foi baleado."
-L.search_dmg_fall = "Ele caiu para sua morte."
-L.search_dmg_boom = "Seus ferimentos e roupas rasgadas indicam que uma explosão o matou."
-L.search_dmg_club = "Este corpo está muito ferido. Claramente ele foi espancado até a morte."
-L.search_dmg_drown = "O corpo revela sinais de afogamento."
-L.search_dmg_stab = "Ele foi esfaqueado e cortado antes de rapidamente sangrar até a morte."
-L.search_dmg_burn = "Cheiro de terrorista assado por aqui..."
-L.search_dmg_tele = "Parece que a amostra de DNA dele foi embaraçada por emissões de táquion!"
-L.search_dmg_car = "Quando este terrorista atravessou a estrada, acabou sendo atropelado por um motorista com a CNH vencida."
-L.search_dmg_other = "Você não pôde encontrar uma causa específica da morte deste terrorista."
-
-L.search_weapon = "Aparentemente, um(a) {weapon} foi usado(a) para matá-lo."
-L.search_head = "O disparo foi direto na cabeça. A vítima não teve tempo para gritar."
-L.search_time = "Ele morreu aproximadamente após {time} antes de seu corpo ser encontrado."
-L.search_dna = "Recupere uma amostra do DNA do assassino utilizando um Scanner de DNA. A amostra de DNA sumirá em aproximadamente {time} a partir de agora."
-
-L.search_kills1 = "Você encontrou uma lista de assassinatos que comprovam a morte de {player}."
-L.search_kills2 = "Você encontrou uma lista de assassinatos com estes nomes:"
-L.search_eyes = "Usando suas técnicas de detetive, você identificou a última pessoa que ele viu: {player}. O assassino, ou uma coincidência?"
-
 -- Scoreboard
 L.sb_playing = "Você está jogando em..."
 L.sb_mapchange = "O mapa será mudado em {num} rodadas ou em {time}"
@@ -250,8 +210,7 @@ L.item_weapon = "Arma"
 
 L.item_armor = "Colete Balístico"
 L.item_armor_desc = [[
-Reduz o dano das balas em 30%
-quando você é atingido.
+Reduz o dano das balas em 30% quando você é atingido.
 
 Equipamento padrão de Detetives.]]
 
@@ -259,16 +218,13 @@ L.item_radar = "Radar"
 L.item_radar_desc = [[
 Permite varrer sinais vitais.
 
-Varre automaticamente assim que você o compra.
-Configure-o na aba Radar deste menu.]]
+Varre automaticamente assim que você o compra. Configure-o na aba Radar deste menu.]]
 
 L.item_disg = "Disfarce"
 L.item_disg_desc = [[
-Oculta sua identidade enquanto habilitado. Também
-evita ser a última pessoa vista por uma vítima.
+Oculta sua identidade enquanto habilitado. Também evita ser a última pessoa vista por uma vítima.
 
-Habilite-o na aba Disfarce deste menu
-ou aperte a tecla Enter do teclado numérico.]]
+Habilite-o na aba Disfarce deste menu ou aperte a tecla Enter do teclado numérico.]]
 
 -- C4
 L.c4_hint = "Pressione {usekey} para armar ou desarmar."
@@ -306,9 +262,7 @@ L.vis_hint = "Pressione {usekey} para pegar (somente Detetives)."
 L.vis_desc = [[
 Permite visualizar uma cena de crime.
 
-Analisa um cadáver para mostrar como
-a vítima morreu, mas somente se
-ela tiver morrido por ferimentos de armas de fogo.]]
+Analisa um cadáver para mostrar como a vítima morreu, mas somente se ela tiver morrido por ferimentos de armas de fogo.]]
 
 -- Decoy
 L.decoy_name = "Isca"
@@ -319,10 +273,7 @@ L.decoy_short_desc = "Está isca, mostrará um radar falso para o outro time."
 L.decoy_pickup_wrong_team = "Você não pode pegar está isca, pertence ao time diferente!"
 
 L.decoy_desc = [[
-Mostra um sinal de radar falso para Detetives,
-e faz os scanners de DNA deles indicar a
-localização da sua Isca se eles procurarem
-a amostra do seu DNA.]]
+Mostra um sinal de radar falso para Detetives, e faz os scanners de DNA deles indicar a localização da sua Isca se eles procurarem a amostra do seu DNA.]]
 
 -- Defuser
 L.defuser_name = "Kit de Desarme"
@@ -331,15 +282,13 @@ L.defuser_help = "{primaryfire} desarma um C4 que está sob sua mira."
 L.defuser_desc = [[
 Instantaneamente desarma um explosivo C4.
 
-Usos ilimitados. Um C4 será mais fácil de
-ser notado se você estiver com isto equipado.]]
+Usos ilimitados. Um C4 será mais fácil de ser notado se você estiver com isto equipado.]]
 
 -- Flare gun
 L.flare_name = "Pistola Sinalizadora"
 
 L.flare_desc = [[
-Pode ser usado para queimar cadáveres para que
-eles nunca sejam encontrados. Munição limitada.
+Pode ser usado para queimar cadáveres para que eles nunca sejam encontrados. Munição limitada.
 
 Queimar um cadáver emite um som estranho.]]
 
@@ -352,28 +301,22 @@ L.hstation_help = "{primaryfire} posiciona a Estação de Cura."
 L.hstation_desc = [[
 Permite que as pessoas se curem quando posicionada.
 
-Seu tempo de recarga é lento. Qualquer um pode
-usá-la, e ela pode ser danificada. Pode ser usada
-para analisar o DNA de seus utilizadores.]]
+Seu tempo de recarga é lento. Qualquer um pode usá-la, e ela pode ser danificada. Pode ser usada para analisar o DNA de seus utilizadores.]]
 
 -- Knife
 L.knife_name = "Faca"
 L.knife_thrown = "Faca arremessada"
 
 L.knife_desc = [[
-Mata o alvo instantaneamente e de forma silenciosa,
-mas só pode ser usada uma vez.
+Mata o alvo instantaneamente e de forma silenciosa, mas só pode ser usada uma vez.
 
-Pode ser arremessada ao usar
-o botão de ataque alternativo.]]
+Pode ser arremessada ao usar o botão de ataque alternativo.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Planta batedores em objetos para empurrar pessoas
-à sua volta de maneira violenta.
+Planta batedores em objetos para empurrar pessoas à sua volta de maneira violenta.
 
-A energia causa dano em pessoas
-que estejam nas proximidades.]]
+A energia causa dano em pessoas que estejam nas proximidades.]]
 
 -- Radio
 L.radio_broken = "Seu Rádio foi destruído!"
@@ -382,16 +325,13 @@ L.radio_help_pri = "{primaryfire} posiciona o Rádio."
 L.radio_desc = [[
 Reproduz sons para distrair e/ou enganar.
 
-Posicione o Rádio em algum lugar, e então
-reproduza os sons nele utilizando a aba Rádio
-deste menu.]]
+Posicione o Rádio em algum lugar, e então reproduza os sons nele utilizando a aba Rádio deste menu.]]
 
 -- Silenced pistol
 L.sipistol_name = "Pistola Silenciada"
 
 L.sipistol_desc = [[
-Pistola de baixo ruído, usa munição
-de pistola normal.
+Pistola de baixo ruído, usa munição de pistola normal.
 
 As vítimas não gritarão quando forem mortas.]]
 
@@ -407,16 +347,13 @@ Sua munição é infinita, mas dispara lentamente.]]
 L.binoc_name = "Binóculos"
 
 L.binoc_desc = [[
-Permite dar zoom em cadáveres para identificá-los
-a partir de uma longa distância.
+Permite dar zoom em cadáveres para identificá-los a partir de uma longa distância.
 
-Seus usos são ilimitados, porém o processo
-de identificação demora alguns segundos.]]
+Seus usos são ilimitados, porém o processo de identificação demora alguns segundos.]]
 
 -- UMP
 L.ump_desc = [[
-SMG experimental que desorienta
-alvos.
+SMG experimental que desorienta alvos.
 
 Usa munição de SMG comum.]]
 
@@ -433,12 +370,9 @@ L.dna_object = "A mostra coletada para o dono deste objeto."
 L.dna_gone = "Não há nenhuma amostra de DNA nesta área."
 
 L.dna_desc = [[
-Colete amostras de DNA de objetos
-e analise-as para saber quem os usou.
+Colete amostras de DNA de objetos e analise-as para saber quem os usou.
 
-Utilize-o em terroristas recentemente mortos
-para coletar a amostra do DNA do assassino e assim
-poder rastreá-lo.]]
+Utilize-o em terroristas recentemente mortos para coletar a amostra do DNA do assassino e assim poder rastreá-lo.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -466,14 +400,13 @@ L.tele_no_mark = "Nenhum local marcado. Marque um local para teletransportar-se.
 L.tele_no_mark_ground = "Você não pode marcar um local para teletransportar-se se você não estiver em um chão sólido!"
 L.tele_no_mark_crouch = "Você não pode marcar um local para teletransportar-se enquanto estiver agachado!"
 
-L.tele_help_pri = "{primaryfire} teletransporta para o local marcado."
-L.tele_help_sec = "{secondaryfire} marca um local de teletransporte."
+--L.tele_help_pri = "Teleports to marked location"
+--L.tele_help_sec = "Marks current location"
 
 L.tele_desc = [[
 Teletransporta para um local previamente marcado.
 
-Teletransportar-se faz barulho, e tem
-um número limitado de usos.]]
+Teletransportar-se faz barulho, e tem um número limitado de usos.]]
 
 -- Ammo names, shown when picked up
 L.ammo_pistol = "Munição de Pistola"
@@ -511,19 +444,17 @@ L.karma_min = "Irresponsável"
 
 -- TargetID misc
 L.corpse = "Cadáver"
-L.corpse_hint = "Pressione {usekey} para investigar. {walkkey} + {usekey} para investigar furtivamente."
+--L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly."
 
 L.target_disg = " (DISFARÇADO)"
 L.target_unid = "Corpo não identificado"
 L.target_unknown = "Um terrorista"
 
-L.target_credits = "Vasculhe para receber créditos não gastos"
-
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Uso único"
 L.tbut_reuse = "Reutilizável"
 L.tbut_retime = "Reutilizável após {num} seg"
-L.tbut_help = "Pressione {key} para ativar"
+L.tbut_help = "Pressione {usekey} para ativar"
 
 -- Spectator muting of living/dead
 L.mute_living = "Jogadores vivos emudecidos"
@@ -980,7 +911,7 @@ L.target_switch_weapon_nospace = "Não há slot de inventário para esta arma"
 L.target_switch_drop_weapon_info = "Dropar {name} do slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "Não há uma arma dropavel no slot {slot}"
 
-L.corpse_searched_by_detective = "Esse corpo foi encontrado por um detetive"
+--L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Este corpo está muito longe."
 
 L.radio_pickup_wrong_team = "Você não pode pegar a rádio de outro time."
@@ -1022,13 +953,12 @@ L.door_locked = "Esta porta esta trancada."
 
 -- 2020-02-11
 L.automoved_to_spec = "(MENSAGEM AUTOMATICA) Eu fui movimentado para o Espetador porque eu estava Parado/AFK."
-L.mute_team = "{time} mutado."
+L.mute_team = "{team} mutado."
 
 -- 2020-02-16
 L.door_auto_closes = "Esta porta fecha automaticamente.."
 L.door_open_touch = "Ande até a porta para abrir."
 L.door_open_touch_and_use = "Ande até a porta ou pressione [{usekey}] para abrir."
-L.hud_health = "Vida"
 
 -- 2020-03-09
 L.help_title = "Ajuda e Configurações"
@@ -1143,13 +1073,10 @@ L.label_gameplay_specmode = "Ativar modo espectador (ficar sempre em modo espect
 L.label_gameplay_fastsw = "Troca de arma rápida"
 L.label_gameplay_hold_aim = "Ativar segurar para mirar"
 L.label_gameplay_mute = "Mutar jogadores vivos quando morrer"
-L.label_gameplay_dtsprint_enable = "Ativar apertar duas veze para correr"
-L.label_gameplay_dtsprint_anykey = "Continuar apertando duas vezes antes de você parar"
 L.label_hud_default = "HUD Padrão"
 L.label_hud_force = "HUD Forçada"
 
 L.label_bind_weaponswitch = "Pegar arma"
-L.label_bind_sprint = "Correr"
 L.label_bind_voice = "Microfone Global"
 L.label_bind_voice_team = "Microfone do Time"
 
@@ -1220,11 +1147,7 @@ L.hud_revival_time = "{time}s"
 L.door_destructible = "Está porta é destrutível ({health}HP)."
 
 -- 2020-05-28
-L.confirm_detective_only = "Apenas detetives podem confirmar o corpo."
-L.inspect_detective_only = "Apenas detetive podem encontrar corpos."
-L.corpse_hint_no_inspect = "Apenas detetives podem encontrar este corpo."
-L.corpse_hint_inspect_only = "Pressione [{usekey}] para procurar. Apenas detetive pode confirmar o corpo."
-L.corpse_hint_inspect_only_credits = "Pressione [{usekey}] para pegar os créditos. Apenas detetives podem encontrar este corpo."
+--L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "Alternar disfarce"
@@ -1463,7 +1386,7 @@ L.xfer_team_indicator = "Time"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1785,10 +1708,8 @@ L.xfer_team_indicator = "Time"
 --L.label_spectator_chat = "Enable spectators chatting with everybody"
 --L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 --L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
---L.label_announce_body_found = "Announce that a body was found"
+--L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 --L.label_confirm_killlist = "Announce kill list of confirmed corpse"
---L.label_inspect_detective_only = "Limit corpse search to policing roles only"
---L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
 --L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
 --L.label_armor_block_headshots = "Enable armor blocking headshots"
 --L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
@@ -1888,7 +1809,6 @@ L.xfer_team_indicator = "Time"
 -- 2023-08-10
 --L.equipmenteditor_name_damage_scaling = "Damage Scaling"
 
-
 -- 2023-08-11
 --L.equipmenteditor_name_allow_drop = "Allow Drop"
 --L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
@@ -1899,7 +1819,6 @@ L.xfer_team_indicator = "Time"
 --L.drop_on_death_type_default = "Default (weapon-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
-
 
 -- 2023-08-26
 --L.equipmenteditor_name_kind = "Equipment Slot"
@@ -1922,6 +1841,152 @@ L.xfer_team_indicator = "Time"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
 --L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-07
+L.search_title = "Resultados de investigação corporal - {player}"
+L.search_info = "Informação"
+L.search_confirm = "Confirmar Morte"
+--L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
+--L.search_take_credits = "Take {credits} Credit(s)"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
+--L.search_call = "Report Death"
+--L.search_called = "Death Reported"
+
+--L.search_team_role_unknown = "???"
+
+L.search_words = "Algo lhe diz que algumas das últimas palavras desta pessoa foram: '{lastwords}'"
+L.search_armor = "Ele estava vestindo um colete balístico atípico."
+L.search_disguiser = "Ele estava carregando um dispositivo que podia ocultar sua identidade."
+L.search_radar = "Ele estava carregando algum tipo de radar. Não está mais funcionando."
+L.search_c4 = "Você encontrou uma nota em um bolso. Ela diz que ao cortar o fio {num}, a bomba será desarmada com segurança."
+
+L.search_dmg_crush = "A maioria dos ossos dele estão quebrados. Parece que ele foi esmagado por algo pesado."
+L.search_dmg_bullet = "É óbvio que ele foi baleado."
+L.search_dmg_fall = "Ele caiu para sua morte."
+L.search_dmg_boom = "Seus ferimentos e roupas rasgadas indicam que uma explosão o matou."
+L.search_dmg_club = "Este corpo está muito ferido. Claramente ele foi espancado até a morte."
+L.search_dmg_drown = "O corpo revela sinais de afogamento."
+L.search_dmg_stab = "Ele foi esfaqueado e cortado antes de rapidamente sangrar até a morte."
+L.search_dmg_burn = "Cheiro de terrorista assado por aqui..."
+L.search_dmg_teleport = "Parece que a amostra de DNA dele foi embaraçada por emissões de táquion!"
+L.search_dmg_car = "Quando este terrorista atravessou a estrada, acabou sendo atropelado por um motorista com a CNH vencida."
+L.search_dmg_other = "Você não pôde encontrar uma causa específica da morte deste terrorista."
+
+--L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
+--L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
+--L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
+--L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
+--L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
+--L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
+--L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
+--L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
+--L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
+--L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
+--L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
+--L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
+--L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
+--L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
+--L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
+--L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
+--L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
+--L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
+--L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+
+--L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
+--L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
+--L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+
+L.search_weapon = "Aparentemente, um(a) {weapon} foi usado(a) para matá-lo."
+L.search_head = "O disparo foi direto na cabeça. A vítima não teve tempo para gritar."
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+
+L.search_kills1 = "Você encontrou uma lista de assassinatos que comprovam a morte de {player}."
+L.search_kills2 = "Você encontrou uma lista de assassinatos com estes nomes: {player}"
+L.search_eyes = "Usando suas técnicas de detetive, você identificou a última pessoa que ele viu: {player}. O assassino, ou uma coincidência?"
+
+--L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+
+--L.search_kill_distance_point_blank = "It was a point blank attack."
+--L.search_kill_distance_close = "The attack came from a short distance."
+--L.search_kill_distance_far = "The victim was attacked from a long distance away."
+
+--L.search_kill_from_front = "The victim was shot from the front."
+--L.search_kill_from_back = "The victim was shot from behind."
+--L.search_kill_from_side = "The victim was shot from the side."
+
+--L.search_hitgroup_head = "The projectile was found in their head."
+--L.search_hitgroup_chest = "The projectile was found in their chest."
+--L.search_hitgroup_stomach = "The projectile was found in their stomach."
+--L.search_hitgroup_rightarm = "The projectile was found in their right arm."
+--L.search_hitgroup_leftarm = "The projectile was found in their left arm."
+--L.search_hitgroup_rightleg = "The projectile was found in their right leg."
+--L.search_hitgroup_leftleg = "The projectile was found in their left leg."
+--L.search_hitgroup_gear = "The projectile was found in their hip."
+
+--L.search_policingrole_report_confirm = [[
+--A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
+--L.search_policingrole_confirm_disabled_1 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
+--L.search_policingrole_confirm_disabled_2 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!
+--You can see the information in here after they confirmed it.]]
+--L.search_spec = [[
+--As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+
+--L.search_title_words = "Victim's last words"
+--L.search_title_c4 = "Defusion mishap"
+--L.search_title_dmg_crush = "Crush damage ({amount} HP)"
+--L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
+--L.search_title_dmg_fall = "Fall damage ({amount} HP)"
+--L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
+--L.search_title_dmg_club = "Club damage ({amount} HP)"
+--L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
+--L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
+--L.search_title_dmg_burn = "Burning damage ({amount} HP)"
+--L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
+--L.search_title_dmg_car = "Car accident ({amount} HP)"
+--L.search_title_dmg_other = "Unknown damage ({amount} HP)"
+--L.search_title_time = "Death time"
+--L.search_title_dna = "DNA sample decay"
+--L.search_title_kills = "The victim's kill list"
+--L.search_title_eyes = "The killer's shadow"
+--L.search_title_floor = "Floor of the crime scene"
+--L.search_title_credits = "{credits} Equipment credit(s)"
+--L.search_title_water = "Water level {level}"
+--L.search_title_policingrole_report_confirm = "Confirm to report death"
+--L.search_title_policingrole_confirm_disabled = "Report corpse"
+--L.search_title_spectator = "You are a spectator"
+
+--L.target_credits_on_confirm = "Confirm to receive unspent credits"
+--L.target_credits_on_search = "Search to receive unspent credits"
+--L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
+--L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+
+--L.label_inspect_confirm_mode = "Select body search mode"
+--L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
+--L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
+--L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
+--L.help_inspect_confirm_mode = [[
+--There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
+--
+--mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
+--
+--mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
+--
+--mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-23
+--L.header_miscellaneous_settings = "Miscellaneous Settings"
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
 
 -- 2023-10-25
 --L.help_keyhelp = [[
@@ -1985,3 +2050,26 @@ L.xfer_team_indicator = "Time"
 --Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
 --L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
 --L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"

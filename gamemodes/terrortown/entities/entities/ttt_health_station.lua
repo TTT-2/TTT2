@@ -185,7 +185,7 @@ if SERVER then
 
 	---
 	-- traditional equipment destruction effects
-	-- @param DamageInfo dmginfo
+	-- @param CTakeDamageInfo dmginfo
 	-- @realm server
 	function ENT:OnTakeDamage(dmginfo)
 		if dmginfo:GetAttacker() == self:GetPlacer() and not ttt_damage_own_healthstation:GetBool() then return end

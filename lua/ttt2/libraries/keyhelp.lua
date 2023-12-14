@@ -35,12 +35,15 @@ local materialPropLeft = Material("vgui/ttt/hudhelp/prop_left")
 local materialPropRight = Material("vgui/ttt/hudhelp/prop_right")
 local materialPropFront = Material("vgui/ttt/hudhelp/prop_front")
 local materialPropBack = Material("vgui/ttt/hudhelp/prop_back")
+local materialPropDash = Material("vgui/ttt/hudhelp/prop_dash")
 local materialLeaveTarget = Material("vgui/ttt/hudhelp/leave_target")
 local materialVoiceGlobal = Material("vgui/ttt/hudhelp/voice_global")
 local materialVoiceTeam = Material("vgui/ttt/hudhelp/voice_team")
 local materialChatGlobal = Material("vgui/ttt/hudhelp/chat_global")
 local materialChatTeam = Material("vgui/ttt/hudhelp/chat_team")
 local materialFlashlight = Material("vgui/ttt/hudhelp/flashlight")
+local materialWeaponDrop = Material("vgui/ttt/hudhelp/weapon_drop")
+local materialAmmoDrop = Material("vgui/ttt/hudhelp/ammo_drop")
 local materialQuickchat = Material("vgui/ttt/hudhelp/quickchat")
 local materialShowmore = Material("vgui/ttt/hudhelp/showmore")
 local materialPointer = Material("vgui/ttt/hudhelp/pointer")
@@ -299,6 +302,15 @@ function keyhelp.InitializeBasicKeys()
 
 		return true
 	end)
+		keyhelp.RegisterKeyHelper("+speed", materialPropDash, KEYHELP_CORE, "label_keyhelper_possession_dash", function(client)
+		if not client:IsSpec() then return end
+
+		local target = client:GetObserverTarget()
+
+		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+
+		return true
+	end)
 	keyhelp.RegisterKeyHelper("+duck", materialLeaveTarget, KEYHELP_CORE, "label_keyhelper_free_roam", function(client)
 		if not client:IsSpec() or not IsValid(client:GetObserverTarget()) then return end
 
@@ -307,6 +319,16 @@ function keyhelp.InitializeBasicKeys()
 
 	-- extra bindings that are not that important but are there as well
 	keyhelp.RegisterKeyHelper("impulse 100", materialFlashlight, KEYHELP_EXTRA, "label_keyhelper_flashlight", function(client)
+		if client:IsSpec() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("+menu", materialWeaponDrop, KEYHELP_EXTRA, "label_keyhelper_weapon_drop", function(client)
+		if client:IsSpec() then return end
+
+		return true
+	end)
+	keyhelp.RegisterKeyHelper("gmod_undo", materialAmmoDrop, KEYHELP_EXTRA, "label_keyhelper_ammo_drop", function(client)
 		if client:IsSpec() then return end
 
 		return true
