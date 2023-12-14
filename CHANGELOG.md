@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
+- Updated the Turkish localization file (by @NovaDiablox)
+
 ### Fixed
 
 - Binoculars scan no longer gets interrupted when changing zoom level
