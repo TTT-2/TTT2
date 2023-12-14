@@ -1,3 +1,8 @@
+---
+-- @class ENT
+-- @desc Thrown knife entity
+-- @section KnifeProjectile
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -199,7 +204,6 @@ if SERVER then
 	---
 	-- @param table data
 	-- @param table phys
-	-- @param 
 	-- @realm server
 	function ENT:PhysicsCollide(data, phys)
 		if self.Stuck then return false end

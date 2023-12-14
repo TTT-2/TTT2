@@ -1,3 +1,8 @@
+---
+-- @class ENT
+-- @desc Phys Hammer in world entity
+-- @section PhysHammer
+
 if SERVER then
 	AddCSLuaFile()
 end

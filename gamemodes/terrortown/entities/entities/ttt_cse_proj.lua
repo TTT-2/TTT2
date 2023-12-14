@@ -61,6 +61,7 @@ local scanloop = Sound("weapons/gauss/chargeloop.wav")
 local dummy_keys = {"victim", "killer"}
 
 ---
+-- @param Entity corpse
 -- @realm shared
 function ENT:ShowSceneForCorpse(corpse)
 	local scene = corpse.scene
@@ -116,6 +117,7 @@ function ENT:StartScanSound()
 end
 
 ---
+-- @param number force
 -- @realm shared
 function ENT:StopScanSound(force)
 	if self.ScanSound and self.ScanSound:IsPlaying() then
@@ -128,6 +130,7 @@ function ENT:StopScanSound(force)
 end
 
 ---
+-- @param Entity activator
 -- @realm shared
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() then
@@ -149,6 +152,7 @@ function ENT:OnRemove()
 end
 
 ---
+-- @param table tr
 -- @realm shared
 function ENT:Explode(tr)
 	if SERVER then
