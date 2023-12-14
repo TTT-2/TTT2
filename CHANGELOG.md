@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Removed the Restriction that only teammates can pickup a radio
 - Fixed missing water level icon breaking scoreboard
 - DNA Tester works now with more than one fingerprint on a weapon
 - TraitorButton config files should now actually work
