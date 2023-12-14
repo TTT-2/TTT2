@@ -295,7 +295,6 @@ Burning a corpse makes a distinct sound.]]
 L.hstation_name = "Health Station"
 
 L.hstation_broken = "Your Health Station has been destroyed!"
-L.hstation_help = "{primaryfire} places the Health Station."
 
 L.hstation_desc = [[
 Allows people to heal when placed.
@@ -2088,3 +2087,4 @@ L.polter_help_secondary = "Charge long range shot"
 L.defuser_help_primary = "Defuses targeted C4"
 L.radio_help_primary = "Throw Radio"
 L.radio_help_secondary = "Stick"
+L.hstation_help_primary = "Place the Health Station"
