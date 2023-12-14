@@ -63,14 +63,14 @@ function ENT:PlayerRoleCanUse(ply)
 	local curRol = ply:GetRoleStringRaw()
 	local curTeam = ply:GetTeam()
 	local mapID = MapButtonEntIndexMapping and MapButtonEntIndexMapping[self:EntIndex()] or -1
+	local overrideRole = nil
+	local overrideTeam = nil
 
 	if TButtonMapConfig and TButtonMapConfig[mapID] and TButtonMapConfig[mapID].Override then
-		local overrideRole = nil
-		local overrideTeam = nil
-
 		if TButtonMapConfig[mapID].Override.Role then
 			overrideRole = TButtonMapConfig[mapID].Override.Role[curRol]
 		end
+
 		if TButtonMapConfig[mapID].Override.Team then
 			overrideTeam = TButtonMapConfig[mapID].Override.Team[curTeam]
 		end

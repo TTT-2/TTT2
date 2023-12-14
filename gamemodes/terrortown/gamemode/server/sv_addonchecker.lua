@@ -515,32 +515,7 @@ addonChecker.curatedList = {
 		reason = "Less bottles, no integration in TTT2 systems, generally buggy.",
 		type = ADDON_OUTDATED
 	},
-	["284419411"] = { -- Minifier by Lykrast
-		alternative = "1896918348",
-		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
-		type = ADDON_OUTDATED
-	},
-	["1338887971"] = { -- Minifier by Hudson
-		alternative = "1896918348",
-		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
-		type = ADDON_OUTDATED
-	},
-	["1354031183"] = { -- Minifier by SnowSoulAngel
-		alternative = "1896918348",
-		reason = "TTT2 integration, updated hitbox, updated camera position, etc.",
-		type = ADDON_OUTDATED
-	},
 	["2672799157"] = { -- Minifier by The Stig
-		alternative = "1896918348",
-		reason = "TTT2 integration.",
-		type = ADDON_OUTDATED
-	},
-	["1551396306"] = { -- Minifier by FaBe2$tRonK
-		alternative = "1896918348",
-		reason = "TTT2 integration.",
-		type = ADDON_OUTDATED
-	},
-	["1599819393"] = { -- Minifier by Coe
 		alternative = "1896918348",
 		reason = "TTT2 integration.",
 		type = ADDON_OUTDATED

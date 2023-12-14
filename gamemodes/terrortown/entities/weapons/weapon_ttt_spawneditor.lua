@@ -331,7 +331,7 @@ if CLIENT then
 			colorSphere = colorPreview
 		end
 
-		local steps = GetSteps(dist3d)
+		local steps = GetSteps(previewData.distance3d)
 
 		renderDrawSphere(
 			previewData.currentPos,
