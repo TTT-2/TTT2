@@ -2073,3 +2073,10 @@ L.label_spec_prop_dash = "Dash force multiplier"
 L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-14
+L.beacon_name = "Beacon"
+L.beacon_desc = [[
+Broadcasts a location to everyone.
+
+Use to warn or group innocents.]]
