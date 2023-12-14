@@ -8,6 +8,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated the Turkish localization file (by @NovaDiablox)
 - Added all new translation strings
+  
+### Fixed
+
+- Fixed context in some sentences
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
