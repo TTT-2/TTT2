@@ -46,7 +46,7 @@ function ENT:CreateReplacement()
 		tgt:SetKeyValue("spawnflags", tostring(2048))
 	end
 
-	if self.Description and self.Description != "" then
+	if self.Description and self.Description ~= "" then
 		tgt:SetKeyValue("description", self.Description)
 	end
 
