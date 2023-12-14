@@ -227,7 +227,6 @@ L.item_disg_desc = [[
 需要启用时，使用本页面的伪装菜单或按下小键盘回车键。]]
 
 -- C4
-L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
 L.c4_disarm_warn = "你所安放的C4已被拆除。"
 L.c4_armed = "C4安放成功。"
 L.c4_disarmed = "你成功拆除了C4。"
@@ -257,7 +256,6 @@ L.c4_status_disarmed = "拆除"
 
 -- Visualizer
 L.vis_name = "显像器"
-L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
 
 L.vis_desc = [[
 可让犯罪现场显像化的仪器。
@@ -2073,3 +2071,7 @@ L.label_spec_prop_dash = "冲刺力倍增器"
 L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"

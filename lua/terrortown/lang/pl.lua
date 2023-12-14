@@ -227,7 +227,6 @@ Ukrywa twój status, gdy jest włączone. Także unika, bycia ostanią osobą wi
 Przełącz w zakładce Przebrania w tym menu lub kliknij Enter na Numpadzie.]]
 
 -- C4
-L.c4_hint = "Kliknij {usekey}, by uzbroić lub rozbroić."
 L.c4_disarm_warn = "C4, które uzbroiłeś, zostało rozbrojone."
 L.c4_armed = "Pomyślnie uzbroiłeś bombę."
 L.c4_disarmed = "Pomyślnie rozbroiłeś bombę."
@@ -257,7 +256,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 
 -- Visualizer
 L.vis_name = "Wizualizer"
-L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
 L.vis_desc = [[
 Wizualizator chwili zabójstwa.
@@ -2073,3 +2071,7 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
