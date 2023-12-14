@@ -310,7 +310,7 @@ local function GetSceneData(victim, attacker, dmginfo)
 		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
 	end
 
-	scene.waterLevel = victim:WaterLevel();
+	scene.waterLevel = victim:WaterLevel()
 	scene.hitGroup = victim:LastHitGroup()
 	scene.floorSurface = 0
 	local groundTrace = util.TraceLine({

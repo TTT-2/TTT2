@@ -345,7 +345,9 @@ function GM:Initialize()
 
 	-- For the paranoid
 	math.randomseed(os.time())
-	math.random(); math.random(); math.random() -- warming up
+	math.random()
+	math.random()
+	math.random()
 
 	WaitForPlayers()
 
