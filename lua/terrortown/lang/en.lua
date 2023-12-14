@@ -2074,3 +2074,4 @@ L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-12-13
 L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+L.newton_force = "FORCE"
