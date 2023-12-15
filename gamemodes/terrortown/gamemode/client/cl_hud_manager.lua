@@ -34,7 +34,7 @@ function GM:HUDPaint()
 	---
 	-- @realm client
 	if hook.Run("HUDShouldDraw", "TTTBombVision") then
-		bombVision.Draw()
+		radarVision.Draw()
 	end
 
 	---

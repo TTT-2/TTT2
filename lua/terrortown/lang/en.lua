@@ -2076,4 +2076,5 @@ L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-12-14
 L.c4_bombvision_time = "Detonation time: {time}"
-L.c4_bombvision_distance = "Bomb distance: {dist}"
+L.c4_bombvision_distance = "Bomb distance: {distance}m"
+L.c4_bombvision_collapsed = "{time} / {distance}m"

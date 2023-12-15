@@ -592,7 +592,7 @@ if SERVER then
 		-- send indicator to traitors
 		--self:SendWarn(true)
 
-		bombVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM, "c4")
+		radarVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
 	end
 
 	---
@@ -820,6 +820,8 @@ if SERVER then
 
 	end
 else -- CLIENT
+	local materialC4 = Material("vgui/ttt/radar/c4")
+
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
@@ -881,10 +883,7 @@ else -- CLIENT
 		local ent = tData:GetEntity()
 		local c_wep = client:GetActiveWeapon()
 
-		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_c4" then
-			return
-		end
+		if not client:IsTerror() or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_c4" then return end
 
 		local defuser_useable = (IsValid(c_wep) and ent:GetArmed()) and c_wep:GetClass() == "weapon_ttt_defuser" or false
 
@@ -907,48 +906,24 @@ else -- CLIENT
 		tData:AddDescriptionLine(TryT("c4_short_desc"))
 	end)
 
-	hook.Add("TTT2FinishedLoading", "TTTC4RegisterRadarRenderer", function()
-		bombVision.RegisterType("c4", Material("vgui/ttt/radar/c4"), function(ent, distance, shouldShowDetails, x, y, scale)
-			local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
+	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarC4", function(rData)
+		local client = LocalPlayer()
+		local ent = rData:GetEntity()
 
-			if shouldShowDetails then
-				draw.AdvancedText(
-					ParT("c4_bombvision_time", {time = time}),
-					"BombVision_Text",
-					x,
-					y,
-					COLOR_WHITE,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_CENTER,
-					true,
-					scale
-				)
+		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
 
-				draw.AdvancedText(
-					ParT("c4_bombvision_distance", {dist = math.Round(distance, 0)}),
-					"BombVision_Text",
-					x,
-					y + 14 * scale,
-					COLOR_WHITE,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_CENTER,
-					true,
-					scale
-				)
-			else
-				draw.AdvancedText(
-					time .. " / " .. math.Round(distance, 0),
-					"BombVision_Text",
-					x,
-					y,
-					COLOR_WHITE,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_CENTER,
-					true,
-					scale
-				)
-			end
-		end)
+		local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
+		local distance = math.Round(util.HammerUnitsToMeters(rData:GetEntityDistance()), 1)
+
+		rData:EnableText()
+
+		rData:AddIcon(materialC4)
+		rData:SetTitle(TryT(ent.PrintName))
+
+		rData:AddDescriptionLine(ParT("c4_bombvision_time", {time = time}))
+		rData:AddDescriptionLine(ParT("c4_bombvision_distance", {distance = distance}))
+
+		rData:SetCollapsedLine(ParT(c4_bombvision_collapsed, {time = time, distance = distance}))
 	end)
 end
 
