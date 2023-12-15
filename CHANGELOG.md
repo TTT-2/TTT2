@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added `ttt_cl_traitorpopup_tab` to allow players or addons to open a specified tab in the Equipment Menu (by @Spanospy):
+  - Example: `ttt_cl_traitorpopup_tab "Transfer"` for opening the credit transfer selection tab.
+
 ### Fixed
 
 - Binoculars scan no longer gets interrupted when changing zoom level

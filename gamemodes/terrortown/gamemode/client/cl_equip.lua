@@ -957,6 +957,45 @@ end
 concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
 --
+-- Opens the menu to a specified tab, if it exists.
+--
+
+local function SwitchTraitorMenuTab(ply, cmd, args)
+
+	--Open the menu if it's not already open
+	if not IsValid(eqframe) then
+		TraitorMenuPopup()
+	end
+
+	if IsValid(eqframe) then
+
+		---@cast eqframe -nil
+		local dsheet = eqframe:Find("DPropertySheet") --Or eqframe:GetChild(4) ?
+
+		local tabs = dsheet:GetItems()
+		local tabindex = nil
+
+		local targettab = args[1]
+
+		for index,tab in pairs(tabs) do
+			if tab.Name == targettab then
+				tabindex = index
+				break
+			end
+		end
+
+		if tabindex then
+			dsheet:SetActiveTab(tabs[tabindex].Tab)
+		else
+			ForceCloseTraitorMenu()
+			print("No tab named " .. targettab .. " found!") --TODO lang this?
+		end
+
+	end
+end
+concommand.Add("ttt_cl_traitorpopup_tab", SwitchTraitorMenuTab)
+
+--
 -- NET RELATED STUFF:
 --
 
