@@ -6,9 +6,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added the beacon back into TTT2, a equipment weapon that was disabled long ago in base TTT
-  - A weapon that can only be bought by policing roles
-  - Adds a wallhack in a radius around them that is visible to anyone
+- Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
+  - Can only be bought by policing roles
+  - Creates a wallhack in a sphere around it, which is visible to everyone
 
 ### Fixed
 
