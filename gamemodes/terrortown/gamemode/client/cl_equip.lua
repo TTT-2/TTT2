@@ -962,9 +962,17 @@ concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
 local function SwitchTraitorMenuTab(ply, cmd, args)
 
+	local closeIfNotFound
+	local targettab = args[1]
+
+	if not targettab then return end
+
 	--Open the menu if it's not already open
 	if not IsValid(eqframe) then
 		TraitorMenuPopup()
+		closeIfNotFound = true
+	else
+		closeIfNotFound = false
 	end
 
 	if IsValid(eqframe) then
@@ -974,8 +982,6 @@ local function SwitchTraitorMenuTab(ply, cmd, args)
 
 		local tabs = dsheet:GetItems()
 		local tabindex = nil
-
-		local targettab = args[1]
 
 		for index,tab in pairs(tabs) do
 			if tab.Name == targettab then
@@ -987,7 +993,9 @@ local function SwitchTraitorMenuTab(ply, cmd, args)
 		if tabindex then
 			dsheet:SetActiveTab(tabs[tabindex].Tab)
 		else
-			ForceCloseTraitorMenu()
+			if closeIfNotFound then
+				ForceCloseTraitorMenu()
+			end
 			print("No tab named " .. targettab .. " found!") --TODO lang this?
 		end
 
