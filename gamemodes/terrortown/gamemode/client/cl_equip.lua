@@ -963,7 +963,7 @@ concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 local function SwitchTraitorMenuTab(ply, cmd, args)
 
 	local closeIfNotFound
-	local targettab = args[1]
+	local targettab = args[1]:lower()
 
 	if not targettab then return end
 
@@ -984,7 +984,7 @@ local function SwitchTraitorMenuTab(ply, cmd, args)
 		local tabindex = nil
 
 		for index,tab in pairs(tabs) do
-			if tab.Name == targettab then
+			if tab.Name:lower() == targettab then
 				tabindex = index
 				break
 			end
