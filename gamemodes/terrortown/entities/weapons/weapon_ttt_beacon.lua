@@ -237,7 +237,7 @@ if CLIENT then
 	---
 	-- @realm client
 	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("visualizer_help_pri", "visualizer_help_sec")
+		self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
 
 		return self.BaseClass.Initialize(self)
 	end
