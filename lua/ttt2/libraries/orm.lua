@@ -11,7 +11,7 @@ local sql = sql
 
 orm = orm or {}
 
-local cachedModels = cachedModels or {}
+local cachedModels = {}
 
 local ORMMODEL = {}
 local ORMOBJECT = {}

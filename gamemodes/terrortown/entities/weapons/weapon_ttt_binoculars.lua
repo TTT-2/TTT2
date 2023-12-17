@@ -95,9 +95,6 @@ function SWEP:SecondaryAttack()
 	end
 
 	self:CycleZoom()
-
-	self:SetProcessing(false)
-	self:SetStartTime(0)
 end
 
 ---

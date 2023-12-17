@@ -1212,7 +1212,7 @@ function BeginRound()
 	-- @realm server
 	hook.Run("TTTBeginRound")
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
+	ents.TTT.TriggerRoundStateOutputs(ROUND_ACTIVE)
 end
 
 ---
