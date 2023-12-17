@@ -281,7 +281,7 @@ if CLIENT then
 			if LocalPlayer():IsTraitor() then
 				surface.SetDrawColor(255, 0, 0, 155)
 			else
-			 surface.SetDrawColor(0, 255, 0, 155)
+				surface.SetDrawColor(0, 255, 0, 155)
 			end
 
 			surface.DrawRect(x - w / 2, y - h, w * charge, h)
