@@ -45,9 +45,8 @@ function ENT:GetNearbyCorpses()
 
 	local near_corpses = {}
 
-	local ent = nil
 	for i = 1, #near do
-		ent = near[i]
+		local ent = near[i]
 		if IsValid(ent) and ent.player_ragdoll and ent.scene then
 			table.insert(near_corpses, {ent = ent, dist = pos:LengthSqr()})
 		end
