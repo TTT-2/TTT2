@@ -279,7 +279,7 @@ if CLIENT then
 			surface.DrawOutlinedRect(x - w / 2, y - h, w, h, 1)
 
 			if LocalPlayer():IsTraitor() then
-			 surface.SetDrawColor(255, 0, 0, 155)
+				surface.SetDrawColor(255, 0, 0, 155)
 			else
 			 surface.SetDrawColor(0, 255, 0, 155)
 			end
