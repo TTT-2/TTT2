@@ -10,8 +10,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Can only be bought by policing roles
   - Creates a wallhack in a sphere around it, which is visible to everyone
 
+### Changed
+
+- Updated the Turkish localization file (by @NovaDiablox)
+
 ### Fixed
 
+- Binoculars scan no longer gets interrupted when changing zoom level
 - Fixed missing water level icon breaking scoreboard
 - DNA Tester works now with more than one fingerprint on a weapon
 - TraitorButton config files should now actually work
