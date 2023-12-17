@@ -2075,8 +2075,8 @@ L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-12-14
-L.visualizer_help_pri = "Throw Beacon on the ground"
-L.visualizer_help_sec = "Stick Beacon to surface"
+L.beacon_help_pri = "Throw Beacon on the ground"
+L.beacon_help_sec = "Stick Beacon to surface"
 L.beacon_name = "Beacon"
 L.beacon_desc = [[
 Broadcasts player locations to everyone in a sphere around this beacon.
