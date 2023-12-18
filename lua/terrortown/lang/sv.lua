@@ -2072,3 +2072,6 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
