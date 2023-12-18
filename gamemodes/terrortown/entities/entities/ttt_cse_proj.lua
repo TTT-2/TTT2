@@ -136,7 +136,9 @@ function ENT:UseOverride(activator)
 
 	local roleDataActivator = activator:GetSubRoleData()
 
-	if activator:CanCarryType(WEAPON_EQUIP) and roleDataActivator.isPolicingRole and roleDataActivator.isPublicRole then
+	if activator:IsTerror() and activator:CanCarryType(WEAPON_EQUIP)
+		and roleDataActivator.isPolicingRole and roleDataActivator.isPublicRole
+	then
 		self:StopScanSound(true)
 		self:Remove()
 
