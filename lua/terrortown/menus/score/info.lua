@@ -6,6 +6,7 @@ local ParT = LANG.GetParamTranslation
 local function MakePlayerRoleTooltip(parent, width, ply)
 	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
 	local height = 25
+	local width = width
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
@@ -14,6 +15,7 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 	titleBox:SetSize(width, 25)
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_roles_time")
+	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	for i = 1, #plyRoles do
@@ -29,24 +31,30 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 		plyRoleBox.GetTitle = function()
 			return tostring(i) .. ". " .. TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")"
 		end
-
+		local length = fastutf8.len(plyRoleBox.GetTitle())
+		if length > shortest then
+			shortest = length
+		end
 		height = height + 20
 	end
 
-	return height
+	width = (shortest * 8)
+	titleBox:SetSize(width, 25)
+	return width, height
 end
 
 local function MakePlayerScoreTooltip(parent, width, ply)
 	local plyScores = CLSCORE.eventsPlayerScores[ply.sid64] or {}
 	local height = 25
+	local width = width
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
 
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
-	titleBox:SetSize(width, 25)
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_score_gained")
+	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	-- In a first Pass filter all scoreevents and scores by name, positivy and number of Events
@@ -86,17 +94,23 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 			plyRoleBox.GetTitle = function()
 				return "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
 			end
-
+			local length = fastutf8.len(plyRoleBox.GetTitle())
+			if length > shortest then
+				shortest = length
+			end
 			height = height + 20
 		end
 	end
 
-	return height
+	width = (shortest * 8)
+	titleBox:SetSize(width, 25)
+	return width, height
 end
 
 local function MakePlayerKarmaTooltip(parent, width, ply)
 	local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
 	local height = 25
+	local width = width
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
@@ -105,6 +119,7 @@ local function MakePlayerKarmaTooltip(parent, width, ply)
 	titleBox:SetSize(width, 25)
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_karma_gained")
+	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	if not istable(plyKarmaList) then
@@ -120,11 +135,16 @@ local function MakePlayerKarmaTooltip(parent, width, ply)
 		plyRoleBox.GetTitle = function()
 			return "- " .. TryT(karmaText) .. ": " .. karma
 		end
-
+		local length = fastutf8.len(plyRoleBox.GetTitle())
+		if length > shortest then
+			shortest = length
+		end
 		height = height + 20
 	end
 
-	return height
+	width = (shortest * 8)
+	titleBox:SetSize(width, 25)
+	return width, height
 end
 
 local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDeath)
@@ -227,12 +247,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyRolesTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local heightRolesTooltip = MakePlayerRoleTooltip(plyRolesTooltipPanel, widthName, ply)
+				local widthRolesTooltip, heightRolesTooltip = MakePlayerRoleTooltip(plyRolesTooltipPanel, widthName, ply)
 
 				plyNameBox:SetTooltipPanel(plyRolesTooltipPanel)
 				plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-				plyNameBox:SetTooltipFixedSize(widthName, heightRolesTooltip)
-				plyRolesTooltipPanel:SetSize(widthName, heightRolesTooltip)
+				plyNameBox:SetTooltipFixedSize(widthRolesTooltip, heightRolesTooltip)
+				plyRolesTooltipPanel:SetSize(widthRolesTooltip, heightRolesTooltip)
 
 				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(sizes.widthKarma, sizes.heightRow)
@@ -243,12 +263,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyKarmaTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local heightKarmaTooltip = MakePlayerKarmaTooltip(plyKarmaTooltipPanel, 200, ply)
+				local widthKarmaTooltip, heightKarmaTooltip = MakePlayerKarmaTooltip(plyKarmaTooltipPanel, widthName, ply)
 
 				plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
 				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-				plyKarmaBox:SetTooltipFixedSize(200, heightKarmaTooltip)
-				plyKarmaTooltipPanel:SetSize(200, heightKarmaTooltip)
+				plyKarmaBox:SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
+				plyKarmaTooltipPanel:SetSize(widthKarmaTooltip, heightKarmaTooltip)
 
 				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyPointsBox:SetSize(sizes.widthScore, sizes.heightRow)
@@ -259,12 +279,12 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyScoreTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local heightScoreTooltip = MakePlayerScoreTooltip(plyScoreTooltipPanel, 200, ply)
+				local widthScoreTooltip, heightScoreTooltip = MakePlayerScoreTooltip(plyScoreTooltipPanel, widthName, ply)
 
 				plyPointsBox:SetTooltipPanel(plyScoreTooltipPanel)
 				plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-				plyPointsBox:SetTooltipFixedSize(200, heightScoreTooltip)
-				plyScoreTooltipPanel:SetSize(200, heightScoreTooltip)
+				plyPointsBox:SetTooltipFixedSize(widthScoreTooltip, heightScoreTooltip)
+				plyScoreTooltipPanel:SetSize(widthScoreTooltip, heightScoreTooltip)
 			end
 		end
 	end
