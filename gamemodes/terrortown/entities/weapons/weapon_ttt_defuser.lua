@@ -30,19 +30,12 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Delay = 1
 SWEP.Primary.Ammo = "none"
 
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Automatic = true
-SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 2
-
 SWEP.Kind = WEAPON_EQUIP2
 SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
 SWEP.WeaponID = AMMO_DEFUSER
 
---SWEP.AllowDrop = false
-
 local defuse = Sound("c4.disarmfinish")
+
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -64,10 +57,7 @@ function SWEP:PrimaryAttack()
 	end
 end
 
-function SWEP:SecondaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:SetNextSecondaryFire(CurTime() + 0.1)
-end
+function SWEP:SecondaryAttack() end
 
 if CLIENT then
 	function SWEP:Initialize()
