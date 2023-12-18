@@ -60,8 +60,6 @@ L.body_found = "{finder} знаходить тіло {victim}. {role}"
 --L.body_found_det = "They were a Detective."
 --L.body_found_inno = "They were Innocent."
 
-L.body_confirm = "{finder} підтверджує смерть {victim}."
-
 L.body_call = "{player} викликає Детектива до тіла {victim}!"
 L.body_call_error = "Ви повинні підтвердити смерть цього гравця перед тим, як викликати Детектива!"
 
@@ -912,7 +910,6 @@ L.idle_popup_title = "Бездіяльність"
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 --L.corpse_too_far_away = "The corpse is too far away."
 
---L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
 --L.radio_short_desc = "Weapon sounds are music to me"
 
 --L.hstation_subtitle = "Press [{usekey}] to receive health."
@@ -2075,3 +2072,10 @@ L.search_eyes = "Використовуючи свої навички детек
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} підтверджує смерть {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

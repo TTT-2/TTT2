@@ -60,8 +60,6 @@ L.body_found_traitor = "他是一位叛徒！"
 L.body_found_det = "他是一位探长。"
 L.body_found_inno = "他是一位无辜者。"
 
-L.body_confirm = "{finder} 确认了 {victim} 的死亡。"
-
 L.body_call = "{player} 请求探长前来检查 {victim} 的尸体！"
 L.body_call_error = "你必须先确定该玩家的死才能呼叫探长！"
 
@@ -912,7 +910,6 @@ L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 没有可丢弃的武�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "这个尸体太远了。"
 
-L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
 L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
@@ -2075,3 +2072,10 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

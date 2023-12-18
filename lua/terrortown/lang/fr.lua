@@ -60,8 +60,6 @@ L.body_found_traitor = "C'était un Traitre!"
 L.body_found_det = "C'était un Détective."
 L.body_found_inno = "C'était un Innocent."
 
-L.body_confirm = "{finder} a confirmé la mort de {victim}."
-
 L.body_call = "{player} appelle un Détective sur le corps de {victim}!"
 L.body_call_error = "Veuillez identifier le corps avant d'appeler un Détective!"
 
@@ -912,7 +910,6 @@ L.target_switch_drop_weapon_info_noslot = "Il n'y a pas d'arme à lâcher dans c
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Ce cadavre est trop loin."
 
-L.radio_pickup_wrong_team = "Vous ne pouvez pas prendre la radio d'une autre team."
 L.radio_short_desc = "Les sons des armes sont de la musique pour moi"
 
 L.hstation_subtitle = "Appuyez sur [{usekey}] pour recevoir des soins."
@@ -2075,3 +2072,10 @@ L.search_eyes = "En utilisant vos compétences de détective, vous avez identifi
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} a confirmé la mort de {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
