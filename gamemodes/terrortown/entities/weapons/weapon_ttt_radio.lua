@@ -1,4 +1,7 @@
--- traitor equipment: radio
+---
+-- @class SWEP
+-- @desc radio
+-- @section weapon_ttt_radio
 
 if SERVER then
 	AddCSLuaFile()
@@ -47,14 +50,21 @@ SWEP.WeaponID = AMMO_RADIO
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:RadioDrop()
 end
+
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:RadioStick()
@@ -62,7 +72,8 @@ end
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
--- c4 plant but different
+--- c4 plant but different
+-- @ignore
 function SWEP:RadioDrop()
 	if SERVER then
 		local ply = self:GetOwner()
@@ -96,7 +107,8 @@ function SWEP:RadioDrop()
 	self:EmitSound(throwsound)
 end
 
--- hey look, more C4 code
+--- hey look, more C4 code
+-- @ignore
 function SWEP:RadioStick()
 	if SERVER then
 		local ply = self:GetOwner()
@@ -142,10 +154,14 @@ function SWEP:RadioStick()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:OnRemove()
 	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
 		RunConsoleCommand("lastinv")
@@ -153,14 +169,17 @@ function SWEP:OnRemove()
 end
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("radio_help_primary", "radio_help_secondary")
 
 		return self.BaseClass.Initialize(self)
 	end
 end
--- Invisible, same hacks as holstered weapon
 
+--- Invisible, same hacks as holstered weapon
+-- @ignore
 function SWEP:Deploy()
 	if SERVER and IsValid(self:GetOwner()) then
 		self:GetOwner():DrawViewModel(false)
@@ -168,9 +187,11 @@ function SWEP:Deploy()
 	return true
 end
 
-function SWEP:DrawWorldModel()
-end
+---
+-- @ignore
+function SWEP:DrawWorldModel() end
 
-function SWEP:DrawWorldModelTranslucent()
-end
+---
+-- @ignore
+function SWEP:DrawWorldModelTranslucent() end
 
