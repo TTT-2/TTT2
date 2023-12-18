@@ -107,7 +107,13 @@ end
 if SERVER then
 	function radarVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
 		for ent, data in pairs(radarVision.registry) do
-			if data.owner ~= ply or data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
+			if data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
+
+			-- case 1: the owner of that targeted entity changed their team
+			if data.owner ~= ply then continue end
+
+			-- case 2: the old or the new team is the same team that the owner has
+			if data.owner:GetTeam() ~= oldTeam and data.owner:GetTeam() ~= newTeam then continue end
 
 			radarVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
 		end
@@ -149,12 +155,14 @@ if CLIENT then
 			local isOffScreen = util.IsOffScreen(screenPos)
 			local distanceEntity = ent:GetPos():Distance(LocalPlayer():EyePos())
 
+			Print(screenPos)
+
 			-- call internal targetID functions first so the data can be modified by addons
 			local rData = RADAR_DATA:Initialize(ent, isOffScreen, distanceEntity)
 
 			---
 			-- now run a hook that can be used by addon devs that changes the appearance
-			-- of the targetid
+			-- of the radar vision
 			-- @realm client
 			hook.Run("TTT2RenderRadarInfo", rData)
 
