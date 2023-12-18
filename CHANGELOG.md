@@ -31,6 +31,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed fallback ammo icon missing
 - Fixed a null entity error in the miniscoreboard
 - Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit
+- Fixed "body_confirm" MSTACK noise by batching all the kills from a body into one message. (by @EntranceJew)
+- Fixed "body_confirm" message sending before corpse confirmation message.
 
 ## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
 

@@ -60,8 +60,6 @@ L.body_found_traitor = "Er war ein Verräter!"
 L.body_found_det = "Er war ein Detektiv."
 L.body_found_inno = "Er war unschuldig."
 
-L.body_confirm = "{finder} bestätigte den Tod von {victim}."
-
 L.body_call = "{player} rief einen Detektiv zum Körper von {victim}!"
 L.body_call_error = "Du musst erst den Tod dieses Spielers bestätigen, bevor du einen Detektiv rufen kannst!"
 
@@ -2075,3 +2073,7 @@ L.crowbar_help_secondary = "Spieler schubsen"
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
+-- L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

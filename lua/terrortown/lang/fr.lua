@@ -60,8 +60,6 @@ L.body_found_traitor = "C'était un Traitre!"
 L.body_found_det = "C'était un Détective."
 L.body_found_inno = "C'était un Innocent."
 
-L.body_confirm = "{finder} a confirmé la mort de {victim}."
-
 L.body_call = "{player} appelle un Détective sur le corps de {victim}!"
 L.body_call_error = "Veuillez identifier le corps avant d'appeler un Détective!"
 
@@ -2075,3 +2073,8 @@ L.search_eyes = "En utilisant vos compétences de détective, vous avez identifi
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} a confirmé la mort de {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+

@@ -60,8 +60,6 @@ L.body_found_traitor = "奴はTraitorだったな！"
 L.body_found_det = "奴はDetectiveだったようだ…"
 L.body_found_inno = "奴はInnocentだったようだ…"
 
-L.body_confirm = "{finder}は{victim}の死を確認した。"
-
 L.body_call = "{player}はDetectiveを{victim}の死体の場所に呼んだ！"
 L.body_call_error = "Detectiveを呼ぶ前にこのプレイヤーの死の確認が必要だ！"
 
@@ -2075,3 +2073,7 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder}は{victim}の死を確認した。"
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

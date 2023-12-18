@@ -68,6 +68,10 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
+local function CorpseSorting(a, b)
+	return a and b and a:upper() < b:upper()
+end
+
 ---
 -- Identifies the corpse, registers it and announces it to the players, if possible.
 -- @param Player ply The player that tries to identify the body
@@ -117,30 +121,6 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		end
 	end
 
-	if GetConVar("ttt2_confirm_killlist"):GetBool() then
-		-- Handle kill list
-		local ragKills = rag.kills
-
-		for i = 1, #ragKills do
-			local victimSIDs = ragKills[i]
-
-			-- filter out disconnected (and bots !)
-			local vic = player.GetBySteamID64(victimSIDs)
-
-			-- is this an unconfirmed dead?
-			if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then continue end
-
-			LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
-
-			vic:ConfirmPlayer(false)
-
-			-- however, do not mark body as found. This lets players find the
-			-- body later and get the benefits of that
-			--local vicrag = vic.server_ragdoll
-			--CORPSE.SetFound(vicrag, true)
-		end
-	end
-
 	-- Announce body
 	if cvBodyfound:GetBool() and notConfirmed then
 		local subrole = rag.was_role
@@ -158,7 +138,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 			net.WriteString("body_found")
 		end
 
-		net.WriteString(rag.sid == "BOT" and "" or rag.sid64)
+		net.WriteString(rag.sid64)
 
 		-- color
 		net.WriteUInt(clr.r, 8)
@@ -180,6 +160,51 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		net.WriteUInt(searchUID or 0, 16)
 
 		net.Broadcast()
+	end
+
+	if GetConVar("ttt2_confirm_killlist"):GetBool() then
+		-- Handle kill list
+		local ragKills = rag.kills
+
+		local killnicks = {}
+		for i = 1, #ragKills do
+			local victimSIDs = ragKills[i]
+
+			-- filter out disconnected (and bots !)
+			local vic = player.GetBySteamID64(victimSIDs)
+
+			-- is this an unconfirmed dead?
+			if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then continue end
+
+			killnicks[#killnicks + 1] = vic:Nick()
+
+			vic:ConfirmPlayer(false)
+
+			-- however, do not mark body as found. This lets players find the
+			-- body later and get the benefits of that
+			--local vicrag = vic.server_ragdoll
+			--CORPSE.SetFound(vicrag, true)
+		end
+
+		if #killnicks == 1 then
+			LANG.Msg("body_confirm_one", {finder = finder, victim = killnicks[1]})
+		elseif #killnicks > 1 then
+			if #killnicks >= 3 then
+				table.sort(killnicks, CorpseSorting)
+			end
+
+			local names = ""
+			for k = 1, #killnicks do
+				local name = killnicks[k]
+				if name == ply:Nick() then continue end
+
+				names = names .. name .. ", "
+			end
+
+			names = string.sub(names, 1, -3)
+
+			LANG.Msg("body_confirm_more", {finder = finder, victims = names, count = #killnicks})
+		end
 	end
 end
 

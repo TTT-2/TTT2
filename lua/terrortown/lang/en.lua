@@ -60,8 +60,6 @@ L.body_found_traitor = "They were a Traitor!"
 L.body_found_det = "They were a Detective."
 L.body_found_inno = "They were Innocent."
 
-L.body_confirm = "{finder} confirmed the death of {victim}."
-
 L.body_call = "{player} called a Detective to the body of {victim}!"
 L.body_call_error = "You must confirm the death of this player before calling a Detective!"
 
@@ -2075,3 +2073,7 @@ L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-11-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} confirmed the death of {victim}."
+L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
