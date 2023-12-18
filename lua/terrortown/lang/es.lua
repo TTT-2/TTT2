@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "No hay un arma que esté ocupando el 
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "El cadáver está muy lejos."
 
-L.radio_pickup_wrong_team = "No puedes recoger la radio de otro equipo."
 L.radio_short_desc = "Los sonidos de las armas son música para mis oídos"
 
 L.hstation_subtitle = "Mantén presionado [{usekey}] para recibir curación."
@@ -2073,3 +2072,6 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"

@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "スロット{slot}には捨てるも�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "その死体から遠すぎる。"
 
-L.radio_pickup_wrong_team = "別陣営が所有するラジオは使えないようだ。"
 L.radio_short_desc = "銃声こそ音楽だ"
 
 L.hstation_subtitle = "[{usekey}]で回復する."
@@ -2073,3 +2072,6 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"

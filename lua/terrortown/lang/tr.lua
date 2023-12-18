@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "{slot} yuvasında düşürülebilir s
 L.corpse_searched_by_detective = "Bu ceset bir dedektif tarafından arandı"
 L.corpse_too_far_away = "Ceset çok uzakta."
 
-L.radio_pickup_wrong_team = "Radyoyu başka bir takımdan alamazsın."
 L.radio_short_desc = "Silah sesleri benim için müziktir"
 
 L.hstation_subtitle = "Sağlık almak için [{usekey}] tuşuna basın."
@@ -1933,7 +1932,7 @@ Bir kamu polisliği rolü ancak ölüm doğrulandıktan sonra bir cesede çağr�
 L.search_policingrole_confirm_disabled_1 = [[
 Ceset ancak bir kamu polisliği rolü ile doğrulanabilir. Haberdar etmek için cesedi bildirin!]]
 L.search_policingrole_confirm_disabled_2 = [[
-Ceset ancak bir kamu polisliği rolü ile doğrulanabilir. Haberdar etmek için cesedi bildirin! 
+Ceset ancak bir kamu polisliği rolü ile doğrulanabilir. Haberdar etmek için cesedi bildirin!
 Onlar onayladıktan sonra buradaki bilgileri görebilirsiniz.]]
 L.search_spec = [[
 Bir izleyici olarak bir cesedin tüm bilgilerini görebilirsiniz, ancak kullanıcı arayüzü ile etkileşime giremezsiniz.]]
@@ -2073,3 +2072,6 @@ L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
 L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
