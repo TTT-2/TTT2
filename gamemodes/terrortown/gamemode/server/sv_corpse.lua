@@ -68,9 +68,6 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
-local function CorpseSorting(a, b)
-	return a and b and a:upper() < b:upper()
-end
 
 ---
 -- Identifies the corpse, registers it and announces it to the players, if possible.
@@ -189,11 +186,13 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		if #killnicks == 1 then
 			LANG.Msg("body_confirm_one", {finder = finder, victim = killnicks[1]})
 		elseif #killnicks > 1 then
-			table.sort(killnicks, CorpseSorting)
+			table.sort(killnicks, function(a, b)
+				return a and b and a:upper() < b:upper()
+			end)
 
 			local names = killnicks[1]
 			for k = 2, #killnicks do
-				names = names .. "," .. killnicks[k]
+				names = names .. ", " .. killnicks[k]
 			end
 
 			LANG.Msg("body_confirm_more", {finder = finder, victims = names, count = #killnicks})
