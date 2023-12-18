@@ -224,6 +224,9 @@ if CLIENT then
 				continue
 			end
 
+			screenPos.x = math.Clamp(screenPos.x, offsetIcon + paddingScreen, ScrW() - offsetIcon - paddingScreen)
+			screenPos.y = math.Clamp(screenPos.y, offsetIcon + paddingScreen, ScrH() - offsetIcon - paddingScreen)
+
 			-- draw Icons
 			local xIcon, yIcon
 
