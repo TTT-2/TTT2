@@ -60,8 +60,6 @@ L.body_found_traitor = "On był zdrajcą!"
 L.body_found_det = "On był detektywem."
 L.body_found_inno = "On był niewinny."
 
-L.body_confirm = "{finder} potwierdził śmierć {victim}."
-
 L.body_call = "{player} zawołał detektywa do ciała {victim}!"
 L.body_call_error = "Musisz potwierdić zgon tego gracza, zanim zawołasz detektywa!"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można 
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Ciało jest za daleko."
 
-L.radio_pickup_wrong_team = "Nie możesz mieć radio innego teamu."
 L.radio_short_desc = "Wystrzały broni są dla mnie muzyką"
 
 L.hstation_subtitle = "Naciśnij [{usekey}] aby otrzymać życie."
@@ -2088,3 +2085,10 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

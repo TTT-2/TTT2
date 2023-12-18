@@ -60,8 +60,6 @@ L.body_found_traitor = "They were a Traitor!"
 L.body_found_det = "They were a Detective."
 L.body_found_inno = "They were Innocent."
 
-L.body_confirm = "{finder} confirmed the death of {victim}."
-
 L.body_call = "{player} called a Detective to the body of {victim}!"
 L.body_call_error = "You must confirm the death of this player before calling a Detective!"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot 
 L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "The corpse is too far away."
 
-L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
 L.radio_short_desc = "Weapon sounds are music to me"
 
 L.hstation_subtitle = "Press [{usekey}] to receive health."
@@ -2088,3 +2085,10 @@ L.msg_beacon_death = "A player died in close proximity to one of your beacons."
 
 L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} confirmed the death of {victim}."
+L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

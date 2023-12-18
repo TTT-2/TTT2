@@ -60,8 +60,6 @@ L.body_found = "{finder} fann {victim}s kropp. {role}"
 --L.body_found_det = "They were a Detective."
 --L.body_found_inno = "They were Innocent."
 
-L.body_confirm = "{finder} bekräftade att {victim} har dött."
-
 L.body_call = "{player} kallade en Detektiv till {victim}s kropp!"
 L.body_call_error = "Du måste bekräfta denna spelarens död för att kunna kalla på en Detektiv!"
 
@@ -914,7 +912,6 @@ L.hat_retrieve = "Du plockade upp hatten av en detektiv."
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 --L.corpse_too_far_away = "The corpse is too far away."
 
---L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
 --L.radio_short_desc = "Weapon sounds are music to me"
 
 --L.hstation_subtitle = "Press [{usekey}] to receive health."
@@ -2088,3 +2085,10 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
