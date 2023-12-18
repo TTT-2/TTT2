@@ -6,8 +6,6 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-DEFINE_BASECLASS "weapon_tttbase"
-
 SWEP.HoldType = "normal"
 
 if CLIENT then
