@@ -162,23 +162,26 @@ function SWEP:BombStick()
 	ply:SetAnimation(PLAYER_ATTACK1)
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("c4_help_primary", "c4_help_secondary")
 
 		return self.BaseClass.Initialize(self)
 	end
 
+	---
+	-- @ignore
 	function SWEP:OnRemove()
 		if IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
 			RunConsoleCommand("lastinv")
 		end
 	end
 end
-
-
-
