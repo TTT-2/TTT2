@@ -225,7 +225,6 @@ Esconde tu ID mientras está en uso. Además evita ser la última persona vista 
 Actívalo en la pestaña disfraz de este menú o presiona el numpad Enter.]]
 
 -- C4
-L.c4_hint = "Presiona {usekey} para activar o desactivar."
 L.c4_disarm_warn = "Un C4 que has plantado fue desactivado."
 L.c4_armed = "Has activado la bomba correctamente."
 L.c4_disarmed = "Has desactivado la bomba correctamente."
@@ -2071,9 +2070,23 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-11-18
+-- 2023-12-14
+--L.bombvision_owner = "Owner: {owner}"
+--L.bombvision_distance = "Distance: {distance}m"
+
+--L.c4_bombvision_time = "Detonation time: {time}"
+--L.c4_bombvision_collapsed = "{time} / {distance}m"
+
+--L.c4_bombvision_safe_zone = "Bomb safe zone"
+--L.c4_bombvision_damage_zone = "Bomb damage zone"
+--L.c4_bombvision_kill_zone = "Bomb kill zone"
+
+--L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmó la muerte de {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"

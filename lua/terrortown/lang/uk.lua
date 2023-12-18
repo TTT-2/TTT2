@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 Перемикайте маскування у відповідній вкладці цього меню або натисніть клавішу Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Натисніть {usekey}, щоб закласти або знешкодити."
 L.c4_disarm_warn = "Вибухівку C4, яку ви заклали, знешкодили."
 L.c4_armed = "Ви успішно заклали бомбу."
 L.c4_disarmed = "Ви успішно знешкодили бомбу."
@@ -2071,9 +2070,23 @@ L.search_eyes = "Використовуючи свої навички детек
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-11-18
+-- 2023-12-14
+--L.bombvision_owner = "Owner: {owner}"
+--L.bombvision_distance = "Distance: {distance}m"
+
+--L.c4_bombvision_time = "Detonation time: {time}"
+--L.c4_bombvision_collapsed = "{time} / {distance}m"
+
+--L.c4_bombvision_safe_zone = "Bomb safe zone"
+--L.c4_bombvision_damage_zone = "Bomb damage zone"
+--L.c4_bombvision_kill_zone = "Bomb kill zone"
+
+--L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"

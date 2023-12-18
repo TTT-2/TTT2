@@ -225,7 +225,6 @@ Versteckt deine ID. Vermeidet außerdem, dass du die letzte vom Opfer gesehene P
 Schalte es im Reiter "Tarnung" ein oder aus oder drücke Enter auf dem Numpad.]]
 
 -- C4
-L.c4_hint = "Drücke {usekey} zum Scharfstellen oder Entschärfen."
 L.c4_disarm_warn = "Eine Ladung C4, die du platziert hast, ist entschärft worden."
 L.c4_armed = "Du hast die Bombe erfolgreich scharf gestellt."
 L.c4_disarmed = "Du hast die Bombe erfolgreich entschärft."
@@ -2071,9 +2070,23 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-11-18
+-- 2023-12-14
+--L.bombvision_owner = "Owner: {owner}"
+--L.bombvision_distance = "Distance: {distance}m"
+
+--L.c4_bombvision_time = "Detonation time: {time}"
+--L.c4_bombvision_collapsed = "{time} / {distance}m"
+
+--L.c4_bombvision_safe_zone = "Bomb safe zone"
+--L.c4_bombvision_damage_zone = "Bomb damage zone"
+--L.c4_bombvision_kill_zone = "Bomb kill zone"
+
+--L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
--- L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"

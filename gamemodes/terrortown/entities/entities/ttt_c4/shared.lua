@@ -899,9 +899,9 @@ else -- CLIENT
 
 		rData:SetTitle(TryT(ent.PrintName))
 
-		rData:AddDescriptionLine(ParT("c4_bombvision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("bombvision_owner", {owner = nick}))
 		rData:AddDescriptionLine(ParT("c4_bombvision_time", {time = time}))
-		rData:AddDescriptionLine(ParT("c4_bombvision_distance", {distance = distance}))
+		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
 
 		local color = COLOR_WHITE
 

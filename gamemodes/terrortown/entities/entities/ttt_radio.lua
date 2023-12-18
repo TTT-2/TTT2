@@ -348,10 +348,10 @@ if CLIENT then
 		rData:SetTitle(TryT(ent.PrintName))
 		rData:AddIcon(materialRadio)
 
-		rData:AddDescriptionLine(ParT("c4_bombvision_owner", {owner = nick}))
-		rData:AddDescriptionLine(ParT("c4_bombvision_distance", {distance = distance}))
+		rData:AddDescriptionLine(ParT("bombvision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
 
-		rData:SetCollapsedLine(ParT("c4_bombvision_collapsed", {distance = distance}))
+		rData:SetCollapsedLine(ParT("bombvision_collapsed", {distance = distance}))
 	end)
 end
 

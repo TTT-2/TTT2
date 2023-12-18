@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 需要启用时，使用本页面的伪装菜单或按下小键盘回车键。]]
 
 -- C4
-L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
 L.c4_disarm_warn = "你所安放的C4已被拆除。"
 L.c4_armed = "C4安放成功。"
 L.c4_disarmed = "你成功拆除了C4。"
@@ -2071,9 +2070,23 @@ L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
--- 2023-11-18
+-- 2023-12-14
+--L.bombvision_owner = "Owner: {owner}"
+--L.bombvision_distance = "Distance: {distance}m"
+
+--L.c4_bombvision_time = "Detonation time: {time}"
+--L.c4_bombvision_collapsed = "{time} / {distance}m"
+
+--L.c4_bombvision_safe_zone = "Bomb safe zone"
+--L.c4_bombvision_damage_zone = "Bomb damage zone"
+--L.c4_bombvision_kill_zone = "Bomb kill zone"
+
+--L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"

@@ -225,7 +225,6 @@ Döljer din identitet när den är påslagen. Hindrar även att man blir den sis
 Slå av/på i Förklädnads-fliken i den här menyn eller tryck Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Tryck på {usekey} för att armera eller desarmera."
 L.c4_disarm_warn = "En C4 som du har placerat har blivit desarmerad."
 L.c4_armed = "Du lyckades armera bomben."
 L.c4_disarmed = "Du lyckades desarmera bomben."
@@ -2071,9 +2070,23 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-11-18
+-- 2023-12-14
+--L.bombvision_owner = "Owner: {owner}"
+--L.bombvision_distance = "Distance: {distance}m"
+
+--L.c4_bombvision_time = "Detonation time: {time}"
+--L.c4_bombvision_collapsed = "{time} / {distance}m"
+
+--L.c4_bombvision_safe_zone = "Bomb safe zone"
+--L.c4_bombvision_damage_zone = "Bomb damage zone"
+--L.c4_bombvision_kill_zone = "Bomb kill zone"
+
+--L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"

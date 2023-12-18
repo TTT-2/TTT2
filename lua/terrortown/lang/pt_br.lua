@@ -225,7 +225,6 @@ Oculta sua identidade enquanto habilitado. Também evita ser a última pessoa vi
 Habilite-o na aba Disfarce deste menu ou aperte a tecla Enter do teclado numérico.]]
 
 -- C4
-L.c4_hint = "Pressione {usekey} para armar ou desarmar."
 L.c4_disarm_warn = "Um explosivo C4 que você plantou foi desarmado."
 L.c4_armed = "Você armou a bomba com sucesso."
 L.c4_disarmed = "Você desarmou a bomba com sucesso."
@@ -2071,9 +2070,23 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-11-18
+-- 2023-12-14
+--L.bombvision_owner = "Owner: {owner}"
+--L.bombvision_distance = "Distance: {distance}m"
+
+--L.c4_bombvision_time = "Detonation time: {time}"
+--L.c4_bombvision_collapsed = "{time} / {distance}m"
+
+--L.c4_bombvision_safe_zone = "Bomb safe zone"
+--L.c4_bombvision_damage_zone = "Bomb damage zone"
+--L.c4_bombvision_kill_zone = "Bomb kill zone"
+
+--L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"

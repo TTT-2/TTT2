@@ -2071,16 +2071,19 @@ L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-12-14
-L.c4_bombvision_owner = "Owner: {owner}"
+L.bombvision_owner = "Owner: {owner}"
+L.bombvision_distance = "Distance: {distance}m"
+
 L.c4_bombvision_time = "Detonation time: {time}"
-L.c4_bombvision_distance = "Distance: {distance}m"
 L.c4_bombvision_collapsed = "{time} / {distance}m"
 
 L.c4_bombvision_safe_zone = "Bomb safe zone"
 L.c4_bombvision_damage_zone = "Bomb damage zone"
 L.c4_bombvision_kill_zone = "Bomb kill zone"
 
--- 2023-11-18
+L.radio_bombvision_collapsed = "{distance}m"
+
+-- 2023-12-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
