@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot 
 L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "The corpse is too far away."
 
-L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
 L.radio_short_desc = "Weapon sounds are music to me"
 
 L.hstation_subtitle = "Press [{usekey}] to receive health."
@@ -2073,3 +2072,5 @@ L.label_spec_prop_dash = "Dash force multiplier"
 L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+L.entity_pickup_owner_only = "Only the owner can pick this up"
