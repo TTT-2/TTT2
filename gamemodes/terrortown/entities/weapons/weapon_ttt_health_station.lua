@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @desc health staion
+-- @section weapon_ttt_health_station
 
 if SERVER then
 	AddCSLuaFile()
