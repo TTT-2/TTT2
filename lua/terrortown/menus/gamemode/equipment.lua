@@ -37,6 +37,8 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 		virtualSubmenus[counter].isItem = items.IsItem(equipment)
 		virtualSubmenus[counter].icon = equipment.iconMaterial
 		virtualSubmenus[counter].iconFullSize = true
+		virtualSubmenus[counter].iconOutline = equipment.StockEquipment or false
+		virtualSubmenus[counter].tooltip = equipment.id
 	end
 end
 

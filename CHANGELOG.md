@@ -21,6 +21,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+- Added tooltip to `Edit Equipment` menu with the equipment's class name and outline equipment with `StockEquipment` set (by @EntranceJew)
 
 ### Fixed
 

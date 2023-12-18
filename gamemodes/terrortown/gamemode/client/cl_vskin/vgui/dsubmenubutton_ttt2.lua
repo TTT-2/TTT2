@@ -29,6 +29,7 @@ function PANEL:Init()
 		title_font = "DermaTTT2SubMenuButtonTitle",
 		icon = nil,
 		iconFullSize = false,
+		iconOutline = false,
 		selected = false,
 	}
 end
@@ -38,6 +39,20 @@ end
 -- @realm client
 function PANEL:IsDown()
 	return self.Depressed
+end
+
+---
+-- @param boolean outline
+-- @realm client
+function PANEL:SetIconOutline(outline)
+	self.contents.iconOutline = outline
+end
+
+---
+-- @return boolean
+-- @realm client
+function PANEL:GetIconOutline()
+	return self.contents.iconOutline
 end
 
 ---

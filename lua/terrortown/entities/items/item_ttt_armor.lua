@@ -12,6 +12,7 @@ ITEM.material = "vgui/ttt/icon_armor"
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 ITEM.oldId = EQUIP_ARMOR or 1
 ITEM.limited = false
+ITEM.StockEquipment = true
 
 if SERVER then
 	---

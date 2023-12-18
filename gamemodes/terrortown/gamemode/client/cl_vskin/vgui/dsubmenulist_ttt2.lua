@@ -91,6 +91,8 @@ function PANEL:AddSubmenuButton(submenuClass)
 
 	settingsButton:SetTitle(submenuClass.title or submenuClass.type)
 	settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
+	settingsButton:SetIconOutline(submenuClass.iconOutline)
+	settingsButton:SetTooltip(submenuClass.tooltip)
 
 	settingsButton.PerformLayout = function(panel)
 		panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
