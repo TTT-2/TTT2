@@ -279,7 +279,6 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "Набор сапёра"
-L.defuser_help = "{primaryfire}: обезвредить С4."
 
 L.defuser_desc = [[
 Мгновенно обезвреживает С4.
@@ -298,7 +297,6 @@ L.flare_desc = [[
 L.hstation_name = "Лечебная станция"
 
 L.hstation_broken = "Ваша Лечебная станция уничтожена!"
-L.hstation_help = "{primaryfire}: разместить Лечебную станцию."
 
 L.hstation_desc = [[
 Позволяет игрокам восстанавливать здоровье.
@@ -322,7 +320,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "Ваше Радио уничтожено!"
-L.radio_help_pri = "{primaryfire}: поместить Радио."
 
 L.radio_desc = [[
 Воспроизводит звуки для отвлечения или обмана.
@@ -1164,7 +1161,6 @@ L.binoc_help_sec = "Изменить уровень приближения."
 
 L.vis_help_pri = "Бросить активированное устройство."
 
-L.decoy_help_pri = "Установить Приманку."
 
 -- 2020-08-07
 L.pickup_error_spec = "Вы не можете подобрать это за наблюдателя."
@@ -2075,3 +2071,27 @@ L.search_eyes = "Используя свои детективные навыки
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
+-- 2023-12-13
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Установить Приманку."

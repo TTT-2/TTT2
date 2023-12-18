@@ -276,7 +276,6 @@ Diğer takımlara sahte bir radar işareti gösterir ve biri DNA'nızı tararsa 
 
 -- Defuser
 L.defuser_name = "İmha Kiti"
-L.defuser_help = "{primaryfire}, hedef C4'ü etkisiz hale getirir."
 
 L.defuser_desc = [[
 Bir C4 patlayıcısını anında etkisiz hale getirin.
@@ -295,7 +294,6 @@ Bir cesedi yakmak belirgin bir ses çıkarır.]]
 L.hstation_name = "Sağlık İstasyonu"
 
 L.hstation_broken = "Sağlık İstasyonun yok edildi!"
-L.hstation_help = "{primaryfire} Sağlık İstasyonunu yerleştirir."
 
 L.hstation_desc = [[
 Yerleştirildiğinde insanların iyileşmesini sağlar.
@@ -319,7 +317,6 @@ Enerji patlamaları yakındaki insanlara zarar verir.]]
 
 -- Radio
 L.radio_broken = "Radyonuz yok edildi!"
-L.radio_help_pri = "{primaryfire} radyoyu yerleştirir."
 
 L.radio_desc = [[
 Dikkat dağıtmak veya kandırmak için sesler çıkarır.
@@ -1161,7 +1158,6 @@ L.binoc_help_sec = "Yakınlaştırma seviyesini değiştirin."
 
 L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
 
-L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2020-08-07
 L.pickup_error_spec = "Bunu izleyici olarak alamazsın."
@@ -2072,3 +2068,27 @@ L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
 L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
+
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
+-- 2023-12-13
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Tuzağı yerleştirin."
