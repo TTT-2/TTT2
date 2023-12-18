@@ -20,6 +20,17 @@ radarVision = {}
 
 radarVision.registry = {}
 
+---
+-- Registers an entity that should be rendered on screen with a wallhack and an optional
+-- UI element that works similar to targetID.
+-- @param Entity ent The entity that should be rendered
+-- @param Player owner The owner of the wallhack that takes their ownershipo with them on team change
+-- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_TEAM`, `VISIBLE_FOR_ALL`
+-- @param[opt] Color color The color of the wallhack, uses team color as fallback
+-- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
+-- @param[opt] any passThroughData any data that should be added to this radar vision, it is also synced to the client
+-- @note Call on server to add entity on server and all defined clients.
+-- @realm shared
 function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
 	if SERVER then
 		local plysTeam = GetTeamFilter(owner:GetTeam(), true, true)
@@ -66,6 +77,12 @@ function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList,
 	}
 end
 
+---
+-- Removes the entity from the radar vision table.
+-- @param Entity ent The entity that should be removed
+-- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
+-- @note Call on server to remove entity on server and all defined clients.
+-- @realm shared
 function radarVision.RemoveEntity(ent, receiverList)
 	if not IsValid(ent) or not radarVision.registry[ent] then return end
 
@@ -92,6 +109,13 @@ function radarVision.RemoveEntity(ent, receiverList)
 	end
 end
 
+---
+-- Updates the entity on the server and all related clients.
+-- @param Entity ent The entity that should be updated
+-- @param Player owner The owner of the wallhack that takes their ownershipo with them on team change
+-- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
+-- @note Call on server to add entity on server and all defined clients.
+-- @realm shared
 function radarVision.UpdateEntity(ent, owner, visibleFor)
 	if not radarVision.registry[ent] then return end
 
@@ -102,6 +126,12 @@ function radarVision.UpdateEntity(ent, owner, visibleFor)
 	radarVision.RegisterEntity(ent, owner, visibleFor)
 end
 
+---
+-- Handles the update of the team of a player change.
+-- @param Entity ent The entity that should be updated
+-- @param string oldTeam The old team of the owner
+-- @param string newTeam The new team of the owner
+-- @realm shared
 function radarVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
 	if not radarVision.registry[ent] or radarVision.registry[ent].visibleFor ~= VISIBLE_FOR_TEAM then return end
 
@@ -114,6 +144,13 @@ function radarVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
 end
 
 if SERVER then
+	---
+	-- Handles the update of the team of a player change. Is called internally and should probably not be called somewhere else.
+	-- @param Entity ent The entity that should be updated
+	-- @param string oldTeam The old team of the owner
+	-- @param string newTeam The new team of the owner
+	-- @internal
+	-- @realm server
 	function radarVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
 		for ent, data in pairs(radarVision.registry) do
 			if data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
@@ -141,6 +178,10 @@ if CLIENT then
 		radarVision.RemoveEntity(net.ReadEntity())
 	end)
 
+	---
+	-- The draw function of the radar vision module.
+	-- @internal
+	-- @realm client
 	function radarVision.Draw()
 		local scale = appearance.GetGlobalScale()
 
