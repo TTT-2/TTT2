@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+ "$basetexture" "vgui/ttt/vskin/markers/builtin"
+ "$vertexcolor" 1
+ "$vertexalpha" 1
+ "$translucent" 1
+}

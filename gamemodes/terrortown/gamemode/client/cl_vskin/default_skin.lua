@@ -342,6 +342,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local colorBackground = colors.background
 	local colorBar = colors.background
 	local colorText = utilGetChangedColor(colors.default, 75)
+	local colorIcon = utilGetChangedColor(COLOR_WHITE, 32)
 	local shift = 0
 	local pad = mathRound(0.3 * h)
 	local hasIcon = panel:HasIcon()
@@ -355,25 +356,28 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 		colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
 		colorBar = colors.accentActive
 		colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
+		colorIcon = utilGetActiveColor(utilGetChangedColor(COLOR_WHITE, 32))
 		shift = 1
 	elseif panel.Hovered then
 		colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
 		colorBar = colors.accentHover
 		colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
+		colorIcon = utilGetHoverColor(utilGetChangedColor(COLOR_WHITE, 48))
 	elseif panel:IsActive() then
 		colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
 		colorBar = colors.accentHover
 		colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
+		colorIcon = utilGetHoverColor(utilGetChangedColor(COLOR_WHITE, 48))
 	end
 
 	drawBox(0, 0, sizes.border, h, colorBar)
 	drawBox(sizes.border, 0, w - sizes.border, h, colorBackground)
 
 	if hasIcon then
-		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorText)
+		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorIcon)
 		if iconBadge then
 			local miniSize = 16
-			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - miniSize, padIcon + shift + sizeIcon - miniSize, miniSize, miniSize, iconBadge, iconAlpha, colorText)
+			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - miniSize, padIcon + shift + sizeIcon - miniSize, miniSize, miniSize, iconBadge, iconAlpha, colors.accent)
 		end
 	end
 
