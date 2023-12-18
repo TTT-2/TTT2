@@ -46,6 +46,8 @@ SWEP.ViewModel = Model("models/weapons/c_357.mdl")
 SWEP.WorldModel = Model("models/weapons/w_357.mdl")
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("flaregun_help_primary")
 
@@ -121,6 +123,11 @@ local function ScorchUnderRagdoll(ent)
 	util.PaintDown(mid, "Scorch", ent)
 end
 
+---
+-- @param Entity att
+-- @param table path
+-- @param CTakeDamageInfo dmginfo
+-- @realm shared
 function IgniteTarget(att, path, dmginfo)
 	local ent = path.Entity
 
@@ -174,6 +181,8 @@ function IgniteTarget(att, path, dmginfo)
 	end
 end
 
+---
+-- @ignore
 function SWEP:ShootFlare()
 	local cone = self.Primary.Cone
 	local bullet = {}
@@ -190,6 +199,8 @@ function SWEP:ShootFlare()
 	self:GetOwner():FireBullets(bullet)
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -216,5 +227,7 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack() end
 
