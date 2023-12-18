@@ -372,7 +372,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	if hasIcon then
 		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorText)
 		if iconBadge then
-			local miniSize = 8
+			local miniSize = 16
 			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - miniSize, padIcon + shift + sizeIcon - miniSize, miniSize, miniSize, iconBadge, iconAlpha, colorText)
 		end
 	end
