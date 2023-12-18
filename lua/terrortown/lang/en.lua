@@ -2082,6 +2082,10 @@ L.knife_help_secondary = "Throw knife"
 L.polter_help_primary = "Fire thumper"
 L.polter_help_secondary = "Charge long range shot"
 
+-- 2023-12-12
+L.newton_help_primary = "Knockback shot"
+L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 L.defuser_help_primary = "Defuse targeted C4"
 L.radio_help_primary = "Place the Radio"
@@ -2089,6 +2093,3 @@ L.radio_help_secondary = "Stick to surface"
 L.hstation_help_primary = "Place the Health Station"
 L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "Stick to surface"
-
-L.newton_help_primary = "Knockback shot"
-L.newton_help_secondary = "Charged knockback shot"
