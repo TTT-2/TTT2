@@ -193,15 +193,10 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 				table.sort(killnicks, CorpseSorting)
 			end
 
-			local names = ""
-			for k = 1, #killnicks do
-				local name = killnicks[k]
-				if name == ply:Nick() then continue end
-
-				names = names .. name .. ", "
+			local names = killnicks[1]
+			for k = 2, #killnicks do
+				names = names .. "," .. killnicks[k]
 			end
-
-			names = string.sub(names, 1, -3)
 
 			LANG.Msg("body_confirm_more", {finder = finder, victims = names, count = #killnicks})
 		end
