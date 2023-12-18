@@ -1,3 +1,4 @@
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -45,15 +46,21 @@ SWEP.WeaponID = AMMO_HEALTHSTATION
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:HealthDrop()
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:HealthDrop()
@@ -61,7 +68,8 @@ end
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
--- ye olde droppe code
+--- ye olde droppe code
+-- @ignore
 function SWEP:HealthDrop()
 	if SERVER then
 		local ply = self:GetOwner()
@@ -96,10 +104,14 @@ function SWEP:HealthDrop()
 	self:EmitSound(throwsound)
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:OnRemove()
 	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
 		RunConsoleCommand("lastinv")
@@ -107,6 +119,8 @@ function SWEP:OnRemove()
 end
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("hstation_help_primary")
 
@@ -114,6 +128,8 @@ if CLIENT then
 	end
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	if SERVER and IsValid(self:GetOwner()) then
 		self:GetOwner():DrawViewModel(false)
@@ -121,7 +137,10 @@ function SWEP:Deploy()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:DrawWorldModel() end
 
+---
+-- @ignore
 function SWEP:DrawWorldModelTranslucent() end
-
