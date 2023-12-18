@@ -6,6 +6,7 @@ local ParT = LANG.GetParamTranslation
 local function MakePlayerRoleTooltip(parent, width, ply)
 	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
 	local height = 25
+	local lengthLongestLine = 0
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
@@ -13,7 +14,7 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_roles_time")
-	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
+	local lengthLongestLine = fastutf8.len(TryT(titleBox:GetTitle()))
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	for i = 1, #plyRoles do
@@ -30,13 +31,13 @@ local function MakePlayerRoleTooltip(parent, width, ply)
 			return tostring(i) .. ". " .. TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")"
 		end
 		local length = fastutf8.len(plyRoleBox.GetTitle())
-		if length > shortest then
-			shortest = length
+		if length > lengthLongestLine then
+			lengthLongestLine = length
 		end
 		height = height + 20
 	end
 
-	width = (shortest * 8)
+	width = (lengthLongestLine * 8)
 	titleBox:SetSize(width, 25)
 	return width, height
 end
@@ -51,7 +52,7 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_score_gained")
-	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
+	local lengthLongestLine = fastutf8.len(TryT(titleBox:GetTitle()))
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
 	-- In a first Pass filter all scoreevents and scores by name, positivy and number of Events
@@ -92,8 +93,8 @@ local function MakePlayerScoreTooltip(parent, width, ply)
 				return "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
 			end
 			local length = fastutf8.len(plyRoleBox.GetTitle())
-			if length > shortest then
-				shortest = length
+			if length > lengthLongestLine then
+				lengthLongestLine = length
 			end
 			height = height + 20
 		end
