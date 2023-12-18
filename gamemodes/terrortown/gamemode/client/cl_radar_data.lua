@@ -152,6 +152,18 @@ function RADAR_DATA:SetCollapsedLine(text, color)
 end
 
 ---
+-- Sets the collapsed line that is shown at greater distance of the specific radar vision element
+-- @param[default=""] string text The text that should be displayed
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
+-- @realm client
+function RADAR_DATA:SetOffScreenLine(text, color)
+	self.params.displayInfo.offScreenLine = {
+		text = text or "",
+		color = IsColor(color) and color or COLOR_WHITE
+	}
+end
+
+---
 -- Returns whether or not a title has been set
 -- @return boolean True if a title is set
 -- @realm client
@@ -181,6 +193,14 @@ end
 -- @realm client
 function RADAR_DATA:HasCollapsedLine()
 	return self.params.displayInfo.collapsedLine and self.params.displayInfo.collapsedLine.text ~= ""
+end
+
+---
+-- Returns whether or not a collapsed line has been set
+-- @return boolean True if a title is set
+-- @realm client
+function RADAR_DATA:HasOffScreenLine()
+	return self.params.displayInfo.offScreenLine and self.params.displayInfo.offScreenLine.text ~= ""
 end
 
 ---

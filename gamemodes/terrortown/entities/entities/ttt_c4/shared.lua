@@ -920,6 +920,7 @@ else -- CLIENT
 		rData:AddIcon(materialC4, rData:IsOffScreen() and color)
 
 		rData:SetCollapsedLine(ParT("c4_bombvision_collapsed", {time = time, distance = distance}))
+		rData:SetOffScreenLine(time)
 	end)
 end
 

@@ -131,7 +131,7 @@ end
 
 if CLIENT then
 	surface.CreateAdvancedFont("RadarVision_Title", { font = "Trebuchet24", size = 20, weight = 600 })
-	surface.CreateAdvancedFont("BombVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
+	surface.CreateAdvancedFont("RadarVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
 
 	net.ReceiveStream("ttt2_register_entity_added", function(streamData)
 		radarVision.RegisterEntity(streamData.ent, streamData.owner, streamData.visibleFor, streamData.color, nil, streamData.data)
@@ -145,6 +145,7 @@ if CLIENT then
 		local scale = appearance.GetGlobalScale()
 
 		local padding = 3 * scale
+		local paddingScreen = 10 * scale
 
 		local sizeIcon = 32 * scale
 		local sizeIconOffScreen = 24 * scale
@@ -193,8 +194,8 @@ if CLIENT then
 					screenPos.y = screenPos.y / 100000
 				end
 
-				screenPos.x = math.Clamp(screenPos.x, offsetIconOffScreen, ScrW() - offsetIconOffScreen)
-				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen, ScrH() - offsetIconOffScreen)
+				screenPos.x = math.Clamp(screenPos.x, offsetIconOffScreen + paddingScreen, ScrW() - offsetIconOffScreen - paddingScreen)
+				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen + paddingScreen, ScrH() - offsetIconOffScreen - paddingScreen)
 
 				draw.FilteredShadowedTexture(
 					screenPos.x - offsetIconOffScreen,
@@ -204,6 +205,20 @@ if CLIENT then
 					icon.material,
 					color.a,
 					color
+				)
+
+				if not rData:HasOffScreenLine() then return end
+
+				draw.AdvancedText(
+					params.displayInfo.offScreenLine.text,
+					"RadarVision_Text",
+					screenPos.x + 1 * scale,
+					screenPos.y + offsetIconOffScreen + padding,
+					params.displayInfo.offScreenLine.color,
+					TEXT_ALIGN_CENTER,
+					TEXT_ALIGN_CENTER,
+					true,
+					scale
 				)
 
 				return
@@ -297,7 +312,7 @@ if CLIENT then
 
 					draw.AdvancedText(
 						text,
-						"BombVision_Text",
+						"RadarVision_Text",
 						xStringDescriptionShifted,
 						yStringDescription,
 						color,
@@ -314,7 +329,7 @@ if CLIENT then
 
 				draw.AdvancedText(
 					params.displayInfo.collapsedLine.text,
-					"BombVision_Text",
+					"RadarVision_Text",
 					screenPos.x + offsetIcon + padding,
 					yStringTitle + heightLineDescription,
 					params.displayInfo.collapsedLine.color,
