@@ -60,8 +60,6 @@ L.body_found_traitor = "Er war ein Verräter!"
 L.body_found_det = "Er war ein Detektiv."
 L.body_found_inno = "Er war unschuldig."
 
-L.body_confirm = "{finder} bestätigte den Tod von {victim}."
-
 L.body_call = "{player} rief einen Detektiv zum Körper von {victim}!"
 L.body_call_error = "Du musst erst den Tod dieses Spielers bestätigen, bevor du einen Detektiv rufen kannst!"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine weg
 L.corpse_searched_by_detective = "Diese Leiche wurde von einer öffentlichen Ordnungsrolle untersucht"
 L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
 
-L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
 L.radio_short_desc = "Waffengeräusche sind Musik für mich"
 
 L.hstation_subtitle = "Drücke [{usekey}] um Leben zu regenerieren."
@@ -2073,3 +2070,10 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
+-- L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
