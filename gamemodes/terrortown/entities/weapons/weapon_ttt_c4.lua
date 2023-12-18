@@ -49,17 +49,22 @@ SWEP.NoSights = true
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:BombDrop()
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:BombStick()
 end
 
--- mostly replicating HL2DM slam throw here
+--- mostly replicating HL2DM slam throw here
+-- @ignore
 function SWEP:BombDrop()
 	if SERVER then
 		local ply = self:GetOwner()
@@ -105,7 +110,8 @@ function SWEP:BombDrop()
 	self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
 end
 
--- again replicating slam, now its attach fn
+--- again replicating slam, now its attach fn
+-- @ignore
 function SWEP:BombStick()
 	if CLIENT then return end
 
