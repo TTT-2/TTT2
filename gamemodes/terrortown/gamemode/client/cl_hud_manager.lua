@@ -33,6 +33,18 @@ function GM:HUDPaint()
 
 	---
 	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTBombVision") then
+		radarVision.Draw()
+	end
+
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTRadar") then
+		RADAR:Draw(client)
+	end
+
+	---
+	-- @realm client
 	if hook.Run("HUDShouldDraw", "TTTTButton") then
 		TBHUD:Draw(client)
 	end
@@ -63,18 +75,6 @@ function GM:HUDPaint()
 	-- @realm client
 	if hook.Run("HUDShouldDraw", "TTTVoice") then
 		VOICE.Draw(client)
-	end
-
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTRadar") then
-		RADAR:Draw(client)
-	end
-
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTBombVision") then
-		radarVision.Draw()
 	end
 end
 
