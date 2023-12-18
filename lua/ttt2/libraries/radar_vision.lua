@@ -185,6 +185,14 @@ if CLIENT then
 				local icon = params.displayInfo.icon[1]
 				local color = icon.color or COLOR_WHITE
 
+				if screenPos.x > 100000 then
+					screenPos.x = screenPos.x / 100000
+				end
+
+				if screenPos.y > 100000 then
+					screenPos.y = screenPos.y / 100000
+				end
+
 				screenPos.x = math.Clamp(screenPos.x, offsetIconOffScreen, ScrW() - offsetIconOffScreen)
 				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen, ScrH() - offsetIconOffScreen)
 
@@ -259,7 +267,7 @@ if CLIENT then
 			)
 
 			-- draw description
-			if util.HammerUnitsToMeters(distanceEntity) <= 15 then
+			if util.HammerUnitsToMeters(distanceEntity) <= 20 then
 				local linesDescription = params.displayInfo.desc
 				local amountLinesDescription = #linesDescription
 

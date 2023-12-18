@@ -46,6 +46,11 @@ AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
 ---
 -- @accessor number
 -- @realm shared
+AccessorFunc(ENT, "radius_inner", "RadiusInner", FORCE_NUMBER)
+
+---
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
 ---
@@ -97,6 +102,10 @@ function ENT:Initialize()
 
 	if not self:GetThrower() then
 		self:SetThrower(nil)
+	end
+
+	if not self:GetRadiusInner() then
+		self:SetRadiusInner(750)
 	end
 
 	if not self:GetRadius() then
@@ -287,7 +296,7 @@ function ENT:Explode(tr)
 		local dmgowner = self:GetThrower()
 		dmgowner = IsValid(dmgowner) and dmgowner or self
 
-		local r_inner = 750
+		local r_inner = self:GetRadiusInner()
 		local r_outer = self:GetRadius()
 
 		if self.DisarmCausedExplosion then
@@ -888,12 +897,27 @@ else -- CLIENT
 
 		rData:EnableText()
 
-		rData:AddIcon(materialC4)
 		rData:SetTitle(TryT(ent.PrintName))
 
 		rData:AddDescriptionLine(ParT("c4_bombvision_owner", {owner = nick}))
 		rData:AddDescriptionLine(ParT("c4_bombvision_time", {time = time}))
 		rData:AddDescriptionLine(ParT("c4_bombvision_distance", {distance = distance}))
+
+		local color = COLOR_WHITE
+
+		if rData:GetEntityDistance() > ent:GetRadius() then
+			rData:AddDescriptionLine(TryT("c4_bombvision_safe_zone"), COLOR_GREEN)
+		elseif rData:GetEntityDistance() > ent:GetRadiusInner() then
+			rData:AddDescriptionLine(TryT("c4_bombvision_damage_zone"), COLOR_ORANGE)
+
+			color = COLOR_ORANGE
+		else
+			rData:AddDescriptionLine(TryT("c4_bombvision_kill_zone"), COLOR_RED)
+
+			color = COLOR_RED
+		end
+
+		rData:AddIcon(materialC4, rData:IsOffScreen() and color)
 
 		rData:SetCollapsedLine(ParT("c4_bombvision_collapsed", {time = time, distance = distance}))
 	end)

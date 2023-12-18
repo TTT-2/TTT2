@@ -2076,6 +2076,10 @@ L.c4_bombvision_time = "Detonation time: {time}"
 L.c4_bombvision_distance = "Distance: {distance}m"
 L.c4_bombvision_collapsed = "{time} / {distance}m"
 
+L.c4_bombvision_safe_zone = "Bomb safe zone"
+L.c4_bombvision_damage_zone = "Bomb damage zone"
+L.c4_bombvision_kill_zone = "Bomb kill zone"
+
 -- 2023-11-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
 
