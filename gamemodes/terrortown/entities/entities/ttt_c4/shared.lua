@@ -912,6 +912,9 @@ else -- CLIENT
 
 		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
 
+		local owner = ent:GetOwner()
+		local nick = IsValid(owner) and owner:Nick() or "---"
+
 		local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
 		local distance = math.Round(util.HammerUnitsToMeters(rData:GetEntityDistance()), 1)
 
@@ -920,10 +923,11 @@ else -- CLIENT
 		rData:AddIcon(materialC4)
 		rData:SetTitle(TryT(ent.PrintName))
 
+		rData:AddDescriptionLine(ParT("c4_bombvision_owner", {owner = nick}))
 		rData:AddDescriptionLine(ParT("c4_bombvision_time", {time = time}))
 		rData:AddDescriptionLine(ParT("c4_bombvision_distance", {distance = distance}))
 
-		rData:SetCollapsedLine(ParT(c4_bombvision_collapsed, {time = time, distance = distance}))
+		rData:SetCollapsedLine(ParT("c4_bombvision_collapsed", {time = time, distance = distance}))
 	end)
 end
 
