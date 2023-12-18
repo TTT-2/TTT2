@@ -132,15 +132,17 @@ end
 -- @param Entity activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() then
-		if activator:IsActiveDetective() and activator:CanCarryType(WEAPON_EQUIP) then
-			self:StopScanSound(true)
-			self:Remove()
+	if not IsValid(activator) or not activator:IsPlayer() then return end
 
-			activator:Give("weapon_ttt_cse")
-		else
-			self:EmitSound("HL2Player.UseDeny")
-		end
+	local roleDataActivator = activator:GetSubRoleData()
+
+	if activator:CanCarryType(WEAPON_EQUIP) and roleDataActivator.isPolicingRole and roleDataActivator.isPublicRole then
+		self:StopScanSound(true)
+		self:Remove()
+
+		activator:Give("weapon_ttt_cse")
+	else
+		self:EmitSound("HL2Player.UseDeny")
 	end
 end
 
