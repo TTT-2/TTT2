@@ -60,8 +60,6 @@ L.body_found_traitor = "Onlar bir Haindi!"
 L.body_found_det = "Onlar bir Dedektifti."
 L.body_found_inno = "Onlar bir Masumdu."
 
-L.body_confirm = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
-
 L.body_call = "{player}, {victim} adlı kurbanın cesedine Dedektif çağırdı!"
 L.body_call_error = "Bir Dedektif çağırmadan önce bu oyuncunun ölümünü onaylamalısın!"
 
@@ -2075,3 +2073,7 @@ L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

@@ -60,8 +60,6 @@ L.body_found_traitor = "他是一位叛徒！"
 L.body_found_det = "他是一位探長。"
 L.body_found_inno = "他是一位無辜者。"
 
-L.body_confirm = "{finder} 確認了 {victim} 的死。"
-
 L.body_call = "{player} 呼喚探長前來檢查 {victim} 的屍體！"
 L.body_call_error = "你必須先確定該玩家的死，才能呼叫探長！"
 
@@ -2075,3 +2073,7 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm = "{finder} 確認了 {victim} 的死。"
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

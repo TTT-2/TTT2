@@ -60,8 +60,6 @@ L.body_found_traitor = "他是一位叛徒！"
 L.body_found_det = "他是一位探长。"
 L.body_found_inno = "他是一位无辜者。"
 
-L.body_confirm = "{finder} 确认了 {victim} 的死亡。"
-
 L.body_call = "{player} 请求探长前来检查 {victim} 的尸体！"
 L.body_call_error = "你必须先确定该玩家的死才能呼叫探长！"
 
@@ -2075,3 +2073,7 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

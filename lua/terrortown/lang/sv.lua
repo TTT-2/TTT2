@@ -60,8 +60,6 @@ L.body_found = "{finder} fann {victim}s kropp. {role}"
 --L.body_found_det = "They were a Detective."
 --L.body_found_inno = "They were Innocent."
 
-L.body_confirm = "{finder} bekräftade att {victim} har dött."
-
 L.body_call = "{player} kallade en Detektiv till {victim}s kropp!"
 L.body_call_error = "Du måste bekräfta denna spelarens död för att kunna kalla på en Detektiv!"
 
@@ -2075,3 +2073,7 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

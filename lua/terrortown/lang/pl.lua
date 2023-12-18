@@ -60,8 +60,6 @@ L.body_found_traitor = "On był zdrajcą!"
 L.body_found_det = "On był detektywem."
 L.body_found_inno = "On był niewinny."
 
-L.body_confirm = "{finder} potwierdził śmierć {victim}."
-
 L.body_call = "{player} zawołał detektywa do ciała {victim}!"
 L.body_call_error = "Musisz potwierdić zgon tego gracza, zanim zawołasz detektywa!"
 
@@ -2075,3 +2073,7 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
