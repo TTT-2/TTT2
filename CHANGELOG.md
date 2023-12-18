@@ -4,6 +4,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added a new radarVision module that is currently used by these builtin weapons (by @TimGoll)
+  - C4
+  - Radio
+
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
