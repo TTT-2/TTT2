@@ -1,3 +1,8 @@
+---
+-- @class SWEP
+-- @desc defuser
+-- @section weapon_ttt_defuser
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -36,6 +41,8 @@ SWEP.WeaponID = AMMO_DEFUSER
 
 local defuse = Sound("c4.disarmfinish")
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -57,15 +64,21 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack() end
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("defuser_help_primary")
 
 		return self.BaseClass.Initialize(self)
 	end
 
+	---
+	-- @ignore
 	function SWEP:DrawWorldModel()
 		if not IsValid(self:GetOwner()) then
 			self:DrawModel()
@@ -73,10 +86,14 @@ if CLIENT then
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	if SERVER and IsValid(self:GetOwner()) then
 		self:GetOwner():DrawViewModel(false)
@@ -84,4 +101,6 @@ function SWEP:Deploy()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:OnDrop() end
