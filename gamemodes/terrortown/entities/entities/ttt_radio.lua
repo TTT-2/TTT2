@@ -37,6 +37,8 @@ function ENT:Initialize()
 
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
+
+		radarVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_TEAM)
 	end
 
 	-- Register with owner
@@ -99,18 +101,19 @@ function ENT:OnTakeDamage(dmginfo)
 	end
 end
 
-if CLIENT then
-	---
-	-- @realm client
-	function ENT:OnRemove()
+---
+-- @realm shared
+function ENT:OnRemove()
+	if CLIENT then
 		local client = LocalPlayer()
 
 		if client ~= self:GetOwner() then return end
 
 		client.radio = nil
+	else
+		radarVision.RemoveEntity(self)
 	end
 end
-
 ---
 -- @param Sound snd
 -- @realm shared
@@ -286,7 +289,7 @@ local nextplay = 0
 ---
 -- @realm shared
 function ENT:Think()
-	if CurTime() <= nextplay or #self.SoundQueue <= 0 then return end
+	if CurTime() <= nextplay or (istable(self.SoundQueue) and #self.SoundQueue <= 0) then return end
 
 	if not self.Playing then
 		self:PlaySound(table.remove(self.SoundQueue, 1))
@@ -297,6 +300,8 @@ function ENT:Think()
 end
 
 if CLIENT then
+	local materialRadio = Material("vgui/ttt/radar/radio")
+
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
@@ -325,6 +330,28 @@ if CLIENT then
 
 		tData:SetKeyBinding("+use")
 		tData:AddDescriptionLine(TryT("radio_short_desc"))
+	end)
+
+	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarRadio", function(rData)
+		local client = LocalPlayer()
+		local ent = rData:GetEntity()
+
+		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_radio" then return end
+
+		local owner = ent:GetOwner()
+		local nick = IsValid(owner) and owner:Nick() or "---"
+
+		local distance = math.Round(util.HammerUnitsToMeters(rData:GetEntityDistance()), 1)
+
+		rData:EnableText()
+
+		rData:SetTitle(TryT(ent.PrintName))
+		rData:AddIcon(materialRadio)
+
+		rData:AddDescriptionLine(ParT("c4_bombvision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("c4_bombvision_distance", {distance = distance}))
+
+		rData:SetCollapsedLine(ParT("c4_bombvision_collapsed", {distance = distance}))
 	end)
 end
 

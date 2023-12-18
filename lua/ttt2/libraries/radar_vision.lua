@@ -147,8 +147,8 @@ if CLIENT then
 		local padding = 3 * scale
 		local paddingScreen = 10 * scale
 
-		local sizeIcon = 32 * scale
-		local sizeIconOffScreen = 24 * scale
+		local sizeIcon = 28 * scale
+		local sizeIconOffScreen = 22 * scale
 
 		local offsetIcon = 0.5 * sizeIcon
 		local offsetIconOffScreen = 0.5 * sizeIconOffScreen
@@ -207,7 +207,7 @@ if CLIENT then
 					color
 				)
 
-				if not rData:HasOffScreenLine() then return end
+				if not rData:HasOffScreenLine() then continue end
 
 				draw.AdvancedText(
 					params.displayInfo.offScreenLine.text,
@@ -221,7 +221,7 @@ if CLIENT then
 					scale
 				)
 
-				return
+				continue
 			end
 
 			-- draw Icons
