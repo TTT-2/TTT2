@@ -6,13 +6,11 @@ local ParT = LANG.GetParamTranslation
 local function MakePlayerRoleTooltip(parent, width, ply)
 	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
 	local height = 25
-	local width = width
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
 
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
-	titleBox:SetSize(width, 25)
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_roles_time")
 	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
@@ -46,7 +44,6 @@ end
 local function MakePlayerScoreTooltip(parent, width, ply)
 	local plyScores = CLSCORE.eventsPlayerScores[ply.sid64] or {}
 	local height = 25
-	local width = width
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
@@ -110,13 +107,11 @@ end
 local function MakePlayerKarmaTooltip(parent, width, ply)
 	local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
 	local height = 25
-	local width = width
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
 
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
-	titleBox:SetSize(width, 25)
 	titleBox:SetDynamicColor(parent, 0)
 	titleBox:SetTitle("tooltip_karma_gained")
 	local shortest = fastutf8.len(TryT(titleBox:GetTitle()))
