@@ -189,9 +189,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		if #killnicks == 1 then
 			LANG.Msg("body_confirm_one", {finder = finder, victim = killnicks[1]})
 		elseif #killnicks > 1 then
-			if #killnicks >= 3 then
-				table.sort(killnicks, CorpseSorting)
-			end
+			table.sort(killnicks, CorpseSorting)
 
 			local names = killnicks[1]
 			for k = 2, #killnicks do
