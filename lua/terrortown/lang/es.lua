@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "No hay un arma que esté ocupando el 
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "El cadáver está muy lejos."
 
-L.radio_pickup_wrong_team = "No puedes recoger la radio de otro equipo."
 L.radio_short_desc = "Los sonidos de las armas son música para mis oídos"
 
 L.hstation_subtitle = "Mantén presionado [{usekey}] para recibir curación."

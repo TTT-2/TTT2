@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "{slot} yuvasında düşürülebilir s
 L.corpse_searched_by_detective = "Bu ceset bir dedektif tarafından arandı"
 L.corpse_too_far_away = "Ceset çok uzakta."
 
-L.radio_pickup_wrong_team = "Radyoyu başka bir takımdan alamazsın."
 L.radio_short_desc = "Silah sesleri benim için müziktir"
 
 L.hstation_subtitle = "Sağlık almak için [{usekey}] tuşuna basın."

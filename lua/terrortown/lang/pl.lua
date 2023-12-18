@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można 
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Ciało jest za daleko."
 
-L.radio_pickup_wrong_team = "Nie możesz mieć radio innego teamu."
 L.radio_short_desc = "Wystrzały broni są dla mnie muzyką"
 
 L.hstation_subtitle = "Naciśnij [{usekey}] aby otrzymać życie."

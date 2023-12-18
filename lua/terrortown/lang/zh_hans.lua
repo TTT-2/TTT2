@@ -914,7 +914,6 @@ L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 没有可丢弃的武�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "这个尸体太远了。"
 
-L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
 L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
