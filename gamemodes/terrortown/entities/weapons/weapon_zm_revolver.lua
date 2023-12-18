@@ -18,7 +18,7 @@ SWEP.Base = "weapon_tttbase"
 
 SWEP.Kind = WEAPON_PISTOL
 SWEP.WeaponID = AMMO_DEAGLE
-SWEP.StockEquipment = true
+SWEP.builtin = true
 SWEP.spawnType = WEAPON_TYPE_PISTOL
 
 SWEP.Primary.Ammo = "AlyxGun" -- hijack an ammo type we don't use otherwise

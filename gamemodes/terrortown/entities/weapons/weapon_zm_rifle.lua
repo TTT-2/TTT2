@@ -19,7 +19,7 @@ SWEP.Base = "weapon_tttbase"
 
 SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_RIFLE
-SWEP.StockEquipment = true
+SWEP.builtin = true
 SWEP.spawnType = WEAPON_TYPE_SNIPER
 
 SWEP.Primary.Delay = 1.5

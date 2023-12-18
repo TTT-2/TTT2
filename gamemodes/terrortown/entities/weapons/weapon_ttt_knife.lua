@@ -48,7 +48,7 @@ SWEP.Kind = WEAPON_EQUIP
 SWEP.CanBuy = {ROLE_TRAITOR} -- only traitors can buy
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_KNIFE
-SWEP.StockEquipment = true
+SWEP.builtin = true
 
 SWEP.IsSilent = true
 

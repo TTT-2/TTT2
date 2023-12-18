@@ -45,7 +45,7 @@ SWEP.NoSights              = true
 SWEP.Kind                  = WEAPON_EQUIP2
 SWEP.CanBuy                = {ROLE_TRAITOR}
 SWEP.WeaponID              = AMMO_PUSH
-SWEP.StockEquipment           = true
+SWEP.builtin           = true
 
 SWEP.UseHands              = true
 SWEP.ViewModel             = "models/weapons/c_superphyscannon.mdl"

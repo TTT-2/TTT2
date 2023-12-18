@@ -91,7 +91,7 @@ function PANEL:AddSubmenuButton(submenuClass)
 
 	settingsButton:SetTitle(submenuClass.title or submenuClass.type)
 	settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
-	settingsButton:SetIconOutline(submenuClass.iconOutline)
+	settingsButton:SetIconBadge(submenuClass.iconBadge)
 	settingsButton:SetTooltip(submenuClass.tooltip)
 
 	settingsButton.PerformLayout = function(panel)

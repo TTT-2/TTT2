@@ -40,7 +40,7 @@ SWEP.Secondary.Automatic   = false
 SWEP.Kind                  = WEAPON_EQUIP2
 SWEP.CanBuy                = {ROLE_TRAITOR} -- only traitors can buy
 SWEP.WeaponID              = AMMO_POLTER
-SWEP.StockEquipment = true
+SWEP.builtin = true
 
 SWEP.UseHands              = true
 SWEP.ViewModel             = "models/weapons/c_irifle.mdl"

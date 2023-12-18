@@ -347,7 +347,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local hasIcon = panel:HasIcon()
 	local isIconFullSize = panel:IsIconFullSize()
 	local padIcon = isIconFullSize and 0 or pad
-	local iconOutline = panel:GetIconOutline()
+	local iconBadge = panel:GetIconBadge()
 	local iconAlpha = isIconFullSize and 255 or colorText.a
 	local sizeIcon = h - 2 * padIcon
 
@@ -371,9 +371,9 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 
 	if hasIcon then
 		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorText)
-		if iconOutline then
-			surface.SetDrawColor(colors.accent)
-			surface.DrawOutlinedRect(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, 2)
+		if iconBadge then
+			local miniSize = 8
+			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - miniSize, padIcon + shift + sizeIcon - miniSize, miniSize, miniSize, iconBadge, iconAlpha, colorText)
 		end
 	end
 

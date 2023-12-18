@@ -11,7 +11,7 @@ ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
 ITEM.hud = Material("vgui/ttt/perks/hud_noenergydmg.png")
 ITEM.material = "vgui/ttt/icon_noenergydmg"
-ITEM.StockEquipment = true
+ITEM.builtin = true
 
 if SERVER then
 	hook.Add("EntityTakeDamage", "TTT2NoEnergyDmg", function(target, dmginfo)

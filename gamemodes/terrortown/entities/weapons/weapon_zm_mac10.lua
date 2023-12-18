@@ -19,7 +19,7 @@ SWEP.Base = "weapon_tttbase"
 
 SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_MAC10
-SWEP.StockEquipment = true
+SWEP.builtin = true
 SWEP.spawnType = WEAPON_TYPE_HEAVY
 
 SWEP.Primary.Damage = 12

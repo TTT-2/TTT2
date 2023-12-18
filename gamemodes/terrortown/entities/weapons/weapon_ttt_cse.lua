@@ -44,7 +44,7 @@ SWEP.Secondary.Delay = 0.2
 SWEP.Kind = WEAPON_EQUIP
 SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
 SWEP.WeaponID = AMMO_CSE
-SWEP.StockEquipment = true
+SWEP.builtin = true
 
 SWEP.LimitedStock = true -- only buyable once
 SWEP.NoSights = true

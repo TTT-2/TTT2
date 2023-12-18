@@ -12,7 +12,7 @@ end
 
 ITEM.CanBuy = {ROLE_TRAITOR}
 ITEM.oldId = EQUIP_DISGUISE or 4
-ITEM.StockEquipment = true
+ITEM.builtin = true
 
 if CLIENT then
 	local trans
