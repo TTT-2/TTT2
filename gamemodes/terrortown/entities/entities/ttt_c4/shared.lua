@@ -20,17 +20,6 @@ if CLIENT then
 	-- this entity can be DNA-sampled so we need some display info
 	ENT.Icon = "vgui/ttt/icon_c4"
 	ENT.PrintName = "C4"
-
-	local ParTranslation = LANG.GetParamTranslation
-	local hint_params = {usekey = Key("+use", "USE")}
-
-	ENT.TargetIDHint = {
-		name = "C4",
-		hint = "c4_hint",
-		fmt  = function(ent, txt)
-			return ParTranslation(txt, hint_params)
-		end
-	}
 end
 
 C4_WIRE_COUNT	= 6
@@ -477,28 +466,9 @@ end
 
 if SERVER then
 	---
-	-- Inform traitors about us
-	-- @param boolean armed
-	-- @realm server
-	function ENT:SendWarn(armed)
-		net.Start("TTT_C4Warn")
-		net.WriteUInt(self:EntIndex(), 16)
-		net.WriteBit(armed)
-
-		if armed then
-			net.WriteVector(self:GetPos())
-			net.WriteFloat(self:GetExplodeTime())
-			net.WriteString(self:GetOwner():GetTeam())
-		end
-
-		--net.Send(GetTeamFilter(self:GetOwner():GetTeam(), true))
-		net.Broadcast()
-	end
-
-	---
 	-- @realm server
 	function ENT:OnRemove()
-		self:SendWarn(false)
+		radarVision.RemoveEntity(self)
 	end
 
 	---
@@ -516,7 +486,8 @@ if SERVER then
 		self:SetExplodeTime(0)
 		self:SetArmed(false)
 		self:WeldToGround(false)
-		self:SendWarn(false)
+
+		radarVision.RemoveEntity(self)
 
 		self.DisarmCausedExplosion = false
 	end
@@ -588,9 +559,6 @@ if SERVER then
 		end
 
 		events.Trigger(EVENT_C4PLANT, ply)
-
-		-- send indicator to traitors
-		--self:SendWarn(true)
 
 		radarVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
 	end

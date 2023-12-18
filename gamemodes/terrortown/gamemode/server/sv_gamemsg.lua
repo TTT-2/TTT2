@@ -134,7 +134,7 @@ end
 -- Returns a list of filtered @{Player}s by the team.
 -- @param string team
 -- @param boolean aliveOnly
--- @param boolean ignore UnknownTeam
+-- @param boolean ignoreUnknownTeam
 -- @return table
 -- @realm server
 function GetTeamFilter(team, aliveOnly, ignoreUnknownTeam)

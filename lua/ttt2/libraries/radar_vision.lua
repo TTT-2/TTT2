@@ -7,7 +7,6 @@
 if SERVER then
 	AddCSLuaFile()
 
-	util.AddNetworkString("ttt2_register_entity_added")
 	util.AddNetworkString("ttt2_register_entity_removed")
 end
 
@@ -23,6 +22,12 @@ radarVision.registry = {}
 
 function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
 	if SERVER then
+		local plysTeam = GetTeamFilter(owner:GetTeam(), true, true)
+
+		if #plysTeam == 0 then -- happens for TEAM_NONE for example
+			visibleFor = VISIBLE_FOR_PLAYER
+		end
+
 		local streamTable = {
 			ent = ent,
 			owner = owner,
@@ -36,9 +41,10 @@ function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList,
 		if visibleFor == VISIBLE_FOR_PLAYER then
 			receiver = owner
 		elseif visibleFor == VISIBLE_FOR_TEAM then
-			receiver = GetTeamFilter(owner:GetTeam(), false, true)
+			receiver = plysTeam
 		end
 
+		-- note: when VISIBLE_FOR_ALL receiver is nil, therefore SendStream uses net.Boradcast
 		net.SendStream("ttt2_register_entity_added", streamTable, receiverList or receiver)
 	end
 
@@ -61,7 +67,7 @@ function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList,
 end
 
 function radarVision.RemoveEntity(ent, receiverList)
-	if not IsValid(ent) then return end
+	if not IsValid(ent) or not radarVision.registry[ent] then return end
 
 	local owner = radarVision.registry[ent].owner
 	local visibleFor = radarVision.registry[ent].visibleFor
@@ -69,10 +75,13 @@ function radarVision.RemoveEntity(ent, receiverList)
 	radarVision.registry[ent] = nil
 
 	if SERVER then
+		net.Start("ttt2_register_entity_removed")
+		net.WriteEntity(ent)
+
 		if visibleFor == VISIBLE_FOR_PLAYER then
 			net.Send(owner)
 		elseif visibleFor == VISIBLE_FOR_TEAM then
-			net.Send(receiverList or GetTeamFilter(owner:GetTeam(), false, true))
+			net.Send(receiverList or GetTeamFilter(owner:GetTeam(), true, true))
 		elseif visibleFor == VISIBLE_FOR_ALL then
 			net.Broadcast()
 		end
@@ -154,8 +163,6 @@ if CLIENT then
 			local screenPos = ent:GetPos():ToScreen()
 			local isOffScreen = util.IsOffScreen(screenPos)
 			local distanceEntity = ent:GetPos():Distance(LocalPlayer():EyePos())
-
-			Print(screenPos)
 
 			-- call internal targetID functions first so the data can be modified by addons
 			local rData = RADAR_DATA:Initialize(ent, isOffScreen, distanceEntity)
