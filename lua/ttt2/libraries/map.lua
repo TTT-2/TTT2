@@ -270,8 +270,10 @@ function map.GetWeaponSpawnEntities()
 	FindSpawnEntities(spawns, ttt_weapon_spawns)
 	FindSpawnEntities(spawns, hl2_weapon_spawns)
 	local hook_weapon_spawns = {}
+
 	-- @realm shared
 	hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
+
 	FindSpawnEntities(spawns, hook_weapon_spawns)
 
 	if map.IsCounterStrikeMap() then
@@ -293,8 +295,10 @@ function map.GetAmmoSpawnEntities()
 	FindSpawnEntities(spawns, ttt_ammo_spawns)
 	FindSpawnEntities(spawns, hl2_ammo_spawns)
 	local hook_ammo_spawns = {}
+
 	-- @realm shared
 	hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
+
 	FindSpawnEntities(spawns, hook_ammo_spawns)
 
 	return spawns
@@ -308,8 +312,10 @@ function map.GetPlayerSpawnEntities()
 	local spawns = {}
 
 	local hook_player_spawns = {}
+
 	-- @realm shared
 	hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
+
 	FindSpawnEntities(spawns, hook_player_spawns)
 	if FindSpawnEntities(spawns, ttt_player_spawns) == 0 then
 		FindSpawnEntities(spawns, ttt_player_spawns_fallback)
@@ -358,8 +364,10 @@ function map.GetSpawnsFromClassTable(spawns)
 
 		-- first check if it is a player spawn, this is independant from the map type
 		local hook_player_spawns = {}
+
 		-- @realm shared
 		hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
+
 		local plyType = ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls]
 
 		if plyType then
@@ -370,8 +378,10 @@ function map.GetSpawnsFromClassTable(spawns)
 
 		-- next check if it is an ammo spawn
 		local hook_ammo_spawns = {}
+
 		-- @realm shared
 		hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
+
 		local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls]
 
 		if ammoType then
@@ -453,15 +463,19 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 
 	if spawnType == SPAWN_TYPE_AMMO then
 		local hook_ammo_spawns = {}
+
 		-- @realm shared
 		hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
+
 		return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls], data
 	end
 
 	if spawnType == SPAWN_TYPE_PLAYER then
 		local hook_player_spawns = {}
+
 		-- @realm shared
 		hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
+
 		return ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls], data
 	end
 end
