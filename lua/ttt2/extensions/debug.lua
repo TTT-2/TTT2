@@ -15,7 +15,7 @@ end
 -- @realm shared
 -- @internal
 local function ConvertToString(object)
-	if(isstring(object)) then
+	if isstring(object) then
 		return "\"" .. object .. "\""
 	else 
 		return tostring(object)
@@ -30,7 +30,7 @@ end
 function debug.print(message)
 	local printMessage = ""
 
-	if(istable(message) and table.IsSequential(message)) then
+	if istable(message) and table.IsSequential(message) then
 		for i = 1, #message do
 			printMessage = printMessage .. ConvertToString(message[i]) .. " "
 		end
