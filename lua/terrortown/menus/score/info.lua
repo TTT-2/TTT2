@@ -54,8 +54,9 @@ local function MakePlayerGenericTooltip(parent, ply, items, title)
 	lengthLongestLine = lengthLongestLine + iconOffset
 
 	-- we found the longest line, now make all entries that long
-	for i = 1, boxLayout:ChildCount() do
-		boxLayout:GetChild(i):SetWidth(lengthLongestLine)
+	local children = boxLayout:GetChildren()
+	for i = 1, #children do
+		children[i]:SetWidth(lengthLongestLine)
 	end
 
 	return lengthLongestLine, height
