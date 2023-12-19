@@ -28,7 +28,7 @@ L.round_voting = "Oylama devam ediyor, yeni raunt {num} saniye geciktirilecek...
 L.round_begintime = "Yeni raunt {num} saniyede başlayacak. Kendini hazırla."
 L.round_selected = "Hainler seçildi."
 L.round_started = "Raunt başladı!"
-L.round_restart = "Raunt bir admin tarafından yeniden başlatıldı."
+L.round_restart = "Raunt bir yönetici tarafından yeniden başlatıldı."
 
 L.round_traitors_one = "Hey hain, yalnızsın."
 L.round_traitors_more = "Hey hain, bunlar senin müttefiklerin {names}"
@@ -134,7 +134,7 @@ L.radio_help = "Radyonuzun bu sesi çalmasını sağlamak için bir düğmeye t�
 L.radio_notplaced = "Sesi çalmak için Radyoyu yerleştirmelisiniz."
 
 -- Radio soundboard buttons
-L.radio_button_scream = "Çığlık at"
+L.radio_button_scream = "Çığlık"
 L.radio_button_expl = "Patlama"
 L.radio_button_pistol = "Tabanca atışları"
 L.radio_button_m16 = "M16 atışları"
@@ -144,7 +144,7 @@ L.radio_button_shotgun = "Pompalı tüfek atışları"
 L.radio_button_rifle = "Tüfek atışı"
 L.radio_button_huge = "H.U.G.E. patlaması"
 L.radio_button_c4 = "C4 bip sesi"
-L.radio_button_burn = "Yanıyor"
+L.radio_button_burn = "Yanma sesi"
 L.radio_button_steps = "Ayak sesleri"
 
 -- Intro screen shown after joining
@@ -1022,7 +1022,7 @@ L.help_damage_indicator_desc = "Hasar göstergesi, oyuncu hasar gördüğünde g
 L.help_shop_key_desc = "Bir raundun sonunda hazırlanırken skor menüsü yerine mağaza tuşuna basarak mağazayı açın"
 
 L.label_menu_menu = "MENÜ"
-L.label_menu_admin_spacer = "Admin Alanı (normal kullanıcılara gösterilmez)"
+L.label_menu_admin_spacer = "Yönetici Alanı (normal kullanıcılara gösterilmez)"
 L.label_language_set = "Dil seç"
 L.label_global_color_enable = "Genel rengi etkinleştir"
 L.label_global_color = "Genel renk"
@@ -1359,88 +1359,88 @@ L.searchbar_default_placeholder = "Listede ara..."
 L.spec_about_to_revive = "İzleme, canlanma sırasında sınırlıdır."
 
 -- 2021-09-01
-L.spawneditor_name = "Canlanma Noktası Düzenleyici Aracı"
-L.spawneditor_desc = "Dünyaya silah, cephane ve oyuncu canlanma noktası yerleştirmek için kullanılır. Yalnızca süper admin tarafından kullanılabilir."
+L.spawneditor_name = "Oluşum Düzenleyici Aracı"
+L.spawneditor_desc = "Dünyaya silah, cephane ve oyuncu canlanma noktası yerleştirmek için kullanılır. Yalnızca süper yönetici tarafından kullanılabilir."
 
-L.spawneditor_place = "Canlanma noktasını yerleştir"
-L.spawneditor_remove = "Canlanma noktasını kaldır"
-L.spawneditor_change = "Canlanma noktası türünü değiştirin (geri almak için [SHIFT] tuşunu basılı tutun)"
+L.spawneditor_place = "Oluşum noktasını yerleştir"
+L.spawneditor_remove = "Oluşum noktasını kaldır"
+L.spawneditor_change = "Oluşum noktası türünü değiştirin (geri almak için [SHIFT] tuşunu basılı tutun)"
 L.spawneditor_ammo_edit = "Otomatik ortaya çıkan cephaneyi düzenlemek için silahın ortaya çıkmasını bekle"
 
-L.spawn_weapon_random = "Rastgele Silah Çıkış Noktası"
-L.spawn_weapon_melee = "Yakın Dövüş Silahı Çıkış Noktası"
-L.spawn_weapon_nade = "Bomba Çıkış Noktası"
-L.spawn_weapon_shotgun = "Pompalı Çıkış Noktası"
-L.spawn_weapon_heavy = "Ağır Silah Çıkış Noktası"
-L.spawn_weapon_sniper = "Keskin Nişancı Silahı Çıkış Noktası"
-L.spawn_weapon_pistol = "Tabanca Silahı Çıkış Noktası"
-L.spawn_weapon_special = "Özel Silah Çıkış Noktası"
-L.spawn_ammo_random = "Rastgele Cephane Çıkış Noktası"
-L.spawn_ammo_deagle = "Deagle Cephanesi Çıkış Noktası"
-L.spawn_ammo_pistol = "Tabanca Cephanesi Çıkış Noktası"
-L.spawn_ammo_mac10 = "Mac10 Cephanesi Çıkış Noktası"
-L.spawn_ammo_rifle = "Tüfek Cephanesi Çıkış Noktası"
-L.spawn_ammo_shotgun = "Pompalı Cephanesi Çıkış Noktası"
+L.spawn_weapon_random = "Rastgele Silah Oluşum Noktası"
+L.spawn_weapon_melee = "Yakın Dövüş Silahı Oluşum Noktası"
+L.spawn_weapon_nade = "Bomba Oluşum Noktası"
+L.spawn_weapon_shotgun = "Pompalı Oluşum Noktası"
+L.spawn_weapon_heavy = "Ağır Silah Oluşum Noktası"
+L.spawn_weapon_sniper = "Keskin Nişancı Silahı Oluşum Noktası"
+L.spawn_weapon_pistol = "Tabanca Silahı Oluşum Noktası"
+L.spawn_weapon_special = "Özel Silah Oluşum Noktası"
+L.spawn_ammo_random = "Rastgele Cephane Oluşum Noktası"
+L.spawn_ammo_deagle = "Deagle Cephanesi Oluşum Noktası"
+L.spawn_ammo_pistol = "Tabanca Cephanesi Oluşum Noktası"
+L.spawn_ammo_mac10 = "Mac10 Cephanesi Oluşum Noktası"
+L.spawn_ammo_rifle = "Tüfek Cephanesi Oluşum Noktası"
+L.spawn_ammo_shotgun = "Pompalı Cephanesi Oluşum Noktası"
 L.spawn_player_random = "Rastgele Oyuncu Canlanma Noktası"
 
 L.spawn_weapon_ammo = "(Cephane {ammo})"
 
-L.spawn_weapon_edit_ammo = "Bu silahın çıkış noktasında cephaneyi artırmak veya azaltmak için [{walkkey}] tuşunu basılı tutun ve [{primaryfire} veya {secondaryfire}] tuşuna basın"
+L.spawn_weapon_edit_ammo = "Bu silahın oluşum noktasında cephaneyi artırmak veya azaltmak için [{walkkey}] tuşunu basılı tutun ve [{primaryfire} veya {secondaryfire}] tuşuna basın"
 
-L.spawn_type_weapon = "Bu bir silah çıkış noktasıdır"
-L.spawn_type_ammo = "Bu bir cephane çıkış noktasıdır"
+L.spawn_type_weapon = "Bu bir silah oluşum noktasıdır"
+L.spawn_type_ammo = "Bu bir cephane oluşum noktasıdır"
 L.spawn_type_player = "Bu bir oyuncu canlanma noktasıdır"
 
-L.spawn_remove = "Bu çıkış noktasını kaldırmak için [{secondaryfire}] tuşuna basın"
+L.spawn_remove = "Bu oluşum noktasını kaldırmak için [{secondaryfire}] tuşuna basın"
 
-L.submenu_administration_entspawn_title = "Çıkış Noktası Düzenleyici"
-L.header_entspawn_settings = "Çıkış Noktası Düzenleyici Ayarları"
-L.button_start_entspawn_edit = "Çıkış Noktası Düzenlemesini Başlat"
-L.button_delete_all_spawns = "Tüm Çıkış Noktalarını Sil"
+L.submenu_administration_entspawn_title = "Oluşum Noktası Düzenleyici"
+L.header_entspawn_settings = "Oluşum Noktası Düzenleyici Ayarları"
+L.button_start_entspawn_edit = "Oluşum Noktası Düzenlemesini Başlat"
+L.button_delete_all_spawns = "Tüm Oluşum Noktalarını Sil"
 
-L.label_dynamic_spawns_enable = "Bu harita için dinamik çıkış noktalarını etkinleştir"
-L.label_dynamic_spawns_global_enable = "Tüm haritalar için dinamik çıkış noktalarını etkinleştir"
+L.label_dynamic_spawns_enable = "Bu harita için dinamik oluşum noktalarını etkinleştir"
+L.label_dynamic_spawns_global_enable = "Tüm haritalar için dinamik oluşum noktalarını etkinleştir"
 
-L.header_equipment_weapon_spawn_setup = "Silah Çıkış Ayarları"
+L.header_equipment_weapon_spawn_setup = "Silah Oluşum Ayarları"
 
 L.help_spawn_editor_info = [[
-Çıkış noktası düzenleyicisi, dünyadaki çıkış noktalarını yerleştirmek, kaldırmak ve düzenlemek için kullanılır. Bu çıkış noktaları silahlar, cephaneler ve oyuncular içindir.
+Oluşum noktası düzenleyicisi, dünyadaki oluşum noktalarını yerleştirmek, kaldırmak ve düzenlemek için kullanılır. Bu oluşum noktaları silahlar, cephaneler ve oyuncular içindir.
 
-Bu çıkış noktaları, 'datatttweaponspawnscripts' içinde bulunan dosyalara kaydedilir. Donanım sıfırlaması için silinebilirler. İlk çıkış noktası dosyaları, haritada ve orijinal TTT silah çıkış noktası komut dosyalarında bulunan çıkış noktalarından oluşturulur. Sıfırlama düğmesine basıldığında her zaman başlangıç durumuna geri dönülür.
+Bu oluşum noktaları, 'datatttweaponspawnscripts' içinde bulunan dosyalara kaydedilir. Donanım sıfırlaması için silinebilirler. İlk oluşum noktası dosyaları, haritada ve orijinal TTT silah oluşum noktası komut dosyalarında bulunan oluşum noktalarından oluşturulur. Sıfırlama düğmesine basıldığında her zaman başlangıç durumuna geri dönülür.
 
-Bu çıkış noktası sisteminin dinamik çıkışları kullandığı unutulmamalıdır. Bu, silahlar için en ilginç olanıdır, çünkü artık belirli bir silahı değil, bir tür silahı tanımlar. Örneğin, bir TTT pompalı çıkış noktası yerine, artık pompalı olarak tanımlanan herhangi bir silahın çıkabileceği genel bir pompalı çıkış noktası var. Her silah için çıkış türü 'Ekipmanı Düzenle' menüsünden ayarlanabilir. Bu, herhangi bir silahın haritada ortaya çıkmasını veya belirli varsayılan silahları devre dışı bırakmasını mümkün kılar.
+Bu oluşum noktası sisteminin dinamik oluşumları kullandığı unutulmamalıdır. Bu, silahlar için en ilginç olanıdır, çünkü artık belirli bir silahı değil, bir tür silahı tanımlar. Örneğin, bir TTT pompalı oluşum noktası yerine, artık pompalı olarak tanımlanan herhangi bir silahın çıkabileceği genel bir pompalı oluşum noktası var. Her silah için oluşum türü 'Ekipmanı Düzenle' menüsünden ayarlanabilir. Bu, herhangi bir silahın haritada ortaya çıkmasını veya belirli varsayılan silahları devre dışı bırakmasını mümkün kılar.
 
 Birçok değişikliğin ancak yeni bir raunt başladıktan sonra yürürlüğe gireceğini unutmayın.]]
-L.help_spawn_editor_enable = "Bazı haritalarda, haritada bulunan orijinal çıkış noktalarının dinamik sistemle değiştirilmeden kullanılması önerilebilir. Aşağıdaki bu seçeneğin değiştirilmesi yalnızca şu anda etkin olan haritayı etkiler, bu nedenle dinamik sistem diğer tüm haritalar için kullanılmaya devam edecektir."
+L.help_spawn_editor_enable = "Bazı haritalarda, haritada bulunan orijinal oluşum noktalarının dinamik sistemle değiştirilmeden kullanılması önerilebilir. Aşağıdaki bu seçeneğin değiştirilmesi yalnızca şu anda etkin olan haritayı etkiler, bu nedenle dinamik sistem diğer tüm haritalar için kullanılmaya devam edecektir."
 L.help_spawn_editor_hint = "İpucu ÇN düzenleyicisinden çıkmak için oyun modu menüsünü yeniden açın."
 L.help_spawn_editor_spawn_amount = [[
-Şu anda bu haritada {weapon} silah çıkışı, {ammo} cephane çıkışı ve {player} oyuncu canlanma noktaları var.
+Şu anda bu haritada {weapon} silah oluşumu, {ammo} cephane oluşumu ve {player} oyuncu canlanma noktaları var.
 Bu miktarı değiştirmek için 'ÇN düzenlemesini başlat'a tıklayın.
 
-{weaponrandom}x Rastgele Silah Çıkışı
-{weaponmelee}x Yakın Dövüş Silahı Çıkışı
-{weaponnade}x El Bombası Çıkışı
-{weaponshotgun}x Pompalı Silahı Çıkışı
-{weaponheavy}x Ağır Silah Çıkışı
-{weaponsniper}x Keskin Nişancı Silahı Çıkışı
-{weaponpistol}x Tabanca Silahı Çıkışı
-{weaponspecial}x Özel Silah Çıkışı
+{weaponrandom}x Rastgele Silah Oluşumu
+{weaponmelee}x Yakın Dövüş Silahı Oluşumu
+{weaponnade}x El Bombası Oluşumu
+{weaponshotgun}x Pompalı Silahı Oluşumu
+{weaponheavy}x Ağır Silah Oluşumu
+{weaponsniper}x Keskin Nişancı Silahı Oluşumu
+{weaponpistol}x Tabanca Silahı Oluşumu
+{weaponspecial}x Özel Silah Oluşumu
 
-{ammorandom}x Rastgele Cephane Çıkışı
-{ammodeagle}x Deagle Cephane Çıkışı
-{ammopistol}x Tabanca Cephane Çıkışı
-{ammomac10}x Mac10 Cephane Çıkışı
-{ammorifle}x Tüfek Cephane Çıkışı
-{ammoshotgun}x Pompalı Cephane Çıkışı
+{ammorandom}x Rastgele Cephane Oluşumu
+{ammodeagle}x Deagle Cephane Oluşumu
+{ammopistol}x Tabanca Cephane Oluşumu
+{ammomac10}x Mac10 Cephane Oluşumu
+{ammorifle}x Tüfek Cephane Oluşumu
+{ammoshotgun}x Pompalı Cephane Oluşumu
 
 {playerrandom}x Rastgele Oyuncu Canlanması]]
 
 L.equipmenteditor_name_auto_spawnable = "Ekipman dünyada rastgele ortaya çıkar"
 L.equipmenteditor_name_spawn_type = "Canlanma türünü seçin"
 L.equipmenteditor_desc_auto_spawnable = [[
-TTT2 çıkış noktası sistemi, dünyadaki her silahın çıkmasına izin verir. Varsayılan olarak, yalnızca yaratıcı tarafından 'Otomatik Çıkabilir' olarak işaretlenen silahlar dünyada ortaya çıkacaktır, ancak bu menüden değiştirilebilir.
+TTT2 oluşum noktası sistemi, dünyadaki her silahın çıkmasına izin verir. Varsayılan olarak, yalnızca yaratıcı tarafından 'Otomatik Çıkabilir' olarak işaretlenen silahlar dünyada ortaya çıkacaktır, ancak bu menüden değiştirilebilir.
 
-Ekipmanın çoğu, varsayılan olarak 'özel silahların ortaya çıkmasına' ayarlanmıştır. Bu, ekipmanın yalnızca rastgele silah çıkışlarında ortaya çıktığı anlamına gelir. Bununla birlikte, mevcut diğer çıkış türlerini kullanmak için dünyaya özel silah çıkış noktaları yerleştirmek veya burada çıkış noktası türünü değiştirmek mümkündür.]]
+Ekipmanın çoğu, varsayılan olarak 'özel silahların ortaya çıkmasına' ayarlanmıştır. Bu, ekipmanın yalnızca rastgele silah oluşumlarında ortaya çıktığı anlamına gelir. Bununla birlikte, mevcut diğer oluşum türlerini kullanmak için dünyaya özel silah oluşum noktaları yerleştirmek veya burada oluşum noktası türünü değiştirmek mümkündür.]]
 
 L.pickup_error_inv_cached = "Envanteriniz önbelleğe alındığı için şu anda bunu alamazsınız."
 
@@ -1468,7 +1468,7 @@ Model seçimleri daha fazla oyuncu modeli yükleyerek genişletilebilir.]]
 
 -- 2021-10-06
 L.menu_server_addons_title = "Sunucu Eklentileri"
-L.menu_server_addons_description = "Sunucu genelinde yalnızca eklentiler için admin ayarları."
+L.menu_server_addons_description = "Sunucu genelinde yalnızca eklentiler için yönetici ayarları."
 
 L.tooltip_finish_score_penalty_alive_teammates = "Canlı takım arkadaşlarının cezası {score}"
 L.finish_score_penalty_alive_teammates = "Canlı takım arkadaşlarının cezası"
@@ -1484,7 +1484,7 @@ Oyuncu modeli havuzuna eklemek için modellere sol tıklayın. Kaldırmak için 
 Sol üstteki küçük gösterge, oyuncu modelinin bir kafa vuruş kutusuna sahip olup olmadığını gösterir. Aşağıdaki simge, bu modelin bir dedektif şapkası için geçerli olup olmadığını gösterir.]]
 
 L.menu_roles_title = "Rol Ayarları"
-L.menu_roles_description = "Çıkış noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
+L.menu_roles_description = "Oluşum noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
 
 L.submenu_administration_roles_general_title = "Genel Rol Ayarları"
 
@@ -1547,7 +1547,7 @@ L.ttt2_desc_traitor = "Hain, Masumların düşmanıdır. Özel ekipman satın al
 L.ttt2_desc_detective = "Masumların güvenebileceği kişi Dedektiftir. Ama Masum bile olsa, kudretli Dedektif tüm kötü teröristleri bulmak zorundadır. Mağazalarındaki ekipmanlar bu görevde onlara yardımcı olabilir."
 
 -- 2021-10-10
-L.button_reset_models = "Oynatıcı Modellerini Sıfırla"
+L.button_reset_models = "Oyuncu Modellerini Sıfırla"
 
 -- 2021-10-13
 L.help_roles_credits_award_kill = "Kredi kazanmanın bir başka yolu da Dedektif gibi 'herkese açık bir rolü' olan yüksek değerli oyuncuları öldürmektir. Eğer katilin rolü bunu etkinleştirdiyse, aşağıda tanımlanan miktarda kredi kazanır."
@@ -1672,7 +1672,7 @@ L.label_damagelog_save = "Hasar kaydını diske kaydet"
 L.label_debug_preventwin = "Herhangi bir kazanma koşulunu önleyin [debug]"
 L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
-L.label_ragdoll_carrying = "Ragdoll taşımayı etkinleştir"
+L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
 L.label_ragdoll_pinning = "Masum olmayan roller için ragdoll sabitlemeyi etkinleştir"
 L.label_ragdoll_pinning_innocents = "Masum roller için ragdoll pinlemeyi etkinleştir"
@@ -1689,7 +1689,7 @@ L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik ba
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
 L.label_armor_on_spawn = "(Yeniden) doğuşta oyuncu zırhı"
-L.label_prep_respawn = "Hazırlık aşamasında anında yeniden doğmayı etkinleştir"
+L.label_prep_respawn = "Hazırlık aşamasında anında yeniden canlanmayı etkinleştir"
 L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
 L.label_firstpreptime_seconds = "Saniye cinsinden ilk hazırlık süresi"
 L.label_roundtime_minutes = "Dakika cinsinden sabit raunt süresi"
@@ -1791,7 +1791,7 @@ L.hudeditor_chat_hint3 = "[TTT2][BİLGİ] Eksen üzerinde hareket etmek ve en bo
 L.hudeditor_chat_hint4 = "[TTT2][BİLGİ] Arayüz Düzenleyiciden çıkmak için [RMB] - 'Kapat'a bas!"
 
 L.guide_nothing_title = "Henüz burada bir şey yok!"
-L.guide_nothing_desc = "Bu devam eden bir çalışma, GitHub'daki projeye katkıda bulunarak bize yardımcı olun."
+L.guide_nothing_desc = "Bu devam eden bir çalışmadır. GitHub'daki projeye katkıda bulunarak bize yardımcı olun."
 
 L.sb_rank_tooltip_developer = "TTT2 Geliştirici"
 L.sb_rank_tooltip_vip = "TTT2 Destekçisi"
@@ -1799,7 +1799,7 @@ L.sb_rank_tooltip_addondev = "TTT2 Eklenti Geliştirici"
 L.sb_rank_tooltip_admin = "Sunucu Yöneticisi"
 L.sb_rank_tooltip_streamer = "Yayıncı"
 L.sb_rank_tooltip_heroes = "TTT2 Kahramanları"
-L.sb_rank_tooltip_team = "Ekip"
+L.sb_rank_tooltip_team = "Takım"
 
 L.tbut_adminarea = "YÖNETİCİ ALANI"
 
@@ -2049,7 +2049,7 @@ L.label_HUD_enable_description = "Puan tablosu açıkken açıklamaları etkinle
 L.label_HUD_enable_box_blur = "Arayüz kutusu arka plan bulanıklığını etkinleştir"
 
 -- 2023-10-28
-L.submenu_gameplay_voiceandvolume_title = "Ses ve Ses Düzeyi"
+L.submenu_gameplay_voiceandvolume_title = "Ses Düzeyi"
 L.header_soundeffect_settings = "Ses Efektleri"
 L.header_voiceandvolume_settings = "Ses Ayarları"
 
@@ -2087,8 +2087,8 @@ L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
 -- 2023-11-18
---L.entity_pickup_owner_only = "Only the owner can pick this up"
+L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
