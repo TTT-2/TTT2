@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Bir şey cephanenizi düşürmenizi engelliyor."
 -- 2019-10-28
 L.target_c4 = "C4 menüsünü açmak için [{usekey}] tuşuna basın"
 L.target_c4_armed = "C4'ü devre dışı bırakmak için [{usekey}] tuşuna basın"
-L.target_c4_armed_defuser = "İmha kitini kullanmak için [{usekey}] tuşuna basın"
+L.target_c4_armed_defuser = "İmha kitini kullanmak için [{primaryfire}] tuşuna basın"
 L.target_c4_not_disarmable = "Yaşayan bir takım arkadaşının C4'ünü devre dışı bırakamazsın"
 L.c4_short_desc = "Çok patlayıcı bir şey"
 

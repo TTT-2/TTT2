@@ -895,7 +895,7 @@ L.shop_search = "Buscar"
 -- 2019-10-28
 L.target_c4 = "Pulsa [{usekey}] para abrir el menú de C4"
 L.target_c4_armed = "Pulsa [{usekey}] para desactivar el C4"
-L.target_c4_armed_defuser = "Pulsa [{usekey}] para usar el kit de desactivación"
+L.target_c4_armed_defuser = "Pulsa [{primaryfire}] para usar el kit de desactivación"
 L.target_c4_not_disarmable = "No puedes desactivar el C4 de un compañero vivo"
 L.c4_short_desc = "Algo muy explosivo"
 

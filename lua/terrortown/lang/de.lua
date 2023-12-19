@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen.
 -- 2019-10-28
 L.target_c4 = "Drücke [{usekey}] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [{usekey}] um C4 zu entschärfen"
-L.target_c4_armed_defuser = "Drücke [{usekey}] um Entschärfer zu verwenden"
+L.target_c4_armed_defuser = "Drücke [{primaryfire}] um Entschärfer zu verwenden"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 L.c4_short_desc = "Etwas sehr explosives"
 
