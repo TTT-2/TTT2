@@ -29,4 +29,7 @@ function ITEM:Reset(buyer)
 	end
 
 	buyer.radar_charge = 0
+	if CLIENT then
+		RADAR:Clear()
+	end
 end
