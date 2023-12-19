@@ -8,15 +8,17 @@ RADAR_DATA = {}
 -- Initializes the @{RADAR_DATA} object
 -- @param Entity ent The focused Entity
 -- @param boolean isOffScreen If the radar is off screen or on screen
+-- @param boolean isOnScreenCenter If the radar icon is on screen center
 -- @param number distance The distance to the focused entity
 -- @return RADAR_DATA The object to be used in the hook
 -- @internal
 -- @realm client
-function RADAR_DATA:Initialize(ent, isOffScreen, distance)
+function RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance)
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
 		isOffScreen = isOffScreen,
+		isOnScreenCenter = isOnScreenCenter,
 		distance = distance
 	}
 
@@ -66,6 +68,14 @@ end
 -- @realm client
 function RADAR_DATA:IsOffScreen()
 	return self.data.isOffScreen
+end
+
+---
+-- Returns if the radar entity is on screen center
+-- @return boolean Whether it is on screen center
+-- @realm client
+function RADAR_DATA:IsOnScreenCenter()
+	return self.data.isOnScreenCenter
 end
 
 ---
@@ -152,18 +162,6 @@ function RADAR_DATA:SetCollapsedLine(text, color)
 end
 
 ---
--- Sets the collapsed line that is shown at greater distance of the specific radar vision element
--- @param[default=""] string text The text that should be displayed
--- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
--- @realm client
-function RADAR_DATA:SetOffScreenLine(text, color)
-	self.params.displayInfo.offScreenLine = {
-		text = text or "",
-		color = IsColor(color) and color or COLOR_WHITE
-	}
-end
-
----
 -- Returns whether or not a title has been set
 -- @return boolean True if a title is set
 -- @realm client
@@ -193,14 +191,6 @@ end
 -- @realm client
 function RADAR_DATA:HasCollapsedLine()
 	return self.params.displayInfo.collapsedLine and self.params.displayInfo.collapsedLine.text ~= ""
-end
-
----
--- Returns whether or not a collapsed line has been set
--- @return boolean True if a title is set
--- @realm client
-function RADAR_DATA:HasOffScreenLine()
-	return self.params.displayInfo.offScreenLine and self.params.displayInfo.offScreenLine.text ~= ""
 end
 
 ---

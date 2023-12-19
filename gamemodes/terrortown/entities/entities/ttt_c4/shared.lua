@@ -919,10 +919,9 @@ else -- CLIENT
 			color = COLOR_RED
 		end
 
-		rData:AddIcon(materialC4, rData:IsOffScreen() and color)
+		rData:AddIcon(materialC4, (rData:IsOffScreen() or not rData:IsOnScreenCenter()) and color)
 
-		rData:SetCollapsedLine(ParT("c4_bombvision_collapsed", {time = time, distance = distance}))
-		rData:SetOffScreenLine(time)
+		rData:SetCollapsedLine(time)
 	end)
 end
 

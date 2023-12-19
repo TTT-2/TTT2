@@ -205,16 +205,25 @@ if CLIENT then
 
 		local heightLineDescription = 14 * scale
 
+		local client = LocalPlayer()
+		local widthScreen = ScrW()
+		local heightScreen = ScrH()
+		local xScreenCenter = 0.5 * widthScreen
+		local yScreenCenter = 0.5 * heightScreen
+
 		for ent, data in pairs(radarVision.registry) do
 			if not IsValid(ent) then continue end
 
 			local posEnt = ent:GetPos() + ent:OBBCenter()
 			local screenPos = posEnt:ToScreen()
 			local isOffScreen = util.IsOffScreen(screenPos)
-			local distanceEntity = posEnt:Distance(LocalPlayer():EyePos())
+			local isOnScreenCenter = not isOffScreen
+				and screenPos.x > xScreenCenter - offsetIcon and screenPos.x < xScreenCenter + offsetIcon
+				and screenPos.y > yScreenCenter - offsetIcon and screenPos.y < yScreenCenter + offsetIcon
+			local distanceEntity = posEnt:Distance(client:EyePos())
 
 			-- call internal targetID functions first so the data can be modified by addons
-			local rData = RADAR_DATA:Initialize(ent, isOffScreen, distanceEntity)
+			local rData = RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity)
 
 			---
 			-- now run a hook that can be used by addon devs that changes the appearance
@@ -228,7 +237,7 @@ if CLIENT then
 
 			local amountIcons = #params.displayInfo.icon
 
-			if isOffScreen then
+			if isOffScreen or not isOnScreenCenter then
 				if amountIcons < 1 then continue end
 
 				local icon = params.displayInfo.icon[1]
@@ -242,8 +251,8 @@ if CLIENT then
 					screenPos.y = screenPos.y / 100000
 				end
 
-				screenPos.x = math.Clamp(screenPos.x, offsetIconOffScreen + paddingScreen, ScrW() - offsetIconOffScreen - paddingScreen)
-				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen + paddingScreen, ScrH() - offsetIconOffScreen - paddingScreen)
+				screenPos.x = math.Clamp(screenPos.x, offsetIconOffScreen + paddingScreen, widthScreen - offsetIconOffScreen - paddingScreen)
+				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen + paddingScreen, heightScreen - offsetIconOffScreen - paddingScreen)
 
 				draw.FilteredShadowedTexture(
 					screenPos.x - offsetIconOffScreen,
@@ -255,14 +264,14 @@ if CLIENT then
 					color
 				)
 
-				if not rData:HasOffScreenLine() then continue end
+				if not rData:HasCollapsedLine() then continue end
 
 				draw.AdvancedText(
-					params.displayInfo.offScreenLine.text,
+					params.displayInfo.collapsedLine.text,
 					"RadarVision_Text",
 					screenPos.x + 1 * scale,
 					screenPos.y + offsetIconOffScreen + padding,
-					params.displayInfo.offScreenLine.color,
+					params.displayInfo.collapsedLine.color,
 					TEXT_ALIGN_CENTER,
 					TEXT_ALIGN_CENTER,
 					true,
@@ -272,8 +281,8 @@ if CLIENT then
 				continue
 			end
 
-			screenPos.x = math.Clamp(screenPos.x, offsetIcon + paddingScreen, ScrW() - offsetIcon - paddingScreen)
-			screenPos.y = math.Clamp(screenPos.y, offsetIcon + paddingScreen, ScrH() - offsetIcon - paddingScreen)
+			screenPos.x = math.Clamp(screenPos.x, offsetIcon + paddingScreen, widthScreen - offsetIcon - paddingScreen)
+			screenPos.y = math.Clamp(screenPos.y, offsetIcon + paddingScreen, heightScreen - offsetIcon - paddingScreen)
 
 			-- draw Icons
 			local xIcon, yIcon
@@ -333,62 +342,46 @@ if CLIENT then
 			)
 
 			-- draw description
-			if util.HammerUnitsToMeters(distanceEntity) <= 20 then
-				local linesDescription = params.displayInfo.desc
-				local amountLinesDescription = #linesDescription
+			local linesDescription = params.displayInfo.desc
+			local amountLinesDescription = #linesDescription
 
-				local xStringDescription = screenPos.x + offsetIcon + padding
+			local xStringDescription = screenPos.x + offsetIcon + padding
 
-				for i = 1, amountLinesDescription do
-					local text = linesDescription[i].text
-					local icons = linesDescription[i].icons
-					local color = linesDescription[i].color
+			for i = 1, amountLinesDescription do
+				local text = linesDescription[i].text
+				local icons = linesDescription[i].icons
+				local color = linesDescription[i].color
 
-					local xStringDescriptionShifted = xStringDescription
-					local yStringDescription = yStringTitle + i * heightLineDescription
+				local xStringDescriptionShifted = xStringDescription
+				local yStringDescription = yStringTitle + i * heightLineDescription
 
-					for j = 1, #icons do
-						draw.FilteredShadowedTexture(
-							xStringDescriptionShifted,
-							yStringDescription - 13,
-							11,
-							11,
-							icons[j],
-							color.a,
-							color
-						)
-
-						xStringDescriptionShifted = xStringDescriptionShifted + 14
-					end
-
-					draw.AdvancedText(
-						text,
-						"RadarVision_Text",
+				for j = 1, #icons do
+					draw.FilteredShadowedTexture(
 						xStringDescriptionShifted,
-						yStringDescription,
-						color,
-						TEXT_ALIGN_LEFT,
-						TEXT_ALIGN_CENTER,
-						true,
-						scale
+						yStringDescription - 13,
+						11,
+						11,
+						icons[j],
+						color.a,
+						color
 					)
 
-					yStringDescription = yStringDescription + heightLineDescription
+					xStringDescriptionShifted = xStringDescriptionShifted + 14
 				end
-			else
-				if not rData:HasCollapsedLine() then continue end
 
 				draw.AdvancedText(
-					params.displayInfo.collapsedLine.text,
+					text,
 					"RadarVision_Text",
-					screenPos.x + offsetIcon + padding,
-					yStringTitle + heightLineDescription,
-					params.displayInfo.collapsedLine.color,
+					xStringDescriptionShifted,
+					yStringDescription,
+					color,
 					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_CENTER,
 					true,
 					scale
 				)
+
+				yStringDescription = yStringDescription + heightLineDescription
 			end
 		end
 	end

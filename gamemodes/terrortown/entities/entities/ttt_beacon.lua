@@ -236,8 +236,6 @@ if CLIENT then
 		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
 
 		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
-
-		rData:SetCollapsedLine(ParT("bombvision_distance_collapsed", {distance = distance}))
 	end)
 
 	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarBeaconPlys", function(rData)
