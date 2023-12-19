@@ -954,8 +954,8 @@ L.mute_team = "{team} sessize alındı."
 
 -- 2020-02-16
 L.door_auto_closes = "Bu kapı otomatik olarak kapanır."
-L.door_open_touch = "Açmak için kapıya ru yürü."
-L.door_open_touch_and_use = "Kapıya ru yürü veya açmak için [{usekey}] tuşuna bas."
+L.door_open_touch = "Açmak için kapıya doğru yürü."
+L.door_open_touch_and_use = "Kapıya doğru yürü veya açmak için [{usekey}] tuşuna bas."
 
 -- 2020-03-09
 L.help_title = "Yardım ve Ayarlar"
@@ -2091,4 +2091,4 @@ L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için p
 
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
-L.body_confirm_more = "{finder}, {count} ölümü ruladı: {victims}."
+L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
