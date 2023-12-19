@@ -69,7 +69,7 @@ end
 -- @realm client
 function PANEL:StoreValueType(value)
 	-- Save value type of first entry for conversion
-	if(self.isValueTypeString == nil) then
+	if self.isValueTypeString == nil then
 		self.isValueTypeString = isstring(value)
 	end
 end
@@ -80,9 +80,9 @@ end
 -- @return any
 -- @realm client
 function PANEL:ConvertValue(value)
-	if(self.isValueTypeString == nil) then
+	if self.isValueTypeString == nil then
 		return value
-	elseif (self.isValueTypeString) then
+	elseif self.isValueTypeString then
 		return tostring(value)
 	else
 		return tonumber(value)
