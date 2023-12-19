@@ -63,6 +63,10 @@ function PANEL:Clear()
 	self:CloseMenu()
 end
 
+---
+-- Stores the type of value that is currently used
+-- @param any value the value to store the type of
+-- @realm client
 function PANEL:StoreValueType(value)
 	-- Save value type of first entry for conversion
 	if(self.isValueTypeString == nil) then
@@ -70,6 +74,11 @@ function PANEL:StoreValueType(value)
 	end
 end
 
+---
+-- Converts the value to the current used type
+-- @param any value the value to convert to a string or number
+-- @return any
+-- @realm client
 function PANEL:ConvertValue(value)
 	if(self.isValueTypeString == nil) then
 		return value
