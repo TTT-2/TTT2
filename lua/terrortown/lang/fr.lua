@@ -895,7 +895,7 @@ L.shop_search = "Recherche"
 -- 2019-10-28
 L.target_c4 = "Appuyez sur [{usekey}] pour ouvrir le menu du C4"
 L.target_c4_armed = "Appuyez sur [{usekey}] pour désarmer le C4"
-L.target_c4_armed_defuser = "Appuyez sur [{usekey}] pour désamorcer le C4"
+L.target_c4_armed_defuser = "Appuyez sur [{primaryfire}] pour désamorcer le C4"
 L.target_c4_not_disarmable = "Vous ne pouvez pas désamorcer le C4 d'un autre Traitre, à moins qu'il soit mort"
 L.c4_short_desc = "Quelque chose de très explosif"
 
