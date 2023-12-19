@@ -12,6 +12,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed targetID hints for old addons now correctly working for all entities
 - Fixed visualizer having pickup hint even though player is unable to pick up
+- Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
+  - Can only be bought by policing roles
+  - Creates a wallhack in a sphere around it, which is visible to everyone
 
 ### Changed
 
@@ -24,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed missing water level icon breaking scoreboard
 - DNA Tester works now with more than one fingerprint on a weapon
 - TraitorButton config files should now actually work
+- Translation strings not rendering on detective's body search mode combobox
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
