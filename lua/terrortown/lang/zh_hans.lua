@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "有什么东西阻挡你丢出子弹。"
 -- 2019-10-28
 L.target_c4 = "按 [{usekey}] 打开C4菜单"
 L.target_c4_armed = "按 [{usekey}] 拆除C4"
-L.target_c4_armed_defuser = "按 [{usekey}] 使用拆弹器"
+L.target_c4_armed_defuser = "按 [{primaryfire}] 使用拆弹器"
 L.target_c4_not_disarmable = "你不能拆除存活队友的C4"
 L.c4_short_desc = "可以炸得很欢"
 

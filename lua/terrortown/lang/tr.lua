@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Bir şey cephanenizi düşürmenizi engelliyor."
 -- 2019-10-28
 L.target_c4 = "C4 menüsünü açmak için [{usekey}] tuşuna basın"
 L.target_c4_armed = "C4'ü devre dışı bırakmak için [{usekey}] tuşuna basın"
-L.target_c4_armed_defuser = "İmha kitini kullanmak için [{usekey}] tuşuna basın"
+L.target_c4_armed_defuser = "İmha kitini kullanmak için [{primaryfire}] tuşuna basın"
 L.target_c4_not_disarmable = "Yaşayan bir takım arkadaşının C4'ünü devre dışı bırakamazsın"
 L.c4_short_desc = "Çok patlayıcı bir şey"
 
@@ -1218,10 +1218,10 @@ L.title_event_creditfound = "Ekipman kredileri bulundu"
 L.title_event_finish = "Raunt sona erdi"
 L.title_event_game = "Yeni bir raunt başladı"
 L.title_event_kill = "Bir oyuncu öldürüldü"
-L.title_event_respawn = "Bir oyuncu yeniden doğdu"
+L.title_event_respawn = "Bir oyuncu yeniden canlandı"
 L.title_event_rolechange = "Bir oyuncu rolünü veya takımını değiştirdi"
 L.title_event_selected = "Roller dağıtıldı"
-L.title_event_spawn = "Bir oyuncu doğdu"
+L.title_event_spawn = "Bir oyuncu canlandı"
 
 L.desc_event_bodyfound = "{finder} ({firole} {fiteam}), {found} ({forole} {foteam}) adlı kişinin cesedini buldu. Cesedin {credits} ekipman kredisi var."
 L.desc_event_bodyfound_headshot = "Kurban kafadan vurularak öldürüldü."
@@ -1235,7 +1235,7 @@ L.desc_event_game = "Yeni bir raunt başladı."
 L.desc_event_respawn = "{player} yeniden canlandı."
 L.desc_event_rolechange = "{player}, {orole} ({oteam}) olan rol takımını {nrole} ({nteam}) olarak değiştirdi."
 L.desc_event_selected = "Takımlar ve roller tüm {amount} oyuncu için dağıtıldı."
-L.desc_event_spawn = "{player} doğdu."
+L.desc_event_spawn = "{player} canlandı."
 
 -- Name of a trap that killed us that has not been named by the mapper
 L.trap_something = "bir şey"
@@ -1688,7 +1688,7 @@ L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
 L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
-L.label_armor_on_spawn = "(Yeniden) doğuşta oyuncu zırhı"
+L.label_armor_on_spawn = "(Yeniden) canlanmada oyuncu zırhı"
 L.label_prep_respawn = "Hazırlık aşamasında anında yeniden canlanmayı etkinleştir"
 L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
 L.label_firstpreptime_seconds = "Saniye cinsinden ilk hazırlık süresi"
@@ -2084,23 +2084,23 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
--- 2023-12-14
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
---L.beacon_name = "Beacon"
---L.beacon_desc = [[
---Broadcasts player locations to everyone in a sphere around this beacon.
---
---Use to keep track of locations on the map that are hard to see.]]
-
---L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
---L.msg_beacon_death = "A player died in close proximity to one of your beacons."
-
---L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
---L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
-
 -- 2023-11-18
 L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
+
+-- 2023-12-14
+L.visualizer_help_pri = "Feneri yere at"
+L.visualizer_help_sec = "Feneri yere yapıştır"
+L.beacon_name = "Fener"
+L.beacon_desc = [[
+Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
+
+Haritada görülmesi zor olan konumları takip etmek için kullanın.]]
+
+L.msg_beacon_destroyed = "Fenerlerinden biri yok edildi!"
+L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
+
+L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
+L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."

@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Coś Cię powstrzymuje przed wyrzuceniem amunicji."
 -- 2019-10-28
 L.target_c4 = "Naciśnij [{usekey}] aby otworzyć menu C4"
 L.target_c4_armed = "Naciśnij [{usekey}] aby rozborić C4"
-L.target_c4_armed_defuser = "Naciśnij [{usekey}] aby rozborić przyżądem"
+L.target_c4_armed_defuser = "Naciśnij [{primaryfire}] aby rozborić przyżądem"
 L.target_c4_not_disarmable = "Nie możesz rozbroić bomby żywego gracza"
 L.c4_short_desc = "Coś bardzo wybuchowego"
 

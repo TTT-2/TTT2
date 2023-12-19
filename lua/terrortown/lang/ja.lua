@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "何かが弾を捨てるのを妨げているようだ�
 -- 2019-10-28
 L.target_c4 = "[{usekey}]でC4メニューを開く"
 L.target_c4_armed = "[{usekey}]でC4を解除する"
-L.target_c4_armed_defuser = "[{usekey}]で除去装置を使う"
+L.target_c4_armed_defuser = "[{primaryfire}]で除去装置を使う"
 L.target_c4_not_disarmable = "あなたは生存しているチームメイトのC4を解除することはできない。"
 L.c4_short_desc = "巨大な爆発を引き起こす"
 

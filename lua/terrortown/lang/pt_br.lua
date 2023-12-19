@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Alguma coisa fez você soltar sua munição.."
 -- 2019-10-28
 L.target_c4 = "Pressione [{usekey}] para abrir o menu da C4"
 L.target_c4_armed = "Pressione [{usekey}] para desarmar a C4"
-L.target_c4_armed_defuser = "Pressione [{usekey}] para usar o desarme"
+L.target_c4_armed_defuser = "Pressione [{primaryfire}] para usar o desarme"
 L.target_c4_not_disarmable = "Você não pode desarmar uma C4 de um companheiro ainda vivo"
 L.c4_short_desc = "Alguma coisa muito explosivo"
 
