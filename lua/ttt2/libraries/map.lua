@@ -458,6 +458,7 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 		local hook_weapon_spawns = {}
 		-- @realm shared
 		hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
+
 		return ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls] or hook_weapon_spawns[cls], data
 	end
 
