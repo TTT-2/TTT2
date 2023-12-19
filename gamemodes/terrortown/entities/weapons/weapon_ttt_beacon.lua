@@ -45,6 +45,7 @@ SWEP.Kind = WEAPON_EQUIP
 SWEP.CanBuy = {ROLE_DETECTIVE}
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_BEACON
+SWEP.builtin = true
 
 SWEP.Spawnable = true
 SWEP.AllowDrop = false
