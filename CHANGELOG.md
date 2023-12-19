@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated the Turkish localization file (by @NovaDiablox)
 - Radio can now only be picked up by placer
+- Radar now clears existing waypoints when removed or on changing role (by @EntranceJew)
 
 ### Fixed
 
