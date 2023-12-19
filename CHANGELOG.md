@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - DNA Tester works now with more than one fingerprint on a weapon
 - TraitorButton config files should now actually work
 - Translation strings not rendering on detective's body search mode combobox
+- C4 defusal prompt now suggesting the right key
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 

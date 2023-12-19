@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 -- 2019-10-28
 L.target_c4 = "Press [{usekey}] to open C4 menu"
 L.target_c4_armed = "Press [{usekey}] to disarm C4"
-L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
+L.target_c4_armed_defuser = "Press [{primaryfire}] to use defuser"
 L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 L.c4_short_desc = "Something very explosive"
 
