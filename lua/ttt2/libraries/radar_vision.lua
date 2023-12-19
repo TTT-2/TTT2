@@ -77,6 +77,11 @@ function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList,
 	}
 end
 
+---
+-- Returns the visibleFor flag for a provided entiy, nil if not set
+-- @param Entity ent The tracked entity
+-- @return number|nil The vibility flag
+-- @realm shared
 function radarVision.GetVisibleFor(ent)
 	if not IsValid(ent) then return end
 

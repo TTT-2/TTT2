@@ -94,7 +94,7 @@ end
 
 if SERVER then
 	---
-	-- @realm shared
+	-- @realm server
 	function ENT:Think()
 		if self.timeLastBeep + 5 >= CurTime() then
 			sound.Play(soundBeep, self:GetPos(), 100, 80)
@@ -134,6 +134,8 @@ if SERVER then
 		return true
 	end
 
+	---
+	-- @realm server
 	function ENT:OnRemove()
 		for ply in pairs(self.lastPlysFound) do
 			radarVision.RemoveEntity(ply)
