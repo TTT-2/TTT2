@@ -36,13 +36,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "label_inspect_confirm_mode",
 		serverConvar = "ttt2_inspect_confirm_mode",
 		choices = {{
-			value = "0",
+			value = 0,
 			title = "choice_inspect_confirm_mode_0"
 		},{
-			value = "1",
+			value = 1,
 			title = "choice_inspect_confirm_mode_1"
 		},{
-			value = "2",
+			value = 2,
 			title = "choice_inspect_confirm_mode_2"
 		}}
 	})

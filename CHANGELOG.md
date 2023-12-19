@@ -8,6 +8,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed and updated the Turkish localization file (by @NovaDiablox)
 - Radio can now only be picked up by placer
+- Comboboxes can now handle numbers and strings as values
+  - Defaults work now with numbers
+  - OnChange-Callback is called with the correct type for ConVars
 
 ### Fixed
 

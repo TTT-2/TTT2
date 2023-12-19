@@ -37,6 +37,8 @@ function PANEL:Init()
 	self.choices = {}
 	self.titleIndices = {}
 	self.valueIndices = {}
+
+	self.isValueTypeString = nil
 end
 
 ---
@@ -56,8 +58,26 @@ function PANEL:Clear()
 	self.titleIndices = {}
 	self.valueIndices = {}
 	self.selected = nil
+	self.isValueTypeString = nil
 
 	self:CloseMenu()
+end
+
+function PANEL:StoreValueType(value)
+	-- Save value type of first entry for conversion
+	if(self.isValueTypeString == nil) then
+		self.isValueTypeString = isstring(value)
+	end
+end
+
+function PANEL:ConvertValue(value)
+	if(self.isValueTypeString == nil) then
+		return value
+	elseif (self.isValueTypeString) then
+		return tostring(value)
+	else
+		return tonumber(value)
+	end
 end
 
 ---
@@ -95,7 +115,7 @@ end
 -- @return number
 -- @realm client
 function PANEL:GetOptionID(value)
-	return self.valueIndices[value] or 1
+	return self.valueIndices[self:ConvertValue(value)] or 1
 end
 
 ---
@@ -134,11 +154,14 @@ end
 -- @return number index
 -- @realm client
 function PANEL:AddChoice(title, value, select, icon, data)
-	if istable(value) then
+	if istable(value) or isbool(value) then
 		ErrorNoHalt("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any table data use the last parameter.\n")
 
 		return
 	end
+
+	self:StoreValueType(value)
+	value = self:ConvertValue(value)
 
 	local index = #self.choices + 1
 
@@ -174,7 +197,7 @@ function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 	end
 
 	local choice = choices[index]
-	local value = choice.value
+	local value = self:ConvertValue(choice.value)
 
 	self.selected = index
 
@@ -452,14 +475,15 @@ function PANEL:SetCallbackEnabledVarValues(value)
 end
 
 ---
--- @param string value
+-- @param string|number value
 -- @realm client
 function PANEL:SetDefaultValue(value)
-	local noDefault = true
+	local hasDefault = false
 
-	if isstring(value) then
-		self.default = value
-		noDefault = false
+	if isstring(value) or isnumber(value) then
+		self:StoreValueType(value)
+		self.default = self:ConvertValue(value)
+		hasDefault = true
 	else
 		self.default = nil
 	end
@@ -467,7 +491,7 @@ function PANEL:SetDefaultValue(value)
 	local reset = self:GetResetButton()
 
 	if ispanel(reset) then
-		reset.noDefault = noDefault
+		reset.noDefault = not hasDefault
 	end
 end
 
