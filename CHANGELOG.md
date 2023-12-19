@@ -9,6 +9,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
   - Can only be bought by policing roles
   - Creates a wallhack in a sphere around it, which is visible to everyone
+- Added DebugPrint(message)
+  - This puts quotation marks around print statements
+  - Can handle single values or a sequential table to be printed
 
 ### Changed
 

@@ -536,6 +536,7 @@ COLOR_WARMGRAY = Color(91, 94, 99, 255)
 COLOR_GOLD = Color(255, 215, 30)
 
 -- include independent libraries (other extensions might require them)
+include("ttt2/libraries/debug.lua")
 include("ttt2/libraries/pon.lua")
 
 -- include extensions
