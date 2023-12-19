@@ -1,7 +1,9 @@
 ---
--- A collection of global debug functions
+-- debug extension
 -- @author ZenBre4ker
 -- @module debug
+
+local debug = debug
 
 if SERVER then
 	AddCSLuaFile()
@@ -25,7 +27,7 @@ end
 -- @param any message The message to display
 -- @note The message can be a variable or a table and even nil. In case of a table it automatically concatenates all entries and checks every object if it is a string
 -- @realm shared
-function DebugPrint(message)
+function debug.print(message)
 	local printMessage = ""
 
 	if(istable(message) and table.IsSequential(message)) then
