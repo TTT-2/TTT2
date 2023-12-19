@@ -225,27 +225,24 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 						local scoreName = rawScoreText.name
 						local score = rawScoreText.score
 
-						filteredPlyScoreList[scoreName] = filteredPlyScoreList[scoreName] or {score = {0,0}, numEvents = {0,0}}
+						filteredPlyScoreList[scoreName] = filteredPlyScoreList[scoreName] or {score = 0, numEvents = 0}
 
-						local posIndex = score < 0 and 1 or 2 -- first entry contains negative and second positive entries
 						local filteredPlyScore = filteredPlyScoreList[scoreName]
 
-						filteredPlyScore.score[posIndex] = filteredPlyScore.score[posIndex] + score
-						filteredPlyScore.numEvents[posIndex] = filteredPlyScore.numEvents[posIndex] + 1
+						filteredPlyScore.score = filteredPlyScore.score + score
+						filteredPlyScore.numEvents = filteredPlyScore.numEvents + 1
 					end
 				end
 
 				for rawScoreTextName, scoreObj in pairs(filteredPlyScoreList) do
-					for i = 1, 2 do
-						local score = scoreObj.score[i]
-						local numberEvents = scoreObj.numEvents[i]
+					local score = scoreObj.score
+					local numberEvents = scoreObj.numEvents
 
-						if score == 0 then continue end
+					if score == 0 then continue end
 
-						scoreBucket[#scoreBucket + 1] = {
-							title = "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
-						}
-					end
+					scoreBucket[#scoreBucket + 1] = {
+						title = "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
+					}
 				end
 				local widthScoreTooltip, heightScoreTooltip = MakePlayerGenericTooltip(plyScoreTooltipPanel, ply, scoreBucket, "tooltip_score_gained")
 
