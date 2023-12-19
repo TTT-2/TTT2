@@ -312,7 +312,6 @@ end
 -- @realm shared
 function map.GetPlayerSpawnEntities()
 	local spawns = {}
-
 	local hook_player_spawns = {}
 
 	-- @realm shared
