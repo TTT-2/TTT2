@@ -325,7 +325,6 @@ function PANEL:MakeComboBox(data)
 				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
 			else
 				-- Support old simple structure
-				choice = choice
 				right:AddChoice(choice, choice)
 			end
 		end
