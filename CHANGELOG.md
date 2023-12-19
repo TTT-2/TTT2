@@ -31,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+- Added new hooks: `TTT2MapRegisterWeaponSpawns`, `TTT2MapRegisterAmmoSpawns`, `TTT2MapRegisterPlayerSpawns` to allow converting a wider variety of source map ports (by @EntranceJew)
 
 ### Fixed
 
