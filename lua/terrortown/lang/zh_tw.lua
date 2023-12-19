@@ -2087,6 +2087,21 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-14
+--L.visualizer_help_pri = "Throw Beacon on the ground"
+--L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
 -- 2023-11-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
