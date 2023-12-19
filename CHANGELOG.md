@@ -12,7 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
-- Fixed and updated the Turkish localization file (by @NovaDiablox)
+- Updated the Turkish localization file (by @NovaDiablox)
 - Radio can now only be picked up by placer
 
 ### Fixed
