@@ -4,6 +4,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
+  - Can only be bought by policing roles
+  - Creates a wallhack in a sphere around it, which is visible to everyone
+
 ### Changed
 
 - Fixed and updated the Turkish localization file (by @NovaDiablox)
