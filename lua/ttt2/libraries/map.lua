@@ -295,6 +295,7 @@ function map.GetAmmoSpawnEntities()
 
 	FindSpawnEntities(spawns, ttt_ammo_spawns)
 	FindSpawnEntities(spawns, hl2_ammo_spawns)
+
 	local hook_ammo_spawns = {}
 
 	-- @realm shared
