@@ -2072,8 +2072,8 @@ L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
 -- 2023-12-14
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
 --L.beacon_desc = [[
 --Broadcasts player locations to everyone in a sphere around this beacon.
@@ -2092,3 +2092,9 @@ L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"
