@@ -269,6 +269,7 @@ function map.GetWeaponSpawnEntities()
 
 	FindSpawnEntities(spawns, ttt_weapon_spawns)
 	FindSpawnEntities(spawns, hl2_weapon_spawns)
+
 	local hook_weapon_spawns = {}
 
 	-- @realm shared
