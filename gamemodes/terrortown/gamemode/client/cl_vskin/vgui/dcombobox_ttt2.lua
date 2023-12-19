@@ -38,7 +38,7 @@ function PANEL:Init()
 	self.titleIndices = {}
 	self.valueIndices = {}
 
-	self.isValueTypeString = nil
+	self.valueType = nil
 end
 
 ---
@@ -58,7 +58,7 @@ function PANEL:Clear()
 	self.titleIndices = {}
 	self.valueIndices = {}
 	self.selected = nil
-	self.isValueTypeString = nil
+	self.valueType = nil
 
 	self:CloseMenu()
 end
@@ -69,8 +69,8 @@ end
 -- @realm client
 function PANEL:StoreValueType(value)
 	-- Save value type of first entry for conversion
-	if self.isValueTypeString == nil then
-		self.isValueTypeString = isstring(value)
+	if self.valueType == nil then
+		self.valueType = type(value)
 	end
 end
 
@@ -80,12 +80,12 @@ end
 -- @return any
 -- @realm client
 function PANEL:ConvertValue(value)
-	if self.isValueTypeString == nil then
-		return value
-	elseif self.isValueTypeString then
+	if self.valueType == "string" then
 		return tostring(value)
-	else
+	elseif self.valueType == "number" then
 		return tonumber(value)
+	else
+		return value
 	end
 end
 
