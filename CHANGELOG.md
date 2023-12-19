@@ -9,10 +9,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new radarVision module that is currently used by these builtin weapons (by @TimGoll)
   - C4
   - Radio
+- Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
+  - Can only be bought by policing roles
+  - Creates a wallhack in a sphere around it, which is visible to everyone
 
 ### Changed
 
-- Updated the Turkish localization file (by @NovaDiablox)
+- Fixed and updated the Turkish localization file (by @NovaDiablox)
 - Radio can now only be picked up by placer
 
 ### Fixed
