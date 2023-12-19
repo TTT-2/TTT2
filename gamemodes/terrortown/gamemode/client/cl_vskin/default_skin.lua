@@ -390,7 +390,6 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorIcon)
 		if iconBadge then
 			local miniSize = nearestPowerOf2(sizeIcon / 4)
-			print(sizeIcon, miniSize)
 			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - miniSize, padIcon + shift + sizeIcon - miniSize, miniSize, miniSize, iconBadge, iconAlpha, colors.accent)
 		end
 	end
