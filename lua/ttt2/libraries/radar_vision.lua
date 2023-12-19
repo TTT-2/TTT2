@@ -77,6 +77,12 @@ function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList,
 	}
 end
 
+function radarVision.GetVisibleFor(ent)
+	if not IsValid(ent) then return end
+
+	return radarVision.registry[ent].visibleFor
+end
+
 ---
 -- Removes the entity from the radar vision table.
 -- @param Entity ent The entity that should be removed
@@ -202,9 +208,10 @@ if CLIENT then
 		for ent, data in pairs(radarVision.registry) do
 			if not IsValid(ent) then continue end
 
-			local screenPos = ent:GetPos():ToScreen()
+			local posEnt = ent:GetPos() + ent:OBBCenter()
+			local screenPos = posEnt:ToScreen()
 			local isOffScreen = util.IsOffScreen(screenPos)
-			local distanceEntity = ent:GetPos():Distance(LocalPlayer():EyePos())
+			local distanceEntity = posEnt:Distance(LocalPlayer():EyePos())
 
 			-- call internal targetID functions first so the data can be modified by addons
 			local rData = RADAR_DATA:Initialize(ent, isOffScreen, distanceEntity)

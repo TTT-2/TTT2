@@ -2081,7 +2081,7 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 --L.c4_bombvision_damage_zone = "Bomb damage zone"
 --L.c4_bombvision_kill_zone = "Bomb kill zone"
 
---L.radio_bombvision_collapsed = "{distance}m"
+--L.bombvision_distance_collapsed = "{distance}m"
 
 -- 2023-12-18
 --L.visualizer_help_pri = "Throw Beacon on the ground"

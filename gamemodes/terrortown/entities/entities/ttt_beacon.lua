@@ -16,6 +16,9 @@ ENT.Model = Model("models/props_lab/reciever01b.mdl")
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
 
+ENT.timeLastBeep = CurTime()
+ENT.lastPlysFound = {}
+
 local beaconDetectionRange = 135
 
 local soundZap = Sound("npc/assassin/ball_zap1.wav")
@@ -42,6 +45,8 @@ function ENT:Initialize()
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
 		self:NextThink(CurTime() + 1)
+
+		radarVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_PLAYER)
 	end
 end
 
@@ -87,36 +92,54 @@ function ENT:OnTakeDamage(dmginfo)
 	end
 end
 
----
--- @realm shared
-function ENT:Think()
-	if SERVER then
-		sound.Play(soundBeep, self:GetPos(), 100, 80)
-	else
+if SERVER then
+	---
+	-- @realm shared
+	function ENT:Think()
+		if self.timeLastBeep + 5 >= CurTime() then
+			sound.Play(soundBeep, self:GetPos(), 100, 80)
+
+			self.timeLastBeep = CurTime()
+		end
+
 		local entsFound = ents.FindInSphere(self:GetPos(), beaconDetectionRange)
 		local plysFound = {}
+		local affectedPlayers = {}
 
 		for i = 1, #entsFound do
 			local ent = entsFound[i]
 
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
 
-			plysFound[#plysFound + 1] = ent
+			plysFound[ent] = true
+			affectedPlayers[ent] = true
 		end
 
-		marks.Remove(self.lastPlysFound or {})
-		marks.Add(plysFound, roles.DETECTIVE.color)
+		table.Merge(affectedPlayers, self.lastPlysFound)
+
+		for ply in pairs(affectedPlayers) do
+			if plysFound[ply] and not self.lastPlysFound[ply] then
+				-- newly added player in range
+				radarVision.RegisterEntity(ply, self:GetOwner(), VISIBLE_FOR_ALL, roles.DETECTIVE.color)
+			elseif not plysFound[ply] and self.lastPlysFound[ply] then
+				-- player lost in range
+				radarVision.RemoveEntity(ply)
+			end
+		end
 
 		self.lastPlysFound = plysFound
+
+		self:NextThink(CurTime() + 0.25)
+
+		return true
 	end
 
-	-- only sets the next think on the server
-	self:NextThink(CurTime() + 5)
+	function ENT:OnRemove()
+		for ply in pairs(self.lastPlysFound) do
+			radarVision.RemoveEntity(ply)
+		end
+	end
 
-	return true
-end
-
-if SERVER then
 	---
 	-- @realm server
 	function ENT:UpdateTransmitState()
@@ -157,6 +180,9 @@ if CLIENT then
 	local baseOpacity = 35
 	local factorRenderDistance = 3
 
+	local materialBeacon = Material("vgui/ttt/radar/beacon")
+	local materialPlayer = Material("vgui/ttt/tid/tid_big_role_not_known")
+
 	---
 	-- @realm client
 	function ENT:OnRemove()
@@ -188,6 +214,46 @@ if CLIENT then
 		end
 
 		tData:AddDescriptionLine(TryT("beacon_short_desc"))
+	end)
+
+	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarBeacon", function(rData)
+		local client = LocalPlayer()
+		local ent = rData:GetEntity()
+
+		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
+
+		local owner = ent:GetOwner()
+		local nick = IsValid(owner) and owner:Nick() or "---"
+
+		local distance = math.Round(util.HammerUnitsToMeters(rData:GetEntityDistance()), 1)
+
+		rData:EnableText()
+
+		rData:AddIcon(materialBeacon)
+		rData:SetTitle(TryT(ent.PrintName))
+
+		rData:AddDescriptionLine(ParT("bombvision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
+
+		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+
+		rData:SetCollapsedLine(ParT("bombvision_distance_collapsed", {distance = distance}))
+	end)
+
+	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarBeaconPlys", function(rData)
+		local client = LocalPlayer()
+		local ent = rData:GetEntity()
+
+		if not client:IsTerror() or not IsValid(ent) or not ent:IsPlayer() or ent == client then return end
+
+		rData:EnableText()
+
+		rData:AddIcon(materialPlayer)
+		rData:SetTitle(TryT("beacon_bombvision_player"))
+
+		rData:AddDescriptionLine(TryT("beacon_bombvision_player_tracked"))
+
+		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("PostDrawTranslucentRenderables", "BeaconRenderRadius", function(_, bSkybox)

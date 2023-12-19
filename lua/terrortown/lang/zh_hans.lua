@@ -2081,7 +2081,7 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 --L.c4_bombvision_damage_zone = "Bomb damage zone"
 --L.c4_bombvision_kill_zone = "Bomb kill zone"
 
---L.radio_bombvision_collapsed = "{distance}m"
+--L.bombvision_distance_collapsed = "{distance}m"
 
 -- 2023-12-18
 --L.visualizer_help_pri = "Throw Beacon on the ground"

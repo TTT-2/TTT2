@@ -903,6 +903,8 @@ else -- CLIENT
 		rData:AddDescriptionLine(ParT("c4_bombvision_time", {time = time}))
 		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
 
+		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+
 		local color = COLOR_WHITE
 
 		if rData:GetEntityDistance() > ent:GetRadius() then
