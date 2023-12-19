@@ -3,143 +3,62 @@
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
 
-local function MakePlayerRoleTooltip(parent, width, ply)
-	local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
-	local height = 25
-
-	local boxLayout = vgui.Create("DIconLayout", parent)
-	boxLayout:Dock(FILL)
-
-	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
-	titleBox:SetDynamicColor(parent, 0)
-	titleBox:SetTitle("tooltip_roles_time")
-	local lengthLongestLine = fastutf8.len(TryT(titleBox:GetTitle()))
-	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-
-	for i = 1, #plyRoles do
-		local plyRole = plyRoles[i]
-		local roleData = roles.GetByIndex(plyRole.role)
-
-		local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
-		plyRoleBox:SetSize(width, 20)
-		plyRoleBox:SetDynamicColor(parent, 0)
-		plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-		plyRoleBox:SetIcon(roleData.iconMaterial)
-
-		plyRoleBox.GetTitle = function()
-			return tostring(i) .. ". " .. TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")"
-		end
-		local length = fastutf8.len(plyRoleBox.GetTitle())
-		if length > lengthLongestLine then
-			lengthLongestLine = length
-		end
-		height = height + 20
-	end
-
-	width = lengthLongestLine * 8
-	titleBox:SetSize(width, 25)
-	return width, height
+local function GetPanelTextSize(pnl)
+	surface.SetFont(pnl:GetTitleFont())
+	return surface.GetTextSize(TryT(pnl:GetTitle()))
 end
 
-local function MakePlayerScoreTooltip(parent, width, ply)
-	local plyScores = CLSCORE.eventsPlayerScores[ply.sid64] or {}
-	local height = 25
+local function MakePlayerGenericTooltip(parent, ply, items, title)
+	local initTitleHeight = 25
+	local lineHeight = 20
+	local iconOffset = ((lineHeight - 2 * math.Round(0.1 * lineHeight)) + 4 * math.Round(0.1 * lineHeight))
 
 	local boxLayout = vgui.Create("DIconLayout", parent)
 	boxLayout:Dock(FILL)
 
 	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
 	titleBox:SetDynamicColor(parent, 0)
-	titleBox:SetTitle("tooltip_score_gained")
-	local lengthLongestLine = fastutf8.len(TryT(titleBox:GetTitle()))
+	titleBox:SetTitle(title)
 	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 
-	-- In a first Pass filter all scoreevents and scores by name, positivy and number of Events
-	local filteredPlyScoreList = {}
-	for i = 1, #plyScores do
-		local plyScoreEvent = plyScores[i]
-		local rawScoreTexts = plyScoreEvent:GetRawScoreText(ply.sid64)
+	local lengthLongestLine, titleHeight = GetPanelTextSize(titleBox)
+	local height = math.max(initTitleHeight, titleHeight)
+	titleBox:SetHeight(height)
 
-		for k = 1, #rawScoreTexts do
-			local rawScoreText = rawScoreTexts[k]
-			local scoreName = rawScoreText.name
-			local score = rawScoreText.score
-
-			filteredPlyScoreList[scoreName] = filteredPlyScoreList[scoreName] or {score = {0,0}, numEvents = {0,0}}
-
-			local posIndex = score < 0 and 1 or 2 -- first entry contains negative and second positive entries
-			local filteredPlyScore = filteredPlyScoreList[scoreName]
-
-			filteredPlyScore.score[posIndex] = filteredPlyScore.score[posIndex] + score
-			filteredPlyScore.numEvents[posIndex] = filteredPlyScore.numEvents[posIndex] + 1
+	for i = 1, #items do
+		local thing = items[i]
+		local plyRow = boxLayout:Add("DColoredTextBoxTTT2")
+		plyRow:SetDynamicColor(parent, 0)
+		plyRow:SetTitleAlign(TEXT_ALIGN_LEFT)
+		if thing.title then
+			plyRow:SetTitle(thing.title)
 		end
+
+		local rowWidth, rowHeight = GetPanelTextSize(plyRow)
+
+		if thing.iconMaterial then
+			plyRow:SetIcon(thing.iconMaterial)
+			rowWidth = rowWidth + iconOffset
+		end
+
+		if rowWidth > lengthLongestLine then
+			lengthLongestLine = rowWidth
+		end
+
+		rowHeight = math.max(lineHeight, rowHeight)
+		plyRow:SetHeight(rowHeight)
+		height = height + rowHeight
 	end
 
-	-- In a second pass we create the tooltip boxes with summarized scoreevents
-	for rawScoreTextName, scoreObj in pairs(filteredPlyScoreList) do
-		for i = 1, 2 do
-			local score = scoreObj.score[i]
-			local numberEvents = scoreObj.numEvents[i]
+	-- add some padding to the right margin
+	lengthLongestLine = lengthLongestLine + iconOffset
 
-			if score == 0 then continue end
-
-			local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
-			plyRoleBox:SetSize(width, 20)
-			plyRoleBox:SetDynamicColor(parent, 0)
-			plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-
-			plyRoleBox.GetTitle = function()
-				return "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
-			end
-			local length = fastutf8.len(plyRoleBox.GetTitle())
-			if length > lengthLongestLine then
-				lengthLongestLine = length
-			end
-			height = height + 20
-		end
+	-- we found the longest line, now make all entries that long
+	for _, v in ipairs( boxLayout:GetChildren() ) do
+		v:SetWidth(lengthLongestLine)
 	end
 
-	width = lengthLongestLine * 8
-	titleBox:SetSize(width, 25)
-	return width, height
-end
-
-local function MakePlayerKarmaTooltip(parent, width, ply)
-	local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
-	local height = 25
-
-	local boxLayout = vgui.Create("DIconLayout", parent)
-	boxLayout:Dock(FILL)
-
-	local titleBox = boxLayout:Add("DColoredTextBoxTTT2")
-	titleBox:SetDynamicColor(parent, 0)
-	titleBox:SetTitle("tooltip_karma_gained")
-	local lengthLongestLine = fastutf8.len(TryT(titleBox:GetTitle()))
-	titleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-
-	if not istable(plyKarmaList) then
-		return height
-	end
-
-	for karmaText, karma in pairs(plyKarmaList) do
-		local plyRoleBox = boxLayout:Add("DColoredTextBoxTTT2")
-		plyRoleBox:SetSize(width, 20)
-		plyRoleBox:SetDynamicColor(parent, 0)
-		plyRoleBox:SetTitleAlign(TEXT_ALIGN_LEFT)
-
-		plyRoleBox.GetTitle = function()
-			return "- " .. TryT(karmaText) .. ": " .. karma
-		end
-		local length = fastutf8.len(plyRoleBox.GetTitle())
-		if length > lengthLongestLine then
-			lengthLongestLine = length
-		end
-		height = height + 20
-	end
-
-	width = lengthLongestLine * 8
-	titleBox:SetSize(width, 25)
-	return width, height
+	return lengthLongestLine, height
 end
 
 local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDeath)
@@ -242,7 +161,18 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyRolesTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local widthRolesTooltip, heightRolesTooltip = MakePlayerRoleTooltip(plyRolesTooltipPanel, widthName, ply)
+				local roleBucket = {}
+				local plyRoles = CLSCORE.eventsPlayerRoles[ply.sid64] or {}
+				for i = 1, #plyRoles do
+					local plyRole = plyRoles[i]
+					local roleData = roles.GetByIndex(plyRole.role)
+
+					roleBucket[#roleBucket + 1] = {
+						title = tostring(i) .. ". " .. TryT(roleData.name) .. " (" .. TryT(plyRole.team) .. ")",
+						iconMaterial = roleData.iconMaterial,
+					}
+				end
+				local widthRolesTooltip, heightRolesTooltip = MakePlayerGenericTooltip(plyRolesTooltipPanel, ply, roleBucket, "tooltip_roles_time")
 
 				plyNameBox:SetTooltipPanel(plyRolesTooltipPanel)
 				plyNameBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
@@ -258,7 +188,14 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyKarmaTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local widthKarmaTooltip, heightKarmaTooltip = MakePlayerKarmaTooltip(plyKarmaTooltipPanel, widthName, ply)
+				local karmaBucket = {}
+				local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
+				for karmaText, karma in pairs(plyKarmaList) do
+					karmaBucket[#karmaBucket + 1] = {
+						title = "- " .. TryT(karmaText) .. ": " .. karma,
+					}
+				end
+				local widthKarmaTooltip, heightKarmaTooltip = MakePlayerGenericTooltip(plyKarmaTooltipPanel, ply, karmaBucket, "tooltip_karma_gained")
 
 				plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
 				plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
@@ -274,7 +211,43 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
 
 				local plyScoreTooltipPanel = vgui.Create("DPanelTTT2")
 
-				local widthScoreTooltip, heightScoreTooltip = MakePlayerScoreTooltip(plyScoreTooltipPanel, widthName, ply)
+				local scoreBucket = {}
+				local plyScores = CLSCORE.eventsPlayerScores[ply.sid64] or {}
+
+				-- In a first Pass filter all scoreevents and scores by name, positivy and number of Events
+				local filteredPlyScoreList = {}
+				for i = 1, #plyScores do
+					local plyScoreEvent = plyScores[i]
+					local rawScoreTexts = plyScoreEvent:GetRawScoreText(ply.sid64)
+
+					for k = 1, #rawScoreTexts do
+						local rawScoreText = rawScoreTexts[k]
+						local scoreName = rawScoreText.name
+						local score = rawScoreText.score
+
+						filteredPlyScoreList[scoreName] = filteredPlyScoreList[scoreName] or {score = {0,0}, numEvents = {0,0}}
+
+						local posIndex = score < 0 and 1 or 2 -- first entry contains negative and second positive entries
+						local filteredPlyScore = filteredPlyScoreList[scoreName]
+
+						filteredPlyScore.score[posIndex] = filteredPlyScore.score[posIndex] + score
+						filteredPlyScore.numEvents[posIndex] = filteredPlyScore.numEvents[posIndex] + 1
+					end
+				end
+
+				for rawScoreTextName, scoreObj in pairs(filteredPlyScoreList) do
+					for i = 1, 2 do
+						local score = scoreObj.score[i]
+						local numberEvents = scoreObj.numEvents[i]
+
+						if score == 0 then continue end
+
+						scoreBucket[#scoreBucket + 1] = {
+							title = "- " .. (numberEvents > 1 and (numberEvents .. "x ") or "") .. ParT("tooltip_" .. rawScoreTextName, {score = score})
+						}
+					end
+				end
+				local widthScoreTooltip, heightScoreTooltip = MakePlayerGenericTooltip(plyScoreTooltipPanel, ply, scoreBucket, "tooltip_score_gained")
 
 				plyPointsBox:SetTooltipPanel(plyScoreTooltipPanel)
 				plyPointsBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
