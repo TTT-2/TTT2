@@ -176,14 +176,11 @@ if SERVER then
 		wep:SetAngles(self:GetAngles())
 		wep.IsDropped = true
 
-		local prints = self.fingerprints or {}
+		wep.fingerprints = table.Copy(self.fingerprints or {})
 
 		self:Remove()
 
 		wep:Spawn()
-		wep.fingerprints = wep.fingerprints or {}
-
-		wep.fingerprints[#wep.fingerprints + 1] = prints
 
 		return wep
 	end
