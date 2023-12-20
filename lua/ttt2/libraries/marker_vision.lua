@@ -228,15 +228,15 @@ if CLIENT then
 			local distanceEntity = posEnt:Distance(client:EyePos())
 
 			-- call internal targetID functions first so the data can be modified by addons
-			local rData = RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity)
+			local mvData = RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity)
 
 			---
 			-- now run a hook that can be used by addon devs that changes the appearance
 			-- of the radar vision
 			-- @realm client
-			hook.Run("TTT2RenderRadarInfo", rData)
+			hook.Run("TTT2RenderRadarInfo", mvData)
 
-			local params = rData.params
+			local params = mvData.params
 
 			if not params.drawInfo then continue end
 
@@ -269,7 +269,7 @@ if CLIENT then
 					color
 				)
 
-				if not rData:HasCollapsedLine() then continue end
+				if not mvData:HasCollapsedLine() then continue end
 
 				draw.AdvancedText(
 					params.displayInfo.collapsedLine.text,

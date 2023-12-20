@@ -884,9 +884,9 @@ else -- CLIENT
 		tData:AddDescriptionLine(TryT("c4_short_desc"))
 	end)
 
-	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarC4", function(rData)
+	hook.Add("TTT2RenderRadarInfo", "HUDDrawMarkerVisionC4", function(mvData)
 		local client = LocalPlayer()
-		local ent = rData:GetEntity()
+		local ent = mvData:GetEntity()
 
 		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
 
@@ -894,35 +894,35 @@ else -- CLIENT
 		local nick = IsValid(owner) and owner:Nick() or "---"
 
 		local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
-		local distance = math.Round(util.HammerUnitsToMeters(rData:GetEntityDistance()), 1)
+		local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
 
-		rData:EnableText()
+		mvData:EnableText()
 
-		rData:SetTitle(TryT(ent.PrintName))
+		mvData:SetTitle(TryT(ent.PrintName))
 
-		rData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
-		rData:AddDescriptionLine(ParT("c4_marker_vision_time", {time = time}))
-		rData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
+		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		mvData:AddDescriptionLine(ParT("c4_marker_vision_time", {time = time}))
+		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		rData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 
 		local color = COLOR_WHITE
 
-		if rData:GetEntityDistance() > ent:GetRadius() then
-			rData:AddDescriptionLine(TryT("c4_marker_vision_safe_zone"), COLOR_GREEN)
-		elseif rData:GetEntityDistance() > ent:GetRadiusInner() then
-			rData:AddDescriptionLine(TryT("c4_marker_vision_damage_zone"), COLOR_ORANGE)
+		if mvData:GetEntityDistance() > ent:GetRadius() then
+			mvData:AddDescriptionLine(TryT("c4_marker_vision_safe_zone"), COLOR_GREEN)
+		elseif mvData:GetEntityDistance() > ent:GetRadiusInner() then
+			mvData:AddDescriptionLine(TryT("c4_marker_vision_damage_zone"), COLOR_ORANGE)
 
 			color = COLOR_ORANGE
 		else
-			rData:AddDescriptionLine(TryT("c4_marker_vision_kill_zone"), COLOR_RED)
+			mvData:AddDescriptionLine(TryT("c4_marker_vision_kill_zone"), COLOR_RED)
 
 			color = COLOR_RED
 		end
 
-		rData:AddIcon(materialC4, (rData:IsOffScreen() or not rData:IsOnScreenCenter()) and color)
+		mvData:AddIcon(materialC4, (mvData:IsOffScreen() or not mvData:IsOnScreenCenter()) and color)
 
-		rData:SetCollapsedLine(time)
+		mvData:SetCollapsedLine(time)
 	end)
 end
 

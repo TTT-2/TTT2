@@ -332,26 +332,26 @@ if CLIENT then
 		tData:AddDescriptionLine(TryT("radio_short_desc"))
 	end)
 
-	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarRadio", function(rData)
+	hook.Add("TTT2RenderRadarInfo", "HUDDrawMarkerVisionRadio", function(mvData)
 		local client = LocalPlayer()
-		local ent = rData:GetEntity()
+		local ent = mvData:GetEntity()
 
 		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_radio" then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
 
-		local distance = math.Round(util.HammerUnitsToMeters(rData:GetEntityDistance()), 1)
+		local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
 
-		rData:EnableText()
+		mvData:EnableText()
 
-		rData:SetTitle(TryT(ent.PrintName))
-		rData:AddIcon(materialRadio)
+		mvData:SetTitle(TryT(ent.PrintName))
+		mvData:AddIcon(materialRadio)
 
-		rData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
-		rData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
+		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		rData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 end
 
