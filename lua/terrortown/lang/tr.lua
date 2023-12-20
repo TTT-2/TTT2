@@ -1962,7 +1962,7 @@ L.search_title_spectator = "İzleyicisin"
 L.target_credits_on_confirm = "Harcanmamış kredi almak için onaylayın"
 L.target_credits_on_search = "Harcanmamış kredileri almak için arama yapın"
 L.corpse_hint_no_inspect_details = "Bu ceset hakkında yalnızca kamu polisliği rolleri bilgi bulabilir."
-L.corpse_hint_inspect_only_details = "Sadece kamu polisliği rolleri cesedi doğrulayabilir."
+L.corpse_hint_inspect_limited_details = "Sadece kamu polisliği rolleri cesedi doğrulayabilir."
 L.corpse_hint_spectator = "Ceset kullanıcı arayüzünü görüntülemek için [{usekey}] tuşuna basın"
 L.corpse_hint_public_policing_searched = "Kamu polisliği rolündeki arama sonuçlarını görüntülemek için [{usekey}] tuşuna basın"
 
