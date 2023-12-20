@@ -218,7 +218,7 @@ if CLIENT then
 		tData:AddDescriptionLine(TryT("beacon_short_desc"))
 	end)
 
-	hook.Add("TTT2RenderRadarInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
+	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
 		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 
@@ -240,7 +240,7 @@ if CLIENT then
 		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 
-	hook.Add("TTT2RenderRadarInfo", "HUDDrawMarkerVisionBeaconPlys", function(mvData)
+	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeaconPlys", function(mvData)
 		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 

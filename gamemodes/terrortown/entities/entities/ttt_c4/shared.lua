@@ -884,7 +884,7 @@ else -- CLIENT
 		tData:AddDescriptionLine(TryT("c4_short_desc"))
 	end)
 
-	hook.Add("TTT2RenderRadarInfo", "HUDDrawMarkerVisionC4", function(mvData)
+	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionC4", function(mvData)
 		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 

@@ -228,13 +228,13 @@ if CLIENT then
 			local distanceEntity = posEnt:Distance(client:EyePos())
 
 			-- call internal targetID functions first so the data can be modified by addons
-			local mvData = RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity)
+			local mvData = MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity)
 
 			---
 			-- now run a hook that can be used by addon devs that changes the appearance
 			-- of the radar vision
 			-- @realm client
-			hook.Run("TTT2RenderRadarInfo", mvData)
+			hook.Run("TTT2RenderMarkerVisionInfo", mvData)
 
 			local params = mvData.params
 
@@ -389,5 +389,14 @@ if CLIENT then
 				yStringDescription = yStringDescription + heightLineDescription
 			end
 		end
+	end
+
+	---
+	-- Add marker vision information that should be rendered on a marker vision object.
+	-- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object which contains all information
+	-- @hook
+	-- @realm client
+	function GM:TTT2RenderMarkerVisionInfo(mvData)
+
 	end
 end

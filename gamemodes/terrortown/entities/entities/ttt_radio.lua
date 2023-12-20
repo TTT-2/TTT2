@@ -332,7 +332,7 @@ if CLIENT then
 		tData:AddDescriptionLine(TryT("radio_short_desc"))
 	end)
 
-	hook.Add("TTT2RenderRadarInfo", "HUDDrawMarkerVisionRadio", function(mvData)
+	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionRadio", function(mvData)
 		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 

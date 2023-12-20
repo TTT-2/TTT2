@@ -1,19 +1,19 @@
 ---
 -- @author Mineotopia
--- @class RADAR_DATA
+-- @class MARKER_VISION_DATA
 
-RADAR_DATA = {}
+MARKER_VISION_DATA = {}
 
 ---
--- Initializes the @{RADAR_DATA} object
+-- Initializes the @{MARKER_VISION_DATA} object
 -- @param Entity ent The focused Entity
 -- @param boolean isOffScreen If the radar is off screen or on screen
 -- @param boolean isOnScreenCenter If the radar icon is on screen center
 -- @param number distance The distance to the focused entity
--- @return RADAR_DATA The object to be used in the hook
+-- @return MARKER_VISION_DATA The object to be used in the hook
 -- @internal
 -- @realm client
-function RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance)
+function MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance)
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
@@ -36,18 +36,18 @@ function RADAR_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance)
 		}
 	}
 
-	return RADAR_DATA:BindTarget(data, params)
+	return MARKER_VISION_DATA:BindTarget(data, params)
 end
 
 
 ---
--- Binds two target data tables to the @{RADAR_DATA} object
+-- Binds two target data tables to the @{MARKER_VISION_DATA} object
 -- @param table data The data table about the focused entity
 -- @param table params The default table with the params that should be modified by the hook
--- @return RADAR_DATA The object to be used in the hook
+-- @return MARKER_VISION_DATA The object to be used in the hook
 -- @internal
 -- @realm client
-function RADAR_DATA:BindTarget(data, params)
+function MARKER_VISION_DATA:BindTarget(data, params)
 	self.data = data
 	self.params = params
 
@@ -58,7 +58,7 @@ end
 -- Returns the currently focused entity
 -- @return Entity The focused entity
 -- @realm client
-function RADAR_DATA:GetEntity()
+function MARKER_VISION_DATA:GetEntity()
 	return self.data.ent
 end
 
@@ -66,7 +66,7 @@ end
 -- Returns if the radar entity is off screen
 -- @return boolean Whether it is off screen
 -- @realm client
-function RADAR_DATA:IsOffScreen()
+function MARKER_VISION_DATA:IsOffScreen()
 	return self.data.isOffScreen
 end
 
@@ -74,7 +74,7 @@ end
 -- Returns if the radar entity is on screen center
 -- @return boolean Whether it is on screen center
 -- @realm client
-function RADAR_DATA:IsOnScreenCenter()
+function MARKER_VISION_DATA:IsOnScreenCenter()
 	return self.data.isOnScreenCenter
 end
 
@@ -82,7 +82,7 @@ end
 -- Returns the distance to the focused entity
 -- @return number The distance to the focused entity
 -- @realm client
-function RADAR_DATA:GetEntityDistance()
+function MARKER_VISION_DATA:GetEntityDistance()
 	return self.data.distance
 end
 
@@ -91,7 +91,7 @@ end
 -- to false from another call
 -- @param[default=true] boolean enableText A boolean defining the text state
 -- @realm client
-function RADAR_DATA:EnableText(enableText)
+function MARKER_VISION_DATA:EnableText(enableText)
 	-- only set if not already set to false
 	if self.params.drawInfo == false then return end
 
@@ -105,7 +105,7 @@ end
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the icon
 -- @return number The amount of icons that are currently in the table
 -- @realm client
-function RADAR_DATA:AddIcon(material, color)
+function MARKER_VISION_DATA:AddIcon(material, color)
 	local amount = #self.params.displayInfo.icon + 1
 
 	self.params.displayInfo.icon[amount] = {
@@ -122,7 +122,7 @@ end
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
 -- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
-function RADAR_DATA:SetTitle(text, color, inline_icons)
+function MARKER_VISION_DATA:SetTitle(text, color, inline_icons)
 	self.params.displayInfo.title = {
 		text = text or "",
 		color = IsColor(color) and color or COLOR_WHITE,
@@ -137,7 +137,7 @@ end
 -- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
-function RADAR_DATA:AddDescriptionLine(text, color, inline_icons)
+function MARKER_VISION_DATA:AddDescriptionLine(text, color, inline_icons)
 	local amount = #self.params.displayInfo.desc + 1
 
 	self.params.displayInfo.desc[amount] = {
@@ -154,7 +154,7 @@ end
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
 -- @realm client
-function RADAR_DATA:SetCollapsedLine(text, color)
+function MARKER_VISION_DATA:SetCollapsedLine(text, color)
 	self.params.displayInfo.collapsedLine = {
 		text = text or "",
 		color = IsColor(color) and color or COLOR_WHITE
@@ -165,7 +165,7 @@ end
 -- Returns whether or not a title has been set
 -- @return boolean True if a title is set
 -- @realm client
-function RADAR_DATA:HasTitle()
+function MARKER_VISION_DATA:HasTitle()
 	return self.params.displayInfo.title and self.params.displayInfo.title.text ~= ""
 end
 
@@ -173,7 +173,7 @@ end
 -- Returns the amount of set description lines
 -- @return number Amount of existing description lines
 -- @realm client
-function RADAR_DATA:GetAmountDescriptionLines()
+function MARKER_VISION_DATA:GetAmountDescriptionLines()
 	return #self.params.displayInfo.desc
 end
 
@@ -181,7 +181,7 @@ end
 -- Returns the amount of set icons
 -- @return number Amount of existing icons
 -- @realm client
-function RADAR_DATA:GetAmountIcons()
+function MARKER_VISION_DATA:GetAmountIcons()
 	return #self.params.displayInfo.icon
 end
 
@@ -189,7 +189,7 @@ end
 -- Returns whether or not a collapsed line has been set
 -- @return boolean True if a title is set
 -- @realm client
-function RADAR_DATA:HasCollapsedLine()
+function MARKER_VISION_DATA:HasCollapsedLine()
 	return self.params.displayInfo.collapsedLine and self.params.displayInfo.collapsedLine.text ~= ""
 end
 
@@ -197,6 +197,6 @@ end
 -- Returns the raw data tables of the radar vision element to me modified by experienced users
 -- @return table,table The table of the entity data, the table of the radar vision element parameters
 -- @realm client
-function RADAR_DATA:GetRaw()
+function MARKER_VISION_DATA:GetRaw()
 	return self.data, self.params
 end
