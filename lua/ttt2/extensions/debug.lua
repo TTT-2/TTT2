@@ -17,7 +17,7 @@ end
 local function ConvertToString(object)
 	if isstring(object) then
 		return "\"" .. object .. "\""
-	else 
+	else
 		return tostring(object)
 	end
 end
