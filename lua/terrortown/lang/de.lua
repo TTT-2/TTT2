@@ -894,7 +894,7 @@ L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen.
 -- 2019-10-28
 L.target_c4 = "Drücke [{usekey}] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [{usekey}] um C4 zu entschärfen"
-L.target_c4_armed_defuser = "Drücke [{usekey}] um Entschärfer zu verwenden"
+L.target_c4_armed_defuser = "Drücke [{primaryfire}] um Entschärfer zu verwenden"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 L.c4_short_desc = "Etwas sehr explosives"
 
@@ -1961,7 +1961,7 @@ L.search_eyes = "Mit deinen Detektiv-Fähigkeiten identifizierst du die letzte P
 L.target_credits_on_confirm = "Bestätige Toten, um ungenutzte Credits zu erhalten"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2086,6 +2086,8 @@ L.crowbar_help_secondary = "Spieler schubsen"
 -- 2023-12-18
 --L.visualizer_help_pri = "Throw Beacon on the ground"
 --L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
 --L.beacon_desc = [[
 --Broadcasts player locations to everyone in a sphere around this beacon.
@@ -2105,3 +2107,9 @@ L.crowbar_help_secondary = "Spieler schubsen"
 L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
 --L.target_pickup_disabled = "You can not pick up this weapon"
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"

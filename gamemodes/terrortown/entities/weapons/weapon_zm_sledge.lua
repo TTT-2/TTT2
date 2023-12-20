@@ -22,6 +22,7 @@ SWEP.AutoSpawnable = true
 
 SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_M249
+SWEP.builtin = true
 SWEP.spawnType = WEAPON_TYPE_HEAVY
 
 SWEP.Primary.Damage = 7

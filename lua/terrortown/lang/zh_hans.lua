@@ -894,7 +894,7 @@ L.drop_ammo_prevented = "有什么东西阻挡你丢出子弹。"
 -- 2019-10-28
 L.target_c4 = "按 [{usekey}] 打开C4菜单"
 L.target_c4_armed = "按 [{usekey}] 拆除C4"
-L.target_c4_armed_defuser = "按 [{usekey}] 使用拆弹器"
+L.target_c4_armed_defuser = "按 [{primaryfire}] 使用拆弹器"
 L.target_c4_not_disarmable = "你不能拆除存活队友的C4"
 L.c4_short_desc = "可以炸得很欢"
 
@@ -1961,7 +1961,7 @@ L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2070,22 +2070,7 @@ L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
--- 2023-12-14
---L.bombvision_owner = "Owner: {owner}"
---L.bombvision_distance = "Distance: {distance}m"
 
---L.c4_bombvision_time = "Detonation time: {time}"
---L.c4_bombvision_collapsed = "{time} / {distance}m"
-
---L.c4_bombvision_safe_zone = "Bomb safe zone"
---L.c4_bombvision_damage_zone = "Bomb damage zone"
---L.c4_bombvision_kill_zone = "Bomb kill zone"
-
---L.bombvision_distance_collapsed = "{distance}m"
-
--- 2023-12-18
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
 --L.beacon_desc = [[
 --Broadcasts player locations to everyone in a sphere around this beacon.
@@ -2103,5 +2088,3 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"

@@ -1751,6 +1751,58 @@ function CreateChanges()
 	]],
 		os.time({ year = 2023, month = 12, day = 12})
 	)
+
+	AddChange(
+		"TTT2 Base - v0.12.2b",
+		[[
+		<h2>Added</h2>
+		<ul>
+			<li>Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT</li>
+			<ul>
+				<li>Can only be bought by policing roles</li>
+				<li>Creates a wallhack in a sphere around it, which is visible to everyone</li>
+			</ul>
+			<li>Added recognizable badge for builtin equipment and roles (by @EntranceJew)</li>
+			<ul>
+				<li>Buy Equipment menu has builtin indicators, replacing the (C) custom marker decorating a majority of equipment</li>
+				<li>F1 > Edit Equipment now has builtin indicators on equipment</li>
+				<li>Added tooltip to F1 > Edit Equipment menu with the equipment's class name.</li>
+				<li>F1 > Role Settings now has builtin indicators for roles</li>
+				<li>F1 > Edit Shops now has builtin indicators for roles</li>
+			</ul>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Updated the Turkish localization file (by @NovaDiablox)</li>
+			<li>Radio can now only be picked up by placer</li>
+			<li>Radar now clears existing waypoints when removed or on changing role (by @EntranceJew)</li>
+			<li>Comboboxes can now handle numbers and strings as values</li>
+			<ul>
+				<li>Defaults work now with numbers</li>
+				<li>OnChange-Callback is called with the correct type for ConVars</li>
+			</ul>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Binoculars scan no longer gets interrupted when changing zoom level</li>
+			<li>Fixed missing water level icon breaking scoreboard</li>
+			<li>DNA Tester works now with more than one fingerprint on a weapon</li>
+			<li>TraitorButton config files should now actually work</li>
+			<li>Translation strings not rendering on detective's body search mode combobox</li>
+			<li>C4 defusal prompt now suggesting the right key</li>
+			<li>Disable to unscope from weapons without ironsights</li>
+			<li>Fixed typo preventing targetid from showing role icons correctly</li>
+			<li>Mitigated issue with CTakeDamageInfo becoming ephemeral outside their hook of origin</li>
+			<li>ttt_game_text can now properly send to "All except traitors", as described.</li>
+			<li>Fixed corpses not listing their kills</li>
+			<li>Comboboxes now show correct values for database driven entries</li>
+			<li>Database-Callbacks are now called with the correct valuetype</li>
+		</ul>
+	]],
+		os.time({ year = 2023, month = 12, day = 20})
+	)
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

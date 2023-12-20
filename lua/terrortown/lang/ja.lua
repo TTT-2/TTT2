@@ -894,7 +894,7 @@ L.drop_ammo_prevented = "何かが弾を捨てるのを妨げているようだ�
 -- 2019-10-28
 L.target_c4 = "[{usekey}]でC4メニューを開く"
 L.target_c4_armed = "[{usekey}]でC4を解除する"
-L.target_c4_armed_defuser = "[{usekey}]で除去装置を使う"
+L.target_c4_armed_defuser = "[{primaryfire}]で除去装置を使う"
 L.target_c4_not_disarmable = "あなたは生存しているチームメイトのC4を解除することはできない。"
 L.c4_short_desc = "巨大な爆発を引き起こす"
 
@@ -1961,7 +1961,7 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2070,38 +2070,5 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-12-14
---L.bombvision_owner = "Owner: {owner}"
---L.bombvision_distance = "Distance: {distance}m"
 
---L.c4_bombvision_time = "Detonation time: {time}"
---L.c4_bombvision_collapsed = "{time} / {distance}m"
-
---L.c4_bombvision_safe_zone = "Bomb safe zone"
---L.c4_bombvision_damage_zone = "Bomb damage zone"
---L.c4_bombvision_kill_zone = "Bomb kill zone"
-
---L.bombvision_distance_collapsed = "{distance}m"
-
--- 2023-12-18
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
---L.beacon_name = "Beacon"
---L.beacon_desc = [[
---Broadcasts player locations to everyone in a sphere around this beacon.
---
---Use to keep track of locations on the map that are hard to see.]]
-
---L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
---L.msg_beacon_death = "A player died in close proximity to one of your beacons."
-
---L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
---L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
-
--- 2023-12-18
---L.entity_pickup_owner_only = "Only the owner can pick this up"
-
--- 2023-12-18
 L.body_confirm_one = "{finder}は{victim}の死を確認した。"
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"

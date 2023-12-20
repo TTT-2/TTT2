@@ -894,7 +894,7 @@ L.idle_popup_title = "Бездіяльність"
 -- 2019-10-28
 --L.target_c4 = "Press [{usekey}] to open C4 menu"
 --L.target_c4_armed = "Press [{usekey}] to disarm C4"
---L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
+--L.target_c4_armed_defuser = "Press [{primaryfire}] to use defuser"
 --L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 --L.c4_short_desc = "Something very explosive"
 
@@ -1961,7 +1961,7 @@ L.search_eyes = "Використовуючи свої навички детек
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2070,22 +2070,7 @@ L.search_eyes = "Використовуючи свої навички детек
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-12-14
---L.bombvision_owner = "Owner: {owner}"
---L.bombvision_distance = "Distance: {distance}m"
 
---L.c4_bombvision_time = "Detonation time: {time}"
---L.c4_bombvision_collapsed = "{time} / {distance}m"
-
---L.c4_bombvision_safe_zone = "Bomb safe zone"
---L.c4_bombvision_damage_zone = "Bomb damage zone"
---L.c4_bombvision_kill_zone = "Bomb kill zone"
-
---L.bombvision_distance_collapsed = "{distance}m"
-
--- 2023-12-18
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
 --L.beacon_desc = [[
 --Broadcasts player locations to everyone in a sphere around this beacon.
@@ -2103,5 +2088,4 @@ L.search_eyes = "Використовуючи свої навички детек
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} підтверджує смерть {victim}."
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"
+
