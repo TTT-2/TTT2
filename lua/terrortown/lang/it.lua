@@ -2088,8 +2088,8 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
 -- 2023-12-14
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
 --L.beacon_desc = [[
 --Broadcasts player locations to everyone in a sphere around this beacon.
@@ -2108,3 +2108,9 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 -- 2023-12-18
 L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"

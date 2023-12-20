@@ -41,6 +41,7 @@ SWEP.Base = "weapon_tttbasegrenade"
 
 SWEP.Kind = WEAPON_NADE
 SWEP.WeaponID = AMMO_MOLOTOV
+SWEP.builtin = true
 SWEP.spawnType = WEAPON_TYPE_NADE
 
 SWEP.UseHands = true

@@ -22,6 +22,7 @@ end
 SWEP.Base = "weapon_tttbasegrenade"
 
 SWEP.WeaponID = AMMO_DISCOMB
+SWEP.builtin = true
 SWEP.Kind = WEAPON_NADE
 SWEP.spawnType = WEAPON_TYPE_NADE
 
