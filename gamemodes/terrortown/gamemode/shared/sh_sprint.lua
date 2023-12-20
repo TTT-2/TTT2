@@ -37,7 +37,7 @@ end
 -- @return boolean
 -- @realm shared
 function SPRINT:IsSprinting(ply)
-	return self.convars.enabled:GetBool() and self:PlayerWantsToSprint(ply) and ply:GetSprintStamina() > 0
+	return self.convars.enabled:GetBool() and self:PlayerWantsToSprint(ply) and ply:GetSprintStamina() > 0 and not ply:IsInIronsights()
 end
 
 ---

@@ -238,6 +238,8 @@ function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 	end
 end
 
+local lastFOV = 84
+
 ---
 -- The Move hook is called for you to manipulate the player's MoveData.
 -- You shouldn't adjust the player's position in any way in the move hook. This is due to
@@ -258,6 +260,14 @@ function GM:Move(ply, moveData)
 	local mul = ply:GetSpeedMultiplier()
 
 	mul = mul * SPRINT:HandleSpeedMultiplierCalculation(ply)
+
+	local newFOV = (ply.baseFOV or ply:GetFOV()) * mul ^ (1 / 6)
+
+	if lastFOV ~= newFOV then
+		lastFOV = newFOV
+
+		ply:SetFOV(newFOV, 0.25, nil, true)
+	end
 
 	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
 	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)

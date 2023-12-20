@@ -980,7 +980,7 @@ end
 -- @hook
 -- @realm shared
 function GM:TTT2PlayerReady(ply)
-
+	ply.baseFOV = ply:GetFOV()
 end
 
 local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
@@ -1123,6 +1123,38 @@ end
 -- @realm shared
 function plymeta:WasRevivedInRound()
 	return self:HasDiedInRound()
+end
+
+-- to make it hotreload safe, we have to make sure it is not
+-- called recursively by only caching the original function
+if debug.getinfo(plymeta.SetFOV, "flLnSu").what == "C" then
+	plymeta.SetOldFOV = plymeta.SetFOV
+end
+
+function plymeta:SetFOV(fov, time, requester, isSprinting)
+	if isSprinting then
+		self.sprintingFOV = fov
+
+		if self.externalFOV then return end
+	end
+
+	if not isSprinting then
+		self.externalFOV = fov
+
+		if fov == 0 then
+			self.externalFOV = nil
+
+			fov = self.sprintingFOV or 0
+		end
+	end
+
+	self:SetOldFOV(fov, time, requester, isSprinting)
+end
+
+function plymeta:IsInIronsights()
+	local wep = self:GetActiveWeapon()
+
+	return IsValid(wep) and isfunction(wep.GetIronsights) and wep:GetIronsights()
 end
 
 ---
