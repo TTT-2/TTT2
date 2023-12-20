@@ -755,11 +755,13 @@ local idle = {
 ---
 -- Sniff for any button inputs to prevent scamming the AFK timer.
 -- @realm client
-hook.Add("SetupMove", "DeathrunIdleCheck", function( ply, mv )
+hook.Add("SetupMove", "DeathrunIdleCheck", function(_, mv)
 	if not GetGlobalBool("ttt_idle", false) then return end
+
 	if mv:GetButtons() ~= idle.btn then
 		idle.t = CurTime()
 	end
+
 	idle.btn = mv:GetButtons()
 end)
 
