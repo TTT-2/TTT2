@@ -39,6 +39,7 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 		virtualSubmenus[counter].icon = roleData.iconMaterial
 		virtualSubmenus[counter].roleData = roleData
 		virtualSubmenus[counter].iconBadge = roleData.builtin and builtinIcon
+		virtualSubmenus[counter].iconBadgeSize = 8
 		virtualSubmenus[counter].basemenu = self
 	end
 end

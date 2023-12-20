@@ -30,6 +30,7 @@ function PANEL:Init()
 		icon = nil,
 		iconFullSize = false,
 		iconBadge = nil,
+		iconBadgeSize = 0,
 		selected = false,
 	}
 end
@@ -53,6 +54,20 @@ end
 -- @realm client
 function PANEL:GetIconBadge()
 	return self.contents.iconBadge
+end
+
+---
+-- @param number size
+-- @realm client
+function PANEL:SetIconBadgeSize(size)
+	self.contents.iconBadgeSize = size
+end
+
+---
+-- @return number
+-- @realm client
+function PANEL:GetIconBadgeSize()
+	return self.contents.iconBadgeSize
 end
 
 ---

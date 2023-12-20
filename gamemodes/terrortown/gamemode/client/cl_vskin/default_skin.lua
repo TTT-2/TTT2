@@ -331,19 +331,6 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	end
 end
 
-local function nearestPowerOf2(N)
-	  -- Calculate log2 of N
-	  local a = math.floor(math.log(N) / math.log(2));
-
-	  -- If 2^a is equal to N, return N
-	  if math.pow(2, a) == N then
-		return N
-	  end
-
-	  -- Return 2^(a + 1)
-	return math.pow(2, a + 1);
-end
-
 ---
 -- @param Panel panel
 -- @param number w
@@ -362,6 +349,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local isIconFullSize = panel:IsIconFullSize()
 	local padIcon = isIconFullSize and 0 or pad
 	local iconBadge = panel:GetIconBadge()
+	local iconBadgeSize = panel:GetIconBadgeSize()
 	local iconAlpha = isIconFullSize and 255 or colorText.a
 	local sizeIcon = h - 2 * padIcon
 
@@ -389,8 +377,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	if hasIcon then
 		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorIcon)
 		if iconBadge then
-			local miniSize = nearestPowerOf2(sizeIcon / 4)
-			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - miniSize, padIcon + shift + sizeIcon - miniSize, miniSize, miniSize, iconBadge, iconAlpha, colors.accent)
+			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - iconBadgeSize, padIcon + shift + sizeIcon - iconBadgeSize, iconBadgeSize, iconBadgeSize, iconBadge, iconAlpha, colors.accent)
 		end
 	end
 
