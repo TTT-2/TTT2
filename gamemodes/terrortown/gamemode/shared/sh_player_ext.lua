@@ -1154,7 +1154,7 @@ end
 function plymeta:IsInIronsights()
 	local wep = self:GetActiveWeapon()
 
-	return IsValid(wep) and isfunction(wep.GetIronsights) and wep:GetIronsights()
+	return IsValid(wep) and not wep.NoSights and isfunction(wep.GetIronsights) and wep:GetIronsights()
 end
 
 ---

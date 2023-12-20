@@ -296,21 +296,16 @@ if CLIENT then
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
-		if self.HUDHelp then
+		if isfunction(self.HUDHelp) then
 			self:DrawHelp()
 		end
 
+		if not enable_crosshair:GetBool() then return end
+
 		local client = LocalPlayer()
 
-		if
-			not enable_crosshair:GetBool()
-			or not IsValid(client)
-			or SPRINT:IsSprinting(client) and not SPRINT.convars.showCrosshair:GetBool()
-		then
-			return
-		end
-
 		local sights = not self.NoSights and self:GetIronsights()
+
 		local x = math.floor(ScrW() * 0.5)
 		local y = math.floor(ScrH() * 0.5)
 		local scale = crosshair_weaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
