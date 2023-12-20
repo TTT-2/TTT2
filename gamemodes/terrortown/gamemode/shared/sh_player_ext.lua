@@ -338,7 +338,7 @@ function plymeta:UpdateTeam(team, suppressEvent, suppressHook)
 	end
 
 	if SERVER then
-		radarVision.PlayerUpdatedTeam(self, oldTeam, newTeam)
+		markerVision.PlayerUpdatedTeam(self, oldTeam, newTeam)
 	end
 
 	if SERVER and not suppressEvent then

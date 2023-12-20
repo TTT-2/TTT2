@@ -8,7 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added a new radarVision module that is currently used by these builtin weapons (by @TimGoll)
+- Added a new markerVision module that is currently used by these builtin weapons (by @TimGoll)
   - C4
   - Radio
 - Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT

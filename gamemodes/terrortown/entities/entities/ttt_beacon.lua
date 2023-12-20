@@ -46,7 +46,7 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 		self:NextThink(CurTime() + 1)
 
-		radarVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_PLAYER)
+		markerVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_PLAYER)
 	end
 end
 
@@ -120,10 +120,10 @@ if SERVER then
 		for ply in pairs(affectedPlayers) do
 			if plysFound[ply] and not self.lastPlysFound[ply] then
 				-- newly added player in range
-				radarVision.RegisterEntity(ply, self:GetOwner(), VISIBLE_FOR_ALL, roles.DETECTIVE.color)
+				markerVision.RegisterEntity(ply, self:GetOwner(), VISIBLE_FOR_ALL, roles.DETECTIVE.color)
 			elseif not plysFound[ply] and self.lastPlysFound[ply] then
 				-- player lost in range
-				radarVision.RemoveEntity(ply)
+				markerVision.RemoveEntity(ply)
 			end
 		end
 
@@ -138,7 +138,7 @@ if SERVER then
 	-- @realm server
 	function ENT:OnRemove()
 		for ply in pairs(self.lastPlysFound) do
-			radarVision.RemoveEntity(ply)
+			markerVision.RemoveEntity(ply)
 		end
 	end
 
@@ -234,10 +234,10 @@ if CLIENT then
 		rData:AddIcon(materialBeacon)
 		rData:SetTitle(TryT(ent.PrintName))
 
-		rData:AddDescriptionLine(ParT("bombvision_owner", {owner = nick}))
-		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
+		rData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		rData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("TTT2RenderRadarInfo", "HUDDrawRadarBeaconPlys", function(rData)
@@ -249,11 +249,11 @@ if CLIENT then
 		rData:EnableText()
 
 		rData:AddIcon(materialPlayer)
-		rData:SetTitle(TryT("beacon_bombvision_player"))
+		rData:SetTitle(TryT("beacon_marker_vision_player"))
 
-		rData:AddDescriptionLine(TryT("beacon_bombvision_player_tracked"))
+		rData:AddDescriptionLine(TryT("beacon_marker_vision_player_tracked"))
 
-		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		rData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("PostDrawTranslucentRenderables", "BeaconRenderRadius", function(_, bSkybox)

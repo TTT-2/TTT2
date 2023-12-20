@@ -477,7 +477,7 @@ if SERVER then
 	---
 	-- @realm server
 	function ENT:OnRemove()
-		radarVision.RemoveEntity(self)
+		markerVision.RemoveEntity(self)
 	end
 
 	---
@@ -496,7 +496,7 @@ if SERVER then
 		self:SetArmed(false)
 		self:WeldToGround(false)
 
-		radarVision.RemoveEntity(self)
+		markerVision.RemoveEntity(self)
 
 		self.DisarmCausedExplosion = false
 	end
@@ -569,7 +569,7 @@ if SERVER then
 
 		events.Trigger(EVENT_C4PLANT, ply)
 
-		radarVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
+		markerVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
 	end
 
 	---
@@ -900,22 +900,22 @@ else -- CLIENT
 
 		rData:SetTitle(TryT(ent.PrintName))
 
-		rData:AddDescriptionLine(ParT("bombvision_owner", {owner = nick}))
-		rData:AddDescriptionLine(ParT("c4_bombvision_time", {time = time}))
-		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
+		rData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("c4_marker_vision_time", {time = time}))
+		rData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		rData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 
 		local color = COLOR_WHITE
 
 		if rData:GetEntityDistance() > ent:GetRadius() then
-			rData:AddDescriptionLine(TryT("c4_bombvision_safe_zone"), COLOR_GREEN)
+			rData:AddDescriptionLine(TryT("c4_marker_vision_safe_zone"), COLOR_GREEN)
 		elseif rData:GetEntityDistance() > ent:GetRadiusInner() then
-			rData:AddDescriptionLine(TryT("c4_bombvision_damage_zone"), COLOR_ORANGE)
+			rData:AddDescriptionLine(TryT("c4_marker_vision_damage_zone"), COLOR_ORANGE)
 
 			color = COLOR_ORANGE
 		else
-			rData:AddDescriptionLine(TryT("c4_bombvision_kill_zone"), COLOR_RED)
+			rData:AddDescriptionLine(TryT("c4_marker_vision_kill_zone"), COLOR_RED)
 
 			color = COLOR_RED
 		end

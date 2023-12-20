@@ -2,7 +2,7 @@
 -- A module that let's devs create bomb visions for any entity that is automatically synced
 -- between server and client and is tied to a player and their team
 -- @author Mineotopia
--- @module radarVision
+-- @module markerVision
 
 if SERVER then
 	AddCSLuaFile()
@@ -16,9 +16,9 @@ VISIBLE_FOR_ALL = 2
 
 VISIBLE_FOR_BITS = 3
 
-radarVision = {}
+markerVision = {}
 
-radarVision.registry = {}
+markerVision.registry = {}
 
 ---
 -- Registers an entity that should be rendered on screen with a wallhack and an optional
@@ -31,7 +31,7 @@ radarVision.registry = {}
 -- @param[opt] any passThroughData any data that should be added to this radar vision, it is also synced to the client
 -- @note Call on server to add entity on server and all defined clients.
 -- @realm shared
-function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
+function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
 	if SERVER then
 		local plysTeam = GetTeamFilter(owner:GetTeam(), true, true)
 
@@ -69,7 +69,7 @@ function radarVision.RegisterEntity(ent, owner, visibleFor, color, receiverList,
 		marks.Add({ent}, color)
 	end
 
-	radarVision.registry[ent] = {
+	markerVision.registry[ent] = {
 		owner = owner,
 		visibleFor = visibleFor,
 		color = color,
@@ -82,10 +82,10 @@ end
 -- @param Entity ent The tracked entity
 -- @return number|nil The vibility flag
 -- @realm shared
-function radarVision.GetVisibleFor(ent)
+function markerVision.GetVisibleFor(ent)
 	if not IsValid(ent) then return end
 
-	return radarVision.registry[ent].visibleFor
+	return markerVision.registry[ent].visibleFor
 end
 
 ---
@@ -94,13 +94,13 @@ end
 -- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
 -- @note Call on server to remove entity on server and all defined clients.
 -- @realm shared
-function radarVision.RemoveEntity(ent, receiverList)
-	if not IsValid(ent) or not radarVision.registry[ent] then return end
+function markerVision.RemoveEntity(ent, receiverList)
+	if not IsValid(ent) or not markerVision.registry[ent] then return end
 
-	local owner = radarVision.registry[ent].owner
-	local visibleFor = radarVision.registry[ent].visibleFor
+	local owner = markerVision.registry[ent].owner
+	local visibleFor = markerVision.registry[ent].visibleFor
 
-	radarVision.registry[ent] = nil
+	markerVision.registry[ent] = nil
 
 	if SERVER then
 		net.Start("ttt2_register_entity_removed")
@@ -127,14 +127,14 @@ end
 -- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
 -- @note Call on server to add entity on server and all defined clients.
 -- @realm shared
-function radarVision.UpdateEntity(ent, owner, visibleFor)
-	if not radarVision.registry[ent] then return end
+function markerVision.UpdateEntity(ent, owner, visibleFor)
+	if not markerVision.registry[ent] then return end
 
-	owner = owner or radarVision.registry[ent].owner
-	visibleFor = visibleFor or radarVision.registry[ent].visibleFor
+	owner = owner or markerVision.registry[ent].owner
+	visibleFor = visibleFor or markerVision.registry[ent].visibleFor
 
-	radarVision.RemoveEntity(ent)
-	radarVision.RegisterEntity(ent, owner, visibleFor)
+	markerVision.RemoveEntity(ent)
+	markerVision.RegisterEntity(ent, owner, visibleFor)
 end
 
 ---
@@ -143,15 +143,15 @@ end
 -- @param string oldTeam The old team of the owner
 -- @param string newTeam The new team of the owner
 -- @realm shared
-function radarVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
-	if not radarVision.registry[ent] or radarVision.registry[ent].visibleFor ~= VISIBLE_FOR_TEAM then return end
+function markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
+	if not markerVision.registry[ent] or markerVision.registry[ent].visibleFor ~= VISIBLE_FOR_TEAM then return end
 
-	local owner = radarVision.registry[ent].owner
+	local owner = markerVision.registry[ent].owner
 	local oldTeamPlys = GetTeamFilter(oldTeam)
 	oldTeamPlys[#oldTeamPlys + 1] = owner
 
-	radarVision.RemoveEntity(ent, oldTeamPlys)
-	radarVision.RegisterEntity(ent, owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, GetTeamFilter(newTeam, false, true))
+	markerVision.RemoveEntity(ent, oldTeamPlys)
+	markerVision.RegisterEntity(ent, owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, GetTeamFilter(newTeam, false, true))
 end
 
 if SERVER then
@@ -162,8 +162,8 @@ if SERVER then
 	-- @param string newTeam The new team of the owner
 	-- @internal
 	-- @realm server
-	function radarVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
-		for ent, data in pairs(radarVision.registry) do
+	function markerVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
+		for ent, data in pairs(markerVision.registry) do
 			if data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
 
 			-- case 1: the owner of that targeted entity changed their team
@@ -172,7 +172,7 @@ if SERVER then
 			-- case 2: the old or the new team is the same team that the owner has
 			if data.owner:GetTeam() ~= oldTeam and data.owner:GetTeam() ~= newTeam then continue end
 
-			radarVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
+			markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
 		end
 	end
 end
@@ -182,18 +182,18 @@ if CLIENT then
 	surface.CreateAdvancedFont("RadarVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
 
 	net.ReceiveStream("ttt2_register_entity_added", function(streamData)
-		radarVision.RegisterEntity(streamData.ent, streamData.owner, streamData.visibleFor, streamData.color, nil, streamData.data)
+		markerVision.RegisterEntity(streamData.ent, streamData.owner, streamData.visibleFor, streamData.color, nil, streamData.data)
 	end)
 
 	net.Receive("ttt2_register_entity_removed", function()
-		radarVision.RemoveEntity(net.ReadEntity())
+		markerVision.RemoveEntity(net.ReadEntity())
 	end)
 
 	---
 	-- The draw function of the radar vision module.
 	-- @internal
 	-- @realm client
-	function radarVision.Draw()
+	function markerVision.Draw()
 		local scale = appearance.GetGlobalScale()
 
 		local padding = 3 * scale
@@ -216,7 +216,7 @@ if CLIENT then
 		local xScreenCenter = 0.5 * widthScreen
 		local yScreenCenter = 0.5 * heightScreen
 
-		for ent, data in pairs(radarVision.registry) do
+		for ent, data in pairs(markerVision.registry) do
 			if not IsValid(ent) then continue end
 
 			local posEnt = ent:GetPos() + ent:OBBCenter()

@@ -28,7 +28,7 @@ TTTFiles = {
 	cl_search = {file = "cl_search.lua", on = "client"},
 	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
 	cl_status = {file = "cl_status.lua", on = "client"},
-	cl_radar_data = {file = "cl_radar_data.lua", on = "client"},
+	cl_marker_vision_data = {file = "cl_marker_vision_data.lua", on = "client"},
 	cl_target_data = {file = "cl_target_data.lua", on = "client"},
 	cl_targetid = {file = "cl_targetid.lua", on = "client"},
 	cl_tbuttons = {file = "cl_tbuttons.lua", on = "client"},

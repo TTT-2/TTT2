@@ -38,7 +38,7 @@ function ENT:Initialize()
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
 
-		radarVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_TEAM)
+		markerVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_TEAM)
 	end
 
 	-- Register with owner
@@ -111,7 +111,7 @@ function ENT:OnRemove()
 
 		client.radio = nil
 	else
-		radarVision.RemoveEntity(self)
+		markerVision.RemoveEntity(self)
 	end
 end
 ---
@@ -348,10 +348,10 @@ if CLIENT then
 		rData:SetTitle(TryT(ent.PrintName))
 		rData:AddIcon(materialRadio)
 
-		rData:AddDescriptionLine(ParT("bombvision_owner", {owner = nick}))
-		rData:AddDescriptionLine(ParT("bombvision_distance", {distance = distance}))
+		rData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		rData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		rData:AddDescriptionLine(TryT("bombvision_visible_for_" .. radarVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		rData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 end
 
