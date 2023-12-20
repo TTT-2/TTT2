@@ -473,7 +473,6 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
 	local role_found = corpse_found and ent.bodySearchResult and ent.bodySearchResult.subrole
-	print("sugma", ent.bodySearchResult.subrole)
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
 	local roleData = roles.GetByIndex(role_found and ent.bodySearchResult.subrole or ROLE_INNOCENT)
 	local roleDataClient = client:GetSubRoleData()
