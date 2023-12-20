@@ -4,6 +4,12 @@ CLGAMEMODESUBMENU.priority = 0
 CLGAMEMODESUBMENU.title = ""
 
 local function PopulateInfo(parent, roleData)
+	if roleData.builtin then
+		parent:MakeHelp({
+			label = "help_roles_builtin",
+		})
+	end
+
 	parent:MakeHelp({
 		label = "help_roles_default_team",
 		params = roleData.defaultTeam

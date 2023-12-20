@@ -16,6 +16,8 @@ CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.langConVar = nil
 CLGAMEMODEMENU.lang = nil
 
+local builtinIcon = Material("vgui/ttt/vskin/markers/builtin")
+
 function CLGAMEMODEMENU:InitializeVirtualMenus()
 	-- add "virtual" submenus that are treated as real one even without files
 	virtualSubmenus = {}
@@ -37,6 +39,9 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 		virtualSubmenus[counter].isItem = items.IsItem(equipment)
 		virtualSubmenus[counter].icon = equipment.iconMaterial
 		virtualSubmenus[counter].iconFullSize = true
+		virtualSubmenus[counter].iconBadge = equipment.builtin and builtinIcon
+		virtualSubmenus[counter].iconBadgeSize = 16
+		virtualSubmenus[counter].tooltip = equipment.id
 	end
 end
 
