@@ -60,8 +60,6 @@ L.body_found_traitor = "他是一位叛徒！"
 L.body_found_det = "他是一位探长。"
 L.body_found_inno = "他是一位无辜者。"
 
-L.body_confirm = "{finder} 确认了 {victim} 的死亡。"
-
 L.body_call = "{player} 请求探长前来检查 {victim} 的尸体！"
 L.body_call_error = "你必须先确定该玩家的死才能呼叫探长！"
 
@@ -897,7 +895,7 @@ L.drop_ammo_prevented = "有什么东西阻挡你丢出子弹。"
 -- 2019-10-28
 L.target_c4 = "按 [{usekey}] 打开C4菜单"
 L.target_c4_armed = "按 [{usekey}] 拆除C4"
-L.target_c4_armed_defuser = "按 [{usekey}] 使用拆弹器"
+L.target_c4_armed_defuser = "按 [{primaryfire}] 使用拆弹器"
 L.target_c4_not_disarmable = "你不能拆除存活队友的C4"
 L.c4_short_desc = "可以炸得很欢"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 没有可丢弃的武�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "这个尸体太远了。"
 
-L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
 L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
@@ -2073,3 +2070,25 @@ L.label_spec_prop_dash = "冲刺力倍增器"
 L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
+
+-- 2023-12-14
+--L.visualizer_help_pri = "Throw Beacon on the ground"
+--L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

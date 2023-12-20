@@ -6,8 +6,18 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
+  - Can only be bought by policing roles
+  - Creates a wallhack in a sphere around it, which is visible to everyone
 - Added `ttt_cl_traitorpopup_tab` to allow players or addons to open a specified tab in the Equipment Menu (by @Spanospy):
   - Example: `ttt_cl_traitorpopup_tab "Transfer"` for opening the credit transfer selection tab.
+
+### Changed
+
+- Updated the Turkish localization file (by @NovaDiablox)
+- Radio can now only be picked up by placer
+- Radar now clears existing waypoints when removed or on changing role (by @EntranceJew)
+
 
 ### Fixed
 
@@ -15,12 +25,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed missing water level icon breaking scoreboard
 - DNA Tester works now with more than one fingerprint on a weapon
 - TraitorButton config files should now actually work
+- Translation strings not rendering on detective's body search mode combobox
+- C4 defusal prompt now suggesting the right key
+- Disable to unscope from weapons without ironsights
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
 ### Added
 
 - Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+- Added new hooks: `TTT2MapRegisterWeaponSpawns`, `TTT2MapRegisterAmmoSpawns`, `TTT2MapRegisterPlayerSpawns` to allow converting a wider variety of source map ports (by @EntranceJew)
 
 ### Fixed
 
@@ -31,6 +45,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed fallback ammo icon missing
 - Fixed a null entity error in the miniscoreboard
 - Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit
+- Fixed "body_confirm" MSTACK noise by batching all the kills from a body into one message. (by @EntranceJew)
+- Fixed "body_confirm" message sending before corpse confirmation message.
 
 ## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
 

@@ -60,8 +60,6 @@ L.body_found_traitor = "Er war ein Verräter!"
 L.body_found_det = "Er war ein Detektiv."
 L.body_found_inno = "Er war unschuldig."
 
-L.body_confirm = "{finder} bestätigte den Tod von {victim}."
-
 L.body_call = "{player} rief einen Detektiv zum Körper von {victim}!"
 L.body_call_error = "Du musst erst den Tod dieses Spielers bestätigen, bevor du einen Detektiv rufen kannst!"
 
@@ -897,7 +895,7 @@ L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen.
 -- 2019-10-28
 L.target_c4 = "Drücke [{usekey}] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [{usekey}] um C4 zu entschärfen"
-L.target_c4_armed_defuser = "Drücke [{usekey}] um Entschärfer zu verwenden"
+L.target_c4_armed_defuser = "Drücke [{primaryfire}] um Entschärfer zu verwenden"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 L.c4_short_desc = "Etwas sehr explosives"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine weg
 L.corpse_searched_by_detective = "Diese Leiche wurde von einer öffentlichen Ordnungsrolle untersucht"
 L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
 
-L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
 L.radio_short_desc = "Waffengeräusche sind Musik für mich"
 
 L.hstation_subtitle = "Drücke [{usekey}] um Leben zu regenerieren."
@@ -2073,3 +2070,25 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-14
+--L.visualizer_help_pri = "Throw Beacon on the ground"
+--L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
+-- L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

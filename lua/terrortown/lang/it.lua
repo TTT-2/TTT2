@@ -60,8 +60,6 @@ L.body_found_traitor = "Era un Traditore!"
 L.body_found_det = "Era un Detective."
 L.body_found_inno = "Era un Innocente."
 
-L.body_confirm = "{finder} ha confermato la morte di {victim}."
-
 L.body_call = "{player} ha chiamato un detective al corpo di {victim}!"
 L.body_call_error = "Devi confermare la morte di questo giocatore prima di chiamare un Detective!"
 
@@ -897,7 +895,7 @@ L.drop_ammo_prevented = "Qualcosa ti impedisce di lasciare queste munizioni."
 -- 2019-10-28
 L.target_c4 = "Premi [{usekey}] per aprire il menù del C4"
 L.target_c4_armed = "Premi [{usekey}] per disinnescare il C4"
-L.target_c4_armed_defuser = "Premi [{usekey}] per usare il disinnescatore"
+L.target_c4_armed_defuser = "Premi [{primaryfire}] per usare il disinnescatore"
 L.target_c4_not_disarmable = "Non puoi disinnescare il C4 di un compagno in vita"
 L.c4_short_desc = "Qualcosa molto esplosivo"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "Non c'è un'arma che puoi lasciare ne
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Il cadavere è troppo lontano."
 
-L.radio_pickup_wrong_team = "Non puoi prendere la radio di un'altra squadra."
 L.radio_short_desc = "I suoni delle armi sono come musica per me"
 
 L.hstation_subtitle = "Premi [{usekey}] per ricevere vita."
@@ -2073,3 +2070,25 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-14
+--L.visualizer_help_pri = "Throw Beacon on the ground"
+--L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."

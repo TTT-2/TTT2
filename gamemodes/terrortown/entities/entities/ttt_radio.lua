@@ -57,7 +57,7 @@ end
 -- @param Player activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:IsInTeam(self:GetOwner()) then
+	if IsValid(activator) and activator:IsPlayer() and activator == self:GetOwner() then
 		local prints = self.fingerprints or {}
 
 		-- picks up weapon, switches if possible and needed, returns weapon if successful
@@ -71,7 +71,7 @@ function ENT:UseOverride(activator)
 
 		table.Add(wep.fingerprints, prints)
 	else
-		LANG.Msg(activator, "radio_pickup_wrong_team")
+		LANG.Msg(activator, "entity_pickup_owner_only")
 	end
 end
 
@@ -316,7 +316,13 @@ if CLIENT then
 		tData:SetOutlineColor(client:GetRoleColor())
 
 		tData:SetTitle(TryT(ent.PrintName))
-		tData:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
+
+		if ent:GetOwner() == client then
+			tData:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
+		else
+			tData:SetSubtitle(TryT("entity_pickup_owner_only"))
+		end
+
 		tData:SetKeyBinding("+use")
 		tData:AddDescriptionLine(TryT("radio_short_desc"))
 	end)
