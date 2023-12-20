@@ -893,7 +893,7 @@ L.drop_ammo_prevented = "Alguma coisa fez você soltar sua munição.."
 -- 2019-10-28
 L.target_c4 = "Pressione [{usekey}] para abrir o menu da C4"
 L.target_c4_armed = "Pressione [{usekey}] para desarmar a C4"
-L.target_c4_armed_defuser = "Pressione [{usekey}] para usar o desarme"
+L.target_c4_armed_defuser = "Pressione [{primaryfire}] para usar o desarme"
 L.target_c4_not_disarmable = "Você não pode desarmar uma C4 de um companheiro ainda vivo"
 L.c4_short_desc = "Alguma coisa muito explosivo"
 
@@ -1960,7 +1960,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2074,8 +2074,8 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.newton_force = "FORCE"
 
 -- 2023-12-14
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
 --L.beacon_desc = [[
 --Broadcasts player locations to everyone in a sphere around this beacon.
@@ -2094,3 +2094,9 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"
