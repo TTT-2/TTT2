@@ -895,7 +895,7 @@ L.drop_ammo_prevented = "Qualcosa ti impedisce di lasciare queste munizioni."
 -- 2019-10-28
 L.target_c4 = "Premi [{usekey}] per aprire il menù del C4"
 L.target_c4_armed = "Premi [{usekey}] per disinnescare il C4"
-L.target_c4_armed_defuser = "Premi [{usekey}] per usare il disinnescatore"
+L.target_c4_armed_defuser = "Premi [{primaryfire}] per usare il disinnescatore"
 L.target_c4_not_disarmable = "Non puoi disinnescare il C4 di un compagno in vita"
 L.c4_short_desc = "Qualcosa molto esplosivo"
 

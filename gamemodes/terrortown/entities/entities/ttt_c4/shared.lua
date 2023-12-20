@@ -822,6 +822,7 @@ else -- CLIENT
 	local GetPT = LANG.GetParamTranslation
 
 	local key_params = {
+		primaryfire = Key("+attack", "MOUSE1"),
 		usekey = Key("+use", "USE"),
 		walkkey = Key("+walk", "WALK")
 	}

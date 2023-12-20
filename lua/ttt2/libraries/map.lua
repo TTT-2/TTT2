@@ -270,6 +270,13 @@ function map.GetWeaponSpawnEntities()
 	FindSpawnEntities(spawns, ttt_weapon_spawns)
 	FindSpawnEntities(spawns, hl2_weapon_spawns)
 
+	local hook_weapon_spawns = {}
+
+	-- @realm shared
+	hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
+
+	FindSpawnEntities(spawns, hook_weapon_spawns)
+
 	if map.IsCounterStrikeMap() then
 		FindSpawnEntities(spawns, css_weapon_spawns)
 	elseif map.IsTeamFortressMap() then
@@ -289,6 +296,13 @@ function map.GetAmmoSpawnEntities()
 	FindSpawnEntities(spawns, ttt_ammo_spawns)
 	FindSpawnEntities(spawns, hl2_ammo_spawns)
 
+	local hook_ammo_spawns = {}
+
+	-- @realm shared
+	hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
+
+	FindSpawnEntities(spawns, hook_ammo_spawns)
+
 	return spawns
 end
 
@@ -298,7 +312,12 @@ end
 -- @realm shared
 function map.GetPlayerSpawnEntities()
 	local spawns = {}
+	local hook_player_spawns = {}
 
+	-- @realm shared
+	hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
+
+	FindSpawnEntities(spawns, hook_player_spawns)
 	if FindSpawnEntities(spawns, ttt_player_spawns) == 0 then
 		FindSpawnEntities(spawns, ttt_player_spawns_fallback)
 	end
@@ -345,7 +364,12 @@ function map.GetSpawnsFromClassTable(spawns)
 		local cls = spawn.class
 
 		-- first check if it is a player spawn, this is independant from the map type
-		local plyType = ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls]
+		local hook_player_spawns = {}
+
+		-- @realm shared
+		hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
+
+		local plyType = ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls]
 
 		if plyType then
 			AddData(spawnTable[SPAWN_TYPE_PLAYER], plyType, spawn)
@@ -354,7 +378,12 @@ function map.GetSpawnsFromClassTable(spawns)
 		end
 
 		-- next check if it is an ammo spawn
-		local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls]
+		local hook_ammo_spawns = {}
+
+		-- @realm shared
+		hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
+
+		local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls]
 
 		if ammoType then
 			AddData(spawnTable[SPAWN_TYPE_AMMO], ammoType, spawn)
@@ -363,7 +392,11 @@ function map.GetSpawnsFromClassTable(spawns)
 		end
 
 		-- next check if it is a weapon spawn
-		local wepType = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls]
+		local hook_weapon_spawns = {}
+		-- @realm shared
+		hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
+
+		local wepType = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls] or hook_weapon_spawns[cls]
 
 		if wepType then
 			AddData(spawnTable[SPAWN_TYPE_WEAPON], wepType, spawn)
@@ -424,14 +457,57 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 	}
 
 	if spawnType == SPAWN_TYPE_WEAPON then
-		return ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls], data
+		local hook_weapon_spawns = {}
+		-- @realm shared
+		hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
+
+		return ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls] or hook_weapon_spawns[cls], data
 	end
 
 	if spawnType == SPAWN_TYPE_AMMO then
-		return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls], data
+		local hook_ammo_spawns = {}
+
+		-- @realm shared
+		hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
+
+		return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls], data
 	end
 
 	if spawnType == SPAWN_TYPE_PLAYER then
-		return ttt_player_spawns[cls] or ttt_player_spawns_fallback[cls], data
+		local hook_player_spawns = {}
+
+		-- @realm shared
+		hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
+
+		return ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls], data
 	end
+end
+
+-- HOOKS --
+
+---
+-- This hook can be used to register additional ammo spawn entities that TTT2 should use.
+-- @param table spawns Table keyed by entity name, values are AMMO_TYPE_* constants.
+-- @hook
+-- @realm shared
+function GM:TTT2MapRegisterAmmoSpawns(spawns)
+
+end
+
+---
+-- This hook can be used to register additional weapon spawn entities that TTT2 should use.
+-- @param table spawns Table keyed by entity name, values are WEAPON_TYPE_* constants.
+-- @hook
+-- @realm shared
+function GM:TTT2MapRegisterWeaponSpawns(spawns)
+
+end
+
+---
+-- This hook can be used to register additional player spawn entities that TTT2 should use.
+-- @param table spawns Table keyed by entity name, values are SPAWN_TYPE_* constants.
+-- @hook
+-- @realm shared
+function GM:TTT2MapRegisterPlayerSpawns(spawns)
+
 end
