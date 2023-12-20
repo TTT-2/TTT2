@@ -268,7 +268,7 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 		end
 
 		sceneData.killOrientation = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and IsValid(rag.scene.dmginfo) and rag.scene.dmginfo:IsBulletDamage() then
+		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and rag.scene.dmginfo.isBulletDamage then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then

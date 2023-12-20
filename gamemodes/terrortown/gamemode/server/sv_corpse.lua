@@ -318,10 +318,30 @@ local function GetSceneDataFromPlayer(ply)
 	return data
 end
 
+local function CloneDamageInfo(dmginfo)
+	return {
+		ammoType = dmginfo:GetAmmoType(),
+		attacker = dmginfo:GetAttacker(),
+		baseDamage = dmginfo:GetBaseDamage(),
+		damage = dmginfo:GetDamage(),
+		damageBonus = dmginfo:GetDamageBonus(),
+		damageCustom = dmginfo:GetDamageCustom(),
+		damageForce = dmginfo:GetDamageForce(),
+		damagePosition = dmginfo:GetDamagePosition(),
+		damageType = dmginfo:GetDamageType(),
+		inflictor = dmginfo:GetInflictor(),
+		maxDamage = dmginfo:GetMaxDamage(),
+		reportedPosition = dmginfo:GetReportedPosition(),
+		isBulletDamage = dmginfo:IsBulletDamage(),
+		isExplosionDamage = dmginfo:IsExplosionDamage(),
+		isFallDamage = dmginfo:IsFallDamage(),
+	}
+end
+
 local function GetSceneData(victim, attacker, dmginfo)
 	local scene = {}
 
-	scene.dmginfo = dmginfo
+	scene.dmginfo = CloneDamageInfo(dmginfo)
 
 	if victim.hit_trace then
 		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
