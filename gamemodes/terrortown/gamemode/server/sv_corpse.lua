@@ -338,10 +338,10 @@ end
 
 ---
 -- Clones a CTakeDamageInfo into a table called DamageInfoData
----@param CTakeDamageInfo dmginfo
--- @return table the DamageInfoData
+-- @param CTakeDamageInfo dmginfo
+-- @return DamageInfoData The damage info data table
 -- @realm server
-local function CreateDamageInfoData(dmginfo)
+function CreateDamageInfoData(dmginfo)
 	return {
 		ammoType = dmginfo:GetAmmoType(),
 		attacker = dmginfo:GetAttacker(),
