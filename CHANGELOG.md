@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `ttt_game_text` can now properly send to "All except traitors", as described.
 - Fixed corpses not listing their kills
 - Comboboxes now show correct values for database driven entries
+- Database-Callbacks are now called with the correct valuetype
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 

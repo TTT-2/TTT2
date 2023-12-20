@@ -822,6 +822,9 @@ if CLIENT then
 			return
 		end
 
+		-- Make sure the value has the right type
+		value = ConvertValueWithKey(value, accessName, key)
+
 		SendUpdateNextTick(MESSAGE_SET_VALUE, {index = index, itemName = itemName, key = key, value = value})
 	end
 
@@ -1173,6 +1176,8 @@ if SERVER then
 			return
 		end
 
+		-- Make sure the value has the right type
+		value = ConvertValueWithKey(value, accessName, key)
 		local saveValue = value
 
 		-- If the value is just the default, then delete it from the sql database by setting it nil
