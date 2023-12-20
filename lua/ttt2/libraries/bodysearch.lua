@@ -64,7 +64,7 @@ bodysearch = {}
 -- Returns the current body inspect/confirm mode that is defined on the server.
 -- @note This is basically a wrapper for the convar `ttt2_inspect_confirm_mode`.
 -- @return number The body inspect/confirm mode
--- @realm shared 
+-- @realm shared
 function bodysearch.GetInspectConfirmMode()
 	return cvInspectConfirmMode:GetInt()
 end
@@ -268,7 +268,7 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 		end
 
 		sceneData.killOrientation = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and rag.scene.dmginfo:IsBulletDamage() then
+		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and IsValid(rag.scene.dmginfo) and rag.scene.dmginfo:IsBulletDamage() then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
@@ -996,7 +996,7 @@ if CLIENT then
 	---
 	-- Checks if the local player can report the body. Depends on the local player, the dead
 	-- player and the current body search mode.
-	-- @param Player ragOwner The dead player whose body might be reported 
+	-- @param Player ragOwner The dead player whose body might be reported
 	-- @return boolean Returns if the local player can report the body
 	-- @note: Reporting is what previously was called "call detective"
 	-- @realm client
