@@ -2073,6 +2073,10 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 -- 2023-12-14
 --L.bombvision_owner = "Owner: {owner}"
 --L.bombvision_distance = "Distance: {distance}m"
+--L.bombvision_visible_for_0 = "Visible for: you"
+--L.bombvision_visible_for_1 = "Visible for: team"
+--L.bombvision_visible_for_2 = "Visible for: everyone"
+--L.bombvision_distance_collapsed = "{distance}m"
 
 --L.c4_bombvision_time = "Detonation time: {time}"
 --L.c4_bombvision_collapsed = "{time} / {distance}m"
@@ -2081,11 +2085,10 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 --L.c4_bombvision_damage_zone = "Bomb damage zone"
 --L.c4_bombvision_kill_zone = "Bomb kill zone"
 
---L.bombvision_distance_collapsed = "{distance}m"
+--L.beacon_bombvision_player = "Tracked Player"
+--L.beacon_bombvision_player_tracked = "This player is tracked by a Beacon"
 
 -- 2023-12-18
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"

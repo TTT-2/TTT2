@@ -2070,12 +2070,13 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
--- 2023-11-18
-L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
-
 -- 2023-12-14
 --L.bombvision_owner = "Owner: {owner}"
 --L.bombvision_distance = "Distance: {distance}m"
+--L.bombvision_visible_for_0 = "Visible for: you"
+--L.bombvision_visible_for_1 = "Visible for: team"
+--L.bombvision_visible_for_2 = "Visible for: everyone"
+--L.bombvision_distance_collapsed = "{distance}m"
 
 --L.c4_bombvision_time = "Detonation time: {time}"
 --L.c4_bombvision_collapsed = "{time} / {distance}m"
@@ -2084,26 +2085,12 @@ L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 --L.c4_bombvision_damage_zone = "Bomb damage zone"
 --L.c4_bombvision_kill_zone = "Bomb kill zone"
 
---L.bombvision_distance_collapsed = "{distance}m"
+--L.beacon_bombvision_player = "Tracked Player"
+--L.beacon_bombvision_player_tracked = "This player is tracked by a Beacon"
 
 -- 2023-12-18
---L.entity_pickup_owner_only = "Only the owner can pick this up"
-
--- 2023-12-18
-L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"
-
---L.visualizer_help_pri = "Throw Beacon on the ground"
---L.visualizer_help_sec = "Stick Beacon to surface"
---L.beacon_name = "Beacon"
---L.beacon_desc = [[
---Broadcasts player locations to everyone in a sphere around this beacon.
---
---Use to keep track of locations on the map that are hard to see.]]
-
-L.visualizer_help_pri = "Feneri yere at"
-L.visualizer_help_sec = "Feneri yere yapıştır"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
@@ -2122,6 +2109,7 @@ L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
+--L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
 --L.builtin_marker = "Built-in."
