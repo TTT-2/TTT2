@@ -2089,6 +2089,15 @@ L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
+-- 2023-11-18
+L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
+
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"
