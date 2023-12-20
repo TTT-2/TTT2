@@ -27,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Disable to unscope from weapons without ironsights
 - Fixed typo preventing targetid from showing role icons correctly
 - Mitigated issue with CTakeDamageInfo becoming ephemeral outside their hook of origin
+- Fixed corpses not listing their kills
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
