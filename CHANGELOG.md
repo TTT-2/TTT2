@@ -35,6 +35,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - C4 defusal prompt now suggesting the right key
 - Disable to unscope from weapons without ironsights
 - Fixed typo preventing targetid from showing role icons correctly
+- Mitigated issue with CTakeDamageInfo becoming ephemeral outside their hook of origin
 - `ttt_game_text` can now properly send to "All except traitors", as described.
 - Fixed corpses not listing their kills
 - Comboboxes now show correct values for database driven entries
