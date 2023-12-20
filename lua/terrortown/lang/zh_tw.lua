@@ -2090,7 +2090,7 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
---L.body_confirm_one = "{finder} confirmed the death of {victim}."
+L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
 
 -- 2023-12-19
