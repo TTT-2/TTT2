@@ -4,16 +4,21 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
-
 ### Added
 
 - Added some missing vanilla TTT entities into TTT2
+
+### Changed
 
 ### Fixed
 
 - Fixed targetID hints for old addons now correctly working for all entities
 - Fixed visualizer having pickup hint even though player is unable to pick up
+
+## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
+
+### Added
+
 - Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
   - Can only be bought by policing roles
   - Creates a wallhack in a sphere around it, which is visible to everyone
