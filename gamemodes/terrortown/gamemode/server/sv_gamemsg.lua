@@ -142,7 +142,7 @@ function GetTeamFilter(team, aliveOnly, ignoreUnknownTeam)
 		return team ~= TEAM_NONE
 			and not TEAMS[team].alone
 			and p:GetTeam() == team
-			and not (not ignoreUnknownTeam and p:GetSubRoleData().unknownTeam)
+			and (ignoreUnknownTeam or not p:GetSubRoleData().unknownTeam)
 			and (not aliveOnly or p:IsTerror())
 	end)
 end
