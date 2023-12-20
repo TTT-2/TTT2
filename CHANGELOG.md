@@ -9,6 +9,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
   - Can only be bought by policing roles
   - Creates a wallhack in a sphere around it, which is visible to everyone
+- Added recognizable badge for `builtin` equipment and roles (by @EntranceJew)
+  - Buy Equipment menu has `builtin` indicators, replacing the `(C)` custom marker decorating a majority of equipment
+  - `F1 > Edit Equipment` now has `builtin` indicators on equipment
+  - Added tooltip to `F1 > Edit Equipment` menu with the equipment's class name.
+  - `F1 > Role Settings` now has `builtin` indicators for roles
+  - `F1 > Edit Shops` now has `builtin` indicators for roles
 
 ### Changed
 
@@ -40,7 +46,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
 - Added new hooks: `TTT2MapRegisterWeaponSpawns`, `TTT2MapRegisterAmmoSpawns`, `TTT2MapRegisterPlayerSpawns` to allow converting a wider variety of source map ports (by @EntranceJew)
-- Added tooltip to `Edit Equipment` menu with the equipment's class name and icon for equipment with `builtin` set (by @EntranceJew)
 
 ### Fixed
 
