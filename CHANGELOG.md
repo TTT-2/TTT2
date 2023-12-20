@@ -15,6 +15,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated the Turkish localization file (by @NovaDiablox)
 - Radio can now only be picked up by placer
 - Radar now clears existing waypoints when removed or on changing role (by @EntranceJew)
+- Comboboxes can now handle numbers and strings as values
+  - Defaults work now with numbers
+  - OnChange-Callback is called with the correct type for ConVars
 
 ### Fixed
 
@@ -26,7 +29,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - C4 defusal prompt now suggesting the right key
 - Disable to unscope from weapons without ironsights
 - Fixed typo preventing targetid from showing role icons correctly
+- `ttt_game_text` can now properly send to "All except traitors", as described.
 - Fixed corpses not listing their kills
+- Comboboxes now show correct values for database driven entries
+- Database-Callbacks are now called with the correct valuetype
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
