@@ -2092,3 +2092,9 @@ L.entity_pickup_owner_only = "Only the owner can pick this up"
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmed the death of {victim}."
 L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+L.builtin_marker = "Built-in."
+L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+L.header_equipment_info = "Equipment information"
