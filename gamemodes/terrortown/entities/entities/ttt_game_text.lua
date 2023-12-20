@@ -66,7 +66,10 @@ function ENT:AcceptInput(name, activator)
 	elseif inputReceiver == RECEIVE_TRAITOR then
 		messageReceiver = GetTeamChatFilter(TEAM_TRAITOR)
 	elseif inputReceiver == RECEIVE_INNOCENT then
-		messageReceiver = GetTeamChatFilter(TEAM_INNOCENT)
+		messageReceiver = GetPlayerFilter(function(p)
+			local plyRoleData = ply:GetSubRoleData()
+			return p:GetTeam() ~= TEAM_TRAITOR and not plyRoleData.disabledTeamChatRecv
+		end)
 	elseif inputReceiver == RECEIVE_ACTIVATOR then
 		if not IsValid(activator) or not activator:IsPlayer() then
 			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
