@@ -558,13 +558,13 @@ if CLIENT then
 			}
 		end,
 		kill_list = function(data)
-			if not data.kills then return end
+			if not data.killEntityIDList then return end
 
-			local num = table.Count(data.kills)
+			local num = table.Count(data.killEntityIDList)
 
 			if num == 1 then
-				local vic = Entity(data.kills[1])
-				local disconnected = data.kills[1] == -1
+				local vic = Entity(data.killEntityIDList[1])
+				local disconnected = data.killEntityIDList[1] == -1
 
 				if disconnected or IsValid(vic) and vic:IsPlayer() then
 					return {
@@ -581,7 +581,7 @@ if CLIENT then
 			elseif num > 1 then
 				local nicks = {}
 
-				for k, idx in pairs(data.kills) do
+				for k, idx in pairs(data.killEntityIDList) do
 					local vic = Entity(idx)
 					local disconnected = idx == -1
 
