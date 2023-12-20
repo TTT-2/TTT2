@@ -322,10 +322,9 @@ function PANEL:MakeComboBox(data)
 			local choice = data.choices[i]
 
 			if istable(choice) then
-				right:AddChoice(choice.title, tostring(choice.value), choice.select, choice.icon, choice.data)
+				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
 			else
 				-- Support old simple structure
-				choice = tostring(choice)
 				right:AddChoice(choice, choice)
 			end
 		end
