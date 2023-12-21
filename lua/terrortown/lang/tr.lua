@@ -2097,7 +2097,7 @@ L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı.
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 
 -- 2023-12-19
---L.builtin_marker = "Built-in."
---L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
---L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
---L.header_equipment_info = "Equipment information"
+L.builtin_marker = "Bütünleşik."
+L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
+L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
+L.header_equipment_info = "Ekipman bilgisi"
