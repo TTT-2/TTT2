@@ -342,11 +342,14 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local colorBackground = colors.background
 	local colorBar = colors.background
 	local colorText = utilGetChangedColor(colors.default, 75)
+	local colorIcon = utilGetChangedColor(COLOR_WHITE, 32)
 	local shift = 0
 	local pad = mathRound(0.3 * h)
 	local hasIcon = panel:HasIcon()
 	local isIconFullSize = panel:IsIconFullSize()
 	local padIcon = isIconFullSize and 0 or pad
+	local iconBadge = panel:GetIconBadge()
+	local iconBadgeSize = panel:GetIconBadgeSize()
 	local iconAlpha = isIconFullSize and 255 or colorText.a
 	local sizeIcon = h - 2 * padIcon
 
@@ -354,22 +357,28 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 		colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
 		colorBar = colors.accentActive
 		colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
+		colorIcon = utilGetActiveColor(utilGetChangedColor(COLOR_WHITE, 32))
 		shift = 1
 	elseif panel.Hovered then
 		colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
 		colorBar = colors.accentHover
 		colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
+		colorIcon = utilGetHoverColor(utilGetChangedColor(COLOR_WHITE, 48))
 	elseif panel:IsActive() then
 		colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
 		colorBar = colors.accentHover
 		colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
+		colorIcon = utilGetHoverColor(utilGetChangedColor(COLOR_WHITE, 48))
 	end
 
 	drawBox(0, 0, sizes.border, h, colorBar)
 	drawBox(sizes.border, 0, w - sizes.border, h, colorBackground)
 
 	if hasIcon then
-		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorText)
+		drawFilteredShadowedTexture(pad + sizes.border, padIcon + shift, sizeIcon, sizeIcon, panel:GetIcon(), iconAlpha, colorIcon)
+		if iconBadge then
+			drawFilteredShadowedTexture(pad + sizes.border + sizeIcon - iconBadgeSize, padIcon + shift + sizeIcon - iconBadgeSize, iconBadgeSize, iconBadgeSize, iconBadge, iconAlpha, colors.accent)
+		end
 	end
 
 	drawSimpleText(

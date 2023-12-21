@@ -1130,7 +1130,7 @@ hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
 
 	local wep = ply:GetActiveWeapon()
 
-	if not IsValid(wep) or not wep:GetIronsights() then return end
+	if not IsValid(wep) or (wep.GetIronsights and not wep:GetIronsights()) then return end
 
 	wep:SetIronsights(false)
 	wep:SetZoom(false)

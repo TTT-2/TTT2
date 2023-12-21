@@ -10,6 +10,7 @@ ITEM.EquipMenuData = {
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
 ITEM.material = "vgui/ttt/icon_speedrun"
+ITEM.builtin = true
 
 hook.Add("TTTPlayerSpeedModifier", "TTT2SpeedRun", function(ply, _, _, speedMultiplierModifier)
 	if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_speedrun") then return end

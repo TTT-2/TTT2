@@ -10,6 +10,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	local accessName = ShopEditor.accessName
 	local itemName = equipment.id
 
+	if equipment.builtin then
+		local form = vgui.CreateTTT2Form(parent, "header_equipment_info")
+		form:MakeHelp({
+			label = "equipmenteditor_desc_builtin"
+		})
+	end
+
 	if not self.isItem then
 		local form = vgui.CreateTTT2Form(parent, "header_equipment_weapon_spawn_setup")
 

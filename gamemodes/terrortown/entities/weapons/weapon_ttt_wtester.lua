@@ -86,6 +86,7 @@ SWEP.Secondary.Delay = 0
 SWEP.Kind = WEAPON_ROLE
 SWEP.CanBuy = nil -- no longer a buyable thing
 SWEP.WeaponID = AMMO_WTESTER
+SWEP.builtin = true
 SWEP.AutoSpawnable = false
 SWEP.NoSights = true
 

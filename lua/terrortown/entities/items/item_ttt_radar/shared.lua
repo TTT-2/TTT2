@@ -11,6 +11,7 @@ ITEM.EquipMenuData = {
 ITEM.material = "vgui/ttt/icon_radar"
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 ITEM.oldId = EQUIP_RADAR or 2
+ITEM.builtin = true
 
 ---
 -- @ignore
@@ -28,4 +29,7 @@ function ITEM:Reset(buyer)
 	end
 
 	buyer.radar_charge = 0
+	if CLIENT then
+		RADAR:Clear()
+	end
 end

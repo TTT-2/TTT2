@@ -15,6 +15,8 @@ CLGAMEMODEMENU.priority = 48
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil
 
+local builtinIcon = Material("vgui/ttt/vskin/markers/builtin")
+
 function CLGAMEMODEMENU:IsAdminMenu()
 	return true
 end
@@ -36,6 +38,8 @@ function CLGAMEMODEMENU:InitializeVirtualMenus()
 		virtualSubmenus[counter].title = roleData.name
 		virtualSubmenus[counter].icon = roleData.iconMaterial
 		virtualSubmenus[counter].roleData = roleData
+		virtualSubmenus[counter].iconBadge = roleData.builtin and builtinIcon
+		virtualSubmenus[counter].iconBadgeSize = 8
 		virtualSubmenus[counter].roles = self.roles
 		virtualSubmenus[counter].basemenu = self
 	end
