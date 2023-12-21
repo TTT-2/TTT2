@@ -17,6 +17,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added tooltip to `F1 > Edit Equipment` menu with the equipment's class name.
   - `F1 > Role Settings` now has `builtin` indicators for roles
   - `F1 > Edit Shops` now has `builtin` indicators for roles
+- Added debug.print(message)
+  - This puts quotation marks around print statements
+  - Can handle single values or a sequential table to be printed
 
 ### Changed
 
