@@ -60,8 +60,6 @@ L.body_found_traitor = "他是一位叛徒！"
 L.body_found_det = "他是一位探長。"
 L.body_found_inno = "他是一位無辜者。"
 
-L.body_confirm = "{finder} 確認了 {victim} 的死。"
-
 L.body_call = "{player} 呼喚探長前來檢查 {victim} 的屍體！"
 L.body_call_error = "你必須先確定該玩家的死，才能呼叫探長！"
 
@@ -897,7 +895,7 @@ L.drop_ammo_prevented = "有什麽東西阻擋你丟出子彈。"
 -- 2019-10-28
 L.target_c4 = "按 [{usekey}] 打開C4菜單"
 L.target_c4_armed = "按 [{usekey}] 拆除C4"
-L.target_c4_armed_defuser = "按 [{usekey}] 使用拆彈器"
+L.target_c4_armed_defuser = "按 [{primaryfire}] 使用拆彈器"
 L.target_c4_not_disarmable = "你不能拆除存活隊友的C4"
 L.c4_short_desc = "可以炸得很歡"
 
@@ -914,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 沒有可丟棄的武�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "這個屍體太遠了。"
 
-L.radio_pickup_wrong_team = "你不能撿起其他隊伍的收音機"
 L.radio_short_desc = "武器聲音，悅耳動聽"
 
 L.hstation_subtitle = "按 [{usekey}] 恢復生命"
@@ -1965,7 +1962,7 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2073,3 +2070,31 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-14
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"

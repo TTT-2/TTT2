@@ -412,14 +412,15 @@ local function CreateEquipmentList(t)
 			if item.iconMaterial then
 				ic = vgui.Create("LayeredIcon", dlist)
 
-				if item.custom and showCustomVar:GetBool() then
+				if item.builtin and showCustomVar:GetBool() then
 					-- Custom marker icon
 					local marker = vgui.Create("DImage")
-					marker:SetImage("vgui/ttt/custom_marker")
+					marker:SetImage("vgui/ttt/vskin/markers/builtin")
+					marker:SetImageColor(col)
 
 					marker.PerformLayout = PerformMarkerLayout
 
-					marker:SetTooltip(GetTranslation("equip_custom"))
+					marker:SetTooltip(GetTranslation("builtin_marker"))
 
 					ic:AddLayer(marker)
 					ic:EnableMousePassthrough(marker)

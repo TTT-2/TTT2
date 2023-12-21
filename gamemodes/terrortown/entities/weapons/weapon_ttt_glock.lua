@@ -34,6 +34,7 @@ SWEP.AmmoEnt = "item_ammo_pistol_ttt"
 
 SWEP.Kind = WEAPON_PISTOL
 SWEP.WeaponID = AMMO_GLOCK
+SWEP.builtin = true
 SWEP.spawnType = WEAPON_TYPE_PISTOL
 
 SWEP.HeadshotMultiplier = 1.75

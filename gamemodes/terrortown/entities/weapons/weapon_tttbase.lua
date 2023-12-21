@@ -379,7 +379,7 @@ if CLIENT then
 			local binding = line.binding -- can be an icon or key
 			local description = line.text
 
-			local wBinding, hBinding = 0
+			local wBinding, hBinding = 0, 0
 			local isIcon = false
 
 			if isstring(binding) then
@@ -1130,7 +1130,7 @@ hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
 
 	local wep = ply:GetActiveWeapon()
 
-	if not IsValid(wep) or not wep:GetIronsights() then return end
+	if not IsValid(wep) or (wep.GetIronsights and not wep:GetIronsights()) then return end
 
 	wep:SetIronsights(false)
 	wep:SetZoom(false)
