@@ -184,15 +184,15 @@ addonChecker.curatedList = {
 	},
 	["1729451064"] = { -- TTT - More Melee Weapons by Solrob
 		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
-		type = ADDON_INCOMPATIBLE,
+		type = ADDON_INCOMPATIBLE
 	},
 	["2912756384"] = { -- TTT ProofOfConcept InnocentTasks by Emzatin.
 		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
-		type = ADDON_INCOMPATIBLE,
+		type = ADDON_INCOMPATIBLE
 	},
 	["1961869471"] = { -- [TTT/2] Crowbar to throwable Crowbar by GengarDC
 		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
-		type = ADDON_INCOMPATIBLE,
+		type = ADDON_INCOMPATIBLE
 	},
 	["278185787"] = { -- Death Note by Blue-Pentagram
 		alternative = "3118796974",
@@ -212,12 +212,12 @@ addonChecker.curatedList = {
 	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
 		alternative = "2150924507",
 		reason = "Addon is broken and doesn't do anything.",
-		type = ADDON_OUTDATED,
+		type = ADDON_OUTDATED
 	},
 	["1125892999"] = { -- TTT Coffee-Cup Hunt by Niandra!
 		alternative = "2150924507",
 		reason = "Addon is broken and doesn't do anything.",
-		type = ADDON_OUTDATED,
+		type = ADDON_OUTDATED
 	},
 	["654341247"] = { -- Clairvoyancy by Liberty
 		alternative = "1637001449",
@@ -410,22 +410,22 @@ addonChecker.curatedList = {
 	["2249861635"] = { -- Handcuffs by Malivil
 		alternative = "2401563697",
 		reason = "Doesn't use the targetID system of TTT2",
-		type = ADDON_OUTDATED,
+		type = ADDON_OUTDATED
 	},
 	["2124909686"] = { -- Handcuffs by DJ Bat
 		alternative = "2401563697",
 		reason = "Doesn't use the targetID system of TTT2",
-		type = ADDON_OUTDATED,
+		type = ADDON_OUTDATED
 	},
 	["1667876426"] = { -- Handcuffs by Wokki
 		alternative = "2401563697",
 		reason = "Doesn't use the targetID system of TTT2",
-		type = ADDON_OUTDATED,
+		type = ADDON_OUTDATED
 	},
 	["1190286764"] = { -- Handcuffs 2 by porter
 		alternative = "2401563697",
 		reason = "Doesn't use the targetID system of TTT2",
-		type = ADDON_OUTDATED,
+		type = ADDON_OUTDATED
 	},
 	["310403937"] = { -- Prop Disguiser by Exho
 		alternative = "2127939503",
