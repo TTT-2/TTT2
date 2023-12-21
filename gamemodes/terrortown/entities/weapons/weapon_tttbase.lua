@@ -710,11 +710,11 @@ end
 -- @realm shared
 function SWEP:GetPrimaryConeFactor()
 	if self:GetIronsights() then
-		-- 15% accuracy bonus when sighting
-		return 0.85
-	elseif IsValid(self:GetOwner()) and self:GetOwner():IsSprinting() then
+		-- 20% accuracy bonus when sighting
+		return 0.8
+	elseif IsValid(self:GetOwner()) and SPRINT:IsSprinting(self:GetOwner()) then
 		-- 100% accuracy malus when sprinting
-		return  2
+		return 2
 	else
 		return 1
 	end
