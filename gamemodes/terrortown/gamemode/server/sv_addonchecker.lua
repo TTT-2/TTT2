@@ -183,15 +183,15 @@ addonChecker.curatedList = {
 		type = ADDON_INCOMPATIBLE
 	},
 	["1729451064"] = { -- TTT - More Melee Weapons by Solrob
-		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["2912756384"] = { -- TTT ProofOfConcept InnocentTasks by Emzatin.
-		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1961869471"] = { -- [TTT/2] Crowbar to throwable Crowbar by GengarDC
-		reason = "Overwrites stock TTT2 crowbar which chauses problems with doors and ttt_map_settings entity.",
+		reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["278185787"] = { -- Death Note by Blue-Pentagram
