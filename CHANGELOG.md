@@ -10,6 +10,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - This puts quotation marks around print statements
   - Can handle single values or a sequential table to be printed
 
+### Changed
+
+### Fixed
+
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
 ### Added
