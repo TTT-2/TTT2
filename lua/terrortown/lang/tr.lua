@@ -4,6 +4,7 @@ local L = LANG.CreateLanguage("tr")
 
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name
+
 L.__alias = "türkçe"
 
 L.lang_name = "Türkçe (Turkish)"
@@ -27,7 +28,7 @@ L.round_voting = "Oylama devam ediyor, yeni raunt {num} saniye geciktirilecek...
 L.round_begintime = "Yeni raunt {num} saniyede başlayacak. Kendini hazırla."
 L.round_selected = "Hainler seçildi."
 L.round_started = "Raunt başladı!"
-L.round_restart = "Raunt bir admin tarafından yeniden başlatıldı."
+L.round_restart = "Raunt bir yönetici tarafından yeniden başlatıldı."
 
 L.round_traitors_one = "Hey hain, yalnızsın."
 L.round_traitors_more = "Hey hain, bunlar senin müttefiklerin {names}"
@@ -58,8 +59,6 @@ L.body_found_team = "{finder}, {victim} adlı kişinin cesedini buldu. {role} ({
 L.body_found_traitor = "Onlar bir Haindi!"
 L.body_found_det = "Onlar bir Dedektifti."
 L.body_found_inno = "Onlar bir Masumdu."
-
-L.body_confirm = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 
 L.body_call = "{player}, {victim} adlı kurbanın cesedine Dedektif çağırdı!"
 L.body_call_error = "Bir Dedektif çağırmadan önce bu oyuncunun ölümünü onaylamalısın!"
@@ -135,7 +134,7 @@ L.radio_help = "Radyonuzun bu sesi çalmasını sağlamak için bir düğmeye t�
 L.radio_notplaced = "Sesi çalmak için Radyoyu yerleştirmelisiniz."
 
 -- Radio soundboard buttons
-L.radio_button_scream = "Çığlık at"
+L.radio_button_scream = "Çığlık"
 L.radio_button_expl = "Patlama"
 L.radio_button_pistol = "Tabanca atışları"
 L.radio_button_m16 = "M16 atışları"
@@ -145,7 +144,7 @@ L.radio_button_shotgun = "Pompalı tüfek atışları"
 L.radio_button_rifle = "Tüfek atışı"
 L.radio_button_huge = "H.U.G.E. patlaması"
 L.radio_button_c4 = "C4 bip sesi"
-L.radio_button_burn = "Yanıyor"
+L.radio_button_burn = "Yanma sesi"
 L.radio_button_steps = "Ayak sesleri"
 
 -- Intro screen shown after joining
@@ -896,7 +895,7 @@ L.drop_ammo_prevented = "Bir şey cephanenizi düşürmenizi engelliyor."
 -- 2019-10-28
 L.target_c4 = "C4 menüsünü açmak için [{usekey}] tuşuna basın"
 L.target_c4_armed = "C4'ü devre dışı bırakmak için [{usekey}] tuşuna basın"
-L.target_c4_armed_defuser = "İmha kitini kullanmak için [{usekey}] tuşuna basın"
+L.target_c4_armed_defuser = "İmha kitini kullanmak için [{primaryfire}] tuşuna basın"
 L.target_c4_not_disarmable = "Yaşayan bir takım arkadaşının C4'ünü devre dışı bırakamazsın"
 L.c4_short_desc = "Çok patlayıcı bir şey"
 
@@ -913,7 +912,6 @@ L.target_switch_drop_weapon_info_noslot = "{slot} yuvasında düşürülebilir s
 L.corpse_searched_by_detective = "Bu ceset bir dedektif tarafından arandı"
 L.corpse_too_far_away = "Ceset çok uzakta."
 
-L.radio_pickup_wrong_team = "Radyoyu başka bir takımdan alamazsın."
 L.radio_short_desc = "Silah sesleri benim için müziktir"
 
 L.hstation_subtitle = "Sağlık almak için [{usekey}] tuşuna basın."
@@ -1024,7 +1022,7 @@ L.help_damage_indicator_desc = "Hasar göstergesi, oyuncu hasar gördüğünde g
 L.help_shop_key_desc = "Bir raundun sonunda hazırlanırken skor menüsü yerine mağaza tuşuna basarak mağazayı açın"
 
 L.label_menu_menu = "MENÜ"
-L.label_menu_admin_spacer = "Admin Alanı (normal kullanıcılara gösterilmez)"
+L.label_menu_admin_spacer = "Yönetici Alanı (normal kullanıcılara gösterilmez)"
 L.label_language_set = "Dil seç"
 L.label_global_color_enable = "Genel rengi etkinleştir"
 L.label_global_color = "Genel renk"
@@ -1046,7 +1044,7 @@ L.label_crosshair_enable = "Nişangahı etkinleştir"
 L.label_crosshair_gap_enable = "Özel nişangah boşluğunu etkinleştir"
 L.label_crosshair_gap = "Özel nişangah aralığı"
 L.label_crosshair_opacity = "Nişangah opaklığı"
-L.label_crosshair_ironsight_opacity = "Demir nişangah opaklığı"
+L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
@@ -1054,7 +1052,7 @@ L.label_crosshair_static_enable = "Sabit nişangahı etkinleştir"
 L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
 L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
 L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
-L.label_crosshair_ironsight_low_enabled = "Demir nişangah kullanırken silahı indirin"
+L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
 L.label_damage_indicator_duration = "Vurulduktan sonra solma süresi (saniye olarak)"
@@ -1146,7 +1144,7 @@ L.hud_revival_time = "{time}sn"
 L.door_destructible = "Bu kapı yok edilebilir ({health}SP)."
 
 -- 2020-05-28
---L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
+L.corpse_hint_inspect_limited = "Arama yapmak için [{usekey}] tuşuna basın. Yalnızca arama kullanıcı arayüzünü görüntülemek için [{walkkey} + {usekey}]"
 
 -- 2020-06-04
 L.label_bind_disguiser = "Kılık Değiştiriciyi aç/kapat"
@@ -1220,10 +1218,10 @@ L.title_event_creditfound = "Ekipman kredileri bulundu"
 L.title_event_finish = "Raunt sona erdi"
 L.title_event_game = "Yeni bir raunt başladı"
 L.title_event_kill = "Bir oyuncu öldürüldü"
-L.title_event_respawn = "Bir oyuncu yeniden doğdu"
+L.title_event_respawn = "Bir oyuncu yeniden canlandı"
 L.title_event_rolechange = "Bir oyuncu rolünü veya takımını değiştirdi"
 L.title_event_selected = "Roller dağıtıldı"
-L.title_event_spawn = "Bir oyuncu doğdu"
+L.title_event_spawn = "Bir oyuncu canlandı"
 
 L.desc_event_bodyfound = "{finder} ({firole} {fiteam}), {found} ({forole} {foteam}) adlı kişinin cesedini buldu. Cesedin {credits} ekipman kredisi var."
 L.desc_event_bodyfound_headshot = "Kurban kafadan vurularak öldürüldü."
@@ -1237,7 +1235,7 @@ L.desc_event_game = "Yeni bir raunt başladı."
 L.desc_event_respawn = "{player} yeniden canlandı."
 L.desc_event_rolechange = "{player}, {orole} ({oteam}) olan rol takımını {nrole} ({nteam}) olarak değiştirdi."
 L.desc_event_selected = "Takımlar ve roller tüm {amount} oyuncu için dağıtıldı."
-L.desc_event_spawn = "{player} doğdu."
+L.desc_event_spawn = "{player} canlandı."
 
 -- Name of a trap that killed us that has not been named by the mapper
 L.trap_something = "bir şey"
@@ -1361,88 +1359,88 @@ L.searchbar_default_placeholder = "Listede ara..."
 L.spec_about_to_revive = "İzleme, canlanma sırasında sınırlıdır."
 
 -- 2021-09-01
-L.spawneditor_name = "Canlanma Noktası Düzenleyici Aracı"
-L.spawneditor_desc = "Dünyaya silah, cephane ve oyuncu canlanma noktası yerleştirmek için kullanılır. Yalnızca süper admin tarafından kullanılabilir."
+L.spawneditor_name = "Oluşum Düzenleyici Aracı"
+L.spawneditor_desc = "Dünyaya silah, cephane ve oyuncu canlanma noktası yerleştirmek için kullanılır. Yalnızca süper yönetici tarafından kullanılabilir."
 
-L.spawneditor_place = "Canlanma noktasını yerleştir"
-L.spawneditor_remove = "Canlanma noktasını kaldır"
-L.spawneditor_change = "Canlanma noktası türünü değiştirin (geri almak için [SHIFT] tuşunu basılı tutun)"
+L.spawneditor_place = "Oluşum noktasını yerleştir"
+L.spawneditor_remove = "Oluşum noktasını kaldır"
+L.spawneditor_change = "Oluşum noktası türünü değiştirin (geri almak için [SHIFT] tuşunu basılı tutun)"
 L.spawneditor_ammo_edit = "Otomatik ortaya çıkan cephaneyi düzenlemek için silahın ortaya çıkmasını bekle"
 
-L.spawn_weapon_random = "Rastgele Silah Çıkış Noktası"
-L.spawn_weapon_melee = "Yakın Dövüş Silahı Çıkış Noktası"
-L.spawn_weapon_nade = "Bomba Çıkış Noktası"
-L.spawn_weapon_shotgun = "Pompalı Çıkış Noktası"
-L.spawn_weapon_heavy = "Ağır Silah Çıkış Noktası"
-L.spawn_weapon_sniper = "Keskin Nişancı Silahı Çıkış Noktası"
-L.spawn_weapon_pistol = "Tabanca Silahı Çıkış Noktası"
-L.spawn_weapon_special = "Özel Silah Çıkış Noktası"
-L.spawn_ammo_random = "Rastgele Cephane Çıkış Noktası"
-L.spawn_ammo_deagle = "Deagle Cephanesi Çıkış Noktası"
-L.spawn_ammo_pistol = "Tabanca Cephanesi Çıkış Noktası"
-L.spawn_ammo_mac10 = "Mac10 Cephanesi Çıkış Noktası"
-L.spawn_ammo_rifle = "Tüfek Cephanesi Çıkış Noktası"
-L.spawn_ammo_shotgun = "Pompalı Cephanesi Çıkış Noktası"
+L.spawn_weapon_random = "Rastgele Silah Oluşum Noktası"
+L.spawn_weapon_melee = "Yakın Dövüş Silahı Oluşum Noktası"
+L.spawn_weapon_nade = "Bomba Oluşum Noktası"
+L.spawn_weapon_shotgun = "Pompalı Oluşum Noktası"
+L.spawn_weapon_heavy = "Ağır Silah Oluşum Noktası"
+L.spawn_weapon_sniper = "Keskin Nişancı Silahı Oluşum Noktası"
+L.spawn_weapon_pistol = "Tabanca Silahı Oluşum Noktası"
+L.spawn_weapon_special = "Özel Silah Oluşum Noktası"
+L.spawn_ammo_random = "Rastgele Cephane Oluşum Noktası"
+L.spawn_ammo_deagle = "Deagle Cephanesi Oluşum Noktası"
+L.spawn_ammo_pistol = "Tabanca Cephanesi Oluşum Noktası"
+L.spawn_ammo_mac10 = "Mac10 Cephanesi Oluşum Noktası"
+L.spawn_ammo_rifle = "Tüfek Cephanesi Oluşum Noktası"
+L.spawn_ammo_shotgun = "Pompalı Cephanesi Oluşum Noktası"
 L.spawn_player_random = "Rastgele Oyuncu Canlanma Noktası"
 
 L.spawn_weapon_ammo = "(Cephane {ammo})"
 
-L.spawn_weapon_edit_ammo = "Bu silahın çıkış noktasında cephaneyi artırmak veya azaltmak için [{walkkey}] tuşunu basılı tutun ve [{primaryfire} veya {secondaryfire}] tuşuna basın"
+L.spawn_weapon_edit_ammo = "Bu silahın oluşum noktasında cephaneyi artırmak veya azaltmak için [{walkkey}] tuşunu basılı tutun ve [{primaryfire} veya {secondaryfire}] tuşuna basın"
 
-L.spawn_type_weapon = "Bu bir silah çıkış noktasıdır"
-L.spawn_type_ammo = "Bu bir cephane çıkış noktasıdır"
+L.spawn_type_weapon = "Bu bir silah oluşum noktasıdır"
+L.spawn_type_ammo = "Bu bir cephane oluşum noktasıdır"
 L.spawn_type_player = "Bu bir oyuncu canlanma noktasıdır"
 
-L.spawn_remove = "Bu çıkış noktasını kaldırmak için [{secondaryfire}] tuşuna basın"
+L.spawn_remove = "Bu oluşum noktasını kaldırmak için [{secondaryfire}] tuşuna basın"
 
-L.submenu_administration_entspawn_title = "Çıkış Noktası Düzenleyici"
-L.header_entspawn_settings = "Çıkış Noktası Düzenleyici Ayarları"
-L.button_start_entspawn_edit = "Çıkış Noktası Düzenlemesini Başlat"
-L.button_delete_all_spawns = "Tüm Çıkış Noktalarını Sil"
+L.submenu_administration_entspawn_title = "Oluşum Noktası Düzenleyici"
+L.header_entspawn_settings = "Oluşum Noktası Düzenleyici Ayarları"
+L.button_start_entspawn_edit = "Oluşum Noktası Düzenlemesini Başlat"
+L.button_delete_all_spawns = "Tüm Oluşum Noktalarını Sil"
 
-L.label_dynamic_spawns_enable = "Bu harita için dinamik çıkış noktalarını etkinleştir"
-L.label_dynamic_spawns_global_enable = "Tüm haritalar için dinamik çıkış noktalarını etkinleştir"
+L.label_dynamic_spawns_enable = "Bu harita için dinamik oluşum noktalarını etkinleştir"
+L.label_dynamic_spawns_global_enable = "Tüm haritalar için dinamik oluşum noktalarını etkinleştir"
 
-L.header_equipment_weapon_spawn_setup = "Silah Çıkış Ayarları"
+L.header_equipment_weapon_spawn_setup = "Silah Oluşum Ayarları"
 
 L.help_spawn_editor_info = [[
-Çıkış noktası düzenleyicisi, dünyadaki çıkış noktalarını yerleştirmek, kaldırmak ve düzenlemek için kullanılır. Bu çıkış noktaları silahlar, cephaneler ve oyuncular içindir.
+Oluşum noktası düzenleyicisi, dünyadaki oluşum noktalarını yerleştirmek, kaldırmak ve düzenlemek için kullanılır. Bu oluşum noktaları silahlar, cephaneler ve oyuncular içindir.
 
-Bu çıkış noktaları, 'datatttweaponspawnscripts' içinde bulunan dosyalara kaydedilir. Donanım sıfırlaması için silinebilirler. İlk çıkış noktası dosyaları, haritada ve orijinal TTT silah çıkış noktası komut dosyalarında bulunan çıkış noktalarından oluşturulur. Sıfırlama düğmesine basıldığında her zaman başlangıç durumuna geri dönülür.
+Bu oluşum noktaları, 'datatttweaponspawnscripts' içinde bulunan dosyalara kaydedilir. Donanım sıfırlaması için silinebilirler. İlk oluşum noktası dosyaları, haritada ve orijinal TTT silah oluşum noktası komut dosyalarında bulunan oluşum noktalarından oluşturulur. Sıfırlama düğmesine basıldığında her zaman başlangıç durumuna geri dönülür.
 
-Bu çıkış noktası sisteminin dinamik çıkışları kullandığı unutulmamalıdır. Bu, silahlar için en ilginç olanıdır, çünkü artık belirli bir silahı değil, bir tür silahı tanımlar. Örneğin, bir TTT pompalı çıkış noktası yerine, artık pompalı olarak tanımlanan herhangi bir silahın çıkabileceği genel bir pompalı çıkış noktası var. Her silah için çıkış türü 'Ekipmanı Düzenle' menüsünden ayarlanabilir. Bu, herhangi bir silahın haritada ortaya çıkmasını veya belirli varsayılan silahları devre dışı bırakmasını mümkün kılar.
+Bu oluşum noktası sisteminin dinamik oluşumları kullandığı unutulmamalıdır. Bu, silahlar için en ilginç olanıdır, çünkü artık belirli bir silahı değil, bir tür silahı tanımlar. Örneğin, bir TTT pompalı oluşum noktası yerine, artık pompalı olarak tanımlanan herhangi bir silahın çıkabileceği genel bir pompalı oluşum noktası var. Her silah için oluşum türü 'Ekipmanı Düzenle' menüsünden ayarlanabilir. Bu, herhangi bir silahın haritada ortaya çıkmasını veya belirli varsayılan silahları devre dışı bırakmasını mümkün kılar.
 
 Birçok değişikliğin ancak yeni bir raunt başladıktan sonra yürürlüğe gireceğini unutmayın.]]
-L.help_spawn_editor_enable = "Bazı haritalarda, haritada bulunan orijinal çıkış noktalarının dinamik sistemle değiştirilmeden kullanılması önerilebilir. Aşağıdaki bu seçeneğin değiştirilmesi yalnızca şu anda etkin olan haritayı etkiler, bu nedenle dinamik sistem diğer tüm haritalar için kullanılmaya devam edecektir."
+L.help_spawn_editor_enable = "Bazı haritalarda, haritada bulunan orijinal oluşum noktalarının dinamik sistemle değiştirilmeden kullanılması önerilebilir. Aşağıdaki bu seçeneğin değiştirilmesi yalnızca şu anda etkin olan haritayı etkiler, bu nedenle dinamik sistem diğer tüm haritalar için kullanılmaya devam edecektir."
 L.help_spawn_editor_hint = "İpucu ÇN düzenleyicisinden çıkmak için oyun modu menüsünü yeniden açın."
 L.help_spawn_editor_spawn_amount = [[
-Şu anda bu haritada {weapon} silah çıkışı, {ammo} cephane çıkışı ve {player} oyuncu canlanma noktaları var.
+Şu anda bu haritada {weapon} silah oluşumu, {ammo} cephane oluşumu ve {player} oyuncu canlanma noktaları var.
 Bu miktarı değiştirmek için 'ÇN düzenlemesini başlat'a tıklayın.
 
-{weaponrandom}x Rastgele Silah Çıkışı
-{weaponmelee}x Yakın Dövüş Silahı Çıkışı
-{weaponnade}x El Bombası Çıkışı
-{weaponshotgun}x Pompalı Silahı Çıkışı
-{weaponheavy}x Ağır Silah Çıkışı
-{weaponsniper}x Keskin Nişancı Silahı Çıkışı
-{weaponpistol}x Tabanca Silahı Çıkışı
-{weaponspecial}x Özel Silah Çıkışı
+{weaponrandom}x Rastgele Silah Oluşumu
+{weaponmelee}x Yakın Dövüş Silahı Oluşumu
+{weaponnade}x El Bombası Oluşumu
+{weaponshotgun}x Pompalı Silahı Oluşumu
+{weaponheavy}x Ağır Silah Oluşumu
+{weaponsniper}x Keskin Nişancı Silahı Oluşumu
+{weaponpistol}x Tabanca Silahı Oluşumu
+{weaponspecial}x Özel Silah Oluşumu
 
-{ammorandom}x Rastgele Cephane Çıkışı
-{ammodeagle}x Deagle Cephane Çıkışı
-{ammopistol}x Tabanca Cephane Çıkışı
-{ammomac10}x Mac10 Cephane Çıkışı
-{ammorifle}x Tüfek Cephane Çıkışı
-{ammoshotgun}x Pompalı Cephane Çıkışı
+{ammorandom}x Rastgele Cephane Oluşumu
+{ammodeagle}x Deagle Cephane Oluşumu
+{ammopistol}x Tabanca Cephane Oluşumu
+{ammomac10}x Mac10 Cephane Oluşumu
+{ammorifle}x Tüfek Cephane Oluşumu
+{ammoshotgun}x Pompalı Cephane Oluşumu
 
 {playerrandom}x Rastgele Oyuncu Canlanması]]
 
 L.equipmenteditor_name_auto_spawnable = "Ekipman dünyada rastgele ortaya çıkar"
 L.equipmenteditor_name_spawn_type = "Canlanma türünü seçin"
 L.equipmenteditor_desc_auto_spawnable = [[
-TTT2 çıkış noktası sistemi, dünyadaki her silahın çıkmasına izin verir. Varsayılan olarak, yalnızca yaratıcı tarafından 'Otomatik Çıkabilir' olarak işaretlenen silahlar dünyada ortaya çıkacaktır, ancak bu menüden değiştirilebilir.
+TTT2 oluşum noktası sistemi, dünyadaki her silahın çıkmasına izin verir. Varsayılan olarak, yalnızca yaratıcı tarafından 'Otomatik Çıkabilir' olarak işaretlenen silahlar dünyada ortaya çıkacaktır, ancak bu menüden değiştirilebilir.
 
-Ekipmanın çoğu, varsayılan olarak 'özel silahların ortaya çıkmasına' ayarlanmıştır. Bu, ekipmanın yalnızca rastgele silah çıkışlarında ortaya çıktığı anlamına gelir. Bununla birlikte, mevcut diğer çıkış türlerini kullanmak için dünyaya özel silah çıkış noktaları yerleştirmek veya burada çıkış noktası türünü değiştirmek mümkündür.]]
+Ekipmanın çoğu, varsayılan olarak 'özel silahların ortaya çıkmasına' ayarlanmıştır. Bu, ekipmanın yalnızca rastgele silah oluşumlarında ortaya çıktığı anlamına gelir. Bununla birlikte, mevcut diğer oluşum türlerini kullanmak için dünyaya özel silah oluşum noktaları yerleştirmek veya burada oluşum noktası türünü değiştirmek mümkündür.]]
 
 L.pickup_error_inv_cached = "Envanteriniz önbelleğe alındığı için şu anda bunu alamazsınız."
 
@@ -1470,7 +1468,7 @@ Model seçimleri daha fazla oyuncu modeli yükleyerek genişletilebilir.]]
 
 -- 2021-10-06
 L.menu_server_addons_title = "Sunucu Eklentileri"
-L.menu_server_addons_description = "Sunucu genelinde yalnızca eklentiler için admin ayarları."
+L.menu_server_addons_description = "Sunucu genelinde yalnızca eklentiler için yönetici ayarları."
 
 L.tooltip_finish_score_penalty_alive_teammates = "Canlı takım arkadaşlarının cezası {score}"
 L.finish_score_penalty_alive_teammates = "Canlı takım arkadaşlarının cezası"
@@ -1486,7 +1484,7 @@ Oyuncu modeli havuzuna eklemek için modellere sol tıklayın. Kaldırmak için 
 Sol üstteki küçük gösterge, oyuncu modelinin bir kafa vuruş kutusuna sahip olup olmadığını gösterir. Aşağıdaki simge, bu modelin bir dedektif şapkası için geçerli olup olmadığını gösterir.]]
 
 L.menu_roles_title = "Rol Ayarları"
-L.menu_roles_description = "Çıkış noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
+L.menu_roles_description = "Oluşum noktalarını, ekipman kredilerini ve daha fazlasını ayarla."
 
 L.submenu_administration_roles_general_title = "Genel Rol Ayarları"
 
@@ -1549,7 +1547,7 @@ L.ttt2_desc_traitor = "Hain, Masumların düşmanıdır. Özel ekipman satın al
 L.ttt2_desc_detective = "Masumların güvenebileceği kişi Dedektiftir. Ama Masum bile olsa, kudretli Dedektif tüm kötü teröristleri bulmak zorundadır. Mağazalarındaki ekipmanlar bu görevde onlara yardımcı olabilir."
 
 -- 2021-10-10
-L.button_reset_models = "Oynatıcı Modellerini Sıfırla"
+L.button_reset_models = "Oyuncu Modellerini Sıfırla"
 
 -- 2021-10-13
 L.help_roles_credits_award_kill = "Kredi kazanmanın bir başka yolu da Dedektif gibi 'herkese açık bir rolü' olan yüksek değerli oyuncuları öldürmektir. Eğer katilin rolü bunu etkinleştirdiyse, aşağıda tanımlanan miktarda kredi kazanır."
@@ -1674,7 +1672,7 @@ L.label_damagelog_save = "Hasar kaydını diske kaydet"
 L.label_debug_preventwin = "Herhangi bir kazanma koşulunu önleyin [debug]"
 L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
-L.label_ragdoll_carrying = "Ragdoll taşımayı etkinleştir"
+L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
 L.label_ragdoll_pinning = "Masum olmayan roller için ragdoll sabitlemeyi etkinleştir"
 L.label_ragdoll_pinning_innocents = "Masum roller için ragdoll pinlemeyi etkinleştir"
@@ -1690,8 +1688,8 @@ L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
 L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
-L.label_armor_on_spawn = "(Yeniden) doğuşta oyuncu zırhı"
-L.label_prep_respawn = "Hazırlık aşamasında anında yeniden doğmayı etkinleştir"
+L.label_armor_on_spawn = "(Yeniden) canlanmada oyuncu zırhı"
+L.label_prep_respawn = "Hazırlık aşamasında anında yeniden canlanmayı etkinleştir"
 L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
 L.label_firstpreptime_seconds = "Saniye cinsinden ilk hazırlık süresi"
 L.label_roundtime_minutes = "Dakika cinsinden sabit raunt süresi"
@@ -1709,7 +1707,7 @@ L.label_lastwords_chatprint = "Yazarken öldürülürse sohbete son kelimelerini
 L.label_identify_body_woconfirm = "'Onayla' düğmesine basmadan cesedi tanımla"
 L.label_announce_body_found = "Bir ceset bulunduğunu duyurun"
 L.label_confirm_killlist = "Onaylanmış cesedin ölüm listesini duyur"
-L.label_dyingshot = "Demir nişangahta ölürken ateş et [deneysel]"
+L.label_dyingshot = "Gez ve arpacıkta ölürken ateş et [deneysel]"
 L.label_armor_block_headshots = "Zırh engelleyici kafadan vuruşları etkinleştir"
 L.label_armor_block_blastdmg = "Patlama hasarını engelleyen zırhı etkinleştir"
 L.label_armor_dynamic = "Dinamik zırhı etkinleştir"
@@ -1793,7 +1791,7 @@ L.hudeditor_chat_hint3 = "[TTT2][BİLGİ] Eksen üzerinde hareket etmek ve en bo
 L.hudeditor_chat_hint4 = "[TTT2][BİLGİ] Arayüz Düzenleyiciden çıkmak için [RMB] - 'Kapat'a bas!"
 
 L.guide_nothing_title = "Henüz burada bir şey yok!"
-L.guide_nothing_desc = "Bu devam eden bir çalışma, GitHub'daki projeye katkıda bulunarak bize yardımcı olun."
+L.guide_nothing_desc = "Bu devam eden bir çalışmadır. GitHub'daki projeye katkıda bulunarak bize yardımcı olun."
 
 L.sb_rank_tooltip_developer = "TTT2 Geliştirici"
 L.sb_rank_tooltip_vip = "TTT2 Destekçisi"
@@ -1801,7 +1799,7 @@ L.sb_rank_tooltip_addondev = "TTT2 Eklenti Geliştirici"
 L.sb_rank_tooltip_admin = "Sunucu Yöneticisi"
 L.sb_rank_tooltip_streamer = "Yayıncı"
 L.sb_rank_tooltip_heroes = "TTT2 Kahramanları"
-L.sb_rank_tooltip_team = "Ekip"
+L.sb_rank_tooltip_team = "Takım"
 
 L.tbut_adminarea = "YÖNETİCİ ALANI"
 
@@ -1845,18 +1843,18 @@ L.label_voice_scaling_mode_log = "Logaritmik"
 L.search_title = "Ceset Arama Sonuçları - {player}"
 L.search_info = "Bilgi"
 L.search_confirm = "Ölümü Onayla"
---L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
---L.search_take_credits = "Take {credits} Credit(s)"
---L.search_confirm_forbidden = "Confirm forbidden"
---L.search_confirmed = "Death Confirmed"
+L.search_confirm_credits = "+{credits} Krediyi Onayla"
+L.search_take_credits = "{credits} Kredi Al"
+L.search_confirm_forbidden = "Yasak Onayla"
+L.search_confirmed = "Ölüm Onaylandı"
 L.search_call = "Dedektifi Ara"
---L.search_called = "Death Reported"
+L.search_called = "Ölüm Bildirildi"
 
---L.search_team_role_unknown = "???"
+L.search_team_role_unknown = "???"
 
 L.search_words = "İçinizden bir ses bu kişinin son sözlerinden bazılarının '{lastwords}' olduğunu söylüyor."
 L.search_armor = "Standart olmayan vücut zırhı giyiyorlardı."
---L.search_disguiser = "They were carrying a device that could hide their identity."
+L.search_disguiser = "Kimliklerini saklamaya yarayan bir cihaz taşıyorlardı."
 L.search_radar = "Bir çeşit radar taşıyorlardı. Artık çalışmıyor."
 L.search_c4 = "Cebinde bir not buldun. Tel {num} kesmenin bombayı güvenli bir şekilde etkisiz hale getireceğini belirtiyor."
 
@@ -1868,118 +1866,118 @@ L.search_dmg_club = "Ceset çürümüş ve hırpalanmış. Belli ki dövülerek 
 L.search_dmg_drown = "Ceset boğulma belirtileri gösteriyor."
 L.search_dmg_stab = "Kanamadan hızlı bir şekilde ölmeden önce bıçaklandılar ve kesildiler."
 L.search_dmg_burn = "Buralar kızartılmış terörist gibi kokuyor..."
---L.search_dmg_teleport = "It looks like their DNA was scrambled by tachyon emissions!"
+L.search_dmg_teleport = "DNA'ları takyon emisyonları tarafından karıştırılmış gibi görünüyor!"
 L.search_dmg_car = "Bu terörist yolu geçtiğinde, dikkatsiz bir sürücü tarafından ezildi."
 L.search_dmg_other = "Bu teröristin ölümünün belirli bir nedenini bulamazsın."
 
---L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
---L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
---L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
---L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
---L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
---L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
---L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
---L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
---L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
---L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
---L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
---L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
---L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
---L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
---L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
---L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
---L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
---L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
---L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
---L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
---L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
---L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+L.search_floor_antlions = "Vücudun her yerinde hala antlionlar var. Zemin onlarla kaplı olmalı."
+L.search_floor_bloodyflesh = "Bu vücuttaki kan eski ve iğrenç görünüyor. Ayakkabılarına yapışmış küçük kanlı et parçaları bile var."
+L.search_floor_concrete = "Ayakkabılarını ve dizlerini gri toz kaplamış. Olay yerinin beton zemini varmış gibi görünüyor."
+L.search_floor_dirt = "Toprak gibi kokuyor. Muhtemelen kurbanın ayakkabılarına yapışan topraktan kaynaklanıyor."
+L.search_floor_eggshell = "İğrenç görünümlü beyaz lekeler kurbanın vücudunu kaplamış. Yumurta kabuğuna benziyor."
+L.search_floor_flesh = "Kurbanın giysileri biraz nemli geliyor. Sanki ıslak bir yüzeye düşmüş gibi. Etli bir yüzey veya bir su kütlesinin kumlu zemini gibi."
+L.search_floor_grate = "Kurbanın derisi bifteğe benziyor. Belli bir sırada kalın çizgiler kurbanın her yerinde görülüyor. Izgaranın üzerinde mi dinlendiler?"
+L.search_floor_alienflesh = "Sence uzaylı eti mi? Kulağa biraz tuhaf geliyor ama dedektif yardımcısı kitabınız onu olası bir zemin yüzeyi olarak listeliyor."
+L.search_floor_snow = "İlk bakışta giysileri sadece ıslak ve buz gibi geliyor ama kenarlardaki beyaz köpüğü gördüğünüzde anlarsınız. Bu kar!"
+L.search_floor_plastic = "'Ah, bu acıtmış olmalı.' Cesetleri yanıklarla kaplıdır. Plastik bir yüzey üzerinde kayarken meydana gelenlere benziyorlar."
+L.search_floor_metal = "En azından artık öldükleri için tetanoz olamazlar. Yaralarını pas kaplıyor. Muhtemelen metal bir yüzeyde öldüler."
+L.search_floor_sand = "Küçük küçük pürüzlü taşlar soğuk cesetlerine yapışmış. Kumsaldaki kaba kum gibi. Ahh, her yere bulaşıyor!"
+L.search_floor_foliage = "Doğa harikadır. Kurbanın kanlı yaraları, neredeyse gizlenecek kadar yeşilliklerle kaplı."
+L.search_floor_computer = "Bip-bup. Cesetleri bilgisayar yüzeyiyle kaplı! Bu nasıl görünüyor diye sorabilirsiniz. Ee, yani!"
+L.search_floor_slosh = "Islak ve hatta belki biraz sümüksü. Tüm vücudu bununla kaplı ve kıyafetleri sırılsıklam. Çok pis kokuyor!"
+L.search_floor_tile = "Küçük parçalar derilerine yapışmış. Darbe aldığında paramparça olan yer fayanslarının parçaları gibi."
+L.search_floor_grass = "Taze kesilmiş çimen gibi kokuyor. Koku neredeyse kan ve ölüm kokusunu bastırıyor."
+L.search_floor_vent = "Vücudunu hissederken taze bir hava esintisi hissediyorsun. Havalandırmada ölüp yanlarında hava mı aldılar?"
+L.search_floor_wood = "Bir parke zeminde oturup düşüncelere dalmaktan daha güzel ne olabilir? En azından kaderi ahşap bir zeminde ölü yatmak!"
+L.search_floor_default = "Bu çok basit, çok normal görünüyor. Ne görüyorsanız o gibi. Yüzeyin türü hakkında hiçbir şey söyleyemiyorsunuz."
+L.search_floor_glass = "Cesetleri birçok kanlı kesikle kaplı. Bazılarında cam kırıkları sıkışmış ve size oldukça tehditkar görünüyor."
+L.search_floor_warpshield = "Warpshield'den yapılmış bir zemin mi? Evet, biz de senin kadar şaşkınız ama notlarımız bunu açıkça belirtiyor. Warpshield."
 
---L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
---L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
---L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+L.search_water_1 = "Kurbanın ayakkabıları ıslak, ancak geri kalanı kuru görünüyor. Muhtemelen ayakları suyun içindeyken öldürüldüler."
+L.search_water_2 = "Kurbanın ayakkabıları sırılsıklam olmuş. Öldürülmeden önce suda dolaştılar mı?"
+L.search_water_3 = "Cesedin tamamı ıslak ve şişmiş. Muhtemelen tamamen su altındayken öldüler."
 
 L.search_weapon = "Görünüşe göre onları öldürmek için bir {weapon} kullanılmış."
 L.search_head = "Ölümcül yara bir kafa vuruşuymuş. Çığlık atacak zaman yok."
---L.search_time = "They died a while before you conducted the search."
---L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+L.search_time = "Siz aramayı yapmadan bir süre önce öldüler."
+L.search_dna = "Bir DNA Tarayıcısı ile katilin DNA'sının bir örneğini alın. DNA örneği bir süre sonra çürüyecek."
 
 L.search_kills1 = "{player} oyuncusunun ölümünü doğrulayan bir leş listesi buldun."
 L.search_kills2 = "Bu adlara sahip bir leş listesi buldunuz: {player}"
 L.search_eyes = "Dedektiflik becerilerini kullanarak, {player} adlı oyuncuyu gördükleri son kişiyi belirledin. Katil ya da bir tesadüf"
 
---L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+L.search_credits = "Kurbanın cebinde {credits} ekipman kredisi var. Bir alışveriş rolü onları alabilir ve iyi bir şekilde kullanabilir. Gözünüzü dört açın!"
 
---L.search_kill_distance_point_blank = "It was a point blank attack."
---L.search_kill_distance_close = "The attack came from a short distance."
---L.search_kill_distance_far = "The victim was attacked from a long distance away."
+L.search_kill_distance_point_blank = "Çok yakın bir saldırıydı."
+L.search_kill_distance_close = "Saldırı kısa mesafeden geldi."
+L.search_kill_distance_far = "Kurban uzak mesafeden saldırıya uğradı."
 
---L.search_kill_from_front = "The victim was shot from the front."
---L.search_kill_from_back = "The victim was shot from behind."
---L.search_kill_from_side = "The victim was shot from the side."
+L.search_kill_from_front = "Kurban önden vuruldu."
+L.search_kill_from_back = "Kurban arkadan vuruldu."
+L.search_kill_from_side = "Kurban yandan vuruldu."
 
---L.search_hitgroup_head = "The projectile was found in their head."
---L.search_hitgroup_chest = "The projectile was found in their chest."
---L.search_hitgroup_stomach = "The projectile was found in their stomach."
---L.search_hitgroup_rightarm = "The projectile was found in their right arm."
---L.search_hitgroup_leftarm = "The projectile was found in their left arm."
---L.search_hitgroup_rightleg = "The projectile was found in their right leg."
---L.search_hitgroup_leftleg = "The projectile was found in their left leg."
---L.search_hitgroup_gear = "The projectile was found in their hip."
+L.search_hitgroup_head = "Mermi başında bulundu."
+L.search_hitgroup_chest = "Mermi gövdesinde bulundu."
+L.search_hitgroup_stomach = "Mermi karnında bulundu."
+L.search_hitgroup_rightarm = "Mermi sağ kolunda bulundu."
+L.search_hitgroup_leftarm = "Mermi sol kolunda bulundu."
+L.search_hitgroup_rightleg = "Mermi sağ bacağında bulundu."
+L.search_hitgroup_leftleg = "Mermi sol bacağında bulundu."
+L.search_hitgroup_gear = "Mermi kalçada bulundu."
 
---L.search_policingrole_report_confirm = [[
---A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
---L.search_policingrole_confirm_disabled_1 = [[
---The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
---L.search_policingrole_confirm_disabled_2 = [[
---The corpse can only be confirmed by a public policing role. Report the body to let them know!
---You can see the information in here after they confirmed it.]]
---L.search_spec = [[
---As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+L.search_policingrole_report_confirm = [[
+Bir kamu polisliği rolü ancak ölüm doğrulandıktan sonra bir cesede çağrılabilir.]]
+L.search_policingrole_confirm_disabled_1 = [[
+Ceset ancak bir kamu polisliği rolü ile doğrulanabilir. Haberdar etmek için cesedi bildirin!]]
+L.search_policingrole_confirm_disabled_2 = [[
+Ceset ancak bir kamu polisliği rolü ile doğrulanabilir. Haberdar etmek için cesedi bildirin!
+Onlar onayladıktan sonra buradaki bilgileri görebilirsiniz.]]
+L.search_spec = [[
+Bir izleyici olarak bir cesedin tüm bilgilerini görebilirsiniz, ancak kullanıcı arayüzü ile etkileşime giremezsiniz.]]
 
---L.search_title_words = "Victim's last words"
---L.search_title_c4 = "Defusion mishap"
---L.search_title_dmg_crush = "Crush damage ({amount} HP)"
---L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
---L.search_title_dmg_fall = "Fall damage ({amount} HP)"
---L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
---L.search_title_dmg_club = "Club damage ({amount} HP)"
---L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
---L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
---L.search_title_dmg_burn = "Burning damage ({amount} HP)"
---L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
---L.search_title_dmg_car = "Car accident ({amount} HP)"
---L.search_title_dmg_other = "Unknown damage ({amount} HP)"
---L.search_title_time = "Death time"
---L.search_title_dna = "DNA sample decay"
---L.search_title_kills = "The victim's kill list"
---L.search_title_eyes = "The killer's shadow"
---L.search_title_floor = "Floor of the crime scene"
---L.search_title_credits = "{credits} Equipment credit(s)"
---L.search_title_water = "Water level {level}"
---L.search_title_policingrole_report_confirm = "Confirm to report death"
---L.search_title_policingrole_confirm_disabled = "Report corpse"
---L.search_title_spectator = "You are a spectator"
+L.search_title_words = "Kurbanın son sözleri"
+L.search_title_c4 = "Parçalarına ayrılma talihsizliği"
+L.search_title_dmg_crush = "Ezme hasarı ({amount} HP)"
+L.search_title_dmg_bullet = "Mermi hasarı ({amount} HP)"
+L.search_title_dmg_fall = "Düşme hasarı ({amount} HP)"
+L.search_title_dmg_boom = "Patlama hasarı ({amount} HP)"
+L.search_title_dmg_club = "Beyzbol sopası hasarı ({amount} HP)"
+L.search_title_dmg_drown = "Boğulma hasarı ({amount} HP)"
+L.search_title_dmg_stab = "Bıçaklama hasarı ({amount} HP)"
+L.search_title_dmg_burn = "Yanma hasarı ({amount} HP)"
+L.search_title_dmg_teleport = "Işınlanma hasarı ({amount} HP)"
+L.search_title_dmg_car = "Araba kazası ({amount} HP)"
+L.search_title_dmg_other = "Bilinmeyen hasar ({amount} HP)"
+L.search_title_time = "Ölüm zamanı"
+L.search_title_dna = "DNA örneği bozunması"
+L.search_title_kills = "Kurbanın ölüm listesi"
+L.search_title_eyes = "Katilin gölgesi"
+L.search_title_floor = "Olay yerinin zemini"
+L.search_title_credits = "{credits} Ekipman kredisi"
+L.search_title_water = "Su seviyesi {level}"
+L.search_title_policingrole_report_confirm = "Ölümü bildirmeyi onayla"
+L.search_title_policingrole_confirm_disabled = "Ceset bildir"
+L.search_title_spectator = "İzleyicisin"
 
---L.target_credits_on_confirm = "Confirm to receive unspent credits"
---L.target_credits_on_search = "Search to receive unspent credits"
---L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
---L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
---L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+L.target_credits_on_confirm = "Harcanmamış kredi almak için onaylayın"
+L.target_credits_on_search = "Harcanmamış kredileri almak için arama yapın"
+L.corpse_hint_no_inspect_details = "Bu ceset hakkında yalnızca kamu polisliği rolleri bilgi bulabilir."
+L.corpse_hint_inspect_limited_details = "Sadece kamu polisliği rolleri cesedi doğrulayabilir."
+L.corpse_hint_spectator = "Ceset kullanıcı arayüzünü görüntülemek için [{usekey}] tuşuna basın"
+L.corpse_hint_public_policing_searched = "Kamu polisliği rolündeki arama sonuçlarını görüntülemek için [{usekey}] tuşuna basın"
 
---L.label_inspect_confirm_mode = "Select body search mode"
---L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
---L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
---L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
---L.help_inspect_confirm_mode = [[
---There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
---
---mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
---
---mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
---
---mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+L.label_inspect_confirm_mode = "Ceset arama modunu seç"
+L.choice_inspect_confirm_mode_0 = "mod 0: standart TTT"
+L.choice_inspect_confirm_mode_1 = "mod 1: sınırlı onay"
+L.choice_inspect_confirm_mode_2 = "mod 2: sınırlı arama"
+L.help_inspect_confirm_mode = [[
+Bu oyun modunda üç farklı ceset arama/onaylama modu vardır. Bu modun seçilmesinin, dedektif gibi kamu polisliği rollerinin önemi üzerinde büyük etkileri vardır.
+
+mode 0: Bu standart TTT'dir. Herkes cesetleri arayabilir ve onaylayabilir. Bir cesedi bildirmek veya ondan kredi almak için önce bedenin onaylanması gerekir. Bu, alışveriş rollerinin gizlice kredi çalmasını biraz zorlaştırır. Bununla birlikte, bir kamu polis oyuncusunun aranması için cesedi ihbar etmek isteyen masum oyuncuların da önce onaylaması gerekir.
+
+mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği rollerinin önemini artırır. Bu aynı zamanda, bir cesedi onaylamadan önce kredi almanın ve organları rapor etmenin artık mümkün olduğu anlamına gelir. Herkes hala cesetleri arayabilir ve bilgileri bulabilir, ancak bulunan bilgileri açıklayamazlar.
+
+mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
 -- 2023-10-23
 L.header_miscellaneous_settings = "Çeşitli Ayarlar"
@@ -2039,7 +2037,7 @@ L.status_speed_description_good = "Normalden daha hızlısın. Eşyalar, ekipman
 L.status_speed_description_bad = "Normalden daha yavaşsınız. Eşyalar, ekipmanlar veya etkiler bunu etkileyebilir."
 
 L.status_on = "açık"
-L.status_off = "Kapalı"
+L.status_off = "kapalı"
 
 L.crowbar_help_primary = "Saldır"
 L.crowbar_help_secondary = "Oyuncuları it"
@@ -2051,9 +2049,9 @@ L.label_HUD_enable_description = "Puan tablosu açıkken açıklamaları etkinle
 L.label_HUD_enable_box_blur = "Arayüz kutusu arka plan bulanıklığını etkinleştir"
 
 -- 2023-10-28
-L.submenu_gameplay_voiceandvolume_title = "Ses ve Ses Düzeyi"
+L.submenu_gameplay_voiceandvolume_title = "Ses Düzeyi"
 L.header_soundeffect_settings = "Ses Efektleri"
-L.header_voiceandvolume_settings = "Ses ve Ses Ayarları"
+L.header_voiceandvolume_settings = "Ses Ayarları"
 
 -- 2023-11-06
 L.drop_reserve_prevented = "Bir şey yedek cephanenizi düşürmenizi engelliyor."
@@ -2072,3 +2070,34 @@ L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
 L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
+
+-- 2023-11-18
+L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
+
+-- 2023-12-14
+L.visualizer_help_pri = "Feneri yere at"
+L.visualizer_help_sec = "Feneri yere yapıştır"
+L.beacon_name = "Fener"
+L.beacon_desc = [[
+Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
+
+Haritada görülmesi zor olan konumları takip etmek için kullanın.]]
+
+L.msg_beacon_destroyed = "Fenerlerinden biri yok edildi!"
+L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
+
+L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
+L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
+
+-- 2023-11-18
+L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
+L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"

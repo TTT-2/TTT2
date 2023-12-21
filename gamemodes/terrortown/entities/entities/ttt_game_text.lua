@@ -66,7 +66,13 @@ function ENT:AcceptInput(name, activator)
 	elseif inputReceiver == RECEIVE_TRAITOR then
 		messageReceiver = GetTeamChatFilter(TEAM_TRAITOR)
 	elseif inputReceiver == RECEIVE_INNOCENT then
-		messageReceiver = GetTeamChatFilter(TEAM_INNOCENT)
+		-- TTT originally defined this as "All except traitors" even though it is labeled as "RECEIVE_INNOCENT",
+		-- but the implementation literally only checked that a player was not a traitor, therefore the intent is
+		-- preserved here since maps aren't likely to be updated
+		messageReceiver = GetPlayerFilter(function(p)
+			local plyRoleData = ply:GetSubRoleData()
+			return p:GetTeam() ~= TEAM_TRAITOR and not plyRoleData.disabledTeamChatRecv
+		end)
 	elseif inputReceiver == RECEIVE_ACTIVATOR then
 		if not IsValid(activator) or not activator:IsPlayer() then
 			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")

@@ -64,7 +64,7 @@ bodysearch = {}
 -- Returns the current body inspect/confirm mode that is defined on the server.
 -- @note This is basically a wrapper for the convar `ttt2_inspect_confirm_mode`.
 -- @return number The body inspect/confirm mode
--- @realm shared 
+-- @realm shared
 function bodysearch.GetInspectConfirmMode()
 	return cvInspectConfirmMode:GetInt()
 end
@@ -268,7 +268,7 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 		end
 
 		sceneData.killOrientation = CORPSE_KILL_NO_DATA
-		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and rag.scene.dmginfo:IsBulletDamage() then
+		if rag.scene.hit_trace and isangle(rag.scene.hit_trace.StartAng) and rag.scene.damageInfoData.isBulletDamage then
 			local rawKillAngle = math.abs(math.AngleDifference(rag.scene.hit_trace.StartAng.yaw, rag.scene.victim.aim_yaw))
 
 			if rawKillAngle < 45 then
@@ -558,13 +558,13 @@ if CLIENT then
 			}
 		end,
 		kill_list = function(data)
-			if not data.kills then return end
+			if not data.killEntityIDList then return end
 
-			local num = table.Count(data.kills)
+			local num = table.Count(data.killEntityIDList)
 
 			if num == 1 then
-				local vic = Entity(data.kills[1])
-				local disconnected = data.kills[1] == -1
+				local vic = Entity(data.killEntityIDList[1])
+				local disconnected = data.killEntityIDList[1] == -1
 
 				if disconnected or IsValid(vic) and vic:IsPlayer() then
 					return {
@@ -581,7 +581,7 @@ if CLIENT then
 			elseif num > 1 then
 				local nicks = {}
 
-				for k, idx in pairs(data.kills) do
+				for k, idx in pairs(data.killEntityIDList) do
 					local vic = Entity(idx)
 					local disconnected = idx == -1
 
@@ -730,7 +730,7 @@ if CLIENT then
 		elseif type == "floor_surface" then
 			return materialFloor
 		elseif type == "water_level" then
-			return materialWaterLevel[data.water_level]
+			return materialWaterLevel[data.killWaterLevel]
 		elseif type == "c4_disarm" then
 			return materialC4Disarm
 		elseif type == "last_id" then
@@ -996,7 +996,7 @@ if CLIENT then
 	---
 	-- Checks if the local player can report the body. Depends on the local player, the dead
 	-- player and the current body search mode.
-	-- @param Player ragOwner The dead player whose body might be reported 
+	-- @param Player ragOwner The dead player whose body might be reported
 	-- @return boolean Returns if the local player can report the body
 	-- @note: Reporting is what previously was called "call detective"
 	-- @realm client
