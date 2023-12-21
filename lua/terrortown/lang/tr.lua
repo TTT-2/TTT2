@@ -1048,7 +1048,6 @@ L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_static_enable = "Sabit nişangahı etkinleştir"
 L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
 L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
 L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
@@ -1765,7 +1764,6 @@ L.label_sprint_enabled = "Koşmayı etkinleştir"
 L.label_sprint_max = "Maksimum koşma dayanıklılığı"
 L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
 L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
-L.label_sprint_crosshair = "Koşarken nişangahı göster"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
@@ -2071,12 +2069,9 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
--- 2023-11-18
-L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
-
 -- 2023-12-14
-L.visualizer_help_pri = "Feneri yere at"
-L.visualizer_help_sec = "Feneri yere yapıştır"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.

@@ -11,8 +11,6 @@ SPRINT = {
 		consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The speed of the stamina consumption (per second; Def: 0.6)"),
 		-- @realm shared
 		regeneration = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The regeneration time of the stamina (per second; Def: 0.3)"),
-		-- @realm shared
-		showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "Should the Crosshair be visible while sprinting? (Def: 0)"),
 	},
 }
 

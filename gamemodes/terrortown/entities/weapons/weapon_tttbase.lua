@@ -238,56 +238,52 @@ local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE,
 
 -- crosshair
 if CLIENT then
-	local GetPTranslation = LANG.GetParamTranslation
 	local TryT = LANG.TryTranslation
+	local PatT = LANG.GetParamTranslation
 
 	---
 	-- @realm client
-	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
+	local cvOpacitySights = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+	local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local enable_crosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
+	local cvEnableCrosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
+	local cvEnableCrosshairGap = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
+	local cvSizeCrosshairGap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
+	local cvOpacityCrosshair = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
+	local cvCrosshairUseWeaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
+	local cvThicknessCrosshair = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
+	local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+	local cvEnableCrosshairDot = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
-
-	---
-	-- @realm client
-	local enable_crosshair_lines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
+	local cvEnableCrosshairLines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
 
 	local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
 	local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
@@ -300,34 +296,33 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
-		if not enable_crosshair:GetBool() then return end
+		if not cvEnableCrosshair:GetBool() then return end
 
 		local client = LocalPlayer()
 
 		local sights = not self.NoSights and self:GetIronsights()
 
-		local x = math.floor(ScrW() * 0.5)
-		local y = math.floor(ScrH() * 0.5)
-		local scale = crosshair_weaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
-		local timescale = 1
+		local xCenter = ScrW() * 0.5
+		local yCenter = ScrH() * 0.5
+		local scale = appearance.GetGlobalScale()
+		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
+		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
 
-		if not crosshair_static:GetBool() then
-			timescale = (2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0))
-		end
-
-		local alpha = sights and sights_opacity:GetFloat() or crosshair_opacity:GetFloat()
-		local gap = enable_gap_crosshair:GetBool() and math.floor(timescale * crosshair_gap:GetFloat()) or math.floor(20 * scale * timescale * (sights and 0.8 or 1))
-		local thickness = crosshair_thickness:GetFloat()
-		local outline = math.floor(crosshair_outlinethickness:GetFloat())
-		local length = math.floor(gap + 25 * crosshair_size:GetFloat() * scale * timescale)
+		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
+		local gap = cvEnableCrosshairGap:GetBool()
+			and (timescale * cvSizeCrosshairGap:GetFloat() * scale)
+			or (20 * scaleWeapon * timescale * self:GetPrimaryConeFactor() * scale)
+		local thickness = cvThicknessCrosshair:GetFloat() * scale
+		local outline = cvThicknessOutlineCrosshair:GetFloat() * scale
+		local length = gap + 25 * cvSizeCrosshair:GetFloat() * scaleWeapon * timescale * scale
 		local offset = thickness * 0.5
 
 		if outline > 0 then
 			surface.SetDrawColor(0, 0, 0, 255 * alpha)
-			surface.DrawRect(x - length - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(x + gap - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(x - offset - outline, y - length - outline, thickness + outline * 2, length - gap + outline * 2)
-			surface.DrawRect(x - offset - outline, y + gap - outline, thickness + outline * 2, length - gap + outline * 2)
+			surface.DrawRect(xCenter - length - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
+			surface.DrawRect(xCenter + gap - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
+			surface.DrawRect(xCenter - offset - outline, yCenter - length - outline, thickness + outline * 2, length - gap + outline * 2)
+			surface.DrawRect(xCenter - offset - outline, yCenter + gap - outline, thickness + outline * 2, length - gap + outline * 2)
 		end
 
 		-- set up crosshair color
@@ -343,16 +338,16 @@ if CLIENT then
 		)
 
 		-- draw crosshair dot
-		if enable_dot_crosshair:GetBool() then
-			surface.DrawRect(x - thickness * 0.5, y - thickness * 0.5, thickness, thickness)
+		if cvEnableCrosshairDot:GetBool() then
+			surface.DrawRect(xCenter - thickness * 0.5, yCenter - thickness * 0.5, thickness, thickness)
 		end
 
 		-- draw crosshair lines
-		if enable_crosshair_lines:GetBool() then
-			surface.DrawRect(x - length, y - offset, length - gap, thickness)
-			surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-			surface.DrawRect(x - offset, y - length, thickness, length - gap)
-			surface.DrawRect(x - offset, y + gap, thickness, length - gap)
+		if cvEnableCrosshairLines:GetBool() then
+			surface.DrawRect(xCenter - length, yCenter - offset, length - gap, thickness)
+			surface.DrawRect(xCenter + gap, yCenter - offset, length - gap, thickness)
+			surface.DrawRect(xCenter - offset, yCenter - length, thickness, length - gap)
+			surface.DrawRect(xCenter - offset, yCenter + gap, thickness, length - gap)
 		end
 	end
 
@@ -481,8 +476,8 @@ if CLIENT then
 		if translate then
 			extraKeyParams = extraKeyParams or {}
 			translate_params = table.Merge(extraKeyParams, defaultKeyParams)
-			primary = primary and GetPTranslation(primary, translate_params)
-			secondary = secondary and GetPTranslation(secondary, translate_params)
+			primary = primary and PatT(primary, translate_params)
+			secondary = secondary and PatT(secondary, translate_params)
 		end
 
 		--find mouse keys in the texts to add respective icons
@@ -713,18 +708,25 @@ end
 ---
 -- @return number
 -- @realm shared
+function SWEP:GetPrimaryConeFactor()
+	if self:GetIronsights() then
+		-- 15% accuracy bonus when sighting
+		return 0.85
+	elseif IsValid(self:GetOwner()) and self:GetOwner():IsSprinting() then
+		-- 100% accuracy malus when sprinting
+		return  2
+	else
+		return 1
+	end
+end
+
+---
+-- @return number
+-- @realm shared
 function SWEP:GetPrimaryCone()
 	local cone = self.Primary.Cone or 0.2
 
-	if self:GetIronsights() then
-		-- 15% accuracy bonus when sighting
-		return cone * 0.85
-	elseif self:GetOwner():IsSprinting() then
-		-- 100% accuracy malus when sprinting
-		return cone * 2
-	else
-		return cone
-	end
+	return cone * self:GetPrimaryConeFactor()
 end
 
 ---

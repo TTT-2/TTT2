@@ -1048,7 +1048,6 @@ L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrir
 --L.label_crosshair_size = "Crosshair size"
 --L.label_crosshair_thickness = "Crosshair thickness"
 --L.label_crosshair_thickness_outline = "Crosshair outline thickness"
---L.label_crosshair_static_enable = "Enable static crosshair"
 --L.label_crosshair_dot_enable = "Enable crosshair dot"
 --L.label_crosshair_lines_enable = "Enable crosshair lines"
 --L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
@@ -1765,7 +1764,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_sprint_max = "Max sprinting stamina"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
 
