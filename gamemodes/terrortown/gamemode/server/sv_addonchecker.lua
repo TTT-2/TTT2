@@ -199,7 +199,7 @@ addonChecker.curatedList = {
 		reason = "Prints only Detectives in TTT2. Roles are hard coded.",
 		type = ADDON_INCOMPATIBLE
 	},
-	["2758610950"] = { -- Death Note TTT2 Fixed Edition	by pat201290
+	["2758610950"] = { -- Death Note TTT2 Fixed Edition by pat201290
 		alternative = "3118796974",
 		reason = "Prints only Detectives in TTT2. Roles are hard coded.",
 		type = ADDON_INCOMPATIBLE
