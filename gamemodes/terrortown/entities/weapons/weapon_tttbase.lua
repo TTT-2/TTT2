@@ -588,14 +588,18 @@ function SWEP:PrimaryAttack(worldsnd)
 		sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
 	end
 
-	self:ShootBullet(self.Primary.Damage, self.Primary.Recoil, self.Primary.NumShots, self:GetPrimaryCone())
+	self:ShootBullet(self.Primary.Damage, self:GetPrimaryRecoil(), self.Primary.NumShots, self:GetPrimaryCone())
 	self:TakePrimaryAmmo(1)
 
 	local owner = self:GetOwner()
 
 	if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then return end
 
-	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
+	owner:ViewPunch(Angle(
+		util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self:GetPrimaryRecoil(),
+		util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self:GetPrimaryRecoil(),
+		0
+	))
 end
 
 ---
@@ -669,10 +673,8 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	self:GetOwner():MuzzleFlash()
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
-	local sights = self:GetIronsights()
-
 	numbul = numbul or 1
-	cone = cone or 0.01
+	cone = cone or 0.02
 
 	local bullet = {}
 	bullet.Num = numbul
@@ -693,11 +695,9 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	-- Owner can die after firebullets
 	if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then return end
 
-	if game.SinglePlayer() and SERVER
-	or not game.SinglePlayer() and CLIENT and IsFirstTimePredicted() then
-		-- reduce recoil if ironsighting
-		recoil = sights and (recoil * 0.6) or recoil
-
+	if SERVER and game.SinglePlayer()
+		or CLIENT and not game.SinglePlayer() and IsFirstTimePredicted()
+	then
 		local eyeang = self:GetOwner():EyeAngles()
 		eyeang.pitch = eyeang.pitch - recoil
 
@@ -710,11 +710,22 @@ end
 -- @realm shared
 function SWEP:GetPrimaryConeFactor()
 	if self:GetIronsights() then
-		-- 20% accuracy bonus when sighting
 		return 0.8
 	elseif IsValid(self:GetOwner()) and SPRINT:IsSprinting(self:GetOwner()) then
-		-- 100% accuracy malus when sprinting
-		return 2
+		return 1.6
+	else
+		return 1
+	end
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoilFactor()
+	if self:GetIronsights() then
+		return 0.6
+	elseif IsValid(self:GetOwner()) and SPRINT:IsSprinting(self:GetOwner()) then
+		return 2.2
 	else
 		return 1
 	end
@@ -724,9 +735,18 @@ end
 -- @return number
 -- @realm shared
 function SWEP:GetPrimaryCone()
-	local cone = self.Primary.Cone or 0.2
+	local cone = self.Primary.Cone or 0.02
 
 	return cone * self:GetPrimaryConeFactor()
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoil()
+	local recoil = self.Primary.Recoil or 1.5
+
+	return recoil * self:GetPrimaryRecoilFactor()
 end
 
 ---
