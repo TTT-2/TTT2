@@ -107,7 +107,8 @@ local function SetupData(roleData)
 			-- @realm server
 			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-			if not roleData.builtin then
+			-- if we don't compare detective here, roles will never get assigned
+			if not roleData.builtin or roleData.index == ROLE_DETECTIVE then
 				---
 				-- @realm server
 				CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})

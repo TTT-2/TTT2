@@ -1962,7 +1962,7 @@ L.search_title_spectator = "İzleyicisin"
 L.target_credits_on_confirm = "Harcanmamış kredi almak için onaylayın"
 L.target_credits_on_search = "Harcanmamış kredileri almak için arama yapın"
 L.corpse_hint_no_inspect_details = "Bu ceset hakkında yalnızca kamu polisliği rolleri bilgi bulabilir."
-L.corpse_hint_inspect_only_details = "Sadece kamu polisliği rolleri cesedi doğrulayabilir."
+L.corpse_hint_inspect_limited_details = "Sadece kamu polisliği rolleri cesedi doğrulayabilir."
 L.corpse_hint_spectator = "Ceset kullanıcı arayüzünü görüntülemek için [{usekey}] tuşuna basın"
 L.corpse_hint_public_policing_searched = "Kamu polisliği rolündeki arama sonuçlarını görüntülemek için [{usekey}] tuşuna basın"
 
@@ -2089,6 +2089,15 @@ L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
+-- 2023-11-18
+L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
+
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"

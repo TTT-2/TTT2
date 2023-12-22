@@ -2,6 +2,22 @@
 -- Corpse functions
 -- @module CORPSE
 
+---@class DamageInfoData
+---@field ammoType number The ammo type which was used, referring to game.GetAmmoTypes()
+---@field attacker Entity The attacker (character who originated the attack), for example a player or an NPC that shot the weapon. Or an Entity.
+---@field baseDamage number The initial unmodified by skill level ( game.GetSkillLevel() ) damage
+---@field damage number The total damage.
+---@field damageBonus number The amount of bonus damage.
+---@field damageCustom number Custom damage type. This is used by Day of Defeat: Source and Team Fortress 2 for extended damage info, but isn't used in Garry's Mod by default.
+---@field damageForce Vector The force taken from the damage, sometimes used for knockback.
+---@field damagePosition Vector The position where the damage was or is going to be applied to.
+---@field damageType number A bitflag which indicates the damage type(s) of the damage.
+---@field inflictor Entity The inflictor of the damage, a projectile, a weapon, or an ordinariy Entity.
+---@field reportedPosition Vector The initial, unmodified position where the damage occured
+---@field isBulletDamage boolean Whether the DamageInfo contained DMG_BULLET
+---@field isExplosionDamage boolean Whether the DamageInfo contained DMG_BLAST
+---@field isFallDamage boolean Whether the DamageInfo contained DMG_FALL
+
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
 
@@ -318,10 +334,37 @@ local function GetSceneDataFromPlayer(ply)
 	return data
 end
 
+---
+
+---
+-- Clones a CTakeDamageInfo into a table called DamageInfoData
+-- @param CTakeDamageInfo dmginfo
+-- @return DamageInfoData The damage info data table
+-- @realm server
+function CreateDamageInfoData(dmginfo)
+	return {
+		ammoType = dmginfo:GetAmmoType(),
+		attacker = dmginfo:GetAttacker(),
+		baseDamage = dmginfo:GetBaseDamage(),
+		damage = dmginfo:GetDamage(),
+		damageBonus = dmginfo:GetDamageBonus(),
+		damageCustom = dmginfo:GetDamageCustom(),
+		damageForce = dmginfo:GetDamageForce(),
+		damagePosition = dmginfo:GetDamagePosition(),
+		damageType = dmginfo:GetDamageType(),
+		inflictor = dmginfo:GetInflictor(),
+		maxDamage = dmginfo:GetMaxDamage(),
+		reportedPosition = dmginfo:GetReportedPosition(),
+		isBulletDamage = dmginfo:IsBulletDamage(),
+		isExplosionDamage = dmginfo:IsExplosionDamage(),
+		isFallDamage = dmginfo:IsFallDamage(),
+	}
+end
+
 local function GetSceneData(victim, attacker, dmginfo)
 	local scene = {}
 
-	scene.dmginfo = dmginfo
+	scene.damageInfoData  = CreateDamageInfoData(dmginfo)
 
 	if victim.hit_trace then
 		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)

@@ -1962,7 +1962,7 @@ L.search_title_spectator = "You are a spectator"
 L.target_credits_on_confirm = "Confirm to receive unspent credits"
 L.target_credits_on_search = "Search to receive unspent credits"
 L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
-L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2092,3 +2092,9 @@ L.entity_pickup_owner_only = "Only the owner can pick this up"
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmed the death of {victim}."
 L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+L.builtin_marker = "Built-in."
+L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+L.header_equipment_info = "Equipment information"
