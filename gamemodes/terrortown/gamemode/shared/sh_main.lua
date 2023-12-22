@@ -274,8 +274,6 @@ function GM:Move(ply, moveData)
 	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
 
 	if ply:GetPlayerSetting("enable_dynamic_fov") then
-		print("changing FOV")
-
 		local newFOV = (ply.baseFOV or ply:GetFOV()) * mul ^ (1 / 6)
 		if lastFOV ~= newFOV then
 			lastFOV = newFOV

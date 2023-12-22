@@ -289,6 +289,8 @@ function plymeta:GetRevivalReason()
 end
 
 function plymeta:SetSettingOnServer(identifier, value)
+	self.playerSettings[identifier] = value
+
 	net.Start("ttt2_set_player_setting")
 	net.WriteString(identifier)
 	net.WriteTable({value}, true) -- use table to support any data type
