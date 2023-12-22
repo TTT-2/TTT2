@@ -6,7 +6,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added debug.print(message)
+  - This puts quotation marks around print statements
+  - Can handle single values or a sequential table to be printed
 - Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
+
+### Changed
+
+- Updated the Turkish localization file (by @NovaDiablox)
+
+### Fixed
+
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
@@ -20,6 +30,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `F1 > Edit Equipment` now has `builtin` indicators on equipment
   - Added tooltip to `F1 > Edit Equipment` menu with the equipment's class name.
   - `F1 > Role Settings` now has `builtin` indicators for roles
+  - `F1 > Edit Shops` now has `builtin` indicators for roles
 
 ### Changed
 
@@ -29,6 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Comboboxes can now handle numbers and strings as values
   - Defaults work now with numbers
   - OnChange-Callback is called with the correct type for ConVars
+- AFK/Idle timer now reads inputs instead of angle/pos checks to circumvent cheese
 
 ### Fixed
 
