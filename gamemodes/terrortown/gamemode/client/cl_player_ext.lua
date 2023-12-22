@@ -282,3 +282,74 @@ end
 function plymeta:GetRevivalReason()
 	return self.revivalReason or {}
 end
+
+local airtime = 0
+local velocity = 0
+local position = 0
+
+local frameCount = 10
+
+-- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
+hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+	if not ply:IsTerror() or ply:GetMoveType() == MOVETYPE_NOCLIP then return end
+
+	if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
+		airtime = math.Clamp(airtime + 1, 0, 300)
+
+		return
+	end
+
+	local view = {
+		ply = ply,
+		origin = origin,
+		angles = angles,
+		fov = fov
+	}
+
+	local eyeAngles = ply:EyeAngles()
+
+	-- handle landing on ground
+	if airtime > 0 then
+		airtime = airtime / frameCount
+
+		view.angles.p = view.angles.p + airtime * 0.01 -- pitch cam shake on land
+		view.angles.r = view.angles.r + airtime * 0.02 * math.Rand(-1, 1) -- roll cam shake on land
+	end
+
+	-- handle crouching
+	if ply:Crouching() then
+		local velocityMultiplier = ply:GetVelocity() * 2
+
+		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+		position = position + velocity * FrameTime() * 0.1
+
+		-- strafe angles
+		view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.02
+
+	-- handle swimming
+	elseif ply:WaterLevel() > 0 then
+		local velocityMultiplier = ply:GetVelocity()
+
+		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+		position = position + velocity * FrameTime() * 0.1
+
+		-- strafe angles
+		view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+
+	-- handle walking
+	else
+		local velocityMultiplier = ply:GetVelocity() * 0.75
+
+		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+		position = position + velocity * FrameTime() * 0.1
+
+		-- strafe angles
+		view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+
+	end
+
+	view.angles.r = angles.r + math.sin(position * 0.5) * velocity * 0.001
+	view.angles.p = angles.p + math.sin(position * 0.25) * velocity * 0.001
+
+	return view
+end)
