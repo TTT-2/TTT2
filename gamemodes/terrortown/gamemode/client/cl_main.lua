@@ -750,12 +750,24 @@ end
 
 -- Simple client-based idle checking
 local idle = {
-	ang = nil,
-	pos = nil,
+	btn = 0,
 	mx = 0,
 	my = 0,
-	t = 0
+	t = 0,
 }
+
+---
+-- Sniff for any button inputs to prevent scamming the AFK timer.
+-- @realm client
+hook.Add("SetupMove", "TTT2IdleCheck", function(_, mv)
+	if not GetGlobalBool("ttt_idle", false) then return end
+
+	if mv:GetButtons() ~= idle.btn then
+		idle.t = CurTime()
+	end
+
+	idle.btn = mv:GetButtons()
+end)
 
 ---
 -- Checks whether a the local @{Player} is idle and handles everything on it's own
@@ -768,17 +780,6 @@ function CheckIdle()
 	local client = LocalPlayer()
 	if not IsValid(client) then return end
 
-	if not idle.ang or not idle.pos then
-		-- init things
-		idle.ang = client:GetAngles()
-		idle.pos = client:GetPos()
-		idle.mx = gui.MouseX()
-		idle.my = gui.MouseY()
-		idle.t = CurTime()
-
-		return
-	end
-
 	if GetRoundState() == ROUND_ACTIVE and client:IsTerror() and client:Alive() then
 		local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
 
@@ -786,18 +787,10 @@ function CheckIdle()
 			idle_limit = 300
 		end
 
-		if client:GetAngles() ~= idle.ang then
-			-- Normal players will move their viewing angles all the time
-			idle.ang = client:GetAngles()
-			idle.t = CurTime()
-		elseif gui.MouseX() ~= idle.mx or gui.MouseY() ~= idle.my then
+		if gui.MouseX() ~= idle.mx or gui.MouseY() ~= idle.my then
 			-- Players in eg. the Help will move their mouse occasionally
 			idle.mx = gui.MouseX()
 			idle.my = gui.MouseY()
-			idle.t = CurTime()
-		elseif client:GetPos():Distance(idle.pos) > 10 then
-			-- Even if players don't move their mouse, they might still walk
-			idle.pos = client:GetPos()
 			idle.t = CurTime()
 		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", TryT("automoved_to_spec"))
