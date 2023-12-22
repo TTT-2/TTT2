@@ -156,7 +156,7 @@ if SERVER then
 			-- Hook that is called when a beacon is about to report a death.
 			-- With this hook the death can be ignored.
 			-- @param Player victim The player that died
-			-- @param Entity ent The beacon entity that the player died near
+			-- @param Entity beacon The beacon entity that the player died near
 			-- @return boolean Return false to cancel the death being reported
 			-- @hook
 			-- @realm server
