@@ -101,6 +101,8 @@ function ENT:Think()
 
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
 
+			---
+			-- @realm client
 			if hook.run("TTT2BeaconDetectPlayer", self, ent) == false then continue end
 
 			plysFound[#plysFound + 1] = ent
@@ -144,6 +146,8 @@ if SERVER then
 
 			if not IsValid(beaconOwner) or table.HasValue(playersNotified, beaconOwner) then continue end
 
+			---
+			-- @realm server			
 			if hook.run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
 			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)
