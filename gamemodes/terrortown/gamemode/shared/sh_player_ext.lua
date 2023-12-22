@@ -1133,6 +1133,13 @@ if debug.getinfo(plymeta.SetFOV, "flLnSu").what == "C" then
 	plymeta.SetOldFOV = plymeta.SetFOV
 end
 
+---
+-- Set a player's FOV (Field Of View) over a certain amount of time.
+-- @param number fov The angle of perception (FOV); set to 0 to return to default user FOV
+-- @param[default=0] number time The time it takes to transition to the FOV expressed in a floating point
+-- @param[default=self] Entity requester The requester or "owner" of the zoom event; only this entity will be able to change the player's FOV until it is set back to 0
+-- @param[default=false] boolean isSprinting Whether this is called to set sprinting FOV
+-- @realm shared
 function plymeta:SetFOV(fov, time, requester, isSprinting)
 	if isSprinting then
 		self.sprintingFOV = fov
@@ -1153,14 +1160,23 @@ function plymeta:SetFOV(fov, time, requester, isSprinting)
 	self:SetOldFOV(fov, time, requester, isSprinting)
 end
 
+---
+-- Checks if a player is in iron sights.
+-- @return boolean Returns true if the player is in iron sights
+-- @realm shared
 function plymeta:IsInIronsights()
 	local wep = self:GetActiveWeapon()
 
 	return IsValid(wep) and not wep.NoSights and isfunction(wep.GetIronsights) and wep:GetIronsights()
 end
 
-function plymeta:GetPlayerSetting(idenfier)
-	return self.playerSettings[idenfier]
+---
+-- Get the value of a shared player setting.
+-- @param string identifier The identifier of the setting
+-- @return any The value of the setting, nil if not set
+-- @realm shared
+function plymeta:GetPlayerSetting(identifier)
+	return self.playerSettings[identifier]
 end
 
 ---

@@ -189,6 +189,8 @@ function GM:Initialize()
 
 	keyhelp.InitializeBasicKeys()
 
+	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
+
 	---
 	-- @realm client
 	hook.Run("TTT2FinishedLoading")
@@ -358,6 +360,8 @@ function GM:OnReloaded()
 	vskin.UpdatedVSkin(skinName, skinName)
 
 	keyhelp.InitializeBasicKeys()
+
+	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
 
 	---
 	-- @realm client

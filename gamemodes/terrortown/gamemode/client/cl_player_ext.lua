@@ -7,7 +7,12 @@ if not plymeta then
 	return
 end
 
+---
+-- @realm client
 local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
 local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
 
 ---
@@ -191,8 +196,6 @@ function GM:SetupMove(ply, mv, cmd)
 	-- @realm shared
 	hook.Run("TTT2PlayerReady", ply)
 
-	ply:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
-
 	-- check if a resolution change happened while
 	-- the gamemode was inactive
 	oldScrW = appearance.GetLastWidth()
@@ -288,6 +291,11 @@ function plymeta:GetRevivalReason()
 	return self.revivalReason or {}
 end
 
+---
+-- Sets a shared playersetting from the client on both server and client.
+-- @param string identifier The identifier of the shared setting
+-- @param any value The setting's value
+-- @realm client
 function plymeta:SetSettingOnServer(identifier, value)
 	self.playerSettings[identifier] = value
 
