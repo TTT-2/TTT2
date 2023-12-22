@@ -17,6 +17,8 @@ if not plymeta then
 	return
 end
 
+plymeta.playerSettings = {}
+
 ---
 -- @internal
 -- @realm shared
@@ -1155,6 +1157,10 @@ function plymeta:IsInIronsights()
 	local wep = self:GetActiveWeapon()
 
 	return IsValid(wep) and not wep.NoSights and isfunction(wep.GetIronsights) and wep:GetIronsights()
+end
+
+function plymeta:GetPlayerSetting(idenfier)
+	return self.playerSettings[idenfier]
 end
 
 ---

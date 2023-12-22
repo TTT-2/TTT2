@@ -13,6 +13,15 @@ TTT2ShopFallbackInitialized = false
 
 local callbackIdentifier = "TTT2RegisteredSWEPCallback"
 
+if CLIENT then
+	-- @realm client
+	CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
+		LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
+	end)
+end
+
 ---
 -- Add callback for equipment and insert changes in the given equipmentTable
 -- @param string name the database-name of the equipment
@@ -261,16 +270,19 @@ function GM:Move(ply, moveData)
 
 	mul = mul * SPRINT:HandleSpeedMultiplierCalculation(ply)
 
-	local newFOV = (ply.baseFOV or ply:GetFOV()) * mul ^ (1 / 6)
-
-	if lastFOV ~= newFOV then
-		lastFOV = newFOV
-
-		ply:SetFOV(newFOV, 0.25, nil, true)
-	end
-
 	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
 	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
+
+	if ply:GetPlayerSetting("enable_dynamic_fov") then
+		print("changing FOV")
+
+		local newFOV = (ply.baseFOV or ply:GetFOV()) * mul ^ (1 / 6)
+		if lastFOV ~= newFOV then
+			lastFOV = newFOV
+
+			ply:SetFOV(newFOV, 0.25, nil, true)
+		end
+	end
 end
 
 -- @param Player ply The player

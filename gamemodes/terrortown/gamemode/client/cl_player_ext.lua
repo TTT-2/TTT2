@@ -7,6 +7,9 @@ if not plymeta then
 	return
 end
 
+local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
+local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
+
 ---
 -- Applies a animation gesture
 -- @param ACT act The @{ACT} or sequence that should be played
@@ -188,6 +191,8 @@ function GM:SetupMove(ply, mv, cmd)
 	-- @realm shared
 	hook.Run("TTT2PlayerReady", ply)
 
+	ply:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
+
 	-- check if a resolution change happened while
 	-- the gamemode was inactive
 	oldScrW = appearance.GetLastWidth()
@@ -283,6 +288,13 @@ function plymeta:GetRevivalReason()
 	return self.revivalReason or {}
 end
 
+function plymeta:SetSettingOnServer(identifier, value)
+	net.Start("ttt2_set_player_setting")
+	net.WriteString(identifier)
+	net.WriteTable({value}, true) -- use table to support any data type
+	net.SendToServer()
+end
+
 local airtime = 0
 local velocity = 0
 local position = 0
@@ -291,6 +303,8 @@ local frameCount = 10
 
 -- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+	if not cvEnableBobbing:GetBool() then return end
+
 	-- handle oversving players
 	if not ply:IsTerror() and IsValid(ply:GetObserverTarget()) then
 		ply = ply:GetObserverTarget()
@@ -329,17 +343,21 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		position = position + velocity * FrameTime() * 0.1
 
 		-- strafe angles
-		view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.02
+		if cvEnableBobbingStrafe:GetBool() then
+			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.02
+		end
 
 	-- handle swimming
 	elseif ply:WaterLevel() > 0 then
-		local velocityMultiplier = ply:GetVelocity()
+		local velocityMultiplier = ply:GetVelocity() * 1.5
 
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
 		-- strafe angles
-		view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+		if cvEnableBobbingStrafe:GetBool() then
+			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+		end
 
 	-- handle walking
 	else
@@ -349,7 +367,9 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		position = position + velocity * FrameTime() * 0.1
 
 		-- strafe angles
-		view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+		if cvEnableBobbingStrafe:GetBool() then
+			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+		end
 
 	end
 

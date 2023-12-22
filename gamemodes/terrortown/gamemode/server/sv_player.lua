@@ -30,6 +30,7 @@ CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 util.AddNetworkString("ttt2_damage_received")
+util.AddNetworkString("ttt2_set_player_setting")
 
 ---
 -- First spawn on the server.
@@ -1345,6 +1346,17 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	net.WriteFloat(dmginfo:GetDamage())
 	net.Send(ent)
 end
+
+net.Receive("ttt2_set_player_setting", function(_, ply)
+	if not IsValid(ply) then return end
+
+	local identifier = net.ReadString()
+	local tableData = net.ReadTable(true)
+
+	if #tableData ~= 1 then return end
+
+	ply.playerSettings[identifier] = tableData[1]
+end)
 
 ---
 -- Called whenever an @{NPC} is killed
