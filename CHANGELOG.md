@@ -9,12 +9,22 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added debug.print(message)
   - This puts quotation marks around print statements
   - Can handle single values or a sequential table to be printed
+- Reworked the way the player camera is handled (by @TimGoll)
+  - Added FOV change on speed change
+  - Added view bobbing on walkin, swimming, falling and stafing
+  - Added convars to disable those changes
+- Added malus to shooting accuracy when sprinting (by @TimGoll)
 
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
+- Changed the way the crosshair is rendered when sprinting (hidden -> increased in size)
 
 ### Fixed
+
+### Removed
+
+- Removed some crosshair related convars: `ttt_crosshair_static`, `ttt2_sprint_crosshair`
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
