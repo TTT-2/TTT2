@@ -160,7 +160,7 @@ if SERVER then
 			-- @return boolean Return false to cancel the death being reported
 			-- @hook
 			-- @realm server
-			if hook.run("TTT2BeaconDeathNotify", victim, ent) == false then continue end
+			if hook.run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
 			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)
 
