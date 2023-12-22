@@ -291,6 +291,11 @@ local frameCount = 10
 
 -- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+	-- handle oversving players
+	if not ply:IsTerror() and IsValid(ply:GetObserverTarget()) then
+		ply = ply:GetObserverTarget()
+	end
+
 	if not ply:IsTerror() or ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 
 	if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
