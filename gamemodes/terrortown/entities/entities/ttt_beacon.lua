@@ -103,7 +103,7 @@ function ENT:Think()
 
 			---
 			-- @realm client
-			if hook.run("TTT2BeaconDetectPlayer", self, ent) == false then continue end
+			if hook.run("TTT2BeaconDetectPlayer", ent, self) == false then continue end
 
 			plysFound[#plysFound + 1] = ent
 		end
