@@ -102,6 +102,12 @@ function ENT:Think()
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
 
 			---
+			-- Hook that is called when a player is about to be found by a beacon.
+			-- With this hook the player can be ignored.
+			-- @param Player ply The player that the beacon has found
+			-- @param Entity ent The beacon entity that found the player
+			-- @return boolean Return false to cancel the player being detected
+			-- @hook
 			-- @realm server
 			if hook.run("TTT2BeaconDetectPlayer", self, ent) == false then continue end
 
@@ -147,8 +153,14 @@ if SERVER then
 			if not IsValid(beaconOwner) or table.HasValue(playersNotified, beaconOwner) then continue end
 
 			---
+			-- Hook that is called when a beacon is about to report a death.
+			-- With this hook the death can be ignored.
+			-- @param Player victim The player that died
+			-- @param Entity ent The beacon entity that the player died near
+			-- @return boolean Return false to cancel the death being reported
+			-- @hook
 			-- @realm server
-			if hook.run("TTT2BeaconDeathNotify", beacon, victim) == false then continue end
+			if hook.run("TTT2BeaconDeathNotify", victim, ent) == false then continue end
 
 			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)
 
