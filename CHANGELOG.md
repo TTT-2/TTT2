@@ -13,7 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added FOV change on speed change
   - Added view bobbing on walking, swimming, falling and strafing
   - Added convars to disable those changes
-- Added malus to shooting accuracy when sprinting (by @TimGoll)
+- Decrease shooting accuracy while sprinting (by @TimGoll)
 
 ### Changed
 
