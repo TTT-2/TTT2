@@ -11,7 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Can handle single values or a sequential table to be printed
 - Reworked the way the player camera is handled (by @TimGoll)
   - Added FOV change on speed change
-  - Added view bobbing on walkin, swimming, falling and stafing
+  - Added view bobbing on walking, swimming, falling and strafing
   - Added convars to disable those changes
 - Added malus to shooting accuracy when sprinting (by @TimGoll)
 
