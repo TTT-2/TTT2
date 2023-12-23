@@ -18,7 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
-- Changed the way the crosshair is rendered when sprinting (hidden -> increased in size)
+- Crosshair now spreads while sprinting instead of being hidden
 
 ### Fixed
 
