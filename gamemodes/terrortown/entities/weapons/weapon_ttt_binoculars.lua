@@ -86,6 +86,7 @@ function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + 0.1)
 
 	local corpse = self:GetTargetingCorpse()
+
 	if corpse == nil or self:GetProcessTarget() ~= NULL and self:GetProcessTarget() == corpse then return end
 
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
