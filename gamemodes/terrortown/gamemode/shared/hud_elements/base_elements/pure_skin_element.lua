@@ -97,17 +97,17 @@ if CLIENT then
 
 	HUDELEMENT.BulletIcons = {
 		["357"] = Material("vgui/ttt/ammo/bullet_357"),
-		["Buckshot"] = Material("vgui/ttt/ammo/bullet_buckshot"),
-		["SMG1"] = Material("vgui/ttt/ammo/bullet_smg1"),
-		["Pistol"] = Material("vgui/ttt/ammo/bullet_pistol"),
-		["AlyxGun"] = Material("vgui/ttt/ammo/bullet_alyxgun"),
+		["buckshot"] = Material("vgui/ttt/ammo/bullet_buckshot"),
+		["smg1"] = Material("vgui/ttt/ammo/bullet_smg1"),
+		["pistol"] = Material("vgui/ttt/ammo/bullet_pistol"),
+		["alyxgun"] = Material("vgui/ttt/ammo/bullet_alyxgun"),
 	}
 
 	HUDELEMENT.AmmoIcons = {
 		["357"] = Material("vgui/ttt/ammo/box_357"),
-		["Buckshot"] = Material("vgui/ttt/ammo/box_buckshot"),
-		["SMG1"] = Material("vgui/ttt/ammo/box_smg1"),
-		["Pistol"] = Material("vgui/ttt/ammo/box_pistol"),
-		["AlyxGun"] = Material("vgui/ttt/ammo/box_alyxgun"),
+		["buckshot"] = Material("vgui/ttt/ammo/box_buckshot"),
+		["smg1"] = Material("vgui/ttt/ammo/box_smg1"),
+		["pistol"] = Material("vgui/ttt/ammo/box_pistol"),
+		["alyxgun"] = Material("vgui/ttt/ammo/box_alyxgun"),
 	}
 end

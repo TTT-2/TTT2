@@ -17,6 +17,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Coerced ammo types to lowercase for better matching in HUD.
+
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
 ### Added
