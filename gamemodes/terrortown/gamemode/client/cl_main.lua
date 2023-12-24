@@ -189,8 +189,6 @@ function GM:Initialize()
 
 	keyhelp.InitializeBasicKeys()
 
-	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
-
 	---
 	-- @realm client
 	hook.Run("TTT2FinishedLoading")
@@ -293,6 +291,8 @@ function GM:InitPostEntity()
 	end
 
 	local client = LocalPlayer()
+
+	client:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
 
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
