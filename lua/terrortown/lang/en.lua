@@ -2098,3 +2098,6 @@ L.builtin_marker = "Built-in."
 L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 L.header_equipment_info = "Equipment information"
+
+-- 2023-12-24
+L.binoc_help_reload = "Clear target."

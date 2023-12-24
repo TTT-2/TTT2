@@ -29,7 +29,7 @@ end
 SWEP.Base = "weapon_tttbase"
 
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
-SWEP.WorldModel = "models/props/cs_office/paper_towels.mdl"
+SWEP.WorldModel = "models/Items/combine_rifle_cartridge01.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -58,15 +58,26 @@ SWEP.ZoomLevels = {
 }
 
 SWEP.ProcessingDelay = 5
+SWEP.decayRate = 0.5
 
 ---
 -- @ignore
 function SWEP:SetupDataTables()
-	self:NetworkVar("Bool", 0, "Processing")
-	self:NetworkVar("Float", 0, "StartTime")
-	self:NetworkVar("Int", 0, "Zoom")
+	self:NetworkVar("Entity", 0, "ProcessTarget")
+	self:NetworkVar("Float", 0, "Progress")
+	self:NetworkVar("Float", 1, "AwayTime")
+	self:NetworkVar("Int", 0, "ZoomAmount")
 
 	return self.BaseClass.SetupDataTables(self)
+end
+
+---
+-- @param Entity target The new processing target.
+-- @realm shared
+function SWEP:SetNewTarget(target)
+	self:SetProcessTarget(target)
+	self:SetProgress(0)
+	self:SetAwayTime(0)
 end
 
 ---
@@ -74,13 +85,13 @@ end
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + 0.1)
 
-	if not self:IsTargetingCorpse() or self:GetProcessing() then return end
+	local corpse = self:GetTargetingCorpse()
+	if corpse == nil or self:GetProcessTarget() ~= NULL and self:GetProcessTarget() == corpse then return end
 
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
 	if SERVER then
-		self:SetProcessing(true)
-		self:SetStartTime(CurTime())
+		self:SetNewTarget(corpse)
 	end
 end
 
@@ -105,7 +116,7 @@ function SWEP:SetZoomLevel(level)
 
 	local owner = self:GetOwner()
 
-	self:SetZoom(level)
+	self:SetZoomAmount(level)
 
 	owner:SetFOV(self.ZoomLevels[level], 0.3)
 	owner:DrawViewModel(false)
@@ -114,13 +125,13 @@ end
 ---
 -- @ignore
 function SWEP:CycleZoom()
-	self:SetZoom(self:GetZoom() + 1)
+	self:SetZoomAmount(self:GetZoomAmount() + 1)
 
-	if not self.ZoomLevels[self:GetZoom()] then
-		self:SetZoom(1)
+	if not self.ZoomLevels[self:GetZoomAmount()] then
+		self:SetZoomAmount(1)
 	end
 
-	self:SetZoomLevel(self:GetZoom())
+	self:SetZoomLevel(self:GetZoomAmount())
 end
 
 ---
@@ -128,7 +139,7 @@ end
 function SWEP:PreDrop()
 	self:SetZoomLevel(1)
 
-	self:SetProcessing(false)
+	self:SetNewTarget(NULL)
 
 	return self.BaseClass.PreDrop(self)
 end
@@ -138,7 +149,7 @@ end
 function SWEP:Holster()
 	self:SetZoomLevel(1)
 
-	self:SetProcessing(false)
+	self:SetNewTarget(NULL)
 
 	return true
 end
@@ -158,6 +169,16 @@ end
 ---
 -- @ignore
 function SWEP:Reload()
+	local make_sound = false
+	if self:GetZoomAmount() ~= 1 or self:GetProgress() > 0 then
+		self:SetZoomLevel(1)
+		make_sound = true
+	end
+
+	if CLIENT and IsFirstTimePredicted() and make_sound then
+		LocalPlayer():EmitSound(click)
+	end
+	self:SetNewTarget(NULL)
 	return false
 end
 
@@ -169,6 +190,18 @@ function SWEP:IsTargetingCorpse()
 	local ent = tr.Entity
 
 	return IsValid(ent) and ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) ~= false
+end
+
+---
+-- @return Entity
+-- @realm shared
+function SWEP:GetTargetingCorpse()
+	local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
+	local ent = tr.Entity
+
+	if IsValid(ent) and ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) ~= false then
+		return ent
+	end
 end
 
 local confirm = Sound("npc/turret_floor/click1.wav")
@@ -192,20 +225,27 @@ end
 function SWEP:Think()
 	BaseClass.Think(self)
 
-	if not self:GetProcessing() then return end
+	if self:GetProcessTarget() == NULL then return end
 
-	if not self:IsTargetingCorpse() then
-		self:SetProcessing(false)
-		self:SetStartTime(0)
+	local tick_direction = engine.TickInterval()
+	local away_time = self:GetAwayTime()
 
-		return
+	if self:GetTargetingCorpse() ~= self:GetProcessTarget() then
+		away_time = away_time + tick_direction
+		self:SetAwayTime( away_time )
+		tick_direction = tick_direction * (-self.decayRate * away_time)
+	else
+		self:SetAwayTime(0)
 	end
 
-	if CurTime() > (self:GetStartTime() + self.ProcessingDelay) then
-		self:IdentifyCorpse()
+	local newProgress = self:GetProgress() + tick_direction
+	self:SetProgress(newProgress)
 
-		self:SetProcessing(false)
-		self:SetStartTime(0)
+	if newProgress < 0 then
+		self:SetNewTarget(NULL)
+	elseif newProgress > self.ProcessingDelay then
+		self:IdentifyCorpse()
+		self:SetNewTarget(NULL)
 	end
 end
 
@@ -233,6 +273,7 @@ if CLIENT then
 	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
+		self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
 		cv_thickness = GetConVar("ttt_crosshair_thickness")
 
 		return self.BaseClass.Initialize(self)
@@ -249,8 +290,8 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:AdjustMouseSensitivity()
-		if self:GetZoom() > 0 then
-			return 1 / self:GetZoom()
+		if self:GetZoomAmount() > 0 then
+			return 1 / self:GetZoomAmount()
 		end
 
 		return -1
@@ -264,14 +305,16 @@ if CLIENT then
 
 		local c_wep = client:GetActiveWeapon()
 
-		if not IsValid(c_wep) then return end
+		if not IsValid(ent)
+			or not IsValid(c_wep)
+			or ent:GetClass() ~= "prop_ragdoll"
+			or c_wep:GetClass() ~= "weapon_ttt_binoculars"
+			or c_wep:GetProcessTarget() ~= ent
+		then
+			return
+		end
 
-		if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
-
-		-- draw progress
-		if not c_wep:GetProcessing() then return end
-
-		local progress = mathRound(mathClamp((CurTime() - c_wep:GetStartTime()) / c_wep.ProcessingDelay * 100, 0, 100))
+		local progress = mathRound(mathClamp((c_wep:GetProgress() / c_wep.ProcessingDelay) * 100, 0, 100))
 
 		tData:AddDescriptionLine(
 			GetPT("binoc_progress", {progress = progress}),
@@ -304,6 +347,6 @@ if CLIENT then
 		surface.DrawRect(x - offset, y - length, thickness, length - gap)
 		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 
-		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoom(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 end
