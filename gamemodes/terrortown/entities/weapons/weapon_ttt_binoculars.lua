@@ -235,7 +235,7 @@ function SWEP:Think()
 
 	if self:GetTargetingCorpse() ~= self:GetProcessTarget() then
 		away_time = away_time + tick_direction
-		self:SetAwayTime( away_time )
+		self:SetAwayTime(away_time)
 		tick_direction = tick_direction * (-self.decayRate * away_time)
 	else
 		self:SetAwayTime(0)
