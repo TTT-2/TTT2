@@ -178,7 +178,9 @@ function SWEP:Reload()
 	if CLIENT and IsFirstTimePredicted() and make_sound then
 		LocalPlayer():EmitSound(click)
 	end
-	self:SetNewTarget(NULL)
+
+	self:SetNewTarget(nil)
+
 	return false
 end
 
