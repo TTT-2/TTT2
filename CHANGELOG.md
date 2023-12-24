@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added view bobbing on walking, swimming, falling and strafing
   - Added convars to disable those changes
 - Decrease shooting accuracy while sprinting (by @TimGoll)
+- Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
 
 ### Changed
 
