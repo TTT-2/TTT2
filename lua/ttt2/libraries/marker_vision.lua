@@ -83,7 +83,7 @@ end
 -- @return number|nil The vibility flag
 -- @realm shared
 function markerVision.GetVisibleFor(ent)
-	if not IsValid(ent) then return end
+	if not IsValid(ent) or not markerVision.registry[ent] then return end
 
 	return markerVision.registry[ent].visibleFor
 end
