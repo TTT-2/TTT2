@@ -211,7 +211,7 @@ end
 ---
 -- Sets a revival reason that is displayed in the revival HUD element.
 -- It supports a language identifier for translated strings.
--- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[default=nil] string name The text or the language identifier, nil to reset
 -- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
 -- @realm client
 function plymeta:SetRevivalReason(name, params)

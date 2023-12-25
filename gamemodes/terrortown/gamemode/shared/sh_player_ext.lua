@@ -17,7 +17,8 @@ if not plymeta then
 	return
 end
 
-plymeta.playerSettings = {}
+-- player meta table is hotreload safe, so we want to keep this table as well
+plymeta.playerSettings = plymeta.playerSettings or {}
 
 ---
 -- @internal
@@ -1141,19 +1142,27 @@ end
 -- @param[default=false] boolean isSprinting Whether this is called to set sprinting FOV
 -- @realm shared
 function plymeta:SetFOV(fov, time, requester, isSprinting)
+	print("setting FOV to: " .. tostring(fov))
+
 	if isSprinting then
 		self.sprintingFOV = fov
 
-		if self.externalFOV then return end
+		print("is sprinting...")
+
+		if self.externalFOV then print("external FOV set, stopping") return end
 	end
 
 	if not isSprinting then
 		self.externalFOV = fov
 
+		print("not sprinting, setting external FOV")
+
 		if fov == 0 then
 			self.externalFOV = nil
 
+
 			fov = self.sprintingFOV or 0
+			print("resetting fov to: " .. tostring(fov))
 		end
 	end
 
