@@ -6,6 +6,7 @@
 
 ttt_include("vgui__cl_sb_info")
 
+local TryT = LANG.TryTranslation
 local GetTranslation = LANG.GetTranslation
 local math = math
 local table = table
@@ -122,8 +123,6 @@ end
 ---
 -- @ignore
 function PANEL:Init()
-	local TryT = LANG.TryTranslation
-
 	-- cannot create info card until player state is known
 	self.info = nil
 	self.open = false
@@ -152,7 +151,7 @@ function PANEL:Init()
 
 	self.sresult = vgui.Create("DImage", self)
 	self.sresult:SetSize(iconSizes, iconSizes)
-	self.sresult:SetMouseInputEnabled(false)
+	self.sresult:SetMouseInputEnabled(true)
 
 	self.dev = vgui.Create("DImage", self)
 	self.dev:SetSize(iconSizes, iconSizes)
@@ -433,12 +432,19 @@ function PANEL:UpdatePlayerData()
 	self.tag:SetText(ptag and GetTranslation(ptag.txt) or "")
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
 
-	self.sresult:SetVisible(ply.bodySearchResult and ply.bodySearchResult.base.isPublicPolicingSearch)
-
-	-- more blue if a detective searched them
-	if ply.bodySearchResult and (LocalPlayer():GetSubRoleData().isPolicingRole or not ply.bodySearchResult.show) then
-		self.sresult:SetImageColor(Color(200, 200, 255))
+	local show_sresult = true
+	-- we have body search results
+	if ply.bodySearchResult and ply.bodySearchResult.show_sb then
+		self.sresult:SetImage("icon16/information.png")
+		self.sresult:SetTooltip(GetTranslation("cl_sb_row_sresult_direct_conf"))
+	elseif ply.bodySearchResult and ply.bodySearchResult.base.isPublicPolicingSearch then
+		self.sresult:SetImage("icon16/magnifier.png")
+		self.sresult:SetTooltip(GetTranslation("cl_sb_row_sresult_pub_police"))
+	else
+		show_sresult = false
 	end
+
+	self.sresult:SetVisible(show_sresult)
 
 	-- cols are likely to need re-centering
 	self:LayoutColumns()
@@ -484,8 +490,7 @@ function PANEL:ApplySchemeSettings()
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
 	self.tag:SetFont("treb_small")
 
-	self.sresult:SetImage("icon16/magnifier.png")
-	self.sresult:SetImageColor(Color(170, 170, 170, 150))
+	self.sresult:SetImageColor(COLOR_WHITE)
 
 	self.dev:SetImage(materialIndicatorDev)
 	self.dev:SetImageColor(namecolor.dev)
