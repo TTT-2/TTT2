@@ -23,6 +23,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Damage Scaling now has a help description.
+
 ### Removed
 
 - Removed some crosshair related convars: `ttt_crosshair_static`, `ttt2_sprint_crosshair`
