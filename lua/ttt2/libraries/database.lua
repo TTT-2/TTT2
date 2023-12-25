@@ -332,7 +332,7 @@ function database.RemoveChangeCallback(accessName, itemName, key, identifier)
 	end
 
 	for i = #callbacks, 1, -1  do
-		callback = callbacks[i]
+		local callback = callbacks[i]
 
 		-- AccesName has to be the same, because registrating callbacks for all sql tables is not allowed
 		if callback.accessName ~= accessName then continue end
