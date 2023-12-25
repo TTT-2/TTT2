@@ -2100,3 +2100,14 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
+
+-- 2023-12-20
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
+--2 = Deal twice the amount of damage.
+--
+--Note: Some weapons might not use this value which causes this modifier to be ineffective.]]

@@ -163,6 +163,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		master = master
 	})
 
+	form:MakeHelp({
+		label = "equipmenteditor_desc_damage_scaling"
+	})
+
 	form:MakeSlider({
 		label = "equipmenteditor_name_damage_scaling",
 		min = 0,
