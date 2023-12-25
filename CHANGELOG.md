@@ -17,7 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Damage Scaling now has a help description
+- Damage Scaling now has a help description.
 - Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
 - Coerced ammo types to lowercase for better matching in HUD.
 
