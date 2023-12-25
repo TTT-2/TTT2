@@ -18,6 +18,7 @@ file.CreateDir("downloaded_assets")
 
 local exists = file.Exists
 local write = file.Write
+local delete = file.Delete
 local fetch = http.Fetch
 local white = Color(255, 255, 255)
 local surface = surface
@@ -64,6 +65,18 @@ local function FetchAvatarAsset(id64, size)
 		return FetchAsset(fetched_avatar_urls[key])
 	end
 
+	---
+	-- @realm client
+	local data = hook.Run("TTT2FetchAvatar", id64, size)
+	if data ~= nil then
+		local url = "hook://" .. key
+		local crcUrl = crc(url)
+
+		fetched_avatar_urls[key] = url
+		write("downloaded_assets/" .. crcUrl .. ".png", data)
+		return
+	end
+
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
 		local link = body:match("<avatarIcon><%!%[CDATA%[(.-)%]%]><%/avatarIcon>")
 
@@ -82,6 +95,26 @@ end
 -- @realm client
 function draw.CacheAvatar(id64, size)
 	FetchAvatarAsset(id64, size)
+end
+
+---
+-- deletes the avatar material for a steamid64
+-- when a cached avatar is found it will be destroyed
+-- @param string id64 the steamid64
+-- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @realm client
+function draw.DropCacheAvatar(id64, size)
+	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
+	local key = id64 .. size
+
+	local url = fetched_avatar_urls[key]
+	local crcUrl = crc(url)
+	local uri = "data/downloaded_assets/" .. crcUrl .. ".png"
+	if exists(uri, "DATA") then
+		delete(uri, "DATA")
+	end
+	mats[url] = nil
+	fetched_avatar_urls[key] = nil
 end
 
 ---
