@@ -885,10 +885,9 @@ else -- CLIENT
 	end)
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionC4", function(mvData)
-		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 
-		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
+		if not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"

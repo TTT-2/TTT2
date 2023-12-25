@@ -333,10 +333,9 @@ if CLIENT then
 	end)
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionRadio", function(mvData)
-		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 
-		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_radio" then return end
+		if not IsValid(ent) or ent:GetClass() ~= "ttt_radio" then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"

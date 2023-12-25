@@ -249,10 +249,9 @@ if CLIENT then
 	end)
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
-		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 
-		if not client:IsTerror() or not IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
+		if IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
@@ -271,10 +270,9 @@ if CLIENT then
 	end)
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeaconPlys", function(mvData)
-		local client = LocalPlayer()
 		local ent = mvData:GetEntity()
 
-		if not client:IsTerror() or not IsValid(ent) or not ent:IsPlayer() or ent == client then return end
+		if not IsValid(ent) or not ent:IsPlayer() or ent == LocalPlayer() then return end
 
 		mvData:EnableText()
 
