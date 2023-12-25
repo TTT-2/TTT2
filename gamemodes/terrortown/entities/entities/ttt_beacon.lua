@@ -111,10 +111,10 @@ if SERVER then
 
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
 
-      ---
+			---
 			-- @realm server
-			if hook.run("TTT2BeaconDetectPlayer", ent, self) == false then continue end
-      
+			if hook.Run("TTT2BeaconDetectPlayer", ent, self) == false then continue end
+
 			plysFound[ent] = true
 			affectedPlayers[ent] = true
 
@@ -175,7 +175,7 @@ if SERVER then
 
 			---
 			-- @realm server			
-			if hook.run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
+			if hook.Run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
 			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)
 
