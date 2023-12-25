@@ -317,9 +317,11 @@ local frameCount = 10
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 	if not cvEnableBobbing:GetBool() then return end
 
+	local observerTarget = ply:GetObserverTarget()
+
 	-- handle observing players
-	if not ply:IsTerror() and IsValid(ply:GetObserverTarget()) then
-		ply = ply:GetObserverTarget()
+	if not ply:IsTerror() and IsValid(obersverTarget) and observerTarget:IsPlayer() then
+		ply = observerTarget
 	end
 
 	if not ply:IsTerror() or ply:GetMoveType() == MOVETYPE_NOCLIP then return end
