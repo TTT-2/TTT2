@@ -109,7 +109,7 @@ if SERVER then
 		for i = 1, #entsFound do
 			local ent = entsFound[i]
 
-			if not IsValid(ent) or not ent:IsPlayer() then continue end
+			if not IsValid(ent) or not ent:IsPlayer() or not ent:IsTerror() then continue end
 
 			---
 			-- @realm server
