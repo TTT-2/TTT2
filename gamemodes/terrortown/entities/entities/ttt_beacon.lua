@@ -111,8 +111,14 @@ if SERVER then
 
 			if not IsValid(ent) or not ent:IsPlayer() then continue end
 
+      ---
+			-- @realm server
+			if hook.run("TTT2BeaconDetectPlayer", ent, self) == false then continue end
+      
 			plysFound[ent] = true
 			affectedPlayers[ent] = true
+
+			plysFound[#plysFound + 1] = ent
 		end
 
 		table.Merge(affectedPlayers, self.lastPlysFound)
@@ -167,12 +173,36 @@ if SERVER then
 
 			if not IsValid(beaconOwner) or table.HasValue(playersNotified, beaconOwner) then continue end
 
+			---
+			-- @realm server			
+			if hook.run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
+
 			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)
 
 			-- make sure a player is only notified once, even if multiple beacons are triggered
 			playersNotified[#playersNotified + 1] = beaconOwner
 		end
 	end)
+
+	---
+	-- Hook that is called when a player is about to be found by a beacon.
+	-- This hook can be used to cancel the detection.
+	-- @param Player ply The player that the beacon has found
+	-- @param Entity ent The beacon entity that found the player
+	-- @return boolean Return false to cancel the player being detected
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTT2BeaconDetectPlayer(ply, ent) end
+
+	---
+	-- Hook that is called when a beacon is about to report a death.
+	-- This hook can be used to cancel the notification.
+	-- @param Player victim The player that died
+	-- @param Entity beacon The beacon entity that the player died near
+	-- @return boolean Return false to cancel the death being reported
+	-- @hook
+	-- @realm server
+	function GAMEMODE:TTT2BeaconDeathNotify(victim, beacon) end
 end
 
 if CLIENT then

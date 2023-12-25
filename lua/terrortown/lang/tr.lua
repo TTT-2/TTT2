@@ -2112,7 +2112,18 @@ L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 --L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
---L.builtin_marker = "Built-in."
---L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
---L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
---L.header_equipment_info = "Equipment information"
+L.builtin_marker = "Bütünleşik."
+L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
+L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
+L.header_equipment_info = "Ekipman bilgisi"
+
+-- 2023-12-20
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
+--2 = Deal twice the amount of damage.
+--
+--Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
