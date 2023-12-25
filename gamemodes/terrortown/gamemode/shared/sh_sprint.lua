@@ -47,7 +47,7 @@ function SPRINT:HandleStaminaCalculation(ply)
 	local staminaConsumptionRate = self.convars.consumption:GetFloat()
 
 	local sprintStamina = ply:GetSprintStamina()
-	local playerWantsToSprint = self:PlayerWantsToSprint(ply)
+	local playerWantsToSprint = self:PlayerWantsToSprint(ply) and not ply:IsInIronsights()
 
 	if (sprintStamina == 1 and not playerWantsToSprint) or (sprintStamina == 0 and playerWantsToSprint) then
 		return
