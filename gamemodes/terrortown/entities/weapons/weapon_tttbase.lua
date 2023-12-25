@@ -288,6 +288,13 @@ if CLIENT then
 	local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
 	local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
 
+	local animData = {
+		timeStart = 0,
+		timeEnd = 0,
+		valueStart = 0,
+		valueEnd = 0
+	}
+
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
@@ -307,6 +314,22 @@ if CLIENT then
 		local scale = appearance.GetGlobalScale()
 		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
 		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
+
+		-- handle size animation
+		if scaleWeapon ~= animData.valueEnd then
+			animData = {
+				timeStart = CurTime(),
+				timeEnd = CurTime() + 0.25,
+				valueStart = animData.valueEnd,
+				valueEnd = scaleWeapon
+			}
+		end
+
+		scaleWeapon = Lerp(
+			math.ease.OutQuint(math.TimeFraction(animData.timeStart, animData.timeEnd, CurTime())),
+			animData.valueStart,
+			animData.valueEnd
+		)
 
 		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
 		local gap = cvEnableCrosshairGap:GetBool()
