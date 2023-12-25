@@ -18,6 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)
+- Damage Scaling now has a help description.
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
