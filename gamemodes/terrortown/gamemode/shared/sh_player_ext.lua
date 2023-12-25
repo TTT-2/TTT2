@@ -982,7 +982,7 @@ end
 -- @hook
 -- @realm shared
 function GM:TTT2PlayerReady(ply)
-	ply.baseFOV = ply:GetFOV()
+
 end
 
 local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel

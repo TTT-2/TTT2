@@ -273,8 +273,9 @@ function GM:Move(ply, moveData)
 	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
 	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
 
-	if ply:GetPlayerSetting("enable_dynamic_fov") then
-		local newFOV = (ply.baseFOV or ply:GetFOV()) * mul ^ (1 / 6)
+	if SERVER and ply:GetPlayerSetting("enable_dynamic_fov") then
+		local newFOV = (ply:GetPlayerSetting("fov_desired") or ply:GetFOV()) * mul ^ (1 / 6)
+
 		if lastFOV ~= newFOV then
 			lastFOV = newFOV
 
@@ -466,6 +467,9 @@ function GM:Tick()
 		end
 
 		VOICE.Tick()
+
+		-- trigger an update that is synced to the server in case the fov slider value changed
+		client:SetSettingOnServer("fov_desired", GetConVar("fov_desired"):GetFloat())
 	end
 end
 

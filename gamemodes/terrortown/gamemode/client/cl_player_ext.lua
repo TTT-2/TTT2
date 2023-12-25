@@ -297,6 +297,8 @@ end
 -- @param any value The setting's value
 -- @realm client
 function plymeta:SetSettingOnServer(identifier, value)
+	if self.playerSettings[identifier] == value then return end
+
 	self.playerSettings[identifier] = value
 
 	net.Start("ttt2_set_player_setting")
@@ -315,7 +317,7 @@ local frameCount = 10
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 	if not cvEnableBobbing:GetBool() then return end
 
-	-- handle oversving players
+	-- handle observing players
 	if not ply:IsTerror() and IsValid(ply:GetObserverTarget()) then
 		ply = ply:GetObserverTarget()
 	end
