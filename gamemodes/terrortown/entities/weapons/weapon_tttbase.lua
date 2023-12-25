@@ -709,10 +709,18 @@ end
 -- @return number
 -- @realm shared
 function SWEP:GetPrimaryConeFactor()
-	if self:GetIronsights() then
-		return 0.8
-	elseif IsValid(self:GetOwner()) and SPRINT:IsSprinting(self:GetOwner()) then
+	local owner = self:GetOwner()
+
+	if not IsValid(owner) then
+		return 1
+	end
+
+	if SPRINT:IsSprinting(owner) and not owner:IsOnGround() then
+		return 2.0
+	elseif SPRINT:IsSprinting(owner) or not owner:IsOnGround() then
 		return 1.6
+	elseif self:GetIronsights() then
+		return 0.8
 	else
 		return 1
 	end
@@ -722,10 +730,18 @@ end
 -- @return number
 -- @realm shared
 function SWEP:GetPrimaryRecoilFactor()
-	if self:GetIronsights() then
-		return 0.6
-	elseif IsValid(self:GetOwner()) and SPRINT:IsSprinting(self:GetOwner()) then
+	local owner = self:GetOwner()
+
+	if not IsValid(owner) then
+		return 1
+	end
+
+	if SPRINT:IsSprinting(owner) and not owner:IsOnGround() then
+		return 2.8
+	elseif SPRINT:IsSprinting(owner) or not owner:IsOnGround() then
 		return 2.2
+	elseif self:GetIronsights() then
+		return 0.6
 	else
 		return 1
 	end
