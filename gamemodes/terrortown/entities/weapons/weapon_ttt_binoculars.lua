@@ -64,7 +64,7 @@ SWEP.ProcessingDelay = 5
 function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 0, "Processing")
 	self:NetworkVar("Float", 0, "StartTime")
-	self:NetworkVar("Int", 0, "Zoom")
+	self:NetworkVar("Int", 0, "ZoomAmount")
 
 	return self.BaseClass.SetupDataTables(self)
 end
@@ -105,7 +105,7 @@ function SWEP:SetZoomLevel(level)
 
 	local owner = self:GetOwner()
 
-	self:SetZoom(level)
+	self:SetZoomAmount(level)
 
 	owner:SetFOV(self.ZoomLevels[level], 0.3)
 	owner:DrawViewModel(false)
@@ -114,13 +114,13 @@ end
 ---
 -- @ignore
 function SWEP:CycleZoom()
-	self:SetZoom(self:GetZoom() + 1)
+	self:SetZoomAmount(self:GetZoomAmount() + 1)
 
-	if not self.ZoomLevels[self:GetZoom()] then
-		self:SetZoom(1)
+	if not self.ZoomLevels[self:GetZoomAmount()] then
+		self:SetZoomAmount(1)
 	end
 
-	self:SetZoomLevel(self:GetZoom())
+	self:SetZoomLevel(self:GetZoomAmount())
 end
 
 ---
@@ -249,8 +249,8 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:AdjustMouseSensitivity()
-		if self:GetZoom() > 0 then
-			return 1 / self:GetZoom()
+		if self:GetZoomAmount() > 0 then
+			return 1 / self:GetZoomAmount()
 		end
 
 		return -1
@@ -304,6 +304,6 @@ if CLIENT then
 		surface.DrawRect(x - offset, y - length, thickness, length - gap)
 		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 
-		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoom(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 end
