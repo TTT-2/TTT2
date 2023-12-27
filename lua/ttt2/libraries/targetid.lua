@@ -472,9 +472,10 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	if not CORPSE.GetPlayerNick(ent, false) then return end
 
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
-	local role_found = corpse_found and ent.bodySearchResult and ent.bodySearchResult.subrole
+	local corpse_ply = corpse_found and CORPSE.GetPlayer(ent) or false
+	local role_found = (corpse_found and ent.bodySearchResult and ent.bodySearchResult.subrole) or (corpse_ply and corpse_ply:GetSubRole())
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
-	local roleData = roles.GetByIndex(role_found and ent.bodySearchResult.subrole or ROLE_INNOCENT)
+	local roleData = (corpse_ply and corpse_ply:GetSubRoleData()) or roles.GetByIndex(role_found and ent.bodySearchResult.subrole or ROLE_INNOCENT)
 	local roleDataClient = client:GetSubRoleData()
 
 	-- enable targetID rendering
