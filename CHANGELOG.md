@@ -22,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
 - Fixed voicechat keybinds being shown even if voice is disabled
 - Coerced ammo types to lowercase for better matching in HUD
+- Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
@@ -62,7 +63,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed corpses not listing their kills
 - Comboboxes now show correct values for database driven entries
 - Database-Callbacks are now called with the correct valuetype
-- Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)
 
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
