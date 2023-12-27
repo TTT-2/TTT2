@@ -73,7 +73,7 @@ local cvEnableDescription = CreateConVar("ttt2_hud_enable_description", "1", FCV
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
-local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, scoreboardShown)
+local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, scoreboardShown, scale)
 	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key")
 	local wBox = math.max(size, wKeyString) + 2 * padding
 	local xIcon = x + 0.5 * (wBox - size)
@@ -108,7 +108,7 @@ local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, 
 	return wBox
 end
 
-local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown)
+local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown, scale)
 	if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then return end
 
 	-- handles both internal GMod bindings and TTT2 bindings
@@ -116,7 +116,7 @@ local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown)
 
 	if not key then return end
 
-	return xBase + padding + DrawKeyContent(xBase, yBase, width, stringUpper(key), keyHelper.iconMaterial, keyHelper.bindingName, scoreboardShown)
+	return xBase + padding + DrawKeyContent(xBase, yBase, width, stringUpper(key), keyHelper.iconMaterial, keyHelper.bindingName, scoreboardShown, scale)
 end
 
 ---
@@ -151,28 +151,30 @@ function keyhelp.Draw()
 	local xBase = 0.5 * ScrW() + offsetCenter
 	local yBase = ScrH() - offsetHeight
 
+	local scale = appearance.GetGlobalScale()
+
 	if cvEnableCore:GetBool() or scoreboardShown then
 		for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][i], scoreboardShown) or xBase
+			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][i], scoreboardShown, scale) or xBase
 		end
 	end
 
 	if not util.EditingModeActive(client) then
 		if cvEnableCore:GetBool() or scoreboardShown then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
-				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown, scale) or xBase
 			end
 		end
 
 		if cvEnableEquipment:GetBool() or scoreboardShown then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
-				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown, scale) or xBase
 			end
 		end
 
 		if cvEnableExtra:GetBool() or scoreboardShown then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
-				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
+				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown, scale) or xBase
 			end
 		end
 	end
@@ -180,7 +182,7 @@ function keyhelp.Draw()
 	-- if anyone of them is disabled, but not all, the show more option is shown
 	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
 	if not scoreboardShown and enbCount > 0 and enbCount < 3 then
-		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1], scoreboardShown)
+		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1], scoreboardShown, scale)
 	end
 end
 
