@@ -110,6 +110,10 @@ SWEP.HotReloadableKeys = {}
 -- SWEPs do not need it for anything.
 --	SWEP.WeaponID = nil
 
+-- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
+-- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
+SWEP.idleResetFix = false
+
 --   YE OLDE SWEP STUFF
 
 if CLIENT then
@@ -158,6 +162,7 @@ SWEP.DeploySpeed = 1.4
 
 SWEP.PrimaryAnim = ACT_VM_PRIMARYATTACK
 SWEP.ReloadAnim = ACT_VM_RELOAD
+SWEP.IdleAnim = ACT_VM_IDLE
 
 SWEP.fingerprints = {}
 
@@ -1045,12 +1050,62 @@ function SWEP:Initialize()
 	end
 end
 
+local idle_activities = {
+	[ACT_VM_IDLE] = true,
+	[ACT_VM_IDLE_TO_LOWERED] = true,
+	[ACT_VM_IDLE_LOWERED] = true,
+	[ACT_VM_IDLE_SILENCED] = true,
+	[ACT_VM_IDLE_EMPTY_LEFT] = true,
+	[ACT_VM_IDLE_EMPTY] = true,
+	[ACT_VM_IDLE_DEPLOYED_EMPTY] = true,
+	[ACT_VM_IDLE_8] = true,
+	[ACT_VM_IDLE_7] = true,
+	[ACT_VM_IDLE_6] = true,
+	[ACT_VM_IDLE_5] = true,
+	[ACT_VM_IDLE_4] = true,
+	[ACT_VM_IDLE_3] = true,
+	[ACT_VM_IDLE_2] = true,
+	[ACT_VM_IDLE_1] = true,
+	[ACT_VM_IDLE_DEPLOYED] = true,
+	[ACT_VM_IDLE_DEPLOYED_8] = true,
+	[ACT_VM_IDLE_DEPLOYED_7] = true,
+	[ACT_VM_IDLE_DEPLOYED_6] = true,
+	[ACT_VM_IDLE_DEPLOYED_5] = true,
+	[ACT_VM_IDLE_DEPLOYED_4] = true,
+	[ACT_VM_IDLE_DEPLOYED_3] = true,
+	[ACT_VM_IDLE_DEPLOYED_2] = true,
+	[ACT_VM_IDLE_DEPLOYED_1] = true,
+	[ACT_VM_IDLE_M203] = true,
+}
+local function IsIdleActivity(vm)
+	return idle_activities[ vm:GetSequenceActivity( vm:GetSequence() ) ] or false
+end
+local function IsCounterStrikeWeapon(str)
+	return string.StartsWith(string.lower(str):gsub("\\","/"), "models/weapons/cstrike/")
+end
+
+local silenced_weapons = {
+	weapon_ttt_sipistol = true,
+	weapon_ttt_tmp_s = true,
+	weapon_ttt_m4a1_s = true,
+}
+
+GLOBAL_ENABLE_IDLEFIX_FOR_DEBUGGING = false
+
 ---
 -- Called when the swep thinks.
 -- @warning If you override Think in your SWEP, you should call BaseClass.Think(self) so as not to break ironsights
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
+	local vm = self:GetOwner():GetViewModel()
+	if (GLOBAL_ENABLE_IDLEFIX_FOR_DEBUGGING or self.idleResetFix)
+		and self.ViewModel and IsCounterStrikeWeapon(self.ViewModel)
+		and vm:GetCycle() >= 1 and not IsIdleActivity(vm)
+	then
+		self:SendWeaponAnim( silenced_weapons[ self:GetClass() ] and ACT_VM_IDLE_SILENCED or self.IdleAnim )
+	end
+
 	if CLIENT then
 		self:CalcViewModel()
 	end
