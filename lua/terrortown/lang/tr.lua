@@ -2071,12 +2071,9 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
--- 2023-11-18
-L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
-
 -- 2023-12-14
-L.visualizer_help_pri = "Feneri yere at"
-L.visualizer_help_sec = "Feneri yere yapıştır"
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
@@ -2101,3 +2098,14 @@ L.builtin_marker = "Bütünleşik."
 L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
+
+-- 2023-12-20
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
+--2 = Deal twice the amount of damage.
+--
+--Note: Some weapons might not use this value which causes this modifier to be ineffective.]]

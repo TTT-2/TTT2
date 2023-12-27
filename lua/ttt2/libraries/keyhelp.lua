@@ -339,12 +339,12 @@ function keyhelp.InitializeBasicKeys()
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("ttt2_voice", materialVoiceGlobal, KEYHELP_EXTRA, "label_keyhelper_voice_global", function(client)
-		if not VOICE.CanEnable() then return end
+		if not VOICE.CanEnable() or not GetGlobalBool("sv_voiceenable", true) then return end
 
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("ttt2_voice_team", materialVoiceTeam, KEYHELP_EXTRA, "label_keyhelper_voice_team", function(client)
-		if not VOICE.CanTeamEnable() then return end
+		if not VOICE.CanTeamEnable() or not GetGlobalBool("sv_voiceenable", true) then return end
 
 		return true
 	end)
