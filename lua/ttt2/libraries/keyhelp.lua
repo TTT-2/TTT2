@@ -80,7 +80,7 @@ keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
 local function DrawKeyContent(x, y, keyString, iconMaterial, bindingName, scoreboardShown, scale)
-	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key")
+	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key", scale)
 	local wBox = math.max(widthScaled, wKeyString) + 2 * paddingScaled
 	local xIcon = x + 0.5 * (wBox - widthScaled)
 	local yIcon = y + paddingScaled + thicknessLineScaled
@@ -90,7 +90,7 @@ local function DrawKeyContent(x, y, keyString, iconMaterial, bindingName, scoreb
 	if cvEnableBoxBlur:GetBool() then
 		draw.BlurredBox(x, y, wBox, heightScaled + paddingScaled)
 		draw.Box(x, y, wBox, heightScaled + paddingScaled, colorBox) -- background color
-		draw.Box(x, y, wBox, 0.5 * thicknessLineScaled, colorBox) -- top line shadow
+		draw.Box(x, y, wBox, math.Round(0.5 * thicknessLineScaled), colorBox) -- top line shadow
 		draw.Box(x, y, wBox, thicknessLineScaled, colorBox) -- top line shadow
 		draw.Box(x, y - thicknessLineScaled, wBox, thicknessLineScaled, COLOR_WHITE) -- white top line
 	end
@@ -183,7 +183,7 @@ function keyhelp.Draw()
 	heightScaled = height * scale
 	widthScaled = width * scale
 	paddingScaled = padding * scale
-	thicknessLineScaled = thicknessLine * scale
+	thicknessLineScaled = math.Round(thicknessLine * scale)
 
 	if cvEnableCore:GetBool() or scoreboardShown then
 		for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do

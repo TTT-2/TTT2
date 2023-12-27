@@ -105,7 +105,7 @@ function draw.ShadowedBox(x, y, w, h, color, scale)
 	scale = scale or 1
 
 	local shift1 = mathRound(scale)
-	local shift2 = mathRound(scale * 2)
+	local shift2 = shift1 * 2
 
 	local tmpCol = GetShadowColor(color)
 
@@ -187,7 +187,7 @@ function draw.ShadowedCircle(x, y, radius, color, scale)
 	scale = scale or 1
 
 	local shift1 = mathRound(scale)
-	local shift2 = mathRound(scale * 2)
+	local shift2 = shift1 * 2
 
 	local tmpCol = GetShadowColor(color)
 
@@ -276,7 +276,7 @@ function draw.ShadowedTexture(x, y, w, h, material, alpha, color, scale)
 	local tmpCol = GetShadowColor(color)
 
 	local shift_tex_1 = mathRound(scale)
-	local shift_tex_2 = mathRound(2 * scale)
+	local shift_tex_2 = 2 * shift_tex_1
 
 	drawTexture(x + shift_tex_2, y + shift_tex_2, w, h, material, tmpCol.a, tmpCol)
 	drawTexture(x + shift_tex_1, y + shift_tex_1, w, h, material, tmpCol.a, tmpCol)
@@ -383,7 +383,7 @@ function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scale)
 	local tmpCol = GetShadowColor(color)
 
 	local shift1 = mathRound(scale)
-	local shift2 = mathRound(scale * 2)
+	local shift2 = shift1 * 2
 
 	drawSimpleText(text, font, x + shift2, y + shift2, tmpCol, xalign, yalign)
 	drawSimpleText(text, font, x + shift1, y + shift1, tmpCol, xalign, yalign)
@@ -654,12 +654,17 @@ end
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
 -- @param[default="DefaultBold"] string font The font ID
--- @warning This function changes the font to the passed font
+-- @param[default=1.0] number scale The UI scale factor
 -- @return number,number w, h The size of the given text
+-- @warning This function changes the font in surface to the passed font
 -- @2D
 -- @realm client
-function draw.GetTextSize(text, font)
+function draw.GetTextSize(text, font, scale)
+	scale = scale or 1.0
+
 	surface.SetFont(font or "DefaultBold")
 
-	return surface.GetTextSize(text)
+	local w, h = surface.GetTextSize(text)
+
+	return w * scale, h * scale
 end
