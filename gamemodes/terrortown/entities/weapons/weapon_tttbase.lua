@@ -17,8 +17,8 @@ if SERVER then
 	AddCSLuaFile()
 else -- CLIENT
 	-- hud help font
-	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 16, weight = 600})
-	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
+	surface.CreateAdvancedFont("weapon_hud_help", {font = "Trebuchet24", size = 16, weight = 600})
+	surface.CreateAdvancedFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
 end
 
 --   TTT SPECIAL EQUIPMENT FIELDS
