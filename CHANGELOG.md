@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)
 - Damage Scaling now has a help description
 - Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
 - Fixed voicechat keybinds being shown even if voice is disabled
