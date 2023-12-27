@@ -158,19 +158,19 @@ function keyhelp.Draw()
 	end
 
 	if not util.EditingModeActive(client) then
-		if cvEnableCore:GetBool() or scoreboardShown then
+		if keyhelp.keyHelpers[KEYHELP_CORE] and (cvEnableCore:GetBool() or scoreboardShown) then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
 				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
 			end
 		end
 
-		if cvEnableEquipment:GetBool() or scoreboardShown then
+		if keyhelp.keyHelpers[KEYHELP_EQUIPMENT] and (cvEnableEquipment:GetBool() or scoreboardShown) then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
 				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
 			end
 		end
 
-		if cvEnableExtra:GetBool() or scoreboardShown then
+		if keyhelp.keyHelpers[KEYHELP_EXTRA] and (cvEnableExtra:GetBool() or scoreboardShown) then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
 				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
 			end
@@ -339,12 +339,12 @@ function keyhelp.InitializeBasicKeys()
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("ttt2_voice", materialVoiceGlobal, KEYHELP_EXTRA, "label_keyhelper_voice_global", function(client)
-		if not VOICE.CanEnable() then return end
+		if not VOICE.CanEnable() or not GetGlobalBool("sv_voiceenable", true) then return end
 
 		return true
 	end)
 	keyhelp.RegisterKeyHelper("ttt2_voice_team", materialVoiceTeam, KEYHELP_EXTRA, "label_keyhelper_voice_team", function(client)
-		if not VOICE.CanTeamEnable() then return end
+		if not VOICE.CanTeamEnable() or not GetGlobalBool("sv_voiceenable", true) then return end
 
 		return true
 	end)

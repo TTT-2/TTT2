@@ -17,9 +17,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Damage Scaling now has a help description.
+- Damage Scaling now has a help description
 - Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
-- Fixed typo in binoculars DataTable refactor.
+- Fixed voicechat keybinds being shown even if voice is disabled
+- Fixed typo in binoculars DataTable refactor
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
