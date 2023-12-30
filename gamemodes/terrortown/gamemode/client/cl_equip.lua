@@ -962,41 +962,48 @@ concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
 local function SwitchTraitorMenuTab(ply, cmd, args)
 
-	local closeIfNotFound
-	local targettab = args[1]:lower()
+	if not args[1] then return end
 
-	if not targettab then return end
+	local MenuWasOpen
+	local TargetTab = args[1]:lower()
 
-	--Open the menu if it's not already open
+	-- Ensure the menu is open, and track whether it was already.
 	if not IsValid(eqframe) then
 		TraitorMenuPopup()
-		closeIfNotFound = true
+		MenuWasOpen = false
 	else
-		closeIfNotFound = false
+		MenuWasOpen = true
 	end
 
 	if IsValid(eqframe) then
 
 		---@cast eqframe -nil
-		local dsheet = eqframe:Find("DPropertySheet") --Or eqframe:GetChild(4) ?
+		local dsheet = eqframe:Find("DPropertySheet")
 
 		local tabs = dsheet:GetItems()
-		local tabindex = nil
+		local FoundTab = nil
 
-		for index,tab in pairs(tabs) do
-			if tab.Name:lower() == targettab then
-				tabindex = index
+		for index,TabItem in pairs(tabs) do
+			if TabItem.Name:lower() == TargetTab then
+				FoundTab = TabItem.Tab
 				break
 			end
 		end
 
-		if tabindex then
-			dsheet:SetActiveTab(tabs[tabindex].Tab)
+		if FoundTab then
+			if dsheet:GetActiveTab() == FoundTab then
+				if MenuWasOpen then
+					--This allows the menu to be closed using the same command / arg to open it
+					ForceCloseTraitorMenu()
+				end
+			else
+				dsheet:SetActiveTab(FoundTab)
+			end
 		else
-			if closeIfNotFound then
+			if not MenuWasOpen then
 				ForceCloseTraitorMenu()
 			end
-			print("No tab named " .. targettab .. " found!") --TODO lang this?
+			print("ttt_cl_traitorpopup_tab failed, No tab named " .. TargetTab .. " was found")
 		end
 
 	end
