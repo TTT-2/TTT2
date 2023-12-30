@@ -26,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Coerced ammo types to lowercase for better matching in HUD
 - The binocular zoom now uses a DataTable that is not already used by its weaponbase
 - Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)
+- Errors when looking at a player's corpse that disconnected (by @EntranceJew)
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
