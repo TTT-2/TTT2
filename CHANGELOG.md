@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
+- Keyhelp and weapon HUD Help now use the global scale factor
 
 ### Fixed
 
