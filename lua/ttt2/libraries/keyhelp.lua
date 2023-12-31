@@ -16,9 +16,15 @@ local inputGetKeyName = input.GetKeyName
 local bindFind = bind.Find
 
 local offsetCenter = 230
-local offsetHeight = 48
+local height = 48
 local width = 18
 local padding = 5
+local thicknessLine = 2
+
+local heightScaled = 0
+local widthScaled = 0
+local paddingScaled = 0
+local thicknessLineScaled = 0
 
 local colorBox = Color(0, 0, 0, 100)
 
@@ -73,42 +79,54 @@ local cvEnableDescription = CreateConVar("ttt2_hud_enable_description", "1", FCV
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
-local function DrawKeyContent(x, y, size, keyString, iconMaterial, bindingName, scoreboardShown)
-	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key")
-	local wBox = math.max(size, wKeyString) + 2 * padding
-	local xIcon = x + 0.5 * (wBox - size)
-	local yIcon = y + padding + 2
+local function DrawKeyContent(x, y, keyString, iconMaterial, bindingName, scoreboardShown, scale)
+	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key", scale)
+	local wBox = math.max(widthScaled, wKeyString) + 2 * paddingScaled
+	local xIcon = x + 0.5 * (wBox - widthScaled)
+	local yIcon = y + paddingScaled + thicknessLineScaled
 	local xKeyString = x + math.floor(0.5 * wBox)
-	local yKeyString = yIcon + size + padding
+	local yKeyString = yIcon + widthScaled + paddingScaled
 
 	if cvEnableBoxBlur:GetBool() then
-		draw.BlurredBox(x, y, wBox, offsetHeight + padding)
-		draw.Box(x, y, wBox, offsetHeight + padding, colorBox) -- background color
-		draw.Box(x, y, wBox, 1, colorBox) -- top line shadow
-		draw.Box(x, y, wBox, 2, colorBox) -- top line shadow
-		draw.Box(x, y - 2, wBox, 2, COLOR_WHITE) -- white top line
+		draw.BlurredBox(x, y, wBox, heightScaled + paddingScaled)
+		draw.Box(x, y, wBox, heightScaled + paddingScaled, colorBox) -- background color
+		draw.Box(x, y, wBox, math.Round(0.5 * thicknessLineScaled), colorBox) -- top line shadow
+		draw.Box(x, y, wBox, thicknessLineScaled, colorBox) -- top line shadow
+		draw.Box(x, y - thicknessLineScaled, wBox, thicknessLineScaled, COLOR_WHITE) -- white top line
 	end
 
-	draw.FilteredShadowedTexture(xIcon, yIcon, size, size, iconMaterial, 255, COLOR_WHITE)
-	draw.ShadowedText(keyString, "weapon_hud_help_key", xKeyString, yKeyString, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	draw.FilteredShadowedTexture(xIcon, yIcon, widthScaled, widthScaled, iconMaterial, 255, COLOR_WHITE, scale)
+	draw.AdvancedText(
+		keyString,
+		"weapon_hud_help_key",
+		xKeyString,
+		yKeyString,
+		COLOR_WHITE,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_TOP,
+		true,
+		scale
+	)
 
 	if scoreboardShown and cvEnableDescription:GetBool() then
 		draw.AdvancedText(
 			LANG.TryTranslation(bindingName),
 			"weapon_hud_help",
 			xKeyString,
-			y - 3 * padding,
+			y - 3 * paddingScaled,
 			COLOR_WHITE,
 			TEXT_ALIGN_LEFT,
 			TEXT_ALIGN_CENTER,
-			true, 1.0, -45
+			true,
+			scale,
+			-45
 		)
 	end
 
 	return wBox
 end
 
-local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown)
+local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown, scale)
 	if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then return end
 
 	-- handles both internal GMod bindings and TTT2 bindings
@@ -116,7 +134,16 @@ local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown)
 
 	if not key then return end
 
-	return xBase + padding + DrawKeyContent(xBase, yBase, width, stringUpper(key), keyHelper.iconMaterial, keyHelper.bindingName, scoreboardShown)
+	return xBase + paddingScaled
+		+ DrawKeyContent(
+			xBase,
+			yBase,
+			stringUpper(key),
+			keyHelper.iconMaterial,
+			keyHelper.bindingName,
+			scoreboardShown,
+			scale
+		)
 end
 
 ---
@@ -148,39 +175,82 @@ function keyhelp.Draw()
 	local client = LocalPlayer()
 	local scoreboardShown = GAMEMODE.ShowScoreboard
 
-	local xBase = 0.5 * ScrW() + offsetCenter
-	local yBase = ScrH() - offsetHeight
+	local scale = appearance.GetGlobalScale()
+
+	local xBase = 0.5 * ScrW() + offsetCenter * scale
+	local yBase = ScrH() - height * scale
+
+	heightScaled = height * scale
+	widthScaled = width * scale
+	paddingScaled = padding * scale
+	thicknessLineScaled = math.Round(thicknessLine * scale)
 
 	if cvEnableCore:GetBool() or scoreboardShown then
 		for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do
-			xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_INTERNAL][i], scoreboardShown) or xBase
+			xBase = DrawKey(
+				client,
+				xBase,
+				yBase,
+				keyhelp.keyHelpers[KEYHELP_INTERNAL][i],
+				scoreboardShown,
+				scale
+			) or xBase
 		end
 	end
 
 	if not util.EditingModeActive(client) then
 		if keyhelp.keyHelpers[KEYHELP_CORE] and (cvEnableCore:GetBool() or scoreboardShown) then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
-				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_CORE][i], scoreboardShown) or xBase
+				xBase = DrawKey(
+					client,
+					xBase,
+					yBase,
+					keyhelp.keyHelpers[KEYHELP_CORE][i],
+					scoreboardShown,
+					scale
+				) or xBase
 			end
 		end
 
 		if keyhelp.keyHelpers[KEYHELP_EQUIPMENT] and (cvEnableEquipment:GetBool() or scoreboardShown) then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
-				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i], scoreboardShown) or xBase
+				xBase = DrawKey(
+					client,
+					xBase,
+					yBase,
+					keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i],
+					scoreboardShown,
+					scale
+				) or xBase
 			end
 		end
 
 		if keyhelp.keyHelpers[KEYHELP_EXTRA] and (cvEnableExtra:GetBool() or scoreboardShown) then
 			for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
-				xBase = DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_EXTRA][i], scoreboardShown) or xBase
+				xBase = DrawKey(
+					client,
+					xBase,
+					yBase,
+					keyhelp.keyHelpers[KEYHELP_EXTRA][i],
+					scoreboardShown,
+					scale
+				) or xBase
 			end
 		end
 	end
 
 	-- if anyone of them is disabled, but not all, the show more option is shown
 	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
+
 	if not scoreboardShown and enbCount > 0 and enbCount < 3 then
-		DrawKey(client, xBase, yBase, keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1], scoreboardShown)
+		xBase = DrawKey(
+			client,
+			xBase,
+			yBase,
+			keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1],
+			scoreboardShown,
+			scale
+		) or xBase
 	end
 end
 
