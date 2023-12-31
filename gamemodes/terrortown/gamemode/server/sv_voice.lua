@@ -33,6 +33,10 @@ hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
 	SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
 end)
 
+cvars.AddChangeCallback(sv_voiceenable:GetName(), function(cv, old, new)
+	SetGlobalBool(sv_voiceenable:GetName(), tobool(tonumber(new)))
+end)
+
 cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
 	SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
 end)

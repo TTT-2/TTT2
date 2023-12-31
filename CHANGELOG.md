@@ -15,7 +15,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
-- Binoculars now have a world model that isn't paper towels.
+- Keyhelp and weapon HUD Help now use the global scale factor
+- Binoculars now have a world model that isn't paper towels
 
 ### Fixed
 
