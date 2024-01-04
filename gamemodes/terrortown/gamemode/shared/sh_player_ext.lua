@@ -1145,7 +1145,7 @@ function plymeta:SetFOV(fov, time, requester, isSprinting)
 	if isSprinting then
 		self.sprintingFOV = fov
 
-		if self.externalFOV then print("external FOV set, stopping") return end
+		if self.externalFOV then return end
 	end
 
 	if not isSprinting then
