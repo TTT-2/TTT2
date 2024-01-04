@@ -1363,6 +1363,10 @@ function GM:OnReloaded()
 	---
 	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2FinishedLoading")
 end
 
 ---
