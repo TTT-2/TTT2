@@ -20,13 +20,13 @@ SPRINT = {
 -- @return boolean
 -- @realm shared
 function SPRINT:PlayerWantsToSprint(ply)
-	local inSprinting = ply:KeyDown(IN_SPEED)
+	local inSprint = ply:KeyDown(IN_SPEED)
 	local inMovement = ply:KeyDown(IN_FORWARD)
 		or ply:KeyDown(IN_BACK)
 		or ply:KeyDown(IN_MOVERIGHT)
 		or ply:KeyDown(IN_MOVELEFT)
 
-	return inSprinting and inMovement
+	return inSprint and inMovement
 end
 
 ---

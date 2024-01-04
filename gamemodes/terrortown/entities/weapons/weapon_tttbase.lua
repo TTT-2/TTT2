@@ -838,8 +838,9 @@ function SWEP:SecondaryAttack()
 
 	local bNotIronsights = not self:GetIronsights()
 
-	self:SetZoom(bNotIronsights)
 	self:SetIronsights(bNotIronsights)
+	self:SetZoom(bNotIronsights)
+
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
@@ -849,8 +850,8 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Deploy
 -- @realm shared
 function SWEP:Deploy()
-	self:SetZoom(false)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	return true
 end
@@ -863,8 +864,9 @@ function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
 	self:DefaultReload(self.ReloadAnim)
-	self:SetZoom(false)
+
 	self:SetIronsights(false)
+	self:SetZoom(false)
 end
 
 ---
@@ -874,8 +876,8 @@ end
 function SWEP:OnRestore()
 	self.NextSecondaryAttack = 0
 
-	self:SetZoom(false)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 end
 
 ---
@@ -1001,8 +1003,8 @@ if SERVER then
 			return false
 		end
 
-		self:SetZoom(false)
 		self:SetIronsights(false)
+		self:SetZoom(false)
 
 		if self:GetNextPrimaryFire() > CurTime() then
 			return false

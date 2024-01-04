@@ -78,8 +78,8 @@ function SWEP:SecondaryAttack()
 
 	local bIronsights = not self:GetIronsights()
 
-	self:SetZoom(bIronsights)
 	self:SetIronsights(bIronsights)
+	self:SetZoom(bIronsights)
 
 	if CLIENT then
 		self:EmitSound(self.Secondary.Sound)
@@ -91,8 +91,8 @@ end
 ---
 -- @ignore
 function SWEP:PreDrop()
-	self:SetZoom(false)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	return self.BaseClass.PreDrop(self)
 end
@@ -103,15 +103,16 @@ function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
 	self:DefaultReload(ACT_VM_RELOAD)
-	self:SetZoom(false)
+
 	self:SetIronsights(false)
+	self:SetZoom(false)
 end
 
 ---
 -- @ignore
 function SWEP:Holster()
-	self:SetZoom(false)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	return true
 end
