@@ -17,8 +17,8 @@ if SERVER then
 	AddCSLuaFile()
 else -- CLIENT
 	-- hud help font
-	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 16, weight = 600})
-	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
+	surface.CreateAdvancedFont("weapon_hud_help", {font = "Trebuchet24", size = 16, weight = 600})
+	surface.CreateAdvancedFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
 end
 
 --   TTT SPECIAL EQUIPMENT FIELDS
@@ -241,6 +241,8 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 	local PatT = LANG.GetParamTranslation
 
+	local mathRound = math.Round
+
 	---
 	-- @realm client
 	local cvOpacitySights = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
@@ -377,13 +379,11 @@ if CLIENT then
 	local colorBox = Color(0, 0, 0, 100)
 	local colorDarkBox = Color(0, 0, 0, 150)
 
-	local padding = 10
 	local sizeIcon = 16
 	local padYKey = 3
 	local padXKey = 5
-	local hLine = 23
 
-	local function ProcessHelpText(lines)
+	local function ProcessHelpText(lines, scale)
 		local width, center = 0, 0
 		local processedData = {}
 
@@ -396,21 +396,21 @@ if CLIENT then
 			local isIcon = false
 
 			if isstring(binding) then
-				local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key")
+				local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key", scale)
 
-				wBinding = wKey + 2 * padXKey
-				hBinding = hKey + 2 * padYKey
+				wBinding = wKey + 2 * padXKey * scale
+				hBinding = hKey + 2 * padYKey * scale
 				isIcon = false
 			elseif binding then
-				wBinding = sizeIcon
-				hBinding = sizeIcon
+				wBinding = sizeIcon * scale
+				hBinding = sizeIcon * scale
 				isIcon = true
 			else
 				continue
 			end
 
 			local translatedDescription = TryT(description)
-			local wDescription = draw.GetTextSize(translatedDescription, "weapon_hud_help")
+			local wDescription = draw.GetTextSize(translatedDescription, "weapon_hud_help", scale)
 
 			processedData[i] = {
 				w = wBinding,
@@ -432,7 +432,12 @@ if CLIENT then
 	-- Draws the help text to the bottom of the screen
 	-- @realm client
 	function SWEP:DrawHelp()
-		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines)
+		local scale = appearance.GetGlobalScale()
+
+		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
+
+		local padding = 10 * scale
+		local hLine = 23 * scale
 
 		local wBox = baseWidth + 5 * padding
 		local hBox = hLine * #processedData + 2 * padding
@@ -440,19 +445,18 @@ if CLIENT then
 		local yBox = ScrH() - hBox
 		local xDivider = xBox + baseCenter + 2.5 * padding
 		local yDividerStart = yBox + padding
-		local yDividerEnd = yBox + hBox - padding
-		local yLine = yDividerStart + 10
+		local yLine = yDividerStart + 10 * scale
 		local xDescription = xDivider + padding
 
 		if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
 			draw.BlurredBox(xBox, yBox, wBox, hBox)
 			draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
-			draw.Box(xBox, yBox, wBox, 1, colorBox) -- top line shadow
-			draw.Box(xBox, yBox, wBox, 2, colorBox) -- top line shadow
-			draw.Box(xBox, yBox - 2, wBox, 2, COLOR_WHITE) -- white top line
+			draw.Box(xBox, yBox, wBox, mathRound(1 * scale), colorBox) -- top line shadow
+			draw.Box(xBox, yBox, wBox, mathRound(2 * scale), colorBox) -- top line shadow
+			draw.Box(xBox, yBox - mathRound(2 * scale), wBox, mathRound(2 * scale), COLOR_WHITE) -- white top line
 		end
 
-		draw.ShadowedLine(xDivider, yDividerStart, xDivider, yDividerEnd, COLOR_WHITE)
+		draw.ShadowedBox(xDivider, yDividerStart, mathRound(scale), hBox - 2 * padding, COLOR_WHITE, scale)
 
 		for i = 1, #processedData do
 			local line = processedData[i]
@@ -463,15 +467,35 @@ if CLIENT then
 			local yBinding = yLine - 0.5 * h
 
 			if line.isIcon then
-				draw.FilteredShadowedTexture(xBinding, yBinding, w, h, line.binding, 255, COLOR_WHITE)
+				draw.FilteredShadowedTexture(xBinding, yBinding, w, h, line.binding, 255, COLOR_WHITE, scale)
 			else
 				draw.Box(xBinding, yBinding + 1, w, h, colorDarkBox)
 				draw.OutlinedShadowedBox(xBinding, yBinding + 1, w, h, 1, COLOR_WHITE)
 
-				draw.ShadowedText(line.binding, "weapon_hud_help_key", xBinding + 0.5 * w, yLine, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.AdvancedText(
+					line.binding,
+					"weapon_hud_help_key",
+					xBinding + 0.5 * w,
+					yLine,
+					COLOR_WHITE,
+					TEXT_ALIGN_CENTER,
+					TEXT_ALIGN_CENTER,
+					true,
+					scale
+				)
 			end
 
-			draw.ShadowedText(line.description, "weapon_hud_help", xDescription, yLine, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.AdvancedText(
+				line.description,
+				"weapon_hud_help",
+				xDescription,
+				yLine,
+				COLOR_WHITE,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_CENTER,
+				true,
+				scale
+			)
 
 			yLine = yLine + hLine
 		end
