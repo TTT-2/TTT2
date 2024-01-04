@@ -190,7 +190,7 @@ function GM:Initialize()
 	keyhelp.InitializeBasicKeys()
 
 	---
-	-- @realm client
+	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
 	---
@@ -360,7 +360,7 @@ function GM:OnReloaded()
 	keyhelp.InitializeBasicKeys()
 
 	---
-	-- @realm client
+	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 end
 
