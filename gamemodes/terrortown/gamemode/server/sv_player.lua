@@ -1558,12 +1558,6 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2PlayerSettingChanged(ply, identifier, oldValue, newValue)
-	print("updating setting: ")
-	print(ply)
-	print(identifier)
-	print(oldValue)
-	print(newValue)
-
 	if IsValid(ply) and identifier == "enable_dynamic_fov" then
 		if newValue then
 			ply:UpdateSprintingFOV()

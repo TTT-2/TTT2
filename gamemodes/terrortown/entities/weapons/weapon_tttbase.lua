@@ -239,7 +239,7 @@ local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE,
 -- crosshair
 if CLIENT then
 	local TryT = LANG.TryTranslation
-	local PatT = LANG.GetParamTranslation
+	local ParT = LANG.GetParamTranslation
 
 	local mathRound = math.Round
 
@@ -523,8 +523,8 @@ if CLIENT then
 		if translate then
 			extraKeyParams = extraKeyParams or {}
 			translate_params = table.Merge(extraKeyParams, defaultKeyParams)
-			primary = primary and PatT(primary, translate_params)
-			secondary = secondary and PatT(secondary, translate_params)
+			primary = primary and ParT(primary, translate_params)
+			secondary = secondary and ParT(secondary, translate_params)
 		end
 
 		--find mouse keys in the texts to add respective icons
