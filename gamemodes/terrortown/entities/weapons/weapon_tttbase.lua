@@ -345,38 +345,39 @@ if CLIENT then
 		local length = mathFloor(gap + 25 * cvSizeCrosshair:GetFloat() * scaleWeapon * timescale * scale)
 		local offset = mathFloor(thickness * 0.5)
 
-		if outline > 0 then
-			surface.SetDrawColor(0, 0, 0, 255 * alpha)
-			surface.DrawRect(xCenter - length - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(xCenter + gap - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(xCenter - offset - outline, yCenter - length - outline, thickness + outline * 2, length - gap + outline * 2)
-			surface.DrawRect(xCenter - offset - outline, yCenter + gap - outline, thickness + outline * 2, length - gap + outline * 2)
-		end
-
 		-- set up crosshair color
 		local color = client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
 
 		color = appearance.SelectFocusColor(color)
 
-		surface.SetDrawColor(
-			color.r,
-			color.g,
-			color.b,
-			255 * alpha
-		)
-
 		-- draw crosshair dot
 		if cvEnableCrosshairDot:GetBool() then
-			surface.DrawRect(xCenter - thickness * 0.5, yCenter - thickness * 0.5, thickness, thickness)
+			local xDot = mathFloor(xCenter - thickness * 0.5)
+			local yDot = mathFloor(yCenter - thickness * 0.5)
+
+			if outline > 0 then
+				surface.SetDrawColor(0, 0, 0, 255 * alpha)
+
+				surface.DrawRect(xDot - outline, yDot - outline, thickness + outline * 2, thickness + outline * 2)
+			end
+
+			surface.SetDrawColor(color.r, color.g, color.b, 255 * alpha)
+
+			surface.DrawRect(xDot, yDot, thickness, thickness)
 		end
 
 		-- draw crosshair lines
 		if cvEnableCrosshairLines:GetBool() then
-			print("-----")
-			print(tostring(xCenter - length) .. ", " .. tostring(yCenter - offset) .. ", " .. tostring(length - gap) .. ", " .. tostring(thickness))
-			print(tostring(xCenter + gap) .. ", " .. tostring(yCenter - offset) .. ", " .. tostring(length - gap) .. ", " .. tostring(thickness))
-			print(tostring(xCenter - offset) .. ", " .. tostring(yCenter - length) .. ", " .. tostring(thickness) .. ", " .. tostring(length - gap))
-			print(tostring(xCenter - offset) .. ", " .. tostring(yCenter + gap) .. ", " .. tostring(thickness) .. ", " .. tostring(length - gap))
+			if outline > 0 then
+				surface.SetDrawColor(0, 0, 0, 255 * alpha)
+
+				surface.DrawRect(xCenter - length - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
+				surface.DrawRect(xCenter + gap - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
+				surface.DrawRect(xCenter - offset - outline, yCenter - length - outline, thickness + outline * 2, length - gap + outline * 2)
+				surface.DrawRect(xCenter - offset - outline, yCenter + gap - outline, thickness + outline * 2, length - gap + outline * 2)
+			end
+
+			surface.SetDrawColor(color.r, color.g, color.b, 255 * alpha)
 
 			surface.DrawRect(xCenter - length, yCenter - offset, length - gap, thickness)
 			surface.DrawRect(xCenter + gap, yCenter - offset, length - gap, thickness)
