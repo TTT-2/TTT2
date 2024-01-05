@@ -246,7 +246,7 @@ function PANEL:SetMaster(master)
 end
 
 ---
--- @param Panel slave
+-- @return number
 -- @realm client
 function PANEL:GetMargin()
 	if not IsValid(self.master) then
