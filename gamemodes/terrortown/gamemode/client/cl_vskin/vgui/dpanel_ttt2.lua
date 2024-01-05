@@ -237,7 +237,7 @@ function PANEL:GetTooltipFont()
 end
 
 ---
--- @param Panel slave
+-- @param Panel master
 -- @realm client
 function PANEL:SetMaster(master)
 	if not IsValid(master) then return end
