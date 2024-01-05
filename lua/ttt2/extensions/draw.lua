@@ -611,7 +611,7 @@ local function InternalGetWrappedText(text, allowedWidth, scale)
 		end
 	end
 
-	return lines, length * scale, height * lns * scale
+	return lines, length * scale, height * (lns + 1) * scale
 end
 
 ---
