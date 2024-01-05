@@ -93,6 +93,26 @@ function PANEL:Paint(w, h)
 end
 
 ---
+-- @param Panel slave
+-- @realm client
+function PANEL:SetMaster(master)
+	if not IsValid(master) then return end
+
+	self.master = master
+end
+
+---
+-- @param Panel slave
+-- @realm client
+function PANEL:GetMargin()
+	if not IsValid(self.master) then
+		return 0
+	end
+
+	return 10 + self.master:GetMargin()
+end
+
+---
 -- @param string strFont
 -- @realm client
 function PANEL:SetFont(strFont)
