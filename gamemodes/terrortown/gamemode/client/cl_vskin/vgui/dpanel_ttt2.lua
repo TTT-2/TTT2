@@ -248,12 +248,12 @@ end
 ---
 -- @return number
 -- @realm client
-function PANEL:GetMargin()
+function PANEL:GetIndentationMargin()
 	if not IsValid(self.master) then
 		return 0
 	end
 
-	return 10 + self.master:GetMargin()
+	return 10 + self.master:GetIndentationMargin()
 end
 
 derma.DefineControl("DPanelTTT2", "", PANEL, "Panel")

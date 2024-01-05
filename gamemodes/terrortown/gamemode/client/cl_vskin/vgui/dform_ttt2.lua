@@ -229,7 +229,7 @@ function PANEL:MakeCheckBox(data)
 		data.master:AddSlave(left)
 		data.master:AddSlave(reset)
 
-		left:DockMargin(left:GetMargin(), 0, 0, 0)
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return left
@@ -293,7 +293,7 @@ function PANEL:MakeSlider(data)
 		right:SetMaster(data.master)
 		reset:SetMaster(data.master)
 
-		left:DockMargin(left:GetMargin(), 0, 0, 0)
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return left
@@ -380,7 +380,7 @@ function PANEL:MakeComboBox(data)
 		right:SetMaster(data.master)
 		reset:SetMaster(data.master)
 
-		left:DockMargin(left:GetMargin(), 0, 0, 0)
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return right, left
@@ -445,7 +445,7 @@ function PANEL:MakeBinder(data)
 		right:SetMaster(data.master)
 		reset:SetMaster(data.master)
 
-		left:DockMargin(left:GetMargin(), 0, 0, 0)
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return right, left
@@ -494,7 +494,7 @@ function PANEL:MakeHelp(data)
 
 		left:SetMaster(data.master)
 
-		left:DockMargin(left:GetMargin(), 0, 0, 0)
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	left:InvalidateLayout(true)
