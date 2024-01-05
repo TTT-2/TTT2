@@ -242,6 +242,7 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	local mathRound = math.Round
+	local mathFloor = math.floor
 
 	---
 	-- @realm client
@@ -311,8 +312,8 @@ if CLIENT then
 
 		local sights = not self.NoSights and self:GetIronsights()
 
-		local xCenter = ScrW() * 0.5
-		local yCenter = ScrH() * 0.5
+		local xCenter = mathFloor(ScrW() * 0.5)
+		local yCenter = mathFloor(ScrH() * 0.5)
 		local scale = appearance.GetGlobalScale()
 		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
 		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
@@ -334,13 +335,15 @@ if CLIENT then
 		)
 
 		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-		local gap = cvEnableCrosshairGap:GetBool()
+		local gap = mathFloor(
+			cvEnableCrosshairGap:GetBool()
 			and (timescale * cvSizeCrosshairGap:GetFloat() * scale)
 			or (20 * scaleWeapon * timescale * self:GetPrimaryConeFactor() * scale)
-		local thickness = cvThicknessCrosshair:GetFloat() * scale
-		local outline = cvThicknessOutlineCrosshair:GetFloat() * scale
-		local length = gap + 25 * cvSizeCrosshair:GetFloat() * scaleWeapon * timescale * scale
-		local offset = thickness * 0.5
+		)
+		local thickness = mathFloor(cvThicknessCrosshair:GetFloat() * scale)
+		local outline = mathFloor(cvThicknessOutlineCrosshair:GetFloat() * scale)
+		local length = mathFloor(gap + 25 * cvSizeCrosshair:GetFloat() * scaleWeapon * timescale * scale)
+		local offset = mathFloor(thickness * 0.5)
 
 		if outline > 0 then
 			surface.SetDrawColor(0, 0, 0, 255 * alpha)
@@ -369,6 +372,12 @@ if CLIENT then
 
 		-- draw crosshair lines
 		if cvEnableCrosshairLines:GetBool() then
+			print("-----")
+			print(tostring(xCenter - length) .. ", " .. tostring(yCenter - offset) .. ", " .. tostring(length - gap) .. ", " .. tostring(thickness))
+			print(tostring(xCenter + gap) .. ", " .. tostring(yCenter - offset) .. ", " .. tostring(length - gap) .. ", " .. tostring(thickness))
+			print(tostring(xCenter - offset) .. ", " .. tostring(yCenter - length) .. ", " .. tostring(thickness) .. ", " .. tostring(length - gap))
+			print(tostring(xCenter - offset) .. ", " .. tostring(yCenter + gap) .. ", " .. tostring(thickness) .. ", " .. tostring(length - gap))
+
 			surface.DrawRect(xCenter - length, yCenter - offset, length - gap, thickness)
 			surface.DrawRect(xCenter + gap, yCenter - offset, length - gap, thickness)
 			surface.DrawRect(xCenter - offset, yCenter - length, thickness, length - gap)
