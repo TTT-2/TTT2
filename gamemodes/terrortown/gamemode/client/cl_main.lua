@@ -190,7 +190,7 @@ function GM:Initialize()
 	keyhelp.InitializeBasicKeys()
 
 	---
-	-- @realm client
+	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
 	---
@@ -364,7 +364,7 @@ function GM:OnReloaded()
 	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
 
 	---
-	-- @realm client
+	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 end
 
