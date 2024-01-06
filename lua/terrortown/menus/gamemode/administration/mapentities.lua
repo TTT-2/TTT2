@@ -63,7 +63,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_prop_spec_dash"
+		label = "help_prop_spec_dash",
+		master = enbPP
 	})
 
 	form:MakeSlider({
