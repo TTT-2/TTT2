@@ -170,17 +170,17 @@ end
 ---
 -- @ignore
 function SWEP:Reload()
-	local make_sound = false
-	if self:GetZoomAmount() ~= 1 or self:GetProgress() > 0 then
+	local playSound = false
+	if self:GetZoomAmount() > 1 or self:GetProgress() > 0 then
 		self:SetZoomLevel(1)
-		make_sound = true
+		playSound = true
 	end
 
-	if CLIENT and IsFirstTimePredicted() and make_sound then
+	if CLIENT and IsFirstTimePredicted() and playSound then
 		LocalPlayer():EmitSound(click)
 	end
 
-	self:SetNewTarget(nil)
+	self:SetNewTarget(NULL)
 
 	return false
 end
@@ -199,8 +199,7 @@ end
 -- @return Entity
 -- @realm shared
 function SWEP:GetTargetingCorpse()
-	local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
-	local ent = tr.Entity
+	local ent = self:GetOwner():GetEyeTrace(MASK_SHOT).Entity
 
 	if IsValid(ent) and ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) ~= false then
 		return ent
@@ -230,18 +229,18 @@ function SWEP:Think()
 
 	if self:GetProcessTarget() == NULL then return end
 
-	local tick_direction = engine.TickInterval()
-	local away_time = self:GetAwayTime()
+	local tickDirection = engine.TickInterval()
+	local awayTime = self:GetAwayTime()
 
 	if self:GetTargetingCorpse() ~= self:GetProcessTarget() then
-		away_time = away_time + tick_direction
-		self:SetAwayTime(away_time)
-		tick_direction = tick_direction * (-self.decayRate * away_time)
+		awayTime = awayTime + tickDirection
+		self:SetAwayTime(awayTime)
+		tickDirection = tickDirection * (-self.decayRate * awayTime)
 	else
 		self:SetAwayTime(0)
 	end
 
-	local newProgress = self:GetProgress() + tick_direction
+	local newProgress = self:GetProgress() + tickDirection
 	self:SetProgress(newProgress)
 
 	if newProgress < 0 then
