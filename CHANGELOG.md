@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - This puts quotation marks around print statements
   - Can handle single values or a sequential table to be printed
 - Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
+- Added indentation to subsettings in F1 menu (by @TimGoll)
 
 ### Changed
 

@@ -484,4 +484,4 @@ function PANEL:SetEnabled(b)
 	FindMetaTable("Panel").SetEnabled(self, b)
 end
 
-derma.DefineControl("DNumSliderTTT2", "", PANEL, "Panel")
+derma.DefineControl("DNumSliderTTT2", "", PANEL, "DPanelTTT2")
