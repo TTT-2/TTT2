@@ -46,7 +46,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form2:MakeHelp({
-		label = "help_item_armor_dynamic"
+		label = "help_item_armor_dynamic",
+		master = enbDyn
 	})
 
 	form2:MakeSlider({
@@ -95,11 +96,12 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 1500,
 		decimal = 0,
-		parent = enbFallDmg
+		master = enbFallDmg
 	})
 
 	formFallDmg:MakeHelp({
-		label = "help_falldmg_exponent"
+		label = "help_falldmg_exponent",
+		master = enbFallDmg
 	})
 
 	formFallDmg:MakeSlider({
@@ -108,6 +110,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 5,
 		decimal = 2,
-		parent = enbFallDmg
+		master = enbFallDmg
 	})
 end
