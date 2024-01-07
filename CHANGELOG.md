@@ -26,7 +26,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added debug.print(message)
   - This puts quotation marks around print statements
   - Can handle single values or a sequential table to be printed
-- Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
 - Targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)
 - Damage Scaling now has a help description
 - Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
