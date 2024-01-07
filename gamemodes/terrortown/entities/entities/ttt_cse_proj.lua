@@ -81,25 +81,26 @@ function ENT:ShowSceneForCorpse(corpse)
 
 	if not scene then return end
 
-	for _, dummy_key in ipairs(dummy_keys) do
+	for i = 1, #dummy_keys do
+		local dummy_key = dummy_keys[i]
 		local dummy = scene[dummy_key]
 
-		if dummy then
-			-- Horrible sins committed here to get all the data we need over the
-			-- wire, the pose parameters are going to be truncated etc. but
-			-- everything sort of works out. If you know a better way to get this
-			-- much data to an effect, let me know.
-			local e = EffectData()
-			e:SetEntity(corpse)
-			e:SetOrigin(dummy.pos)
-			e:SetAngles(dummy.ang)
-			e:SetColor(dummy.sequence)
-			e:SetScale(dummy.cycle)
-			e:SetStart(Vector(dummy.aim_yaw, dummy.aim_pitch, dummy.move_yaw))
-			e:SetRadius(dur)
+		if not dummy then continue end
 
-			util.Effect("crimescene_dummy", e)
-		end
+		-- Horrible sins committed here to get all the data we need over the
+		-- wire, the pose parameters are going to be truncated etc. but
+		-- everything sort of works out. If you know a better way to get this
+		-- much data to an effect, let me know.
+		local e = EffectData()
+		e:SetEntity(corpse)
+		e:SetOrigin(dummy.pos)
+		e:SetAngles(dummy.ang)
+		e:SetColor(dummy.sequence)
+		e:SetScale(dummy.cycle)
+		e:SetStart(Vector(dummy.aim_yaw, dummy.aim_pitch, dummy.move_yaw))
+		e:SetRadius(dur)
+
+		util.Effect("crimescene_dummy", e)
 	end
 end
 
