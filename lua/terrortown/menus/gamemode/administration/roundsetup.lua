@@ -149,7 +149,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form5:MakeHelp({
-		label = "help_round_limit"
+		label = "help_round_limit",
+		master = enbSessionLimitsEnabled
 	})
 
 	form5:MakeSlider({

@@ -10,11 +10,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - This puts quotation marks around print statements
   - Can handle single values or a sequential table to be printed
 - Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
+- Added indentation to subsettings in F1 menu (by @TimGoll)
 
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
 - Keyhelp and weapon HUD Help now use the global scale factor
+- debug.print can now handle `nil` entries in a nearly sequential table
 
 ### Fixed
 
@@ -27,6 +29,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)
 - Errors when looking at a player's corpse that disconnected (by @EntranceJew)
 - Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)
+- Shopeditor now correctly shows resetted and default values
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 

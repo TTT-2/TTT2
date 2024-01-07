@@ -14,11 +14,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_roles_advanced_warning"
+		label = "help_roles_advanced_warning",
+		master = masterEnb
 	})
 
 	form:MakeHelp({
-		label = "help_roles_max_roles"
+		label = "help_roles_max_roles",
+		master = masterEnb
 	})
 
 	form:MakeSlider({
@@ -40,7 +42,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_roles_max_baseroles"
+		label = "help_roles_max_baseroles",
+		master = masterEnb
 	})
 
 	form:MakeSlider({

@@ -236,4 +236,24 @@ function PANEL:GetTooltipFont()
 	return self.tooltip.font
 end
 
+---
+-- @param Panel master
+-- @realm client
+function PANEL:SetMaster(master)
+	if not IsValid(master) then return end
+
+	self.master = master
+end
+
+---
+-- @return number
+-- @realm client
+function PANEL:GetIndentationMargin()
+	if not IsValid(self.master) then
+		return 0
+	end
+
+	return 10 + self.master:GetIndentationMargin()
+end
+
 derma.DefineControl("DPanelTTT2", "", PANEL, "Panel")
