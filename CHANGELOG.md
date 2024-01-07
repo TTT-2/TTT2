@@ -16,6 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated the Turkish localization file (by @NovaDiablox)
 - Keyhelp and weapon HUD Help now use the global scale factor
+- debug.print can now handle `nil` entries in a nearly sequential table
 
 ### Fixed
 
