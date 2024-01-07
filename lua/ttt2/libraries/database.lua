@@ -1092,14 +1092,18 @@ if SERVER then
 				return true, value
 			end
 
+			ConvertTable(sqlData, accessName)
+
 			local newTable = {}
 			for _key in pairs(dataTable.keys) do
+				-- Get default values if no value was saved
+				if sqlData[_key] == nil then
+					sqlData[_key] = database.GetDefaultValue(accessName, itemName, _key)
+				end
 				newTable[_key] = sqlData[_key]
 			end
 
 			sqlData = newTable
-			ConvertTable(sqlData, accessName)
-
 			dataTable.storedData[itemName] = sqlData
 		else
 			-- Get all data, convert and return it
@@ -1109,8 +1113,14 @@ if SERVER then
 				return false
 			end
 
-			for _, item in pairs(sqlData) do
-				ConvertTable(item, accessName)
+			for _, _itemName in pairs(sqlData) do
+				ConvertTable(_itemName, accessName)
+				-- Get default values if no value was saved
+				for _key in pairs(dataTable.keys) do
+					if _itemName[_key] == nil then
+						_itemName[_key] = database.GetDefaultValue(accessName, _itemName, _key)
+					end
+				end
 			end
 
 			-- Convert numerical indices to string indices with the itemName
