@@ -225,7 +225,6 @@ Döljer din identitet när den är påslagen. Hindrar även att man blir den sis
 Slå av/på i Förklädnads-fliken i den här menyn eller tryck Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Tryck på {usekey} för att armera eller desarmera."
 L.c4_disarm_warn = "En C4 som du har placerat har blivit desarmerad."
 L.c4_armed = "Du lyckades armera bomben."
 L.c4_disarmed = "Du lyckades desarmera bomben."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DESARMERAD"
 
 -- Visualizer
 L.vis_name = "Visualiserare"
-L.vis_hint = "Tryck {usekey} för att plocka upp (endast Detektiver)."
 
 L.vis_desc = [[
 Verktyg för brottsscens-visualisering.
@@ -2070,6 +2068,10 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
