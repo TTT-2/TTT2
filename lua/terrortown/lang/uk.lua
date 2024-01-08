@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 Перемикайте маскування у відповідній вкладці цього меню або натисніть клавішу Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Натисніть {usekey}, щоб закласти або знешкодити."
 L.c4_disarm_warn = "Вибухівку C4, яку ви заклали, знешкодили."
 L.c4_armed = "Ви успішно заклали бомбу."
 L.c4_disarmed = "Ви успішно знешкодили бомбу."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "ЗНЕШКОД-\nЖЕНА"
 
 -- Visualizer
 L.vis_name = "Візуалізатор"
-L.vis_hint = "Натисніть {usekey}, щоб підібрати (Лише для Детективів)."
 
 L.vis_desc = [[
 Пристрій, який вміє візуалізувати злочини.
@@ -2068,6 +2066,10 @@ L.search_eyes = "Використовуючи свої навички детек
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

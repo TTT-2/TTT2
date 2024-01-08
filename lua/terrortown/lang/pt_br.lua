@@ -225,7 +225,6 @@ Oculta sua identidade enquanto habilitado. Também evita ser a última pessoa vi
 Habilite-o na aba Disfarce deste menu ou aperte a tecla Enter do teclado numérico.]]
 
 -- C4
-L.c4_hint = "Pressione {usekey} para armar ou desarmar."
 L.c4_disarm_warn = "Um explosivo C4 que você plantou foi desarmado."
 L.c4_armed = "Você armou a bomba com sucesso."
 L.c4_disarmed = "Você desarmou a bomba com sucesso."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DESARMADO"
 
 -- Visualizer
 L.vis_name = "Visualizador"
-L.vis_hint = "Pressione {usekey} para pegar (somente Detetives)."
 
 L.vis_desc = [[
 Permite visualizar uma cena de crime.
@@ -2068,6 +2066,10 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

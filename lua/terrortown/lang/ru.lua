@@ -227,7 +227,6 @@ L.item_disg_desc = [[
 Включить/выключить Маскировку можно во вкладке «Маскировка» или нажав Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Нажмите {usekey}, чтобы заложить/обезвредить."
 L.c4_disarm_warn = "С4, заложенная вами, была обезврежена."
 L.c4_armed = "Вы заложили бомбу."
 L.c4_disarmed = "Вы успешно обезвредили бомбу."
@@ -257,7 +256,6 @@ L.c4_status_disarmed = "ОБЕЗВРЕ-\nЖЕНА"
 
 -- Visualizer
 L.vis_name = "Визуализатор"
-L.vis_hint = "Нажмите {usekey}, чтобы подобрать. (только для детективов)"
 
 L.vis_desc = [[
 Устройство, визуализирующее сцену преступления.
@@ -2070,6 +2068,10 @@ L.search_eyes = "Используя свои детективные навыки
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

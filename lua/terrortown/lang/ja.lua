@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 このメニューの変装メニュー内かテンキーのEnterで切り替え。]]
 
 -- C4
-L.c4_hint = "{usekey}を押して起動もしくは解除"
 L.c4_disarm_warn = "C4が解除されてしまった。"
 L.c4_armed = "爆弾は起動完了だ。"
 L.c4_disarmed = "爆弾の解除に成功した。"
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "解除済み"
 
 -- Visualizer
 L.vis_name = "可視化装置"
-L.vis_hint = "{usekey}で拾う（探偵のみ）"
 
 L.vis_desc = [[
 殺害現場を可視化してくれる機械。
@@ -2068,6 +2066,10 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

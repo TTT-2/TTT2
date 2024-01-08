@@ -6,15 +6,28 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added debug.print(message)
-  - This puts quotation marks around print statements
-  - Can handle single values or a sequential table to be printed
 - Reworked the way the player camera is handled (by @TimGoll)
   - Added FOV change on speed change
   - Added view bobbing on walking, swimming, falling and strafing
   - Added convars to disable those changes
-- Decrease shooting accuracy while sprinting or in air (by @TimGoll)
+
+### Changed
+
+- Decreased shooting accuracy while sprinting or in air (by @TimGoll)
+
+### Fixed
+
+## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
+
+### Added
+
+- Added some missing vanilla TTT entities into TTT2
+- Added debug.print(message)
+  - This puts quotation marks around print statements
+  - Can handle single values or a sequential table to be printed
+  - Can handle `nil` entries in a nearly sequential table
 - Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
+- Added indentation to subsettings in F1 menu (by @TimGoll)
 
 ### Changed
 
@@ -24,7 +37,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)
+- Fixed targetID hints for old addons now correctly working for all entities
+- Fixed visualizer having pickup hint even though player is unable to pick up
+- Targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)
 - Damage Scaling now has a help description
 - Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
 - Fixed voicechat keybinds being shown even if voice is disabled
@@ -32,6 +47,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The binocular zoom now uses a DataTable that is not already used by its weaponbase
 - Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)
 - Errors when looking at a player's corpse that disconnected (by @EntranceJew)
+- Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)
+- Shopeditor now correctly shows resetted and default values
 
 ### Removed
 

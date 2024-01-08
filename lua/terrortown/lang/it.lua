@@ -225,7 +225,6 @@ Nasconde le tue informazioni quando attivo. Evita anche di essere l'ultima perso
 Disabilitalo nella finestra Travestimento di questo menù o premi Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Premi {usekey} per innescare o disinnescare."
 L.c4_disarm_warn = "Un C4 che hai piazzato è stato disinnescato."
 L.c4_armed = "Hai innescato la bomba con successo."
 L.c4_disarmed = "Hai disinnescato la bomba con successo."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DISINNESCATA"
 
 -- Visualizer
 L.vis_name = "Visualizzatore"
-L.vis_hint = "Premi {usekey} per raccoglierlo (solo Detective)."
 
 L.vis_desc = [[
 Dispositivo per visualizzare una scena del crimine.
@@ -2068,6 +2066,10 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
