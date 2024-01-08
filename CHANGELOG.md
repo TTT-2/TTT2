@@ -18,6 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added debug.print(message)
   - This puts quotation marks around print statements
   - Can handle single values or a sequential table to be printed
+  - Can handle `nil` entries in a nearly sequential table
 - Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
 - Added indentation to subsettings in F1 menu (by @TimGoll)
 
@@ -25,7 +26,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Updated the Turkish localization file (by @NovaDiablox)
 - Keyhelp and weapon HUD Help now use the global scale factor
-- debug.print can now handle `nil` entries in a nearly sequential table
 
 ### Fixed
 

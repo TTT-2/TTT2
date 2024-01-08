@@ -1814,6 +1814,7 @@ function CreateChanges()
 			<ul>
 				<li>This puts quotation marks around print statements</li>
 				<li>Can handle single values or a sequential table to be printed</li>
+				<li>Can handle `nil` entries in a nearly sequential table</li>
 			</ul>
 			<li>Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)</li>
 			<li>Added indentation to subsettings in F1 menu (by @TimGoll)</li>
@@ -1823,7 +1824,6 @@ function CreateChanges()
 		<ul>
 			<li>Updated the Turkish localization file (by @NovaDiablox)</li>
 			<li>Keyhelp and weapon HUD Help now use the global scale factor</li>
-			<li>debug.print can now handle `nil` entries in a nearly sequential table</li>
 		</ul>
 
 		<h2>Fixed</h2>
