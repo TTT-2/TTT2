@@ -6,7 +6,68 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Grenade Rework:
+  - New individual equipment icons for grenades. (by @EntranceJew)
+  - Imported effects for a discombob, redone particles (by @TimGoll & [Karate Walrus's TTT Better Discombobulator](https://steamcommunity.com/sharedfiles/filedetails/?id=2034376741)
+  - Integrated grenade options from [Karate Walrus's TTT Base Grenade Update](https://steamcommunity.com/sharedfiles/filedetails/?id=2036561862)'s rework. (integrated by @EntranceJew)
+  - Integrated grenade options from [Emzatin.'s TTT Base Grenade Fix & Rework](https://steamcommunity.com/sharedfiles/filedetails/?id=2863673270)'s
+  - Added `Gameplay > Grenade Charge UI` gameplay throw indicator from [Raf's Grenade Indicators for TTT](https://steamcommunity.com/sharedfiles/filedetails/?id=2926866690) (integrated by @EntranceJew)
+  - Added `Gameplay > Grenade Trajectory UI` from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
+  - Addon Checker now discourages using the workshop version of those addons, due to conflicting implementation of the same features.
+- Third Party Menu
+  - Icon by @TimGoll
+  - Can disable specific cross-integration features here.
+- Added new `gameEffects` library:
+  - **Extinguish / ExtinguishInRadius**: Allow making things on fire, not. Plays a sound edited together by (@EntranceJew)
+  - **SpawnSmoke**: Spawn a smoke entity in a position, accepts a table to define parameters.
+  - **StartFires / SpawnFire / RadiusDamage**: Global utility functions from Incendiary Grenade now live here.
+  - **DiscombobEffect**: Spawn the visuals for a discombob effect.
+  - **PushPullRadius**: The effect of a discombob now lives here.
+
 ### Changed
+
+- Grenade Rework:
+  - Base Grenade Changes:
+    - Added throw noise to all grenades.
+    - Added impact/bounce collide sound to all grenades.
+    - Allows editing the following for addon developers:
+      - Throw Force, controls speed of projectiles and impact velocity
+      - Detonate Time, the time that it takes to explode
+      - Spherical Physics Radius, changes PhysObj shape and size if greater than 0
+      - Disarm Hit Players, disarms players when they are hit with a projectile
+      - Damage Trigger Behavior, Prime drops the live grenade projectile, Instant Explosion detonates immediately
+      - Damage Trigger Projectile Explosion, the mid-air projectile will explode if it takes damage
+      - Prevent Damage Chain Reaction, the grenade weapon and projectile will not activate from other grenades that have been triggered by damage.
+    - All grenades have a Bounce / Bounciness factor they can utilize, but only Discombobulator uses it out the gate.
+    - Separate GetThrowVelocity function to compute trajectory more easily.
+  - Incendiary Grenade Changes:
+    - New vFire support to utilize dynamic fires.
+    - Improved handling of existing `ttt_flame` entity.
+  - Smoke Grenade Changes:
+    - Extinguishes fires within radius for the duration of its effect.
+    - Added new detonation noise.
+    - Added a looping sound for smokes during their activity duration.
+    - Smokes use an entity `ttt_smoke`, to network their properties.
+    - The appearance of smoke is identical across all clients due to networking and SharedRandom.
+    - Allows editing the following from the Edit Equipment menu:
+      - Lifetime, the duration a smoke is active.
+  - Discombobulator Changes:
+    - Disperses smoke grenade clouds instantly, stopping their effect.
+    - Added new sounds for bouncing.
+    - Added new particle effects.
+    - Allows editing the following from the Edit Equipment menu:
+      - Nothing
+  - New hook `GM:TTT2ConfGrenadeExplode(pos, radius, force)` for when something is caught in a discombob explosion.
+  - Added `ttt_smoke`
+    - Predictably distributes smoke effects, with all the features on Smoke Grenades.
+    - Available under `gameEffects` library.
+  - `ttt_flame`
+    - Removes AccessorFuncs, utilizes NetworkVar / SetupDataTables
+    - Remove legacy renderer.
+    - Added option for preventing being knocked around after the fire begins.
+    - Added a trail and an ember sprite to indicate its position prior to fire beginning.
+    - Enforced a tighter collider in proportion to the flame particles.
+    - Add vFire support via the Third Party menu.
 
 ### Fixed
 
@@ -144,23 +205,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added dashing to propspec (by @TimGoll)
 - Added new functions to database module
   - `database.SetDefaultValuesFromItem(accessName, itemName, item)`
-- Grenade Rework:
-  - New individual equipment icons for grenades. (by @EntranceJew)
-  - Imported effects for a discombob, redone particles (by @TimGoll & [Karate Walrus's TTT Better Discombobulator](https://steamcommunity.com/sharedfiles/filedetails/?id=2034376741)
-  - Integrated grenade options from [Karate Walrus's TTT Base Grenade Update](https://steamcommunity.com/sharedfiles/filedetails/?id=2036561862)'s rework. (integrated by @EntranceJew)
-  - Integrated grenade options from [Emzatin.'s TTT Base Grenade Fix & Rework](https://steamcommunity.com/sharedfiles/filedetails/?id=2863673270)'s
-  - Added `Gameplay > Grenade Charge UI` gameplay throw indicator from [Raf's Grenade Indicators for TTT](https://steamcommunity.com/sharedfiles/filedetails/?id=2926866690) (integrated by @EntranceJew)
-  - Added `Gameplay > Grenade Trajectory UI` from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
-  - Addon Checker now discourages using the workshop version of those addons, due to conflicting implementation of the same features.
-- Third Party Menu
-  - Icon by @TimGoll
-  - Can disable specific cross-integration features here.
-- Added new `gameEffects` library:
-  - **Extinguish / ExtinguishInRadius**: Allow making things on fire, not. Plays a sound edited together by (@EntranceJew)
-  - **SpawnSmoke**: Spawn a smoke entity in a position, accepts a table to define parameters.
-  - **StartFires / SpawnFire / RadiusDamage**: Global utility functions from Incendiary Grenade now live here.
-  - **DiscombobEffect**: Spawn the visuals for a discombob effect.
-  - **PushPullRadius**: The effect of a discombob now lives here.
 
 ### Changed
 
@@ -192,48 +236,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
-- Grenade Rework:
-  - Base Grenade Changes:
-    - Added throw noise to all grenades.
-    - Added impact/bounce collide sound to all grenades.
-    - Allows editing the following for addon developers:
-      - Throw Force, controls speed of projectiles and impact velocity
-      - Detonate Time, the time that it takes to explode
-      - Spherical Physics Radius, changes PhysObj shape and size if greater than 0
-      - Disarm Hit Players, disarms players when they are hit with a projectile
-      - Damage Trigger Behavior, Prime drops the live grenade projectile, Instant Explosion detonates immediately
-      - Damage Trigger Projectile Explosion, the mid-air projectile will explode if it takes damage
-      - Prevent Damage Chain Reaction, the grenade weapon and projectile will not activate from other grenades that have been triggered by damage.
-    - All grenades have a Bounce / Bounciness factor they can utilize, but only Discombobulator uses it out the gate.
-    - Separate GetThrowVelocity function to compute trajectory more easily.
-  - Incendiary Grenade Changes:
-    - New vFire support to utilize dynamic fires.
-    - Improved handling of existing `ttt_flame` entity.
-  - Smoke Grenade Changes:
-    - Extinguishes fires within radius for the duration of its effect.
-    - Added new detonation noise.
-    - Added a looping sound for smokes during their activity duration.
-    - Smokes use an entity `ttt_smoke`, to network their properties.
-    - The appearance of smoke is identical across all clients due to networking and SharedRandom.
-    - Allows editing the following from the Edit Equipment menu:
-      - Lifetime, the duration a smoke is active.
-  - Discombobulator Changes:
-    - Disperses smoke grenade clouds instantly, stopping their effect.
-    - Added new sounds for bouncing.
-    - Added new particle effects.
-    - Allows editing the following from the Edit Equipment menu:
-      - Nothing
-  - New hook `GM:TTT2ConfGrenadeExplode(pos, radius, force)` for when something is caught in a discombob explosion.
-  - Added `ttt_smoke`
-    - Predictably distributes smoke effects, with all the features on Smoke Grenades.
-    - Available under `gameEffects` library.
-  - `ttt_flame`
-    - Removes AccessorFuncs, utilizes NetworkVar / SetupDataTables
-    - Remove legacy renderer.
-    - Added option for preventing being knocked around after the fire begins.
-    - Added a trail and an ember sprite to indicate its position prior to fire beginning.
-    - Enforced a tighter collider in proportion to the flame particles.
-    - Add vFire support via the Third Party menu.
 
 ### Fixed
 
