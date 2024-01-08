@@ -1809,6 +1809,7 @@ function CreateChanges()
 		[[
 		<h2>Added</h2>
 		<ul>
+			<li>Added some missing vanilla TTT entities into TTT2</li>
 			<li>Added debug.print(message)</li>
 			<ul>
 				<li>This puts quotation marks around print statements</li>
@@ -1827,6 +1828,8 @@ function CreateChanges()
 
 		<h2>Fixed</h2>
 		<ul>
+			<li>Fixed targetID hints for old addons now correctly working for all entities</li>
+			<li>Fixed visualizer having pickup hint even though player is unable to pick up</li>
 			<li>targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)</li>
 			<li>Damage Scaling now has a help description</li>
 			<li>Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2</li>
