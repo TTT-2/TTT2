@@ -225,7 +225,6 @@ Açıkken kimlik bilgilerinizi gizler. Ayrıca bir mağdur tarafından en son g�
 Bu menünün Kılık Değiştirme sekmesini açın veya Numpad Enter tuşuna basın.]]
 
 -- C4
-L.c4_hint = "Devreye almak veya devre dışı bırakmak için {usekey} tuşuna basın."
 L.c4_disarm_warn = "Yerleştirdiğiniz bir C4 patlayıcı etkisiz hale getirildi."
 L.c4_armed = "Bombayı başarıyla devreye aldınız."
 L.c4_disarmed = "Bombayı başarıyla etkisiz hale getirdiniz."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DEVRE DIŞI"
 
 -- Visualizer
 L.vis_name = "Görüntüleyici"
-L.vis_hint = "Açmak için {usekey} tuşuna basın (Yalnızca Dedektifler)."
 
 L.vis_desc = [[
 Olay yeri görüntüleme cihazı.
@@ -2070,6 +2068,10 @@ L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
 L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
