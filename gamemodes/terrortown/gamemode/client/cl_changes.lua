@@ -1749,7 +1749,7 @@ function CreateChanges()
 			<li>Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit</li>
 		</ul>
 	]],
-		os.time({ year = 2023, month = 12, day = 12})
+		os.time({ year = 2023, month = 12, day = 12 })
 	)
 
 	AddChange(
@@ -1801,8 +1801,50 @@ function CreateChanges()
 			<li>Database-Callbacks are now called with the correct valuetype</li>
 		</ul>
 	]],
-		os.time({ year = 2023, month = 12, day = 20})
+		os.time({ year = 2023, month = 12, day = 20 })
 	)
+
+	AddChange(
+		"TTT2 Base - v0.12.3b",
+		[[
+		<h2>Added</h2>
+		<ul>
+			<li>Added some missing vanilla TTT entities into TTT2</li>
+			<li>Added debug.print(message)</li>
+			<ul>
+				<li>This puts quotation marks around print statements</li>
+				<li>Can handle single values or a sequential table to be printed</li>
+				<li>Can handle `nil` entries in a nearly sequential table</li>
+			</ul>
+			<li>Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)</li>
+			<li>Added indentation to subsettings in F1 menu (by @TimGoll)</li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li>Updated the Turkish localization file (by @NovaDiablox)</li>
+			<li>Keyhelp and weapon HUD Help now use the global scale factor</li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li>Fixed targetID hints for old addons now correctly working for all entities</li>
+			<li>Fixed visualizer having pickup hint even though player is unable to pick up</li>
+			<li>targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)</li>
+			<li>Damage Scaling now has a help description</li>
+			<li>Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2</li>
+			<li>Fixed voicechat keybinds being shown even if voice is disabled</li>
+			<li>Coerced ammo types to lowercase for better matching in HUD</li>
+			<li>The binocular zoom now uses a DataTable that is not already used by its weaponbase</li>
+			<li>Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)</li>
+			<li>Errors when looking at a player's corpse that disconnected (by @EntranceJew)</li>
+			<li>Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)</li>
+			<li>Shopeditor now correctly shows resetted and default values</li>
+		</ul>
+	]],
+		os.time({ year = 2024, month = 01, day = 07 })
+	)
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
