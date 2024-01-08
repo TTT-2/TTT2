@@ -444,16 +444,6 @@ function targetid.HUDDrawTargetIDPlayers(tData)
 			ent.sb_tag.color
 		)
 	end
-
-	-- add hints to the player
-	local hint = ent.TargetIDHint
-
-	if hint and hint.hint then
-		tData:AddDescriptionLine(
-			hint.fmt(ent, hint.hint),
-			COLOR_LGRAY
-		)
-	end
 end
 
 ---
@@ -517,16 +507,6 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 		role_found and roleData.iconMaterial or materialCorpse,
 		role_found and roleData.color or COLOR_YELLOW
 	)
-
-	-- add hints to the corpse
-	local hint = ent.TargetIDHint
-
-	if hint and hint.hint then
-		tData:AddDescriptionLine(
-			hint.fmt(ent, hint.hint),
-			COLOR_LGRAY
-		)
-	end
 
 	-- add info if searched by detectives
 	if ent.bodySearchResult and ent.bodySearchResult.base.isPublicPolicingSearch then
