@@ -6,6 +6,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping:
+  - Added `SWEP.IdleAnim` to allow specifying an idle animation.
+  - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
+
 ### Changed
 
 ### Fixed
@@ -21,9 +25,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Can handle `nil` entries in a nearly sequential table
 - Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
 - Added indentation to subsettings in F1 menu (by @TimGoll)
-- `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping:
-  - Added `SWEP.IdleAnim` to allow specifying an idle animation.
-  - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
 
 ### Changed
 
