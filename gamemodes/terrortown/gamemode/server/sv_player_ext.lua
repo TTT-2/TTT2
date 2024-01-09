@@ -233,7 +233,7 @@ function plymeta:SendEquipment(mode, itemName)
 	end
 
 	net.Start("TTT_Equipment")
-	net.WriteUInt(mode, 1)
+	net.WriteUInt(mode, 2)
 
 	if mode ~= EQUIPITEMS_RESET then
 		net.WriteString(itemName)

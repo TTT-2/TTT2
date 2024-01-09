@@ -178,7 +178,7 @@ local function UpdateEquipment()
 	local ply = LocalPlayer()
 	if not IsValid(ply) then return end
 
-	local mode = net.ReadUInt(1)
+	local mode = net.ReadUInt(2)
 
 	local equipItems = ply:GetEquipmentItems()
 
