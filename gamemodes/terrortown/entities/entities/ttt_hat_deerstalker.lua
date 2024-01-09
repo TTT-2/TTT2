@@ -21,8 +21,6 @@ end
 ---
 -- @realm shared
 function ENT:Initialize()
-	self:SetBeingWorn(true)
-
 	self:SetModel(self.Model)
 
 	self:DrawShadow(false)
@@ -30,15 +28,19 @@ function ENT:Initialize()
 	-- don't physicsinit the ent here, because physicsing and then setting
 	-- movetype none is 1) a waste of memory, 2) broken
 
-	self:SetMoveType(MOVETYPE_NONE)
-	self:SetSolid(SOLID_NONE)
-	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-
 	if SERVER then
-		self.Wearer = self:GetParent()
+		if IsValid(self:GetParent()) then
+			self:EquipTo(self:GetParent())
+		else
+			self:Drop()
+		end
+		self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+		self:SetUseType(SIMPLE_USE)
 		self:AddEffects(bit.bor(EF_BONEMERGE, EF_BONEMERGE_FASTCULL, EF_PARENT_ANIMATES))
 	end
 end
+
+
 
 if SERVER then
 	---
@@ -52,7 +54,28 @@ if SERVER then
 	---
 	-- @realm server
 	function ENT:OnRemove()
-		self:SetBeingWorn(false)
+		-- only focus on cleaning up external links, we're not long for this world
+		if self.Wearer and self.Wearer.hat == self then
+			self.Wearer.hat = nil
+		end
+	end
+
+	---
+	-- @param Player ply The player to put the hat on.
+	-- @realm server
+	function ENT:EquipTo(ply)
+		self.Wearer = ply
+		ply.hat = self
+
+		self:SetBeingWorn(true)
+
+		self:SetMoveType(MOVETYPE_NONE)
+		self:SetSolid(SOLID_NONE)
+
+		local pos, ang = playermodels.GetHatPosition(ply)
+		self:SetPos(pos)
+		self:SetAngles(ang)
+		self:SetParent(ply)
 	end
 
 	---
@@ -65,26 +88,17 @@ if SERVER then
 		self:SetParent(nil)
 
 		self:SetBeingWorn(false)
-		self:SetUseType(SIMPLE_USE)
 
 		-- only now physics this entity
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetSolid(SOLID_VPHYSICS)
 		self:SetMoveType(MOVETYPE_VPHYSICS)
 
-		-- position at head
+		-- if we're not already on the player's head,
 		if IsValid(ply) then
-			local bone = ply:LookupBone("ValveBiped.Bip01_Head1")
-			if bone then
-				local pos, ang = ply:GetBonePosition(bone)
-				self:SetPos(pos)
-				self:SetAngles(ang)
-			else
-				local pos = ply:GetPos()
-				pos.z = pos.z + 68
-
-				self:SetPos(pos)
-			end
+			local pos, ang = ply:GetBonePosition(bone)
+			self:SetPos(pos)
+			self:SetAngles(ang)
 		end
 
 		-- physics push
@@ -109,8 +123,9 @@ if SERVER then
 	end
 
 	local function CanEquipHat(ply)
+		local rd = ply:GetSubRoleData()
 		return not IsValid(ply.hat) and
-			(ttt_hats_innocent:GetBool() or ply:GetRole() == ROLE_DETECTIVE)
+			(ttt_hats_innocent:GetBool() or (rd.isPolicingRole and rd.isPublicRole))
 	end
 
 	---
@@ -129,31 +144,14 @@ if SERVER then
 
 			sound.Play("weapon.ImpactSoft", self:GetPos(), 75, 100, 1)
 
-			self:SetMoveType(MOVETYPE_NONE)
-			self:SetSolid(SOLID_NONE)
-			self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-
-			self:SetParent(ply)
-			self.Wearer = ply
-
-			ply.hat = self
-
-			self:SetBeingWorn(true)
+			self:EquipTo(ply)
 
 			LANG.Msg(ply, "hat_retrieve")
 		end
 	end
 
 	local function TestHat(ply, cmd, args)
-		local hat = ents.Create("ttt_hat_deerstalker")
-
-		hat:SetPos(ply:GetPos() + Vector(0,0,70))
-		hat:SetAngles(ply:GetAngles())
-		hat:SetParent(ply)
-
-		ply.hat = hat
-
-		hat:Spawn()
+		playermodels.ApplyPlayerHat(ply, nil, args[1] or "ttt_hat_deerstalker")
 	end
 	concommand.Add("ttt_debug_testhat", TestHat, nil, nil, FCVAR_CHEAT)
 end
