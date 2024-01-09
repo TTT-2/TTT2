@@ -199,7 +199,7 @@ local function UpdateEquipment()
 
 		if mode == EQUIPITEMS_ADD then
 			equipItems[#equipItems + 1] = itemName
-			
+
 			if item and isfunction(item.Equip) then
 				item:Equip(ply)
 			end
