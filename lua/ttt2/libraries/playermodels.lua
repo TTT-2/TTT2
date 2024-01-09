@@ -259,8 +259,10 @@ end
 
 ---
 -- Finds the location and angle of the hat.
+-- @param Player ply The player whose hat position should be found
 -- @return Vector pos The location of the attach point.
 -- @return Angle ang The angle of the attach point.
+-- @realm shared
 function playermodels.GetHatPosition(ply)
 	local pos, ang
 	if IsValid(ply) then
@@ -269,7 +271,6 @@ function playermodels.GetHatPosition(ply)
 			pos, ang = ply:GetBonePosition(bone)
 		else
 			pos, ang = ply:GetPos(), ply:GetAngles()
-			-- TODO: sometimes 68, sometimes 70
 			pos.z = pos.z + GetPlayerSize(ply).z
 		end
 	end
