@@ -3,13 +3,13 @@
 -- @author ZenBre4ker
 -- @class Shop
 
-SHOP = SHOP or {}
+shop = shop or {}
 
 ---
 -- Buys the equipment with the corresponding Id
 -- @param string equipmentId The name of the equipment to buy
 -- @realm client
-function SHOP.BuyEquipment(equipmentId)
+function shop.BuyEquipment(equipmentId)
 	net.Start("TTT2OrderEquipment")
 	net.WriteString(equipmentId)
 	net.SendToServer()
@@ -17,8 +17,9 @@ end
 
 ---
 -- Get available credits of the local player
+-- @return number The number of credits available
 -- @realm client
-function SHOP.GetAvailableCredits()
+function shop.GetAvailableCredits()
 	local client = LocalPlayer()
 
 	return IsValid(client) and client.equipment_credits or -1

@@ -177,7 +177,7 @@ local function PreqLabels(parent, x, y)
 
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
-		local credits = SHOP.GetAvailableCredits()
+		local credits = shop.GetAvailableCredits()
 		local cr = sel and sel.credits or 1
 
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
@@ -350,7 +350,7 @@ local function CreateEquipmentList(t)
 
 	local client = LocalPlayer()
 	local currole = client:GetSubRole()
-	local credits = SHOP.GetAvailableCredits()
+	local credits = shop.GetAvailableCredits()
 
 	local itemSize = 64
 
@@ -504,7 +504,7 @@ local function CreateEquipmentList(t)
 			ic.PressedLeftMouse = function(self, doubleClick)
 				if not doubleClick or self.item.disabledBuy or not enableDoubleClickBuy:GetBool() then return end
 
-				SHOP.BuyEquipment(self.item.id)
+				shop.BuyEquipment(self.item.id)
 
 				---@cast eqframe -nil
 				eqframe:Close()
@@ -609,7 +609,7 @@ function TraitorMenuPopup()
 		eqframe:Close()
 	end
 
-	local credits = SHOP.GetAvailableCredits()
+	local credits = shop.GetAvailableCredits()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
@@ -891,7 +891,7 @@ function TraitorMenuPopup()
 
 		local choice = pnl.item
 
-		SHOP.BuyEquipment(choice.id)
+		shop.BuyEquipment(choice.id)
 
 		dframe:Close()
 	end
