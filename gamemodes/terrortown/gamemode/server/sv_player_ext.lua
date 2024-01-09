@@ -157,7 +157,7 @@ function plymeta:SetDefaultCredits()
 end
 
 ---
--- Synces the amount of credits with the @{Player}
+-- Syncs the amount of credits with the @{Player}
 -- @realm server
 function plymeta:SendCredits()
 	net.Start("TTT_Credits")
@@ -169,33 +169,33 @@ end
 
 ---
 -- Gives a specific @{ITEM} (if possible)
--- @param string cls
+-- @param string className
 -- @return ITEM|nil
 -- @realm server
 -- @internal
-function plymeta:AddEquipmentItem(cls)
-	local item = items.GetStored(cls)
+function plymeta:AddEquipmentItem(className)
+	local item = items.GetStored(className)
 
-	if not item or item.limited and self:HasEquipmentItem(cls) then return end
+	if not item or item.limited and self:HasEquipmentItem(className) then return end
 
 	self.equipmentItems = self.equipmentItems or {}
-	self.equipmentItems[#self.equipmentItems + 1] = cls
+	self.equipmentItems[#self.equipmentItems + 1] = className
 
 	item:Equip(self)
 
-	self:SendEquipment()
+	self:SendEquipment(EQUIPITEMS_ADD, className)
 
 	return item
 end
 
 ---
 -- Removes a specific @{ITEM}
--- @param string cls
+-- @param string className
 -- @realm server
-function plymeta:RemoveEquipmentItem(cls)
-	if not self:HasEquipmentItem(cls) then return end
+function plymeta:RemoveEquipmentItem(className)
+	if not self:HasEquipmentItem(className) then return end
 
-	local item = items.GetStored(cls)
+	local item = items.GetStored(className)
 
 	if item and isfunction(item.Reset) then
 		item:Reset(self)
@@ -204,14 +204,14 @@ function plymeta:RemoveEquipmentItem(cls)
 	local equipItems = self:GetEquipmentItems()
 
 	for k = 1, #equipItems do
-		if equipItems[k] == cls then
+		if equipItems[k] == className then
 			table.remove(self.equipmentItems, k)
 
 			break
 		end
 	end
 
-	self:SendEquipment()
+	self:SendEquipment(EQUIPITEMS_REMOVE, className)
 end
 
 ---
@@ -221,17 +221,20 @@ end
 plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 
 ---
--- Synces the server stored equipment with the @{Player}
+-- Syncs the server stored equipment with the @{Player}
 -- @note We do this instead of an NW var in order to limit the info to just this ply
 -- @realm server
-function plymeta:SendEquipment()
-	local arr = self:GetEquipmentItems()
+function plymeta:SendEquipment(mode, itemName)
+	if not mode then
+		ErrorNoHalt("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.")
+		return
+	end
 
 	net.Start("TTT_Equipment")
-	net.WriteUInt(#arr, 16)
+	net.WriteUInt(mode, 1)
 
-	for i = 1, #arr do
-		net.WriteString(arr[i])
+	if mode ~= EQUIPITEMS_RESET then
+		net.WriteString(itemName)
 	end
 
 	net.Send(self)
@@ -253,7 +256,7 @@ function plymeta:ResetEquipment()
 
 	self.equipmentItems = {}
 
-	self:SendEquipment()
+	self:SendEquipment(EQUIPITEMS_RESET)
 end
 
 ---

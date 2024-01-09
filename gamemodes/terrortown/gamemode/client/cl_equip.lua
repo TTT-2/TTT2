@@ -177,7 +177,7 @@ local function PreqLabels(parent, x, y)
 
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
-		local credits = client:GetCredits()
+		local credits = SHOP.GetAvailableCredits()
 		local cr = sel and sel.credits or 1
 
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
@@ -350,7 +350,7 @@ local function CreateEquipmentList(t)
 
 	local ply = LocalPlayer()
 	local currole = ply:GetSubRole()
-	local credits = ply:GetCredits()
+	local credits = SHOP.GetAvailableCredits()
 
 	local itemSize = 64
 
@@ -504,9 +504,7 @@ local function CreateEquipmentList(t)
 			ic.PressedLeftMouse = function(self, doubleClick)
 				if not doubleClick or self.item.disabledBuy or not enableDoubleClickBuy:GetBool() then return end
 
-				net.Start("TTT2OrderEquipment")
-				net.WriteString(self.item.id)
-				net.SendToServer()
+				SHOP.BuyEquipment(self.item.id)
 
 				---@cast eqframe -nil
 				eqframe:Close()
@@ -611,7 +609,7 @@ function TraitorMenuPopup()
 		eqframe:Close()
 	end
 
-	local credits = ply:GetCredits()
+	local credits = SHOP.GetAvailableCredits()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
@@ -893,9 +891,7 @@ function TraitorMenuPopup()
 
 		local choice = pnl.item
 
-		net.Start("TTT2OrderEquipment")
-		net.WriteString(choice.id)
-		net.SendToServer()
+		SHOP.BuyEquipment(choice.id)
 
 		dframe:Close()
 	end
@@ -960,63 +956,6 @@ concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 --
 -- NET RELATED STUFF:
 --
-
-local function ReceiveEquipment()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
-
-	local eqAmount = net.ReadUInt(16)
-	local tmp = {}
-	local toRem = {}
-
-	for i = 1, eqAmount do
-		tmp[i] = net.ReadString()
-	end
-
-	local equipItems = ply:GetEquipmentItems()
-
-	-- reset all old items
-	for k = 1, #equipItems do
-		local v = equipItems[k]
-
-		if table.HasValue(tmp, v) then continue end
-
-		local item = items.GetStored(v)
-		if item and isfunction(item.Reset) then
-			item:Reset(ply)
-		end
-
-		table.insert(toRem, 1, k)
-	end
-
-	-- remove finally
-	for i = 1, #toRem do
-		table.remove(equipItems, toRem[i])
-	end
-
-	-- now equip the items the player doesn't own
-	for k = 1, #tmp do
-		local v = tmp[k]
-
-		if not table.HasValue(equipItems, v) then
-			equipItems[#equipItems + 1] = v
-
-			local item = items.GetStored(v)
-			if item and isfunction(item.Equip) then
-				item:Equip(ply)
-			end
-		end
-	end
-end
-net.Receive("TTT_Equipment", ReceiveEquipment)
-
-local function ReceiveCredits()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
-
-	ply.equipment_credits = net.ReadUInt(8)
-end
-net.Receive("TTT_Credits", ReceiveCredits)
 
 local r = 0
 

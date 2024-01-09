@@ -166,6 +166,54 @@ local function TargetPlayer()
 end
 net.Receive("TTT2TargetPlayer", TargetPlayer)
 
+local function UpdateCredits()
+	local ply = LocalPlayer()
+	if not IsValid(ply) then return end
+
+	ply.equipment_credits = net.ReadUInt(8)
+end
+net.Receive("TTT_Credits", UpdateCredits)
+
+local function UpdateEquipment()
+	local ply = LocalPlayer()
+	if not IsValid(ply) then return end
+
+	local mode = net.ReadUInt(1)
+
+	local equipItems = ply:GetEquipmentItems()
+
+	if mode == EQUIPITEMS_RESET then
+		for i = #equipItems, 1, -1 do
+			local itemName = equipItems[i]
+			local item = items.GetStored(itemName)
+
+			if item and isfunction(item.Reset) then
+				item:Reset(ply)
+			end
+		end
+
+		table.Empty(equipItems)
+	else
+		local itemName = net.ReadString()
+		local item = items.GetStored(itemName)
+
+		if mode == EQUIPITEMS_ADD then
+			equipItems[#equipItems + 1] = itemName
+			
+			if item and isfunction(item.Equip) then
+				item:Equip(ply)
+			end
+		elseif mode == EQUIPITEMS_REMOVE then
+			table.remove(equipItems, itemName)
+
+			if item and isfunction(item.Reset) then
+				item:Reset(ply)
+			end
+		end
+	end
+end
+net.Receive("TTT_Equipment", UpdateEquipment)
+
 ---
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
