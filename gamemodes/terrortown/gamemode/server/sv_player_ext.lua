@@ -223,6 +223,8 @@ plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 ---
 -- Syncs the server stored equipment with the @{Player}
 -- @note We do this instead of an NW var in order to limit the info to just this ply
+-- @param number mode The mode to determine how the Equipment is handled on the client
+-- @param string itemName The name of the item to send, can be 'nil' if mode is EQUIPITEMS_RESET
 -- @realm server
 function plymeta:SendEquipment(mode, itemName)
 	if not mode then

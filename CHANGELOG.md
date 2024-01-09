@@ -8,7 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
-- Refactored client shop logic into separate SHOP-class
+- Refactored client shop logic into separate SHOP-class (in Progress)
 
 ### Fixed
 
