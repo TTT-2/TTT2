@@ -7,9 +7,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 ### Changed
+
 - dframe_ttt2 panels can now manually enable bindings while they are open
 
 ### Fixed
+
 - The roundendscreen can now be closed with the correct Binding
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
