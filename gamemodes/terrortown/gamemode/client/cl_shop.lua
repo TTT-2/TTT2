@@ -19,7 +19,7 @@ end
 -- Get available credits of the local player
 -- @realm client
 function SHOP.GetAvailableCredits()
-	local ply = LocalPlayer()
+	local client = LocalPlayer()
 
-	return IsValid(ply) and ply.equipment_credits or -1
+	return IsValid(client) and client.equipment_credits or -1
 end

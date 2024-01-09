@@ -167,20 +167,20 @@ end
 net.Receive("TTT2TargetPlayer", TargetPlayer)
 
 local function UpdateCredits()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
-	ply.equipment_credits = net.ReadUInt(8)
+	client.equipment_credits = net.ReadUInt(8)
 end
 net.Receive("TTT_Credits", UpdateCredits)
 
 local function UpdateEquipment()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	local mode = net.ReadUInt(2)
 
-	local equipItems = ply:GetEquipmentItems()
+	local equipItems = client:GetEquipmentItems()
 
 	if mode == EQUIPITEMS_RESET then
 		for i = #equipItems, 1, -1 do
@@ -188,7 +188,7 @@ local function UpdateEquipment()
 			local item = items.GetStored(itemName)
 
 			if item and isfunction(item.Reset) then
-				item:Reset(ply)
+				item:Reset(client)
 			end
 		end
 
@@ -201,13 +201,13 @@ local function UpdateEquipment()
 			equipItems[#equipItems + 1] = itemName
 
 			if item and isfunction(item.Equip) then
-				item:Equip(ply)
+				item:Equip(client)
 			end
 		elseif mode == EQUIPITEMS_REMOVE then
 			table.remove(equipItems, itemName)
 
 			if item and isfunction(item.Reset) then
-				item:Reset(ply)
+				item:Reset(client)
 			end
 		end
 	end
