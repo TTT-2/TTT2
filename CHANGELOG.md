@@ -8,6 +8,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Refactored client shop logic into separate shop-class
+
 ### Fixed
 
 - Role selection RNG improvements (by @EntranceJew):
