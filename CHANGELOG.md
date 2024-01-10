@@ -68,6 +68,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
     - Added a trail and an ember sprite to indicate its position prior to fire beginning.
     - Enforced a tighter collider in proportion to the flame particles.
     - Add vFire support via the Third Party menu.
+- Refactored client shop logic into separate shop-class
 
 ### Fixed
 
