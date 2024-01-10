@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Refactored client shop logic into separate shop-class
 - Binoculars now have a world model that isn't paper towels
 
 ### Fixed
