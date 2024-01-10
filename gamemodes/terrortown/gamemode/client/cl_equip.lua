@@ -177,7 +177,7 @@ local function PreqLabels(parent, x, y)
 
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
-		local credits = shop.GetAvailableCredits()
+		local credits = client:GetCredits()
 		local cr = sel and sel.credits or 1
 
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
@@ -350,7 +350,7 @@ local function CreateEquipmentList(t)
 
 	local client = LocalPlayer()
 	local currole = client:GetSubRole()
-	local credits = shop.GetAvailableCredits()
+	local credits = client:GetCredits()
 
 	local itemSize = 64
 
@@ -504,7 +504,7 @@ local function CreateEquipmentList(t)
 			ic.PressedLeftMouse = function(self, doubleClick)
 				if not doubleClick or self.item.disabledBuy or not enableDoubleClickBuy:GetBool() then return end
 
-				shop.BuyEquipment(self.item.id)
+				shop.BuyEquipment(client, self.item.id)
 
 				---@cast eqframe -nil
 				eqframe:Close()
@@ -609,7 +609,7 @@ function TraitorMenuPopup()
 		eqframe:Close()
 	end
 
-	local credits = shop.GetAvailableCredits()
+	local credits = client:GetCredits()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
@@ -840,7 +840,7 @@ function TraitorMenuPopup()
 	end
 
 	-- Random Shop Rerolling
-	if GetGlobalBool("ttt2_random_shops") and GetGlobalBool("ttt2_random_shop_reroll") then
+	if shop.CanRerollShop(client) then
 		local dtransfer = CreateRerollMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))
@@ -891,7 +891,7 @@ function TraitorMenuPopup()
 
 		local choice = pnl.item
 
-		shop.BuyEquipment(choice.id)
+		shop.BuyEquipment(client, choice.id)
 
 		dframe:Close()
 	end
