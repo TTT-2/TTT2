@@ -7,12 +7,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+- Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 
 ### Changed
 
 - Refactored client shop logic into separate shop-class (by @ZenBre4ker)
 - dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
+- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair
 
 ### Fixed
 
