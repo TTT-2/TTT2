@@ -1628,10 +1628,10 @@ end
 ---
 -- Caches the weapons currently in the player inventory and removes them.
 -- These weapons can be restored at any time.
--- @param boolean forceAll force all weapons to be removed, including weapon_ttt_unarmed
+-- @param boolean removeUnarmed force all weapons to be removed, including weapon_ttt_unarmed
 -- @note As long as a player has cached weapons, they are unable to pick up any weapon.
 -- @realm server
-function plymeta:CacheAndStripWeapons(forceAll)
+function plymeta:CacheAndStripWeapons(removeUnarmed)
 	self.cachedWeaponInventory = {}
 	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
 
@@ -1641,7 +1641,7 @@ function plymeta:CacheAndStripWeapons(forceAll)
 		local wep = weps[i]
 		local wepClass = WEPS.GetClass(wep)
 
-		if not forceAll and wepClass == "weapon_ttt_unarmed" then continue end
+		if not removeUnarmed and wepClass == "weapon_ttt_unarmed" then continue end
 
 		self.cachedWeaponInventory[#self.cachedWeaponInventory + 1] = {
 			cls = wepClass,
@@ -1655,7 +1655,7 @@ function plymeta:CacheAndStripWeapons(forceAll)
 	-- OnDrop which is not intended for the weapon caching
 	self:StripWeapons()
 
-	if not forceAll then
+	if not removeUnarmed then
 		self:Give("weapon_ttt_unarmed")
 	end
 end
