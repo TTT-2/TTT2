@@ -6,12 +6,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+
 ### Changed
 
-- Refactored client shop logic into separate shop-class
+- Refactored client shop logic into separate shop-class (by @ZenBre4ker)
+- dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
+- Binoculars now have a world model that isn't paper towels (by @EntranceJew)
 
 ### Fixed
 
+- The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Role selection RNG improvements (by @EntranceJew):
   - Uses `Player:CanSelectRole()` now instead of duplicating logic
   - Option for server to disregard player role selection preferences
