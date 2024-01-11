@@ -340,9 +340,10 @@ function plymeta:GetRevivalReason()
 end
 
 ---
--- Sets a shared playersetting from the client on both server and client.
+-- Sets a shared playersetting from the client on both server and client. Make sure the
+-- variable is registered with `RegisterSettingOnServer` as the setting is otherwise discarded.
 -- @param string identifier The identifier of the shared setting
--- @param any value The setting's value
+-- @param any value The setting's value, it is parsed as a string before transmitting
 -- @realm client
 function plymeta:SetSettingOnServer(identifier, value)
 	if self.playerSettings[identifier] == value then return end
@@ -351,7 +352,7 @@ function plymeta:SetSettingOnServer(identifier, value)
 
 	net.Start("ttt2_set_player_setting")
 	net.WriteString(identifier)
-	net.WriteTable({value}, true) -- use table to support any data type
+	net.WriteString(tostring(value))
 	net.SendToServer()
 end
 
