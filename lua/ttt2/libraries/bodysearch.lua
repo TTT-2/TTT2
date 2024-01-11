@@ -247,7 +247,11 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 		sceneData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage or 0))
 		sceneData.killFloorSurface = rag.scene.floorSurface or 0
 		sceneData.killWaterLevel = rag.scene.waterLevel or 0
-		sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
+
+		-- only add last seen id if searched by public policing role
+		if sceneData.base.isPublicPolicingSearch then
+			sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
+		end
 
 		sceneData.killDistance = CORPSE_KILL_NO_DATA
 		if rag.scene.hit_trace and isvector(rag.scene.hit_trace.StartPos) then
