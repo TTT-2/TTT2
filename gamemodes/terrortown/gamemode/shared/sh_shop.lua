@@ -8,20 +8,20 @@ shop = shop or {}
 shop.statusCode = {
 	SUCCESS = 1,
 	SUCCESSIGNORECOST = 2,
-	INVALIDPLAYER = 2,
-	INVALIDID = 3,
-	NOTENOUGHCREDITS = 4,
-	NOTBUYABLE = 4,
-	NOTENOUGHPLAYERS = 5,
-	LIMITEDBOUGHT = 6,
-	NOTBUYABLEFORROLE = 7,
-	BLOCKEDBYOLDHOOK = 8,
-	BLOCKEDBYTTT2HOOK = 9,
-	PENDINGORDER = 4,
-	NOSHOP = 5,
-	MISSINGRANDOMSHOP = 6,
-	NOTINSHOP = 7,
-	NOTEXISTING = 8
+	INVALIDPLAYER = 3,
+	INVALIDID = 4,
+	NOTEXISTING = 5,
+	NOTENOUGHCREDITS = 6,
+	NOTBUYABLE = 7,
+	NOTENOUGHPLAYERS = 8,
+	LIMITEDBOUGHT = 9,
+	NOTBUYABLEFORROLE = 10,
+	PENDINGORDER = 11,
+	NOSHOP = 12,
+	NORANDOMSHOP = 13,
+	NOTINSHOP = 14,
+	BLOCKEDBYOLDHOOK = 15,
+	BLOCKEDBYTTT2HOOK = 16,
 }
 
 ---
@@ -108,7 +108,7 @@ function shop.IsEquipmentBuyableFor(ply, equipmentId)
 
 	if GetGlobalBool("ttt2_random_shops") then
 		if not RANDOMSHOP[ply] or #RANDOMSHOP[ply] == 0 then
-			return false, shop.statusCode.MISSINGRANDOMSHOP
+			return false, shop.statusCode.NORANDOMSHOP
 		end
 
 		local containedInRandomShop = false
@@ -313,7 +313,7 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 
 		net.Start("TTT2CreditTransferUpdate")
 		net.Send(ply)
-		
+
 		LANG.Msg(ply, "xfer_success", {player = target:Nick()}, MSG_MSTACK_ROLE)
 		LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits}, MSG_MSTACK_ROLE)
 	end
