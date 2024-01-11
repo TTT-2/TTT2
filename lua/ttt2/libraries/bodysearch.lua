@@ -249,7 +249,7 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 		sceneData.killWaterLevel = rag.scene.waterLevel or 0
 
 		-- only add last seen id if searched by public policing role
-		if sceneData.base.isPublicPolicingSearch then
+		if isPublicPolicingSearch then
 			sceneData.lastSeenEnt = rag.lastid and rag.lastid.ent or nil
 		end
 
