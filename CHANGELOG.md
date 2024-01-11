@@ -16,6 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Role selection RNG improvements (by @EntranceJew):
   - Uses `Player:CanSelectRole()` now instead of duplicating logic
