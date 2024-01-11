@@ -407,7 +407,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 
 		-- strafe angles
 		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.02
+			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.01
 		end
 
 	-- handle swimming
@@ -431,7 +431,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 
 		-- strafe angles
 		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.003
 		end
 
 	end
