@@ -134,6 +134,14 @@ function PANEL:IsFrameHidden()
 end
 
 ---
+-- Checks if a visible frame should block TTT2 Binds
+-- @return boolean Returns if this frame blocks TTT2 Binds
+-- @realm client
+function PANEL:IsBlockingBindings()
+	return true
+end
+
+---
 -- Clears the contents of this frame.
 -- @note If a new size is given, the position of the frame is reset
 -- @param[opt] number w The new width
