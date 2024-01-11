@@ -9,6 +9,11 @@ local IsValid = IsValid
 local hook = hook
 local math = math
 
+-- Distinguish between 3 modes to reset, add or remove equipped items
+EQUIPITEMS_RESET = 0
+EQUIPITEMS_ADD = 1
+EQUIPITEMS_REMOVE = 2
+
 ---@class Player
 local plymeta = FindMetaTable("Player")
 if not plymeta then

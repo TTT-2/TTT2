@@ -2121,3 +2121,7 @@ For the poltergeist, this would affect each "thump" and the final explosion.
 2 = Deal twice the amount of damage.
 
 Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+L.binoc_help_reload = "Clear target."
+
