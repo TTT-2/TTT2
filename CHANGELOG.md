@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
 - Grenade Rework:
   - New individual equipment icons for grenades. (by @EntranceJew)
   - Imported effects for a discombob, redone particles (by @TimGoll & [Karate Walrus's TTT Better Discombobulator](https://steamcommunity.com/sharedfiles/filedetails/?id=2034376741)
@@ -26,6 +27,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Refactored client shop logic into separate shop-class (by @ZenBre4ker)
+- dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
+- Binoculars now have a world model that isn't paper towels (by @EntranceJew)
 - Grenade Rework:
   - Base Grenade Changes:
     - Added throw noise to all grenades.
@@ -68,9 +72,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
     - Added a trail and an ember sprite to indicate its position prior to fire beginning.
     - Enforced a tighter collider in proportion to the flame particles.
     - Add vFire support via the Third Party menu.
-- Refactored client shop logic into separate shop-class
 
 ### Fixed
+
+- Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
+- The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
