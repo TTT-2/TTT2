@@ -8,6 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
+- Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
 
 ### Changed
 
