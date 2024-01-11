@@ -138,6 +138,10 @@ function CLSCORE:CreatePanel()
 		self:HidePanel()
 	end)
 
+	frame.IsBlockingBindings = function(slf)
+		return self:IsBlockingBindings()
+	end
+
 	-- LEFT HAND MENU STRIP
 	local menuBox = vgui.Create("DPanelTTT2", frame)
 	menuBox:SetSize(self.sizes.widthMenu, self.sizes.heightMainArea)
@@ -250,6 +254,14 @@ function CLSCORE:IsPanelHidden()
 	else
 		return true
 	end
+end
+
+---
+-- Checks if this panel should block TTT2 Binds
+-- @return boolean True if this frame blocks TTT2 Binds
+-- @realm client
+function CLSCORE:IsBlockingBindings()
+	return false
 end
 
 ---
@@ -412,7 +424,6 @@ function CLSCORE:Toggle()
 end
 
 bind.Register("toggle_clscore", function()
-	CLSCORE:ClearPanel()
 	CLSCORE:Toggle()
 end,
 nil, "header_bindings_ttt2", "label_bind_clscore")
