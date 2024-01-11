@@ -27,11 +27,10 @@ end
 -- @param number credits The purchase price of the @{ITEM} or @{Weapon}
 -- @return boolean Return false to block buying of an equipment item
 -- @return boolean Return true to make the purchase free
--- @return string Return a string that is shown in a @{MSTACK} message
 -- @hook
 -- @realm server
 function GM:TTT2CanOrderEquipment(ply, cls, isItem, credits)
-
+	return true, false
 end
 
 ---
@@ -60,17 +59,47 @@ end
 
 -- Equipment buying
 
+local function HandleErrorMessage(ply, equipmentId, statusCode)
+	if statusCode == shop.statusCode.SUCCESS then
+		return
+	elseif statusCode == shop.statusCode.PENDINGORDER then
+		LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
+	elseif statusCode == shop.statusCode.NOTEXISTING then
+		print(ply, " tried to buy equip that doesn't exist: ", equipmentId)
+	elseif statusCode == shop.statusCode.NOTENOUGHCREDITS then
+		print(ply, " tried to buy item/weapon, but didn't have enough credits.")
+	elseif statusCode == shop.statusCode.INVALIDID then
+		ErrorNoHalt("[TTT2][ERROR] No ID was requested by:", ply)
+	elseif statusCode == shop.statusCode.NOTBUYABLE then
+		LANG.Msg(ply, "This equipment cannot be bought.", nil, MSG_MSTACK_ROLE)
+	elseif statusCode == shop.statusCode.NOTENOUGHPLAYERS then
+		LANG.Msg(ply, "Minimum amount of active players needed.", nil, MSG_MSTACK_ROLE)
+	elseif statusCode == shop.statusCode.LIMITEDBOUGHT then
+		LANG.Msg(ply, "This equipment is limited and is already bought.", nil, MSG_MSTACK_ROLE)
+	elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
+		LANG.Msg(ply, "Your role can't buy this equipment.", nil, MSG_MSTACK_ROLE)
+	end
+end
+
 local function NetOrderEquipment(len, ply)
 	local equipmentId = net.ReadString()
 
-	shop.BuyEquipment(ply, equipmentId)
+	local isSuccess, statusCode = shop.BuyEquipment(ply, equipmentId)
+
+	if not isSuccess then
+		HandleErrorMessage(ply, equipmentId, statusCode)
+	end
 end
 net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
 local function ConCommandOrderEquipment(ply, cmd, args)
 	if #args ~= 1 then return end
 
-	shop.BuyEquipment(ply, args[1])
+	local isSuccess, statusCode = shop.BuyEquipment(ply, args[1])
+
+	if not isSuccess then
+		HandleErrorMessage(ply, statusCode)
+	end
 end
 concommand.Add("ttt_order_equipment", ConCommandOrderEquipment)
 

@@ -5,101 +5,175 @@
 
 shop = shop or {}
 
-function shop.IsEquipmentBuyableFor(ply, equipmentId)
-	if not GetGlobalBool("ttt2_random_shops") or not RANDOMSHOP[ply] or #RANDOMSHOP[ply] == 0 then
-		return true
-	end
-
-	for i = 1, #RANDOMSHOP[ply] do
-		if RANDOMSHOP[ply][i].id ~= equipmentId then continue end
-
-		return true
-	end
-
-	return false
-end
-
-
-local function HasPendingOrder(ply)
-	return timer.Exists("give_equipment" .. ply:UniqueID())
-end
+shop.statusCode = {
+	SUCCESS = 1,
+	SUCCESSIGNORECOST = 2,
+	INVALIDPLAYER = 2,
+	INVALIDID = 3,
+	NOTENOUGHCREDITS = 4,
+	NOTBUYABLE = 4,
+	NOTENOUGHPLAYERS = 5,
+	LIMITEDBOUGHT = 6,
+	NOTBUYABLEFORROLE = 7,
+	BLOCKEDBYOLDHOOK = 8,
+	BLOCKEDBYTTT2HOOK = 9,
+	PENDINGORDER = 4,
+	NOSHOP = 5,
+	MISSINGRANDOMSHOP = 6,
+	NOTINSHOP = 7,
+	NOTEXISTING = 8
+}
 
 ---
--- Buys the equipment with the corresponding Id
+-- Check if an equipment is currently buyable for a player
+-- @param Player ply The player to buy the equipment for
 -- @param string equipmentId The name of the equipment to buy
+-- @return bool True, if equipment can be bought
+-- @return number The shop.statusCode, that lead to the decision
+-- @realm shared
+function shop.IsEquipmentBuyableFor(ply, equipmentId)
+	if not IsValid(ply) or not ply:IsActive() then
+		return false, shop.statusCode.INVALIDPLAYER
+	end
+
+	if not equipmentId then
+		return false, shop.statusCode.INVALIDID
+	end
+
+	local isItem = items.IsItem(equipmentId)
+
+	-- we use weapons.GetStored to save time making an unnecessary copy, we will not be modifying it
+	local equipment = isItem and items.GetStored(equipmentId) or weapons.GetStored(equipmentId)
+
+	if not istable(equipment) then
+		return false, shop.statusCode.NOTEXISTING
+	end
+
+	local credits = equipment.credits or 1
+
+	if credits > ply:GetCredits() then
+		return false, shop.statusCode.NOTENOUGHCREDITS
+	end
+
+	if equipment.notBuyable then
+		return false, shop.statusCode.NOTBUYABLE
+	end
+
+	if equipment.minPlayers and equipment.minPlayers > 1 then
+		local activePlys = util.GetActivePlayers()
+
+		if #activePlys < equipment.minPlayers then
+			return false,  shop.statusCode.NOTENOUGHPLAYERS
+		end
+	end
+
+	local team = ply:GetTeam()
+
+	if equipment.globalLimited
+		and BUYTABLE[equipment.id]
+		or team
+		and equipment.teamLimited
+		and TEAMS[team]
+		and not TEAMS[team].alone
+		and TEAMBUYTABLE[team]
+		and TEAMBUYTABLE[team][equipment.id]
+		or equipment.limited
+		and ply:HasBought(equipment.ClassName) then
+		return false, shop.statusCode.LIMITEDBOUGHT
+	end
+
+	local subrole = GetShopFallback(ply:GetSubRole())
+
+	-- weapon whitelist check
+	if not equipment.CanBuy[subrole] then
+		return false, shop.statusCode.NOTBUYABLEFORROLE
+	end
+
+	if CLIENT then
+		return true, shop.statusCode.SUCCESS
+	end
+
+	-- if we have a pending order because we are in a confined space, don't
+	-- start a new one
+	if timer.Exists("give_equipment" .. ply:UniqueID()) then
+		return false, shop.statusCode.PENDINGORDER
+	end
+
+	local rd = roles.GetByIndex(subrole)
+	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
+
+	if shopFallback == SHOP_DISABLED then
+		return false, shop.statusCode.NOSHOP
+	end
+
+	if GetGlobalBool("ttt2_random_shops") then
+		if not RANDOMSHOP[ply] or #RANDOMSHOP[ply] == 0 then
+			return false, shop.statusCode.MISSINGRANDOMSHOP
+		end
+
+		local containedInRandomShop = false
+
+		for i = 1, #RANDOMSHOP[ply] do
+			if RANDOMSHOP[ply][i].id ~= equipmentId then continue end
+
+			containedInRandomShop = true
+		end
+
+		if not containedInRandomShop then
+			return false, shop.statusCode.NOTINSHOP
+		end
+	end
+
+	-- Still support old items
+	local oldId = isItem and equipment.oldId or equipmentId
+
+	---
+	-- @note Keep compatibility with old addons
+	-- @realm server
+	if not hook.Run("TTTCanOrderEquipment", ply, oldId, isItem) then
+		return false, shop.statusCode.BLOCKEDBYOLDHOOK
+	end
+
+	---
+	-- @note Add our own hook with more consistent class parameter and some more information
+	-- @realm server
+	local allow, ignoreCost = hook.Run("TTT2CanOrderEquipment", ply, equipmentId, isItem, credits)
+	if not allow then
+		return false, shop.statusCode.BLOCKEDBYTTT2HOOK
+	end
+
+	if ignoreCost then
+		return true, shop.statusCode.SUCCESSIGNORECOST
+	end
+
+	return true, shop.statusCode.SUCCESS
+end
+
+
+---
+-- Buys for player the equipment with the corresponding Id
+-- @param Player ply The player to buy the equipment for
+-- @param string equipmentId The name of the equipment to buy
+-- @return bool True, if equipment can be bought
+-- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
 function shop.BuyEquipment(ply, equipmentId)
-	if not IsValid(ply) or not equipmentId or not ply:IsActive() then return end
+	local isBuyable, statusCode = shop.IsEquipmentBuyableFor(ply, equipmentId)
+	if not isBuyable then
+		return false, statusCode
+	end
 
 	if CLIENT then
 		net.Start("TTT2OrderEquipment")
 		net.WriteString(equipmentId)
 		net.SendToServer()
 	else
-		-- if we have a pending order because we are in a confined space, don't
-		-- start a new one
-		if HasPendingOrder(ply) then
-			LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
-
-			return
-		end
-
-		local subrole = GetShopFallback(ply:GetSubRole())
-		local rd = roles.GetByIndex(subrole)
-
-		local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-		if shopFallback == SHOP_DISABLED then return end
-
 		local isItem = items.IsItem(equipmentId)
 
-		-- The item/weapon might not even be part of the current shop
-		if not shop.IsEquipmentBuyableFor(ply, equipmentId) then return end
-
-		-- we use weapons.GetStored to save time on an unnecessary copy, we will not be modifying it
-		local equip_table = not isItem and weapons.GetStored(equipmentId) or items.GetStored(equipmentId)
-
-		if not equip_table then
-			print(ply, "tried to buy equip that doesn't exists", equipmentId)
-
-			return
-		end
-
-		-- Check for minimum players, global limit, team limit and player limit
-		local buyable, _, reason = EquipmentIsBuyable(equip_table, ply)
-		if not buyable then
-			if reason then
-				LANG.Msg(ply, reason, nil, MSG_MSTACK_ROLE)
-			end
-
-			return
-		end
-
-		-- still support old items
-		local idOrCls = (isItem and equip_table.oldId or nil) or equipmentId
-
-		local credits = equip_table.credits or 1
-
-		if credits > ply:GetCredits() then
-			print(ply, "tried to buy item/weapon, but didn't have enough credits")
-
-			return
-		end
-
-		---
-		-- @note Keep compatibility with old addons
-		-- @realm server
-		if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, isItem) then return end
-
-		---
-		-- @note Add our own hook with more consistent class parameter and some more information
-		-- @realm server
-		local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, equipmentId, isItem, credits)
-
-		if message then
-			LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
-		end
-
-		if allow == false then return end
+		-- we use weapons.GetStored to save time making an unnecessary copy, we will not be modifying it
+		local equipment = isItem and items.GetStored(equipmentId) or weapons.GetStored(equipmentId)
+		local credits = equipment.credits or 1
+		local ignoreCost = statusCode == shop.statusCode.SUCCESSIGNORECOST
 
 		if not ignoreCost then
 			ply:SubtractCredits(credits)
@@ -116,10 +190,10 @@ function shop.BuyEquipment(ply, equipmentId)
 				item:Bought(ply)
 			end
 		else
-			ply:GiveEquipmentWeapon(equipmentId, function(p, c, w)
-				if isfunction(w.WasBought) then
+			ply:GiveEquipmentWeapon(equipmentId, function(_ply, _equipmentId, _weapon)
+				if isfunction(_weapon.WasBought) then
 					-- some weapons give extra ammo after being bought, etc
-					w:WasBought(p)
+					_weapon:WasBought(_ply)
 				end
 			end)
 		end
@@ -135,21 +209,31 @@ function shop.BuyEquipment(ply, equipmentId)
 		end)
 
 		if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
-			RerollShop(ply)
+			shop.RerollShop(ply)
 		end
+
+		-- Still support old items
+		local oldId = isItem and equipment.oldId or equipmentId
 
 		---
 		-- @note Keep compatibility with old addons
 		-- @realm server
-		hook.Run("TTTOrderedEquipment", ply, idOrCls, isItem)
+		hook.Run("TTTOrderedEquipment", ply, oldId, isItem)
 
 		---
 		-- @note Add our own hook with more consistent class parameter
 		-- @realm server
-		hook.Run("TTT2OrderedEquipment", ply, equipmentId, isItem, credits, ignoreCost or false)
+		hook.Run("TTT2OrderedEquipment", ply, equipmentId, isItem, credits, ignoreCost)
 	end
+	
+	return true, statusCode
 end
 
+---
+-- Check if the player can reroll their shop
+-- @param Player ply The player to reroll the shop for
+-- @return bool True, if shop can be rerolled
+-- @realm shared
 function shop.CanRerollShop(ply)
 	return GetGlobalBool("ttt2_random_shops")
 		and GetGlobalBool("ttt2_random_shop_reroll")
@@ -158,8 +242,12 @@ function shop.CanRerollShop(ply)
 		and ply:GetCredits() >= GetGlobalInt("ttt2_random_shop_reroll_cost")
 end
 
+---
+-- Reroll shop for player
+-- @param Player ply The player to reroll the shop for
+-- @realm shared
 function shop.RerollShop(ply)
-	if not shop.CanRerollShop(ply) return end
+	if not shop.CanRerollShop(ply) then return end
 
 	if CLIENT then
 		RunConsoleCommand("ttt2_reroll_shop")
@@ -174,6 +262,12 @@ function shop.RerollShop(ply)
 	end
 end
 
+---
+-- Transfer credits from one player to another
+-- @param Player The player to transfer the credits from
+-- @param string The SteamID64 of the player to transfer the credits to
+-- @param number The number of credits to transfer
+-- @realm shared
 function shop.TransferCredits(ply, targetPlyId64, credits)
 	if not IsValid(ply) or not isstring(targetPlyId64) or not isnumber(credits) or credits <= 0 then return end
 
@@ -182,9 +276,7 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 	else
 		local target = player.GetBySteamID64(targetPlyId64)
 
-		if not IsValid(target)
-		or target == ply
-		then
+		if not IsValid(target) or target == ply then
 			LANG.Msg(ply, "xfer_no_recip", nil, MSG_MSTACK_ROLE)
 
 			return
@@ -206,12 +298,14 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 		if allow == false then return end
 
 		ply:SubtractCredits(credits)
+
 		if target:IsTerror() and target:Alive() then
 			target:AddCredits(credits)
 		else
 			-- The would be recipient is dead, which the sender may not know.
 			-- Instead attempt to send the credits to the target's corpse, where they can be picked up.
 			local rag = target:FindCorpse()
+
 			if IsValid(rag) then
 				CORPSE.SetCredits(rag, CORPSE.GetCredits(rag, 0) + credits)
 			end
@@ -219,6 +313,7 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 
 		net.Start("TTT2CreditTransferUpdate")
 		net.Send(ply)
+		
 		LANG.Msg(ply, "xfer_success", {player = target:Nick()}, MSG_MSTACK_ROLE)
 		LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits}, MSG_MSTACK_ROLE)
 	end

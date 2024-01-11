@@ -249,7 +249,29 @@ local function PreqLabels(parent, x, y)
 	tbl.info.img:SetImage("vgui/ttt/equip/icon_info")
 
 	tbl.info.Check = function(s, sel)
-		return EquipmentIsBuyable(sel, client)
+		if not istable(sel) then
+			return false, "X", "No table given."
+		end
+
+		local isBuyable, statusCode = shop.IsEquipmentBuyableFor(client, sel.id)
+
+		if statusCode == shop.statusCode.SUCCESS then
+			return true, "✔", "Ok"
+		elseif statusCode == shop.statusCode.INVALIDID then
+			ErrorNoHalt("[TTT2][ERROR] Missing id in table:", sel)
+			PrintTable(sel)
+			return false, "X", "No ID"
+		elseif statusCode == shop.statusCode.NOTBUYABLE then
+			return false, "X", "This equipment cannot be bought."
+		elseif statusCode == shop.statusCode.NOTENOUGHPLAYERS then
+			local activePlys = util.GetActivePlayers()
+
+			return false, " " .. #activePlys .. " / " .. sel.minPlayers, "Minimum amount of active players needed."
+		elseif statusCode == shop.statusCode.LIMITEDBOUGHT then
+			return false, "X", "This equipment is limited and is already bought."
+		elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
+			return false, "X", "Your role can't buy this equipment."
+		end
 	end
 
 	for _, pnl in pairs(tbl) do
@@ -486,7 +508,7 @@ local function CreateEquipmentList(t)
 					or items.IsItem(item.id) and item.limited and client:HasEquipmentItem(item.id)
 					-- already carrying a weapon for this slot
 					or ItemIsWeapon(item) and not CanCarryWeapon(item)
-					or not EquipmentIsBuyable(item, client)
+					or not shop.IsEquipmentBuyableFor(client, item.id)
 					-- already bought the item before
 					or item.limited and client:HasBought(item.id)
 				) or (item.credits or 1) > credits
