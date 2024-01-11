@@ -362,10 +362,10 @@ local position = 0
 
 local frameCount = 10
 
+local lastStrafeValue = 0
+
 -- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
-	if not cvEnableBobbing:GetBool() then return end
-
 	local observerTarget = ply:GetObserverTarget()
 
 	-- handle observing players
@@ -389,6 +389,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 	}
 
 	local eyeAngles = ply:EyeAngles()
+	local strafeValue = 0
 
 	-- handle landing on ground
 	if airtime > 0 then
@@ -405,10 +406,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
-		-- strafe angles
-		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.01
-		end
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.015
 
 	-- handle swimming
 	elseif ply:WaterLevel() > 0 then
@@ -417,10 +415,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
-		-- strafe angles
-		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
-		end
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.005
 
 	-- handle walking
 	else
@@ -429,15 +424,28 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
-		-- strafe angles
-		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.003
-		end
-
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.006
 	end
 
-	view.angles.r = angles.r + math.sin(position * 0.5) * velocity * 0.001
-	view.angles.p = angles.p + math.sin(position * 0.25) * velocity * 0.001
+	strafeValue = math.Round(strafeValue, 2)
+	lastStrafeValue = math.Round(lastStrafeValue, 2)
+
+	if strafeValue > lastStrafeValue then
+		lastStrafeValue = math.min(strafeValue, lastStrafeValue + FrameTime() * 35.0)
+	elseif strafeValue < lastStrafeValue then
+		lastStrafeValue = math.max(strafeValue, lastStrafeValue - FrameTime() * 35.0)
+	else
+		lastStrafeValue = strafeValue
+	end
+
+	if cvEnableBobbing:GetBool() then
+		view.angles.r = view.angles.r + math.sin(position * 0.5) * velocity * 0.001
+		view.angles.p = view.angles.p + math.sin(position * 0.25) * velocity * 0.001
+	end
+
+	if cvEnableBobbingStrafe:GetBool() then
+		view.angles.r = view.angles.r + lastStrafeValue
+	end
 
 	return view
 end)
