@@ -1628,6 +1628,7 @@ end
 ---
 -- Caches the weapons currently in the player inventory and removes them.
 -- These weapons can be restored at any time.
+-- @param boolean forceAll force all weapons to be removed, including weapon_ttt_unarmed
 -- @note As long as a player has cached weapons, they are unable to pick up any weapon.
 -- @realm server
 function plymeta:CacheAndStripWeapons(forceAll)
@@ -1684,13 +1685,17 @@ function plymeta:RestoreCachedWeapons()
 	self:ResetCachedWeapons()
 end
 
+---
+-- Removes a cached weapon from the cache list.
+-- @param string wep The weapon class
+-- @realm server
 function plymeta:RemoveCachedWeapon(wep)
 	if not self:HasCachedWeapons() then return end
 
 	for i = 1, #self.cachedWeaponInventory do
 		local cachedWeapon = self.cachedWeaponInventory[i]
 
-		if cachedWeapon ~= wep then continue end
+		if cachedWeapon.cls ~= wep then continue end
 
 		table.remove(self.cachedWeaponInventory, i)
 
@@ -1698,10 +1703,18 @@ function plymeta:RemoveCachedWeapon(wep)
 	end
 end
 
+---
+-- Checks wether a player has cached items that can be restored.
+-- @return boolean Returns wether the player has a cached inventory
+-- @realm server
 function plymeta:HasCachedItems()
 	return self.cachedItemInventory ~= nil
 end
 
+---
+-- Caches the items currently in the player inventory and removes them.
+-- These items can be restored at any time.
+-- @realm server
 function plymeta:CacheAndStripItems()
 	if self:HasCachedItems() then return end
 
@@ -1710,6 +1723,10 @@ function plymeta:CacheAndStripItems()
 	self:SetEquipmentItems(nil)
 end
 
+---
+-- Restores the cached items if there are any cached items. Does nothing if
+-- no items are cached.
+-- @realm server
 function plymeta:RestoreCachedItems()
 	if not self:HasCachedItems() then return end
 
@@ -1721,6 +1738,10 @@ function plymeta:RestoreCachedItems()
 	self.cachedItemInventory = nil
 end
 
+---
+-- Removes a cached item from the cache list.
+-- @param string item The item class
+-- @realm server
 function plymeta:RemoveCachedItem(item)
 	if not self:HasCachedItems() then return end
 
@@ -1739,6 +1760,10 @@ function plymeta:RemoveCachedItem(item)
 	end
 end
 
+---
+-- Used to reset the weapon cache at round restart.
+-- @internal
+-- @realm server
 function plymeta:ResetItemAndWeaponCache()
 	self.cachedWeaponInventory = nil
 	self.cachedWeaponSelected = nil

@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_unarmed
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -37,26 +41,38 @@ SWEP.silentPickup = true
 
 SWEP.builtin = true
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:ShouldDropOnDie()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	if SERVER and IsValid(self:GetOwner()) then
 		self:GetOwner():DrawViewModel(false)
@@ -67,14 +83,20 @@ function SWEP:Deploy()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Holster()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:DrawWorldModel()
 
 end
 
+---
+-- @ignore
 function SWEP:DrawWorldModelTranslucent()
 
 end
