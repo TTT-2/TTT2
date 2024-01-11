@@ -228,7 +228,10 @@ plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 -- @realm server
 function plymeta:SendEquipment(mode, itemName)
 	if not mode then
-		ErrorNoHalt("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.")
+		ErrorNoHalt("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n")
+
+		debug.Trace()
+
 		return
 	end
 
@@ -1627,25 +1630,33 @@ end
 -- These weapons can be restored at any time.
 -- @note As long as a player has cached weapons, they are unable to pick up any weapon.
 -- @realm server
-function plymeta:CacheAndStripWeapons()
-	local cachedWeaponInventory = {}
+function plymeta:CacheAndStripWeapons(forceAll)
+	self.cachedWeaponInventory = {}
+	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
 
 	local weps = self:GetWeapons()
 
 	for i = 1, #weps do
 		local wep = weps[i]
+		local wepClass = WEPS.GetClass(wep)
 
-		cachedWeaponInventory[#cachedWeaponInventory + 1] = {
-			cls = WEPS.GetClass(wep),
+		if not forceAll and wepClass == "weapon_ttt_unarmed" then continue end
+
+		self.cachedWeaponInventory[#self.cachedWeaponInventory + 1] = {
+			cls = wepClass,
 			clip1 = wep:Clip1(),
 			clip2 = wep:Clip2()
 		}
 	end
 
-	self.cachedWeaponInventory = cachedWeaponInventory
-	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
 
+	-- we have to use this hack here instead of StripWeapon because StripWeapon calls
+	-- OnDrop which is not intended for the weapon caching
 	self:StripWeapons()
+
+	if not forceAll then
+		self:Give("weapon_ttt_unarmed")
+	end
 end
 
 ---
@@ -1671,6 +1682,68 @@ function plymeta:RestoreCachedWeapons()
 	end
 
 	self:ResetCachedWeapons()
+end
+
+function plymeta:RemoveCachedWeapon(wep)
+	if not self:HasCachedWeapons() then return end
+
+	for i = 1, #self.cachedWeaponInventory do
+		local cachedWeapon = self.cachedWeaponInventory[i]
+
+		if cachedWeapon ~= wep then continue end
+
+		table.remove(self.cachedWeaponInventory, i)
+
+		return
+	end
+end
+
+function plymeta:HasCachedItems()
+	return self.cachedItemInventory ~= nil
+end
+
+function plymeta:CacheAndStripItems()
+	if self:HasCachedItems() then return end
+
+	self.cachedItemInventory = self:GetEquipmentItems()
+
+	self:SetEquipmentItems(nil)
+end
+
+function plymeta:RestoreCachedItems()
+	if not self:HasCachedItems() then return end
+
+	-- make sure the player keeps any items received during this period
+	table.Merge(self.cachedItemInventory, self:GetEquipmentItems())
+
+	self:SetEquipmentItems(self.cachedItemInventory)
+
+	self.cachedItemInventory = nil
+end
+
+function plymeta:RemoveCachedItem(item)
+	if not self:HasCachedItems() then return end
+
+	for i = 1, #self.cachedItemInventory do
+		local cachedItem = self.cachedItemInventory[i]
+
+		if cachedItem ~= item then continue end
+
+		table.remove(self.cachedItemInventory, i)
+
+		-- make sure equipment remove functions are called
+		items.GetStored(item):Reset(self)
+		self:SendEquipment(EQUIPITEMS_REMOVE, item)
+
+		return
+	end
+end
+
+function plymeta:ResetItemAndWeaponCache()
+	self.cachedWeaponInventory = nil
+	self.cachedWeaponSelected = nil
+
+	self.cachedItemInventory = nil
 end
 
 ---
