@@ -8,6 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Refactored client shop logic into separate shop-class
 - dframe_ttt2 panels can now manually enable bindings while they are open
 
 ### Fixed
