@@ -21,6 +21,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
+- Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
