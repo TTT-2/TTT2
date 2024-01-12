@@ -36,7 +36,8 @@ function CreateRerollMenu(parent)
 	dsubmit:SetText(GetTranslation("reroll_button"))
 
 	dsubmit.DoClick = function(s)
-		shop.RerollShop(client)
+		if not shop.TryRerollShop(client) then return end
+
 		RunConsoleCommand("ttt_cl_traitorpopup")
 
 		timer.Simple(0.1, function()

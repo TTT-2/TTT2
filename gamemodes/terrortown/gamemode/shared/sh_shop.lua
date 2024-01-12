@@ -209,7 +209,7 @@ function shop.BuyEquipment(ply, equipmentId)
 		end)
 
 		if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
-			shop.RerollShop(ply)
+			shop.ForceRerollShop(ply)
 		end
 
 		-- Still support old items
@@ -243,23 +243,24 @@ function shop.CanRerollShop(ply)
 end
 
 ---
--- Reroll shop for player
+-- Reroll shop for player and subtract the credits of it
+-- @note Use `shop.ForceRerollShop(ply)` to reroll without cost and restrictions
 -- @param Player ply The player to reroll the shop for
+-- @return bool True, if shop was successfully rerolled
 -- @realm shared
-function shop.RerollShop(ply)
-	if not shop.CanRerollShop(ply) then return end
+function shop.TryRerollShop(ply)
+	if not shop.CanRerollShop(ply) then
+		return false
+	end
 
 	if CLIENT then
 		RunConsoleCommand("ttt2_reroll_shop")
 	else
 		ply:SubtractCredits(GetGlobalInt("ttt2_random_shop_reroll_cost"))
-
-		if GetGlobalBool("ttt2_random_team_shops") then
-			ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shop_items"), true)
-		else
-			UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shop_items"), false)
-		end
+		shop.ForceRerollShop(ply)
 	end
+
+	return true
 end
 
 ---

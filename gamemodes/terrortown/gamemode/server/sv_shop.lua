@@ -81,6 +81,18 @@ local function HandleErrorMessage(ply, equipmentId, statusCode)
 	end
 end
 
+---
+-- This skips restrictions and forces a reroll of the shop
+-- @param Player ply The player to reroll the shop for
+-- @realm server
+function shop.ForceRerollShop(ply)
+	if GetGlobalBool("ttt2_random_team_shops") then
+		ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shop_items"), true)
+	else
+		UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shop_items"), false)
+	end
+end
+
 local function NetOrderEquipment(len, ply)
 	local equipmentId = net.ReadString()
 
@@ -134,6 +146,6 @@ end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
 local function RerollShopForCredit(ply, cmd, args)
-	shop.RerollShop(ply)
+	shop.TryRerollShop(ply)
 end
 concommand.Add("ttt2_reroll_shop", RerollShopForCredit)
