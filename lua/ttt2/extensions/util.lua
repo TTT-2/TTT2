@@ -155,10 +155,9 @@ end
 -- @return table List of active @{Player}s
 -- @realm shared
 function util.GetActivePlayers()
-	return util.GetFilteredPlayers(
-		function(ply)
-			return IsValid(ply) and not ply:GetForceSpec()
-		end)
+	return util.GetFilteredPlayers(function(ply)
+		return IsValid(ply) and not ply:GetForceSpec()
+	end)
 end
 
 ---
