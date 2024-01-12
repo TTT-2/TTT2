@@ -31,7 +31,7 @@ shop.statusCode = {
 -- @return bool True, if equipment can be bought
 -- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
-function shop.IsEquipmentBuyableFor(ply, equipmentId)
+function shop.CanBuyEquipment(ply, equipmentId)
 	if not IsValid(ply) or not ply:IsActive() then
 		return false, shop.statusCode.INVALIDPLAYER
 	end
@@ -158,7 +158,7 @@ end
 -- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
 function shop.BuyEquipment(ply, equipmentId)
-	local isBuyable, statusCode = shop.IsEquipmentBuyableFor(ply, equipmentId)
+	local isBuyable, statusCode = shop.CanBuyEquipment(ply, equipmentId)
 	if not isBuyable then
 		return false, statusCode
 	end

@@ -253,7 +253,7 @@ local function PreqLabels(parent, x, y)
 			return false, "X", "No table given."
 		end
 
-		local isBuyable, statusCode = shop.IsEquipmentBuyableFor(client, sel.id)
+		local isBuyable, statusCode = shop.CanBuyEquipment(client, sel.id)
 
 		if statusCode == shop.statusCode.SUCCESS then
 			return true, "✔", "Ok"
@@ -508,7 +508,7 @@ local function CreateEquipmentList(t)
 					or items.IsItem(item.id) and item.limited and client:HasEquipmentItem(item.id)
 					-- already carrying a weapon for this slot
 					or ItemIsWeapon(item) and not CanCarryWeapon(item)
-					or not shop.IsEquipmentBuyableFor(client, item.id)
+					or not shop.CanBuyEquipment(client, item.id)
 					-- already bought the item before
 					or item.limited and client:HasBought(item.id)
 				) or (item.credits or 1) > credits
