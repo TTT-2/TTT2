@@ -120,6 +120,10 @@ local function SetupData(roleData)
 	-- @realm shared
 	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
+	---
+	-- @realm shared
+	CreateConVar("ttt_" .. roleData.name .. "_traitor_button_visible", tostring(conVarData.traitorButtonVisible or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+
 	if SERVER then
 		---
 		-- @realm server

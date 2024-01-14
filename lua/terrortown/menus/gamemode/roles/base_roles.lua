@@ -109,6 +109,11 @@ local function PopulateTButtons(parent, roleData)
 		serverConvar = "ttt_" .. roleData.name .. "_traitor_button",
 		label = "label_roles_tbutton"
 	})
+
+	parent:MakeCheckBox({
+		serverConvar = "ttt_" .. roleData.name .. "_traitor_button_visible",
+		label = "label_roles_tbutton_visible"
+	})
 end
 
 local function PopulateCredits(parent, roleData)

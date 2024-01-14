@@ -42,9 +42,9 @@ function TBHUD:CacheEnts()
 
 		for i = 1, #btns do
 			local ent = btns[i]
-			local access, overrideRole, overrideTeam, roleIntend, teamIntend = ent:PlayerRoleCanUse(ply)
+			local access, overrideRole, overrideTeam, roleIntend, teamIntend, visible = ent:PlayerRoleCanUse(ply)
 
-			if not admin and not access then continue end
+			if not visible and not admin then continue end
 
 			self.buttons[ent:EntIndex()] = {
 				["ent"] = ent,
@@ -55,7 +55,8 @@ function TBHUD:CacheEnts()
 				["teamIntend"] = teamIntend,
 				["admin"] = admin,
 				["roleColor"] = ply:GetRoleColor(),
-				["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or COLOR_BLACK
+				["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or COLOR_BLACK,
+				["visible"] = visible,
 			}
 		end
 	end
@@ -70,7 +71,7 @@ end
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
 
-	return IsValid(ply) and ply:IsActive() and self.focus_but and (self.focus_but.access or self.focus_but.admin) and IsValid(self.focus_but.ent)
+	return IsValid(ply) and ply:IsActive() and self.focus_but and (self.focus_but.visible or self.focus_but.admin) and IsValid(self.focus_but.ent)
 end
 
 ---
@@ -134,6 +135,8 @@ local tbut_outline = Material("vgui/ttt/ttt2_hand_outline")
 local size = 32
 local mid = size * 0.5
 local focus_range = 25
+local outline_width = 4
+local circle_radius = (size + outline_width * 2) / 2
 
 ---
 -- Draws the traitor buttons on the HUD
@@ -151,6 +154,7 @@ function TBHUD:Draw(client)
 	local focus_but
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
 	local showToAdmins = GetGlobalBool("ttt2_tbutton_admin_show", false)
+	local off_angle = 270
 
 	-- draw icon on HUD for every button within range
 	for _, val in pairs(self.buttons) do
@@ -158,16 +162,19 @@ function TBHUD:Draw(client)
 		local teamAccess = val.overrideTeam or val.access and val.teamIntend ~= TEAM_NONE and val.overrideRole == nil and val.overrideTeam == nil
 		local outlineColor = teamAccess and val.teamColor or val.roleColor or COLOR_BLACK
 
-		if not IsValid(ent) or not ent.IsUsable then continue end
+		if not IsValid(ent) then continue end
 
 		pos = ent:GetPos()
 		scrpos = pos:ToScreen()
 
-		if util.IsOffScreen(scrpos) or not ent:IsUsable() then continue end
+		local percent = math.Clamp((ent:GetNextUseTime() - CurTime()) / ent:GetDelay(), 0, 1)
+		local end_angle = 360 * percent
+
+		if util.IsOffScreen(scrpos) then continue end
 
 		local usableRange = ent:GetUsableRange()
 
-		if not val.access and not showToAdmins then continue end
+		if not val.visible and not showToAdmins then continue end
 
 		d = pos - plypos
 		d = d:Dot(d) / (usableRange * usableRange)
@@ -175,13 +182,21 @@ function TBHUD:Draw(client)
 		-- draw if this button is within range, with alpha based on distance
 		if d >= 1 then continue end
 
-		local scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
+		local alpha = 200 * (1 - d)
+		local outlineColorAlpha = ColorAlpha(outlineColor, alpha)
 
-		if val.access then
-			draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_normal, 200 * (1 - d), COLOR_WHITE)
+		if ent:GetDelay() > 0 and percent > 0 then
+			ent.arcCacheID1 = draw.Arc(ent.arcCacheID1, scrpos.x, scrpos.y, circle_radius, outline_width, 0, 360, 0, ColorAlpha(COLOR_BLACK, alpha))
+			ent.arcCacheID2 = draw.Arc(ent.arcCacheID2, scrpos.x, scrpos.y, circle_radius, outline_width, -off_angle, end_angle - off_angle, 0, outlineColorAlpha)
 		end
 
-		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_outline, 200 * (1 - d), outlineColor)
+		local scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
+
+		if val.visible then
+			draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_normal, alpha, COLOR_WHITE)
+		end
+
+		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_outline, alpha, outlineColor)
 
 		if d <= focus_d then continue end
 
@@ -209,6 +224,11 @@ function TBHUD:Draw(client)
 
 		scrpos = focus_but.ent:GetPos():ToScreen()
 		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
+
+		if val.visible and ent:GetDelay() > 0 and percent > 0 then
+			ent.arcCacheID3 = draw.Arc(ent.arcCacheID3, scrpos.x, scrpos.y, circle_radius, outline_width, 0, 360, 0, ColorAlpha(COLOR_BLACK, 200))
+			ent.arcCacheID4 = draw.ShadowedArc(ent.arcCacheID4, scrpos.x, scrpos.y, circle_radius, outline_width, -off_angle, end_angle - off_angle, 0, outlineColor)
+		end
 
 		-- redraw in-focus version of icon
 		draw.FilteredTexture(scrPosXMid - 3 , scrPosYMid - 3, size + 6, size + 6, tbut_focus, 200, COLOR_WHITE)

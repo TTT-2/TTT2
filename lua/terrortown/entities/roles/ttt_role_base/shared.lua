@@ -270,3 +270,15 @@ function ROLE:CanUseTraitorButton()
 
 	return cv and cv:GetBool() or false
 end
+
+---
+-- Returns whether a @{ROLE} can see or use traitor buttons.
+-- @return boolean
+-- @realm shared
+function ROLE:CanSeeTraitorButton()
+	if self:CanUseTraitorButton() then return true end
+
+	local cv = GetConVar("ttt_" .. self.name .. "_traitor_button_visible")
+
+	return cv and cv:GetBool() or false
+end

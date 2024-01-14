@@ -55,7 +55,7 @@ end
 ---
 -- Returns whether the player can use this specific button
 -- @param Player ply Player
--- @return boolean access, overrideRole, overrideTeam, roleIntend, teamIntend
+-- @return boolean access, overrideRole, overrideTeam, roleIntend, teamIntend, visible
 -- @realm shared
 function ENT:PlayerRoleCanUse(ply)
 	local role = self:GetRole()
@@ -76,12 +76,15 @@ function ENT:PlayerRoleCanUse(ply)
 		end
 
 		if (overrideRole ~= nil or overrideTeam ~= nil) then
-			return overrideRole or (overrideRole ~= false and overrideTeam), overrideRole, overrideTeam, role, team
+			local use = overrideRole or (overrideRole ~= false and overrideTeam)
+			return use, overrideRole, overrideTeam, role, team, use
 		end
 	end
 
 	if self:IsGeneric() then
-		return ply:GetSubRoleData():CanUseTraitorButton(), overrideRole, overrideTeam, role, team
+		local srd = ply:GetSubRoleData()
+		local use = srd:CanUseTraitorButton()
+		return use, overrideRole, overrideTeam, role, team, srd:CanSeeTraitorButton() or use
 	else
 		return (role == "none" or role == curRol) and (team == TEAM_NONE or team == curTeam), overrideRole, overrideTeam, role, team
 	end

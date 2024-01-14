@@ -2155,6 +2155,11 @@ Note: Some weapons might not use this value which causes this modifier to be ine
 -- 2023-12-24
 L.binoc_help_reload = "Clear target."
 
+-- 2023-12-27
+L.tbut_help_visible = "You cannot activate it as your role."
+L.tbut_help_visible_reason = "You see this because your role has the ability to see traitor buttons."
+L.label_roles_tbutton_visible = "Role can see Traitor buttons"
+
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
 L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"

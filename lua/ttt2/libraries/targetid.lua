@@ -84,7 +84,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
 	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent)
-		and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime()
+		and (TBHUD.focus_but.visible or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime()
 	then
 		local ent = TBHUD.focus_but.ent
 
@@ -192,17 +192,20 @@ function targetid.HUDDrawTargetIDTButtons(tData)
 	tData:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or TryT(ent:GetDescription()))
 
 	-- set the subtitle and icon depending on the currently used mode
-	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
+	if (TBHUD.focus_but.admin or TBHUD.focus_but.visible) and not TBHUD.focus_but.access then
 		tData:AddIcon(
 			materialTButton,
 			COLOR_LGRAY
 		)
-
+	end
+	if admin_mode and TBHUD.focus_but.admin then
 		tData:SetSubtitle(TryT("tbut_help_admin"))
-	else
+	elseif TBHUD.focus_but.access then
 		tData:SetKey(input.GetKeyCode(key_params.usekey))
 
 		tData:SetSubtitle(ParT("tbut_help", key_params))
+	elseif TBHUD.focus_but.visible then
+		tData:SetSubtitle(TryT("tbut_help_visible"))
 	end
 
 	-- add description time with some general info about this specific traitor button
@@ -217,14 +220,28 @@ function targetid.HUDDrawTargetIDTButtons(tData)
 			client:GetRoleColor()
 		)
 	else
+		local time = math.max(0, ent:GetNextUseTime() - CurTime())
+		if time == 0 then
+			time = ent:GetDelay()
+		end
 		tData:AddDescriptionLine(
-			ParT("tbut_retime", {num = ent:GetDelay()}),
+			ParT("tbut_retime", {num = string.format("%.0f", time)}),
 			client:GetRoleColor()
 		)
 	end
 
 	-- only add more information if in admin mode
-	if not admin_mode or not client:IsAdmin() then return end
+	if not (admin_mode and client:IsAdmin()) then
+		if TBHUD.focus_but.visible and not TBHUD.focus_but.access then
+			tData:AddDescriptionLine() -- adding empty line
+
+			tData:AddDescriptionLine(
+				TryT("tbut_help_visible_reason"),
+				COLOR_ORANGE
+			)
+		end
+		return
+	end
 
 	local but = TBHUD.focus_but
 
