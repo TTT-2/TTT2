@@ -17,6 +17,12 @@ local table = table
 local cam = cam
 local tableCopy = table.Copy
 local mathRound = math.Round
+local mathFloor = math.floor
+local mathMax = math.max
+local mathRad = math.rad
+local mathCos = math.cos
+local mathSin = math.sin
+local mathAbs = math.abs
 
 local colorShadowDark = Color(0, 0, 0, 220)
 local colorShadowBright = Color(0, 0, 0, 75)
@@ -667,4 +673,156 @@ function draw.GetTextSize(text, font, scale)
 	local w, h = surface.GetTextSize(text)
 
 	return w * scale, h * scale
+end
+
+local cachedArcs = {}
+
+-- Currently caching is only searched for changed angleStart and angleEnd. We only modify these
+-- parameters, so this will lead to the best possible performance
+local function PrecacheArc(id, x, y, radius, thickness, angleStart, angleEnd, roughness)
+	if cachedArcs[id]
+		and cachedArcs[id].x == x
+		and cachedArcs[id].y == y
+		and cachedArcs[id].radius == radius
+		and cachedArcs[id].angleStart == angleStart
+		and cachedArcs[id].angleEnd == angleEnd
+	then
+		return cachedArcs[id].arcs
+	else
+		cachedArcs[id] = {}
+		cachedArcs[id].x = x
+		cachedArcs[id].y = y
+		cachedArcs[id].radius = radius
+		cachedArcs[id].angleStart = angleStart
+		cachedArcs[id].angleEnd = angleEnd
+	end
+
+	local triarc = {}
+
+	-- Define step
+	local step = mathMax(roughness or 1, 1)
+
+	-- Correct start/end ang
+	angleStart, angleEnd = angleStart or 0, angleEnd or 0
+
+	if angleStart > angleEnd then
+		step = mathAbs(step) * -1
+	end
+
+	-- Create the inner circle's points.
+	local inner2 = {}
+	local r = radius - thickness
+
+	for deg = angleStart, angleEnd, step do
+		local rad = mathRad(deg)
+		-- local rad = deg2rad * deg
+		local ox, oy = x + (mathCos(rad) * r), y + (-mathSin(rad) * r)
+
+		inner2[#inner2 + 1] = {
+			x = ox,
+			y = oy,
+			u = (ox - x) / radius + 0.5,
+			v = (oy - y) / radius + 0.5,
+		}
+	end
+
+	-- Create the outer circle's points.
+	local outer2 = {}
+
+	for deg = angleStart, angleEnd, step do
+		local rad = mathRad(deg)
+		-- local rad = deg2rad * deg
+		local ox, oy = x + (mathCos(rad) * radius), y + (-mathSin(rad) * radius)
+
+		outer2[#outer2 + 1] = {
+			x = ox,
+			y = oy,
+			u = (ox - x) / radius + 0.5,
+			v = (oy - y) / radius + 0.5,
+		}
+	end
+
+	local inn = #inner2 * 2
+
+	-- Triangulize the points.
+	for tri = 1, inn do -- twice as many triangles as there are degrees.
+		local p1, p2, p3
+
+		p1 = outer2[mathFloor(tri * 0.5) + 1]
+		p3 = inner2[mathFloor((tri + 1) * 0.5) + 1]
+
+		if tri % 2 == 0 then -- if the number is even use outer.
+			p2 = outer2[mathFloor((tri + 1) * 0.5)]
+		else
+			p2 = inner2[mathFloor((tri + 1) * 0.5)]
+		end
+
+		triarc[#triarc + 1] = {p1, p2, p3}
+	end
+
+	cachedArcs[id].arcs = triarc
+
+	return triarc
+end
+
+-- A function that draws an arc that can be a full or part circle.
+-- @param[default=nil] number identifier The numeric identifier for the caching, automatically set if nil
+-- @param number x The arc center x position
+-- @param number y The arc center y position
+-- @param number radius The arc radius
+-- @param number thickness The arc thickness, the arc is drawn to the inside
+-- @param[default=0] number angleStart The arc start angle
+-- @param[default=0] number angleStart The arc end angle
+-- @param[default=1] number roughness The arc's roughness, aka degrees per step
+-- @param[default=COLOR_WHITE] number color The arc's color
+-- @realm client
+function draw.Arc(identifier, x, y, radius, thickness, angleStart, angleEnd, roughness, color)
+	identifier = identifier or #cachedArcs
+
+	surface.SetDrawColor(color or COLOR_WHITE)
+	draw.NoTexture()
+
+	surface.DrawPolyTable(PrecacheArc(
+		identifier,
+		x,
+		y,
+		radius,
+		thickness,
+		angleStart,
+		angleEnd,
+		roughness
+	))
+
+	return identifier
+end
+
+local drawArc = draw.Arc
+
+-- A function that draws a shadowed arc that can be a full or part circle.
+-- @param[default=nil] number identifier The numeric identifier for the caching, automatically set if nil
+-- @param number x The arc center x position
+-- @param number y The arc center y position
+-- @param number radius The arc radius
+-- @param number thickness The arc thickness, the arc is drawn to the inside
+-- @param[default=0] number angleStart The arc start angle
+-- @param[default=0] number angleStart The arc end angle
+-- @param[default=1] number roughness The arc's roughness, aka degrees per step
+-- @param[default=COLOR_WHITE] number color The arc's color
+-- @param[default=1.0] number scale A scaling factor that is used for the shadows
+-- @realm client
+function draw.ShadowedArc(identifier, x, y, radius, thickness, angleStart, angleEnd, roughness, color, scale)
+	identifier = identifier or #cachedArcs
+	scale = scale or 1
+
+	local shift1 = mathRound(scale)
+	local shift2 = shift1 * 2
+
+	local tmpCol = GetShadowColor(color)
+
+	drawArc(identifier + 0, x + shift2, y + shift2, radius, thickness, angleStart, angleEnd, roughness, tmpCol)
+	drawArc(identifier + 1, x + shift1, y + shift1, radius, thickness, angleStart, angleEnd, roughness, tmpCol)
+	drawArc(identifier + 2, x + shift1, y + shift1, radius, thickness, angleStart, angleEnd, roughness, tmpCol)
+	drawArc(identifier + 3, x, y, radius, thickness, angleStart, angleEnd, roughness, color)
+
+	return identifier
 end
