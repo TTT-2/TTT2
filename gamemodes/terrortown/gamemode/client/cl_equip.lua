@@ -271,6 +271,8 @@ local function PreqLabels(parent, x, y)
 			return false, "X", "This equipment is limited and is already bought."
 		elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
 			return false, "X", "Your role can't buy this equipment."
+		else
+			return false, "X", "Unknown statusCode " .. tostring(statusCode)
 		end
 	end
 
