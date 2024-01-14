@@ -1677,7 +1677,14 @@ function plymeta:RestoreCachedWeapons()
 	end
 
 	if self.cachedWeaponSelected then
-		self:SelectWeapon(self.cachedWeaponSelected)
+		local cachedWeaponSelected = self.cachedWeaponSelected
+
+		-- delay selection by .1 seconds to actually select the weapon
+		timer.Simple(0.1, function()
+			if not IsValid(self) then return end
+
+			self:SelectWeapon(cachedWeaponSelected)
+		end)
 	end
 
 	self:ResetCachedWeapons()
