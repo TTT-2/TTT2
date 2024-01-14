@@ -677,8 +677,7 @@ end
 
 local cachedArcs = {}
 
--- Currently caching is only searched for changed angleStart and angleEnd. We only modify these
--- parameters, so this will lead to the best possible performance
+-- Generates an arc out of triangles that is cached in a table to reduce rendering time
 local function PrecacheArc(id, x, y, radius, thickness, angleStart, angleEnd, roughness)
 	if cachedArcs[id]
 		and cachedArcs[id].x == x
