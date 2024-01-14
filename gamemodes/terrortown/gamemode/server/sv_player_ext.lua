@@ -682,10 +682,6 @@ function plymeta:InitialSpawn()
 
 	self:SetPos(spawnPoint.pos)
 	self:SetAngles(spawnPoint.ang)
-
-	-- register synced vars
-	self:RegisterSettingOnServer("enable_dynamic_fov", "bool")
-	self:RegisterSettingOnServer("fov_desired", "float")
 end
 
 ---

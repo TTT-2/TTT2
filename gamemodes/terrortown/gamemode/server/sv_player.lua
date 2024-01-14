@@ -41,9 +41,6 @@ CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 util.AddNetworkString("ttt2_damage_received")
 util.AddNetworkString("ttt2_set_player_setting")
 
--- player meta table is hotreload safe, so we want to keep this table as well
-plymeta.playerSettingRegistry = plymeta.playerSettingRegistry or {}
-
 ---
 -- Update the sprinting FOV on the player if the setting is enabled.
 -- @realm server
@@ -59,16 +56,6 @@ function plymeta:UpdateSprintingFOV()
 
 		self:SetFOV(newFOV, 0.25, nil, true)
 	end
-end
-
----
--- Registers a synced client setting on the server. This has to be done so that settings set by
--- `SetSettingOnServer` are not discarded on the server
--- @parameter string identifier The identifier of the synced setting
--- @parameter string type The data type of the setting, e.g. `number`, `bool` or `string`
--- @realm server
-function plymeta:RegisterSettingOnServer(identifier, type)
-	self.playerSettingRegistry[identifier] = type
 end
 
 ---
@@ -1393,13 +1380,13 @@ net.Receive("ttt2_set_player_setting", function(_, ply)
 	local data = net.ReadString()
 
 	-- make sure that the setting is registered on the server
-	if not ply.playerSettingRegistry[identifier] then return end
+	if not player.playerSettingRegistry[identifier] then return end
 
 	local oldValue = ply.playerSettings[identifier]
 
-	if ply.playerSettingRegistry[identifier] == "number" then
+	if player.playerSettingRegistry[identifier] == "number" then
 		ply.playerSettings[identifier] = tonumber(data)
-	elseif ply.playerSettingRegistry[identifier] == "bool" then
+	elseif player.playerSettingRegistry[identifier] == "bool" then
 		ply.playerSettings[identifier] = tobool(data)
 	else
 		ply.playerSettings[identifier] = data
