@@ -96,6 +96,9 @@ SWEP.IsSilent = false
 -- in close proximity to this weapon when spawned.
 SWEP.autoAmmoAmount = 0
 
+-- It this is set to true, there will be no pickup notification when receiving this weapon.
+SWEP.silentPickup = false
+
 -- Set Keys like { "HeadshotMultiplier", "Weight", { "Primary", "Recoil" }, { "Secondary", "Ammo" } } if you want the data to be persistent after hotreloads
 -- Empty it before a hotreload to reset data after a hotreload, otherwise this data keep persisting until you do a map reload or restart your server
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()

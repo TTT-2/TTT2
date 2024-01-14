@@ -63,6 +63,8 @@ SWEP.CarryHack = nil
 SWEP.Constr = nil
 SWEP.PrevOwner = nil
 
+SWEP.builtin = true
+
 -- ConVar syncing
 if SERVER then
 
