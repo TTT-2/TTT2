@@ -147,6 +147,22 @@ function vguihandler.IsOpen()
 end
 
 ---
+-- Returns if a menu is blocking TTT2 Binds or not
+-- @return boolean True if a menu is open and blocks Bindings
+-- @realm client
+function vguihandler.IsBlockingBindings()
+	local frames = vguihandler.frames
+
+	for i = 1, #frames do
+		if frames[i]:IsFrameHidden() or not frames[i]:IsBlockingBindings() then continue end
+
+		return true
+	end
+
+	return false
+end
+
+---
 -- Draws the background behind the opened vgui menues. It is called in
 -- @{GM:PostDrawHUD}.
 -- @internal

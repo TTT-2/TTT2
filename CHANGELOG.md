@@ -6,12 +6,21 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+
 ### Changed
 
-- Refactored client shop logic into separate shop-class
+- Refactored client shop logic into separate shop-class (by @ZenBre4ker)
   - Enabled shared shop class to buy and check equipment
   - Removed third argument of `TTT2CanOrderEquipment`-Hook, no message is outputted anymore
+- dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
+- Binoculars now have a world model that isn't paper towels (by @EntranceJew)
+
 ### Fixed
+
+- Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
+- The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
+- Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 
 ### Breaking Changes
 
