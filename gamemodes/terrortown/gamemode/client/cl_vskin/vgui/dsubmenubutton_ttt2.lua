@@ -29,6 +29,8 @@ function PANEL:Init()
 		title_font = "DermaTTT2SubMenuButtonTitle",
 		icon = nil,
 		iconFullSize = false,
+		iconBadge = nil,
+		iconBadgeSize = 0,
 		selected = false,
 	}
 end
@@ -38,6 +40,34 @@ end
 -- @realm client
 function PANEL:IsDown()
 	return self.Depressed
+end
+
+---
+-- @param Material badge
+-- @realm client
+function PANEL:SetIconBadge(badge)
+	self.contents.iconBadge = badge
+end
+
+---
+-- @return Material|nil
+-- @realm client
+function PANEL:GetIconBadge()
+	return self.contents.iconBadge
+end
+
+---
+-- @param number size
+-- @realm client
+function PANEL:SetIconBadgeSize(size)
+	self.contents.iconBadgeSize = size
+end
+
+---
+-- @return number
+-- @realm client
+function PANEL:GetIconBadgeSize()
+	return self.contents.iconBadgeSize
 end
 
 ---

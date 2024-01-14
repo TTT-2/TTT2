@@ -177,7 +177,7 @@ local function PreqLabels(parent, x, y)
 
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
-		local credits = client:GetCredits()
+		local credits = shop.GetAvailableCredits()
 		local cr = sel and sel.credits or 1
 
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
@@ -348,9 +348,9 @@ local function CreateEquipmentList(t)
 		return
 	end
 
-	local ply = LocalPlayer()
-	local currole = ply:GetSubRole()
-	local credits = ply:GetCredits()
+	local client = LocalPlayer()
+	local currole = client:GetSubRole()
+	local credits = shop.GetAvailableCredits()
 
 	local itemSize = 64
 
@@ -365,7 +365,7 @@ local function CreateEquipmentList(t)
 
 	-- Determine if we already have equipment
 	local owned_ids = {}
-	local weps = ply:GetWeapons()
+	local weps = client:GetWeapons()
 
 	for i = 1, #weps do
 		local wep = weps[i]
@@ -381,7 +381,7 @@ local function CreateEquipmentList(t)
 	end
 
 	local itms = {}
-	local tmp = GetEquipmentForRole(ply, currole, t.notalive)
+	local tmp = GetEquipmentForRole(client, currole, t.notalive)
 
 	for i = 1, #tmp do
 		if not tmp[i].notBuyable then
@@ -390,7 +390,7 @@ local function CreateEquipmentList(t)
 	end
 
 	if #itms == 0 and not t.notalive then
-		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+		client:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 
 		return
 	end
@@ -398,8 +398,8 @@ local function CreateEquipmentList(t)
 	-- temp table for sorting
 	local paneltablefav = {}
 	local paneltable = {}
-	local steamid = ply:SteamID64()
-	local col = ply:GetRoleColor()
+	local steamid = client:SteamID64()
+	local col = client:GetRoleColor()
 
 	for k = 1, #itms do
 		local item = itms[k]
@@ -412,14 +412,15 @@ local function CreateEquipmentList(t)
 			if item.iconMaterial then
 				ic = vgui.Create("LayeredIcon", dlist)
 
-				if item.custom and showCustomVar:GetBool() then
+				if item.builtin and showCustomVar:GetBool() then
 					-- Custom marker icon
 					local marker = vgui.Create("DImage")
-					marker:SetImage("vgui/ttt/custom_marker")
+					marker:SetImage("vgui/ttt/vskin/markers/builtin")
+					marker:SetImageColor(col)
 
 					marker.PerformLayout = PerformMarkerLayout
 
-					marker:SetTooltip(GetTranslation("equip_custom"))
+					marker:SetTooltip(GetTranslation("builtin_marker"))
 
 					ic:AddLayer(marker)
 					ic:EnableMousePassthrough(marker)
@@ -482,12 +483,12 @@ local function CreateEquipmentList(t)
 			if not t.notalive and ((
 					-- already owned
 					table.HasValue(owned_ids, item.id)
-					or items.IsItem(item.id) and item.limited and ply:HasEquipmentItem(item.id)
+					or items.IsItem(item.id) and item.limited and client:HasEquipmentItem(item.id)
 					-- already carrying a weapon for this slot
 					or ItemIsWeapon(item) and not CanCarryWeapon(item)
-					or not EquipmentIsBuyable(item, ply)
+					or not EquipmentIsBuyable(item, client)
 					-- already bought the item before
-					or item.limited and ply:HasBought(item.id)
+					or item.limited and client:HasBought(item.id)
 				) or (item.credits or 1) > credits
 			) then
 				ic:SetIconColor(color_darkened)
@@ -503,9 +504,7 @@ local function CreateEquipmentList(t)
 			ic.PressedLeftMouse = function(self, doubleClick)
 				if not doubleClick or self.item.disabledBuy or not enableDoubleClickBuy:GetBool() then return end
 
-				net.Start("TTT2OrderEquipment")
-				net.WriteString(self.item.id)
-				net.SendToServer()
+				shop.BuyEquipment(self.item.id)
 
 				---@cast eqframe -nil
 				eqframe:Close()
@@ -551,17 +550,17 @@ local color_bggrey = Color(90, 90, 95, 255)
 -- Creates / opens the shop frame
 -- @realm client
 function TraitorMenuPopup()
-	local ply = LocalPlayer()
+	local client = LocalPlayer()
 
-	if not IsValid(ply) then return end
+	if not IsValid(client) then return end
 
-	local subrole = ply:GetSubRole()
+	local subrole = client:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
 	local rd = roles.GetByIndex(fallbackRole)
 	local notalive = false
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
-	if ply:Alive() and ply:IsActive() and fallback == SHOP_DISABLED then return end
+	if client:Alive() and client:IsActive() and fallback == SHOP_DISABLED then return end
 
 	-- calculate dimensions
 	local numCols, numRows, itemSize
@@ -600,7 +599,7 @@ function TraitorMenuPopup()
 	end
 
 	-- if the player is not alive / the round is not active let him choose his shop
-	if not ply:Alive() or not ply:IsActive() then
+	if not client:Alive() or not client:IsActive() then
 		notalive = true
 	end
 
@@ -610,7 +609,7 @@ function TraitorMenuPopup()
 		eqframe:Close()
 	end
 
-	local credits = ply:GetCredits()
+	local credits = shop.GetAvailableCredits()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
@@ -820,14 +819,14 @@ function TraitorMenuPopup()
 	dsheet:AddSheet(GetTranslation("equip_tabtitle"), dequip, "icon16/bomb.png", false, false, GetTranslation("equip_tooltip_main"))
 
 	-- Item control
-	if ply:HasEquipmentItem("item_ttt_radar") then
+	if client:HasEquipmentItem("item_ttt_radar") then
 		local dradar = RADAR.CreateMenu(dsheet, dframe)
 
 		dsheet:AddSheet(GetTranslation("radar_name"), dradar, "icon16/magnifier.png", false, false, GetTranslation("equip_tooltip_radar"))
 	end
 
 	-- Weapon/item control
-	if IsValid(ply.radio) or ply:HasWeapon("weapon_ttt_radio") then
+	if IsValid(client.radio) or client:HasWeapon("weapon_ttt_radio") then
 		local dradio = TRADIO.CreateMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("radio_name"), dradio, "icon16/transmit.png", false, false, GetTranslation("equip_tooltip_radio"))
@@ -892,9 +891,7 @@ function TraitorMenuPopup()
 
 		local choice = pnl.item
 
-		net.Start("TTT2OrderEquipment")
-		net.WriteString(choice.id)
-		net.SendToServer()
+		shop.BuyEquipment(choice.id)
 
 		dframe:Close()
 	end
@@ -917,13 +914,13 @@ function TraitorMenuPopup()
 
 	dfav.DoClick = function()
 		local pnl = dlist.SelectedPanel
-		local role = drolesel and RolenameToRole(drolesel:GetValue()) or ply:GetSubRole()
+		local role = drolesel and RolenameToRole(drolesel:GetValue()) or client:GetSubRole()
 
 		if not pnl or not pnl.item then return end
 
 		local choice = pnl.item
 		local weapon = choice.id
-		local steamid = ply:SteamID64()
+		local steamid = client:SteamID64()
 
 		CreateFavTable()
 
@@ -960,81 +957,24 @@ concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 -- NET RELATED STUFF:
 --
 
-local function ReceiveEquipment()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
-
-	local eqAmount = net.ReadUInt(16)
-	local tmp = {}
-	local toRem = {}
-
-	for i = 1, eqAmount do
-		tmp[i] = net.ReadString()
-	end
-
-	local equipItems = ply:GetEquipmentItems()
-
-	-- reset all old items
-	for k = 1, #equipItems do
-		local v = equipItems[k]
-
-		if table.HasValue(tmp, v) then continue end
-
-		local item = items.GetStored(v)
-		if item and isfunction(item.Reset) then
-			item:Reset(ply)
-		end
-
-		table.insert(toRem, 1, k)
-	end
-
-	-- remove finally
-	for i = 1, #toRem do
-		table.remove(equipItems, toRem[i])
-	end
-
-	-- now equip the items the player doesn't own
-	for k = 1, #tmp do
-		local v = tmp[k]
-
-		if not table.HasValue(equipItems, v) then
-			equipItems[#equipItems + 1] = v
-
-			local item = items.GetStored(v)
-			if item and isfunction(item.Equip) then
-				item:Equip(ply)
-			end
-		end
-	end
-end
-net.Receive("TTT_Equipment", ReceiveEquipment)
-
-local function ReceiveCredits()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
-
-	ply.equipment_credits = net.ReadUInt(8)
-end
-net.Receive("TTT_Credits", ReceiveCredits)
-
 local r = 0
 
 local function ReceiveBought()
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
-	ply.bought = {}
+	client.bought = {}
 
 	local num = net.ReadUInt(8)
 
 	for i = 1, num do
 		local s = net.ReadString()
 		if s ~= "" then
-			ply.bought[#ply.bought + 1] = s
+			client.bought[#client.bought + 1] = s
 
 			BUYTABLE[s] = true
 
-			local team = ply:GetTeam()
+			local team = client:GetTeam()
 			if team then
 				TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
 				TEAMBUYTABLE[team][s] = true
@@ -1045,7 +985,7 @@ local function ReceiveBought()
 	-- This usermessage sometimes fails to contain the last weapon that was
 	-- bought, even though resending then works perfectly. Possibly a bug in
 	-- bf_read. Anyway, this hack is a workaround: we just request a new umsg.
-	if num ~= #ply.bought and r < 10 then -- r is an infinite loop guard
+	if num ~= #client.bought and r < 10 then -- r is an infinite loop guard
 		RunConsoleCommand("ttt_resend_bought")
 
 		r = r + 1

@@ -4,11 +4,100 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+
+### Changed
+
+- Refactored client shop logic into separate shop-class (by @ZenBre4ker)
+- dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
+- Binoculars now have a world model that isn't paper towels (by @EntranceJew)
+
+### Fixed
+
+- Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
+- The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
+- Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
+
+## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
+
+### Added
+
+- Added some missing vanilla TTT entities into TTT2
+- Added debug.print(message)
+  - This puts quotation marks around print statements
+  - Can handle single values or a sequential table to be printed
+  - Can handle `nil` entries in a nearly sequential table
+- Added new hooks `TTT2BeaconDetectPlayer` and `TTT2BeaconDeathNotify` to allow preventing / overriding a beacon's player detection & alerts (by @spanospy)
+- Added indentation to subsettings in F1 menu (by @TimGoll)
+
+### Changed
+
+- Updated the Turkish localization file (by @NovaDiablox)
+- Keyhelp and weapon HUD Help now use the global scale factor
+
+### Fixed
+
+- Fixed targetID hints for old addons now correctly working for all entities
+- Fixed visualizer having pickup hint even though player is unable to pick up
+- Targetid wasn't showing named corpse's role, information which was already present on the scoreboard (by @EntranceJew)
+- Damage Scaling now has a help description
+- Fixed the database module setting a global variable called `callback` which breaks addons such as PointShop2
+- Fixed voicechat keybinds being shown even if voice is disabled
+- Coerced ammo types to lowercase for better matching in HUD
+- The binocular zoom now uses a DataTable that is not already used by its weaponbase
+- Fixed round scoreboard tooltips not being wide enough for their strings (by @EntranceJew)
+- Errors when looking at a player's corpse that disconnected (by @EntranceJew)
+- Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)
+- Shopeditor now correctly shows resetted and default values
+
+## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
+
+### Added
+
+- Added the beacon back into TTT2, an equipment that was disabled long ago in base TTT
+  - Can only be bought by policing roles
+  - Creates a wallhack in a sphere around it, which is visible to everyone
+- Added recognizable badge for `builtin` equipment and roles (by @EntranceJew)
+  - Buy Equipment menu has `builtin` indicators, replacing the `(C)` custom marker decorating a majority of equipment
+  - `F1 > Edit Equipment` now has `builtin` indicators on equipment
+  - Added tooltip to `F1 > Edit Equipment` menu with the equipment's class name.
+  - `F1 > Role Settings` now has `builtin` indicators for roles
+  - `F1 > Edit Shops` now has `builtin` indicators for roles
+
+### Changed
+
+- Updated the Turkish localization file (by @NovaDiablox)
+- Radio can now only be picked up by placer
+- Radar now clears existing waypoints when removed or on changing role (by @EntranceJew)
+- Comboboxes can now handle numbers and strings as values
+  - Defaults work now with numbers
+  - OnChange-Callback is called with the correct type for ConVars
+- AFK/Idle timer now reads inputs instead of angle/pos checks to circumvent cheese
+
+### Fixed
+
+- Binoculars scan no longer gets interrupted when changing zoom level
+- Fixed missing water level icon breaking scoreboard
+- DNA Tester works now with more than one fingerprint on a weapon
+- TraitorButton config files should now actually work
+- Translation strings not rendering on detective's body search mode combobox
+- C4 defusal prompt now suggesting the right key
+- Disable to unscope from weapons without ironsights
+- Fixed typo preventing targetid from showing role icons correctly
+- Mitigated issue with CTakeDamageInfo becoming ephemeral outside their hook of origin
+- `ttt_game_text` can now properly send to "All except traitors", as described.
+- Fixed corpses not listing their kills
+- Comboboxes now show correct values for database driven entries
+- Database-Callbacks are now called with the correct valuetype
+
 ## [v0.12.1b](https://github.com/TTT-2/TTT2/tree/v0.12.1b) (2023-12-12)
 
 ### Added
 
 - Added a new `fastutf8` library that provides faster utf8 functions (added by @saibotk, created by @blitmap)
+- Added new hooks: `TTT2MapRegisterWeaponSpawns`, `TTT2MapRegisterAmmoSpawns`, `TTT2MapRegisterPlayerSpawns` to allow converting a wider variety of source map ports (by @EntranceJew)
 
 ### Fixed
 
@@ -19,6 +108,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed fallback ammo icon missing
 - Fixed a null entity error in the miniscoreboard
 - Fixed missing bodysearch information if victim was killed without leaving a trace caused by a weapon hit
+- Fixed "body_confirm" MSTACK noise by batching all the kills from a body into one message. (by @EntranceJew)
+- Fixed "body_confirm" message sending before corpse confirmation message.
 
 ## [v0.12.0b](https://github.com/TTT-2/TTT2/tree/v0.12.0b) (2023-12-11)
 

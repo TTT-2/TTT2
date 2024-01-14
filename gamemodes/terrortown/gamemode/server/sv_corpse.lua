@@ -2,6 +2,22 @@
 -- Corpse functions
 -- @module CORPSE
 
+---@class DamageInfoData
+---@field ammoType number The ammo type which was used, referring to game.GetAmmoTypes()
+---@field attacker Entity The attacker (character who originated the attack), for example a player or an NPC that shot the weapon. Or an Entity.
+---@field baseDamage number The initial unmodified by skill level ( game.GetSkillLevel() ) damage
+---@field damage number The total damage.
+---@field damageBonus number The amount of bonus damage.
+---@field damageCustom number Custom damage type. This is used by Day of Defeat: Source and Team Fortress 2 for extended damage info, but isn't used in Garry's Mod by default.
+---@field damageForce Vector The force taken from the damage, sometimes used for knockback.
+---@field damagePosition Vector The position where the damage was or is going to be applied to.
+---@field damageType number A bitflag which indicates the damage type(s) of the damage.
+---@field inflictor Entity The inflictor of the damage, a projectile, a weapon, or an ordinariy Entity.
+---@field reportedPosition Vector The initial, unmodified position where the damage occured
+---@field isBulletDamage boolean Whether the DamageInfo contained DMG_BULLET
+---@field isExplosionDamage boolean Whether the DamageInfo contained DMG_BLAST
+---@field isFallDamage boolean Whether the DamageInfo contained DMG_FALL
+
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
 
@@ -68,6 +84,7 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
+
 ---
 -- Identifies the corpse, registers it and announces it to the players, if possible.
 -- @param Player ply The player that tries to identify the body
@@ -117,30 +134,6 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		end
 	end
 
-	if GetConVar("ttt2_confirm_killlist"):GetBool() then
-		-- Handle kill list
-		local ragKills = rag.kills
-
-		for i = 1, #ragKills do
-			local victimSIDs = ragKills[i]
-
-			-- filter out disconnected (and bots !)
-			local vic = player.GetBySteamID64(victimSIDs)
-
-			-- is this an unconfirmed dead?
-			if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then continue end
-
-			LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
-
-			vic:ConfirmPlayer(false)
-
-			-- however, do not mark body as found. This lets players find the
-			-- body later and get the benefits of that
-			--local vicrag = vic.server_ragdoll
-			--CORPSE.SetFound(vicrag, true)
-		end
-	end
-
 	-- Announce body
 	if cvBodyfound:GetBool() and notConfirmed then
 		local subrole = rag.was_role
@@ -158,7 +151,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 			net.WriteString("body_found")
 		end
 
-		net.WriteString(rag.sid == "BOT" and "" or rag.sid64)
+		net.WriteString(rag.sid64)
 
 		-- color
 		net.WriteUInt(clr.r, 8)
@@ -180,6 +173,46 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
 		net.WriteUInt(searchUID or 0, 16)
 
 		net.Broadcast()
+	end
+
+	if GetConVar("ttt2_confirm_killlist"):GetBool() then
+		-- Handle kill list
+		local ragKills = rag.kills
+
+		local killnicks = {}
+		for i = 1, #ragKills do
+			local victimSIDs = ragKills[i]
+
+			-- filter out disconnected (and bots !)
+			local vic = player.GetBySteamID64(victimSIDs)
+
+			-- is this an unconfirmed dead?
+			if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then continue end
+
+			killnicks[#killnicks + 1] = vic:Nick()
+
+			vic:ConfirmPlayer(false)
+
+			-- however, do not mark body as found. This lets players find the
+			-- body later and get the benefits of that
+			--local vicrag = vic.server_ragdoll
+			--CORPSE.SetFound(vicrag, true)
+		end
+
+		if #killnicks == 1 then
+			LANG.Msg("body_confirm_one", {finder = finder, victim = killnicks[1]})
+		elseif #killnicks > 1 then
+			table.sort(killnicks, function(a, b)
+				return a and b and a:upper() < b:upper()
+			end)
+
+			local names = killnicks[1]
+			for k = 2, #killnicks do
+				names = names .. ", " .. killnicks[k]
+			end
+
+			LANG.Msg("body_confirm_more", {finder = finder, victims = names, count = #killnicks})
+		end
 	end
 end
 
@@ -301,16 +334,43 @@ local function GetSceneDataFromPlayer(ply)
 	return data
 end
 
+---
+
+---
+-- Clones a CTakeDamageInfo into a table called DamageInfoData
+-- @param CTakeDamageInfo dmginfo
+-- @return DamageInfoData The damage info data table
+-- @realm server
+function CreateDamageInfoData(dmginfo)
+	return {
+		ammoType = dmginfo:GetAmmoType(),
+		attacker = dmginfo:GetAttacker(),
+		baseDamage = dmginfo:GetBaseDamage(),
+		damage = dmginfo:GetDamage(),
+		damageBonus = dmginfo:GetDamageBonus(),
+		damageCustom = dmginfo:GetDamageCustom(),
+		damageForce = dmginfo:GetDamageForce(),
+		damagePosition = dmginfo:GetDamagePosition(),
+		damageType = dmginfo:GetDamageType(),
+		inflictor = dmginfo:GetInflictor(),
+		maxDamage = dmginfo:GetMaxDamage(),
+		reportedPosition = dmginfo:GetReportedPosition(),
+		isBulletDamage = dmginfo:IsBulletDamage(),
+		isExplosionDamage = dmginfo:IsExplosionDamage(),
+		isFallDamage = dmginfo:IsFallDamage(),
+	}
+end
+
 local function GetSceneData(victim, attacker, dmginfo)
 	local scene = {}
 
-	scene.dmginfo = dmginfo
+	scene.damageInfoData  = CreateDamageInfoData(dmginfo)
 
 	if victim.hit_trace then
 		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
 	end
 
-	scene.waterLevel = victim:WaterLevel();
+	scene.waterLevel = victim:WaterLevel()
 	scene.hitGroup = victim:LastHitGroup()
 	scene.floorSurface = 0
 	local groundTrace = util.TraceLine({

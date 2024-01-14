@@ -1,5 +1,7 @@
 --- @ignore
 
+local TryT = LANG.TryTranslation
+
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 98
@@ -35,16 +37,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	form:MakeComboBox({
 		label = "label_inspect_confirm_mode",
 		serverConvar = "ttt2_inspect_confirm_mode",
-		choices = {{
-			value = "0",
-			title = "choice_inspect_confirm_mode_0"
-		},{
-			value = "1",
-			title = "choice_inspect_confirm_mode_1"
-		},{
-			value = "2",
-			title = "choice_inspect_confirm_mode_2"
-		}}
+		choices = {
+			{title = TryT("choice_inspect_confirm_mode_0"), value = 0},
+			{title = TryT("choice_inspect_confirm_mode_1"), value = 1},
+			{title = TryT("choice_inspect_confirm_mode_2"), value = 2},
+		},
 	})
 
 	local form2 = vgui.CreateTTT2Form(parent, "header_round_setup_prep")
@@ -152,7 +149,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form5:MakeHelp({
-		label = "help_round_limit"
+		label = "help_round_limit",
+		master = enbSessionLimitsEnabled
 	})
 
 	form5:MakeSlider({

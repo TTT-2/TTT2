@@ -13,7 +13,7 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local HUDElementList = HUDElementList or {}
+local HUDElementList = {}
 
 ---
 -- Copies any missing data from base table to the target table

@@ -62,8 +62,6 @@ L.body_found_traitor = "Он был предателем!"
 L.body_found_det = "Он был детективом."
 L.body_found_inno = "Он был невиновным."
 
-L.body_confirm = "{finder} подтверждает смерть {victim}."
-
 L.body_call = "{player} зовёт детектива к телу {victim}!"
 L.body_call_error = "Вы должны подтвердить смерть игрока, прежде чем звать детектива!"
 
@@ -229,7 +227,6 @@ L.item_disg_desc = [[
 Включить/выключить Маскировку можно во вкладке «Маскировка» или нажав Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Нажмите {usekey}, чтобы заложить/обезвредить."
 L.c4_disarm_warn = "С4, заложенная вами, была обезврежена."
 L.c4_armed = "Вы заложили бомбу."
 L.c4_disarmed = "Вы успешно обезвредили бомбу."
@@ -259,7 +256,6 @@ L.c4_status_disarmed = "ОБЕЗВРЕ-\nЖЕНА"
 
 -- Visualizer
 L.vis_name = "Визуализатор"
-L.vis_hint = "Нажмите {usekey}, чтобы подобрать. (только для детективов)"
 
 L.vis_desc = [[
 Устройство, визуализирующее сцену преступления.
@@ -896,7 +892,7 @@ L.drop_ammo_prevented = "Что-то не даёт вам выбросить б�
 -- 2019-10-28
 L.target_c4 = "[{usekey}]: открыть меню C4."
 L.target_c4_armed = "[{usekey}]: обезвредить C4."
-L.target_c4_armed_defuser = "[{usekey}]: использовать Набор сапёра."
+L.target_c4_armed_defuser = "[{primaryfire}]: использовать Набор сапёра."
 L.target_c4_not_disarmable = "Нельзя обезвредить C4 живого напарника."
 L.c4_short_desc = "Кое-что крайне взрывоопасное."
 
@@ -913,7 +909,6 @@ L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбр�
 --L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Тело слишком далеко."
 
-L.radio_pickup_wrong_team = "Вы не можете подобрать Радио другой команды."
 L.radio_short_desc = "Звуки выстрелов для меня словно музыка"
 
 L.hstation_subtitle = "[{usekey}]: восстановить здоровье."
@@ -1963,7 +1958,7 @@ L.search_eyes = "Используя свои детективные навыки
 --L.target_credits_on_confirm = "Confirm to receive unspent credits"
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_only_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
 --L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
@@ -2072,9 +2067,8 @@ L.search_eyes = "Используя свои детективные навыки
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
--- 2023-12-07
 --L.c4_help_primary = "Place the C4"
---L.c4_help_secondary = "Stick to surface"
+--L.newton_force = "FORCE"
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
@@ -2095,3 +2089,41 @@ L.search_eyes = "Используя свои детективные навыки
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "Установить Приманку."
+-- 2023-12-14
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-11-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} подтверждает смерть {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"
+
+-- 2023-12-20
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
+--2 = Deal twice the amount of damage.
+--
+--Note: Some weapons might not use this value which causes this modifier to be ineffective.]]

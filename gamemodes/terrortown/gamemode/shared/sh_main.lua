@@ -188,6 +188,7 @@ function GM:TTT2Initialize()
 end
 
 ---
+-- Called when TTT2 is finished loading on startup and hotreload.
 -- @hook
 -- @realm shared
 function GM:TTT2FinishedLoading()

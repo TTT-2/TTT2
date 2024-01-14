@@ -11,6 +11,7 @@ ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
 ITEM.hud = Material("vgui/ttt/perks/hud_nofiredmg.png")
 ITEM.material = "vgui/ttt/icon_nofiredmg"
+ITEM.builtin = true
 
 if SERVER then
 	hook.Add("EntityTakeDamage", "TTT2NoFireDmg", function(target, dmginfo)

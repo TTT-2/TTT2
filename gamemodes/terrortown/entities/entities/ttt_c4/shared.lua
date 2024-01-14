@@ -20,17 +20,6 @@ if CLIENT then
 	-- this entity can be DNA-sampled so we need some display info
 	ENT.Icon = "vgui/ttt/icon_c4"
 	ENT.PrintName = "C4"
-
-	local GetPTranslation = LANG.GetParamTranslation
-	local hint_params = {usekey = Key("+use", "USE")}
-
-	ENT.TargetIDHint = {
-		name = "C4",
-		hint = "c4_hint",
-		fmt  = function(ent, txt)
-			return GetPTranslation(txt, hint_params)
-		end
-	}
 end
 
 C4_WIRE_COUNT	= 6
@@ -822,6 +811,7 @@ else -- CLIENT
 	local GetPT = LANG.GetParamTranslation
 
 	local key_params = {
+		primaryfire = Key("+attack", "MOUSE1"),
 		usekey = Key("+use", "USE"),
 		walkkey = Key("+walk", "WALK")
 	}

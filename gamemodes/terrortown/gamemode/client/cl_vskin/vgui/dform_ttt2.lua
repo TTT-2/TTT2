@@ -223,8 +223,13 @@ function PANEL:MakeCheckBox(data)
 	self:AddItem(left, nil, reset)
 
 	if IsValid(data.master) and isfunction(data.master.AddSlave) then
+		left:SetMaster(data.master)
+		reset:SetMaster(data.master)
+
 		data.master:AddSlave(left)
 		data.master:AddSlave(reset)
+
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return left
@@ -283,6 +288,12 @@ function PANEL:MakeSlider(data)
 		data.master:AddSlave(left)
 		data.master:AddSlave(right)
 		data.master:AddSlave(reset)
+
+		left:SetMaster(data.master)
+		right:SetMaster(data.master)
+		reset:SetMaster(data.master)
+
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return left
@@ -322,10 +333,9 @@ function PANEL:MakeComboBox(data)
 			local choice = data.choices[i]
 
 			if istable(choice) then
-				right:AddChoice(choice.title, tostring(choice.value), choice.select, choice.icon, choice.data)
+				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
 			else
 				-- Support old simple structure
-				choice = tostring(choice)
 				right:AddChoice(choice, choice)
 			end
 		end
@@ -365,6 +375,12 @@ function PANEL:MakeComboBox(data)
 		data.master:AddSlave(left)
 		data.master:AddSlave(right)
 		data.master:AddSlave(reset)
+
+		left:SetMaster(data.master)
+		right:SetMaster(data.master)
+		reset:SetMaster(data.master)
+
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return right, left
@@ -424,6 +440,12 @@ function PANEL:MakeBinder(data)
 		data.master:AddSlave(left)
 		data.master:AddSlave(right)
 		data.master:AddSlave(reset)
+
+		left:SetMaster(data.master)
+		right:SetMaster(data.master)
+		reset:SetMaster(data.master)
+
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
 	end
 
 	return right, left
@@ -466,6 +488,14 @@ function PANEL:MakeHelp(data)
 	end
 
 	self:AddItem(left, nil)
+
+	if IsValid(data.master) and isfunction(data.master.AddSlave) then
+		data.master:AddSlave(left)
+
+		left:SetMaster(data.master)
+
+		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+	end
 
 	left:InvalidateLayout(true)
 

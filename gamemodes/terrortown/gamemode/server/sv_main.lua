@@ -345,7 +345,9 @@ function GM:Initialize()
 
 	-- For the paranoid
 	math.randomseed(os.time())
-	math.random(); math.random(); math.random() -- warming up
+	math.random()
+	math.random()
+	math.random()
 
 	WaitForPlayers()
 
@@ -1210,7 +1212,7 @@ function BeginRound()
 	-- @realm server
 	hook.Run("TTTBeginRound")
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
+	ents.TTT.TriggerRoundStateOutputs(ROUND_ACTIVE)
 end
 
 ---
@@ -1363,6 +1365,10 @@ function GM:OnReloaded()
 	---
 	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
+
+	---
+	-- @realm shared
+	hook.Run("TTT2FinishedLoading")
 end
 
 ---
