@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+- Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 
 ### Changed
 
