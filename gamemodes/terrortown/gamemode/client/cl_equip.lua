@@ -254,26 +254,29 @@ local function PreqLabels(parent, x, y)
 		end
 
 		local isBuyable, statusCode = shop.CanBuyEquipment(client, sel.id)
+		local iconText = isBuyable and "✔" or "X"
+		local tooltipText
 
 		if statusCode == shop.statusCode.SUCCESS then
-			return true, "✔", "Ok"
+			tooltipText = "Ok"
 		elseif statusCode == shop.statusCode.INVALIDID then
 			ErrorNoHalt("[TTT2][ERROR] Missing id in table:", sel)
 			PrintTable(sel)
-			return false, "X", "No ID"
+			tooltipText = "No ID"
 		elseif statusCode == shop.statusCode.NOTBUYABLE then
-			return false, "X", "This equipment cannot be bought."
+			tooltipText = "This equipment cannot be bought."
 		elseif statusCode == shop.statusCode.NOTENOUGHPLAYERS then
-			local activePlys = util.GetActivePlayers()
-
-			return false, " " .. #activePlys .. " / " .. sel.minPlayers, "Minimum amount of active players needed."
+			iconText = " " .. #util.GetActivePlayers() .. " / " .. sel.minPlayers
+			tooltipText = "Minimum amount of active players needed."
 		elseif statusCode == shop.statusCode.LIMITEDBOUGHT then
-			return false, "X", "This equipment is limited and is already bought."
+			tooltipText = "This equipment is limited and is already bought."
 		elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
-			return false, "X", "Your role can't buy this equipment."
+			tooltipText = "Your role can't buy this equipment."
 		else
-			return false, "X", "Unknown statusCode " .. tostring(statusCode)
+			tooltipText = "Undefined statusCode " .. tostring(statusCode)
 		end
+
+		return isBuyable, iconText, tooltipText
 	end
 
 	for _, pnl in pairs(tbl) do

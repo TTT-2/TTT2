@@ -225,7 +225,7 @@ function shop.BuyEquipment(ply, equipmentId)
 		-- @realm server
 		hook.Run("TTT2OrderedEquipment", ply, equipmentId, isItem, credits, ignoreCost)
 	end
-	
+
 	return true, statusCode
 end
 
