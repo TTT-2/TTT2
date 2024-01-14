@@ -22,7 +22,7 @@ end
 ---
 -- A function that takes a table with triangles and draws them to the screen.
 -- @note The draw color has to be set beforehand
--- @parame table tbl A table with triangles
+-- @param table tbl A table with triangles
 -- @realm client
 function surface.DrawPolyTable(tbl)
 	for i = 1, #tbl do
