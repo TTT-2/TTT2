@@ -11,7 +11,7 @@ if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 54
 
-	SWEP.Icon = "vgui/ttt/icon_nades"
+	SWEP.Icon = "vgui/ttt/icon_smokegrenade"
 	SWEP.IconLetter = "Q"
 end
 
