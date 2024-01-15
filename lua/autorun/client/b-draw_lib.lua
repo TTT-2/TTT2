@@ -103,7 +103,7 @@ end
 -- Deletes the avatar material for a steamid64
 -- when a cached avatar is found it will be destroyed.
 -- @param string id64 The player's steamid64
--- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @realm client
 function draw.DropCacheAvatar(id64, size)
 	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
