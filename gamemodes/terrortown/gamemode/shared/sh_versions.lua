@@ -77,12 +77,14 @@ function versions.GetLastVersionChanges(currentVersion)
 	local isUpgrade = maxIndex >= lastVersionIndex
 
 	local changeList = {}
+
+	-- lastVersionIndex + 1 to exclude changes already present in a version
 	if isUpgrade then
-		for i = lastVersionIndex, maxIndex, 1 do
+		for i = lastVersionIndex + 1, maxIndex, 1 do
 			changeList[#changeList + 1] = versions.names[i]
 		end
 	else
-		for i = maxIndex, lastVersionIndex, -1 do
+		for i = maxIndex, lastVersionIndex + 1, -1 do
 			changeList[#changeList + 1] = versions.names[i]
 		end
 	end
@@ -111,5 +113,8 @@ function versions.UpdateDatabase()
 end
 
 versions.names = {
+	"0.12.0b",
+	"0.12.1b",
+	"0.12.2b",
 	"0.12.3b",
 }

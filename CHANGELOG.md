@@ -6,6 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added migrations between TTT2-versions, some breaking changes could now be migrated instead
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
 - Reworked the way the player camera is handled (by @TimGoll)
   - Added FOV change on speed change

@@ -272,6 +272,14 @@ fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function
 	MsgN("Added TTT2 server autorun file: ", path)
 end)
 
+fileloader.LoadFolder("terrortown/migrations/client/", true, CLIENT_FILE, function(path)
+	MsgN("Marked TTT2 client migration file for distribution: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/migrations/server/", true, SERVER_FILE, function(path)
+	MsgN("Added TTT2 server migration file: ", path)
+end)
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook

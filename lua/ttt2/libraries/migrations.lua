@@ -1,5 +1,5 @@
 ---
--- A database schema migrations library
+-- A TTT2 version migrations library
 -- @author ZenBre4ker
 -- @module migrations
 
@@ -18,7 +18,10 @@ function migrations.CreateCommand(states, upgrade, downgrade)
 		downgrade = function(cmd) return end
 	end
 
-	return {states = states, Upgrade = upgrade, Downgrade = downgrade, isCommand = true}
+	local command = {Upgrade = upgrade, Downgrade = downgrade, isCommand = true}
+	table.Merge(command, states)
+
+	return command
 end
 
 function migrations.Add(version, command)
@@ -51,7 +54,8 @@ function migrations.MigrateToVersion(newVersion)
 
 	commandsList = {}
 
-	migrationSuccess = true
+	local migrationSuccess = true
+	local errorMessage = ""
 
 	for i = 1, #changeList do
 		local version = changeList[i]
@@ -59,26 +63,27 @@ function migrations.MigrateToVersion(newVersion)
 
 		if not commands then continue end
 
-		-- TODO: Handle Errors with messages or stacks
 		if isUpgrade then
 			for j = 1, #commands do
-				if not pcall(commands[j].Upgrade(commands[j])) then
-					migrationSuccess = false
+				migrationSuccess, errorMessage = pcall(commands[j].Upgrade, commands[j])
 
-					break
-				end
+				if not migrationSuccess then break end
 			end
 		else
 			-- In case of a downgrade do it the other way around
 			for j = #commands, 1, -1 do
-				if not pcall(commands[j].Downgrade(commands[j])) then
-					migrationSuccess = false
-					
-					break
-				end
+				migrationSuccess, errorMessage = pcall(commands[j].Downgrade, commands[j])
+
+				if not migrationSuccess then break end
 			end
 		end
+
+		if not migrationSuccess then break end
 	end
 
+	if not migrationSuccess then
+		ErrorNoHalt("[TTT2] Migration failed. Error: " .. tostring(errorMessage))
+	end
+	
 	return migrationSuccess
 end
