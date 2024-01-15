@@ -1039,16 +1039,12 @@ L.label_shop_show_slot = "Show slot marker"
 L.label_shop_show_custom = "Show custom item marker"
 L.label_shop_show_fav = "Show favourite item marker"
 L.label_crosshair_enable = "Enable crosshair"
-L.label_crosshair_gap_enable = "Enable custom crosshair gap"
-L.label_crosshair_gap = "Custom crosshair gap"
 L.label_crosshair_opacity = "Crosshair opacity"
 L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
-L.label_crosshair_size = "Crosshair size"
-L.label_crosshair_thickness = "Crosshair thickness"
-L.label_crosshair_thickness_outline = "Crosshair outline thickness"
-L.label_crosshair_dot_enable = "Enable crosshair dot"
-L.label_crosshair_lines_enable = "Enable crosshair lines"
-L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
+L.label_crosshair_size = "Crosshair size multiplier"
+L.label_crosshair_thickness = "Crosshair thickness multiplier"
+L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
+L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
 L.label_damage_indicator_enable = "Enable damage indicator"
 L.label_damage_indicator_mode = "Select damage indicator theme"
@@ -2125,3 +2121,19 @@ Note: Some weapons might not use this value which causes this modifier to be ine
 -- 2023-12-24
 L.binoc_help_reload = "Clear target."
 
+-- 2024-01-05
+L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+L.label_crosshair_mode = "Crosshair mode"
+L.label_crosshair_static_length = "Enable static crosshair line length"
+
+L.choice_crosshair_mode_0 = "Lines and dot"
+L.choice_crosshair_mode_1 = "Lines only"
+L.choice_crosshair_mode_2 = "Dot only"
+
+L.help_crosshair_scale_enable = [[
+Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+
+If the line length is kept static, only the gap scales with cone changes.]]
+
+L.header_weapon_settings = "Weapon Settings"
