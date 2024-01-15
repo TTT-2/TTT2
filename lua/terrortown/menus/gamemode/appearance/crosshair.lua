@@ -19,7 +19,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_crosshair_scale_enable"
+		label = "help_crosshair_scale_enable",
+		master = crossEnb
 	})
 
 	local crossDynScaleEnb = form:MakeCheckBox({
