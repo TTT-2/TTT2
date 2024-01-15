@@ -112,9 +112,11 @@ function draw.DropCacheAvatar(id64, size)
 	local url = fetched_avatar_urls[key]
 	local crcUrl = crc(url)
 	local uri = "data/downloaded_assets/" .. crcUrl .. ".png"
+
 	if exists(uri, "DATA") then
 		delete(uri, "DATA")
 	end
+
 	mats[url] = nil
 	fetched_avatar_urls[key] = nil
 end
