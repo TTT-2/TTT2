@@ -1038,15 +1038,11 @@ L.label_shop_show_slot = "Yuva işaretini göster"
 L.label_shop_show_custom = "Özel öğe işaretini göster"
 L.label_shop_show_fav = "Favori öğe işaretini göster"
 L.label_crosshair_enable = "Nişangahı etkinleştir"
-L.label_crosshair_gap_enable = "Özel nişangah boşluğunu etkinleştir"
-L.label_crosshair_gap = "Özel nişangah aralığı"
 L.label_crosshair_opacity = "Nişangah opaklığı"
 L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
-L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
 L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
@@ -2107,15 +2103,6 @@ Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
 2 = Hasar miktarının iki katı kadar hasar ver.
 Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
-L.header_roles_magnetostick = "Manyeto Çubuğu"
-L.label_roles_ragdoll_pinning = "Ceset asmayı etkinleştir"
-L.magneto_stick_help_idle_push = "Varlığı it"
-L.magneto_stick_help_idle_pull_or_pickup = "Varlığı çek / al"
-L.magneto_stick_help_carry_rag_pin = "Cesedi as"
-L.magneto_stick_help_carry_rag_drop = "Cesedi bırak"
-L.magneto_stick_help_carry_prop_release = "Nesneyi serbest bırak"
-L.magneto_stick_help_carry_prop_drop = "Nesneyi bırak"
-
 -- 23-12-22
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
@@ -2126,3 +2113,23 @@ L.label_enable_bobbing = "Sallanmayı etkinleştir"
 L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
+
+-- 2023-12-24
+L.binoc_help_reload = "Hedefi kaldırın."
+
+-- 2024-01-05
+L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
+L.label_crosshair_outline_high_contrast = "Dış çizgi yüksek kontrast rengini etkinleştir"
+L.label_crosshair_mode = "Nişangah modu"
+L.label_crosshair_static_length = "Statik nişangah çizgi uzunluğunu etkinleştir"
+
+L.choice_crosshair_mode_0 = "Çizgiler ve nokta"
+L.choice_crosshair_mode_1 = "Sadece çizgiler"
+L.choice_crosshair_mode_2 = "Sadece nokta"
+
+L.help_crosshair_scale_enable = [[
+Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendirilmesini sağlar. Koni, zıplama ve koşma gibi dış faktörlerle çarpılan silahın taban isabetinden etkilenir.
+
+Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
+
+L.header_weapon_settings = "Silah Ayarları"
