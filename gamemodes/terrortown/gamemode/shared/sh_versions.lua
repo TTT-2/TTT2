@@ -15,7 +15,6 @@ versions.savingKeys = {}
 -- @return ORMMODEL Returns the model of the versions database table
 -- @realm client
 local function GetORM()
-
 	if istable(versions.orm) then
 		return versions.orm
 	end
@@ -40,6 +39,20 @@ function versions.GetLastVersion()
 	return firstEntry and firstEntry.name or GAMEMODE.Version
 end
 
+function versions.GetVersionIndex(version)
+	local versionIndex
+	
+	for i = #versions.names, 1, -1 do
+		if versions.names[i] ~= version then continue end
+
+		versionIndex = i
+
+		break
+	end
+
+	return versionIndex
+end
+
 ---
 -- Gets an ordered list of version changes since the last update
 -- This order is reversed in case a downgrade was done
@@ -49,15 +62,7 @@ end
 -- @return table A table containing all last versions, that were not installed
 function versions.GetLastVersionChanges(currentVersion)
 	local lastVersion = versions.GetLastVersion()
-	local lastVersionIndex
-	
-	for i = #versions.names, 1, -1 do
-		if not versions.names[i] == currentVersion then continue end
-
-		lastVersionIndex = i
-
-		break
-	end
+	local lastVersionIndex = versions.GetVersionIndex(lastVersion)
 
 	-- In case we have an unknown version number
 	-- Return an empty list as there is no order determinable
@@ -65,35 +70,28 @@ function versions.GetLastVersionChanges(currentVersion)
 		return nil, {}
 	end
 
-	local maxIndex
-	if not currentVersion or currentVersion == GAMEMODE.Version then
-		maxIndex = #versions.names
+	local curVersionIndex
+	if isstring(currentVersion) then
+		curVersionIndex = versions.GetVersionIndex(currentVersion)
 	else
-		for i = 1, #versions.names do
-			if currentVersion == versions.names[i] then
-				maxIndex = i
-
-				break
-			end
-		end
+		curVersionIndex = #versions.names
 	end
 
-	if not maxIndex then
-		debug.print({"Error max index is", maxIndex})
+	if not curVersionIndex then
 		return nil, {}
 	end
 
-	local isUpgrade = maxIndex >= lastVersionIndex
+	local isUpgrade = curVersionIndex >= lastVersionIndex
 
 	local changeList = {}
 
-	-- lastVersionIndex + 1 to exclude changes already present in a version
+	-- lower index + 1 to exclude changes already present in the lowest version
 	if isUpgrade then
-		for i = lastVersionIndex + 1, maxIndex, 1 do
+		for i = lastVersionIndex + 1, curVersionIndex, 1 do
 			changeList[#changeList + 1] = versions.names[i]
 		end
 	else
-		for i = maxIndex, lastVersionIndex + 1, -1 do
+		for i = lastVersionIndex, curVersionIndex + 1, -1 do
 			changeList[#changeList + 1] = versions.names[i]
 		end
 	end
