@@ -1048,7 +1048,6 @@ L.label_crosshair_ironsight_opacity = "Непрозрачность прицел
 L.label_crosshair_size = "Размер прицела"
 L.label_crosshair_thickness = "Толщина прицела"
 L.label_crosshair_thickness_outline = "Толщина обводки прицела"
-L.label_crosshair_static_enable = "Включить статичный прицел."
 L.label_crosshair_dot_enable = "Включить точку прицела."
 L.label_crosshair_lines_enable = "Включить линии прицела."
 L.label_crosshair_scale_enable = "Включить разные размеры прицела для разного оружия."
@@ -1765,7 +1764,6 @@ L.label_sprint_enabled = "Включить ускорение"
 L.label_sprint_max = "Максимальная выносливость ускорения"
 L.label_sprint_stamina_consumption = "Коэффициент потребления выносливости"
 L.label_sprint_stamina_regeneration = "Коэффициент восстановления выносливости"
-L.label_sprint_crosshair = "Показывать прицел при ускорении"
 L.label_crowbar_unlocks = "Основная атака может использоваться для взаимодействия (например, открытия)"
 L.label_crowbar_pushforce = "Сила толчка монтировки"
 
@@ -2102,6 +2100,18 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
+
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the payer's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.

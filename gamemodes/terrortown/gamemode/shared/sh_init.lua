@@ -543,6 +543,7 @@ include("ttt2/libraries/pon.lua")
 
 -- include extensions
 include("ttt2/extensions/math.lua")
+include("ttt2/extensions/player.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")

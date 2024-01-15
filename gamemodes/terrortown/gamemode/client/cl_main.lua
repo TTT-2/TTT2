@@ -294,6 +294,8 @@ function GM:InitPostEntity()
 
 	local client = LocalPlayer()
 
+	client:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
+
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
@@ -360,6 +362,8 @@ function GM:OnReloaded()
 	vskin.UpdatedVSkin(skinName, skinName)
 
 	keyhelp.InitializeBasicKeys()
+
+	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
 
 	---
 	-- @realm shared

@@ -7,6 +7,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+- Reworked the way the player camera is handled (by @TimGoll)
+  - Added FOV change on speed change
+  - Added view bobbing on walking, swimming, falling and strafing
+  - Added convars to disable those changes
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
@@ -18,7 +22,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed third argument of `TTT2CanOrderEquipment`-Hook, no message is outputted anymore
 - dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
-- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair
+- Decreased shooting accuracy while sprinting or in air (by @TimGoll)
+- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
 
 ### Fixed
 
@@ -46,6 +51,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
+- Crosshair now spreads while sprinting instead of being hidden
 - Keyhelp and weapon HUD Help now use the global scale factor
 
 ### Fixed
@@ -62,6 +68,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Errors when looking at a player's corpse that disconnected (by @EntranceJew)
 - Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)
 - Shopeditor now correctly shows resetted and default values
+
+### Removed
+
+- Removed some crosshair related convars: `ttt_crosshair_static`, `ttt2_sprint_crosshair`
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 

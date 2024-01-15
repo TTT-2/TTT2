@@ -9,6 +9,15 @@ local net = net
 local IsValid = IsValid
 local hook = hook
 
+---@class Player
+local plymeta = FindMetaTable("Player")
+if not plymeta then
+	Error("FAILED TO FIND PLAYER TABLE")
+
+	return
+end
+
+
 ---
 -- @realm server
 local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -30,6 +39,24 @@ CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 util.AddNetworkString("ttt2_damage_received")
+util.AddNetworkString("ttt2_set_player_setting")
+
+---
+-- Update the sprinting FOV on the player if the setting is enabled.
+-- @realm server
+function plymeta:UpdateSprintingFOV()
+	local mul = self:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(self)
+
+	if not self:GetPlayerSetting("enable_dynamic_fov") then return end
+
+	local newFOV = (self:GetPlayerSetting("fov_desired") or 85) * mul ^ (1 / 6)
+
+	if self.lastFOV ~= newFOV then
+		self.lastFOV = newFOV
+
+		self:SetFOV(newFOV, 0.25, nil, true)
+	end
+end
 
 ---
 -- First spawn on the server.
@@ -1346,6 +1373,30 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	net.Send(ent)
 end
 
+net.Receive("ttt2_set_player_setting", function(_, ply)
+	if not IsValid(ply) then return end
+
+	local identifier = net.ReadString()
+	local data = net.ReadString()
+
+	-- make sure that the setting is registered on the server
+	if not player.playerSettingRegistry[identifier] then return end
+
+	local oldValue = ply.playerSettings[identifier]
+
+	if player.playerSettingRegistry[identifier] == "number" then
+		ply.playerSettings[identifier] = tonumber(data)
+	elseif player.playerSettingRegistry[identifier] == "bool" then
+		ply.playerSettings[identifier] = tobool(data)
+	else
+		ply.playerSettings[identifier] = data
+	end
+
+	---
+	-- @realm server
+	hook.Run("TTT2PlayerSettingChanged", ply, identifier, oldValue, ply.playerSettings[identifier])
+end)
+
 ---
 -- Called whenever an @{NPC} is killed
 -- @param NPC npc The killed @{NPC}
@@ -1503,4 +1554,24 @@ function GM:AllowPVP()
 	local rs = GetRoundState()
 
 	return rs ~= ROUND_PREP and (rs ~= ROUND_POST or ttt_postdm:GetBool())
+end
+
+---
+-- A hook that is called on change of a player setting on the server.
+-- @param Player ply The player whose setting was changed
+-- @param string identifier The setting's identifier
+-- @param any oldValue The old value of the setting
+-- @param any newValue The new value of the settings
+-- @hook
+-- @realm server
+function GM:TTT2PlayerSettingChanged(ply, identifier, oldValue, newValue)
+	if IsValid(ply) and identifier == "enable_dynamic_fov" then
+		if newValue then
+			ply:UpdateSprintingFOV()
+		else
+			ply.lastFOV = 0
+
+			ply:SetFOV(0, 0.25, nil, true)
+		end
+	end
 end
