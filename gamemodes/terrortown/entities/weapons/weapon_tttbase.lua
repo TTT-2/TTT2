@@ -1115,7 +1115,7 @@ end
 -- @realm shared
 function SWEP:Think()
 	local vm = self:GetOwner():GetViewModel()
-	
+
 	if self.idleResetFix and self.ViewModel and vm:GetCycle() >= 1 and not IsIdleActivity(vm) then
 		self:SendWeaponAnim( self.IdleAnim or ACT_VM_IDLE )
 	end
