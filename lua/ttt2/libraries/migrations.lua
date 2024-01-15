@@ -47,12 +47,10 @@ function migrations.MigrateToVersion(newVersion)
 
 	if isUpgrade == nil then
 		ErrorNoHalt("[TTT2] Migration failed. This Version " .. tostring(newVersion)
-		.. " or the last saved version " .. tostring(versions.GetLastVersion())
-		.. " could not be valid.\n")
+			.. " or the last saved version " .. tostring(versions.GetLastVersion())
+			.. " could not be valid.\n")
 		return false
 	end
-
-	commandsList = {}
 
 	local migrationSuccess = true
 	local errorMessage = ""
@@ -61,7 +59,7 @@ function migrations.MigrateToVersion(newVersion)
 		local version = changeList[i]
 		local commands = migrations.commands[version]
 
-		if not commands then continue end
+		if not istable(commands) then continue end
 
 		if isUpgrade then
 			for j = 1, #commands do
