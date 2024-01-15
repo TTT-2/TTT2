@@ -24,6 +24,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
+- Updated the Turkish localization file (by @NovaDiablox)
 
 ### Fixed
 
