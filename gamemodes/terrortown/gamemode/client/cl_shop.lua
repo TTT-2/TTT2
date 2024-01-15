@@ -57,8 +57,8 @@ function shop.SetFavoriteState(equipmentId, isFavorite)
 
 	if isFavorite and not favoriteItem then
 		favoriteItem = favOrm:New({
-				name = equipmentId,
-			})
+			name = equipmentId,
+		})
 		favoriteItem:Save()
 	elseif favoriteItem then
 		favoriteItem:Delete()
