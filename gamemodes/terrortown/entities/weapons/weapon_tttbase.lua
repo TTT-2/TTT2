@@ -1103,6 +1103,7 @@ local idle_activities = {
 	[ACT_VM_IDLE_DEPLOYED_1] = true,
 	[ACT_VM_IDLE_M203] = true,
 }
+
 local function IsIdleActivity(vm)
 	return idle_activities[ vm:GetSequenceActivity( vm:GetSequence() ) ] or false
 end
