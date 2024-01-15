@@ -12,7 +12,7 @@ local function Downgrade(cmd)
 	print(cmd.endMessage)
 end
 
-migrations.add(version,
+migrations.Add(version,
 	migrations.CreateCommand(
 		states,
 		Upgrade,

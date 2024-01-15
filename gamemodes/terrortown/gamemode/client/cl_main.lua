@@ -16,6 +16,7 @@ surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
 ttt_include("sh_init")
+ttt_include("sh_versions")
 
 ttt_include("sh_cvar_handler")
 
