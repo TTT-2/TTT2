@@ -13,6 +13,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Refactored client shop logic into separate shop-class (by @ZenBre4ker)
 - dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
+- Brought `c4`, `defuser`, `flaregun`, `health_station`, `radio` weapons down from upstream (by @a7f3)
+- Updated help text for `c4`, `defuser`, `flaregun`, `health_station`, `radio`, `knife`, `phammer`, `push`, and `zm_carry` weapons (by @a7f3)
 
 ### Fixed
 
