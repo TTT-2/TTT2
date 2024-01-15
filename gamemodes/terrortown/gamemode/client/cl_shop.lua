@@ -10,6 +10,11 @@ shop.favorites.databaseName = "ttt2_shop_favorites"
 shop.favorites.orm = nil
 shop.favorites.savingKeys = {}
 
+---
+-- Gets the orm of shop favorites
+-- If the table is not existing, it also creates it
+-- @return ORMMODEL Returns the model of the favorites database table
+-- @realm client
 local function GetFavoritesORM()
 	local favorites = shop.favorites
 
