@@ -975,7 +975,7 @@ L.menu_guide_description = "幫助你開始遊玩 TTT2 並解釋玩法和身份�
 L.menu_bindings_description = "將 TTT2 和其插件的功能綁到你想要的鍵位"
 L.menu_language_description = "選擇遊戲語言"
 L.menu_appearance_description = "調整界面的樣式和性能"
-L.menu_gameplay_description = "避免特定身份和其他遊戲相關選項"
+--L.menu_gameplay_description = "Tweak some features."
 L.menu_addons_description = "配置本地插件"
 L.menu_legacy_description = "舊TTT的菜單，應該已被導入新系統"
 L.menu_administration_description = "界面和商店的通用管理菜單"
@@ -1002,8 +1002,6 @@ L.submenu_appearance_interface_title = "界面"
 L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
-L.submenu_gameplay_avoidroles_title = "避免特定身份"
-
 L.submenu_administration_hud_title = "HUD 設置"
 L.submenu_administration_randomshop_title = "隨機商店"
 
@@ -1090,7 +1088,6 @@ L.header_damage_indicator = "傷害指示設置"
 L.header_performance_settings = "性能設置"
 L.header_interface_settings = "界面設置"
 L.header_gameplay_settings = "遊戲性設置"
-L.header_roleselection = "啟用身份分配"
 L.header_hud_administration = "選擇默認和強製 HUD"
 L.header_hud_enabled = "啟用/禁用 HUDs"
 

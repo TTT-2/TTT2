@@ -975,7 +975,7 @@ L.menu_guide_description = "Hilft dir mit TTT2 zurecht zu kommen und erklärt ei
 L.menu_bindings_description = "Belege Tasten von TTT2 und seinen Erweiterungen nach deinem Geschmack"
 L.menu_language_description = "Stelle die Sprache des Spiels ein"
 L.menu_appearance_description = "Verändere die Erscheinung und Performance der UI"
-L.menu_gameplay_description = "Vermeide Rollen und verändere ein paar andere Funktionen"
+--L.menu_gameplay_description = "Tweak some features."
 L.menu_addons_description = "Stelle lokale Addons nach deinem Geschmack ein"
 L.menu_legacy_description = "Einstellungen von alten TTT Erweiterungen, die zum neuen UI-System konvertiert werden sollten"
 L.menu_administration_description = "Allgemeine Einstellungen für HUDs, Ausrüstung und Shops"
@@ -1002,8 +1002,6 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Verschiedenes"
 
 L.submenu_gameplay_general_title = "Allgemein"
-L.submenu_gameplay_avoidroles_title = "Vermeide Rollen"
-
 L.submenu_administration_hud_title = "HUD Einstellungen"
 L.submenu_administration_randomshop_title = "Zufälliger Shop"
 
@@ -1090,7 +1088,6 @@ L.header_damage_indicator = "Schadensanzeigen Einstellungen"
 L.header_performance_settings = "Performance Einstellungen"
 L.header_interface_settings = "Anzeigeeinstellungen"
 L.header_gameplay_settings = "Spieleinstellungen"
-L.header_roleselection = "Aktierung Rollenzuweisung"
 L.header_hud_administration = "Wähle Standard-HUD und Erzwungenes-HUD"
 L.header_hud_enabled = "De-/aktiviere HUDs"
 

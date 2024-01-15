@@ -744,7 +744,7 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:GetAvoidRole(role)
-	return self:GetInfoNum("ttt_avoid_" .. roles.GetByIndex(role).name, 0) > 0
+	return false
 end
 
 ---
@@ -754,7 +754,7 @@ end
 -- @realm server
 -- @deprecated
 function plymeta:GetAvoidDetective()
-	return self:GetAvoidRole(ROLE_DETECTIVE)
+	return false
 end
 
 ---
@@ -765,13 +765,18 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:CanSelectRole(roleData, choice_count, role_count)
-	local min_karmas = ConVarExists("ttt_" .. roleData.name .. "_karma_min") and GetConVar("ttt_" .. roleData.name .. "_karma_min"):GetInt() or 0
+	-- if there aren't enough players anymore to have a greater role variety
+	if choice_count <= role_count then return true end
 
-	return (
-		choice_count <= role_count
-		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID64()] == ROLE_INNOCENT
-		or math.random(3) == 2
-	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
+	-- or the player has enough karma
+	local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
+	local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
+	if KARMA.cv.enabled:GetBool() and self:GetBaseKarma() > minKarma then return true end
+
+	-- or if the randomness decides
+	if math.random(3) == 2 then return true end
+
+	return false
 end
 
 ---

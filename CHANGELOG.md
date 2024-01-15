@@ -30,6 +30,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
 - Grenades have icons
+- Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
+- Role avoidance is no longer an option
 
 ### Fixed
 
