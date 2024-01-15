@@ -9,6 +9,11 @@ local IsValid = IsValid
 local hook = hook
 local math = math
 
+-- Distinguish between 3 modes to reset, add or remove equipped items
+EQUIPITEMS_RESET = 0
+EQUIPITEMS_ADD = 1
+EQUIPITEMS_REMOVE = 2
+
 ---@class Player
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -783,6 +788,26 @@ end
 -- @realm shared
 function plymeta:GetEquipmentItems()
 	return self.equipmentItems or {}
+end
+
+---
+-- Resets the equipment item table to the provided one
+-- @param[opt] table items The table with the item entities
+-- @realm shared
+function plymeta:SetEquipmentItems(items)
+	self.equipmentItems = items or {}
+
+	if SERVER then
+		-- we use this instead of SendEquipment here to prevent any of the
+		-- equipment reset functions to be triggered
+		net.SendStream("TTT2_SetEquipmentItems", self.equipmentItems, self)
+	end
+end
+
+if CLIENT then
+	net.ReceiveStream("TTT2_SetEquipmentItems", function(equipmentItems)
+		LocalPlayer():SetEquipmentItems(equipmentItems)
+	end)
 end
 
 ---

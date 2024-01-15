@@ -174,6 +174,54 @@ local function TargetPlayer()
 end
 net.Receive("TTT2TargetPlayer", TargetPlayer)
 
+local function UpdateCredits()
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
+	client.equipment_credits = net.ReadUInt(8)
+end
+net.Receive("TTT_Credits", UpdateCredits)
+
+local function UpdateEquipment()
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
+	local mode = net.ReadUInt(2)
+
+	local equipItems = client:GetEquipmentItems()
+
+	if mode == EQUIPITEMS_RESET then
+		for i = #equipItems, 1, -1 do
+			local itemName = equipItems[i]
+			local item = items.GetStored(itemName)
+
+			if item and isfunction(item.Reset) then
+				item:Reset(client)
+			end
+		end
+
+		table.Empty(equipItems)
+	else
+		local itemName = net.ReadString()
+		local item = items.GetStored(itemName)
+
+		if mode == EQUIPITEMS_ADD then
+			equipItems[#equipItems + 1] = itemName
+
+			if item and isfunction(item.Equip) then
+				item:Equip(client)
+			end
+		elseif mode == EQUIPITEMS_REMOVE then
+			table.RemoveByValue(equipItems, itemName)
+
+			if item and isfunction(item.Reset) then
+				item:Reset(client)
+			end
+		end
+	end
+end
+net.Receive("TTT_Equipment", UpdateEquipment)
+
 ---
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
@@ -292,9 +340,10 @@ function plymeta:GetRevivalReason()
 end
 
 ---
--- Sets a shared playersetting from the client on both server and client.
+-- Sets a shared playersetting from the client on both server and client. Make sure the
+-- variable is registered with `RegisterSettingOnServer` as the setting is otherwise discarded.
 -- @param string identifier The identifier of the shared setting
--- @param any value The setting's value
+-- @param any value The setting's value, it is parsed as a string before transmitting
 -- @realm client
 function plymeta:SetSettingOnServer(identifier, value)
 	if self.playerSettings[identifier] == value then return end
@@ -303,7 +352,7 @@ function plymeta:SetSettingOnServer(identifier, value)
 
 	net.Start("ttt2_set_player_setting")
 	net.WriteString(identifier)
-	net.WriteTable({value}, true) -- use table to support any data type
+	net.WriteString(tostring(value))
 	net.SendToServer()
 end
 
@@ -313,10 +362,10 @@ local position = 0
 
 local frameCount = 10
 
+local lastStrafeValue = 0
+
 -- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
-	if not cvEnableBobbing:GetBool() then return end
-
 	local observerTarget = ply:GetObserverTarget()
 
 	-- handle observing players
@@ -340,6 +389,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 	}
 
 	local eyeAngles = ply:EyeAngles()
+	local strafeValue = 0
 
 	-- handle landing on ground
 	if airtime > 0 then
@@ -356,10 +406,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
-		-- strafe angles
-		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.02
-		end
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.015
 
 	-- handle swimming
 	elseif ply:WaterLevel() > 0 then
@@ -368,10 +415,7 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
-		-- strafe angles
-		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
-		end
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.005
 
 	-- handle walking
 	else
@@ -380,15 +424,28 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
 		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
 		position = position + velocity * FrameTime() * 0.1
 
-		-- strafe angles
-		if cvEnableBobbingStrafe:GetBool() then
-			view.angles.r = angles.r + eyeAngles:Right():Dot(velocityMultiplier) * 0.005
-		end
-
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.006
 	end
 
-	view.angles.r = angles.r + math.sin(position * 0.5) * velocity * 0.001
-	view.angles.p = angles.p + math.sin(position * 0.25) * velocity * 0.001
+	strafeValue = math.Round(strafeValue, 2)
+	lastStrafeValue = math.Round(lastStrafeValue, 2)
+
+	if strafeValue > lastStrafeValue then
+		lastStrafeValue = math.min(strafeValue, lastStrafeValue + FrameTime() * 35.0)
+	elseif strafeValue < lastStrafeValue then
+		lastStrafeValue = math.max(strafeValue, lastStrafeValue - FrameTime() * 35.0)
+	else
+		lastStrafeValue = strafeValue
+	end
+
+	if cvEnableBobbing:GetBool() then
+		view.angles.r = view.angles.r + math.sin(position * 0.5) * velocity * 0.001
+		view.angles.p = view.angles.p + math.sin(position * 0.25) * velocity * 0.001
+	end
+
+	if cvEnableBobbingStrafe:GetBool() then
+		view.angles.r = view.angles.r + lastStrafeValue
+	end
 
 	return view
 end)

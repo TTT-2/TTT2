@@ -225,7 +225,6 @@ Hides your ID info while on. Also avoids being the person last seen by a victim.
 Toggle in the Disguise tab of this menu or press Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Press {usekey} to arm or disarm."
 L.c4_disarm_warn = "A C4 explosive you planted has been disarmed."
 L.c4_armed = "You have successfully armed the bomb."
 L.c4_disarmed = "You have successfully disarmed the bomb."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DISARMED"
 
 -- Visualizer
 L.vis_name = "Visualizer"
-L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
 L.vis_desc = [[
 Crime scene visualization device.
@@ -2065,6 +2063,10 @@ L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+L.newton_force = "FORCE"
+
 -- 2023-12-14
 L.beacon_help_pri = "Throw Beacon on the ground"
 L.beacon_help_sec = "Stick Beacon to surface"
@@ -2115,6 +2117,9 @@ For the poltergeist, this would affect each "thump" and the final explosion.
 2 = Deal twice the amount of damage.
 
 Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+L.binoc_help_reload = "Clear target."
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"

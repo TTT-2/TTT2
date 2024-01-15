@@ -225,7 +225,6 @@ Ukrywa twój status, gdy jest włączone. Także unika, bycia ostanią osobą wi
 Przełącz w zakładce Przebrania w tym menu lub kliknij Enter na Numpadzie.]]
 
 -- C4
-L.c4_hint = "Kliknij {usekey}, by uzbroić lub rozbroić."
 L.c4_disarm_warn = "C4, które uzbroiłeś, zostało rozbrojone."
 L.c4_armed = "Pomyślnie uzbroiłeś bombę."
 L.c4_disarmed = "Pomyślnie rozbroiłeś bombę."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 
 -- Visualizer
 L.vis_name = "Wizualizer"
-L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
 L.vis_desc = [[
 Wizualizator chwili zabójstwa.
@@ -1046,6 +1044,7 @@ L.label_crosshair_ironsight_opacity = "Widoczność celownika z przycelowania"
 L.label_crosshair_size = "Wielkość celownika"
 L.label_crosshair_thickness = "Grubość celownika"
 L.label_crosshair_thickness_outline = "Grubość otoczki celownika"
+
 L.label_crosshair_scale_enable = "Umożliw różne wielkości"
 L.label_crosshair_ironsight_low_enabled = "Obniż broń podczas użycia celowniku mechanicznego"
 L.label_damage_indicator_enable = "Enable damage indicator"
@@ -2065,6 +2064,10 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2102,7 +2105,6 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20

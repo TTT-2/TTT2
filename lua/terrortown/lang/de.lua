@@ -225,7 +225,6 @@ Versteckt deine ID. Vermeidet außerdem, dass du die letzte vom Opfer gesehene P
 Schalte es im Reiter "Tarnung" ein oder aus oder drücke Enter auf dem Numpad.]]
 
 -- C4
-L.c4_hint = "Drücke {usekey} zum Scharfstellen oder Entschärfen."
 L.c4_disarm_warn = "Eine Ladung C4, die du platziert hast, ist entschärft worden."
 L.c4_armed = "Du hast die Bombe erfolgreich scharf gestellt."
 L.c4_disarmed = "Du hast die Bombe erfolgreich entschärft."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "ENTSCHÄRFT"
 
 -- Visualizer
 L.vis_name = "Visualisierer"
-L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.
@@ -2065,6 +2063,10 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2103,6 +2105,7 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
 --L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20

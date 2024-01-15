@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 このメニューの変装メニュー内かテンキーのEnterで切り替え。]]
 
 -- C4
-L.c4_hint = "{usekey}を押して起動もしくは解除"
 L.c4_disarm_warn = "C4が解除されてしまった。"
 L.c4_armed = "爆弾は起動完了だ。"
 L.c4_disarmed = "爆弾の解除に成功した。"
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "解除済み"
 
 -- Visualizer
 L.vis_name = "可視化装置"
-L.vis_hint = "{usekey}で拾う（探偵のみ）"
 
 L.vis_desc = [[
 殺害現場を可視化してくれる機械。
@@ -1046,7 +1044,6 @@ L.label_crosshair_ironsight_opacity = "アイアンサイトのクロスヘア�
 L.label_crosshair_size = "クロスヘアの大きさ"
 L.label_crosshair_thickness = "クロスヘアの太さ"
 L.label_crosshair_thickness_outline = "クロスヘアの外枠の太さ"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 L.label_crosshair_ironsight_low_enabled = "アイアンサイトを使用する場合は武器を提げる"
 L.label_damage_indicator_enable = "ダメージインジケーターを有効"
 L.label_damage_indicator_mode = "ダメージインジケーターのテーマを選択"
@@ -2065,6 +2062,10 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2102,7 +2103,6 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20

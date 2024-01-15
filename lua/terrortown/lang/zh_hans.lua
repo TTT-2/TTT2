@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 需要启用时，使用本页面的伪装菜单或按下小键盘回车键。]]
 
 -- C4
-L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
 L.c4_disarm_warn = "你所安放的C4已被拆除。"
 L.c4_armed = "C4安放成功。"
 L.c4_disarmed = "你成功拆除了C4。"
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "拆除"
 
 -- Visualizer
 L.vis_name = "显像器"
-L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
 
 L.vis_desc = [[
 可让犯罪现场显像化的仪器。
@@ -1046,7 +1044,7 @@ L.label_crosshair_ironsight_opacity = "瞄准时准星透明度"
 L.label_crosshair_size = "准星长度"
 L.label_crosshair_thickness = "准星粗细"
 L.label_crosshair_thickness_outline = "准星外框粗细"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
+
 L.label_crosshair_ironsight_low_enabled = "瞄准时降低武器模型"
 L.label_damage_indicator_enable = "启用伤害指示"
 L.label_damage_indicator_mode = "选择伤害指示主题"
@@ -2065,6 +2063,10 @@ L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2102,7 +2104,6 @@ L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20

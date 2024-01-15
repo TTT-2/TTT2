@@ -225,7 +225,6 @@ Cache votre ID. Évite de paraître comme la dernière personne vue avant de mou
 Activer/Désactiver le déguisement vers l'onglet Déguisement de ce menu ou appuyer sur Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Utilisez {usekey} pour amorcer ou désamorcer."
 L.c4_disarm_warn = "Un explosif C4 que vous avez planté a été désamorcé."
 L.c4_armed = "Vous avez amorcé le C4 avec succès."
 L.c4_disarmed = "Vous avez désamorcé le C4 avec succès."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DÉSARMÉE"
 
 -- Visualizer
 L.vis_name = "Visualiseur"
-L.vis_hint = "Appuyez sur {usekey} pour ramasser (Détectives seulement)."
 
 L.vis_desc = [[
 Dispositif de visualisation de scène de crime.
@@ -1046,7 +1044,6 @@ L.label_crosshair_ironsight_opacity = "Opacité du réticule du viseur"
 L.label_crosshair_size = "Taille du réticule"
 L.label_crosshair_thickness = "Épaisseur du réticule"
 L.label_crosshair_thickness_outline = "Épaisseur du contour du réticule"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Baissez votre arme lorsque vous utilisez le viseur"
 L.label_damage_indicator_enable = "Activer l'indicateur de dégâts"
 L.label_damage_indicator_mode = "Sélectionnez le thème de l'indicateur de dégâts"
@@ -2065,6 +2062,10 @@ L.search_eyes = "En utilisant vos compétences de détective, vous avez identifi
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2101,9 +2102,6 @@ L.body_confirm_one = "{finder} a confirmé la mort de {victim}."
 --L.label_enable_dynamic_fov = "Enable dynamic FOV change"
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
-
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
---L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.

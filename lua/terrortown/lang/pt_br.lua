@@ -225,7 +225,6 @@ Oculta sua identidade enquanto habilitado. Também evita ser a última pessoa vi
 Habilite-o na aba Disfarce deste menu ou aperte a tecla Enter do teclado numérico.]]
 
 -- C4
-L.c4_hint = "Pressione {usekey} para armar ou desarmar."
 L.c4_disarm_warn = "Um explosivo C4 que você plantou foi desarmado."
 L.c4_armed = "Você armou a bomba com sucesso."
 L.c4_disarmed = "Você desarmou a bomba com sucesso."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DESARMADO"
 
 -- Visualizer
 L.vis_name = "Visualizador"
-L.vis_hint = "Pressione {usekey} para pegar (somente Detetives)."
 
 L.vis_desc = [[
 Permite visualizar uma cena de crime.
@@ -1046,7 +1044,6 @@ L.label_crosshair_ironsight_opacity = "Opacidade da mira de ferro"
 L.label_crosshair_size = "Tamanho da mira"
 L.label_crosshair_thickness = "Espessura da mira"
 L.label_crosshair_thickness_outline = "Contorno da espessura da mira"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Mira de ferro para armas fracas"
 L.label_damage_indicator_enable = "Ativar indicador de dano"
 L.label_damage_indicator_mode = "Selecione o tema do indicador de dano"
@@ -2065,6 +2062,10 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2102,7 +2103,6 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20

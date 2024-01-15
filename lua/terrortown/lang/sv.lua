@@ -225,7 +225,6 @@ Döljer din identitet när den är påslagen. Hindrar även att man blir den sis
 Slå av/på i Förklädnads-fliken i den här menyn eller tryck Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Tryck på {usekey} för att armera eller desarmera."
 L.c4_disarm_warn = "En C4 som du har placerat har blivit desarmerad."
 L.c4_armed = "Du lyckades armera bomben."
 L.c4_disarmed = "Du lyckades desarmera bomben."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DESARMERAD"
 
 -- Visualizer
 L.vis_name = "Visualiserare"
-L.vis_hint = "Tryck {usekey} för att plocka upp (endast Detektiver)."
 
 L.vis_desc = [[
 Verktyg för brottsscens-visualisering.
@@ -1043,10 +1041,6 @@ L.help_title = "Hjälp och Inställningar"
 --L.label_crosshair_enable = "Enable crosshair"
 --L.label_crosshair_opacity = "Crosshair opacity"
 --L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
---L.label_crosshair_size = "Crosshair size multiplier"
---L.label_crosshair_thickness = "Crosshair thickness multiplier"
---L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 --L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
 --L.label_damage_indicator_enable = "Enable damage indicator"
 --L.label_damage_indicator_mode = "Select damage indicator theme"
@@ -2065,6 +2059,10 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2102,7 +2100,6 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20

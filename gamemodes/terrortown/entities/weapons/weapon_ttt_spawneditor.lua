@@ -44,6 +44,8 @@ SWEP.lastReload = 0
 
 SWEP.AllowDrop = false
 
+SWEP.builtin = true
+
 local previewData = {}
 
 if SERVER then

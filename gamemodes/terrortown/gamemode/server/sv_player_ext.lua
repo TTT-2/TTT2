@@ -157,7 +157,7 @@ function plymeta:SetDefaultCredits()
 end
 
 ---
--- Synces the amount of credits with the @{Player}
+-- Syncs the amount of credits with the @{Player}
 -- @realm server
 function plymeta:SendCredits()
 	net.Start("TTT_Credits")
@@ -169,33 +169,33 @@ end
 
 ---
 -- Gives a specific @{ITEM} (if possible)
--- @param string cls
+-- @param string className
 -- @return ITEM|nil
 -- @realm server
 -- @internal
-function plymeta:AddEquipmentItem(cls)
-	local item = items.GetStored(cls)
+function plymeta:AddEquipmentItem(className)
+	local item = items.GetStored(className)
 
-	if not item or item.limited and self:HasEquipmentItem(cls) then return end
+	if not item or item.limited and self:HasEquipmentItem(className) then return end
 
 	self.equipmentItems = self.equipmentItems or {}
-	self.equipmentItems[#self.equipmentItems + 1] = cls
+	self.equipmentItems[#self.equipmentItems + 1] = className
 
 	item:Equip(self)
 
-	self:SendEquipment()
+	self:SendEquipment(EQUIPITEMS_ADD, className)
 
 	return item
 end
 
 ---
 -- Removes a specific @{ITEM}
--- @param string cls
+-- @param string className
 -- @realm server
-function plymeta:RemoveEquipmentItem(cls)
-	if not self:HasEquipmentItem(cls) then return end
+function plymeta:RemoveEquipmentItem(className)
+	if not self:HasEquipmentItem(className) then return end
 
-	local item = items.GetStored(cls)
+	local item = items.GetStored(className)
 
 	if item and isfunction(item.Reset) then
 		item:Reset(self)
@@ -204,14 +204,14 @@ function plymeta:RemoveEquipmentItem(cls)
 	local equipItems = self:GetEquipmentItems()
 
 	for k = 1, #equipItems do
-		if equipItems[k] == cls then
+		if equipItems[k] == className then
 			table.remove(self.equipmentItems, k)
 
 			break
 		end
 	end
 
-	self:SendEquipment()
+	self:SendEquipment(EQUIPITEMS_REMOVE, className)
 end
 
 ---
@@ -221,17 +221,23 @@ end
 plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 
 ---
--- Synces the server stored equipment with the @{Player}
+-- Syncs the server stored equipment with the @{Player}
 -- @note We do this instead of an NW var in order to limit the info to just this ply
+-- @param number mode The mode to determine how the Equipment is handled on the client
+-- @param string itemName The name of the item to send, can be 'nil' if mode is EQUIPITEMS_RESET
 -- @realm server
-function plymeta:SendEquipment()
-	local arr = self:GetEquipmentItems()
+function plymeta:SendEquipment(mode, itemName)
+	if not mode then
+		ErrorNoHaltWithStack("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n")
+
+		return
+	end
 
 	net.Start("TTT_Equipment")
-	net.WriteUInt(#arr, 16)
+	net.WriteUInt(mode, 2)
 
-	for i = 1, #arr do
-		net.WriteString(arr[i])
+	if mode ~= EQUIPITEMS_RESET then
+		net.WriteString(itemName)
 	end
 
 	net.Send(self)
@@ -253,7 +259,7 @@ function plymeta:ResetEquipment()
 
 	self.equipmentItems = {}
 
-	self:SendEquipment()
+	self:SendEquipment(EQUIPITEMS_RESET)
 end
 
 ---
@@ -1620,27 +1626,36 @@ end
 ---
 -- Caches the weapons currently in the player inventory and removes them.
 -- These weapons can be restored at any time.
+-- @param boolean removeUnarmed force all weapons to be removed, including weapon_ttt_unarmed
 -- @note As long as a player has cached weapons, they are unable to pick up any weapon.
 -- @realm server
-function plymeta:CacheAndStripWeapons()
-	local cachedWeaponInventory = {}
+function plymeta:CacheAndStripWeapons(removeUnarmed)
+	self.cachedWeaponInventory = {}
+	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
 
 	local weps = self:GetWeapons()
 
 	for i = 1, #weps do
 		local wep = weps[i]
+		local wepClass = WEPS.GetClass(wep)
 
-		cachedWeaponInventory[#cachedWeaponInventory + 1] = {
-			cls = WEPS.GetClass(wep),
+		if not removeUnarmed and wepClass == "weapon_ttt_unarmed" then continue end
+
+		self.cachedWeaponInventory[#self.cachedWeaponInventory + 1] = {
+			cls = wepClass,
 			clip1 = wep:Clip1(),
 			clip2 = wep:Clip2()
 		}
 	end
 
-	self.cachedWeaponInventory = cachedWeaponInventory
-	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
 
+	-- we have to use this hack here instead of StripWeapon because StripWeapon calls
+	-- OnDrop which is not intended for the weapon caching
 	self:StripWeapons()
+
+	if not removeUnarmed then
+		self:Give("weapon_ttt_unarmed")
+	end
 end
 
 ---
@@ -1662,10 +1677,103 @@ function plymeta:RestoreCachedWeapons()
 	end
 
 	if self.cachedWeaponSelected then
-		self:SelectWeapon(self.cachedWeaponSelected)
+		local cachedWeaponSelected = self.cachedWeaponSelected
+
+		-- delay selection by .1 seconds to actually select the weapon
+		timer.Simple(0.1, function()
+			if not IsValid(self) then return end
+
+			self:SelectWeapon(cachedWeaponSelected)
+		end)
 	end
 
 	self:ResetCachedWeapons()
+end
+
+---
+-- Removes a cached weapon from the cache list.
+-- @param string wep The weapon class
+-- @realm server
+function plymeta:RemoveCachedWeapon(wep)
+	if not self:HasCachedWeapons() then return end
+
+	for i = 1, #self.cachedWeaponInventory do
+		local cachedWeapon = self.cachedWeaponInventory[i]
+
+		if cachedWeapon.cls ~= wep then continue end
+
+		table.remove(self.cachedWeaponInventory, i)
+
+		return
+	end
+end
+
+---
+-- Checks wether a player has cached items that can be restored.
+-- @return boolean Returns wether the player has a cached inventory
+-- @realm server
+function plymeta:HasCachedItems()
+	return self.cachedItemInventory ~= nil
+end
+
+---
+-- Caches the items currently in the player inventory and removes them.
+-- These items can be restored at any time.
+-- @realm server
+function plymeta:CacheAndStripItems()
+	if self:HasCachedItems() then return end
+
+	self.cachedItemInventory = self:GetEquipmentItems()
+
+	self:SetEquipmentItems(nil)
+end
+
+---
+-- Restores the cached items if there are any cached items. Does nothing if
+-- no items are cached.
+-- @realm server
+function plymeta:RestoreCachedItems()
+	if not self:HasCachedItems() then return end
+
+	-- make sure the player keeps any items received during this period
+	table.Merge(self.cachedItemInventory, self:GetEquipmentItems())
+
+	self:SetEquipmentItems(self.cachedItemInventory)
+
+	self.cachedItemInventory = nil
+end
+
+---
+-- Removes a cached item from the cache list.
+-- @param string item The item class
+-- @realm server
+function plymeta:RemoveCachedItem(item)
+	if not self:HasCachedItems() then return end
+
+	for i = 1, #self.cachedItemInventory do
+		local cachedItem = self.cachedItemInventory[i]
+
+		if cachedItem ~= item then continue end
+
+		table.remove(self.cachedItemInventory, i)
+
+		-- make sure equipment remove functions are called
+		items.GetStored(item):Reset(self)
+		self:SendEquipment(EQUIPITEMS_REMOVE, item)
+
+		return
+	end
+end
+
+---
+-- Used to reset the weapon cache at round restart.
+-- @internal
+-- @realm server
+function plymeta:ResetItemAndWeaponCache()
+	self.cachedWeaponInventory = nil
+	self.cachedWeaponSelected = nil
+
+	self.cachedItemInventory = nil
 end
 
 ---

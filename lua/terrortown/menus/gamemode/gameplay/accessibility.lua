@@ -21,14 +21,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		label = "help_enable_bobbing_strafe"
 	})
 
-	local masterEnb = form:MakeCheckBox({
+	form:MakeCheckBox({
 		label = "label_enable_bobbing",
 		convar = "ttt2_enable_bobbing"
 	})
 
 	form:MakeCheckBox({
 		label = "label_enable_bobbing_strafe",
-		convar = "ttt2_enable_bobbing_strafe",
-		master = masterEnb
+		convar = "ttt2_enable_bobbing_strafe"
 	})
 end

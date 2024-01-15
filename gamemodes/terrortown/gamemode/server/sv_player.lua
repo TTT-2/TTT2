@@ -1377,17 +1377,24 @@ net.Receive("ttt2_set_player_setting", function(_, ply)
 	if not IsValid(ply) then return end
 
 	local identifier = net.ReadString()
-	local tableData = net.ReadTable(true)
+	local data = net.ReadString()
 
-	if #tableData ~= 1 then return end
+	-- make sure that the setting is registered on the server
+	if not player.playerSettingRegistry[identifier] then return end
 
 	local oldValue = ply.playerSettings[identifier]
 
-	ply.playerSettings[identifier] = tableData[1]
+	if player.playerSettingRegistry[identifier] == "number" then
+		ply.playerSettings[identifier] = tonumber(data)
+	elseif player.playerSettingRegistry[identifier] == "bool" then
+		ply.playerSettings[identifier] = tobool(data)
+	else
+		ply.playerSettings[identifier] = data
+	end
 
 	---
 	-- @realm server
-	hook.Run("TTT2PlayerSettingChanged", ply, identifier, oldValue, tableData[1])
+	hook.Run("TTT2PlayerSettingChanged", ply, identifier, oldValue, ply.playerSettings[identifier])
 end)
 
 ---

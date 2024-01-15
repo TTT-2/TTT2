@@ -64,8 +64,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			{title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL},
 			{title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA},
 			{title = TryT("slot_weapon_class"), value = WEAPON_CLASS}
-		},
-		master = nil
+		}
 	})
 
 	form:MakeHelp({
@@ -79,7 +78,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "equipmenteditor_desc_not_random"
+		label = "equipmenteditor_desc_not_random",
+		master = master
 	})
 
 	form:MakeCheckBox({
@@ -89,7 +89,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "equipmenteditor_desc_global_limited"
+		label = "equipmenteditor_desc_global_limited",
+		master = master
 	})
 
 	form:MakeCheckBox({
@@ -99,7 +100,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "equipmenteditor_desc_team_limited"
+		label = "equipmenteditor_desc_team_limited",
+		master = master
 	})
 
 	form:MakeCheckBox({
@@ -109,7 +111,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "equipmenteditor_desc_player_limited"
+		label = "equipmenteditor_desc_player_limited",
+		master = master
 	})
 
 	form:MakeCheckBox({
@@ -124,12 +127,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
 	form:MakeCheckBox({
 		label = "equipmenteditor_name_allow_drop",
-		database = DatabaseElement(accessName, itemName, "AllowDrop"),
-		master = nil
+		database = DatabaseElement(accessName, itemName, "AllowDrop")
 	})
 
 	form:MakeHelp({
-		label = "equipmenteditor_desc_drop_on_death_type"
+		label = "equipmenteditor_desc_drop_on_death_type",
 	})
 
 	form:MakeComboBox({
@@ -139,8 +141,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			{title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT},
 			{title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE},
 			{title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY}
-		},
-		master = nil
+		}
 	})
 
 	form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
@@ -150,8 +151,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 63,
 		decimal = 0,
-		database = DatabaseElement(accessName, itemName, "minPlayers"),
-		master = master
+		database = DatabaseElement(accessName, itemName, "minPlayers")
 	})
 
 	form:MakeSlider({
@@ -159,8 +159,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 20,
 		decimal = 0,
-		database = DatabaseElement(accessName, itemName, "credits"),
-		master = master
+		database = DatabaseElement(accessName, itemName, "credits")
 	})
 
 	form:MakeHelp({
@@ -172,8 +171,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		min = 0,
 		max = 8,
 		decimal = 2,
-		database = DatabaseElement(accessName, itemName, "damageScaling"),
-		master = nil
+		database = DatabaseElement(accessName, itemName, "damageScaling")
 	})
 
 

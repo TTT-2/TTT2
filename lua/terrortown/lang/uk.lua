@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 Перемикайте маскування у відповідній вкладці цього меню або натисніть клавішу Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Натисніть {usekey}, щоб закласти або знешкодити."
 L.c4_disarm_warn = "Вибухівку C4, яку ви заклали, знешкодили."
 L.c4_armed = "Ви успішно заклали бомбу."
 L.c4_disarmed = "Ви успішно знешкодили бомбу."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "ЗНЕШКОД-\nЖЕНА"
 
 -- Visualizer
 L.vis_name = "Візуалізатор"
-L.vis_hint = "Натисніть {usekey}, щоб підібрати (Лише для Детективів)."
 
 L.vis_desc = [[
 Пристрій, який вміє візуалізувати злочини.
@@ -1043,10 +1041,7 @@ L.help_title = "Допомога та Налаштування"
 --L.label_crosshair_enable = "Enable crosshair"
 --L.label_crosshair_opacity = "Crosshair opacity"
 --L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
---L.label_crosshair_size = "Crosshair size multiplier"
---L.label_crosshair_thickness = "Crosshair thickness multiplier"
---L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
+
 --L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
 --L.label_damage_indicator_enable = "Enable damage indicator"
 --L.label_damage_indicator_mode = "Select damage indicator theme"
@@ -2065,6 +2060,10 @@ L.search_eyes = "Використовуючи свої навички детек
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2102,7 +2101,6 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
