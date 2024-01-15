@@ -1103,17 +1103,6 @@ local idle_activities = {
 local function IsIdleActivity(vm)
 	return idle_activities[ vm:GetSequenceActivity( vm:GetSequence() ) ] or false
 end
-local function IsCounterStrikeWeapon(str)
-	return string.StartsWith(string.lower(str):gsub("\\","/"), "models/weapons/cstrike/")
-end
-
-local silenced_weapons = {
-	weapon_ttt_sipistol = true,
-	weapon_ttt_tmp_s = true,
-	weapon_ttt_m4a1_s = true,
-}
-
-GLOBAL_ENABLE_IDLEFIX_FOR_DEBUGGING = false
 
 ---
 -- Called when the swep thinks.
@@ -1122,11 +1111,8 @@ GLOBAL_ENABLE_IDLEFIX_FOR_DEBUGGING = false
 -- @realm shared
 function SWEP:Think()
 	local vm = self:GetOwner():GetViewModel()
-	if (GLOBAL_ENABLE_IDLEFIX_FOR_DEBUGGING or self.idleResetFix)
-		and self.ViewModel and IsCounterStrikeWeapon(self.ViewModel)
-		and vm:GetCycle() >= 1 and not IsIdleActivity(vm)
-	then
-		self:SendWeaponAnim( silenced_weapons[ self:GetClass() ] and ACT_VM_IDLE_SILENCED or self.IdleAnim )
+	if self.idleResetFix and self.ViewModel and vm:GetCycle() >= 1 and not IsIdleActivity(vm) then
+		self:SendWeaponAnim( self.IdleAnim or ACT_VM_IDLE )
 	end
 
 	if CLIENT then

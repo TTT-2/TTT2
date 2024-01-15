@@ -40,6 +40,7 @@ SWEP.AmmoEnt = "item_ammo_pistol_ttt"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_m4a1.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
+SWEP.idleResetFix = true
 
 SWEP.IronSightsPos = Vector(-7.58, -9.2, 0.55)
 SWEP.IronSightsAng = Vector(2.599, -1.3, -3.6)
