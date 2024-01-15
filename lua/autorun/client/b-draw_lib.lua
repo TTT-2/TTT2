@@ -73,7 +73,9 @@ local function FetchAvatarAsset(id64, size)
 		local crcUrl = crc(url)
 
 		fetched_avatar_urls[key] = url
+
 		write("downloaded_assets/" .. crcUrl .. ".png", data)
+
 		return
 	end
 
