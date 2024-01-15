@@ -1036,17 +1036,12 @@ L.label_shop_show_slot = "Yuva işaretini göster"
 L.label_shop_show_custom = "Özel öğe işaretini göster"
 L.label_shop_show_fav = "Favori öğe işaretini göster"
 L.label_crosshair_enable = "Nişangahı etkinleştir"
-L.label_crosshair_gap_enable = "Özel nişangah boşluğunu etkinleştir"
-L.label_crosshair_gap = "Özel nişangah aralığı"
 L.label_crosshair_opacity = "Nişangah opaklığı"
 L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_static_enable = "Sabit nişangahı etkinleştir"
-L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
-L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
-L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
+--L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -1759,7 +1754,6 @@ L.label_sprint_enabled = "Koşmayı etkinleştir"
 L.label_sprint_max = "Maksimum koşma dayanıklılığı"
 L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
 L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
-L.label_sprint_crosshair = "Koşarken nişangahı göster"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
@@ -2083,6 +2077,7 @@ L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için p
 -- 2023-11-18
 L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 
+-- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 
@@ -2091,11 +2086,47 @@ L.builtin_marker = "Bütünleşik."
 L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
---L.newton_help_secondary = "Charged knockback shot"
 
---L.radio_help_primary = "Place the Radio"
---For a rifle, this would affect just the bullet.
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
+-- 2023-12-20
 L.decoy_help_pri = "Tuzağı yerleştirin."
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

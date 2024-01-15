@@ -39,6 +39,7 @@ SWEP.AmmoEnt = "item_ammo_pistol_ttt"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_fiveseven.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_fiveseven.mdl"
+SWEP.idleResetFix = true
 
 SWEP.IronSightsPos = Vector(-5.95, -4, 2.799)
 SWEP.IronSightsAng = Vector(0, 0, 0)

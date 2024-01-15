@@ -1036,17 +1036,12 @@ L.label_shop_show_slot = "Zeige Slot Symbol"
 L.label_shop_show_custom = "Zeige Symbol für benutzerdefiniertes Element"
 L.label_shop_show_fav = "Zeige Symbol für favorisiertes Element"
 L.label_crosshair_enable = "Aktiviere Fadenkreuz"
-L.label_crosshair_gap_enable = "Aktiviere benutzerdefinierte Fadenkreuz-Lücke"
-L.label_crosshair_gap = "Benutzerdefinierte Fadenkreuz-Lücke"
 L.label_crosshair_opacity = "Transparenz des Fadenkreuzes"
 L.label_crosshair_ironsight_opacity = "Durchlässigkeit des Fadenkreuz-Visiers"
 L.label_crosshair_size = "Fadenkreuz Größe"
 L.label_crosshair_thickness = "Fadenkreuz Dicke"
 L.label_crosshair_thickness_outline = "Dicke der Umrandung des Fadenkreuzes"
-L.label_crosshair_static_enable = "Aktiviere statisches Fadenkreuz"
-L.label_crosshair_dot_enable = "Aktiviere Fadenkreuz-Punkt"
-L.label_crosshair_lines_enable = "Aktiviere Fadenkreuz-Linien"
-L.label_crosshair_scale_enable = "Aktiviere die Skalierung des Fadenkreuzes"
+L.label_crosshair_scale_enable = "Aktiviere die dynamische Skalierung des Fadenkreuzes"
 L.label_crosshair_ironsight_low_enabled = "Senke Waffe beim Zielen durch Kimme und Korn"
 L.label_damage_indicator_enable = "Aktiviere Schadensanzeige"
 L.label_damage_indicator_mode = "Schadensanzeigen Thema"
@@ -1759,7 +1754,6 @@ L.label_sprint_enabled = "Aktiviere Sprinten"
 L.label_sprint_max = "Maximale Sprint-Ausdauer"
 L.label_sprint_stamina_consumption = "Faktor für den Verbrauch von Ausdauer"
 L.label_sprint_stamina_regeneration = "Faktor für die Regeneration von Ausdauer"
-L.label_sprint_crosshair = "Zeige Fadenkreuz beim Sprinten"
 L.label_crowbar_unlocks = "Der Primärangriff kann als Interaktion (z. B. Entsperren) verwendet werden"
 L.label_crowbar_pushforce = "Brechstangen-Schubsstärke"
 
@@ -2111,10 +2105,44 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --L.builtin_marker = "Built-in."
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
+L.decoy_help_pri = "Platziere die Attrappe."
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a rifle, this would affect just the bullet.
-L.decoy_help_pri = "Platziere die Attrappe."
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

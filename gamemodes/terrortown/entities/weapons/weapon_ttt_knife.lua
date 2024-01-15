@@ -30,6 +30,7 @@ SWEP.Base = "weapon_tttbase"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_knife_t.mdl"
 SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
+SWEP.idleResetFix = true
 
 SWEP.Primary.Damage = 50
 SWEP.Primary.ClipSize = -1
