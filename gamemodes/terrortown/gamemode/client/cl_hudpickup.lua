@@ -38,7 +38,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDWeaponPickedUp
 -- @local
 function GM:HUDWeaponPickedUp(wep)
-	if not IsValid(wep) then return end
+	if not IsValid(wep) or wep.silentPickup then return end
 
 	local client = LocalPlayer()
 

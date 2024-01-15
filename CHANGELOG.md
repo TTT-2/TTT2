@@ -11,18 +11,30 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added FOV change on speed change
   - Added view bobbing on walking, swimming, falling and strafing
   - Added convars to disable those changes
+- Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
+- Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
+- Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
 
 ### Changed
 
 - Refactored client shop logic into separate shop-class (by @ZenBre4ker)
+  - Enabled shared shop class to buy and check equipment
+  - Removed third argument of `TTT2CanOrderEquipment`-Hook, no message is outputted anymore
 - dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
+- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
 
 ### Fixed
 
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
+- Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
+
+### Breaking Changes
+
+- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
+  - Returned text and result are now replaced by a statusCode
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 

@@ -18,3 +18,14 @@ end
 function surface.CreateAdvancedFont(fontName, fontData)
 	fonts.AddFont(fontName, fontData.size, fontData)
 end
+
+---
+-- A function that takes a table with triangles and draws them to the screen.
+-- @note The draw color has to be set beforehand
+-- @param table tbl A table with triangles
+-- @realm client
+function surface.DrawPolyTable(tbl)
+	for i = 1, #tbl do
+		surface.DrawPoly(tbl[i])
+	end
+end
