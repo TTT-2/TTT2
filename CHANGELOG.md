@@ -14,6 +14,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
+- Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew)
+- Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)
+- `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
+  - Added `SWEP.IdleAnim` to allow specifying an idle animation.
+  - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
 
 ### Changed
 

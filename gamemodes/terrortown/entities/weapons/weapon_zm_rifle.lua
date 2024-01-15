@@ -44,6 +44,7 @@ SWEP.AmmoEnt = "item_ammo_357_ttt"
 SWEP.UseHands = true
 SWEP.ViewModel = Model("models/weapons/cstrike/c_snip_scout.mdl")
 SWEP.WorldModel = Model("models/weapons/w_snip_scout.mdl")
+SWEP.idleResetFix = true
 
 SWEP.IronSightsPos = Vector(5, -15, -2)
 SWEP.IronSightsAng = Vector(2.6, 1.37, 3.5)
