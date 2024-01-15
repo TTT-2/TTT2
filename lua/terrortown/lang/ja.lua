@@ -1046,7 +1046,6 @@ L.label_crosshair_ironsight_opacity = "アイアンサイトのクロスヘア�
 L.label_crosshair_size = "クロスヘアの大きさ"
 L.label_crosshair_thickness = "クロスヘアの太さ"
 L.label_crosshair_thickness_outline = "クロスヘアの外枠の太さ"
-L.label_crosshair_static_enable = "スタティッククロスヘアを有効"
 L.label_crosshair_dot_enable = "クロスヘアドットを有効"
 L.label_crosshair_lines_enable = "クロスヘアラインを有効"
 L.label_crosshair_scale_enable = "武器依存の武器スケールを有効にする"
@@ -1763,7 +1762,6 @@ L.label_sprint_enabled = "走行を有効"
 L.label_sprint_max = "走行用スタミナ最大値"
 L.label_sprint_stamina_consumption = "スタミナ消費率"
 L.label_sprint_stamina_regeneration = "スタミナ再生率"
-L.label_sprint_crosshair = "走行中のクロスヘアの表示"
 L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
 
@@ -2100,6 +2098,18 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
+
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the payer's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.

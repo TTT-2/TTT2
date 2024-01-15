@@ -53,7 +53,7 @@ function SWEP:SetZoom(state)
 	if not IsValid(owner) or not owner:IsPlayer() then return end
 
 	if state then
-		owner:SetFOV(35, 0.5)
+		owner:SetFOV(42, 0.5)
 	else
 		owner:SetFOV(0, 0.2)
 	end
@@ -69,14 +69,15 @@ function SWEP:SecondaryAttack()
 
 	self:SetIronsights(bIronsights)
 	self:SetZoom(bIronsights)
+
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
 ---
 -- @ignore
 function SWEP:PreDrop()
-	self:SetZoom(false)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	return self.BaseClass.PreDrop(self)
 end
@@ -87,6 +88,7 @@ function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
 	self:DefaultReload(ACT_VM_RELOAD)
+
 	self:SetIronsights(false)
 	self:SetZoom(false)
 end

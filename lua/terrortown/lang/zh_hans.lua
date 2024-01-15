@@ -1046,7 +1046,6 @@ L.label_crosshair_ironsight_opacity = "瞄准时准星透明度"
 L.label_crosshair_size = "准星长度"
 L.label_crosshair_thickness = "准星粗细"
 L.label_crosshair_thickness_outline = "准星外框粗细"
-L.label_crosshair_static_enable = "启用静态准星"
 L.label_crosshair_dot_enable = "启用准星中点"
 L.label_crosshair_lines_enable = "启用准星直线"
 L.label_crosshair_scale_enable = "启用武器对应准星大小"
@@ -1763,7 +1762,6 @@ L.label_sprint_enabled = "启用冲刺功能"
 L.label_sprint_max = "冲刺体力最大值"
 L.label_sprint_stamina_consumption = "体力消耗系数"
 L.label_sprint_stamina_regeneration = "体力恢复系数"
-L.label_sprint_crosshair = "冲刺时显示准星"
 L.label_crowbar_unlocks = "主要攻击键可以作为互动（即解锁）使用"
 L.label_crowbar_pushforce = "撬棍推动力"
 
@@ -2100,6 +2098,18 @@ L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
+
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the payer's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.

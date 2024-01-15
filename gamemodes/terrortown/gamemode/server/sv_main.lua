@@ -7,6 +7,7 @@ ttt_include("sh_cvar_handler")
 
 ttt_include("sh_sprint")
 ttt_include("sh_main")
+ttt_include("sh_shop")
 ttt_include("sh_shopeditor")
 ttt_include("sh_network_sync")
 ttt_include("sh_door")
@@ -309,6 +310,10 @@ function GM:Initialize()
 
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
+
+	-- register synced player variables
+	player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
+	player.RegisterSettingOnServer("fov_desired", "float")
 
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")
@@ -1359,6 +1364,10 @@ function GM:OnReloaded()
 	-- set the default random playermodel
 	self.playermodel = playermodels.GetRandomPlayerModel()
 	self.playercolor = COLOR_WHITE
+
+	-- register synced player variables
+	player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
+	player.RegisterSettingOnServer("fov_desired", "float")
 
 	---
 	-- @realm shared

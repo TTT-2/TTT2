@@ -1046,7 +1046,6 @@ L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
 L.label_crosshair_size = "Crosshair size"
 L.label_crosshair_thickness = "Crosshair thickness"
 L.label_crosshair_thickness_outline = "Crosshair outline thickness"
-L.label_crosshair_static_enable = "Enable static crosshair"
 L.label_crosshair_dot_enable = "Enable crosshair dot"
 L.label_crosshair_lines_enable = "Enable crosshair lines"
 L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
@@ -1763,7 +1762,6 @@ L.label_sprint_enabled = "Enable sprinting"
 L.label_sprint_max = "Max sprinting stamina"
 L.label_sprint_stamina_consumption = "Stamina consumption factor"
 L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
-L.label_sprint_crosshair = "Show crosshair while sprinting"
 L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -2100,6 +2098,18 @@ L.builtin_marker = "Built-in."
 L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 L.header_equipment_info = "Equipment information"
+
+-- 2023-12-22
+L.submenu_gameplay_accessibility_title = "Accessibility"
+
+L.header_accessibility_settings = "Accessibility Settings"
+
+L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+L.label_enable_bobbing = "Enable view bobbing"
+L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.

@@ -177,7 +177,7 @@ local function PreqLabels(parent, x, y)
 
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
-		local credits = shop.GetAvailableCredits()
+		local credits = client:GetCredits()
 		local cr = sel and sel.credits or 1
 
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
@@ -249,7 +249,34 @@ local function PreqLabels(parent, x, y)
 	tbl.info.img:SetImage("vgui/ttt/equip/icon_info")
 
 	tbl.info.Check = function(s, sel)
-		return EquipmentIsBuyable(sel, client)
+		if not istable(sel) then
+			return false, "X", "No table given."
+		end
+
+		local isBuyable, statusCode = shop.CanBuyEquipment(client, sel.id)
+		local iconText = isBuyable and "✔" or "X"
+		local tooltipText
+
+		if statusCode == shop.statusCode.SUCCESS then
+			tooltipText = "Ok"
+		elseif statusCode == shop.statusCode.INVALIDID then
+			ErrorNoHalt("[TTT2][ERROR] Missing id in table:", sel)
+			PrintTable(sel)
+			tooltipText = "No ID"
+		elseif statusCode == shop.statusCode.NOTBUYABLE then
+			tooltipText = "This equipment cannot be bought."
+		elseif statusCode == shop.statusCode.NOTENOUGHPLAYERS then
+			iconText = " " .. #util.GetActivePlayers() .. " / " .. sel.minPlayers
+			tooltipText = "Minimum amount of active players needed."
+		elseif statusCode == shop.statusCode.LIMITEDBOUGHT then
+			tooltipText = "This equipment is limited and is already bought."
+		elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
+			tooltipText = "Your role can't buy this equipment."
+		else
+			tooltipText = "Undefined statusCode " .. tostring(statusCode)
+		end
+
+		return isBuyable, iconText, tooltipText
 	end
 
 	for _, pnl in pairs(tbl) do
@@ -350,7 +377,7 @@ local function CreateEquipmentList(t)
 
 	local client = LocalPlayer()
 	local currole = client:GetSubRole()
-	local credits = shop.GetAvailableCredits()
+	local credits = client:GetCredits()
 
 	local itemSize = 64
 
@@ -486,7 +513,7 @@ local function CreateEquipmentList(t)
 					or items.IsItem(item.id) and item.limited and client:HasEquipmentItem(item.id)
 					-- already carrying a weapon for this slot
 					or ItemIsWeapon(item) and not CanCarryWeapon(item)
-					or not EquipmentIsBuyable(item, client)
+					or not shop.CanBuyEquipment(client, item.id)
 					-- already bought the item before
 					or item.limited and client:HasBought(item.id)
 				) or (item.credits or 1) > credits
@@ -504,7 +531,7 @@ local function CreateEquipmentList(t)
 			ic.PressedLeftMouse = function(self, doubleClick)
 				if not doubleClick or self.item.disabledBuy or not enableDoubleClickBuy:GetBool() then return end
 
-				shop.BuyEquipment(self.item.id)
+				shop.BuyEquipment(client, self.item.id)
 
 				---@cast eqframe -nil
 				eqframe:Close()
@@ -609,7 +636,7 @@ function TraitorMenuPopup()
 		eqframe:Close()
 	end
 
-	local credits = shop.GetAvailableCredits()
+	local credits = client:GetCredits()
 	local can_order = true
 	local name = GetTranslation("equip_title")
 
@@ -840,7 +867,7 @@ function TraitorMenuPopup()
 	end
 
 	-- Random Shop Rerolling
-	if GetGlobalBool("ttt2_random_shops") and GetGlobalBool("ttt2_random_shop_reroll") then
+	if shop.CanRerollShop(client) then
 		local dtransfer = CreateRerollMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))
@@ -891,7 +918,7 @@ function TraitorMenuPopup()
 
 		local choice = pnl.item
 
-		shop.BuyEquipment(choice.id)
+		shop.BuyEquipment(client, choice.id)
 
 		dframe:Close()
 	end

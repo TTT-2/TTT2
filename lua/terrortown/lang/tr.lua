@@ -1046,7 +1046,6 @@ L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_static_enable = "Sabit nişangahı etkinleştir"
 L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
 L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
 L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
@@ -1763,7 +1762,6 @@ L.label_sprint_enabled = "Koşmayı etkinleştir"
 L.label_sprint_max = "Maksimum koşma dayanıklılığı"
 L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
 L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
-L.label_sprint_crosshair = "Koşarken nişangahı göster"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
@@ -2100,6 +2098,18 @@ L.builtin_marker = "Bütünleşik."
 L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
+
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the payer's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.

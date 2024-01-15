@@ -18,9 +18,7 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	local isSlowed = false
 
 	-- Slow down ironsighters
-	local wep = ply:GetActiveWeapon()
-
-	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
+	if ply:IsInIronsights() then
 		baseMultiplier = 120 / 220
 		isSlowed = true
 	end
