@@ -54,37 +54,6 @@ local serverSizeVar = GetConVar("ttt_bem_sv_size")
 ---
 -- Some database functions of the shop
 
----
--- Get all favorites of a @{Player} based on the subrole
--- @param number steamid steamid of the @{Player}
--- @param number subrole subrole id
--- @return table list of all favorites based on the subrole
--- @realm client
-local function GetFavorites(steamid, subrole)
-	local query = ("SELECT weapon_id FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "'")
-
-	return sql.Query(query)
-end
-
----
--- Looks for weapon id in favorites table (result of GetFavorites)
--- @param table favorites favorites table
--- @param number id id of the @{WEAPON} or @{ITEM}
--- @return boolean
--- @realm client
-local function IsFavorite(favorites, id)
-	for _, value in pairs(favorites) do
-		local dbid = value["weapon_id"]
-
-		if dbid == tostring(id) then
-			return true
-		end
-	end
-
-	return false
-end
-
-
 local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
@@ -393,7 +362,6 @@ local function CreateEquipmentList(t)
 	-- temp table for sorting
 	local paneltablefav = {}
 	local paneltable = {}
-	local steamid = client:SteamID64()
 	local col = client:GetRoleColor()
 
 	for k = 1, #itms do
@@ -913,7 +881,6 @@ function TraitorMenuPopup()
 
 		local choice = pnl.item
 		local equipmentId = choice.id
-		local steamid = client:SteamID64()
 
 		shop.SetFavoriteState(equipmentId, not pnl.favorite)
 
