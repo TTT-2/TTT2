@@ -47,11 +47,11 @@ end
 -- @param bool isFavorite If the equipmentId is a favorite
 -- @realm client
 function shop.SetFavoriteState(equipmentId, isFavorite)
-	local favoritesORM = GetFavoritesORM()
-	local favoriteItem = favorites:Find(equipmentId)
+	local orm = GetFavoritesORM()
+	local favoriteItem = orm:Find(equipmentId)
 
 	if isFavorite and not favoriteItem then
-		favoriteItem = favoritesORM:New({
+		favoriteItem = orm:New({
 				name = equipmentId,
 			})
 		favoriteItem:Save()
