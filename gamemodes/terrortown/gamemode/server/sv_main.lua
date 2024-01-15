@@ -1048,6 +1048,8 @@ function PrepareRound()
 
 		ply:CancelRevival(nil, true)
 		ply:SendRevivalReason(nil)
+
+		ply:ResetItemAndWeaponCache()
 	end
 
 	---

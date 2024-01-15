@@ -50,6 +50,8 @@ SWEP.Spawnable = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
+SWEP.builtin = true
+
 ---
 -- @realm shared
 function SWEP:OnDrop()

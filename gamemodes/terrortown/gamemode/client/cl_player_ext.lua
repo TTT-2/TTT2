@@ -204,7 +204,7 @@ local function UpdateEquipment()
 				item:Equip(client)
 			end
 		elseif mode == EQUIPITEMS_REMOVE then
-			table.remove(equipItems, itemName)
+			table.RemoveByValue(equipItems, itemName)
 
 			if item and isfunction(item.Reset) then
 				item:Reset(client)
