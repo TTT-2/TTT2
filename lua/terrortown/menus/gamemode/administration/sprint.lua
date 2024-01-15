@@ -39,10 +39,4 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 2,
 		master = enbSprint
 	})
-
-	form:MakeCheckBox({
-		serverConvar = "ttt2_sprint_crosshair",
-		label = "label_sprint_crosshair",
-		master = enbSprint
-	})
 end

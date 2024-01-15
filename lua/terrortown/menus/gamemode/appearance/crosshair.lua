@@ -83,12 +83,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeCheckBox({
-		label = "label_crosshair_static_enable",
-		convar = "ttt_crosshair_static",
-		master = crossEnb
-	})
-
-	form:MakeCheckBox({
 		label = "label_crosshair_dot_enable",
 		convar = "ttt_crosshair_dot",
 		master = crossEnb

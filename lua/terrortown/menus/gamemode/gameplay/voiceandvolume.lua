@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 98
+CLGAMEMODESUBMENU.priority = 99
 CLGAMEMODESUBMENU.title = "submenu_gameplay_voiceandvolume_title"
 
 function CLGAMEMODESUBMENU:Populate(parent)

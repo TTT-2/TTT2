@@ -721,7 +721,7 @@ end
 -- Returns the language identifier for a specific spawnType/entType combination.
 -- @param number spawnType The type of the spawn
 -- @param number entType The specific entity type for the specific spawn type
--- @return string Returns the language identifer
+-- @return string Returns the language identifier
 -- @realm shared
 function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].name or "undefined_lang_identifier"

@@ -151,6 +151,16 @@ function util.GetNextAlivePlayer(ply)
 end
 
 ---
+-- Returns the list of active @{Player}s that are not forced spectators
+-- @return table List of active @{Player}s
+-- @realm shared
+function util.GetActivePlayers()
+	return util.GetFilteredPlayers(function(ply)
+		return IsValid(ply) and not ply:GetForceSpec()
+	end)
+end
+
+---
 -- Returns the previous available @{Player} based on the given @{Player} in the global list
 -- @param Player ply
 -- @return Player
