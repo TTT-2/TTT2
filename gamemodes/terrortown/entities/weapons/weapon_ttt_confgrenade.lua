@@ -28,7 +28,6 @@ SWEP.AutoSpawnable = true
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_eq_fraggrenade.mdl"
 SWEP.WorldModel = "models/weapons/w_eq_fraggrenade.mdl"
-SWEP.idleResetFix = true
 
 SWEP.Weight = 5
 

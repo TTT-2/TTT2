@@ -25,7 +25,6 @@ SWEP.spawnType = WEAPON_TYPE_NADE
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_eq_smokegrenade.mdl"
 SWEP.WorldModel = "models/weapons/w_eq_smokegrenade.mdl"
-SWEP.idleResetFix = true
 
 SWEP.Weight = 5
 SWEP.AutoSpawnable = true
