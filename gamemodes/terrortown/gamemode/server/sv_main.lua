@@ -7,6 +7,7 @@ ttt_include("sh_cvar_handler")
 
 ttt_include("sh_sprint")
 ttt_include("sh_main")
+ttt_include("sh_shop")
 ttt_include("sh_shopeditor")
 ttt_include("sh_network_sync")
 ttt_include("sh_door")

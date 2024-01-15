@@ -60,6 +60,7 @@ TTTFiles = {
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
 	sh_rolelayering = {file = "sh_rolelayering.lua", on = "shared"},
 	sh_scoring = {file = "sh_scoring.lua", on = "shared"},
+	sh_shop = {file = "sh_shop.lua", on = "shared"},
 	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
 	sh_sql = {file = "sh_sql.lua", on = "shared"},
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},

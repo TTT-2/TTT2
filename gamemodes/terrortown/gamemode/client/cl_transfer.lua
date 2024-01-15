@@ -121,7 +121,7 @@ function CreateTransferMenu(parent)
 
 	dsubmit.DoClick = function(s)
 		if selected_sid then
-			RunConsoleCommand("ttt_transfer_credits", selected_sid, CREDITS_PER_XFER)
+			shop.TransferCredits(client, selected_sid, CREDITS_PER_XFER)
 		end
 	end
 
