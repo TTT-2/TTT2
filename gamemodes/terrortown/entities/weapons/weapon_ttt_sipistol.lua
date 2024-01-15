@@ -3,19 +3,19 @@ AddCSLuaFile()
 SWEP.HoldType = "pistol"
 
 if CLIENT then
-    SWEP.PrintName = "sipistol_name"
-    SWEP.Slot = 6
+	SWEP.PrintName = "sipistol_name"
+	SWEP.Slot = 6
 
-    SWEP.ViewModelFlip = false
-    SWEP.ViewModelFOV = 54
+	SWEP.ViewModelFlip = false
+	SWEP.ViewModelFOV = 54
 
-    SWEP.EquipMenuData = {
-        type = "item_weapon",
-        desc = "sipistol_desc"
-    }
+	SWEP.EquipMenuData = {
+		type = "item_weapon",
+		desc = "sipistol_desc"
+	}
 
-    SWEP.Icon = "vgui/ttt/icon_silenced"
-    SWEP.IconLetter = "a"
+	SWEP.Icon = "vgui/ttt/icon_silenced"
+	SWEP.IconLetter = "a"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -52,13 +52,13 @@ SWEP.ReloadAnim = ACT_VM_RELOAD_SILENCED
 SWEP.IdleAnim = ACT_VM_IDLE_SILENCED
 
 function SWEP:Deploy()
-    self:SendWeaponAnim(ACT_VM_DRAW_SILENCED)
-    return self.BaseClass.Deploy(self)
+	self:SendWeaponAnim(ACT_VM_DRAW_SILENCED)
+	return self.BaseClass.Deploy(self)
 end
 
 -- We were bought as special equipment, and we have an extra to give
 function SWEP:WasBought(buyer)
-    if IsValid(buyer) then -- probably already self:GetOwner()
-        buyer:GiveAmmo( 20, "Pistol" )
-    end
+	if IsValid(buyer) then -- probably already self:GetOwner()
+		buyer:GiveAmmo( 20, "Pistol" )
+	end
 end
