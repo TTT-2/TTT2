@@ -47,6 +47,8 @@ SWEP.CanBuy = {ROLE_TRAITOR} -- only traitors can buy
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_RADIO
 
+SWEP.builtin = true
+
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 

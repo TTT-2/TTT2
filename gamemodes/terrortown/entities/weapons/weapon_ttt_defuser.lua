@@ -39,6 +39,8 @@ SWEP.Kind = WEAPON_EQUIP2
 SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
 SWEP.WeaponID = AMMO_DEFUSER
 
+SWEP.builtin = true
+
 local defuse = Sound("c4.disarmfinish")
 
 ---

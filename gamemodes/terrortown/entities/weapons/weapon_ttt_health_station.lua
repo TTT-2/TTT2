@@ -47,6 +47,8 @@ SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_HEALTHSTATION
 
+SWEP.builtin = true
+
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
@@ -60,13 +62,6 @@ end
 -- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:HealthDrop()
-end
-
----
--- @ignore
-function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:HealthDrop()
 end
 
