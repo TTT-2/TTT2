@@ -55,38 +55,6 @@ local serverSizeVar = GetConVar("ttt_bem_sv_size")
 -- Some database functions of the shop
 
 ---
--- Creates the fav table if it not already exists
--- @realm client
-local function CreateFavTable()
-	if not sql.TableExists("ttt_bem_fav") then
-		local query = "CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT)"
-		sql.Query(query)
-	end
-end
-
----
--- Adds a @{WEAPON} or an @{ITEM} into the fav table
--- @param number steamid steamid of the @{Player}
--- @param number subrole subrole id
--- @param string id the @{WEAPON} or @{ITEM} id
--- @realm client
-local function AddFavorite(steamid, subrole, id)
-	local query = ("INSERT INTO ttt_bem_fav VALUES('" .. steamid .. "','" .. subrole .. "','" .. id .. "')")
-	sql.Query(query)
-end
-
----
--- Removes a @{WEAPON} or an @{ITEM} into the fav table
--- @param number steamid steamid of the @{Player}
--- @param number subrole subrole id
--- @param string id the @{WEAPON} or @{ITEM} id
--- @realm client
-local function RemoveFavorite(steamid, subrole, id)
-	local query = ("DELETE FROM ttt_bem_fav WHERE guid = '" .. steamid .. "' AND role = '" .. subrole .. "' AND weapon_id = '" .. id .. "'")
-	sql.Query(query)
-end
-
----
 -- Get all favorites of a @{Player} based on the subrole
 -- @param number steamid steamid of the @{Player}
 -- @param number subrole subrole id
@@ -456,9 +424,7 @@ local function CreateEquipmentList(t)
 				-- Favorites marker icon
 				ic.favorite = false
 
-				local favorites = GetFavorites(steamid, currole)
-
-				if favorites and IsFavorite(favorites, item.id) then
+				if shop.IsFavorite(item.id) then
 					ic.favorite = true
 
 					if showFavoriteVar:GetBool() then
@@ -946,16 +912,10 @@ function TraitorMenuPopup()
 		if not pnl or not pnl.item then return end
 
 		local choice = pnl.item
-		local weapon = choice.id
+		local equipmentId = choice.id
 		local steamid = client:SteamID64()
 
-		CreateFavTable()
-
-		if pnl.favorite then
-			RemoveFavorite(steamid, role, weapon)
-		else
-			AddFavorite(steamid, role, weapon)
-		end
+		shop.SetFavoriteState(equipmentId, not pnl.favorite)
 
 		-- Reload item list
 		coroutine.resume(currentEquipmentCoroutine, {role = role, search = curSearch, notalive = notalive})

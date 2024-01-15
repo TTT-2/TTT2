@@ -10,6 +10,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
+- Readded global accessors to clientside shop favorites
+  - `shop.IsFavorite(equipmentId)`
+  - `shop.SetFavoriteState(equipmentId, isFavorite)`
+  - `shop.GetFavorites()`
 
 ### Changed
 
@@ -30,6 +34,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
   - Returned text and result are now replaced by a statusCode
+- Removed use of `ttt_bem_fav` sql-table storing all favorites for steamid and roles
+  - They are now stored under `ttt2_shop_favorites` for all users on one pc and all roles
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
