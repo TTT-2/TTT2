@@ -12,7 +12,7 @@ migrations.commands = {}
 
 function migrations.CreateCommand(states, upgrade, downgrade)
 	if not istable(states) or not isfunction(upgrade) or not isfunction(downgrade) then
-		ErrorNoHalt("[TTT2] Couldn't create migrations command. Missing states-table, upgrade- or downgrade-function.")
+		ErrorNoHalt("[TTT2] Couldn't create migrations command. Missing states-table, upgrade- or downgrade-function.\n")
 		states = {}
 		upgrade = function(cmd) return end
 		downgrade = function(cmd) return end
@@ -26,7 +26,7 @@ end
 
 function migrations.Add(version, command)
 	if not isstring(version) or not (istable(command) and command.isCommand) then
-		ErrorNoHalt("[TTT2] Couldn't add migration command. Missing version or command.")
+		ErrorNoHalt("[TTT2] Couldn't add migration command. Missing version or command.\n")
 		return false
 	end
 
@@ -48,7 +48,7 @@ function migrations.MigrateToVersion(newVersion)
 	if isUpgrade == nil then
 		ErrorNoHalt("[TTT2] Migration failed. This Version " .. tostring(newVersion)
 		.. " or the last saved version " .. tostring(versions.GetLastVersion())
-		.. " could not be valid.")
+		.. " could not be valid.\n")
 		return false
 	end
 
@@ -82,8 +82,8 @@ function migrations.MigrateToVersion(newVersion)
 	end
 
 	if not migrationSuccess then
-		ErrorNoHalt("[TTT2] Migration failed. Error: " .. tostring(errorMessage))
+		ErrorNoHalt("[TTT2] Migration failed. Error: " .. tostring(errorMessage) .. "\n")
 	end
-	
+
 	return migrationSuccess
 end

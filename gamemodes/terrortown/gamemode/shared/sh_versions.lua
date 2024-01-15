@@ -44,12 +44,20 @@ end
 -- Gets an ordered list of version changes since the last update
 -- This order is reversed in case a downgrade was done
 -- @note Returns `nil` and an empty list if version unknown
--- @param string|nil The version name you want to get the change list for, current one if `nil`
+-- @param string|nil currentVersion The version name you want to get the change list for, current one if `nil`
 -- @return bool|nil True if TTT2 was upgraded aka the current version is newer than the last one, `nil` on error
 -- @return table A table containing all last versions, that were not installed
 function versions.GetLastVersionChanges(currentVersion)
 	local lastVersion = versions.GetLastVersion()
-	local lastVersionIndex = versions.names[lastVersion]
+	local lastVersionIndex
+	
+	for i = #versions.names, 1, -1 do
+		if not versions.names[i] == currentVersion then continue end
+
+		lastVersionIndex = i
+
+		break
+	end
 
 	-- In case we have an unknown version number
 	-- Return an empty list as there is no order determinable
@@ -71,6 +79,7 @@ function versions.GetLastVersionChanges(currentVersion)
 	end
 
 	if not maxIndex then
+		debug.print({"Error max index is", maxIndex})
 		return nil, {}
 	end
 
