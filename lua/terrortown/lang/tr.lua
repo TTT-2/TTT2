@@ -3,7 +3,7 @@
 local L = LANG.CreateLanguage("tr")
 
 -- Compatibility language name that might be removed soon.
-
+-- the alias name is based on the original TTT language name
 
 L.__alias = "türkçe"
 
@@ -820,7 +820,6 @@ L.aw_tod2_text = "raundun başlamasından hemen sonra öldü."
 
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
--- New comment format for this language file is YY-MM-DD
 -- v24
 L.drop_no_ammo = "Silahının şarjöründe cephane kutusu olarak düşecek yeterli cephane yok."
 
