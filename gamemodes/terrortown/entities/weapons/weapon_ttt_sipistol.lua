@@ -51,12 +51,16 @@ SWEP.PrimaryAnim = ACT_VM_PRIMARYATTACK_SILENCED
 SWEP.ReloadAnim = ACT_VM_RELOAD_SILENCED
 SWEP.IdleAnim = ACT_VM_IDLE_SILENCED
 
+---
+--@ignore
 function SWEP:Deploy()
 	self:SendWeaponAnim(ACT_VM_DRAW_SILENCED)
 	return self.BaseClass.Deploy(self)
 end
 
+---
 -- We were bought as special equipment, and we have an extra to give
+--@ignore
 function SWEP:WasBought(buyer)
 	if IsValid(buyer) then -- probably already self:GetOwner()
 		buyer:GiveAmmo( 20, "Pistol" )
