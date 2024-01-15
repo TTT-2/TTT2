@@ -36,6 +36,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
+- Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
+
+### Removed
+
+- Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
 
 ### Breaking Changes
 
@@ -74,10 +79,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Errors when looking at a player's corpse that disconnected (by @EntranceJew)
 - Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)
 - Shopeditor now correctly shows resetted and default values
-
-### Removed
-
-- Removed some crosshair related convars: `ttt_crosshair_static`, `ttt2_sprint_crosshair`
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 
