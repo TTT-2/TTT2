@@ -30,6 +30,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
 - Updated the Turkish localization file (by @NovaDiablox)
+- Grenades have icons
 
 ### Fixed
 
