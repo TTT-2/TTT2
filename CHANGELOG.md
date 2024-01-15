@@ -7,6 +7,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+- Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
+- Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
+- Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping:
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
@@ -16,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Refactored client shop logic into separate shop-class (by @ZenBre4ker)
 - dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
+- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair
 
 ### Fixed
 

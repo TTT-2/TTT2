@@ -788,6 +788,26 @@ function plymeta:GetEquipmentItems()
 end
 
 ---
+-- Resets the equipment item table to the provided one
+-- @param[opt] table items The table with the item entities
+-- @realm shared
+function plymeta:SetEquipmentItems(items)
+	self.equipmentItems = items or {}
+
+	if SERVER then
+		-- we use this instead of SendEquipment here to prevent any of the
+		-- equipment reset functions to be triggered
+		net.SendStream("TTT2_SetEquipmentItems", self.equipmentItems, self)
+	end
+end
+
+if CLIENT then
+	net.ReceiveStream("TTT2_SetEquipmentItems", function(equipmentItems)
+		LocalPlayer():SetEquipmentItems(equipmentItems)
+	end)
+end
+
+---
 -- Given an equipment id, returns if @{Player} owns this. Given nil, returns if
 -- @{Player} has any equipment item.
 -- @param[opt] string id
