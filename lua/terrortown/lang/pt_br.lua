@@ -1044,6 +1044,7 @@ L.label_crosshair_ironsight_opacity = "Opacidade da mira de ferro"
 L.label_crosshair_size = "Tamanho da mira"
 L.label_crosshair_thickness = "Espessura da mira"
 L.label_crosshair_thickness_outline = "Contorno da espessura da mira"
+--L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Mira de ferro para armas fracas"
 L.label_damage_indicator_enable = "Ativar indicador de dano"
 L.label_damage_indicator_mode = "Selecione o tema do indicador de dano"
@@ -2103,6 +2104,7 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
@@ -2115,6 +2117,9 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
 
 -- 2024-01-05
 --L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
