@@ -19,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
+- Icon for `Voice & Volume` menu
 
 ### Changed
 
