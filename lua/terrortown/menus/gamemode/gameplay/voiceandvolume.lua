@@ -4,7 +4,6 @@ CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
 CLGAMEMODESUBMENU.priority = 99
 CLGAMEMODESUBMENU.title = "submenu_gameplay_voiceandvolume_title"
-CLGAMEMODESUBMENU.icon = Material("vgui/ttt/vskin/helpscreen/voiceandvolume")
 
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_soundeffect_settings")
