@@ -10,6 +10,13 @@ end
 migrations = {}
 migrations.commands = {}
 
+---
+-- Creates a command with state information, an up- and downgrade function
+-- @param table states The states that are needed to fulfill the upgrade
+-- @param function upgrade The function that is used for forward operations
+-- @param function downgrade The function that is used for reverting operations of this command
+-- @return @{command} A command containing necessary functionality for forward and backward operations
+-- @realm shared
 function migrations.CreateCommand(states, upgrade, downgrade)
 	if not istable(states) or not isfunction(upgrade) or not isfunction(downgrade) then
 		ErrorNoHalt("[TTT2] Couldn't create migrations command. Missing states-table, upgrade- or downgrade-function.\n")
@@ -24,6 +31,12 @@ function migrations.CreateCommand(states, upgrade, downgrade)
 	return command
 end
 
+---
+-- Adds a migration command for every version, that is executed on migration
+-- @param string version The version to add the command for
+-- @param @{command} The command to execute on migration
+-- @return bool True, if adding was successful
+-- @realm shared
 function migrations.Add(version, command)
 	if not isstring(version) or not (istable(command) and command.isCommand) then
 		ErrorNoHalt("[TTT2] Couldn't add migration command. Missing version or command.\n")

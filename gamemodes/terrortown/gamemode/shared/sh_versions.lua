@@ -1,6 +1,6 @@
 ---
 -- Shared list of versions
--- @note Used for migrations to get version order
+-- @note Used for migrations to get version order and store last saved version
 -- @author ZenBre4ker
 -- @class versions
 
@@ -8,12 +8,18 @@ versions = {}
 versions.databaseName = "ttt2_last_version"
 versions.orm = nil
 versions.savingKeys = {}
+versions.names = {
+	"0.12.0b",
+	"0.12.1b",
+	"0.12.2b",
+	"0.12.3b",
+}
 
 ---
 -- Gets the orm of versions
 -- If the table is not existing, it also creates it
 -- @return ORMMODEL Returns the model of the versions database table
--- @realm client
+-- @realm shared
 local function GetORM()
 	if istable(versions.orm) then
 		return versions.orm
@@ -34,11 +40,20 @@ local function GetORM()
 	return versions.orm
 end
 
+---
+-- Gets last stored version
+-- @note Returns current version if database wasnt created, a new installation is assumed
+-- @return string The last stored version
+-- @realm shared
 function versions.GetLastVersion()
 	local firstEntry = GetORM():All()[1]
 	return firstEntry and firstEntry.name or GAMEMODE.Version
 end
 
+---
+-- Gets the versionIndex of the version
+-- @return number|nil The index of the version, `nil` if none was found
+-- @realm shared
 function versions.GetVersionIndex(version)
 	local versionIndex
 	
@@ -60,6 +75,7 @@ end
 -- @param string|nil currentVersion The version name you want to get the change list for, current one if `nil`
 -- @return bool|nil True if TTT2 was upgraded aka the current version is newer than the last one, `nil` on error
 -- @return table A table containing all last versions, that were not installed
+-- @realm shared
 function versions.GetLastVersionChanges(currentVersion)
 	local lastVersion = versions.GetLastVersion()
 	local lastVersionIndex = versions.GetVersionIndex(lastVersion)
@@ -103,10 +119,18 @@ end
 -- Updates the saved version in the database to the current one
 -- @warning Dont use this manually as this could disable all migrations
 -- This should only be used by migrations after all changes were handled
-function versions.UpdateDatabase()
+-- @param string newVersion the new Version to update the database with
+-- @realm shared
+function versions.UpdateDatabase(newVersion)
+
+	if not isstring(newVersion) and not versions.GetVersionIndex(newVersion) then
+		ErrorNoHalt("[TTT2] Invalid new Version", tostring(newVersion), "to Update to.")
+		return
+	end
+
 	local lastVersion = versions.GetLastVersion()
 
-	if lastVersion == GAMEMODE.Version then return end
+	if lastVersion == newVersion then return end
 
 	local lastORM = GetORM():Find(lastVersion)
 
@@ -115,13 +139,6 @@ function versions.UpdateDatabase()
 	end
 
 	GetORM():New({
-		name = GAMEMODE.Version,
+		name = newVersion,
 	}):Save()
 end
-
-versions.names = {
-	"0.12.0b",
-	"0.12.1b",
-	"0.12.2b",
-	"0.12.3b",
-}

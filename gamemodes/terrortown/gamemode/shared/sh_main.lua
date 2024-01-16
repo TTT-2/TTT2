@@ -184,8 +184,8 @@ hook.Add("PreRegisterSWEP", "TTT2RegisterSWEP", TTT2RegisterSWEP)
 function GM:TTT2Initialize()
 	-- Migrate all changes of TTT2 for the new version
 	if migrations.MigrateToVersion(GAMEMODE.Version) then
-		-- OnSuccess Update the database to the new version
-		versions.UpdateDatabase()
+		-- On Success Update the database to the new version
+		versions.UpdateDatabase(GAMEMODE.Version)
 	end
 
 	-- load all roles
