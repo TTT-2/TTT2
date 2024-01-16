@@ -363,7 +363,6 @@ if CLIENT then
 			local xDot = xCenter - mathFloor(thicknessLine * 0.5)
 			local yDot = yCenter - mathFloor(thicknessLine * 0.5)
 
-
 			if cvEnableOutlineCrosshair:GetBool() then
 				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
 
