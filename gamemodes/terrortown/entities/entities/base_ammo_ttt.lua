@@ -103,9 +103,6 @@ function ENT:CheckForWeapon(ply)
 		self.CachedWeapons = tbl
 	end
 
-	local plyHasWeapon = ply.HasWeapon
-	local cached = self.CachedWeapons
-
 	return false
 end
 

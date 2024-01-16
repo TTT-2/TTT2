@@ -251,8 +251,6 @@ local function PlayerStandsOn(ent)
 end
 
 if SERVER then
-	local ent_diff = vector_origin
-	local ent_diff_time = CurTime()
 	local stand_time = 0
 
 	---
