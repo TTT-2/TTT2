@@ -360,8 +360,9 @@ if CLIENT then
 
 		-- draw crosshair dot
 		if cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_ONLY then
-			local xDot = mathFloor(xCenter - thicknessLine * 0.5)
-			local yDot = mathFloor(yCenter - thicknessLine * 0.5)
+			local xDot = xCenter - mathFloor(thicknessLine * 0.5)
+			local yDot = yCenter - mathFloor(thicknessLine * 0.5)
+
 
 			if cvEnableOutlineCrosshair:GetBool() then
 				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
