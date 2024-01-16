@@ -196,11 +196,6 @@ function TBHUD:Draw(client)
 			continue
 		end
 
-		-- avoid constantly switching focus every frame causing
-		-- 2+ buttons to appear in focus, instead "stick" to one
-		-- ent for a very short time to ensure consistency
-		focus_but = val
-
 		-- draw extra graphics and information for button when it's in-focus
 		if not focus_but or not IsValid(focus_but.ent) then continue end
 

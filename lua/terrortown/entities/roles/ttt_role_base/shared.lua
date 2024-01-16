@@ -46,16 +46,6 @@ ROLE.score = {
 }
 
 ROLE.karma = {
-	-- The multiplier that is used to calculate the Karma penalty for a team kill.
-	-- Keep in mind that the game will increase the multiplier further if it was avoidable
-	-- like a kill on a public policing role.
-	teamKillPenaltyMultiplier = 1,
-
-	-- The multiplier that is used to calculate the Karma penalty for team damage.
-	-- Keep in mind that the game will increase the multiplier further if it was avoidable
-	-- like damage applied to a public policing role.
-	teamHurtPenaltyMultiplier = 1,
-
 	-- The multiplier that is used to change the Karma given to the killer if a player
 	-- from an enemy team is killed.
 	enemyKillBonusMultiplier = 1,
@@ -125,10 +115,6 @@ ROLE.preventFindCredits = false
 -- other role that is able to win is alive. If this convar is set to true, this role
 -- is unable to win by staying alive. A custom wincondition might be added.
 ROLE.preventWin = false
-
--- If a player knows the role of their team mate, their role is shown overhead with
--- an icon. However this can be disabled with this role variable.
-ROLE.avoidTeamIcons = false
 
 -- Disables the sync of this role to the owner of the role. This means the owner doesn't
 -- know about their own role. Should probably extended by custom role syncing.

@@ -193,64 +193,6 @@ function PANEL:AddChoice(title, value, select, icon, data)
 end
 
 ---
--- @param number index the option id
--- @param[default=false] boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
-	local choices = self.choices
-
-	if index > #choices then
-		ErrorNoHalt("[TTT2] PANEL:ChooseOptionID failed, exceeding index size of choices.")
-
-		return
-	end
-
-	local choice = choices[index]
-	local value = self:ConvertValue(choice.value)
-
-	self.selected = index
-
-	self:SetText(choice.title)
-	self:OnSelect(index, value, choice.data)
-
-	self:CloseMenu()
-
-	if ignoreCallbackEnabledVars then return end
-
-	self:SetCallbackEnabledVarValues(value)
-end
-
----
--- @note this chooses the the set value like in the original DComboBox
--- @param string|number value should be indexable e.g. the value used to set conVars
--- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:ChooseOptionValue(value, ignoreConVar)
-	self:ChooseOptionID(self:GetOptionID(value), ignoreConVar)
-end
-
----
--- @note this chooses the displayed text rather than the set value like in the original DComboBox
--- So use `PANEL:ChooseOptionValue` for the old behaviour
--- @param string name the displayed text
--- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:ChooseOptionName(name, ignoreConVar)
-	self:ChooseOptionID(self:GetOptionTitleID(name), ignoreConVar)
-end
-
----
--- Choose option by index, title is not settable
--- @param[opt] string title is unused as it cant be set anymore
--- @param number index the option id
--- @param[default=false] boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
--- @deprecated Giving titles is not possible anymore. Use `PANEL:ChooseOptionID` instead
-function PANEL:ChooseOption(title, index, ignoreConVar)
-	self:ChooseOptionID(index, ignoreConVar)
-end
-
----
 -- @return number
 -- @realm client
 function PANEL:GetSelectedID()
@@ -357,15 +299,6 @@ function PANEL:CloseMenu()
 		self.menu:Remove()
 		self.menu = nil
 	end
-end
-
----
--- @warning this doesnt set the displayed text like before, but the value and selects an option
--- @param string|number value should be indexable
--- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:SetValue(value, ignoreConVar)
-	self:ChooseOptionValue(value, ignoreConVar)
 end
 
 local callbackEnabledVarTracker = 0

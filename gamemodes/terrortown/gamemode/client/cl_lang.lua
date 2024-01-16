@@ -311,9 +311,6 @@ function LANG.SetActiveLanguage(langName)
 
 		LANG.ActiveLanguage = langName
 
-		-- cache ref to table to avoid hopping through LANG and Strings every time
-		cachedActive = LANG.Strings[langName]
-
 		-- set the default lang as fallback, if it hasn't yet
 		LANG.SetFallback(cachedActive)
 

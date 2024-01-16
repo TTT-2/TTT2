@@ -159,20 +159,6 @@ function PANEL:SetDatabase(databaseInfo)
 end
 
 ---
--- @param any val
--- @param boolean ignoreCallbackEnabledVar To avoid endless loops, separated setting of convars and UI values
--- @realm client
-function PANEL:SetValue(val, ignoreCallbackEnabledVar)
-	self:SetIgnoreCallbackEnabledVar(ignoreCallbackEnabledVar)
-
-	if self.inverted then
-		val = not val
-	end
-
-	self.Button:SetValue(val)
-end
-
----
 -- @param boolean value
 -- @realm client
 function PANEL:SetDefaultValue(value)

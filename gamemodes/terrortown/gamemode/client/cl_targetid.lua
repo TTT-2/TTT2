@@ -155,7 +155,6 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		local shouldDrawDefault = ply:IsActive()
 			and ply:HasRole()
 			and (not client:IsActive() or ply:IsInTeam(client) or rd.isPublicRole)
-			and not rd.avoidTeamIcons
 
 		---
 		-- @realm client

@@ -83,9 +83,6 @@ local function RoleChatMsg(sender, msg)
 		or senderRoleData.unknownTeam
 		or senderRoleData.disabledTeamChat
 		or TEAMS[senderTeam].alone
-		---
-		-- @realm server
-		or hook.Run("TTT2AvoidTeamChat", sender, senderTeam, msg) == false
 	then return end
 
 	net.Start("TTT_RoleChat")
@@ -375,12 +372,6 @@ function GM:PlayerSay(ply, text, teamOnly)
 			RoleChatMsg(ply, text)
 
 			return ""
-		elseif not team_spec then -- General Chat handling
-			---
-			-- @realm server
-			if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
-				return ""
-			end
 		end
 	end
 
@@ -533,27 +524,4 @@ end
 -- @realm server
 function GM:TTT2CanSeeChat(reader, sender, isTeam)
 	return true
-end
-
----
--- Cancelable hook to block a team chat message.
--- @param Player sender The player that sends the message.
--- @param string team The team identifier
--- @param string msg The message that is about to be sent
--- @return nil|boolean Return false to block message
--- @hook
--- @realm server
-function GM:TTT2AvoidTeamChat(sender, team, msg)
-
-end
-
----
--- Cancelable hook to block a general chat message.
--- @param Player sender The player that sends the message.
--- @param string msg The message that is about to be sent
--- @return nil|boolean Return false to block message
--- @hook
--- @realm server
-function GM:TTT2AvoidGeneralChat(sender, msg)
-
 end

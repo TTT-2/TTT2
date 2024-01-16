@@ -346,9 +346,6 @@ function ttt2net.OnUpdate(path, func)
 	-- Get the registered callbacks table for the given path
 	local registeredCallbacks = table.GetWithPath(ttt2net.dataListeners, tmpPath) or {}
 
-	-- Check if this function is not already registered, to avoid duplicates
-	if table.HasValue(registeredCallbacks, func) then return end
-
 	-- Add the function to the callback table
 	registeredCallbacks[#registeredCallbacks + 1] = func
 

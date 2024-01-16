@@ -514,16 +514,6 @@ function plymeta:RecordKill(victim)
 end
 
 ---
--- This is doing nothing, it's just a function to avoid incompatibility
--- @note Please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states
--- @param any slowed
--- @deprecated
--- @realm server
-function plymeta:SetSpeed(slowed)
-	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
-end
-
----
 -- Resets the last words
 -- @realm server
 function plymeta:ResetLastWords()
@@ -736,25 +726,6 @@ function plymeta:UnSpectate()
 	oldUnSpectate(self)
 
 	self:SetNoTarget(false)
-end
-
----
--- Returns whether a @{Player} has disabled the selection of a given @{ROLE}
--- @param number role subrole id of a @{ROLE}
--- @return boolean
--- @realm server
-function plymeta:GetAvoidRole(role)
-	return false
-end
-
----
--- Returns whether a @{Player} has disabled the selection of the detective role
--- @note This gives compatibility for some legacy ttt addons
--- @return boolean
--- @realm server
--- @deprecated
-function plymeta:GetAvoidDetective()
-	return false
 end
 
 ---
@@ -1090,37 +1061,6 @@ end
 -- @realm server
 function plymeta:ResetRoundDeathCounter()
 	self:TTT2NETSetUInt("player_round_deaths", 0, 8)
-end
-
----
--- Selects a random available @{ROLE} for a @{Player}
--- @param table avoidRoles list of @{ROLE}s that should be avoided
--- @realm server
-function plymeta:SelectRandomRole(avoidRoles)
-	local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
-	local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
-	local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
-
-	local availableRoles = {}
-	local roleCount = {}
-
-	for i = 1, #availablePlayers do
-		local rd = availablePlayers[i]:GetSubRoleData()
-
-		roleCount[rd] = (roleCount[rd] or 0) + 1
-	end
-
-	for roleData, roleAmount in pairs(selectableRoles) do
-		if (not avoidRoles or not avoidRoles[roleData]) and (not roleCount[roleData] or roleCount[roleData] < roleAmount) then
-			availableRoles[#availableRoles + 1] = roleData.index
-		end
-	end
-
-	if #availableRoles < 1 then return end
-
-	self:SetRole(availableRoles[math.random(#availableRoles)])
-
-	SendFullStateUpdate()
 end
 
 local pendingItems = {}
@@ -1536,9 +1476,6 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 
 			return
 		end
-
-		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
-		if dropWeapon == wep then return end
 
 		if not self:SafeDropWeapon(dropWeapon, true) then return end
 

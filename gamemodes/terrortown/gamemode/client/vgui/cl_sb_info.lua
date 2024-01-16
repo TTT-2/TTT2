@@ -175,7 +175,6 @@ vgui.Register("TTTScorePlayerInfoSearch", PANEL, "TTTScorePlayerInfoBase")
 TTTScoreboard.Tags = {
 	{txt = "sb_tag_friend", color = COLOR_GREEN},
 	{txt = "sb_tag_susp", color = COLOR_YELLOW},
-	{txt = "sb_tag_avoid", color = Color(255, 150, 0, 255)},
 	{txt = "sb_tag_kill", color = COLOR_RED},
 	{txt = "sb_tag_miss", color = Color(130, 190, 130, 255)}
 }

@@ -187,7 +187,6 @@ L.sb_info_help = "Search this player's body, and you can review the results here
 
 L.sb_tag_friend = "FRIEND"
 L.sb_tag_susp = "SUSPECT"
-L.sb_tag_avoid = "AVOID"
 L.sb_tag_kill = "KILL"
 L.sb_tag_miss = "MISSING"
 
@@ -219,10 +218,6 @@ Allows you to scan for life signs.
 Starts automatic scans as soon as you buy it. Configure it in Radar tab of this menu.]]
 
 L.item_disg = "Disguiser"
-L.item_disg_desc = [[
-Hides your ID info while on. Also avoids being the person last seen by a victim.
-
-Toggle in the Disguise tab of this menu or press Numpad Enter.]]
 
 -- C4
 L.c4_disarm_warn = "A C4 explosive you planted has been disarmed."

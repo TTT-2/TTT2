@@ -340,31 +340,6 @@ function KARMA.ApplyKarma(ply)
 	end
 end
 
--- Return true if a traitor could have easily avoided the damage/death
-local function WasAvoidable(attacker, victim, dmginfo)
-	local infl = dmginfo:GetInflictor()
-
-	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
-		local victimRoleData = victim:GetSubRoleData()
-
-		---
-		-- @realm server
-		local mutiplier = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
-
-		if mutiplier then
-			return mutiplier
-		elseif victimRoleData.isPublicRole and victimRoleData.isPolicingRole then
-			return 2
-		elseif not attacker:GetSubRoleData().unknownTeam then
-			return 1
-		else
-			return 0.5
-		end
-	end
-
-	return 0
-end
-
 ---
 -- Handle karma change due to one player damaging another. Damage must not have
 -- been applied to the victim yet, but must have been scaled according to the
@@ -399,7 +374,6 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	else -- team hurts own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.karma.teamHurtPenaltyMultiplier
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMHURT])
@@ -438,7 +412,6 @@ function KARMA.Killed(attacker, victim, dmginfo)
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
 
-		local multiplicator = WasAvoidable(attacker, victim, dmginfo) * attackerRoleData.karma.teamKillPenaltyMultiplier
 		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim, KARMA.reason[KARMA_TEAMKILL])

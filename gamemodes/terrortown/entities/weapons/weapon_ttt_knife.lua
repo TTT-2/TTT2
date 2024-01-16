@@ -118,23 +118,15 @@ function SWEP:PrimaryAttack()
 
 
 	if SERVER and tr.Hit and tr.HitNonWorld and IsValid(hitEnt) and hitEnt:IsPlayer() then
-		-- knife damage is never karma'd, so don't need to take that into
-		-- account we do want to avoid rounding error strangeness caused by
-		-- other damage scaling, causing a death when we don't expect one, so
-		-- when the target's health is close to kill-point we just kill
-		if hitEnt:Health() < (self.Primary.Damage + 10) then
-			self:StabKill(tr, spos, sdest)
-		else
-			local dmg = DamageInfo()
-			dmg:SetDamage(self.Primary.Damage)
-			dmg:SetAttacker(owner)
-			dmg:SetInflictor(self)
-			dmg:SetDamageForce(owner:GetAimVector() * 5)
-			dmg:SetDamagePosition(owner:GetPos())
-			dmg:SetDamageType(DMG_SLASH)
+		local dmg = DamageInfo()
+		dmg:SetDamage(self.Primary.Damage)
+		dmg:SetAttacker(owner)
+		dmg:SetInflictor(self)
+		dmg:SetDamageForce(owner:GetAimVector() * 5)
+		dmg:SetDamagePosition(owner:GetPos())
+		dmg:SetDamageType(DMG_SLASH)
 
-			hitEnt:DispatchTraceAttack(dmg, spos + (owner:GetAimVector() * 3), sdest)
-		end
+		hitEnt:DispatchTraceAttack(dmg, spos + (owner:GetAimVector() * 3), sdest)
 	end
 
 	owner:LagCompensation(false)

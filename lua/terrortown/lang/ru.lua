@@ -189,7 +189,6 @@ L.sb_info_help = "Осмотрите тело этого игрока, и смо
 
 L.sb_tag_friend = "ДРУГ"
 L.sb_tag_susp = "ПОДОЗРЕВАЕМЫЙ"
-L.sb_tag_avoid = "ИЗБЕГАТЬ"
 L.sb_tag_kill = "УБИТЬ"
 L.sb_tag_miss = "ПРОПАЛ"
 

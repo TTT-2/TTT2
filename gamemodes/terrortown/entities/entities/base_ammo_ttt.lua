@@ -106,15 +106,6 @@ function ENT:CheckForWeapon(ply)
 	local plyHasWeapon = ply.HasWeapon
 	local cached = self.CachedWeapons
 
-	-- Check if player has a weapon that we know needs us. This is called in
-	-- Touch, which is called many a time, so we use the cache here to avoid
-	-- looping through every weapon the player has to check their AmmoEnt.
-	for i = 1, #cached do
-		if plyHasWeapon(ply, cached[i]) then
-			return true
-		end
-	end
-
 	return false
 end
 

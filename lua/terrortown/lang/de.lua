@@ -187,7 +187,6 @@ L.sb_info_help = "Durchsuche den Körper des Spielers und du wirst hier die Erge
 
 L.sb_tag_friend = "FREUND"
 L.sb_tag_susp = "VERDÄCHTIG"
-L.sb_tag_avoid = "VERMEIDEN"
 L.sb_tag_kill = "TÖTEN"
 L.sb_tag_miss = "VERMISST"
 

@@ -782,14 +782,9 @@ end
 -- Initializes the fallback shop for a @{ROLE}
 -- @param Role roleData
 -- @param table fallbackTable
--- @param[opt] boolean avoidSet
 -- @internal
 -- @realm shared
-function InitFallbackShop(roleData, fallbackTable, avoidSet)
-	if not avoidSet then
-		roleData.fallbackTable = fallbackTable
-	end
-
+function InitFallbackShop(roleData, fallbackTable)
 	local fallback = GetShopFallbackTable(roleData.index)
 	if fallback then
 		for i = 1, #fallbackTable do

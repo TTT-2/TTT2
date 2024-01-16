@@ -31,7 +31,6 @@ ENT.Model = Model("models/weapons/w_c4_planted.mdl")
 
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
-ENT.Avoidable = true
 
 ---
 -- @accessor Entity
@@ -215,13 +214,12 @@ function ENT:SphereDamage(dmgowner, center, radius)
 
 	local r = radius * radius -- square so we can compare with dot product directly
 
-	-- pre-declare to avoid realloc
-	local d = 0.0
-	local diff = nil
-	local dmg = 0
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
+		local d = 0.0
+		local diff = nil
+		local dmg = 0
 		local ply = plys[i]
 
 		if ply:Team() ~= TEAM_TERROR then continue end
