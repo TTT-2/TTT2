@@ -249,6 +249,7 @@ function WIREPANEL:GetWireColor(i)
 end
 
 ---
+-- @param number i The index of the wire
 -- @realm client
 function WIREPANEL:SetWireIndex(i)
 	self.m_Image:SetImageColor(self:GetWireColor(i))
