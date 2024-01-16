@@ -164,7 +164,7 @@ L.quick_inno = "{player} masum."
 L.quick_check = "Kimse hayatta mı?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below. Keep these lowercase.
+-- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "hiç kimse"
 L.quick_disg = "kılık değiştirmiş biri var"
 L.quick_corpse = "kimliği belirsiz bir ceset var"
@@ -820,16 +820,17 @@ L.aw_tod2_text = "raundun başlamasından hemen sonra öldü."
 
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
+
 -- v24
 L.drop_no_ammo = "Silahının şarjöründe cephane kutusu olarak düşecek yeterli cephane yok."
 
--- 15-05-25
+-- 2015-05-25
 L.hat_retrieve = "Bir Dedektif'in şapkasını aldın."
 
--- 17-09-03
+-- 2017-09-03
 L.sb_sortby = "Sıralama Ölçütü"
 
--- 18-07-24
+-- 2018-07-24
 L.equip_tooltip_main = "Ekipman menüsü"
 L.equip_tooltip_radar = "Radar kontrolü"
 L.equip_tooltip_disguise = "Kılık değiştirme kontrolü"
@@ -848,23 +849,23 @@ L.binoc_body = "CESET ALGILANDI"
 
 L.idle_popup_title = "Boşta"
 
--- 19-01-31
+-- 2019-01-31
 L.create_own_shop = "Kendi mağazanı oluştur"
 L.shop_link = "Şununla bağlantı kur"
 L.shop_disabled = "Mağazayı devre dışı bırak"
 L.shop_default = "Varsayılan mağazayı kullan"
 
--- 19-05-05
+-- 2019-05-05
 L.reroll_name = "Yeniden dağıt"
 L.reroll_menutitle = "Ekipmanı yeniden dağıt"
 L.reroll_no_credits = "Yeniden dağıtmak için {amount} krediye ihtiyacınız var!"
 L.reroll_button = "Yeniden Dağıt"
 L.reroll_help = "Mağazanızda yeni bir rastgele ekipman seti almak için {amount} kredi kullanın!"
 
--- 19-05-06
+-- 2019-05-06
 L.equip_not_alive = "Sağdan bir rol seçerek mevcut tüm öğeleri görüntüleyebilirsiniz. Favorilerinizi işaretlemeyi unutmayın!"
 
--- 19-06-27
+-- 2019-06-27
 L.shop_editor_title = "Mağaza Düzenleme"
 L.shop_edit_items_weapong = "Silahları Düzenle"
 L.shop_edit = "Mağazaları Düzenle"
@@ -886,10 +887,10 @@ L.shop_role_select = "Bir rol seçin"
 L.shop_role_selected = "{role} adlı rolün mağazası seçildi!"
 L.shop_search = "Ara"
 
--- 19-10-19
+-- 2019-10-19
 L.drop_ammo_prevented = "Bir şey cephanenizi düşürmenizi engelliyor."
 
--- 19-10-28
+-- 2019-10-28
 L.target_c4 = "C4 menüsünü açmak için [{usekey}] tuşuna basın"
 L.target_c4_armed = "C4'ü devre dışı bırakmak için [{usekey}] tuşuna basın"
 L.target_c4_armed_defuser = "İmha kitini kullanmak için [{primaryfire}] tuşuna basın"
@@ -917,7 +918,7 @@ L.hstation_empty = "Bu sağlık istasyonunda daha fazla şarj kalmadı"
 L.hstation_maxhealth = "Sağlığınız tam"
 L.hstation_short_desc = "Sağlık istasyonu zaman içinde yavaş yavaş şarj olur"
 
--- 19-11-03
+-- 2019-11-03
 L.vis_short_desc = "Kurban ateşli silahla yaralanarak öldüyse olay yerini gösterir"
 L.corpse_binoculars = "Cesedi dürbünle aramak için [{key}] tuşuna basın."
 L.binoc_progress = "Aranıyor: %{progress}"
@@ -926,7 +927,7 @@ L.pickup_no_room = "Bu silah türü için envanterinizde yer yok."
 L.pickup_fail = "Bu silahı alamazsın."
 L.pickup_pending = "Zaten bir silah aldın, alana kadar bekle."
 
--- 20-01-07
+-- 2020-01-07
 L.tbut_help_admin = "Hain düğmesi ayarlarını düzenle"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] düğmesi {role} için"
 L.tbut_role_config = "Rol {current}"
@@ -939,22 +940,22 @@ L.tbut_allow = "İzin ver"
 L.tbut_prohib = "Yasakla"
 L.tbut_default = "Varsayılan"
 
--- 20-02-09
+-- 2020-02-09
 L.name_door = "Kapı"
 L.door_open = "Kapıyı açmak için [{usekey}] tuşuna basın."
 L.door_close = "Kapıyı kapatmak için [{usekey}] tuşuna basın."
 L.door_locked = "Bu kapı kilitli."
 
--- 20-02-11
+-- 2020-02-11
 L.automoved_to_spec = "(OTOMATİK MESAJ) Boşta olduğum için İzleyici takımına alındım."
 L.mute_team = "{team} sessize alındı."
 
--- 20-02-16
+-- 2020-02-16
 L.door_auto_closes = "Bu kapı otomatik olarak kapanır."
 L.door_open_touch = "Açmak için kapıya doğru yürü."
 L.door_open_touch_and_use = "Kapıya doğru yürü veya açmak için [{usekey}] tuşuna bas."
 
--- 20-03-09
+-- 2020-03-09
 L.help_title = "Ayarlar ve Yardım"
 
 L.menu_changelog_title = "Değişiklik günlüğü"
@@ -1101,7 +1102,7 @@ L.button_reset = "Sıfırla"
 L.button_close = "Kapat"
 L.button_hud_editor = "Arayüz Düzenleyici"
 
--- 20-04-20
+-- 2020-04-20
 L.item_speedrun = "Hız"
 L.item_speedrun_desc = [[Sizi %50 daha hızlı yapar!]]
 L.item_no_explosion_damage = "Patlama Hasarı Yok"
@@ -1119,29 +1120,29 @@ L.item_no_prop_damage_desc = [[Nesne hasarına karşı bağışıklık kazandır
 L.item_no_drown_damage = "Boğulma Hasarı Yok"
 L.item_no_drown_damage_desc = [[Boğulma hasarına karşı bağışıklık kazandırır.]]
 
--- 20-04-21
+-- 2020-04-21
 L.dna_tid_possible = "Tarama yapılabilir."
 L.dna_tid_impossible = "Tarama yapılamaz."
 L.dna_screen_ready = "DNA yok"
 L.dna_screen_match = "Eşleşme"
 
--- 20-04-30
+-- 2020-04-30
 L.message_revival_canceled = "Diriliş iptal edildi."
 L.message_revival_failed = "Diriliş başarısız oldu."
 L.message_revival_failed_missing_body = "Cesediniz artık mevcut olmadığı için diriltilemediniz."
 L.hud_revival_title = "Dirilişe kalan süre"
 L.hud_revival_time = "{time}sn"
 
--- 20-05-03
+-- 2020-05-03
 L.door_destructible = "Bu kapı yok edilebilir ({health}SP)."
 
--- 20-05-28
+-- 2020-05-28
 L.corpse_hint_inspect_limited = "Arama yapmak için [{usekey}] tuşuna basın. Yalnızca arama kullanıcı arayüzünü görüntülemek için [{walkkey} + {usekey}]"
 
--- 20-06-04
+-- 2020-06-04
 L.label_bind_disguiser = "Kılık Değiştiriciyi aç/kapat"
 
--- 20-06-24
+-- 2020-06-24
 L.dna_help_primary = "DNA örneği al"
 L.dna_help_secondary = "DNA yuvasını değiştirin"
 L.dna_help_reload = "Numuneyi sil"
@@ -1153,19 +1154,19 @@ L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
 
 L.decoy_help_pri = "Tuzağı yerleştirin."
 
--- 20-08-07
+-- 2020-08-07
 L.pickup_error_spec = "Bunu izleyici olarak alamazsın."
 L.pickup_error_owns = "Bu silah zaten sende olduğu için bunu alamazsın."
 L.pickup_error_noslot = "Boş alanın olmadığı için bunu alamazsın."
 
--- 20-11-02
+-- 2020-11-02
 L.lang_server_default = "Sunucu Varsayılanı"
 L.help_lang_info = [[
 Bu çeviri %{coverage} oranında tamamlandı ve İngilizce dili varsayılan referans olarak alındı.
 
 Bu çevirilerin topluluk tarafından yapıldığını unutmayın. Bir şey eksik veya yanlışsa katkıda bulunmaktan çekinmeyin.]]
 
--- 21-04-13
+-- 2021-04-13
 L.title_score_info = "Raunt Sonu Bilgisi"
 L.title_score_events = "Olay Zaman Çizelgesi"
 
@@ -1276,10 +1277,10 @@ L.desc_event_kill_crush_using = "{victim} ({vrole} {vteam}), {trap} aracılıyla
 L.desc_event_kill_other = "{victim} ({vrole} {vteam}), {attacker} tarafından öldürüldü."
 L.desc_event_kill_other_using = "{victim} ({vrole} {vteam}), {trap} kullanılarak {attacker} ({arole} {ateam}) tarafından havaya uçuruldu."
 
--- 21-04-20
+-- 2021-04-20
 L.none = "Rol Yok"
 
--- 21-04-24
+-- 2021-04-24
 L.karma_teamkill_tooltip = "Öldürülen takım arkadaşı"
 L.karma_teamhurt_tooltip = "Hasar verilen takım arkadaşı"
 L.karma_enemykill_tooltip = "Öldürülen düşman"
@@ -1288,7 +1289,7 @@ L.karma_cleanround_tooltip = "Raundu Temizle"
 L.karma_roundheal_tooltip = "Karma yenileme"
 L.karma_unknown_tooltip = "Bilinmiyor"
 
--- 21-05-07
+-- 2021-05-07
 L.header_random_shop_administration = "Rastgele Mağaza Ayarları"
 L.header_random_shop_value_administration = "Bakiye Ayarları"
 
@@ -1303,7 +1304,7 @@ L.shopeditor_name_random_shop_reroll = "Mağaza yeniden dağıtım kullanılabil
 L.shopeditor_name_random_shop_reroll_cost = "Yeniden dağıtım başına maliyet"
 L.shopeditor_name_random_shop_reroll_per_buy = "Satın aldıktan sonra otomatik olarak yeniden dağıt"
 
--- 21-06-04
+-- 2021-06-04
 L.header_equipment_setup = "Ekipman Ayarları"
 L.header_equipment_value_setup = "Bakiye Ayarları"
 
@@ -1320,13 +1321,13 @@ L.equipmenteditor_desc_player_limited = "Etkinleştirilirse, ekipman aktif raunt
 L.equipmenteditor_name_min_players = "Satın almak için minimum oyuncu sayısı"
 L.equipmenteditor_name_credits = "Kredi cinsinden fiyat"
 
--- 21-06-08
+-- 2021-06-08
 L.equip_not_added = "eklenmedi"
 L.equip_added = "eklendi"
 L.equip_inherit_added = "eklendi (devralma)"
 L.equip_inherit_removed = "kaldırıldı (devral)"
 
--- 21-06-09
+-- 2021-06-09
 L.layering_not_layered = "Katmanlı değil"
 L.layering_layer = "Katman {layer}"
 L.header_rolelayering_role = "{role} dağıtımı"
@@ -1337,20 +1338,20 @@ L.help_rolelayering_roleselection = "Rol dağılım süreci iki aşamaya ayrılm
 L.help_rolelayering_layers = "Her dağıtımdan yalnızca bir rol seçilir. İlk olarak, özel katmanlardan gelen roller, ilk katmandan başlayarak son katmana ulaşılana kadar dağıtılır veya daha fazla rol yükseltilemez. Hangisi önce olursa olsun, yükseltilebilir slotlar hala mevcutsa, katmanlanmamış roller de dağıtılacaktır."
 L.scoreboard_voice_tooltip = "Ses seviyesini değiştirmek için kaydırın"
 
--- 21-06-15
+-- 2021-06-15
 L.header_shop_linker = "Ayarlar"
 L.label_shop_linker_set = "Mağaza türünü seçin"
 
--- 21-06-18
+-- 2021-06-18
 L.xfer_team_indicator = "Takım"
 
--- 21-06-25
+-- 2021-06-25
 L.searchbar_default_placeholder = "Listede ara..."
 
--- 21-07-11
+-- 2021-07-11
 L.spec_about_to_revive = "İzleme, canlanma sırasında sınırlıdır."
 
--- 21-09-01
+-- 2021-09-01
 L.spawneditor_name = "Oluşum Düzenleyici Aracı"
 L.spawneditor_desc = "Dünyaya silah, cephane ve oyuncu canlanma noktası yerleştirmek için kullanılır. Yalnızca süper yönetici tarafından kullanılabilir."
 
@@ -1436,7 +1437,7 @@ Ekipmanın çoğu, varsayılan olarak 'özel silahların ortaya çıkmasına' ay
 
 L.pickup_error_inv_cached = "Envanteriniz önbelleğe alındığı için şu anda bunu alamazsınız."
 
--- 21-09-02
+-- 2021-09-02
 L.submenu_administration_playermodels_title = "Oyuncu Modelleri"
 L.header_playermodels_general = "Genel Oyuncu Modeli Ayarları"
 L.header_playermodels_selection = "Oyuncu Modeli Havuzunu Seçin"
@@ -1458,7 +1459,7 @@ Varsayılan olarak tüm oyunculara yalnızca CSS Phoenix oyuncu modeli atanır. 
 
 Model seçimleri daha fazla oyuncu modeli yükleyerek genişletilebilir.]]
 
--- 21-10-06
+-- 2021-10-06
 L.menu_server_addons_title = "Sunucu Eklentileri"
 L.menu_server_addons_description = "Sunucu genelinde yalnızca eklentiler için yönetici ayarları."
 
@@ -1469,7 +1470,7 @@ L.kill_score_suicide = "İntihar"
 L.tooltip_kill_score_team = "Takım arkadaşı öldürme {score}"
 L.kill_score_team = "Takım arkadaşı öldürme"
 
--- 21-10-09
+-- 2021-10-09
 L.help_models_select = [[
 Oyuncu modeli havuzuna eklemek için modellere sol tıklayın. Kaldırmak için tekrar sol tıklayın. Odaklanan model için etkin ve devre dışı dedektif şapkaları arasında sağ tıklama geçiş yapar.
 
@@ -1538,10 +1539,10 @@ L.ttt2_desc_innocent = "Bir Masum, hiçbir özel yeteneğe sahip değildir. Ter�
 L.ttt2_desc_traitor = "Hain, Masumların düşmanıdır. Özel ekipman satın alabilecekleri bir ekipman menüsü vardır. Takım arkadaşları hariç herkesi öldürmek zorundalar."
 L.ttt2_desc_detective = "Masumların güvenebileceği kişi Dedektiftir. Kudretli Dedektif tüm kötü teröristleri bulmak zorundadır. Mağazalarındaki ekipmanlar bu görevde onlara yardımcı olabilir."
 
--- 21-10-10
+-- 2021-10-10
 L.button_reset_models = "Oyuncu Modellerini Sıfırla"
 
--- 21-10-13
+-- 2021-10-13
 L.help_roles_credits_award_kill = "Kredi kazanmanın bir başka yolu da Dedektif gibi 'herkese açık bir rolü' olan yüksek değerli oyuncuları öldürmektir. Eğer katilin rolü bunu etkinleştirdiyse, aşağıda tanımlanan miktarda kredi kazanır."
 L.help_roles_credits_award = [[
 Temel TTT2'de kredi almanın iki farklı yolu vardır
@@ -1561,7 +1562,7 @@ L.label_roles_credits_dead_award = "Ölü düşmanların belirli bir yüzdesi i�
 L.label_roles_credits_kill_award = "Yüksek değerli oyuncu öldürme için kredi ödülünü etkinleştir"
 L.label_roles_min_karma = "Dağılımı göz önünde bulundurmak için Karma'nın alt sınırı"
 
--- 21-11-07
+-- 2021-11-07
 L.submenu_administration_administration_title = "Yönetim"
 L.submenu_administration_voicechat_title = "Sesli sohbet Metin sohbeti"
 L.submenu_administration_round_setup_title = "Raunt Ayarları"
@@ -1760,7 +1761,7 @@ L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
--- 22-07-02
+-- 2022-07-02
 L.header_playersettings_falldmg = "Düşme Hasarı Ayarları"
 
 L.label_falldmg_enable = "Düşme hasarını etkinleştir"
@@ -1772,7 +1773,7 @@ Bu değer, oyuncunun yere çarpma hızı ile katlanarak düşme hasarının ne k
 
 Bu değeri değiştirirken dikkatli olun. Çok yükseğe ayarlamak en küçük düşüşleri bile ölümcül hale getirebilirken, çok düşük ayarlamak oyuncuların aşırı yüksekliklerden düşmesine ve çok az hasar görmesine veya hiç hasar görmemesine izin verecektir.]]
 
--- 23-02-08
+-- 2023-02-08
 L.testpopup_title = "Çok satırlı bir başlık içeren bir test açılır penceresi, ne GÜZEL!"
 L.testpopup_subtitle = "Aa merhaba! Bu, bazı özel bilgiler içeren süslü bir açılır penceredir. Metin çok satırlı da olabilir, ne kadar süslü! Off, herhangi bir fikrim olsaydı çok daha fazla metin ekleyebilirdim..."
 
@@ -1794,10 +1795,10 @@ L.sb_rank_tooltip_team = "Takım"
 
 L.tbut_adminarea = "YÖNETİCİ ALANI"
 
--- 23-08-10
+-- 2023-08-10
 L.equipmenteditor_name_damage_scaling = "Hasar Boyutu"
 
--- 23-08-11
+-- 2023-08-11
 L.equipmenteditor_name_allow_drop = "Bırakmaya İzin Ver"
 L.equipmenteditor_desc_allow_drop = "Etkinleştirilirse, ekipman oyuncu tarafından serbestçe bırakılabilir."
 
@@ -1808,7 +1809,7 @@ L.drop_on_death_type_default = "Varsayılan (silah tanımlı)"
 L.drop_on_death_type_force = "Ölürken Bırakmaya Zorla"
 L.drop_on_death_type_deny = "Ölürken Bırakmayı Reddet"
 
--- 23-08-26
+-- 2023-08-26
 L.equipmenteditor_name_kind = "Ekipman Yuvası"
 L.equipmenteditor_desc_kind = "Ekipmanın olduğu envanter yuvası."
 
@@ -1822,7 +1823,7 @@ L.slot_weapon_special = "Özel Yuva"
 L.slot_weapon_extra = "Ekstra Yuva"
 L.slot_weapon_class = "Sınıf Yuvası"
 
--- 23-10-04
+-- 2023-10-04
 L.label_voice_duck_spectator = "İzleyici seslerini azalt"
 L.label_voice_duck_spectator_amount = "İzleyici seslerini azaltma miktarı"
 L.label_voice_scaling = "Ses Seviyesi Ölçekleme Modu"
@@ -1830,7 +1831,7 @@ L.label_voice_scaling_mode_linear = "Doğrusal"
 L.label_voice_scaling_mode_power4 = "Güç 4"
 L.label_voice_scaling_mode_log = "Logaritmik"
 
--- 23-10-07
+-- 2023-10-07
 L.search_title = "Ceset Arama Sonuçları - {player}"
 L.search_info = "Bilgi"
 L.search_confirm = "Ölümü Onayla"
@@ -1970,13 +1971,13 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
--- 23-10-23
+-- 2023-10-23
 L.header_miscellaneous_settings = "Çeşitli Ayarlar"
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
 L.header_hud_elements_customize = "Arayüz Öğelerini Özelleştir"
 L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri için özel ayarlardır."
 
--- 23-10-25
+-- 2023-10-25
 L.help_keyhelp = [[
 Tuş atama yardımcıları, oyuncuya her zaman güncel tuş atamalarını gösteren ve özellikle yeni oyuncular için yararlı olan bir kullanıcı arayüzü öğesinin bir parçasıdır. Üç farklı türde tuş atama vardır.
 
@@ -2019,7 +2020,7 @@ L.label_keyhelper_disguiser = "Kılık Değiştiriciyi aç/kapat"
 L.label_keyhelper_save_exit = "kaydet ve çık"
 L.label_keyhelper_spec_third_person = "Üçüncü kişi görünümünü aç/kapat"
 
--- 23-10-26
+-- 2023-10-26
 L.item_armor_reinforced = "Güçlendirilmiş Zırh"
 L.item_armor_sidebar = "Zırh sizi vücudunuza giren mermilere karşı korur. Ama sonsuza kadar değil."
 L.item_disguiser_sidebar = "Kılık değiştirici, adınızı diğer oyunculara göstermeyerek kimliğinizi korur."
@@ -2033,26 +2034,26 @@ L.status_off = "kapalı"
 L.crowbar_help_primary = "Saldır"
 L.crowbar_help_secondary = "Oyuncuları it"
 
--- 23-10-27
+-- 2023-10-27
 L.help_HUD_enable_description = [[
 Tuş yardımcısı veya kenar çubuğu gibi bazı arayüz öğeleri, puan tablosu açıkken ayrıntılı bilgi gösterir. Bu, dağınıklığı azaltmak için devre dışı bırakılabilir.]]
 L.label_HUD_enable_description = "Puan tablosu açıkken açıklamaları etkinleştir"
 L.label_HUD_enable_box_blur = "Arayüz kutusu arka plan bulanıklığını etkinleştir"
 
--- 23-10-28
+-- 2023-10-28
 L.submenu_gameplay_voiceandvolume_title = "Ses Düzeyi"
 L.header_soundeffect_settings = "Ses Efektleri"
 L.header_voiceandvolume_settings = "Ses Ayarları"
 
--- 23-11-06
+-- 2023-11-06
 L.drop_reserve_prevented = "Bir şey yedek cephanenizi düşürmenizi engelliyor."
 L.drop_no_reserve = "Rezervinizde cephane kutusu olarak düşecek yeterli cephane yok."
 L.drop_no_room_ammo = "Burada silahını bırakacak yerin yok!"
 
--- 23-11-14
+-- 2023-11-14
 L.hat_deerstalker_name = "Dedektifin Şapkası"
 
--- 23-11-16
+-- 2023-11-16
 L.help_prop_spec_dash = [[
 Normal hareketten daha yüksek kuvvette olabilirler. Daha yüksek kuvvet aynı zamanda daha yüksek temel değer tüketimi anlamına gelir.
 
@@ -2062,11 +2063,11 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
--- 23-12-13
+-- 2023-12-13
 L.vis_no_pickup = "Sadece kamu polisliği rolleri görüntüleyiciyi alabilir"
 L.newton_force = "GÜÇ"
 
--- 23-12-14
+-- 2023-12-14
 L.beacon_help_pri = "Feneri yere at"
 L.beacon_help_sec = "Feneri yere yapıştır"
 L.beacon_name = "Fener"
@@ -2081,29 +2082,20 @@ L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
--- 23-11-18
+-- 2023-11-18
 L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 
--- 23-12-18
+-- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 
--- 23-12-19
+-- 2023-12-19
 L.builtin_marker = "Bütünleşik."
 L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
--- 23-12-20
-L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
-Bir pompalı için bu, her bir saçmayı etkileyecektir.
-Bir tüfek için bu sadece kurşunu etkiler.
-Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
-0.5 = Hasar miktarının yarısını ver.
-2 = Hasar miktarının iki katı kadar hasar ver.
-Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
-
--- 23-12-22
+-- 2023-12-22
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
 L.header_accessibility_settings = "Erişilebilirlik Ayarları"
@@ -2111,8 +2103,18 @@ L.header_accessibility_settings = "Erişilebilirlik Ayarları"
 L.label_enable_dynamic_fov = "Dinamik FOV değişikliğini etkinleştir"
 L.label_enable_bobbing = "Sallanmayı etkinleştir"
 L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
+
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
+
+-- 2023-12-20
+L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
+Bir pompalı için bu, her bir saçmayı etkileyecektir.
+Bir tüfek için bu sadece kurşunu etkiler.
+Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
+0.5 = Hasar miktarının yarısını ver.
+2 = Hasar miktarının iki katı kadar hasar ver.
+Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
 -- 2023-12-24
 L.binoc_help_reload = "Hedefi kaldırın."
