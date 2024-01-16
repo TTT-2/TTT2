@@ -5,15 +5,13 @@
 local loopsound = Sound("ambient/levels/labs/teleport_mechanism_windup1.wav")
 
 local mat_rising = Material( "models/props_combine/stasisshield_sheet")
-local mat_sparkle = Material("models/effects/comball_tape")
 local top = 80
-local mid = 32
 local final_height = top
 local vector_up = Vector(0,0,1)
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Init(data)
 	self.EffectOwner = data:GetEntity()
 
@@ -47,7 +45,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Think()
 	if self.EndTime < CurTime() then
 		SafeRemoveEntity(self.Dummy)
@@ -83,7 +81,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Render()
 	local norm = vector_up * -1
 	local pos = self:GetPos()

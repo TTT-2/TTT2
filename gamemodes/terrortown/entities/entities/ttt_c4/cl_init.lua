@@ -4,14 +4,15 @@ include("shared.lua")
 
 local starttime = C4_MINIMUM_TIME
 
-local beep = Sound("weapons/c4/c4_click.wav")
-
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
 
 ---- ARMING
 
+---
 -- Initial bomb arming
+-- @param ttt_c4 bomb The bomb to configure
+-- @realm client
 function ShowC4Config(bomb)
 	local dframe = vgui.Create("DFrame")
 	local w, h = 350, 270
@@ -42,8 +43,6 @@ function ShowC4Config(bomb)
 	dclock:SetPos(m * 2, m * 2)
 
 	dformtime:AddItem(dclock)
-
-	local ch, cw = dclock:GetSize()
 
 	local dtime = vgui.Create("DNumSlider", dformtime)
 	dtime:SetWide(w - m * 4)
@@ -164,7 +163,7 @@ local c4_wirecut_mat = Material("vgui/ttt/c4_wire_cut")
 local on_wire_cut = nil
 
 -- Wire
-local PANEL = {}
+local WIREPANEL = {}
 
 local wire_colors = {
 	Color(200,   0,   0, 255), -- red
@@ -175,7 +174,9 @@ local wire_colors = {
 	Color(255, 160,  50, 255)  -- brown
 }
 
-function PANEL:Init()
+---
+-- @realm client
+function WIREPANEL:Init()
 	self.BaseClass.Init(self)
 
 	self:NoClipping(true)
@@ -186,8 +187,10 @@ function PANEL:Init()
 end
 
 local c4_cut_tex = surface.GetTextureID(c4_cut_mat:GetName())
-function PANEL:PaintOverHovered()
 
+---
+-- @realm client
+function WIREPANEL:PaintOverHovered()
 	surface.SetTexture(c4_cut_tex)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.DrawTexturedRect(175, -20, 32, 32)
@@ -195,22 +198,31 @@ function PANEL:PaintOverHovered()
 	draw.SimpleText(PT("c4_disarm_cut", {num = self.Index}), "DermaDefault", 85, -10, COLOR_WHITE, 0, 0)
 end
 
-PANEL.OnMousePressed = DButton.OnMousePressed
+---
+-- @realm client
+WIREPANEL.OnMousePressed = DButton.OnMousePressed
 
-PANEL.OnMouseReleased = DButton.OnMouseReleased
+---
+-- @realm client
+WIREPANEL.OnMouseReleased = DButton.OnMouseReleased
 
-
-function PANEL:OnCursorEntered()
+---
+-- @realm client
+function WIREPANEL:OnCursorEntered()
 	if not self.IsCut then
 	  self.PaintOver = self.PaintOverHovered
 	end
 end
 
-function PANEL:OnCursorExited()
+---
+-- @realm client
+function WIREPANEL:OnCursorExited()
 	self.PaintOver = self.BaseClass.PaintOver
 end
 
-function PANEL:DoClick()
+---
+-- @realm client
+function WIREPANEL:DoClick()
 	if self:GetParent():GetDisabled() then return end
 
 	self.IsCut = true
@@ -226,29 +238,35 @@ function PANEL:DoClick()
 	end
 end
 
-function PANEL:GetWireColor(i)
+---
+-- @param number i The index of the wire
+-- @realm client
+function WIREPANEL:GetWireColor(i)
 	i = i or 1
 	i = i % (#wire_colors + 1)
 
 	return wire_colors[i] or COLOR_WHITE
 end
 
-function PANEL:SetWireIndex(i)
+---
+-- @realm client
+function WIREPANEL:SetWireIndex(i)
 	self.m_Image:SetImageColor(self:GetWireColor(i))
 
 	self.Index = i
 end
 
-vgui.Register("DisarmWire", PANEL, "DImageButton")
+vgui.Register("DisarmWire", WIREPANEL, "DImageButton")
 
 
 -- Bomb
-local PANEL = {}
+local BOMBPANEL = {}
 
-AccessorFunc(PANEL, "wirecount", "WireCount")
+AccessorFunc(BOMBPANEL, "wirecount", "WireCount")
 
-
-function PANEL:Init()
+---
+-- @realm client
+function BOMBPANEL:Init()
 	self.Bomb = vgui.Create("DImage", self)
 	self.Bomb:SetSize(256, 256)
 	self.Bomb:SetPos(0,0)
@@ -275,7 +293,7 @@ function PANEL:Init()
 	self:SetPaintBackground(false)
 end
 
-vgui.Register( "DisarmPanel", PANEL, "DPanel" )
+vgui.Register( "DisarmPanel", BOMBPANEL, "DPanel" )
 
 
 surface.CreateFont("C4Timer", {
@@ -286,6 +304,9 @@ surface.CreateFont("C4Timer", {
 
 local disarm_success, disarm_fail
 
+---
+-- @param ttt_c4 bomb The bomb to disarm
+-- @realm client
 function ShowC4Disarm(bomb)
 	local dframe = vgui.Create("DFrame")
 	local w, h = 420, 340

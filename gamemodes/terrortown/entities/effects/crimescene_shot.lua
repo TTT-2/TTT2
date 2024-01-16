@@ -7,7 +7,7 @@ local shot_mat = Material("cable/blue_elec")
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Init(data)
 	self.ShotStart = data:GetStart()
 	self.ShotEnd   = data:GetOrigin()
@@ -31,7 +31,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Think()
 	if self.EndTime < CurTime() then
 		return false
@@ -49,7 +49,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Render()
 	render.SetMaterial(shot_mat)
 

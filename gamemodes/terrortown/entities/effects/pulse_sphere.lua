@@ -7,7 +7,7 @@ local mat_orb = Material("models/effects/splodearc_sheet")
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Init(data)
 	self:SetPos(data:GetOrigin())
 
@@ -35,7 +35,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Think()
 	if self.EndTime < CurTime() then
 		SafeRemoveEntity(self.Orb)
@@ -59,7 +59,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Render()
 	render.MaterialOverride(mat_orb)
 	render.SuppressEngineLighting( true )

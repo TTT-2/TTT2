@@ -6,7 +6,7 @@ local backup_mdl = Model("models/player/phoenix.mdl")
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Init(data)
 	self.Corpse = data:GetEntity()
 
@@ -56,7 +56,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Think()
 	if self.EndTime < CurTime() then
 		SafeRemoveEntity(self.Dummy)
@@ -74,7 +74,7 @@ end
 
 ---
 --@ignore
---@realm client
+-- @realm client
 function EFFECT:Render()
 	render.SuppressEngineLighting( true )
 	render.SetColorModulation(0.4, 0.4, 1)
