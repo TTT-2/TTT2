@@ -44,6 +44,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
+- Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
 
 ### Removed
 
