@@ -52,6 +52,7 @@ end
 
 ---
 -- Gets the versionIndex of the version
+-- @param string version The version to get the index of
 -- @return number|nil The index of the version, `nil` if none was found
 -- @realm shared
 function versions.GetVersionIndex(version)
