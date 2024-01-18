@@ -57,7 +57,7 @@ end
 -- @realm shared
 function versions.GetVersionIndex(version)
 	local versionIndex
-	
+
 	for i = #versions.names, 1, -1 do
 		if versions.names[i] ~= version then continue end
 
