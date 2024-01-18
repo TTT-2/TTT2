@@ -22,6 +22,7 @@ ttt_include("sh_cvar_handler")
 ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
+ttt_include("sh_shop")
 ttt_include("sh_shopeditor")
 ttt_include("sh_rolelayering")
 ttt_include("sh_scoring")
@@ -99,6 +100,7 @@ ttt_include("cl_keys")
 ttt_include("cl_wepswitch")
 ttt_include("cl_scoring")
 ttt_include("cl_popups")
+ttt_include("cl_shop")
 ttt_include("cl_equip")
 ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
@@ -292,6 +294,8 @@ function GM:InitPostEntity()
 
 	local client = LocalPlayer()
 
+	client:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
+
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
@@ -358,6 +362,8 @@ function GM:OnReloaded()
 	vskin.UpdatedVSkin(skinName, skinName)
 
 	keyhelp.InitializeBasicKeys()
+
+	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
 
 	---
 	-- @realm shared

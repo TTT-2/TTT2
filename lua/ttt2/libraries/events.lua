@@ -25,7 +25,7 @@ end
 
 ---
 -- Returns the reference to a table of the event.
--- @param string name The name identifer of the event
+-- @param string name The name identifier of the event
 -- @return table The reference to the event table
 -- @realm shared
 function events.Get(name)
@@ -34,7 +34,7 @@ end
 
 ---
 -- Returns the reference to a copy of the table of the event.
--- @param string name The name identifer of the event
+-- @param string name The name identifier of the event
 -- @return table The reference to the copied event table
 -- @realm shared
 function events.Create(name)
@@ -43,7 +43,7 @@ end
 
 ---
 -- Checks if an event with this ID is registered in the event list.
--- @param string name The name identifer of the event
+-- @param string name The name identifier of the event
 -- @return boolean Returns true if an event of this name exists
 -- @realm shared
 function events.Exist(name)
@@ -120,7 +120,7 @@ end
 if SERVER then
 	---
 	-- Triggers an event, adds it to a managed list and starts the score calculation for this event.
-	-- @param string name The name identifer of the event
+	-- @param string name The name identifier of the event
 	-- @param any ... The arguments that should be passed to the event, see the @{EVENT:Trigger} function
 	-- @realm server
 	function events.Trigger(name, ...)

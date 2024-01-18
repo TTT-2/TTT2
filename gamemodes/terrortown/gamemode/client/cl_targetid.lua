@@ -264,6 +264,16 @@ function GM:HUDDrawTargetID()
 	targetid.HUDDrawTargetIDDoors(tData)
 	targetid.HUDDrawTargetIDDNAScanner(tData)
 
+	-- add hints to the focused entity (deprecated method of adding stuff to targetID)
+	local hint = ent.TargetIDHint
+
+	if hint and hint.hint then
+		tData:AddDescriptionLine(
+			hint.fmt(ent, hint.hint),
+			COLOR_LGRAY
+		)
+	end
+
 	---
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid

@@ -225,7 +225,6 @@ Cache votre ID. Évite de paraître comme la dernière personne vue avant de mou
 Activer/Désactiver le déguisement vers l'onglet Déguisement de ce menu ou appuyer sur Numpad Enter.]]
 
 -- C4
-L.c4_hint = "Utilisez {usekey} pour amorcer ou désamorcer."
 L.c4_disarm_warn = "Un explosif C4 que vous avez planté a été désamorcé."
 L.c4_armed = "Vous avez amorcé le C4 avec succès."
 L.c4_disarmed = "Vous avez désamorcé le C4 avec succès."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DÉSARMÉE"
 
 -- Visualizer
 L.vis_name = "Visualiseur"
-L.vis_hint = "Appuyez sur {usekey} pour ramasser (Détectives seulement)."
 
 L.vis_desc = [[
 Dispositif de visualisation de scène de crime.
@@ -1041,17 +1039,12 @@ L.label_shop_show_slot = "Afficher le marqueur de slot"
 L.label_shop_show_custom = "Afficher le marqueur d'objet personnalisé"
 L.label_shop_show_fav = "Afficher le marqueur d'article favoris"
 L.label_crosshair_enable = "Activer le réticule"
-L.label_crosshair_gap_enable = "Activer le réticule centré"
-L.label_crosshair_gap = "Personnalisé l'écartement du réticule centré"
 L.label_crosshair_opacity = "Opacité du réticule"
 L.label_crosshair_ironsight_opacity = "Opacité du réticule du viseur"
 L.label_crosshair_size = "Taille du réticule"
 L.label_crosshair_thickness = "Épaisseur du réticule"
 L.label_crosshair_thickness_outline = "Épaisseur du contour du réticule"
-L.label_crosshair_static_enable = "Activer le réticule statique"
-L.label_crosshair_dot_enable = "Activer le point du réticule "
-L.label_crosshair_lines_enable = "Activer les lignes du réticule"
-L.label_crosshair_scale_enable = "Activer la dépendance du réticule par rapport au type d'arme"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Baissez votre arme lorsque vous utilisez le viseur"
 L.label_damage_indicator_enable = "Activer l'indicateur de dégâts"
 L.label_damage_indicator_mode = "Sélectionnez le thème de l'indicateur de dégâts"
@@ -1765,7 +1758,6 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.label_sprint_max = "Max sprinting stamina"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -2071,6 +2063,10 @@ L.search_eyes = "En utilisant vos compétences de détective, vous avez identifi
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2099,6 +2095,18 @@ L.body_confirm_one = "{finder} a confirmé la mort de {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2109,3 +2117,23 @@ L.body_confirm_one = "{finder} a confirmé la mort de {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

@@ -44,6 +44,7 @@ SWEP.AmmoEnt = "item_ammo_357_ttt"
 SWEP.UseHands = true
 SWEP.ViewModel = Model("models/weapons/cstrike/c_snip_scout.mdl")
 SWEP.WorldModel = Model("models/weapons/w_snip_scout.mdl")
+SWEP.idleResetFix = true
 
 SWEP.IronSightsPos = Vector(5, -15, -2)
 SWEP.IronSightsAng = Vector(2.6, 1.37, 3.5)
@@ -91,8 +92,8 @@ end
 ---
 -- @ignore
 function SWEP:PreDrop()
-	self:SetZoom(false)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	return self.BaseClass.PreDrop(self)
 end
@@ -103,6 +104,7 @@ function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
 	self:DefaultReload(ACT_VM_RELOAD)
+
 	self:SetIronsights(false)
 	self:SetZoom(false)
 end

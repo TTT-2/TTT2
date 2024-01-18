@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 このメニューの変装メニュー内かテンキーのEnterで切り替え。]]
 
 -- C4
-L.c4_hint = "{usekey}を押して起動もしくは解除"
 L.c4_disarm_warn = "C4が解除されてしまった。"
 L.c4_armed = "爆弾は起動完了だ。"
 L.c4_disarmed = "爆弾の解除に成功した。"
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "解除済み"
 
 -- Visualizer
 L.vis_name = "可視化装置"
-L.vis_hint = "{usekey}で拾う（探偵のみ）"
 
 L.vis_desc = [[
 殺害現場を可視化してくれる機械。
@@ -1041,17 +1039,12 @@ L.label_shop_show_slot = "スロットマーカーを表示"
 L.label_shop_show_custom = "カスタムアイテムマーカーを表示"
 L.label_shop_show_fav = "お気に入りアイテムマーカーを表示"
 L.label_crosshair_enable = "クロスヘアあり"
-L.label_crosshair_gap_enable = "カスタムクロスヘアギャップあり"
-L.label_crosshair_gap = "カスタムクロスヘアギャップ"
 L.label_crosshair_opacity = "クロスヘア不透明度"
 L.label_crosshair_ironsight_opacity = "アイアンサイトのクロスヘアの不透明度"
 L.label_crosshair_size = "クロスヘアの大きさ"
 L.label_crosshair_thickness = "クロスヘアの太さ"
 L.label_crosshair_thickness_outline = "クロスヘアの外枠の太さ"
-L.label_crosshair_static_enable = "スタティッククロスヘアを有効"
-L.label_crosshair_dot_enable = "クロスヘアドットを有効"
-L.label_crosshair_lines_enable = "クロスヘアラインを有効"
-L.label_crosshair_scale_enable = "武器依存の武器スケールを有効にする"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "アイアンサイトを使用する場合は武器を提げる"
 L.label_damage_indicator_enable = "ダメージインジケーターを有効"
 L.label_damage_indicator_mode = "ダメージインジケーターのテーマを選択"
@@ -1765,7 +1758,6 @@ L.label_sprint_enabled = "走行を有効"
 L.label_sprint_max = "走行用スタミナ最大値"
 L.label_sprint_stamina_consumption = "スタミナ消費率"
 L.label_sprint_stamina_regeneration = "スタミナ再生率"
-L.label_sprint_crosshair = "走行中のクロスヘアの表示"
 L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
 
@@ -2071,6 +2063,10 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2099,6 +2095,18 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2109,3 +2117,23 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

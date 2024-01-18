@@ -225,7 +225,6 @@ Açıkken kimlik bilgilerinizi gizler. Ayrıca bir mağdur tarafından en son g�
 Bu menünün Kılık Değiştirme sekmesini açın veya Numpad Enter tuşuna basın.]]
 
 -- C4
-L.c4_hint = "Devreye almak veya devre dışı bırakmak için {usekey} tuşuna basın."
 L.c4_disarm_warn = "Yerleştirdiğiniz bir C4 patlayıcı etkisiz hale getirildi."
 L.c4_armed = "Bombayı başarıyla devreye aldınız."
 L.c4_disarmed = "Bombayı başarıyla etkisiz hale getirdiniz."
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "DEVRE DIŞI"
 
 -- Visualizer
 L.vis_name = "Görüntüleyici"
-L.vis_hint = "Açmak için {usekey} tuşuna basın (Yalnızca Dedektifler)."
 
 L.vis_desc = [[
 Olay yeri görüntüleme cihazı.
@@ -1041,17 +1039,12 @@ L.label_shop_show_slot = "Yuva işaretini göster"
 L.label_shop_show_custom = "Özel öğe işaretini göster"
 L.label_shop_show_fav = "Favori öğe işaretini göster"
 L.label_crosshair_enable = "Nişangahı etkinleştir"
-L.label_crosshair_gap_enable = "Özel nişangah boşluğunu etkinleştir"
-L.label_crosshair_gap = "Özel nişangah aralığı"
 L.label_crosshair_opacity = "Nişangah opaklığı"
 L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_static_enable = "Sabit nişangahı etkinleştir"
-L.label_crosshair_dot_enable = "Nişangah noktasını etkinleştir"
-L.label_crosshair_lines_enable = "Nişangah çizgilerini etkinleştir"
-L.label_crosshair_scale_enable = "Silaha bağlı silah ölçeğini etkinleştir"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -1765,7 +1758,6 @@ L.label_sprint_enabled = "Koşmayı etkinleştir"
 L.label_sprint_max = "Maksimum koşma dayanıklılığı"
 L.label_sprint_stamina_consumption = "Dayanıklılık tüketim faktörü"
 L.label_sprint_stamina_regeneration = "Dayanıklılık yenileme faktörü"
-L.label_sprint_crosshair = "Koşarken nişangahı göster"
 L.label_crowbar_unlocks = "Birincil saldırı etkileşim (yani kilit açma) olarak kullanılabilir"
 L.label_crowbar_pushforce = "Levye itme kuvveti"
 
@@ -2071,6 +2063,10 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2099,6 +2095,18 @@ L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir ö
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2109,3 +2117,23 @@ L.header_equipment_info = "Ekipman bilgisi"
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

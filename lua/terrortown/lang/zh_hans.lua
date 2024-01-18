@@ -225,7 +225,6 @@ L.item_disg_desc = [[
 需要启用时，使用本页面的伪装菜单或按下小键盘回车键。]]
 
 -- C4
-L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
 L.c4_disarm_warn = "你所安放的C4已被拆除。"
 L.c4_armed = "C4安放成功。"
 L.c4_disarmed = "你成功拆除了C4。"
@@ -255,7 +254,6 @@ L.c4_status_disarmed = "拆除"
 
 -- Visualizer
 L.vis_name = "显像器"
-L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
 
 L.vis_desc = [[
 可让犯罪现场显像化的仪器。
@@ -1041,17 +1039,12 @@ L.label_shop_show_slot = "显示装备槽位"
 L.label_shop_show_custom = "显示自定义标记"
 L.label_shop_show_fav = "显示最爱标记"
 L.label_crosshair_enable = "启用十字准星"
-L.label_crosshair_gap_enable = "启用自定义准星大小"
-L.label_crosshair_gap = "自定义准星大小"
 L.label_crosshair_opacity = "准星透明度"
 L.label_crosshair_ironsight_opacity = "瞄准时准星透明度"
 L.label_crosshair_size = "准星长度"
 L.label_crosshair_thickness = "准星粗细"
 L.label_crosshair_thickness_outline = "准星外框粗细"
-L.label_crosshair_static_enable = "启用静态准星"
-L.label_crosshair_dot_enable = "启用准星中点"
-L.label_crosshair_lines_enable = "启用准星直线"
-L.label_crosshair_scale_enable = "启用武器对应准星大小"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "瞄准时降低武器模型"
 L.label_damage_indicator_enable = "启用伤害指示"
 L.label_damage_indicator_mode = "选择伤害指示主题"
@@ -1765,7 +1758,6 @@ L.label_sprint_enabled = "启用冲刺功能"
 L.label_sprint_max = "冲刺体力最大值"
 L.label_sprint_stamina_consumption = "体力消耗系数"
 L.label_sprint_stamina_regeneration = "体力恢复系数"
-L.label_sprint_crosshair = "冲刺时显示准星"
 L.label_crowbar_unlocks = "主要攻击键可以作为互动（即解锁）使用"
 L.label_crowbar_pushforce = "撬棍推动力"
 
@@ -2071,6 +2063,10 @@ L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
@@ -2099,6 +2095,18 @@ L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2109,3 +2117,23 @@ L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

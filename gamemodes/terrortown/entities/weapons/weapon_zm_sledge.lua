@@ -39,6 +39,7 @@ SWEP.Primary.Sound = Sound("Weapon_m249.Single")
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_mach_m249para.mdl"
 SWEP.WorldModel = "models/weapons/w_mach_m249para.mdl"
+SWEP.idleResetFix = true
 
 SWEP.HeadshotMultiplier = 2.2
 

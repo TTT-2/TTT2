@@ -721,7 +721,7 @@ end
 -- Returns the language identifier for a specific spawnType/entType combination.
 -- @param number spawnType The type of the spawn
 -- @param number entType The specific entity type for the specific spawn type
--- @return string Returns the language identifer
+-- @return string Returns the language identifier
 -- @realm shared
 function entspawnscript.GetLangIdentifierFromSpawnType(spawnType, entType)
 	return spawnData[spawnType][entType].name or "undefined_lang_identifier"
@@ -1003,7 +1003,8 @@ function entspawnscript.StartEditing(ply)
 	else
 		if entspawnscript.IsEditing(ply) then return end
 
-		ply:CacheAndStripWeapons()
+		ply:CacheAndStripWeapons(true)
+		ply:CacheAndStripItems()
 
 		timer.Simple(0, function()
 			if not IsValid(ply) then return end
@@ -1031,6 +1032,7 @@ function entspawnscript.StopEditing(ply)
 		if not entspawnscript.IsEditing(ply) then return end
 
 		ply:RestoreCachedWeapons()
+		ply:RestoreCachedItems()
 		ply:StripWeapon("weapon_ttt_spawneditor")
 
 		entspawnscript.SetEditing(ply, false)
