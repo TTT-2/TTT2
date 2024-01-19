@@ -739,25 +739,6 @@ function plymeta:UnSpectate()
 end
 
 ---
--- Returns whether a @{Player} has disabled the selection of a given @{ROLE}
--- @param number role subrole id of a @{ROLE}
--- @return boolean
--- @realm server
-function plymeta:GetAvoidRole(role)
-	return false
-end
-
----
--- Returns whether a @{Player} has disabled the selection of the detective role
--- @note This gives compatibility for some legacy ttt addons
--- @return boolean
--- @realm server
--- @deprecated
-function plymeta:GetAvoidDetective()
-	return false
-end
-
----
 -- Returns whether a @{Player} is able to select a specific @{ROLE}
 -- @param ROLE roleData
 -- @param number choice_count

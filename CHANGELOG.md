@@ -56,6 +56,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
   - Returned text and result are now replaced by a statusCode
+- No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
