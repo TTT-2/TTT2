@@ -685,6 +685,8 @@ local function SelectForcedRoles(plys, selectableRoles)
 
 			if roleCount <= curCount then break end -- if the limit is reached, stop selection for this role
 
+			table.remove(forcedPlys, pick) -- remove selected player to avoid multiple selection
+
 			roleselection.forcedRoles[tostring(ply:SteamID64())] = nil
 
 			if roleselection.finalRoles[ply] then continue end -- we don't need to set a final role if this player already has a final role

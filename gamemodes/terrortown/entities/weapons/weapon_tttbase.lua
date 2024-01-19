@@ -1312,7 +1312,20 @@ hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
 	wep:SetZoom(false)
 end)
 
-if SERVER then
+if CLIENT then
+	---
+	-- Tell the server about the users preference regarding holding aim or toggle aim,
+	-- necessary to avoid prediction issues
+	local function UpdateHoldAimCV()
+		net.Start("TTT2UpdateHoldAimConvar")
+		net.WriteBool(ttt2_hold_aim:GetBool())
+		net.SendToServer()
+	end
+
+	hook.Add("InitPostEntity", "TTT2InitHoldAimCV", UpdateHoldAimCV)
+
+	cvars.AddChangeCallback("ttt2_hold_aim", UpdateHoldAimCV)
+else
 	net.Receive("TTT2UpdateHoldAimConvar", function(_, ply)
 		ply.holdAim = net.ReadBool()
 	end)

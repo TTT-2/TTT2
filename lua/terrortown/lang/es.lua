@@ -187,6 +187,7 @@ L.sb_info_help = "Investiga el cadáver de este jugador, puedes revisar los resu
 
 L.sb_tag_friend = "AMIGO"
 L.sb_tag_susp = "SOSPECHOSO"
+L.sb_tag_avoid = "EVITAR"
 L.sb_tag_kill = "MATAR"
 L.sb_tag_miss = "PERDIDO"
 

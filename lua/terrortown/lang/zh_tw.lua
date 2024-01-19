@@ -187,6 +187,7 @@ L.sb_info_help = "搜索此玩家的屍體，可以獲取一些線索。"
 
 L.sb_tag_friend = "可信任者"
 L.sb_tag_susp = "有嫌疑者"
+L.sb_tag_avoid = "應迴避者"
 L.sb_tag_kill = "已死者"
 L.sb_tag_miss = "失蹤者"
 

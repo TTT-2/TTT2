@@ -159,6 +159,27 @@ function PANEL:SetMax(max)
 end
 
 ---
+-- @param any val
+-- @param boolean ignoreCallbackEnabledVars To avoid endless loops, separated setting of convars and UI values
+-- @realm client
+function PANEL:SetValue(value, ignoreCallbackEnabledVars)
+	if not value then return end
+
+	value = math.Clamp(tonumber(value) or 0, self:GetMin(), self:GetMax())
+	value = math.Round(value, self:GetDecimals())
+
+	if value == self:GetValue() then return end
+
+	self.m_fValue = value
+
+	self:ValueChanged(value)
+	-- Set ConVars only when Mouse is released
+	if ignoreCallbackEnabledVars or self:IsEditing() then return end
+
+	self:SetCallbackEnabledVarValues(value)
+end
+
+---
 -- @realm client
 function PANEL:SetValueFromTextBox()
 	local val = self.TextArea:GetText()

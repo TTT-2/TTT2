@@ -316,6 +316,8 @@ function items.MigrateLegacyItems()
 		for i = 1, #tbl do
 			local v = tbl[i]
 
+			if v.avoidTTT2 then continue end
+
 			local name = v.ClassName or v.name or WEPS.GetClass(v)
 
 			if not name then continue end

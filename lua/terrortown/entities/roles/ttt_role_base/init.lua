@@ -25,6 +25,21 @@ function ROLE:RemoveRoleLoadout(ply, isRoleChange)
 end
 
 ---
+-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
+-- @return boolean
+-- @realm server
+function ROLE:IsSelectable(avoidHook)
+	return self == roles.INNOCENT or self == roles.TRAITOR
+		or (GetConVar("ttt_newroles_enabled"):GetBool() or self == roles.DETECTIVE)
+		and not self.notSelectable
+		and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
+		---
+		-- @realm server
+		and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
+end
+
+---
 -- Returns the available amount of this role based on the given amount of available players
 -- @param number ply_count amount of available players
 -- @return number selectable amount of this role

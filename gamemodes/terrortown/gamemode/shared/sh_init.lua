@@ -244,6 +244,21 @@ function GetBaseRole(subrole)
 	return roles.GetByIndex(subrole):GetBaseRole()
 end
 
+if SERVER then
+
+	---
+	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+	-- @param ROLE roleData
+	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
+	-- @return boolean
+	-- @realm server
+	-- @see ROLE:IsSelectable
+	-- @deprecated
+	function IsRoleSelectable(roleData, avoidHook)
+		return roleData:IsSelectable(avoidHook)
+	end
+end
+
 ---
 -- Returns a list of subroles of this BaseRole (this subrole's BaseRole)
 -- @param number subrole subrole id of a @{ROLE}

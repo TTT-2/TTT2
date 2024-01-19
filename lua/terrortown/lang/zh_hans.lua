@@ -187,6 +187,7 @@ L.sb_info_help = "搜索此玩家的尸体，可以获取一些线索。"
 
 L.sb_tag_friend = "可信"
 L.sb_tag_susp = "可疑"
+L.sb_tag_avoid = "躲避"
 L.sb_tag_kill = "死亡"
 L.sb_tag_miss = "失踪"
 

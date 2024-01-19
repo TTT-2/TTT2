@@ -251,6 +251,8 @@ local function PlayerStandsOn(ent)
 end
 
 if SERVER then
+	local ent_diff = vector_origin
+	local ent_diff_time = CurTime()
 	local stand_time = 0
 
 	---
@@ -259,6 +261,22 @@ if SERVER then
 		BaseClass.Think(self)
 
 		if not self:CheckValidity() then return end
+
+		-- If we are too far from our object, force a drop. To avoid doing this
+		-- vector math extremely often (esp. when everyone is carrying something)
+		-- even though the occurrence is very rare, limited to once per
+		-- second. This should be plenty to catch the rare glitcher.
+		if CurTime() > ent_diff_time then
+			ent_diff = self:GetPos() - self.EntHolding:GetPos()
+
+			if ent_diff:Dot(ent_diff) > 40000 then
+				self:Reset()
+
+				return
+			end
+
+			ent_diff_time = CurTime() + 1
+		end
 
 		if CurTime() > stand_time then
 			if PlayerStandsOn(self.EntHolding) then
@@ -395,6 +413,9 @@ function SWEP:DoAttack(pickup)
 				if self:AllowPickup(trEnt) then
 					self:Pickup()
 					self:SendWeaponAnim(ACT_VM_HITCENTER)
+
+					-- make the refire slower to avoid immediately dropping
+					local delay = (trEnt:GetClass() == "prop_ragdoll") and 0.8 or 0.5
 
 					self:SetNextSecondaryFire(CurTime() + delay)
 

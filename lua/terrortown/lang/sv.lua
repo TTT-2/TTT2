@@ -187,6 +187,7 @@ L.sb_info_help = "Om du kollar igenom denna spelares lik kan du se resultaten h�
 
 L.sb_tag_friend = "VÄN"
 L.sb_tag_susp = "MISSTÄNKT"
+L.sb_tag_avoid = "UNDVIK"
 L.sb_tag_kill = "DÖDA"
 L.sb_tag_miss = "SAKNAD"
 

@@ -7,6 +7,10 @@ local cv_sv_cheats = GetConVar("sv_cheats")
 
 local function SendWeaponDrop()
 	RunConsoleCommand("ttt_dropweapon")
+
+	-- Turn off weapon switch display if you had it open while dropping, to avoid
+	-- inconsistencies.
+	WSWITCH:Disable()
 end
 
 ---

@@ -187,6 +187,7 @@ L.sb_info_help = "Przejrzyj zwłoki tego gracza, a znajdziesz tutaj wyniki jego 
 
 L.sb_tag_friend = "PRZYJACIEL"
 L.sb_tag_susp = "PODEJRZANY"
+L.sb_tag_avoid = "UNIKAĆ"
 L.sb_tag_kill = "ZABIĆ"
 L.sb_tag_miss = "ZAGINIONY"
 

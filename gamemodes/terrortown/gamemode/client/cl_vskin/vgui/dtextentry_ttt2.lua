@@ -67,6 +67,24 @@ end
 
 ---
 -- @param any val
+-- @param boolean ignoreConVar To avoid endless loops, separated setting of convars and UI values
+-- @realm client
+function PANEL:SetValue(value, ignoreConVar)
+	if not value then return end
+
+	if value == self:GetValue() then return end
+
+	self.m_sValue = value
+
+	self:ValueChanged(value)
+
+	if ignoreConVar then return end
+
+	self:SetConVarValues(value)
+end
+
+---
+-- @param any val
 -- @realm client
 function PANEL:SetConVarValues(value)
 	if self.conVar then

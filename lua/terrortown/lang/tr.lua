@@ -187,6 +187,7 @@ L.sb_info_help = "Bu oyuncunun cesedinde arama yapıp sonuçları buradan incele
 
 L.sb_tag_friend = "ARKADAŞ"
 L.sb_tag_susp = "ŞÜPHELİ"
+L.sb_tag_avoid = "KAÇIN"
 L.sb_tag_kill = "ÖLDÜR"
 L.sb_tag_miss = "KAYIP"
 
