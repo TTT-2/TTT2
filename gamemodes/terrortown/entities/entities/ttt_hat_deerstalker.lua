@@ -96,7 +96,7 @@ if SERVER then
 
 		-- if we're not already on the player's head,
 		if IsValid(ply) then
-			local pos, ang = ply:GetBonePosition(bone)
+			local pos, ang = playermodels.GetHatPosition(ply)
 			self:SetPos(pos)
 			self:SetAngles(ang)
 		end
