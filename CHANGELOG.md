@@ -33,6 +33,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
 - Grenades have icons
+- Brought down the `EFFECT`s: `crimescene_dummy`, `crimescene_shot`, `pulse_sphere`, `teleport_beamdown`, `teleport_beamup`
+- Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
+- Brought down the `SWEP`: `weapon_ttt_stungun`
+- Brought down the menu for arming/defusing C4
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
 
@@ -42,6 +46,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
+- Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
 
 ### Removed
 

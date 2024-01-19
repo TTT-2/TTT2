@@ -2082,9 +2082,6 @@ L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks
 -- 2023-11-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
 
--- 2023-11-20
--- on this day, nothing happened in this location
-
 -- 2023-12-18
 L.body_confirm_one = "{finder} confirmed the death of {victim}."
 L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
