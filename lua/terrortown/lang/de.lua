@@ -2078,6 +2078,12 @@ L.crowbar_help_secondary = "Spieler schubsen"
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Platziere die Attrappe."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
@@ -2105,6 +2111,8 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --L.builtin_marker = "Built-in."
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2118,11 +2126,12 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
-L.decoy_help_pri = "Platziere die Attrappe."
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
 --For a rifle, this would affect just the bullet.
 --For the poltergeist, this would affect each "thump" and the final explosion.
 --
+--0.5 = Deal half the amount of damage.
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]

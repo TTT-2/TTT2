@@ -2059,8 +2059,9 @@ L.label_keyhelper_possession_dash = "prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
+-- 2023-12-07
 --L.c4_help_primary = "Place the C4"
---L.newton_force = "FORCE"
+--L.c4_help_secondary = "Stick to surface"
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
@@ -2075,12 +2076,15 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 --L.newton_help_secondary = "Charged knockback shot"
 
 -- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
 --L.defuser_help_primary = "Defuse targeted C4"
 --L.radio_help_primary = "Place the Radio"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "安放诱饵。"
+
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"

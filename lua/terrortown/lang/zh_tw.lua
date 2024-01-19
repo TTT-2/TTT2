@@ -2078,7 +2078,6 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
-
 --L.defuser_help_primary = "Defuse targeted C4"
 --L.radio_help_primary = "Place the Radio"
 --L.radio_help_secondary = "Stick to surface"
