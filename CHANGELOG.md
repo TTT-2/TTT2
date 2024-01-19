@@ -38,6 +38,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
+- Improve Simplified Chinese String Translation (by @sbzlzh)
+- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
 
 ### Fixed
 
