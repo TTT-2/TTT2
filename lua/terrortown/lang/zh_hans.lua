@@ -1864,7 +1864,7 @@ L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
 
 L.search_floor_antlions = "尸体上仍然爬满了蚁狮。地上也一定爬满了它们。"
 L.search_floor_bloodyflesh = "尸体上的血看起来又老又恶心，甚至有小块血肉粘在鞋上。"
-L.search_floor_concrete = "灰色的尘土覆盖了他们的鞋子和膝盖。看起来犯罪现场的地板是混凝土的。"
+L.search_floor_concrete = "灰色的尘土覆盖了尸体的鞋子和膝盖。看起来犯罪现场的地面是混凝土制的。"
 L.search_floor_dirt = "闻起来有泥土的味道。可能是来自粘在受害者鞋子上的泥土。"
 L.search_floor_eggshell = "恶心的白色斑点覆盖了受害者的身体。看起来像鸡蛋壳。"
 L.search_floor_flesh = "受害者的衣服感觉有点湿。好像他们摔在了一个湿的表面上。像是肉质的表面，或者水体的沙地。"
