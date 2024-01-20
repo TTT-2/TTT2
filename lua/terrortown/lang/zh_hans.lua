@@ -1863,7 +1863,7 @@ L.search_dmg_car = "他穿越马路时被一个粗心的驾驶碾死了。"
 L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
 
 L.search_floor_antlions = "尸体上仍然爬满了蚁狮。地上也一定爬满了它们。"
-L.search_floor_bloodyflesh = "身上的血看起来又老又恶心。甚至有小块血肉粘在他们的鞋子上。"
+L.search_floor_bloodyflesh = "尸体上的血看起来又老又恶心，甚至有小块血肉粘在鞋上。"
 L.search_floor_concrete = "灰色的尘土覆盖了他们的鞋子和膝盖。看起来犯罪现场的地板是混凝土的。"
 L.search_floor_dirt = "闻起来有泥土的味道。可能是来自粘在受害者鞋子上的泥土。"
 L.search_floor_eggshell = "恶心的白色斑点覆盖了受害者的身体。看起来像鸡蛋壳。"
