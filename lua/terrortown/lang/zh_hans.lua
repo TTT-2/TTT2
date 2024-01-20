@@ -1543,7 +1543,7 @@ L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜�
 L.button_reset_models = "重置玩家模型"
 
 -- 2021-10-13
-L.help_roles_credits_award_kill = "另一种获得积分的方式是通过杀死拥有“公开角色”的高价值玩家，比如侦探。如果杀手的身份启用了这个功能，他们会获得此处配置的积分量。"
+L.help_roles_credits_award_kill = "另一种获得积分的方式是通过杀死拥有'公开身份'的高价值玩家，比如侦探。如果杀手的身份启用了这个功能，他们会获得此处配置的积分量。"
 L.help_roles_credits_award = [[
 在TTT2中，有两种不同的方式可以获得积分：
 
