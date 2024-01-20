@@ -1910,7 +1910,7 @@ L.search_kill_from_side = "受害者是侧面中弹的。"
 
 L.search_hitgroup_head = "弹头来自尸体的头部。"
 L.search_hitgroup_chest = "弹头来自尸体的胸部。"
-L.search_hitgroup_stomach = "弹头在他们的胃部找到。"
+L.search_hitgroup_stomach = "弹头来自尸体的胃部。"
 L.search_hitgroup_rightarm = "弹头在他们的右臂找到。"
 L.search_hitgroup_leftarm = "弹头在他们的左臂找到。"
 L.search_hitgroup_rightleg = "弹头在他们的右腿找到。"
