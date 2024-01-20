@@ -1877,17 +1877,17 @@ L.search_floor_sand = "小小的粗糙的岩石粘在他们冰冷的身体上。
 L.search_floor_foliage = "大自然真美。受害者的血腥伤口被足够的叶子覆盖，几乎被隐藏起来。"
 L.search_floor_computer = "嘀嗒嘀嗒。他的尸体被计算机表面覆盖着！你问这看起来会是什么样子？额，诶嘿！"
 L.search_floor_slosh = "湿漉漉的，甚至可能有点黏糊糊的。他们的整个身体都被它覆盖，衣服也被浸湿。它很臭！"
-L.search_floor_tile = "小碎片粘在他们的皮肤上。像是地板瓷砖在撞击时破碎的碎片。"
+L.search_floor_tile = "许多碎片插在尸体上，像是摔在瓷砖地面上时砸出的痕迹。"
 L.search_floor_grass = "闻起来像刚割过的草。这种气味几乎盖过了血和死亡的气味。"
-L.search_floor_vent = "当你摸他们的身体时，你感觉到一股新鲜的气流。他们是不是在通风口里死的，然后带走了空气？"
+L.search_floor_vent = "当你摸他们的身体时，你感觉到一股新鲜的气流。他是不是在死在了通风口里然后带走了空气？"
 L.search_floor_wood = "有什么比坐在硬木地板上沉思更好的事情呢？至少不是躺在木地板上死！"
-L.search_floor_default = "那看起来很基础，很正常。几乎是默认的。你无法判断出任何类型的表面。"
-L.search_floor_glass = "他们的身体上满是许多血腥的切口。其中一些切口里卡着玻璃碎片，看起来对你来说相当威胁。"
-L.search_floor_warpshield = "由warpshield制成的地板？是的，我们和你一样困惑。但我们的笔记清楚地记载了它。Warpshield。"
+L.search_floor_default = "那看起来很基础，很普通。像是默认的一样。你无法判断出这个表面的任何特征。"
+L.search_floor_glass = "他的尸体上全是血腥的切口。有些伤口里卡着玻璃碎片，看上去挺吓人的。"
+L.search_floor_warpshield = "由'warpshield'制成的地板？没错，我们和你一样困惑。但我们的笔记上清楚地这么写着。'Warpshield'。"
 
-L.search_water_1 = "受害者的鞋子是湿的，但其余部分似乎是干的。他们可能是在水中被杀的。"
-L.search_water_2 = "受害者的鞋子和裤子都被浸透了。他们在被杀之前是不是在水中漫步？"
-L.search_water_3 = "整个身体都是湿的，肿胀的。他们可能是在完全被淹没的时候死的。"
+L.search_water_1 = "受害者的鞋子沾了水，但其他地方都是干的。他可能是脚踩在水里时被杀的。"
+L.search_water_2 = "受害者的鞋子和裤子都湿透了。他们在被杀时是不是在涉水？"
+L.search_water_3 = "潮湿的尸体全身肿胀着。他可能是在完全被淹没的时候死的。"
 
 L.search_weapon = "死者是被 {weapon} 所杀。"
 L.search_head = "最后一击打在头上。完全没机会叫喊。"
@@ -1915,7 +1915,7 @@ L.search_hitgroup_rightarm = "弹头来自尸体的右臂。"
 L.search_hitgroup_leftarm = "弹头来自尸体的左臂。"
 L.search_hitgroup_rightleg = "弹头来自尸体的右腿。"
 L.search_hitgroup_leftleg = "弹头来自尸体的左腿。"
-L.search_hitgroup_gear = "弹头在他们的臀部找到。"
+L.search_hitgroup_gear = "弹头来自尸体的腰部。"
 
 L.search_policingrole_report_confirm = [[
 只有在尸体被确认死亡后，才能召唤公共警察角色到死亡的尸体。]]
@@ -1925,7 +1925,7 @@ L.search_policingrole_confirm_disabled_2 = [[
 只有公共警察角色才能确认尸体。报告尸体让他们知道！
 他们确认后，你可以在这里看到信息。]]
 L.search_spec = [[
-作为观众，你能看到尸体的所有信息，但不能与界面互动。]]
+作为观察者，你能看到尸体的所有信息，但不能与界面交互。]]
 
 L.search_title_words = "受害者的遗言"
 L.search_title_c4 = "拆弹失误"
