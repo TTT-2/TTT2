@@ -1913,7 +1913,7 @@ L.search_hitgroup_chest = "弹头来自尸体的胸部。"
 L.search_hitgroup_stomach = "弹头来自尸体的胃部。"
 L.search_hitgroup_rightarm = "弹头来自尸体的右臂。"
 L.search_hitgroup_leftarm = "弹头来自尸体的左臂。"
-L.search_hitgroup_rightleg = "弹头在他们的右腿找到。"
+L.search_hitgroup_rightleg = "弹头来自尸体的右腿。"
 L.search_hitgroup_leftleg = "弹头在他们的左腿找到。"
 L.search_hitgroup_gear = "弹头在他们的臀部找到。"
 
