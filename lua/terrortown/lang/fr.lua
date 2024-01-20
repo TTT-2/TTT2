@@ -1002,6 +1002,7 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Autre"
 
 L.submenu_gameplay_general_title = "Général"
+
 L.submenu_administration_hud_title = "Paramètres HUD"
 L.submenu_administration_randomshop_title = "Shop Aléatoire"
 

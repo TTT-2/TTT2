@@ -1002,6 +1002,7 @@ L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrir
 --L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 --L.submenu_gameplay_general_title = "General"
+
 --L.submenu_administration_hud_title = "HUD Settings"
 --L.submenu_administration_randomshop_title = "Random Shop"
 
