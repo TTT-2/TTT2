@@ -55,7 +55,7 @@ function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList
 			receiver = plysTeam
 		end
 
-		-- note: when VISIBLE_FOR_ALL receiver is nil, therefore SendStream uses net.Boradcast
+		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and therefore SendStream uses net.Broadcast
 		net.SendStream("ttt2_register_entity_added", streamTable, receiverList or receiver)
 	end
 
@@ -78,9 +78,9 @@ function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList
 end
 
 ---
--- Returns the visibleFor flag for a provided entiy, nil if not set
+-- Returns the visibleFor flag for a provided entity, nil if not set
 -- @param Entity ent The tracked entity
--- @return number|nil The vibility flag
+-- @return number|nil The visibility flag
 -- @realm shared
 function markerVision.GetVisibleFor(ent)
 	if not IsValid(ent) or not markerVision.registry[ent] then return end
@@ -92,7 +92,7 @@ end
 -- Removes the entity from the radar vision table.
 -- @param Entity ent The entity that should be removed
 -- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
--- @note Call on server to remove entity on server and all defined clients.
+-- @note The `receiverList` parameter only takes effect when called on the server and the visibility level of `VISIBLE_FOR_TEAM`.
 -- @realm shared
 function markerVision.RemoveEntity(ent, receiverList)
 	if not IsValid(ent) or not markerVision.registry[ent] then return end
@@ -123,8 +123,8 @@ end
 ---
 -- Updates the entity on the server and all related clients.
 -- @param Entity ent The entity that should be updated
--- @param Player owner The owner of the wallhack that takes their ownershipo with them on team change
--- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
+-- @param[opt] Player owner The new owner of the wallhack 
+-- @param[opt] table visibleFor The new visibility level
 -- @note Call on server to add entity on server and all defined clients.
 -- @realm shared
 function markerVision.UpdateEntity(ent, owner, visibleFor)
