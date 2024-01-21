@@ -71,7 +71,7 @@ L.close = "Kapat"
 L.cancel = "İptal"
 
 -- For navigation buttons
-L.next = "İleri"
+L.next = "Sonraki"
 L.prev = "Önceki"
 
 -- Equipment buying menu
@@ -145,7 +145,7 @@ L.radio_button_rifle = "Tüfek atışı"
 L.radio_button_huge = "H.U.G.E. patlaması"
 L.radio_button_c4 = "C4 bip sesi"
 L.radio_button_burn = "Yanma sesi"
-L.radio_button_steps = "Ayak sesleri"
+L.radio_button_steps = "Adım sesi"
 
 -- Intro screen shown after joining
 L.intro_help = "Oyunda yeniyseniz, talimatlar için F1'e basın!"
@@ -171,7 +171,7 @@ L.quick_corpse = "kimliği belirsiz bir ceset var"
 L.quick_corpse_id = "{player} oyuncusunun cesedi"
 
 -- Scoreboard
-L.sb_playing = "Şu anda oynuyorsunuz..."
+L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
 L.sb_mapchange = "{num} rauntta veya {time} içinde harita değişecektir."
 L.sb_mapchange_disabled = "Oturum sınırları devre dışı."
 
@@ -232,7 +232,7 @@ L.c4_no_room = "Bu C4'ü taşıyamazsınız."
 
 L.c4_desc = "Güçlü zaman ayarlı patlayıcı."
 
-L.c4_arm = "C4 kuşan"
+L.c4_arm = "C4 kur"
 L.c4_arm_timer = "Zamanlayıcı"
 L.c4_arm_seconds = "Patlamaya saniye kaldı"
 L.c4_arm_attempts = "Etkisiz hale getirme girişimlerinde, 6 telden {num} tanesi kesildiğinde anında patlamaya neden olur."
@@ -280,7 +280,7 @@ Bir C4 patlayıcısını anında etkisiz hale getirin.
 Sınırsız kullanım. Bunu taşırsanız C4'ün fark edilmesi daha kolay olacaktır.]]
 
 -- Flare gun
-L.flare_name = "İşaret fişeği tabancası"
+L.flare_name = "İşaret Fişeği"
 
 L.flare_desc = [[
 Cesetleri asla bulunamayacak şekilde yakmak için kullanılabilir. Sınırlı cephane.
@@ -308,7 +308,7 @@ Alternatif ateş kullanılarak atılabilir.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Katilleri nesneleri şiddetle itip kakmak için üzerlerine vururlar.
+Katilleri nesnelerle şiddetle itip kakarlar.
 
 Enerji patlamaları yakındaki insanlara zarar verir.]]
 
@@ -329,7 +329,7 @@ Düşük gürültülü tabanca, normal tabanca mermisi kullanır.
 Kurbanlar öldürüldüklerinde çığlık atmazlar.]]
 
 -- Newton launcher
-L.newton_name = "Newton fırlatıcı"
+L.newton_name = "Newton Fırlatıcı"
 
 L.newton_desc = [[
 İnsanları güvenli bir mesafeden itin.
@@ -373,7 +373,7 @@ L.magnet_help = "Cesedi yüzeye tutturmak için {primaryfire}"
 
 -- Grenades and misc
 L.grenade_smoke = "Duman bombası"
-L.grenade_fire = "Yakıcı bomba"
+L.grenade_fire = "Yanıcı bomba"
 
 L.unarmed_name = "Gizlendi"
 L.crowbar_name = "Levye"
@@ -405,11 +405,11 @@ Işınlanma gürültü yapar ve kullanım sayısı sınırlıdır.]]
 L.ammo_pistol = "9mm cephanesi"
 
 L.ammo_smg1 = "SMG cephanesi"
-L.ammo_buckshot = "Pompalı tüfek cephanesi"
+L.ammo_buckshot = "Pompalı Tüfek cephanesi"
 L.ammo_357 = "Tüfek cephanesi"
 L.ammo_alyxgun = "Deagle cephanesi"
-L.ammo_ar2altfire = "İşaret fişeği cephanesi"
-L.ammo_gravity = "Poltergeist cephanesi"
+L.ammo_ar2altfire = "İşaret Fişeği cephanesi"
+L.ammo_gravity = "Afacan Peri cephanesi"
 
 -- Round status
 L.round_wait = "Bekleniyor"
@@ -430,8 +430,8 @@ L.hp_death = "Ölüme Yakın"
 
 -- TargetID Karma status
 L.karma_max = "Saygın"
-L.karma_high = "Ham"
-L.karma_med = "Tetik Çekmeye Hazır"
+L.karma_high = "İyi"
+L.karma_med = "Tetik Çekmeye Meyilli"
 L.karma_low = "Tehlikeli"
 L.karma_min = "Sorumsuz"
 
@@ -512,7 +512,7 @@ L.tips_panel_tip = "İpucu"
 -- Tip texts
 L.tip1 = "Hainler, {walkkey} tuşunu basılı tutarak ve {usekey} tuşuna basarak, ölümü onaylamadan bir cesedi sessizce arayabilirler."
 
-L.tip2 = "Bir C4 patlayıcısını daha uzun bir zamanlayıcıyla donatmak, masum biri onu etkisiz hale getirmeye çalıştığında anında patlamasına neden olan tellerin sayısını artıracaktır. Ayrıca daha yumuşak ve daha az sıklıkta bip sesi çıkaracaktır."
+L.tip2 = "Bir C4'ü daha uzun bir zamanlayıcıyla donatmak, masum biri onu etkisiz hale getirmeye çalıştığında anında patlamasına neden olan tellerin sayısını artıracaktır. Ayrıca daha yumuşak ve daha az sıklıkta bip sesi çıkaracaktır."
 
 L.tip3 = "Dedektifler, 'gözlerine yansıyanı' bulmak için bir cesedi arayabilirler. Bu, ölü adamın gördüğü son kişi. Arkadan vurulduysa katil olmak zorunda değil."
 
@@ -526,7 +526,7 @@ L.tip7 = "Hainler masumları öldürmede önemli ilerleme kaydettiklerinde, öd�
 
 L.tip8 = "Hainler ve Dedektifler, diğer Hainlerin ve Dedektiflerin cesetlerinden harcanmamış ekipman kredileri toplayabilir."
 
-L.tip9 = "Afacan Peri herhangi bir fizik nesnesini ölümcül bir mermiye dönüştürebilir. Her yumruğa, yakındaki herkese zarar veren bir enerji patlaması eşlik eder."
+L.tip9 = "Afacan Peri herhangi bir fizik nesnesini ölümcül bir mermiye dönüştürebilir. Her darbeye, yakındaki herkese zarar veren bir enerji patlaması eşlik eder."
 
 L.tip10 = "Hain veya Dedektifseniz, sağ üstteki kırmızı mesajlara dikkat edin. Bunlar sizin için önemli olacak."
 
@@ -594,7 +594,7 @@ L.tip40 = "Raunt zamanlayıcısının üzerinde 'HIZLI MOD' yazıyorsa, raunt il
 L.report_title = "Raunt Raporu"
 
 -- Tabs
-L.report_tab_hilite = "Önemli Noktalar"
+L.report_tab_hilite = "Öne Çıkanlar"
 L.report_tab_hilite_tip = "Rauntta Öne Çıkanlar"
 L.report_tab_events = "Olaylar"
 L.report_tab_events_tip = "Bu raunt gerçekleşen olayların kaydı"
@@ -953,7 +953,7 @@ L.door_open_touch = "Açmak için kapıya doğru yürü."
 L.door_open_touch_and_use = "Kapıya doğru yürü veya açmak için [{usekey}] tuşuna bas."
 
 -- 2020-03-09
-L.help_title = "Yardım ve Ayarlar"
+L.help_title = "Ayarlar ve Yardım"
 
 L.menu_changelog_title = "Değişiklik günlüğü"
 L.menu_guide_title = "TTT2 Kılavuzu"
@@ -972,7 +972,7 @@ L.menu_guide_description = "TTT2'ye başlamanıza yardımcı olur ve oyun, rolle
 L.menu_bindings_description = "TTT2'nin ve eklentilerinin belirli özelliklerini kendi beğeninize göre ayarlayın."
 L.menu_language_description = "Oyun modunun dilini seçin."
 L.menu_appearance_description = "Kullanıcı arayüzünün görünümünü ve performansını değiştirin."
-L.menu_gameplay_description = "Rollerden kaçının ve bazı özellikleri düzenleyin."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Yerel eklentileri istediğiniz gibi yapılandırın."
 L.menu_legacy_description = "Orijinal TTT'den dönüştürülen sekmelerin yeni sisteme taşınması gereken bir panel."
 L.menu_administration_description = "Arayüzler, mağazalar vb. için genel ayarlar"
@@ -999,7 +999,6 @@ L.submenu_appearance_interface_title = "Arayüz"
 L.submenu_appearance_miscellaneous_title = "Çeşitli"
 
 L.submenu_gameplay_general_title = "Genel"
-L.submenu_gameplay_avoidroles_title = "Rol Seçiminden Kaçın"
 
 L.submenu_administration_hud_title = "Arayüz Ayarları"
 L.submenu_administration_randomshop_title = "Rasgele Mağaza"
@@ -1041,7 +1040,9 @@ L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
---L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
+
+L.label_crosshair_scale_enable = "Silaha bağlı nişangah ölçeğini etkinleştir"
+
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -1071,7 +1072,7 @@ L.label_hud_basecolor = "Temel Renk"
 
 L.label_menu_not_populated = "Bu alt menü herhangi bir içerik içermiyor."
 
-L.header_bindings_ttt2 = "TTT2 Atamaları"
+L.header_bindings_ttt2 = "TTT2 Tuş Atamaları"
 L.header_bindings_other = "Diğer Atamalar"
 L.header_language = "Dil Ayarları"
 L.header_global_color = "Genel Rengi Seç"
@@ -1087,7 +1088,6 @@ L.header_damage_indicator = "Hasar Göstergesi Ayarları"
 L.header_performance_settings = "Performans Ayarları"
 L.header_interface_settings = "Arayüz Ayarları"
 L.header_gameplay_settings = "Oynanış Ayarları"
-L.header_roleselection = "Kaçınılan Rolleri Seç"
 L.header_hud_administration = "Varsayılan ve Zorunlu Arayüzleri Seç"
 L.header_hud_enabled = "Arayüzleri etkinleştir veya devre dışı bırak"
 
@@ -1101,13 +1101,13 @@ L.button_hud_editor = "Arayüz Düzenleyici"
 
 -- 2020-04-20
 L.item_speedrun = "Hız"
-L.item_speedrun_desc = [[Sizi % 50 daha hızlı yapar!]]
+L.item_speedrun_desc = [[Sizi %50 daha hızlı yapar!]]
 L.item_no_explosion_damage = "Patlama Hasarı Yok"
 L.item_no_explosion_damage_desc = [[Patlama hasarına karşı bağışıklık kazandırır.]]
 L.item_no_fall_damage = "Düşme Hasarı Yok"
 L.item_no_fall_damage_desc = [[Düşme hasarına karşı bağışıklık kazandırır.]]
-L.item_no_fire_damage = "Yangın Hasarı Yok"
-L.item_no_fire_damage_desc = [[Yangın hasarına karşı bağışıklık kazandırır.]]
+L.item_no_fire_damage = "Yanma Hasarı Yok"
+L.item_no_fire_damage_desc = [[Yanma hasarına karşı bağışıklık kazandırır.]]
 L.item_no_hazard_damage = "Tehlike Hasarı Yok"
 L.item_no_hazard_damage_desc = [[Zehir, radyasyon ve asit gibi tehlike hasarlarına karşı bağışıklık kazandırır.]]
 L.item_no_energy_damage = "Enerji Hasarı Yok"
@@ -1124,8 +1124,8 @@ L.dna_screen_ready = "DNA yok"
 L.dna_screen_match = "Eşleşme"
 
 -- 2020-04-30
-L.message_revival_canceled = "Canlandırma iptal edildi."
-L.message_revival_failed = "Canlandırma başarısız oldu."
+L.message_revival_canceled = "Diriliş iptal edildi."
+L.message_revival_failed = "Diriliş başarısız oldu."
 L.message_revival_failed_missing_body = "Cesediniz artık mevcut olmadığı için diriltilemediniz."
 L.hud_revival_title = "Dirilişe kalan süre"
 L.hud_revival_time = "{time}sn"
@@ -1401,18 +1401,18 @@ Bu oluşum noktası sisteminin dinamik oluşumları kullandığı unutulmamalıd
 
 Birçok değişikliğin ancak yeni bir raunt başladıktan sonra yürürlüğe gireceğini unutmayın.]]
 L.help_spawn_editor_enable = "Bazı haritalarda, haritada bulunan orijinal oluşum noktalarının dinamik sistemle değiştirilmeden kullanılması önerilebilir. Aşağıdaki bu seçeneğin değiştirilmesi yalnızca şu anda etkin olan haritayı etkiler, bu nedenle dinamik sistem diğer tüm haritalar için kullanılmaya devam edecektir."
-L.help_spawn_editor_hint = "İpucu ÇN düzenleyicisinden çıkmak için oyun modu menüsünü yeniden açın."
+L.help_spawn_editor_hint = "İpucu oluşum düzenleyicisinden çıkmak için oyun modu menüsünü yeniden açın."
 L.help_spawn_editor_spawn_amount = [[
 Şu anda bu haritada {weapon} silah oluşumu, {ammo} cephane oluşumu ve {player} oyuncu canlanma noktaları var.
-Bu miktarı değiştirmek için 'ÇN düzenlemesini başlat'a tıklayın.
+Bu miktarı değiştirmek için 'ON düzenlemesini başlat'a tıklayın.
 
 {weaponrandom}x Rastgele Silah Oluşumu
 {weaponmelee}x Yakın Dövüş Silahı Oluşumu
 {weaponnade}x El Bombası Oluşumu
 {weaponshotgun}x Pompalı Silahı Oluşumu
 {weaponheavy}x Ağır Silah Oluşumu
-{weaponsniper}x Keskin Nişancı Silahı Oluşumu
-{weaponpistol}x Tabanca Silahı Oluşumu
+{weaponsniper}x Keskin Nişancı Oluşumu
+{weaponpistol}x Tabanca Oluşumu
 {weaponspecial}x Özel Silah Oluşumu
 
 {ammorandom}x Rastgele Cephane Oluşumu
@@ -1531,9 +1531,9 @@ L.label_roles_max_baseroles = "Üst temel rol sınırı"
 L.label_roles_max_baseroles_pct = "Yüzde olarak üst temel rol sınırı"
 L.label_detective_hats = "Dedektif gibi polislik rolleri için şapkaları etkinleştir (oyuncu modeli izin veriyorsa)"
 
-L.ttt2_desc_innocent = "Bir Masum, hiçbir özel yeteneğe sahip değildir. Teröristler arasında kötüleri bulup öldürmek zorundalar. Ama takım arkadaşlarını öldürmemeye dikkat etmek zorundalar."
+L.ttt2_desc_innocent = "Bir Masum, hiçbir özel yeteneğe sahip değildir. Teröristler arasında kötüleri bulup öldürmek zorundalar. Ayrıca takım arkadaşlarını öldürmemeye dikkat etmek zorundalar."
 L.ttt2_desc_traitor = "Hain, Masumların düşmanıdır. Özel ekipman satın alabilecekleri bir ekipman menüsü vardır. Takım arkadaşları hariç herkesi öldürmek zorundalar."
-L.ttt2_desc_detective = "Masumların güvenebileceği kişi Dedektiftir. Ama Masum bile olsa, kudretli Dedektif tüm kötü teröristleri bulmak zorundadır. Mağazalarındaki ekipmanlar bu görevde onlara yardımcı olabilir."
+L.ttt2_desc_detective = "Masumların güvenebileceği kişi Dedektiftir. Kudretli Dedektif tüm kötü teröristleri bulmak zorundadır. Mağazalarındaki ekipmanlar bu görevde onlara yardımcı olabilir."
 
 -- 2021-10-10
 L.button_reset_models = "Oyuncu Modellerini Sıfırla"
@@ -1629,20 +1629,20 @@ Hasar alırken, bu hasarın belirli bir yüzdesi zırh hasarına dönüştürül
 Güçlendirilmiş zırh etkinleştirilirse, zırh değeri takviye eşiğinin üzerinde olduğu sürece oyuncuya uygulanan hasar %15 azaltılır.]]
 L.help_sherlock_mode = "Sherlock modu klasik TTT modudur. Sherlock modu devre dışı bırakılırsa, cesetler onaylanamaz, puan tablosu herkesi canlı olarak gösterir ve izleyiciler yaşayan oyuncularla konuşabilir."
 L.help_prop_possession = [[
-Nesne kontrolü, izleyiciler tarafından dünyada bulunan nesneleri kontrol etmek için kullanılabilir ve söz konusu nesneyi hareket ettirmek için yavaş şarj olan 'güç ölçeri' kullanılabilir."
+Nesne kontrolü, izleyiciler tarafından dünyada bulunan nesneleri kontrol etmek için kullanılabilir ve söz konusu nesneyi hareket ettirmek için yavaş şarj olan 'güç ölçeri' kullanılabilir.
 
 'Güç Ölçeri'nin maksimum değeri, tanımlanmış iki sınır arasına sıkıştırılmış ölüm farkının eklendiği bir topa sahip olma temel değerinden oluşur. Sayaç zamanla yavaş yavaş şarj olur. Ayarlanan şarj süresi, 'güç ölçerde' tek bir noktayı şarj etmek için gereken süredir.]]
 L.help_karma = "Oyuncular belirli miktarda Karma ile başlar ve takım arkadaşlarına zarar verdiklerinde kaybederler. Kaybettikleri miktar, hasar verdikleri veya öldürdükleri kişinin Karmasına bağlıdır. Düşük Karma, verilen hasarı azaltır."
 L.help_karma_strict = "Katı Karma etkinleştirilirse, Karma düştükçe hasar cezası daha hızlı artar. Kapalı olduğunda, insanlar 800'ün üzerinde kaldığında hasar cezası çok düşüktür. Katı modu etkinleştirmek, Karma'nın gereksiz öldürmeleri caydırmada daha büyük bir rol oynamasını sağlarken, onu devre dışı bırakmak, Karma'nın yalnızca takım arkadaşlarını sürekli olarak öldüren oyunculara zarar verdiği daha \"gevşek\" bir oyunla sonuçlanır."
 L.help_karma_max = "Maks. Karmanın değerini 1000'in üzerine ayarlamak, 1000'den fazla Karmaya sahip oyunculara hasar bonusu vermez. Karma sınırı olarak kullanılabilir."
-L.help_karma_ratio = "Her ikisi de aynı takımdaysa, kurbanın Karmasının ne kadarının saldırgandan çıkarıldığını hesaplamak için kullanılan hasarın oranı. Bir takım öldürme gerçekleşirse, başka bir ceza uygulanır."
+L.help_karma_ratio = "Her ikisi de aynı takımdaysa, kurbanın Karmasının ne kadarının saldırgandan çıkarıldığını hesaplamak için kullanılan hasarın oranıdır. Bir takım öldürme gerçekleşirse, başka bir ceza uygulanır."
 L.help_karma_traitordmg_ratio = "Her ikisi de farklı takımlarda ise, kurbanın Karmasının ne kadarının saldırgana eklendiğini hesaplamak için kullanılan hasarın oranı. Eğer bir düşman öldürülürse, bir bonus daha uygulanır."
-L.help_karma_bonus = "Bir rauntta Karma kazanmanın iki farklı pasif yolu da vardır. Birincisi, raunt sonundaki her oyuncuya uygulanan bir karma restorasyonudur. Daha sonra, hiçbir takım arkadaşı bir oyuncu tarafından yaralanmamış veya öldürülmemişse, ikincil bir temiz raunt bonusu verilir."
+L.help_karma_bonus = "Bir rauntta Karma kazanmanın iki farklı pasif yolu da vardır. Birincisi, raunt sonundaki her oyuncuya uygulanan bir karma restorasyonudur. Hiçbir takım arkadaşı bir oyuncu tarafından yaralanmamış veya öldürülmemişse, ikincil bir temiz raunt bonusu verilir."
 L.help_karma_clean_half = [[
-Bir oyuncunun Karması başlangıç seviyesinin üzerinde olduğunda (yani maksimum Karma bundan daha yüksek olacak şekilde yapılandırıldığında), tüm Karma artışları, Karmalarının başlangıç seviyesinin ne kadar üzerinde olduğuna bağlı olarak azaltılacaktır. Yani ne kadar yüksek olursa o kadar yavaş yükselir."
+Bir oyuncunun Karması başlangıç seviyesinin üzerinde olduğunda (yani maksimum Karma bundan daha yüksek olacak şekilde yapılandırıldığında), tüm Karma artışları, Karmalarının başlangıç seviyesinin ne kadar üzerinde olduğuna bağlı olarak azaltılacaktır. Yani ne kadar yüksek olursa o kadar yavaş yükselir.
 
-Bu azalma, başlangıçta hızlı olan üstel bir bozunma eğrisine girer ve artış küçüldükçe yavaşlar. Bu konvar, bonusun hangi noktada yarıya indirildiğini (yani yarılanma ömrünü) belirler. Varsayılan değer 0.25 ile, Karma'nın başlangıç miktarı 1000 ve maksimum 1500 ise ve bir oyuncu Karma 1125'e ((1500 - 1000) 0.25 = "125) sahipse, temiz raunt bonusu 30 2 = "15 olacaktır. Böylece bonusu daha hızlı düşürmek için bu konvarı düşürürsünüz, daha yavaş düşürmek için 1'e yükseltirsiniz.]]
-L.help_max_slots = "Yuva başına maksimum silah miktarını ayarlar. '-1 ', sınır olmadığı anlamına gelir."
+Bu azalma, başlangıçta hızlı olan üstel bir bozunma eğrisine girer ve artış küçüldükçe yavaşlar. Bu konvar, bonusun hangi noktada yarıya indirildiğini (yani yarılanma ömrünü) belirler. Varsayılan değer 0.25 ile, Karma'nın başlangıç miktarı 1000 ve maksimum 1500 ise ve bir oyuncu Karma 1125'e ((1500 - 1000) 0.25 = 125) sahipse, temiz raunt bonusu 30 2 = 15 olacaktır. Böylece bonusu daha hızlı düşürmek için bu konvarı düşürürsünüz, daha yavaş düşürmek için 1'e yükseltirsiniz.]]
+L.help_max_slots = "Yuva başına maksimum silah miktarını ayarlar. '-1', sınır olmadığı anlamına gelir."
 L.help_item_armor_value = "Dinamik modda zırh ögesinin verdiği zırh değeridir. Klasik mod etkinleştirilirse (bkz. 'Yönetim' - 'Oyuncu Ayarları'), 0'dan büyük her değer mevcut zırh olarak sayılır."
 
 L.label_killer_dna_range = "DNA bırakmak için maksimum öldürme aralığı"
@@ -1663,8 +1663,8 @@ L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
 L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
-L.label_ragdoll_pinning = "Masum olmayan roller için ragdoll sabitlemeyi etkinleştir"
-L.label_ragdoll_pinning_innocents = "Masum roller için ragdoll pinlemeyi etkinleştir"
+L.label_ragdoll_pinning = "Masum olmayan roller için ceset sabitlemeyi etkinleştir"
+L.label_ragdoll_pinning_innocents = "Masum roller için ceset pinlemeyi etkinleştir"
 L.label_weapon_carrying = "Silah taşımayı etkinleştir"
 L.label_weapon_carrying_range = "Silah taşıma menzili"
 L.label_prop_carrying_force = "Nesne kaldırma gücü"
@@ -1773,10 +1773,10 @@ Bu değeri değiştirirken dikkatli olun. Çok yükseğe ayarlamak en küçük d
 L.testpopup_title = "Çok satırlı bir başlık içeren bir test açılır penceresi, ne GÜZEL!"
 L.testpopup_subtitle = "Aa merhaba! Bu, bazı özel bilgiler içeren süslü bir açılır penceredir. Metin çok satırlı da olabilir, ne kadar süslü! Off, herhangi bir fikrim olsaydı çok daha fazla metin ekleyebilirdim..."
 
-L.hudeditor_chat_hint1 = "[TTT2][BİLGİ] Bir öğenin üzerine gelin, [LMB] tuşuna basın ve basılı tutun ve TAŞIMAK veya YENİDEN BOYUTLANDIRMAK için fareyi hareket ettirin."
+L.hudeditor_chat_hint1 = "[TTT2][BİLGİ] Bir öğenin üzerine gelin, [SOL TIK] tuşuna basın ve basılı tutun. TAŞIMAK veya YENİDEN BOYUTLANDIRMAK için fareyi hareket ettirin."
 L.hudeditor_chat_hint2 = "[TTT2][BİLGİ] Simetrik yeniden boyutlandırma için ALT tuşuna basın ve basılı tutun."
 L.hudeditor_chat_hint3 = "[TTT2][BİLGİ] Eksen üzerinde hareket etmek ve en boy oranını korumak için SHIFT tuşunu basılı tutun."
-L.hudeditor_chat_hint4 = "[TTT2][BİLGİ] Arayüz Düzenleyiciden çıkmak için [RMB] - 'Kapat'a bas!"
+L.hudeditor_chat_hint4 = "[TTT2][BİLGİ] Arayüz Düzenleyiciden çıkmak için [SAĞ TIK] - 'Kapat'a bas!"
 
 L.guide_nothing_title = "Henüz burada bir şey yok!"
 L.guide_nothing_desc = "Bu devam eden bir çalışmadır. GitHub'daki projeye katkıda bulunarak bize yardımcı olun."
@@ -1820,8 +1820,8 @@ L.slot_weapon_extra = "Ekstra Yuva"
 L.slot_weapon_class = "Sınıf Yuvası"
 
 -- 2023-10-04
-L.label_voice_duck_spectator = "İzleyici seslerini buğula"
-L.label_voice_duck_spectator_amount = "İzleyici seslerini buğulama miktarı"
+L.label_voice_duck_spectator = "İzleyici seslerini azalt"
+L.label_voice_duck_spectator_amount = "İzleyici seslerini azaltma miktarı"
 L.label_voice_scaling = "Ses Seviyesi Ölçekleme Modu"
 L.label_voice_scaling_mode_linear = "Doğrusal"
 L.label_voice_scaling_mode_power4 = "Güç 4"
@@ -1925,17 +1925,17 @@ Bir izleyici olarak bir cesedin tüm bilgilerini görebilirsiniz, ancak kullanı
 
 L.search_title_words = "Kurbanın son sözleri"
 L.search_title_c4 = "Parçalarına ayrılma talihsizliği"
-L.search_title_dmg_crush = "Ezme hasarı ({amount} HP)"
-L.search_title_dmg_bullet = "Mermi hasarı ({amount} HP)"
-L.search_title_dmg_fall = "Düşme hasarı ({amount} HP)"
-L.search_title_dmg_boom = "Patlama hasarı ({amount} HP)"
-L.search_title_dmg_club = "Beyzbol sopası hasarı ({amount} HP)"
-L.search_title_dmg_drown = "Boğulma hasarı ({amount} HP)"
-L.search_title_dmg_stab = "Bıçaklama hasarı ({amount} HP)"
-L.search_title_dmg_burn = "Yanma hasarı ({amount} HP)"
-L.search_title_dmg_teleport = "Işınlanma hasarı ({amount} HP)"
-L.search_title_dmg_car = "Araba kazası ({amount} HP)"
-L.search_title_dmg_other = "Bilinmeyen hasar ({amount} HP)"
+L.search_title_dmg_crush = "Ezme hasarı ({amount} SP)"
+L.search_title_dmg_bullet = "Mermi hasarı ({amount} SP)"
+L.search_title_dmg_fall = "Düşme hasarı ({amount} SP)"
+L.search_title_dmg_boom = "Patlama hasarı ({amount} SP)"
+L.search_title_dmg_club = "Beyzbol sopası hasarı ({amount} SP)"
+L.search_title_dmg_drown = "Boğulma hasarı ({amount} SP)"
+L.search_title_dmg_stab = "Bıçaklama hasarı ({amount} SP)"
+L.search_title_dmg_burn = "Yanma hasarı ({amount} SP)"
+L.search_title_dmg_teleport = "Işınlanma hasarı ({amount} SP)"
+L.search_title_dmg_car = "Araba kaza hasarı ({amount} SP)"
+L.search_title_dmg_other = "Bilinmeyen hasar ({amount} SP)"
 L.search_title_time = "Ölüm zamanı"
 L.search_title_dna = "DNA örneği bozunması"
 L.search_title_kills = "Kurbanın ölüm listesi"
@@ -1975,13 +1975,13 @@ L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri i�
 
 -- 2023-10-25
 L.help_keyhelp = [[
-Tuş atama yardımcıları, oyuncuya her zaman güncel tuş atamalarını gösteren ve özellikle yeni oyuncular için yararlı olan bir kullanıcı arayüzü öğesinin bir parçasıdır. Üç farklı türde tuş atama vardır
+Tuş atama yardımcıları, oyuncuya her zaman güncel tuş atamalarını gösteren ve özellikle yeni oyuncular için yararlı olan bir kullanıcı arayüzü öğesinin bir parçasıdır. Üç farklı türde tuş atama vardır.
 
 Çekirdek: Bunlar, TTT2'de bulunan en önemli atamaları içerir. Onlar olmadan oyunu tam potansiyeliyle oynamak zordur.
 Ekstra Core'a benzer, ancak her zaman onlara ihtiyacınız yoktur. Sohbet, ses veya el feneri gibi şeyler içerirler. Yeni oyuncuların bunu etkinleştirmesi yararlı olabilir.
-Ekipman bazı ekipman öğelerinin kendi atamaları vardır, bunlar bu kategoride gösterilmiştir.
+Bazı ekipman öğelerinin kendi atamaları vardır, bunlar bu kategoride gösterilmiştir.
 
-Puan tablosu görünür olduğunda devre dışı kategoriler hala gösterilir]]
+Puan tablosu görünür olduğunda devre dışı kategoriler hala gösterilir.]]
 
 L.label_keyhelp_show_core = "Her zaman çekirdek atamaları göstermeyi etkinleştir"
 L.label_keyhelp_show_extra = "Her zaman ekstra atamaları göstermeyi etkinleştir"
@@ -2084,10 +2084,12 @@ L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "Tuzağı yerleştirin."
+L.vis_no_pickup = "Sadece kamu polisliği rolleri görüntüleyiciyi alabilir"
+L.newton_force = "GÜÇ"
 
 -- 2023-12-14
---L.beacon_help_pri = "Throw Beacon on the ground"
---L.beacon_help_sec = "Stick Beacon to surface"
+L.beacon_help_pri = "Feneri yere at"
+L.beacon_help_sec = "Feneri yere yapıştır"
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
@@ -2114,44 +2116,42 @@ L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
 -- 2023-12-22
---L.submenu_gameplay_accessibility_title = "Accessibility"
+L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
---L.header_accessibility_settings = "Accessibility Settings"
+L.header_accessibility_settings = "Erişilebilirlik Ayarları"
 
---L.label_enable_dynamic_fov = "Enable dynamic FOV change"
---L.label_enable_bobbing = "Enable view bobbing"
---L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+L.label_enable_dynamic_fov = "Dinamik FOV değişikliğini etkinleştir"
+L.label_enable_bobbing = "Sallanmayı etkinleştir"
+L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
---L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
+L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
 
 -- 2023-12-20
---L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
---For a shotgun, this would affect each pellet.
---For a rifle, this would affect just the bullet.
---For the poltergeist, this would affect each "thump" and the final explosion.
---
---0.5 = Deal half the amount of damage.
---2 = Deal twice the amount of damage.
---
---Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
+Bir pompalı için bu, her bir saçmayı etkileyecektir.
+Bir tüfek için bu sadece kurşunu etkiler.
+Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
+0.5 = Hasar miktarının yarısını ver.
+2 = Hasar miktarının iki katı kadar hasar ver.
+Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
 -- 2023-12-24
---L.binoc_help_reload = "Clear target."
+L.binoc_help_reload = "Hedefi kaldırın."
 
 -- 2024-01-05
---L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
---L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
---L.label_crosshair_mode = "Crosshair mode"
---L.label_crosshair_static_length = "Enable static crosshair line length"
+L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
+L.label_crosshair_outline_high_contrast = "Dış çizgi yüksek kontrast rengini etkinleştir"
+L.label_crosshair_mode = "Nişangah modu"
+L.label_crosshair_static_length = "Statik nişangah çizgi uzunluğunu etkinleştir"
 
---L.choice_crosshair_mode_0 = "Lines and dot"
---L.choice_crosshair_mode_1 = "Lines only"
---L.choice_crosshair_mode_2 = "Dot only"
+L.choice_crosshair_mode_0 = "Çizgiler ve nokta"
+L.choice_crosshair_mode_1 = "Sadece çizgiler"
+L.choice_crosshair_mode_2 = "Sadece nokta"
 
---L.help_crosshair_scale_enable = [[
---Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
---
---If the line length is kept static, only the gap scales with cone changes.]]
+L.help_crosshair_scale_enable = [[
+Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendirilmesini sağlar. Koni, zıplama ve koşma gibi dış faktörlerle çarpılan silahın taban isabetinden etkilenir.
 
---L.header_weapon_settings = "Weapon Settings"
+Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
+
+L.header_weapon_settings = "Silah Ayarları"

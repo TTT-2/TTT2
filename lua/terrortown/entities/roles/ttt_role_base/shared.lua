@@ -94,9 +94,6 @@ ROLE.conVarData = {
 
 	-- Sets the shop for this role, by default roles have no shop set.
 	shopFallback = SHOP_DISABLED,
-
-	-- If this is enabled the 'avoid role selection' can be toggled for this role.
-	togglable = true
 }
 
 -- This role variable makes the role unselectable if set to true. This might be
