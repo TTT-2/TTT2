@@ -2122,7 +2122,6 @@ L.decoy_help_pri = "Piazza un esca."
 -- 2023-12-18
 L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
 --L.builtin_marker = "Built-in."

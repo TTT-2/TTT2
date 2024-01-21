@@ -2122,7 +2122,6 @@ L.entity_pickup_owner_only = "只有拥有者才能捡起这个"
 -- 2023-12-18
 L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 L.body_confirm_more = "{finder} 确认了以下 {count} 人的死亡: {victims}。"
---L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
 L.builtin_marker = "内置。"

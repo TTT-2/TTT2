@@ -2122,7 +2122,6 @@ L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 -- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
 L.builtin_marker = "Bütünleşik."

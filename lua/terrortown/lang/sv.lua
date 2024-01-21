@@ -2122,7 +2122,6 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 -- 2023-12-18
 L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
 --L.builtin_marker = "Built-in."
