@@ -1,5 +1,5 @@
 ---
--- A module that let's devs create bomb visions for any entity that is automatically synced
+-- A module that let's devs create marker visions for any entity that is automatically synced
 -- between server and client and is tied to a player and their team
 -- @author Mineotopia
 -- @module markerVision
