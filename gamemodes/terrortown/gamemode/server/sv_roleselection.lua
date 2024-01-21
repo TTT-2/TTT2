@@ -586,15 +586,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
 			roleCount = roleCount - selectedForcedRoles[subrole]
 		end
 
-		local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
-		local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
-
-		-- give this player the role if
-		if plysAmount <= roleCount -- or there aren't enough players anymore to have a greater role variety
-			or ply:GetBaseKarma() > minKarma -- or the player has enough karma
-				and not ply:GetAvoidRole(subrole) -- and the player doesn't avoid this role
-			or math.random(3) == 2 -- or if the randomness decides
-		then
+		if ply:CanSelectRole(roleData, plysAmount, availableRolesAmount) then
 			table.remove(plys, pick)
 
 			roleselection.finalRoles[ply] = subrole
@@ -782,9 +774,7 @@ end
 local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 	local curRoles = 0
 	local plysList = {}
-
-	local minKarmaCVar = GetConVar("ttt_" .. roles.GetByIndex(subrole).name .. "_karma_min")
-	local min_karmas = minKarmaCVar and minKarmaCVar:GetInt() or 0
+	local roleData = roles.GetByIndex(subrole)
 
 	while curRoles < roleAmount and #plys > 0 do
 		-- select random index in plys table
@@ -793,13 +783,7 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 		-- the player we consider
 		local ply = plys[pick]
 
-		-- give this player the role if
-		if subrole == ROLE_INNOCENT -- this role is an innocent role
-			or #plys <= roleAmount -- or there aren't enough players anymore to have a greater role variety
-			or ply:GetBaseKarma() > min_karmas -- or the player has enough karma
-				and not ply:GetAvoidRole(subrole) -- and the player doesn't avoid this role
-			or math.random(3) == 2 -- or if the randomness decides
-		then
+		if subrole == ROLE_INNOCENT or ply:CanSelectRole(roleData, #plys, roleAmount) then
 			table.remove(plys, pick)
 
 			curRoles = curRoles + 1
@@ -825,6 +809,9 @@ function roleselection.SelectRoles(plys, maxPlys)
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
 	plys = roleselection.GetSelectablePlayers(plys or player.GetAll())
+
+	-- Randomize role assignment by shuffling the list early.
+	table.Shuffle(plys)
 
 	maxPlys = maxPlys or #plys
 

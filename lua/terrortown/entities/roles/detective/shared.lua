@@ -33,8 +33,6 @@ function ROLE:PreInitialize()
 		credits = 1,
 		creditsAwardDeadEnable = 1,
 		creditsAwardKillEnable = 0,
-
-		togglable = true
 	}
 end
 
