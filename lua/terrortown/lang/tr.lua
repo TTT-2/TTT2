@@ -2104,7 +2104,6 @@ L.decoy_help_pri = "Tuzağı yerleştirin."
 -- 2023-12-18
 L.beacon_help_pri = "Feneri yere at"
 L.beacon_help_sec = "Feneri yere yapıştır"
-
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.

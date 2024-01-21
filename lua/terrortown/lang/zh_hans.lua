@@ -2102,17 +2102,8 @@ L.decoy_help_pri = "安放诱饵。"
 --L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
 
 -- 2023-12-18
---L.beacon_help_pri = "Throw Beacon on the ground"
---L.beacon_help_sec = "Stick Beacon to surface"
---L.beacon_name = "Beacon"
---L.beacon_desc = [[
---Broadcasts player locations to everyone in a sphere around this beacon.
---
---Use to keep track of locations on the map that are hard to see.]]
-
 L.beacon_help_pri = "将信标扔在地上"
 L.beacon_help_sec = "将信标粘贴到表面"
-
 L.beacon_name = "信标"
 L.beacon_desc = [[
 将玩家位置广播给信标周围球形范围内的所有人。
@@ -2126,19 +2117,12 @@ L.beacon_pickup_disabled = "只有信标的拥有者才能拾起它"
 L.beacon_short_desc = "警察角色使用信标在他们周围添加本地透视效果"
 
 -- 2023-12-18
---L.entity_pickup_owner_only = "Only the owner can pick this up"
-
--- 2023-12-18
-L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
---L.target_pickup_disabled = "You can not pick up this weapon"
-
--- 2023-11-18
 L.entity_pickup_owner_only = "只有拥有者才能捡起这个"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 L.body_confirm_more = "{finder} 确认了以下 {count} 人的死亡: {victims}。"
+--L.target_pickup_disabled = "You can not pick up this weapon"
 
 -- 2023-12-19
 L.builtin_marker = "内置。"
