@@ -2074,16 +2074,14 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 --L.newton_help_secondary = "Charged knockback shot"
 
 -- 2023-12-13
---L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
---L.newton_force = "FORCE"
+L.vis_no_pickup = "只有公共警察角色才能捡起显像器"
+L.newton_force = "推力"
 --L.defuser_help_primary = "Defuse targeted C4"
 --L.radio_help_primary = "Place the Radio"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "安放诱饵。"
-L.vis_no_pickup = "只有公共警察角色才能捡起显像器"
-L.newton_force = "推力"
 
 -- 2023-12-14
 L.beacon_help_pri = "将信标扔在地上"

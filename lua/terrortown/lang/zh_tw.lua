@@ -999,6 +999,7 @@ L.submenu_appearance_interface_title = "界面"
 L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
+
 L.submenu_administration_hud_title = "HUD 設置"
 L.submenu_administration_randomshop_title = "隨機商店"
 

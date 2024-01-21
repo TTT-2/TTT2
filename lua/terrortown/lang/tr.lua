@@ -1040,9 +1040,7 @@ L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-
 L.label_crosshair_scale_enable = "Silaha bağlı nişangah ölçeğini etkinleştir"
-
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -2076,16 +2074,14 @@ L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 --L.newton_help_secondary = "Charged knockback shot"
 
 -- 2023-12-13
---L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
---L.newton_force = "FORCE"
+L.vis_no_pickup = "Sadece kamu polisliği rolleri görüntüleyiciyi alabilir"
+L.newton_force = "GÜÇ"
 --L.defuser_help_primary = "Defuse targeted C4"
 --L.radio_help_primary = "Place the Radio"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
 L.decoy_help_pri = "Tuzağı yerleştirin."
-L.vis_no_pickup = "Sadece kamu polisliği rolleri görüntüleyiciyi alabilir"
-L.newton_force = "GÜÇ"
 
 -- 2023-12-14
 L.beacon_help_pri = "Feneri yere at"
