@@ -273,7 +273,6 @@ Detectiveに偽のレーダー反応を表示させ、彼らがあなたのDNA�
 
 -- Defuser
 L.defuser_name = "C4除去装置"
-L.defuser_help = "{primaryfire}でC4除去"
 
 L.defuser_desc = [[
 C4爆弾を即座に除去する。
@@ -292,7 +291,6 @@ L.flare_desc = [[
 L.hstation_name = "回復ステーション"
 
 L.hstation_broken = "回復ステーションが破壊された！"
-L.hstation_help = "{primaryfire}で回復ステーション設置"
 
 L.hstation_desc = [[
 回復が可能な設置型の機械。チャージは遅く、
@@ -316,7 +314,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "ラジオが破壊された！"
-L.radio_help_pri = "{primaryfire}でラジオを置く"
 
 L.radio_desc = [[
 注意を逸らしたり欺くために音を再生できる機械。
@@ -975,7 +972,7 @@ L.menu_guide_description = "TTT2が初めての方への説明、遊び方、役
 L.menu_bindings_description = "TTT2用の特定の機能、\nまたはそれ対応のアドオン関連のキーを設定。"
 L.menu_language_description = "言語を設定できます。"
 L.menu_appearance_description = "外見やユーザーインターフェイスを\n微調整できます。"
-L.menu_gameplay_description = "ある役職になることを避けたりなど、\nそのほかの微調整ができます。"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "個人のお好きで、現在導入されている\nアドオン構成ができます。"
 L.menu_legacy_description = "旧TTTのように設定ができ、\nその設定はTTT2にも適用されます。"
 L.menu_administration_description = "HUD、ショップやその他の設定。"
@@ -1002,7 +999,6 @@ L.submenu_appearance_interface_title = "インターフェイス"
 L.submenu_appearance_miscellaneous_title = "その他"
 
 L.submenu_gameplay_general_title = "基本設定"
-L.submenu_gameplay_avoidroles_title = "役職設定"
 
 L.submenu_administration_hud_title = "HUD設定"
 L.submenu_administration_randomshop_title = "ランダムショップ"
@@ -1090,7 +1086,6 @@ L.header_damage_indicator = "ダメージインジケータ設定"
 L.header_performance_settings = "パフォーマンス設定"
 L.header_interface_settings = "インターフェイス設定"
 L.header_gameplay_settings = "ゲーム設定"
-L.header_roleselection = "あまりなりたくない役職を選択(必ずならないわけではありません)"
 L.header_hud_administration = "デフォルトと強制的HUDを選択"
 L.header_hud_enabled = "HUD 有効/無効"
 
@@ -1152,7 +1147,6 @@ L.binoc_help_sec = "ズームレベル変更"
 
 L.vis_help_pri = "可視化装置を落とす"
 
-L.decoy_help_pri = "デコイを設置する"
 
 -- 2020-08-07
 L.pickup_error_spec = "観戦者のためこれは拾えないようだ。"
@@ -2063,9 +2057,31 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "デコイを設置する"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

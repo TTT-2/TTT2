@@ -273,7 +273,6 @@ Diğer takımlara sahte bir radar işareti gösterir ve biri DNA'nızı tararsa 
 
 -- Defuser
 L.defuser_name = "İmha Kiti"
-L.defuser_help = "{primaryfire}, hedef C4'ü etkisiz hale getirir."
 
 L.defuser_desc = [[
 Bir C4 patlayıcısını anında etkisiz hale getirin.
@@ -292,7 +291,6 @@ Bir cesedi yakmak belirgin bir ses çıkarır.]]
 L.hstation_name = "Sağlık İstasyonu"
 
 L.hstation_broken = "Sağlık İstasyonun yok edildi!"
-L.hstation_help = "{primaryfire} Sağlık İstasyonunu yerleştirir."
 
 L.hstation_desc = [[
 Yerleştirildiğinde insanların iyileşmesini sağlar.
@@ -316,7 +314,6 @@ Enerji patlamaları yakındaki insanlara zarar verir.]]
 
 -- Radio
 L.radio_broken = "Radyonuz yok edildi!"
-L.radio_help_pri = "{primaryfire} radyoyu yerleştirir."
 
 L.radio_desc = [[
 Dikkat dağıtmak veya kandırmak için sesler çıkarır.
@@ -975,7 +972,7 @@ L.menu_guide_description = "TTT2'ye başlamanıza yardımcı olur ve oyun, rolle
 L.menu_bindings_description = "TTT2'nin ve eklentilerinin belirli özelliklerini kendi beğeninize göre ayarlayın."
 L.menu_language_description = "Oyun modunun dilini seçin."
 L.menu_appearance_description = "Kullanıcı arayüzünün görünümünü ve performansını değiştirin."
-L.menu_gameplay_description = "Rollerden kaçının ve bazı özellikleri düzenleyin."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Yerel eklentileri istediğiniz gibi yapılandırın."
 L.menu_legacy_description = "Orijinal TTT'den dönüştürülen sekmelerin yeni sisteme taşınması gereken bir panel."
 L.menu_administration_description = "Arayüzler, mağazalar vb. için genel ayarlar"
@@ -1002,7 +999,6 @@ L.submenu_appearance_interface_title = "Arayüz"
 L.submenu_appearance_miscellaneous_title = "Çeşitli"
 
 L.submenu_gameplay_general_title = "Genel"
-L.submenu_gameplay_avoidroles_title = "Rol Seçiminden Kaçın"
 
 L.submenu_administration_hud_title = "Arayüz Ayarları"
 L.submenu_administration_randomshop_title = "Rasgele Mağaza"
@@ -1044,9 +1040,7 @@ L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
 L.label_crosshair_size = "Nişangah boyutu"
 L.label_crosshair_thickness = "Nişangah kalınlığı"
 L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-
 L.label_crosshair_scale_enable = "Silaha bağlı nişangah ölçeğini etkinleştir"
-
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -1092,7 +1086,6 @@ L.header_damage_indicator = "Hasar Göstergesi Ayarları"
 L.header_performance_settings = "Performans Ayarları"
 L.header_interface_settings = "Arayüz Ayarları"
 L.header_gameplay_settings = "Oynanış Ayarları"
-L.header_roleselection = "Kaçınılan Rolleri Seç"
 L.header_hud_administration = "Varsayılan ve Zorunlu Arayüzleri Seç"
 L.header_hud_enabled = "Arayüzleri etkinleştir veya devre dışı bırak"
 
@@ -1154,7 +1147,6 @@ L.binoc_help_sec = "Yakınlaştırma seviyesini değiştirin."
 
 L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
 
-L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2020-08-07
 L.pickup_error_spec = "Bunu izleyici olarak alamazsın."
@@ -2065,9 +2057,31 @@ L.label_keyhelper_possession_dash = "nesne: bakılan yönde atıl"
 L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 L.vis_no_pickup = "Sadece kamu polisliği rolleri görüntüleyiciyi alabilir"
 L.newton_force = "GÜÇ"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2023-12-14
 L.beacon_help_pri = "Feneri yere at"

@@ -34,11 +34,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
 - Updated the Turkish localization file (by @NovaDiablox)
 - Grenades have icons
+- Brought `c4`, `defuser`, `flaregun`, `health_station`, `radio` weapons down from upstream (by @a7f3)
+- Updated help text for `c4`, `defuser`, `flaregun`, `health_station`, `radio`, `knife`, `phammer`, `push`, and `zm_carry` weapons (by @a7f3)
 - Brought down the `EFFECT`s: `crimescene_dummy`, `crimescene_shot`, `pulse_sphere`, `teleport_beamdown`, `teleport_beamup`
 - Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
+- Updated and improved  Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
 - Consolidated hat logic
+- Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
+- Role avoidance is no longer an option
 
 ### Fixed
 
@@ -57,6 +62,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
   - Returned text and result are now replaced by a statusCode
+- No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 

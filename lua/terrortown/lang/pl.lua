@@ -273,7 +273,6 @@ Pokazuje fałszywy znacznik na radarze Detektywów, i sprawia, że DNA skaner po
 
 -- Defuser
 L.defuser_name = "Rozbrajacz"
-L.defuser_help = "{primaryfire} rozbraja zaznaczone C4."
 
 L.defuser_desc = [[
 Natychmiastowo robraja ładunek C4.
@@ -292,7 +291,6 @@ Palenie zwłok wydaje charakterystyczny dźwięk.]]
 L.hstation_name = "Stacja Lecząca"
 
 L.hstation_broken = "Twoja stacja lecząca została zniszczona!"
-L.hstation_help = "{primaryfire} kładzie stacje."
 
 L.hstation_desc = [[
 Pozwala ludzią się leczyć, gdy jest położone.
@@ -316,7 +314,6 @@ Rani ludzi, których trafi.]]
 
 -- Radio
 L.radio_broken = "Twoje radio zostało zniszczone!"
-L.radio_help_pri = "{primaryfire} kładzie radio."
 
 L.radio_desc = [[
 Odtwarza dźwięki lub odgłosy.
@@ -975,7 +972,7 @@ L.menu_guide_description = "Pomaga zapoznać się z TTT i pomóc Ci je zrozumie�
 L.menu_bindings_description = "Ustaw swoje własne bindy dotyczące rozgrywki"
 L.menu_language_description = "Wybierz język gry"
 L.menu_appearance_description = "Popraw wygląd i wydajność UI"
-L.menu_gameplay_description = "Unikaj ról, bądź widzem itp"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Konfiguracja addonów"
 L.menu_legacy_description = "Panle z przekonwertowanymi addonami TTT, powinny być przeportowane do nowego systemu"
 L.menu_administration_description = "Ustawienia generalne HUDu, sklepów itd."
@@ -1002,7 +999,6 @@ L.submenu_appearance_interface_title = "Interfejs"
 L.submenu_appearance_miscellaneous_title = "Różne"
 
 L.submenu_gameplay_general_title = "Główne"
-L.submenu_gameplay_avoidroles_title = "Unikaj ról"
 
 L.submenu_administration_hud_title = "Ustawienia HUDa"
 L.submenu_administration_randomshop_title = "Losowy Sklep"
@@ -1090,7 +1086,6 @@ L.header_damage_indicator = "Ustawienia powiadomień obrażeń"
 L.header_performance_settings = "Ustawienia Wydajności"
 L.header_interface_settings = "Ustawienia interfejsu"
 L.header_gameplay_settings = "Ustawienia rozgrywki"
-L.header_roleselection = "Włącz przypisywanie ról"
 L.header_hud_administration = "Wybierz Domyślne i wymuś HUDy"
 L.header_hud_enabled = "Włącz/Wyłącz HUDy"
 
@@ -1152,7 +1147,6 @@ L.binoc_help_sec = "Zmień Przybliżenie."
 
 L.vis_help_pri = "Wyrzuć aktywne urządzenie."
 
-L.decoy_help_pri = "Rozstaw Wabik."
 
 -- 2020-08-07
 L.pickup_error_spec = "Nie możesz tego zrobić jako widz."
@@ -2063,9 +2057,31 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Rozstaw Wabik."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
