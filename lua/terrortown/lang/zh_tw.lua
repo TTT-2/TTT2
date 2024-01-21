@@ -273,7 +273,6 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "拆彈器"
-L.defuser_help = " {primaryfire} 拆除目標炸彈。"
 
 L.defuser_desc = [[
 迅速拆除一個C4。
@@ -292,7 +291,6 @@ L.flare_desc = [[
 L.hstation_name = "醫療站"
 
 L.hstation_broken = "你的醫療站已被摧毀！"
-L.hstation_help = " {primaryfire} 裝置了一個醫療站。"
 
 L.hstation_desc = [[
 設置後，允許人們前來治療。恢復速度相當緩慢。
@@ -316,7 +314,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "你的收音機已被摧毀！"
-L.radio_help_pri = " {primaryfire} 裝置了收音機。"
 
 L.radio_desc = [[
 播放音樂使人們分心、誤導。
@@ -1002,6 +999,7 @@ L.submenu_appearance_interface_title = "界面"
 L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
+
 L.submenu_administration_hud_title = "HUD 設置"
 L.submenu_administration_randomshop_title = "隨機商店"
 
@@ -1149,7 +1147,6 @@ L.binoc_help_sec = "切換放大倍率"
 
 L.vis_help_pri = "丟棄當前設備。"
 
-L.decoy_help_pri = "安放誘餌。"
 
 -- 2020-08-07
 L.pickup_error_spec = "作為觀察者你無法撿起這個。"
@@ -2060,9 +2057,31 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "安放誘餌。"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

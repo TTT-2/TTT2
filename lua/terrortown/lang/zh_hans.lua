@@ -273,7 +273,6 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "拆弹器"
-L.defuser_help = "{primaryfire} 拆除目标炸弹。"
 
 L.defuser_desc = [[
 迅速拆除一个C4。
@@ -292,7 +291,6 @@ L.flare_desc = [[
 L.hstation_name = "医疗站"
 
 L.hstation_broken = "你的医疗站被摧毁了！"
-L.hstation_help = "{primaryfire} 安放了一个医疗站。"
 
 L.hstation_desc = [[
 安放后，允许人们用其治疗自己。
@@ -316,7 +314,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "你的收音机已被摧毁！"
-L.radio_help_pri = "{primaryfire} 安放了收音机。"
 
 L.radio_desc = [[
 播放音效来误导或欺骗玩家。
@@ -1150,7 +1147,6 @@ L.binoc_help_sec = "切换放大倍率"
 
 L.vis_help_pri = "丢弃当前装备。"
 
-L.decoy_help_pri = "安放诱饵。"
 
 -- 2020-08-07
 L.pickup_error_spec = "作为观察者你无法捡起这个。"
@@ -2061,9 +2057,31 @@ L.label_keyhelper_possession_dash = "Prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 L.vis_no_pickup = "只有公共警察角色才能捡起显像器"
 L.newton_force = "推力"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "安放诱饵。"
 
 -- 2023-12-14
 L.beacon_help_pri = "将信标扔在地上"

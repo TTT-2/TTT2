@@ -273,7 +273,6 @@ Mostra um sinal de radar falso para Detetives, e faz os scanners de DNA deles in
 
 -- Defuser
 L.defuser_name = "Kit de Desarme"
-L.defuser_help = "{primaryfire} desarma um C4 que está sob sua mira."
 
 L.defuser_desc = [[
 Instantaneamente desarma um explosivo C4.
@@ -292,7 +291,6 @@ Queimar um cadáver emite um som estranho.]]
 L.hstation_name = "Estação de Cura"
 
 L.hstation_broken = "Sua Estação de Cura foi destruída!"
-L.hstation_help = "{primaryfire} posiciona a Estação de Cura."
 
 L.hstation_desc = [[
 Permite que as pessoas se curem quando posicionada.
@@ -316,7 +314,6 @@ A energia causa dano em pessoas que estejam nas proximidades.]]
 
 -- Radio
 L.radio_broken = "Seu Rádio foi destruído!"
-L.radio_help_pri = "{primaryfire} posiciona o Rádio."
 
 L.radio_desc = [[
 Reproduz sons para distrair e/ou enganar.
@@ -1150,7 +1147,6 @@ L.binoc_help_sec = "Alterar o zoom."
 
 L.vis_help_pri = "Largar o dispositivo ativo."
 
-L.decoy_help_pri = "Plantar a isca."
 
 -- 2020-08-07
 L.pickup_error_spec = "Você não pode pegar isto como espectaor."
@@ -2061,9 +2057,31 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Plantar a isca."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

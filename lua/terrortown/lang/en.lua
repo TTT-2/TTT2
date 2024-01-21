@@ -273,7 +273,6 @@ Shows a fake radar sign to other teams, and makes the DNA scanner show the locat
 
 -- Defuser
 L.defuser_name = "Defuser"
-L.defuser_help = "{primaryfire} defuses targeted C4."
 
 L.defuser_desc = [[
 Instantly defuse a C4 explosive.
@@ -292,7 +291,6 @@ Burning a corpse makes a distinct sound.]]
 L.hstation_name = "Health Station"
 
 L.hstation_broken = "Your Health Station has been destroyed!"
-L.hstation_help = "{primaryfire} places the Health Station."
 
 L.hstation_desc = [[
 Allows people to heal when placed.
@@ -316,7 +314,6 @@ The energy bursts damage people in close proximity.]]
 
 -- Radio
 L.radio_broken = "Your Radio has been destroyed!"
-L.radio_help_pri = "{primaryfire} places the Radio."
 
 L.radio_desc = [[
 Plays sounds to distract or deceive.
@@ -1150,7 +1147,6 @@ L.binoc_help_sec = "Change zoom level."
 
 L.vis_help_pri = "Drop the activated device."
 
-L.decoy_help_pri = "Plant the Decoy."
 
 -- 2020-08-07
 L.pickup_error_spec = "You cannot pick this up as a spectator."
@@ -2061,9 +2057,31 @@ L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+L.c4_help_primary = "Place the C4"
+L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+L.magneto_help_primary = "Push entity"
+L.magneto_help_secondary = "Pickup entity"
+L.knife_help_primary = "Stab"
+L.knife_help_secondary = "Throw knife"
+L.polter_help_primary = "Fire thumper"
+L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+L.newton_help_primary = "Knockback shot"
+L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 L.newton_force = "FORCE"
+L.defuser_help_primary = "Defuse targeted C4"
+L.radio_help_primary = "Place the Radio"
+L.radio_help_secondary = "Stick to surface"
+L.hstation_help_primary = "Place the Health Station"
+L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Stick to surface"
 
 -- 2023-12-14
 L.beacon_help_pri = "Throw Beacon on the ground"

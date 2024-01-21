@@ -314,7 +314,7 @@ if CLIENT then
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
-		if isfunction(self.HUDHelp) then
+		if self.HUDHelp then
 			self:DrawHelp()
 		end
 
