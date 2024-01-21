@@ -62,6 +62,8 @@ function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList
 	if CLIENT then
 		if visibleFor == VISIBLE_FOR_ALL then
 			color = color or TEAMS[TEAM_INNOCENT].color
+		elseif visibleFor == VISIBLE_FOR_PLAYER then
+			color = color or TEAMS[TEAM_NONE].color
 		else
 			color = color or TEAMS[LocalPlayer():GetTeam()].color
 		end
