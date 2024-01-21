@@ -797,7 +797,7 @@ if SERVER then
 
 	end
 else -- CLIENT
-	local materialC4 = Material("vgui/ttt/radar/c4")
+	local materialC4 = Material("vgui/ttt/marker_vision/c4")
 
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation

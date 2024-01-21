@@ -6,7 +6,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added a new markerVision module that is currently used by these builtin weapons (by @TimGoll)
+- Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll)
   - C4
   - Radio
   - Beacon

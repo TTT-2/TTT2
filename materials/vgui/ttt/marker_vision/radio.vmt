@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/radar/c4"
+	"$basetexture" "vgui/ttt/marker_vision/radio"
 	"$nocull" 1
 	"$nodecal" 1
 	"$nolod" 1

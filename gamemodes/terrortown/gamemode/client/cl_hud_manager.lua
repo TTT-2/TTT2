@@ -59,7 +59,7 @@ function GM:HUDPaint()
 
 	---
 	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTBombVision") then
+	if hook.Run("HUDShouldDraw", "TTT2MarkerVision") then
 		markerVision.Draw()
 	end
 

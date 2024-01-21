@@ -212,7 +212,7 @@ if CLIENT then
 	local baseOpacity = 35
 	local factorRenderDistance = 3
 
-	local materialBeacon = Material("vgui/ttt/radar/beacon")
+	local materialBeacon = Material("vgui/ttt/marker_vision/beacon")
 	local materialPlayer = Material("vgui/ttt/tid/tid_big_role_not_known")
 
 	---

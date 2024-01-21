@@ -125,7 +125,7 @@ end
 -- @param Entity ent The entity that should be updated
 -- @param[opt] Player owner The new owner of the wallhack 
 -- @param[opt] table visibleFor The new visibility level
--- @note Call on server to add entity on server and all defined clients.
+-- @note Call on server to update entity on server and all defined clients.
 -- @realm shared
 function markerVision.UpdateEntity(ent, owner, visibleFor)
 	if not markerVision.registry[ent] then return end

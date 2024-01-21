@@ -300,7 +300,7 @@ function ENT:Think()
 end
 
 if CLIENT then
-	local materialRadio = Material("vgui/ttt/radar/radio")
+	local materialRadio = Material("vgui/ttt/marker_vision/radio")
 
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
