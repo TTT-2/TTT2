@@ -38,8 +38,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
-- Updated with new Simplified Chinese string translation (by @sbzlzh)
-- Improved translation of some Simplified Chinese strings (by @TheOnly8Z)
+- Updated and improved  Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
+- Consolidated hat logic
+- Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
+- Role avoidance is no longer an option
 
 ### Fixed
 
@@ -58,6 +60,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
   - Returned text and result are now replaced by a statusCode
+- No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
