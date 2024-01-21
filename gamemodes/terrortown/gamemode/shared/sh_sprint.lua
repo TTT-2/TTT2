@@ -11,8 +11,6 @@ SPRINT = {
 		consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The speed of the stamina consumption (per second; Def: 0.6)"),
 		-- @realm shared
 		regeneration = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The regeneration time of the stamina (per second; Def: 0.3)"),
-		-- @realm shared
-		showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "Should the Crosshair be visible while sprinting? (Def: 0)"),
 	},
 }
 
@@ -22,13 +20,13 @@ SPRINT = {
 -- @return boolean
 -- @realm shared
 function SPRINT:PlayerWantsToSprint(ply)
-	local isSprinting = ply:KeyDown(IN_SPEED)
+	local inSprint = ply:KeyDown(IN_SPEED)
 	local inMovement = ply:KeyDown(IN_FORWARD)
 		or ply:KeyDown(IN_BACK)
 		or ply:KeyDown(IN_MOVERIGHT)
 		or ply:KeyDown(IN_MOVELEFT)
 
-	return isSprinting and inMovement
+	return inSprint and inMovement
 end
 
 ---
@@ -37,7 +35,7 @@ end
 -- @return boolean
 -- @realm shared
 function SPRINT:IsSprinting(ply)
-	return self.convars.enabled:GetBool() and self:PlayerWantsToSprint(ply) and ply:GetSprintStamina() > 0
+	return self.convars.enabled:GetBool() and self:PlayerWantsToSprint(ply) and ply:GetSprintStamina() > 0 and not ply:IsInIronsights()
 end
 
 ---
@@ -49,7 +47,7 @@ function SPRINT:HandleStaminaCalculation(ply)
 	local staminaConsumptionRate = self.convars.consumption:GetFloat()
 
 	local sprintStamina = ply:GetSprintStamina()
-	local playerWantsToSprint = self:PlayerWantsToSprint(ply)
+	local playerWantsToSprint = self:PlayerWantsToSprint(ply) and not ply:IsInIronsights()
 
 	if (sprintStamina == 1 and not playerWantsToSprint) or (sprintStamina == 0 and playerWantsToSprint) then
 		return

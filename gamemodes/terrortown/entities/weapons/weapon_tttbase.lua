@@ -96,6 +96,9 @@ SWEP.IsSilent = false
 -- in close proximity to this weapon when spawned.
 SWEP.autoAmmoAmount = 0
 
+-- It this is set to true, there will be no pickup notification when receiving this weapon.
+SWEP.silentPickup = false
+
 -- Set Keys like { "HeadshotMultiplier", "Weight", { "Primary", "Recoil" }, { "Secondary", "Ammo" } } if you want the data to be persistent after hotreloads
 -- Empty it before a hotreload to reset data after a hotreload, otherwise this data keep persisting until you do a map reload or restart your server
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
@@ -109,6 +112,10 @@ SWEP.HotReloadableKeys = {}
 -- DO NOT set SWEP.WeaponID. Only the standard TTT weapons can have it. Custom
 -- SWEPs do not need it for anything.
 --	SWEP.WeaponID = nil
+
+-- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
+-- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
+SWEP.idleResetFix = false
 
 --   YE OLDE SWEP STUFF
 
@@ -158,6 +165,7 @@ SWEP.DeploySpeed = 1.4
 
 SWEP.PrimaryAnim = ACT_VM_PRIMARYATTACK
 SWEP.ReloadAnim = ACT_VM_RELOAD
+SWEP.IdleAnim = ACT_VM_IDLE
 
 SWEP.fingerprints = {}
 
@@ -238,60 +246,69 @@ local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE,
 
 -- crosshair
 if CLIENT then
-	local GetPTranslation = LANG.GetParamTranslation
 	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
+
 	local mathRound = math.Round
+	local mathFloor = math.floor
+
+	local CROSSHAIR_MODE_DOT_AND_LINES = 0
+	local CROSSHAIR_MODE_LINES_ONLY = 1
+	local CROSSHAIR_MODE_DOT_ONLY = 2
 
 	---
 	-- @realm client
-	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
+	local cvOpacitySights = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+	local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local enable_crosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
+	local cvEnableCrosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
+	local cvOpacityCrosshair = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
+	local cvCrosshairUseWeaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
+	local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
+	local cvThicknessCrosshair = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
+	local cvEnableOutlineCrosshair = CreateConVar("ttt_crosshair_outline_enable", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
+	local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outline_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+	local cvHighContrastOutlineCrosshair = CreateConVar("ttt_crosshair_outline_high_contrast", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
-
-	---
-	-- @realm client
-	local enable_crosshair_lines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
+	local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
 	local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
 	local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
+
+	local animData = {
+		timeStart = 0,
+		timeEnd = 0,
+		valueStart = 0,
+		valueEnd = 0
+	}
 
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
@@ -301,64 +318,99 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
+		if not cvEnableCrosshair:GetBool() then return end
+
 		local client = LocalPlayer()
 
-		if
-			not enable_crosshair:GetBool()
-			or not IsValid(client)
-			or SPRINT:IsSprinting(client) and not SPRINT.convars.showCrosshair:GetBool()
-		then
-			return
-		end
-
 		local sights = not self.NoSights and self:GetIronsights()
-		local x = math.floor(ScrW() * 0.5)
-		local y = math.floor(ScrH() * 0.5)
-		local scale = crosshair_weaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
-		local timescale = 1
 
-		if not crosshair_static:GetBool() then
-			timescale = (2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0))
+		local xCenter = mathFloor(ScrW() * 0.5)
+		local yCenter = mathFloor(ScrH() * 0.5)
+		local scale = appearance.GetGlobalScale()
+		local baseConeWeapon = math.max(0.2, 10 * self:GetPrimaryConeBase())
+		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
+		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
+
+		-- handle size animation
+		if scaleWeapon ~= animData.valueEnd then
+			animData = {
+				timeStart = CurTime(),
+				timeEnd = CurTime() + 0.25,
+				valueStart = animData.valueEnd,
+				valueEnd = scaleWeapon
+			}
 		end
 
-		local alpha = sights and sights_opacity:GetFloat() or crosshair_opacity:GetFloat()
-		local gap = enable_gap_crosshair:GetBool() and math.floor(timescale * crosshair_gap:GetFloat()) or math.floor(20 * scale * timescale * (sights and 0.8 or 1))
-		local thickness = crosshair_thickness:GetFloat()
-		local outline = math.floor(crosshair_outlinethickness:GetFloat())
-		local length = math.floor(gap + 25 * crosshair_size:GetFloat() * scale * timescale)
-		local offset = thickness * 0.5
-
-		if outline > 0 then
-			surface.SetDrawColor(0, 0, 0, 255 * alpha)
-			surface.DrawRect(x - length - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(x + gap - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(x - offset - outline, y - length - outline, thickness + outline * 2, length - gap + outline * 2)
-			surface.DrawRect(x - offset - outline, y + gap - outline, thickness + outline * 2, length - gap + outline * 2)
-		end
-
-		-- set up crosshair color
-		local color = client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
-
-		color = appearance.SelectFocusColor(color)
-
-		surface.SetDrawColor(
-			color.r,
-			color.g,
-			color.b,
-			255 * alpha
+		scaleWeapon = Lerp(
+			math.ease.OutQuint(math.TimeFraction(animData.timeStart, animData.timeEnd, CurTime())),
+			animData.valueStart,
+			animData.valueEnd
 		)
 
+		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
+		local gap = mathFloor(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
+		local thicknessLine = mathFloor(cvThicknessCrosshair:GetFloat() * scale)
+		local thicknessOutline = mathFloor(cvThicknessOutlineCrosshair:GetFloat() * scale)
+		local lengthLine = mathFloor(gap + 25 * cvSizeCrosshair:GetFloat() * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon) * timescale * scale)
+		local offsetLine = mathFloor(thicknessLine * 0.5)
+
+		-- set up crosshair color
+		local color = appearance.SelectFocusColor(client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color)
+		local colorOutline = cvHighContrastOutlineCrosshair:GetBool() and util.GetDefaultColor(color) or COLOR_BLACK
+
 		-- draw crosshair dot
-		if enable_dot_crosshair:GetBool() then
-			surface.DrawRect(x - thickness * 0.5, y - thickness * 0.5, thickness, thickness)
+		if cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_ONLY then
+			local xDot = mathFloor(xCenter - thicknessLine * 0.5)
+			local yDot = mathFloor(yCenter - thicknessLine * 0.5)
+
+			if cvEnableOutlineCrosshair:GetBool() then
+				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
+
+				surface.DrawRect(xDot - thicknessOutline, yDot - thicknessOutline, thicknessLine + thicknessOutline * 2, thicknessLine + thicknessOutline * 2)
+			end
+
+			surface.SetDrawColor(color.r, color.g, color.b, color.a * alpha)
+
+			surface.DrawRect(xDot, yDot, thicknessLine, thicknessLine)
 		end
 
 		-- draw crosshair lines
-		if enable_crosshair_lines:GetBool() then
-			surface.DrawRect(x - length, y - offset, length - gap, thickness)
-			surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-			surface.DrawRect(x - offset, y - length, thickness, length - gap)
-			surface.DrawRect(x - offset, y + gap, thickness, length - gap)
+		if cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_LINES_ONLY then
+			if cvEnableOutlineCrosshair:GetBool() then
+				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
+
+				surface.DrawRect(
+					xCenter - lengthLine - thicknessOutline,
+					yCenter - offsetLine - thicknessOutline,
+					lengthLine - gap + thicknessOutline * 2,
+					thicknessLine + thicknessOutline * 2
+				)
+				surface.DrawRect(
+					xCenter + gap - thicknessOutline,
+					yCenter - offsetLine - thicknessOutline,
+					lengthLine - gap + thicknessOutline * 2,
+					thicknessLine + thicknessOutline * 2
+				)
+				surface.DrawRect(
+					xCenter - offsetLine - thicknessOutline,
+					yCenter - lengthLine - thicknessOutline,
+					thicknessLine + thicknessOutline * 2,
+					lengthLine - gap + thicknessOutline * 2
+				)
+				surface.DrawRect(
+					xCenter - offsetLine - thicknessOutline,
+					yCenter + gap - thicknessOutline,
+					thicknessLine + thicknessOutline * 2,
+					lengthLine - gap + thicknessOutline * 2
+				)
+			end
+
+			surface.SetDrawColor(color.r, color.g, color.b, color.a * alpha)
+
+			surface.DrawRect(xCenter - lengthLine, yCenter - offsetLine, lengthLine - gap, thicknessLine)
+			surface.DrawRect(xCenter + gap, yCenter - offsetLine, lengthLine - gap, thicknessLine)
+			surface.DrawRect(xCenter - offsetLine, yCenter - lengthLine, thicknessLine, lengthLine - gap)
+			surface.DrawRect(xCenter - offsetLine, yCenter + gap, thicknessLine, lengthLine - gap)
 		end
 	end
 
@@ -509,8 +561,8 @@ if CLIENT then
 		if translate then
 			extraKeyParams = extraKeyParams or {}
 			translate_params = table.Merge(extraKeyParams, defaultKeyParams)
-			primary = primary and GetPTranslation(primary, translate_params)
-			secondary = secondary and GetPTranslation(secondary, translate_params)
+			primary = primary and ParT(primary, translate_params)
+			secondary = secondary and ParT(secondary, translate_params)
 		end
 
 		--find mouse keys in the texts to add respective icons
@@ -621,14 +673,18 @@ function SWEP:PrimaryAttack(worldsnd)
 		sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
 	end
 
-	self:ShootBullet(self.Primary.Damage, self.Primary.Recoil, self.Primary.NumShots, self:GetPrimaryCone())
+	self:ShootBullet(self.Primary.Damage, self:GetPrimaryRecoil(), self.Primary.NumShots, self:GetPrimaryCone())
 	self:TakePrimaryAmmo(1)
 
 	local owner = self:GetOwner()
 
 	if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then return end
 
-	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
+	owner:ViewPunch(Angle(
+		util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self:GetPrimaryRecoil(),
+		util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self:GetPrimaryRecoil(),
+		0
+	))
 end
 
 ---
@@ -702,10 +758,8 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	self:GetOwner():MuzzleFlash()
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
-	local sights = self:GetIronsights()
-
 	numbul = numbul or 1
-	cone = cone or 0.01
+	cone = cone or 0.02
 
 	local bullet = {}
 	bullet.Num = numbul
@@ -726,11 +780,9 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	-- Owner can die after firebullets
 	if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then return end
 
-	if game.SinglePlayer() and SERVER
-	or not game.SinglePlayer() and CLIENT and IsFirstTimePredicted() then
-		-- reduce recoil if ironsighting
-		recoil = sights and (recoil * 0.6) or recoil
-
+	if SERVER and game.SinglePlayer()
+		or CLIENT and not game.SinglePlayer() and IsFirstTimePredicted()
+	then
 		local eyeang = self:GetOwner():EyeAngles()
 		eyeang.pitch = eyeang.pitch - recoil
 
@@ -741,12 +793,73 @@ end
 ---
 -- @return number
 -- @realm shared
-function SWEP:GetPrimaryCone()
-	local cone = self.Primary.Cone or 0.2
+function SWEP:GetPrimaryConeFactor()
+	local owner = self:GetOwner()
 
-	-- 10% accuracy bonus when sighting
-	return self:GetIronsights() and (cone * 0.85) or cone
+	if not IsValid(owner) then
+		return 1
+	end
+
+	if SPRINT:IsSprinting(owner) and not owner:IsOnGround() then
+		return 2.0
+	elseif SPRINT:IsSprinting(owner) or not owner:IsOnGround() then
+		return 1.6
+	elseif self:GetIronsights() then
+		return 0.8
+	else
+		return 1
+	end
 end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoilFactor()
+	local owner = self:GetOwner()
+
+	if not IsValid(owner) then
+		return 1
+	end
+
+	if SPRINT:IsSprinting(owner) and not owner:IsOnGround() then
+		return 2.8
+	elseif SPRINT:IsSprinting(owner) or not owner:IsOnGround() then
+		return 2.2
+	elseif self:GetIronsights() then
+		return 0.6
+	else
+		return 1
+	end
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryCone()
+	return self:GetPrimaryConeBase() * self:GetPrimaryConeFactor()
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryConeBase()
+	return self.Primary.Cone or 0.02
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoil()
+	return self:GetPrimaryRecoilBase() * self:GetPrimaryRecoilFactor()
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoilBase()
+	return self.Primary.Recoil or 1.5
+end
+
 
 ---
 -- @param Player victim
@@ -776,6 +889,7 @@ function SWEP:SecondaryAttack()
 
 	self:SetIronsights(bNotIronsights)
 	self:SetZoom(bNotIronsights)
+
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
@@ -799,6 +913,7 @@ function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
 	self:DefaultReload(self.ReloadAnim)
+
 	self:SetIronsights(false)
 	self:SetZoom(false)
 end
@@ -1056,8 +1171,8 @@ function SWEP:Initialize()
 	elseif SERVER then
 		self.fingerprints = {}
 
-		self:SetIronsights(false)
 		self:SetZoom(false)
+		self:SetIronsights(false)
 	end
 
 	self:SetDeploySpeed(self.DeploySpeed)
@@ -1068,12 +1183,50 @@ function SWEP:Initialize()
 	end
 end
 
+local idle_activities = {
+	[ACT_VM_IDLE] = true,
+	[ACT_VM_IDLE_TO_LOWERED] = true,
+	[ACT_VM_IDLE_LOWERED] = true,
+	[ACT_VM_IDLE_SILENCED] = true,
+	[ACT_VM_IDLE_EMPTY_LEFT] = true,
+	[ACT_VM_IDLE_EMPTY] = true,
+	[ACT_VM_IDLE_DEPLOYED_EMPTY] = true,
+	[ACT_VM_IDLE_8] = true,
+	[ACT_VM_IDLE_7] = true,
+	[ACT_VM_IDLE_6] = true,
+	[ACT_VM_IDLE_5] = true,
+	[ACT_VM_IDLE_4] = true,
+	[ACT_VM_IDLE_3] = true,
+	[ACT_VM_IDLE_2] = true,
+	[ACT_VM_IDLE_1] = true,
+	[ACT_VM_IDLE_DEPLOYED] = true,
+	[ACT_VM_IDLE_DEPLOYED_8] = true,
+	[ACT_VM_IDLE_DEPLOYED_7] = true,
+	[ACT_VM_IDLE_DEPLOYED_6] = true,
+	[ACT_VM_IDLE_DEPLOYED_5] = true,
+	[ACT_VM_IDLE_DEPLOYED_4] = true,
+	[ACT_VM_IDLE_DEPLOYED_3] = true,
+	[ACT_VM_IDLE_DEPLOYED_2] = true,
+	[ACT_VM_IDLE_DEPLOYED_1] = true,
+	[ACT_VM_IDLE_M203] = true,
+}
+
+local function IsIdleActivity(vm)
+	return idle_activities[ vm:GetSequenceActivity( vm:GetSequence() ) ] or false
+end
+
 ---
 -- Called when the swep thinks.
 -- @warning If you override Think in your SWEP, you should call BaseClass.Think(self) so as not to break ironsights
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
+	local vm = self:GetOwner():GetViewModel()
+
+	if self.idleResetFix and self.ViewModel and vm:GetCycle() >= 1 and not IsIdleActivity(vm) then
+		self:SendWeaponAnim( self.IdleAnim or ACT_VM_IDLE )
+	end
+
 	if CLIENT then
 		self:CalcViewModel()
 	end

@@ -49,6 +49,10 @@ end)
 function CLGAMEMODESUBMENU:Populate(parent)
 	local form = vgui.CreateTTT2Form(parent, "header_entspawn_settings")
 
+	form:MakeHelp({
+		label = "help_spawn_editor_info"
+	})
+
 	-- store the reference to the checkbox in a variable
 	-- because the other settings are enabled based on
 	-- the state of this checkbox
@@ -62,11 +66,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_spawn_editor_info"
-	})
-
-	form:MakeHelp({
-		label = "help_spawn_editor_enable"
+		label = "help_spawn_editor_enable",
+		master = dynSpawnEnable
 	})
 
 	updateCheckBoxes[1] = form:MakeCheckBox({
@@ -80,7 +81,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_spawn_editor_hint"
+		label = "help_spawn_editor_hint",
+		master = dynSpawnEnable
 	})
 
 	updateHelpBox = form:MakeHelp({
@@ -104,7 +106,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 			ammorifle = ttt2net.Get({"entspawnscript", "spawnamount", "ammorifle"}) or 0,
 			ammoshotgun = ttt2net.Get({"entspawnscript", "spawnamount", "ammoshotgun"}) or 0,
 			playerrandom = ttt2net.Get({"entspawnscript", "spawnamount", "playerrandom"}) or 0
-		}
+		},
+		master = dynSpawnEnable
 	})
 
 	local form2 = vgui.CreateTTT2Form(parent, "header_entspawn_plyspawn")

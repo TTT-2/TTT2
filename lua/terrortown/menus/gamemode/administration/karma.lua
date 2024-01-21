@@ -18,7 +18,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_karma_strict"
+		label = "help_karma_strict",
+		master = enbKma
 	})
 
 	form:MakeCheckBox({
@@ -37,7 +38,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_karma_max"
+		label = "help_karma_max",
+		master = enbKma
 	})
 
 	form:MakeSlider({
@@ -50,7 +52,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_karma_ratio"
+		label = "help_karma_ratio",
+		master = enbKma
 	})
 
 	form:MakeSlider({
@@ -72,7 +75,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_karma_traitordmg_ratio"
+		label = "help_karma_traitordmg_ratio",
+		master = enbKma
 	})
 
 	form:MakeSlider({
@@ -94,7 +98,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_karma_bonus"
+		label = "help_karma_bonus",
+		master = enbKma
 	})
 
 	form:MakeSlider({
@@ -116,7 +121,8 @@ function CLGAMEMODESUBMENU:Populate(parent)
 	})
 
 	form:MakeHelp({
-		label = "help_karma_clean_half"
+		label = "help_karma_clean_half",
+		master = enbKma
 	})
 
 	form:MakeSlider({

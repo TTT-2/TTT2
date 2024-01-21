@@ -87,40 +87,32 @@ local function SetupData(roleData)
 	local conVarData = roleData.conVarData or {}
 
 	-- shared
-	if not roleData.notSelectable then
-		if CLIENT then
-			if conVarData.togglable then
-				---
-				-- @realm client
-				CreateConVar("ttt_avoid_" .. roleData.name, "0", {FCVAR_ARCHIVE, FCVAR_USERINFO})
-			end
-		else -- SERVER
+	if not roleData.notSelectable and SERVER then
+		---
+		-- @realm server
+		CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+		---
+		-- @realm server
+		CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+		---
+		-- @realm server
+		CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+		-- if we don't compare detective here, roles will never get assigned
+		if not roleData.builtin or roleData.index == ROLE_DETECTIVE then
 			---
 			-- @realm server
-			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			---
 			-- @realm server
-			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			---
 			-- @realm server
-			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-			-- if we don't compare detective here, roles will never get assigned
-			if not roleData.builtin or roleData.index == ROLE_DETECTIVE then
-				---
-				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-				---
-				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-				---
-				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-			end
+			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 	end
 

@@ -791,8 +791,18 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintHelpLabelTTT2(panel, w, h)
-	drawBox(0, 0, w, h, colors.helpBox)
-	drawBox(0, 0, 4, h, colors.helpBar)
+	local colorBox = colors.helpBox
+	local colorBar = colors.helpBar
+	local colorText = colors.helpText
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorBar = ColorAlpha(colorBar, alphaDisabled)
+		colorText = ColorAlpha(colorText, 0.5 * alphaDisabled)
+	end
+
+	drawBox(0, 0, w, h, colorBox)
+	drawBox(0, 0, 4, h, colorBar)
 
 	local textTranslated = ParT(panel:GetText(), TryT(panel:GetTextParams()))
 	local textWrapped = drawGetWrappedText(
@@ -810,7 +820,7 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 			panel:GetFont(),
 			panel.paddingX,
 			posY,
-			colors.helpText,
+			colorText,
 			TEXT_ALIGN_LEFT,
 			TEXT_ALIGN_TOP
 		)

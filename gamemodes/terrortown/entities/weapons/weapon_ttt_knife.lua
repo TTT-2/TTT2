@@ -30,6 +30,7 @@ SWEP.Base = "weapon_tttbase"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_knife_t.mdl"
 SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
+SWEP.idleResetFix = true
 
 SWEP.Primary.Damage = 50
 SWEP.Primary.ClipSize = -1
@@ -330,6 +331,14 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
+
+	---
+	-- @ignore
+	function SWEP:Initialize()
+		self:AddTTT2HUDHelp("knife_help_primary", "knife_help_secondary")
+		return self.BaseClass.Initialize(self)
+	end
+
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(tData)
 		local client = LocalPlayer()

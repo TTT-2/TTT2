@@ -8,6 +8,14 @@ if not plymeta then
 end
 
 ---
+-- @realm client
+local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
+
+---
 -- Applies a animation gesture
 -- @param ACT act The @{ACT} or sequence that should be played
 -- @param number weight The weight this slot should be set to. Value must be ranging from 0 to 1.
@@ -166,6 +174,54 @@ local function TargetPlayer()
 end
 net.Receive("TTT2TargetPlayer", TargetPlayer)
 
+local function UpdateCredits()
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
+	client.equipment_credits = net.ReadUInt(8)
+end
+net.Receive("TTT_Credits", UpdateCredits)
+
+local function UpdateEquipment()
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
+	local mode = net.ReadUInt(2)
+
+	local equipItems = client:GetEquipmentItems()
+
+	if mode == EQUIPITEMS_RESET then
+		for i = #equipItems, 1, -1 do
+			local itemName = equipItems[i]
+			local item = items.GetStored(itemName)
+
+			if item and isfunction(item.Reset) then
+				item:Reset(client)
+			end
+		end
+
+		table.Empty(equipItems)
+	else
+		local itemName = net.ReadString()
+		local item = items.GetStored(itemName)
+
+		if mode == EQUIPITEMS_ADD then
+			equipItems[#equipItems + 1] = itemName
+
+			if item and isfunction(item.Equip) then
+				item:Equip(client)
+			end
+		elseif mode == EQUIPITEMS_REMOVE then
+			table.RemoveByValue(equipItems, itemName)
+
+			if item and isfunction(item.Reset) then
+				item:Reset(client)
+			end
+		end
+	end
+end
+net.Receive("TTT_Equipment", UpdateEquipment)
+
 ---
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
@@ -203,7 +259,7 @@ end
 ---
 -- Sets a revival reason that is displayed in the revival HUD element.
 -- It supports a language identifier for translated strings.
--- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[default=nil] string name The text or the language identifier, nil to reset
 -- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
 -- @realm client
 function plymeta:SetRevivalReason(name, params)
@@ -282,3 +338,114 @@ end
 function plymeta:GetRevivalReason()
 	return self.revivalReason or {}
 end
+
+---
+-- Sets a shared playersetting from the client on both server and client. Make sure the
+-- variable is registered with `RegisterSettingOnServer` as the setting is otherwise discarded.
+-- @param string identifier The identifier of the shared setting
+-- @param any value The setting's value, it is parsed as a string before transmitting
+-- @realm client
+function plymeta:SetSettingOnServer(identifier, value)
+	if self.playerSettings[identifier] == value then return end
+
+	self.playerSettings[identifier] = value
+
+	net.Start("ttt2_set_player_setting")
+	net.WriteString(identifier)
+	net.WriteString(tostring(value))
+	net.SendToServer()
+end
+
+local airtime = 0
+local velocity = 0
+local position = 0
+
+local frameCount = 10
+
+local lastStrafeValue = 0
+
+-- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
+hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+	local observerTarget = ply:GetObserverTarget()
+
+	-- handle observing players
+	if not ply:IsTerror() and IsValid(obersverTarget) and observerTarget:IsPlayer() then
+		ply = observerTarget
+	end
+
+	if not ply:IsTerror() or ply:GetMoveType() == MOVETYPE_NOCLIP then return end
+
+	if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
+		airtime = math.Clamp(airtime + 1, 0, 300)
+
+		return
+	end
+
+	local view = {
+		ply = ply,
+		origin = origin,
+		angles = angles,
+		fov = fov
+	}
+
+	local eyeAngles = ply:EyeAngles()
+	local strafeValue = 0
+
+	-- handle landing on ground
+	if airtime > 0 then
+		airtime = airtime / frameCount
+
+		view.angles.p = view.angles.p + airtime * 0.01 -- pitch cam shake on land
+		view.angles.r = view.angles.r + airtime * 0.02 * math.Rand(-1, 1) -- roll cam shake on land
+	end
+
+	-- handle crouching
+	if ply:Crouching() then
+		local velocityMultiplier = ply:GetVelocity() * 2
+
+		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+		position = position + velocity * FrameTime() * 0.1
+
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.015
+
+	-- handle swimming
+	elseif ply:WaterLevel() > 0 then
+		local velocityMultiplier = ply:GetVelocity() * 1.5
+
+		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+		position = position + velocity * FrameTime() * 0.1
+
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+
+	-- handle walking
+	else
+		local velocityMultiplier = ply:GetVelocity() * 0.75
+
+		velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+		position = position + velocity * FrameTime() * 0.1
+
+		strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.006
+	end
+
+	strafeValue = math.Round(strafeValue, 2)
+	lastStrafeValue = math.Round(lastStrafeValue, 2)
+
+	if strafeValue > lastStrafeValue then
+		lastStrafeValue = math.min(strafeValue, lastStrafeValue + FrameTime() * 35.0)
+	elseif strafeValue < lastStrafeValue then
+		lastStrafeValue = math.max(strafeValue, lastStrafeValue - FrameTime() * 35.0)
+	else
+		lastStrafeValue = strafeValue
+	end
+
+	if cvEnableBobbing:GetBool() then
+		view.angles.r = view.angles.r + math.sin(position * 0.5) * velocity * 0.001
+		view.angles.p = view.angles.p + math.sin(position * 0.25) * velocity * 0.001
+	end
+
+	if cvEnableBobbingStrafe:GetBool() then
+		view.angles.r = view.angles.r + lastStrafeValue
+	end
+
+	return view
+end)

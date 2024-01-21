@@ -254,7 +254,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 
 -- Visualizer
 L.vis_name = "Wizualizer"
-L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
 L.vis_desc = [[
 Wizualizator chwili zabójstwa.
@@ -274,7 +273,6 @@ Pokazuje fałszywy znacznik na radarze Detektywów, i sprawia, że DNA skaner po
 
 -- Defuser
 L.defuser_name = "Rozbrajacz"
-L.defuser_help = "{primaryfire} rozbraja zaznaczone C4."
 
 L.defuser_desc = [[
 Natychmiastowo robraja ładunek C4.
@@ -293,7 +291,6 @@ Palenie zwłok wydaje charakterystyczny dźwięk.]]
 L.hstation_name = "Stacja Lecząca"
 
 L.hstation_broken = "Twoja stacja lecząca została zniszczona!"
-L.hstation_help = "{primaryfire} kładzie stacje."
 
 L.hstation_desc = [[
 Pozwala ludzią się leczyć, gdy jest położone.
@@ -317,7 +314,6 @@ Rani ludzi, których trafi.]]
 
 -- Radio
 L.radio_broken = "Twoje radio zostało zniszczone!"
-L.radio_help_pri = "{primaryfire} kładzie radio."
 
 L.radio_desc = [[
 Odtwarza dźwięki lub odgłosy.
@@ -976,7 +972,7 @@ L.menu_guide_description = "Pomaga zapoznać się z TTT i pomóc Ci je zrozumie�
 L.menu_bindings_description = "Ustaw swoje własne bindy dotyczące rozgrywki"
 L.menu_language_description = "Wybierz język gry"
 L.menu_appearance_description = "Popraw wygląd i wydajność UI"
-L.menu_gameplay_description = "Unikaj ról, bądź widzem itp"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Konfiguracja addonów"
 L.menu_legacy_description = "Panle z przekonwertowanymi addonami TTT, powinny być przeportowane do nowego systemu"
 L.menu_administration_description = "Ustawienia generalne HUDu, sklepów itd."
@@ -1003,7 +999,6 @@ L.submenu_appearance_interface_title = "Interfejs"
 L.submenu_appearance_miscellaneous_title = "Różne"
 
 L.submenu_gameplay_general_title = "Główne"
-L.submenu_gameplay_avoidroles_title = "Unikaj ról"
 
 L.submenu_administration_hud_title = "Ustawienia HUDa"
 L.submenu_administration_randomshop_title = "Losowy Sklep"
@@ -1040,16 +1035,11 @@ L.label_shop_show_slot = "Pokaż sloty"
 L.label_shop_show_custom = "Pokaż customowe intemy"
 L.label_shop_show_fav = "Pokaż ulubione itemy"
 L.label_crosshair_enable = "Włącz celownik"
-L.label_crosshair_gap_enable = "Umożliw odstęp"
-L.label_crosshair_gap = "Odstęp celownika"
 L.label_crosshair_opacity = "Ukrycie celownika podczas korzystania z celowniku mechanicznego"
 L.label_crosshair_ironsight_opacity = "Widoczność celownika z przycelowania"
 L.label_crosshair_size = "Wielkość celownika"
 L.label_crosshair_thickness = "Grubość celownika"
 L.label_crosshair_thickness_outline = "Grubość otoczki celownika"
-L.label_crosshair_static_enable = "Umożliw statyczny celownik "
-L.label_crosshair_dot_enable = "Umożliw kropkę celownika"
-L.label_crosshair_lines_enable = "Zezwól na linie celownika"
 L.label_crosshair_scale_enable = "Umożliw różne wielkości"
 L.label_crosshair_ironsight_low_enabled = "Obniż broń podczas użycia celowniku mechanicznego"
 L.label_damage_indicator_enable = "Enable damage indicator"
@@ -1096,7 +1086,6 @@ L.header_damage_indicator = "Ustawienia powiadomień obrażeń"
 L.header_performance_settings = "Ustawienia Wydajności"
 L.header_interface_settings = "Ustawienia interfejsu"
 L.header_gameplay_settings = "Ustawienia rozgrywki"
-L.header_roleselection = "Włącz przypisywanie ról"
 L.header_hud_administration = "Wybierz Domyślne i wymuś HUDy"
 L.header_hud_enabled = "Włącz/Wyłącz HUDy"
 
@@ -1158,7 +1147,6 @@ L.binoc_help_sec = "Zmień Przybliżenie."
 
 L.vis_help_pri = "Wyrzuć aktywne urządzenie."
 
-L.decoy_help_pri = "Rozstaw Wabik."
 
 -- 2020-08-07
 L.pickup_error_spec = "Nie możesz tego zrobić jako widz."
@@ -1764,7 +1752,6 @@ L.none = "Brak Roli"
 --L.label_sprint_max = "Max sprinting stamina"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -2070,6 +2057,32 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Rozstaw Wabik."
+
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
@@ -2117,6 +2130,18 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2127,3 +2152,23 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

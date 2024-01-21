@@ -254,7 +254,6 @@ L.c4_status_disarmed = "DISINNESCATA"
 
 -- Visualizer
 L.vis_name = "Visualizzatore"
-L.vis_hint = "Premi {usekey} per raccoglierlo (solo Detective)."
 
 L.vis_desc = [[
 Dispositivo per visualizzare una scena del crimine.
@@ -274,7 +273,6 @@ Mostra un segnale falso sul radar dei Detective, e mostra sui loro DNA scanner l
 
 -- Defuser
 L.defuser_name = "Disinnescatore"
-L.defuser_help = "{primaryfire} disinnesca C4 selezionato."
 
 L.defuser_desc = [[
 Disinnesca istantaneamente un C4.
@@ -293,7 +291,6 @@ Bruciare un cadavere fa un suono distinto.]]
 L.hstation_name = "Stazione di Cura"
 
 L.hstation_broken = "La tua Stazione di Cura è stata distrutta!"
-L.hstation_help = "{primaryfire} piazza la Stazione di Cura."
 
 L.hstation_desc = [[
 Permette ai giocatori di curarsi una volta piazzata.
@@ -317,7 +314,6 @@ Le scariche di energia danneggiano i giocatori nelle vicinanze.]]
 
 -- Radio
 L.radio_broken = "La tua Radio è stata distrutta!"
-L.radio_help_pri = "{primaryfire} piazza una Radio."
 
 L.radio_desc = [[
 Fa dei suoni per distrarre o ingannare.
@@ -976,7 +972,7 @@ L.menu_guide_description = "Ti aiuta a cominciare con TTT2 e ti spiega delle cos
 L.menu_bindings_description = "Assegna specifiche funzioni di TTT2 e le sue addon a tuo piacimento"
 L.menu_language_description = "Seleziona la lingua del gioco"
 L.menu_appearance_description = "Modifica l'aspetto e la performane dell'interfaccia"
-L.menu_gameplay_description = "Evita dei ruoli e modifica alcune funzioni"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Configura le addon locali a tuo piacimento"
 L.menu_legacy_description = "Un pannello con le finestre convertite dal TTT originale, dovrebbero essere portate al nuovo sistema"
 L.menu_administration_description = "Impostazioni generli per gli HUD, shop ecc."
@@ -1003,7 +999,6 @@ L.submenu_appearance_interface_title = "Interfaccia"
 L.submenu_appearance_miscellaneous_title = "Varie"
 
 L.submenu_gameplay_general_title = "Generale"
-L.submenu_gameplay_avoidroles_title = "Evita Selezione Ruoli"
 
 L.submenu_administration_hud_title = "Impostazioni HUD"
 L.submenu_administration_randomshop_title = "Shop Casuale"
@@ -1040,16 +1035,11 @@ L.label_shop_show_slot = "Mostra indicatore dello slot"
 L.label_shop_show_custom = "Mostra indicatore dell'oggetto personalizzato"
 L.label_shop_show_fav = "Mostra indicatore oggetto preferito"
 L.label_crosshair_enable = "Abilita Crosshair"
-L.label_crosshair_gap_enable = "Abilita gap del mirino personalizzato"
-L.label_crosshair_gap = "Gap mirino personalizzato"
 L.label_crosshair_opacity = "Opacità mirino"
 L.label_crosshair_ironsight_opacity = "Opacità mirino di ferro"
 L.label_crosshair_size = "Grandezza mirino"
 L.label_crosshair_thickness = "Spessore mirino"
 L.label_crosshair_thickness_outline = "Spessore contorno del mirino"
-L.label_crosshair_static_enable = "Abilita mirino statico"
-L.label_crosshair_dot_enable = "Abilita punto del mirino"
-L.label_crosshair_lines_enable = "Abilita linee del mirino"
 L.label_crosshair_scale_enable = "Abilita scalatura del mirino dell'arma"
 L.label_crosshair_ironsight_low_enabled = "Abbassa arma quando usi il mirino di ferro"
 L.label_damage_indicator_enable = "Abilita indicatore del danno"
@@ -1096,7 +1086,6 @@ L.header_damage_indicator = "Impostazioni Indicatori del Danno"
 L.header_performance_settings = "Impostazioni Performance"
 L.header_interface_settings = "Impostazioni Interfaccia"
 L.header_gameplay_settings = "Impostazioni del Gameplay"
-L.header_roleselection = "Abilita Assegnamento Ruoli"
 L.header_hud_administration = "Seleziona HUD di Default e Forzati"
 L.header_hud_enabled = "Abilita/Disabilita HUD"
 
@@ -1158,7 +1147,6 @@ L.binoc_help_sec = "Cambia livello di zoom."
 
 L.vis_help_pri = "Getta il dispositivo."
 
-L.decoy_help_pri = "Piazza un esca."
 
 -- 2020-08-07
 L.pickup_error_spec = "Non puoi prendere questo da spettatore."
@@ -1764,7 +1752,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) è stata ucciso da
 --L.label_sprint_max = "Max sprinting stamina"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -2070,6 +2057,32 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Piazza un esca."
+
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
@@ -2117,6 +2130,18 @@ L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+-- 2023-12-22
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2127,3 +2152,23 @@ L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"
