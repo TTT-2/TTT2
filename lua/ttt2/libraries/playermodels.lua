@@ -258,25 +258,51 @@ function playermodels.GetRandomPlayerModel()
 end
 
 ---
+-- Finds the location and angle of the hat.
+-- @param Player ply The player whose hat position should be found
+-- @return Vector pos The location of the attach point.
+-- @return Angle ang The angle of the attach point.
+-- @realm shared
+function playermodels.GetHatPosition(ply)
+	local pos, ang
+	if IsValid(ply) then
+		local bone = ply:LookupBone("ValveBiped.Bip01_Head1")
+		if bone then
+			pos, ang = ply:GetBonePosition(bone)
+		else
+			pos, ang = ply:GetPos(), ply:GetAngles()
+			pos.z = pos.z + GetPlayerSize(ply).z
+		end
+	end
+
+	return pos, ang
+end
+
+---
 -- Applies a detective hat to the provided player. Doesn't check if the player's model
 -- allows a hat. Use the Filter function for this.
 -- @param Player ply The player that should receive the hat
 -- @param[opt] function Filter The filter function that has to return true to apply a hat
+-- @param[opt] string hatName The class name of the hat entity, if different from the detective's hat.
 -- @realm server
-function playermodels.ApplyPlayerHat(ply, Filter)
+function playermodels.ApplyPlayerHat(ply, Filter, hatName)
 	if IsValid(ply.hat) or (isfunction(Filter) and not Filter(ply)) then return end
 
-	local hat = ents.Create("ttt_hat_deerstalker")
+	local hat = ents.Create(hatName or "ttt_hat_deerstalker")
 
 	if not IsValid(hat) then return end
 
-	hat:SetPos(ply:GetPos() + Vector(0, 0, GetPlayerSize(ply).z))
-	hat:SetAngles(ply:GetAngles())
+	local pos, ang = playermodels.GetHatPosition(ply)
+	hat:SetPos(pos)
+	hat:SetAngles(ang)
 	hat:SetParent(ply)
 
-	hat:Spawn()
-
+	if isfunction(hat.EquipTo) then
+		hat:EquipTo(ply)
+	end
 	ply.hat = hat
+
+	hat:Spawn()
 end
 
 ---

@@ -15,6 +15,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
+- Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew)
+- Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)
+- `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
+  - Added `SWEP.IdleAnim` to allow specifying an idle animation.
+  - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
+- Icon for gameplay menu
+- Icon for accessibility menu
+- Icon for `Voice & Volume` menu
 
 ### Changed
 
@@ -25,12 +33,26 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
+- Updated the Turkish localization file (by @NovaDiablox)
+- Grenades have icons
+- Brought down the `EFFECT`s: `crimescene_dummy`, `crimescene_shot`, `pulse_sphere`, `teleport_beamdown`, `teleport_beamup`
+- Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
+- Brought down the `SWEP`: `weapon_ttt_stungun`
+- Brought down the menu for arming/defusing C4
+- Consolidated hat logic
 
 ### Fixed
 
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
+- Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
+- Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
+
+### Removed
+
+- Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
+- Removed DX8/SW models that aren't used
 
 ### Breaking Changes
 
@@ -69,10 +91,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Errors when looking at a player's corpse that disconnected (by @EntranceJew)
 - Fixed `TTT2FinishedLoading` hook not called on server on hot reload (by @TimGoll)
 - Shopeditor now correctly shows resetted and default values
-
-### Removed
-
-- Removed some crosshair related convars: `ttt_crosshair_static`, `ttt2_sprint_crosshair`
 
 ## [v0.12.2b](https://github.com/TTT-2/TTT2/tree/v0.12.2b) (2023-12-20)
 

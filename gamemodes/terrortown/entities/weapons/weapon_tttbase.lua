@@ -113,6 +113,10 @@ SWEP.HotReloadableKeys = {}
 -- SWEPs do not need it for anything.
 --	SWEP.WeaponID = nil
 
+-- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
+-- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
+SWEP.idleResetFix = false
+
 --   YE OLDE SWEP STUFF
 
 if CLIENT then
@@ -161,6 +165,7 @@ SWEP.DeploySpeed = 1.4
 
 SWEP.PrimaryAnim = ACT_VM_PRIMARYATTACK
 SWEP.ReloadAnim = ACT_VM_RELOAD
+SWEP.IdleAnim = ACT_VM_IDLE
 
 SWEP.fingerprints = {}
 
@@ -245,6 +250,11 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	local mathRound = math.Round
+	local mathFloor = math.floor
+
+	local CROSSHAIR_MODE_DOT_AND_LINES = 0
+	local CROSSHAIR_MODE_LINES_ONLY = 1
+	local CROSSHAIR_MODE_DOT_ONLY = 2
 
 	---
 	-- @realm client
@@ -260,14 +270,6 @@ if CLIENT then
 
 	---
 	-- @realm client
-	local cvEnableCrosshairGap = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
-
-	---
-	-- @realm client
-	local cvSizeCrosshairGap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
-
-	---
-	-- @realm client
 	local cvOpacityCrosshair = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
 
 	---
@@ -276,19 +278,27 @@ if CLIENT then
 
 	---
 	-- @realm client
+	local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local cvThicknessCrosshair = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+	local cvEnableOutlineCrosshair = CreateConVar("ttt_crosshair_outline_enable", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local cvEnableCrosshairDot = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
+	local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outline_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
-	local cvEnableCrosshairLines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
+	local cvHighContrastOutlineCrosshair = CreateConVar("ttt_crosshair_outline_high_contrast", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
+	local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
 	local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
 	local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
@@ -314,9 +324,10 @@ if CLIENT then
 
 		local sights = not self.NoSights and self:GetIronsights()
 
-		local xCenter = ScrW() * 0.5
-		local yCenter = ScrH() * 0.5
+		local xCenter = mathFloor(ScrW() * 0.5)
+		local yCenter = mathFloor(ScrH() * 0.5)
 		local scale = appearance.GetGlobalScale()
+		local baseConeWeapon = math.max(0.2, 10 * self:GetPrimaryConeBase())
 		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
 		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
 
@@ -337,45 +348,69 @@ if CLIENT then
 		)
 
 		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-		local gap = cvEnableCrosshairGap:GetBool()
-			and (timescale * cvSizeCrosshairGap:GetFloat() * scale)
-			or (20 * scaleWeapon * timescale * self:GetPrimaryConeFactor() * scale)
-		local thickness = cvThicknessCrosshair:GetFloat() * scale
-		local outline = cvThicknessOutlineCrosshair:GetFloat() * scale
-		local length = gap + 25 * cvSizeCrosshair:GetFloat() * scaleWeapon * timescale * scale
-		local offset = thickness * 0.5
-
-		if outline > 0 then
-			surface.SetDrawColor(0, 0, 0, 255 * alpha)
-			surface.DrawRect(xCenter - length - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(xCenter + gap - outline, yCenter - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(xCenter - offset - outline, yCenter - length - outline, thickness + outline * 2, length - gap + outline * 2)
-			surface.DrawRect(xCenter - offset - outline, yCenter + gap - outline, thickness + outline * 2, length - gap + outline * 2)
-		end
+		local gap = mathFloor(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
+		local thicknessLine = mathFloor(cvThicknessCrosshair:GetFloat() * scale)
+		local thicknessOutline = mathFloor(cvThicknessOutlineCrosshair:GetFloat() * scale)
+		local lengthLine = mathFloor(gap + 25 * cvSizeCrosshair:GetFloat() * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon) * timescale * scale)
+		local offsetLine = mathFloor(thicknessLine * 0.5)
 
 		-- set up crosshair color
-		local color = client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
-
-		color = appearance.SelectFocusColor(color)
-
-		surface.SetDrawColor(
-			color.r,
-			color.g,
-			color.b,
-			255 * alpha
-		)
+		local color = appearance.SelectFocusColor(client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color)
+		local colorOutline = cvHighContrastOutlineCrosshair:GetBool() and util.GetDefaultColor(color) or COLOR_BLACK
 
 		-- draw crosshair dot
-		if cvEnableCrosshairDot:GetBool() then
-			surface.DrawRect(xCenter - thickness * 0.5, yCenter - thickness * 0.5, thickness, thickness)
+		if cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_ONLY then
+			local xDot = mathFloor(xCenter - thicknessLine * 0.5)
+			local yDot = mathFloor(yCenter - thicknessLine * 0.5)
+
+			if cvEnableOutlineCrosshair:GetBool() then
+				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
+
+				surface.DrawRect(xDot - thicknessOutline, yDot - thicknessOutline, thicknessLine + thicknessOutline * 2, thicknessLine + thicknessOutline * 2)
+			end
+
+			surface.SetDrawColor(color.r, color.g, color.b, color.a * alpha)
+
+			surface.DrawRect(xDot, yDot, thicknessLine, thicknessLine)
 		end
 
 		-- draw crosshair lines
-		if cvEnableCrosshairLines:GetBool() then
-			surface.DrawRect(xCenter - length, yCenter - offset, length - gap, thickness)
-			surface.DrawRect(xCenter + gap, yCenter - offset, length - gap, thickness)
-			surface.DrawRect(xCenter - offset, yCenter - length, thickness, length - gap)
-			surface.DrawRect(xCenter - offset, yCenter + gap, thickness, length - gap)
+		if cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_LINES_ONLY then
+			if cvEnableOutlineCrosshair:GetBool() then
+				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
+
+				surface.DrawRect(
+					xCenter - lengthLine - thicknessOutline,
+					yCenter - offsetLine - thicknessOutline,
+					lengthLine - gap + thicknessOutline * 2,
+					thicknessLine + thicknessOutline * 2
+				)
+				surface.DrawRect(
+					xCenter + gap - thicknessOutline,
+					yCenter - offsetLine - thicknessOutline,
+					lengthLine - gap + thicknessOutline * 2,
+					thicknessLine + thicknessOutline * 2
+				)
+				surface.DrawRect(
+					xCenter - offsetLine - thicknessOutline,
+					yCenter - lengthLine - thicknessOutline,
+					thicknessLine + thicknessOutline * 2,
+					lengthLine - gap + thicknessOutline * 2
+				)
+				surface.DrawRect(
+					xCenter - offsetLine - thicknessOutline,
+					yCenter + gap - thicknessOutline,
+					thicknessLine + thicknessOutline * 2,
+					lengthLine - gap + thicknessOutline * 2
+				)
+			end
+
+			surface.SetDrawColor(color.r, color.g, color.b, color.a * alpha)
+
+			surface.DrawRect(xCenter - lengthLine, yCenter - offsetLine, lengthLine - gap, thicknessLine)
+			surface.DrawRect(xCenter + gap, yCenter - offsetLine, lengthLine - gap, thicknessLine)
+			surface.DrawRect(xCenter - offsetLine, yCenter - lengthLine, thicknessLine, lengthLine - gap)
+			surface.DrawRect(xCenter - offsetLine, yCenter + gap, thicknessLine, lengthLine - gap)
 		end
 	end
 
@@ -801,19 +836,30 @@ end
 -- @return number
 -- @realm shared
 function SWEP:GetPrimaryCone()
-	local cone = self.Primary.Cone or 0.02
+	return self:GetPrimaryConeBase() * self:GetPrimaryConeFactor()
+end
 
-	return cone * self:GetPrimaryConeFactor()
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryConeBase()
+	return self.Primary.Cone or 0.02
 end
 
 ---
 -- @return number
 -- @realm shared
 function SWEP:GetPrimaryRecoil()
-	local recoil = self.Primary.Recoil or 1.5
-
-	return recoil * self:GetPrimaryRecoilFactor()
+	return self:GetPrimaryRecoilBase() * self:GetPrimaryRecoilFactor()
 end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoilBase()
+	return self.Primary.Recoil or 1.5
+end
+
 
 ---
 -- @param Player victim
@@ -1137,12 +1183,50 @@ function SWEP:Initialize()
 	end
 end
 
+local idle_activities = {
+	[ACT_VM_IDLE] = true,
+	[ACT_VM_IDLE_TO_LOWERED] = true,
+	[ACT_VM_IDLE_LOWERED] = true,
+	[ACT_VM_IDLE_SILENCED] = true,
+	[ACT_VM_IDLE_EMPTY_LEFT] = true,
+	[ACT_VM_IDLE_EMPTY] = true,
+	[ACT_VM_IDLE_DEPLOYED_EMPTY] = true,
+	[ACT_VM_IDLE_8] = true,
+	[ACT_VM_IDLE_7] = true,
+	[ACT_VM_IDLE_6] = true,
+	[ACT_VM_IDLE_5] = true,
+	[ACT_VM_IDLE_4] = true,
+	[ACT_VM_IDLE_3] = true,
+	[ACT_VM_IDLE_2] = true,
+	[ACT_VM_IDLE_1] = true,
+	[ACT_VM_IDLE_DEPLOYED] = true,
+	[ACT_VM_IDLE_DEPLOYED_8] = true,
+	[ACT_VM_IDLE_DEPLOYED_7] = true,
+	[ACT_VM_IDLE_DEPLOYED_6] = true,
+	[ACT_VM_IDLE_DEPLOYED_5] = true,
+	[ACT_VM_IDLE_DEPLOYED_4] = true,
+	[ACT_VM_IDLE_DEPLOYED_3] = true,
+	[ACT_VM_IDLE_DEPLOYED_2] = true,
+	[ACT_VM_IDLE_DEPLOYED_1] = true,
+	[ACT_VM_IDLE_M203] = true,
+}
+
+local function IsIdleActivity(vm)
+	return idle_activities[ vm:GetSequenceActivity( vm:GetSequence() ) ] or false
+end
+
 ---
 -- Called when the swep thinks.
 -- @warning If you override Think in your SWEP, you should call BaseClass.Think(self) so as not to break ironsights
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
+	local vm = self:GetOwner():GetViewModel()
+
+	if self.idleResetFix and self.ViewModel and vm:GetCycle() >= 1 and not IsIdleActivity(vm) then
+		self:SendWeaponAnim( self.IdleAnim or ACT_VM_IDLE )
+	end
+
 	if CLIENT then
 		self:CalcViewModel()
 	end

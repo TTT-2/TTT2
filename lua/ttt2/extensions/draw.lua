@@ -571,7 +571,7 @@ local function InternalGetWrappedText(text, allowedWidth, scale)
 	end
 
 	local words = string.Explode(" ", text)
-	local lines = {}
+	local lines = {""}
 
 	for i = 1, #words do
 		local word = words[i]

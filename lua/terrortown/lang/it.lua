@@ -1039,15 +1039,11 @@ L.label_shop_show_slot = "Mostra indicatore dello slot"
 L.label_shop_show_custom = "Mostra indicatore dell'oggetto personalizzato"
 L.label_shop_show_fav = "Mostra indicatore oggetto preferito"
 L.label_crosshair_enable = "Abilita Crosshair"
-L.label_crosshair_gap_enable = "Abilita gap del mirino personalizzato"
-L.label_crosshair_gap = "Gap mirino personalizzato"
 L.label_crosshair_opacity = "Opacità mirino"
 L.label_crosshair_ironsight_opacity = "Opacità mirino di ferro"
 L.label_crosshair_size = "Grandezza mirino"
 L.label_crosshair_thickness = "Spessore mirino"
 L.label_crosshair_thickness_outline = "Spessore contorno del mirino"
-L.label_crosshair_dot_enable = "Abilita punto del mirino"
-L.label_crosshair_lines_enable = "Abilita linee del mirino"
 L.label_crosshair_scale_enable = "Abilita scalatura del mirino dell'arma"
 L.label_crosshair_ironsight_low_enabled = "Abbassa arma quando usi il mirino di ferro"
 L.label_damage_indicator_enable = "Abilita indicatore del danno"
@@ -2108,7 +2104,7 @@ L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
 --L.label_enable_bobbing = "Enable view bobbing"
 --L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the payer's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
@@ -2121,3 +2117,23 @@ L.body_confirm_one = "{finder} ha confermato la morte di {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"

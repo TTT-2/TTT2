@@ -42,5 +42,6 @@ SWEP.HeadshotMultiplier = 1.75
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_glock18.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_glock18.mdl"
+SWEP.idleResetFix = true
 
 SWEP.IronSightsPos = Vector(-5.79, -3.9982, 2.8289)
