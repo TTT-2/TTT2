@@ -117,8 +117,6 @@ if SERVER then
 
 			plysFound[ent] = true
 			affectedPlayers[ent] = true
-
-			plysFound[#plysFound + 1] = ent
 		end
 
 		table.Merge(affectedPlayers, self.lastPlysFound)
@@ -146,6 +144,8 @@ if SERVER then
 		for ply in pairs(self.lastPlysFound) do
 			markerVision.RemoveEntity(ply)
 		end
+
+		markerVision.RemoveEntity(self)
 	end
 
 	---
@@ -215,12 +215,6 @@ if CLIENT then
 	local materialBeacon = Material("vgui/ttt/marker_vision/beacon")
 	local materialPlayer = Material("vgui/ttt/tid/tid_big_role_not_known")
 
-	---
-	-- @realm client
-	function ENT:OnRemove()
-		marks.Remove(self.lastPlysFound or {})
-	end
-
 	-- handle looking at Beacon
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBeacon", function(tData)
 		local client = LocalPlayer()
@@ -251,7 +245,7 @@ if CLIENT then
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
 		local ent = mvData:GetEntity()
 
-		if IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
+		if not IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
