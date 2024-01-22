@@ -2084,6 +2084,24 @@ L.newton_force = "GÜÇ"
 L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_visible_for_0 = "Visible for: you"
+--L.marker_vision_visible_for_1 = "Visible for: team"
+--L.marker_vision_visible_for_2 = "Visible for: everyone"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 L.beacon_help_pri = "Feneri yere at"
 L.beacon_help_sec = "Feneri yere yapıştır"
 L.beacon_name = "Fener"
@@ -2098,7 +2116,7 @@ L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
--- 2023-11-18
+-- 2023-12-18
 L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 
 -- 2023-12-18

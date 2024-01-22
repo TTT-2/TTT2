@@ -345,6 +345,10 @@ function plymeta:UpdateTeam(team, suppressEvent, suppressHook)
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 
+	if SERVER then
+		markerVision.PlayerUpdatedTeam(self, oldTeam, newTeam)
+	end
+
 	if SERVER and not suppressEvent then
 		local subrole = self:GetSubRole()
 

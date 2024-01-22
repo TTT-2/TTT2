@@ -6,6 +6,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll)
+  - C4
+  - Radio
+  - Beacon
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
 - Reworked the way the player camera is handled (by @TimGoll)
   - Added FOV change on speed change

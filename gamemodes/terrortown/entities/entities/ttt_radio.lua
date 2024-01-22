@@ -37,6 +37,8 @@ function ENT:Initialize()
 
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
+
+		markerVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_TEAM)
 	end
 
 	-- Register with owner
@@ -99,18 +101,19 @@ function ENT:OnTakeDamage(dmginfo)
 	end
 end
 
-if CLIENT then
-	---
-	-- @realm client
-	function ENT:OnRemove()
+---
+-- @realm shared
+function ENT:OnRemove()
+	if CLIENT then
 		local client = LocalPlayer()
 
 		if client ~= self:GetOwner() then return end
 
 		client.radio = nil
+	else
+		markerVision.RemoveEntity(self)
 	end
 end
-
 ---
 -- @param Sound snd
 -- @realm shared
@@ -286,7 +289,7 @@ local nextplay = 0
 ---
 -- @realm shared
 function ENT:Think()
-	if CurTime() <= nextplay or #self.SoundQueue <= 0 then return end
+	if CurTime() <= nextplay or (istable(self.SoundQueue) and #self.SoundQueue <= 0) then return end
 
 	if not self.Playing then
 		self:PlaySound(table.remove(self.SoundQueue, 1))
@@ -297,6 +300,8 @@ function ENT:Think()
 end
 
 if CLIENT then
+	local materialRadio = Material("vgui/ttt/marker_vision/radio")
+
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
@@ -325,6 +330,27 @@ if CLIENT then
 
 		tData:SetKeyBinding("+use")
 		tData:AddDescriptionLine(TryT("radio_short_desc"))
+	end)
+
+	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionRadio", function(mvData)
+		local ent = mvData:GetEntity()
+
+		if not IsValid(ent) or ent:GetClass() ~= "ttt_radio" then return end
+
+		local owner = ent:GetOwner()
+		local nick = IsValid(owner) and owner:Nick() or "---"
+
+		local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+
+		mvData:EnableText()
+
+		mvData:SetTitle(TryT(ent.PrintName))
+		mvData:AddIcon(materialRadio)
+
+		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
+
+		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
 	end)
 end
 
