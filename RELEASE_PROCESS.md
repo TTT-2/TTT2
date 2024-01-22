@@ -36,11 +36,6 @@ The following steps will document our release process to prevent mistakes and co
         - Update the `GM.Version` string to the new version.
         - Check if other `GM` strings are up to date as well.
 
-    1. Update `gamemodes/terrortown/gamemode/shared/sh_versions.lua`.
-
-        - Add to the `versions.names` table the newest version name.
-            - New versions go below the last version, meaning higher indices
-
     1. Clean up the language files with our leanguage cleanup tool
 
         - Tool: https://github.com/TTT-2/ttt2-language_parser

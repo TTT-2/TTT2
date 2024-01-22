@@ -2,7 +2,6 @@
 -- Trouble in Terrorist Town 2
 
 ttt_include("sh_init")
-ttt_include("sh_versions")
 
 ttt_include("sh_cvar_handler")
 
@@ -271,14 +270,6 @@ end)
 
 fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function(path)
 	MsgN("Added TTT2 server autorun file: ", path)
-end)
-
-fileloader.LoadFolder("terrortown/migrations/client/", true, CLIENT_FILE, function(path)
-	MsgN("Marked TTT2 client migration file for distribution: ", path)
-end)
-
-fileloader.LoadFolder("terrortown/migrations/server/", true, SERVER_FILE, function(path)
-	MsgN("Added TTT2 server migration file: ", path)
 end)
 
 ---

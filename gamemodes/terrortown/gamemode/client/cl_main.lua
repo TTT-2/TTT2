@@ -16,7 +16,6 @@ surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
 ttt_include("sh_init")
-ttt_include("sh_versions")
 
 ttt_include("sh_cvar_handler")
 
@@ -124,10 +123,6 @@ end)
 
 fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
 	MsgN("Added TTT2 shared autorun file: ", path)
-end)
-
-fileloader.LoadFolder("terrortown/migrations/client/", true, CLIENT_FILE, function(path)
-	MsgN("Added TTT2 client migration file: ", path)
 end)
 
 -- all files are loaded
