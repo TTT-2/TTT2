@@ -273,7 +273,6 @@ Mostra un segnale falso sul radar dei Detective, e mostra sui loro DNA scanner l
 
 -- Defuser
 L.defuser_name = "Disinnescatore"
-L.defuser_help = "{primaryfire} disinnesca C4 selezionato."
 
 L.defuser_desc = [[
 Disinnesca istantaneamente un C4.
@@ -292,7 +291,6 @@ Bruciare un cadavere fa un suono distinto.]]
 L.hstation_name = "Stazione di Cura"
 
 L.hstation_broken = "La tua Stazione di Cura è stata distrutta!"
-L.hstation_help = "{primaryfire} piazza la Stazione di Cura."
 
 L.hstation_desc = [[
 Permette ai giocatori di curarsi una volta piazzata.
@@ -316,7 +314,6 @@ Le scariche di energia danneggiano i giocatori nelle vicinanze.]]
 
 -- Radio
 L.radio_broken = "La tua Radio è stata distrutta!"
-L.radio_help_pri = "{primaryfire} piazza una Radio."
 
 L.radio_desc = [[
 Fa dei suoni per distrarre o ingannare.
@@ -975,7 +972,7 @@ L.menu_guide_description = "Ti aiuta a cominciare con TTT2 e ti spiega delle cos
 L.menu_bindings_description = "Assegna specifiche funzioni di TTT2 e le sue addon a tuo piacimento"
 L.menu_language_description = "Seleziona la lingua del gioco"
 L.menu_appearance_description = "Modifica l'aspetto e la performane dell'interfaccia"
-L.menu_gameplay_description = "Evita dei ruoli e modifica alcune funzioni"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Configura le addon locali a tuo piacimento"
 L.menu_legacy_description = "Un pannello con le finestre convertite dal TTT originale, dovrebbero essere portate al nuovo sistema"
 L.menu_administration_description = "Impostazioni generli per gli HUD, shop ecc."
@@ -1002,7 +999,6 @@ L.submenu_appearance_interface_title = "Interfaccia"
 L.submenu_appearance_miscellaneous_title = "Varie"
 
 L.submenu_gameplay_general_title = "Generale"
-L.submenu_gameplay_avoidroles_title = "Evita Selezione Ruoli"
 
 L.submenu_administration_hud_title = "Impostazioni HUD"
 L.submenu_administration_randomshop_title = "Shop Casuale"
@@ -1090,7 +1086,6 @@ L.header_damage_indicator = "Impostazioni Indicatori del Danno"
 L.header_performance_settings = "Impostazioni Performance"
 L.header_interface_settings = "Impostazioni Interfaccia"
 L.header_gameplay_settings = "Impostazioni del Gameplay"
-L.header_roleselection = "Abilita Assegnamento Ruoli"
 L.header_hud_administration = "Seleziona HUD di Default e Forzati"
 L.header_hud_enabled = "Abilita/Disabilita HUD"
 
@@ -1152,7 +1147,6 @@ L.binoc_help_sec = "Cambia livello di zoom."
 
 L.vis_help_pri = "Getta il dispositivo."
 
-L.decoy_help_pri = "Piazza un esca."
 
 -- 2020-08-07
 L.pickup_error_spec = "Non puoi prendere questo da spettatore."
@@ -2063,9 +2057,31 @@ L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ult
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Piazza un esca."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

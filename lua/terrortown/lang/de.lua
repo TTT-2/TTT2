@@ -273,7 +273,6 @@ Zeigt Detektiven ein gefälschtes Radar-Signal und bewirkt, dass der DNA-Scanner
 
 -- Defuser
 L.defuser_name = "Entschärfer"
-L.defuser_help = "{primaryfire} entschärft anvisiertes C4."
 
 L.defuser_desc = [[
 Entschärft sofort eine C4-Bombe.
@@ -292,7 +291,6 @@ Das Verbrennen einer Leiche macht ein ganz bestimmtes Geräusch.]]
 L.hstation_name = "Gesundheitsstation"
 
 L.hstation_broken = "Deine Gesundheitsstation wurde zerstört!"
-L.hstation_help = "{primaryfire} platziert die Gesundheitsstation."
 
 L.hstation_desc = [[
 Ermöglicht bei Platzierung, dass sich jeder Spieler an ihr heilen kann.
@@ -316,7 +314,6 @@ Die Energiespitzen schädigen nahestehende Spieler.]]
 
 -- Radio
 L.radio_broken = "Dein Radio wurde zerstört!"
-L.radio_help_pri = "{primaryfire} platziert das Radio."
 
 L.radio_desc = [[
 Spielt Geräusche zur Ablenkung ab.
@@ -975,7 +972,7 @@ L.menu_guide_description = "Hilft dir mit TTT2 zurecht zu kommen und erklärt ei
 L.menu_bindings_description = "Belege Tasten von TTT2 und seinen Erweiterungen nach deinem Geschmack"
 L.menu_language_description = "Stelle die Sprache des Spiels ein"
 L.menu_appearance_description = "Verändere die Erscheinung und Performance der UI"
-L.menu_gameplay_description = "Vermeide Rollen und verändere ein paar andere Funktionen"
+L.menu_gameplay_description = "Verändere Lautstärke-, Barrierefreiheits- und Gameplay-Einstellungen."
 L.menu_addons_description = "Stelle lokale Addons nach deinem Geschmack ein"
 L.menu_legacy_description = "Einstellungen von alten TTT Erweiterungen, die zum neuen UI-System konvertiert werden sollten"
 L.menu_administration_description = "Allgemeine Einstellungen für HUDs, Ausrüstung und Shops"
@@ -1002,7 +999,6 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Verschiedenes"
 
 L.submenu_gameplay_general_title = "Allgemein"
-L.submenu_gameplay_avoidroles_title = "Vermeide Rollen"
 
 L.submenu_administration_hud_title = "HUD Einstellungen"
 L.submenu_administration_randomshop_title = "Zufälliger Shop"
@@ -1090,7 +1086,6 @@ L.header_damage_indicator = "Schadensanzeigen Einstellungen"
 L.header_performance_settings = "Performance Einstellungen"
 L.header_interface_settings = "Anzeigeeinstellungen"
 L.header_gameplay_settings = "Spieleinstellungen"
-L.header_roleselection = "Aktierung Rollenzuweisung"
 L.header_hud_administration = "Wähle Standard-HUD und Erzwungenes-HUD"
 L.header_hud_enabled = "De-/aktiviere HUDs"
 
@@ -1152,7 +1147,6 @@ L.binoc_help_sec = "Ändere Zoom-Level."
 
 L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 
-L.decoy_help_pri = "Platziere die Attrappe."
 
 -- 2020-08-07
 L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
@@ -2063,9 +2057,31 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Platziere die Attrappe."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

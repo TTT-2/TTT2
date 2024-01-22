@@ -273,7 +273,6 @@ Montre un faux signe sur le radar des autres teams, et fait que leur scanner ADN
 
 -- Defuser
 L.defuser_name = "Kit de désamorçage"
-L.defuser_help = "{primaryfire} désamorce le C4 ciblé."
 
 L.defuser_desc = [[
 Désamorce instantanément un explosif C4.
@@ -292,7 +291,6 @@ Brûler un corps fait un son distinct.]]
 L.hstation_name = "Station de Soins"
 
 L.hstation_broken = "Votre Station de Soins a été détruite!"
-L.hstation_help = "{primaryfire} place la Station de Soins."
 
 L.hstation_desc = [[
 Soigne les personnes qui l'utilisent.
@@ -316,7 +314,6 @@ Ces éclats d'énergie peuvent frapper les gens à proximité.]]
 
 -- Radio
 L.radio_broken = "Votre Radio a été détruite!"
-L.radio_help_pri = "{primaryfire} place la Radio."
 
 L.radio_desc = [[
 Joue des sons pour distraire ou tromper.
@@ -975,7 +972,7 @@ L.menu_guide_description = "Vous aide à démarrer TTT2 et vous explique certain
 L.menu_bindings_description = "Configurer les caractéristiques spécifiques de TTT2 et de ses addons"
 L.menu_language_description = "Sélectionnez la langue du jeu"
 L.menu_appearance_description = "Modifier l'apparence et la performance de votre UI"
-L.menu_gameplay_description = "Bloquer des rôles et modifie certains éléments"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Configurer les addons locaux à votre convenance"
 L.menu_legacy_description = "Une interface avec des onglets convertis à partir du TTT original, ils devraient être portés sur le nouveau système"
 L.menu_administration_description = "Paramètres généraux pour les HUD, les shops, etc."
@@ -1002,7 +999,6 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Autre"
 
 L.submenu_gameplay_general_title = "Général"
-L.submenu_gameplay_avoidroles_title = "Blacklistage de rôle"
 
 L.submenu_administration_hud_title = "Paramètres HUD"
 L.submenu_administration_randomshop_title = "Shop Aléatoire"
@@ -1044,7 +1040,7 @@ L.label_crosshair_ironsight_opacity = "Opacité du réticule du viseur"
 L.label_crosshair_size = "Taille du réticule"
 L.label_crosshair_thickness = "Épaisseur du réticule"
 L.label_crosshair_thickness_outline = "Épaisseur du contour du réticule"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Baissez votre arme lorsque vous utilisez le viseur"
 L.label_damage_indicator_enable = "Activer l'indicateur de dégâts"
 L.label_damage_indicator_mode = "Sélectionnez le thème de l'indicateur de dégâts"
@@ -1090,7 +1086,6 @@ L.header_damage_indicator = "Paramètres de l'indicateur de dégâts"
 L.header_performance_settings = "Paramètres de performance"
 L.header_interface_settings = "Paramètres de l'interface"
 L.header_gameplay_settings = "Paramètres de jeu"
-L.header_roleselection = "Activer/Désactiver l'attribution de certains rôles"
 L.header_hud_administration = "Sélectionnez l'HUDs par Défaut et Obligatoire"
 L.header_hud_enabled = "Activer/Désactiver l'HUDs"
 
@@ -1152,7 +1147,6 @@ L.binoc_help_sec = "Changer le niveau de zoom."
 
 L.vis_help_pri = "Lâcher l'appareil activé."
 
-L.decoy_help_pri = "Planter le leurre."
 
 -- 2020-08-07
 L.pickup_error_spec = "Vous ne pouvez pas prendre cela en tant que spectateur."
@@ -2063,9 +2057,31 @@ L.search_eyes = "En utilisant vos compétences de détective, vous avez identifi
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Planter le leurre."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

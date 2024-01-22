@@ -273,7 +273,6 @@ Visar ett fejkat radar-spår för detektiver, och gör så att deras DNA-skanner
 
 -- Defuser
 L.defuser_name = "Desarmerare"
-L.defuser_help = "{primaryfire} desarmerar C4 i siktet."
 
 L.defuser_desc = [[
 Desarmerar C4 omedelbart.
@@ -292,7 +291,6 @@ Att bränna ett lik gör ett tydligt ljud.]]
 L.hstation_name = "Hälsostation"
 
 L.hstation_broken = "Din Hälsostation har blivit förstörd!"
-L.hstation_help = "{primaryfire} placerar Hälsostationen."
 
 L.hstation_desc = [[
 Tillåter spelare att helas när den är utplacerad.
@@ -316,7 +314,6 @@ Explosionerna skadar spelare i närheten.]]
 
 -- Radio
 L.radio_broken = "Din Radio har blivit förstörd!"
-L.radio_help_pri = "{primaryfire} placerar Radion."
 
 L.radio_desc = [[
 Spelar upp distraherande eller bedragande ljud.
@@ -975,7 +972,7 @@ L.help_title = "Hjälp och Inställningar"
 --L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking."
 --L.menu_language_description = "Select the language of the gamemode."
 --L.menu_appearance_description = "Tweak the appearance and performance of the UI."
---L.menu_gameplay_description = "Avoid roles and tweak some features."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 --L.menu_addons_description = "Configure local addons to your liking."
 --L.menu_legacy_description = "A panel with converted tabs from the original TTT that should be ported over to the new system."
 --L.menu_administration_description = "General settings for HUDs, shops etc."
@@ -1002,7 +999,6 @@ L.help_title = "Hjälp och Inställningar"
 --L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 --L.submenu_gameplay_general_title = "General"
---L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
 --L.submenu_administration_hud_title = "HUD Settings"
 --L.submenu_administration_randomshop_title = "Random Shop"
@@ -1044,7 +1040,7 @@ L.help_title = "Hjälp och Inställningar"
 --L.label_crosshair_size = "Crosshair size multiplier"
 --L.label_crosshair_thickness = "Crosshair thickness multiplier"
 --L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
---L.label_crosshair_scale_enable = "Enable dynamic scrosshair scale"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 --L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
 --L.label_damage_indicator_enable = "Enable damage indicator"
 --L.label_damage_indicator_mode = "Select damage indicator theme"
@@ -1090,7 +1086,6 @@ L.help_title = "Hjälp och Inställningar"
 --L.header_performance_settings = "Performance Settings"
 --L.header_interface_settings = "Interface Settings"
 --L.header_gameplay_settings = "Gameplay Settings"
---L.header_roleselection = "Select Avoiding Roles"
 --L.header_hud_administration = "Select Default and Forced HUDs"
 --L.header_hud_enabled = "Enable/Disable HUDs"
 
@@ -1152,7 +1147,6 @@ L.help_title = "Hjälp och Inställningar"
 
 --L.vis_help_pri = "Drop the activated device."
 
---L.decoy_help_pri = "Plant the Decoy."
 
 -- 2020-08-07
 --L.pickup_error_spec = "You cannot pick this up as a spectator."
@@ -2063,9 +2057,31 @@ L.search_eyes = "Genom att använda dina detektivfärdigheter kan du identifiera
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+--L.decoy_help_pri = "Stick to surface"
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"

@@ -314,7 +314,7 @@ if CLIENT then
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
-		if isfunction(self.HUDHelp) then
+		if self.HUDHelp then
 			self:DrawHelp()
 		end
 
@@ -621,7 +621,7 @@ if CLIENT then
 		local width = draw.GetTextSize(text, "weapon_hud_help")
 
 		self.HUDHelp.bindingLines[#self.HUDHelp.bindingLines + 1] = {text = text, binding = materialOrBinding}
-		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
+		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length or 0, width)
 	end
 
 	---

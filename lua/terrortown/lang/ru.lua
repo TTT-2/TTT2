@@ -275,7 +275,6 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "Набор сапёра"
-L.defuser_help = "{primaryfire}: обезвредить С4."
 
 L.defuser_desc = [[
 Мгновенно обезвреживает С4.
@@ -294,7 +293,6 @@ L.flare_desc = [[
 L.hstation_name = "Лечебная станция"
 
 L.hstation_broken = "Ваша Лечебная станция уничтожена!"
-L.hstation_help = "{primaryfire}: разместить Лечебную станцию."
 
 L.hstation_desc = [[
 Позволяет игрокам восстанавливать здоровье.
@@ -318,7 +316,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "Ваше Радио уничтожено!"
-L.radio_help_pri = "{primaryfire}: поместить Радио."
 
 L.radio_desc = [[
 Воспроизводит звуки для отвлечения или обмана.
@@ -977,7 +974,7 @@ L.menu_guide_description = "Поможет вам освоиться в TTT2 и 
 L.menu_bindings_description = "Назначьте клавиши на различные функции TTT2 и его дополнений по своему вкусу."
 L.menu_language_description = "Выберите язык режима игры."
 L.menu_appearance_description = "Настройки внешний вида и производительности интерфейса."
-L.menu_gameplay_description = "Настройки некоторых функций и избегания ролей."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Настройте локальные дополнения по своему вкусу."
 L.menu_legacy_description = "Панель с конвертированными вкладками из оригинального TTT, которые должны быть перенесены на новую систему."
 L.menu_administration_description = "Общие настройки интерфейсов, магазинов и прочего."
@@ -1004,7 +1001,6 @@ L.submenu_appearance_interface_title = "Интерфейс"
 L.submenu_appearance_miscellaneous_title = "Прочее"
 
 L.submenu_gameplay_general_title = "Общее"
-L.submenu_gameplay_avoidroles_title = "Выбор избегаемых ролей"
 
 L.submenu_administration_hud_title = "Настройки интерфейса"
 L.submenu_administration_randomshop_title = "Случайный магазин"
@@ -1092,7 +1088,6 @@ L.header_damage_indicator = "Настройки индикатора урона"
 L.header_performance_settings = "Настройки производительности"
 L.header_interface_settings = "Настройки интерфейса"
 L.header_gameplay_settings = "Настройки игры"
-L.header_roleselection = "Выбор избегаемых ролей"
 L.header_hud_administration = "Выбор интерфейса по умолчанию и принудительного интерфейса"
 L.header_hud_enabled = "Включение или выключение интерфейсов"
 
@@ -1154,7 +1149,6 @@ L.binoc_help_sec = "Изменить уровень приближения."
 
 L.vis_help_pri = "Бросить активированное устройство."
 
-L.decoy_help_pri = "Установить Приманку."
 
 -- 2020-08-07
 L.pickup_error_spec = "Вы не можете подобрать это за наблюдателя."
@@ -2065,9 +2059,31 @@ L.search_eyes = "Используя свои детективные навыки
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Установить Приманку."
 
 -- 2023-12-14
 --L.beacon_help_pri = "Throw Beacon on the ground"
