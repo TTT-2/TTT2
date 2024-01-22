@@ -29,6 +29,10 @@ migrations.commands = {}
 migrations.cachedCommands = {}
 migrations.isLoaded = false
 
+---
+-- Get ORM table and create it if not available yet
+-- @return @{ORMOBJECT} The orm-table to address the database
+-- @realm shared
 function migrations.GetORM()
 	if istable(migrations.orm) then
 		return migrations.orm
@@ -63,8 +67,8 @@ function migrations.CreateCommand(states, upgrade, downgrade)
 end
 
 ---
--- Adds a migration command for every version, that is executed on migration
--- @param string version The version to add the command for
+-- Adds a migration command, that is executed on migration
+-- @Note Only used in `terrortown/migrations` and corresponding `client`/`server`/`shared` folders
 -- @param @{command} The command to execute on migration
 -- @return bool True, if adding was successful
 -- @realm shared
@@ -80,8 +84,7 @@ function migrations.Add(command)
 end
 
 ---
--- Runs or reverts gamemode migrations with the given version.
--- @param string|nil newVersion The desired version of the Gamemode to migrate to, uses current one if `nil`.
+-- Runs all missing forward gamemode migrations.
 -- @return boolean `true` if the desired version was successfully migrated and `false` in case of an error.
 -- @realm shared
 function migrations.Apply()
@@ -135,6 +138,9 @@ function migrations.Apply()
 	return migrationSuccess
 end
 
+---
+-- Callback function that combines commands with fileNames
+-- @realm shared
 local function fileIncludedCallback(filePath, folderPath)
 	fileName = string.TrimLeft(filePath, folderPath)
 
@@ -144,6 +150,9 @@ local function fileIncludedCallback(filePath, folderPath)
 	migrations.cachedCommands = {}
 end
 
+---
+-- Loads migration-files and accepts added commands per file
+-- @realm shared
 function migrations.Load()
 	MsgN("[TTT2] Loading Migrations ...")
 	migrations.cachedCommands = {}
