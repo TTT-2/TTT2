@@ -96,7 +96,10 @@ function migrations.Apply()
 	for fileName, commands in SortedPairs(migrations.commands) do
 		local fileInfo = databaseORM:Find(fileName)
 
-		if fileInfo and fileInfo.wasSuccess then continue end
+		-- As ORM currently gives out strings check it
+		if fileInfo and (fileInfo.wasSuccess == true or fileInfo.wasSuccess == "true") then continue end
+
+		MsgN("[TTT2] Migrating: ", fileName)
 
 		for j = 1, #commands do
 			migrationSuccess, errorMessage = pcall(commands[j].Upgrade, commands[j])
@@ -124,14 +127,16 @@ function migrations.Apply()
 	end
 
 	if not migrationSuccess then
-		ErrorNoHalt("[TTT2] Migration failed. Error: " .. tostring(errorMessage) .. "\n")
+		ErrorNoHalt("[TTT2] Migration failed. Error:\n" .. tostring(errorMessage) .. "\n")
+	else
+		MsgN("[TTT2] Migration was successful.")
 	end
 
 	return migrationSuccess
 end
 
 local function fileIncludedCallback(filePath, folderPath)
-	fileName = string.Trim(filePath, folderPath)
+	fileName = string.TrimLeft(filePath, folderPath)
 
 	migrations.commands[fileName] = migrations.cachedCommands
 
@@ -140,27 +145,28 @@ local function fileIncludedCallback(filePath, folderPath)
 end
 
 function migrations.Load()
+	MsgN("[TTT2] Loading Migrations ...")
 	migrations.cachedCommands = {}
 
 	if CLIENT then
-		fileloader.LoadFolder(migrations.folderPath .. "client/", true, CLIENT_FILE, function(filePath, folderPath)
+		fileloader.LoadFolder(migrations.folderPath .. "client/", false, CLIENT_FILE, function(filePath, folderPath)
 			MsgN("Added TTT2 client migration file: ", filePath)
 			fileIncludedCallback(filePath, folderPath)
 		end)
 	end
 
 	if SERVER then
-		fileloader.LoadFolder(migrations.folderPath .. "client/", true, CLIENT_FILE, function(filePath, folderPath)
+		fileloader.LoadFolder(migrations.folderPath .. "client/", false, CLIENT_FILE, function(filePath, folderPath)
 			MsgN("Marked TTT2 client migration file for distribution: ", filePath)
 		end)
 
-		fileloader.LoadFolder(migrations.folderPath .. "server/", true, SERVER_FILE, function(filePath, folderPath)
+		fileloader.LoadFolder(migrations.folderPath .. "server/", false, SERVER_FILE, function(filePath, folderPath)
 			MsgN("Added TTT2 server migration file: ", filePath)
 			fileIncludedCallback(filePath, folderPath)
 		end)
 	end
 
-	fileloader.LoadFolder(migrations.folderPath .. "shared/", true, SHARED_FILE, function(filePath, folderPath)
+	fileloader.LoadFolder(migrations.folderPath .. "shared/", false, SHARED_FILE, function(filePath, folderPath)
 		MsgN("Added TTT2 shared migration file: ", filePath)
 		fileIncludedCallback(filePath, folderPath)
 	end)
