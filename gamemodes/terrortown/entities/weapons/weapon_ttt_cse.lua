@@ -68,18 +68,6 @@ end
 
 ---
 -- @ignore
-function SWEP:DrawWorldModel()
-
-end
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @ignore
 function SWEP:PreDrop(isdeath)
 	if not isdeath then return end
 
@@ -157,5 +145,19 @@ if CLIENT then
 		self:AddTTT2HUDHelp("vis_help_pri")
 
 		return self.BaseClass.Initialize(self)
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
 	end
 end

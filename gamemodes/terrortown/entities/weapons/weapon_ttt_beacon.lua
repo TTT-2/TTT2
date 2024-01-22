@@ -55,12 +55,6 @@ SWEP.builtin = true
 
 ---
 -- @realm shared
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @realm shared
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -127,20 +121,6 @@ function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(false)
 
 	return true
-end
-
----
--- @realm shared
-function SWEP:DrawWorldModel()
-	if not IsValid(self:GetOwner()) then
-		self:DrawModel()
-	end
-end
-
----
--- @realm shared
-function SWEP:DrawWorldModelTranslucent()
-
 end
 
 if SERVER then
@@ -241,6 +221,20 @@ if CLIENT then
 		self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
 
 		return self.BaseClass.Initialize(self)
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
 	end
 end
 

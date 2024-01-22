@@ -52,11 +52,7 @@ SWEP.builtin = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
+SWEP.drawColor = Color(180, 180, 250, 255)
 
 ---
 -- @ignore
@@ -117,14 +113,16 @@ function SWEP:OnRemove()
 	end
 end
 
-if CLIENT then
-	---
-	-- @ignore
-	function SWEP:Initialize()
+---
+-- @realm shared
+function SWEP:Initialize()
+	if CLIENT then
 		self:AddTTT2HUDHelp("hstation_help_primary")
-
-		return self.BaseClass.Initialize(self)
 	end
+
+	self:SetColor(self.drawColor)
+
+	return self.BaseClass.Initialize(self)
 end
 
 ---
@@ -136,10 +134,18 @@ function SWEP:Deploy()
 	return true
 end
 
----
--- @ignore
-function SWEP:DrawWorldModel() end
+if CLIENT then
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
 
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent() end
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
+	end
+end

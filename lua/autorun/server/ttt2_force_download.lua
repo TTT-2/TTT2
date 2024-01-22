@@ -114,6 +114,7 @@ resource.AddFile("materials/vgui/ttt/icon_nohazarddmg.vmt")
 resource.AddFile("materials/vgui/ttt/perks/hud_nohazarddmg.png")
 
 resource.AddFile("materials/vgui/ttt/icon_magneto_stick.vmt")
+resource.AddFile("materials/vgui/ttt/icon_unarmed.vmt")
 
 -- pickup symbols
 resource.AddFile("materials/vgui/ttt/pickup/icon_heavy.png")

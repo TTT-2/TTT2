@@ -50,12 +50,6 @@ SWEP.NoSights = true
 
 ---
 -- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -215,6 +209,20 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
+	end
 end
 
 ---
@@ -223,18 +231,4 @@ function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(false)
 
 	return true
-end
-
----
--- @ignore
-function SWEP:DrawWorldModel()
-	if IsValid(self:GetOwner()) then return end
-
-	self:DrawModel()
-end
-
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
-
 end

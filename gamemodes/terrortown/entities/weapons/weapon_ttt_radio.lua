@@ -54,12 +54,6 @@ SWEP.NoSights = true
 
 ---
 -- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:RadioDrop()
@@ -178,6 +172,20 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
+	end
 end
 
 --- Invisible, same hacks as holstered weapon
@@ -188,12 +196,3 @@ function SWEP:Deploy()
 	end
 	return true
 end
-
----
--- @ignore
-function SWEP:DrawWorldModel() end
-
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent() end
-
