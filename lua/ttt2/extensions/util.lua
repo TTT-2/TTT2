@@ -531,6 +531,7 @@ function util.TransformToRange(value, minValue, maxValue, minTargetValue, maxTar
 	return minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
 end
 
+---
 -- This is a helper function that checks if any of the current edit modes is active
 -- that has to be left by pressing F1.
 -- @param Player ply The player who might be editing
@@ -540,6 +541,15 @@ end
 -- @realm shared
 function util.EditingModeActive(ply)
 	return (HUDEditor and HUDEditor.IsEditing) or entspawnscript.IsEditing(ply)
+end
+
+---
+-- Converts hammer units to meters.
+-- @param number value The value in hammer units
+-- @return number The converted value in meters
+-- @realm shared
+function util.HammerUnitsToMeters(value)
+	return value * 19.05 / 1000
 end
 
 if CLIENT then

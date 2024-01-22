@@ -332,6 +332,14 @@ end
 if CLIENT then
 	local TryT = LANG.TryTranslation
 
+	---
+	-- @ignore
+	function SWEP:Initialize()
+		self:AddTTT2HUDHelp("knife_help_primary", "knife_help_secondary")
+		return self.BaseClass.Initialize(self)
+	end
+
+
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(tData)
 		local client = LocalPlayer()
 		local ent = tData:GetEntity()

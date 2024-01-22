@@ -266,3 +266,8 @@ resource.AddFile("materials/vgui/ttt/icon_floor.vmt")
 resource.AddFile("materials/vgui/ttt/icon_water_1.vmt")
 resource.AddFile("materials/vgui/ttt/icon_water_2.vmt")
 resource.AddFile("materials/vgui/ttt/icon_water_3.vmt")
+
+-- markerVision icons
+resource.AddFile("materials/vgui/ttt/marker_vision/beacon.vmt")
+resource.AddFile("materials/vgui/ttt/marker_vision/c4.vmt")
+resource.AddFile("materials/vgui/ttt/marker_vision/radio.vmt")

@@ -689,6 +689,17 @@ if SERVER then
 	end
 end
 
+if CLIENT then
+	---
+	-- @ignore
+	function SWEP:Initialize()
+		self:AddTTT2HUDHelp("magneto_help_primary", "magneto_help_secondary" )
+
+		return self.BaseClass.Initialize(self)
+	end
+end
+
+
 ---
 -- @ignore
 function SWEP:OnRemove()
@@ -736,7 +747,7 @@ if SERVER then
 
 	end
 
-else
+else -- CLIENT
 	local draw = draw
 
 	local PT = LANG.GetParamTranslation

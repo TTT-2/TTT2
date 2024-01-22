@@ -68,6 +68,10 @@ function SWEP:Initialize()
 		self:SetSkin(1)
 	end
 
+	if CLIENT then
+		self:AddTTT2HUDHelp("newton_help_primary", "newton_help_secondary")
+	end
+
 	self.IsCharging = false
 	self:SetCharge(0)
 
@@ -238,6 +242,10 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:DrawHUD()
+		if self.DrawHelp then
+			self:DrawHelp()
+		end
+
 		local x = ScrW() / 2.0
 		local y = ScrH() / 2.0
 

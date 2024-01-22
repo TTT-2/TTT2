@@ -46,6 +46,11 @@ AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
 ---
 -- @accessor number
 -- @realm shared
+AccessorFunc(ENT, "radius_inner", "RadiusInner", FORCE_NUMBER)
+
+---
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
 ---
@@ -97,6 +102,10 @@ function ENT:Initialize()
 
 	if not self:GetThrower() then
 		self:SetThrower(nil)
+	end
+
+	if not self:GetRadiusInner() then
+		self:SetRadiusInner(750)
 	end
 
 	if not self:GetRadius() then
@@ -287,7 +296,7 @@ function ENT:Explode(tr)
 		local dmgowner = self:GetThrower()
 		dmgowner = IsValid(dmgowner) and dmgowner or self
 
-		local r_inner = 750
+		local r_inner = self:GetRadiusInner()
 		local r_outer = self:GetRadius()
 
 		if self.DisarmCausedExplosion then
@@ -466,28 +475,9 @@ end
 
 if SERVER then
 	---
-	-- Inform traitors about us
-	-- @param boolean armed
-	-- @realm server
-	function ENT:SendWarn(armed)
-		net.Start("TTT_C4Warn")
-		net.WriteUInt(self:EntIndex(), 16)
-		net.WriteBit(armed)
-
-		if armed then
-			net.WriteVector(self:GetPos())
-			net.WriteFloat(self:GetExplodeTime())
-			net.WriteString(self:GetOwner():GetTeam())
-		end
-
-		--net.Send(GetTeamFilter(self:GetOwner():GetTeam(), true))
-		net.Broadcast()
-	end
-
-	---
 	-- @realm server
 	function ENT:OnRemove()
-		self:SendWarn(false)
+		markerVision.RemoveEntity(self)
 	end
 
 	---
@@ -505,7 +495,8 @@ if SERVER then
 		self:SetExplodeTime(0)
 		self:SetArmed(false)
 		self:WeldToGround(false)
-		self:SendWarn(false)
+
+		markerVision.RemoveEntity(self)
 
 		self.DisarmCausedExplosion = false
 	end
@@ -578,8 +569,7 @@ if SERVER then
 
 		events.Trigger(EVENT_C4PLANT, ply)
 
-		-- send indicator to traitors
-		self:SendWarn(true)
+		markerVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
 	end
 
 	---
@@ -807,8 +797,10 @@ if SERVER then
 
 	end
 else -- CLIENT
+	local materialC4 = Material("vgui/ttt/marker_vision/c4")
+
 	local TryT = LANG.TryTranslation
-	local GetPT = LANG.GetParamTranslation
+	local ParT = LANG.GetParamTranslation
 
 	local key_params = {
 		primaryfire = Key("+attack", "MOUSE1"),
@@ -869,10 +861,7 @@ else -- CLIENT
 		local ent = tData:GetEntity()
 		local c_wep = client:GetActiveWeapon()
 
-		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_c4" then
-			return
-		end
+		if not client:IsTerror() or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_c4" then return end
 
 		local defuser_useable = (IsValid(c_wep) and ent:GetArmed()) and c_wep:GetClass() == "weapon_ttt_defuser" or false
 
@@ -884,15 +873,55 @@ else -- CLIENT
 		tData:SetTitle(TryT(ent.PrintName))
 
 		if ent:GetArmed() and defuser_useable then
-			tData:SetSubtitle(GetPT("target_c4_armed_defuser", key_params))
+			tData:SetSubtitle(ParT("target_c4_armed_defuser", key_params))
 		elseif ent:GetArmed() then
-			tData:SetSubtitle(GetPT("target_c4_armed", key_params))
+			tData:SetSubtitle(ParT("target_c4_armed", key_params))
 		else
-			tData:SetSubtitle(GetPT("target_c4", key_params))
+			tData:SetSubtitle(ParT("target_c4", key_params))
 		end
 
 		tData:SetKeyBinding(defuser_useable and "+attack" or "+use")
 		tData:AddDescriptionLine(TryT("c4_short_desc"))
+	end)
+
+	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionC4", function(mvData)
+		local ent = mvData:GetEntity()
+
+		if not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
+
+		local owner = ent:GetOwner()
+		local nick = IsValid(owner) and owner:Nick() or "---"
+
+		local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
+		local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+
+		mvData:EnableText()
+
+		mvData:SetTitle(TryT(ent.PrintName))
+
+		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
+		mvData:AddDescriptionLine(ParT("c4_marker_vision_time", {time = time}))
+		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
+
+		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+
+		local color = COLOR_WHITE
+
+		if mvData:GetEntityDistance() > ent:GetRadius() then
+			mvData:AddDescriptionLine(TryT("c4_marker_vision_safe_zone"), COLOR_GREEN)
+		elseif mvData:GetEntityDistance() > ent:GetRadiusInner() then
+			mvData:AddDescriptionLine(TryT("c4_marker_vision_damage_zone"), COLOR_ORANGE)
+
+			color = COLOR_ORANGE
+		else
+			mvData:AddDescriptionLine(TryT("c4_marker_vision_kill_zone"), COLOR_RED)
+
+			color = COLOR_RED
+		end
+
+		mvData:AddIcon(materialC4, (mvData:IsOffScreen() or not mvData:IsOnScreenCenter()) and color)
+
+		mvData:SetCollapsedLine(time)
 	end)
 end
 

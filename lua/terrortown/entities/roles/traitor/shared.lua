@@ -32,6 +32,6 @@ function ROLE:PreInitialize()
 		traitorButton = 1,
 		credits = 2,
 		creditsAwardDeadEnable = 1,
-		creditsAwardKillEnable = 1
+		creditsAwardKillEnable = 1,
 	}
 end

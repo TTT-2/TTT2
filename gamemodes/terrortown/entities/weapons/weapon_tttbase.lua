@@ -314,7 +314,7 @@ if CLIENT then
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
-		if isfunction(self.HUDHelp) then
+		if self.HUDHelp then
 			self:DrawHelp()
 		end
 
@@ -360,8 +360,8 @@ if CLIENT then
 
 		-- draw crosshair dot
 		if cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_ONLY then
-			local xDot = mathFloor(xCenter - thicknessLine * 0.5)
-			local yDot = mathFloor(yCenter - thicknessLine * 0.5)
+			local xDot = xCenter - offsetLine
+			local yDot = yCenter - offsetLine
 
 			if cvEnableOutlineCrosshair:GetBool() then
 				surface.SetDrawColor(colorOutline.r, colorOutline.g, colorOutline.b, colorOutline.a * alpha)
@@ -621,7 +621,7 @@ if CLIENT then
 		local width = draw.GetTextSize(text, "weapon_hud_help")
 
 		self.HUDHelp.bindingLines[#self.HUDHelp.bindingLines + 1] = {text = text, binding = materialOrBinding}
-		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
+		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length or 0, width)
 	end
 
 	---

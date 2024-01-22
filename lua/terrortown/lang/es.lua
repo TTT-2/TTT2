@@ -273,7 +273,6 @@ Muestra una señal falsa en el radar,y hace que el escáner ADN muestre una fals
 
 -- Defuser
 L.defuser_name = "Kit de Desactivación"
-L.defuser_help = "{primaryfire} desactiva el C4."
 
 L.defuser_desc = [[
 Desactiva instantáneamente un C4.
@@ -292,7 +291,6 @@ Quemar un cuerpo hace un sonido distintivo.]]
 L.hstation_name = "Estación de salud"
 
 L.hstation_broken = "¡Tu estación de salud ha sido destruida!"
-L.hstation_help = "{primaryfire} coloca una estación de salud."
 
 L.hstation_desc = [[
 Permite que las personas se curen.
@@ -316,7 +314,6 @@ El daño de energía daña a las personas en corta distancia.]]
 
 -- Radio
 L.radio_broken = "¡Tu radio fue destruida!"
-L.radio_help_pri = "{primaryfire} coloca la Radio."
 
 L.radio_desc = [[
 Reproduce sonidos para distraer o confundir.
@@ -975,7 +972,7 @@ L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrir
 --L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking."
 --L.menu_language_description = "Select the language of the gamemode."
 --L.menu_appearance_description = "Tweak the appearance and performance of the UI."
---L.menu_gameplay_description = "Avoid roles and tweak some features."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 --L.menu_addons_description = "Configure local addons to your liking."
 --L.menu_legacy_description = "A panel with converted tabs from the original TTT that should be ported over to the new system."
 --L.menu_administration_description = "General settings for HUDs, shops etc."
@@ -1002,7 +999,6 @@ L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrir
 --L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 --L.submenu_gameplay_general_title = "General"
---L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
 --L.submenu_administration_hud_title = "HUD Settings"
 --L.submenu_administration_randomshop_title = "Random Shop"
@@ -1090,7 +1086,6 @@ L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrir
 --L.header_performance_settings = "Performance Settings"
 --L.header_interface_settings = "Interface Settings"
 --L.header_gameplay_settings = "Gameplay Settings"
---L.header_roleselection = "Select Avoiding Roles"
 --L.header_hud_administration = "Select Default and Forced HUDs"
 --L.header_hud_enabled = "Enable/Disable HUDs"
 
@@ -1152,7 +1147,6 @@ L.binoc_help_sec = "Cambiar nivel de zoom."
 
 L.vis_help_pri = "Soltar el dispositivo activo."
 
-L.decoy_help_pri = "Colocar el señuelo."
 
 -- 2020-08-07
 L.pickup_error_spec = "No puedes recoger esto como espectador."
@@ -2063,11 +2057,51 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+L.decoy_help_pri = "Colocar el señuelo."
 
 -- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_visible_for_0 = "Visible for: you"
+--L.marker_vision_visible_for_1 = "Visible for: team"
+--L.marker_vision_visible_for_2 = "Visible for: everyone"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
@@ -2082,7 +2116,7 @@ L.search_eyes = "Gracias a tus habilidades de detective, has identificado que la
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-11-18
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18

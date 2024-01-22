@@ -233,24 +233,6 @@ function RADAR:Draw(client)
 	end
 end
 
-local function ReceiveC4Warn()
-	local idx = net.ReadUInt(16)
-	local armed = net.ReadBit() == 1
-
-	if armed then
-		local pos = net.ReadVector()
-		local etime = net.ReadFloat()
-		local team = net.ReadString()
-
-		RADAR.bombs[idx] = {pos = pos, t = etime, team = team}
-	else
-		RADAR.bombs[idx] = nil
-	end
-
-	RADAR.bombs_count = table.Count(RADAR.bombs)
-end
-net.Receive("TTT_C4Warn", ReceiveC4Warn)
-
 local function TTT_CorpseCall()
 	local pos = net.ReadVector()
 	local _tmp = {pos = pos, called = CurTime()}

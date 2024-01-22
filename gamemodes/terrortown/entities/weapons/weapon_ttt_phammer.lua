@@ -98,6 +98,7 @@ function SWEP:Initialize()
 
 			self.Ghost = ghost
 		end
+		self:AddTTT2HUDHelp("polter_help_primary", "polter_help_secondary")
 	end
 
 	self.IsCharging = false
@@ -395,6 +396,10 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:DrawHUD()
+		if self.DrawHelp then
+			self:DrawHelp()
+		end
+
 		local x = ScrW() / 2.0
 		local y = ScrH() / 2.0
 
