@@ -26,6 +26,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
+- Added a new vgui element: `DWeaponPreview_TTT2` to render a player with their equipped weapon (by @TimGoll)
+  - Supports any normal weapon that has a `.HoldType` and a `.WorldModel`
+  - Supports any weapon that is made with the SWEP Construction Kit (bommerang, melonmine, ...)
 
 ### Changed
 
