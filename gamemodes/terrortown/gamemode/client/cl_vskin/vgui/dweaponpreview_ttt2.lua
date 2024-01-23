@@ -74,7 +74,7 @@ function PANEL:Init()
 	self:SetAnimSpeed(0.5)
 	self:SetAnimated(true)
 
-	self:SetAmbientLight(Color(100, 100, 100))
+	self:SetAmbientLight(Color(150, 150, 150))
 
 	self:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))
 	self:SetDirectionalLight(BOX_FRONT, Color(255, 255, 255))
@@ -89,7 +89,9 @@ function PANEL:Init()
 		wep = nil,
 		wepClass = "",
 		HoldType = "normal",
-		worldModelData = nil
+		worldModelData = {},
+		worldModels = {},
+		specialModelHandeling = false
 	}
 end
 
@@ -141,28 +143,49 @@ function PANEL:SetWeaponClass(cls)
 
 	if not wep then return end
 
+	-- before storing the ent, make sure that a possible old ent
+	-- is removed because clientside models are not garbage collected
+	if IsValid(self.data.wep) then
+		self.data.wep:Remove()
+	end
+
 	-- make sure it is reset in case different weapon was used before
-	self.data.worldModelData = nil
+	self.data.worldModelData = {}
 	self.data.wepClass = cls
+	self.data.specialModelHandeling = false
 
 	-- if WElements are set, this weapon is created with the SWEP Construction Kit
 	-- and special handling has to be used to render the weapon
 	if wep.WElements then
+		self.data.specialModelHandeling = true
+
 		for name, data in pairs(wep.WElements) do
 			if data.type ~= "Model" then continue end
 
-			self.data.worldModelData = data
+			self.data.worldModelData[name] = data
 
-			break -- only use first valid entry
+			local cEnt = ClientsideModel(data.model, RENDERGROUP_OTHER)
+
+			if not IsValid(cEnt) then continue end
+
+			self.data.worldModels[name] = cEnt
+		end
+	else
+		local cEnt = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
+
+		if not IsValid(cEnt) then return end
+
+		cEnt:SetNoDraw(true)
+		cEnt:SetIK(false)
+
+		cEnt:SetParent(self.data.ply)
+		cEnt:AddEffects(EF_BONEMERGE)
+
+		if wep.HoldType ~= "normal" then
+			self.data.wep = cEnt
 		end
 	end
 
-	local cEnt = ClientsideModel(self.data.worldModelData and self.data.worldModelData.model or wep.WorldModel, RENDERGROUP_OTHER)
-
-	if not IsValid(cEnt) then return end
-
-	cEnt:SetNoDraw(true)
-	cEnt:SetIK(false)
 
 	self.data.HoldType = wep.HoldType
 
@@ -170,25 +193,9 @@ function PANEL:SetWeaponClass(cls)
 		self.data.ply:SetSequence(self.data.ply:LookupSequence("idle_all_01"))
 	else
 		self.data.ply:SetSequence(self.data.ply:LookupSequence("idle_" .. wep.HoldType))
-
-		-- only merge bones if no special handling is needed
-		if not self.data.worldModelData then
-			cEnt:SetParent(self.data.ply)
-			cEnt:AddEffects(EF_BONEMERGE)
-		end
 	end
 
 	self.data.ply:SetupBones()
-
-	-- before storing the ent, make sure that a possible old ent
-	-- is removed because clientside models are not garbage collected
-	if IsValid(self.data.wep) then
-		self.data.wep:Remove()
-	end
-
-	if wep.HoldType ~= "normal" then
-		self.data.wep = cEnt
-	end
 end
 
 ---
@@ -224,43 +231,46 @@ function PANEL:DrawModel()
 	-- boomerang or the melon mine: https://steamcommunity.com/sharedfiles/filedetails/?id=109724869
 	--
 	-- This code is taken and slightly modified from its WorldModel renderer
-	if self.data.worldModelData then
-		local worldModelData = self.data.worldModelData
+	if self.data.specialModelHandeling then
 		local wepEnt = weapons.Get(self.data.wepClass)
 		local pos, ang
 
-		if worldModelData.bone then
-			pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply)
-		else
-			pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply, "ValveBiped.Bip01_R_Hand")
-		end
+		for name, worldModelData in pairs(self.data.worldModelData) do
+			wep = self.data.worldModels[name]
 
-		wep:SetPos(pos + ang:Forward() * worldModelData.pos.x + ang:Right() * worldModelData.pos.y + ang:Up() * worldModelData.pos.z)
+			if worldModelData.bone then
+				pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply)
+			else
+				pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply, "ValveBiped.Bip01_R_Hand")
+			end
 
-		ang:RotateAroundAxis(ang:Up(), worldModelData.angle.y)
-		ang:RotateAroundAxis(ang:Right(), worldModelData.angle.p)
-		ang:RotateAroundAxis(ang:Forward(), worldModelData.angle.r)
+			wep:SetPos(pos + ang:Forward() * worldModelData.pos.x + ang:Right() * worldModelData.pos.y + ang:Up() * worldModelData.pos.z)
 
-		wep:SetAngles(ang)
+			ang:RotateAroundAxis(ang:Up(), worldModelData.angle.y)
+			ang:RotateAroundAxis(ang:Right(), worldModelData.angle.p)
+			ang:RotateAroundAxis(ang:Forward(), worldModelData.angle.r)
 
-		local matrix = Matrix()
-		matrix:Scale(worldModelData.size)
-		wep:EnableMatrix("RenderMultiply", matrix)
+			wep:SetAngles(ang)
 
-		if worldModelData.material == "" then
-			wep:SetMaterial("")
-		elseif wep:GetMaterial() ~= worldModelData.material then
-			wep:SetMaterial( worldModelData.material )
-		end
+			local matrix = Matrix()
+			matrix:Scale(worldModelData.size)
+			wep:EnableMatrix("RenderMultiply", matrix)
 
-		if worldModelData.skin and worldModelData.skin ~= wep:GetSkin() then
-			wep:SetSkin(worldModelData.skin)
-		end
+			if worldModelData.material == "" then
+				wep:SetMaterial("")
+			elseif wep:GetMaterial() ~= worldModelData.material then
+				wep:SetMaterial( worldModelData.material )
+			end
 
-		if worldModelData.bodygroup then
-			for k, v in pairs(worldModelData.bodygroup) do
-				if wep:GetBodygroup(k) ~= v then
-					wep:SetBodygroup(k, v)
+			if worldModelData.skin and worldModelData.skin ~= wep:GetSkin() then
+				wep:SetSkin(worldModelData.skin)
+			end
+
+			if worldModelData.bodygroup then
+				for k, v in pairs(worldModelData.bodygroup) do
+					if wep:GetBodygroup(k) ~= v then
+						wep:SetBodygroup(k, v)
+					end
 				end
 			end
 		end
@@ -268,7 +278,11 @@ function PANEL:DrawModel()
 
 	self:LayoutEntity(ply)
 
-	if IsValid(wep) then
+	if self.data.specialModelHandeling then
+		for _, model in pairs(self.data.worldModels) do
+			self:LayoutEntity(model)
+		end
+	elseif IsValid(wep) then
 		self:LayoutEntity(wep)
 	end
 
@@ -300,9 +314,14 @@ function PANEL:DrawModel()
 
 		ply:DrawModel()
 
-		if IsValid(wep) then
-			render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
+		render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
 
+		if self.data.specialModelHandeling then
+			print(self.data.wepClass)
+			for _, model in pairs(self.data.worldModels) do
+				model:DrawModel()
+			end
+		elseif IsValid(wep) then
 			wep:DrawModel()
 		end
 
