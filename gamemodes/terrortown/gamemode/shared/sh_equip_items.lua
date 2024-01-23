@@ -1147,18 +1147,16 @@ if SERVER then
 	end
 
 	hook.Add("TTT2UpdateTeam", "TTT2SyncTeambuyEquipment", function(ply, oldTeam, team)
-		if not TEAMBUYTABLE then return end
-
 		if oldTeam and oldTeam ~= TEAM_NONE then
 			net.Start("TTT2ResetTBEq")
 			net.WriteString(oldTeam)
 			net.Send(ply)
 		end
 
-		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
+		if team and team ~= TEAM_NONE and not TEAMS[team].alone and shop.teamBuyTable[team] then
 			local filter = GetTeamFilter(team)
 
-			for id in pairs(TEAMBUYTABLE[team]) do
+			for id in pairs(shop.teamBuyTable[team]) do
 				net.Start("TTT2ReceiveTBEq")
 				net.WriteString(id)
 				net.Send(filter)
@@ -1180,8 +1178,8 @@ else -- CLIENT
 		local team = LocalPlayer():GetTeam()
 
 		if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-			TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-			TEAMBUYTABLE[team][s] = true
+			shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
+			shop.teamBuyTable[team][s] = true
 		end
 	end
 	net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
@@ -1189,7 +1187,7 @@ else -- CLIENT
 	local function ReceiveGlobalbuyEquipment()
 		local s = net.ReadString()
 
-		BUYTABLE[s] = true
+		shop.buyTable[s] = true
 	end
 	net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)
 
@@ -1198,7 +1196,7 @@ else -- CLIENT
 
 		if not s or s == TEAM_NONE then return end
 
-		TEAMBUYTABLE[s] = nil
+		shop.teamBuyTable[s] = nil
 	end
 	net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
 

@@ -24,6 +24,14 @@ shop.statusCode = {
 	BLOCKEDBYTTT2HOOK = 16,
 }
 
+shop.buyTable = shop.buyTable or {}
+shop.teamBuyTable = shop.teamBuyTable or {}
+
+function shop.Reset()
+	shop.buyTable = {}
+	shop.teamBuyTable = {}
+end
+
 ---
 -- Check if an equipment is currently buyable for a player
 -- @param Player ply The player to buy the equipment for
@@ -70,13 +78,13 @@ function shop.CanBuyEquipment(ply, equipmentId)
 	local team = ply:GetTeam()
 
 	if equipment.globalLimited
-		and BUYTABLE[equipment.id]
+		and shop.buyTable[equipment.id]
 		or team
 		and equipment.teamLimited
 		and TEAMS[team]
 		and not TEAMS[team].alone
-		and TEAMBUYTABLE[team]
-		and TEAMBUYTABLE[team][equipment.id]
+		and shop.teamBuyTable[team]
+		and shop.teamBuyTable[team][equipment.id]
 		or equipment.limited
 		and ply:HasBought(equipment.ClassName) then
 		return false, shop.statusCode.LIMITEDBOUGHT

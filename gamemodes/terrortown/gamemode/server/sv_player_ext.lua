@@ -306,7 +306,7 @@ function plymeta:AddBought(cls)
 	self.bought = self.bought or {}
 	self.bought[#self.bought + 1] = tostring(cls)
 
-	BUYTABLE[cls] = true
+	shop.buyTable[cls] = true
 
 	net.Start("TTT2ReceiveGBEq")
 	net.WriteString(cls)
@@ -315,8 +315,8 @@ function plymeta:AddBought(cls)
 	local team = self:GetTeam()
 
 	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-		TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-		TEAMBUYTABLE[team][cls] = true
+		shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
+		shop.teamBuyTable[team][cls] = true
 
 		if SERVER then
 			net.Start("TTT2ReceiveTBEq")

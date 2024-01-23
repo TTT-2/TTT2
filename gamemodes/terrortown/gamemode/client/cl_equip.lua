@@ -999,12 +999,12 @@ local function ReceiveBought()
 		if s ~= "" then
 			client.bought[#client.bought + 1] = s
 
-			BUYTABLE[s] = true
+			shop.buyTable[s] = true
 
 			local team = client:GetTeam()
 			if team then
-				TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-				TEAMBUYTABLE[team][s] = true
+				shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
+				shop.teamBuyTable[team][s] = true
 			end
 		end
 	end

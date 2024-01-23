@@ -621,25 +621,21 @@ local function TTT2SyncShopsWithServer(len, ply)
 	SyncEquipment(ply)
 
 	-- sync bought sweps
-	if BUYTABLE then
-		for id in pairs(BUYTABLE) do
-			net.Start("TTT2ReceiveGBEq")
-			net.WriteString(id)
-			net.Send(ply)
-		end
+	for id in pairs(shop.buyTable) do
+		net.Start("TTT2ReceiveGBEq")
+		net.WriteString(id)
+		net.Send(ply)
 	end
 
-	if TEAMBUYTABLE then
-		local team = ply:GetTeam()
+	local team = ply:GetTeam()
 
-		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
-			local filter = GetTeamFilter(team)
+	if team and team ~= TEAM_NONE and not TEAMS[team].alone and shop.teamBuyTable[team] then
+		local filter = GetTeamFilter(team)
 
-			for id in pairs(TEAMBUYTABLE[team]) do
-				net.Start("TTT2ReceiveTBEq")
-				net.WriteString(id)
-				net.Send(filter)
-			end
+		for id in pairs(shop.teamBuyTable[team]) do
+			net.Start("TTT2ReceiveTBEq")
+			net.WriteString(id)
+			net.Send(filter)
 		end
 	end
 end

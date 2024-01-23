@@ -663,6 +663,3 @@ DefaultEquipment = {
 	[1] = {},
 	[2] = {}
 }
-
-BUYTABLE = BUYTABLE or {}
-TEAMBUYTABLE = TEAMBUYTABLE or {}
