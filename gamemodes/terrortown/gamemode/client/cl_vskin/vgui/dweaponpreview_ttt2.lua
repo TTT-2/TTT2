@@ -124,8 +124,6 @@ function PANEL:SetPlayerModel(model)
 	cEnt:SetNoDraw(true)
 	cEnt:SetIK(false)
 
-	cEnt:SetupBones()
-
 	-- before storing the ent, make sure that a possible old ent
 	-- is removed because clientside models are not garbage collected
 	if IsValid(self.data.ply) then
@@ -159,6 +157,8 @@ function PANEL:SetWeaponClass(cls)
 		cEnt:SetParent(self.data.ply)
 		cEnt:AddEffects(EF_BONEMERGE)
 	end
+
+	self.data.ply:SetupBones()
 
 	-- before storing the ent, make sure that a possible old ent
 	-- is removed because clientside models are not garbage collected
