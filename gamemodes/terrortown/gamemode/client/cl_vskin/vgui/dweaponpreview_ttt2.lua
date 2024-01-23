@@ -265,11 +265,7 @@ function PANEL:DrawModel()
 			matrix:Scale(worldModelData.size)
 			wep:EnableMatrix("RenderMultiply", matrix)
 
-			if worldModelData.material == "" then
-				wep:SetMaterial("")
-			elseif wep:GetMaterial() ~= worldModelData.material then
-				wep:SetMaterial( worldModelData.material )
-			end
+			wep:SetMaterial(worldModelData.material)
 
 			if worldModelData.skin and worldModelData.skin ~= wep:GetSkin() then
 				wep:SetSkin(worldModelData.skin)
