@@ -89,6 +89,56 @@ function shop.IsTeamBoughtFor(ply, equipmentId)
 end
 
 ---
+-- Marks the equipment as already bought for the player
+-- @param Player ply The player to set it for
+-- @param string equipmentId The name of the equipment to set
+-- @realm shared
+function shop.SetEquipmentBought(ply, equipmentId)
+	shop.buyTable[ply] = shop.buyTable[ply] or {}
+	shop.buyTable[ply][equipmentId] = true
+
+	if CLIENT then return end
+
+	shop.BroadcastEquipmentGlobalBought(equipmentId)
+end
+
+---
+-- Marks the equipment as already globally bought
+-- @param string equipmentId The name of the equipment to set
+-- @realm shared
+function shop.SetEquipmentGlobalBought(equipmentId)
+	shop.globalBuyTable[equipmentId] = true
+
+	if CLIENT then return end
+
+	shop.BroadcastEquipmentGlobalBought(equipmentId)
+end
+
+---
+-- Marks the equipment as already bought for the team of the player
+-- @param Player ply The player to set it for
+-- @param string equipmentId The name of the equipment to set
+-- @realm shared
+function shop.SetEquipmentTeamBought(ply, equipmentId)
+	local team = ply:GetTeam()
+
+	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
+		return false
+	end
+
+	shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
+	shop.teamBuyTable[team][equipmentId] = true
+
+	if SERVER then
+		net.Start("TTT2ReceiveTBEq")
+		net.WriteString(equipmentId)
+		net.Send(GetTeamFilter(team))
+	end
+
+	return true
+end
+
+---
 -- Check if an equipment is currently buyable for a player
 -- @param Player ply The player to buy the equipment for
 -- @param string equipmentId The name of the equipment to buy
@@ -291,56 +341,6 @@ function shop.BuyEquipment(ply, equipmentId)
 	end
 
 	return true, statusCode
-end
-
----
--- Marks the equipment as already bought for the player
--- @param Player ply The player to set it for
--- @param string equipmentId The name of the equipment to set
--- @realm shared
-function shop.SetEquipmentBought(ply, equipmentId)
-	shop.buyTable[ply] = shop.buyTable[ply] or {}
-	shop.buyTable[ply][equipmentId] = true
-
-	if CLIENT then return end
-
-	shop.BroadcastEquipmentGlobalBought(equipmentId)
-end
-
----
--- Marks the equipment as already globally bought
--- @param string equipmentId The name of the equipment to set
--- @realm shared
-function shop.SetEquipmentGlobalBought(equipmentId)
-	shop.globalBuyTable[equipmentId] = true
-
-	if CLIENT then return end
-
-	shop.BroadcastEquipmentGlobalBought(equipmentId)
-end
-
----
--- Marks the equipment as already bought for the team of the player
--- @param Player ply The player to set it for
--- @param string equipmentId The name of the equipment to set
--- @realm shared
-function shop.SetEquipmentTeamBought(ply, equipmentId)
-	local team = ply:GetTeam()
-
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-		return false
-	end
-
-	shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
-	shop.teamBuyTable[team][equipmentId] = true
-
-	if SERVER then
-		net.Start("TTT2ReceiveTBEq")
-		net.WriteString(equipmentId)
-		net.Send(GetTeamFilter(team))
-	end
-
-	return true
 end
 
 ---
