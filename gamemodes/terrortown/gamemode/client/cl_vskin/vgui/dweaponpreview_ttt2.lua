@@ -272,9 +272,9 @@ function PANEL:DrawModel()
 			end
 
 			if worldModelData.bodygroup then
-				for k, v in pairs(worldModelData.bodygroup) do
-					if wep:GetBodygroup(k) ~= v then
-						wep:SetBodygroup(k, v)
+				for bodygroup, value in pairs(worldModelData.bodygroup) do
+					if wep:GetBodygroup(bodygroup) ~= value then
+						wep:SetBodygroup(bodygroup, value)
 					end
 				end
 			end
