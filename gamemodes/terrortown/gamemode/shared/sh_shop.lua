@@ -48,10 +48,9 @@ function shop.ResetTeamBuy(ply, oldTeam)
 	if CLIENT then
 		shop.teamBuyTable[oldTeam] = nil
 	elseif SERVER and oldTeam and shop.teamBuyTable[oldTeam] then
-			net.Start("TTT2ResetTBEq")
-			net.WriteString(oldTeam)
-			net.Send(ply)
-		end
+		net.Start("TTT2ResetTBEq")
+		net.WriteString(oldTeam)
+		net.Send(ply)
 	end
 end
 

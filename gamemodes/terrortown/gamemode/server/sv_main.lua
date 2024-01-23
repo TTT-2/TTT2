@@ -61,7 +61,6 @@ local math = math
 local table = table
 local net = net
 local player = player
-local pairs = pairs
 local timer = timer
 local util = util
 local IsValid = IsValid

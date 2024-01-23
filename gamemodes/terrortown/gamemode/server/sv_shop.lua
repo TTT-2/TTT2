@@ -104,6 +104,10 @@ local function NetOrderEquipment(len, ply)
 end
 net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
+---
+-- Broadcast a globally bought equipment
+-- @param string equipmentId The bought equipment
+-- @realm server
 function shop.BroadcastEquipmentGlobalBought(equipmentId)
 	net.Start("TTT2ReceiveGBEq")
 	net.WriteString(equipmentId)
