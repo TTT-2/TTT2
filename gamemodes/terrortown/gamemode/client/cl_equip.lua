@@ -995,17 +995,12 @@ local function ReceiveBought()
 	local num = net.ReadUInt(8)
 
 	for i = 1, num do
-		local s = net.ReadString()
-		if s ~= "" then
-			client.bought[#client.bought + 1] = s
+		local equipmentId = net.ReadString()
+		if equipmentId ~= "" then
+			client.bought[#client.bought + 1] = equipmentId
 
-			shop.buyTable[s] = true
-
-			local team = client:GetTeam()
-			if team then
-				shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
-				shop.teamBuyTable[team][s] = true
-			end
+			shop.SetEquipmentBought(equipmentId)
+			shop.SetEquipmentTeamBought(client, equipmentId)
 		end
 	end
 

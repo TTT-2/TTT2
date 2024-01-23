@@ -32,6 +32,17 @@ function shop.Reset()
 	shop.teamBuyTable = {}
 end
 
+function shop.ResetTeamBuy(ply, oldTeam)
+	if CLIENT then
+		shop.teamBuyTable[oldTeam] = nil
+	elseif SERVER and oldTeam and shop.teamBuyTable[oldTeam] then
+			net.Start("TTT2ResetTBEq")
+			net.WriteString(oldTeam)
+			net.Send(ply)
+		end
+	end
+end
+
 ---
 -- Check if an equipment is currently buyable for a player
 -- @param Player ply The player to buy the equipment for
@@ -235,6 +246,35 @@ function shop.BuyEquipment(ply, equipmentId)
 	end
 
 	return true, statusCode
+end
+
+function shop.SetEquipmentBought(equipmentId)
+	shop.buyTable[equpmentId] = true
+
+	if CLIENT then return end
+
+	net.Start("TTT2ReceiveGBEq")
+	net.WriteString(equipmentId)
+	net.Broadcast()
+end
+
+function shop.SetEquipmentTeamBought(ply, equipmentId)
+	local team = ply:GetTeam()
+
+	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
+		return false
+	end
+
+	shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
+	shop.teamBuyTable[team][equipmentId] = true
+
+	if SERVER then
+		net.Start("TTT2ReceiveTBEq")
+		net.WriteString(equipmentId)
+		net.Send(GetTeamFilter(team))
+	end
+
+	return true
 end
 
 ---

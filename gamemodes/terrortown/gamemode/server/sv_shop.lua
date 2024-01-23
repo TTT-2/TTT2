@@ -104,6 +104,40 @@ local function NetOrderEquipment(len, ply)
 end
 net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
+function shop.SendEquipmentGlobalBought(ply)
+	for equipmentId in pairs(shop.buyTable) do
+		net.Start("TTT2ReceiveGBEq")
+		net.WriteString(equipmentId)
+		net.Send(ply)
+	end
+end
+
+function shop.SendEquipmentTeamBought(ply)
+	local team = ply:GetTeam()
+
+	if team and shop.teamBuyTable[team] then
+		local filter = GetTeamFilter(team)
+
+		for equipmentId in pairs(shop.teamBuyTable[team]) do
+			net.Start("TTT2ReceiveTBEq")
+			net.WriteString(equipmentId)
+			net.Send(filter)
+		end
+	end
+end
+
+local function TTT2SyncShopsWithServer(len, ply)
+	-- reset and set if it's a fallback
+	net.Start("shopFallbackReset")
+	net.Send(ply)
+
+	SyncEquipment(ply)
+
+	shop.SendEquipmentGlobalBought(ply)
+	shop.SendEquipmentTeamBought(ply)
+end
+net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
+
 local function ConCommandOrderEquipment(ply, cmd, args)
 	if #args ~= 1 then return end
 

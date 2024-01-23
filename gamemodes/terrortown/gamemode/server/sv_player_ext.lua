@@ -299,31 +299,15 @@ end
 -- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
 -- @note This will disable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentId
 -- @realm server
 -- @see Player:RemoveBought
-function plymeta:AddBought(cls)
+function plymeta:AddBought(equipmentId)
 	self.bought = self.bought or {}
-	self.bought[#self.bought + 1] = tostring(cls)
+	self.bought[#self.bought + 1] = tostring(equipmentId)
 
-	shop.buyTable[cls] = true
-
-	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(cls)
-	net.Broadcast()
-
-	local team = self:GetTeam()
-
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-		shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
-		shop.teamBuyTable[team][cls] = true
-
-		if SERVER then
-			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(cls)
-			net.Send(GetTeamFilter(team))
-		end
-	end
+	shop.SetEquipmentBought(equipmentId)
+	shop.SetEquipmentTeamBought(self, equipmentId)
 
 	self:SendBought()
 end

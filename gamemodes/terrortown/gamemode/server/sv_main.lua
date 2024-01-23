@@ -613,34 +613,6 @@ function LoadShopsEquipment()
 	end
 end
 
-local function TTT2SyncShopsWithServer(len, ply)
-	-- reset and set if it's a fallback
-	net.Start("shopFallbackReset")
-	net.Send(ply)
-
-	SyncEquipment(ply)
-
-	-- sync bought sweps
-	for id in pairs(shop.buyTable) do
-		net.Start("TTT2ReceiveGBEq")
-		net.WriteString(id)
-		net.Send(ply)
-	end
-
-	local team = ply:GetTeam()
-
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone and shop.teamBuyTable[team] then
-		local filter = GetTeamFilter(team)
-
-		for id in pairs(shop.teamBuyTable[team]) do
-			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(id)
-			net.Send(filter)
-		end
-	end
-end
-net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
-
 ---
 -- This @{function} is used to trigger the round syncing
 -- @param number state the round state
