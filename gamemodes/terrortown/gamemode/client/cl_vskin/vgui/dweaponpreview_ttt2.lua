@@ -65,7 +65,6 @@ function PANEL:Init()
 	self:SetMouseInputEnabled(true)
 	self:SetKeyboardInputEnabled(true)
 
-	self:SetCursor("hand")
 	self:SetFont("DermaTTT2TextLarge")
 
 	self:SetCamPos(Vector(75, -65, 55))
@@ -75,7 +74,7 @@ function PANEL:Init()
 	self:SetAnimSpeed(0.5)
 	self:SetAnimated(true)
 
-	self:SetAmbientLight(Color(150, 150, 150))
+	self:SetAmbientLight(Color(100, 100, 100))
 
 	self:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))
 	self:SetDirectionalLight(BOX_FRONT, Color(255, 255, 255))
@@ -278,9 +277,7 @@ function PANEL:DrawModel()
 	cam.Start3D(self.vCamPos, ang, self.fFOV, xBaseStart, yBaseStart, w, h, 5, self.farZ)
 		render.SuppressEngineLighting(true)
 		render.SetLightingOrigin(ply:GetPos())
-		render.ResetModelLighting(self.colAmbientLight.r / 255, self.colAmbientLight.g / 255, self.colAmbientLight.b / 255)
 		render.SetColorModulation(self.colColor.r / 255, self.colColor.g / 255, self.colColor.b / 255)
-		render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
 
 		for i = 0, 6 do
 			local col = self.directionalLight[i]
@@ -293,9 +290,19 @@ function PANEL:DrawModel()
 		-- make a mask to make sure the graphic is limited
 		render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
 
+		if self.Hovered then
+			render.ResetModelLighting(1.0, 1.0, 1.0)
+			render.SetBlend(0.2)
+		else
+			render.ResetModelLighting(self.colAmbientLight.r / 255, self.colAmbientLight.g / 255, self.colAmbientLight.b / 255)
+			render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
+		end
+
 		ply:DrawModel()
 
 		if IsValid(wep) then
+			render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
+
 			wep:DrawModel()
 		end
 
