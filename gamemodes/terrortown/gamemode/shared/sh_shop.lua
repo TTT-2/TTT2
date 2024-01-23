@@ -84,7 +84,7 @@ function shop.IsTeamBoughtFor(ply, equipmentId)
 
 	return team
 		and shop.teamBuyTable[team]
-		and shop.teamBuyTable[team][equipment.id]
+		and shop.teamBuyTable[team][equipmentId]
 end
 
 ---
