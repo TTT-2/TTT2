@@ -110,6 +110,10 @@ function shop.BroadcastEquipmentGlobalBought(equipmentId)
 	net.Broadcast()
 end
 
+---
+-- Sends all bought equipments to players as globally bought
+-- @param Player ply The player to send it to
+-- @realm shared
 function shop.SendAllEquipmentGlobalBought(ply)
 	for equipmentId in pairs(shop.globalBuyTable) do
 		net.Start("TTT2ReceiveGBEq")
@@ -118,6 +122,10 @@ function shop.SendAllEquipmentGlobalBought(ply)
 	end
 end
 
+---
+-- Sends all bought equipments to players of the same team
+-- @param Player ply The player to get the team of
+-- @realm shared
 function shop.SendEquipmentTeamBought(ply)
 	local team = ply:GetTeam()
 

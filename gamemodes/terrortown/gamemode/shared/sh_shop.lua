@@ -30,12 +30,20 @@ shop.buyTable = shop.buyTable or {}
 shop.globalBuyTable = shop.globalBuyTable or {}
 shop.teamBuyTable = shop.teamBuyTable or {}
 
+---
+-- Resets buy tables of shop
+-- @realm shared
 function shop.Reset()
 	shop.buyTable = {}
 	shop.globalBuyTable = {}
 	shop.teamBuyTable = {}
 end
 
+---
+-- Resets team buy tables of shop
+-- @param Player ply The player to reset the table of
+-- @param string oldTeam The identifier of the old team
+-- @realm shared
 function shop.ResetTeamBuy(ply, oldTeam)
 	if CLIENT then
 		shop.teamBuyTable[oldTeam] = nil
@@ -47,14 +55,31 @@ function shop.ResetTeamBuy(ply, oldTeam)
 	end
 end
 
+---
+-- Returns if the equipment is already bought for the player
+-- @param Player ply The player to check
+-- @param string equipmentId The name of the equipment to check
+-- @return bool If the Equipment was bought
+-- @realm shared
 function shop.IsBoughtFor(ply, equipmentId)
 	return shop.buyTable[ply] and shop.buyTable[ply][equipmentId]
 end
 
+---
+-- Returns if the equipment is already globally bought by a player
+-- @param string equipmentId The name of the equipment to check
+-- @return bool If the Equipment was globally bought
+-- @realm shared
 function shop.IsGlobalBought(equipmentId)
 	return shop.globalBuyTable[equipmentId]
 end
 
+---
+-- Returns if the equipment is already bought for the players team
+-- @param Player ply The player to check the team of
+-- @param string equipmentId The name of the equipment to check
+-- @return bool If the Equipment was bought by a teammate
+-- @realm shared
 function shop.IsTeamBoughtFor(ply, equipmentId)
 	local team = ply:GetTeam()
 
@@ -268,6 +293,11 @@ function shop.BuyEquipment(ply, equipmentId)
 	return true, statusCode
 end
 
+---
+-- Marks the equipment as already bought for the player
+-- @param Player ply The player to set it for
+-- @param string equipmentId The name of the equipment to set
+-- @realm shared
 function shop.SetEquipmentBought(ply, equipmentId)
 	shop.buyTable[ply] = shop.buyTable[ply] or {}
 	shop.buyTable[ply][equipmentId] = true
@@ -277,6 +307,10 @@ function shop.SetEquipmentBought(ply, equipmentId)
 	shop.BroadcastEquipmentGlobalBought(equipmentId)
 end
 
+---
+-- Marks the equipment as already globally bought
+-- @param string equipmentId The name of the equipment to set
+-- @realm shared
 function shop.SetEquipmentGlobalBought(equipmentId)
 	shop.globalBuyTable[equipmentId] = true
 
@@ -285,6 +319,11 @@ function shop.SetEquipmentGlobalBought(equipmentId)
 	shop.BroadcastEquipmentGlobalBought(equipmentId)
 end
 
+---
+-- Marks the equipment as already bought for the team of the player
+-- @param Player ply The player to set it for
+-- @param string equipmentId The name of the equipment to set
+-- @realm shared
 function shop.SetEquipmentTeamBought(ply, equipmentId)
 	local team = ply:GetTeam()
 
