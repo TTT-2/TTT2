@@ -306,7 +306,8 @@ function plymeta:AddBought(equipmentId)
 	self.bought = self.bought or {}
 	self.bought[#self.bought + 1] = tostring(equipmentId)
 
-	shop.SetEquipmentBought(equipmentId)
+	shop.SetEquipmentBought(self, equipmentId)
+	shop.SetEquipmentGlobalBought(equipmentId)
 	shop.SetEquipmentTeamBought(self, equipmentId)
 
 	self:SendBought()

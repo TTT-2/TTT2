@@ -104,8 +104,14 @@ local function NetOrderEquipment(len, ply)
 end
 net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
-function shop.SendEquipmentGlobalBought(ply)
-	for equipmentId in pairs(shop.buyTable) do
+function shop.BroadcastEquipmentGlobalBought(equipmentId)
+	net.Start("TTT2ReceiveGBEq")
+	net.WriteString(equipmentId)
+	net.Broadcast()
+end
+
+function shop.SendAllEquipmentGlobalBought(ply)
+	for equipmentId in pairs(shop.globalBuyTable) do
 		net.Start("TTT2ReceiveGBEq")
 		net.WriteString(equipmentId)
 		net.Send(ply)
@@ -133,7 +139,7 @@ local function TTT2SyncShopsWithServer(len, ply)
 
 	SyncEquipment(ply)
 
-	shop.SendEquipmentGlobalBought(ply)
+	shop.SendAllEquipmentGlobalBought(ply)
 	shop.SendEquipmentTeamBought(ply)
 end
 net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)

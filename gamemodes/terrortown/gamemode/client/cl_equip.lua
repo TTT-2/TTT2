@@ -270,6 +270,10 @@ local function PreqLabels(parent, x, y)
 			tooltipText = "Minimum amount of active players needed."
 		elseif statusCode == shop.statusCode.LIMITEDBOUGHT then
 			tooltipText = "This equipment is limited and is already bought."
+		elseif statusCode == shop.statusCode.GLOBALLIMITEDBOUGHT then
+			tooltipText = "This equipment is globally limited and is already bought by someone."
+		elseif statusCode == shop.statusCode.TEAMLIMITEDBOUGHT then
+			tooltipText = "This equipment is limited in team and is already bought by a teammate."
 		elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
 			tooltipText = "Your role can't buy this equipment."
 		else
@@ -999,7 +1003,7 @@ local function ReceiveBought()
 		if equipmentId ~= "" then
 			client.bought[#client.bought + 1] = equipmentId
 
-			shop.SetEquipmentBought(equipmentId)
+			shop.SetEquipmentBought(LocalPlayer(), equipmentId)
 			shop.SetEquipmentTeamBought(client, equipmentId)
 		end
 	end

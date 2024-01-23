@@ -22,6 +22,6 @@ net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
 local function ReceiveGlobalbuyEquipment()
 	local equipmentId = net.ReadString()
 
-	shop.SetEquipmentBought(equipmentId)
+	shop.SetEquipmentGlobalBought(equipmentId)
 end
 net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)

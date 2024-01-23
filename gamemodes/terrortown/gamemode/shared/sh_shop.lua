@@ -15,20 +15,24 @@ shop.statusCode = {
 	NOTBUYABLE = 7,
 	NOTENOUGHPLAYERS = 8,
 	LIMITEDBOUGHT = 9,
-	NOTBUYABLEFORROLE = 10,
-	PENDINGORDER = 11,
-	NOSHOP = 12,
-	NORANDOMSHOP = 13,
-	NOTINSHOP = 14,
-	BLOCKEDBYOLDHOOK = 15,
-	BLOCKEDBYTTT2HOOK = 16,
+	TEAMLIMITEDBOUGHT = 10,
+	GLOBALLIMITEDBOUGHT = 11,
+	NOTBUYABLEFORROLE = 12,
+	PENDINGORDER = 13,
+	NOSHOP = 14,
+	NORANDOMSHOP = 15,
+	NOTINSHOP = 16,
+	BLOCKEDBYOLDHOOK = 17,
+	BLOCKEDBYTTT2HOOK = 18,
 }
 
 shop.buyTable = shop.buyTable or {}
+shop.globalBuyTable = shop.globalBuyTable or {}
 shop.teamBuyTable = shop.teamBuyTable or {}
 
 function shop.Reset()
 	shop.buyTable = {}
+	shop.globalBuyTable = {}
 	shop.teamBuyTable = {}
 end
 
@@ -41,6 +45,22 @@ function shop.ResetTeamBuy(ply, oldTeam)
 			net.Send(ply)
 		end
 	end
+end
+
+function shop.IsBoughtFor(ply, equipmentId)
+	return shop.buyTable[ply] and shop.buyTable[ply][equipmentId]
+end
+
+function shop.IsGlobalBought(equipmentId)
+	return shop.globalBuyTable[equipmentId]
+end
+
+function shop.IsTeamBoughtFor(ply, equipmentId)
+	local team = ply:GetTeam()
+
+	return team
+		and shop.teamBuyTable[team]
+		and shop.teamBuyTable[team][equipment.id]
 end
 
 ---
@@ -86,19 +106,19 @@ function shop.CanBuyEquipment(ply, equipmentId)
 		end
 	end
 
-	local team = ply:GetTeam()
+	if equipment.limited
+		and shop.IsBoughtFor(ply, equipmentId) then
+		return false, shop.statusCode.LIMITEDBOUGHT
+	end
 
 	if equipment.globalLimited
-		and shop.buyTable[equipment.id]
-		or team
-		and equipment.teamLimited
-		and TEAMS[team]
-		and not TEAMS[team].alone
-		and shop.teamBuyTable[team]
-		and shop.teamBuyTable[team][equipment.id]
-		or equipment.limited
-		and ply:HasBought(equipment.ClassName) then
-		return false, shop.statusCode.LIMITEDBOUGHT
+		and shop.IsGlobalBought(equipmentId) then
+		return false, shop.statusCode.GLOBALLIMITEDBOUGHT
+	end
+
+	if equipment.teamLimited
+		and shop.IsTeamBoughtFor(ply,equipmentId) then
+		return false, shop.statusCode.TEAMLIMITEDBOUGHT
 	end
 
 	local subrole = GetShopFallback(ply:GetSubRole())
@@ -248,14 +268,21 @@ function shop.BuyEquipment(ply, equipmentId)
 	return true, statusCode
 end
 
-function shop.SetEquipmentBought(equipmentId)
-	shop.buyTable[equpmentId] = true
+function shop.SetEquipmentBought(ply, equipmentId)
+	shop.buyTable[ply] = shop.buyTable[ply] or {}
+	shop.buyTable[ply][equipmentId] = true
 
 	if CLIENT then return end
 
-	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(equipmentId)
-	net.Broadcast()
+	shop.BroadcastEquipmentGlobalBought(equipmentId)
+end
+
+function shop.SetEquipmentGlobalBought(equipmentId)
+	shop.globalBuyTable[equipmentId] = true
+
+	if CLIENT then return end
+
+	shop.BroadcastEquipmentGlobalBought(equipmentId)
 end
 
 function shop.SetEquipmentTeamBought(ply, equipmentId)
