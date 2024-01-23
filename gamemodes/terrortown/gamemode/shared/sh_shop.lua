@@ -181,17 +181,20 @@ function shop.CanBuyEquipment(ply, equipmentId)
 	end
 
 	if equipment.limited
-		and shop.IsBoughtFor(ply, equipmentId) then
+		and shop.IsBoughtFor(ply, equipmentId)
+	then
 		return false, shop.statusCode.LIMITEDBOUGHT
 	end
 
 	if equipment.globalLimited
-		and shop.IsGlobalBought(equipmentId) then
+		and shop.IsGlobalBought(equipmentId)
+	then
 		return false, shop.statusCode.GLOBALLIMITEDBOUGHT
 	end
 
 	if equipment.teamLimited
-		and shop.IsTeamBoughtFor(ply,equipmentId) then
+		and shop.IsTeamBoughtFor(ply,equipmentId)
+	then
 		return false, shop.statusCode.TEAMLIMITEDBOUGHT
 	end
 
