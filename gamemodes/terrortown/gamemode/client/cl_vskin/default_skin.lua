@@ -1752,9 +1752,9 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
-	panel:DrawModel()
-
-	draw.OutlinedBox(0, 0, w, h, 1, COLOR_ORANGE)
+	if panel:HasModel() then
+		panel:DrawModel()
+	end
 end
 
 -- REGISTER DERMA SKIN

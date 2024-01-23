@@ -53,6 +53,11 @@ AccessorFunc(PANEL, "colColor", "Color")
 AccessorFunc(PANEL, "bAnimated", "Animated")
 
 ---
+-- @accessor boolean
+-- @realm client
+AccessorFunc(PANEL, "bHoverEffect", "HoverEffect")
+
+---
 -- @ignore
 function PANEL:Init()
 	self.lastPaint = 0
@@ -73,6 +78,7 @@ function PANEL:Init()
 
 	self:SetAnimSpeed(0.5)
 	self:SetAnimated(true)
+	self:SetHoverEffect(true)
 
 	self:SetAmbientLight(Color(150, 150, 150))
 
@@ -136,6 +142,9 @@ function PANEL:SetPlayerModel(model)
 	self.data.ply = cEnt
 end
 
+---
+-- @param string cls
+-- @realm client
 function PANEL:SetWeaponClass(cls)
 	if not IsValid(self.data.ply) then return end
 
@@ -304,7 +313,7 @@ function PANEL:DrawModel()
 		-- make a mask to make sure the graphic is limited
 		render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
 
-		if self.Hovered then
+		if self.Hovered and self.bHoverEffect then
 			render.ResetModelLighting(1.0, 1.0, 1.0)
 			render.SetBlend(0.2)
 		else
@@ -349,17 +358,10 @@ function PANEL:RunAnimation()
 end
 
 ---
--- @return string
--- @realm client
-function PANEL:GetModel()
-	return self.data.mdl
-end
-
----
 -- @return boolean
 -- @realm client
 function PANEL:HasModel()
-	return self.data.mdl ~= nil
+	return IsValid(self.data.ply) and self.data.wepClass ~= ""
 end
 
 ---

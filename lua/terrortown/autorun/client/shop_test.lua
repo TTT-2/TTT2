@@ -20,6 +20,7 @@ concommand.Add("shop", function()
 	profileBox1:SetPos(0, 50)
 	profileBox1:SetPlayerModel(LocalPlayer():GetModel())
 	profileBox1:SetWeaponClass("weapon_ttt_melonmine")
+	profileBox1:SetHoverEffect(false)
 
 	local profileBox2 = vgui.Create("DWeaponPreviewTTT2", menuFrame)
 	profileBox2:SetSize(200, 300)
