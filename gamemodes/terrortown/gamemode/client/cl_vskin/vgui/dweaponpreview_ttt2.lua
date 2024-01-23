@@ -68,14 +68,14 @@ function PANEL:Init()
 	self:SetCursor("hand")
 	self:SetFont("DermaTTT2TextLarge")
 
-	self:SetCamPos(Vector(55, 55, 55))
-	self:SetLookAt(Vector(0, 0, 55))
-	self:SetFOV(85)
+	self:SetCamPos(Vector(75, -65, 55))
+	self:SetLookAt(Vector(5, 0, 35))
+	self:SetFOV(35)
 
 	self:SetAnimSpeed(0.5)
 	self:SetAnimated(true)
 
-	self:SetAmbientLight(Color(50, 50, 50))
+	self:SetAmbientLight(Color(150, 150, 150))
 
 	self:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))
 	self:SetDirectionalLight(BOX_FRONT, Color(255, 255, 255))
@@ -187,7 +187,9 @@ function PANEL:SetWeaponClass(cls)
 		self.data.wep:Remove()
 	end
 
-	self.data.wep = cEnt
+	if wep.HoldType ~= "normal" then
+		self.data.wep = cEnt
+	end
 end
 
 ---
@@ -196,7 +198,7 @@ function PANEL:DrawModel()
 	local ply = self.data.ply
 	local wep = self.data.wep
 
-	if not IsValid(ply) or not IsValid(wep) then return end
+	if not IsValid(ply) then return end
 
 	local w, h = self:GetSize()
 	local xBaseStart, yBaseStart = self:LocalToScreen(0, 0)
@@ -266,7 +268,10 @@ function PANEL:DrawModel()
 	end -- end of SWEP Construction Kit support
 
 	self:LayoutEntity(ply)
-	self:LayoutEntity(wep)
+
+	if IsValid(wep) then
+		self:LayoutEntity(wep)
+	end
 
 	local ang = self.aLookAngle or (self.vLookatPos - self.vCamPos):Angle()
 
@@ -289,7 +294,10 @@ function PANEL:DrawModel()
 		render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
 
 		ply:DrawModel()
-		wep:DrawModel()
+
+		if IsValid(wep) then
+			wep:DrawModel()
+		end
 
 		render.SetScissorRect(0, 0, 0, 0, false)
 		render.SuppressEngineLighting(false)
