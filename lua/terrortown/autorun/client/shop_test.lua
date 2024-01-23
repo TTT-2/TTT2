@@ -19,7 +19,7 @@ concommand.Add("shop", function()
 	profileBox:SetSize(1000, 750)
 	profileBox:Dock(LEFT)
 	profileBox:SetPlayerModel(LocalPlayer():GetModel())
-	profileBox:SetWeaponClass("weapon_ttt_glock")
+	profileBox:SetWeaponClass("weapon_ttt_melonmine")
 	profileBox:SetCamPos(Vector(50, -60, 75))
 	profileBox:SetFOV(85)
 

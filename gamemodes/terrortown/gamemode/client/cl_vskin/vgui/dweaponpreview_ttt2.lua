@@ -88,7 +88,9 @@ function PANEL:Init()
 	self.data = {
 		ply = nil,
 		wep = nil,
-		HoldType = "normal"
+		wepClass = "",
+		HoldType = "normal",
+		worldModelData = nil
 	}
 end
 
@@ -140,7 +142,23 @@ function PANEL:SetWeaponClass(cls)
 
 	if not wep then return end
 
-	local cEnt = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
+	-- make sure it is reset in case different weapon was used before
+	self.data.worldModelData = nil
+	self.data.wepClass = cls
+
+	-- if WElements are set, this weapon is created with the SWEP Construction Kit
+	-- and special handling has to be used to render the weapon
+	if wep.WElements then
+		for name, data in pairs(wep.WElements) do
+			if data.type ~= "Model" then continue end
+
+			self.data.worldModelData = data
+
+			break -- only use first valid entry
+		end
+	end
+
+	local cEnt = ClientsideModel(self.data.worldModelData and self.data.worldModelData.model or wep.WorldModel, RENDERGROUP_OTHER)
 
 	if not IsValid(cEnt) then return end
 
@@ -154,8 +172,11 @@ function PANEL:SetWeaponClass(cls)
 	else
 		self.data.ply:SetSequence(self.data.ply:LookupSequence("idle_" .. wep.HoldType))
 
-		cEnt:SetParent(self.data.ply)
-		cEnt:AddEffects(EF_BONEMERGE)
+		-- only merge bones if no special handling is needed
+		if not self.data.worldModelData then
+			cEnt:SetParent(self.data.ply)
+			cEnt:AddEffects(EF_BONEMERGE)
+		end
 	end
 
 	self.data.ply:SetupBones()
@@ -197,6 +218,52 @@ function PANEL:DrawModel()
 		xLimitEnd = mathMin(xLimitEnd, x2)
 		yLimitEnd = mathMin(yLimitEnd, y2)
 	end
+
+	-- This adds support for the "SWEP Construction Kit" that is used by many weapons such as the
+	-- boomerang or the melon mine: https://steamcommunity.com/sharedfiles/filedetails/?id=109724869
+	--
+	-- This code is taken and slightly modified from its WorldModel renderer
+	if self.data.worldModelData then
+		local worldModelData = self.data.worldModelData
+		local wepEnt = weapons.Get(self.data.wepClass)
+		local pos, ang
+
+		if worldModelData.bone then
+			pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply)
+		else
+			pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply, "ValveBiped.Bip01_R_Hand")
+		end
+
+		wep:SetPos(pos + ang:Forward() * worldModelData.pos.x + ang:Right() * worldModelData.pos.y + ang:Up() * worldModelData.pos.z)
+
+		ang:RotateAroundAxis(ang:Up(), worldModelData.angle.y)
+		ang:RotateAroundAxis(ang:Right(), worldModelData.angle.p)
+		ang:RotateAroundAxis(ang:Forward(), worldModelData.angle.r)
+
+		wep:SetAngles(ang)
+
+		local matrix = Matrix()
+		matrix:Scale(worldModelData.size)
+		wep:EnableMatrix("RenderMultiply", matrix)
+
+		if worldModelData.material == "" then
+			wep:SetMaterial("")
+		elseif wep:GetMaterial() ~= worldModelData.material then
+			wep:SetMaterial( worldModelData.material )
+		end
+
+		if worldModelData.skin and worldModelData.skin ~= wep:GetSkin() then
+			wep:SetSkin(worldModelData.skin)
+		end
+
+		if worldModelData.bodygroup then
+			for k, v in pairs(worldModelData.bodygroup) do
+				if wep:GetBodygroup(k) ~= v then
+					wep:SetBodygroup(k, v)
+				end
+			end
+		end
+	end -- end of SWEP Construction Kit support
 
 	self:LayoutEntity(ply)
 	self:LayoutEntity(wep)
