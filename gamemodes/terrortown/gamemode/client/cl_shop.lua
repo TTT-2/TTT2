@@ -7,27 +7,11 @@ shop = shop or {}
 
 shop.favorites = shop.favorites or {}
 shop.favorites.databaseName = "ttt2_shop_favorites"
-shop.favorites.orm = nil
 shop.favorites.savingKeys = {}
 
----
--- Gets the orm of shop favorites
--- If the table is not existing, it also creates it
--- @return ORMMODEL Returns the model of the favorites database table
--- @realm client
-local function GetFavoritesORM()
-	local favorites = shop.favorites
+sql.CreateSqlTable(shop.favorites.databaseName, shop.favorites.savingKeys)
 
-	if istable(favorites.orm) then
-		return favorites.orm
-	end
-
-	-- Create Sql and orm table if not already done
-	sql.CreateSqlTable(favorites.databaseName, favorites.savingKeys)
-	favorites.orm = orm.Make(favorites.databaseName)
-
-	return favorites.orm
-end
+shop.favorites.orm = orm.Make(shop.favorites.databaseName)
 
 ---
 -- Looks for equipment id in favorites table
@@ -35,7 +19,7 @@ end
 -- @return boolean
 -- @realm client
 function shop.IsFavorite(equipmentId)
-	return GetFavoritesORM():Find(equipmentId) ~= nil
+	return shop.favorites.orm:Find(equipmentId) ~= nil
 end
 
 ---
@@ -43,7 +27,7 @@ end
 -- @return table list of all favorites
 -- @realm client
 function shop.GetFavorites()
-	return GetFavoritesORM():All()
+	return shop.favorites.orm:All()
 end
 
 ---
@@ -52,7 +36,7 @@ end
 -- @param bool isFavorite If the equipmentId is a favorite
 -- @realm client
 function shop.SetFavoriteState(equipmentId, isFavorite)
-	local favOrm = GetFavoritesORM()
+	local favOrm = shop.favorites.orm
 	local favoriteItem = favOrm:Find(equipmentId)
 
 	if isFavorite and not favoriteItem then
