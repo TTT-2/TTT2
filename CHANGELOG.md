@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
+- `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
 
 ### Changed
 
@@ -60,6 +61,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
 - Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
 - Magneto stick now shows tooltips respective to its current state.
+- `ttt_flame` is visible while it is moving  (by @EntranceJew)
+- `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
 
 ### Fixed
 

@@ -343,7 +343,7 @@ function ENT:Explode(tr)
 
 		-- few fire bits to ignite things
 		timer.Simple(0.2, function()
-			StartFires(pos, tr, 4, 5, true, dmgowner)
+			gameEffects.StartFires(pos, tr, 4, 5, true, dmgowner, 500, false, 132, 0)
 		end)
 
 		self:SetExplodeTime(0)
