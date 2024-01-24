@@ -54,6 +54,7 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = true
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 local delay_beamup = 1
 local delay_beamdown = 1
@@ -373,16 +374,6 @@ if CLIENT then
 			label = "label_teleport_telefrags"
 		})
 	end
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
-	return true
 end
 
 ---
