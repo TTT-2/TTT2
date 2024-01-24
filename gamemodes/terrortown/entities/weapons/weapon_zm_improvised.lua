@@ -280,12 +280,6 @@ function SWEP:SecondaryAttack()
 	end
 end
 
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
 if SERVER then
 	---
 	-- A cancelable hook that is called if a player tries to push another player.

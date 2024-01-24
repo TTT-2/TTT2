@@ -50,6 +50,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Consolidated hat logic
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
+- All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
 
 ### Fixed
 

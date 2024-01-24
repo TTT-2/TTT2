@@ -13,6 +13,12 @@ if CLIENT then
 	SWEP.Slot = 5
 
 	SWEP.ViewModelFOV = 10
+
+	SWEP.EquipMenuData = {
+		type = "item_weapon",
+	}
+
+	SWEP.Icon = "vgui/ttt/icon_unarmed"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -44,18 +50,6 @@ SWEP.builtin = true
 
 ---
 -- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @ignore
-function SWEP:ShouldDropOnDie()
-	return false
-end
-
----
--- @ignore
 function SWEP:PrimaryAttack()
 
 end
@@ -78,14 +72,18 @@ function SWEP:Holster()
 	return true
 end
 
----
--- @ignore
-function SWEP:DrawWorldModel()
+if CLIENT then
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
 
-end
+		self:DrawModel()
+	end
 
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
 
+	end
 end

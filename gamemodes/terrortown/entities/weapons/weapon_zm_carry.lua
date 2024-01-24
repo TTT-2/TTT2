@@ -722,18 +722,6 @@ function SWEP:Holster()
 	return true
 end
 
----
--- @ignore
-function SWEP:ShouldDropOnDie()
-	return false
-end
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
 if SERVER then
 	---
 	-- A cancelable hook that is called once a player tries to pickup an entity.

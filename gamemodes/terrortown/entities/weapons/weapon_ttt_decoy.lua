@@ -46,13 +46,8 @@ SWEP.WeaponID = AMMO_DECOY
 SWEP.builtin = true
 
 SWEP.AllowDrop = false
+SWEP.NoSights = true
 SWEP.InvisibleViewModel = true
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
 
 ---
 -- @ignore
@@ -215,18 +210,18 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
-end
 
----
--- @ignore
-function SWEP:DrawWorldModel()
-	if IsValid(self:GetOwner()) then return end
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
 
-	self:DrawModel()
-end
+		self:DrawModel()
+	end
 
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
 
+	end
 end

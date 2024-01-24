@@ -324,9 +324,7 @@ if CLIENT then
 
 		local client = LocalPlayer()
 
-		if self.InvisibleViewModel then
-			client:DrawViewModel(false)
-		end
+		client:DrawViewModel(not self.InvisibleViewModel)
 
 		if not cvEnableCrosshair:GetBool() then return end
 
