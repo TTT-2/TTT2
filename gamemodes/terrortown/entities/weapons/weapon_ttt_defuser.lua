@@ -39,6 +39,8 @@ SWEP.Kind = WEAPON_EQUIP2
 SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
 SWEP.WeaponID = AMMO_DEFUSER
 
+SWEP.InvisibleViewModel = true
+
 SWEP.builtin = true
 
 local defuse = Sound("c4.disarmfinish")
@@ -92,15 +94,6 @@ end
 -- @ignore
 function SWEP:Reload()
 	return false
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-	return true
 end
 
 ---

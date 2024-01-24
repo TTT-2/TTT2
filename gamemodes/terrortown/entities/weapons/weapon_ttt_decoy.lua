@@ -46,7 +46,7 @@ SWEP.WeaponID = AMMO_DECOY
 SWEP.builtin = true
 
 SWEP.AllowDrop = false
-SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 ---
 -- @ignore
@@ -215,14 +215,6 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
 end
 
 ---
