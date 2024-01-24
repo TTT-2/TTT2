@@ -323,7 +323,6 @@ function PANEL:DrawModel()
 		render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
 
 		if self.data.specialModelHandeling then
-			print(self.data.wepClass)
 			for _, model in pairs(self.data.worldModels) do
 				model:DrawModel()
 			end
