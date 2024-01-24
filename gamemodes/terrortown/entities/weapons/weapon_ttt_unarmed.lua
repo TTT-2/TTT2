@@ -36,6 +36,7 @@ SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 SWEP.silentPickup = true
 
@@ -69,18 +70,6 @@ end
 -- @ignore
 function SWEP:Reload()
 
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
-	self:DrawShadow(false)
-
-	return true
 end
 
 ---

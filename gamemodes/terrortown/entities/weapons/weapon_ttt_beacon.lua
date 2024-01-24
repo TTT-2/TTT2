@@ -50,6 +50,7 @@ SWEP.builtin = true
 SWEP.Spawnable = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 SWEP.builtin = true
 
@@ -119,14 +120,6 @@ function SWEP:OnRemove()
 	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():IsTerror() then
 		RunConsoleCommand("lastinv")
 	end
-end
-
----
--- @realm shared
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
 end
 
 ---
