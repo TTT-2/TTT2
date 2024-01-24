@@ -51,6 +51,7 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 ---
 -- @ignore
@@ -188,11 +189,3 @@ if CLIENT then
 	end
 end
 
---- Invisible, same hacks as holstered weapon
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-	return true
-end

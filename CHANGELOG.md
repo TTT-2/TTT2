@@ -23,9 +23,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
+  - Added `SWEP.InvisibleViewModel` to prevent a weapon from drawing a ViewModel at all without FOV hacks or Deploy code which has no effect.
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
+- Made beacon model and icon unique from decoy (by @EntranceJew)
 
 ### Changed
 

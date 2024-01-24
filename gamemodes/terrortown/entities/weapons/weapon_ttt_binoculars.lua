@@ -49,6 +49,7 @@ SWEP.WeaponID = AMMO_BINOCULARS
 SWEP.builtin = true
 
 SWEP.AllowDrop = true
+SWEP.InvisibleViewModel = true
 
 SWEP.ZoomLevels = {
 	0,
@@ -120,7 +121,6 @@ function SWEP:SetZoomLevel(level)
 	self:SetZoomAmount(level)
 
 	owner:SetFOV(self.ZoomLevels[level], 0.3)
-	owner:DrawViewModel(false)
 end
 
 ---
@@ -158,13 +158,9 @@ end
 ---
 -- @ignore
 function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
 	self:SetZoomLevel(1)
 
-	return true
+	return self.BaseClass.Deploy(self)
 end
 
 ---

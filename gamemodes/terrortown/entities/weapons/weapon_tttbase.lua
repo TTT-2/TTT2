@@ -68,6 +68,10 @@ if CLIENT then
 	-- if the files are different, it only looks at the name. I recommend you
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+
+	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
+	-- overload drawing functions.
+	SWEP.InvisibleViewModel = false
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -318,9 +322,14 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
+		local client = LocalPlayer()
+
+		if self.InvisibleViewModel then
+			client:DrawViewModel(false)
+		end
+
 		if not cvEnableCrosshair:GetBool() then return end
 
-		local client = LocalPlayer()
 
 		local sights = not self.NoSights and self:GetIronsights()
 

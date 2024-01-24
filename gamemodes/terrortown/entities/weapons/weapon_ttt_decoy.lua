@@ -17,7 +17,7 @@ else -- CLIENT
 		desc = "decoy_desc"
 	}
 
-	SWEP.Icon = "vgui/ttt/icon_beacon"
+	SWEP.Icon = "vgui/ttt/icon_decoy"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -47,6 +47,7 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 ---
 -- @ignore

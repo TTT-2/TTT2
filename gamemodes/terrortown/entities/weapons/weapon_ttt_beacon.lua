@@ -50,6 +50,7 @@ SWEP.builtin = true
 SWEP.Spawnable = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 SWEP.builtin = true
 

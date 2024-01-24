@@ -51,6 +51,7 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 SWEP.drawColor = Color(180, 180, 250, 255)
 
@@ -125,14 +126,6 @@ function SWEP:Initialize()
 	return self.BaseClass.Initialize(self)
 end
 
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-	return true
-end
 
 if CLIENT then
 	---
