@@ -27,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
+- Made beacon model and icon unique from decoy (by @EntranceJew)
 
 ### Changed
 
