@@ -31,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 
 ### Changed
 
