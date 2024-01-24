@@ -225,11 +225,3 @@ if CLIENT then
 
 	end
 end
-
----
--- @ignore
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
-end

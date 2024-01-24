@@ -116,14 +116,6 @@ function SWEP:OnRemove()
 	end
 end
 
----
--- @realm shared
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
-end
-
 if SERVER then
 	local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
