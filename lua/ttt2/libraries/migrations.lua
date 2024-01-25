@@ -132,7 +132,7 @@ function migrations.Apply()
 	if not migrationSuccess then
 		ErrorNoHalt("[TTT2] Migration failed. Error:\n" .. tostring(errorMessage) .. "\n")
 	else
-		MsgN("[TTT2] Migration was successful.")
+		MsgN("[TTT2] Successfully migrated: ", fileName)
 	end
 
 	return migrationSuccess
