@@ -169,6 +169,8 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 end
 
+local propSpecLabelColor = Color(220, 200, 0, 120)
+
 ---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
@@ -176,17 +178,14 @@ local function DrawPropSpecLabels(client)
 		return
 	end
 
-	surface.SetFont("TabLarge")
-
-	local tgt, scrpos, text
-	local w = 0
+	local tgt, scrpos, color, _
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
 		local ply = plys[i]
 
 		if ply:IsSpec() then
-			surface.SetTextColor(220, 200, 0, 120)
+			color = propSpecLabelColor
 
 			tgt = ply:GetObserverTarget()
 
@@ -196,9 +195,7 @@ local function DrawPropSpecLabels(client)
 				scrpos = nil
 			end
 		else
-			local _, healthcolor = util.HealthToString(ply:Health(), ply:GetMaxHealth())
-
-			surface.SetTextColor(clr(healthcolor))
+			_, color = util.HealthToString(ply:Health(), ply:GetMaxHealth())
 
 			scrpos = ply:EyePos()
 			scrpos.z = scrpos.z + 20
@@ -209,11 +206,17 @@ local function DrawPropSpecLabels(client)
 			continue
 		end
 
-		text = ply:Nick()
-		w = surface.GetTextSize(text)
-
-		surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y)
-		surface.DrawText(text)
+		draw.AdvancedText(
+			ply:Nick(),
+			"PureSkinMSTACKMsg",
+			scrpos.x,
+			scrpos.y,
+			color,
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER,
+			true,
+			appearance.GetGlobalScale()
+		)
 	end
 end
 
