@@ -396,9 +396,7 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:DrawHUD()
-		if self.DrawHelp then
-			self:DrawHelp()
-		end
+		self:DrawHelp()
 
 		local x = ScrW() / 2.0
 		local y = ScrH() / 2.0

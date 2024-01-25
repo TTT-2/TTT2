@@ -477,6 +477,7 @@ if CLIENT then
 	-- Draws the help text to the bottom of the screen
 	-- @realm client
 	function SWEP:DrawHelp()
+		if not self.HUDHelp or not #self.HUDHelp.bindingLines then return end
 		local scale = appearance.GetGlobalScale()
 
 		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
@@ -576,7 +577,7 @@ if CLIENT then
 		primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
 		secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2") or nil
 
-		self:AddTTT2HUDHelp()
+		self:ClearHUDHelp()
 
 		if primary then
 			self:AddHUDHelpLine(primary, primary_key)
@@ -593,10 +594,7 @@ if CLIENT then
 	-- @param[optchain] string secondary_text description for secondaryfire
 	-- @realm client
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
-		self.HUDHelp = {
-			bindingLines = {},
-			max_length = 0
-		}
+		self:ClearHUDHelp()
 
 		if primary then
 			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
@@ -605,6 +603,17 @@ if CLIENT then
 		if secondary then
 			self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
 		end
+	end
+
+	---
+	-- Utility for removing all existing help lines so more can be added.
+	-- This can be useful for dynamically updating help text.
+	-- @realm client
+	function SWEP:ClearHUDHelp()
+		self.HUDHelp = {
+			bindingLines = {},
+			max_length = 0
+		}
 	end
 
 	---
