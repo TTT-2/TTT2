@@ -730,6 +730,24 @@ if CLIENT then
 		modelbuilder.Render(self, self.WRenderOrder, self.WElements, boneEnt)
 	end
 
+	function SWEP:Holster()
+		local owner = self:GetOwner()
+
+		if IsValid(owner) then
+			local viewModel = owner:GetViewModel()
+
+			if IsValid(viewModel) then
+				modelbuilder.ResetBonePositions(viewModel)
+			end
+		end
+
+		return true
+	end
+
+	function SWEP:OnRemove()
+		self:Holster()
+	end
+
 	---
 	-- This hook can be used by swep addons to populate the equipment settings page
 	-- with custom convars. The parent is the submenu, where a new form has to
