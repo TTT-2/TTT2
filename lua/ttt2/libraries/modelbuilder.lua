@@ -1,0 +1,258 @@
+---
+-- Used to build custom world and view models. 
+-- @author Mineotopia
+-- @module modelbuilder
+
+if SERVER then
+	AddCSLuaFile()
+
+	return
+end
+
+modelbuilder = {}
+
+local propertiesMaterial = {"nocull", "additive", "vertexalpha", "vertexcolor", "ignorez"}
+
+function modelbuilder.CreateModel(wep, modelData)
+	-- handle a model being added to the view or world model
+	if modelData.type == "Model" and modelData.model and modelData.model ~= ""
+		and (not IsValid(modelData.modelEnt) or modelData.createdModel ~= modelData.model)
+		and string.find(modelData.model, ".mdl") and file.Exists (modelData.model, "GAME")
+	then
+		modelData.modelEnt = ClientsideModel(modelData.model, RENDER_GROUP_VIEW_MODEL_OPAQUE) --todo check correct render group
+
+		if IsValid(modelData.modelEnt) then
+			modelData.modelEnt:SetPos(wep:GetPos())
+			modelData.modelEnt:SetAngles(wep:GetAngles())
+			modelData.modelEnt:SetParent(wep)
+			modelData.modelEnt:SetNoDraw(true)
+			modelData.createdModel = modelData.model
+		else
+			modelData.modelEnt = nil
+		end
+
+	-- handle a sprite being added to the view or world model
+	elseif modelData.type == "Sprite" and modelData.sprite and modelData.sprite ~= ""
+		and (not modelData.spriteMaterial or modelData.createdSprite ~= modelData.sprite)
+		and file.Exists ("materials/" .. modelData.sprite .. ".vmt", "GAME")
+	then
+		local name = modelData.sprite .. "-"
+		local params = {
+			["$basetexture"] = modelData.sprite
+		}
+
+		-- make sure we create a unique name based on the selected options
+		for i = 1, #propertiesMaterial do
+			local property = propertiesMaterial[i]
+
+			if modelData[property] then
+				params["$" .. property] = 1
+				name = name .. "1"
+			else
+				name = name .. "0"
+			end
+		end
+
+		modelData.createdSprite = modelData.sprite
+		modelData.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
+	end
+end
+
+function modelbuilder.ResetBonePositions(viewModel)
+	local boneCount = viewModel:GetBoneCount()
+
+	if not boneCount then return end
+
+	for i = 0, boneCount do
+		viewModel:ManipulateBoneScale(i, Vector(1, 1, 1))
+		viewModel:ManipulateBoneAngles(i, Angle(0, 0, 0))
+		viewModel:ManipulateBonePosition(i, Vector(0, 0, 0))
+	end
+end
+
+function modelbuilder.UpdateBonePositions(wep, viewModel)
+	if not wep.ViewModelBoneMods then
+		modelbuilder.ResetBonePositions(viewModel)
+
+		return
+	end
+
+	local allBones = {}
+
+	for i = 0, viewModel:GetBoneCount() do
+		local bonename = viewModel:GetBoneName(i)
+
+		if wep.ViewModelBoneMods[bonename] then
+			allBones[bonename] = wep.ViewModelBoneMods[bonename]
+		else
+			allBones[bonename] = {
+				scale = Vector(1, 1, 1),
+				pos = Vector(0, 0, 0),
+				angle = Angle(0, 0, 0)
+			}
+		end
+	end
+
+	for identifier, dataTable in pairs(allBones) do
+		local bone = viewModel:LookupBone(identifier)
+
+		if not bone then continue end
+
+		local s = Vector(dataTable.scale.x, dataTable.scale.y, dataTable.scale.z)
+		local p = Vector(dataTable.pos.x, dataTable.pos.y, dataTable.pos.z)
+		local ms = Vector(1, 1, 1)
+
+		local cur = viewModel:GetBoneParent(bone)
+
+		while (cur >= 0) do
+			local pScale = allBones[viewModel:GetBoneName(cur)].scale
+
+			ms = ms * pScale
+			cur = viewModel:GetBoneParent(cur)
+		end
+
+		s = s * ms
+
+		if viewModel:GetManipulateBoneScale(bone) ~= s then
+			viewModel:ManipulateBoneScale(bone, s)
+		end
+
+		if viewModel:GetManipulateBoneAngles(bone) ~= dataTable.angle then
+			viewModel:ManipulateBoneAngles(bone, dataTable.angle)
+		end
+
+		if viewModel:GetManipulateBonePosition(bone) ~= p then
+			viewModel:ManipulateBonePosition(bone, p)
+		end
+	end
+end
+
+function modelbuilder.BuildRenderOrder(elements, cachedRenderOrder)
+	if cachedRenderOrder then
+		return cachedRenderOrder
+	end
+
+	local newRenderOrder = {}
+
+	for identifier, dataTable in pairs(elements) do
+		if dataTable.type == "Model" then
+			table.insert(newRenderOrder, 1, identifier)
+		elseif dataTable.type == "Sprite" or dataTable.type == "Quad" then
+			table.insert(newRenderOrder, identifier)
+		end
+	end
+
+	return newRenderOrder
+end
+
+function modelbuilder.GetBoneOrientation(wep, baseDataTable, dataTable, ent, boneOverride)
+	local bone, pos, ang
+
+	if dataTable.rel and dataTable.rel ~= "" then
+		local tbl = baseDataTable[dataTable.rel]
+
+		if not tbl then return end
+
+		-- Technically, if there exists an element with the same name as a bone
+		-- you can get in an infinite loop. Let's just hope nobody's that stupid.
+		pos, ang = modelbuilder.GetBoneOrientation(wep, baseDataTable, tbl, ent)
+
+		if not pos then return end
+
+		pos = pos + ang:Forward() * tbl.pos.x + ang:Right() * tbl.pos.y + ang:Up() * tbl.pos.z
+
+		ang:RotateAroundAxis(ang:Up(), tbl.angle.y)
+		ang:RotateAroundAxis(ang:Right(), tbl.angle.p)
+		ang:RotateAroundAxis(ang:Forward(), tbl.angle.r)
+	else
+		bone = ent:LookupBone(boneOverride or dataTable.bone)
+
+		if not bone then return end
+
+		pos, ang = Vector(0,0,0), Angle(0,0,0)
+
+		local matrix = ent:GetBoneMatrix(bone)
+
+		if matrix then
+			pos, ang = matrix:GetTranslation(), matrix:GetAngles()
+		end
+
+		local owner = wep:GetOwner()
+
+		if IsValid(owner) and owner:IsPlayer() and ent == owner:GetViewModel() and wep.ViewModelFlip then
+			ang.r = -ang.r -- Fixes mirrored models
+		end
+	end
+
+	return pos, ang
+end
+
+function modelbuilder.Render(wep, renderOrder, elements, boneEntity)
+	for i = 1, #renderOrder do
+		local identifier = renderOrder[i]
+		local modelData = elements[identifier]
+
+		if modelData.hide or not modelData.bone then continue end
+
+		local model = modelData.modelEnt
+		local sprite = modelData.spriteMaterial
+
+		local pos, ang = modelbuilder.GetBoneOrientation(wep, elements, modelData, boneEntity)
+
+		if not pos then continue end
+
+		if modelData.type == "Model" and IsValid(model) then
+			model:SetPos(pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z)
+			ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
+			ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
+			ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
+
+			model:SetAngles(ang)
+
+			local matrix = Matrix()
+			matrix:Scale(modelData.size)
+
+			model:EnableMatrix("RenderMultiply", matrix)
+			model:SetMaterial(modelData.material)
+
+			if modelData.skin then
+				model:SetSkin(modelData.skin)
+			end
+
+			if modelData.bodygroup then
+				for bodygroup, value in pairs(modelData.bodygroup) do
+					wep:SetBodygroup(bodygroup, value)
+				end
+			end
+
+			if modelData.surpresslightning then
+				render.SuppressEngineLighting(true)
+			end
+
+			render.SetColorModulation(modelData.color.r / 255, modelData.color.g / 255, modelData.color.b / 255)
+			render.SetBlend(modelData.color.a / 255)
+
+			model:DrawModel()
+
+			render.SetBlend(1)
+			render.SetColorModulation(1, 1, 1)
+
+			if modelData.surpresslightning then
+				render.SuppressEngineLighting(false)
+			end
+		elseif modelData.type == "Sprite" and sprite then
+			local drawpos = pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z
+			render.SetMaterial(sprite)
+			render.DrawSprite(drawpos, modelData.size.x, modelData.size.y, modelData.color)
+		elseif modelData.type == "Quad" and modelData.draw_func then
+			local drawpos = pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z
+			ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
+			ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
+			ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
+
+			cam.Start3D2D(drawpos, ang, modelData.size)
+				modelData.draw_func(wep)
+			cam.End3D2D()
+		end
+	end
+end

@@ -121,6 +121,15 @@ SWEP.HotReloadableKeys = {}
 -- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
 SWEP.idleResetFix = false
 
+-- It set to true, hands are drawn in the view model
+SWEP.UseHands = false
+
+-- If set to true, the default view model of the weapon is drawn
+SWEP.ShowViewModel = true
+
+-- If set to true, the default world model of the weapon is drawn
+SWEP.ShowWorldModel = true
+
 --   YE OLDE SWEP STUFF
 
 if CLIENT then
@@ -659,6 +668,69 @@ if CLIENT then
 		self.fCurrentSysTime = SysTime()
 	end
 
+	function SWEP:AddCustomViewModel(identifier, modelData)
+		self.VElements = self.VElements or {}
+		self.VElements[identifier] = modelData
+
+		modelbuilder.CreateModel(self, self.VElements[identifier])
+	end
+
+	function SWEP:AddCustomWorldModel(identifier, modelData)
+		self.WElements = self.WElements or {}
+		self.WElements[identifier] = modelData
+
+		modelbuilder.CreateModel(self, self.WElements[identifier])
+	end
+
+	-- @param string identifier The identifier for this bone
+	function SWEP:ApplyViewModelBoneMods(identifier, modelData)
+		self.ViewModelBoneMods = self.ViewModelBoneMods or {}
+		self.ViewModelBoneMods[identifier] = modelData
+	end
+
+	function SWEP:ViewModelDrawn()
+		if not self.VElements then return end
+
+		local viewModel = self:GetOwner():GetViewModel()
+
+		if not IsValid(viewModel) then return end
+
+		modelbuilder.UpdateBonePositions(self, viewModel)
+		--self:UpdateBonePositions(viewModel)
+
+		-- we build a render order because sprites need to be drawn after models
+		self.VRenderOrder = modelbuilder.BuildRenderOrder(self.VElements, self.VRenderOrder)
+
+		modelbuilder.Render(self, self.VRenderOrder, self.VElements, viewModel)
+	end
+
+	function SWEP:DrawWorldModel()
+		local client = LocalPlayer()
+
+		-- draw view model when spectating player
+		if client == OBS_MODE_IN_EYE and client:GetObserverTarget() == self:GetOwner() then return end
+
+		if self.ShowWorldModel then
+			self:DrawModel()
+		end
+
+		if not self.WElements then return end
+
+		-- we build a render order because sprites need to be drawn after models
+		self.WRenderOrder = modelbuilder.BuildRenderOrder(self.WElements, self.WRenderOrder)
+
+		local boneEnt
+
+		if IsValid(self:GetOwner()) then
+			boneEnt = self:GetOwner()
+		else
+			-- when the weapon is dropped
+			boneEnt = self
+		end
+
+		modelbuilder.Render(self, self.WRenderOrder, self.WElements, boneEnt)
+	end
+
 	---
 	-- This hook can be used by swep addons to populate the equipment settings page
 	-- with custom convars. The parent is the submenu, where a new form has to
@@ -1192,10 +1264,28 @@ function SWEP:Initialize()
 	end
 
 	self:SetDeploySpeed(self.DeploySpeed)
+	self:SetHoldType(self.HoldType or "pistol")
 
-	-- compat for gmod update
-	if self.SetHoldType then
-		self:SetHoldType(self.HoldType or "pistol")
+	-- handle custom view and world model initialization
+	if CLIENT then
+		local owner = self:GetOwner()
+
+		if not IsValid(owner) then return end
+
+		local viewModel = owner:GetViewModel()
+
+		if not IsValid(viewModel) then return end
+
+		modelbuilder.ResetBonePositions(viewModel)
+
+		-- Init viewmodel visibility
+		if self.ShowViewModel then
+			viewModel:SetColor(Color(255,255,255,255))
+		else
+			-- view model resets to render mode 0 every frame so we just apply
+			-- a debug material to prevent it from drawing
+			viewModel:SetMaterial("Debug/hsv")
+		end
 	end
 end
 
@@ -1237,10 +1327,10 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
-	local vm = self:GetOwner():GetViewModel()
+	local viewModel = self:GetOwner():GetViewModel()
 
-	if self.idleResetFix and self.ViewModel and vm:GetCycle() >= 1 and not IsIdleActivity(vm) then
-		self:SendWeaponAnim( self.IdleAnim or ACT_VM_IDLE )
+	if self.idleResetFix and self.ViewModel and viewModel:GetCycle() >= 1 and not IsIdleActivity(viewModel) then
+		self:SendWeaponAnim(self.IdleAnim or ACT_VM_IDLE)
 	end
 
 	if CLIENT then

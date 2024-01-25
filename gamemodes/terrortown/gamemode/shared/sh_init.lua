@@ -583,6 +583,7 @@ include("ttt2/libraries/entspawnscript.lua")
 include("ttt2/libraries/bodysearch.lua")
 include("ttt2/libraries/keyhelp.lua")
 include("ttt2/libraries/marker_vision.lua")
+include("ttt2/libraries/modelbuilder.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
