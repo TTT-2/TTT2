@@ -683,9 +683,9 @@ if CLIENT then
 	end
 
 	-- @param string identifier The identifier for this bone
-	function SWEP:ApplyViewModelBoneMods(identifier, modelData)
+	function SWEP:ApplyViewModelBoneMods(identifier, boneData)
 		self.ViewModelBoneMods = self.ViewModelBoneMods or {}
-		self.ViewModelBoneMods[identifier] = modelData
+		self.ViewModelBoneMods[identifier] = boneData
 	end
 
 	function SWEP:ViewModelDrawn()
@@ -696,7 +696,6 @@ if CLIENT then
 		if not IsValid(viewModel) then return end
 
 		modelbuilder.UpdateBonePositions(self, viewModel)
-		--self:UpdateBonePositions(viewModel)
 
 		-- we build a render order because sprites need to be drawn after models
 		self.VRenderOrder = modelbuilder.BuildRenderOrder(self.VElements, self.VRenderOrder)
