@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
+- Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 
 ### Changed
 
@@ -51,6 +52,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
 - All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
+- Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
 
 ### Fixed
 
