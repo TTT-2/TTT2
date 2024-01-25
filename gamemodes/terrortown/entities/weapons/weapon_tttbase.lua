@@ -1321,7 +1321,7 @@ function SWEP:Initialize()
 
 		-- Init viewmodel visibility
 		if self.ShowViewModel then
-			viewModel:SetColor(Color(255,255,255,255))
+			viewModel:SetColor(Color(255, 255, 255, 255))
 		else
 			-- view model resets to render mode 0 every frame so we just apply
 			-- a debug material to prevent it from drawing
