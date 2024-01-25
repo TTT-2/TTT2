@@ -668,6 +668,12 @@ if CLIENT then
 		self.fCurrentSysTime = SysTime()
 	end
 
+	---
+	-- Adds a custom view model.
+	-- @note Multiple view models can be added, they are all rendered at once
+	-- @param string identifier The name of the added view model
+	-- @param ModelData modelData The model data table
+	-- @realm client
 	function SWEP:AddCustomViewModel(identifier, modelData)
 		self.VElements = self.VElements or {}
 		self.VElements[identifier] = modelData
@@ -675,6 +681,12 @@ if CLIENT then
 		modelbuilder.CreateModel(self, self.VElements[identifier])
 	end
 
+	---
+	-- Adds a custom world model.
+	-- @note Multiple world models can be added, they are all rendered at once
+	-- @param string identifier The name of the added world model
+	-- @param ModelData modelData The model data table
+	-- @realm client
 	function SWEP:AddCustomWorldModel(identifier, modelData)
 		self.WElements = self.WElements or {}
 		self.WElements[identifier] = modelData
@@ -682,18 +694,23 @@ if CLIENT then
 		modelbuilder.CreateModel(self, self.WElements[identifier])
 	end
 
+	---
+	-- Adds modifications to view model bones.
 	-- @param string identifier The identifier for this bone
+	-- @param BoneData boneData The bone data table
+	-- @realm client
 	function SWEP:ApplyViewModelBoneMods(identifier, boneData)
 		self.ViewModelBoneMods = self.ViewModelBoneMods or {}
 		self.ViewModelBoneMods[identifier] = boneData
 	end
 
-	function SWEP:ViewModelDrawn()
+	---
+	-- Called straight after the view model has been drawn. This is called before
+	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
+	-- @param Entity viewModel Player's view model
+	-- @realm client
+	function SWEP:ViewModelDrawn(viewModel)
 		if not self.VElements then return end
-
-		local viewModel = self:GetOwner():GetViewModel()
-
-		if not IsValid(viewModel) then return end
 
 		modelbuilder.UpdateBonePositions(self, viewModel)
 
@@ -703,6 +720,9 @@ if CLIENT then
 		modelbuilder.Render(self, self.VRenderOrder, self.VElements, viewModel)
 	end
 
+	---
+	-- Called when we are about to draw the world model.
+	-- @realm client
 	function SWEP:DrawWorldModel()
 		local client = LocalPlayer()
 
@@ -730,6 +750,8 @@ if CLIENT then
 		modelbuilder.Render(self, self.WRenderOrder, self.WElements, boneEnt)
 	end
 
+	---
+	-- @realm client
 	function SWEP:Holster()
 		local owner = self:GetOwner()
 
@@ -744,6 +766,8 @@ if CLIENT then
 		return true
 	end
 
+	---
+	-- @realm client
 	function SWEP:OnRemove()
 		self:Holster()
 	end
