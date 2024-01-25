@@ -53,6 +53,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Role avoidance is no longer an option
 - All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
 - Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
+- Spectator name labels now use a skin font and scaling (by @EntranceJew)
 
 ### Fixed
 
