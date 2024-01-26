@@ -8,8 +8,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ENT.Type = "anim"
-ENT.Model = Model("models/props_lab/reciever01b.mdl")
+ENT.Base = "ttt_base_placeable"
+ENT.Model = "models/props_lab/reciever01b.mdl"
 ENT.CanHavePrints = false
 ENT.CanUseKey = true
 
@@ -18,13 +18,7 @@ ENT.CanUseKey = true
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
-	if SERVER then
-		self:PhysicsInit(SOLID_VPHYSICS)
-	end
-
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_INTERACTIVE)
+	self.BaseClass.Initialize(self)
 
 	if SERVER then
 		self:SetMaxHealth(100)
@@ -35,14 +29,6 @@ function ENT:Initialize()
 	-- can pick this up if we own it
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
-
-		local weptbl = util.WeaponForClass("weapon_ttt_decoy")
-
-		if weptbl and weptbl.Kind then
-			self.WeaponKind = weptbl.Kind
-		else
-			self.WeaponKind = WEAPON_EQUIP2
-		end
 	end
 end
 
@@ -50,7 +36,9 @@ end
 -- @param Player activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if not IsValid(activator) or not activator:HasTeam() or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
+	if not IsValid(activator) or not activator:HasTeam()
+		or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam()
+	then return end
 
 	-- picks up weapon, switches if possible and needed, returns weapon if successful
 	local wep = activator:SafePickupWeaponClass("weapon_ttt_decoy", true)
@@ -64,36 +52,21 @@ function ENT:UseOverride(activator)
 	self:Remove()
 end
 
-local zapsound = Sound("npc/assassin/ball_zap1.wav")
-
----
--- @param CTakeDamageInfo dmginfo
--- @realm shared
-function ENT:OnTakeDamage(dmginfo)
-	self:TakePhysicsDamage(dmginfo)
-	self:SetHealth(self:Health() - dmginfo:GetDamage())
-
-	if self:Health() > 0 then return end
-
-	self:Remove()
-
-	local effect = EffectData()
-	effect:SetOrigin(self:GetPos())
-
-	util.Effect("cball_explode", effect)
-	sound.Play(zapsound, self:GetPos())
-
-	if IsValid(self:GetOwner()) then
-		LANG.Msg(self:GetOwner(), "decoy_broken")
-	end
-end
-
----
 -- @realm shared
 function ENT:OnRemove()
-	if not IsValid(self:GetOwner()) then return end
+	if not IsValid(self:GetOriginator()) then return end
 
-	self:GetOwner().decoy = nil
+	self:GetOriginator().decoy = nil
+end
+
+if SERVER then
+	function ENT:WasDestroyed()
+		local originator = self:GetOriginator()
+
+		if not IsValid(originator) then return end
+
+		LANG.Msg(originator, "decoy_broken", nil, MSG_MSTACK_WARN)
+	end
 end
 
 if CLIENT then

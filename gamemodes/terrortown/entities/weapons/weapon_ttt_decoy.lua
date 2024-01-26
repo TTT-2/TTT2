@@ -27,10 +27,10 @@ SWEP.HoldType = "normal"
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/props_lab/reciever01b.mdl"
 
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
+SWEP.Primary.ClipSize = 1
+SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = true
-SWEP.Primary.Ammo = "none"
+SWEP.Primary.Ammo = "slam"
 SWEP.Primary.Delay = 1.0
 
 SWEP.Secondary.ClipSize = -1
@@ -50,121 +50,39 @@ SWEP.NoSights = true
 SWEP.InvisibleViewModel = true
 
 ---
--- @ignore
+-- @realm shared
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	if SERVER then
-		self:DecoyStick()
+	if SERVER and self:CanPrimaryAttack() then
+		local decoy = ents.Create("ttt_decoy")
+
+		if decoy:ThrowEntity(self:GetOwner(), Angle(90, 0, 0)) then
+			decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
+
+			self:PlacedDecoy(decoy)
+		end
 	end
 end
 
 ---
--- @ignore
+-- @realm shared
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	if SERVER then
-		self:DecoyStick()
-	end
-end
-
-local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
----
--- Drop is disabled to prevent traitors from placing the decoy in unreachable places.
--- @realm shared
-function SWEP:DecoyDrop()
-	if SERVER then
-		local ply = self:GetOwner()
-
-		if not IsValid(ply) or self.Planted then return end
-
-		local vsrc = ply:GetShootPos()
-		local vang = ply:GetAimVector()
-		local vvel = ply:GetVelocity()
-
-		local vthrow = vvel + vang * 200
+	if SERVER and self:CanPrimaryAttack() then
 		local decoy = ents.Create("ttt_decoy")
 
-		if not IsValid(decoy) then return end
+		if decoy:StickEntity(self:GetOwner()) then
+			decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
 
-		decoy:SetPos(vsrc + vang * 10)
-		decoy:SetOwner(ply)
-		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
-		decoy:Spawn()
-		decoy:PointAtEntity(ply)
-
-		local ang = decoy:GetAngles()
-		ang:RotateAroundAxis(ang:Right(), 90)
-
-		decoy:SetAngles(ang)
-		decoy:PhysWake()
-
-		local phys = decoy:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:SetVelocity(vthrow)
+			self:PlacedDecoy(decoy)
 		end
-
-		self:PlacedDecoy(decoy)
 	end
-
-	self:EmitSound(throwsound)
 end
+
 
 if SERVER then
-	---
-	-- @realm server
-	function SWEP:DecoyStick()
-		local ply = self:GetOwner()
-
-		if not IsValid(ply) or self.Planted then return end
-
-		local ignore = {ply, self}
-		local spos = ply:GetShootPos()
-		local epos = spos + ply:GetAimVector() * 80
-
-		local tr = util.TraceLine({
-			start = spos,
-			endpos = epos,
-			filter = ignore,
-			mask = MASK_SOLID
-		})
-
-		if not tr.HitWorld then return end
-
-		local decoy = ents.Create("ttt_decoy")
-		if not IsValid(decoy) then return end
-
-		decoy:PointAtEntity(ply)
-
-		local tr_ent = util.TraceEntity({
-			start = spos,
-			endpos = epos,
-			filter = ignore,
-			mask = MASK_SOLID
-		}, decoy)
-
-		if not tr_ent.HitWorld then return end
-
-		local ang = tr_ent.HitNormal:Angle()
-
-		decoy:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
-		decoy:SetAngles(ang)
-		decoy:SetOwner(ply)
-		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
-		decoy:Spawn()
-
-		local phys = decoy:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:EnableMotion(false)
-		end
-
-		decoy.IsOnWall = true
-
-		self:PlacedDecoy(decoy)
-	end
-
 	-- add hook that changes all decoys
 	hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
 		if not IsValid(ply.decoy) then return end
@@ -183,8 +101,6 @@ function SWEP:PlacedDecoy(decoy)
 
 	if not self:CanPrimaryAttack() then
 		self:Remove()
-
-		self.Planted = true
 	end
 end
 

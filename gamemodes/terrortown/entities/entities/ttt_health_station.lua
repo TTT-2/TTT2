@@ -6,13 +6,12 @@
 if SERVER then
 	AddCSLuaFile()
 else
-	-- this entity can be DNA-sampled so we need some display info
 	ENT.Icon = "vgui/ttt/icon_health"
 	ENT.PrintName = "hstation_name"
 end
 
-ENT.Type = "anim"
-ENT.Model = Model("models/props/cs_office/microwave.mdl")
+ENT.Base = "ttt_base_placeable"
+ENT.Model = "models/props/cs_office/microwave.mdl"
 
 --ENT.CanUseKey = true
 ENT.CanHavePrints = true
@@ -26,13 +25,10 @@ ENT.HealRate = 1
 ENT.HealFreq = 0.2
 
 ---
--- @accessor Player
--- @realm shared
-AccessorFunc(ENT, "Placer", "Placer")
-
----
 -- @realm shared
 function ENT:SetupDataTables()
+	self.BaseClass.SetupDataTables(self)
+
 	self:NetworkVar("Int", 0, "StoredHealth")
 end
 
@@ -41,14 +37,11 @@ end
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_BBOX)
+	self.BaseClass.Initialize(self)
 
 	local b = 32
 
 	self:SetCollisionBounds(Vector(-b, -b, -b), Vector(b,b,b))
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	if SERVER then
 		self:SetMaxHealth(200)
@@ -64,7 +57,6 @@ function ENT:Initialize()
 	self:SetHealth(200)
 	self:SetColor(Color(180, 180, 250, 255))
 	self:SetStoredHealth(200)
-	self:SetPlacer(nil)
 
 	self.NextHeal = 0
 	self.fingerprints = {}
@@ -179,36 +171,12 @@ if SERVER then
 		nextcharge = CurTime() + self.RechargeFreq
 	end
 
-	---
-	-- @realm server
-	local ttt_damage_own_healthstation = CreateConVar("ttt_damage_own_healthstation", "0", FCVAR_NONE, "0 as detective cannot damage their own health station")
+	function ENT:WasDestroyed()
+		local originator = self:GetOriginator()
 
-	---
-	-- traditional equipment destruction effects
-	-- @param CTakeDamageInfo dmginfo
-	-- @realm server
-	function ENT:OnTakeDamage(dmginfo)
-		if dmginfo:GetAttacker() == self:GetPlacer() and not ttt_damage_own_healthstation:GetBool() then return end
+		if not IsValid(originator) then return end
 
-		self:TakePhysicsDamage(dmginfo)
-		self:SetHealth(self:Health() - dmginfo:GetDamage())
-
-		local att = dmginfo:GetAttacker()
-		local placer = self:GetPlacer()
-
-		if IsPlayer(att) then
-			DamageLog(Format("DMG: \t %s [%s] damaged health station [%s] for %d dmg", att:Nick(), att:GetRoleString(), IsPlayer(placer) and placer:Nick() or "<disconnected>", dmginfo:GetDamage()))
-		end
-
-		if self:Health() > 0 then return end
-
-		self:Remove()
-
-		util.EquipmentDestroyed(self:GetPos())
-
-		if IsValid(self:GetPlacer()) then
-			LANG.Msg(self:GetPlacer(), "hstation_broken")
-		end
+		LANG.Msg(originator, "hstation_broken", nil, MSG_MSTACK_WARN)
 	end
 else
 	local TryT = LANG.TryTranslation
