@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Added custom world and view models to some builtin weapons (by @TimGoll)
+  - added for: radio, beacon, decoy, binoculars, visualizer
 
 ### Changed
 
