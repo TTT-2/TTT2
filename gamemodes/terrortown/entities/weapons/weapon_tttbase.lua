@@ -710,6 +710,15 @@ if CLIENT then
 	-- @param Entity viewModel Player's view model
 	-- @realm client
 	function SWEP:ViewModelDrawn(viewModel)
+		if self.ShowViewModel then
+			-- this resets the material to the default material
+			viewModel:SetMaterial("")
+		else
+			-- view model resets to render mode 0 every frame so we just apply
+			-- a debug material to prevent it from drawing
+			viewModel:SetMaterial("vgui/hsv")
+		end
+
 		if not self.VElements then return end
 
 		modelbuilder.UpdateBonePositions(self, viewModel)
@@ -748,28 +757,6 @@ if CLIENT then
 		end
 
 		modelbuilder.Render(self, self.WRenderOrder, self.WElements, boneEnt)
-	end
-
-	---
-	-- @realm client
-	function SWEP:Holster()
-		local owner = self:GetOwner()
-
-		if IsValid(owner) then
-			local viewModel = owner:GetViewModel()
-
-			if IsValid(viewModel) then
-				modelbuilder.ResetBonePositions(viewModel)
-			end
-		end
-
-		return true
-	end
-
-	---
-	-- @realm client
-	function SWEP:OnRemove()
-		self:Holster()
 	end
 
 	---
@@ -1306,26 +1293,6 @@ function SWEP:Initialize()
 
 	self:SetDeploySpeed(self.DeploySpeed)
 	self:SetHoldType(self.HoldType or "pistol")
-
-	-- handle custom view and world model initialization
-	if CLIENT then
-		local owner = self:GetOwner()
-
-		if not IsValid(owner) then return end
-
-		local viewModel = owner:GetViewModel()
-
-		if not IsValid(viewModel) then return end
-
-		-- Init viewmodel visibility
-		if self.ShowViewModel then
-			viewModel:SetColor(Color(255, 255, 255, 255))
-		else
-			-- view model resets to render mode 0 every frame so we just apply
-			-- a debug material to prevent it from drawing
-			viewModel:SetMaterial("Debug/hsv")
-		end
-	end
 end
 
 local idle_activities = {
