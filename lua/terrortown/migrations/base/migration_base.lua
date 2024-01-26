@@ -7,6 +7,7 @@ MIGRATION.Downgrade = nil
 ---
 -- Checks if upgrade and downgrade functions are available
 -- @return boolean
+-- @realm shared
 function MIGRATION:IsValid()
 	return isfunction(self.Upgrade) and isfunction(self.Downgrade)
 end
