@@ -54,8 +54,8 @@ SWEP.ViewModelFOV = 70
 SWEP.ViewModelFlip = false
 
 SWEP.UseHands = true
-SWEP.ShowViewModel = false
-SWEP.ShowWorldModel = false
+SWEP.ShowDefaultViewModel = false
+SWEP.ShowDefaultWorldModel = false
 
 ---
 -- @realm shared

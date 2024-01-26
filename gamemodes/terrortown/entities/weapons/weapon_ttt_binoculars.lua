@@ -57,7 +57,7 @@ SWEP.ZoomLevels = {
 SWEP.ProcessingDelay = 5
 SWEP.decayRate = 0.5
 
-SWEP.ShowWorldModel = false
+SWEP.ShowDefaultWorldModel = false
 
 ---
 -- @ignore
