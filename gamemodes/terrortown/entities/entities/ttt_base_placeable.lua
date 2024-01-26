@@ -1,0 +1,269 @@
+---
+-- @class ENT
+-- @desc A base that handles everything around placeable and destroyable entities
+-- @section ttt_base_placeable
+
+if SERVER then
+	AddCSLuaFile()
+end
+
+ENT.Type = "anim"
+
+---
+-- @realm shared
+function ENT:Initialize()
+	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetSolid(SOLID_VPHYSICS)
+	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+
+	if SERVER then
+		self:PrecacheGibs()
+	end
+
+	local phys = self:GetPhysicsObject()
+
+	if IsValid(phys) then
+		phys:SetMass(40)
+	end
+
+	self:SetHealth(10)
+end
+
+function ENT:SetupDataTables()
+	self:NetworkVar("Entity", 0, "Originator")
+end
+
+if SERVER then
+	local soundRumble = {
+		Sound("physics/concrete/concrete_break2.wav"),
+		Sound("physics/concrete/concrete_break3.wav"),
+	}
+
+	local soundBreak = {
+		Sound("physics/metal/metal_box_break1.wav"),
+		Sound("physics/metal/metal_box_break2.wav"),
+	}
+
+	local soundGlass = {
+		Sound("physics/glass/glass_bottle_break1.wav"),
+		Sound("physics/glass/glass_bottle_break2.wav"),
+		Sound("physics/glass/glass_cup_break1.wav"),
+		Sound("physics/glass/glass_cup_break2.wav"),
+		Sound("physics/glass/glass_pottery_break1.wav"),
+		Sound("physics/glass/glass_pottery_break2.wav"),
+		Sound("physics/glass/glass_pottery_break3.wav"),
+		Sound("physics/glass/glass_pottery_break4.wav"),
+	}
+
+	local soundWeld = Sound("weapons/c4/c4_plant.wav")
+
+	local soundThrow = Sound("Weapon_SLAM.SatchelThrow")
+
+	AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
+	AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
+
+	function ENT:OnTakeDamage(dmgInfo)
+		-- we add a flag here because stuff can happen in the WasDestroyed
+		-- hook that could create in infinite loop that crashes the game
+		if self.isDestroyed then return end
+
+		if not self:IsWeldedToSurface() then
+			self:TakePhysicsDamage(dmgInfo)
+		end
+
+		local pos = self:GetPos()
+		local amountDamage = dmgInfo:GetDamage()
+		local attacker = dmgInfo:GetAttacker()
+		local originator = self:GetOriginator()
+
+		self:SetHealth(self:Health() - amountDamage)
+
+		if IsValid(attacker) and attacker:IsPlayer() then
+			DamageLog(Format(
+				"DMG: \t %s [%s] damaged '%s' [owner: %s] for %d dmg",
+				attacker:Nick(),
+				attacker:GetRoleString(),
+				self:GetClass(),
+				(IsValid(originator) and originator:IsPlayer()) and originator:Nick() or "<disconnected>",
+				amountDamage
+			))
+		end
+
+		if self:Health() <= 0 then
+			self:SetSolid(SOLID_NONE)
+
+			self:GibBreakClient(Vector(0, 0, 100))
+
+			local effect = EffectData()
+			effect:SetOrigin(pos)
+
+			util.Effect("cball_explode", effect)
+
+			sound.Play(table.Random(soundRumble), pos, 75)
+			sound.Play(table.Random(soundBreak), pos, 50)
+			sound.Play(table.Random(soundGlass), pos, 65)
+
+			self.isDestroyed = true
+
+			local decal = self:WasDestroyed(pos, dmgInfo) or "FadingScorch"
+
+			local vecHitNormal = self:GetHitNormal()
+
+			if vecHitNormal then
+				local tr = util.TraceLine({
+					start = pos,
+					endpos = pos - vecHitNormal * 256,
+					filter = {self},
+					mask = MASK_SOLID
+				})
+
+				util.Decal(decal, tr.HitPos + tr.HitNormal, tr.HitPos - tr.HitNormal, self)
+			else
+				util.PaintDown(pos, decal, self)
+			end
+
+			self:Remove()
+		else
+			local effect = EffectData()
+			effect:SetOrigin(pos)
+
+			util.Effect("ThumperDust", effect)
+		end
+	end
+
+	function ENT:WasDestroyed(pos, dmgInfo)
+
+	end
+
+	function ENT:WeldToSurface(stateWelding)
+		self.stateWelding = stateWelding
+
+		if stateWelding then
+			local vecHitNormal = self:GetHitNormal()
+
+			if vecHitNormal then
+				self:SetAngles(vecHitNormal:Angle() + (self:GetStickRotation() or Angle(0, 0, 0)))
+			end
+
+			local pos = self:GetPos()
+			local ignore = player.GetAll()
+
+			ignore[#ignore + 1] = {self}
+
+			local tr = util.TraceEntity({
+				start = pos,
+				endpos = pos - Vector(0, 0, 16),
+				filter = ignore,
+				mask = MASK_SOLID
+			}, self)
+
+			sound.Play(soundWeld, pos, 75)
+
+			if tr.Hit and (IsValid(tr.Entity) or tr.HitWorld) then
+				local phys = self:GetPhysicsObject()
+
+				if IsValid(phys) then
+					if tr.HitWorld then
+						phys:EnableMotion(false)
+					else
+						self.originalMass = phys:GetMass()
+						phys:SetMass(150)
+					end
+				end
+
+				-- only weld to objects we cannot pick up
+				local entphys = tr.Entity:GetPhysicsObject()
+				if IsValid(entphys) and entphys:GetMass() > CARRY_WEIGHT_LIMIT then
+					constraint.Weld(self, tr.Entity, 0, 0, 0, true)
+				end
+			end
+		else
+			constraint.RemoveConstraints(self, "Weld")
+
+			local phys = self:GetPhysicsObject()
+
+			if IsValid(phys) then
+				phys:EnableMotion(true)
+				phys:SetMass(self.originalMass or 10)
+			end
+		end
+	end
+
+	function ENT:IsWeldedToSurface()
+		return self.stateWelding or false
+	end
+
+	function ENT:ThrowEntity(ply, rotationalOffset)
+		ply:SetAnimation(PLAYER_ATTACK1)
+
+		rotationalOffset = rotationalOffset or Angle(0, 0, 0)
+
+		local posThrow = ply:GetShootPos() - Vector(0, 0, 15)
+		local vecAim = ply:GetAimVector()
+		local velocity = ply:GetVelocity()
+		local velocityThrow = velocity + vecAim * 250
+
+		self:SetPos(posThrow + vecAim * 10)
+		self:SetOriginator(ply)
+		self:Spawn()
+		self:PointAtEntity(ply)
+
+		local ang = self:GetAngles()
+		ang:RotateAroundAxis(ang:Right(), rotationalOffset.pitch)
+		ang:RotateAroundAxis(ang:Up(), rotationalOffset.yaw)
+		ang:RotateAroundAxis(ang:Forward(), rotationalOffset.roll)
+
+		self:SetAngles(ang)
+		self:PhysWake()
+
+		local phys = self:GetPhysicsObject()
+
+		if IsValid(phys) then
+			phys:SetVelocity(velocityThrow)
+		end
+
+		self:EmitSound(soundThrow)
+
+		return true
+	end
+
+	function ENT:StickEntity(ply, rotationalOffset, angleCondition)
+		ply:SetAnimation(PLAYER_ATTACK1)
+
+		rotationalOffset = rotationalOffset or Angle(0, 0, 0)
+
+		local pos = ply:GetShootPos()
+
+		local tr = util.TraceLine({
+			start = pos,
+			endpos = pos + ply:GetAimVector() * 100,
+			mask = MASK_NPCWORLDSTATIC,
+			filter = {self, ply}
+		})
+
+		if not tr.Hit then
+			return false
+		end
+
+		self:SetPos(tr.HitPos)
+		self:SetOriginator(ply)
+		self:Spawn()
+		self:SetHitNormal(tr.HitNormal)
+
+		if tr.HitNormal.x == 0 and tr.HitNormal.y == 0 and tr.HitNormal.z == 1 then
+			--print(rotationalOffset)
+			--rotationalOffset:RotateAroundAxis(Vector(0, 0, 1), ply:GetAngles().yaw)
+			--print(rotationalOffset)
+
+			rotationalOffset.yaw = rotationalOffset.yaw + ply:GetAngles().yaw + 180
+		end
+
+		if not angleCondition or math.abs(tr.HitNormal:Angle().pitch) >= angleCondition then
+			self:SetStickRotation(rotationalOffset)
+		end
+
+		self:WeldToSurface(true)
+
+		return true
+	end
+end
