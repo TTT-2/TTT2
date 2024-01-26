@@ -12,7 +12,7 @@ else
 end
 
 ENT.Type = "anim"
-ENT.Model = Model("models/props/cs_office/radio.mdl")
+ENT.Model = "models/props/cs_office/radio.mdl"
 
 ENT.CanUseKey = true
 ENT.CanHavePrints = false

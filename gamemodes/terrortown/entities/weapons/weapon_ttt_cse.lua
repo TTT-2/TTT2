@@ -6,15 +6,11 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "grenade"
 
 if CLIENT then
 	SWEP.PrintName = "vis_name"
 	SWEP.Slot = 6
-
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
-	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -26,8 +22,8 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.ViewModel = Model("models/weapons/v_crowbar.mdl")
-SWEP.WorldModel = Model("models/Items/battery.mdl")
+SWEP.ViewModel = "models/weapons/cstrike/c_eq_fraggrenade.mdl"
+SWEP.WorldModel = "models/Items/battery.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -51,6 +47,13 @@ SWEP.NoSights = true
 SWEP.AllowDrop = false
 
 SWEP.DeathScanDelay = 15
+
+SWEP.ViewModelFOV = 70
+SWEP.ViewModelFlip = false
+
+SWEP.UseHands = true
+SWEP.ShowViewModel = false
+SWEP.ShowWorldModel = false
 
 ---
 -- @ignore
@@ -144,20 +147,36 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("vis_help_pri")
 
-		return self.BaseClass.Initialize(self)
-	end
+		self:AddCustomViewModel("vmodel", {
+			type = "Model",
+			model = "models/Items/battery.mdl",
+			bone = "ValveBiped.Bip01_R_Finger2",
+			rel = "",
+			pos = Vector(1.5, 1.5, 2.7),
+			angle = Angle(180, 20, 0),
+			size = Vector(0.65, 0.65, 0.65),
+			color = Color(255, 255, 255, 255),
+			surpresslightning = false,
+			material = "",
+			skin = 0,
+			bodygroup = {}
+		})
 
-	---
-	-- @realm client
-	function SWEP:DrawWorldModel()
-		if IsValid(self:GetOwner()) then return end
+		self:AddCustomWorldModel("wmodel", {
+			type = "Model",
+			model = "models/Items/battery.mdl",
+			bone = "ValveBiped.Bip01_R_Hand",
+			rel = "",
+			pos = Vector(3.2, 2.5, 2.7),
+			angle = Angle(180, -100, 0),
+			size = Vector(0.65, 0.65, 0.65),
+			color = Color(255, 255, 255, 255),
+			surpresslightning = false,
+			material = "",
+			skin = 0,
+			bodygroup = {}
+		})
 
-		self:DrawModel()
-	end
-
-	---
-	-- @realm client
-	function SWEP:DrawWorldModelTranslucent()
-
+		self.BaseClass.Initialize(self)
 	end
 end

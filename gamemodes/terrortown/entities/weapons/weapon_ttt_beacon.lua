@@ -6,14 +6,11 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "slam"
 
 if CLIENT then
 	SWEP.PrintName = "beacon_name"
 	SWEP.Slot = 6
-
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -25,8 +22,8 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
-SWEP.WorldModel = "models/props_lab/reciever01b.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_c4.mdl"
+SWEP.WorldModel = "models/props_lab/reciever01a.mdl"
 
 SWEP.Primary.ClipSize = 3
 SWEP.Primary.DefaultClip = 1
@@ -50,9 +47,15 @@ SWEP.builtin = true
 SWEP.Spawnable = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 SWEP.builtin = true
+
+SWEP.ViewModelFOV = 70
+SWEP.ViewModelFlip = false
+
+SWEP.UseHands = true
+SWEP.ShowViewModel = false
+SWEP.ShowWorldModel = false
 
 ---
 -- @realm shared
@@ -213,21 +216,36 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
 
-		return self.BaseClass.Initialize(self)
-	end
+		self:AddCustomViewModel("vmodel", {
+			type = "Model",
+			model = "models/props_lab/reciever01a.mdl",
+			bone = "ValveBiped.Bip01_R_Finger2",
+			rel = "",
+			pos = Vector(2.2, 6.5, -1),
+			angle = Angle(120, 10, 0),
+			size = Vector(0.6, 0.6, 0.6),
+			color = Color(255, 255, 255, 255),
+			surpresslightning = false,
+			material = "",
+			skin = 0,
+			bodygroup = {}
+		})
 
-	---
-	-- @realm client
-	function SWEP:DrawWorldModel()
-		if IsValid(self:GetOwner()) then return end
+		self:AddCustomWorldModel("wmodel", {
+			type = "Model",
+			model = "models/props_lab/reciever01a.mdl",
+			bone = "ValveBiped.Bip01_R_Hand",
+			rel = "",
+			pos = Vector(6.7, 7, -1),
+			angle = Angle(-60, 35, 0),
+			size = Vector(0.6, 0.6, 0.6),
+			color = Color(255, 255, 255, 255),
+			surpresslightning = false,
+			material = "",
+			skin = 0,
+			bodygroup = {}
+		})
 
-		self:DrawModel()
-	end
-
-	---
-	-- @realm client
-	function SWEP:DrawWorldModelTranslucent()
-
+		self.BaseClass.Initialize(self)
 	end
 end
-

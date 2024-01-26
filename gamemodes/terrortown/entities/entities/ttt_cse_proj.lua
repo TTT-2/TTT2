@@ -9,7 +9,7 @@ end
 
 ENT.Type = "anim"
 ENT.Base = "ttt_basegrenade_proj"
-ENT.Model = Model("models/Items/battery.mdl")
+ENT.Model = "models/Items/battery.mdl"
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 

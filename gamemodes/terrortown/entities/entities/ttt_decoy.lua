@@ -9,7 +9,7 @@ if SERVER then
 end
 
 ENT.Type = "anim"
-ENT.Model = Model("models/props_lab/reciever01b.mdl")
+ENT.Model = "models/props_lab/reciever01b.mdl"
 ENT.CanHavePrints = false
 ENT.CanUseKey = true
 

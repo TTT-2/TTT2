@@ -12,7 +12,7 @@ if CLIENT then
 end
 
 ENT.Type = "anim"
-ENT.Model = Model("models/props_lab/reciever01a.mdl")
+ENT.Model = "models/props_lab/reciever01a.mdl"
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
 
