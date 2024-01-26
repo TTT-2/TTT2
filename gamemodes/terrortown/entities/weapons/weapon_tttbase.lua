@@ -1317,8 +1317,6 @@ function SWEP:Initialize()
 
 		if not IsValid(viewModel) then return end
 
-		modelbuilder.ResetBonePositions(viewModel)
-
 		-- Init viewmodel visibility
 		if self.ShowViewModel then
 			viewModel:SetColor(Color(255, 255, 255, 255))
