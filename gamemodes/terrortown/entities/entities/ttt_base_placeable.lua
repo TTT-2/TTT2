@@ -69,7 +69,7 @@ if SERVER then
 	-- @realm server
 	function ENT:OnTakeDamage(dmgInfo)
 		-- we add a flag here because stuff can happen in the WasDestroyed
-		-- hook that could create in infinite loop that crashes the game
+		-- hook that could create an infinite loop that crashes the game
 		if self.isDestroyed then return end
 
 		if not self:IsWeldedToSurface() then
