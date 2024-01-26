@@ -8,80 +8,24 @@ if SERVER then
 end
 
 migrations = {}
-migrations.orm = nil
 migrations.databaseName = "ttt2_migrations"
 migrations.savingKeys = {
-	date = {
+	executedAt = {
 		typ = "string",
 		default = ""
 	},
-	wasSuccess = {
-		typ = "bool",
-		default = false
-	},
-	wasUpgrade = {
-		typ = "bool",
-		default = true
+	statusMessage = {
+		typ = "string",
+		default = "Success"
 	},
 }
+
+sql.CreateSqlTable(migrations.databaseName, migrations.savingKeys)
+migrations.orm = orm.Make(migrations.databaseName)
+
 migrations.folderPath = "terrortown/migrations/"
-migrations.commands = {}
-migrations.cachedCommands = {}
+migrations.migrations = {}
 migrations.isLoaded = false
-
----
--- Get ORM table and create it if not available yet
--- @return @{ORMOBJECT} The orm-table to address the database
--- @realm shared
-function migrations.GetORM()
-	if istable(migrations.orm) then
-		return migrations.orm
-	end
-
-	-- Create Sql and orm table if not already done or savingKeys were changed
-	sql.CreateSqlTable(migrations.databaseName, migrations.savingKeys)
-	migrations.orm = orm.Make(migrations.databaseName)
-
-	return migrations.orm
-end
-
----
--- Creates a command with state information, an up- and downgrade function
--- @param table states The states that are needed to fulfill the upgrade
--- @param function upgrade The function that is used for forward operations
--- @param function downgrade The function that is used for reverting operations of this command
--- @return @{command} A command containing necessary functionality for forward and backward operations
--- @realm shared
-function migrations.CreateCommand(states, upgrade, downgrade)
-	if not istable(states) or not isfunction(upgrade) or not isfunction(downgrade) then
-		ErrorNoHalt("[TTT2] Couldn't create migrations command. Missing states-table, upgrade- or downgrade-function.\n")
-		states = {}
-		upgrade = function(cmd) return end
-		downgrade = function(cmd) return end
-	end
-
-	local command = {Upgrade = upgrade, Downgrade = downgrade, isCommand = true}
-	table.Merge(command, states)
-
-	return command
-end
-
----
--- Adds a migration command, that is executed on migration
--- @Note Only used in `terrortown/migrations` and corresponding `client`/`server`/`shared` folders
--- @param @{command} The command to execute on migration
--- @return bool True, if adding was successful
--- @realm shared
-function migrations.Add(command)
-	if not istable(command) or not command.isCommand then
-		ErrorNoHalt("[TTT2] Couldn't add migration command. Missing version or command.\n")
-		return false
-	end
-
-	migrations.cachedCommands[#migrations.cachedCommands + 1] = command
-
-	return true
-end
 
 ---
 -- Runs all missing forward gamemode migrations.
@@ -94,91 +38,116 @@ function migrations.Apply()
 
 	local migrationSuccess = true
 	local errorMessage = ""
-	local databaseORM = migrations.GetORM()
 
-	for fileName, commands in SortedPairs(migrations.commands) do
-		local fileInfo = databaseORM:Find(fileName)
+	for fileName, migration in SortedPairs(migrations.migrations) do
+		if not IsValid(migration) then continue end
+
+		local fileInfo = migrations.orm:Find(fileName)
 
 		-- As ORM currently gives out strings check it
 		if fileInfo and (fileInfo.wasSuccess == true or fileInfo.wasSuccess == "true") then continue end
 
 		MsgN("[TTT2] Migrating: ", fileName)
 
-		for j = 1, #commands do
-			migrationSuccess, errorMessage = pcall(commands[j].Upgrade, commands[j])
+		migrationSuccess, errorMessage = pcall(migration.Upgrade, migration)
 
-			if not migrationSuccess then break end
-		end
-
-		local date = os.date("%Y/%m/%d - %H:%M:%S", os.time())
+		local executedAt = os.date("%Y/%m/%d - %H:%M:%S", os.time())
 
 		if fileInfo then
-			fileInfo.date = date
-			fileInfo.wasSuccess = migrationSuccess
-			fileInfo.wasUpgrade = true
+			fileInfo.executedAt = executedAt
+			fileInfo.statusMessage = migrationSuccess and "Success" or errorMessage
 			fileInfo:Save()
 		else
-			databaseORM:New({
+			migrations.orm:New({
 				name = fileName,
-				date = date,
-				wasSuccess = migrationSuccess,
-				wasUpgrade = true
+				executedAt = executedAt,
+				statusMessage = migrationSuccess and "Success" or errorMessage,
 			}):Save()
 		end
 
-		if not migrationSuccess then break end
-	end
-
-	if not migrationSuccess then
-		ErrorNoHalt("[TTT2] Migration failed. Error:\n" .. tostring(errorMessage) .. "\n")
-	else
-		MsgN("[TTT2] Successfully migrated: ", fileName)
+		if not migrationSuccess then
+			ErrorNoHalt("[TTT2] Migration failed. Error:\n" .. tostring(errorMessage) .. "\n")
+			break;
+		else
+			MsgN("[TTT2] Successfully migrated: ", fileName)
+		end
 	end
 
 	return migrationSuccess
 end
 
 ---
--- Callback function that combines commands with fileNames
+-- Once all the scripts are loaded we can set up the baseclass
+-- we have to wait until they're all setup because load order
+-- could cause some entities to load before their bases!
+-- @local
 -- @realm shared
-local function fileIncludedCallback(filePath, folderPath)
-	fileName = string.TrimLeft(filePath, folderPath)
+function migrations.OnLoaded()
+	for migrationName in pairs(migrations.migrations) do
+		local newTable = migrations.Get(migrationName)
+		migrations.migrations[migrationName] = newTable
 
-	migrations.commands[fileName] = migrations.cachedCommands
-
-	-- Empty cache for next file
-	migrations.cachedCommands = {}
+		baseclass.Set(migrationName, newTable)
+	end
 end
 
 ---
--- Loads migration-files and accepts added commands per file
+-- Get a migration by name (a copy)
+-- @param string name migration name
+-- @return table returns the new migration table
+-- @realm shared
+function migrations.Get(name)
+	local stored = migrations.migrations[name]
+	if not stored then return end
+
+	local newTable = table.Copy(stored)
+	newTable.Base = newTable.Base or "migration_base"
+
+	-- If we're not derived from ourselves (a base migration)
+	-- then derive from our 'Base' Migration.
+	if newTable.Base ~= name then
+		local base = migrations.Get(newTable.Base)
+
+		if not base then
+			ErrorNoHalt("ERROR: Trying to derive Migration", tostring(name), " from non existant Migration " .. tostring(newTable.Base) .. "!\n")
+		else
+			newTable = table.Inherit(newTable, base)
+		end
+	end
+
+	return newTable
+end
+
+---
+-- Loads migration-files and starts inheriting from base files
 -- @realm shared
 function migrations.Load()
 	MsgN("[TTT2] Loading Migrations ...")
-	migrations.cachedCommands = {}
+	MIGRATION = {}
 
-	if CLIENT then
-		fileloader.LoadFolder(migrations.folderPath .. "client/", false, CLIENT_FILE, function(filePath, folderPath)
-			MsgN("Added TTT2 client migration file: ", filePath)
-			fileIncludedCallback(filePath, folderPath)
-		end)
-	end
-
-	if SERVER then
-		fileloader.LoadFolder(migrations.folderPath .. "client/", false, CLIENT_FILE, function(filePath, folderPath)
-			MsgN("Marked TTT2 client migration file for distribution: ", filePath)
-		end)
-
-		fileloader.LoadFolder(migrations.folderPath .. "server/", false, SERVER_FILE, function(filePath, folderPath)
-			MsgN("Added TTT2 server migration file: ", filePath)
-			fileIncludedCallback(filePath, folderPath)
-		end)
-	end
-
-	fileloader.LoadFolder(migrations.folderPath .. "shared/", false, SHARED_FILE, function(filePath, folderPath)
+	local function insertMigration(filePath)
 		MsgN("Added TTT2 shared migration file: ", filePath)
-		fileIncludedCallback(filePath, folderPath)
+
+		local folderTable = string.Split(filePath, '/')
+		local fileName = string.TrimRight(folderTable[#folderTable], ".lua")
+		migrations.migrations[fileName] = MIGRATION
+
+		-- Empty table for next file
+		MIGRATION = {}
+	end
+
+	-- @note Until fileloader does not do a real deepsearch we have to use two calls
+	-- Load base migrations
+	fileloader.LoadFolder(migrations.folderPath, true, SHARED_FILE, function(filePath)
+		insertMigration(filePath)
 	end)
+
+	-- Load actual migrations
+	fileloader.LoadFolder(migrations.folderPath, false, SHARED_FILE, function(filePath)
+		insertMigration(filePath)
+	end)
+
+	migrations.OnLoaded()
 
 	migrations.isLoaded = true
 end

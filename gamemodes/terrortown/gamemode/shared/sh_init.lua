@@ -570,7 +570,6 @@ include("ttt2/libraries/vskin.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/database.lua")
-include("ttt2/libraries/migrations.lua")
 include("ttt2/libraries/marks.lua")
 include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
@@ -595,6 +594,9 @@ ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
 ttt_include("sh_playerclass")
+
+-- include files that need all the above
+include("ttt2/libraries/migrations.lua")
 
 ---
 -- Returns the equipment's file name
