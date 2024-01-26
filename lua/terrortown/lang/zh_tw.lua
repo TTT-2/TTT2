@@ -2081,7 +2081,6 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "安放誘餌。"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
@@ -2171,3 +2170,7 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放誘餌"
+--L.decoy_help_secondary = "Stick Decoy to surface"

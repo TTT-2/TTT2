@@ -2083,7 +2083,6 @@ L.search_eyes = "Используя свои детективные навыки
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "Установить Приманку."
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
@@ -2173,3 +2172,7 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
+-- 2024-01-27
+L.decoy_help_primary = "Установить Приманку"
+--L.decoy_help_secondary = "Stick Decoy to surface"

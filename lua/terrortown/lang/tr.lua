@@ -2081,7 +2081,6 @@ L.radio_help_primary = "Radyoyu yerleştir"
 L.radio_help_secondary = "Zemine yapıştır"
 L.hstation_help_primary = "Sağlık İstasyonunu yerleştir"
 L.flaregun_help_primary = "Varlığı yak"
-L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2023-12-14
 L.marker_vision_owner = "Sahip: {owner}"
@@ -2169,3 +2168,7 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
 
 L.header_weapon_settings = "Silah Ayarları"
+
+-- 2024-01-27
+L.decoy_help_primary = "Tuzağı yerleştirin"
+--L.decoy_help_secondary = "Stick Decoy to surface"

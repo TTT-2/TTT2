@@ -2081,7 +2081,6 @@ L.crowbar_help_secondary = "Spieler schubsen"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "Platziere die Attrappe."
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
@@ -2171,3 +2170,7 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
+-- 2024-01-27
+L.decoy_help_primary = "Platziere die Attrappe"
+--L.decoy_help_secondary = "Stick Decoy to surface"
