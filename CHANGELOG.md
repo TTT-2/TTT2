@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
+  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt0_radio` and `ttt_cse_proj` to that base
 
 ### Changed
 
