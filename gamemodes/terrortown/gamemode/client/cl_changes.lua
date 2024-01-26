@@ -1845,6 +1845,96 @@ function CreateChanges()
 		os.time({ year = 2024, month = 01, day = 07 })
 	)
 
+	AddChange(
+		"TTT2 Base - v0.12.4b",
+		[[
+		<h2>Added</h2>
+		<ul>
+			<li> Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll) </li>
+			<ul>
+				<li> C4 </li>
+				<li> Radio </li>
+				<li> Beacon </li>
+			</ul>
+			<li> Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew) </li>
+			<li> Reworked the way the player camera is handled (by @TimGoll) </li>
+			<ul>
+				<li> Added FOV change on speed change </li>
+				<li> Added view bobbing on walking, swimming, falling and strafing </li>
+				<li> Added convars to disable those changes </li>
+			</ul>
+			<li> Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21) </li>
+			<li> Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll) </li>
+			<li> Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll) </li>
+			<li> Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew) </li>
+			<li> Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew) </li>
+			<li> `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew) </li>
+			<ul>
+				<li> Added `SWEP.IdleAnim` to allow specifying an idle animation. </li>
+				<li> Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position. </li>
+				<li> Added `SWEP.InvisibleViewModel` to prevent a weapon from drawing a ViewModel at all without FOV hacks or Deploy code which has no effect. </li>
+			</ul>
+			<li> Icon for gameplay, accessibility and `Voice & Volume` menu </li>
+			<li> Made beacon model and icon unique from decoy (by @EntranceJew) </li>
+			<li> Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew) </li>
+		</ul>
+
+		<h2>Changed</h2>
+		<ul>
+			<li> Refactored client shop logic into separate shop-class (by @ZenBre4ker) </li>
+			<ul>
+				<li> Enabled shared shop class to buy and check equipment </li>
+				<li> Removed third argument of `TTT2CanOrderEquipment`-Hook, no message is outputted anymore </li>
+			</ul>
+			<li> dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker) </li>
+			<li> Binoculars now have a world model that isn't paper towels (by @EntranceJew) </li>
+			<li> Decreased shooting accuracy while sprinting or in air (by @TimGoll) </li>
+			<li> A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll) </li>
+			<li> Updated the Turkish localization file (by @NovaDiablox) </li>
+			<li> Grenades have icons </li>
+			<li> Brought `c4`, `defuser`, `flaregun`, `health_station`, `radio` weapons down from upstream (by @a7f3) </li>
+			<li> Updated help text for `c4`, `defuser`, `flaregun`, `health_station`, `radio`, `knife`, `phammer`, `push`, and `zm_carry` weapons (by @a7f3) </li>
+			<li> Brought down the `EFFECT`s: `crimescene_dummy`, `crimescene_shot`, `pulse_sphere`, `teleport_beamdown`, `teleport_beamup` </li>
+			<li> Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check` </li>
+			<li> Brought down the `SWEP`: `weapon_ttt_stungun` </li>
+			<li> Brought down the menu for arming/defusing C4 </li>
+			<li> Updated and improved  Simplified Chinese translation (by @sbzlzh and @TheOnly8Z) </li>
+			<li> Consolidated hat logic </li>
+			<li> Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic </li>
+			<li> Role avoidance is no longer an option </li>
+			<li> All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew) </li>
+			<li> Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp` </li>
+			<li> Spectator name labels now use a skin font and scaling (by @EntranceJew) </li>
+		</ul>
+
+		<h2>Fixed</h2>
+		<ul>
+			<li> Fixed database now properly saving boolean `false` values </li>
+			<li> Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll) </li>
+			<li> The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker) </li>
+			<li> Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll) </li>
+			<li> Fixed the crosshair being offcenter on some UI scales (by @TimGoll) </li>
+			<li> Fixed to wrong line calculations for wrapped text (by @NickCloudAT) </li>
+		</ul>
+
+		<h2>Removed</h2>
+		<ul>
+			<li> Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details </li>
+			<li> Removed DX8/SW models that aren't used </li>
+		</ul>
+
+		<h2>Breaking Changes</h2>
+		<ul>
+			<li> Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)` </li>
+			<ul>
+				<li> Returned text and result are now replaced by a statusCode </li>
+			</ul>
+			<li> No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()` </li>
+		</ul>
+	]],
+		os.time({ year = 2024, month = 01, day = 27 })
+	)
+
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client

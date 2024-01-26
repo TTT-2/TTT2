@@ -6,6 +6,18 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+### Breaking Changes
+
+## [v0.12.4b](https://github.com/TTT-2/TTT2/tree/v0.12.4b) (2024-01-27)
+
+### Added
+
 - Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll)
   - C4
   - Radio
@@ -24,9 +36,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
   - Added `SWEP.InvisibleViewModel` to prevent a weapon from drawing a ViewModel at all without FOV hacks or Deploy code which has no effect.
-- Icon for gameplay menu
-- Icon for accessibility menu
-- Icon for `Voice & Volume` menu
+- Icon for gameplay, accessibility and `Voice & Volume` menu (by @EntranceJew)
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 
