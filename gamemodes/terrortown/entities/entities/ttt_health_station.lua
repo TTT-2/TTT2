@@ -171,6 +171,8 @@ if SERVER then
 		nextcharge = CurTime() + self.RechargeFreq
 	end
 
+	---
+	-- @realm server
 	function ENT:WasDestroyed()
 		local originator = self:GetOriginator()
 

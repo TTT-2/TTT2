@@ -29,6 +29,8 @@ function ENT:Initialize()
 	self:SetHealth(10)
 end
 
+---
+-- @realm shared
 function ENT:SetupDataTables()
 	self:NetworkVar("Entity", 0, "Originator")
 end
@@ -62,6 +64,9 @@ if SERVER then
 	AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
 	AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
 
+	---
+	-- @param CTakeDamageInfo dmgInfo
+	-- @realm server
 	function ENT:OnTakeDamage(dmgInfo)
 		-- we add a flag here because stuff can happen in the WasDestroyed
 		-- hook that could create in infinite loop that crashes the game
@@ -131,10 +136,21 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Called when the entity was destroyed and is not yet removed. Can be used to trigger special things.
+	-- @param Vector pos The position of the entitiy
+	-- @param CTakeDamageInfo dmgInfo The damage info object that killed the entity
+	-- @return nil|string The decal name that should be painted on destruction
+	-- @hook
+	-- @realm server
 	function ENT:WasDestroyed(pos, dmgInfo)
 
 	end
 
+	---
+	-- Welds the entity to the nearest surface.
+	-- @param boolean stateWelding The welding state; true to weld, false to unweld
+	-- @realm server
 	function ENT:WeldToSurface(stateWelding)
 		self.stateWelding = stateWelding
 
@@ -189,10 +205,20 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Checks if the entity is welded to a surface.
+	-- @return boolean Returns true if the entity is welded to a surface
+	-- @realm server
 	function ENT:IsWeldedToSurface()
 		return self.stateWelding or false
 	end
 
+	---
+	-- Helper function for a weapon that wants to throw the entity. Already handles everything.
+	-- @param Player ply The player that throws the entity, the owner
+	-- @param[opt] Angle rotationalOffset The model's rotational offset that should be applied
+	-- @return boolean Returns true on success
+	-- @realm server
 	function ENT:ThrowEntity(ply, rotationalOffset)
 		ply:SetAnimation(PLAYER_ATTACK1)
 
@@ -227,6 +253,13 @@ if SERVER then
 		return true
 	end
 
+	---
+	-- Helper function for a weapon that wants to stick the entity to a surface. Already handles everything.
+	-- @param Player ply The player that sticks the entity, the owner
+	-- @param[opt] Angle rotationalOffset The model's rotational offset that should be applied
+	-- @param[opt] number angleCondition The angle condition that has to be met to apoply the rotational offset
+	-- @return boolean Returns true on success
+	-- @realm server
 	function ENT:StickEntity(ply, rotationalOffset, angleCondition)
 		ply:SetAnimation(PLAYER_ATTACK1)
 
@@ -251,10 +284,6 @@ if SERVER then
 		self:SetHitNormal(tr.HitNormal)
 
 		if tr.HitNormal.x == 0 and tr.HitNormal.y == 0 and tr.HitNormal.z == 1 then
-			--print(rotationalOffset)
-			--rotationalOffset:RotateAroundAxis(Vector(0, 0, 1), ply:GetAngles().yaw)
-			--print(rotationalOffset)
-
 			rotationalOffset.yaw = rotationalOffset.yaw + ply:GetAngles().yaw + 180
 		end
 

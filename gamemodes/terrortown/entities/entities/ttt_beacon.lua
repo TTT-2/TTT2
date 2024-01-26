@@ -65,6 +65,8 @@ end
 if SERVER then
 	local soundBeep = Sound("weapons/c4/cc4_beep1.wav")
 
+	---
+	-- @realm server
 	function ENT:WasDestroyed()
 		local originator = self:GetOriginator()
 
@@ -72,6 +74,7 @@ if SERVER then
 
 		LANG.Msg(originator, "msg_beacon_destroyed", nil, MSG_MSTACK_WARN)
 	end
+
 	---
 	-- @realm server
 	function ENT:Think()

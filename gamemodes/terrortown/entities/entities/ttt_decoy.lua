@@ -60,6 +60,8 @@ function ENT:OnRemove()
 end
 
 if SERVER then
+	---
+	-- @realm server
 	function ENT:WasDestroyed()
 		local originator = self:GetOriginator()
 
