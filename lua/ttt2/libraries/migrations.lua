@@ -24,6 +24,7 @@ sql.CreateSqlTable(migrations.databaseName, migrations.savingKeys)
 migrations.orm = orm.Make(migrations.databaseName)
 
 migrations.folderPath = "terrortown/migrations/"
+migrations.baseFolderPath = "terrortown/migrations/base/"
 migrations.migrations = {}
 migrations.isLoaded = false
 
@@ -76,78 +77,32 @@ function migrations.Apply()
 	return migrationSuccess
 end
 
----
--- Once all the scripts are loaded we can set up the baseclass
--- we have to wait until they're all setup because load order
--- could cause some entities to load before their bases!
--- @local
--- @realm shared
-function migrations.OnLoaded()
-	for migrationName in pairs(migrations.migrations) do
-		local newTable = migrations.Get(migrationName)
-		migrations.migrations[migrationName] = newTable
-
-		baseclass.Set(migrationName, newTable)
-	end
+-- load score menu pages
+local function ShouldInherit(t, base)
+	return t.base ~= t.type
 end
 
----
--- Get a migration by name (a copy)
--- @param string name migration name
--- @return table returns the new migration table
--- @realm shared
-function migrations.Get(name)
-	local stored = migrations.migrations[name]
-	if not stored then return end
+local function OnInitialization(class, path, name)
+	class.type = name
+	class.base = class.base or "migration_base"
 
-	local newTable = table.Copy(stored)
-	newTable.Base = newTable.Base or "migration_base"
+	MsgN("Added TTT2 Migration file: ", path, name)
+end
 
-	-- If we're not derived from ourselves (a base migration)
-	-- then derive from our 'Base' Migration.
-	if newTable.Base ~= name then
-		local base = migrations.Get(newTable.Base)
-
-		if not base then
-			ErrorNoHalt("ERROR: Trying to derive Migration", tostring(name), " from non existant Migration " .. tostring(newTable.Base) .. "!\n")
-		else
-			newTable = table.Inherit(newTable, base)
-		end
-	end
-
-	return newTable
+local function PostInherit(class, path, name)
+	baseclass.Set(name, class)
 end
 
 ---
 -- Loads migration-files and starts inheriting from base files
 -- @realm shared
 function migrations.Load()
-	MsgN("[TTT2] Loading Migrations ...")
-	MIGRATION = {}
+	MsgN("\n\n[TTT2] Loading Base Migrations ...")
 
-	local function insertMigration(filePath)
-		MsgN("Added TTT2 shared migration file: ", filePath)
-
-		local folderTable = string.Split(filePath, '/')
-		local fileName = string.TrimRight(folderTable[#folderTable], ".lua")
-		migrations.migrations[fileName] = MIGRATION
-
-		-- Empty table for next file
-		MIGRATION = {}
-	end
-
-	-- @note Until fileloader does not do a real deepsearch we have to use two calls
-	-- Load base migrations
-	fileloader.LoadFolder(migrations.folderPath, true, SHARED_FILE, function(filePath)
-		insertMigration(filePath)
-	end)
-
-	-- Load actual migrations
-	fileloader.LoadFolder(migrations.folderPath, false, SHARED_FILE, function(filePath)
-		insertMigration(filePath)
-	end)
-
-	migrations.OnLoaded()
-
+	local baseClasses = classbuilder.BuildFromFolder(migrations.baseFolderPath, SHARED_FILE, "MIGRATION", OnInitialization, true, ShouldInherit, {}, PostInherit)
+	PrintTable(baseClasses)
+	MsgN("[TTT2] Loading other Migrations ...")
+	migrations.migrations = classbuilder.BuildFromFolder(migrations.folderPath, SHARED_FILE, "MIGRATION", OnInitialization, true, ShouldInherit, baseClasses, PostInherit)
+	PrintTable(migrations.migrations)
 	migrations.isLoaded = true
 end

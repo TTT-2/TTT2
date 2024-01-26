@@ -1,7 +1,6 @@
 ---
 -- @class MIGRATION
 -- @section migration_base
-
 MIGRATION.Upgrade = nil
 MIGRATION.Downgrade = nil
 

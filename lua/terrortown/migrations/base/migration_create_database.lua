@@ -1,12 +1,11 @@
 ---
 -- @class MIGRATION
 -- @section migration_create_database
-
 local base = "migration_base"
 
 DEFINE_BASECLASS(base)
 
-MIGRATION.Base = base
+MIGRATION.base = base
 
 MIGRATION.databaseName = nil
 MIGRATION.savingKeys = nil
