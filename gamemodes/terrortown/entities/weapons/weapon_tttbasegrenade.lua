@@ -125,7 +125,7 @@ if CLIENT then
 		local previousIterationPosition = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, gravityMultiplier, stepSize)
 
 		local fractionalFrameTime = (SysTime() % 1) * 2
-		local evenOrOddFrameForDashedLineDrawingPurposes = fractionalFrameTime > 1 and 1 or 0
+		local i = fractionalFrameTime > 1 and 1 or 0
 		fractionalFrameTime = fractionalFrameTime - math.floor(fractionalFrameTime)
 
 		local arcColor = appearance.ShouldUseGlobalFocusColor() and appearance.GetFocusColor() or self:GetOwner():GetRoleColor()
@@ -155,8 +155,8 @@ if CLIENT then
 
 			local denom = (stepDistance / stepSize) ^ arcWidthDiminishOverDistanceFactor
 			local arcSegmentLength = from:DistToSqr(to) ^ arcSegmentLengthFactor
-			evenOrOddFrameForDashedLineDrawingPurposes = (evenOrOddFrameForDashedLineDrawingPurposes + 1) % 2
-			if evenOrOddFrameForDashedLineDrawingPurposes == 0 then
+			i = (i + 1) % 2
+			if i == 0 then
 				render.DrawBeam(from, from + norm * (fractionalFrameTime * arcSegmentLength), arcWidth * denom, 0, 1,  drawColor)
 			else
 				render.DrawBeam(to - norm * ((1 - fractionalFrameTime) * arcSegmentLength), to, arcWidth * denom, 0, 1, drawColor)
