@@ -66,6 +66,7 @@ SWEP.AutoSpawnable = false
 
 SWEP.AllowDelete = false -- never removed for weapon reduction
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 
 local sound_single = Sound("Weapon_Crowbar.Single")
 

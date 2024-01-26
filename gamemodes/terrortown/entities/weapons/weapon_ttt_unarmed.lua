@@ -41,6 +41,7 @@ SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
 
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 SWEP.NoSights = true
 SWEP.InvisibleViewModel = true
 

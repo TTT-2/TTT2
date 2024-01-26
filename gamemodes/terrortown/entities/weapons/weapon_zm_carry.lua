@@ -56,6 +56,7 @@ SWEP.Kind = WEAPON_CARRY
 
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 SWEP.NoSights = true
 
 SWEP.EntHolding = nil
