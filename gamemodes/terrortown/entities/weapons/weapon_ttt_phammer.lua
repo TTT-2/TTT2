@@ -316,6 +316,8 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:ViewModelDrawn()
+		self.BaseClass.ViewModelDrawn(self)
+
 		local client = LocalPlayer()
 		local vm = client:GetViewModel()
 		if not IsValid(vm) then return end
@@ -390,7 +392,6 @@ if CLIENT then
 		liney = liney > 13 and 0 or liney + 1
 
 		cam.End3D2D()
-
 	end
 
 	---

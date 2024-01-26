@@ -125,10 +125,10 @@ SWEP.idleResetFix = false
 SWEP.UseHands = false
 
 -- If set to true, the default view model of the weapon is drawn
-SWEP.ShowViewModel = true
+SWEP.ShowDefaultViewModel = true
 
 -- If set to true, the default world model of the weapon is drawn
-SWEP.ShowWorldModel = true
+SWEP.ShowDefaultWorldModel = true
 
 --   YE OLDE SWEP STUFF
 
@@ -710,7 +710,7 @@ if CLIENT then
 	-- @param Entity viewModel Player's view model
 	-- @realm client
 	function SWEP:ViewModelDrawn(viewModel)
-		if self.ShowViewModel then
+		if self.ShowDefaultViewModel then
 			-- this resets the material to the default material
 			viewModel:SetMaterial("")
 		else
@@ -736,9 +736,11 @@ if CLIENT then
 		local client = LocalPlayer()
 
 		-- draw view model when spectating player
-		if client == OBS_MODE_IN_EYE and client:GetObserverTarget() == self:GetOwner() then return end
+		if client:GetObserverMode() == OBS_MODE_IN_EYE
+			and client:GetObserverTarget() == self:GetOwner()
+		then return end
 
-		if self.ShowWorldModel then
+		if self.ShowDefaultWorldModel then
 			self:DrawModel()
 		end
 
