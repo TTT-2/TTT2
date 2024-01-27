@@ -119,11 +119,11 @@ ttt_include("cl_weapon_pickup")
 ttt_include("cl_help") -- Creates Menus which depend on other client files. Should be loaded as late as possible
 
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
-	MsgN("Added TTT2 client autorun file: ", path)
+	Dev(1, "Added TTT2 client autorun file: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
-	MsgN("Added TTT2 shared autorun file: ", path)
+	Dev(1, "Added TTT2 shared autorun file: ", path)
 end)
 
 -- all files are loaded
@@ -151,7 +151,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
-	MsgN("TTT2 Client initializing...")
+	Dev(1, "TTT2 Client initializing...")
 
 	---
 	-- @realm client
@@ -163,17 +163,17 @@ function GM:Initialize()
 	-- load default TTT2 language files or mark them as downloadable on the server
 	-- load addon language files in a second pass, the core language files are loaded earlier
 	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
+		Dev(1, "Added TTT2 language file: ", path)
 	end)
 
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
 		ErrorNoHaltWithStack("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \"" .. path .. "\"")
-		MsgN("Added TTT2 language file: ", path)
+		Dev(1, "Added TTT2 language file: ", path)
 	end)
 
 	-- load vskin files
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
+		Dev(1, "Added TTT2 vskin file: ", path)
 	end)
 
 	-- initialize scale callbacks
@@ -225,7 +225,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	MsgN("TTT Client post-init...")
+	Dev(1, "TTT Client post-init...")
 
 	---
 	-- @realm client
@@ -546,7 +546,7 @@ local function ReceiveRoundState()
 		RoundStateChange(o, GAMEMODE.round_state)
 	end
 
-	MsgN("Round state: " .. GAMEMODE.round_state)
+	Dev(1, "Round state: " .. GAMEMODE.round_state)
 end
 net.Receive("TTT_RoundState", ReceiveRoundState)
 

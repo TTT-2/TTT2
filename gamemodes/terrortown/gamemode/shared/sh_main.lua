@@ -61,7 +61,7 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 	end
 
 	if doHotreload then
-		MsgN("[TTT2] Trying to hotreload ",  name, " .")
+		Dev(1, "[TTT2] Trying to hotreload ",  name, " .")
 	end
 
 	-- Initialize Equipment
@@ -73,7 +73,7 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 
 		-- Keep custom changed data from the old SWEP if hotReloadableKeys are given
 		if istable(equipment.HotReloadableKeys) and #equipment.HotReloadableKeys > 0 and oldSWEP then
-			MsgN("[TTT2] Hotreloading ",  #equipment.HotReloadableKeys, " given Keys from old SWEP-file.")
+			Dev(1, "[TTT2] Hotreloading ",  #equipment.HotReloadableKeys, " given Keys from old SWEP-file.")
 
 			for _, keys in pairs(equipment.HotReloadableKeys) do
 				local eqKeyField = equipment
@@ -118,7 +118,7 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 
 				if continueOuterLoop then continue end
 
-				MsgN("[TTT2] Overwriting SWEP",  keyString, " = ", tostring(eqKeyField[saveKey]), " with ", tostring(oldKeyField))
+				Dev(1, "[TTT2] Overwriting SWEP",  keyString, " = ", tostring(eqKeyField[saveKey]), " with ", tostring(oldKeyField))
 
 				eqKeyField[saveKey] = oldKeyField
 			end
@@ -165,7 +165,7 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
 		net.SendToServer()
 	end
 
-	MsgN("[TTT2] Hotreloading ", name, " was successful.")
+	Dev(1, "[TTT2] Hotreloading ", name, " was successful.")
 
 	return
 end

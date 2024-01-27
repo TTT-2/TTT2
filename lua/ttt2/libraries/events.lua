@@ -244,7 +244,7 @@ local function OnInitialization(class, path, name)
 
 	_G["EVENT_" .. string.upper(name)] = name
 
-	MsgN("Added TTT2 event file: ", path, name)
+	Dev(1, "Added TTT2 event file: ", path, name)
 end
 
 eventTypes = classbuilder.BuildFromFolder(

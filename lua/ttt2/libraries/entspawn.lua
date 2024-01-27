@@ -222,16 +222,16 @@ function entspawn.SpawnPlayers(deadOnly)
 			-- clean up table
 			table.RemoveEmptyEntries(playersToSpawn, sizePlayersToSpawn)
 
-			MsgN("Spawned " .. sizeSpawnWave .. " players in spawn wave.")
+			Dev(1, "Spawned " .. sizeSpawnWave .. " players in spawn wave.")
 
 			if #playersToSpawn == 0 then
 				timerRemove("spawnwave")
 
-				MsgN("Spawn waves ending, all players spawned.")
+				Dev(1, "Spawn waves ending, all players spawned.")
 			end
 		end
 
-		MsgN("Spawn waves starting.")
+		Dev(1, "Spawn waves starting.")
 
 		timerCreate("spawnwave", waveDelay, 0, spawnFunction)
 

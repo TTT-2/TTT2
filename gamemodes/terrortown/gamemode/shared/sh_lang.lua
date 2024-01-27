@@ -29,7 +29,7 @@ local pairs = pairs
 local string = string
 
 fileloader.LoadFolder("terrortown/lang/", false, CLIENT_FILE, function(path)
-	MsgN("Added TTT2 core language file: ", path)
+	Dev(1, "Added TTT2 core language file: ", path)
 end)
 
 if SERVER then

@@ -295,7 +295,7 @@ function HUD:DrawElemAndChildren(elem)
 
 		local child = hudelements.GetStored(childName)
 		if not child then
-			MsgN("Error: Hudelement with name " .. childName .. " not found!")
+			Dev(1, "Error: Hudelement with name " .. childName .. " not found!")
 
 			continue
 		end
@@ -323,7 +323,7 @@ function HUD:Draw()
 
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
-			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
+			Dev(1, "Error: Hudelement with name " .. elemName .. " not found!")
 
 			continue
 		end

@@ -423,7 +423,7 @@ function GM:PlayerLoadout(ply, isRespawn)
 	end)
 
 	if not HasLoadoutWeapons(ply) then
-		MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
+		Dev(1, "Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 
 		local timerId = ply:EntIndex()
 

@@ -1105,7 +1105,7 @@ if SERVER then
 
 		owner:SetEyeAngles(eyeang)
 
-		MsgN(owner:Nick() .. " fired his DYING SHOT")
+		Dev(1, owner:Nick() .. " fired his DYING SHOT")
 
 		owner.dying_wep = self
 

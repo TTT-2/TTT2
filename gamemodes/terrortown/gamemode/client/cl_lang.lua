@@ -324,7 +324,7 @@ function LANG.SetActiveLanguage(langName)
 			hook.Run("TTTLanguageChanged", oldName, langName)
 		end
 	else
-		MsgN(Format("The language '%s' does not exist on this server. Falling back to English...", langName))
+		Dev(1, Format("The language '%s' does not exist on this server. Falling back to English...", langName))
 
 		-- fall back to default if possible
 		if langName ~= LANG.DefaultLanguage then
