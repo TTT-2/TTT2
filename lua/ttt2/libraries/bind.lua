@@ -128,7 +128,7 @@ local function TTT2LoadBindings()
 				tableInsert(bind.bindings[tmp], tbl.name)
 			end
 
-			print("[TTT2][BIND] Loaded bindings...")
+			Dev(1, "[TTT2][BIND] Loaded bindings...")
 		end
 	end
 

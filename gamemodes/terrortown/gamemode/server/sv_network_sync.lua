@@ -715,7 +715,7 @@ end
 -- @realm server
 -- @internal
 local function ClientRequestFullStateUpdate(len, client)
-	print("[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
+	Dev(1, "[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
 
 	ttt2net.SendFullStateUpdate(client)
 end

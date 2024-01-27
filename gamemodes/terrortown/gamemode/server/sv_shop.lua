@@ -65,9 +65,9 @@ local function HandleErrorMessage(ply, equipmentId, statusCode)
 	elseif statusCode == shop.statusCode.PENDINGORDER then
 		LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
 	elseif statusCode == shop.statusCode.NOTEXISTING then
-		print(ply, " tried to buy equip that doesn't exist: ", equipmentId)
+		Dev(1, ply .. " tried to buy equip that doesn't exist: " .. equipmentId)
 	elseif statusCode == shop.statusCode.NOTENOUGHCREDITS then
-		print(ply, " tried to buy item/weapon, but didn't have enough credits.")
+		Dev(1, ply .. " tried to buy item/weapon, but didn't have enough credits.")
 	elseif statusCode == shop.statusCode.INVALIDID then
 		ErrorNoHaltWithStack("[TTT2][ERROR] No ID was requested by:", ply)
 	elseif statusCode == shop.statusCode.NOTBUYABLE then

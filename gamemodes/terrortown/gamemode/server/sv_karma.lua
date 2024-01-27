@@ -182,10 +182,10 @@ function KARMA.ResetRoundChanges()
 
 		if not IsValid(ply) then continue end
 
-		print("\nFor Player " .. ply:GetName())
+		Dev(1, "\nFor Player " .. ply:GetName())
 
 		for reason, karma in pairs(reasonList) do
-			print("An amount of " .. karma .. " was changed for the reason of " .. reason)
+			Dev(1, "An amount of " .. karma .. " was changed for the reason of " .. reason)
 		end
 	end
 end
@@ -336,7 +336,7 @@ function KARMA.ApplyKarma(ply)
 	ply:SetDamageFactor(math.Clamp(df, 0.1, 1.0))
 
 	if IsDebug() then
-		print(Format("%s has karma %f and gets df %f", ply:Nick(), ply:GetBaseKarma(), df))
+		Dev(1, Format("%s has karma %f and gets df %f", ply:Nick(), ply:GetBaseKarma(), df))
 	end
 end
 
@@ -394,7 +394,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYHURT])
 
-			print(Format("%s (%f) hurt %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+			Dev(1, Format("%s (%f) hurt %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
 	else -- team hurts own team
 		if not victim:GetCleanRound() then return end
@@ -406,7 +406,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 		attacker:SetCleanRound(false)
 
-		print(Format("%s (%f) hurt %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
+		Dev(1, Format("%s (%f) hurt %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
 	end
 end
 
@@ -433,7 +433,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 
 			reward = KARMA.GiveReward(attacker, reward, KARMA.reason[KARMA_ENEMYKILL])
 
-			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+			Dev(1, Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
@@ -445,7 +445,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 
 		attacker:SetCleanRound(false)
 
-		print(Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
+		Dev(1, Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
 	end
 end
 
@@ -512,7 +512,7 @@ function KARMA.Rebase()
 		local ply = plys[i]
 
 		if IsDebug() then
-			print(ply, "rebased from ", ply:GetBaseKarma(), " to ", ply:GetLiveKarma())
+			Dev(1, ply, "rebased from ", ply:GetBaseKarma(), " to ", ply:GetLiveKarma())
 		end
 
 		ply:SetBaseKarma(ply:GetLiveKarma())
@@ -635,7 +635,7 @@ function KARMA.Remember(ply)
 	end
 
 	if ply:SteamID64() == nil then
-		print("[TTT2] ERROR: Player has no steamID64")
+		ErrorNoHaltWithStack("[TTT2] ERROR: Player has no steamID64:" .. ply)
 
 		return
 	end

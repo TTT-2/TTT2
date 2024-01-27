@@ -158,7 +158,7 @@ else -- CLIENT
 
 			LANG.ServerLanguage = lang_name
 
-			print("Server default language is: ", lang_name)
+			Dev(1, "Server default language is: ", lang_name)
 		end
 	end
 	net.Receive("TTT_ServerLang", RecvServerLang)

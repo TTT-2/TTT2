@@ -284,7 +284,7 @@ do
 			index = index + 1
 
 			if not self[tv] then
-				print('did not find type: ' .. tv)
+				Dev(1, 'did not find type: ' .. tv)
 			end
 
 			index, v = self[tv](self, index, str, cache)

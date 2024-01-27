@@ -33,7 +33,7 @@ RANDOMSAVEDSHOPS = RANDOMSAVEDSHOPS or {} -- saved random shops
 -- JUST used to convert old items to new ones
 local itemMt = {
 	__newindex = function(tbl, key, val)
-		print("[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!")
+		ErrorNoHaltWithStack("[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!")
 	end
 }
 
@@ -726,7 +726,7 @@ function GenerateNewEquipmentID()
 
 			if v.oldId ~= val or not v.id then continue end
 
-			print("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
+			ErrorNoHaltWithStack("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
 
 			break
 		end
@@ -982,8 +982,6 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function SyncEquipment(ply, add)
-		--print("[TTT2][SHOP] Sending new SHOP list to " .. ply:Nick() .. "...")
-
 		local s = EncodeForStream(SYNC_EQUIP)
 		if not s then return end
 
@@ -1257,7 +1255,6 @@ else -- CLIENT
 	local buff = ""
 
 	local function TTT2SyncEquipment(len)
-		--print("[TTT2][SHOP] Received new SHOP list from server! Updating...")
 
 		local add = net.ReadBool()
 		local cont = net.ReadBit() == 1

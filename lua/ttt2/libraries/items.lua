@@ -354,7 +354,7 @@ function items.MigrateLegacyItems()
 
 				items.Register(ITEMDATA, GetEquipmentFileName(name))
 
-				print("[TTT2][INFO] Automatically converted legacy item: ", name, ITEMDATA.oldId)
+				Dev(1, "[TTT2][INFO] Automatically converted legacy item:\t" .. name .. "\t" .. ITEMDATA.oldId)
 			else
 				item.CanBuy = item.CanBuy or {}
 				item.CanBuy[subrole] = subrole

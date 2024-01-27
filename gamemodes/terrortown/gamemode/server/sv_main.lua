@@ -1391,7 +1391,7 @@ function GM:MapTriggeredEnd(wintype)
 		self.MapWin = wintype
 	else
 		-- print alert and hint for contact
-		print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
+		ErrorNoHaltWithStack("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
 	end
 end
 
