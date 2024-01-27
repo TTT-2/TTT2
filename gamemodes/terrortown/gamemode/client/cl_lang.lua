@@ -69,7 +69,7 @@ function LANG.AddToLanguage(langName, stringName, stringText)
 	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
-		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(stringName), tostring(langName)))
+		ErrorNoHaltWithStack(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(stringName), tostring(langName)))
 
 		return stringName
 	end
@@ -220,7 +220,7 @@ function LANG.GetNameFromAlias(langName)
 
 	for name, tbl in pairs(LANG.Strings) do
 		if tbl.__alias and string.lower(tbl.__alias) == langName then
-			MsgN("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
+			ErrorNoHaltWithStack("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
 
 			return name
 		end
@@ -238,7 +238,7 @@ function LANG.GetUnsafeNamed(langName)
 	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
-		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(langName)))
+		ErrorNoHaltWithStack(Format("Failed to get '%s': language does not exist.\n", tostring(langName)))
 
 		return
 	end

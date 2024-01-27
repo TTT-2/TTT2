@@ -136,7 +136,7 @@ end
 local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
 	if not hudEl then
-		MsgN("Error: HUD with name " .. name .. " was not found!")
+		ErrorNoHaltWithStack("Error: HUD with name " .. name .. " was not found!")
 
 		return
 	end

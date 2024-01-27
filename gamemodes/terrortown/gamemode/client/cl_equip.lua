@@ -260,7 +260,7 @@ local function PreqLabels(parent, x, y)
 		if statusCode == shop.statusCode.SUCCESS then
 			tooltipText = "Ok"
 		elseif statusCode == shop.statusCode.INVALIDID then
-			ErrorNoHalt("[TTT2][ERROR] Missing id in table:", sel)
+			ErrorNoHaltWithStack("[TTT2][ERROR] Missing id in table:", sel)
 			PrintTable(sel)
 			tooltipText = "No ID"
 		elseif statusCode == shop.statusCode.NOTBUYABLE then

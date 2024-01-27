@@ -180,7 +180,7 @@ if SERVER then
 				local success, err = pcall(self.Explode, self)
 
 				if not success then
-					ErrorNoHalt("ERROR CAUGHT: ttt_flame: " .. err .. "\n")
+					ErrorNoHaltWithStack("ERROR CAUGHT: ttt_flame: " .. err .. "\n")
 				end
 			end
 

@@ -90,7 +90,7 @@ function HUD:PerformLayout()
 
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
-			Msg("Error: Hudelement not found during PerformLayout: " .. elemName)
+			ErrorNoHaltWithStack("Error: Hudelement not found during PerformLayout: " .. elemName)
 
 			continue
 		end
@@ -115,7 +115,7 @@ function HUD:Initialize()
 
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
-			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
+			ErrorNoHaltWithStack("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
 
 			continue
 		end
@@ -133,7 +133,7 @@ function HUD:Initialize()
 
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
-			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
+			ErrorNoHaltWithStack("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
 
 			continue
 		end
@@ -347,7 +347,7 @@ function HUD:Reset()
 
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
-			Msg("Error: Hudelement not found during Reset: " .. elemName)
+			ErrorNoHaltWithStack("Error: Hudelement not found during Reset: " .. elemName)
 
 			continue
 		end

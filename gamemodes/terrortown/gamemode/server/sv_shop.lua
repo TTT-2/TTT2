@@ -69,7 +69,7 @@ local function HandleErrorMessage(ply, equipmentId, statusCode)
 	elseif statusCode == shop.statusCode.NOTENOUGHCREDITS then
 		print(ply, " tried to buy item/weapon, but didn't have enough credits.")
 	elseif statusCode == shop.statusCode.INVALIDID then
-		ErrorNoHalt("[TTT2][ERROR] No ID was requested by:", ply)
+		ErrorNoHaltWithStack("[TTT2][ERROR] No ID was requested by:", ply)
 	elseif statusCode == shop.statusCode.NOTBUYABLE then
 		LANG.Msg(ply, "This equipment cannot be bought.", nil, MSG_MSTACK_ROLE)
 	elseif statusCode == shop.statusCode.NOTENOUGHPLAYERS then

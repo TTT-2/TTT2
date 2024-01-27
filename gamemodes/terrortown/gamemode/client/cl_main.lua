@@ -167,7 +167,7 @@ function GM:Initialize()
 	end)
 
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
+		ErrorNoHaltWithStack("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \"" .. path .. "\"")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 

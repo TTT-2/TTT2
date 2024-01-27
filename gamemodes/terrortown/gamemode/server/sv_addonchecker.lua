@@ -651,16 +651,16 @@ function addonChecker.Check()
 		local detectedAddon = addonChecker.curatedList[tostring(addon.wsid)]
 		if not detectedAddon then continue end
 
-		ErrorNoHalt(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
+		ErrorNoHaltWithStack(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
 
 		if detectedAddon.reason then
-			ErrorNoHalt("Reason: " .. detectedAddon.reason .. "\n")
+			ErrorNoHaltWithStack("Reason: " .. detectedAddon.reason .. "\n")
 		end
 
-		ErrorNoHalt("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
+		ErrorNoHaltWithStack("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
 
 		if detectedAddon.alternative then
-			ErrorNoHalt("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
+			ErrorNoHaltWithStack("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
 		end
 
 		print("")

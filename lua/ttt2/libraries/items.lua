@@ -172,7 +172,7 @@ function items.Get(name, retTbl)
 		local base = items.Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant item " .. tostring(retval.Base) .. "!\n")
+			ErrorNoHaltWithStack("ERROR: Trying to derive item " .. tostring(name) .. " from non existant item " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end

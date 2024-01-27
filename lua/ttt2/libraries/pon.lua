@@ -193,7 +193,7 @@ do
 	end
 
 	encode.__index = function(key)
-		ErrorNoHalt('Type: ' .. key .. ' can not be encoded. Encoded as as pass-over value.')
+		ErrorNoHaltWithStack('Type: ' .. key .. ' can not be encoded. Encoded as as pass-over value.')
 
 		return encode['nil']
 	end

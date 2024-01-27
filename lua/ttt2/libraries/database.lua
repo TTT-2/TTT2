@@ -153,7 +153,7 @@ function database.GetDefaultValue(accessName, itemName, key)
 	local index = nameToIndex[accessName]
 
 	if not index then
-		ErrorNoHalt("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " is not available or is not synced.")
+		ErrorNoHaltWithStack("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " is not available or is not synced.")
 
 		return
 	end
@@ -169,7 +169,7 @@ function database.GetDefaultValue(accessName, itemName, key)
 		local savingKey = dataTable.keys[key]
 
 		if not istable(savingKey) then
-			ErrorNoHalt("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+			ErrorNoHaltWithStack("[TTT2] database.GetDefaultValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
@@ -758,7 +758,7 @@ if CLIENT then
 			local function OnWaitEndFunc() database.GetValue(accessName, itemName, key, OnReceiveFunc) end
 
 			if not tryGetRegisteredDatabase(accessName, OnWaitEndFunc) then
-				ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
+				ErrorNoHaltWithStack("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
 				OnReceiveFunc(false)
 			end
 
@@ -768,7 +768,7 @@ if CLIENT then
 		local dataTable = registeredDatabases[index]
 
 		if isstring(key) and not dataTable.keys[key] then
-			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+			ErrorNoHaltWithStack("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
@@ -811,13 +811,13 @@ if CLIENT then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
+			ErrorNoHaltWithStack("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not available or synced.")
 
 			return
 		end
 
 		if not registeredDatabases[index].keys[key] then
-			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+			ErrorNoHaltWithStack("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
@@ -836,7 +836,7 @@ if CLIENT then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			ErrorNoHalt("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
+			ErrorNoHaltWithStack("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
 
 			return
 		end
@@ -1048,7 +1048,7 @@ if SERVER then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not registered.")
+			ErrorNoHaltWithStack("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " is not registered.")
 
 			return false
 		end
@@ -1057,7 +1057,7 @@ if SERVER then
 
 		-- If itemName and key are given but the key is not registered, throw an error
 		if itemName and key and not dataTable.keys[key] then
-			ErrorNoHalt("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+			ErrorNoHaltWithStack("[TTT2] database.GetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return false
 		end
@@ -1165,7 +1165,7 @@ if SERVER then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not registered.")
+			ErrorNoHaltWithStack("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " is not registered.")
 
 			return
 		end
@@ -1173,7 +1173,7 @@ if SERVER then
 		local _, hasWriteAccess = hasAccessToDatabase(index, plyID64)
 
 		if not hasWriteAccess then
-			ErrorNoHalt("[TTT2] database.SetValue failed. The player with the ID64 " .. plyID64 .. " has no write access to the database " .. accessName .. " .")
+			ErrorNoHaltWithStack("[TTT2] database.SetValue failed. The player with the ID64 " .. plyID64 .. " has no write access to the database " .. accessName .. " .")
 
 			return
 		end
@@ -1181,7 +1181,7 @@ if SERVER then
 		local dataTable = registeredDatabases[index]
 
 		if not dataTable.keys[key] then
-			ErrorNoHalt("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+			ErrorNoHaltWithStack("[TTT2] database.SetValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
@@ -1257,7 +1257,7 @@ if SERVER then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			ErrorNoHalt("[TTT2] database.SetDefaultValue failed. The registered Database of " .. accessName .. " is not registered.")
+			ErrorNoHaltWithStack("[TTT2] database.SetDefaultValue failed. The registered Database of " .. accessName .. " is not registered.")
 
 			return
 		end
@@ -1265,7 +1265,7 @@ if SERVER then
 		local dataTable = registeredDatabases[index]
 
 		if not dataTable.keys[key] then
-			ErrorNoHalt("[TTT2] database.SetDefaultValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
+			ErrorNoHaltWithStack("[TTT2] database.SetDefaultValue failed. The registered Database of " .. accessName .. " doesnt have a key named " .. key)
 
 			return
 		end
@@ -1298,11 +1298,11 @@ if SERVER then
 	function database.SetDefaultValuesFromItem(accessName, itemName, item)
 		local index = nameToIndex[accessName]
 		if not index then
-			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The registered Database of " .. accessName .. " is not registered.")
+			ErrorNoHaltWithStack("[TTT2] database.SetDefaultValuesFromItem failed. The registered Database of " .. accessName .. " is not registered.")
 			return
 		end
 		if not istable(item) then
-			ErrorNoHalt("[TTT2] database.SetDefaultValuesFromItem failed. The given item has no accessible values.")
+			ErrorNoHaltWithStack("[TTT2] database.SetDefaultValuesFromItem failed. The given item has no accessible values.")
 			return
 		end
 		local dataTable = registeredDatabases[index]
@@ -1323,7 +1323,7 @@ if SERVER then
 		local index = nameToIndex[accessName]
 
 		if not index then
-			ErrorNoHalt("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
+			ErrorNoHaltWithStack("[TTT2] database.Reset failed. The registered Database of " .. accessName .. " is not available or synced.")
 
 			return
 		end
@@ -1331,7 +1331,7 @@ if SERVER then
 		local _, hasWriteAccess = hasAccessToDatabase(index, plyID64)
 
 		if not hasWriteAccess then
-			ErrorNoHalt("[TTT2] database.Reset failed. The player with the ID64 " .. plyID64 .. " has no write access to the database " .. accessName .. " .")
+			ErrorNoHaltWithStack("[TTT2] database.Reset failed. The player with the ID64 " .. plyID64 .. " has no write access to the database " .. accessName .. " .")
 
 			return
 		end

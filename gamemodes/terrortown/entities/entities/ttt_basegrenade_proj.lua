@@ -50,7 +50,7 @@ end
 -- override to describe what happens when the nade explodes
 -- @ignore
 function ENT:Explode(tr)
-	ErrorNoHalt("ERROR: BaseGrenadeProjectile explosion code not overridden!\n")
+	ErrorNoHaltWithStack("ERROR: BaseGrenadeProjectile explosion code not overridden!\n")
 end
 
 ---
@@ -78,7 +78,7 @@ function ENT:Think()
 		if not success then
 			-- prevent effect spam on Lua error
 			self:Remove()
-			ErrorNoHalt("ERROR CAUGHT: ttt_basegrenade_proj: " .. err .. "\n")
+			ErrorNoHaltWithStack("ERROR CAUGHT: ttt_basegrenade_proj: " .. err .. "\n")
 		end
 	end
 end

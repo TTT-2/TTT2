@@ -584,7 +584,7 @@ function GM:TTT2RegisterWeaponID(eq)
 		print("No id could be assigned. Equipment has no name.")
 	end
 
-	ErrorNoHalt("[TTT2][IDCHECK][ERROR] Equipment is invalid after registration attempt and has no id.\n")
+	ErrorNoHaltWithStack("[TTT2][IDCHECK][ERROR] Equipment is invalid after registration attempt and has no id.\n")
 	PrintTable(eq)
 
 	return false

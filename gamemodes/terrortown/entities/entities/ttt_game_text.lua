@@ -39,7 +39,7 @@ function ENT:KeyValue(key, value)
 		self.Receiver = tonumber(value)
 
 		if not self.Receiver or self.Receiver < 0 or self.Receiver > 5 then
-			ErrorNoHalt("ERROR: ttt_game_text has invalid inputReceiver value\n")
+			ErrorNoHaltWithStack("ERROR: ttt_game_text has invalid inputReceiver value\n")
 
 			self.Receiver = RECEIVE_ACTIVATOR
 		end
@@ -75,7 +75,7 @@ function ENT:AcceptInput(name, activator)
 		end)
 	elseif inputReceiver == RECEIVE_ACTIVATOR then
 		if not IsValid(activator) or not activator:IsPlayer() then
-			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
+			ErrorNoHaltWithStack("ttt_game_text tried to show message to invalid !activator\n")
 
 			return true
 		end

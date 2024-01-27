@@ -271,7 +271,7 @@ function roles.Get(name, retTbl)
 		local base = roles.Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
+			ErrorNoHaltWithStack("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end

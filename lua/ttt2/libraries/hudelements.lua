@@ -127,7 +127,7 @@ function hudelements.Get(name, retTbl)
 		local base = hudelements.Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive HUD Element " .. tostring(name) .. " from non existant HUD Element " .. tostring(retval.Base) .. "!\n")
+			ErrorNoHaltWithStack("ERROR: Trying to derive HUD Element " .. tostring(name) .. " from non existant HUD Element " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end
@@ -221,7 +221,7 @@ end
 function hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
 	local child = hudelements.GetStored(childid)
 	if not child then
-		MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". child element instance was not found or registered yet!")
+		ErrorNoHaltWithStack("Error: Cannot add child " .. childid .. " to " .. parentid .. ". child element instance was not found or registered yet!")
 
 		return
 	end
@@ -229,7 +229,7 @@ function hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
 	if not parent_is_type then
 		local parent = hudelements.GetStored(parentid)
 		if not parent then
-			MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". parent element was not found or registered yet!")
+			ErrorNoHaltWithStack("Error: Cannot add child " .. childid .. " to " .. parentid .. ". parent element was not found or registered yet!")
 
 			return
 		end

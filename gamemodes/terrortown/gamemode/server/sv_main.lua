@@ -296,7 +296,7 @@ function GM:Initialize()
 	end)
 
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
+		ErrorNoHaltWithStack("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \"" .. path .. "\"")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
@@ -356,13 +356,13 @@ function GM:Initialize()
 	WaitForPlayers()
 
 	if cvars.Number("sv_alltalk", 0) > 0 then
-		ErrorNoHalt("TTT2 WARNING: sv_alltalk is enabled. Dead players will be able to talk to living players. TTT2 will now attempt to set sv_alltalk 0.\n")
+		ErrorNoHaltWithStack("TTT2 WARNING: sv_alltalk is enabled. Dead players will be able to talk to living players. TTT2 will now attempt to set sv_alltalk 0.\n")
 
 		RunConsoleCommand("sv_alltalk", "0")
 	end
 
 	if not IsMounted("cstrike") then
-		ErrorNoHalt("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
+		ErrorNoHaltWithStack("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 
 	---

@@ -44,10 +44,10 @@ EquipmentItems = EquipmentItems or setmetatable(
 	},
 	{
 		__index = function(tbl, key)
-			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
+			ErrorNoHaltWithStack("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
 		end,
 		__newindex = function(tbl, key, val)
-			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
+			ErrorNoHaltWithStack("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
 
 			if istable(val) then
 				tbl[key] = setmetatable(val, itemMt)
@@ -299,7 +299,7 @@ local function EncodeForStream(tbl)
 
 	local result = util.TableToJSON(tbl)
 	if not result then
-		ErrorNoHalt("Round report event encoding failed!\n")
+		ErrorNoHaltWithStack("Round report event encoding failed!\n")
 
 		return false
 	else
@@ -650,7 +650,7 @@ else -- CLIENT
 			local json_shop = buff -- util.Decompress(buff)
 
 			if not json_shop then
-				ErrorNoHalt("RANDOMSHOP decompression failed!\n")
+				ErrorNoHaltWithStack("RANDOMSHOP decompression failed!\n")
 			else
 				-- convert the json string back to a table
 				local tmp = util.JSONToTable(json_shop)
@@ -666,7 +666,7 @@ else -- CLIENT
 
 					RANDOMSHOP[LocalPlayer()] = tmp2
 				else
-					ErrorNoHalt("RANDOMSHOP decoding failed!\n")
+					ErrorNoHaltWithStack("RANDOMSHOP decoding failed!\n")
 				end
 			end
 
@@ -1274,7 +1274,7 @@ else -- CLIENT
 		buff = ""
 
 		if not json_shop then
-			ErrorNoHalt("SHOP decompression failed!\n")
+			ErrorNoHaltWithStack("SHOP decompression failed!\n")
 
 			return
 		end
@@ -1283,7 +1283,7 @@ else -- CLIENT
 		local tmp = util.JSONToTable(json_shop)
 
 		if not istable(tmp) then
-			ErrorNoHalt("SHOP decoding failed!\n")
+			ErrorNoHaltWithStack("SHOP decoding failed!\n")
 
 			return
 		end

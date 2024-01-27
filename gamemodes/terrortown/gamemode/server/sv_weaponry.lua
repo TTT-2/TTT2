@@ -486,7 +486,7 @@ function GM:WeaponEquip(wep, ply)
 	if not wep.Kind then
 		wep:Remove() -- only remove if they lack critical stuff
 
-		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+		ErrorNoHaltWithStack("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
 
 		return
 	end

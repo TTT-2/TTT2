@@ -69,7 +69,7 @@ function HUDELEMENT:ApplyToChildren(funcName, ...)
 
 		local elemtbl = hudelements.GetStored(elem)
 		if not elemtbl then
-			Msg("ERROR: HUDElement " .. (self.id or "?") .. " has unknown child element named " .. elem .. " when applying a function to all children: " .. funcName .. " \n")
+			ErrorNoHaltWithStack("ERROR: HUDElement " .. (self.id or "?") .. " has unknown child element named " .. elem .. " when applying a function to all children: " .. funcName .. " \n")
 
 			continue
 		end
@@ -77,7 +77,7 @@ function HUDELEMENT:ApplyToChildren(funcName, ...)
 		if isfunction(elemtbl[funcName]) then
 			elemtbl[funcName](elemtbl, ...)
 		else
-			MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
+			ErrorNoHaltWithStack("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
 		end
 	end
 end

@@ -35,7 +35,7 @@ local function DBCreateBindsTable()
 		local result = sql.Query("CREATE TABLE " .. BIND_TABLE_NAME .. " (guid TEXT, name TEXT, button TEXT)")
 
 		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Could not create the database table...")
+			ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Could not create the database table...")
 
 			return false
 		end
@@ -51,7 +51,7 @@ local function DBCreateDefaultBindsFlagTable()
 		local result = sql.Query("CREATE TABLE " .. BIND_FLAG_TABLE_NAME .. " (guid TEXT, name TEXT)")
 
 		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Could not create the flag database table...")
+			ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Could not create the flag database table...")
 
 			return false
 		end
@@ -67,7 +67,7 @@ local function SaveBinding(name, button)
 		local result = sql.Query("INSERT INTO " .. BIND_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
 
 		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
+			ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
 		end
 	end
 end
@@ -79,7 +79,7 @@ local function DBRemoveBinding(name, button)
 		local result = sql.Query("DELETE FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
 
 		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
+			ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
 		end
 	end
 end
@@ -91,7 +91,7 @@ local function DBSetDefaultAppliedFlag(name)
 		local result = sql.Query("INSERT INTO " .. BIND_FLAG_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ")")
 
 		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to save binding flag to database...")
+			ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Wasn't able to save binding flag to database...")
 		end
 	end
 end

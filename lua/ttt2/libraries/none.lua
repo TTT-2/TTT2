@@ -32,7 +32,7 @@ end
 -- @deprecated
 -- @realm shared
 function AccessorFuncDT(tbl, varname, name)
-	MsgN("[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version.")
+	ErrorNoHaltWithStack("[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version.")
 	tbl["Get" .. name] = function(s)
 		return s.dt and s.dt[varname]
 	end
