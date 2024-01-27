@@ -520,7 +520,7 @@ end
 -- @deprecated
 -- @realm server
 function plymeta:SetSpeed(slowed)
-	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
+	error("Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states")
 end
 
 ---

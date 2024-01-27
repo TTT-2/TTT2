@@ -12,7 +12,8 @@ AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL)
 ---
 -- @accessor boolean
 -- @realm client
-AccessorFunc(PANEL, "m_bBackground", "DrawBackground", FORCE_BOOL) -- deprecated
+-- @deprecated
+AccessorFunc(PANEL, "m_bBackground", "DrawBackground", FORCE_BOOL)
 
 ---
 -- @accessor boolean
