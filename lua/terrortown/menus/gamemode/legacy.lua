@@ -22,7 +22,6 @@ local function RegisterLegacyTabCache()
 	elemStore.AddSheet = function(slf, label, panel, material, noStretchX, noStretchY, tooltip)
 		if not IsValid(panel) then
 			ErrorNoHaltWithStack("DPropertySheet:AddSheet tried to add invalid panel!")
-			debug.Trace()
 
 			return
 		end
