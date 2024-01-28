@@ -30,14 +30,14 @@ local markedEnt = NULL
 local markedColor = color_white
 
 ---
--- Renders marked models, this is a sub function for Render
--- @param table ents list of @{Entity}
+-- Renders marked models, this is a sub function for Render.
+-- @param table markedEntsTable list of @{Entity}
 -- @param Color col color of rendering
--- @param number size size of ents table
+-- @param number size size of markedEntsTable table
 -- @realm client
-local function RenderMarkedModels(ents, col, size)
+local function RenderMarkedModels(markedEntsTable, col, size)
 	for i = 1, size do
-		markedEnt = ents[i]
+		markedEnt = markedEntsTable[i]
 
 		-- prevent messing up materials
 		markedEnt:SetNoDraw(true)
@@ -60,21 +60,21 @@ local function RenderMarkedModels(ents, col, size)
 end
 
 ---
--- Renders the entity based on the color
--- @param table ents list of @{Entity}
+-- Renders the entity based on the color.
+-- @param table markedEntsTable list of @{Entity}
 -- @param Color col color of rendering
 -- @realm client
-local function Render(ents, col)
+local function Render(markedEntsTable, col)
 	-- check for valid data
 	local tmp = {}
 	local index = 1
 	local remTable = {}
 	local remSize = 0
 
-	local entsSize = #ents
+	local entsTableSize = #markedEntsTable
 
-	for i = 1, entsSize do
-		local ent = ents[i]
+	for i = 1, entsTableSize do
+		local ent = markedEntsTable[i]
 
 		if not IsValid(ent) then -- search for invalid data
 			remSize = remSize + 1
@@ -90,11 +90,11 @@ local function Render(ents, col)
 		local tableRemove = table.remove
 
 		for i = 1, remSize do
-			for x = 1, entsSize do
-				if ents[x] == remTable[i] then
-					tableRemove(ents, x)
+			for x = 1, entsTableSize do
+				if markedEntsTable[x] == remTable[i] then
+					tableRemove(markedEntsTable, x)
 
-					entsSize = entsSize - 1
+					entsTableSize = entsTableSize - 1
 
 					break
 				end
