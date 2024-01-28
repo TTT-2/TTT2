@@ -63,6 +63,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
+- Fixed marks library having self zfailing and color issues (by @WardenPotato)
 
 ### Removed
 

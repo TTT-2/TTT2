@@ -9,8 +9,6 @@
 local render = render
 local table = table
 local IsValid = IsValid
-local cam = cam
-local surface = surface
 local hook = hook
 local pairs = pairs
 
@@ -25,24 +23,58 @@ marks = {}
 local marksList = {}
 local marksHookInstalled = false
 
+-- reuse the same memory for each render
+local oldR, oldG, oldB = 1, 1, 1
+local oldBlend = 1
+local markedEnt = NULL
+local markedColor = color_white
+
 ---
--- Renders the entity based on the color
--- @param table ents list of @{Entity}
+-- Renders marked models, this is a sub function for Render.
+-- @param table markedEntsTable list of @{Entity}
 -- @param Color col color of rendering
--- @param Vector pos position of client's view the rendering starts from
--- @param Angle ang angle of client's view the rendering starts from
+-- @param number size size of markedEntsTable table
 -- @realm client
-local function Render(ents, col, pos, ang, w, h)
+local function RenderMarkedModels(markedEntsTable, col, size)
+	for i = 1, size do
+		markedEnt = markedEntsTable[i]
+
+		-- prevent messing up materials
+		markedEnt:SetNoDraw(true)
+		-- get/set the color of our marked entity
+		markedColor = markedEnt:GetColor()
+		oldR, oldG, oldB = render.GetColorModulation()
+		render.SetColorModulation(markedColor.r / 255, markedColor.g / 255, markedColor.b / 255)
+		-- get/set the transparency of our marked entity
+		oldBlend = render.GetBlend()
+		render.SetBlend(markedColor.a / 255)
+
+		-- draw the entity
+		markedEnt:DrawModel()
+
+		-- reset the values back to what they were
+		markedEnt:SetNoDraw(false)
+		render.SetColorModulation(oldR, oldG, oldB)
+		render.SetBlend(oldBlend)
+	end
+end
+
+---
+-- Renders the entity based on the color.
+-- @param table markedEntsTable list of @{Entity}
+-- @param Color col color of rendering
+-- @realm client
+local function Render(markedEntsTable, col)
 	-- check for valid data
 	local tmp = {}
 	local index = 1
 	local remTable = {}
 	local remSize = 0
 
-	local entsSize = #ents
+	local entsTableSize = #markedEntsTable
 
-	for i = 1, entsSize do
-		local ent = ents[i]
+	for i = 1, entsTableSize do
+		local ent = markedEntsTable[i]
 
 		if not IsValid(ent) then -- search for invalid data
 			remSize = remSize + 1
@@ -58,11 +90,11 @@ local function Render(ents, col, pos, ang, w, h)
 		local tableRemove = table.remove
 
 		for i = 1, remSize do
-			for x = 1, entsSize do
-				if ents[x] == remTable[i] then
-					tableRemove(ents, x)
+			for x = 1, entsTableSize do
+				if markedEntsTable[x] == remTable[i] then
+					tableRemove(markedEntsTable, x)
 
-					entsSize = entsSize - 1
+					entsTableSize = entsTableSize - 1
 
 					break
 				end
@@ -73,38 +105,41 @@ local function Render(ents, col, pos, ang, w, h)
 	local size = #tmp
 	if size == 0 then return end
 
+	-- reset everything to known good values
+	render.SetStencilWriteMask(0xFF)
+	render.SetStencilTestMask(0xFF)
+	render.SetStencilReferenceValue(0)
+	render.SetStencilCompareFunction(STENCIL_ALWAYS)
+	render.SetStencilPassOperation(STENCIL_KEEP)
+	render.SetStencilFailOperation(STENCIL_KEEP)
+	render.SetStencilZFailOperation(STENCIL_KEEP)
 	render.ClearStencil()
+
+	-- enable stencils
 	render.SetStencilEnable(true)
-	render.SetStencilWriteMask(255)
-	render.SetStencilTestMask(255)
-	render.SetStencilReferenceValue(15)
-	render.SetStencilFailOperation(STENCILOPERATION_KEEP)
-	render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
-	render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
-	render.SetBlend(0)
+	-- set the reference value to 1. This is what the compare function tests against
+	render.SetStencilReferenceValue(1)
 
-	for i = 1, size do
-		tmp[i]:DrawModel()
-	end
+	-- always draw everything, since we need the ZFail to work we cannot use STENCIL_NEVER to avoid drawing to the RT
+	render.SetStencilCompareFunction(STENCIL_ALWAYS)
+	-- if something would draw to the screen but is behind something, set the pixels it draws to 1
+	render.SetStencilZFailOperation(STENCIL_REPLACE)
 
-	render.SetBlend(1)
-	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+	RenderMarkedModels(tmp, col, size)
 
-	-- stencil work is done in postdrawopaquerenderables, where surface doesn't work correctly
-	-- workaround via 3D2D by Bletotum
+	-- now we basically do the same thing again but this time we set stencil values to 0 if the operation passes
+	-- this fixes the entity zfailing with itself
+	render.SetStencilZFailOperation(STENCIL_KEEP)
+	render.SetStencilPassOperation(STENCILOPERATION_ZERO)
 
-	cam.Start3D2D(pos, ang, 1)
+	RenderMarkedModels(tmp, col, size)
 
-	surface.SetDrawColor(col.r, col.g, col.b, col.a)
-	surface.DrawRect(-w, -h, w * 2, h * 2)
+	-- now, only draw things that have their pixels set to 1. This is the hidden parts of the stencil tests
+	render.SetStencilCompareFunction(STENCIL_EQUAL)
+	-- flush the screen. This will draw our color onto the screen
+	render.ClearBuffersObeyStencil(col.r, col.g, col.b, col.a, false)
 
-	cam.End3D2D()
-
-	for i = 1, size do
-		tmp[i]:DrawModel()
-	end
-
+	-- let everything render normally again
 	render.SetStencilEnable(false)
 end
 
@@ -112,17 +147,8 @@ end
 -- Hook that renders the entities with the highlighting
 -- @realm client
 local function RenderHook()
-	local client = LocalPlayer()
-	local ang = client:EyeAngles()
-	local pos = client:EyePos() + ang:Forward() * 10
-
-	ang = Angle(ang.p + 90, ang.y, 0)
-
-	local w = ScrW()
-	local h = ScrH()
-
 	for _, list in pairs(marksList) do
-		Render(list.ents, list.col, pos, ang, w, h)
+		Render(list.ents, list.col)
 	end
 end
 
