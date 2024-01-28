@@ -172,7 +172,7 @@ function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
 	local spawnPoints = plyspawn.GetPlayerSpawnPoints()
 
 	if not spawnPoints or #spawnPoints == 0 then
-		Error("[TTT2][PLYSPAWN] No spawn points found! Make sure there is at least one spawn point on the map.\n")
+		Dev(1, "[TTT2][PLYSPAWN] No spawn points found! Make sure there is at least one spawn point on the map.\n")
 
 		return false
 	end
@@ -203,7 +203,7 @@ function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
 
 		if not riggedSpawnPoint then continue end
 
-		ErrorNoHaltWithStack("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
+		Dev(1, "TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
 
 		-- this is an old TTT flag that I will keep for compatibilities sake
 		GAMEMODE.HaveRiggedSpawn = true
