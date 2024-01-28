@@ -29,7 +29,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
-- TButton users can now see a visual countdown of buttons that will reactivate (by @EntranceJew)
+- TButton users can now see a visual countdown of buttons that will reactivate (by @EntranceJew, graphics help by @WardenPotato)
 - A new permission per-role: being able to see the existence of TButtons on a map (by @EntranceJew)
 
 ### Changed
