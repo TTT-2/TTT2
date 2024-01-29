@@ -495,11 +495,6 @@ function VOICE.UpdatePlayerVoiceVolume(ply)
 	if isfunction(func) then
 		out_vol = func( vol )
 	end
-	-- if the database fails for strange people then blast their ears out and save it
-	if out_vol ~= 0 and not out_vol then
-		out_vol = 1
-		VOICE.SetPreferredPlayerVoiceVolume(ply, out_vol)
-	end
 
 	ply:SetVoiceVolumeScale( out_vol )
 
