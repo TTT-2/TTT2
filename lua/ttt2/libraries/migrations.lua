@@ -9,114 +9,65 @@ end
 
 migrations = {}
 migrations.folderPath = "terrortown/migrations/"
-migrations.baseFolderPath = migrations.folderPath .. "base/"
 migrations.databaseName = "ttt2_migrations"
 migrations.savingKeys = {
 	executedAt = {
 		typ = "string",
 		default = ""
-	},
-	statusMessage = {
-		typ = "string",
-		default = "Success"
-	},
+	}
 }
 
 sql.CreateSqlTable(migrations.databaseName, migrations.savingKeys)
 migrations.orm = orm.Make(migrations.databaseName)
 
-migrations.migrations = {}
-migrations.isLoaded = false
-
 ---
 -- Runs all missing forward gamemode migrations.
--- @return boolean `true` if the desired version was successfully migrated and `false` in case of an error.
 -- @realm shared
 function migrations.Apply()
-	if not migrations.isLoaded then
-		migrations.Load()
-	end
+	local files = file.Find(migrations.folderPath .. "*.lua", "LUA", "nameasc") or {}
 
-	local migrationSuccess = true
-	local errorMessage = ""
+	local fileExecutionCounter = 0
 
-	for fileName, migration in SortedPairs(migrations.migrations) do
-		if not IsValid(migration) then continue end
+	-- Add Hook to OnLuaError to catch if migrations fail
+	local isSuccess = true
+	local hookName = "OnLuaError"
+	local hookIdentifier = "TTT2MigrationErrorCatcher"
+	hook.Add(hookName, hookIdentifier, function(error, realm, stack, name, id)
+		isSuccess = false
+	end)
+
+	for i = 1, #files do
+		local fileName = files[i]
+		local fullPath = migrations.folderPath .. files[i]
 
 		local fileInfo = migrations.orm:Find(fileName)
 
-		-- As ORM currently gives out strings check it
-		if fileInfo and (fileInfo.wasSuccess == true or fileInfo.wasSuccess == "true") then continue end
+		if fileInfo then continue end
 
 		MsgN("[TTT2] Migrating: ", fileName)
 
-		migrationSuccess, errorMessage = pcall(migration.Upgrade, migration)
+		if SERVER then
+			AddCSLuaFile(fullPath)
+		end
+		include(fullPath)
+
+		if not isSuccess then
+			Error("\n[TTT2] Migration failed.\n\n")
+
+			return
+		end
 
 		local executedAt = os.date("%Y/%m/%d - %H:%M:%S", os.time())
 
-		if fileInfo then
-			fileInfo.executedAt = executedAt
-			fileInfo.statusMessage = migrationSuccess and "Success" or errorMessage
-			fileInfo:Save()
-		else
-			migrations.orm:New({
-				name = fileName,
-				executedAt = executedAt,
-				statusMessage = migrationSuccess and "Success" or errorMessage,
-			}):Save()
-		end
+		migrations.orm:New({
+			name = fileName,
+			executedAt = executedAt,
+		}):Save()
 
-		if not migrationSuccess then
-			ErrorNoHalt("[TTT2] Migration failed. Error:\n" .. tostring(errorMessage) .. "\n")
-			break;
-		else
-			MsgN("[TTT2] Successfully migrated: ", fileName)
-		end
+		fileExecutionCounter = fileExecutionCounter + 1
 	end
 
-	return migrationSuccess
-end
+	hook.Remove(hookName, hookIdentifier)
 
----
--- Checks if this class should inherit from the baseClass
--- In this case only looks up, if the class is the base
--- @param table class The class that inherits
--- @param table base The class to inherit from
--- @return boolean If the class is the base
-local function ShouldInherit(class, baseClass)
-	return class.base ~= class.type
-end
-
----
--- Run on Initialization of a class after building it
--- @param table class The Class that got initialized
--- @param string path The path the file was found in
--- @param string name The name of the class
-local function OnInitialization(class, path, name)
-	class.type = name
-	class.base = class.base or "migration_base"
-
-	MsgN("Added TTT2 Migration file: ", path, name)
-end
-
----
--- Run after inheriting to set as final baseclass
--- @param table class The Class that got initialized
--- @param string path The path the file was found in
--- @param string name The name of the class
-local function PostInherit(class, path, name)
-	baseclass.Set(name, class)
-end
-
----
--- Loads migration-files and starts inheriting from base files
--- @realm shared
-function migrations.Load()
-	MsgN("[TTT2] Loading base Migrations for inheritance ...")
-	local baseClasses = classbuilder.BuildFromFolder(migrations.baseFolderPath, SHARED_FILE, "MIGRATION", OnInitialization, true, ShouldInherit, {}, PostInherit)
-
-	MsgN("[TTT2] Loading Migrations ...")
-	migrations.migrations = classbuilder.BuildFromFolder(migrations.folderPath, SHARED_FILE, "MIGRATION", OnInitialization, true, ShouldInherit, baseClasses, PostInherit)
-
-	migrations.isLoaded = true
+	MsgN("[TTT2] Successfully migrated ", fileExecutionCounter, " Files.")
 end
