@@ -46,7 +46,7 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 		self:NextThink(CurTime() + 1)
 
-		markerVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_PLAYER)
+		markerVision.RegisterEntity(self, ROLE_DETECTIVE, VISIBLE_FOR_ROLE)
 	end
 end
 

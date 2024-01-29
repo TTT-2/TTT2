@@ -11,8 +11,9 @@ if SERVER then
 end
 
 VISIBLE_FOR_PLAYER = 0
-VISIBLE_FOR_TEAM = 1
-VISIBLE_FOR_ALL = 2
+VISIBLE_FOR_ROLE = 1
+VISIBLE_FOR_TEAM = 2
+VISIBLE_FOR_ALL = 3
 
 VISIBLE_FOR_BITS = 3
 
@@ -24,7 +25,8 @@ markerVision.registry = {}
 -- Registers an entity that should be rendered on screen with a wallhack and an optional
 -- UI element that works similar to targetID.
 -- @param Entity ent The entity that should be rendered
--- @param Player owner The owner of the wallhack that takes their ownershipo with them on team change
+-- @param number|string|Player owner The owner of the wallhack that takes their ownership with them on team change; can
+-- also be a team (string) or role (number) if it shouldn't be bound to a player
 -- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_TEAM`, `VISIBLE_FOR_ALL`
 -- @param[opt] Color color The color of the wallhack, uses team color as fallback
 -- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
@@ -33,10 +35,13 @@ markerVision.registry = {}
 -- @realm shared
 function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
 	if SERVER then
-		local plysTeam = GetTeamFilter(owner:GetTeam(), true, true)
+		-- handle the player being in a team that is not known, like the unknown
+		if IsPlayer(owner) then
+			local plysTeam = GetTeamFilter(owner:GetTeam(), false, true)
 
-		if #plysTeam == 0 then -- happens for TEAM_NONE for example
-			visibleFor = VISIBLE_FOR_PLAYER
+			if #plysTeam == 0 then -- happens for TEAM_NONE for example
+				visibleFor = VISIBLE_FOR_PLAYER
+			end
 		end
 
 		local streamTable = {
@@ -51,8 +56,20 @@ function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList
 
 		if visibleFor == VISIBLE_FOR_PLAYER then
 			receiver = owner
+		elseif visibleFor == VISIBLE_FOR_ROLE then
+			if IsPlayer(owner) then
+				receiver = GetRoleFilter(owner:GetSubRole(), false)
+			else
+				-- handle static role
+				receiver = GetRoleFilter(owner, false)
+			end
 		elseif visibleFor == VISIBLE_FOR_TEAM then
-			receiver = plysTeam
+			if IsPlayer(owner) then
+				receiver = plysTeam
+			else
+				-- handle static team
+				receiver = GetTeamFilter(owner, false, true)
+			end
 		end
 
 		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and therefore SendStream uses net.Broadcast
@@ -64,6 +81,8 @@ function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList
 			color = color or TEAMS[TEAM_INNOCENT].color
 		elseif visibleFor == VISIBLE_FOR_PLAYER then
 			color = color or TEAMS[TEAM_NONE].color
+		elseif visibleFor == VISIBLE_FOR_ROLE then
+			color = color or LocalPlayer():GetRoleColor()
 		else
 			color = color or TEAMS[LocalPlayer():GetTeam()].color
 		end
@@ -110,8 +129,18 @@ function markerVision.RemoveEntity(ent, receiverList)
 
 		if visibleFor == VISIBLE_FOR_PLAYER then
 			net.Send(owner)
+		elseif visibleFor == VISIBLE_FOR_ROLE then
+			if IsPlayer(owner) then
+				net.Send(receiverList or GetRoleFilter(owner:GetRole(), false))
+			else
+				net.Send(receiverList or GetRoleFilter(owner, false))
+			end
 		elseif visibleFor == VISIBLE_FOR_TEAM then
-			net.Send(receiverList or GetTeamFilter(owner:GetTeam(), true, true))
+			if IsPlayer(owner) then
+				net.Send(receiverList or GetTeamFilter(owner:GetTeam(), false, true))
+			else
+				net.Send(receiverList or GetTeamFilter(owner, false, true))
+			end
 		elseif visibleFor == VISIBLE_FOR_ALL then
 			net.Broadcast()
 		end
@@ -149,11 +178,28 @@ function markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
 	if not markerVision.registry[ent] or markerVision.registry[ent].visibleFor ~= VISIBLE_FOR_TEAM then return end
 
 	local owner = markerVision.registry[ent].owner
-	local oldTeamPlys = GetTeamFilter(oldTeam)
+	local oldTeamPlys = GetTeamFilter(oldTeam, false, true)
 	oldTeamPlys[#oldTeamPlys + 1] = owner
 
 	markerVision.RemoveEntity(ent, oldTeamPlys)
 	markerVision.RegisterEntity(ent, owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, GetTeamFilter(newTeam, false, true))
+end
+
+---
+-- Handles the update of the role of a player change.
+-- @param Entity ent The entity that should be updated
+-- @param string oldTeam The old role of the owner
+-- @param string newTeam The new role of the owner
+-- @realm shared
+function markerVision.UpdateEntityOwnerRole(ent, oldRole, newRole)
+	if not markerVision.registry[ent] or markerVision.registry[ent].visibleFor ~= VISIBLE_FOR_ROLE then return end
+
+	local owner = markerVision.registry[ent].owner
+	local oldRolePlys = GetRoleFilter(oldRole, false)
+	oldRolePlys[#oldRolePlys + 1] = owner
+
+	markerVision.RemoveEntity(ent, oldRolePlys)
+	markerVision.RegisterEntity(ent, owner, VISIBLE_FOR_ROLE, roles.GetByIndex(newRole).color, GetRoleFilter(newRole, false))
 end
 
 if SERVER then
@@ -168,13 +214,69 @@ if SERVER then
 		for ent, data in pairs(markerVision.registry) do
 			if data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
 
-			-- case 1: the owner of that targeted entity changed their team
-			if data.owner ~= ply then continue end
+			-- case 1: the owner is a player and they are the one that changed their team
+			-- this means that the entity is taken to the new team
+			if IsPlayer(data.owner) and data.owner == ply then
+				markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
 
-			-- case 2: the old or the new team is the same team that the owner has
-			if data.owner:GetTeam() ~= oldTeam and data.owner:GetTeam() ~= newTeam then continue end
+				continue
+			end
 
-			markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
+			-- case 2: it is bound to the team and the player's old team matches
+			if data.owner == oldTeam then
+				local oldTeamPlys = GetTeamFilter(oldTeam, false, true)
+				oldTeamPlys[#oldTeamPlys + 1] = ply
+
+				markerVision.RemoveEntity(ent, oldTeamPlys)
+				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_TEAM, TEAMS[oldTeam].color, GetTeamFilter(oldTeam, false, true))
+
+				continue
+			end
+
+			-- case 2: it is bound to the team and the player's new team matches
+			if data.owner == newTeam then
+				local teamPlys = GetTeamFilter(newTeam, false)
+
+				markerVision.RemoveEntity(ent, teamPlys)
+				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, teamPlys)
+
+				continue
+			end
+		end
+	end
+
+	function markerVision.PlayerUpdatedRole(ply, oldRole, newRole)
+		for ent, data in pairs(markerVision.registry) do
+			if data.visibleFor ~= VISIBLE_FOR_ROLE then continue end
+
+			-- case 1: the owner is a player and they are the one that changed their role
+			-- this means that the entity is taken to the new role
+			if IsPlayer(data.owner) and data.owner == ply then
+				markerVision.UpdateEntityOwnerRole(ent, oldRole, newRole)
+
+				continue
+			end
+
+			-- case 2: it is bound to the role and the player's old role matches
+			if data.owner == oldRole then
+				local oldRolePlys = GetRoleFilter(oldRole, false)
+				oldRolePlys[#oldRolePlys + 1] = ply
+
+				markerVision.RemoveEntity(ent, oldRolePlys)
+				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(oldRole).color, GetRoleFilter(oldRole, false))
+
+				continue
+			end
+
+			-- case 2: it is bound to the role and the player's new role matches
+			if data.owner == newRole then
+				local rolePlys = GetRoleFilter(newRole, false)
+
+				markerVision.RemoveEntity(ent, rolePlys)
+				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(newRole).color, rolePlys)
+
+				continue
+			end
 		end
 	end
 end

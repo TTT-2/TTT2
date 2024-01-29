@@ -2086,9 +2086,6 @@ L.decoy_help_pri = "安放诱饵。"
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
 --L.marker_vision_distance_collapsed = "{distance}m"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2171,3 +2168,9 @@ L.help_crosshair_scale_enable = [[
 如果线的长度保持不变，则只有间隙会随着锥度的变化而缩放。]]
 
 L.header_weapon_settings = "武器设置"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your team"
+--L.marker_vision_visible_for_2 = "Visible for your role"
+--L.marker_vision_visible_for_3 = "Visible for everyone"

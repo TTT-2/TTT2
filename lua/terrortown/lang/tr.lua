@@ -2086,9 +2086,6 @@ L.decoy_help_pri = "Tuzağı yerleştirin."
 -- 2023-12-14
 L.marker_vision_owner = "Sahip: {owner}"
 L.marker_vision_distance = "Uzaklık: {distance}m"
-L.marker_vision_visible_for_0 = "Sadece size görünür"
-L.marker_vision_visible_for_1 = "Takıma görünür"
-L.marker_vision_visible_for_2 = "Herkese görünür"
 L.marker_vision_distance_collapsed = "{distance}m"
 
 L.c4_marker_vision_time = "Patlamaya: {time}"
@@ -2169,3 +2166,9 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
 
 L.header_weapon_settings = "Silah Ayarları"
+
+
+L.marker_vision_visible_for_0 = "Sadece size görünür"
+L.marker_vision_visible_for_1 = "Takıma görünür"
+--L.marker_vision_visible_for_2 = "Visible for your role"
+L.marker_vision_visible_for_3 = "Herkese görünür"

@@ -86,7 +86,7 @@ end
 -- @return boolean
 -- @realm shared
 function IsPlayer(ent)
-	return ent and IsValid(ent) and ent:IsPlayer()
+	return ent and isentity(ent) and IsValid(ent) and ent:IsPlayer()
 end
 
 ---

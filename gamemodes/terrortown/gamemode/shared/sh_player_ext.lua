@@ -146,6 +146,10 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		---
 		-- @realm shared
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
+
+		if SERVER then
+			markerVision.PlayerUpdatedRole(self, oldSubrole, subrole)
+		end
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
