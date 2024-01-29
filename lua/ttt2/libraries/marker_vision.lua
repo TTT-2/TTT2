@@ -188,8 +188,8 @@ end
 ---
 -- Handles the update of the role of a player change.
 -- @param Entity ent The entity that should be updated
--- @param string oldTeam The old role of the owner
--- @param string newTeam The new role of the owner
+-- @param number oldRole The old role of the owner
+-- @param number newRole The new role of the owner
 -- @realm shared
 function markerVision.UpdateEntityOwnerRole(ent, oldRole, newRole)
 	if not markerVision.registry[ent] or markerVision.registry[ent].visibleFor ~= VISIBLE_FOR_ROLE then return end
@@ -245,6 +245,13 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Handles the update of the role of a player change. Is called internally and should probably not be called somewhere else.
+	-- @param Entity ent The entity that should be updated
+	-- @param number oldRole The old role of the owner
+	-- @param number newRole The new role of the owner
+	-- @internal
+	-- @realm server
 	function markerVision.PlayerUpdatedRole(ply, oldRole, newRole)
 		for ent, data in pairs(markerVision.registry) do
 			if data.visibleFor ~= VISIBLE_FOR_ROLE then continue end
