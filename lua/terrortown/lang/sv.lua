@@ -2171,6 +2171,6 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 
 
 --L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your team"
---L.marker_vision_visible_for_2 = "Visible for your role"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
 --L.marker_vision_visible_for_3 = "Visible for everyone"

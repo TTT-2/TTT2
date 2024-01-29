@@ -2169,6 +2169,6 @@ L.header_weapon_settings = "Silah Ayarları"
 
 
 L.marker_vision_visible_for_0 = "Sadece size görünür"
-L.marker_vision_visible_for_1 = "Takıma görünür"
---L.marker_vision_visible_for_2 = "Visible for your role"
+--L.marker_vision_visible_for_1 = "Visible for your team"
+L.marker_vision_visible_for_2 = "Takıma görünür"
 L.marker_vision_visible_for_3 = "Herkese görünür"
