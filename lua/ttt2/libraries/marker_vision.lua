@@ -27,7 +27,7 @@ markerVision.registry = {}
 -- @param Entity ent The entity that should be rendered
 -- @param number|string|Player owner The owner of the wallhack that takes their ownership with them on team change; can
 -- also be a team (string) or role (number) if it shouldn't be bound to a player
--- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_TEAM`, `VISIBLE_FOR_ALL`
+-- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_ROLE`, `VISIBLE_FOR_TEAM`,  `VISIBLE_FOR_ALL`
 -- @param[opt] Color color The color of the wallhack, uses team color as fallback
 -- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
 -- @param[opt] any passThroughData any data that should be added to this radar vision, it is also synced to the client
