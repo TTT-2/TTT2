@@ -7,7 +7,7 @@
 if SERVER then
 	AddCSLuaFile()
 
-	util.AddNetworkString("ttt2_register_entity_removed")
+	util.AddNetworkString("ttt2_marker_vision_entity_removed")
 end
 
 VISIBLE_FOR_PLAYER = 0
@@ -22,128 +22,61 @@ markerVision = {}
 markerVision.registry = {}
 
 ---
--- Registers an entity that should be rendered on screen with a wallhack and an optional
--- UI element that works similar to targetID.
--- @param Entity ent The entity that should be rendered
--- @param number|string|Player owner The owner of the wallhack that takes their ownership with them on team change; can
--- also be a team (string) or role (number) if it shouldn't be bound to a player
--- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_ROLE`, `VISIBLE_FOR_TEAM`,  `VISIBLE_FOR_ALL`
--- @param[opt] Color color The color of the wallhack, uses team color as fallback
--- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
--- @param[opt] any passThroughData any data that should be added to this radar vision, it is also synced to the client
--- @note Call on server to add entity on server and all defined clients.
+-- Creates a new marker vision object for the entity.
+-- @note This does not sync to the client, @{MARKER_VISION_OBJECT:SyncToClients}
+-- has to be called on it first
+-- @param Entity ent The entity which should receive the marker vision element
+-- @param string identifier The unique identifier of this marker vision element
+-- @return MARKER_VISION_OBJECT The marker vision object that was created
 -- @realm shared
-function markerVision.RegisterEntity(ent, owner, visibleFor, color, receiverList, passThroughData)
-	if SERVER then
-		-- handle the player being in a team that is not known, like the unknown
-		if IsPlayer(owner) then
-			local plysTeam = GetTeamFilter(owner:GetTeam(), false, true)
+function markerVision.Add(ent, identifier)
+	local mvObject = table.Copy(MARKER_VISION_OBJECT)
+	mvObject:SetEnt(ent)
+	mvObject:SetIdentifier(identifier)
 
-			if #plysTeam == 0 then -- happens for TEAM_NONE for example
-				visibleFor = VISIBLE_FOR_PLAYER
-			end
-		end
+	markerVision.registry[#markerVision.registry + 1] = mvObject
 
-		local streamTable = {
-			ent = ent,
-			owner = owner,
-			visibleFor = visibleFor,
-			color = color,
-			data = passThroughData
-		}
-
-		local receiver
-
-		if visibleFor == VISIBLE_FOR_PLAYER then
-			receiver = owner
-		elseif visibleFor == VISIBLE_FOR_ROLE then
-			if IsPlayer(owner) then
-				receiver = GetRoleFilter(owner:GetSubRole(), false)
-			else
-				-- handle static role
-				receiver = GetRoleFilter(owner, false)
-			end
-		elseif visibleFor == VISIBLE_FOR_TEAM then
-			if IsPlayer(owner) then
-				receiver = plysTeam
-			else
-				-- handle static team
-				receiver = GetTeamFilter(owner, false, true)
-			end
-		end
-
-		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and therefore SendStream uses net.Broadcast
-		net.SendStream("ttt2_register_entity_added", streamTable, receiverList or receiver)
-	end
-
-	if CLIENT then
-		if visibleFor == VISIBLE_FOR_ALL then
-			color = color or TEAMS[TEAM_INNOCENT].color
-		elseif visibleFor == VISIBLE_FOR_PLAYER then
-			color = color or TEAMS[TEAM_NONE].color
-		elseif visibleFor == VISIBLE_FOR_ROLE then
-			color = color or LocalPlayer():GetRoleColor()
-		else
-			color = color or TEAMS[LocalPlayer():GetTeam()].color
-		end
-
-		marks.Add({ent}, color)
-	end
-
-	markerVision.registry[ent] = {
-		owner = owner,
-		visibleFor = visibleFor,
-		color = color,
-		data = passThroughData
-	}
+	return mvObject
 end
 
 ---
--- Returns the visibleFor flag for a provided entity, nil if not set
--- @param Entity ent The tracked entity
--- @return number|nil The visibility flag
+-- Returns the marker vision element if it exists.
+-- @param Entity ent The entity which should receive the marker vision element
+-- @param string identifier The unique identifier of this marker vision element
+-- @return MARKER_VISION_OBJECT The marker vision object
 -- @realm shared
-function markerVision.GetVisibleFor(ent)
-	if not IsValid(ent) or not markerVision.registry[ent] then return end
+function markerVision.Get(ent, identifier)
+	for i = 1, #markerVision.registry do
+		local mvObject = markerVision.registry[i]
 
-	return markerVision.registry[ent].visibleFor
+		if mvObject:IsSearchedObject(ent, identifier) then
+			return mvObject, i
+		end
+	end
+
+	return nil, -1
 end
 
 ---
--- Removes the entity from the radar vision table.
--- @param Entity ent The entity that should be removed
--- @param[opt] table receiverList A list of players that should receive the netmessage, overwrites the default
--- @note The `receiverList` parameter only takes effect when called on the server and the visibility level of `VISIBLE_FOR_TEAM`.
+-- Removes the marker vision element if it exists.
+-- @param Entity ent The entity which should receive the marker vision element
+-- @note If called on the server, it is also removed on the client
+-- @param string identifier The unique identifier of this marker vision element
 -- @realm shared
-function markerVision.RemoveEntity(ent, receiverList)
-	if not IsValid(ent) or not markerVision.registry[ent] then return end
+function markerVision.Remove(ent, identifier)
+	local _, index = markerVision.Get(ent, identifier)
 
-	local owner = markerVision.registry[ent].owner
-	local visibleFor = markerVision.registry[ent].visibleFor
+	if index == -1 then return end
 
-	markerVision.registry[ent] = nil
+	table.remove(markerVision.registry, index)
 
+	-- to simplify the networking and to prevent any artefacts due to
+	-- role changes, a removal is broadcasted to everyone
 	if SERVER then
-		net.Start("ttt2_register_entity_removed")
+		net.Start("ttt2_marker_vision_entity_removed")
 		net.WriteEntity(ent)
-
-		if visibleFor == VISIBLE_FOR_PLAYER then
-			net.Send(owner)
-		elseif visibleFor == VISIBLE_FOR_ROLE then
-			if IsPlayer(owner) then
-				net.Send(receiverList or GetRoleFilter(owner:GetRole(), false))
-			else
-				net.Send(receiverList or GetRoleFilter(owner, false))
-			end
-		elseif visibleFor == VISIBLE_FOR_TEAM then
-			if IsPlayer(owner) then
-				net.Send(receiverList or GetTeamFilter(owner:GetTeam(), false, true))
-			else
-				net.Send(receiverList or GetTeamFilter(owner, false, true))
-			end
-		elseif visibleFor == VISIBLE_FOR_ALL then
-			net.Broadcast()
-		end
+		net.WriteString(identifier)
+		net.Broadcast()
 	end
 
 	if CLIENT then
@@ -151,94 +84,86 @@ function markerVision.RemoveEntity(ent, receiverList)
 	end
 end
 
+
+local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TABLE")
+
 ---
--- Updates the entity on the server and all related clients.
--- @param Entity ent The entity that should be updated
--- @param[opt] Player owner The new owner of the wallhack 
--- @param[opt] table visibleFor The new visibility level
--- @note Call on server to update entity on server and all defined clients.
+-- Creates a new marker vision object for the entity.
+-- @note This does not sync to the client, @{MARKER_VISION_OBJECT:SyncToClients}
+-- has to be called on it first
+-- @param string identifier The unique identifier of this marker vision element
+-- @return MARKER_VISION_OBJECT The marker vision object that was created
 -- @realm shared
-function markerVision.UpdateEntity(ent, owner, visibleFor)
-	if not markerVision.registry[ent] then return end
-
-	owner = owner or markerVision.registry[ent].owner
-	visibleFor = visibleFor or markerVision.registry[ent].visibleFor
-
-	markerVision.RemoveEntity(ent)
-	markerVision.RegisterEntity(ent, owner, visibleFor)
+function entmeta:AddMarkerVision(identifier)
+	return markerVision.Add(self, identifier)
 end
 
 ---
--- Handles the update of the team of a player change.
--- @param Entity ent The entity that should be updated
--- @param string oldTeam The old team of the owner
--- @param string newTeam The new team of the owner
+-- Returns the marker vision element if it exists.
+-- @param string identifier The unique identifier of this marker vision element
+-- @return MARKER_VISION_OBJECT The marker vision object
 -- @realm shared
-function markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
-	if not markerVision.registry[ent] or markerVision.registry[ent].visibleFor ~= VISIBLE_FOR_TEAM then return end
-
-	local owner = markerVision.registry[ent].owner
-	local oldTeamPlys = GetTeamFilter(oldTeam, false, true)
-	oldTeamPlys[#oldTeamPlys + 1] = owner
-
-	markerVision.RemoveEntity(ent, oldTeamPlys)
-	markerVision.RegisterEntity(ent, owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, GetTeamFilter(newTeam, false, true))
+function entmeta:GetMarkerVision(identifier)
+	return markerVision.Get(self, identifier)
 end
 
 ---
--- Handles the update of the role of a player change.
--- @param Entity ent The entity that should be updated
--- @param number oldRole The old role of the owner
--- @param number newRole The new role of the owner
+-- Removes the marker vision element if it exists.
+-- @note If called on the server, it is also removed on the client
+-- @param string identifier The unique identifier of this marker vision element
 -- @realm shared
-function markerVision.UpdateEntityOwnerRole(ent, oldRole, newRole)
-	if not markerVision.registry[ent] or markerVision.registry[ent].visibleFor ~= VISIBLE_FOR_ROLE then return end
-
-	local owner = markerVision.registry[ent].owner
-	local oldRolePlys = GetRoleFilter(oldRole, false)
-	oldRolePlys[#oldRolePlys + 1] = owner
-
-	markerVision.RemoveEntity(ent, oldRolePlys)
-	markerVision.RegisterEntity(ent, owner, VISIBLE_FOR_ROLE, roles.GetByIndex(newRole).color, GetRoleFilter(newRole, false))
+function entmeta:RemoveMarkerVision(identifier)
+	markerVision.Remove(self, identifier)
 end
 
 if SERVER then
 	---
-	-- Handles the update of the team of a player change. Is called internally and should probably not be called somewhere else.
+	-- Handles the update of the team of a player change. Is called internally and should
+	-- probably not be called somewhere else.
 	-- @param Entity ent The entity that should be updated
 	-- @param string oldTeam The old team of the owner
 	-- @param string newTeam The new team of the owner
 	-- @internal
 	-- @realm server
 	function markerVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
-		for ent, data in pairs(markerVision.registry) do
-			if data.visibleFor ~= VISIBLE_FOR_TEAM then continue end
+		for i = 1, #markerVision.registry do
+			local mvObject = markerVision.registry[i]
+			local mvObjectData = mvObject.data
+
+			if mvObjectData.visibleFor ~= VISIBLE_FOR_TEAM then continue end
 
 			-- case 1: the owner is a player and they are the one that changed their team
 			-- this means that the entity is taken to the new team
-			if IsPlayer(data.owner) and data.owner == ply then
-				markerVision.UpdateEntityOwnerTeam(ent, oldTeam, newTeam)
+			if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
+				mvObject:UpdateRelations(mvObjectData.owner, VISIBLE_FOR_TEAM)
+				mvObject:SyncToClients()
+
+				--markerVision.UpdateEntityOwnerTeam(entry, oldTeam, newTeam)
 
 				continue
 			end
 
 			-- case 2: it is bound to the team and the player's old team matches
-			if data.owner == oldTeam then
-				local oldTeamPlys = GetTeamFilter(oldTeam, false, true)
-				oldTeamPlys[#oldTeamPlys + 1] = ply
+			if mvObjectData.owner == oldTeam then
+				mvObject:UpdateRelations()
+				mvObject:SyncToClients()
+				--local oldTeamPlys = GetTeamFilter(oldTeam, false, true)
+				--oldTeamPlys[#oldTeamPlys + 1] = ply
 
-				markerVision.RemoveEntity(ent, oldTeamPlys)
-				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_TEAM, TEAMS[oldTeam].color, GetTeamFilter(oldTeam, false, true))
+				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_TEAM, TEAMS[oldTeam].color, GetTeamFilter(oldTeam, false, true))
+				--markerVision.RemoveEntity(entry, oldTeamPlys)
 
 				continue
 			end
 
 			-- case 2: it is bound to the team and the player's new team matches
-			if data.owner == newTeam then
-				local teamPlys = GetTeamFilter(newTeam, false)
+			if mvObjectData.owner == newTeam then
+				mvObject:UpdateRelations()
+				mvObject:SyncToClients()
+				--local teamPlys = GetTeamFilter(newTeam, false)
 
-				markerVision.RemoveEntity(ent, teamPlys)
-				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, teamPlys)
+				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, teamPlys)
+				--markerVision.RemoveEntity(entry, teamPlys)
 
 				continue
 			end
@@ -253,34 +178,44 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function markerVision.PlayerUpdatedRole(ply, oldRole, newRole)
-		for ent, data in pairs(markerVision.registry) do
-			if data.visibleFor ~= VISIBLE_FOR_ROLE then continue end
+		for i = 1, #markerVision.registry do
+			local mvObject = markerVision.registry[i]
+			local mvObjectData = mvObject.data
+
+			if mvObjectData.visibleFor ~= VISIBLE_FOR_ROLE then continue end
 
 			-- case 1: the owner is a player and they are the one that changed their role
 			-- this means that the entity is taken to the new role
-			if IsPlayer(data.owner) and data.owner == ply then
-				markerVision.UpdateEntityOwnerRole(ent, oldRole, newRole)
+			if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
+				mvObject:UpdateRelations(mvObjectData.owner, VISIBLE_FOR_TEAM)
+				mvObject:SyncToClients()
+
+				--markerVision.UpdateEntityOwnerRole(entry, oldRole, newRole)
 
 				continue
 			end
 
 			-- case 2: it is bound to the role and the player's old role matches
-			if data.owner == oldRole then
-				local oldRolePlys = GetRoleFilter(oldRole, false)
-				oldRolePlys[#oldRolePlys + 1] = ply
+			if mvObjectData.owner == oldRole then
+				mvObject:UpdateRelations()
+				mvObject:SyncToClients()
+				--local oldRolePlys = GetRoleFilter(oldRole, false)
+				--oldRolePlys[#oldRolePlys + 1] = ply
 
-				markerVision.RemoveEntity(ent, oldRolePlys)
-				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(oldRole).color, GetRoleFilter(oldRole, false))
+				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(oldRole).color, GetRoleFilter(oldRole, false))
+				--markerVision.RemoveEntity(entry, oldRolePlys)
 
 				continue
 			end
 
 			-- case 2: it is bound to the role and the player's new role matches
-			if data.owner == newRole then
-				local rolePlys = GetRoleFilter(newRole, false)
+			if mvObjectData.owner == newRole then
+				mvObject:UpdateRelations()
+				mvObject:SyncToClients()
+				--local rolePlys = GetRoleFilter(newRole, false)
 
-				markerVision.RemoveEntity(ent, rolePlys)
-				markerVision.RegisterEntity(ent, data.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(newRole).color, rolePlys)
+				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(newRole).color, rolePlys)
+				--markerVision.RemoveEntity(entry, rolePlys)
 
 				continue
 			end
@@ -291,14 +226,6 @@ end
 if CLIENT then
 	surface.CreateAdvancedFont("RadarVision_Title", { font = "Trebuchet24", size = 20, weight = 600 })
 	surface.CreateAdvancedFont("RadarVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
-
-	net.ReceiveStream("ttt2_register_entity_added", function(streamData)
-		markerVision.RegisterEntity(streamData.ent, streamData.owner, streamData.visibleFor, streamData.color, nil, streamData.data)
-	end)
-
-	net.Receive("ttt2_register_entity_removed", function()
-		markerVision.RemoveEntity(net.ReadEntity())
-	end)
 
 	---
 	-- The draw function of the radar vision module.
@@ -327,7 +254,10 @@ if CLIENT then
 		local xScreenCenter = 0.5 * widthScreen
 		local yScreenCenter = 0.5 * heightScreen
 
-		for ent, data in pairs(markerVision.registry) do
+		for i = 1, #markerVision.registry do
+			local mvObject = markerVision.registry[i]
+			local ent = mvObject.data.ent
+
 			if not IsValid(ent) then continue end
 
 			local posEnt = ent:GetPos() + ent:OBBCenter()
@@ -339,7 +269,7 @@ if CLIENT then
 			local distanceEntity = posEnt:Distance(client:EyePos())
 
 			-- call internal targetID functions first so the data can be modified by addons
-			local mvData = MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity)
+			local mvData = MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity, mvObject)
 
 			---
 			-- now run a hook that can be used by addon devs that changes the appearance
@@ -407,8 +337,8 @@ if CLIENT then
 				xIcon = screenPos.x - offsetIcon
 				yIcon = screenPos.y - offsetIcon
 
-				for i = 1, amountIcons do
-					local icon = params.displayInfo.icon[i]
+				for j = 1, amountIcons do
+					local icon = params.displayInfo.icon[j]
 					local color = icon.color or COLOR_WHITE
 
 					draw.FilteredShadowedTexture(
@@ -431,13 +361,13 @@ if CLIENT then
 			local xStringTitle = screenPos.x + offsetIcon + padding
 			local yStringTitle = screenPos.y
 
-			for i = 1, #params.displayInfo.title.icons do
+			for j = 1, #params.displayInfo.title.icons do
 				drawsc.FilteredShadowedTexture(
 					xStringTitle,
 					yStringTitle - offsetTitleIcon,
 					sizeTitleIcon,
 					sizeTitleIcon,
-					params.displayInfo.title.icons[i],
+					params.displayInfo.title.icons[j],
 					params.displayInfo.title.color.a,
 					params.displayInfo.title.color
 				)
@@ -463,21 +393,21 @@ if CLIENT then
 
 			local xStringDescription = screenPos.x + offsetIcon + padding
 
-			for i = 1, amountLinesDescription do
-				local text = linesDescription[i].text
-				local icons = linesDescription[i].icons
-				local color = linesDescription[i].color
+			for j = 1, amountLinesDescription do
+				local text = linesDescription[j].text
+				local icons = linesDescription[j].icons
+				local color = linesDescription[j].color
 
 				local xStringDescriptionShifted = xStringDescription
-				local yStringDescription = yStringTitle + i * heightLineDescription
+				local yStringDescription = yStringTitle + j * heightLineDescription
 
-				for j = 1, #icons do
+				for k = 1, #icons do
 					draw.FilteredShadowedTexture(
 						xStringDescriptionShifted,
 						yStringDescription - 13,
 						11,
 						11,
-						icons[j],
+						icons[k],
 						color.a,
 						color
 					)

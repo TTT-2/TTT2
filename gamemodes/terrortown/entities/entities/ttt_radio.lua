@@ -38,7 +38,9 @@ function ENT:Initialize()
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
 
-		markerVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_TEAM)
+		local mvObject = self:AddMarkerVision("radio_owner")
+		mvObject:UpdateRelations(self:GetOwner(), VISIBLE_FOR_TEAM)
+		mvObject:SyncToClients()
 	end
 
 	-- Register with owner
@@ -111,7 +113,7 @@ function ENT:OnRemove()
 
 		client.radio = nil
 	else
-		markerVision.RemoveEntity(self)
+		self:RemoveMarkerVision("radio_owner")
 	end
 end
 ---
@@ -334,8 +336,9 @@ if CLIENT then
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionRadio", function(mvData)
 		local ent = mvData:GetEntity()
+		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not IsValid(ent) or ent:GetClass() ~= "ttt_radio" then return end
+		if not mvObject:IsSearchedObject(ent, "radio_owner") then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
@@ -350,7 +353,7 @@ if CLIENT then
 		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
 		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForString()), COLOR_SLATEGRAY)
 	end)
 end
 

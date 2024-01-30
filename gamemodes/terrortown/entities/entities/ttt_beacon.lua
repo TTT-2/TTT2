@@ -46,7 +46,9 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 		self:NextThink(CurTime() + 1)
 
-		markerVision.RegisterEntity(self, ROLE_DETECTIVE, VISIBLE_FOR_ROLE)
+		local mvObject = self:AddMarkerVision("beacon_owner")
+		mvObject:UpdateRelations(ROLE_DETECTIVE, VISIBLE_FOR_ROLE)
+		mvObject:SyncToClients()
 	end
 end
 
@@ -124,10 +126,13 @@ if SERVER then
 		for ply in pairs(affectedPlayers) do
 			if plysFound[ply] and not self.lastPlysFound[ply] then
 				-- newly added player in range
-				markerVision.RegisterEntity(ply, self:GetOwner(), VISIBLE_FOR_ALL, roles.DETECTIVE.color)
+				local mvObject = ply:AddMarkerVision("beacon_player")
+				mvObject:UpdateRelations(self:GetOwner(), VISIBLE_FOR_ALL)
+				mvObject:SetColor(roles.DETECTIVE.color)
+				mvObject:SyncToClients()
 			elseif not plysFound[ply] and self.lastPlysFound[ply] then
 				-- player lost in range
-				markerVision.RemoveEntity(ply)
+				ply:RemoveMarkerVision("beacon_player")
 			end
 		end
 
@@ -142,10 +147,10 @@ if SERVER then
 	-- @realm server
 	function ENT:OnRemove()
 		for ply in pairs(self.lastPlysFound) do
-			markerVision.RemoveEntity(ply)
+			ply:RemoveMarkerVision("beacon_player")
 		end
 
-		markerVision.RemoveEntity(self)
+		self:RemoveMarkerVision("beacon_owner")
 	end
 
 	---
@@ -244,8 +249,9 @@ if CLIENT then
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
 		local ent = mvData:GetEntity()
+		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
+		if not mvObject:IsSearchedObject(ent, "beacon_owner") then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
@@ -260,13 +266,14 @@ if CLIENT then
 		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
 		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForString()), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeaconPlys", function(mvData)
 		local ent = mvData:GetEntity()
+		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not IsValid(ent) or not ent:IsPlayer() or ent == LocalPlayer() then return end
+		if not mvObject:IsSearchedObject(ent, "beacon_player") or ent == LocalPlayer() then return end
 
 		mvData:EnableText()
 
@@ -275,7 +282,7 @@ if CLIENT then
 
 		mvData:AddDescriptionLine(TryT("beacon_marker_vision_player_tracked"))
 
-		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForString()), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("PostDrawTranslucentRenderables", "BeaconRenderRadius", function(_, bSkybox)

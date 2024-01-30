@@ -13,13 +13,14 @@ MARKER_VISION_DATA = {}
 -- @return MARKER_VISION_DATA The object to be used in the hook
 -- @internal
 -- @realm client
-function MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance)
+function MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance, mvObject)
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
 		isOffScreen = isOffScreen,
 		isOnScreenCenter = isOnScreenCenter,
-		distance = distance
+		distance = distance,
+		mvObject = mvObject
 	}
 
 	-- preset a table of values that can be changed with a hook
@@ -199,4 +200,12 @@ end
 -- @realm client
 function MARKER_VISION_DATA:GetRaw()
 	return self.data, self.params
+end
+
+---
+-- Returns the marker vision object linked to this.
+-- @return MARKER_VISION_OBJECT The marker vision object
+-- @realm client
+function MARKER_VISION_DATA:GetMarkerVisionObject()
+	return self.data.mvObject
 end

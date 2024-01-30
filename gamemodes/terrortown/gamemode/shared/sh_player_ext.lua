@@ -148,7 +148,13 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 
 		if SERVER then
-			markerVision.PlayerUpdatedRole(self, oldSubrole, subrole)
+			-- trigger the update in the next tick to make sure the role is updated
+			-- on the client first before any markerVision updates are sent
+			timer.Simple(0, function()
+				if not IsValid(self) then return end
+
+				markerVision.PlayerUpdatedRole(self, oldSubrole, subrole)
+			end)
 		end
 	end
 
@@ -350,7 +356,13 @@ function plymeta:UpdateTeam(team, suppressEvent, suppressHook)
 	end
 
 	if SERVER then
-		markerVision.PlayerUpdatedTeam(self, oldTeam, newTeam)
+		-- trigger the update in the next tick to make sure the team is updated
+		-- on the client first before any markerVision updates are sent
+		timer.Simple(0, function()
+			if not IsValid(self) then return end
+
+			markerVision.PlayerUpdatedTeam(self, oldTeam, newTeam)
+		end)
 	end
 
 	if SERVER and not suppressEvent then

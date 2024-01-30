@@ -477,7 +477,7 @@ if SERVER then
 	---
 	-- @realm server
 	function ENT:OnRemove()
-		markerVision.RemoveEntity(self)
+		self:RemoveMarkerVision("c4_owner")
 	end
 
 	---
@@ -496,7 +496,7 @@ if SERVER then
 		self:SetArmed(false)
 		self:WeldToGround(false)
 
-		markerVision.RemoveEntity(self)
+		self:RemoveMarkerVision("c4_owner")
 
 		self.DisarmCausedExplosion = false
 	end
@@ -569,7 +569,9 @@ if SERVER then
 
 		events.Trigger(EVENT_C4PLANT, ply)
 
-		markerVision.RegisterEntity(self, ply, VISIBLE_FOR_TEAM)
+		local mvObject = self:AddMarkerVision("c4_owner")
+		mvObject:UpdateRelations(ply, VISIBLE_FOR_TEAM)
+		mvObject:SyncToClients()
 	end
 
 	---
@@ -886,8 +888,9 @@ else -- CLIENT
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionC4", function(mvData)
 		local ent = mvData:GetEntity()
+		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
+		if not mvObject:IsSearchedObject(ent, "c4_owner") then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
@@ -903,7 +906,7 @@ else -- CLIENT
 		mvData:AddDescriptionLine(ParT("c4_marker_vision_time", {time = time}))
 		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForString()), COLOR_SLATEGRAY)
 
 		local color = COLOR_WHITE
 
