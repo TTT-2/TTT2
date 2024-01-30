@@ -10,6 +10,7 @@ MARKER_VISION_DATA = {}
 -- @param boolean isOffScreen If the radar is off screen or on screen
 -- @param boolean isOnScreenCenter If the radar icon is on screen center
 -- @param number distance The distance to the focused entity
+-- @param MARKER_VISION_OBJECT mvObject The marker vision element that carries the data
 -- @return MARKER_VISION_DATA The object to be used in the hook
 -- @internal
 -- @realm client
