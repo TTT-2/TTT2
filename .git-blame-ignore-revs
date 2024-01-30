@@ -1,0 +1,4 @@
+# .git-blame-ignore-revs
+#
+# Run stylua formatter on entire codebase
+77b89186415f188ff465ee3e2c43ef6632aa37a9
