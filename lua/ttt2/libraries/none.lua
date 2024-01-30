@@ -81,12 +81,12 @@ function Dev(level, ...)
 end
 
 ---
--- A simple check whether an @{Entity} is a valid @{Player}
--- @param Entity ent
--- @return boolean
+-- A simple check whether a variable is a valid @{Player}
+-- @param any var The variable that should be checked
+-- @return boolean Returns true if the variable is a valid player
 -- @realm shared
-function IsPlayer(ent)
-	return ent and isentity(ent) and IsValid(ent) and ent:IsPlayer()
+function IsPlayer(var)
+	return var and isentity(var) and IsValid(var) and var:IsPlayer()
 end
 
 ---
