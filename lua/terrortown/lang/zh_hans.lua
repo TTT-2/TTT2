@@ -1965,6 +1965,9 @@ L.help_inspect_confirm_mode = [[
 
 模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公共警察玩家报告死尸现在是获取任何尸体信息的唯一方式。]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
 L.header_miscellaneous_settings = "其他设置"
 L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"

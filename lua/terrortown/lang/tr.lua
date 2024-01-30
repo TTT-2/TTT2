@@ -1965,6 +1965,9 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
 L.header_miscellaneous_settings = "Çeşitli Ayarlar"
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"

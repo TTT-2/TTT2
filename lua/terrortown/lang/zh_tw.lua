@@ -1965,6 +1965,9 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
 --L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
