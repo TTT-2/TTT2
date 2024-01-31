@@ -42,7 +42,7 @@ surface.CreateFont("TargetIDSmall2", { font = "TargetID", size = 16, weight = 10
 
 -- cache colors
 local colorKeyBack = Color(0, 0, 0, 150)
-local colorSpecLabel = Color(220, 200, 0, 120)
+local colorPropSpecLabel = Color(220, 200, 0, 120)
 
 -- cached materials for overhead icons and outlines
 local materialPropspecOutline = Material("models/props_combine/portalball001_sheet")
@@ -183,7 +183,7 @@ local function DrawPropSpecLabels(client)
 		local ply = plys[i]
 
 		if ply:IsSpec() then
-			color = colorSpecLabel
+			color = colorPropSpecLabel
 
 			tgt = ply:GetObserverTarget()
 
