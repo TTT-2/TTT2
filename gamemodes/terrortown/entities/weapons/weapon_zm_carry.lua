@@ -205,6 +205,7 @@ function SWEP:Reset(keep_velocity)
 
 	local ctarget = self:GetCarryTarget()
 	local ctype = DetermineCarryType(ctarget)
+	
 	if IsValid(ctarget) then
 		-- it is possible for weapons to be already equipped at this point
 		-- changing the owner in such a case would cause problems
