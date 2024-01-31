@@ -791,6 +791,7 @@ if CLIENT then
 	function SWEP:RefreshTTT2HUDHelp()
 		local ctarget = self:GetCarryTarget()
 		local ctype = DetermineCarryType(ctarget)
+		
 		if ctype ~= CARRY_TYPE_NONE and IsValid(ctarget) then
 			if ctype == CARRY_TYPE_RAGDOLL then
 				self:AddTTT2HUDHelp(
