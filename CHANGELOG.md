@@ -1257,8 +1257,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added new **HUD** system
-  - Added **HUDSwitcher** (`F1 â†’ Settings â†’ HUDSwitcher`)
-  - Added **HUDEditor** (`F1 â†’ Settings â†’ HUDSwitcher`)
+  - Added **HUDSwitcher** (`F1 → Settings → HUDSwitcher`)
+  - Added **HUDEditor** (`F1 → Settings → HUDSwitcher`)
   - Added old TTT HUD
   - Added **new** PureSkin HUD, an improved and fully integrated new HUD
   - Added a Miniscoreboard / Confirm view at the top
