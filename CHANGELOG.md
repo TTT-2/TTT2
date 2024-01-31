@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Throwables (grenades) now have a `:GetPullTime()` accessor
+- Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 
 ### Changed
 
