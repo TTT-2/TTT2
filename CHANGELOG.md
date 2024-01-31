@@ -244,6 +244,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when oberserving a player in their eyes
 
 ### Fixed
 
