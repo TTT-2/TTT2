@@ -6,7 +6,6 @@ local util = util
 local render = render
 local surface = surface
 local draw = draw
-local GetPlayers = player.GetAll
 local math = math
 local IsValid = IsValid
 local hook = hook
@@ -42,8 +41,8 @@ surface.CreateAdvancedFont("TargetID_Description", { font = "Trebuchet24", size 
 surface.CreateFont("TargetIDSmall2", { font = "TargetID", size = 16, weight = 1000 })
 
 -- cache colors
-local colorBlacktrans = Color(0, 0, 0, 180)
 local colorKeyBack = Color(0, 0, 0, 150)
+local colorSpecLabel = Color(220, 200, 0, 120)
 
 -- cached materials for overhead icons and outlines
 local materialPropspecOutline = Material("models/props_combine/portalball001_sheet")
@@ -53,54 +52,37 @@ local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
+-- @param Player client The client entity
 -- @param Player ply The player to receive an overhead icon
--- @param Material ricon
--- @param Color rcolor
+-- @param Material iconRole The role icon that will be drawn
+-- @param Color colorRole The role color for the background
 -- @realm client
-function DrawOverheadRoleIcon(ply, ricon, rcolor)
-	local client = LocalPlayer()
-	if ply == client then
-		return
-	end
+function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
+	local pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_Head1")):GetTranslation()
 
-	-- get position of player
-	local pos = ply:GetPos()
-	pos.z = pos.z + 80
+	pos.z = pos.z + 12 + 10 * ply:GetModelScale()
 
-	-- get eye angle of player
-	local ea = ply:EyeAngles()
-	ea.pitch = 0
+	local ang = client:EyeAngles()
+	local shift = Vector(0, 5, 0)
 
-	-- shift overheadicon in eyedirection of player
-	local shift = Vector(6, 0, 0)
-	shift:Rotate(ea)
+	shift:Rotate(ang)
 	pos:Add(shift)
 
-	local dir = client:GetForward() * -1
+	ang.pitch = 90
+	ang:RotateAroundAxis(ang:Up(), 90)
+	ang:RotateAroundAxis(ang:Right(), 180)
 
-	-- start linear filter
-	render.PushFilterMag(TEXFILTER.LINEAR)
-	render.PushFilterMin(TEXFILTER.LINEAR)
+	cam.Start3D2D(pos, ang, 0.1)
+		draw.FilteredTexture(0, 0, 100, 100, materialBase, 255, colorRole)
+		draw.FilteredTexture(0, 0, 100, 100, materialBaseOverlay, 255, COLOR_WHITE)
+		draw.FilteredShadowedTexture(15, 10, 70, 70, iconRole, 255, util.GetDefaultColor(colorRole))
+	cam.End3D2D()
+end
 
-	-- draw color
-	render.SetMaterial(materialBase)
-	render.DrawQuadEasy(pos, dir, 10, 10, rcolor, 180)
+local function DistanceSorter(a, b)
+	local client = LocalPlayer()
 
-	-- draw border overlay
-	render.SetMaterial(materialBaseOverlay)
-	render.DrawQuadEasy(pos, dir, 10, 10, COLOR_WHITE, 180)
-
-	-- draw shadow
-	render.SetMaterial(ricon)
-	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, colorBlacktrans, 180)
-
-	-- draw icon
-	render.SetMaterial(ricon)
-	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, util.GetDefaultColor(rcolor), 180)
-
-	-- stop linear filter
-	render.PopFilterMag()
-	render.PopFilterMin()
+	return client:GetPos():Distance(a.ply:GetPos()) > client:GetPos():Distance(b.ply:GetPos())
 end
 
 ---
@@ -117,7 +99,9 @@ end
 -- @local
 function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
-	local plys = GetPlayers()
+	local clientTarget = client:GetObserverTarget()
+	local clientObsMode = client:GetObserverMode()
+	local plys = player.GetAll()
 
 	if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
@@ -148,14 +132,18 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		return
 	end
 
+	local plysWithIcon = {}
+
 	for i = 1, #plys do
 		local ply = plys[i]
-		local rd = ply:GetSubRoleData()
+		local roleData = ply:GetSubRoleData()
 
 		local shouldDrawDefault = ply:IsActive()
 			and ply:HasRole()
-			and (not client:IsActive() or ply:IsInTeam(client) or rd.isPublicRole)
-			and not rd.avoidTeamIcons
+			and (not client:IsActive() or ply:IsInTeam(client) or roleData.isPublicRole)
+			and not roleData.avoidTeamIcons
+			and ply ~= client
+			and not (clientTarget == ply and IsPlayer(clientTarget) and clientObsMode == OBS_MODE_IN_EYE)
 
 		---
 		-- @realm client
@@ -165,11 +153,21 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			continue
 		end
 
-		DrawOverheadRoleIcon(ply, material or rd.iconMaterial, color or ply:GetRoleColor())
+		plysWithIcon[#plysWithIcon + 1] = {
+			ply = ply,
+			material = material or roleData.iconMaterial,
+			color = color or ply:GetRoleColor()
+		}
+	end
+
+	table.sort(plysWithIcon, DistanceSorter)
+
+	for i = 1, #plysWithIcon do
+		local plyWithIcon = plysWithIcon[i]
+
+		DrawOverheadRoleIcon(client, plyWithIcon.ply, plyWithIcon.material, plyWithIcon.color)
 	end
 end
-
-local propSpecLabelColor = Color(220, 200, 0, 120)
 
 ---
 -- Spectator labels
@@ -185,7 +183,7 @@ local function DrawPropSpecLabels(client)
 		local ply = plys[i]
 
 		if ply:IsSpec() then
-			color = propSpecLabelColor
+			color = colorSpecLabel
 
 			tgt = ply:GetObserverTarget()
 
