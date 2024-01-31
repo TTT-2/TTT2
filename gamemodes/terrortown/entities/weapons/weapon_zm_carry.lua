@@ -834,6 +834,7 @@ if CLIENT then
 				return true
 			end
 		end
+
 		return false
 	end
 
