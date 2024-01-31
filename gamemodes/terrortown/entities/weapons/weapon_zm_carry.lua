@@ -205,7 +205,7 @@ function SWEP:Reset(keep_velocity)
 
 	local ctarget = self:GetCarryTarget()
 	local ctype = DetermineCarryType(ctarget)
-	
+
 	if IsValid(ctarget) then
 		-- it is possible for weapons to be already equipped at this point
 		-- changing the owner in such a case would cause problems
@@ -351,7 +351,7 @@ end
 ---
 -- @param Entity target
 -- @realm shared
-function SWEP:AllowPush(target)
+function SWEP:CanBeMoved(target)
 	local phys = target:GetPhysicsObject()
 
 	if not IsValid(phys)
@@ -426,7 +426,7 @@ function SWEP:DoAttack(pickup)
 	local trace = ply:GetEyeTrace()
 	local trEnt = trace.Entity
 
-	if not IsValid(trEnt) or not self:AllowPush(trEnt) then return end
+	if not IsValid(trEnt) or not self:CanBeMoved(trEnt) then return end
 
 	local within_range = (ply:EyePos() - trace.HitPos):Length() < self:GetRange(trEnt)
 
@@ -792,7 +792,7 @@ if CLIENT then
 	function SWEP:RefreshTTT2HUDHelp()
 		local ctarget = self:GetCarryTarget()
 		local ctype = DetermineCarryType(ctarget)
-		
+
 		if ctype ~= CARRY_TYPE_NONE and IsValid(ctarget) then
 			if ctype == CARRY_TYPE_RAGDOLL then
 				self:AddTTT2HUDHelp(
