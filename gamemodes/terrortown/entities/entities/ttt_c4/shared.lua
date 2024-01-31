@@ -890,7 +890,7 @@ else -- CLIENT
 		local ent = mvData:GetEntity()
 		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not mvObject:IsSearchedObject(ent, "c4_owner") then return end
+		if not mvObject:IsObjectFor(ent, "c4_owner") then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
@@ -906,7 +906,7 @@ else -- CLIENT
 		mvData:AddDescriptionLine(ParT("c4_marker_vision_time", {time = time}))
 		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForString()), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
 
 		local color = COLOR_WHITE
 

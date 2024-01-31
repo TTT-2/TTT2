@@ -49,7 +49,7 @@ function markerVision.Get(ent, identifier)
 	for i = 1, #markerVision.registry do
 		local mvObject = markerVision.registry[i]
 
-		if mvObject:IsSearchedObject(ent, identifier) then
+		if mvObject:IsObjectFor(ent, identifier) then
 			return mvObject, i
 		end
 	end

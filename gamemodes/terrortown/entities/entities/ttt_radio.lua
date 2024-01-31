@@ -338,7 +338,7 @@ if CLIENT then
 		local ent = mvData:GetEntity()
 		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not mvObject:IsSearchedObject(ent, "radio_owner") then return end
+		if not mvObject:IsObjectFor(ent, "radio_owner") then return end
 
 		local owner = ent:GetOwner()
 		local nick = IsValid(owner) and owner:Nick() or "---"
@@ -353,7 +353,7 @@ if CLIENT then
 		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
 		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForString()), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
 	end)
 end
 

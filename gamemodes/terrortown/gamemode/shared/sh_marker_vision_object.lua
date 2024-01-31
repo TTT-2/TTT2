@@ -105,7 +105,7 @@ end
 -- Gets the visible for flag as a language string to the element.
 -- @return string The visible for flag as a language string
 -- @realm shared
-function MARKER_VISION_OBJECT:GetVisibleForString()
+function MARKER_VISION_OBJECT:GetVisibleForTranslationKey()
 	return "marker_vision_visible_for_" .. tostring(self:GetVisibleFor())
 end
 
@@ -116,7 +116,7 @@ end
 -- @param string identifier The unique identifier
 -- @return boolean Returns true if the element matches
 -- @realm shared
-function MARKER_VISION_OBJECT:IsSearchedObject(ent, identifier)
+function MARKER_VISION_OBJECT:IsObjectFor(ent, identifier)
 	return self.data.ent == ent and self.data.identifier == identifier
 end
 
