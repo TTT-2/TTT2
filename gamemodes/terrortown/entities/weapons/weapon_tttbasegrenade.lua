@@ -56,6 +56,11 @@ SWEP.DeploySpeed = 1.5
 AccessorFunc(SWEP, "det_time", "DetTime")
 
 ---
+-- @accessor number
+-- @realm shared
+AccessorFunc(SWEP, "pull_time", "PullTime", FORCE_NUMBER)
+
+---
 -- @realm server
 CreateConVar("ttt_nade_throw_during_prep", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
@@ -99,6 +104,7 @@ function SWEP:PullPin()
 	end
 
 	self:SetPin(true)
+	self:SetPullTime(CurTime())
 
 	self:SetDetTime(CurTime() + self.detonate_timer)
 end
@@ -290,6 +296,7 @@ function SWEP:Initialize()
 
 	self:SetDeploySpeed(self.DeploySpeed)
 	self:SetDetTime(0)
+	self:SetPullTime(0)
 	self:SetThrowTime(0)
 	self:SetPin(false)
 
@@ -303,5 +310,48 @@ function SWEP:OnRemove()
 
 	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
 		RunConsoleCommand("use", "weapon_ttt_unarmed")
+	end
+end
+
+if CLIENT then
+	local draw = draw
+	local TryT = LANG.TryTranslation
+	local hudTextColor = Color(255, 255, 255, 180)
+
+	---
+	-- @ignore
+	function SWEP:DrawHUD()
+		if self.HUDHelp then
+			self:DrawHelp()
+		end
+
+		if self:GetPin() and self:GetPullTime() > 0 then
+			local client = LocalPlayer()
+
+			local x = ScrW() * 0.5
+			local y = ScrH() * 0.5
+			y = y + (y / 3)
+
+			local pct = 1 - math.Clamp((CurTime() - self:GetPullTime()) / (self:GetDetTime() - self:GetPullTime()), 0, 1)
+
+			local scale = appearance.GetGlobalScale()
+			local w, h = 100 * scale, 20 * scale
+			local drawColor = appearance.SelectFocusColor(client:GetRoleColor())
+
+			draw.AdvancedText(
+				TryT("grenade_fuse"),
+				"PureSkinBar",
+				x - w / 2,
+				y - h,
+				hudTextColor,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_BOTTOM,
+				true,
+				scale
+			)
+			draw.Box(x - w / 2 + scale, y - h + scale, w * pct, h, COLOR_BLACK)
+			draw.OutlinedShadowedBox(x - w / 2, y - h, w, h, scale, drawColor)
+			draw.Box(x - w / 2, y - h, w * pct, h, drawColor)
+		end
 	end
 end
