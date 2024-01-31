@@ -138,32 +138,13 @@ if SERVER then
 				mvObject:UpdateRelations(mvObjectData.owner, VISIBLE_FOR_TEAM)
 				mvObject:SyncToClients()
 
-				--markerVision.UpdateEntityOwnerTeam(entry, oldTeam, newTeam)
-
 				continue
 			end
 
-			-- case 2: it is bound to the team and the player's old team matches
-			if mvObjectData.owner == oldTeam then
+			-- case 2: it is bound to the team and the player's new/old team matches
+			if mvObjectData.owner == oldTeam or mvObjectData.owner == newTeam then
 				mvObject:UpdateRelations()
 				mvObject:SyncToClients()
-				--local oldTeamPlys = GetTeamFilter(oldTeam, false, true)
-				--oldTeamPlys[#oldTeamPlys + 1] = ply
-
-				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_TEAM, TEAMS[oldTeam].color, GetTeamFilter(oldTeam, false, true))
-				--markerVision.RemoveEntity(entry, oldTeamPlys)
-
-				continue
-			end
-
-			-- case 2: it is bound to the team and the player's new team matches
-			if mvObjectData.owner == newTeam then
-				mvObject:UpdateRelations()
-				mvObject:SyncToClients()
-				--local teamPlys = GetTeamFilter(newTeam, false)
-
-				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_TEAM, TEAMS[newTeam].color, teamPlys)
-				--markerVision.RemoveEntity(entry, teamPlys)
 
 				continue
 			end
@@ -190,32 +171,13 @@ if SERVER then
 				mvObject:UpdateRelations(mvObjectData.owner, VISIBLE_FOR_TEAM)
 				mvObject:SyncToClients()
 
-				--markerVision.UpdateEntityOwnerRole(entry, oldRole, newRole)
-
 				continue
 			end
 
-			-- case 2: it is bound to the role and the player's old role matches
-			if mvObjectData.owner == oldRole then
+			-- case 2: it is bound to the role and the player's new/old role matches
+			if mvObjectData.owner == oldRole or mvObjectData.owner == newRole then
 				mvObject:UpdateRelations()
 				mvObject:SyncToClients()
-				--local oldRolePlys = GetRoleFilter(oldRole, false)
-				--oldRolePlys[#oldRolePlys + 1] = ply
-
-				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(oldRole).color, GetRoleFilter(oldRole, false))
-				--markerVision.RemoveEntity(entry, oldRolePlys)
-
-				continue
-			end
-
-			-- case 2: it is bound to the role and the player's new role matches
-			if mvObjectData.owner == newRole then
-				mvObject:UpdateRelations()
-				mvObject:SyncToClients()
-				--local rolePlys = GetRoleFilter(newRole, false)
-
-				--markerVision.RegisterEntity(entry.ent, entry.owner, VISIBLE_FOR_ROLE, roles.GetByIndex(newRole).color, rolePlys)
-				--markerVision.RemoveEntity(entry, rolePlys)
 
 				continue
 			end
