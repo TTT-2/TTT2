@@ -247,7 +247,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Changed the way the role overhead icon is rendered (by @TimGoll)
   - It now tracks the players head position
   - Rendering order is based on distance, no more weird visual glitches
-  - Hidden when oberserving a player in their eyes
+  - Hidden when observing a player in first person view
 
 ### Fixed
 
