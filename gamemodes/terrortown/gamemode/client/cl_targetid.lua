@@ -49,6 +49,17 @@ local materialPropspecOutline = Material("models/props_combine/portalball001_she
 local materialBase = Material("vgui/ttt/dynamic/sprite_base")
 local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 
+local scaleFactorOverHeadIcon = 10
+local sizeBaseOverHeadIcon = 10
+local offsetOverHeadIcon = sizeBaseOverHeadIcon + 4
+
+local scaleOverHeadIcon = 1 / scaleFactorOverHeadIcon
+local sizeOverHeadIcon = scaleFactorOverHeadIcon * sizeBaseOverHeadIcon
+local shiftOverHeadIcon = 0.5 * sizeBaseOverHeadIcon
+local xShiftIconOverHeadIcon = 0.15 * sizeOverHeadIcon
+local yShiftIconOverHeadIcon = 0.1 * sizeOverHeadIcon
+local sizeIconOverHeadIcon = 0.7 * sizeOverHeadIcon
+
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
@@ -58,13 +69,11 @@ local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 -- @param Color colorRole The role color for the background
 -- @realm client
 function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
-	local pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_Head1")):GetTranslation()
-
-	pos.z = pos.z + 12 + 10 * ply:GetModelScale()
-
 	local ang = client:EyeAngles()
-	local shift = Vector(0, 5, 0)
+	local pos = ply:GetPos() + ply:GetHeightVector()
+	pos.z = pos.z + offsetOverHeadIcon
 
+	local shift = Vector(0, shiftOverHeadIcon, 0)
 	shift:Rotate(ang)
 	pos:Add(shift)
 
@@ -72,10 +81,34 @@ function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
 	ang:RotateAroundAxis(ang:Up(), 90)
 	ang:RotateAroundAxis(ang:Right(), 180)
 
-	cam.Start3D2D(pos, ang, 0.1)
-		draw.FilteredTexture(0, 0, 100, 100, materialBase, 255, colorRole)
-		draw.FilteredTexture(0, 0, 100, 100, materialBaseOverlay, 255, COLOR_WHITE)
-		draw.FilteredShadowedTexture(15, 10, 70, 70, iconRole, 255, util.GetDefaultColor(colorRole))
+	cam.Start3D2D(pos, ang, scaleOverHeadIcon)
+		draw.FilteredTexture(
+			0,
+			0,
+			sizeOverHeadIcon,
+			sizeOverHeadIcon,
+			materialBase,
+			255,
+			colorRole
+		)
+		draw.FilteredTexture(
+			0,
+			0,
+			sizeOverHeadIcon,
+			sizeOverHeadIcon,
+			materialBaseOverlay,
+			255,
+			COLOR_WHITE
+		)
+		draw.FilteredShadowedTexture(
+			xShiftIconOverHeadIcon,
+			yShiftIconOverHeadIcon,
+			sizeIconOverHeadIcon,
+			sizeIconOverHeadIcon,
+			iconRole,
+			255,
+			util.GetDefaultColor(colorRole)
+		)
 	cam.End3D2D()
 end
 
@@ -128,9 +161,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if not cvEnableOverheadicons:GetBool() then
-		return
-	end
+	if not cvEnableOverheadicons:GetBool() then return end
 
 	local plysWithIcon = {}
 
@@ -149,7 +180,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		-- @realm client
 		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
-		if shouldDraw == false or not shouldDrawDefault and not (material and color) then
+		if shouldDraw == false or not shouldDrawDefault or (shouldDraw and not material and not color) then
 			continue
 		end
 
