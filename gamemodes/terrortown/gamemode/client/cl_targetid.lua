@@ -180,7 +180,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		-- @realm client
 		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
-		if shouldDraw == false or not shouldDrawDefault or (shouldDraw and not material and not color) then
+		if shouldDraw == false or not shouldDrawDefault then
 			continue
 		end
 
