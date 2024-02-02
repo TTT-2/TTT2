@@ -271,7 +271,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
-- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @QWardenPotato)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
 
 ### Deprecated
 
