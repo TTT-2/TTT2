@@ -1177,7 +1177,7 @@ function plymeta:GetHeightVector()
 		matrix = self:GetBoneMatrix(bone)
 	end
 
-	if bone and matrix then
+	if matrix then
 		local pos = matrix:GetTranslation()
 
 		-- note: the 8 is the assumed height of the head after the head bone
