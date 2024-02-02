@@ -1182,7 +1182,7 @@ function plymeta:GetHeightVector()
 
 		-- note: the 8 is the assumed height of the head after the head bone
 		-- this might not work for every model
-		pos.z = pos.z + 8 * self:GetModelScale()
+		pos.z = pos.z + 8 * self:GetModelScale() * self:GetManipulateBoneScale(bone).z
 
 		return pos - self:GetPos()
 
