@@ -80,9 +80,9 @@ function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
 end
 
 local function DistanceSorter(a, b)
-	local client = LocalPlayer()
+	local clientPos = LocalPlayer():GetPos()
 
-	return client:GetPos():Distance(a.ply:GetPos()) > client:GetPos():Distance(b.ply:GetPos())
+	return clientPos:Distance(a.ply:GetPos()) > clientPos:Distance(b.ply:GetPos())
 end
 
 ---
