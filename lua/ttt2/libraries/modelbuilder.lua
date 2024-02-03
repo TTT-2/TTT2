@@ -246,7 +246,7 @@ end
 ---
 -- Renders the world or view model.
 -- @param Entity wep The weapon whose view model should be rendered
--- @param table renerOrder The render order of the view model elements
+-- @param table renderOrder The render order of the view model elements
 -- @param table elements The elements of the view model
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
