@@ -3,9 +3,11 @@
 -- @class ENT
 -- @section ttt_basegrenade_proj
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
-ENT.Base = "ttt_base_placeable"
+ENT.Type = "anim"
 
 ENT.Model = "models/weapons/w_eq_flashbang_thrown.mdl"
 

@@ -7,7 +7,7 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ENT.Base = "ttt_basegrenade_proj"
+ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/Items/battery.mdl"
 
 ENT.RenderGroup = RENDERGROUP_BOTH
