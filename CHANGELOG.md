@@ -78,6 +78,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
 - Removed DX8/SW models that aren't used
+- Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
 
 ### Breaking Changes
 

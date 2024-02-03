@@ -181,10 +181,13 @@ function ENT:StartFire()
 end
 
 if CLIENT then
-	local flamesprites = {}
-	for i = 1, 5, 1 do
-		flamesprites[#flamesprites + 1] = Material("particles/flamelet" .. i)
-	end
+	local flamesprites = {
+		Material("particles/flamelet1"),
+		Material("particles/flamelet2"),
+		Material("particles/flamelet3"),
+		Material("particles/flamelet4"),
+		Material("particles/flamelet5"),
+	}
 
 	---
 	-- @realm client
@@ -192,7 +195,7 @@ if CLIENT then
 		if self:GetBurning() and self.debug_viz then
 			render.DrawWireframeSphere(self:GetPos(), self.hurt_radius, 16, 9, COLOR_RED)
 		elseif not self:GetBurning() then
-			local frame = math.floor(((SysTime() * self.low_detail_fps) + self:EntIndex()) % #flamesprites) + 1
+			local frame = math.floor(((SysTime() * self.low_detail_fps) + self:EntIndex()) % (#flamesprites-1)) + 1
 			cam.Start3D()
 			render.SetMaterial(flamesprites[ frame ])
 			render.DrawSprite(self:GetPos(), self.low_detail_size, self.low_detail_size, color_white)

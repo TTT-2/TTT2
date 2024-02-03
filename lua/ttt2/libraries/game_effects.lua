@@ -90,10 +90,12 @@ function gameEffects.SpawnFire(pos, scale, ignite_delay, life_span, owner, paren
 	fire:SetPos(pos)
 	--no glow + delete when out + start on + last forever
 	fire:SetKeyValue("spawnflags", tostring(128 + 32 + 4 + 2 + 1))
-	fire:SetKeyValue("firesize", tostring(scale)) -- hardly controls size, hitbox is goofy, impossible to work with
+	-- hardly controls size, hitbox is goofy, impossible to work with
+	fire:SetKeyValue("firesize", tostring(scale))
 	fire:SetKeyValue("fireattack", tostring(ignite_delay))
 	fire:SetKeyValue("health", tostring(life_span))
 	fire:SetKeyValue("ignitionpoint", "64")
+	-- don't hurt the player because we're managing the hurtbox ourselves
 	fire:SetKeyValue("damagescale", "0")
 	fire:Spawn()
 	fire:Activate()
@@ -113,9 +115,9 @@ end
 -- @todo This seems to do similar checking as util.BlastDamageInfo might, consider comparing them
 -- @realm shared
 function gameEffects.RadiusDamage(dmginfo, pos, radius, inflictor)
-	local vics = ents.FindInSphere(pos, radius)
+	local entsFound = ents.FindInSphere(pos, radius)
 	for i = 1, #entsFound do
-		local vic = vics[i]
+		local vic = entsFound[i]
 
 		if IsValid(vic) and inflictor:Visible(vic) and vic:IsPlayer() and vic:Alive() and vic:IsTerror() then
 			vic:TakeDamageInfo(dmginfo)
