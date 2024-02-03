@@ -218,14 +218,14 @@ function PANEL:DrawModel()
 	local xLimitStart, yLimitStart = xBaseStart, yBaseStart
 	local xLimitEnd, yLimitEnd = self:LocalToScreen(self:GetWide(), self:GetTall())
 
-	local curparent = self
+	local currentParent = self
 
 	-- iterate till the top is found to make sure the image is not out of bounds
-	while curparent:GetParent() do
-		curparent = curparent:GetParent()
+	while currentParent:GetParent() do
+		currentParent = currentParent:GetParent()
 
-		local x1, y1 = curparent:LocalToScreen(0, 0)
-		local x2, y2 = curparent:LocalToScreen(curparent:GetWide(), curparent:GetTall())
+		local x1, y1 = currentParent:LocalToScreen(0, 0)
+		local x2, y2 = currentParent:LocalToScreen(currentParent:GetWide(), currentParent:GetTall())
 
 		xLimitStart = mathMax(xLimitStart, x1)
 		yLimitStart = mathMax(yLimitStart, y1)
