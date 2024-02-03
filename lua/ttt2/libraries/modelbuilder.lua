@@ -264,8 +264,10 @@ function modelbuilder.Render(wep, renderOrder, elements, boneEntity)
 
 		if not pos then continue end
 
+		local posModel = pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z
+
 		if modelData.type == "Model" and IsValid(model) then
-			model:SetPos(pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z)
+			model:SetPos(posModel)
 			ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
 			ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
 			ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
@@ -304,16 +306,14 @@ function modelbuilder.Render(wep, renderOrder, elements, boneEntity)
 				render.SuppressEngineLighting(false)
 			end
 		elseif modelData.type == "Sprite" and sprite then
-			local drawpos = pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z
 			render.SetMaterial(sprite)
-			render.DrawSprite(drawpos, modelData.size.x, modelData.size.y, modelData.color)
+			render.DrawSprite(posModel, modelData.size.x, modelData.size.y, modelData.color)
 		elseif modelData.type == "Quad" and modelData.draw_func then
-			local drawpos = pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z
 			ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
 			ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
 			ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
 
-			cam.Start3D2D(drawpos, ang, modelData.size)
+			cam.Start3D2D(posModel, ang, modelData.size)
 				modelData.draw_func(wep)
 			cam.End3D2D()
 		end
