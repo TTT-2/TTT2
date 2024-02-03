@@ -2169,3 +2169,6 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
 
 L.header_weapon_settings = "Silah Ayarları"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
