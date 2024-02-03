@@ -73,6 +73,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
 - Removed DX8/SW models that aren't used
+- Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
 
 ### Breaking Changes
 
