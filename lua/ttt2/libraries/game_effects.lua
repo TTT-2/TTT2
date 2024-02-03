@@ -111,8 +111,6 @@ end
 -- @param Vector pos
 -- @param number radius
 -- @param Entity inflictor
--- @todo C4 uses a completely different method for this, so do all grenades, maybe fix that?
--- @todo This seems to do similar checking as util.BlastDamageInfo might, consider comparing them
 -- @realm shared
 function gameEffects.RadiusDamage(dmginfo, pos, radius, inflictor)
 	local entsFound = ents.FindInSphere(pos, radius)
