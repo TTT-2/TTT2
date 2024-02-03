@@ -69,8 +69,9 @@ if CLIENT then
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
-	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
-	-- overload drawing functions.
+	-- If set to true, the default view model of the weapon is drawn, otherwise it
+	-- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
+	-- the weapon but still draw the hands holding it.
 	SWEP.ShowDefaultViewModel = true
 end
 
