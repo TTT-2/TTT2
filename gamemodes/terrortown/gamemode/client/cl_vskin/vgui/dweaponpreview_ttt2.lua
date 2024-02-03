@@ -67,8 +67,6 @@ function PANEL:Init()
 	self:SetContentAlignment(5)
 
 	self:SetTall(22)
-	self:SetMouseInputEnabled(true)
-	self:SetKeyboardInputEnabled(true)
 
 	self:SetFont("DermaTTT2TextLarge")
 
