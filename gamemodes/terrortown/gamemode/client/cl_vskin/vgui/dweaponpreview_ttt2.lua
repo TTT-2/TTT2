@@ -186,6 +186,9 @@ function PANEL:SetWeaponClass(cls)
 		clientsideEntity:SetIK(false)
 
 		clientsideEntity:SetParent(self.data.ply)
+
+		-- Applies a bonemerge engine effect. This merges the bones of this entity with the
+		-- entity of its parent so that they always move together.
 		clientsideEntity:AddEffects(EF_BONEMERGE)
 
 		if wep.HoldType ~= "normal" then
