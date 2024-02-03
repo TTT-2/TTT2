@@ -123,28 +123,23 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 
 	for i = 0, viewModel:GetBoneCount() do
 		local bonename = viewModel:GetBoneName(i)
+		local dataTable
 
 		if wep.customViewModelBoneMods[bonename] then
-			allBones[bonename] = wep.customViewModelBoneMods[bonename]
+			dataTable = wep.customViewModelBoneMods[bonename]
 		else
-			allBones[bonename] = {
+			dataTable = {
 				scale = Vector(1, 1, 1),
 				pos = Vector(0, 0, 0),
 				angle = Angle(0, 0, 0)
 			}
 		end
-	end
-
-	for identifier, dataTable in pairs(allBones) do
-		local bone = viewModel:LookupBone(identifier)
-
-		if not bone then continue end
 
 		local scale = Vector(dataTable.scale.x, dataTable.scale.y, dataTable.scale.z)
 		local position = Vector(dataTable.pos.x, dataTable.pos.y, dataTable.pos.z)
 		local modelScale = Vector(1, 1, 1)
 
-		local currentBone = viewModel:GetBoneParent(bone)
+		local currentBone = viewModel:GetBoneParent(i)
 
 		while (currentBone >= 0) do
 			modelScale = modelScale * allBones[viewModel:GetBoneName(currentBone)].scale
@@ -153,16 +148,16 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 
 		scale = scale * modelScale
 
-		if viewModel:GetManipulateBoneScale(bone) ~= scale then
-			viewModel:ManipulateBoneScale(bone, scale)
+		if viewModel:GetManipulateBoneScale(i) ~= scale then
+			viewModel:ManipulateBoneScale(i, scale)
 		end
 
-		if viewModel:GetManipulateBoneAngles(bone) ~= dataTable.angle then
-			viewModel:ManipulateBoneAngles(bone, dataTable.angle)
+		if viewModel:GetManipulateBoneAngles(i) ~= dataTable.angle then
+			viewModel:ManipulateBoneAngles(i, dataTable.angle)
 		end
 
-		if viewModel:GetManipulateBonePosition(bone) ~= position then
-			viewModel:ManipulateBonePosition(bone, position)
+		if viewModel:GetManipulateBonePosition(i) ~= position then
+			viewModel:ManipulateBonePosition(i, position)
 		end
 	end
 end
