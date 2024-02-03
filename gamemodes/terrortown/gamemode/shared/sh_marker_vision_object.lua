@@ -1,15 +1,18 @@
 ---
+-- This class handles the syncing and tracking of markerVision elements
+-- between the server and the client. Each markerVision element has its
+-- own instance of this class that contains all the data.
 -- @author Mineotopia
--- @class MARKER_VISION_OBJECT
+-- @class MARKER_VISION_ELEMENT
 
-MARKER_VISION_OBJECT = {}
-MARKER_VISION_OBJECT.data = {}
+MARKER_VISION_ELEMENT = {}
+MARKER_VISION_ELEMENT.data = {}
 
 ---
 -- Sets the mark color to the element.
 -- @param Color color The color
 -- @realm shared
-function MARKER_VISION_OBJECT:SetColor(color)
+function MARKER_VISION_ELEMENT:SetColor(color)
 	self.data.color = color
 end
 
@@ -17,7 +20,7 @@ end
 -- Gets the mark color to the element.
 -- @return Color The color
 -- @realm shared
-function MARKER_VISION_OBJECT:GetColor()
+function MARKER_VISION_ELEMENT:GetColor()
 	return self.data.color
 end
 
@@ -25,7 +28,7 @@ end
 -- Sets the marked entity to the element.
 -- @param Entity ent The marked entity
 -- @realm shared
-function MARKER_VISION_OBJECT:SetEnt(ent)
+function MARKER_VISION_ELEMENT:SetEnt(ent)
 	self.data.ent = ent
 end
 
@@ -33,7 +36,7 @@ end
 -- Gets the marked entity to the element.
 -- @return Entity The marked entity
 -- @realm shared
-function MARKER_VISION_OBJECT:GetEnt()
+function MARKER_VISION_ELEMENT:GetEnt()
 	return self.data.ent
 end
 
@@ -41,7 +44,7 @@ end
 -- Sets the unique identifier to the element.
 -- @param string identifier The unique identifier
 -- @realm shared
-function MARKER_VISION_OBJECT:SetIdentifier(identifier)
+function MARKER_VISION_ELEMENT:SetIdentifier(identifier)
 	self.data.identifier = identifier
 end
 
@@ -49,7 +52,7 @@ end
 -- Gets the unique identifier to the element.
 -- @return string The unique identifier
 -- @realm shared
-function MARKER_VISION_OBJECT:GetIdentifier()
+function MARKER_VISION_ELEMENT:GetIdentifier()
 	return self.data.identifier
 end
 
@@ -57,7 +60,7 @@ end
 -- Sets the mark owner to the element.
 -- @param Entity owner The mark owner
 -- @realm shared
-function MARKER_VISION_OBJECT:SetOwner(owner)
+function MARKER_VISION_ELEMENT:SetOwner(owner)
 	self.data.owner = owner
 end
 
@@ -65,7 +68,7 @@ end
 -- Gets the mark owner to the element.
 -- @return Entity The mark owner
 -- @realm shared
-function MARKER_VISION_OBJECT:GetOwner()
+function MARKER_VISION_ELEMENT:GetOwner()
 	return self.data.owner
 end
 
@@ -73,7 +76,7 @@ end
 -- Sets the visible for flag to the element.
 -- @param number visibleFor The visible for flag
 -- @realm shared
-function MARKER_VISION_OBJECT:SetVisibleFor(visibleFor)
+function MARKER_VISION_ELEMENT:SetVisibleFor(visibleFor)
 	self.data.visibleFor = visibleFor
 end
 
@@ -81,7 +84,7 @@ end
 -- Gets the visible for flag to the element.
 -- @return number The visible for flag
 -- @realm shared
-function MARKER_VISION_OBJECT:GetVisibleFor()
+function MARKER_VISION_ELEMENT:GetVisibleFor()
 	return self.data.visibleFor
 end
 
@@ -89,7 +92,7 @@ end
 -- Gets the visible for flag as a language string to the element.
 -- @return string The visible for flag as a language string
 -- @realm shared
-function MARKER_VISION_OBJECT:GetVisibleForTranslationKey()
+function MARKER_VISION_ELEMENT:GetVisibleForTranslationKey()
 	return "marker_vision_visible_for_" .. tostring(self:GetVisibleFor())
 end
 
@@ -100,19 +103,19 @@ end
 -- @param string identifier The unique identifier
 -- @return boolean Returns true if the element matches
 -- @realm shared
-function MARKER_VISION_OBJECT:IsObjectFor(ent, identifier)
+function MARKER_VISION_ELEMENT:IsObjectFor(ent, identifier)
 	return self.data.ent == ent and self.data.identifier == identifier
 end
 
 ---
 -- Updates the relations of this marker vision element.
--- @note This does not sync it to the client, call @{MARKER_VISION_OBJECT:SyncToClients} to sync to client.
+-- @note This does not sync it to the client, call @{MARKER_VISION_ELEMENT:SyncToClients} to sync to client.
 -- @param number|string|Player owner The owner of the wallhack that takes their ownership with them on
 -- team change; can also be a team (string) or role (number) if it shouldn't be bound to a player
 -- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_ROLE`, `VISIBLE_FOR_TEAM`,
 -- `VISIBLE_FOR_ALL`
 -- @realm shared
-function MARKER_VISION_OBJECT:UpdateRelations(owner, visibleFor)
+function MARKER_VISION_ELEMENT:UpdateRelations(owner, visibleFor)
 	-- this is done this way to support an UpdateRelations call on Role/Team change without
 	-- the need to pass these values again
 	self.data.owner = owner or self.data.owner
@@ -123,7 +126,7 @@ end
 -- Checks if the entity is valid and the identifier is set.
 -- @return boolean Returns true if valid
 -- @realm shared
-function MARKER_VISION_OBJECT:IsValid()
+function MARKER_VISION_ELEMENT:IsValid()
 	if not IsValid(self.data.ent) then
 		return false
 	end
@@ -138,12 +141,12 @@ end
 if SERVER then
 	---
 	-- Syncs the marker vision element to the client that should receive it.
-	-- @note The receipients should be set first with @{MARKER_VISION_OBJECT:UpdateRelations}.
+	-- @note The receipients should be set first with @{MARKER_VISION_ELEMENT:UpdateRelations}.
 	-- @note If the marker vision element was synced already, it is updated on the client.
 	-- @param[opt] table receiverListOverwrite A table of players that should receive the update
 	-- if not the automatic receipient selection should be used.
 	-- @realm server
-	function MARKER_VISION_OBJECT:SyncToClients(receiverListOverwrite)
+	function MARKER_VISION_ELEMENT:SyncToClients(receiverListOverwrite)
 		if not self.data.owner then return end
 
 		if self.data.visibleFor == VISIBLE_FOR_PLAYER then

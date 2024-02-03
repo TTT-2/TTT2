@@ -23,14 +23,14 @@ markerVision.registry = {}
 
 ---
 -- Creates a new marker vision object for the entity.
--- @note This does not sync to the client, @{MARKER_VISION_OBJECT:SyncToClients}
+-- @note This does not sync to the client, @{MARKER_VISION_ELEMENT:SyncToClients}
 -- has to be called on it first
 -- @param Entity ent The entity which should receive the marker vision element
 -- @param string identifier The unique identifier of this marker vision element
--- @return MARKER_VISION_OBJECT The marker vision object that was created
+-- @return MARKER_VISION_ELEMENT The marker vision object that was created
 -- @realm shared
 function markerVision.Add(ent, identifier)
-	local mvObject = table.Copy(MARKER_VISION_OBJECT)
+	local mvObject = table.Copy(MARKER_VISION_ELEMENT)
 	mvObject:SetEnt(ent)
 	mvObject:SetIdentifier(identifier)
 
@@ -43,7 +43,7 @@ end
 -- Returns the marker vision element if it exists.
 -- @param Entity ent The entity which should receive the marker vision element
 -- @param string identifier The unique identifier of this marker vision element
--- @return MARKER_VISION_OBJECT The marker vision object
+-- @return MARKER_VISION_ELEMENT The marker vision object
 -- @realm shared
 function markerVision.Get(ent, identifier)
 	for i = 1, #markerVision.registry do
@@ -89,10 +89,10 @@ local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TA
 
 ---
 -- Creates a new marker vision object for the entity.
--- @note This does not sync to the client, @{MARKER_VISION_OBJECT:SyncToClients}
+-- @note This does not sync to the client, @{MARKER_VISION_ELEMENT:SyncToClients}
 -- has to be called on it first
 -- @param string identifier The unique identifier of this marker vision element
--- @return MARKER_VISION_OBJECT The marker vision object that was created
+-- @return MARKER_VISION_ELEMENT The marker vision object that was created
 -- @realm shared
 function entmeta:AddMarkerVision(identifier)
 	return markerVision.Add(self, identifier)
@@ -101,7 +101,7 @@ end
 ---
 -- Returns the marker vision element if it exists.
 -- @param string identifier The unique identifier of this marker vision element
--- @return MARKER_VISION_OBJECT The marker vision object
+-- @return MARKER_VISION_ELEMENT The marker vision object
 -- @realm shared
 function entmeta:GetMarkerVision(identifier)
 	return markerVision.Get(self, identifier)

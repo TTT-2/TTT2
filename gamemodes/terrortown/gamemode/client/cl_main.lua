@@ -34,7 +34,7 @@ ttt_include("sh_door")
 ttt_include("sh_voice")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
-ttt_include("sh_marker_vision_object")
+ttt_include("sh_MARKER_VISION_ELEMENT")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
