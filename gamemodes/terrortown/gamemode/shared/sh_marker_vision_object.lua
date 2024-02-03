@@ -6,22 +6,6 @@ MARKER_VISION_OBJECT = {}
 MARKER_VISION_OBJECT.data = {}
 
 ---
--- Sets the pass through data to the element.
--- @param any passThroughData The pass through data
--- @realm shared
-function MARKER_VISION_OBJECT:SetPassThroughData(passThroughData)
-	self.data.passThroughData = passThroughData
-end
-
----
--- Gets the pass through data to the element.
--- @return any The pass through data
--- @realm shared
-function MARKER_VISION_OBJECT:GetPassThroughData()
-	return self.data.passThroughData
-end
-
----
 -- Sets the mark color to the element.
 -- @param Color color The color
 -- @realm shared
@@ -158,9 +142,8 @@ if SERVER then
 	-- @note If the marker vision element was synced already, it is updated on the client.
 	-- @param[opt] table receiverListOverwrite A table of players that should receive the update
 	-- if not the automatic receipient selection should be used.
-	-- @param[opt] any passThroughData Data that should be sent with this call as well
 	-- @realm server
-	function MARKER_VISION_OBJECT:SyncToClients(receiverListOverwrite, passThroughData)
+	function MARKER_VISION_OBJECT:SyncToClients(receiverListOverwrite)
 		if not self.data.owner then return end
 
 		if self.data.visibleFor == VISIBLE_FOR_PLAYER then
@@ -198,15 +181,11 @@ if SERVER then
 			net.Send(self.lastReceiverList)
 		end
 
-		self:SetPassThroughData(passThroughData)
-
 		-- delay adding wallhack by a tick so that all possible removals are always done first
 		timer.Simple(0, function()
 			if not IsValid(self) then return end
 
 			net.SendStream("ttt2_marker_vision_entity", self.data, receiverListOverwrite or self.receiverList)
-
-			self:SetPassThroughData(nil)
 
 			-- cache this, so we know where to remove the old data on update
 			self.lastReceiverList = receiverListOverwrite or self.receiverList
@@ -224,7 +203,6 @@ if CLIENT then
 		local mvObject = markerVision.Add(streamData.ent, streamData.identifier)
 		mvObject:UpdateRelations(streamData.owner, streamData.visibleFor)
 		mvObject:SetColor(streamData.color)
-		mvObject:SetPassThroughData(streamData.passThroughData)
 
 		-- add mark to entity
 		if streamData.visibleFor == VISIBLE_FOR_ALL then
