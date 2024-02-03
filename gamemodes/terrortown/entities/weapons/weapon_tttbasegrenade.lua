@@ -92,11 +92,10 @@ end
 ---
 -- @param Vector currentIterationPosition The initial position for this iteration cycle.
 -- @param number launchVelocity The launch velocity for this iteration cycle.
--- @param number gravityMultiplier The gravity multiplier for this iteration cycle.
 -- @param number stepDistance The step size for the current iteration cycle.
 -- @return Vector The next location to iterate from.
-local function PositionFromPhysicsParams(currentIterationPosition, launchVelocity, gravityMultiplier, stepDistance)
-	local activeGravity = gravityMultiplier * physenv.GetGravity()
+local function PositionFromPhysicsParams(currentIterationPosition, launchVelocity, stepDistance)
+	local activeGravity = physenv.GetGravity()
 
 	return currentIterationPosition + (launchVelocity * stepDistance + 0.5 * activeGravity * stepDistance ^ 2)
 end
@@ -116,13 +115,12 @@ if CLIENT then
 	-- @realm client
 	function SWEP:DrawDefaultThrowPath(ply)
 		local stepSize = 0.005
-		local gravityMultiplier = 1
 
 		local owner = self:GetOwner()
 		local currentIterationPosition, _ = self:GetViewModelPosition(owner:EyePos(), owner:EyeAngles())
 		local launchPosition, launchVelocity = self:GetThrowVelocity()
 		currentIterationPosition = currentIterationPosition - ply:EyePos() + launchPosition
-		local previousIterationPosition = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, gravityMultiplier, stepSize)
+		local previousIterationPosition = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, stepSize)
 
 		local fractionalFrameTime = (SysTime() % 1) * 2
 		local i = fractionalFrameTime > 1 and 1 or 0
@@ -141,7 +139,7 @@ if CLIENT then
 		for stepDistance = stepSize * 2, 1, stepSize do
 			local drawColor = AlphaLerp(arcColor, stepDistance, arcAlpha)
 
-			local pos = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, gravityMultiplier, stepDistance)
+			local pos = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, stepDistance)
 			local t = util.TraceLine({
 				start = previousIterationPosition,
 				endpos = pos,
@@ -324,23 +322,7 @@ function SWEP:Throw()
 
 		self.was_thrown = true
 
-		local ang = ply:EyeAngles()
-		local src = ply:GetPos() + (ply:Crouching() and ply:GetViewOffsetDucked() or ply:GetViewOffset()) + ang:Forward() * 8 + ang:Right() * 10
-		local target = ply:GetEyeTraceNoCursor().HitPos
-		local tang = (target-src):Angle() -- A target angle to actually throw the grenade to the crosshair instead of fowards
-
-		-- Makes the grenade go upgwards
-		if tang.p < 90 then
-			tang.p = -10 + tang.p * ((90 + 10) / 90)
-		else
-			tang.p = 360 - tang.p
-			tang.p = -10 + tang.p * -((90 + 10) / 90)
-		end
-
-		tang.p = math.Clamp(tang.p,-90,90) -- Makes the grenade not go backwards :/
-
-		local vel = math.min(800, (90 - tang.p) * 6)
-		local force = tang:Forward() * vel + ply:GetVelocity()
+		local src, force = self:GetThrowVelocity()
 		self:CreateGrenade(src, Angle(0,0,0), force, Vector(600, math.random(-1200, 1200), 0), ply)
 
 		self:SetThrowTime(0)
