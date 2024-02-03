@@ -38,38 +38,40 @@ local propertiesMaterial = {"nocull", "additive", "vertexalpha", "vertexcolor", 
 -- @param ModelData modelData The model data for the model
 -- @realm client
 function modelbuilder.CreateModel(wep, modelData)
-	-- handle a model being added to the view or world model
-	if modelData.type == "Model" and modelData.model and modelData.model ~= ""
-		and (not IsValid(modelData.modelEnt) or modelData.createdModel ~= modelData.model)
-		and string.find(modelData.model, ".mdl") and file.Exists (modelData.model, "GAME")
-	then
-		modelData.modelEnt = ClientsideModel(modelData.model, RENDER_GROUP_VIEW_MODEL_OPAQUE) --todo check correct render group
+	local modelDataCopy = table.FullCopy(modelData)
 
-		if IsValid(modelData.modelEnt) then
-			modelData.modelEnt:SetPos(wep:GetPos())
-			modelData.modelEnt:SetAngles(wep:GetAngles())
-			modelData.modelEnt:SetParent(wep)
-			modelData.modelEnt:SetNoDraw(true)
-			modelData.createdModel = modelData.model
+	-- handle a model being added to the view or world model
+	if modelDataCopy.type == "Model" and modelDataCopy.model and modelDataCopy.model ~= ""
+		and (not IsValid(modelDataCopy.modelEnt) or modelDataCopy.createdModel ~= modelDataCopy.model)
+		and string.find(modelDataCopy.model, ".mdl") and file.Exists (modelDataCopy.model, "GAME")
+	then
+		modelDataCopy.modelEnt = ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE) --todo check correct render group
+
+		if IsValid(modelDataCopy.modelEnt) then
+			modelDataCopy.modelEnt:SetPos(wep:GetPos())
+			modelDataCopy.modelEnt:SetAngles(wep:GetAngles())
+			modelDataCopy.modelEnt:SetParent(wep)
+			modelDataCopy.modelEnt:SetNoDraw(true)
+			modelDataCopy.createdModel = modelDataCopy.model
 		else
-			modelData.modelEnt = nil
+			modelDataCopy.modelEnt = nil
 		end
 
 	-- handle a sprite being added to the view or world model
-	elseif modelData.type == "Sprite" and modelData.sprite and modelData.sprite ~= ""
-		and (not modelData.spriteMaterial or modelData.createdSprite ~= modelData.sprite)
-		and file.Exists ("materials/" .. modelData.sprite .. ".vmt", "GAME")
+	elseif modelDataCopy.type == "Sprite" and modelDataCopy.sprite and modelDataCopy.sprite ~= ""
+		and (not modelDataCopy.spriteMaterial or modelDataCopy.createdSprite ~= modelDataCopy.sprite)
+		and file.Exists ("materials/" .. modelDataCopy.sprite .. ".vmt", "GAME")
 	then
-		local name = modelData.sprite .. "-"
+		local name = modelDataCopy.sprite .. "-"
 		local params = {
-			["$basetexture"] = modelData.sprite
+			["$basetexture"] = modelDataCopy.sprite
 		}
 
 		-- make sure we create a unique name based on the selected options
 		for i = 1, #propertiesMaterial do
 			local property = propertiesMaterial[i]
 
-			if modelData[property] then
+			if modelDataCopy[property] then
 				params["$" .. property] = 1
 				name = name .. "1"
 			else
@@ -77,9 +79,11 @@ function modelbuilder.CreateModel(wep, modelData)
 			end
 		end
 
-		modelData.createdSprite = modelData.sprite
-		modelData.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
+		modelDataCopy.createdSprite = modelDataCopy.sprite
+		modelDataCopy.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
 	end
+
+	return modelDataCopy
 end
 
 ---
@@ -107,7 +111,7 @@ end
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
 function modelbuilder.UpdateBonePositions(wep, viewModel)
-	if not wep.ViewModelBoneMods then
+	if not wep.customViewModelBoneMods then
 		modelbuilder.ResetBonePositions(viewModel)
 
 		return
@@ -118,8 +122,8 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 	for i = 0, viewModel:GetBoneCount() do
 		local bonename = viewModel:GetBoneName(i)
 
-		if wep.ViewModelBoneMods[bonename] then
-			allBones[bonename] = wep.ViewModelBoneMods[bonename]
+		if wep.customViewModelBoneMods[bonename] then
+			allBones[bonename] = wep.customViewModelBoneMods[bonename]
 		else
 			allBones[bonename] = {
 				scale = Vector(1, 1, 1),

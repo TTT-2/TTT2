@@ -675,10 +675,9 @@ if CLIENT then
 	-- @param ModelData modelData The model data table
 	-- @realm client
 	function SWEP:AddCustomViewModel(identifier, modelData)
-		self.VElements = self.VElements or {}
-		self.VElements[identifier] = modelData
+		self.customViewModelElements = self.customViewModelElements or {}
 
-		modelbuilder.CreateModel(self, self.VElements[identifier])
+		self.customViewModelElements[identifier] = modelbuilder.CreateModel(self, modelData)
 	end
 
 	---
@@ -688,10 +687,9 @@ if CLIENT then
 	-- @param ModelData modelData The model data table
 	-- @realm client
 	function SWEP:AddCustomWorldModel(identifier, modelData)
-		self.WElements = self.WElements or {}
-		self.WElements[identifier] = modelData
+		self.customWorldModelElements = self.customWorldModelElements or {}
 
-		modelbuilder.CreateModel(self, self.WElements[identifier])
+		self.customWorldModelElements[identifier] = modelbuilder.CreateModel(self, modelData)
 	end
 
 	---
@@ -700,8 +698,8 @@ if CLIENT then
 	-- @param BoneData boneData The bone data table
 	-- @realm client
 	function SWEP:ApplyViewModelBoneMods(identifier, boneData)
-		self.ViewModelBoneMods = self.ViewModelBoneMods or {}
-		self.ViewModelBoneMods[identifier] = boneData
+		self.customViewModelBoneMods = self.customViewModelBoneMods or {}
+		self.customViewModelBoneMods[identifier] = boneData
 	end
 
 	---
@@ -719,14 +717,14 @@ if CLIENT then
 			viewModel:SetMaterial("vgui/hsv")
 		end
 
-		if not self.VElements then return end
+		if not self.customViewModelElements then return end
 
 		modelbuilder.UpdateBonePositions(self, viewModel)
 
 		-- we build a render order because sprites need to be drawn after models
-		self.VRenderOrder = modelbuilder.BuildRenderOrder(self.VElements, self.VRenderOrder)
+		self.VRenderOrder = modelbuilder.BuildRenderOrder(self.customViewModelElements, self.VRenderOrder)
 
-		modelbuilder.Render(self, self.VRenderOrder, self.VElements, viewModel)
+		modelbuilder.Render(self, self.VRenderOrder, self.customViewModelElements, viewModel)
 	end
 
 	---
@@ -744,10 +742,10 @@ if CLIENT then
 			self:DrawModel()
 		end
 
-		if not self.WElements then return end
+		if not self.customWorldModelElements then return end
 
 		-- we build a render order because sprites need to be drawn after models
-		self.WRenderOrder = modelbuilder.BuildRenderOrder(self.WElements, self.WRenderOrder)
+		self.WRenderOrder = modelbuilder.BuildRenderOrder(self.customWorldModelElements, self.WRenderOrder)
 
 		local boneEnt
 
@@ -758,7 +756,7 @@ if CLIENT then
 			boneEnt = self
 		end
 
-		modelbuilder.Render(self, self.WRenderOrder, self.WElements, boneEnt)
+		modelbuilder.Render(self, self.WRenderOrder, self.customWorldModelElements, boneEnt)
 	end
 
 	---
