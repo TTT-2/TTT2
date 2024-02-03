@@ -87,8 +87,8 @@ hook.Add("TTT2ReceivedRolelayerData", "received_layer_data", function(role, laye
 		for cLayer = 1, #layerTable do
 			local currentLayer = layerTable[cLayer]
 
-			for cEntry = 1, #currentLayer do
-				if currentLayer[cEntry] == subrole then
+			for clientsideEntityry = 1, #currentLayer do
+				if currentLayer[clientsideEntityry] == subrole then
 					found = true
 
 					break

@@ -124,12 +124,12 @@ end
 -- @realm client
 function PANEL:SetPlayerModel(model)
 	-- set the entity
-	local cEnt = ClientsideModel(model, RENDERGROUP_OTHER)
+	local clientsideEntity = ClientsideModel(model, RENDERGROUP_OTHER)
 
-	if not IsValid(cEnt) then return end
+	if not IsValid(clientsideEntity) then return end
 
-	cEnt:SetNoDraw(true)
-	cEnt:SetIK(false)
+	clientsideEntity:SetNoDraw(true)
+	clientsideEntity:SetIK(false)
 
 	-- before storing the ent, make sure that a possible old ent
 	-- is removed because clientside models are not garbage collected
@@ -137,7 +137,7 @@ function PANEL:SetPlayerModel(model)
 		self.data.ply:Remove()
 	end
 
-	self.data.ply = cEnt
+	self.data.ply = clientsideEntity
 end
 
 ---
@@ -171,25 +171,25 @@ function PANEL:SetWeaponClass(cls)
 
 			self.data.worldModelData[name] = data
 
-			local cEnt = ClientsideModel(data.model, RENDERGROUP_OTHER)
+			local clientsideEntity = ClientsideModel(data.model, RENDERGROUP_OTHER)
 
-			if not IsValid(cEnt) then continue end
+			if not IsValid(clientsideEntity) then continue end
 
-			self.data.worldModels[name] = cEnt
+			self.data.worldModels[name] = clientsideEntity
 		end
 	else
-		local cEnt = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
+		local clientsideEntity = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
 
-		if not IsValid(cEnt) then return end
+		if not IsValid(clientsideEntity) then return end
 
-		cEnt:SetNoDraw(true)
-		cEnt:SetIK(false)
+		clientsideEntity:SetNoDraw(true)
+		clientsideEntity:SetIK(false)
 
-		cEnt:SetParent(self.data.ply)
-		cEnt:AddEffects(EF_BONEMERGE)
+		clientsideEntity:SetParent(self.data.ply)
+		clientsideEntity:AddEffects(EF_BONEMERGE)
 
 		if wep.HoldType ~= "normal" then
-			self.data.wep = cEnt
+			self.data.wep = clientsideEntity
 		end
 	end
 
