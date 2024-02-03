@@ -77,8 +77,6 @@ function SWEP:SecondaryAttack()
 			bomb.fingerprints = self.fingerprints
 
 			self:Remove()
-
-			self.Planted = true
 		end
 	end
 end
