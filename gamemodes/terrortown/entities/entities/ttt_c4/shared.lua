@@ -33,6 +33,8 @@ ENT.CanHavePrints = true
 ENT.CanUseKey = true
 ENT.Avoidable = true
 
+ENT.isDestructible = false
+
 ---
 -- @accessor Entity
 -- @realm shared

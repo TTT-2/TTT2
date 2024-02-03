@@ -9,12 +9,16 @@ end
 
 ENT.Type = "anim"
 
+-- if set to false, the entity can not be destroyed by damage
+ENT.isDestructible = true
+
 ---
 -- @realm shared
 function ENT:Initialize()
-	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+	self:SetMoveType(MOVETYPE_VPHYSICS)
+	self:PhysicsInit(SOLID_VPHYSICS)
 
 	if SERVER then
 		self:PrecacheGibs()
@@ -26,7 +30,7 @@ function ENT:Initialize()
 		phys:SetMass(40)
 	end
 
-	self:SetHealth(10)
+	self:SetHealth(100)
 end
 
 ---
@@ -75,6 +79,8 @@ if SERVER then
 		if not self:IsWeldedToSurface() then
 			self:TakePhysicsDamage(dmgInfo)
 		end
+
+		if not self.isDestructible then return end
 
 		local pos = self:GetPos()
 		local amountDamage = dmgInfo:GetDamage()

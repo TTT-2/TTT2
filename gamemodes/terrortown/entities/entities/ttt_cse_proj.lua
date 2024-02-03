@@ -30,7 +30,8 @@ function ENT:Initialize()
 
 	if SERVER then
 		self:SetMaxHealth(50)
-		self:SetExplodeTime(CurTime() + 1)
+		print("created ... " .. tostring(CurTime()))
+		self:NextThink(CurTime() + 1)
 	end
 
 	self:SetHealth(50)
@@ -155,11 +156,13 @@ function ENT:OnRemove()
 	self:StopScanSound(true)
 end
 
----
--- @param table tr
--- @realm shared
-function ENT:Explode(tr)
-	if SERVER then
+if SERVER then
+	---
+	-- @param table tr
+	-- @realm shared
+	function ENT:Think()
+		print("scanning ... " .. tostring(CurTime()))
+
 		-- prevent starting effects when round is about to restart
 		if GetRoundState() == ROUND_POST then return end
 
@@ -193,7 +196,9 @@ function ENT:Explode(tr)
 		end
 
 		-- "schedule" next show pulse
-		self:SetDetonateTimer(self.PulseDelay)
+		self:NextThink(CurTime() + self.PulseDelay)
+
+		return true
 	end
 end
 
