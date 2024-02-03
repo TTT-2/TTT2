@@ -77,7 +77,7 @@ function ENT:Explode(tr)
 		self:Remove()
 	else
 		local spos = self:GetPos()
-		util.PaintDown("SmallScorch", spos + Vector(0,0,64), spos + Vector(0,0,-128), self)
+		util.PaintDown(spos, "SmallScorch", self)
 
 		self:SetDetonateExact(0)
 

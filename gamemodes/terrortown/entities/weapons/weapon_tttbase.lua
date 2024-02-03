@@ -68,6 +68,10 @@ if CLIENT then
 	-- if the files are different, it only looks at the name. I recommend you
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+
+	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
+	-- overload drawing functions.
+	SWEP.InvisibleViewModel = false
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -318,9 +322,12 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
+		local client = LocalPlayer()
+
+		client:DrawViewModel(not self.InvisibleViewModel)
+
 		if not cvEnableCrosshair:GetBool() then return end
 
-		local client = LocalPlayer()
 
 		local sights = not self.NoSights and self:GetIronsights()
 
@@ -422,7 +429,7 @@ if CLIENT then
 	local padXKey = 5
 
 	local function ProcessHelpText(lines, scale)
-		local width, center = 0, 0
+		local widthBinding, widthDescription = 0, 0
 		local processedData = {}
 
 		for i = 1, #lines do
@@ -438,6 +445,7 @@ if CLIENT then
 
 				wBinding = wKey + 2 * padXKey * scale
 				hBinding = hKey + 2 * padYKey * scale
+
 				isIcon = false
 			elseif binding then
 				wBinding = sizeIcon * scale
@@ -459,29 +467,30 @@ if CLIENT then
 				wDescription = wDescription
 			}
 
-			width = math.max(width, wBinding + wDescription)
-			center = math.max(center, wBinding)
+			widthBinding = math.max(widthBinding, wBinding)
+			widthDescription = math.max(widthDescription, wDescription)
 		end
 
-		return width, center, processedData
+		return widthBinding, widthDescription, processedData
 	end
 
 	---
 	-- Draws the help text to the bottom of the screen
 	-- @realm client
 	function SWEP:DrawHelp()
+		if not self.HUDHelp or not #self.HUDHelp.bindingLines then return end
 		local scale = appearance.GetGlobalScale()
 
-		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
+		local baseWidthBinding, baseWidthDescription, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
 
 		local padding = 10 * scale
 		local hLine = 23 * scale
 
-		local wBox = baseWidth + 5 * padding
+		local wBox = baseWidthBinding + baseWidthDescription + 4 * padding
 		local hBox = hLine * #processedData + 2 * padding
 		local xBox = 0.5 * (ScrW() - wBox)
 		local yBox = ScrH() - hBox
-		local xDivider = xBox + baseCenter + 2.5 * padding
+		local xDivider = xBox + baseWidthBinding + 2 * padding
 		local yDividerStart = yBox + padding
 		local yLine = yDividerStart + 10 * scale
 		local xDescription = xDivider + padding
@@ -569,7 +578,7 @@ if CLIENT then
 		primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
 		secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2") or nil
 
-		self:AddTTT2HUDHelp()
+		self:ClearHUDHelp()
 
 		if primary then
 			self:AddHUDHelpLine(primary, primary_key)
@@ -586,10 +595,7 @@ if CLIENT then
 	-- @param[optchain] string secondary_text description for secondaryfire
 	-- @realm client
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
-		self.HUDHelp = {
-			bindingLines = {},
-			max_length = 0
-		}
+		self:ClearHUDHelp()
 
 		if primary then
 			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
@@ -598,6 +604,17 @@ if CLIENT then
 		if secondary then
 			self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
 		end
+	end
+
+	---
+	-- Utility for removing all existing help lines so more can be added.
+	-- This can be useful for dynamically updating help text.
+	-- @realm client
+	function SWEP:ClearHUDHelp()
+		self.HUDHelp = {
+			bindingLines = {},
+			max_length = 0
+		}
 	end
 
 	---

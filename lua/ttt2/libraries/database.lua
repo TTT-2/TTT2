@@ -378,7 +378,7 @@ end
 -- @realm shared
 -- @internal
 local function ConvertValueWithKey(value, accessName, key)
-	if not value or value == "nil" or value == "NULL" then return end
+	if value == nil or value == "nil" or value == "NULL" then return end
 
 	local index = nameToIndex[accessName]
 

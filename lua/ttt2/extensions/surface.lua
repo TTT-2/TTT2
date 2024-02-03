@@ -26,6 +26,8 @@ end
 -- @realm client
 function surface.DrawPolyTable(tbl)
 	for i = 1, #tbl do
+		render.FullReset()
+
 		surface.DrawPoly(tbl[i])
 	end
 end

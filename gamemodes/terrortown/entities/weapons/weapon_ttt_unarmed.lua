@@ -13,6 +13,12 @@ if CLIENT then
 	SWEP.Slot = 5
 
 	SWEP.ViewModelFOV = 10
+
+	SWEP.EquipMenuData = {
+		type = "item_weapon",
+	}
+
+	SWEP.Icon = "vgui/ttt/icon_unarmed"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -35,23 +41,13 @@ SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
 
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 SWEP.NoSights = true
+SWEP.InvisibleViewModel = true
 
 SWEP.silentPickup = true
 
 SWEP.builtin = true
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @ignore
-function SWEP:ShouldDropOnDie()
-	return false
-end
 
 ---
 -- @ignore
@@ -73,30 +69,22 @@ end
 
 ---
 -- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
-	self:DrawShadow(false)
-
-	return true
-end
-
----
--- @ignore
 function SWEP:Holster()
 	return true
 end
 
----
--- @ignore
-function SWEP:DrawWorldModel()
+if CLIENT then
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
 
-end
+		self:DrawModel()
+	end
 
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
 
+	end
 end

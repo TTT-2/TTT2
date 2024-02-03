@@ -56,6 +56,7 @@ SWEP.Kind = WEAPON_CARRY
 
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 SWEP.NoSights = true
 
 SWEP.EntHolding = nil
@@ -720,18 +721,6 @@ function SWEP:Holster()
 	self:Reset()
 
 	return true
-end
-
----
--- @ignore
-function SWEP:ShouldDropOnDie()
-	return false
-end
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
 end
 
 if SERVER then

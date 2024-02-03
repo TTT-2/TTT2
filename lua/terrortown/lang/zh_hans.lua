@@ -2171,3 +2171,6 @@ L.help_crosshair_scale_enable = [[
 如果线的长度保持不变，则只有间隙会随着锥度的变化而缩放。]]
 
 L.header_weapon_settings = "武器设置"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"

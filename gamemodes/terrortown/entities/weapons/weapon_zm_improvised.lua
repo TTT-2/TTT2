@@ -66,6 +66,7 @@ SWEP.AutoSpawnable = false
 
 SWEP.AllowDelete = false -- never removed for weapon reduction
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 
 local sound_single = Sound("Weapon_Crowbar.Single")
 
@@ -278,12 +279,6 @@ function SWEP:SecondaryAttack()
 	if isfunction(owner.LagCompensation) then
 		owner:LagCompensation(false)
 	end
-end
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
 end
 
 if SERVER then

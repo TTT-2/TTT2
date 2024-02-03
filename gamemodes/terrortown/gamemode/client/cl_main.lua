@@ -494,9 +494,6 @@ local function ReceiveRole()
 	if not isfunction(client.SetRole) then return end
 
 	client:SetRole(subrole, team)
-
-	Msg("You are: ")
-	MsgN(string.upper(roles.GetByIndex(subrole).name))
 end
 net.Receive("TTT_Role", ReceiveRole)
 

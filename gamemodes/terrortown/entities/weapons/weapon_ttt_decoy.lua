@@ -17,7 +17,7 @@ else -- CLIENT
 		desc = "decoy_desc"
 	}
 
-	SWEP.Icon = "vgui/ttt/icon_beacon"
+	SWEP.Icon = "vgui/ttt/icon_decoy"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -47,12 +47,7 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
+SWEP.InvisibleViewModel = true
 
 ---
 -- @ignore
@@ -215,26 +210,18 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
-end
 
----
--- @ignore
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
 
-	return true
-end
+		self:DrawModel()
+	end
 
----
--- @ignore
-function SWEP:DrawWorldModel()
-	if IsValid(self:GetOwner()) then return end
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
 
-	self:DrawModel()
-end
-
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
-
+	end
 end
