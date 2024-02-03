@@ -103,6 +103,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
 - Fixed door health displaying as a humongous string of decimals
+- Fixed the MSTACK noise not playing when it should (by @figardo in base TTT)
 
 ### Removed
 
