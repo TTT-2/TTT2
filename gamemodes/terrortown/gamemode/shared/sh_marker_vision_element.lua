@@ -32,13 +32,22 @@ function MARKER_VISION_ELEMENT:GetColor()
 	elseif self.data.visibleFor == VISIBLE_FOR_PLAYER then
 		return TEAMS[TEAM_NONE].color
 	elseif self.data.visibleFor == VISIBLE_FOR_ROLE then
-		return LocalPlayer():GetRoleColor()
+		if IsPlayer(self.data.owner) then
+			return self.data.owner:GetRoleColor()
+		else
+			-- handle static role
+			return roles.GetByIndex(self.data.owner).color
+		end
 	elseif self.data.visibleFor == VISIBLE_FOR_TEAM then
-		return TEAMS[LocalPlayer():GetTeam()].color
-	else
-		-- this is a fallback when nothing is defined yet
-		return COLOR_WHITE
+		if IsPlayer(self.data.owner) then
+			return TEAMS[self.data.owner:GetTeam()].color
+		else
+			-- handle static team
+			return TEAMS[self.data.owner].color
+		end
 	end
+
+	return COLOR_WHITE
 end
 
 ---
