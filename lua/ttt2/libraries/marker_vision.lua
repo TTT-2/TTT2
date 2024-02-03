@@ -191,6 +191,35 @@ if SERVER then
 end
 
 if CLIENT then
+	net.ReceiveStream("ttt2_marker_vision_entity", function(streamData)
+		-- handle existing data on the client, the existing one will be updated
+		if IsValid(markerVision.Get(streamData.ent, streamData.identifier)) then
+			markerVision.Remove(streamData.ent, streamData.identifier)
+		end
+
+		local mvObject = markerVision.Add(streamData.ent, streamData.identifier)
+		mvObject:SetOwner(streamData.owner)
+		mvObject:SetVisibleFor(streamData.visibleFor)
+		mvObject:SetColor(streamData.color)
+
+		-- add mark to entity
+		if streamData.visibleFor == VISIBLE_FOR_ALL then
+			streamData.color = streamData.color or TEAMS[TEAM_INNOCENT].color
+		elseif streamData.visibleFor == VISIBLE_FOR_PLAYER then
+			streamData.color = streamData.color or TEAMS[TEAM_NONE].color
+		elseif streamData.visibleFor == VISIBLE_FOR_ROLE then
+			streamData.color = streamData.color or LocalPlayer():GetRoleColor()
+		else
+			streamData.color = streamData.color or TEAMS[LocalPlayer():GetTeam()].color
+		end
+
+		marks.Add({streamData.ent}, streamData.color)
+	end)
+
+	net.Receive("ttt2_marker_vision_entity_removed", function()
+		markerVision.Remove(net.ReadEntity(), net.ReadString())
+	end)
+
 	surface.CreateAdvancedFont("RadarVision_Title", { font = "Trebuchet24", size = 20, weight = 600 })
 	surface.CreateAdvancedFont("RadarVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
 
