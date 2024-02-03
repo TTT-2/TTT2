@@ -1173,6 +1173,46 @@ function plymeta:WasRevivedInRound()
 	return self:HasDiedInRound()
 end
 
+---
+-- Returns the player height vector based on the curren thead bone
+-- position. X and Y move along the head bone, Z contains the actual
+-- height.
+-- @note Uses the player's bounding box as a fallback if the head
+-- bone is not defined
+-- @note Respects the model scale for the height calculation
+-- @return vector The player height
+-- @realm shared
+function plymeta:GetHeightVector()
+	local matrix
+	local bone = self:LookupBone("ValveBiped.Bip01_Head1")
+
+	-- if the bone is defined, the bone matrix is defined as well;
+	-- however on hot reloads this can momentarily break before it
+	-- fixes itself again after a short time
+	if bone then
+		matrix = self:GetBoneMatrix(bone)
+	end
+
+	if matrix then
+		local pos = matrix:GetTranslation()
+
+		-- note: the 8 is the assumed height of the head after the head bone
+		-- this might not work for every model
+		pos.z = pos.z + 8 * self:GetModelScale() * self:GetManipulateBoneScale(bone).z
+
+		return pos - self:GetPos()
+
+	-- if the model has no head bone for some reason, use the player
+	-- position as a fallback
+	else
+		local obbmMaxs = self:OBBMaxs()
+		obbmMaxs.x = 0
+		obbmMaxs.y = 0
+
+		return obbmMaxs * self:GetModelScale()
+	end
+end
+
 -- to make it hotreload safe, we have to make sure it is not
 -- called recursively by only caching the original function
 if debug.getinfo(plymeta.SetFOV, "flLnSu").what == "C" then
