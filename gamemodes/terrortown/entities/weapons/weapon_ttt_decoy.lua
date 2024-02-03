@@ -8,9 +8,7 @@ else -- CLIENT
 	SWEP.PrintName = "decoy_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
-	SWEP.DrawCrosshair = false
+	SWEP.ShowViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -47,7 +45,6 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 ---
 -- @ignore

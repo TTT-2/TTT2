@@ -13,8 +13,7 @@ if CLIENT then
 	SWEP.PrintName = "defuser_name"
 	SWEP.Slot = 7
 
-	SWEP.DrawCrosshair = false
-	SWEP.ViewModelFOV = 10
+	SWEP.ShowViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -38,8 +37,6 @@ SWEP.Primary.Ammo = "none"
 SWEP.Kind = WEAPON_EQUIP2
 SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
 SWEP.WeaponID = AMMO_DEFUSER
-
-SWEP.InvisibleViewModel = true
 
 SWEP.builtin = true
 

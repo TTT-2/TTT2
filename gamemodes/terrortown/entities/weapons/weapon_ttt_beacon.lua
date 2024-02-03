@@ -12,8 +12,7 @@ if CLIENT then
 	SWEP.PrintName = "beacon_name"
 	SWEP.Slot = 6
 
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
+	SWEP.ShowViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -50,7 +49,6 @@ SWEP.builtin = true
 SWEP.Spawnable = true
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 SWEP.builtin = true
 

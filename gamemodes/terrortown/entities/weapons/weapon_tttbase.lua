@@ -71,7 +71,7 @@ if CLIENT then
 
 	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
 	-- overload drawing functions.
-	SWEP.InvisibleViewModel = false
+	SWEP.ShowViewModel = true
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -184,7 +184,7 @@ local skipWeapons = {}
 
 ---
 -- Checks if the weapon should be skipped. Skips all weapons not based on weapon_tttbase
--- @param weapon swep the weapon to check
+-- @param Weapon swep the weapon to check
 -- @realm shared
 -- @internal
 local function shouldSkipWeapon(swep)
@@ -315,6 +315,30 @@ if CLIENT then
 	}
 
 	---
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:PreDrawViewModel
+	-- @param Entity vm This is the view model entity after it is drawn
+	-- @param Weapon wep This is the weapon that is from the view model (same as self)
+	-- @param Player owner The owner of the weapon
+	-- @realm client
+	function SWEP:PreDrawViewModel(vm, wep, owner)
+		if self.ShowViewModel then
+			owner:DrawViewModel(false)
+		end
+	end
+
+	---
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:PostDrawViewModel
+	-- @param Entity vm This is the view model entity after it is drawn
+	-- @param Weapon wep This is the weapon that is from the view model (same as self)
+	-- @param Player owner The owner of the weapon
+	-- @realm client
+	function SWEP:PostDrawViewModel(vm, wep, owner)
+		if self.ShowViewModel then
+			owner:DrawViewModel(true)
+		end
+	end
+
+	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
@@ -322,13 +346,9 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
-		local client = LocalPlayer()
-
-		client:DrawViewModel(not self.InvisibleViewModel)
-
 		if not cvEnableCrosshair:GetBool() then return end
 
-
+		local client = LocalPlayer()
 		local sights = not self.NoSights and self:GetIronsights()
 
 		local xCenter = mathFloor(ScrW() * 0.5)

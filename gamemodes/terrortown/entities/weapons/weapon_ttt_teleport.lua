@@ -18,9 +18,7 @@ if CLIENT then
 	SWEP.PrintName = "tele_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 10
-	SWEP.DrawCrosshair = false
+	SWEP.ShowViewModel = false
 	SWEP.CSMuzzleFlashes = false
 
 	SWEP.EquipMenuData = {
@@ -54,7 +52,6 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = true
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 local delay_beamup = 1
 local delay_beamdown = 1

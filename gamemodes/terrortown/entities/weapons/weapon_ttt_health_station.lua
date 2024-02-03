@@ -13,8 +13,7 @@ if CLIENT then
 	SWEP.PrintName = "hstation_name"
 	SWEP.Slot = 6
 
-	SWEP.ViewModelFOV = 10
-	SWEP.DrawCrosshair = false
+	SWEP.ShowViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -51,7 +50,6 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 SWEP.drawColor = Color(180, 180, 250, 255)
 
