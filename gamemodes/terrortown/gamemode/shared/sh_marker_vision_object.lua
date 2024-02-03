@@ -186,7 +186,11 @@ if SERVER then
 		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and
 		-- therefore SendStream uses net.Broadcast
 
-		-- if data was previously set, it should be removed first on the client
+		-- If data was previously set, it should be removed first on the client. This is a
+		-- simple solution to a complex problem where the marks color has to be updated or
+		-- removed on the client before updating it.
+		-- A more in depth solution that reduces network traffic would be possible, but as
+		-- this won't be called that often anyway, this shouldn't be an issue
 		if self.lastReceiverList then
 			net.Start("ttt2_marker_vision_entity_removed")
 			net.WriteEntity(self.data.ent)
