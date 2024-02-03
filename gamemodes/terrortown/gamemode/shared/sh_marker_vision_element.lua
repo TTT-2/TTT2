@@ -9,7 +9,8 @@ MARKER_VISION_ELEMENT = {}
 MARKER_VISION_ELEMENT.data = {}
 
 ---
--- Sets the mark color to the element.
+-- Sets the mark color to the element. This should be set if the automatic
+-- color selection based on the VisibleFor flag is not desired.
 -- @param Color color The color
 -- @realm shared
 function MARKER_VISION_ELEMENT:SetColor(color)
@@ -17,11 +18,23 @@ function MARKER_VISION_ELEMENT:SetColor(color)
 end
 
 ---
--- Gets the mark color to the element.
+-- Gets the mark color to the element. Uses the hard defined color if set
+-- or the dynamic color based on VisibleFor flag.
 -- @return Color The color
 -- @realm shared
 function MARKER_VISION_ELEMENT:GetColor()
-	return self.data.color
+	if self.data.visibleFor == VISIBLE_FOR_ALL then
+		return self.data.color or TEAMS[TEAM_INNOCENT].color
+	elseif self.data.visibleFor == VISIBLE_FOR_PLAYER then
+		return self.data.color or TEAMS[TEAM_NONE].color
+	elseif self.data.visibleFor == VISIBLE_FOR_ROLE then
+		return self.data.color or LocalPlayer():GetRoleColor()
+	elseif self.data.visibleFor == VISIBLE_FOR_TEAM then
+		return self.data.color or TEAMS[LocalPlayer():GetTeam()].color
+	else
+		-- this is a fallback when nothing is defined yet
+		return COLOR_WHITE
+	end
 end
 
 ---

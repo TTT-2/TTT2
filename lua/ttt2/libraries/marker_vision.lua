@@ -203,17 +203,7 @@ if CLIENT then
 		mvObject:SetColor(streamData.color)
 
 		-- add mark to entity
-		if streamData.visibleFor == VISIBLE_FOR_ALL then
-			streamData.color = streamData.color or TEAMS[TEAM_INNOCENT].color
-		elseif streamData.visibleFor == VISIBLE_FOR_PLAYER then
-			streamData.color = streamData.color or TEAMS[TEAM_NONE].color
-		elseif streamData.visibleFor == VISIBLE_FOR_ROLE then
-			streamData.color = streamData.color or LocalPlayer():GetRoleColor()
-		else
-			streamData.color = streamData.color or TEAMS[LocalPlayer():GetTeam()].color
-		end
-
-		marks.Add({streamData.ent}, streamData.color)
+		marks.Add({streamData.ent}, mvObject:GetColor())
 	end)
 
 	net.Receive("ttt2_marker_vision_entity_removed", function()
