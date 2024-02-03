@@ -87,6 +87,8 @@ end
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
 function modelbuilder.ResetBonePositions(viewModel)
+	if not IsValid(viewModel) then return end
+
 	local boneCount = viewModel:GetBoneCount()
 
 	if not boneCount then return end
@@ -132,31 +134,29 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 
 		if not bone then continue end
 
-		local s = Vector(dataTable.scale.x, dataTable.scale.y, dataTable.scale.z)
-		local p = Vector(dataTable.pos.x, dataTable.pos.y, dataTable.pos.z)
-		local ms = Vector(1, 1, 1)
+		local scale = Vector(dataTable.scale.x, dataTable.scale.y, dataTable.scale.z)
+		local position = Vector(dataTable.pos.x, dataTable.pos.y, dataTable.pos.z)
+		local modelScale = Vector(1, 1, 1)
 
-		local cur = viewModel:GetBoneParent(bone)
+		local currentBone = viewModel:GetBoneParent(bone)
 
-		while (cur >= 0) do
-			local pScale = allBones[viewModel:GetBoneName(cur)].scale
-
-			ms = ms * pScale
-			cur = viewModel:GetBoneParent(cur)
+		while (currentBone >= 0) do
+			modelScale = modelScale * allBones[viewModel:GetBoneName(currentBone)].scale
+			currentBone = viewModel:GetBoneParent(currentBone)
 		end
 
-		s = s * ms
+		scale = scale * modelScale
 
-		if viewModel:GetManipulateBoneScale(bone) ~= s then
-			viewModel:ManipulateBoneScale(bone, s)
+		if viewModel:GetManipulateBoneScale(bone) ~= scale then
+			viewModel:ManipulateBoneScale(bone, scale)
 		end
 
 		if viewModel:GetManipulateBoneAngles(bone) ~= dataTable.angle then
 			viewModel:ManipulateBoneAngles(bone, dataTable.angle)
 		end
 
-		if viewModel:GetManipulateBonePosition(bone) ~= p then
-			viewModel:ManipulateBonePosition(bone, p)
+		if viewModel:GetManipulateBonePosition(bone) ~= position then
+			viewModel:ManipulateBonePosition(bone, position)
 		end
 	end
 end

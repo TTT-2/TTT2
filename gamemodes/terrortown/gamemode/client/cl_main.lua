@@ -421,6 +421,9 @@ local function RoundStateChange(o, n)
 
 		-- clear decals in cache from previous round
 		util.ClearDecals()
+
+		-- resets bone positions that fixes broken fingers on bad addons
+		modelbuilder.ResetBonePositions(LocalPlayer():GetViewModel())
 	elseif n == ROUND_ACTIVE then
 		-- round starts
 		VOICE.CycleMuteState(MUTE_NONE)

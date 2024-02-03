@@ -209,6 +209,10 @@ addonChecker.curatedList = {
 		reason = "Prints only Detectives in TTT2. Roles are hard coded.",
 		type = ADDON_INCOMPATIBLE
 	},
+	["110148946"] = { -- ttt_broken_hand_fix by Jolez
+		reason = "Already built in into TTT2",
+		type = ADDON_INCOMPATIBLE
+	},
 	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
 		alternative = "2150924507",
 		reason = "Addon is broken and doesn't do anything.",

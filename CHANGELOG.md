@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added support for easy addition of custom view and world models (by @TimGoll)
   - Added `AddCustomViewModel` to add custom view models
   - Added `AddCustomWorldModel` to add custom world models
+  - Added an automatic fix for badly coded addons that break the view model fingers
 
 ### Changed
 
