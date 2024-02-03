@@ -23,14 +23,18 @@ end
 -- @return Color The color
 -- @realm shared
 function MARKER_VISION_ELEMENT:GetColor()
+	if self.data.color then
+		return self.data.color
+	end
+
 	if self.data.visibleFor == VISIBLE_FOR_ALL then
-		return self.data.color or TEAMS[TEAM_INNOCENT].color
+		return TEAMS[TEAM_INNOCENT].color
 	elseif self.data.visibleFor == VISIBLE_FOR_PLAYER then
-		return self.data.color or TEAMS[TEAM_NONE].color
+		return TEAMS[TEAM_NONE].color
 	elseif self.data.visibleFor == VISIBLE_FOR_ROLE then
-		return self.data.color or LocalPlayer():GetRoleColor()
+		return LocalPlayer():GetRoleColor()
 	elseif self.data.visibleFor == VISIBLE_FOR_TEAM then
-		return self.data.color or TEAMS[LocalPlayer():GetTeam()].color
+		return TEAMS[LocalPlayer():GetTeam()].color
 	else
 		-- this is a fallback when nothing is defined yet
 		return COLOR_WHITE
