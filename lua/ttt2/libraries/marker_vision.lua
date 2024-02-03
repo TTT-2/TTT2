@@ -44,6 +44,7 @@ end
 -- @param Entity ent The entity which should receive the marker vision element
 -- @param string identifier The unique identifier of this marker vision element
 -- @return MARKER_VISION_ELEMENT The marker vision object
+-- @return number The position in the table, -1 if not found
 -- @realm shared
 function markerVision.Get(ent, identifier)
 	for i = 1, #markerVision.registry do
