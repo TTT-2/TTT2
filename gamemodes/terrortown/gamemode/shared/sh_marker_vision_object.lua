@@ -133,31 +133,6 @@ function MARKER_VISION_OBJECT:UpdateRelations(owner, visibleFor)
 	-- the need to pass these values again
 	self.data.owner = owner or self.data.owner
 	self.data.visibleFor = visibleFor or self.data.visibleFor
-
-	if SERVER then
-		if self.data.visibleFor == VISIBLE_FOR_PLAYER then
-			self.receiverList = {self.data.owner}
-		elseif self.data.visibleFor == VISIBLE_FOR_ROLE then
-			if IsPlayer(self.data.owner) then
-				self.receiverList = GetRoleFilter(self.data.owner:GetSubRole(), false)
-			else
-				-- handle static role
-				self.receiverList = GetRoleFilter(self.data.owner, false)
-			end
-		elseif self.data.visibleFor == VISIBLE_FOR_TEAM then
-			if IsPlayer(self.data.owner) then
-				self.receiverList = GetTeamFilter(self.data.owner:GetTeam(), false, true)
-			else
-				-- handle static team
-				self.receiverList = GetTeamFilter(self.data.owner, false, true)
-			end
-		else
-			self.receiverList = nil
-		end
-
-		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and
-		-- therefore SendStream uses net.Broadcast
-	end
 end
 
 ---
@@ -187,6 +162,29 @@ if SERVER then
 	-- @realm server
 	function MARKER_VISION_OBJECT:SyncToClients(receiverListOverwrite, passThroughData)
 		if not self.data.owner then return end
+
+		if self.data.visibleFor == VISIBLE_FOR_PLAYER then
+			self.receiverList = {self.data.owner}
+		elseif self.data.visibleFor == VISIBLE_FOR_ROLE then
+			if IsPlayer(self.data.owner) then
+				self.receiverList = GetRoleFilter(self.data.owner:GetSubRole(), false)
+			else
+				-- handle static role
+				self.receiverList = GetRoleFilter(self.data.owner, false)
+			end
+		elseif self.data.visibleFor == VISIBLE_FOR_TEAM then
+			if IsPlayer(self.data.owner) then
+				self.receiverList = GetTeamFilter(self.data.owner:GetTeam(), false, true)
+			else
+				-- handle static team
+				self.receiverList = GetTeamFilter(self.data.owner, false, true)
+			end
+		else
+			self.receiverList = nil
+		end
+
+		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and
+		-- therefore SendStream uses net.Broadcast
 
 		-- if data was previously set, it should be removed first on the client
 		if self.lastReceiverList then
