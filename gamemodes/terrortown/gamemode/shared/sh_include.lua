@@ -68,7 +68,7 @@ TTTFiles = {
 	sh_voice = {file = "sh_voice.lua", on = "shared"},
 	sh_speed = {file = "sh_speed.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
-	sh_MARKER_VISION_ELEMENT = {file = "sh_MARKER_VISION_ELEMENT.lua", on = "shared"},
+	sh_marker_vision_element = {file = "sh_marker_vision_element.lua", on = "shared"},
 
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},

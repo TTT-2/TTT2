@@ -108,21 +108,6 @@ function MARKER_VISION_ELEMENT:IsObjectFor(ent, identifier)
 end
 
 ---
--- Updates the relations of this marker vision element.
--- @note This does not sync it to the client, call @{MARKER_VISION_ELEMENT:SyncToClients} to sync to client.
--- @param number|string|Player owner The owner of the wallhack that takes their ownership with them on
--- team change; can also be a team (string) or role (number) if it shouldn't be bound to a player
--- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_ROLE`, `VISIBLE_FOR_TEAM`,
--- `VISIBLE_FOR_ALL`
--- @realm shared
-function MARKER_VISION_ELEMENT:UpdateRelations(owner, visibleFor)
-	-- this is done this way to support an UpdateRelations call on Role/Team change without
-	-- the need to pass these values again
-	self.data.owner = owner or self.data.owner
-	self.data.visibleFor = visibleFor or self.data.visibleFor
-end
-
----
 -- Checks if the entity is valid and the identifier is set.
 -- @return boolean Returns true if valid
 -- @realm shared
@@ -141,7 +126,8 @@ end
 if SERVER then
 	---
 	-- Syncs the marker vision element to the client that should receive it.
-	-- @note The receipients should be set first with @{MARKER_VISION_ELEMENT:UpdateRelations}.
+	-- @note The receipients should be set first with @{MARKER_VISION_ELEMENT:SetOwner} and
+	-- @{MARKER_VISION_ELEMENT:SetVisibleFor}.
 	-- @note If the marker vision element was synced already, it is updated on the client.
 	-- @param[opt] table receiverListOverwrite A table of players that should receive the update
 	-- if not the automatic receipient selection should be used.
@@ -172,6 +158,8 @@ if SERVER then
 		-- note: when VISIBLE_FOR_ALL is used, the receiver will be nil and
 		-- therefore SendStream uses net.Broadcast
 
+		self.receiverList = receiverListOverwrite or self.receiverList
+
 		-- If data was previously set, it should be removed first on the client. This is a
 		-- simple solution to a complex problem where the marks color has to be updated or
 		-- removed on the client before updating it.
@@ -188,10 +176,10 @@ if SERVER then
 		timer.Simple(0, function()
 			if not IsValid(self) then return end
 
-			net.SendStream("ttt2_marker_vision_entity", self.data, receiverListOverwrite or self.receiverList)
+			net.SendStream("ttt2_marker_vision_entity", self.data, self.receiverList)
 
 			-- cache this, so we know where to remove the old data on update
-			self.lastReceiverList = receiverListOverwrite or self.receiverList
+			self.lastReceiverList = self.receiverList
 		end)
 	end
 end
@@ -204,7 +192,8 @@ if CLIENT then
 		end
 
 		local mvObject = markerVision.Add(streamData.ent, streamData.identifier)
-		mvObject:UpdateRelations(streamData.owner, streamData.visibleFor)
+		mvObject:SetOwner(streamData.owner)
+		mvObject:SetVisibleFor(streamData.visibleFor)
 		mvObject:SetColor(streamData.color)
 
 		-- add mark to entity

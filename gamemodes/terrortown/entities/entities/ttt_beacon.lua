@@ -47,7 +47,8 @@ function ENT:Initialize()
 		self:NextThink(CurTime() + 1)
 
 		local mvObject = self:AddMarkerVision("beacon_owner")
-		mvObject:UpdateRelations(ROLE_DETECTIVE, VISIBLE_FOR_ROLE)
+		mvObject:SetOwner(ROLE_DETECTIVE)
+		mvObject:SetVisibleFor(VISIBLE_FOR_ROLE)
 		mvObject:SyncToClients()
 	end
 end
@@ -127,7 +128,8 @@ if SERVER then
 			if plysFound[ply] and not self.lastPlysFound[ply] then
 				-- newly added player in range
 				local mvObject = ply:AddMarkerVision("beacon_player")
-				mvObject:UpdateRelations(self:GetOwner(), VISIBLE_FOR_ALL)
+				mvObject:SetOwner(self:GetOwner())
+				mvObject:SetVisibleFor(VISIBLE_FOR_ALL)
 				mvObject:SetColor(roles.DETECTIVE.color)
 				mvObject:SyncToClients()
 			elseif not plysFound[ply] and self.lastPlysFound[ply] then

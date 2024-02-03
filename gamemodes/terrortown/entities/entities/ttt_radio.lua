@@ -39,7 +39,8 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 
 		local mvObject = self:AddMarkerVision("radio_owner")
-		mvObject:UpdateRelations(self:GetOwner(), VISIBLE_FOR_TEAM)
+		mvObject:SetOwner(self:GetOwner())
+		mvObject:SetVisibleFor(VISIBLE_FOR_TEAM)
 		mvObject:SyncToClients()
 	end
 

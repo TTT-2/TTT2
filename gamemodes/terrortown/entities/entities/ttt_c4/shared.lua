@@ -570,7 +570,8 @@ if SERVER then
 		events.Trigger(EVENT_C4PLANT, ply)
 
 		local mvObject = self:AddMarkerVision("c4_owner")
-		mvObject:UpdateRelations(ply, VISIBLE_FOR_TEAM)
+		mvObject:SetOwner(ply)
+		mvObject:SetVisibleFor(VISIBLE_FOR_TEAM)
 		mvObject:SyncToClients()
 	end
 

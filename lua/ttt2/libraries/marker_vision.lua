@@ -135,7 +135,8 @@ if SERVER then
 			-- case 1: the owner is a player and they are the one that changed their team
 			-- this means that the entity is taken to the new team
 			if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
-				mvObject:UpdateRelations(mvObjectData.owner, VISIBLE_FOR_TEAM)
+				-- nothing needs to be updated here, the new receiver list is generated
+				-- in SyncToClients
 				mvObject:SyncToClients()
 
 				continue
@@ -143,7 +144,8 @@ if SERVER then
 
 			-- case 2: it is bound to the team and the player's new/old team matches
 			if mvObjectData.owner == oldTeam or mvObjectData.owner == newTeam then
-				mvObject:UpdateRelations()
+				-- nothing needs to be updated here, the new receiver list is generated
+				-- in SyncToClients
 				mvObject:SyncToClients()
 
 				continue
@@ -152,7 +154,8 @@ if SERVER then
 	end
 
 	---
-	-- Handles the update of the role of a player change. Is called internally and should probably not be called somewhere else.
+	-- Handles the update of the role of a player change. Is called internally and should
+	-- probably not be called somewhere else.
 	-- @param Entity ent The entity that should be updated
 	-- @param number oldRole The old role of the owner
 	-- @param number newRole The new role of the owner
@@ -168,7 +171,8 @@ if SERVER then
 			-- case 1: the owner is a player and they are the one that changed their role
 			-- this means that the entity is taken to the new role
 			if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
-				mvObject:UpdateRelations(mvObjectData.owner, VISIBLE_FOR_TEAM)
+				-- nothing needs to be updated here, the new receiver list is generated
+				-- in SyncToClients
 				mvObject:SyncToClients()
 
 				continue
@@ -176,7 +180,8 @@ if SERVER then
 
 			-- case 2: it is bound to the role and the player's new/old role matches
 			if mvObjectData.owner == oldRole or mvObjectData.owner == newRole then
-				mvObject:UpdateRelations()
+				-- nothing needs to be updated here, the new receiver list is generated
+				-- in SyncToClients
 				mvObject:SyncToClients()
 
 				continue
