@@ -200,8 +200,9 @@ if CLIENT then
 	-- @param Player ply
 	-- @realm client
 	function SWEP:PostDrawViewModel(vm, weapon, ply)
-		if not cvEnableTrajectoryUI:GetBool() then return end
-		self:DrawDefaultThrowPath(ply)
+		if cvEnableTrajectoryUI:GetBool() then
+		    self:DrawDefaultThrowPath(ply)
+		end
 	end
 end
 
