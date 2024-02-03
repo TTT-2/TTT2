@@ -443,7 +443,7 @@ if CLIENT then
 	local padXKey = 5
 
 	local function ProcessHelpText(lines, scale)
-		local width, center = 0, 0
+		local widthBinding, widthDescription = 0, 0
 		local processedData = {}
 
 		for i = 1, #lines do
@@ -459,6 +459,7 @@ if CLIENT then
 
 				wBinding = wKey + 2 * padXKey * scale
 				hBinding = hKey + 2 * padYKey * scale
+
 				isIcon = false
 			elseif binding then
 				wBinding = sizeIcon * scale
@@ -480,11 +481,11 @@ if CLIENT then
 				wDescription = wDescription
 			}
 
-			width = math.max(width, wBinding + wDescription)
-			center = math.max(center, wBinding)
+			widthBinding = math.max(widthBinding, wBinding)
+			widthDescription = math.max(widthDescription, wDescription)
 		end
 
-		return width, center, processedData
+		return widthBinding, widthDescription, processedData
 	end
 
 	---
@@ -494,16 +495,16 @@ if CLIENT then
 		if not self.HUDHelp or not #self.HUDHelp.bindingLines then return end
 		local scale = appearance.GetGlobalScale()
 
-		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
+		local baseWidthBinding, baseWidthDescription, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
 
 		local padding = 10 * scale
 		local hLine = 23 * scale
 
-		local wBox = baseWidth + 5 * padding
+		local wBox = baseWidthBinding + baseWidthDescription + 4 * padding
 		local hBox = hLine * #processedData + 2 * padding
 		local xBox = 0.5 * (ScrW() - wBox)
 		local yBox = ScrH() - hBox
-		local xDivider = xBox + baseCenter + 2.5 * padding
+		local xDivider = xBox + baseWidthBinding + 2 * padding
 		local yDividerStart = yBox + padding
 		local yLine = yDividerStart + 10 * scale
 		local xDescription = xDivider + padding
