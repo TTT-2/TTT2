@@ -2,7 +2,6 @@ SWEP.Base = "weapon_tttbase"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 45
-	SWEP.DrawCrosshair = false
 	SWEP.ViewModelFlip = false
 
 	SWEP.EquipMenuData = {
