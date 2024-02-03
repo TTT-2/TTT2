@@ -2173,3 +2173,6 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
