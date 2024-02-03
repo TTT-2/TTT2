@@ -12,6 +12,9 @@ on:
 
 jobs:
   update-language-files:
+    # guard against running on forks as they are probably not setup for this
+    if: github.repository_owner == 'TTT-2'
+
     runs-on: ubuntu-latest
 
     steps:
