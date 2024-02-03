@@ -158,8 +158,7 @@ end
 
 if SERVER then
 	---
-	-- @param table tr
-	-- @realm shared
+	-- @realm server
 	function ENT:Think()
 		print("scanning ... " .. tostring(CurTime()))
 
@@ -195,7 +194,7 @@ if SERVER then
 			self:StopScanSound()
 		end
 
-		-- "schedule" next show pulse
+		-- "schedule" next show pulse, return true to enable NextThink
 		self:NextThink(CurTime() + self.PulseDelay)
 
 		return true
