@@ -35,6 +35,58 @@ modelbuilder = {}
 local propertiesMaterial = {"nocull", "additive", "vertexalpha", "vertexcolor", "ignorez"}
 
 ---
+-- Gets the orientation of a given bone.
+-- @param Entity wep The weapon whose bone orientation is desired
+-- @param table baseDataTable The base data table, most of the time the view elements
+-- @param table dataTable The data table, most of the time the model data
+-- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
+-- @param string boneOverride An override to get a secific bone
+-- @return Vector pos The bone position
+-- @return Angle ang The bone angle
+-- @realm client
+local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, boneOverride)
+	local bone, pos, ang
+
+	if dataTable.rel and dataTable.rel ~= "" then
+		local tbl = baseDataTable[dataTable.rel]
+
+		if not tbl then return end
+
+		-- Technically, if there exists an element with the same name as a bone
+		-- you can get in an infinite loop. Let's just hope nobody's that stupid.
+		pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity)
+
+		if not pos then return end
+
+		pos = pos + ang:Forward() * tbl.pos.x + ang:Right() * tbl.pos.y + ang:Up() * tbl.pos.z
+
+		ang:RotateAroundAxis(ang:Up(), tbl.angle.y)
+		ang:RotateAroundAxis(ang:Right(), tbl.angle.p)
+		ang:RotateAroundAxis(ang:Forward(), tbl.angle.r)
+	else
+		bone = boneEntity:LookupBone(boneOverride or dataTable.bone)
+
+		if not bone then return end
+
+		pos, ang = Vector(0,0,0), Angle(0,0,0)
+
+		local matrix = boneEntity:GetBoneMatrix(bone)
+
+		if matrix then
+			pos, ang = matrix:GetTranslation(), matrix:GetAngles()
+		end
+
+		local owner = wep:GetOwner()
+
+		if IsValid(owner) and owner:IsPlayer() and boneEntity == owner:GetViewModel() and wep.ViewModelFlip then
+			ang.r = -ang.r -- Fixes mirrored models
+		end
+	end
+
+	return pos, ang
+end
+
+---
 -- Creates a clientside model that is used as a view or world model with the provided model data.
 -- @param Entity wep The weapon for which the model should be created
 -- @param ModelData modelData The model data for the model
@@ -188,58 +240,6 @@ function modelbuilder.BuildRenderOrder(elements, cachedRenderOrder)
 end
 
 ---
--- Gets the orientation of a given bone.
--- @param Entity wep The weapon whose bone orientation is desired
--- @param table baseDataTable The base data table, most of the time the view elements
--- @param table dataTable The data table, most of the time the model data
--- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
--- @param string boneOverride An override to get a secific bone
--- @return Vector pos The bone position
--- @return Angle ang The bone angle
--- @realm client
-function modelbuilder.GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, boneOverride)
-	local bone, pos, ang
-
-	if dataTable.rel and dataTable.rel ~= "" then
-		local tbl = baseDataTable[dataTable.rel]
-
-		if not tbl then return end
-
-		-- Technically, if there exists an element with the same name as a bone
-		-- you can get in an infinite loop. Let's just hope nobody's that stupid.
-		pos, ang = modelbuilder.GetBoneOrientation(wep, baseDataTable, tbl, boneEntity)
-
-		if not pos then return end
-
-		pos = pos + ang:Forward() * tbl.pos.x + ang:Right() * tbl.pos.y + ang:Up() * tbl.pos.z
-
-		ang:RotateAroundAxis(ang:Up(), tbl.angle.y)
-		ang:RotateAroundAxis(ang:Right(), tbl.angle.p)
-		ang:RotateAroundAxis(ang:Forward(), tbl.angle.r)
-	else
-		bone = boneEntity:LookupBone(boneOverride or dataTable.bone)
-
-		if not bone then return end
-
-		pos, ang = Vector(0,0,0), Angle(0,0,0)
-
-		local matrix = boneEntity:GetBoneMatrix(bone)
-
-		if matrix then
-			pos, ang = matrix:GetTranslation(), matrix:GetAngles()
-		end
-
-		local owner = wep:GetOwner()
-
-		if IsValid(owner) and owner:IsPlayer() and boneEntity == owner:GetViewModel() and wep.ViewModelFlip then
-			ang.r = -ang.r -- Fixes mirrored models
-		end
-	end
-
-	return pos, ang
-end
-
----
 -- Renders the world or view model.
 -- @param Entity wep The weapon whose view model should be rendered
 -- @param table renderOrder The render order of the view model elements
@@ -256,7 +256,7 @@ function modelbuilder.Render(wep, renderOrder, elements, boneEntity)
 		local model = modelData.modelEnt
 		local sprite = modelData.spriteMaterial
 
-		local pos, ang = modelbuilder.GetBoneOrientation(wep, elements, modelData, boneEntity)
+		local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity)
 
 		if not pos then continue end
 
