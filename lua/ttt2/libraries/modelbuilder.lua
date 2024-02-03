@@ -44,7 +44,7 @@ function modelbuilder.CreateModel(wep, modelData)
 	-- handle a model being added to the view or world model
 	if modelDataCopy.type == "Model" and modelDataCopy.model and modelDataCopy.model ~= ""
 		and (not IsValid(modelDataCopy.modelEnt) or modelDataCopy.createdModel ~= modelDataCopy.model)
-		and string.find(modelDataCopy.model, ".mdl") and file.Exists (modelDataCopy.model, "GAME")
+		and string.find(modelDataCopy.model, ".mdl") and file.Exists(modelDataCopy.model, "GAME")
 	then
 		modelDataCopy.modelEnt = ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE) --todo check correct render group
 
@@ -61,7 +61,7 @@ function modelbuilder.CreateModel(wep, modelData)
 	-- handle a sprite being added to the view or world model
 	elseif modelDataCopy.type == "Sprite" and modelDataCopy.sprite and modelDataCopy.sprite ~= ""
 		and (not modelDataCopy.spriteMaterial or modelDataCopy.createdSprite ~= modelDataCopy.sprite)
-		and file.Exists ("materials/" .. modelDataCopy.sprite .. ".vmt", "GAME")
+		and file.Exists("materials/" .. modelDataCopy.sprite .. ".vmt", "GAME")
 	then
 		local name = modelDataCopy.sprite .. "-"
 		local params = {
