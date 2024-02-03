@@ -25,11 +25,6 @@ ENT.SoundDelay = 0.5
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_NONE)
-
 	self.BaseClass.Initialize(self)
 
 	if SERVER then
