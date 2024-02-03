@@ -31,6 +31,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 - Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
   - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt0_radio` and `ttt_cse_proj` to that base
+- Throwables (grenades) now have a `:GetPullTime()` accessor
+- Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 
 ### Changed
 
@@ -65,6 +67,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
+- Fixed marks library having self zfailing and color issues (by @WardenPotato)
 
 ### Removed
 
@@ -243,6 +246,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when observing a player in first person view
 
 ### Fixed
 
@@ -266,6 +273,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Deprecated
 
