@@ -144,6 +144,7 @@ if SERVER then
 			end
 
 			-- case 2: it is bound to the team and the player's new/old team matches
+			-- note: in this case the owner is no entity, but a team
 			if mvObjectData.owner == oldTeam or mvObjectData.owner == newTeam then
 				-- nothing needs to be updated here, the new receiver list is generated
 				-- in SyncToClients
@@ -180,6 +181,7 @@ if SERVER then
 			end
 
 			-- case 2: it is bound to the role and the player's new/old role matches
+			-- note: in this case the owner is no entity, but a role
 			if mvObjectData.owner == oldRole or mvObjectData.owner == newRole then
 				-- nothing needs to be updated here, the new receiver list is generated
 				-- in SyncToClients

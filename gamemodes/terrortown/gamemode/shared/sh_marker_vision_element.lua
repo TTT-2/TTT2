@@ -84,7 +84,8 @@ end
 
 ---
 -- Sets the mark owner to the element.
--- @param Entity owner The mark owner
+-- @param number|string|Player owner The owner of the wallhack that takes their ownership with them on
+-- role/team change; can also be a team (string) or role (number) if it shouldn't be bound to a player
 -- @realm shared
 function MARKER_VISION_ELEMENT:SetOwner(owner)
 	self.data.owner = owner
@@ -100,7 +101,8 @@ end
 
 ---
 -- Sets the visible for flag to the element.
--- @param number visibleFor The visible for flag
+-- @param number visibleFor Visibility setting: `VISIBLE_FOR_PLAYER`, `VISIBLE_FOR_ROLE`,
+-- `VISIBLE_FOR_TEAM`, `VISIBLE_FOR_ALL`
 -- @realm shared
 function MARKER_VISION_ELEMENT:SetVisibleFor(visibleFor)
 	self.data.visibleFor = visibleFor
