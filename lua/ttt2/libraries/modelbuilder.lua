@@ -1,5 +1,6 @@
 ---
--- Used to build custom world and view models. This code is based on the SWEP construction kit.
+-- Used to build custom world and view models. It also renders those custom models.
+-- This code is based on the SWEP construction kit.
 -- @ref https://github.com/MagicSwap/SWEP_Construction_Kit
 -- @author Mineotopia
 -- @module modelbuilder
