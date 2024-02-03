@@ -263,7 +263,11 @@ if SERVER then
 	-- Helper function for a weapon that wants to stick the entity to a surface. Already handles everything.
 	-- @param Player ply The player that sticks the entity, the owner
 	-- @param[opt] Angle rotationalOffset The model's rotational offset that should be applied
-	-- @param[opt] number angleCondition The angle condition that has to be met to apoply the rotational offset
+	-- @param[opt] number angleCondition The angle condition that has to be met to apply the rotational offset
+	-- @note On the rotations: A model ca be rotated in three axis. This can be set in `rotationalOffset`. It is
+	-- also possible to tie this to an `angleCondition` that has to be met so that this offset is applied. Such
+	-- a angle condition is any possible angle: if the angle of the hit normal is greater then the provided
+	-- condition, the offset is applied.
 	-- @return boolean Returns true on success
 	-- @realm server
 	function ENT:StickEntity(ply, rotationalOffset, angleCondition)
