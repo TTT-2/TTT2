@@ -33,6 +33,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added `AddCustomViewModel` to add custom view models
   - Added `AddCustomWorldModel` to add custom world models
   - Added an automatic fix for badly coded addons that break the view model fingers
+- Throwables (grenades) now have a `:GetPullTime()` accessor
+- Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 
 ### Changed
 
@@ -61,11 +63,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed database now properly saving boolean `false` values
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
+- Fixed marks library having self zfailing and color issues (by @WardenPotato)
 
 ### Removed
 
@@ -244,6 +248,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when observing a player in first person view
 
 ### Fixed
 
@@ -267,6 +275,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Deprecated
 
