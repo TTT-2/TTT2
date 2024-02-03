@@ -29,10 +29,18 @@ jobs:
       - name: run language parser
         run: python ttt2-language_parser/parse.py --in "$GITHUB_WORKSPACE/ttt2/lua/terrortown/lang" --out "$GITHUB_WORKSPACE/ttt2/lua/terrortown/lang" --base en --ignore chef
 
+      - name: generate app token
+        uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Create Pull Request
         id: ci-update-language-files
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ steps.generate-token.outputs.token }}
           path: ttt2
           add-paths: "lua/terrortown/lang/*.lua"
           commit-message: Update language files
