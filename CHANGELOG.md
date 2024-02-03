@@ -272,6 +272,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
 - Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Deprecated
 
