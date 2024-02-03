@@ -18,7 +18,6 @@ if CLIENT then
 	SWEP.Slot = 3
 
 	SWEP.ViewModelFlip = true
-	SWEP.DrawCrosshair = false
 
 	SWEP.Icon = "vgui/ttt/icon_nades"
 end

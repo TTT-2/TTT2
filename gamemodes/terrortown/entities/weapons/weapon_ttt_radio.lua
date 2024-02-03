@@ -13,9 +13,7 @@ if CLIENT then
 	SWEP.PrintName = "radio_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 10
-	SWEP.DrawCrosshair = false
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -51,7 +49,6 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 ---
 -- @ignore

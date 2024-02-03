@@ -27,7 +27,6 @@ if CLIENT then
 
 	SWEP.Icon = "vgui/ttt/icon_magneto_stick"
 
-	SWEP.DrawCrosshair = false
 	SWEP.ViewModelFlip = false
 end
 
