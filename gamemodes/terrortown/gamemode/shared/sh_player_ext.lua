@@ -148,8 +148,10 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 
 		if SERVER then
-			-- trigger the update in the next tick to make sure the role is updated
-			-- on the client first before any markerVision updates are sent
+			-- Trigger the update in the next tick to make sure the role is updated
+			-- on the client first before any markerVision updates are sent.
+			-- This is important so that functions such as GetRoleColor() return the
+			-- correct color instead of the color from the old role.
 			timer.Simple(0, function()
 				if not IsValid(self) then return end
 
@@ -356,8 +358,10 @@ function plymeta:UpdateTeam(team, suppressEvent, suppressHook)
 	end
 
 	if SERVER then
-		-- trigger the update in the next tick to make sure the team is updated
-		-- on the client first before any markerVision updates are sent
+		-- Trigger the update in the next tick to make sure the team is updated
+		-- on the client first before any markerVision updates are sent.
+		-- This is important so that the team color assess returns the
+		-- correct color instead of the color from the old team.
 		timer.Simple(0, function()
 			if not IsValid(self) then return end
 
