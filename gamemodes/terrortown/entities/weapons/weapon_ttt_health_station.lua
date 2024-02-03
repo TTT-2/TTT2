@@ -13,7 +13,7 @@ if CLIENT then
 	SWEP.PrintName = "hstation_name"
 	SWEP.Slot = 6
 
-	SWEP.ShowViewModel = false
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",

@@ -51,7 +51,7 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-SWEP.ShowViewModel = true
+SWEP.ShowDefaultViewModel = true
 
 ---
 -- @ignore

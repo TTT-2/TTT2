@@ -71,7 +71,7 @@ if CLIENT then
 
 	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
 	-- overload drawing functions.
-	SWEP.ShowViewModel = true
+	SWEP.ShowDefaultViewModel = true
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -315,26 +315,19 @@ if CLIENT then
 	}
 
 	---
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:PreDrawViewModel
-	-- @param Entity vm This is the view model entity after it is drawn
-	-- @param Weapon wep This is the weapon that is from the view model (same as self)
-	-- @param Player owner The owner of the weapon
+	-- Called straight after the view model has been drawn. This is called before
+	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
+	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
 	-- @realm client
-	function SWEP:PreDrawViewModel(vm, wep, owner)
-		if self.ShowViewModel then
-			owner:DrawViewModel(false)
-		end
-	end
-
-	---
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:PostDrawViewModel
-	-- @param Entity vm This is the view model entity after it is drawn
-	-- @param Weapon wep This is the weapon that is from the view model (same as self)
-	-- @param Player owner The owner of the weapon
-	-- @realm client
-	function SWEP:PostDrawViewModel(vm, wep, owner)
-		if self.ShowViewModel then
-			owner:DrawViewModel(true)
+	function SWEP:ViewModelDrawn(viewModel)
+		if self.ShowDefaultViewModel then
+			-- this resets the material to the default material
+			viewModel:SetMaterial("")
+		else
+			-- view model resets to render mode 0 every frame so we just apply
+			-- a debug material to prevent it from drawing
+			viewModel:SetMaterial("vgui/hsv")
 		end
 	end
 

@@ -18,7 +18,7 @@ if CLIENT then
 	SWEP.PrintName = "tele_name"
 	SWEP.Slot = 7
 
-	SWEP.ShowViewModel = false
+	SWEP.ShowDefaultViewModel = false
 	SWEP.CSMuzzleFlashes = false
 
 	SWEP.EquipMenuData = {
