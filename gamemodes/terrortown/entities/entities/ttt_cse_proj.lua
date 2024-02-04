@@ -30,7 +30,6 @@ function ENT:Initialize()
 
 	if SERVER then
 		self:SetMaxHealth(50)
-		print("created ... " .. tostring(CurTime()))
 		self:NextThink(CurTime() + 1)
 	end
 
