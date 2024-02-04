@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "機器人永遠是觀察者"
 L.label_tbutton_admin_show = "向管理員顯示叛徒按鈕"
 L.label_ragdoll_carrying = "啟用布娃娃搬運"
 L.label_prop_throwing = "啟用道具投擲"
-L.label_ragdoll_pinning = "為非無辜者角色啟用布娃娃夾子"
-L.label_ragdoll_pinning_innocents = "為無辜者啟用布娃娃夾子"
 L.label_weapon_carrying = "啟用武器搬運"
 L.label_weapon_carrying_range = "武器搬運範圍"
 L.label_prop_carrying_force = "Prop推進力"
@@ -2132,6 +2130,7 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2177,3 +2176,11 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

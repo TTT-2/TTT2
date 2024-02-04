@@ -102,8 +102,6 @@ function ITEM:AddToSettingsMenu(parent)
 	})
 end
 
-
-
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
 	local sz = (util.IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size
@@ -117,7 +115,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 
 	-- Drawing full size?
 	if sz == size then
-		local text = math.ceil(LocalPlayer():GetPos():Distance(tgt.pos))
+		local text = tostring(math.Round(util.HammerUnitsToMeters(LocalPlayer():EyePos():Distance(tgt.pos)), 0)) .. "m"
 		local w, h = surface.GetTextSize(text)
 
 		-- Show range to target
@@ -155,7 +153,8 @@ function RADAR:Draw(client)
 
 	surface.SetFont("HudSelectionText")
 
-	-- C4 warnings
+	-- bomb warnings
+	-- note: This is deprecated use markerVision instead
 	if self.bombs_count ~= 0 and client:IsActive() and not client:GetSubRoleData().unknownTeam then
 		surface.SetTexture(c4warn)
 		surface.SetTextColor(client:GetRoleColor())
@@ -168,7 +167,7 @@ function RADAR:Draw(client)
 		end
 	end
 
-	-- Corpse calls
+	-- corpse calls
 	if not table.IsEmpty(self.called_corpses) then
 		surface.SetTexture(det_beacon)
 		surface.SetTextColor(255, 255, 255, 240)
@@ -179,7 +178,7 @@ function RADAR:Draw(client)
 		end
 	end
 
-	-- Samples
+	-- DNA samples
 	if self.samples_count ~= 0 then
 		surface.SetTexture(sample_scan)
 		surface.SetTextColor(200, 50, 50, 255)
@@ -190,14 +189,14 @@ function RADAR:Draw(client)
 		end
 	end
 
-	-- Player radar
+	-- player radar
 	if not self.enable then return end
 
 	surface.SetTexture(indicator)
 
 	local radarTime = client.radarTime or 30
 	local remaining = math.max(0, radarTime - (CurTime() - RADAR.startTime))
-	local alpha_base = 50 + 180 * (remaining / radarTime)
+	local alpha_base = 55 + 200 * (remaining / radarTime)
 	local mpos = Vector(ScrW() * 0.5, ScrH() * 0.5, 0)
 
 	local subrole, alpha, scrpos, md

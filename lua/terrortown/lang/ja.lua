@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "Botは観戦者状態にする"
 L.label_tbutton_admin_show = "管理者側にTraitorトラップを表示"
 L.label_ragdoll_carrying = "Ragdollの運搬を有効"
 L.label_prop_throwing = "オブジェクトを投げることを有効"
-L.label_ragdoll_pinning = "Innocent以外の役職に対してRagdollの張り付けを有効"
-L.label_ragdoll_pinning_innocents = "InnocentのRagdollの張り付けを有効"
 L.label_weapon_carrying = "武器の運搬を有効"
 L.label_weapon_carrying_range = "武器を運べるまでの距離"
 L.label_prop_carrying_force = "オブジェクト拾得力"
@@ -2132,6 +2130,7 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2177,3 +2176,11 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
