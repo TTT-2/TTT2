@@ -20,7 +20,7 @@ function ENT:KeyValue(key, value)
 		self.Credits = tonumber(value) or 0
 
 		if not tonumber(value) then
-			ErrorNoHaltWithStack(tostring(self) .. " has bad 'credits' setting.\n")
+			ErrorNoHalt(tostring(self) .. " has bad 'credits' setting.\n")
 		end
 	end
 end

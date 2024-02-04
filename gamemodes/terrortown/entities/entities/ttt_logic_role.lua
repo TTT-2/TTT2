@@ -29,7 +29,7 @@ function ENT:KeyValue(key, value)
 		self.checkingRole = tonumber(value)
 
 		if not self.checkingRole then
-			ErrorNoHaltWithStack("ttt_logic_role: bad value for Role key, not a number\n")
+			ErrorNoHalt("ttt_logic_role: bad value for Role key, not a number\n")
 
 			self.checkingRole = ROLE_NONE
 		end

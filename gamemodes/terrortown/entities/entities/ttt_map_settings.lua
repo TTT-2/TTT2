@@ -66,11 +66,11 @@ function ENT:AcceptInput(name, activator, caller, data)
 		local mdlname = tostring(data)
 
 		if not mdlname then
-			ErrorNoHaltWithStack("ttt_map_settings: Invalid parameter to SetPlayerModels input!\n")
+			ErrorNoHalt("ttt_map_settings: Invalid parameter to SetPlayerModels input!\n")
 
 			return false
 		elseif not util.IsValidModel(mdlname) then
-			ErrorNoHaltWithStack("ttt_map_settings: Invalid model given: " .. mdlname .. "\n")
+			ErrorNoHalt("ttt_map_settings: Invalid model given: " .. mdlname .. "\n")
 
 			return false
 		end

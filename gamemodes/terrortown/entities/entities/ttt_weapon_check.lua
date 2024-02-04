@@ -102,7 +102,7 @@ function ENT:TestWeapons(weptype)
 	local check = self:GetWeaponChecker(weptype)
 
 	if check == nil then
-		ErrorNoHaltWithStack("ttt_weapon_check: invalid parameter\n")
+		ErrorNoHalt("ttt_weapon_check: invalid parameter\n")
 		return 0
 	end
 
@@ -127,7 +127,7 @@ function ENT:AcceptInput(name, activator, caller, data)
 		local wepname = tostring(data)
 
 		if not weptype and not wepname then
-			ErrorNoHaltWithStack("ttt_weapon_check: Invalid parameter to CheckForWeapons input!\n")
+			ErrorNoHalt("ttt_weapon_check: Invalid parameter to CheckForWeapons input!\n")
 			return false
 		end
 

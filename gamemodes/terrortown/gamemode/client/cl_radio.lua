@@ -281,7 +281,7 @@ local function RadioCommand(ply, cmd, arg)
 	---
 	-- @realm client
 	if hook.Run("TTT2ClientRadioCommand", cmd) then
-		ErrorNoHaltWithStack("ttt_radio, execution prevented by a hook")
+		Dev(1, "ttt_radio, execution prevented by a hook")
 
 		return
 	end
