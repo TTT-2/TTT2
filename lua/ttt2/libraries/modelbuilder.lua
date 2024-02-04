@@ -3,7 +3,7 @@
 -- This code is based on the SWEP construction kit.
 -- @ref https://github.com/MagicSwap/SWEP_Construction_Kit
 -- @author Mineotopia
--- @module modelbuilder
+-- @module weaponrenderer
 
 ---@class ModelData
 ---@field type string The type of this model, it can be "Model", "SPrite" or "Quad"
@@ -30,7 +30,7 @@ if SERVER then
 	return
 end
 
-modelbuilder = {}
+weaponrenderer = {}
 
 local propertiesMaterial = {"nocull", "additive", "vertexalpha", "vertexcolor", "ignorez"}
 
@@ -92,7 +92,7 @@ end
 -- @param ModelData modelData The model data for the model
 -- @return table The new created model data table
 -- @realm client
-function modelbuilder.CreateModel(wep, modelData)
+function weaponrenderer.CreateModel(wep, modelData)
 	local modelDataCopy = table.FullCopy(modelData)
 
 	-- handle a model being added to the view or world model
@@ -147,7 +147,7 @@ end
 -- Resets the bone positions of a view model.
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
-function modelbuilder.ResetBonePositions(viewModel)
+function weaponrenderer.ResetBonePositions(viewModel)
 	if not IsValid(viewModel) then return end
 
 	local boneCount = viewModel:GetBoneCount()
@@ -167,9 +167,9 @@ end
 -- @param Entity wep The weapon for which the view model should be updated
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
-function modelbuilder.UpdateBonePositions(wep, viewModel)
+function weaponrenderer.UpdateBonePositions(wep, viewModel)
 	if not wep.customViewModelBoneMods then
-		modelbuilder.ResetBonePositions(viewModel)
+		weaponrenderer.ResetBonePositions(viewModel)
 
 		return
 	end
@@ -222,7 +222,7 @@ end
 -- @param table cachedRenderOrder The cached render order that is uesed as a fallback
 -- @return table Returns a new or the cached render order
 -- @realm client
-function modelbuilder.BuildRenderOrder(elements, cachedRenderOrder)
+function weaponrenderer.BuildRenderOrder(elements, cachedRenderOrder)
 	if cachedRenderOrder then
 		return cachedRenderOrder
 	end
@@ -247,7 +247,7 @@ end
 -- @param table elements The elements of the view model
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
-function modelbuilder.Render(wep, renderOrder, elements, boneEntity)
+function weaponrenderer.Render(wep, renderOrder, elements, boneEntity)
 	for i = 1, #renderOrder do
 		local identifier = renderOrder[i]
 		local modelData = elements[identifier]

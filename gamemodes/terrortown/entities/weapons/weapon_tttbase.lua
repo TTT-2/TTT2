@@ -673,7 +673,7 @@ if CLIENT then
 	function SWEP:AddCustomViewModel(identifier, modelData)
 		self.customViewModelElements = self.customViewModelElements or {}
 
-		self.customViewModelElements[identifier] = modelbuilder.CreateModel(self, modelData)
+		self.customViewModelElements[identifier] = weaponrenderer.CreateModel(self, modelData)
 	end
 
 	---
@@ -685,7 +685,7 @@ if CLIENT then
 	function SWEP:AddCustomWorldModel(identifier, modelData)
 		self.customWorldModelElements = self.customWorldModelElements or {}
 
-		self.customWorldModelElements[identifier] = modelbuilder.CreateModel(self, modelData)
+		self.customWorldModelElements[identifier] = weaponrenderer.CreateModel(self, modelData)
 	end
 
 	---
@@ -716,12 +716,12 @@ if CLIENT then
 
 		if not self.customViewModelElements then return end
 
-		modelbuilder.UpdateBonePositions(self, viewModel)
+		weaponrenderer.UpdateBonePositions(self, viewModel)
 
 		-- we build a render order because sprites need to be drawn after models
-		self.VRenderOrder = modelbuilder.BuildRenderOrder(self.customViewModelElements, self.VRenderOrder)
+		self.VRenderOrder = weaponrenderer.BuildRenderOrder(self.customViewModelElements, self.VRenderOrder)
 
-		modelbuilder.Render(self, self.VRenderOrder, self.customViewModelElements, viewModel)
+		weaponrenderer.Render(self, self.VRenderOrder, self.customViewModelElements, viewModel)
 	end
 
 	---
@@ -742,7 +742,7 @@ if CLIENT then
 		if not self.customWorldModelElements then return end
 
 		-- we build a render order because sprites need to be drawn after models
-		self.WRenderOrder = modelbuilder.BuildRenderOrder(self.customWorldModelElements, self.WRenderOrder)
+		self.WRenderOrder = weaponrenderer.BuildRenderOrder(self.customWorldModelElements, self.WRenderOrder)
 
 		local boneEnt
 
@@ -753,7 +753,7 @@ if CLIENT then
 			boneEnt = self
 		end
 
-		modelbuilder.Render(self, self.WRenderOrder, self.customWorldModelElements, boneEnt)
+		weaponrenderer.Render(self, self.WRenderOrder, self.customWorldModelElements, boneEnt)
 	end
 
 	---

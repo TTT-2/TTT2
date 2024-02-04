@@ -423,7 +423,7 @@ local function RoundStateChange(o, n)
 		util.ClearDecals()
 
 		-- resets bone positions that fixes broken fingers on bad addons
-		modelbuilder.ResetBonePositions(LocalPlayer():GetViewModel())
+		weaponrenderer.ResetBonePositions(LocalPlayer():GetViewModel())
 	elseif n == ROUND_ACTIVE then
 		-- round starts
 		VOICE.CycleMuteState(MUTE_NONE)
