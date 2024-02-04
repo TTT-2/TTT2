@@ -194,6 +194,7 @@ function RADIO:GetTargetType()
 	---
 	-- @hook
 	-- @realm client
+	-- stylua: ignore
 	local ent = hook.Run("TTT2ModifyRadioTarget", trace.Entity) or trace.Entity
 
 	if ent:IsPlayer() and ent:IsTerror() then
@@ -280,6 +281,7 @@ local function RadioCommand(ply, cmd, arg)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("TTT2ClientRadioCommand", cmd) then
 		Dev(1, "ttt_radio, execution prevented by a hook")
 

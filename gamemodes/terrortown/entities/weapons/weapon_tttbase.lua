@@ -250,10 +250,12 @@ end
 
 ---
 -- @realm client
+-- stylua: ignore
 local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE, "Toggles whether the `cball_bounce` Effect should get triggered on the hit position") or nil
 
 ---
 -- @realm client
+-- stylua: ignore
 local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE, "Toogles whether you have to hold the key to aim", 0, 1) or nil
 
 -- crosshair
@@ -272,46 +274,57 @@ if CLIENT then
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvOpacitySights = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvEnableCrosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvOpacityCrosshair = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvCrosshairUseWeaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvThicknessCrosshair = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvEnableOutlineCrosshair = CreateConVar("ttt_crosshair_outline_enable", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outline_thickness", "1", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvHighContrastOutlineCrosshair = CreateConVar("ttt_crosshair_outline_high_contrast", "0", FCVAR_ARCHIVE)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
 	local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
@@ -1362,6 +1375,7 @@ end
 if CLIENT then
 	---
 	-- @realm client
+	-- stylua: ignore
 	local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
 
 	local host_timescale = GetConVar("host_timescale")

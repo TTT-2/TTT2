@@ -9,14 +9,17 @@ if SERVER then
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	cvCrowbarDelay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	cvCrowbarUnlocks = CreateConVar("ttt_crowbar_unlocks", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	cvCrowbarPushForce = CreateConVar("ttt_crowbar_pushforce", "395", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 end
 
@@ -257,6 +260,7 @@ function SWEP:SecondaryAttack()
 	if tr.Hit and IsValid(ply) and ply:IsPlayer() and (owner:EyePos() - tr.HitPos):Length() < 100 then
 		---
 		-- @realm shared
+		-- stylua: ignore
 		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", owner, ply) then
 			local pushvel = tr.Normal * cvCrowbarPushForce:GetFloat()
 			pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching

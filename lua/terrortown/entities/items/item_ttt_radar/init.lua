@@ -148,6 +148,7 @@ local function GetDataForRadar(ply, ent)
 	else
 		---
 		-- @realm server
+		-- stylua: ignore
 		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
 		if not subrole then

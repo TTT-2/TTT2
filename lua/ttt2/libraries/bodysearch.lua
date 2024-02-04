@@ -56,6 +56,7 @@ CORPSE_KILL_DIRECTION_SIDE = 3
 -- mode 0: normal behavior, everyone can search/confirm bodies
 -- mode 1: only public policing roles can confirm bodies, but everyone can still see all data in the menu
 -- mode 2: only public policing roles can confirm and search bodies
+-- stylua: ignore
 local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 bodysearch = {}
@@ -79,6 +80,7 @@ end
 function bodysearch.CanTakeCredits(ply, rag, isLongRange)
 	---
 	-- @realm shared
+	-- stylua: ignore
 	if hook.Run("TTT2CheckFindCredits", ply, rag) == false then
 		return false
 	end
@@ -148,6 +150,7 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 
 		---
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
 
 		-- show indicator in radar to detectives
@@ -159,6 +162,7 @@ net.Receive("ttt2_client_reports_corpse", function(_, ply)
 
 		---
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("TTT2CalledPolicingRole", plyTable, ply, rag, CORPSE.GetPlayer(rag))
 	end)
 
@@ -331,6 +335,7 @@ if CLIENT then
 		local eq = {} -- placeholder for the hook, not used right now
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTTBodySearchEquipment", searchStreamData, eq)
 
 		searchStreamData.show = LocalPlayer() == searchStreamData.base.inspector
@@ -842,6 +847,7 @@ if CLIENT then
 
 		---
 		-- @realm client
+		-- stylua: ignore
 		hook.Run("TTTBodySearchPopulate", search, raw)
 
 		return search

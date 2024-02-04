@@ -52,6 +52,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 					and not p:RoleKnown()
 					---
 					-- @realm server
+					-- stylua: ignore
 					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
 				then continue end
 
@@ -236,6 +237,7 @@ function SendFullStateUpdate()
 		---
 		-- maybe some networking for custom roles or role hacking
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("TTT2SpecialRoleSyncing", plySyncTo, tmp)
 
 		syncTbl[plySyncTo] = {}
@@ -330,6 +332,7 @@ local function ttt_request_rolelist(plySyncTo)
 		---
 		-- maybe some networking for custom roles or role hacking
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("TTT2SpecialRoleSyncing", plySyncTo, tmp)
 
 		local tbl = {}

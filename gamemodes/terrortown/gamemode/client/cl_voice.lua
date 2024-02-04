@@ -28,14 +28,17 @@ g_VoicePanelList = nil
 
 ---
 -- @realm client
+-- stylua: ignore
 local duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE})
 
 ---
 -- @realm client
+-- stylua: ignore
 local duck_spectator_amount = CreateConVar("ttt2_voice_duck_spectator_amount", "0", {FCVAR_ARCHIVE})
 
 ---
 -- @realm client
+-- stylua: ignore
 local scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE})
 
 local function CreateVoiceTable()
@@ -99,6 +102,7 @@ function VOICE.CanTeamEnable()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
 		return false
 	end
@@ -127,6 +131,7 @@ function VOICE.CanEnable()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
 		return false
 	end
@@ -249,6 +254,7 @@ function GM:PlayerStartVoice(ply)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply, pnl.Color) or pnl.Color
 
 	PlayerVoicePanels[ply] = pnl

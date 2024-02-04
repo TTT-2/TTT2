@@ -152,6 +152,7 @@ if SERVER then
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	local cvUseWeaponSpawnScript = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
 	---
 	-- Called when the entities on the map are available and the spawn entities can be read..
@@ -492,6 +493,7 @@ if SERVER then
 
 			---
 			-- @realm server
+			-- stylua: ignore
 			if not hook.Run("TTT2AdminCheck", ply) then continue end
 
 			for key, value in pairs(entspawnscript.GetSettings()) do
@@ -527,6 +529,7 @@ if SERVER then
 
 			---
 			-- @realm server
+			-- stylua: ignore
 			if not hook.Run("TTT2AdminCheck", ply) then continue end
 
 			ttt2net.Set({"entspawnscript", "spawnamount", "weapon"}, {type = "int", bits = 16}, amountSpawns[SPAWN_TYPE_WEAPON], ply)
@@ -1097,6 +1100,7 @@ if SERVER then
 	net.Receive("ttt2_remove_spawn_ent", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.RemoveSpawnById(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), false, ply)
@@ -1105,6 +1109,7 @@ if SERVER then
 	net.Receive("ttt2_add_spawn_ent", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.AddSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
@@ -1113,6 +1118,7 @@ if SERVER then
 	net.Receive("ttt2_update_spawn_ent", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.UpdateSpawn(net.ReadUInt(4), net.ReadUInt(4), net.ReadUInt(32), net.ReadVector(), net.ReadAngle(), net.ReadUInt(8), false, ply)
@@ -1121,6 +1127,7 @@ if SERVER then
 	net.Receive("ttt2_delete_all_spawns", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.DeleteAllSpawns()
@@ -1129,6 +1136,7 @@ if SERVER then
 	net.Receive("ttt2_entspawn_setting_update", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.SetSetting(net.ReadString(), net.ReadInt(16), net.ReadBool())
@@ -1137,6 +1145,7 @@ if SERVER then
 	net.Receive("ttt2_entspawn_reset", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		entspawnscript.ResetMapToDefault()
@@ -1145,6 +1154,7 @@ if SERVER then
 	net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		if net.ReadBool() then

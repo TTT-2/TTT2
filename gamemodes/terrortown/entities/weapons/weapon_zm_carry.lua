@@ -101,13 +101,16 @@ local flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 
 ---
 -- @realm shared
+-- stylua: ignore
 local cvAllowRagCarry = CreateConVar("ttt_ragdoll_carrying", "1", flags)
 
 ---
 -- @realm server
+-- stylua: ignore
 local cvPropForce = CreateConVar("ttt_prop_carrying_force", "60000", flags)
 ---
 -- @realm shared
+-- stylua: ignore
 local cvPropThrow = CreateConVar("ttt_prop_throwing", "1", flags)
 
 ---
@@ -115,6 +118,7 @@ local cvPropThrow = CreateConVar("ttt_prop_throwing", "1", flags)
 -- system (ie. not fixable). Tuning the range seems to make this more
 -- difficult. Not sure why. It's that kind of crash.
 -- @realm server
+-- stylua: ignore
 local cvAllowWepCarry = CreateConVar("ttt_weapon_carrying", "0", flags)
 
 ---
@@ -122,6 +126,7 @@ local cvAllowWepCarry = CreateConVar("ttt_weapon_carrying", "0", flags)
 -- system (ie. not fixable). Tuning the range seems to make this more
 -- difficult. Not sure why. It's that kind of crash.
 -- @realm server
+-- stylua: ignore
 local cvWepCarryRange = CreateConVar("ttt_weapon_carrying_range", "50", flags)
 
 CARRY_TYPE_NONE = 0
@@ -345,6 +350,7 @@ function SWEP:AllowPickup(target)
 		and (ctype ~= CARRY_TYPE_WEAPON or cvAllowWepCarry:GetBool())
 		---
 		-- @realm shared
+		-- stylua: ignore
 		and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
 end
 

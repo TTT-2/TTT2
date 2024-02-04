@@ -14,14 +14,17 @@ WSWITCH = {
 	cv = {
 		---
 		-- @realm client
+		-- stylua: ignore
 		hide = CreateConVar("ttt_weaponswitcher_hide", "1", FCVAR_ARCHIVE),
 
 		---
 		-- @realm client
+		-- stylua: ignore
 		fast = CreateConVar("ttt_weaponswitcher_fast", "0", FCVAR_ARCHIVE),
 
 		---
 		-- @realm client
+		-- stylua: ignore
 		display = CreateConVar("ttt_weaponswitcher_displayfast", "0", FCVAR_ARCHIVE)
 	}
 }

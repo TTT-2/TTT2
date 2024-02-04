@@ -132,6 +132,7 @@ end
 function plymeta:SetDefaultCredits()
 	---
 	-- @realm server
+	-- stylua: ignore
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
 	if not self:IsShopper() then
@@ -153,6 +154,7 @@ function plymeta:SetDefaultCredits()
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
 end
 
@@ -591,10 +593,12 @@ end
 function plymeta:SpawnForRound(deadOnly)
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("PlayerSetModel", self)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTTPlayerSetColor", self)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
@@ -857,6 +861,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 			---
 			-- @realm server
+			-- stylua: ignore
 			hook.Run("PlayerLoadout", self, true)
 
 			self:SetCredits(CORPSE.GetCredits(corpse, 0))
@@ -1368,6 +1373,7 @@ function plymeta:DropAmmo(wep, useClip, amt)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if hook.Run("TTT2DropAmmo", self, hook_data) == false then
 		LANG.Msg(self, useClip and "drop_ammo_prevented" or "drop_reserve_prevented", nil, MSG_MSTACK_WARN)
 
@@ -1428,6 +1434,7 @@ function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon, true)
 
 	self.forcedPickup = false
@@ -1572,6 +1579,7 @@ local function SetPlayerReady(_, ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)

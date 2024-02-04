@@ -59,6 +59,7 @@ function ENT:PlayerCanPickup(ply)
 
 	---
 	-- @realm shared
+	-- stylua: ignore
 	local result = hook.Run("TTTCanPickupAmmo", ply, self)
 	if result then
 		return result

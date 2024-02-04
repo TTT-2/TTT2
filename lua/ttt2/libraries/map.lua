@@ -273,6 +273,7 @@ function map.GetWeaponSpawnEntities()
 	local hook_weapon_spawns = {}
 
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
 
 	FindSpawnEntities(spawns, hook_weapon_spawns)
@@ -299,6 +300,7 @@ function map.GetAmmoSpawnEntities()
 	local hook_ammo_spawns = {}
 
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
 
 	FindSpawnEntities(spawns, hook_ammo_spawns)
@@ -315,6 +317,7 @@ function map.GetPlayerSpawnEntities()
 	local hook_player_spawns = {}
 
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
 
 	FindSpawnEntities(spawns, hook_player_spawns)
@@ -367,6 +370,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		local hook_player_spawns = {}
 
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
 
 		local plyType = ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls]
@@ -381,6 +385,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		local hook_ammo_spawns = {}
 
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
 
 		local ammoType = ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls]
@@ -394,6 +399,7 @@ function map.GetSpawnsFromClassTable(spawns)
 		-- next check if it is a weapon spawn
 		local hook_weapon_spawns = {}
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
 
 		local wepType = ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls] or hook_weapon_spawns[cls]
@@ -459,6 +465,7 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 	if spawnType == SPAWN_TYPE_WEAPON then
 		local hook_weapon_spawns = {}
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2MapRegisterWeaponSpawns", hook_weapon_spawns)
 
 		return ttt_weapon_spawns[cls] or hl2_weapon_spawns[cls] or css_weapon_spawns[cls] or tf2_weapon_spawns[cls] or hook_weapon_spawns[cls], data
@@ -468,6 +475,7 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 		local hook_ammo_spawns = {}
 
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2MapRegisterAmmoSpawns", hook_ammo_spawns)
 
 		return ttt_ammo_spawns[cls] or hl2_ammo_spawns[cls] or hook_ammo_spawns[cls], data
@@ -477,6 +485,7 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 		local hook_player_spawns = {}
 
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2MapRegisterPlayerSpawns", hook_player_spawns)
 
 		return ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls], data

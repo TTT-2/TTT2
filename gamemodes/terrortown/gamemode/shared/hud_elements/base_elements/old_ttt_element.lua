@@ -15,6 +15,7 @@ HUDELEMENT.Base = base
 if CLIENT then
 	---
 	-- @realm client
+	-- stylua: ignore
 	local hudWidth = CreateConVar("ttt2_base_hud_width", "0", FCVAR_ARCHIVE)
 
 	-- Color presets

@@ -15,6 +15,7 @@ local callbackIdentifier = "TTT2RegisteredSWEPCallback"
 
 if CLIENT then
 	-- @realm client
+	-- stylua: ignore
 	CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
@@ -187,10 +188,12 @@ function GM:TTT2Initialize()
 
 	---
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2RolesLoaded")
 
 	---
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2BaseRoleInit")
 
 	DefaultEquipment = GetDefaultEquipment()
@@ -316,6 +319,7 @@ local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
 ---
 -- @realm shared
+-- stylua: ignore
 local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 ---

@@ -13,6 +13,7 @@ local function GetLegacyTabs(elemStore)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTTSettingsTabs", elemStore)
 
 	return elemStore:GetItems()

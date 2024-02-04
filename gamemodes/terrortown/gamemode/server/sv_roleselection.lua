@@ -21,18 +21,22 @@ roleselection.subroleLayers = {}
 roleselection.cv = {
 	---
 	-- @realm server
+	-- stylua: ignore
 	ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles"),
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0"),
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles"),
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 }
 
@@ -241,6 +245,7 @@ function roleselection.GetSelectablePlayers(plys)
 		---
 		-- Everyone on the spec team is in specmode
 		-- @realm server
+		-- stylua: ignore
 		if not ply:GetForceSpec() and not hook.Run("TTT2DisableRoleSelection", ply) then
 			tmp[#tmp + 1] = ply
 		end
@@ -398,6 +403,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
 
 	local baseroleLoopTbl = { -- just contains available / selectable baseroles
@@ -462,6 +468,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 
 	-- Counts max distributable subroles after cleanup
@@ -552,6 +559,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
 	roleselection.selectableRoles = selectableRoles
@@ -696,6 +704,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 
 			---
 			-- @realm server
+			-- stylua: ignore
 			hook.Run("TTT2ReceivedForcedRole", ply, subrole)
 		end
 
@@ -896,6 +905,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2ModifyFinalRoles", roleselection.finalRoles)
 
 	for i = 1, #plys do

@@ -64,6 +64,7 @@ local function GetLegacyTabs()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTTSettingsTabs", elemStore)
 
 	return elemStore:GetItems()
@@ -75,6 +76,7 @@ local function CheckForLegacyTabs()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTTSettingsTabs", dtabs)
 
 	local amount = #dtabs:GetItems()

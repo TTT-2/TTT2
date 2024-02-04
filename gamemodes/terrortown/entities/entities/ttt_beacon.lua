@@ -98,6 +98,7 @@ if SERVER then
 
 			---
 			-- @realm server
+			-- stylua: ignore
 			if hook.Run("TTT2BeaconDetectPlayer", ent, self) == false then continue end
 
 			plysFound[ent] = true
@@ -164,6 +165,7 @@ if SERVER then
 
 			---
 			-- @realm server			
+			-- stylua: ignore
 			if hook.Run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
 			LANG.Msg(beaconOwner, "msg_beacon_death", nil, MSG_MSTACK_WARN)

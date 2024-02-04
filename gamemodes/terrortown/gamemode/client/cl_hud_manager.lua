@@ -3,6 +3,7 @@
 
 ---
 -- @realm client
+-- stylua: ignore
 local current_hud_cvar = CreateConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 local current_hud_table = nil
@@ -33,38 +34,45 @@ function GM:HUDPaint()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTTTButton") then
 		TBHUD:Draw(client)
 	end
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTTTargetID") then
 		---
 		-- @realm client
+		-- stylua: ignore
 		hook.Run("HUDDrawTargetID")
 	end
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTT2HUD") then
 		HUDManager.DrawHUD()
 	end
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTT2KeyHelp") then
 		keyhelp.Draw()
 	end
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTT2MarkerVision") then
 		markerVision.Draw()
 	end
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTTRadar") then
 		RADAR:Draw(client)
 	end
@@ -73,6 +81,7 @@ function GM:HUDPaint()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("HUDShouldDraw", "TTTVoice") then
 		VOICE.Draw(client)
 	end
@@ -159,6 +168,7 @@ local function UpdateHUD(name)
 	---
 	-- Call all listeners
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTT2HUDUpdated", name)
 end
 

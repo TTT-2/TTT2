@@ -67,6 +67,7 @@ local function FetchAvatarAsset(id64, size)
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	local data = hook.Run("TTT2FetchAvatar", id64, size)
 	if data ~= nil then
 		local url = "hook://" .. key

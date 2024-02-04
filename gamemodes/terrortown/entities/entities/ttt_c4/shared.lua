@@ -206,6 +206,7 @@ local c4boom = Sound("c4.explode")
 function ENT:Explode(tr)
 	---
 	-- @realm shared
+	-- stylua: ignore
 	local result, message = hook.Run("TTTC4Explode", self)
 
 	if result == false then
@@ -545,6 +546,7 @@ if SERVER then
 			else
 				---
 				-- @realm server
+				-- stylua: ignore
 				local result, message = hook.Run("TTTC4Arm", bomb, ply)
 
 				if result ~= false then
@@ -562,6 +564,7 @@ if SERVER then
 	local function SendDisarmResult(ply, bomb, disarmResult)
 		---
 		-- @realm server
+		-- stylua: ignore
 		local result, message = hook.Run("TTTC4Disarm", bomb, disarmResult, ply)
 
 		if result == false then
@@ -624,6 +627,7 @@ if SERVER then
 
 				---
 				-- @realm server
+				-- stylua: ignore
 				local result, message = hook.Run("TTTC4Pickup", bomb, ply)
 
 				if result == false then
@@ -669,6 +673,7 @@ if SERVER then
 
 		---
 		-- @realm server
+		-- stylua: ignore
 		local result, message = hook.Run("TTTC4Destroyed", bomb, ply)
 
 		if result == false then
