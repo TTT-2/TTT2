@@ -163,7 +163,7 @@ end
 
 ---
 -- Updates the bone positions of the view model of a weapon. If there are
--- non setup yet, it will reset it to a default state.
+-- none setup yet, it will reset it to a default state.
 -- @param Entity wep The weapon for which the view model should be updated
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
@@ -195,7 +195,12 @@ function weaponrenderer.UpdateBonePositions(wep, viewModel)
 		local currentBone = viewModel:GetBoneParent(i)
 
 		while (currentBone >= 0) do
-			modelScale = modelScale * wep.customViewModelBoneMods[viewModel:GetBoneName(currentBone)].scale
+			local viewModelBoneMod = wep.customViewModelBoneMods[viewModel:GetBoneName(currentBone)]
+
+			if viewModelBoneMod then
+				modelScale = modelScale * viewModelBoneMod.scale
+			end
+
 			currentBone = viewModel:GetBoneParent(currentBone)
 		end
 
