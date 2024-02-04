@@ -80,12 +80,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Breaking Changes
 
-- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
+- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
 - No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 - Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
-  - Use new Accessors `shop.IsBoughtFor(ply, equipmentId)`, `shop.IsGlobalBought(equipmentId)` and `shop.IsTeamBoughtFor(ply, equipmentId)`
-  - Use new Setter `shop.SetEquipmentBought(ply, equipmentId)`, `shop.SetEquipmentGlobalBought(equipmentId)` and `shop.SetEquipmentTeamBought(ply, equipmentId)`
+  - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`
+  - Use new Setter `shop.SetEquipmentBought(ply, equipmentName)`, `shop.SetEquipmentGlobalBought(equipmentName)` and `shop.SetEquipmentTeamBought(ply, equipmentName)`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 

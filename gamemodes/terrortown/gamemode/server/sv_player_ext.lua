@@ -299,16 +299,16 @@ end
 -- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
 -- @note This will disable another purchase of the same equipment
 -- if this equipment is limited
--- @param string equipmentId
+-- @param string equipmentName
 -- @realm server
 -- @see Player:RemoveBought
-function plymeta:AddBought(equipmentId)
+function plymeta:AddBought(equipmentName)
 	self.bought = self.bought or {}
-	self.bought[#self.bought + 1] = tostring(equipmentId)
+	self.bought[#self.bought + 1] = tostring(equipmentName)
 
-	shop.SetEquipmentBought(self, equipmentId)
-	shop.SetEquipmentGlobalBought(equipmentId)
-	shop.SetEquipmentTeamBought(self, equipmentId)
+	shop.SetEquipmentBought(self, equipmentName)
+	shop.SetEquipmentGlobalBought(equipmentName)
+	shop.SetEquipmentTeamBought(self, equipmentName)
 
 	self:SendBought()
 end
@@ -317,16 +317,16 @@ end
 -- Removes an @{ITEM} or a @{Weapon} from the bought list of a @{Player}
 -- @note This will enable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:AddBought
-function plymeta:RemoveBought(cls)
+function plymeta:RemoveBought(equipmentName)
 	local key
 
 	self.bought = self.bought or {}
 
 	for k = 1, #self.bought do
-		if self.bought[k] ~= tostring(cls) then continue end
+		if self.bought[k] ~= tostring(equipmentName) then continue end
 
 		key = k
 

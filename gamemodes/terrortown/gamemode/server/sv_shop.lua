@@ -59,13 +59,13 @@ end
 
 -- Equipment buying
 
-local function HandleErrorMessage(ply, equipmentId, statusCode)
+local function HandleErrorMessage(ply, equipmentName, statusCode)
 	if statusCode == shop.statusCode.SUCCESS then
 		return
 	elseif statusCode == shop.statusCode.PENDINGORDER then
 		LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
 	elseif statusCode == shop.statusCode.NOTEXISTING then
-		print(ply, " tried to buy equip that doesn't exist: ", equipmentId)
+		print(ply, " tried to buy equip that doesn't exist: ", equipmentName)
 	elseif statusCode == shop.statusCode.NOTENOUGHCREDITS then
 		print(ply, " tried to buy item/weapon, but didn't have enough credits.")
 	elseif statusCode == shop.statusCode.INVALIDID then
@@ -94,23 +94,23 @@ function shop.ForceRerollShop(ply)
 end
 
 local function NetOrderEquipment(len, ply)
-	local equipmentId = net.ReadString()
+	local equipmentName = net.ReadString()
 
-	local isSuccess, statusCode = shop.BuyEquipment(ply, equipmentId)
+	local isSuccess, statusCode = shop.BuyEquipment(ply, equipmentName)
 
 	if not isSuccess then
-		HandleErrorMessage(ply, equipmentId, statusCode)
+		HandleErrorMessage(ply, equipmentName, statusCode)
 	end
 end
 net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
 ---
 -- Broadcast a globally bought equipment
--- @param string equipmentId The bought equipment
+-- @param string equipmentName The bought equipment
 -- @realm server
-function shop.BroadcastEquipmentGlobalBought(equipmentId)
+function shop.BroadcastEquipmentGlobalBought(equipmentName)
 	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(equipmentId)
+	net.WriteString(equipmentName)
 	net.Broadcast()
 end
 
@@ -119,9 +119,9 @@ end
 -- @param Player ply The player to send it to
 -- @realm shared
 function shop.SendAllEquipmentGlobalBought(ply)
-	for equipmentId in pairs(shop.globalBuyTable) do
+	for equipmentName in pairs(shop.globalBuyTable) do
 		net.Start("TTT2ReceiveGBEq")
-		net.WriteString(equipmentId)
+		net.WriteString(equipmentName)
 		net.Send(ply)
 	end
 end
@@ -136,9 +136,9 @@ function shop.SendEquipmentTeamBought(ply)
 	if team and shop.teamBuyTable[team] then
 		local filter = GetTeamFilter(team)
 
-		for equipmentId in pairs(shop.teamBuyTable[team]) do
+		for equipmentName in pairs(shop.teamBuyTable[team]) do
 			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(equipmentId)
+			net.WriteString(equipmentName)
 			net.Send(filter)
 		end
 	end

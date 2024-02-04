@@ -13,15 +13,15 @@ end
 net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
 
 local function ReceiveTeambuyEquipment()
-	local equipmentId = net.ReadString()
+	local equipmentName = net.ReadString()
 
-	shop.SetEquipmentTeamBought(LocalPlayer(), equipmentId)
+	shop.SetEquipmentTeamBought(LocalPlayer(), equipmentName)
 end
 net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
 
 local function ReceiveGlobalbuyEquipment()
-	local equipmentId = net.ReadString()
+	local equipmentName = net.ReadString()
 
-	shop.SetEquipmentGlobalBought(equipmentId)
+	shop.SetEquipmentGlobalBought(equipmentName)
 end
 net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)

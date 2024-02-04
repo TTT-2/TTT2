@@ -999,12 +999,12 @@ local function ReceiveBought()
 	local num = net.ReadUInt(8)
 
 	for i = 1, num do
-		local equipmentId = net.ReadString()
-		if equipmentId ~= "" then
-			client.bought[#client.bought + 1] = equipmentId
+		local equipmentName = net.ReadString()
+		if equipmentName ~= "" then
+			client.bought[#client.bought + 1] = equipmentName
 
-			shop.SetEquipmentBought(LocalPlayer(), equipmentId)
-			shop.SetEquipmentTeamBought(client, equipmentId)
+			shop.SetEquipmentBought(LocalPlayer(), equipmentName)
+			shop.SetEquipmentTeamBought(client, equipmentName)
 		end
 	end
 

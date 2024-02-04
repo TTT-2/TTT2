@@ -57,68 +57,68 @@ end
 ---
 -- Returns if the equipment is already bought for the player
 -- @param Player ply The player to check
--- @param string equipmentId The name of the equipment to check
+-- @param string equipmentName The name of the equipment to check
 -- @return bool If the Equipment was bought
 -- @realm shared
-function shop.IsBoughtFor(ply, equipmentId)
-	return shop.buyTable[ply] and shop.buyTable[ply][equipmentId]
+function shop.IsBoughtFor(ply, equipmentName)
+	return shop.buyTable[ply] and shop.buyTable[ply][equipmentName]
 end
 
 ---
 -- Returns if the equipment is already globally bought by a player
--- @param string equipmentId The name of the equipment to check
+-- @param string equipmentName The name of the equipment to check
 -- @return bool If the Equipment was globally bought
 -- @realm shared
-function shop.IsGlobalBought(equipmentId)
-	return shop.globalBuyTable[equipmentId]
+function shop.IsGlobalBought(equipmentName)
+	return shop.globalBuyTable[equipmentName]
 end
 
 ---
 -- Returns if the equipment is already bought for the players team
 -- @param Player ply The player to check the team of
--- @param string equipmentId The name of the equipment to check
+-- @param string equipmentName The name of the equipment to check
 -- @return bool If the Equipment was bought by a teammate
 -- @realm shared
-function shop.IsTeamBoughtFor(ply, equipmentId)
+function shop.IsTeamBoughtFor(ply, equipmentName)
 	local team = ply:GetTeam()
 
 	return team
 		and shop.teamBuyTable[team]
-		and shop.teamBuyTable[team][equipmentId]
+		and shop.teamBuyTable[team][equipmentName]
 end
 
 ---
 -- Marks the equipment as already bought for the player
 -- @param Player ply The player to set it for
--- @param string equipmentId The name of the equipment to set
+-- @param string equipmentName The name of the equipment to set
 -- @realm shared
-function shop.SetEquipmentBought(ply, equipmentId)
+function shop.SetEquipmentBought(ply, equipmentName)
 	shop.buyTable[ply] = shop.buyTable[ply] or {}
-	shop.buyTable[ply][equipmentId] = true
+	shop.buyTable[ply][equipmentName] = true
 
 	if CLIENT then return end
 
-	shop.BroadcastEquipmentGlobalBought(equipmentId)
+	shop.BroadcastEquipmentGlobalBought(equipmentName)
 end
 
 ---
 -- Marks the equipment as already globally bought
--- @param string equipmentId The name of the equipment to set
+-- @param string equipmentName The name of the equipment to set
 -- @realm shared
-function shop.SetEquipmentGlobalBought(equipmentId)
-	shop.globalBuyTable[equipmentId] = true
+function shop.SetEquipmentGlobalBought(equipmentName)
+	shop.globalBuyTable[equipmentName] = true
 
 	if CLIENT then return end
 
-	shop.BroadcastEquipmentGlobalBought(equipmentId)
+	shop.BroadcastEquipmentGlobalBought(equipmentName)
 end
 
 ---
 -- Marks the equipment as already bought for the team of the player
 -- @param Player ply The player to set it for
--- @param string equipmentId The name of the equipment to set
+-- @param string equipmentName The name of the equipment to set
 -- @realm shared
-function shop.SetEquipmentTeamBought(ply, equipmentId)
+function shop.SetEquipmentTeamBought(ply, equipmentName)
 	local team = ply:GetTeam()
 
 	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
@@ -126,11 +126,11 @@ function shop.SetEquipmentTeamBought(ply, equipmentId)
 	end
 
 	shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
-	shop.teamBuyTable[team][equipmentId] = true
+	shop.teamBuyTable[team][equipmentName] = true
 
 	if SERVER then
 		net.Start("TTT2ReceiveTBEq")
-		net.WriteString(equipmentId)
+		net.WriteString(equipmentName)
 		net.Send(GetTeamFilter(team))
 	end
 
@@ -140,23 +140,23 @@ end
 ---
 -- Check if an equipment is currently buyable for a player
 -- @param Player ply The player to buy the equipment for
--- @param string equipmentId The name of the equipment to buy
+-- @param string equipmentName The name of the equipment to buy
 -- @return bool True, if equipment can be bought
 -- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
-function shop.CanBuyEquipment(ply, equipmentId)
+function shop.CanBuyEquipment(ply, equipmentName)
 	if not IsValid(ply) or not ply:IsActive() then
 		return false, shop.statusCode.INVALIDPLAYER
 	end
 
-	if not equipmentId then
+	if not equipmentName then
 		return false, shop.statusCode.INVALIDID
 	end
 
-	local isItem = items.IsItem(equipmentId)
+	local isItem = items.IsItem(equipmentName)
 
 	-- we use weapons.GetStored to save time making an unnecessary copy, we will not be modifying it
-	local equipment = isItem and items.GetStored(equipmentId) or weapons.GetStored(equipmentId)
+	local equipment = isItem and items.GetStored(equipmentName) or weapons.GetStored(equipmentName)
 
 	if not istable(equipment) then
 		return false, shop.statusCode.NOTEXISTING
@@ -181,19 +181,19 @@ function shop.CanBuyEquipment(ply, equipmentId)
 	end
 
 	if equipment.limited
-		and shop.IsBoughtFor(ply, equipmentId)
+		and shop.IsBoughtFor(ply, equipmentName)
 	then
 		return false, shop.statusCode.LIMITEDBOUGHT
 	end
 
 	if equipment.globalLimited
-		and shop.IsGlobalBought(equipmentId)
+		and shop.IsGlobalBought(equipmentName)
 	then
 		return false, shop.statusCode.GLOBALLIMITEDBOUGHT
 	end
 
 	if equipment.teamLimited
-		and shop.IsTeamBoughtFor(ply,equipmentId)
+		and shop.IsTeamBoughtFor(ply, equipmentName)
 	then
 		return false, shop.statusCode.TEAMLIMITEDBOUGHT
 	end
@@ -230,7 +230,7 @@ function shop.CanBuyEquipment(ply, equipmentId)
 		local containedInRandomShop = false
 
 		for i = 1, #RANDOMSHOP[ply] do
-			if RANDOMSHOP[ply][i].id ~= equipmentId then continue end
+			if RANDOMSHOP[ply][i].id ~= equipmentName then continue end
 
 			containedInRandomShop = true
 		end
@@ -241,7 +241,7 @@ function shop.CanBuyEquipment(ply, equipmentId)
 	end
 
 	-- Still support old items
-	local oldId = isItem and equipment.oldId or equipmentId
+	local oldId = isItem and equipment.oldId or equipmentName
 
 	---
 	-- @note Keep compatibility with old addons
@@ -253,7 +253,7 @@ function shop.CanBuyEquipment(ply, equipmentId)
 	---
 	-- @note Add our own hook with more consistent class parameter and some more information
 	-- @realm server
-	local allow, ignoreCost = hook.Run("TTT2CanOrderEquipment", ply, equipmentId, isItem, credits)
+	local allow, ignoreCost = hook.Run("TTT2CanOrderEquipment", ply, equipmentName, isItem, credits)
 	if not allow then
 		return false, shop.statusCode.BLOCKEDBYTTT2HOOK
 	end
@@ -269,25 +269,25 @@ end
 ---
 -- Buys for player the equipment with the corresponding Id
 -- @param Player ply The player to buy the equipment for
--- @param string equipmentId The name of the equipment to buy
+-- @param string equipmentName The name of the equipment to buy
 -- @return bool True, if equipment can be bought
 -- @return number The shop.statusCode, that lead to the decision
 -- @realm shared
-function shop.BuyEquipment(ply, equipmentId)
-	local isBuyable, statusCode = shop.CanBuyEquipment(ply, equipmentId)
+function shop.BuyEquipment(ply, equipmentName)
+	local isBuyable, statusCode = shop.CanBuyEquipment(ply, equipmentName)
 	if not isBuyable then
 		return false, statusCode
 	end
 
 	if CLIENT then
 		net.Start("TTT2OrderEquipment")
-		net.WriteString(equipmentId)
+		net.WriteString(equipmentName)
 		net.SendToServer()
 	else
-		local isItem = items.IsItem(equipmentId)
+		local isItem = items.IsItem(equipmentName)
 
 		-- we use weapons.GetStored to save time making an unnecessary copy, we will not be modifying it
-		local equipment = isItem and items.GetStored(equipmentId) or weapons.GetStored(equipmentId)
+		local equipment = isItem and items.GetStored(equipmentName) or weapons.GetStored(equipmentName)
 		local credits = equipment.credits or 1
 		local ignoreCost = statusCode == shop.statusCode.SUCCESSIGNORECOST
 
@@ -295,18 +295,18 @@ function shop.BuyEquipment(ply, equipmentId)
 			ply:SubtractCredits(credits)
 		end
 
-		ply:AddBought(equipmentId)
+		ply:AddBought(equipmentName)
 
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable
 		if isItem then
-			local item = ply:GiveEquipmentItem(equipmentId)
+			local item = ply:GiveEquipmentItem(equipmentName)
 
 			if isfunction(item.Bought) then
 				item:Bought(ply)
 			end
 		else
-			ply:GiveEquipmentWeapon(equipmentId, function(_ply, _equipmentId, _weapon)
+			ply:GiveEquipmentWeapon(equipmentName, function(_ply, _equipmentName, _weapon)
 				if isfunction(_weapon.WasBought) then
 					-- some weapons give extra ammo after being bought, etc
 					_weapon:WasBought(_ply)
@@ -320,7 +320,7 @@ function shop.BuyEquipment(ply, equipmentId)
 			if not IsValid(ply) then return end
 
 			net.Start("TTT_BoughtItem")
-			net.WriteString(equipmentId)
+			net.WriteString(equipmentName)
 			net.Send(ply)
 		end)
 
@@ -329,7 +329,7 @@ function shop.BuyEquipment(ply, equipmentId)
 		end
 
 		-- Still support old items
-		local oldId = isItem and equipment.oldId or equipmentId
+		local oldId = isItem and equipment.oldId or equipmentName
 
 		---
 		-- @note Keep compatibility with old addons
@@ -339,7 +339,7 @@ function shop.BuyEquipment(ply, equipmentId)
 		---
 		-- @note Add our own hook with more consistent class parameter
 		-- @realm server
-		hook.Run("TTT2OrderedEquipment", ply, equipmentId, isItem, credits, ignoreCost)
+		hook.Run("TTT2OrderedEquipment", ply, equipmentName, isItem, credits, ignoreCost)
 	end
 
 	return true, statusCode
