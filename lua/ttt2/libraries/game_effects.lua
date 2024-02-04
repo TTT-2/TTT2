@@ -70,13 +70,12 @@ end
 -- Creates a single point of fire, with optional vfire support.
 -- @param Vector pos The position to create the fire at.
 -- @param number scale Controls the height of the flame more than its radius. Informs the size.
--- @param number ignite_delay The time before the fire becomes a full flame.
 -- @param number life_span How long a fire will burn for.
 -- @param nil|Entity owner The creator of the fire.
 -- @param nil|Entity parent The thing to attach the fire to.
 -- @return nil|Entity The fire it created, or nil if it was merged / couldn't be created.
 -- @realm server
-function gameEffects.SpawnFire(pos, scale, ignite_delay, life_span, owner, parent)
+function gameEffects.SpawnFire(pos, scale, life_span, owner, parent)
 	if CreateVFire then
 		return CreateVFire(nil, pos, vector_up, life_span, owner)
 	end
@@ -92,7 +91,6 @@ function gameEffects.SpawnFire(pos, scale, ignite_delay, life_span, owner, paren
 	fire:SetKeyValue("spawnflags", tostring(128 + 32 + 4 + 2 + 1))
 	-- hardly controls size, hitbox is goofy, impossible to work with
 	fire:SetKeyValue("firesize", tostring(scale))
-	fire:SetKeyValue("fireattack", tostring(ignite_delay))
 	fire:SetKeyValue("health", tostring(life_span))
 	fire:SetKeyValue("ignitionpoint", "64")
 	-- don't hurt the player because we're managing the hurtbox ourselves

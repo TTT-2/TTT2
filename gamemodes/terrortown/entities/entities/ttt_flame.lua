@@ -15,8 +15,6 @@ AccessorFunc(ENT, "dmgparent", "DamageParent")
 
 ENT.firechild = nil
 
-ENT.fire_ignite_delay = 0
-
 ENT.real_scale = nil
 ENT.fire_scale_base = 0.9
 ENT.fire_scale_variance = 0.2
@@ -168,7 +166,7 @@ end
 function ENT:StartFire()
 	util.PaintDown(self:GetPos(), "Scorch", self)
 
-	self.firechild = gameEffects.SpawnFire(self:GetPos(), self.real_scale, self.fire_ignite_delay, self:GetLifeSpan(), self:GetDamageParent(), self)
+	self.firechild = gameEffects.SpawnFire(self:GetPos(), self.real_scale, self:GetLifeSpan(), self:GetDamageParent(), self)
 	self:DeleteOnRemove(self.firechild)
 
 	self:SetBurning(true)
