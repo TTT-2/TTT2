@@ -69,7 +69,7 @@ function LANG.AddToLanguage(langName, stringName, stringText)
 	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
-		ErrorNoHaltWithStack(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(stringName), tostring(langName)))
+		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(stringName), tostring(langName)))
 
 		return stringName
 	end

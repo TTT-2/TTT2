@@ -75,7 +75,7 @@ function ENT:AcceptInput(name, activator)
 		end)
 	elseif inputReceiver == RECEIVE_ACTIVATOR then
 		if not IsValid(activator) or not activator:IsPlayer() then
-			ErrorNoHaltWithStack("ttt_game_text tried to show message to invalid !activator\n")
+			ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
 
 			return true
 		end
