@@ -443,7 +443,7 @@ if CLIENT then
 		local owner = self:GetOwner()
 
 		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-			RunConsoleCommand("lastinv")
+			RunConsoleCommand("use", "weapon_ttt_unarmed")
 		end
 	end
 

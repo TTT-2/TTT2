@@ -726,6 +726,8 @@ if CLIENT then
 
 	---
 	-- Called when the swep is about to be removed.
+	-- @warning If you override OnRemove in your SWEP and you are using a custom world or
+	-- view model, you should call BaseClass.OnRemove(self) so as not to break viewmodels.
 	-- @ref https://wiki.facepunch.com/gmod/WEAPON:OnRemove
 	-- @realm client
 	function SWEP:OnRemove()
@@ -734,6 +736,8 @@ if CLIENT then
 
 	---
 	-- Called when weapon tries to holster.
+	-- @warning If you override Holster in your SWEP and you are using a custom world or
+	-- view model, you should call BaseClass.Holster(self) so as not to break viewmodels.
 	-- @param Weapon wep The weapon we are trying switch to
 	-- @return boolean Return true to allow weapon to holster
 	-- @ref https://wiki.facepunch.com/gmod/WEAPON:Holster
