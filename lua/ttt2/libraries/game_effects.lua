@@ -30,11 +30,6 @@ function gameEffects.StartFires(pos, tr, num, lifetime, explode, dmgowner, sprea
 		local vstart = pos + tr.HitNormal * 64
 		local ttl = lifetime + math.Rand(-lifetime_variance, lifetime_variance)
 
-		if CreateVFireBall then
-			flames[#flames + 1] = CreateVFireBall(ttl, size, vstart, ang:Forward() * spread_force, dmgowner)
-			continue
-		end
-
 		local flame = ents.Create("ttt_flame")
 		flame:SetPos(vstart)
 		flame:SetFlameSize(size)
@@ -67,7 +62,7 @@ function gameEffects.StartFires(pos, tr, num, lifetime, explode, dmgowner, sprea
 end
 
 ---
--- Creates a single point of fire, with optional vfire support.
+-- Creates a single point of fire.
 -- @param Vector pos The position to create the fire at.
 -- @param number scale Controls the height of the flame more than its radius. Informs the size.
 -- @param number life_span How long a fire will burn for.
@@ -76,10 +71,6 @@ end
 -- @return nil|Entity The fire it created, or nil if it was merged / couldn't be created.
 -- @realm server
 function gameEffects.SpawnFire(pos, scale, life_span, owner, parent)
-	if CreateVFire then
-		return CreateVFire(nil, pos, vector_up, life_span, owner)
-	end
-
 	local fire = ents.Create("env_fire")
 
 	if not IsValid(fire) then return end
