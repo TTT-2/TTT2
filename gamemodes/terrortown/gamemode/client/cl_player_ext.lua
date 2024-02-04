@@ -9,10 +9,12 @@ end
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
 
 ---
@@ -81,6 +83,7 @@ end
 
 ---
 -- @realm client
+-- stylua: ignore
 local cv_ttt_show_gestures = CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
 
 ---
@@ -242,6 +245,7 @@ function GM:SetupMove(ply, mv, cmd)
 
 	---
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2PlayerReady", ply)
 
 	-- check if a resolution change happened while
@@ -252,6 +256,7 @@ function GM:SetupMove(ply, mv, cmd)
 	if oldScrH ~= ScrH() or oldScrW ~= ScrW() then
 		---
 		-- @realm client
+		-- stylua: ignore
 		hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
 	end
 end

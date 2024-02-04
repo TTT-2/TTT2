@@ -16,6 +16,7 @@ local function GetTextForPlayer(ply)
 
 		---
 		-- @realm client
+		-- stylua: ignore
 		if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 			return GetTranslation("info_popup_" .. roleData.name)
 		else
@@ -45,6 +46,7 @@ local function GetTextForPlayer(ply)
 
 			---
 			-- @realm client
+			-- stylua: ignore
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 				return GetPTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
 			else
@@ -55,6 +57,7 @@ local function GetTextForPlayer(ply)
 
 			---
 			-- @realm client
+			-- stylua: ignore
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 				return GetTranslation("info_popup_" .. roleData.name .. "_alone")
 			else
@@ -66,6 +69,7 @@ end
 
 ---
 -- @realm client
+-- stylua: ignore
 local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIVE)
 
 local function drawFunc(s, w, h)

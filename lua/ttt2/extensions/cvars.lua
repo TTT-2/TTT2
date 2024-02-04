@@ -189,6 +189,7 @@ elseif SERVER then
 
 		---
 		-- @realm server
+		-- stylua: ignore
 		if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
 
 		RunConsoleCommand(conVarName, value)
@@ -208,6 +209,7 @@ elseif SERVER then
 
 		---
 		-- @realm server
+		-- stylua: ignore
 		local isAdmin = IsValid(ply) and hook.Run("TTT2AdminCheck", ply)
 
 		requestCacheSize = net.ReadUInt(identityBitCount)

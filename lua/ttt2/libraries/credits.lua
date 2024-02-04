@@ -21,6 +21,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if hook.Run("TTT2CheckCreditAward", victim, attacker) == false then return end
 
 	local roleDataAttacker = attacker:GetSubRoleData()

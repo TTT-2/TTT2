@@ -62,6 +62,7 @@ AccessorFunc(SWEP, "pull_time", "PullTime", FORCE_NUMBER)
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_nade_throw_during_prep", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
@@ -103,6 +104,7 @@ end
 if CLIENT then
 	---
 	-- @realm client
+	-- stylua: ignore
 	local cvEnableTrajectoryUI = CreateConVar("ttt2_grenade_trajectory_ui", 0, FCVAR_ARCHIVE)
 
 	local function AlphaLerp(from, frac, max)

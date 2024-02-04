@@ -22,10 +22,12 @@ local sv_voiceenable = GetConVar("sv_voiceenable")
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
@@ -113,6 +115,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	---
 	-- custom post-settings
 	-- @realm server
+	-- stylua: ignore
 	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not isGlobalVoice)
 
 	if can_hear ~= nil then
@@ -166,6 +169,7 @@ local function RoleGlobalVoice(ply, isGlobal)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, not isGlobal) == false
 
 	SendRoleVoiceState(ply)

@@ -32,6 +32,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
 
 	local itms = items.GetList()
@@ -69,6 +70,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not eject[name]
 		then
 			-- @realm client
+			-- stylua: ignore
 			if hook.Run("TTT2RegisterWeaponID", eq) then
 				tbl[#tbl + 1] = eq
 			else

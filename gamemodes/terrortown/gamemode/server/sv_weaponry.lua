@@ -17,10 +17,12 @@ local IsEquipment = WEPS.IsEquipment
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -149,6 +151,7 @@ local function GetLoadoutWeapons(subrole)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 
 	return loadout_weapons[subrole]
@@ -272,6 +275,7 @@ local function GetLoadoutItems(subrole)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 
 	return loadout_items[subrole]
@@ -346,6 +350,7 @@ end
 ---
 -- Called to give @{Player}s the default set of @{Weapon}s.
 -- @note This function may not work in your custom gamemode if you have overridden your
+-- stylua: ignore
 -- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply @{Player} to give @{Weapon}s to
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
@@ -445,6 +450,7 @@ function GM:UpdatePlayerLoadouts()
 	for i = 1, #plys do
 		---
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("PlayerLoadout", plys[i], false)
 	end
 end

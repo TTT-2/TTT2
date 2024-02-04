@@ -9,6 +9,7 @@ local table = table
 ---
 -- @realm client
 -- @internal
+-- stylua: ignore
 local changesVersion = CreateConVar("changes_version", "v0.0.0.0", FCVAR_ARCHIVE)
 
 local changes, currentVersion
@@ -1848,6 +1849,7 @@ function CreateChanges()
 	---
 	-- run hook for other addons to add their changelog as well
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 

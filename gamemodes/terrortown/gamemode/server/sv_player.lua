@@ -20,22 +20,27 @@ end
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt2_bots_lock_on_death = CreateConVar("ttt2_bots_lock_on_death", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 util.AddNetworkString("ttt2_damage_received")
@@ -176,14 +181,17 @@ function GM:PlayerSpawn(ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("PlayerLoadout", ply, false)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("PlayerSetModel", ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTTPlayerSetColor", ply)
 
 	ply:SetupHands()
@@ -279,6 +287,7 @@ end
 -- Called whenever a @{Player} spawns and must choose a model.
 -- A good place to assign a model to a @{Player}.
 -- @note This function may not work in your custom gamemode if you have overridden
+-- stylua: ignore
 -- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply The @{Player} being chosen
 -- @hook
@@ -808,6 +817,7 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
 		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
 	end
@@ -818,6 +828,7 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
@@ -865,6 +876,7 @@ function GM:PostPlayerDeath(ply)
 
 		---
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("PlayerLoadout", ply, false)
 	end)
 end
@@ -1066,14 +1078,17 @@ local fallsounds_count = #fallsounds
 
 ---
 -- @realm server
+-- stylua: ignore
 local falldmg_enable = CreateConVar("ttt2_falldmg_enable", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local falldmg_min_vel = CreateConVar("ttt2_falldmg_min_velocity", "450", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local falldmg_expo = CreateConVar("ttt2_falldmg_exponent", "1.75", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -1155,6 +1170,7 @@ end
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -1177,6 +1193,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if not hook.Run("AllowPVP") then
 		-- if player vs player damage, or if damage versus a prop, then zero
 		if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
@@ -1186,6 +1203,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	elseif ent:IsPlayer() then
 		---
 		-- @realm server
+		-- stylua: ignore
 		hook.Run("PlayerTakeDamage", ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
 	elseif ent:IsExplosive() then
 		-- When a barrel hits a player, that player damages the barrel because
@@ -1394,6 +1412,7 @@ net.Receive("ttt2_set_player_setting", function(_, ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTT2PlayerSettingChanged", ply, identifier, oldValue, ply.playerSettings[identifier])
 end)
 

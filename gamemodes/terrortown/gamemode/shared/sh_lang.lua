@@ -111,6 +111,7 @@ if SERVER then
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	local cv_ttt_lang_serverdefault = CreateConVar("ttt_lang_serverdefault", "en", FCVAR_ARCHIVE)
 
 	local function ServerLangRequest(ply, cmd, args)

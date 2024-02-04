@@ -4,12 +4,16 @@ SPRINT = {
 	-- Set up ConVars
 	convars = {
 		-- @realm shared
+		-- stylua: ignore
 		enabled = CreateConVar("ttt2_sprint_enabled", "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "Toggle Sprint (Def: 1)"),
 		-- @realm shared
+		-- stylua: ignore
 		multiplier = CreateConVar("ttt2_sprint_max", "0.5", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The speed modifier the player will receive. Will be added on top of 1, so 0.5 => 1.5 speed. (Def: 0.5)"),
 		-- @realm shared
+		-- stylua: ignore
 		consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The speed of the stamina consumption (per second; Def: 0.6)"),
 		-- @realm shared
+		-- stylua: ignore
 		regeneration = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "The regeneration time of the stamina (per second; Def: 0.3)"),
 	},
 }
@@ -60,12 +64,14 @@ function SPRINT:HandleStaminaCalculation(ply)
 	if playerWantsToSprint then
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2StaminaDrain", ply, rateModifier)
 
 		newStamina = math.max(sprintStamina - FrameTime() * rateModifier[1] * staminaConsumptionRate, 0)
 	else
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2StaminaRegen", ply, rateModifier)
 
 		newStamina = math.min(sprintStamina + FrameTime() * rateModifier[1] * staminaRegeneratonRate, 1)
@@ -87,6 +93,7 @@ function SPRINT:HandleSpeedMultiplierCalculation(ply)
 
 	---
 	-- @realm shared
+	-- stylua: ignore
 	hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
 
 	return (1 + self.convars.multiplier:GetFloat()) * sprintMultiplierModifier[1]

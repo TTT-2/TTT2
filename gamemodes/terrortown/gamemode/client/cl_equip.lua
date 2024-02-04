@@ -15,34 +15,42 @@ local hook = hook
 
 ---
 -- @realm client
+-- stylua: ignore
 local numColsVar = CreateConVar("ttt_bem_cols", 5, FCVAR_ARCHIVE, "Sets the number of columns in the Traitor/Detective menu's item list.")
 
 ---
 -- @realm client
+-- stylua: ignore
 local numRowsVar = CreateConVar("ttt_bem_rows", 6, FCVAR_ARCHIVE, "Sets the number of rows in the Traitor/Detective menu's item list.")
 
 ---
 -- @realm client
+-- stylua: ignore
 local itemSizeVar = CreateConVar("ttt_bem_size", 64, FCVAR_ARCHIVE, "Sets the item size in the Traitor/Detective menu's item list.")
 
 ---
 -- @realm client
+-- stylua: ignore
 local showCustomVar = CreateConVar("ttt_bem_marker_custom", 1, FCVAR_ARCHIVE, "Should custom items get a marker?")
 
 ---
 -- @realm client
+-- stylua: ignore
 local showFavoriteVar = CreateConVar("ttt_bem_marker_fav", 1, FCVAR_ARCHIVE, "Should favorite items get a marker?")
 
 ---
 -- @realm client
+-- stylua: ignore
 local showSlotVar = CreateConVar("ttt_bem_marker_slot", 1, FCVAR_ARCHIVE, "Should items get a slot-marker?")
 
 ---
 -- @realm client
+-- stylua: ignore
 local alwaysShowShopVar = CreateConVar("ttt_bem_always_show_shop", 1, FCVAR_ARCHIVE, "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?")
 
 ---
 -- @realm client
+-- stylua: ignore
 local enableDoubleClickBuy = CreateConVar("ttt_bem_enable_doubleclick_buy", 1, FCVAR_ARCHIVE, "Sets if you will be able to double click on an Item to buy it.")
 
 -- get serverside ConVars
@@ -880,6 +888,7 @@ function TraitorMenuPopup()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTTEquipmentTabs", dsheet)
 
 	-- couple panelselect with info
@@ -1034,6 +1043,7 @@ local function ReceiveBoughtItem()
 	---
 	-- I can imagine custom equipment wanting this, so making a hook
 	-- @realm client
+	-- stylua: ignore
 	hook.Run("TTTBoughtItem", item ~= nil, (item and item.oldId or nil) or id)
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
@@ -1067,6 +1077,7 @@ function GM:OnContextMenuOpen()
 
 	---
 	-- @realm client
+	-- stylua: ignore
 	if hook.Run("TTT2PreventAccessShop", LocalPlayer()) then return end
 
 	if IsValid(eqframe) then

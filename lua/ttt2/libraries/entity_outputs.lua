@@ -50,6 +50,7 @@ function entityOutputs.RegisterHook(hookName)
 
 		---
 		-- @ignore
+		-- stylua: ignore
 		hook.Run(hookName, caller, activator)
 	end)
 end
@@ -75,6 +76,7 @@ function entityOutputs.RegisterMapEntityOutput(ent, outputName, hookName, delay,
 
 	---
 	-- @ignore
+	-- stylua: ignore
 	ent:Fire("AddOutput", outputName .. " triggerhook:RunPassedCode:hook.Run('" .. hookName .. "_Internal'):" .. delay .. ":" .. repititions)
 
 	entityOutputs.RegisterHook(hookName)

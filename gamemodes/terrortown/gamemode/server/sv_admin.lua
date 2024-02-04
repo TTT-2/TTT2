@@ -49,6 +49,7 @@ end
 function PrintTraitors(ply)
 	---
 	-- @realm server
+	-- stylua: ignore
 	if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) then
 		ServerLog(Format("%s used ttt_print_traitors\n", IsValid(ply) and ply:Nick() or "console"))
 
@@ -88,6 +89,7 @@ function PrintReport(ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) then
 		ServerLog(Format("%s used ttt_print_adminreport\n", IsValid(ply) and ply:Nick() or "console"))
 
@@ -116,6 +118,7 @@ local function PrintKarma(ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) then
 		ServerLog(Format("%s used ttt_print_karma\n", IsValid(ply) and ply:Nick() or "console"))
 
@@ -131,22 +134,27 @@ concommand.Add("ttt_print_karma", PrintKarma)
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_highlight_admins = CreateConVar("ttt_highlight_admins", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_highlight_dev = CreateConVar("ttt_highlight_dev", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_highlight_vip = CreateConVar("ttt_highlight_vip", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_highlight_addondev = CreateConVar("ttt_highlight_addondev", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cv_ttt_highlight_supporter = CreateConVar("ttt_highlight_supporter", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddScoreboardGlobals", function()
@@ -175,10 +183,12 @@ end)
 
 ---
 -- @realm server
+-- stylua: ignore
 local dmglog_console = CreateConVar("ttt_log_damage_for_console", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local dmglog_save = CreateConVar("ttt_damagelog_save", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function PrintDamageLog(ply)
@@ -186,6 +196,7 @@ local function PrintDamageLog(ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) or GetRoundState() ~= ROUND_ACTIVE then
 		ServerLog(Format("%s used ttt_print_damagelog\n", IsValid(ply) and ply:Nick() or "console"))
 		pr("*** Damage log:\n")
@@ -244,6 +255,7 @@ end
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_bantype = CreateConVar("ttt_ban_type", "autodetect", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function DetectServerPlugin()

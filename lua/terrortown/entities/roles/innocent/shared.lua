@@ -21,6 +21,7 @@ end
 if SERVER then
 	---
 	-- @realm server
+	-- stylua: ignore
 	local ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
 
 	---

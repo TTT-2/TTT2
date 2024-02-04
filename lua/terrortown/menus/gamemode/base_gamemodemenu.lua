@@ -23,6 +23,7 @@ CLGAMEMODEMENU.submenus = {}
 function CLGAMEMODEMENU:ShouldShow()
 	---
 	-- @realm client
+	-- stylua: ignore
 	if self:IsAdminMenu() and not hook.Run("TTT2AdminCheck", LocalPlayer()) then
 		return false
 	end

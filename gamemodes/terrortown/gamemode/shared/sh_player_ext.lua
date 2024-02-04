@@ -119,6 +119,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		if activeRolesCount > 0 then
 			---
 			-- @realm shared
+			-- stylua: ignore
 			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
@@ -131,6 +132,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 			if oldActiveRolesCount <= 0 then
 				---
 				-- @realm shared
+				-- stylua: ignore
 				hook.Run("TTT2ToggleRole", oldRoleData, false)
 			end
 		end
@@ -139,12 +141,14 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 	if oldBaseRole ~= newBaseRole or forceHooks then
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2UpdateBaserole", self, oldBaseRole, newBaseRole)
 	end
 
 	if oldSubrole ~= subrole or forceHooks then
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 
 		if SERVER then
@@ -163,6 +167,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 	if oldTeam ~= newTeam or forceHooks then
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 
@@ -180,6 +185,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 		if SERVER then
 			---
 			-- @realm server
+			-- stylua: ignore
 			hook.Run("PlayerLoadout", self, false)
 
 			-- Don't update the model if oldSubrole is nil (player isn't already spawned, leading to an initialization error)
@@ -193,6 +199,7 @@ function plymeta:SetRole(subrole, team, forceHooks, suppressEvent)
 
 			---
 			-- @realm server
+			-- stylua: ignore
 			hook.Run("TTTPlayerSetColor", self)
 		end
 	end
@@ -225,6 +232,7 @@ end
 function plymeta:SetRoleColor(col)
 	---
 	-- @realm shared
+	-- stylua: ignore
 	self.roleColor = hook.Run("TTT2ModifyRoleColor", self, col) or col
 end
 
@@ -243,6 +251,7 @@ end
 function plymeta:SetRoleDkColor(col)
 	---
 	-- @realm shared
+	-- stylua: ignore
 	self.roleDkColor = hook.Run("TTT2ModifyRoleDkColor", self, col) or col
 end
 
@@ -261,6 +270,7 @@ end
 function plymeta:SetRoleLtColor(col)
 	---
 	-- @realm shared
+	-- stylua: ignore
 	self.roleLtColor = hook.Run("TTT2ModifyRoleLtColor", self, col) or col
 end
 
@@ -279,6 +289,7 @@ end
 function plymeta:SetRoleBgColor(col)
 	---
 	-- @realm shared
+	-- stylua: ignore
 	self.roleBgColor = hook.Run("TTT2ModifyRoleBgColor", self, col) or col
 end
 
@@ -354,6 +365,7 @@ function plymeta:UpdateTeam(team, suppressEvent, suppressHook)
 	if not suppressHook then
 		---
 		-- @realm shared
+		-- stylua: ignore
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 

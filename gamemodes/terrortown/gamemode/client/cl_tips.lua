@@ -10,6 +10,7 @@ local IsValid = IsValid
 
 ---
 -- @realm client
+-- stylua: ignore
 local cv_ttt_tips_enable = CreateConVar("ttt_tips_enable", "1", FCVAR_ARCHIVE)
 
 local draw = draw

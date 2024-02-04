@@ -115,6 +115,7 @@ net.Receive("TTT2ToggleTButton", function(len, ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	local use, message = hook.Run("TTTCanToggleTraitorButton", ent, ply)
 
 	if not use then
@@ -136,6 +137,7 @@ local function ActivateTButton(ply, ent)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	local use, message = hook.Run("TTTCanUseTraitorButton", ent, ply)
 
 	if not use then
@@ -304,6 +306,7 @@ function ENT:TraitorUse(ply)
 
 	---
 	-- @realm server
+	-- stylua: ignore
 	hook.Run("TTTTraitorButtonActivated", self, ply)
 
 	return true
