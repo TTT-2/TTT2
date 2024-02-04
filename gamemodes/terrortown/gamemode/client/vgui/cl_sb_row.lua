@@ -434,12 +434,12 @@ function PANEL:UpdatePlayerData()
 
 	local show_sresult = true
 	-- we have body search results
-	if ply.bodySearchResult and ply.bodySearchResult.show_sb then
-		self.sresult:SetImage("icon16/information.png")
-		self.sresult:SetTooltip(GetTranslation("cl_sb_row_sresult_direct_conf"))
-	elseif ply.bodySearchResult and ply.bodySearchResult.base.isPublicPolicingSearch then
+	if ply.bodySearchResult and ply.bodySearchResult.base.isPublicPolicingSearch then
 		self.sresult:SetImage("icon16/magnifier.png")
 		self.sresult:SetTooltip(GetTranslation("cl_sb_row_sresult_pub_police"))
+	elseif ply.bodySearchResult and ply.bodySearchResult.show_sb then
+		self.sresult:SetImage("icon16/information.png")
+		self.sresult:SetTooltip(GetTranslation("cl_sb_row_sresult_direct_conf"))
 	else
 		show_sresult = false
 	end
