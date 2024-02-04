@@ -102,7 +102,7 @@ function weaponrenderer.CreateModel(wep, modelData)
 		and (not IsValid(modelDataCopy.modelEnt) or modelDataCopy.createdModel ~= modelDataCopy.model)
 		and string.find(modelDataCopy.model, ".mdl") and file.Exists(modelDataCopy.model, "GAME")
 	then
-		-- note on the redergroup: This rendergroup is not listed in the GMod wiki; however all
+		-- note on the rendergroup: This rendergroup is not listed in the GMod wiki; however all
 		-- SWEP construction kit weapons use this rendergroup - and it works
 		modelDataCopy.modelEnt = ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
 
