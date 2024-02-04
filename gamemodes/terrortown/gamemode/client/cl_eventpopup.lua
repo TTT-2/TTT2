@@ -88,7 +88,7 @@ function EPOP:ActivateMessage()
 
 	elem.time = CurTime() + elem.displayTime
 
-	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text)
+	Dev(1, "[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text)
 end
 
 ---

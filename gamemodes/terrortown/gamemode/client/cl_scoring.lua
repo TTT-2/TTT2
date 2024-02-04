@@ -62,7 +62,7 @@ local function OnInitialization(class, path, name)
 	class.type = name
 	class.base = class.base or "base_scoremenu"
 
-	MsgN("Added TTT2 score menu file: ", path, name)
+	Dev(1, "Added TTT2 score menu file: ", path, name)
 end
 
 local subMenus = classbuilder.BuildFromFolder(

@@ -260,7 +260,7 @@ local function PreqLabels(parent, x, y)
 		if statusCode == shop.statusCode.SUCCESS then
 			tooltipText = "Ok"
 		elseif statusCode == shop.statusCode.INVALIDID then
-			ErrorNoHalt("[TTT2][ERROR] Missing id in table:", sel)
+			ErrorNoHaltWithStack("[TTT2][ERROR] Missing id in table:", sel)
 			PrintTable(sel)
 			tooltipText = "No ID"
 		elseif statusCode == shop.statusCode.NOTBUYABLE then
@@ -501,7 +501,8 @@ local function CreateEquipmentList(t)
 				ic = vgui.Create("SpawnIcon", dlist)
 				ic:SetModel(item.itemModel)
 			else
-				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+				ErrorNoHaltWithStack("Equipment item does not have model or material specified.")
+				PrintTable(item)
 
 				continue
 			end
@@ -778,7 +779,7 @@ function TraitorMenuPopup()
 		drolesel:SetValue(LANG.GetTranslation("shop_role_select") .. " ...")
 
 		drolesel.OnSelect = function(panel, index, value)
-			print(LANG.GetParamTranslation("shop_role_selected", {role = value}))
+			Dev(2, LANG.GetParamTranslation("shop_role_selected", {role = value}))
 
 			dnotaliveHelp:SetText("")
 

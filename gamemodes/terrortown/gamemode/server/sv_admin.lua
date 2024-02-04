@@ -289,7 +289,7 @@ local function BanningFunction()
 		bantype = DetectServerPlugin()
 	end
 
-	print("Banning using " .. bantype .. " method.")
+	Dev(2, "Banning using " .. bantype .. " method.")
 
 	return ban_functions[bantype] or ban_functions["gmod"]
 end

@@ -164,7 +164,7 @@ end
 -- @realm client
 function PANEL:AddChoice(title, value, select, icon, data)
 	if istable(value) or isbool(value) then
-		ErrorNoHalt("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any table data use the last parameter.\n")
+		ErrorNoHaltWithStack("[TTT2] dcombobox_ttt2 AddChoice format changed to PANEL:AddChoice(title, value, select, icon, data)\n For any table data use the last parameter.\n")
 
 		return
 	end
@@ -200,7 +200,7 @@ function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 	local choices = self.choices
 
 	if index > #choices then
-		ErrorNoHalt("[TTT2] PANEL:ChooseOptionID failed, exceeding index size of choices.")
+		ErrorNoHaltWithStack("[TTT2] PANEL:ChooseOptionID failed, exceeding index size of choices.")
 
 		return
 	end

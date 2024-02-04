@@ -33,7 +33,7 @@ RANDOMSAVEDSHOPS = RANDOMSAVEDSHOPS or {} -- saved random shops
 -- JUST used to convert old items to new ones
 local itemMt = {
 	__newindex = function(tbl, key, val)
-		print("[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!")
+		ErrorNoHaltWithStack("[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!")
 	end
 }
 
@@ -44,10 +44,10 @@ EquipmentItems = EquipmentItems or setmetatable(
 	},
 	{
 		__index = function(tbl, key)
-			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
+			ErrorNoHaltWithStack("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
 		end,
 		__newindex = function(tbl, key, val)
-			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
+			ErrorNoHaltWithStack("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
 
 			if istable(val) then
 				tbl[key] = setmetatable(val, itemMt)
@@ -299,7 +299,7 @@ local function EncodeForStream(tbl)
 
 	local result = util.TableToJSON(tbl)
 	if not result then
-		ErrorNoHalt("Round report event encoding failed!\n")
+		ErrorNoHaltWithStack("Round report event encoding failed!\n")
 
 		return false
 	else
@@ -650,7 +650,7 @@ else -- CLIENT
 			local json_shop = buff -- util.Decompress(buff)
 
 			if not json_shop then
-				ErrorNoHalt("RANDOMSHOP decompression failed!\n")
+				ErrorNoHaltWithStack("RANDOMSHOP decompression failed!\n")
 			else
 				-- convert the json string back to a table
 				local tmp = util.JSONToTable(json_shop)
@@ -666,7 +666,7 @@ else -- CLIENT
 
 					RANDOMSHOP[LocalPlayer()] = tmp2
 				else
-					ErrorNoHalt("RANDOMSHOP decoding failed!\n")
+					ErrorNoHaltWithStack("RANDOMSHOP decoding failed!\n")
 				end
 			end
 
@@ -726,7 +726,7 @@ function GenerateNewEquipmentID()
 
 			if v.oldId ~= val or not v.id then continue end
 
-			print("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
+			ErrorNoHalt("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
 
 			break
 		end
@@ -982,8 +982,6 @@ if SERVER then
 	-- @internal
 	-- @realm server
 	function SyncEquipment(ply, add)
-		--print("[TTT2][SHOP] Sending new SHOP list to " .. ply:Nick() .. "...")
-
 		local s = EncodeForStream(SYNC_EQUIP)
 		if not s then return end
 
@@ -1215,7 +1213,6 @@ else -- CLIENT
 	local buff = ""
 
 	local function TTT2SyncEquipment(len)
-		--print("[TTT2][SHOP] Received new SHOP list from server! Updating...")
 
 		local add = net.ReadBool()
 		local cont = net.ReadBit() == 1
@@ -1232,7 +1229,7 @@ else -- CLIENT
 		buff = ""
 
 		if not json_shop then
-			ErrorNoHalt("SHOP decompression failed!\n")
+			ErrorNoHaltWithStack("SHOP decompression failed!\n")
 
 			return
 		end
@@ -1241,7 +1238,7 @@ else -- CLIENT
 		local tmp = util.JSONToTable(json_shop)
 
 		if not istable(tmp) then
-			ErrorNoHalt("SHOP decoding failed!\n")
+			ErrorNoHaltWithStack("SHOP decoding failed!\n")
 
 			return
 		end

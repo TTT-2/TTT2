@@ -259,15 +259,15 @@ fileloader.LoadFolder("terrortown/menus/gamemode/", true, CLIENT_FILE)
 
 -- provide and add autorun files
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
-	MsgN("Marked TTT2 client autorun file for distribution: ", path)
+	Dev(1, "Marked TTT2 client autorun file for distribution: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
-	MsgN("Marked and added TTT2 shared autorun file for distribution: ", path)
+	Dev(1, "Marked and added TTT2 shared autorun file for distribution: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function(path)
-	MsgN("Added TTT2 server autorun file: ", path)
+	Dev(1, "Added TTT2 server autorun file: ", path)
 end)
 
 ---
@@ -277,7 +277,7 @@ end)
 -- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
-	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
+	Dev(1, "Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
 	---
@@ -291,17 +291,17 @@ function GM:Initialize()
 	-- load default TTT2 language files or mark them as downloadable on the server
 	-- load addon language files in a second pass, the core language files are loaded earlier
 	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
+		Dev(1, "Added TTT2 language file: ", path)
 	end)
 
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
-		MsgN("Added TTT2 language file: ", path)
+		ErrorNoHaltWithStack("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \"" .. path .. "\"")
+		Dev(1, "Added TTT2 language file: ", path)
 	end)
 
 	-- load vskin files
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
+		Dev(1, "Added TTT2 vskin file: ", path)
 	end)
 
 	roleselection.LoadLayers()
@@ -375,7 +375,7 @@ end
 -- @hook
 -- @realm server
 function GM:InitCvars()
-	MsgN("TTT2 initializing ConVar settings...")
+	Dev(1, "TTT2 initializing ConVar settings...")
 
 	-- Initialize game state that is synced with client
 	SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
@@ -412,7 +412,7 @@ end
 function GM:InitPostEntity()
 	self:InitCvars()
 
-	MsgN("[TTT2][INFO] Client post-init...")
+	Dev(1, "[TTT2][INFO] Client post-init...")
 
 	---
 	-- @realm shared
@@ -485,7 +485,7 @@ function GM:InitPostEntity()
 	-- initialize the equipment
 	LoadShopsEquipment()
 
-	MsgN("[TTT2][INFO] Shops initialized...")
+	Dev(1, "[TTT2][INFO] Shops initialized...")
 	TTT2ShopFallbackInitialized = true
 
 	WEPS.ForcePrecache()
@@ -1358,7 +1358,7 @@ function GM:MapTriggeredEnd(wintype)
 		self.MapWin = wintype
 	else
 		-- print alert and hint for contact
-		print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
+		ErrorNoHaltWithStack("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
 	end
 end
 

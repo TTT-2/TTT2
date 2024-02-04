@@ -172,7 +172,7 @@ function items.Get(name, retTbl)
 		local base = items.Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant item " .. tostring(retval.Base) .. "!\n")
+			ErrorNoHaltWithStack("ERROR: Trying to derive item " .. tostring(name) .. " from non existant item " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end
@@ -354,7 +354,7 @@ function items.MigrateLegacyItems()
 
 				items.Register(ITEMDATA, GetEquipmentFileName(name))
 
-				print("[TTT2][INFO] Automatically converted legacy item: ", name, ITEMDATA.oldId)
+				Dev(1, "[TTT2][INFO] Automatically converted legacy item:\t" .. name .. "\t" .. ITEMDATA.oldId)
 			else
 				item.CanBuy = item.CanBuy or {}
 				item.CanBuy[subrole] = subrole

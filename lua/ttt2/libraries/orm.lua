@@ -33,7 +33,7 @@ function orm.Make(tableName, force)
 	local dataStructure = sql.GetTableColumns(tableName)
 
 	if not primaryKey or not dataStructure then
-		ErrorNoHalt("[ORM] An sql error occurred while retrieving the metadata of the following databasetable: " .. tableName)
+		ErrorNoHaltWithStack("[ORM] An sql error occurred while retrieving the metadata of the following databasetable: " .. tableName)
 	end
 
 	local model = {}
@@ -120,7 +120,7 @@ function ORMMODEL:Find(primaryValue)
 
 		where = table.concat(where, " AND ")
 	else
-		ErrorNoHalt("[ORM] Number of primaryvalues does not match number of primarykeys!")
+		ErrorNoHaltWithStack("[ORM] Number of primaryvalues does not match number of primarykeys!")
 
 		return
 	end

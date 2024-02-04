@@ -334,7 +334,7 @@ end
 -- Subclasses must override with their own grenade ent.
 -- @realm shared
 function SWEP:GetGrenadeName()
-	ErrorNoHalt("SWEP BASEGRENADE ERROR: GetGrenadeName not overridden! This is probably wrong!\n")
+	ErrorNoHaltWithStack("SWEP BASEGRENADE ERROR: GetGrenadeName not overridden! This is probably wrong!\n")
 
 	return "ttt_firegrenade_proj"
 end

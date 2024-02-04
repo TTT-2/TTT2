@@ -370,7 +370,7 @@ function ENT:Think()
 			-- prevent effect spam on Lua error
 			self:Remove()
 
-			ErrorNoHalt("ERROR CAUGHT: ttt_c4: " .. err .. "\n")
+			ErrorNoHaltWithStack("ERROR CAUGHT: ttt_c4: " .. err .. "\n")
 		end
 	elseif self:GetArmed() and CurTime() > self.timeBeep then
 		local amp = 48

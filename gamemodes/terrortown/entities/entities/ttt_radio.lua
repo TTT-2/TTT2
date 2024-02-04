@@ -371,7 +371,7 @@ if SERVER then
 		if not IsValid(radio) or radio:GetOriginator() ~= ply or radio:GetClass() ~= "ttt_radio" then return end
 
 		if not table.HasValue(soundtypes, snd) then
-			print("Received radio sound not in table from", ply)
+			ErrorNoHaltWithStack("Received radio sound not in table from", ply)
 
 			return
 		end

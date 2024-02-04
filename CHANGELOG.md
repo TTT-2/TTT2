@@ -67,6 +67,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `ttt_flame` is visible while it is moving  (by @EntranceJew)
 - `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
 - The built-in DNA scanner now displays distances in meters (by @TimGoll)
+- Noisy prints are now gated behind various levels of `developer` convar (by @EntranceJew)
+- Any warnings developers should fix will now print with stack traces (by @EntranceJew)
 
 ### Fixed
 
