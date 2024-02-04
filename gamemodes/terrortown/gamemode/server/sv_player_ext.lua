@@ -299,31 +299,16 @@ end
 -- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
 -- @note This will disable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:RemoveBought
-function plymeta:AddBought(cls)
+function plymeta:AddBought(equipmentName)
 	self.bought = self.bought or {}
-	self.bought[#self.bought + 1] = tostring(cls)
+	self.bought[#self.bought + 1] = tostring(equipmentName)
 
-	BUYTABLE[cls] = true
-
-	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(cls)
-	net.Broadcast()
-
-	local team = self:GetTeam()
-
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-		TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-		TEAMBUYTABLE[team][cls] = true
-
-		if SERVER then
-			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(cls)
-			net.Send(GetTeamFilter(team))
-		end
-	end
+	shop.SetEquipmentBought(self, equipmentName)
+	shop.SetEquipmentGlobalBought(equipmentName)
+	shop.SetEquipmentTeamBought(self, equipmentName)
 
 	self:SendBought()
 end
@@ -332,16 +317,16 @@ end
 -- Removes an @{ITEM} or a @{Weapon} from the bought list of a @{Player}
 -- @note This will enable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:AddBought
-function plymeta:RemoveBought(cls)
+function plymeta:RemoveBought(equipmentName)
 	local key
 
 	self.bought = self.bought or {}
 
 	for k = 1, #self.bought do
-		if self.bought[k] ~= tostring(cls) then continue end
+		if self.bought[k] ~= tostring(equipmentName) then continue end
 
 		key = k
 
