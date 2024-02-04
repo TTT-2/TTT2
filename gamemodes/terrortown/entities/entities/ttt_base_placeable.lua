@@ -266,7 +266,7 @@ if SERVER then
 	-- @param[opt] number angleCondition The angle condition that has to be met to apply the rotational offset
 	-- @note On the rotations: A model ca be rotated in three axis. This can be set in `rotationalOffset`. It is
 	-- also possible to tie this to an `angleCondition` that has to be met so that this offset is applied. Such
-	-- a angle condition is any possible angle: if the angle of the hit normal is greater then the provided
+	-- an angle condition is any possible angle: if the angle of the hit normal is greater then the provided
 	-- condition, the offset is applied.
 	-- @return boolean Returns true on success
 	-- @realm server
