@@ -3,7 +3,7 @@
 -- @author Mineotopia
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 local pairs = pairs
@@ -13,9 +13,9 @@ local utilPrecacheModel = util.PrecacheModel
 local mathRandom = math.random
 
 local function GetPlayerSize(ply)
-	local bottom, top = ply:GetHull()
+    local bottom, top = ply:GetHull()
 
-	return top - bottom
+    return top - bottom
 end
 
 ---
@@ -24,32 +24,32 @@ end
 local cvCustomModels = CreateConVar("ttt2_use_custom_models", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local initialDefaultStates = {
-	selected = {
-		["css_phoenix"] = true,
-		["css_arctic"] = true,
-		["css_guerilla"] = true,
-		["css_leet"] = true
-	},
-	hattable = {
-		["css_phoenix"] = true,
-		["css_arctic"] = true,
-		["monk"] = true,
-		["female01"] = true,
-		["female02"] = true,
-		["female03"] = true,
-		["female04"] = true,
-		["female05"] = true,
-		["female06"] = true,
-		["male01"] = true,
-		["male02"] = true,
-		["male03"] = true,
-		["male04"] = true,
-		["male05"] = true,
-		["male06"] = true,
-		["male07"] = true,
-		["male08"] = true,
-		["male09"] = true
-	}
+    selected = {
+        ["css_phoenix"] = true,
+        ["css_arctic"] = true,
+        ["css_guerilla"] = true,
+        ["css_leet"] = true,
+    },
+    hattable = {
+        ["css_phoenix"] = true,
+        ["css_arctic"] = true,
+        ["monk"] = true,
+        ["female01"] = true,
+        ["female02"] = true,
+        ["female03"] = true,
+        ["female04"] = true,
+        ["female05"] = true,
+        ["female06"] = true,
+        ["male01"] = true,
+        ["male02"] = true,
+        ["male03"] = true,
+        ["male04"] = true,
+        ["male05"] = true,
+        ["male06"] = true,
+        ["male07"] = true,
+        ["male08"] = true,
+        ["male09"] = true,
+    },
 }
 
 playermodels = playermodels or {}
@@ -57,8 +57,8 @@ playermodels = playermodels or {}
 playermodels.accessName = "Playermodels"
 playermodels.sqltable = "ttt2_playermodel_pool_changes"
 playermodels.savingKeys = {
-	selected = {typ = "bool", default = false},
-	hattable = {typ = "bool", default = false}
+    selected = { typ = "bool", default = false },
+    hattable = { typ = "bool", default = false },
 }
 playermodels.accessLevel = TTT2_DATABASE_ACCESS_ANY
 
@@ -68,8 +68,8 @@ playermodels.hasHeadHitBox = {}
 
 -- Enums for the states
 playermodels.state = {
-	selected = "selected",
-	hattable = "hattable"
+    selected = "selected",
+    hattable = "hattable",
 }
 
 ---
@@ -79,7 +79,7 @@ playermodels.state = {
 -- @param boolean state The selection state, `true` to enable the model
 -- @realm shared
 function playermodels.UpdateModel(name, valueName, state)
-	database.SetValue(playermodels.accessName, name, valueName, state)
+    database.SetValue(playermodels.accessName, name, valueName, state)
 end
 
 ---
@@ -90,13 +90,18 @@ end
 -- @return[opt] boolean Returns true, if the model is in the selection pool on the server only
 -- @realm shared
 function playermodels.IsSelectedModel(name, OnReceiveFunc)
-	local _, isSelected = database.GetValue(playermodels.accessName, name, "selected", function(databaseExists, value)
-		OnReceiveFunc(value)
-	end)
+    local _, isSelected = database.GetValue(
+        playermodels.accessName,
+        name,
+        "selected",
+        function(databaseExists, value)
+            OnReceiveFunc(value)
+        end
+    )
 
-	if SERVER then
-		return isSelected
-	end
+    if SERVER then
+        return isSelected
+    end
 end
 
 ---
@@ -107,13 +112,18 @@ end
 -- @return[opt] boolean Returns true, if the model is hattable on the server only
 -- @realm shared
 function playermodels.IsHattableModel(name, OnReceiveFunc)
-	local _, isHattable = database.GetValue(playermodels.accessName, name, "hattable", function(databaseExists, value)
-		OnReceiveFunc(value)
-	end)
+    local _, isHattable = database.GetValue(
+        playermodels.accessName,
+        name,
+        "hattable",
+        function(databaseExists, value)
+            OnReceiveFunc(value)
+        end
+    )
 
-	if SERVER then
-		return isHattable
-	end
+    if SERVER then
+        return isHattable
+    end
 end
 
 ---
@@ -122,7 +132,7 @@ end
 -- @return boolean Returns true, if the model has a head hitbox
 -- @realm shared
 function playermodels.HasHeadHitBox(name)
-	return ttt2net.Get({"playermodels", "hasHeadHitBox"})[name]
+    return ttt2net.Get({ "playermodels", "hasHeadHitBox" })[name]
 end
 
 ---
@@ -133,10 +143,15 @@ end
 -- @param string identifier A chosen identifier to be able to remove the callback
 -- @realm shared
 function playermodels.AddChangeCallback(modelName, valueName, callback, identifier)
-	database.AddChangeCallback(playermodels.accessName, modelName, valueName, function(accessName, itemName, key, oldValue, newValue)
-		callback(newValue)
-	end,
-	identifier)
+    database.AddChangeCallback(
+        playermodels.accessName,
+        modelName,
+        valueName,
+        function(accessName, itemName, key, oldValue, newValue)
+            callback(newValue)
+        end,
+        identifier
+    )
 end
 
 ---
@@ -146,34 +161,36 @@ end
 -- @param string identifier The chosen identifier to remove the callback
 -- @realm shared
 function playermodels.RemoveChangeCallback(modelName, valueName, identifier)
-	database.RemoveChangeCallback(playermodels.accessName, modelName, valueName, identifier)
+    database.RemoveChangeCallback(playermodels.accessName, modelName, valueName, identifier)
 end
 
 ---
 -- Reset all selected playermodels, hattability and reinitialize the database.
 -- @realm shared
 function playermodels.Reset()
-	database.Reset(playermodels.accessName)
+    database.Reset(playermodels.accessName)
 end
 
 ---
 -- Server only functions from here on
-if CLIENT then return end
+if CLIENT then
+    return
+end
 
 ---
 -- Returns an indexed table with all the models that are in the selection pool.
 -- @return table An indexed table with all selected player models
 -- @realm server
 function playermodels.GetSelectedModels()
-	local playerModelPoolNames = {}
+    local playerModelPoolNames = {}
 
-	for name in pairs(playerManagerAllValidModels()) do
-		if playermodels.IsSelectedModel(name) then
-			playerModelPoolNames[#playerModelPoolNames + 1] = name
-		end
-	end
+    for name in pairs(playerManagerAllValidModels()) do
+        if playermodels.IsSelectedModel(name) then
+            playerModelPoolNames[#playerModelPoolNames + 1] = name
+        end
+    end
 
-	return playerModelPoolNames
+    return playerModelPoolNames
 end
 
 ---
@@ -182,23 +199,30 @@ end
 -- @internal
 -- @realm server
 function playermodels.Initialize()
-	if not database.Register(playermodels.sqltable, playermodels.accessName, playermodels.savingKeys, playermodels.accessLevel) then
-		return false
-	end
+    if
+        not database.Register(
+            playermodels.sqltable,
+            playermodels.accessName,
+            playermodels.savingKeys,
+            playermodels.accessLevel
+        )
+    then
+        return false
+    end
 
-	for name in pairs(playerManagerAllValidModels()) do
-		for key, defaultStates in pairs(initialDefaultStates) do
-			local state = defaultStates[name]
+    for name in pairs(playerManagerAllValidModels()) do
+        for key, defaultStates in pairs(initialDefaultStates) do
+            local state = defaultStates[name]
 
-			if state ~= nil then
-				database.SetDefaultValue(playermodels.accessName, name, key, state)
-			end
-		end
-	end
+            if state ~= nil then
+                database.SetDefaultValue(playermodels.accessName, name, key, state)
+            end
+        end
+    end
 
-	playermodels.InitializeHeadHitBoxes()
+    playermodels.InitializeHeadHitBoxes()
 
-	return true
+    return true
 end
 
 ---
@@ -207,25 +231,25 @@ end
 -- @note Do not use before @{GM:InitPostEntity} has been called, otherwise the server will crash!
 -- @realm server
 function playermodels.InitializeHeadHitBoxes()
-	local testingEnt = ents.Create("ttt_model_tester")
+    local testingEnt = ents.Create("ttt_model_tester")
 
-	for name, model in pairs(playerManagerAllValidModels()) do
-		testingEnt:SetModel(model)
+    for name, model in pairs(playerManagerAllValidModels()) do
+        testingEnt:SetModel(model)
 
-		for i = 1, testingEnt:GetHitBoxCount(0) do
-			if testingEnt:GetHitBoxHitGroup(i - 1, 0) == HITGROUP_HEAD then
-				playermodels.hasHeadHitBox[name] = true
+        for i = 1, testingEnt:GetHitBoxCount(0) do
+            if testingEnt:GetHitBoxHitGroup(i - 1, 0) == HITGROUP_HEAD then
+                playermodels.hasHeadHitBox[name] = true
 
-				break
-			end
+                break
+            end
 
-			playermodels.hasHeadHitBox[name] = false
-		end
-	end
+            playermodels.hasHeadHitBox[name] = false
+        end
+    end
 
-	ttt2net.Set({"playermodels", "hasHeadHitBox"}, {type = "table"}, playermodels.hasHeadHitBox)
+    ttt2net.Set({ "playermodels", "hasHeadHitBox" }, { type = "table" }, playermodels.hasHeadHitBox)
 
-	testingEnt:Remove()
+    testingEnt:Remove()
 end
 
 ---
@@ -235,9 +259,9 @@ end
 -- @internal
 -- @realm server
 function playermodels.PrecacheModels()
-	for _, model in pairs(playerManagerAllValidModels()) do
-		utilPrecacheModel(model)
-	end
+    for _, model in pairs(playerManagerAllValidModels()) do
+        utilPrecacheModel(model)
+    end
 end
 
 ---
@@ -245,17 +269,17 @@ end
 -- @return Model model The selected playermodel
 -- @realm server
 function playermodels.GetRandomPlayerModel()
-	local availableModels = playermodels.GetSelectedModels()
-	local sizeAvailableModels = #availableModels
+    local availableModels = playermodels.GetSelectedModels()
+    local sizeAvailableModels = #availableModels
 
-	if cvCustomModels:GetBool() and sizeAvailableModels > 0 then
-		local modelPaths = playerManagerAllValidModels()
-		local randomModel = availableModels[mathRandom(sizeAvailableModels)]
+    if cvCustomModels:GetBool() and sizeAvailableModels > 0 then
+        local modelPaths = playerManagerAllValidModels()
+        local randomModel = availableModels[mathRandom(sizeAvailableModels)]
 
-		return Model(modelPaths[randomModel])
-	else
-		return Model(playermodels.fallbackModel)
-	end
+        return Model(modelPaths[randomModel])
+    else
+        return Model(playermodels.fallbackModel)
+    end
 end
 
 ---
@@ -265,18 +289,18 @@ end
 -- @return Angle ang The angle of the attach point.
 -- @realm shared
 function playermodels.GetHatPosition(ply)
-	local pos, ang
-	if IsValid(ply) then
-		local bone = ply:LookupBone("ValveBiped.Bip01_Head1")
-		if bone then
-			pos, ang = ply:GetBonePosition(bone)
-		else
-			pos, ang = ply:GetPos(), ply:GetAngles()
-			pos.z = pos.z + GetPlayerSize(ply).z
-		end
-	end
+    local pos, ang
+    if IsValid(ply) then
+        local bone = ply:LookupBone("ValveBiped.Bip01_Head1")
+        if bone then
+            pos, ang = ply:GetBonePosition(bone)
+        else
+            pos, ang = ply:GetPos(), ply:GetAngles()
+            pos.z = pos.z + GetPlayerSize(ply).z
+        end
+    end
 
-	return pos, ang
+    return pos, ang
 end
 
 ---
@@ -287,23 +311,27 @@ end
 -- @param[opt] string hatName The class name of the hat entity, if different from the detective's hat.
 -- @realm server
 function playermodels.ApplyPlayerHat(ply, Filter, hatName)
-	if IsValid(ply.hat) or (isfunction(Filter) and not Filter(ply)) then return end
+    if IsValid(ply.hat) or (isfunction(Filter) and not Filter(ply)) then
+        return
+    end
 
-	local hat = ents.Create(hatName or "ttt_hat_deerstalker")
+    local hat = ents.Create(hatName or "ttt_hat_deerstalker")
 
-	if not IsValid(hat) then return end
+    if not IsValid(hat) then
+        return
+    end
 
-	local pos, ang = playermodels.GetHatPosition(ply)
-	hat:SetPos(pos)
-	hat:SetAngles(ang)
-	hat:SetParent(ply)
+    local pos, ang = playermodels.GetHatPosition(ply)
+    hat:SetPos(pos)
+    hat:SetAngles(ang)
+    hat:SetParent(ply)
 
-	if isfunction(hat.EquipTo) then
-		hat:EquipTo(ply)
-	end
-	ply.hat = hat
+    if isfunction(hat.EquipTo) then
+        hat:EquipTo(ply)
+    end
+    ply.hat = hat
 
-	hat:Spawn()
+    hat:Spawn()
 end
 
 ---
@@ -311,11 +339,13 @@ end
 -- @param Player ply The player whose hat should be removed
 -- @realm server
 function playermodels.RemovePlayerHat(ply)
-	if not IsValid(ply.hat) then return end
+    if not IsValid(ply.hat) then
+        return
+    end
 
-	SafeRemoveEntity(ply.hat)
+    SafeRemoveEntity(ply.hat)
 
-	ply.hat = nil
+    ply.hat = nil
 end
 
 ---
@@ -324,5 +354,5 @@ end
 -- @return boolean Returns true if the player's model can have a detective hat
 -- @realm server
 function playermodels.PlayerCanHaveHat(ply)
-	return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
+    return playermodels.IsHattableModel(playerManagerTranslateToPlayerModelName(ply:GetModel()))
 end

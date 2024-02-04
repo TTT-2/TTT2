@@ -1,4 +1,6 @@
-if engine.ActiveGamemode() ~= "terrortown" then return end
+if engine.ActiveGamemode() ~= "terrortown" then
+    return
+end
 
 -- This file forces clients to download the icons
 -- If you are distributing those files via FastDL, comment out the line below.

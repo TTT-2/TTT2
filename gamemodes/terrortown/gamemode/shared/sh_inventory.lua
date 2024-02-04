@@ -2,101 +2,101 @@
 -- @section Inventory
 
 if SERVER then
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxMeleeSlots = CreateConVar("ttt2_max_melee_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of melee weapons, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxMeleeSlots = CreateConVar("ttt2_max_melee_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of melee weapons, a player can carry (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxSecondarySlots = CreateConVar("ttt2_max_secondary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of secondary weapons, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxSecondarySlots = CreateConVar("ttt2_max_secondary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of secondary weapons, a player can carry (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxPrimarySlots = CreateConVar("ttt2_max_primary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of primary weapons, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxPrimarySlots = CreateConVar("ttt2_max_primary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of primary weapons, a player can carry (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxNadeSlots = CreateConVar("ttt2_max_nade_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of grenades, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxNadeSlots = CreateConVar("ttt2_max_nade_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of grenades, a player can carry (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxCarrySlots = CreateConVar("ttt2_max_carry_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of carry tools, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxCarrySlots = CreateConVar("ttt2_max_carry_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of carry tools, a player can carry (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxUnarmedSlots = CreateConVar("ttt2_max_unarmed_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of unarmed slots, a player can have (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxUnarmedSlots = CreateConVar("ttt2_max_unarmed_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of unarmed slots, a player can have (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxSpecialSlots = CreateConVar("ttt2_max_special_slots", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of special weapons, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxSpecialSlots = CreateConVar("ttt2_max_special_slots", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of special weapons, a player can carry (-1 = infinite)")
 
-	---
-	-- @realm server
-	-- stylua: ignore
-	local maxExtraSlots = CreateConVar("ttt2_max_extra_slots", "-1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of extra weapons, a player can carry (-1 = infinite)")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local maxExtraSlots = CreateConVar("ttt2_max_extra_slots", "-1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of extra weapons, a player can carry (-1 = infinite)")
 
-	hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
-		SetGlobalInt(maxMeleeSlots:GetName(), maxMeleeSlots:GetInt())
-		SetGlobalInt(maxSecondarySlots:GetName(), maxSecondarySlots:GetInt())
-		SetGlobalInt(maxPrimarySlots:GetName(), maxPrimarySlots:GetInt())
-		SetGlobalInt(maxNadeSlots:GetName(), maxNadeSlots:GetInt())
-		SetGlobalInt(maxCarrySlots:GetName(), maxCarrySlots:GetInt())
-		SetGlobalInt(maxUnarmedSlots:GetName(), maxUnarmedSlots:GetInt())
-		SetGlobalInt(maxSpecialSlots:GetName(), maxSpecialSlots:GetInt())
-		SetGlobalInt(maxExtraSlots:GetName(), maxExtraSlots:GetInt())
-		SetGlobalInt("ttt2_max_class_slots", -1)
-	end)
+    hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
+        SetGlobalInt(maxMeleeSlots:GetName(), maxMeleeSlots:GetInt())
+        SetGlobalInt(maxSecondarySlots:GetName(), maxSecondarySlots:GetInt())
+        SetGlobalInt(maxPrimarySlots:GetName(), maxPrimarySlots:GetInt())
+        SetGlobalInt(maxNadeSlots:GetName(), maxNadeSlots:GetInt())
+        SetGlobalInt(maxCarrySlots:GetName(), maxCarrySlots:GetInt())
+        SetGlobalInt(maxUnarmedSlots:GetName(), maxUnarmedSlots:GetInt())
+        SetGlobalInt(maxSpecialSlots:GetName(), maxSpecialSlots:GetInt())
+        SetGlobalInt(maxExtraSlots:GetName(), maxExtraSlots:GetInt())
+        SetGlobalInt("ttt2_max_class_slots", -1)
+    end)
 
-	cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxMeleeSlotsChange")
+    cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxMeleeSlotsChange")
 
-	cvars.AddChangeCallback(maxSecondarySlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxSecondarySlotsChange")
+    cvars.AddChangeCallback(maxSecondarySlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxSecondarySlotsChange")
 
-	cvars.AddChangeCallback(maxPrimarySlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxPrimarySlotsChange")
+    cvars.AddChangeCallback(maxPrimarySlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxPrimarySlotsChange")
 
-	cvars.AddChangeCallback(maxNadeSlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxNadeSlotsChange")
+    cvars.AddChangeCallback(maxNadeSlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxNadeSlotsChange")
 
-	cvars.AddChangeCallback(maxCarrySlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxCarrySlotsChange")
+    cvars.AddChangeCallback(maxCarrySlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxCarrySlotsChange")
 
-	cvars.AddChangeCallback(maxUnarmedSlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxUnarmedSlotsChange")
+    cvars.AddChangeCallback(maxUnarmedSlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxUnarmedSlotsChange")
 
-	cvars.AddChangeCallback(maxSpecialSlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxSpecialSlotsChange")
+    cvars.AddChangeCallback(maxSpecialSlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxSpecialSlotsChange")
 
-	cvars.AddChangeCallback(maxExtraSlots:GetName(), function(name, old, new)
-		SetGlobalInt(name, tonumber(new))
-	end, "TTT2MaxExtraSlotsChange")
+    cvars.AddChangeCallback(maxExtraSlots:GetName(), function(name, old, new)
+        SetGlobalInt(name, tonumber(new))
+    end, "TTT2MaxExtraSlotsChange")
 end
 
 ORDERED_SLOT_TABLE = {
-	[WEAPON_MELEE] = "ttt2_max_melee_slots",
-	[WEAPON_PISTOL] = "ttt2_max_secondary_slots",
-	[WEAPON_HEAVY] = "ttt2_max_primary_slots",
-	[WEAPON_NADE] = "ttt2_max_nade_slots",
-	[WEAPON_CARRY] = "ttt2_max_carry_slots",
-	[WEAPON_UNARMED] = "ttt2_max_unarmed_slots",
-	[WEAPON_SPECIAL] = "ttt2_max_special_slots",
-	[WEAPON_EXTRA] = "ttt2_max_extra_slots",
-	[WEAPON_CLASS] = "ttt2_max_class_slots"
+    [WEAPON_MELEE] = "ttt2_max_melee_slots",
+    [WEAPON_PISTOL] = "ttt2_max_secondary_slots",
+    [WEAPON_HEAVY] = "ttt2_max_primary_slots",
+    [WEAPON_NADE] = "ttt2_max_nade_slots",
+    [WEAPON_CARRY] = "ttt2_max_carry_slots",
+    [WEAPON_UNARMED] = "ttt2_max_unarmed_slots",
+    [WEAPON_SPECIAL] = "ttt2_max_special_slots",
+    [WEAPON_EXTRA] = "ttt2_max_extra_slots",
+    [WEAPON_CLASS] = "ttt2_max_class_slots",
 }
 
 ---
@@ -105,11 +105,11 @@ ORDERED_SLOT_TABLE = {
 -- @return number valid kind
 -- @realm shared
 function MakeKindValid(kind)
-	if not kind or kind > WEAPON_CLASS or kind < WEAPON_MELEE then
-		return WEAPON_EXTRA
-	else
-		return kind
-	end
+    if not kind or kind > WEAPON_CLASS or kind < WEAPON_MELEE then
+        return WEAPON_EXTRA
+    else
+        return kind
+    end
 end
 
 ---
@@ -119,9 +119,11 @@ end
 -- @param Player ply
 -- @realm shared
 function CleanupInventoryIfDirty(ply)
-	if ply.inventory and not ply.refresh_inventory_cache then return end
+    if ply.inventory and not ply.refresh_inventory_cache then
+        return
+    end
 
-	CleanupInventory(ply)
+    CleanupInventory(ply)
 end
 
 ---
@@ -129,31 +131,35 @@ end
 -- @param Player ply
 -- @realm shared
 function CleanupInventory(ply)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	ply.refresh_inventory_cache = false
-	ply.inventory = {}
+    ply.refresh_inventory_cache = false
+    ply.inventory = {}
 
-	for k in pairs(ORDERED_SLOT_TABLE) do
-		ply.inventory[k] = {}
-	end
+    for k in pairs(ORDERED_SLOT_TABLE) do
+        ply.inventory[k] = {}
+    end
 
-	-- add weapons which are already in inventory
-	local weaponsInInventory = 0
-	local weps = ply:GetWeapons()
+    -- add weapons which are already in inventory
+    local weaponsInInventory = 0
+    local weps = ply:GetWeapons()
 
-	for i = 1, #weps do
-		if not weps[i].Kind then continue end
+    for i = 1, #weps do
+        if not weps[i].Kind then
+            continue
+        end
 
-		AddWeaponToInventory(ply, weps[i])
+        AddWeaponToInventory(ply, weps[i])
 
-		weaponsInInventory = weaponsInInventory + 1
-	end
+        weaponsInInventory = weaponsInInventory + 1
+    end
 
-	-- no valid weapons found (try again)
-	if weaponsInInventory == 0 then
-		ply.refresh_inventory_cache = true
-	end
+    -- no valid weapons found (try again)
+    if weaponsInInventory == 0 then
+        ply.refresh_inventory_cache = true
+    end
 end
 
 ---
@@ -163,16 +169,16 @@ end
 -- @return boolean
 -- @realm shared
 function InventorySlotFree(ply, kind)
-	if not IsValid(ply) then
-		return false
-	end
+    if not IsValid(ply) then
+        return false
+    end
 
-	CleanupInventoryIfDirty(ply)
+    CleanupInventoryIfDirty(ply)
 
-	local invSlot = MakeKindValid(kind)
-	local slotCount = GetGlobalInt(ORDERED_SLOT_TABLE[invSlot])
+    local invSlot = MakeKindValid(kind)
+    local slotCount = GetGlobalInt(ORDERED_SLOT_TABLE[invSlot])
 
-	return slotCount < 0 or #ply.inventory[invSlot] < slotCount
+    return slotCount < 0 or #ply.inventory[invSlot] < slotCount
 end
 
 SWITCHMODE_PICKUP = 0
@@ -189,60 +195,59 @@ SWITCHMODE_NOSPACE = 3
 -- @return boolean The switchmode
 -- @realm shared
 function GetBlockingWeapon(ply, wep)
-	-- start the drop weapon check by checking the active weapon
-	local activeWeapon = ply:GetActiveWeapon()
-	local throwWeapon, switchMode
+    -- start the drop weapon check by checking the active weapon
+    local activeWeapon = ply:GetActiveWeapon()
+    local throwWeapon, switchMode
 
-	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
+    local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
 
-	-- if there is no room to drop the weapon, the pickup should be prohibited
-	if tr.HitWorld then
-		throwWeapon = nil
-		switchMode = SWITCHMODE_NOSPACE
+    -- if there is no room to drop the weapon, the pickup should be prohibited
+    if tr.HitWorld then
+        throwWeapon = nil
+        switchMode = SWITCHMODE_NOSPACE
 
-	-- if the player already has this weapon class, the weapon has to be dropped
-	elseif ply:HasWeapon(WEPS.GetClass(wep)) then
-		throwWeapon = ply:GetWeapon(WEPS.GetClass(wep))
-		switchMode = SWITCHMODE_SWITCH
+    -- if the player already has this weapon class, the weapon has to be dropped
+    elseif ply:HasWeapon(WEPS.GetClass(wep)) then
+        throwWeapon = ply:GetWeapon(WEPS.GetClass(wep))
+        switchMode = SWITCHMODE_SWITCH
 
-	-- if the player has a slot free while also not yet having this weapon class
-	elseif InventorySlotFree(ply, wep.Kind) then
-		throwWeapon = nil
-		switchMode = SWITCHMODE_PICKUP
+    -- if the player has a slot free while also not yet having this weapon class
+    elseif InventorySlotFree(ply, wep.Kind) then
+        throwWeapon = nil
+        switchMode = SWITCHMODE_PICKUP
 
-	-- if the player has already a weapon with the same class selected - drop this one
-	elseif IsValid(activeWeapon) and activeWeapon.AllowDrop and activeWeapon.Kind == wep.Kind then
-		throwWeapon = activeWeapon
-		switchMode = SWITCHMODE_SWITCH
+    -- if the player has already a weapon with the same class selected - drop this one
+    elseif IsValid(activeWeapon) and activeWeapon.AllowDrop and activeWeapon.Kind == wep.Kind then
+        throwWeapon = activeWeapon
+        switchMode = SWITCHMODE_SWITCH
 
-	-- try to find a dropable weapon in the selected slot
-	else
-		local weps = ply.inventory[MakeKindValid(wep.Kind)]
-		switchMode = SWITCHMODE_FULLINV
+    -- try to find a dropable weapon in the selected slot
+    else
+        local weps = ply.inventory[MakeKindValid(wep.Kind)]
+        switchMode = SWITCHMODE_FULLINV
 
-		-- get droppable weapon from given slot
-		for i = 1, #weps do
-			local wep_iter = weps[i]
+        -- get droppable weapon from given slot
+        for i = 1, #weps do
+            local wep_iter = weps[i]
 
-			-- found a weapon that is allowed to be dropped
-			if IsValid(wep_iter) and wep_iter.AllowDrop then
-				throwWeapon = wep_iter
-				switchMode = SWITCHMODE_SWITCH
+            -- found a weapon that is allowed to be dropped
+            if IsValid(wep_iter) and wep_iter.AllowDrop then
+                throwWeapon = wep_iter
+                switchMode = SWITCHMODE_SWITCH
 
-				break
-			end
-		end
-	end
+                break
+            end
+        end
+    end
 
-	-- now make sure the selected weapon is valid and dropable
-	if IsValid(throwWeapon) and not throwWeapon.AllowDrop then
-		throwWeapon = nil
-		switchMode = SWITCHMODE_FULLINV
-	end
+    -- now make sure the selected weapon is valid and dropable
+    if IsValid(throwWeapon) and not throwWeapon.AllowDrop then
+        throwWeapon = nil
+        switchMode = SWITCHMODE_FULLINV
+    end
 
-	return throwWeapon, throwWeapon == activeWeapon, switchMode
+    return throwWeapon, throwWeapon == activeWeapon, switchMode
 end
-
 
 ---
 -- Adds a @{Weapon} into the Inventory
@@ -251,17 +256,17 @@ end
 -- @return boolean whether it was successful
 -- @realm shared
 function AddWeaponToInventory(ply, wep)
-	if not IsValid(ply) then
-		return false
-	end
+    if not IsValid(ply) then
+        return false
+    end
 
-	CleanupInventoryIfDirty(ply)
+    CleanupInventoryIfDirty(ply)
 
-	local invSlot = MakeKindValid(wep.Kind)
+    local invSlot = MakeKindValid(wep.Kind)
 
-	ply.inventory[invSlot][#ply.inventory[invSlot] + 1] = wep
+    ply.inventory[invSlot][#ply.inventory[invSlot] + 1] = wep
 
-	return true
+    return true
 end
 
 ---
@@ -271,15 +276,15 @@ end
 -- @return boolean whether it was successful
 -- @realm shared
 function RemoveWeaponFromInventory(ply, wep)
-	if not IsValid(ply) then
-		return false
-	end
+    if not IsValid(ply) then
+        return false
+    end
 
-	CleanupInventoryIfDirty(ply)
+    CleanupInventoryIfDirty(ply)
 
-	local invSlot = MakeKindValid(wep.Kind)
+    local invSlot = MakeKindValid(wep.Kind)
 
-	table.RemoveByValue(ply.inventory[invSlot], wep)
+    table.RemoveByValue(ply.inventory[invSlot], wep)
 
-	return true
+    return true
 end

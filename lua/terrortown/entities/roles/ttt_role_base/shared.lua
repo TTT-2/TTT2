@@ -7,93 +7,93 @@
 ROLE.isAbstract = true
 
 ROLE.score = {
-	-- The multiplier that is used to calculate the score penalty
-	-- that is added if this role kills a team member.
-	teamKillsMultiplier = 0,
+    -- The multiplier that is used to calculate the score penalty
+    -- that is added if this role kills a team member.
+    teamKillsMultiplier = 0,
 
-	-- The multiplier that is used to calculate the gained score
-	-- by killing someone from a different team.
-	killsMultiplier = 0,
+    -- The multiplier that is used to calculate the gained score
+    -- by killing someone from a different team.
+    killsMultiplier = 0,
 
-	-- The amount of score points gained by confirming a body.
-	bodyFoundMuliplier = 1,
+    -- The amount of score points gained by confirming a body.
+    bodyFoundMuliplier = 1,
 
-	-- The amount of score points gained by surviving a round,
-	-- based on the amount of dead enemy players. Only applied when
-	-- in winning team.
-	surviveBonusMultiplier = 0,
+    -- The amount of score points gained by surviving a round,
+    -- based on the amount of dead enemy players. Only applied when
+    -- in winning team.
+    surviveBonusMultiplier = 0,
 
-	-- The amount of score point lost by surviving a round, based
-	-- on the amount of surviving team players. Only applied when
-	-- not in winning team.
-	survivePenaltyMultiplier = 0,
+    -- The amount of score point lost by surviving a round, based
+    -- on the amount of surviving team players. Only applied when
+    -- not in winning team.
+    survivePenaltyMultiplier = 0,
 
-	-- The amount of score points granted due to a survival of the
-	-- round for every teammate alive.
-	aliveTeammatesBonusMultiplier = 1,
+    -- The amount of score points granted due to a survival of the
+    -- round for every teammate alive.
+    aliveTeammatesBonusMultiplier = 1,
 
-	-- Multiplier for a score for every player alive at the end of
-	-- the round. Can be negative for roles that should kill everyone.
-	allSurviveBonusMultiplier = 0,
+    -- Multiplier for a score for every player alive at the end of
+    -- the round. Can be negative for roles that should kill everyone.
+    allSurviveBonusMultiplier = 0,
 
-	-- The amount of score points gained by being alive if the
-	-- round ended with nobody winning, usually a negative number.
-	timelimitMultiplier = 0,
+    -- The amount of score points gained by being alive if the
+    -- round ended with nobody winning, usually a negative number.
+    timelimitMultiplier = 0,
 
-	-- The amount of points gained by killing yourself. Should be a
-	-- negative number for most roles.
-	suicideMultiplier = -1
+    -- The amount of points gained by killing yourself. Should be a
+    -- negative number for most roles.
+    suicideMultiplier = -1,
 }
 
 ROLE.karma = {
-	-- The multiplier that is used to calculate the Karma penalty for a team kill.
-	-- Keep in mind that the game will increase the multiplier further if it was avoidable
-	-- like a kill on a public policing role.
-	teamKillPenaltyMultiplier = 1,
+    -- The multiplier that is used to calculate the Karma penalty for a team kill.
+    -- Keep in mind that the game will increase the multiplier further if it was avoidable
+    -- like a kill on a public policing role.
+    teamKillPenaltyMultiplier = 1,
 
-	-- The multiplier that is used to calculate the Karma penalty for team damage.
-	-- Keep in mind that the game will increase the multiplier further if it was avoidable
-	-- like damage applied to a public policing role.
-	teamHurtPenaltyMultiplier = 1,
+    -- The multiplier that is used to calculate the Karma penalty for team damage.
+    -- Keep in mind that the game will increase the multiplier further if it was avoidable
+    -- like damage applied to a public policing role.
+    teamHurtPenaltyMultiplier = 1,
 
-	-- The multiplier that is used to change the Karma given to the killer if a player
-	-- from an enemy team is killed.
-	enemyKillBonusMultiplier = 1,
+    -- The multiplier that is used to change the Karma given to the killer if a player
+    -- from an enemy team is killed.
+    enemyKillBonusMultiplier = 1,
 
-	-- The multiplier that is used to change the Karma given to the attacker if a player
-	-- from an enemy team is damaged.
-	enemyHurtBonusMultiplier = 1,
+    -- The multiplier that is used to change the Karma given to the attacker if a player
+    -- from an enemy team is damaged.
+    enemyHurtBonusMultiplier = 1,
 }
 
 ROLE.conVarData = {
-	-- The percentage of players that get this role.
-	pct = 0.4,
+    -- The percentage of players that get this role.
+    pct = 0.4,
 
-	-- The maximum amount of players that get this role.
-	maximum = 32,
+    -- The maximum amount of players that get this role.
+    maximum = 32,
 
-	-- The minimum amount of players that have to be available fot this role to be selected.
-	minPlayers = 1,
+    -- The minimum amount of players that have to be available fot this role to be selected.
+    minPlayers = 1,
 
-	-- The minimum amount of Karma needed for selection.
-	minKarma = 0,
+    -- The minimum amount of Karma needed for selection.
+    minKarma = 0,
 
-	-- Defines if the role has access to traitor buttons.
-	traitorButton = 0,
+    -- Defines if the role has access to traitor buttons.
+    traitorButton = 0,
 
-	-- Sets the amount of credits the role is starting with.
-	credits = 0,
+    -- Sets the amount of credits the role is starting with.
+    credits = 0,
 
-	-- Defines if this role gains credits if a certain percentage of players
-	-- from other teams is dead.
-	creditsAwardDeadEnable = 0,
+    -- Defines if this role gains credits if a certain percentage of players
+    -- from other teams is dead.
+    creditsAwardDeadEnable = 0,
 
-	-- Defines if this role is awarded with credits for the kill of a high profile.
-	-- policing role, such as a detective.
-	creditsAwardKillEnable = 0,
+    -- Defines if this role is awarded with credits for the kill of a high profile.
+    -- policing role, such as a detective.
+    creditsAwardKillEnable = 0,
 
-	-- Sets the shop for this role, by default roles have no shop set.
-	shopFallback = SHOP_DISABLED,
+    -- Sets the shop for this role, by default roles have no shop set.
+    shopFallback = SHOP_DISABLED,
 }
 
 -- This role variable makes the role unselectable if set to true. This might be
@@ -173,9 +173,7 @@ ROLE.disabledTeamVoiceRecv = false
 -- This is mostly used to register the defaultTeam, shopFallback, etc...
 -- @hook
 -- @realm shared
-function ROLE:PreInitialize()
-
-end
+function ROLE:PreInitialize() end
 
 ---
 -- This function is called after all roles have been loaded with their
@@ -186,18 +184,16 @@ end
 -- (eg. @{LANG} function calls).
 -- @hook
 -- @realm shared
-function ROLE:Initialize()
-
-end
+function ROLE:Initialize() end
 
 ---
 -- Returns the starting credits of a @{ROLE} based on ConVar settings or default traitor settings
 -- @return[default=0] number
 -- @realm shared
 function ROLE:GetStartingCredits()
-	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_starting")
+    local cv = GetConVar("ttt_" .. self.abbr .. "_credits_starting")
 
-	return cv and cv:GetInt() or 0
+    return cv and cv:GetInt() or 0
 end
 
 ---
@@ -205,13 +201,13 @@ end
 -- @return[default=false] boolean
 -- @realm shared
 function ROLE:IsShoppingRole()
-	if self.subrole == ROLE_NONE then
-		return false
-	end
+    if self.subrole == ROLE_NONE then
+        return false
+    end
 
-	local shopFallback = GetGlobalString("ttt_" .. self.abbr .. "_shop_fallback")
+    local shopFallback = GetGlobalString("ttt_" .. self.abbr .. "_shop_fallback")
 
-	return shopFallback ~= SHOP_DISABLED
+    return shopFallback ~= SHOP_DISABLED
 end
 
 ---
@@ -219,7 +215,7 @@ end
 -- @return boolean
 -- @realm shared
 function ROLE:IsBaseRole()
-	return self.baserole == nil
+    return self.baserole == nil
 end
 
 ---
@@ -228,9 +224,11 @@ end
 -- @deprecated
 -- @realm shared
 function ROLE:SetBaseRole(baserole)
-	ErrorNoHaltWithStack("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
+    ErrorNoHaltWithStack(
+        "[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!"
+    )
 
-	roles.SetBaseRole(self, baserole)
+    roles.SetBaseRole(self, baserole)
 end
 
 ---
@@ -238,7 +236,7 @@ end
 -- @return number subrole id of the BaseRole (@{ROLE})
 -- @realm shared
 function ROLE:GetBaseRole()
-	return self.baserole or self.index
+    return self.baserole or self.index
 end
 
 ---
@@ -246,19 +244,19 @@ end
 -- @return table list of @{ROLE}
 -- @realm shared
 function ROLE:GetSubRoles()
-	local br = self:GetBaseRole()
-	local tmp = {}
-	local rlsList = roles.GetList()
+    local br = self:GetBaseRole()
+    local tmp = {}
+    local rlsList = roles.GetList()
 
-	for k = 1, #rlsList do
-		local v = rlsList[k]
+    for k = 1, #rlsList do
+        local v = rlsList[k]
 
-		if v.baserole and v.baserole == br or v.index == br then
-			tmp[#tmp + 1] = v
-		end
-	end
+        if v.baserole and v.baserole == br or v.index == br then
+            tmp[#tmp + 1] = v
+        end
+    end
 
-	return tmp
+    return tmp
 end
 
 ---
@@ -266,7 +264,7 @@ end
 -- @return boolean
 -- @realm shared
 function ROLE:CanUseTraitorButton()
-	local cv = GetConVar("ttt_" .. self.name .. "_traitor_button")
+    local cv = GetConVar("ttt_" .. self.name .. "_traitor_button")
 
-	return cv and cv:GetBool() or false
+    return cv and cv:GetBool() or false
 end

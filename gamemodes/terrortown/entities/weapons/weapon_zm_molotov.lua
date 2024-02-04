@@ -1,18 +1,18 @@
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 SWEP.HoldType = "grenade"
 
 if CLIENT then
-	SWEP.PrintName = "grenade_fire"
-	SWEP.Slot = 3
+    SWEP.PrintName = "grenade_fire"
+    SWEP.Slot = 3
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 54
+    SWEP.ViewModelFlip = false
+    SWEP.ViewModelFOV = 54
 
-	SWEP.Icon = "vgui/ttt/icon_firegrenade"
-	SWEP.IconLetter = "P"
+    SWEP.Icon = "vgui/ttt/icon_firegrenade"
+    SWEP.IconLetter = "P"
 end
 
 SWEP.Base = "weapon_tttbasegrenade"
@@ -34,5 +34,5 @@ SWEP.Spawnable = true
 -- really the only difference between grenade weapons: the model and the thrown ent.
 -- @ignore
 function SWEP:GetGrenadeName()
-	return "ttt_firegrenade_proj"
+    return "ttt_firegrenade_proj"
 end

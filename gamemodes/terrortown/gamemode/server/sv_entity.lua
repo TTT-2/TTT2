@@ -3,18 +3,20 @@
 -- @class Entity
 
 local safeCollisionGroups = {
-	[COLLISION_GROUP_WEAPON] = true
+    [COLLISION_GROUP_WEAPON] = true,
 }
 
 local entmeta = FindMetaTable("Entity")
-if not entmeta then return end
+if not entmeta then
+    return
+end
 
 ---
 -- Sets the @{Entity}'s damage owner and the current time
 -- @param Player ply
 -- @realm server
 function entmeta:SetDamageOwner(ply)
-	self.dmg_owner = {ply = ply, t = CurTime()}
+    self.dmg_owner = { ply = ply, t = CurTime() }
 end
 
 ---
@@ -23,9 +25,11 @@ end
 -- @return number the time the damage owner was set
 -- @realm server
 function entmeta:GetDamageOwner()
-	if self.dmg_owner == nil then return end
+    if self.dmg_owner == nil then
+        return
+    end
 
-	return self.dmg_owner.ply, self.dmg_owner.t
+    return self.dmg_owner.ply, self.dmg_owner.t
 end
 
 ---
@@ -33,9 +37,9 @@ end
 -- @return boolean
 -- @realm server
 function entmeta:IsExplosive()
-	local kv = self:GetKeyValues()["ExplodeDamage"]
+    local kv = self:GetKeyValues()["ExplodeDamage"]
 
-	return self:Health() > 0 and kv and kv > 0
+    return self:Health() > 0 and kv and kv > 0
 end
 
 ---
@@ -43,7 +47,7 @@ end
 -- @return boolean Returns if the entity is passable
 -- @realm server
 function entmeta:HasPassableCollisionGrup()
-	return safeCollisionGroups[self:GetCollisionGroup()]
+    return safeCollisionGroups[self:GetCollisionGroup()]
 end
 
 local oldSpawn = entmeta.Spawn
@@ -54,14 +58,14 @@ local oldSpawn = entmeta.Spawn
 -- or @{Player:SpawnForRound} if you want to (re-)spawn the player.
 -- @realm server
 function entmeta:Spawn()
-	if self:IsPlayer() then
-		local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+    if self:IsPlayer() then
+        local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-		if spawnPoint then
-			self:SetPos(spawnPoint.pos)
-			self:SetAngles(spawnPoint.ang)
-		end
-	end
+        if spawnPoint then
+            self:SetPos(spawnPoint.pos)
+            self:SetAngles(spawnPoint.ang)
+        end
+    end
 
-	oldSpawn(self)
+    oldSpawn(self)
 end

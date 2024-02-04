@@ -3,7 +3,7 @@
 -- @author EntranceJew
 -- @module gameEffects
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 gameEffects = {}
@@ -23,42 +23,53 @@ gameEffects = {}
 -- @param number lifetime_variance The amount each lifetime for each fire can vary.
 -- @return table A table full of the fire entities.
 -- @realm shared
-function gameEffects.StartFires(pos, tr, num, lifetime, explode, dmgowner, spread_force, immobile, size, lifetime_variance)
-	local flames = {}
-	for i = 1, num do
-		local ang = Angle(-math.Rand(0, 180), math.Rand(0, 360), math.Rand(0, 360))
-		local vstart = pos + tr.HitNormal * 64
-		local ttl = lifetime + math.Rand(-lifetime_variance, lifetime_variance)
+function gameEffects.StartFires(
+    pos,
+    tr,
+    num,
+    lifetime,
+    explode,
+    dmgowner,
+    spread_force,
+    immobile,
+    size,
+    lifetime_variance
+)
+    local flames = {}
+    for i = 1, num do
+        local ang = Angle(-math.Rand(0, 180), math.Rand(0, 360), math.Rand(0, 360))
+        local vstart = pos + tr.HitNormal * 64
+        local ttl = lifetime + math.Rand(-lifetime_variance, lifetime_variance)
 
-		local flame = ents.Create("ttt_flame")
-		flame:SetPos(vstart)
-		flame:SetFlameSize(size)
-		flame:SetLifeSpan(ttl)
-		flame:SetImmobile(immobile)
+        local flame = ents.Create("ttt_flame")
+        flame:SetPos(vstart)
+        flame:SetFlameSize(size)
+        flame:SetLifeSpan(ttl)
+        flame:SetImmobile(immobile)
 
-		if IsValid(dmgowner) and dmgowner:IsPlayer() then
-			flame:SetDamageParent(dmgowner)
-			flame:SetOwner(dmgowner)
-		end
+        if IsValid(dmgowner) and dmgowner:IsPlayer() then
+            flame:SetDamageParent(dmgowner)
+            flame:SetOwner(dmgowner)
+        end
 
-		flame:SetDieTime(CurTime() + ttl)
-		flame:SetExplodeOnDeath(explode)
-		flame:Spawn()
-		flame:PhysWake()
+        flame:SetDieTime(CurTime() + ttl)
+        flame:SetExplodeOnDeath(explode)
+        flame:Spawn()
+        flame:PhysWake()
 
-		local phys = flame:GetPhysicsObject()
+        local phys = flame:GetPhysicsObject()
 
-		if IsValid(phys) then
-			-- the balance between mass and force is subtle, be careful adjusting
-			phys:SetMass(2)
-			phys:ApplyForceCenter(ang:Forward() * spread_force)
-			phys:AddAngleVelocity(Vector(ang.p, ang.r, ang.y))
-		end
+        if IsValid(phys) then
+            -- the balance between mass and force is subtle, be careful adjusting
+            phys:SetMass(2)
+            phys:ApplyForceCenter(ang:Forward() * spread_force)
+            phys:AddAngleVelocity(Vector(ang.p, ang.r, ang.y))
+        end
 
-		flames[#flames + 1] = flame
-	end
+        flames[#flames + 1] = flame
+    end
 
-	return flames
+    return flames
 end
 
 ---
@@ -71,25 +82,27 @@ end
 -- @return nil|Entity The fire it created, or nil if it was merged / couldn't be created.
 -- @realm server
 function gameEffects.SpawnFire(pos, scale, life_span, owner, parent)
-	local fire = ents.Create("env_fire")
+    local fire = ents.Create("env_fire")
 
-	if not IsValid(fire) then return end
+    if not IsValid(fire) then
+        return
+    end
 
-	fire:SetParent(parent)
-	fire:SetOwner(owner)
-	fire:SetPos(pos)
-	--no glow + delete when out + start on + last forever
-	fire:SetKeyValue("spawnflags", tostring(128 + 32 + 4 + 2 + 1))
-	-- hardly controls size, hitbox is goofy, impossible to work with
-	fire:SetKeyValue("firesize", tostring(scale))
-	fire:SetKeyValue("health", tostring(life_span))
-	fire:SetKeyValue("ignitionpoint", "64")
-	-- don't hurt the player because we're managing the hurtbox ourselves
-	fire:SetKeyValue("damagescale", "0")
-	fire:Spawn()
-	fire:Activate()
+    fire:SetParent(parent)
+    fire:SetOwner(owner)
+    fire:SetPos(pos)
+    --no glow + delete when out + start on + last forever
+    fire:SetKeyValue("spawnflags", tostring(128 + 32 + 4 + 2 + 1))
+    -- hardly controls size, hitbox is goofy, impossible to work with
+    fire:SetKeyValue("firesize", tostring(scale))
+    fire:SetKeyValue("health", tostring(life_span))
+    fire:SetKeyValue("ignitionpoint", "64")
+    -- don't hurt the player because we're managing the hurtbox ourselves
+    fire:SetKeyValue("damagescale", "0")
+    fire:Spawn()
+    fire:Activate()
 
-	return fire
+    return fire
 end
 
 ---
@@ -102,12 +115,18 @@ end
 -- @param Entity inflictor
 -- @realm shared
 function gameEffects.RadiusDamage(dmginfo, pos, radius, inflictor)
-	local entsFound = ents.FindInSphere(pos, radius)
-	for i = 1, #entsFound do
-		local vic = entsFound[i]
+    local entsFound = ents.FindInSphere(pos, radius)
+    for i = 1, #entsFound do
+        local vic = entsFound[i]
 
-		if IsValid(vic) and inflictor:Visible(vic) and vic:IsPlayer() and vic:Alive() and vic:IsTerror() then
-			vic:TakeDamageInfo(dmginfo)
-		end
-	end
+        if
+            IsValid(vic)
+            and inflictor:Visible(vic)
+            and vic:IsPlayer()
+            and vic:Alive()
+            and vic:IsTerror()
+        then
+            vic:TakeDamageInfo(dmginfo)
+        end
+    end
 end

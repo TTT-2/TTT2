@@ -6,22 +6,22 @@
 shop = shop or {}
 
 local function ResetTeambuyEquipment()
-	local team = net.ReadString()
+    local team = net.ReadString()
 
-	shop.ResetTeamBuy(LocalPlayer(), team)
+    shop.ResetTeamBuy(LocalPlayer(), team)
 end
 net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
 
 local function ReceiveTeambuyEquipment()
-	local equipmentName = net.ReadString()
+    local equipmentName = net.ReadString()
 
-	shop.SetEquipmentTeamBought(LocalPlayer(), equipmentName)
+    shop.SetEquipmentTeamBought(LocalPlayer(), equipmentName)
 end
 net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
 
 local function ReceiveGlobalbuyEquipment()
-	local equipmentName = net.ReadString()
+    local equipmentName = net.ReadString()
 
-	shop.SetEquipmentGlobalBought(equipmentName)
+    shop.SetEquipmentGlobalBought(equipmentName)
 end
 net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)

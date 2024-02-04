@@ -3,22 +3,28 @@ util.AddNetworkString("ttt2_switch_weapon_update_cache")
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
-	ErrorNoHaltWithStack("FAILED TO FIND PLAYER TABLE")
+    ErrorNoHaltWithStack("FAILED TO FIND PLAYER TABLE")
 
-	return
+    return
 end
 
 net.Receive("ttt2_switch_weapon", function(_, ply)
-	-- player and wepaon must be valid
-	if not IsValid(ply) or not ply:IsTerror() or not ply:Alive() then return end
+    -- player and wepaon must be valid
+    if not IsValid(ply) or not ply:IsTerror() or not ply:Alive() then
+        return
+    end
 
-	-- handle weapon switch
-	local tracedWeapon = ply:GetEyeTrace().Entity
+    -- handle weapon switch
+    local tracedWeapon = ply:GetEyeTrace().Entity
 
-	if not IsValid(tracedWeapon) or not tracedWeapon:IsWeapon() then return end
+    if not IsValid(tracedWeapon) or not tracedWeapon:IsWeapon() then
+        return
+    end
 
-	-- do not pickup weapon if too far away
-	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
+    -- do not pickup weapon if too far away
+    if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then
+        return
+    end
 
-	ply:SafePickupWeapon(tracedWeapon, false, true, true, nil) -- force pickup; drop blocking weapon, autoselect is set automatically
+    ply:SafePickupWeapon(tracedWeapon, false, true, true, nil) -- force pickup; drop blocking weapon, autoselect is set automatically
 end)

@@ -12,7 +12,7 @@ PLAYER.CrouchedWalkSpeed = 0.3
 -- @realm shared
 -- @internal
 function PLAYER:SetupDataTables()
-	self.Player:SetupDataTables()
+    self.Player:SetupDataTables()
 end
 
 player_manager.RegisterClass("player_ttt", PLAYER, "player_default")

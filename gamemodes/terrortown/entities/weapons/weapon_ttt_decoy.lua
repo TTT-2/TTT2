@@ -3,23 +3,23 @@
 -- @section weapon_ttt_decoy
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
-DEFINE_BASECLASS "weapon_tttbase"
+DEFINE_BASECLASS("weapon_tttbase")
 
 if CLIENT then
-	SWEP.PrintName = "decoy_name"
-	SWEP.Slot = 7
+    SWEP.PrintName = "decoy_name"
+    SWEP.Slot = 7
 
-	SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultViewModel = false
 
-	SWEP.EquipMenuData = {
-		type = "item_weapon",
-		desc = "decoy_desc"
-	}
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+        desc = "decoy_desc",
+    }
 
-	SWEP.Icon = "vgui/ttt/icon_decoy"
+    SWEP.Icon = "vgui/ttt/icon_decoy"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -42,7 +42,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 1.0
 
 SWEP.Kind = WEAPON_EQUIP2
-SWEP.CanBuy = {ROLE_TRAITOR}
+SWEP.CanBuy = { ROLE_TRAITOR }
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_DECOY
 SWEP.builtin = true
@@ -53,94 +53,95 @@ SWEP.NoSights = true
 ---
 -- @realm shared
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	if SERVER and self:CanPrimaryAttack() then
-		local decoy = ents.Create("ttt_decoy")
+    if SERVER and self:CanPrimaryAttack() then
+        local decoy = ents.Create("ttt_decoy")
 
-		if decoy:ThrowEntity(self:GetOwner(), Angle(90, 0, 0)) then
-			decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
+        if decoy:ThrowEntity(self:GetOwner(), Angle(90, 0, 0)) then
+            decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
 
-			self:PlacedDecoy(decoy)
-		end
-	end
+            self:PlacedDecoy(decoy)
+        end
+    end
 end
 
 ---
 -- @realm shared
 function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	if SERVER and self:CanPrimaryAttack() then
-		local decoy = ents.Create("ttt_decoy")
+    if SERVER and self:CanPrimaryAttack() then
+        local decoy = ents.Create("ttt_decoy")
 
-		if decoy:StickEntity(self:GetOwner()) then
-			decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
+        if decoy:StickEntity(self:GetOwner()) then
+            decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
 
-			self:PlacedDecoy(decoy)
-		end
-	end
+            self:PlacedDecoy(decoy)
+        end
+    end
 end
 
-
 if SERVER then
-	-- add hook that changes all decoys
-	hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
-		if not IsValid(ply.decoy) then return end
+    -- add hook that changes all decoys
+    hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
+        if not IsValid(ply.decoy) then
+            return
+        end
 
-		ply.decoy:SetNWString("decoy_owner_team", newTeam)
-	end)
+        ply.decoy:SetNWString("decoy_owner_team", newTeam)
+    end)
 end
 
 ---
 -- @param Entity decoy
 -- @realm shared
 function SWEP:PlacedDecoy(decoy)
-	self:GetOwner().decoy = decoy
+    self:GetOwner().decoy = decoy
 
-	self:TakePrimaryAmmo(1)
+    self:TakePrimaryAmmo(1)
 
-	if not self:CanPrimaryAttack() then
-		self:Remove()
-	end
+    if not self:CanPrimaryAttack() then
+        self:Remove()
+    end
 end
 
 ---
 -- @ignore
 function SWEP:Reload()
-	return false
+    return false
 end
 
 if CLIENT then
-	---
-	-- @realm client
-	function SWEP:OnRemove()
-		local owner = self:GetOwner()
+    ---
+    -- @realm client
+    function SWEP:OnRemove()
+        local owner = self:GetOwner()
 
-		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-			RunConsoleCommand("lastinv")
-		end
-	end
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
 
-	---
-	-- @ignore
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("decoy_help_primary", "decoy_help_secondary")
+    ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("decoy_help_primary", "decoy_help_secondary")
 
-		return BaseClass.Initialize(self)
-	end
+        return BaseClass.Initialize(self)
+    end
 
-	---
-	-- @realm client
-	function SWEP:DrawWorldModel()
-		if IsValid(self:GetOwner()) then return end
+    ---
+    -- @realm client
+    function SWEP:DrawWorldModel()
+        if IsValid(self:GetOwner()) then
+            return
+        end
 
-		self:DrawModel()
-	end
+        self:DrawModel()
+    end
 
-	---
-	-- @realm client
-	function SWEP:DrawWorldModelTranslucent()
-
-	end
+    ---
+    -- @realm client
+    function SWEP:DrawWorldModelTranslucent() end
 end

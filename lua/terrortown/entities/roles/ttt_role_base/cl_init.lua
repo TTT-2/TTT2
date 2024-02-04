@@ -11,9 +11,7 @@
 -- @param DPanel parent The parent panel which is the submenu
 -- @hook
 -- @realm client
-function ROLE:AddToSettingsMenu(parent)
-
-end
+function ROLE:AddToSettingsMenu(parent) end
 
 ---
 -- This hook can be used by role addons to populate the role credit settings form
@@ -22,6 +20,4 @@ end
 -- @param DPanel parent The parent panel which is the credits form
 -- @hook
 -- @realm client
-function ROLE:AddToSettingsMenuCreditsForm(parent)
-
-end
+function ROLE:AddToSettingsMenuCreditsForm(parent) end
