@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
 L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
-L.label_ragdoll_pinning = "Masum olmayan roller için ceset sabitlemeyi etkinleştir"
-L.label_ragdoll_pinning_innocents = "Masum roller için ceset pinlemeyi etkinleştir"
 L.label_weapon_carrying = "Silah taşımayı etkinleştir"
 L.label_weapon_carrying_range = "Silah taşıma menzili"
 L.label_prop_carrying_force = "Nesne kaldırma gücü"
@@ -2132,6 +2130,7 @@ L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir ö
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
+
 -- 2023-12-22
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
@@ -2175,3 +2174,11 @@ L.header_weapon_settings = "Silah Ayarları"
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

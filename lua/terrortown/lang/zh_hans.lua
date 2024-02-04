@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "机器人永远是观察者"
 L.label_tbutton_admin_show = "向管理员显示叛徒按钮"
 L.label_ragdoll_carrying = "启用布娃娃搬运"
 L.label_prop_throwing = "启用道具投掷"
-L.label_ragdoll_pinning = "为非无辜者角色启用布娃娃夹子"
-L.label_ragdoll_pinning_innocents = "为无辜者启用布娃娃夹子"
 L.label_weapon_carrying = "启用武器搬运"
 L.label_weapon_carrying_range = "武器搬运范围"
 L.label_prop_carrying_force = "Prop推进力"
@@ -2132,6 +2130,7 @@ L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
 L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
 
+
 -- 2023-12-22
 L.submenu_gameplay_accessibility_title = "辅助功能"
 
@@ -2177,3 +2176,11 @@ L.header_weapon_settings = "武器设置"
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
