@@ -68,6 +68,11 @@ if CLIENT then
 	-- if the files are different, it only looks at the name. I recommend you
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+
+	-- If set to true, the default view model of the weapon is drawn, otherwise it
+	-- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
+	-- the weapon but still draw the hands holding it.
+	SWEP.ShowDefaultViewModel = true
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -180,7 +185,7 @@ local skipWeapons = {}
 
 ---
 -- Checks if the weapon should be skipped. Skips all weapons not based on weapon_tttbase
--- @param weapon swep the weapon to check
+-- @param Weapon swep the weapon to check
 -- @realm shared
 -- @internal
 local function shouldSkipWeapon(swep)
@@ -311,6 +316,23 @@ if CLIENT then
 	}
 
 	---
+	-- Called straight after the view model has been drawn. This is called before
+	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
+	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+	-- @realm client
+	function SWEP:ViewModelDrawn(viewModel)
+		if self.ShowDefaultViewModel then
+			-- this resets the material to the default material
+			viewModel:SetMaterial("")
+		else
+			-- view model resets to render mode 0 every frame so we just apply
+			-- a debug material to prevent it from drawing
+			viewModel:SetMaterial("vgui/hsv")
+		end
+	end
+
+	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
@@ -321,7 +343,6 @@ if CLIENT then
 		if not cvEnableCrosshair:GetBool() then return end
 
 		local client = LocalPlayer()
-
 		local sights = not self.NoSights and self:GetIronsights()
 
 		local xCenter = mathFloor(ScrW() * 0.5)
@@ -422,7 +443,7 @@ if CLIENT then
 	local padXKey = 5
 
 	local function ProcessHelpText(lines, scale)
-		local width, center = 0, 0
+		local widthBinding, widthDescription = 0, 0
 		local processedData = {}
 
 		for i = 1, #lines do
@@ -438,6 +459,7 @@ if CLIENT then
 
 				wBinding = wKey + 2 * padXKey * scale
 				hBinding = hKey + 2 * padYKey * scale
+
 				isIcon = false
 			elseif binding then
 				wBinding = sizeIcon * scale
@@ -459,29 +481,30 @@ if CLIENT then
 				wDescription = wDescription
 			}
 
-			width = math.max(width, wBinding + wDescription)
-			center = math.max(center, wBinding)
+			widthBinding = math.max(widthBinding, wBinding)
+			widthDescription = math.max(widthDescription, wDescription)
 		end
 
-		return width, center, processedData
+		return widthBinding, widthDescription, processedData
 	end
 
 	---
 	-- Draws the help text to the bottom of the screen
 	-- @realm client
 	function SWEP:DrawHelp()
+		if not self.HUDHelp or not #self.HUDHelp.bindingLines then return end
 		local scale = appearance.GetGlobalScale()
 
-		local baseWidth, baseCenter, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
+		local baseWidthBinding, baseWidthDescription, processedData = ProcessHelpText(self.HUDHelp.bindingLines, scale)
 
 		local padding = 10 * scale
 		local hLine = 23 * scale
 
-		local wBox = baseWidth + 5 * padding
+		local wBox = baseWidthBinding + baseWidthDescription + 4 * padding
 		local hBox = hLine * #processedData + 2 * padding
 		local xBox = 0.5 * (ScrW() - wBox)
 		local yBox = ScrH() - hBox
-		local xDivider = xBox + baseCenter + 2.5 * padding
+		local xDivider = xBox + baseWidthBinding + 2 * padding
 		local yDividerStart = yBox + padding
 		local yLine = yDividerStart + 10 * scale
 		local xDescription = xDivider + padding
@@ -569,7 +592,7 @@ if CLIENT then
 		primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
 		secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2") or nil
 
-		self:AddTTT2HUDHelp()
+		self:ClearHUDHelp()
 
 		if primary then
 			self:AddHUDHelpLine(primary, primary_key)
@@ -586,10 +609,7 @@ if CLIENT then
 	-- @param[optchain] string secondary_text description for secondaryfire
 	-- @realm client
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
-		self.HUDHelp = {
-			bindingLines = {},
-			max_length = 0
-		}
+		self:ClearHUDHelp()
 
 		if primary then
 			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
@@ -598,6 +618,17 @@ if CLIENT then
 		if secondary then
 			self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
 		end
+	end
+
+	---
+	-- Utility for removing all existing help lines so more can be added.
+	-- This can be useful for dynamically updating help text.
+	-- @realm client
+	function SWEP:ClearHUDHelp()
+		self.HUDHelp = {
+			bindingLines = {},
+			max_length = 0
+		}
 	end
 
 	---

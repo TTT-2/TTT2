@@ -12,8 +12,7 @@ if CLIENT then
 	SWEP.PrintName = "beacon_name"
 	SWEP.Slot = 6
 
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -52,12 +51,6 @@ SWEP.AllowDrop = false
 SWEP.NoSights = true
 
 SWEP.builtin = true
-
----
--- @realm shared
-function SWEP:OnDrop()
-	self:Remove()
-end
 
 ---
 -- @realm shared
@@ -119,28 +112,6 @@ function SWEP:OnRemove()
 	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():IsTerror() then
 		RunConsoleCommand("lastinv")
 	end
-end
-
----
--- @realm shared
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
-end
-
----
--- @realm shared
-function SWEP:DrawWorldModel()
-	if not IsValid(self:GetOwner()) then
-		self:DrawModel()
-	end
-end
-
----
--- @realm shared
-function SWEP:DrawWorldModelTranslucent()
-
 end
 
 if SERVER then
@@ -241,6 +212,20 @@ if CLIENT then
 		self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
 
 		return self.BaseClass.Initialize(self)
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
 	end
 end
 

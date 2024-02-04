@@ -14,9 +14,7 @@ if CLIENT then
 	SWEP.PrintName = "binoc_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
-	SWEP.DrawCrosshair = false
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -120,7 +118,6 @@ function SWEP:SetZoomLevel(level)
 	self:SetZoomAmount(level)
 
 	owner:SetFOV(self.ZoomLevels[level], 0.3)
-	owner:DrawViewModel(false)
 end
 
 ---
@@ -158,13 +155,9 @@ end
 ---
 -- @ignore
 function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
 	self:SetZoomLevel(1)
 
-	return true
+	return self.BaseClass.Deploy(self)
 end
 
 ---

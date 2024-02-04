@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "Bots sind immer Zuschauer"
 L.label_tbutton_admin_show = "Zeige Verräterknöpfe für Admins"
 L.label_ragdoll_carrying = "Aktiviere das Tragen von Ragdolls"
 L.label_prop_throwing = "Aktiviere das Werfen von Props"
-L.label_ragdoll_pinning = "Aktiviere das Anpinnen von Ragdolls für Nicht-Unschuldige Rollen."
-L.label_ragdoll_pinning_innocents = "Aktiviere das Anpinnen von Ragdolls für Unschuldige Rollen."
 L.label_weapon_carrying = "Aktiviere das Tragen von Waffen"
 L.label_weapon_carrying_range = "Tragreichweite für Waffen"
 L.label_prop_carrying_force = "Prop Aufhebkraft"
@@ -1965,6 +1963,9 @@ L.target_credits_on_confirm = "Bestätige Toten, um ungenutzte Credits zu erhalt
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
 L.header_miscellaneous_settings = "Verschiedene Einstellungen"
 L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"
@@ -2063,7 +2064,7 @@ L.crowbar_help_secondary = "Spieler schubsen"
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
 --L.knife_help_primary = "Stab"
 --L.knife_help_secondary = "Throw knife"
 --L.polter_help_primary = "Fire thumper"
@@ -2129,6 +2130,7 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2171,3 +2173,14 @@ L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

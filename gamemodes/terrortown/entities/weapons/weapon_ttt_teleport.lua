@@ -18,9 +18,7 @@ if CLIENT then
 	SWEP.PrintName = "tele_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 10
-	SWEP.DrawCrosshair = false
+	SWEP.ShowDefaultViewModel = false
 	SWEP.CSMuzzleFlashes = false
 
 	SWEP.EquipMenuData = {
@@ -373,16 +371,6 @@ if CLIENT then
 			label = "label_teleport_telefrags"
 		})
 	end
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
-	return true
 end
 
 ---

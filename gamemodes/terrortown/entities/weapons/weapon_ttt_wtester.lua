@@ -20,7 +20,6 @@ if CLIENT then
 	SWEP.ViewModelFOV = 54
 	SWEP.ViewModelFlip = false
 	SWEP.UseHands = true
-	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -495,13 +494,13 @@ else -- CLIENT
 				local vectorToPos = targetPos - scannerPos
 				local angleToPos = vectorToPos:Angle()
 				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
-				local distance = math.max(LocalPlayer():GetPos():Distance(targetPos) - 47, 0)
+				local distance = tostring(math.Round(util.HammerUnitsToMeters(LocalPlayer():EyePos():Distance(targetPos)), 0)) .. "m"
 
 				surface.SetDrawColor(96, 255, 96 , 255)
 				surface.SetMaterial(dna_screen_arrow)
 				DrawTexturedRectRotatedPoint(256, 256, 120, 120, arrowRotation, 0, -130)
 
-				draw.AdvancedText(math.Round(distance), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.25)
+				draw.AdvancedText(distance, "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.25)
 
 				draw.FilteredTexture(146, 146, 220, 220, dna_screen_circle, 255, screen_fontcolor)
 			else

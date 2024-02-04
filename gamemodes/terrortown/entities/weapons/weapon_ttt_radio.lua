@@ -13,9 +13,7 @@ if CLIENT then
 	SWEP.PrintName = "radio_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 10
-	SWEP.DrawCrosshair = false
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -51,12 +49,6 @@ SWEP.builtin = true
 
 SWEP.AllowDrop = false
 SWEP.NoSights = true
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
 
 ---
 -- @ignore
@@ -178,22 +170,19 @@ if CLIENT then
 
 		return self.BaseClass.Initialize(self)
 	end
-end
 
---- Invisible, same hacks as holstered weapon
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
 	end
-	return true
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
+	end
 end
-
----
--- @ignore
-function SWEP:DrawWorldModel() end
-
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent() end
 

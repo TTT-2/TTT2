@@ -14,7 +14,6 @@ if CLIENT then
 
 	SWEP.ViewModelFOV = 10
 	SWEP.ViewModelFlip = false
-	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -64,18 +63,6 @@ end
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:DropDevice()
-end
-
----
--- @ignore
-function SWEP:DrawWorldModel()
-
-end
-
----
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
 end
 
 ---
@@ -157,5 +144,19 @@ if CLIENT then
 		self:AddTTT2HUDHelp("vis_help_pri")
 
 		return self.BaseClass.Initialize(self)
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:DrawWorldModelTranslucent()
+
 	end
 end

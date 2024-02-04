@@ -23,9 +23,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
+  - Added `SWEP.ShowDefaultViewModel` to prevent a weapon from drawing a ViewModel when set to `false` at all without FOV hacks or Deploy code which has no effect.
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
+- Made beacon model and icon unique from decoy (by @EntranceJew)
+- Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Throwables (grenades) now have a `:GetPullTime()` accessor
+- Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 
 ### Changed
 
@@ -48,14 +54,24 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Consolidated hat logic
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
+- All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
+- Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
+- Spectator name labels now use a skin font and scaling (by @EntranceJew)
+- The built-in radar now displays distances in meters (by @TimGoll)
+- Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
+- Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
+- Magneto stick now shows tooltips respective to its current state.
+- The built-in DNA scanner now displays distances in meters (by @TimGoll)
 
 ### Fixed
 
+- Fixed database now properly saving boolean `false` values
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
+- Fixed marks library having self zfailing and color issues (by @WardenPotato)
 
 ### Removed
 
@@ -237,6 +253,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when observing a player in first person view
 
 ### Fixed
 
@@ -260,6 +280,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Deprecated
 

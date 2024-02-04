@@ -13,8 +13,7 @@ if CLIENT then
 	SWEP.PrintName = "defuser_name"
 	SWEP.Slot = 7
 
-	SWEP.DrawCrosshair = false
-	SWEP.ViewModelFOV = 10
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -92,15 +91,6 @@ end
 -- @ignore
 function SWEP:Reload()
 	return false
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-	return true
 end
 
 ---
