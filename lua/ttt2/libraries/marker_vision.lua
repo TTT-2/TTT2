@@ -92,6 +92,7 @@ local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TA
 ---
 -- Creates a new marker vision object for the entity.
 -- @note This does not sync to the client, @{MARKER_VISION_ELEMENT:SyncToClients}
+-- @param[opt] Player owner The new owner of the wallhack 
 -- has to be called on it first
 -- @param string identifier The unique identifier of this marker vision element
 -- @return MARKER_VISION_ELEMENT The marker vision object that was created
@@ -220,11 +221,11 @@ if CLIENT then
 
     surface.CreateAdvancedFont(
         "RadarVision_Title",
-        { font = "Trebuchet24", size = 20, weight = 600 }
+        { font = "Tahoma", size = 20, weight = 600, antialias = true }
     )
     surface.CreateAdvancedFont(
         "RadarVision_Text",
-        { font = "Trebuchet24", size = 14, weight = 300 }
+        { font = "Tahoma", size = 14, weight = 300, antialias = true }
     )
 
     ---
