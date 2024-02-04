@@ -31,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 
 ### Changed
 
@@ -57,6 +58,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
 - Spectator name labels now use a skin font and scaling (by @EntranceJew)
 - The built-in radar now displays distances in meters (by @TimGoll)
+- Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
+- Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
+- Magneto stick now shows tooltips respective to its current state.
+- The built-in DNA scanner now displays distances in meters (by @TimGoll)
 
 ### Fixed
 
