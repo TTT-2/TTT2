@@ -69,6 +69,17 @@ if CLIENT then
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
+	-- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
+	-- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
+	SWEP.idleResetFix = false
+
+	-- It set to true, hands are drawn in the view model
+	SWEP.UseHands = false
+
+	-- If set to true, the default world model of the weapon is drawn. If set to false
+	-- the hands are still drawn in the position of the SWEP.HoldType.
+	SWEP.ShowDefaultWorldModel = true
+
 	-- If set to true, the default view model of the weapon is drawn, otherwise it
 	-- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
 	-- the weapon but still draw the hands holding it.
@@ -117,19 +128,6 @@ SWEP.HotReloadableKeys = {}
 -- DO NOT set SWEP.WeaponID. Only the standard TTT weapons can have it. Custom
 -- SWEPs do not need it for anything.
 --	SWEP.WeaponID = nil
-
--- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
--- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
-SWEP.idleResetFix = false
-
--- It set to true, hands are drawn in the view model
-SWEP.UseHands = false
-
--- If set to true, the default view model of the weapon is drawn
-SWEP.ShowDefaultViewModel = true
-
--- If set to true, the default world model of the weapon is drawn
-SWEP.ShowDefaultWorldModel = true
 
 --   YE OLDE SWEP STUFF
 
@@ -323,23 +321,6 @@ if CLIENT then
 		valueStart = 0,
 		valueEnd = 0
 	}
-
-	---
-	-- Called straight after the view model has been drawn. This is called before
-	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
-	-- @param Entity viewModel Player's view model
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
-	-- @realm client
-	function SWEP:ViewModelDrawn(viewModel)
-		if self.ShowDefaultViewModel then
-			-- this resets the material to the default material
-			viewModel:SetMaterial("")
-		else
-			-- view model resets to render mode 0 every frame so we just apply
-			-- a debug material to prevent it from drawing
-			viewModel:SetMaterial("vgui/hsv")
-		end
-	end
 
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
@@ -721,6 +702,7 @@ if CLIENT then
 	-- Called straight after the view model has been drawn. This is called before
 	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
 	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
 	-- @realm client
 	function SWEP:ViewModelDrawn(viewModel)
 		if self.ShowDefaultViewModel then
