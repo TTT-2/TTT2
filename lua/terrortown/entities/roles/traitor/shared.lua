@@ -30,6 +30,7 @@ function ROLE:PreInitialize()
 		maximum = 32,
 		minPlayers = 1,
 		traitorButton = 1,
+		ragdollPinning = 1,
 		credits = 2,
 		creditsAwardDeadEnable = 1,
 		creditsAwardKillEnable = 1,

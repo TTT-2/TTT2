@@ -102,4 +102,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		decimal = 1,
 		master = crossEnb
 	})
+
+	form:MakeCheckBox({
+		label = "label_grenade_trajectory_ui",
+		convar = "ttt2_grenade_trajectory_ui",
+		master = crossEnb
+	})
 end

@@ -1147,23 +1147,8 @@ if SERVER then
 	end
 
 	hook.Add("TTT2UpdateTeam", "TTT2SyncTeambuyEquipment", function(ply, oldTeam, team)
-		if not TEAMBUYTABLE then return end
-
-		if oldTeam and oldTeam ~= TEAM_NONE then
-			net.Start("TTT2ResetTBEq")
-			net.WriteString(oldTeam)
-			net.Send(ply)
-		end
-
-		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
-			local filter = GetTeamFilter(team)
-
-			for id in pairs(TEAMBUYTABLE[team]) do
-				net.Start("TTT2ReceiveTBEq")
-				net.WriteString(id)
-				net.Send(filter)
-			end
-		end
+		shop.ResetTeamBuy(ply, oldTeam)
+		shop.SendEquipmentTeamBought(ply)
 	end)
 
 	---
@@ -1175,33 +1160,6 @@ if SERVER then
 
 	end
 else -- CLIENT
-	local function ReceiveTeambuyEquipment()
-		local s = net.ReadString()
-		local team = LocalPlayer():GetTeam()
-
-		if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-			TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-			TEAMBUYTABLE[team][s] = true
-		end
-	end
-	net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
-
-	local function ReceiveGlobalbuyEquipment()
-		local s = net.ReadString()
-
-		BUYTABLE[s] = true
-	end
-	net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)
-
-	local function ResetTeambuyEquipment()
-		local s = net.ReadString()
-
-		if not s or s == TEAM_NONE then return end
-
-		TEAMBUYTABLE[s] = nil
-	end
-	net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
-
 	---
 	-- Adds an equipment into a @{ROLE}'s equipment table
 	-- @param number subrole subrole id

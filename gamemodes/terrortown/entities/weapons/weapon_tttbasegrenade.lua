@@ -18,7 +18,6 @@ if CLIENT then
 	SWEP.Slot = 3
 
 	SWEP.ViewModelFlip = true
-	SWEP.DrawCrosshair = false
 
 	SWEP.Icon = "vgui/ttt/icon_nades"
 end
@@ -49,6 +48,7 @@ SWEP.IsGrenade = true
 SWEP.was_thrown = false
 SWEP.detonate_timer = 5
 SWEP.DeploySpeed = 1.5
+SWEP.throwForce = 1
 
 ---
 -- @accessor number
@@ -87,6 +87,121 @@ end
 -- @ignore
 function SWEP:SecondaryAttack()
 
+end
+
+---
+-- @param Vector currentIterationPosition The initial position for this iteration cycle.
+-- @param number launchVelocity The launch velocity for this iteration cycle.
+-- @param number stepDistance The step size for the current iteration cycle.
+-- @return Vector The next location to iterate from.
+local function PositionFromPhysicsParams(currentIterationPosition, launchVelocity, stepDistance)
+	local activeGravity = physenv.GetGravity()
+
+	return currentIterationPosition + (launchVelocity * stepDistance + 0.5 * activeGravity * stepDistance ^ 2)
+end
+
+if CLIENT then
+	---
+	-- @realm client
+	local cvEnableTrajectoryUI = CreateConVar("ttt2_grenade_trajectory_ui", 0, FCVAR_ARCHIVE)
+
+	local function AlphaLerp(from, frac, max)
+		local fr = frac ^ 0.5
+		return ColorAlpha(from, Lerp(fr, 0, math.min(max, 255)))
+	end
+
+	---
+	-- @param Player ply
+	-- @realm client
+	function SWEP:DrawDefaultThrowPath(ply)
+		local stepSize = 0.005
+
+		local owner = self:GetOwner()
+		local currentIterationPosition, _ = self:GetViewModelPosition(owner:EyePos(), owner:EyeAngles())
+		local launchPosition, launchVelocity = self:GetThrowVelocity()
+		currentIterationPosition = currentIterationPosition - ply:EyePos() + launchPosition
+		local previousIterationPosition = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, stepSize)
+
+		local fractionalFrameTime = (SysTime() % 1) * 2
+		local i = fractionalFrameTime > 1 and 1 or 0
+		fractionalFrameTime = fractionalFrameTime - math.floor(fractionalFrameTime)
+
+		local arcColor = appearance.ShouldUseGlobalFocusColor() and appearance.GetFocusColor() or self:GetOwner():GetRoleColor()
+		local arcAlpha = math.Round(GetConVar("ttt_crosshair_opacity"):GetFloat() * 255)
+		local arcWidth = 0.6
+		local arcWidthDiminishOverDistanceFactor = 0.25
+		local arcSegmentLengthFactor = 0.5
+		local arcImpactCrossLength = 1
+
+		render.SetColorMaterial()
+		cam.Start3D(EyePos(), EyeAngles())
+
+		for stepDistance = stepSize * 2, 1, stepSize do
+			local drawColor = AlphaLerp(arcColor, stepDistance, arcAlpha)
+
+			local pos = PositionFromPhysicsParams(currentIterationPosition, launchVelocity, stepDistance)
+			local t = util.TraceLine({
+				start = previousIterationPosition,
+				endpos = pos,
+				filter = {ply, self}
+			})
+
+			local from = previousIterationPosition
+			local to = t.Hit and t.HitPos or pos
+			local norm = to - from
+			norm:Normalize()
+
+			local denom = (stepDistance / stepSize) ^ arcWidthDiminishOverDistanceFactor
+			local arcSegmentLength = from:DistToSqr(to) ^ arcSegmentLengthFactor
+			i = (i + 1) % 2
+			if i == 0 then
+				render.DrawBeam(from, from + norm * (fractionalFrameTime * arcSegmentLength), arcWidth * denom, 0, 1,  drawColor)
+			else
+				render.DrawBeam(to - norm * ((1 - fractionalFrameTime) * arcSegmentLength), to, arcWidth * denom, 0, 1, drawColor)
+			end
+
+			if t.Hit then
+				local hitPosition = t.HitPos + t.HitNormal * (t.FractionLeftSolid * denom)
+				local impactCrossSegmentLength = arcImpactCrossLength * denom
+				local impactCrossVector = Vector(0, 0, impactCrossSegmentLength)
+
+				local angleLeft = Angle(t.HitNormal:Angle())
+				angleLeft:RotateAroundAxis(t.HitNormal, -45)
+				local left = Vector(impactCrossVector)
+				left:Rotate(angleLeft)
+				render.DrawBeam(
+					hitPosition - (left * impactCrossSegmentLength),
+					hitPosition + left * impactCrossSegmentLength,
+					arcWidth * denom, 0, 1, drawColor
+				)
+
+				local angleUp = Angle(t.HitNormal:Angle())
+				angleUp:RotateAroundAxis(t.HitNormal, 45)
+				local up = Vector(impactCrossVector)
+				up:Rotate(angleUp)
+				render.DrawBeam(
+					hitPosition - (up * impactCrossSegmentLength),
+					hitPosition + up * impactCrossSegmentLength,
+					arcWidth * denom, 0, 1, drawColor
+				)
+				break
+			end
+			previousIterationPosition = pos
+		end
+
+		cam.End3D()
+	end
+
+	---
+	-- @param Entity vm
+	-- @param Weapon weapon
+	-- @param Player ply
+	-- @realm client
+	function SWEP:PostDrawViewModel(vm, weapon, ply)
+		if cvEnableTrajectoryUI:GetBool() then
+		    self:DrawDefaultThrowPath(ply)
+		end
+	end
 end
 
 ---
@@ -170,6 +285,31 @@ function SWEP:StartThrow()
 end
 
 ---
+-- @return Vector, Vector The point of origin for the thrown projectile, and its force.
+-- @realm shared
+function SWEP:GetThrowVelocity()
+	local ply = self:GetOwner()
+	local ang = ply:EyeAngles()
+	local src = ply:GetPos() + (ply:Crouching() and ply:GetViewOffsetDucked() or ply:GetViewOffset()) + (ang:Forward() * 8) + (ang:Right() * 10)
+	local target = ply:GetEyeTraceNoCursor().HitPos
+	-- A target angle to actually throw the grenade to the crosshair instead of forwards
+	local tang = (target - src):Angle()
+	-- Makes the grenade go upwards
+	if tang.p < 90 then
+		tang.p = -10 + tang.p * ((90 + 10) / 90)
+	else
+		tang.p = 360 - tang.p
+		tang.p = -10 + tang.p * -((90 + 10) / 90)
+	end
+
+	-- Makes the grenade not go backwards :/
+	tang.p = math.Clamp(tang.p, -90, 90)
+	local vel = math.min(800, (90 - tang.p) * 6)
+	local force = tang:Forward() * vel * self.throwForce + ply:GetVelocity()
+	return src, force
+end
+
+---
 -- @ignore
 function SWEP:Throw()
 	if CLIENT then
@@ -182,24 +322,8 @@ function SWEP:Throw()
 
 		self.was_thrown = true
 
-		local ang = ply:EyeAngles()
-		local src = ply:GetPos() + (ply:Crouching() and ply:GetViewOffsetDucked() or ply:GetViewOffset()) + ang:Forward() * 8 + ang:Right() * 10
-		local target = ply:GetEyeTraceNoCursor().HitPos
-		local tang = (target-src):Angle() -- A target angle to actually throw the grenade to the crosshair instead of fowards
-
-		-- Makes the grenade go upgwards
-		if tang.p < 90 then
-			tang.p = -10 + tang.p * ((90 + 10) / 90)
-		else
-			tang.p = 360 - tang.p
-			tang.p = -10 + tang.p * -((90 + 10) / 90)
-		end
-
-		tang.p = math.Clamp(tang.p,-90,90) -- Makes the grenade not go backwards :/
-
-		local vel = math.min(800, (90 - tang.p) * 6)
-		local thr = tang:Forward() * vel + ply:GetVelocity()
-		self:CreateGrenade(src, Angle(0,0,0), thr, Vector(600, math.random(-1200, 1200), 0), ply)
+		local src, force = self:GetThrowVelocity()
+		self:CreateGrenade(src, Angle(0,0,0), force, Vector(600, math.random(-1200, 1200), 0), ply)
 
 		self:SetThrowTime(0)
 		self:Remove()

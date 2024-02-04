@@ -69,9 +69,10 @@ if CLIENT then
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
-	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
-	-- overload drawing functions.
-	SWEP.InvisibleViewModel = false
+	-- If set to true, the default view model of the weapon is drawn, otherwise it
+	-- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
+	-- the weapon but still draw the hands holding it.
+	SWEP.ShowDefaultViewModel = true
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -184,7 +185,7 @@ local skipWeapons = {}
 
 ---
 -- Checks if the weapon should be skipped. Skips all weapons not based on weapon_tttbase
--- @param weapon swep the weapon to check
+-- @param Weapon swep the weapon to check
 -- @realm shared
 -- @internal
 local function shouldSkipWeapon(swep)
@@ -254,7 +255,9 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	local mathRound = math.Round
-	local mathFloor = math.floor
+	local mathClamp = math.Clamp
+	local mathCeil = math.ceil
+	local mathMax = math.max
 
 	local CROSSHAIR_MODE_DOT_AND_LINES = 0
 	local CROSSHAIR_MODE_LINES_ONLY = 1
@@ -315,6 +318,23 @@ if CLIENT then
 	}
 
 	---
+	-- Called straight after the view model has been drawn. This is called before
+	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
+	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+	-- @realm client
+	function SWEP:ViewModelDrawn(viewModel)
+		if self.ShowDefaultViewModel then
+			-- this resets the material to the default material
+			viewModel:SetMaterial("")
+		else
+			-- view model resets to render mode 0 every frame so we just apply
+			-- a debug material to prevent it from drawing
+			viewModel:SetMaterial("vgui/hsv")
+		end
+	end
+
+	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
@@ -322,21 +342,17 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
-		local client = LocalPlayer()
-
-		client:DrawViewModel(not self.InvisibleViewModel)
-
 		if not cvEnableCrosshair:GetBool() then return end
 
-
+		local client = LocalPlayer()
 		local sights = not self.NoSights and self:GetIronsights()
 
-		local xCenter = mathFloor(ScrW() * 0.5)
-		local yCenter = mathFloor(ScrH() * 0.5)
+		local xCenter = mathCeil(ScrW() * 0.5)
+		local yCenter = mathCeil(ScrH() * 0.5)
 		local scale = appearance.GetGlobalScale()
-		local baseConeWeapon = math.max(0.2, 10 * self:GetPrimaryConeBase())
+		local baseConeWeapon = mathMax(0.2, 10 * self:GetPrimaryConeBase())
 		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
-		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
+		local timescale = 2 - mathClamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
 
 		-- handle size animation
 		if scaleWeapon ~= animData.valueEnd then
@@ -355,11 +371,11 @@ if CLIENT then
 		)
 
 		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-		local gap = mathFloor(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
-		local thicknessLine = mathFloor(cvThicknessCrosshair:GetFloat() * scale)
-		local thicknessOutline = mathFloor(cvThicknessOutlineCrosshair:GetFloat() * scale)
-		local lengthLine = mathFloor(gap + 25 * cvSizeCrosshair:GetFloat() * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon) * timescale * scale)
-		local offsetLine = mathFloor(thicknessLine * 0.5)
+		local gap = mathCeil(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
+		local thicknessLine = mathCeil(cvThicknessCrosshair:GetFloat() * scale)
+		local thicknessOutline = mathCeil(cvThicknessOutlineCrosshair:GetFloat() * scale)
+		local lengthLine = mathCeil(gap + 25 * cvSizeCrosshair:GetFloat() * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon) * timescale * scale)
+		local offsetLine = mathCeil(thicknessLine * 0.5)
 
 		-- set up crosshair color
 		local color = appearance.SelectFocusColor(client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color)

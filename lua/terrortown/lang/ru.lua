@@ -1663,8 +1663,6 @@ L.label_bots_are_spectators = "Боты всегда наблюдатели"
 L.label_tbutton_admin_show = "Показывать кнопки предателей администраторам"
 L.label_ragdoll_carrying = "Включить поднятие рэгдоллов"
 L.label_prop_throwing = "Включить метание предметов"
-L.label_ragdoll_pinning = "Включить прикрепление тел для не невиновных ролей"
-L.label_ragdoll_pinning_innocents = "Включить прикрепление для невиновных ролей"
 L.label_weapon_carrying = "Включить поднятие оружия"
 L.label_weapon_carrying_range = "Дальность поднятого оружия"
 L.label_prop_carrying_force = "Сила поднятия предметов"
@@ -1967,6 +1965,9 @@ L.search_eyes = "Используя свои детективные навыки
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
 --L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
@@ -2065,7 +2066,7 @@ L.search_eyes = "Используя свои детективные навыки
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
 --L.knife_help_primary = "Stab"
 --L.knife_help_secondary = "Throw knife"
 --L.polter_help_primary = "Fire thumper"
@@ -2130,6 +2131,7 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2176,3 +2178,14 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 -- 2024-01-27
 L.decoy_help_primary = "Установить Приманку"
 --L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
