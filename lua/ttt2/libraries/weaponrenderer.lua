@@ -223,7 +223,7 @@ function weaponrenderer.UpdateBonePositions(wep, viewModel)
 end
 
 ---
--- Builds a render order or returns the cache if already built. The render order is necessary
+-- Returns an ordered elements table. The render order is necessary
 -- because models have to be drawn before sprites and quads.
 -- @param table elements the view elements table
 -- @return table Returns a new or the cached render order
