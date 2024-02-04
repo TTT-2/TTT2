@@ -90,6 +90,7 @@ end
 -- Creates a clientside model that is used as a view or world model with the provided model data.
 -- @param Entity wep The weapon for which the model should be created
 -- @param ModelData modelData The model data for the model
+-- @return table The new created model data table
 -- @realm client
 function modelbuilder.CreateModel(wep, modelData)
 	local modelDataCopy = table.FullCopy(modelData)
