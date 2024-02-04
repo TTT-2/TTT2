@@ -11,8 +11,10 @@ if CLIENT then
 	ENT.PrintName = "Beacon"
 end
 
-ENT.Type = "anim"
-ENT.Model = Model("models/props_lab/reciever01a.mdl")
+ENT.Base = "ttt_base_placeable"
+
+ENT.Model = "models/props_lab/reciever01a.mdl"
+
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
 
@@ -21,21 +23,12 @@ ENT.lastPlysFound = {}
 
 local beaconDetectionRange = 135
 
-local soundZap = Sound("npc/assassin/ball_zap1.wav")
-local soundBeep = Sound("weapons/c4/cc4_beep1.wav")
-
 ---
 -- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
-	if SERVER then
-		self:PhysicsInit(SOLID_VPHYSICS)
-	end
-
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_BBOX)
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+	self.BaseClass.Initialize(self)
 
 	if SERVER then
 		self:SetMaxHealth(100)
@@ -46,7 +39,10 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 		self:NextThink(CurTime() + 1)
 
-		markerVision.RegisterEntity(self, self:GetOwner(), VISIBLE_FOR_PLAYER)
+		local mvObject = self:AddMarkerVision("beacon_owner")
+		mvObject:SetOwner(ROLE_DETECTIVE)
+		mvObject:SetVisibleFor(VISIBLE_FOR_ROLE)
+		mvObject:SyncToClients()
 	end
 end
 
@@ -54,7 +50,7 @@ end
 -- @param Entity activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if not IsValid(activator) or self:GetOwner() ~= activator then return end
+	if not IsValid(activator) or self:GetOriginator() ~= activator then return end
 
 	local wep = activator:GetWeapon("weapon_ttt_beacon")
 
@@ -63,36 +59,25 @@ function ENT:UseOverride(activator)
 
 		if not pickup then return end
 	else
-		wep = activator:GiveEquipmentWeapon("weapon_ttt_beacon")
+		wep = activator:SafePickupWeaponClass("weapon_ttt_beacon", true)
 	end
 
 	self:Remove()
 end
 
----
--- @param CTakeDamageInfo dmginfo
--- @realm shared
-function ENT:OnTakeDamage(dmginfo)
-	self:TakePhysicsDamage(dmginfo)
-	self:SetHealth(self:Health() - dmginfo:GetDamage())
-
-	if self:Health() <= 0 then
-		self:Remove()
-
-		local effect = EffectData()
-		effect:SetOrigin(self:GetPos())
-
-		util.Effect("cball_explode", effect)
-
-		sound.Play(soundZap, self:GetPos())
-
-		if IsValid(self:GetOwner()) then
-			LANG.Msg(self:GetOwner(), "msg_beacon_destroyed", nil, MSG_MSTACK_WARN)
-		end
-	end
-end
-
 if SERVER then
+	local soundBeep = Sound("weapons/c4/cc4_beep1.wav")
+
+	---
+	-- @realm server
+	function ENT:WasDestroyed()
+		local originator = self:GetOriginator()
+
+		if not IsValid(originator) then return end
+
+		LANG.Msg(originator, "msg_beacon_destroyed", nil, MSG_MSTACK_WARN)
+	end
+
 	---
 	-- @realm server
 	function ENT:Think()
@@ -124,10 +109,14 @@ if SERVER then
 		for ply in pairs(affectedPlayers) do
 			if plysFound[ply] and not self.lastPlysFound[ply] then
 				-- newly added player in range
-				markerVision.RegisterEntity(ply, self:GetOwner(), VISIBLE_FOR_ALL, roles.DETECTIVE.color)
+				local mvObject = ply:AddMarkerVision("beacon_player")
+				mvObject:SetOwner(self:GetOwner())
+				mvObject:SetVisibleFor(VISIBLE_FOR_ALL)
+				mvObject:SetColor(roles.DETECTIVE.color)
+				mvObject:SyncToClients()
 			elseif not plysFound[ply] and self.lastPlysFound[ply] then
 				-- player lost in range
-				markerVision.RemoveEntity(ply)
+				ply:RemoveMarkerVision("beacon_player")
 			end
 		end
 
@@ -142,10 +131,10 @@ if SERVER then
 	-- @realm server
 	function ENT:OnRemove()
 		for ply in pairs(self.lastPlysFound) do
-			markerVision.RemoveEntity(ply)
+			ply:RemoveMarkerVision("beacon_player")
 		end
 
-		markerVision.RemoveEntity(self)
+		self:RemoveMarkerVision("beacon_owner")
 	end
 
 	---
@@ -169,7 +158,7 @@ if SERVER then
 
 		for i = 1, #beaconsFound do
 			local beacon = beaconsFound[i]
-			local beaconOwner = beacon:GetOwner()
+			local beaconOwner = beacon:GetOriginator()
 
 			if not IsValid(beaconOwner) or table.HasValue(playersNotified, beaconOwner) then continue end
 
@@ -231,7 +220,7 @@ if CLIENT then
 
 		tData:SetTitle(TryT(ent.PrintName))
 
-		if ent:GetOwner() == client then
+		if ent:GetOriginator() == client then
 			tData:SetKeyBinding("+use")
 			tData:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
 		else
@@ -244,10 +233,11 @@ if CLIENT then
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
 		local ent = mvData:GetEntity()
+		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not IsValid(ent) or ent:GetClass() ~= "ttt_beacon" then return end
+		if not mvObject:IsObjectFor(ent, "beacon_owner") then return end
 
-		local owner = ent:GetOwner()
+		local owner = ent:GetOriginator()
 		local nick = IsValid(owner) and owner:Nick() or "---"
 
 		local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
@@ -260,13 +250,14 @@ if CLIENT then
 		mvData:AddDescriptionLine(ParT("marker_vision_owner", {owner = nick}))
 		mvData:AddDescriptionLine(ParT("marker_vision_distance", {distance = distance}))
 
-		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeaconPlys", function(mvData)
 		local ent = mvData:GetEntity()
+		local mvObject = mvData:GetMarkerVisionObject()
 
-		if not IsValid(ent) or not ent:IsPlayer() or ent == LocalPlayer() then return end
+		if not mvObject:IsObjectFor(ent, "beacon_player") or ent == LocalPlayer() then return end
 
 		mvData:EnableText()
 
@@ -275,7 +266,7 @@ if CLIENT then
 
 		mvData:AddDescriptionLine(TryT("beacon_marker_vision_player_tracked"))
 
-		mvData:AddDescriptionLine(TryT("marker_vision_visible_for_" .. markerVision.GetVisibleFor(ent)), COLOR_SLATEGRAY)
+		mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
 	end)
 
 	hook.Add("PostDrawTranslucentRenderables", "BeaconRenderRadius", function(_, bSkybox)
@@ -293,7 +284,7 @@ if CLIENT then
 		for i = 1, #entities do
 			local ent = entities[i]
 
-			if ent:GetClass() ~= "ttt_beacon" or ent:GetOwner() ~= client then continue end
+			if ent:GetClass() ~= "ttt_beacon" or ent:GetOriginator() ~= client then continue end
 
 			local distance = math.max(beaconDetectionRange, client:GetPos():Distance(ent:GetPos()))
 			colorSphere.a = baseOpacity * math.max(maxRenderDistance - distance, 0) / maxRenderDistance

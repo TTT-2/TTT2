@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "机器人永远是观察者"
 L.label_tbutton_admin_show = "向管理员显示叛徒按钮"
 L.label_ragdoll_carrying = "启用布娃娃搬运"
 L.label_prop_throwing = "启用道具投掷"
-L.label_ragdoll_pinning = "为非无辜者角色启用布娃娃夹子"
-L.label_ragdoll_pinning_innocents = "为无辜者启用布娃娃夹子"
 L.label_weapon_carrying = "启用武器搬运"
 L.label_weapon_carrying_range = "武器搬运范围"
 L.label_prop_carrying_force = "Prop推进力"
@@ -2084,14 +2082,10 @@ L.newton_force = "推力"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "安放诱饵。"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
 --L.marker_vision_distance_collapsed = "{distance}m"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2131,6 +2125,7 @@ L.builtin_marker = "内置。"
 L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
 L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
+
 
 -- 2023-12-22
 L.submenu_gameplay_accessibility_title = "辅助功能"
@@ -2175,5 +2170,22 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "武器设置"
 
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放诱饵"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

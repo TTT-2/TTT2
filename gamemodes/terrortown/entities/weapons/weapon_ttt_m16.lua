@@ -2,6 +2,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "ar2"
 
 if CLIENT then
@@ -79,7 +81,7 @@ function SWEP:PreDrop()
 	self:SetIronsights(false)
 	self:SetZoom(false)
 
-	return self.BaseClass.PreDrop(self)
+	return BaseClass.PreDrop(self)
 end
 
 ---

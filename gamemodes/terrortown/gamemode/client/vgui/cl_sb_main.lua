@@ -279,7 +279,7 @@ local function column_label_work(self_, table_to_add, label, width, sort_identif
 		-- Otherwise...
 		if _G.sboard_sort[sort_identifier] == nil then
 			if sort_func == nil then
-				ErrorNoHalt("Sort ID provided without a sorting function, Label = ", label, " ; ID = ", sort_identifier)
+				ErrorNoHaltWithStack("Sort ID provided without a sorting function, Label = ", label, " ; ID = ", sort_identifier)
 
 				can_sort = false
 			else

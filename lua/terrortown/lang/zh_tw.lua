@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "機器人永遠是觀察者"
 L.label_tbutton_admin_show = "向管理員顯示叛徒按鈕"
 L.label_ragdoll_carrying = "啟用布娃娃搬運"
 L.label_prop_throwing = "啟用道具投擲"
-L.label_ragdoll_pinning = "為非無辜者角色啟用布娃娃夾子"
-L.label_ragdoll_pinning_innocents = "為無辜者啟用布娃娃夾子"
 L.label_weapon_carrying = "啟用武器搬運"
 L.label_weapon_carrying_range = "武器搬運範圍"
 L.label_prop_carrying_force = "Prop推進力"
@@ -2084,14 +2082,10 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "安放誘餌。"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
 --L.marker_vision_distance_collapsed = "{distance}m"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2131,6 +2125,7 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
+
 
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
@@ -2175,5 +2170,22 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 
 --L.header_weapon_settings = "Weapon Settings"
 
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放誘餌"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

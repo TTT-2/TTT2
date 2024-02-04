@@ -121,7 +121,7 @@ function huds.Get(name, retTbl)
 		local base = huds.Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive HUD " .. tostring(name) .. " from non existant HUD " .. tostring(retval.Base) .. "!\n")
+			ErrorNoHaltWithStack("ERROR: Trying to derive HUD " .. tostring(name) .. " from non existant HUD " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end

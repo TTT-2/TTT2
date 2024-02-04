@@ -220,7 +220,7 @@ function LANG.GetNameFromAlias(langName)
 
 	for name, tbl in pairs(LANG.Strings) do
 		if tbl.__alias and string.lower(tbl.__alias) == langName then
-			MsgN("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
+			Dev(1, "[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
 
 			return name
 		end
@@ -238,7 +238,7 @@ function LANG.GetUnsafeNamed(langName)
 	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
-		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(langName)))
+		ErrorNoHaltWithStack(Format("Failed to get '%s': language does not exist.\n", tostring(langName)))
 
 		return
 	end
@@ -324,7 +324,7 @@ function LANG.SetActiveLanguage(langName)
 			hook.Run("TTTLanguageChanged", oldName, langName)
 		end
 	else
-		MsgN(Format("The language '%s' does not exist on this server. Falling back to English...", langName))
+		Dev(1, Format("The language '%s' does not exist on this server. Falling back to English...", langName))
 
 		-- fall back to default if possible
 		if langName ~= LANG.DefaultLanguage then
@@ -409,19 +409,19 @@ LANG.Styles = {
 	[MSG_MSTACK_ROLE] = function(text)
 		MSTACK:AddColoredBgMessage(text, LocalPlayer():GetRoleColor())
 
-		print("[TTT2] Role:	" .. text)
+		Dev(2, "[TTT2] Role:	" .. text)
 	end,
 
 	[MSG_MSTACK_WARN] = function(text)
 		MSTACK:AddColoredBgMessage(text, colorWarn)
 
-		print("[TTT2] Warn:	" .. text)
+		Dev(2, "[TTT2] Warn:	" .. text)
 	end,
 
 	[MSG_MSTACK_PLAIN] = function(text)
 		MSTACK:AddMessage(text)
 
-		print("[TTT2]:	" .. text)
+		Dev(2, "[TTT2]:	" .. text)
 	end,
 
 	[MSG_CHAT_ROLE] = function(text)

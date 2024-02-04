@@ -70,7 +70,7 @@ end
 -- @realm server
 -- @internal
 function HUDManager.StoreData()
-	MsgN("[TTT2][HUDManager] Storing data in database...")
+	Dev(1, "[TTT2][HUDManager] Storing data in database...")
 
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_TABLE, "key TEXT PRIMARY KEY, value TEXT") then
 		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('forcedHUD', " .. sql.SQLStr(ttt2net.GetGlobal({"hud_manager", "forcedHUD"})) .. ")")
@@ -94,7 +94,7 @@ end
 -- @realm server
 -- @internal
 function HUDManager.LoadData()
-	MsgN("[TTT2][HUDManager] Loading data from database...")
+	Dev(1, "[TTT2][HUDManager] Loading data from database...")
 
 	ttt2net.SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, DB_GetStringValue("forcedHUD"))
 	ttt2net.SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, DB_GetStringValue("defaultHUD") or "pure_skin")

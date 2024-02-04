@@ -209,6 +209,10 @@ addonChecker.curatedList = {
 		reason = "Prints only Detectives in TTT2. Roles are hard coded.",
 		type = ADDON_INCOMPATIBLE
 	},
+	["110148946"] = { -- ttt_broken_hand_fix by Jolez
+		reason = "Already built in into TTT2",
+		type = ADDON_INCOMPATIBLE
+	},
 	["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
 		alternative = "2150924507",
 		reason = "Addon is broken and doesn't do anything.",
@@ -654,13 +658,13 @@ function addonChecker.Check()
 		ErrorNoHalt(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
 
 		if detectedAddon.reason then
-			ErrorNoHalt("Reason: " .. detectedAddon.reason .. "\n")
+			print("Reason: " .. detectedAddon.reason .. "\n")
 		end
 
-		ErrorNoHalt("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
+		print("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
 
 		if detectedAddon.alternative then
-			ErrorNoHalt("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
+			print("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
 		end
 
 		print("")

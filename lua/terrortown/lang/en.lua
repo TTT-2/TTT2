@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 L.submenu_gameplay_general_title = "General"
 
@@ -1967,7 +1966,6 @@ mode 2: This mode is yet a bit more strict than mode 1. In this mode the search 
 L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
 
 -- 2023-10-23
-L.header_miscellaneous_settings = "Miscellaneous Settings"
 L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 L.header_hud_elements_customize = "Customize the HUD-Elements"
 L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2082,14 +2080,10 @@ L.radio_help_primary = "Place the Radio"
 L.radio_help_secondary = "Stick to surface"
 L.hstation_help_primary = "Place the Health Station"
 L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "Stick to surface"
 
 -- 2023-12-14
 L.marker_vision_owner = "Owner: {owner}"
 L.marker_vision_distance = "Distance: {distance}m"
-L.marker_vision_visible_for_0 = "Visible for: you"
-L.marker_vision_visible_for_1 = "Visible for: team"
-L.marker_vision_visible_for_2 = "Visible for: everyone"
 L.marker_vision_distance_collapsed = "{distance}m"
 
 L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2174,6 +2168,16 @@ Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. 
 If the line length is kept static, only the gap scales with cone changes.]]
 
 L.header_weapon_settings = "Weapon Settings"
+
+--2024-01-29
+L.marker_vision_visible_for_0 = "Visible for you"
+L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_2 = "Visible for your team"
+L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "Throw Decoy on the ground"
+L.decoy_help_secondary = "Stick Decoy to surface"
 
 -- 2024-01-24
 L.grenade_fuse = "FUSE"

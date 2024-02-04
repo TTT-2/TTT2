@@ -334,7 +334,7 @@ end
 -- Subclasses must override with their own grenade ent.
 -- @realm shared
 function SWEP:GetGrenadeName()
-	ErrorNoHalt("SWEP BASEGRENADE ERROR: GetGrenadeName not overridden! This is probably wrong!\n")
+	ErrorNoHaltWithStack("SWEP BASEGRENADE ERROR: GetGrenadeName not overridden! This is probably wrong!\n")
 
 	return "ttt_firegrenade_proj"
 end
@@ -427,20 +427,21 @@ function SWEP:Initialize()
 	self.was_thrown = false
 end
 
----
--- @ignore
-function SWEP:OnRemove()
-	local owner = self:GetOwner()
-
-	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
-		RunConsoleCommand("use", "weapon_ttt_unarmed")
-	end
-end
 
 if CLIENT then
 	local draw = draw
 	local TryT = LANG.TryTranslation
 	local hudTextColor = Color(255, 255, 255, 180)
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("use", "weapon_ttt_unarmed")
+		end
+	end
 
 	---
 	-- @ignore

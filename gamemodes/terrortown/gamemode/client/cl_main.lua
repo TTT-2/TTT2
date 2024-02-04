@@ -34,6 +34,7 @@ ttt_include("sh_door")
 ttt_include("sh_voice")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
+ttt_include("sh_marker_vision_element")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -119,11 +120,11 @@ ttt_include("cl_weapon_pickup")
 ttt_include("cl_help") -- Creates Menus which depend on other client files. Should be loaded as late as possible
 
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
-	MsgN("Added TTT2 client autorun file: ", path)
+	Dev(1, "Added TTT2 client autorun file: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
-	MsgN("Added TTT2 shared autorun file: ", path)
+	Dev(1, "Added TTT2 shared autorun file: ", path)
 end)
 
 -- all files are loaded
@@ -151,7 +152,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
-	MsgN("TTT2 Client initializing...")
+	Dev(1, "TTT2 Client initializing...")
 
 	---
 	-- @realm client
@@ -163,17 +164,17 @@ function GM:Initialize()
 	-- load default TTT2 language files or mark them as downloadable on the server
 	-- load addon language files in a second pass, the core language files are loaded earlier
 	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
+		Dev(1, "Added TTT2 language file: ", path)
 	end)
 
 	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
-		MsgN("Added TTT2 language file: ", path)
+		ErrorNoHaltWithStack("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \"" .. path .. "\"")
+		Dev(1, "Added TTT2 language file: ", path)
 	end)
 
 	-- load vskin files
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
+		Dev(1, "Added TTT2 vskin file: ", path)
 	end)
 
 	-- initialize scale callbacks
@@ -225,7 +226,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	MsgN("TTT Client post-init...")
+	Dev(1, "TTT Client post-init...")
 
 	---
 	-- @realm client
@@ -421,6 +422,9 @@ local function RoundStateChange(o, n)
 
 		-- clear decals in cache from previous round
 		util.ClearDecals()
+
+		-- resets bone positions that fixes broken fingers on bad addons
+		weaponrenderer.ResetBonePositions(LocalPlayer():GetViewModel())
 	elseif n == ROUND_ACTIVE then
 		-- round starts
 		VOICE.CycleMuteState(MUTE_NONE)
@@ -475,7 +479,7 @@ local function RoundStateChange(o, n)
 end
 
 local function ttt_print_playercount()
-	print(GAMEMODE.StartingPlayers)
+	Dev(2, GAMEMODE.StartingPlayers)
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
@@ -546,7 +550,7 @@ local function ReceiveRoundState()
 		RoundStateChange(o, GAMEMODE.round_state)
 	end
 
-	MsgN("Round state: " .. GAMEMODE.round_state)
+	Dev(1, "Round state: " .. GAMEMODE.round_state)
 end
 net.Receive("TTT_RoundState", ReceiveRoundState)
 
@@ -642,7 +646,7 @@ local function PlayerSpawn()
 
 	-- TTT Totem prevention
 	if LocalPlayer().GetRoleTable then
-		print("[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod...")
+		ErrorNoHaltWithStack("[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod...")
 	end
 end
 net.Receive("TTT_PlayerSpawned", PlayerSpawn)

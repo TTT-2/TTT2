@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
 L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
-L.label_ragdoll_pinning = "Masum olmayan roller için ceset sabitlemeyi etkinleştir"
-L.label_ragdoll_pinning_innocents = "Masum roller için ceset pinlemeyi etkinleştir"
 L.label_weapon_carrying = "Silah taşımayı etkinleştir"
 L.label_weapon_carrying_range = "Silah taşıma menzili"
 L.label_prop_carrying_force = "Nesne kaldırma gücü"
@@ -2084,14 +2082,10 @@ L.radio_help_primary = "Radyoyu yerleştir"
 L.radio_help_secondary = "Zemine yapıştır"
 L.hstation_help_primary = "Sağlık İstasyonunu yerleştir"
 L.flaregun_help_primary = "Varlığı yak"
-L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2023-12-14
 L.marker_vision_owner = "Sahip: {owner}"
 L.marker_vision_distance = "Uzaklık: {distance}m"
-L.marker_vision_visible_for_0 = "Sadece size görünür"
-L.marker_vision_visible_for_1 = "Takıma görünür"
-L.marker_vision_visible_for_2 = "Herkese görünür"
 L.marker_vision_distance_collapsed = "{distance}m"
 
 L.c4_marker_vision_time = "Patlamaya: {time}"
@@ -2131,6 +2125,7 @@ L.builtin_marker = "Bütünleşik."
 L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
+
 
 -- 2023-12-22
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
@@ -2173,5 +2168,22 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 
 L.header_weapon_settings = "Silah Ayarları"
 
+L.marker_vision_visible_for_0 = "Sadece size görünür"
+--L.marker_vision_visible_for_1 = "Visible for your team"
+L.marker_vision_visible_for_2 = "Takıma görünür"
+L.marker_vision_visible_for_3 = "Herkese görünür"
+
+-- 2024-01-27
+L.decoy_help_primary = "Tuzağı yerleştirin"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

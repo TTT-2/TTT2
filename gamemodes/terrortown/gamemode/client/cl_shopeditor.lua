@@ -49,7 +49,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 			if eq.id then
 				tbl[#tbl + 1] = eq
 			else
-				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Item without id:\n")
+				ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Item without id:\n")
 				PrintTable(eq)
 			end
 		end
@@ -72,7 +72,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 			if hook.Run("TTT2RegisterWeaponID", eq) then
 				tbl[#tbl + 1] = eq
 			else
-				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
+				ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
 			end
 		end
 	end

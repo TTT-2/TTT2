@@ -104,7 +104,7 @@ function SWEP:Initialize()
 	self.IsCharging = false
 	self:SetCharge(0)
 
-	return self.BaseClass.Initialize(self)
+	return BaseClass.Initialize(self)
 end
 
 ---
@@ -213,8 +213,14 @@ function SWEP:CreateHammer(tgt, pos)
 end
 
 ---
--- @ignore
+-- @realm shared
 function SWEP:OnRemove()
+	local owner = self:GetOwner()
+
+	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+		RunConsoleCommand("lastinv")
+	end
+
 	if CLIENT and IsValid(self.Ghost) then
 		self.Ghost:Remove()
 	end
@@ -233,7 +239,7 @@ function SWEP:Holster()
 	self.IsCharging = false
 	self:SetCharge(0)
 
-	return self.BaseClass.Holster(self)
+	return true
 end
 
 
@@ -244,7 +250,7 @@ if SERVER then
 	---
 	-- @ignore
 	function SWEP:Think()
-		self.BaseClass.Think(self)
+		BaseClass.Think(self)
 
 		if not IsValid(self:GetOwner()) then return end
 
@@ -316,6 +322,8 @@ if CLIENT then
 	---
 	-- @ignore
 	function SWEP:ViewModelDrawn()
+		BaseClass.ViewModelDrawn(self)
+
 		local client = LocalPlayer()
 		local vm = client:GetViewModel()
 		if not IsValid(vm) then return end
@@ -390,7 +398,6 @@ if CLIENT then
 		liney = liney > 13 and 0 or liney + 1
 
 		cam.End3D2D()
-
 	end
 
 	---

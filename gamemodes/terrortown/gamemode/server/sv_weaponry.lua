@@ -423,7 +423,7 @@ function GM:PlayerLoadout(ply, isRespawn)
 	end)
 
 	if not HasLoadoutWeapons(ply) then
-		MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
+		Dev(1, "Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 
 		local timerId = ply:EntIndex()
 
@@ -486,7 +486,7 @@ function GM:WeaponEquip(wep, ply)
 	if not wep.Kind then
 		wep:Remove() -- only remove if they lack critical stuff
 
-		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+		ErrorNoHaltWithStack("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
 
 		return
 	end

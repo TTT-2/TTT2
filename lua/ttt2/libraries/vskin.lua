@@ -32,7 +32,7 @@ vskin.skins = vskin.skins or {}
 -- @realm client
 function vskin.RegisterVSkin(name, skin)
 	if vskin.skins[name] then
-		print("[TTT2 Skin] A skin with this name already exists!")
+		ErrorNoHaltWithStack("[TTT2 Skin] A skin with this name already exists!")
 
 		return
 	end
