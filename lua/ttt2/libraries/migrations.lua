@@ -27,15 +27,6 @@ function migrations.Apply()
 	local files = file.Find(migrations.folderPath .. "*.lua", "LUA", "nameasc") or {}
 
 	local fileExecutionCounter = 0
-
-	-- Add Hook to OnLuaError to catch if migrations fail
-	local isSuccess = true
-	local hookName = "OnLuaError"
-	local hookIdentifier = "TTT2MigrationErrorCatcher"
-	hook.Add(hookName, hookIdentifier, function(error, realm, stack, name, id)
-		isSuccess = false
-	end)
-
 	for i = 1, #files do
 		local fileName = files[i]
 		local fullPath = migrations.folderPath .. files[i]
@@ -49,10 +40,10 @@ function migrations.Apply()
 		if SERVER then
 			AddCSLuaFile(fullPath)
 		end
-		include(fullPath)
+		local isSuccess, errorMessage = pcall(include(fullPath))
 
 		if not isSuccess then
-			Error("\n[TTT2] Migration failed.\n\n")
+			Error("\n[TTT2] Migration failed.\n", errorMessage, "\n\n")
 
 			return
 		end
@@ -66,8 +57,6 @@ function migrations.Apply()
 
 		fileExecutionCounter = fileExecutionCounter + 1
 	end
-
-	hook.Remove(hookName, hookIdentifier)
 
 	MsgN("[TTT2] Successfully migrated ", fileExecutionCounter, " Files.")
 end

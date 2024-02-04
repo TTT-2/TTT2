@@ -1,4 +1,6 @@
 --- @ignore
 -- Sample Migration file for favorites
 -- Will be removed after review
-print("Sample migration was called.")
+return function ()
+	print("Sample migration was called.")
+end
