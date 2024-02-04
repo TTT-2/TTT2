@@ -8,7 +8,7 @@
 -- @module weaponrenderer
 
 ---@class ModelData
----@field type string The type of this model, it can be "Model", "SPrite" or "Quad"
+---@field type string The type of this model, it can be "Model", "Sprite" or "Quad"
 ---@field model string The path to the model file
 ---@field bone string The name of the reference bone
 ---@field rel string The name of a related identifier
