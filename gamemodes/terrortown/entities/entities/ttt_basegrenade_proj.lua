@@ -60,7 +60,7 @@ end
 -- @ignore
 function ENT:Think()
 	local etime = self:GetExplodeTime() or 0
-	if etime != 0 and etime < CurTime() then
+	if etime ~= 0 and etime < CurTime() then
 		-- if thrower disconnects before grenade explodes, just don't explode
 		if SERVER and (not IsValid(self:GetThrower())) then
 			self:Remove()
