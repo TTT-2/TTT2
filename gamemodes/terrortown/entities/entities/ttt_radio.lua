@@ -11,8 +11,9 @@ else
 	ENT.PrintName = "radio_name"
 end
 
-ENT.Type = "anim"
-ENT.Model = Model("models/props/cs_office/radio.mdl")
+ENT.Base = "ttt_base_placeable"
+
+ENT.Model = "models/props/cs_office/radio.mdl"
 
 ENT.CanUseKey = true
 ENT.CanHavePrints = false
@@ -24,10 +25,7 @@ ENT.SoundDelay = 0.5
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_NONE)
+	self.BaseClass.Initialize(self)
 
 	if SERVER then
 		self:SetMaxHealth(40)
@@ -48,7 +46,7 @@ function ENT:Initialize()
 	if CLIENT then
 		local client = LocalPlayer()
 
-		if client == self:GetOwner() then
+		if client == self:GetOriginator() then
 			client.radio = self
 		end
 	end
@@ -62,7 +60,7 @@ end
 -- @param Player activator
 -- @realm shared
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator == self:GetOwner() then
+	if IsValid(activator) and activator:IsPlayer() and activator == self:GetOriginator() then
 		local prints = self.fingerprints or {}
 
 		-- picks up weapon, switches if possible and needed, returns weapon if successful
@@ -80,27 +78,15 @@ function ENT:UseOverride(activator)
 	end
 end
 
-local zapsound = Sound("npc/assassin/ball_zap1.wav")
+if SERVER then
+	---
+	-- @realm server
+	function ENT:WasDestroyed()
+		local originator = self:GetOriginator()
 
----
--- @param CTakeDamageInfo dmginfo
--- @realm shared
-function ENT:OnTakeDamage(dmginfo)
-	self:TakePhysicsDamage(dmginfo)
-	self:SetHealth(self:Health() - dmginfo:GetDamage())
+		if not IsValid(originator) then return end
 
-	if self:Health() > 0 then return end
-
-	self:Remove()
-
-	local effect = EffectData()
-	effect:SetOrigin(self:GetPos())
-
-	util.Effect("cball_explode", effect)
-	sound.Play(zapsound, self:GetPos())
-
-	if IsValid(self:GetOwner()) then
-		LANG.Msg(self:GetOwner(), "radio_broken")
+		LANG.Msg(originator, "radio_broken", nil, MSG_MSTACK_WARN)
 	end
 end
 
@@ -110,7 +96,7 @@ function ENT:OnRemove()
 	if CLIENT then
 		local client = LocalPlayer()
 
-		if client ~= self:GetOwner() then return end
+		if client ~= self:GetOriginator() then return end
 
 		client.radio = nil
 	else
@@ -292,7 +278,7 @@ local nextplay = 0
 ---
 -- @realm shared
 function ENT:Think()
-	if CurTime() <= nextplay or (istable(self.SoundQueue) and #self.SoundQueue <= 0) then return end
+	if CurTime() <= nextplay or not istable(self.SoundQueue) or #self.SoundQueue <= 0 then return end
 
 	if not self.Playing then
 		self:PlaySound(table.remove(self.SoundQueue, 1))
@@ -325,7 +311,7 @@ if CLIENT then
 
 		tData:SetTitle(TryT(ent.PrintName))
 
-		if ent:GetOwner() == client then
+		if ent:GetOriginator() == client then
 			tData:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
 		else
 			tData:SetSubtitle(TryT("entity_pickup_owner_only"))
@@ -341,8 +327,8 @@ if CLIENT then
 
 		if not mvObject:IsObjectFor(ent, "radio_owner") then return end
 
-		local owner = ent:GetOwner()
-		local nick = IsValid(owner) and owner:Nick() or "---"
+		local originator = ent:GetOriginator()
+		local nick = IsValid(originator) and originator:Nick() or "---"
 
 		local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
 
@@ -384,12 +370,12 @@ if SERVER then
 
 		local radio = Entity(eidx)
 
-		if ply:GetTeam() ~= radio:GetOwner():GetTeam() then return end
+		if ply:GetTeam() ~= radio:GetOriginator():GetTeam() then return end
 
-		if not IsValid(radio) or radio:GetOwner() ~= ply or radio:GetClass() ~= "ttt_radio" then return end
+		if not IsValid(radio) or radio:GetOriginator() ~= ply or radio:GetClass() ~= "ttt_radio" then return end
 
 		if not table.HasValue(soundtypes, snd) then
-			print("Received radio sound not in table from", ply)
+			ErrorNoHaltWithStack("Received radio sound not in table from", ply)
 
 			return
 		end

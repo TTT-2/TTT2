@@ -371,3 +371,29 @@ function table.DeepInherit(t, base)
 
 	return t
 end
+
+-- Fully copies the table, meaning all tables inside this table are copied too.
+-- Normal table.Copy copies only their reference.
+-- @note Does not copy entities as well, only copies their reference.
+-- @warning Do not use on tables that contain themselves somewhere down the line or
+-- you'll get an infinite loop
+-- @param table tbl The table that should be copied
+-- @return table The copied table
+-- @realm shared
+function table.FullCopy(tbl)
+	local result = {}
+
+	for key, value in pairs(tbl) do
+		if type(value) == "table" then
+			result[key] = table.FullCopy(value)
+		elseif type(v) == "Vector" then
+			result[key] = Vector(value.x, value.y, value.z)
+		elseif type(v) == "Angle" then
+			result[key] = Angle(value.p, value.y, value.r)
+		else
+			result[key] = value
+		end
+	end
+
+	return result
+end

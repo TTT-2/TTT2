@@ -12,6 +12,8 @@ if SERVER then
 	ttt_telefrags = CreateConVar("ttt_teleport_telefrags", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "normal"
 
 if CLIENT then
@@ -358,7 +360,7 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("tele_help_pri", "tele_help_sec")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---

@@ -29,8 +29,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Added support for easy addition of custom view and world models (by @TimGoll)
+  - Added `AddCustomViewModel` to add custom view models
+  - Added `AddCustomWorldModel` to add custom world models
+  - Added an automatic fix for badly coded addons that break the view model fingers
+- Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
+  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt0_radio` and `ttt_cse_proj` to that base
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
+- `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
 
 ### Changed
 
@@ -56,6 +64,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
 - Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
 - Spectator name labels now use a skin font and scaling (by @EntranceJew)
+- The built-in radar now displays distances in meters (by @TimGoll)
+- Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
+- Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
+- Magneto stick now shows tooltips respective to its current state.
+- `ttt_flame` is visible while it is moving  (by @EntranceJew)
+- `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
+- The built-in DNA scanner now displays distances in meters (by @TimGoll)
+- Noisy prints are now gated behind various levels of `developer` convar (by @EntranceJew)
+- Any warnings developers should fix will now print with stack traces (by @EntranceJew)
 
 ### Fixed
 
@@ -72,12 +89,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
 - Removed DX8/SW models that aren't used
+- Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
+- Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
 
 ### Breaking Changes
 
-- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
+- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
 - No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
+- Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
+  - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`
+  - Use new Setter `shop.SetEquipmentBought(ply, equipmentName)`, `shop.SetEquipmentGlobalBought(equipmentName)` and `shop.SetEquipmentTeamBought(ply, equipmentName)`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 

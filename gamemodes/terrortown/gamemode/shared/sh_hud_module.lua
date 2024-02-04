@@ -44,7 +44,7 @@ for i = 1, #pathFiles do
 
 	huds.Register(HUD, cls)
 
-	MsgN("[TTT2][Huds] Registered abstract HUD " .. cls)
+	Dev(1, "[TTT2][Huds] Registered abstract HUD " .. cls)
 
 	HUD = nil
 end
@@ -65,7 +65,7 @@ for i = 1, #subFolders do
 
 	huds.Register(HUD, folder)
 
-	MsgN("[TTT2][Huds] Registered abstract HUD " .. folder)
+	Dev(1, "[TTT2][Huds] Registered abstract HUD " .. folder)
 
 	HUD = nil
 end
@@ -94,7 +94,7 @@ for i = 1, #pathFiles2 do
 
 	huds.Register(HUD, cls)
 
-	MsgN("[TTT2][Huds] Registered HUD " .. cls)
+	Dev(1, "[TTT2][Huds] Registered HUD " .. cls)
 
 	HUD = nil
 end
@@ -116,7 +116,7 @@ for i = 1, #subFolders2 do
 
 	huds.Register(HUD, folder)
 
-	MsgN("[TTT2][Huds] Registered HUD " .. folder)
+	Dev(1, "[TTT2][Huds] Registered HUD " .. folder)
 
 	HUD = nil
 end

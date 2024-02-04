@@ -1661,8 +1661,6 @@ L.label_bots_are_spectators = "Botは観戦者状態にする"
 L.label_tbutton_admin_show = "管理者側にTraitorトラップを表示"
 L.label_ragdoll_carrying = "Ragdollの運搬を有効"
 L.label_prop_throwing = "オブジェクトを投げることを有効"
-L.label_ragdoll_pinning = "Innocent以外の役職に対してRagdollの張り付けを有効"
-L.label_ragdoll_pinning_innocents = "InnocentのRagdollの張り付けを有効"
 L.label_weapon_carrying = "武器の運搬を有効"
 L.label_weapon_carrying_range = "武器を運べるまでの距離"
 L.label_prop_carrying_force = "オブジェクト拾得力"
@@ -1965,6 +1963,9 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
 --L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
@@ -2063,7 +2064,7 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
 --L.knife_help_primary = "Stab"
 --L.knife_help_secondary = "Throw knife"
 --L.polter_help_primary = "Fire thumper"
@@ -2081,7 +2082,6 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "デコイを設置する"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
@@ -2125,6 +2125,7 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
+
 
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
@@ -2174,5 +2175,17 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.marker_vision_visible_for_2 = "Visible for your team"
 --L.marker_vision_visible_for_3 = "Visible for everyone"
 
+-- 2024-01-27
+L.decoy_help_primary = "デコイを設置する"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

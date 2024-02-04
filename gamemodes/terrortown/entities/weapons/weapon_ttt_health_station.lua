@@ -7,6 +7,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "normal"
 
 if CLIENT then
@@ -57,59 +59,20 @@ SWEP.drawColor = Color(180, 180, 250, 255)
 -- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:HealthDrop()
-end
 
-local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
---- ye olde droppe code
--- @ignore
-function SWEP:HealthDrop()
 	if SERVER then
-		local ply = self:GetOwner()
-		if not IsValid(ply) then return end
-
-		if self.Planted then return end
-
-		local vsrc = ply:GetShootPos()
-		local vang = ply:GetAimVector()
-		local vvel = ply:GetVelocity()
-
-		local vthrow = vvel + vang * 200
-
 		local health = ents.Create("ttt_health_station")
-		if IsValid(health) then
-			health:SetPos(vsrc + vang * 10)
-			health:Spawn()
 
-			health:SetPlacer(ply)
-
-			health:PhysWake()
-			local phys = health:GetPhysicsObject()
-			if IsValid(phys) then
-				phys:SetVelocity(vthrow)
-			end
+		if health:ThrowEntity(self:GetOwner(), Angle(90, -90, 0)) then
 			self:Remove()
-
-			self.Planted = true
 		end
 	end
-
-	self:EmitSound(throwsound)
 end
 
 ---
 -- @ignore
 function SWEP:Reload()
 	return false
-end
-
----
--- @ignore
-function SWEP:OnRemove()
-	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
-		RunConsoleCommand("lastinv")
-	end
 end
 
 ---
@@ -121,7 +84,7 @@ function SWEP:Initialize()
 
 	self:SetColor(self.drawColor)
 
-	return self.BaseClass.Initialize(self)
+	return BaseClass.Initialize(self)
 end
 
 
@@ -132,6 +95,16 @@ if CLIENT then
 		if IsValid(self:GetOwner()) then return end
 
 		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---

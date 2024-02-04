@@ -11,7 +11,7 @@ local hook = hook
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
-	Error("FAILED TO FIND PLAYER TABLE")
+	ErrorNoHaltWithStack("FAILED TO FIND PLAYER TABLE")
 
 	return
 end
@@ -228,7 +228,7 @@ plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 -- @realm server
 function plymeta:SendEquipment(mode, itemName)
 	if not mode then
-		ErrorNoHaltWithStack("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n")
+		ErrorNoHaltWithStackWithStack("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n")
 
 		return
 	end
@@ -299,31 +299,16 @@ end
 -- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
 -- @note This will disable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:RemoveBought
-function plymeta:AddBought(cls)
+function plymeta:AddBought(equipmentName)
 	self.bought = self.bought or {}
-	self.bought[#self.bought + 1] = tostring(cls)
+	self.bought[#self.bought + 1] = tostring(equipmentName)
 
-	BUYTABLE[cls] = true
-
-	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(cls)
-	net.Broadcast()
-
-	local team = self:GetTeam()
-
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-		TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-		TEAMBUYTABLE[team][cls] = true
-
-		if SERVER then
-			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(cls)
-			net.Send(GetTeamFilter(team))
-		end
-	end
+	shop.SetEquipmentBought(self, equipmentName)
+	shop.SetEquipmentGlobalBought(equipmentName)
+	shop.SetEquipmentTeamBought(self, equipmentName)
 
 	self:SendBought()
 end
@@ -332,16 +317,16 @@ end
 -- Removes an @{ITEM} or a @{Weapon} from the bought list of a @{Player}
 -- @note This will enable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:AddBought
-function plymeta:RemoveBought(cls)
+function plymeta:RemoveBought(equipmentName)
 	local key
 
 	self.bought = self.bought or {}
 
 	for k = 1, #self.bought do
-		if self.bought[k] ~= tostring(cls) then continue end
+		if self.bought[k] ~= tostring(equipmentName) then continue end
 
 		key = k
 
@@ -520,7 +505,7 @@ end
 -- @deprecated
 -- @realm server
 function plymeta:SetSpeed(slowed)
-	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
+	ErrorNoHaltWithStack("Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states")
 end
 
 ---
@@ -809,8 +794,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 	-- compatible mode for block round
 	if isbool(blockRound) then
-		MsgN("[DEPRECATION WARNING]: You should use the REVIVAL_BLOCK enum here.")
-		debug.Trace()
+		ErrorNoHaltWithStack("[DEPRECATION WARNING]: You should use the REVIVAL_BLOCK enum here.")
 	end
 
 	if blockRound == nil or blockRound == false then
@@ -1476,7 +1460,7 @@ end
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
 	if not IsValid(wep) then
-		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
+		ErrorNoHaltWithStack(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
 
 		LANG.Msg(self, "pickup_fail")
 

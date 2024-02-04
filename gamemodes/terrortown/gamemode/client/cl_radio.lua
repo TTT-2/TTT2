@@ -273,7 +273,7 @@ end
 -- this way players can bind keys to them
 local function RadioCommand(ply, cmd, arg)
 	if not IsValid(ply) then
-		print("ttt_radio failed, invalid player")
+		ErrorNoHaltWithStack("ttt_radio failed, invalid player")
 
 		return
 	end
@@ -281,13 +281,13 @@ local function RadioCommand(ply, cmd, arg)
 	---
 	-- @realm client
 	if hook.Run("TTT2ClientRadioCommand", cmd) then
-		print("ttt_radio, execution prevented by a hook")
+		Dev(1, "ttt_radio, execution prevented by a hook")
 
 		return
 	end
 
 	if #arg ~= 1 then
-		print("ttt_radio failed, too many arguments?")
+		ErrorNoHaltWithStack("ttt_radio failed, too many arguments?")
 
 		return
 	end
@@ -318,7 +318,7 @@ local function RadioCommand(ply, cmd, arg)
 	end
 
 	if not text then
-		print("ttt_radio failed, argument not valid radiocommand")
+		ErrorNoHaltWithStack("ttt_radio failed, argument not valid radiocommand")
 
 		return
 	end

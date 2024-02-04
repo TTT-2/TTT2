@@ -228,7 +228,7 @@ end
 -- @deprecated
 -- @realm shared
 function ROLE:SetBaseRole(baserole)
-	print("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
+	ErrorNoHaltWithStack("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
 
 	roles.SetBaseRole(self, baserole)
 end

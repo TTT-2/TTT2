@@ -3,7 +3,7 @@ util.AddNetworkString("ttt2_switch_weapon_update_cache")
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
-	Error("FAILED TO FIND PLAYER TABLE")
+	ErrorNoHaltWithStack("FAILED TO FIND PLAYER TABLE")
 
 	return
 end

@@ -20,6 +20,8 @@ if SERVER then
 	cvCrowbarPushForce = CreateConVar("ttt_crowbar_pushforce", "395", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "melee"
 
 if CLIENT then
@@ -319,7 +321,7 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("crowbar_help_primary", "crowbar_help_secondary")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---

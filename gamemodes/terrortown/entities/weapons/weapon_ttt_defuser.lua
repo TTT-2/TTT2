@@ -7,6 +7,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "slam"
 
 if CLIENT then
@@ -75,7 +77,7 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("defuser_help_primary")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---

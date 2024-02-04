@@ -2,6 +2,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "pistol"
 
 if CLIENT then
@@ -53,7 +55,7 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("flaregun_help_primary")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 end
 

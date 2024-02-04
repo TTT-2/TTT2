@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 L.submenu_gameplay_general_title = "General"
 
@@ -1661,8 +1660,6 @@ L.label_bots_are_spectators = "Bots are always spectators"
 L.label_tbutton_admin_show = "Show traitor buttons to admins"
 L.label_ragdoll_carrying = "Enable ragdoll carrying"
 L.label_prop_throwing = "Enable prop throwing"
-L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
-L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
 L.label_weapon_carrying = "Enable weapon carrying"
 L.label_weapon_carrying_range = "Weapon carry range"
 L.label_prop_carrying_force = "Prop pickup force"
@@ -1965,8 +1962,10 @@ mode 1: This mode increases the importance of public policing roles by limiting 
 
 mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
-L.header_miscellaneous_settings = "Miscellaneous Settings"
 L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 L.header_hud_elements_customize = "Customize the HUD-Elements"
 L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2063,7 +2062,7 @@ L.c4_help_secondary = "Stick to surface"
 
 -- 2023-12-11
 L.magneto_help_primary = "Push entity"
-L.magneto_help_secondary = "Pickup entity"
+L.magneto_help_secondary = "Pull / pickup entity"
 L.knife_help_primary = "Stab"
 L.knife_help_secondary = "Throw knife"
 L.polter_help_primary = "Fire thumper"
@@ -2081,7 +2080,6 @@ L.radio_help_primary = "Place the Radio"
 L.radio_help_secondary = "Stick to surface"
 L.hstation_help_primary = "Place the Health Station"
 L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "Stick to surface"
 
 -- 2023-12-14
 L.marker_vision_owner = "Owner: {owner}"
@@ -2125,6 +2123,7 @@ L.builtin_marker = "Built-in."
 L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 L.header_equipment_info = "Equipment information"
+
 
 -- 2023-12-22
 L.submenu_gameplay_accessibility_title = "Accessibility"
@@ -2175,5 +2174,17 @@ L.marker_vision_visible_for_1 = "Visible for your role"
 L.marker_vision_visible_for_2 = "Visible for your team"
 L.marker_vision_visible_for_3 = "Visible for everyone"
 
+-- 2024-01-27
+L.decoy_help_primary = "Throw Decoy on the ground"
+L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+L.header_roles_magnetostick = "Magneto Stick"
+L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+L.magneto_stick_help_carry_prop_release = "Release prop"
+L.magneto_stick_help_carry_prop_drop = "Drop prop"

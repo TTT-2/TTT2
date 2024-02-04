@@ -139,7 +139,7 @@ if SERVER then
 		if isfunction(filter) then
 			filter = nil
 
-			print("Warning: Do not set the filter to a function if used on a server.")
+			ErrorNoHaltWithStack("Warning: Do not set the filter to a function if used on a server.")
 		end
 
 		filter = istable(filter) and filter or {filter}
