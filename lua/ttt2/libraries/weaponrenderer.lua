@@ -1,5 +1,7 @@
 ---
 -- Used to build custom world and view models. It also renders those custom models.
+-- This module can only be used by entities that are based on `weapon_ttt_base` as this
+-- relies on some functions defined in this class.
 -- This code is based on the SWEP construction kit.
 -- @ref https://github.com/MagicSwap/SWEP_Construction_Kit
 -- @author Mineotopia
