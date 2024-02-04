@@ -2167,8 +2167,10 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 
 L.header_weapon_settings = "Silah Ayarları"
 
-
 L.marker_vision_visible_for_0 = "Sadece size görünür"
 --L.marker_vision_visible_for_1 = "Visible for your team"
 L.marker_vision_visible_for_2 = "Takıma görünür"
 L.marker_vision_visible_for_3 = "Herkese görünür"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"

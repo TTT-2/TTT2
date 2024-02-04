@@ -2169,8 +2169,10 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "武器设置"
 
-
 --L.marker_vision_visible_for_0 = "Visible for you"
 --L.marker_vision_visible_for_1 = "Visible for your role"
 --L.marker_vision_visible_for_2 = "Visible for your team"
 --L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"

@@ -26,7 +26,6 @@ if CLIENT then
 	SWEP.PrintName = "crowbar_name"
 	SWEP.Slot = 0
 
-	SWEP.DrawCrosshair = false
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 54
 
