@@ -60,6 +60,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
 - Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
 - Magneto stick now shows tooltips respective to its current state.
+- The built-in DNA scanner now displays distances in meters (by @TimGoll)
 
 ### Fixed
 
