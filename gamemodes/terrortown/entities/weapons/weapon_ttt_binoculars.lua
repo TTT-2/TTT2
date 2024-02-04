@@ -14,9 +14,7 @@ if CLIENT then
 	SWEP.PrintName = "binoc_name"
 	SWEP.Slot = 7
 
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
-	SWEP.DrawCrosshair = false
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -49,7 +47,6 @@ SWEP.WeaponID = AMMO_BINOCULARS
 SWEP.builtin = true
 
 SWEP.AllowDrop = true
-SWEP.InvisibleViewModel = true
 
 SWEP.ZoomLevels = {
 	0,

@@ -23,7 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
-  - Added `SWEP.InvisibleViewModel` to prevent a weapon from drawing a ViewModel at all without FOV hacks or Deploy code which has no effect.
+  - Added `SWEP.ShowDefaultViewModel` to prevent a weapon from drawing a ViewModel when set to `false` at all without FOV hacks or Deploy code which has no effect.
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
@@ -35,6 +35,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added an automatic fix for badly coded addons that break the view model fingers
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 
 ### Changed
 
@@ -60,6 +61,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
 - Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
 - Spectator name labels now use a skin font and scaling (by @EntranceJew)
+- Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
+- Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
+- Magneto stick now shows tooltips respective to its current state.
 
 ### Fixed
 

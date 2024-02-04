@@ -104,6 +104,13 @@ local function PopulateSelection(parent, roleData)
 	})
 end
 
+local function PopulateMagnetoStick(parent, roleData)
+	parent:MakeCheckBox({
+		serverConvar = "ttt2_ragdoll_pinning_" .. roleData.name,
+		label = "label_roles_ragdoll_pinning"
+	})
+end
+
 local function PopulateTButtons(parent, roleData)
 	parent:MakeCheckBox({
 		serverConvar = "ttt_" .. roleData.name .. "_traitor_button",
@@ -149,6 +156,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 		PopulateSelection(vgui.CreateTTT2Form(parent, "header_roles_selection"), self.roleData)
 	end
 
+	PopulateMagnetoStick(vgui.CreateTTT2Form(parent, "header_roles_magnetostick"), self.roleData)
 	PopulateTButtons(vgui.CreateTTT2Form(parent, "header_roles_tbuttons"), self.roleData)
 	PopulateCredits(vgui.CreateTTT2Form(parent, "header_roles_credits"), self.roleData)
 

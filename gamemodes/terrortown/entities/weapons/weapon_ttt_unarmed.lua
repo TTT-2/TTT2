@@ -12,7 +12,7 @@ if CLIENT then
 	SWEP.PrintName = "unarmed_name"
 	SWEP.Slot = 5
 
-	SWEP.ViewModelFOV = 10
+	SWEP.ShowDefaultViewModel = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
@@ -43,7 +43,6 @@ SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 SWEP.NoSights = true
-SWEP.InvisibleViewModel = true
 
 SWEP.silentPickup = true
 

@@ -20,7 +20,6 @@ if CLIENT then
 	SWEP.ViewModelFOV = 54
 	SWEP.ViewModelFlip = false
 	SWEP.UseHands = true
-	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
 		type = "item_weapon",

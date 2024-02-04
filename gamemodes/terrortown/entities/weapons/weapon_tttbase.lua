@@ -69,9 +69,10 @@ if CLIENT then
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
-	-- The ViewModel should not draw, in any situation. Prevents the need for hacks which
-	-- overload drawing functions.
-	SWEP.InvisibleViewModel = false
+	-- If set to true, the default view model of the weapon is drawn, otherwise it
+	-- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
+	-- the weapon but still draw the hands holding it.
+	SWEP.ShowDefaultViewModel = true
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -193,7 +194,7 @@ local skipWeapons = {}
 
 ---
 -- Checks if the weapon should be skipped. Skips all weapons not based on weapon_tttbase
--- @param weapon swep the weapon to check
+-- @param Weapon swep the weapon to check
 -- @realm shared
 -- @internal
 local function shouldSkipWeapon(swep)
@@ -324,6 +325,23 @@ if CLIENT then
 	}
 
 	---
+	-- Called straight after the view model has been drawn. This is called before
+	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
+	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+	-- @realm client
+	function SWEP:ViewModelDrawn(viewModel)
+		if self.ShowDefaultViewModel then
+			-- this resets the material to the default material
+			viewModel:SetMaterial("")
+		else
+			-- view model resets to render mode 0 every frame so we just apply
+			-- a debug material to prevent it from drawing
+			viewModel:SetMaterial("vgui/hsv")
+		end
+	end
+
+	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
@@ -331,13 +349,9 @@ if CLIENT then
 			self:DrawHelp()
 		end
 
-		local client = LocalPlayer()
-
-		client:DrawViewModel(not self.InvisibleViewModel)
-
 		if not cvEnableCrosshair:GetBool() then return end
 
-
+		local client = LocalPlayer()
 		local sights = not self.NoSights and self:GetIronsights()
 
 		local xCenter = mathFloor(ScrW() * 0.5)
