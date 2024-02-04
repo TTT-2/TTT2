@@ -68,6 +68,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
 - Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
 - Magneto stick now shows tooltips respective to its current state.
+- Scoreboard shows non-policing detective results, in sync with the miniscoreboard (by @EntranceJew)
 - `ttt_flame` is visible while it is moving (by @EntranceJew)
 - `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
 - The built-in DNA scanner now displays distances in meters (by @TimGoll)
