@@ -38,7 +38,7 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 0.2
+SWEP.Secondary.Delay = 1.0
 
 SWEP.Kind = WEAPON_EQUIP
 SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
@@ -55,14 +55,28 @@ SWEP.DeathScanDelay = 15
 -- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:DropDevice()
+
+	if SERVER then
+		local cse = ents.Create("ttt_cse_proj")
+
+		if cse:ThrowEntity(self:GetOwner()) then
+			self:Remove()
+		end
+	end
 end
 
 ---
 -- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-	self:DropDevice()
+
+	if SERVER then
+		local cse = ents.Create("ttt_cse_proj")
+
+		if cse:ThrowEntity(self:GetOwner()) then
+			self:Remove()
+		end
+	end
 end
 
 ---
@@ -93,48 +107,6 @@ function SWEP:OnRemove()
 	if IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
 		RunConsoleCommand("lastinv")
 	end
-end
-
-local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
----
--- @realm shared
-function SWEP:DropDevice()
-	if CLIENT then return end
-
-	self:EmitSound(throwsound)
-
-	local cse = nil
-	local ply = self:GetOwner()
-
-	if not IsValid(ply) or self.Planted then return end
-
-	local vsrc = ply:GetShootPos()
-	local vang = ply:GetAimVector()
-	local vvel = ply:GetVelocity()
-	local vthrow = vvel + vang * 200
-
-	cse = ents.Create("ttt_cse_proj")
-
-	if not IsValid(cse) then return end
-
-	cse:SetPos(vsrc + vang * 10)
-	cse:SetOwner(ply)
-	cse:SetThrower(ply)
-	cse:Spawn()
-	cse:PhysWake()
-
-	local phys = cse:GetPhysicsObject()
-
-	if IsValid(phys) then
-		phys:SetVelocity(vthrow)
-	end
-
-	self:Remove()
-
-	self.Planted = true
-
-	return cse
 end
 
 if CLIENT then

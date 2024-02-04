@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
+  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt0_radio` and `ttt_cse_proj` to that base
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
@@ -80,6 +82,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
 - Removed DX8/SW models that aren't used
+- Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
 - Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
 
 ### Breaking Changes
