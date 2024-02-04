@@ -6,6 +6,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "knife"
 
 if CLIENT then
@@ -316,18 +318,6 @@ if SERVER then
 	end
 end
 
----
--- @ignore
-function SWEP:OnRemove()
-	if SERVER then return end
-
-	local owner = self:GetOwner()
-
-	if IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
-		RunConsoleCommand("lastinv")
-	end
-end
-
 if CLIENT then
 	local TryT = LANG.TryTranslation
 
@@ -335,9 +325,20 @@ if CLIENT then
 	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("knife_help_primary", "knife_help_secondary")
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		BaseClass.OnRemove(self)
+
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
+	end
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(tData)
 		local client = LocalPlayer()

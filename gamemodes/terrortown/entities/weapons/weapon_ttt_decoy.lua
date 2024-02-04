@@ -4,7 +4,11 @@
 
 if SERVER then
 	AddCSLuaFile()
-else -- CLIENT
+end
+
+DEFINE_BASECLASS "weapon_tttbase"
+
+if CLIENT then
 	SWEP.PrintName = "decoy_name"
 	SWEP.Slot = 7
 
@@ -193,11 +197,15 @@ end
 
 if CLIENT then
 	---
-	-- @ignore
+	-- @realm client
 	function SWEP:OnRemove()
-		if not IsValid(self:GetOwner()) or self:GetOwner() ~= LocalPlayer() or not self:GetOwner():Alive() then return end
+		BaseClass.OnRemove(self)
 
-		RunConsoleCommand("lastinv")
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---
@@ -205,7 +213,7 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("decoy_help_pri")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---

@@ -1,4 +1,8 @@
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
+
+DEFINE_BASECLASS "weapon_tttbase"
 
 SWEP.HoldType = "pistol"
 
@@ -56,7 +60,7 @@ SWEP.IdleAnim = ACT_VM_IDLE_SILENCED
 --@ignore
 function SWEP:Deploy()
 	self:SendWeaponAnim(ACT_VM_DRAW_SILENCED)
-	return self.BaseClass.Deploy(self)
+	return BaseClass.Deploy(self)
 end
 
 ---

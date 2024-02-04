@@ -395,6 +395,8 @@ end
 ---
 -- @ignore
 function SWEP:Holster()
+	BaseClass.Holster(self)
+
 	if self:GetPin() then
 		return false -- no switching after pulling pin
 	end
@@ -427,20 +429,23 @@ function SWEP:Initialize()
 	self.was_thrown = false
 end
 
----
--- @ignore
-function SWEP:OnRemove()
-	local owner = self:GetOwner()
-
-	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
-		RunConsoleCommand("use", "weapon_ttt_unarmed")
-	end
-end
 
 if CLIENT then
 	local draw = draw
 	local TryT = LANG.TryTranslation
 	local hudTextColor = Color(255, 255, 255, 180)
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		BaseClass.OnRemove(self)
+
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
+	end
 
 	---
 	-- @ignore

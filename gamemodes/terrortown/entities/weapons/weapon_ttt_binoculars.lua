@@ -66,7 +66,7 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 1, "AwayTime")
 	self:NetworkVar("Int", 0, "ZoomAmount")
 
-	return self.BaseClass.SetupDataTables(self)
+	return BaseClass.SetupDataTables(self)
 end
 
 ---
@@ -139,12 +139,14 @@ function SWEP:PreDrop()
 
 	self:SetNewTarget(NULL)
 
-	return self.BaseClass.PreDrop(self)
+	return BaseClass.PreDrop(self)
 end
 
 ---
 -- @ignore
 function SWEP:Holster()
+	BaseClass.Holster(self)
+
 	self:SetZoomLevel(1)
 
 	self:SetNewTarget(NULL)
@@ -157,7 +159,7 @@ end
 function SWEP:Deploy()
 	self:SetZoomLevel(1)
 
-	return self.BaseClass.Deploy(self)
+	return BaseClass.Deploy(self)
 end
 
 ---
@@ -255,13 +257,15 @@ if CLIENT then
 	local cv_thickness
 
 	---
-	-- @ignore
+	-- @realm client
 	function SWEP:OnRemove()
+		BaseClass.OnRemove(self)
+
 		local owner = self:GetOwner()
 
-		if not IsValid(owner) or owner ~= LocalPlayer() or not owner:Alive() then return end
-
-		RunConsoleCommand("lastinv")
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---
@@ -271,7 +275,7 @@ if CLIENT then
 		self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
 		cv_thickness = GetConVar("ttt_crosshair_thickness")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---

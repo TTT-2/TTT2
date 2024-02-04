@@ -6,6 +6,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "normal"
 
 if CLIENT then
@@ -83,18 +85,6 @@ function SWEP:Reload()
 	return false
 end
 
----
--- @ignore
-function SWEP:OnRemove()
-	if SERVER then return end
-
-	local owner = self:GetOwner()
-
-	if IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
-		RunConsoleCommand("lastinv")
-	end
-end
-
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
 ---
@@ -143,7 +133,19 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("vis_help_pri")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
+	end
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		BaseClass.OnRemove(self)
+
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---

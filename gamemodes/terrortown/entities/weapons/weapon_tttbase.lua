@@ -699,13 +699,22 @@ if CLIENT then
 	end
 
 	---
-	-- Called straight after the view model has been drawn. This is called before
-	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
-	-- @param Entity viewModel Player's view model
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+	-- Sets the view model texture overwrite which is used for hiding the view
+	-- model in case of custom view models.
+	-- @note This is called in @{SWEP:OnRemove}, @{SWEP:Holster} and @{SWEP:ViewModelDraw}
+	-- since weapons created with the SWEP construction kit tend to overwrite these functions
+	-- and we need to make sure that the view models are not invisible after one of our
+	-- weapons with a custom view model was drawn.
+	-- @param boolean state Whether the view model should be invisible or not
+	-- @param[opt] Entity viewModel The view model in question, set to nil to use the
+	-- player default view model
 	-- @realm client
-	function SWEP:ViewModelDrawn(viewModel)
-		if self.ShowDefaultViewModel then
+	function SWEP:SetViewModelRenderEnable(state, viewModel)
+		viewModel = viewModel or LocalPlayer():GetViewModel()
+
+		if not IsValid(viewModel) then return end
+
+		if state then
 			-- this resets the material to the default material
 			viewModel:SetMaterial("")
 		else
@@ -713,6 +722,38 @@ if CLIENT then
 			-- a debug material to prevent it from drawing
 			viewModel:SetMaterial("vgui/hsv")
 		end
+	end
+
+	---
+	-- Called when the swep is about to be removed.
+	-- @ref https://wiki.facepunch.com/gmod/WEAPON:OnRemove
+	-- @realm client
+	function SWEP:OnRemove()
+		self:SetViewModelRenderEnable(true)
+	end
+
+	---
+	-- Called when weapon tries to holster.
+	-- @param Weapon wep The weapon we are trying switch to
+	-- @return boolean Return true to allow weapon to holster
+	-- @ref https://wiki.facepunch.com/gmod/WEAPON:Holster
+	-- @realm client
+	function SWEP:Holster(wep)
+		self:SetViewModelRenderEnable(true)
+
+		return true
+	end
+
+	---
+	-- Called straight after the view model has been drawn. This is called before
+	-- @{GM:PostDrawViewModel} and @{WEAPON:PostDrawViewModel}.
+	-- @warning If you override ViewModelDrawn in your SWEP and you are using a custom world or
+	-- view model, you should call BaseClass.ViewModelDrawn(self) so as not to break viewmodels.
+	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+	-- @realm client
+	function SWEP:ViewModelDrawn(viewModel)
+		self:SetViewModelRenderEnable(self.ShowDefaultViewModel, viewModel)
 
 		if not self.customViewModelElements then return end
 
