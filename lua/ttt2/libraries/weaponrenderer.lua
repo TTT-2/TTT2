@@ -228,7 +228,7 @@ end
 -- @param table elements the view elements table
 -- @return table Returns a new or the cached render order
 -- @realm client
-function weaponrenderer.BuildRenderOrder(elements)
+local function BuildRenderOrder(elements)
 	local newRenderOrder = {}
 
 	for identifier, dataTable in pairs(elements) do
@@ -249,7 +249,7 @@ end
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
 function weaponrenderer.Render(wep, elements, boneEntity)
-	local renderOrder = weaponrenderer.BuildRenderOrder(elements)
+	local renderOrder = BuildRenderOrder(elements)
 
 	for i = 1, #renderOrder do
 		local identifier = renderOrder[i]
