@@ -713,10 +713,7 @@ if CLIENT then
 
 		weaponrenderer.UpdateBonePositions(self, viewModel)
 
-		-- we build a render order because sprites need to be drawn after models
-		self.VRenderOrder = weaponrenderer.BuildRenderOrder(self.customViewModelElements, self.VRenderOrder)
-
-		weaponrenderer.Render(self, self.VRenderOrder, self.customViewModelElements, viewModel)
+		weaponrenderer.Render(self, self.customViewModelElements, viewModel)
 	end
 
 	---
@@ -736,9 +733,6 @@ if CLIENT then
 
 		if not self.customWorldModelElements then return end
 
-		-- we build a render order because sprites need to be drawn after models
-		self.WRenderOrder = weaponrenderer.BuildRenderOrder(self.customWorldModelElements, self.WRenderOrder)
-
 		local boneEnt
 
 		if IsValid(self:GetOwner()) then
@@ -748,7 +742,7 @@ if CLIENT then
 			boneEnt = self
 		end
 
-		weaponrenderer.Render(self, self.WRenderOrder, self.customWorldModelElements, boneEnt)
+		weaponrenderer.Render(self, self.customWorldModelElements, boneEnt)
 	end
 
 	---
