@@ -255,7 +255,9 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	local mathRound = math.Round
-	local mathFloor = math.floor
+	local mathClamp = math.Clamp
+	local mathCeil = math.ceil
+	local mathMax = math.max
 
 	local CROSSHAIR_MODE_DOT_AND_LINES = 0
 	local CROSSHAIR_MODE_LINES_ONLY = 1
@@ -345,12 +347,12 @@ if CLIENT then
 		local client = LocalPlayer()
 		local sights = not self.NoSights and self:GetIronsights()
 
-		local xCenter = mathFloor(ScrW() * 0.5)
-		local yCenter = mathFloor(ScrH() * 0.5)
+		local xCenter = mathCeil(ScrW() * 0.5)
+		local yCenter = mathCeil(ScrH() * 0.5)
 		local scale = appearance.GetGlobalScale()
-		local baseConeWeapon = math.max(0.2, 10 * self:GetPrimaryConeBase())
+		local baseConeWeapon = mathMax(0.2, 10 * self:GetPrimaryConeBase())
 		local scaleWeapon = cvCrosshairUseWeaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
-		local timescale = 2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
+		local timescale = 2 - mathClamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
 
 		-- handle size animation
 		if scaleWeapon ~= animData.valueEnd then
@@ -369,11 +371,11 @@ if CLIENT then
 		)
 
 		local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-		local gap = mathFloor(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
-		local thicknessLine = mathFloor(cvThicknessCrosshair:GetFloat() * scale)
-		local thicknessOutline = mathFloor(cvThicknessOutlineCrosshair:GetFloat() * scale)
-		local lengthLine = mathFloor(gap + 25 * cvSizeCrosshair:GetFloat() * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon) * timescale * scale)
-		local offsetLine = mathFloor(thicknessLine * 0.5)
+		local gap = mathCeil(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
+		local thicknessLine = mathCeil(cvThicknessCrosshair:GetFloat() * scale)
+		local thicknessOutline = mathCeil(cvThicknessOutlineCrosshair:GetFloat() * scale)
+		local lengthLine = mathCeil(gap + 25 * cvSizeCrosshair:GetFloat() * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon) * timescale * scale)
+		local offsetLine = mathCeil(thicknessLine * 0.5)
 
 		-- set up crosshair color
 		local color = appearance.SelectFocusColor(client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color)

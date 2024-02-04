@@ -54,96 +54,26 @@ SWEP.NoSights = true
 -- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:RadioDrop()
+
+	if SERVER then
+		local radio = ents.Create("ttt_radio")
+
+		if radio:ThrowEntity(self:GetOwner(), Angle(120, 0, 0)) then
+			self:Remove()
+		end
+	end
 end
 
 ---
 -- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-	self:RadioStick()
-end
 
-local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
---- c4 plant but different
--- @ignore
-function SWEP:RadioDrop()
 	if SERVER then
-		local ply = self:GetOwner()
-		if not IsValid(ply) then return end
-
-		if self.Planted then return end
-
-		local vsrc = ply:GetShootPos()
-		local vang = ply:GetAimVector()
-		local vvel = ply:GetVelocity()
-
-		local vthrow = vvel + vang * 200
-
 		local radio = ents.Create("ttt_radio")
-		if IsValid(radio) then
-			radio:SetPos(vsrc + vang * 10)
-			radio:SetOwner(ply)
-			radio:Spawn()
 
-			radio:PhysWake()
-			local phys = radio:GetPhysicsObject()
-			if IsValid(phys) then
-				phys:SetVelocity(vthrow)
-			end
+		if radio:StickEntity(self:GetOwner(), Angle(90, 0, 0), 45) then
 			self:Remove()
-
-			self.Planted = true
-		end
-	end
-
-	self:EmitSound(throwsound)
-end
-
---- hey look, more C4 code
--- @ignore
-function SWEP:RadioStick()
-	if SERVER then
-		local ply = self:GetOwner()
-		if not IsValid(ply) then return end
-
-		if self.Planted then return end
-
-		local ignore = {ply, self}
-		local spos = ply:GetShootPos()
-		local epos = spos + ply:GetAimVector() * 80
-		local tr = util.TraceLine({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID})
-
-		if tr.HitWorld then
-			local radio = ents.Create("ttt_radio")
-			if IsValid(radio) then
-				radio:PointAtEntity(ply)
-
-				local tr_ent =
-					util.TraceEntity({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID}, radio)
-
-				if tr_ent.HitWorld then
-					local ang = tr_ent.HitNormal:Angle()
-					ang:RotateAroundAxis(ang:Up(), -180)
-
-					radio:SetPos(tr_ent.HitPos + ang:Forward() * -2.5)
-					radio:SetAngles(ang)
-					radio:SetOwner(ply)
-					radio:Spawn()
-
-					local phys = radio:GetPhysicsObject()
-					if IsValid(phys) then
-						phys:EnableMotion(false)
-					end
-
-					radio.IsOnWall = true
-
-					self:Remove()
-
-					self.Planted = true
-				end
-			end
 		end
 	end
 end

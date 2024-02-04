@@ -26,12 +26,14 @@ C4_WIRE_COUNT	= 6
 C4_MINIMUM_TIME = 45
 C4_MAXIMUM_TIME = 600
 
-ENT.Type = "anim"
-ENT.Model = Model("models/weapons/w_c4_planted.mdl")
+ENT.Base = "ttt_base_placeable"
+ENT.Model = "models/weapons/w_c4_planted.mdl"
 
 ENT.CanHavePrints = true
 ENT.CanUseKey = true
 ENT.Avoidable = true
+
+ENT.isDestructible = false
 
 ---
 -- @accessor Entity
@@ -70,6 +72,8 @@ ENT.safeWires = nil
 -- Initializes the data
 -- @realm shared
 function ENT:SetupDataTables()
+	self.BaseClass.SetupDataTables(self)
+
 	self:NetworkVar("Int", 0, "ExplodeTime")
 	self:NetworkVar("Bool", 0, "Armed")
 end
@@ -80,13 +84,7 @@ end
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
-	if SERVER then
-		self:PhysicsInit(SOLID_VPHYSICS)
-	end
-
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_BBOX)
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+	self.BaseClass.Initialize(self)
 
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
@@ -151,63 +149,6 @@ function ENT.SafeWiresForTime(t)
 		return 4
 	else
 		return 5
-	end
-end
-
----
--- @param boolean state
--- @realm shared
-function ENT:WeldToGround(state)
-	if self.IsOnWall then return end
-
-	if state then
-		-- getgroundentity does not work for non-players
-		-- so sweep ent downward to find what we're lying on
-		local ignore = player.GetAll()
-		ignore[#ignore + 1] = self
-
-		local tr = util.TraceEntity({
-			start = self:GetPos(),
-			endpos = self:GetPos() - Vector(0, 0, 16),
-			filter = ignore,
-			mask = MASK_SOLID
-		}, self)
-
-		-- Start by increasing weight/making uncarryable
-		local phys = self:GetPhysicsObject()
-
-		if IsValid(phys) then
-			-- Could just use a pickup flag for this. However, then it's easier to
-			-- push it around.
-			self.OrigMass = phys:GetMass()
-
-			phys:SetMass(150)
-		end
-
-		if tr.Hit and (IsValid(tr.Entity) or tr.HitWorld) then
-			-- "Attach" to a brush if possible
-			if IsValid(phys) and tr.HitWorld then
-				phys:EnableMotion(false)
-			end
-
-			-- Else weld to objects we cannot pick up
-			local entphys = tr.Entity:GetPhysicsObject()
-
-			if IsValid(entphys) and entphys:GetMass() > CARRY_WEIGHT_LIMIT then
-				constraint.Weld(self, tr.Entity, 0, 0, 0, true)
-			end
-
-			-- Worst case, we are still uncarryable
-		end
-	else
-		constraint.RemoveConstraints(self, "Weld")
-
-		local phys = self:GetPhysicsObject()
-
-		if IsValid(phys) then
-			phys:EnableMotion(true)
-			phys:SetMass(self.OrigMass or 10)
-		end
 	end
 end
 
@@ -343,7 +284,7 @@ function ENT:Explode(tr)
 
 		-- few fire bits to ignite things
 		timer.Simple(0.2, function()
-			StartFires(pos, tr, 4, 5, true, dmgowner)
+			gameEffects.StartFires(pos, tr, 4, 5, true, dmgowner, 500, false, 132, 0)
 		end)
 
 		self:SetExplodeTime(0)
@@ -484,7 +425,7 @@ if SERVER then
 	-- @param Player ply
 	-- @realm server
 	function ENT:Disarm(ply)
-		local owner = self:GetOwner()
+		local owner = self:GetOriginator()
 
 		events.Trigger(EVENT_C4DISARM, owner, ply, true)
 
@@ -494,7 +435,6 @@ if SERVER then
 
 		self:SetExplodeTime(0)
 		self:SetArmed(false)
-		self:WeldToGround(false)
 
 		markerVision.RemoveEntity(self)
 
@@ -507,7 +447,7 @@ if SERVER then
 	function ENT:FailedDisarm(ply)
 		self.DisarmCausedExplosion = true
 
-		events.Trigger(EVENT_C4DISARM, self:GetOwner(), ply, false)
+		events.Trigger(EVENT_C4DISARM, self:GetOriginator(), ply, false)
 
 		-- tiny moment of zen and realization before the bang
 		self:SetExplodeTime(CurTime() + 0.1)
@@ -523,7 +463,6 @@ if SERVER then
 		self:SetArmTime(CurTime())
 
 		self:SetArmed(true)
-		self:WeldToGround(true)
 
 		self.DisarmCausedExplosion = false
 
@@ -534,7 +473,7 @@ if SERVER then
 		-- Owner determines who gets messages and can quick-disarm if traitor,
 		-- make that the armer as well for now. Theoretically the dropping player
 		-- should also be able to quick-disarm, but that's going to be rare.
-		self:SetOwner(ply)
+		self:SetOriginator(ply)
 
 		-- Wire stuff:
 
@@ -649,7 +588,7 @@ if SERVER then
 		if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb.DisarmCausedExplosion and bomb:GetArmed() then
 			if bomb:GetPos():Distance(ply:GetPos()) > 256 then
 				return
-			elseif bomb.safeWires[wire] or ply:IsTraitor() or ply == bomb:GetOwner() then
+			elseif bomb.safeWires[wire] or ply:IsTraitor() or ply == bomb:GetOriginator() then
 				LANG.Msg(ply, "c4_disarmed")
 
 				bomb:Disarm(ply)
@@ -889,7 +828,7 @@ else -- CLIENT
 
 		if not IsValid(ent) or ent:GetClass() ~= "ttt_c4" then return end
 
-		local owner = ent:GetOwner()
+		local owner = ent:GetOriginator()
 		local nick = IsValid(owner) and owner:Nick() or "---"
 
 		local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")

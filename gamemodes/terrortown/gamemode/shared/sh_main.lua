@@ -471,8 +471,7 @@ end
 -- @hook
 -- @realm shared
 function GM:TTTPrepareRound()
-	BUYTABLE = {}
-	TEAMBUYTABLE = {}
+	shop.Reset()
 end
 
 ---
