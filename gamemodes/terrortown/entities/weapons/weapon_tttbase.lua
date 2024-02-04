@@ -707,8 +707,6 @@ if CLIENT then
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
 	-- @realm client
 	function SWEP:ViewModelDrawn(viewModel)
-		self:SetViewModelRenderEnable(self.ShowDefaultViewModel, viewModel)
-
 		if not self.customViewModelElements then return end
 
 		weaponrenderer.UpdateBonePositions(self, viewModel)

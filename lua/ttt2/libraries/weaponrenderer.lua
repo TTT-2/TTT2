@@ -226,14 +226,9 @@ end
 -- Builds a render order or returns the cache if already built. The render order is necessary
 -- because models have to be drawn before sprites and quads.
 -- @param table elements the view elements table
--- @param table cachedRenderOrder The cached render order that is uesed as a fallback
 -- @return table Returns a new or the cached render order
 -- @realm client
-function weaponrenderer.BuildRenderOrder(elements, cachedRenderOrder)
-	if cachedRenderOrder then
-		return cachedRenderOrder
-	end
-
+function weaponrenderer.BuildRenderOrder(elements)
 	local newRenderOrder = {}
 
 	for identifier, dataTable in pairs(elements) do
@@ -250,11 +245,14 @@ end
 ---
 -- Renders the world or view model.
 -- @param Entity wep The weapon whose view model should be rendered
--- @param table renderOrder The render order of the view model elements
 -- @param table elements The elements of the view model
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
-function weaponrenderer.Render(wep, renderOrder, elements, boneEntity)
+function weaponrenderer.Render(wep, elements, boneEntity)
+	local renderOrder = weaponrenderer.BuildRenderOrder(elements)
+
+	PrintTable(renderOrder)
+
 	for i = 1, #renderOrder do
 		local identifier = renderOrder[i]
 		local modelData = elements[identifier]
