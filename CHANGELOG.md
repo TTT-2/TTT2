@@ -83,6 +83,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
 - Fixed marks library having self zfailing and color issues (by @WardenPotato)
+- Fixed `IsPlayer` failing if a non-entity is passed to it (by @TimGoll)
 
 ### Removed
 

@@ -2086,9 +2086,6 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
 --L.marker_vision_distance_collapsed = "{distance}m"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2172,6 +2169,11 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-01-27
 L.decoy_help_primary = "Plantar a isca"

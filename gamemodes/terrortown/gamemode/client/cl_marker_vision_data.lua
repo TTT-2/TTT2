@@ -10,16 +10,18 @@ MARKER_VISION_DATA = {}
 -- @param boolean isOffScreen If the radar is off screen or on screen
 -- @param boolean isOnScreenCenter If the radar icon is on screen center
 -- @param number distance The distance to the focused entity
+-- @param MARKER_VISION_ELEMENT mvObject The marker vision element that carries the data
 -- @return MARKER_VISION_DATA The object to be used in the hook
 -- @internal
 -- @realm client
-function MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance)
+function MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distance, mvObject)
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
 		isOffScreen = isOffScreen,
 		isOnScreenCenter = isOnScreenCenter,
-		distance = distance
+		distance = distance,
+		mvObject = mvObject
 	}
 
 	-- preset a table of values that can be changed with a hook
@@ -199,4 +201,12 @@ end
 -- @realm client
 function MARKER_VISION_DATA:GetRaw()
 	return self.data, self.params
+end
+
+---
+-- Returns the marker vision object linked to this.
+-- @return MARKER_VISION_ELEMENT The marker vision object
+-- @realm client
+function MARKER_VISION_DATA:GetMarkerVisionObject()
+	return self.data.mvObject
 end
