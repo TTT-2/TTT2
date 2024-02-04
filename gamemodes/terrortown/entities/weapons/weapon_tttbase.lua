@@ -751,11 +751,11 @@ if CLIENT then
 	-- @param Player ply The the owner of the view model
 	-- @return boolean Return true to prevent the default view model rendering. This also affects @{GM:PostDrawViewModel}
 	-- @realm client
-	function SWEP:PreDrawViewModel(viewModel, wep, ply)
+	hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
 		-- special case: Hands should be shown, but the view model weapon shouldn't be; in this
 		-- case we have to apply this debug material to make it invisible because returning true
 		-- in this hook would prevent both the hands and the weapon from rendering
-		if self.UseHands and not self.ShowDefaultViewModel then
+		if wep.UseHands and not wep.ShowDefaultViewModel then
 			viewModel:SetMaterial("vgui/hsv")
 
 			return
@@ -763,11 +763,14 @@ if CLIENT then
 
 		-- default case: Normal view model texture is used and view model draw is defined
 		-- with the SWEP.ShowDefaultViewModel variable
-
 		viewModel:SetMaterial("")
 
-		return not self.ShowDefaultViewModel
-	end
+		-- only return something if we actually want to hide it because otherwise the SWEP
+		-- hook is never called even if the view model is rendered
+		if not wep.ShowDefaultViewModel then
+			return true
+		end
+	end)
 
 	---
 	-- This hook can be used by swep addons to populate the equipment settings page

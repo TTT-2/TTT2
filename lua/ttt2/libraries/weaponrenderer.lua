@@ -251,8 +251,6 @@ end
 function weaponrenderer.Render(wep, elements, boneEntity)
 	local renderOrder = weaponrenderer.BuildRenderOrder(elements)
 
-	PrintTable(renderOrder)
-
 	for i = 1, #renderOrder do
 		local identifier = renderOrder[i]
 		local modelData = elements[identifier]
