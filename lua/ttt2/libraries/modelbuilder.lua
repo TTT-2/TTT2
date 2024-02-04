@@ -174,8 +174,6 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 		return
 	end
 
-	local allBones = {}
-
 	for i = 0, viewModel:GetBoneCount() do
 		local bonename = viewModel:GetBoneName(i)
 		local dataTable
@@ -197,7 +195,7 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 		local currentBone = viewModel:GetBoneParent(i)
 
 		while (currentBone >= 0) do
-			modelScale = modelScale * allBones[viewModel:GetBoneName(currentBone)].scale
+			modelScale = modelScale * wep.customViewModelBoneMods[viewModel:GetBoneName(currentBone)].scale
 			currentBone = viewModel:GetBoneParent(currentBone)
 		end
 
