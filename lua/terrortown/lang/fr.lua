@@ -2066,7 +2066,7 @@ L.search_eyes = "En utilisant vos compétences de détective, vous avez identifi
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
 --L.knife_help_primary = "Stab"
 --L.knife_help_secondary = "Throw knife"
 --L.polter_help_primary = "Fire thumper"
