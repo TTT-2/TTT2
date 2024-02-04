@@ -190,8 +190,8 @@ function modelbuilder.UpdateBonePositions(wep, viewModel)
 			}
 		end
 
-		local scale = Vector(dataTable.scale.x, dataTable.scale.y, dataTable.scale.z)
-		local position = Vector(dataTable.pos.x, dataTable.pos.y, dataTable.pos.z)
+		local scale = dataTable.scale
+		local position = dataTable.pos
 		local modelScale = Vector(1, 1, 1)
 
 		local currentBone = viewModel:GetBoneParent(i)
