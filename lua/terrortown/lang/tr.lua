@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "Nişangah"
 L.submenu_appearance_dmgindicator_title = "Hasar Göstergesi"
 L.submenu_appearance_performance_title = "Performans"
 L.submenu_appearance_interface_title = "Arayüz"
-L.submenu_appearance_miscellaneous_title = "Çeşitli"
 
 L.submenu_gameplay_general_title = "Genel"
 
@@ -1967,7 +1966,6 @@ mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal 
 --L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
 
 -- 2023-10-23
-L.header_miscellaneous_settings = "Çeşitli Ayarlar"
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
 L.header_hud_elements_customize = "Arayüz Öğelerini Özelleştir"
 L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri için özel ayarlardır."
@@ -2127,7 +2125,7 @@ L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
 
--- 2023-12-22
+-- 2023-12-24
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
 L.header_accessibility_settings = "Erişilebilirlik Ayarları"
@@ -2138,7 +2136,6 @@ L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
-
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
 Bir pompalı için bu, her bir saçmayı etkileyecektir.
@@ -2150,6 +2147,8 @@ Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri
 
 -- 2023-12-24
 L.binoc_help_reload = "Hedefi kaldırın."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
@@ -2168,8 +2167,9 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 
 L.header_weapon_settings = "Silah Ayarları"
 
+
 L.marker_vision_visible_for_0 = "Sadece size görünür"
---L.marker_vision_visible_for_1 = "Visible for your team"
+--L.marker_vision_visible_for_1 = "Visible for your role"
 L.marker_vision_visible_for_2 = "Takıma görünür"
 L.marker_vision_visible_for_3 = "Herkese görünür"
 
