@@ -1663,8 +1663,6 @@ L.label_bots_are_spectators = "Боты всегда наблюдатели"
 L.label_tbutton_admin_show = "Показывать кнопки предателей администраторам"
 L.label_ragdoll_carrying = "Включить поднятие рэгдоллов"
 L.label_prop_throwing = "Включить метание предметов"
-L.label_ragdoll_pinning = "Включить прикрепление тел для не невиновных ролей"
-L.label_ragdoll_pinning_innocents = "Включить прикрепление для невиновных ролей"
 L.label_weapon_carrying = "Включить поднятие оружия"
 L.label_weapon_carrying_range = "Дальность поднятого оружия"
 L.label_prop_carrying_force = "Сила поднятия предметов"
@@ -2134,6 +2132,7 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2179,3 +2178,11 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

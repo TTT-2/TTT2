@@ -1661,8 +1661,6 @@ L.desc_event_kill_other_using = "{victim} ({vrole} / {vteam}) fue asesinado por 
 --L.label_tbutton_admin_show = "Show traitor buttons to admins"
 --L.label_ragdoll_carrying = "Enable ragdoll carrying"
 --L.label_prop_throwing = "Enable prop throwing"
---L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
---L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
 --L.label_weapon_carrying = "Enable weapon carrying"
 --L.label_weapon_carrying_range = "Weapon carry range"
 --L.label_prop_carrying_force = "Prop pickup force"
@@ -2132,6 +2130,7 @@ L.body_confirm_one = "{finder} confirmó la muerte de {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
 -- 2023-12-22
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
@@ -2177,3 +2176,11 @@ L.body_confirm_one = "{finder} confirmó la muerte de {victim}."
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
