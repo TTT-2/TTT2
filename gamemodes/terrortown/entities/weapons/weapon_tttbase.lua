@@ -17,10 +17,13 @@ if SERVER then
     AddCSLuaFile()
 else -- CLIENT
     -- hud help font
-    surface.CreateAdvancedFont("weapon_hud_help", { font = "Trebuchet24", size = 16, weight = 600 })
-    surface.CreateAdvancedFont(
+	surface.CreateAdvancedFont(
+		"weapon_hud_help",
+		{ font = "Tahoma", size = 16, weight = 600, antialias = true }
+	)
+	surface.CreateAdvancedFont(
         "weapon_hud_help_key",
-        { font = "Trebuchet24", size = 13, weight = 1200 }
+        { font = "Tahoma", size = 13, weight = 1200, antialias = true }
     )
 end
 
