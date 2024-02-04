@@ -57,7 +57,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
-- Updated and improved  Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
+- Updated and improved Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
 - Consolidated hat logic
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
@@ -68,11 +68,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
 - Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
 - Magneto stick now shows tooltips respective to its current state.
-- `ttt_flame` is visible while it is moving  (by @EntranceJew)
+- `ttt_flame` is visible while it is moving (by @EntranceJew)
 - `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
 - The built-in DNA scanner now displays distances in meters (by @TimGoll)
 - Noisy prints are now gated behind various levels of `developer` convar (by @EntranceJew)
 - Any warnings developers should fix will now print with stack traces (by @EntranceJew)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when observing a player in first person view
 
 ### Fixed
 
@@ -84,6 +88,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
 - Fixed marks library having self zfailing and color issues (by @WardenPotato)
 - Fixed `IsPlayer` failing if a non-entity is passed to it (by @TimGoll)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Removed
 
@@ -267,10 +273,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
-- Changed the way the role overhead icon is rendered (by @TimGoll)
-  - It now tracks the players head position
-  - Rendering order is based on distance, no more weird visual glitches
-  - Hidden when observing a player in first person view
 
 ### Fixed
 
@@ -294,8 +296,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
-- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
-- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Deprecated
 
