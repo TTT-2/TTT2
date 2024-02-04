@@ -47,13 +47,13 @@ end
 ---
 -- Called whenever a @{Player} ordered an @{ITEM} or @{Weapon}.
 -- @param Player ply The player that bought something
--- @param string cls The class of the @{ITEM} or @{Weapon}
+-- @param string equipmentName The name of the @{ITEM} or @{Weapon}
 -- @param boolean isItem True if item, false if weapon
 -- @param number credits The purchase price of the @{ITEM} or @{Weapon}
 -- @param boolean ignoreCost True if the cost was ignored and received for free
 -- @hook
 -- @realm server
-function GM:TTT2OrderedEquipment(ply, cls, isItem, credits, ignoreCost)
+function GM:TTT2OrderedEquipment(ply, equipmentName, isItem, credits, ignoreCost)
 
 end
 
