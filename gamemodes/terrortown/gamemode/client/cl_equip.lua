@@ -775,7 +775,7 @@ function TraitorMenuPopup()
 		drolesel:SetValue(LANG.GetTranslation("shop_role_select") .. " ...")
 
 		drolesel.OnSelect = function(panel, index, value)
-			print(LANG.GetParamTranslation("shop_role_selected", {role = value}))
+			Dev(2, LANG.GetParamTranslation("shop_role_selected", {role = value}))
 
 			dnotaliveHelp:SetText("")
 

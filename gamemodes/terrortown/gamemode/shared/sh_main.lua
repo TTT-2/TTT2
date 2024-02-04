@@ -579,9 +579,9 @@ function GM:TTT2RegisterWeaponID(eq)
 	local name = eq.PrintName or class
 
 	if name then
-		print(name .. " cant be assigned an id.")
+		Dev(2, name .. " cant be assigned an id.")
 	else
-		print("No id could be assigned. Equipment has no name.")
+		Dev(2, "No id could be assigned. Equipment has no name.")
 	end
 
 	ErrorNoHaltWithStack("[TTT2][IDCHECK][ERROR] Equipment is invalid after registration attempt and has no id.\n")

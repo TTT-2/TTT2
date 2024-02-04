@@ -726,7 +726,7 @@ function GenerateNewEquipmentID()
 
 			if v.oldId ~= val or not v.id then continue end
 
-			ErrorNoHaltWithStack("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
+			ErrorNoHalt("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
 
 			break
 		end

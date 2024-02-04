@@ -639,10 +639,10 @@ addonChecker.curatedList = {
 function addonChecker.Check()
 	local addonTable = engine.GetAddons()
 
-	print("")
-	print("TTT2 ADDON CHECKER")
-	print("=============================================================")
-	print("")
+	Dev(1, "")
+	Dev(1, "TTT2 ADDON CHECKER")
+	Dev(1, "=============================================================")
+	Dev(1, "")
 
 	for i = 1, #addonTable do
 		local addon = addonTable[i]
@@ -651,24 +651,24 @@ function addonChecker.Check()
 		local detectedAddon = addonChecker.curatedList[tostring(addon.wsid)]
 		if not detectedAddon then continue end
 
-		ErrorNoHaltWithStack(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
+		ErrorNoHalt(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
 
 		if detectedAddon.reason then
-			ErrorNoHaltWithStack("Reason: " .. detectedAddon.reason .. "\n")
+			Dev(1, "Reason: " .. detectedAddon.reason .. "\n")
 		end
 
-		ErrorNoHaltWithStack("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
+		Dev(1, "--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
 
 		if detectedAddon.alternative then
-			ErrorNoHaltWithStack("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
+			Dev(1, "--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
 		end
 
-		print("")
+		Dev(1, "")
 	end
 
-	print("=============================================================")
-	print("This is the end of the addon checker output.")
-	print("")
+	Dev(1, "=============================================================")
+	Dev(1, "This is the end of the addon checker output.")
+	Dev(1, "")
 end
 
 concommand.Add("addonchecker", addonChecker.Check)

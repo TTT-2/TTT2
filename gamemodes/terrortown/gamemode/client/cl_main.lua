@@ -475,7 +475,7 @@ local function RoundStateChange(o, n)
 end
 
 local function ttt_print_playercount()
-	print(GAMEMODE.StartingPlayers)
+	Dev(2, GAMEMODE.StartingPlayers)
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 

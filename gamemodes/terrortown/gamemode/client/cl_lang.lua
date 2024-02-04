@@ -409,19 +409,19 @@ LANG.Styles = {
 	[MSG_MSTACK_ROLE] = function(text)
 		MSTACK:AddColoredBgMessage(text, LocalPlayer():GetRoleColor())
 
-		print("[TTT2] Role:	" .. text)
+		Dev(2, "[TTT2] Role:	" .. text)
 	end,
 
 	[MSG_MSTACK_WARN] = function(text)
 		MSTACK:AddColoredBgMessage(text, colorWarn)
 
-		print("[TTT2] Warn:	" .. text)
+		Dev(2, "[TTT2] Warn:	" .. text)
 	end,
 
 	[MSG_MSTACK_PLAIN] = function(text)
 		MSTACK:AddMessage(text)
 
-		print("[TTT2]:	" .. text)
+		Dev(2, "[TTT2]:	" .. text)
 	end,
 
 	[MSG_CHAT_ROLE] = function(text)

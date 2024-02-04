@@ -356,13 +356,13 @@ function GM:Initialize()
 	WaitForPlayers()
 
 	if cvars.Number("sv_alltalk", 0) > 0 then
-		ErrorNoHaltWithStack("TTT2 WARNING: sv_alltalk is enabled. Dead players will be able to talk to living players. TTT2 will now attempt to set sv_alltalk 0.\n")
+		ErrorNoHalt("TTT2 WARNING: sv_alltalk is enabled. Dead players will be able to talk to living players. TTT2 will now attempt to set sv_alltalk 0.\n")
 
 		RunConsoleCommand("sv_alltalk", "0")
 	end
 
 	if not IsMounted("cstrike") then
-		ErrorNoHaltWithStack("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
+		ErrorNoHalt("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 
 	---

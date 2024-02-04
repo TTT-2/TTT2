@@ -64,5 +64,5 @@ function debug.print(message)
 		printMessage = ConvertToString(message)
 	end
 
-	print(printMessage)
+	Dev(2, printMessage)
 end

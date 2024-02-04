@@ -635,7 +635,7 @@ function KARMA.Remember(ply)
 	end
 
 	if ply:SteamID64() == nil then
-		ErrorNoHaltWithStack("[TTT2] ERROR: Player has no steamID64:" .. ply)
+		ErrorNoHaltWithStack("[TTT2] ERROR: Player has no steamID64:", ply)
 
 		return
 	end
