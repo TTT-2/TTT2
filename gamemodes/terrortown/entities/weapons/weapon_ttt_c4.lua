@@ -52,119 +52,36 @@ SWEP.Secondary.Delay = 1.0
 
 SWEP.NoSights = true
 
-local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
 ---
 -- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:BombDrop()
+
+	if SERVER then
+		local bomb = ents.Create("ttt_c4")
+
+		if bomb:ThrowEntity(self:GetOwner(), Angle(30, 180, 0)) then
+			bomb.fingerprints = self.fingerprints
+
+			self:Remove()
+		end
+	end
 end
 
 ---
 -- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-	self:BombStick()
-end
 
---- mostly replicating HL2DM slam throw here
--- @ignore
-function SWEP:BombDrop()
 	if SERVER then
-		local ply = self:GetOwner()
-		if not IsValid(ply) then return end
-
-		if self.Planted then return end
-
-		local vsrc = ply:GetShootPos()
-		local vang = ply:GetAimVector()
-		local vvel = ply:GetVelocity()
-
-		local vthrow = vvel + vang * 200
-
 		local bomb = ents.Create("ttt_c4")
-		if IsValid(bomb) then
-			bomb:SetPos(vsrc + vang * 10)
-			bomb:SetOwner(ply)
-			bomb:SetThrower(ply)
-			bomb:Spawn()
 
-			bomb:PointAtEntity(ply)
-
-			local ang = bomb:GetAngles()
-			ang:RotateAroundAxis(ang:Up(), 180)
-			bomb:SetAngles(ang)
-
+		if bomb:StickEntity(self:GetOwner(), Angle(-90, 0, 180)) then
 			bomb.fingerprints = self.fingerprints
 
-			bomb:PhysWake()
-			local phys = bomb:GetPhysicsObject()
-			if IsValid(phys) then
-				phys:SetVelocity(vthrow)
-			end
 			self:Remove()
-
-			self.Planted = true
 		end
-
-		ply:SetAnimation(PLAYER_ATTACK1)
 	end
-
-	self:EmitSound(throwsound)
-	self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
-end
-
---- again replicating slam, now its attach fn
--- @ignore
-function SWEP:BombStick()
-	if CLIENT then return end
-
-	local ply = self:GetOwner()
-	if not IsValid(ply) then return end
-
-	if self.Planted then return end
-
-	local ignore = {ply, self}
-	local spos = ply:GetShootPos()
-	local epos = spos + ply:GetAimVector() * 80
-	local tr = util.TraceLine({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID})
-
-	if not tr.HitWorld then return end
-
-	local bomb = ents.Create("ttt_c4")
-	if not IsValid(bomb) then return end
-
-	bomb:PointAtEntity(ply)
-
-	local tr_ent = util.TraceEntity({start = spos, endpos = epos, filter = ignore, mask = MASK_SOLID}, bomb)
-
-	if tr_ent.HitWorld then
-		local ang = tr_ent.HitNormal:Angle()
-		ang:RotateAroundAxis(ang:Right(), -90)
-		ang:RotateAroundAxis(ang:Up(), 180)
-
-		bomb:SetPos(tr_ent.HitPos)
-		bomb:SetAngles(ang)
-		bomb:SetOwner(ply)
-		bomb:SetThrower(ply)
-		bomb:Spawn()
-
-		bomb.fingerprints = self.fingerprints
-
-		local phys = bomb:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:EnableMotion(false)
-		end
-
-		bomb.IsOnWall = true
-
-		self:Remove()
-
-		self.Planted = true
-	end
-
-	ply:SetAnimation(PLAYER_ATTACK1)
 end
 
 ---

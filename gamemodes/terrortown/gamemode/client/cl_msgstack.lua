@@ -112,7 +112,7 @@ local function ReceiveGameMsg()
 	local text = net.ReadString()
 	local special = net.ReadBit() == 1
 
-	print(text)
+	Dev(2, text)
 
 	MSTACK:AddMessage(text, special)
 end
@@ -126,7 +126,7 @@ local function ReceiveCustomMsg()
 	c.g = net.ReadUInt(8)
 	c.b = net.ReadUInt(8)
 
-	print(text)
+	Dev(2, text)
 
 	MSTACK:AddColoredMessage(text, c)
 end

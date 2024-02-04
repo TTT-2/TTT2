@@ -60,7 +60,11 @@ function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
 	if SERVER and self:CanPrimaryAttack() then
-		self:BeaconDrop()
+		local beacon = ents.Create("ttt_beacon")
+
+		if beacon:ThrowEntity(self:GetOwner(), Angle(90, 0, 0)) then
+			self:PlacedBeacon()
+		end
 	end
 end
 
@@ -70,7 +74,11 @@ function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
 	if SERVER and self:CanPrimaryAttack() then
-		self:BeaconStick()
+		local beacon = ents.Create("ttt_beacon")
+
+		if beacon:StickEntity(self:GetOwner()) then
+			self:PlacedBeacon()
+		end
 	end
 end
 
@@ -91,6 +99,7 @@ function SWEP:PickupBeacon()
 		return false
 	else
 		self:SetClip1(self:Clip1() + 1)
+
 		return true
 	end
 end
@@ -108,94 +117,11 @@ function SWEP:Reload()
 	return false
 end
 
-if SERVER then
-	local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
-	---
-	-- @realm server
-	function SWEP:BeaconDrop()
-		local ply = self:GetOwner()
-
-		if not IsValid(ply) then return end
-
-		local vsrc = ply:GetShootPos()
-		local vang = ply:GetAimVector()
-		local vvel = ply:GetVelocity()
-		local vthrow = vvel + vang * 200
-		local beacon = ents.Create("ttt_beacon")
-
-		if IsValid(beacon) then
-			beacon:SetPos(vsrc + vang * 10)
-			beacon:SetOwner(ply)
-			beacon:Spawn()
-
-			beacon:PointAtEntity(ply)
-
-			local ang = beacon:GetAngles()
-			ang:RotateAroundAxis(ang:Right(), 90)
-			beacon:SetAngles(ang)
-
-			beacon:PhysWake()
-			local phys = beacon:GetPhysicsObject()
-			if IsValid(phys) then
-				phys:SetVelocity(vthrow)
-			end
-
-			self:PlacedBeacon()
-		end
-
-		self:EmitSound(throwsound)
-	end
-
-	---
-	-- @realm server
-	function SWEP:BeaconStick()
-		local ply = self:GetOwner()
-
-		if not IsValid(ply) then return end
-
-		local ignore = {ply, self}
-		local spos = ply:GetShootPos()
-		local epos = spos + ply:GetAimVector() * 80
-		local tr = util.TraceLine({
-			start = spos,
-			endpos = epos,
-			filter = ignore,
-			mask = MASK_SOLID
-		})
-
-		if not tr.HitWorld then return end
-
-		local beacon = ents.Create("ttt_beacon")
-
-		if not IsValid(beacon) then return end
-
-		beacon:PointAtEntity(ply)
-
-		local tr_ent = util.TraceEntity({
-			start = spos,
-			endpos = epos,
-			filter = ignore,
-			mask = MASK_SOLID
-		}, beacon)
-
-		if not tr_ent.HitWorld then return end
-
-		local ang = tr_ent.HitNormal:Angle()
-
-		beacon:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
-		beacon:SetAngles(ang)
-		beacon:SetOwner(ply)
-		beacon:Spawn()
-
-		local phys = beacon:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:EnableMotion(false)
-		end
-
-		beacon.IsOnWall = true
-
-		self:PlacedBeacon()
+---
+-- @realm shared
+function SWEP:OnRemove()
+	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():IsTerror() then
+		RunConsoleCommand("lastinv")
 	end
 end
 

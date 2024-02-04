@@ -63,12 +63,12 @@ end
 -- @todo global vars list
 -- @realm shared
 local function SetupGlobals(roleData)
-	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
+	Dev(1, "[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 
 	local upStr = string.upper(roleData.name)
 
 	if _G[upStr] then
-		print("[TTT2][ROLE] Overwriting already existing global '" .. upStr .. "' ...")
+		Dev(1, "[TTT2][ROLE] Overwriting already existing global '" .. upStr .. "' ...")
 	end
 
 	_G["ROLE_" .. upStr] = roleData.index
@@ -82,7 +82,7 @@ end
 -- @todo ConVar list
 -- @realm shared
 local function SetupData(roleData)
-	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
+	Dev(1, "[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
 
 	local conVarData = roleData.conVarData or {}
 
@@ -169,7 +169,7 @@ local function SetupData(roleData)
 	-- set fallback data if not already exists
 	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE -- fix defaultTeam
 
-	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
+	Dev(1, "[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
 ---
@@ -202,7 +202,7 @@ function roles.Register(t, name)
 	local upStr = string.upper(name)
 
 	if roles[upStr] then
-		print("[TTT2][ROLE] Role '" .. name .. "' interferes with the 'roles' table (function or role with same name is already registered)!")
+		ErrorNoHaltWithStack("[TTT2][ROLE] Role '" .. name .. "' interferes with the 'roles' table (function or role with same name is already registered)!")
 	end
 
 	roles[upStr] = t
@@ -271,7 +271,7 @@ function roles.Get(name, retTbl)
 		local base = roles.Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
+			ErrorNoHaltWithStack("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end
@@ -560,6 +560,6 @@ function roles.SetBaseRole(roleTable, baserole)
 		roleTable.baserole = baserole
 		roleTable.defaultTeam = br.defaultTeam
 
-		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleTable.name .. "' subrole with baserole '" .. br.name .. "'")
+		Dev(1, "[TTT2][ROLE-SYSTEM] Connected '" .. roleTable.name .. "' subrole with baserole '" .. br.name .. "'")
 	end
 end

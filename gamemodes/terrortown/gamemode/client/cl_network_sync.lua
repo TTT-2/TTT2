@@ -92,12 +92,12 @@ end
 -- Prints out all ttt2net related tables, for debugging purposes.
 -- @realm client
 function ttt2net.Debug()
-	print("[TTT2NET] Debug:")
-	print("Registered listeners:")
+	Dev(2, "[TTT2NET] Debug:")
+	Dev(2, "Registered listeners:")
 	PrintTable(ttt2net.dataListeners)
-	print("Meta data table:")
+	Dev(2, "Meta data table:")
 	PrintTable(ttt2net.dataStoreMetadata)
-	print("Data store table:")
+	Dev(2, "Data store table:")
 	PrintTable(ttt2net.dataStore)
 end
 

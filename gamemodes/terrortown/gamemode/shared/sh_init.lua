@@ -556,6 +556,7 @@ include("ttt2/extensions/cvars.lua")
 include("ttt2/extensions/render.lua")
 
 -- include libraries
+include("ttt2/libraries/none.lua")
 include("ttt2/libraries/fastutf8.lua")
 include("ttt2/libraries/huds.lua")
 include("ttt2/libraries/hudelements.lua")
@@ -577,7 +578,6 @@ include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/roles.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
-include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
 include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
@@ -585,6 +585,7 @@ include("ttt2/libraries/bodysearch.lua")
 include("ttt2/libraries/keyhelp.lua")
 include("ttt2/libraries/marker_vision.lua")
 include("ttt2/libraries/weaponrenderer.lua")
+include("ttt2/libraries/game_effects.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
@@ -665,6 +666,3 @@ DefaultEquipment = {
 	[1] = {},
 	[2] = {}
 }
-
-BUYTABLE = BUYTABLE or {}
-TEAMBUYTABLE = TEAMBUYTABLE or {}

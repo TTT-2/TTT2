@@ -2082,7 +2082,6 @@ L.newton_force = "推力"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "安放诱饵。"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
@@ -2173,6 +2172,10 @@ L.help_crosshair_scale_enable = [[
 如果线的长度保持不变，则只有间隙会随着锥度的变化而缩放。]]
 
 L.header_weapon_settings = "武器设置"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放诱饵"
+--L.decoy_help_secondary = "Stick Decoy to surface"
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"

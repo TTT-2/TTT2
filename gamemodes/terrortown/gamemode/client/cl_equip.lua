@@ -260,7 +260,7 @@ local function PreqLabels(parent, x, y)
 		if statusCode == shop.statusCode.SUCCESS then
 			tooltipText = "Ok"
 		elseif statusCode == shop.statusCode.INVALIDID then
-			ErrorNoHalt("[TTT2][ERROR] Missing id in table:", sel)
+			ErrorNoHaltWithStack("[TTT2][ERROR] Missing id in table:", sel)
 			PrintTable(sel)
 			tooltipText = "No ID"
 		elseif statusCode == shop.statusCode.NOTBUYABLE then
@@ -270,6 +270,10 @@ local function PreqLabels(parent, x, y)
 			tooltipText = "Minimum amount of active players needed."
 		elseif statusCode == shop.statusCode.LIMITEDBOUGHT then
 			tooltipText = "This equipment is limited and is already bought."
+		elseif statusCode == shop.statusCode.GLOBALLIMITEDBOUGHT then
+			tooltipText = "This equipment is globally limited and is already bought by someone."
+		elseif statusCode == shop.statusCode.TEAMLIMITEDBOUGHT then
+			tooltipText = "This equipment is limited in team and is already bought by a teammate."
 		elseif statusCode == shop.statusCode.NOTBUYABLEFORROLE then
 			tooltipText = "Your role can't buy this equipment."
 		else
@@ -497,7 +501,8 @@ local function CreateEquipmentList(t)
 				ic = vgui.Create("SpawnIcon", dlist)
 				ic:SetModel(item.itemModel)
 			else
-				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+				ErrorNoHaltWithStack("Equipment item does not have model or material specified.")
+				PrintTable(item)
 
 				continue
 			end
@@ -774,7 +779,7 @@ function TraitorMenuPopup()
 		drolesel:SetValue(LANG.GetTranslation("shop_role_select") .. " ...")
 
 		drolesel.OnSelect = function(panel, index, value)
-			print(LANG.GetParamTranslation("shop_role_selected", {role = value}))
+			Dev(2, LANG.GetParamTranslation("shop_role_selected", {role = value}))
 
 			dnotaliveHelp:SetText("")
 
@@ -995,17 +1000,12 @@ local function ReceiveBought()
 	local num = net.ReadUInt(8)
 
 	for i = 1, num do
-		local s = net.ReadString()
-		if s ~= "" then
-			client.bought[#client.bought + 1] = s
+		local equipmentName = net.ReadString()
+		if equipmentName ~= "" then
+			client.bought[#client.bought + 1] = equipmentName
 
-			BUYTABLE[s] = true
-
-			local team = client:GetTeam()
-			if team then
-				TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-				TEAMBUYTABLE[team][s] = true
-			end
+			shop.SetEquipmentBought(LocalPlayer(), equipmentName)
+			shop.SetEquipmentTeamBought(client, equipmentName)
 		end
 	end
 

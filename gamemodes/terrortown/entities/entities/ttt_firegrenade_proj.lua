@@ -56,7 +56,7 @@ function ENT:Explode(tr)
 
 		util.BlastDamage(self, self:GetThrower(), pos, self:GetRadius(), self:GetDmg())
 
-		StartFires(pos, tr, 10, 20, false, self:GetThrower())
+		gameEffects.StartFires(pos, tr, 10, 20, false, self:GetThrower(), 500, false, 128, 2)
 
 		self:SetDetonateExact(0)
 

@@ -669,7 +669,7 @@ function entspawnscript.SetSetting(key, value, omitSaving)
 	end
 
 	if not isnumber(value) then
-		ErrorNoHalt("WARNING: Only number and boolean values for map settings allowed.")
+		ErrorNoHaltWithStack("WARNING: Only number and boolean values for map settings allowed.")
 
 		return
 	end

@@ -3,13 +3,16 @@
 -- @class ENT
 -- @section ttt_basegrenade_proj
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 ENT.Type = "anim"
-ENT.Model = Model("models/weapons/w_eq_flashbang_thrown.mdl")
+
+ENT.Model = "models/weapons/w_eq_flashbang_thrown.mdl"
 
 
-AccessorFunc( ENT, "thrower", "Thrower")
+AccessorFunc(ENT, "thrower", "Thrower")
 
 ---
 -- @ignore
@@ -21,6 +24,8 @@ end
 -- @ignore
 function ENT:Initialize()
 	self:SetModel(self.Model)
+
+	self.BaseClass.Initialize(self)
 
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -50,7 +55,7 @@ end
 -- override to describe what happens when the nade explodes
 -- @ignore
 function ENT:Explode(tr)
-	ErrorNoHalt("ERROR: BaseGrenadeProjectile explosion code not overridden!\n")
+	ErrorNoHaltWithStack("ERROR: BaseGrenadeProjectile explosion code not overridden!\n")
 end
 
 ---
@@ -78,7 +83,7 @@ function ENT:Think()
 		if not success then
 			-- prevent effect spam on Lua error
 			self:Remove()
-			ErrorNoHalt("ERROR CAUGHT: ttt_basegrenade_proj: " .. err .. "\n")
+			ErrorNoHaltWithStack("ERROR CAUGHT: ttt_basegrenade_proj: " .. err .. "\n")
 		end
 	end
 end

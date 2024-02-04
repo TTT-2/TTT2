@@ -252,7 +252,7 @@ function ShopEditor.SetupShopEditorCVars()
 		local _func = function(convar_name, value_old, value_new)
 			if value_old == value_new then return end
 
-			print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)
+			Dev(1, convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)
 
 			SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
 			ShopEditor.OnChangeWSCVar(v.index, value_new)

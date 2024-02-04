@@ -516,14 +516,14 @@ end
 -- Prints out all ttt2net related tables, for debugging purposes.
 -- @realm server
 function ttt2net.Debug()
-	print("[TTT2NET] Debug:")
-	print("Initialized clients:")
+	Dev(2, "[TTT2NET] Debug:")
+	Dev(2, "Initialized clients:")
 	PrintTable(ttt2net.initializedClients)
-	print("Synced NWVars:")
+	Dev(2, "Synced NWVars:")
 	PrintTable(ttt2net.dataSyncedNWVars)
-	print("Meta data table:")
+	Dev(2, "Meta data table:")
 	PrintTable(ttt2net.dataStoreMetadata)
-	print("Data store table:")
+	Dev(2, "Data store table:")
 	PrintTable(ttt2net.dataStore)
 end
 
@@ -715,7 +715,7 @@ end
 -- @realm server
 -- @internal
 local function ClientRequestFullStateUpdate(len, client)
-	print("[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
+	Dev(1, "[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
 
 	ttt2net.SendFullStateUpdate(client)
 end

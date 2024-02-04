@@ -7,9 +7,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ENT.Type = "anim"
-ENT.Base = "ttt_basegrenade_proj"
-ENT.Model = Model("models/Items/battery.mdl")
+ENT.Base = "ttt_base_placeable"
+ENT.Model = "models/Items/battery.mdl"
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 
@@ -23,13 +22,15 @@ ENT.CanUseKey = true
 ---
 -- @realm shared
 function ENT:Initialize()
+	self:SetModel(self.Model)
+
 	self.BaseClass.Initialize(self)
 
 	self:SetSolid(SOLID_VPHYSICS)
 
 	if SERVER then
 		self:SetMaxHealth(50)
-		self:SetExplodeTime(CurTime() + 1)
+		self:NextThink(CurTime() + 1)
 	end
 
 	self:SetHealth(50)
@@ -55,7 +56,6 @@ function ENT:GetNearbyCorpses()
 	return near_corpses
 end
 
-local zapsound = Sound("npc/assassin/ball_zap1.wav")
 local scanloop = Sound("weapons/gauss/chargeloop.wav")
 local dummy_keys = {"victim", "killer"}
 
@@ -143,7 +143,7 @@ function ENT:UseOverride(activator)
 		self:StopScanSound(true)
 		self:Remove()
 
-		activator:Give("weapon_ttt_cse")
+		activator:SafePickupWeaponClass("weapon_ttt_cse", true)
 	else
 		self:EmitSound("HL2Player.UseDeny")
 	end
@@ -155,11 +155,10 @@ function ENT:OnRemove()
 	self:StopScanSound(true)
 end
 
----
--- @param table tr
--- @realm shared
-function ENT:Explode(tr)
-	if SERVER then
+if SERVER then
+	---
+	-- @realm server
+	function ENT:Think()
 		-- prevent starting effects when round is about to restart
 		if GetRoundState() == ROUND_POST then return end
 
@@ -192,28 +191,10 @@ function ENT:Explode(tr)
 			self:StopScanSound()
 		end
 
-		-- "schedule" next show pulse
-		self:SetDetonateTimer(self.PulseDelay)
-	end
-end
+		-- "schedule" next show pulse, return true to enable NextThink
+		self:NextThink(CurTime() + self.PulseDelay)
 
-if SERVER then
-	---
-	-- Called when the entity is taking damage.
-	-- @param CTakeDamageInfo damage The damage to be applied to the entity
-	-- @realm server
-	function ENT:OnTakeDamage(dmginfo)
-		self:TakePhysicsDamage(dmginfo)
-		self:SetHealth(self:Health() - dmginfo:GetDamage())
-
-		if self:Health() < 0 then
-			self:Remove()
-
-			local effect = EffectData()
-			effect:SetOrigin(self:GetPos())
-			util.Effect("cball_explode", effect)
-			sound.Play(zapsound, self:GetPos())
-		end
+		return true
 	end
 end
 

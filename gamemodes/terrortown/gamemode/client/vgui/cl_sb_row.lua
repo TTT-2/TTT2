@@ -259,7 +259,7 @@ local function ColorForPlayer(ply)
 		if c and istable(c) and c.r and c.b and c.g and c.a then
 			return c
 		else
-			ErrorNoHalt("TTTScoreboardColorForPlayer hook returned something that isn't a color!\n")
+			ErrorNoHaltWithStack("TTTScoreboardColorForPlayer hook returned something that isn't a color!\n")
 		end
 	end
 

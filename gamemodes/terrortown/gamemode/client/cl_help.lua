@@ -38,7 +38,7 @@ local function OnSubmenuClassLoaded(class, path, name)
 	class.type = name
 	class.base = class.base or "base_gamemodesubmenu"
 
-	MsgN("Added TTT2 gamemode submenu file: ", path, name)
+	Dev(1, "Added TTT2 gamemode submenu file: ", path, name)
 end
 
 -- load submenu base from specific folder
@@ -57,7 +57,7 @@ local function OnMenuClassLoaded(class, path, name)
 	class.type = name
 	class.base = class.base or "base_gamemodemenu"
 
-	MsgN("Added TTT2 gamemode menu file: ", path, name)
+	Dev(1, "Added TTT2 gamemode menu file: ", path, name)
 end
 
 -- initialize the submenus after they were loaded
