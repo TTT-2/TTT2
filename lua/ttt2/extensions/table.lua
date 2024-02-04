@@ -377,7 +377,7 @@ end
 -- @note Does not copy entities as well, only copies their reference.
 -- @warning Do not use on tables that contain themselves somewhere down the line or
 -- you'll get an infinite loop
--- @parameter table tbl The table that should be copied
+-- @param table tbl The table that should be copied
 -- @return table The copied table
 -- @realm shared
 function table.FullCopy(tbl)
