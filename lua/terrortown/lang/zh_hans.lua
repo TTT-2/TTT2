@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "准星"
 L.submenu_appearance_dmgindicator_title = "伤害指示"
 L.submenu_appearance_performance_title = "性能"
 L.submenu_appearance_interface_title = "界面"
-L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
 
@@ -1967,7 +1966,6 @@ L.help_inspect_confirm_mode = [[
 --L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
 
 -- 2023-10-23
-L.header_miscellaneous_settings = "其他设置"
 L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"
 L.header_hud_elements_customize = "自定义 HUD 元素"
 L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
@@ -2127,7 +2125,7 @@ L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
 
 
--- 2023-12-22
+-- 2023-12-24
 L.submenu_gameplay_accessibility_title = "辅助功能"
 
 L.header_accessibility_settings = "辅助功能设置"
@@ -2138,7 +2136,6 @@ L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
 
 L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
 L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
-
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
 对于霰弹枪，这将影响每个弹丸。
@@ -2152,6 +2149,8 @@ L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此�
 
 -- 2023-12-24
 L.binoc_help_reload = "清除目标。"
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "启用十字准线轮廓"
@@ -2169,6 +2168,7 @@ L.help_crosshair_scale_enable = [[
 如果线的长度保持不变，则只有间隙会随着锥度的变化而缩放。]]
 
 L.header_weapon_settings = "武器设置"
+
 
 --L.marker_vision_visible_for_0 = "Visible for you"
 --L.marker_vision_visible_for_1 = "Visible for your role"

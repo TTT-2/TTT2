@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "Celownik"
 L.submenu_appearance_dmgindicator_title = "Pow. o obrażeniach"
 L.submenu_appearance_performance_title = "Wydajność"
 L.submenu_appearance_interface_title = "Interfejs"
-L.submenu_appearance_miscellaneous_title = "Różne"
 
 L.submenu_gameplay_general_title = "Główne"
 
@@ -1967,7 +1966,6 @@ L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatni
 --L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
 
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 --L.header_hud_elements_customize = "Customize the HUD-Elements"
 --L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2127,7 +2125,7 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --L.header_equipment_info = "Equipment information"
 
 
--- 2023-12-22
+-- 2023-12-24
 --L.submenu_gameplay_accessibility_title = "Accessibility"
 
 --L.header_accessibility_settings = "Accessibility Settings"
@@ -2138,7 +2136,6 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 
 --L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
-
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2152,6 +2149,8 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 
 -- 2023-12-24
 --L.binoc_help_reload = "Clear target."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 --L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
@@ -2169,6 +2168,7 @@ L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
 --If the line length is kept static, only the gap scales with cone changes.]]
 
 --L.header_weapon_settings = "Weapon Settings"
+
 
 --L.marker_vision_visible_for_0 = "Visible for you"
 --L.marker_vision_visible_for_1 = "Visible for your role"
