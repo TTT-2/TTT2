@@ -220,7 +220,7 @@ function LANG.GetNameFromAlias(langName)
 
 	for name, tbl in pairs(LANG.Strings) do
 		if tbl.__alias and string.lower(tbl.__alias) == langName then
-			ErrorNoHaltWithStack("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
+			Dev(1, "[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
 
 			return name
 		end
