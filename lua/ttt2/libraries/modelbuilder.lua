@@ -162,8 +162,8 @@ function modelbuilder.ResetBonePositions(viewModel)
 end
 
 ---
--- Updates the bone positions of the view model of a weapon. Is used to hide a
--- default view model of a weapon.
+-- Updates the bone positions of the view model of a weapon. If there are
+-- non setup yet, it will reset it to a default state.
 -- @param Entity wep The weapon for which the view model should be updated
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
