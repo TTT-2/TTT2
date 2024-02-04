@@ -13,71 +13,77 @@ local radioframe
 RADIO = {}
 RADIO.Show = false
 
-RADIO.StoredTarget = {nick = "", t = 0}
-RADIO.LastRadio = {msg = "", t = 0}
+RADIO.StoredTarget = { nick = "", t = 0 }
+RADIO.LastRadio = { msg = "", t = 0 }
 
 -- [key] -> command
 RADIO.Commands = {
-	{cmd = "yes", text = "quick_yes", format = false},
-	{cmd = "no", text = "quick_no", format = false},
-	{cmd = "help", text = "quick_help", format = false},
-	{cmd = "imwith", text = "quick_imwith", format = true},
-	{cmd = "see", text = "quick_see", format = true},
-	{cmd = "suspect", text = "quick_suspect", format = true},
-	{cmd = "traitor", text = "quick_traitor", format = true},
-	{cmd = "innocent", text = "quick_inno", format = true},
-	{cmd = "check", text = "quick_check", format = false}
+    { cmd = "yes", text = "quick_yes", format = false },
+    { cmd = "no", text = "quick_no", format = false },
+    { cmd = "help", text = "quick_help", format = false },
+    { cmd = "imwith", text = "quick_imwith", format = true },
+    { cmd = "see", text = "quick_see", format = true },
+    { cmd = "suspect", text = "quick_suspect", format = true },
+    { cmd = "traitor", text = "quick_traitor", format = true },
+    { cmd = "innocent", text = "quick_inno", format = true },
+    { cmd = "check", text = "quick_check", format = false },
 }
 
 local cmdToTag = {
-	["innocent"] = TTTScoreboard.Tags[1],
-	["suspect"] = TTTScoreboard.Tags[2],
-	--[""] = TTTScoreboard.Tags[3],
-	["traitor"] = TTTScoreboard.Tags[4]
-	--[""] = TTTScoreboard.Tags[5]
+    ["innocent"] = TTTScoreboard.Tags[1],
+    ["suspect"] = TTTScoreboard.Tags[2],
+    --[""] = TTTScoreboard.Tags[3],
+    ["traitor"] = TTTScoreboard.Tags[4],
+    --[""] = TTTScoreboard.Tags[5]
 }
 
 local function tagPlayer(ply, rCmd)
-	if not isstring(ply) and IsValid(ply) and ply:IsPlayer() and cmdToTag[rCmd] then
-		-- If the radio command is one of the ones I track, tag the player
-		ply.sb_tag = cmdToTag[rCmd]
-	end
+    if not isstring(ply) and IsValid(ply) and ply:IsPlayer() and cmdToTag[rCmd] then
+        -- If the radio command is one of the ones I track, tag the player
+        ply.sb_tag = cmdToTag[rCmd]
+    end
 end
 
 local function RadioThink(s)
-	local tgt, v = RADIO:GetTarget()
+    local tgt, v = RADIO:GetTarget()
 
-	if s.target == tgt then return end
+    if s.target == tgt then
+        return
+    end
 
-	s.target = tgt
+    s.target = tgt
 
-	tgt = string.Interp(s.txt, {player = RADIO.ToPrintable(tgt)})
+    tgt = string.Interp(s.txt, { player = RADIO.ToPrintable(tgt) })
 
-	if v then
-		tgt = util.Capitalize(tgt)
-	end
+    if v then
+        tgt = util.Capitalize(tgt)
+    end
 
-	s:SetText(s.id .. tgt)
-	s:SizeToContents()
+    s:SetText(s.id .. tgt)
+    s:SizeToContents()
 
-	if not IsValid(radioframe) then return end
+    if not IsValid(radioframe) then
+        return
+    end
 
-	radioframe:ForceResize()
+    radioframe:ForceResize()
 end
 
 local function RadioResize(s)
-	local w = 0
-	local label
+    local w = 0
+    local label
 
-	for _, v in pairs(s.Items) do
-		label = v:GetChild(0)
+    for _, v in pairs(s.Items) do
+        label = v:GetChild(0)
 
-		if not IsValid(label) or label:GetWide() <= w then continue end
+        if not IsValid(label) or label:GetWide() <= w then
+            continue
+        end
 
-		w = label:GetWide()
-	end
+        w = label:GetWide()
+    end
 
-	s:SetWide(w + 20)
+    s:SetWide(w + 20)
 end
 
 ---
@@ -86,83 +92,89 @@ end
 -- @param boolean state
 -- @realm client
 function RADIO:ShowRadioCommands(state)
-	if not state then
-		if not IsValid(radioframe) then return end
+    if not state then
+        if not IsValid(radioframe) then
+            return
+        end
 
-		radioframe:Remove()
+        radioframe:Remove()
 
-		radioframe = nil
+        radioframe = nil
 
-		-- don't capture keys
-		self.Show = false
+        -- don't capture keys
+        self.Show = false
 
-		return
-	else
-		local client = LocalPlayer()
-		if not IsValid(client) then return end
+        return
+    else
+        local client = LocalPlayer()
+        if not IsValid(client) then
+            return
+        end
 
-		if not radioframe then
-			local w, h = 200, 300
+        if not radioframe then
+            local w, h = 200, 300
 
-			radioframe = vgui.Create("DForm")
-			radioframe:SetName(GetTranslation("quick_title"))
-			radioframe:SetSize(w, h)
-			radioframe:SetMouseInputEnabled(false)
-			radioframe:SetKeyboardInputEnabled(false)
+            radioframe = vgui.Create("DForm")
+            radioframe:SetName(GetTranslation("quick_title"))
+            radioframe:SetSize(w, h)
+            radioframe:SetMouseInputEnabled(false)
+            radioframe:SetKeyboardInputEnabled(false)
 
-			radioframe:CenterVertical()
+            radioframe:CenterVertical()
 
-			-- ASS
-			radioframe.ForceResize = RadioResize
+            -- ASS
+            radioframe.ForceResize = RadioResize
 
-			local commands = self.Commands
-			local text_nobody = GetTranslation("quick_nobody")
+            local commands = self.Commands
+            local text_nobody = GetTranslation("quick_nobody")
 
-			for key = 1, #commands do
-				local command = commands[key]
-				local dlabel = vgui.Create("DLabel", radioframe)
-				local id = key .. ": "
-				local txt = id
+            for key = 1, #commands do
+                local command = commands[key]
+                local dlabel = vgui.Create("DLabel", radioframe)
+                local id = key .. ": "
+                local txt = id
 
-				if command.format then
-					txt = txt .. GetPTranslation(command.text, {player = text_nobody})
-				else
-					txt = txt .. GetTranslation(command.text)
-				end
+                if command.format then
+                    txt = txt .. GetPTranslation(command.text, { player = text_nobody })
+                else
+                    txt = txt .. GetTranslation(command.text)
+                end
 
-				dlabel:SetText(txt)
-				dlabel:SetFont("TabLarge")
-				dlabel:SetTextColor(COLOR_WHITE)
-				dlabel:SizeToContents()
+                dlabel:SetText(txt)
+                dlabel:SetFont("TabLarge")
+                dlabel:SetTextColor(COLOR_WHITE)
+                dlabel:SizeToContents()
 
-				if command.format then
-					dlabel.target = nil
-					dlabel.id = id
-					dlabel.txt = GetTranslation(command.text)
-					dlabel.Think = RadioThink
-				end
+                if command.format then
+                    dlabel.target = nil
+                    dlabel.id = id
+                    dlabel.txt = GetTranslation(command.text)
+                    dlabel.Think = RadioThink
+                end
 
-				radioframe:AddItem(dlabel)
-			end
+                radioframe:AddItem(dlabel)
+            end
 
-			radioframe:ForceResize()
-		end
+            radioframe:ForceResize()
+        end
 
-		radioframe:MakePopup()
+        radioframe:MakePopup()
 
-		-- grabs input on init(), which happens in makepopup
-		radioframe:SetMouseInputEnabled(false)
-		radioframe:SetKeyboardInputEnabled(false)
+        -- grabs input on init(), which happens in makepopup
+        radioframe:SetMouseInputEnabled(false)
+        radioframe:SetKeyboardInputEnabled(false)
 
-		-- capture slot keys while we're open
-		self.Show = true
+        -- capture slot keys while we're open
+        self.Show = true
 
-		timer.Create("radiocmdshow", 3, 1, function()
-			if not RADIO then return end
+        timer.Create("radiocmdshow", 3, 1, function()
+            if not RADIO then
+                return
+            end
 
-			RADIO:ShowRadioCommands(false)
-		end)
-	end
+            RADIO:ShowRadioCommands(false)
+        end)
+    end
 end
 
 ---
@@ -171,12 +183,14 @@ end
 -- @param number slotidx
 -- @realm client
 function RADIO:SendCommand(slotidx)
-	local c = self.Commands[slotidx]
-	if not c then return end
+    local c = self.Commands[slotidx]
+    if not c then
+        return
+    end
 
-	RunConsoleCommand("ttt_radio", c.cmd)
+    RunConsoleCommand("ttt_radio", c.cmd)
 
-	self:ShowRadioCommands(false)
+    self:ShowRadioCommands(false)
 end
 
 ---
@@ -185,31 +199,35 @@ end
 -- @return nil|boolean Whether a custom cmd matches this situation, if true the first return argument is a command string
 -- @realm client
 function RADIO:GetTargetType()
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
+    local client = LocalPlayer()
+    if not IsValid(client) then
+        return
+    end
 
-	local trace = client:GetEyeTrace(MASK_SHOT)
-	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
+    local trace = client:GetEyeTrace(MASK_SHOT)
+    if not trace or not trace.Hit or not IsValid(trace.Entity) then
+        return
+    end
 
-	---
-	-- @hook
-	-- @realm client
-	-- stylua: ignore
-	local ent = hook.Run("TTT2ModifyRadioTarget", trace.Entity) or trace.Entity
+    ---
+    -- @hook
+    -- @realm client
+    -- stylua: ignore
+    local ent = hook.Run("TTT2ModifyRadioTarget", trace.Entity) or trace.Entity
 
-	if ent:IsPlayer() and ent:IsTerror() then
-		if ent:GetNWBool("disguised", false) then
-			return "quick_disg", true
-		else
-			return ent, false
-		end
-	elseif ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, "") ~= "" then
-		if DetectiveMode() and not CORPSE.GetFound(ent, false) then
-			return "quick_corpse", true
-		else
-			return ent, false
-		end
-	end
+    if ent:IsPlayer() and ent:IsTerror() then
+        if ent:GetNWBool("disguised", false) then
+            return "quick_disg", true
+        else
+            return ent, false
+        end
+    elseif ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, "") ~= "" then
+        if DetectiveMode() and not CORPSE.GetFound(ent, false) then
+            return "quick_corpse", true
+        else
+            return ent, false
+        end
+    end
 end
 
 ---
@@ -218,15 +236,18 @@ end
 -- @return nil|string
 -- @realm client
 function RADIO.ToPrintable(target)
-	if isstring(target) then
-		return GetTranslation(target)
-	elseif IsValid(target) then
-		if target:IsPlayer() then
-			return target:Nick()
-		elseif target:GetClass() == "prop_ragdoll" then
-			return GetPTranslation("quick_corpse_id", {player = CORPSE.GetPlayerNick(target, "A Terrorist")})
-		end
-	end
+    if isstring(target) then
+        return GetTranslation(target)
+    elseif IsValid(target) then
+        if target:IsPlayer() then
+            return target:Nick()
+        elseif target:GetClass() == "prop_ragdoll" then
+            return GetPTranslation(
+                "quick_corpse_id",
+                { player = CORPSE.GetPlayerNick(target, "A Terrorist") }
+            )
+        end
+    end
 end
 
 ---
@@ -236,23 +257,23 @@ end
 -- @see RADIO:GetTargetType
 -- @realm client
 function RADIO:GetTarget()
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	if IsValid(client) then
-		local current, vague = self:GetTargetType()
+    if IsValid(client) then
+        local current, vague = self:GetTargetType()
 
-		if current then
-			return current, vague
-		end
+        if current then
+            return current, vague
+        end
 
-		local stored = self.StoredTarget
+        local stored = self.StoredTarget
 
-		if stored.target and stored.t > CurTime() - 3 then
-			return stored.target, stored.vague
-		end
-	end
+        if stored.target and stored.t > CurTime() - 3 then
+            return stored.target, stored.vague
+        end
+    end
 
-	return "quick_nobody", true
+    return "quick_nobody", true
 end
 
 ---
@@ -260,140 +281,146 @@ end
 -- @see RADIO:GetTargetType
 -- @realm client
 function RADIO:StoreTarget()
-	local current, vague = self:GetTargetType()
+    local current, vague = self:GetTargetType()
 
-	if current then
-		self.StoredTarget.target = current
-		self.StoredTarget.vague = vague
-		self.StoredTarget.t = CurTime()
-	end
+    if current then
+        self.StoredTarget.target = current
+        self.StoredTarget.vague = vague
+        self.StoredTarget.t = CurTime()
+    end
 end
 
 ---
 -- Radio commands are a console cmd instead of directly sent from RADIO, because
 -- this way players can bind keys to them
 local function RadioCommand(ply, cmd, arg)
-	if not IsValid(ply) then
-		ErrorNoHaltWithStack("ttt_radio failed, invalid player")
+    if not IsValid(ply) then
+        ErrorNoHaltWithStack("ttt_radio failed, invalid player")
 
-		return
-	end
+        return
+    end
 
-	---
-	-- @realm client
-	-- stylua: ignore
-	if hook.Run("TTT2ClientRadioCommand", cmd) then
-		Dev(1, "ttt_radio, execution prevented by a hook")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("TTT2ClientRadioCommand", cmd) then
+        Dev(1, "ttt_radio, execution prevented by a hook")
 
-		return
-	end
+        return
+    end
 
-	if #arg ~= 1 then
-		ErrorNoHaltWithStack("ttt_radio failed, too many arguments?")
+    if #arg ~= 1 then
+        ErrorNoHaltWithStack("ttt_radio failed, too many arguments?")
 
-		return
-	end
+        return
+    end
 
-	if RADIO.LastRadio.t > CurTime() - 0.5 then return end
+    if RADIO.LastRadio.t > CurTime() - 0.5 then
+        return
+    end
 
-	local msg_type = arg[1]
-	local target, vague = RADIO:GetTarget()
-	local msg_name
+    local msg_type = arg[1]
+    local target, vague = RADIO:GetTarget()
+    local msg_name
 
-	-- this will not be what is shown, but what is stored in case this message
-	-- has to be used as last words (which will always be english for now)
-	local text
-	local commands = RADIO.Commands
+    -- this will not be what is shown, but what is stored in case this message
+    -- has to be used as last words (which will always be english for now)
+    local text
+    local commands = RADIO.Commands
 
-	for i = 1, #commands do
-		local msg = commands[i]
+    for i = 1, #commands do
+        local msg = commands[i]
 
-		if msg.cmd ~= msg_type then continue end
+        if msg.cmd ~= msg_type then
+            continue
+        end
 
-		local eng = LANG.GetTranslationFromLanguage(msg.text, "en")
-		local _tmp = {player = RADIO.ToPrintable(target)}
+        local eng = LANG.GetTranslationFromLanguage(msg.text, "en")
+        local _tmp = { player = RADIO.ToPrintable(target) }
 
-		text = msg.format and string.Interp(eng, _tmp) or eng
-		msg_name = msg.text
+        text = msg.format and string.Interp(eng, _tmp) or eng
+        msg_name = msg.text
 
-		break
-	end
+        break
+    end
 
-	if not text then
-		ErrorNoHaltWithStack("ttt_radio failed, argument not valid radiocommand")
+    if not text then
+        ErrorNoHaltWithStack("ttt_radio failed, argument not valid radiocommand")
 
-		return
-	end
+        return
+    end
 
-	if vague then
-		text = util.Capitalize(text)
-	end
+    if vague then
+        text = util.Capitalize(text)
+    end
 
-	RADIO.LastRadio.t = CurTime()
-	RADIO.LastRadio.msg = text
+    RADIO.LastRadio.t = CurTime()
+    RADIO.LastRadio.msg = text
 
-	tagPlayer(target, msg_type)
+    tagPlayer(target, msg_type)
 
-	-- target is either a lang string or an entity
-	target = isstring(target) and target or tostring(target:EntIndex())
+    -- target is either a lang string or an entity
+    target = isstring(target) and target or tostring(target:EntIndex())
 
-	RunConsoleCommand("_ttt_radio_send", msg_name, target)
+    RunConsoleCommand("_ttt_radio_send", msg_name, target)
 end
 
 local function RadioComplete(cmd, arg)
-	local c = {}
-	local commands = RADIO.Commands
+    local c = {}
+    local commands = RADIO.Commands
 
-	for i = 1, #commands do
-		c[i] = "ttt_radio " .. commands[i].cmd
-	end
+    for i = 1, #commands do
+        c[i] = "ttt_radio " .. commands[i].cmd
+    end
 
-	return c
+    return c
 end
 concommand.Add("ttt_radio", RadioCommand, RadioComplete)
 
 local function RadioMsgRecv()
-	local sender = net.ReadEntity()
-	local msg = net.ReadString()
-	local param = net.ReadString()
+    local sender = net.ReadEntity()
+    local msg = net.ReadString()
+    local param = net.ReadString()
 
-	if not IsValid(sender) or not sender:IsPlayer() then return end
+    if not IsValid(sender) or not sender:IsPlayer() then
+        return
+    end
 
-	GAMEMODE:PlayerSentRadioCommand(sender, msg, param)
+    GAMEMODE:PlayerSentRadioCommand(sender, msg, param)
 
-	-- if param is a language string, translate it
-	-- else it's a nickname
-	local lang_param = LANG.GetNameParam(param)
-	if lang_param then
-		if lang_param == "quick_corpse_id" then
-			-- special case where nested translation is needed
-			param = GetPTranslation(lang_param, {player = net.ReadString()})
-		else
-			param = GetTranslation(lang_param)
-		end
-	end
+    -- if param is a language string, translate it
+    -- else it's a nickname
+    local lang_param = LANG.GetNameParam(param)
+    if lang_param then
+        if lang_param == "quick_corpse_id" then
+            -- special case where nested translation is needed
+            param = GetPTranslation(lang_param, { player = net.ReadString() })
+        else
+            param = GetTranslation(lang_param)
+        end
+    end
 
-	local text = GetPTranslation(msg, {player = param})
+    local text = GetPTranslation(msg, { player = param })
 
-	-- don't want to capitalize nicks, but everything else is fair game
-	if lang_param then
-		text = util.Capitalize(text)
-	end
+    -- don't want to capitalize nicks, but everything else is fair game
+    if lang_param then
+        text = util.Capitalize(text)
+    end
 
-	if sender:IsDetective() then
-		AddDetectiveText(sender, text)
-	else
-		chat.AddText(sender, COLOR_WHITE, ": " .. text)
-	end
+    if sender:IsDetective() then
+        AddDetectiveText(sender, text)
+    else
+        chat.AddText(sender, COLOR_WHITE, ": " .. text)
+    end
 end
 net.Receive("TTT_RadioMsg", RadioMsgRecv)
 
 local radio_gestures = {
-	quick_yes = ACT_GMOD_GESTURE_AGREE,
-	quick_no = ACT_GMOD_GESTURE_DISAGREE,
-	quick_see = ACT_GMOD_GESTURE_WAVE,
-	quick_check = ACT_SIGNAL_GROUP,
-	quick_suspect = ACT_SIGNAL_HALT
+    quick_yes = ACT_GMOD_GESTURE_AGREE,
+    quick_no = ACT_GMOD_GESTURE_DISAGREE,
+    quick_see = ACT_GMOD_GESTURE_WAVE,
+    quick_check = ACT_SIGNAL_GROUP,
+    quick_suspect = ACT_SIGNAL_HALT,
 }
 
 ---
@@ -405,10 +432,12 @@ local radio_gestures = {
 -- @hook
 -- @realm client
 function GM:PlayerSentRadioCommand(ply, name, target)
-	local act = radio_gestures[name]
-	if not act then return end
+    local act = radio_gestures[name]
+    if not act then
+        return
+    end
 
-	ply:AnimPerformGesture(act)
+    ply:AnimPerformGesture(act)
 end
 
 ---
@@ -418,9 +447,7 @@ end
 -- @return[default=nil] boolean
 -- @hook
 -- @realm client
-function GM:TTT2ClientRadioCommand(cmd)
-
-end
+function GM:TTT2ClientRadioCommand(cmd) end
 
 ---
 -- Hook that can be used to modify the targeted entity for the radio commands.
@@ -428,6 +455,4 @@ end
 -- @return nil|Entity Return the entity that should be used, `nil` if kept unchanged
 -- @hook
 -- @realm client
-function GM:TTT2ModifyRadioTarget(ent)
-
-end
+function GM:TTT2ModifyRadioTarget(ent) end

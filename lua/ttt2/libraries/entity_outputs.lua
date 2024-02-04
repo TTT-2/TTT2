@@ -4,7 +4,9 @@
 -- @author Mineotopia
 -- @module entityOutputs
 
-if CLIENT then return end -- this is a serverside-only module
+if CLIENT then
+    return
+end -- this is a serverside-only module
 
 entityOutputs = entityOutputs or {}
 entityOutputs.hooks = entityOutputs.hooks or {}
@@ -15,11 +17,13 @@ entityOutputs.hooks = entityOutputs.hooks or {}
 -- @internal
 -- @realm server
 function entityOutputs.SetUp()
-	if IsValid(entityOutputs.mapLuaRun) then return end
+    if IsValid(entityOutputs.mapLuaRun) then
+        return
+    end
 
-	entityOutputs.mapLuaRun = ents.Create("lua_run")
-	entityOutputs.mapLuaRun:SetName("triggerhook")
-	entityOutputs.mapLuaRun:Spawn()
+    entityOutputs.mapLuaRun = ents.Create("lua_run")
+    entityOutputs.mapLuaRun:SetName("triggerhook")
+    entityOutputs.mapLuaRun:Spawn()
 end
 
 ---
@@ -28,11 +32,11 @@ end
 -- @internal
 -- @realm server
 function entityOutputs.CleanUp()
-	for hookName in pairs(entityOutputs.hooks) do
-		hook.Remove(hookName .. "_Internal", hookName .. "_name")
-	end
+    for hookName in pairs(entityOutputs.hooks) do
+        hook.Remove(hookName .. "_Internal", hookName .. "_name")
+    end
 
-	entityOutputs.hooks = {}
+    entityOutputs.hooks = {}
 end
 
 ---
@@ -41,18 +45,20 @@ end
 -- @internal
 -- @realm server
 function entityOutputs.RegisterHook(hookName)
-	if entityOutputs.hooks[hookName] then return end
+    if entityOutputs.hooks[hookName] then
+        return
+    end
 
-	entityOutputs.hooks[hookName] = true
+    entityOutputs.hooks[hookName] = true
 
-	hook.Add(hookName .. "_Internal", hookName .. "_name", function()
-		local activator, caller = ACTIVATOR, CALLER
+    hook.Add(hookName .. "_Internal", hookName .. "_name", function()
+        local activator, caller = ACTIVATOR, CALLER
 
-		---
-		-- @ignore
-		-- stylua: ignore
-		hook.Run(hookName, caller, activator)
-	end)
+        ---
+        -- @ignore
+        -- stylua: ignore
+        hook.Run(hookName, caller, activator)
+    end)
 end
 
 ---
@@ -69,15 +75,17 @@ end
 -- @ref https://wiki.facepunch.com/gmod/Entity:Fire
 -- @realm server
 function entityOutputs.RegisterMapEntityOutput(ent, outputName, hookName, delay, repititions)
-	if not IsValid(ent) then return end
+    if not IsValid(ent) then
+        return
+    end
 
-	delay = delay or 0
-	repititions = repititions or -1
+    delay = delay or 0
+    repititions = repititions or -1
 
-	---
-	-- @ignore
-	-- stylua: ignore
-	ent:Fire("AddOutput", outputName .. " triggerhook:RunPassedCode:hook.Run('" .. hookName .. "_Internal'):" .. delay .. ":" .. repititions)
+    ---
+    -- @ignore
+    -- stylua: ignore
+    ent:Fire("AddOutput", outputName .. " triggerhook:RunPassedCode:hook.Run('" .. hookName .. "_Internal'):" .. delay .. ":" .. repititions)
 
-	entityOutputs.RegisterHook(hookName)
+    entityOutputs.RegisterHook(hookName)
 end

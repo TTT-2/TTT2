@@ -27,14 +27,14 @@
 ---@field angle Angle The rotation offset
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 weaponrenderer = {}
 
-local propertiesMaterial = {"nocull", "additive", "vertexalpha", "vertexcolor", "ignorez"}
+local propertiesMaterial = { "nocull", "additive", "vertexalpha", "vertexcolor", "ignorez" }
 
 ---
 -- Gets the orientation of a given bone.
@@ -47,45 +47,56 @@ local propertiesMaterial = {"nocull", "additive", "vertexalpha", "vertexcolor", 
 -- @return Angle ang The bone angle
 -- @realm client
 local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, boneOverride)
-	local bone, pos, ang
+    local bone, pos, ang
 
-	if dataTable.rel and dataTable.rel ~= "" then
-		local tbl = baseDataTable[dataTable.rel]
+    if dataTable.rel and dataTable.rel ~= "" then
+        local tbl = baseDataTable[dataTable.rel]
 
-		if not tbl then return end
+        if not tbl then
+            return
+        end
 
-		-- Technically, if there exists an element with the same name as a bone
-		-- you can get in an infinite loop. Let's just hope nobody's that stupid.
-		pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity)
+        -- Technically, if there exists an element with the same name as a bone
+        -- you can get in an infinite loop. Let's just hope nobody's that stupid.
+        pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity)
 
-		if not pos then return end
+        if not pos then
+            return
+        end
 
-		pos = pos + ang:Forward() * tbl.pos.x + ang:Right() * tbl.pos.y + ang:Up() * tbl.pos.z
+        pos = pos + ang:Forward() * tbl.pos.x + ang:Right() * tbl.pos.y + ang:Up() * tbl.pos.z
 
-		ang:RotateAroundAxis(ang:Up(), tbl.angle.y)
-		ang:RotateAroundAxis(ang:Right(), tbl.angle.p)
-		ang:RotateAroundAxis(ang:Forward(), tbl.angle.r)
-	else
-		bone = boneEntity:LookupBone(boneOverride or dataTable.bone)
+        ang:RotateAroundAxis(ang:Up(), tbl.angle.y)
+        ang:RotateAroundAxis(ang:Right(), tbl.angle.p)
+        ang:RotateAroundAxis(ang:Forward(), tbl.angle.r)
+    else
+        bone = boneEntity:LookupBone(boneOverride or dataTable.bone)
 
-		if not bone then return end
+        if not bone then
+            return
+        end
 
-		pos, ang = Vector(0,0,0), Angle(0,0,0)
+        pos, ang = Vector(0, 0, 0), Angle(0, 0, 0)
 
-		local matrix = boneEntity:GetBoneMatrix(bone)
+        local matrix = boneEntity:GetBoneMatrix(bone)
 
-		if matrix then
-			pos, ang = matrix:GetTranslation(), matrix:GetAngles()
-		end
+        if matrix then
+            pos, ang = matrix:GetTranslation(), matrix:GetAngles()
+        end
 
-		local owner = wep:GetOwner()
+        local owner = wep:GetOwner()
 
-		if IsValid(owner) and owner:IsPlayer() and boneEntity == owner:GetViewModel() and wep.ViewModelFlip then
-			ang.r = -ang.r -- Fixes mirrored models
-		end
-	end
+        if
+            IsValid(owner)
+            and owner:IsPlayer()
+            and boneEntity == owner:GetViewModel()
+            and wep.ViewModelFlip
+        then
+            ang.r = -ang.r -- Fixes mirrored models
+        end
+    end
 
-	return pos, ang
+    return pos, ang
 end
 
 ---
@@ -95,54 +106,62 @@ end
 -- @return table The new created model data table
 -- @realm client
 function weaponrenderer.CreateModel(wep, modelData)
-	local modelDataCopy = table.FullCopy(modelData)
+    local modelDataCopy = table.FullCopy(modelData)
 
-	-- handle a model being added to the view or world model
-	if modelDataCopy.type == "Model" and modelDataCopy.model and modelDataCopy.model ~= ""
-		and (not IsValid(modelDataCopy.modelEnt) or modelDataCopy.createdModel ~= modelDataCopy.model)
-		and string.find(modelDataCopy.model, ".mdl") and file.Exists(modelDataCopy.model, "GAME")
-	then
-		-- note on the rendergroup: This rendergroup is not listed in the GMod wiki; however all
-		-- SWEP construction kit weapons use this rendergroup - and it works
-		modelDataCopy.modelEnt = ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
+    -- handle a model being added to the view or world model
+    if
+        modelDataCopy.type == "Model"
+        and modelDataCopy.model
+        and modelDataCopy.model ~= ""
+        and (not IsValid(modelDataCopy.modelEnt) or modelDataCopy.createdModel ~= modelDataCopy.model)
+        and string.find(modelDataCopy.model, ".mdl")
+        and file.Exists(modelDataCopy.model, "GAME")
+    then
+        -- note on the rendergroup: This rendergroup is not listed in the GMod wiki; however all
+        -- SWEP construction kit weapons use this rendergroup - and it works
+        modelDataCopy.modelEnt =
+            ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
 
-		if IsValid(modelDataCopy.modelEnt) then
-			modelDataCopy.modelEnt:SetPos(wep:GetPos())
-			modelDataCopy.modelEnt:SetAngles(wep:GetAngles())
-			modelDataCopy.modelEnt:SetParent(wep)
-			modelDataCopy.modelEnt:SetNoDraw(true)
-			modelDataCopy.createdModel = modelDataCopy.model
-		else
-			modelDataCopy.modelEnt = nil
-		end
+        if IsValid(modelDataCopy.modelEnt) then
+            modelDataCopy.modelEnt:SetPos(wep:GetPos())
+            modelDataCopy.modelEnt:SetAngles(wep:GetAngles())
+            modelDataCopy.modelEnt:SetParent(wep)
+            modelDataCopy.modelEnt:SetNoDraw(true)
+            modelDataCopy.createdModel = modelDataCopy.model
+        else
+            modelDataCopy.modelEnt = nil
+        end
 
-	-- handle a sprite being added to the view or world model
-	elseif modelDataCopy.type == "Sprite" and modelDataCopy.sprite and modelDataCopy.sprite ~= ""
-		and (not modelDataCopy.spriteMaterial or modelDataCopy.createdSprite ~= modelDataCopy.sprite)
-		and file.Exists("materials/" .. modelDataCopy.sprite .. ".vmt", "GAME")
-	then
-		local name = modelDataCopy.sprite .. "-"
-		local params = {
-			["$basetexture"] = modelDataCopy.sprite
-		}
+    -- handle a sprite being added to the view or world model
+    elseif
+        modelDataCopy.type == "Sprite"
+        and modelDataCopy.sprite
+        and modelDataCopy.sprite ~= ""
+        and (not modelDataCopy.spriteMaterial or modelDataCopy.createdSprite ~= modelDataCopy.sprite)
+        and file.Exists("materials/" .. modelDataCopy.sprite .. ".vmt", "GAME")
+    then
+        local name = modelDataCopy.sprite .. "-"
+        local params = {
+            ["$basetexture"] = modelDataCopy.sprite,
+        }
 
-		-- make sure we create a unique name based on the selected options
-		for i = 1, #propertiesMaterial do
-			local property = propertiesMaterial[i]
+        -- make sure we create a unique name based on the selected options
+        for i = 1, #propertiesMaterial do
+            local property = propertiesMaterial[i]
 
-			if modelDataCopy[property] then
-				params["$" .. property] = 1
-				name = name .. "1"
-			else
-				name = name .. "0"
-			end
-		end
+            if modelDataCopy[property] then
+                params["$" .. property] = 1
+                name = name .. "1"
+            else
+                name = name .. "0"
+            end
+        end
 
-		modelDataCopy.createdSprite = modelDataCopy.sprite
-		modelDataCopy.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
-	end
+        modelDataCopy.createdSprite = modelDataCopy.sprite
+        modelDataCopy.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
+    end
 
-	return modelDataCopy
+    return modelDataCopy
 end
 
 ---
@@ -150,17 +169,21 @@ end
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
 function weaponrenderer.ResetBonePositions(viewModel)
-	if not IsValid(viewModel) then return end
+    if not IsValid(viewModel) then
+        return
+    end
 
-	local boneCount = viewModel:GetBoneCount()
+    local boneCount = viewModel:GetBoneCount()
 
-	if not boneCount then return end
+    if not boneCount then
+        return
+    end
 
-	for i = 0, boneCount do
-		viewModel:ManipulateBoneScale(i, Vector(1, 1, 1))
-		viewModel:ManipulateBoneAngles(i, Angle(0, 0, 0))
-		viewModel:ManipulateBonePosition(i, Vector(0, 0, 0))
-	end
+    for i = 0, boneCount do
+        viewModel:ManipulateBoneScale(i, Vector(1, 1, 1))
+        viewModel:ManipulateBoneAngles(i, Angle(0, 0, 0))
+        viewModel:ManipulateBonePosition(i, Vector(0, 0, 0))
+    end
 end
 
 ---
@@ -170,56 +193,56 @@ end
 -- @param Entity viewModel The view model of the weapon
 -- @realm client
 function weaponrenderer.UpdateBonePositions(wep, viewModel)
-	if not wep.customViewModelBoneMods then
-		weaponrenderer.ResetBonePositions(viewModel)
+    if not wep.customViewModelBoneMods then
+        weaponrenderer.ResetBonePositions(viewModel)
 
-		return
-	end
+        return
+    end
 
-	for i = 0, viewModel:GetBoneCount() do
-		local bonename = viewModel:GetBoneName(i)
-		local dataTable
+    for i = 0, viewModel:GetBoneCount() do
+        local bonename = viewModel:GetBoneName(i)
+        local dataTable
 
-		if wep.customViewModelBoneMods[bonename] then
-			dataTable = wep.customViewModelBoneMods[bonename]
-		else
-			dataTable = {
-				scale = Vector(1, 1, 1),
-				pos = Vector(0, 0, 0),
-				angle = Angle(0, 0, 0)
-			}
-		end
+        if wep.customViewModelBoneMods[bonename] then
+            dataTable = wep.customViewModelBoneMods[bonename]
+        else
+            dataTable = {
+                scale = Vector(1, 1, 1),
+                pos = Vector(0, 0, 0),
+                angle = Angle(0, 0, 0),
+            }
+        end
 
-		local scale = dataTable.scale
-		local position = dataTable.pos
-		local modelScale = Vector(1, 1, 1)
+        local scale = dataTable.scale
+        local position = dataTable.pos
+        local modelScale = Vector(1, 1, 1)
 
-		local currentBone = viewModel:GetBoneParent(i)
+        local currentBone = viewModel:GetBoneParent(i)
 
-		while (currentBone >= 0) do
-			local viewModelBoneMod = wep.customViewModelBoneMods[viewModel:GetBoneName(currentBone)]
+        while currentBone >= 0 do
+            local viewModelBoneMod = wep.customViewModelBoneMods[viewModel:GetBoneName(currentBone)]
 
-			if viewModelBoneMod then
-				modelScale = modelScale * viewModelBoneMod.scale
-			end
+            if viewModelBoneMod then
+                modelScale = modelScale * viewModelBoneMod.scale
+            end
 
-			currentBone = viewModel:GetBoneParent(currentBone)
-		end
+            currentBone = viewModel:GetBoneParent(currentBone)
+        end
 
-		scale = scale * modelScale
+        scale = scale * modelScale
 
-		if viewModel:GetManipulateBoneScale(i) ~= scale then
-			viewModel:ManipulateBoneScale(i, scale)
-		end
+        if viewModel:GetManipulateBoneScale(i) ~= scale then
+            viewModel:ManipulateBoneScale(i, scale)
+        end
 
-		if viewModel:GetManipulateBoneAngles(i) ~= dataTable.angle then
-			viewModel:ManipulateBoneAngles(i, dataTable.angle)
-		end
+        if viewModel:GetManipulateBoneAngles(i) ~= dataTable.angle then
+            viewModel:ManipulateBoneAngles(i, dataTable.angle)
+        end
 
-		if viewModel:GetManipulateBonePosition(i) ~= position then
-			viewModel:ManipulateBonePosition(i, position)
-		end
-	end
+        if viewModel:GetManipulateBonePosition(i) ~= position then
+            viewModel:ManipulateBonePosition(i, position)
+        end
+    end
 end
 
 ---
@@ -229,17 +252,17 @@ end
 -- @return table Returns a new or the cached render order
 -- @realm client
 local function BuildRenderOrder(elements)
-	local newRenderOrder = {}
+    local newRenderOrder = {}
 
-	for identifier, dataTable in pairs(elements) do
-		if dataTable.type == "Model" then
-			table.insert(newRenderOrder, 1, identifier)
-		elseif dataTable.type == "Sprite" or dataTable.type == "Quad" then
-			table.insert(newRenderOrder, identifier)
-		end
-	end
+    for identifier, dataTable in pairs(elements) do
+        if dataTable.type == "Model" then
+            table.insert(newRenderOrder, 1, identifier)
+        elseif dataTable.type == "Sprite" or dataTable.type == "Quad" then
+            table.insert(newRenderOrder, identifier)
+        end
+    end
 
-	return newRenderOrder
+    return newRenderOrder
 end
 
 ---
@@ -249,73 +272,84 @@ end
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
 function weaponrenderer.Render(wep, elements, boneEntity)
-	local renderOrder = BuildRenderOrder(elements)
+    local renderOrder = BuildRenderOrder(elements)
 
-	for i = 1, #renderOrder do
-		local identifier = renderOrder[i]
-		local modelData = elements[identifier]
+    for i = 1, #renderOrder do
+        local identifier = renderOrder[i]
+        local modelData = elements[identifier]
 
-		if modelData.hide or not modelData.bone then continue end
+        if modelData.hide or not modelData.bone then
+            continue
+        end
 
-		local model = modelData.modelEnt
-		local sprite = modelData.spriteMaterial
+        local model = modelData.modelEnt
+        local sprite = modelData.spriteMaterial
 
-		local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity)
+        local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity)
 
-		if not pos then continue end
+        if not pos then
+            continue
+        end
 
-		local posModel = pos + ang:Forward() * modelData.pos.x + ang:Right() * modelData.pos.y + ang:Up() * modelData.pos.z
+        local posModel = pos
+            + ang:Forward() * modelData.pos.x
+            + ang:Right() * modelData.pos.y
+            + ang:Up() * modelData.pos.z
 
-		if modelData.type == "Model" and IsValid(model) then
-			model:SetPos(posModel)
-			ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
-			ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
-			ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
+        if modelData.type == "Model" and IsValid(model) then
+            model:SetPos(posModel)
+            ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
+            ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
+            ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
 
-			model:SetAngles(ang)
+            model:SetAngles(ang)
 
-			local matrix = Matrix()
-			matrix:Scale(modelData.size)
+            local matrix = Matrix()
+            matrix:Scale(modelData.size)
 
-			model:EnableMatrix("RenderMultiply", matrix)
-			model:SetMaterial(modelData.material)
+            model:EnableMatrix("RenderMultiply", matrix)
+            model:SetMaterial(modelData.material)
 
-			if modelData.skin then
-				model:SetSkin(modelData.skin)
-			end
+            if modelData.skin then
+                model:SetSkin(modelData.skin)
+            end
 
-			if modelData.bodygroup then
-				for bodygroup, value in pairs(modelData.bodygroup) do
-					wep:SetBodygroup(bodygroup, value)
-				end
-			end
+            if modelData.bodygroup then
+                for bodygroup, value in pairs(modelData.bodygroup) do
+                    wep:SetBodygroup(bodygroup, value)
+                end
+            end
 
-			if modelData.surpresslightning then
-				render.SuppressEngineLighting(true)
-			end
+            if modelData.surpresslightning then
+                render.SuppressEngineLighting(true)
+            end
 
-			render.SetColorModulation(modelData.color.r / 255, modelData.color.g / 255, modelData.color.b / 255)
-			render.SetBlend(modelData.color.a / 255)
+            render.SetColorModulation(
+                modelData.color.r / 255,
+                modelData.color.g / 255,
+                modelData.color.b / 255
+            )
+            render.SetBlend(modelData.color.a / 255)
 
-			model:DrawModel()
+            model:DrawModel()
 
-			render.SetBlend(1)
-			render.SetColorModulation(1, 1, 1)
+            render.SetBlend(1)
+            render.SetColorModulation(1, 1, 1)
 
-			if modelData.surpresslightning then
-				render.SuppressEngineLighting(false)
-			end
-		elseif modelData.type == "Sprite" and sprite then
-			render.SetMaterial(sprite)
-			render.DrawSprite(posModel, modelData.size.x, modelData.size.y, modelData.color)
-		elseif modelData.type == "Quad" and modelData.draw_func then
-			ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
-			ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
-			ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
+            if modelData.surpresslightning then
+                render.SuppressEngineLighting(false)
+            end
+        elseif modelData.type == "Sprite" and sprite then
+            render.SetMaterial(sprite)
+            render.DrawSprite(posModel, modelData.size.x, modelData.size.y, modelData.color)
+        elseif modelData.type == "Quad" and modelData.draw_func then
+            ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
+            ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
+            ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
 
-			cam.Start3D2D(posModel, ang, modelData.size)
-				modelData.draw_func(wep)
-			cam.End3D2D()
-		end
-	end
+            cam.Start3D2D(posModel, ang, modelData.size)
+            modelData.draw_func(wep)
+            cam.End3D2D()
+        end
+    end
 end

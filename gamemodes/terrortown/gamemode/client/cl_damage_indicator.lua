@@ -2,35 +2,36 @@
 -- @module dmgindicator
 
 dmgindicator = {
-	themes = {},
+    themes = {},
 
-	-- setup convars
-	cv = {
-		---
-		-- @realm client
-		-- stylua: ignore
-		enable = CreateConVar("ttt_dmgindicator_enable", "1", FCVAR_ARCHIVE),
+    -- setup convars
+    cv = {
+        ---
+        -- @realm client
+        -- stylua: ignore
+        enable = CreateConVar("ttt_dmgindicator_enable", "1", FCVAR_ARCHIVE),
 
-		---
-		-- @realm client
-		-- stylua: ignore
-		mode = CreateConVar("ttt_dmgindicator_mode", "default", FCVAR_ARCHIVE),
+        ---
+        -- @realm client
+        -- stylua: ignore
+        mode = CreateConVar("ttt_dmgindicator_mode", "default", FCVAR_ARCHIVE),
 
-		---
-		-- @realm client
-		-- stylua: ignore
-		duration = CreateConVar("ttt_dmgindicator_duration", "1.5", FCVAR_ARCHIVE),
+        ---
+        -- @realm client
+        -- stylua: ignore
+        duration = CreateConVar("ttt_dmgindicator_duration", "1.5", FCVAR_ARCHIVE),
 
-		---
-		-- @realm client
-		-- stylua: ignore
-		maxdamage = CreateConVar("ttt_dmgindicator_maxdamage", "50.0", FCVAR_ARCHIVE),
+        ---
+        -- @realm client
+        -- stylua: ignore
+        maxdamage = CreateConVar("ttt_dmgindicator_maxdamage", "50.0", FCVAR_ARCHIVE),
 
-		---
-		-- @realm client
-		-- stylua: ignore
-		maxalpha = CreateConVar("ttt_dmgindicator_maxalpha", "255", FCVAR_ARCHIVE)
-	}
+        ---
+        -- @realm client
+        -- stylua: ignore
+        maxalpha = CreateConVar("ttt_dmgindicator_maxalpha", "255", FCVAR_ARCHIVE)
+,
+    },
 }
 
 local lastDamage = CurTime()
@@ -41,25 +42,30 @@ local materialStringBase = "vgui/ttt/dmgindicator/themes/"
 local pathBase = "materials/" .. materialStringBase
 
 local function CollectDmgIndicatorTextures()
-	local materials = file.Find(pathBase .. "*.png", "GAME")
+    local materials = file.Find(pathBase .. "*.png", "GAME")
 
-	for i = 1, #materials do
-		local material = materials[i]
-		local materialName = string.StripExtension(material)
+    for i = 1, #materials do
+        local material = materials[i]
+        local materialName = string.StripExtension(material)
 
-		dmgindicator.themes[materialName] = Material(materialStringBase .. material)
-	end
+        dmgindicator.themes[materialName] = Material(materialStringBase .. material)
+    end
 end
 
 CollectDmgIndicatorTextures()
 
 net.Receive("ttt2_damage_received", function()
-	local damageReceived = net.ReadFloat()
-	if damageReceived <= 0 then return end
+    local damageReceived = net.ReadFloat()
+    if damageReceived <= 0 then
+        return
+    end
 
-	lastDamage = CurTime()
-	maxDamageAmount = math.min(1.0, math.max(damageAmount, 0.0) + damageReceived / dmgindicator.cv.maxdamage:GetFloat())
-	damageAmount = maxDamageAmount
+    lastDamage = CurTime()
+    maxDamageAmount = math.min(
+        1.0,
+        math.max(damageAmount, 0.0) + damageReceived / dmgindicator.cv.maxdamage:GetFloat()
+    )
+    damageAmount = maxDamageAmount
 end)
 
 ---
@@ -71,20 +77,24 @@ end)
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDPaintBackground
 -- @local
 function GM:HUDPaintBackground()
-	if not dmgindicator.cv.enable:GetBool() then return end
+    if not dmgindicator.cv.enable:GetBool() then
+        return
+    end
 
-	local indicatorDuration = dmgindicator.cv.duration:GetFloat()
+    local indicatorDuration = dmgindicator.cv.duration:GetFloat()
 
-	if damageAmount > 0 then
-		local theme = dmgindicator.themes[dmgindicator.cv.mode:GetString()] or dmgindicator.themes["Default"]
-		local remainingTimeFactor = math.max(0, indicatorDuration - (CurTime() - lastDamage)) / indicatorDuration
+    if damageAmount > 0 then
+        local theme = dmgindicator.themes[dmgindicator.cv.mode:GetString()]
+            or dmgindicator.themes["Default"]
+        local remainingTimeFactor = math.max(0, indicatorDuration - (CurTime() - lastDamage))
+            / indicatorDuration
 
-		damageAmount = maxDamageAmount * remainingTimeFactor
+        damageAmount = maxDamageAmount * remainingTimeFactor
 
-		surface.SetDrawColor(255, 255, 255, dmgindicator.cv.maxalpha:GetInt() * damageAmount)
-		surface.SetMaterial(theme)
-		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
-	end
+        surface.SetDrawColor(255, 255, 255, dmgindicator.cv.maxalpha:GetInt() * damageAmount)
+        surface.SetMaterial(theme)
+        surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+    end
 end
 
 ---
@@ -92,5 +102,5 @@ end
 -- @return table A table with names of all themes
 -- @realm client
 function dmgindicator.GetThemeNames()
-	return table.GetKeys(dmgindicator.themes)
+    return table.GetKeys(dmgindicator.themes)
 end

@@ -6,14 +6,14 @@
 local TryT = LANG.TryTranslation
 
 local defaultMessage = {
-	title = {
-		text = LANG.TryTranslation("testpopup_title")
-	},
-	subtitle = {
-		text = LANG.TryTranslation("testpopup_subtitle")
-	},
-	iconTable = {},
-	time = CurTime() + 5
+    title = {
+        text = LANG.TryTranslation("testpopup_title"),
+    },
+    subtitle = {
+        text = LANG.TryTranslation("testpopup_subtitle"),
+    },
+    iconTable = {},
+    time = CurTime() + 5,
 }
 
 local counter = 0
@@ -27,13 +27,15 @@ EPOP.messageQueue = EPOP.messageQueue or {}
 -- @realm client
 -- @internal
 function EPOP:Think()
-	if #self.messageQueue == 0 then return end
+    if #self.messageQueue == 0 then
+        return
+    end
 
-	local elem = self.messageQueue[1]
+    local elem = self.messageQueue[1]
 
-	if elem.time and CurTime() >= elem.time then
-		EPOP:RemoveMessage(elem.id)
-	end
+    if elem.time and CurTime() >= elem.time then
+        EPOP:RemoveMessage(elem.id)
+    end
 end
 
 ---
@@ -46,35 +48,35 @@ end
 -- @return string Returns a unique id generated for this message
 -- @realm client
 function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
-	local id = "epop_unique_id_" .. counter
+    local id = "epop_unique_id_" .. counter
 
-	counter = counter + 1
+    counter = counter + 1
 
-	local queueSize = #self.messageQueue
+    local queueSize = #self.messageQueue
 
-	-- delete previous message if it is nonblocking
-	if queueSize > 0 and not self.messageQueue[queueSize].blocking then
-		table.remove(self.messageQueue, queueSize)
+    -- delete previous message if it is nonblocking
+    if queueSize > 0 and not self.messageQueue[queueSize].blocking then
+        table.remove(self.messageQueue, queueSize)
 
-		queueSize = queueSize - 1
-	end
+        queueSize = queueSize - 1
+    end
 
-	-- add the new message to the queue
-	self.messageQueue[queueSize + 1] = {
-		id = id,
-		title = istable(title) and title or {text = title or ""},
-		subtitle = istable(subtitle) and subtitle or {text = subtitle or ""},
-		displayTime = displayTime or 4,
-		iconTable = iconTable or {},
-		blocking = blocking == nil and false or blocking
-	}
+    -- add the new message to the queue
+    self.messageQueue[queueSize + 1] = {
+        id = id,
+        title = istable(title) and title or { text = title or "" },
+        subtitle = istable(subtitle) and subtitle or { text = subtitle or "" },
+        displayTime = displayTime or 4,
+        iconTable = iconTable or {},
+        blocking = blocking == nil and false or blocking,
+    }
 
-	-- the new element is the first one in the list and should be therefore activated
-	if queueSize == 0 then
-		self:ActivateMessage()
-	end
+    -- the new element is the first one in the list and should be therefore activated
+    if queueSize == 0 then
+        self:ActivateMessage()
+    end
 
-	return id
+    return id
 end
 
 ---
@@ -82,13 +84,15 @@ end
 -- @internal
 -- @realm client
 function EPOP:ActivateMessage()
-	if #self.messageQueue == 0 then return end
+    if #self.messageQueue == 0 then
+        return
+    end
 
-	local elem = self.messageQueue[1]
+    local elem = self.messageQueue[1]
 
-	elem.time = CurTime() + elem.displayTime
+    elem.time = CurTime() + elem.displayTime
 
-	Dev(1, "[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text)
+    Dev(1, "[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text)
 end
 
 ---
@@ -96,7 +100,7 @@ end
 -- @return boolean Returns if the message shoould be rendered
 -- @realm client
 function EPOP:ShouldRender()
-	return #self.messageQueue > 0
+    return #self.messageQueue > 0
 end
 
 ---
@@ -104,7 +108,7 @@ end
 -- @return table The message table
 -- @realm client
 function EPOP:GetMessage()
-	return self.messageQueue[1]
+    return self.messageQueue[1]
 end
 
 ---
@@ -112,7 +116,7 @@ end
 -- @return table The message table
 -- @realm client
 function EPOP:GetDefaultMessage()
-	return table.Copy(defaultMessage)
+    return table.Copy(defaultMessage)
 end
 
 ---
@@ -120,12 +124,12 @@ end
 -- @param number index The nimeric index
 -- @realm client
 function EPOP:RemoveMessageByIndex(index)
-	table.remove(self.messageQueue, index)
+    table.remove(self.messageQueue, index)
 
-	-- if the removed message was the first in the queue, the next one should be activated
-	if index == 1 then
-		EPOP:ActivateMessage()
-	end
+    -- if the removed message was the first in the queue, the next one should be activated
+    if index == 1 then
+        EPOP:ActivateMessage()
+    end
 end
 
 ---
@@ -135,58 +139,60 @@ end
 -- @return boolean Returns true if a message got deleted
 -- @realm client
 function EPOP:RemoveMessage(id)
-	if #self.messageQueue == 0 then
-		return false
-	end
+    if #self.messageQueue == 0 then
+        return false
+    end
 
-	if id then
-		for i = 1, #self.messageQueue do
-			local elem = self.messageQueue[i]
+    if id then
+        for i = 1, #self.messageQueue do
+            local elem = self.messageQueue[i]
 
-			if elem.id ~= id then continue end
+            if elem.id ~= id then
+                continue
+            end
 
-			self:RemoveMessageByIndex(i)
+            self:RemoveMessageByIndex(i)
 
-			return true
-		end
-	else
-		self:RemoveMessageByIndex(1)
+            return true
+        end
+    else
+        self:RemoveMessageByIndex(1)
 
-		return true
-	end
+        return true
+    end
 
-	return false
+    return false
 end
 
 ---
 -- Clears the whole message queue
 -- @realm client
 function EPOP:Clear()
-	self.messageQueue = {}
+    self.messageQueue = {}
 end
 
 net.Receive("ttt2_eventpopup", function()
-	local title, subtitle
+    local title, subtitle
 
-	if net.ReadBool() then
-		title = {}
+    if net.ReadBool() then
+        title = {}
 
-		title.text = TryT(net.ReadString())
+        title.text = TryT(net.ReadString())
 
-		if net.ReadBool() then
-			title.color = net.ReadColor()
-		end
-	end
+        if net.ReadBool() then
+            title.color = net.ReadColor()
+        end
+    end
 
-	if net.ReadBool() then
-		subtitle = {}
+    if net.ReadBool() then
+        subtitle = {}
 
-		subtitle.text = TryT(net.ReadString())
+        subtitle.text = TryT(net.ReadString())
 
-		if net.ReadBool() then
-			subtitle.color = net.ReadColor()
-		end
-	end
+        if net.ReadBool() then
+            subtitle.color = net.ReadColor()
+        end
+    end
 
-	EPOP:AddMessage(title, subtitle, net.ReadUInt(16), nil, net.ReadBool())
+    EPOP:AddMessage(title, subtitle, net.ReadUInt(16), nil, net.ReadBool())
 end)

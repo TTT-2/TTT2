@@ -47,29 +47,32 @@ util.AddNetworkString(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE)
 -- @realm server
 -- @internal
 local function SyncNWVarWithPath(path, meta, nwent, nwkey)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	local metadata = meta or table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
-	local value = ttt2net.Get(tmpPath)
+    local metadata = meta or table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    local value = ttt2net.Get(tmpPath)
 
-	if metadata.type == "int" then
-		assert(not metadata.unsigned, "[TTT2NET] Unsigned numbers are not supported by NWVars! Change the metadata information!")
+    if metadata.type == "int" then
+        assert(
+            not metadata.unsigned,
+            "[TTT2NET] Unsigned numbers are not supported by NWVars! Change the metadata information!"
+        )
 
-		nwent:SetNWInt(nwkey, value)
-	elseif metadata.type == "bool" then
-		nwent:SetNWBool(nwkey, value)
-	elseif metadata.type == "float" then
-		nwent:SetNWFloat(nwkey, value)
-	else
-		nwent:SetNWString(nwkey, value)
-	end
+        nwent:SetNWInt(nwkey, value)
+    elseif metadata.type == "bool" then
+        nwent:SetNWBool(nwkey, value)
+    elseif metadata.type == "float" then
+        nwent:SetNWFloat(nwkey, value)
+    else
+        nwent:SetNWString(nwkey, value)
+    end
 end
 
 ---
@@ -80,11 +83,15 @@ end
 -- @return boolean Returns true if they are equal false if not
 -- @realm server
 function ttt2net.NetworkMetaDataTableEqual(meta1, meta2)
-	if meta1 == nil and meta2 == nil then
-		return true
-	end
+    if meta1 == nil and meta2 == nil then
+        return true
+    end
 
-	return istable(meta1) and istable(meta2) and meta1.type == meta2.type and meta1.bits == meta2.bits and meta1.unsigned == meta2.unsigned
+    return istable(meta1)
+        and istable(meta2)
+        and meta1.type == meta2.type
+        and meta1.bits == meta2.bits
+        and meta1.unsigned == meta2.unsigned
 end
 
 ---
@@ -103,29 +110,31 @@ end
 -- @param[opt] table metadata The metadata table
 -- @realm server
 function ttt2net.SetMetaData(path, metadata)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Retrieve the stored metadata
-	local storedMetaData = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    -- Retrieve the stored metadata
+    local storedMetaData = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
-	-- If the metadata is already stored, do nothing
-	if ttt2net.NetworkMetaDataTableEqual(storedMetaData, metadata) then return end
+    -- If the metadata is already stored, do nothing
+    if ttt2net.NetworkMetaDataTableEqual(storedMetaData, metadata) then
+        return
+    end
 
-	-- Insert data to metadata table
-	table.SetWithPath(ttt2net.dataStoreMetadata, tmpPath, metadata)
+    -- Insert data to metadata table
+    table.SetWithPath(ttt2net.dataStoreMetadata, tmpPath, metadata)
 
-	-- Set value of the data field to nil
-	table.SetWithPath(ttt2net.dataStore, tmpPath, nil)
+    -- Set value of the data field to nil
+    table.SetWithPath(ttt2net.dataStore, tmpPath, nil)
 
-	-- Sync new meta information to all clients that are already connected and received a full state!
-	ttt2net.SendMetaDataUpdate(tmpPath)
+    -- Sync new meta information to all clients that are already connected and received a full state!
+    ttt2net.SendMetaDataUpdate(tmpPath)
 end
 
 ---
@@ -136,19 +145,19 @@ end
 -- @param[opt] table metadata The metadata table
 -- @realm server
 function ttt2net.SetMetaDataGlobal(path, metadata)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table
-	table.insert(tmpPath, 1, "global")
+    -- Add the prefix for the correct table
+    table.insert(tmpPath, 1, "global")
 
-	ttt2net.SetMetaData(tmpPath, metadata)
+    ttt2net.SetMetaData(tmpPath, metadata)
 end
 
 ---
@@ -160,20 +169,20 @@ end
 -- @param Player|Entity ply The player/entity to set the value on
 -- @realm server
 function ttt2net.SetMetaDataOnPlayer(path, metadata, ply)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, ply:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, ply:EntIndex())
 
-	ttt2net.SetMetaData(tmpPath, metadata)
+    ttt2net.SetMetaData(tmpPath, metadata)
 end
 
 ---
@@ -193,53 +202,57 @@ end
 -- @param[opt] Entity client The client/entity to set this value for (overrides the default value)
 -- @realm server
 function ttt2net.Set(path, meta, value, client)
-	local tmpPath
-	local clientId = client and client:EntIndex() or nil
+    local tmpPath
+    local clientId = client and client:EntIndex() or nil
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	local metadata = meta or table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    local metadata = meta or table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
-	assert(metadata, "[TTT2NET] Set() called but no metadata entry or metadata parameter found!")
+    assert(metadata, "[TTT2NET] Set() called but no metadata entry or metadata parameter found!")
 
-	-- Set the meta data, this will only send / update if the meta data has changed
-	ttt2net.SetMetaData(tmpPath, metadata)
+    -- Set the meta data, this will only send / update if the meta data has changed
+    ttt2net.SetMetaData(tmpPath, metadata)
 
-	-- Add the identifier for the default value for all clients or the clientId if specified
-	tmpPath[#tmpPath + 1] = clientId or "default"
+    -- Add the identifier for the default value for all clients or the clientId if specified
+    tmpPath[#tmpPath + 1] = clientId or "default"
 
-	-- Skip if the value is already present or nil
-	if table.GetWithPath(ttt2net.dataStore, tmpPath) == value then return end
+    -- Skip if the value is already present or nil
+    if table.GetWithPath(ttt2net.dataStore, tmpPath) == value then
+        return
+    end
 
-	-- Save the value
-	table.SetWithPath(ttt2net.dataStore, tmpPath, value)
+    -- Save the value
+    table.SetWithPath(ttt2net.dataStore, tmpPath, value)
 
-	-- Remove last key eg. "default" or the player id, as this does not belong to the base path
-	tmpPath[#tmpPath] = nil
+    -- Remove last key eg. "default" or the player id, as this does not belong to the base path
+    tmpPath[#tmpPath] = nil
 
-	-- Sync the new value
-	ttt2net.SendDataUpdate(tmpPath, client)
+    -- Sync the new value
+    ttt2net.SendDataUpdate(tmpPath, client)
 
-	-- Sync all registered nwvars to the new value
-	-- Only attempt to sync, if the path leads to a player, which NWVars can be synced to.
-	if #path < 2 or path[1] ~= "players" then return end
+    -- Sync all registered nwvars to the new value
+    -- Only attempt to sync, if the path leads to a player, which NWVars can be synced to.
+    if #path < 2 or path[1] ~= "players" then
+        return
+    end
 
-	-- Get the entity associated to the path
-	local ent = Entity(path[2])
+    -- Get the entity associated to the path
+    local ent = Entity(path[2])
 
-	assert(IsEntity(ent), "[TTT2NET] Set() used on a path with an invalid entity!")
+    assert(IsEntity(ent), "[TTT2NET] Set() used on a path with an invalid entity!")
 
-	-- Get all registered nwvars
-	local nwvars = table.GetWithPath(ttt2net.dataSyncedNWVars, tmpPath) or {}
+    -- Get all registered nwvars
+    local nwvars = table.GetWithPath(ttt2net.dataSyncedNWVars, tmpPath) or {}
 
-	for i = 1, #nwvars do
-		SyncNWVarWithPath(tmpPath, metadata, ent, nwvars[i])
-	end
+    for i = 1, #nwvars do
+        SyncNWVarWithPath(tmpPath, metadata, ent, nwvars[i])
+    end
 end
 
 ---
@@ -250,53 +263,59 @@ end
 -- @param table path The path to clear out all overrides on.
 -- @realm server
 function ttt2net.RemoveOverrides(path)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	local currentDataTable = ttt2net.dataStore
+    local currentDataTable = ttt2net.dataStore
 
-	if currentDataTable == nil then return end
+    if currentDataTable == nil then
+        return
+    end
 
-	-- Traverse the path in the ttt2net.dataStore table.
-	-- This will be done until the second last table is reached, so we still have a reference to the parent table.
-	for i = 1, (#tmpPath - 1) do
-		currentDataTable = currentDataTable[tmpPath[i]]
+    -- Traverse the path in the ttt2net.dataStore table.
+    -- This will be done until the second last table is reached, so we still have a reference to the parent table.
+    for i = 1, (#tmpPath - 1) do
+        currentDataTable = currentDataTable[tmpPath[i]]
 
-		if currentDataTable == nil then return end
-	end
+        if currentDataTable == nil then
+            return
+        end
+    end
 
-	local lastKey = tmpPath[#tmpPath]
+    local lastKey = tmpPath[#tmpPath]
 
-	-- If the table does not have the last key, then exit
-	if currentDataTable[lastKey] == nil then return end
+    -- If the table does not have the last key, then exit
+    if currentDataTable[lastKey] == nil then
+        return
+    end
 
-	local defaultValue = currentDataTable[lastKey].default
+    local defaultValue = currentDataTable[lastKey].default
 
-	-- Collect all players that had an override value set
-	local playerIds = table.GetKeys(currentDataTable[lastKey])
-	local receivers = {}
+    -- Collect all players that had an override value set
+    local playerIds = table.GetKeys(currentDataTable[lastKey])
+    local receivers = {}
 
-	-- Check all keys if they are a valid EntIndex and resolve them to the player instance
-	for i = 1, #playerIds do
-		local ply = Entity(playerIds[i])
-		-- ply will be nil if no entity is found
+    -- Check all keys if they are a valid EntIndex and resolve them to the player instance
+    for i = 1, #playerIds do
+        local ply = Entity(playerIds[i])
+        -- ply will be nil if no entity is found
 
-		if IsEntity(ply) and ply:IsPlayer() then
-			receivers[#receivers + 1] = ply
-		end
-	end
+        if IsEntity(ply) and ply:IsPlayer() then
+            receivers[#receivers + 1] = ply
+        end
+    end
 
-	-- Replace the existing table with a new table that just contains the default value
-	currentDataTable[lastKey] = { default = defaultValue }
+    -- Replace the existing table with a new table that just contains the default value
+    currentDataTable[lastKey] = { default = defaultValue }
 
-	-- Send update to all players that previously had an override
-	ttt2net.SendDataUpdate(tmpPath, receivers)
+    -- Send update to all players that previously had an override
+    ttt2net.SendDataUpdate(tmpPath, receivers)
 end
 
 ---
@@ -307,19 +326,19 @@ end
 -- @param table path The path to clear out all overrides on.
 -- @realm server
 function ttt2net.RemoveOverridesGlobal(path)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table
-	table.insert(tmpPath, 1, "global")
+    -- Add the prefix for the correct table
+    table.insert(tmpPath, 1, "global")
 
-	ttt2net.RemoveOverrides(tmpPath)
+    ttt2net.RemoveOverrides(tmpPath)
 end
 
 ---
@@ -331,20 +350,20 @@ end
 -- @param Player|Entity ply The player/entity object that will be cleared
 -- @realm server
 function ttt2net.RemoveOverridesOnPlayer(path, ply)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, ply:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, ply:EntIndex())
 
-	ttt2net.RemoveOverrides(tmpPath)
+    ttt2net.RemoveOverrides(tmpPath)
 end
 
 ---
@@ -357,20 +376,20 @@ end
 -- @return any|nil The value found at the given path
 -- @realm server
 function ttt2net.Get(path, client)
-	local clientId = client and client:EntIndex() or nil
-	local tmpPath
+    local clientId = client and client:EntIndex() or nil
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the identifier for the default value for all clients or the clientId if specified
-	tmpPath[#tmpPath + 1] = clientId or "default"
+    -- Add the identifier for the default value for all clients or the clientId if specified
+    tmpPath[#tmpPath + 1] = clientId or "default"
 
-	return table.GetWithPath(ttt2net.dataStore, tmpPath)
+    return table.GetWithPath(ttt2net.dataStore, tmpPath)
 end
 
 ---
@@ -383,31 +402,31 @@ end
 -- @return any|nil The value that a client knows
 -- @realm server
 function ttt2net.GetWithOverride(path, client)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	local clientId = client:EntIndex()
+    local clientId = client:EntIndex()
 
-	local overridePath = table.Copy(tmpPath)
-	overridePath[#overridePath + 1] = clientId
+    local overridePath = table.Copy(tmpPath)
+    overridePath[#overridePath + 1] = clientId
 
-	local defaultPath = table.Copy(tmpPath)
-	defaultPath[#defaultPath + 1] = "default"
+    local defaultPath = table.Copy(tmpPath)
+    defaultPath[#defaultPath + 1] = "default"
 
-	-- Get the overwrite value if available
-	local overrideValue = table.GetWithPath(ttt2net.dataStore, overridePath)
+    -- Get the overwrite value if available
+    local overrideValue = table.GetWithPath(ttt2net.dataStore, overridePath)
 
-	if overrideValue ~= nil then
-		return overrideValue
-	else
-		return table.GetWithPath(ttt2net.dataStore, defaultPath)
-	end
+    if overrideValue ~= nil then
+        return overrideValue
+    else
+        return table.GetWithPath(ttt2net.dataStore, defaultPath)
+    end
 end
 
 ---
@@ -419,19 +438,19 @@ end
 -- @return any|nil The value for the given path
 -- @realm server
 function ttt2net.GetGlobal(path, client)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table
-	table.insert(tmpPath, 1, "global")
+    -- Add the prefix for the correct table
+    table.insert(tmpPath, 1, "global")
 
-	return ttt2net.Get(tmpPath, client)
+    return ttt2net.Get(tmpPath, client)
 end
 
 ---
@@ -444,19 +463,19 @@ end
 -- @param[opt] Entity client The client/entity to set this value for (overrides the default value)
 -- @realm server
 function ttt2net.SetGlobal(path, meta, value, client)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table
-	table.insert(tmpPath, 1, "global")
+    -- Add the prefix for the correct table
+    table.insert(tmpPath, 1, "global")
 
-	ttt2net.Set(tmpPath, meta, value, client)
+    ttt2net.Set(tmpPath, meta, value, client)
 end
 
 ---
@@ -470,20 +489,20 @@ end
 -- @param[opt] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function ttt2net.SetOnPlayer(path, meta, value, ply, client)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, ply:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, ply:EntIndex())
 
-	ttt2net.Set(tmpPath, meta, value, client)
+    ttt2net.Set(tmpPath, meta, value, client)
 end
 
 ---
@@ -496,35 +515,35 @@ end
 -- @return any|nil The value for the given path
 -- @realm server
 function ttt2net.GetOnPlayer(path, ply, client)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, ply:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, ply:EntIndex())
 
-	return ttt2net.Get(tmpPath, client)
+    return ttt2net.Get(tmpPath, client)
 end
 
 ---
 -- Prints out all ttt2net related tables, for debugging purposes.
 -- @realm server
 function ttt2net.Debug()
-	Dev(2, "[TTT2NET] Debug:")
-	Dev(2, "Initialized clients:")
-	PrintTable(ttt2net.initializedClients)
-	Dev(2, "Synced NWVars:")
-	PrintTable(ttt2net.dataSyncedNWVars)
-	Dev(2, "Meta data table:")
-	PrintTable(ttt2net.dataStoreMetadata)
-	Dev(2, "Data store table:")
-	PrintTable(ttt2net.dataStore)
+    Dev(2, "[TTT2NET] Debug:")
+    Dev(2, "Initialized clients:")
+    PrintTable(ttt2net.initializedClients)
+    Dev(2, "Synced NWVars:")
+    PrintTable(ttt2net.dataSyncedNWVars)
+    Dev(2, "Meta data table:")
+    PrintTable(ttt2net.dataStoreMetadata)
+    Dev(2, "Data store table:")
+    PrintTable(ttt2net.dataStore)
 end
 
 ---
@@ -534,25 +553,25 @@ end
 -- @param any path The path to send a metadata update for
 -- @realm server
 function ttt2net.SendMetaDataUpdate(path)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Check for a metadata entry
-	local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    -- Check for a metadata entry
+    local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
-	-- Write meta data
-	net.Start(ttt2net.NETMSG_META_UPDATE)
+    -- Write meta data
+    net.Start(ttt2net.NETMSG_META_UPDATE)
 
-	ttt2net.NetWritePath(tmpPath)
-	ttt2net.NetWriteMetaData(metadata)
+    ttt2net.NetWritePath(tmpPath)
+    ttt2net.NetWriteMetaData(metadata)
 
-	net.Send(ttt2net.initializedClients)
+    net.Send(ttt2net.initializedClients)
 end
 
 ---
@@ -567,23 +586,23 @@ end
 -- @param[opt] table path The current path to the curTable based on the root of the data table
 -- @realm server
 function ttt2net.RemoveOverridesForClient(client, curTable, path)
-	local tmpPath = not istable(path) and { path } or path and table.Copy(path) or {}
+    local tmpPath = not istable(path) and { path } or path and table.Copy(path) or {}
 
-	-- Visit all keys in the current tree
-	for key in pairs(curTable) do
-		local nextNode = curTable[key]
-		local nextPath = table.Copy(tmpPath)
-		nextPath[#nextPath + 1] = key
+    -- Visit all keys in the current tree
+    for key in pairs(curTable) do
+        local nextNode = curTable[key]
+        local nextPath = table.Copy(tmpPath)
+        nextPath[#nextPath + 1] = key
 
-		-- Check if we reached a leaf node (a node with metadata)
-		if nextNode.type then
-			-- Remove the override from this key
-			ttt2net.Set(nextPath, nil, nil, client)
-		else
-			-- Descend a level deeper
-			ttt2net.RemoveOverridesForClient(client, curTable[key], nextPath)
-		end
-	end
+        -- Check if we reached a leaf node (a node with metadata)
+        if nextNode.type then
+            -- Remove the override from this key
+            ttt2net.Set(nextPath, nil, nil, client)
+        else
+            -- Descend a level deeper
+            ttt2net.RemoveOverridesForClient(client, curTable[key], nextPath)
+        end
+    end
 end
 
 ---
@@ -592,15 +611,15 @@ end
 -- @param Entity client The client to remove
 -- @realm server
 function ttt2net.ResetClient(client)
-	assert(IsEntity(client), "[TTT2NET] ResetClient() client is not a valid Entity!")
+    assert(IsEntity(client), "[TTT2NET] ResetClient() client is not a valid Entity!")
 
-	table.RemoveByValue(ttt2net.initializedClients, client)
+    table.RemoveByValue(ttt2net.initializedClients, client)
 
-	-- Clear up the player specific data table
-	ttt2net.SetMetaDataOnPlayer(nil, nil, client)
+    -- Clear up the player specific data table
+    ttt2net.SetMetaDataOnPlayer(nil, nil, client)
 
-	-- Clear up all left over overrides
-	ttt2net.RemoveOverridesForClient(client, ttt2net.dataStoreMetadata)
+    -- Clear up all left over overrides
+    ttt2net.RemoveOverridesForClient(client, ttt2net.dataStoreMetadata)
 end
 
 ---
@@ -610,37 +629,39 @@ end
 -- @param[opt] Player|table client The client/list of clients or nil to send this to all known clients
 -- @realm server
 function ttt2net.SendDataUpdate(path, client)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Check for a valid metadata entry
-	local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    -- Check for a valid metadata entry
+    local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
-	assert(metadata, "[TTT2NET] SendDataUpdate(): Metadata table is not initialized for this path.")
+    assert(metadata, "[TTT2NET] SendDataUpdate(): Metadata table is not initialized for this path.")
 
-	-- Only send to the client (or table of clients) that was specified or the already initialized clients
-	-- This will check if client is a table or a single client and format it to a table and otherwise use
-	-- the ttt2net.initializedClients list.
-	local receivers = istable(client) and client or client and { client } or ttt2net.initializedClients
+    -- Only send to the client (or table of clients) that was specified or the already initialized clients
+    -- This will check if client is a table or a single client and format it to a table and otherwise use
+    -- the ttt2net.initializedClients list.
+    local receivers = istable(client) and client
+        or client and { client }
+        or ttt2net.initializedClients
 
-	-- For each receiver send the data
-	for i = 1, #receivers do
-		local receiver = receivers[i]
-		local value = ttt2net.GetWithOverride(tmpPath, receiver)
+    -- For each receiver send the data
+    for i = 1, #receivers do
+        local receiver = receivers[i]
+        local value = ttt2net.GetWithOverride(tmpPath, receiver)
 
-		net.Start(ttt2net.NETMSG_DATA_UPDATE)
+        net.Start(ttt2net.NETMSG_DATA_UPDATE)
 
-		ttt2net.NetWritePath(tmpPath)
-		ttt2net.NetWriteData(metadata, value)
+        ttt2net.NetWritePath(tmpPath)
+        ttt2net.NetWriteData(metadata, value)
 
-		net.Send(receiver)
-	end
+        net.Send(receiver)
+    end
 end
 
 ---
@@ -655,27 +676,27 @@ end
 -- @param[opt] table path The current path to the curTable based on the root of the data table
 -- @realm server
 function ttt2net.DataTableWithOverrides(client, curTable, path)
-	local tmpPath = not istable(path) and { path } or path and table.Copy(path) or {}
-	local newTable = table.Copy(curTable)
+    local tmpPath = not istable(path) and { path } or path and table.Copy(path) or {}
+    local newTable = table.Copy(curTable)
 
-	-- Visit all keys in the current tree
-	for key in pairs(curTable) do
-		local nextNode = curTable[key]
-		local nextPath = table.Copy(tmpPath)
+    -- Visit all keys in the current tree
+    for key in pairs(curTable) do
+        local nextNode = curTable[key]
+        local nextPath = table.Copy(tmpPath)
 
-		nextPath[#nextPath + 1] = key
+        nextPath[#nextPath + 1] = key
 
-		-- Check if we reached a leaf node (a node with metadata)
-		if nextNode.type then
-			-- Replace the metadata with the data
-			newTable[key] = ttt2net.GetWithOverride(nextPath, client)
-		else
-			-- Descend a level deeper
-			newTable[key] = ttt2net.DataTableWithOverrides(client, curTable[key], nextPath)
-		end
-	end
+        -- Check if we reached a leaf node (a node with metadata)
+        if nextNode.type then
+            -- Replace the metadata with the data
+            newTable[key] = ttt2net.GetWithOverride(nextPath, client)
+        else
+            -- Descend a level deeper
+            newTable[key] = ttt2net.DataTableWithOverrides(client, curTable[key], nextPath)
+        end
+    end
 
-	return newTable
+    return newTable
 end
 
 ---
@@ -686,24 +707,26 @@ end
 -- @param[opt] Player|table client The client/list of clients or nil for all known clients, to send the update to
 -- @realm server
 function ttt2net.SendFullStateUpdate(client)
-	-- Wrap the given receivers to a table
-	local receivers = istable(client) and client or client and { client } or ttt2net.initializedClients
+    -- Wrap the given receivers to a table
+    local receivers = istable(client) and client
+        or client and { client }
+        or ttt2net.initializedClients
 
-	-- For each receiver create the custom data table with respect to the override values and send it
-	for i = 1, #receivers do
-		local receiver = receivers[i]
-		local data = {
-			meta = ttt2net.dataStoreMetadata,
-			data = ttt2net.DataTableWithOverrides(receiver, ttt2net.dataStoreMetadata)
-		}
+    -- For each receiver create the custom data table with respect to the override values and send it
+    for i = 1, #receivers do
+        local receiver = receivers[i]
+        local data = {
+            meta = ttt2net.dataStoreMetadata,
+            data = ttt2net.DataTableWithOverrides(receiver, ttt2net.dataStoreMetadata),
+        }
 
-		net.SendStream(ttt2net.NET_STREAM_FULL_STATE_UPDATE, data, receiver)
+        net.SendStream(ttt2net.NET_STREAM_FULL_STATE_UPDATE, data, receiver)
 
-		-- Set the client as initialized (so it will receive future data updates)
-		if not table.HasValue(ttt2net.initializedClients, receiver) then
-			ttt2net.initializedClients[#ttt2net.initializedClients + 1] = receiver
-		end
-	end
+        -- Set the client as initialized (so it will receive future data updates)
+        if not table.HasValue(ttt2net.initializedClients, receiver) then
+            ttt2net.initializedClients[#ttt2net.initializedClients + 1] = receiver
+        end
+    end
 end
 
 ---
@@ -715,9 +738,9 @@ end
 -- @realm server
 -- @internal
 local function ClientRequestFullStateUpdate(len, client)
-	Dev(1, "[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
+    Dev(1, "[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
 
-	ttt2net.SendFullStateUpdate(client)
+    ttt2net.SendFullStateUpdate(client)
 end
 net.Receive(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE, ClientRequestFullStateUpdate)
 
@@ -727,7 +750,7 @@ net.Receive(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE, ClientRequestFullStateUpda
 -- @param table path The path table to send
 -- @realm server
 function ttt2net.NetWritePath(path)
-	net.WriteString(pon.encode(path))
+    net.WriteString(pon.encode(path))
 end
 
 ---
@@ -736,18 +759,20 @@ end
 -- @param table metadata The metadata to send
 -- @realm server
 function ttt2net.NetWriteMetaData(metadata)
-	local isMetadataNil = metadata == nil
+    local isMetadataNil = metadata == nil
 
-	net.WriteBool(isMetadataNil)
+    net.WriteBool(isMetadataNil)
 
-	if isMetadataNil then return end
+    if isMetadataNil then
+        return
+    end
 
-	net.WriteString(metadata.type)
+    net.WriteString(metadata.type)
 
-	if metadata.type == "int" then
-		net.WriteUInt(metadata.bits, 6) -- 6 bits, so we can safely send the maximum bit count of 32 bits
-		net.WriteBool(metadata.unsigned)
-	end
+    if metadata.type == "int" then
+        net.WriteUInt(metadata.bits, 6) -- 6 bits, so we can safely send the maximum bit count of 32 bits
+        net.WriteBool(metadata.unsigned)
+    end
 end
 
 ---
@@ -760,33 +785,35 @@ end
 -- @param[opt] any val The value to send, can also be nil
 -- @realm server
 function ttt2net.NetWriteData(metadata, val)
-	-- Check if the value is nil, to also allow setting a value to nil
-	local isValNil = val == nil
+    -- Check if the value is nil, to also allow setting a value to nil
+    local isValNil = val == nil
 
-	net.WriteBool(isValNil)
+    net.WriteBool(isValNil)
 
-	if isValNil then return end
+    if isValNil then
+        return
+    end
 
-	-- Decide on how to send the data, or fallback to string
-	if metadata.type == "int" then
-		if metadata.unsigned then
-			net.WriteUInt(val, metadata.bits or 32)
-		else
-			net.WriteInt(val, metadata.bits or 32)
-		end
-	elseif metadata.type == "bool" then
-		net.WriteBool(val)
-	elseif metadata.type == "float" then
-		net.WriteFloat(val)
-	elseif metadata.type == "table" then
-		net.WriteString(pon.encode(val))
-	else
-		net.WriteString(val)
-	end
+    -- Decide on how to send the data, or fallback to string
+    if metadata.type == "int" then
+        if metadata.unsigned then
+            net.WriteUInt(val, metadata.bits or 32)
+        else
+            net.WriteInt(val, metadata.bits or 32)
+        end
+    elseif metadata.type == "bool" then
+        net.WriteBool(val)
+    elseif metadata.type == "float" then
+        net.WriteFloat(val)
+    elseif metadata.type == "table" then
+        net.WriteString(pon.encode(val))
+    else
+        net.WriteString(val)
+    end
 end
 
 local function NWVarProxyCallback(ent, name, oldval, newval, path, meta)
-	ttt2net.Set(path, meta, newval)
+    ttt2net.Set(path, meta, newval)
 end
 
 ---
@@ -805,55 +832,61 @@ end
 -- @param string nwkey The key of the NWVar
 -- @realm server
 function ttt2net.SyncWithNWVar(path, meta, nwent, nwkey)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, nwent:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, nwent:EntIndex())
 
-	local metadata = meta or table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    local metadata = meta or table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
-	assert(metadata, "[TTT2NET] SyncWithNWVar() called but no metadata entry or metadata parameter found!")
+    assert(
+        metadata,
+        "[TTT2NET] SyncWithNWVar() called but no metadata entry or metadata parameter found!"
+    )
 
-	-- Set the meta data, this will only send / update if the meta data has changed
-	ttt2net.SetMetaData(tmpPath, metadata)
+    -- Set the meta data, this will only send / update if the meta data has changed
+    ttt2net.SetMetaData(tmpPath, metadata)
 
-	nwent:SetNWVarProxy(nwkey, function (ent, name, oldval, newval)
-		NWVarProxyCallback(ent, name, oldval, newval, tmpPath, metadata)
-	end)
+    nwent:SetNWVarProxy(nwkey, function(ent, name, oldval, newval)
+        NWVarProxyCallback(ent, name, oldval, newval, tmpPath, metadata)
+    end)
 
-	local curval = nil
+    local curval = nil
 
-	if metadata.type == "int" then
-		assert(not metadata.unsigned, "[TTT2NET] Unsigned numbers are not supported by NWVars! Change the metadata information!")
+    if metadata.type == "int" then
+        assert(
+            not metadata.unsigned,
+            "[TTT2NET] Unsigned numbers are not supported by NWVars! Change the metadata information!"
+        )
 
-		curval = nwent:GetNWInt(nwkey)
-	elseif metadata.type == "bool" then
-		curval = nwent:GetNWBool(nwkey)
-	elseif metadata.type == "float" then
-		curval = nwent:GetNWFloat(nwkey)
-	else
-		curval = nwent:GetNWString(nwkey)
-	end
+        curval = nwent:GetNWInt(nwkey)
+    elseif metadata.type == "bool" then
+        curval = nwent:GetNWBool(nwkey)
+    elseif metadata.type == "float" then
+        curval = nwent:GetNWFloat(nwkey)
+    else
+        curval = nwent:GetNWString(nwkey)
+    end
 
-	ttt2net.Set(tmpPath, metadata, curval)
+    ttt2net.Set(tmpPath, metadata, curval)
 
-	-- Get all registered nwvars
-	local nwvars = table.GetWithPath(ttt2net.dataSyncedNWVars, tmpPath) or {}
+    -- Get all registered nwvars
+    local nwvars = table.GetWithPath(ttt2net.dataSyncedNWVars, tmpPath) or {}
 
-	-- Add the nwkey to the registered nwvars on this path
-	if not table.HasValue(nwvars, nwkey) then
-		nwvars[#nwvars + 1] = nwkey
-	end
+    -- Add the nwkey to the registered nwvars on this path
+    if not table.HasValue(nwvars, nwkey) then
+        nwvars[#nwvars + 1] = nwkey
+    end
 
-	table.SetWithPath(ttt2net.dataSyncedNWVars, tmpPath, nwvars)
+    table.SetWithPath(ttt2net.dataSyncedNWVars, tmpPath, nwvars)
 end
 
 ---
@@ -874,7 +907,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetBool(path, value, client)
-	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self, client)
+    ttt2net.SetOnPlayer(path, { type = "bool" }, value, self, client)
 end
 
 ---
@@ -886,10 +919,10 @@ end
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetInt(path, value, bits, client)
-	ttt2net.SetOnPlayer(path, {
-		type = "int",
-		bits = bits
-	}, value, self, client)
+    ttt2net.SetOnPlayer(path, {
+        type = "int",
+        bits = bits,
+    }, value, self, client)
 end
 
 ---
@@ -901,11 +934,11 @@ end
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetUInt(path, value, bits, client)
-	ttt2net.SetOnPlayer(path, {
-		type = "int",
-		unsigned = true,
-		bits = bits
-	}, value, self, client)
+    ttt2net.SetOnPlayer(path, {
+        type = "int",
+        unsigned = true,
+        bits = bits,
+    }, value, self, client)
 end
 
 ---
@@ -916,7 +949,7 @@ end
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetFloat(path, value, client)
-	ttt2net.SetOnPlayer(path, { type = "float" }, value, self, client)
+    ttt2net.SetOnPlayer(path, { type = "float" }, value, self, client)
 end
 
 ---
@@ -927,5 +960,5 @@ end
 -- @param[optchain] Entity client The client/entity to set this value for (as an override for the default value)
 -- @realm server
 function plymeta:TTT2NETSetString(path, value, client)
-	ttt2net.SetOnPlayer(path, { type = "string" }, value, self, client)
+    ttt2net.SetOnPlayer(path, { type = "string" }, value, self, client)
 end

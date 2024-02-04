@@ -5,7 +5,9 @@
 ENT.Type = "brush"
 ENT.Base = "base_brush"
 
-if CLIENT then return end
+if CLIENT then
+    return
+end
 
 ---
 -- Called when the engine sets a value for this scripted entity.
@@ -13,10 +15,10 @@ if CLIENT then return end
 -- @param string value The new value
 -- @realm server
 function ENT:KeyValue(key, value)
-	if key == "TraitorsFound" then
-		-- this is our output, so handle it as such
-		self:StoreOutput(key, value)
-	end
+    if key == "TraitorsFound" then
+        -- this is our output, so handle it as such
+        self:StoreOutput(key, value)
+    end
 end
 
 ---
@@ -27,30 +29,38 @@ end
 -- @return[default=0] number The amount of evil valid players found
 -- @realm server
 function ENT:CountValidPlayers(activator, caller, data)
-	local mins = self:LocalToWorld(self:OBBMins())
-	local maxs = self:LocalToWorld(self:OBBMaxs())
+    local mins = self:LocalToWorld(self:OBBMins())
+    local maxs = self:LocalToWorld(self:OBBMaxs())
 
-	local plys = player.GetAll()
-	local count = 0
+    local plys = player.GetAll()
+    local count = 0
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		-- only count if it is a valid player that is in range
-		if not IsValid(ply) or not ply:Alive() or not util.VectorInBounds(ply:GetPos(), mins, maxs) then continue end
+        -- only count if it is a valid player that is in range
+        if
+            not IsValid(ply)
+            or not ply:Alive()
+            or not util.VectorInBounds(ply:GetPos(), mins, maxs)
+        then
+            continue
+        end
 
-		---
-		-- @realm server
-		-- stylua: ignore
-		local _, team = hook.Run("TTT2ModifyLogicRoleCheck", ply, self, activator, caller, data)
+        ---
+        -- @realm server
+        -- stylua: ignore
+        local _, team = hook.Run("TTT2ModifyLogicRoleCheck", ply, self, activator, caller, data)
 
-		-- only count if it is a evil role
-		if not util.IsEvilTeam(team) then continue end
+        -- only count if it is a evil role
+        if not util.IsEvilTeam(team) then
+            continue
+        end
 
-		count = count + 1
-	end
+        count = count + 1
+    end
 
-	return count
+    return count
 end
 
 ---
@@ -62,13 +72,13 @@ end
 -- @return[default=true] boolean Return true if the default action should be supressed
 -- @realm server
 function ENT:AcceptInput(name, activator, caller, data)
-	if name == "CheckForTraitor" then
-		local traitorCount = self:CountValidPlayers(activator, caller, data)
+    if name == "CheckForTraitor" then
+        local traitorCount = self:CountValidPlayers(activator, caller, data)
 
-		self:TriggerOutput("TraitorsFound", activator, traitorCount)
+        self:TriggerOutput("TraitorsFound", activator, traitorCount)
 
-		return true
-	end
+        return true
+    end
 end
 
 ---
@@ -85,5 +95,5 @@ end
 -- @hook
 -- @realm server
 function GAMEMODE:TTT2ModifyLogicRoleCheck(ply, ent, activator, caller, data)
-	return ply:GetBaseRole(), ply:GetTeam()
+    return ply:GetBaseRole(), ply:GetTeam()
 end

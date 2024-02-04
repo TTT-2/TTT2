@@ -8,5 +8,5 @@ CLGAMEMODEMENU.description = "menu_administration_description"
 CLGAMEMODEMENU.priority = 50
 
 function CLGAMEMODEMENU:IsAdminMenu()
-	return true
+    return true
 end

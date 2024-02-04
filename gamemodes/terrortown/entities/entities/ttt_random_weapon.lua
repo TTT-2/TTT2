@@ -13,17 +13,17 @@ ENT.autoAmmoAmount = 0
 -- @param string|number value
 -- @realm shared
 function ENT:KeyValue(key, value)
-	if key == "auto_ammo" then
-		self.autoAmmoAmount = tonumber(value)
-	end
+    if key == "auto_ammo" then
+        self.autoAmmoAmount = tonumber(value)
+    end
 end
 
 ---
--- @note Only used to forceSpawn weapons after map cleanup 
+-- @note Only used to forceSpawn weapons after map cleanup
 -- otherwise these entities are only used to mark the spots for random weapon spawns
 -- @realm shared
 function ENT:Initialize()
-	if entspawn.IsForcedRandomSpawnEnabled() then
-		entspawn.SpawnRandomWeapon(self)
-	end
+    if entspawn.IsForcedRandomSpawnEnabled() then
+        entspawn.SpawnRandomWeapon(self)
+    end
 end

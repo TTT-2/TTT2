@@ -4,25 +4,25 @@
 -- @section weapon_ttt_health_station
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
-DEFINE_BASECLASS "weapon_tttbase"
+DEFINE_BASECLASS("weapon_tttbase")
 
 SWEP.HoldType = "normal"
 
 if CLIENT then
-	SWEP.PrintName = "hstation_name"
-	SWEP.Slot = 6
+    SWEP.PrintName = "hstation_name"
+    SWEP.Slot = 6
 
-	SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultViewModel = false
 
-	SWEP.EquipMenuData = {
-		type = "item_weapon",
-		desc = "hstation_desc"
-	}
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+        desc = "hstation_desc",
+    }
 
-	SWEP.Icon = "vgui/ttt/icon_health"
+    SWEP.Icon = "vgui/ttt/icon_health"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -44,7 +44,7 @@ SWEP.Secondary.Delay = 1.0
 
 -- This is special equipment
 SWEP.Kind = WEAPON_EQUIP
-SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
+SWEP.CanBuy = { ROLE_DETECTIVE } -- only detectives can buy
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_HEALTHSTATION
 
@@ -58,58 +58,57 @@ SWEP.drawColor = Color(180, 180, 250, 255)
 ---
 -- @ignore
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	if SERVER then
-		local health = ents.Create("ttt_health_station")
+    if SERVER then
+        local health = ents.Create("ttt_health_station")
 
-		if health:ThrowEntity(self:GetOwner(), Angle(90, -90, 0)) then
-			self:Remove()
-		end
-	end
+        if health:ThrowEntity(self:GetOwner(), Angle(90, -90, 0)) then
+            self:Remove()
+        end
+    end
 end
 
 ---
 -- @ignore
 function SWEP:Reload()
-	return false
+    return false
 end
 
 ---
 -- @realm shared
 function SWEP:Initialize()
-	if CLIENT then
-		self:AddTTT2HUDHelp("hstation_help_primary")
-	end
+    if CLIENT then
+        self:AddTTT2HUDHelp("hstation_help_primary")
+    end
 
-	self:SetColor(self.drawColor)
+    self:SetColor(self.drawColor)
 
-	return BaseClass.Initialize(self)
+    return BaseClass.Initialize(self)
 end
 
-
 if CLIENT then
-	---
-	-- @realm client
-	function SWEP:DrawWorldModel()
-		if IsValid(self:GetOwner()) then return end
+    ---
+    -- @realm client
+    function SWEP:DrawWorldModel()
+        if IsValid(self:GetOwner()) then
+            return
+        end
 
-		self:DrawModel()
-	end
+        self:DrawModel()
+    end
 
-	---
-	-- @realm client
-	function SWEP:OnRemove()
-		local owner = self:GetOwner()
+    ---
+    -- @realm client
+    function SWEP:OnRemove()
+        local owner = self:GetOwner()
 
-		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-			RunConsoleCommand("lastinv")
-		end
-	end
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
 
-	---
-	-- @realm client
-	function SWEP:DrawWorldModelTranslucent()
-
-	end
+    ---
+    -- @realm client
+    function SWEP:DrawWorldModelTranslucent() end
 end

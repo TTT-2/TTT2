@@ -67,59 +67,61 @@ AccessorFunc(PANEL, "m_bHighlight", "Highlight", FORCE_BOOL)
 ---
 -- @ignore
 function PANEL:Init()
-	self:SetIsToggle(false)
-	self:SetToggle(false)
-	self:SetEnabled(true)
-	self:SetMouseInputEnabled(false)
-	self:SetKeyboardInputEnabled(false)
-	self:SetDoubleClickingEnabled(true)
+    self:SetIsToggle(false)
+    self:SetToggle(false)
+    self:SetEnabled(true)
+    self:SetMouseInputEnabled(false)
+    self:SetKeyboardInputEnabled(false)
+    self:SetDoubleClickingEnabled(true)
 
-	-- Nicer default height
-	self:SetTall(20)
+    -- Nicer default height
+    self:SetTall(20)
 
-	-- This turns off the engine drawing
-	self:SetPaintBackgroundEnabled(false)
-	self:SetPaintBorderEnabled(false)
+    -- This turns off the engine drawing
+    self:SetPaintBackgroundEnabled(false)
+    self:SetPaintBorderEnabled(false)
 
-	self:SetFont("DermaTTT2Text")
+    self:SetFont("DermaTTT2Text")
 end
 
 ---
 -- @ignore
 function PANEL:Paint(w, h)
-	derma.SkinHook("Paint", "LabelTTT2", self, w, h)
+    derma.SkinHook("Paint", "LabelTTT2", self, w, h)
 
-	return true
+    return true
 end
 
 ---
 -- @param Panel master
 -- @realm client
 function PANEL:SetMaster(master)
-	if not IsValid(master) then return end
+    if not IsValid(master) then
+        return
+    end
 
-	self.master = master
+    self.master = master
 end
 
 ---
 -- @return number
 -- @realm client
 function PANEL:GetIndentationMargin()
-	if not IsValid(self.master) then
-		return 0
-	end
+    if not IsValid(self.master) then
+        return 0
+    end
 
-	return 10 + self.master:GetIndentationMargin()
+    return 10 + self.master:GetIndentationMargin()
 end
 
 ---
 -- @param string strFont
 -- @realm client
 function PANEL:SetFont(strFont)
-	self.m_FontName = strFont
+    self.m_FontName = strFont
 
-	self:SetFontInternal(self.m_FontName)
-	self:ApplySchemeSettings()
+    self:SetFontInternal(self.m_FontName)
+    self:ApplySchemeSettings()
 end
 
 ---
@@ -127,225 +129,219 @@ end
 -- @param table params
 -- @realm client
 function PANEL:SetTextParams(params)
-	self.params = params
+    self.params = params
 end
 
 ---
 -- @realm client
 function PANEL:GetTextParams()
-	return self.params or {}
+    return self.params or {}
 end
 
 ---
 -- @realm client
 function PANEL:Toggle()
-	if not self:GetIsToggle() then return end
+    if not self:GetIsToggle() then
+        return
+    end
 
-	self:SetToggle(not self:GetToggle())
-	self:OnToggled(self:GetToggle())
+    self:SetToggle(not self:GetToggle())
+    self:OnToggled(self:GetToggle())
 end
 
 ---
 -- @param boolean bEnabled
 -- @realm client
 function PANEL:SetEnabled(bEnabled)
-	self.m_bEnabled = bEnabled
+    self.m_bEnabled = bEnabled
 
-	self:InvalidateLayout()
+    self:InvalidateLayout()
 end
 
 ---
 -- @return boolean
 -- @realm client
 function PANEL:IsEnabled()
-	return self.m_bEnabled
+    return self.m_bEnabled
 end
 
 ---
 -- @return boolean
 -- @realm client
 function PANEL:GetDisabled()
-	return not self:IsEnabled()
+    return not self:IsEnabled()
 end
 
 ---
 -- @realm client
-function PANEL:ApplySchemeSettings()
-
-end
+function PANEL:ApplySchemeSettings() end
 
 ---
 -- @ignore
 function PANEL:Think()
-	if self:GetAutoStretchVertical() then
-		self:SizeToContentsY()
-	end
+    if self:GetAutoStretchVertical() then
+        self:SizeToContentsY()
+    end
 end
 
 ---
 -- @ignore
 function PANEL:PerformLayout()
-	self:ApplySchemeSettings()
+    self:ApplySchemeSettings()
 end
 
 ---
 -- @realm client
 function PANEL:OnCursorEntered()
-	self:InvalidateLayout(true)
+    self:InvalidateLayout(true)
 end
 
 ---
 -- @realm client
 function PANEL:OnCursorExited()
-	self:InvalidateLayout(true)
+    self:InvalidateLayout(true)
 end
 
 ---
 -- @param number mcode
 -- @realm client
 function PANEL:OnMousePressed(mcode)
-	if self:GetDisabled() then return end
+    if self:GetDisabled() then
+        return
+    end
 
-	if mcode == MOUSE_LEFT and not dragndrop.IsDragging() and self.m_bDoubleClicking then
-		if self.LastClickTime and SysTime() - self.LastClickTime < 0.2 then
-			self:DoDoubleClickInternal()
-			self:DoDoubleClick()
+    if mcode == MOUSE_LEFT and not dragndrop.IsDragging() and self.m_bDoubleClicking then
+        if self.LastClickTime and SysTime() - self.LastClickTime < 0.2 then
+            self:DoDoubleClickInternal()
+            self:DoDoubleClick()
 
-			return
-		end
+            return
+        end
 
-		self.LastClickTime = SysTime()
-	end
+        self.LastClickTime = SysTime()
+    end
 
-	-- If we're selectable and have shift held down then go up
-	-- the parent until we find a selection canvas and start box selection
-	if self:IsSelectable() and mcode == MOUSE_LEFT and input.IsShiftDown() then
-		return self:StartBoxSelection()
-	end
+    -- If we're selectable and have shift held down then go up
+    -- the parent until we find a selection canvas and start box selection
+    if self:IsSelectable() and mcode == MOUSE_LEFT and input.IsShiftDown() then
+        return self:StartBoxSelection()
+    end
 
-	self:MouseCapture(true)
-	self.Depressed = true
-	self:OnDepressed()
-	self:InvalidateLayout(true)
+    self:MouseCapture(true)
+    self.Depressed = true
+    self:OnDepressed()
+    self:InvalidateLayout(true)
 
-	--
-	-- Tell DragNDrop that we're down, and might start getting dragged!
-	--
-	self:DragMousePress(mcode)
+    --
+    -- Tell DragNDrop that we're down, and might start getting dragged!
+    --
+    self:DragMousePress(mcode)
 end
 
 ---
 -- @param number mcode
 -- @realm client
 function PANEL:OnMouseReleased(mcode)
-	self:MouseCapture(false)
+    self:MouseCapture(false)
 
-	if self:GetDisabled() then return end
+    if self:GetDisabled() then
+        return
+    end
 
-	if not self.Depressed and dragndrop.m_DraggingMain ~= self then return end
+    if not self.Depressed and dragndrop.m_DraggingMain ~= self then
+        return
+    end
 
-	if self.Depressed then
-		self.Depressed = nil
-		self:OnReleased()
-		self:InvalidateLayout(true)
-	end
+    if self.Depressed then
+        self.Depressed = nil
+        self:OnReleased()
+        self:InvalidateLayout(true)
+    end
 
-	-- If we were being dragged then don't do the default behaviour!
-	if self:DragMouseRelease(mcode) then return end
+    -- If we were being dragged then don't do the default behaviour!
+    if self:DragMouseRelease(mcode) then
+        return
+    end
 
-	if self:IsSelectable() and mcode == MOUSE_LEFT then
-		local canvas = self:GetSelectionCanvas()
+    if self:IsSelectable() and mcode == MOUSE_LEFT then
+        local canvas = self:GetSelectionCanvas()
 
-		if canvas then
-			canvas:UnselectAll()
-		end
-	end
+        if canvas then
+            canvas:UnselectAll()
+        end
+    end
 
-	if not self.Hovered then return end
+    if not self.Hovered then
+        return
+    end
 
-	--
-	-- For the purposes of these callbacks we want to
-	-- keep depressed true. This helps us out in controls
-	-- like the checkbox in the properties dialog. Because
-	-- the properties dialog will only manually change the value
-	-- if IsEditing() is true - and the only way to work out if
-	-- a label/button based control is editing is when it's depressed.
-	--
-	self.Depressed = true
+    --
+    -- For the purposes of these callbacks we want to
+    -- keep depressed true. This helps us out in controls
+    -- like the checkbox in the properties dialog. Because
+    -- the properties dialog will only manually change the value
+    -- if IsEditing() is true - and the only way to work out if
+    -- a label/button based control is editing is when it's depressed.
+    --
+    self.Depressed = true
 
-	if mcode == MOUSE_RIGHT then
-		self:DoRightClick()
-	elseif mcode == MOUSE_LEFT then
-		self:DoClickInternal()
-		self:DoClick()
-	elseif mcode == MOUSE_MIDDLE then
-		self:DoMiddleClick()
-	end
+    if mcode == MOUSE_RIGHT then
+        self:DoRightClick()
+    elseif mcode == MOUSE_LEFT then
+        self:DoClickInternal()
+        self:DoClick()
+    elseif mcode == MOUSE_MIDDLE then
+        self:DoMiddleClick()
+    end
 
-	self.Depressed = nil
+    self.Depressed = nil
 end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:OnReleased()
-
-end
+function PANEL:OnReleased() end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:OnDepressed()
-
-end
+function PANEL:OnDepressed() end
 
 ---
 -- overwrites the base function with an empty function
 -- @param boolean bool
 -- @realm client
-function PANEL:OnToggled(bool)
-
-end
+function PANEL:OnToggled(bool) end
 
 ---
 -- @realm client
 function PANEL:DoClick()
-	self:Toggle()
+    self:Toggle()
 end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:DoRightClick()
-
-end
+function PANEL:DoRightClick() end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:DoMiddleClick()
-
-end
+function PANEL:DoMiddleClick() end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:DoClickInternal()
-
-end
+function PANEL:DoClickInternal() end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:DoDoubleClick()
-
-end
+function PANEL:DoDoubleClick() end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:DoDoubleClickInternal()
-
-end
+function PANEL:DoDoubleClickInternal() end
 
 derma.DefineControl("DLabelTTT2", "A Label", PANEL, "DLabel")

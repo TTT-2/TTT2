@@ -3,7 +3,9 @@
 -- @author Mineotopia
 -- @module entspawn
 
-if CLIENT then return end -- this is a serverside-ony module
+if CLIENT then
+    return
+end -- this is a serverside-ony module
 
 ---
 -- @realm server
@@ -29,7 +31,7 @@ entspawn = entspawn or {}
 -- @param boolean enable The state to set it to.
 -- @realm server
 function entspawn.SetForcedRandomSpawn(enable)
-	allowForcedRandomSpawn = enable
+    allowForcedRandomSpawn = enable
 end
 
 ---
@@ -37,7 +39,7 @@ end
 -- @return boolean if forced random spawns are enabled
 -- @realm server
 function entspawn.IsForcedRandomSpawnEnabled()
-	return allowForcedRandomSpawn
+    return allowForcedRandomSpawn
 end
 
 ---
@@ -45,18 +47,18 @@ end
 -- @param Entity ent the entity holding the random weapon data
 -- @realm server
 function entspawn.SpawnRandomWeapon(ent)
-	local spawns = {
-		[WEAPON_TYPE_RANDOM] = {
-			[1] = {
-				pos = ent:GetPos(),
-				ang = ent:GetAngles(),
-				ammo = ent.autoAmmoAmount or 0
-				}
-			}
-		}
+    local spawns = {
+        [WEAPON_TYPE_RANDOM] = {
+            [1] = {
+                pos = ent:GetPos(),
+                ang = ent:GetAngles(),
+                ammo = ent.autoAmmoAmount or 0,
+            },
+        },
+    }
 
-	local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
-	entspawn.SpawnEntities(spawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
+    local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
+    entspawn.SpawnEntities(spawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
 end
 
 ---
@@ -64,50 +66,54 @@ end
 -- @param Entity ent the entity holding the random ammo data
 -- @realm server
 function entspawn.SpawnRandomAmmo(ent)
-	local spawns = {
-		[AMMO_TYPE_RANDOM] = {
-			[1] = {
-				pos = ent:GetPos(),
-				ang = ent:GetAngles(),
-				ammo = 1
-				}
-			}
-		}
+    local spawns = {
+        [AMMO_TYPE_RANDOM] = {
+            [1] = {
+                pos = ent:GetPos(),
+                ang = ent:GetAngles(),
+                ammo = 1,
+            },
+        },
+    }
 
-	local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
-	entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+    local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
+    entspawn.SpawnEntities(spawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
 end
 
 local function RemoveEntities(entTable, spawnTable, spawnType)
-	local useDefaultSpawns = not entspawnscript.ShouldUseCustomSpawns()
+    local useDefaultSpawns = not entspawnscript.ShouldUseCustomSpawns()
 
-	for _, ents in pairs(entTable) do
-		for i = 1, #ents do
-			local ent = ents[i]
+    for _, ents in pairs(entTable) do
+        for i = 1, #ents do
+            local ent = ents[i]
 
-			-- do not remove entity if no custom spawns are used
-			if useDefaultSpawns then
-				if map.IsDefaultTerrortownMapEntity(ent) then continue end
+            -- do not remove entity if no custom spawns are used
+            if useDefaultSpawns then
+                if map.IsDefaultTerrortownMapEntity(ent) then
+                    continue
+                end
 
-				-- since some obscure spawn entities are valid for multiple different spawn types,
-				-- they can be used to spawn different types of entities. Therefore this is a table.
-				local entType, data = map.GetDataFromSpawnEntity(ent, spawnType)
+                -- since some obscure spawn entities are valid for multiple different spawn types,
+                -- they can be used to spawn different types of entities. Therefore this is a table.
+                local entType, data = map.GetDataFromSpawnEntity(ent, spawnType)
 
-				spawnTable[spawnType] = spawnTable[spawnType] or {}
-				spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
+                spawnTable[spawnType] = spawnTable[spawnType] or {}
+                spawnTable[spawnType][entType] = spawnTable[spawnType][entType] or {}
 
-				spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = data
-			end
+                spawnTable[spawnType][entType][#spawnTable[spawnType][entType] + 1] = data
+            end
 
-			ent:Remove()
-		end
-	end
+            ent:Remove()
+        end
+    end
 end
 
 local function GetRandomEntityFromTable(ents)
-	if not ents then return end
+    if not ents then
+        return
+    end
 
-	return ents[math.random(#ents)]
+    return ents[math.random(#ents)]
 end
 
 ---
@@ -118,13 +124,13 @@ end
 -- @return table spawnTable A table of entities that should be spawned additionally
 -- @realm server
 function entspawn.RemoveMapEntities()
-	local spawnTable = entspawnscript.GetEmptySpawnTableStructure()
+    local spawnTable = entspawnscript.GetEmptySpawnTableStructure()
 
-	RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable, SPAWN_TYPE_WEAPON)
-	RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable, SPAWN_TYPE_AMMO)
-	RemoveEntities(map.GetPlayerSpawnEntities(), spawnTable, SPAWN_TYPE_PLAYER)
+    RemoveEntities(map.GetWeaponSpawnEntities(), spawnTable, SPAWN_TYPE_WEAPON)
+    RemoveEntities(map.GetAmmoSpawnEntities(), spawnTable, SPAWN_TYPE_AMMO)
+    RemoveEntities(map.GetPlayerSpawnEntities(), spawnTable, SPAWN_TYPE_PLAYER)
 
-	return spawnTable
+    return spawnTable
 end
 
 ---
@@ -136,51 +142,63 @@ end
 -- @param number randomType The spawn type that should be used as random
 -- @realm server
 function entspawn.SpawnEntities(spawns, entsForTypes, entTable, randomType)
-	if not spawns then return end
+    if not spawns then
+        return
+    end
 
-	for entType, spawnTable in pairs(spawns) do
-		for i = 1, #spawnTable do
-			local spawn = spawnTable[i]
-			--Check if spawn.pos is valid
-			if not spawn or not spawn.pos then continue end
-			-- if the weapon spawn is a random weapon spawn, select any spawnable weapon
-			local selectedEnt
-			if entType == randomType then
-				selectedEnt = GetRandomEntityFromTable(entTable)
-			else
-				selectedEnt = GetRandomEntityFromTable(entsForTypes[entType])
-			end
+    for entType, spawnTable in pairs(spawns) do
+        for i = 1, #spawnTable do
+            local spawn = spawnTable[i]
+            --Check if spawn.pos is valid
+            if not spawn or not spawn.pos then
+                continue
+            end
+            -- if the weapon spawn is a random weapon spawn, select any spawnable weapon
+            local selectedEnt
+            if entType == randomType then
+                selectedEnt = GetRandomEntityFromTable(entTable)
+            else
+                selectedEnt = GetRandomEntityFromTable(entsForTypes[entType])
+            end
 
-			if not selectedEnt then continue end
+            if not selectedEnt then
+                continue
+            end
 
-			-- create the weapon entity
-			local spawnedEnt = ents.Create(WEPS.GetClass(selectedEnt))
+            -- create the weapon entity
+            local spawnedEnt = ents.Create(WEPS.GetClass(selectedEnt))
 
-			if not IsValid(spawnedEnt) then continue end
+            if not IsValid(spawnedEnt) then
+                continue
+            end
 
-			-- set the position and angle of the spawned weapon entity
-			spawnedEnt:SetPos(spawn.pos)
-			spawnedEnt:SetAngles(spawn.ang)
-			spawnedEnt:Spawn()
-			spawnedEnt:PhysWake()
+            -- set the position and angle of the spawned weapon entity
+            spawnedEnt:SetPos(spawn.pos)
+            spawnedEnt:SetAngles(spawn.ang)
+            spawnedEnt:Spawn()
+            spawnedEnt:PhysWake()
 
-			-- if the spawn has a defined auto ammo spawn, the ammo should be spawned now
-			if spawn.ammo == 0 or not spawnedEnt.AmmoEnt then continue end
+            -- if the spawn has a defined auto ammo spawn, the ammo should be spawned now
+            if spawn.ammo == 0 or not spawnedEnt.AmmoEnt then
+                continue
+            end
 
-			for k = 1, spawn.ammo do
-				local ammoEnt = ents.Create(spawnedEnt.AmmoEnt)
+            for k = 1, spawn.ammo do
+                local ammoEnt = ents.Create(spawnedEnt.AmmoEnt)
 
-				if not IsValid(ammoEnt) then continue end
+                if not IsValid(ammoEnt) then
+                    continue
+                end
 
-				local pos = spawn.pos + Vector(mathRand(-35, 35), mathRand(-35, 35), 25)
+                local pos = spawn.pos + Vector(mathRand(-35, 35), mathRand(-35, 35), 25)
 
-				ammoEnt:SetPos(pos)
-				ammoEnt:SetAngles(VectorRand():Angle())
-				ammoEnt:Spawn()
-				ammoEnt:PhysWake()
-			end
-		end
-	end
+                ammoEnt:SetPos(pos)
+                ammoEnt:SetAngles(VectorRand():Angle())
+                ammoEnt:Spawn()
+                ammoEnt:PhysWake()
+            end
+        end
+    end
 end
 
 ---
@@ -188,57 +206,57 @@ end
 -- @param[opt] boolean deadOnly Set to true to only respawn dead players
 -- @realm server
 function entspawn.SpawnPlayers(deadOnly)
-	local waveDelay = cvSpawnWaveInterval:GetFloat()
-	local plys = player.GetAll()
+    local waveDelay = cvSpawnWaveInterval:GetFloat()
+    local plys = player.GetAll()
 
-	-- simple method, spawn everybody at once
-	if waveDelay <= 0 or deadOnly then
-		for i = 1, #plys do
-			plys[i]:SpawnForRound(deadOnly)
-		end
-	else
-		-- wave method
-		local amountSpawnPoints = #plyspawn.GetPlayerSpawnPoints()
-		local playersToSpawn = {}
+    -- simple method, spawn everybody at once
+    if waveDelay <= 0 or deadOnly then
+        for i = 1, #plys do
+            plys[i]:SpawnForRound(deadOnly)
+        end
+    else
+        -- wave method
+        local amountSpawnPoints = #plyspawn.GetPlayerSpawnPoints()
+        local playersToSpawn = {}
 
-		for _, ply in RandomPairs(plys) do
-			if ply:ShouldSpawn() then
-				playersToSpawn[#playersToSpawn + 1] = ply
+        for _, ply in RandomPairs(plys) do
+            if ply:ShouldSpawn() then
+                playersToSpawn[#playersToSpawn + 1] = ply
 
-				GAMEMODE:PlayerSpawnAsSpectator(ply)
-			end
-		end
+                GAMEMODE:PlayerSpawnAsSpectator(ply)
+            end
+        end
 
-		local spawnFunction = function()
-			local sizePlayersToSpawn = #playersToSpawn
-			local sizeSpawnWave = mathMin(amountSpawnPoints, sizePlayersToSpawn)
+        local spawnFunction = function()
+            local sizePlayersToSpawn = #playersToSpawn
+            local sizeSpawnWave = mathMin(amountSpawnPoints, sizePlayersToSpawn)
 
-			-- fill the available spawnpoints with players that need spawning
-			for i = 1, sizeSpawnWave do
-				playersToSpawn[i]:SpawnForRound(deadOnly)
+            -- fill the available spawnpoints with players that need spawning
+            for i = 1, sizeSpawnWave do
+                playersToSpawn[i]:SpawnForRound(deadOnly)
 
-				playersToSpawn[i] = nil -- mark for deletion
-			end
+                playersToSpawn[i] = nil -- mark for deletion
+            end
 
-			-- clean up table
-			table.RemoveEmptyEntries(playersToSpawn, sizePlayersToSpawn)
+            -- clean up table
+            table.RemoveEmptyEntries(playersToSpawn, sizePlayersToSpawn)
 
-			Dev(1, "Spawned " .. sizeSpawnWave .. " players in spawn wave.")
+            Dev(1, "Spawned " .. sizeSpawnWave .. " players in spawn wave.")
 
-			if #playersToSpawn == 0 then
-				timerRemove("spawnwave")
+            if #playersToSpawn == 0 then
+                timerRemove("spawnwave")
 
-				Dev(1, "Spawn waves ending, all players spawned.")
-			end
-		end
+                Dev(1, "Spawn waves ending, all players spawned.")
+            end
+        end
 
-		Dev(1, "Spawn waves starting.")
+        Dev(1, "Spawn waves starting.")
 
-		timerCreate("spawnwave", waveDelay, 0, spawnFunction)
+        timerCreate("spawnwave", waveDelay, 0, spawnFunction)
 
-		-- already run one wave, which may stop the timer if everyone is spawned in one go
-		spawnFunction()
-	end
+        -- already run one wave, which may stop the timer if everyone is spawned in one go
+        spawnFunction()
+    end
 end
 
 ---
@@ -247,36 +265,36 @@ end
 -- @internal
 -- @realm server
 function entspawn.HandleSpawns()
-	-- in a first pass, all weapon entities are removed; if in classic spawn mode, a few
-	-- spawn points that should be replaced are returned
-	local spawnTable = entspawn.RemoveMapEntities()
+    -- in a first pass, all weapon entities are removed; if in classic spawn mode, a few
+    -- spawn points that should be replaced are returned
+    local spawnTable = entspawn.RemoveMapEntities()
 
-	-- if in classic mode, set those spawn points to data table
-	if not entspawnscript.ShouldUseCustomSpawns() then
-		entspawnscript.SetSpawns(spawnTable)
-	end
+    -- if in classic mode, set those spawn points to data table
+    if not entspawnscript.ShouldUseCustomSpawns() then
+        entspawnscript.SetSpawns(spawnTable)
+    end
 
-	-- in the next tick the new entities are spawned
-	timer.Simple(0, function()
-		-- SPAWN WEAPONS
-		local wepSpawns = entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_WEAPON)
-		-- This function returns two tables, the first is ordered by weapon spawn types,
-		-- the second is just a normal indexed list with all spawnable weapons. This is
-		-- done like this to improve the performance for random weapon spawns.
-		local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
+    -- in the next tick the new entities are spawned
+    timer.Simple(0, function()
+        -- SPAWN WEAPONS
+        local wepSpawns = entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_WEAPON)
+        -- This function returns two tables, the first is ordered by weapon spawn types,
+        -- the second is just a normal indexed list with all spawnable weapons. This is
+        -- done like this to improve the performance for random weapon spawns.
+        local wepsForTypes, weps = WEPS.GetWeaponsForSpawnTypes()
 
-		entspawn.SpawnEntities(wepSpawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
+        entspawn.SpawnEntities(wepSpawns, wepsForTypes, weps, WEAPON_TYPE_RANDOM)
 
-		-- SPAWN AMMO
-		local ammoSpawns = entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_AMMO)
-		-- This function returns two tables, the first is ordered by weapon spawn types,
-		-- the second is just a normal indexed list with all spawnable weapons. This is
-		-- done like this to improve the performance for random weapon spawns.
-		local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
+        -- SPAWN AMMO
+        local ammoSpawns = entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_AMMO)
+        -- This function returns two tables, the first is ordered by weapon spawn types,
+        -- the second is just a normal indexed list with all spawnable weapons. This is
+        -- done like this to improve the performance for random weapon spawns.
+        local ammoForTypes, ammo = WEPS.GetAmmoForSpawnTypes()
 
-		entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
+        entspawn.SpawnEntities(ammoSpawns, ammoForTypes, ammo, AMMO_TYPE_RANDOM)
 
-		-- SPAWN PLAYER
-		entspawn.SpawnPlayers(false)
-	end)
+        -- SPAWN PLAYER
+        entspawn.SpawnPlayers(false)
+    end)
 end

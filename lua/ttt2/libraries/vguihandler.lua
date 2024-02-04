@@ -4,20 +4,21 @@
 -- @module vguihandler
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return -- the rest of the vguihandler library is client only
+    return -- the rest of the vguihandler library is client only
 end
 
 local table = table
 
-vguihandler = vguihandler or {
-	frames = {},
-	callback = {
-		frame = {},
-		hidden = {}
-	}
-}
+vguihandler = vguihandler
+    or {
+        frames = {},
+        callback = {
+            frame = {},
+            hidden = {},
+        },
+    }
 
 -- Call this function to create a new frame. Using this instead of setting the
 -- frame up manually has the benefit that all basic settings are already set.
@@ -29,25 +30,25 @@ vguihandler = vguihandler or {
 -- @return Panel The created/cleared DFrameTTT2 object
 -- @realm client
 function vguihandler.GenerateFrame(w, h, title)
-	local frame = vgui.Create("DFrameTTT2")
+    local frame = vgui.Create("DFrameTTT2")
 
-	frame:SetSize(w, h)
-	frame:Center()
-	frame:SetTitle(title)
+    frame:SetSize(w, h)
+    frame:Center()
+    frame:SetTitle(title)
 
-	local OriginalClose = frame.Close
+    local OriginalClose = frame.Close
 
-	frame.Close = function(slf)
-		if slf:GetDeleteOnClose() then
-			table.RemoveByValue(vguihandler.frames, frame)
-		end
+    frame.Close = function(slf)
+        if slf:GetDeleteOnClose() then
+            table.RemoveByValue(vguihandler.frames, frame)
+        end
 
-		OriginalClose(slf)
-	end
+        OriginalClose(slf)
+    end
 
-	vguihandler.frames[#vguihandler.frames + 1] = frame
+    vguihandler.frames[#vguihandler.frames + 1] = frame
 
-	return frame
+    return frame
 end
 
 ---
@@ -55,20 +56,22 @@ end
 -- @return table Returns a table of the frames that are now hidden
 -- @realm client
 function vguihandler.HideFrames()
-	local frames = vguihandler.frames
-	local hiddenFrames = {}
+    local frames = vguihandler.frames
+    local hiddenFrames = {}
 
-	for i = 1, #frames do
-		local frame = frames[i]
+    for i = 1, #frames do
+        local frame = frames[i]
 
-		if frame:IsFrameHidden() then continue end
+        if frame:IsFrameHidden() then
+            continue
+        end
 
-		frame:HideFrame()
+        frame:HideFrame()
 
-		hiddenFrames[#hiddenFrames + 1] = frame
-	end
+        hiddenFrames[#hiddenFrames + 1] = frame
+    end
 
-	return hiddenFrames
+    return hiddenFrames
 end
 
 ---
@@ -76,28 +79,32 @@ end
 -- @param table A table of frames
 -- @realm client
 function vguihandler.ShowFrames(frames)
-	for i = 1, #frames do
-		local frame = frames[i]
+    for i = 1, #frames do
+        local frame = frames[i]
 
-		if not IsValid(frame) or not frame:IsFrameHidden() then continue end
+        if not IsValid(frame) or not frame:IsFrameHidden() then
+            continue
+        end
 
-		frame:ShowFrame()
-	end
+        frame:ShowFrame()
+    end
 end
 
 ---
 -- Unhides all frames that are currently registered and hidden.
 -- @realm client
 function vguihandler.ShowAllFrames()
-	local frames = vguihandler.frames
+    local frames = vguihandler.frames
 
-	for i = 1, #frames do
-		local frame = frames[i]
+    for i = 1, #frames do
+        local frame = frames[i]
 
-		if not frame:IsFrameHidden() then continue end
+        if not frame:IsFrameHidden() then
+            continue
+        end
 
-		frame:ShowFrame()
-	end
+        frame:ShowFrame()
+    end
 end
 
 ---
@@ -106,28 +113,28 @@ end
 -- @internal
 -- @realm client
 function vguihandler.InvalidateVSkin()
-	local frames = vguihandler.frames
+    local frames = vguihandler.frames
 
-	for i = 1, #frames do
-		frames[i]:InvalidateLayout()
-	end
+    for i = 1, #frames do
+        frames[i]:InvalidateLayout()
+    end
 end
 
 ---
 -- Rebuilds the whole menu without a specific changed setting.
 -- @realm client
 function vguihandler.Rebuild()
-	local frames = vguihandler.frames
+    local frames = vguihandler.frames
 
-	for i = 1, #frames do
-		local frame = frames[i]
+    for i = 1, #frames do
+        local frame = frames[i]
 
-		if isfunction(frame.OnRebuild) then
-			frame:OnRebuild()
-		end
-	end
+        if isfunction(frame.OnRebuild) then
+            frame:OnRebuild()
+        end
+    end
 
-	vguihandler.InvalidateVSkin()
+    vguihandler.InvalidateVSkin()
 end
 
 ---
@@ -135,15 +142,17 @@ end
 -- @return boolean True if a menu is open
 -- @realm client
 function vguihandler.IsOpen()
-	local frames = vguihandler.frames
+    local frames = vguihandler.frames
 
-	for i = 1, #frames do
-		if frames[i]:IsFrameHidden() then continue end
+    for i = 1, #frames do
+        if frames[i]:IsFrameHidden() then
+            continue
+        end
 
-		return true
-	end
+        return true
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -151,15 +160,17 @@ end
 -- @return boolean True if a menu is open and blocks Bindings
 -- @realm client
 function vguihandler.IsBlockingBindings()
-	local frames = vguihandler.frames
+    local frames = vguihandler.frames
 
-	for i = 1, #frames do
-		if frames[i]:IsFrameHidden() or not frames[i]:IsBlockingBindings() then continue end
+    for i = 1, #frames do
+        if frames[i]:IsFrameHidden() or not frames[i]:IsBlockingBindings() then
+            continue
+        end
 
-		return true
-	end
+        return true
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -168,18 +179,20 @@ end
 -- @internal
 -- @realm client
 function vguihandler.DrawBackground()
-	if not vguihandler.IsOpen() then return end
+    if not vguihandler.IsOpen() then
+        return
+    end
 
-	local width = ScrW()
-	local height = ScrH()
+    local width = ScrW()
+    local height = ScrH()
 
-	if vskin.ShouldBlurBackground() then
-		draw.BlurredBox(0, 0, width, height, 1)
-	end
+    if vskin.ShouldBlurBackground() then
+        draw.BlurredBox(0, 0, width, height, 1)
+    end
 
-	if vskin.ShouldColorBackground() then
-		-- for some reason the color has to be bigger than the screen to
-		-- fill the entire screenspace
-		draw.Box(-1, -1, width + 2, height + 2, vskin.GetScreenColor())
-	end
+    if vskin.ShouldColorBackground() then
+        -- for some reason the color has to be bigger than the screen to
+        -- fill the entire screenspace
+        draw.Box(-1, -1, width + 2, height + 2, vskin.GetScreenColor())
+    end
 end

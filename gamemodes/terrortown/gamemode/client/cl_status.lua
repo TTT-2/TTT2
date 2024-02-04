@@ -16,18 +16,18 @@ STATUS.active = {}
 -- of a given status @{STATUS:SetActiveIcon}.
 -- @realm client
 function STATUS:RegisterStatus(id, data)
-	if STATUS.registered[id] ~= nil then  -- name is not unique
-		return false
-	end
+    if STATUS.registered[id] ~= nil then -- name is not unique
+        return false
+    end
 
-	-- support single and multible icons per status effect
-	if data.hud.GetTexture then
-		data.hud = {data.hud}
-	end
+    -- support single and multible icons per status effect
+    if data.hud.GetTexture then
+        data.hud = { data.hud }
+    end
 
-	STATUS.registered[id] = data
+    STATUS.registered[id] = data
 
-	return true
+    return true
 end
 
 ---
@@ -36,11 +36,13 @@ end
 -- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddStatus(id, active_icon)
-	if STATUS.registered[id] == nil then return end
+    if STATUS.registered[id] == nil then
+        return
+    end
 
-	STATUS.active[id] = table.Copy(STATUS.registered[id])
+    STATUS.active[id] = table.Copy(STATUS.registered[id])
 
-	self:SetActiveIcon(id, active_icon or 1)
+    self:SetActiveIcon(id, active_icon or 1)
 end
 
 ---
@@ -52,23 +54,27 @@ end
 -- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
-	if self.registered[id] == nil or duration == 0 then return end
+    if self.registered[id] == nil or duration == 0 then
+        return
+    end
 
-	self:AddStatus(id, active_icon)
+    self:AddStatus(id, active_icon)
 
-	self.active[id].displaytime = CurTime() + duration
+    self.active[id].displaytime = CurTime() + duration
 
-	timer.Create(id, duration, 1, function()
-		if not self then return end
+    timer.Create(id, duration, 1, function()
+        if not self then
+            return
+        end
 
-		self:RemoveStatus(id)
-	end)
+        self:RemoveStatus(id)
+    end)
 
-	if showDuration then
-		self.active[id].DrawInfo = function(slf)
-			return tostring(math.ceil(math.max(0, slf.displaytime - CurTime())))
-		end
-	end
+    if showDuration then
+        self.active[id].DrawInfo = function(slf)
+            return tostring(math.ceil(math.max(0, slf.displaytime - CurTime())))
+        end
+    end
 end
 
 ---
@@ -77,15 +83,17 @@ end
 -- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:SetActiveIcon(id, active_icon)
-	if STATUS.active[id] == nil then return end
+    if STATUS.active[id] == nil then
+        return
+    end
 
-	local max_amount = self.registered[id].hud.GetTexture and 1 or #STATUS.registered[id].hud
+    local max_amount = self.registered[id].hud.GetTexture and 1 or #STATUS.registered[id].hud
 
-	if not active_icon or active_icon < 1 or active_icon > max_amount then
-		active_icon = 1
-	end
+    if not active_icon or active_icon < 1 or active_icon > max_amount then
+        active_icon = 1
+    end
 
-	STATUS.active[id].active_icon = active_icon
+    STATUS.active[id].active_icon = active_icon
 end
 
 ---
@@ -94,7 +102,7 @@ end
 -- @return boolean Whether the status is registered
 -- @realm client
 function STATUS:Registered(id)
-	return (STATUS.registered[id] ~= nil) and true or false
+    return (STATUS.registered[id] ~= nil) and true or false
 end
 
 ---
@@ -103,7 +111,7 @@ end
 -- @return boolean Whether the status is active
 -- @realm client
 function STATUS:Active(id)
-	return (STATUS.active[id] ~= nil) and true or false
+    return (STATUS.active[id] ~= nil) and true or false
 end
 
 ---
@@ -111,13 +119,15 @@ end
 -- @param string id The id of the registered @{STATUS}
 -- @realm client
 function STATUS:RemoveStatus(id)
-	if STATUS.active[id] == nil then return end
+    if STATUS.active[id] == nil then
+        return
+    end
 
-	STATUS.active[id] = nil
+    STATUS.active[id] = nil
 
-	if timer.Exists(id) then
-		timer.Remove(id)
-	end
+    if timer.Exists(id) then
+        timer.Remove(id)
+    end
 end
 
 ---
@@ -125,27 +135,27 @@ end
 -- @see STATUS:RemoveStatus
 -- @realm client
 function STATUS:RemoveAll()
-	for i in pairs(STATUS.active) do
-		STATUS:RemoveStatus(i)
-	end
+    for i in pairs(STATUS.active) do
+        STATUS:RemoveStatus(i)
+    end
 end
 
 net.Receive("ttt2_status_effect_add", function()
-	STATUS:AddStatus(net.ReadString(), net.ReadUInt(8))
+    STATUS:AddStatus(net.ReadString(), net.ReadUInt(8))
 end)
 
 net.Receive("ttt2_status_effect_set_id", function()
-	STATUS:SetActiveIcon(net.ReadString(), net.ReadUInt(8))
+    STATUS:SetActiveIcon(net.ReadString(), net.ReadUInt(8))
 end)
 
 net.Receive("ttt2_status_effect_add_timed", function()
-	STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool(), net.ReadUInt(8))
+    STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool(), net.ReadUInt(8))
 end)
 
 net.Receive("ttt2_status_effect_remove", function()
-	STATUS:RemoveStatus(net.ReadString())
+    STATUS:RemoveStatus(net.ReadString())
 end)
 
 net.Receive("ttt2_status_effect_remove_all", function()
-	STATUS:RemoveAll()
+    STATUS:RemoveAll()
 end)

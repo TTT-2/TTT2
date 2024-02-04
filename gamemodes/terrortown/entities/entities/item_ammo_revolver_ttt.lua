@@ -1,5 +1,5 @@
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 ENT.Type = "anim"
@@ -14,8 +14,8 @@ ENT.spawnType = AMMO_TYPE_DEAGLE
 ---
 -- @ignore
 function ENT:Initialize()
-	-- Differentiate from rifle ammo
-	self:SetColor(Color(255, 100, 100, 255))
+    -- Differentiate from rifle ammo
+    self:SetColor(Color(255, 100, 100, 255))
 
-	return self.BaseClass.Initialize(self)
+    return self.BaseClass.Initialize(self)
 end

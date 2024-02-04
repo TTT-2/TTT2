@@ -29,7 +29,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 -- @return boolean The value at the path or fallback if the value is nil
 -- @realm shared
 function plymeta:TTT2NETGetBool(path, fallback)
-	return tobool(ttt2net.GetOnPlayer(path, self) == true or fallback)
+    return tobool(ttt2net.GetOnPlayer(path, self) == true or fallback)
 end
 
 ---
@@ -40,7 +40,7 @@ end
 -- @return number The value at the path or fallback if the value is nil
 -- @realm shared
 function plymeta:TTT2NETGetInt(path, fallback)
-	return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
+    return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -51,7 +51,7 @@ end
 -- @return number The value at the path or fallback if the value is nil
 -- @realm shared
 function plymeta:TTT2NETGetUInt(path, fallback)
-	return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
+    return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -62,7 +62,7 @@ end
 -- @return number The value at the path or fallback if the value is nil
 -- @realm shared
 function plymeta:TTT2NETGetFloat(path, fallback)
-	return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
+    return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -73,5 +73,5 @@ end
 -- @return string The value at the path or fallback if the value is nil
 -- @realm shared
 function plymeta:TTT2NETGetString(path, fallback)
-	return tostring(ttt2net.GetOnPlayer(path, self) or fallback)
+    return tostring(ttt2net.GetOnPlayer(path, self) or fallback)
 end

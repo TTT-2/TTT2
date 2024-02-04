@@ -1,22 +1,22 @@
 local HUDS_ABSTRACT_FOLDER = "base_huds"
 
 local function includeFoldersFiles(base, fld, fls)
-	for i = 1, #fls do
-		local fl = fls[i]
-		local filename = base .. fld .. "/" .. fl
+    for i = 1, #fls do
+        local fl = fls[i]
+        local filename = base .. fld .. "/" .. fl
 
-		if SERVER then
-			AddCSLuaFile(filename)
-		end
+        if SERVER then
+            AddCSLuaFile(filename)
+        end
 
-		if CLIENT and fl == "cl_init.lua" then
-			include(filename)
-		elseif SERVER and fl == "init.lua" then
-			include(filename)
-		elseif fl == "shared.lua" then
-			include(filename)
-		end
-	end
+        if CLIENT and fl == "cl_init.lua" then
+            include(filename)
+        elseif SERVER and fl == "init.lua" then
+            include(filename)
+        elseif fl == "shared.lua" then
+            include(filename)
+        end
+    end
 end
 
 --
@@ -28,46 +28,46 @@ local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
 
 -- include HUD Elements files
 for i = 1, #pathFiles do
-	local fl = pathFiles[i]
+    local fl = pathFiles[i]
 
-	HUD = {}
+    HUD = {}
 
-	if SERVER then
-		AddCSLuaFile(pathBase .. fl)
-	end
+    if SERVER then
+        AddCSLuaFile(pathBase .. fl)
+    end
 
-	include(pathBase .. fl)
+    include(pathBase .. fl)
 
-	local cls = string.sub(fl, 0, #fl - 4)
+    local cls = string.sub(fl, 0, #fl - 4)
 
-	HUD.isAbstract = true
+    HUD.isAbstract = true
 
-	huds.Register(HUD, cls)
+    huds.Register(HUD, cls)
 
-	Dev(1, "[TTT2][Huds] Registered abstract HUD " .. cls)
+    Dev(1, "[TTT2][Huds] Registered abstract HUD " .. cls)
 
-	HUD = nil
+    HUD = nil
 end
 
 -- include HUD Elements folders
 local _, subFolders = file.Find(pathBase .. "*", "LUA")
 
 for i = 1, #subFolders do
-	local folder = subFolders[i]
-	local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+    local folder = subFolders[i]
+    local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
-	-- all huds will be loaded here
-	HUD = {}
+    -- all huds will be loaded here
+    HUD = {}
 
-	includeFoldersFiles(pathBase, folder, subFiles)
+    includeFoldersFiles(pathBase, folder, subFiles)
 
-	HUD.isAbstract = true
+    HUD.isAbstract = true
 
-	huds.Register(HUD, folder)
+    huds.Register(HUD, folder)
 
-	Dev(1, "[TTT2][Huds] Registered abstract HUD " .. folder)
+    Dev(1, "[TTT2][Huds] Registered abstract HUD " .. folder)
 
-	HUD = nil
+    HUD = nil
 end
 
 --
@@ -80,43 +80,45 @@ local pathFiles2 = file.Find(pathBase .. "*.lua", "LUA")
 
 -- include HUD Elements files
 for i = 1, #pathFiles2 do
-	local fl = pathFiles2[i]
+    local fl = pathFiles2[i]
 
-	HUD = {}
+    HUD = {}
 
-	if SERVER then
-		AddCSLuaFile(pathBase .. fl)
-	end
+    if SERVER then
+        AddCSLuaFile(pathBase .. fl)
+    end
 
-	include(pathBase .. fl)
+    include(pathBase .. fl)
 
-	local cls = string.sub(fl, 0, #fl - 4)
+    local cls = string.sub(fl, 0, #fl - 4)
 
-	huds.Register(HUD, cls)
+    huds.Register(HUD, cls)
 
-	Dev(1, "[TTT2][Huds] Registered HUD " .. cls)
+    Dev(1, "[TTT2][Huds] Registered HUD " .. cls)
 
-	HUD = nil
+    HUD = nil
 end
 
 -- include HUD Elements folders
 local _, subFolders2 = file.Find(pathBase .. "*", "LUA")
 
 for i = 1, #subFolders2 do
-	local folder = subFolders2[i]
+    local folder = subFolders2[i]
 
-	if folder == HUDS_ABSTRACT_FOLDER then continue end
+    if folder == HUDS_ABSTRACT_FOLDER then
+        continue
+    end
 
-	local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+    local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
-	-- all huds will be loaded here
-	HUD = {}
+    -- all huds will be loaded here
+    HUD = {}
 
-	includeFoldersFiles(pathBase, folder, subFiles)
+    includeFoldersFiles(pathBase, folder, subFiles)
 
-	huds.Register(HUD, folder)
+    huds.Register(HUD, folder)
 
-	Dev(1, "[TTT2][Huds] Registered HUD " .. folder)
+    Dev(1, "[TTT2][Huds] Registered HUD " .. folder)
 
-	HUD = nil
+    HUD = nil
 end

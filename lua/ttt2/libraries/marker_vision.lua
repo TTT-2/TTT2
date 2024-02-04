@@ -5,9 +5,9 @@
 -- @module markerVision
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	util.AddNetworkString("ttt2_marker_vision_entity_removed")
+    util.AddNetworkString("ttt2_marker_vision_entity_removed")
 end
 
 VISIBLE_FOR_PLAYER = 0
@@ -30,13 +30,13 @@ markerVision.registry = {}
 -- @return MARKER_VISION_ELEMENT The marker vision object that was created
 -- @realm shared
 function markerVision.Add(ent, identifier)
-	local mvObject = table.Copy(MARKER_VISION_ELEMENT)
-	mvObject:SetEnt(ent)
-	mvObject:SetIdentifier(identifier)
+    local mvObject = table.Copy(MARKER_VISION_ELEMENT)
+    mvObject:SetEnt(ent)
+    mvObject:SetIdentifier(identifier)
 
-	markerVision.registry[#markerVision.registry + 1] = mvObject
+    markerVision.registry[#markerVision.registry + 1] = mvObject
 
-	return mvObject
+    return mvObject
 end
 
 ---
@@ -47,15 +47,15 @@ end
 -- @return number The position in the table, -1 if not found
 -- @realm shared
 function markerVision.Get(ent, identifier)
-	for i = 1, #markerVision.registry do
-		local mvObject = markerVision.registry[i]
+    for i = 1, #markerVision.registry do
+        local mvObject = markerVision.registry[i]
 
-		if mvObject:IsObjectFor(ent, identifier) then
-			return mvObject, i
-		end
-	end
+        if mvObject:IsObjectFor(ent, identifier) then
+            return mvObject, i
+        end
+    end
 
-	return nil, -1
+    return nil, -1
 end
 
 ---
@@ -65,26 +65,27 @@ end
 -- @param string identifier The unique identifier of this marker vision element
 -- @realm shared
 function markerVision.Remove(ent, identifier)
-	local _, index = markerVision.Get(ent, identifier)
+    local _, index = markerVision.Get(ent, identifier)
 
-	if index == -1 then return end
+    if index == -1 then
+        return
+    end
 
-	table.remove(markerVision.registry, index)
+    table.remove(markerVision.registry, index)
 
-	-- to simplify the networking and to prevent any artefacts due to
-	-- role changes, a removal is broadcasted to everyone
-	if SERVER then
-		net.Start("ttt2_marker_vision_entity_removed")
-		net.WriteEntity(ent)
-		net.WriteString(identifier)
-		net.Broadcast()
-	end
+    -- to simplify the networking and to prevent any artefacts due to
+    -- role changes, a removal is broadcasted to everyone
+    if SERVER then
+        net.Start("ttt2_marker_vision_entity_removed")
+        net.WriteEntity(ent)
+        net.WriteString(identifier)
+        net.Broadcast()
+    end
 
-	if CLIENT then
-		marks.Remove({ent})
-	end
+    if CLIENT then
+        marks.Remove({ ent })
+    end
 end
-
 
 local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TABLE")
 
@@ -96,7 +97,7 @@ local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TA
 -- @return MARKER_VISION_ELEMENT The marker vision object that was created
 -- @realm shared
 function entmeta:AddMarkerVision(identifier)
-	return markerVision.Add(self, identifier)
+    return markerVision.Add(self, identifier)
 end
 
 ---
@@ -105,7 +106,7 @@ end
 -- @return MARKER_VISION_ELEMENT The marker vision object
 -- @realm shared
 function entmeta:GetMarkerVision(identifier)
-	return markerVision.Get(self, identifier)
+    return markerVision.Get(self, identifier)
 end
 
 ---
@@ -114,320 +115,360 @@ end
 -- @param string identifier The unique identifier of this marker vision element
 -- @realm shared
 function entmeta:RemoveMarkerVision(identifier)
-	markerVision.Remove(self, identifier)
+    markerVision.Remove(self, identifier)
 end
 
 if SERVER then
-	---
-	-- Handles the update of the team of a player change. Is called internally and should
-	-- probably not be called somewhere else.
-	-- @param Entity ent The entity that should be updated
-	-- @param string oldTeam The old team of the owner
-	-- @param string newTeam The new team of the owner
-	-- @internal
-	-- @realm server
-	function markerVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
-		for i = 1, #markerVision.registry do
-			local mvObject = markerVision.registry[i]
-			local mvObjectData = mvObject.data
+    ---
+    -- Handles the update of the team of a player change. Is called internally and should
+    -- probably not be called somewhere else.
+    -- @param Entity ent The entity that should be updated
+    -- @param string oldTeam The old team of the owner
+    -- @param string newTeam The new team of the owner
+    -- @internal
+    -- @realm server
+    function markerVision.PlayerUpdatedTeam(ply, oldTeam, newTeam)
+        for i = 1, #markerVision.registry do
+            local mvObject = markerVision.registry[i]
+            local mvObjectData = mvObject.data
 
-			if mvObjectData.visibleFor ~= VISIBLE_FOR_TEAM then continue end
+            if mvObjectData.visibleFor ~= VISIBLE_FOR_TEAM then
+                continue
+            end
 
-			-- case 1: the owner is a player and they are the one that changed their team
-			-- this means that the entity is taken to the new team
-			if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
-				-- nothing needs to be updated here, the new receiver list is generated
-				-- in SyncToClients
-				mvObject:SyncToClients()
+            -- case 1: the owner is a player and they are the one that changed their team
+            -- this means that the entity is taken to the new team
+            if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
+                -- nothing needs to be updated here, the new receiver list is generated
+                -- in SyncToClients
+                mvObject:SyncToClients()
 
-				continue
-			end
+                continue
+            end
 
-			-- case 2: it is bound to the team and the player's new/old team matches
-			-- note: in this case the owner is no entity, but a team
-			if mvObjectData.owner == oldTeam or mvObjectData.owner == newTeam then
-				-- nothing needs to be updated here, the new receiver list is generated
-				-- in SyncToClients
-				mvObject:SyncToClients()
+            -- case 2: it is bound to the team and the player's new/old team matches
+            -- note: in this case the owner is no entity, but a team
+            if mvObjectData.owner == oldTeam or mvObjectData.owner == newTeam then
+                -- nothing needs to be updated here, the new receiver list is generated
+                -- in SyncToClients
+                mvObject:SyncToClients()
 
-				continue
-			end
-		end
-	end
+                continue
+            end
+        end
+    end
 
-	---
-	-- Handles the update of the role of a player change. Is called internally and should
-	-- probably not be called somewhere else.
-	-- @param Entity ent The entity that should be updated
-	-- @param number oldRole The old role of the owner
-	-- @param number newRole The new role of the owner
-	-- @internal
-	-- @realm server
-	function markerVision.PlayerUpdatedRole(ply, oldRole, newRole)
-		for i = 1, #markerVision.registry do
-			local mvObject = markerVision.registry[i]
-			local mvObjectData = mvObject.data
+    ---
+    -- Handles the update of the role of a player change. Is called internally and should
+    -- probably not be called somewhere else.
+    -- @param Entity ent The entity that should be updated
+    -- @param number oldRole The old role of the owner
+    -- @param number newRole The new role of the owner
+    -- @internal
+    -- @realm server
+    function markerVision.PlayerUpdatedRole(ply, oldRole, newRole)
+        for i = 1, #markerVision.registry do
+            local mvObject = markerVision.registry[i]
+            local mvObjectData = mvObject.data
 
-			if mvObjectData.visibleFor ~= VISIBLE_FOR_ROLE then continue end
+            if mvObjectData.visibleFor ~= VISIBLE_FOR_ROLE then
+                continue
+            end
 
-			-- case 1: the owner is a player and they are the one that changed their role
-			-- this means that the entity is taken to the new role
-			if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
-				-- nothing needs to be updated here, the new receiver list is generated
-				-- in SyncToClients
-				mvObject:SyncToClients()
+            -- case 1: the owner is a player and they are the one that changed their role
+            -- this means that the entity is taken to the new role
+            if IsPlayer(mvObjectData.owner) and mvObjectData.owner == ply then
+                -- nothing needs to be updated here, the new receiver list is generated
+                -- in SyncToClients
+                mvObject:SyncToClients()
 
-				continue
-			end
+                continue
+            end
 
-			-- case 2: it is bound to the role and the player's new/old role matches
-			-- note: in this case the owner is no entity, but a role
-			if mvObjectData.owner == oldRole or mvObjectData.owner == newRole then
-				-- nothing needs to be updated here, the new receiver list is generated
-				-- in SyncToClients
-				mvObject:SyncToClients()
+            -- case 2: it is bound to the role and the player's new/old role matches
+            -- note: in this case the owner is no entity, but a role
+            if mvObjectData.owner == oldRole or mvObjectData.owner == newRole then
+                -- nothing needs to be updated here, the new receiver list is generated
+                -- in SyncToClients
+                mvObject:SyncToClients()
 
-				continue
-			end
-		end
-	end
+                continue
+            end
+        end
+    end
 end
 
 if CLIENT then
-	net.ReceiveStream("ttt2_marker_vision_entity", function(streamData)
-		-- handle existing data on the client, the existing one will be updated
-		if IsValid(markerVision.Get(streamData.ent, streamData.identifier)) then
-			markerVision.Remove(streamData.ent, streamData.identifier)
-		end
+    net.ReceiveStream("ttt2_marker_vision_entity", function(streamData)
+        -- handle existing data on the client, the existing one will be updated
+        if IsValid(markerVision.Get(streamData.ent, streamData.identifier)) then
+            markerVision.Remove(streamData.ent, streamData.identifier)
+        end
 
-		local mvObject = markerVision.Add(streamData.ent, streamData.identifier)
-		mvObject:SetOwner(streamData.owner)
-		mvObject:SetVisibleFor(streamData.visibleFor)
-		mvObject:SetColor(streamData.color)
+        local mvObject = markerVision.Add(streamData.ent, streamData.identifier)
+        mvObject:SetOwner(streamData.owner)
+        mvObject:SetVisibleFor(streamData.visibleFor)
+        mvObject:SetColor(streamData.color)
 
-		-- add mark to entity
-		marks.Add({streamData.ent}, mvObject:GetColor())
-	end)
+        -- add mark to entity
+        marks.Add({ streamData.ent }, mvObject:GetColor())
+    end)
 
-	net.Receive("ttt2_marker_vision_entity_removed", function()
-		markerVision.Remove(net.ReadEntity(), net.ReadString())
-	end)
+    net.Receive("ttt2_marker_vision_entity_removed", function()
+        markerVision.Remove(net.ReadEntity(), net.ReadString())
+    end)
 
-	surface.CreateAdvancedFont("RadarVision_Title", { font = "Trebuchet24", size = 20, weight = 600 })
-	surface.CreateAdvancedFont("RadarVision_Text", { font = "Trebuchet24", size = 14, weight = 300 })
+    surface.CreateAdvancedFont(
+        "RadarVision_Title",
+        { font = "Trebuchet24", size = 20, weight = 600 }
+    )
+    surface.CreateAdvancedFont(
+        "RadarVision_Text",
+        { font = "Trebuchet24", size = 14, weight = 300 }
+    )
 
-	---
-	-- The draw function of the radar vision module.
-	-- @internal
-	-- @realm client
-	function markerVision.Draw()
-		local scale = appearance.GetGlobalScale()
+    ---
+    -- The draw function of the radar vision module.
+    -- @internal
+    -- @realm client
+    function markerVision.Draw()
+        local scale = appearance.GetGlobalScale()
 
-		local padding = 3 * scale
-		local paddingScreen = 10 * scale
+        local padding = 3 * scale
+        local paddingScreen = 10 * scale
 
-		local sizeIcon = 28 * scale
-		local sizeIconOffScreen = 22 * scale
+        local sizeIcon = 28 * scale
+        local sizeIconOffScreen = 22 * scale
 
-		local offsetIcon = 0.5 * sizeIcon
-		local offsetIconOffScreen = 0.5 * sizeIconOffScreen
+        local offsetIcon = 0.5 * sizeIcon
+        local offsetIconOffScreen = 0.5 * sizeIconOffScreen
 
-		local sizeTitleIcon = 14 * scale
-		local offsetTitleIcon = 0.5 * sizeTitleIcon
+        local sizeTitleIcon = 14 * scale
+        local offsetTitleIcon = 0.5 * sizeTitleIcon
 
-		local heightLineDescription = 14 * scale
+        local heightLineDescription = 14 * scale
 
-		local client = LocalPlayer()
-		local widthScreen = ScrW()
-		local heightScreen = ScrH()
-		local xScreenCenter = 0.5 * widthScreen
-		local yScreenCenter = 0.5 * heightScreen
+        local client = LocalPlayer()
+        local widthScreen = ScrW()
+        local heightScreen = ScrH()
+        local xScreenCenter = 0.5 * widthScreen
+        local yScreenCenter = 0.5 * heightScreen
 
-		for i = 1, #markerVision.registry do
-			local mvObject = markerVision.registry[i]
-			local ent = mvObject.data.ent
+        for i = 1, #markerVision.registry do
+            local mvObject = markerVision.registry[i]
+            local ent = mvObject.data.ent
 
-			if not IsValid(ent) then continue end
+            if not IsValid(ent) then
+                continue
+            end
 
-			local posEnt = ent:GetPos() + ent:OBBCenter()
-			local screenPos = posEnt:ToScreen()
-			local isOffScreen = util.IsOffScreen(screenPos)
-			local isOnScreenCenter = not isOffScreen
-				and screenPos.x > xScreenCenter - offsetIcon and screenPos.x < xScreenCenter + offsetIcon
-				and screenPos.y > yScreenCenter - offsetIcon and screenPos.y < yScreenCenter + offsetIcon
-			local distanceEntity = posEnt:Distance(client:EyePos())
+            local posEnt = ent:GetPos() + ent:OBBCenter()
+            local screenPos = posEnt:ToScreen()
+            local isOffScreen = util.IsOffScreen(screenPos)
+            local isOnScreenCenter = not isOffScreen
+                and screenPos.x > xScreenCenter - offsetIcon
+                and screenPos.x < xScreenCenter + offsetIcon
+                and screenPos.y > yScreenCenter - offsetIcon
+                and screenPos.y < yScreenCenter + offsetIcon
+            local distanceEntity = posEnt:Distance(client:EyePos())
 
-			-- call internal targetID functions first so the data can be modified by addons
-			local mvData = MARKER_VISION_DATA:Initialize(ent, isOffScreen, isOnScreenCenter, distanceEntity, mvObject)
+            -- call internal targetID functions first so the data can be modified by addons
+            local mvData = MARKER_VISION_DATA:Initialize(
+                ent,
+                isOffScreen,
+                isOnScreenCenter,
+                distanceEntity,
+                mvObject
+            )
 
-			---
-			-- now run a hook that can be used by addon devs that changes the appearance
-			-- of the radar vision
-			-- @realm client
-			-- stylua: ignore
-			hook.Run("TTT2RenderMarkerVisionInfo", mvData)
+            ---
+            -- now run a hook that can be used by addon devs that changes the appearance
+            -- of the radar vision
+            -- @realm client
+            -- stylua: ignore
+            hook.Run("TTT2RenderMarkerVisionInfo", mvData)
 
-			local params = mvData.params
+            local params = mvData.params
 
-			if not params.drawInfo then continue end
+            if not params.drawInfo then
+                continue
+            end
 
-			local amountIcons = #params.displayInfo.icon
+            local amountIcons = #params.displayInfo.icon
 
-			if isOffScreen or not isOnScreenCenter then
-				if amountIcons < 1 then continue end
+            if isOffScreen or not isOnScreenCenter then
+                if amountIcons < 1 then
+                    continue
+                end
 
-				local icon = params.displayInfo.icon[1]
-				local color = icon.color or COLOR_WHITE
+                local icon = params.displayInfo.icon[1]
+                local color = icon.color or COLOR_WHITE
 
-				if screenPos.x > 100000 then
-					screenPos.x = screenPos.x / 100000
-				end
+                if screenPos.x > 100000 then
+                    screenPos.x = screenPos.x / 100000
+                end
 
-				if screenPos.y > 100000 then
-					screenPos.y = screenPos.y / 100000
-				end
+                if screenPos.y > 100000 then
+                    screenPos.y = screenPos.y / 100000
+                end
 
-				screenPos.x = math.Clamp(screenPos.x, offsetIconOffScreen + paddingScreen, widthScreen - offsetIconOffScreen - paddingScreen)
-				screenPos.y = math.Clamp(screenPos.y, offsetIconOffScreen + paddingScreen, heightScreen - offsetIconOffScreen - paddingScreen)
+                screenPos.x = math.Clamp(
+                    screenPos.x,
+                    offsetIconOffScreen + paddingScreen,
+                    widthScreen - offsetIconOffScreen - paddingScreen
+                )
+                screenPos.y = math.Clamp(
+                    screenPos.y,
+                    offsetIconOffScreen + paddingScreen,
+                    heightScreen - offsetIconOffScreen - paddingScreen
+                )
 
-				draw.FilteredShadowedTexture(
-					screenPos.x - offsetIconOffScreen,
-					screenPos.y - offsetIconOffScreen,
-					sizeIconOffScreen,
-					sizeIconOffScreen,
-					icon.material,
-					color.a,
-					color
-				)
+                draw.FilteredShadowedTexture(
+                    screenPos.x - offsetIconOffScreen,
+                    screenPos.y - offsetIconOffScreen,
+                    sizeIconOffScreen,
+                    sizeIconOffScreen,
+                    icon.material,
+                    color.a,
+                    color
+                )
 
-				if not mvData:HasCollapsedLine() then continue end
+                if not mvData:HasCollapsedLine() then
+                    continue
+                end
 
-				draw.AdvancedText(
-					params.displayInfo.collapsedLine.text,
-					"RadarVision_Text",
-					screenPos.x + 1 * scale,
-					screenPos.y + offsetIconOffScreen + padding,
-					params.displayInfo.collapsedLine.color,
-					TEXT_ALIGN_CENTER,
-					TEXT_ALIGN_CENTER,
-					true,
-					scale
-				)
+                draw.AdvancedText(
+                    params.displayInfo.collapsedLine.text,
+                    "RadarVision_Text",
+                    screenPos.x + 1 * scale,
+                    screenPos.y + offsetIconOffScreen + padding,
+                    params.displayInfo.collapsedLine.color,
+                    TEXT_ALIGN_CENTER,
+                    TEXT_ALIGN_CENTER,
+                    true,
+                    scale
+                )
 
-				continue
-			end
+                continue
+            end
 
-			screenPos.x = math.Clamp(screenPos.x, offsetIcon + paddingScreen, widthScreen - offsetIcon - paddingScreen)
-			screenPos.y = math.Clamp(screenPos.y, offsetIcon + paddingScreen, heightScreen - offsetIcon - paddingScreen)
+            screenPos.x = math.Clamp(
+                screenPos.x,
+                offsetIcon + paddingScreen,
+                widthScreen - offsetIcon - paddingScreen
+            )
+            screenPos.y = math.Clamp(
+                screenPos.y,
+                offsetIcon + paddingScreen,
+                heightScreen - offsetIcon - paddingScreen
+            )
 
-			-- draw Icons
-			local xIcon, yIcon
+            -- draw Icons
+            local xIcon, yIcon
 
-			if amountIcons > 0 then
-				xIcon = screenPos.x - offsetIcon
-				yIcon = screenPos.y - offsetIcon
+            if amountIcons > 0 then
+                xIcon = screenPos.x - offsetIcon
+                yIcon = screenPos.y - offsetIcon
 
-				for j = 1, amountIcons do
-					local icon = params.displayInfo.icon[j]
-					local color = icon.color or COLOR_WHITE
+                for j = 1, amountIcons do
+                    local icon = params.displayInfo.icon[j]
+                    local color = icon.color or COLOR_WHITE
 
-					draw.FilteredShadowedTexture(
-						xIcon,
-						yIcon,
-						sizeIcon,
-						sizeIcon,
-						icon.material,
-						color.a,
-						color
-					)
+                    draw.FilteredShadowedTexture(
+                        xIcon,
+                        yIcon,
+                        sizeIcon,
+                        sizeIcon,
+                        icon.material,
+                        color.a,
+                        color
+                    )
 
-					yIcon = sizeIcon + padding
-				end
-			end
+                    yIcon = sizeIcon + padding
+                end
+            end
 
-			-- draw title
-			local stringTitle = params.displayInfo.title.text
+            -- draw title
+            local stringTitle = params.displayInfo.title.text
 
-			local xStringTitle = screenPos.x + offsetIcon + padding
-			local yStringTitle = screenPos.y
+            local xStringTitle = screenPos.x + offsetIcon + padding
+            local yStringTitle = screenPos.y
 
-			for j = 1, #params.displayInfo.title.icons do
-				drawsc.FilteredShadowedTexture(
-					xStringTitle,
-					yStringTitle - offsetTitleIcon,
-					sizeTitleIcon,
-					sizeTitleIcon,
-					params.displayInfo.title.icons[j],
-					params.displayInfo.title.color.a,
-					params.displayInfo.title.color
-				)
+            for j = 1, #params.displayInfo.title.icons do
+                drawsc.FilteredShadowedTexture(
+                    xStringTitle,
+                    yStringTitle - offsetTitleIcon,
+                    sizeTitleIcon,
+                    sizeTitleIcon,
+                    params.displayInfo.title.icons[j],
+                    params.displayInfo.title.color.a,
+                    params.displayInfo.title.color
+                )
 
-				xStringTitle = xStringTitle + 18 * scale
-			end
+                xStringTitle = xStringTitle + 18 * scale
+            end
 
-			draw.AdvancedText(
-				stringTitle,
-				"RadarVision_Title",
-				xStringTitle,
-				yStringTitle - 2 * scale,
-				params.displayInfo.title.color,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_CENTER,
-				true,
-				scale
-			)
+            draw.AdvancedText(
+                stringTitle,
+                "RadarVision_Title",
+                xStringTitle,
+                yStringTitle - 2 * scale,
+                params.displayInfo.title.color,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_CENTER,
+                true,
+                scale
+            )
 
-			-- draw description
-			local linesDescription = params.displayInfo.desc
-			local amountLinesDescription = #linesDescription
+            -- draw description
+            local linesDescription = params.displayInfo.desc
+            local amountLinesDescription = #linesDescription
 
-			local xStringDescription = screenPos.x + offsetIcon + padding
+            local xStringDescription = screenPos.x + offsetIcon + padding
 
-			for j = 1, amountLinesDescription do
-				local text = linesDescription[j].text
-				local icons = linesDescription[j].icons
-				local color = linesDescription[j].color
+            for j = 1, amountLinesDescription do
+                local text = linesDescription[j].text
+                local icons = linesDescription[j].icons
+                local color = linesDescription[j].color
 
-				local xStringDescriptionShifted = xStringDescription
-				local yStringDescription = yStringTitle + j * heightLineDescription
+                local xStringDescriptionShifted = xStringDescription
+                local yStringDescription = yStringTitle + j * heightLineDescription
 
-				for k = 1, #icons do
-					draw.FilteredShadowedTexture(
-						xStringDescriptionShifted,
-						yStringDescription - 13,
-						11,
-						11,
-						icons[k],
-						color.a,
-						color
-					)
+                for k = 1, #icons do
+                    draw.FilteredShadowedTexture(
+                        xStringDescriptionShifted,
+                        yStringDescription - 13,
+                        11,
+                        11,
+                        icons[k],
+                        color.a,
+                        color
+                    )
 
-					xStringDescriptionShifted = xStringDescriptionShifted + 14
-				end
+                    xStringDescriptionShifted = xStringDescriptionShifted + 14
+                end
 
-				draw.AdvancedText(
-					text,
-					"RadarVision_Text",
-					xStringDescriptionShifted,
-					yStringDescription,
-					color,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_CENTER,
-					true,
-					scale
-				)
+                draw.AdvancedText(
+                    text,
+                    "RadarVision_Text",
+                    xStringDescriptionShifted,
+                    yStringDescription,
+                    color,
+                    TEXT_ALIGN_LEFT,
+                    TEXT_ALIGN_CENTER,
+                    true,
+                    scale
+                )
 
-				yStringDescription = yStringDescription + heightLineDescription
-			end
-		end
-	end
+                yStringDescription = yStringDescription + heightLineDescription
+            end
+        end
+    end
 
-	---
-	-- Add marker vision information that should be rendered on a marker vision object.
-	-- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object which contains all information
-	-- @hook
-	-- @realm client
-	function GM:TTT2RenderMarkerVisionInfo(mvData)
-
-	end
+    ---
+    -- Add marker vision information that should be rendered on a marker vision object.
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object which contains all information
+    -- @hook
+    -- @realm client
+    function GM:TTT2RenderMarkerVisionInfo(mvData) end
 end
