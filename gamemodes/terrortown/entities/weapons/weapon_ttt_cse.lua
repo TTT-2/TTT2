@@ -6,6 +6,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "normal"
 
 if CLIENT then
@@ -115,7 +117,17 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("vis_help_pri")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
+	end
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---

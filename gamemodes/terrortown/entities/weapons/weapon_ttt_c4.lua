@@ -3,7 +3,11 @@
 -- @section weapon_ttt_c4
 if SERVER then
 	AddCSLuaFile()
-else -- CLIENT
+end
+
+DEFINE_BASECLASS "weapon_tttbase"
+
+if CLIENT then
 	SWEP.PrintName = "C4"
 	SWEP.Slot = 6
 
@@ -92,13 +96,15 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("c4_help_primary", "c4_help_secondary")
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---
-	-- @ignore
+	-- @realm client
 	function SWEP:OnRemove()
-		if IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
 			RunConsoleCommand("lastinv")
 		end
 	end

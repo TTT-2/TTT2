@@ -130,7 +130,7 @@ function SWEP:Initialize()
 		self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
 	end
 
-	return self.BaseClass.Initialize(self)
+	return BaseClass.Initialize(self)
 end
 
 ---

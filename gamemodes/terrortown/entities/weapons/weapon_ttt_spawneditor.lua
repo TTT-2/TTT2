@@ -1,3 +1,9 @@
+if SERVER then
+	AddCSLuaFile()
+end
+
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.Base = "weapon_tttbase"
 
 if CLIENT then
@@ -66,7 +72,7 @@ if SERVER then
 			net.Send(self:GetOwner())
 		end)
 
-		self.BaseClass.Deploy(self)
+		BaseClass.Deploy(self)
 	end
 
 	---
@@ -344,12 +350,18 @@ if CLIENT then
 	end
 
 	---
-	-- @ignore
+	-- @realm client
 	function SWEP:OnRemove()
 		hook.Remove("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit")
 
 		-- clear the local cache to prevent flickering after reset
 		entspawnscript.ClearLocalCache()
+
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---

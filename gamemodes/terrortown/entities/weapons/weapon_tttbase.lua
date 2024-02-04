@@ -69,6 +69,17 @@ if CLIENT then
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
+	-- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
+	-- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
+	SWEP.idleResetFix = false
+
+	-- It set to true, hands are drawn in the view model
+	SWEP.UseHands = false
+
+	-- If set to true, the default world model of the weapon is drawn. If set to false
+	-- the hands are still drawn in the position of the SWEP.HoldType.
+	SWEP.ShowDefaultWorldModel = true
+
 	-- If set to true, the default view model of the weapon is drawn, otherwise it
 	-- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
 	-- the weapon but still draw the hands holding it.
@@ -117,10 +128,6 @@ SWEP.HotReloadableKeys = {}
 -- DO NOT set SWEP.WeaponID. Only the standard TTT weapons can have it. Custom
 -- SWEPs do not need it for anything.
 --	SWEP.WeaponID = nil
-
--- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
--- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
-SWEP.idleResetFix = false
 
 --   YE OLDE SWEP STUFF
 
@@ -316,23 +323,6 @@ if CLIENT then
 		valueStart = 0,
 		valueEnd = 0
 	}
-
-	---
-	-- Called straight after the view model has been drawn. This is called before
-	-- GM:PostDrawViewModel and WEAPON:PostDrawViewModel.
-	-- @param Entity viewModel Player's view model
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
-	-- @realm client
-	function SWEP:ViewModelDrawn(viewModel)
-		if self.ShowDefaultViewModel then
-			-- this resets the material to the default material
-			viewModel:SetMaterial("")
-		else
-			-- view model resets to render mode 0 every frame so we just apply
-			-- a debug material to prevent it from drawing
-			viewModel:SetMaterial("vgui/hsv")
-		end
-	end
 
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
@@ -675,6 +665,114 @@ if CLIENT then
 		self.fCurrentTime = CurTime()
 		self.fCurrentSysTime = SysTime()
 	end
+
+	---
+	-- Adds a custom view model.
+	-- @note Multiple view models can be added, they are all rendered at once
+	-- @param string identifier The name of the added view model
+	-- @param ModelData modelData The model data table
+	-- @realm client
+	function SWEP:AddCustomViewModel(identifier, modelData)
+		self.customViewModelElements = self.customViewModelElements or {}
+
+		self.customViewModelElements[identifier] = weaponrenderer.CreateModel(self, modelData)
+	end
+
+	---
+	-- Adds a custom world model.
+	-- @note Multiple world models can be added, they are all rendered at once
+	-- @param string identifier The name of the added world model
+	-- @param ModelData modelData The model data table
+	-- @realm client
+	function SWEP:AddCustomWorldModel(identifier, modelData)
+		self.customWorldModelElements = self.customWorldModelElements or {}
+
+		self.customWorldModelElements[identifier] = weaponrenderer.CreateModel(self, modelData)
+	end
+
+	---
+	-- Adds modifications to view model bones.
+	-- @param string identifier The identifier for this bone
+	-- @param BoneData boneData The bone data table
+	-- @realm client
+	function SWEP:ApplyViewModelBoneMods(identifier, boneData)
+		self.customViewModelBoneMods = self.customViewModelBoneMods or {}
+		self.customViewModelBoneMods[identifier] = boneData
+	end
+
+	---
+	-- Called straight after the view model has been drawn. This is called before
+	-- @{GM:PostDrawViewModel} and @{WEAPON:PostDrawViewModel}.
+	-- @warning If you override ViewModelDrawn in your SWEP and you are using a custom world or
+	-- view model, you should call BaseClass.ViewModelDrawn(self) so as not to break viewmodels.
+	-- @param Entity viewModel Player's view model
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+	-- @realm client
+	function SWEP:ViewModelDrawn(viewModel)
+		if not self.customViewModelElements then return end
+
+		weaponrenderer.UpdateBonePositions(self, viewModel)
+
+		weaponrenderer.Render(self, self.customViewModelElements, viewModel)
+	end
+
+	---
+	-- Called when we are about to draw the world model.
+	-- @realm client
+	function SWEP:DrawWorldModel()
+		local client = LocalPlayer()
+
+		-- draw view model when spectating player
+		if client:GetObserverMode() == OBS_MODE_IN_EYE
+			and client:GetObserverTarget() == self:GetOwner()
+		then return end
+
+		if self.ShowDefaultWorldModel then
+			self:DrawModel()
+		end
+
+		if not self.customWorldModelElements then return end
+
+		local boneEnt
+
+		if IsValid(self:GetOwner()) then
+			boneEnt = self:GetOwner()
+		else
+			-- when the weapon is dropped
+			boneEnt = self
+		end
+
+		weaponrenderer.Render(self, self.customWorldModelElements, boneEnt)
+	end
+
+	---
+	-- Allows you to modify viewmodel while the weapon in use before it is drawn.
+	-- @warning This hook only works if you haven't overridden @{GM:PreDrawViewModel}.
+	-- @param Entity viewModel This is the view model entity before it is drawn
+	-- @param Weapon wep This is the weapon that is from the view model
+	-- @param Player ply The the owner of the view model
+	-- @return boolean Return true to prevent the default view model rendering. This also affects @{GM:PostDrawViewModel}
+	-- @realm client
+	hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
+		-- special case: Hands should be shown, but the view model weapon shouldn't be; in this
+		-- case we have to apply this debug material to make it invisible because returning true
+		-- in this hook would prevent both the hands and the weapon from rendering
+		if wep.UseHands and not wep.ShowDefaultViewModel then
+			viewModel:SetMaterial("vgui/hsv")
+
+			return
+		end
+
+		-- default case: Normal view model texture is used and view model draw is defined
+		-- with the SWEP.ShowDefaultViewModel variable
+		viewModel:SetMaterial("")
+
+		-- only return something if we actually want to hide it because otherwise the SWEP
+		-- hook is never called even if the view model is rendered
+		if not wep.ShowDefaultViewModel then
+			return true
+		end
+	end)
 
 	---
 	-- This hook can be used by swep addons to populate the equipment settings page
@@ -1209,11 +1307,7 @@ function SWEP:Initialize()
 	end
 
 	self:SetDeploySpeed(self.DeploySpeed)
-
-	-- compat for gmod update
-	if self.SetHoldType then
-		self:SetHoldType(self.HoldType or "pistol")
-	end
+	self:SetHoldType(self.HoldType or "pistol")
 end
 
 local idle_activities = {
@@ -1254,10 +1348,10 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
-	local vm = self:GetOwner():GetViewModel()
+	local viewModel = self:GetOwner():GetViewModel()
 
-	if self.idleResetFix and self.ViewModel and vm:GetCycle() >= 1 and not IsIdleActivity(vm) then
-		self:SendWeaponAnim( self.IdleAnim or ACT_VM_IDLE )
+	if self.idleResetFix and self.ViewModel and viewModel:GetCycle() >= 1 and not IsIdleActivity(viewModel) then
+		self:SendWeaponAnim(self.IdleAnim or ACT_VM_IDLE)
 	end
 
 	if CLIENT then

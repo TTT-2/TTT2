@@ -7,6 +7,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "normal"
 
 if CLIENT then
@@ -74,14 +76,6 @@ function SWEP:Reload()
 end
 
 ---
--- @ignore
-function SWEP:OnRemove()
-	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
-		RunConsoleCommand("lastinv")
-	end
-end
-
----
 -- @realm shared
 function SWEP:Initialize()
 	if CLIENT then
@@ -90,7 +84,7 @@ function SWEP:Initialize()
 
 	self:SetColor(self.drawColor)
 
-	return self.BaseClass.Initialize(self)
+	return BaseClass.Initialize(self)
 end
 
 
@@ -101,6 +95,16 @@ if CLIENT then
 		if IsValid(self:GetOwner()) then return end
 
 		self:DrawModel()
+	end
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("lastinv")
+		end
 	end
 
 	---

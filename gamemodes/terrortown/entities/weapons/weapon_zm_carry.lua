@@ -672,12 +672,20 @@ function SWEP:SetupDataTables()
 	-- client actually has no idea what we're holding, and almost never needs to know
 	self:NetworkVar("Entity", 0, "CarryTarget")
 
-	return self.BaseClass.SetupDataTables(self)
+	return BaseClass.SetupDataTables(self)
 end
 
 ---
--- @ignore
+-- @realm client
 function SWEP:OnRemove()
+	BaseClass.OnRemove(self)
+
+	local owner = self:GetOwner()
+
+	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+		RunConsoleCommand("lastinv")
+	end
+
 	self:Reset()
 end
 
@@ -703,7 +711,7 @@ if SERVER then
 	function SWEP:Initialize()
 		self:SetCarryTarget(NULL)
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---
@@ -777,7 +785,7 @@ if CLIENT then
 	function SWEP:Initialize()
 		self:RefreshTTT2HUDHelp()
 
-		return self.BaseClass.Initialize(self)
+		return BaseClass.Initialize(self)
 	end
 
 	---

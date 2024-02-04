@@ -2,6 +2,8 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+DEFINE_BASECLASS "weapon_tttbase"
+
 SWEP.HoldType = "shotgun"
 
 if CLIENT then
@@ -52,7 +54,7 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 0, "Reloading")
 	self:NetworkVar("Float", 0, "ReloadTimer")
 
-	return self.BaseClass.SetupDataTables(self)
+	return BaseClass.SetupDataTables(self)
 end
 
 ---
@@ -136,7 +138,7 @@ end
 ---
 -- @ignore
 function SWEP:Think()
-	self.BaseClass.Think(self)
+	BaseClass.Think(self)
 
 	if not self:GetReloading() then return end
 
@@ -161,7 +163,7 @@ function SWEP:Deploy()
 	self:SetReloading(false)
 	self:SetReloadTimer(0)
 
-	return self.BaseClass.Deploy(self)
+	return BaseClass.Deploy(self)
 end
 
 ---

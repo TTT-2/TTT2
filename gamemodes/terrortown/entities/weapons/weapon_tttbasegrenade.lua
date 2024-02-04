@@ -427,20 +427,21 @@ function SWEP:Initialize()
 	self.was_thrown = false
 end
 
----
--- @ignore
-function SWEP:OnRemove()
-	local owner = self:GetOwner()
-
-	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
-		RunConsoleCommand("use", "weapon_ttt_unarmed")
-	end
-end
 
 if CLIENT then
 	local draw = draw
 	local TryT = LANG.TryTranslation
 	local hudTextColor = Color(255, 255, 255, 180)
+
+	---
+	-- @realm client
+	function SWEP:OnRemove()
+		local owner = self:GetOwner()
+
+		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+			RunConsoleCommand("use", "weapon_ttt_unarmed")
+		end
+	end
 
 	---
 	-- @ignore

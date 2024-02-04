@@ -75,7 +75,7 @@ function SWEP:Initialize()
 	self.IsCharging = false
 	self:SetCharge(0)
 
-	return self.BaseClass.Initialize(self)
+	return BaseClass.Initialize(self)
 end
 
 ---
@@ -193,8 +193,14 @@ function SWEP:PreDrop()
 end
 
 ---
--- @ignore
+-- @realm shared
 function SWEP:OnRemove()
+	local owner = self:GetOwner()
+
+	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+		RunConsoleCommand("lastinv")
+	end
+
 	self.IsCharging = false
 	self:SetCharge(0)
 end
@@ -217,7 +223,7 @@ end
 ---
 -- @ignore
 function SWEP:Think()
-	self.BaseClass.Think(self)
+	BaseClass.Think(self)
 
 	if self.IsCharging and IsValid(self:GetOwner()) and self:GetOwner():IsTerror() then
 		-- on client this is prediction
