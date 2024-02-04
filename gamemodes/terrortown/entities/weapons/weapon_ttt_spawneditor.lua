@@ -352,8 +352,6 @@ if CLIENT then
 	---
 	-- @realm client
 	function SWEP:OnRemove()
-		BaseClass.OnRemove(self)
-
 		hook.Remove("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit")
 
 		-- clear the local cache to prevent flickering after reset

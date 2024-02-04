@@ -98,8 +98,6 @@ end
 ---
 -- @ignore
 function SWEP:Holster()
-	BaseClass.Holster(self)
-
 	self:SetIronsights(false)
 	self:SetZoom(false)
 

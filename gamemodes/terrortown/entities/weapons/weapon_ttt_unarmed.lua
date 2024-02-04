@@ -71,8 +71,6 @@ end
 ---
 -- @ignore
 function SWEP:Holster()
-	BaseClass.Holster(self)
-
 	return true
 end
 

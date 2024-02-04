@@ -215,8 +215,6 @@ end
 ---
 -- @realm shared
 function SWEP:OnRemove()
-	BaseClass.OnRemove(self)
-
 	local owner = self:GetOwner()
 
 	if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
@@ -234,8 +232,6 @@ end
 ---
 -- @ignore
 function SWEP:Holster()
-	BaseClass.Holster(self)
-
 	if CLIENT and IsValid(self.Ghost) then
 		self.Ghost:SetNoDraw(true)
 	end
@@ -243,7 +239,7 @@ function SWEP:Holster()
 	self.IsCharging = false
 	self:SetCharge(0)
 
-	return BaseClass.Holster(self)
+	return true
 end
 
 

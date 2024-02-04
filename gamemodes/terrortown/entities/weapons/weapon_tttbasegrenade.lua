@@ -395,8 +395,6 @@ end
 ---
 -- @ignore
 function SWEP:Holster()
-	BaseClass.Holster(self)
-
 	if self:GetPin() then
 		return false -- no switching after pulling pin
 	end
@@ -438,8 +436,6 @@ if CLIENT then
 	---
 	-- @realm client
 	function SWEP:OnRemove()
-		BaseClass.OnRemove(self)
-
 		local owner = self:GetOwner()
 
 		if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then

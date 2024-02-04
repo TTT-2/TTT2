@@ -700,8 +700,6 @@ end
 ---
 -- @ignore
 function SWEP:Holster()
-	BaseClass.Holster(self)
-
 	self:Reset()
 
 	return true
