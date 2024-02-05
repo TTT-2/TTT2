@@ -113,6 +113,10 @@ if CLIENT then
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("vis_help_pri")
 
+        self.BaseClass.Initialize(self)
+    end
+
+    function SWEP:InitializeCustomModels()
         self:AddCustomViewModel("vmodel", {
             type = "Model",
             model = "models/Items/battery.mdl",
@@ -142,8 +146,6 @@ if CLIENT then
             skin = 0,
             bodygroup = {},
         })
-
-        self.BaseClass.Initialize(self)
     end
 
     ---
