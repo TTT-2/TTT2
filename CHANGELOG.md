@@ -41,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 - `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
+- Added weapon pickup sounds when picking up weapons manually (by @TimGoll)
 
 ### Changed
 
