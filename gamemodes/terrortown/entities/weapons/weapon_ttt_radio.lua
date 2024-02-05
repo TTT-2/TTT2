@@ -9,13 +9,23 @@ end
 
 DEFINE_BASECLASS("weapon_tttbase")
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "grenade"
 
 if CLIENT then
     SWEP.PrintName = "radio_name"
     SWEP.Slot = 7
 
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+        desc = "radio_desc",
+    }
+
+    SWEP.ViewModelFOV = 70
+    SWEP.ViewModelFlip = false
+
+    SWEP.UseHands = true
     SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultWorldModel = false
 
     SWEP.EquipMenuData = {
         type = "item_weapon",
@@ -27,7 +37,7 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_eq_fraggrenade.mdl"
 SWEP.WorldModel = "models/props/cs_office/radio.mdl"
 
 SWEP.Primary.ClipSize = -1
@@ -92,7 +102,37 @@ if CLIENT then
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("radio_help_primary", "radio_help_secondary")
 
-        return BaseClass.Initialize(self)
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/props/cs_office/radio.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(7, 3.5, 2),
+            angle = Angle(10, 75, 200),
+            size = Vector(0.725, 0.725, 0.725),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
+
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/props/cs_office/radio.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(4, 6, 0),
+            angle = Angle(20, 15, 190),
+            size = Vector(0.625, 0.625, 0.625),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
+
+        self.BaseClass.Initialize(self)
     end
 
     ---
@@ -104,18 +144,4 @@ if CLIENT then
             RunConsoleCommand("lastinv")
         end
     end
-
-    ---
-    -- @realm client
-    function SWEP:DrawWorldModel()
-        if IsValid(self:GetOwner()) then
-            return
-        end
-
-        self:DrawModel()
-    end
-
-    ---
-    -- @realm client
-    function SWEP:DrawWorldModelTranslucent() end
 end

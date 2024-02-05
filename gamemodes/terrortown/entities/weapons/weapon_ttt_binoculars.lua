@@ -8,13 +8,14 @@ end
 
 DEFINE_BASECLASS("weapon_tttbase")
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "camera"
 
 if CLIENT then
     SWEP.PrintName = "binoc_name"
     SWEP.Slot = 7
 
     SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultWorldModel = false
 
     SWEP.EquipMenuData = {
         type = "item_weapon",
@@ -281,19 +282,25 @@ if CLIENT then
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
         self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
+
         cv_thickness = GetConVar("ttt_crosshair_thickness")
 
-        return BaseClass.Initialize(self)
-    end
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/Items/combine_rifle_cartridge01.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(4, 5, 0),
+            angle = Angle(0, 80, -20),
+            size = Vector(0.7, 0.7, 0.7),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
 
-    ---
-    -- @ignore
-    function SWEP:DrawWorldModel()
-        if IsValid(self:GetOwner()) then
-            return
-        end
-
-        self:DrawModel()
+        self.BaseClass.Initialize(self)
     end
 
     ---
