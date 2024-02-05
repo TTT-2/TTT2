@@ -94,11 +94,7 @@ function PANEL:Init()
     self.data = {
         ply = nil,
         wep = nil,
-        wepClass = "",
         HoldType = "normal",
-        worldModelData = {},
-        worldModels = {},
-        specialModelHandeling = false,
     }
 end
 
@@ -181,9 +177,7 @@ function PANEL:SetWeaponClass(cls)
     end
 
     -- make sure it is reset in case different weapon was used before
-    self.data.worldModelData = {}
     self.data.wepClass = cls
-    self.data.specialModelHandeling = false
 
     local clientsideEntity = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
 
@@ -246,15 +240,8 @@ function PANEL:DrawModel()
         yLimitEnd = mathMin(yLimitEnd, y2)
     end
 
+    -- only the player has to be layouted (animated) because the weapon is tied to them
     self:LayoutEntity(ply)
-
-    if self.data.specialModelHandeling then
-        for _, model in pairs(self.data.worldModels) do
-            self:LayoutEntity(model)
-        end
-    elseif IsValid(wep) then
-        self:LayoutEntity(wep)
-    end
 
     local ang = self.aLookAngle or (self.vLookatPos - self.vCamPos):Angle()
 
@@ -325,7 +312,7 @@ end
 -- @return boolean
 -- @realm client
 function PANEL:HasModel()
-    return IsValid(self.data.ply) and self.data.wepClass ~= ""
+    return IsValid(self.data.ply)
 end
 
 ---
