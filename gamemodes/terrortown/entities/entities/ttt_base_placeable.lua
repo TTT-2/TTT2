@@ -67,6 +67,8 @@ if SERVER then
 
     local soundThrow = Sound("Weapon_SLAM.SatchelThrow")
 
+    local soundDeny = Sound("HL2Player.UseDeny")
+
     AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
     AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
 
@@ -234,11 +236,13 @@ if SERVER then
     -- @hook
     -- @realm server
     function ENT:UseOverride(activator)
-        if
-            not IsValid(activator)
-            or not self.pickupWeaponClass
-            or not self:PlayerCanPickupWeapon(activator)
-        then
+        if not IsValid(activator) or not self.pickupWeaponClass then
+            return
+        end
+
+        if not self:PlayerCanPickupWeapon(activator) then
+            self:EmitSound(soundDeny)
+
             return
         end
 
@@ -254,6 +258,8 @@ if SERVER then
 
             -- if pickup has failed, the in-world entity should not be removed
             if not IsValid(wep) then
+                self:EmitSound(soundDeny)
+
                 return
             end
         end
