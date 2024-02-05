@@ -188,6 +188,7 @@ if SERVER then
     end
 
     ---
+    -- @param Player activator
     -- @realm server
     function ENT:PlayerCanPickupWeapon(activator)
         local roleDataActivator = activator:GetSubRoleData()

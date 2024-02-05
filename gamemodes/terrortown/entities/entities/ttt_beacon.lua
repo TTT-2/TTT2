@@ -128,6 +128,7 @@ if SERVER then
     end
 
     ---
+    -- @param Player activator
     -- @realm server
     function ENT:PlayerCanPickupWeapon(activator)
         return self:GetOriginator() == activator

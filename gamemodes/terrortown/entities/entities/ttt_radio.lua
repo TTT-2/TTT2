@@ -77,12 +77,15 @@ if SERVER then
     end
 
     ---
+    -- @param Player activator
     -- @realm server
     function ENT:PlayerCanPickupWeapon(activator)
         return activator == self:GetOriginator()
     end
 
     ---
+    -- @param Player activator
+    -- @param Weapon wep
     -- @realm server
     function ENT:OnPickup(activator, wep)
         local prints = self.fingerprints or {}
