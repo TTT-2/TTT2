@@ -236,7 +236,7 @@ if SERVER then
     -- @hook
     -- @realm server
     function ENT:UseOverride(activator)
-        if not IsValid(activator) or not self.pickupWeaponClass then
+        if not IsValid(activator) or not activator:IsTerror() or not self.pickupWeaponClass then
             return
         end
 

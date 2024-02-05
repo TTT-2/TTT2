@@ -192,9 +192,7 @@ if SERVER then
     function ENT:PlayerCanPickupWeapon(activator)
         local roleDataActivator = activator:GetSubRoleData()
 
-        return activator:IsTerror()
-            and roleDataActivator.isPolicingRole
-            and roleDataActivator.isPublicRole
+        return roleDataActivator.isPolicingRole and roleDataActivator.isPublicRole
     end
 end
 
