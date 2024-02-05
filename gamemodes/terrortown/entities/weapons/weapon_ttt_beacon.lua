@@ -98,18 +98,6 @@ function SWEP:PlacedBeacon()
 end
 
 ---
--- @realm shared
-function SWEP:PickupBeacon()
-    if self:Clip1() >= self.Primary.ClipSize then
-        return false
-    else
-        self:SetClip1(self:Clip1() + 1)
-
-        return true
-    end
-end
-
----
 -- @param Player buyer
 -- @realm shared
 function SWEP:WasBought(buyer)
