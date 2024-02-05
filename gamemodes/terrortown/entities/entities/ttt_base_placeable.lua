@@ -12,6 +12,8 @@ ENT.Type = "anim"
 -- if set to false, the entity can not be destroyed by damage
 ENT.isDestructible = true
 
+ENT.pickupWeaponClass = nil
+
 ---
 -- @realm shared
 function ENT:Initialize()
@@ -222,6 +224,53 @@ if SERVER then
     -- @realm server
     function ENT:IsWeldedToSurface()
         return self.stateWelding or false
+    end
+
+    ---
+    -- Hook that is called if a player uses their use key while focusing on the entity.
+    -- @note When overwriting this function BaseClass.UseOverwrite has to be called if
+    -- the entity pickup system should be used.
+    -- @param Player activator The player that used their use key
+    -- @hook
+    -- @realm server
+    function ENT:UseOverride(activator)
+        if
+            not IsValid(activator)
+            or not self.pickupWeaponClass
+            or not self:PlayerCanPickupWeapon(activator)
+        then
+            return
+        end
+
+        local wep = activator:GetWeapon(self.pickupWeaponClass)
+
+        if IsValid(wep) and wep:Clip1() < wep.Primary.ClipSize then
+            wep:SetClip1(wep:Clip1() + 1)
+        else
+            -- picks up weapon and drops blocking weapon if slot is already in use
+            wep = activator:SafePickupWeaponClass(self.pickupWeaponClass, true)
+
+            -- if pickup has failed, the in-world entity should not be removed
+            if not IsValid(wep) then
+                return
+            end
+        end
+
+        if self:IsWeldedToSurface() then
+            sound.Play(soundWeld, self:GetPos(), 75)
+        end
+
+        self:Remove()
+    end
+
+    ---
+    -- Run if a valid player tries to pick up this entity to check if this pickup is accepted.
+    -- @param Player activator The player that used their use key
+    -- @return boolean Return true to allow pickup
+    -- @hook
+    -- @realm server
+    function ENT:PlayerCanPickupWeapon(activator)
+        return true
     end
 
     ---
