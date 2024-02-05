@@ -7,6 +7,8 @@ if SERVER then
     AddCSLuaFile()
 end
 
+DEFINE_BASECLASS("ttt_base_placeable")
+
 ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/Items/battery.mdl"
 
@@ -24,7 +26,7 @@ ENT.CanUseKey = true
 function ENT:Initialize()
     self:SetModel(self.Model)
 
-    self.BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 
     self:SetSolid(SOLID_VPHYSICS)
 

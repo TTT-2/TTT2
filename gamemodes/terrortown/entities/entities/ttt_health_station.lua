@@ -5,7 +5,11 @@
 
 if SERVER then
     AddCSLuaFile()
-else
+end
+
+DEFINE_BASECLASS("ttt_base_placeable")
+
+if CLIENT then
     ENT.Icon = "vgui/ttt/icon_health"
     ENT.PrintName = "hstation_name"
 end
@@ -27,7 +31,7 @@ ENT.HealFreq = 0.2
 ---
 -- @realm shared
 function ENT:SetupDataTables()
-    self.BaseClass.SetupDataTables(self)
+    BaseClass.SetupDataTables(self)
 
     self:NetworkVar("Int", 0, "StoredHealth")
 end
@@ -37,7 +41,7 @@ end
 function ENT:Initialize()
     self:SetModel(self.Model)
 
-    self.BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 
     local b = 32
 

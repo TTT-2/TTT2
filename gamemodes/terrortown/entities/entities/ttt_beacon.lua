@@ -6,6 +6,8 @@ if SERVER then
     AddCSLuaFile()
 end
 
+DEFINE_BASECLASS("ttt_base_placeable")
+
 if CLIENT then
     ENT.Icon = "vgui/ttt/icon_beacon"
     ENT.PrintName = "Beacon"
@@ -28,7 +30,7 @@ local beaconDetectionRange = 135
 function ENT:Initialize()
     self:SetModel(self.Model)
 
-    self.BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 
     if SERVER then
         self:SetMaxHealth(100)

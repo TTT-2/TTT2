@@ -17,7 +17,7 @@ ENT.AmmoType = "Pistol"
 ENT.AmmoAmount = 1
 ENT.AmmoMax = 10
 ENT.AmmoEntMax = 1
-ENT.Model = Model("models/items/boxsrounds.mdl")
+ENT.Model = "models/items/boxsrounds.mdl"
 
 ---
 -- bw compat

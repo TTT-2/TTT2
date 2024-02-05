@@ -16,6 +16,8 @@ if SERVER then
     AddCSLuaFile("shared.lua")
 end
 
+DEFINE_BASECLASS("ttt_base_placeable")
+
 if CLIENT then
     -- this entity can be DNA-sampled so we need some display info
     ENT.Icon = "vgui/ttt/icon_c4"
@@ -72,7 +74,7 @@ ENT.safeWires = nil
 -- Initializes the data
 -- @realm shared
 function ENT:SetupDataTables()
-    self.BaseClass.SetupDataTables(self)
+    BaseClass.SetupDataTables(self)
 
     self:NetworkVar("Int", 0, "ExplodeTime")
     self:NetworkVar("Bool", 0, "Armed")
@@ -84,7 +86,7 @@ end
 function ENT:Initialize()
     self:SetModel(self.Model)
 
-    self.BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 
     if SERVER then
         self:SetUseType(SIMPLE_USE)
