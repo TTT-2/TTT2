@@ -275,8 +275,8 @@ end
 
 ---
 -- Renders the world or view model.
--- @param Entity wep The weapon whose view model should be rendered
--- @param table elements The elements of the view model
+-- @param Entity wep The weapon whose view or world model should be rendered
+-- @param table elements The elements of the view or world model
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
 function weaponrenderer.Render(wep, elements, boneEntity)
@@ -362,6 +362,13 @@ function weaponrenderer.Render(wep, elements, boneEntity)
     end
 end
 
+---
+-- Renders the view model if valid view model elements are provided. It also updates the bone
+-- positions so that the view model tracks the hands.
+-- @param Entity wep The weapon whose view model should be rendered
+-- @param table elements The elements of the view model
+-- @param Entity viewModel The player's view model
+-- @realm client
 function weaponrenderer.RenderViewModel(wep, elements, viewModel)
     if not elements then
         return
@@ -372,6 +379,15 @@ function weaponrenderer.RenderViewModel(wep, elements, viewModel)
     weaponrenderer.Render(wep, elements, viewModel)
 end
 
+---
+-- Renders the wold model if valid wold model elements are provided. It also renders the default
+-- world model of the weapon if enabled
+-- @param Entity wep The weapon whose world model should be rendered
+-- @param Entity wepModel The weapon mode whose world model should be rendered, in most cases
+-- identical to the first parameter
+-- @param table elements The elements of the world model
+-- @param[opt] Player owner The owner entity of the weapon, binds the model to their hands
+-- @realm client
 function weaponrenderer.RenderWoldModel(wep, wepModel, elements, owner)
     if wep.ShowDefaultWorldModel then
         wepModel:DrawModel()
