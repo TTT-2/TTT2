@@ -7,11 +7,13 @@ ttt_include("vgui__cl_sb_main")
 sboard_panel = nil
 
 local function ScoreboardRemove()
-	if not sboard_panel then return end
+    if not sboard_panel then
+        return
+    end
 
-	sboard_panel:Remove()
+    sboard_panel:Remove()
 
-	sboard_panel = nil
+    sboard_panel = nil
 end
 hook.Add("TTTLanguageChanged", "RebuildScoreboard", ScoreboardRemove)
 
@@ -20,9 +22,9 @@ hook.Add("TTTLanguageChanged", "RebuildScoreboard", ScoreboardRemove)
 -- @hook
 -- @realm client
 function GM:ScoreboardCreate()
-	ScoreboardRemove()
+    ScoreboardRemove()
 
-	sboard_panel = vgui.Create("TTTScoreboard")
+    sboard_panel = vgui.Create("TTTScoreboard")
 end
 
 ---
@@ -32,17 +34,17 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:ScoreboardShow
 -- @local
 function GM:ScoreboardShow()
-	self.ShowScoreboard = true
+    self.ShowScoreboard = true
 
-	if not sboard_panel then
-		self:ScoreboardCreate()
-	end
+    if not sboard_panel then
+        self:ScoreboardCreate()
+    end
 
-	gui.EnableScreenClicker(true)
+    gui.EnableScreenClicker(true)
 
-	sboard_panel:SetVisible(true)
-	sboard_panel:UpdateScoreboard(true)
-	sboard_panel:StartUpdateTimer()
+    sboard_panel:SetVisible(true)
+    sboard_panel:UpdateScoreboard(true)
+    sboard_panel:StartUpdateTimer()
 end
 
 ---
@@ -52,13 +54,15 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:ScoreboardHide
 -- @local
 function GM:ScoreboardHide()
-	self.ShowScoreboard = false
+    self.ShowScoreboard = false
 
-	gui.EnableScreenClicker(false)
+    gui.EnableScreenClicker(false)
 
-	if not sboard_panel then return end
+    if not sboard_panel then
+        return
+    end
 
-	sboard_panel:SetVisible(false)
+    sboard_panel:SetVisible(false)
 end
 
 ---
@@ -67,7 +71,7 @@ end
 -- @hook
 -- @realm client
 function GM:GetScoreboardPanel()
-	return sboard_panel
+    return sboard_panel
 end
 
 ---
@@ -80,5 +84,5 @@ end
 -- @realm client
 -- @local
 function GM:HUDDrawScoreBoard()
-	-- replaced by panel version
+    -- replaced by panel version
 end

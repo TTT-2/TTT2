@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "Nişangah"
 L.submenu_appearance_dmgindicator_title = "Hasar Göstergesi"
 L.submenu_appearance_performance_title = "Performans"
 L.submenu_appearance_interface_title = "Arayüz"
-L.submenu_appearance_miscellaneous_title = "Çeşitli"
 
 L.submenu_gameplay_general_title = "Genel"
 
@@ -1661,8 +1660,6 @@ L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
 L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
-L.label_ragdoll_pinning = "Masum olmayan roller için ceset sabitlemeyi etkinleştir"
-L.label_ragdoll_pinning_innocents = "Masum roller için ceset pinlemeyi etkinleştir"
 L.label_weapon_carrying = "Silah taşımayı etkinleştir"
 L.label_weapon_carrying_range = "Silah taşıma menzili"
 L.label_prop_carrying_force = "Nesne kaldırma gücü"
@@ -1965,8 +1962,10 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
-L.header_miscellaneous_settings = "Çeşitli Ayarlar"
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
 L.header_hud_elements_customize = "Arayüz Öğelerini Özelleştir"
 L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri için özel ayarlardır."
@@ -2081,14 +2080,10 @@ L.radio_help_primary = "Radyoyu yerleştir"
 L.radio_help_secondary = "Zemine yapıştır"
 L.hstation_help_primary = "Sağlık İstasyonunu yerleştir"
 L.flaregun_help_primary = "Varlığı yak"
-L.decoy_help_pri = "Tuzağı yerleştirin."
 
 -- 2023-12-14
 L.marker_vision_owner = "Sahip: {owner}"
 L.marker_vision_distance = "Uzaklık: {distance}m"
-L.marker_vision_visible_for_0 = "Sadece size görünür"
-L.marker_vision_visible_for_1 = "Takıma görünür"
-L.marker_vision_visible_for_2 = "Herkese görünür"
 L.marker_vision_distance_collapsed = "{distance}m"
 
 L.c4_marker_vision_time = "Patlamaya: {time}"
@@ -2129,7 +2124,8 @@ L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir ö
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
--- 2023-12-22
+
+-- 2023-12-24
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
 L.header_accessibility_settings = "Erişilebilirlik Ayarları"
@@ -2140,7 +2136,6 @@ L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
-
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
 Bir pompalı için bu, her bir saçmayı etkileyecektir.
@@ -2152,6 +2147,8 @@ Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri
 
 -- 2023-12-24
 L.binoc_help_reload = "Hedefi kaldırın."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
@@ -2170,5 +2167,23 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 
 L.header_weapon_settings = "Silah Ayarları"
 
+
+L.marker_vision_visible_for_0 = "Sadece size görünür"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_2 = "Takıma görünür"
+L.marker_vision_visible_for_3 = "Herkese görünür"
+
+-- 2024-01-27
+L.decoy_help_primary = "Tuzağı yerleştirin"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

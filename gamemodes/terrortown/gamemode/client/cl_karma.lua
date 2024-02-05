@@ -8,5 +8,5 @@ KARMA = {}
 -- @return boolean
 -- @realm client
 function KARMA.IsEnabled()
-	return GetGlobalBool("ttt_karma", false)
+    return GetGlobalBool("ttt_karma", false)
 end

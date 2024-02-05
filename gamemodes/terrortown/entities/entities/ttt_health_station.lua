@@ -4,15 +4,18 @@
 -- @section ttt_health_station
 
 if SERVER then
-	AddCSLuaFile()
-else
-	-- this entity can be DNA-sampled so we need some display info
-	ENT.Icon = "vgui/ttt/icon_health"
-	ENT.PrintName = "hstation_name"
+    AddCSLuaFile()
 end
 
-ENT.Type = "anim"
-ENT.Model = Model("models/props/cs_office/microwave.mdl")
+DEFINE_BASECLASS("ttt_base_placeable")
+
+if CLIENT then
+    ENT.Icon = "vgui/ttt/icon_health"
+    ENT.PrintName = "hstation_name"
+end
+
+ENT.Base = "ttt_base_placeable"
+ENT.Model = "models/props/cs_office/microwave.mdl"
 
 --ENT.CanUseKey = true
 ENT.CanHavePrints = true
@@ -26,55 +29,48 @@ ENT.HealRate = 1
 ENT.HealFreq = 0.2
 
 ---
--- @accessor Player
--- @realm shared
-AccessorFunc(ENT, "Placer", "Placer")
-
----
 -- @realm shared
 function ENT:SetupDataTables()
-	self:NetworkVar("Int", 0, "StoredHealth")
+    BaseClass.SetupDataTables(self)
+
+    self:NetworkVar("Int", 0, "StoredHealth")
 end
 
 ---
 -- @realm shared
 function ENT:Initialize()
-	self:SetModel(self.Model)
+    self:SetModel(self.Model)
 
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_BBOX)
+    BaseClass.Initialize(self)
 
-	local b = 32
+    local b = 32
 
-	self:SetCollisionBounds(Vector(-b, -b, -b), Vector(b,b,b))
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+    self:SetCollisionBounds(Vector(-b, -b, -b), Vector(b, b, b))
 
-	if SERVER then
-		self:SetMaxHealth(200)
+    if SERVER then
+        self:SetMaxHealth(200)
 
-		local phys = self:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:SetMass(200)
-		end
+        local phys = self:GetPhysicsObject()
+        if IsValid(phys) then
+            phys:SetMass(200)
+        end
 
-		self:SetUseType(CONTINUOUS_USE)
-	end
+        self:SetUseType(CONTINUOUS_USE)
+    end
 
-	self:SetHealth(200)
-	self:SetColor(Color(180, 180, 250, 255))
-	self:SetStoredHealth(200)
-	self:SetPlacer(nil)
+    self:SetHealth(200)
+    self:SetColor(Color(180, 180, 250, 255))
+    self:SetStoredHealth(200)
 
-	self.NextHeal = 0
-	self.fingerprints = {}
+    self.NextHeal = 0
+    self.fingerprints = {}
 end
 
 ---
 -- @param number amount
 -- @realm shared
 function ENT:AddToStorage(amount)
-	self:SetStoredHealth(math.min(self.MaxStored, self:GetStoredHealth() + amount))
+    self:SetStoredHealth(math.min(self.MaxStored, self:GetStoredHealth() + amount))
 end
 
 ---
@@ -82,12 +78,12 @@ end
 -- @return number
 -- @realm shared
 function ENT:TakeFromStorage(amount)
-	-- if we only have 5 healthpts in store, that is the amount we heal
-	amount = math.min(amount, self:GetStoredHealth())
+    -- if we only have 5 healthpts in store, that is the amount we heal
+    amount = math.min(amount, self:GetStoredHealth())
 
-	self:SetStoredHealth(math.max(0, self:GetStoredHealth() - amount))
+    self:SetStoredHealth(math.max(0, self:GetStoredHealth() - amount))
 
-	return amount
+    return amount
 end
 
 local soundHealing = Sound("items/medshot4.wav")
@@ -103,9 +99,7 @@ local timeLastSound = 0
 -- @return boolean Return false to cancel the heal tick
 -- @hook
 -- @realm server
-function GAMEMODE:TTTPlayerUsedHealthStation(ply, ent, healed)
-
-end
+function GAMEMODE:TTTPlayerUsedHealthStation(ply, ent, healed) end
 
 ---
 -- @param Player ply
@@ -113,145 +107,138 @@ end
 -- @return boolean
 -- @realm shared
 function ENT:GiveHealth(ply, healthMax)
-	if self:GetStoredHealth() > 0 then
-		healthMax = healthMax or self.MaxHeal
+    if self:GetStoredHealth() > 0 then
+        healthMax = healthMax or self.MaxHeal
 
-		local dmg = ply:GetMaxHealth() - ply:Health()
-		if dmg > 0 then
-			-- constant clamping, no risks
-			local healed = self:TakeFromStorage(math.min(healthMax, dmg))
-			local new = math.min(ply:GetMaxHealth(), ply:Health() + healed)
+        local dmg = ply:GetMaxHealth() - ply:Health()
+        if dmg > 0 then
+            -- constant clamping, no risks
+            local healed = self:TakeFromStorage(math.min(healthMax, dmg))
+            local new = math.min(ply:GetMaxHealth(), ply:Health() + healed)
 
-			---
-			-- @realm shared
-			if hook.Run("TTTPlayerUsedHealthStation", ply, self, healed) == false then
-				return false
-			end
+            ---
+            -- @realm shared
+            -- stylua: ignore
+            if hook.Run("TTTPlayerUsedHealthStation", ply, self, healed) == false then
+                return false
+            end
 
-			ply:SetHealth(new)
+            ply:SetHealth(new)
 
-			if timeLastSound + 2 < CurTime() then
-				self:EmitSound(soundHealing)
+            if timeLastSound + 2 < CurTime() then
+                self:EmitSound(soundHealing)
 
-				timeLastSound = CurTime()
-			end
+                timeLastSound = CurTime()
+            end
 
-			if not table.HasValue(self.fingerprints, ply) then
-				self.fingerprints[#self.fingerprints + 1] = ply
-			end
+            if not table.HasValue(self.fingerprints, ply) then
+                self.fingerprints[#self.fingerprints + 1] = ply
+            end
 
-			return true
-		else
-			self:EmitSound(soundFail)
-		end
-	else
-		self:EmitSound(soundFail)
-	end
+            return true
+        else
+            self:EmitSound(soundFail)
+        end
+    else
+        self:EmitSound(soundFail)
+    end
 
-	return false
+    return false
 end
 
 ---
 -- @param Player ply
 -- @realm shared
 function ENT:Use(ply)
-	if not IsValid(ply) or not ply:IsPlayer() or not ply:IsActive() then return end
+    if not IsValid(ply) or not ply:IsPlayer() or not ply:IsActive() then
+        return
+    end
 
-	local t = CurTime()
-	if t < self.NextHeal then return end
+    local t = CurTime()
+    if t < self.NextHeal then
+        return
+    end
 
-	local healed = self:GiveHealth(ply, self.HealRate)
+    local healed = self:GiveHealth(ply, self.HealRate)
 
-	self.NextHeal = t + (self.HealFreq * (healed and 1 or 2))
+    self.NextHeal = t + (self.HealFreq * (healed and 1 or 2))
 end
 
 if SERVER then
-	-- recharge
-	local nextcharge = 0
+    -- recharge
+    local nextcharge = 0
 
-	---
-	-- @realm server
-	function ENT:Think()
-		if nextcharge > CurTime() then return end
+    ---
+    -- @realm server
+    function ENT:Think()
+        if nextcharge > CurTime() then
+            return
+        end
 
-		self:AddToStorage(self.RechargeRate)
+        self:AddToStorage(self.RechargeRate)
 
-		nextcharge = CurTime() + self.RechargeFreq
-	end
+        nextcharge = CurTime() + self.RechargeFreq
+    end
 
-	---
-	-- @realm server
-	local ttt_damage_own_healthstation = CreateConVar("ttt_damage_own_healthstation", "0", FCVAR_NONE, "0 as detective cannot damage their own health station")
+    ---
+    -- @realm server
+    function ENT:WasDestroyed()
+        local originator = self:GetOriginator()
 
-	---
-	-- traditional equipment destruction effects
-	-- @param CTakeDamageInfo dmginfo
-	-- @realm server
-	function ENT:OnTakeDamage(dmginfo)
-		if dmginfo:GetAttacker() == self:GetPlacer() and not ttt_damage_own_healthstation:GetBool() then return end
+        if not IsValid(originator) then
+            return
+        end
 
-		self:TakePhysicsDamage(dmginfo)
-		self:SetHealth(self:Health() - dmginfo:GetDamage())
-
-		local att = dmginfo:GetAttacker()
-		local placer = self:GetPlacer()
-
-		if IsPlayer(att) then
-			DamageLog(Format("DMG: \t %s [%s] damaged health station [%s] for %d dmg", att:Nick(), att:GetRoleString(), IsPlayer(placer) and placer:Nick() or "<disconnected>", dmginfo:GetDamage()))
-		end
-
-		if self:Health() > 0 then return end
-
-		self:Remove()
-
-		util.EquipmentDestroyed(self:GetPos())
-
-		if IsValid(self:GetPlacer()) then
-			LANG.Msg(self:GetPlacer(), "hstation_broken")
-		end
-	end
+        LANG.Msg(originator, "hstation_broken", nil, MSG_MSTACK_WARN)
+    end
 else
-	local TryT = LANG.TryTranslation
-	local ParT = LANG.GetParamTranslation
+    local TryT = LANG.TryTranslation
+    local ParT = LANG.GetParamTranslation
 
-	local key_params = {
-		usekey = Key("+use", "USE"),
-		walkkey = Key("+walk", "WALK")
-	}
+    local key_params = {
+        usekey = Key("+use", "USE"),
+        walkkey = Key("+walk", "WALK"),
+    }
 
-	-- handle looking at healthstation
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tData)
-		local client = LocalPlayer()
-		local ent = tData:GetEntity()
+    -- handle looking at healthstation
+    hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tData)
+        local client = LocalPlayer()
+        local ent = tData:GetEntity()
 
-		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_health_station" then
-			return
-		end
+        if
+            not IsValid(client)
+            or not client:IsTerror()
+            or not client:Alive()
+            or not IsValid(ent)
+            or tData:GetEntityDistance() > 100
+            or ent:GetClass() ~= "ttt_health_station"
+        then
+            return
+        end
 
-		-- enable targetID rendering
-		tData:EnableText()
-		tData:EnableOutline()
-		tData:SetOutlineColor(client:GetRoleColor())
+        -- enable targetID rendering
+        tData:EnableText()
+        tData:EnableOutline()
+        tData:SetOutlineColor(client:GetRoleColor())
 
-		tData:SetTitle(TryT(ent.PrintName))
-		tData:SetSubtitle(ParT("hstation_subtitle", key_params))
-		tData:SetKeyBinding("+use")
+        tData:SetTitle(TryT(ent.PrintName))
+        tData:SetSubtitle(ParT("hstation_subtitle", key_params))
+        tData:SetKeyBinding("+use")
 
-		local hstation_charge = ent:GetStoredHealth() or 0
+        local hstation_charge = ent:GetStoredHealth() or 0
 
-		tData:AddDescriptionLine(TryT("hstation_short_desc"))
+        tData:AddDescriptionLine(TryT("hstation_short_desc"))
 
-		tData:AddDescriptionLine(
-			(hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
-			(hstation_charge > 0) and roles.DETECTIVE.ltcolor or COLOR_ORANGE
-		)
+        tData:AddDescriptionLine(
+            (hstation_charge > 0) and ParT("hstation_charge", { charge = hstation_charge })
+                or TryT("hstation_empty"),
+            (hstation_charge > 0) and roles.DETECTIVE.ltcolor or COLOR_ORANGE
+        )
 
-		if client:Health() < client:GetMaxHealth() then return end
+        if client:Health() < client:GetMaxHealth() then
+            return
+        end
 
-		tData:AddDescriptionLine(
-			TryT("hstation_maxhealth"),
-			COLOR_ORANGE
-		)
-	end)
+        tData:AddDescriptionLine(TryT("hstation_maxhealth"), COLOR_ORANGE)
+    end)
 end

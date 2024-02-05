@@ -9,5 +9,5 @@ CLGAMEMODEMENU.priority = 94
 
 -- overwrite and return true to enable a searchbar
 function CLGAMEMODEMENU:HasSearchbar()
-	return true
+    return true
 end

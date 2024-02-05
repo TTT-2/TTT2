@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "准星"
 L.submenu_appearance_dmgindicator_title = "伤害指示"
 L.submenu_appearance_performance_title = "性能"
 L.submenu_appearance_interface_title = "界面"
-L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
 
@@ -1661,8 +1660,6 @@ L.label_bots_are_spectators = "机器人永远是观察者"
 L.label_tbutton_admin_show = "向管理员显示叛徒按钮"
 L.label_ragdoll_carrying = "启用布娃娃搬运"
 L.label_prop_throwing = "启用道具投掷"
-L.label_ragdoll_pinning = "为非无辜者角色启用布娃娃夹子"
-L.label_ragdoll_pinning_innocents = "为无辜者启用布娃娃夹子"
 L.label_weapon_carrying = "启用武器搬运"
 L.label_weapon_carrying_range = "武器搬运范围"
 L.label_prop_carrying_force = "Prop推进力"
@@ -1965,8 +1962,10 @@ L.help_inspect_confirm_mode = [[
 
 模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公共警察玩家报告死尸现在是获取任何尸体信息的唯一方式。]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
-L.header_miscellaneous_settings = "其他设置"
 L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"
 L.header_hud_elements_customize = "自定义 HUD 元素"
 L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
@@ -2063,7 +2062,7 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
 -- 2023-12-11
 --L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
 --L.knife_help_primary = "Stab"
 --L.knife_help_secondary = "Throw knife"
 --L.polter_help_primary = "Fire thumper"
@@ -2081,14 +2080,10 @@ L.newton_force = "推力"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "安放诱饵。"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
 --L.marker_vision_distance_collapsed = "{distance}m"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2129,7 +2124,8 @@ L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
 L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
 
--- 2023-12-22
+
+-- 2023-12-24
 L.submenu_gameplay_accessibility_title = "辅助功能"
 
 L.header_accessibility_settings = "辅助功能设置"
@@ -2140,7 +2136,6 @@ L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
 
 L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
 L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
-
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
 对于霰弹枪，这将影响每个弹丸。
@@ -2154,6 +2149,8 @@ L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此�
 
 -- 2023-12-24
 L.binoc_help_reload = "清除目标。"
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "启用十字准线轮廓"
@@ -2172,5 +2169,23 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "武器设置"
 
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放诱饵"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

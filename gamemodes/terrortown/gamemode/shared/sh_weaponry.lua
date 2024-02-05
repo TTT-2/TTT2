@@ -18,9 +18,9 @@ local scriptedEntsGetList = scripted_ents.GetList
 -- @return boolean weapon type (<code>kind</code>)
 -- @realm shared
 function WEPS.TypeForWeapon(class)
-	local tbl = util.WeaponForClass(class)
+    local tbl = util.WeaponForClass(class)
 
-	return tbl and tbl.Kind or WEAPON_NONE
+    return tbl and tbl.Kind or WEAPON_NONE
 end
 
 ---
@@ -29,7 +29,7 @@ end
 -- @return boolean whether the table is a valid equipment (weapon)
 -- @realm shared
 function WEPS.IsEquipment(wep)
-	return wep and wep.Kind and wep.Kind >= WEAPON_EQUIP
+    return wep and wep.Kind and wep.Kind >= WEAPON_EQUIP
 end
 
 ---
@@ -38,11 +38,11 @@ end
 -- @return nil|string weapon's class
 -- @realm shared
 function WEPS.GetClass(wep)
-	if istable(wep) then
-		return wep.ClassName or wep.Classname or wep.id or wep.name
-	elseif IsValid(wep) then
-		return wep:GetClass()
-	end
+    if istable(wep) then
+        return wep.ClassName or wep.Classname or wep.id or wep.name
+    elseif IsValid(wep) then
+        return wep:GetClass()
+    end
 end
 
 ---
@@ -51,27 +51,31 @@ end
 -- @return table An indexed table with all spawnable weapons including those with invalid spawn types
 -- @realm shared
 function WEPS.GetWeaponsForSpawnTypes()
-	local wepsForSpawns = {}
-	local wepsTable = {}
-	local weps = wepGetList()
+    local wepsForSpawns = {}
+    local wepsTable = {}
+    local weps = wepGetList()
 
-	for i = 1, #weps do
-		local wep = weps[i]
-		local spawnType = wep.spawnType
+    for i = 1, #weps do
+        local wep = weps[i]
+        local spawnType = wep.spawnType
 
-		if not wep.AutoSpawnable then continue end
+        if not wep.AutoSpawnable then
+            continue
+        end
 
-		-- add these entities to the random weapon table even if they might
-		-- not have a spawn type defined
-		wepsTable[#wepsTable + 1] = wep
+        -- add these entities to the random weapon table even if they might
+        -- not have a spawn type defined
+        wepsTable[#wepsTable + 1] = wep
 
-		if not spawnType then continue end
+        if not spawnType then
+            continue
+        end
 
-		wepsForSpawns[spawnType] = wepsForSpawns[spawnType] or {}
-		wepsForSpawns[spawnType][#wepsForSpawns[spawnType] + 1] = wep
-	end
+        wepsForSpawns[spawnType] = wepsForSpawns[spawnType] or {}
+        wepsForSpawns[spawnType][#wepsForSpawns[spawnType] + 1] = wep
+    end
 
-	return wepsForSpawns, wepsTable
+    return wepsForSpawns, wepsTable
 end
 
 ---
@@ -80,30 +84,36 @@ end
 -- @return table An indexed table with all spawnable ammo including those with invalid spawn types
 -- @realm shared
 function WEPS.GetAmmoForSpawnTypes()
-	local ammoForSpawns = {}
-	local ammoTable = {}
+    local ammoForSpawns = {}
+    local ammoTable = {}
 
-	local allEnts = scriptedEntsGetList()
+    local allEnts = scriptedEntsGetList()
 
-	for _, entData in pairs(allEnts) do
-		if entData.Base ~= "base_ammo_ttt" then continue end
+    for _, entData in pairs(allEnts) do
+        if entData.Base ~= "base_ammo_ttt" then
+            continue
+        end
 
-		local ammo = entData.t
-		local spawnType = ammo.spawnType
+        local ammo = entData.t
+        local spawnType = ammo.spawnType
 
-		if not ammo.AutoSpawnable then continue end
+        if not ammo.AutoSpawnable then
+            continue
+        end
 
-		-- add these entities to the random ammo table even if they might
-		-- not have a spawn type defined
-		ammoTable[#ammoTable + 1] = ammo
+        -- add these entities to the random ammo table even if they might
+        -- not have a spawn type defined
+        ammoTable[#ammoTable + 1] = ammo
 
-		if not spawnType then continue end
+        if not spawnType then
+            continue
+        end
 
-		ammoForSpawns[spawnType] = ammoForSpawns[spawnType] or {}
-		ammoForSpawns[spawnType][#ammoForSpawns[spawnType] + 1] = ammo
-	end
+        ammoForSpawns[spawnType] = ammoForSpawns[spawnType] or {}
+        ammoForSpawns[spawnType][#ammoForSpawns[spawnType] + 1] = ammo
+    end
 
-	return ammoForSpawns, ammoTable
+    return ammoForSpawns, ammoTable
 end
 
 ---
@@ -111,12 +121,14 @@ end
 -- @param Player ply
 -- @realm shared
 function WEPS.DisguiseToggle(ply)
-	if not IsValid(ply) or not ply:IsActive() then return end
+    if not IsValid(ply) or not ply:IsActive() then
+        return
+    end
 
-	if not ply:GetNWBool("disguised", false) then
-		RunConsoleCommand("ttt_set_disguise", "1")
-	else
-		RunConsoleCommand("ttt_set_disguise", "0")
-	end
+    if not ply:GetNWBool("disguised", false) then
+        RunConsoleCommand("ttt_set_disguise", "1")
+    else
+        RunConsoleCommand("ttt_set_disguise", "0")
+    end
 end
 concommand.Add("ttt_toggle_disguise", WEPS.DisguiseToggle)

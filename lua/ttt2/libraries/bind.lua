@@ -5,9 +5,9 @@
 -- @module bind
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 local tableInsert = table.insert
@@ -23,159 +23,213 @@ bind = bind or {}
 bind.bindings = bind.bindings or {}
 bind.registry = bind.registry or {}
 bind.settingsBindings = bind.settingsBindings or {}
-bind.settingsBindingsCategories = bind.settingsBindingsCategories or {
-	"header_bindings_ttt2",
-	"header_bindings_other"
-}
+bind.settingsBindingsCategories = bind.settingsBindingsCategories
+    or {
+        "header_bindings_ttt2",
+        "header_bindings_other",
+    }
 
 ---
 -- @internal
 local function DBCreateBindsTable()
-	if not sql.TableExists(BIND_TABLE_NAME) then
-		local result = sql.Query("CREATE TABLE " .. BIND_TABLE_NAME .. " (guid TEXT, name TEXT, button TEXT)")
+    if not sql.TableExists(BIND_TABLE_NAME) then
+        local result =
+            sql.Query("CREATE TABLE " .. BIND_TABLE_NAME .. " (guid TEXT, name TEXT, button TEXT)")
 
-		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Could not create the database table...")
+        if result == false then
+            ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Could not create the database table...")
 
-			return false
-		end
-	end
+            return false
+        end
+    end
 
-	return true
+    return true
 end
 
 ---
 -- @internal
 local function DBCreateDefaultBindsFlagTable()
-	if not sql.TableExists(BIND_FLAG_TABLE_NAME) then
-		local result = sql.Query("CREATE TABLE " .. BIND_FLAG_TABLE_NAME .. " (guid TEXT, name TEXT)")
+    if not sql.TableExists(BIND_FLAG_TABLE_NAME) then
+        local result =
+            sql.Query("CREATE TABLE " .. BIND_FLAG_TABLE_NAME .. " (guid TEXT, name TEXT)")
 
-		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Could not create the flag database table...")
+        if result == false then
+            ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Could not create the flag database table...")
 
-			return false
-		end
-	end
+            return false
+        end
+    end
 
-	return true
+    return true
 end
 
 ---
 -- @internal
 local function SaveBinding(name, button)
-	if DBCreateBindsTable() then
-		local result = sql.Query("INSERT INTO " .. BIND_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
+    if DBCreateBindsTable() then
+        local result = sql.Query(
+            "INSERT INTO "
+                .. BIND_TABLE_NAME
+                .. " VALUES('"
+                .. LocalPlayer():SteamID64()
+                .. "', "
+                .. sql.SQLStr(name)
+                .. ", "
+                .. sql.SQLStr(button)
+                .. ")"
+        )
 
-		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
-		end
-	end
+        if result == false then
+            ErrorNoHaltWithStack("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
+        end
+    end
 end
 
 ---
 -- @internal
 local function DBRemoveBinding(name, button)
-	if DBCreateBindsTable() then
-		local result = sql.Query("DELETE FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
+    if DBCreateBindsTable() then
+        local result = sql.Query(
+            "DELETE FROM "
+                .. BIND_TABLE_NAME
+                .. " WHERE guid = '"
+                .. LocalPlayer():SteamID64()
+                .. "' AND name = "
+                .. sql.SQLStr(name)
+                .. " AND button = "
+                .. sql.SQLStr(button)
+        )
 
-		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
-		end
-	end
+        if result == false then
+            ErrorNoHaltWithStack(
+                "[TTT2][BIND][ERROR] Wasn't able to remove binding from database..."
+            )
+        end
+    end
 end
 
 ---
 -- @internal
 local function DBSetDefaultAppliedFlag(name)
-	if DBCreateDefaultBindsFlagTable() then
-		local result = sql.Query("INSERT INTO " .. BIND_FLAG_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ")")
+    if DBCreateDefaultBindsFlagTable() then
+        local result = sql.Query(
+            "INSERT INTO "
+                .. BIND_FLAG_TABLE_NAME
+                .. " VALUES('"
+                .. LocalPlayer():SteamID64()
+                .. "', "
+                .. sql.SQLStr(name)
+                .. ")"
+        )
 
-		if result == false then
-			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to save binding flag to database...")
-		end
-	end
+        if result == false then
+            ErrorNoHaltWithStack(
+                "[TTT2][BIND][ERROR] Wasn't able to save binding flag to database..."
+            )
+        end
+    end
 end
 
 ---
 -- @internal
 local function WasDefaultApplied(name)
-	if DBCreateDefaultBindsFlagTable() then
-		local result = sql.Query("SELECT * FROM " .. BIND_FLAG_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name))
+    if DBCreateDefaultBindsFlagTable() then
+        local result = sql.Query(
+            "SELECT * FROM "
+                .. BIND_FLAG_TABLE_NAME
+                .. " WHERE guid = '"
+                .. LocalPlayer():SteamID64()
+                .. "' AND name = "
+                .. sql.SQLStr(name)
+        )
 
-		return istable(result)
-	end
+        return istable(result)
+    end
 
-	return false
+    return false
 end
 
 ---
 -- @internal
 local function TTT2LoadBindings()
-	if DBCreateBindsTable() then
-		local result = sql.Query("SELECT * FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
+    if DBCreateBindsTable() then
+        local result = sql.Query(
+            "SELECT * FROM "
+                .. BIND_TABLE_NAME
+                .. " WHERE guid = '"
+                .. LocalPlayer():SteamID64()
+                .. "'"
+        )
 
-		if istable(result) then
-			local resultCount = #result
+        if istable(result) then
+            local resultCount = #result
 
-			for i = 1, resultCount do
-				local tbl = result[i]
-				local tmp = tbl.button
+            for i = 1, resultCount do
+                local tbl = result[i]
+                local tmp = tbl.button
 
-				bind.RemoveAll(tbl.name, false)
+                bind.RemoveAll(tbl.name, false)
 
-				bind.bindings[tmp] = bind.bindings[tmp] or {}
+                bind.bindings[tmp] = bind.bindings[tmp] or {}
 
-				tableInsert(bind.bindings[tmp], tbl.name)
-			end
+                tableInsert(bind.bindings[tmp], tbl.name)
+            end
 
-			print("[TTT2][BIND] Loaded bindings...")
-		end
-	end
+            Dev(1, "[TTT2][BIND] Loaded bindings...")
+        end
+    end
 
-	-- Try assigning the default key bind once if none is defined
-	for name in pairs(bind.registry) do
-		local item = bind.registry[name]
+    -- Try assigning the default key bind once if none is defined
+    for name in pairs(bind.registry) do
+        local item = bind.registry[name]
 
-		if item.defaultKey and not WasDefaultApplied(name) then
-			if bind.Find(name) == KEY_NONE then
-				bind.Set(item.defaultKey, name, true)
-			end
+        if item.defaultKey and not WasDefaultApplied(name) then
+            if bind.Find(name) == KEY_NONE then
+                bind.Set(item.defaultKey, name, true)
+            end
 
-			-- We tried to assign the default, but a bind was already present, so do not retry
-			-- and always set the applied flag.
-			DBSetDefaultAppliedFlag(name)
-		end
-	end
+            -- We tried to assign the default, but a bind was already present, so do not retry
+            -- and always set the applied flag.
+            DBSetDefaultAppliedFlag(name)
+        end
+    end
 end
 
 ---
 -- @internal
 local function TTT2BindCheckThink()
-	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
-	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or vguihandler.IsBlockingBindings() then return end
+    -- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
+    if
+        vgui.GetKeyboardFocus() ~= nil
+        or LocalPlayer():IsTyping()
+        or gui.IsConsoleVisible()
+        or vguihandler.IsBlockingBindings()
+    then
+        return
+    end
 
-	for btn, tbl in pairs(bind.bindings) do
-		local cache = input.IsButtonDown(btn)
+    for btn, tbl in pairs(bind.bindings) do
+        local cache = input.IsButtonDown(btn)
 
-		if cache and FirstPressed[btn] then
-			for _, name in pairs(tbl) do
-				if bind.registry[name] and isfunction(bind.registry[name].OnPressed) then
-					bind.registry[name].OnPressed()
-				end
-			end
-		end
+        if cache and FirstPressed[btn] then
+            for _, name in pairs(tbl) do
+                if bind.registry[name] and isfunction(bind.registry[name].OnPressed) then
+                    bind.registry[name].OnPressed()
+                end
+            end
+        end
 
-		if not cache and WasPressed[btn] then
-			for _, name in pairs(tbl) do
-				if bind.registry[name] and isfunction(bind.registry[name].OnReleased) then
-					bind.registry[name].OnReleased()
-				end
-			end
-		end
+        if not cache and WasPressed[btn] then
+            for _, name in pairs(tbl) do
+                if bind.registry[name] and isfunction(bind.registry[name].OnReleased) then
+                    bind.registry[name].OnReleased()
+                end
+            end
+        end
 
-		WasPressed[btn] = cache
-		FirstPressed[btn] = not cache
-	end
+        WasPressed[btn] = cache
+        FirstPressed[btn] = not cache
+    end
 end
 
 hook.Add("Think", "TTT2CallBindings", TTT2BindCheckThink)
@@ -186,7 +240,7 @@ hook.Add("InitPostEntity", "TTT2LoadBindings", TTT2LoadBindings)
 -- @return table
 -- @realm client
 function bind.GetTable()
-	return bind.bindings
+    return bind.bindings
 end
 
 ---
@@ -196,19 +250,22 @@ end
 -- @return[default=KEY_NONE] number
 -- @realm client
 function bind.Find(name)
-	if not name then return end
+    if not name then
+        return
+    end
 
-	for btn, tbl in pairs(bind.bindings) do
-		for _, id in pairs(tbl) do
-			if id ~= name then continue end
+    for btn, tbl in pairs(bind.bindings) do
+        for _, id in pairs(tbl) do
+            if id ~= name then
+                continue
+            end
 
-			return btn
-		end
-	end
+            return btn
+        end
+    end
 
-	return KEY_NONE
+    return KEY_NONE
 end
-
 
 ---
 -- Finds all buttons associated with a specific binding and returns
@@ -217,19 +274,23 @@ end
 -- @return table
 -- @realm client
 function bind.FindAll(name)
-	if not name then return end
+    if not name then
+        return
+    end
 
-	local bt = {}
+    local bt = {}
 
-	for btn, tbl in pairs(bind.bindings) do
-		for _, id in pairs(tbl) do
-			if id ~= name then continue end
+    for btn, tbl in pairs(bind.bindings) do
+        for _, id in pairs(tbl) do
+            if id ~= name then
+                continue
+            end
 
-			tableInsert(bt, btn)
-		end
-	end
+            tableInsert(bt, btn)
+        end
+    end
 
-	return bt
+    return bt
 end
 
 ---
@@ -238,17 +299,19 @@ end
 -- @return boolean
 -- @realm client
 function bind.IsPressed(name)
-	if not name then return end
+    if not name then
+        return
+    end
 
-	local buttons = bind.FindAll(name)
+    local buttons = bind.FindAll(name)
 
-	for i = 1, #buttons do
-		if WasPressed[buttons[i]] then
-			return true
-		end
-	end
+    for i = 1, #buttons do
+        if WasPressed[buttons[i]] then
+            return true
+        end
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -258,17 +321,21 @@ end
 -- @param boolean persistent
 -- @realm client
 function bind.Remove(btn, name, persistent)
-	if persistent then
-		DBRemoveBinding(name, btn) -- Still try to delete from DB
-	end
+    if persistent then
+        DBRemoveBinding(name, btn) -- Still try to delete from DB
+    end
 
-	if not bind.bindings[btn] then return end
+    if not bind.bindings[btn] then
+        return
+    end
 
-	for i, v in pairs(bind.bindings[btn]) do
-		if v ~= name then continue end
+    for i, v in pairs(bind.bindings[btn]) do
+        if v ~= name then
+            continue
+        end
 
-		bind.bindings[btn][i] = nil
-	end
+        bind.bindings[btn][i] = nil
+    end
 end
 
 ---
@@ -277,13 +344,13 @@ end
 -- @param boolean persistent
 -- @realm client
 function bind.RemoveAll(name, persistent)
-	local foundBinds = bind.FindAll(name)
-	local foundBindsCount = #foundBinds
+    local foundBinds = bind.FindAll(name)
+    local foundBindsCount = #foundBinds
 
-	-- clear all bindings
-	for i = 1, foundBindsCount do
-		bind.Remove(foundBinds[i], name, persistent)
-	end
+    -- clear all bindings
+    for i = 1, foundBindsCount do
+        bind.Remove(foundBinds[i], name, persistent)
+    end
 end
 
 ---
@@ -294,28 +361,29 @@ end
 -- @param[optchain] number defaultKey
 -- @realm client
 function bind.AddSettingsBinding(name, label, category, defaultKey)
-	if not category then
-		category = "header_bindings_other"
-	end
+    if not category then
+        category = "header_bindings_other"
+    end
 
-	if not table.HasValue(bind.settingsBindingsCategories, category) then
-		bind.settingsBindingsCategories[#bind.settingsBindingsCategories + 1] = category
-	end
+    if not table.HasValue(bind.settingsBindingsCategories, category) then
+        bind.settingsBindingsCategories[#bind.settingsBindingsCategories + 1] = category
+    end
 
-	-- check if it already exists
-	for i = 1, #bind.settingsBindings do
-		local tbl = bind.settingsBindings[i]
+    -- check if it already exists
+    for i = 1, #bind.settingsBindings do
+        local tbl = bind.settingsBindings[i]
 
-		if tbl.name == name then
-			tbl.label = label -- update
-			tbl.category = category
-			tbl.defaultKey = defaultKey
+        if tbl.name == name then
+            tbl.label = label -- update
+            tbl.category = category
+            tbl.defaultKey = defaultKey
 
-			return -- don't insert again
-		end
-	end
+            return -- don't insert again
+        end
+    end
 
-	bind.settingsBindings[#bind.settingsBindings + 1] = {name = name, label = label, category = category, defaultKey = defaultKey}
+    bind.settingsBindings[#bind.settingsBindings + 1] =
+        { name = name, label = label, category = category, defaultKey = defaultKey }
 end
 
 ---
@@ -333,17 +401,19 @@ end
 -- @param[optchain] number defaultKey
 -- @realm client
 function bind.Register(name, OnPressed, OnReleased, dontShowOrCategory, settingsLabel, defaultKey)
-	if not isfunction(OnPressed) and not isfunction(OnReleased) then return end
+    if not isfunction(OnPressed) and not isfunction(OnReleased) then
+        return
+    end
 
-	bind.registry[name] = {
-		OnPressed = OnPressed,
-		OnReleased = OnReleased,
-		defaultKey = defaultKey
-	}
+    bind.registry[name] = {
+        OnPressed = OnPressed,
+        OnReleased = OnReleased,
+        defaultKey = defaultKey,
+    }
 
-	if dontShowOrCategory ~= true then
-		bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory, defaultKey)
-	end
+    if dontShowOrCategory ~= true then
+        bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory, defaultKey)
+    end
 end
 
 ---
@@ -354,15 +424,17 @@ end
 -- @param boolean persistent
 -- @realm client
 function bind.Add(btn, name, persistent)
-	if not name or name == "" or not isnumber(btn) then return end
+    if not name or name == "" or not isnumber(btn) then
+        return
+    end
 
-	bind.bindings[btn] = bind.bindings[btn] or {}
+    bind.bindings[btn] = bind.bindings[btn] or {}
 
-	tableInsert(bind.bindings[btn], name)
+    tableInsert(bind.bindings[btn], name)
 
-	if persistent then
-		SaveBinding(name, btn)
-	end
+    if persistent then
+        SaveBinding(name, btn)
+    end
 end
 
 ---
@@ -373,10 +445,12 @@ end
 -- @param boolean persistent
 -- @realm client
 function bind.Set(btn, name, persistent)
-	if not name or name == "" or not isnumber(btn) then return end
+    if not name or name == "" or not isnumber(btn) then
+        return
+    end
 
-	bind.RemoveAll(name, persistent)
-	bind.Add(btn, name, persistent)
+    bind.RemoveAll(name, persistent)
+    bind.Add(btn, name, persistent)
 end
 
 ---
@@ -384,7 +458,7 @@ end
 -- @return table
 -- @realm client
 function bind.GetSettingsBindings()
-	return bind.settingsBindings
+    return bind.settingsBindings
 end
 
 ---
@@ -392,5 +466,5 @@ end
 -- @return table
 -- @realm client
 function bind.GetSettingsBindingsCategories()
-	return bind.settingsBindingsCategories
+    return bind.settingsBindingsCategories
 end

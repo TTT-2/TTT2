@@ -18,24 +18,31 @@ targetid.Initialize()
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvMinimalisticTid = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableSpectatorsoutline = CreateConVar("ttt2_enable_spectatorsoutline", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
 surface.CreateAdvancedFont("TargetID_Key", { font = "Trebuchet24", size = 26, weight = 900 })
 surface.CreateAdvancedFont("TargetID_Title", { font = "Trebuchet24", size = 20, weight = 900 })
 surface.CreateAdvancedFont("TargetID_Subtitle", { font = "Trebuchet24", size = 17, weight = 300 })
-surface.CreateAdvancedFont("TargetID_Description", { font = "Trebuchet24", size = 15, weight = 300 })
+surface.CreateAdvancedFont(
+    "TargetID_Description",
+    { font = "Trebuchet24", size = 15, weight = 300 }
+)
 
 -- keep this font for compatibility reasons
 surface.CreateFont("TargetIDSmall2", { font = "TargetID", size = 16, weight = 1000 })
@@ -69,53 +76,45 @@ local sizeIconOverHeadIcon = 0.7 * sizeOverHeadIcon
 -- @param Color colorRole The role color for the background
 -- @realm client
 function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
-	local ang = client:EyeAngles()
-	local pos = ply:GetPos() + ply:GetHeightVector()
-	pos.z = pos.z + offsetOverHeadIcon
+    local ang = client:EyeAngles()
+    local pos = ply:GetPos() + ply:GetHeightVector()
+    pos.z = pos.z + offsetOverHeadIcon
 
-	local shift = Vector(0, shiftOverHeadIcon, 0)
-	shift:Rotate(ang)
-	pos:Add(shift)
+    local shift = Vector(0, shiftOverHeadIcon, 0)
+    shift:Rotate(ang)
+    pos:Add(shift)
 
-	ang.pitch = 90
-	ang:RotateAroundAxis(ang:Up(), 90)
-	ang:RotateAroundAxis(ang:Right(), 180)
+    ang.pitch = 90
+    ang:RotateAroundAxis(ang:Up(), 90)
+    ang:RotateAroundAxis(ang:Right(), 180)
 
-	cam.Start3D2D(pos, ang, scaleOverHeadIcon)
-		draw.FilteredTexture(
-			0,
-			0,
-			sizeOverHeadIcon,
-			sizeOverHeadIcon,
-			materialBase,
-			255,
-			colorRole
-		)
-		draw.FilteredTexture(
-			0,
-			0,
-			sizeOverHeadIcon,
-			sizeOverHeadIcon,
-			materialBaseOverlay,
-			255,
-			COLOR_WHITE
-		)
-		draw.FilteredShadowedTexture(
-			xShiftIconOverHeadIcon,
-			yShiftIconOverHeadIcon,
-			sizeIconOverHeadIcon,
-			sizeIconOverHeadIcon,
-			iconRole,
-			255,
-			util.GetDefaultColor(colorRole)
-		)
-	cam.End3D2D()
+    cam.Start3D2D(pos, ang, scaleOverHeadIcon)
+    draw.FilteredTexture(0, 0, sizeOverHeadIcon, sizeOverHeadIcon, materialBase, 255, colorRole)
+    draw.FilteredTexture(
+        0,
+        0,
+        sizeOverHeadIcon,
+        sizeOverHeadIcon,
+        materialBaseOverlay,
+        255,
+        COLOR_WHITE
+    )
+    draw.FilteredShadowedTexture(
+        xShiftIconOverHeadIcon,
+        yShiftIconOverHeadIcon,
+        sizeIconOverHeadIcon,
+        sizeIconOverHeadIcon,
+        iconRole,
+        255,
+        util.GetDefaultColor(colorRole)
+    )
+    cam.End3D2D()
 end
 
 local function DistanceSorter(a, b)
-	local clientPos = LocalPlayer():GetPos()
+    local clientPos = LocalPlayer():GetPos()
 
-	return clientPos:Distance(a.ply:GetPos()) > clientPos:Distance(b.ply:GetPos())
+    return clientPos:Distance(a.ply:GetPos()) > clientPos:Distance(b.ply:GetPos())
 end
 
 ---
@@ -131,122 +130,133 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostDrawTranslucentRenderables
 -- @local
 function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
-	local client = LocalPlayer()
-	local clientTarget = client:GetObserverTarget()
-	local clientObsMode = client:GetObserverMode()
-	local plys = player.GetAll()
+    local client = LocalPlayer()
+    local clientTarget = client:GetObserverTarget()
+    local clientObsMode = client:GetObserverMode()
+    local plys = player.GetAll()
 
-	if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
-		cam.Start3D(EyePos(), EyeAngles())
+    if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
+        cam.Start3D(EyePos(), EyeAngles())
 
-		for i = 1, #plys do
-			local ply = plys[i]
-			local tgt = ply:GetObserverTarget()
+        for i = 1, #plys do
+            local ply = plys[i]
+            local tgt = ply:GetObserverTarget()
 
-			if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
-				render.MaterialOverride(materialPropspecOutline)
-				render.SuppressEngineLighting(true)
-				render.SetColorModulation(1, 0.5, 0)
+            if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
+                render.MaterialOverride(materialPropspecOutline)
+                render.SuppressEngineLighting(true)
+                render.SetColorModulation(1, 0.5, 0)
 
-				tgt:SetModelScale(1.05, 0)
-				tgt:DrawModel()
+                tgt:SetModelScale(1.05, 0)
+                tgt:DrawModel()
 
-				render.SetColorModulation(1, 1, 1)
-				render.SuppressEngineLighting(false)
-				render.MaterialOverride(nil)
-			end
-		end
+                render.SetColorModulation(1, 1, 1)
+                render.SuppressEngineLighting(false)
+                render.MaterialOverride(nil)
+            end
+        end
 
-		cam.End3D()
-	end
+        cam.End3D()
+    end
 
-	-- OVERHEAD ICONS
-	if not cvEnableOverheadicons:GetBool() then return end
+    -- OVERHEAD ICONS
+    if not cvEnableOverheadicons:GetBool() then
+        return
+    end
 
-	local plysWithIcon = {}
+    local plysWithIcon = {}
 
-	for i = 1, #plys do
-		local ply = plys[i]
-		local roleData = ply:GetSubRoleData()
+    for i = 1, #plys do
+        local ply = plys[i]
+        local roleData = ply:GetSubRoleData()
 
-		local shouldDrawDefault = ply:IsActive()
-			and ply:HasRole()
-			and (not client:IsActive() or ply:IsInTeam(client) or roleData.isPublicRole)
-			and not roleData.avoidTeamIcons
-			and ply ~= client
-			and not (clientTarget == ply and IsPlayer(clientTarget) and clientObsMode == OBS_MODE_IN_EYE)
+        local shouldDrawDefault = ply:IsActive()
+            and ply:HasRole()
+            and (not client:IsActive() or ply:IsInTeam(client) or roleData.isPublicRole)
+            and not roleData.avoidTeamIcons
+            and ply ~= client
+            and not (
+                clientTarget == ply
+                and IsPlayer(clientTarget)
+                and clientObsMode == OBS_MODE_IN_EYE
+            )
 
-		---
-		-- @realm client
-		local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
+        ---
+        -- @realm client
+        -- stylua: ignore
+        local shouldDraw, material, color = hook.Run("TTT2ModifyOverheadIcon", ply, shouldDrawDefault)
 
-		if shouldDraw == false or not shouldDrawDefault then
-			continue
-		end
+        if shouldDraw == false or not shouldDrawDefault then
+            continue
+        end
 
-		plysWithIcon[#plysWithIcon + 1] = {
-			ply = ply,
-			material = material or roleData.iconMaterial,
-			color = color or ply:GetRoleColor()
-		}
-	end
+        plysWithIcon[#plysWithIcon + 1] = {
+            ply = ply,
+            material = material or roleData.iconMaterial,
+            color = color or ply:GetRoleColor(),
+        }
+    end
 
-	table.sort(plysWithIcon, DistanceSorter)
+    table.sort(plysWithIcon, DistanceSorter)
 
-	for i = 1, #plysWithIcon do
-		local plyWithIcon = plysWithIcon[i]
+    for i = 1, #plysWithIcon do
+        local plyWithIcon = plysWithIcon[i]
 
-		DrawOverheadRoleIcon(client, plyWithIcon.ply, plyWithIcon.material, plyWithIcon.color)
-	end
+        DrawOverheadRoleIcon(client, plyWithIcon.ply, plyWithIcon.material, plyWithIcon.color)
+    end
 end
 
 ---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
-	if not client:IsSpec() and GetRoundState() ~= ROUND_POST then
-		return
-	end
+    if not client:IsSpec() and GetRoundState() ~= ROUND_POST then
+        return
+    end
 
-	local tgt, scrpos, color, _
-	local plys = player.GetAll()
+    local tgt, scrpos, color, _
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		if ply:IsSpec() then
-			color = colorPropSpecLabel
+        if ply:IsSpec() then
+            color = colorPropSpecLabel
 
-			tgt = ply:GetObserverTarget()
+            tgt = ply:GetObserverTarget()
 
-			if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
-				scrpos = tgt:GetPos():ToScreen()
-			else
-				scrpos = nil
-			end
-		else
-			_, color = util.HealthToString(ply:Health(), ply:GetMaxHealth())
+            if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
+                scrpos = tgt:GetPos():ToScreen()
+            else
+                scrpos = nil
+            end
+        else
+            local clientTarget = client:GetObserverTarget()
+            if ply == client or (clientTarget == ply and IsPlayer(clientTarget)) then
+                continue
+            end
+            _, color = util.HealthToString(ply:Health(), ply:GetMaxHealth())
 
-			scrpos = ply:EyePos()
-			scrpos.z = scrpos.z + 20
-			scrpos = scrpos:ToScreen()
-		end
+            scrpos = ply:EyePos()
+            scrpos.z = scrpos.z + 20
+            scrpos = scrpos:ToScreen()
+        end
 
-		if scrpos == nil or util.IsOffScreen(scrpos) then
-			continue
-		end
+        if scrpos == nil or util.IsOffScreen(scrpos) then
+            continue
+        end
 
-		draw.AdvancedText(
-			ply:Nick(),
-			"PureSkinMSTACKMsg",
-			scrpos.x,
-			scrpos.y,
-			color,
-			TEXT_ALIGN_CENTER,
-			TEXT_ALIGN_CENTER,
-			true,
-			appearance.GetGlobalScale()
-		)
-	end
+        draw.AdvancedText(
+            ply:Nick(),
+            "PureSkinMSTACKMsg",
+            scrpos.x,
+            scrpos.y,
+            color,
+            TEXT_ALIGN_CENTER,
+            TEXT_ALIGN_CENTER,
+            true,
+            appearance.GetGlobalScale()
+        )
+    end
 end
 
 ---
@@ -256,236 +266,260 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDDrawTargetID
 -- @local
 function GM:HUDDrawTargetID()
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTPropSpec") then
-		DrawPropSpecLabels(client)
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTTPropSpec") then
+        DrawPropSpecLabels(client)
+    end
 
-	local ent, unchangedEnt, distance
-	local startpos = client:EyePos()
-	local direction = client:GetAimVector()
-	local filter = client:GetObserverMode() == OBS_MODE_IN_EYE and { client, client:GetObserverTarget() } or client
+    local ent, unchangedEnt, distance
+    local startpos = client:EyePos()
+    local direction = client:GetAimVector()
+    local filter = client:GetObserverMode() == OBS_MODE_IN_EYE
+            and { client, client:GetObserverTarget() }
+        or client
 
-	ent, distance = targetid.FindEntityAlongView(startpos, direction, filter)
+    ent, distance = targetid.FindEntityAlongView(startpos, direction, filter)
 
-	---
-	-- @realm client
-	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
-	if changedEnt then
-		unchangedEnt = ent
-		ent = changedEnt
-	end
+    if changedEnt then
+        unchangedEnt = ent
+        ent = changedEnt
+    end
 
-	-- make sure it is a valid entity
-	if not IsValid(ent) or ent.NoTarget then
-		return
-	end
+    -- make sure it is a valid entity
+    if not IsValid(ent) or ent.NoTarget then
+        return
+    end
 
-	-- call internal targetID functions first so the data can be modified by addons
-	local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
+    -- call internal targetID functions first so the data can be modified by addons
+    local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
 
-	targetid.HUDDrawTargetIDSpawnEdit(tData)
-	targetid.HUDDrawTargetIDTButtons(tData)
-	targetid.HUDDrawTargetIDWeapons(tData)
-	targetid.HUDDrawTargetIDPlayers(tData)
-	targetid.HUDDrawTargetIDRagdolls(tData)
-	targetid.HUDDrawTargetIDDoors(tData)
-	targetid.HUDDrawTargetIDDNAScanner(tData)
+    targetid.HUDDrawTargetIDSpawnEdit(tData)
+    targetid.HUDDrawTargetIDTButtons(tData)
+    targetid.HUDDrawTargetIDWeapons(tData)
+    targetid.HUDDrawTargetIDPlayers(tData)
+    targetid.HUDDrawTargetIDRagdolls(tData)
+    targetid.HUDDrawTargetIDDoors(tData)
+    targetid.HUDDrawTargetIDDNAScanner(tData)
 
-	-- add hints to the focused entity (deprecated method of adding stuff to targetID)
-	local hint = ent.TargetIDHint
+    -- add hints to the focused entity (deprecated method of adding stuff to targetID)
+    local hint = ent.TargetIDHint
 
-	if hint and hint.hint then
-		tData:AddDescriptionLine(
-			hint.fmt(ent, hint.hint),
-			COLOR_LGRAY
-		)
-	end
+    if hint and hint.hint then
+        tData:AddDescriptionLine(hint.fmt(ent, hint.hint), COLOR_LGRAY)
+    end
 
-	---
-	-- now run a hook that can be used by addon devs that changes the appearance
-	-- of the targetid
-	-- @realm client
-	hook.Run("TTTRenderEntityInfo", tData)
+    ---
+    -- now run a hook that can be used by addon devs that changes the appearance
+    -- of the targetid
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("TTTRenderEntityInfo", tData)
 
-	local data = tData.data
-	local params = tData.params
+    local data = tData.data
+    local params = tData.params
 
-	-- draws an outline around the entity if defined
-	if params.drawOutline and cvDrawHalo:GetBool() then
-		outline.Add(data.ent, appearance.SelectFocusColor(params.outlineColor), OUTLINE_MODE_VISIBLE)
-	end
+    -- draws an outline around the entity if defined
+    if params.drawOutline and cvDrawHalo:GetBool() then
+        outline.Add(
+            data.ent,
+            appearance.SelectFocusColor(params.outlineColor),
+            OUTLINE_MODE_VISIBLE
+        )
+    end
 
-	if not params.drawInfo then
-		return
-	end
+    if not params.drawInfo then
+        return
+    end
 
-	-- render on display text
-	local pad = 4
-	local pad2 = pad * 2
+    -- render on display text
+    local pad = 4
+    local pad2 = pad * 2
 
-	-- draw key and keybox
-	-- the keyboxsize gets used as reference value since in most cases a key will be rendered
-	-- therefore the key size gets calculated every time, even if no key is set
-	local key_string = string.upper(params.displayInfo.key and input.GetKeyName(params.displayInfo.key) or "")
+    -- draw key and keybox
+    -- the keyboxsize gets used as reference value since in most cases a key will be rendered
+    -- therefore the key size gets calculated every time, even if no key is set
+    local key_string =
+        string.upper(params.displayInfo.key and input.GetKeyName(params.displayInfo.key) or "")
 
-	local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
+    local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
 
-	local key_box_w = key_string_w + 5 * pad
-	local key_box_h = key_string_h + pad2
-	local key_box_x = params.refPosition.x - key_box_w - pad2 - 2 -- -2 because of border width
-	local key_box_y = params.refPosition.y
+    local key_box_w = key_string_w + 5 * pad
+    local key_box_h = key_string_h + pad2
+    local key_box_x = params.refPosition.x - key_box_w - pad2 - 2 -- -2 because of border width
+    local key_box_y = params.refPosition.y
 
-	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
-	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
+    local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
+    local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
-	if params.displayInfo.key then
-		drawsc.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
+    if params.displayInfo.key then
+        drawsc.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
 
-		drawsc.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-		drawsc.AdvancedShadowedText(
-			key_string,
-			"TargetID_Key",
-			key_string_x,
-			key_string_y,
-			COLOR_WHITE,
-			TEXT_ALIGN_CENTER,
-			TEXT_ALIGN_CENTER
-		)
-	end
+        drawsc.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+        drawsc.AdvancedShadowedText(
+            key_string,
+            "TargetID_Key",
+            key_string_x,
+            key_string_y,
+            COLOR_WHITE,
+            TEXT_ALIGN_CENTER,
+            TEXT_ALIGN_CENTER
+        )
+    end
 
-	-- draw icon
-	local icon_amount = #params.displayInfo.icon
-	local icon_x, icon_y
+    -- draw icon
+    local icon_amount = #params.displayInfo.icon
+    local icon_x, icon_y
 
-	if icon_amount > 0 then
-		icon_x = params.refPosition.x - key_box_h - pad2
-		icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or key_box_y + 1
+    if icon_amount > 0 then
+        icon_x = params.refPosition.x - key_box_h - pad2
+        icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or key_box_y + 1
 
-		for i = 1, icon_amount do
-			local icon = params.displayInfo.icon[i]
-			local color = icon.color or COLOR_WHITE
+        for i = 1, icon_amount do
+            local icon = params.displayInfo.icon[i]
+            local color = icon.color or COLOR_WHITE
 
-			drawsc.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
+            drawsc.FilteredShadowedTexture(
+                icon_x,
+                icon_y,
+                key_box_h,
+                key_box_h,
+                icon.material,
+                color.a,
+                color
+            )
 
-			icon_y = icon_y + key_box_h
-		end
-	end
+            icon_y = icon_y + key_box_h
+        end
+    end
 
-	-- draw title
-	local title_string = params.displayInfo.title.text or ""
+    -- draw title
+    local title_string = params.displayInfo.title.text or ""
 
-	local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
+    local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
-	local title_string_x = params.refPosition.x + pad2
-	local title_string_y = key_box_y + title_string_h - 4
+    local title_string_x = params.refPosition.x + pad2
+    local title_string_y = key_box_y + title_string_h - 4
 
-	for i = 1, #params.displayInfo.title.icons do
-		drawsc.FilteredShadowedTexture(
-			title_string_x,
-			title_string_y - 16,
-			14,
-			14,
-			params.displayInfo.title.icons[i],
-			params.displayInfo.title.color.a,
-			params.displayInfo.title.color
-		)
+    for i = 1, #params.displayInfo.title.icons do
+        drawsc.FilteredShadowedTexture(
+            title_string_x,
+            title_string_y - 16,
+            14,
+            14,
+            params.displayInfo.title.icons[i],
+            params.displayInfo.title.color.a,
+            params.displayInfo.title.color
+        )
 
-		title_string_x = title_string_x + 18
-	end
+        title_string_x = title_string_x + 18
+    end
 
-	drawsc.AdvancedShadowedText(
-		title_string,
-		"TargetID_Title",
-		title_string_x,
-		title_string_y,
-		params.displayInfo.title.color,
-		TEXT_ALIGN_LEFT,
-		TEXT_ALIGN_BOTTOM
-	)
+    drawsc.AdvancedShadowedText(
+        title_string,
+        "TargetID_Title",
+        title_string_x,
+        title_string_y,
+        params.displayInfo.title.color,
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_BOTTOM
+    )
 
-	-- draw subtitle
-	local subtitle_string = params.displayInfo.subtitle.text or ""
+    -- draw subtitle
+    local subtitle_string = params.displayInfo.subtitle.text or ""
 
-	local subtitle_string_x = params.refPosition.x + pad2
-	local subtitle_string_y = key_box_y + key_box_h + 2
+    local subtitle_string_x = params.refPosition.x + pad2
+    local subtitle_string_y = key_box_y + key_box_h + 2
 
-	for i = 1, #params.displayInfo.subtitle.icons do
-		drawsc.FilteredShadowedTexture(
-			subtitle_string_x,
-			subtitle_string_y - 14,
-			12,
-			12,
-			params.displayInfo.subtitle.icons[i],
-			params.displayInfo.subtitle.color.a,
-			params.displayInfo.subtitle.color
-		)
+    for i = 1, #params.displayInfo.subtitle.icons do
+        drawsc.FilteredShadowedTexture(
+            subtitle_string_x,
+            subtitle_string_y - 14,
+            12,
+            12,
+            params.displayInfo.subtitle.icons[i],
+            params.displayInfo.subtitle.color.a,
+            params.displayInfo.subtitle.color
+        )
 
-		subtitle_string_x = subtitle_string_x + 16
-	end
+        subtitle_string_x = subtitle_string_x + 16
+    end
 
-	drawsc.AdvancedShadowedText(
-		subtitle_string,
-		"TargetID_Subtitle",
-		subtitle_string_x,
-		subtitle_string_y,
-		params.displayInfo.subtitle.color,
-		TEXT_ALIGN_LEFT,
-		TEXT_ALIGN_BOTTOM
-	)
+    drawsc.AdvancedShadowedText(
+        subtitle_string,
+        "TargetID_Subtitle",
+        subtitle_string_x,
+        subtitle_string_y,
+        params.displayInfo.subtitle.color,
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_BOTTOM
+    )
 
-	-- in cvMinimalisticTid mode, no descriptions should be shown
-	local desc_line_amount, desc_line_h = 0, 0
+    -- in cvMinimalisticTid mode, no descriptions should be shown
+    local desc_line_amount, desc_line_h = 0, 0
 
-	if not cvMinimalisticTid:GetBool() then
-		-- draw description text
-		local desc_lines = params.displayInfo.desc
+    if not cvMinimalisticTid:GetBool() then
+        -- draw description text
+        local desc_lines = params.displayInfo.desc
 
-		local desc_string_x = params.refPosition.x + pad2
-		local desc_string_y = key_box_y + key_box_h + 8 * pad
-		desc_line_h = 17
-		desc_line_amount = #desc_lines
+        local desc_string_x = params.refPosition.x + pad2
+        local desc_string_y = key_box_y + key_box_h + 8 * pad
+        desc_line_h = 17
+        desc_line_amount = #desc_lines
 
-		for i = 1, desc_line_amount do
-			local text = desc_lines[i].text
-			local icons = desc_lines[i].icons
-			local color = desc_lines[i].color
-			local desc_string_x_loop = desc_string_x
+        for i = 1, desc_line_amount do
+            local text = desc_lines[i].text
+            local icons = desc_lines[i].icons
+            local color = desc_lines[i].color
+            local desc_string_x_loop = desc_string_x
 
-			for j = 1, #icons do
-				drawsc.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
+            for j = 1, #icons do
+                drawsc.FilteredShadowedTexture(
+                    desc_string_x_loop,
+                    desc_string_y - 13,
+                    11,
+                    11,
+                    icons[j],
+                    color.a,
+                    color
+                )
 
-				desc_string_x_loop = desc_string_x_loop + 14
-			end
+                desc_string_x_loop = desc_string_x_loop + 14
+            end
 
-			drawsc.AdvancedShadowedText(
-				text,
-				"TargetID_Description",
-				desc_string_x_loop,
-				desc_string_y,
-				color,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_BOTTOM
-			)
-			desc_string_y = desc_string_y + desc_line_h
-		end
-	end
+            drawsc.AdvancedShadowedText(
+                text,
+                "TargetID_Description",
+                desc_string_x_loop,
+                desc_string_y,
+                color,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_BOTTOM
+            )
+            desc_string_y = desc_string_y + desc_line_h
+        end
+    end
 
-	-- draw spacer line
-	local spacer_line_x = params.refPosition.x - 1
-	local spacer_line_y = key_box_y
+    -- draw spacer line
+    local spacer_line_x = params.refPosition.x - 1
+    local spacer_line_y = key_box_y
 
-	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
-	local spacer_line_text_l = key_box_h
-		+ ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+    local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
+    local spacer_line_text_l = key_box_h
+        + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
 
-	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
+    local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l
+        or spacer_line_text_l
 
-	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, COLOR_WHITE)
+    drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, COLOR_WHITE)
 end
 
 ---

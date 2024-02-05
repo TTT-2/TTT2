@@ -3,24 +3,26 @@
 -- @author Mineotopia
 -- @module spawn
 
-if CLIENT then return end -- this is a serverside-ony module
+if CLIENT then
+    return
+end -- this is a serverside-ony module
 
 local Vector = Vector
 local table = table
 local mathSin = math.sin
 local mathCos = math.cos
 
-local spawnPointVariations = {Vector(0, 0, 0)}
+local spawnPointVariations = { Vector(0, 0, 0) }
 
 for i = 0, 360, 22.5 do
-	spawnPointVariations[#spawnPointVariations + 1] = Vector(mathCos(i), mathSin(i), 0)
+    spawnPointVariations[#spawnPointVariations + 1] = Vector(mathCos(i), mathSin(i), 0)
 end
 
 -- returns the player size as a vector
 local function GetPlayerSize(ply)
-	local bottom, top = ply:GetHull()
+    local bottom, top = ply:GetHull()
 
-	return top - bottom
+    return top - bottom
 end
 
 plyspawn = plyspawn or {}
@@ -36,76 +38,81 @@ plyspawn = plyspawn or {}
 -- @return boolean Returns if the spawn point is safe
 -- @realm server
 function plyspawn.IsSpawnPointSafe(ply, pos, force, filter)
-	local sizePlayer = GetPlayerSize(ply)
+    local sizePlayer = GetPlayerSize(ply)
 
-	if not util.IsInWorld(pos) then
-		return false
-	end
+    if not util.IsInWorld(pos) then
+        return false
+    end
 
-	filter = istable(filter) and filter or {filter}
+    filter = istable(filter) and filter or { filter }
 
-	-- the center pos is slightly shifted to the top to prevent ground
-	-- collisions in the walltrace
-	local posCenter = pos + Vector(0, 0, 0.525 * sizePlayer.z)
+    -- the center pos is slightly shifted to the top to prevent ground
+    -- collisions in the walltrace
+    local posCenter = pos + Vector(0, 0, 0.525 * sizePlayer.z)
 
-	-- Make sure there is enough space around the player
-	local traceWalls = util.TraceHull({
-		start = posCenter,
-		endpos = posCenter,
-		mins = -0.5 * sizePlayer,
-		maxs = 0.5 * sizePlayer,
-		filter = function(ent)
-			if not IsValid(ent) or table.HasValue(filter, ent) then
-				return false
-			end
+    -- Make sure there is enough space around the player
+    local traceWalls = util.TraceHull({
+        start = posCenter,
+        endpos = posCenter,
+        mins = -0.5 * sizePlayer,
+        maxs = 0.5 * sizePlayer,
+        filter = function(ent)
+            if not IsValid(ent) or table.HasValue(filter, ent) then
+                return false
+            end
 
-			if ent:HasPassableCollisionGrup() then
-				return false
-			end
+            if ent:HasPassableCollisionGrup() then
+                return false
+            end
 
-			return true
-		end,
-		mask = MASK_SOLID
-	})
+            return true
+        end,
+        mask = MASK_SOLID,
+    })
 
-	if traceWalls.Hit then
-		return false
-	end
+    if traceWalls.Hit then
+        return false
+    end
 
-	-- make sure the new position is on the ground
-	local traceGround = util.TraceLine({
-		start = posCenter,
-		endpos = posCenter - Vector(0, 0, sizePlayer.z),
-		filter = player.GetAll(),
-		mask = MASK_SOLID
-	})
+    -- make sure the new position is on the ground
+    local traceGround = util.TraceLine({
+        start = posCenter,
+        endpos = posCenter - Vector(0, 0, sizePlayer.z),
+        filter = player.GetAll(),
+        mask = MASK_SOLID,
+    })
 
-	if not traceGround.Hit then
-		return false
-	end
+    if not traceGround.Hit then
+        return false
+    end
 
-	local blockingEntities = ents.FindInBox(
-		pos + Vector(-0.5 * sizePlayer.x, -0.5 * sizePlayer.y, 0),
-		pos + sizePlayer
-	)
+    local blockingEntities =
+        ents.FindInBox(pos + Vector(-0.5 * sizePlayer.x, -0.5 * sizePlayer.y, 0), pos + sizePlayer)
 
-	for i = 1, #blockingEntities do
-		local blockingEntity = blockingEntities[i]
+    for i = 1, #blockingEntities do
+        local blockingEntity = blockingEntities[i]
 
-		if not IsValid(blockingEntity) or not blockingEntity:IsPlayer()
-			or not blockingEntity:IsTerror() or not blockingEntity:Alive()
-		then continue end
+        if
+            not IsValid(blockingEntity)
+            or not blockingEntity:IsPlayer()
+            or not blockingEntity:IsTerror()
+            or not blockingEntity:Alive()
+        then
+            continue
+        end
 
-		if table.HasValue(filter, blockingEntity) then continue end
+        if table.HasValue(filter, blockingEntity) then
+            continue
+        end
 
-		if force then
-			blockingEntity:Kill()
-		else
-			return false
-		end
-	end
+        if force then
+            blockingEntity:Kill()
+        else
+            return false
+        end
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -117,18 +124,20 @@ end
 -- @return table A table of position vectors
 -- @realm server
 function plyspawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
-	local sizePlayer = GetPlayerSize(ply)
+    local sizePlayer = GetPlayerSize(ply)
 
-	if not pos then return {} end
+    if not pos then
+        return {}
+    end
 
-	local boundsPlayer = Vector(sizePlayer.x, sizePlayer.y, 0) * 1.5 * (radiusMultiplier or 1)
-	local positions = {}
+    local boundsPlayer = Vector(sizePlayer.x, sizePlayer.y, 0) * 1.5 * (radiusMultiplier or 1)
+    local positions = {}
 
-	for i = 1, #spawnPointVariations do
-		positions[i] = pos + spawnPointVariations[i] * boundsPlayer
-	end
+    for i = 1, #spawnPointVariations do
+        positions[i] = pos + spawnPointVariations[i] * boundsPlayer
+    end
 
-	return positions
+    return positions
 end
 
 ---
@@ -141,15 +150,17 @@ end
 -- @return Vector|nil Returns the safe spawn position, nil if none was found
 -- @realm server
 function plyspawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
-	local spawnPoints = plyspawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
+    local spawnPoints = plyspawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
 
-	for i = 1, #spawnPoints do
-		local spawnPoint = spawnPoints[i]
+    for i = 1, #spawnPoints do
+        local spawnPoint = spawnPoints[i]
 
-		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint, false) then continue end
+        if not plyspawn.IsSpawnPointSafe(ply, spawnPoint, false) then
+            continue
+        end
 
-		return spawnPoint
-	end
+        return spawnPoint
+    end
 end
 
 ---
@@ -157,7 +168,7 @@ end
 -- @return table Returns a table of unsafe spawn points
 -- @realm server
 function plyspawn.GetPlayerSpawnPoints()
-	return entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
+    return entspawnscript.GetSpawnsForSpawnType(SPAWN_TYPE_PLAYER)[PLAYER_TYPE_RANDOM]
 end
 
 ---
@@ -169,59 +180,73 @@ end
 -- @return boolean|table A safe spawn point, false if no spawn point was found on the map
 -- @realm server
 function plyspawn.GetRandomSafePlayerSpawnPoint(ply)
-	local spawnPoints = plyspawn.GetPlayerSpawnPoints()
+    local spawnPoints = plyspawn.GetPlayerSpawnPoints()
 
-	if not spawnPoints or #spawnPoints == 0 then
-		Error("[TTT2][PLYSPAWN] No spawn points found! Make sure there is at least one spawn point on the map.\n")
+    if not spawnPoints or #spawnPoints == 0 then
+        Dev(
+            1,
+            "[TTT2][PLYSPAWN] No spawn points found! Make sure there is at least one spawn point on the map.\n"
+        )
 
-		return false
-	end
+        return false
+    end
 
-	-- the table should be shuffled for each spawn point calculation to improve randomness
-	table.Shuffle(spawnPoints)
+    -- the table should be shuffled for each spawn point calculation to improve randomness
+    table.Shuffle(spawnPoints)
 
-	if not IsValid(ply) or not ply:IsTerror() then
-		return spawnPoints[1]
-	end
+    if not IsValid(ply) or not ply:IsTerror() then
+        return spawnPoints[1]
+    end
 
-	-- Optimistic attempt: assume there are sufficient spawns for all and one is free
-	for i = 1, #spawnPoints do
-		local spawnPoint = spawnPoints[i]
+    -- Optimistic attempt: assume there are sufficient spawns for all and one is free
+    for i = 1, #spawnPoints do
+        local spawnPoint = spawnPoints[i]
 
-		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, false) then continue end
+        if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, false) then
+            continue
+        end
 
-		return spawnPoint
-	end
+        return spawnPoint
+    end
 
-	-- That did not work, so now look around spawns
-	local pickedSpawnPoint
+    -- That did not work, so now look around spawns
+    local pickedSpawnPoint
 
-	for i = 1, #spawnPoints do
-		pickedSpawnPoint = spawnPoints[i]
+    for i = 1, #spawnPoints do
+        pickedSpawnPoint = spawnPoints[i]
 
-		local riggedSpawnPoint = plyspawn.MakeSpawnPointSafe(ply, pickedSpawnPoint.pos)
+        local riggedSpawnPoint = plyspawn.MakeSpawnPointSafe(ply, pickedSpawnPoint.pos)
 
-		if not riggedSpawnPoint then continue end
+        if not riggedSpawnPoint then
+            continue
+        end
 
-		ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
+        Dev(
+            1,
+            "TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for "
+                .. tostring(ply)
+                .. "\n"
+        )
 
-		-- this is an old TTT flag that I will keep for compatibilities sake
-		GAMEMODE.HaveRiggedSpawn = true
+        -- this is an old TTT flag that I will keep for compatibilities sake
+        GAMEMODE.HaveRiggedSpawn = true
 
-		return {
-			pos = riggedSpawnPoint,
-			ang = pickedSpawnPoint.ang
-		}
-	end
+        return {
+            pos = riggedSpawnPoint,
+            ang = pickedSpawnPoint.ang,
+        }
+    end
 
-	-- Last attempt, force one
-	for i = 1, #spawnPoints do
-		local spawnPoint = spawnPoints[i]
+    -- Last attempt, force one
+    for i = 1, #spawnPoints do
+        local spawnPoint = spawnPoints[i]
 
-		if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, true) then continue end
+        if not plyspawn.IsSpawnPointSafe(ply, spawnPoint.pos, true) then
+            continue
+        end
 
-		return spawnPoint
-	end
+        return spawnPoint
+    end
 
-	return pickedSpawnPoint
+    return pickedSpawnPoint
 end

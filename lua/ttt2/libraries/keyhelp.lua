@@ -1,7 +1,7 @@
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 KEYHELP_INTERNAL = 1
@@ -58,92 +58,111 @@ local materialSave = Material("vgui/ttt/hudhelp/save")
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableCore = CreateConVar("ttt2_keyhelp_show_core", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableExtra = CreateConVar("ttt2_keyhelp_show_extra", "0", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableEquipment = CreateConVar("ttt2_keyhelp_show_equipment", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableBoxBlur = CreateConVar("ttt2_hud_enable_box_blur", "1", FCVAR_ARCHIVE)
 
 ---
 -- @realm client
+-- stylua: ignore
 local cvEnableDescription = CreateConVar("ttt2_hud_enable_description", "1", FCVAR_ARCHIVE)
 
 keyhelp = keyhelp or {}
 keyhelp.keyHelpers = {}
 
 local function DrawKeyContent(x, y, keyString, iconMaterial, bindingName, scoreboardShown, scale)
-	local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key", scale)
-	local wBox = math.max(widthScaled, wKeyString) + 2 * paddingScaled
-	local xIcon = x + 0.5 * (wBox - widthScaled)
-	local yIcon = y + paddingScaled + thicknessLineScaled
-	local xKeyString = x + math.floor(0.5 * wBox)
-	local yKeyString = yIcon + widthScaled + paddingScaled
+    local wKeyString = draw.GetTextSize(keyString, "weapon_hud_help_key", scale)
+    local wBox = math.max(widthScaled, wKeyString) + 2 * paddingScaled
+    local xIcon = x + 0.5 * (wBox - widthScaled)
+    local yIcon = y + paddingScaled + thicknessLineScaled
+    local xKeyString = x + math.floor(0.5 * wBox)
+    local yKeyString = yIcon + widthScaled + paddingScaled
 
-	if cvEnableBoxBlur:GetBool() then
-		draw.BlurredBox(x, y, wBox, heightScaled + paddingScaled)
-		draw.Box(x, y, wBox, heightScaled + paddingScaled, colorBox) -- background color
-		draw.Box(x, y, wBox, math.Round(0.5 * thicknessLineScaled), colorBox) -- top line shadow
-		draw.Box(x, y, wBox, thicknessLineScaled, colorBox) -- top line shadow
-		draw.Box(x, y - thicknessLineScaled, wBox, thicknessLineScaled, COLOR_WHITE) -- white top line
-	end
+    if cvEnableBoxBlur:GetBool() then
+        draw.BlurredBox(x, y, wBox, heightScaled + paddingScaled)
+        draw.Box(x, y, wBox, heightScaled + paddingScaled, colorBox) -- background color
+        draw.Box(x, y, wBox, math.Round(0.5 * thicknessLineScaled), colorBox) -- top line shadow
+        draw.Box(x, y, wBox, thicknessLineScaled, colorBox) -- top line shadow
+        draw.Box(x, y - thicknessLineScaled, wBox, thicknessLineScaled, COLOR_WHITE) -- white top line
+    end
 
-	draw.FilteredShadowedTexture(xIcon, yIcon, widthScaled, widthScaled, iconMaterial, 255, COLOR_WHITE, scale)
-	draw.AdvancedText(
-		keyString,
-		"weapon_hud_help_key",
-		xKeyString,
-		yKeyString,
-		COLOR_WHITE,
-		TEXT_ALIGN_CENTER,
-		TEXT_ALIGN_TOP,
-		true,
-		scale
-	)
+    draw.FilteredShadowedTexture(
+        xIcon,
+        yIcon,
+        widthScaled,
+        widthScaled,
+        iconMaterial,
+        255,
+        COLOR_WHITE,
+        scale
+    )
+    draw.AdvancedText(
+        keyString,
+        "weapon_hud_help_key",
+        xKeyString,
+        yKeyString,
+        COLOR_WHITE,
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_TOP,
+        true,
+        scale
+    )
 
-	if scoreboardShown and cvEnableDescription:GetBool() then
-		draw.AdvancedText(
-			LANG.TryTranslation(bindingName),
-			"weapon_hud_help",
-			xKeyString,
-			y - 3 * paddingScaled,
-			COLOR_WHITE,
-			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_CENTER,
-			true,
-			scale,
-			-45
-		)
-	end
+    if scoreboardShown and cvEnableDescription:GetBool() then
+        draw.AdvancedText(
+            LANG.TryTranslation(bindingName),
+            "weapon_hud_help",
+            xKeyString,
+            y - 3 * paddingScaled,
+            COLOR_WHITE,
+            TEXT_ALIGN_LEFT,
+            TEXT_ALIGN_CENTER,
+            true,
+            scale,
+            -45
+        )
+    end
 
-	return wBox
+    return wBox
 end
 
 local function DrawKey(client, xBase, yBase, keyHelper, scoreboardShown, scale)
-	if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then return end
+    if not isfunction(keyHelper.callback) or not keyHelper.callback(client) then
+        return
+    end
 
-	-- handles both internal GMod bindings and TTT2 bindings
-	local key = Key(keyHelper.binding) or inputGetKeyName(bindFind(keyHelper.binding))
+    -- handles both internal GMod bindings and TTT2 bindings
+    local key = Key(keyHelper.binding) or inputGetKeyName(bindFind(keyHelper.binding))
 
-	if not key then return end
+    if not key then
+        return
+    end
 
-	return xBase + paddingScaled
-		+ DrawKeyContent(
-			xBase,
-			yBase,
-			stringUpper(key),
-			keyHelper.iconMaterial,
-			keyHelper.bindingName,
-			scoreboardShown,
-			scale
-		)
+    return xBase
+        + paddingScaled
+        + DrawKeyContent(
+            xBase,
+            yBase,
+            stringUpper(key),
+            keyHelper.iconMaterial,
+            keyHelper.bindingName,
+            scoreboardShown,
+            scale
+        )
 end
 
 ---
@@ -156,15 +175,15 @@ end
 -- @param function callback The callback function that checks if this binding should be rendered on screen
 -- @realm client
 function keyhelp.RegisterKeyHelper(binding, iconMaterial, bindingType, bindingName, callback)
-	keyhelp.keyHelpers[bindingType] = keyhelp.keyHelpers[bindingType] or {}
+    keyhelp.keyHelpers[bindingType] = keyhelp.keyHelpers[bindingType] or {}
 
-	keyhelp.keyHelpers[bindingType][#keyhelp.keyHelpers[bindingType] + 1] = {
-		binding = binding,
-		iconMaterial = iconMaterial,
-		bindingType = bindingType,
-		bindingName = bindingName,
-		callback = callback
-	}
+    keyhelp.keyHelpers[bindingType][#keyhelp.keyHelpers[bindingType] + 1] = {
+        binding = binding,
+        iconMaterial = iconMaterial,
+        bindingType = bindingType,
+        bindingName = bindingName,
+        callback = callback,
+    }
 end
 
 ---
@@ -172,86 +191,89 @@ end
 -- @internal
 -- @realm client
 function keyhelp.Draw()
-	local client = LocalPlayer()
-	local scoreboardShown = GAMEMODE.ShowScoreboard
+    local client = LocalPlayer()
+    local scoreboardShown = GAMEMODE.ShowScoreboard
 
-	local scale = appearance.GetGlobalScale()
+    local scale = appearance.GetGlobalScale()
 
-	local xBase = 0.5 * ScrW() + offsetCenter * scale
-	local yBase = ScrH() - height * scale
+    local xBase = 0.5 * ScrW() + offsetCenter * scale
+    local yBase = ScrH() - height * scale
 
-	heightScaled = height * scale
-	widthScaled = width * scale
-	paddingScaled = padding * scale
-	thicknessLineScaled = math.Round(thicknessLine * scale)
+    heightScaled = height * scale
+    widthScaled = width * scale
+    paddingScaled = padding * scale
+    thicknessLineScaled = math.Round(thicknessLine * scale)
 
-	if cvEnableCore:GetBool() or scoreboardShown then
-		for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do
-			xBase = DrawKey(
-				client,
-				xBase,
-				yBase,
-				keyhelp.keyHelpers[KEYHELP_INTERNAL][i],
-				scoreboardShown,
-				scale
-			) or xBase
-		end
-	end
+    if cvEnableCore:GetBool() or scoreboardShown then
+        for i = 1, #keyhelp.keyHelpers[KEYHELP_INTERNAL] do
+            xBase = DrawKey(
+                client,
+                xBase,
+                yBase,
+                keyhelp.keyHelpers[KEYHELP_INTERNAL][i],
+                scoreboardShown,
+                scale
+            ) or xBase
+        end
+    end
 
-	if not util.EditingModeActive(client) then
-		if keyhelp.keyHelpers[KEYHELP_CORE] and (cvEnableCore:GetBool() or scoreboardShown) then
-			for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
-				xBase = DrawKey(
-					client,
-					xBase,
-					yBase,
-					keyhelp.keyHelpers[KEYHELP_CORE][i],
-					scoreboardShown,
-					scale
-				) or xBase
-			end
-		end
+    if not util.EditingModeActive(client) then
+        if keyhelp.keyHelpers[KEYHELP_CORE] and (cvEnableCore:GetBool() or scoreboardShown) then
+            for i = 1, #keyhelp.keyHelpers[KEYHELP_CORE] do
+                xBase = DrawKey(
+                    client,
+                    xBase,
+                    yBase,
+                    keyhelp.keyHelpers[KEYHELP_CORE][i],
+                    scoreboardShown,
+                    scale
+                ) or xBase
+            end
+        end
 
-		if keyhelp.keyHelpers[KEYHELP_EQUIPMENT] and (cvEnableEquipment:GetBool() or scoreboardShown) then
-			for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
-				xBase = DrawKey(
-					client,
-					xBase,
-					yBase,
-					keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i],
-					scoreboardShown,
-					scale
-				) or xBase
-			end
-		end
+        if
+            keyhelp.keyHelpers[KEYHELP_EQUIPMENT]
+            and (cvEnableEquipment:GetBool() or scoreboardShown)
+        then
+            for i = 1, #keyhelp.keyHelpers[KEYHELP_EQUIPMENT] do
+                xBase = DrawKey(
+                    client,
+                    xBase,
+                    yBase,
+                    keyhelp.keyHelpers[KEYHELP_EQUIPMENT][i],
+                    scoreboardShown,
+                    scale
+                ) or xBase
+            end
+        end
 
-		if keyhelp.keyHelpers[KEYHELP_EXTRA] and (cvEnableExtra:GetBool() or scoreboardShown) then
-			for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
-				xBase = DrawKey(
-					client,
-					xBase,
-					yBase,
-					keyhelp.keyHelpers[KEYHELP_EXTRA][i],
-					scoreboardShown,
-					scale
-				) or xBase
-			end
-		end
-	end
+        if keyhelp.keyHelpers[KEYHELP_EXTRA] and (cvEnableExtra:GetBool() or scoreboardShown) then
+            for i = 1, #keyhelp.keyHelpers[KEYHELP_EXTRA] do
+                xBase = DrawKey(
+                    client,
+                    xBase,
+                    yBase,
+                    keyhelp.keyHelpers[KEYHELP_EXTRA][i],
+                    scoreboardShown,
+                    scale
+                ) or xBase
+            end
+        end
+    end
 
-	-- if anyone of them is disabled, but not all, the show more option is shown
-	local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
+    -- if anyone of them is disabled, but not all, the show more option is shown
+    local enbCount = cvEnableCore:GetInt() + cvEnableEquipment:GetInt() + cvEnableExtra:GetInt()
 
-	if not scoreboardShown and enbCount > 0 and enbCount < 3 then
-		xBase = DrawKey(
-			client,
-			xBase,
-			yBase,
-			keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1],
-			scoreboardShown,
-			scale
-		) or xBase
-	end
+    if not scoreboardShown and enbCount > 0 and enbCount < 3 then
+        xBase = DrawKey(
+            client,
+            xBase,
+            yBase,
+            keyhelp.keyHelpers[KEYHELP_SCOREBOARD][1],
+            scoreboardShown,
+            scale
+        ) or xBase
+    end
 end
 
 ---
@@ -259,182 +281,440 @@ end
 -- @internal
 -- @realm client
 function keyhelp.InitializeBasicKeys()
-	-- core bindings that should be visible be default
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSettings, KEYHELP_INTERNAL, "label_keyhelper_help", function(client)
-		if util.EditingModeActive(client) then return end
+    -- core bindings that should be visible be default
+    keyhelp.RegisterKeyHelper(
+        "gm_showhelp",
+        materialSettings,
+        KEYHELP_INTERNAL,
+        "label_keyhelper_help",
+        function(client)
+            if util.EditingModeActive(client) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("gm_showhelp", materialSave, KEYHELP_INTERNAL, "label_keyhelper_save_exit", function(client)
-		if not util.EditingModeActive(client) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "gm_showhelp",
+        materialSave,
+        KEYHELP_INTERNAL,
+        "label_keyhelper_save_exit",
+        function(client)
+            if not util.EditingModeActive(client) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("gm_showteam", materialMute, KEYHELP_CORE, "label_keyhelper_mutespec", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "gm_showteam",
+        materialMute,
+        KEYHELP_CORE,
+        "label_keyhelper_mutespec",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+menu_context", materialShoppingRole, KEYHELP_CORE, "label_keyhelper_shop", function(client)
-		if client:IsSpec() or not client:IsShopper() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+menu_context",
+        materialShoppingRole,
+        KEYHELP_CORE,
+        "label_keyhelper_shop",
+        function(client)
+            if client:IsSpec() or not client:IsShopper() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+duck", materialPointer, KEYHELP_CORE, "label_keyhelper_show_pointer", function(client)
-		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+duck",
+        materialPointer,
+        KEYHELP_CORE,
+        "label_keyhelper_show_pointer",
+        function(client)
+            if not client:IsSpec() or IsValid(client:GetObserverTarget()) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+use", materialPosessing, KEYHELP_CORE, "label_keyhelper_possess_focus_entity", function(client)
-		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+use",
+        materialPosessing,
+        KEYHELP_CORE,
+        "label_keyhelper_possess_focus_entity",
+        function(client)
+            if not client:IsSpec() or IsValid(client:GetObserverTarget()) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+use", materialPlayer, KEYHELP_CORE, "label_keyhelper_spec_focus_player", function(client)
-		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+use",
+        materialPlayer,
+        KEYHELP_CORE,
+        "label_keyhelper_spec_focus_player",
+        function(client)
+            if not client:IsSpec() or IsValid(client:GetObserverTarget()) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+attack", materialPlayerPrev, KEYHELP_CORE, "label_keyhelper_spec_previous_player", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+attack",
+        materialPlayerPrev,
+        KEYHELP_CORE,
+        "label_keyhelper_spec_previous_player",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or not target:IsPlayer() then return end
+            if not IsValid(target) or not target:IsPlayer() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+attack2", materialPlayerNext, KEYHELP_CORE, "label_keyhelper_spec_next_player", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+attack2",
+        materialPlayerNext,
+        KEYHELP_CORE,
+        "label_keyhelper_spec_next_player",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or not target:IsPlayer() then return end
+            if not IsValid(target) or not target:IsPlayer() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+reload", materialThirdPerson, KEYHELP_CORE, "label_keyhelper_spec_third_person", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+reload",
+        materialThirdPerson,
+        KEYHELP_CORE,
+        "label_keyhelper_spec_third_person",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or not target:IsPlayer() then return end
+            if not IsValid(target) or not target:IsPlayer() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+attack2", materialPlayerRandom, KEYHELP_CORE, "label_keyhelper_spec_player", function(client)
-		if not client:IsSpec() or IsValid(client:GetObserverTarget()) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+attack2",
+        materialPlayerRandom,
+        KEYHELP_CORE,
+        "label_keyhelper_spec_player",
+        function(client)
+            if not client:IsSpec() or IsValid(client:GetObserverTarget()) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+jump", materialPropJump, KEYHELP_CORE, "label_keyhelper_possession_jump", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+jump",
+        materialPropJump,
+        KEYHELP_CORE,
+        "label_keyhelper_possession_jump",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+            if
+                not IsValid(target)
+                or target:IsPlayer()
+                or target:GetNWEntity("spec_owner", nil) ~= client
+            then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+moveleft", materialPropLeft, KEYHELP_CORE, "label_keyhelper_possession_left", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+moveleft",
+        materialPropLeft,
+        KEYHELP_CORE,
+        "label_keyhelper_possession_left",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+            if
+                not IsValid(target)
+                or target:IsPlayer()
+                or target:GetNWEntity("spec_owner", nil) ~= client
+            then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+moveright", materialPropRight, KEYHELP_CORE, "label_keyhelper_possession_right", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+moveright",
+        materialPropRight,
+        KEYHELP_CORE,
+        "label_keyhelper_possession_right",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+            if
+                not IsValid(target)
+                or target:IsPlayer()
+                or target:GetNWEntity("spec_owner", nil) ~= client
+            then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+forward", materialPropFront, KEYHELP_CORE, "label_keyhelper_possession_forward", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+forward",
+        materialPropFront,
+        KEYHELP_CORE,
+        "label_keyhelper_possession_forward",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner") ~= client then return end
+            if
+                not IsValid(target)
+                or target:IsPlayer()
+                or target:GetNWEntity("spec_owner") ~= client
+            then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+back", materialPropBack, KEYHELP_CORE, "label_keyhelper_possession_backward", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+back",
+        materialPropBack,
+        KEYHELP_CORE,
+        "label_keyhelper_possession_backward",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner") ~= client then return end
+            if
+                not IsValid(target)
+                or target:IsPlayer()
+                or target:GetNWEntity("spec_owner") ~= client
+            then
+                return
+            end
 
-		return true
-	end)
-		keyhelp.RegisterKeyHelper("+speed", materialPropDash, KEYHELP_CORE, "label_keyhelper_possession_dash", function(client)
-		if not client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+speed",
+        materialPropDash,
+        KEYHELP_CORE,
+        "label_keyhelper_possession_dash",
+        function(client)
+            if not client:IsSpec() then
+                return
+            end
 
-		local target = client:GetObserverTarget()
+            local target = client:GetObserverTarget()
 
-		if not IsValid(target) or target:IsPlayer() or target:GetNWEntity("spec_owner", nil) ~= client then return end
+            if
+                not IsValid(target)
+                or target:IsPlayer()
+                or target:GetNWEntity("spec_owner", nil) ~= client
+            then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+duck", materialLeaveTarget, KEYHELP_CORE, "label_keyhelper_free_roam", function(client)
-		if not client:IsSpec() or not IsValid(client:GetObserverTarget()) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+duck",
+        materialLeaveTarget,
+        KEYHELP_CORE,
+        "label_keyhelper_free_roam",
+        function(client)
+            if not client:IsSpec() or not IsValid(client:GetObserverTarget()) then
+                return
+            end
 
-		return true
-	end)
+            return true
+        end
+    )
 
-	-- extra bindings that are not that important but are there as well
-	keyhelp.RegisterKeyHelper("impulse 100", materialFlashlight, KEYHELP_EXTRA, "label_keyhelper_flashlight", function(client)
-		if client:IsSpec() then return end
+    -- extra bindings that are not that important but are there as well
+    keyhelp.RegisterKeyHelper(
+        "impulse 100",
+        materialFlashlight,
+        KEYHELP_EXTRA,
+        "label_keyhelper_flashlight",
+        function(client)
+            if client:IsSpec() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+menu", materialWeaponDrop, KEYHELP_EXTRA, "label_keyhelper_weapon_drop", function(client)
-		if client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+menu",
+        materialWeaponDrop,
+        KEYHELP_EXTRA,
+        "label_keyhelper_weapon_drop",
+        function(client)
+            if client:IsSpec() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("gmod_undo", materialAmmoDrop, KEYHELP_EXTRA, "label_keyhelper_ammo_drop", function(client)
-		if client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "gmod_undo",
+        materialAmmoDrop,
+        KEYHELP_EXTRA,
+        "label_keyhelper_ammo_drop",
+        function(client)
+            if client:IsSpec() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("+zoom", materialQuickchat, KEYHELP_EXTRA, "label_keyhelper_quickchat", function(client)
-		if client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "+zoom",
+        materialQuickchat,
+        KEYHELP_EXTRA,
+        "label_keyhelper_quickchat",
+        function(client)
+            if client:IsSpec() then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("ttt2_voice", materialVoiceGlobal, KEYHELP_EXTRA, "label_keyhelper_voice_global", function(client)
-		if not VOICE.CanEnable() or not GetGlobalBool("sv_voiceenable", true) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "ttt2_voice",
+        materialVoiceGlobal,
+        KEYHELP_EXTRA,
+        "label_keyhelper_voice_global",
+        function(client)
+            if not VOICE.CanEnable() or not GetGlobalBool("sv_voiceenable", true) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("ttt2_voice_team", materialVoiceTeam, KEYHELP_EXTRA, "label_keyhelper_voice_team", function(client)
-		if not VOICE.CanTeamEnable() or not GetGlobalBool("sv_voiceenable", true) then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "ttt2_voice_team",
+        materialVoiceTeam,
+        KEYHELP_EXTRA,
+        "label_keyhelper_voice_team",
+        function(client)
+            if not VOICE.CanTeamEnable() or not GetGlobalBool("sv_voiceenable", true) then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("messagemode", materialChatGlobal, KEYHELP_EXTRA, "label_keyhelper_chat_global", function(client)
-		if client:GetSubRoleData().disabledGeneralChat then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "messagemode",
+        materialChatGlobal,
+        KEYHELP_EXTRA,
+        "label_keyhelper_chat_global",
+        function(client)
+            if client:GetSubRoleData().disabledGeneralChat then
+                return
+            end
 
-		return true
-	end)
-	keyhelp.RegisterKeyHelper("messagemode2", materialChatTeam, KEYHELP_EXTRA, "label_keyhelper_chat_team", function(client)
-		if client:IsSpec() then return end
+            return true
+        end
+    )
+    keyhelp.RegisterKeyHelper(
+        "messagemode2",
+        materialChatTeam,
+        KEYHELP_EXTRA,
+        "label_keyhelper_chat_team",
+        function(client)
+            if client:IsSpec() then
+                return
+            end
 
-		local clientRoleData = client:GetSubRoleData()
+            local clientRoleData = client:GetSubRoleData()
 
-		if clientRoleData.unknownTeam or clientRoleData.disabledTeamChat then return end
+            if clientRoleData.unknownTeam or clientRoleData.disabledTeamChat then
+                return
+            end
 
-		return true
-	end)
+            return true
+        end
+    )
 
-	-- internal bindings, there should only be this one
-	keyhelp.RegisterKeyHelper("+showscores", materialShowmore, KEYHELP_SCOREBOARD, "label_keyhelper_show_all", function(client)
-		return true
-	end)
+    -- internal bindings, there should only be this one
+    keyhelp.RegisterKeyHelper(
+        "+showscores",
+        materialShowmore,
+        KEYHELP_SCOREBOARD,
+        "label_keyhelper_show_all",
+        function(client)
+            return true
+        end
+    )
 end

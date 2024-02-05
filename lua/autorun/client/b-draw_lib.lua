@@ -1,4 +1,6 @@
-if engine.ActiveGamemode() ~= "terrortown" then return end
+if engine.ActiveGamemode() ~= "terrortown" then
+    return
+end
 
 ---
 -- A Simple Garry's mod drawing library
@@ -31,62 +33,67 @@ local mats = {}
 local fetched_avatar_urls = {}
 
 local function FetchAsset(url)
-	if not url then return end
+    if not url then
+        return
+    end
 
-	if mats[url] then
-		return mats[url]
-	end
+    if mats[url] then
+        return mats[url]
+    end
 
-	local crcUrl = crc(url)
+    local crcUrl = crc(url)
 
-	if exists("downloaded_assets/" .. crcUrl .. ".png", "DATA") then
-		mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
+    if exists("downloaded_assets/" .. crcUrl .. ".png", "DATA") then
+        mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
 
-		return mats[url]
-	end
+        return mats[url]
+    end
 
-	fetch(url, function(data)
-		write("downloaded_assets/" .. crcUrl .. ".png", data)
+    fetch(url, function(data)
+        write("downloaded_assets/" .. crcUrl .. ".png", data)
 
-		mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
-	end)
+        mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
+    end)
 end
 
 local function FetchAvatarAsset(id64, size)
-	if not id64 then
-		return _bot_avatar
-	end
+    if not id64 then
+        return _bot_avatar
+    end
 
-	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
+    size = size == "medium" and "_medium" or size == "large" and "_full" or ""
 
-	local key = id64 .. size
+    local key = id64 .. size
 
-	if fetched_avatar_urls[key] then
-		return FetchAsset(fetched_avatar_urls[key])
-	end
+    if fetched_avatar_urls[key] then
+        return FetchAsset(fetched_avatar_urls[key])
+    end
 
-	---
-	-- @realm client
-	local data = hook.Run("TTT2FetchAvatar", id64, size)
-	if data ~= nil then
-		local url = "hook://" .. key
-		local crcUrl = crc(url)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local data = hook.Run("TTT2FetchAvatar", id64, size)
+    if data ~= nil then
+        local url = "hook://" .. key
+        local crcUrl = crc(url)
 
-		fetched_avatar_urls[key] = url
+        fetched_avatar_urls[key] = url
 
-		write("downloaded_assets/" .. crcUrl .. ".png", data)
+        write("downloaded_assets/" .. crcUrl .. ".png", data)
 
-		return
-	end
+        return
+    end
 
-	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
-		local link = body:match("<avatarIcon><%!%[CDATA%[(.-)%]%]><%/avatarIcon>")
+    fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
+        local link = body:match("<avatarIcon><%!%[CDATA%[(.-)%]%]><%/avatarIcon>")
 
-		if not link then return end
+        if not link then
+            return
+        end
 
-		fetched_avatar_urls[key] = link:Replace(".jpg", size .. ".jpg")
-		FetchAsset(fetched_avatar_urls[key])
-	end)
+        fetched_avatar_urls[key] = link:Replace(".jpg", size .. ".jpg")
+        FetchAsset(fetched_avatar_urls[key])
+    end)
 end
 
 ---
@@ -96,7 +103,7 @@ end
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @realm client
 function draw.CacheAvatar(id64, size)
-	FetchAvatarAsset(id64, size)
+    FetchAvatarAsset(id64, size)
 end
 
 ---
@@ -106,19 +113,19 @@ end
 -- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @realm client
 function draw.DropCacheAvatar(id64, size)
-	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
-	local key = id64 .. size
+    size = size == "medium" and "_medium" or size == "large" and "_full" or ""
+    local key = id64 .. size
 
-	local url = fetched_avatar_urls[key]
-	local crcUrl = crc(url)
-	local uri = "data/downloaded_assets/" .. crcUrl .. ".png"
+    local url = fetched_avatar_urls[key]
+    local crcUrl = crc(url)
+    local uri = "data/downloaded_assets/" .. crcUrl .. ".png"
 
-	if exists(uri, "DATA") then
-		delete(uri, "DATA")
-	end
+    if exists(uri, "DATA") then
+        delete(uri, "DATA")
+    end
 
-	mats[url] = nil
-	fetched_avatar_urls[key] = nil
+    mats[url] = nil
+    fetched_avatar_urls[key] = nil
 end
 
 ---
@@ -133,20 +140,20 @@ end
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 -- @realm client
 local function DrawImage(material, x, y, width, height, color, angle, cornerorigin)
-	color = color or white
+    color = color or white
 
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(material)
+    surface.SetDrawColor(color.r, color.g, color.b, color.a)
+    surface.SetMaterial(material)
 
-	if not angle then
-		surface.DrawTexturedRect(x, y, width, height)
-	else
-		if not cornerorigin then
-			surface.DrawTexturedRectRotated(x, y, width, height, angle)
-		else
-			surface.DrawTexturedRectRotated(x + width * 0.5, y + height * 0.5, width, height, angle)
-		end
-	end
+    if not angle then
+        surface.DrawTexturedRect(x, y, width, height)
+    else
+        if not cornerorigin then
+            surface.DrawTexturedRectRotated(x, y, width, height, angle)
+        else
+            surface.DrawTexturedRectRotated(x + width * 0.5, y + height * 0.5, width, height, angle)
+        end
+    end
 end
 
 ---
@@ -161,7 +168,7 @@ end
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 -- @realm client
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
-	DrawImage(FetchAsset(url) or _error, x, y, width, height, color, angle, cornerorigin)
+    DrawImage(FetchAsset(url) or _error, x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
@@ -174,15 +181,15 @@ end
 -- @param Color color
 -- @realm client
 function draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)
-	color = color or white
+    color = color or white
 
-	local xiwx, yihy = math.ceil(parentwidth / xrep), math.ceil(parentheight / yrep)
+    local xiwx, yihy = math.ceil(parentwidth / xrep), math.ceil(parentheight / yrep)
 
-	for x = 0, xrep - 1 do
-		for y = 0, yrep - 1 do
-			draw.WebImage(url, x * xiwx, y * yihy, xiwx, yihy, color)
-		end
-	end
+    for x = 0, xrep - 1 do
+        for y = 0, yrep - 1 do
+            draw.WebImage(url, x * xiwx, y * yihy, xiwx, yihy, color)
+        end
+    end
 end
 
 ---
@@ -198,7 +205,16 @@ end
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 -- @realm client
 function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornerorigin)
-	DrawImage(FetchAvatarAsset(id64, size) or _default_avatar, x, y, width, height, color, angle, cornerorigin)
+    DrawImage(
+        FetchAvatarAsset(id64, size) or _default_avatar,
+        x,
+        y,
+        width,
+        height,
+        color,
+        angle,
+        cornerorigin
+    )
 end
 
 ---
@@ -209,5 +225,5 @@ end
 -- @return Material
 -- @realm client
 function draw.GetAvatarMaterial(id64, size)
-	return FetchAvatarAsset(id64, size) or _default_avatar
+    return FetchAvatarAsset(id64, size) or _default_avatar
 end

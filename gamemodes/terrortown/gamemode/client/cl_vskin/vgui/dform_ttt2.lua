@@ -27,36 +27,38 @@ local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 ---
 -- @ignore
 function PANEL:Init()
-	self.items = {}
+    self.items = {}
 
-	self:SetSpacing(4)
-	self:SetPadding(10)
+    self:SetSpacing(4)
+    self:SetPadding(10)
 
-	self:SetPaintBackground(true)
+    self:SetPaintBackground(true)
 
-	self:SetMouseInputEnabled(true)
-	self:SetKeyboardInputEnabled(true)
+    self:SetMouseInputEnabled(true)
+    self:SetKeyboardInputEnabled(true)
 end
 
 ---
 -- @param string name
 -- @realm client
 function PANEL:SetName(name)
-	self:SetLabel(name)
+    self:SetLabel(name)
 end
 
 ---
 -- @realm client
 function PANEL:Clear()
-	for i = 1, #self.items do
-		local item = self.items[i]
+    for i = 1, #self.items do
+        local item = self.items[i]
 
-		if not IsValid(item) then continue end
+        if not IsValid(item) then
+            continue
+        end
 
-		item:Remove()
-	end
+        item:Remove()
+    end
 
-	self.items = {}
+    self.items = {}
 end
 
 ---
@@ -65,61 +67,59 @@ end
 -- @param Panel reset
 -- @realm client
 function PANEL:AddItem(left, right, reset)
-	self:InvalidateLayout()
+    self:InvalidateLayout()
 
-	local panel = vgui.Create("DSizeToContents", self)
+    local panel = vgui.Create("DSizeToContents", self)
 
-	panel:SetSizeX(false)
-	panel:Dock(TOP)
-	panel:DockPadding(10, 10, 10, 0)
-	panel:InvalidateLayout()
+    panel:SetSizeX(false)
+    panel:Dock(TOP)
+    panel:DockPadding(10, 10, 10, 0)
+    panel:InvalidateLayout()
 
-	if IsValid(reset) then
-		reset:SetParent(panel)
-		reset:Dock(RIGHT)
-	end
+    if IsValid(reset) then
+        reset:SetParent(panel)
+        reset:Dock(RIGHT)
+    end
 
-	if IsValid(right) then
-		left:SetParent(panel)
-		left:Dock(LEFT)
-		left:InvalidateLayout(true)
-		left:SetSize(350, 20)
+    if IsValid(right) then
+        left:SetParent(panel)
+        left:Dock(LEFT)
+        left:InvalidateLayout(true)
+        left:SetSize(350, 20)
 
-		right:SetParent(panel)
-		right:SetPos(350, 0)
-		right:InvalidateLayout(true)
-	elseif IsValid(left) then
-		left:SetParent(panel)
-		left:Dock(TOP)
-	end
+        right:SetParent(panel)
+        right:SetPos(350, 0)
+        right:InvalidateLayout(true)
+    elseif IsValid(left) then
+        left:SetParent(panel)
+        left:Dock(TOP)
+    end
 
-	self.items[#self.items + 1] = panel
+    self.items[#self.items + 1] = panel
 end
 
 ---
 -- overwrites the base function with an empty function
 -- @realm client
-function PANEL:Rebuild()
-
-end
+function PANEL:Rebuild() end
 
 -- FUNCTIONS TO POPULATE THE FORM
 
 local function MakeReset(parent)
-	local reset = vgui.Create("DButtonTTT2", parent)
+    local reset = vgui.Create("DButtonTTT2", parent)
 
-	reset:SetText("button_default")
-	reset:SetSize(32, 32)
+    reset:SetText("button_default")
+    reset:SetSize(32, 32)
 
-	reset.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormButtonIconTTT2", slf, w, h)
+    reset.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormButtonIconTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	reset.material = materialReset
+    reset.material = materialReset
 
-	return reset
+    return reset
 end
 
 ---
@@ -132,59 +132,59 @@ end
 -- @return Panel The created textentry
 -- @realm client
 function PANEL:MakeTextEntry(data)
-	local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("DLabelTTT2", self)
 
-	left:SetText(data.label)
+    left:SetText(data.label)
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	local right = vgui.Create("DTextEntryTTT2", self)
+    local right = vgui.Create("DTextEntryTTT2", self)
 
-	local reset = MakeReset(self)
-	right:SetResetButton(reset)
+    local reset = MakeReset(self)
+    right:SetResetButton(reset)
 
-	right:SetUpdateOnType(false)
-	right:SetHeightMult(1)
+    right:SetUpdateOnType(false)
+    right:SetHeightMult(1)
 
-	right.OnGetFocus = function(slf)
-		util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
-	end
+    right.OnGetFocus = function(slf)
+        util.getHighestPanelParent(self):SetKeyboardInputEnabled(true)
+    end
 
-	right.OnLoseFocus = function(slf)
-		util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
-	end
+    right.OnLoseFocus = function(slf)
+        util.getHighestPanelParent(self):SetKeyboardInputEnabled(false)
+    end
 
-	-- Set default if possible even if the convar could still overwrite it
-	right:SetDefaultValue(data.default)
-	right:SetConVar(data.convar)
-	right:SetServerConVar(data.serverConvar)
+    -- Set default if possible even if the convar could still overwrite it
+    right:SetDefaultValue(data.default)
+    right:SetConVar(data.convar)
+    right:SetServerConVar(data.serverConvar)
 
-	if not data.convar and not data.serverConvar and data.initial then
-		right:SetValue(data.initial)
-	end
+    if not data.convar and not data.serverConvar and data.initial then
+        right:SetValue(data.initial)
+    end
 
-	right.OnValueChanged = function(slf, value)
-		if isfunction(data.OnChange) then
-			data.OnChange(slf, value)
-		end
-	end
+    right.OnValueChanged = function(slf, value)
+        if isfunction(data.OnChange) then
+            data.OnChange(slf, value)
+        end
+    end
 
-	right:SetTall(32)
-	right:Dock(TOP)
+    right:SetTall(32)
+    right:Dock(TOP)
 
-	self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		data.master:AddSlave(left)
-		data.master:AddSlave(right)
-		data.master:AddSlave(reset)
-	end
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
+        data.master:AddSlave(right)
+        data.master:AddSlave(reset)
+    end
 
-	return left, right
+    return left, right
 end
 
 ---
@@ -193,46 +193,46 @@ end
 -- @return Panel The created checkbox
 -- @realm client
 function PANEL:MakeCheckBox(data)
-	local left = vgui.Create("DCheckBoxLabelTTT2", self)
+    local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
-	local reset = MakeReset(self)
-	left:SetResetButton(reset)
+    local reset = MakeReset(self)
+    left:SetResetButton(reset)
 
-	left:SetText(data.label)
-	left:SetTextParams(data.params)
-	left:SetInverted(data.invert)
+    left:SetText(data.label)
+    left:SetTextParams(data.params)
+    left:SetInverted(data.invert)
 
-	-- Set default if possible even if the convar could still overwrite it
-	left:SetDefaultValue(data.default)
-	left:SetConVar(data.convar)
-	left:SetServerConVar(data.serverConvar)
-	left:SetDatabase(data.database)
+    -- Set default if possible even if the convar could still overwrite it
+    left:SetDefaultValue(data.default)
+    left:SetConVar(data.convar)
+    left:SetServerConVar(data.serverConvar)
+    left:SetDatabase(data.database)
 
-	left:SetTall(32)
+    left:SetTall(32)
 
-	if not data.convar and not data.serverConvar and not data.database and data.initial then
-		left:SetValue(data.initial)
-	end
+    if not data.convar and not data.serverConvar and not data.database and data.initial then
+        left:SetValue(data.initial)
+    end
 
-	left.OnValueChanged = function(slf, value)
-		if isfunction(data.OnChange) then
-			data.OnChange(slf, value)
-		end
-	end
+    left.OnValueChanged = function(slf, value)
+        if isfunction(data.OnChange) then
+            data.OnChange(slf, value)
+        end
+    end
 
-	self:AddItem(left, nil, reset)
+    self:AddItem(left, nil, reset)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		left:SetMaster(data.master)
-		reset:SetMaster(data.master)
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        left:SetMaster(data.master)
+        reset:SetMaster(data.master)
 
-		data.master:AddSlave(left)
-		data.master:AddSlave(reset)
+        data.master:AddSlave(left)
+        data.master:AddSlave(reset)
 
-		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
-	end
+        left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+    end
 
-	return left
+    return left
 end
 
 ---
@@ -241,62 +241,62 @@ end
 -- @return Panel The created slider
 -- @realm client
 function PANEL:MakeSlider(data)
-	local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("DLabelTTT2", self)
 
-	left:SetText(data.label)
+    left:SetText(data.label)
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	local right = vgui.Create("DNumSliderTTT2", self)
+    local right = vgui.Create("DNumSliderTTT2", self)
 
-	local reset = MakeReset(self)
-	right:SetResetButton(reset)
+    local reset = MakeReset(self)
+    right:SetResetButton(reset)
 
-	right:SetMinMax(data.min, data.max)
+    right:SetMinMax(data.min, data.max)
 
-	if data.decimal ~= nil then
-		right:SetDecimals(data.decimal)
-	end
+    if data.decimal ~= nil then
+        right:SetDecimals(data.decimal)
+    end
 
-	-- Set default if possible even if the convar could still overwrite it
-	right:SetDefaultValue(data.default)
-	right:SetConVar(data.convar)
-	right:SetServerConVar(data.serverConvar)
-	right:SetDatabase(data.database)
-	right:SizeToContents()
+    -- Set default if possible even if the convar could still overwrite it
+    right:SetDefaultValue(data.default)
+    right:SetConVar(data.convar)
+    right:SetServerConVar(data.serverConvar)
+    right:SetDatabase(data.database)
+    right:SizeToContents()
 
-	if not data.convar and not data.serverConvar and not data.database and data.initial then
-		right:SetValue(data.initial)
-	end
+    if not data.convar and not data.serverConvar and not data.database and data.initial then
+        right:SetValue(data.initial)
+    end
 
-	right.OnValueChanged = function(slf, value)
-		if isfunction(data.OnChange) then
-			data.OnChange(slf, value)
-		end
-	end
+    right.OnValueChanged = function(slf, value)
+        if isfunction(data.OnChange) then
+            data.OnChange(slf, value)
+        end
+    end
 
-	right:SetTall(32)
-	right:Dock(TOP)
+    right:SetTall(32)
+    right:Dock(TOP)
 
-	self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		data.master:AddSlave(left)
-		data.master:AddSlave(right)
-		data.master:AddSlave(reset)
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
+        data.master:AddSlave(right)
+        data.master:AddSlave(reset)
 
-		left:SetMaster(data.master)
-		right:SetMaster(data.master)
-		reset:SetMaster(data.master)
+        left:SetMaster(data.master)
+        right:SetMaster(data.master)
+        reset:SetMaster(data.master)
 
-		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
-	end
+        left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+    end
 
-	return left
+    return left
 end
 
 ---
@@ -312,78 +312,78 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeComboBox(data)
-	local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("DLabelTTT2", self)
 
-	left:SetText(data.label)
+    left:SetText(data.label)
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	local right = vgui.Create("DComboBoxTTT2", self)
+    local right = vgui.Create("DComboBoxTTT2", self)
 
-	local reset = MakeReset(self)
-	right:SetResetButton(reset)
-	right:SetDefaultValue(data.default) -- Set default if possible even if the convar could still overwrite it
+    local reset = MakeReset(self)
+    right:SetResetButton(reset)
+    right:SetDefaultValue(data.default) -- Set default if possible even if the convar could still overwrite it
 
-	if data.choices then
-		for i = 1, #data.choices do
-			local choice = data.choices[i]
+    if data.choices then
+        for i = 1, #data.choices do
+            local choice = data.choices[i]
 
-			if istable(choice) then
-				right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
-			else
-				-- Support old simple structure
-				right:AddChoice(choice, choice)
-			end
-		end
-	end
+            if istable(choice) then
+                right:AddChoice(choice.title, choice.value, choice.select, choice.icon, choice.data)
+            else
+                -- Support old simple structure
+                right:AddChoice(choice, choice)
+            end
+        end
+    end
 
-	local conVar = data.convar or data.conVar
-	right:SetConVar(conVar)
+    local conVar = data.convar or data.conVar
+    right:SetConVar(conVar)
 
-	local serverConVar = data.serverConvar or data.serverConVar
-	right:SetServerConVar(serverConVar)
+    local serverConVar = data.serverConvar or data.serverConVar
+    right:SetServerConVar(serverConVar)
 
-	right:SetDatabase(data.database)
+    right:SetDatabase(data.database)
 
-	-- Only choose an option, if no conVars are set
-	if not isstring(conVar) and not isstring(serverConVar) and not istable(data.database) then
-		if data.selectId then
-			right:ChooseOptionId(data.selectId, true)
-		elseif data.selectName or data.selectTitle then
-			right:ChooseOptionName(data.selectName or data.selectTitle, true)
-		elseif data.selectValue then
-			right:ChooseOptionValue(data.selectValue, true)
-		end
-	end
+    -- Only choose an option, if no conVars are set
+    if not isstring(conVar) and not isstring(serverConVar) and not istable(data.database) then
+        if data.selectId then
+            right:ChooseOptionId(data.selectId, true)
+        elseif data.selectName or data.selectTitle then
+            right:ChooseOptionName(data.selectName or data.selectTitle, true)
+        elseif data.selectValue then
+            right:ChooseOptionValue(data.selectValue, true)
+        end
+    end
 
-	right.OnSelect = function(slf, index, value, additionalData)
-		if data and isfunction(data.OnChange) then
-			data.OnChange(value, additionalData, slf)
-		end
-	end
+    right.OnSelect = function(slf, index, value, additionalData)
+        if data and isfunction(data.OnChange) then
+            data.OnChange(value, additionalData, slf)
+        end
+    end
 
-	right:SetTall(32)
-	right:Dock(TOP)
+    right:SetTall(32)
+    right:Dock(TOP)
 
-	self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		data.master:AddSlave(left)
-		data.master:AddSlave(right)
-		data.master:AddSlave(reset)
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
+        data.master:AddSlave(right)
+        data.master:AddSlave(reset)
 
-		left:SetMaster(data.master)
-		right:SetMaster(data.master)
-		reset:SetMaster(data.master)
+        left:SetMaster(data.master)
+        right:SetMaster(data.master)
+        reset:SetMaster(data.master)
 
-		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
-	end
+        left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+    end
 
-	return right, left
+    return right, left
 end
 
 ---
@@ -393,62 +393,62 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeBinder(data)
-	local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("DLabelTTT2", self)
 
-	left:SetText(data.label)
+    left:SetText(data.label)
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	local right = vgui.Create("DBinderPanelTTT2", self)
+    local right = vgui.Create("DBinderPanelTTT2", self)
 
-	right.binder:SetValue(data.select)
+    right.binder:SetValue(data.select)
 
-	right.binder.OnChange = function(slf, keyNum)
-		if isfunction(data.OnChange) then
-			data.OnChange(slf, keyNum)
-		end
-	end
+    right.binder.OnChange = function(slf, keyNum)
+        if isfunction(data.OnChange) then
+            data.OnChange(slf, keyNum)
+        end
+    end
 
-	right.disable.DoClick = function(slf)
-		if isfunction(data.OnDisable) then
-			data.OnDisable(slf, right.binder)
-		end
-	end
+    right.disable.DoClick = function(slf)
+        if isfunction(data.OnDisable) then
+            data.OnDisable(slf, right.binder)
+        end
+    end
 
-	right.disable.material = materialDisable
+    right.disable.material = materialDisable
 
-	right:SetTall(32)
-	right:Dock(TOP)
+    right:SetTall(32)
+    right:Dock(TOP)
 
-	local reset = MakeReset(self)
+    local reset = MakeReset(self)
 
-	if data.default ~= nil then
-		reset.DoClick = function(slf)
-			right.binder:SetValue(data.default)
-		end
-	else
-		reset.noDefault = true
-	end
+    if data.default ~= nil then
+        reset.DoClick = function(slf)
+            right.binder:SetValue(data.default)
+        end
+    else
+        reset.noDefault = true
+    end
 
-	self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		data.master:AddSlave(left)
-		data.master:AddSlave(right)
-		data.master:AddSlave(reset)
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
+        data.master:AddSlave(right)
+        data.master:AddSlave(reset)
 
-		left:SetMaster(data.master)
-		right:SetMaster(data.master)
-		reset:SetMaster(data.master)
+        left:SetMaster(data.master)
+        right:SetMaster(data.master)
+        reset:SetMaster(data.master)
 
-		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
-	end
+        left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+    end
 
-	return right, left
+    return right, left
 end
 
 ---
@@ -457,49 +457,46 @@ end
 -- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
-	local left = vgui.Create("DLabelTTT2", self)
+    local left = vgui.Create("DLabelTTT2", self)
 
-	left:SetText(data.label)
-	left:SetTextParams(data.params)
-	left:SetContentAlignment(7)
-	left:SetAutoStretchVertical(true)
+    left:SetText(data.label)
+    left:SetTextParams(data.params)
+    left:SetContentAlignment(7)
+    left:SetAutoStretchVertical(true)
 
-	left.paddingX = 10
-	left.paddingY = 5
+    left.paddingX = 10
+    left.paddingY = 5
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	-- make sure the height is based on the amount of text inside
-	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
+    -- make sure the height is based on the amount of text inside
+    left.PerformLayout = function(slf, w, h)
+        local textTranslated =
+            LANG.GetParamTranslation(slf:GetText(), LANG.TryTranslation(slf:GetTextParams()))
 
-		local textWrapped = draw.GetWrappedText(
-			textTranslated,
-			w - 2 * slf.paddingX,
-			slf:GetFont()
-		)
-		local _, heightText = draw.GetTextSize("", slf:GetFont())
+        local textWrapped = draw.GetWrappedText(textTranslated, w - 2 * slf.paddingX, slf:GetFont())
+        local _, heightText = draw.GetTextSize("", slf:GetFont())
 
-		slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
-	end
+        slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
+    end
 
-	self:AddItem(left, nil)
+    self:AddItem(left, nil)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		data.master:AddSlave(left)
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
 
-		left:SetMaster(data.master)
+        left:SetMaster(data.master)
 
-		left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
-	end
+        left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+    end
 
-	left:InvalidateLayout(true)
+    left:InvalidateLayout(true)
 
-	return left
+    return left
 end
 
 -- Adds a colormixer to the form
@@ -508,74 +505,74 @@ end
 -- @return Panel The created label
 -- @realm client
 function PANEL:MakeColorMixer(data)
-	local left = vgui.Create("DLabelTTT2", self)
-	local right = vgui.Create("DPanel", self)
+    local left = vgui.Create("DLabelTTT2", self)
+    local right = vgui.Create("DPanel", self)
 
-	left:SetTall(data.height or 240)
-	right:SetTall(data.height or 240)
+    left:SetTall(data.height or 240)
+    right:SetTall(data.height or 240)
 
-	right:Dock(TOP)
-	right:DockPadding(10, 10, 10, 10)
+    right:Dock(TOP)
+    right:DockPadding(10, 10, 10, 10)
 
-	left:SetText(data.label)
+    left:SetText(data.label)
 
-	local colorMixer = vgui.Create("DColorMixer", right)
+    local colorMixer = vgui.Create("DColorMixer", right)
 
-	colorMixer:SetColor(data.initial or COLOR_WHITE)
-	colorMixer:SetAlphaBar(data.showAlphaBar or false)
-	colorMixer:SetPalette(data.showPalette or false)
-	colorMixer:Dock(FILL)
+    colorMixer:SetColor(data.initial or COLOR_WHITE)
+    colorMixer:SetAlphaBar(data.showAlphaBar or false)
+    colorMixer:SetPalette(data.showPalette or false)
+    colorMixer:Dock(FILL)
 
-	colorMixer.ValueChanged = function(slf, color)
-		if isfunction(data.OnChange) then
-			data.OnChange(slf, color)
-		end
-	end
+    colorMixer.ValueChanged = function(slf, color)
+        if isfunction(data.OnChange) then
+            data.OnChange(slf, color)
+        end
+    end
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	right.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormBoxTTT2", slf, w, h)
+    right.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormBoxTTT2", slf, w, h)
 
-		return true
-	end
+        return true
+    end
 
-	right.SetEnabled = function(slf, enabled)
-		slf.m_bDisabled = not enabled
+    right.SetEnabled = function(slf, enabled)
+        slf.m_bDisabled = not enabled
 
-		if enabled then
-			slf:SetMouseInputEnabled(true)
-		else
-			slf:SetMouseInputEnabled(false)
-		end
+        if enabled then
+            slf:SetMouseInputEnabled(true)
+        else
+            slf:SetMouseInputEnabled(false)
+        end
 
-		-- update colormixer as well
-		colorMixer:SetEnabled(enabled)
-	end
+        -- update colormixer as well
+        colorMixer:SetEnabled(enabled)
+    end
 
-	self:AddItem(left, right)
+    self:AddItem(left, right)
 
-	if IsValid(data.master) and isfunction(data.master.AddSlave) then
-		data.master:AddSlave(left)
-		data.master:AddSlave(right)
-	end
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
+        data.master:AddSlave(right)
+    end
 
-	return right, left
+    return right, left
 end
 
 -- Adds a panel to the form
 -- @return Panel The created panel
 -- @realm client
 function PANEL:MakePanel()
-	local panel = vgui.Create("DPanelTTT2", self)
+    local panel = vgui.Create("DPanelTTT2", self)
 
-	self:AddItem(panel)
+    self:AddItem(panel)
 
-	return panel
+    return panel
 end
 
 ---
@@ -585,20 +582,20 @@ end
 -- @return Panel The created card
 -- @realm client
 function PANEL:MakeCard(data, base)
-	local card = base:Add("DCardTTT2")
+    local card = base:Add("DCardTTT2")
 
-	card:SetSize(238, 78)
-	card:SetIcon(data.icon)
-	card:SetText(data.label)
-	card:SetMode(data.initial)
+    card:SetSize(238, 78)
+    card:SetIcon(data.icon)
+    card:SetText(data.label)
+    card:SetMode(data.initial)
 
-	card.OnModeChanged = function(slf, oldMode, newMode)
-		if data and isfunction(data.OnChange) then
-			data.OnChange(slf, oldMode, newMode)
-		end
-	end
+    card.OnModeChanged = function(slf, oldMode, newMode)
+        if data and isfunction(data.OnChange) then
+            data.OnChange(slf, oldMode, newMode)
+        end
+    end
 
-	return card
+    return card
 end
 
 ---
@@ -608,30 +605,34 @@ end
 -- @return Panel The created image check box
 -- @realm client
 function PANEL:MakeImageCheckBox(data, base)
-	local box = base:Add("DImageCheckBoxTTT2")
+    local box = base:Add("DImageCheckBoxTTT2")
 
-	box:SetSize(238, 175)
-	box:SetModel(data.model)
-	box:SetHeadBox(data.headbox or false)
-	box:SetText(data.label)
+    box:SetSize(238, 175)
+    box:SetModel(data.model)
+    box:SetHeadBox(data.headbox or false)
+    box:SetText(data.label)
 
-	if isfunction(data.OnModelSelected) then
-		box.OnModelSelected = function(slf, userTriggered, state)
-			if not userTriggered then return end
+    if isfunction(data.OnModelSelected) then
+        box.OnModelSelected = function(slf, userTriggered, state)
+            if not userTriggered then
+                return
+            end
 
-			data.OnModelSelected(slf, state)
-		end
-	end
+            data.OnModelSelected(slf, state)
+        end
+    end
 
-	if isfunction(data.OnModelHattable) then
-		box.OnModelHattable = function(slf, userTriggered, state)
-			if not userTriggered then return end
+    if isfunction(data.OnModelHattable) then
+        box.OnModelHattable = function(slf, userTriggered, state)
+            if not userTriggered then
+                return
+            end
 
-			data.OnModelHattable(slf, state)
-		end
-	end
+            data.OnModelHattable(slf, state)
+        end
+    end
 
-	return box
+    return box
 end
 
 -- Adds an icon layout to the form
@@ -639,14 +640,14 @@ end
 -- @return Panel The created panel
 -- @realm client
 function PANEL:MakeIconLayout(spacing)
-	local panel = vgui.Create("DIconLayout", self)
+    local panel = vgui.Create("DIconLayout", self)
 
-	panel:SetSpaceY(spacing or 10)
-	panel:SetSpaceX(spacing or 10)
+    panel:SetSpaceY(spacing or 10)
+    panel:SetSpaceX(spacing or 10)
 
-	self:AddItem(panel)
+    self:AddItem(panel)
 
-	return panel
+    return panel
 end
 
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
@@ -661,10 +662,10 @@ derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 -- @return Panel The created collapsable form
 -- @realm client
 function vgui.CreateTTT2Form(parent, name)
-	local form = vgui.Create("DFormTTT2", parent, name)
+    local form = vgui.Create("DFormTTT2", parent, name)
 
-	form:SetName(name)
-	form:Dock(TOP)
+    form:SetName(name)
+    form:Dock(TOP)
 
-	return form
+    return form
 end

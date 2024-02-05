@@ -23,7 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
   - Added `SWEP.IdleAnim` to allow specifying an idle animation.
   - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
-  - Added `SWEP.InvisibleViewModel` to prevent a weapon from drawing a ViewModel at all without FOV hacks or Deploy code which has no effect.
+  - Added `SWEP.ShowDefaultViewModel` to prevent a weapon from drawing a ViewModel when set to `false` at all without FOV hacks or Deploy code which has no effect.
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
@@ -32,8 +32,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Supports any weapon that is made with the SWEP Construction Kit (boomerang, melonmine, ...)
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Added support for easy addition of custom view and world models (by @TimGoll)
+  - Added `AddCustomViewModel` to add custom view models
+  - Added `AddCustomWorldModel` to add custom world models
+  - Added an automatic fix for badly coded addons that break the view model fingers
+- Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
+  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt0_radio` and `ttt_cse_proj` to that base
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
+- `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
 
 ### Changed
 
@@ -52,13 +60,28 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
-- Updated and improved  Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
+- Updated and improved Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
 - Consolidated hat logic
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
 - All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
 - Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
 - Spectator name labels now use a skin font and scaling (by @EntranceJew)
+- The built-in radar now displays distances in meters (by @TimGoll)
+- Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
+- Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
+- Magneto stick now shows tooltips respective to its current state.
+- Scoreboard shows non-policing detective results, in sync with the miniscoreboard (by @EntranceJew)
+- `ttt_flame` is visible while it is moving (by @EntranceJew)
+- `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
+- The built-in DNA scanner now displays distances in meters (by @TimGoll)
+- Noisy prints are now gated behind various levels of `developer` convar (by @EntranceJew)
+- Any warnings developers should fix will now print with stack traces (by @EntranceJew)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when observing a player in first person view
+- Your own spectator nametag will not display when looking directly up in post-round (by @EntranceJew)
 
 ### Fixed
 
@@ -69,17 +92,25 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
 - Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
 - Fixed marks library having self zfailing and color issues (by @WardenPotato)
+- Fixed `IsPlayer` failing if a non-entity is passed to it (by @TimGoll)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Removed
 
 - Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
 - Removed DX8/SW models that aren't used
+- Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
+- Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
 
 ### Breaking Changes
 
-- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
+- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
 - No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
+- Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
+  - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`
+  - Use new Setter `shop.SetEquipmentBought(ply, equipmentName)`, `shop.SetEquipmentGlobalBought(equipmentName)` and `shop.SetEquipmentTeamBought(ply, equipmentName)`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
@@ -247,10 +278,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved reset buttons onto the left (by @a7f3)
 - Added ammo icons to the weapon switch HUD and player status HUD elements (by @EntranceJew)
 - Changed the disguiser icon to be more fitting (by @TimGoll)
-- Changed the way the role overhead icon is rendered (by @TimGoll)
-  - It now tracks the players head position
-  - Rendering order is based on distance, no more weird visual glitches
-  - Hidden when observing a player in first person view
 
 ### Fixed
 
@@ -274,8 +301,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed nil value of SetValue in `DNumSliderTTT2` , `DCheckBoxLabelTTT2`. And fix nil value for boxCache[name] in `PlayerModels` (by @sbzlzh)
 - Prevent weapon_tttbase Lua errors with NPCs (by @BuzzHaddaBig in base TTT)
 - Fix miniscoreboard HUD from showing confirmed players that switched to spectator as having been revived (by @EntranceJew)
-- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
-- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 
 ### Deprecated
 

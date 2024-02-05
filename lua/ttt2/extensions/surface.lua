@@ -4,9 +4,9 @@
 -- @module surface
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 ---
@@ -16,7 +16,7 @@ end
 -- @param table fontData
 -- @realm client
 function surface.CreateAdvancedFont(fontName, fontData)
-	fonts.AddFont(fontName, fontData.size, fontData)
+    fonts.AddFont(fontName, fontData.size, fontData)
 end
 
 ---
@@ -25,9 +25,9 @@ end
 -- @param table tbl A table with triangles
 -- @realm client
 function surface.DrawPolyTable(tbl)
-	for i = 1, #tbl do
-		render.FullReset()
+    for i = 1, #tbl do
+        render.FullReset()
 
-		surface.DrawPoly(tbl[i])
-	end
+        surface.DrawPoly(tbl[i])
+    end
 end
