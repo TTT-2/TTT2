@@ -17,7 +17,7 @@ if CLIENT then
 
     SWEP.EquipMenuData = {
         type = "item_weapon",
-        desc = "radio_desc"
+        desc = "radio_desc",
     }
 
     SWEP.ViewModelFOV = 70
@@ -96,7 +96,6 @@ function SWEP:Reload()
     return false
 end
 
-
 if CLIENT then
     ---
     -- @ignore
@@ -115,7 +114,7 @@ if CLIENT then
             surpresslightning = false,
             material = "",
             skin = 0,
-            bodygroup = {}
+            bodygroup = {},
         })
 
         self:AddCustomWorldModel("wmodel", {
@@ -130,7 +129,7 @@ if CLIENT then
             surpresslightning = false,
             material = "",
             skin = 0,
-            bodygroup = {}
+            bodygroup = {},
         })
 
         self.BaseClass.Initialize(self)

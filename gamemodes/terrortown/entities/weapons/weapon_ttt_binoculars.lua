@@ -297,7 +297,7 @@ if CLIENT then
             surpresslightning = false,
             material = "",
             skin = 0,
-            bodygroup = {}
+            bodygroup = {},
         })
 
         self.BaseClass.Initialize(self)
@@ -317,11 +317,14 @@ if CLIENT then
         local client = LocalPlayer()
         local ent = tData:GetEntity()
 
-        if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+        if not IsValid(client) or not client:IsTerror() or not client:Alive() then
+            return
+        end
 
         local c_wep = client:GetActiveWeapon()
 
-        if not IsValid(ent)
+        if
+            not IsValid(ent)
             or not IsValid(c_wep)
             or ent:GetClass() ~= "prop_ragdoll"
             or c_wep:GetClass() ~= "weapon_ttt_binoculars"
@@ -330,12 +333,10 @@ if CLIENT then
             return
         end
 
-        local progress = mathRound(mathClamp((c_wep:GetProgress() / c_wep.ProcessingDelay) * 100, 0, 100))
+        local progress =
+            mathRound(mathClamp((c_wep:GetProgress() / c_wep.ProcessingDelay) * 100, 0, 100))
 
-        tData:AddDescriptionLine(
-            GetPT("binoc_progress", {progress = progress}),
-            hud_color
-        )
+        tData:AddDescriptionLine(GetPT("binoc_progress", { progress = progress }), hud_color)
     end)
 
     ---
@@ -363,6 +364,14 @@ if CLIENT then
         surface.DrawRect(x - offset, y - length, thickness, length - gap)
         surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 
-        draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.ShadowedText(
+            TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(),
+            "TargetID_Description",
+            x + length + 10,
+            y - length,
+            hud_color,
+            TEXT_ALIGN_LEFT,
+            TEXT_ALIGN_CENTER
+        )
     end
 end

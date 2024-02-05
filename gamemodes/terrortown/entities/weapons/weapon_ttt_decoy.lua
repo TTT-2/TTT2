@@ -135,7 +135,7 @@ if CLIENT then
             surpresslightning = false,
             material = "",
             skin = 0,
-            bodygroup = {}
+            bodygroup = {},
         })
 
         self:AddCustomWorldModel("wmodel", {
@@ -150,7 +150,7 @@ if CLIENT then
             surpresslightning = false,
             material = "",
             skin = 0,
-            bodygroup = {}
+            bodygroup = {},
         })
 
         self.BaseClass.Initialize(self)
