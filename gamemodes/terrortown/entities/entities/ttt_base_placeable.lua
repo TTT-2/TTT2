@@ -241,6 +241,8 @@ if SERVER then
         end
 
         if not self:PlayerCanPickupWeapon(activator) then
+            LANG.Msg(activator, "pickup_fail", nil, MSG_MSTACK_WARN)
+
             self:EmitSound(soundDeny)
 
             return
@@ -258,6 +260,8 @@ if SERVER then
 
             -- if pickup has failed, the in-world entity should not be removed
             if not IsValid(wep) then
+                LANG.Msg(activator, "pickup_no_room", nil, MSG_MSTACK_WARN)
+
                 self:EmitSound(soundDeny)
 
                 return
