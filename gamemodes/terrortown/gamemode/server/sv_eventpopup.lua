@@ -14,48 +14,50 @@ EPOP = EPOP or {}
 -- @param[default=false] boolean blocking If this is false, this message gets instantly replaced if a new message is added
 -- @realm server
 function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
-	if not title and not subtitle then return end
+    if not title and not subtitle then
+        return
+    end
 
-	net.Start("ttt2_eventpopup")
+    net.Start("ttt2_eventpopup")
 
-	if title then
-		title = istable(title) and title or {text = title}
+    if title then
+        title = istable(title) and title or { text = title }
 
-		net.WriteBool(true)
-		net.WriteString(title.text)
+        net.WriteBool(true)
+        net.WriteString(title.text)
 
-		if IsColor(title.color) then
-			net.WriteBool(true)
-			net.WriteColor(title.color)
-		else
-			net.WriteBool(false)
-		end
-	else
-		net.WriteBool(false)
-	end
+        if IsColor(title.color) then
+            net.WriteBool(true)
+            net.WriteColor(title.color)
+        else
+            net.WriteBool(false)
+        end
+    else
+        net.WriteBool(false)
+    end
 
-	if subtitle then
-		subtitle = istable(subtitle) and subtitle or {text = subtitle}
+    if subtitle then
+        subtitle = istable(subtitle) and subtitle or { text = subtitle }
 
-		net.WriteBool(true)
-		net.WriteString(subtitle.text)
+        net.WriteBool(true)
+        net.WriteString(subtitle.text)
 
-		if IsColor(subtitle.color) then
-			net.WriteBool(true)
-			net.WriteColor(subtitle.color)
-		else
-			net.WriteBool(false)
-		end
-	else
-		net.WriteBool(false)
-	end
+        if IsColor(subtitle.color) then
+            net.WriteBool(true)
+            net.WriteColor(subtitle.color)
+        else
+            net.WriteBool(false)
+        end
+    else
+        net.WriteBool(false)
+    end
 
-	net.WriteUInt(displayTime or 4, 16)
-	net.WriteBool(blocking == true)
+    net.WriteUInt(displayTime or 4, 16)
+    net.WriteBool(blocking == true)
 
-	if plys then
-		net.Send(plys)
-	else
-		net.Broadcast()
-	end
+    if plys then
+        net.Send(plys)
+    else
+        net.Broadcast()
+    end
 end

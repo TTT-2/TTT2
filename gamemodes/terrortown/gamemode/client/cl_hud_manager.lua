@@ -3,6 +3,7 @@
 
 ---
 -- @realm client
+-- stylua: ignore
 local current_hud_cvar = CreateConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 local current_hud_table = nil
@@ -13,9 +14,11 @@ HUDManager = {}
 -- Draws the current selected HUD
 -- @realm client
 function HUDManager.DrawHUD()
-	if not current_hud_table or not current_hud_table.Draw then return end
+    if not current_hud_table or not current_hud_table.Draw then
+        return
+    end
 
-	current_hud_table:Draw()
+    current_hud_table:Draw()
 end
 
 ---
@@ -29,53 +32,63 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDPaint
 -- @local
 function GM:HUDPaint()
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTTButton") then
-		TBHUD:Draw(client)
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTTTButton") then
+        TBHUD:Draw(client)
+    end
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTTargetID") then
-		---
-		-- @realm client
-		hook.Run("HUDDrawTargetID")
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTTTargetID") then
+        ---
+        -- @realm client
+        -- stylua: ignore
+        hook.Run("HUDDrawTargetID")
+    end
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTT2HUD") then
-		HUDManager.DrawHUD()
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTT2HUD") then
+        HUDManager.DrawHUD()
+    end
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTT2KeyHelp") then
-		keyhelp.Draw()
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTT2KeyHelp") then
+        keyhelp.Draw()
+    end
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTT2MarkerVision") then
-		markerVision.Draw()
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTT2MarkerVision") then
+        markerVision.Draw()
+    end
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTRadar") then
-		RADAR:Draw(client)
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTTRadar") then
+        RADAR:Draw(client)
+    end
 
-	if not client:Alive() or client:Team() == TEAM_SPEC then return end
+    if not client:Alive() or client:Team() == TEAM_SPEC then
+        return
+    end
 
-	---
-	-- @realm client
-	if hook.Run("HUDShouldDraw", "TTTVoice") then
-		VOICE.Draw(client)
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if hook.Run("HUDShouldDraw", "TTTVoice") then
+        VOICE.Draw(client)
+    end
 end
 
 ---
@@ -86,7 +99,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostDrawHUD
 -- @local
 function GM:PostDrawHUD()
-	vguihandler.DrawBackground()
+    vguihandler.DrawBackground()
 end
 
 ---
@@ -100,18 +113,18 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:OnScreenSizeChanged
 -- @realm client
 function GM:OnScreenSizeChanged(oldScrW, oldScrH)
-	-- resolution has changed, update resolution in appearance
-	-- to handle dynamic resolution changes
-	appearance.UpdateResolution(ScrW(), ScrH())
+    -- resolution has changed, update resolution in appearance
+    -- to handle dynamic resolution changes
+    appearance.UpdateResolution(ScrW(), ScrH())
 end
 
 -- Hide the standard HUD stuff
 local gmodhud = {
-	["CHudHealth"] = true,
-	["CHudBattery"] = true,
-	["CHudAmmo"] = true,
-	["CHudSecondaryAmmo"] = true,
-	["CHudDamageIndicator"] = true
+    ["CHudHealth"] = true,
+    ["CHudBattery"] = true,
+    ["CHudAmmo"] = true,
+    ["CHudSecondaryAmmo"] = true,
+    ["CHudDamageIndicator"] = true,
 }
 
 ---
@@ -126,40 +139,41 @@ local gmodhud = {
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDShouldDraw
 -- @local
 function GM:HUDShouldDraw(name)
-	if gmodhud[name] then
-		return false
-	end
+    if gmodhud[name] then
+        return false
+    end
 
-	return self.BaseClass.HUDShouldDraw(self, name)
+    return self.BaseClass.HUDShouldDraw(self, name)
 end
 
 local function UpdateHUD(name)
-	local hudEl = huds.GetStored(name)
-	if not hudEl then
-		MsgN("Error: HUD with name " .. name .. " was not found!")
+    local hudEl = huds.GetStored(name)
+    if not hudEl then
+        ErrorNoHaltWithStack("Error: HUD with name " .. name .. " was not found!")
 
-		return
-	end
+        return
+    end
 
-	HUDEditor.StopEditHUD()
+    HUDEditor.StopEditHUD()
 
-	-- save the old HUDs values
-	if current_hud_table then
-		current_hud_table:SaveData()
-	end
+    -- save the old HUDs values
+    if current_hud_table then
+        current_hud_table:SaveData()
+    end
 
-	current_hud_cvar:SetString(name)
+    current_hud_cvar:SetString(name)
 
-	current_hud_table = hudEl
+    current_hud_table = hudEl
 
-	-- Initialize elements
-	hudEl:Initialize()
-	hudEl:LoadData()
+    -- Initialize elements
+    hudEl:Initialize()
+    hudEl:LoadData()
 
-	---
-	-- Call all listeners
-	-- @realm client
-	hook.Run("TTT2HUDUpdated", name)
+    ---
+    -- Call all listeners
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("TTT2HUDUpdated", name)
 end
 
 ---
@@ -167,13 +181,13 @@ end
 -- @return string
 -- @realm client
 function HUDManager.GetHUD()
-	local hudvar = current_hud_cvar:GetString()
+    local hudvar = current_hud_cvar:GetString()
 
-	if not huds.GetStored(hudvar) then
-		hudvar = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
-	end
+    if not huds.GetStored(hudvar) then
+        hudvar = ttt2net.GetGlobal({ "hud_manager", "defaultHUD" }) or "pure_skin"
+    end
 
-	return hudvar
+    return hudvar
 end
 
 ---
@@ -183,43 +197,45 @@ end
 -- @param string name The name of the HUD
 -- @realm client
 function HUDManager.SetHUD(name)
-	local currentHUD = HUDManager.GetHUD()
+    local currentHUD = HUDManager.GetHUD()
 
-	net.Start("TTT2RequestHUD")
-	net.WriteString(name or currentHUD)
-	net.WriteString(currentHUD)
-	net.SendToServer()
+    net.Start("TTT2RequestHUD")
+    net.WriteString(name or currentHUD)
+    net.WriteString(currentHUD)
+    net.SendToServer()
 end
 
 ---
 -- Resets the current HUD if possible
 -- @realm client
 function HUDManager.ResetHUD()
-	local hud = huds.GetStored(HUDManager.GetHUD())
+    local hud = huds.GetStored(HUDManager.GetHUD())
 
-	if not hud then return end
+    if not hud then
+        return
+    end
 
-	hud:Reset()
-	hud:SaveData()
+    hud:Reset()
+    hud:SaveData()
 end
 
 ---
 -- Initializes all @{HUD}s and loads the SQL stored data
 -- @realm client
 function HUDManager.LoadAllHUDS()
-	local hudsTbl = huds.GetList()
+    local hudsTbl = huds.GetList()
 
-	for i = 1, #hudsTbl do
-		local hud = hudsTbl[i]
+    for i = 1, #hudsTbl do
+        local hud = hudsTbl[i]
 
-		hud:Initialize()
-		hud:LoadData()
-	end
+        hud:Initialize()
+        hud:LoadData()
+    end
 end
 
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2ReceiveHUD", function()
-	UpdateHUD(net.ReadString())
+    UpdateHUD(net.ReadString())
 end)
 
 ---
@@ -228,6 +244,4 @@ end)
 -- @param string name The name of the new HUD
 -- @hook
 -- @realm client
-function GM:TTT2HUDUpdated(name)
-
-end
+function GM:TTT2HUDUpdated(name) end

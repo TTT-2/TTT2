@@ -16,40 +16,42 @@ local color_4 = Color(255, 200, 20)
 local color_5 = Color(255, 255, 200)
 
 local function LastWordsRecv()
-	local sender = net.ReadEntity()
-	local words = net.ReadString()
+    local sender = net.ReadEntity()
+    local words = net.ReadString()
 
-	local validSender = IsValid(sender)
+    local validSender = IsValid(sender)
 
-	local was_detective = validSender and sender:IsDetective()
-	local nick = validSender and sender:Nick() or "<Unknown>"
+    local was_detective = validSender and sender:IsDetective()
+    local nick = validSender and sender:Nick() or "<Unknown>"
 
-	chat.AddText(
-		color_1,
-		Format("(%s) ", string.upper(GetTranslation("last_words"))),
-		was_detective and color_2 or color_3,
-		nick,
-		COLOR_WHITE,
-		": " .. words
-	)
+    chat.AddText(
+        color_1,
+        Format("(%s) ", string.upper(GetTranslation("last_words"))),
+        was_detective and color_2 or color_3,
+        nick,
+        COLOR_WHITE,
+        ": " .. words
+    )
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
 local function TTT_RoleChat()
-	local sender = net.ReadEntity()
-	if not IsValid(sender) then return end
+    local sender = net.ReadEntity()
+    if not IsValid(sender) then
+        return
+    end
 
-	local text = net.ReadString()
-	local roleData = sender:GetSubRoleData() -- use cached role
+    local text = net.ReadString()
+    local roleData = sender:GetSubRoleData() -- use cached role
 
-	chat.AddText(
-		sender:GetRoleColor(),
-		Format("(%s) ", string.upper(GetTranslation(roleData.name))),
-		color_4,
-		sender:Nick(),
-		color_5,
-		": " .. text
-	)
+    chat.AddText(
+        sender:GetRoleColor(),
+        Format("(%s) ", string.upper(GetTranslation(roleData.name))),
+        color_4,
+        sender:Nick(),
+        color_5,
+        ": " .. text
+    )
 end
 net.Receive("TTT_RoleChat", TTT_RoleChat)
 
@@ -76,14 +78,14 @@ net.Receive("TTT_RoleChat", TTT_RoleChat)
 -- @ref https://wiki.facepunch.com/gmod/GM:ChatText
 -- @local
 function GM:ChatText(idx, name, text, type)
-	if type == "joinleave" and string.find(text, "Changed name during a round") then
-		-- prevent nick from showing up
-		chat.AddText(LANG.GetTranslation("name_kick"))
+    if type == "joinleave" and string.find(text, "Changed name during a round") then
+        -- prevent nick from showing up
+        chat.AddText(LANG.GetTranslation("name_kick"))
 
-		return true
-	end
+        return true
+    end
 
-	return BaseClass.ChatText(self, idx, name, text, type)
+    return BaseClass.ChatText(self, idx, name, text, type)
 end
 
 ---
@@ -92,7 +94,7 @@ end
 -- @param string text
 -- @realm client
 function AddDetectiveText(ply, text)
-	chat.AddText(roles.DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
+    chat.AddText(roles.DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
 end
 
 ---
@@ -109,34 +111,34 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:OnPlayerChat
 -- @local
 function GM:OnPlayerChat(ply, text, teamChat, isDead)
-	if not IsValid(ply) then
-		return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
-	end
+    if not IsValid(ply) then
+        return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
+    end
 
-	local plyRoleData = ply:GetSubRoleData()
+    local plyRoleData = ply:GetSubRoleData()
 
-	-- send detective-like message if role is public policing role
-	-- note: while it seems like is not nessecary to check if the role is public because
-	-- only a public role is synced, this is still checked here to make sure it works
-	-- well with revivals. A non-public role won't be counted as public policing role
-	-- if they were revived and their role is known.
-	if ply:IsActive() and plyRoleData.isPolicingRole and plyRoleData.isPublicRole then
-		AddDetectiveText(ply, text)
+    -- send detective-like message if role is public policing role
+    -- note: while it seems like is not nessecary to check if the role is public because
+    -- only a public role is synced, this is still checked here to make sure it works
+    -- well with revivals. A non-public role won't be counted as public policing role
+    -- if they were revived and their role is known.
+    if ply:IsActive() and plyRoleData.isPolicingRole and plyRoleData.isPublicRole then
+        AddDetectiveText(ply, text)
 
-		return true
-	end
+        return true
+    end
 
-	local sTeam = ply:Team() == TEAM_SPEC
+    local sTeam = ply:Team() == TEAM_SPEC
 
-	if sTeam and not isDead then
-		isDead = true
-	end
+    if sTeam and not isDead then
+        isDead = true
+    end
 
-	if teamChat and (sTeam or ply:GetSubRoleData().unknownTeam) then
-		teamChat = false
-	end
+    if teamChat and (sTeam or ply:GetSubRoleData().unknownTeam) then
+        teamChat = false
+    end
 
-	return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
+    return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
 end
 
 local last_chat = ""
@@ -149,7 +151,7 @@ local last_chat = ""
 -- @ref https://wiki.facepunch.com/gmod/GM:ChatTextChanged
 -- @local
 function GM:ChatTextChanged(text)
-	last_chat = text
+    last_chat = text
 end
 
 ---
@@ -157,20 +159,20 @@ end
 -- @realm client
 -- @internal
 function ChatInterrupt()
-	local client = LocalPlayer()
-	local id = net.ReadUInt(32)
+    local client = LocalPlayer()
+    local id = net.ReadUInt(32)
 
-	local last_seen = IsValid(client.last_id) and client.last_id:EntIndex() or 0
-	local last_words = "."
+    local last_seen = IsValid(client.last_id) and client.last_id:EntIndex() or 0
+    local last_words = "."
 
-	if last_chat == "" then
-		if RADIO.LastRadio.t > CurTime() - 2 then
-			last_words = RADIO.LastRadio.msg
-		end
-	else
-		last_words = last_chat
-	end
+    if last_chat == "" then
+        if RADIO.LastRadio.t > CurTime() - 2 then
+            last_words = RADIO.LastRadio.msg
+        end
+    else
+        last_words = last_chat
+    end
 
-	RunConsoleCommand("_deathrec", tostring(id), tostring(last_seen), last_words)
+    RunConsoleCommand("_deathrec", tostring(id), tostring(last_seen), last_words)
 end
 net.Receive("TTT_InterruptChat", ChatInterrupt)

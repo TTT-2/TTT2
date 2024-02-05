@@ -17,17 +17,19 @@ util.AddNetworkString("TTT2RadarUpdateTime")
 ---
 -- @ignore
 function ITEM:Initialize()
-	cv_radarCharge = GetConVar("ttt2_radar_charge_time")
+    cv_radarCharge = GetConVar("ttt2_radar_charge_time")
 end
 
 local function UpdateTimeOnPlayer(ply)
-	if ply.lastRadarTime == ply.radarTime then return end
+    if ply.lastRadarTime == ply.radarTime then
+        return
+    end
 
-	ply.lastRadarTime = ply.radarTime
+    ply.lastRadarTime = ply.radarTime
 
-	net.Start("TTT2RadarUpdateTime")
-	net.WriteUInt(ply.radarTime, 8)
-	net.Send(ply)
+    net.Start("TTT2RadarUpdateTime")
+    net.WriteUInt(ply.radarTime, 8)
+    net.Send(ply)
 end
 
 ---
@@ -41,85 +43,93 @@ RADAR = RADAR or {}
 -- @internal
 -- @realm server
 function RADAR.TriggerRadarScan(ply)
-	if not IsValid(ply) or not ply:IsTerror() then return end
+    if not IsValid(ply) or not ply:IsTerror() then
+        return
+    end
 
-	if not ply:HasEquipmentItem("item_ttt_radar") then
-		LANG.Msg(ply, "radar_not_owned", nil, MSG_CHAT_WARN)
+    if not ply:HasEquipmentItem("item_ttt_radar") then
+        LANG.Msg(ply, "radar_not_owned", nil, MSG_CHAT_WARN)
 
-		return
-	end
+        return
+    end
 
-	if ply.radar_charge > CurTime() then
-		LANG.Msg(ply, "radar_charging", nil, MSG_CHAT_WARN)
+    if ply.radar_charge > CurTime() then
+        LANG.Msg(ply, "radar_charging", nil, MSG_CHAT_WARN)
 
-		return
-	end
+        return
+    end
 
-	-- update radar time after the previous scan was finished
-	UpdateTimeOnPlayer(ply)
+    -- update radar time after the previous scan was finished
+    UpdateTimeOnPlayer(ply)
 
-	-- remove 0.1 seconds to account for rounding errors
-	ply.radar_charge = CurTime() + ply.radarTime - 0.1
+    -- remove 0.1 seconds to account for rounding errors
+    ply.radar_charge = CurTime() + ply.radarTime - 0.1
 
-	local targets, customradar
+    local targets, customradar
 
-	if ply:GetSubRoleData() and ply:GetSubRoleData().CustomRadar then
-		customradar = ply:GetSubRoleData().CustomRadar(ply)
-	end
+    if ply:GetSubRoleData() and ply:GetSubRoleData().CustomRadar then
+        customradar = ply:GetSubRoleData().CustomRadar(ply)
+    end
 
-	if istable(customradar) then
-		targets = table.Copy(customradar)
-	else -- if we get no value we use default radar
-		targets = {}
+    if istable(customradar) then
+        targets = table.Copy(customradar)
+    else -- if we get no value we use default radar
+        targets = {}
 
-		local scan_ents = player.GetAll()
+        local scan_ents = player.GetAll()
 
-		table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
+        table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
-		for i = 1, #scan_ents do
-			local ent = scan_ents[i]
+        for i = 1, #scan_ents do
+            local ent = scan_ents[i]
 
-			if not IsValid(ent) or ply == ent or ent:IsPlayer() and (not ent:IsTerror() or ent:GetNWBool("disguised", false)) then continue end
+            if
+                not IsValid(ent)
+                or ply == ent
+                or ent:IsPlayer() and (not ent:IsTerror() or ent:GetNWBool("disguised", false))
+            then
+                continue
+            end
 
-			local pos = ent:LocalToWorld(ent:OBBCenter())
+            local pos = ent:LocalToWorld(ent:OBBCenter())
 
-			-- Round off, easier to send and inaccuracy does not matter
-			pos.x = math.Round(pos.x)
-			pos.y = math.Round(pos.y)
-			pos.z = math.Round(pos.z)
+            -- Round off, easier to send and inaccuracy does not matter
+            pos.x = math.Round(pos.x)
+            pos.y = math.Round(pos.y)
+            pos.z = math.Round(pos.z)
 
-			targets[#targets + 1] = RADAR.CreateTargetTable(ply, pos, ent)
-		end
-	end
+            targets[#targets + 1] = RADAR.CreateTargetTable(ply, pos, ent)
+        end
+    end
 
-	net.Start("TTT_Radar")
-	net.WriteUInt(#targets, 16)
+    net.Start("TTT_Radar")
+    net.WriteUInt(#targets, 16)
 
-	for i = 1, #targets do
-		local tgt = targets[i]
+    for i = 1, #targets do
+        local tgt = targets[i]
 
-		net.WriteInt(tgt.pos.x, 32)
-		net.WriteInt(tgt.pos.y, 32)
-		net.WriteInt(tgt.pos.z, 32)
+        net.WriteInt(tgt.pos.x, 32)
+        net.WriteInt(tgt.pos.y, 32)
+        net.WriteInt(tgt.pos.z, 32)
 
-		if tgt.subrole == -1 then
-			net.WriteBool(false)
-		else
-			net.WriteBool(true)
-			net.WriteUInt(tgt.subrole, ROLE_BITS)
-		end
+        if tgt.subrole == -1 then
+            net.WriteBool(false)
+        else
+            net.WriteBool(true)
+            net.WriteUInt(tgt.subrole, ROLE_BITS)
+        end
 
-		net.WriteString(tgt.team or "none")
+        net.WriteString(tgt.team or "none")
 
-		if tgt.color then
-			net.WriteBool(true)
-			net.WriteColor(tgt.color)
-		else
-			net.WriteBool(false)
-		end
-	end
+        if tgt.color then
+            net.WriteBool(true)
+            net.WriteColor(tgt.color)
+        else
+            net.WriteBool(false)
+        end
+    end
 
-	net.Send(ply)
+    net.Send(ply)
 end
 concommand.Add("ttt_radar_scan", RADAR.TriggerRadarScan)
 
@@ -131,35 +141,44 @@ concommand.Add("ttt_radar_scan", RADAR.TriggerRadarScan)
 -- @return nil|string The modified team
 -- @hook
 -- @realm server
-function GM:TTT2ModifyRadarRole(ply, target)
-
-end
+function GM:TTT2ModifyRadarRole(ply, target) end
 
 local function GetDataForRadar(ply, ent)
-	local subrole, team = -1, "none"
+    local subrole, team = -1, "none"
 
-	if not IsValid(ent) then
-		subrole = -1
-	elseif not ent:IsPlayer() then
-		-- Decoys appear as innocents for players from other teams
-		if ent:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
-			subrole = ROLE_INNOCENT
-		end
-	else
-		---
-		-- @realm server
-		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
+    if not IsValid(ent) then
+        subrole = -1
+    elseif not ent:IsPlayer() then
+        -- Decoys appear as innocents for players from other teams
+        if ent:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
+            subrole = ROLE_INNOCENT
+        end
+    else
+        ---
+        -- @realm server
+        -- stylua: ignore
+        subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
-		if not subrole then
-			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
-		end
+        if not subrole then
+            subrole = (
+                ent:IsInTeam(ply)
+                or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())
+            )
+                    and ent:GetSubRole()
+                or ROLE_INNOCENT
+        end
 
-		if not team then
-			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
-		end
-	end
+        if not team then
+            team = (
+                ent:IsInTeam(ply)
+                or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())
+            )
+                    and ent:GetTeam()
+                or TEAM_INNOCENT
+        end
+    end
 
-	return subrole, team
+    return subrole, team
 end
 
 ---
@@ -171,14 +190,14 @@ end
 -- @return table
 -- @realm server
 function RADAR.CreateTargetTable(ply, pos, ent, color)
-	local subrole, team = GetDataForRadar(ply, ent)
+    local subrole, team = GetDataForRadar(ply, ent)
 
-	return {
-		pos = pos,
-		subrole = subrole,
-		team = team,
-		color = color
-	}
+    return {
+        pos = pos,
+        subrole = subrole,
+        team = team,
+        color = color,
+    }
 end
 
 ---
@@ -187,14 +206,18 @@ end
 -- @internal
 -- @realm server
 function RADAR.SetupRadarScan(ply)
-	timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
-		if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_radar")
-			or ply.radarDoesNotRepeat
-		then return end
+    timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
+        if
+            not IsValid(ply)
+            or not ply:HasEquipmentItem("item_ttt_radar")
+            or ply.radarDoesNotRepeat
+        then
+            return
+        end
 
-		RADAR.TriggerRadarScan(ply)
-		RADAR.SetupRadarScan(ply)
-	end)
+        RADAR.TriggerRadarScan(ply)
+        RADAR.SetupRadarScan(ply)
+    end)
 end
 
 ---
@@ -203,12 +226,14 @@ end
 -- @param Player ply The player who owens the radar
 -- @realm server
 function RADAR.Init(ply)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	ply:ResetRadarTime()
+    ply:ResetRadarTime()
 
-	RADAR.TriggerRadarScan(ply)
-	RADAR.SetupRadarScan(ply)
+    RADAR.TriggerRadarScan(ply)
+    RADAR.SetupRadarScan(ply)
 end
 
 ---
@@ -217,15 +242,19 @@ end
 -- @param Player ply The player who owned the radar
 -- @realm server
 function RADAR.Deinit(ply)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	timer.Remove("radarTimeout_" .. ply:SteamID64())
+    timer.Remove("radarTimeout_" .. ply:SteamID64())
 end
 
 net.Receive("TTT2RadarUpdateAutoScan", function(_, ply)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	ply.radarDoesNotRepeat = not net.ReadBool()
+    ply.radarDoesNotRepeat = not net.ReadBool()
 end)
 
 ---
@@ -238,14 +267,14 @@ local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
 -- @param number time The radar time interval
 -- @realm server
 function plymeta:SetRadarTime(time)
-	self.radarTime = time
+    self.radarTime = time
 end
 
 ---
 -- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
 -- @realm server
 function plymeta:ResetRadarTime()
-	self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
+    self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
 end
 
 ---
@@ -253,13 +282,15 @@ end
 -- call this function after @{plymeta:SetRadarTime} to enforce an immediate change.
 -- @realm server
 function plymeta:ForceRadarScan()
-	if not self:HasEquipmentItem("item_ttt_radar") then return end
+    if not self:HasEquipmentItem("item_ttt_radar") then
+        return
+    end
 
-	RADAR.Deinit(self)
+    RADAR.Deinit(self)
 
-	-- reset the radar charge end time to now to allow a new scan
-	self.radar_charge = CurTime()
+    -- reset the radar charge end time to now to allow a new scan
+    self.radar_charge = CurTime()
 
-	RADAR.TriggerRadarScan(self)
-	RADAR.SetupRadarScan(self)
+    RADAR.TriggerRadarScan(self)
+    RADAR.SetupRadarScan(self)
 end

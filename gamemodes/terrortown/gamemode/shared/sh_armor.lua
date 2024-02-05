@@ -3,9 +3,9 @@
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
-	Error("FAILED TO FIND PLAYER TABLE")
+    ErrorNoHaltWithStack("FAILED TO FIND PLAYER TABLE")
 
-	return
+    return
 end
 
 ---
@@ -13,7 +13,7 @@ end
 -- @return[default=0] number armor
 -- @realm shared
 function plymeta:GetArmor()
-	return self.armor or 0
+    return self.armor or 0
 end
 
 ---
@@ -21,7 +21,7 @@ end
 -- @return[default=100] number max armor
 -- @realm shared
 function plymeta:GetMaxArmor()
-	return self.armor_max or 0
+    return self.armor_max or 0
 end
 
 ---
@@ -29,5 +29,6 @@ end
 -- @return boolean is armor reinforced
 -- @realm shared
 function plymeta:ArmorIsReinforced()
-	return GetGlobalBool("ttt_armor_enable_reinforced", false) and self:GetArmor() > GetGlobalInt("ttt_armor_threshold_for_reinforced", 0)
+    return GetGlobalBool("ttt_armor_enable_reinforced", false)
+        and self:GetArmor() > GetGlobalInt("ttt_armor_threshold_for_reinforced", 0)
 end

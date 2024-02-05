@@ -4,7 +4,7 @@
 -- @module sql
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 ---
@@ -14,15 +14,15 @@ end
 -- @return boolean Returns true if the column exists in the table
 -- @realm shared
 function sql.ColumnExists(tableName, columnName)
-	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+    local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	for i = 1, #result do
-		if result[i].name == columnName then
-			return true
-		end
-	end
+    for i = 1, #result do
+        if result[i].name == columnName then
+            return true
+        end
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -31,21 +31,23 @@ end
 -- @return table|nil Returns a table of the primarykey columns and nil in case of an error
 -- @realm shared
 function sql.GetPrimaryKey(tableName)
-	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+    local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	if result == false then return end
+    if result == false then
+        return
+    end
 
-	local primaryKeys = {}
+    local primaryKeys = {}
 
-	for i = 1, #result do
-		local pk = tonumber(result[i].pk)
+    for i = 1, #result do
+        local pk = tonumber(result[i].pk)
 
-		if pk ~= 0 then
-			primaryKeys[pk] = result[i].name
-		end
-	end
+        if pk ~= 0 then
+            primaryKeys[pk] = result[i].name
+        end
+    end
 
-	return primaryKeys
+    return primaryKeys
 end
 
 ---
@@ -54,17 +56,19 @@ end
 -- @return table|nil Returns a table of the column names and nil in case of an error.
 -- @realm shared
 function sql.GetTableColumns(tableName)
-	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+    local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	if result == false then return end
+    if result == false then
+        return
+    end
 
-	local columnNames = {}
+    local columnNames = {}
 
-	for i = 1, #result do
-		columnNames[i] = result[i].name
-	end
+    for i = 1, #result do
+        columnNames[i] = result[i].name
+    end
 
-	return columnNames
+    return columnNames
 end
 
 ---
@@ -72,7 +76,7 @@ end
 -- @param string tableName The name of the table to remove
 -- @realm shared
 function sql.DropTable(tableName)
-	return sql.Query("DROP TABLE " .. sql.SQLIdent(tableName))
+    return sql.Query("DROP TABLE " .. sql.SQLIdent(tableName))
 end
 
 ---
@@ -81,7 +85,7 @@ end
 -- @return string Returns the escaped string
 -- @realm shared
 function sql.SQLIdent(str)
-	return "\"" .. str:gsub("\"", "\"\"") .. "\""
+    return "\"" .. str:gsub("\"", "\"\"") .. "\""
 end
 
 ---
@@ -89,5 +93,5 @@ end
 -- This is equivalent to `sql.Query("Rollback;")`.
 -- @realm shared
 function sql.Rollback()
-	sql.Query("Rollback;")
+    sql.Query("Rollback;")
 end

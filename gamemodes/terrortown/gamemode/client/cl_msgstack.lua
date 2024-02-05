@@ -19,11 +19,11 @@ local traitor_msg_bg = Color(255, 0, 0, 255)
 -- @param Color c
 -- @realm client
 function MSTACK:AddColoredMessage(text, c)
-	local item = {}
-	item.text = text
-	item.col = c
+    local item = {}
+    item.text = text
+    item.col = c
 
-	self:AddMessageEx(item)
+    self:AddMessageEx(item)
 end
 
 ---
@@ -32,11 +32,11 @@ end
 -- @param Color bg_clr
 -- @realm client
 function MSTACK:AddColoredBgMessage(text, bg_clr)
-	local item = {}
-	item.text = text
-	item.bg = bg_clr
+    local item = {}
+    item.text = text
+    item.bg = bg_clr
 
-	self:AddMessageEx(item)
+    self:AddMessageEx(item)
 end
 
 ---
@@ -46,12 +46,12 @@ end
 -- @param string title
 -- @realm client
 function MSTACK:AddImagedMessage(text, image, title)
-	local item = {}
-	item.text = text
-	item.title = title
-	item.image = image
+    local item = {}
+    item.text = text
+    item.title = title
+    item.image = image
 
-	self:AddMessageEx(item)
+    self:AddMessageEx(item)
 end
 
 ---
@@ -62,13 +62,13 @@ end
 -- @param string title
 -- @realm client
 function MSTACK:AddColoredImagedMessage(text, bg_clr, image, title)
-	local item = {}
-	item.text = text
-	item.title = title
-	item.bg = bg_clr
-	item.image = image
+    local item = {}
+    item.text = text
+    item.title = title
+    item.bg = bg_clr
+    item.image = image
 
-	self:AddMessageEx(item)
+    self:AddMessageEx(item)
 end
 
 ---
@@ -78,18 +78,18 @@ end
 -- @internal
 -- @todo add table structure
 function MSTACK:AddMessageEx(item)
-	item.time = CurTime()
-	item.sounded = false
+    item.time = CurTime()
+    item.sounded = false
 
-	-- Stagger the fading a bit
-	if self.last > item.time - 1 then
-		item.time = self.last + 1
-	end
+    -- Stagger the fading a bit
+    if self.last > item.time - 1 then
+        item.time = self.last + 1
+    end
 
-	-- Insert at the top
-	table.insert(self.msgs, 1, item)
+    -- Insert at the top
+    table.insert(self.msgs, 1, item)
 
-	self.last = item.time
+    self.last = item.time
 end
 
 ---
@@ -100,34 +100,34 @@ end
 -- @param boolean traitor_only
 -- @realm client
 function MSTACK:AddMessage(text, traitor_only)
-	if traitor_only then
-		self:AddColoredBgMessage(text, traitor_msg_bg)
-	else
-		self:AddColoredMessage(text)
-	end
+    if traitor_only then
+        self:AddColoredBgMessage(text, traitor_msg_bg)
+    else
+        self:AddColoredMessage(text)
+    end
 end
 
 -- Game state message channel
 local function ReceiveGameMsg()
-	local text = net.ReadString()
-	local special = net.ReadBit() == 1
+    local text = net.ReadString()
+    local special = net.ReadBit() == 1
 
-	print(text)
+    Dev(2, text)
 
-	MSTACK:AddMessage(text, special)
+    MSTACK:AddMessage(text, special)
 end
 net.Receive("TTT_GameMsg", ReceiveGameMsg)
 
 local function ReceiveCustomMsg()
-	local text = net.ReadString()
-	local c = table.Copy(COLOR_WHITE)
+    local text = net.ReadString()
+    local c = table.Copy(COLOR_WHITE)
 
-	c.r = net.ReadUInt(8)
-	c.g = net.ReadUInt(8)
-	c.b = net.ReadUInt(8)
+    c.r = net.ReadUInt(8)
+    c.g = net.ReadUInt(8)
+    c.b = net.ReadUInt(8)
 
-	print(text)
+    Dev(2, text)
 
-	MSTACK:AddColoredMessage(text, c)
+    MSTACK:AddColoredMessage(text, c)
 end
 net.Receive("TTT_GameMsgColor", ReceiveCustomMsg)

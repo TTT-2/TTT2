@@ -9,15 +9,13 @@
 local render = render
 local table = table
 local IsValid = IsValid
-local cam = cam
-local surface = surface
 local hook = hook
 local pairs = pairs
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 marks = {}
@@ -25,145 +23,179 @@ marks = {}
 local marksList = {}
 local marksHookInstalled = false
 
+-- reuse the same memory for each render
+local oldR, oldG, oldB = 1, 1, 1
+local oldBlend = 1
+local markedEnt = NULL
+local markedColor = color_white
+
 ---
--- Renders the entity based on the color
--- @param table ents list of @{Entity}
+-- Renders marked models, this is a sub function for Render.
+-- @param table markedEntsTable list of @{Entity}
 -- @param Color col color of rendering
--- @param Vector pos position of client's view the rendering starts from
--- @param Angle ang angle of client's view the rendering starts from
+-- @param number size size of markedEntsTable table
 -- @realm client
-local function Render(ents, col, pos, ang, w, h)
-	-- check for valid data
-	local tmp = {}
-	local index = 1
-	local remTable = {}
-	local remSize = 0
+local function RenderMarkedModels(markedEntsTable, col, size)
+    for i = 1, size do
+        markedEnt = markedEntsTable[i]
 
-	local entsSize = #ents
+        -- prevent messing up materials
+        markedEnt:SetNoDraw(true)
+        -- get/set the color of our marked entity
+        markedColor = markedEnt:GetColor()
+        oldR, oldG, oldB = render.GetColorModulation()
+        render.SetColorModulation(markedColor.r / 255, markedColor.g / 255, markedColor.b / 255)
+        -- get/set the transparency of our marked entity
+        oldBlend = render.GetBlend()
+        render.SetBlend(markedColor.a / 255)
 
-	for i = 1, entsSize do
-		local ent = ents[i]
+        -- draw the entity
+        markedEnt:DrawModel()
 
-		if not IsValid(ent) then -- search for invalid data
-			remSize = remSize + 1
-			remTable[remSize] = ent
-		elseif not ent:IsPlayer() or ent:Alive() and ent:IsTerror() then
-			tmp[index] = ent
-			index = index + 1
-		end
-	end
+        -- reset the values back to what they were
+        markedEnt:SetNoDraw(false)
+        render.SetColorModulation(oldR, oldG, oldB)
+        render.SetBlend(oldBlend)
+    end
+end
 
-	-- clear invalid data. Should just happen if a player disconnects or an entity is deleted
-	if remSize ~= 0 then
-		local tableRemove = table.remove
+---
+-- Renders the entity based on the color.
+-- @param table markedEntsTable list of @{Entity}
+-- @param Color col color of rendering
+-- @realm client
+local function Render(markedEntsTable, col)
+    -- check for valid data
+    local tmp = {}
+    local index = 1
+    local remTable = {}
+    local remSize = 0
 
-		for i = 1, remSize do
-			for x = 1, entsSize do
-				if ents[x] == remTable[i] then
-					tableRemove(ents, x)
+    local entsTableSize = #markedEntsTable
 
-					entsSize = entsSize - 1
+    for i = 1, entsTableSize do
+        local ent = markedEntsTable[i]
 
-					break
-				end
-			end
-		end
-	end
+        if not IsValid(ent) then -- search for invalid data
+            remSize = remSize + 1
+            remTable[remSize] = ent
+        elseif not ent:IsPlayer() or ent:Alive() and ent:IsTerror() then
+            tmp[index] = ent
+            index = index + 1
+        end
+    end
 
-	local size = #tmp
-	if size == 0 then return end
+    -- clear invalid data. Should just happen if a player disconnects or an entity is deleted
+    if remSize ~= 0 then
+        local tableRemove = table.remove
 
-	render.ClearStencil()
-	render.SetStencilEnable(true)
-	render.SetStencilWriteMask(255)
-	render.SetStencilTestMask(255)
-	render.SetStencilReferenceValue(15)
-	render.SetStencilFailOperation(STENCILOPERATION_KEEP)
-	render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
-	render.SetStencilPassOperation(STENCILOPERATION_KEEP)
-	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
-	render.SetBlend(0)
+        for i = 1, remSize do
+            for x = 1, entsTableSize do
+                if markedEntsTable[x] == remTable[i] then
+                    tableRemove(markedEntsTable, x)
 
-	for i = 1, size do
-		tmp[i]:DrawModel()
-	end
+                    entsTableSize = entsTableSize - 1
 
-	render.SetBlend(1)
-	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+                    break
+                end
+            end
+        end
+    end
 
-	-- stencil work is done in postdrawopaquerenderables, where surface doesn't work correctly
-	-- workaround via 3D2D by Bletotum
+    local size = #tmp
+    if size == 0 then
+        return
+    end
 
-	cam.Start3D2D(pos, ang, 1)
+    -- reset everything to known good values
+    render.SetStencilWriteMask(0xFF)
+    render.SetStencilTestMask(0xFF)
+    render.SetStencilReferenceValue(0)
+    render.SetStencilCompareFunction(STENCIL_ALWAYS)
+    render.SetStencilPassOperation(STENCIL_KEEP)
+    render.SetStencilFailOperation(STENCIL_KEEP)
+    render.SetStencilZFailOperation(STENCIL_KEEP)
+    render.ClearStencil()
 
-	surface.SetDrawColor(col.r, col.g, col.b, col.a)
-	surface.DrawRect(-w, -h, w * 2, h * 2)
+    -- enable stencils
+    render.SetStencilEnable(true)
+    -- set the reference value to 1. This is what the compare function tests against
+    render.SetStencilReferenceValue(1)
 
-	cam.End3D2D()
+    -- always draw everything, since we need the ZFail to work we cannot use STENCIL_NEVER to avoid drawing to the RT
+    render.SetStencilCompareFunction(STENCIL_ALWAYS)
+    -- if something would draw to the screen but is behind something, set the pixels it draws to 1
+    render.SetStencilZFailOperation(STENCIL_REPLACE)
 
-	for i = 1, size do
-		tmp[i]:DrawModel()
-	end
+    RenderMarkedModels(tmp, col, size)
 
-	render.SetStencilEnable(false)
+    -- now we basically do the same thing again but this time we set stencil values to 0 if the operation passes
+    -- this fixes the entity zfailing with itself
+    render.SetStencilZFailOperation(STENCIL_KEEP)
+    render.SetStencilPassOperation(STENCILOPERATION_ZERO)
+
+    RenderMarkedModels(tmp, col, size)
+
+    -- now, only draw things that have their pixels set to 1. This is the hidden parts of the stencil tests
+    render.SetStencilCompareFunction(STENCIL_EQUAL)
+    -- flush the screen. This will draw our color onto the screen
+    render.ClearBuffersObeyStencil(col.r, col.g, col.b, col.a, false)
+
+    -- let everything render normally again
+    render.SetStencilEnable(false)
 end
 
 ---
 -- Hook that renders the entities with the highlighting
 -- @realm client
 local function RenderHook()
-	local client = LocalPlayer()
-	local ang = client:EyeAngles()
-	local pos = client:EyePos() + ang:Forward() * 10
-
-	ang = Angle(ang.p + 90, ang.y, 0)
-
-	local w = ScrW()
-	local h = ScrH()
-
-	for _, list in pairs(marksList) do
-		Render(list.ents, list.col, pos, ang, w, h)
-	end
+    for _, list in pairs(marksList) do
+        Render(list.ents, list.col)
+    end
 end
 
 ---
 -- Hook adding
 -- @realm client
 local function AddMarksHook()
-	if marksHookInstalled then return end
+    if marksHookInstalled then
+        return
+    end
 
-	hook.Add("PostDrawOpaqueRenderables", "RenderMarks", RenderHook)
+    hook.Add("PostDrawOpaqueRenderables", "RenderMarks", RenderHook)
 end
 
 ---
 -- Hook removing
 -- @realm client
 local function RemoveMarksHook()
-	hook.Remove("PostDrawOpaqueRenderables", "RenderMarks")
+    hook.Remove("PostDrawOpaqueRenderables", "RenderMarks")
 
-	marksHookInstalled = false
+    marksHookInstalled = false
 end
 
 ---
 -- Initialization of the markers list
 -- @realm client
 local function SetupMarkList(col)
-	if not col then return end
+    if not col then
+        return
+    end
 
-	local str = tostring(col)
+    local str = tostring(col)
 
-	marksList[str] = marksList[str] or {}
-	marksList[str].ents = marksList[str].ents or {}
-	marksList[str].col = col
+    marksList[str] = marksList[str] or {}
+    marksList[str].ents = marksList[str].ents or {}
+    marksList[str].col = col
 end
 
 ---
 -- Clearing the cached @{Entity} list
 -- @realm client
 function marks.Clear()
-	marksList = {}
+    marksList = {}
 
-	RemoveMarksHook()
+    RemoveMarksHook()
 end
 
 ---
@@ -171,34 +203,38 @@ end
 -- @param table ents list of entities that should get removed
 -- @realm client
 function marks.Remove(ents)
-	local entsSize = #ents
+    local entsSize = #ents
 
-	if entsSize == 0 or table.Count(marksList) == 0 then return end
+    if entsSize == 0 or table.Count(marksList) == 0 then
+        return
+    end
 
-	for i = 1, entsSize do
-		local ent = ents[i]
+    for i = 1, entsSize do
+        local ent = ents[i]
 
-		for _, list in pairs(marksList) do
-			local ret = nil
-			local size = #list.ents
+        for _, list in pairs(marksList) do
+            local ret = nil
+            local size = #list.ents
 
-			for x = 1, size do
-				if ent == list.ents[x] then
-					table.remove(list.ents, x)
+            for x = 1, size do
+                if ent == list.ents[x] then
+                    table.remove(list.ents, x)
 
-					ret = true
+                    ret = true
 
-					break
-				end
-			end
+                    break
+                end
+            end
 
-			if ret then break end
-		end
-	end
+            if ret then
+                break
+            end
+        end
+    end
 
-	if table.IsEmpty(marksList) then
-		RemoveMarksHook()
-	end
+    if table.IsEmpty(marksList) then
+        RemoveMarksHook()
+    end
 end
 
 ---
@@ -207,19 +243,21 @@ end
 -- @param Color col the color the added entities should get rendered
 -- @realm client
 function marks.Add(ents, col)
-	if #ents == 0 or not col then return end
+    if #ents == 0 or not col then
+        return
+    end
 
-	-- check if an entity is already inserted and remove it
-	marks.Remove(ents)
+    -- check if an entity is already inserted and remove it
+    marks.Remove(ents)
 
-	-- setup the table
-	SetupMarkList(col)
+    -- setup the table
+    SetupMarkList(col)
 
-	-- add entities into the table
-	table.Add(marksList[tostring(col)].ents, ents)
+    -- add entities into the table
+    table.Add(marksList[tostring(col)].ents, ents)
 
-	-- add the hook if there is something to render
-	AddMarksHook()
+    -- add the hook if there is something to render
+    AddMarksHook()
 end
 
 ---
@@ -230,25 +268,27 @@ end
 -- @usage marks.Set({}, COLOR_WHITE) -- this will clear all entities rendered in white
 -- @realm client
 function marks.Set(ents, col)
-	if not col or not istable(ents) then return end
+    if not col or not istable(ents) then
+        return
+    end
 
-	-- check if an entity is already inserted and remove it
-	marks.Remove(ents)
+    -- check if an entity is already inserted and remove it
+    marks.Remove(ents)
 
-	-- set the entities or remove table if empty
-	local str = tostring(col)
+    -- set the entities or remove table if empty
+    local str = tostring(col)
 
-	SetupMarkList(col)
+    SetupMarkList(col)
 
-	if #ents == 0 then
-		marksList[str] = nil
-	else
-		marksList[str].ents = ents
-	end
+    if #ents == 0 then
+        marksList[str] = nil
+    else
+        marksList[str].ents = ents
+    end
 
-	if table.IsEmpty(marksList) then
-		RemoveMarksHook()
-	else
-		AddMarksHook()
-	end
+    if table.IsEmpty(marksList) then
+        RemoveMarksHook()
+    else
+        AddMarksHook()
+    end
 end

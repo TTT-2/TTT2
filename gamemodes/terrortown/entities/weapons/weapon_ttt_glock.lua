@@ -1,18 +1,18 @@
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 SWEP.HoldType = "pistol"
 
 if CLIENT then
-	SWEP.PrintName = "Glock"
-	SWEP.Slot = 1
+    SWEP.PrintName = "Glock"
+    SWEP.Slot = 1
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 54
+    SWEP.ViewModelFlip = false
+    SWEP.ViewModelFOV = 54
 
-	SWEP.Icon = "vgui/ttt/icon_glock"
-	SWEP.IconLetter = "c"
+    SWEP.Icon = "vgui/ttt/icon_glock"
+    SWEP.IconLetter = "c"
 end
 
 SWEP.Base = "weapon_tttbase"

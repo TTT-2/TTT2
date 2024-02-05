@@ -3,23 +3,26 @@
 -- @section weapon_ttt_binoculars
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
-DEFINE_BASECLASS "weapon_tttbase"
+DEFINE_BASECLASS("weapon_tttbase")
 
 SWEP.HoldType = "camera"
 
 if CLIENT then
-	SWEP.PrintName = "binoc_name"
-	SWEP.Slot = 7
+    SWEP.PrintName = "binoc_name"
+    SWEP.Slot = 7
 
-	SWEP.EquipMenuData = {
-		type = "item_weapon",
-		desc = "binoc_desc"
-	}
+    SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultWorldModel = false
 
-	SWEP.Icon = "vgui/ttt/icon_binoc"
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+        desc = "binoc_desc",
+    }
+
+    SWEP.Icon = "vgui/ttt/icon_binoc"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -40,59 +43,58 @@ SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 0.2
 
 SWEP.Kind = WEAPON_EQUIP2
-SWEP.CanBuy = {ROLE_DETECTIVE} -- only detectives can buy
+SWEP.CanBuy = { ROLE_DETECTIVE } -- only detectives can buy
 SWEP.WeaponID = AMMO_BINOCULARS
 SWEP.builtin = true
 
 SWEP.AllowDrop = true
-SWEP.InvisibleViewModel = true
 
 SWEP.ZoomLevels = {
-	0,
-	30,
-	20,
-	10
+    0,
+    30,
+    20,
+    10,
 }
 
 SWEP.ProcessingDelay = 5
 SWEP.decayRate = 0.5
 
-SWEP.ShowDefaultWorldModel = false
-
 ---
 -- @ignore
 function SWEP:SetupDataTables()
-	self:NetworkVar("Entity", 0, "ProcessTarget")
-	self:NetworkVar("Float", 0, "Progress")
-	self:NetworkVar("Float", 1, "AwayTime")
-	self:NetworkVar("Int", 0, "ZoomAmount")
+    self:NetworkVar("Entity", 0, "ProcessTarget")
+    self:NetworkVar("Float", 0, "Progress")
+    self:NetworkVar("Float", 1, "AwayTime")
+    self:NetworkVar("Int", 0, "ZoomAmount")
 
-	return self.BaseClass.SetupDataTables(self)
+    return BaseClass.SetupDataTables(self)
 end
 
 ---
 -- @param Entity target The new processing target.
 -- @realm shared
 function SWEP:SetNewTarget(target)
-	self:SetProcessTarget(target)
-	self:SetProgress(0)
-	self:SetAwayTime(0)
+    self:SetProcessTarget(target)
+    self:SetProgress(0)
+    self:SetAwayTime(0)
 end
 
 ---
 -- @ignore
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire(CurTime() + 0.1)
+    self:SetNextPrimaryFire(CurTime() + 0.1)
 
-	local corpse = self:GetTargetingCorpse()
+    local corpse = self:GetTargetingCorpse()
 
-	if corpse == nil or self:GetProcessTarget() ~= NULL and self:GetProcessTarget() == corpse then return end
+    if corpse == nil or self:GetProcessTarget() ~= NULL and self:GetProcessTarget() == corpse then
+        return
+    end
 
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	if SERVER then
-		self:SetNewTarget(corpse)
-	end
+    if SERVER then
+        self:SetNewTarget(corpse)
+    end
 end
 
 local click = Sound("weapons/sniper/sniper_zoomin.wav")
@@ -100,104 +102,112 @@ local click = Sound("weapons/sniper/sniper_zoomin.wav")
 ---
 -- @ignore
 function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	if CLIENT and IsFirstTimePredicted() then
-		LocalPlayer():EmitSound(click)
-	end
+    if CLIENT and IsFirstTimePredicted() then
+        LocalPlayer():EmitSound(click)
+    end
 
-	self:CycleZoom()
+    self:CycleZoom()
 end
 
 ---
 -- @ignore
 function SWEP:SetZoomLevel(level)
-	if CLIENT then return end
+    if CLIENT then
+        return
+    end
 
-	local owner = self:GetOwner()
+    local owner = self:GetOwner()
 
-	self:SetZoomAmount(level)
+    self:SetZoomAmount(level)
 
-	owner:SetFOV(self.ZoomLevels[level], 0.3)
+    owner:SetFOV(self.ZoomLevels[level], 0.3)
 end
 
 ---
 -- @ignore
 function SWEP:CycleZoom()
-	self:SetZoomAmount(self:GetZoomAmount() + 1)
+    self:SetZoomAmount(self:GetZoomAmount() + 1)
 
-	if not self.ZoomLevels[self:GetZoomAmount()] then
-		self:SetZoomAmount(1)
-	end
+    if not self.ZoomLevels[self:GetZoomAmount()] then
+        self:SetZoomAmount(1)
+    end
 
-	self:SetZoomLevel(self:GetZoomAmount())
+    self:SetZoomLevel(self:GetZoomAmount())
 end
 
 ---
 -- @ignore
 function SWEP:PreDrop()
-	self:SetZoomLevel(1)
+    self:SetZoomLevel(1)
 
-	self:SetNewTarget(NULL)
+    self:SetNewTarget(NULL)
 
-	return self.BaseClass.PreDrop(self)
+    return BaseClass.PreDrop(self)
 end
 
 ---
 -- @ignore
 function SWEP:Holster()
-	self:SetZoomLevel(1)
+    self:SetZoomLevel(1)
 
-	self:SetNewTarget(NULL)
+    self:SetNewTarget(NULL)
 
-	return true
+    return true
 end
 
 ---
 -- @ignore
 function SWEP:Deploy()
-	self:SetZoomLevel(1)
+    self:SetZoomLevel(1)
 
-	return self.BaseClass.Deploy(self)
+    return BaseClass.Deploy(self)
 end
 
 ---
 -- @ignore
 function SWEP:Reload()
-	local playSound = false
-	if self:GetZoomAmount() > 1 or self:GetProgress() > 0 then
-		self:SetZoomLevel(1)
-		playSound = true
-	end
+    local playSound = false
+    if self:GetZoomAmount() > 1 or self:GetProgress() > 0 then
+        self:SetZoomLevel(1)
+        playSound = true
+    end
 
-	if CLIENT and IsFirstTimePredicted() and playSound then
-		LocalPlayer():EmitSound(click)
-	end
+    if CLIENT and IsFirstTimePredicted() and playSound then
+        LocalPlayer():EmitSound(click)
+    end
 
-	self:SetNewTarget(NULL)
+    self:SetNewTarget(NULL)
 
-	return false
+    return false
 end
 
 ---
 -- @return boolean
 -- @realm shared
 function SWEP:IsTargetingCorpse()
-	local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
-	local ent = tr.Entity
+    local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
+    local ent = tr.Entity
 
-	return IsValid(ent) and ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) ~= false
+    return IsValid(ent)
+        and ent:GetClass() == "prop_ragdoll"
+        and CORPSE.GetPlayerNick(ent, false) ~= false
 end
 
 ---
 -- @return Entity
 -- @realm shared
 function SWEP:GetTargetingCorpse()
-	local ent = self:GetOwner():GetEyeTrace(MASK_SHOT).Entity
+    local ent = self:GetOwner():GetEyeTrace(MASK_SHOT).Entity
 
-	if IsValid(ent) and ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) ~= false then
-		return ent
-	end
+    if
+        IsValid(ent)
+        and ent:GetClass() == "prop_ragdoll"
+        and CORPSE.GetPlayerNick(ent, false) ~= false
+    then
+        return ent
+    end
 end
 
 local confirm = Sound("npc/turret_floor/click1.wav")
@@ -205,44 +215,46 @@ local confirm = Sound("npc/turret_floor/click1.wav")
 ---
 -- @realm shared
 function SWEP:IdentifyCorpse()
-	local owner = self:GetOwner()
+    local owner = self:GetOwner()
 
-	if SERVER then
-		local tr = owner:GetEyeTrace(MASK_SHOT)
+    if SERVER then
+        local tr = owner:GetEyeTrace(MASK_SHOT)
 
-		CORPSE.ShowSearch(owner, tr.Entity, false, true)
-	elseif IsFirstTimePredicted() then
-		LocalPlayer():EmitSound(confirm)
-	end
+        CORPSE.ShowSearch(owner, tr.Entity, false, true)
+    elseif IsFirstTimePredicted() then
+        LocalPlayer():EmitSound(confirm)
+    end
 end
 
 ---
 -- @ignore
 function SWEP:Think()
-	BaseClass.Think(self)
+    BaseClass.Think(self)
 
-	if self:GetProcessTarget() == NULL then return end
+    if self:GetProcessTarget() == NULL then
+        return
+    end
 
-	local tickDirection = engine.TickInterval()
-	local awayTime = self:GetAwayTime()
+    local tickDirection = engine.TickInterval()
+    local awayTime = self:GetAwayTime()
 
-	if self:GetTargetingCorpse() ~= self:GetProcessTarget() then
-		awayTime = awayTime + tickDirection
-		self:SetAwayTime(awayTime)
-		tickDirection = tickDirection * (-self.decayRate * awayTime)
-	else
-		self:SetAwayTime(0)
-	end
+    if self:GetTargetingCorpse() ~= self:GetProcessTarget() then
+        awayTime = awayTime + tickDirection
+        self:SetAwayTime(awayTime)
+        tickDirection = tickDirection * (-self.decayRate * awayTime)
+    else
+        self:SetAwayTime(0)
+    end
 
-	local newProgress = self:GetProgress() + tickDirection
-	self:SetProgress(newProgress)
+    local newProgress = self:GetProgress() + tickDirection
+    self:SetProgress(newProgress)
 
-	if newProgress < 0 then
-		self:SetNewTarget(NULL)
-	elseif newProgress > self.ProcessingDelay then
-		self:IdentifyCorpse()
-		self:SetNewTarget(NULL)
-	end
+    if newProgress < 0 then
+        self:SetNewTarget(NULL)
+    elseif newProgress > self.ProcessingDelay then
+        self:IdentifyCorpse()
+        self:SetNewTarget(NULL)
+    end
 end
 
 if CLIENT then
@@ -256,14 +268,14 @@ if CLIENT then
 	local cv_thickness
 
 	---
-	-- @ignore
-	function SWEP:OnRemove()
-		local owner = self:GetOwner()
+    -- @realm client
+    function SWEP:OnRemove()
+        local owner = self:GetOwner()
 
-		if not IsValid(owner) or owner ~= LocalPlayer() or not owner:Alive() then return end
-
-		RunConsoleCommand("lastinv")
-	end
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
 
 	---
 	-- @ignore

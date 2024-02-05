@@ -21,13 +21,14 @@ CLGAMEMODEMENU.submenus = {}
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:ShouldShow()
-	---
-	-- @realm client
-	if self:IsAdminMenu() and not hook.Run("TTT2AdminCheck", LocalPlayer()) then
-		return false
-	end
+    ---
+    -- @realm client
+    -- stylua: ignore
+    if self:IsAdminMenu() and not hook.Run("TTT2AdminCheck", LocalPlayer()) then
+        return false
+    end
 
-	return self:HasVisibleSubmenus()
+    return self:HasVisibleSubmenus()
 end
 
 ---
@@ -38,7 +39,7 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:HasVisibleSubmenus()
-	return #self:GetVisibleSubmenus() > 0
+    return #self:GetVisibleSubmenus() > 0
 end
 
 ---
@@ -48,18 +49,20 @@ end
 -- @return table Returns a table of all registered and visible submenus
 -- @realm client
 function CLGAMEMODEMENU:GetVisibleSubmenus()
-	local visibleSubmenus = {}
-	local allSubmenus = self:GetSubmenus()
+    local visibleSubmenus = {}
+    local allSubmenus = self:GetSubmenus()
 
-	for i = 1, #allSubmenus do
-		local submenu = allSubmenus[i]
+    for i = 1, #allSubmenus do
+        local submenu = allSubmenus[i]
 
-		if not submenu:ShouldShow() then continue end
+        if not submenu:ShouldShow() then
+            continue
+        end
 
-		visibleSubmenus[#visibleSubmenus + 1] = submenu
-	end
+        visibleSubmenus[#visibleSubmenus + 1] = submenu
+    end
 
-	return visibleSubmenus
+    return visibleSubmenus
 end
 
 ---
@@ -68,7 +71,7 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:IsAdminMenu()
-	return false
+    return false
 end
 
 ---
@@ -76,7 +79,7 @@ end
 -- @return table A table with all found submenus
 -- @realm client
 function CLGAMEMODEMENU:GetSubmenus()
-	return self.submenus
+    return self.submenus
 end
 
 ---
@@ -85,13 +88,15 @@ end
 -- @return[default=nil] table Returns the reference to the found submenu class
 -- @realm client
 function CLGAMEMODEMENU:GetSubmenuByName(name)
-	for i = 1, #self.submenus do
-		local submenu = self.submenus[i]
+    for i = 1, #self.submenus do
+        local submenu = self.submenus[i]
 
-		if submenu.type ~= name then continue end
+        if submenu.type ~= name then
+            continue
+        end
 
-		return submenu
-	end
+        return submenu
+    end
 end
 
 ---
@@ -99,7 +104,7 @@ end
 -- @param table submenuTable The new submenu class table
 -- @realm client
 function CLGAMEMODEMENU:SetSubmenuTable(submenuTable)
-	self.submenus = submenuTable
+    self.submenus = submenuTable
 end
 
 ---
@@ -107,7 +112,7 @@ end
 -- @param CLGAMEMODESUBMENU submenu The new submenu class
 -- @realm client
 function CLGAMEMODEMENU:AddSubmenu(submenu)
-	self.submenus[#self.submenus + 1] = submenu
+    self.submenus[#self.submenus + 1] = submenu
 end
 
 ---
@@ -117,7 +122,7 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:HasSearchbar()
-	return false
+    return false
 end
 
 ---
@@ -129,26 +134,26 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:GetMatchingSubmenus(searchText)
-	local submenuClasses = self:GetVisibleSubmenus()
+    local submenuClasses = self:GetVisibleSubmenus()
 
-	if searchText == "" then
-		return submenuClasses
-	end
+    if searchText == "" then
+        return submenuClasses
+    end
 
-	local filteredSubmenuClasses = {}
+    local filteredSubmenuClasses = {}
 
-	local counter = 0
+    local counter = 0
 
-	for i = 1, #submenuClasses do
-		local submenuClass = submenuClasses[i]
+    for i = 1, #submenuClasses do
+        local submenuClass = submenuClasses[i]
 
-		if self:MatchesSearchString(submenuClass, searchText) then
-			counter = counter + 1
-			filteredSubmenuClasses[counter] = submenuClass
-		end
-	end
+        if self:MatchesSearchString(submenuClass, searchText) then
+            counter = counter + 1
+            filteredSubmenuClasses[counter] = submenuClass
+        end
+    end
 
-	return filteredSubmenuClasses
+    return filteredSubmenuClasses
 end
 
 ---
@@ -162,11 +167,11 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODEMENU:MatchesSearchString(submenuClass, searchText)
-	local txt = stringLower(searchText)
-	local title = stringLower(TryT(submenuClass.title))
-	local start = stringFind(title, txt)
+    local txt = stringLower(searchText)
+    local title = stringLower(TryT(submenuClass.title))
+    local start = stringFind(title, txt)
 
-	return tobool(start)
+    return tobool(start)
 end
 
 ---
@@ -174,6 +179,4 @@ end
 -- @note This function should be overwritten but not called.
 -- @hook
 -- @realm client
-function CLGAMEMODEMENU:Initialize()
-
-end
+function CLGAMEMODEMENU:Initialize() end
