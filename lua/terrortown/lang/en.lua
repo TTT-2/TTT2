@@ -262,7 +262,6 @@ Analyzes a corpse to show how the victim was killed, but only if they died of gu
 
 -- Decoy
 L.decoy_name = "Decoy"
-L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
