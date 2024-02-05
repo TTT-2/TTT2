@@ -246,6 +246,8 @@ if SERVER then
 
         if IsValid(wep) and wep:Clip1() < wep.Primary.ClipSize then
             wep:SetClip1(wep:Clip1() + 1)
+
+            activator:SelectWeapon(self.pickupWeaponClass)
         else
             -- picks up weapon and drops blocking weapon if slot is already in use
             wep = activator:SafePickupWeaponClass(self.pickupWeaponClass, true)
