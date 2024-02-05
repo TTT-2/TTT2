@@ -78,6 +78,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - It now tracks the players head position
   - Rendering order is based on distance, no more weird visual glitches
   - Hidden when observing a player in first person view
+- Your own spectator nametag will not display when looking directly up in post-round (by @EntranceJew)
 
 ### Fixed
 

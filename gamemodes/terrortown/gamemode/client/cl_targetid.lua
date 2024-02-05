@@ -230,6 +230,10 @@ local function DrawPropSpecLabels(client)
                 scrpos = nil
             end
         else
+            local clientTarget = client:GetObserverTarget()
+            if ply == client or (clientTarget == ply and IsPlayer(clientTarget)) then
+                continue
+            end
             _, color = util.HealthToString(ply:Health(), ply:GetMaxHealth())
 
             scrpos = ply:EyePos()
