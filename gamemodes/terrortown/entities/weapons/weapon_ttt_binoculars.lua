@@ -288,6 +288,8 @@ if CLIENT then
         self.BaseClass.Initialize(self)
     end
 
+    ---
+    -- @realm client
     function SWEP:InitializeCustomModels()
         self:AddCustomWorldModel("wmodel", {
             type = "Model",
