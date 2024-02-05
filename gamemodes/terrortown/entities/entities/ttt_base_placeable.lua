@@ -280,7 +280,7 @@ if SERVER then
     ---
     -- Run if a valid player tries to pick up this entity to check if this pickup is accepted.
     -- @param Player activator The player that used their use key
-    -- @return boolean Return true to allow pickup
+    -- @return[default=true] boolean Return true to allow pickup
     -- @hook
     -- @realm server
     function ENT:PlayerCanPickupWeapon(activator)
