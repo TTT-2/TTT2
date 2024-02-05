@@ -69,6 +69,8 @@ if SERVER then
 
     local soundDeny = Sound("HL2Player.UseDeny")
 
+    local soundWeaponPickup = Sound("items/ammo_pickup.wav")
+
     AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
     AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
 
@@ -252,6 +254,8 @@ if SERVER then
 
         if IsValid(wep) and wep:Clip1() < wep.Primary.ClipSize then
             wep:SetClip1(wep:Clip1() + 1)
+
+            activator:EmitSound(soundWeaponPickup)
 
             activator:SelectWeapon(self.pickupWeaponClass)
         else
