@@ -19,6 +19,7 @@ ENT.SceneDuration = 10
 ENT.PulseDelay = 10
 
 ENT.CanUseKey = true
+ENT.pickupWeaponClass = "weapon_ttt_cse"
 
 ---
 -- @realm shared
@@ -137,31 +138,6 @@ function ENT:StopScanSound(force)
 end
 
 ---
--- @param Entity activator
--- @realm shared
-function ENT:UseOverride(activator)
-    if not IsValid(activator) or not activator:IsPlayer() then
-        return
-    end
-
-    local roleDataActivator = activator:GetSubRoleData()
-
-    if
-        activator:IsTerror()
-        and activator:CanCarryType(WEAPON_EQUIP)
-        and roleDataActivator.isPolicingRole
-        and roleDataActivator.isPublicRole
-    then
-        self:StopScanSound(true)
-        self:Remove()
-
-        activator:SafePickupWeaponClass("weapon_ttt_cse", true)
-    else
-        self:EmitSound("HL2Player.UseDeny")
-    end
-end
-
----
 -- @realm shared
 function ENT:OnRemove()
     self:StopScanSound(true)
@@ -209,6 +185,17 @@ if SERVER then
         self:NextThink(CurTime() + self.PulseDelay)
 
         return true
+    end
+
+    ---
+    -- @realm server
+    function ENT:PlayerCanPickupWeapon(activator)
+        local roleDataActivator = activator:GetSubRoleData()
+
+        return activator:IsTerror()
+            and activator:CanCarryType(WEAPON_EQUIP)
+            and roleDataActivator.isPolicingRole
+            and roleDataActivator.isPublicRole
     end
 end
 
