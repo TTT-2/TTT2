@@ -2,7 +2,11 @@
 -- @class ENT
 -- @section ttt_smokegrenade_proj
 
-AddCSLuaFile()
+if SERVER then
+    AddCSLuaFile()
+end
+
+DEFINE_BASECLASS("ttt_basegrenade_proj")
 
 ENT.Type = "anim"
 ENT.Base = "ttt_basegrenade_proj"
@@ -17,7 +21,7 @@ function ENT:Initialize()
         self:SetRadius(20)
     end
 
-    return self.BaseClass.Initialize(self)
+    return BaseClass.Initialize(self)
 end
 
 if CLIENT then

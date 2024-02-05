@@ -3,7 +3,11 @@
 -- @class ENT
 -- @section ttt_firegrenade_proj
 
-AddCSLuaFile()
+if SERVER then
+    AddCSLuaFile()
+end
+
+DEFINE_BASECLASS("ttt_basegrenade_proj")
 
 ENT.Type = "anim"
 ENT.Base = "ttt_basegrenade_proj"
@@ -22,7 +26,7 @@ function ENT:Initialize()
         self:SetDmg(25)
     end
 
-    return self.BaseClass.Initialize(self)
+    return BaseClass.Initialize(self)
 end
 
 ---

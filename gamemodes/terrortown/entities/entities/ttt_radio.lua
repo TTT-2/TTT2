@@ -5,7 +5,11 @@
 
 if SERVER then
     AddCSLuaFile()
-else
+end
+
+DEFINE_BASECLASS("ttt_base_placeable")
+
+if CLIENT then
     -- this entity can be DNA-sampled so we need some display info
     ENT.Icon = "vgui/ttt/icon_radio"
     ENT.PrintName = "radio_name"
@@ -25,7 +29,7 @@ ENT.SoundDelay = 0.5
 function ENT:Initialize()
     self:SetModel(self.Model)
 
-    self.BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 
     if SERVER then
         self:SetMaxHealth(40)

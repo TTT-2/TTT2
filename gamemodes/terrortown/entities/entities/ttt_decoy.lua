@@ -8,6 +8,8 @@ if SERVER then
     AddCSLuaFile()
 end
 
+DEFINE_BASECLASS("ttt_base_placeable")
+
 ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/props_lab/reciever01b.mdl"
 ENT.CanHavePrints = false
@@ -18,7 +20,7 @@ ENT.CanUseKey = true
 function ENT:Initialize()
     self:SetModel(self.Model)
 
-    self.BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 
     if SERVER then
         self:SetMaxHealth(100)
