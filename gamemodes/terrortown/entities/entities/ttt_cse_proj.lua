@@ -10,9 +10,8 @@ end
 DEFINE_BASECLASS("ttt_base_placeable")
 
 ENT.Base = "ttt_base_placeable"
-ENT.Model = "models/Items/battery.mdl"
 
-ENT.RenderGroup = RENDERGROUP_BOTH
+ENT.Model = "models/Items/battery.mdl"
 
 ENT.Range = 128
 ENT.MaxScenesPerPulse = 3

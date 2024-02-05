@@ -12,7 +12,12 @@ if CLIENT then
     SWEP.PrintName = "decoy_name"
     SWEP.Slot = 7
 
+    SWEP.ViewModelFOV = 70
+    SWEP.ViewModelFlip = false
+
+    SWEP.UseHands = true
     SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultWorldModel = false
 
     SWEP.EquipMenuData = {
         type = "item_weapon",
@@ -24,9 +29,9 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "slam"
 
-SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_c4.mdl"
 SWEP.WorldModel = "models/props_lab/reciever01b.mdl"
 
 SWEP.Primary.ClipSize = 1
@@ -114,6 +119,44 @@ end
 
 if CLIENT then
     ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("decoy_help_pri")
+
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01b.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(2.0, 4.8, -0.5),
+            angle = Angle(120, 10, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
+
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01b.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(6, 5.4, -1),
+            angle = Angle(-60, 35, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
+
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
     -- @realm client
     function SWEP:OnRemove()
         local owner = self:GetOwner()
@@ -122,26 +165,4 @@ if CLIENT then
             RunConsoleCommand("lastinv")
         end
     end
-
-    ---
-    -- @ignore
-    function SWEP:Initialize()
-        self:AddTTT2HUDHelp("decoy_help_primary", "decoy_help_secondary")
-
-        return BaseClass.Initialize(self)
-    end
-
-    ---
-    -- @realm client
-    function SWEP:DrawWorldModel()
-        if IsValid(self:GetOwner()) then
-            return
-        end
-
-        self:DrawModel()
-    end
-
-    ---
-    -- @realm client
-    function SWEP:DrawWorldModelTranslucent() end
 end

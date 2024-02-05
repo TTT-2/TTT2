@@ -11,7 +11,9 @@ end
 DEFINE_BASECLASS("ttt_base_placeable")
 
 ENT.Base = "ttt_base_placeable"
+
 ENT.Model = "models/props_lab/reciever01b.mdl"
+
 ENT.CanHavePrints = false
 ENT.CanUseKey = true
 

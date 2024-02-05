@@ -35,8 +35,8 @@ SWEP.WeaponID = AMMO_C4
 SWEP.builtin = true
 
 SWEP.UseHands = true
-SWEP.ViewModel = Model("models/weapons/cstrike/c_c4.mdl")
-SWEP.WorldModel = Model("models/weapons/w_c4.mdl")
+SWEP.ViewModel = "models/weapons/cstrike/c_c4.mdl"
+SWEP.WorldModel = "models/weapons/w_c4.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
