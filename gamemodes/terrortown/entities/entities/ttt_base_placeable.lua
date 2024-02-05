@@ -272,6 +272,8 @@ if SERVER then
             sound.Play(soundWeld, self:GetPos(), 75)
         end
 
+        self:OnPickup(activator, wep)
+
         self:Remove()
     end
 
@@ -284,6 +286,14 @@ if SERVER then
     function ENT:PlayerCanPickupWeapon(activator)
         return true
     end
+
+    ---
+    -- Called when this entity is picked up and about to be removed.
+    -- @param Player activator The player that used their use key
+    -- @param Weapon wep The weapon that is added to their inventory
+    -- @hook
+    -- @realm server
+    function ENT:OnPickup(activator, wep) end
 
     ---
     -- Helper function for a weapon that wants to throw the entity. Already handles everything.
