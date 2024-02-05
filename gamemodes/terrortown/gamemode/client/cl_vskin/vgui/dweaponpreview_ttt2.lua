@@ -291,7 +291,7 @@ function PANEL:DrawModel()
 
     render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
 
-    weaponrenderer.RenderWoldModel(
+    weaponrenderer.RenderWorldModel(
         wep,
         wepModel,
         wep.customWorldModelElements or wep.WElements,

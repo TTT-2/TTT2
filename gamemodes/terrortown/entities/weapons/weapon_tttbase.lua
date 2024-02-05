@@ -822,7 +822,7 @@ if CLIENT then
             return
         end
 
-        weaponrenderer.RenderWoldModel(self, self, self.customWorldModelElements, self:GetOwner())
+        weaponrenderer.RenderWorldModel(self, self, self.customWorldModelElements, self:GetOwner())
     end
 
     ---

@@ -388,7 +388,7 @@ end
 -- @param table elements The elements of the world model
 -- @param[opt] Player owner The owner entity of the weapon, binds the model to their hands
 -- @realm client
-function weaponrenderer.RenderWoldModel(wep, wepModel, elements, owner)
+function weaponrenderer.RenderWorldModel(wep, wepModel, elements, owner)
     if wep.ShowDefaultWorldModel then
         wepModel:DrawModel()
     end
