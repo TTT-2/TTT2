@@ -231,11 +231,7 @@ local function DrawPropSpecLabels(client)
             end
         else
             local clientTarget = client:GetObserverTarget()
-            local clientObsMode = client:GetObserverMode()
-            if ply == client or (
-                clientTarget == ply
-                and IsPlayer(clientTarget)
-            ) then
+            if ply == client or (clientTarget == ply and IsPlayer(clientTarget)) then
                 continue
             end
             _, color = util.HealthToString(ply:Health(), ply:GetMaxHealth())
