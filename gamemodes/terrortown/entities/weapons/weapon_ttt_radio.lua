@@ -15,10 +15,10 @@ if CLIENT then
     SWEP.PrintName = "radio_name"
     SWEP.Slot = 7
 
-	SWEP.EquipMenuData = {
-		type = "item_weapon",
-		desc = "radio_desc"
-	}
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+        desc = "radio_desc"
+    }
 
     SWEP.ViewModelFOV = 70
     SWEP.ViewModelFlip = false
@@ -93,50 +93,50 @@ end
 ---
 -- @ignore
 function SWEP:Reload()
-	return false
+    return false
 end
 
 
 if CLIENT then
-	---
-	-- @ignore
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("radio_help_primary", "radio_help_secondary")
+    ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("radio_help_primary", "radio_help_secondary")
 
-		self:AddCustomViewModel("vmodel", {
-			type = "Model",
-			model = "models/props/cs_office/radio.mdl",
-			bone = "ValveBiped.Bip01_R_Finger2",
-			rel = "",
-			pos = Vector(7, 3.5, 2),
-			angle = Angle(10, 75, 200),
-			size = Vector(0.725, 0.725, 0.725),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/props/cs_office/radio.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(7, 3.5, 2),
+            angle = Angle(10, 75, 200),
+            size = Vector(0.725, 0.725, 0.725),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self:AddCustomWorldModel("wmodel", {
-			type = "Model",
-			model = "models/props/cs_office/radio.mdl",
-			bone = "ValveBiped.Bip01_R_Hand",
-			rel = "",
-			pos = Vector(4, 6, 0),
-			angle = Angle(20, 15, 190),
-			size = Vector(0.625, 0.625, 0.625),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/props/cs_office/radio.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(4, 6, 0),
+            angle = Angle(20, 15, 190),
+            size = Vector(0.625, 0.625, 0.625),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self.BaseClass.Initialize(self)
-	end
-  
-  ---
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
     -- @realm client
     function SWEP:OnRemove()
         local owner = self:GetOwner()

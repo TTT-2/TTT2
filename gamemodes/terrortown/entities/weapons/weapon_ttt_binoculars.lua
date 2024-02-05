@@ -258,16 +258,16 @@ function SWEP:Think()
 end
 
 if CLIENT then
-	local TryT = LANG.TryTranslation
-	local GetPT = LANG.GetParamTranslation
-	local mathRound = math.Round
-	local mathClamp = math.Clamp
+    local TryT = LANG.TryTranslation
+    local GetPT = LANG.GetParamTranslation
+    local mathRound = math.Round
+    local mathClamp = math.Clamp
 
-	local hud_color = Color(60, 220, 20, 255)
+    local hud_color = Color(60, 220, 20, 255)
 
-	local cv_thickness
+    local cv_thickness
 
-	---
+    ---
     -- @realm client
     function SWEP:OnRemove()
         local owner = self:GetOwner()
@@ -277,92 +277,92 @@ if CLIENT then
         end
     end
 
-	---
-	-- @ignore
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
-		self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
+    ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
+        self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
 
-		cv_thickness = GetConVar("ttt_crosshair_thickness")
+        cv_thickness = GetConVar("ttt_crosshair_thickness")
 
-		self:AddCustomWorldModel("wmodel", {
-			type = "Model",
-			model = "models/Items/combine_rifle_cartridge01.mdl",
-			bone = "ValveBiped.Bip01_R_Hand",
-			rel = "",
-			pos = Vector(4, 5, 0),
-			angle = Angle(0, 80, -20),
-			size = Vector(0.7, 0.7, 0.7),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/Items/combine_rifle_cartridge01.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(4, 5, 0),
+            angle = Angle(0, 80, -20),
+            size = Vector(0.7, 0.7, 0.7),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self.BaseClass.Initialize(self)
-	end
+        self.BaseClass.Initialize(self)
+    end
 
-	---
-	-- @ignore
-	function SWEP:AdjustMouseSensitivity()
-		if self:GetZoomAmount() > 0 then
-			return 1 / self:GetZoomAmount()
-		end
+    ---
+    -- @ignore
+    function SWEP:AdjustMouseSensitivity()
+        if self:GetZoomAmount() > 0 then
+            return 1 / self:GetZoomAmount()
+        end
 
-		return -1
-	end
+        return -1
+    end
 
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(tData)
-		local client = LocalPlayer()
-		local ent = tData:GetEntity()
+    hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(tData)
+        local client = LocalPlayer()
+        local ent = tData:GetEntity()
 
-		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+        if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
 
-		local c_wep = client:GetActiveWeapon()
+        local c_wep = client:GetActiveWeapon()
 
-		if not IsValid(ent)
-			or not IsValid(c_wep)
-			or ent:GetClass() ~= "prop_ragdoll"
-			or c_wep:GetClass() ~= "weapon_ttt_binoculars"
-			or c_wep:GetProcessTarget() ~= ent
-		then
-			return
-		end
+        if not IsValid(ent)
+            or not IsValid(c_wep)
+            or ent:GetClass() ~= "prop_ragdoll"
+            or c_wep:GetClass() ~= "weapon_ttt_binoculars"
+            or c_wep:GetProcessTarget() ~= ent
+        then
+            return
+        end
 
-		local progress = mathRound(mathClamp((c_wep:GetProgress() / c_wep.ProcessingDelay) * 100, 0, 100))
+        local progress = mathRound(mathClamp((c_wep:GetProgress() / c_wep.ProcessingDelay) * 100, 0, 100))
 
-		tData:AddDescriptionLine(
-			GetPT("binoc_progress", {progress = progress}),
-			hud_color
-		)
-	end)
+        tData:AddDescriptionLine(
+            GetPT("binoc_progress", {progress = progress}),
+            hud_color
+        )
+    end)
 
-	---
-	-- @ignore
-	function SWEP:DrawHUD()
-		self:DrawHelp()
+    ---
+    -- @ignore
+    function SWEP:DrawHUD()
+        self:DrawHelp()
 
-		local length = 35
-		local gap = 15
-		local thickness = math.floor(cv_thickness and cv_thickness:GetFloat() or 1)
-		local offset = thickness * 0.5
+        local length = 35
+        local gap = 15
+        local thickness = math.floor(cv_thickness and cv_thickness:GetFloat() or 1)
+        local offset = thickness * 0.5
 
-		surface.SetDrawColor(clr(hud_color))
+        surface.SetDrawColor(clr(hud_color))
 
-		-- change scope when looking at corpse
-		if self:IsTargetingCorpse() then
-			gap = thickness * 2
-		end
+        -- change scope when looking at corpse
+        if self:IsTargetingCorpse() then
+            gap = thickness * 2
+        end
 
-		local x = ScrW() * 0.5
-		local y = ScrH() * 0.5
+        local x = ScrW() * 0.5
+        local y = ScrH() * 0.5
 
-		surface.DrawRect(x - length, y - offset, length - gap, thickness)
-		surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-		surface.DrawRect(x - offset, y - length, thickness, length - gap)
-		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
+        surface.DrawRect(x - length, y - offset, length - gap, thickness)
+        surface.DrawRect(x + gap, y - offset, length - gap, thickness)
+        surface.DrawRect(x - offset, y - length, thickness, length - gap)
+        surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 
-		draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
+        draw.ShadowedText(TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(), "TargetID_Description", x + length + 10, y - length, hud_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    end
 end

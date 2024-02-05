@@ -20,7 +20,7 @@ if CLIENT then
     SWEP.UseHands = true
     SWEP.ShowDefaultViewModel = false
     SWEP.ShowDefaultWorldModel = false
-  
+
     SWEP.EquipMenuData = {
         type = "item_weapon",
         desc = "vis_desc",
@@ -108,45 +108,45 @@ function SWEP:Reload()
 end
 
 if CLIENT then
-	---
-	-- @ignore
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("vis_help_pri")
+    ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("vis_help_pri")
 
-		self:AddCustomViewModel("vmodel", {
-			type = "Model",
-			model = "models/Items/battery.mdl",
-			bone = "ValveBiped.Bip01_R_Finger2",
-			rel = "",
-			pos = Vector(1.5, 1.5, 2.7),
-			angle = Angle(180, 20, 0),
-			size = Vector(0.65, 0.65, 0.65),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/Items/battery.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(1.5, 1.5, 2.7),
+            angle = Angle(180, 20, 0),
+            size = Vector(0.65, 0.65, 0.65),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self:AddCustomWorldModel("wmodel", {
-			type = "Model",
-			model = "models/Items/battery.mdl",
-			bone = "ValveBiped.Bip01_R_Hand",
-			rel = "",
-			pos = Vector(3.2, 2.5, 2.7),
-			angle = Angle(180, -100, 0),
-			size = Vector(0.65, 0.65, 0.65),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/Items/battery.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(3.2, 2.5, 2.7),
+            angle = Angle(180, -100, 0),
+            size = Vector(0.65, 0.65, 0.65),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self.BaseClass.Initialize(self)
-	end
-  
-  ---
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
     -- @realm client
     function SWEP:OnRemove()
         local owner = self:GetOwner()

@@ -3,7 +3,7 @@
 -- @section weapon_ttt_decoy
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 DEFINE_BASECLASS("weapon_tttbase")
@@ -118,43 +118,43 @@ function SWEP:Reload()
 end
 
 if CLIENT then
-	---
-	-- @ignore
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("decoy_help_pri")
+    ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("decoy_help_pri")
 
-		self:AddCustomViewModel("vmodel", {
-			type = "Model",
-			model = "models/props_lab/reciever01b.mdl",
-			bone = "ValveBiped.Bip01_R_Finger2",
-			rel = "",
-			pos = Vector(2.0, 4.8, -0.5),
-			angle = Angle(120, 10, 0),
-			size = Vector(0.6, 0.6, 0.6),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01b.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(2.0, 4.8, -0.5),
+            angle = Angle(120, 10, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self:AddCustomWorldModel("wmodel", {
-			type = "Model",
-			model = "models/props_lab/reciever01b.mdl",
-			bone = "ValveBiped.Bip01_R_Hand",
-			rel = "",
-			pos = Vector(6, 5.4, -1),
-			angle = Angle(-60, 35, 0),
-			size = Vector(0.6, 0.6, 0.6),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01b.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(6, 5.4, -1),
+            angle = Angle(-60, 35, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self.BaseClass.Initialize(self)
-	end
+        self.BaseClass.Initialize(self)
+    end
 
     ---
     -- @realm client

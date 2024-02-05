@@ -123,43 +123,43 @@ function SWEP:Reload()
 end
 
 if CLIENT then
-	---
-	-- @realm client
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
+    ---
+    -- @realm client
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
 
-		self:AddCustomViewModel("vmodel", {
-			type = "Model",
-			model = "models/props_lab/reciever01a.mdl",
-			bone = "ValveBiped.Bip01_R_Finger2",
-			rel = "",
-			pos = Vector(2.2, 6.5, -1),
-			angle = Angle(120, 10, 0),
-			size = Vector(0.6, 0.6, 0.6),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01a.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(2.2, 6.5, -1),
+            angle = Angle(120, 10, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self:AddCustomWorldModel("wmodel", {
-			type = "Model",
-			model = "models/props_lab/reciever01a.mdl",
-			bone = "ValveBiped.Bip01_R_Hand",
-			rel = "",
-			pos = Vector(6.7, 7, -1),
-			angle = Angle(-60, 35, 0),
-			size = Vector(0.6, 0.6, 0.6),
-			color = Color(255, 255, 255, 255),
-			surpresslightning = false,
-			material = "",
-			skin = 0,
-			bodygroup = {}
-		})
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01a.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(6.7, 7, -1),
+            angle = Angle(-60, 35, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {}
+        })
 
-		self.BaseClass.Initialize(self)
-	end
+        self.BaseClass.Initialize(self)
+    end
 
     ---
     -- @realm client
