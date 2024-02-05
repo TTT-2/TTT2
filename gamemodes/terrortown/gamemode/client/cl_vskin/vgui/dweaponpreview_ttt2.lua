@@ -76,9 +76,12 @@ function PANEL:Init()
 
     self:SetAnimSpeed(0.5)
     self:SetAnimated(true)
+
+    -- the mouse input has to be enabled to detect mouse hovering
+    self:SetMouseInputEnabled(true)
     self:SetHoverEffect(true)
 
-    self:SetAmbientLight(Color(150, 150, 150))
+    self:SetAmbientLight(Color(175, 175, 175))
 
     self:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))
     self:SetDirectionalLight(BOX_FRONT, Color(255, 255, 255))
@@ -95,7 +98,7 @@ function PANEL:Init()
         HoldType = "normal",
         worldModelData = {},
         worldModels = {},
-        specialModelHandeling = false
+        specialModelHandeling = false,
     }
 end
 
@@ -126,7 +129,9 @@ function PANEL:SetPlayerModel(model)
     -- set the entity
     local clientsideEntity = ClientsideModel(model, RENDERGROUP_OTHER)
 
-    if not IsValid(clientsideEntity) then return end
+    if not IsValid(clientsideEntity) then
+        return
+    end
 
     clientsideEntity:SetNoDraw(true)
     clientsideEntity:SetIK(false)
@@ -144,11 +149,30 @@ end
 -- @param string cls
 -- @realm client
 function PANEL:SetWeaponClass(cls)
-    if not IsValid(self.data.ply) then return end
+    if not IsValid(self.data.ply) then
+        return
+    end
 
+    -- weapons.Get returns a copy of the weapon table, it is therefore fine to
+    -- create modifications on that table
     local wep = weapons.Get(cls)
 
-    if not wep then return end
+    if not wep then
+        return
+    end
+
+    wep:InitializeCustomModels()
+
+    -- if the weapon is created with the SWEP Construction Kit, we have to import the
+    -- data into our system. To be on the safe side we also disable to default world
+    -- model for these weapons
+    if wep.WElements then
+        wep.ShowDefaultWorldModel = false
+
+        for identifier, modelData in pairs(wep.WElements) do
+            wep:AddCustomWorldModel(identifier, modelData)
+        end
+    end
 
     -- before storing the ent, make sure that a possible old ent
     -- is removed because clientside models are not garbage collected
@@ -161,41 +185,23 @@ function PANEL:SetWeaponClass(cls)
     self.data.wepClass = cls
     self.data.specialModelHandeling = false
 
-    -- if WElements are set, this weapon is created with the SWEP Construction Kit
-    -- and special handling has to be used to render the weapon
-    if wep.WElements then
-        self.data.specialModelHandeling = true
+    local clientsideEntity = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
 
-        for name, data in pairs(wep.WElements) do
-            if data.type ~= "Model" then continue end
-
-            self.data.worldModelData[name] = data
-
-            local clientsideEntity = ClientsideModel(data.model, RENDERGROUP_OTHER)
-
-            if not IsValid(clientsideEntity) then continue end
-
-            self.data.worldModels[name] = clientsideEntity
-        end
-    else
-        local clientsideEntity = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
-
-        if not IsValid(clientsideEntity) then return end
-
-        clientsideEntity:SetNoDraw(true)
-        clientsideEntity:SetIK(false)
-
-        clientsideEntity:SetParent(self.data.ply)
-
-        -- Applies a bonemerge engine effect. This merges the bones of this entity with the
-        -- entity of its parent so that they always move together.
-        clientsideEntity:AddEffects(EF_BONEMERGE)
-
-        if wep.HoldType ~= "normal" then
-            self.data.wep = clientsideEntity
-        end
+    if not IsValid(clientsideEntity) then
+        return
     end
 
+    clientsideEntity:SetNoDraw(true)
+    clientsideEntity:SetIK(false)
+
+    clientsideEntity:SetParent(self.data.ply)
+
+    -- Applies a bonemerge engine effect. This merges the bones of this entity with the
+    -- entity of its parent so that they always move together.
+    clientsideEntity:AddEffects(EF_BONEMERGE)
+
+    self.data.wepModel = clientsideEntity
+    self.data.wep = wep
 
     self.data.HoldType = wep.HoldType
 
@@ -213,8 +219,11 @@ end
 function PANEL:DrawModel()
     local ply = self.data.ply
     local wep = self.data.wep
+    local wepModel = self.data.wepModel
 
-    if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
     local w, h = self:GetSize()
     local xBaseStart, yBaseStart = self:LocalToScreen(0, 0)
@@ -237,51 +246,6 @@ function PANEL:DrawModel()
         yLimitEnd = mathMin(yLimitEnd, y2)
     end
 
-    -- This adds support for the "SWEP Construction Kit" that is used by many weapons such as the
-    -- boomerang or the melon mine: https://steamcommunity.com/sharedfiles/filedetails/?id=109724869
-    --
-    -- This code is taken and slightly modified from its WorldModel renderer
-    if self.data.specialModelHandeling then
-        local wepEnt = weapons.Get(self.data.wepClass)
-        local pos, ang
-
-        for name, worldModelData in pairs(self.data.worldModelData) do
-            wep = self.data.worldModels[name]
-
-            if worldModelData.bone then
-                pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply)
-            else
-                pos, ang = wepEnt:GetBoneOrientation(wepEnt.WElements, worldModelData, self.data.ply, "ValveBiped.Bip01_R_Hand")
-            end
-
-            wep:SetPos(pos + ang:Forward() * worldModelData.pos.x + ang:Right() * worldModelData.pos.y + ang:Up() * worldModelData.pos.z)
-
-            ang:RotateAroundAxis(ang:Up(), worldModelData.angle.y)
-            ang:RotateAroundAxis(ang:Right(), worldModelData.angle.p)
-            ang:RotateAroundAxis(ang:Forward(), worldModelData.angle.r)
-
-            wep:SetAngles(ang)
-
-            local matrix = Matrix()
-            matrix:Scale(worldModelData.size)
-            wep:EnableMatrix("RenderMultiply", matrix)
-
-            wep:SetMaterial(worldModelData.material)
-
-            if worldModelData.skin and worldModelData.skin ~= wep:GetSkin() then
-                wep:SetSkin(worldModelData.skin)
-            end
-
-            if worldModelData.bodygroup then
-                for bodygroup, value in pairs(worldModelData.bodygroup) do
-                    if wep:GetBodygroup(bodygroup) ~= value then
-                        wep:SetBodygroup(bodygroup, value)
-                    end
-                end
-            end
-        end
-    end -- end of SWEP Construction Kit support
-
     self:LayoutEntity(ply)
 
     if self.data.specialModelHandeling then
@@ -295,44 +259,47 @@ function PANEL:DrawModel()
     local ang = self.aLookAngle or (self.vLookatPos - self.vCamPos):Angle()
 
     cam.Start3D(self.vCamPos, ang, self.fFOV, xBaseStart, yBaseStart, w, h, 5, self.farZ)
-        render.SuppressEngineLighting(true)
-        render.SetLightingOrigin(ply:GetPos())
-        render.SetColorModulation(self.colColor.r / 255, self.colColor.g / 255, self.colColor.b / 255)
+    render.SuppressEngineLighting(true)
+    render.SetLightingOrigin(ply:GetPos())
+    render.SetColorModulation(self.colColor.r / 255, self.colColor.g / 255, self.colColor.b / 255)
 
-        -- iterates over the model lighting enum: https://wiki.facepunch.com/gmod/Enums/BOX
-        for i = 0, 6 do
-            local col = self.directionalLight[i]
+    -- iterates over the model lighting enum: https://wiki.facepunch.com/gmod/Enums/BOX
+    for i = 0, 6 do
+        local col = self.directionalLight[i]
 
-            if col then
-                render.SetModelLighting(i, col.r / 255, col.g / 255, col.b / 255)
-            end
+        if col then
+            render.SetModelLighting(i, col.r / 255, col.g / 255, col.b / 255)
         end
+    end
 
-        -- make a mask to make sure the graphic is limited
-        render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
+    -- make a mask to make sure the graphic is limited
+    render.SetScissorRect(xLimitStart, yLimitStart, xLimitEnd, yLimitEnd, true)
 
-        if self.Hovered and self.bHoverEffect then
-            render.ResetModelLighting(1.0, 1.0, 1.0)
-            render.SetBlend(0.2)
-        else
-            render.ResetModelLighting(self.colAmbientLight.r / 255, self.colAmbientLight.g / 255, self.colAmbientLight.b / 255)
-            render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
-        end
-
-        ply:DrawModel()
-
+    if self.Hovered and self.bHoverEffect then
+        render.ResetModelLighting(1.0, 1.0, 1.0)
+        render.SetBlend(0.2)
+    else
+        render.ResetModelLighting(
+            self.colAmbientLight.r / 255,
+            self.colAmbientLight.g / 255,
+            self.colAmbientLight.b / 255
+        )
         render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
+    end
 
-        if self.data.specialModelHandeling then
-            for _, model in pairs(self.data.worldModels) do
-                model:DrawModel()
-            end
-        elseif IsValid(wep) then
-            wep:DrawModel()
-        end
+    ply:DrawModel()
 
-        render.SetScissorRect(0, 0, 0, 0, false)
-        render.SuppressEngineLighting(false)
+    render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
+
+    weaponrenderer.RenderWoldModel(
+        wep,
+        wepModel,
+        wep.customWorldModelElements or wep.WElements,
+        ply
+    )
+
+    render.SetScissorRect(0, 0, 0, 0, false)
+    render.SuppressEngineLighting(false)
     cam.End3D()
 
     self.lastPaint = RealTime()
@@ -375,4 +342,9 @@ function PANEL:Paint(w, h)
     return false
 end
 
-derma.DefineControl("DWeaponPreviewTTT2", "A box that renders a player with an equipped weapon", PANEL, "DLabelTTT2")
+derma.DefineControl(
+    "DWeaponPreviewTTT2",
+    "A box that renders a player with an equipped weapon",
+    PANEL,
+    "DLabelTTT2"
+)
