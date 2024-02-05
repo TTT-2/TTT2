@@ -252,8 +252,8 @@ function PANEL:DrawModel()
     render.SetColorModulation(self.colColor.r / 255, self.colColor.g / 255, self.colColor.b / 255)
     render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
 
-		-- iterates over the model lighting enum: https://wiki.facepunch.com/gmod/Enums/BOX
-		for i = 0, 6 do
+        -- iterates over the model lighting enum: https://wiki.facepunch.com/gmod/Enums/BOX
+        for i = 0, 6 do
         local col = self.directionalLight[i]
 
         if col then

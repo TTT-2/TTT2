@@ -2012,9 +2012,9 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
-	if panel:HasModel() then
-		panel:DrawModel()
-	end
+    if panel:HasModel() then
+        panel:DrawModel()
+    end
 end
 
 -- REGISTER DERMA SKIN
