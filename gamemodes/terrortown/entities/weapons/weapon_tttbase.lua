@@ -753,7 +753,8 @@ if CLIENT then
 
     ---
     -- Adds a custom view model.
-    -- @note Multiple view models can be added, they are all rendered at once
+    -- @note Multiple view models can be added, they are all rendered at once.
+    -- @note Call this in @{SWEP:InitializeCustomModels}.
     -- @param string identifier The name of the added view model
     -- @param ModelData modelData The model data table
     -- @realm client
@@ -765,7 +766,8 @@ if CLIENT then
 
     ---
     -- Adds a custom world model.
-    -- @note Multiple world models can be added, they are all rendered at once
+    -- @note Multiple world models can be added, they are all rendered at once.
+    -- @note Call this in @{SWEP:InitializeCustomModels}.
     -- @param string identifier The name of the added world model
     -- @param ModelData modelData The model data table
     -- @realm client
@@ -785,6 +787,13 @@ if CLIENT then
         self.customViewModelBoneMods[identifier] = boneData
     end
 
+    ---
+    -- Initialization function that is only used to initialize custom view and world models with
+    -- @{SWEP:AddCustomViewModel} and @{SWEP:AddCustomWorldModel}.
+    -- @warning This function is also called in the setup for clientside weapon entities for the UI.
+    -- Therefore this function should only contain the setup calls for custom view and world models.
+    -- Entity specific function calls might throw errors in this function.
+    -- @realm client
     function SWEP:InitializeCustomModels() end
 
     ---
