@@ -193,7 +193,6 @@ if SERVER then
         local roleDataActivator = activator:GetSubRoleData()
 
         return activator:IsTerror()
-            and activator:CanCarryType(WEAPON_EQUIP)
             and roleDataActivator.isPolicingRole
             and roleDataActivator.isPublicRole
     end
