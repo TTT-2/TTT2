@@ -115,7 +115,7 @@ function PANEL:OnRemove()
 end
 
 ---
--- @param number iDirections
+-- @param number iDirections The direction enum: https://wiki.facepunch.com/gmod/Enums/BOX
 -- @param Color color
 -- @realm client
 function PANEL:SetDirectionalLight(iDirection, color)
