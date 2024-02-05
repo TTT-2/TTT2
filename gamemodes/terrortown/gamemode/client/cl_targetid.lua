@@ -235,7 +235,6 @@ local function DrawPropSpecLabels(client)
             if ply == client or (
                 clientTarget == ply
                 and IsPlayer(clientTarget)
-                and clientObsMode == OBS_MODE_IN_EYE
             ) then
                 continue
             end
