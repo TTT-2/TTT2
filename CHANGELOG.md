@@ -98,6 +98,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `IsPlayer` failing if a non-entity is passed to it (by @TimGoll)
 - Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
 - Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
+- Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
 
 ### Removed
 

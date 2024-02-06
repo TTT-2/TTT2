@@ -306,7 +306,7 @@ function SEARCHSCREEN:Show(data)
         ---
         -- @realm client
         -- stylua: ignore
-        hook.Run("TTTBodySearchPopulate", searchAdd, search)
+        hook.Run("TTTBodySearchPopulate", searchAdd, data)
         for _, v in pairs(searchAdd) do
             if istable(v.text) then
                 self:MakeInfoItem(
