@@ -99,6 +99,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
 - Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 - Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
+- Fixed the way fonts are initialized in TTT2 meaning that it is no longer broken and also works on linux (by @EntranceJew)
 
 ### Removed
 
