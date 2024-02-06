@@ -127,9 +127,9 @@ function SWEP:Initialize()
 
         self:SetSubMaterial(0, "!scanner_screen_mat")
 
-        surface.CreateAdvancedFont(
-            "DNAScannerDistanceFont",
-            { font = "Trebuchet24", size = 32, weight = 1200 }
+		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
+            "Tahoma",
+            { font = "Trebuchet24", size = 32, weight = 1200, antialias = true }
         )
 
         self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")

@@ -6,20 +6,47 @@
 local surface = surface
 
 -- Fonts
-surface.CreateAdvancedFont(
+surface.CreateAdvancedFont("PureSkinMSTACKImageMsg",
     "PureSkinMSTACKImageMsg",
-    { font = "Trebuchet24", size = 21, weight = 1000 }
+    { font = "Tahoma", size = 21, weight = 1000, antialias = true }
 )
-surface.CreateAdvancedFont("PureSkinMSTACKMsg", { font = "Trebuchet18", size = 15, weight = 900 })
-surface.CreateAdvancedFont("PureSkinRole", { font = "Trebuchet24", size = 30, weight = 700 })
-surface.CreateAdvancedFont("PureSkinBar", { font = "Trebuchet24", size = 21, weight = 1000 })
-surface.CreateAdvancedFont("PureSkinWep", { font = "Trebuchet24", size = 21, weight = 1000 })
-surface.CreateAdvancedFont("PureSkinWepNum", { font = "Trebuchet24", size = 21, weight = 700 })
-surface.CreateAdvancedFont("PureSkinItemInfo", { font = "Trebuchet24", size = 14, weight = 700 })
-surface.CreateAdvancedFont("PureSkinTimeLeft", { font = "Trebuchet24", size = 24, weight = 800 })
+surface.CreateAdvancedFont(
+	"PureSkinMSTACKMsg",
+	{ font = "Tahoma", size = 15, weight = 900, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinRole",
+	{ font = "Tahoma", size = 30, weight = 700, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinBar",
+	{ font = "Tahoma", size = 21, weight = 1000, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinWep",
+	{ font = "Tahoma", size = 21, weight = 1000, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinWepNum",
+	{ font = "Tahoma", size = 21, weight = 700, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinItemInfo",
+	{ font = "Tahoma", size = 14, weight = 700, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinTimeLeft",
+	{ font = "Tahoma", size = 24, weight = 800, antialias = true }
+)
 
-surface.CreateAdvancedFont("PureSkinPopupTitle", { font = "Trebuchet24", size = 48, weight = 600 })
-surface.CreateAdvancedFont("PureSkinPopupText", { font = "Trebuchet18", size = 18, weight = 600 })
+surface.CreateAdvancedFont(
+	"PureSkinPopupTitle",
+	{ font = "Tahoma", size = 48, weight = 600, antialias = true }
+)
+surface.CreateAdvancedFont(
+	"PureSkinPopupText",
+	{ font = "Tahoma", size = 18, weight = 600, antialias = true }
+)
 
 -- base drawing functions
 include("cl_drawing_functions.lua")
