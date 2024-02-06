@@ -176,9 +176,6 @@ function PANEL:SetWeaponClass(cls)
         self.data.wep:Remove()
     end
 
-    -- make sure it is reset in case different weapon was used before
-    self.data.wepClass = cls
-
     local clientsideEntity = ClientsideModel(wep.WorldModel, RENDERGROUP_OTHER)
 
     if not IsValid(clientsideEntity) then
