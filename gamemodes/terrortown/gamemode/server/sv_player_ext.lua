@@ -16,6 +16,8 @@ if not plymeta then
     return
 end
 
+local soundWeaponPickup = Sound("items/ammo_pickup.wav")
+
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
@@ -1606,6 +1608,8 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 
     wep.wpickup_autoSelect = shouldAutoSelect
 
+    self:EmitSound(soundWeaponPickup)
+
     return wep
 end
 
@@ -1643,6 +1647,8 @@ function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSel
             pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
         end
     end
+
+    self:EmitSound(soundWeaponPickup)
 
     return pWep
 end

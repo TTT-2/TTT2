@@ -222,14 +222,14 @@ function PANEL:DrawModel()
     local xLimitStart, yLimitStart = xBaseStart, yBaseStart
     local xLimitEnd, yLimitEnd = self:LocalToScreen(self:GetWide(), self:GetTall())
 
-    local curparent = self
+    local currentParent = self
 
     -- iterate till the top is found to make sure the image is not out of bounds
-    while curparent:GetParent() do
-        curparent = curparent:GetParent()
+    while currentParent:GetParent() do
+        currentParent = currentParent:GetParent()
 
-        local x1, y1 = curparent:LocalToScreen(0, 0)
-        local x2, y2 = curparent:LocalToScreen(curparent:GetWide(), curparent:GetTall())
+        local x1, y1 = currentParent:LocalToScreen(0, 0)
+        local x2, y2 = currentParent:LocalToScreen(currentParent:GetWide(), currentParent:GetTall())
 
         xLimitStart = mathMax(xLimitStart, x1)
         yLimitStart = mathMax(yLimitStart, y1)
@@ -252,6 +252,7 @@ function PANEL:DrawModel()
     render.SetColorModulation(self.colColor.r / 255, self.colColor.g / 255, self.colColor.b / 255)
     render.SetBlend((self:GetAlpha() / 255) * (self.colColor.a / 255))
 
+    -- iterates over the model lighting enum: https://wiki.facepunch.com/gmod/Enums/BOX
     for i = 0, 6 do
         local col = self.directionalLight[i]
 

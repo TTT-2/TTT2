@@ -285,6 +285,12 @@ if CLIENT then
 
         cv_thickness = GetConVar("ttt_crosshair_thickness")
 
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
+    -- @realm client
+    function SWEP:InitializeCustomModels()
         self:AddCustomWorldModel("wmodel", {
             type = "Model",
             model = "models/Items/combine_rifle_cartridge01.mdl",
@@ -299,8 +305,6 @@ if CLIENT then
             skin = 0,
             bodygroup = {},
         })
-
-        self.BaseClass.Initialize(self)
     end
 
     ---

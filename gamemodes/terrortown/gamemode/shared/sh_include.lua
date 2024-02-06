@@ -143,6 +143,10 @@ TTTFiles = {
     cl_vskin__vgui__dsubmenulist = { file = "cl_vskin/vgui/dsubmenulist_ttt2.lua", on = "client" },
     cl_vskin__vgui__dinfoitem = { file = "cl_vskin/vgui/dinfoitem_ttt2.lua", on = "client" },
     cl_vskin__vgui__dprofilepanel = { file = "cl_vskin/vgui/dprofilepanel_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dweaponpreview = {
+        file = "cl_vskin/vgui/dweaponpreview_ttt2.lua",
+        on = "client",
+    },
 }
 
 if SERVER then

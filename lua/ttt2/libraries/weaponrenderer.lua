@@ -84,15 +84,19 @@ local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, bon
             pos, ang = matrix:GetTranslation(), matrix:GetAngles()
         end
 
-        local owner = wep:GetOwner()
+        -- if the entity has no function to determine the owner it is probably a clientside entity
+        -- meaning that no view model is needed since it only renders a world model
+        if isfunction(wep.GetOwner) then
+            local owner = wep:GetOwner()
 
-        if
-            IsValid(owner)
-            and owner:IsPlayer()
-            and boneEntity == owner:GetViewModel()
-            and wep.ViewModelFlip
-        then
-            ang.r = -ang.r -- Fixes mirrored models
+            if
+                IsValid(owner)
+                and owner:IsPlayer()
+                and boneEntity == owner:GetViewModel()
+                and wep.ViewModelFlip
+            then
+                ang.r = -ang.r -- Fixes mirrored models
+            end
         end
     end
 
@@ -123,10 +127,14 @@ function weaponrenderer.CreateModel(wep, modelData)
             ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
 
         if IsValid(modelDataCopy.modelEnt) then
-            modelDataCopy.modelEnt:SetPos(wep:GetPos())
-            modelDataCopy.modelEnt:SetAngles(wep:GetAngles())
-            modelDataCopy.modelEnt:SetParent(wep)
-            modelDataCopy.modelEnt:SetNoDraw(true)
+            -- for clientside entities wep:GetPos is not defined; since a view model is not needed
+            -- for these entities, this can be ignored
+            if isfunction(wep.GetPos) then
+                modelDataCopy.modelEnt:SetPos(wep:GetPos())
+                modelDataCopy.modelEnt:SetAngles(wep:GetAngles())
+                modelDataCopy.modelEnt:SetParent(wep)
+                modelDataCopy.modelEnt:SetNoDraw(true)
+            end
             modelDataCopy.createdModel = modelDataCopy.model
         else
             modelDataCopy.modelEnt = nil
@@ -267,8 +275,8 @@ end
 
 ---
 -- Renders the world or view model.
--- @param Entity wep The weapon whose view model should be rendered
--- @param table elements The elements of the view model
+-- @param Entity wep The weapon whose view or world model should be rendered
+-- @param table elements The elements of the view or world model
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
 -- @realm client
 function weaponrenderer.Render(wep, elements, boneEntity)
@@ -352,4 +360,51 @@ function weaponrenderer.Render(wep, elements, boneEntity)
             cam.End3D2D()
         end
     end
+end
+
+---
+-- Renders the view model if valid view model elements are provided. It also updates the bone
+-- positions so that the view model tracks the hands.
+-- @param Entity wep The weapon whose view model should be rendered
+-- @param table elements The elements of the view model
+-- @param Entity viewModel The player's view model
+-- @realm client
+function weaponrenderer.RenderViewModel(wep, elements, viewModel)
+    if not elements then
+        return
+    end
+
+    weaponrenderer.UpdateBonePositions(wep, viewModel)
+
+    weaponrenderer.Render(wep, elements, viewModel)
+end
+
+---
+-- Renders the wold model if valid wold model elements are provided. It also renders the default
+-- world model of the weapon if enabled
+-- @param Entity wep The weapon whose world model should be rendered
+-- @param Entity wepModel The weapon mode whose world model should be rendered, in most cases
+-- identical to the first parameter
+-- @param table elements The elements of the world model
+-- @param[opt] Player owner The owner entity of the weapon, binds the model to their hands
+-- @realm client
+function weaponrenderer.RenderWorldModel(wep, wepModel, elements, owner)
+    if wep.ShowDefaultWorldModel then
+        wepModel:DrawModel()
+    end
+
+    if not elements then
+        return
+    end
+
+    local boneEnt
+
+    if IsValid(owner) then
+        boneEnt = owner
+    else
+        -- when the weapon is dropped for example
+        boneEnt = wepModel
+    end
+
+    weaponrenderer.Render(wepModel, elements, boneEnt)
 end

@@ -27,6 +27,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for gameplay menu
 - Icon for accessibility menu
 - Icon for `Voice & Volume` menu
+- Added a new vgui element: `DWeaponPreview_TTT2` to render a player with their equipped weapon (by @TimGoll)
+  - Supports any normal weapon that has a `.HoldType` and a `.WorldModel`
+  - Supports any weapon that is made with the SWEP Construction Kit (boomerang, melonmine, ...)
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 - Added custom world and view models to some builtin weapons (by @TimGoll)
@@ -42,6 +45,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 - `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
+- Added weapon pickup sounds when picking up weapons manually (by @TimGoll)
 
 ### Changed
 
@@ -95,6 +99,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `IsPlayer` failing if a non-entity is passed to it (by @TimGoll)
 - Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
 - Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
+- Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
 
 ### Removed
 

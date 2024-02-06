@@ -123,6 +123,12 @@ if CLIENT then
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("decoy_help_pri")
 
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
+    -- @realm client
+    function SWEP:InitializeCustomModels()
         self:AddCustomViewModel("vmodel", {
             type = "Model",
             model = "models/props_lab/reciever01b.mdl",
@@ -152,8 +158,6 @@ if CLIENT then
             skin = 0,
             bodygroup = {},
         })
-
-        self.BaseClass.Initialize(self)
     end
 
     ---
