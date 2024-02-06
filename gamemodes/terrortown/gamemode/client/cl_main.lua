@@ -82,6 +82,7 @@ ttt_include("cl_vskin__vgui__dsearchbar")
 ttt_include("cl_vskin__vgui__dprofilepanel")
 ttt_include("cl_vskin__vgui__dinfoitem")
 ttt_include("cl_vskin__vgui__dsubmenulist")
+ttt_include("cl_vskin__vgui__dweaponpreview")
 
 ttt_include("cl_changes")
 ttt_include("cl_network_sync")

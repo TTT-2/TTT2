@@ -2006,5 +2006,16 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
     end
 end
 
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintWeaponPreviewTTT2(panel, w, h)
+    if panel:HasModel() then
+        panel:DrawModel()
+    end
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

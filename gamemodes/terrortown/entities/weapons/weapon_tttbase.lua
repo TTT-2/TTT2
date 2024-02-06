@@ -753,7 +753,8 @@ if CLIENT then
 
     ---
     -- Adds a custom view model.
-    -- @note Multiple view models can be added, they are all rendered at once
+    -- @note Multiple view models can be added, they are all rendered at once.
+    -- @note Call this in @{SWEP:InitializeCustomModels}.
     -- @param string identifier The name of the added view model
     -- @param ModelData modelData The model data table
     -- @realm client
@@ -765,7 +766,8 @@ if CLIENT then
 
     ---
     -- Adds a custom world model.
-    -- @note Multiple world models can be added, they are all rendered at once
+    -- @note Multiple world models can be added, they are all rendered at once.
+    -- @note Call this in @{SWEP:InitializeCustomModels}.
     -- @param string identifier The name of the added world model
     -- @param ModelData modelData The model data table
     -- @realm client
@@ -786,6 +788,15 @@ if CLIENT then
     end
 
     ---
+    -- Initialization function that is only used to initialize custom view and world models with
+    -- @{SWEP:AddCustomViewModel} and @{SWEP:AddCustomWorldModel}.
+    -- @warning This function is also called in the setup for clientside weapon entities for the UI.
+    -- Therefore this function should only contain the setup calls for custom view and world models.
+    -- Entity specific function calls might throw errors in this function.
+    -- @realm client
+    function SWEP:InitializeCustomModels() end
+
+    ---
     -- Called straight after the view model has been drawn. This is called before
     -- @{GM:PostDrawViewModel} and @{WEAPON:PostDrawViewModel}.
     -- @warning If you override ViewModelDrawn in your SWEP and you are using a custom world or
@@ -794,13 +805,7 @@ if CLIENT then
     -- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
     -- @realm client
     function SWEP:ViewModelDrawn(viewModel)
-        if not self.customViewModelElements then
-            return
-        end
-
-        weaponrenderer.UpdateBonePositions(self, viewModel)
-
-        weaponrenderer.Render(self, self.customViewModelElements, viewModel)
+        weaponrenderer.RenderViewModel(self, self.customViewModelElements, viewModel)
     end
 
     ---
@@ -817,32 +822,15 @@ if CLIENT then
             return
         end
 
-        if self.ShowDefaultWorldModel then
-            self:DrawModel()
-        end
-
-        if not self.customWorldModelElements then
-            return
-        end
-
-        local boneEnt
-
-        if IsValid(self:GetOwner()) then
-            boneEnt = self:GetOwner()
-        else
-            -- when the weapon is dropped
-            boneEnt = self
-        end
-
-        weaponrenderer.Render(self, self.customWorldModelElements, boneEnt)
+        weaponrenderer.RenderWorldModel(self, self, self.customWorldModelElements, self:GetOwner())
     end
 
     ---
     -- Allows you to modify viewmodel while the weapon in use before it is drawn.
     -- @warning This hook only works if you haven't overridden @{GM:PreDrawViewModel}.
     -- @param Entity viewModel This is the view model entity before it is drawn
-    -- @param Weapon wep This is the weapon that is from the view model
     -- @param Player ply The the owner of the view model
+    -- @param Weapon wep This is the weapon that is from the view model
     -- @return boolean Return true to prevent the default view model rendering. This also affects @{GM:PostDrawViewModel}
     -- @realm client
     hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
@@ -1416,6 +1404,10 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Initialize
 -- @realm shared
 function SWEP:Initialize()
+    if CLIENT then
+        self:InitializeCustomModels()
+    end
+
     if CLIENT and self:Clip1() == -1 then
         self:SetClip1(self.Primary.DefaultClip)
     elseif SERVER then

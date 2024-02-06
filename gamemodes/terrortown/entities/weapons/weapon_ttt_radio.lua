@@ -102,6 +102,12 @@ if CLIENT then
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("radio_help_primary", "radio_help_secondary")
 
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
+    -- @realm client
+    function SWEP:InitializeCustomModels()
         self:AddCustomViewModel("vmodel", {
             type = "Model",
             model = "models/props/cs_office/radio.mdl",
@@ -131,8 +137,6 @@ if CLIENT then
             skin = 0,
             bodygroup = {},
         })
-
-        self.BaseClass.Initialize(self)
     end
 
     ---

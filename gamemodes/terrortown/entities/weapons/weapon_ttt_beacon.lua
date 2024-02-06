@@ -128,6 +128,12 @@ if CLIENT then
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("beacon_help_pri", "beacon_help_sec")
 
+        self.BaseClass.Initialize(self)
+    end
+
+    ---
+    -- @realm client
+    function SWEP:InitializeCustomModels()
         self:AddCustomViewModel("vmodel", {
             type = "Model",
             model = "models/props_lab/reciever01a.mdl",
@@ -157,8 +163,6 @@ if CLIENT then
             skin = 0,
             bodygroup = {},
         })
-
-        self.BaseClass.Initialize(self)
     end
 
     ---
