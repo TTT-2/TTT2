@@ -114,33 +114,6 @@ local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 ---
 -- @ignore
-function SWEP:Initialize()
-    if CLIENT then
-        -- Create render target
-        self.scannerScreenTex = GetRenderTarget("scanner_screen_tex", 512, 512)
-
-        self.scannerScreenMat = CreateMaterial("scanner_screen_mat", "UnlitGeneric", {
-            ["$basetexture"] = self.scannerScreenTex,
-            ["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0",
-        })
-        self.scannerScreenMat:SetTexture("$basetexture", self.scannerScreenTex)
-
-        self:SetSubMaterial(0, "!scanner_screen_mat")
-
-		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
-            "Tahoma",
-            { font = "Trebuchet24", size = 32, weight = 1200, antialias = true }
-        )
-
-        self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
-        self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
-    end
-
-    return BaseClass.Initialize(self)
-end
-
----
--- @ignore
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -497,10 +470,17 @@ if SERVER then
     -- @hook
     -- @realm server
     function GAMEMODE:TTTFoundDNA(finder, toucher, ent) end
-else -- CLIENT
+end
+
+if CLIENT then
     local TryT = LANG.TryTranslation
     local screen_bgcolor = Color(220, 220, 220, 255)
     local screen_fontcolor = Color(144, 210, 235, 255)
+
+    surface.CreateAdvancedFont(
+        "DNAScannerDistanceFont",
+        { font = "Tahoma", size = 32, weight = 1200, antialias = true }
+    )
 
     local function DrawTexturedRectRotatedPoint(x, y, w, h, rot, x0, y0)
         local c = math.cos(math.rad(rot))
@@ -510,6 +490,26 @@ else -- CLIENT
         local newy = y0 * c + x0 * s
 
         surface.DrawTexturedRectRotated(x + newx, y + newy, w, h, rot)
+    end
+
+    ---
+    -- @realm client
+    function SWEP:Initialize()
+        -- Create render target
+        self.scannerScreenTex = GetRenderTarget("scanner_screen_tex", 512, 512)
+
+        self.scannerScreenMat = CreateMaterial("scanner_screen_mat", "UnlitGeneric", {
+            ["$basetexture"] = self.scannerScreenTex,
+            ["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0",
+        })
+        self.scannerScreenMat:SetTexture("$basetexture", self.scannerScreenTex)
+
+        self:SetSubMaterial(0, "!scanner_screen_mat")
+
+        self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
+        self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
+
+        return BaseClass.Initialize(self)
     end
 
     ---

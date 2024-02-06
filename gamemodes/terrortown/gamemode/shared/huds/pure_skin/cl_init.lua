@@ -6,46 +6,45 @@
 local surface = surface
 
 -- Fonts
-surface.CreateAdvancedFont("PureSkinMSTACKImageMsg",
+surface.CreateAdvancedFont(
     "PureSkinMSTACKImageMsg",
     { font = "Tahoma", size = 21, weight = 1000, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinMSTACKMsg",
-	{ font = "Tahoma", size = 15, weight = 900, antialias = true }
+    "PureSkinMSTACKMsg",
+    { font = "Tahoma", size = 15, weight = 900, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinRole",
-	{ font = "Tahoma", size = 30, weight = 700, antialias = true }
+    "PureSkinRole",
+    { font = "Tahoma", size = 30, weight = 700, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinBar",
-	{ font = "Tahoma", size = 21, weight = 1000, antialias = true }
+    "PureSkinBar",
+    { font = "Tahoma", size = 21, weight = 1000, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinWep",
-	{ font = "Tahoma", size = 21, weight = 1000, antialias = true }
+    "PureSkinWep",
+    { font = "Tahoma", size = 21, weight = 1000, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinWepNum",
-	{ font = "Tahoma", size = 21, weight = 700, antialias = true }
+    "PureSkinWepNum",
+    { font = "Tahoma", size = 21, weight = 700, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinItemInfo",
-	{ font = "Tahoma", size = 14, weight = 700, antialias = true }
+    "PureSkinItemInfo",
+    { font = "Tahoma", size = 14, weight = 700, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinTimeLeft",
-	{ font = "Tahoma", size = 24, weight = 800, antialias = true }
-)
-
-surface.CreateAdvancedFont(
-	"PureSkinPopupTitle",
-	{ font = "Tahoma", size = 48, weight = 600, antialias = true }
+    "PureSkinTimeLeft",
+    { font = "Tahoma", size = 24, weight = 800, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"PureSkinPopupText",
-	{ font = "Tahoma", size = 18, weight = 600, antialias = true }
+    "PureSkinPopupTitle",
+    { font = "Tahoma", size = 48, weight = 600, antialias = true }
+)
+surface.CreateAdvancedFont(
+    "PureSkinPopupText",
+    { font = "Tahoma", size = 18, weight = 600, antialias = true }
 )
 
 -- base drawing functions

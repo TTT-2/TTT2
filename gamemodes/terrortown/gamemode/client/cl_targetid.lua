@@ -37,23 +37,20 @@ local cvEnableSpectatorsoutline = CreateConVar("ttt2_enable_spectatorsoutline", 
 local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", { FCVAR_ARCHIVE, FCVAR_USERINFO })
 
 surface.CreateAdvancedFont(
-	"TargetID_Key", 
-	{ font = "Tahoma", size = 26, weight = 900, antialias = true }
+    "TargetID_Key",
+    { font = "Tahoma", size = 26, weight = 900, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"TargetID_Title", 
-	{ font = "Tahoma", size = 20, weight = 900, antialias = true }
+    "TargetID_Title",
+    { font = "Tahoma", size = 20, weight = 900, antialias = true }
 )
 surface.CreateAdvancedFont(
-	"TargetID_Subtitle",
-	{ font = "Tahoma", size = 17, weight = 300, antialias = true }
+    "TargetID_Subtitle",
+    { font = "Tahoma", size = 17, weight = 300, antialias = true }
 )
 surface.CreateAdvancedFont(
     "TargetID_Description",
     { font = "Tahoma", size = 15, weight = 300, antialias = true }
-)
-    "TargetID_Description",
-    { font = "Trebuchet24", size = 15, weight = 300, antialias = true }
 )
 
 -- keep this font for compatibility reasons

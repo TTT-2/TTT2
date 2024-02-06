@@ -15,13 +15,15 @@ local weaponMetaTable = FindMetaTable("Weapon")
 
 if SERVER then
     AddCSLuaFile()
-else -- CLIENT
+end
+
+if CLIENT then
     -- hud help font
-	surface.CreateAdvancedFont(
-		"weapon_hud_help",
-		{ font = "Tahoma", size = 16, weight = 600, antialias = true }
-	)
-	surface.CreateAdvancedFont(
+    surface.CreateAdvancedFont(
+        "weapon_hud_help",
+        { font = "Tahoma", size = 16, weight = 600, antialias = true }
+    )
+    surface.CreateAdvancedFont(
         "weapon_hud_help_key",
         { font = "Tahoma", size = 13, weight = 1200, antialias = true }
     )

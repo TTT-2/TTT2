@@ -92,7 +92,6 @@ local entmeta = assert(FindMetaTable("Entity"), "[TTT2] FAILED TO FIND ENTITY TA
 ---
 -- Creates a new marker vision object for the entity.
 -- @note This does not sync to the client, @{MARKER_VISION_ELEMENT:SyncToClients}
--- @param[opt] Player owner The new owner of the wallhack 
 -- has to be called on it first
 -- @param string identifier The unique identifier of this marker vision element
 -- @return MARKER_VISION_ELEMENT The marker vision object that was created
