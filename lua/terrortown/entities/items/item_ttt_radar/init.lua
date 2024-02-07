@@ -152,6 +152,7 @@ local function GetDataForRadar(ply, ent)
         -- Decoys appear as innocents for players from other teams
         if ent:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
             subrole = ROLE_INNOCENT
+            team = TEAM_INNOCENT
         end
     else
         ---
