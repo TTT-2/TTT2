@@ -64,6 +64,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
 - Updated and improved Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
+- improved Simplified Chinese translation （by @TEGTainFan）
 - Consolidated hat logic
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
