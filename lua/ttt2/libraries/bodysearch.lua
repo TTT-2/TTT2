@@ -59,6 +59,8 @@ CORPSE_KILL_DIRECTION_SIDE = 3
 -- stylua: ignore
 local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+local materialWeaponFallback = Material("vgui/ttt/missing_equip_icon")
+
 bodysearch = {}
 
 ---
@@ -833,6 +835,9 @@ if CLIENT then
             if ent and ent.t and ent.t.Icon then
                 return Material(ent.t.Icon)
             end
+
+            -- as a fallback use this missing texture icon
+            return materialWeaponFallback
         elseif type == "dmg" then
             return DamageToIconMaterial(data)
         elseif type == "death_time" then
