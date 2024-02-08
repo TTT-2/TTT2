@@ -220,11 +220,11 @@ if CLIENT then
 
     surface.CreateAdvancedFont(
         "RadarVision_Title",
-        { font = "Tahoma", size = 20, weight = 600, antialias = true }
+        { font = "Tahoma", size = 20, weight = 600, extended = true }
     )
     surface.CreateAdvancedFont(
         "RadarVision_Text",
-        { font = "Tahoma", size = 14, weight = 300, antialias = true }
+        { font = "Tahoma", size = 14, weight = 300, extended = true }
     )
 
     ---

@@ -21,11 +21,11 @@ if CLIENT then
     -- hud help font
     surface.CreateAdvancedFont(
         "weapon_hud_help",
-        { font = "Tahoma", size = 16, weight = 600, antialias = true }
+        { font = "Tahoma", size = 16, weight = 600, extended = true }
     )
     surface.CreateAdvancedFont(
         "weapon_hud_help_key",
-        { font = "Tahoma", size = 13, weight = 1200, antialias = true }
+        { font = "Tahoma", size = 13, weight = 1200, extended = true }
     )
 end
 

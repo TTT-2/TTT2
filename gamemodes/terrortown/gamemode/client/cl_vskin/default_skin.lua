@@ -64,67 +64,67 @@ local sizes = {}
 -- register fonts
 surface.CreateAdvancedFont(
     "DermaTTT2Title",
-    { font = "Tahoma", size = 26, weight = 300, antialias = true }
+    { font = "Tahoma", size = 26, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2TitleSmall",
-    { font = "Tahoma", size = 18, weight = 600, antialias = true }
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2MenuButtonTitle",
-    { font = "Tahoma", size = 22, weight = 300, antialias = true }
+    { font = "Tahoma", size = 22, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2MenuButtonDescription",
-    { font = "Tahoma", size = 14, weight = 300, antialias = true }
+    { font = "Tahoma", size = 14, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2SubMenuButtonTitle",
-    { font = "Tahoma", size = 18, weight = 600, antialias = true }
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2MenuButtonDescription",
-    { font = "Tahoma", size = 14, weight = 300, antialias = true }
+    { font = "Tahoma", size = 14, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2SubMenuButtonTitle",
-    { font = "Tahoma", size = 18, weight = 600, antialias = true }
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2Button",
-    { font = "Tahoma", size = 14, weight = 600, antialias = true }
+    { font = "Tahoma", size = 14, weight = 600, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2CatHeader",
-    { font = "Tahoma", size = 16, weight = 900, antialias = true }
+    { font = "Tahoma", size = 16, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2TextSmall",
-    { font = "Tahoma", size = 12, weight = 300, antialias = true }
+    { font = "Tahoma", size = 12, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2Text",
-    { font = "Tahoma", size = 16, weight = 300, antialias = true }
+    { font = "Tahoma", size = 16, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2TextLarge",
-    { font = "Tahoma", size = 18, weight = 300, antialias = true }
+    { font = "Tahoma", size = 18, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2TextLarger",
-    { font = "Tahoma", size = 20, weight = 900, antialias = true }
+    { font = "Tahoma", size = 20, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2TextLargest",
-    { font = "Tahoma", size = 24, weight = 900, antialias = true }
+    { font = "Tahoma", size = 24, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2TextHuge",
-    { font = "Tahoma", size = 72, weight = 900, antialias = true }
+    { font = "Tahoma", size = 72, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2SmallBold",
-    { font = "Tahoma", size = 14, weight = 900, antialias = true }
+    { font = "Tahoma", size = 14, weight = 900, extended = true }
 )
 
 ---

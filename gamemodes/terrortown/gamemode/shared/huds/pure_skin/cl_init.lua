@@ -8,43 +8,43 @@ local surface = surface
 -- Fonts
 surface.CreateAdvancedFont(
     "PureSkinMSTACKImageMsg",
-    { font = "Tahoma", size = 21, weight = 1000, antialias = true }
+    { font = "Tahoma", size = 21, weight = 1000, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinMSTACKMsg",
-    { font = "Tahoma", size = 15, weight = 900, antialias = true }
+    { font = "Tahoma", size = 15, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinRole",
-    { font = "Tahoma", size = 30, weight = 700, antialias = true }
+    { font = "Tahoma", size = 30, weight = 700, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinBar",
-    { font = "Tahoma", size = 21, weight = 1000, antialias = true }
+    { font = "Tahoma", size = 21, weight = 1000, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinWep",
-    { font = "Tahoma", size = 21, weight = 1000, antialias = true }
+    { font = "Tahoma", size = 21, weight = 1000, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinWepNum",
-    { font = "Tahoma", size = 21, weight = 700, antialias = true }
+    { font = "Tahoma", size = 21, weight = 700, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinItemInfo",
-    { font = "Tahoma", size = 14, weight = 700, antialias = true }
+    { font = "Tahoma", size = 14, weight = 700, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinTimeLeft",
-    { font = "Tahoma", size = 24, weight = 800, antialias = true }
+    { font = "Tahoma", size = 24, weight = 800, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinPopupTitle",
-    { font = "Tahoma", size = 48, weight = 600, antialias = true }
+    { font = "Tahoma", size = 48, weight = 600, extended = true }
 )
 surface.CreateAdvancedFont(
     "PureSkinPopupText",
-    { font = "Tahoma", size = 18, weight = 600, antialias = true }
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
 )
 
 -- base drawing functions

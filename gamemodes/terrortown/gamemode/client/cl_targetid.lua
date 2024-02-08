@@ -38,19 +38,19 @@ local cvEnableOverheadicons = CreateConVar("ttt2_enable_overheadicons", "1", { F
 
 surface.CreateAdvancedFont(
     "TargetID_Key",
-    { font = "Tahoma", size = 26, weight = 900, antialias = true }
+    { font = "Tahoma", size = 26, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "TargetID_Title",
-    { font = "Tahoma", size = 20, weight = 900, antialias = true }
+    { font = "Tahoma", size = 20, weight = 900, extended = true }
 )
 surface.CreateAdvancedFont(
     "TargetID_Subtitle",
-    { font = "Tahoma", size = 17, weight = 300, antialias = true }
+    { font = "Tahoma", size = 17, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "TargetID_Description",
-    { font = "Tahoma", size = 15, weight = 300, antialias = true }
+    { font = "Tahoma", size = 15, weight = 300, extended = true }
 )
 
 -- keep this font for compatibility reasons

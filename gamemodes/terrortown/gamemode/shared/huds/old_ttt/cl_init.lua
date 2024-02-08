@@ -6,10 +6,10 @@
 local surface = surface
 
 -- Fonts
-surface.CreateFont("TraitorState", { font = "Tahoma", size = 28, weight = 1000, antialias = true })
-surface.CreateFont("TimeLeft", { font = "Tahoma", size = 24, weight = 800, antialias = true })
-surface.CreateFont("HealthAmmo", { font = "Tahoma", size = 24, weight = 750, antialias = true })
-surface.CreateFont("ItemInfo", { font = "Tahoma", size = 14, weight = 700, antialias = true })
+surface.CreateFont("TraitorState", { font = "Tahoma", size = 28, weight = 1000, extended = true })
+surface.CreateFont("TimeLeft", { font = "Tahoma", size = 24, weight = 800, extended = true })
+surface.CreateFont("HealthAmmo", { font = "Tahoma", size = 24, weight = 750, extended = true })
+surface.CreateFont("ItemInfo", { font = "Tahoma", size = 14, weight = 700, extended = true })
 
 local base = "hud_base"
 

@@ -479,7 +479,7 @@ if CLIENT then
 
     surface.CreateAdvancedFont(
         "DNAScannerDistanceFont",
-        { font = "Tahoma", size = 32, weight = 1200, antialias = true }
+        { font = "Tahoma", size = 32, weight = 1200, extended = true }
     )
 
     local function DrawTexturedRectRotatedPoint(x, y, w, h, rot, x0, y0)
