@@ -1493,6 +1493,8 @@ net.Receive("ttt2_set_player_setting", function(_, ply)
         return
     end
 
+    ply.playerSettings = ply.playerSettings or {}
+
     local identifier = net.ReadString()
     local data = net.ReadString()
 

@@ -370,6 +370,8 @@ end
 -- @param any value The setting's value, it is parsed as a string before transmitting
 -- @realm client
 function plymeta:SetSettingOnServer(identifier, value)
+    self.playerSettings = self.playerSettings or {}
+
     if self.playerSettings[identifier] == value then
         return
     end
