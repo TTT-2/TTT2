@@ -2065,7 +2065,7 @@ L.magneto_help_primary = "推动实体"
 L.magneto_help_secondary = "推动/拾取实体"
 L.knife_help_primary = "刺"
 L.knife_help_secondary = "投掷小刀"
---L.polter_help_primary = "Firenife thumper"
+--L.polter_help_primary = "Fire thumper"
 --L.polter_help_secondary = "Charge long range shot"
 
 -- 2023-12-12
