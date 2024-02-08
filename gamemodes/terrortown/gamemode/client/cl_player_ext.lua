@@ -376,12 +376,19 @@ function plymeta:SetSettingOnServer(identifier, value)
         return
     end
 
+    local oldValue = self.playerSettings[identifier]
+
     self.playerSettings[identifier] = value
 
     net.Start("ttt2_set_player_setting")
     net.WriteString(identifier)
     net.WriteString(tostring(value))
     net.SendToServer()
+
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2PlayerSettingChanged", self, identifier, oldValue, self.playerSettings[identifier])
 end
 
 local airtime = 0

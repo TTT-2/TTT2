@@ -1308,6 +1308,45 @@ function plymeta:GetPlayerSetting(identifier)
 end
 
 ---
+-- Update the sprinting FOV on the player if the setting is enabled.
+-- @realm shared
+function plymeta:UpdateSprintingFOV()
+    local mul = self:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(self)
+
+    if not self:GetPlayerSetting("enable_dynamic_fov") then
+        return
+    end
+
+    local newFOV = (self:GetPlayerSetting("fov_desired") or 85) * mul ^ (1 / 6)
+
+    if self.lastFOV ~= newFOV then
+        self.lastFOV = newFOV
+
+        self:SetFOV(newFOV, 0.25, nil, true)
+    end
+end
+
+---
+-- A hook that is called on change of a player setting on the server.
+-- @param Player ply The player whose setting was changed
+-- @param string identifier The setting's identifier
+-- @param any oldValue The old value of the setting
+-- @param any newValue The new value of the settings
+-- @hook
+-- @realm shared
+function GM:TTT2PlayerSettingChanged(ply, identifier, oldValue, newValue)
+    if IsValid(ply) and identifier == "enable_dynamic_fov" then
+        if newValue then
+            ply:UpdateSprintingFOV()
+        else
+            ply.lastFOV = 0
+
+            ply:SetFOV(0, 0.25, nil, true)
+        end
+    end
+end
+
+---
 -- A hook that is called on the change of a role. It is called once for the old role
 -- and once for the new role if some criteria are met.
 -- @param ROLE roleData The roledata of the rolechange
