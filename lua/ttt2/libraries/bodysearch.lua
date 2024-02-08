@@ -819,7 +819,20 @@ if CLIENT then
 
     local function TypeToMaterial(type, data)
         if type == "wep" then
-            return util.WeaponForClass(data.wep).iconMaterial
+            -- in most cases the inflictor is a weapon and the weapon has a cached
+            -- material that can be used
+            local wep = util.WeaponForClass(data.wep).iconMaterial
+
+            if wep then
+                return wep.iconMaterial
+            end
+
+            -- sometimes the projectile is a custom entity that kills the player
+            local ent = scripted_ents.GetStored(data.wep)
+
+            if ent and ent.t and ent.t.Icon then
+                return Material(ent.t.Icon)
+            end
         elseif type == "dmg" then
             return DamageToIconMaterial(data)
         elseif type == "death_time" then
@@ -916,6 +929,8 @@ if CLIENT then
     function bodysearch.PreprocSearch(raw)
         local search = {}
 
+        local index = 1
+
         for i = 1, #bodysearch.searchResultOrder do
             local type = bodysearch.searchResultOrder[i]
             local searchData = bodysearch.GetContentFromData(type, raw)
@@ -930,11 +945,23 @@ if CLIENT then
             -- only use the first text entry here
             local transText = LANG.GetDynamicTranslation(text[1].body, text[1].params, true)
 
-            search[type] = {
-                img = searchData.iconMaterial:GetName(),
-                text = transText,
-                p = i, -- sorting number
-            }
+            if searchData.iconMaterial then
+                -- note: GetName only returns the material name. This Fails if the addon uses a
+                -- png for its material, we therefore have to check if the material exists on disk
+                local materialFile = searchData.iconMaterial:GetName()
+
+                if file.Exists("materials/" .. materialFile .. ".png", "GAME") then
+                    materialFile = materialFile .. ".png"
+                end
+
+                search[type] = {
+                    img = materialFile,
+                    text = transText,
+                    p = index, -- sorting number
+                }
+
+                index = index + 1
+            end
 
             -- special cases with icon text
             local iconTextFn = TypeToIconText(type, raw)
