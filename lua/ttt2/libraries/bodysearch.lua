@@ -946,7 +946,7 @@ if CLIENT then
             local transText = LANG.GetDynamicTranslation(text[1].body, text[1].params, true)
 
             if searchData.iconMaterial then
-                -- note: GetName only returns the material name. This Fails if the addon uses a
+                -- note: GetName only returns the material name. This fails if the addon uses a
                 -- png for its material, we therefore have to check if the material exists on disk
                 local materialFile = searchData.iconMaterial:GetName()
 
