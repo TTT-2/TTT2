@@ -22,9 +22,6 @@ if not plymeta then
     return
 end
 
--- player meta table is hotreload safe, so we want to keep this table as well
-plymeta.playerSettings = plymeta.playerSettings or {}
-
 ---
 -- @internal
 -- @realm shared
@@ -1307,7 +1304,7 @@ end
 -- @return any The value of the setting, nil if not set
 -- @realm shared
 function plymeta:GetPlayerSetting(identifier)
-    return self.playerSettings[identifier]
+    return self.playerSettings and self.playerSettings[identifier]
 end
 
 ---
