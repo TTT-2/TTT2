@@ -101,6 +101,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 - Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
+- Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
 
 ### Removed
 
