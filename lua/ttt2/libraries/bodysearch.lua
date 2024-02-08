@@ -823,7 +823,7 @@ if CLIENT then
         if type == "wep" then
             -- in most cases the inflictor is a weapon and the weapon has a cached
             -- material that can be used
-            local wep = util.WeaponForClass(data.wep).iconMaterial
+            local wep = util.WeaponForClass(data.wep)
 
             if wep then
                 return wep.iconMaterial
