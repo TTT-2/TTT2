@@ -307,9 +307,7 @@ function GM:Move(ply, moveData)
     moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
     moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
 
-    if SERVER then
-        ply:UpdateSprintingFOV()
-    end
+    ply:UpdateSprintingFOV()
 end
 
 -- @param Player ply The player

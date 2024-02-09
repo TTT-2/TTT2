@@ -62,32 +62,70 @@ local colors = {}
 local sizes = {}
 
 -- register fonts
-surface.CreateAdvancedFont("DermaTTT2Title", { font = "Trebuchet24", size = 26, weight = 300 })
-surface.CreateAdvancedFont("DermaTTT2TitleSmall", { font = "Trebuchet24", size = 18, weight = 600 })
+surface.CreateAdvancedFont(
+    "DermaTTT2Title",
+    { font = "Tahoma", size = 26, weight = 300, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2TitleSmall",
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
+)
 surface.CreateAdvancedFont(
     "DermaTTT2MenuButtonTitle",
-    { font = "Trebuchet24", size = 22, weight = 300 }
+    { font = "Tahoma", size = 22, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2MenuButtonDescription",
-    { font = "Trebuchet24", size = 14, weight = 300 }
+    { font = "Tahoma", size = 14, weight = 300, extended = true }
 )
 surface.CreateAdvancedFont(
     "DermaTTT2SubMenuButtonTitle",
-    { font = "Trebuchet24", size = 18, weight = 600 }
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
 )
-surface.CreateAdvancedFont("DermaTTT2Button", { font = "Trebuchet24", size = 14, weight = 600 })
-surface.CreateAdvancedFont("DermaTTT2CatHeader", { font = "Trebuchet24", size = 16, weight = 900 })
-surface.CreateAdvancedFont("DermaTTT2TextSmall", { font = "Trebuchet24", size = 12, weight = 300 })
-surface.CreateAdvancedFont("DermaTTT2Text", { font = "Trebuchet24", size = 16, weight = 300 })
-surface.CreateAdvancedFont("DermaTTT2TextLarge", { font = "Trebuchet24", size = 18, weight = 300 })
-surface.CreateAdvancedFont("DermaTTT2TextLarger", { font = "Trebuchet24", size = 20, weight = 900 })
+surface.CreateAdvancedFont(
+    "DermaTTT2MenuButtonDescription",
+    { font = "Tahoma", size = 14, weight = 300, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2SubMenuButtonTitle",
+    { font = "Tahoma", size = 18, weight = 600, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2Button",
+    { font = "Tahoma", size = 14, weight = 600, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2CatHeader",
+    { font = "Tahoma", size = 16, weight = 900, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2TextSmall",
+    { font = "Tahoma", size = 12, weight = 300, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2Text",
+    { font = "Tahoma", size = 16, weight = 300, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2TextLarge",
+    { font = "Tahoma", size = 18, weight = 300, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2TextLarger",
+    { font = "Tahoma", size = 20, weight = 900, extended = true }
+)
 surface.CreateAdvancedFont(
     "DermaTTT2TextLargest",
-    { font = "Trebuchet24", size = 24, weight = 900 }
+    { font = "Tahoma", size = 24, weight = 900, extended = true }
 )
-surface.CreateAdvancedFont("DermaTTT2TextHuge", { font = "Trebuchet24", size = 72, weight = 900 })
-surface.CreateAdvancedFont("DermaTTT2SmallBold", { font = "Trebuchet24", size = 14, weight = 900 })
+surface.CreateAdvancedFont(
+    "DermaTTT2TextHuge",
+    { font = "Tahoma", size = 72, weight = 900, extended = true }
+)
+surface.CreateAdvancedFont(
+    "DermaTTT2SmallBold",
+    { font = "Tahoma", size = 14, weight = 900, extended = true }
+)
 
 ---
 -- Updates the @{SKIN}

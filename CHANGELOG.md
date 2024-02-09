@@ -100,8 +100,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
 - Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 - Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
+- Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
 - Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
+- Fixed door health displaying as a humongous string of decimals
 
 ### Removed
 
@@ -109,6 +111,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed DX8/SW models that aren't used
 - Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
 - Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
+- Removed `resource.AddFile` calls, server operators should use the workshop version or manually bundle loose files.
 
 ### Breaking Changes
 
