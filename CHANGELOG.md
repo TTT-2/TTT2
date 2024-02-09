@@ -100,6 +100,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
 - Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
 - Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
+- Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
 - Fixed door health displaying as a humongous string of decimals
 
