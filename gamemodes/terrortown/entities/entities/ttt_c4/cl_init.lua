@@ -188,7 +188,7 @@ local wire_colors = {
 ---
 -- @realm client
 function WIREPANEL:Init()
-    BaseClass.Init(self)
+    self.BaseClass.Init(self)
 
     self:NoClipping(true)
     self:SetMouseInputEnabled(true)
