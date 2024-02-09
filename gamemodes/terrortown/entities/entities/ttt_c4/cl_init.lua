@@ -1,7 +1,5 @@
 -- bomb menus
 
-DEFINE_BASECLASS("ttt_base_placeable")
-
 include("shared.lua")
 
 local starttime = C4_MINIMUM_TIME
@@ -188,7 +186,7 @@ local wire_colors = {
 ---
 -- @realm client
 function WIREPANEL:Init()
-    BaseClass.Init(self)
+    self.BaseClass.Init(self)
 
     self:NoClipping(true)
     self:SetMouseInputEnabled(true)
@@ -236,7 +234,7 @@ end
 ---
 -- @realm client
 function WIREPANEL:OnCursorExited()
-    self.PaintOver = BaseClass.PaintOver
+    self.PaintOver = self.BaseClass.PaintOver
 end
 
 ---
@@ -248,7 +246,7 @@ function WIREPANEL:DoClick()
 
     self.IsCut = true
 
-    self.PaintOver = BaseClass.PaintOver
+    self.PaintOver = self.BaseClass.PaintOver
 
     self.m_Image:SetMaterial(c4_wirecut_mat)
 

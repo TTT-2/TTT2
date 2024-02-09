@@ -370,9 +370,13 @@ end
 -- @param any value The setting's value, it is parsed as a string before transmitting
 -- @realm client
 function plymeta:SetSettingOnServer(identifier, value)
+    self.playerSettings = self.playerSettings or {}
+
     if self.playerSettings[identifier] == value then
         return
     end
+
+    local oldValue = self.playerSettings[identifier]
 
     self.playerSettings[identifier] = value
 
@@ -380,6 +384,11 @@ function plymeta:SetSettingOnServer(identifier, value)
     net.WriteString(identifier)
     net.WriteString(tostring(value))
     net.SendToServer()
+
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2PlayerSettingChanged", self, identifier, oldValue, self.playerSettings[identifier])
 end
 
 local airtime = 0

@@ -645,7 +645,7 @@ function targetid.HUDDrawTargetIDDoors(tData)
 
     if ent:DoorIsDestructible() then
         tData:AddDescriptionLine(
-            ParT("door_destructible", { health = ent:GetFastSyncedHealth() }),
+            ParT("door_destructible", { health = math.ceil(ent:GetFastSyncedHealth()) }),
             COLOR_LBROWN,
             { materialDestructible }
         )
