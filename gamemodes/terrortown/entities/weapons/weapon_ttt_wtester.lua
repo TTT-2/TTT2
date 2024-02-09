@@ -470,7 +470,7 @@ if SERVER then
     -- @hook
     -- @realm server
     function GAMEMODE:TTTFoundDNA(finder, toucher, ent) end
-end
+end -- SERVER
 
 if CLIENT then
     local TryT = LANG.TryTranslation
