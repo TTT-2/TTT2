@@ -236,7 +236,7 @@ end
 ---
 -- @realm client
 function WIREPANEL:OnCursorExited()
-    self.PaintOver = BaseClass.PaintOver
+    self.PaintOver = self.BaseClass.PaintOver
 end
 
 ---
@@ -248,7 +248,7 @@ function WIREPANEL:DoClick()
 
     self.IsCut = true
 
-    self.PaintOver = BaseClass.PaintOver
+    self.PaintOver = self.BaseClass.PaintOver
 
     self.m_Image:SetMaterial(c4_wirecut_mat)
 
