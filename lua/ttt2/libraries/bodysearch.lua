@@ -830,11 +830,14 @@ if CLIENT then
 
             -- sometimes the projectile is a custom entity that kills the player
             -- which means it is not a weapon with a cached material
-            elseif wep.Icon and wep.Icon ~= "" then
-                return Material(wep.Icon)
-
-            -- as a fallback use this missing texture icon
             else
+                local mat = Material(wep.Icon)
+
+                if not mat:IsError() then
+                    return mat
+                end
+
+                -- as a fallback use this missing texture icon
                 return materialWeaponFallback
             end
         elseif type == "dmg" then
