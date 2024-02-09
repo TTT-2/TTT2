@@ -121,7 +121,7 @@ if CLIENT then
     ---
     -- @ignore
     function SWEP:Initialize()
-        self:AddTTT2HUDHelp("decoy_help_pri")
+        self:AddTTT2HUDHelp("decoy_help_primary", "decoy_help_secondary")
 
         self.BaseClass.Initialize(self)
     end
