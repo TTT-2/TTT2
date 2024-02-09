@@ -961,6 +961,8 @@ if CLIENT then
                     materialFile = materialFile .. ".png"
                 elseif file.Exists("materials/" .. materialFile .. ".jpg", "GAME") then
                     materialFile = materialFile .. ".jpg"
+                elseif file.Exists("materials/" .. materialFile .. ".jpeg", "GAME") then
+                    materialFile = materialFile .. ".jpeg"
                 end
 
                 search[type] = {
