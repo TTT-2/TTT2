@@ -1,7 +1,5 @@
 -- bomb menus
 
-DEFINE_BASECLASS("ttt_base_placeable")
-
 include("shared.lua")
 
 local starttime = C4_MINIMUM_TIME
