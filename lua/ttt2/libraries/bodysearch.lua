@@ -821,23 +821,22 @@ if CLIENT then
 
     local function TypeToMaterial(type, data)
         if type == "wep" then
-            -- in most cases the inflictor is a weapon and the weapon has a cached
-            -- material that can be used
             local wep = util.WeaponForClass(data.wep)
 
-            if wep then
+            -- in most cases the inflictor is a weapon and the weapon has a cached
+            -- material that can be used
+            if wep.iconMaterial then
                 return wep.iconMaterial
-            end
 
             -- sometimes the projectile is a custom entity that kills the player
-            local ent = scripted_ents.GetStored(data.wep)
-
-            if ent and ent.t and ent.t.Icon then
-                return Material(ent.t.Icon)
-            end
+            -- which means it is not a weapon with a cached material
+            elseif wep.Icon and wep.Icon ~= "" then
+                return Material(wep.Icon)
 
             -- as a fallback use this missing texture icon
-            return materialWeaponFallback
+            else
+                return materialWeaponFallback
+            end
         elseif type == "dmg" then
             return DamageToIconMaterial(data)
         elseif type == "death_time" then
