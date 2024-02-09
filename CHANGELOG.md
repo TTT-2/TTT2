@@ -109,6 +109,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed DX8/SW models that aren't used
 - Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
 - Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
+- Removed `resource.AddFile` calls, server operators should use the workshop version or manually bundle loose files.
 
 ### Breaking Changes
 
