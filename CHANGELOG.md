@@ -102,6 +102,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
 - Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
+- Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
 - Fixed door health displaying as a humongous string of decimals
 
 ### Removed
