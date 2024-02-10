@@ -286,6 +286,7 @@ util.AddNetworkString("TTT2OrderEquipment")
 util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
+util.AddNetworkString("TTT2UpdateFOV")
 
 -- provide menu files by loading them from here:
 fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)
@@ -352,7 +353,6 @@ function GM:Initialize()
 
     -- register synced player variables
     player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
-    player.RegisterSettingOnServer("fov_desired", "float")
 
     -- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
     RunConsoleCommand("mp_friendlyfire", "1")
@@ -1442,7 +1442,6 @@ function GM:OnReloaded()
 
     -- register synced player variables
     player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
-    player.RegisterSettingOnServer("fov_desired", "float")
 
     ---
     -- @realm shared

@@ -17,6 +17,14 @@ local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
 -- stylua: ignore
 local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
 
+-- @realm client
+-- stylua: ignore
+local cvEnableDynamicFOV = CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
+    LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
+end)
+
 ---
 -- Applies a animation gesture
 -- @param ACT act The @{ACT} or sequence that should be played
@@ -398,6 +406,8 @@ local position = 0
 local frameCount = 10
 
 local lastStrafeValue = 0
+local lastFOVValue = 85
+local multiplier = 40
 
 -- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
@@ -412,18 +422,51 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         return
     end
 
-    if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
-        airtime = math.Clamp(airtime + 1, 0, 300)
-
-        return
-    end
-
     local view = {
         ply = ply,
         origin = origin,
         angles = angles,
         fov = fov,
+        drawviewer = false,
     }
+
+    local dynFOV = fov
+    local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
+    local desiredFOV = dynFOV * mul ^ (1 / 6)
+
+    if ply.triggeredFOV then
+        ply.triggeredFOV = false
+
+        multiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
+    end
+
+    if not ply.fixedFOV then
+        if desiredFOV > lastFOVValue then
+            dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * multiplier)
+        elseif desiredFOV < lastFOVValue then
+            dynFOV = math.max(desiredFOV, lastFOVValue - FrameTime() * multiplier)
+        else
+            dynFOV = lastFOVValue
+
+            multiplier = 40
+        end
+
+        lastFOVValue = dynFOV
+    else
+        -- cache the current FOV value while in fixed FOV mode to use this value
+        -- to transition out of this mode
+        lastFOVValue = fov
+    end
+
+    if cvEnableDynamicFOV:GetBool() then
+        view.fov = dynFOV
+    end
+
+    if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
+        airtime = math.Clamp(airtime + 1, 0, 300)
+
+        return view
+    end
 
     local eyeAngles = ply:EyeAngles()
     local strafeValue = 0
