@@ -43,7 +43,7 @@ function migrations.Apply()
 		local isSuccess, errorMessage = pcall(include(fullPath))
 
 		if not isSuccess then
-			error("\n[TTT2] Migration failed.\n" .. errorMessage .. "\n\n", 1)
+			error("[TTT2] Migration failed.\n" .. errorMessage, 1)
 
 			return
 		end
