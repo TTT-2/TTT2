@@ -317,7 +317,7 @@ function GM:Initialize()
 
     -- Migrate all changes of TTT2
     migrations.Apply()
-  
+
     ---
     -- @realm shared
     -- stylua: ignore
