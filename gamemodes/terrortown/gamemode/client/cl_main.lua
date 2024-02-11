@@ -153,6 +153,9 @@ end
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
+	-- Migrate all changes of TTT2
+	migrations.Apply()
+
 	---
 	-- @realm client
 	hook.Run("TTT2Initialize")

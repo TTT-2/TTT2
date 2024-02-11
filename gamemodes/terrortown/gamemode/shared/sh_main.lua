@@ -182,9 +182,6 @@ hook.Add("PreRegisterSWEP", "TTT2RegisterSWEP", TTT2RegisterSWEP)
 -- @hook
 -- @realm shared
 function GM:TTT2Initialize()
-	-- Migrate all changes of TTT2
-	migrations.Apply()
-
 	-- load all roles
 	roles.OnLoaded()
 

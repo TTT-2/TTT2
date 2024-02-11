@@ -281,6 +281,9 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
+	-- Migrate all changes of TTT2
+	migrations.Apply()
+
 	---
 	-- @realm shared
 	hook.Run("TTT2Initialize")
