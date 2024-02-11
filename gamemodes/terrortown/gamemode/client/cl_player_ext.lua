@@ -427,15 +427,17 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         origin = origin,
         angles = angles,
         fov = fov,
-        drawviewer = false,
     }
 
     local dynFOV = fov
     local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
-    local desiredFOV = dynFOV * mul ^ (1 / 6)
+    local desiredFOV = fov * mul ^ (1 / 6)
 
     if ply.triggeredFOV then
         ply.triggeredFOV = false
+
+        -- make sure the correct lastFOV value is used when only a networked value is available
+        lastFOVValue = ply.lastFOV
 
         multiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
     end

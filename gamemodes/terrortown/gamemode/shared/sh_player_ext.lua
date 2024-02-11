@@ -1280,8 +1280,9 @@ function plymeta:SetFOV(fov, time, requester)
         if SERVER then
             net.Start("TTT2UpdateFOV")
             net.WriteEntity(self)
-            net.WriteBool(true) -- FOV is fixed
+            net.WriteBool(true) -- FOV is fixed now
             net.WriteFloat(time)
+            net.WriteFloat(self:GetFOV())
             net.Broadcast()
         end
 
@@ -1299,12 +1300,14 @@ function plymeta:SetFOV(fov, time, requester)
             if SERVER then
                 net.Start("TTT2UpdateFOV")
                 net.WriteEntity(self)
-                net.WriteBool(false) -- FOV is fixed
+                net.WriteBool(false) -- FOV isn't fixed anymore
                 net.WriteFloat(time)
+                net.WriteFloat(self:GetFOV())
                 net.Broadcast()
             end
         end
 
+        -- set time to 0 so our custom FOV code can handle the zoom out
         time = 0
     end
 
@@ -1321,14 +1324,16 @@ if CLIENT then
             return
         end
 
-        -- only update on the client if not already updated via direct call
-        if not ply.fixedFOV then
-            return
-        end
+        local lastFixedFOV = ply.fixedFOV
 
         ply.fixedFOV = net.ReadBool()
-        ply.triggeredFOV = not ply.fixedFOV
         ply.timeFOV = net.ReadFloat()
+
+        -- only trigger our zoom out if there was a change
+        if lastFixedFOV and not ply.fixedFOV then
+            ply.triggeredFOV = true
+            ply.lastFOV = net.ReadFloat()
+        end
     end)
 end
 
