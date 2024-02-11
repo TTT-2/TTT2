@@ -18,7 +18,9 @@ ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/props_lab/reciever01a.mdl"
 
 ENT.CanHavePrints = true
+
 ENT.CanUseKey = true
+ENT.pickupWeaponClass = "weapon_ttt_beacon"
 
 ENT.timeLastBeep = CurTime()
 ENT.lastPlysFound = {}
@@ -46,29 +48,6 @@ function ENT:Initialize()
         mvObject:SetVisibleFor(VISIBLE_FOR_ROLE)
         mvObject:SyncToClients()
     end
-end
-
----
--- @param Entity activator
--- @realm shared
-function ENT:UseOverride(activator)
-    if not IsValid(activator) or self:GetOriginator() ~= activator then
-        return
-    end
-
-    local wep = activator:GetWeapon("weapon_ttt_beacon")
-
-    if IsValid(wep) then
-        local pickup = wep:PickupBeacon()
-
-        if not pickup then
-            return
-        end
-    else
-        wep = activator:SafePickupWeaponClass("weapon_ttt_beacon", true)
-    end
-
-    self:Remove()
 end
 
 if SERVER then
@@ -146,6 +125,13 @@ if SERVER then
         end
 
         self:RemoveMarkerVision("beacon_owner")
+    end
+
+    ---
+    -- @param Player activator
+    -- @realm server
+    function ENT:PlayerCanPickupWeapon(activator)
+        return self:GetOriginator() == activator
     end
 
     ---

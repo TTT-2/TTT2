@@ -39,7 +39,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added `AddCustomWorldModel` to add custom world models
   - Added an automatic fix for badly coded addons that break the view model fingers
 - Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
-  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt0_radio` and `ttt_cse_proj` to that base
+  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt_radio` and `ttt_cse_proj` to that base
+  - also handles pickup of those entities
 - Throwables (grenades) now have a `:GetPullTime()` accessor
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
