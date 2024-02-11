@@ -22,51 +22,53 @@ sql = sql or {}
 -- @realm shared
 -- @todo usage
 function sql.GetParsedData(key, data, res)
-	if key == "BaseClass" then return end
+    if key == "BaseClass" then
+        return
+    end
 
-	local val = res[key]
+    local val = res[key]
 
-	if val == "NULL" then
-		return nil
-	end
+    if val == "NULL" then
+        return nil
+    end
 
-	if data.typ == "number" or data.typ == "float" then
-		val = tonumber(val)
-	elseif data.typ == "bool" then
-		val = val == "1"
-	elseif data.typ == "pos" then
-		val = {
-			x = tonumber(res[key .. "_x"]),
-			y = tonumber(res[key .. "_y"])
-		}
+    if data.typ == "number" or data.typ == "float" then
+        val = tonumber(val)
+    elseif data.typ == "bool" then
+        val = val == "1"
+    elseif data.typ == "pos" then
+        val = {
+            x = tonumber(res[key .. "_x"]),
+            y = tonumber(res[key .. "_y"]),
+        }
 
-		if not val.x or not val.y then
-			val = nil
-		end
-	elseif data.typ == "size" then
-		val = {
-			w = tonumber(res[key .. "_w"]),
-			h = tonumber(res[key .. "_h"])
-		}
+        if not val.x or not val.y then
+            val = nil
+        end
+    elseif data.typ == "size" then
+        val = {
+            w = tonumber(res[key .. "_w"]),
+            h = tonumber(res[key .. "_h"]),
+        }
 
-		if not val.w or not val.h then
-			val = nil
-		end
-	elseif data.typ == "color" then
-		val = {}
-		val.r = tonumber(res[key .. "_r"])
-		val.g = tonumber(res[key .. "_g"])
-		val.b = tonumber(res[key .. "_b"])
-		val.a = tonumber(res[key .. "_a"] or 255)
+        if not val.w or not val.h then
+            val = nil
+        end
+    elseif data.typ == "color" then
+        val = {}
+        val.r = tonumber(res[key .. "_r"])
+        val.g = tonumber(res[key .. "_g"])
+        val.b = tonumber(res[key .. "_b"])
+        val.a = tonumber(res[key .. "_a"] or 255)
 
-		if not val.r or not val.g or not val.b then
-			val = nil
-		else
-			val = Color(val.r, val.g, val.b, val.a)
-		end
-	end
+        if not val.r or not val.g or not val.b then
+            val = nil
+        else
+            val = Color(val.r, val.g, val.b, val.a)
+        end
+    end
 
-	return val
+    return val
 end
 
 ---
@@ -78,40 +80,44 @@ end
 -- @realm shared
 -- @todo usage
 function sql.ParseData(tbl, keys)
-	local tmp = {}
+    local tmp = {}
 
-	for key, data in pairs(keys) do
-		if key == "BaseClass" then continue end
+    for key, data in pairs(keys) do
+        if key == "BaseClass" then
+            continue
+        end
 
-		local dat = tbl[key]
+        local dat = tbl[key]
 
-		if dat == nil then
-			dat = data.default
-		end
+        if dat == nil then
+            dat = data.default
+        end
 
-		if dat == nil then continue end
+        if dat == nil then
+            continue
+        end
 
-		if data.typ == "bool" then
-			dat = dat and 1 or 0
+        if data.typ == "bool" then
+            dat = dat and 1 or 0
 
-			tmp[key] = dat
-		elseif data.typ == "pos" then
-			tmp[key .. "_x"] = dat.x or 0
-			tmp[key .. "_y"] = dat.y or 0
-		elseif data.typ == "size" then
-			tmp[key .. "_w"] = dat.w or 0
-			tmp[key .. "_h"] = dat.h or 0
-		elseif data.typ == "color" then
-			tmp[key .. "_r"] = dat.r or 255
-			tmp[key .. "_g"] = dat.g or 255
-			tmp[key .. "_b"] = dat.b or 255
-			tmp[key .. "_a"] = dat.a or 255
-		else
-			tmp[key] = dat
-		end
-	end
+            tmp[key] = dat
+        elseif data.typ == "pos" then
+            tmp[key .. "_x"] = dat.x or 0
+            tmp[key .. "_y"] = dat.y or 0
+        elseif data.typ == "size" then
+            tmp[key .. "_w"] = dat.w or 0
+            tmp[key .. "_h"] = dat.h or 0
+        elseif data.typ == "color" then
+            tmp[key .. "_r"] = dat.r or 255
+            tmp[key .. "_g"] = dat.g or 255
+            tmp[key .. "_b"] = dat.b or 255
+            tmp[key .. "_a"] = dat.a or 255
+        else
+            tmp[key] = dat
+        end
+    end
 
-	return tmp
+    return tmp
 end
 
 ---
@@ -122,23 +128,32 @@ end
 -- @realm shared
 -- @todo usage
 function sql.ParseDataString(key, data)
-	if key == "BaseClass" then return end
+    if key == "BaseClass" then
+        return
+    end
 
-	local sanitizedKey = sql.SQLStr(key, true)
+    local sanitizedKey = sql.SQLStr(key, true)
 
-	if data.typ == "bool" or data.typ == "number" then
-		return sanitizedKey .. " INTEGER"
-	elseif data.typ == "float" then
-		return sanitizedKey .. " REAL"
-	elseif data.typ == "pos" then
-		return sanitizedKey .. "_x INTEGER," .. sanitizedKey .. "_y INTEGER"
-	elseif data.typ == "size" then
-		return sanitizedKey .. "_w INTEGER," .. sanitizedKey .. "_h INTEGER"
-	elseif data.typ == "color" then
-		return sanitizedKey .. "_r INTEGER," .. sanitizedKey .. "_g INTEGER," .. sanitizedKey .. "_b INTEGER," .. sanitizedKey .. "_a INTEGER"
-	end
+    if data.typ == "bool" or data.typ == "number" then
+        return sanitizedKey .. " INTEGER"
+    elseif data.typ == "float" then
+        return sanitizedKey .. " REAL"
+    elseif data.typ == "pos" then
+        return sanitizedKey .. "_x INTEGER," .. sanitizedKey .. "_y INTEGER"
+    elseif data.typ == "size" then
+        return sanitizedKey .. "_w INTEGER," .. sanitizedKey .. "_h INTEGER"
+    elseif data.typ == "color" then
+        return sanitizedKey
+            .. "_r INTEGER,"
+            .. sanitizedKey
+            .. "_g INTEGER,"
+            .. sanitizedKey
+            .. "_b INTEGER,"
+            .. sanitizedKey
+            .. "_a INTEGER"
+    end
 
-	return sanitizedKey .. " TEXT"
+    return sanitizedKey .. " TEXT"
 end
 
 --
@@ -156,25 +171,27 @@ end
 -- @realm shared
 -- @todo usage
 function sql.BuildInsertString(tableName, name, tbl, keys)
-	if not keys then return end
+    if not keys then
+        return
+    end
 
-	local tmp = sql.ParseData(tbl, keys)
+    local tmp = sql.ParseData(tbl, keys)
 
-	local str = "INSERT INTO " .. sql.SQLStr(tableName) .. " (name"
+    local str = "INSERT INTO " .. sql.SQLStr(tableName) .. " (name"
 
-	for k in pairs(tmp) do
-		str = str .. "," .. sql.SQLStr(k)
-	end
+    for k in pairs(tmp) do
+        str = str .. "," .. sql.SQLStr(k)
+    end
 
-	str = str .. ") VALUES (" .. sql.SQLStr(name)
+    str = str .. ") VALUES (" .. sql.SQLStr(name)
 
-	for _, v in pairs(tmp) do
-		str = str .. "," .. sql.SQLStr(v)
-	end
+    for _, v in pairs(tmp) do
+        str = str .. "," .. sql.SQLStr(v)
+    end
 
-	str = str .. ")"
+    str = str .. ")"
 
-	return str
+    return str
 end
 
 ---
@@ -187,25 +204,27 @@ end
 -- @realm shared
 -- @todo usage
 function sql.BuildUpdateString(tableName, name, tbl, keys)
-	if not keys then return end
+    if not keys then
+        return
+    end
 
-	local tmp = sql.ParseData(tbl, keys)
+    local tmp = sql.ParseData(tbl, keys)
 
-	local b = true
-	local str = "UPDATE " .. sql.SQLStr(tableName) .. " SET "
+    local b = true
+    local str = "UPDATE " .. sql.SQLStr(tableName) .. " SET "
 
-	for k, v in pairs(tmp) do
-		if not b then
-			str = str .. ","
-		end
+    for k, v in pairs(tmp) do
+        if not b then
+            str = str .. ","
+        end
 
-		b = false
-		str = str .. sql.SQLStr(k) .. "=" .. sql.SQLStr(v)
-	end
+        b = false
+        str = str .. sql.SQLStr(k) .. "=" .. sql.SQLStr(v)
+    end
 
-	str = str .. " WHERE name=" .. sql.SQLStr(name)
+    str = str .. " WHERE name=" .. sql.SQLStr(name)
 
-	return str
+    return str
 end
 
 ---
@@ -216,44 +235,50 @@ end
 -- @realm shared
 -- @todo usage
 function sql.CreateSqlTable(tableName, keys)
-	local result
+    local result
 
-	if not sql.TableExists(tableName) then
-		local str = "CREATE TABLE " .. sql.SQLStr(tableName) .. " (name TEXT PRIMARY KEY"
+    if not sql.TableExists(tableName) then
+        local str = "CREATE TABLE " .. sql.SQLStr(tableName) .. " (name TEXT PRIMARY KEY"
 
-		for key, data in pairs(keys) do
-			str = str .. ", " .. sql.ParseDataString(key, data)
-		end
+        for key, data in pairs(keys) do
+            str = str .. ", " .. sql.ParseDataString(key, data)
+        end
 
-		str = str .. ")"
+        str = str .. ")"
 
-		result = sql.Query(str)
-	else
-		local clmns = sql.Query("PRAGMA table_info(" .. sql.SQLStr(tableName) .. ")")
+        result = sql.Query(str)
+    else
+        local clmns = sql.Query("PRAGMA table_info(" .. sql.SQLStr(tableName) .. ")")
 
-		for key, data in pairs(keys) do
-			local exists = false
+        for key, data in pairs(keys) do
+            local exists = false
 
-			for i = 1, #clmns do
-				if clmns[i].name ~= key then continue end
+            for i = 1, #clmns do
+                if clmns[i].name ~= key then
+                    continue
+                end
 
-				exists = true
-			end
+                exists = true
+            end
 
-			if exists then continue end
+            if exists then
+                continue
+            end
 
-			local res = sql.ParseDataString(key, data)
-			if not res then continue end
+            local res = sql.ParseDataString(key, data)
+            if not res then
+                continue
+            end
 
-			local resArr = string.Explode(",", res)
+            local resArr = string.Explode(",", res)
 
-			for i = 1, #resArr do
-				sql.Query("ALTER TABLE " .. sql.SQLStr(tableName) .. " ADD " .. resArr[i])
-			end
-		end
-	end
+            for i = 1, #resArr do
+                sql.Query("ALTER TABLE " .. sql.SQLStr(tableName) .. " ADD " .. resArr[i])
+            end
+        end
+    end
 
-	return result ~= false
+    return result ~= false
 end
 
 ---
@@ -266,12 +291,16 @@ end
 -- @realm shared
 -- @todo usage
 function sql.Init(tableName, name, tbl, keys)
-	if not keys or table.IsEmpty(keys) then return end
+    if not keys or table.IsEmpty(keys) then
+        return
+    end
 
-	local query = sql.BuildInsertString(tableName, name, tbl, keys)
-	if not query then return end
+    local query = sql.BuildInsertString(tableName, name, tbl, keys)
+    if not query then
+        return
+    end
 
-	return sql.Query(query)
+    return sql.Query(query)
 end
 
 ---
@@ -284,12 +313,16 @@ end
 -- @realm shared
 -- @todo usage
 function sql.Save(tableName, name, tbl, keys)
-	if not keys or table.IsEmpty(keys) then return end
+    if not keys or table.IsEmpty(keys) then
+        return
+    end
 
-	local query = sql.BuildUpdateString(tableName, name, tbl, keys)
-	if not query then return end
+    local query = sql.BuildUpdateString(tableName, name, tbl, keys)
+    if not query then
+        return
+    end
 
-	return sql.Query(query)
+    return sql.Query(query)
 end
 
 ---
@@ -304,26 +337,33 @@ end
 -- @realm shared
 -- @todo usage
 function sql.Load(tableName, name, tbl, keys)
-	if not keys or table.IsEmpty(keys) then return end
+    if not keys or table.IsEmpty(keys) then
+        return
+    end
 
-	local result = sql.Query("SELECT * FROM " .. sql.SQLStr(tableName) .. " WHERE name = " .. sql.SQLStr(name))
+    local result =
+        sql.Query("SELECT * FROM " .. sql.SQLStr(tableName) .. " WHERE name = " .. sql.SQLStr(name))
 
-	if not result or not result[1] then
-		return false, false
-	end
+    if not result or not result[1] then
+        return false, false
+    end
 
-	local res = result[1]
-	local changed = false
+    local res = result[1]
+    local changed = false
 
-	for key, data in pairs(keys) do
-		if key == "BaseClass" then continue end
+    for key, data in pairs(keys) do
+        if key == "BaseClass" then
+            continue
+        end
 
-		local nres = sql.GetParsedData(key, data, res)
-		if nres == nil or nres == "NULL" or tbl[key] == nres then continue end
+        local nres = sql.GetParsedData(key, data, res)
+        if nres == nil or nres == "NULL" or tbl[key] == nres then
+            continue
+        end
 
-		tbl[key] = nres -- overwrite with saved one
-		changed = true
-	end
+        tbl[key] = nres -- overwrite with saved one
+        changed = true
+    end
 
-	return true, changed
+    return true, changed
 end

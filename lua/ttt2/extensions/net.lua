@@ -14,12 +14,12 @@ local NETMSG_STREAM = "TTT2_NET_STREAM"
 local NETMSG_REQUEST_NEXT_SPLIT = "TTT2_NET_REQUEST_NEXT_SPLIT"
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	-- Add the network string for streaming data
-	util.AddNetworkString(NETMSG_STREAM)
-	-- Add the network string for requesting single splits
-	util.AddNetworkString(NETMSG_REQUEST_NEXT_SPLIT)
+    -- Add the network string for streaming data
+    util.AddNetworkString(NETMSG_STREAM)
+    -- Add the network string for requesting single splits
+    util.AddNetworkString(NETMSG_REQUEST_NEXT_SPLIT)
 end
 
 -- Size to split the network stream at (currently a bit lower than the max value, just to have some buffer)
@@ -27,12 +27,12 @@ end
 net.STREAM_FRAGMENTATION_SIZE = 65400
 
 -- Stream cache variables
-net.send_stream_cache  = {}
-net.receiving_players  = {}
+net.send_stream_cache = {}
+net.receiving_players = {}
 net.receive_stream_cache = {}
 net.stream_callbacks = {}
 
---- 
+---
 -- Sends next part of the stream
 -- @param string messageId a unique message id similar to the network strings
 -- @param number streamId the current stream number the split is requested for
@@ -40,34 +40,34 @@ net.stream_callbacks = {}
 -- @realm shared
 -- @internal
 local function SendNextStream(messageId, streamId, split, plys)
-	net.Start(NETMSG_STREAM)
-	-- Write the messageId
-	net.WriteString(messageId)
-	-- Write the streamId
-	net.WriteUInt(streamId, 32)
-	-- Write the current split
-	net.WriteUInt(split, 8)
+    net.Start(NETMSG_STREAM)
+    -- Write the messageId
+    net.WriteString(messageId)
+    -- Write the streamId
+    net.WriteUInt(streamId, 32)
+    -- Write the current split
+    net.WriteUInt(split, 8)
 
-	local data = net.send_stream_cache[messageId][streamId]
-	-- Write the actual data fragment as a string, which internally will also send its size
-	net.WriteString(data[split])
+    local data = net.send_stream_cache[messageId][streamId]
+    -- Write the actual data fragment as a string, which internally will also send its size
+    net.WriteString(data[split])
 
-	if SERVER then
-		if plys then
-			net.Send(plys)
-		else
-			net.Broadcast()
-		end
-	else
-		net.SendToServer()
-	end
+    if SERVER then
+        if plys then
+            net.Send(plys)
+        else
+            net.Broadcast()
+        end
+    else
+        net.SendToServer()
+    end
 
-	-- Delete cache if all players requested the last split
-	local receivingPlayerList = net.receiving_players[messageId][streamId]
-	if split <= 1 and (receivingPlayerList == nil or next(receivingPlayerList) == nil) then
-		net.receiving_players[messageId][streamId] = nil
-		net.send_stream_cache[messageId][streamId] = nil
-	end
+    -- Delete cache if all players requested the last split
+    local receivingPlayerList = net.receiving_players[messageId][streamId]
+    if split <= 1 and (receivingPlayerList == nil or next(receivingPlayerList) == nil) then
+        net.receiving_players[messageId][streamId] = nil
+        net.send_stream_cache[messageId][streamId] = nil
+    end
 end
 
 ---
@@ -77,20 +77,22 @@ end
 -- @realm shared
 -- @internal
 local function SendNextSplit(len, ply)
-	local messageId = net.ReadString()
-	local streamId = net.ReadUInt(32)
-	local nextSplit = net.ReadUInt(8)
+    local messageId = net.ReadString()
+    local streamId = net.ReadUInt(32)
+    local nextSplit = net.ReadUInt(8)
 
-	local receivingPlayerList = net.receiving_players[messageId][streamId]
+    local receivingPlayerList = net.receiving_players[messageId][streamId]
 
-	if nextSplit < 1 or receivingPlayerList and not receivingPlayerList[ply:SteamID64()] then return end
+    if nextSplit < 1 or receivingPlayerList and not receivingPlayerList[ply:SteamID64()] then
+        return
+    end
 
-	-- Remove players that requested the last split
-	if nextSplit <= 1 then
-		receivingPlayerList[ply:SteamID64()] = nil
-	end
+    -- Remove players that requested the last split
+    if nextSplit <= 1 then
+        receivingPlayerList[ply:SteamID64()] = nil
+    end
 
-	SendNextStream(messageId, streamId, nextSplit, ply)
+    SendNextStream(messageId, streamId, nextSplit, ply)
 end
 net.Receive(NETMSG_REQUEST_NEXT_SPLIT, SendNextSplit)
 
@@ -104,27 +106,27 @@ net.Receive(NETMSG_REQUEST_NEXT_SPLIT, SendNextSplit)
 -- @param[opt] table|player plys SERVERSIDE only! Optional, use it to send a stream to a single player or a group of players otherwise it's broadcasted.
 -- @realm shared
 function net.SendStream(messageId, data, plys)
-	local encodedString = pon.encode(data)
-	local splits = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
+    local encodedString = pon.encode(data)
+    local splits = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
 
-	net.send_stream_cache[messageId] = net.send_stream_cache[messageId] or {}
-	net.receiving_players[messageId] = net.receiving_players[messageId] or {}
+    net.send_stream_cache[messageId] = net.send_stream_cache[messageId] or {}
+    net.receiving_players[messageId] = net.receiving_players[messageId] or {}
 
-	local streamId = #net.send_stream_cache[messageId] + 1
+    local streamId = #net.send_stream_cache[messageId] + 1
 
-	net.send_stream_cache[messageId][streamId] = splits
+    net.send_stream_cache[messageId][streamId] = splits
 
-	if SERVER and plys and #splits > 1 then
-		net.receiving_players[messageId][streamId] = {}
-		plys = istable(plys) and plys or {plys}
+    if SERVER and plys and #splits > 1 then
+        net.receiving_players[messageId][streamId] = {}
+        plys = istable(plys) and plys or { plys }
 
-		for i = 1, #plys do
-			net.receiving_players[messageId][streamId][plys[i]:SteamID64()] = true
-		end
-	end
+        for i = 1, #plys do
+            net.receiving_players[messageId][streamId][plys[i]:SteamID64()] = true
+        end
+    end
 
-	-- Send first stream directly
-	SendNextStream(messageId, streamId, #splits, plys)
+    -- Send first stream directly
+    SendNextStream(messageId, streamId, #splits, plys)
 end
 
 ---
@@ -136,21 +138,21 @@ end
 -- @realm shared
 -- @internal
 local function RequestNextSplit(messageId, streamId, split, plys)
-	net.Start(NETMSG_REQUEST_NEXT_SPLIT)
+    net.Start(NETMSG_REQUEST_NEXT_SPLIT)
 
-	net.WriteString(messageId)
-	net.WriteUInt(streamId, 32)
-	net.WriteUInt(split, 8)
+    net.WriteString(messageId)
+    net.WriteUInt(streamId, 32)
+    net.WriteUInt(split, 8)
 
-	if SERVER then
-		if plys then
-			net.Send(plys)
-		else
-			net.Broadcast()
-		end
-	else
-		net.SendToServer()
-	end
+    if SERVER then
+        if plys then
+            net.Send(plys)
+        else
+            net.Broadcast()
+        end
+    else
+        net.SendToServer()
+    end
 end
 
 ---
@@ -163,10 +165,10 @@ end
 -- @param function callback(receivedTable, ply) This is the function that is called with the received table.
 -- @realm shared
 function net.ReceiveStream(messageId, callback)
-	-- has to be saved as string, otherwise the key lookups will fail on the table
-	local msg = tostring(messageId)
+    -- has to be saved as string, otherwise the key lookups will fail on the table
+    local msg = tostring(messageId)
 
-	net.stream_callbacks[msg] = callback
+    net.stream_callbacks[msg] = callback
 end
 
 ---
@@ -178,32 +180,33 @@ end
 -- @realm shared
 -- @internal
 local function ReceiveStream(len, ply)
-	local messageId = net.ReadString()
-	local streamId = net.ReadUInt(32)
-	local split = net.ReadUInt(8)
-	local data = net.ReadString()
+    local messageId = net.ReadString()
+    local streamId = net.ReadUInt(32)
+    local split = net.ReadUInt(8)
+    local data = net.ReadString()
 
-	-- Create cache table if it does not exist yet for this message
-	net.receive_stream_cache[messageId] = net.receive_stream_cache[messageId] or {}
-	net.receive_stream_cache[messageId][streamId] = net.receive_stream_cache[messageId][streamId] or {}
-	-- Write data to cache table
-	net.receive_stream_cache[messageId][streamId][split] = data
+    -- Create cache table if it does not exist yet for this message
+    net.receive_stream_cache[messageId] = net.receive_stream_cache[messageId] or {}
+    net.receive_stream_cache[messageId][streamId] = net.receive_stream_cache[messageId][streamId]
+        or {}
+    -- Write data to cache table
+    net.receive_stream_cache[messageId][streamId][split] = data
 
-	-- Check if this was the last fragment
-	if split <= 1 then
-		-- Otherwise this was the last packet, so reconstruct the data
-		local encodedStr = table.concat(net.receive_stream_cache[messageId][streamId])
-		local callback = net.stream_callbacks[messageId]
+    -- Check if this was the last fragment
+    if split <= 1 then
+        -- Otherwise this was the last packet, so reconstruct the data
+        local encodedStr = table.concat(net.receive_stream_cache[messageId][streamId])
+        local callback = net.stream_callbacks[messageId]
 
-		-- Clear cache
-		net.receive_stream_cache[messageId][streamId] = nil
+        -- Clear cache
+        net.receive_stream_cache[messageId][streamId] = nil
 
-		-- Check if a callback is registered
-		if isfunction(callback) then
-			callback(pon.decode(encodedStr), ply)
-		end
-	else
-		RequestNextSplit(messageId, streamId, split - 1, ply)
-	end
+        -- Check if a callback is registered
+        if isfunction(callback) then
+            callback(pon.decode(encodedStr), ply)
+        end
+    else
+        RequestNextSplit(messageId, streamId, split - 1, ply)
+    end
 end
 net.Receive(NETMSG_STREAM, ReceiveStream)

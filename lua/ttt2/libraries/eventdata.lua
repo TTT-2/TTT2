@@ -5,7 +5,7 @@
 -- @module eventdata
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 eventdata = eventdata or {}
@@ -17,20 +17,22 @@ eventdata = eventdata or {}
 -- @return table A table with the amounts of deaths per player
 -- @realm shared
 function eventdata.GetPlayerTotalDeaths()
-	local eventList = events.list
-	local deathList = {}
+    local eventList = events.list
+    local deathList = {}
 
-	for i = 1, #eventList do
-		local event = eventList[i]
+    for i = 1, #eventList do
+        local event = eventList[i]
 
-		if event.type ~= EVENT_KILL then continue end
+        if event.type ~= EVENT_KILL then
+            continue
+        end
 
-		local victim64 = event.event.victim.sid64
+        local victim64 = event.event.victim.sid64
 
-		deathList[victim64] = (deathList[victim64] or 0) + 1
-	end
+        deathList[victim64] = (deathList[victim64] or 0) + 1
+    end
 
-	return deathList
+    return deathList
 end
 
 ---
@@ -39,15 +41,17 @@ end
 -- @return table A table with the nick, sid64, role and team of each player
 -- @realm shared
 function eventdata.GetPlayerBeginRoles()
-	local eventList = events.list
+    local eventList = events.list
 
-	for i = 1, #eventList do
-		local event = eventList[i]
+    for i = 1, #eventList do
+        local event = eventList[i]
 
-		if event.type ~= EVENT_SELECTED then continue end
+        if event.type ~= EVENT_SELECTED then
+            continue
+        end
 
-		return event.event.plys
-	end
+        return event.event.plys
+    end
 end
 
 ---
@@ -56,15 +60,17 @@ end
 -- @return table A table with the nick, sid64, alive, role and team of each player
 -- @realm shared
 function eventdata.GetPlayerEndRoles()
-	local eventList = events.list
+    local eventList = events.list
 
-	for i = 1, #eventList do
-		local event = eventList[i]
+    for i = 1, #eventList do
+        local event = eventList[i]
 
-		if event.type ~= EVENT_FINISH then continue end
+        if event.type ~= EVENT_FINISH then
+            continue
+        end
 
-		return event.event.plys
-	end
+        return event.event.plys
+    end
 end
 
 ---
@@ -73,40 +79,42 @@ end
 -- @return table A table with all rolechanges per player, each entry contains the new role and the new team
 -- @realm shared
 function eventdata.GetPlayerRoles()
-	local eventList = events.list
-	local plyRoles = {}
+    local eventList = events.list
+    local plyRoles = {}
 
-	-- we can use the fact that the eventlist is chronological
-	for i = 1, #eventList do
-		local event = eventList[i]
+    -- we can use the fact that the eventlist is chronological
+    for i = 1, #eventList do
+        local event = eventList[i]
 
-		if event.type == EVENT_SELECTED then
-			local plys = event.event.plys
+        if event.type == EVENT_SELECTED then
+            local plys = event.event.plys
 
-			for k = 1, #plys do
-				local ply = plys[k]
+            for k = 1, #plys do
+                local ply = plys[k]
 
-				plyRoles[ply.sid64] = {{
-					role = ply.role,
-					team = ply.team
-				}}
-			end
-		elseif event.type == EVENT_ROLECHANGE and event.event.roundState == ROUND_ACTIVE then
-			local ply = event.event
+                plyRoles[ply.sid64] = {
+                    {
+                        role = ply.role,
+                        team = ply.team,
+                    },
+                }
+            end
+        elseif event.type == EVENT_ROLECHANGE and event.event.roundState == ROUND_ACTIVE then
+            local ply = event.event
 
-			-- if a player connects after the round started, they don't have a starting role
-			if not plyRoles[ply.sid64] then
-				plyRoles[ply.sid64] = {}
-			end
+            -- if a player connects after the round started, they don't have a starting role
+            if not plyRoles[ply.sid64] then
+                plyRoles[ply.sid64] = {}
+            end
 
-			plyRoles[ply.sid64][#plyRoles[ply.sid64] + 1] = {
-				role = ply.newRole,
-				team = ply.newTeam
-			}
-		end
-	end
+            plyRoles[ply.sid64][#plyRoles[ply.sid64] + 1] = {
+                role = ply.newRole,
+                team = ply.newTeam,
+            }
+        end
+    end
 
-	return plyRoles
+    return plyRoles
 end
 
 ---
@@ -114,26 +122,28 @@ end
 -- @return table Returns a table of all scored events per player
 -- @realm shared
 function eventdata.GetPlayerScores()
-	local eventList = events.list
-	local plyScores = {}
+    local eventList = events.list
+    local plyScores = {}
 
-	for i = 1, #eventList do
-		local event = eventList[i]
+    for i = 1, #eventList do
+        local event = eventList[i]
 
-		if not event:HasScore() then continue end
+        if not event:HasScore() then
+            continue
+        end
 
-		local plys64 = event:GetScoredPlayers()
+        local plys64 = event:GetScoredPlayers()
 
-		for k = 1, #plys64 do
-			local ply64 = plys64[k]
+        for k = 1, #plys64 do
+            local ply64 = plys64[k]
 
-			plyScores[ply64] = plyScores[ply64] or {}
+            plyScores[ply64] = plyScores[ply64] or {}
 
-			plyScores[ply64][#plyScores[ply64] + 1] = event
-		end
-	end
+            plyScores[ply64][#plyScores[ply64] + 1] = event
+        end
+    end
 
-	return plyScores
+    return plyScores
 end
 
 ---
@@ -143,24 +153,26 @@ end
 -- @return table A table with the score per player
 -- @realm shared
 function eventdata.GetPlayerTotalScores()
-	local eventList = events.list
-	local scoreList = {}
+    local eventList = events.list
+    local scoreList = {}
 
-	for i = 1, #eventList do
-		local event = eventList[i]
+    for i = 1, #eventList do
+        local event = eventList[i]
 
-		if not event:HasScore() then continue end
+        if not event:HasScore() then
+            continue
+        end
 
-		local plys64 = event:GetScoredPlayers()
+        local plys64 = event:GetScoredPlayers()
 
-		for k = 1, #plys64 do
-			local ply64 = plys64[k]
+        for k = 1, #plys64 do
+            local ply64 = plys64[k]
 
-			scoreList[ply64] = (scoreList[ply64] or 0) + event:GetSummedPlayerScore(ply64)
-		end
-	end
+            scoreList[ply64] = (scoreList[ply64] or 0) + event:GetSummedPlayerScore(ply64)
+        end
+    end
 
-	return scoreList
+    return scoreList
 end
 
 ---
@@ -168,20 +180,22 @@ end
 -- @return table Returns a table of all karma events per player
 -- @realm shared
 function eventdata.GetPlayerKarma()
-	local eventList = events.list
-	local plysKarma = {}
+    local eventList = events.list
+    local plysKarma = {}
 
-	-- Go table from back to front as only the newest sync is relevant
-	for i = #eventList, 1, -1 do
-		local event = eventList[i]
+    -- Go table from back to front as only the newest sync is relevant
+    for i = #eventList, 1, -1 do
+        local event = eventList[i]
 
-		if not event:HasKarma() then continue end
-		plysKarma = event:GetKarma()
+        if not event:HasKarma() then
+            continue
+        end
+        plysKarma = event:GetKarma()
 
-		break
-	end
+        break
+    end
 
-	return plysKarma
+    return plysKarma
 end
 
 ---
@@ -191,25 +205,27 @@ end
 -- @return table A table with the karma per player
 -- @realm shared
 function eventdata.GetPlayerTotalKarma()
-	local eventList = events.list
-	local plysKarma = {}
+    local eventList = events.list
+    local plysKarma = {}
 
-	-- Go table from back to front as only the newest sync is relevant
-	for i = #eventList, 1, -1 do
-		local event = eventList[i]
+    -- Go table from back to front as only the newest sync is relevant
+    for i = #eventList, 1, -1 do
+        local event = eventList[i]
 
-		if not event:HasKarma() then continue end
+        if not event:HasKarma() then
+            continue
+        end
 
-		for sid64, reasonList in pairs(event:GetKarma()) do
-			plysKarma[sid64] = 0
+        for sid64, reasonList in pairs(event:GetKarma()) do
+            plysKarma[sid64] = 0
 
-			for _, karma in pairs(reasonList) do
-				plysKarma[sid64] = plysKarma[sid64] + karma
-			end
-		end
+            for _, karma in pairs(reasonList) do
+                plysKarma[sid64] = plysKarma[sid64] + karma
+            end
+        end
 
-		break
-	end
+        break
+    end
 
-	return plysKarma
+    return plysKarma
 end

@@ -6,9 +6,9 @@
 -- @module drawsc
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 local GetGlobalScale = appearance.GetGlobalScale
@@ -39,9 +39,16 @@ drawsc = {}
 -- @2D
 -- @realm client
 function drawsc.OutlinedBox(x, y, w, h, t, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawOutlinedBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), mRound(t * scale), color)
+    drawOutlinedBox(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(w * scale),
+        mRound(h * scale),
+        mRound(t * scale),
+        color
+    )
 end
 
 ---
@@ -56,9 +63,17 @@ end
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedBox(x, y, w, h, t, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawOutlinedShadowedBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), mRound(t * scale), color, scale)
+    drawOutlinedShadowedBox(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(w * scale),
+        mRound(h * scale),
+        mRound(t * scale),
+        color,
+        scale
+    )
 end
 
 ---
@@ -72,9 +87,9 @@ end
 -- @2D
 -- @realm client
 function drawsc.Box(x, y, w, h, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), color)
+    drawBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), color)
 end
 
 ---
@@ -88,9 +103,16 @@ end
 -- @2D
 -- @realm client
 function drawsc.ShadowedBox(x, y, w, h, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawShadowedBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), color, scale)
+    drawShadowedBox(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(w * scale),
+        mRound(h * scale),
+        color,
+        scale
+    )
 end
 
 ---
@@ -103,9 +125,9 @@ end
 -- @2D
 -- @realm client
 function drawsc.OutlinedCircle(x, y, r, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawOutlinedCircle(mRound(x * scale), mRound(y * scale), mRound(r * scale), color)
+    drawOutlinedCircle(mRound(x * scale), mRound(y * scale), mRound(r * scale), color)
 end
 
 ---
@@ -118,9 +140,15 @@ end
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedCircle(x, y, r, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawOutlinedShadowedCircle(mRound(x * scale), mRound(y * scale), mRound(r * scale), color, scale)
+    drawOutlinedShadowedCircle(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(r * scale),
+        color,
+        scale
+    )
 end
 
 ---
@@ -136,9 +164,17 @@ end
 -- @2D
 -- @realm client
 function drawsc.FilteredTexture(x, y, w, h, material, alpha, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawFilteredTexture(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), material, alpha, color)
+    drawFilteredTexture(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(w * scale),
+        mRound(h * scale),
+        material,
+        alpha,
+        color
+    )
 end
 
 ---
@@ -154,9 +190,18 @@ end
 -- @2D
 -- @realm client
 function drawsc.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawFilteredShadowedTexture(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), material, alpha, color, scale)
+    drawFilteredShadowedTexture(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(w * scale),
+        mRound(h * scale),
+        material,
+        alpha,
+        color,
+        scale
+    )
 end
 
 ---
@@ -175,9 +220,20 @@ end
 -- @2D
 -- @realm client
 function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign, angle)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, false, scale, angle)
+    drawAdvancedText(
+        text,
+        font,
+        mRound(x * scale),
+        mRound(y * scale),
+        color,
+        xalign,
+        yalign,
+        false,
+        scale,
+        angle
+    )
 end
 
 ---
@@ -196,9 +252,20 @@ end
 -- @2D
 -- @realm client
 function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign, angle)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, true, scale, angle)
+    drawAdvancedText(
+        text,
+        font,
+        mRound(x * scale),
+        mRound(y * scale),
+        color,
+        xalign,
+        yalign,
+        true,
+        scale,
+        angle
+    )
 end
 
 ---
@@ -211,7 +278,13 @@ end
 -- @2D
 -- @realm client
 function drawsc.BlurredBox(x, y, w, h, fraction)
-	local scale = GetGlobalScale()
+    local scale = GetGlobalScale()
 
-	drawBlurredBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), fraction)
+    drawBlurredBox(
+        mRound(x * scale),
+        mRound(y * scale),
+        mRound(w * scale),
+        mRound(h * scale),
+        fraction
+    )
 end

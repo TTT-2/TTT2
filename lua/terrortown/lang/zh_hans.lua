@@ -107,7 +107,7 @@ L.disg_not_owned = "你没有伪装器！"
 L.disg_enable = "执行伪装"
 
 L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命值以及人品。除此之外，你也能躲避探长的雷达。"
-L.disg_help2 = "按下小键盘回车键可不通过菜单直接切换伪装。您也可以使用控制台把另一个键位绑定'ttt_toggle_disguise'。"
+L.disg_help2 = "按下小键盘回车键可不通过菜单直接切换伪装。你也可以使用控制台把另一个键位绑定'ttt_toggle_disguise'。"
 
 -- Radar tab in equipment menu
 L.radar_name = "雷达"
@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "准星"
 L.submenu_appearance_dmgindicator_title = "伤害指示"
 L.submenu_appearance_performance_title = "性能"
 L.submenu_appearance_interface_title = "界面"
-L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
 
@@ -1661,8 +1660,6 @@ L.label_bots_are_spectators = "机器人永远是观察者"
 L.label_tbutton_admin_show = "向管理员显示叛徒按钮"
 L.label_ragdoll_carrying = "启用布娃娃搬运"
 L.label_prop_throwing = "启用道具投掷"
-L.label_ragdoll_pinning = "为非无辜者角色启用布娃娃夹子"
-L.label_ragdoll_pinning_innocents = "为无辜者启用布娃娃夹子"
 L.label_weapon_carrying = "启用武器搬运"
 L.label_weapon_carrying_range = "武器搬运范围"
 L.label_prop_carrying_force = "Prop推进力"
@@ -1826,12 +1823,12 @@ L.label_voice_scaling_mode_power4 = "四次方"
 L.label_voice_scaling_mode_log = "对数"
 
 -- 2023-10-07
-L.search_title = "尸体搜索结果 - {player}"
+L.search_title = "尸检 - {player}"
 L.search_info = "信息"
 L.search_confirm = "确认死亡"
 L.search_confirm_credits = "确认（+{credits} 积分）"
 L.search_take_credits = "获取 {credits} 积分"
-L.search_confirm_forbidden = "确认禁用"
+L.search_confirm_forbidden = "确认死亡被禁用"
 L.search_confirmed = "确认死亡"
 L.search_call = "呼叫探长"
 L.search_called = "死亡报告"
@@ -1856,7 +1853,7 @@ L.search_dmg_teleport = "看起来他的DNA以超光速粒子之形式散乱在�
 L.search_dmg_car = "他穿越马路时被一个粗心的驾驶碾死了。"
 L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
 
-L.search_floor_antlions = "尸体上仍然爬满了蚁狮。地上也一定爬满了它们。"
+L.search_floor_antlions = "尸体上仍然爬满了蚂蚁。地上也爬满了它们。"
 L.search_floor_bloodyflesh = "尸体上的血看起来又老又恶心，甚至有小块血肉粘在鞋上。"
 L.search_floor_concrete = "灰色的尘土覆盖了尸体的鞋子和膝盖。看起来犯罪现场的地面是混凝土制的。"
 L.search_floor_dirt = "闻起来有泥土的味道。可能是来自粘在受害者鞋子上的泥土。"
@@ -1866,7 +1863,7 @@ L.search_floor_grate = "受害者的皮肤像牛排一样，全身都有网格�
 L.search_floor_alienflesh = "外星人的肉？听起来有点离谱。但你的侦探助手书将其列为可能的地面材质。"
 L.search_floor_snow = "一眼看去，他的衣服只是潮湿而冰冷的。但当你看到边缘的白色泡沫时你就明白了。是雪！"
 L.search_floor_plastic = "'哎哟，那一定很疼。' 尸体上布满了烫伤的痕迹，看起来像是和塑料表面摩擦出来的伤势。"
-L.search_floor_metal = "至少他们现在死了，不会得破伤风。锈迹斑斑的伤口。他们可能是在金属表面上死的。"
+L.search_floor_metal = "尸体上布满了锈迹斑斑的伤口，至少他们现在死了，不会得破伤风。他们可能是在金属表面上死的。"
 L.search_floor_sand = "小小的粗糙的岩石粘在他们冰冷的身体上。像海滩上的粗砂。啊，它到处都是！"
 L.search_floor_foliage = "大自然真美。受害者的血腥伤口被足够的叶子覆盖，几乎被隐藏起来。"
 L.search_floor_computer = "嘀嗒嘀嗒。他的尸体被计算机表面覆盖着！你问这看起来会是什么样子？额，诶嘿！"
@@ -1890,44 +1887,44 @@ L.search_dna = "用DNA扫描仪获取杀手的DNA样本。DNA样本会在一段�
 
 L.search_kills1 = "你找到一个名单，记载着他发现的死者：{player}"
 L.search_kills2 = "你找到了一个名单，记载着他杀的这些人：{player}"
-L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。凶手，还是巧合？"
+L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。是凶手，还是巧合？"
 
-L.search_credits = "受害者口袋里有 {credits} 积分。可购物的身份也许会拿走它们并好好利用。请留意！"
+L.search_credits = "受害者口袋里有 {credits} 积分。带商店的身份也许会拿走它们并好好利用。请留意！"
 
-L.search_kill_distance_point_blank = "攻击来自非常近的距离。"
-L.search_kill_distance_close = "攻击来自较短的距离。"
+L.search_kill_distance_point_blank = "受害者是从近处被攻击的。"
+L.search_kill_distance_close = "受害者是从不远处被攻击的。"
 L.search_kill_distance_far = "受害者是从远处被攻击的。"
 
 L.search_kill_from_front = "受害者是正面中弹的。"
 L.search_kill_from_back = "受害者是背面中弹的。"
 L.search_kill_from_side = "受害者是侧面中弹的。"
 
-L.search_hitgroup_head = "弹头来自尸体的头部。"
-L.search_hitgroup_chest = "弹头来自尸体的胸部。"
-L.search_hitgroup_stomach = "弹头来自尸体的胃部。"
-L.search_hitgroup_rightarm = "弹头来自尸体的右臂。"
-L.search_hitgroup_leftarm = "弹头来自尸体的左臂。"
-L.search_hitgroup_rightleg = "弹头来自尸体的右腿。"
-L.search_hitgroup_leftleg = "弹头来自尸体的左腿。"
-L.search_hitgroup_gear = "弹头来自尸体的腰部。"
+L.search_hitgroup_head = "弹头发现于尸体的头部。"
+L.search_hitgroup_chest = "弹头发现于尸体的胸部。"
+L.search_hitgroup_stomach = "弹头发现于尸体的胃部。"
+L.search_hitgroup_rightarm = "弹头发现于尸体的右臂。"
+L.search_hitgroup_leftarm = "弹头发现于尸体的左臂。"
+L.search_hitgroup_rightleg = "弹头发现于尸体的右腿。"
+L.search_hitgroup_leftleg = "弹头发现于尸体的左腿。"
+L.search_hitgroup_gear = "弹头发现于尸体的腰部。"
 
 L.search_policingrole_report_confirm = [[
-只有在尸体被确认死亡后，才能召唤公共警察角色到死亡的尸体。]]
+只有在尸体被确认死亡后，才能召唤公开警察角色到死亡尸体的位置。]]
 L.search_policingrole_confirm_disabled_1 = [[
-只有公共警察角色才能确认尸体。报告尸体让他们知道！]]
+只有公开警察角色才能确认死亡。报告尸体位置来让他们知道！]]
 L.search_policingrole_confirm_disabled_2 = [[
-只有公共警察角色才能确认尸体。报告尸体让他们知道！
-他们确认后，你可以在这里看到信息。]]
+只有公开警察角色才能确认死亡。报告尸体位置来让他们知道！
+他们确认后，你可以在这里看到尸检。]]
 L.search_spec = [[
-作为观察者，你能看到尸体的所有信息，但不能与界面交互。]]
+作为观察者，你能看到尸检的全部信息，但不能与界面交互。]]
 
-L.search_title_words = "受害者的遗言"
+L.search_title_words = "受害者遗言"
 L.search_title_c4 = "拆弹失误"
 L.search_title_dmg_crush = "挤压伤害 ({amount} 生命值)"
 L.search_title_dmg_bullet = "枪弹伤害 ({amount} 生命值)"
 L.search_title_dmg_fall = "跌落伤害 ({amount} 生命值)"
 L.search_title_dmg_boom = "爆炸伤害 ({amount} 生命值)"
-L.search_title_dmg_club = "棍棒伤害 ({amount} 生命值)"
+L.search_title_dmg_club = "钝器伤害 ({amount} 生命值)"
 L.search_title_dmg_drown = "溺水伤害 ({amount} 生命值)"
 L.search_title_dmg_stab = "刺伤伤害 ({amount} 生命值)"
 L.search_title_dmg_burn = "烧伤伤害 ({amount} 生命值)"
@@ -1936,18 +1933,18 @@ L.search_title_dmg_car = "车祸 ({amount} 生命值)"
 L.search_title_dmg_other = "未知伤害 ({amount} 生命值)"
 L.search_title_time = "死亡时间"
 L.search_title_dna = "DNA样本衰变"
-L.search_title_kills = "受害者的杀戮名单"
-L.search_title_eyes = "凶手的影子"
+L.search_title_kills = "受害者名单"
+L.search_title_eyes = "眼中的倒影"
 L.search_title_floor = "犯罪现场的地板"
 L.search_title_credits = "{credits} 设备积分"
 L.search_title_water = "水位 {level}"
-L.search_title_policingrole_report_confirm = "确认报告死亡"
-L.search_title_policingrole_confirm_disabled = "报告尸体"
-L.search_title_spectator = "你是一个观众"
+L.search_title_policingrole_report_confirm = "确认死亡"
+L.search_title_policingrole_confirm_disabled = "报告尸体位置"
+L.search_title_spectator = "你是观察者"
 
 L.target_credits_on_confirm = "确认死亡可获得未使用的积分"
 L.target_credits_on_search = "搜索可获得未使用的积分"
-L.corpse_hint_no_inspect_details = "只有公共警察角色可以找到这具尸体的信息。"
+L.corpse_hint_no_inspect_details = "只有公开警察角色可以找到这具尸体的信息。"
 L.corpse_hint_inspect_limited_details = "只有公共警察角色可以确认这具尸体。"
 L.corpse_hint_spectator = "按 [{usekey}] 查看尸体界面"
 L.corpse_hint_public_policing_searched = "按 [{usekey}] 查看公共警察角色的搜索结果"
@@ -1957,17 +1954,19 @@ L.choice_inspect_confirm_mode_0 = "模式 0: 标准 TTT"
 L.choice_inspect_confirm_mode_1 = "模式 1: 限制确认"
 L.choice_inspect_confirm_mode_2 = "模式 2: 限制搜索"
 L.help_inspect_confirm_mode = [[
-在这个游戏模式中，有三种不同的尸体搜索/确认模式。选择这个模式对公共警察角色（如侦探）的重要性有很大影响。
+在这个游戏模式中，有三种不同的尸体搜索/确认模式。选择这个模式对公开警察角色（如侦探）的重要性有很大影响。
 
-模式 0: 这是标准的 TTT 行为。每个人都可以搜索和确认尸体。要报告尸体或从尸体上取得积分，首先必须确认尸体。这使得购物角色偷偷地偷取积分变得有点困难。然而，想要报告尸体以召唤公共警察玩家的无辜玩家也需要先确认。
+模式 0: 这是标准的 TTT 行为。每个人都可以搜索和确认尸体。要取得尸检或从尸体上取得积分，首先必须确认死亡。这使得带商店角色偷偷地偷取积分变得有点困难。然而，想要报告尸体位置以召唤公开警察玩家的无辜玩家也需要先确认。
 
-模式 1: 这种模式通过将确认选项限制为公共警察角色，增加了公共警察角色的重要性。这也意味着在确认尸体之前就可以取得积分和报告尸体。每个人仍然可以搜索死尸并找到信息，但他们无法宣布找到的信息。
+模式 1: 这种模式通过将确认死亡选项限制为公开警察角色，提升了公开警察角色的重要性。这也意味着在确认死亡之前就可以取得积分和尸检。每个人仍然可以搜索死尸并找到信息，但他们无法宣布找到的信息。
 
-模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公共警察玩家报告死尸现在是获取任何尸体信息的唯一方式。]]
+模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公开警察玩家报告尸体位置现在是获取任何尸体信息的唯一方式。]]
+
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
 
 -- 2023-10-23
-L.header_miscellaneous_settings = "其他设置"
-L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条会出现脉动"
+L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条将会开始闪烁"
 L.header_hud_elements_customize = "自定义 HUD 元素"
 L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
 
@@ -2040,9 +2039,9 @@ L.header_soundeffect_settings = "声音效果"
 L.header_voiceandvolume_settings = "声音和音量设置"
 
 -- 2023-11-06
-L.drop_reserve_prevented = "有东西阻止您丢弃储备弹药。"
-L.drop_no_reserve = "你的储备弹药不足，无法作为弹药箱投放。"
-L.drop_no_room_ammo = "您没有地方放置弹药！"
+L.drop_reserve_prevented = "有东西阻止你丢弃备弹。"
+L.drop_no_reserve = "你的备弹不足，无法作为弹药箱投放。"
+L.drop_no_room_ammo = "你没有地方放置弹药箱！"
 
 -- 2023-11-14
 L.hat_deerstalker_name = "侦探帽"
@@ -2058,14 +2057,14 @@ L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 
 -- 2023-12-07
---L.c4_help_primary = "Place the C4"
---L.c4_help_secondary = "Stick to surface"
+L.c4_help_primary = "安放C4"
+L.c4_help_secondary = "将其放置在墙面上"
 
 -- 2023-12-11
---L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
---L.knife_help_primary = "Stab"
---L.knife_help_secondary = "Throw knife"
+L.magneto_help_primary = "推动实体"
+L.magneto_help_secondary = "推动/拾取实体"
+L.knife_help_primary = "刺"
+L.knife_help_secondary = "投掷小刀"
 --L.polter_help_primary = "Fire thumper"
 --L.polter_help_secondary = "Charge long range shot"
 
@@ -2074,21 +2073,17 @@ L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
 --L.newton_help_secondary = "Charged knockback shot"
 
 -- 2023-12-13
-L.vis_no_pickup = "只有公共警察角色才能捡起显像器"
+L.vis_no_pickup = "只有公开警察角色才能捡起显像器"
 L.newton_force = "推力"
 --L.defuser_help_primary = "Defuse targeted C4"
 --L.radio_help_primary = "Place the Radio"
 --L.radio_help_secondary = "Stick to surface"
 --L.hstation_help_primary = "Place the Health Station"
 --L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "安放诱饵。"
 
 -- 2023-12-14
 --L.marker_vision_owner = "Owner: {owner}"
 --L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
 --L.marker_vision_distance_collapsed = "{distance}m"
 
 --L.c4_marker_vision_time = "Detonation time: {time}"
@@ -2129,7 +2124,8 @@ L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
 L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
 
--- 2023-12-22
+
+-- 2023-12-24
 L.submenu_gameplay_accessibility_title = "辅助功能"
 
 L.header_accessibility_settings = "辅助功能设置"
@@ -2140,7 +2136,6 @@ L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
 
 L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
 L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
-
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
 对于霰弹枪，这将影响每个弹丸。
@@ -2154,20 +2149,43 @@ L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此�
 
 -- 2023-12-24
 L.binoc_help_reload = "清除目标。"
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
-L.label_crosshair_thickness_outline_enable = "启用十字准线轮廓"
+L.label_crosshair_thickness_outline_enable = "启用准星轮廓"
 L.label_crosshair_outline_high_contrast = "启用轮廓高对比度颜色"
-L.label_crosshair_mode = "十字准线模式"
-L.label_crosshair_static_length = "启用静态十字准线长度"
+L.label_crosshair_mode = "准星模式"
+L.label_crosshair_static_length = "启用静态准星长度"
 
 L.choice_crosshair_mode_0 = "线条和点"
 L.choice_crosshair_mode_1 = "仅线条"
 L.choice_crosshair_mode_2 = "仅点"
 
 L.help_crosshair_scale_enable = [[
-动态十字准线可根据武器的锥度缩放十字准线。锥度受武器的基本精度影响，并与跳跃和冲刺等外部因素相乘。
+动态准星可根据武器的扩散度缩放准星。扩散度受武器的基本精度影响，并与跳跃和冲刺等外部因素相乘。
 
-如果线的长度保持不变，则只有间隙会随着锥度的变化而缩放。]]
+如果线的长度保持不变，则只有间隙会随着扩散度的变化而缩放。]]
 
 L.header_weapon_settings = "武器设置"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放诱饵"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

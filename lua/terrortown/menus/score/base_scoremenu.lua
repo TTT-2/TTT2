@@ -12,6 +12,4 @@ CLSCOREMENU.title = "base_menu_title"
 -- @note This function should be overwritten but not not called.
 -- @internal
 -- @realm client
-function CLSCOREMENU:Populate(parent)
-
-end
+function CLSCOREMENU:Populate(parent) end

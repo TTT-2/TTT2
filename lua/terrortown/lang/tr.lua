@@ -972,7 +972,7 @@ L.menu_guide_description = "TTT2'ye başlamanıza yardımcı olur ve oyun, rolle
 L.menu_bindings_description = "TTT2'nin ve eklentilerinin belirli özelliklerini kendi beğeninize göre ayarlayın."
 L.menu_language_description = "Oyun modunun dilini seçin."
 L.menu_appearance_description = "Kullanıcı arayüzünün görünümünü ve performansını değiştirin."
---L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
+L.menu_gameplay_description = "Ses, erişilebilirlik ve oynanış ayarlarını düzenleyin."
 L.menu_addons_description = "Yerel eklentileri istediğiniz gibi yapılandırın."
 L.menu_legacy_description = "Orijinal TTT'den dönüştürülen sekmelerin yeni sisteme taşınması gereken bir panel."
 L.menu_administration_description = "Arayüzler, mağazalar vb. için genel ayarlar"
@@ -996,7 +996,6 @@ L.submenu_appearance_crosshair_title = "Nişangah"
 L.submenu_appearance_dmgindicator_title = "Hasar Göstergesi"
 L.submenu_appearance_performance_title = "Performans"
 L.submenu_appearance_interface_title = "Arayüz"
-L.submenu_appearance_miscellaneous_title = "Çeşitli"
 
 L.submenu_gameplay_general_title = "Genel"
 
@@ -1661,8 +1660,6 @@ L.label_bots_are_spectators = "Botlar her zaman izleyicidir"
 L.label_tbutton_admin_show = "Hain düğmelerini yöneticilere göster"
 L.label_ragdoll_carrying = "Ceset taşımayı etkinleştir"
 L.label_prop_throwing = "Nesne fırlatmayı etkinleştir"
-L.label_ragdoll_pinning = "Masum olmayan roller için ceset sabitlemeyi etkinleştir"
-L.label_ragdoll_pinning_innocents = "Masum roller için ceset pinlemeyi etkinleştir"
 L.label_weapon_carrying = "Silah taşımayı etkinleştir"
 L.label_weapon_carrying_range = "Silah taşıma menzili"
 L.label_prop_carrying_force = "Nesne kaldırma gücü"
@@ -1965,8 +1962,10 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
-L.header_miscellaneous_settings = "Çeşitli Ayarlar"
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
 L.header_hud_elements_customize = "Arayüz Öğelerini Özelleştir"
 L.help_hud_elements_special_settings = "Bunlar, kullanılan arayüz öğeleri için özel ayarlardır."
@@ -2058,48 +2057,44 @@ L.label_keyhelper_weapon_drop = "mümkünse seçilen silahı bırak"
 L.label_keyhelper_ammo_drop = "seçilen silahın şarjöründen cephane çıkar"
 
 -- 2023-12-07
---L.c4_help_primary = "Place the C4"
---L.c4_help_secondary = "Stick to surface"
+L.c4_help_primary = "C4'ü yerleştir"
+L.c4_help_secondary = "Zemine koy"
 
 -- 2023-12-11
---L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pickup entity"
---L.knife_help_primary = "Stab"
---L.knife_help_secondary = "Throw knife"
---L.polter_help_primary = "Fire thumper"
---L.polter_help_secondary = "Charge long range shot"
+L.magneto_help_primary = "Varlığı it"
+L.magneto_help_secondary = "Varlığı al"
+L.knife_help_primary = "Bıçakla"
+L.knife_help_secondary = "Bıçağı fırlat"
+L.polter_help_primary = "Ateşle"
+L.polter_help_secondary = "Uzun menzil atışı şarjla"
 
 -- 2023-12-12
---L.newton_help_primary = "Knockback shot"
---L.newton_help_secondary = "Charged knockback shot"
+L.newton_help_primary = "İtme vuruşu"
+L.newton_help_secondary = "Şarjlı itme vuruşu"
 
 -- 2023-12-13
 L.vis_no_pickup = "Sadece kamu polisliği rolleri görüntüleyiciyi alabilir"
 L.newton_force = "GÜÇ"
---L.defuser_help_primary = "Defuse targeted C4"
---L.radio_help_primary = "Place the Radio"
---L.radio_help_secondary = "Stick to surface"
---L.hstation_help_primary = "Place the Health Station"
---L.flaregun_help_primary = "Burn body/entity"
-L.decoy_help_pri = "Tuzağı yerleştirin."
+L.defuser_help_primary = "Hedef C4'ü çöz"
+L.radio_help_primary = "Radyoyu yerleştir"
+L.radio_help_secondary = "Zemine yapıştır"
+L.hstation_help_primary = "Sağlık İstasyonunu yerleştir"
+L.flaregun_help_primary = "Varlığı yak"
 
 -- 2023-12-14
---L.marker_vision_owner = "Owner: {owner}"
---L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_visible_for_0 = "Visible for: you"
---L.marker_vision_visible_for_1 = "Visible for: team"
---L.marker_vision_visible_for_2 = "Visible for: everyone"
---L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_owner = "Sahip: {owner}"
+L.marker_vision_distance = "Uzaklık: {distance}m"
+L.marker_vision_distance_collapsed = "{distance}m"
 
---L.c4_marker_vision_time = "Detonation time: {time}"
---L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_time = "Patlamaya: {time}"
+L.c4_marker_vision_collapsed = "{time} / {distance}m"
 
---L.c4_marker_vision_safe_zone = "Bomb safe zone"
---L.c4_marker_vision_damage_zone = "Bomb damage zone"
---L.c4_marker_vision_kill_zone = "Bomb kill zone"
+L.c4_marker_vision_safe_zone = "Bombadan güvenli bölge"
+L.c4_marker_vision_damage_zone = "Bomba hasar bölgesi"
+L.c4_marker_vision_kill_zone = "Bomba öldürme bölgesi"
 
---L.beacon_marker_vision_player = "Tracked Player"
---L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+L.beacon_marker_vision_player = "İzlenen Oyuncu"
+L.beacon_marker_vision_player_tracked = "Bu oyuncu bir Fener tarafından izleniyor"
 
 -- 2023-12-18
 L.beacon_help_pri = "Feneri yere at"
@@ -2129,7 +2124,8 @@ L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir ö
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
--- 2023-12-22
+
+-- 2023-12-24
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
 
 L.header_accessibility_settings = "Erişilebilirlik Ayarları"
@@ -2140,7 +2136,6 @@ L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
-
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
 Bir pompalı için bu, her bir saçmayı etkileyecektir.
@@ -2152,6 +2147,8 @@ Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri
 
 -- 2023-12-24
 L.binoc_help_reload = "Hedefi kaldırın."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
@@ -2169,3 +2166,24 @@ Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendiril
 Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
 
 L.header_weapon_settings = "Silah Ayarları"
+
+
+L.marker_vision_visible_for_0 = "Sadece size görünür"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_2 = "Takıma görünür"
+L.marker_vision_visible_for_3 = "Herkese görünür"
+
+-- 2024-01-27
+L.decoy_help_primary = "Tuzağı yerleştirin"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"

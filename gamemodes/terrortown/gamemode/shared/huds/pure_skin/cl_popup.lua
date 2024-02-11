@@ -10,6 +10,6 @@
 -- @param number h height
 -- @realm client
 function HUD.PopupPaint(pnl, w, h)
-	DrawHUDElementBg(0, 0, w, h, pnl.paintColor)
-	DrawHUDElementLines(0, 0, w, h)
+    DrawHUDElementBg(0, 0, w, h, pnl.paintColor)
+    DrawHUDElementLines(0, 0, w, h)
 end

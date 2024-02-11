@@ -11,9 +11,12 @@ local surface = surface
 local hook = hook
 
 -- Define GM12 fonts for compatibility
-surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
-surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
-surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
+surface.CreateFont("DefaultBold", { font = "Tahoma", size = 13, weight = 1000 })
+surface.CreateFont(
+    "TabLarge",
+    { font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false }
+)
+surface.CreateFont("Trebuchet22", { font = "Trebuchet MS", size = 22, weight = 900 })
 
 ttt_include("sh_init")
 
@@ -34,6 +37,7 @@ ttt_include("sh_door")
 ttt_include("sh_voice")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
+ttt_include("sh_marker_vision_element")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -78,6 +82,7 @@ ttt_include("cl_vskin__vgui__dsearchbar")
 ttt_include("cl_vskin__vgui__dprofilepanel")
 ttt_include("cl_vskin__vgui__dinfoitem")
 ttt_include("cl_vskin__vgui__dsubmenulist")
+ttt_include("cl_vskin__vgui__dweaponpreview")
 
 ttt_include("cl_changes")
 ttt_include("cl_network_sync")
@@ -119,11 +124,11 @@ ttt_include("cl_weapon_pickup")
 ttt_include("cl_help") -- Creates Menus which depend on other client files. Should be loaded as late as possible
 
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
-	MsgN("Added TTT2 client autorun file: ", path)
+    Dev(1, "Added TTT2 client autorun file: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
-	MsgN("Added TTT2 shared autorun file: ", path)
+    Dev(1, "Added TTT2 shared autorun file: ", path)
 end)
 
 -- all files are loaded
@@ -131,17 +136,20 @@ local TryT = LANG.TryTranslation
 
 ---
 -- @realm client
+-- stylua: ignore
 local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
 
 local cues = {
-	Sound("ttt/thump01e.mp3"),
-	Sound("ttt/thump02e.mp3")
+    Sound("ttt/thump01e.mp3"),
+    Sound("ttt/thump02e.mp3"),
 }
 
 local function PlaySoundCue()
-	if not ttt_cl_soundcues:GetBool() then return end
+    if not ttt_cl_soundcues:GetBool() then
+        return
+    end
 
-	surface.PlaySound(cues[math.random(#cues)])
+    surface.PlaySound(cues[math.random(#cues)])
 end
 
 ---
@@ -151,57 +159,64 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
-	MsgN("TTT2 Client initializing...")
+    Dev(1, "TTT2 Client initializing...")
 
-	-- Migrate all changes of TTT2
-	migrations.Apply()
+    -- Migrate all changes of TTT2
+    migrations.Apply()
 
-	---
-	-- @realm client
-	hook.Run("TTT2Initialize")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("TTT2Initialize")
 
-	self.round_state = ROUND_WAIT
-	self.roundCount = 0
+    self.round_state = ROUND_WAIT
+    self.roundCount = 0
 
-	-- load default TTT2 language files or mark them as downloadable on the server
-	-- load addon language files in a second pass, the core language files are loaded earlier
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
+    -- load default TTT2 language files or mark them as downloadable on the server
+    -- load addon language files in a second pass, the core language files are loaded earlier
+    fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+        Dev(1, "Added TTT2 language file: ", path)
+    end)
 
-	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
-		MsgN("Added TTT2 language file: ", path)
-	end)
+    fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
+        ErrorNoHaltWithStack(
+            "[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \""
+                .. path
+                .. "\""
+        )
+        Dev(1, "Added TTT2 language file: ", path)
+    end)
 
-	-- load vskin files
-	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
+    -- load vskin files
+    fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
+        Dev(1, "Added TTT2 vskin file: ", path)
+    end)
 
-	-- initialize scale callbacks
-	appearance.RegisterScaleChangeCallback(HUDManager.ResetHUD)
+    -- initialize scale callbacks
+    appearance.RegisterScaleChangeCallback(HUDManager.ResetHUD)
 
-	LANG.Init()
+    LANG.Init()
 
-	self.BaseClass:Initialize()
+    self.BaseClass:Initialize()
 
-	ARMOR:Initialize()
-	SPEED:Initialize()
+    ARMOR:Initialize()
+    SPEED:Initialize()
 
-	local skinName = vskin.GetVSkinName()
+    local skinName = vskin.GetVSkinName()
 
-	vskin.UpdatedVSkin(skinName, skinName)
+    vskin.UpdatedVSkin(skinName, skinName)
 
-	keyhelp.InitializeBasicKeys()
+    keyhelp.InitializeBasicKeys()
 
-	---
-	-- @realm shared
-	hook.Run("TTT2FinishedLoading")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2FinishedLoading")
 
-	---
-	-- @realm client
-	hook.Run("PostInitialize")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("PostInitialize")
 end
 
 ---
@@ -211,9 +226,10 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
-	---
-	-- @realm client
-	hook.Run("TTT2PostCleanupMap")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("TTT2PostCleanupMap")
 end
 
 ---
@@ -228,102 +244,107 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	MsgN("TTT Client post-init...")
+    Dev(1, "TTT Client post-init...")
 
-	---
-	-- @realm client
-	hook.Run("TTTInitPostEntity")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("TTTInitPostEntity")
 
-	items.MigrateLegacyItems()
-	items.OnLoaded()
+    items.MigrateLegacyItems()
+    items.OnLoaded()
 
-	-- load all HUDs
-	huds.OnLoaded()
+    -- load all HUDs
+    huds.OnLoaded()
 
-	-- load all HUD elements
-	hudelements.OnLoaded()
+    -- load all HUD elements
+    hudelements.OnLoaded()
 
-	HUDManager.LoadAllHUDS()
-	HUDManager.SetHUD()
+    HUDManager.LoadAllHUDS()
+    HUDManager.SetHUD()
 
-	local sweps = weapons.GetList()
+    local sweps = weapons.GetList()
 
-	-- load sweps
-	for i = 1, #sweps do
-		local eq = sweps[i]
+    -- load sweps
+    for i = 1, #sweps do
+        local eq = sweps[i]
 
-		-- Check if an equipment has an id or ignore it
-		-- @realm server
-		if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
+        -- Check if an equipment has an id or ignore it
+        -- @realm server
+        -- stylua: ignore
+        if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
 
-		-- Insert data into role fallback tables
-		InitDefaultEquipment(eq)
+        -- Insert data into role fallback tables
+        InitDefaultEquipment(eq)
 
-		eq.CanBuy = {} -- reset normal weapons equipment
-	end
+        eq.CanBuy = {} -- reset normal weapons equipment
+    end
 
-	local roleList = roles.GetList()
+    local roleList = roles.GetList()
 
-	-- reset normal equipment tables
-	for i = 1, #roleList do
-		Equipment[roleList[i].index] = {}
-	end
+    -- reset normal equipment tables
+    for i = 1, #roleList do
+        Equipment[roleList[i].index] = {}
+    end
 
-	-- initialize fallback shops
-	InitFallbackShops()
+    -- initialize fallback shops
+    InitFallbackShops()
 
-	---
-	-- @realm client
-	hook.Run("PostInitPostEntity")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("PostInitPostEntity")
 
-	---
-	-- @realm client
-	hook.Run("InitFallbackShops")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("InitFallbackShops")
 
-	---
-	-- @realm client
-	hook.Run("LoadedFallbackShops")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    hook.Run("LoadedFallbackShops")
 
-	net.Start("TTT2SyncShopsWithServer")
-	net.SendToServer()
-	TTT2ShopFallbackInitialized = true
+    net.Start("TTT2SyncShopsWithServer")
+    net.SendToServer()
+    TTT2ShopFallbackInitialized = true
 
-	net.Start("TTT_Spectate")
-	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
-	net.SendToServer()
+    net.Start("TTT_Spectate")
+    net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
+    net.SendToServer()
 
-	if not game.SinglePlayer() then
-		timer.Create("idlecheck", 5, 0, CheckIdle)
-	end
+    if not game.SinglePlayer() then
+        timer.Create("idlecheck", 5, 0, CheckIdle)
+    end
 
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	client:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
+    client:SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
 
-	-- make sure player class extensions are loaded up, and then do some
-	-- initialization on them
-	if IsValid(client) and client.GetTraitor then
-		self:ClearClientState()
-	end
+    -- make sure player class extensions are loaded up, and then do some
+    -- initialization on them
+    if IsValid(client) and client.GetTraitor then
+        self:ClearClientState()
+    end
 
-	-- cache players avatar
-	local plys = player.GetAll()
+    -- cache players avatar
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local plyid64 = plys[i]:SteamID64()
+    for i = 1, #plys do
+        local plyid64 = plys[i]:SteamID64()
 
-		-- caching
-		draw.CacheAvatar(plyid64, "small")
-		draw.CacheAvatar(plyid64, "medium")
-		draw.CacheAvatar(plyid64, "large")
-	end
+        -- caching
+        draw.CacheAvatar(plyid64, "small")
+        draw.CacheAvatar(plyid64, "medium")
+        draw.CacheAvatar(plyid64, "large")
+    end
 
-	timer.Create("cache_ents", 1, 0, function()
-		self:DoCacheEnts()
-	end)
+    timer.Create("cache_ents", 1, 0, function()
+        self:DoCacheEnts()
+    end)
 
-	RunConsoleCommand("_ttt_request_serverlang")
-	RunConsoleCommand("_ttt_request_rolelist")
+    RunConsoleCommand("_ttt_request_serverlang")
+    RunConsoleCommand("_ttt_request_rolelist")
 end
 
 ---
@@ -332,46 +353,52 @@ end
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
-	-- load all roles
-	roles.OnLoaded()
+    -- load all roles
+    roles.OnLoaded()
 
-	---
-	-- @realm shared
-	hook.Run("TTT2RolesLoaded")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2RolesLoaded")
 
-	---
-	-- @realm shared
-	hook.Run("TTT2BaseRoleInit")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2BaseRoleInit")
 
-	-- load all items
-	items.OnLoaded()
+    -- load all items
+    items.OnLoaded()
 
-	-- load all HUDs
-	huds.OnLoaded()
+    -- load all HUDs
+    huds.OnLoaded()
 
-	-- load all HUD elements
-	hudelements.OnLoaded()
+    -- load all HUD elements
+    hudelements.OnLoaded()
 
-	-- re-request the HUD to be loaded
-	HUDManager.LoadAllHUDS()
-	HUDManager.SetHUD()
+    -- re-request the HUD to be loaded
+    HUDManager.LoadAllHUDS()
+    HUDManager.SetHUD()
 
-	ARMOR:Initialize()
-	SPEED:Initialize()
+    ARMOR:Initialize()
+    SPEED:Initialize()
 
-	-- rebuild menues on game reload
-	vguihandler.Rebuild()
+    -- rebuild menues on game reload
+    vguihandler.Rebuild()
 
-	local skinName = vskin.GetVSkinName()
-	vskin.UpdatedVSkin(skinName, skinName)
+    local skinName = vskin.GetVSkinName()
+    vskin.UpdatedVSkin(skinName, skinName)
 
-	keyhelp.InitializeBasicKeys()
+    keyhelp.InitializeBasicKeys()
 
-	LocalPlayer():SetSettingOnServer("enable_dynamic_fov", GetConVar("ttt2_enable_dynamic_fov"):GetBool())
+    LocalPlayer():SetSettingOnServer(
+        "enable_dynamic_fov",
+        GetConVar("ttt2_enable_dynamic_fov"):GetBool()
+    )
 
-	---
-	-- @realm shared
-	hook.Run("TTT2FinishedLoading")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2FinishedLoading")
 end
 
 ---
@@ -380,8 +407,8 @@ end
 -- @hook
 -- @realm client
 function GM:DoCacheEnts()
-	RADAR:CacheEnts()
-	TBHUD:CacheEnts()
+    RADAR:CacheEnts()
+    TBHUD:CacheEnts()
 end
 
 ---
@@ -390,8 +417,8 @@ end
 -- @hook
 -- @realm client
 function GM:HUDClear()
-	RADAR:Clear()
-	TBHUD:Clear()
+    RADAR:Clear()
+    TBHUD:Clear()
 end
 
 ---
@@ -399,160 +426,174 @@ end
 -- @return boolean
 -- @realm client
 function GetRoundState()
-	return GAMEMODE.round_state
+    return GAMEMODE.round_state
 end
 
 local function RoundStateChange(o, n)
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	if n == ROUND_PREP then
-		-- prep starts
-		GAMEMODE:ClearClientState()
-		GAMEMODE:CleanUpMap()
+    if n == ROUND_PREP then
+        -- prep starts
+        GAMEMODE:ClearClientState()
+        GAMEMODE:CleanUpMap()
 
-		EPOP:Clear()
+        EPOP:Clear()
 
-		-- show warning to spec mode players
-		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
-			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
-		end
+        -- show warning to spec mode players
+        if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
+            LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
+        end
 
-		-- reset cached server language in case it has changed
-		RunConsoleCommand("_ttt_request_serverlang")
+        -- reset cached server language in case it has changed
+        RunConsoleCommand("_ttt_request_serverlang")
 
-		GAMEMODE.roundCount = GAMEMODE.roundCount + 1
+        GAMEMODE.roundCount = GAMEMODE.roundCount + 1
 
-		-- clear decals in cache from previous round
-		util.ClearDecals()
-	elseif n == ROUND_ACTIVE then
-		-- round starts
-		VOICE.CycleMuteState(MUTE_NONE)
+        -- clear decals in cache from previous round
+        util.ClearDecals()
 
-		CLSCORE:ClearPanel()
+        -- resets bone positions that fixes broken fingers on bad addons
+        weaponrenderer.ResetBonePositions(LocalPlayer():GetViewModel())
+    elseif n == ROUND_ACTIVE then
+        -- round starts
+        VOICE.CycleMuteState(MUTE_NONE)
 
-		-- people may have died and been searched during prep
-		for i = 1, #plys do
-			bodysearch.ResetSearchResult(plys[i])
-		end
+        CLSCORE:ClearPanel()
 
-		-- clear blood decals produced during prep
-		util.ClearDecals()
+        -- people may have died and been searched during prep
+        for i = 1, #plys do
+            bodysearch.ResetSearchResult(plys[i])
+        end
 
-		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
+        -- clear blood decals produced during prep
+        util.ClearDecals()
 
-		PlaySoundCue()
-	elseif n == ROUND_POST then
-		RunConsoleCommand("ttt_cl_traitorpopup_close")
+        GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
 
-		PlaySoundCue()
-	end
+        PlaySoundCue()
+    elseif n == ROUND_POST then
+        RunConsoleCommand("ttt_cl_traitorpopup_close")
 
-	-- stricter checks when we're talking about hooks, because this function may
-	-- be called with for example o = WAIT and n = POST, for newly connecting
-	-- players, which hooking code may not expect
-	if n == ROUND_PREP then
-		---
-		-- Can enter PREP from any phase due to ttt_roundrestart
-		-- @realm shared
-		hook.Run("TTTPrepareRound")
-	elseif o == ROUND_PREP and n == ROUND_ACTIVE then
-		---
-		-- @realm shared
-		hook.Run("TTTBeginRound")
-	elseif o == ROUND_ACTIVE and n == ROUND_POST then
-		---
-		-- @realm shared
-		hook.Run("TTTEndRound")
-	end
+        PlaySoundCue()
+    end
 
-	-- whatever round state we get, clear out the voice flags
-	local winTeams = roles.GetWinTeams()
+    -- stricter checks when we're talking about hooks, because this function may
+    -- be called with for example o = WAIT and n = POST, for newly connecting
+    -- players, which hooking code may not expect
+    if n == ROUND_PREP then
+        ---
+        -- Can enter PREP from any phase due to ttt_roundrestart
+        -- @realm shared
+        -- stylua: ignore
+        hook.Run("TTTPrepareRound")
+    elseif o == ROUND_PREP and n == ROUND_ACTIVE then
+        ---
+        -- @realm shared
+        -- stylua: ignore
+        hook.Run("TTTBeginRound")
+    elseif o == ROUND_ACTIVE and n == ROUND_POST then
+        ---
+        -- @realm shared
+        -- stylua: ignore
+        hook.Run("TTTEndRound")
+    end
 
-	for i = 1, #plys do
-		local pl = plys[i]
+    -- whatever round state we get, clear out the voice flags
+    local winTeams = roles.GetWinTeams()
 
-		for k = 1, #winTeams do
-			pl[winTeams[k] .. "_gvoice"] = false
-		end
-	end
+    for i = 1, #plys do
+        local pl = plys[i]
+
+        for k = 1, #winTeams do
+            pl[winTeams[k] .. "_gvoice"] = false
+        end
+    end
 end
 
 local function ttt_print_playercount()
-	print(GAMEMODE.StartingPlayers)
+    Dev(2, GAMEMODE.StartingPlayers)
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
 -- usermessages
 
 local function ReceiveRole()
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
+    local client = LocalPlayer()
+    if not IsValid(client) then
+        return
+    end
 
-	local subrole = net.ReadUInt(ROLE_BITS)
-	local team = net.ReadString()
+    local subrole = net.ReadUInt(ROLE_BITS)
+    local team = net.ReadString()
 
-	-- after a mapswitch, server might have sent us this before we are even done
-	-- loading our code
-	if not isfunction(client.SetRole) then return end
+    -- after a mapswitch, server might have sent us this before we are even done
+    -- loading our code
+    if not isfunction(client.SetRole) then
+        return
+    end
 
-	client:SetRole(subrole, team)
-
-	Msg("You are: ")
-	MsgN(string.upper(roles.GetByIndex(subrole).name))
+    client:SetRole(subrole, team)
 end
 net.Receive("TTT_Role", ReceiveRole)
 
 local function ReceiveRoleReset()
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
-	end
+    for i = 1, #plys do
+        plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
+    end
 end
 net.Receive("TTT_RoleReset", ReceiveRoleReset)
 
 -- role test
 local function TTT2TestRole()
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
+    local client = LocalPlayer()
+    if not IsValid(client) then
+        return
+    end
 
-	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
+    client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
 end
 net.Receive("TTT2TestRole", TTT2TestRole)
 
 local function ReceiveRoleList()
-	local subrole = net.ReadUInt(ROLE_BITS)
-	local team = net.ReadString()
-	local num_ids = net.ReadUInt(8)
+    local subrole = net.ReadUInt(ROLE_BITS)
+    local team = net.ReadString()
+    local num_ids = net.ReadUInt(8)
 
-	for i = 1, num_ids do
-		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
-		local ply = player.GetByID(eidx)
+    for i = 1, num_ids do
+        local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
+        local ply = player.GetByID(eidx)
 
-		if IsValid(ply) and ply.SetRole then
-			ply:SetRole(subrole, team)
+        if IsValid(ply) and ply.SetRole then
+            ply:SetRole(subrole, team)
 
-			local plyrd = ply:GetSubRoleData()
+            local plyrd = ply:GetSubRoleData()
 
-			if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
-				ply[team .. "_gvoice"] = false -- assume role's chat by default
-			end
-		end
-	end
+            if
+                team ~= TEAM_NONE
+                and not plyrd.unknownTeam
+                and not plyrd.disabledTeamVoice
+                and not TEAMS[team].alone
+            then
+                ply[team .. "_gvoice"] = false -- assume role's chat by default
+            end
+        end
+    end
 end
 net.Receive("TTT_RoleList", ReceiveRoleList)
 
 -- Round state comm
 local function ReceiveRoundState()
-	local o = GetRoundState()
+    local o = GetRoundState()
 
-	GAMEMODE.round_state = net.ReadUInt(3)
+    GAMEMODE.round_state = net.ReadUInt(3)
 
-	if o ~= GAMEMODE.round_state then
-		RoundStateChange(o, GAMEMODE.round_state)
-	end
+    if o ~= GAMEMODE.round_state then
+        RoundStateChange(o, GAMEMODE.round_state)
+    end
 
-	MsgN("Round state: " .. GAMEMODE.round_state)
+    Dev(1, "Round state: " .. GAMEMODE.round_state)
 end
 net.Receive("TTT_RoundState", ReceiveRoundState)
 
@@ -562,47 +603,53 @@ net.Receive("TTT_RoundState", ReceiveRoundState)
 -- @hook
 -- @realm client
 function GM:ClearClientState()
-	self:HUDClear()
+    self:HUDClear()
 
-	local client = LocalPlayer()
-	if not client.SetRole then return end -- code not loaded yet
+    local client = LocalPlayer()
+    if not client.SetRole then
+        return
+    end -- code not loaded yet
 
-	client:SetRole(ROLE_NONE)
+    client:SetRole(ROLE_NONE)
 
-	client.equipmentItems = {}
-	client.equipment_credits = 0
-	client.bought = {}
-	client.last_id = nil
-	client.radio = nil
-	client.called_corpses = {}
+    client.equipmentItems = {}
+    client.equipment_credits = 0
+    client.bought = {}
+    client.last_id = nil
+    client.radio = nil
+    client.called_corpses = {}
 
-	client:SetTargetPlayer(nil)
+    client:SetTargetPlayer(nil)
 
-	VOICE.InitBattery()
+    VOICE.InitBattery()
 
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local pl = plys[i]
-		if not IsValid(pl) then continue end
+    for i = 1, #plys do
+        local pl = plys[i]
+        if not IsValid(pl) then
+            continue
+        end
 
-		pl.sb_tag = nil
+        pl.sb_tag = nil
 
-		pl:SetRole(ROLE_NONE)
+        pl:SetRole(ROLE_NONE)
 
-		bodysearch.ResetSearchResult(pl)
-	end
+        bodysearch.ResetSearchResult(pl)
+    end
 
-	VOICE.CycleMuteState(MUTE_NONE)
+    VOICE.CycleMuteState(MUTE_NONE)
 
-	RunConsoleCommand("ttt_mute_team_check", "0")
+    RunConsoleCommand("ttt_mute_team_check", "0")
 
-	if not self.ForcedMouse then return end
+    if not self.ForcedMouse then
+        return
+    end
 
-	gui.EnableScreenClicker(false)
+    gui.EnableScreenClicker(false)
 end
 net.Receive("TTT_ClearClientState", function()
-	GAMEMODE:ClearClientState()
+    GAMEMODE:ClearClientState()
 end)
 
 local color_trans = Color(0, 0, 0, 0)
@@ -613,50 +660,56 @@ local color_trans = Color(0, 0, 0, 0)
 -- @hook
 -- @realm client
 function GM:CleanUpMap()
-	--remove thermal vision
-	thermalvision.Clear()
+    --remove thermal vision
+    thermalvision.Clear()
 
-	-- Ragdolls sometimes stay around on clients. Deleting them can create issues
-	-- so all we can do is try to hide them.
-	local ragdolls = ents.FindByClass("prop_ragdoll")
+    -- Ragdolls sometimes stay around on clients. Deleting them can create issues
+    -- so all we can do is try to hide them.
+    local ragdolls = ents.FindByClass("prop_ragdoll")
 
-	for i = 1, #ragdolls do
-		local ent = ragdolls[i]
+    for i = 1, #ragdolls do
+        local ent = ragdolls[i]
 
-		if not IsValid(ent) or CORPSE.GetPlayerNick(ent, "") == "" then continue end
+        if not IsValid(ent) or CORPSE.GetPlayerNick(ent, "") == "" then
+            continue
+        end
 
-		ent:SetNoDraw(true)
-		ent:SetSolid(SOLID_NONE)
-		ent:SetColor(color_trans)
+        ent:SetNoDraw(true)
+        ent:SetSolid(SOLID_NONE)
+        ent:SetColor(color_trans)
 
-		-- Horrible hack to make targetid ignore this ent, because we can't
-		-- modify the collision group clientside.
-		ent.NoTarget = true
-	end
+        -- Horrible hack to make targetid ignore this ent, because we can't
+        -- modify the collision group clientside.
+        ent.NoTarget = true
+    end
 
-	game.CleanUpMap()
+    game.CleanUpMap()
 end
 
 -- server tells us to call this when our LocalPlayer has spawned
 local function PlayerSpawn()
-	local as_spec = net.ReadBit() == 1
-	if as_spec then
-		TIPS.Show()
-	else
-		TIPS.Hide()
-	end
+    local as_spec = net.ReadBit() == 1
+    if as_spec then
+        TIPS.Show()
+    else
+        TIPS.Hide()
+    end
 
-	-- TTT Totem prevention
-	if LocalPlayer().GetRoleTable then
-		print("[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod...")
-	end
+    -- TTT Totem prevention
+    if LocalPlayer().GetRoleTable then
+        ErrorNoHaltWithStack(
+            "[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod..."
+        )
+    end
 end
 net.Receive("TTT_PlayerSpawned", PlayerSpawn)
 
 local function PlayerDeath()
-	if not TIPS then return end
+    if not TIPS then
+        return
+    end
 
-	TIPS.Show()
+    TIPS.Show()
 end
 net.Receive("TTT_PlayerDied", PlayerDeath)
 
@@ -674,10 +727,10 @@ net.Receive("TTT_PlayerDied", PlayerDeath)
 -- @ref https://wiki.facepunch.com/gmod/GM:ShouldDrawLocalPlayer
 -- @local
 function GM:ShouldDrawLocalPlayer(ply)
-	return false
+    return false
 end
 
-local view = {origin = vector_origin, angles = angle_zero, fov = 0}
+local view = { origin = vector_origin, angles = angle_zero, fov = 0 }
 
 ---
 -- Allows override of the default view.
@@ -695,36 +748,36 @@ local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 -- @ref https://wiki.facepunch.com/gmod/GM:CalcView
 -- @local
 function GM:CalcView(ply, origin, angles, fov, znear, zfar)
-	view.origin = origin
-	view.angles = angles
-	view.fov = fov
+    view.origin = origin
+    view.angles = angles
+    view.fov = fov
 
-	-- first person ragdolling
-	if ply:Team() == TEAM_SPEC and ply:GetObserverMode() == OBS_MODE_IN_EYE then
-		local tgt = ply:GetObserverTarget()
+    -- first person ragdolling
+    if ply:Team() == TEAM_SPEC and ply:GetObserverMode() == OBS_MODE_IN_EYE then
+        local tgt = ply:GetObserverTarget()
 
-		if IsValid(tgt) and not tgt:IsPlayer() then
-			-- assume if we are in_eye and not speccing a player, we spec a ragdoll
-			local eyes = tgt:LookupAttachment("eyes") or 0
-			eyes = tgt:GetAttachment(eyes)
+        if IsValid(tgt) and not tgt:IsPlayer() then
+            -- assume if we are in_eye and not speccing a player, we spec a ragdoll
+            local eyes = tgt:LookupAttachment("eyes") or 0
+            eyes = tgt:GetAttachment(eyes)
 
-			if eyes then
-				view.origin = eyes.Pos
-				view.angles = eyes.Ang
-			end
-		end
-	end
+            if eyes then
+                view.origin = eyes.Pos
+                view.angles = eyes.Ang
+            end
+        end
+    end
 
-	local wep = ply:GetActiveWeapon()
+    local wep = ply:GetActiveWeapon()
 
-	if IsValid(wep) then
-		local func = wep.CalcView
-		if func then
-			view.origin, view.angles, view.fov = func(wep, ply, origin * 1, angles * 1, fov)
-		end
-	end
+    if IsValid(wep) then
+        local func = wep.CalcView
+        if func then
+            view.origin, view.angles, view.fov = func(wep, ply, origin * 1, angles * 1, fov)
+        end
+    end
 
-	return view
+    return view
 end
 
 ---
@@ -738,9 +791,7 @@ end
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:AddDeathNotice
 -- @local
-function GM:AddDeathNotice(attacker, attackerTeam, inflictor, victim, victimTeam)
-
-end
+function GM:AddDeathNotice(attacker, attackerTeam, inflictor, victim, victimTeam) end
 
 ---
 -- This hook is called every frame to draw all of the current death notices.
@@ -750,29 +801,29 @@ end
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:DrawDeathNotice
 -- @local
-function GM:DrawDeathNotice(x, y)
-
-end
+function GM:DrawDeathNotice(x, y) end
 
 -- Simple client-based idle checking
 local idle = {
-	btn = 0,
-	mx = 0,
-	my = 0,
-	t = 0,
+    btn = 0,
+    mx = 0,
+    my = 0,
+    t = 0,
 }
 
 ---
 -- Sniff for any button inputs to prevent scamming the AFK timer.
 -- @realm client
 hook.Add("SetupMove", "TTT2IdleCheck", function(_, mv)
-	if not GetGlobalBool("ttt_idle", false) then return end
+    if not GetGlobalBool("ttt_idle", false) then
+        return
+    end
 
-	if mv:GetButtons() ~= idle.btn then
-		idle.t = CurTime()
-	end
+    if mv:GetButtons() ~= idle.btn then
+        idle.t = CurTime()
+    end
 
-	idle.btn = mv:GetButtons()
+    idle.btn = mv:GetButtons()
 end)
 
 ---
@@ -781,40 +832,44 @@ end)
 -- @realm client
 -- @internal
 function CheckIdle()
-	if not GetGlobalBool("ttt_idle", false) then return end
+    if not GetGlobalBool("ttt_idle", false) then
+        return
+    end
 
-	local client = LocalPlayer()
-	if not IsValid(client) then return end
+    local client = LocalPlayer()
+    if not IsValid(client) then
+        return
+    end
 
-	if GetRoundState() == ROUND_ACTIVE and client:IsTerror() and client:Alive() then
-		local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
+    if GetRoundState() == ROUND_ACTIVE and client:IsTerror() and client:Alive() then
+        local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
 
-		if idle_limit <= 0 then -- networking sucks sometimes
-			idle_limit = 300
-		end
+        if idle_limit <= 0 then -- networking sucks sometimes
+            idle_limit = 300
+        end
 
-		if gui.MouseX() ~= idle.mx or gui.MouseY() ~= idle.my then
-			-- Players in eg. the Help will move their mouse occasionally
-			idle.mx = gui.MouseX()
-			idle.my = gui.MouseY()
-			idle.t = CurTime()
-		elseif CurTime() > idle.t + idle_limit then
-			RunConsoleCommand("say", TryT("automoved_to_spec"))
+        if gui.MouseX() ~= idle.mx or gui.MouseY() ~= idle.my then
+            -- Players in eg. the Help will move their mouse occasionally
+            idle.mx = gui.MouseX()
+            idle.my = gui.MouseY()
+            idle.t = CurTime()
+        elseif CurTime() > idle.t + idle_limit then
+            RunConsoleCommand("say", TryT("automoved_to_spec"))
 
-			timer.Simple(0, function() -- move client into the spectator team in the next frame
-				RunConsoleCommand("ttt_spectator_mode", 1)
+            timer.Simple(0, function() -- move client into the spectator team in the next frame
+                RunConsoleCommand("ttt_spectator_mode", 1)
 
-				net.Start("TTT_Spectate")
-				net.WriteBool(true)
-				net.SendToServer()
+                net.Start("TTT_Spectate")
+                net.WriteBool(true)
+                net.SendToServer()
 
-				RunConsoleCommand("ttt_cl_idlepopup")
-			end)
-		elseif CurTime() > idle.t + idle_limit * 0.5 then
-			-- will repeat
-			LANG.Msg("idle_warning")
-		end
-	end
+                RunConsoleCommand("ttt_cl_idlepopup")
+            end)
+        elseif CurTime() > idle.t + idle_limit * 0.5 then
+            -- will repeat
+            LANG.Msg("idle_warning")
+        end
+    end
 end
 
 ---
@@ -829,45 +884,46 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:OnEntityCreated
 -- @local
 function GM:OnEntityCreated(ent)
-	-- Make ragdolls look like the player that has died
-	if ent:IsRagdoll() then
-		local ply = CORPSE.GetPlayer(ent)
+    -- Make ragdolls look like the player that has died
+    if ent:IsRagdoll() then
+        local ply = CORPSE.GetPlayer(ent)
 
-		if IsValid(ply) then
-			-- Only copy any decals if this ragdoll was recently created
-			if ent:GetCreationTime() > CurTime() - 1 then
-				ent:SnatchModelInstance(ply)
-			end
+        if IsValid(ply) then
+            -- Only copy any decals if this ragdoll was recently created
+            if ent:GetCreationTime() > CurTime() - 1 then
+                ent:SnatchModelInstance(ply)
+            end
 
-			-- Copy the color for the PlayerColor matproxy
-			local playerColor = ply:GetPlayerColor()
+            -- Copy the color for the PlayerColor matproxy
+            local playerColor = ply:GetPlayerColor()
 
-			ent.GetPlayerColor = function()
-				return playerColor
-			end
-		end
-	end
+            ent.GetPlayerColor = function()
+                return playerColor
+            end
+        end
+    end
 
-	return self.BaseClass.OnEntityCreated(self, ent)
+    return self.BaseClass.OnEntityCreated(self, ent)
 end
 
 net.Receive("TTT2PlayerAuthedShared", function(len)
-	local steamid64 = net.ReadString()
-	local name = net.ReadString()
+    local steamid64 = net.ReadString()
+    local name = net.ReadString()
 
-	-- checking for bots
-	if steamid64 == "" then
-		steamid64 = nil
-	end
+    -- checking for bots
+    if steamid64 == "" then
+        steamid64 = nil
+    end
 
-	-- cache avatars
-	draw.CacheAvatar(steamid64, "small")
-	draw.CacheAvatar(steamid64, "medium")
-	draw.CacheAvatar(steamid64, "large")
+    -- cache avatars
+    draw.CacheAvatar(steamid64, "small")
+    draw.CacheAvatar(steamid64, "medium")
+    draw.CacheAvatar(steamid64, "large")
 
-	---
-	-- @realm shared
-	hook.Run("TTT2PlayerAuthed", steamid64, name)
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
 
 ---
@@ -877,6 +933,4 @@ end)
 -- @param string name The player's name
 -- @hook
 -- @realm client
-function GM:TTT2PlayerAuthed(steamID64, name)
-
-end
+function GM:TTT2PlayerAuthed(steamID64, name) end

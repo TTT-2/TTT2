@@ -21,34 +21,35 @@ local selected_sid
 -- @return[default=nil] string for the client which offers info related to the transaction
 -- @hook
 -- @realm client
-function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
-
-end
+function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer) end
 
 local function UpdateTransferSubmitButton()
-	if not IsValid(dhelp) or not IsValid(dsubmit) then return end
+    if not IsValid(dhelp) or not IsValid(dsubmit) then
+        return
+    end
 
-	local client = LocalPlayer()
-	if client:GetCredits() <= 0 then
-		dhelp:SetText(GetTranslation("xfer_no_credits"))
-		dsubmit:SetEnabled(false)
-	elseif selected_sid then
-		local ply = player.GetBySteamID64(selected_sid)
+    local client = LocalPlayer()
+    if client:GetCredits() <= 0 then
+        dhelp:SetText(GetTranslation("xfer_no_credits"))
+        dsubmit:SetEnabled(false)
+    elseif selected_sid then
+        local ply = player.GetBySteamID64(selected_sid)
 
-		---
-		-- @realm client
-		local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
+        ---
+        -- @realm client
+        -- stylua: ignore
+        local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
 
-		if allow == false then
-			dsubmit:SetEnabled(false)
-		else
-			dsubmit:SetEnabled(true)
-		end
+        if allow == false then
+            dsubmit:SetEnabled(false)
+        else
+            dsubmit:SetEnabled(true)
+        end
 
-		if isstring(msg) then
-			dhelp:SetText(msg)
-		end
-	end
+        if isstring(msg) then
+            dhelp:SetText(msg)
+        end
+    end
 end
 
 --Called after the server performs a successful transfer of credits.
@@ -60,73 +61,73 @@ net.Receive("TTT2CreditTransferUpdate", UpdateTransferSubmitButton)
 -- @return Panel the created DForm menu
 -- @realm client
 function CreateTransferMenu(parent)
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	dform = vgui.Create("DForm", parent)
-	dform:SetName(GetTranslation("xfer_menutitle"))
-	dform:StretchToParent(0, 0, 0, 0)
-	dform:SetAutoSize(false)
+    dform = vgui.Create("DForm", parent)
+    dform:SetName(GetTranslation("xfer_menutitle"))
+    dform:StretchToParent(0, 0, 0, 0)
+    dform:SetAutoSize(false)
 
-	local bw, bh = 100, 20
+    local bw, bh = 100, 20
 
-	dsubmit = vgui.Create("DButton", dform)
-	dsubmit:SetSize(bw, bh)
-	dsubmit:SetEnabled(false)
-	dsubmit:SetText(GetTranslation("xfer_send"))
+    dsubmit = vgui.Create("DButton", dform)
+    dsubmit:SetSize(bw, bh)
+    dsubmit:SetEnabled(false)
+    dsubmit:SetText(GetTranslation("xfer_send"))
 
-	--Add the help button. Change its text dynamically to match the situation.
-	dhelp = dform:Help("")
+    --Add the help button. Change its text dynamically to match the situation.
+    dhelp = dform:Help("")
 
-	local dpick = vgui.Create("DComboBox", dform)
-	dpick.OnSelect = function(s, idx, val, data)
-		if data then
-			selected_sid = data
+    local dpick = vgui.Create("DComboBox", dform)
+    dpick.OnSelect = function(s, idx, val, data)
+        if data then
+            selected_sid = data
 
-			--Upon selecting the player, determine if a transfer can be made to them.
-			UpdateTransferSubmitButton()
-		end
-	end
+            --Upon selecting the player, determine if a transfer can be made to them.
+            UpdateTransferSubmitButton()
+        end
+    end
 
-	dpick:SetWide(250)
-	dpick:SetSortItems(false)
+    dpick:SetWide(250)
+    dpick:SetSortItems(false)
 
-	-- fill combobox
-	local plys = player.GetAll()
+    -- fill combobox
+    local plys = player.GetAll()
 
-	table.sort(plys, function (a, b)
-		return a:IsInTeam(client) and not b:IsInTeam(client)
-	end)
+    table.sort(plys, function(a, b)
+        return a:IsInTeam(client) and not b:IsInTeam(client)
+    end)
 
-	for i = 1, #plys do
-		local ply = plys[i]
-		local sid = ply:SteamID64()
+    for i = 1, #plys do
+        local ply = plys[i]
+        local sid = ply:SteamID64()
 
-		--SteamID64() returns nil for bots on the client, and so credits can't be transferred to them.
-		--Transfers can be made to players who have died (as the sender may not know if they're alive), but can't be made to spectators who joined in the middle of a match.
-		if ply ~= client and (ply:IsTerror() or ply:IsDeadTerror()) and sid then
-			local choiceText = ply:Nick()
+        --SteamID64() returns nil for bots on the client, and so credits can't be transferred to them.
+        --Transfers can be made to players who have died (as the sender may not know if they're alive), but can't be made to spectators who joined in the middle of a match.
+        if ply ~= client and (ply:IsTerror() or ply:IsDeadTerror()) and sid then
+            local choiceText = ply:Nick()
 
-			if ply:IsInTeam(client) then
-				choiceText = choiceText .. " (" .. GetTranslation("xfer_team_indicator") .. ")"
-			end
+            if ply:IsInTeam(client) then
+                choiceText = choiceText .. " (" .. GetTranslation("xfer_team_indicator") .. ")"
+            end
 
-			dpick:AddChoice(choiceText, sid)
-		end
-	end
+            dpick:AddChoice(choiceText, sid)
+        end
+    end
 
-	-- select first player by default
-	if dpick:GetOptionText(1) then
-		dpick:ChooseOptionID(1)
-	end
+    -- select first player by default
+    if dpick:GetOptionText(1) then
+        dpick:ChooseOptionID(1)
+    end
 
-	dsubmit.DoClick = function(s)
-		if selected_sid then
-			shop.TransferCredits(client, selected_sid, CREDITS_PER_XFER)
-		end
-	end
+    dsubmit.DoClick = function(s)
+        if selected_sid then
+            shop.TransferCredits(client, selected_sid, CREDITS_PER_XFER)
+        end
+    end
 
-	dform:AddItem(dpick)
-	dform:AddItem(dsubmit)
+    dform:AddItem(dpick)
+    dform:AddItem(dsubmit)
 
-	return dform
+    return dform
 end

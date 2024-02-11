@@ -10,7 +10,7 @@ local baseclass = baseclass
 local pairs = pairs
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 local HUDElementList = {}
@@ -22,15 +22,15 @@ local HUDElementList = {}
 -- @return table t target table
 -- @realm shared
 local function TableInherit(t, base)
-	for k, v in pairs(base) do
-		if t[k] == nil then
-			t[k] = v
-		elseif k ~= "BaseClass" and istable(t[k]) and istable(v[k]) then
-			TableInherit(t[k], v)
-		end
-	end
+    for k, v in pairs(base) do
+        if t[k] == nil then
+            t[k] = v
+        elseif k ~= "BaseClass" and istable(t[k]) and istable(v[k]) then
+            TableInherit(t[k], v)
+        end
+    end
 
-	return t
+    return t
 end
 
 ---
@@ -40,21 +40,21 @@ end
 -- @return boolean returns whether name is based on base
 -- @realm shared
 function hudelements.IsBasedOn(name, base)
-	local t = hudelements.GetStored(name)
+    local t = hudelements.GetStored(name)
 
-	if not t then
-		return false
-	end
+    if not t then
+        return false
+    end
 
-	if t.Base == name then
-		return false
-	end
+    if t.Base == name then
+        return false
+    end
 
-	if t.Base == base then
-		return true
-	end
+    if t.Base == base then
+        return true
+    end
 
-	return hudelements.IsBasedOn(t.Base, base)
+    return hudelements.IsBasedOn(t.Base, base)
 end
 
 ---
@@ -64,12 +64,12 @@ end
 -- @param string name hud element name
 -- @realm shared
 function hudelements.Register(t, name)
-	name = string.lower(name)
+    name = string.lower(name)
 
-	t.ClassName = name
-	t.id = name
+    t.ClassName = name
+    t.id = name
 
-	HUDElementList[name] = t
+    HUDElementList[name] = t
 end
 
 ---
@@ -77,25 +77,24 @@ end
 -- @local
 -- @realm shared
 function hudelements.OnLoaded()
+    --
+    -- Once all the scripts are loaded we can set up the baseclass
+    -- - we have to wait until they're all setup because load order
+    -- could cause some entities to load before their bases!
+    --
+    for k in pairs(HUDElementList) do
+        local newTable = hudelements.Get(k)
+        HUDElementList[k] = newTable
 
-	--
-	-- Once all the scripts are loaded we can set up the baseclass
-	-- - we have to wait until they're all setup because load order
-	-- could cause some entities to load before their bases!
-	--
-	for k in pairs(HUDElementList) do
-		local newTable = hudelements.Get(k)
-		HUDElementList[k] = newTable
+        baseclass.Set(k, newTable)
+    end
 
-		baseclass.Set(k, newTable)
-	end
-
-	if CLIENT then
-		-- Call PreInitialize on all hudelements
-		for _, v in pairs(HUDElementList) do
-			v:PreInitialize()
-		end
-	end
+    if CLIENT then
+        -- Call PreInitialize on all hudelements
+        for _, v in pairs(HUDElementList) do
+            v:PreInitialize()
+        end
+    end
 end
 
 ---
@@ -105,35 +104,43 @@ end
 -- @return table returns the modified retTbl or the new hud element table
 -- @realm shared
 function hudelements.Get(name, retTbl)
-	local Stored = hudelements.GetStored(name)
-	if not Stored then return end
+    local Stored = hudelements.GetStored(name)
+    if not Stored then
+        return
+    end
 
-	-- Create/copy a new table
-	local retval = retTbl or {}
+    -- Create/copy a new table
+    local retval = retTbl or {}
 
-	for k, v in pairs(Stored) do
-		if istable(v) then
-			retval[k] = table.Copy(v)
-		else
-			retval[k] = v
-		end
-	end
+    for k, v in pairs(Stored) do
+        if istable(v) then
+            retval[k] = table.Copy(v)
+        else
+            retval[k] = v
+        end
+    end
 
-	retval.Base = retval.Base or "hud_element_base"
+    retval.Base = retval.Base or "hud_element_base"
 
-	-- If we're not derived from ourselves (a base HUD element)
-	-- then derive from our 'Base' HUD element.
-	if retval.Base ~= name then
-		local base = hudelements.Get(retval.Base)
+    -- If we're not derived from ourselves (a base HUD element)
+    -- then derive from our 'Base' HUD element.
+    if retval.Base ~= name then
+        local base = hudelements.Get(retval.Base)
 
-		if not base then
-			Msg("ERROR: Trying to derive HUD Element " .. tostring(name) .. " from non existant HUD Element " .. tostring(retval.Base) .. "!\n")
-		else
-			retval = TableInherit(retval, base)
-		end
-	end
+        if not base then
+            ErrorNoHaltWithStack(
+                "ERROR: Trying to derive HUD Element "
+                    .. tostring(name)
+                    .. " from non existant HUD Element "
+                    .. tostring(retval.Base)
+                    .. "!\n"
+            )
+        else
+            retval = TableInherit(retval, base)
+        end
+    end
 
-	return retval
+    return retval
 end
 
 ---
@@ -142,7 +149,7 @@ end
 -- @return table returns the real hud element table
 -- @realm shared
 function hudelements.GetStored(name)
-	return HUDElementList[name]
+    return HUDElementList[name]
 end
 
 ---
@@ -150,13 +157,13 @@ end
 -- @return table registered hud elements
 -- @realm shared
 function hudelements.GetList()
-	local result = {}
+    local result = {}
 
-	for _, v in pairs(HUDElementList) do
-		result[#result + 1] = v
-	end
+    for _, v in pairs(HUDElementList) do
+        result[#result + 1] = v
+    end
 
-	return result
+    return result
 end
 
 ---
@@ -164,15 +171,15 @@ end
 -- @return table returns a list of all the registered hud element types
 -- @realm shared
 function hudelements.GetElementTypes()
-	local typetbl = {}
+    local typetbl = {}
 
-	for _, v in pairs(HUDElementList) do
-		if v.type and not table.HasValue(typetbl, v.type) then
-			table.insert(typetbl, v.type)
-		end
-	end
+    for _, v in pairs(HUDElementList) do
+        if v.type and not table.HasValue(typetbl, v.type) then
+            table.insert(typetbl, v.type)
+        end
+    end
 
-	return typetbl
+    return typetbl
 end
 
 ---
@@ -181,11 +188,11 @@ end
 -- @return nil|table returns the first element matching the type of all the registered hud elements
 -- @realm shared
 function hudelements.GetTypeElement(type)
-	for _, v in pairs(HUDElementList) do
-		if v.type and v.type == type then
-			return v
-		end
-	end
+    for _, v in pairs(HUDElementList) do
+        if v.type and v.type == type then
+            return v
+        end
+    end
 end
 
 ---
@@ -194,15 +201,15 @@ end
 -- @return table returns all hud elements matching the type of all the registered hud elements
 -- @realm shared
 function hudelements.GetAllTypeElements(type)
-	local retTbl = {}
+    local retTbl = {}
 
-	for _, v in pairs(HUDElementList) do
-		if v.type and v.type == type then
-			retTbl[#retTbl + 1] = v
-		end
-	end
+    for _, v in pairs(HUDElementList) do
+        if v.type and v.type == type then
+            retTbl[#retTbl + 1] = v
+        end
+    end
 
-	return retTbl
+    return retTbl
 end
 
 ---
@@ -219,29 +226,41 @@ end
 -- @todo example / usage
 -- @realm shared
 function hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
-	local child = hudelements.GetStored(childid)
-	if not child then
-		MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". child element instance was not found or registered yet!")
+    local child = hudelements.GetStored(childid)
+    if not child then
+        ErrorNoHaltWithStack(
+            "Error: Cannot add child "
+                .. childid
+                .. " to "
+                .. parentid
+                .. ". child element instance was not found or registered yet!"
+        )
 
-		return
-	end
+        return
+    end
 
-	if not parent_is_type then
-		local parent = hudelements.GetStored(parentid)
-		if not parent then
-			MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". parent element was not found or registered yet!")
+    if not parent_is_type then
+        local parent = hudelements.GetStored(parentid)
+        if not parent then
+            ErrorNoHaltWithStack(
+                "Error: Cannot add child "
+                    .. childid
+                    .. " to "
+                    .. parentid
+                    .. ". parent element was not found or registered yet!"
+            )
 
-			return
-		end
+            return
+        end
 
-		parent:AddChild(childid)
-	else
-		local elems = hudelements.GetAllTypeElements(parentid)
+        parent:AddChild(childid)
+    else
+        local elems = hudelements.GetAllTypeElements(parentid)
 
-		for i = 1, #elems do
-			elems[i]:AddChild(childid)
-		end
-	end
+        for i = 1, #elems do
+            elems[i]:AddChild(childid)
+        end
+    end
 
-	child:SetParentRelation(parentid, parent_is_type)
+    child:SetParentRelation(parentid, parent_is_type)
 end

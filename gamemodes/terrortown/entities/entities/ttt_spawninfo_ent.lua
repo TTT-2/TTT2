@@ -4,7 +4,7 @@
 -- @section ttt_spawninfo_ent
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 ENT.Type = "anim"
@@ -12,5 +12,5 @@ ENT.Base = "base_anim"
 
 -- @realm server
 function ENT:UpdateTransmitState()
-	return TRANSMIT_ALWAYS
+    return TRANSMIT_ALWAYS
 end

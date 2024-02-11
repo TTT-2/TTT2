@@ -1,4 +1,6 @@
-if engine.ActiveGamemode() ~= "terrortown" then return end
+if engine.ActiveGamemode() ~= "terrortown" then
+    return
+end
 
 ---
 -- Entity Crash Catcher v2
@@ -14,79 +16,126 @@ RunConsoleCommand("sv_crazyphysics_remove", "1")
 
 ------------------- Script -------------------
 local function DebugMessage(
-		bRemove,
-		Entity,
-		vEntityPosition,
-		aEntityRotation,
-		vEntityVelocity,
-		vObjectPosition --[[= "N/A"]],
-		aObjectRotation --[[= "N/A"]],
-		vObjectVelocity --[[ = "N/A"]]
-	)
-
-	return "\n[GS CrazyPhysics] " .. tostring(Entity)
-	.. (bRemove and " removed!" or " frozen!")
-	.. "\nEntity position:\t" .. tostring(vEntityPosition)
-	.. "\nEntity angle:\t" .. tostring(aEntityRotation)
-	.. "\nEntity velocity:\t" .. tostring(vEntityVelocity)
-	.. "\nPhysics object position:\t" .. (vObjectPosition == nil and "N/A" or tostring(vObjectPosition))
-	.. "\nPhysics object rotation:\t" .. (aObjectRotation == nil and "N/A" or tostring(aObjectRotation))
-	.. "\nPhysics object velocity:\t" .. (vObjectVelocity == nil and "N/A" or tostring(vObjectVelocity)) .. "\n"
+    bRemove,
+    Entity,
+    vEntityPosition,
+    aEntityRotation,
+    vEntityVelocity,
+    vObjectPosition --[[= "N/A"]],
+    aObjectRotation --[[= "N/A"]],
+    vObjectVelocity --[[ = "N/A"]]
+)
+    return "\n[GS CrazyPhysics] "
+        .. tostring(Entity)
+        .. (bRemove and " removed!" or " frozen!")
+        .. "\nEntity position:\t"
+        .. tostring(vEntityPosition)
+        .. "\nEntity angle:\t"
+        .. tostring(aEntityRotation)
+        .. "\nEntity velocity:\t"
+        .. tostring(vEntityVelocity)
+        .. "\nPhysics object position:\t"
+        .. (vObjectPosition == nil and "N/A" or tostring(vObjectPosition))
+        .. "\nPhysics object rotation:\t"
+        .. (aObjectRotation == nil and "N/A" or tostring(aObjectRotation))
+        .. "\nPhysics object velocity:\t"
+        .. (vObjectVelocity == nil and "N/A" or tostring(vObjectVelocity))
+        .. "\n"
 end
 
 if CLIENT then
-	net.Receive("GS_CrazyPhysics_Defuse", function()
-		chat.AddText(DebugMessage(false, "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
-		net.ReadVector(), net.ReadAngle(), net.ReadVector()))
-	end)
+    net.Receive("GS_CrazyPhysics_Defuse", function()
+        chat.AddText(
+            DebugMessage(
+                false,
+                "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
+                net.ReadVector(),
+                net.ReadAngle(),
+                net.ReadVector()
+            )
+        )
+    end)
 
-	net.Receive("GS_CrazyPhysics_Remove", function()
-		chat.AddText(DebugMessage(true, "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
-		net.ReadVector(), net.ReadAngle(), net.ReadVector()))
-	end)
+    net.Receive("GS_CrazyPhysics_Remove", function()
+        chat.AddText(
+            DebugMessage(
+                true,
+                "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
+                net.ReadVector(),
+                net.ReadAngle(),
+                net.ReadVector()
+            )
+        )
+    end)
 
-	net.Receive("GS_CrazyPhysics_Defuse_Object", function()
-		chat.AddText(DebugMessage(false, "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
-		net.ReadVector(), net.ReadAngle(), net.ReadVector(), net.ReadVector(), net.ReadAngle(), net.ReadVector()))
-	end)
+    net.Receive("GS_CrazyPhysics_Defuse_Object", function()
+        chat.AddText(
+            DebugMessage(
+                false,
+                "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
+                net.ReadVector(),
+                net.ReadAngle(),
+                net.ReadVector(),
+                net.ReadVector(),
+                net.ReadAngle(),
+                net.ReadVector()
+            )
+        )
+    end)
 
-	net.Receive("GS_CrazyPhysics_Remove_Object", function()
-		chat.AddText(DebugMessage(true, "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
-		net.ReadVector(), net.ReadAngle(), net.ReadVector(), net.ReadVector(), net.ReadAngle(), net.ReadVector()))
-	end)
+    net.Receive("GS_CrazyPhysics_Remove_Object", function()
+        chat.AddText(
+            DebugMessage(
+                true,
+                "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
+                net.ReadVector(),
+                net.ReadAngle(),
+                net.ReadVector(),
+                net.ReadVector(),
+                net.ReadAngle(),
+                net.ReadVector()
+            )
+        )
+    end)
 
-	return -- following code is serverside-only
+    return -- following code is serverside-only
 end
 
 -- Options
 
 ---
 -- @realm server
+-- stylua: ignore
 local gs_crazyphysics = CreateConVar("gs_crazyphysics", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Enables Lua crazyphysics detection")
 
 ---
 -- @realm server
+-- stylua: ignore
 local gs_crazyphysics_echo = CreateConVar("gs_crazyphysics_echo", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Inform players of ragdoll freezing/removal")
 
 ---
 -- @realm server
+-- stylua: ignore
 local gs_crazyphysics_interval = CreateConVar("gs_crazyphysics_interval", "0.1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How often to check entities for extreme velocity")
 
 ---
 -- @realm server
+-- stylua: ignore
 local gs_crazyphysics_speed_defuse = CreateConVar("gs_crazyphysics_speed_defuse", "4000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max velocity in in/s an entity can reach before it's frozen")
 
 ---
 -- @realm server
+-- stylua: ignore
 local gs_crazyphysics_speed_remove = CreateConVar("gs_crazyphysics_speed_remove", "6000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max velocity in in/s an entity can reach before it's removed")
 
 ---
 -- @realm server
+-- stylua: ignore
 local gs_crazyphysics_defusetime = CreateConVar("gs_crazyphysics_defusetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How long to freeze the entity for during diffusal")
 
 -- Add entity classes you want checked
 local tEntitiesToCheck = {
-	"prop_ragdoll"
+    "prop_ragdoll",
 }
 
 local bTTT
@@ -95,17 +144,17 @@ local cv_ttt_announce_body_found
 local cv_ttt2_confirm_killlist
 
 hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
-	-- Change check if your terrortown folder is named something different
-	bTTT = engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE)
-	if bTTT then
-		-- Add entity classes you want identified
-		tIdentifyEntities = {
-			prop_ragdoll = true
-		}
+    -- Change check if your terrortown folder is named something different
+    bTTT = engine.ActiveGamemode():lower() == "terrortown" and TTT2 and istable(CORPSE)
+    if bTTT then
+        -- Add entity classes you want identified
+        tIdentifyEntities = {
+            prop_ragdoll = true,
+        }
 
-		cv_ttt_announce_body_found = GetConVar("ttt_announce_body_found")
-		cv_ttt2_confirm_killlist = GetConVar("ttt2_confirm_killlist")
-	end
+        cv_ttt_announce_body_found = GetConVar("ttt_announce_body_found")
+        cv_ttt2_confirm_killlist = GetConVar("ttt2_confirm_killlist")
+    end
 end)
 
 util.AddNetworkString("GS_CrazyPhysics_Defuse")
@@ -116,236 +165,294 @@ util.AddNetworkString("GS_CrazyPhysics_Remove_Object")
 local iEntityLen = #tEntitiesToCheck
 
 local function SetAbsVelocity(pEntity, vAbsVelocity)
-	if pEntity:GetSaveTable()["m_vecAbsVelocity"] ~= vAbsVelocity then
-		-- The abs velocity won't be dirty since we're setting it here
-		pEntity:RemoveEFlags(EFL_DIRTY_ABSVELOCITY)
+    if pEntity:GetSaveTable()["m_vecAbsVelocity"] ~= vAbsVelocity then
+        -- The abs velocity won't be dirty since we're setting it here
+        pEntity:RemoveEFlags(EFL_DIRTY_ABSVELOCITY)
 
-		-- All children are invalid, but we are not
-		local tChildren = pEntity:GetChildren()
+        -- All children are invalid, but we are not
+        local tChildren = pEntity:GetChildren()
 
-		for i = 1, #tChildren do
-			tChildren[i]:AddEFlags(EFL_DIRTY_ABSVELOCITY)
-		end
+        for i = 1, #tChildren do
+            tChildren[i]:AddEFlags(EFL_DIRTY_ABSVELOCITY)
+        end
 
-		pEntity:SetSaveValue("m_vecAbsVelocity", vAbsVelocity)
+        pEntity:SetSaveValue("m_vecAbsVelocity", vAbsVelocity)
 
-		-- NOTE: Do *not* do a network state change in this case.
-		-- m_vVelocity is only networked for the player, which is not manual mode
-		local pMoveParent = pEntity:GetMoveParent()
+        -- NOTE: Do *not* do a network state change in this case.
+        -- m_vVelocity is only networked for the player, which is not manual mode
+        local pMoveParent = pEntity:GetMoveParent()
 
-		if IsValid(pMoveParent) then
-			-- First subtract out the parent's abs velocity to get a relative
-			-- velocity measured in world space
-			-- Transform relative velocity into parent space
-			-- FIXME
-			--pEntity:SetSaveValue("m_vecVelocity", (vAbsVelocity - pMoveParent:_GetAbsVelocity()):IRotate(pMoveParent:EntityToWorldTransform()))
-			pEntity:SetSaveValue("velocity", vAbsVelocity)
-		else
-			pEntity:SetSaveValue("velocity", vAbsVelocity)
-		end
-	end
+        if IsValid(pMoveParent) then
+            -- First subtract out the parent's abs velocity to get a relative
+            -- velocity measured in world space
+            -- Transform relative velocity into parent space
+            -- FIXME
+            --pEntity:SetSaveValue("m_vecVelocity", (vAbsVelocity - pMoveParent:_GetAbsVelocity()):IRotate(pMoveParent:EntityToWorldTransform()))
+            pEntity:SetSaveValue("velocity", vAbsVelocity)
+        else
+            pEntity:SetSaveValue("velocity", vAbsVelocity)
+        end
+    end
 end
 
 local function KillVelocity(pEntity)
-	pEntity:CollisionRulesChanged()
-	pEntity:SetLocalVelocity(vector_origin) -- ::SetLocalVelocity
-	pEntity:SetVelocity(vector_origin) -- ::SetBaseVelocity
+    pEntity:CollisionRulesChanged()
+    pEntity:SetLocalVelocity(vector_origin) -- ::SetLocalVelocity
+    pEntity:SetVelocity(vector_origin) -- ::SetBaseVelocity
 
-	SetAbsVelocity(pEntity, vector_origin) -- ::SetAbsVelocity
+    SetAbsVelocity(pEntity, vector_origin) -- ::SetAbsVelocity
 
-	for i = 0, pEntity:GetPhysicsObjectCount() - 1 do
-		local pPhysObj = pEntity:GetPhysicsObjectNum(i)
-		pPhysObj:EnableMotion(false)
-		pPhysObj:SetVelocity(vector_origin)
-		pPhysObj:SetVelocityInstantaneous(vector_origin)
-		pPhysObj:RecheckCollisionFilter()
-		pPhysObj:Sleep()
-	end
+    for i = 0, pEntity:GetPhysicsObjectCount() - 1 do
+        local pPhysObj = pEntity:GetPhysicsObjectNum(i)
+        pPhysObj:EnableMotion(false)
+        pPhysObj:SetVelocity(vector_origin)
+        pPhysObj:SetVelocityInstantaneous(vector_origin)
+        pPhysObj:RecheckCollisionFilter()
+        pPhysObj:Sleep()
+    end
 end
 
 local function IdentifyCorpse(pCorpse)
-	if CORPSE.GetFound(pCorpse, false) then return end
+    if CORPSE.GetFound(pCorpse, false) then
+        return
+    end
 
-	CORPSE.SetFound(pCorpse, true)
+    CORPSE.SetFound(pCorpse, true)
 
-	local pPlayer = pCorpse:GetDTEntity(CORPSE.dti.ENT_PLAYER)
-	local nRole = ROLE_NONE
-	local nTeam = TEAM_NONE
+    local pPlayer = pCorpse:GetDTEntity(CORPSE.dti.ENT_PLAYER)
+    local nRole = ROLE_NONE
+    local nTeam = TEAM_NONE
 
-	if IsValid(pPlayer) then
-		pPlayer:TTT2NETSetBool("body_found", true)
+    if IsValid(pPlayer) then
+        pPlayer:TTT2NETSetBool("body_found", true)
 
-		nRole = pCorpse.was_role or pPlayer:GetSubRole()
-		nTeam = pCorpse.was_team or pPlayer:GetTeam()
-		--[[
-		if nRole == ROLE_TRAITOR then
-			SendConfirmedTraitors(GetInnocentFilter(false))
-		end
-		]]--
-		SendFullStateUpdate()
-	else
-		local sSteamID = pCorpse.sid64
+        nRole = pCorpse.was_role or pPlayer:GetSubRole()
+        nTeam = pCorpse.was_team or pPlayer:GetTeam()
+        --[[
+        if nRole == ROLE_TRAITOR then
+            SendConfirmedTraitors(GetInnocentFilter(false))
+        end
+        ]]
+        --
+        SendFullStateUpdate()
+    else
+        local sSteamID = pCorpse.sid64
 
-		if sSteamID then
-			pPlayer = player.GetBySteamID64(sSteamID)
+        if sSteamID then
+            pPlayer = player.GetBySteamID64(sSteamID)
 
-			if IsValid(pPlayer) then
-				pPlayer:TTT2NETSetBool("body_found", true)
+            if IsValid(pPlayer) then
+                pPlayer:TTT2NETSetBool("body_found", true)
 
-				nRole = pCorpse.was_role or pPlayer:GetSubRole()
-				nTeam = pCorpse.was_team or pPlayer:GetTeam()
-				--[[
-				if nRole == ROLE_TRAITOR then
-					SendConfirmedTraitors(GetInnocentFilter(false))
-				end
-				]]--
-				SendFullStateUpdate()
-			end
-		end
-	end
+                nRole = pCorpse.was_role or pPlayer:GetSubRole()
+                nTeam = pCorpse.was_team or pPlayer:GetTeam()
+                --[[
+                if nRole == ROLE_TRAITOR then
+                    SendConfirmedTraitors(GetInnocentFilter(false))
+                end
+                ]]
+                --
+                SendFullStateUpdate()
+            end
+        end
+    end
 
-	if cv_ttt_announce_body_found:GetBool() then
-		if GetGlobalBool("ttt2_confirm_team") then -- TODO adjust the new messages
-			LANG.Msg("body_found", {
-				finder = "The Server",
-				victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
-				role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr),
-				team = LANG.Param(nTeam)
-			})
-		else
-			LANG.Msg("body_found", {
-				finder = "The Server",
-				victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
-				role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr)
-			})
-		end
-	end
+    if cv_ttt_announce_body_found:GetBool() then
+        if GetGlobalBool("ttt2_confirm_team") then -- TODO adjust the new messages
+            LANG.Msg("body_found", {
+                finder = "The Server",
+                victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
+                role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr),
+                team = LANG.Param(nTeam),
+            })
+        else
+            LANG.Msg("body_found", {
+                finder = "The Server",
+                victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
+                role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr),
+            })
+        end
+    end
 
-	if cv_ttt2_confirm_killlist:GetBool() then
-		local tKills = pCorpse.kills
-		if tKills then
-			for i = 1, #tKills do
-				local pVictim = player.GetBySteamID64(tKills[i])
+    if cv_ttt2_confirm_killlist:GetBool() then
+        local tKills = pCorpse.kills
+        if tKills then
+            for i = 1, #tKills do
+                local pVictim = player.GetBySteamID64(tKills[i])
 
-				if not IsValid(pVictim) or pVictim:TTT2NETGetBool("body_found") then continue end
+                if not IsValid(pVictim) or pVictim:TTT2NETGetBool("body_found") then
+                    continue
+                end
 
-				pVictim:TTT2NETSetBool("body_found", true)
+                pVictim:TTT2NETSetBool("body_found", true)
 
-				LANG.Msg("body_confirm", {
-					finder = "The Server",
-					victim = pVictim:GetName()
-				})
-			end
-		end
-	end
+                LANG.Msg("body_confirm", {
+                    finder = "The Server",
+                    victim = pVictim:GetName(),
+                })
+            end
+        end
+    end
 end
 
-local function SendMessage(bRemove, bCheckObjectVel, pEntity, vEntityPos, aEntityRot, vEntityVel, vObjectPos, aObjectRot, vObjectVel)
-	ServerLog(DebugMessage(bRemove, pEntity, vEntityPos, aEntityRot, vEntityVel, vObjectPos, aObjectRot, vObjectVel))
+local function SendMessage(
+    bRemove,
+    bCheckObjectVel,
+    pEntity,
+    vEntityPos,
+    aEntityRot,
+    vEntityVel,
+    vObjectPos,
+    aObjectRot,
+    vObjectVel
+)
+    ServerLog(
+        DebugMessage(
+            bRemove,
+            pEntity,
+            vEntityPos,
+            aEntityRot,
+            vEntityVel,
+            vObjectPos,
+            aObjectRot,
+            vObjectVel
+        )
+    )
 
-	if gs_crazyphysics_echo:GetBool() then
-		net.Start(bRemove and (bCheckObjectVel and "GS_CrazyPhysics_Remove_Object" or "GS_CrazyPhysics_Remove")
-		or (bCheckObjectVel and "GS_CrazyPhysics_Defuse_Object" or "GS_CrazyPhysics_Defuse"))
+    if gs_crazyphysics_echo:GetBool() then
+        net.Start(
+            bRemove
+                    and (bCheckObjectVel and "GS_CrazyPhysics_Remove_Object" or "GS_CrazyPhysics_Remove")
+                or (bCheckObjectVel and "GS_CrazyPhysics_Defuse_Object" or "GS_CrazyPhysics_Defuse")
+        )
 
-		net.WriteUInt(pEntity:EntIndex(), 16)
-		net.WriteString(pEntity:GetClass())
-		net.WriteVector(vEntityPos)
-		net.WriteAngle(aEntityRot)
-		net.WriteVector(vEntityVel)
+        net.WriteUInt(pEntity:EntIndex(), 16)
+        net.WriteString(pEntity:GetClass())
+        net.WriteVector(vEntityPos)
+        net.WriteAngle(aEntityRot)
+        net.WriteVector(vEntityVel)
 
-		if bCheckObjectVel then
-			net.WriteVector(vObjectPos)
-			net.WriteAngle(aObjectRot)
-			net.WriteVector(vObjectVel)
-		end
+        if bCheckObjectVel then
+            net.WriteVector(vObjectPos)
+            net.WriteAngle(aObjectRot)
+            net.WriteVector(vObjectVel)
+        end
 
-		net.Broadcast()
-	end
+        net.Broadcast()
+    end
 end
 
 local flNextCheck = 0
 
 hook.Add("Think", "GS_CrazyPhysics", function()
-	if not gs_crazyphysics:GetBool() then return end
+    if not gs_crazyphysics:GetBool() then
+        return
+    end
 
-	local flCurTime = CurTime()
+    local flCurTime = CurTime()
 
-	if flNextCheck > flCurTime then return end
+    if flNextCheck > flCurTime then
+        return
+    end
 
-	flNextCheck = flCurTime + gs_crazyphysics_interval:GetFloat()
+    flNextCheck = flCurTime + gs_crazyphysics_interval:GetFloat()
 
-	local flRemoveSpeed = gs_crazyphysics_speed_remove:GetFloat()
-	flRemoveSpeed = flRemoveSpeed * flRemoveSpeed
+    local flRemoveSpeed = gs_crazyphysics_speed_remove:GetFloat()
+    flRemoveSpeed = flRemoveSpeed * flRemoveSpeed
 
-	local flDefuseSpeed = gs_crazyphysics_speed_defuse:GetFloat()
-	flDefuseSpeed = flDefuseSpeed * flDefuseSpeed
+    local flDefuseSpeed = gs_crazyphysics_speed_defuse:GetFloat()
+    flDefuseSpeed = flDefuseSpeed * flDefuseSpeed
 
-	for i = 1, iEntityLen do
-		local sClass = tEntitiesToCheck[i]
-		local tEntities = ents.FindByClass(sClass)
+    for i = 1, iEntityLen do
+        local sClass = tEntitiesToCheck[i]
+        local tEntities = ents.FindByClass(sClass)
 
-		for i2 = 1, #tEntities do
-			local pEntity = tEntities[i2]
-			local vEntityVel = pEntity:GetVelocity() -- ::GetAbsVelocity
-			local flEntityVel = vEntityVel:LengthSqr()
-			local pPhysObj = pEntity:GetPhysicsObject()
-			local bCheckObjectVel = IsValid(pPhysObj)
-			local vObjectVel, flObjectVel
+        for i2 = 1, #tEntities do
+            local pEntity = tEntities[i2]
+            local vEntityVel = pEntity:GetVelocity() -- ::GetAbsVelocity
+            local flEntityVel = vEntityVel:LengthSqr()
+            local pPhysObj = pEntity:GetPhysicsObject()
+            local bCheckObjectVel = IsValid(pPhysObj)
+            local vObjectVel, flObjectVel
 
-			if bCheckObjectVel then
-				vObjectVel = pPhysObj:GetVelocity()
-				flObjectVel = vObjectVel:LengthSqr()
-			end
+            if bCheckObjectVel then
+                vObjectVel = pPhysObj:GetVelocity()
+                flObjectVel = vObjectVel:LengthSqr()
+            end
 
-			if flEntityVel >= flRemoveSpeed or bCheckObjectVel and flObjectVel >= flRemoveSpeed then
-				KillVelocity(pEntity)
+            if flEntityVel >= flRemoveSpeed or bCheckObjectVel and flObjectVel >= flRemoveSpeed then
+                KillVelocity(pEntity)
 
-				pEntity:Remove()
+                pEntity:Remove()
 
-				if bTTT and tIdentifyEntities[sClass] then
-					IdentifyCorpse(pEntity)
-				end
+                if bTTT and tIdentifyEntities[sClass] then
+                    IdentifyCorpse(pEntity)
+                end
 
-				local vObjectPos, aObjectRot
+                local vObjectPos, aObjectRot
 
-				if bCheckObjectVel then
-					vObjectPos = pPhysObj:GetPos()
-					aObjectRot = pPhysObj:GetAngles()
-				end
+                if bCheckObjectVel then
+                    vObjectPos = pPhysObj:GetPos()
+                    aObjectRot = pPhysObj:GetAngles()
+                end
 
-				SendMessage(true, bCheckObjectVel, pEntity, pEntity:GetPos(), pEntity:GetAngles(), vEntityVel, vObjectPos, aObjectRot, vObjectVel)
-			elseif flEntityVel >= flDefuseSpeed or bCheckObjectVel and flObjectVel >= flDefuseSpeed then
-				KillVelocity(pEntity)
+                SendMessage(
+                    true,
+                    bCheckObjectVel,
+                    pEntity,
+                    pEntity:GetPos(),
+                    pEntity:GetAngles(),
+                    vEntityVel,
+                    vObjectPos,
+                    aObjectRot,
+                    vObjectVel
+                )
+            elseif
+                flEntityVel >= flDefuseSpeed or bCheckObjectVel and flObjectVel >= flDefuseSpeed
+            then
+                KillVelocity(pEntity)
 
-				timer.Simple(gs_crazyphysics_defusetime:GetFloat(), function()
-					if not IsValid(pEntity) then return end
+                timer.Simple(gs_crazyphysics_defusetime:GetFloat(), function()
+                    if not IsValid(pEntity) then
+                        return
+                    end
 
-					pEntity:SetLocalVelocity(vector_origin) -- ::SetLocalVelocity
-					pEntity:SetVelocity(vector_origin) -- ::SetBaseVelocity
+                    pEntity:SetLocalVelocity(vector_origin) -- ::SetLocalVelocity
+                    pEntity:SetVelocity(vector_origin) -- ::SetBaseVelocity
 
-					SetAbsVelocity(pEntity, vector_origin) -- ::SetAbsVelocity
+                    SetAbsVelocity(pEntity, vector_origin) -- ::SetAbsVelocity
 
-					for i3 = 0, pEntity:GetPhysicsObjectCount() - 1 do
-						local pPhysObj2 = pEntity:GetPhysicsObjectNum(i3)
-						pPhysObj2:EnableMotion(true)
-						pPhysObj2:SetVelocity(vector_origin)
-						pPhysObj2:SetVelocityInstantaneous(vector_origin)
-						pPhysObj2:Wake()
-						pPhysObj2:RecheckCollisionFilter()
-					end
+                    for i3 = 0, pEntity:GetPhysicsObjectCount() - 1 do
+                        local pPhysObj2 = pEntity:GetPhysicsObjectNum(i3)
+                        pPhysObj2:EnableMotion(true)
+                        pPhysObj2:SetVelocity(vector_origin)
+                        pPhysObj2:SetVelocityInstantaneous(vector_origin)
+                        pPhysObj2:Wake()
+                        pPhysObj2:RecheckCollisionFilter()
+                    end
 
-					pEntity:CollisionRulesChanged()
-				end)
+                    pEntity:CollisionRulesChanged()
+                end)
 
-				local vObjectPos, aObjectRot
+                local vObjectPos, aObjectRot
 
-				if bCheckObjectVel then
-					vObjectPos = pPhysObj:GetPos()
-					aObjectRot = pPhysObj:GetAngles()
-				end
+                if bCheckObjectVel then
+                    vObjectPos = pPhysObj:GetPos()
+                    aObjectRot = pPhysObj:GetAngles()
+                end
 
-				SendMessage(false, bCheckObjectVel, pEntity, pEntity:GetPos(), pEntity:GetAngles(), vEntityVel, vObjectPos, aObjectRot, vObjectVel)
-			end
-		end
-	end
+                SendMessage(
+                    false,
+                    bCheckObjectVel,
+                    pEntity,
+                    pEntity:GetPos(),
+                    pEntity:GetAngles(),
+                    vEntityVel,
+                    vObjectPos,
+                    aObjectRot,
+                    vObjectVel
+                )
+            end
+        end
+    end
 end)

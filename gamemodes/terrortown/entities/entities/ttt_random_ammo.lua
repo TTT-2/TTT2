@@ -7,11 +7,11 @@ ENT.Type = "point"
 ENT.Base = "base_point"
 
 ---
--- @note Only used to forceSpawn ammo after map cleanup 
+-- @note Only used to forceSpawn ammo after map cleanup
 -- otherwise these entities are only used to mark the spots for random ammo spawns
 -- @realm shared
 function ENT:Initialize()
-	if entspawn.IsForcedRandomSpawnEnabled() then
-		entspawn.SpawnRandomAmmo(self)
-	end
+    if entspawn.IsForcedRandomSpawnEnabled() then
+        entspawn.SpawnRandomAmmo(self)
+    end
 end

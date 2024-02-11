@@ -11,10 +11,12 @@ local hook = hook
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
-	Error("FAILED TO FIND PLAYER TABLE")
+    ErrorNoHaltWithStack("FAILED TO FIND PLAYER TABLE")
 
-	return
+    return
 end
+
+local soundWeaponPickup = Sound("items/ammo_pickup.wav")
 
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
@@ -31,11 +33,11 @@ util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 -- @param boolean s
 -- @realm server
 function plymeta:SetRagdollSpec(s)
-	if s then
-		self.spec_ragdoll_start = CurTime()
-	end
+    if s then
+        self.spec_ragdoll_start = CurTime()
+    end
 
-	self.spec_ragdoll = s
+    self.spec_ragdoll = s
 end
 
 ---
@@ -43,7 +45,7 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:GetRagdollSpec()
-	return self.spec_ragdoll
+    return self.spec_ragdoll
 end
 
 ---
@@ -51,9 +53,9 @@ end
 -- @param boolean state
 -- @realm server
 function plymeta:SetForceSpec(state)
-	self.force_spec = state -- compatibility with other addons
+    self.force_spec = state -- compatibility with other addons
 
-	self:SetNWBool("force_spec", state)
+    self:SetNWBool("force_spec", state)
 end
 
 -- Karma
@@ -64,7 +66,7 @@ end
 -- @param number k
 -- @realm server
 function plymeta:SetBaseKarma(k)
-	self:SetNWFloat("karma", k)
+    self:SetNWFloat("karma", k)
 end
 
 ---
@@ -90,7 +92,7 @@ AccessorFunc(plymeta, "clean_round", "CleanRound", FORCE_BOOL)
 -- Initializes the KARMA for the given @{Player}
 -- @realm server
 function plymeta:InitKarma()
-	KARMA.InitPlayer(self)
+    KARMA.InitPlayer(self)
 end
 
 -- Equipment credits
@@ -100,9 +102,9 @@ end
 -- @param number amt
 -- @realm server
 function plymeta:SetCredits(amt)
-	self.equipment_credits = amt
+    self.equipment_credits = amt
 
-	self:SendCredits()
+    self:SendCredits()
 end
 
 ---
@@ -110,7 +112,7 @@ end
 -- @param number amt
 -- @realm server
 function plymeta:AddCredits(amt)
-	self:SetCredits(self:GetCredits() + amt)
+    self:SetCredits(self:GetCredits() + amt)
 end
 
 ---
@@ -118,51 +120,53 @@ end
 -- @param number amt
 -- @realm server
 function plymeta:SubtractCredits(amt)
-	local tmp = self:GetCredits() - amt
-	if tmp < 0 then
-		tmp = 0
-	end
+    local tmp = self:GetCredits() - amt
+    if tmp < 0 then
+        tmp = 0
+    end
 
-	self:SetCredits(tmp)
+    self:SetCredits(tmp)
 end
 
 ---
 -- Sets the default amount of credits
 -- @realm server
 function plymeta:SetDefaultCredits()
-	---
-	-- @realm server
-	if hook.Run("TTT2SetDefaultCredits", self) then return end
+    ---
+    -- @realm server
+    -- stylua: ignore
+    if hook.Run("TTT2SetDefaultCredits", self) then return end
 
-	if not self:IsShopper() then
-		self:SetCredits(0)
+    if not self:IsShopper() then
+        self:SetCredits(0)
 
-		return
-	end
+        return
+    end
 
-	local rd = self:GetSubRoleData()
-	local name = "ttt_" .. rd.abbr .. "_credits_starting"
+    local rd = self:GetSubRoleData()
+    local name = "ttt_" .. rd.abbr .. "_credits_starting"
 
-	if self:GetTeam() ~= TEAM_TRAITOR then
-		self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
+    if self:GetTeam() ~= TEAM_TRAITOR then
+        self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
 
-		return
-	end
+        return
+    end
 
-	local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
+    local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
 
-	---
-	-- @realm server
-	self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
+    ---
+    -- @realm server
+    -- stylua: ignore
+    self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
 end
 
 ---
 -- Syncs the amount of credits with the @{Player}
 -- @realm server
 function plymeta:SendCredits()
-	net.Start("TTT_Credits")
-	net.WriteUInt(self:GetCredits(), 8)
-	net.Send(self)
+    net.Start("TTT_Credits")
+    net.WriteUInt(self:GetCredits(), 8)
+    net.Send(self)
 end
 
 -- Equipment items
@@ -174,18 +178,20 @@ end
 -- @realm server
 -- @internal
 function plymeta:AddEquipmentItem(className)
-	local item = items.GetStored(className)
+    local item = items.GetStored(className)
 
-	if not item or item.limited and self:HasEquipmentItem(className) then return end
+    if not item or item.limited and self:HasEquipmentItem(className) then
+        return
+    end
 
-	self.equipmentItems = self.equipmentItems or {}
-	self.equipmentItems[#self.equipmentItems + 1] = className
+    self.equipmentItems = self.equipmentItems or {}
+    self.equipmentItems[#self.equipmentItems + 1] = className
 
-	item:Equip(self)
+    item:Equip(self)
 
-	self:SendEquipment(EQUIPITEMS_ADD, className)
+    self:SendEquipment(EQUIPITEMS_ADD, className)
 
-	return item
+    return item
 end
 
 ---
@@ -193,25 +199,27 @@ end
 -- @param string className
 -- @realm server
 function plymeta:RemoveEquipmentItem(className)
-	if not self:HasEquipmentItem(className) then return end
+    if not self:HasEquipmentItem(className) then
+        return
+    end
 
-	local item = items.GetStored(className)
+    local item = items.GetStored(className)
 
-	if item and isfunction(item.Reset) then
-		item:Reset(self)
-	end
+    if item and isfunction(item.Reset) then
+        item:Reset(self)
+    end
 
-	local equipItems = self:GetEquipmentItems()
+    local equipItems = self:GetEquipmentItems()
 
-	for k = 1, #equipItems do
-		if equipItems[k] == className then
-			table.remove(self.equipmentItems, k)
+    for k = 1, #equipItems do
+        if equipItems[k] == className then
+            table.remove(self.equipmentItems, k)
 
-			break
-		end
-	end
+            break
+        end
+    end
 
-	self:SendEquipment(EQUIPITEMS_REMOVE, className)
+    self:SendEquipment(EQUIPITEMS_REMOVE, className)
 end
 
 ---
@@ -227,62 +235,66 @@ plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 -- @param string itemName The name of the item to send, can be 'nil' if mode is EQUIPITEMS_RESET
 -- @realm server
 function plymeta:SendEquipment(mode, itemName)
-	if not mode then
-		ErrorNoHaltWithStack("[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n")
+    if not mode then
+        ErrorNoHaltWithStackWithStack(
+            "[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n"
+        )
 
-		return
-	end
+        return
+    end
 
-	net.Start("TTT_Equipment")
-	net.WriteUInt(mode, 2)
+    net.Start("TTT_Equipment")
+    net.WriteUInt(mode, 2)
 
-	if mode ~= EQUIPITEMS_RESET then
-		net.WriteString(itemName)
-	end
+    if mode ~= EQUIPITEMS_RESET then
+        net.WriteString(itemName)
+    end
 
-	net.Send(self)
+    net.Send(self)
 end
 
 ---
 -- Resets the equipment of a @{Player}
 -- @realm server
 function plymeta:ResetEquipment()
-	local equipItems = self:GetEquipmentItems()
+    local equipItems = self:GetEquipmentItems()
 
-	for i = 1, #equipItems do
-		local item = items.GetStored(equipItems[i])
+    for i = 1, #equipItems do
+        local item = items.GetStored(equipItems[i])
 
-		if item and isfunction(item.Reset) then
-			item:Reset(self)
-		end
-	end
+        if item and isfunction(item.Reset) then
+            item:Reset(self)
+        end
+    end
 
-	self.equipmentItems = {}
+    self.equipmentItems = {}
 
-	self:SendEquipment(EQUIPITEMS_RESET)
+    self:SendEquipment(EQUIPITEMS_RESET)
 end
 
 ---
 -- Sends the list of bought @{ITEM}s and @{Weapon}s to the @{Player}
 -- @realm server
 function plymeta:SendBought()
-	local bought = self.bought
+    local bought = self.bought
 
-	-- Send all as string, even though equipment are numbers, for simplicity
-	net.Start("TTT_Bought")
-	net.WriteUInt(#bought, 8)
+    -- Send all as string, even though equipment are numbers, for simplicity
+    net.Start("TTT_Bought")
+    net.WriteUInt(#bought, 8)
 
-	for i = 1, #bought do
-		net.WriteString(bought[i])
-	end
+    for i = 1, #bought do
+        net.WriteString(bought[i])
+    end
 
-	net.Send(self)
+    net.Send(self)
 end
 
 local function ttt_resend_bought(ply)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	ply:SendBought()
+    ply:SendBought()
 end
 concommand.Add("ttt_resend_bought", ttt_resend_bought)
 
@@ -290,133 +302,120 @@ concommand.Add("ttt_resend_bought", ttt_resend_bought)
 -- Resets the bought list of a @{Player}
 -- @realm server
 function plymeta:ResetBought()
-	self.bought = {}
+    self.bought = {}
 
-	self:SendBought()
+    self:SendBought()
 end
 
 ---
 -- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
 -- @note This will disable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:RemoveBought
-function plymeta:AddBought(cls)
-	self.bought = self.bought or {}
-	self.bought[#self.bought + 1] = tostring(cls)
+function plymeta:AddBought(equipmentName)
+    self.bought = self.bought or {}
+    self.bought[#self.bought + 1] = tostring(equipmentName)
 
-	BUYTABLE[cls] = true
+    shop.SetEquipmentBought(self, equipmentName)
+    shop.SetEquipmentGlobalBought(equipmentName)
+    shop.SetEquipmentTeamBought(self, equipmentName)
 
-	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(cls)
-	net.Broadcast()
-
-	local team = self:GetTeam()
-
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-		TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-		TEAMBUYTABLE[team][cls] = true
-
-		if SERVER then
-			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(cls)
-			net.Send(GetTeamFilter(team))
-		end
-	end
-
-	self:SendBought()
+    self:SendBought()
 end
 
 ---
 -- Removes an @{ITEM} or a @{Weapon} from the bought list of a @{Player}
 -- @note This will enable another purchase of the same equipment
 -- if this equipment is limited
--- @param string cls
+-- @param string equipmentName
 -- @realm server
 -- @see Player:AddBought
-function plymeta:RemoveBought(cls)
-	local key
+function plymeta:RemoveBought(equipmentName)
+    local key
 
-	self.bought = self.bought or {}
+    self.bought = self.bought or {}
 
-	for k = 1, #self.bought do
-		if self.bought[k] ~= tostring(cls) then continue end
+    for k = 1, #self.bought do
+        if self.bought[k] ~= tostring(equipmentName) then
+            continue
+        end
 
-		key = k
+        key = k
 
-		break
-	end
+        break
+    end
 
-	if key then
-		table.remove(self.bought, key)
+    if key then
+        table.remove(self.bought, key)
 
-		self:SendBought()
-	end
+        self:SendBought()
+    end
 end
 
 ---
 -- Strips player of all equipment
 -- @realm server
 function plymeta:StripAll()
-	-- standard stuff
-	self:StripAmmo()
-	self:StripWeapons()
+    -- standard stuff
+    self:StripAmmo()
+    self:StripWeapons()
 
-	-- our stuff
-	self:ResetEquipment()
-	self:SetCredits(0)
+    -- our stuff
+    self:ResetEquipment()
+    self:SetCredits(0)
 end
 
 ---
 -- Sets all flags (force_spec, etc) to their default
 -- @realm server
 function plymeta:ResetStatus()
-	self:SetRole(ROLE_NONE) -- this will update the team automatically
-	self:SetRagdollSpec(false)
-	self:SetForceSpec(false)
-	self:ResetRoundFlags()
+    self:SetRole(ROLE_NONE) -- this will update the team automatically
+    self:SetRagdollSpec(false)
+    self:SetForceSpec(false)
+    self:ResetRoundFlags()
 end
 
 ---
 -- Sets round-based misc flags to default position. Called at PlayerSpawn.
 -- @realm server
 function plymeta:ResetRoundFlags()
-	self:ResetEquipment()
-	self:SetCredits(0)
-	self:ResetBought()
+    self:ResetEquipment()
+    self:SetCredits(0)
+    self:ResetBought()
 
-	-- equipment stuff
-	self.bomb_wire = nil
-	self.radar_charge = 0
-	self.decoy = nil
+    -- equipment stuff
+    self.bomb_wire = nil
+    self.radar_charge = 0
+    self.decoy = nil
 
-	timer.Remove("give_equipment" .. self:UniqueID())
+    timer.Remove("give_equipment" .. self:UniqueID())
 
-	-- corpse
-	self:TTT2NETSetBool("body_found", false)
+    -- corpse
+    self:TTT2NETSetBool("body_found", false)
 
-	self.kills = {}
-	self.dying_wep = nil
-	self.was_headshot = false
+    self.kills = {}
+    self.dying_wep = nil
+    self.was_headshot = false
 
-	-- communication
-	self.mute_team = -1
+    -- communication
+    self.mute_team = -1
 
-	local winTms = roles.GetWinTeams()
+    local winTms = roles.GetWinTeams()
 
-	for i = 1, #winTms do
-		self[winTms[i] .. "_gvoice"] = false
-	end
+    for i = 1, #winTms do
+        self[winTms[i] .. "_gvoice"] = false
+    end
 
-	self:SetNWBool("disguised", false)
+    self:SetNWBool("disguised", false)
 
-	-- karma
-	self:SetCleanRound(true)
-	self:Freeze(false)
+    -- karma
+    self:SetCleanRound(true)
+    self:Freeze(false)
 
-	-- armor
-	self:ResetArmor()
+    -- armor
+    self:ResetArmor()
 end
 
 ---
@@ -429,46 +428,52 @@ end
 -- takes the @{Player}, cls and created @{Weapon} as parameters, can be nil
 -- @realm server
 function plymeta:GiveEquipmentWeapon(cls, callback)
-	if not cls then return end
+    if not cls then
+        return
+    end
 
-	if not self:CanCarryWeapon(weapons.GetStored(cls)) then return end
+    if not self:CanCarryWeapon(weapons.GetStored(cls)) then
+        return
+    end
 
-	-- Referring to players by SteamID64 because a player may disconnect while his
-	-- unique timer still runs, in which case we want to be able to stop it. For
-	-- that we need its name, and hence his SteamID64.
-	local tmr = "give_equipment" .. self:UniqueID()
+    -- Referring to players by SteamID64 because a player may disconnect while his
+    -- unique timer still runs, in which case we want to be able to stop it. For
+    -- that we need its name, and hence his SteamID64.
+    local tmr = "give_equipment" .. self:UniqueID()
 
-	if not IsValid(self) or not self:Alive() then
-		timer.Remove(tmr)
+    if not IsValid(self) or not self:Alive() then
+        timer.Remove(tmr)
 
-		return
-	end
+        return
+    end
 
-	-- giving attempt, will fail if we're in a crazy spot in the map or perhaps
-	-- other glitchy cases
-	local w = self:Give(cls)
+    -- giving attempt, will fail if we're in a crazy spot in the map or perhaps
+    -- other glitchy cases
+    local w = self:Give(cls)
 
-	if not IsValid(w) or not self:HasWeapon(cls) then
-		if not timer.Exists(tmr) then
-			local slf = self
+    if not IsValid(w) or not self:HasWeapon(cls) then
+        if not timer.Exists(tmr) then
+            local slf = self
 
-			timer.Create(tmr, 1, 0, function()
-				if not IsValid(slf) then return end
+            timer.Create(tmr, 1, 0, function()
+                if not IsValid(slf) then
+                    return
+                end
 
-				slf:GiveEquipmentWeapon(cls, callback)
-			end)
-		end
+                slf:GiveEquipmentWeapon(cls, callback)
+            end)
+        end
 
-		-- we will be retrying
-	else
-		-- can stop retrying, if we were
-		timer.Remove(tmr)
+        -- we will be retrying
+    else
+        -- can stop retrying, if we were
+        timer.Remove(tmr)
 
-		if isfunction(callback) then
-			-- basically a delayed/asynchronous return, necessary due to the timers
-			callback(self, cls, w)
-		end
-	end
+        if isfunction(callback) then
+            -- basically a delayed/asynchronous return, necessary due to the timers
+            callback(self, cls, w)
+        end
+    end
 end
 
 ---
@@ -477,15 +482,17 @@ end
 -- @return ITEM|nil
 -- @realm server
 function plymeta:GiveEquipmentItem(cls)
-	if not cls then return end
+    if not cls then
+        return
+    end
 
-	local item = items.GetStored(cls)
+    local item = items.GetStored(cls)
 
-	if not item or item.limited and self:HasEquipmentItem(cls) then
-		return
-	end
+    if not item or item.limited and self:HasEquipmentItem(cls) then
+        return
+    end
 
-	return self:AddEquipmentItem(cls)
+    return self:AddEquipmentItem(cls)
 end
 
 ---
@@ -493,13 +500,13 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:ShouldScore()
-	if self:GetForceSpec() then
-		return false
-	elseif self:IsSpec() and self:Alive() then
-		return false
-	else
-		return true
-	end
+    if self:GetForceSpec() then
+        return false
+    elseif self:IsSpec() and self:Alive() then
+        return false
+    else
+        return true
+    end
 end
 
 ---
@@ -507,10 +514,12 @@ end
 -- @param Player victim
 -- @realm server
 function plymeta:RecordKill(victim)
-	if not IsValid(victim) then return end
+    if not IsValid(victim) then
+        return
+    end
 
-	self.kills = self.kills or {}
-	self.kills[#self.kills + 1] = victim:SteamID64()
+    self.kills = self.kills or {}
+    self.kills[#self.kills + 1] = victim:SteamID64()
 end
 
 ---
@@ -520,16 +529,18 @@ end
 -- @deprecated
 -- @realm server
 function plymeta:SetSpeed(slowed)
-	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
+    ErrorNoHaltWithStack(
+        "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
+    )
 end
 
 ---
 -- Resets the last words
 -- @realm server
 function plymeta:ResetLastWords()
-	--if not IsValid(self) then return end -- timers are dangerous things
+    --if not IsValid(self) then return end -- timers are dangerous things
 
-	self.last_words_id = nil
+    self.last_words_id = nil
 end
 
 ---
@@ -537,47 +548,51 @@ end
 -- @param CTakeDamageInfo dmginfo
 -- @realm server
 function plymeta:SendLastWords(dmginfo)
-	-- Use a pseudo unique id to prevent people from abusing the concmd
-	self.last_words_id = math.floor(CurTime() + math.random(500))
+    -- Use a pseudo unique id to prevent people from abusing the concmd
+    self.last_words_id = math.floor(CurTime() + math.random(500))
 
-	-- See if the damage was interesting
-	local dtype = KILL_NORMAL
+    -- See if the damage was interesting
+    local dtype = KILL_NORMAL
 
-	if dmginfo:GetAttacker() == self or dmginfo:GetInflictor() == self then
-		dtype = KILL_SUICIDE
-	elseif dmginfo:IsDamageType(DMG_BURN) then
-		dtype = KILL_BURN
-	elseif dmginfo:IsFallDamage() then
-		dtype = KILL_FALL
-	end
+    if dmginfo:GetAttacker() == self or dmginfo:GetInflictor() == self then
+        dtype = KILL_SUICIDE
+    elseif dmginfo:IsDamageType(DMG_BURN) then
+        dtype = KILL_BURN
+    elseif dmginfo:IsFallDamage() then
+        dtype = KILL_FALL
+    end
 
-	self.death_type = dtype
+    self.death_type = dtype
 
-	net.Start("TTT_InterruptChat")
-	net.WriteUInt(self.last_words_id, 32)
-	net.Send(self)
+    net.Start("TTT_InterruptChat")
+    net.WriteUInt(self.last_words_id, 32)
+    net.Send(self)
 
-	-- any longer than this and you're out of luck
-	local ply = self
+    -- any longer than this and you're out of luck
+    local ply = self
 
-	timer.Simple(2, function()
-		if not IsValid(ply) then return end
+    timer.Simple(2, function()
+        if not IsValid(ply) then
+            return
+        end
 
-		ply:ResetLastWords()
-	end)
+        ply:ResetLastWords()
+    end)
 end
 
 ---
 -- Resets the view
 -- @realm server
 function plymeta:ResetViewRoll()
-	local ang = self:EyeAngles()
+    local ang = self:EyeAngles()
 
-	if ang.r == 0 then return end
+    if ang.r == 0 then
+        return
+    end
 
-	ang.r = 0
+    ang.r = 0
 
-	self:SetEyeAngles(ang)
+    self:SetEyeAngles(ang)
 end
 
 ---
@@ -585,17 +600,17 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:ShouldSpawn()
-	-- do not spawn players who have not been through initspawn
-	if not self:IsSpec() and not self:IsTerror() then
-		return false
-	end
+    -- do not spawn players who have not been through initspawn
+    if not self:IsSpec() and not self:IsTerror() then
+        return false
+    end
 
-	-- do not spawn forced specs
-	if self:IsSpec() and self:GetForceSpec() then
-		return false
-	end
+    -- do not spawn forced specs
+    if self:IsSpec() and self:GetForceSpec() then
+        return false
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -604,85 +619,89 @@ end
 -- @return boolean Returns true if player is spawned
 -- @realm server
 function plymeta:SpawnForRound(deadOnly)
-	---
-	-- @realm server
-	hook.Run("PlayerSetModel", self)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("PlayerSetModel", self)
 
-	---
-	-- @realm server
-	hook.Run("TTTPlayerSetColor", self)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTTPlayerSetColor", self)
 
-	-- wrong alive status and not a willing spec who unforced after prep started
-	-- (and will therefore be "alive")
-	if deadOnly and self:Alive() and not self:IsSpec() then
-		-- if the player does not need respawn, make sure he has full health
-		self:SetHealth(self:GetMaxHealth())
+    -- wrong alive status and not a willing spec who unforced after prep started
+    -- (and will therefore be "alive")
+    if deadOnly and self:Alive() and not self:IsSpec() then
+        -- if the player does not need respawn, make sure he has full health
+        self:SetHealth(self:GetMaxHealth())
 
-		return false
-	end
+        return false
+    end
 
-	if not self:ShouldSpawn() then
-		return false
-	end
+    if not self:ShouldSpawn() then
+        return false
+    end
 
-	-- reset propspec state that they may have gotten during prep
-	PROPSPEC.Clear(self)
+    -- reset propspec state that they may have gotten during prep
+    PROPSPEC.Clear(self)
 
-	-- respawn anyone else
-	if self:Team() == TEAM_SPEC then
-		self:UnSpectate()
-	end
+    -- respawn anyone else
+    if self:Team() == TEAM_SPEC then
+        self:UnSpectate()
+    end
 
-	self:StripAll()
-	self:SetTeam(TEAM_TERROR)
-	self:Spawn()
+    self:StripAll()
+    self:SetTeam(TEAM_TERROR)
+    self:Spawn()
 
-	-- set spawn position
-	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+    -- set spawn position
+    local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-	if not spawnPoint then
-		return false
-	end
+    if not spawnPoint then
+        return false
+    end
 
-	self:SetPos(spawnPoint.pos)
-	self:SetAngles(spawnPoint.ang)
+    self:SetPos(spawnPoint.pos)
+    self:SetAngles(spawnPoint.ang)
 
-	-- tell caller that we spawned
-	return true
+    -- tell caller that we spawned
+    return true
 end
 
 ---
 -- This is called on the first spawn to set the default vars
 -- @realm server
 function plymeta:InitialSpawn()
-	self.has_spawned = false
+    self.has_spawned = false
 
-	-- The team the player spawns on depends on the round state
-	self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
+    -- The team the player spawns on depends on the round state
+    self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
 
-	-- Change some gmod defaults
-	self:SetCanZoom(false)
-	self:SetJumpPower(160)
-	self:SetCrouchedWalkSpeed(0.3)
-	self:SetRunSpeed(220)
-	self:SetWalkSpeed(220)
-	self:SetMaxSpeed(220)
+    -- Change some gmod defaults
+    self:SetCanZoom(false)
+    self:SetJumpPower(160)
+    self:SetCrouchedWalkSpeed(0.3)
+    self:SetRunSpeed(220)
+    self:SetWalkSpeed(220)
+    self:SetMaxSpeed(220)
 
-	self:ResetStatus()
+    self:ResetStatus()
 
-	-- Start off with clean, full karma (unless it can and should be loaded)
-	self:InitKarma()
+    -- Start off with clean, full karma (unless it can and should be loaded)
+    self:InitKarma()
 
-	-- We never have weapons here, but this inits our equipment state
-	self:StripAll()
+    -- We never have weapons here, but this inits our equipment state
+    self:StripAll()
 
-	-- set spawn position
-	local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+    -- set spawn position
+    local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-	if not spawnPoint then return end
+    if not spawnPoint then
+        return
+    end
 
-	self:SetPos(spawnPoint.pos)
-	self:SetAngles(spawnPoint.ang)
+    self:SetPos(spawnPoint.pos)
+    self:SetAngles(spawnPoint.ang)
 end
 
 ---
@@ -691,8 +710,8 @@ end
 -- @param string reason
 -- @realm server
 function plymeta:KickBan(length, reason)
-	-- see admin.lua
-	PerformKickBan(self, length, reason)
+    -- see admin.lua
+    PerformKickBan(self, length, reason)
 end
 
 local oldSpectate = plymeta.Spectate
@@ -702,15 +721,15 @@ local oldSpectate = plymeta.Spectate
 -- @param number type
 -- @realm server
 function plymeta:Spectate(type)
-	oldSpectate(self, type)
+    oldSpectate(self, type)
 
-	-- NPCs should never see spectators. A workaround for the fact that gmod NPCs
-	-- do not ignore them by default.
-	self:SetNoTarget(true)
+    -- NPCs should never see spectators. A workaround for the fact that gmod NPCs
+    -- do not ignore them by default.
+    self:SetNoTarget(true)
 
-	if type == OBS_MODE_ROAMING then
-		self:SetMoveType(MOVETYPE_NOCLIP)
-	end
+    if type == OBS_MODE_ROAMING then
+        self:SetMoveType(MOVETYPE_NOCLIP)
+    end
 end
 
 local oldSpectateEntity = plymeta.SpectateEntity
@@ -720,11 +739,11 @@ local oldSpectateEntity = plymeta.SpectateEntity
 -- @param Entity ent
 -- @realm server
 function plymeta:SpectateEntity(ent)
-	oldSpectateEntity(self, ent)
+    oldSpectateEntity(self, ent)
 
-	if IsValid(ent) and ent:IsPlayer() then
-		self:SetupHands(ent)
-	end
+    if IsValid(ent) and ent:IsPlayer() then
+        self:SetupHands(ent)
+    end
 end
 
 local oldUnSpectate = plymeta.UnSpectate
@@ -733,9 +752,9 @@ local oldUnSpectate = plymeta.UnSpectate
 -- Unspectates a @{Player}
 -- @realm server
 function plymeta:UnSpectate()
-	oldUnSpectate(self)
+    oldUnSpectate(self)
 
-	self:SetNoTarget(false)
+    self:SetNoTarget(false)
 end
 
 ---
@@ -746,47 +765,53 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:CanSelectRole(roleData, choice_count, role_count)
-	-- if there aren't enough players anymore to have a greater role variety
-	if choice_count <= role_count then return true end
+    -- if there aren't enough players anymore to have a greater role variety
+    if choice_count <= role_count then
+        return true
+    end
 
-	-- or the player has enough karma
-	local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
-	local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
-	if KARMA.cv.enabled:GetBool() and self:GetBaseKarma() > minKarma then return true end
+    -- or the player has enough karma
+    local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
+    local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
+    if KARMA.cv.enabled:GetBool() and self:GetBaseKarma() > minKarma then
+        return true
+    end
 
-	-- or if the randomness decides
-	if math.random(3) == 2 then return true end
+    -- or if the randomness decides
+    if math.random(3) == 2 then
+        return true
+    end
 
-	return false
+    return false
 end
 
 ---
 -- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
 -- @realm server
 function plymeta:FindCorpse()
-	local ragdolls = ents.FindByClass("prop_ragdoll")
+    local ragdolls = ents.FindByClass("prop_ragdoll")
 
-	for i = 1, #ragdolls do
-		local ent = ragdolls[i]
+    for i = 1, #ragdolls do
+        local ent = ragdolls[i]
 
-		if ent.uqid == self:UniqueID() and IsValid(ent) then
-			return ent or false
-		end
-	end
+        if ent.uqid == self:UniqueID() and IsValid(ent) then
+            return ent or false
+        end
+    end
 end
 
 -- Handles all stuff needed if the revival failed
 local function OnReviveFailed(ply, failMessage)
-	if isfunction(ply.OnReviveFailedCallback) then
-		ply.OnReviveFailedCallback(ply, failMessage)
+    if isfunction(ply.OnReviveFailedCallback) then
+        ply.OnReviveFailedCallback(ply, failMessage)
 
-		ply.OnReviveFailedCallback = nil
-	else
-		LANG.Msg(ply, failMessage, nil, MSG_MSTACK_WARN)
-	end
+        ply.OnReviveFailedCallback = nil
+    else
+        LANG.Msg(ply, failMessage, nil, MSG_MSTACK_WARN)
+    end
 
-	net.Start("TTT2RevivalStopped")
-	net.Send(ply)
+    net.Start("TTT2RevivalStopped")
+    net.Send(ply)
 end
 
 ---
@@ -800,99 +825,112 @@ end
 -- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
 -- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
 -- @realm server
-function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos, spawnEyeAngle)
-	if self:IsReviving() then return end
+function plymeta:Revive(
+    delay,
+    OnRevive,
+    DoCheck,
+    needsCorpse,
+    blockRound,
+    OnFail,
+    spawnPos,
+    spawnEyeAngle
+)
+    if self:IsReviving() then
+        return
+    end
 
-	local name = "TTT2RevivePlayer" .. self:EntIndex()
+    local name = "TTT2RevivePlayer" .. self:EntIndex()
 
-	delay = delay or 3
+    delay = delay or 3
 
-	-- compatible mode for block round
-	if isbool(blockRound) then
-		MsgN("[DEPRECATION WARNING]: You should use the REVIVAL_BLOCK enum here.")
-		debug.Trace()
-	end
+    -- compatible mode for block round
+    if isbool(blockRound) then
+        ErrorNoHaltWithStack("[DEPRECATION WARNING]: You should use the REVIVAL_BLOCK enum here.")
+    end
 
-	if blockRound == nil or blockRound == false then
-		blockRound = REVIVAL_BLOCK_NONE
-	elseif blockRound == true then
-		blockRound = REVIVAL_BLOCK_AS_ALIVE
-	end
+    if blockRound == nil or blockRound == false then
+        blockRound = REVIVAL_BLOCK_NONE
+    elseif blockRound == true then
+        blockRound = REVIVAL_BLOCK_AS_ALIVE
+    end
 
-	self:SetReviving(true)
-	self:SetRevivalBlockMode(blockRound)
-	self:SetRevivalStartTime(CurTime())
-	self:SetRevivalDuration(delay)
+    self:SetReviving(true)
+    self:SetRevivalBlockMode(blockRound)
+    self:SetRevivalStartTime(CurTime())
+    self:SetRevivalDuration(delay)
 
-	self.OnReviveFailedCallback = OnFail
+    self.OnReviveFailedCallback = OnFail
 
-	timer.Create(name, delay, 1, function()
-		if not IsValid(self) then return end
+    timer.Create(name, delay, 1, function()
+        if not IsValid(self) then
+            return
+        end
 
-		self:SetReviving(false)
-		self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
-		self:SendRevivalReason(nil)
+        self:SetReviving(false)
+        self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
+        self:SendRevivalReason(nil)
 
-		if not isfunction(DoCheck) or DoCheck(self) then
-			local corpse = self:FindCorpse()
+        if not isfunction(DoCheck) or DoCheck(self) then
+            local corpse = self:FindCorpse()
 
-			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				OnReviveFailed(self, "message_revival_failed_missing_body")
+            if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
+                OnReviveFailed(self, "message_revival_failed_missing_body")
 
-				return
-			end
+                return
+            end
 
-			self:SetMaxHealth(100)
-			self:SetHealth(100)
+            self:SetMaxHealth(100)
+            self:SetHealth(100)
 
-			self:SpawnForRound(true)
+            self:SpawnForRound(true)
 
-			if not spawnPos and IsValid(corpse) then
-				spawnPos = corpse:GetPos()
-				spawnEyeAngle = Angle(0, corpse:GetAngles().y, 0)
-			end
+            if not spawnPos and IsValid(corpse) then
+                spawnPos = corpse:GetPos()
+                spawnEyeAngle = Angle(0, corpse:GetAngles().y, 0)
+            end
 
-			spawnPos = spawnPos or self:GetDeathPosition()
-			spawnPos = plyspawn.MakeSpawnPointSafe(self, spawnPos)
+            spawnPos = spawnPos or self:GetDeathPosition()
+            spawnPos = plyspawn.MakeSpawnPointSafe(self, spawnPos)
 
-			if not spawnPos then
-				local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
+            if not spawnPos then
+                local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
-				if not spawnPoint then
-					OnReviveFailed(self, "message_revival_failed")
+                if not spawnPoint then
+                    OnReviveFailed(self, "message_revival_failed")
 
-					return
-				end
+                    return
+                end
 
-				spawnPos = spawnPoint.pos
-				spawnEyeAngle = spawnPoint.ang
-			end
+                spawnPos = spawnPoint.pos
+                spawnEyeAngle = spawnPoint.ang
+            end
 
-			self:SetPos(spawnPos)
-			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
+            self:SetPos(spawnPos)
+            self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
 
-			---
-			-- @realm server
-			hook.Run("PlayerLoadout", self, true)
+            ---
+            -- @realm server
+            -- stylua: ignore
+            hook.Run("PlayerLoadout", self, true)
 
-			self:SetCredits(CORPSE.GetCredits(corpse, 0))
-			self:SelectWeapon("weapon_zm_improvised")
+            self:SetCredits(CORPSE.GetCredits(corpse, 0))
+            self:SelectWeapon("weapon_zm_improvised")
 
-			if IsValid(corpse) then
-				corpse:Remove()
-			end
+            if IsValid(corpse) then
+                corpse:Remove()
+            end
 
-			DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
+            DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
 
-			if isfunction(OnRevive) then
-				OnRevive(self)
-			end
-		else
-			OnReviveFailed(self, "message_revival_failed")
-		end
+            if isfunction(OnRevive) then
+                OnRevive(self)
+            end
+        else
+            OnReviveFailed(self, "message_revival_failed")
+        end
 
-		self.OnReviveFailedCallback = nil
-	end)
+        self.OnReviveFailedCallback = nil
+    end)
 end
 
 ---
@@ -901,19 +939,22 @@ end
 -- @param[opt] boolean silent If silent is true, no sound and text will be displayed
 -- @realm server
 function plymeta:CancelRevival(failMessage, silent)
-	if not self:IsReviving() then return end
+    if not self:IsReviving() then
+        return
+    end
 
-	self:SetReviving(false)
-	self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
-	self:SendRevivalReason(nil)
+    self:SetReviving(false)
+    self:SetRevivalBlockMode(REVIVAL_BLOCK_NONE)
+    self:SendRevivalReason(nil)
 
-	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+    timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
 
-	if silent then return end
+    if silent then
+        return
+    end
 
-	OnReviveFailed(self, failMessage or "message_revival_canceled")
+    OnReviveFailed(self, failMessage or "message_revival_canceled")
 end
-
 
 ---
 -- Sets the revival state.
@@ -921,15 +962,17 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetReviving(isReviving)
-	isReviving = isReviving or false
+    isReviving = isReviving or false
 
-	if self.isReviving == isReviving then return end
+    if self.isReviving == isReviving then
+        return
+    end
 
-	self.isReviving = isReviving
+    self.isReviving = isReviving
 
-	net.Start("TTT2RevivalUpdate_IsReviving")
-	net.WriteBool(self.isReviving)
-	net.Send(self)
+    net.Start("TTT2RevivalUpdate_IsReviving")
+    net.WriteBool(self.isReviving)
+    net.Send(self)
 end
 
 ---
@@ -938,15 +981,17 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetRevivalBlockMode(revivalBlockMode)
-	revivalBlockMode = revivalBlockMode or REVIVAL_BLOCK_NONE
+    revivalBlockMode = revivalBlockMode or REVIVAL_BLOCK_NONE
 
-	if self.revivalBlockMode == revivalBlockMode then return end
+    if self.revivalBlockMode == revivalBlockMode then
+        return
+    end
 
-	self.revivalBlockMode = revivalBlockMode
+    self.revivalBlockMode = revivalBlockMode
 
-	net.Start("TTT2RevivalUpdate_RevivalBlockMode")
-	net.WriteUInt(self.revivalBlockMode, REVIVAL_BITS)
-	net.Send(self)
+    net.Start("TTT2RevivalUpdate_RevivalBlockMode")
+    net.WriteUInt(self.revivalBlockMode, REVIVAL_BITS)
+    net.Send(self)
 end
 
 ---
@@ -955,15 +1000,17 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetRevivalStartTime(startTime)
-	startTime = startTime or CurTime()
+    startTime = startTime or CurTime()
 
-	if self.revivalStartTime == startTime then return end
+    if self.revivalStartTime == startTime then
+        return
+    end
 
-	self.revivalStartTime = startTime
+    self.revivalStartTime = startTime
 
-	net.Start("TTT2RevivalUpdate_RevivalStartTime")
-	net.WriteFloat(self.revivalStartTime)
-	net.Send(self)
+    net.Start("TTT2RevivalUpdate_RevivalStartTime")
+    net.WriteFloat(self.revivalStartTime)
+    net.Send(self)
 end
 
 ---
@@ -972,15 +1019,17 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetRevivalDuration(duration)
-	duration = duration or 0.0
+    duration = duration or 0.0
 
-	if self.revivalDurarion == duration then return end
+    if self.revivalDurarion == duration then
+        return
+    end
 
-	self.revivalDurarion = duration
+    self.revivalDurarion = duration
 
-	net.Start("TTT2RevivalUpdate_RevivalDuration")
-	net.WriteFloat(self.revivalDurarion)
-	net.Send(self)
+    net.Start("TTT2RevivalUpdate_RevivalDuration")
+    net.WriteFloat(self.revivalDurarion)
+    net.Send(self)
 end
 
 ---
@@ -990,29 +1039,28 @@ end
 -- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
 -- @realm server
 function plymeta:SendRevivalReason(name, params)
-	net.Start("TTT2SetRevivalReason")
+    net.Start("TTT2SetRevivalReason")
 
-	if name then
-		net.WriteBool(false)
-		net.WriteString(name)
+    if name then
+        net.WriteBool(false)
+        net.WriteString(name)
 
-		local paramsAmount = params and table.Count(params) or 0
+        local paramsAmount = params and table.Count(params) or 0
 
-		net.WriteUInt(paramsAmount, 8)
+        net.WriteUInt(paramsAmount, 8)
 
-		if paramsAmount > 0 then
-			for k, v in pairs(params) do
-				net.WriteString(k)
-				net.WriteString(tostring(v))
-			end
-		end
-	else
-		net.WriteBool(true)
-	end
+        if paramsAmount > 0 then
+            for k, v in pairs(params) do
+                net.WriteString(k)
+                net.WriteString(tostring(v))
+            end
+        end
+    else
+        net.WriteBool(true)
+    end
 
-	net.Send(self)
+    net.Send(self)
 end
-
 
 ---
 -- Sets the last death position.
@@ -1020,7 +1068,7 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetLastDeathPosition(pos)
-	self.lastDeathPosition = pos
+    self.lastDeathPosition = pos
 end
 
 ---
@@ -1029,7 +1077,7 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetLastSpawnPosition(pos)
-	self.lastSpawnPosition = pos
+    self.lastSpawnPosition = pos
 end
 
 ---
@@ -1037,7 +1085,7 @@ end
 -- @return Vector The last death position
 -- @realm server
 function plymeta:GetDeathPosition()
-	return self.lastDeathPosition
+    return self.lastDeathPosition
 end
 
 ---
@@ -1045,7 +1093,7 @@ end
 -- @return Vector The last spawn position
 -- @realm server
 function plymeta:GetSpawnPosition()
-	return self.lastSpawnPosition
+    return self.lastSpawnPosition
 end
 
 ---
@@ -1054,7 +1102,7 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetActiveInRound(state)
-	self:TTT2NETSetBool("player_was_active_in_round", state or false)
+    self:TTT2NETSetBool("player_was_active_in_round", state or false)
 end
 
 ---
@@ -1062,7 +1110,7 @@ end
 -- @internal
 -- @realm server
 function plymeta:IncreaseRoundDeathCounter()
-	self:TTT2NETSetUInt("player_round_deaths", self:GetDeathsInRound() + 1, 8)
+    self:TTT2NETSetUInt("player_round_deaths", self:GetDeathsInRound() + 1, 8)
 end
 
 ---
@@ -1070,7 +1118,7 @@ end
 -- @internal
 -- @realm server
 function plymeta:ResetRoundDeathCounter()
-	self:TTT2NETSetUInt("player_round_deaths", 0, 8)
+    self:TTT2NETSetUInt("player_round_deaths", 0, 8)
 end
 
 ---
@@ -1078,30 +1126,35 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-	local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
-	local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
-	local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
+    local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
+    local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
+    local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
 
-	local availableRoles = {}
-	local roleCount = {}
+    local availableRoles = {}
+    local roleCount = {}
 
-	for i = 1, #availablePlayers do
-		local rd = availablePlayers[i]:GetSubRoleData()
+    for i = 1, #availablePlayers do
+        local rd = availablePlayers[i]:GetSubRoleData()
 
-		roleCount[rd] = (roleCount[rd] or 0) + 1
-	end
+        roleCount[rd] = (roleCount[rd] or 0) + 1
+    end
 
-	for roleData, roleAmount in pairs(selectableRoles) do
-		if (not avoidRoles or not avoidRoles[roleData]) and (not roleCount[roleData] or roleCount[roleData] < roleAmount) then
-			availableRoles[#availableRoles + 1] = roleData.index
-		end
-	end
+    for roleData, roleAmount in pairs(selectableRoles) do
+        if
+            (not avoidRoles or not avoidRoles[roleData])
+            and (not roleCount[roleData] or roleCount[roleData] < roleAmount)
+        then
+            availableRoles[#availableRoles + 1] = roleData.index
+        end
+    end
 
-	if #availableRoles < 1 then return end
+    if #availableRoles < 1 then
+        return
+    end
 
-	self:SetRole(availableRoles[math.random(#availableRoles)])
+    self:SetRole(availableRoles[math.random(#availableRoles)])
 
-	SendFullStateUpdate()
+    SendFullStateUpdate()
 end
 
 local pendingItems = {}
@@ -1111,30 +1164,32 @@ local pendingItems = {}
 -- @param string cls
 -- @realm server
 function plymeta:GiveItem(cls)
-	if GetRoundState() == ROUND_PREP then
-		pendingItems[self] = pendingItems[self] or {}
-		pendingItems[self][#pendingItems[self] + 1] = cls
+    if GetRoundState() == ROUND_PREP then
+        pendingItems[self] = pendingItems[self] or {}
+        pendingItems[self][#pendingItems[self] + 1] = cls
 
-		return
-	end
+        return
+    end
 
-	self:GiveEquipmentItem(cls)
-	self:AddBought(cls)
+    self:GiveEquipmentItem(cls)
+    self:AddBought(cls)
 
-	local item = items.GetStored(cls)
-	if item and isfunction(item.Bought) then
-		item:Bought(self)
-	end
+    local item = items.GetStored(cls)
+    if item and isfunction(item.Bought) then
+        item:Bought(self)
+    end
 
-	local ply = self
+    local ply = self
 
-	timer.Simple(0.5, function()
-		if not IsValid(ply) then return end
+    timer.Simple(0.5, function()
+        if not IsValid(ply) then
+            return
+        end
 
-		net.Start("TTT_BoughtItem")
-		net.WriteString(cls)
-		net.Send(ply)
-	end)
+        net.Start("TTT_BoughtItem")
+        net.WriteString(cls)
+        net.Send(ply)
+    end)
 end
 
 ---
@@ -1142,8 +1197,8 @@ end
 -- @param string cls
 -- @realm server
 function plymeta:RemoveItem(cls)
-	self:RemoveEquipmentItem(cls)
-	self:RemoveBought(cls)
+    self:RemoveEquipmentItem(cls)
+    self:RemoveBought(cls)
 end
 
 ---
@@ -1151,8 +1206,8 @@ end
 -- @param string cls
 -- @realm server
 function plymeta:RemoveWeapon(cls)
-	self:RemoveEquipmentWeapon(cls)
-	self:RemoveBought(cls)
+    self:RemoveEquipmentWeapon(cls)
+    self:RemoveBought(cls)
 end
 
 ---
@@ -1160,27 +1215,27 @@ end
 -- @param[opt] boolean announceRole
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
-	if self:GetNWFloat("t_first_found", -1) < 0 then
-		self:TTT2NETSetFloat("t_first_found", CurTime())
-	end
+    if self:GetNWFloat("t_first_found", -1) < 0 then
+        self:TTT2NETSetFloat("t_first_found", CurTime())
+    end
 
-	self:TTT2NETSetFloat("t_last_found", CurTime())
+    self:TTT2NETSetFloat("t_last_found", CurTime())
 
-	if announceRole then
-		self:TTT2NETSetBool("role_found", true)
-	end
+    if announceRole then
+        self:TTT2NETSetBool("role_found", true)
+    end
 
-	self:TTT2NETSetBool("body_found", true)
+    self:TTT2NETSetBool("body_found", true)
 end
 
 ---
 -- Resets the confirmation of a @{Player}
 -- @realm server
 function plymeta:ResetConfirmPlayer()
-	-- body_found is reset on the player reset
-	self:TTT2NETSetBool("role_found", false)
-	self:TTT2NETSetFloat("t_first_found", -1)
-	self:TTT2NETSetFloat("t_last_found", -1)
+    -- body_found is reset on the player reset
+    self:TTT2NETSetBool("role_found", false)
+    self:TTT2NETSetFloat("t_first_found", -1)
+    self:TTT2NETSetFloat("t_last_found", -1)
 end
 
 ---
@@ -1190,46 +1245,50 @@ end
 -- @param ACT act The @{ACT} or sequence that should be played
 -- @realm server
 function plymeta:AnimPerformGesture(act)
-	if not act then return end
+    if not act then
+        return
+    end
 
-	net.Start("TTT_PerformGesture")
-	net.WriteEntity(self)
-	net.WriteUInt(act, 16)
-	net.Broadcast()
+    net.Start("TTT_PerformGesture")
+    net.WriteEntity(self)
+    net.WriteUInt(act, 16)
+    net.Broadcast()
 end
 
 -- TODO REMOVE THIS
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
-	for ply, tbl in pairs(pendingItems) do
-		if not IsValid(ply) then continue end
+    for ply, tbl in pairs(pendingItems) do
+        if not IsValid(ply) then
+            continue
+        end
 
-		local plyGiveItem = ply.GiveItem
+        local plyGiveItem = ply.GiveItem
 
-		for i = 1, #tbl do
-			plyGiveItem(ply, tbl[i])
-		end
-	end
+        for i = 1, #tbl do
+            plyGiveItem(ply, tbl[i])
+        end
+    end
 
-	pendingItems = {}
+    pendingItems = {}
 end)
 
 -- reset confirm state only on round begin, not on revive
 hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		plys[i]:ResetConfirmPlayer()
-	end
+    for i = 1, #plys do
+        plys[i]:ResetConfirmPlayer()
+    end
 end)
 
 -- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
 hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		plys[i]:ResetConfirmPlayer()
-	end
+    for i = 1, #plys do
+        plys[i]:ResetConfirmPlayer()
+    end
 end)
 
 local plymeta_old_Give = plymeta.Give
@@ -1243,18 +1302,18 @@ local plymeta_old_Give = plymeta.Give
 -- @return Weapon
 -- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
-	-- ForcedPickup needs to be used to be able to ignore the cv_auto_pickup cvar
-	self.forcedPickup = true
+    -- ForcedPickup needs to be used to be able to ignore the cv_auto_pickup cvar
+    self.forcedPickup = true
 
-	-- ForcedGive needs to be used to give weapons when there are cached ones, e.g. in use with the spawneditor
-	self.forcedGive = true
+    -- ForcedGive needs to be used to give weapons when there are cached ones, e.g. in use with the spawneditor
+    self.forcedGive = true
 
-	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
+    local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	self.forcedPickup = false
-	self.forcedGive = false
+    self.forcedPickup = false
+    self.forcedGive = false
 
-	return wep
+    return wep
 end
 
 ---
@@ -1263,23 +1322,23 @@ end
 -- @return boolean Returns if this weapon can be dropped
 -- @realm server
 function plymeta:CanSafeDropWeapon(wep)
-	if not wep then
-		return true
-	end
+    if not wep then
+        return true
+    end
 
-	if not IsValid(wep) or not wep.AllowDrop then
-		return false
-	end
+    if not IsValid(wep) or not wep.AllowDrop then
+        return false
+    end
 
-	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
+    local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
 
-	if tr.Hit then
-		LANG.Msg(self, "drop_no_room", nil, MSG_MSTACK_WARN)
+    if tr.Hit then
+        LANG.Msg(self, "drop_no_room", nil, MSG_MSTACK_WARN)
 
-		return false
-	end
+        return false
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -1289,30 +1348,30 @@ end
 -- @return boolean Returns if this weapon is dropped
 -- @realm server
 function plymeta:SafeDropWeapon(wep, keepSelection)
-	if not self:CanSafeDropWeapon(wep) then
-		return false
-	end
+    if not self:CanSafeDropWeapon(wep) then
+        return false
+    end
 
-	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
+    self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
-	WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
+    WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
 
-	return true
+    return true
 end
 
 local function TraceAmmoDrop(ply)
-	local pos, ang = ply:GetShootPos(), ply:EyeAngles()
-	local fwd, rgt, up = ang:Forward(), ang:Right(), ang:Up()
+    local pos, ang = ply:GetShootPos(), ply:EyeAngles()
+    local fwd, rgt, up = ang:Forward(), ang:Right(), ang:Up()
 
-	local dir = fwd * 32
-	rgt:Mul(6)
-	up:Mul(-5)
-	dir:Add(rgt)
-	dir:Add(up)
+    local dir = fwd * 32
+    rgt:Mul(6)
+    up:Mul(-5)
+    dir:Add(rgt)
+    dir:Add(up)
 
-	local tr = util.QuickTrace(pos, dir, ply)
+    local tr = util.QuickTrace(pos, dir, ply)
 
-	return tr, pos, dir, fwd
+    return tr, pos, dir, fwd
 end
 
 ---
@@ -1321,19 +1380,19 @@ end
 -- @return boolean Returns if this weapon's ammo can be dropped
 -- @realm server
 function plymeta:CanSafeDropAmmo(wep)
-	if not IsValid(self) or not (IsValid(wep) and wep.AmmoEnt) then
-		return false
-	end
+    if not IsValid(self) or not (IsValid(wep) and wep.AmmoEnt) then
+        return false
+    end
 
-	local tr = TraceAmmoDrop(self)
+    local tr = TraceAmmoDrop(self)
 
-	if tr.HitWorld then
-		LANG.Msg(self, "drop_no_room_ammo", nil, MSG_MSTACK_WARN)
+    if tr.HitWorld then
+        LANG.Msg(self, "drop_no_room_ammo", nil, MSG_MSTACK_WARN)
 
-		return false
-	end
+        return false
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -1344,15 +1403,15 @@ end
 -- @return boolean Returns if ammo is dropped
 -- @realm server
 function plymeta:SafeDropAmmo(wep, useClip, amt)
-	if not self:CanSafeDropAmmo(wep) then
-		return false
-	end
+    if not self:CanSafeDropAmmo(wep) then
+        return false
+    end
 
-	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+    self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
 
-	self:DropAmmo(wep, useClip, amt)
+    self:DropAmmo(wep, useClip, amt)
 
-	return true
+    return true
 end
 
 ---
@@ -1363,72 +1422,74 @@ end
 -- @return boolean Returns if this weapon's ammo is dropped.
 -- @realm server
 function plymeta:DropAmmo(wep, useClip, amt)
-	amt = amt or 0
+    amt = amt or 0
 
-	local box = ents.Create(wep.AmmoEnt)
+    local box = ents.Create(wep.AmmoEnt)
 
-	if not IsValid(box) then return end
+    if not IsValid(box) then
+        return
+    end
 
-	-- most of this goes into computing ammo amount
-	if amt <= 0 then
-		if useClip then
-			amt = wep:Clip1()
-		else
-			amt = math.min(
-				wep.Primary.ClipSize,
-				self:GetAmmoCount(wep.Primary.Ammo)
-			)
-		end
-	end
-	local hook_data = {amt}
+    -- most of this goes into computing ammo amount
+    if amt <= 0 then
+        if useClip then
+            amt = wep:Clip1()
+        else
+            amt = math.min(wep.Primary.ClipSize, self:GetAmmoCount(wep.Primary.Ammo))
+        end
+    end
+    local hook_data = { amt }
 
-	---
-	-- @realm server
-	if hook.Run("TTT2DropAmmo", self, hook_data) == false then
-		LANG.Msg(self, useClip and "drop_ammo_prevented" or "drop_reserve_prevented", nil, MSG_MSTACK_WARN)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    if hook.Run("TTT2DropAmmo", self, hook_data) == false then
+        LANG.Msg(self, useClip and "drop_ammo_prevented" or "drop_reserve_prevented", nil, MSG_MSTACK_WARN)
 
-		return false
-	end
-	amt = hook_data[1]
-	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
-		LANG.Msg(self, useClip and "drop_no_ammo" or "drop_no_reserve", nil, MSG_MSTACK_WARN)
+        return false
+    end
+    amt = hook_data[1]
+    if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
+        LANG.Msg(self, useClip and "drop_no_ammo" or "drop_no_reserve", nil, MSG_MSTACK_WARN)
 
-		return false
-	end
+        return false
+    end
 
-	local _, pos, dir, fwd = TraceAmmoDrop(self)
+    local _, pos, dir, fwd = TraceAmmoDrop(self)
 
-	pos:Add(dir)
+    pos:Add(dir)
 
-	box:SetPos(pos)
-	box:SetOwner(self)
-	box:Spawn()
-	box:PhysWake()
+    box:SetPos(pos)
+    box:SetOwner(self)
+    box:Spawn()
+    box:PhysWake()
 
-	local phys = box:GetPhysicsObject()
+    local phys = box:GetPhysicsObject()
 
-	if IsValid(phys) then
-		fwd:Mul(1000)
+    if IsValid(phys) then
+        fwd:Mul(1000)
 
-		phys:ApplyForceCenter(fwd)
-		phys:ApplyForceOffset(VectorRand(), vector_origin)
-	end
+        phys:ApplyForceCenter(fwd)
+        phys:ApplyForceOffset(VectorRand(), vector_origin)
+    end
 
-	box.AmmoAmount = amt
+    box.AmmoAmount = amt
 
-	timer.Simple(2, function()
-		if not IsValid(box) then return end
+    timer.Simple(2, function()
+        if not IsValid(box) then
+            return
+        end
 
-		box:SetOwner(nil)
-	end)
+        box:SetOwner(nil)
+    end)
 
-	if useClip then
-		wep:SetClip1( math.max(wep:Clip1() - amt, 0) )
-	else
-		self:RemoveAmmo(amt, wep.Primary.Ammo)
-	end
+    if useClip then
+        wep:SetClip1(math.max(wep:Clip1() - amt, 0))
+    else
+        self:RemoveAmmo(amt, wep.Primary.Ammo)
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -1440,15 +1501,16 @@ end
 -- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
-	self.forcedPickup = forcePickup
+    self.forcedPickup = forcePickup
 
-	---
-	-- @realm server
-	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon, true)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon, true)
 
-	self.forcedPickup = false
+    self.forcedPickup = false
 
-	return ret, errCode
+    return ret, errCode
 end
 
 ---
@@ -1459,9 +1521,9 @@ end
 -- @return boolean
 -- @realm server
 function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
-	local wep = ents.Create(wepCls)
+    local wep = ents.Create(wepCls)
 
-	return self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
+    return self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 end
 
 ---
@@ -1475,68 +1537,80 @@ end
 -- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
-	if not IsValid(wep) then
-		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
+    if not IsValid(wep) then
+        ErrorNoHaltWithStack(
+            tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n"
+        )
 
-		LANG.Msg(self, "pickup_fail")
+        LANG.Msg(self, "pickup_fail")
 
-		return
-	end
+        return
+    end
 
-	-- block weapon switch if slot is occupied and there is no room to
-	-- drop the weapon safely
-	if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then return end
+    -- block weapon switch if slot is occupied and there is no room to
+    -- drop the weapon safely
+    if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then
+        return
+    end
 
-	local ret, errCode = self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
+    local ret, errCode = self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 
-	if not ret then
-		if errCode == 1 then
-			LANG.Msg(self, "pickup_error_spec")
-		elseif errCode == 2 then
-			LANG.Msg(self, "pickup_error_owns")
-		elseif errCode == 3 then
-			LANG.Msg(self, "pickup_error_noslot")
-		elseif errCode == 6 then
-			LANG.Msg(self, "pickup_error_inv_cached")
-		end
+    if not ret then
+        if errCode == 1 then
+            LANG.Msg(self, "pickup_error_spec")
+        elseif errCode == 2 then
+            LANG.Msg(self, "pickup_error_owns")
+        elseif errCode == 3 then
+            LANG.Msg(self, "pickup_error_noslot")
+        elseif errCode == 6 then
+            LANG.Msg(self, "pickup_error_inv_cached")
+        end
 
-		return
-	end
+        return
+    end
 
-	-- if the variable is not set, set it fitting to the keypress
-	if shouldAutoSelect == nil then
-		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
-	end
+    -- if the variable is not set, set it fitting to the keypress
+    if shouldAutoSelect == nil then
+        shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
+    end
 
-	-- if parameter is set the currently blocking weapon should be dropped
-	if dropBlockingWeapon ~= false then
-		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
+    -- if parameter is set the currently blocking weapon should be dropped
+    if dropBlockingWeapon ~= false then
+        local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_FULLINV then
-			LANG.Msg(self, "pickup_no_room")
+        if switchMode == SWITCHMODE_FULLINV then
+            LANG.Msg(self, "pickup_no_room")
 
-			return
-		end
+            return
+        end
 
-		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
-		if dropWeapon == wep then return end
+        -- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
+        if dropWeapon == wep then
+            return
+        end
 
-		if not self:SafeDropWeapon(dropWeapon, true) then return end
+        if not self:SafeDropWeapon(dropWeapon, true) then
+            return
+        end
 
-		-- set flag to new weapon that is used to autoselect it later on
-		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
+        -- set flag to new weapon that is used to autoselect it later on
+        shouldAutoSelect = shouldAutoSelect or isActiveWeapon
 
-		-- set to holstered if current weapon is dropped to prevent short crowbar selection
-		if isActiveWeapon then
-			self:SelectWeapon("weapon_ttt_unarmed")
-		end
-	end
+        -- set to holstered if current weapon is dropped to prevent short crowbar selection
+        if isActiveWeapon then
+            self:SelectWeapon("weapon_ttt_unarmed")
+        end
+    end
 
-	if not self:PickupWeapon(wep, ammoOnly or false) then return end
+    if not self:PickupWeapon(wep, ammoOnly or false) then
+        return
+    end
 
-	wep.wpickup_autoSelect = shouldAutoSelect
+    wep.wpickup_autoSelect = shouldAutoSelect
 
-	return wep
+    self:EmitSound(soundWeaponPickup)
+
+    return wep
 end
 
 ---
@@ -1548,47 +1622,54 @@ end
 -- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
-	-- if the variable is not set, set it fitting to the keypress
-	if shouldAutoSelect == nil then
-		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
-	end
+    -- if the variable is not set, set it fitting to the keypress
+    if shouldAutoSelect == nil then
+        shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
+    end
 
-	local wep = weapons.GetStored(wepCls)
-	local pWep
+    local wep = weapons.GetStored(wepCls)
+    local pWep
 
-	-- if parameter is set the currently blocking weapon should be dropped
-	if dropBlockingWeapon then
-		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
+    -- if parameter is set the currently blocking weapon should be dropped
+    if dropBlockingWeapon then
+        local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_FULLINV or switchMode == SWITCHMODE_NOSPACE then return end
+        if switchMode == SWITCHMODE_FULLINV or switchMode == SWITCHMODE_NOSPACE then
+            return
+        end
 
-		self:SafeDropWeapon(dropWeapon, true)
+        self:SafeDropWeapon(dropWeapon, true)
 
-		pWep = self:Give(wepCls)
+        pWep = self:Give(wepCls)
 
-		if IsValid(pWep) then
-			-- set flag to new weapon that is used to autoselect it later on
-			pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
-		end
-	end
+        if IsValid(pWep) then
+            -- set flag to new weapon that is used to autoselect it later on
+            pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+        end
+    end
 
-	return pWep
+    self:EmitSound(soundWeaponPickup)
+
+    return pWep
 end
 
 -- receives the PlayerReady flag from the client and calls the serverwide hook
 local function SetPlayerReady(_, ply)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	ply.isReady = true
+    ply.isReady = true
 
-	-- Send full state update to client
-	ttt2net.SendFullStateUpdate(ply)
+    -- Send full state update to client
+    ttt2net.SendFullStateUpdate(ply)
 
-	entspawnscript.TransmitToPlayer(ply)
+    entspawnscript.TransmitToPlayer(ply)
 
-	---
-	-- @realm server
-	hook.Run("TTT2PlayerReady", ply)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
@@ -1597,8 +1678,8 @@ net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 -- without triggering the restore function, e.g. @{GM:PlayerSpawn}.
 -- @realm server
 function plymeta:ResetCachedWeapons()
-	self.cachedWeaponInventory = nil
-	self.cachedWeaponSelected = nil
+    self.cachedWeaponInventory = nil
+    self.cachedWeaponSelected = nil
 end
 
 ---
@@ -1606,7 +1687,7 @@ end
 -- @return boolean Returns wether the player has a cached inventory
 -- @realm server
 function plymeta:HasCachedWeapons()
-	return self.cachedWeaponInventory ~= nil
+    return self.cachedWeaponInventory ~= nil
 end
 
 ---
@@ -1616,32 +1697,33 @@ end
 -- @note As long as a player has cached weapons, they are unable to pick up any weapon.
 -- @realm server
 function plymeta:CacheAndStripWeapons(removeUnarmed)
-	self.cachedWeaponInventory = {}
-	self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
+    self.cachedWeaponInventory = {}
+    self.cachedWeaponSelected = WEPS.GetClass(self:GetActiveWeapon())
 
-	local weps = self:GetWeapons()
+    local weps = self:GetWeapons()
 
-	for i = 1, #weps do
-		local wep = weps[i]
-		local wepClass = WEPS.GetClass(wep)
+    for i = 1, #weps do
+        local wep = weps[i]
+        local wepClass = WEPS.GetClass(wep)
 
-		if not removeUnarmed and wepClass == "weapon_ttt_unarmed" then continue end
+        if not removeUnarmed and wepClass == "weapon_ttt_unarmed" then
+            continue
+        end
 
-		self.cachedWeaponInventory[#self.cachedWeaponInventory + 1] = {
-			cls = wepClass,
-			clip1 = wep:Clip1(),
-			clip2 = wep:Clip2()
-		}
-	end
+        self.cachedWeaponInventory[#self.cachedWeaponInventory + 1] = {
+            cls = wepClass,
+            clip1 = wep:Clip1(),
+            clip2 = wep:Clip2(),
+        }
+    end
 
+    -- we have to use this hack here instead of StripWeapon because StripWeapon calls
+    -- OnDrop which is not intended for the weapon caching
+    self:StripWeapons()
 
-	-- we have to use this hack here instead of StripWeapon because StripWeapon calls
-	-- OnDrop which is not intended for the weapon caching
-	self:StripWeapons()
-
-	if not removeUnarmed then
-		self:Give("weapon_ttt_unarmed")
-	end
+    if not removeUnarmed then
+        self:Give("weapon_ttt_unarmed")
+    end
 end
 
 ---
@@ -1649,31 +1731,37 @@ end
 -- no weapons are cached.
 -- @realm server
 function plymeta:RestoreCachedWeapons()
-	if not self:HasCachedWeapons() then return end
+    if not self:HasCachedWeapons() then
+        return
+    end
 
-	for i = 1, #self.cachedWeaponInventory do
-		local wep = self.cachedWeaponInventory[i]
+    for i = 1, #self.cachedWeaponInventory do
+        local wep = self.cachedWeaponInventory[i]
 
-		local givenWep = self:Give(wep.cls)
+        local givenWep = self:Give(wep.cls)
 
-		if not IsValid(givenWep) then continue end
+        if not IsValid(givenWep) then
+            continue
+        end
 
-		givenWep:SetClip1(wep.clip1 or 0)
-		givenWep:SetClip2(wep.clip2 or 0)
-	end
+        givenWep:SetClip1(wep.clip1 or 0)
+        givenWep:SetClip2(wep.clip2 or 0)
+    end
 
-	if self.cachedWeaponSelected then
-		local cachedWeaponSelected = self.cachedWeaponSelected
+    if self.cachedWeaponSelected then
+        local cachedWeaponSelected = self.cachedWeaponSelected
 
-		-- delay selection by .1 seconds to actually select the weapon
-		timer.Simple(0.1, function()
-			if not IsValid(self) then return end
+        -- delay selection by .1 seconds to actually select the weapon
+        timer.Simple(0.1, function()
+            if not IsValid(self) then
+                return
+            end
 
-			self:SelectWeapon(cachedWeaponSelected)
-		end)
-	end
+            self:SelectWeapon(cachedWeaponSelected)
+        end)
+    end
 
-	self:ResetCachedWeapons()
+    self:ResetCachedWeapons()
 end
 
 ---
@@ -1681,17 +1769,21 @@ end
 -- @param string wep The weapon class
 -- @realm server
 function plymeta:RemoveCachedWeapon(wep)
-	if not self:HasCachedWeapons() then return end
+    if not self:HasCachedWeapons() then
+        return
+    end
 
-	for i = 1, #self.cachedWeaponInventory do
-		local cachedWeapon = self.cachedWeaponInventory[i]
+    for i = 1, #self.cachedWeaponInventory do
+        local cachedWeapon = self.cachedWeaponInventory[i]
 
-		if cachedWeapon.cls ~= wep then continue end
+        if cachedWeapon.cls ~= wep then
+            continue
+        end
 
-		table.remove(self.cachedWeaponInventory, i)
+        table.remove(self.cachedWeaponInventory, i)
 
-		return
-	end
+        return
+    end
 end
 
 ---
@@ -1699,7 +1791,7 @@ end
 -- @return boolean Returns wether the player has a cached inventory
 -- @realm server
 function plymeta:HasCachedItems()
-	return self.cachedItemInventory ~= nil
+    return self.cachedItemInventory ~= nil
 end
 
 ---
@@ -1707,11 +1799,13 @@ end
 -- These items can be restored at any time.
 -- @realm server
 function plymeta:CacheAndStripItems()
-	if self:HasCachedItems() then return end
+    if self:HasCachedItems() then
+        return
+    end
 
-	self.cachedItemInventory = self:GetEquipmentItems()
+    self.cachedItemInventory = self:GetEquipmentItems()
 
-	self:SetEquipmentItems(nil)
+    self:SetEquipmentItems(nil)
 end
 
 ---
@@ -1719,14 +1813,16 @@ end
 -- no items are cached.
 -- @realm server
 function plymeta:RestoreCachedItems()
-	if not self:HasCachedItems() then return end
+    if not self:HasCachedItems() then
+        return
+    end
 
-	-- make sure the player keeps any items received during this period
-	table.Merge(self.cachedItemInventory, self:GetEquipmentItems())
+    -- make sure the player keeps any items received during this period
+    table.Merge(self.cachedItemInventory, self:GetEquipmentItems())
 
-	self:SetEquipmentItems(self.cachedItemInventory)
+    self:SetEquipmentItems(self.cachedItemInventory)
 
-	self.cachedItemInventory = nil
+    self.cachedItemInventory = nil
 end
 
 ---
@@ -1734,21 +1830,25 @@ end
 -- @param string item The item class
 -- @realm server
 function plymeta:RemoveCachedItem(item)
-	if not self:HasCachedItems() then return end
+    if not self:HasCachedItems() then
+        return
+    end
 
-	for i = 1, #self.cachedItemInventory do
-		local cachedItem = self.cachedItemInventory[i]
+    for i = 1, #self.cachedItemInventory do
+        local cachedItem = self.cachedItemInventory[i]
 
-		if cachedItem ~= item then continue end
+        if cachedItem ~= item then
+            continue
+        end
 
-		table.remove(self.cachedItemInventory, i)
+        table.remove(self.cachedItemInventory, i)
 
-		-- make sure equipment remove functions are called
-		items.GetStored(item):Reset(self)
-		self:SendEquipment(EQUIPITEMS_REMOVE, item)
+        -- make sure equipment remove functions are called
+        items.GetStored(item):Reset(self)
+        self:SendEquipment(EQUIPITEMS_REMOVE, item)
 
-		return
-	end
+        return
+    end
 end
 
 ---
@@ -1756,10 +1856,10 @@ end
 -- @internal
 -- @realm server
 function plymeta:ResetItemAndWeaponCache()
-	self.cachedWeaponInventory = nil
-	self.cachedWeaponSelected = nil
+    self.cachedWeaponInventory = nil
+    self.cachedWeaponSelected = nil
 
-	self.cachedItemInventory = nil
+    self.cachedItemInventory = nil
 end
 
 ---
@@ -1769,9 +1869,7 @@ end
 -- receiving their credits
 -- @hook
 -- @realm server
-function GM:TTT2SetDefaultCredits(ply)
-
-end
+function GM:TTT2SetDefaultCredits(ply) end
 
 ---
 -- Hook that is used to modify the default credits of a traitor.
@@ -1780,6 +1878,4 @@ end
 -- @return nil|number The amound of credits the player should receive
 -- @hook
 -- @realm server
-function GM:TTT2ModifyDefaultTraitorCredits(ply, credits)
-
-end
+function GM:TTT2ModifyDefaultTraitorCredits(ply, credits) end

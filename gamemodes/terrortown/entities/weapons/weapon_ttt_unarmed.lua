@@ -3,16 +3,24 @@
 -- @section weapon_ttt_unarmed
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
+
+DEFINE_BASECLASS("weapon_tttbase")
 
 SWEP.HoldType = "normal"
 
 if CLIENT then
-	SWEP.PrintName = "unarmed_name"
-	SWEP.Slot = 5
+    SWEP.PrintName = "unarmed_name"
+    SWEP.Slot = 5
 
-	SWEP.ViewModelFOV = 10
+    SWEP.ShowDefaultViewModel = false
+
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+    }
+
+    SWEP.Icon = "vgui/ttt/icon_unarmed"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -31,10 +39,11 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
 SWEP.Kind = WEAPON_UNARMED
-SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
+SWEP.InLoadoutFor = { ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE }
 
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
+SWEP.overrideDropOnDeath = DROP_ON_DEATH_TYPE_DENY
 SWEP.NoSights = true
 
 SWEP.silentPickup = true
@@ -43,60 +52,34 @@ SWEP.builtin = true
 
 ---
 -- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
+function SWEP:PrimaryAttack() end
 
 ---
 -- @ignore
-function SWEP:ShouldDropOnDie()
-	return false
-end
+function SWEP:SecondaryAttack() end
 
 ---
 -- @ignore
-function SWEP:PrimaryAttack()
-
-end
-
----
--- @ignore
-function SWEP:SecondaryAttack()
-
-end
-
----
--- @ignore
-function SWEP:Reload()
-
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	if SERVER and IsValid(self:GetOwner()) then
-		self:GetOwner():DrawViewModel(false)
-	end
-
-	self:DrawShadow(false)
-
-	return true
-end
+function SWEP:Reload() end
 
 ---
 -- @ignore
 function SWEP:Holster()
-	return true
+    return true
 end
 
----
--- @ignore
-function SWEP:DrawWorldModel()
+if CLIENT then
+    ---
+    -- @realm client
+    function SWEP:DrawWorldModel()
+        if IsValid(self:GetOwner()) then
+            return
+        end
 
-end
+        self:DrawModel()
+    end
 
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
-
+    ---
+    -- @realm client
+    function SWEP:DrawWorldModelTranslucent() end
 end
