@@ -26,7 +26,6 @@ function ShopEditor.GetEquipmentForRoleAll()
 
     local eject = {
         weapon_fists = true,
-        weapon_ttt_unarmed = true,
         bobs_blacklisted = true,
     }
 
