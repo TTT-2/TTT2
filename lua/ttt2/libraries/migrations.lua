@@ -35,7 +35,7 @@ function migrations.Apply()
 
 		if fileInfo then continue end
 
-		MsgN("[TTT2] Migrating: ", fileName)
+		Dev(1, "Migrating: ", fileName)
 
 		if SERVER then
 			AddCSLuaFile(fullPath)
@@ -58,5 +58,5 @@ function migrations.Apply()
 		fileExecutionCounter = fileExecutionCounter + 1
 	end
 
-	MsgN("[TTT2] Successfully migrated ", fileExecutionCounter, " Files.")
+	Dev(1, "[TTT2] Successfully migrated ", fileExecutionCounter, " Files.")
 end
