@@ -433,7 +433,7 @@ function ShowC4Disarm(bomb)
     ddesc:SetWrap(true)
     if LocalPlayer():IsTraitor() then
         ddesc:SetText(T("c4_disarm_t"))
-    elseif LocalPlayer() == bomb:GetOwner() then
+    elseif LocalPlayer() == bomb:GetOriginator() then
         ddesc:SetText(T("c4_disarm_owned"))
     else
         ddesc:SetText(T("c4_disarm_other"))
