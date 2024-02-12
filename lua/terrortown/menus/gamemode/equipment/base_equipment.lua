@@ -186,7 +186,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
     end
 
     -- now add custom equipment settings
-    equipment:AddToSettingsMenu(parent)
+    if isfunction(equipment.AddToSettingsMenu) then
+        equipment:AddToSettingsMenu(parent)
+    end
 
     -- stylua: ignore
     hook.Run("TTT2OnEquipmentAddToSettingsMenu", equipment, parent)
