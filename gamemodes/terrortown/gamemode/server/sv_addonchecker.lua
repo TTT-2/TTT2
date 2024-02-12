@@ -213,6 +213,10 @@ addonChecker.curatedList = {
         reason = "Already built in into TTT2",
         type = ADDON_INCOMPATIBLE,
     },
+    ["2990353959"] = { -- Weapon Spawn Ratio Mod by Corvatile
+        reason = "Breaks random weapon spawns by overwriting the random weapon entity.",
+        type = ADDON_INCOMPATIBLE,
+    },
     ["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
         alternative = "2150924507",
         reason = "Addon is broken and doesn't do anything.",
