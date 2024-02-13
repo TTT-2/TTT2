@@ -1282,7 +1282,6 @@ function plymeta:SetFOV(fov, time, requester)
             net.WriteEntity(self)
             net.WriteBool(true) -- FOV is fixed now
             net.WriteFloat(time)
-            net.WriteFloat(self:GetFOV())
             net.Broadcast()
         end
 
@@ -1302,7 +1301,6 @@ function plymeta:SetFOV(fov, time, requester)
                 net.WriteEntity(self)
                 net.WriteBool(false) -- FOV isn't fixed anymore
                 net.WriteFloat(time)
-                net.WriteFloat(self:GetFOV())
                 net.Broadcast()
             end
         end
@@ -1332,7 +1330,6 @@ if CLIENT then
         -- only trigger our zoom out if there was a change
         if lastFixedFOV and not ply.fixedFOV then
             ply.triggeredFOV = true
-            ply.lastFOV = net.ReadFloat()
         end
     end)
 end

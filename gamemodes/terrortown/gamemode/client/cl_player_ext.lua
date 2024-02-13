@@ -407,10 +407,11 @@ local frameCount = 10
 
 local lastStrafeValue = 0
 local lastFOVValue = 85
-local multiplier = 40
+local fovTransitionMultiplier = 40
 
--- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
-hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+-- handles dynamic camera features such as view bobbing, stafe tilting and fov changes
+-- parts of it are heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
+hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
     local observerTarget = ply:GetObserverTarget()
 
     -- handle observing players
@@ -433,30 +434,41 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
     local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
     local desiredFOV = fov * mul ^ (1 / 6)
 
+    local wep = ply:GetActiveWeapon()
+
     if ply.triggeredFOV then
         ply.triggeredFOV = false
 
         -- make sure the correct lastFOV value is used when only a networked value is available
-        lastFOVValue = ply.lastFOV
+        --lastFOVValue = ply.lastFOV
 
-        multiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
+        fovTransitionMultiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
     end
 
-    if not ply.fixedFOV then
+    -- special case: If SetFOV is only called on the server, we have to use custom networking
+    -- to bridge the delay between the engine and custom data being sent to the client, we check
+    -- if the player is still in ironsights and the weapon actually uses ironsights
+    if ply.fixedFOV and wep and not wep:GetIronsights() and wep:GetIronsightsTime() > 0 then
+        dynFOV = lastFOVValue
+
+    -- normal case: handle transitioning between different FOV values. Be it while sprinting or
+    -- zooming out of a fixed value
+    elseif not ply.fixedFOV then
         if desiredFOV > lastFOVValue then
-            dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * multiplier)
+            dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * fovTransitionMultiplier)
         elseif desiredFOV < lastFOVValue then
-            dynFOV = math.max(desiredFOV, lastFOVValue - FrameTime() * multiplier)
+            dynFOV = math.max(desiredFOV, lastFOVValue - FrameTime() * fovTransitionMultiplier)
         else
             dynFOV = lastFOVValue
 
-            multiplier = 40
+            fovTransitionMultiplier = 40
         end
 
         lastFOVValue = dynFOV
+
+    -- special case: cache the current FOV value while in fixed FOV mode to use this value
+    -- to transition out of this mode
     else
-        -- cache the current FOV value while in fixed FOV mode to use this value
-        -- to transition out of this mode
         lastFOVValue = fov
     end
 
