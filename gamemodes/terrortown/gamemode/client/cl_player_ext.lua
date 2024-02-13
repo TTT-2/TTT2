@@ -440,13 +440,19 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         ply.triggeredFOV = false
 
         -- make sure the correct lastFOV value is used when only a networked value is available
-        lastFOVValue = ply.lastFOV
+        --lastFOVValue = ply.lastFOV
 
         fovTransitionMultiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
     end
 
-    if ply.fixedFOV and wep and not wep:GetIronsights() then
+    -- special case: If SetFOV is only called on the server, we have to use custom networking
+    -- to bridge the delay between the engine and custom data being sent to the client, we check
+    -- if the player is still in ironsights and the weapon actually uses ironsights
+    if ply.fixedFOV and wep and not wep:GetIronsights() and wep:GetIronsightsTime() > 0 then
         dynFOV = lastFOVValue
+
+    -- normal case: handle transitioning between different FOV values. Be it while sprinting or
+    -- zooming out of a fixed value
     elseif not ply.fixedFOV then
         if desiredFOV > lastFOVValue then
             dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * fovTransitionMultiplier)
@@ -459,9 +465,10 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         end
 
         lastFOVValue = dynFOV
+
+    -- special case: cache the current FOV value while in fixed FOV mode to use this value
+    -- to transition out of this mode
     else
-        -- cache the current FOV value while in fixed FOV mode to use this value
-        -- to transition out of this mode
         lastFOVValue = fov
     end
 
