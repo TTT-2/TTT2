@@ -411,7 +411,7 @@ local fovTransitionMultiplier = 40
 
 -- handles dynamic camera features such as view bobbing, stafe tilting and fov changes
 -- parts of it are heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
-hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
     local observerTarget = ply:GetObserverTarget()
 
     -- handle observing players
