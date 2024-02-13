@@ -262,7 +262,6 @@ Analizuje ciało by pokazać jak jak ofiara zostałą zabita, ale tylko jak zgin
 
 -- Decoy
 L.decoy_name = "Wabik"
-L.decoy_no_room = "Nie możesz wziąć tego wabika."
 L.decoy_broken = "Twój wabik został zniszczony!"
 
 L.decoy_short_desc = "Pokazuje oszukaną pozycję na radarze"

@@ -262,7 +262,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "雷达诱饵"
-L.decoy_no_room = "你无法携带雷达诱饵。"
 L.decoy_broken = "你的雷达诱饵被摧毁了！"
 
 L.decoy_short_desc = "这个诱饵会为其他阵营显示一个假雷达信号"
