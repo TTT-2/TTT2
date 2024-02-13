@@ -262,7 +262,6 @@ Analisa um cadáver para mostrar como a vítima morreu, mas somente se ela tiver
 
 -- Decoy
 L.decoy_name = "Isca"
-L.decoy_no_room = "Você não pode pegar esta Isca."
 L.decoy_broken = "Sua Isca foi destruída!"
 
 L.decoy_short_desc = "Está isca, mostrará um radar falso para o outro time."

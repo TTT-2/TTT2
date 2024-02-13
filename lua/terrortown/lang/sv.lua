@@ -262,7 +262,6 @@ Analyserar ett lik för att visa hur offret dog, men enbart om han dog av skotts
 
 -- Decoy
 L.decoy_name = "Lockbete"
-L.decoy_no_room = "Du kan ej bära detta Lockbete."
 L.decoy_broken = "Ditt Lockbete har förstörts!"
 
 --L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"

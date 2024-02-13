@@ -262,7 +262,6 @@ Analizza un cadavere per mostrare come la vittima è stata uccisa, ma solo se è
 
 -- Decoy
 L.decoy_name = "Esca"
-L.decoy_no_room = "Non puoi portare questa Esca."
 L.decoy_broken = "la tua Esca è stata distrutta!"
 
 L.decoy_short_desc = "Questa esca mostra un finto segnale radar per gli altri team"
