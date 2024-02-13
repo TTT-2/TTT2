@@ -433,6 +433,8 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
     local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
     local desiredFOV = fov * mul ^ (1 / 6)
 
+    local wep = ply:GetActiveWeapon()
+
     if ply.triggeredFOV then
         ply.triggeredFOV = false
 
@@ -442,7 +444,9 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         multiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
     end
 
-    if not ply.fixedFOV then
+    if ply.fixedFOV and wep and not wep:GetIronsights() then
+        dynFOV = lastFOVValue
+    elseif not ply.fixedFOV then
         if desiredFOV > lastFOVValue then
             dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * multiplier)
         elseif desiredFOV < lastFOVValue then
