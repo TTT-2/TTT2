@@ -407,9 +407,10 @@ local frameCount = 10
 
 local lastStrafeValue = 0
 local lastFOVValue = 85
-local multiplier = 40
+local fovTransitionMultiplier = 40
 
--- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
+-- handles dynamic camera features such as view bobbing, stafe tilting and fov changes
+-- parts of it are heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
 hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
     local observerTarget = ply:GetObserverTarget()
 
@@ -441,20 +442,20 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         -- make sure the correct lastFOV value is used when only a networked value is available
         lastFOVValue = ply.lastFOV
 
-        multiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
+        fovTransitionMultiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
     end
 
     if ply.fixedFOV and wep and not wep:GetIronsights() then
         dynFOV = lastFOVValue
     elseif not ply.fixedFOV then
         if desiredFOV > lastFOVValue then
-            dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * multiplier)
+            dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * fovTransitionMultiplier)
         elseif desiredFOV < lastFOVValue then
-            dynFOV = math.max(desiredFOV, lastFOVValue - FrameTime() * multiplier)
+            dynFOV = math.max(desiredFOV, lastFOVValue - FrameTime() * fovTransitionMultiplier)
         else
             dynFOV = lastFOVValue
 
-            multiplier = 40
+            fovTransitionMultiplier = 40
         end
 
         lastFOVValue = dynFOV
