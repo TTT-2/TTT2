@@ -1270,10 +1270,6 @@ function plymeta:SetFOV(fov, time, requester)
         return
     end
 
-    if CLIENT then
-        return
-    end
-
     -- normal case, SetFOV is used to set a fixed FOV value, we should track
     -- this so we know that we should no apply custom FOV in GM:CalcView
     if fov and fov ~= 0 then
