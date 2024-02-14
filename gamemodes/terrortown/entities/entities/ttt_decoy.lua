@@ -15,7 +15,9 @@ ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/props_lab/reciever01b.mdl"
 
 ENT.CanHavePrints = false
+
 ENT.CanUseKey = true
+ENT.pickupWeaponClass = "weapon_ttt_decoy"
 
 ---
 -- @realm shared
@@ -34,30 +36,6 @@ function ENT:Initialize()
     if SERVER then
         self:SetUseType(SIMPLE_USE)
     end
-end
-
----
--- @param Player activator
--- @realm shared
-function ENT:UseOverride(activator)
-    if
-        not IsValid(activator)
-        or not activator:HasTeam()
-        or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam()
-    then
-        return
-    end
-
-    -- picks up weapon, switches if possible and needed, returns weapon if successful
-    local wep = activator:SafePickupWeaponClass("weapon_ttt_decoy", true)
-
-    if not IsValid(wep) then
-        LANG.Msg(activator, "decoy_no_room")
-
-        return
-    end
-
-    self:Remove()
 end
 
 -- @realm shared
@@ -80,6 +58,14 @@ if SERVER then
         end
 
         LANG.Msg(originator, "decoy_broken", nil, MSG_MSTACK_WARN)
+    end
+
+    ---
+    -- @param Player activator
+    -- @realm server
+    function ENT:PlayerCanPickupWeapon(activator)
+        return activator:HasTeam()
+            and self:GetNWString("decoy_owner_team", "none") == activator:GetTeam()
     end
 end
 

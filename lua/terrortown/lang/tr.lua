@@ -262,7 +262,6 @@ Kurbanın nasıl öldürüldüğünü göstermek için bir cesedi analiz eder, a
 
 -- Decoy
 L.decoy_name = "Tuzak"
-L.decoy_no_room = "Bu tuzağı taşıyamazsınız."
 L.decoy_broken = "Tuzağınız yok edildi!"
 
 L.decoy_short_desc = "Bu tuzak, diğer takımlar tarafından görülebilen sahte bir radar işareti gösterir"

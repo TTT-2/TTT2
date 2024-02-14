@@ -262,7 +262,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "Приманка"
-L.decoy_no_room = "Ви не можете переносити цю приманку."
 L.decoy_broken = "Вашу Приманку знищено!"
 
 --L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"

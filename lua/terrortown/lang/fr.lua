@@ -262,7 +262,6 @@ Analyse un corps pour montrer comment la victime a été tuée, mais seulement s
 
 -- Decoy
 L.decoy_name = "Leurre"
-L.decoy_no_room = "Vous ne pouvez pas prendre ce leurre."
 L.decoy_broken = "Votre leurre a été détruit!"
 
 L.decoy_short_desc = "Ce leurre montre un faux signal radar visible par les autres teams"
