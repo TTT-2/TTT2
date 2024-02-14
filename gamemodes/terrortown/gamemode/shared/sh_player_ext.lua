@@ -33,6 +33,13 @@ function plymeta:SetupDataTables()
     if SERVER then
         self:SetSprintStamina(1)
     end
+
+    -- these are networked variables for the custom FOV handling
+    self:NetworkVar("Float", 1, "FOVTime")
+    self:NetworkVar("Float", 2, "FOVTransitionTime")
+    self:NetworkVar("Float", 3, "FOVValue")
+    self:NetworkVar("Float", 4, "FOVLastValue")
+    self:NetworkVar("Bool", 0, "FOVFixedValue")
 end
 
 ---
@@ -1270,68 +1277,19 @@ function plymeta:SetFOV(fov, time, requester)
         return
     end
 
-    -- normal case, SetFOV is used to set a fixed FOV value, we should track
-    -- this so we know that we should no apply custom FOV in GM:CalcView
-    if fov and fov ~= 0 then
-        self.fixedFOV = true
-        self.triggeredFOV = false
-        self.timeFOV = time
+    -- these values have to be set for our custom FOV handling in GM:CalcView
+    self:SetFOVLastValue(self:GetFOVValue())
+    self:SetFOVValue(fov or 0)
+    self:SetFOVTime(CurTime())
+    self:SetFOVTransitionTime(time)
+    self:SetFOVFixedValue(fov and fov ~= 0)
 
-        if SERVER then
-            net.Start("TTT2UpdateFOV")
-            net.WriteEntity(self)
-            net.WriteBool(true) -- FOV is fixed now
-            net.WriteFloat(time)
-            net.Broadcast()
-        end
-
-    -- when we zoom out, this has to trigger our custom zoom out that handles different
-    -- desired FOV values instead of 0, we therefore set it without transition to handle
-    -- the transistion ourself
-    else
-        -- the SetFOV function is called multiple times, this check makes sure
-        -- we only trigger on the first call after a zoom out
-        if self.fixedFOV then
-            self.fixedFOV = false
-            self.triggeredFOV = true
-            self.timeFOV = time
-
-            if SERVER then
-                net.Start("TTT2UpdateFOV")
-                net.WriteEntity(self)
-                net.WriteBool(false) -- FOV isn't fixed anymore
-                net.WriteFloat(time)
-                net.Broadcast()
-            end
-        end
-
-        -- set time to 0 so our custom FOV code can handle the zoom out
+    -- set time to 0 so our custom FOV code can handle the zoom out
+    if not fov or fov == 0 then
         time = 0
     end
 
     self:SetOldFOV(fov, time, requester)
-end
-
-if CLIENT then
-    -- we have to update this via netmessage as well, because some addons only call
-    -- the SetFOV on the server, so we have to manually sync it
-    net.Receive("TTT2UpdateFOV", function()
-        local ply = net.ReadEntity()
-
-        if not IsValid(ply) then
-            return
-        end
-
-        local lastFixedFOV = ply.fixedFOV
-
-        ply.fixedFOV = net.ReadBool()
-        ply.timeFOV = net.ReadFloat()
-
-        -- only trigger our zoom out if there was a change
-        if lastFixedFOV and not ply.fixedFOV then
-            ply.triggeredFOV = true
-        end
-    end)
 end
 
 ---

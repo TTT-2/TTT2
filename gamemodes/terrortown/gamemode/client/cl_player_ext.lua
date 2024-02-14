@@ -406,8 +406,8 @@ local position = 0
 local frameCount = 10
 
 local lastStrafeValue = 0
-local lastFOVValue = 85
-local fovTransitionMultiplier = 40
+
+local cvHostTimescale = GetConVar("host_timescale")
 
 -- handles dynamic camera features such as view bobbing, stafe tilting and fov changes
 -- parts of it are heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
@@ -430,46 +430,54 @@ hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
         fov = fov,
     }
 
+    ply.lastFOVValue = ply.lastFOVValue or fov
+
     local dynFOV = fov
     local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
     local desiredFOV = fov * mul ^ (1 / 6)
 
-    local wep = ply:GetActiveWeapon()
+    -- fixed mode: when SetZoom is set to something different than 0, this value should be used
+    -- without any custom modification
+    if ply:GetFOVFixedValue() then
+        dynFOV = fov
 
-    if ply.triggeredFOV then
-        ply.triggeredFOV = false
+    -- dynamic mode: transition between different FOV values
+    else
+        local time = math.max(
+            0,
+            (CurTime() - ply:GetFOVTime()) * game.GetTimeScale() * cvHostTimescale:GetFloat()
+        )
 
-        -- make sure the correct lastFOV value is used when only a networked value is available
-        --lastFOVValue = ply.lastFOV
+        local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
 
-        fovTransitionMultiplier = (desiredFOV - lastFOVValue) / ply.timeFOV
-    end
+        -- if the transition progress has reached 100%, we should enable the sprint
+        -- FOV smoothing algorithm
+        if progressTransition >= 1.0 then
+            if desiredFOV > ply.lastFOVValue then
+                desiredFOV = math.min(desiredFOV, ply.lastFOVValue + FrameTime() * 40)
 
-    -- special case: If SetFOV is only called on the server, we have to use custom networking
-    -- to bridge the delay between the engine and custom data being sent to the client, we check
-    -- if the player is still in ironsights and the weapon actually uses ironsights
-    if ply.fixedFOV and wep and not wep:GetIronsights() and wep:GetIronsightsTime() > 0 then
-        dynFOV = lastFOVValue
+                ply.lastFOVValue = desiredFOV
+            elseif desiredFOV < ply.lastFOVValue then
+                desiredFOV = math.max(desiredFOV, ply.lastFOVValue - FrameTime() * 40)
 
-    -- normal case: handle transitioning between different FOV values. Be it while sprinting or
-    -- zooming out of a fixed value
-    elseif not ply.fixedFOV then
-        if desiredFOV > lastFOVValue then
-            dynFOV = math.min(desiredFOV, lastFOVValue + FrameTime() * fovTransitionMultiplier)
-        elseif desiredFOV < lastFOVValue then
-            dynFOV = math.max(desiredFOV, lastFOVValue - FrameTime() * fovTransitionMultiplier)
-        else
-            dynFOV = lastFOVValue
-
-            fovTransitionMultiplier = 40
+                ply.lastFOVValue = desiredFOV
+            end
         end
 
-        lastFOVValue = dynFOV
+        -- make sure that FOV values of 0 are mapped to the desired FOV value
+        -- which is based on the base FOV value set in the GMOD settings
+        local fovNext = ply:GetFOVValue()
+        local fovLast = ply:GetFOVLastValue()
 
-    -- special case: cache the current FOV value while in fixed FOV mode to use this value
-    -- to transition out of this mode
-    else
-        lastFOVValue = fov
+        if fovNext == 0 then
+            fovNext = desiredFOV
+        end
+
+        if fovLast == 0 then
+            fovLast = desiredFOV
+        end
+
+        dynFOV = fovLast - (fovLast - fovNext) * progressTransition
     end
 
     if cvEnableDynamicFOV:GetBool() then
