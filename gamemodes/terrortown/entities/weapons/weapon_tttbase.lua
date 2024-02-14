@@ -128,10 +128,6 @@ SWEP.silentPickup = false
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
 SWEP.HotReloadableKeys = {}
 
--- Auto select the last weapon, when this weapon is removed from the player's iventory
--- Only works if OnRemove in the base class is called
-SWEP.SelectLastWeaponOnRemove = true
-
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
 --	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
@@ -750,10 +746,6 @@ if CLIENT then
     ---
     -- @realm client
     function SWEP:OnRemove()
-        if not self.SelectLastWeaponOnRemove then
-            return
-        end
-
         local owner = self:GetOwner()
 
         if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
