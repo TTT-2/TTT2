@@ -602,6 +602,9 @@ ttt_include("sh_role_module")
 ttt_include("sh_item_module")
 ttt_include("sh_playerclass")
 
+-- include files that need all the above
+include("ttt2/libraries/migrations.lua")
+
 ---
 -- Returns the equipment's file name
 -- @param string name

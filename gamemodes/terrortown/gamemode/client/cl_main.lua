@@ -161,6 +161,9 @@ end
 function GM:Initialize()
     Dev(1, "TTT2 Client initializing...")
 
+    -- Migrate all changes of TTT2
+    migrations.Apply()
+
     ---
     -- @realm client
     -- stylua: ignore
