@@ -46,6 +46,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 - `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
 - Added weapon pickup sounds when picking up weapons manually (by @TimGoll)
+- Added `SWEP.SelectLastWeaponOnRemove` to handle weapon selection on weapon removal; it is set to `true` by default (by @TimGoll)
 
 ### Changed
 
