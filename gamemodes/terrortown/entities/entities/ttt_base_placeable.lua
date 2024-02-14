@@ -309,7 +309,7 @@ if SERVER then
         local posThrow = ply:GetShootPos() - Vector(0, 0, 15)
         local vecAim = ply:GetAimVector()
 
-        if not ply:HasDropSpace(nil, posThrow, vecAim) then
+        if not ply:HasDropSpace(posThrow, vecAim) then
             LANG.Msg(ply, "throw_no_room", nil, MSG_MSTACK_WARN)
 
             return false

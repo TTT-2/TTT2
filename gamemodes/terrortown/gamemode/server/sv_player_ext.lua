@@ -1318,13 +1318,13 @@ end
 
 ---
 -- Checks if the player has space in front of them to drop a weapon.
--- @param[opt] Weapon wep The weapon that should be dropped; add it as a parameter
--- to have it on the trace ignore list
 -- @param Vector pos The position from where the drop should start
 -- @param Vector aim The aim vector or the general drop vector
+-- @param[opt] Weapon wep The weapon that should be dropped; add it as a parameter
+-- to have it on the trace ignore list
 -- @return boolean Returns if there is space for a weapon to be dropped
 -- @realm server
-function plymeta:HasDropSpace(wep, pos, aim)
+function plymeta:HasDropSpace(pos, aim, wep)
     local tr = util.QuickTrace(pos, aim * 18, { self, wep })
 
     return not tr.Hit
@@ -1344,7 +1344,7 @@ function plymeta:CanSafeDropWeapon(wep)
         return false
     end
 
-    if not self:HasDropSpace(wep, self:GetShootPos(), self:GetAimVector()) then
+    if not self:HasDropSpace(self:GetShootPos(), self:GetAimVector(), wep) then
         LANG.Msg(self, "drop_no_room", nil, MSG_MSTACK_WARN)
 
         return false
