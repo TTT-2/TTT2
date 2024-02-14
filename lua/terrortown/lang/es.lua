@@ -262,7 +262,6 @@ Analiza el cuerpo para saber cómo la víctima fue aseinada, únicamente si muri
 
 -- Decoy
 L.decoy_name = "Señuelo"
-L.decoy_no_room = "No puedes llevar este señuelo."
 L.decoy_broken = "¡Tu señuelo fue destruído!"
 
 L.decoy_short_desc = "Este señuelo muestra una señal de vida falsa en el radar"

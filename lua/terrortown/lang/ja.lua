@@ -262,7 +262,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "デコイ"
-L.decoy_no_room = "この狭い所ではデコイは持てないようだ。"
 L.decoy_broken = "デコイが破壊された！"
 
 L.decoy_short_desc = "このデコイは別陣営のレーダーに偽のレーダー反応を示してくれるぞ。"

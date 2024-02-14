@@ -12,6 +12,8 @@ ENT.Type = "anim"
 -- if set to false, the entity can not be destroyed by damage
 ENT.isDestructible = true
 
+ENT.pickupWeaponClass = nil
+
 ---
 -- @realm shared
 function ENT:Initialize()
@@ -64,6 +66,10 @@ if SERVER then
     local soundWeld = Sound("weapons/c4/c4_plant.wav")
 
     local soundThrow = Sound("Weapon_SLAM.SatchelThrow")
+
+    local soundDeny = Sound("HL2Player.UseDeny")
+
+    local soundWeaponPickup = Sound("items/ammo_pickup.wav")
 
     AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
     AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
@@ -223,6 +229,75 @@ if SERVER then
     function ENT:IsWeldedToSurface()
         return self.stateWelding or false
     end
+
+    ---
+    -- Hook that is called if a player uses their use key while focusing on the entity.
+    -- @note When overwriting this function BaseClass.UseOverwrite has to be called if
+    -- the entity pickup system should be used.
+    -- @param Player activator The player that used their use key
+    -- @hook
+    -- @realm server
+    function ENT:UseOverride(activator)
+        if not IsValid(activator) or not activator:IsTerror() or not self.pickupWeaponClass then
+            return
+        end
+
+        if not self:PlayerCanPickupWeapon(activator) then
+            LANG.Msg(activator, "pickup_fail", nil, MSG_MSTACK_WARN)
+
+            self:EmitSound(soundDeny)
+
+            return
+        end
+
+        local wep = activator:GetWeapon(self.pickupWeaponClass)
+
+        if IsValid(wep) and wep:Clip1() < wep.Primary.ClipSize then
+            wep:SetClip1(wep:Clip1() + 1)
+
+            activator:EmitSound(soundWeaponPickup)
+
+            activator:SelectWeapon(self.pickupWeaponClass)
+        else
+            -- picks up weapon and drops blocking weapon if slot is already in use
+            wep = activator:SafePickupWeaponClass(self.pickupWeaponClass, true)
+
+            -- if pickup has failed, the in-world entity should not be removed
+            if not IsValid(wep) then
+                LANG.Msg(activator, "pickup_no_room", nil, MSG_MSTACK_WARN)
+
+                self:EmitSound(soundDeny)
+
+                return
+            end
+        end
+
+        if self:IsWeldedToSurface() then
+            sound.Play(soundWeld, self:GetPos(), 75)
+        end
+
+        self:OnPickup(activator, wep)
+
+        self:Remove()
+    end
+
+    ---
+    -- Run if a valid player tries to pick up this entity to check if this pickup is accepted.
+    -- @param Player activator The player that used their use key
+    -- @return[default=true] boolean Return true to allow pickup
+    -- @hook
+    -- @realm server
+    function ENT:PlayerCanPickupWeapon(activator)
+        return true
+    end
+
+    ---
+    -- Called when this entity is picked up and about to be removed.
+    -- @param Player activator The player that used their use key
+    -- @param Weapon wep The weapon that is added to their inventory
+    -- @hook
+    -- @realm server
+    function ENT:OnPickup(activator, wep) end
 
     ---
     -- Helper function for a weapon that wants to throw the entity. Already handles everything.

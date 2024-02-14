@@ -19,8 +19,11 @@ ENT.Base = "ttt_base_placeable"
 
 ENT.Model = "models/props/cs_office/radio.mdl"
 
-ENT.CanUseKey = true
 ENT.CanHavePrints = false
+
+ENT.CanUseKey = true
+ENT.pickupWeaponClass = "weapon_ttt_radio"
+
 ENT.SoundLimit = 5
 ENT.SoundDelay = 0.5
 
@@ -41,7 +44,7 @@ function ENT:Initialize()
         self:SetUseType(SIMPLE_USE)
 
         local mvObject = self:AddMarkerVision("radio_owner")
-        mvObject:SetOwner(self:GetOwner())
+        mvObject:SetOwner(self:GetOriginator())
         mvObject:SetVisibleFor(VISIBLE_FOR_TEAM)
         mvObject:SyncToClients()
     end
@@ -60,30 +63,6 @@ function ENT:Initialize()
     self.fingerprints = {}
 end
 
----
--- @param Player activator
--- @realm shared
-function ENT:UseOverride(activator)
-    if IsValid(activator) and activator:IsPlayer() and activator == self:GetOriginator() then
-        local prints = self.fingerprints or {}
-
-        -- picks up weapon, switches if possible and needed, returns weapon if successful
-        local wep = activator:SafePickupWeaponClass("weapon_ttt_radio", true)
-
-        if not IsValid(wep) then
-            return
-        end
-
-        self:Remove()
-
-        wep.fingerprints = wep.fingerprints or {}
-
-        table.Add(wep.fingerprints, prints)
-    else
-        LANG.Msg(activator, "entity_pickup_owner_only")
-    end
-end
-
 if SERVER then
     ---
     -- @realm server
@@ -95,6 +74,25 @@ if SERVER then
         end
 
         LANG.Msg(originator, "radio_broken", nil, MSG_MSTACK_WARN)
+    end
+
+    ---
+    -- @param Player activator
+    -- @realm server
+    function ENT:PlayerCanPickupWeapon(activator)
+        return activator == self:GetOriginator()
+    end
+
+    ---
+    -- @param Player activator
+    -- @param Weapon wep
+    -- @realm server
+    function ENT:OnPickup(activator, wep)
+        local prints = self.fingerprints or {}
+
+        wep.fingerprints = wep.fingerprints or {}
+
+        table.Add(wep.fingerprints, prints)
     end
 end
 

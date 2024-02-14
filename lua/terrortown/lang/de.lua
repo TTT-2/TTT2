@@ -262,7 +262,6 @@ Analysiere eine Leiche, um zu sehen, wie die Person umgebracht wurde, funktionie
 
 -- Decoy
 L.decoy_name = "Attrappe"
-L.decoy_no_room = "Du kannst diese Attrappe nicht tragen."
 L.decoy_broken = "Deine Attrappe wurde zerstört!"
 
 L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sichtbar für andere Teams"
