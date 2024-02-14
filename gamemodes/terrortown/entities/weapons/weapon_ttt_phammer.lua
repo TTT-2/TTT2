@@ -238,11 +238,7 @@ end
 ---
 -- @realm shared
 function SWEP:OnRemove()
-    local owner = self:GetOwner()
-
-    if CLIENT and IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-        RunConsoleCommand("lastinv")
-    end
+    BaseClass.OnRemove(self)
 
     if CLIENT and IsValid(self.Ghost) then
         self.Ghost:Remove()
