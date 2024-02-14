@@ -123,7 +123,7 @@ end
 function shop.SetEquipmentTeamBought(ply, equipmentName)
     local team = ply:GetTeam()
 
-    if team and team == TEAM_NONE or TEAMS[team].alone then
+    if not team or team == TEAM_NONE or TEAMS[team].alone then
         return
     end
 
