@@ -455,13 +455,11 @@ hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
         if progressTransition >= 1.0 then
             if desiredFOV > ply.lastFOVValue then
                 desiredFOV = math.min(desiredFOV, ply.lastFOVValue + FrameTime() * 40)
-
-                ply.lastFOVValue = desiredFOV
             elseif desiredFOV < ply.lastFOVValue then
                 desiredFOV = math.max(desiredFOV, ply.lastFOVValue - FrameTime() * 40)
-
-                ply.lastFOVValue = desiredFOV
             end
+
+            ply.lastFOVValue = desiredFOV
         end
 
         -- make sure that FOV values of 0 are mapped to the desired FOV value
