@@ -193,7 +193,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
             1,
             "Weapon '"
                 .. equipment:GetClass()
-                .. "' does't use the weapon_tttbase and can therefore not populate the settings panel."
+                .. "' doesn't use the weapon_tttbase and cannot be added to the settings panel."
         )
     end
 
