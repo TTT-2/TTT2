@@ -22,6 +22,9 @@ migrations.orm = orm.Make(migrations.databaseName)
 
 ---
 -- Runs all missing forward gamemode migrations.
+-- @note Folderpath is lua/terrortown/migrations/*.lua
+-- @note Migrations shall be returned as anonymous functions inside those files
+-- @note Migrations are shared, so use if CLIENT|SERVER for separation
 -- @realm shared
 function migrations.Apply()
     local files = file.Find(migrations.folderPath .. "*.lua", "LUA", "nameasc") or {}
