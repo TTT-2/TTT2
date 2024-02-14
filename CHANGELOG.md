@@ -87,6 +87,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Rendering order is based on distance, no more weird visual glitches
   - Hidden when observing a player in first person view
 - Your own spectator nametag will not display when looking directly up in post-round (by @EntranceJew)
+- Made sure the last weapon is selected by default if the current weapon is removed; overwrite `OnRemove` to prevent that (by @TimGoll)
 
 ### Fixed
 

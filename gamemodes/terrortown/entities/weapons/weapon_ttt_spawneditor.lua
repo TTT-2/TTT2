@@ -353,16 +353,12 @@ if CLIENT then
     ---
     -- @realm client
     function SWEP:OnRemove()
+        BaseClass.OnRemove(self)
+
         hook.Remove("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit")
 
         -- clear the local cache to prevent flickering after reset
         entspawnscript.ClearLocalCache()
-
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("lastinv")
-        end
     end
 
     ---
