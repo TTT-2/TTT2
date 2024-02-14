@@ -306,12 +306,19 @@ if SERVER then
     -- @return boolean Returns true on success
     -- @realm server
     function ENT:ThrowEntity(ply, rotationalOffset)
+        local posThrow = ply:GetShootPos() - Vector(0, 0, 15)
+        local vecAim = ply:GetAimVector()
+
+        if not ply:HasDropSpace(posThrow, vecAim) then
+            LANG.Msg(ply, "throw_no_room", nil, MSG_MSTACK_WARN)
+
+            return false
+        end
+
         ply:SetAnimation(PLAYER_ATTACK1)
 
         rotationalOffset = rotationalOffset or Angle(0, 0, 0)
 
-        local posThrow = ply:GetShootPos() - Vector(0, 0, 15)
-        local vecAim = ply:GetAimVector()
         local velocity = ply:GetVelocity()
         local velocityThrow = velocity + vecAim * 250
 
