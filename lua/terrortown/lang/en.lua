@@ -2190,4 +2190,4 @@ L.magneto_stick_help_carry_prop_release = "Release prop"
 L.magneto_stick_help_carry_prop_drop = "Drop prop"
 
 -- 2024-02-14
-L.throw_no_room = "You have to place here to throw this device"
+L.throw_no_room = "You have no space here to throw this device"
