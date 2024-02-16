@@ -262,7 +262,6 @@ Analisa um cadáver para mostrar como a vítima morreu, mas somente se ela tiver
 
 -- Decoy
 L.decoy_name = "Isca"
-L.decoy_no_room = "Você não pode pegar esta Isca."
 L.decoy_broken = "Sua Isca foi destruída!"
 
 L.decoy_short_desc = "Está isca, mostrará um radar falso para o outro time."
@@ -273,7 +272,6 @@ Mostra um sinal de radar falso para Detetives, e faz os scanners de DNA deles in
 
 -- Defuser
 L.defuser_name = "Kit de Desarme"
-L.defuser_help = "{primaryfire} desarma um C4 que está sob sua mira."
 
 L.defuser_desc = [[
 Instantaneamente desarma um explosivo C4.
@@ -292,7 +290,6 @@ Queimar um cadáver emite um som estranho.]]
 L.hstation_name = "Estação de Cura"
 
 L.hstation_broken = "Sua Estação de Cura foi destruída!"
-L.hstation_help = "{primaryfire} posiciona a Estação de Cura."
 
 L.hstation_desc = [[
 Permite que as pessoas se curem quando posicionada.
@@ -316,7 +313,6 @@ A energia causa dano em pessoas que estejam nas proximidades.]]
 
 -- Radio
 L.radio_broken = "Seu Rádio foi destruído!"
-L.radio_help_pri = "{primaryfire} posiciona o Rádio."
 
 L.radio_desc = [[
 Reproduz sons para distrair e/ou enganar.
@@ -975,7 +971,7 @@ L.menu_guide_description = "Ajuda você a começar no TTT2 explicando sobre o ga
 L.menu_bindings_description = "Binds especificas do TTT2 para fazer você virar pro."
 L.menu_language_description = "Selecione a linguagem do modo."
 L.menu_appearance_description = "Aparencias personalizadas do TTT2."
-L.menu_gameplay_description = "Evite funções e outras coisas também."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Configure addons locais do seu jeito."
 L.menu_legacy_description = "Um painel com guias convertidas do TTT original que deve ser portado para o novo sistema."
 L.menu_administration_description = "Configurações gerais para Huds, lojas e etc."
@@ -999,10 +995,8 @@ L.submenu_appearance_crosshair_title = "Mira"
 L.submenu_appearance_dmgindicator_title = "Indicador de Dano"
 L.submenu_appearance_performance_title = "Desempenho"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Outros"
 
 L.submenu_gameplay_general_title = "Geral"
-L.submenu_gameplay_avoidroles_title = "Evitar funções"
 
 L.submenu_administration_hud_title = "Configurações da HUD"
 L.submenu_administration_randomshop_title = "Loja Aleatória"
@@ -1039,17 +1033,12 @@ L.label_shop_show_slot = "Mostrar marcação de slot"
 L.label_shop_show_custom = "Mostrar marca de item customizado"
 L.label_shop_show_fav = "Mostar marcação de itens favoritos"
 L.label_crosshair_enable = "Ativar mira"
-L.label_crosshair_gap_enable = "Ativar lacuna da mira personalizada"
-L.label_crosshair_gap = "Lacuna personalizada da mira"
 L.label_crosshair_opacity = "Opacidade da mira"
 L.label_crosshair_ironsight_opacity = "Opacidade da mira de ferro"
 L.label_crosshair_size = "Tamanho da mira"
 L.label_crosshair_thickness = "Espessura da mira"
 L.label_crosshair_thickness_outline = "Contorno da espessura da mira"
-L.label_crosshair_static_enable = "Ativar mira estática"
-L.label_crosshair_dot_enable = "Ativar ponto na mira"
-L.label_crosshair_lines_enable = "Ativar linha da mira"
-L.label_crosshair_scale_enable = "Ativar escala dependendo da arma"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Mira de ferro para armas fracas"
 L.label_damage_indicator_enable = "Ativar indicador de dano"
 L.label_damage_indicator_mode = "Selecione o tema do indicador de dano"
@@ -1095,7 +1084,6 @@ L.header_damage_indicator = "Configuração do indicador de dano"
 L.header_performance_settings = "Configuração de Performance"
 L.header_interface_settings = "Configuração da Interface"
 L.header_gameplay_settings = "Configuração do Gameplay"
-L.header_roleselection = "Selecione a função que deseja evitar"
 L.header_hud_administration = "Selecionar HUD padrão e forçada"
 L.header_hud_enabled = "Ativar/Desativar HUD"
 
@@ -1157,7 +1145,6 @@ L.binoc_help_sec = "Alterar o zoom."
 
 L.vis_help_pri = "Largar o dispositivo ativo."
 
-L.decoy_help_pri = "Plantar a isca."
 
 -- 2020-08-07
 L.pickup_error_spec = "Você não pode pegar isto como espectaor."
@@ -1672,8 +1659,6 @@ L.xfer_team_indicator = "Time"
 --L.label_tbutton_admin_show = "Show traitor buttons to admins"
 --L.label_ragdoll_carrying = "Enable ragdoll carrying"
 --L.label_prop_throwing = "Enable prop throwing"
---L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
---L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
 --L.label_weapon_carrying = "Enable weapon carrying"
 --L.label_weapon_carrying_range = "Weapon carry range"
 --L.label_prop_carrying_force = "Prop pickup force"
@@ -1763,7 +1748,6 @@ L.xfer_team_indicator = "Time"
 --L.label_sprint_max = "Max sprinting stamina"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -1977,8 +1961,10 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 --L.header_hud_elements_customize = "Customize the HUD-Elements"
 --L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2069,11 +2055,47 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
@@ -2088,7 +2110,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-11-18
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
@@ -2101,6 +2123,18 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
+-- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2111,3 +2145,49 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "Plantar a isca"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+--L.throw_no_room = "You have no space here to throw this device"

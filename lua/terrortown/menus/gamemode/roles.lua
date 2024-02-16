@@ -18,46 +18,48 @@ CLGAMEMODEMENU.roles = nil
 local builtinIcon = Material("vgui/ttt/vskin/markers/builtin")
 
 function CLGAMEMODEMENU:IsAdminMenu()
-	return true
+    return true
 end
 
 function CLGAMEMODEMENU:InitializeVirtualMenus()
-	-- add "virtual" submenus that are treated as real one even without files
-	virtualSubmenus = {}
+    -- add "virtual" submenus that are treated as real one even without files
+    virtualSubmenus = {}
 
-	self.roles = roles.GetSortedRoles()
-	local rolesMenuBase = self:GetSubmenuByName("base_roles")
+    self.roles = roles.GetSortedRoles()
+    local rolesMenuBase = self:GetSubmenuByName("base_roles")
 
-	local counter = 0
-	for _, roleData in pairs(self.roles) do
-		if roleData.index == ROLE_NONE then continue end
+    local counter = 0
+    for _, roleData in pairs(self.roles) do
+        if roleData.index == ROLE_NONE then
+            continue
+        end
 
-		counter = counter + 1
+        counter = counter + 1
 
-		virtualSubmenus[counter] = tableCopy(rolesMenuBase)
-		virtualSubmenus[counter].title = roleData.name
-		virtualSubmenus[counter].icon = roleData.iconMaterial
-		virtualSubmenus[counter].roleData = roleData
-		virtualSubmenus[counter].iconBadge = roleData.builtin and builtinIcon
-		virtualSubmenus[counter].iconBadgeSize = 8
-		virtualSubmenus[counter].basemenu = self
-	end
+        virtualSubmenus[counter] = tableCopy(rolesMenuBase)
+        virtualSubmenus[counter].title = roleData.name
+        virtualSubmenus[counter].icon = roleData.iconMaterial
+        virtualSubmenus[counter].roleData = roleData
+        virtualSubmenus[counter].iconBadge = roleData.builtin and builtinIcon
+        virtualSubmenus[counter].iconBadgeSize = 8
+        virtualSubmenus[counter].basemenu = self
+    end
 end
 
 -- overwrite the normal submenu function to return our custom virtual submenus
 function CLGAMEMODEMENU:GetSubmenus()
-	if not self.isInitialized then
-		self.isInitialized = true
+    if not self.isInitialized then
+        self.isInitialized = true
 
-		self:InitializeVirtualMenus()
-	end
+        self:InitializeVirtualMenus()
+    end
 
-	return virtualSubmenus
+    return virtualSubmenus
 end
 
 -- overwrite and return true to enable a searchbar
 function CLGAMEMODEMENU:HasSearchbar()
-	return true
+    return true
 end
 
 ---
@@ -69,6 +71,4 @@ end
 -- @param DPanel parent The parent panel which is the submenu
 -- @hook
 -- @realm client
-function GM:TTT2OnRoleAddToSettingsMenu(role, parent)
-
-end
+function GM:TTT2OnRoleAddToSettingsMenu(role, parent) end

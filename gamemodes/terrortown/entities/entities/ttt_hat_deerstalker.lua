@@ -15,145 +15,145 @@ ENT.CanUseKey = true
 ---
 -- @realm shared
 function ENT:SetupDataTables()
-	self:NetworkVar("Bool", 0, "BeingWorn")
+    self:NetworkVar("Bool", 0, "BeingWorn")
 end
 
 ---
 -- @realm shared
 function ENT:Initialize()
-	self:SetBeingWorn(true)
+    self:SetModel(self.Model)
 
-	self:SetModel(self.Model)
+    self:DrawShadow(false)
 
-	self:DrawShadow(false)
+    -- don't physicsinit the ent here, because physicsing and then setting
+    -- movetype none is 1) a waste of memory, 2) broken
 
-	-- don't physicsinit the ent here, because physicsing and then setting
-	-- movetype none is 1) a waste of memory, 2) broken
-
-	self:SetMoveType(MOVETYPE_NONE)
-	self:SetSolid(SOLID_NONE)
-	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-
-	if SERVER then
-		self.Wearer = self:GetParent()
-		self:AddEffects(bit.bor(EF_BONEMERGE, EF_BONEMERGE_FASTCULL, EF_PARENT_ANIMATES))
-	end
+    if SERVER then
+        if IsValid(self:GetParent()) then
+            self:EquipTo(self:GetParent())
+        else
+            self:Drop()
+        end
+        self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+        self:SetUseType(SIMPLE_USE)
+        self:AddEffects(bit.bor(EF_BONEMERGE, EF_BONEMERGE_FASTCULL, EF_PARENT_ANIMATES))
+    end
 end
 
 if SERVER then
-	---
-	-- @realm server
-	local ttt_hats_reclaim = CreateConVar("ttt_detective_hats_reclaim", "1")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local ttt_hats_reclaim = CreateConVar("ttt_detective_hats_reclaim", "1")
 
-	---
-	-- @realm server
-	local ttt_hats_innocent = CreateConVar("ttt_detective_hats_reclaim_any", "0")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local ttt_hats_innocent = CreateConVar("ttt_detective_hats_reclaim_any", "0")
 
-	---
-	-- @realm server
-	function ENT:OnRemove()
-		self:SetBeingWorn(false)
-	end
+    ---
+    -- @realm server
+    function ENT:OnRemove()
+        -- only focus on cleaning up external links, we're not long for this world
+        if self.Wearer and self.Wearer.hat == self then
+            self.Wearer.hat = nil
+        end
+    end
 
-	---
-	-- @param Vector dir The drop direction.
-	-- @realm server
-	function ENT:Drop(dir)
-		local ply = self:GetParent()
+    ---
+    -- @param Player ply The player to put the hat on.
+    -- @realm server
+    function ENT:EquipTo(ply)
+        self.Wearer = ply
+        ply.hat = self
 
-		ply.hat = nil
-		self:SetParent(nil)
+        self:SetBeingWorn(true)
 
-		self:SetBeingWorn(false)
-		self:SetUseType(SIMPLE_USE)
+        self:SetMoveType(MOVETYPE_NONE)
+        self:SetSolid(SOLID_NONE)
 
-		-- only now physics this entity
-		self:PhysicsInit(SOLID_VPHYSICS)
-		self:SetSolid(SOLID_VPHYSICS)
-		self:SetMoveType(MOVETYPE_VPHYSICS)
+        local pos, ang = playermodels.GetHatPosition(ply)
+        self:SetPos(pos)
+        self:SetAngles(ang)
+        self:SetParent(ply)
+    end
 
-		-- position at head
-		if IsValid(ply) then
-			local bone = ply:LookupBone("ValveBiped.Bip01_Head1")
-			if bone then
-				local pos, ang = ply:GetBonePosition(bone)
-				self:SetPos(pos)
-				self:SetAngles(ang)
-			else
-				local pos = ply:GetPos()
-				pos.z = pos.z + 68
+    ---
+    -- @param Vector dir The drop direction.
+    -- @realm server
+    function ENT:Drop(dir)
+        local ply = self:GetParent()
 
-				self:SetPos(pos)
-			end
-		end
+        ply.hat = nil
+        self:SetParent(nil)
 
-		-- physics push
-		local phys = self:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:SetMass(10)
+        self:SetBeingWorn(false)
 
-			if IsValid(ply) then
-				phys:SetVelocityInstantaneous(ply:GetVelocity())
-			end
+        -- only now physics this entity
+        self:PhysicsInit(SOLID_VPHYSICS)
+        self:SetSolid(SOLID_VPHYSICS)
+        self:SetMoveType(MOVETYPE_VPHYSICS)
 
-			if not dir then
-				phys:ApplyForceCenter(Vector(0, 0, 1200))
-			else
-				phys:ApplyForceCenter(Vector(0, 0, 700) + dir * 500)
-			end
+        -- if we're not already on the player's head,
+        if IsValid(ply) then
+            local pos, ang = playermodels.GetHatPosition(ply)
+            self:SetPos(pos)
+            self:SetAngles(ang)
+        end
 
-			phys:AddAngleVelocity(VectorRand() * 200)
+        -- physics push
+        local phys = self:GetPhysicsObject()
+        if IsValid(phys) then
+            phys:SetMass(10)
 
-			phys:Wake()
-		end
-	end
+            if IsValid(ply) then
+                phys:SetVelocityInstantaneous(ply:GetVelocity())
+            end
 
-	local function CanEquipHat(ply)
-		return not IsValid(ply.hat) and
-			(ttt_hats_innocent:GetBool() or ply:GetRole() == ROLE_DETECTIVE)
-	end
+            if not dir then
+                phys:ApplyForceCenter(Vector(0, 0, 1200))
+            else
+                phys:ApplyForceCenter(Vector(0, 0, 700) + dir * 500)
+            end
 
-	---
-	-- @param Player ply
-	-- @realm server
-	function ENT:UseOverride(ply)
-		if not ttt_hats_reclaim:GetBool() then return end
+            phys:AddAngleVelocity(VectorRand() * 200)
 
-		if IsValid(ply) and not self:GetBeingWorn() then
-			if GetRoundState() ~= ROUND_ACTIVE then
-				SafeRemoveEntity(self)
-				return
-			elseif not CanEquipHat(ply) then
-				return
-			end
+            phys:Wake()
+        end
+    end
 
-			sound.Play("weapon.ImpactSoft", self:GetPos(), 75, 100, 1)
+    local function CanEquipHat(ply)
+        local rd = ply:GetSubRoleData()
+        return not IsValid(ply.hat)
+            and (ttt_hats_innocent:GetBool() or (rd.isPolicingRole and rd.isPublicRole))
+    end
 
-			self:SetMoveType(MOVETYPE_NONE)
-			self:SetSolid(SOLID_NONE)
-			self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+    ---
+    -- @param Player ply
+    -- @realm server
+    function ENT:UseOverride(ply)
+        if not ttt_hats_reclaim:GetBool() then
+            return
+        end
 
-			self:SetParent(ply)
-			self.Wearer = ply
+        if IsValid(ply) and not self:GetBeingWorn() then
+            if GetRoundState() ~= ROUND_ACTIVE then
+                SafeRemoveEntity(self)
+                return
+            elseif not CanEquipHat(ply) then
+                return
+            end
 
-			ply.hat = self
+            sound.Play("weapon.ImpactSoft", self:GetPos(), 75, 100, 1)
 
-			self:SetBeingWorn(true)
+            self:EquipTo(ply)
 
-			LANG.Msg(ply, "hat_retrieve")
-		end
-	end
+            LANG.Msg(ply, "hat_retrieve")
+        end
+    end
 
-	local function TestHat(ply, cmd, args)
-		local hat = ents.Create("ttt_hat_deerstalker")
-
-		hat:SetPos(ply:GetPos() + Vector(0,0,70))
-		hat:SetAngles(ply:GetAngles())
-		hat:SetParent(ply)
-
-		ply.hat = hat
-
-		hat:Spawn()
-	end
-	concommand.Add("ttt_debug_testhat", TestHat, nil, nil, FCVAR_CHEAT)
+    local function TestHat(ply, cmd, args)
+        playermodels.ApplyPlayerHat(ply, nil, args[1] or "ttt_hat_deerstalker")
+    end
+    concommand.Add("ttt_debug_testhat", TestHat, nil, nil, FCVAR_CHEAT)
 end

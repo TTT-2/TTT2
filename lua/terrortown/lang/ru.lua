@@ -264,7 +264,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "Приманка"
-L.decoy_no_room = "Вы не можете подобрать эту Приманку."
 L.decoy_broken = "Ваша Приманка уничтожена!"
 
 L.decoy_short_desc = "Эта Приманка создаёт фальшивую метку на радарах других команд."
@@ -275,7 +274,6 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "Набор сапёра"
-L.defuser_help = "{primaryfire}: обезвредить С4."
 
 L.defuser_desc = [[
 Мгновенно обезвреживает С4.
@@ -294,7 +292,6 @@ L.flare_desc = [[
 L.hstation_name = "Лечебная станция"
 
 L.hstation_broken = "Ваша Лечебная станция уничтожена!"
-L.hstation_help = "{primaryfire}: разместить Лечебную станцию."
 
 L.hstation_desc = [[
 Позволяет игрокам восстанавливать здоровье.
@@ -318,7 +315,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "Ваше Радио уничтожено!"
-L.radio_help_pri = "{primaryfire}: поместить Радио."
 
 L.radio_desc = [[
 Воспроизводит звуки для отвлечения или обмана.
@@ -977,7 +973,7 @@ L.menu_guide_description = "Поможет вам освоиться в TTT2 и 
 L.menu_bindings_description = "Назначьте клавиши на различные функции TTT2 и его дополнений по своему вкусу."
 L.menu_language_description = "Выберите язык режима игры."
 L.menu_appearance_description = "Настройки внешний вида и производительности интерфейса."
-L.menu_gameplay_description = "Настройки некоторых функций и избегания ролей."
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Настройте локальные дополнения по своему вкусу."
 L.menu_legacy_description = "Панель с конвертированными вкладками из оригинального TTT, которые должны быть перенесены на новую систему."
 L.menu_administration_description = "Общие настройки интерфейсов, магазинов и прочего."
@@ -1001,10 +997,8 @@ L.submenu_appearance_crosshair_title = "Прицел"
 L.submenu_appearance_dmgindicator_title = "Индикатор урона"
 L.submenu_appearance_performance_title = "Производительность"
 L.submenu_appearance_interface_title = "Интерфейс"
-L.submenu_appearance_miscellaneous_title = "Прочее"
 
 L.submenu_gameplay_general_title = "Общее"
-L.submenu_gameplay_avoidroles_title = "Выбор избегаемых ролей"
 
 L.submenu_administration_hud_title = "Настройки интерфейса"
 L.submenu_administration_randomshop_title = "Случайный магазин"
@@ -1041,16 +1035,11 @@ L.label_shop_show_slot = "Отображать метку слота"
 L.label_shop_show_custom = "Отображать метку предмета сервера"
 L.label_shop_show_fav = "Отображать метку избранного предмета"
 L.label_crosshair_enable = "Включить прицел."
-L.label_crosshair_gap_enable = "Включить пользовательский зазор прицела."
-L.label_crosshair_gap = "Пользовательский зазор"
 L.label_crosshair_opacity = "Непрозрачность прицела"
 L.label_crosshair_ironsight_opacity = "Непрозрачность прицела при прицеливании"
 L.label_crosshair_size = "Размер прицела"
 L.label_crosshair_thickness = "Толщина прицела"
 L.label_crosshair_thickness_outline = "Толщина обводки прицела"
-L.label_crosshair_static_enable = "Включить статичный прицел."
-L.label_crosshair_dot_enable = "Включить точку прицела."
-L.label_crosshair_lines_enable = "Включить линии прицела."
 L.label_crosshair_scale_enable = "Включить разные размеры прицела для разного оружия."
 L.label_crosshair_ironsight_low_enabled = "Опускать оружие при прицеливании."
 L.label_damage_indicator_enable = "Включить индикатор урона."
@@ -1097,7 +1086,6 @@ L.header_damage_indicator = "Настройки индикатора урона"
 L.header_performance_settings = "Настройки производительности"
 L.header_interface_settings = "Настройки интерфейса"
 L.header_gameplay_settings = "Настройки игры"
-L.header_roleselection = "Выбор избегаемых ролей"
 L.header_hud_administration = "Выбор интерфейса по умолчанию и принудительного интерфейса"
 L.header_hud_enabled = "Включение или выключение интерфейсов"
 
@@ -1159,7 +1147,6 @@ L.binoc_help_sec = "Изменить уровень приближения."
 
 L.vis_help_pri = "Бросить активированное устройство."
 
-L.decoy_help_pri = "Установить Приманку."
 
 -- 2020-08-07
 L.pickup_error_spec = "Вы не можете подобрать это за наблюдателя."
@@ -1674,8 +1661,6 @@ L.label_bots_are_spectators = "Боты всегда наблюдатели"
 L.label_tbutton_admin_show = "Показывать кнопки предателей администраторам"
 L.label_ragdoll_carrying = "Включить поднятие рэгдоллов"
 L.label_prop_throwing = "Включить метание предметов"
-L.label_ragdoll_pinning = "Включить прикрепление тел для не невиновных ролей"
-L.label_ragdoll_pinning_innocents = "Включить прикрепление для невиновных ролей"
 L.label_weapon_carrying = "Включить поднятие оружия"
 L.label_weapon_carrying_range = "Дальность поднятого оружия"
 L.label_prop_carrying_force = "Сила поднятия предметов"
@@ -1765,7 +1750,6 @@ L.label_sprint_enabled = "Включить ускорение"
 L.label_sprint_max = "Максимальная выносливость ускорения"
 L.label_sprint_stamina_consumption = "Коэффициент потребления выносливости"
 L.label_sprint_stamina_regeneration = "Коэффициент восстановления выносливости"
-L.label_sprint_crosshair = "Показывать прицел при ускорении"
 L.label_crowbar_unlocks = "Основная атака может использоваться для взаимодействия (например, открытия)"
 L.label_crowbar_pushforce = "Сила толчка монтировки"
 
@@ -1979,8 +1963,10 @@ L.search_eyes = "Используя свои детективные навыки
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 --L.header_hud_elements_customize = "Customize the HUD-Elements"
 --L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2071,11 +2057,47 @@ L.search_eyes = "Используя свои детективные навыки
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
@@ -2090,7 +2112,7 @@ L.search_eyes = "Используя свои детективные навыки
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-11-18
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
@@ -2103,6 +2125,18 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
+-- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2113,3 +2147,49 @@ L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "Установить Приманку"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+--L.throw_no_room = "You have no space here to throw this device"

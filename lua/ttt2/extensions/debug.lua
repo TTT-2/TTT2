@@ -6,7 +6,7 @@
 local debug = debug
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 ---
@@ -15,11 +15,11 @@ end
 -- @realm shared
 -- @internal
 local function ConvertToString(object)
-	if isstring(object) then
-		return "\"" .. object .. "\""
-	else
-		return tostring(object)
-	end
+    if isstring(object) then
+        return "\"" .. object .. "\""
+    else
+        return tostring(object)
+    end
 end
 
 ---
@@ -30,22 +30,26 @@ end
 -- @realm shared
 -- @internal
 local function TryConvertToSequentialTable(tbl)
-	if not istable(tbl) then return false end
+    if not istable(tbl) then
+        return false
+    end
 
-	-- Check that all keys are numbers
-	local largestIndex = 1
-	for key, tableContent in pairs(tbl) do
-		if not isnumber(key) then return false end
-		if largestIndex < key then
-			largestIndex = key
-		end
-	end
+    -- Check that all keys are numbers
+    local largestIndex = 1
+    for key, tableContent in pairs(tbl) do
+        if not isnumber(key) then
+            return false
+        end
+        if largestIndex < key then
+            largestIndex = key
+        end
+    end
 
-	for i = 1, largestIndex do
-		tbl[i] = ConvertToString(tbl[i])
-	end
+    for i = 1, largestIndex do
+        tbl[i] = ConvertToString(tbl[i])
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -54,15 +58,15 @@ end
 -- @note The message can be a variable or a table and even nil. In case of a table it automatically concatenates all entries and checks every object if it is a string
 -- @realm shared
 function debug.print(message)
-	local printMessage = ""
+    local printMessage = ""
 
-	if TryConvertToSequentialTable(message) then
-		for i = 1, #message do
-			printMessage = printMessage .. message[i] .. " "
-		end
-	else
-		printMessage = ConvertToString(message)
-	end
+    if TryConvertToSequentialTable(message) then
+        for i = 1, #message do
+            printMessage = printMessage .. message[i] .. " "
+        end
+    else
+        printMessage = ConvertToString(message)
+    end
 
-	print(printMessage)
+    Dev(2, printMessage)
 end

@@ -6,7 +6,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added migrations between TTT2-versions, some breaking changes could now be migrated instead
+- Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll)
+  - C4
+  - Radio
+  - Beacon
 - Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)
+- Reworked the way the player camera is handled (by @TimGoll)
+  - Added FOV change on speed change
+  - Added view bobbing on walking, swimming, falling and strafing
+  - Added convars to disable those changes
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
@@ -14,6 +23,34 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `shop.IsFavorite(equipmentId)`
   - `shop.SetFavoriteState(equipmentId, isFavorite)`
   - `shop.GetFavorites()`
+- Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew)
+- Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)
+- `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
+  - Added `SWEP.IdleAnim` to allow specifying an idle animation.
+  - Added `SWEP.idleResetFix` to allow the animations for CS:S weapons to automatically be returned to an idle position.
+  - Added `SWEP.ShowDefaultViewModel` to prevent a weapon from drawing a ViewModel when set to `false` at all without FOV hacks or Deploy code which has no effect.
+- Icon for gameplay menu
+- Icon for accessibility menu
+- Icon for `Voice & Volume` menu
+- Added a new vgui element: `DWeaponPreview_TTT2` to render a player with their equipped weapon (by @TimGoll)
+  - Supports any normal weapon that has a `.HoldType` and a `.WorldModel`
+  - Supports any weapon that is made with the SWEP Construction Kit (boomerang, melonmine, ...)
+- Made beacon model and icon unique from decoy (by @EntranceJew)
+- Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
+- Added custom world and view models to some builtin weapons (by @TimGoll)
+  - added for: radio, beacon, decoy, binoculars, visualizer
+- Added support for easy addition of custom view and world models (by @TimGoll)
+  - Added `AddCustomViewModel` to add custom view models
+  - Added `AddCustomWorldModel` to add custom world models
+  - Added an automatic fix for badly coded addons that break the view model fingers
+- Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
+  - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt_radio` and `ttt_cse_proj` to that base
+  - also handles pickup of those entities
+- Throwables (grenades) now have a `:GetPullTime()` accessor
+- Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
+- UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
+- `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
+- Added weapon pickup sounds when picking up weapons manually (by @TimGoll)
 
 ### Changed
 
@@ -22,20 +59,77 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed third argument of `TTT2CanOrderEquipment`-Hook, no message is outputted anymore
 - dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
-- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair
+- Decreased shooting accuracy while sprinting or in air (by @TimGoll)
+- A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
+- Updated the Turkish localization file (by @NovaDiablox)
+- Grenades have icons
+- Brought `c4`, `defuser`, `flaregun`, `health_station`, `radio` weapons down from upstream (by @a7f3)
+- Updated help text for `c4`, `defuser`, `flaregun`, `health_station`, `radio`, `knife`, `phammer`, `push`, and `zm_carry` weapons (by @a7f3)
+- Brought down the `EFFECT`s: `crimescene_dummy`, `crimescene_shot`, `pulse_sphere`, `teleport_beamdown`, `teleport_beamup`
+- Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
+- Brought down the `SWEP`: `weapon_ttt_stungun`
+- Brought down the menu for arming/defusing C4
+- Updated and improved Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
+- improved Simplified Chinese translation （by @TEGTainFan）
+- Consolidated hat logic
+- Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
+- Role avoidance is no longer an option
+- All `builtin` weapons can now be configured to drop via `Edit Equipment` (by @EntranceJew)
+- Removed redundant checks outside of `SWEP:DrawHelp`, protected only `SWEP:DrawHelp`
+- Spectator name labels now use a skin font and scaling (by @EntranceJew)
+- The built-in radar now displays distances in meters (by @TimGoll)
+- Converted `ttt_ragdoll_pinning` and `ttt_ragdoll_pinning_innocents` into per-role permissions.
+- Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it.
+- Magneto stick now shows tooltips respective to its current state.
+- Scoreboard shows non-policing detective results, in sync with the miniscoreboard (by @EntranceJew)
+- `ttt_flame` is visible while it is moving (by @EntranceJew)
+- `ttt_flame`'s hurtbox is more accurate to its visuals (by @EntranceJew)
+- The built-in DNA scanner now displays distances in meters (by @TimGoll)
+- Noisy prints are now gated behind various levels of `developer` convar (by @EntranceJew)
+- Any warnings developers should fix will now print with stack traces (by @EntranceJew)
+- Changed the way the role overhead icon is rendered (by @TimGoll)
+  - It now tracks the players head position
+  - Rendering order is based on distance, no more weird visual glitches
+  - Hidden when observing a player in first person view
+- Your own spectator nametag will not display when looking directly up in post-round (by @EntranceJew)
+- Made sure the last weapon is selected by default if the current weapon is removed; overwrite `OnRemove` to prevent that (by @TimGoll)
 
 ### Fixed
 
+- Fixed database now properly saving boolean `false` values
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
+- Fixed the crosshair being offcenter on some UI scales (by @TimGoll)
+- Fixed to wrong line calculations for wrapped text (by @NickCloudAT)
+- Fixed marks library having self zfailing and color issues (by @WardenPotato)
+- Fixed `IsPlayer` failing if a non-entity is passed to it (by @TimGoll)
+- Fixed draw.Arc when `gmod_mcore_test` is set to 1 (by @WardenPotato)
+- Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)
+- Fixed `GM:TTTBodySearchPopulate` using the wrong data variable (by @TimGoll)
+- Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
+- Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
+- Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
+- Fixed door health displaying as a humongous string of decimals
+
+### Removed
+
+- Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
+- Removed DX8/SW models that aren't used
+- Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
+- Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
+- Removed `resource.AddFile` calls, server operators should use the workshop version or manually bundle loose files.
 
 ### Breaking Changes
 
-- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentId)`
+- Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
 - Removed use of `ttt_bem_fav` sql-table storing all favorites for steamid and roles
   - They are now stored under `ttt2_shop_favorites` for all users on one pc and all roles
+- No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
+- Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
+  - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`
+  - Use new Setter `shop.SetEquipmentBought(ply, equipmentName)`, `shop.SetEquipmentGlobalBought(equipmentName)` and `shop.SetEquipmentTeamBought(ply, equipmentName)`
 
 ## [v0.12.3b](https://github.com/TTT-2/TTT2/tree/v0.12.3b) (2024-01-07)
 
@@ -52,6 +146,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Updated the Turkish localization file (by @NovaDiablox)
+- Crosshair now spreads while sprinting instead of being hidden
 - Keyhelp and weapon HUD Help now use the global scale factor
 
 ### Fixed

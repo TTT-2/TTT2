@@ -13,7 +13,7 @@ SCORE.Events = SCORE.Events or {}
 -- @realm server
 -- @deprecated
 function SCORE:AddEvent(entry, t_override)
-	entry.t = t_override or CurTime()
+    entry.t = t_override or CurTime()
 
-	self.Events[#self.Events + 1] = entry
+    self.Events[#self.Events + 1] = entry
 end

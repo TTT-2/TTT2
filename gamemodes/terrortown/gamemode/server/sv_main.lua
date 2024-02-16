@@ -14,6 +14,7 @@ ttt_include("sh_door")
 ttt_include("sh_voice")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
+ttt_include("sh_marker_vision_element")
 
 ttt_include("sv_network_sync")
 ttt_include("sv_hud_manager")
@@ -61,7 +62,6 @@ local math = math
 local table = table
 local net = net
 local player = player
-local pairs = pairs
 local timer = timer
 local util = util
 local IsValid = IsValid
@@ -69,140 +69,174 @@ local hook = hook
 
 ---
 -- @realm server
+-- stylua: ignore
 local roundtime = CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local preptime = CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local posttime = CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local firstpreptime = CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local haste_starting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Credits
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_credits_award_pct", "0.35", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_credits_award_size", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_session_limits_enabled = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
+-- stylua: ignore
 local round_limit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
+-- stylua: ignore
 local time_limit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
+-- stylua: ignore
 local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local voice_drain_normal = CreateConVar("ttt_voice_drain_normal", "0.2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local voice_drain_admin = CreateConVar("ttt_voice_drain_admin", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local voice_drain_recharge = CreateConVar("ttt_voice_drain_recharge", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local namechangekick = CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local namechangebtime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cvPreferMapModels = CreateConVar("ttt2_prefer_map_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
 
 ---
 -- @realm server
+-- stylua: ignore
 local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Time that passes before the map is changed after the last round ends or the timer runs out", 0)
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
 ---
 -- @realm server
+-- stylua: ignore
 local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Show team of confirmed player")
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Confirm players in kill list")
 
 ---
 -- @realm server
+-- stylua: ignore
 CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
+-- stylua: ignore
 local ttt_newroles_enabled = CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Pool some network names.
@@ -232,7 +266,6 @@ util.AddNetworkString("TTT_RoleReset")
 util.AddNetworkString("TTT_ConfirmUseTButton")
 util.AddNetworkString("TTT_C4Config")
 util.AddNetworkString("TTT_C4DisarmResult")
-util.AddNetworkString("TTT_C4Warn")
 util.AddNetworkString("TTT_ScanResult")
 util.AddNetworkString("TTT_FlareScorch")
 util.AddNetworkString("TTT_Radar")
@@ -261,15 +294,15 @@ fileloader.LoadFolder("terrortown/menus/gamemode/", true, CLIENT_FILE)
 
 -- provide and add autorun files
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
-	MsgN("Marked TTT2 client autorun file for distribution: ", path)
+    Dev(1, "Marked TTT2 client autorun file for distribution: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
-	MsgN("Marked and added TTT2 shared autorun file for distribution: ", path)
+    Dev(1, "Marked and added TTT2 shared autorun file for distribution: ", path)
 end)
 
 fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function(path)
-	MsgN("Added TTT2 server autorun file: ", path)
+    Dev(1, "Added TTT2 server autorun file: ", path)
 end)
 
 ---
@@ -279,92 +312,110 @@ end)
 -- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
-	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
-	ShowVersion()
+    Dev(1, "Trouble In Terrorist Town 2 gamemode initializing...")
+    ShowVersion()
 
-	---
-	-- @realm shared
-	hook.Run("TTT2Initialize")
+    -- Migrate all changes of TTT2
+    migrations.Apply()
 
-	---
-	-- @realm shared
-	hook.Run("TTT2FinishedLoading")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2Initialize")
 
-	-- load default TTT2 language files or mark them as downloadable on the server
-	-- load addon language files in a second pass, the core language files are loaded earlier
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 language file: ", path)
-	end)
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2FinishedLoading")
 
-	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
-		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
-		MsgN("Added TTT2 language file: ", path)
-	end)
+    -- load default TTT2 language files or mark them as downloadable on the server
+    -- load addon language files in a second pass, the core language files are loaded earlier
+    fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+        Dev(1, "Added TTT2 language file: ", path)
+    end)
 
-	-- load vskin files
-	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
-		MsgN("Added TTT2 vskin file: ", path)
-	end)
+    fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
+        ErrorNoHaltWithStack(
+            "[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'. Source: \""
+                .. path
+                .. "\""
+        )
+        Dev(1, "Added TTT2 language file: ", path)
+    end)
 
-	roleselection.LoadLayers()
+    -- load vskin files
+    fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
+        Dev(1, "Added TTT2 vskin file: ", path)
+    end)
 
-	ShopEditor.SetupShopEditorCVars()
-	ShopEditor.CreateShopDBs()
+    roleselection.LoadLayers()
 
-	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
-	RunConsoleCommand("mp_friendlyfire", "1")
+    ShopEditor.SetupShopEditorCVars()
+    ShopEditor.CreateShopDBs()
 
-	-- Default crowbar unlocking settings, may be overridden by config entity
-	self.crowbar_unlocks = {
-		[OPEN_DOOR] = true,
-		[OPEN_ROT] = true,
-		[OPEN_BUT] = true,
-		[OPEN_NOTOGGLE] = true
-	}
+    -- register synced player variables
+    player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
+    player.RegisterSettingOnServer("fov_desired", "float")
 
-	-- More map config ent defaults
-	self.force_plymodel = ""
-	self.propspec_allow_named = true
+    -- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
+    RunConsoleCommand("mp_friendlyfire", "1")
 
-	self.MapWin = WIN_NONE
-	self.AwardedCredits = false
-	self.AwardedCreditsDead = 0
+    -- Default crowbar unlocking settings, may be overridden by config entity
+    self.crowbar_unlocks = {
+        [OPEN_DOOR] = true,
+        [OPEN_ROT] = true,
+        [OPEN_BUT] = true,
+        [OPEN_NOTOGGLE] = true,
+    }
 
-	self.round_state = ROUND_WAIT
-	self.FirstRound = true
-	self.RoundStartTime = 0
-	self.roundCount = 0
+    -- More map config ent defaults
+    self.force_plymodel = ""
+    self.propspec_allow_named = true
 
-	self.DamageLog = {}
-	self.LastRole = {}
+    self.MapWin = WIN_NONE
+    self.AwardedCredits = false
+    self.AwardedCreditsDead = 0
 
-	-- Delay reading of cvars until config has definitely loaded
-	self.cvar_init = false
+    self.round_state = ROUND_WAIT
+    self.FirstRound = true
+    self.RoundStartTime = 0
+    self.roundCount = 0
 
-	SetGlobalFloat("ttt_round_end", -1)
-	SetGlobalFloat("ttt_haste_end", -1)
+    self.DamageLog = {}
+    self.LastRole = {}
 
-	-- For the paranoid
-	math.randomseed(os.time())
-	math.random()
-	math.random()
-	math.random()
+    -- Delay reading of cvars until config has definitely loaded
+    self.cvar_init = false
 
-	WaitForPlayers()
+    SetGlobalFloat("ttt_round_end", -1)
+    SetGlobalFloat("ttt_haste_end", -1)
 
-	if cvars.Number("sv_alltalk", 0) > 0 then
-		ErrorNoHalt("TTT2 WARNING: sv_alltalk is enabled. Dead players will be able to talk to living players. TTT2 will now attempt to set sv_alltalk 0.\n")
+    -- For the paranoid
+    math.randomseed(os.time())
+    math.random()
+    math.random()
+    math.random()
 
-		RunConsoleCommand("sv_alltalk", "0")
-	end
+    WaitForPlayers()
 
-	if not IsMounted("cstrike") then
-		ErrorNoHalt("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
-	end
+    if cvars.Number("sv_alltalk", 0) > 0 then
+        ErrorNoHalt(
+            "TTT2 WARNING: sv_alltalk is enabled. Dead players will be able to talk to living players. TTT2 will now attempt to set sv_alltalk 0.\n"
+        )
 
-	---
-	-- @realm shared
-	hook.Run("PostInitialize")
+        RunConsoleCommand("sv_alltalk", "0")
+    end
+
+    if not IsMounted("cstrike") then
+        ErrorNoHalt(
+            "TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n"
+        )
+    end
+
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("PostInitialize")
 end
 
 ---
@@ -373,16 +424,16 @@ end
 -- @hook
 -- @realm server
 function GM:InitCvars()
-	MsgN("TTT2 initializing ConVar settings...")
+    Dev(1, "TTT2 initializing ConVar settings...")
 
-	-- Initialize game state that is synced with client
-	SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
+    -- Initialize game state that is synced with client
+    SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
 
-	self:SyncGlobals()
+    self:SyncGlobals()
 
-	KARMA.InitState()
+    KARMA.InitState()
 
-	self.cvar_init = true
+    self.cvar_init = true
 end
 
 ---
@@ -393,7 +444,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:GetGameDescription
 -- @local
 function GM:GetGameDescription()
-	return self.Name
+    return self.Name
 end
 
 ---
@@ -408,99 +459,107 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	self:InitCvars()
+    self:InitCvars()
 
-	MsgN("[TTT2][INFO] Client post-init...")
+    Dev(1, "[TTT2][INFO] Client post-init...")
 
-	---
-	-- @realm shared
-	hook.Run("TTTInitPostEntity")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTTInitPostEntity")
 
-	-- load entity spawns from file / map
-	entspawnscript.OnLoaded()
+    -- load entity spawns from file / map
+    entspawnscript.OnLoaded()
 
-	items.MigrateLegacyItems()
-	items.OnLoaded()
+    items.MigrateLegacyItems()
+    items.OnLoaded()
 
-	-- load all HUDs
-	huds.OnLoaded()
+    -- load all HUDs
+    huds.OnLoaded()
 
-	-- load all HUD elements
-	hudelements.OnLoaded()
+    -- load all HUD elements
+    hudelements.OnLoaded()
 
-	local sweps = weapons.GetList()
+    local sweps = weapons.GetList()
 
-	for i = 1, #sweps do
-		local eq = sweps[i]
+    for i = 1, #sweps do
+        local eq = sweps[i]
 
-		-- Check if an equipment has an id or ignore it
-		-- @realm server
-		if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
+        -- Check if an equipment has an id or ignore it
+        -- @realm server
+        -- stylua: ignore
+        if not hook.Run("TTT2RegisterWeaponID", eq) then continue end
 
-		-- Insert data into role fallback tables
-		InitDefaultEquipment(eq)
+        -- Insert data into role fallback tables
+        InitDefaultEquipment(eq)
 
-		eq.CanBuy = {} -- reset normal weapons equipment
-	end
+        eq.CanBuy = {} -- reset normal weapons equipment
+    end
 
-	-- init hudelements fns
-	local hudElems = hudelements.GetList()
+    -- init hudelements fns
+    local hudElems = hudelements.GetList()
 
-	for i = 1, #hudElems do
-		local hudelem = hudElems[i]
+    for i = 1, #hudElems do
+        local hudelem = hudElems[i]
 
-		if not hudelem.togglable then continue end
+        if not hudelem.togglable then
+            continue
+        end
 
-		local nm = "ttt2_elem_toggled_" .. hudelem.id
+        local nm = "ttt2_elem_toggled_" .. hudelem.id
 
-		---
-		-- @name ttt2_elem_toggled_[HUDELEMENT_NAME]
-		-- @realm server
-		local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        ---
+        -- @name ttt2_elem_toggled_[HUDELEMENT_NAME]
+        -- @realm server
+        -- stylua: ignore
+        local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		SetGlobalBool(nm, ret:GetBool())
+        SetGlobalBool(nm, ret:GetBool())
 
-		cvars.AddChangeCallback(nm, function(cvarName, old, new)
-			SetGlobalBool(cvarName, tobool(new))
-		end, "CVAR_" .. nm)
-	end
+        cvars.AddChangeCallback(nm, function(cvarName, old, new)
+            SetGlobalBool(cvarName, tobool(new))
+        end, "CVAR_" .. nm)
+    end
 
-	-- initialize fallback shops
-	InitFallbackShops()
+    -- initialize fallback shops
+    InitFallbackShops()
 
-	---
-	-- @realm server
-	hook.Run("PostInitPostEntity")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("PostInitPostEntity")
 
-	---
-	-- @realm server
-	hook.Run("InitFallbackShops")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("InitFallbackShops")
 
-	---
-	-- @realm server
-	hook.Run("LoadedFallbackShops")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("LoadedFallbackShops")
 
-	-- initialize the equipment
-	LoadShopsEquipment()
+    -- initialize the equipment
+    LoadShopsEquipment()
 
-	MsgN("[TTT2][INFO] Shops initialized...")
-	TTT2ShopFallbackInitialized = true
+    Dev(1, "[TTT2][INFO] Shops initialized...")
+    TTT2ShopFallbackInitialized = true
 
-	WEPS.ForcePrecache()
+    WEPS.ForcePrecache()
 
-	-- precache player models
-	playermodels.PrecacheModels()
+    -- precache player models
+    playermodels.PrecacheModels()
 
-	-- initialize playermodel database
-	playermodels.Initialize()
+    -- initialize playermodel database
+    playermodels.Initialize()
 
-	-- set the default random playermodel
-	self.playermodel = playermodels.GetRandomPlayerModel()
-	self.playercolor = COLOR_WHITE
+    -- set the default random playermodel
+    self.playermodel = playermodels.GetRandomPlayerModel()
+    self.playercolor = COLOR_WHITE
 
-	timer.Simple(0, function()
-		addonChecker.Check()
-	end)
+    timer.Simple(0, function()
+        addonChecker.Check()
+    end)
 end
 
 ---
@@ -515,7 +574,7 @@ end
 -- @hook
 -- @realm server
 function GM:AcceptInput(ent, name, activator, caller, data)
-	return door.AcceptInput(ent, name, activator, caller, data)
+    return door.AcceptInput(ent, name, activator, caller, data)
 end
 
 ---
@@ -525,71 +584,75 @@ end
 -- @hook
 -- @realm server
 function GM:SyncGlobals()
-	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
-	SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
-	SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
-	SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
-	SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
-	SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
+    SetGlobalBool("ttt_detective", ttt_detective:GetBool())
+    SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
+    SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
+    SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
+    SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
+    SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
 
-	SetGlobalBool(voice_drain:GetName(), voice_drain:GetBool())
-	SetGlobalFloat(voice_drain_normal:GetName(), voice_drain_normal:GetFloat())
-	SetGlobalFloat(voice_drain_admin:GetName(), voice_drain_admin:GetFloat())
-	SetGlobalFloat(voice_drain_recharge:GetName(), voice_drain_recharge:GetFloat())
+    SetGlobalBool(voice_drain:GetName(), voice_drain:GetBool())
+    SetGlobalFloat(voice_drain_normal:GetName(), voice_drain_normal:GetFloat())
+    SetGlobalFloat(voice_drain_admin:GetName(), voice_drain_admin:GetFloat())
+    SetGlobalFloat(voice_drain_recharge:GetName(), voice_drain_recharge:GetFloat())
 
-	local rlsList = roles.GetList()
+    local rlsList = roles.GetList()
 
-	for i = 1, #rlsList do
-		local abbr = rlsList[i].abbr
+    for i = 1, #rlsList do
+        local abbr = rlsList[i].abbr
 
-		SetGlobalString("ttt_" .. abbr .. "_shop_fallback", GetConVar("ttt_" .. abbr .. "_shop_fallback"):GetString())
-	end
+        SetGlobalString(
+            "ttt_" .. abbr .. "_shop_fallback",
+            GetConVar("ttt_" .. abbr .. "_shop_fallback"):GetString()
+        )
+    end
 
-	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
+    SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
 
-	---
-	-- @realm server
-	hook.Run("TTT2SyncGlobals")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2SyncGlobals")
 end
 
 cvars.AddChangeCallback(ttt_detective:GetName(), function(cv, old, new)
-	SetGlobalBool("ttt_detective", tobool(tonumber(new)))
+    SetGlobalBool("ttt_detective", tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
-	SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
+    SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(ttt_session_limits_enabled:GetName(), function(cv, old, new)
-	SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))
+    SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
-	SetGlobalInt(time_limit:GetName(), tonumber(new))
+    SetGlobalInt(time_limit:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(idle_time:GetName(), function(cv, old, new)
-	SetGlobalInt(idle_time:GetName(), tonumber(new))
+    SetGlobalInt(idle_time:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
-	SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
+    SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(voice_drain:GetName(), function(cv, old, new)
-	SetGlobalBool(voice_drain:GetName(), tobool(tonumber(new)))
+    SetGlobalBool(voice_drain:GetName(), tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(voice_drain_normal:GetName(), function(cv, old, new)
-	SetGlobalFloat(voice_drain_normal:GetName(), tonumber(new))
+    SetGlobalFloat(voice_drain_normal:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(voice_drain_admin:GetName(), function(cv, old, new)
-	SetGlobalFloat(voice_drain_admin:GetName(), tonumber(new))
+    SetGlobalFloat(voice_drain_admin:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(voice_drain_recharge:GetName(), function(cv, old, new)
-	SetGlobalFloat(voice_drain_recharge:GetName(), tonumber(new))
+    SetGlobalFloat(voice_drain_recharge:GetName(), tonumber(new))
 end)
 
 ---
@@ -597,50 +660,20 @@ end)
 -- @realm server
 -- @internal
 function LoadShopsEquipment()
-	-- initialize shop equipment
-	local rlsList = roles.GetList()
+    -- initialize shop equipment
+    local rlsList = roles.GetList()
 
-	for i = 1, #rlsList do
-		local roleData = rlsList[i]
+    for i = 1, #rlsList do
+        local roleData = rlsList[i]
 
-		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-		if shopFallback ~= roleData.name then continue end
+        local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+        if shopFallback ~= roleData.name then
+            continue
+        end
 
-		LoadSingleShopEquipment(roleData)
-	end
+        LoadSingleShopEquipment(roleData)
+    end
 end
-
-local function TTT2SyncShopsWithServer(len, ply)
-	-- reset and set if it's a fallback
-	net.Start("shopFallbackReset")
-	net.Send(ply)
-
-	SyncEquipment(ply)
-
-	-- sync bought sweps
-	if BUYTABLE then
-		for id in pairs(BUYTABLE) do
-			net.Start("TTT2ReceiveGBEq")
-			net.WriteString(id)
-			net.Send(ply)
-		end
-	end
-
-	if TEAMBUYTABLE then
-		local team = ply:GetTeam()
-
-		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
-			local filter = GetTeamFilter(team)
-
-			for id in pairs(TEAMBUYTABLE[team]) do
-				net.Start("TTT2ReceiveTBEq")
-				net.WriteString(id)
-				net.Send(filter)
-			end
-		end
-	end
-end
-net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
 
 ---
 -- This @{function} is used to trigger the round syncing
@@ -648,14 +681,14 @@ net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
 -- @param[opt] Player ply if nil, this will broadcast to every connected @{PLayer}
 -- @realm server
 function SendRoundState(state, ply)
-	net.Start("TTT_RoundState")
-	net.WriteUInt(state, 3)
+    net.Start("TTT_RoundState")
+    net.WriteUInt(state, 3)
 
-	if IsValid(ply) then
-		net.Send(ply)
-	else
-		net.Broadcast()
-	end
+    if IsValid(ply) then
+        net.Send(ply)
+    else
+        net.Broadcast()
+    end
 end
 
 ---
@@ -665,11 +698,11 @@ end
 -- @param number state
 -- @realm server
 function SetRoundState(state)
-	GAMEMODE.round_state = state
+    GAMEMODE.round_state = state
 
-	events.Trigger(EVENT_GAME, state)
+    events.Trigger(EVENT_GAME, state)
 
-	SendRoundState(state)
+    SendRoundState(state)
 end
 
 ---
@@ -679,24 +712,26 @@ end
 -- @return number
 -- @realm server
 function GetRoundState()
-	return GAMEMODE.round_state
+    return GAMEMODE.round_state
 end
 
 local function EnoughPlayers()
-	local ready = 0
+    local ready = 0
 
-	-- only count truly available players, i.e. no forced specs
-	local plys = player.GetAll()
+    -- only count truly available players, i.e. no forced specs
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		if not IsValid(ply) or not ply:ShouldSpawn() then continue end
+        if not IsValid(ply) or not ply:ShouldSpawn() then
+            continue
+        end
 
-		ready = ready + 1
-	end
+        ready = ready + 1
+    end
 
-	return ready >= ttt_minply:GetInt()
+    return ready >= ttt_minply:GetInt()
 end
 
 ---
@@ -708,10 +743,12 @@ end
 -- @see WaitForPlayers
 -- @internal
 function WaitingForPlayersChecker()
-	if GetRoundState() ~= ROUND_WAIT or not EnoughPlayers() then return end
+    if GetRoundState() ~= ROUND_WAIT or not EnoughPlayers() then
+        return
+    end
 
-	timer.Create("wait2prep", 1, 1, PrepareRound)
-	timer.Stop("waitingforply")
+    timer.Create("wait2prep", 1, 1, PrepareRound)
+    timer.Stop("waitingforply")
 end
 
 ---
@@ -720,11 +757,13 @@ end
 -- @see WaitingForPlayersChecker
 -- @internal
 function WaitForPlayers()
-	SetRoundState(ROUND_WAIT)
+    SetRoundState(ROUND_WAIT)
 
-	if timer.Start("waitingforply") then return end
+    if timer.Start("waitingforply") then
+        return
+    end
 
-	timer.Create("waitingforply", 2, 0, WaitingForPlayersChecker)
+    timer.Create("waitingforply", 2, 0, WaitingForPlayersChecker)
 end
 
 ---
@@ -736,15 +775,17 @@ end
 -- @realm server
 -- @internal
 function FixSpectators()
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		if not ply:IsSpec() or ply:GetRagdollSpec() or ply:GetMoveType() >= MOVETYPE_NOCLIP then continue end
+        if not ply:IsSpec() or ply:GetRagdollSpec() or ply:GetMoveType() >= MOVETYPE_NOCLIP then
+            continue
+        end
 
-		ply:Spectate(OBS_MODE_ROAMING)
-	end
+        ply:Spectate(OBS_MODE_ROAMING)
+    end
 end
 
 ---
@@ -753,58 +794,67 @@ end
 -- @realm server
 -- @internal
 local function WinChecker()
-	if GetRoundState() ~= ROUND_ACTIVE then return end
+    if GetRoundState() ~= ROUND_ACTIVE then
+        return
+    end
 
-	if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
-		EndRound(WIN_TIMELIMIT)
-	elseif not ttt_dbgwin:GetBool() then
-		---
-		-- @realm server
-		win = hook.Run("TTT2PreWinChecker")
+    if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
+        EndRound(WIN_TIMELIMIT)
+    elseif not ttt_dbgwin:GetBool() then
+        ---
+        -- @realm server
+        -- stylua: ignore
+        win = hook.Run("TTT2PreWinChecker")
 
-		---
-		-- @realm server
-		win = win or hook.Run("TTTCheckForWin")
+        ---
+        -- @realm server
+        -- stylua: ignore
+        win = win or hook.Run("TTTCheckForWin")
 
-		if win == WIN_NONE then return end
+        if win == WIN_NONE then
+            return
+        end
 
-		EndRound(win)
-	end
+        EndRound(win)
+    end
 end
 
 local function NameChangeKick()
-	if not namechangekick:GetBool() then
-		timer.Remove("namecheck")
+    if not namechangekick:GetBool() then
+        timer.Remove("namecheck")
 
-		return
-	end
+        return
+    end
 
-	if GetRoundState() ~= ROUND_ACTIVE then return end
+    if GetRoundState() ~= ROUND_ACTIVE then
+        return
+    end
 
-	local hmns = player.GetHumans()
+    local hmns = player.GetHumans()
 
-	for i = 1, #hmns do
-		local ply = hmns[i]
+    for i = 1, #hmns do
+        local ply = hmns[i]
 
-		if not ply.spawn_nick then
-			ply.spawn_nick = ply:Nick()
+        if not ply.spawn_nick then
+            ply.spawn_nick = ply:Nick()
 
-			continue
-		end
+            continue
+        end
 
-		---
-		-- @realm server
-		if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
+        ---
+        -- @realm server
+        -- stylua: ignore
+        if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
 
-		local t = namechangebtime:GetInt()
-		local msg = "Changed name during a round"
+        local t = namechangebtime:GetInt()
+        local msg = "Changed name during a round"
 
-		if t > 0 then
-			ply:KickBan(t, msg)
-		else
-			ply:Kick(msg)
-		end
-	end
+        if t > 0 then
+            ply:KickBan(t, msg)
+        else
+            ply:Kick(msg)
+        end
+    end
 end
 
 ---
@@ -813,20 +863,22 @@ end
 -- @realm server
 -- @internal
 function StartNameChangeChecks()
-	if not namechangekick:GetBool() then return end
+    if not namechangekick:GetBool() then
+        return
+    end
 
-	-- bring nicks up to date, may have been changed during prep/post
-	local plys = player.GetAll()
+    -- bring nicks up to date, may have been changed during prep/post
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		ply.spawn_nick = ply:Nick()
-	end
+        ply.spawn_nick = ply:Nick()
+    end
 
-	if not timer.Exists("namecheck") then
-		timer.Create("namecheck", 3, 0, NameChangeKick)
-	end
+    if not timer.Exists("namecheck") then
+        timer.Create("namecheck", 3, 0, NameChangeKick)
+    end
 end
 
 ---
@@ -835,9 +887,9 @@ end
 -- @internal
 -- @see StopWinChecks
 function StartWinChecks()
-	if not timer.Start("winchecker") then
-		timer.Create("winchecker", 1, 0, WinChecker)
-	end
+    if not timer.Start("winchecker") then
+        timer.Create("winchecker", 1, 0, WinChecker)
+    end
 end
 
 ---
@@ -846,7 +898,7 @@ end
 -- @internal
 -- @see StartWinChecks
 function StopWinChecks()
-	timer.Stop("winchecker")
+    timer.Stop("winchecker")
 end
 
 ---
@@ -856,12 +908,12 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PreCleanupMap
 -- @local
 function GM:PreCleanupMap()
-	ents.TTT.FixParentedPreCleanup()
+    ents.TTT.FixParentedPreCleanup()
 
-	entityOutputs.CleanUp()
+    entityOutputs.CleanUp()
 
-	-- While cleaning up the map, disable random weapons directly spawning
-	entspawn.SetForcedRandomSpawn(false)
+    -- While cleaning up the map, disable random weapons directly spawning
+    entspawn.SetForcedRandomSpawn(false)
 end
 
 ---
@@ -871,61 +923,62 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
-	ents.TTT.FixParentedPostCleanup()
+    ents.TTT.FixParentedPostCleanup()
 
-	entityOutputs.SetUp()
+    entityOutputs.SetUp()
 
-	entspawn.HandleSpawns()
+    entspawn.HandleSpawns()
 
-	-- After map cleanup enable 'env_entity_maker'-entities to force spawn random weapons and ammo
-	-- This is necessary for maps like 'ttt_lttp_kakariko_a5', that only initialize 'ttt_random_weapon'-entities
-	-- after destroying vases and were therefore not affected by our entspawn-system
-	entspawn.SetForcedRandomSpawn(true)
-	---
-	-- @realm server
-	hook.Run("TTT2PostCleanupMap")
+    -- After map cleanup enable 'env_entity_maker'-entities to force spawn random weapons and ammo
+    -- This is necessary for maps like 'ttt_lttp_kakariko_a5', that only initialize 'ttt_random_weapon'-entities
+    -- after destroying vases and were therefore not affected by our entspawn-system
+    entspawn.SetForcedRandomSpawn(true)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2PostCleanupMap")
 
-	door.SetUp()
+    door.SetUp()
 end
 
 local function CleanUp()
-	game.CleanUpMap()
+    game.CleanUpMap()
 
-	-- Strip players now, so that their weapons are not seen by ReplaceEntities
-	local plys = player.GetAll()
+    -- Strip players now, so that their weapons are not seen by ReplaceEntities
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local v = plys[i]
+    for i = 1, #plys do
+        local v = plys[i]
 
-		v:StripWeapons()
-		v:SetRole(ROLE_NONE) -- will reset team automatically
-	end
+        v:StripWeapons()
+        v:SetRole(ROLE_NONE) -- will reset team automatically
+    end
 
-	-- a different kind of cleanup
-	hook.Remove("PlayerSay", "ULXMeCheck")
+    -- a different kind of cleanup
+    hook.Remove("PlayerSay", "ULXMeCheck")
 end
 
 local function StopRoundTimers()
-	-- remove all timers
-	timer.Stop("wait2prep")
-	timer.Stop("prep2begin")
-	timer.Stop("end2prep")
-	timer.Stop("winchecker")
+    -- remove all timers
+    timer.Stop("wait2prep")
+    timer.Stop("prep2begin")
+    timer.Stop("end2prep")
+    timer.Stop("winchecker")
 end
 
 -- Make sure we have the players to do a round, people can leave during our
 -- preparations so we'll call this numerous times
 local function CheckForAbort()
-	if not EnoughPlayers() then
-		LANG.Msg("round_minplayers")
+    if not EnoughPlayers() then
+        LANG.Msg("round_minplayers")
 
-		StopRoundTimers()
-		WaitForPlayers()
+        StopRoundTimers()
+        WaitForPlayers()
 
-		return true
-	end
+        return true
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -934,7 +987,7 @@ end
 -- @realm server
 -- @internal
 function SetRoundEnd(endtime)
-	SetGlobalFloat("ttt_round_end", endtime)
+    SetGlobalFloat("ttt_round_end", endtime)
 end
 
 ---
@@ -943,7 +996,7 @@ end
 -- @realm server
 -- @internal
 function IncRoundEnd(incr)
-	SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
+    SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
 end
 
 ---
@@ -951,185 +1004,205 @@ end
 -- @realm server
 -- @internal
 function PrepareRound()
-	-- Check playercount
-	if CheckForAbort() then return end
+    -- Check playercount
+    if CheckForAbort() then
+        return
+    end
 
-	---
-	-- @realm server
-	local delay_round, delay_length = hook.Run("TTTDelayRoundStartForVote")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local delay_round, delay_length = hook.Run("TTTDelayRoundStartForVote")
 
-	if delay_round then
-		delay_length = delay_length or 30
+    if delay_round then
+        delay_length = delay_length or 30
 
-		LANG.Msg("round_voting", {num = delay_length})
+        LANG.Msg("round_voting", { num = delay_length })
 
-		timer.Create("delayedprep", delay_length, 1, PrepareRound)
+        timer.Create("delayedprep", delay_length, 1, PrepareRound)
 
-		return
-	end
+        return
+    end
 
-	CleanUp()
+    CleanUp()
 
-	GAMEMODE.roundCount = GAMEMODE.roundCount + 1
+    GAMEMODE.roundCount = GAMEMODE.roundCount + 1
 
-	GAMEMODE.MapWin = WIN_NONE
-	GAMEMODE.AwardedCredits = false
-	GAMEMODE.AwardedCreditsDead = 0
+    GAMEMODE.MapWin = WIN_NONE
+    GAMEMODE.AwardedCredits = false
+    GAMEMODE.AwardedCreditsDead = 0
 
-	events.Reset()
+    events.Reset()
 
-	-- Update damage scaling
-	KARMA.RoundPrepare()
+    -- Update damage scaling
+    KARMA.RoundPrepare()
 
-	-- New look. Random if no forced model set
-	if cvPreferMapModels:GetBool() and GAMEMODE.force_plymodel and GAMEMODE.force_plymodel ~= "" then
-		GAMEMODE.playermodel = GAMEMODE.force_plymodel
-	elseif cvSelectModelPerRound:GetBool() then
-		GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
-	end
+    -- New look. Random if no forced model set
+    if
+        cvPreferMapModels:GetBool()
+        and GAMEMODE.force_plymodel
+        and GAMEMODE.force_plymodel ~= ""
+    then
+        GAMEMODE.playermodel = GAMEMODE.force_plymodel
+    elseif cvSelectModelPerRound:GetBool() then
+        GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
+    end
 
-	---
-	-- @realm server
-	GAMEMODE.playercolor = hook.Run("TTTPlayerColor", GAMEMODE.playermodel)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    GAMEMODE.playercolor = hook.Run("TTTPlayerColor", GAMEMODE.playermodel)
 
-	if CheckForAbort() then return end
+    if CheckForAbort() then
+        return
+    end
 
-	-- Schedule round start
-	local ptime = preptime:GetInt()
+    -- Schedule round start
+    local ptime = preptime:GetInt()
 
-	if GAMEMODE.FirstRound then
-		ptime = firstpreptime:GetInt()
+    if GAMEMODE.FirstRound then
+        ptime = firstpreptime:GetInt()
 
-		GAMEMODE.FirstRound = false
-	end
+        GAMEMODE.FirstRound = false
+    end
 
-	-- remove decals
-	util.ClearDecals()
+    -- remove decals
+    util.ClearDecals()
 
-	-- Piggyback on "round end" time global var to show end of phase timer
-	SetRoundEnd(CurTime() + ptime)
+    -- Piggyback on "round end" time global var to show end of phase timer
+    SetRoundEnd(CurTime() + ptime)
 
-	timer.Simple(1, function()
-		SetRoundEnd(CurTime() + ptime - 1)
-	end)
+    timer.Simple(1, function()
+        SetRoundEnd(CurTime() + ptime - 1)
+    end)
 
-	timer.Create("prep2begin", ptime, 1, BeginRound)
+    timer.Create("prep2begin", ptime, 1, BeginRound)
 
-	-- Mute for a second around traitor selection, to counter a dumb exploit
-	-- related to traitor's mics cutting off for a second when they're selected.
-	timer.Create("selectmute", ptime - 1, 1, function()
-		MuteForRestart(true)
-	end)
+    -- Mute for a second around traitor selection, to counter a dumb exploit
+    -- related to traitor's mics cutting off for a second when they're selected.
+    timer.Create("selectmute", ptime - 1, 1, function()
+        MuteForRestart(true)
+    end)
 
-	LANG.Msg("round_begintime", {num = ptime})
+    LANG.Msg("round_begintime", { num = ptime })
 
-	SetRoundState(ROUND_PREP)
+    SetRoundState(ROUND_PREP)
 
-	-- Undo the roundrestart mute, though they will once again be muted for the
-	-- selectmute timer.
-	timer.Create("restartmute", 1, 1, function()
-		MuteForRestart(false)
-	end)
+    -- Undo the roundrestart mute, though they will once again be muted for the
+    -- selectmute timer.
+    timer.Create("restartmute", 1, 1, function()
+        MuteForRestart(false)
+    end)
 
-	net.Start("TTT_ClearClientState")
-	net.Broadcast()
+    net.Start("TTT_ClearClientState")
+    net.Broadcast()
 
-	-- In case client's cleanup fails, make client set all players to innocent role
-	timer.Simple(1, SendRoleReset)
+    -- In case client's cleanup fails, make client set all players to innocent role
+    timer.Simple(1, SendRoleReset)
 
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		ply:SetTargetPlayer(nil)
-		ply:ResetRoundDeathCounter()
-		ply:SetActiveInRound(false)
+        ply:SetTargetPlayer(nil)
+        ply:ResetRoundDeathCounter()
+        ply:SetActiveInRound(false)
 
-		ply:CancelRevival(nil, true)
-		ply:SendRevivalReason(nil)
+        ply:CancelRevival(nil, true)
+        ply:SendRevivalReason(nil)
 
-		ply:ResetItemAndWeaponCache()
-	end
+        ply:ResetItemAndWeaponCache()
+    end
 
-	---
-	-- Tell hooks and map we started prep
-	-- @realm server
-	hook.Run("TTTPrepareRound")
+    ---
+    -- Tell hooks and map we started prep
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTTPrepareRound")
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
+    ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
 
 local function TraitorSorting(a, b)
-	return a and b and a:upper() < b:upper()
+    return a and b and a:upper() < b:upper()
 end
 
 ---
 -- Tells the Traitors about their team mates
 -- @realm server
 function TellTraitorsAboutTraitors()
-	local traitornicks = {}
-	local plys = player.GetAll()
+    local traitornicks = {}
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local v = plys[i]
+    for i = 1, #plys do
+        local v = plys[i]
 
-		if v:GetTeam() ~= TEAM_TRAITOR then continue end
+        if v:GetTeam() ~= TEAM_TRAITOR then
+            continue
+        end
 
-		traitornicks[#traitornicks + 1] = v:Nick()
-	end
+        traitornicks[#traitornicks + 1] = v:Nick()
+    end
 
-	for i = 1, #plys do
-		local v = plys[i]
+    for i = 1, #plys do
+        local v = plys[i]
 
-		if v:GetTeam() ~= TEAM_TRAITOR then continue end
+        if v:GetTeam() ~= TEAM_TRAITOR then
+            continue
+        end
 
-		local tmp = table.Copy(traitornicks)
+        local tmp = table.Copy(traitornicks)
 
-		---
-		-- @realm server
-		local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
+        ---
+        -- @realm server
+        -- stylua: ignore
+        local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
-		if shouldShow == false or tmp == nil or #tmp == 0 then continue end
+        if shouldShow == false or tmp == nil or #tmp == 0 then
+            continue
+        end
 
-		if #tmp == 1 then
-			LANG.Msg(v, "round_traitors_one", nil, MSG_MSTACK_ROLE)
+        if #tmp == 1 then
+            LANG.Msg(v, "round_traitors_one", nil, MSG_MSTACK_ROLE)
 
-			return
-		end
+            return
+        end
 
-		if #tmp >= 3 then
-			table.sort(tmp, TraitorSorting)
-		end
+        if #tmp >= 3 then
+            table.sort(tmp, TraitorSorting)
+        end
 
-		local names = ""
+        local names = ""
 
-		for k = 1, #tmp do
-			local name = tmp[k]
-			if name == v:Nick() then continue end
+        for k = 1, #tmp do
+            local name = tmp[k]
+            if name == v:Nick() then
+                continue
+            end
 
-			names = names .. name .. ", "
-		end
+            names = names .. name .. ", "
+        end
 
-		names = string.sub(names, 1, -3)
+        names = string.sub(names, 1, -3)
 
-		LANG.Msg(v, "round_traitors_more", {names = names}, MSG_MSTACK_ROLE)
-	end
+        LANG.Msg(v, "round_traitors_more", { names = names }, MSG_MSTACK_ROLE)
+    end
 end
 
 local function InitRoundEndTime()
-	-- Init round values
-	local endtime = CurTime() + roundtime:GetInt() * 60
+    -- Init round values
+    local endtime = CurTime() + roundtime:GetInt() * 60
 
-	if HasteMode() then
-		endtime = CurTime() + haste_starting:GetInt() * 60
+    if HasteMode() then
+        endtime = CurTime() + haste_starting:GetInt() * 60
 
-		-- this is a "fake" time shown to innocents, showing the end time if no
-		-- one would have been killed, it has no gameplay effect
-		SetGlobalFloat("ttt_haste_end", endtime)
-	end
+        -- this is a "fake" time shown to innocents, showing the end time if no
+        -- one would have been killed, it has no gameplay effect
+        SetGlobalFloat("ttt_haste_end", endtime)
+    end
 
-	SetRoundEnd(endtime)
+    SetRoundEnd(endtime)
 end
 
 ---
@@ -1137,85 +1210,92 @@ end
 -- @realm server
 -- @internal
 function BeginRound()
-	GAMEMODE:SyncGlobals()
+    GAMEMODE:SyncGlobals()
 
-	if CheckForAbort() then return end
+    if CheckForAbort() then
+        return
+    end
 
-	InitRoundEndTime()
+    InitRoundEndTime()
 
-	if CheckForAbort() then return end
+    if CheckForAbort() then
+        return
+    end
 
-	-- Respawn dumb people who died during prep
-	entspawn.SpawnPlayers(true)
+    -- Respawn dumb people who died during prep
+    entspawn.SpawnPlayers(true)
 
-	-- Remove their ragdolls
-	ents.TTT.RemoveRagdolls(true)
+    -- Remove their ragdolls
+    ents.TTT.RemoveRagdolls(true)
 
-	-- remove decals
-	util.ClearDecals()
+    -- remove decals
+    util.ClearDecals()
 
-	-- Check for low-karma players that weren't banned on round end
-	KARMA.RoundBegin()
+    -- Check for low-karma players that weren't banned on round end
+    KARMA.RoundBegin()
 
-	if CheckForAbort() then return end
+    if CheckForAbort() then
+        return
+    end
 
-	-- Select traitors & co. This is where things really start so we can't abort
-	-- anymore.
-	roleselection.SelectRoles()
+    -- Select traitors & co. This is where things really start so we can't abort
+    -- anymore.
+    roleselection.SelectRoles()
 
-	LANG.Msg("round_selected")
+    LANG.Msg("round_selected")
 
-	-- Edge case where a player joins just as the round starts and is picked as
-	-- traitor, but for whatever reason does not get the traitor state msg. So
-	-- re-send after a second just to make sure everyone is getting it.
-	-- TODO improve
-	timer.Simple(1, SendFullStateUpdate)
-	timer.Simple(10, SendFullStateUpdate)
+    -- Edge case where a player joins just as the round starts and is picked as
+    -- traitor, but for whatever reason does not get the traitor state msg. So
+    -- re-send after a second just to make sure everyone is getting it.
+    -- TODO improve
+    timer.Simple(1, SendFullStateUpdate)
+    timer.Simple(10, SendFullStateUpdate)
 
-	-- Give the StateUpdate messages ample time to arrive
-	timer.Simple(1.5, TellTraitorsAboutTraitors)
-	timer.Simple(2.5, ShowRoundStartPopup)
+    -- Give the StateUpdate messages ample time to arrive
+    timer.Simple(1.5, TellTraitorsAboutTraitors)
+    timer.Simple(2.5, ShowRoundStartPopup)
 
-	-- Start the win condition check timer
-	StartWinChecks()
-	StartNameChangeChecks()
+    -- Start the win condition check timer
+    StartWinChecks()
+    StartNameChangeChecks()
 
-	timer.Create("selectmute", 1, 1, function()
-		MuteForRestart(false)
-	end)
+    timer.Create("selectmute", 1, 1, function()
+        MuteForRestart(false)
+    end)
 
-	GAMEMODE.DamageLog = {}
-	GAMEMODE.RoundStartTime = CurTime()
+    GAMEMODE.DamageLog = {}
+    GAMEMODE.RoundStartTime = CurTime()
 
-	-- Sound start alarm
-	SetRoundState(ROUND_ACTIVE)
-	LANG.Msg("round_started")
-	ServerLog("Round proper has begun...\n")
+    -- Sound start alarm
+    SetRoundState(ROUND_ACTIVE)
+    LANG.Msg("round_started")
+    ServerLog("Round proper has begun...\n")
 
-	events.Trigger(EVENT_SELECTED)
+    events.Trigger(EVENT_SELECTED)
 
-	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
+    GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
-	ARMOR:InitPlayerArmor()
+    ARMOR:InitPlayerArmor()
 
-	local plys = player.GetAll()
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		ply:ResetRoundDeathCounter()
+        ply:ResetRoundDeathCounter()
 
-		-- a player should be considered "was active in round" if they received a role
-		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
-	end
+        -- a player should be considered "was active in round" if they received a role
+        ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
+    end
 
-	credits.ResetTeamStates()
+    credits.ResetTeamStates()
 
-	---
-	-- @realm server
-	hook.Run("TTTBeginRound")
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTTBeginRound")
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_ACTIVE)
+    ents.TTT.TriggerRoundStateOutputs(ROUND_ACTIVE)
 end
 
 ---
@@ -1224,32 +1304,32 @@ end
 -- @realm server
 -- @internal
 function PrintResultMessage(result)
-	ServerLog("Round ended.\n")
+    ServerLog("Round ended.\n")
 
-	if result == WIN_TIMELIMIT then
-		LANG.Msg("win_time")
-		ServerLog("Result: timelimit reached, traitors lose.\n")
+    if result == WIN_TIMELIMIT then
+        LANG.Msg("win_time")
+        ServerLog("Result: timelimit reached, traitors lose.\n")
 
-		return
-	elseif result == WIN_NONE or result == TEAM_NONE then
-		LANG.Msg("win_nones")
-		ServerLog("Result: No-one wins.\n")
+        return
+    elseif result == WIN_NONE or result == TEAM_NONE then
+        LANG.Msg("win_nones")
+        ServerLog("Result: No-one wins.\n")
 
-		return
-	else
-		if isnumber(result) then
-			if result == WIN_TRAITOR then
-				result = TEAM_TRAITOR
-			elseif result == WIN_INNOCENT then
-				result = TEAM_INNOCENT
-			end
-		end
+        return
+    else
+        if isnumber(result) then
+            if result == WIN_TRAITOR then
+                result = TEAM_TRAITOR
+            elseif result == WIN_INNOCENT then
+                result = TEAM_INNOCENT
+            end
+        end
 
-		LANG.Msg("win_" .. result) -- TODO translation
-		ServerLog("Result: " .. result .. " wins.\n") -- TODO translation
+        LANG.Msg("win_" .. result) -- TODO translation
+        ServerLog("Result: " .. result .. " wins.\n") -- TODO translation
 
-		return
-	end
+        return
+    end
 end
 
 ---
@@ -1257,24 +1337,25 @@ end
 -- @realm server
 -- @internal
 function CheckForMapSwitch()
-	-- Check for mapswitch
-	local roundsLeft = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
+    -- Check for mapswitch
+    local roundsLeft = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
 
-	SetGlobalInt("ttt_rounds_left", roundsLeft)
+    SetGlobalInt("ttt_rounds_left", roundsLeft)
 
-	local timeLeft = math.max(0, time_limit:GetInt() * 60 - CurTime())
-	local nextmap = string.upper(game.GetMapNext())
+    local timeLeft = math.max(0, time_limit:GetInt() * 60 - CurTime())
+    local nextmap = string.upper(game.GetMapNext())
 
-	if roundsLeft <= 0 or timeLeft <= 0 then
-		timer.Stop("end2prep")
-		SetRoundEnd(CurTime())
+    if roundsLeft <= 0 or timeLeft <= 0 then
+        timer.Stop("end2prep")
+        SetRoundEnd(CurTime())
 
-		---
-		-- @realm server
-		hook.Run("TTT2LoadNextMap", nextmap, roundsLeft, timeLeft)
-	else
-		LANG.Msg("limit_left", {num = roundsLeft, time = math.ceil(timeLeft / 60)})
-	end
+        ---
+        -- @realm server
+        -- stylua: ignore
+        hook.Run("TTT2LoadNextMap", nextmap, roundsLeft, timeLeft)
+    else
+        LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
+    end
 end
 
 ---
@@ -1283,54 +1364,55 @@ end
 -- @realm server
 -- @internal
 function EndRound(result)
-	PrintResultMessage(result)
+    PrintResultMessage(result)
 
-	KARMA.RoundEnd()
+    KARMA.RoundEnd()
 
-	events.Trigger(EVENT_FINISH, result)
+    events.Trigger(EVENT_FINISH, result)
 
-	SetRoundState(ROUND_POST)
+    SetRoundState(ROUND_POST)
 
-	local ptime = math.max(5, posttime:GetInt())
+    local ptime = math.max(5, posttime:GetInt())
 
-	LANG.Msg("win_showreport", {num = ptime})
-	timer.Create("end2prep", ptime, 1, PrepareRound)
+    LANG.Msg("win_showreport", { num = ptime })
+    timer.Create("end2prep", ptime, 1, PrepareRound)
 
-	-- Piggyback on "round end" time global var to show end of phase timer
-	SetRoundEnd(CurTime() + ptime)
+    -- Piggyback on "round end" time global var to show end of phase timer
+    SetRoundEnd(CurTime() + ptime)
 
-	timer.Create("restartmute", ptime - 1, 1, function()
-		MuteForRestart(true)
-	end)
+    timer.Create("restartmute", ptime - 1, 1, function()
+        MuteForRestart(true)
+    end)
 
-	-- Stop checking for wins
-	StopWinChecks()
+    -- Stop checking for wins
+    StopWinChecks()
 
-	-- send each client the role setup, reveal every player
-	local rlsList = roles.GetList()
+    -- send each client the role setup, reveal every player
+    local rlsList = roles.GetList()
 
-	for i = 1, #rlsList do
-		SendSubRoleList(rlsList[i].index)
-	end
+    for i = 1, #rlsList do
+        SendSubRoleList(rlsList[i].index)
+    end
 
-	-- We may need to start a timer for a mapswitch, or start a vote
-	if GetGlobalBool("ttt_session_limits_enabled") then
-		CheckForMapSwitch()
-	end
+    -- We may need to start a timer for a mapswitch, or start a vote
+    if GetGlobalBool("ttt_session_limits_enabled") then
+        CheckForMapSwitch()
+    end
 
-	events.UpdateScoreboard()
+    events.UpdateScoreboard()
 
-	-- send the clients the round log, players will be shown the report
-	events.StreamToClients()
+    -- send the clients the round log, players will be shown the report
+    events.StreamToClients()
 
-	---
-	-- server plugins might want to start a map vote here or something
-	-- these hooks are not used by TTT internally
-	-- possible incompatibility for other addons
-	-- @realm server
-	hook.Run("TTTEndRound", result)
+    ---
+    -- server plugins might want to start a map vote here or something
+    -- these hooks are not used by TTT internally
+    -- possible incompatibility for other addons
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTTEndRound", result)
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
+    ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
 
 ---
@@ -1339,39 +1421,46 @@ end
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
-	-- load all roles
-	roles.OnLoaded()
+    -- load all roles
+    roles.OnLoaded()
 
-	-- reload entity spawns from file
-	entspawnscript.OnLoaded()
+    -- reload entity spawns from file
+    entspawnscript.OnLoaded()
 
-	-- load all items
-	items.OnLoaded()
+    -- load all items
+    items.OnLoaded()
 
-	-- load all HUDs
-	huds.OnLoaded()
+    -- load all HUDs
+    huds.OnLoaded()
 
-	-- load all HUD elements
-	hudelements.OnLoaded()
+    -- load all HUD elements
+    hudelements.OnLoaded()
 
-	-- reload everything from the playermodels
-	playermodels.Initialize()
+    -- reload everything from the playermodels
+    playermodels.Initialize()
 
-	-- set the default random playermodel
-	self.playermodel = playermodels.GetRandomPlayerModel()
-	self.playercolor = COLOR_WHITE
+    -- set the default random playermodel
+    self.playermodel = playermodels.GetRandomPlayerModel()
+    self.playercolor = COLOR_WHITE
 
-	---
-	-- @realm shared
-	hook.Run("TTT2RolesLoaded")
+    -- register synced player variables
+    player.RegisterSettingOnServer("enable_dynamic_fov", "bool")
+    player.RegisterSettingOnServer("fov_desired", "float")
 
-	---
-	-- @realm shared
-	hook.Run("TTT2BaseRoleInit")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2RolesLoaded")
 
-	---
-	-- @realm shared
-	hook.Run("TTT2FinishedLoading")
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2BaseRoleInit")
+
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2FinishedLoading")
 end
 
 ---
@@ -1380,35 +1469,36 @@ end
 -- @hook
 -- @realm server
 function GM:MapTriggeredEnd(wintype)
-	if wintype ~= WIN_NONE then
-		self.MapWin = wintype
-	else
-		-- print alert and hint for contact
-		print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
-	end
+    if wintype ~= WIN_NONE then
+        self.MapWin = wintype
+    else
+        -- print alert and hint for contact
+        ErrorNoHaltWithStack("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
+    end
 end
 
 hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
-	net.Start("TTT2PlayerAuthedShared")
-	net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
-	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
-	net.Broadcast()
+    net.Start("TTT2PlayerAuthedShared")
+    net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
+    net.WriteString((ply and ply:Nick()) or "UNKNOWN")
+    net.Broadcast()
 end)
 
 local function ttt_roundrestart(ply, command, args)
-	---
-	-- ply is nil on dedicated server console
-	-- @realm server
-	if not IsValid(ply) or ply:IsAdmin() or hook.Run("TTT2AdminCheck", ply) or cvars.Bool("sv_cheats", 0) then
-		LANG.Msg("round_restart")
+    ---
+    -- ply is nil on dedicated server console
+    -- @realm server
+    -- stylua: ignore
+    if not IsValid(ply) or ply:IsAdmin() or hook.Run("TTT2AdminCheck", ply) or cvars.Bool("sv_cheats", 0) then
+        LANG.Msg("round_restart")
 
-		StopRoundTimers()
+        StopRoundTimers()
 
-		-- do prep
-		PrepareRound()
-	else
-		ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
-	end
+        -- do prep
+        PrepareRound()
+    else
+        ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
+    end
 end
 concommand.Add("ttt_roundrestart", ttt_roundrestart)
 
@@ -1417,26 +1507,31 @@ concommand.Add("ttt_roundrestart", ttt_roundrestart)
 -- @param Player ply
 -- @realm server
 function ShowVersion(ply)
-	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n", GAMEMODE.Version)
+    local text = Format(
+        "This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n",
+        GAMEMODE.Version
+    )
 
-	if IsValid(ply) then
-		ply:PrintMessage(HUD_PRINTNOTIFY, text)
-	else
-		Msg(text)
-	end
+    if IsValid(ply) then
+        ply:PrintMessage(HUD_PRINTNOTIFY, text)
+    else
+        Msg(text)
+    end
 end
 concommand.Add("ttt_version", ShowVersion)
 
 local function ttt_toggle_newroles(ply)
-	if not ply:IsAdmin() then return end
+    if not ply:IsAdmin() then
+        return
+    end
 
-	local b = not ttt_newroles_enabled:GetBool()
+    local b = not ttt_newroles_enabled:GetBool()
 
-	ttt_newroles_enabled:SetBool(b)
+    ttt_newroles_enabled:SetBool(b)
 
-	local word = b and "enabled" or "disabled"
+    local word = b and "enabled" or "disabled"
 
-	ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
+    ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
 end
 concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
 
@@ -1445,9 +1540,7 @@ concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
 -- TTT2 globals are synced.
 -- @hook
 -- @realm server
-function GM:TTT2SyncGlobals()
-
-end
+function GM:TTT2SyncGlobals() end
 
 ---
 -- This hook is run before @{GM:TTTCheckForWin} and should be used for custom winconditions in
@@ -1455,9 +1548,7 @@ end
 -- @return nil|string The team identifier of the winning team
 -- @hook
 -- @realm server
-function GM:TTT2PreWinChecker()
-
-end
+function GM:TTT2PreWinChecker() end
 
 ---
 -- Called after a player changed their nickname.
@@ -1465,9 +1556,7 @@ end
 -- @return nil|boolean Return true to prevent the kick of the player
 -- @hook
 -- @realm server
-function GM:TTTNameChangeKick(ply)
-
-end
+function GM:TTTNameChangeKick(ply) end
 
 ---
 -- A hook to prevent a traitor from receiving the list of their mates.
@@ -1477,9 +1566,7 @@ end
 -- name of their mates
 -- @hook
 -- @realm server
-function GM:TTT2TellTraitors(traitorNicks, ply)
-
-end
+function GM:TTT2TellTraitors(traitorNicks, ply) end
 
 ---
 -- Can be used to modify the table of teams with alive players. This hook is
@@ -1489,9 +1576,7 @@ end
 -- @param table alives The table of teams which have at least one player still alive
 -- @hook
 -- @realm server
-function GM:TTT2ModifyWinningAlives(alives)
-
-end
+function GM:TTT2ModifyWinningAlives(alives) end
 
 ---
 -- Called if CheckForMapSwitch has determined that a map change should happen.
@@ -1502,13 +1587,13 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2LoadNextMap(nextmap, roundsLeft, timeLeft)
-	if roundsLeft <= 0 then
-		LANG.Msg("limit_round", {mapname = nextmap})
-	elseif timeLeft <= 0 then
-		LANG.Msg("limit_time", {mapname = nextmap})
-	end
+    if roundsLeft <= 0 then
+        LANG.Msg("limit_round", { mapname = nextmap })
+    elseif timeLeft <= 0 then
+        LANG.Msg("limit_time", { mapname = nextmap })
+    end
 
-	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
+    timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
 end
 
 ---
@@ -1519,7 +1604,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTTDelayRoundStartForVote()
-	return false
+    return false
 end
 
 ---
@@ -1529,64 +1614,73 @@ end
 -- @hook
 -- @realm server
 function GM:TTTCheckForWin()
-	if not ttt_dbgwin or ttt_dbgwin:GetBool() then
-		return WIN_NONE
-	end
+    if not ttt_dbgwin or ttt_dbgwin:GetBool() then
+        return WIN_NONE
+    end
 
-	if self.MapWin ~= WIN_NONE then -- a role wins
-		local mapWin = self.MapWin
+    if self.MapWin ~= WIN_NONE then -- a role wins
+        local mapWin = self.MapWin
 
-		self.MapWin = WIN_NONE
+        self.MapWin = WIN_NONE
 
-		return mapWin
-	end
+        return mapWin
+    end
 
-	local aliveTeams = {}
-	local plys = player.GetAll()
+    local aliveTeams = {}
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local ply = plys[i]
-		local team = ply:GetTeam()
+    for i = 1, #plys do
+        local ply = plys[i]
+        local team = ply:GetTeam()
 
-		if (ply:IsTerror() or ply:IsBlockingRevival()) and not ply:GetSubRoleData().preventWin and team ~= TEAM_NONE then
-			aliveTeams[#aliveTeams + 1] = team
-		end
+        if
+            (ply:IsTerror() or ply:IsBlockingRevival())
+            and not ply:GetSubRoleData().preventWin
+            and team ~= TEAM_NONE
+        then
+            aliveTeams[#aliveTeams + 1] = team
+        end
 
-		-- special case: The revival blocks the round end
-		if ply:GetRevivalBlockMode() == REVIVAL_BLOCK_ALL then
-			return WIN_NONE
-		end
-	end
+        -- special case: The revival blocks the round end
+        if ply:GetRevivalBlockMode() == REVIVAL_BLOCK_ALL then
+            return WIN_NONE
+        end
+    end
 
-	---
-	-- @realm server
-	hook.Run("TTT2ModifyWinningAlives", aliveTeams)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2ModifyWinningAlives", aliveTeams)
 
-	local checkedTeams = {}
-	local b = 0
+    local checkedTeams = {}
+    local b = 0
 
-	for i = 1, #aliveTeams do
-		local team = aliveTeams[i]
+    for i = 1, #aliveTeams do
+        local team = aliveTeams[i]
 
-		if team == TEAM_NONE then continue end
+        if team == TEAM_NONE then
+            continue
+        end
 
-		if not checkedTeams[team] or TEAMS[team].alone then
-			-- prevent win of custom role -> maybe own win conditions
-			b = b + 1
+        if not checkedTeams[team] or TEAMS[team].alone then
+            -- prevent win of custom role -> maybe own win conditions
+            b = b + 1
 
-			-- check
-			checkedTeams[team] = true
-		end
+            -- check
+            checkedTeams[team] = true
+        end
 
-		-- if 2 teams alive
-		if b == 2 then break end
-	end
+        -- if 2 teams alive
+        if b == 2 then
+            break
+        end
+    end
 
-	if b > 1 then -- if >= 2 teams alive: no one wins
-		return WIN_NONE -- early out
-	elseif b == 1 then -- just 1 team is alive
-		return aliveTeams[1]
-	else -- rare case: nobody is alive, e.g. because of an explosion
-		return TEAM_NONE -- none_win
-	end
+    if b > 1 then -- if >= 2 teams alive: no one wins
+        return WIN_NONE -- early out
+    elseif b == 1 then -- just 1 team is alive
+        return aliveTeams[1]
+    else -- rare case: nobody is alive, e.g. because of an explosion
+        return TEAM_NONE -- none_win
+    end
 end

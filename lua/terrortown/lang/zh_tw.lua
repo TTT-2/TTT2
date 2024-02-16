@@ -262,7 +262,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "雷達誘餌"
-L.decoy_no_room = "你無法攜帶雷達誘餌。"
 L.decoy_broken = "你的雷達誘餌已被摧毀！"
 
 L.decoy_short_desc = "這個誘餌會為其他陣營顯示一個假雷達信號"
@@ -273,7 +272,6 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "拆彈器"
-L.defuser_help = " {primaryfire} 拆除目標炸彈。"
 
 L.defuser_desc = [[
 迅速拆除一個C4。
@@ -292,7 +290,6 @@ L.flare_desc = [[
 L.hstation_name = "醫療站"
 
 L.hstation_broken = "你的醫療站已被摧毀！"
-L.hstation_help = " {primaryfire} 裝置了一個醫療站。"
 
 L.hstation_desc = [[
 設置後，允許人們前來治療。恢復速度相當緩慢。
@@ -316,7 +313,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "你的收音機已被摧毀！"
-L.radio_help_pri = " {primaryfire} 裝置了收音機。"
 
 L.radio_desc = [[
 播放音樂使人們分心、誤導。
@@ -975,7 +971,7 @@ L.menu_guide_description = "幫助你開始遊玩 TTT2 並解釋玩法和身份�
 L.menu_bindings_description = "將 TTT2 和其插件的功能綁到你想要的鍵位"
 L.menu_language_description = "選擇遊戲語言"
 L.menu_appearance_description = "調整界面的樣式和性能"
-L.menu_gameplay_description = "避免特定身份和其他遊戲相關選項"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "配置本地插件"
 L.menu_legacy_description = "舊TTT的菜單，應該已被導入新系統"
 L.menu_administration_description = "界面和商店的通用管理菜單"
@@ -999,10 +995,8 @@ L.submenu_appearance_crosshair_title = "準星"
 L.submenu_appearance_dmgindicator_title = "傷害指示"
 L.submenu_appearance_performance_title = "性能"
 L.submenu_appearance_interface_title = "界面"
-L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
-L.submenu_gameplay_avoidroles_title = "避免特定身份"
 
 L.submenu_administration_hud_title = "HUD 設置"
 L.submenu_administration_randomshop_title = "隨機商店"
@@ -1039,17 +1033,12 @@ L.label_shop_show_slot = "顯示裝備槽位"
 L.label_shop_show_custom = "顯示自定義標記"
 L.label_shop_show_fav = "顯示最愛標記"
 L.label_crosshair_enable = "啟用十字準星"
-L.label_crosshair_gap_enable = "啟用自定義準星大小"
-L.label_crosshair_gap = "自定義準星大小"
 L.label_crosshair_opacity = "準星透明度"
 L.label_crosshair_ironsight_opacity = "瞄準時準星透明度"
 L.label_crosshair_size = "準星長度"
 L.label_crosshair_thickness = "準星粗細"
 L.label_crosshair_thickness_outline = "準星外框粗細"
-L.label_crosshair_static_enable = "啟用靜態準星"
-L.label_crosshair_dot_enable = "啟用準星中點"
-L.label_crosshair_lines_enable = "啟用準星直線"
-L.label_crosshair_scale_enable = "啟用武器對應準星大小"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "瞄準時降低武器模型"
 L.label_damage_indicator_enable = "啟用傷害指示"
 L.label_damage_indicator_mode = "選擇傷害指示主題"
@@ -1095,7 +1084,6 @@ L.header_damage_indicator = "傷害指示設置"
 L.header_performance_settings = "性能設置"
 L.header_interface_settings = "界面設置"
 L.header_gameplay_settings = "遊戲性設置"
-L.header_roleselection = "啟用身份分配"
 L.header_hud_administration = "選擇默認和強製 HUD"
 L.header_hud_enabled = "啟用/禁用 HUDs"
 
@@ -1157,7 +1145,6 @@ L.binoc_help_sec = "切換放大倍率"
 
 L.vis_help_pri = "丟棄當前設備。"
 
-L.decoy_help_pri = "安放誘餌。"
 
 -- 2020-08-07
 L.pickup_error_spec = "作為觀察者你無法撿起這個。"
@@ -1672,8 +1659,6 @@ L.label_bots_are_spectators = "機器人永遠是觀察者"
 L.label_tbutton_admin_show = "向管理員顯示叛徒按鈕"
 L.label_ragdoll_carrying = "啟用布娃娃搬運"
 L.label_prop_throwing = "啟用道具投擲"
-L.label_ragdoll_pinning = "為非無辜者角色啟用布娃娃夾子"
-L.label_ragdoll_pinning_innocents = "為無辜者啟用布娃娃夾子"
 L.label_weapon_carrying = "啟用武器搬運"
 L.label_weapon_carrying_range = "武器搬運範圍"
 L.label_prop_carrying_force = "Prop推進力"
@@ -1763,7 +1748,6 @@ L.label_sprint_enabled = "啟用沖刺功能"
 L.label_sprint_max = "沖刺體力最大值"
 L.label_sprint_stamina_consumption = "體力消耗系數"
 L.label_sprint_stamina_regeneration = "體力恢復系數"
-L.label_sprint_crosshair = "沖刺時顯示準星"
 L.label_crowbar_unlocks = "主要攻擊鍵可以作為互動（即解鎖）使用"
 L.label_crowbar_pushforce = "撬棍推動力"
 
@@ -1977,8 +1961,10 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 --L.header_hud_elements_customize = "Customize the HUD-Elements"
 --L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2069,11 +2055,47 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
@@ -2088,7 +2110,7 @@ L.search_eyes = "透過你的探查技能，你確信他臨死前見到的最後
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-11-18
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
@@ -2101,6 +2123,18 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
+-- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2111,3 +2145,49 @@ L.body_confirm_one = "{finder} 確認了 {victim} 的死。"
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放誘餌"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+--L.throw_no_room = "You have no space here to throw this device"

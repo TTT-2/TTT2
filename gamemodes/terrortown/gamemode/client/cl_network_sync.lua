@@ -23,19 +23,21 @@ ttt2net.dataListeners = {}
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 -- @realm client
 function ttt2net.Get(path)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Prevent wrong data being returned, when no metadata entry exists
-	if table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath) == nil then return end
+    -- Prevent wrong data being returned, when no metadata entry exists
+    if table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath) == nil then
+        return
+    end
 
-	return table.GetWithPath(ttt2net.dataStore, tmpPath)
+    return table.GetWithPath(ttt2net.dataStore, tmpPath)
 end
 
 ---
@@ -47,19 +49,19 @@ end
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 -- @realm client
 function ttt2net.GetGlobal(path)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table
-	table.insert(tmpPath, 1, "global")
+    -- Add the prefix for the correct table
+    table.insert(tmpPath, 1, "global")
 
-	return ttt2net.Get(tmpPath)
+    return ttt2net.Get(tmpPath)
 end
 
 ---
@@ -72,33 +74,33 @@ end
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 -- @realm client
 function ttt2net.GetOnPlayer(path, ply)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, ply:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, ply:EntIndex())
 
-	return ttt2net.Get(tmpPath, ply)
+    return ttt2net.Get(tmpPath, ply)
 end
 
 ---
 -- Prints out all ttt2net related tables, for debugging purposes.
 -- @realm client
 function ttt2net.Debug()
-	print("[TTT2NET] Debug:")
-	print("Registered listeners:")
-	PrintTable(ttt2net.dataListeners)
-	print("Meta data table:")
-	PrintTable(ttt2net.dataStoreMetadata)
-	print("Data store table:")
-	PrintTable(ttt2net.dataStore)
+    Dev(2, "[TTT2NET] Debug:")
+    Dev(2, "Registered listeners:")
+    PrintTable(ttt2net.dataListeners)
+    Dev(2, "Meta data table:")
+    PrintTable(ttt2net.dataStoreMetadata)
+    Dev(2, "Data store table:")
+    PrintTable(ttt2net.dataStore)
 end
 
 ---
@@ -109,27 +111,27 @@ end
 -- @internal
 -- @realm client
 local function CallCallbacksOnTree(oldData, curPath)
-	local tmpPath = not istable(curPath) and { curPath } or table.Copy(curPath) or {}
-	local curNode = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
+    local tmpPath = not istable(curPath) and { curPath } or table.Copy(curPath) or {}
+    local curNode = table.GetWithPath(ttt2net.dataStoreMetadata, tmpPath)
 
-	-- Go through all keys that the current node has
-	for key in pairs(curNode) do
-		local nextNode = curNode[key]
-		local nextPath = table.Copy(tmpPath)
-		nextPath[#nextPath + 1] = key
+    -- Go through all keys that the current node has
+    for key in pairs(curNode) do
+        local nextNode = curNode[key]
+        local nextPath = table.Copy(tmpPath)
+        nextPath[#nextPath + 1] = key
 
-		if nextNode.type then
-			-- The node is a leaf node -> is a node with meta data
-			local oldval = table.GetWithPath(oldData, nextPath)
-			local newval = ttt2net.Get(nextPath)
+        if nextNode.type then
+            -- The node is a leaf node -> is a node with meta data
+            local oldval = table.GetWithPath(oldData, nextPath)
+            local newval = ttt2net.Get(nextPath)
 
-			-- Call the listeners for this change
-			ttt2net.CallOnUpdate(nextPath, oldval, newval)
-		else
-			-- Descend a level deeper
-			CallCallbacksOnTree(oldData, nextPath)
-		end
-	end
+            -- Call the listeners for this change
+            ttt2net.CallOnUpdate(nextPath, oldval, newval)
+        else
+            -- Descend a level deeper
+            CallCallbacksOnTree(oldData, nextPath)
+        end
+    end
 end
 
 ---
@@ -141,16 +143,16 @@ end
 -- @internal
 -- @realm client
 local function ReceiveFullStateUpdate(result)
-	-- Temporarily save the old tables, to use let the update callbacks know of the previous value
-	local oldData = ttt2net.dataStore
-	local oldMetaData = ttt2net.dataStoreMetadata
+    -- Temporarily save the old tables, to use let the update callbacks know of the previous value
+    local oldData = ttt2net.dataStore
+    local oldMetaData = ttt2net.dataStoreMetadata
 
-	-- Replace tables with the result
-	ttt2net.dataStoreMetadata = result.meta
-	ttt2net.dataStore = result.data
+    -- Replace tables with the result
+    ttt2net.dataStoreMetadata = result.meta
+    ttt2net.dataStore = result.data
 
-	-- Call all callback functions for all paths
-	CallCallbacksOnTree(oldData, oldMetaData)
+    -- Call all callback functions for all paths
+    CallCallbacksOnTree(oldData, oldMetaData)
 end
 net.ReceiveStream(ttt2net.NET_STREAM_FULL_STATE_UPDATE, ReceiveFullStateUpdate)
 
@@ -162,20 +164,20 @@ net.ReceiveStream(ttt2net.NET_STREAM_FULL_STATE_UPDATE, ReceiveFullStateUpdate)
 -- @internal
 -- @realm client
 local function ReceiveMetaDataUpdate()
-	local path = ttt2net.NetReadPath()
-	local metadata = ttt2net.NetReadMetaData()
+    local path = ttt2net.NetReadPath()
+    local metadata = ttt2net.NetReadMetaData()
 
-	-- Set the new metadata
-	table.SetWithPath(ttt2net.dataStoreMetadata, path, metadata)
+    -- Set the new metadata
+    table.SetWithPath(ttt2net.dataStoreMetadata, path, metadata)
 
-	-- Store the old value if there is any known
-	local oldval = table.GetWithPath(ttt2net.dataStore, path)
+    -- Store the old value if there is any known
+    local oldval = table.GetWithPath(ttt2net.dataStore, path)
 
-	-- Clear the saved value, as the metadata changed
-	table.SetWithPath(ttt2net.dataStore, path, nil)
+    -- Clear the saved value, as the metadata changed
+    table.SetWithPath(ttt2net.dataStore, path, nil)
 
-	-- Call callbacks that registered on data updates
-	ttt2net.CallOnUpdate(path, oldval, nil)
+    -- Call callbacks that registered on data updates
+    ttt2net.CallOnUpdate(path, oldval, nil)
 end
 net.Receive(ttt2net.NETMSG_META_UPDATE, ReceiveMetaDataUpdate)
 
@@ -187,22 +189,22 @@ net.Receive(ttt2net.NETMSG_META_UPDATE, ReceiveMetaDataUpdate)
 -- @internal
 -- @realm client
 local function ReceiveDataUpdate()
-	local path = ttt2net.NetReadPath()
+    local path = ttt2net.NetReadPath()
 
-	-- Get the metadata for the path, this will also error if there is no metadata entry for the path
-	local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, path)
+    -- Get the metadata for the path, this will also error if there is no metadata entry for the path
+    local metadata = table.GetWithPath(ttt2net.dataStoreMetadata, path)
 
-	-- Read the new value based on the metadata entry
-	local newval = ttt2net.NetReadData(metadata)
+    -- Read the new value based on the metadata entry
+    local newval = ttt2net.NetReadData(metadata)
 
-	-- Save the old value as we need to tell the update listeners about it
-	local oldval = ttt2net.Get(path)
+    -- Save the old value as we need to tell the update listeners about it
+    local oldval = ttt2net.Get(path)
 
-	-- Save the new data
-	table.SetWithPath(ttt2net.dataStore, path, newval)
+    -- Save the new data
+    table.SetWithPath(ttt2net.dataStore, path, newval)
 
-	-- Call the update listeners
-	ttt2net.CallOnUpdate(path, oldval, newval)
+    -- Call the update listeners
+    ttt2net.CallOnUpdate(path, oldval, newval)
 end
 net.Receive(ttt2net.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
 
@@ -215,50 +217,52 @@ net.Receive(ttt2net.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
 -- @param any newval The new value, after the update
 -- @realm client
 function ttt2net.CallOnUpdate(path, oldval, newval)
-	-- Skip if the value did not change
-	if oldval == newval then return end
+    -- Skip if the value did not change
+    if oldval == newval then
+        return
+    end
 
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	local currentPath = table.Copy(tmpPath)
-	local reversePath = {}
+    local currentPath = table.Copy(tmpPath)
+    local reversePath = {}
 
-	-- Traverse the path tree up from the bottom and call all their listeners
-	for y = 1, #tmpPath do
-		-- Add the special key for the "callbacks" to the path
-		currentPath[#currentPath + 1] = "__callbacks"
+    -- Traverse the path tree up from the bottom and call all their listeners
+    for y = 1, #tmpPath do
+        -- Add the special key for the "callbacks" to the path
+        currentPath[#currentPath + 1] = "__callbacks"
 
-		-- Get all registered callbacks
-		local callbacks = table.GetWithPath(ttt2net.dataListeners, currentPath) or {}
+        -- Get all registered callbacks
+        local callbacks = table.GetWithPath(ttt2net.dataListeners, currentPath) or {}
 
-		-- Call all registered callbacks for the current path
-		for i = 1, #callbacks do
-			callbacks[i](oldval, newval, reversePath)
-		end
+        -- Call all registered callbacks for the current path
+        for i = 1, #callbacks do
+            callbacks[i](oldval, newval, reversePath)
+        end
 
-		-- Remove the "callbacks" path entry
-		currentPath[#currentPath] = nil
+        -- Remove the "callbacks" path entry
+        currentPath[#currentPath] = nil
 
-		-- Remove the last path element and save in reversePath to let the parent callbacks know which value has changed
-		table.insert(reversePath, 1, currentPath[#currentPath])
+        -- Remove the last path element and save in reversePath to let the parent callbacks know which value has changed
+        table.insert(reversePath, 1, currentPath[#currentPath])
 
-		currentPath[#currentPath] = nil
-	end
+        currentPath[#currentPath] = nil
+    end
 end
 
 ---
 -- Request a full state update from the server.
 -- @realm client
 function ttt2net.RequestFullStateUpdate()
-	net.Start(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE)
-	net.SendToServer()
+    net.Start(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE)
+    net.SendToServer()
 end
 
 ---
@@ -267,9 +271,9 @@ end
 -- @return table The path table
 -- @realm client
 function ttt2net.NetReadPath()
-	local result = net.ReadString()
+    local result = net.ReadString()
 
-	return pon.decode(result)
+    return pon.decode(result)
 end
 
 ---
@@ -278,19 +282,21 @@ end
 -- @return table The metadata table
 -- @realm client
 function ttt2net.NetReadMetaData()
-	-- If the null flag is set, then return null
-	if net.ReadBool() then return end
+    -- If the null flag is set, then return null
+    if net.ReadBool() then
+        return
+    end
 
-	local metadata = {}
-	metadata.type = net.ReadString()
+    local metadata = {}
+    metadata.type = net.ReadString()
 
-	-- The int type has some extra information
-	if metadata.type == "int" then
-		metadata.bits = net.ReadUInt(6)
-		metadata.unsigned = net.ReadBool()
-	end
+    -- The int type has some extra information
+    if metadata.type == "int" then
+        metadata.bits = net.ReadUInt(6)
+        metadata.unsigned = net.ReadBool()
+    end
 
-	return metadata
+    return metadata
 end
 
 ---
@@ -301,24 +307,26 @@ end
 -- @return any The data that was read
 -- @realm client
 function ttt2net.NetReadData(metadata)
-	-- If the null flag is set, then return null
-	if net.ReadBool() then return end
+    -- If the null flag is set, then return null
+    if net.ReadBool() then
+        return
+    end
 
-	if metadata.type == "int" then
-		if metadata.unsigned then
-			return net.ReadUInt(metadata.bits or 32)
-		else
-			return net.ReadInt(metadata.bits or 32)
-		end
-	elseif metadata.type == "bool" then
-		return net.ReadBool()
-	elseif metadata.type == "float" then
-		return net.ReadFloat()
-	elseif metadata.type == "table" then
-		return pon.decode(net.ReadString())
-	else
-		return net.ReadString()
-	end
+    if metadata.type == "int" then
+        if metadata.unsigned then
+            return net.ReadUInt(metadata.bits or 32)
+        else
+            return net.ReadInt(metadata.bits or 32)
+        end
+    elseif metadata.type == "bool" then
+        return net.ReadBool()
+    elseif metadata.type == "float" then
+        return net.ReadFloat()
+    elseif metadata.type == "table" then
+        return pon.decode(net.ReadString())
+    else
+        return net.ReadString()
+    end
 end
 
 ---
@@ -329,31 +337,33 @@ end
 -- @param function func
 -- @realm client
 function ttt2net.OnUpdate(path, func)
-	assert(isfunction(func), "[TTT2NET] OnUpdate called with an invalid function.")
+    assert(isfunction(func), "[TTT2NET] OnUpdate called with an invalid function.")
 
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the special callback key to the path
-	tmpPath[#tmpPath + 1] = "__callbacks"
+    -- Add the special callback key to the path
+    tmpPath[#tmpPath + 1] = "__callbacks"
 
-	-- Get the registered callbacks table for the given path
-	local registeredCallbacks = table.GetWithPath(ttt2net.dataListeners, tmpPath) or {}
+    -- Get the registered callbacks table for the given path
+    local registeredCallbacks = table.GetWithPath(ttt2net.dataListeners, tmpPath) or {}
 
-	-- Check if this function is not already registered, to avoid duplicates
-	if table.HasValue(registeredCallbacks, func) then return end
+    -- Check if this function is not already registered, to avoid duplicates
+    if table.HasValue(registeredCallbacks, func) then
+        return
+    end
 
-	-- Add the function to the callback table
-	registeredCallbacks[#registeredCallbacks + 1] = func
+    -- Add the function to the callback table
+    registeredCallbacks[#registeredCallbacks + 1] = func
 
-	-- Set the callback table again
-	table.SetWithPath(ttt2net.dataListeners, tmpPath, registeredCallbacks)
+    -- Set the callback table again
+    table.SetWithPath(ttt2net.dataListeners, tmpPath, registeredCallbacks)
 end
 
 ---
@@ -363,19 +373,19 @@ end
 -- @param function func The callback function that should be executed
 -- @realm client
 function ttt2net.OnUpdateGlobal(path, func)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table
-	table.insert(tmpPath, 1, "global")
+    -- Add the prefix for the correct table
+    table.insert(tmpPath, 1, "global")
 
-	ttt2net.OnUpdate(tmpPath, func)
+    ttt2net.OnUpdate(tmpPath, func)
 end
 
 ---
@@ -386,18 +396,18 @@ end
 -- @param function func The callback function that should be executed
 -- @realm client
 function ttt2net.OnUpdateOnPlayer(path, ply, func)
-	local tmpPath
+    local tmpPath
 
-	-- Convert path with single key to table
-	if not istable(path) then
-		tmpPath = { path }
-	else
-		tmpPath = table.Copy(path)
-	end
+    -- Convert path with single key to table
+    if not istable(path) then
+        tmpPath = { path }
+    else
+        tmpPath = table.Copy(path)
+    end
 
-	-- Add the prefix for the correct table with the specific player
-	table.insert(tmpPath, 1, "players")
-	table.insert(tmpPath, 2, ply:EntIndex())
+    -- Add the prefix for the correct table with the specific player
+    table.insert(tmpPath, 1, "players")
+    table.insert(tmpPath, 2, ply:EntIndex())
 
-	ttt2net.OnUpdate(tmpPath, func)
+    ttt2net.OnUpdate(tmpPath, func)
 end

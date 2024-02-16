@@ -262,7 +262,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "デコイ"
-L.decoy_no_room = "この狭い所ではデコイは持てないようだ。"
 L.decoy_broken = "デコイが破壊された！"
 
 L.decoy_short_desc = "このデコイは別陣営のレーダーに偽のレーダー反応を示してくれるぞ。"
@@ -273,7 +272,6 @@ Detectiveに偽のレーダー反応を表示させ、彼らがあなたのDNA�
 
 -- Defuser
 L.defuser_name = "C4除去装置"
-L.defuser_help = "{primaryfire}でC4除去"
 
 L.defuser_desc = [[
 C4爆弾を即座に除去する。
@@ -292,7 +290,6 @@ L.flare_desc = [[
 L.hstation_name = "回復ステーション"
 
 L.hstation_broken = "回復ステーションが破壊された！"
-L.hstation_help = "{primaryfire}で回復ステーション設置"
 
 L.hstation_desc = [[
 回復が可能な設置型の機械。チャージは遅く、
@@ -316,7 +313,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "ラジオが破壊された！"
-L.radio_help_pri = "{primaryfire}でラジオを置く"
 
 L.radio_desc = [[
 注意を逸らしたり欺くために音を再生できる機械。
@@ -975,7 +971,7 @@ L.menu_guide_description = "TTT2が初めての方への説明、遊び方、役
 L.menu_bindings_description = "TTT2用の特定の機能、\nまたはそれ対応のアドオン関連のキーを設定。"
 L.menu_language_description = "言語を設定できます。"
 L.menu_appearance_description = "外見やユーザーインターフェイスを\n微調整できます。"
-L.menu_gameplay_description = "ある役職になることを避けたりなど、\nそのほかの微調整ができます。"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "個人のお好きで、現在導入されている\nアドオン構成ができます。"
 L.menu_legacy_description = "旧TTTのように設定ができ、\nその設定はTTT2にも適用されます。"
 L.menu_administration_description = "HUD、ショップやその他の設定。"
@@ -999,10 +995,8 @@ L.submenu_appearance_crosshair_title = "クロスヘア"
 L.submenu_appearance_dmgindicator_title = "ダメージインジケータ"
 L.submenu_appearance_performance_title = "パフォーマンス"
 L.submenu_appearance_interface_title = "インターフェイス"
-L.submenu_appearance_miscellaneous_title = "その他"
 
 L.submenu_gameplay_general_title = "基本設定"
-L.submenu_gameplay_avoidroles_title = "役職設定"
 
 L.submenu_administration_hud_title = "HUD設定"
 L.submenu_administration_randomshop_title = "ランダムショップ"
@@ -1039,17 +1033,12 @@ L.label_shop_show_slot = "スロットマーカーを表示"
 L.label_shop_show_custom = "カスタムアイテムマーカーを表示"
 L.label_shop_show_fav = "お気に入りアイテムマーカーを表示"
 L.label_crosshair_enable = "クロスヘアあり"
-L.label_crosshair_gap_enable = "カスタムクロスヘアギャップあり"
-L.label_crosshair_gap = "カスタムクロスヘアギャップ"
 L.label_crosshair_opacity = "クロスヘア不透明度"
 L.label_crosshair_ironsight_opacity = "アイアンサイトのクロスヘアの不透明度"
 L.label_crosshair_size = "クロスヘアの大きさ"
 L.label_crosshair_thickness = "クロスヘアの太さ"
 L.label_crosshair_thickness_outline = "クロスヘアの外枠の太さ"
-L.label_crosshair_static_enable = "スタティッククロスヘアを有効"
-L.label_crosshair_dot_enable = "クロスヘアドットを有効"
-L.label_crosshair_lines_enable = "クロスヘアラインを有効"
-L.label_crosshair_scale_enable = "武器依存の武器スケールを有効にする"
+--L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "アイアンサイトを使用する場合は武器を提げる"
 L.label_damage_indicator_enable = "ダメージインジケーターを有効"
 L.label_damage_indicator_mode = "ダメージインジケーターのテーマを選択"
@@ -1095,7 +1084,6 @@ L.header_damage_indicator = "ダメージインジケータ設定"
 L.header_performance_settings = "パフォーマンス設定"
 L.header_interface_settings = "インターフェイス設定"
 L.header_gameplay_settings = "ゲーム設定"
-L.header_roleselection = "あまりなりたくない役職を選択(必ずならないわけではありません)"
 L.header_hud_administration = "デフォルトと強制的HUDを選択"
 L.header_hud_enabled = "HUD 有効/無効"
 
@@ -1157,7 +1145,6 @@ L.binoc_help_sec = "ズームレベル変更"
 
 L.vis_help_pri = "可視化装置を落とす"
 
-L.decoy_help_pri = "デコイを設置する"
 
 -- 2020-08-07
 L.pickup_error_spec = "観戦者のためこれは拾えないようだ。"
@@ -1672,8 +1659,6 @@ L.label_bots_are_spectators = "Botは観戦者状態にする"
 L.label_tbutton_admin_show = "管理者側にTraitorトラップを表示"
 L.label_ragdoll_carrying = "Ragdollの運搬を有効"
 L.label_prop_throwing = "オブジェクトを投げることを有効"
-L.label_ragdoll_pinning = "Innocent以外の役職に対してRagdollの張り付けを有効"
-L.label_ragdoll_pinning_innocents = "InnocentのRagdollの張り付けを有効"
 L.label_weapon_carrying = "武器の運搬を有効"
 L.label_weapon_carrying_range = "武器を運べるまでの距離"
 L.label_prop_carrying_force = "オブジェクト拾得力"
@@ -1763,7 +1748,6 @@ L.label_sprint_enabled = "走行を有効"
 L.label_sprint_max = "走行用スタミナ最大値"
 L.label_sprint_stamina_consumption = "スタミナ消費率"
 L.label_sprint_stamina_regeneration = "スタミナ再生率"
-L.label_sprint_crosshair = "走行中のクロスヘアの表示"
 L.label_crowbar_unlocks = "バールによる鍵解除"
 L.label_crowbar_pushforce = "バールで押す力"
 
@@ -1977,8 +1961,10 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --
 --mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
---L.header_miscellaneous_settings = "Miscellaneous Settings"
 --L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 --L.header_hud_elements_customize = "Customize the HUD-Elements"
 --L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2069,11 +2055,47 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 --L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 --L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 --L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 --L.beacon_help_pri = "Throw Beacon on the ground"
 --L.beacon_help_sec = "Stick Beacon to surface"
 --L.beacon_name = "Beacon"
@@ -2088,7 +2110,7 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 --L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-11-18
+-- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
@@ -2101,6 +2123,18 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+
+-- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2111,3 +2145,49 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --2 = Deal twice the amount of damage.
 --
 --Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "デコイを設置する"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+--L.throw_no_room = "You have no space here to throw this device"

@@ -1,18 +1,18 @@
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 SWEP.HoldType = "pistol"
 
 if CLIENT then
-	SWEP.PrintName = "pistol_name"
-	SWEP.Slot = 1
+    SWEP.PrintName = "pistol_name"
+    SWEP.Slot = 1
 
-	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 54
+    SWEP.ViewModelFlip = false
+    SWEP.ViewModelFOV = 54
 
-	SWEP.Icon = "vgui/ttt/icon_pistol"
-	SWEP.IconLetter = "u"
+    SWEP.Icon = "vgui/ttt/icon_pistol"
+    SWEP.IconLetter = "u"
 end
 
 SWEP.Base = "weapon_tttbase"
@@ -39,6 +39,7 @@ SWEP.AmmoEnt = "item_ammo_pistol_ttt"
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_fiveseven.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_fiveseven.mdl"
+SWEP.idleResetFix = true
 
 SWEP.IronSightsPos = Vector(-5.95, -4, 2.799)
 SWEP.IronSightsAng = Vector(0, 0, 0)

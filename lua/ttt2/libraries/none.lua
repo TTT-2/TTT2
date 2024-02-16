@@ -7,7 +7,7 @@
 -- @module none
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 ---
@@ -19,7 +19,7 @@ end
 -- @return number alpha value of the given color
 -- @realm shared
 function clr(color)
-	return color.r, color.g, color.b, color.a
+    return color.r, color.g, color.b, color.a
 end
 
 ---
@@ -32,16 +32,18 @@ end
 -- @deprecated
 -- @realm shared
 function AccessorFuncDT(tbl, varname, name)
-	MsgN("[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version.")
-	tbl["Get" .. name] = function(s)
-		return s.dt and s.dt[varname]
-	end
+    ErrorNoHaltWithStack(
+        "[DEPRECATION WARNING] Using `AccessorFuncDT` is deprecated and will be removed in a future version."
+    )
+    tbl["Get" .. name] = function(s)
+        return s.dt and s.dt[varname]
+    end
 
-	tbl["Set" .. name] = function(s, v)
-		if s.dt then
-			s.dt[varname] = v
-		end
-	end
+    tbl["Set" .. name] = function(s, v)
+        if s.dt then
+            s.dt[varname] = v
+        end
+    end
 end
 
 ---
@@ -52,12 +54,12 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/input.LookupBinding
 function Key(binding, default)
-	local b = input.LookupBinding(binding)
-	if not b then
-		return default
-	end
+    local b = input.LookupBinding(binding)
+    if not b then
+        return default
+    end
 
-	return string.upper(b)
+    return string.upper(b)
 end
 
 ---
@@ -66,27 +68,29 @@ end
 -- @param any ... anything that should be printed
 -- @realm shared
 function Dev(level, ...)
-	if not cvars or cvars.Number("developer", 0) < level then return end
+    if not cvars or cvars.Number("developer", 0) < level then
+        return
+    end
 
-	Msg("[TTT dev]")
-	-- table.concat does not tostring, derp
+    Msg("[TTT dev]")
+    -- table.concat does not tostring, derp
 
-	local params = {...}
+    local params = { ... }
 
-	for i = 1, #params do
-		Msg(" " .. tostring(params[i]))
-	end
+    for i = 1, #params do
+        Msg(" " .. tostring(params[i]))
+    end
 
-	Msg("\n")
+    Msg("\n")
 end
 
 ---
--- A simple check whether an @{Entity} is a valid @{Player}
--- @param Entity ent
--- @return boolean
+-- A simple check whether a variable is a valid @{Player}
+-- @param any var The variable that should be checked
+-- @return boolean Returns true if the variable is a valid player
 -- @realm shared
-function IsPlayer(ent)
-	return ent and IsValid(ent) and ent:IsPlayer()
+function IsPlayer(var)
+    return var and isentity(var) and IsValid(var) and var:IsPlayer()
 end
 
 ---
@@ -95,5 +99,5 @@ end
 -- @return boolean
 -- @realm shared
 function IsRagdoll(ent)
-	return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
+    return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
 end

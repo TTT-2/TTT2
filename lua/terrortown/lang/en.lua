@@ -262,7 +262,6 @@ Analyzes a corpse to show how the victim was killed, but only if they died of gu
 
 -- Decoy
 L.decoy_name = "Decoy"
-L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
@@ -273,7 +272,6 @@ Shows a fake radar sign to other teams, and makes the DNA scanner show the locat
 
 -- Defuser
 L.defuser_name = "Defuser"
-L.defuser_help = "{primaryfire} defuses targeted C4."
 
 L.defuser_desc = [[
 Instantly defuse a C4 explosive.
@@ -292,7 +290,6 @@ Burning a corpse makes a distinct sound.]]
 L.hstation_name = "Health Station"
 
 L.hstation_broken = "Your Health Station has been destroyed!"
-L.hstation_help = "{primaryfire} places the Health Station."
 
 L.hstation_desc = [[
 Allows people to heal when placed.
@@ -316,7 +313,6 @@ The energy bursts damage people in close proximity.]]
 
 -- Radio
 L.radio_broken = "Your Radio has been destroyed!"
-L.radio_help_pri = "{primaryfire} places the Radio."
 
 L.radio_desc = [[
 Plays sounds to distract or deceive.
@@ -975,7 +971,7 @@ L.menu_guide_description = "Helps you to get started with TTT2 and explains some
 L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking."
 L.menu_language_description = "Select the language of the gamemode."
 L.menu_appearance_description = "Tweak the appearance and performance of the UI."
-L.menu_gameplay_description = "Avoid roles and tweak some features."
+L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Configure local addons to your liking."
 L.menu_legacy_description = "A panel with converted tabs from the original TTT that should be ported over to the new system."
 L.menu_administration_description = "General settings for HUDs, shops etc."
@@ -999,10 +995,8 @@ L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Miscellaneous"
 
 L.submenu_gameplay_general_title = "General"
-L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
 L.submenu_administration_hud_title = "HUD Settings"
 L.submenu_administration_randomshop_title = "Random Shop"
@@ -1039,17 +1033,12 @@ L.label_shop_show_slot = "Show slot marker"
 L.label_shop_show_custom = "Show custom item marker"
 L.label_shop_show_fav = "Show favourite item marker"
 L.label_crosshair_enable = "Enable crosshair"
-L.label_crosshair_gap_enable = "Enable custom crosshair gap"
-L.label_crosshair_gap = "Custom crosshair gap"
 L.label_crosshair_opacity = "Crosshair opacity"
 L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
-L.label_crosshair_size = "Crosshair size"
-L.label_crosshair_thickness = "Crosshair thickness"
-L.label_crosshair_thickness_outline = "Crosshair outline thickness"
-L.label_crosshair_static_enable = "Enable static crosshair"
-L.label_crosshair_dot_enable = "Enable crosshair dot"
-L.label_crosshair_lines_enable = "Enable crosshair lines"
-L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
+L.label_crosshair_size = "Crosshair size multiplier"
+L.label_crosshair_thickness = "Crosshair thickness multiplier"
+L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
+L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
 L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
 L.label_damage_indicator_enable = "Enable damage indicator"
 L.label_damage_indicator_mode = "Select damage indicator theme"
@@ -1095,7 +1084,6 @@ L.header_damage_indicator = "Damage Indicator Settings"
 L.header_performance_settings = "Performance Settings"
 L.header_interface_settings = "Interface Settings"
 L.header_gameplay_settings = "Gameplay Settings"
-L.header_roleselection = "Select Avoiding Roles"
 L.header_hud_administration = "Select Default and Forced HUDs"
 L.header_hud_enabled = "Enable/Disable HUDs"
 
@@ -1157,7 +1145,6 @@ L.binoc_help_sec = "Change zoom level."
 
 L.vis_help_pri = "Drop the activated device."
 
-L.decoy_help_pri = "Plant the Decoy."
 
 -- 2020-08-07
 L.pickup_error_spec = "You cannot pick this up as a spectator."
@@ -1672,8 +1659,6 @@ L.label_bots_are_spectators = "Bots are always spectators"
 L.label_tbutton_admin_show = "Show traitor buttons to admins"
 L.label_ragdoll_carrying = "Enable ragdoll carrying"
 L.label_prop_throwing = "Enable prop throwing"
-L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
-L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
 L.label_weapon_carrying = "Enable weapon carrying"
 L.label_weapon_carrying_range = "Weapon carry range"
 L.label_prop_carrying_force = "Prop pickup force"
@@ -1763,7 +1748,6 @@ L.label_sprint_enabled = "Enable sprinting"
 L.label_sprint_max = "Max sprinting stamina"
 L.label_sprint_stamina_consumption = "Stamina consumption factor"
 L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
-L.label_sprint_crosshair = "Show crosshair while sprinting"
 L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -1977,8 +1961,10 @@ mode 1: This mode increases the importance of public policing roles by limiting 
 
 mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
 
+-- 2023-10-19
+L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
 -- 2023-10-23
-L.header_miscellaneous_settings = "Miscellaneous Settings"
 L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
 L.header_hud_elements_customize = "Customize the HUD-Elements"
 L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
@@ -2069,11 +2055,47 @@ L.label_keyhelper_possession_dash = "prop: dash in view direction"
 L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
 L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
 
+-- 2023-12-07
+L.c4_help_primary = "Place the C4"
+L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+L.magneto_help_primary = "Push entity"
+L.magneto_help_secondary = "Pull / pickup entity"
+L.knife_help_primary = "Stab"
+L.knife_help_secondary = "Throw knife"
+L.polter_help_primary = "Fire thumper"
+L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+L.newton_help_primary = "Knockback shot"
+L.newton_help_secondary = "Charged knockback shot"
+
 -- 2023-12-13
 L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
 L.newton_force = "FORCE"
+L.defuser_help_primary = "Defuse targeted C4"
+L.radio_help_primary = "Place the Radio"
+L.radio_help_secondary = "Stick to surface"
+L.hstation_help_primary = "Place the Health Station"
+L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
+L.marker_vision_owner = "Owner: {owner}"
+L.marker_vision_distance = "Distance: {distance}m"
+L.marker_vision_distance_collapsed = "{distance}m"
+
+L.c4_marker_vision_time = "Detonation time: {time}"
+L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+L.c4_marker_vision_safe_zone = "Bomb safe zone"
+L.c4_marker_vision_damage_zone = "Bomb damage zone"
+L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+L.beacon_marker_vision_player = "Tracked Player"
+L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
 L.beacon_help_pri = "Throw Beacon on the ground"
 L.beacon_help_sec = "Stick Beacon to surface"
 L.beacon_name = "Beacon"
@@ -2088,7 +2110,7 @@ L.msg_beacon_death = "A player died in close proximity to one of your beacons."
 L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-11-18
+-- 2023-12-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
 
 -- 2023-12-18
@@ -2101,6 +2123,18 @@ L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2
 L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 L.header_equipment_info = "Equipment information"
 
+
+-- 2023-12-24
+L.submenu_gameplay_accessibility_title = "Accessibility"
+
+L.header_accessibility_settings = "Accessibility Settings"
+
+L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+L.label_enable_bobbing = "Enable view bobbing"
+L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 For a shotgun, this would affect each pellet.
@@ -2114,4 +2148,46 @@ Note: Some weapons might not use this value which causes this modifier to be ine
 
 -- 2023-12-24
 L.binoc_help_reload = "Clear target."
+L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
+-- 2024-01-05
+L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+L.label_crosshair_mode = "Crosshair mode"
+L.label_crosshair_static_length = "Enable static crosshair line length"
+
+L.choice_crosshair_mode_0 = "Lines and dot"
+L.choice_crosshair_mode_1 = "Lines only"
+L.choice_crosshair_mode_2 = "Dot only"
+
+L.help_crosshair_scale_enable = [[
+Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+
+If the line length is kept static, only the gap scales with cone changes.]]
+
+L.header_weapon_settings = "Weapon Settings"
+
+--2024-01-29
+L.marker_vision_visible_for_0 = "Visible for you"
+L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_2 = "Visible for your team"
+L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "Throw Decoy on the ground"
+L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+L.header_roles_magnetostick = "Magneto Stick"
+L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+L.magneto_stick_help_carry_prop_release = "Release prop"
+L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+L.throw_no_room = "You have no space here to throw this device"

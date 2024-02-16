@@ -17,6 +17,8 @@
 @PointClass base(Item) studio("models/items/BoxBuckshot.mdl")= item_box_buckshot_ttt : "Box Buckshot" []
 @PointClass base(Item) studio("models/items/357ammo.mdl")= item_ammo_revolver_ttt : "Box of Deagle ammo" []
 
+@PointClass base(Item) studio("models/ttt/deerstalker.mdl")= ttt_hat_deerstalker : "Detective's Hat" []
+
 @PointClass base(Item) studio("models/items/boxflares.mdl")= ttt_random_ammo : "Random ammo" []
 @PointClass base(Item) studio("models/weapons/w_shotgun.mdl")= ttt_random_weapon : "Random weapon" [
  auto_ammo(integer) : "Autospawn ammo items" : 0 : "Number of matching ammo entities to spawn around the weapon. Leave some room above this entity for the ammo, it will be spawned there, fall and end up around the gun. Set to 0 to disable."

@@ -8,9 +8,9 @@ local IsValid = IsValid
 
 -- Manual datatable indexing
 CORPSE.dti = {
-	BOOL_FOUND = 0,
-	ENT_PLAYER = 0,
-	INT_CREDITS = 0
+    BOOL_FOUND = 0,
+    ENT_PLAYER = 0,
+    INT_CREDITS = 0,
 }
 
 local dti = CORPSE.dti
@@ -23,7 +23,7 @@ local dti = CORPSE.dti
 -- @note networked data abstraction
 -- @realm shared
 function CORPSE.GetFound(rag, default)
-	return rag and rag:GetDTBool(dti.BOOL_FOUND) or default
+    return rag and rag:GetDTBool(dti.BOOL_FOUND) or default
 end
 
 ---
@@ -33,17 +33,17 @@ end
 -- @return string
 -- @realm shared
 function CORPSE.GetPlayerNick(rag, default)
-	if not IsValid(rag) then
-		return default
-	end
+    if not IsValid(rag) then
+        return default
+    end
 
-	local ply = rag:GetDTEntity(dti.ENT_PLAYER)
+    local ply = rag:GetDTEntity(dti.ENT_PLAYER)
 
-	if IsValid(ply) then
-		return ply:Nick()
-	else
-		return rag:GetNWString("nick", default)
-	end
+    if IsValid(ply) then
+        return ply:Nick()
+    else
+        return rag:GetNWString("nick", default)
+    end
 end
 
 ---
@@ -53,11 +53,11 @@ end
 -- @return number
 -- @realm shared
 function CORPSE.GetCredits(rag, default)
-	if not IsValid(rag) then
-		return default
-	end
+    if not IsValid(rag) then
+        return default
+    end
 
-	return rag:GetDTInt(dti.INT_CREDITS)
+    return rag:GetDTInt(dti.INT_CREDITS)
 end
 
 ---
@@ -66,11 +66,11 @@ end
 -- @return Player owner
 -- @realm shared
 function CORPSE.GetPlayer(rag)
-	if not IsValid(rag) then
-		return NULL
-	end
+    if not IsValid(rag) then
+        return NULL
+    end
 
-	return rag:GetDTEntity(dti.ENT_PLAYER)
+    return rag:GetDTEntity(dti.ENT_PLAYER)
 end
 
 ---
@@ -80,5 +80,5 @@ end
 -- @return boolean Returns if the ragdoll is valid
 -- @realm shared
 function CORPSE.IsValidBody(rag)
-	return IsValid(rag) and CORPSE.GetPlayerNick(rag, false) ~= false
+    return IsValid(rag) and CORPSE.GetPlayerNick(rag, false) ~= false
 end

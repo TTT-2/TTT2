@@ -11,9 +11,7 @@ CLGAMEMODESUBMENU.title = ""
 -- @param Panel parent The parent panel
 -- @hook
 -- @realm client
-function CLGAMEMODESUBMENU:Populate(parent)
-
-end
+function CLGAMEMODESUBMENU:Populate(parent) end
 
 ---
 -- This function is used to populate the button panel of a submenu on open/refresh.
@@ -22,9 +20,7 @@ end
 -- @param Panel parent The parent panel
 -- @hook
 -- @realm client
-function CLGAMEMODESUBMENU:PopulateButtonPanel(parent)
-
-end
+function CLGAMEMODESUBMENU:PopulateButtonPanel(parent) end
 
 ---
 -- Function to overwrite if the menu should have a button panel.
@@ -33,7 +29,7 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODESUBMENU:HasButtonPanel()
-	return false
+    return false
 end
 
 ---
@@ -41,9 +37,7 @@ end
 -- @note This function should be overwritten but not not called.
 -- @hook
 -- @realm client
-function CLGAMEMODESUBMENU:Initialize()
-
-end
+function CLGAMEMODESUBMENU:Initialize() end
 
 ---
 -- Used to define whether this submenu should be shown at all.
@@ -52,5 +46,5 @@ end
 -- @hook
 -- @realm client
 function CLGAMEMODESUBMENU:ShouldShow()
-	return true
+    return true
 end

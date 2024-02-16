@@ -32,10 +32,12 @@ local hook = hook
 
 ---
 -- @realm server
+-- stylua: ignore
 local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "If detective mode, announce when someone's body is found")
 
 ---
 -- @realm server
+-- stylua: ignore
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ttt_include("sh_corpse")
@@ -51,8 +53,8 @@ local dti = CORPSE.dti
 -- @param boolean state
 -- @realm server
 function CORPSE.SetFound(rag, state)
-	--rag:SetNWBool("found", state)
-	rag:SetDTBool(dti.BOOL_FOUND, state)
+    --rag:SetNWBool("found", state)
+    rag:SetDTBool(dti.BOOL_FOUND, state)
 end
 
 ---
@@ -61,17 +63,17 @@ end
 -- @param Player|string ply_or_name
 -- @realm server
 function CORPSE.SetPlayerNick(rag, ply_or_name)
-	-- don't have datatable strings, so use a dt entity for common case of
-	-- still-connected player, and if the player is gone, fall back to nw string
-	local name = ply_or_name
+    -- don't have datatable strings, so use a dt entity for common case of
+    -- still-connected player, and if the player is gone, fall back to nw string
+    local name = ply_or_name
 
-	if IsValid(ply_or_name) then
-		name = ply_or_name:Nick()
+    if IsValid(ply_or_name) then
+        name = ply_or_name:Nick()
 
-		rag:SetDTEntity(dti.ENT_PLAYER, ply_or_name)
-	end
+        rag:SetDTEntity(dti.ENT_PLAYER, ply_or_name)
+    end
 
-	rag:SetNWString("nick", name)
+    rag:SetNWString("nick", name)
 end
 
 ---
@@ -80,10 +82,9 @@ end
 -- @param number credits
 -- @realm server
 function CORPSE.SetCredits(rag, credits)
-	--rag:SetNWInt("credits", credits)
-	rag:SetDTInt(dti.INT_CREDITS, credits)
+    --rag:SetNWInt("credits", credits)
+    rag:SetDTInt(dti.INT_CREDITS, credits)
 end
-
 
 ---
 -- Identifies the corpse, registers it and announces it to the players, if possible.
@@ -92,128 +93,136 @@ end
 -- @param[default=0] number searchUID The unique search ID that is used to keep track of the search for the UI
 -- @realm server
 function CORPSE.IdentifyBody(ply, rag, searchUID)
-	if not ply:IsTerror() or not ply:Alive() then return end
+    if not ply:IsTerror() or not ply:Alive() then
+        return
+    end
 
-	-- simplified case for those who die and get found during prep
-	if GetRoundState() == ROUND_PREP then
-		CORPSE.SetFound(rag, true)
+    -- simplified case for those who die and get found during prep
+    if GetRoundState() == ROUND_PREP then
+        CORPSE.SetFound(rag, true)
 
-		return
-	end
+        return
+    end
 
-	---
-	-- @realm server
-	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
+    ---
+    -- @realm server
+    -- stylua: ignore
+    if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
 
-	local finder = ply:Nick()
-	local nick = CORPSE.GetPlayerNick(rag, "")
-	local notConfirmed = not CORPSE.GetFound(rag, false)
+    local finder = ply:Nick()
+    local nick = CORPSE.GetPlayerNick(rag, "")
+    local notConfirmed = not CORPSE.GetFound(rag, false)
 
-	-- Register find
-	if notConfirmed then -- will return either false or a valid ply
-		local deadply = player.GetBySteamID64(rag.sid64)
+    -- Register find
+    if notConfirmed then -- will return either false or a valid ply
+        local deadply = player.GetBySteamID64(rag.sid64)
 
-		---
-		-- @realm server
-		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
-			deadply:ConfirmPlayer(true)
+        ---
+        -- @realm server
+        -- stylua: ignore
+        if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
+            deadply:ConfirmPlayer(true)
 
-			SendPlayerToEveryone(deadply)
-		end
+            SendPlayerToEveryone(deadply)
+        end
 
-		events.Trigger(EVENT_BODYFOUND, ply, rag)
+        events.Trigger(EVENT_BODYFOUND, ply, rag)
 
-		---
-		-- @realm server
-		hook.Run("TTTBodyFound", ply, deadply, rag)
+        ---
+        -- @realm server
+        -- stylua: ignore
+        hook.Run("TTTBodyFound", ply, deadply, rag)
 
-		---
-		-- @realm server
-		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
-			CORPSE.SetFound(rag, true)
-		end
-	end
+        ---
+        -- @realm server
+        -- stylua: ignore
+        if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
+            CORPSE.SetFound(rag, true)
+        end
+    end
 
-	-- Announce body
-	if cvBodyfound:GetBool() and notConfirmed then
-		local subrole = rag.was_role
-		local team = rag.was_team
-		local rd = roles.GetByIndex(subrole)
-		local roletext = "body_found_" .. rd.abbr
-		local clr = rag.role_color
-		local bool = GetGlobalBool("ttt2_confirm_team")
+    -- Announce body
+    if cvBodyfound:GetBool() and notConfirmed then
+        local subrole = rag.was_role
+        local team = rag.was_team
+        local rd = roles.GetByIndex(subrole)
+        local roletext = "body_found_" .. rd.abbr
+        local clr = rag.role_color
+        local bool = GetGlobalBool("ttt2_confirm_team")
 
-		net.Start("TTT2SendConfirmMsg")
+        net.Start("TTT2SendConfirmMsg")
 
-		if bool then
-			net.WriteString("body_found_team")
-		else
-			net.WriteString("body_found")
-		end
+        if bool then
+            net.WriteString("body_found_team")
+        else
+            net.WriteString("body_found")
+        end
 
-		net.WriteString(rag.sid64)
+        net.WriteString(rag.sid64)
 
-		-- color
-		net.WriteUInt(clr.r, 8)
-		net.WriteUInt(clr.g, 8)
-		net.WriteUInt(clr.b, 8)
-		net.WriteUInt(clr.a, 8)
+        -- color
+        net.WriteUInt(clr.r, 8)
+        net.WriteUInt(clr.g, 8)
+        net.WriteUInt(clr.b, 8)
+        net.WriteUInt(clr.a, 8)
 
-		net.WriteBool(bool)
+        net.WriteBool(bool)
 
-		net.WriteString(finder)
-		net.WriteString(nick)
-		net.WriteString(roletext)
+        net.WriteString(finder)
+        net.WriteString(nick)
+        net.WriteString(roletext)
 
-		if bool then
-			net.WriteString(team)
-		end
+        if bool then
+            net.WriteString(team)
+        end
 
-		-- send searchUID to update UI buttons on client
-		net.WriteUInt(searchUID or 0, 16)
+        -- send searchUID to update UI buttons on client
+        net.WriteUInt(searchUID or 0, 16)
 
-		net.Broadcast()
-	end
+        net.Broadcast()
+    end
 
-	if GetConVar("ttt2_confirm_killlist"):GetBool() then
-		-- Handle kill list
-		local ragKills = rag.kills
+    if GetConVar("ttt2_confirm_killlist"):GetBool() then
+        -- Handle kill list
+        local ragKills = rag.kills
 
-		local killnicks = {}
-		for i = 1, #ragKills do
-			local victimSIDs = ragKills[i]
+        local killnicks = {}
+        for i = 1, #ragKills do
+            local victimSIDs = ragKills[i]
 
-			-- filter out disconnected (and bots !)
-			local vic = player.GetBySteamID64(victimSIDs)
+            -- filter out disconnected (and bots !)
+            local vic = player.GetBySteamID64(victimSIDs)
 
-			-- is this an unconfirmed dead?
-			if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then continue end
+            -- is this an unconfirmed dead?
+            if not IsValid(vic) or vic:TTT2NETGetBool("body_found", false) then
+                continue
+            end
 
-			killnicks[#killnicks + 1] = vic:Nick()
+            killnicks[#killnicks + 1] = vic:Nick()
 
-			vic:ConfirmPlayer(false)
+            vic:ConfirmPlayer(false)
 
-			-- however, do not mark body as found. This lets players find the
-			-- body later and get the benefits of that
-			--local vicrag = vic.server_ragdoll
-			--CORPSE.SetFound(vicrag, true)
-		end
+            -- however, do not mark body as found. This lets players find the
+            -- body later and get the benefits of that
+            --local vicrag = vic.server_ragdoll
+            --CORPSE.SetFound(vicrag, true)
+        end
 
-		if #killnicks == 1 then
-			LANG.Msg("body_confirm_one", {finder = finder, victim = killnicks[1]})
-		elseif #killnicks > 1 then
-			table.sort(killnicks, function(a, b)
-				return a and b and a:upper() < b:upper()
-			end)
+        if #killnicks == 1 then
+            LANG.Msg("body_confirm_one", { finder = finder, victim = killnicks[1] })
+        elseif #killnicks > 1 then
+            table.sort(killnicks, function(a, b)
+                return a and b and a:upper() < b:upper()
+            end)
 
-			local names = killnicks[1]
-			for k = 2, #killnicks do
-				names = names .. ", " .. killnicks[k]
-			end
+            local names = killnicks[1]
+            for k = 2, #killnicks do
+                names = names .. ", " .. killnicks[k]
+            end
 
-			LANG.Msg("body_confirm_more", {finder = finder, victims = names, count = #killnicks})
-		end
-	end
+            LANG.Msg("body_confirm_more", { finder = finder, victims = names, count = #killnicks })
+        end
+    end
 end
 
 ---
@@ -224,48 +233,55 @@ end
 -- @param boolean isLongRange Is the search performed from a long range
 -- @realm server
 function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
-	if not IsValid(ply) or not IsValid(rag) then return end
+    if not IsValid(ply) or not IsValid(rag) then
+        return
+    end
 
-	-- prevent search for anyone if the body is burning
-	if rag:IsOnFire() then
-		LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
+    -- prevent search for anyone if the body is burning
+    if rag:IsOnFire() then
+        LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
 
-		return
-	end
+        return
+    end
 
-	---
-	-- @realm server
-	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
+    ---
+    -- @realm server
+    -- stylua: ignore
+    if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
-	local sceneData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
+    local sceneData = bodysearch.AssimilateSceneData(ply, rag, isCovert, isLongRange)
 
-	-- only in mode 0 everyone can confirm by pressing E
-	if bodysearch.GetInspectConfirmMode() == 0 or sceneData.base.isPublicPolicingSearch then
-		-- only give credits if body is also confirmed
-		if not isCovert then
-			bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
-		end
+    -- only in mode 0 everyone can confirm by pressing E
+    if bodysearch.GetInspectConfirmMode() == 0 or sceneData.base.isPublicPolicingSearch then
+        -- only give credits if body is also confirmed
+        if not isCovert then
+            bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
+        end
 
-		if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
-			CORPSE.IdentifyBody(ply, rag, sceneData.searchUID)
-		end
-	elseif not isCovert then
-		-- in mode 1 and 2 every active shopping role can take credits
-		bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
-	end
+        if
+            GetConVar("ttt_identify_body_woconfirm"):GetBool()
+            and DetectiveMode()
+            and not isCovert
+        then
+            CORPSE.IdentifyBody(ply, rag, sceneData.searchUID)
+        end
+    elseif not isCovert then
+        -- in mode 1 and 2 every active shopping role can take credits
+        bodysearch.GiveFoundCredits(ply, rag, isLongRange, sceneData.searchUID)
+    end
 
-	-- cache credits of corpse here, AFTER one might has taken them
-	sceneData.credits = CORPSE.GetCredits(rag, 0)
+    -- cache credits of corpse here, AFTER one might has taken them
+    sceneData.credits = CORPSE.GetCredits(rag, 0)
 
-	-- identifier so we know whether a ttt_confirm_death was legit
-	ply.searchID = sceneData.searchUID
+    -- identifier so we know whether a ttt_confirm_death was legit
+    ply.searchID = sceneData.searchUID
 
-	local roleData = ply:GetSubRoleData()
-	if ply:IsActive() and roleData.isPolicingRole and roleData.isPublicRole and not isCovert then
-		bodysearch.StreamSceneData(sceneData)
-	else
-		bodysearch.StreamSceneData(sceneData, ply)
-	end
+    local roleData = ply:GetSubRoleData()
+    if ply:IsActive() and roleData.isPolicingRole and roleData.isPublicRole and not isCovert then
+        bodysearch.StreamSceneData(sceneData)
+    else
+        bodysearch.StreamSceneData(sceneData, ply)
+    end
 end
 
 ---
@@ -277,61 +293,84 @@ end
 -- @return table sample
 -- @realm server
 local function GetKillerSample(victim, attacker, dmg)
-	-- only guns and melee damage, not explosions
-	if not dmg:IsBulletDamage() and not dmg:IsDamageType(DMG_SLASH) and not dmg:IsDamageType(DMG_CLUB) then return end
+    -- only guns and melee damage, not explosions
+    if
+        not dmg:IsBulletDamage()
+        and not dmg:IsDamageType(DMG_SLASH)
+        and not dmg:IsDamageType(DMG_CLUB)
+    then
+        return
+    end
 
-	if not IsValid(victim) or not IsValid(attacker) or not attacker:IsPlayer() then return end
+    if not IsValid(victim) or not IsValid(attacker) or not attacker:IsPlayer() then
+        return
+    end
 
-	-- NPCs for which a player is damage owner (meaning despite the NPC dealing
-	-- the damage, the attacker is a player) should not cause the player's DNA to
-	-- end up on the corpse.
-	local infl = dmg:GetInflictor()
+    -- NPCs for which a player is damage owner (meaning despite the NPC dealing
+    -- the damage, the attacker is a player) should not cause the player's DNA to
+    -- end up on the corpse.
+    local infl = dmg:GetInflictor()
 
-	if IsValid(infl) and infl:IsNPC() then return end
+    if IsValid(infl) and infl:IsNPC() then
+        return
+    end
 
-	local dist = victim:GetPos():Distance(attacker:GetPos())
+    local dist = victim:GetPos():Distance(attacker:GetPos())
 
-	if not ConVarExists("ttt_killer_dna_range") or dist > GetConVar("ttt_killer_dna_range"):GetInt() then return end
+    if
+        not ConVarExists("ttt_killer_dna_range")
+        or dist > GetConVar("ttt_killer_dna_range"):GetInt()
+    then
+        return
+    end
 
-	local sample = {}
-	sample.killer = attacker
-	sample.killer_sid = attacker:SteamID64()
-	sample.killer_sid64 = attacker:SteamID64()
-	sample.victim = victim
-	sample.t = CurTime() + (-1 * (0.019 * dist) ^ 2 + (ConVarExists("ttt_killer_dna_basetime") and GetConVar("ttt_killer_dna_basetime"):GetInt() or 0))
+    local sample = {}
+    sample.killer = attacker
+    sample.killer_sid = attacker:SteamID64()
+    sample.killer_sid64 = attacker:SteamID64()
+    sample.victim = victim
+    sample.t = CurTime()
+        + (
+            -1 * (0.019 * dist) ^ 2
+            + (
+                ConVarExists("ttt_killer_dna_basetime")
+                    and GetConVar("ttt_killer_dna_basetime"):GetInt()
+                or 0
+            )
+        )
 
-	return sample
+    return sample
 end
 
 local crimescene_keys = {
-	"Fraction",
-	"HitBox",
-	"Normal",
-	"HitPos",
-	"StartPos"
+    "Fraction",
+    "HitBox",
+    "Normal",
+    "HitPos",
+    "StartPos",
 }
 
 local poseparams = {
-	"aim_yaw",
-	"move_yaw",
-	"aim_pitch"
+    "aim_yaw",
+    "move_yaw",
+    "aim_pitch",
 }
 
 local function GetSceneDataFromPlayer(ply)
-	local data = {
-		pos = ply:GetPos(),
-		ang = ply:GetAngles(),
-		sequence = ply:GetSequence(),
-		cycle = ply:GetCycle()
-	}
+    local data = {
+        pos = ply:GetPos(),
+        ang = ply:GetAngles(),
+        sequence = ply:GetSequence(),
+        cycle = ply:GetCycle(),
+    }
 
-	for i = 1, #poseparams do
-		local param = poseparams[i]
+    for i = 1, #poseparams do
+        local param = poseparams[i]
 
-		data[param] = ply:GetPoseParameter(param)
-	end
+        data[param] = ply:GetPoseParameter(param)
+    end
 
-	return data
+    return data
 end
 
 ---
@@ -342,68 +381,70 @@ end
 -- @return DamageInfoData The damage info data table
 -- @realm server
 function CreateDamageInfoData(dmginfo)
-	return {
-		ammoType = dmginfo:GetAmmoType(),
-		attacker = dmginfo:GetAttacker(),
-		baseDamage = dmginfo:GetBaseDamage(),
-		damage = dmginfo:GetDamage(),
-		damageBonus = dmginfo:GetDamageBonus(),
-		damageCustom = dmginfo:GetDamageCustom(),
-		damageForce = dmginfo:GetDamageForce(),
-		damagePosition = dmginfo:GetDamagePosition(),
-		damageType = dmginfo:GetDamageType(),
-		inflictor = dmginfo:GetInflictor(),
-		maxDamage = dmginfo:GetMaxDamage(),
-		reportedPosition = dmginfo:GetReportedPosition(),
-		isBulletDamage = dmginfo:IsBulletDamage(),
-		isExplosionDamage = dmginfo:IsExplosionDamage(),
-		isFallDamage = dmginfo:IsFallDamage(),
-	}
+    return {
+        ammoType = dmginfo:GetAmmoType(),
+        attacker = dmginfo:GetAttacker(),
+        baseDamage = dmginfo:GetBaseDamage(),
+        damage = dmginfo:GetDamage(),
+        damageBonus = dmginfo:GetDamageBonus(),
+        damageCustom = dmginfo:GetDamageCustom(),
+        damageForce = dmginfo:GetDamageForce(),
+        damagePosition = dmginfo:GetDamagePosition(),
+        damageType = dmginfo:GetDamageType(),
+        inflictor = dmginfo:GetInflictor(),
+        maxDamage = dmginfo:GetMaxDamage(),
+        reportedPosition = dmginfo:GetReportedPosition(),
+        isBulletDamage = dmginfo:IsBulletDamage(),
+        isExplosionDamage = dmginfo:IsExplosionDamage(),
+        isFallDamage = dmginfo:IsFallDamage(),
+    }
 end
 
 local function GetSceneData(victim, attacker, dmginfo)
-	local scene = {}
+    local scene = {}
 
-	scene.damageInfoData  = CreateDamageInfoData(dmginfo)
+    scene.damageInfoData = CreateDamageInfoData(dmginfo)
 
-	if victim.hit_trace then
-		scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
-	end
+    if victim.hit_trace then
+        scene.hit_trace = table.CopyKeys(victim.hit_trace, crimescene_keys)
+    end
 
-	scene.waterLevel = victim:WaterLevel()
-	scene.hitGroup = victim:LastHitGroup()
-	scene.floorSurface = 0
-	local groundTrace = util.TraceLine({
-		start = victim:GetPos(),
-		endpos = victim:GetPos() + Vector(0, 0, -100)
-	})
-	if groundTrace.Hit then
-		scene.floorSurface = groundTrace.MatType
-	end
-	scene.plyModel = victim:GetModel()
-	scene.plySID64 = victim:SteamID64()
-	scene.lastDamage = dmginfo:GetDamage()
+    scene.waterLevel = victim:WaterLevel()
+    scene.hitGroup = victim:LastHitGroup()
+    scene.floorSurface = 0
+    local groundTrace = util.TraceLine({
+        start = victim:GetPos(),
+        endpos = victim:GetPos() + Vector(0, 0, -100),
+    })
+    if groundTrace.Hit then
+        scene.floorSurface = groundTrace.MatType
+    end
+    scene.plyModel = victim:GetModel()
+    scene.plySID64 = victim:SteamID64()
+    scene.lastDamage = dmginfo:GetDamage()
 
-	scene.victim = GetSceneDataFromPlayer(victim)
+    scene.victim = GetSceneDataFromPlayer(victim)
 
-	if IsValid(attacker) and attacker:IsPlayer() then
-		scene.killer = GetSceneDataFromPlayer(attacker)
+    if IsValid(attacker) and attacker:IsPlayer() then
+        scene.killer = GetSceneDataFromPlayer(attacker)
 
-		if not scene.hit_trace then return scene end
+        if not scene.hit_trace then
+            return scene
+        end
 
-		local att = attacker:LookupAttachment("anim_attachment_RH")
-		local angpos = attacker:GetAttachment(att)
+        local att = attacker:LookupAttachment("anim_attachment_RH")
+        local angpos = attacker:GetAttachment(att)
 
-		if not angpos then
-			scene.hit_trace.StartPos = attacker:GetShootPos()
-			scene.hit_trace.StartAng = attacker:EyeAngles()
-		else
-			scene.hit_trace.StartPos = angpos.Pos
-			scene.hit_trace.StartAng = angpos.Ang
-		end
-	end
+        if not angpos then
+            scene.hit_trace.StartPos = attacker:GetShootPos()
+            scene.hit_trace.StartAng = attacker:EyeAngles()
+        else
+            scene.hit_trace.StartPos = angpos.Pos
+            scene.hit_trace.StartAng = angpos.Ang
+        end
+    end
 
-	return scene
+    return scene
 end
 
 realdamageinfo = 0
@@ -416,105 +457,113 @@ realdamageinfo = 0
 -- @return Entity the CORPSE
 -- @realm server
 function CORPSE.Create(ply, attacker, dmginfo)
-	if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
-	local efn = ply.effect_fn
-	ply.effect_fn = nil
+    local efn = ply.effect_fn
+    ply.effect_fn = nil
 
-	local rag = ents.Create("prop_ragdoll")
-	if not IsValid(rag) then return end
+    local rag = ents.Create("prop_ragdoll")
+    if not IsValid(rag) then
+        return
+    end
 
-	rag:SetPos(ply:GetPos())
-	rag:SetModel(ply:GetModel())
-	rag:SetSkin(ply:GetSkin())
-	rag:SetAngles(ply:GetAngles())
-	rag:SetColor(ply:GetColor())
+    rag:SetPos(ply:GetPos())
+    rag:SetModel(ply:GetModel())
+    rag:SetSkin(ply:GetSkin())
+    rag:SetAngles(ply:GetAngles())
+    rag:SetColor(ply:GetColor())
 
-	rag:Spawn()
-	rag:Activate()
+    rag:Spawn()
+    rag:Activate()
 
-	-- nonsolid to players, but can be picked up and shot
-	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-	rag:SetCustomCollisionCheck(true)
+    -- nonsolid to players, but can be picked up and shot
+    rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+    rag:SetCustomCollisionCheck(true)
 
-	-- flag this ragdoll as being a player's
-	rag.player_ragdoll = true
-	rag.sid = ply:SteamID()
-	rag.sid64 = ply:SteamID64()
-	rag.uqid = ply:UniqueID() -- backwards compatibility use rag.sid64 instead
+    -- flag this ragdoll as being a player's
+    rag.player_ragdoll = true
+    rag.sid = ply:SteamID()
+    rag.sid64 = ply:SteamID64()
+    rag.uqid = ply:UniqueID() -- backwards compatibility use rag.sid64 instead
 
-	-- network data
-	CORPSE.SetPlayerNick(rag, ply)
-	CORPSE.SetFound(rag, false)
-	CORPSE.SetCredits(rag, ply:GetCredits())
+    -- network data
+    CORPSE.SetPlayerNick(rag, ply)
+    CORPSE.SetFound(rag, false)
+    CORPSE.SetCredits(rag, ply:GetCredits())
 
-	-- if someone searches this body they can find info on the victim and the
-	-- death circumstances
-	rag.equipment = table.Copy(ply:GetEquipmentItems())
-	rag.was_role = ply:GetSubRole()
-	rag.role_color = ply:GetRoleColor()
+    -- if someone searches this body they can find info on the victim and the
+    -- death circumstances
+    rag.equipment = table.Copy(ply:GetEquipmentItems())
+    rag.was_role = ply:GetSubRole()
+    rag.role_color = ply:GetRoleColor()
 
-	rag.was_team = ply:GetTeam()
-	rag.bomb_wire = ply.bomb_wire
-	rag.dmgtype = dmginfo:GetDamageType()
+    rag.was_team = ply:GetTeam()
+    rag.bomb_wire = ply.bomb_wire
+    rag.dmgtype = dmginfo:GetDamageType()
 
-	local wep = util.WeaponFromDamage(dmginfo)
-	---@cast wep -nil
-	rag.dmgwep = IsValid(wep) and wep:GetClass() or ""
+    local wep = util.WeaponFromDamage(dmginfo)
+    ---@cast wep -nil
+    rag.dmgwep = IsValid(wep) and wep:GetClass() or ""
 
-	rag.was_headshot = ply.was_headshot and dmginfo:IsBulletDamage()
-	rag.time = CurTime()
-	rag.kills = table.Copy(ply.kills)
-	rag.killer_sample = GetKillerSample(ply, attacker, dmginfo)
+    rag.was_headshot = ply.was_headshot and dmginfo:IsBulletDamage()
+    rag.time = CurTime()
+    rag.kills = table.Copy(ply.kills)
+    rag.killer_sample = GetKillerSample(ply, attacker, dmginfo)
 
-	-- crime scene data
-	rag.scene = GetSceneData(ply, attacker, dmginfo)
+    -- crime scene data
+    rag.scene = GetSceneData(ply, attacker, dmginfo)
 
-	-- position the bones
-	local num = (rag:GetPhysicsObjectCount() - 1)
-	local v = ply:GetVelocity()
+    -- position the bones
+    local num = (rag:GetPhysicsObjectCount() - 1)
+    local v = ply:GetVelocity()
 
-	-- bullets have a lot of force, which feels better when shooting props,
-	-- but makes bodies fly, so dampen that here
-	if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_SLASH) then
-		v:Mul(0.2)
-	end
+    -- bullets have a lot of force, which feels better when shooting props,
+    -- but makes bodies fly, so dampen that here
+    if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_SLASH) then
+        v:Mul(0.2)
+    end
 
-	---
-	-- @realm server
-	hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
 
-	for i = 0, num do
-		local bone = rag:GetPhysicsObjectNum(i)
+    for i = 0, num do
+        local bone = rag:GetPhysicsObjectNum(i)
 
-		if IsValid(bone) then
-			local bp, ba = ply:GetBonePosition(rag:TranslatePhysBoneToBone(i))
+        if IsValid(bone) then
+            local bp, ba = ply:GetBonePosition(rag:TranslatePhysBoneToBone(i))
 
-			if bp and ba then
-				bone:SetPos(bp)
-				bone:SetAngles(ba)
-			end
+            if bp and ba then
+                bone:SetPos(bp)
+                bone:SetAngles(ba)
+            end
 
-			-- not sure if this will work:
-			bone:SetVelocity(v)
-		end
-	end
+            -- not sure if this will work:
+            bone:SetVelocity(v)
+        end
+    end
 
-	-- create advanced death effects (knives)
-	if efn then
-		-- next frame, after physics is happy for this ragdoll
-		timer.Simple(0, function()
-			if not IsValid(rag) then return end
+    -- create advanced death effects (knives)
+    if efn then
+        -- next frame, after physics is happy for this ragdoll
+        timer.Simple(0, function()
+            if not IsValid(rag) then
+                return
+            end
 
-			efn(rag)
-		end)
-	end
+            efn(rag)
+        end)
+    end
 
-	---
-	-- @realm server
-	hook.Run("TTTOnCorpseCreated", rag, ply)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTTOnCorpseCreated", rag, ply)
 
-	return rag -- we'll be speccing this
+    return rag -- we'll be speccing this
 end
 
 ---
@@ -523,7 +572,7 @@ end
 -- @return boolean Returns if the player was headshot
 -- @realm server
 function CORPSE.WasHeadshot(rag)
-	return IsValid(rag) and rag.was_headshot
+    return IsValid(rag) and rag.was_headshot
 end
 
 ---
@@ -532,7 +581,7 @@ end
 -- @return number The death time, 0 if the ragdol is not valid
 -- @realm server
 function CORPSE.GetPlayerDeathTime(rag)
-	return rag.time or 0
+    return rag.time or 0
 end
 
 ---
@@ -541,7 +590,7 @@ end
 -- @return string The SteamID64, "" if the ragdol is not valid
 -- @realm server
 function CORPSE.GetPlayerSID64(rag)
-	return rag.sid64 or ""
+    return rag.sid64 or ""
 end
 
 ---
@@ -550,7 +599,7 @@ end
 -- @return number The role, @{ROLE_INNOCENT} if the ragdol is not valid
 -- @realm server
 function CORPSE.GetPlayerRole(rag)
-	return rag.was_role or ROLE_INNOCENT
+    return rag.was_role or ROLE_INNOCENT
 end
 
 ---
@@ -559,19 +608,26 @@ end
 -- @return string The team, @{TEAM_INNOCENT} if the ragdol is not valid
 -- @realm server
 function CORPSE.GetPlayerTeam(rag)
-	return rag.was_team or TEAM_INNOCENT
+    return rag.was_team or TEAM_INNOCENT
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
-	if cvRagCollide:GetBool() then return end
+    if cvRagCollide:GetBool() then
+        return
+    end
 
-	if IsValid(ent1) and IsValid(ent2)
-	and ent1:IsRagdoll() and ent2:IsRagdoll()
-	and ent1.GetCollisionGroup and ent1:GetCollisionGroup() == COLLISION_GROUP_WEAPON
-	and ent2.GetCollisionGroup and ent2:GetCollisionGroup() == COLLISION_GROUP_WEAPON
-	then
-		return false
-	end
+    if
+        IsValid(ent1)
+        and IsValid(ent2)
+        and ent1:IsRagdoll()
+        and ent2:IsRagdoll()
+        and ent1.GetCollisionGroup
+        and ent1:GetCollisionGroup() == COLLISION_GROUP_WEAPON
+        and ent2.GetCollisionGroup
+        and ent2:GetCollisionGroup() == COLLISION_GROUP_WEAPON
+    then
+        return false
+    end
 end)
 
 ---
@@ -584,9 +640,7 @@ end)
 -- @param Player deadply The dead player
 -- @hook
 -- @realm server
-function GM:TTT2CalledPolicingRole(policingPlys, finder, ragdoll, deadply)
-
-end
+function GM:TTT2CalledPolicingRole(policingPlys, finder, ragdoll, deadply) end
 
 ---
 -- Checks whether a @{Player} is able to identify a @{CORPSE}.
@@ -597,7 +651,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTTCanIdentifyCorpse(ply, rag)
-	return true
+    return true
 end
 
 ---
@@ -608,9 +662,7 @@ end
 -- @param[default=nil] boolean Return false to block confirmation
 -- @hook
 -- @realm server
-function GM:TTT2ConfirmPlayer(ply, rag)
-
-end
+function GM:TTT2ConfirmPlayer(ply, rag) end
 
 ---
 -- Called when a player finds a ragdoll. They must be able to inspect the body
@@ -621,9 +673,7 @@ end
 -- @param Entity rag The ragdoll that was found
 -- @hook
 -- @realm server
-function GM:TTTBodyFound(ply, deadply, rag)
-
-end
+function GM:TTTBodyFound(ply, deadply, rag) end
 
 ---
 -- Used to block updating the state of the corpse. Normally a confirmed
@@ -637,9 +687,7 @@ end
 -- corpse found variable
 -- @hook
 -- @realm server
-function GM:TTT2SetCorpseFound(deadply, ply, rag)
-
-end
+function GM:TTT2SetCorpseFound(deadply, ply, rag) end
 
 ---
 -- This hook is called after a players pressed the "call detective" button and
@@ -650,9 +698,7 @@ end
 -- @param Player ply The player that pressed the "call detective" button
 -- @hook
 -- @realm server
-function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, rag, ply)
-
-end
+function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, rag, ply) end
 
 ---
 -- Checks whether a @{Player} is able to search a @{CORPSE} based on their position.
@@ -666,7 +712,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTTCanSearchCorpse(ply, rag, isCovert, isLongRange)
-	return true
+    return true
 end
 
 ---
@@ -676,9 +722,7 @@ end
 -- @param Vector velocity The velocity vector of the corpse
 -- @hook
 -- @realm server
-function GM:TTT2ModifyRagdollVelocity(deadply, rag, velocity)
-
-end
+function GM:TTT2ModifyRagdollVelocity(deadply, rag, velocity) end
 
 ---
 -- Called after a dead player's corpse has been created and initialized. Modify the corpse table
@@ -687,6 +731,4 @@ end
 -- @param Player deadply The dead player whose ragdoll was created
 -- @hook
 -- @realm server
-function GM:TTTOnCorpseCreated(rag, deadply)
-
-end
+function GM:TTTOnCorpseCreated(rag, deadply) end

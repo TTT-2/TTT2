@@ -7,7 +7,7 @@
 -- @module util
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 local band = bit.band
@@ -36,28 +36,28 @@ local mathFloor = math.floor
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
-	local inf = dmg:GetInflictor()
-	local wep = nil
+    local inf = dmg:GetInflictor()
+    local wep = nil
 
-	if IsValid(inf) then
-		if inf:IsWeapon() or inf.Projectile then
-			wep = inf
-		elseif dmg:IsDamageType(DMG_DIRECT) or dmg:IsDamageType(DMG_CRUSH) then
-			-- DMG_DIRECT is the player burning, no weapon involved
-			-- DMG_CRUSH is physics or falling on someone
-			wep = nil
-		elseif inf:IsPlayer() then
-			wep = inf:GetActiveWeapon()
+    if IsValid(inf) then
+        if inf:IsWeapon() or inf.Projectile then
+            wep = inf
+        elseif dmg:IsDamageType(DMG_DIRECT) or dmg:IsDamageType(DMG_CRUSH) then
+            -- DMG_DIRECT is the player burning, no weapon involved
+            -- DMG_CRUSH is physics or falling on someone
+            wep = nil
+        elseif inf:IsPlayer() then
+            wep = inf:GetActiveWeapon()
 
-			if not IsValid(wep) then
-				-- this may have been a dying shot, in which case we need a
-				-- workaround to find the weapon because it was dropped on death
-				wep = IsValid(inf.dying_wep) and inf.dying_wep or nil
-			end
-		end
-	end
+            if not IsValid(wep) then
+                -- this may have been a dying shot, in which case we need a
+                -- workaround to find the weapon because it was dropped on death
+                wep = IsValid(inf.dying_wep) and inf.dying_wep or nil
+            end
+        end
+    end
 
-	return wep
+    return wep
 end
 
 ---
@@ -68,20 +68,19 @@ end
 -- @return Weapon
 -- @realm shared
 function util.WeaponForClass(cls)
-	local wep = weaponsGetStored(cls)
+    local wep = weaponsGetStored(cls)
 
-	if not wep then
-		wep = sentsGetStored(cls)
-		if wep then
+    if not wep then
+        wep = sentsGetStored(cls)
+        if wep then
+            -- don't like to rely on this, but the alternative is
+            -- sentsGet which does a full table copy, so only do
+            -- that as last resort
+            wep = wep.t or sentsGet(cls)
+        end
+    end
 
-			-- don't like to rely on this, but the alternative is
-			-- sentsGet which does a full table copy, so only do
-			-- that as last resort
-			wep = wep.t or sentsGet(cls)
-		end
-	end
-
-	return wep
+    return wep
 end
 
 ---
@@ -90,21 +89,21 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-	local plys = playerGetAll()
+    local plys = playerGetAll()
 
-	if not isfunction(filterFn) then
-		return plys
-	end
+    if not isfunction(filterFn) then
+        return plys
+    end
 
-	local tmp = {}
+    local tmp = {}
 
-	for i = 1, #plys do
-		if filterFn(plys[i]) then
-			tmp[#tmp + 1] = plys[i]
-		end
-	end
+    for i = 1, #plys do
+        if filterFn(plys[i]) then
+            tmp[#tmp + 1] = plys[i]
+        end
+    end
 
-	return tmp
+    return tmp
 end
 
 ---
@@ -112,18 +111,18 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-	local plys = playerGetAll()
-	local tmp = {}
+    local plys = playerGetAll()
+    local tmp = {}
 
-	for i = 1, #plys do
-		local ply = plys[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
-		if ply:Alive() and ply:IsTerror() then
-			tmp[#tmp + 1] = ply
-		end
-	end
+        if ply:Alive() and ply:IsTerror() then
+            tmp[#tmp + 1] = ply
+        end
+    end
 
-	return tmp
+    return tmp
 end
 
 ---
@@ -132,22 +131,24 @@ end
 -- @return Player
 -- @realm shared
 function util.GetNextAlivePlayer(ply)
-	local alive = util.GetAlivePlayers()
-	if #alive < 1 then return end
+    local alive = util.GetAlivePlayers()
+    if #alive < 1 then
+        return
+    end
 
-	if IsValid(ply) then
-		local prev = nil
+    if IsValid(ply) then
+        local prev = nil
 
-		for i = 1, #alive do
-			if prev == ply then
-				return alive[i]
-			end
+        for i = 1, #alive do
+            if prev == ply then
+                return alive[i]
+            end
 
-			prev = alive[i]
-		end
-	end
+            prev = alive[i]
+        end
+    end
 
-	return alive[1]
+    return alive[1]
 end
 
 ---
@@ -155,9 +156,9 @@ end
 -- @return table List of active @{Player}s
 -- @realm shared
 function util.GetActivePlayers()
-	return util.GetFilteredPlayers(function(ply)
-		return IsValid(ply) and not ply:GetForceSpec()
-	end)
+    return util.GetFilteredPlayers(function(ply)
+        return IsValid(ply) and not ply:GetForceSpec()
+    end)
 end
 
 ---
@@ -166,22 +167,24 @@ end
 -- @return Player
 -- @realm shared
 function util.GetPreviousAlivePlayer(ply)
-	local alive = util.GetAlivePlayers()
-	if #alive < 1 then return end
+    local alive = util.GetAlivePlayers()
+    if #alive < 1 then
+        return
+    end
 
-	if IsValid(ply) then
-		local prev = nil
+    if IsValid(ply) then
+        local prev = nil
 
-		for i = #alive, 1, -1 do
-			if prev == ply then
-				return alive[i]
-			end
+        for i = #alive, 1, -1 do
+            if prev == ply then
+                return alive[i]
+            end
 
-			prev = alive[i]
-		end
-	end
+            prev = alive[i]
+        end
+    end
 
-	return alive[#alive]
+    return alive[#alive]
 end
 
 ---
@@ -191,14 +194,14 @@ end
 -- @return Color The darkened color
 -- @realm shared
 function util.ColorDarken(color, value)
-	value = mathClamp(value, 0, 255)
+    value = mathClamp(value, 0, 255)
 
-	return Color(
-		mathMax(color.r - value, 0),
-		mathMax(color.g - value, 0),
-		mathMax(color.b - value, 0),
-		color.a
-	)
+    return Color(
+        mathMax(color.r - value, 0),
+        mathMax(color.g - value, 0),
+        mathMax(color.b - value, 0),
+        color.a
+    )
 end
 
 ---
@@ -208,29 +211,29 @@ end
 -- @return Color The lightened color
 -- @realm shared
 function util.ColorLighten(color, value)
-	value = mathClamp(value, 0, 255)
+    value = mathClamp(value, 0, 255)
 
-	return Color(
-		mathMin(color.r + value, 255),
-		mathMin(color.g + value, 255),
-		mathMin(color.b + value, 255),
-		color.a
-	)
+    return Color(
+        mathMin(color.r + value, 255),
+        mathMin(color.g + value, 255),
+        mathMin(color.b + value, 255),
+        color.a
+    )
 end
 
 -- shifts the hue
 local function HueShift(hue, shift)
-	hue = hue + shift
+    hue = hue + shift
 
-	while hue >= 360 do
-		hue = hue - 360
-	end
+    while hue >= 360 do
+        hue = hue - 360
+    end
 
-	while hue < 0 do
-		hue = hue + 360
-	end
+    while hue < 0 do
+        hue = hue + 360
+    end
 
-	return hue
+    return hue
 end
 
 ---
@@ -239,12 +242,12 @@ end
 -- @return Color The complementary color
 -- @realm shared
 function util.ColorComplementary(color)
-	local c_hsv, saturation, value = ColorToHSV(color)
+    local c_hsv, saturation, value = ColorToHSV(color)
 
-	local c_new = HSVToColor(HueShift(c_hsv, 180), saturation, value)
-	c_new.a = color.a
+    local c_new = HSVToColor(HueShift(c_hsv, 180), saturation, value)
+    c_new.a = color.a
 
-	return c_new
+    return c_new
 end
 
 ---
@@ -253,11 +256,11 @@ end
 -- @return Color The color based on the background color
 -- @realm shared
 function util.GetDefaultColor(color)
-	if color.r + color.g + color.b < 500 then
-		return COLOR_WHITE
-	else
-		return COLOR_BLACK
-	end
+    if color.r + color.g + color.b < 500 then
+        return COLOR_WHITE
+    else
+        return COLOR_BLACK
+    end
 end
 
 ---
@@ -267,11 +270,11 @@ end
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetChangedColor(color, value)
-	if color.r + color.g + color.b < 383 then
-		return util.ColorLighten(color, value or 20)
-	else
-		return util.ColorDarken(color, value or 20)
-	end
+    if color.r + color.g + color.b < 383 then
+        return util.ColorLighten(color, value or 20)
+    else
+        return util.ColorDarken(color, value or 20)
+    end
 end
 
 ---
@@ -281,7 +284,7 @@ end
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetHoverColor(color)
-	return util.GetChangedColor(color, 20)
+    return util.GetChangedColor(color, 20)
 end
 
 ---
@@ -291,16 +294,18 @@ end
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetActiveColor(color)
-	return util.GetChangedColor(color, 40)
+    return util.GetChangedColor(color, 40)
 end
 
 local function DoBleed(ent)
-	if not IsValid(ent) or (ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror())) then return end
+    if not IsValid(ent) or (ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror())) then
+        return
+    end
 
-	local jitter = VectorRand() * 30
-	jitter.z = 20
+    local jitter = VectorRand() * 30
+    jitter.z = 20
 
-	util.PaintDown(ent:GetPos() + jitter, "Blood", ent)
+    util.PaintDown(ent:GetPos() + jitter, "Blood", ent)
 end
 
 ---
@@ -311,21 +316,29 @@ end
 -- @realm shared
 -- @todo improve description
 function util.StartBleeding(ent, dmg, t)
-	if dmg < 5 or not IsValid(ent) or ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror()) then return end
+    if
+        dmg < 5
+        or not IsValid(ent)
+        or ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror())
+    then
+        return
+    end
 
-	local times = mathClamp(mathRound(dmg / 15), 1, 20)
-	local delay = mathClamp(t / times, 0.1, 2)
+    local times = mathClamp(mathRound(dmg / 15), 1, 20)
+    local delay = mathClamp(t / times, 0.1, 2)
 
-	if ent:IsPlayer() then
-		times = times * 2
-		delay = delay * 0.5
-	end
+    if ent:IsPlayer() then
+        times = times * 2
+        delay = delay * 0.5
+    end
 
-	timer.Create("bleed" .. ent:EntIndex(), delay, times, function()
-		if not IsValid(ent) then return end
+    timer.Create("bleed" .. ent:EntIndex(), delay, times, function()
+        if not IsValid(ent) then
+            return
+        end
 
-		DoBleed(ent)
-	end)
+        DoBleed(ent)
+    end)
 end
 
 ---
@@ -333,7 +346,7 @@ end
 -- @param Entity ent
 -- @realm shared
 function util.StopBleeding(ent)
-	timer.Remove("bleed" .. ent:EntIndex())
+    timer.Remove("bleed" .. ent:EntIndex())
 end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
@@ -343,12 +356,12 @@ local zapsound = Sound("npc/assassin/ball_zap1.wav")
 -- @param Vector pos
 -- @realm shared
 function util.EquipmentDestroyed(pos)
-	local effect = EffectData()
+    local effect = EffectData()
 
-	effect:SetOrigin(pos)
+    effect:SetOrigin(pos)
 
-	util.Effect("cball_explode", effect)
-	sound.Play(zapsound, pos)
+    util.Effect("cball_explode", effect)
+    sound.Play(zapsound, pos)
 end
 
 ---
@@ -358,12 +371,12 @@ end
 -- @realm shared
 -- @todo improve description
 function util.BasicKeyHandler(pnl, kc)
-	-- passthrough F5
-	if kc == KEY_F5 then
-		RunConsoleCommand("jpeg")
-	else
-		pnl:Close()
-	end
+    -- passthrough F5
+    if kc == KEY_F5 then
+        RunConsoleCommand("jpeg")
+    else
+        pnl:Close()
+    end
 end
 
 ---
@@ -373,19 +386,17 @@ end
 -- @realm shared
 -- @deprecated
 function util.SafeRemoveHook(event, name)
-	local h = hook.GetTable()
-	if h and h[event] and h[event][name] then
-		hook.Remove(event, name)
-	end
+    local h = hook.GetTable()
+    if h and h[event] and h[event][name] then
+        hook.Remove(event, name)
+    end
 end
 
 ---
 -- Just a noop @{function} that is doing NOTHING
 -- @realm shared
 -- @see util.passthrough
-function util.noop()
-
-end
+function util.noop() end
 
 ---
 -- Just a passthrough @{function} that is doing NOTHING but returning the given value
@@ -394,7 +405,7 @@ end
 -- @realm shared
 -- @see util.noop
 function util.passthrough(x)
-	return x
+    return x
 end
 
 ---
@@ -404,11 +415,11 @@ end
 -- @return boolean
 -- @realm shared
 function util.BitSet(val, bit2)
-	if istable(val) then
-		return items.TableHasItem(val, bit2)
-	end
+    if istable(val) then
+        return items.TableHasItem(val, bit2)
+    end
 
-	return band(val, bit2) == bit2
+    return band(val, bit2) == bit2
 end
 
 ---
@@ -416,11 +427,11 @@ end
 -- @param string file path
 -- @realm shared
 function util.IncludeClientFile(file)
-	if CLIENT then
-		include(file)
-	else
-		AddCSLuaFile(file)
-	end
+    if CLIENT then
+        include(file)
+    else
+        AddCSLuaFile(file)
+    end
 end
 
 ---
@@ -430,21 +441,21 @@ end
 -- @return string
 -- @realm shared
 function util.SimpleTime(seconds, fmt)
-	if not seconds then
-		seconds = 0
-	end
+    if not seconds then
+        seconds = 0
+    end
 
-	local ms = (seconds - mathFloor(seconds)) * 100
+    local ms = (seconds - mathFloor(seconds)) * 100
 
-	seconds = mathFloor(seconds)
+    seconds = mathFloor(seconds)
 
-	local s = seconds % 60
+    local s = seconds % 60
 
-	seconds = (seconds - s) / 60
+    seconds = (seconds - s) / 60
 
-	local m = seconds % 60
+    local m = seconds % 60
 
-	return string.format(fmt, m, s, ms)
+    return string.format(fmt, m, s, ms)
 end
 
 ---
@@ -455,17 +466,17 @@ end
 -- @return function The pointer to the original functions
 -- @realm shared
 function util.OverwriteFunction(name)
-	local str = stringSplit(name, ".")
+    local str = stringSplit(name, ".")
 
-	if not _G[name .. "_backup"] then
-		if #str == 1 then
-			_G[name .. "_backup"] = _G[str[1]]
-		elseif #str == 2 then
-			_G[name .. "_backup"] = _G[str[1]][str[2]]
-		end
-	end
+    if not _G[name .. "_backup"] then
+        if #str == 1 then
+            _G[name .. "_backup"] = _G[str[1]]
+        elseif #str == 2 then
+            _G[name .. "_backup"] = _G[str[1]][str[2]]
+        end
+    end
 
-	return _G[name .. "_backup"]
+    return _G[name .. "_backup"]
 end
 
 ---
@@ -474,9 +485,9 @@ end
 -- @return string The file name without file ending
 -- @realm shared
 function util.GetFileName(name)
-	local splitString = stringSplit(name, '.')
+    local splitString = stringSplit(name, ".")
 
-	return tableConcat(splitString, ".", 1, #splitString - 1)
+    return tableConcat(splitString, ".", 1, #splitString - 1)
 end
 
 ---
@@ -495,13 +506,13 @@ util.Capitalize = string.Capitalize
 -- @return boolean Returns if a team is evil
 -- @realm shared
 function util.IsEvilTeam(team)
-	-- players without a team are counted as neutral
-	if not team or team == TEAM_NONE then
-		return false
-	end
+    -- players without a team are counted as neutral
+    if not team or team == TEAM_NONE then
+        return false
+    end
 
-	-- all non inno roles are counted as evil
-	return team ~= TEAM_INNOCENT
+    -- all non inno roles are counted as evil
+    return team ~= TEAM_INNOCENT
 end
 
 ---
@@ -512,9 +523,12 @@ end
 -- @return boolean Returns true if the vector is bounded
 -- @realm shared
 function util.VectorInBounds(vec, lowerBound, upperBound)
-	return vec.x > lowerBound.x and vec.x < upperBound.x
-		and vec.y > lowerBound.y and vec.y < upperBound.y
-		and vec.z > lowerBound.z and vec.z < upperBound.z
+    return vec.x > lowerBound.x
+        and vec.x < upperBound.x
+        and vec.y > lowerBound.y
+        and vec.y < upperBound.y
+        and vec.z > lowerBound.z
+        and vec.z < upperBound.z
 end
 
 ---
@@ -526,11 +540,13 @@ end
 -- @param number maxTargetValue The maximum value that the mapped value can have
 -- @realm shared
 function util.TransformToRange(value, minValue, maxValue, minTargetValue, maxTargetValue)
-	value = mathMax(minValue, mathMin(maxValue, value))
+    value = mathMax(minValue, mathMin(maxValue, value))
 
-	return minTargetValue + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
+    return minTargetValue
+        + (maxTargetValue - minTargetValue) * (value - minValue) / (maxValue - minValue)
 end
 
+---
 -- This is a helper function that checks if any of the current edit modes is active
 -- that has to be left by pressing F1.
 -- @param Player ply The player who might be editing
@@ -539,111 +555,122 @@ end
 -- realm. So make sure to check it not only on the server.
 -- @realm shared
 function util.EditingModeActive(ply)
-	return (HUDEditor and HUDEditor.IsEditing) or entspawnscript.IsEditing(ply)
+    return (HUDEditor and HUDEditor.IsEditing) or entspawnscript.IsEditing(ply)
+end
+
+---
+-- Converts hammer units to meters.
+-- @param number value The value in hammer units
+-- @return number The converted value in meters
+-- @realm shared
+function util.HammerUnitsToMeters(value)
+    return value * 19.05 / 1000
 end
 
 if CLIENT then
-	local colorsHealth = {
-		healthy = Color(0, 255, 0, 255),
-		hurt = Color(170, 230, 10, 255),
-		wounded = Color(230, 215, 10, 255),
-		badwound = Color(255, 140, 0, 255),
-		death = Color(255, 0, 0, 255)
-	}
+    local colorsHealth = {
+        healthy = Color(0, 255, 0, 255),
+        hurt = Color(170, 230, 10, 255),
+        wounded = Color(230, 215, 10, 255),
+        badwound = Color(255, 140, 0, 255),
+        death = Color(255, 0, 0, 255),
+    }
 
-	---
-	-- Checks whether a given position is on screen
-	-- @param table scrpos table with x and y attributes
-	-- @return boolean
-	-- @realm client
-	function util.IsOffScreen(scrpos)
-		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
-	end
+    ---
+    -- Checks whether a given position is on screen
+    -- @param table scrpos table with x and y attributes
+    -- @return boolean
+    -- @realm client
+    function util.IsOffScreen(scrpos)
+        return not scrpos.visible
+            or scrpos.x < 0
+            or scrpos.y < 0
+            or scrpos.x > ScrW()
+            or scrpos.y > ScrH()
+    end
 
-	-- Backward compatibility
-	IsOffScreen = util.IsOffScreen
+    -- Backward compatibility
+    IsOffScreen = util.IsOffScreen
 
-	---
-	-- Creates a @{string} based on the given health and maxhealth
-	-- @param number health
-	-- @param number maxhealth
-	-- @return string
-	-- @realm client
-	function util.HealthToString(health, maxhealth)
-		maxhealth = maxhealth or 100
+    ---
+    -- Creates a @{string} based on the given health and maxhealth
+    -- @param number health
+    -- @param number maxhealth
+    -- @return string
+    -- @realm client
+    function util.HealthToString(health, maxhealth)
+        maxhealth = maxhealth or 100
 
-		if health > maxhealth * 0.9 then
-			return "hp_healthy", colorsHealth.healthy
-		elseif health > maxhealth * 0.7 then
-			return "hp_hurt", colorsHealth.hurt
-		elseif health > maxhealth * 0.45 then
-			return "hp_wounded", colorsHealth.wounded
-		elseif health > maxhealth * 0.2 then
-			return "hp_badwnd", colorsHealth.badwound
-		else
-			return "hp_death", colorsHealth.death
-		end
-	end
+        if health > maxhealth * 0.9 then
+            return "hp_healthy", colorsHealth.healthy
+        elseif health > maxhealth * 0.7 then
+            return "hp_hurt", colorsHealth.hurt
+        elseif health > maxhealth * 0.45 then
+            return "hp_wounded", colorsHealth.wounded
+        elseif health > maxhealth * 0.2 then
+            return "hp_badwnd", colorsHealth.badwound
+        else
+            return "hp_death", colorsHealth.death
+        end
+    end
 
-	local colorsKarma = {
-		max = COLOR_WHITE,
-		high = Color(255, 240, 135, 255),
-		med = Color(245, 220, 60, 255),
-		low = Color(255, 180, 0, 255),
-		min = Color(255, 130, 0, 255),
-	}
+    local colorsKarma = {
+        max = COLOR_WHITE,
+        high = Color(255, 240, 135, 255),
+        med = Color(245, 220, 60, 255),
+        low = Color(255, 180, 0, 255),
+        min = Color(255, 130, 0, 255),
+    }
 
-	---
-	-- Creates a @{string} based on the given karma and the ttt_karma_max cvar
-	-- @param number karma
-	-- @return string
-	-- @realm client
-	function util.KarmaToString(karma)
-		local maxkarma = GetGlobalInt("ttt_karma_max", 1000)
+    ---
+    -- Creates a @{string} based on the given karma and the ttt_karma_max cvar
+    -- @param number karma
+    -- @return string
+    -- @realm client
+    function util.KarmaToString(karma)
+        local maxkarma = GetGlobalInt("ttt_karma_max", 1000)
 
-		if karma > maxkarma * 0.89 then
-			return "karma_max", colorsKarma.max
-		elseif karma > maxkarma * 0.8 then
-			return "karma_high", colorsKarma.high
-		elseif karma > maxkarma * 0.65 then
-			return "karma_med", colorsKarma.med
-		elseif karma > maxkarma * 0.5 then
-			return "karma_low", colorsKarma.low
-		else
-			return "karma_min", colorsKarma.min
-		end
-	end
+        if karma > maxkarma * 0.89 then
+            return "karma_max", colorsKarma.max
+        elseif karma > maxkarma * 0.8 then
+            return "karma_high", colorsKarma.high
+        elseif karma > maxkarma * 0.65 then
+            return "karma_med", colorsKarma.med
+        elseif karma > maxkarma * 0.5 then
+            return "karma_low", colorsKarma.low
+        else
+            return "karma_min", colorsKarma.min
+        end
+    end
 
-	---
-	-- Draws a filtered textured rectangle / image / icon
-	-- @param number x
-	-- @param number y
-	-- @param number w width
-	-- @param number h height
-	-- @param Material material
-	-- @param number alpha
-	-- @param Color col the alpha value will be ignored
-	-- @deprecated draw.FilteredTexture should be used instead
-	-- @realm client
-	-- @author Mineotopia
-	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, col)
-		--print("[TTT2][DEPRECATION][util.DrawFilteredTexturedRect] draw.FilteredTexture should be used instead")
+    ---
+    -- Draws a filtered textured rectangle / image / icon
+    -- @param number x
+    -- @param number y
+    -- @param number w width
+    -- @param number h height
+    -- @param Material material
+    -- @param number alpha
+    -- @param Color col the alpha value will be ignored
+    -- @deprecated draw.FilteredTexture should be used instead
+    -- @realm client
+    -- @author Mineotopia
+    function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, col)
+        draw.FilteredTexture(x, y, w, h, material, alpha, col)
+    end
 
-		draw.FilteredTexture(x, y, w, h, material, alpha, col)
-	end
+    ---
+    -- Checks recursively the parents until none is found and the highest parent is returned
+    -- @ignore
+    function util.getHighestPanelParent(panel)
+        local parent = panel
+        local checkParent = panel:GetParent()
 
-	---
-	-- Checks recursively the parents until none is found and the highest parent is returned
-	-- @ignore
-	function util.getHighestPanelParent(panel)
-		local parent = panel
-		local checkParent = panel:GetParent()
+        while ispanel(checkParent) do
+            parent = checkParent
+            checkParent = parent:GetParent()
+        end
 
-		while ispanel(checkParent) do
-			parent = checkParent
-			checkParent = parent:GetParent()
-		end
-
-		return parent
-	end
+        return parent
+    end
 end

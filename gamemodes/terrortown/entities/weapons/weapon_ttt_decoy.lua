@@ -3,34 +3,41 @@
 -- @section weapon_ttt_decoy
 
 if SERVER then
-	AddCSLuaFile()
-else -- CLIENT
-	SWEP.PrintName = "decoy_name"
-	SWEP.Slot = 7
+    AddCSLuaFile()
+end
 
-	SWEP.ViewModelFOV = 10
-	SWEP.ViewModelFlip = false
-	SWEP.DrawCrosshair = false
+DEFINE_BASECLASS("weapon_tttbase")
 
-	SWEP.EquipMenuData = {
-		type = "item_weapon",
-		desc = "decoy_desc"
-	}
+if CLIENT then
+    SWEP.PrintName = "decoy_name"
+    SWEP.Slot = 7
 
-	SWEP.Icon = "vgui/ttt/icon_beacon"
+    SWEP.ViewModelFOV = 70
+    SWEP.ViewModelFlip = false
+
+    SWEP.UseHands = true
+    SWEP.ShowDefaultViewModel = false
+    SWEP.ShowDefaultWorldModel = false
+
+    SWEP.EquipMenuData = {
+        type = "item_weapon",
+        desc = "decoy_desc",
+    }
+
+    SWEP.Icon = "vgui/ttt/icon_decoy"
 end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "slam"
 
-SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_c4.mdl"
 SWEP.WorldModel = "models/props_lab/reciever01b.mdl"
 
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
+SWEP.Primary.ClipSize = 1
+SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = true
-SWEP.Primary.Ammo = "none"
+SWEP.Primary.Ammo = "slam"
 SWEP.Primary.Delay = 1.0
 
 SWEP.Secondary.ClipSize = -1
@@ -40,7 +47,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 1.0
 
 SWEP.Kind = WEAPON_EQUIP2
-SWEP.CanBuy = {ROLE_TRAITOR}
+SWEP.CanBuy = { ROLE_TRAITOR }
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_DECOY
 SWEP.builtin = true
@@ -49,192 +56,107 @@ SWEP.AllowDrop = false
 SWEP.NoSights = true
 
 ---
--- @ignore
-function SWEP:OnDrop()
-	self:Remove()
-end
-
----
--- @ignore
-function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-
-	if SERVER then
-		self:DecoyStick()
-	end
-end
-
----
--- @ignore
-function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-
-	if SERVER then
-		self:DecoyStick()
-	end
-end
-
-local throwsound = Sound("Weapon_SLAM.SatchelThrow")
-
----
--- Drop is disabled to prevent traitors from placing the decoy in unreachable places.
 -- @realm shared
-function SWEP:DecoyDrop()
-	if SERVER then
-		local ply = self:GetOwner()
+function SWEP:PrimaryAttack()
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-		if not IsValid(ply) or self.Planted then return end
+    if SERVER and self:CanPrimaryAttack() then
+        local decoy = ents.Create("ttt_decoy")
 
-		local vsrc = ply:GetShootPos()
-		local vang = ply:GetAimVector()
-		local vvel = ply:GetVelocity()
+        if decoy:ThrowEntity(self:GetOwner(), Angle(90, 0, 0)) then
+            decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
 
-		local vthrow = vvel + vang * 200
-		local decoy = ents.Create("ttt_decoy")
+            self:PlacedDecoy(decoy)
+        end
+    end
+end
 
-		if not IsValid(decoy) then return end
+---
+-- @realm shared
+function SWEP:SecondaryAttack()
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-		decoy:SetPos(vsrc + vang * 10)
-		decoy:SetOwner(ply)
-		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
-		decoy:Spawn()
-		decoy:PointAtEntity(ply)
+    if SERVER and self:CanPrimaryAttack() then
+        local decoy = ents.Create("ttt_decoy")
 
-		local ang = decoy:GetAngles()
-		ang:RotateAroundAxis(ang:Right(), 90)
+        if decoy:StickEntity(self:GetOwner()) then
+            decoy:SetNWString("decoy_owner_team", self:GetOwner():GetTeam())
 
-		decoy:SetAngles(ang)
-		decoy:PhysWake()
-
-		local phys = decoy:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:SetVelocity(vthrow)
-		end
-
-		self:PlacedDecoy(decoy)
-	end
-
-	self:EmitSound(throwsound)
+            self:PlacedDecoy(decoy)
+        end
+    end
 end
 
 if SERVER then
-	---
-	-- @realm server
-	function SWEP:DecoyStick()
-		local ply = self:GetOwner()
+    -- add hook that changes all decoys
+    hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
+        if not IsValid(ply.decoy) then
+            return
+        end
 
-		if not IsValid(ply) or self.Planted then return end
-
-		local ignore = {ply, self}
-		local spos = ply:GetShootPos()
-		local epos = spos + ply:GetAimVector() * 80
-
-		local tr = util.TraceLine({
-			start = spos,
-			endpos = epos,
-			filter = ignore,
-			mask = MASK_SOLID
-		})
-
-		if not tr.HitWorld then return end
-
-		local decoy = ents.Create("ttt_decoy")
-		if not IsValid(decoy) then return end
-
-		decoy:PointAtEntity(ply)
-
-		local tr_ent = util.TraceEntity({
-			start = spos,
-			endpos = epos,
-			filter = ignore,
-			mask = MASK_SOLID
-		}, decoy)
-
-		if not tr_ent.HitWorld then return end
-
-		local ang = tr_ent.HitNormal:Angle()
-
-		decoy:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
-		decoy:SetAngles(ang)
-		decoy:SetOwner(ply)
-		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
-		decoy:Spawn()
-
-		local phys = decoy:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:EnableMotion(false)
-		end
-
-		decoy.IsOnWall = true
-
-		self:PlacedDecoy(decoy)
-	end
-
-	-- add hook that changes all decoys
-	hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
-		if not IsValid(ply.decoy) then return end
-
-		ply.decoy:SetNWString("decoy_owner_team", newTeam)
-	end)
+        ply.decoy:SetNWString("decoy_owner_team", newTeam)
+    end)
 end
 
 ---
 -- @param Entity decoy
 -- @realm shared
 function SWEP:PlacedDecoy(decoy)
-	self:GetOwner().decoy = decoy
+    self:GetOwner().decoy = decoy
 
-	self:TakePrimaryAmmo(1)
+    self:TakePrimaryAmmo(1)
 
-	if not self:CanPrimaryAttack() then
-		self:Remove()
-
-		self.Planted = true
-	end
+    if not self:CanPrimaryAttack() then
+        self:Remove()
+    end
 end
 
 ---
 -- @ignore
 function SWEP:Reload()
-	return false
+    return false
 end
 
 if CLIENT then
-	---
-	-- @ignore
-	function SWEP:OnRemove()
-		if not IsValid(self:GetOwner()) or self:GetOwner() ~= LocalPlayer() or not self:GetOwner():Alive() then return end
+    ---
+    -- @ignore
+    function SWEP:Initialize()
+        self:AddTTT2HUDHelp("decoy_help_primary", "decoy_help_secondary")
 
-		RunConsoleCommand("lastinv")
-	end
+        self.BaseClass.Initialize(self)
+    end
 
-	---
-	-- @ignore
-	function SWEP:Initialize()
-		self:AddTTT2HUDHelp("decoy_help_pri")
+    ---
+    -- @realm client
+    function SWEP:InitializeCustomModels()
+        self:AddCustomViewModel("vmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01b.mdl",
+            bone = "ValveBiped.Bip01_R_Finger2",
+            rel = "",
+            pos = Vector(2.0, 4.8, -0.5),
+            angle = Angle(120, 10, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
 
-		return self.BaseClass.Initialize(self)
-	end
-end
-
----
--- @ignore
-function SWEP:Deploy()
-	self:GetOwner():DrawViewModel(false)
-
-	return true
-end
-
----
--- @ignore
-function SWEP:DrawWorldModel()
-	if IsValid(self:GetOwner()) then return end
-
-	self:DrawModel()
-end
-
----
--- @ignore
-function SWEP:DrawWorldModelTranslucent()
-
+        self:AddCustomWorldModel("wmodel", {
+            type = "Model",
+            model = "models/props_lab/reciever01b.mdl",
+            bone = "ValveBiped.Bip01_R_Hand",
+            rel = "",
+            pos = Vector(6, 5.4, -1),
+            angle = Angle(-60, 35, 0),
+            size = Vector(0.6, 0.6, 0.6),
+            color = Color(255, 255, 255, 255),
+            surpresslightning = false,
+            material = "",
+            skin = 0,
+            bodygroup = {},
+        })
+    end
 end

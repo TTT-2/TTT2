@@ -49,31 +49,35 @@ local WeaponNames
 -- @return table
 -- @realm shared
 function GetWeaponClassNames()
-	if WeaponNames then
-		return WeaponNames
-	end
+    if WeaponNames then
+        return WeaponNames
+    end
 
-	local tbl = {}
-	local weps = weapons.GetList()
+    local tbl = {}
+    local weps = weapons.GetList()
 
-	for i = 1, #weps do
-		local v = weps[i]
+    for i = 1, #weps do
+        local v = weps[i]
 
-		if v == nil or v.WeaponID == nil then continue end
+        if v == nil or v.WeaponID == nil then
+            continue
+        end
 
-		tbl[v.WeaponID] = WEPS.GetClass(v)
-	end
+        tbl[v.WeaponID] = WEPS.GetClass(v)
+    end
 
-	for _, v in pairs(scripted_ents.GetList()) do
-		local id = istable(v) and (v.WeaponID or (v.t and v.t.WeaponID)) or nil
-		if id == nil then continue end
+    for _, v in pairs(scripted_ents.GetList()) do
+        local id = istable(v) and (v.WeaponID or (v.t and v.t.WeaponID)) or nil
+        if id == nil then
+            continue
+        end
 
-		tbl[id] = WEPS.GetClass(v)
-	end
+        tbl[id] = WEPS.GetClass(v)
+    end
 
-	WeaponNames = tbl
+    WeaponNames = tbl
 
-	return WeaponNames
+    return WeaponNames
 end
 
 ---
@@ -83,13 +87,13 @@ end
 -- @return Weapon
 -- @realm shared
 function EnumToSWEP(ammo)
-	local e2w = GetWeaponClassNames() or {}
+    local e2w = GetWeaponClassNames() or {}
 
-	if e2w[ammo] then
-		return util.WeaponForClass(e2w[ammo])
-	else
-		return
-	end
+    if e2w[ammo] then
+        return util.WeaponForClass(e2w[ammo])
+    else
+        return
+    end
 end
 
 ---
@@ -99,9 +103,9 @@ end
 -- @return any
 -- @realm shared
 function EnumToSWEPKey(ammo, key)
-	local swep = EnumToSWEP(ammo)
+    local swep = EnumToSWEP(ammo)
 
-	return swep and swep[key]
+    return swep and swep[key]
 end
 
 ---
@@ -114,7 +118,7 @@ end
 -- @realm shared
 -- @see EnumToSWEPKey
 function EnumToWep(ammo)
-	return EnumToSWEPKey(ammo, "PrintName")
+    return EnumToSWEPKey(ammo, "PrintName")
 end
 
 ---
@@ -123,7 +127,9 @@ end
 -- @return string the @{Weapon} id
 -- @realm shared
 function WepToEnum(wep)
-	if not IsValid(wep) then return end
+    if not IsValid(wep) then
+        return
+    end
 
-	return wep.WeaponID
+    return wep.WeaponID
 end

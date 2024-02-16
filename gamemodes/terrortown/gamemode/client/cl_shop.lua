@@ -19,7 +19,7 @@ shop.favorites.orm = orm.Make(shop.favorites.databaseName)
 -- @return boolean
 -- @realm client
 function shop.IsFavorite(equipmentId)
-	return shop.favorites.orm:Find(equipmentId) ~= nil
+    return shop.favorites.orm:Find(equipmentId) ~= nil
 end
 
 ---
@@ -27,7 +27,7 @@ end
 -- @return table list of all favorites
 -- @realm client
 function shop.GetFavorites()
-	return shop.favorites.orm:All()
+    return shop.favorites.orm:All()
 end
 
 ---
@@ -36,15 +36,36 @@ end
 -- @param bool isFavorite If the equipmentId is a favorite
 -- @realm client
 function shop.SetFavoriteState(equipmentId, isFavorite)
-	local favOrm = shop.favorites.orm
-	local favoriteItem = favOrm:Find(equipmentId)
+    local favOrm = shop.favorites.orm
+    local favoriteItem = favOrm:Find(equipmentId)
 
-	if isFavorite and not favoriteItem then
-		favoriteItem = favOrm:New({
-			name = equipmentId,
-		})
-		favoriteItem:Save()
-	elseif favoriteItem then
-		favoriteItem:Delete()
-	end
+    if isFavorite and not favoriteItem then
+        favoriteItem = favOrm:New({
+            name = equipmentId,
+        })
+        favoriteItem:Save()
+    elseif favoriteItem then
+        favoriteItem:Delete()
+    end
 end
+
+local function ResetTeambuyEquipment()
+    local team = net.ReadString()
+
+    shop.ResetTeamBuy(LocalPlayer(), team)
+end
+net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
+
+local function ReceiveTeambuyEquipment()
+    local equipmentName = net.ReadString()
+
+    shop.SetEquipmentTeamBought(LocalPlayer(), equipmentName)
+end
+net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
+
+local function ReceiveGlobalbuyEquipment()
+    local equipmentName = net.ReadString()
+
+    shop.SetEquipmentGlobalBought(equipmentName)
+end
+net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)
