@@ -108,6 +108,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
 - Fixed door health displaying as a humongous string of decimals
 
+### Deprecated
+
+- Deprecated `sql.CreateSqlTable`, use migrations to manage database schemas instead
+
 ### Removed
 
 - Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details
@@ -115,6 +119,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed the convar `ttt_damage_own_healthstation` as it was inconsistent and probably unused as well
 - Removed `ttt_fire_fallback`, there's no situation where the fire shouldn't draw anymore.
 - Removed `resource.AddFile` calls, server operators should use the workshop version or manually bundle loose files.
+- Removed ability to add columns on existing database table through `sql.CreateSqlTable`
 
 ### Breaking Changes
 
