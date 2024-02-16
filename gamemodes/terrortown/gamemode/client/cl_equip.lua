@@ -974,17 +974,7 @@ function TraitorMenuPopup()
             return
         end
 
-        local choice = pnl.item
-        local weapon = choice.id
-        local steamid = client:SteamID64()
-
-        CreateFavTable()
-
-        if pnl.favorite then
-            RemoveFavorite(steamid, role, weapon)
-        else
-            AddFavorite(steamid, role, weapon)
-        end
+        shop.SetFavoriteState(pnl.item.id, not pnl.favorite)
 
         -- Reload item list
         coroutine.resume(
