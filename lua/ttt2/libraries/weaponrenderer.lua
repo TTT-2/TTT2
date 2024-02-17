@@ -42,10 +42,11 @@ local propertiesMaterial = { "nocull", "additive", "vertexalpha", "vertexcolor",
 -- @param table baseDataTable The base data table, most of the time the view elements
 -- @param table dataTable The data table, most of the time the model data
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
+-- @param boolean isInWorld If the weapon is placed in the world, without a player holding it
 -- @return Vector pos The bone position
 -- @return Angle ang The bone angle
 -- @realm client
-local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity)
+local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, isInWorld)
     local bone, pos, ang
 
     if dataTable.rel and dataTable.rel ~= "" then
@@ -57,7 +58,7 @@ local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity)
 
         -- Technically, if there exists an element with the same name as a bone
         -- you can get in an infinite loop. Let's just hope nobody's that stupid.
-        pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity)
+        pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity, isInWorld)
 
         if not pos then
             return
@@ -75,7 +76,9 @@ local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity)
         -- this is important when the model is thrown in the world and has to be
         -- rendered on its own; especially for models that chose random names for
         -- their main bone
-        bone = bone or boneEntity:LookupBone(boneEntity:GetBoneName(0))
+        if isInWorld then
+            bone = bone or boneEntity:LookupBone(boneEntity:GetBoneName(0))
+        end
 
         if not bone then
             return
@@ -304,7 +307,7 @@ function weaponrenderer.Render(wep, elements, boneEntity)
         local model = modelData.modelEnt
         local sprite = modelData.spriteMaterial
 
-        local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity)
+        local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity, not hasHandBone)
 
         if not pos then
             continue
