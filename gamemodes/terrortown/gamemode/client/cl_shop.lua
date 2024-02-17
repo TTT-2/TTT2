@@ -7,11 +7,6 @@ shop = shop or {}
 
 shop.favorites = shop.favorites or {}
 shop.favorites.databaseName = "ttt2_shop_favorites"
-shop.favorites.savingKeys = {}
-
-sql.CreateSqlTable(shop.favorites.databaseName, shop.favorites.savingKeys)
-
-shop.favorites.orm = orm.Make(shop.favorites.databaseName)
 
 ---
 -- Looks for equipment id in favorites table
