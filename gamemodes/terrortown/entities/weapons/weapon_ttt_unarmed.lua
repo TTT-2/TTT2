@@ -68,6 +68,18 @@ function SWEP:Holster()
     return true
 end
 
+---
+-- @ignore
+function SWEP:OnDrop()
+    self:Remove()
+end
+
+---
+-- @ignore
+function SWEP:ShouldDropOnDie()
+    return false
+end
+
 if CLIENT then
     ---
     -- @realm client
@@ -82,4 +94,14 @@ if CLIENT then
     ---
     -- @realm client
     function SWEP:DrawWorldModelTranslucent() end
+end
+
+if SERVER then
+    ---
+    -- Always return true to be removed instead of dropped
+    -- @return boolean
+    -- @realm client
+    function SWEP:ShouldRemove()
+        return true
+    end
 end
