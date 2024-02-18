@@ -1195,40 +1195,6 @@ function GM:OnContextMenuOpen()
     end
 end
 
----
--- Caches the material or model
--- @param table item
--- @realm client
-function TTT2CacheEquipMaterials(item)
-    item.isValidEquipment = true
-
-    if item.material then
-        item.iconMaterial = Material(item.material)
-
-        if item.iconMaterial:IsError() then
-            -- setting fallback error material
-            item.iconMaterial = fallback_mat
-        end
-    elseif item.model then
-        -- do not use fallback mat and use model instead
-        item.itemModel = item.model
-    end
-
-    --if there is no sensible material and model, the item should probably not be editable in the equipment Editor
-    if item.material == "vgui/ttt/icon_id" and item.model == "models/weapons/w_bugbait.mdl" then
-        item.isValidEquipment = false
-    end
-end
-
--- Preload materials for the shop
-hook.Add("PostInitPostEntity", "TTT2CacheEquipMaterials", function()
-    local itms = ShopEditor.GetEquipmentForRoleAll()
-
-    for _, item in pairs(itms) do
-        TTT2CacheEquipMaterials(item)
-    end
-end)
-
 -- Closes menu when roles are selected
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
     if not IsValid(eqframe) then

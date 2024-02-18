@@ -1,7 +1,9 @@
 ---
 -- @module ShopEditor
 
-local Equipmentnew
+local materialFallback = Material("vgui/ttt/missing_equip_icon")
+
+local equipmentCache
 
 local net = net
 
@@ -11,18 +13,57 @@ ShopEditor = ShopEditor or {}
 ShopEditor.fallback = {}
 ShopEditor.customShopRefresh = false
 
----
--- Returns a list of every available equipment
--- @return table
--- @realm client
-function ShopEditor.GetEquipmentForRoleAll()
-    -- need to build equipment cache?
-    if Equipmentnew ~= nil then
-        return Equipmentnew
+
+function ShopEditor.GetInstalledEquipment()
+    local installedEquipment = {}
+
+    local equipmentItems = items.GetList()
+
+    -- find buyable items to load info from
+    for i = 1, #equipmentItems do
+        local equipment = equipmentItems[i]
+        local name = WEPS.GetClass(equipment)
+
+        if name and not equipment.Duplicated and not string.match(name, "base") then
+            if equipment.id then
+                installedEquipment[#installedEquipment + 1] = equipment
+            else
+                ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Item without id:\n")
+
+                PrintTable(equipment)
+            end
+        end
     end
 
-    -- start with all the non-weapon goodies
-    local tbl = {}
+    -- find buyable weapons to load info from
+    local equipmentWeapons = weapons.GetList()
+
+    for i = 1, #equipmentWeapons do
+        local equipment = equipmentWeapons[i]
+        local name = WEPS.GetClass(equipment)
+
+        if
+            name
+            and not equipment.Duplicated
+            and not string.match(name, "base")
+            and not string.match(name, "event")
+        then
+            installedEquipment[#installedEquipment + 1] = equipment
+        else
+            ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
+        end
+    end
+
+    return installedEquipment
+end
+
+function ShopEditor.BuildValidEquipmentCache()
+    -- need to build equipment cache?
+    if equipmentCache ~= nil then
+        return equipmentCache
+    end
+
+    equipmentCache = {}
 
     local eject = {
         weapon_fists = true,
@@ -33,53 +74,55 @@ function ShopEditor.GetEquipmentForRoleAll()
     ---
     -- @realm client
     -- stylua: ignore
-    hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
+    hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject)
 
-    local itms = items.GetList()
+    local installedEquipment = ShopEditor.GetInstalledEquipment()
 
-    -- find buyable items to load info from
-    for i = 1, #itms do
-        local eq = itms[i]
-        local name = WEPS.GetClass(eq)
+    for i = 1, #installedEquipment do
+        local equipment = installedEquipment[i]
+        local name = WEPS.GetClass(equipment)
 
-        if name and not eq.Duplicated and not string.match(name, "base") and not eject[name] then
-            if eq.id then
-                tbl[#tbl + 1] = eq
-            else
-                ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Item without id:\n")
-                PrintTable(eq)
-            end
+        if eject[name] then continue end
+
+        --if there is no sensible material and model, the item should probably not be editable in the equipment Editor
+        if item.material == "vgui/ttt/icon_id" and item.model == "models/weapons/w_bugbait.mdl" then
+            continue
         end
+
+        -- this hook: hook.Run("TTT2RegisterWeaponID", eq)
+
+        -- maybe even eject weapons with the wrong base?
+
+        -- equipment is valid, cache the material now
+        if item.material then
+            item.iconMaterial = Material(item.material)
+    
+            if item.iconMaterial:IsError() then
+                -- setting fallback error material
+                item.iconMaterial = materialFallback
+            end
+        elseif item.model then
+            -- do not use fallback mat and use model instead
+            item.itemModel = item.model
+        end
+
+        equipmentCache[#equipmentCache + 1] = equipment
     end
 
-    -- find buyable weapons to load info from
-    local weps = weapons.GetList()
-
-    for i = 1, #weps do
-        local eq = weps[i]
-        local name = WEPS.GetClass(eq)
-
-        if
-            name
-            and not eq.Duplicated
-            and not string.match(name, "base")
-            and not string.match(name, "event")
-            and not eject[name]
-        then
-            -- @realm client
-            -- stylua: ignore
-            if hook.Run("TTT2RegisterWeaponID", eq) then
-                tbl[#tbl + 1] = eq
-            else
-                ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
-            end
-        end
-    end
-
-    Equipmentnew = tbl
-
-    return Equipmentnew
+    return equipmentCache
 end
+
+---
+-- Returns a list of every available equipment
+-- @return table
+-- @realm client
+function ShopEditor.GetEquipmentForRoleAll()
+    return ShopEditor.BuildValidEquipmentCache()
+end
+
+hook.Add("TTT2FinishedLoading", "TTT2BuildEquipCache", function()
+    ShopEditor.BuildValidEquipmentCache()
+end)
 
 local function shopFallbackAnsw(len)
     local subrole = net.ReadUInt(ROLE_BITS)
@@ -91,10 +134,10 @@ local function shopFallbackAnsw(len)
     -- reset everything
     Equipment[subrole] = {}
 
-    local itms = items.GetList()
+    local equipmentItems = items.GetList()
 
-    for i = 1, #itms do
-        local v = itms[i]
+    for i = 1, #equipmentItems do
+        local v = equipmentItems[i]
         local canBuy = v.CanBuy
 
         if not canBuy then
@@ -104,10 +147,10 @@ local function shopFallbackAnsw(len)
         canBuy[subrole] = nil
     end
 
-    local weps = weapons.GetList()
+    local equipmentWeapons = weapons.GetList()
 
-    for i = 1, #weps do
-        local v = weps[i]
+    for i = 1, #equipmentWeapons do
+        local v = equipmentWeapons[i]
         local canBuy = v.CanBuy
 
         if not canBuy then
@@ -142,16 +185,16 @@ end
 net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
 local function shopFallbackReset(len)
-    local itms = items.GetList()
+    local equipmentItems = items.GetList()
 
-    for i = 1, #itms do
-        itms[i].CanBuy = {}
+    for i = 1, #equipmentItems do
+        equipmentItems[i].CanBuy = {}
     end
 
-    local weps = weapons.GetList()
+    local equipmentWeapons = weapons.GetList()
 
-    for i = 1, #weps do
-        weps[i].CanBuy = {}
+    for i = 1, #equipmentWeapons do
+        equipmentWeapons[i].CanBuy = {}
     end
 
     local rlsList = roles.GetList()

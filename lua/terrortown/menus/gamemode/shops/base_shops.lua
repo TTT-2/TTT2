@@ -86,10 +86,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
         for i = 1, #items do
             local item = items[i]
 
-            if not item.isValidEquipment then
-                continue
-            end
-
             counter = counter + 1
 
             sortedEquipmentList[counter] = item
