@@ -651,6 +651,7 @@ function addonChecker.Check()
     print("TTT2 ADDON CHECKER")
     print("=============================================================")
     print("")
+    print("Scanning for known incompatible addons:")
 
     for i = 1, #addonTable do
         local addon = addonTable[i]
@@ -693,6 +694,29 @@ function addonChecker.Check()
         print("")
     end
 
+    print("=============================================================")
+    print("")
+    print("Scanning for weapons with incorrect weapon base:")
+
+    local equipmentWeapons = weapons.GetList()
+
+    for i = 1, #equipmentWeapons do
+        local wep = equipmentWeapons[i]
+
+        if weapons.IsBasedOn(wep.ClassName, "weapon_tttbase") then
+            continue
+        end
+
+        print("Warning: " .. wep.ClassName .. " is not based on 'weapon_tttbase', this may lead to issues when playing the game\n")
+        print("Location: " .. wep.Folder .. "\n")
+
+        if wep.Author and wep.Author ~= "" then
+            print("Author: " .. wep.Author .. "\n")
+        end
+    end
+    
+    
+    print("")
     print("=============================================================")
     print("This is the end of the addon checker output.")
     print("")
