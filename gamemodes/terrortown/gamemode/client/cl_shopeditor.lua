@@ -94,16 +94,16 @@ function ShopEditor.BuildValidEquipmentCache()
         -- maybe even eject weapons with the wrong base?
 
         -- equipment is valid, cache the material now
-        if item.material then
-            item.iconMaterial = Material(item.material)
+        if equipment.material then
+            equipment.iconMaterial = Material(equipment.material)
     
-            if item.iconMaterial:IsError() then
+            if equipment.iconMaterial:IsError() then
                 -- setting fallback error material
-                item.iconMaterial = materialFallback
+                equipment.iconMaterial = materialFallback
             end
-        elseif item.model then
+        elseif equipment.model then
             -- do not use fallback mat and use model instead
-            item.itemModel = item.model
+            equipment.itemModel = equipment.model
         end
 
         equipmentCache[#equipmentCache + 1] = equipment
