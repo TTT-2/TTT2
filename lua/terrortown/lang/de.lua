@@ -1688,7 +1688,7 @@ L.label_session_limits_enabled = "Aktiviere Sitzungs Limitierungen"
 L.label_spectator_chat = "Aktiviere, dass Zuschauer mit jedem chatten können"
 L.label_lastwords_chatprint = "Gib die letzten Worte im Chat aus, wenn der Spieler getötet wird, während er tippt"
 L.label_identify_body_woconfirm = "Leichnam identifizieren, ohne die Schaltfläche 'Tod Bestätigen' drücken zu müssen"
-L.label_announce_body_found = "Ankündigen, dass eine Leiche gefunden wurde, wenn der Körper bestätigt wird"
+L.label_announce_body_found = "Ankündigen, dass ein Leichnam gefunden wurde, wenn dieser bestätigt wird"
 L.label_confirm_killlist = "Die Todesliste des bestätigten Leichnams verkünden"
 L.label_dyingshot = "Beim Tod schießen, wenn Visier aktiv [experimentell]"
 L.label_armor_block_headshots = "Aktiviere das Blockieren von Kopfschüssen durch Rüstung"
@@ -1886,9 +1886,9 @@ L.search_dna = "Erlange eine Probe der DNA des Mörders mit dem DNA-Scanner. Die
 
 L.search_kills1 = "Du fandest eine Liste an Tötungen, die den Tod von {player} beweist."
 L.search_kills2 = "Du fandest eine Liste an Tötungen mit diesen Namen: {player}"
-L.search_eyes = "Mit deinen Detektiv-Fähigkeiten identifizierst du die letzte Person, die das Opfer sah: {player}. Der Mörder oder ein Zufall?"
+L.search_eyes = "Mit deinen Detektiv-Fähigkeiten identifizierst du die Person, die vom Opfer zuletzt gesehen wurde: {player}. Der Mörder oder ein Zufall?"
 
-L.search_credits = "Das Opfer hat {credits} Ausrüstungspunkt(e) in der Tasche. Eine Shopping-Rolle könnte sie an sich nehmen und sinnvoll verwenden. Behalten Sie es im Auge!"
+L.search_credits = "Das Opfer hat {credits} Ausrüstungspunkt(e) in der Tasche. Eine Shopping-Rolle könnte sie an sich nehmen und sinnvoll verwenden. Behalte es im Auge!"
 
 L.search_kill_distance_point_blank = "Es war ein Angriff aus nächster Nähe."
 L.search_kill_distance_close = "Der Angriff erfolgte aus kurzer Entfernung."
@@ -2030,7 +2030,7 @@ L.crowbar_help_secondary = "Spieler schubsen"
 L.help_HUD_enable_description = [[
 Manche HUD-Elemente, wie der Tastenhelfer oder die Seitenleiste, zeigen detailliertere Informationen an, wenn das Scoreboard offen ist. Dies kann deaktiviert werden, um Unordnung zu reduzieren.]]
 L.label_HUD_enable_description = "Aktiviere Beschreibungen, wenn das Scoreboard offen ist"
-L.label_HUD_enable_box_blur = "Aktiviere Hintergrund-Blur der UI-Box"
+L.label_HUD_enable_box_blur = "Aktiviere Hintergrund-Verschwommenheit der UI-Box"
 
 -- 2023-10-28
 L.submenu_gameplay_voiceandvolume_title = "Sprache & Lautstärke"
@@ -2060,8 +2060,8 @@ L.c4_help_primary = "C4 Platzieren"
 L.c4_help_secondary = "An Oberfläche kleben"
 
 -- 2023-12-11
-L.magneto_help_primary = "Entity wegdrücken"
-L.magneto_help_secondary = "Entity heranziehen / aufheben"
+L.magneto_help_primary = "Entität wegschieben"
+L.magneto_help_secondary = "Entität heranziehen / aufheben"
 L.knife_help_primary = "Stechen"
 L.knife_help_secondary = "Messer werfen"
 L.polter_help_primary = "Feuere Klopfer"
@@ -2078,7 +2078,7 @@ L.defuser_help_primary = "Ausgewähltes C4 entschärfen"
 L.radio_help_primary = "Radio platzieren"
 L.radio_help_secondary = "An Oberfläche kleben"
 L.hstation_help_primary = "Gesundheitsstation platzieren"
-L.flaregun_help_primary = "Körfper/Entity verbrennen"
+L.flaregun_help_primary = "Körper/Entität verbrennen"
 
 -- 2023-12-14
 L.marker_vision_owner = "Besitzer: {owner}"
