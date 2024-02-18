@@ -42,11 +42,11 @@ local propertiesMaterial = { "nocull", "additive", "vertexalpha", "vertexcolor",
 -- @param table baseDataTable The base data table, most of the time the view elements
 -- @param table dataTable The data table, most of the time the model data
 -- @param Entity boneEntity The bone entity, can be the view model, the player or the weapon
--- @param string boneOverride An override to get a secific bone
+-- @param boolean isInWorld If the weapon is placed in the world, without a player holding it
 -- @return Vector pos The bone position
 -- @return Angle ang The bone angle
 -- @realm client
-local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, boneOverride)
+local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, isInWorld)
     local bone, pos, ang
 
     if dataTable.rel and dataTable.rel ~= "" then
@@ -58,7 +58,7 @@ local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, bon
 
         -- Technically, if there exists an element with the same name as a bone
         -- you can get in an infinite loop. Let's just hope nobody's that stupid.
-        pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity)
+        pos, ang = GetBoneOrientation(wep, baseDataTable, tbl, boneEntity, isInWorld)
 
         if not pos then
             return
@@ -70,7 +70,15 @@ local function GetBoneOrientation(wep, baseDataTable, dataTable, boneEntity, bon
         ang:RotateAroundAxis(ang:Right(), tbl.angle.p)
         ang:RotateAroundAxis(ang:Forward(), tbl.angle.r)
     else
-        bone = boneEntity:LookupBone(boneOverride or dataTable.bone)
+        bone = boneEntity:LookupBone(dataTable.bone)
+
+        -- as a fallback, always try to use the first bone
+        -- this is important when the model is thrown in the world and has to be
+        -- rendered on its own; especially for models that chose random names for
+        -- their main bone
+        if isInWorld then
+            bone = bone or boneEntity:LookupBone(boneEntity:GetBoneName(0))
+        end
 
         if not bone then
             return
@@ -282,6 +290,12 @@ end
 function weaponrenderer.Render(wep, elements, boneEntity)
     local renderOrder = BuildRenderOrder(elements)
 
+    -- if a model has a hand bone, it is probably created as a weapon and should therefore
+    -- be handled that way. If a model is abused as a weapon then it doesn't have a handbone
+    -- and should therefore not be rotated
+    local boneId = boneEntity:LookupBone("ValveBiped.Bip01_R_Hand")
+    local hasHandBone = boneId and boneId ~= "__INVALIDBONE__"
+
     for i = 1, #renderOrder do
         local identifier = renderOrder[i]
         local modelData = elements[identifier]
@@ -293,29 +307,37 @@ function weaponrenderer.Render(wep, elements, boneEntity)
         local model = modelData.modelEnt
         local sprite = modelData.spriteMaterial
 
-        local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity)
+        local pos, ang = GetBoneOrientation(wep, elements, modelData, boneEntity, not hasHandBone)
 
         if not pos then
             continue
         end
 
         local posModel = pos
-            + ang:Forward() * modelData.pos.x
-            + ang:Right() * modelData.pos.y
-            + ang:Up() * modelData.pos.z
+
+        if hasHandBone then
+            posModel = posModel
+                + ang:Forward() * modelData.pos.x
+                + ang:Right() * modelData.pos.y
+                + ang:Up() * modelData.pos.z
+        end
 
         if modelData.type == "Model" and IsValid(model) then
-            model:SetPos(posModel)
-            ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
-            ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
-            ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
+            if hasHandBone then
+                model:SetPos(posModel)
 
-            model:SetAngles(ang)
+                ang:RotateAroundAxis(ang:Up(), modelData.angle.y)
+                ang:RotateAroundAxis(ang:Right(), modelData.angle.p)
+                ang:RotateAroundAxis(ang:Forward(), modelData.angle.r)
 
-            local matrix = Matrix()
-            matrix:Scale(modelData.size)
+                model:SetAngles(ang)
 
-            model:EnableMatrix("RenderMultiply", matrix)
+                local matrix = Matrix()
+                matrix:Scale(modelData.size)
+
+                model:EnableMatrix("RenderMultiply", matrix)
+            end
+
             model:SetMaterial(modelData.material)
 
             if modelData.skin then
