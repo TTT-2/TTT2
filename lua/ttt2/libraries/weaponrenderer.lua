@@ -291,7 +291,7 @@ function weaponrenderer.Render(wep, elements, boneEntity)
     local renderOrder = BuildRenderOrder(elements)
 
     -- if a model has a hand bone, it is probably created as a weapon and should therefore
-    -- be handled that way. If a model is abused aas a weapon then it doesn't have a handbone
+    -- be handled that way. If a model is abused as a weapon then it doesn't have a handbone
     -- and should therefore not be rotated
     local boneId = boneEntity:LookupBone("ValveBiped.Bip01_R_Hand")
     local hasHandBone = boneId and boneId ~= "__INVALIDBONE__"
