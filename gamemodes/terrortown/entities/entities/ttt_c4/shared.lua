@@ -37,6 +37,9 @@ ENT.Avoidable = true
 
 ENT.isDestructible = false
 
+ENT.iconMaterial = Material("vgui/ttt/marker_vision/c4")
+ENT.markerVisibility = VISIBLE_FOR_TEAM
+
 ---
 -- @accessor Entity
 -- @realm shared
@@ -427,12 +430,6 @@ end
 
 if SERVER then
     ---
-    -- @realm server
-    function ENT:OnRemove()
-        self:RemoveMarkerVision("c4_owner")
-    end
-
-    ---
     -- @param Player ply
     -- @realm server
     function ENT:Disarm(ply)
@@ -446,8 +443,6 @@ if SERVER then
 
         self:SetExplodeTime(0)
         self:SetArmed(false)
-
-        self:RemoveMarkerVision("c4_owner")
 
         self.DisarmCausedExplosion = false
     end
@@ -518,11 +513,6 @@ if SERVER then
         end
 
         events.Trigger(EVENT_C4PLANT, ply)
-
-        local mvObject = self:AddMarkerVision("c4_owner")
-        mvObject:SetOwner(ply)
-        mvObject:SetVisibleFor(VISIBLE_FOR_TEAM)
-        mvObject:SyncToClients()
     end
 
     ---
@@ -773,8 +763,6 @@ if SERVER then
     -- @realm server
     function GAMEMODE:TTTC4Destroyed(bomb, ply) end
 else -- CLIENT
-    local materialC4 = Material("vgui/ttt/marker_vision/c4")
-
     local TryT = LANG.TryTranslation
     local ParT = LANG.GetParamTranslation
 
@@ -883,35 +871,12 @@ else -- CLIENT
         tData:AddDescriptionLine(TryT("c4_short_desc"))
     end)
 
-    hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionC4", function(mvData)
-        local ent = mvData:GetEntity()
-        local mvObject = mvData:GetMarkerVisionObject()
-
-        if not mvObject:IsObjectFor(ent, "c4_owner") then
-            return
-        end
-
-        local owner = ent:GetOriginator()
-        local nick = IsValid(owner) and owner:Nick() or "---"
-
-        local time = util.SimpleTime(ent:GetExplodeTime() - CurTime(), "%02i:%02i")
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
-
-        mvData:EnableText()
-
-        mvData:SetTitle(TryT(ent.PrintName))
-
-        mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
-        mvData:AddDescriptionLine(ParT("c4_marker_vision_time", { time = time }))
-        mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
-
-        mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
-
+    function ENT:GetMarkerVisionColors(mvData)
         local color = COLOR_WHITE
 
-        if mvData:GetEntityDistance() > ent:GetRadius() then
+        if mvData:GetEntityDistance() > self:GetRadius() then
             mvData:AddDescriptionLine(TryT("c4_marker_vision_safe_zone"), COLOR_GREEN)
-        elseif mvData:GetEntityDistance() > ent:GetRadiusInner() then
+        elseif mvData:GetEntityDistance() > self:GetRadiusInner() then
             mvData:AddDescriptionLine(TryT("c4_marker_vision_damage_zone"), COLOR_ORANGE)
 
             color = COLOR_ORANGE
@@ -921,13 +886,24 @@ else -- CLIENT
             color = COLOR_RED
         end
 
-        mvData:AddIcon(
-            materialC4,
-            (mvData:IsOffScreen() or not mvData:IsOnScreenCenter()) and color
-        )
+        if mvData:IsOffScreen() or not mvData:IsOnScreenCenter() or not self:GetArmed() then
+            color = COLOR_WHITE
+        end
+
+        return { color }
+    end
+
+    function ENT:CustomizeMarkerVision(mvData)
+        if not self:GetArmed() then
+            return
+        end
+
+        local time = util.SimpleTime(self:GetExplodeTime() - CurTime(), "%02i:%02i")
+
+        mvData:AddDescriptionLine(ParT("c4_marker_vision_time", { time = time }))
 
         mvData:SetCollapsedLine(time)
-    end)
+    end
 end
 
 ---

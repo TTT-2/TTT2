@@ -25,6 +25,9 @@ ENT.pickupWeaponClass = "weapon_ttt_beacon"
 ENT.timeLastBeep = CurTime()
 ENT.lastPlysFound = {}
 
+ENT.iconMaterial = Material("vgui/ttt/marker_vision/beacon")
+ENT.markerVisibility = VISIBLE_FOR_PLAYER
+
 local beaconDetectionRange = 135
 
 ---
@@ -42,11 +45,6 @@ function ENT:Initialize()
     if SERVER then
         self:SetUseType(SIMPLE_USE)
         self:NextThink(CurTime() + 1)
-
-        local mvObject = self:AddMarkerVision("beacon_owner")
-        mvObject:SetOwner(ROLE_DETECTIVE)
-        mvObject:SetVisibleFor(VISIBLE_FOR_ROLE)
-        mvObject:SyncToClients()
     end
 end
 
@@ -124,7 +122,7 @@ if SERVER then
             ply:RemoveMarkerVision("beacon_player")
         end
 
-        self:RemoveMarkerVision("beacon_owner")
+        BaseClass.OnRemove(self)
     end
 
     ---
@@ -164,7 +162,7 @@ if SERVER then
             end
 
             ---
-            -- @realm server			
+            -- @realm server
             -- stylua: ignore
             if hook.Run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
@@ -203,7 +201,6 @@ if CLIENT then
     local baseOpacity = 35
     local factorRenderDistance = 3
 
-    local materialBeacon = Material("vgui/ttt/marker_vision/beacon")
     local materialPlayer = Material("vgui/ttt/tid/tid_big_role_not_known")
 
     -- handle looking at Beacon
@@ -238,30 +235,6 @@ if CLIENT then
         end
 
         tData:AddDescriptionLine(TryT("beacon_short_desc"))
-    end)
-
-    hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeacon", function(mvData)
-        local ent = mvData:GetEntity()
-        local mvObject = mvData:GetMarkerVisionObject()
-
-        if not mvObject:IsObjectFor(ent, "beacon_owner") then
-            return
-        end
-
-        local owner = ent:GetOriginator()
-        local nick = IsValid(owner) and owner:Nick() or "---"
-
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
-
-        mvData:EnableText()
-
-        mvData:AddIcon(materialBeacon)
-        mvData:SetTitle(TryT(ent.PrintName))
-
-        mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
-        mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
-
-        mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
     end)
 
     hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBeaconPlys", function(mvData)

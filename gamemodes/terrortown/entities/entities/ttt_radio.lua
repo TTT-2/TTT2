@@ -27,6 +27,9 @@ ENT.pickupWeaponClass = "weapon_ttt_radio"
 ENT.SoundLimit = 5
 ENT.SoundDelay = 0.5
 
+ENT.iconMaterial = Material("vgui/ttt/marker_vision/radio")
+ENT.markerVisibility = VISIBLE_FOR_TEAM
+
 ---
 -- @realm shared
 function ENT:Initialize()
@@ -42,11 +45,6 @@ function ENT:Initialize()
 
     if SERVER then
         self:SetUseType(SIMPLE_USE)
-
-        local mvObject = self:AddMarkerVision("radio_owner")
-        mvObject:SetOwner(self:GetOriginator())
-        mvObject:SetVisibleFor(VISIBLE_FOR_TEAM)
-        mvObject:SyncToClients()
     end
 
     -- Register with owner
@@ -107,9 +105,9 @@ function ENT:OnRemove()
         end
 
         client.radio = nil
-    else
-        self:RemoveMarkerVision("radio_owner")
     end
+
+    BaseClass.OnRemove(self)
 end
 ---
 -- @param Sound snd
@@ -340,30 +338,6 @@ if CLIENT then
 
         tData:SetKeyBinding("+use")
         tData:AddDescriptionLine(TryT("radio_short_desc"))
-    end)
-
-    hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionRadio", function(mvData)
-        local ent = mvData:GetEntity()
-        local mvObject = mvData:GetMarkerVisionObject()
-
-        if not mvObject:IsObjectFor(ent, "radio_owner") then
-            return
-        end
-
-        local originator = ent:GetOriginator()
-        local nick = IsValid(originator) and originator:Nick() or "---"
-
-        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
-
-        mvData:EnableText()
-
-        mvData:SetTitle(TryT(ent.PrintName))
-        mvData:AddIcon(materialRadio)
-
-        mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
-        mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
-
-        mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
     end)
 end
 

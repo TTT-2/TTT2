@@ -14,6 +14,10 @@ ENT.isDestructible = true
 
 ENT.pickupWeaponClass = nil
 
+-- MarkerVision related
+ENT.iconMaterial = Material("vgui/ttt/tid/tid_big_role_not_known")
+ENT.markerVisibility = VISIBLE_FOR_PLAYER
+
 ---
 -- @realm shared
 function ENT:Initialize()
@@ -24,6 +28,11 @@ function ENT:Initialize()
 
     if SERVER then
         self:PrecacheGibs()
+
+        local mvObject = self:AddMarkerVision("ttt_base_placeable_owner")
+        mvObject:SetOwner(self:GetOriginator())
+        mvObject:SetVisibleFor(self.markerVisibility)
+        mvObject:SyncToClients()
     end
 
     local phys = self:GetPhysicsObject()
@@ -73,6 +82,12 @@ if SERVER then
 
     AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
     AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
+
+    ---
+    -- @realm server
+    function ENT:OnRemove()
+        self:RemoveMarkerVision("ttt_base_placeable_owner")
+    end
 
     ---
     -- @param CTakeDamageInfo dmgInfo
@@ -232,7 +247,7 @@ if SERVER then
 
     ---
     -- Hook that is called if a player uses their use key while focusing on the entity.
-    -- @note When overwriting this function BaseClass.UseOverwrite has to be called if
+    -- @note When overwriting this function BaseClass.UseOverride has to be called if
     -- the entity pickup system should be used.
     -- @param Player activator The player that used their use key
     -- @hook
@@ -392,4 +407,58 @@ if SERVER then
 
         return true
     end
-end
+end -- SERVER
+
+if CLIENT then
+    local TryT = LANG.TryTranslation
+    local ParT = LANG.GetParamTranslation
+
+    function ENT:ShouldDrawMarkerVision()
+        return true
+    end
+
+    function ENT:CustomizeMarkerVision(mvData) end
+
+    function ENT:GetMarkerVisionIcons(mvData)
+        return { self.iconMaterial }
+    end
+
+    function ENT:GetMarkerVisionColors(mvData)
+        return { COLOR_WHITE }
+    end
+
+    hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBasePlaceable", function(mvData)
+        local ent = mvData:GetEntity()
+        local mvObject = mvData:GetMarkerVisionObject()
+
+        if
+            not mvObject:IsObjectFor(ent, "ttt_base_placeable_owner")
+            or not ent:ShouldDrawMarkerVision()
+        then
+            return
+        end
+
+        local owner = ent:GetOriginator()
+        local nick = IsValid(owner) and owner:Nick() or "---"
+
+        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+
+        mvData:EnableText()
+        mvData:SetTitle(TryT(ent.PrintName))
+
+        local icons = ent:GetMarkerVisionIcons(mvData)
+        local colors = ent:GetMarkerVisionColors(mvData)
+        local size = math.min(#icons, #colors)
+
+        for i = 1, size do
+            mvData:AddIcon(icons[i], colors[i])
+        end
+
+        mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
+        mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
+
+        mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
+
+        ent:CustomizeMarkerVision(mvData)
+    end)
+end -- CLIENT

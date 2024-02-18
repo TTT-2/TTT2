@@ -19,6 +19,12 @@ ENT.CanHavePrints = false
 ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_decoy"
 
+if CLIENT then
+    ENT.Icon = "vgui/ttt/icon_decoy"
+    ENT.PrintName = "decoy_name"
+    ENT.iconMaterial = Material("vgui/ttt/icon_decoy")
+end
+
 ---
 -- @realm shared
 function ENT:Initialize()
