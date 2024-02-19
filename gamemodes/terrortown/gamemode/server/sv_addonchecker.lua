@@ -701,21 +701,34 @@ function addonChecker.Check()
     local equipmentWeapons = weapons.GetList()
 
     for i = 1, #equipmentWeapons do
-        local wep = equipmentWeapons[i]
+        local equipment = equipmentWeapons[i]
+        local name = WEPS.GetClass(equipment)
 
-        if weapons.IsBasedOn(wep.ClassName, "weapon_tttbase") then
+        if
+            name and not equipment.Duplicated and weapons.IsBasedOn(name, "weapon_tttbase")
+            -- ignore bases as they are not added to the shop anyways
+            or string.match(name, "base")
+            or string.match(name, "event")
+            -- ignore weapons that are not in the terrortown folder
+            or not string.match(equipment.Folder, "terrortown/")
+        then
             continue
         end
 
-        print("Warning: " .. wep.ClassName .. " is not based on 'weapon_tttbase', this may lead to issues when playing the game\n")
-        print("Location: " .. wep.Folder .. "\n")
+        print(
+            "Warning: "
+                .. name
+                .. " is not based on 'weapon_tttbase', this may lead to issues when playing the game"
+        )
+        print("Location: " .. equipment.Folder)
 
-        if wep.Author and wep.Author ~= "" then
-            print("Author: " .. wep.Author .. "\n")
+        if equipment.Author and equipment.Author ~= "" then
+            print("Author: " .. equipment.Author)
         end
+
+        print("")
     end
-    
-    
+
     print("")
     print("=============================================================")
     print("This is the end of the addon checker output.")
