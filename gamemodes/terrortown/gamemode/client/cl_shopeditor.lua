@@ -13,7 +13,6 @@ ShopEditor = ShopEditor or {}
 ShopEditor.fallback = {}
 ShopEditor.customShopRefresh = false
 
-
 function ShopEditor.GetInstalledEquipment()
     local installedEquipment = {}
 
@@ -48,9 +47,11 @@ function ShopEditor.GetInstalledEquipment()
             and not string.match(name, "base")
             and not string.match(name, "event")
         then
-            installedEquipment[#installedEquipment + 1] = equipment
-        else
-            ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
+            if hook.Run("TTT2RegisterWeaponID", equipment) then
+                installedEquipment[#installedEquipment + 1] = equipment
+            else
+                ErrorNoHaltWithStack("[TTT2][SHOPEDITOR][ERROR] Weapon without id.\n")
+            end
         end
     end
 
@@ -82,21 +83,10 @@ function ShopEditor.BuildValidEquipmentCache()
         local equipment = installedEquipment[i]
         local name = WEPS.GetClass(equipment)
 
-        if eject[name] then continue end
-
-        --if there is no sensible material and model, the item should probably not be editable in the equipment Editor
-        if item.material == "vgui/ttt/icon_id" and item.model == "models/weapons/w_bugbait.mdl" then
-            continue
-        end
-
-        -- this hook: hook.Run("TTT2RegisterWeaponID", eq)
-
-        -- maybe even eject weapons with the wrong base?
-
-        -- equipment is valid, cache the material now
+        -- caching should always happen, even if the weapon is not added to the list
         if equipment.material then
             equipment.iconMaterial = Material(equipment.material)
-    
+
             if equipment.iconMaterial:IsError() then
                 -- setting fallback error material
                 equipment.iconMaterial = materialFallback
@@ -105,6 +95,20 @@ function ShopEditor.BuildValidEquipmentCache()
             -- do not use fallback mat and use model instead
             equipment.itemModel = equipment.model
         end
+
+        if eject[name] then
+            continue
+        end
+
+        --if there is no sensible material and model, the equipment should probably not be editable in the equipment Editor
+        if
+            equipment.material == "vgui/ttt/icon_id"
+            and equipment.model == "models/weapons/w_bugbait.mdl"
+        then
+            continue
+        end
+
+        -- this hook: hook.Run("TTT2RegisterWeaponID", eq)
 
         equipmentCache[#equipmentCache + 1] = equipment
     end
