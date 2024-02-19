@@ -53,6 +53,8 @@ function ShopEditor.GetInstalledEquipment()
             and not string.match(name, "base")
             and not string.match(name, "event")
         then
+            -- @realm client
+            -- stylua: ignore
             if hook.Run("TTT2RegisterWeaponID", equipment) then
                 installedEquipment[#installedEquipment + 1] = equipment
             else
