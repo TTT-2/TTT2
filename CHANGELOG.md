@@ -89,6 +89,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Hidden when observing a player in first person view
 - Your own spectator nametag will not display when looking directly up in post-round (by @EntranceJew)
 - Made sure the last weapon is selected by default if the current weapon is removed; overwrite `OnRemove` to prevent that (by @TimGoll)
+- Changed the way weapon icon caching is working to make sure all weapons always have a cached icon material (by @TimGoll)
 
 ### Fixed
 
