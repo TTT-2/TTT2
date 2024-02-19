@@ -13,6 +13,12 @@ ShopEditor = ShopEditor or {}
 ShopEditor.fallback = {}
 ShopEditor.customShopRefresh = false
 
+---
+-- Generates and returns a list of all equipment items and weapons on the server that can be loaded.
+-- This means that they have an ID and are not a base for other weapons. This list also contains
+-- disabled or ejected equipment.
+-- @return table The table with all equipment
+-- @realm client
 function ShopEditor.GetInstalledEquipment()
     local installedEquipment = {}
 
@@ -58,12 +64,11 @@ function ShopEditor.GetInstalledEquipment()
     return installedEquipment
 end
 
+---
+-- Builts the clientside equipment cache with the cached icons; only caches weapons that are
+-- deemed valid and not ejected.
+-- @realm client
 function ShopEditor.BuildValidEquipmentCache()
-    -- need to build equipment cache?
-    if equipmentCache ~= nil then
-        return equipmentCache
-    end
-
     equipmentCache = {}
 
     local eject = {
@@ -100,7 +105,8 @@ function ShopEditor.BuildValidEquipmentCache()
             continue
         end
 
-        --if there is no sensible material and model, the equipment should probably not be editable in the equipment Editor
+        --if there is no sensible material and model, the equipment should probably not be
+        -- editable in the equipment editor or being added to the shop
         if
             equipment.material == "vgui/ttt/icon_id"
             and equipment.model == "models/weapons/w_bugbait.mdl"
@@ -108,25 +114,17 @@ function ShopEditor.BuildValidEquipmentCache()
             continue
         end
 
-        -- this hook: hook.Run("TTT2RegisterWeaponID", eq)
-
         equipmentCache[#equipmentCache + 1] = equipment
     end
-
-    return equipmentCache
 end
 
 ---
--- Returns a list of every available equipment
--- @return table
+-- Returns the cached equipment list that is built on every (re-)load of the game.
+-- @return table The cached equipment table
 -- @realm client
 function ShopEditor.GetEquipmentForRoleAll()
-    return ShopEditor.BuildValidEquipmentCache()
+    return equipmentCache or {}
 end
-
-hook.Add("TTT2FinishedLoading", "TTT2BuildEquipCache", function()
-    ShopEditor.BuildValidEquipmentCache()
-end)
 
 local function shopFallbackAnsw(len)
     local subrole = net.ReadUInt(ROLE_BITS)
