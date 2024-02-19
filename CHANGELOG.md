@@ -108,6 +108,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
 - Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
 - Fixed door health displaying as a humongous string of decimals
+- Fixed the initial lag-spike when opening the shop for the first time on a map (by @TimGoll)
 
 ### Removed
 
