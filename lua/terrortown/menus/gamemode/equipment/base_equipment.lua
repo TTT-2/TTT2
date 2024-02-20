@@ -186,7 +186,16 @@ function CLGAMEMODESUBMENU:Populate(parent)
     end
 
     -- now add custom equipment settings
-    equipment:AddToSettingsMenu(parent)
+    if isfunction(equipment.AddToSettingsMenu) then
+        equipment:AddToSettingsMenu(parent)
+    else
+        Dev(
+            1,
+            "Weapon '"
+                .. equipment:GetClass()
+                .. "' doesn't use the weapon_tttbase and cannot be added to the settings panel."
+        )
+    end
 
     -- stylua: ignore
     hook.Run("TTT2OnEquipmentAddToSettingsMenu", equipment, parent)

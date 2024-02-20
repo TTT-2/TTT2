@@ -93,7 +93,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Fixed database now properly saving boolean `false` values
+- Fixed database now properly saving boolean `false` values (by @ZenBre4ker)
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
@@ -107,7 +107,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
 - Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
-- Fixed door health displaying as a humongous string of decimals
+- Fixed door health displaying as a humongous string of decimals (by @EntranceJew)
+- Fixed weapons that use the wrong weapon base from throwing errors in the F1 menu (by @TimGoll)
 
 ### Removed
 
