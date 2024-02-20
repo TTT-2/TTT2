@@ -208,6 +208,8 @@ function GM:Initialize()
 
     keyhelp.InitializeBasicKeys()
 
+    ShopEditor.BuildValidEquipmentCache()
+
     ---
     -- @realm shared
     -- stylua: ignore
@@ -389,6 +391,8 @@ function GM:OnReloaded()
     vskin.UpdatedVSkin(skinName, skinName)
 
     keyhelp.InitializeBasicKeys()
+
+    ShopEditor.BuildValidEquipmentCache()
 
     LocalPlayer():SetSettingOnServer(
         "enable_dynamic_fov",
