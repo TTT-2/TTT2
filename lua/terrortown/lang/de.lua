@@ -35,7 +35,7 @@ L.round_traitors_more = "Verräter, dies sind die Namen deiner Verbündeten: {na
 
 L.win_time = "Die Zeit ist abgelaufen. Die Verräter haben verloren."
 L.win_traitors = "Die Verräter haben gewonnen!"
-L.win_innocents = "Die Innos haben gewonnen!"
+L.win_innocents = "Die Unschuldigen haben gewonnen!"
 L.win_nones = "Die Bienen haben gewonnen! (Es ist ein Unentschieden)"
 L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Sekunde(n) an."
 
@@ -44,8 +44,8 @@ L.limit_time = "Zeitlimit erreicht. Die nächste Map wird bald geladen."
 L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
 
 -- Credit awards
-L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."
-L.credit_kill = "Dir wurde(n) {num} Credit(s) gegeben, da du einen {role} getötet hast."
+L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungspunkt(e) für eure Leistung gegeben."
+L.credit_kill = "Dir wurde(n) {num} Ausrüstungspunkt(e) gegeben, da du einen {role} getötet hast."
 
 -- Karma
 L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde vollen Schaden!"
@@ -64,7 +64,7 @@ L.body_call = "{player} rief einen Detektiv zum Körper von {victim}!"
 L.body_call_error = "Du musst erst den Tod dieses Spielers bestätigen, bevor du einen Detektiv rufen kannst!"
 
 L.body_burning = "Autsch! Diese Leiche brennt lichterloh!"
-L.body_credits = "Du hast {num} Credit(s) an diesem Körper gefunden!"
+L.body_credits = "Du hast {num} Ausrüstungspunkt(e) an diesem Körper gefunden!"
 
 -- Menus and windows
 L.close = "Schließen"
@@ -79,8 +79,8 @@ L.equip_title = "Ausrüstung"
 L.equip_tabtitle = "Ausrüstung bestellen"
 
 L.equip_status = "Bestellstatus"
-L.equip_cost = "Du hast {num} Credit(s) übrig."
-L.equip_help_cost = "Jedes Ausrüstungsteil, das du kaufst, kostet 1 Credit."
+L.equip_cost = "Du hast {num} Ausrüstungspunkt(e) übrig."
+L.equip_help_cost = "Jedes Ausrüstungsteil, das du kaufst, kostet 1 Ausrüstungspunkt."
 
 L.equip_help_carry = "Du kannst nur das kaufen, für das du auch Platz hast."
 L.equip_carry = "Du kannst diese Ausrüstung tragen."
@@ -120,13 +120,13 @@ L.radar_charging = "Dein Radar lädt immer noch auf!"
 
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
-L.xfer_menutitle = "Credits transferieren"
-L.xfer_send = "Sende einen Credit"
+L.xfer_menutitle = "Ausrüstungspunkte transferieren"
+L.xfer_send = "Sende einen Ausrüstungspunkt"
 
-L.xfer_no_recip = "Der Empfänger ist ungültig, Credit-Transfer abgebrochen."
-L.xfer_no_credits = "Ungenügend Credits für einen Transfer."
-L.xfer_success = "Credit-Transfer an {player} abgeschlossen."
-L.xfer_received = "{player} gab dir {num} Credit(s)."
+L.xfer_no_recip = "Der Empfänger ist ungültig, Ausrüstungspunkt-Transfer abgebrochen."
+L.xfer_no_credits = "Ungenügend Ausrüstungspunkte für einen Transfer."
+L.xfer_success = "Ausrüstungspunkt-Transfer an {player} abgeschlossen."
+L.xfer_received = "{player} gab dir {num} Ausrüstungspunkt(e)."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
@@ -517,19 +517,19 @@ L.tip3 = "Detektive können Leichen untersuchen, um herauszufinden, wer ‘in de
 
 L.tip4 = "Niemand wird von deinem Tod erfahren, bis jemand deine Leiche gefunden und untersucht hat."
 
-L.tip5 = "Wenn ein Verräter einen Detektiv tötet, erlangen diese direkt einen Credit als Belohnung."
+L.tip5 = "Wenn ein Verräter einen Detektiv tötet, erlangen diese direkt einen Ausrüstungspunkt als Belohnung."
 
-L.tip6 = "Wenn ein Verräter von einem Detektiv getötet wird, erhalten alle Detektive einen Credit."
+L.tip6 = "Wenn ein Verräter von einem Detektiv getötet wird, erhalten alle Detektive einen Ausrüstungspunkt."
 
-L.tip7 = "Wenn Verräter einen guten Fortschritt beim Töten von Unschuldigen gemacht haben, erhalten sie als Belohnung einen Credit."
+L.tip7 = "Wenn Verräter einen guten Fortschritt beim Töten von Unschuldigen gemacht haben, erhalten sie als Belohnung einen Ausrüstungspunkt."
 
-L.tip8 = "Verräter und Detektive können unverbrauchte Credits von Leichen anderer Verräter oder Detektive aufsammeln."
+L.tip8 = "Verräter und Detektive können unverbrauchte Ausrüstungspunkte von Leichen anderer Verräter oder Detektive aufsammeln."
 
 L.tip9 = "Der Poltergeist kann physikalische Objekte in tödliche Projektile verwandeln. Jeder Schlag ist begleitet von einem Energieimpuls, der jeden in der Nähe verletzt."
 
 L.tip10 = "Halte als Verräter auf rote oder als Detektiv auf blaue Nachrichten in der oberen rechten Bildschirmecke Ausschau. Diese sind wichtig für dich."
 
-L.tip11 = "Behalte als Verräter oder Detektiv im Kopf, dass du Credits verdienst, wenn deine Partner gut arbeiten. Vergiss nicht diese auch auszugeben!"
+L.tip11 = "Behalte als Verräter oder Detektiv im Kopf, dass du Ausrüstungspunkte verdienst, wenn deine Partner gut arbeiten. Vergiss nicht diese auch auszugeben!"
 
 L.tip12 = "Der DNA-Scanner des Detektivs kann genutzt werden, um DNA-Proben von Waffen und Objekten zu erhalten. Diese können zum Scannen benutzt werden, um die Position des Spielers herauszufinden, der diese benutzt hat. Nützlich, wenn du eine Probe von einer Leiche oder einer entschärften Ladung C4 erhalten hast!"
 
@@ -545,7 +545,7 @@ L.tip17 = "Stehen die Unschuldigen alle zusammen und sind schwer einzeln zu erle
 
 L.tip18 = "Du kannst mit dem platzierten Radio als Verräter Sounds im Ausrüstungsmenü abspielen. Du kannst mehrere Sounds hintereinander in Warteschlange geben, indem du sie in der Reihenfolge anklickst, in der sie gespielt werden sollen."
 
-L.tip19 = "Wenn du als Detektiv Credits übrighast, kannst du deinen Entschärfer an einen glaubwürdigen Unschuldigen abgeben, dich um Wichtigeres kümmern und ihm den gefährlichen Job des Entschärfens überlassen."
+L.tip19 = "Wenn du als Detektiv Ausrüstungspunkte übrighast, kannst du deinen Entschärfer an einen glaubwürdigen Unschuldigen abgeben, dich um Wichtigeres kümmern und ihm den gefährlichen Job des Entschärfens überlassen."
 
 L.tip20 = "Das Fernglas der Detektive kann Leichen aus großer Distanz untersuchen. Schlechte Nachrichten für die Verräter, wenn die die Leiche als Lockmittel nutzen wollten. Allerdings ist der Detektiv währenddessen unbewaffnet und abgelenkt..."
 
@@ -806,7 +806,7 @@ L.aw_fnd3_title = "Geruch des Todes"
 L.aw_fnd3_text = "stolperte immer wieder über irgendwelche Leichen. {num} Mal diese Runde."
 
 L.aw_crd1_title = "Leichenfledderer"
-L.aw_crd1_text = "schnorrte sich {num} zurückgelassene Credits von Leichen zusammen."
+L.aw_crd1_text = "schnorrte sich {num} zurückgelassene Ausrüstungspunkte von Leichen zusammen."
 
 L.aw_tod1_title = "Teuer erkaufter Sieg"
 L.aw_tod1_text = "starb nur wenige Sekunden bevor sein Team die Runde gewann."
@@ -831,7 +831,7 @@ L.equip_tooltip_main = "Ausrüstungsmenü"
 L.equip_tooltip_radar = "Radar-Einstellungen"
 L.equip_tooltip_disguise = "Tarnungs-Einstellungen"
 L.equip_tooltip_radio = "Radio-Einstellungen"
-L.equip_tooltip_xfer = "Credits transferieren"
+L.equip_tooltip_xfer = "Ausrüstungspunkte transferieren"
 L.equip_tooltip_reroll = "Ausrüstung neu auswürfeln"
 
 L.confgrenade_name = "Discombobulator"
@@ -854,9 +854,9 @@ L.shop_default = "Standart-Shop verwenden"
 -- 2019-05-05
 L.reroll_name = "Reroll"
 L.reroll_menutitle = "Ausrüstung auswürfeln"
-L.reroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
+L.reroll_no_credits = "Du brauchst {amount} Ausrüstungspunkt(e) zum neu ausrollen!"
 L.reroll_button = "Reroll"
-L.reroll_help = "Verwende {amount} Credits, um ein neues zufälliges Set von Ausrüstungsgegenständen in deinem Shop zu erhalten!"
+L.reroll_help = "Verwende {amount} Ausrüstungspunkt(e), um ein neues zufälliges Set von Ausrüstungsgegenständen in deinem Shop zu erhalten!"
 
 -- 2019-05-06
 L.equip_not_alive = "Du kannst alle verfügbaren Items sehen, wenn du eine Rolle auf der rechten Seite auswählst. Denk dran, du kannst zu jeder Zeit Favoriten hinzufügen!"
@@ -975,7 +975,7 @@ L.menu_gameplay_description = "Verändere Lautstärke-, Barrierefreiheits- und G
 L.menu_addons_description = "Stelle lokale Addons nach deinem Geschmack ein"
 L.menu_legacy_description = "Einstellungen von alten TTT Erweiterungen, die zum neuen UI-System konvertiert werden sollten"
 L.menu_administration_description = "Allgemeine Einstellungen für HUDs, Ausrüstung und Shops"
-L.menu_equipment_description = "Stelle Credits, Limitierungen, Verfügbarkeiten und anderes ein"
+L.menu_equipment_description = "Stelle Ausrüstungspunkte, Limitierungen, Verfügbarkeiten und anderes ein"
 L.menu_shops_description = "Entferne oder füge Shops zu Rollen hinzu und definiere die Ausrüstung in diesen"
 
 L.submenu_guide_gameplay_title = "Gameplay"
@@ -1130,7 +1130,7 @@ L.hud_revival_time = "{time}s"
 L.door_destructible = "Tür ist zerstörbar ({health}HP)"
 
 -- 2020-05-28
---L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
+L.corpse_hint_inspect_limited = "Drücke [{usekey}] zum Untersuchen. [{walkkey} + {usekey}] um nur die Untersuchungs-UI anzuzeigen."
 
 -- 2020-06-04
 L.label_bind_disguiser = "Tarnung umschalten"
@@ -1288,7 +1288,7 @@ L.header_random_shop_value_administration = "Balance Einstellungen"
 L.shopeditor_name_random_shops = "Aktiviere Zufalls-Shop"
 L.shopeditor_desc_random_shops = [[Zufallsshops geben jedem Spieler ein begrenztes, zufällig ausgewähltes Set aller verfügbaren Ausrüstungen.
 Teamshops geben allen Spielern in einem Team zwangsweise dasselbe Set, anstelle von individuellen.
-Das Neuauswürfeln ermöglicht es dir, für Credits ein neues zufälliges Ausrüstungsset zu erhalten.]]
+Das Neuauswürfeln ermöglicht es dir, für Ausrüstungspunkte ein neues zufälliges Ausrüstungsset zu erhalten.]]
 L.shopeditor_name_random_shop_items = "Anzahl zufälliger Equipments"
 L.shopeditor_desc_random_shop_items = "Dies schließt Ausrüstungsgegenstände ein, die mit \"Immer im Shop verfügbar\" markiert sind. Wähle also eine ausreichend hohe Zahl, oder du bekommst nur diese."
 L.shopeditor_name_random_team_shops = "Aktiviere Team-Shops"
@@ -1311,7 +1311,7 @@ L.equipmenteditor_desc_team_limited = "Wenn aktiviert, kann die Ausrüstung nur 
 L.equipmenteditor_name_player_limited = "Spieler limitierte Anzahl"
 L.equipmenteditor_desc_player_limited = "Wenn aktiviert, kann die Ausrüstung nur einmal pro Spieler in der laufenden Runde gekauft werden."
 L.equipmenteditor_name_min_players = "Mindestanzahl von Spielern zum Kauf"
-L.equipmenteditor_name_credits = "Kosten in Credits"
+L.equipmenteditor_name_credits = "Kosten in Ausrüstungspunkten"
 
 -- 2021-06-08
 L.equip_not_added = "nicht enthalten"
@@ -1483,16 +1483,16 @@ L.header_roles_reward_credits = "Belohnungsausrüstungspunkte"
 L.help_roles_default_team = "Standardteam: {team}"
 L.help_roles_unselectable = "Diese Rolle ist nicht verteilbar. Sie wird im Rollenverteilungsprozess nicht berücksichtigt. In den meisten Fällen handelt es sich dabei um eine Rolle, die während der Runde manuell durch ein Ereignis wie eine Wiederbelebung, eine Sidekick-Deagle oder etwas Ähnliches zugewiesen wird."
 L.help_roles_selectable = "Diese Rolle ist verteilbar. Wenn alle Kriterien erfüllt sind, wird diese Rolle im Rollenverteilungsprozess berücksichtigt."
-L.help_roles_credits = "Credits werden verwendet, um Ausrüstung im Shop zu kaufen. Es ergibt meistens Sinn, sie nur für die Rollen zu vergeben, die Zugang zu Shops haben. Da es jedoch möglich ist, Credits in Leichen zu finden, kannst du Rollen auch Startcredits als Belohnung für ihren Mörder geben."
+L.help_roles_credits = "Ausrüstungspunkte werden verwendet, um Ausrüstung im Shop zu kaufen. Es ergibt meistens Sinn, sie nur für die Rollen zu vergeben, die Zugang zu Shops haben. Da es jedoch möglich ist, Ausrüstungspunkte in Leichen zu finden, kannst du Rollen auch Start-Ausrüstungspunkte als Belohnung für ihren Mörder geben."
 L.help_roles_selection_short = "Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle."
 L.help_roles_selection = [[
 Die Rollenverteilung pro Spieler definiert den Prozentsatz der Spieler, denen diese Rolle zugewiesen wird. Zum Beispiel, wenn der Wert auf '0,2' eingestellt ist, erhält jeder fünfte Spieler diese Rolle. Dies bedeutet auch, dass mindestens 5 Spieler benötigt werden, damit diese Rolle überhaupt verteilt wird.
 Beachte, dass all dies nur gilt, wenn die Rolle für den Verteilungsprozess berücksichtigt wird.
 
 Die oben genannte Rollenverteilung hat eine besondere Integration mit der unteren Spielerbegrenzung. Wenn die Rolle für die Verteilung in Betracht gezogen wird und der Mindestwert unter dem Wert liegt, der durch den Verteilungsfaktor angegeben wird, aber die Anzahl der Spieler gleich oder größer als die untere Begrenzung ist, kann immer noch ein einzelner Spieler diese Rolle erhalten. Der Verteilungsprozess funktioniert dann wie gewohnt für den zweiten Spieler.]]
-L.help_roles_award_info = "Einige Rollen (wenn in ihren Credit-Einstellungen aktiviert) erhalten Credits, wenn ein bestimmter Prozentsatz an Feinden gestorben ist. Die damit verbundenen Werte können hier angepasst werden."
-L.help_roles_award_pct = "Wenn dieser Prozentsatz der Feinde tot ist, erhalten bestimmte Rollen Credits als Belohnung."
-L.help_roles_award_repeat = "Ob die Creditvergabe mehrmals erfolgt. Zum Beispiel, wenn der Prozentsatz auf '0.25' eingestellt ist und diese Einstellung aktiviert ist, erhalten Spieler bei '25%', '50%' und '75%' toten Feinden jeweils Ausrüstungspunkte."
+L.help_roles_award_info = "Einige Rollen (wenn in ihren Ausrüstungspunkt-Einstellungen aktiviert) erhalten Ausrüstungspunkte, wenn ein bestimmter Prozentsatz an Feinden gestorben ist. Die damit verbundenen Werte können hier angepasst werden."
+L.help_roles_award_pct = "Wenn dieser Prozentsatz der Feinde tot ist, erhalten bestimmte Rollen Ausrüstungspunkte als Belohnung."
+L.help_roles_award_repeat = "Ob die Ausrüstungspunktevergabe mehrmals erfolgt. Zum Beispiel, wenn der Prozentsatz auf '0.25' eingestellt ist und diese Einstellung aktiviert ist, erhalten Spieler bei '25%', '50%' und '75%' toten Feinden jeweils Ausrüstungspunkte."
 L.help_roles_advanced_warning = "WARNUNG: Dies sind fortgeschrittene Einstellungen, die den Rollenverteilungsprozess komplett durcheinander bringen können. Bei Unsicherheit sollten alle Werte auf '0' belassen werden. Dieser Wert bedeutet, dass keine Grenzen gelten und die Rollenverteilung versuchen wird, so viele Rollen wie möglich zuzuweisen."
 L.help_roles_max_roles = [[
 Der Begriff "Rollen" umfasst hier sowohl die Basisrollen als auch die Unterrollen. Standardmäßig gibt es keine Begrenzung, wie viele verschiedene Rollen zugewiesen werden können. Es gibt jedoch zwei verschiedene Möglichkeiten, sie zu beschränken:
@@ -1537,19 +1537,19 @@ L.button_reset_models = "Spielermodelle Zurücksetzen"
 -- 2021-10-13
 L.help_roles_credits_award_kill = "Ein weiterer Weg Ausrüstungspunkte zu erhalten ist es wichtige Spieler mit 'öffentlichen Rollen' (wie beispielsweise dem Detektiv) zu töten. Wenn die Rolle des Mörders dies aktiviert hat, dann bekommt der Spieler die hier definierte Anzahl an Ausrüstungspunkten."
 L.help_roles_credits_award = [[
-Es gibt zwei verschiedene Möglichkeiten, um in Basis-TTT2 Credits zu erhalten:
+Es gibt zwei verschiedene Möglichkeiten, um in Basis-TTT2 Ausrüstungspunkte zu erhalten:
 
-1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhält das gesamte Team Credits.
-2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Rolle' wie einem Detektiv getötet hat, werden dem Mörder Credits verliehen.
+1. Wenn ein bestimmter Prozentsatz des feindlichen Teams tot ist, erhält das gesamte Team Ausrüstungspunkte.
+2. Wenn ein Spieler einen Spieler mit einer 'öffentlichen Rolle' wie einem Detektiv getötet hat, werden dem Mörder Ausrüstungspunkte verliehen.
 
-Bitte beachte, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Credits.
+Bitte beachte, dass dies immer noch für jede Rolle aktiviert/deaktiviert werden kann, selbst wenn das gesamte Team belohnt wird. Zum Beispiel, wenn das Team Unschuldige belohnt wird, aber die Rolle Unschuldiger diese Funktion deaktiviert hat, erhält nur der Detektiv seine Ausrüstungspunkte.
 Die Balanceeinstellungen für diese Funktion können in 'Administration' -> 'Allgemeine Rolleneinstellungen' festgelegt werden.]]
 L.help_detective_hats = [[
 Öffentliche Ordnungsrollen wie der Detektiv können Hüte tragen, um ihre Autorität zu zeigen. Sie verlieren diese Hüte bei ihrem Tod oder wenn der Kopf beschädigt wird.
 
 Einige Spielermodelle unterstützen standardmäßig keine Hüte. Dies kann in 'Administration' -> 'Spielermodell' geändert werden.]]
 
-L.label_roles_credits_award_kill = "Anzahl an Credits für die Tötung"
+L.label_roles_credits_award_kill = "Anzahl an Ausrüstungspunkten für die Tötung"
 L.label_roles_credits_dead_award = "Aktiviere Ausrüstungspunktebelohnung für gewissen Anteil an toten Gegnern"
 L.label_roles_credits_kill_award = "Aktiviere Ausrüstungspunktebelohnung für Mord an wichtigem Spieler"
 L.label_roles_min_karma = "Untere Grenze des Karmas, um die Verteilung in Betracht zu ziehen"
@@ -1687,8 +1687,8 @@ L.label_postround_dm = "Aktiviere Deathmatch nach Rundenende"
 L.label_session_limits_enabled = "Aktiviere Sitzungs Limitierungen"
 L.label_spectator_chat = "Aktiviere, dass Zuschauer mit jedem chatten können"
 L.label_lastwords_chatprint = "Gib die letzten Worte im Chat aus, wenn der Spieler getötet wird, während er tippt"
-L.label_identify_body_woconfirm = "Leichnam identifizieren, ohne die Schaltfläche 'Tod Bestätigen' drücken zu müssen."
---L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
+L.label_identify_body_woconfirm = "Leichnam identifizieren, ohne die Schaltfläche 'Tod Bestätigen' drücken zu müssen"
+L.label_announce_body_found = "Ankündigen, dass ein Leichnam gefunden wurde, wenn dieser bestätigt wird"
 L.label_confirm_killlist = "Die Todesliste des bestätigten Leichnams verkünden"
 L.label_dyingshot = "Beim Tod schießen, wenn Visier aktiv [experimentell]"
 L.label_armor_block_headshots = "Aktiviere das Blockieren von Kopfschüssen durch Rüstung"
@@ -1825,144 +1825,144 @@ L.label_voice_scaling_mode_log = "Logarithmisch"
 L.search_title = "Ergebnisse der Leichenuntersuchung - {player}"
 L.search_info = "Information"
 L.search_confirm = "Tod bestätigen"
---L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
---L.search_take_credits = "Take {credits} Credit(s)"
---L.search_confirm_forbidden = "Confirm forbidden"
---L.search_confirmed = "Death Confirmed"
---L.search_call = "Report Death"
---L.search_called = "Death Reported"
+L.search_confirm_credits = "Bestätigen (+{credits} Ausrüstungspunkt(e))"
+L.search_take_credits = "Nehme {credits} Ausrüstungspunkt(e)"
+L.search_confirm_forbidden = "Bestätigen verboten"
+L.search_confirmed = "Tod bestätigt"
+L.search_call = "Tod melden"
+L.search_called = "Tod gemeldet"
 
 --L.search_team_role_unknown = "???"
 
-L.search_words = "Etwas sagt dir, dass die letzten Worte dieser Person \"{lastwords}\" waren."
-L.search_armor = "Sie trug eine nicht-standardmäßige Körperrüstung."
-L.search_disguiser = "Sie trug ein Gerät, dass ihre Identität verstecken konnte."
-L.search_radar = "Sie trug eine Form eines Radars. Es funktioniert nicht mehr."
+L.search_words = "Etwas sagt dir, dass die letzten Worte des Opfers \"{lastwords}\" waren."
+L.search_armor = "Das Opfer trug eine nicht-standardmäßige Körperrüstung."
+L.search_disguiser = "Das Opfer trug ein Gerät, dass die Identität verstecken konnte."
+L.search_radar = "Das Opfer trug eine Form eines Radars. Es funktioniert nicht mehr."
 L.search_c4 = "In der Tasche war eine Notiz. Sie besagt, dass das Durchschneiden des Drahtes {num} die Bombe sicher entschärfen wird."
 
 L.search_dmg_crush = "Viele Knochen des Opfers sind gebrochen. Es scheint, als habe der Einschlag eines schweren Objekts zum Tode geführt."
-L.search_dmg_bullet = "Es ist offensichtlich, dass die Person erschossen wurde."
-L.search_dmg_fall = "Sie fiel in ihren Tod."
-L.search_dmg_boom = "Ihre Wunden und die versengte Kleidung weisen auf eine Explosion hin, die ihr ein Ende bereitet hat."
-L.search_dmg_club = "Der Körper ist ramponiert und verbeult. Die Person wurde mit Sicherheit zu Tode geprügelt."
+L.search_dmg_bullet = "Es ist offensichtlich, dass das Opfer erschossen wurde."
+L.search_dmg_fall = "Das Opfer fiel in den Tod."
+L.search_dmg_boom = "Die Wunden und die versengte Kleidung weisen auf eine Explosion hin, die das Ende bereitet hat."
+L.search_dmg_club = "Der Körper ist ramponiert und verbeult. Das Opfer wurde mit Sicherheit zu Tode geprügelt."
 L.search_dmg_drown = "Der Körper zeigt Anzeichen und Symptome von Ertrinken."
-L.search_dmg_stab = "Sie wurde stark geschnitten und hatte tiefe Wunden und verblutete schlussendlich."
+L.search_dmg_stab = "Das Opfer wurde stark geschnitten und hatte tiefe Wunden und verblutete schlussendlich."
 L.search_dmg_burn = "Es riecht hier nach gerösteten Terroristen..."
-L.search_dmg_teleport = "Es scheint, als sei ihre DNA durch Tachyonen verunstaltet worden!"
-L.search_dmg_car = "Als diese Person die Straße überquerte, wurde sie von einem rücksichtslosen Fahrer überrollt."
-L.search_dmg_other = "Du kannst keinen spezifischen Grund für den Tod dieser Person finden."
+L.search_dmg_teleport = "Es scheint, als wäre die DNA durch Tachyonen verunstaltet worden!"
+L.search_dmg_car = "Als das Opfer die Straße überquerte, wurde es von einem rücksichtslosen Fahrer überrollt."
+L.search_dmg_other = "Du kannst keinen spezifischen Grund für den Tod des Opfers finden."
 
---L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
---L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
---L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
---L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
---L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
---L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
---L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
---L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
---L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
---L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
---L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
---L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
---L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
---L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
---L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
---L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
---L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
---L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
---L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
---L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
---L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
---L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+L.search_floor_antlions = "Es gibt immer noch Ameisenlöwen überall am Körper. Der Boden muss mit ihnen bedeckt sein."
+L.search_floor_bloodyflesh = "Das Blut an diesem Körper sieht alt und eklig aus. Es sind sogar kleine Stücke blutigen Fleisches an den Schuhen kleben geblieben."
+L.search_floor_concrete = "Grauer Staub bedeckt die Schuhe und Knie. Es sieht so aus, als hätte der Tatort einen Betonboden."
+L.search_floor_dirt = "Es riecht erdig. Das kommt wahrscheinlich von dem Schmutz, der an den Schuhen des Opfers haftet."
+L.search_floor_eggshell = "Ekelhaft aussehende weiße Flecken bedecken den Körper des Opfers. Es sieht aus wie Eierschalen."
+L.search_floor_flesh = "Die Kleidung des Opfers fühlt sich irgendwie feucht an. Als ob es auf eine nasse Oberfläche gefallen wäre. Wie eine fleischige Oberfläche oder der sandige Boden eines Gewässers."
+L.search_floor_grate = "Die Haut des Opfers sieht aus wie ein Steak. Dicke Linien, die in einem Raster angeordnet sind, sind überall auf ihr sichtbar. Hat es auf einem Rost gelegen?"
+L.search_floor_alienflesh = "Außerirdisches Fleisch, denkst du? Klingt ziemlich abwegig. Aber dein Detektivhilfebuch führt es als mögliche Bodenoberfläche auf."
+L.search_floor_snow = "Auf den ersten Blick fühlt sich die Kleidung nur nass und eiskalt an. Aber sobald du den weißen Schaum an den Rändern siehst, verstehst du es. Es ist Schnee!"
+L.search_floor_plastic = "'Autsch, das muss wehtun.' Der Körper ist von Verbrennungen bedeckt. Sie sehen aus wie die, die entstehen, wenn man über eine Plastikoberfläche rutscht."
+L.search_floor_metal = "Zumindest kann das Opfer jetzt keine Tetanusinfektion bekommen, da es tot ist. Rost bedeckt die Wunden. Es ist wahrscheinlich auf einer metallischen Oberfläche gestorben."
+L.search_floor_sand = "Kleine grobe Steine kleben am kalten Körper des Opfers. Wie rauer Sand vom Strand. Er ist einfach überall!"
+L.search_floor_foliage = "Die Natur ist wunderbar. Die blutigen Wunden des Opfers sind mit genügend Laub bedeckt, dass sie fast versteckt sind."
+L.search_floor_computer = "Beep-boop. Der Körper ist von einer Computeroberfläche bedeckt! Wie sieht das aus, fragst du vielleicht? Nun, wer weiß!"
+L.search_floor_slosh = "Feucht und vielleicht sogar ein wenig schleimig. Der ganze Körper ist damit bedeckt und die Kleider sind durchnässt. Es stinkt!"
+L.search_floor_tile = "Kleine Scherben kleben an der Haut. Wie Scherben von Bodenfliesen, die beim Aufprall zerbrochen sind."
+L.search_floor_grass = "Es riecht nach frisch geschnittenem Gras. Der Geruch überwältigt fast den Geruch von Blut und Tod."
+L.search_floor_vent = "Du spürst einen frischen Luftstoß, wenn du den Körper berührst. Ist das Opfer in einem Lüftungsschacht gestorben und hat die Luft mitgenommen?"
+L.search_floor_wood = "Was gibt es Schöneres, als auf einem Holzboden zu sitzen und in Gedanken zu versinken? Zumindest nicht tot auf einem Holzboden liegen!"
+L.search_floor_default = "Das scheint so grundlegend, so normal. Fast standardmäßig. Du kannst nichts über die Art der Oberfläche sagen."
+L.search_floor_glass = "Der Körper ist mit vielen blutigen Schnitten bedeckt. In einigen von ihnen stecken Glasscherben, die ziemlich bedrohlich aussehen."
+L.search_floor_warpshield = "Ein Boden aus Warpshield? Ja, wir sind genauso verwirrt wie du es warst. Aber unsere Notizen erwähnen es eindeutig. Warpshield."
 
---L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
---L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
---L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+L.search_water_1 = "Die Schuhe des Opfers sind nass, aber der Rest scheint trocken zu sein. Es wurden wahrscheinlich getötet, während die Füße im Wasser waren."
+L.search_water_2 = "Die Schuhe und Hosen des Opfers sind durchnässt. Ist es durch Wasser gelaufen, bevor es getötet wurde?"
+L.search_water_3 = "Der gesamte Körper ist nass und geschwollen. Es ist wahrscheinlich gestorben, während es vollständig untergetaucht war."
 
-L.search_weapon = "Es scheint, als wurde ein(e) {weapon} benutzt, um sie zu töten."
+L.search_weapon = "Es scheint, als wurde ein(e) {weapon} zum töten benutzt."
 L.search_head = "Die tödliche Wunde war ein Kopfschuss. Keine Zeit, um zu schreien."
-L.search_time = "Sie wurde eine Weile bevor du die Untersuchung begonnen hast getötet."
+L.search_time = "Das Opfer wurde eine Weile bevor du die Untersuchung begonnen hast getötet."
 L.search_dna = "Erlange eine Probe der DNA des Mörders mit dem DNA-Scanner. Die DNA-Probe verfällt nach einer Weile."
 
 L.search_kills1 = "Du fandest eine Liste an Tötungen, die den Tod von {player} beweist."
 L.search_kills2 = "Du fandest eine Liste an Tötungen mit diesen Namen: {player}"
-L.search_eyes = "Mit deinen Detektiv-Fähigkeiten identifizierst du die letzte Person, die sie sah: {player}. Der Mörder oder ein Zufall?"
+L.search_eyes = "Mit deinen Detektiv-Fähigkeiten identifizierst du die Person, die vom Opfer zuletzt gesehen wurde: {player}. Der Mörder oder ein Zufall?"
 
---L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+L.search_credits = "Das Opfer hat {credits} Ausrüstungspunkt(e) in der Tasche. Eine Shopping-Rolle könnte sie an sich nehmen und sinnvoll verwenden. Behalte es im Auge!"
 
---L.search_kill_distance_point_blank = "It was a point blank attack."
---L.search_kill_distance_close = "The attack came from a short distance."
---L.search_kill_distance_far = "The victim was attacked from a long distance away."
+L.search_kill_distance_point_blank = "Es war ein Angriff aus nächster Nähe."
+L.search_kill_distance_close = "Der Angriff erfolgte aus kurzer Entfernung."
+L.search_kill_distance_far = "Das Opfer wurde aus großer Entfernung angegriffen."
 
---L.search_kill_from_front = "The victim was shot from the front."
---L.search_kill_from_back = "The victim was shot from behind."
---L.search_kill_from_side = "The victim was shot from the side."
+L.search_kill_from_front = "Das Opfer wurde von vorne erschossen."
+L.search_kill_from_back = "Das Opfer wurde von hinten erschossen."
+L.search_kill_from_side = "Das Opfer wurde von der Seite erschossen."
 
---L.search_hitgroup_head = "The projectile was found in their head."
---L.search_hitgroup_chest = "The projectile was found in their chest."
---L.search_hitgroup_stomach = "The projectile was found in their stomach."
---L.search_hitgroup_rightarm = "The projectile was found in their right arm."
---L.search_hitgroup_leftarm = "The projectile was found in their left arm."
---L.search_hitgroup_rightleg = "The projectile was found in their right leg."
---L.search_hitgroup_leftleg = "The projectile was found in their left leg."
---L.search_hitgroup_gear = "The projectile was found in their hip."
+L.search_hitgroup_head = "Das Projektil wurde im Kopf gefunden."
+L.search_hitgroup_chest = "Das Projektil wurde in der Brust gefunden."
+L.search_hitgroup_stomach = "Das Projektil wurde im Bauch gefunden."
+L.search_hitgroup_rightarm = "Das Projektil wurde im rechten Arm gefunden."
+L.search_hitgroup_leftarm = "Das Projektil wurde im linken Arm gefunden."
+L.search_hitgroup_rightleg = "Das Projektil wurde im rechten Bein gefunden."
+L.search_hitgroup_leftleg = "Das Projektil wurde im linken Bein gefunden."
+L.search_hitgroup_gear = "Das Projektil wurde in der Hüfte gefunden."
 
---L.search_policingrole_report_confirm = [[
---A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
---L.search_policingrole_confirm_disabled_1 = [[
---The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
---L.search_policingrole_confirm_disabled_2 = [[
---The corpse can only be confirmed by a public policing role. Report the body to let them know!
---You can see the information in here after they confirmed it.]]
---L.search_spec = [[
---As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+L.search_policingrole_report_confirm = [[
+Eine öffentliche Ordnungsrolle kann nur zu einer Leiche gerufen werden, nachdem der Tod des Opfers bestätigt wurde.]]
+L.search_policingrole_confirm_disabled_1 = [[
+Die Leiche kann nur von einer öffentlichen Ordnungsrolle bestätigt werden. Melde die Leiche, um sie zu informieren!]]
+L.search_policingrole_confirm_disabled_2 = [[
+Die Leiche kann nur von einer öffentlichen Ordnungsrolle bestätigt werden. Melde die Leiche, um sie darüber zu informieren!
+Du kannst die Informationen hier sehen, nachdem sie es bestätigt haben.]]
+L.search_spec = [[
+Als Zuschauer kannst du alle Informationen einer Leiche sehen, bist aber nicht in der Lage, mit der Benutzeroberfläche zu interagieren.]]
 
---L.search_title_words = "Victim's last words"
---L.search_title_c4 = "Defusion mishap"
---L.search_title_dmg_crush = "Crush damage ({amount} HP)"
---L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
---L.search_title_dmg_fall = "Fall damage ({amount} HP)"
---L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
---L.search_title_dmg_club = "Club damage ({amount} HP)"
---L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
---L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
---L.search_title_dmg_burn = "Burning damage ({amount} HP)"
---L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
---L.search_title_dmg_car = "Car accident ({amount} HP)"
---L.search_title_dmg_other = "Unknown damage ({amount} HP)"
---L.search_title_time = "Death time"
---L.search_title_dna = "DNA sample decay"
---L.search_title_kills = "The victim's kill list"
---L.search_title_eyes = "The killer's shadow"
---L.search_title_floor = "Floor of the crime scene"
---L.search_title_credits = "{credits} Equipment credit(s)"
---L.search_title_water = "Water level {level}"
---L.search_title_policingrole_report_confirm = "Confirm to report death"
---L.search_title_policingrole_confirm_disabled = "Report corpse"
---L.search_title_spectator = "You are a spectator"
+L.search_title_words = "Die letzten Worte des Opfers"
+L.search_title_c4 = "Missgeschick bei der Entschärfung"
+L.search_title_dmg_crush = "Quetschschaden ({amount} HP)"
+L.search_title_dmg_bullet = "Kugelschaden ({amount} HP)"
+L.search_title_dmg_fall = "Fallschaden ({amount} HP)"
+L.search_title_dmg_boom = "Explosionsschaden ({amount} HP)"
+L.search_title_dmg_club = "Schlagstockschaden ({amount} HP)"
+L.search_title_dmg_drown = "Ertrinkungsschaden ({amount} HP)"
+L.search_title_dmg_stab = "Stichschaden ({amount} HP)"
+L.search_title_dmg_burn = "Brandschaden ({amount} HP)"
+L.search_title_dmg_teleport = "Teleportationsschaden ({amount} HP)"
+L.search_title_dmg_car = "Autounfall ({amount} HP)"
+L.search_title_dmg_other = "Unbekannter Schaden ({amount} HP)"
+L.search_title_time = "Todeszeit"
+L.search_title_dna = "Zerfall von DNA-Proben"
+L.search_title_kills = "Die Tötungsliste des Opfers"
+L.search_title_eyes = "Der Schatten des Mörders"
+L.search_title_floor = "Der Boden des Tatorts"
+L.search_title_credits = "{credits} Ausrüstungspunkt(e)"
+L.search_title_water = "Wasserpegel {level}"
+L.search_title_policingrole_report_confirm = "Bestätige um den Tod zu melden"
+L.search_title_policingrole_confirm_disabled = "Leiche melden"
+L.search_title_spectator = "Du bist ein Zuschauer"
 
-L.target_credits_on_confirm = "Bestätige Toten, um ungenutzte Credits zu erhalten"
---L.target_credits_on_search = "Search to receive unspent credits"
---L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
---L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
---L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
---L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+L.target_credits_on_confirm = "Bestätige Toten, um ungenutzte Ausrüstungspunkte zu erhalten"
+L.target_credits_on_search = "Untersuchen, um ungenutzte Ausrüstungspunkte zu erhalten"
+L.corpse_hint_no_inspect_details = "Nur öffentliche Ordnungsrollen können Informationen über diese Leiche finden."
+L.corpse_hint_inspect_limited_details = "Nur öffentliche Ordnungsrollen können diesen Körper bestätigen."
+L.corpse_hint_spectator = "Drücke [{usekey}] um die Untersuchungs-UI anzuzeigen."
+L.corpse_hint_public_policing_searched = "Drücke [{usekey}] um die Untersuchungsergebnisse einer öffentlichen Ordnungsrolle einzusehen"
 
---L.label_inspect_confirm_mode = "Select body search mode"
---L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
---L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
---L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
---L.help_inspect_confirm_mode = [[
---There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
---
---mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
---
---mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
---
---mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+L.label_inspect_confirm_mode = "Wähle den Körfper-Untersuchungsmodus"
+L.choice_inspect_confirm_mode_0 = "Modus 0: standard TTT"
+L.choice_inspect_confirm_mode_1 = "Modus 1: limitiertes Bestätigen"
+L.choice_inspect_confirm_mode_2 = "Modus 2: limitiertes Untersuchen"
+L.help_inspect_confirm_mode = [[
+Es gibt drei verschiedene Körper-Untersuchungs-/Bestätigungsmodi in diesem Spielmodus. Die Auswahl dieses Modus hat einen großen Einfluss auf die Wichtigkeit von öffentlichen Ordnungsrollen wie den Detektiv.
+
+Modus 0: Dieser Modus ist der standard TTT-Modus. Jeder kann Körper untersuchen und bestätigen. Um einen Körper zu melden, oder die Ausrüstungspunkte zu nehmen, muss der Körper zuerst bestätigt werden. Dies macht es etwas schwerer für Shopping-Rollen heimlich an die Ausrüstungspunkte zu kommen. Jedoch müssen auch Unschuldige den Körper zuerst melden, bevor sie eine öffentliche Ordnungsrolle rufen können.
+
+Modus 1: Dieser Modus erhöht die Wichtigkeit von öffentlichen Ordnungsrollen, indem die Bestätigungsoption auf diese limitiert wird. Das bedeutet auch, dass das Nehmen von Ausrüstungspunkten und das Melden von Körpern nun vor dem Bestätigen möglich ist. Jeder ist in der Lage Leichen zu untersuchen und Informationen dadurch zu gewinnen, diese können aber nicht an alle verkündet werden.
+
+Modus 2: Diser Modus ist noch etwas strikter als Modus 1. In diesem Modus wird die Untersuchungsoption für normale Spieler ebenfalls entfernt. Das bedeutet, dass das melden von Leichen an eine öffentliche Ordnungsrolle nun der einzige Weg ist, um an Informationen der Leiche zu kommen.]]
 
 -- 2023-10-19
---L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+L.label_grenade_trajectory_ui = "Anzeige der Granatenflugbahn"
 
 -- 2023-10-23
 L.label_hud_pulsate_health_enable = "Pulsieren der Lebensleiste bei weniger als 25% Gesundheit"
@@ -2027,167 +2027,167 @@ L.crowbar_help_primary = "Zuschlagen"
 L.crowbar_help_secondary = "Spieler schubsen"
 
 -- 2023-10-27
---L.help_HUD_enable_description = [[
---Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
---L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
---L.label_HUD_enable_box_blur = "Enable UI box background blur"
+L.help_HUD_enable_description = [[
+Manche HUD-Elemente, wie der Tastenhelfer oder die Seitenleiste, zeigen detailliertere Informationen an, wenn das Scoreboard offen ist. Dies kann deaktiviert werden, um Unordnung zu reduzieren.]]
+L.label_HUD_enable_description = "Aktiviere Beschreibungen, wenn das Scoreboard offen ist"
+L.label_HUD_enable_box_blur = "Aktiviere Hintergrund-Verschwommenheit der UI-Box"
 
 -- 2023-10-28
---L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
---L.header_soundeffect_settings = "Sound Effects"
---L.header_voiceandvolume_settings = "Voice & Volume Settings"
+L.submenu_gameplay_voiceandvolume_title = "Sprache & Lautstärke"
+L.header_soundeffect_settings = "Sound Effekte"
+L.header_voiceandvolume_settings = "Sprache- & Lautstärkeeinstellungen"
 
 -- 2023-11-06
---L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
---L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
---L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+L.drop_reserve_prevented = "Etwas hindert dich daran, deine Reserve-Munition abzulegen."
+L.drop_no_reserve = "Nicht genügend Munition in deinem Vorrat, um als Munitionskiste abgelegt zu werden."
+L.drop_no_room_ammo = "Hier ist kein Platz, um deine Munition fallen zu lassen!"
 
 -- 2023-11-14
---L.hat_deerstalker_name = "Detective's Hat"
+L.hat_deerstalker_name = "Detektivshut"
 
 -- 2023-11-16
---L.help_prop_spec_dash = [[
---Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
---
---This variable is a multiplier of the push force.]]
---L.label_spec_prop_dash = "Dash force multiplier"
---L.label_keyhelper_possession_dash = "prop: dash in view direction"
---L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
---L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+L.help_prop_spec_dash = [[
+Propspec-Schübe sind Bewegungen in Richtung des Zielvektors. Sie können eine höhere Kraft als die normale Bewegung haben. Eine höhere Kraft bedeutet auch einen höheren Verbrauch des Basiswerts.
+
+Diese Variable ist ein Multiplikator der Push-Force.]]
+L.label_spec_prop_dash = "Schubkraft Multiplikator"
+L.label_keyhelper_possession_dash = "prop: Schub in Blickrichtung"
+L.label_keyhelper_weapon_drop = "wenn möglich, ausgewählte Waffe ablegen"
+L.label_keyhelper_ammo_drop = "Munition der ausgewählten Waffe aus dem Magazin ablegen"
 
 -- 2023-12-07
---L.c4_help_primary = "Place the C4"
---L.c4_help_secondary = "Stick to surface"
+L.c4_help_primary = "C4 Platzieren"
+L.c4_help_secondary = "An Oberfläche kleben"
 
 -- 2023-12-11
---L.magneto_help_primary = "Push entity"
---L.magneto_help_secondary = "Pull / pickup entity"
---L.knife_help_primary = "Stab"
---L.knife_help_secondary = "Throw knife"
---L.polter_help_primary = "Fire thumper"
---L.polter_help_secondary = "Charge long range shot"
+L.magneto_help_primary = "Entität wegschieben"
+L.magneto_help_secondary = "Entität heranziehen / aufheben"
+L.knife_help_primary = "Stechen"
+L.knife_help_secondary = "Messer werfen"
+L.polter_help_primary = "Feuere Klopfer"
+L.polter_help_secondary = "Langstreckenschuss aufladen"
 
 -- 2023-12-12
---L.newton_help_primary = "Knockback shot"
---L.newton_help_secondary = "Charged knockback shot"
+L.newton_help_primary = "Rückstoßschuss"
+L.newton_help_secondary = "Aufgeladener Rückstoßschuss"
 
 -- 2023-12-13
---L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
---L.newton_force = "FORCE"
---L.defuser_help_primary = "Defuse targeted C4"
---L.radio_help_primary = "Place the Radio"
---L.radio_help_secondary = "Stick to surface"
---L.hstation_help_primary = "Place the Health Station"
---L.flaregun_help_primary = "Burn body/entity"
+L.vis_no_pickup = "Nur öffentliche Ordnungsrollen können den Visualisierer aufheben"
+L.newton_force = "KRAFT"
+L.defuser_help_primary = "Ausgewähltes C4 entschärfen"
+L.radio_help_primary = "Radio platzieren"
+L.radio_help_secondary = "An Oberfläche kleben"
+L.hstation_help_primary = "Gesundheitsstation platzieren"
+L.flaregun_help_primary = "Körper/Entität verbrennen"
 
 -- 2023-12-14
---L.marker_vision_owner = "Owner: {owner}"
---L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_owner = "Besitzer: {owner}"
+L.marker_vision_distance = "Distanz: {distance}m"
+L.marker_vision_distance_collapsed = "{distance}m"
 
---L.c4_marker_vision_time = "Detonation time: {time}"
---L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_time = "Explosionszeit: {time}"
+L.c4_marker_vision_collapsed = "{time} / {distance}m"
 
---L.c4_marker_vision_safe_zone = "Bomb safe zone"
---L.c4_marker_vision_damage_zone = "Bomb damage zone"
---L.c4_marker_vision_kill_zone = "Bomb kill zone"
+L.c4_marker_vision_safe_zone = "Bombensicherheitszone"
+L.c4_marker_vision_damage_zone = "Bombenschadenszone"
+L.c4_marker_vision_kill_zone = "Bombentötungszone"
 
---L.beacon_marker_vision_player = "Tracked Player"
---L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
-
--- 2023-12-18
---L.beacon_help_pri = "Throw Beacon on the ground"
---L.beacon_help_sec = "Stick Beacon to surface"
---L.beacon_name = "Beacon"
---L.beacon_desc = [[
---Broadcasts player locations to everyone in a sphere around this beacon.
---
---Use to keep track of locations on the map that are hard to see.]]
-
---L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
---L.msg_beacon_death = "A player died in close proximity to one of your beacons."
-
---L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
---L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+L.beacon_marker_vision_player = "Verfolgter Spieler"
+L.beacon_marker_vision_player_tracked = "Dieser Spieler wird von einem Peilsender verfolgt."
 
 -- 2023-12-18
---L.entity_pickup_owner_only = "Only the owner can pick this up"
+L.beacon_help_pri = "Peilsender auf den Boden werfen"
+L.beacon_help_sec = "Peilsender an Oberfläche kleben"
+L.beacon_name = "Peilsender"
+L.beacon_desc = [[
+Überträgt die Spielerpositionen an alle in einer Kugel um diesen Peilsender herum.
+
+Verwenden, um Orte auf der Karte im Auge zu behalten, die schwer zu sehen sind.]]
+
+L.msg_beacon_destroyed = "Einer deiner Peilsender wurde zerstört!"
+L.msg_beacon_death = "Ein Spieler ist in unmittelbarer Nähe eines deiner Peilsender gestorben."
+
+L.beacon_pickup_disabled = "Nur der Besitzer des Peilsenders kann ihn aufheben"
+L.beacon_short_desc = "Peilsender werden von öffentlichen Ordnungsrollen verwendet, um lokale Wallhacks um sie herum hinzuzufügen"
+
+-- 2023-12-18
+L.entity_pickup_owner_only = "Nur der Besitzer kann dies aufheben"
 
 -- 2023-12-18
 L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
---L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+L.body_confirm_more = "{finder} bestätigte {count} Tode von: {victims}."
 
 -- 2023-12-19
---L.builtin_marker = "Built-in."
---L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
---L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
---L.header_equipment_info = "Equipment information"
+L.builtin_marker = "Integriert."
+L.equipmenteditor_desc_builtin = "Diese Ausrüstung ist integriert, sie kommt mit TTT2!"
+L.help_roles_builtin = "Diese Rolle ist integriert, sie kommt mit TTT2!"
+L.header_equipment_info = "Ausrüstungsinformationen"
 
 
 -- 2023-12-24
---L.submenu_gameplay_accessibility_title = "Accessibility"
+L.submenu_gameplay_accessibility_title = "Barrierefreiheit"
 
---L.header_accessibility_settings = "Accessibility Settings"
+L.header_accessibility_settings = "Einstellungen für Barrierefreiheit"
 
---L.label_enable_dynamic_fov = "Enable dynamic FOV change"
---L.label_enable_bobbing = "Enable view bobbing"
---L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+L.label_enable_dynamic_fov = "Aktiviere das dynamische Sichtfeld"
+L.label_enable_bobbing = "Aktiviere 'Sichtwackeln'"
+L.label_enable_bobbing_strafe = "Aktiviere 'Sichtwackeln' beim seitwärts gehen"
 
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
---L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+L.help_enable_dynamic_fov = "Das dynamische Sichtfeld wird je nach Geschwindigkeit des Spielers angewendet. Wenn ein Spieler zum Beispiel rennt, wird das Sichtfeld vergrößert, um die Geschwindigkeit zu visualisieren."
+L.help_enable_bobbing_strafe = "'View bobbing' ist das leichte Kamerawackeln beim Gehen, Schwimmen oder Fallen."
 -- 2023-12-20
---L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
---For a shotgun, this would affect each pellet.
---For a rifle, this would affect just the bullet.
---For the poltergeist, this would affect each "thump" and the final explosion.
---
---0.5 = Deal half the amount of damage.
---2 = Deal twice the amount of damage.
---
---Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+L.equipmenteditor_desc_damage_scaling = [[Multipliziert den Basisschadenswert der Waffe um diesen Faktor.
+Für eine Schrotflinte würde sich dies auf jedes Geschoss auswirken.
+Für ein Gewehr würde sich dies nur auf die Kugel auswirken.
+Für den Poltergeist würde sich dies auf jeden Stoß und die finale Explosion auswirken.
+
+0.5 = Halbiert den zugefügten Schaden.
+2 = Verdoppelt den zugefügten Schaden.
+
+Notiz: Einige Waffen verwenden diesen Wert möglicherweise nicht, was dazu führt, dass dieser Modifikator unwirksam ist.]]
 
 -- 2023-12-24
---L.binoc_help_reload = "Clear target."
---L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
---L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+L.binoc_help_reload = "Ziel löschen."
+L.cl_sb_row_sresult_direct_conf = "Direkte Bestätigung"
+L.cl_sb_row_sresult_pub_police = "Bestätigung einer öffentlichen Ordnungsrolle"
 
 -- 2024-01-05
---L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
---L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
---L.label_crosshair_mode = "Crosshair mode"
---L.label_crosshair_static_length = "Enable static crosshair line length"
+L.label_crosshair_thickness_outline_enable = "Aktiviere Umrandung des Fadenkreuz"
+L.label_crosshair_outline_high_contrast = "Aktiviere hohen Kontrast der Umrandung"
+L.label_crosshair_mode = "Fadenkreuzmodus"
+L.label_crosshair_static_length = "Aktiviere konstante Länge der Fadenkreuzlinien"
 
---L.choice_crosshair_mode_0 = "Lines and dot"
---L.choice_crosshair_mode_1 = "Lines only"
---L.choice_crosshair_mode_2 = "Dot only"
+L.choice_crosshair_mode_0 = "Linien und Punkt"
+L.choice_crosshair_mode_1 = "Nur Linien"
+L.choice_crosshair_mode_2 = "Nur Punkt"
 
---L.help_crosshair_scale_enable = [[
---Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
---
---If the line length is kept static, only the gap scales with cone changes.]]
+L.help_crosshair_scale_enable = [[
+Das dynamische Fadenkreuz ermöglicht das Skalieren des Fadenkreuzes je nach Streukegel der Waffe. Der Streukegel wird von der Basisgenauigkeit der Waffe beeinflusst, multipliziert mit externen Faktoren wie Springen und Sprinten.
 
---L.header_weapon_settings = "Weapon Settings"
+Wenn die Linienlänge konstant bleibt, skaliert nur der Abstand mit den Streukegeländerungen.]]
+
+L.header_weapon_settings = "Waffeneinstellungen"
 
 
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
+L.marker_vision_visible_for_0 = "Für dich sichtbar"
+L.marker_vision_visible_for_1 = "Für deine Rolle sichtbar"
+L.marker_vision_visible_for_2 = "Für dein Team sichtbar"
+L.marker_vision_visible_for_3 = "Für jeden sichtbar"
 
 -- 2024-01-27
 L.decoy_help_primary = "Platziere die Attrappe"
---L.decoy_help_secondary = "Stick Decoy to surface"
+L.decoy_help_secondary = "Attrappe an Oberfläche kleben"
 
 -- 2024-01-24
---L.grenade_fuse = "FUSE"
+L.grenade_fuse = "LUNTE"
 
 -- 2024-01-25
---L.header_roles_magnetostick = "Magneto Stick"
---L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
---L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
---L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+L.header_roles_magnetostick = "Magneto-Stick"
+L.label_roles_ragdoll_pinning = "Aktivere das anheften von Ragdolls"
+L.magneto_stick_help_carry_rag_pin = "Ragdoll anheften"
+L.magneto_stick_help_carry_rag_drop = "Ragdoll fallenlassen"
+L.magneto_stick_help_carry_prop_release = "Prop freilassen"
+L.magneto_stick_help_carry_prop_drop = "Prop fallenlassen"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."

@@ -47,6 +47,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 - `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
 - Added weapon pickup sounds when picking up weapons manually (by @TimGoll)
+- Added further missing German translation (by @NickCloudAT)
 
 ### Changed
 
@@ -93,7 +94,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Fixed database now properly saving boolean `false` values
+- Fixed database now properly saving boolean `false` values (by @ZenBre4ker)
 - Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)
 - The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)
 - Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)
@@ -107,8 +108,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)
 - Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)
 - Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)
-- Fixed door health displaying as a humongous string of decimals
-- Fixed the initial lag-spike when opening the shop for the first time on a map (by @TimGoll)
+- Fixed door health displaying as a humongous string of decimals (by @EntranceJew)
+- Fixed weapons that use the wrong weapon base from throwing errors in the F1 menu (by @TimGoll)
 
 ### Removed
 
