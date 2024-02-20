@@ -66,7 +66,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
             { title = TryT("slot_weapon_heavy"), value = WEAPON_HEAVY },
             { title = TryT("slot_weapon_nade"), value = WEAPON_NADE },
             { title = TryT("slot_weapon_carry"), value = WEAPON_CARRY },
-            { title = TryT("slot_weapon_unarmed"), value = WEAPON_UNARMED },
             { title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL },
             { title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA },
             { title = TryT("slot_weapon_class"), value = WEAPON_CLASS },
