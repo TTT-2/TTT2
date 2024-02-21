@@ -6,6 +6,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
+
+### Added
+
 - Added migrations between TTT2-versions, some breaking changes could now be migrated instead
 - Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll)
   - C4
