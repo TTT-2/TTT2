@@ -408,6 +408,11 @@ if SERVER then
         return true
     end
 
+    ---
+    -- Gets the current markerOwner
+    -- @note Override if not the originator should own the marker
+    -- @return Player|Role The Player or role be marker owner
+    -- @realm server
     function ENT:GetMarkerOwner()
         return self:GetOriginator()
     end
@@ -417,27 +422,46 @@ if CLIENT then
     local TryT = LANG.TryTranslation
     local ParT = LANG.GetParamTranslation
 
-    function ENT:ShouldDrawMarkerVision()
+    ---
+    -- Override to handle activation of marker overlay
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @realm client
+    function ENT:ShouldDrawMarkerVision(mvData)
         return true
     end
 
+    ---
+    -- Override to customize markervision on drawcalls
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @realm client
     function ENT:CustomizeMarkerVision(mvData) end
 
+    ---
+    -- Override if not the markerIconMaterial should be used
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @return table Containing the icon Materials to show
+    -- @realm client
     function ENT:GetMarkerVisionIcons(mvData)
         return { self.markerIconMaterial }
     end
 
+    ---
+    -- Override if not the default color for the icons should be used
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @return table Containing the icon colors to show
+    -- @realm client
     function ENT:GetMarkerVisionIconColors(mvData)
         return { COLOR_WHITE }
     end
 
+    -- Handle markervision for ttt_base_placeables
     hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBasePlaceable", function(mvData)
         local ent = mvData:GetEntity()
         local mvObject = mvData:GetMarkerVisionObject()
 
         if
             not mvObject:IsObjectFor(ent, "ttt_base_placeable_owner")
-            or not ent:ShouldDrawMarkerVision()
+            or not ent:ShouldDrawMarkerVision(mvData)
         then
             return
         end
