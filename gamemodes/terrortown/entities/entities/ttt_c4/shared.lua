@@ -37,7 +37,7 @@ ENT.Avoidable = true
 
 ENT.isDestructible = false
 
-ENT.iconMaterial = Material("vgui/ttt/marker_vision/c4")
+ENT.markerIconMaterial = Material("vgui/ttt/marker_vision/c4")
 ENT.markerVisibility = VISIBLE_FOR_TEAM
 
 ---
@@ -871,7 +871,7 @@ else -- CLIENT
         tData:AddDescriptionLine(TryT("c4_short_desc"))
     end)
 
-    function ENT:GetMarkerVisionColors(mvData)
+    function ENT:GetMarkerVisionIconColors(mvData)
         local color = COLOR_WHITE
 
         if mvData:GetEntityDistance() > self:GetRadius() then

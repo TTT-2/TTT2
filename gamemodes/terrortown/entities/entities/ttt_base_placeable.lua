@@ -15,7 +15,7 @@ ENT.isDestructible = true
 ENT.pickupWeaponClass = nil
 
 -- MarkerVision related
-ENT.iconMaterial = Material("vgui/ttt/tid/tid_big_role_not_known")
+ENT.markerIconMaterial = Material("vgui/ttt/tid/tid_big_role_not_known")
 ENT.markerVisibility = VISIBLE_FOR_PLAYER
 
 ---
@@ -420,10 +420,10 @@ if CLIENT then
     function ENT:CustomizeMarkerVision(mvData) end
 
     function ENT:GetMarkerVisionIcons(mvData)
-        return { self.iconMaterial }
+        return { self.markerIconMaterial }
     end
 
-    function ENT:GetMarkerVisionColors(mvData)
+    function ENT:GetMarkerVisionIconColors(mvData)
         return { COLOR_WHITE }
     end
 
@@ -447,7 +447,7 @@ if CLIENT then
         mvData:SetTitle(TryT(ent.PrintName))
 
         local icons = ent:GetMarkerVisionIcons(mvData)
-        local colors = ent:GetMarkerVisionColors(mvData)
+        local colors = ent:GetMarkerVisionIconColors(mvData)
         local size = math.min(#icons, #colors)
 
         for i = 1, size do

@@ -12,7 +12,7 @@ DEFINE_BASECLASS("ttt_base_placeable")
 if CLIENT then
     ENT.Icon = "vgui/ttt/icon_health"
     ENT.PrintName = "hstation_name"
-    ENT.iconMaterial = Material("vgui/ttt/icon_health")
+    ENT.markerIconMaterial = Material("vgui/ttt/icon_health")
 end
 
 ENT.Base = "ttt_base_placeable"

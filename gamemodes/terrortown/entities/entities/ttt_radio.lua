@@ -27,7 +27,7 @@ ENT.pickupWeaponClass = "weapon_ttt_radio"
 ENT.SoundLimit = 5
 ENT.SoundDelay = 0.5
 
-ENT.iconMaterial = Material("vgui/ttt/marker_vision/radio")
+ENT.markerIconMaterial = Material("vgui/ttt/marker_vision/radio")
 ENT.markerVisibility = VISIBLE_FOR_TEAM
 
 ---
@@ -303,8 +303,6 @@ function ENT:Think()
 end
 
 if CLIENT then
-    local materialRadio = Material("vgui/ttt/marker_vision/radio")
-
     local TryT = LANG.TryTranslation
     local ParT = LANG.GetParamTranslation
 

@@ -25,7 +25,7 @@ ENT.pickupWeaponClass = "weapon_ttt_beacon"
 ENT.timeLastBeep = CurTime()
 ENT.lastPlysFound = {}
 
-ENT.iconMaterial = Material("vgui/ttt/marker_vision/beacon")
+ENT.markerIconMaterial = Material("vgui/ttt/marker_vision/beacon")
 ENT.markerVisibility = VISIBLE_FOR_PLAYER
 
 local beaconDetectionRange = 135
