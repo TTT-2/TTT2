@@ -66,7 +66,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
             { title = TryT("slot_weapon_heavy"), value = WEAPON_HEAVY },
             { title = TryT("slot_weapon_nade"), value = WEAPON_NADE },
             { title = TryT("slot_weapon_carry"), value = WEAPON_CARRY },
-            { title = TryT("slot_weapon_unarmed"), value = WEAPON_UNARMED },
             { title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL },
             { title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA },
             { title = TryT("slot_weapon_class"), value = WEAPON_CLASS },
@@ -186,7 +185,16 @@ function CLGAMEMODESUBMENU:Populate(parent)
     end
 
     -- now add custom equipment settings
-    equipment:AddToSettingsMenu(parent)
+    if isfunction(equipment.AddToSettingsMenu) then
+        equipment:AddToSettingsMenu(parent)
+    else
+        Dev(
+            1,
+            "Weapon '"
+                .. equipment:GetClass()
+                .. "' doesn't use the weapon_tttbase and cannot be added to the settings panel."
+        )
+    end
 
     -- stylua: ignore
     hook.Run("TTT2OnEquipmentAddToSettingsMenu", equipment, parent)
