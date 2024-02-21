@@ -123,8 +123,8 @@ end
 function shop.SetEquipmentTeamBought(ply, equipmentName)
     local team = ply:GetTeam()
 
-    if team and team ~= TEAM_NONE and not TEAMS[team].alone then
-        return false
+    if not team or team == TEAM_NONE or TEAMS[team].alone then
+        return
     end
 
     shop.teamBuyTable[team] = shop.teamBuyTable[team] or {}
@@ -135,8 +135,6 @@ function shop.SetEquipmentTeamBought(ply, equipmentName)
         net.WriteString(equipmentName)
         net.Send(GetTeamFilter(team))
     end
-
-    return true
 end
 
 ---

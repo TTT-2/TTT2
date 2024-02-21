@@ -98,14 +98,4 @@ if CLIENT then
 
         return BaseClass.Initialize(self)
     end
-
-    ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("lastinv")
-        end
-    end
 end

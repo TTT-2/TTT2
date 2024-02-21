@@ -315,6 +315,9 @@ function GM:Initialize()
     Dev(1, "Trouble In Terrorist Town 2 gamemode initializing...")
     ShowVersion()
 
+    -- Migrate all changes of TTT2
+    migrations.Apply()
+
     ---
     -- @realm shared
     -- stylua: ignore

@@ -150,8 +150,6 @@ local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
 
-local fallback_mat = Material("vgui/ttt/missing_equip_icon")
-
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
@@ -1194,40 +1192,6 @@ function GM:OnContextMenuOpen()
         RunConsoleCommand("ttt_cl_traitorpopup")
     end
 end
-
----
--- Caches the material or model
--- @param table item
--- @realm client
-function TTT2CacheEquipMaterials(item)
-    item.isValidEquipment = true
-
-    if item.material then
-        item.iconMaterial = Material(item.material)
-
-        if item.iconMaterial:IsError() then
-            -- setting fallback error material
-            item.iconMaterial = fallback_mat
-        end
-    elseif item.model then
-        -- do not use fallback mat and use model instead
-        item.itemModel = item.model
-    end
-
-    --if there is no sensible material and model, the item should probably not be editable in the equipment Editor
-    if item.material == "vgui/ttt/icon_id" and item.model == "models/weapons/w_bugbait.mdl" then
-        item.isValidEquipment = false
-    end
-end
-
--- Preload materials for the shop
-hook.Add("PostInitPostEntity", "TTT2CacheEquipMaterials", function()
-    local itms = ShopEditor.GetEquipmentForRoleAll()
-
-    for _, item in pairs(itms) do
-        TTT2CacheEquipMaterials(item)
-    end
-end)
 
 -- Closes menu when roles are selected
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()

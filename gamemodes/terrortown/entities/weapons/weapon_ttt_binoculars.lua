@@ -268,16 +268,6 @@ if CLIENT then
     local cv_thickness
 
     ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("lastinv")
-        end
-    end
-
-    ---
     -- @ignore
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")

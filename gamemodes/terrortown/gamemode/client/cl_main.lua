@@ -161,6 +161,9 @@ end
 function GM:Initialize()
     Dev(1, "TTT2 Client initializing...")
 
+    -- Migrate all changes of TTT2
+    migrations.Apply()
+
     ---
     -- @realm client
     -- stylua: ignore
@@ -204,6 +207,8 @@ function GM:Initialize()
     vskin.UpdatedVSkin(skinName, skinName)
 
     keyhelp.InitializeBasicKeys()
+
+    ShopEditor.BuildValidEquipmentCache()
 
     ---
     -- @realm shared
@@ -386,6 +391,8 @@ function GM:OnReloaded()
     vskin.UpdatedVSkin(skinName, skinName)
 
     keyhelp.InitializeBasicKeys()
+
+    ShopEditor.BuildValidEquipmentCache()
 
     LocalPlayer():SetSettingOnServer(
         "enable_dynamic_fov",

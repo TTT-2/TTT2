@@ -187,7 +187,7 @@ local function TTT2RegisterSWEP(equipment, name, initialize)
             util.PrecacheModel(equipment.ViewModel)
         end
     elseif CLIENT then
-        TTT2CacheEquipMaterials(equipment)
+        ShopEditor.BuildValidEquipmentCache()
         net.Start("TTT2SyncShopsWithServer")
         net.SendToServer()
     end
