@@ -30,7 +30,7 @@ function ENT:Initialize()
         self:PrecacheGibs()
 
         local mvObject = self:AddMarkerVision("ttt_base_placeable_owner")
-        mvObject:SetOwner(self:GetOriginator())
+        mvObject:SetOwner(self:GetMarkerOwner())
         mvObject:SetVisibleFor(self.markerVisibility)
         mvObject:SyncToClients()
     end
@@ -406,6 +406,10 @@ if SERVER then
         self:WeldToSurface(true)
 
         return true
+    end
+
+    function ENT:GetMarkerOwner()
+        return self:GetOriginator()
     end
 end -- SERVER
 
