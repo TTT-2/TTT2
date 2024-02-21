@@ -871,6 +871,11 @@ else -- CLIENT
         tData:AddDescriptionLine(TryT("c4_short_desc"))
     end)
 
+    ---
+    -- Overriden to change colors with distance to armed c4
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @return table Containing the icon colors to show
+    -- @realm client
     function ENT:GetMarkerVisionIconColors(mvData)
         local color = COLOR_WHITE
 
@@ -893,6 +898,10 @@ else -- CLIENT
         return { color }
     end
 
+    ---
+    -- Overriden to add time to marker
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @realm client
     function ENT:CustomizeMarkerVision(mvData)
         if not self:GetArmed() then
             return
