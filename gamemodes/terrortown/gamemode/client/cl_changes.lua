@@ -1852,6 +1852,161 @@ function CreateChanges()
         os.time({ year = 2024, month = 01, day = 07 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.13.0b",
+        [[
+        <h2>Added</h2>
+        <ul>
+            <li>Added migrations between TTT2-versions, some breaking changes could now be migrated instead</li>
+            <li>Added a new markerVision module that adds information to a specific point in space to replace the old C4 radar; it is currently used by these builtin weapons (by @TimGoll)</li>
+            <ul>
+                <li>C4</li>
+                <li>Radio</li>
+                <li>Beacon</li>
+            </ul>
+            <li>Binoculars now retain search progress if interrupted. Progress decays based on time since last observed (by @EntranceJew)</li>
+            <li>Reworked the way the player camera is handled (by @TimGoll)</li>
+            <ul>
+                <li>Added FOV change on speed change</li>
+                <li>Added view bobbing on walking, swimming, falling and strafing</li>
+                <li>Added convars to disable those changes</li>
+            </ul>
+            <li>Added <code>draw.Arc</code> and <code>draw.ShadowedArc</code> from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)</li>
+            <li>Added possibility to cache and remove items, similar to how it is already possible with weapons with <code>CacheAndStripItems</code> (by @TimGoll)</li>
+            <li>Added an option for weapons to hide the pickup notification by setting <code>SWEP.silentPickup</code> to <code>true</code> (by @TimGoll)</li>
+            <li>Added <code>TTT2FetchAvatar</code> hook for intercepting avatar URIs (by @EntranceJew)</li>
+            <li>Added <code>draw.DropCacheAvatar</code> to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)</li>
+            <li><code>weapon_tttbase</code> changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)</li>
+            <ul>
+                <li>Added <code>SWEP.IdleAnim</code> to allow specifying an idle animation.</li>
+                <li>Added <code>SWEP.idleResetFix</code> to allow the animations for CS:S weapons to automatically be returned to an idle position.</li>
+                <li>Added <code>SWEP.ShowDefaultViewModel</code> to prevent a weapon from drawing a ViewModel when set to false at all without FOV hacks or Deploy code which has no effect.</li>
+            </ul>
+            <li>Added a new vgui element: <code>DWeaponPreview_TTT2</code> to render a player with their equipped weapon (by @TimGoll)</li>
+            <ul>
+                <li>Supports any normal weapon that has a <code>.HoldType</code> and a <code>.WorldModel</code></li>
+                <li>Supports any weapon that is made with the SWEP Construction Kit (boomerang, melonmine, ...) or made for our custom world model renderer</li>
+            </ul>
+            <li>Made beacon model and icon unique from decoy (by @EntranceJew)</li>
+            <li>Added <code>SWEP:ClearHUDHelp()</code> to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)</li>
+            <li>Added custom world and view models to some builtin weapons (by @TimGoll)</li>
+            <li>Added custom world and view models to some builtin weapons (by @TimGoll)</li>
+            <ul>
+                <li>added for: radio, beacon, decoy, binoculars, visualizer</li>
+            </ul>
+            <li>Added support for easy addition of custom view and world models (by @TimGoll)</li>
+            <ul>
+                <li>Added <code>AddCustomViewModel</code> to add custom view models</li>
+                <li>Added <code>AddCustomWorldModel</code> to add custom world models</li>
+                <li>Added an automatic fix for badly coded addons that break the view model fingers</li>
+            </ul>
+            <li>Added <code>ttt_base_placeable</code> entity that is used to handle any placeable / destroyable entity (by @TimGoll)</li>
+            <ul>
+                <li>moved <code>ttt_c4</code>, <code>ttt_health_station</code>, <code>ttt_beacon</code>, <code>ttt_decoy</code>, <code>ttt_radio</code> and <code>ttt_cse_proj</code> to that base</li>
+                <li>also handles pickup of those entities</li>
+            </ul>
+            <li>Throwables (grenades) now have a <code>:GetPullTime()</code> accessor (by @EntranceJew)</li>
+            <li>Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)</li>
+            <li>UI for grenade throw arcs from colemclaren's TTT fork (integrated by @EntranceJew)</li>
+            <li><code>gameEffects</code> library for global effects that are useful, such as starting fires (by @EntranceJew)</li>
+            <li>Added weapon pickup sounds when picking up weapons manually (by @TimGoll)</li>
+        </ul>
+
+        <h2>Changed</h2>
+        <ul>
+            <li>Refactored client shop logic into separate shop-class (by @ZenBre4ker</li>
+            <ul>
+                <li>Enabled shared shop class to buy and check equipment</li>
+                <li>Removed third argument of <code>TTT2CanOrderEquipment</code>-Hook, no message is outputted anymore</li>
+            </ul>
+            <li>dframe_ttt2 panels can now manually enable bindings while they are open (by @ZenBre4ker)</li>
+            <li>Binoculars now have a world model that isn't paper towels (by @EntranceJew)</li>
+            <li>Decreased shooting accuracy while sprinting or in air (by @TimGoll)</li>
+            <li>A player whose weapons are stripped and cached will keep <code>weapon_ttt_unarmed</code> which means they keep their crosshair (by @TimGoll)</li>
+            <li>Updated the German localization file (by @NickCloudAT)</li>
+            <li>Updated the Turkish localization file (by @NovaDiablox)</li>
+            <li>Grenades have icons</li>
+            <li>Brought <code>C4</code>, <code>defuser</code>, <code>flaregun</code>, <code>health_station</code>, <code>radio</code> weapons down from upstream (by @a7f3)</li>
+            <li>Updated help text for <code>C4</code>, <code>defuser</code>, <code>flaregun</code>, <code>health_station</code>, <code>radio</code>, <code>knife</code>, <code>phammer</code>, <code>push</code>, and <code>zm_carry</code> weapons (by @a7f3)</li>
+            <li>Brought down the <code>EFFECT</code>s: <code>crimescene_dummy</code>, <code>crimescene_shot</code>, <code>pulse_sphere</code>, <code>teleport_beamdown</code>, <code>teleport_beamup</code></li>
+            <li>Brought down the <code>ENT</code>s: <code>ttt_basegrenade_proj</code>, <code>ttt_carry_handler</code> (unused), <code>ttt_firegrenade_proj</code>, <code>ttt_smokegrenade_proj</code>, <code>ttt_weapon_check</code></li>
+            <li>Brought down the <code>SWEP</code>: <code>weapon_ttt_stungun</code></li>
+            <li>Brought down the menu for arming/defusing C4</li>
+            <li>Updated and improved Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)</li>
+            <li>Improved Simplified Chinese translation（by @TEGTainFan）</li>
+            <li>Consolidated hat logic</li>
+            <li>Player role selection logic uses <code>Player:CanSelectRole()</code> now instead of duplicating logic</li>
+            <li>Role avoidance is no longer an option</li>
+            <li>All <code>builtin</code> weapons can now be configured to drop via <code>Edit Equipment</code> (by @EntranceJew)</li>
+            <li>Removed redundant checks outside of <code>SWEP:DrawHelp</code>, protected only <code>SWEP:DrawHelp</code></li>
+            <li>Spectator name labels now use a skin font and scaling (by @EntranceJew)</li>
+            <li>The built-in radar now displays distances in meters (by @TimGoll)</li>
+            <li>Converted <code>ttt_ragdoll_pinning</code> and <code>ttt_ragdoll_pinning_innocents</code> into per-role permissions</li>
+            <li>Magneto stick now allows right-clicking to instantly drop something, while left-clicking still releases/throws it</li>
+            <li>Magneto stick now shows tooltips respective to its current state</li>
+            <li>Scoreboard shows non-policing detective results, in sync with the miniscoreboard (by @EntranceJew)</li>
+            <li><code>ttt_flame</code> is visible while it is moving (by @EntranceJew)</li>
+            <li><code>ttt_flame</code>'s hurtbox is more accurate to its visuals (by @EntranceJew)</li>
+            <li>The built-in DNA scanner now displays distances in meters (by @TimGoll)</li>
+            <li>Noisy prints are now gated behind various levels of <code>developer</code> convar (by @EntranceJew)</li>
+            <li>Any warnings developers should fix will now print with stack traces (by @EntranceJew)</li>
+            <li>Changed the way the role overhead icon is rendered (by @TimGoll)</li>
+            <ul>
+                <li>It now tracks the players head position</li>
+                <li>Rendering order is based on distance, no more weird visual glitches</li>
+                <li>Hidden when observing a player in first person view</li>
+            </ul>
+            <li>Your own spectator nametag will not display when looking directly up in post-round (by @EntranceJew)</li>
+            <li>Made sure the last weapon is selected by default if the current weapon is removed; overwrite <code>OnRemove</code> to prevent that (by @TimGoll)</li>
+            <li>Changed the way weapon icon caching is working to make sure all weapons always have a cached icon material (by @TimGoll)</li>
+        </ul>
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed database now properly saving boolean <code>false</code> values (by @ZenBre4ker)</li>
+            <li>Fixed cached weapons not being selected after giving them back to the owner (by @TimGoll)</li>
+            <li>The roundendscreen can now be closed with the correct Binding (by @ZenBre4ker)</li>
+            <li>Fixed last seen player being wrongly visible for every search instead of only public policing role search (by @TimGoll)</li>
+            <li>Fixed the crosshair being offcenter on some UI scales (by @TimGoll)</li>
+            <li>Fixed to wrong line calculations for wrapped text (by @NickCloudAT)</li>
+            <li>Fixed marks library having self zfailing and color issues (by @WardenPotato)</li>
+            <li>Fixed <code>IsPlayer</code> failing if a non-entity is passed to it (by @TimGoll)</li>
+            <li>Fixed <code>draw.Arc</code> when gmod_mcore_test is set to 1 (by @WardenPotato)</li>
+            <li>Fixed weapon help box width for wide bindings with short descriptions (by @TimGoll)</li>
+            <li>Fixed <code>GM:TTTBodySearchPopulate</code> using the wrong data variable (by @TimGoll)</li>
+            <li>Fixed font initialization to not trip engine font fallback behavior (by @EntranceJew)</li>
+            <li>Fixed the decoy producing a wrong colored icon for other teams (by @NickCloudAT)</li>
+            <li>Fixed the scoreboard being stuck open sometimes if the inflictor was no weapon (by @TimGoll)</li>
+            <li>Fixed door health displaying as a humongous string of decimals (by @EntranceJew)</li>
+            <li>Fixed weapons that use the wrong weapon base from throwing errors in the F1 menu (by @TimGoll)</li>
+        </ul>
+
+        <h2>Removed</h2>
+        <ul>
+            <li>Removed some crosshair related convars and replaced them with other ones, see the crosshair settings menu for details</li>
+            <li>Removed DX8/SW models that aren't used</li>
+            <li>Removed the convar <code>ttt_damage_own_healthstation</code> as it was inconsistent and probably unused as well</li>
+            <li>Removed <code>ttt_fire_fallback</code>, there's no situation where the fire shouldn't draw anymore</li>
+            <li>Removed <code>resource.AddFile</code> calls, server operators should use the workshop version or manually bundle loose files</li>
+        </ul>
+
+        <h2>Breaking Changes</h2>
+        <ul>
+            <li>Moved global shared <code>EquipmentIsBuyable(tbl, ply)</code> to <code>shop.CanBuyEquipment(ply, equipmentName)</code></li>
+            <ul>
+                <li>Returned text and result are now replaced by a statusCode</li>
+            </ul>
+            <li>No more <code>plymeta:GetAvoidRole(role)</code> or <code>plymeta:GetAvoidDetective()</code></li>
+            <li>Moved global <code>TEAMBUYTABLE</code> to <code>shop.teamBuyTable</code> and separated <code>BUYTABLE</code> into <code>shop.buyTable</code> and <code>shop.globalBuyTable</code></li>
+            <ul>
+                <li>Use new Accessors <code>shop.IsBoughtFor(ply, equipmentName)</code>, <code>shop.IsGlobalBought(equipmentName)</code> and <code>shop.IsTeamBoughtFor(ply, equipmentName)</code></li>
+                <li>Use new Setter <code>shop.SetEquipmentBought(ply, equipmentName)</code>, <code>shop.SetEquipmentGlobalBought(equipmentName)</code> and <code>shop.SetEquipmentTeamBought(ply, equipmentName)</code></li>
+            </ul>
+        </ul>
+    ]],
+        os.time({ year = 2024, month = 02, day = 21 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
