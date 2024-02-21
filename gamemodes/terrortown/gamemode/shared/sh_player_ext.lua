@@ -39,7 +39,7 @@ function plymeta:SetupDataTables()
     self:NetworkVar("Float", 2, "FOVTransitionTime")
     self:NetworkVar("Float", 3, "FOVValue")
     self:NetworkVar("Float", 4, "FOVLastValue")
-    self:NetworkVar("Bool", 0, "FOVFixedValue")
+    self:NetworkVar("Bool", 0, "FOVIsFixed")
 end
 
 ---
@@ -1282,7 +1282,7 @@ function plymeta:SetFOV(fov, time, requester)
     self:SetFOVValue(fov or 0)
     self:SetFOVTime(CurTime())
     self:SetFOVTransitionTime(time)
-    self:SetFOVFixedValue(fov and fov ~= 0)
+    self:SetFOVIsFixed(fov and fov ~= 0)
 
     -- set time to 0 so our custom FOV code can handle the zoom out
     if not fov or fov == 0 then

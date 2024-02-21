@@ -430,7 +430,13 @@ hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
         fov = fov,
     }
 
-    ply.lastFOVValue = ply.lastFOVValue or fov
+    -- This variable is used to cache the last FOV falue on a frame by frame basis, it is used to
+    -- achieve smooth transitions. It is not to be confused with the synced LastFOVValue as this only
+    -- caches the FOV changes on a macro scale and has nothing to do with the animation on a frame
+    -- by frame base.
+    -- Also the lastFOVFrameValue variable is intentionally not always set to the current value to
+    -- control the animation in such a way that FOV jumps are prohibited.
+    ply.lastFOVFrameValue = ply.lastFOVFrameValue or fov
 
     local dynFOV = fov
     local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
@@ -438,7 +444,7 @@ hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
 
     -- fixed mode: when SetZoom is set to something different than 0, this value should be used
     -- without any custom modification
-    if ply:GetFOVFixedValue() then
+    if ply:GetFOVIsFixed() then
         dynFOV = fov
 
     -- dynamic mode: transition between different FOV values
@@ -451,15 +457,16 @@ hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
         local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
 
         -- if the transition progress has reached 100%, we should enable the sprint
-        -- FOV smoothing algorithm
+        -- FOV smoothing algorithm; the value 40 was determined by trying different values
+        -- until it looked like a smooth transition
         if progressTransition >= 1.0 then
-            if desiredFOV > ply.lastFOVValue then
-                desiredFOV = math.min(desiredFOV, ply.lastFOVValue + FrameTime() * 40)
-            elseif desiredFOV < ply.lastFOVValue then
-                desiredFOV = math.max(desiredFOV, ply.lastFOVValue - FrameTime() * 40)
+            if desiredFOV > ply.lastFOVFrameValue then
+                desiredFOV = math.min(desiredFOV, ply.lastFOVFrameValue + FrameTime() * 40)
+            elseif desiredFOV < ply.lastFOVFrameValue then
+                desiredFOV = math.max(desiredFOV, ply.lastFOVFrameValue - FrameTime() * 40)
             end
 
-            ply.lastFOVValue = desiredFOV
+            ply.lastFOVFrameValue = desiredFOV
         end
 
         -- make sure that FOV values of 0 are mapped to the desired FOV value
