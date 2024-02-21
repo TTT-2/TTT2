@@ -33,6 +33,13 @@ function plymeta:SetupDataTables()
     if SERVER then
         self:SetSprintStamina(1)
     end
+
+    -- these are networked variables for the custom FOV handling
+    self:NetworkVar("Float", 1, "FOVTime")
+    self:NetworkVar("Float", 2, "FOVTransitionTime")
+    self:NetworkVar("Float", 3, "FOVValue")
+    self:NetworkVar("Float", 4, "FOVLastValue")
+    self:NetworkVar("Bool", 0, "FOVIsFixed")
 end
 
 ---
@@ -1261,28 +1268,28 @@ end
 -- @param number fov The angle of perception (FOV); set to 0 to return to default user FOV
 -- @param[default=0] number time The time it takes to transition to the FOV expressed in a floating point
 -- @param[default=self] Entity requester The requester or "owner" of the zoom event; only this entity will be able to change the player's FOV until it is set back to 0
--- @param[default=false] boolean isSprinting Whether this is called to set sprinting FOV
 -- @realm shared
-function plymeta:SetFOV(fov, time, requester, isSprinting)
-    if isSprinting then
-        self.sprintingFOV = fov
+function plymeta:SetFOV(fov, time, requester)
+    -- if dynamic FOV is disabled, the default function should be used
+    if not self:GetPlayerSetting("enable_dynamic_fov") then
+        self:SetOldFOV(fov, time, requester)
 
-        if self.externalFOV then
-            return
-        end
+        return
     end
 
-    if not isSprinting then
-        self.externalFOV = fov
+    -- these values have to be set for our custom FOV handling in GM:CalcView
+    self:SetFOVLastValue(self:GetFOVValue())
+    self:SetFOVValue(fov or 0)
+    self:SetFOVTime(CurTime())
+    self:SetFOVTransitionTime(time)
+    self:SetFOVIsFixed(fov and fov ~= 0)
 
-        if fov == 0 then
-            self.externalFOV = nil
-
-            fov = self.sprintingFOV or 0
-        end
+    -- set time to 0 so our custom FOV code can handle the zoom out
+    if not fov or fov == 0 then
+        time = 0
     end
 
-    self:SetOldFOV(fov, time, requester, isSprinting)
+    self:SetOldFOV(fov, time, requester)
 end
 
 ---
@@ -1308,25 +1315,6 @@ function plymeta:GetPlayerSetting(identifier)
 end
 
 ---
--- Update the sprinting FOV on the player if the setting is enabled.
--- @realm shared
-function plymeta:UpdateSprintingFOV()
-    local mul = self:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(self)
-
-    if not self:GetPlayerSetting("enable_dynamic_fov") then
-        return
-    end
-
-    local newFOV = (self:GetPlayerSetting("fov_desired") or 85) * mul ^ (1 / 6)
-
-    if self.lastFOV ~= newFOV then
-        self.lastFOV = newFOV
-
-        self:SetFOV(newFOV, 0.25, nil, true)
-    end
-end
-
----
 -- A hook that is called on change of a player setting on the server.
 -- @param Player ply The player whose setting was changed
 -- @param string identifier The setting's identifier
@@ -1334,17 +1322,7 @@ end
 -- @param any newValue The new value of the settings
 -- @hook
 -- @realm shared
-function GM:TTT2PlayerSettingChanged(ply, identifier, oldValue, newValue)
-    if IsValid(ply) and identifier == "enable_dynamic_fov" then
-        if newValue then
-            ply:UpdateSprintingFOV()
-        else
-            ply.lastFOV = 0
-
-            ply:SetFOV(0, 0.25, nil, true)
-        end
-    end
-end
+function GM:TTT2PlayerSettingChanged(ply, identifier, oldValue, newValue) end
 
 ---
 -- A hook that is called on the change of a role. It is called once for the old role

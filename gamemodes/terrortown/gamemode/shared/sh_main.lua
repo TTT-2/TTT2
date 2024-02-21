@@ -13,16 +13,6 @@ TTT2ShopFallbackInitialized = false
 
 local callbackIdentifier = "TTT2RegisteredSWEPCallback"
 
-if CLIENT then
-    -- @realm client
-    -- stylua: ignore
-    CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-    cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
-        LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
-    end)
-end
-
 ---
 -- Add callback for equipment and insert changes in the given equipmentTable
 -- @param string name the database-name of the equipment
@@ -306,8 +296,6 @@ function GM:Move(ply, moveData)
 
     moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
     moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
-
-    ply:UpdateSprintingFOV()
 end
 
 -- @param Player ply The player
@@ -497,9 +485,6 @@ function GM:Tick()
         end
 
         VOICE.Tick()
-
-        -- trigger an update that is synced to the server in case the fov slider value changed
-        client:SetSettingOnServer("fov_desired", GetConVar("fov_desired"):GetFloat())
     end
 end
 

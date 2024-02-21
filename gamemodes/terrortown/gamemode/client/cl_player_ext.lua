@@ -17,6 +17,14 @@ local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
 -- stylua: ignore
 local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
 
+-- @realm client
+-- stylua: ignore
+local cvEnableDynamicFOV = CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
+    LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
+end)
+
 ---
 -- Applies a animation gesture
 -- @param ACT act The @{ACT} or sequence that should be played
@@ -399,8 +407,11 @@ local frameCount = 10
 
 local lastStrafeValue = 0
 
--- heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
-hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
+local cvHostTimescale = GetConVar("host_timescale")
+
+-- handles dynamic camera features such as view bobbing, stafe tilting and fov changes
+-- parts of it are heavily inspired from V92's "Head Bobbing": https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
+hook.Add("CalcView", "TTT2DynamicCamera", function(ply, origin, angles, fov)
     local observerTarget = ply:GetObserverTarget()
 
     -- handle observing players
@@ -412,18 +423,77 @@ hook.Add("CalcView", "TTT2ViewBobbingHook", function(ply, origin, angles, fov)
         return
     end
 
-    if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
-        airtime = math.Clamp(airtime + 1, 0, 300)
-
-        return
-    end
-
     local view = {
         ply = ply,
         origin = origin,
         angles = angles,
         fov = fov,
     }
+
+    -- This variable is used to cache the last FOV falue on a frame by frame basis, it is used to
+    -- achieve smooth transitions. It is not to be confused with the synced LastFOVValue as this only
+    -- caches the FOV changes on a macro scale and has nothing to do with the animation on a frame
+    -- by frame base.
+    -- Also the lastFOVFrameValue variable is intentionally not always set to the current value to
+    -- control the animation in such a way that FOV jumps are prohibited.
+    ply.lastFOVFrameValue = ply.lastFOVFrameValue or fov
+
+    local dynFOV = fov
+    local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
+    local desiredFOV = fov * mul ^ (1 / 6)
+
+    -- fixed mode: when SetZoom is set to something different than 0, this value should be used
+    -- without any custom modification
+    if ply:GetFOVIsFixed() then
+        dynFOV = fov
+
+    -- dynamic mode: transition between different FOV values
+    else
+        local time = math.max(
+            0,
+            (CurTime() - ply:GetFOVTime()) * game.GetTimeScale() * cvHostTimescale:GetFloat()
+        )
+
+        local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
+
+        -- if the transition progress has reached 100%, we should enable the sprint
+        -- FOV smoothing algorithm; the value 40 was determined by trying different values
+        -- until it looked like a smooth transition
+        if progressTransition >= 1.0 then
+            if desiredFOV > ply.lastFOVFrameValue then
+                desiredFOV = math.min(desiredFOV, ply.lastFOVFrameValue + FrameTime() * 40)
+            elseif desiredFOV < ply.lastFOVFrameValue then
+                desiredFOV = math.max(desiredFOV, ply.lastFOVFrameValue - FrameTime() * 40)
+            end
+
+            ply.lastFOVFrameValue = desiredFOV
+        end
+
+        -- make sure that FOV values of 0 are mapped to the desired FOV value
+        -- which is based on the base FOV value set in the GMOD settings
+        local fovNext = ply:GetFOVValue()
+        local fovLast = ply:GetFOVLastValue()
+
+        if fovNext == 0 then
+            fovNext = desiredFOV
+        end
+
+        if fovLast == 0 then
+            fovLast = desiredFOV
+        end
+
+        dynFOV = fovLast - (fovLast - fovNext) * progressTransition
+    end
+
+    if cvEnableDynamicFOV:GetBool() then
+        view.fov = dynFOV
+    end
+
+    if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
+        airtime = math.Clamp(airtime + 1, 0, 300)
+
+        return view
+    end
 
     local eyeAngles = ply:EyeAngles()
     local strafeValue = 0
