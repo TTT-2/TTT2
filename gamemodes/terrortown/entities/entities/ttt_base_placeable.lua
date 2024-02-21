@@ -14,6 +14,10 @@ ENT.isDestructible = true
 
 ENT.pickupWeaponClass = nil
 
+-- MarkerVision related
+ENT.markerIconMaterial = Material("vgui/ttt/tid/tid_big_role_not_known")
+ENT.markerVisibility = VISIBLE_FOR_PLAYER
+
 ---
 -- @realm shared
 function ENT:Initialize()
@@ -24,6 +28,11 @@ function ENT:Initialize()
 
     if SERVER then
         self:PrecacheGibs()
+
+        local mvObject = self:AddMarkerVision("ttt_base_placeable_owner")
+        mvObject:SetOwner(self:GetMarkerOwner())
+        mvObject:SetVisibleFor(self.markerVisibility)
+        mvObject:SyncToClients()
     end
 
     local phys = self:GetPhysicsObject()
@@ -73,6 +82,12 @@ if SERVER then
 
     AccessorFunc(ENT, "hitNormal", "HitNormal", FORCE_VECTOR)
     AccessorFunc(ENT, "stickRotation", "StickRotation", FORCE_ANGLE)
+
+    ---
+    -- @realm server
+    function ENT:OnRemove()
+        self:RemoveMarkerVision("ttt_base_placeable_owner")
+    end
 
     ---
     -- @param CTakeDamageInfo dmgInfo
@@ -232,7 +247,7 @@ if SERVER then
 
     ---
     -- Hook that is called if a player uses their use key while focusing on the entity.
-    -- @note When overwriting this function BaseClass.UseOverwrite has to be called if
+    -- @note When overwriting this function BaseClass.UseOverride has to be called if
     -- the entity pickup system should be used.
     -- @param Player activator The player that used their use key
     -- @hook
@@ -392,4 +407,86 @@ if SERVER then
 
         return true
     end
-end
+
+    ---
+    -- Gets the current markerOwner
+    -- @note Override if not the originator should own the marker
+    -- @return Player|Role The Player or role be marker owner
+    -- @realm server
+    function ENT:GetMarkerOwner()
+        return self:GetOriginator()
+    end
+end -- SERVER
+
+if CLIENT then
+    local TryT = LANG.TryTranslation
+    local ParT = LANG.GetParamTranslation
+
+    ---
+    -- Override to handle activation of marker overlay
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @realm client
+    function ENT:ShouldDrawMarkerVision(mvData)
+        return true
+    end
+
+    ---
+    -- Override to customize markervision on drawcalls
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @realm client
+    function ENT:CustomizeMarkerVision(mvData) end
+
+    ---
+    -- Override if not the markerIconMaterial should be used
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @return table Containing the icon Materials to show
+    -- @realm client
+    function ENT:GetMarkerVisionIcons(mvData)
+        return { self.markerIconMaterial }
+    end
+
+    ---
+    -- Override if not the default color for the icons should be used
+    -- @param MARKER_VISION_DATA mvData The @{MARKER_VISION_DATA} data object
+    -- @return table Containing the icon colors to show
+    -- @realm client
+    function ENT:GetMarkerVisionIconColors(mvData)
+        return { COLOR_WHITE }
+    end
+
+    -- Handle markervision for ttt_base_placeables
+    hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionBasePlaceable", function(mvData)
+        local ent = mvData:GetEntity()
+        local mvObject = mvData:GetMarkerVisionObject()
+
+        if
+            not mvObject:IsObjectFor(ent, "ttt_base_placeable_owner")
+            or not ent:ShouldDrawMarkerVision(mvData)
+        then
+            return
+        end
+
+        local owner = ent:GetOriginator()
+        local nick = IsValid(owner) and owner:Nick() or "---"
+
+        local distance = math.Round(util.HammerUnitsToMeters(mvData:GetEntityDistance()), 1)
+
+        mvData:EnableText()
+        mvData:SetTitle(TryT(ent.PrintName))
+
+        local icons = ent:GetMarkerVisionIcons(mvData)
+        local colors = ent:GetMarkerVisionIconColors(mvData)
+        local size = math.min(#icons, #colors)
+
+        for i = 1, size do
+            mvData:AddIcon(icons[i], colors[i])
+        end
+
+        mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
+        mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
+
+        mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
+
+        ent:CustomizeMarkerVision(mvData)
+    end)
+end -- CLIENT
