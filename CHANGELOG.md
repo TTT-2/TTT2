@@ -38,7 +38,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Icon for `Voice & Volume` menu
 - Added a new vgui element: `DWeaponPreview_TTT2` to render a player with their equipped weapon (by @TimGoll)
   - Supports any normal weapon that has a `.HoldType` and a `.WorldModel`
-  - Supports any weapon that is made with the SWEP Construction Kit (boomerang, melonmine, ...)
+  - Supports any weapon that is made with the SWEP Construction Kit (boomerang, melonmine, ...) or made for our custom world model renderer
 - Made beacon model and icon unique from decoy (by @EntranceJew)
 - Added `SWEP:ClearHUDHelp()` to allow blanking the help text, for dynamically updating help text on equipment (by @EntranceJew)
 - Added custom world and view models to some builtin weapons (by @TimGoll)
@@ -50,12 +50,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `ttt_base_placeable` entity that is used to handle any placeable / destroyable entity (by @TimGoll)
   - moved `ttt_c4`, `ttt_health_station`, `ttt_beacon`, `ttt_decoy`, `ttt_radio` and `ttt_cse_proj` to that base
   - also handles pickup of those entities
-- Throwables (grenades) now have a `:GetPullTime()` accessor
+- Throwables (grenades) now have a `:GetPullTime()` accessor (by @EntranceJew)
 - Throwables (grenades) show UI for the amount of time remaining before detonation (fuse time) (by @EntranceJew)
 - UI for grenade throw arcs from [colemclaren's TTT fork](https://github.com/colemclaren/ttt/blob/master/addons/moat_addons/lua/weapons/weapon_tttbasegrenade.lua#L293-L353) (integrated by @EntranceJew)
 - `gameEffects` library for global effects that are useful, such as starting fires (by @EntranceJew)
 - Added weapon pickup sounds when picking up weapons manually (by @TimGoll)
-- Added further missing German translation (by @NickCloudAT)
 
 ### Changed
 
@@ -66,16 +65,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Binoculars now have a world model that isn't paper towels (by @EntranceJew)
 - Decreased shooting accuracy while sprinting or in air (by @TimGoll)
 - A player whose weapons are stripped and cached will keep `weapon_ttt_unarmed` which means they keep their crosshair (by @TimGoll)
+- Updated the German localization file (by @NickCloudAT)
 - Updated the Turkish localization file (by @NovaDiablox)
 - Grenades have icons
-- Brought `c4`, `defuser`, `flaregun`, `health_station`, `radio` weapons down from upstream (by @a7f3)
-- Updated help text for `c4`, `defuser`, `flaregun`, `health_station`, `radio`, `knife`, `phammer`, `push`, and `zm_carry` weapons (by @a7f3)
+- Brought `C4`, `defuser`, `flaregun`, `health_station`, `radio` weapons down from upstream (by @a7f3)
+- Updated help text for `C4`, `defuser`, `flaregun`, `health_station`, `radio`, `knife`, `phammer`, `push`, and `zm_carry` weapons (by @a7f3)
 - Brought down the `EFFECT`s: `crimescene_dummy`, `crimescene_shot`, `pulse_sphere`, `teleport_beamdown`, `teleport_beamup`
 - Brought down the `ENT`s: `ttt_basegrenade_proj`, `ttt_carry_handler` (unused), `ttt_firegrenade_proj`, `ttt_smokegrenade_proj`, `ttt_weapon_check`
 - Brought down the `SWEP`: `weapon_ttt_stungun`
 - Brought down the menu for arming/defusing C4
 - Updated and improved Simplified Chinese translation (by @sbzlzh and @TheOnly8Z)
-- improved Simplified Chinese translation （by @TEGTainFan）
+- Improved Simplified Chinese translation（by @TEGTainFan）
 - Consolidated hat logic
 - Player role selection logic uses `Player:CanSelectRole()` now instead of duplicating logic
 - Role avoidance is no longer an option
