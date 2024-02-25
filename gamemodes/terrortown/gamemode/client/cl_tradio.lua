@@ -1,12 +1,11 @@
 ---
 -- Traitor radio controls
 -- @module TRADIO
+TRADIO = TRADIO or {}
+TRADIO.sizes = TRADIO.sizes or {}
+TRADIO.menuFrame = TRADIO.menuFrame or nil
 
-TRADIO = {}
-
-local IsValid = IsValid
-
-local sound_names = {
+local sounds = {
     scream = "radio_button_scream",
     explosion = "radio_button_expl",
     pistol = "radio_button_pistol",
@@ -21,92 +20,80 @@ local sound_names = {
     footsteps = "radio_button_steps",
 }
 
-local smatrix = {
-    { "scream", "burning", "explosion", "footsteps" },
-    { "pistol", "shotgun", "mac10", "deagle" },
-    { "m16", "rifle", "huge", "beeps" },
-}
+---
+-- Calculates and caches the dimensions of the Radio UI.
+-- @realm client
+function TRADIO:CalculateSizes()
+    self.sizes.padding = 10
 
-local function PlayRadioSound(snd)
-    local r = LocalPlayer().radio
-    if not IsValid(r) then
-        return
-    end
+    self.sizes.heightButton = 45
+    self.sizes.widthButton = 160
 
-    RunConsoleCommand("ttt_radio_play", tostring(r:EntIndex()), snd)
-end
+    self.sizes.numWidthButtons = 3
+    self.sizes.numHeightButtons = math.ceil(table.Count(sounds) / 3)
 
-local function ButtonClickPlay(s)
-    PlayRadioSound(s.snd)
-end
+    self.sizes.widthMainArea = self.sizes.widthButton * self.sizes.numWidthButtons
+        + (self.sizes.numWidthButtons - 1) * self.sizes.padding
+    self.sizes.heightMainArea = self.sizes.heightButton * self.sizes.numHeightButtons
+        + (self.sizes.numHeightButtons - 1) * self.sizes.padding
 
-local function CreateSoundBoard(parent)
-    local b = vgui.Create("DPanel", parent)
-
-    --b:SetPaintBackground(false)
-
-    local bh, bw = 50, 100
-    local m = 5
-    local ver = #smatrix
-    local hor = #smatrix[1]
-
-    local x, y = 0, 0
-
-    for ri = 1, ver do
-        local row = smatrix[ri]
-        local rj = ri - 1 -- easier for computing x, y
-
-        for rk = 1, #row do
-            local snd = row[rk]
-            local rl = rk - 1
-
-            y = rj * m + rj * bh
-            x = rl * m + rl * bw
-
-            local but = vgui.Create("DButton", b)
-            but:SetPos(x, y)
-            but:SetSize(bw, bh)
-            but:SetText(LANG.GetTranslation(sound_names[snd]))
-
-            but.snd = snd
-            but.DoClick = ButtonClickPlay
-        end
-    end
-
-    b:SetSize(bw * hor + m * (hor - 1), bh * ver + m * (ver - 1))
-    b:SetPos(m, 25)
-    b:CenterHorizontal()
-
-    return b
+    self.sizes.width = self.sizes.widthMainArea + 2 * self.sizes.padding
+    self.sizes.height = self.sizes.heightMainArea
+        + vskin.GetHeaderHeight()
+        + vskin.GetBorderSize()
+        + 2 * self.sizes.padding
 end
 
 ---
--- Creates the traitor radio menu
--- @param Panel parent
--- @return Panel the created DPanel menu
+-- Show the radio UI with all sound buttons. Generates the whole UI.
 -- @realm client
-function TRADIO.CreateMenu(parent)
-    local w, h = parent:GetSize()
-    local client = LocalPlayer()
+function TRADIO:Toggle(radioEnt)
+    self.radio = radioEnt
+    self.entIndex = tostring(radioEnt:EntIndex())
 
-    local wrap = vgui.Create("DPanel", parent)
-    wrap:SetSize(w, h)
-    wrap:SetPaintBackground(false)
+    self:CalculateSizes()
 
-    local dhelp = vgui.Create("DLabel", wrap)
-    dhelp:SetFont("TabLarge")
-    dhelp:SetText(LANG.GetTranslation("radio_help"))
-    dhelp:SetTextColor(COLOR_WHITE)
-
-    if IsValid(client.radio) then
-        CreateSoundBoard(wrap) -- local board
-    elseif client:HasWeapon("weapon_ttt_radio") then
-        dhelp:SetText(LANG.GetTranslation("radio_notplaced"))
+    -- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
+    if IsValid(self.menuFrame) then
+        self.menuFrame:CloseFrame()
+    else
+        self.menuFrame =
+            vguihandler.GenerateFrame(self.sizes.width, self.sizes.height, "radio_name")
     end
 
-    dhelp:SizeToContents()
-    dhelp:SetPos(10, 5)
-    dhelp:CenterHorizontal()
+    self.menuFrame:SetPadding(
+        self.sizes.padding,
+        self.sizes.padding,
+        self.sizes.padding,
+        self.sizes.padding
+    )
 
-    return wrap
+    -- any keypress closes the frame
+    self.menuFrame:SetKeyboardInputEnabled(false)
+    self.menuFrame.OnKeyCodePressed = util.BasicKeyHandler
+
+    local contentBox = vgui.Create("DPanelTTT2", self.menuFrame)
+    contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
+    contentBox:Dock(TOP)
+
+    local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
+    contentAreaScroll:SetVerticalScrollbarEnabled(true)
+    contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
+    contentAreaScroll:Dock(FILL)
+
+    local buttonField = vgui.Create("DIconLayout", contentAreaScroll)
+    buttonField:SetSpaceY(self.sizes.padding)
+    buttonField:SetSpaceX(self.sizes.padding)
+    buttonField:Dock(TOP)
+
+    for sound, translationName in pairs(sounds) do
+        local buttonReport = vgui.Create("DButtonTTT2", buttonField)
+        buttonReport:SetText(LANG.GetTranslation(translationName))
+        buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
+        buttonReport.DoClick = function(btn)
+            if IsValid(self.radio) then
+                RunConsoleCommand("ttt_radio_play", self.entIndex, sound)
+            end
+        end
+    end
 end

@@ -130,8 +130,6 @@ L.xfer_received = "{player} has given you {num} credit."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
-L.radio_help = "Click a button to make your Radio play that sound."
-L.radio_notplaced = "You must place the Radio to play sound on it."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Scream"

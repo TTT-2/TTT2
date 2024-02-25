@@ -365,6 +365,14 @@ if CLIENT then
 
         mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
     end)
+
+    ---
+    -- This is triggered, when you focus a marker of an entity and press 'Use'-Key
+    -- Overriden to open the radio menu
+    -- @realm client
+    function ENT:RemoteUse()
+        TRADIO:Toggle(self)
+    end
 end
 
 if SERVER then
