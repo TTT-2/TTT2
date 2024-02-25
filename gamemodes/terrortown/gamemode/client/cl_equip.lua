@@ -542,7 +542,9 @@ local function CreateEquipmentList(t)
                 ic = vgui.Create("SpawnIcon", dlist)
                 ic:SetModel(item.itemModel)
             else
-                ErrorNoHaltWithStack("Equipment item does not have model or material specified.")
+                ErrorNoHaltWithStack(
+                    "Equipment item does not have model or material specified:" .. equipName
+                )
                 PrintTable(item)
 
                 continue
