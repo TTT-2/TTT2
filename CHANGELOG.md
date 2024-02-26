@@ -10,6 +10,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed renering for weapons not based on the TTT2 base (like TFA) (by @TimGoll)
+
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 
 ### Added
