@@ -137,7 +137,25 @@ local TryT = LANG.TryTranslation
 ---
 -- @realm client
 -- stylua: ignore
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
+local cvSoundCues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
+
+---
+-- @realm client
+-- stylua: ignore
+local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+-- stylua: ignore
+local cvEnableBobbingStrafe = CreateConVar("ttt2_enable_bobbing_strafe", "1", FCVAR_ARCHIVE)
+
+-- @realm client
+-- stylua: ignore
+local cvEnableDynamicFOV = CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
+    LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
+end)
 
 local cues = {
     Sound("ttt/thump01e.mp3"),
@@ -145,7 +163,7 @@ local cues = {
 }
 
 local function PlaySoundCue()
-    if not ttt_cl_soundcues:GetBool() then
+    if not cvSoundCues:GetBool() then
         return
     end
 
@@ -787,7 +805,170 @@ function GM:CalcView(ply, origin, angles, fov, znear, zfar)
         end
     end
 
+    self:DynamicCamera(view, ply)
+
     return view
+end
+
+local airtime = 0
+local velocity = 0
+local position = 0
+
+local frameCount = 10
+
+local lastStrafeValue = 0
+
+local cvHostTimescale = GetConVar("host_timescale")
+
+-- Handles dynamic camera features such as view bobbing, stafe tilting and fov changes.
+-- @note: Parts of it are heavily inspired from V92's "Head Bobbing":
+-- https://steamcommunity.com/sharedfiles/filedetails/?id=572928034
+-- @param table viewTable The view table that is modified in this function
+-- @param Player ply The player who's view should be modified
+-- @hook
+-- @realm client
+function GM:DynamicCamera(viewTable, ply)
+    local observerTarget = ply:GetObserverTarget()
+
+    -- handle observing players if obs mode is OBS_MODE_FIXED, OBS_MODE_IN_EYE, OBS_MODE_CHASE or OBS_MODE_ROAMING
+    if
+        not ply:IsTerror()
+        and IsValid(observerTarget)
+        and observerTarget:IsPlayer()
+        and observerTarget:GetObserverMode() >= OBS_MODE_FIXED
+    then
+        ply = observerTarget
+
+    -- if something else then a player is observed, nothing should be applied here
+    elseif IsValid(observerTarget) and not observerTarget:IsPlayer() then
+        return
+    end
+
+    if not ply:IsTerror() or ply:GetMoveType() == MOVETYPE_NOCLIP then
+        return
+    end
+
+    -- This variable is used to cache the last FOV falue on a frame by frame basis, it is used to
+    -- achieve smooth transitions. It is not to be confused with the synced LastFOVValue as this only
+    -- caches the FOV changes on a macro scale and has nothing to do with the animation on a frame
+    -- by frame base.
+    -- Also the lastFOVFrameValue variable is intentionally not always set to the current value to
+    -- control the animation in such a way that FOV jumps are prohibited.
+    ply.lastFOVFrameValue = ply.lastFOVFrameValue or viewTable.fov
+
+    local dynFOV = viewTable.fov
+    local mul = ply:GetSpeedMultiplier() * SPRINT:HandleSpeedMultiplierCalculation(ply)
+    local desiredFOV = viewTable.fov * mul ^ (1 / 6)
+
+    -- fixed mode: when SetZoom is set to something different than 0, this value should be used
+    -- without any custom modification
+    if ply:GetFOVIsFixed() then
+        dynFOV = viewTable.fov
+
+    -- dynamic mode: transition between different FOV values
+    else
+        local time = math.max(
+            0,
+            (CurTime() - ply:GetFOVTime()) * game.GetTimeScale() * cvHostTimescale:GetFloat()
+        )
+
+        local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
+
+        -- if the transition progress has reached 100%, we should enable the sprint
+        -- FOV smoothing algorithm; the value 40 was determined by trying different values
+        -- until it looked like a smooth transition
+        if progressTransition >= 1.0 then
+            if desiredFOV > ply.lastFOVFrameValue then
+                desiredFOV = math.min(desiredFOV, ply.lastFOVFrameValue + FrameTime() * 40)
+            elseif desiredFOV < ply.lastFOVFrameValue then
+                desiredFOV = math.max(desiredFOV, ply.lastFOVFrameValue - FrameTime() * 40)
+            end
+
+            ply.lastFOVFrameValue = desiredFOV
+        end
+
+        -- make sure that FOV values of 0 are mapped to the desired FOV value
+        -- which is based on the base FOV value set in the GMOD settings
+        local fovNext = ply:GetFOVValue()
+        local fovLast = ply:GetFOVLastValue()
+
+        if fovNext == 0 then
+            fovNext = desiredFOV
+        end
+
+        if fovLast == 0 then
+            fovLast = desiredFOV
+        end
+
+        dynFOV = fovLast - (fovLast - fovNext) * progressTransition
+    end
+
+    if cvEnableDynamicFOV:GetBool() then
+        viewTable.fov = dynFOV
+    end
+
+    if (not ply:IsOnGround() and ply:WaterLevel() == 0) or ply:InVehicle() then
+        airtime = math.Clamp(airtime + 1, 0, 300)
+    end
+
+    local eyeAngles = ply:EyeAngles()
+    local strafeValue = 0
+
+    -- handle landing on ground
+    if airtime > 0 then
+        airtime = airtime / frameCount
+
+        viewTable.angles.p = viewTable.angles.p + airtime * 0.01 -- pitch cam shake on land
+        viewTable.angles.r = viewTable.angles.r + airtime * 0.02 * math.Rand(-1, 1) -- roll cam shake on land
+    end
+
+    -- handle crouching
+    if ply:Crouching() then
+        local velocityMultiplier = ply:GetVelocity() * 2
+
+        velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+        position = position + velocity * FrameTime() * 0.1
+
+        strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.015
+
+    -- handle swimming
+    elseif ply:WaterLevel() > 0 then
+        local velocityMultiplier = ply:GetVelocity() * 1.5
+
+        velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+        position = position + velocity * FrameTime() * 0.1
+
+        strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.005
+
+    -- handle walking
+    else
+        local velocityMultiplier = ply:GetVelocity() * 0.75
+
+        velocity = velocity * 0.9 + velocityMultiplier:Length() * 0.1
+        position = position + velocity * FrameTime() * 0.1
+
+        strafeValue = eyeAngles:Right():Dot(velocityMultiplier) * 0.006
+    end
+
+    strafeValue = math.Round(strafeValue, 2)
+    lastStrafeValue = math.Round(lastStrafeValue, 2)
+
+    if strafeValue > lastStrafeValue then
+        lastStrafeValue = math.min(strafeValue, lastStrafeValue + FrameTime() * 35.0)
+    elseif strafeValue < lastStrafeValue then
+        lastStrafeValue = math.max(strafeValue, lastStrafeValue - FrameTime() * 35.0)
+    else
+        lastStrafeValue = strafeValue
+    end
+
+    if cvEnableBobbing:GetBool() then
+        viewTable.angles.r = viewTable.angles.r + math.sin(position * 0.5) * velocity * 0.001
+        viewTable.angles.p = viewTable.angles.p + math.sin(position * 0.25) * velocity * 0.001
+    end
+
+    if cvEnableBobbingStrafe:GetBool() then
+        viewTable.angles.r = viewTable.angles.r + lastStrafeValue
+    end
 end
 
 ---
