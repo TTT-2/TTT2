@@ -10,6 +10,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed the new view changes affecting some weapons by moving it to the GM:CalcView hook and adding a new break condition (by @TimGoll)
+
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 
 ### Added
