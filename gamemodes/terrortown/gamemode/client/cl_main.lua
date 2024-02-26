@@ -456,8 +456,14 @@ local function RoundStateChange(o, n)
         -- clear decals in cache from previous round
         util.ClearDecals()
 
-        -- resets bone positions that fixes broken fingers on bad addons
-        weaponrenderer.ResetBonePositions(LocalPlayer():GetViewModel())
+        local client = LocalPlayer()
+
+        -- Resets bone positions that fixes broken fingers on bad addons.
+        -- When late-joining a server this function is executed before the local player
+        -- is completely set up. Therefore we safeguard this with this check.
+        if IsValid(client) and isfunction(client.GetViewModel) then
+            weaponrenderer.ResetBonePositions(client:GetViewModel())
+        end
     elseif n == ROUND_ACTIVE then
         -- round starts
         VOICE.CycleMuteState(MUTE_NONE)
