@@ -10,7 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Fixed bodysearch entries not having a title no longer breaking the rendering (by @TimGoll)
+- Fixed bodysearch entries not having a title breaking the rendering (by @TimGoll)
 
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 
