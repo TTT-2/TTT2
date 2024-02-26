@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed rendering for weapons not based on the TTT2 base (e.g. TFA) (by @TimGoll)
+- Fixed an error in an error message (by @mexikoedi)
 
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 
