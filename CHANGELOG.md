@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed `GetViewModel` error on the client when joining a server (by @TimGoll)
 - Fixed the new view changes preventing weapons from modifying the playerview (by @TimGoll)
 - Fixed the new view changes affecting non-player entities (by @TimGoll)
 - Fixed an error in an error message (by @mexikoedi)
