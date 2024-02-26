@@ -11,6 +11,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed rendering for weapons not based on the TTT2 base (e.g. TFA) (by @TimGoll)
+- Fixed bodysearch entries not having a title breaking the rendering (by @TimGoll)
+- Fixed `GetViewModel` error on the client when joining a server (by @TimGoll)
+- Fixed the new view changes preventing weapons from modifying the playerview (by @TimGoll)
+- Fixed the new view changes affecting non-player entities (by @TimGoll)
 - Fixed an error in an error message (by @mexikoedi)
 
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
