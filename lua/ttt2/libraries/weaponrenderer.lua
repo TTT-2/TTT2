@@ -411,7 +411,11 @@ end
 -- @param[opt] Player owner The owner entity of the weapon, binds the model to their hands
 -- @realm client
 function weaponrenderer.RenderWorldModel(wep, wepModel, elements, owner)
-    if wep.ShowDefaultWorldModel then
+    -- note: while ShowDefaultWorldModel is set to true in the weapon base, addons such as TFA do not
+    -- use the weapon base and only implement parts of it to work with TTT. In a perfect world TFA would
+    -- be updated to fix this issue, but we can also prevent it by explicitly checking for false here.
+    -- This means that `nil` (when the weapon isn't based on our base) counts as `true` as well.
+    if wep.ShowDefaultWorldModel ~= false then
         wepModel:DrawModel()
     end
 
