@@ -181,7 +181,7 @@ if SERVER then
             local pos = self:GetPos()
             local ignore = player.GetAll()
 
-            ignore[#ignore + 1] = { self }
+            ignore[#ignore + 1] = self
 
             local tr = util.TraceEntity({
                 start = pos,
