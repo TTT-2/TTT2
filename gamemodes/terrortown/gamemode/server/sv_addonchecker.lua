@@ -638,6 +638,11 @@ addonChecker.curatedList = {
         reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
         type = ADDON_OUTDATED,
     },
+    ["922285407"] = { -- Spring mine by Phoenixf
+        alternative = "3166539189",
+        reason = "The addon is completely broken and doesn't work at all. Also this rework has better integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
 }
 
 ---
