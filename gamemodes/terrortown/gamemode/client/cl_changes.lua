@@ -2007,6 +2007,23 @@ function CreateChanges()
         os.time({ year = 2024, month = 02, day = 23 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.13.1",
+        [[
+
+        <h2>Fixed</h2>
+        <ul>
+            <li>Fixed rendering for weapons not based on the TTT2 base (e.g. TFA) (by @TimGoll)</li>
+            <li>Fixed bodysearch entries not having a title breaking the rendering (by @TimGoll)</li>
+            <li>Fixed <code>GetViewModel</code> error on the client when joining a server (by @TimGoll)</li>
+            <li>Fixed the new view changes preventing weapons from modifying the playerview (by @TimGoll)</li>
+            <li>Fixed the new view changes affecting non-player entities (by @TimGoll)</li>
+            <li>Fixed an error in an error message (by @mexikoedi)</li>
+        </ul>
+    ]],
+        os.time({ year = 2024, month = 02, day = 27 })
+    )
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
