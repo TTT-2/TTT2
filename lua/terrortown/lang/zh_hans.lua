@@ -2187,4 +2187,4 @@ L.marker_vision_visible_for_2 = "您的团队可见"
 L.marker_vision_visible_for_3 = "每个人都可见"
 
 -- 2024-02-14
-L.throw_no_room = "这里没地方扔这个装置"
+L.throw_no_room = "你这里没有地方扔这个装置"
