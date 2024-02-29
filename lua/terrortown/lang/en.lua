@@ -2110,10 +2110,8 @@ L.msg_beacon_death = "A player died in close proximity to one of your beacons."
 L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-12-18
 L.entity_pickup_owner_only = "Only the owner can pick this up"
 
--- 2023-12-18
 L.body_confirm_one = "{finder} confirmed the death of {victim}."
 L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
 
@@ -2123,18 +2121,6 @@ L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2
 L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 L.header_equipment_info = "Equipment information"
 
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "Accessibility"
-
-L.header_accessibility_settings = "Accessibility Settings"
-
-L.label_enable_dynamic_fov = "Enable dynamic FOV change"
-L.label_enable_bobbing = "Enable view bobbing"
-L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
-
-L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
-L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 For a shotgun, this would affect each pellet.
@@ -2147,6 +2133,17 @@ For the poltergeist, this would affect each "thump" and the final explosion.
 Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
 
 -- 2023-12-24
+L.submenu_gameplay_accessibility_title = "Accessibility"
+
+L.header_accessibility_settings = "Accessibility Settings"
+
+L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+L.label_enable_bobbing = "Enable view bobbing"
+L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 L.binoc_help_reload = "Clear target."
 L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
 L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
@@ -2168,16 +2165,6 @@ If the line length is kept static, only the gap scales with cone changes.]]
 
 L.header_weapon_settings = "Weapon Settings"
 
---2024-01-29
-L.marker_vision_visible_for_0 = "Visible for you"
-L.marker_vision_visible_for_1 = "Visible for your role"
-L.marker_vision_visible_for_2 = "Visible for your team"
-L.marker_vision_visible_for_3 = "Visible for everyone"
-
--- 2024-01-27
-L.decoy_help_primary = "Throw Decoy on the ground"
-L.decoy_help_secondary = "Stick Decoy to surface"
-
 -- 2024-01-24
 L.grenade_fuse = "FUSE"
 
@@ -2188,6 +2175,16 @@ L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
 L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
 L.magneto_stick_help_carry_prop_release = "Release prop"
 L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-01-27
+L.decoy_help_primary = "Throw Decoy on the ground"
+L.decoy_help_secondary = "Stick Decoy to surface"
+
+--2024-01-29
+L.marker_vision_visible_for_0 = "Visible for you"
+L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_2 = "Visible for your team"
+L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-02-14
 L.throw_no_room = "You have no space here to throw this device"

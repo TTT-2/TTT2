@@ -971,7 +971,7 @@ L.menu_guide_description = "帮助你开始游玩 TTT2 并解释玩法和身份�
 L.menu_bindings_description = "将 TTT2 和其插件的功能绑到你想要的键位"
 L.menu_language_description = "选择游戏语言"
 L.menu_appearance_description = "调整界面的样式和性能"
---L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
+L.menu_gameplay_description = "调整语音和声音音量、辅助功能设置和游戏设置。"
 L.menu_addons_description = "配置本地插件"
 L.menu_legacy_description = "旧TTT的菜单，应该已被导入新系统"
 L.menu_administration_description = "界面和商店的通用管理菜单"
@@ -1962,7 +1962,7 @@ L.help_inspect_confirm_mode = [[
 模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公开警察玩家报告尸体位置现在是获取任何尸体信息的唯一方式。]]
 
 -- 2023-10-19
---L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+L.label_grenade_trajectory_ui = "手榴弹弹道指示器"
 
 -- 2023-10-23
 L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条将会开始闪烁"
@@ -2064,36 +2064,36 @@ L.magneto_help_primary = "推动实体"
 L.magneto_help_secondary = "推动/拾取实体"
 L.knife_help_primary = "刺"
 L.knife_help_secondary = "投掷小刀"
---L.polter_help_primary = "Fire thumper"
---L.polter_help_secondary = "Charge long range shot"
+L.polter_help_primary = "发射砰砰炮"
+L.polter_help_secondary = "冲锋远程射击"
 
 -- 2023-12-12
---L.newton_help_primary = "Knockback shot"
---L.newton_help_secondary = "Charged knockback shot"
+L.newton_help_primary = "击退攻击"
+L.newton_help_secondary = "蓄力击退攻击"
 
 -- 2023-12-13
 L.vis_no_pickup = "只有公开警察角色才能捡起显像器"
 L.newton_force = "推力"
---L.defuser_help_primary = "Defuse targeted C4"
---L.radio_help_primary = "Place the Radio"
---L.radio_help_secondary = "Stick to surface"
---L.hstation_help_primary = "Place the Health Station"
---L.flaregun_help_primary = "Burn body/entity"
+L.defuser_help_primary = "拆除目标C4"
+L.radio_help_primary = "放置无线电"
+L.radio_help_secondary = "粘附在表面上"
+L.hstation_help_primary = "放置医疗站"
+L.flaregun_help_primary = "烧毁尸体/实体"
 
 -- 2023-12-14
---L.marker_vision_owner = "Owner: {owner}"
---L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_owner = "所有者: {owner}"
+L.marker_vision_distance = "距离: {distance}米"
+L.marker_vision_distance_collapsed = "{distance}米"
 
---L.c4_marker_vision_time = "Detonation time: {time}"
---L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_time = "引爆时间: {time}"
+L.c4_marker_vision_collapsed = "{time} / {distance}米"
 
---L.c4_marker_vision_safe_zone = "Bomb safe zone"
---L.c4_marker_vision_damage_zone = "Bomb damage zone"
---L.c4_marker_vision_kill_zone = "Bomb kill zone"
+L.c4_marker_vision_safe_zone = "爆炸安全区"
+L.c4_marker_vision_damage_zone = "爆炸破坏区"
+L.c4_marker_vision_kill_zone = "爆炸杀伤区"
 
---L.beacon_marker_vision_player = "Tracked Player"
---L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+L.beacon_marker_vision_player = "被追踪的玩家"
+L.beacon_marker_vision_player_tracked = "该玩家被信标追踪"
 
 -- 2023-12-18
 L.beacon_help_pri = "将信标扔在地上"
@@ -2110,10 +2110,8 @@ L.msg_beacon_death = "一个玩家在你的一个信标的附近死亡。"
 L.beacon_pickup_disabled = "只有信标的拥有者才能拾起它"
 L.beacon_short_desc = "警察角色使用信标在他们周围添加本地透视效果"
 
--- 2023-12-18
 L.entity_pickup_owner_only = "只有拥有者才能捡起这个"
 
--- 2023-12-18
 L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 L.body_confirm_more = "{finder} 确认了以下 {count} 人的死亡: {victims}。"
 
@@ -2123,18 +2121,6 @@ L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
 L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
 
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "辅助功能"
-
-L.header_accessibility_settings = "辅助功能设置"
-
-L.label_enable_dynamic_fov = "启用动态 FOV 更改"
-L.label_enable_bobbing = "启用视图晃动"
-L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
-
-L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
-L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
 对于霰弹枪，这将影响每个弹丸。
@@ -2147,9 +2133,20 @@ L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此�
 注意：有些武器可能不使用这个值，这会导致这个修饰符无效。]]
 
 -- 2023-12-24
-L.binoc_help_reload = "清除目标。"
---L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
---L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+L.submenu_gameplay_accessibility_title = "辅助功能"
+
+L.header_accessibility_settings = "辅助功能设置"
+
+L.label_enable_dynamic_fov = "启用动态 FOV 更改"
+L.label_enable_bobbing = "启用视图晃动"
+L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
+
+L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
+L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
+
+L.binoc_help_reload = "清除目标"
+L.cl_sb_row_sresult_direct_conf = "直接确认"
+L.cl_sb_row_sresult_pub_police = "公共警察角色确认"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "启用准星轮廓"
@@ -2168,26 +2165,26 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "武器设置"
 
+-- 2024-01-24
+L.grenade_fuse = "保险丝"
 
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
+-- 2024-01-25
+L.header_roles_magnetostick = "磁力棒"
+L.label_roles_ragdoll_pinning = "启用布娃娃固定"
+L.magneto_stick_help_carry_rag_pin = "固定布娃娃"
+L.magneto_stick_help_carry_rag_drop = "丢弃布娃娃"
+L.magneto_stick_help_carry_prop_release = "释放道具"
+L.magneto_stick_help_carry_prop_drop = "丢弃道具"
 
 -- 2024-01-27
 L.decoy_help_primary = "安放诱饵"
---L.decoy_help_secondary = "Stick Decoy to surface"
+L.decoy_help_secondary = "将诱饵粘在表面"
 
--- 2024-01-24
---L.grenade_fuse = "FUSE"
-
--- 2024-01-25
---L.header_roles_magnetostick = "Magneto Stick"
---L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
---L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
---L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+--2024-01-29
+L.marker_vision_visible_for_0 = "您可见"
+L.marker_vision_visible_for_1 = "您的角色可见"
+L.marker_vision_visible_for_2 = "您的团队可见"
+L.marker_vision_visible_for_3 = "每个人都可见"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+L.throw_no_room = "这里没地方扔这个装置"
