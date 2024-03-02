@@ -369,23 +369,22 @@ function GM:PlayerSpray(ply)
     end
 end
 
-local overrideDoPlayerUse = false
-
 ---
 -- Triggered when the @{Player} presses use on an object.
 -- Continuously runs until USE is released but will not activate other Entities
 -- until the USE key is released; dependent on activation type of the @{Entity}.
--- @note This is just allowed for terrorists
+-- @note TTT2 blocks all gmod internal use and only checks this for addons
 -- @param Player ply The @{Player} pressing the "use" key.
 -- @param Entity ent The entity which the @{Player} is looking at / activating USE on.
+-- @param bool overrideDoPlayerUse This is used to override the default outcome of the check
 -- @return boolean Return false if the @{Player} is not allowed to USE the entity.
 -- Do not return true if using a hook, otherwise other mods may not get a chance to block a @{Player}'s use.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerUse
 -- @local
-function GM:PlayerUse(ply, ent)
-    return overrideDoPlayerUse
+function GM:PlayerUse(ply, ent, overrideDoPlayerUse)
+    return overrideDoPlayerUse or false
 end
 
 ---
@@ -548,15 +547,15 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
     end
 
     -- Check if the use interaction is possible
+    -- Use 150 instead of 100 to allow some desync between client and server
     local distance = ply:GetShootPos():Distance(ent:GetPos())
     if distance > 150 then
         return
     end
 
-    -- Override player use to enable addons to still handle it
+    -- Enable addons to allow handling PlayerUse
     -- Otherwise default to old IsTerror Check
-    overrideDoPlayerUse = ply:IsTerror()
-    if hook.Run("PlayerUse", ply, ent) then
+    if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
         ent:Use(ply, ply)
     end
     overrideDoPlayerUse = false
