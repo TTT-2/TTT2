@@ -76,7 +76,6 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return TBHUD:UseFocused()
         end
 
-        -- see if we need to do some custom usekey overriding
         local tr = util.TraceLine({
             start = ply:GetShootPos(),
             endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
@@ -90,9 +89,10 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 
         local isClientOnly = false
         if isfunction(tr.Entity.ClientUse) then
-            isClientOnly = tr.Entity:ClientUse(ply)
+            isClientOnly = tr.Entity:ClientUse()
         end
 
+        -- If returned true by ClientUse, then dont call Use and UseOverride serverside
         if isClientOnly then
             return
         end
