@@ -513,9 +513,12 @@ function GM:KeyPress(ply, key)
 end
 
 ---
--- Normally all dead players are blocked from "+use" on the server, meaning we
--- can't let them search bodies. This sucks because searching bodies is
--- fun. Hence on the client we override +use for specs and use this instead.
+-- This is called as spectator to use an entity
+-- Spectators can search bodies, spectate players and possess entities.
+-- @param Player ply The player using the use key
+-- @param Entity ent The entity, that is used
+-- @realm server
+-- @local
 local function SpecUseKey(ply, ent)
     -- Do not allow the spectator to gather information if they're about to revive.
     if ply:IsReviving() then
@@ -539,6 +542,13 @@ local function SpecUseKey(ply, ent)
     end
 end
 
+---
+-- This is called by a client when using the "+use"-key
+-- and contains the entity which was detected
+-- @param number len Length of the message
+-- @param Player ply Player that sent the message
+-- @realm server
+-- @internal
 net.Receive("TTT2PlayerUseEntity", function(len, ply)
     local ent = net.ReadEntity()
 
@@ -553,8 +563,11 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
         return
     end
 
+    ---
     -- Enable addons to allow handling PlayerUse
     -- Otherwise default to old IsTerror Check
+    -- @realm server
+    -- stylua: ignore
     if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
         ent:Use(ply, ply)
     end
