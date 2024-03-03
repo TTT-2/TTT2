@@ -5,8 +5,10 @@
 TTT2 versioning is based on semantic-versioning.
 Prefixing versions with a `v` to indicate it is a version number and appending a `b` to indicate its beta status.
 
-The latest release will be published to the Steam Workshop in form of an [addon](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556).
-The latest development will be accessible on this repository's master branch.
+- The latest release will be published to the Steam Workshop in form of an [addon](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556).
+- The latest release should be represented by the state in the release branch.
+    - The release tag points to the respective commit.
+- The latest development will be accessible on this repository's default branch.
 
 ## Release steps
 
@@ -48,7 +50,7 @@ The following steps will document our release process to prevent mistakes and co
 
 1. Draft a new Github release.
 
-    1. Target the `master` branch.
+    1. Target the `release` branch.
     1. Supply both `Tag version` and `Release title` with `<version>`.
     1. Copy applicable entries from the `CHANGELOG.md` to the `Describe this release` textarea.
     1. Press `Publish release`.
