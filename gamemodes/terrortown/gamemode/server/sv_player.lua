@@ -592,7 +592,7 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
     elseif ent.player_ragdoll then
         CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
     elseif ent:IsWeapon() then
-        ply:SafePickupWeapon(ent, false, true, true, nil) -- force pickup; drop blocking weapon, autoselect is set automatically
+        ply:SafePickupWeapon(ent, false, true, true, nil)
     end
 end)
 
