@@ -846,13 +846,20 @@ if CLIENT then
     -- @param Entity viewModel This is the view model entity before it is drawn
     -- @param Player ply The the owner of the view model
     -- @param Weapon wep This is the weapon that is from the view model
-    -- @return boolean Return true to prevent the default view model rendering. This also affects @{GM:PostDrawViewModel}
+    -- @return boolean Return true to prevent the default view model rendering. This also
+    -- affects @{GM:PostDrawViewModel}
     -- @realm client
     hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
+        -- note: while ShowDefaultViewModel is set to true in the weapon base, addons such as TFA
+        -- do not use the weapon base and only implement parts of it to work with TTT. In a perfect
+        -- world TFA would be updated to fix this issue, but we can also prevent it by explicitly
+        -- checking for false here.
+        -- This means that `nil` (when the weapon isn't based on our base) counts as `true` as well.
+
         -- special case: Hands should be shown, but the view model weapon shouldn't be; in this
         -- case we have to apply this debug material to make it invisible because returning true
         -- in this hook would prevent both the hands and the weapon from rendering
-        if wep.UseHands and not wep.ShowDefaultViewModel then
+        if wep.UseHands and wep.ShowDefaultViewModel == false then
             viewModel:SetMaterial("vgui/hsv")
 
             return
@@ -864,7 +871,7 @@ if CLIENT then
 
         -- only return something if we actually want to hide it because otherwise the SWEP
         -- hook is never called even if the view model is rendered
-        if not wep.ShowDefaultViewModel then
+        if wep.ShowDefaultViewModel == false then
             return true
         end
     end)

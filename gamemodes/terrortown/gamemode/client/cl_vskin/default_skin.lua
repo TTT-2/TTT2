@@ -1996,10 +1996,12 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
     local title = panel:GetTitle()
     local text_title = ""
 
-    if title.params then
-        text_title = ParT(title.body, title.params)
-    else
-        text_title = TryT(title.body)
+    if title then
+        if title.params then
+            text_title = ParT(title.body, title.params)
+        else
+            text_title = TryT(title.body)
+        end
     end
 
     drawSimpleText(
@@ -2014,15 +2016,18 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
 
     local text = panel:GetText()
     local text_translated = ""
-    for i = 1, #text do
-        local params = text[i].params
-        local body = text[i].body
 
-        if not body then
-            continue
+    if text then
+        for i = 1, #text do
+            local params = text[i].params
+            local body = text[i].body
+
+            if not body then
+                continue
+            end
+
+            text_translated = text_translated .. DynT(body, params, true) .. ""
         end
-
-        text_translated = text_translated .. DynT(body, params, true) .. ""
     end
 
     local text_wrapped = drawGetWrappedText(text_translated, w - posText - padding, "DermaDefault")

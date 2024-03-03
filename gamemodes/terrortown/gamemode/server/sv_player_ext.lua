@@ -236,7 +236,7 @@ plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 -- @realm server
 function plymeta:SendEquipment(mode, itemName)
     if not mode then
-        ErrorNoHaltWithStackWithStack(
+        ErrorNoHaltWithStack(
             "[TTT2] Define an EQUIPITEMS_mode for plymeta:SendEquipment(mode, itemName) to work.\n"
         )
 
