@@ -392,43 +392,4 @@ if SERVER then
 
         return true
     end
-end -- SERVER
-
-if CLIENT then
-    ---
-    -- This is triggered, when you focus a marker of an entity and press 'Use'-Key
-    -- Override to handle remote use
-    -- @realm client
-    function ENT:RemoteUse() end
-
-    hook.Add("KeyRelease", "TTT2RemoteUsePlaceable", function(ply, key)
-        if
-            key ~= IN_USE
-            or not IsValid(ply)
-            or not ply:IsTerror()
-            or not IsFirstTimePredicted()
-        then
-            return
-        end
-
-        local focussedEnt = markerVision.GetFocussedEntity()
-        if not IsValid(focussedEnt) or not isfunction(focussedEnt.RemoteUse) then
-            return
-        end
-
-        -- see if we need to do some custom usekey overriding
-        local tr = util.TraceLine({
-            start = ply:GetShootPos(),
-            endpos = ply:GetShootPos() + ply:GetAimVector() * 110,
-            filter = ply,
-            mask = MASK_SHOT,
-        })
-
-        -- Check if we want to pickup a weapon or check a corpse
-        if tr.Hit and IsValid(tr.Entity) and (tr.Entity.CanUseKey or tr.Entity.player_ragdoll) then
-            return
-        end
-
-        focussedEnt:RemoteUse()
-    end)
-end -- CLIENT
+end

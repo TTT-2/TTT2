@@ -551,8 +551,17 @@ end
 -- @internal
 net.Receive("TTT2PlayerUseEntity", function(len, ply)
     local ent = net.ReadEntity()
+    local isRemote = net.ReadBool()
 
     if not IsValid(ent) then
+        return
+    end
+
+    if isRemote then
+        if isfunction(ent.RemoteUse) then
+            ent:RemoteUse(ply)
+        end
+
         return
     end
 
