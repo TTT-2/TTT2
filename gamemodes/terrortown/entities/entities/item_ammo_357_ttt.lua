@@ -1,5 +1,5 @@
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 ENT.Type = "anim"

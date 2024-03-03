@@ -10,9 +10,7 @@
 -- @param Player ply
 -- @param boolean isRoleChange This is true for a rolechange, but not for a respawn
 -- @realm server
-function ROLE:GiveRoleLoadout(ply, isRoleChange)
-
-end
+function ROLE:GiveRoleLoadout(ply, isRoleChange) end
 
 ---
 -- Function that is overwritten by the role and is called on rolechange and death.
@@ -20,9 +18,7 @@ end
 -- @param Player ply
 -- @param boolean isRoleChange This is true for a rolechange, but not for death
 -- @realm server
-function ROLE:RemoveRoleLoadout(ply, isRoleChange)
-
-end
+function ROLE:RemoveRoleLoadout(ply, isRoleChange) end
 
 ---
 -- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
@@ -30,13 +26,15 @@ end
 -- @return boolean
 -- @realm server
 function ROLE:IsSelectable(avoidHook)
-	return self == INNOCENT or self == TRAITOR
-		or (GetConVar("ttt_newroles_enabled"):GetBool() or self == DETECTIVE)
-		and not self.notSelectable
-		and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
-		---
-		-- @realm server
-		and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
+    return self == roles.INNOCENT
+        or self == roles.TRAITOR
+        or (GetConVar("ttt_newroles_enabled"):GetBool() or self == roles.DETECTIVE)
+            and not self.notSelectable
+            and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
+            ---
+            -- @realm server
+            -- stylua: ignore
+            and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
 end
 
 ---
@@ -45,20 +43,22 @@ end
 -- @return number selectable amount of this role
 -- @realm server
 function ROLE:GetAvailableRoleCount(ply_count)
-	if ply_count < GetConVar("ttt_" .. self.name .. "_min_players"):GetInt() then
-		return 0
-	end
+    if ply_count < GetConVar("ttt_" .. self.name .. "_min_players"):GetInt() then
+        return 0
+    end
 
-	local maxCVar = GetConVar("ttt_" .. self.name .. "_max")
-	local maxAmount = maxCVar and maxCVar:GetInt() or 1
+    local maxCVar = GetConVar("ttt_" .. self.name .. "_max")
+    local maxAmount = maxCVar and maxCVar:GetInt() or 1
 
-	if maxAmount <= 1 then return 1 end
+    if maxAmount <= 1 then
+        return 1
+    end
 
-	-- get number of role members: pct of players rounded down
-	local role_count = math.floor(ply_count * GetConVar("ttt_" .. self.name .. "_pct"):GetFloat())
+    -- get number of role members: pct of players rounded down
+    local role_count = math.floor(ply_count * GetConVar("ttt_" .. self.name .. "_pct"):GetFloat())
 
-	-- make sure there is at least 1 of the role
-	return math.Clamp(role_count, 1, maxAmount)
+    -- make sure there is at least 1 of the role
+    return math.Clamp(role_count, 1, maxAmount)
 end
 
 -- Returns if the role can be awarded credits for a kill. Is is intended to award credits
@@ -67,9 +67,9 @@ end
 -- @return boolean Returns true if the player can be awarded with credits
 -- @realm server
 function ROLE:IsAwardedCreditsForKill()
-	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_award_kill_enb")
+    local cv = GetConVar("ttt_" .. self.abbr .. "_credits_award_kill_enb")
 
-	return cv and cv:GetBool() or false
+    return cv and cv:GetBool() or false
 end
 
 ---
@@ -80,9 +80,9 @@ end
 -- @return boolean Returns true if the player can be awarded with credits
 -- @realm server
 function ROLE:IsAwardedCreditsForPlayerDead()
-	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_award_dead_enb")
+    local cv = GetConVar("ttt_" .. self.abbr .. "_credits_award_dead_enb")
 
-	return cv and cv:GetBool() or false
+    return cv and cv:GetBool() or false
 end
 
 ---
@@ -91,6 +91,4 @@ end
 -- @return nil|boolean Return true to cancel selection
 -- @hook
 -- @realm server
-function GM:TTT2RoleNotSelectable(roleData)
-
-end
+function GM:TTT2RoleNotSelectable(roleData) end

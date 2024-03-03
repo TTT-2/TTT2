@@ -8,49 +8,48 @@ TARGET_DATA = {}
 
 ---
 -- Initializes the @{TARGET_DATA} object
--- @param entity ent The focused Entity
--- @param entity unchangedEnt The original focused Entity if focus was changed by the hook
--- @param number distance The distance to the focused Entity
--- @return @{TARGET_DATA} The object to be used in the hook
+-- @param Entity ent The focused Entity
+-- @param Entity unchangedEnt The original focused entity if focus was changed by the hook
+-- @param number distance The distance to the focused entity
+-- @return TARGET_DATA The object to be used in the hook
 -- @internal
 -- @realm client
 function TARGET_DATA:Initialize(ent, unchangedEnt, distance)
-	-- combine data into a table to read them inside a hook
-	local data = {
-		ent = ent,
-		unchangedEnt = unchangedEnt,
-		distance = distance
-	}
+    -- combine data into a table to read them inside a hook
+    local data = {
+        ent = ent,
+        unchangedEnt = unchangedEnt,
+        distance = distance,
+    }
 
-	-- preset a table of values that can be changed with a hook
-	local params = {
-		drawInfo = nil,
-		drawOutline = nil,
-		outlineColor = COLOR_WHITE,
-		displayInfo = {
-			key = nil,
-			icon = {},
-			title = {
-				icons = {},
-				text = "",
-				color = COLOR_WHITE
-			},
-			subtitle = {
-				icons = {},
-				text = "",
-				color = COLOR_LLGRAY
-			},
-			desc = {}
-		},
-		refPosition = {
-			x = math.Round(0.5 * ScrW() / appearance.GetGlobalScale(), 0),
-			y = math.Round(0.5 * ScrH() / appearance.GetGlobalScale(), 0) + 42
-		}
-	}
+    -- preset a table of values that can be changed with a hook
+    local params = {
+        drawInfo = nil,
+        drawOutline = nil,
+        outlineColor = COLOR_WHITE,
+        displayInfo = {
+            key = nil,
+            icon = {},
+            title = {
+                icons = {},
+                text = "",
+                color = COLOR_WHITE,
+            },
+            subtitle = {
+                icons = {},
+                text = "",
+                color = COLOR_LLGRAY,
+            },
+            desc = {},
+        },
+        refPosition = {
+            x = math.Round(0.5 * ScrW() / appearance.GetGlobalScale(), 0),
+            y = math.Round(0.5 * ScrH() / appearance.GetGlobalScale(), 0) + 42,
+        },
+    }
 
-	return TARGET_DATA:BindTarget(data, params)
+    return TARGET_DATA:BindTarget(data, params)
 end
-
 
 ---
 -- Binds two target data tables to the @{TARGET_DATA} object
@@ -60,10 +59,10 @@ end
 -- @internal
 -- @realm client
 function TARGET_DATA:BindTarget(data, params)
-	self.data = data
-	self.params = params
+    self.data = data
+    self.params = params
 
-	return self
+    return self
 end
 
 ---
@@ -71,7 +70,7 @@ end
 -- @return Entity The focused entity
 -- @realm client
 function TARGET_DATA:GetEntity()
-	return self.data.ent
+    return self.data.ent
 end
 
 ---
@@ -79,7 +78,7 @@ end
 -- @return nil|Entity The focused entity, nil if it wasn't modified
 -- @realm client
 function TARGET_DATA:GetUnchangedEntity()
-	return self.data.unchangedEnt
+    return self.data.unchangedEnt
 end
 
 ---
@@ -87,7 +86,7 @@ end
 -- @return number The distance to the focused entity
 -- @realm client
 function TARGET_DATA:GetEntityDistance()
-	return self.data.distance
+    return self.data.distance
 end
 
 ---
@@ -96,11 +95,13 @@ end
 -- @param[default=true] boolean enb_outline A boolean defining the outline state
 -- @realm client
 function TARGET_DATA:EnableOutline(enb_outline)
-	-- only set if not already set to false
-	if self.params.drawOutline == false then return end
+    -- only set if not already set to false
+    if self.params.drawOutline == false then
+        return
+    end
 
-	-- set to true if true or nil, but keep false
-	self.params.drawOutline = (enb_outline == nil) and true or enb_outline
+    -- set to true if true or nil, but keep false
+    self.params.drawOutline = (enb_outline == nil) and true or enb_outline
 end
 
 ---
@@ -109,11 +110,13 @@ end
 -- @param[default=true] boolean enb_text A boolean defining the text state
 -- @realm client
 function TARGET_DATA:EnableText(enb_text)
-	-- only set if not already set to false
-	if self.params.drawInfo == false then return end
+    -- only set if not already set to false
+    if self.params.drawInfo == false then
+        return
+    end
 
-	-- set to true if true or nil, but keep false
-	self.params.drawInfo = (enb_text == nil) and true or enb_text
+    -- set to true if true or nil, but keep false
+    self.params.drawInfo = (enb_text == nil) and true or enb_text
 end
 
 ---
@@ -121,16 +124,16 @@ end
 -- @param[default=Color(255, 255, 255, 255)] Color The outline color
 -- @realm client
 function TARGET_DATA:SetOutlineColor(color)
-	self.params.outlineColor = IsColor(color) and color or COLOR_WHITE
+    self.params.outlineColor = IsColor(color) and color or COLOR_WHITE
 end
 
 ---
 -- Returns the reference position of the targetID HUD element. The reference position
 -- is used to position the element on screen.
--- @return number, number Reference position x, reference position y
+-- @return number,number Reference position x, reference position y
 -- @realm client
 function TARGET_DATA:GetRefPosition()
-	return self.params.refPosition.x, self.params.refPosition.y
+    return self.params.refPosition.x, self.params.refPosition.y
 end
 
 ---
@@ -141,10 +144,10 @@ end
 -- @param number ref_y The reference position on the y axis
 -- @realm client
 function TARGET_DATA:SetRefPosition(ref_x, ref_y)
-	self.params.refPosition = {
-		x = ref_x or self.params.refPosition.x,
-		y = ref_y or self.params.refPosition.y
-	}
+    self.params.refPosition = {
+        x = ref_x or self.params.refPosition.x,
+        y = ref_y or self.params.refPosition.y,
+    }
 end
 
 ---
@@ -152,7 +155,7 @@ end
 -- @param string key The key to be displayed, this can be any string. E.g. "E".
 -- @realm client
 function TARGET_DATA:SetKey(key)
-	self.params.displayInfo.key = key
+    self.params.displayInfo.key = key
 end
 
 ---
@@ -160,7 +163,7 @@ end
 -- @param string key_binding The key binding like "+use".
 -- @realm client
 function TARGET_DATA:SetKeyBinding(key_binding)
-	self.params.displayInfo.key = input.GetKeyCode(input.LookupBinding(key_binding))
+    self.params.displayInfo.key = input.GetKeyCode(input.LookupBinding(key_binding))
 end
 
 ---
@@ -170,14 +173,14 @@ end
 -- @return number The amount of icons that are currently in the table
 -- @realm client
 function TARGET_DATA:AddIcon(material, color)
-	local amount = #self.params.displayInfo.icon + 1
+    local amount = #self.params.displayInfo.icon + 1
 
-	self.params.displayInfo.icon[amount] = {
-		material = material,
-		color = IsColor(color) and color or COLOR_WHITE
-	}
+    self.params.displayInfo.icon[amount] = {
+        material = material,
+        color = IsColor(color) and color or COLOR_WHITE,
+    }
 
-	return amount
+    return amount
 end
 
 ---
@@ -187,11 +190,11 @@ end
 -- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetTitle(text, color, inline_icons)
-	self.params.displayInfo.title = {
-		text = text or "",
-		color = IsColor(color) and color or COLOR_WHITE,
-		icons = inline_icons or {}
-	}
+    self.params.displayInfo.title = {
+        text = text or "",
+        color = IsColor(color) and color or COLOR_WHITE,
+        icons = inline_icons or {},
+    }
 end
 
 ---
@@ -201,11 +204,11 @@ end
 -- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetSubtitle(text, color, inline_icons)
-	self.params.displayInfo.subtitle = {
-		text = text or "",
-		color = IsColor(color) and color or COLOR_LLGRAY,
-		icons = inline_icons or {}
-	}
+    self.params.displayInfo.subtitle = {
+        text = text or "",
+        color = IsColor(color) and color or COLOR_LLGRAY,
+        icons = inline_icons or {},
+    }
 end
 
 ---
@@ -216,15 +219,15 @@ end
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
-	local amount = #self.params.displayInfo.desc + 1
+    local amount = #self.params.displayInfo.desc + 1
 
-	self.params.displayInfo.desc[amount] = {
-		text = text or "",
-		color = IsColor(color) and color or COLOR_WHITE,
-		icons = inline_icons or {}
-	}
+    self.params.displayInfo.desc[amount] = {
+        text = text or "",
+        color = IsColor(color) and color or COLOR_WHITE,
+        icons = inline_icons or {},
+    }
 
-	return amount
+    return amount
 end
 
 ---
@@ -232,7 +235,7 @@ end
 -- @return boolean True if a title is set
 -- @realm client
 function TARGET_DATA:HasTitle()
-	return self.params.displayInfo.title and self.params.displayInfo.title ~= ""
+    return self.params.displayInfo.title and self.params.displayInfo.title ~= ""
 end
 
 ---
@@ -240,7 +243,7 @@ end
 -- @return boolean True if a subtitle is set
 -- @realm client
 function TARGET_DATA:HasSubtitle()
-	return self.params.displayInfo.subtitle and self.params.displayInfo.subtitle ~= ""
+    return self.params.displayInfo.subtitle and self.params.displayInfo.subtitle ~= ""
 end
 
 ---
@@ -248,7 +251,7 @@ end
 -- @return number Amount of existing description lines
 -- @realm client
 function TARGET_DATA:GetAmountDescriptionLines()
-	return #self.params.displayInfo.desc
+    return #self.params.displayInfo.desc
 end
 
 ---
@@ -256,7 +259,7 @@ end
 -- @return boolean True if a key is set
 -- @realm client
 function TARGET_DATA:HasKey()
-	return self.params.displayInfo.key ~= nil
+    return self.params.displayInfo.key ~= nil
 end
 
 ---
@@ -264,13 +267,13 @@ end
 -- @return number Amount of existing icons
 -- @realm client
 function TARGET_DATA:GetAmountIcons()
-	return #self.params.displayInfo.icon
+    return #self.params.displayInfo.icon
 end
 
 ---
 -- Returns the raw data tables of the targetID element to me modified by experienced users
--- @return table, table The table of the entity data, the table of the targetID element parameters
+-- @return table,table The table of the entity data, the table of the targetID element parameters
 -- @realm client
 function TARGET_DATA:GetRaw()
-	return self.data, self.params
+    return self.data, self.params
 end

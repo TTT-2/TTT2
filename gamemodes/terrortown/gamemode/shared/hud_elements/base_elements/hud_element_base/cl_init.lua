@@ -12,18 +12,18 @@ local hudelements = hudelements
 local math = math
 
 local zero_tbl_pos = {
-	x = 0,
-	y = 0
+    x = 0,
+    y = 0,
 }
 
 local zero_tbl_size = {
-	w = 0,
-	h = 0
+    w = 0,
+    h = 0,
 }
 
 local zero_tbl_min_size = {
-	w = 0,
-	h = 0
+    w = 0,
+    h = 0,
 }
 
 -- Basic position / dimension variables
@@ -41,15 +41,15 @@ HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
 
 HUDELEMENT.defaults = {
-	-- resize area parameters
-	click_area = 20,
-	click_padding = 0
+    -- resize area parameters
+    click_area = 20,
+    click_padding = 0,
 }
 
 HUDELEMENT.edit_live_data = {
-	calc_new_click_area = false,
-	old_row = nil,
-	old_col = nil
+    calc_new_click_area = false,
+    old_row = nil,
+    old_col = nil,
 }
 
 ---
@@ -60,26 +60,44 @@ HUDELEMENT.edit_live_data = {
 -- @param[opt] any ... parameters to call the given function with
 -- @realm client
 function HUDELEMENT:ApplyToChildren(funcName, ...)
-	if not funcName then return end
+    if not funcName then
+        return
+    end
 
-	local children = self:GetChildren()
+    local children = self:GetChildren()
 
-	for i = 1, #children do
-		local elem = children[i]
+    for i = 1, #children do
+        local elem = children[i]
 
-		local elemtbl = hudelements.GetStored(elem)
-		if not elemtbl then
-			Msg("ERROR: HUDElement " .. (self.id or "?") .. " has unknown child element named " .. elem .. " when applying a function to all children: " .. funcName .. " \n")
+        local elemtbl = hudelements.GetStored(elem)
+        if not elemtbl then
+            ErrorNoHaltWithStack(
+                "ERROR: HUDElement "
+                    .. (self.id or "?")
+                    .. " has unknown child element named "
+                    .. elem
+                    .. " when applying a function to all children: "
+                    .. funcName
+                    .. " \n"
+            )
 
-			continue
-		end
+            continue
+        end
 
-		if isfunction(elemtbl[funcName]) then
-			elemtbl[funcName](elemtbl, ...)
-		else
-			MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
-		end
-	end
+        if isfunction(elemtbl[funcName]) then
+            elemtbl[funcName](elemtbl, ...)
+        else
+            ErrorNoHaltWithStack(
+                "ERROR: HUDElement "
+                    .. (self.id or "?")
+                    .. " has child named "
+                    .. elem
+                    .. " with unknown function "
+                    .. funcName
+                    .. " \n"
+            )
+        end
+    end
 end
 
 ---
@@ -94,10 +112,7 @@ end
 -- @note Use this to set child<->parent relations and also to force your element to a specific HUD if needed etc,
 -- this is called before Initialized and other objects can still be uninitialized!
 -- @realm client
-function HUDELEMENT:PreInitialize()
-
-end
-
+function HUDELEMENT:PreInitialize() end
 
 ---
 -- This function will be called each time the HUD is loaded eg. when
@@ -111,19 +126,18 @@ end
 -- @{HUDELEMENT:Initialize} on all children.
 -- @realm client
 function HUDELEMENT:Initialize()
-	local defaults = self:GetDefaults()
+    local defaults = self:GetDefaults()
 
-	self:SetSize(defaults.size.w, defaults.size.h)
-	self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
+    self:SetSize(defaults.size.w, defaults.size.h)
+    self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
 
-	defaults = self:GetDefaults()
+    defaults = self:GetDefaults()
 
-	self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+    self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
 
-	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
-	self:ApplyToChildren("Initialize")
+    -- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
+    self:ApplyToChildren("Initialize")
 end
-
 
 ---
 -- This function is called when an element should draw its content.
@@ -131,9 +145,7 @@ end
 -- any values if not explicitly needed.
 -- @hook
 -- @realm client
-function HUDELEMENT:Draw()
-
-end
+function HUDELEMENT:Draw() end
 
 ---
 -- This function is called to decide whether or not an element should be drawn.
@@ -142,7 +154,7 @@ end
 -- @hook
 -- @realm client
 function HUDELEMENT:ShouldDraw()
-	return true
+    return true
 end
 
 ---
@@ -153,7 +165,7 @@ end
 -- @hook
 -- @realm client
 function HUDELEMENT:IsResizable()
-	return true, true
+    return true, true
 end
 
 ---
@@ -163,7 +175,7 @@ end
 -- @hook
 -- @realm client
 function HUDELEMENT:AspectRatioIsLocked()
-	return false
+    return false
 end
 
 ---
@@ -173,7 +185,7 @@ end
 -- @hook
 -- @realm client
 function HUDELEMENT:InheritParentBorder()
-	return false
+    return false
 end
 -- parameter overwrites end
 
@@ -183,7 +195,7 @@ end
 -- @hook
 -- @realm client
 function HUDELEMENT:PerformLayout()
-	self:ApplyToChildren("PerformLayout")
+    self:ApplyToChildren("PerformLayout")
 end
 
 ---
@@ -192,7 +204,7 @@ end
 -- @return table x and y value
 -- @realm client
 function HUDELEMENT:GetBasePos()
-	return table.Copy(self.basepos)
+    return table.Copy(self.basepos)
 end
 
 ---
@@ -203,13 +215,13 @@ end
 -- @param number y
 -- @realm client
 function HUDELEMENT:SetBasePos(x, y)
-	local pos_difference_x = self.pos.x - self.basepos.x
-	local pos_difference_y = self.pos.y - self.basepos.y
+    local pos_difference_x = self.pos.x - self.basepos.x
+    local pos_difference_y = self.pos.y - self.basepos.y
 
-	self.basepos.x = x
-	self.basepos.y = y
+    self.basepos.x = x
+    self.basepos.y = y
 
-	self:SetPos(x + pos_difference_x, y + pos_difference_y)
+    self:SetPos(x + pos_difference_x, y + pos_difference_y)
 end
 
 ---
@@ -218,7 +230,7 @@ end
 -- @return table with x and y value
 -- @realm client
 function HUDELEMENT:GetPos()
-	return table.Copy(self.pos)
+    return table.Copy(self.pos)
 end
 
 ---
@@ -228,8 +240,8 @@ end
 -- @param number y
 -- @realm client
 function HUDELEMENT:SetPos(x, y)
-	self.pos.x = x
-	self.pos.y = y
+    self.pos.x = x
+    self.pos.y = y
 end
 
 ---
@@ -239,7 +251,7 @@ end
 -- @return table width and height value
 -- @realm client
 function HUDELEMENT:GetMinSize()
-	return table.Copy(self.minsize)
+    return table.Copy(self.minsize)
 end
 
 ---
@@ -250,8 +262,8 @@ end
 -- @param number h
 -- @realm client
 function HUDELEMENT:SetMinSize(w, h)
-	self.minsize.w = w
-	self.minsize.h = h
+    self.minsize.w = w
+    self.minsize.h = h
 end
 
 ---
@@ -259,7 +271,7 @@ end
 -- @return table with width and height value
 -- @realm client
 function HUDELEMENT:GetSize()
-	return table.Copy(self.size)
+    return table.Copy(self.size)
 end
 
 ---
@@ -271,31 +283,31 @@ end
 -- @param number h
 -- @realm client
 function HUDELEMENT:SetSize(w, h)
-	w = math.Round(w)
-	h = math.Round(h)
+    w = math.Round(w)
+    h = math.Round(h)
 
-	local nw, nh = w < 0, h < 0
+    local nw, nh = w < 0, h < 0
 
-	if nw then
-		w = -w
-	end
+    if nw then
+        w = -w
+    end
 
-	if nh then
-		h = -h
-	end
+    if nh then
+        h = -h
+    end
 
-	if nw or nh then
-		if nw then
-			self:SetPos(self:GetBasePos().x - w, self:GetPos().y)
-		end
+    if nw or nh then
+        if nw then
+            self:SetPos(self:GetBasePos().x - w, self:GetPos().y)
+        end
 
-		if nh then
-			self:SetPos(self:GetPos().x, self:GetBasePos().y - h)
-		end
-	end
+        if nh then
+            self:SetPos(self:GetPos().x, self:GetBasePos().y - h)
+        end
+    end
 
-	self.size.w = w
-	self.size.h = h
+    self.size.w = w
+    self.size.h = h
 end
 
 ---
@@ -305,7 +317,7 @@ end
 -- @internal
 -- @realm client
 function HUDELEMENT:GetParentRelation()
-	return self.parent, self.parent_is_type
+    return self.parent, self.parent_is_type
 end
 
 ---
@@ -316,8 +328,8 @@ end
 -- @internal
 -- @realm client
 function HUDELEMENT:SetParentRelation(parent, is_type)
-	self.parent = parent
-	self.parent_is_type = is_type
+    self.parent = parent
+    self.parent_is_type = is_type
 end
 
 ---
@@ -327,9 +339,9 @@ end
 -- @param number elementid
 -- @realm client
 function HUDELEMENT:AddChild(elementid)
-	if not table.HasValue(self.children, elementid) then
-		self.children[#self.children + 1] = elementid
-	end
+    if not table.HasValue(self.children, elementid) then
+        self.children[#self.children + 1] = elementid
+    end
 end
 
 ---
@@ -337,7 +349,7 @@ end
 -- @return boolean
 -- @realm client
 function HUDELEMENT:IsChild()
-	return self.parent ~= nil
+    return self.parent ~= nil
 end
 
 ---
@@ -345,7 +357,7 @@ end
 -- @return boolean
 -- @realm client
 function HUDELEMENT:IsParent()
-	return #self.children > 0
+    return #self.children > 0
 end
 
 ---
@@ -353,7 +365,7 @@ end
 -- @return table a copy of all your child elements
 -- @realm client
 function HUDELEMENT:GetChildren()
-	return table.Copy(self.children)
+    return table.Copy(self.children)
 end
 
 ---
@@ -362,35 +374,40 @@ end
 -- @return table size (<code>{@{number} w, @{number} h}</code>)
 -- @realm client
 function HUDELEMENT:GetBorderParams()
-	if not self:IsParent() then
-		return self:GetPos(), self:GetSize()
-	end
+    if not self:IsParent() then
+        return self:GetPos(), self:GetSize()
+    end
 
-	local pos = self:GetPos()
-	local size = self:GetSize()
-	local children = self:GetChildren()
+    local pos = self:GetPos()
+    local size = self:GetSize()
+    local children = self:GetChildren()
 
-	local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
+    local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
 
-	-- iterate over children
-	for i = 1, #children do
-		local elem_str = children[i]
-		local elem = hudelements.GetStored(elem_str)
+    -- iterate over children
+    for i = 1, #children do
+        local elem_str = children[i]
+        local elem = hudelements.GetStored(elem_str)
 
-		local hud = huds.GetStored(HUDManager.GetHUD())
+        local hud = huds.GetStored(HUDManager.GetHUD())
 
-		if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldDraw() then
-			local c_pos = elem:GetPos()
-			local c_size = elem:GetSize()
+        if
+            elem
+            and elem:InheritParentBorder()
+            and hud:ShouldShow(elem.type)
+            and elem:ShouldDraw()
+        then
+            local c_pos = elem:GetPos()
+            local c_size = elem:GetSize()
 
-			x_min = math.min(x_min, c_pos.x)
-			y_min = math.min(y_min, c_pos.y)
-			x_max = math.max(x_max, c_pos.x + c_size.w)
-			y_max = math.max(y_max, c_pos.y + c_size.h)
-		end
-	end
+            x_min = math.min(x_min, c_pos.x)
+            y_min = math.min(y_min, c_pos.y)
+            x_max = math.max(x_max, c_pos.x + c_size.w)
+            y_max = math.max(y_max, c_pos.y + c_size.h)
+        end
+    end
 
-	return {x = x_min, y = y_min}, {w = x_max - x_min, h = y_max - y_min}
+    return { x = x_min, y = y_min }, { w = x_max - x_min, h = y_max - y_min }
 end
 
 ---
@@ -401,12 +418,12 @@ end
 -- @return boolean
 -- @realm client
 function HUDELEMENT:IsInRange(x, y, range)
-	range = range or 0
+    range = range or 0
 
-	local minX, minY = self.pos.x, self.pos.y
-	local maxX, maxY = minX + self.size.w, minY + self.size.h
+    local minX, minY = self.pos.x, self.pos.y
+    local maxX, maxY = minX + self.size.w, minY + self.size.h
 
-	return x - range <= maxX and x + range >= minX and y - range <= maxY and y + range >= minY
+    return x - range <= maxX and x + range >= minX and y - range <= maxY and y + range >= minY
 end
 
 ---
@@ -416,7 +433,7 @@ end
 -- @return boolean
 -- @realm client
 function HUDELEMENT:IsInPos(x, y)
-	return self:IsInRange(x, y, 0)
+    return self:IsInRange(x, y, 0)
 end
 
 ---
@@ -428,56 +445,56 @@ end
 -- @local
 -- @realm client
 function HUDELEMENT:OnHovered(x, y)
-	if self:IsChild() then -- children are not resizeable
-		return {false, false, false}, {false, false, false}
-	end
+    if self:IsChild() then -- children are not resizeable
+        return { false, false, false }, { false, false, false }
+    end
 
-	local minX, minY = self.pos.x, self.pos.y
-	local maxX, maxY = minX + self.size.w, minY + self.size.h
+    local minX, minY = self.pos.x, self.pos.y
+    local maxX, maxY = minX + self.size.w, minY + self.size.h
 
-	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
-	local res_x, res_y = self:IsResizable()
+    local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
+    local res_x, res_y = self:IsResizable()
 
-	local row, col
+    local row, col
 
-	-- ROWS
-	if res_y then
-		row = {
-			y > minY + c_pad and y < minY + c_pad + c_area, -- top row
-			y > minY + 2 * c_pad + c_area and y < maxY - 2 * c_pad - c_area, -- center column
-			y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
-		}
-	else
-		row = {
-			false, -- top row
-			y > minY + c_pad and y < maxY - c_pad, -- center column
-			false -- right column
-		}
-	end
+    -- ROWS
+    if res_y then
+        row = {
+            y > minY + c_pad and y < minY + c_pad + c_area, -- top row
+            y > minY + 2 * c_pad + c_area and y < maxY - 2 * c_pad - c_area, -- center column
+            y > maxY - c_pad - c_area and y < maxY - c_pad, -- right column
+        }
+    else
+        row = {
+            false, -- top row
+            y > minY + c_pad and y < maxY - c_pad, -- center column
+            false, -- right column
+        }
+    end
 
-	-- COLUMS
-	if res_x then
-		col = {
-			x > minX + c_pad and x < minX + c_pad + c_area, -- left column
-			x > minX + 2 * c_pad + c_area and x < maxX - 2 * c_pad - c_area, -- center column
-			x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
-		}
-	else
-		col = {
-			false, -- left column
-			x > minX + c_pad and x < maxX - c_pad, -- center column
-			false -- right column
-		}
-	end
+    -- COLUMS
+    if res_x then
+        col = {
+            x > minX + c_pad and x < minX + c_pad + c_area, -- left column
+            x > minX + 2 * c_pad + c_area and x < maxX - 2 * c_pad - c_area, -- center column
+            x > maxX - c_pad - c_area and x < maxX - c_pad, -- right column
+        }
+    else
+        col = {
+            false, -- left column
+            x > minX + c_pad and x < maxX - c_pad, -- center column
+            false, -- right column
+        }
+    end
 
-	-- locked aspect ratio has to be a special case to not break movement
-	-- ignore if mouse is on center
-	if self:AspectRatioIsLocked() and not (row[2] and col[2]) then
-		row[2] = false
-		col[2] = false
-	end
+    -- locked aspect ratio has to be a special case to not break movement
+    -- ignore if mouse is on center
+    if self:AspectRatioIsLocked() and not (row[2] and col[2]) then
+        row[2] = false
+        col[2] = false
+    end
 
-	return row, col
+    return row, col
 end
 
 ---
@@ -487,61 +504,61 @@ end
 -- @local
 -- @realm client
 function HUDELEMENT:DrawHovered(x, y)
-	if not self:IsInPos(x, y) then
-		return false
-	end
+    if not self:IsInPos(x, y) then
+        return false
+    end
 
-	local minX, minY = self.pos.x, self.pos.y
-	local maxX, maxY = minX + self.size.w, minY + self.size.h
-	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
-	local res_x, res_y = self:IsResizable()
+    local minX, minY = self.pos.x, self.pos.y
+    local maxX, maxY = minX + self.size.w, minY + self.size.h
+    local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
+    local res_x, res_y = self:IsResizable()
 
-	local row, col = self:OnHovered(x, y)
-	local x1, x2, y1, y2 = 0, 0, 0, 0
+    local row, col = self:OnHovered(x, y)
+    local x1, x2, y1, y2 = 0, 0, 0, 0
 
-	if row[1] then -- resizeable in all directions
-		y1 = minY + c_pad
-		y2 = minY + c_pad + c_area
-	elseif row[2] and (col[1] or col[3]) and not res_y then -- only resizeable in X
-		y1 = minY + c_pad
-		y2 = maxY - c_pad
-	elseif row[2] and not res_y then -- only resizeable in X / show center area
-		y1 = minY + c_pad
-		y2 = maxY - c_pad
-	elseif row[2] then -- resizeable in all directions / show center area
-		y1 = minY + 2 * c_pad + c_area
-		y2 = maxY - 2 * c_pad - c_area
-	elseif row[3] then -- resizeable in all directions
-		y1 = maxY - c_pad - c_area
-		y2 = maxY - c_pad
-	end
+    if row[1] then -- resizeable in all directions
+        y1 = minY + c_pad
+        y2 = minY + c_pad + c_area
+    elseif row[2] and (col[1] or col[3]) and not res_y then -- only resizeable in X
+        y1 = minY + c_pad
+        y2 = maxY - c_pad
+    elseif row[2] and not res_y then -- only resizeable in X / show center area
+        y1 = minY + c_pad
+        y2 = maxY - c_pad
+    elseif row[2] then -- resizeable in all directions / show center area
+        y1 = minY + 2 * c_pad + c_area
+        y2 = maxY - 2 * c_pad - c_area
+    elseif row[3] then -- resizeable in all directions
+        y1 = maxY - c_pad - c_area
+        y2 = maxY - c_pad
+    end
 
-	if col[1] then -- resizeable in all directions
-		x1 = minX + c_pad
-		x2 = minX + c_pad + c_area
-	elseif col[2] and (row[1] or row[3]) and not res_x then -- only resizeable in Y
-		x1 = minX + c_pad
-		x2 = maxX - c_pad
-	elseif col[2] and not res_x then -- only resizeable in Y / show center area
-		x1 = minX + c_pad
-		x2 = maxX - c_pad
-	elseif col[2] then -- resizeable in all directions / show center area
-		x1 = minX + 2 * c_pad + c_area
-		x2 = maxX - 2 * c_pad - c_area
-	elseif col[3] then -- resizeable in all directions
-		x1 = maxX - c_pad - c_area
-		x2 = maxX - c_pad
-	end
+    if col[1] then -- resizeable in all directions
+        x1 = minX + c_pad
+        x2 = minX + c_pad + c_area
+    elseif col[2] and (row[1] or row[3]) and not res_x then -- only resizeable in Y
+        x1 = minX + c_pad
+        x2 = maxX - c_pad
+    elseif col[2] and not res_x then -- only resizeable in Y / show center area
+        x1 = minX + c_pad
+        x2 = maxX - c_pad
+    elseif col[2] then -- resizeable in all directions / show center area
+        x1 = minX + 2 * c_pad + c_area
+        x2 = maxX - 2 * c_pad - c_area
+    elseif col[3] then -- resizeable in all directions
+        x1 = maxX - c_pad - c_area
+        x2 = maxX - c_pad
+    end
 
-	-- set color
-	if row[2] and col[2] then
-		surface.SetDrawColor(20, 150, 245, 155)
-	else
-		surface.SetDrawColor(245, 30, 80, 155)
-	end
+    -- set color
+    if row[2] and col[2] then
+        surface.SetDrawColor(20, 150, 245, 155)
+    else
+        surface.SetDrawColor(245, 30, 80, 155)
+    end
 
-	-- draw rect
-	surface.DrawRect(x1, y1, x2 - x1, y2 - y1)
+    -- draw rect
+    surface.DrawRect(x1, y1, x2 - x1, y2 - y1)
 end
 
 ---
@@ -554,47 +571,47 @@ end
 -- @local
 -- @realm client
 function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
-	alt_pressed = alt_pressed or false
+    alt_pressed = alt_pressed or false
 
-	local row, col
+    local row, col
 
-	if self.edit_live_data.calc_new_click_area then
-		if not self:IsInPos(x, y) then
-			return false
-		end
+    if self.edit_live_data.calc_new_click_area then
+        if not self:IsInPos(x, y) then
+            return false
+        end
 
-		row, col = self:OnHovered(x, y)
-		self.edit_live_data.old_row = row
-		self.edit_live_data.old_col = col
+        row, col = self:OnHovered(x, y)
+        self.edit_live_data.old_row = row
+        self.edit_live_data.old_col = col
 
-		self.edit_live_data.calc_new_click_area = false
-	else
-		row = self.edit_live_data.old_row
-		col = self.edit_live_data.old_col
-	end
+        self.edit_live_data.calc_new_click_area = false
+    else
+        row = self.edit_live_data.old_row
+        col = self.edit_live_data.old_col
+    end
 
-	if row == nil or col == nil then
-		return false
-	end
+    if row == nil or col == nil then
+        return false
+    end
 
-	-- cache for shorter access
-	local x_p = col[3] and (row[1] or row[2] or row[3])
-	local x_m = col[1] and (row[1] or row[2] or row[3])
-	local y_p = row[3] and (col[1] or col[2] or col[3])
-	local y_m = row[1] and (col[1] or col[2] or col[3])
+    -- cache for shorter access
+    local x_p = col[3] and (row[1] or row[2] or row[3])
+    local x_m = col[1] and (row[1] or row[2] or row[3])
+    local y_p = row[3] and (col[1] or col[2] or col[3])
+    local y_m = row[1] and (col[1] or col[2] or col[3])
 
-	local ret_transform_axis = {
-		x_p = x_p or (alt_pressed and x_m) or false,
-		x_m = x_m or (alt_pressed and x_p) or false,
-		y_p = y_p or (alt_pressed and y_m) or false,
-		y_m = y_m or (alt_pressed and y_p) or false,
-		edge = (col[1] or col[3]) and (row[1] or row[3]),
-		direction_x = x_p and 1 or - 1,
-		direction_y = y_p and 1 or - 1,
-		move = row[2] and col[2]
-	}
+    local ret_transform_axis = {
+        x_p = x_p or (alt_pressed and x_m) or false,
+        x_m = x_m or (alt_pressed and x_p) or false,
+        y_p = y_p or (alt_pressed and y_m) or false,
+        y_m = y_m or (alt_pressed and y_p) or false,
+        edge = (col[1] or col[3]) and (row[1] or row[3]),
+        direction_x = x_p and 1 or -1,
+        direction_y = y_p and 1 or -1,
+        move = row[2] and col[2],
+    }
 
-	return ret_transform_axis
+    return ret_transform_axis
 end
 
 -- @todo the active area should only be changed on mouse click
@@ -607,9 +624,10 @@ end
 -- @local
 -- @realm client
 function HUDELEMENT:SetMouseClicked(mouse_clicked, x, y)
-	if self:IsInPos(x, y) then
-		self.edit_live_data.calc_new_click_area = mouse_clicked or self.edit_live_data.calc_new_click_area
-	end
+    if self:IsInPos(x, y) then
+        self.edit_live_data.calc_new_click_area = mouse_clicked
+            or self.edit_live_data.calc_new_click_area
+    end
 end
 
 ---
@@ -617,22 +635,30 @@ end
 -- @local
 -- @realm client
 function HUDELEMENT:DrawSize()
-	local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
+    local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
 
-	surface.SetDrawColor(255, 0, 0, 255)
-	surface.DrawLine(x, y, x + w, y) -- top
-	surface.DrawLine(x + 1, y + 1, x + w - 1, y + 1) -- top
+    surface.SetDrawColor(255, 0, 0, 255)
+    surface.DrawLine(x, y, x + w, y) -- top
+    surface.DrawLine(x + 1, y + 1, x + w - 1, y + 1) -- top
 
-	surface.DrawLine(x + w, y, x + w, y + h) -- right
-	surface.DrawLine(x + w - 1, y + 1, x + w - 1, y + h - 1) -- right
+    surface.DrawLine(x + w, y, x + w, y + h) -- right
+    surface.DrawLine(x + w - 1, y + 1, x + w - 1, y + h - 1) -- right
 
-	surface.DrawLine(x, y + h, x + w, y + h) -- bottom
-	surface.DrawLine(x + 1, y + h - 1, x + w - 1, y + h - 1) -- bottom
+    surface.DrawLine(x, y + h, x + w, y + h) -- bottom
+    surface.DrawLine(x + 1, y + h - 1, x + w - 1, y + h - 1) -- bottom
 
-	surface.DrawLine(x, y, x, y + h) -- left
-	surface.DrawLine(x + 1, y + 1, x + 1, y + h - 1) -- left
+    surface.DrawLine(x, y, x, y + h) -- left
+    surface.DrawLine(x + 1, y + 1, x + 1, y + h - 1) -- left
 
-	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 7, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.DrawText(
+        self.id,
+        "DermaDefault",
+        x + w * 0.5,
+        y + h * 0.5 - 7,
+        COLOR_WHITE,
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_CENTER
+    )
 end
 
 ---
@@ -642,11 +668,11 @@ end
 -- @return table basepos, size and minsize fields
 -- @realm client
 function HUDELEMENT:GetDefaults()
-	return {
-		basepos = table.Copy(self.basepos),
-		size = table.Copy(self.size),
-		minsize = table.Copy(self.minsize)
-	}
+    return {
+        basepos = table.Copy(self.basepos),
+        size = table.Copy(self.size),
+        minsize = table.Copy(self.minsize),
+    }
 end
 
 ---
@@ -654,31 +680,31 @@ end
 -- original position.
 -- @realm client
 function HUDELEMENT:Reset()
-	local defaults = self:GetDefaults()
-	local defaultPos = defaults.basepos
-	local defaultSize = defaults.size
-	local defaultMinSize = defaults.minsize
+    local defaults = self:GetDefaults()
+    local defaultPos = defaults.basepos
+    local defaultSize = defaults.size
+    local defaultMinSize = defaults.minsize
 
-	if defaultPos then
-		self:SetBasePos(defaultPos.x, defaultPos.y)
-	end
+    if defaultPos then
+        self:SetBasePos(defaultPos.x, defaultPos.y)
+    end
 
-	if defaultMinSize then
-		self:SetMinSize(defaultMinSize.w, defaultMinSize.h)
-	end
+    if defaultMinSize then
+        self:SetMinSize(defaultMinSize.w, defaultMinSize.h)
+    end
 
-	if defaultSize then
-		self:SetSize(defaultSize.w, defaultSize.h)
-	end
+    if defaultSize then
+        self:SetSize(defaultSize.w, defaultSize.h)
+    end
 
-	self:ApplyToChildren("Reset")
+    self:ApplyToChildren("Reset")
 
-	self:PerformLayout()
+    self:PerformLayout()
 end
 
 local savingKeys = {
-	basepos = {typ = "pos"},
-	size = {typ = "size"}
+    basepos = { typ = "pos" },
+    size = { typ = "size" },
 }
 
 ---
@@ -686,50 +712,52 @@ local savingKeys = {
 -- @return table with savable keys
 -- @realm client
 function HUDELEMENT:GetSavingKeys()
-	return table.Copy(savingKeys)
+    return table.Copy(savingKeys)
 end
 
 ---
 -- Saves the current savingkey values (position, size)
 -- @realm client
 function HUDELEMENT:SaveData()
-	sql.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
+    sql.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
 ---
 -- Loads the saved keys and applies them to the element
 -- @realm client
 function HUDELEMENT:LoadData()
-	local skeys = self:GetSavingKeys()
-	local loadedData = {}
+    local skeys = self:GetSavingKeys()
+    local loadedData = {}
 
-	-- load and initialize the elements data from database
-	if sql.CreateSqlTable("ttt2_hudelements", skeys) then
-		local loaded = sql.Load("ttt2_hudelements", self.id, loadedData, skeys)
-		if not loaded then
-			sql.Init("ttt2_hudelements", self.id, self, skeys)
-		end
-	end
+    -- load and initialize the elements data from database
+    if sql.CreateSqlTable("ttt2_hudelements", skeys) then
+        local loaded = sql.Load("ttt2_hudelements", self.id, loadedData, skeys)
+        if not loaded then
+            sql.Init("ttt2_hudelements", self.id, self, skeys)
+        end
+    end
 
-	if loadedData.pos then
-		self:SetPos(loadedData.pos.x, loadedData.pos.y)
+    if loadedData.pos then
+        self:SetPos(loadedData.pos.x, loadedData.pos.y)
 
-		loadedData.pos = nil
-	end
+        loadedData.pos = nil
+    end
 
-	if loadedData.basepos then
-		self:SetBasePos(loadedData.basepos.x, loadedData.basepos.y)
+    if loadedData.basepos then
+        self:SetBasePos(loadedData.basepos.x, loadedData.basepos.y)
 
-		loadedData.basepos = nil
-	end
+        loadedData.basepos = nil
+    end
 
-	if loadedData.size then
-		self:SetSize(loadedData.size.w, loadedData.size.h)
+    if loadedData.size then
+        self:SetSize(loadedData.size.w, loadedData.size.h)
 
-		loadedData.size = nil
-	end
+        loadedData.size = nil
+    end
 
-	for k, v in pairs(loadedData) do
-		self[k] = v or self[k]
-	end
+    for k, v in pairs(loadedData) do
+        if v ~= nil then
+            self[k] = v
+        end
+    end
 end

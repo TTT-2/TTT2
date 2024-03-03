@@ -21,58 +21,56 @@ ITEM.limited = true
 ITEM.Category = "TTT" -- the @{ITEM} Category
 
 if CLIENT then
+    -- If this is a buyable @{ITEM} (ie. CanBuy is not nil) EquipMenuData must be
+    -- a table containing some information to show in the Equipment Menu. See
+    -- default equipment items for real-world examples.
+    ITEM.EquipMenuData = nil
 
-	-- If this is a buyable @{ITEM} (ie. CanBuy is not nil) EquipMenuData must be
-	-- a table containing some information to show in the Equipment Menu. See
-	-- default equipment items for real-world examples.
-	ITEM.EquipMenuData = nil
+    -- Example data:
+    -- ITEM.EquipMenuData = {
+    --
+    --   Type tells players if it's a weapon or @{ITEM}
+    --     type = "Weapon",
+    --
+    --   Desc is the description in the menu. Needs manual linebreaks (via \n).
+    --     desc = "Text."
+    -- }
 
-	-- Example data:
-	-- ITEM.EquipMenuData = {
-	--
-	--   Type tells players if it's a weapon or @{ITEM}
-	--     type = "Weapon",
-	--
-	--   Desc is the description in the menu. Needs manual linebreaks (via \n).
-	--     desc = "Text."
-	-- }
+    -- A short description for the sidebar
+    ITEM.sidebarDescription = nil
 
-	-- This sets the icon shown for the @{ITEM} in the DNA sampler, search window,
-	-- equipment menu (if buyable), etc.
-	ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
+    -- This sets the icon shown for the @{ITEM} in the DNA sampler, search window,
+    -- equipment menu (if buyable), etc.
+    ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
 
-	-- set to false if item should not be shown in body search
-	ITEM.populateSearch = true
+    -- set to false if item should not be shown in body search
+    ITEM.populateSearch = true
 
-	-- You can make your own @{ITEM} icon using the template in:
-	--   /garrysmod/gamemodes/terrortown/template/
+    -- You can make your own @{ITEM} icon using the template in:
+    --   /garrysmod/gamemodes/terrortown/template/
 
-	-- Open one of TTT's icons with VTFEdit to see what kind of settings to use
-	-- when exporting to VTF. Once you have a VTF and VMT, you can
-	-- resource.AddFile("materials/vgui/...") them here. GIVE YOUR ICON A UNIQUE
-	-- FILENAME, or it WILL be overwritten by other servers! Gmod does not check
-	-- if the files are different, it only looks at the name. I recommend you
-	-- create your own directory so that this does not happen,
-	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+    -- Open one of TTT's icons with VTFEdit to see what kind of settings to use
+    -- when exporting to VTF. Once you have a VTF and VMT, you can
+    -- resource.AddFile("materials/vgui/...") them here. GIVE YOUR ICON A UNIQUE
+    -- FILENAME, or it WILL be overwritten by other servers! Gmod does not check
+    -- if the files are different, it only looks at the name. I recommend you
+    -- create your own directory so that this does not happen,
+    -- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
-	---
-	-- Draw some information in a small box next to the icon in the hud if a @{Player} is owning this @{ITEM}
-	-- @hook
-	-- @realm client
-	function ITEM:DrawInfo()
+    ---
+    -- Draw some information in a small box next to the icon in the hud if a @{Player} is owning this @{ITEM}
+    -- @hook
+    -- @realm client
+    function ITEM:DrawInfo() end
 
-	end
-
-	---
-	-- This hook can be used by item addons to populate the equipment settings page
-	-- with custom convars. The parent is the submenu, where a new form has to
-	-- be added.
-	-- @param DPanel parent The parent panel which is the submenu
-	-- @hook
-	-- @realm client
-	function ITEM:AddToSettingsMenu(parent)
-
-	end
+    ---
+    -- This hook can be used by item addons to populate the equipment settings page
+    -- with custom convars. The parent is the submenu, where a new form has to
+    -- be added.
+    -- @param DPanel parent The parent panel which is the submenu
+    -- @hook
+    -- @realm client
+    function ITEM:AddToSettingsMenu(parent) end
 end
 
 ---
@@ -80,39 +78,31 @@ end
 -- @param Player ply
 -- @hook
 -- @realm shared
-function ITEM:Reset(ply)
-
-end
+function ITEM:Reset(ply) end
 
 ---
 -- A player or NPC has picked the @{ITEM} up
 -- @param Player ply
 -- @hook
 -- @realm shared
-function ITEM:Equip(ply)
-
-end
+function ITEM:Equip(ply) end
 
 ---
 -- A player or NPC has bought the @{ITEM}
 -- @param Player ply
 -- @hook
 -- @realm shared
-function ITEM:Bought(ply)
-
-end
+function ITEM:Bought(ply) end
 
 ---
 -- Called when the @{ITEM} is created.
 -- @realm shared
-function ITEM:Initialize()
-
-end
+function ITEM:Initialize() end
 
 ---
 -- useable, but do not modify this!
 -- @return boolean whether this @{ITEM} is an equipment
 -- @realm shared
 function ITEM:IsEquipment()
-	return WEPS.IsEquipment(self)
+    return WEPS.IsEquipment(self)
 end

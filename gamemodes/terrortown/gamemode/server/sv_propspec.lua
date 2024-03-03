@@ -11,19 +11,28 @@ PROPSPEC = {}
 
 ---
 -- @realm server
-local propspec_toggle = CreateConVar("ttt_spec_prop_control", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+-- stylua: ignore
+local cvPropspecToggle = CreateConVar("ttt_spec_prop_control", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-local propspec_base = CreateConVar("ttt_spec_prop_base", "8", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+-- stylua: ignore
+local cvPropspecBase = CreateConVar("ttt_spec_prop_base", "8", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-local propspec_min = CreateConVar("ttt_spec_prop_maxpenalty", "-6", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+-- stylua: ignore
+local cvPropspecMin = CreateConVar("ttt_spec_prop_maxpenalty", "-6", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
-local propspec_max = CreateConVar("ttt_spec_prop_maxbonus", "16", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+-- stylua: ignore
+local cvPropspecMax = CreateConVar("ttt_spec_prop_maxbonus", "16", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+-- stylua: ignore
+local cvPropspecDashMulitplier = CreateConVar("ttt_spec_prop_dash", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- Forces a @{Player} to spectate an @{Entity}
@@ -31,25 +40,26 @@ local propspec_max = CreateConVar("ttt_spec_prop_maxbonus", "16", {FCVAR_NOTIFY,
 -- @param Entity ent
 -- @realm server
 function PROPSPEC.Start(ply, ent)
-	ply:Spectate(OBS_MODE_CHASE)
-	ply:SpectateEntity(ent, true)
+    ply:Spectate(OBS_MODE_CHASE)
+    ply:SpectateEntity(ent, true)
 
-	local bonus = math.Clamp(math.ceil(ply:Frags() * 0.5), propspec_min:GetInt(), propspec_max:GetInt())
+    local bonus =
+        math.Clamp(math.ceil(ply:Frags() * 0.5), cvPropspecMin:GetInt(), cvPropspecMax:GetInt())
 
-	ply.propspec = {
-		ent = ent,
-		t = 0,
-		retime = 0,
-		punches = 0,
-		max = propspec_base:GetInt() + bonus
-	}
+    ply.propspec = {
+        ent = ent,
+        t = 0,
+        retime = 0,
+        punches = 0,
+        max = cvPropspecBase:GetInt() + bonus,
+    }
 
-	ent:SetNWEntity("spec_owner", ply)
-	ply:SetNWInt("bonuspunches", bonus)
+    ent:SetNWEntity("spec_owner", ply)
+    ply:SetNWInt("bonuspunches", bonus)
 end
 
 local function IsWhitelistedClass(cls)
-	return string.match(cls, "prop_physics*") or string.match(cls, "func_physbox*")
+    return string.match(cls, "prop_physics*") or string.match(cls, "func_physbox*")
 end
 
 ---
@@ -58,17 +68,33 @@ end
 -- @param Entity ent
 -- @realm server
 function PROPSPEC.Target(ply, ent)
-	if not propspec_toggle:GetBool() or not IsValid(ply) or not ply:IsSpec() or not IsValid(ent) or IsValid(ent:GetNWEntity("spec_owner", nil)) then return end
+    if
+        not cvPropspecToggle:GetBool()
+        or not IsValid(ply)
+        or not ply:IsSpec()
+        or not IsValid(ent)
+        or IsValid(ent:GetNWEntity("spec_owner", nil))
+    then
+        return
+    end
 
-	local phys = ent:GetPhysicsObject()
+    local phys = ent:GetPhysicsObject()
 
-	if ent:GetName() ~= "" and not GAMEMODE.propspec_allow_named or not IsValid(phys) or not phys:IsMoveable() then return end
+    if
+        ent:GetName() ~= "" and not GAMEMODE.propspec_allow_named
+        or not IsValid(phys)
+        or not phys:IsMoveable()
+    then
+        return
+    end
 
-	-- normally only specific whitelisted ent classes can be possessed, but
-	-- custom ents can mark themselves possessable as well
-	if not ent.AllowPropspec and not IsWhitelistedClass(ent:GetClass()) then return end
+    -- normally only specific whitelisted ent classes can be possessed, but
+    -- custom ents can mark themselves possessable as well
+    if not ent.AllowPropspec and not IsWhitelistedClass(ent:GetClass()) then
+        return
+    end
 
-	PROPSPEC.Start(ply, ent)
+    PROPSPEC.Start(ply, ent)
 end
 
 ---
@@ -77,15 +103,15 @@ end
 -- @param Player ply
 -- @realm server
 function PROPSPEC.Clear(ply)
-	local ent = (ply.propspec and ply.propspec.ent) or ply:GetObserverTarget()
+    local ent = (ply.propspec and ply.propspec.ent) or ply:GetObserverTarget()
 
-	if IsValid(ent) then
-		ent:SetNWEntity("spec_owner", nil)
-	end
+    if IsValid(ent) then
+        ent:SetNWEntity("spec_owner", nil)
+    end
 
-	ply.propspec = nil
+    ply.propspec = nil
 
-	ply:SpectateEntity(nil)
+    ply:UnSpectate()
 end
 
 ---
@@ -93,102 +119,114 @@ end
 -- @param Player ply
 -- @realm server
 function PROPSPEC.End(ply)
-	PROPSPEC.Clear(ply)
+    PROPSPEC.Clear(ply)
 
-	ply:Spectate(OBS_MODE_ROAMING)
-	ply:ResetViewRoll()
+    ply:Spectate(OBS_MODE_ROAMING)
+    ply:ResetViewRoll()
 
-	timer.Simple(0.1, function()
-		if not IsValid(ply) then return end
+    timer.Simple(0.1, function()
+        if not IsValid(ply) then
+            return
+        end
 
-		ply:ResetViewRoll()
-	end)
+        ply:ResetViewRoll()
+    end)
 end
 
 ---
 -- @realm server
+-- stylua: ignore
 local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- Triggers an event based on the pressed key
 -- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
--- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
 -- @return boolean
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
 function PROPSPEC.Key(ply, key)
-	local ent = ply.propspec.ent
-	local validEnt = IsValid(ent)
-	local phys = validEnt and ent:GetPhysicsObject()
+    local ent = ply.propspec.ent
+    local validEnt = IsValid(ent)
+    local phys = validEnt and ent:GetPhysicsObject()
 
-	if not validEnt or not IsValid(phys) then
-		PROPSPEC.End(ply)
+    if not validEnt or not IsValid(phys) then
+        PROPSPEC.End(ply)
 
-		return false
-	end
+        return false
+    end
 
-	if not phys:IsMoveable() then
-		PROPSPEC.End(ply)
+    if not phys:IsMoveable() then
+        PROPSPEC.End(ply)
 
-		return true
-	elseif phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
-		-- we can stay with the prop while it's held, but not affect it
-		if key == IN_DUCK then
-			PROPSPEC.End(ply)
-		end
+        return true
+    elseif phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
+        -- we can stay with the prop while it's held, but not affect it
+        if key == IN_DUCK then
+            PROPSPEC.End(ply)
+        end
 
-		return true
-	end
+        return true
+    end
 
-	-- always allow leaving
-	if key == IN_DUCK then
-		PROPSPEC.End(ply)
+    -- always allow leaving
+    if key == IN_DUCK then
+        PROPSPEC.End(ply)
 
-		return true
-	end
+        return true
+    end
 
-	local pr = ply.propspec
+    local pSpec = ply.propspec
 
-	if pr.t > CurTime() or pr.punches < 1 then
-		return true
-	end
+    if pSpec.t > CurTime() or pSpec.punches < 1 then
+        return true
+    end
 
-	local m = math.min(150, phys:GetMass())
-	local force = propspec_force:GetInt()
-	local aim = ply:GetAimVector()
-	local mf = m * force
+    local mass = math.min(150, phys:GetMass())
+    local force = propspec_force:GetInt()
+    local mf = mass * force
+    local vectorAim = ply:GetAimVector()
 
-	pr.t = CurTime() + 0.15
+    local vectorAimPlanar = Vector(vectorAim.x, vectorAim.y, 0)
+    vectorAimPlanar:Normalize()
 
-	if key == IN_JUMP then
-		-- upwards bump
-		phys:ApplyForceCenter(Vector(0, 0, mf))
+    local vectorPerpendicularLeft = Vector(-vectorAimPlanar.y, vectorAimPlanar.x, 0)
+    local vectorPerpendicularRight = Vector(vectorAimPlanar.y, -vectorAimPlanar.x, 0)
 
-		pr.t = CurTime() + 0.05
-	elseif key == IN_FORWARD then
-		-- bump away from player
-		phys:ApplyForceCenter(aim * mf)
-	elseif key == IN_BACK then
-		phys:ApplyForceCenter(aim * (mf * -1))
-	elseif key == IN_MOVELEFT then
-		phys:AddAngleVelocity(Vector(0, 0, 200))
-		phys:ApplyForceCenter(Vector(0, 0, mf / 3))
-	elseif key == IN_MOVERIGHT then
-		phys:AddAngleVelocity(Vector(0, 0, -200))
-		phys:ApplyForceCenter(Vector(0, 0, mf / 3))
-	else
-		return true -- eat other keys, and do not decrement punches
-	end
+    local multiplierPunches = 1
 
-	pr.punches = math.max(pr.punches - 1, 0)
+    pSpec.t = CurTime() + 0.15
 
-	ply:SetNWFloat("specpunches", pr.punches / pr.max)
+    if key == IN_JUMP then
+        phys:ApplyForceCenter(Vector(0, 0, mf))
 
-	return true
+        pSpec.t = CurTime() + 0.05
+    elseif key == IN_SPEED then
+        multiplierPunches = cvPropspecDashMulitplier:GetInt()
+
+        phys:ApplyForceCenter(vectorAim:GetNormalized() * mf * cvPropspecDashMulitplier:GetInt())
+    elseif key == IN_FORWARD then
+        phys:ApplyForceCenter(vectorAimPlanar * mf)
+    elseif key == IN_BACK then
+        phys:ApplyForceCenter(-vectorAimPlanar * mf)
+    elseif key == IN_MOVELEFT then
+        phys:ApplyForceCenter(vectorPerpendicularLeft * mf * 0.33)
+    elseif key == IN_MOVERIGHT then
+        phys:ApplyForceCenter(vectorPerpendicularRight * mf * 0.33)
+    else
+        return true -- eat other keys, and do not decrement punches
+    end
+
+    pSpec.punches = math.max(pSpec.punches - multiplierPunches, 0)
+
+    ply:SetNWFloat("specpunches", pSpec.punches / pSpec.max)
+
+    return true
 end
 
 ---
 -- @realm server
+-- stylua: ignore
 local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -197,13 +235,15 @@ local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1", {FCVAR_N
 -- @param Player ply
 -- @realm server
 function PROPSPEC.Recharge(ply)
-	local pr = ply.propspec
+    local pr = ply.propspec
 
-	if pr.retime >= CurTime() then return end
+    if pr.retime >= CurTime() then
+        return
+    end
 
-	pr.punches = math.min(pr.punches + 1, pr.max)
+    pr.punches = math.min(pr.punches + 1, pr.max)
 
-	ply:SetNWFloat("specpunches", pr.punches / pr.max)
+    ply:SetNWFloat("specpunches", pr.punches / pr.max)
 
-	pr.retime = CurTime() + propspec_retime:GetFloat()
+    pr.retime = CurTime() + propspec_retime:GetFloat()
 end

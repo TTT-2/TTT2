@@ -5,8 +5,6 @@
 
 local base = "hud_base"
 
-local savingKeys
-
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
@@ -19,9 +17,9 @@ HUD.scale = HUD.defaultscale
 -- @{HUD:PerformLayout} before setting the HUDELEMENT.initialized parameter.
 -- @realm client
 function HUD:Initialize()
-	self.basecolor = table.Copy(self.defaultcolor)
+    self.basecolor = table.Copy(self.defaultcolor)
 
-	BaseClass.Initialize(self)
+    BaseClass.Initialize(self)
 end
 
 ---
@@ -30,19 +28,17 @@ end
 -- @return table
 -- @realm client
 function HUD:GetSavingKeys()
-	if not savingKeys then
-		savingKeys = BaseClass.GetSavingKeys(self)
-		savingKeys.basecolor = {
-			typ = "color",
-			desc = "label_hud_basecolor",
-			OnChange = function(slf, col)
-				slf:PerformLayout()
-				slf:SaveData()
-			end
-		}
-	end
+    local savingKeys = BaseClass.GetSavingKeys(self) or {}
+    savingKeys.basecolor = {
+        typ = "color",
+        desc = "label_hud_basecolor",
+        OnChange = function(slf, col)
+            slf:PerformLayout()
+            slf:SaveData()
+        end,
+    }
 
-	return table.Copy(savingKeys)
+    return table.Copy(savingKeys)
 end
 
 ---
@@ -52,22 +48,24 @@ end
 -- / changes to this HUD.
 -- @realm client
 function HUD:LoadData()
-	BaseClass.LoadData(self)
+    BaseClass.LoadData(self)
 
-	local elems = self:GetElements()
-	local scale = appearance.GetGlobalScale()
+    local elems = self:GetElements()
+    local scale = appearance.GetGlobalScale()
 
-	for i = 1, #elems do
-		local elemName = elems[i]
+    for i = 1, #elems do
+        local elemName = elems[i]
 
-		local elem = hudelements.GetStored(elemName)
-		if not elem then continue end
+        local elem = hudelements.GetStored(elemName)
+        if not elem then
+            continue
+        end
 
-		local min_size = elem:GetDefaults().minsize
+        local min_size = elem:GetDefaults().minsize
 
-		elem:SetMinSize(min_size.w * scale, min_size.h * scale)
-		elem:PerformLayout()
-	end
+        elem:SetMinSize(min_size.w * scale, min_size.h * scale)
+        elem:PerformLayout()
+    end
 end
 
 ---
@@ -75,27 +73,29 @@ end
 -- @param number scale
 -- @realm client
 function HUD:ApplyScale(scale)
-	local elems = self:GetElements()
+    local elems = self:GetElements()
 
-	for i = 1, #elems do
-		local elemName = elems[i]
+    for i = 1, #elems do
+        local elemName = elems[i]
 
-		local elem = hudelements.GetStored(elemName)
-		if not elem then continue end
+        local elem = hudelements.GetStored(elemName)
+        if not elem then
+            continue
+        end
 
-		local size = elem:GetSize()
-		local min_size = elem:GetMinSize()
+        local size = elem:GetSize()
+        local min_size = elem:GetMinSize()
 
-		elem:SetMinSize(min_size.w * scale, min_size.h * scale)
-		elem:SetSize(size.w * scale, size.h * scale)
-		elem:PerformLayout()
+        elem:SetMinSize(min_size.w * scale, min_size.h * scale)
+        elem:SetSize(size.w * scale, size.h * scale)
+        elem:PerformLayout()
 
-		--reset position to new calculated default position
-		local defaultPos = elem:GetDefaults().basepos
+        --reset position to new calculated default position
+        local defaultPos = elem:GetDefaults().basepos
 
-		elem:SetBasePos(defaultPos.x, defaultPos.y)
-		elem:PerformLayout()
-	end
+        elem:SetBasePos(defaultPos.x, defaultPos.y)
+        elem:PerformLayout()
+    end
 end
 
 ---
@@ -104,9 +104,9 @@ end
 -- on non-child elements.
 -- @realm client
 function HUD:Reset()
-	self.basecolor = table.Copy(self.defaultcolor)
+    self.basecolor = table.Copy(self.defaultcolor)
 
-	BaseClass.Reset(self)
+    BaseClass.Reset(self)
 
-	self:ApplyScale(appearance.GetGlobalScale())
+    self:ApplyScale(appearance.GetGlobalScale())
 end

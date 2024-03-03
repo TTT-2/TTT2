@@ -4,7 +4,7 @@
 -- @module table
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 local table = table
@@ -19,13 +19,13 @@ local isfunction = isfunction
 -- @param table t
 -- @realm shared
 function table.Randomize(t)
-	local out = {}
+    local out = {}
 
-	while #t > 0 do
-		out[#out + 1] = table.remove(t, math.random(#t))
-	end
+    while #t > 0 do
+        out[#out + 1] = table.remove(t, math.random(#t))
+    end
 
-	t = out
+    t = out
 end
 
 ---
@@ -38,22 +38,24 @@ end
 -- @return any the value at the given path or nil if it does not exist
 -- @realm shared
 function table.GetWithPath(dataTable, path)
-	assert(path, "table.GetWithPath(..) missing path parameter.")
+    assert(path, "table.GetWithPath(..) missing path parameter.")
 
-	-- Convert single key to table
-	if not istable(path) then
-		path = { path }
-	end
+    -- Convert single key to table
+    if not istable(path) then
+        path = { path }
+    end
 
-	local currentDataTable = dataTable
+    local currentDataTable = dataTable
 
-	for i = 1, #path do
-		if currentDataTable == nil then return end
+    for i = 1, #path do
+        if currentDataTable == nil then
+            return
+        end
 
-		currentDataTable = currentDataTable[path[i]]
-	end
+        currentDataTable = currentDataTable[path[i]]
+    end
 
-	return currentDataTable
+    return currentDataTable
 end
 
 ---
@@ -66,30 +68,30 @@ end
 -- @param any value
 -- @realm shared
 function table.SetWithPath(dataTable, path, value)
-	assert(path, "table.SetWithPath(..) missing path parameter.")
+    assert(path, "table.SetWithPath(..) missing path parameter.")
 
-	-- Convert single key to table
-	if not istable(path) then
-		path = { path }
-	end
+    -- Convert single key to table
+    if not istable(path) then
+        path = { path }
+    end
 
-	local currentDataTable = dataTable or {}
+    local currentDataTable = dataTable or {}
 
-	-- Create new table entries along the path if they do not exist
-	-- This will be done until the second last table is reached.
-	for i = 1, (#path - 1) do
-		currentDataTable[path[i]] = currentDataTable[path[i]] or {}
-		currentDataTable = currentDataTable[path[i]]
-	end
+    -- Create new table entries along the path if they do not exist
+    -- This will be done until the second last table is reached.
+    for i = 1, (#path - 1) do
+        currentDataTable[path[i]] = currentDataTable[path[i]] or {}
+        currentDataTable = currentDataTable[path[i]]
+    end
 
-	-- Set the value on the table (the last table on the path)
-	currentDataTable[path[#path]] = value
+    -- Set the value on the table (the last table on the path)
+    currentDataTable[path[#path]] = value
 end
 
 ---
 -- Checks if a table has a value.
 -- @note For optimization, functions that look for a value by sorting the table should never be needed if you work on a table that you built yourself.
--- @note Override of the original <a href="https://wiki.garrysmod.com/page/table/HasValue">table.HasValue</a> check with nil check
+-- @note Override of the original <a href="https://wiki.facepunch.com/gmod/table.HasValue">table.HasValue</a> check with nil check
 -- @warning This function is very inefficient for large tables (O(n)) and should probably not be called in things that run each frame. Instead, consider a table structure such as example 2 below.
 -- @param table tbl Table to check
 -- @param any val Value to search for
@@ -102,15 +104,17 @@ end
 -- > nil true
 -- @realm shared
 function table.HasValue(tbl, val)
-	if not tbl then return end
+    if not tbl then
+        return
+    end
 
-	for _, v in pairs(tbl) do
-		if v == val then
-			return true
-		end
-	end
+    for _, v in pairs(tbl) do
+        if v == val then
+            return true
+        end
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -120,17 +124,17 @@ end
 -- @return boolean
 -- @realm shared
 function table.EqualValues(a, b)
-	if a == b then
-		return true
-	end
+    if a == b then
+        return true
+    end
 
-	for k, v in pairs(a) do
-		if v ~= b[k] then
-			return false
-		end
-	end
+    for k, v in pairs(a) do
+        if v ~= b[k] then
+            return false
+        end
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -141,17 +145,19 @@ end
 -- @return boolean
 -- @realm shared
 function table.HasTable(tbl, needle)
-	if not tbl then return end
+    if not tbl then
+        return
+    end
 
-	for _, v in pairs(tbl) do
-		if v == needle then
-			return true
-		elseif table.EqualValues(v, needle) then
-			return true
-		end
-	end
+    for _, v in pairs(tbl) do
+        if v == needle then
+            return true
+        elseif table.EqualValues(v, needle) then
+            return true
+        end
+    end
 
-	return false
+    return false
 end
 
 ---
@@ -161,22 +167,24 @@ end
 -- @return table
 -- @realm shared
 function table.CopyKeys(tbl, keys)
-	if not (tbl and keys) then return end
+    if not (tbl and keys) then
+        return
+    end
 
-	local out = {}
-	local val
+    local out = {}
+    local val
 
-	for _, k in pairs(keys) do
-		val = tbl[k]
+    for _, k in pairs(keys) do
+        val = tbl[k]
 
-		if istable(val) then
-			out[k] = table.Copy(val)
-		else
-			out[k] = val
-		end
-	end
+        if istable(val) then
+            out[k] = table.Copy(val)
+        else
+            out[k] = val
+        end
+    end
 
-	return out
+    return out
 end
 
 ---
@@ -186,17 +194,21 @@ end
 -- @param[opt] boolean iterable
 -- @realm shared
 function table.AddMissing(target, source, iterable)
-	if #source == 0 then return end
+    if #source == 0 then
+        return
+    end
 
-	local fn = not iterable and pairs or ipairs
-	local index = #target + 1
+    local fn = not iterable and pairs or ipairs
+    local index = #target + 1
 
-	for _, v in fn(source) do
-		if table.HasValue(target, v) then continue end
+    for _, v in fn(source) do
+        if table.HasValue(target, v) then
+            continue
+        end
 
-		target[index] = v
-		index = index + 1
-	end
+        target[index] = v
+        index = index + 1
+    end
 end
 
 ---
@@ -208,19 +220,21 @@ end
 -- @param number tableSize the number of entries in dataTable
 -- @realm shared
 function table.RemoveEmptyEntries(dataTable, tableSize)
-	local j = 1
+    local j = 1
 
-	for i = 1, tableSize do
-		if not dataTable[i] then continue end
+    for i = 1, tableSize do
+        if not dataTable[i] then
+            continue
+        end
 
-		if i ~= j then
-			-- Keep i's value, move it to j's pos.
-			dataTable[j] = dataTable[i]
-			dataTable[i] = nil
-		end
+        if i ~= j then
+            -- Keep i's value, move it to j's pos.
+            dataTable[j] = dataTable[i]
+            dataTable[i] = nil
+        end
 
-		j = j + 1
-	end
+        j = j + 1
+    end
 end
 
 ---
@@ -230,18 +244,18 @@ end
 -- @return table the given t, but sorted
 -- @realm shared
 function table.Shuffle(t)
-	local n = #t
+    local n = #t
 
-	while n > 2 do
-		-- n is now the last pertinent index
-		local k = rand(n) -- 1 <= k <= n
+    while n > 2 do
+        -- n is now the last pertinent index
+        local k = rand(n) -- 1 <= k <= n
 
-		-- Quick swap
-		t[n], t[k] = t[k], t[n]
-		n = n - 1
-	end
+        -- Quick swap
+        t[n], t[k] = t[k], t[n]
+        n = n - 1
+    end
 
-	return t
+    return t
 end
 
 ---
@@ -253,38 +267,38 @@ end
 -- @warning The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
 -- @realm shared
 function table.ExtractRandomEntry(tbl, filterFn)
-	local cTbl = #tbl
+    local cTbl = #tbl
 
-	-- if no filterFn is defined, get a any random entry of the given @{table}
-	if not isfunction(filterFn) then
-		local index = rand(cTbl)
-		local entry = tbl[index]
+    -- if no filterFn is defined, get a any random entry of the given @{table}
+    if not isfunction(filterFn) then
+        local index = rand(cTbl)
+        local entry = tbl[index]
 
-		tremove(tbl, index)
+        tremove(tbl, index)
 
-		return entry
-	end
+        return entry
+    end
 
-	local tmpTbl = {}
+    local tmpTbl = {}
 
-	-- create a temporary table used for easy and fast access after shuffling
-	for i = 1, cTbl do
-		tmpTbl[i] = i
-	end
+    -- create a temporary table used for easy and fast access after shuffling
+    for i = 1, cTbl do
+        tmpTbl[i] = i
+    end
 
-	table.Shuffle(tmpTbl)
+    table.Shuffle(tmpTbl)
 
-	for i = 1, cTbl do
-		local index = tmpTbl[i]
+    for i = 1, cTbl do
+        local index = tmpTbl[i]
 
-		if filterFn(tbl[index]) then
-			local entry = tbl[index]
+        if filterFn(tbl[index]) then
+            local entry = tbl[index]
 
-			tremove(tbl, index)
+            tremove(tbl, index)
 
-			return entry
-		end
-	end
+            return entry
+        end
+    end
 end
 
 ---
@@ -299,23 +313,25 @@ end
 -- @return[default=0] number|string The index where the biggest subtable was found
 -- @realm shared
 function table.GetAndRemoveBiggestSubTable(tbl)
-	local subTbl = {}
-	local subIdx = 0
+    local subTbl = {}
+    local subIdx = 0
 
-	for i, t in pairs(tbl) do
-		if #t < #subTbl then continue end
+    for i, t in pairs(tbl) do
+        if #t < #subTbl then
+            continue
+        end
 
-		subTbl = t
-		subIdx = i
-	end
+        subTbl = t
+        subIdx = i
+    end
 
-	if isnumber(subItx) then
-		table.remove(tbl, subIdx)
-	else
-		tbl[subIdx] = nil
-	end
+    if isnumber(subIdx) then
+        table.remove(tbl, subIdx)
+    else
+        tbl[subIdx] = nil
+    end
 
-	return subTbl, subIdx
+    return subTbl, subIdx
 end
 
 -- Returns an indexed table of indexes that exist in both tables.
@@ -325,18 +341,22 @@ end
 -- @return table A table with the keys that exist in both tables
 -- @realm shared
 function table.GetEqualEntryKeys(tbl, reference)
-	-- return an empty table if tbl is nil
-	if not tbl then return {} end
+    -- return an empty table if tbl is nil
+    if not tbl then
+        return {}
+    end
 
-	local equalTbl = {}
+    local equalTbl = {}
 
-	for index in pairs(tbl) do
-		if not reference[index] then continue end
+    for index in pairs(tbl) do
+        if not reference[index] then
+            continue
+        end
 
-		equalTbl[#equalTbl + 1] = index
-	end
+        equalTbl[#equalTbl + 1] = index
+    end
 
-	return equalTbl
+    return equalTbl
 end
 
 ---
@@ -347,7 +367,7 @@ end
 -- @return number The amount of indexes that exist in both tables
 -- @realm shared
 function table.GetEqualEntriesAmount(tbl, reference)
-	return #table.GetEqualEntryKeys(tbl, reference)
+    return #table.GetEqualEntryKeys(tbl, reference)
 end
 
 -- Copies any missing data from base table to the target table.
@@ -357,17 +377,43 @@ end
 -- @return table The modified target table
 -- @realm shared
 function table.DeepInherit(t, base)
-	if not base then
-		return t
-	end
+    if not base then
+        return t
+    end
 
-	for k, v in pairs(base) do
-		if t[k] == nil then
-			t[k] = v
-		elseif k ~= "BaseClass" and istable(t[k]) then
-			table.DeepInherit(t[k], v)
-		end
-	end
+    for k, v in pairs(base) do
+        if t[k] == nil then
+            t[k] = v
+        elseif k ~= "BaseClass" and istable(t[k]) then
+            table.DeepInherit(t[k], v)
+        end
+    end
 
-	return t
+    return t
+end
+
+-- Fully copies the table, meaning all tables inside this table are copied too.
+-- Normal table.Copy copies only their reference.
+-- @note Does not copy entities as well, only copies their reference.
+-- @warning Do not use on tables that contain themselves somewhere down the line or
+-- you'll get an infinite loop
+-- @param table tbl The table that should be copied
+-- @return table The copied table
+-- @realm shared
+function table.FullCopy(tbl)
+    local result = {}
+
+    for key, value in pairs(tbl) do
+        if type(value) == "table" then
+            result[key] = table.FullCopy(value)
+        elseif type(v) == "Vector" then
+            result[key] = Vector(value.x, value.y, value.z)
+        elseif type(v) == "Angle" then
+            result[key] = Angle(value.p, value.y, value.r)
+        else
+            result[key] = value
+        end
+    end
+
+    return result
 end

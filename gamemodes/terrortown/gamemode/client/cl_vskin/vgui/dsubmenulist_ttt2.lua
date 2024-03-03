@@ -14,41 +14,26 @@ local heightNavHeader = 10
 local heightNavButton = 50
 
 ---
--- Checks recursively the parents until none is found and the highest parent is returned
--- @ignore
-local function getHighestParent(slf)
-	local parent = slf
-	local checkParent = slf:GetParent()
-
-	while ispanel(checkParent) do
-		parent = checkParent
-		checkParent = parent:GetParent()
-	end
-
-	return parent
-end
-
----
 -- @ignore
 function PANEL:Init()
-	-- Make navArea scrollable
-	local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
-	navAreaScroll:SetVerticalScrollbarEnabled(true)
-	navAreaScroll:Dock(BOTTOM)
-	self.navAreaScroll = navAreaScroll
+    -- Make navArea scrollable
+    local navAreaScroll = vgui.Create("DScrollPanelTTT2", self)
+    navAreaScroll:SetVerticalScrollbarEnabled(true)
+    navAreaScroll:Dock(BOTTOM)
+    self.navAreaScroll = navAreaScroll
 
-	-- Split nav area into a grid layout
-	local navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
-	navAreaScrollGrid:Dock(FILL)
-	self.navAreaScrollGrid = navAreaScrollGrid
+    -- Split nav area into a grid layout
+    local navAreaScrollGrid = vgui.Create("DIconLayout", self.navAreaScroll)
+    navAreaScrollGrid:Dock(FILL)
+    self.navAreaScrollGrid = navAreaScrollGrid
 
-	-- Get the frame to be able to enable keyboardinput on searchbar focus
-	self.frame = getHighestParent(self)
+    -- Get the frame to be able to enable keyboardinput on searchbar focus
+    self.frame = util.getHighestPanelParent(self)
 
-	-- This turns off the engine drawing
-	self:SetPaintBackgroundEnabled(false)
-	self:SetPaintBorderEnabled(false)
-	self:SetPaintBackground(false)
+    -- This turns off the engine drawing
+    self:SetPaintBackgroundEnabled(false)
+    self:SetPaintBorderEnabled(false)
+    self:SetPaintBackground(false)
 end
 
 ---
@@ -57,43 +42,45 @@ end
 -- @param number heightBar
 -- @realm client
 function PANEL:SetSearchBarSize(widthBar, heightBar)
-	if not self.searchBar then return end
+    if not self.searchBar then
+        return
+    end
 
-	self.searchBar:SetSize(widthBar, heightBar)
+    self.searchBar:SetSize(widthBar, heightBar)
 end
 
 ---
 -- This function enables or disables the searchBar.
--- @param bool active
+-- @param boolean active
 -- @realm client
 function PANEL:EnableSearchBar(active)
-	if not active then
-		if self.searchBar then
-			self.searchBar:Clear()
-		end
+    if not active then
+        if self.searchBar then
+            self.searchBar:Clear()
+        end
 
-		return
-	end
+        return
+    end
 
-	-- Add searchbar on top	
-	local searchBar = vgui.Create("DSearchBarTTT2", self)
-	searchBar:SetUpdateOnType(true)
-	searchBar:SetPos(0, heightNavHeader)
-	searchBar:SetHeightMult(1)
+    -- Add searchbar on top
+    local searchBar = vgui.Create("DSearchBarTTT2", self)
+    searchBar:SetUpdateOnType(true)
+    searchBar:SetPos(0, heightNavHeader)
+    searchBar:SetHeightMult(1)
 
-	searchBar.OnValueChange = function(slf, searchText)
-		self:GenerateSubmenuList(self.basemenuClass:GetMatchingSubmenus(searchText))
-	end
+    searchBar.OnValueChange = function(slf, searchText)
+        self:GenerateSubmenuList(self.basemenuClass:GetMatchingSubmenus(searchText))
+    end
 
-	searchBar.OnGetFocus = function(slf)
-		self.frame:SetKeyboardInputEnabled(true)
-	end
+    searchBar.OnGetFocus = function(slf)
+        self.frame:SetKeyboardInputEnabled(true)
+    end
 
-	searchBar.OnLoseFocus = function(slf)
-		self.frame:SetKeyboardInputEnabled(false)
-	end
+    searchBar.OnLoseFocus = function(slf)
+        self.frame:SetKeyboardInputEnabled(false)
+    end
 
-	self.searchBar = searchBar
+    self.searchBar = searchBar
 end
 
 ---
@@ -102,29 +89,32 @@ end
 -- @return panel
 -- @realm client
 function PANEL:AddSubmenuButton(submenuClass)
-	local settingsButton = self.navAreaScrollGrid:Add("DSubmenuButtonTTT2")
+    local settingsButton = self.navAreaScrollGrid:Add("DSubmenuButtonTTT2")
 
-	settingsButton:SetTitle(submenuClass.title or submenuClass.type)
-	settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
+    settingsButton:SetTitle(submenuClass.title or submenuClass.type)
+    settingsButton:SetIcon(submenuClass.icon, submenuClass.iconFullSize)
+    settingsButton:SetIconBadge(submenuClass.iconBadge)
+    settingsButton:SetIconBadgeSize(submenuClass.iconBadgeSize)
+    settingsButton:SetTooltip(submenuClass.tooltip)
 
-	settingsButton.PerformLayout = function(panel)
-		panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
-	end
+    settingsButton.PerformLayout = function(panel)
+        panel:SetSize(panel:GetParent():GetWide(), heightNavButton)
+    end
 
-	settingsButton.DoClick = function(slf)
-		HELPSCRN:SetupContentArea(self.contentArea, submenuClass)
-		HELPSCRN:BuildContentArea()
+    settingsButton.DoClick = function(slf)
+        HELPSCRN:SetupContentArea(self.contentArea, submenuClass)
+        HELPSCRN:BuildContentArea()
 
-		-- handle the set/unset of active buttons for the draw process
-		if self.lastActive and self.lastActive.SetActive then
-			self.lastActive:SetActive(false)
-		end
+        -- handle the set/unset of active buttons for the draw process
+        if self.lastActive and self.lastActive.SetActive then
+            self.lastActive:SetActive(false)
+        end
 
-		slf:SetActive()
-		self.lastActive = slf
-	end
+        slf:SetActive()
+        self.lastActive = slf
+    end
 
-	return settingsButton
+    return settingsButton
 end
 
 ---
@@ -132,35 +122,35 @@ end
 -- @param menuClasses submenuClasses
 -- @realm client
 function PANEL:GenerateSubmenuList(submenuClasses)
-	self.navAreaScrollGrid:Clear()
-	self.contentArea:Clear()
+    self.navAreaScrollGrid:Clear()
+    self.contentArea:Clear()
 
-	if #submenuClasses == 0 then
-		local labelNoContent = vgui.Create("DLabelTTT2", self.contentArea)
-		local widthContent = self.contentArea:GetSize()
+    if #submenuClasses == 0 then
+        local labelNoContent = vgui.Create("DLabelTTT2", self.contentArea)
+        local widthContent = self.contentArea:GetSize()
 
-		labelNoContent:SetText("label_menu_not_populated")
-		labelNoContent:SetSize(widthContent - 40, 50)
-		labelNoContent:SetFont("DermaTTT2Title")
-		labelNoContent:SetPos(20, 0)
-	else
-		for i = 1, #submenuClasses do
-			local submenuClass = submenuClasses[i]
-			local settingsButton = self:AddSubmenuButton(submenuClass)
+        labelNoContent:SetText("label_menu_not_populated")
+        labelNoContent:SetSize(widthContent - 40, 50)
+        labelNoContent:SetFont("DermaTTT2Title")
+        labelNoContent:SetPos(20, 0)
+    else
+        for i = 1, #submenuClasses do
+            local submenuClass = submenuClasses[i]
+            local settingsButton = self:AddSubmenuButton(submenuClass)
 
-			-- Handle the set of active buttons for the draw process
-			if i == 1 then
-				settingsButton:SetActive()
-				self.lastActive = settingsButton
-			end
-		end
+            -- Handle the set of active buttons for the draw process
+            if i == 1 then
+                settingsButton:SetActive()
+                self.lastActive = settingsButton
+            end
+        end
 
-		HELPSCRN:SetupContentArea(self.contentArea, submenuClasses[1])
-		HELPSCRN:BuildContentArea()
-	end
+        HELPSCRN:SetupContentArea(self.contentArea, submenuClasses[1])
+        HELPSCRN:BuildContentArea()
+    end
 
-	-- Last refresh sizes depending on number of submenus added
-	self:InvalidateLayout(true)
+    -- Last refresh sizes depending on number of submenus added
+    self:InvalidateLayout(true)
 end
 
 ---
@@ -169,52 +159,52 @@ end
 -- @param panel contenArea
 -- @realm client
 function PANEL:SetBasemenuClass(basemenuClass, contentArea)
-	self.basemenuClass = basemenuClass
-	self.contentArea = contentArea
+    self.basemenuClass = basemenuClass
+    self.contentArea = contentArea
 
-	self:GenerateSubmenuList(basemenuClass:GetVisibleSubmenus())
+    self:GenerateSubmenuList(basemenuClass:GetVisibleSubmenus())
 end
 
 ---
 -- @param number padding
 -- @realm client
 function PANEL:SetPadding(padding)
-	self.padding = padding
+    self.padding = padding
 
-	self.navAreaScrollGrid:SetSpaceY(padding)
+    self.navAreaScrollGrid:SetSpaceY(padding)
 end
 
 ---
 -- @return number
 -- @realm client
 function PANEL:GetPadding()
-	return self.padding
+    return self.padding
 end
 
 ---
 -- @ignore
 function PANEL:PerformLayout()
-	-- First invalidate Parent to get current correct docking size
-	self:InvalidateParent(true)
+    -- First invalidate Parent to get current correct docking size
+    self:InvalidateParent(true)
 
-	local widthNavContent, heightNavContent = self:GetSize()
-	local heightShift = heightNavHeader + (self.searchBar and heightNavButton + self.padding or 0)
+    local widthNavContent, heightNavContent = self:GetSize()
+    local heightShift = heightNavHeader + (self.searchBar and heightNavButton + self.padding or 0)
 
-	self:SetSearchBarSize(widthNavContent, heightNavButton)
-	self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightShift)
+    self:SetSearchBarSize(widthNavContent, heightNavButton)
+    self.navAreaScroll:SetSize(widthNavContent, heightNavContent - heightShift)
 
-	-- Last invalidate all buttons and then the scrolllist for correct size to contents
-	self.navAreaScrollGrid:InvalidateChildren(true)
-	self.navAreaScroll:InvalidateLayout(true)
+    -- Last invalidate all buttons and then the scrolllist for correct size to contents
+    self.navAreaScrollGrid:InvalidateChildren(true)
+    self.navAreaScroll:InvalidateLayout(true)
 end
 
 ---
 -- @return boolean
 -- @realm client
 function PANEL:Clear()
-	local cleared = self.searchBar:Clear()
+    local cleared = self.searchBar:Clear()
 
-	return tobool(cleared and self.navAreaScroll:Clear())
+    return tobool(cleared and self.navAreaScroll:Clear())
 end
 
 derma.DefineControl("DSubmenuListTTT2", "", PANEL, "DPanelTTT2")

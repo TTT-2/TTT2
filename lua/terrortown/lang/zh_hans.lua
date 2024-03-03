@@ -1,4 +1,4 @@
--- Simplified Chinese language strings (by 8z & TEGTianFan & 波と一緒に漂う)
+-- Simplified Chinese language strings (by 8Z & TEGTianFan)
 
 local L = LANG.CreateLanguage("zh_hans")
 
@@ -34,8 +34,8 @@ L.round_traitors_one = "叛徒，你将孤身奋斗。"
 L.round_traitors_more = "叛徒，你的队友是：{names}"
 
 L.win_time = "时间用尽，叛徒失败了。"
-L.win_traitor = "叛徒取得了胜利！"
-L.win_innocent = "叛徒们被击败了！"
+L.win_traitors = "叛徒取得了胜利！"
+L.win_innocents = "叛徒们被击败了！"
 L.win_nones = "无人胜出！（平局）"
 L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
@@ -60,10 +60,8 @@ L.body_found_traitor = "他是一位叛徒！"
 L.body_found_det = "他是一位探长。"
 L.body_found_inno = "他是一位无辜者。"
 
-L.body_confirm = "{finder} 确认了 {victim} 的死亡。"
-
 L.body_call = "{player} 请求探长前来检查 {victim} 的尸体！"
-L.body_call_error = "你必须先确定该玩家的死才能呼叫探长！"
+L.body_call_error = "你必须先确认玩家死亡后才能呼叫探长！"
 
 L.body_burning = "好烫！这个尸体着火了！"
 L.body_credits = "你在尸体上找到 {num} 积分！"
@@ -108,8 +106,8 @@ L.disg_menutitle = "伪装器控制"
 L.disg_not_owned = "你没有伪装器！"
 L.disg_enable = "执行伪装"
 
-L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命以及人品。除此之外，你也能躲避探长的雷达。"
-L.disg_help2 = "可直接在主选单外，使用数字键来切换伪装。你也可以用控制台指令绑定指令 ttt_toggle_disguise。"
+L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命值以及人品。除此之外，你也能躲避探长的雷达。"
+L.disg_help2 = "按下小键盘回车键可不通过菜单直接切换伪装。你也可以使用控制台把另一个键位绑定'ttt_toggle_disguise'。"
 
 -- Radar tab in equipment menu
 L.radar_name = "雷达"
@@ -172,46 +170,6 @@ L.quick_disg = "伪装着的人"
 L.quick_corpse = "一具未搜索过的尸体"
 L.quick_corpse_id = " {player} 的尸体"
 
--- Body search window
-L.search_title = "尸体搜索结果"
-L.search_info = "信息"
-L.search_confirm = "确认死亡"
-L.search_call = "呼叫探长"
-
--- Descriptions of pieces of information found
-L.search_nick = "这是 {player} 的尸体。"
-
-L.search_role_traitor = "这个人是叛徒！"
-L.search_role_det = "这个人是探长。"
-L.search_role_inno = "这个人是无辜的恐怖分子。"
-
-L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
-L.search_armor = "他穿着非标准装甲。"
-L.search_disg = "他持有一个能隐匿身份的设备"
-L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
-L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
-
-L.search_dmg_crush = "他多处骨折。看起来是某种重物的冲击撞死了他。"
-L.search_dmg_bullet = "他很明显是被射杀身亡的。"
-L.search_dmg_fall = "他是坠落身亡的。"
-L.search_dmg_boom = "他的伤口以及烧焦的衣物，应是爆炸导致其死亡。"
-L.search_dmg_club = "他的身体有许多擦伤打击痕迹，明显是被殴打致死的。"
-L.search_dmg_drown = "他身上的蛛丝马迹显示是溺死的。"
-L.search_dmg_stab = "他是被刺击与挥砍后，迅速失血致死的。"
-L.search_dmg_burn = "闻起来像烧焦的恐怖分子.."
-L.search_dmg_tele = "看起来他的DNA以超光速粒子之形式散乱在附近。"
-L.search_dmg_car = "他穿越马路时被一个粗心的驾驶碾死了。"
-L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
-
-L.search_weapon = "死者是被 {weapon} 所杀。"
-L.search_head = "最后一击打在头上。完全没机会叫喊。"
-L.search_time = "他大约在你搜索前的 {time} 死亡。"
-L.search_dna = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
-
-L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
-L.search_kills2 = "你找到了一个名单，记载着他杀的这些人："
-L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。凶手，还是巧合？"
-
 -- Scoreboard
 L.sb_playing = "你正在玩的服务器是..."
 L.sb_mapchange = "地图将于 {num} 个回合或是 {time} 后更换。"
@@ -233,7 +191,7 @@ L.sb_tag_avoid = "躲避"
 L.sb_tag_kill = "死亡"
 L.sb_tag_miss = "失踪"
 
--- Equipment actions， like buying and dropping
+-- Equipment actions, like buying and dropping
 L.buy_no_stock = "无法购买此装备：你已拥有它了。"
 L.buy_pending = "你已订购此装备，请等待配送。"
 L.buy_received = "你已收到此装备。"
@@ -267,7 +225,6 @@ L.item_disg_desc = [[
 需要启用时，使用本页面的伪装菜单或按下小键盘回车键。]]
 
 -- C4
-L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
 L.c4_disarm_warn = "你所安放的C4已被拆除。"
 L.c4_armed = "C4安放成功。"
 L.c4_disarmed = "你成功拆除了C4。"
@@ -288,6 +245,7 @@ L.c4_remove_destroy2 = "确认：销毁"
 L.c4_disarm = "拆除C4"
 L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
+L.c4_disarm_t = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
@@ -296,7 +254,6 @@ L.c4_status_disarmed = "拆除"
 
 -- Visualizer
 L.vis_name = "显像器"
-L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
 
 L.vis_desc = [[
 可让犯罪现场显像化的仪器。
@@ -305,7 +262,6 @@ L.vis_desc = [[
 
 -- Decoy
 L.decoy_name = "雷达诱饵"
-L.decoy_no_room = "你无法携带雷达诱饵。"
 L.decoy_broken = "你的雷达诱饵被摧毁了！"
 
 L.decoy_short_desc = "这个诱饵会为其他阵营显示一个假雷达信号"
@@ -316,12 +272,11 @@ L.decoy_desc = [[
 
 -- Defuser
 L.defuser_name = "拆弹器"
-L.defuser_help = "{primaryfire} 拆除目标炸弹。"
 
 L.defuser_desc = [[
 迅速拆除一个C4。
 
-不限制使用次数。若你持有此设备，拆除C4时会轻松许多。]]
+不限制使用次数。若你持有此装备，拆除C4时会轻松许多。]]
 
 -- Flare gun
 L.flare_name = "信号枪"
@@ -335,7 +290,6 @@ L.flare_desc = [[
 L.hstation_name = "医疗站"
 
 L.hstation_broken = "你的医疗站被摧毁了！"
-L.hstation_help = "{primaryfire} 安放了一个医疗站。"
 
 L.hstation_desc = [[
 安放后，允许人们用其治疗自己。
@@ -359,7 +313,6 @@ L.polter_desc = [[
 
 -- Radio
 L.radio_broken = "你的收音机已被摧毁！"
-L.radio_help_pri = "{primaryfire} 安放了收音机。"
 
 L.radio_desc = [[
 播放音效来误导或欺骗玩家。
@@ -405,7 +358,7 @@ L.dna_killer = "成功采集到凶手的DNA样本！"
 L.dna_duplicate = "匹配！你的扫描仪里已经有这个DNA样本了。"
 L.dna_no_killer = "DNA样本无法检索（凶手已离线？）"
 L.dna_armed = "炸弹已启动！赶紧拆除它！"
-L.dna_object = "在目标上采集到 {num} 个新DNA样本。"
+L.dna_object = "从目标上采集了最后一位所有者的样本"
 L.dna_gone = "区域内没侦测到可采集之DNA样本。"
 
 L.dna_desc = [[
@@ -421,7 +374,7 @@ L.magnet_help = "{primaryfire} 将其定在墙上。"
 L.grenade_smoke = "烟雾弹"
 L.grenade_fire = "燃烧弹"
 
-L.unarmed_name = "无武装"
+L.unarmed_name = "收起武器"
 L.crowbar_name = "撬棍"
 L.pistol_name = "手枪"
 L.rifle_name = "狙击枪"
@@ -439,15 +392,15 @@ L.tele_no_mark = "标记传送地点后才能传送。"
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri = "{primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec = "{scondaryfire} 标记传送地点。"
+L.tele_help_pri = "传送到标记位置"
+L.tele_help_sec = "标记当前位置"
 
 L.tele_desc = [[
 可以传送到先前标记的地点。
 
 传送器会产生噪音，而且使用次数是有限的。]]
 
--- Ammo names， shown when picked up
+-- Ammo names, shown when picked up
 L.ammo_pistol = "手枪弹药"
 
 L.ammo_smg1 = "冲锋枪弹药"
@@ -463,7 +416,7 @@ L.round_prep = "准备中"
 L.round_active = "进行中"
 L.round_post = "回合结束"
 
--- Health， ammo and time area
+-- Health, ammo and time area
 L.overtime = "加时"
 L.hastemode = "急速模式"
 
@@ -474,7 +427,7 @@ L.hp_wounded = "受伤"
 L.hp_badwnd = "重伤"
 L.hp_death = "濒死"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "良好"
 L.karma_high = "粗鲁"
 L.karma_med = "不可靠"
@@ -483,14 +436,13 @@ L.karma_min = "滥杀者"
 
 -- TargetID misc
 L.corpse = "尸体"
-L.corpse_hint = "按下 [{usekey}] 来搜索，用 [{walkkey} + {usekey}] 进行无声搜索。"
+L.corpse_hint = "按下 [{usekey}] 进行搜索并确认。按下 [{walkkey} + {usekey}] 进行隐秘搜索。"
 
 L.target_disg = "（伪装状态）"
 L.target_unid = "未确认的尸体"
+L.target_unknown = "一名恐怖分子"
 
-L.target_credits = "搜索尸体以获取未被消耗积分"
-
--- HUD buttons with hand icons that only traitors can see
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "一次性"
 L.tbut_reuse = "重复使用"
 L.tbut_retime = "{num} 秒可后再次使用"
@@ -503,8 +455,7 @@ L.mute_all = "全部静音"
 L.mute_off = "取消静音"
 
 -- Spectators and prop possession
-L.punch_title = "飞击量表" --"PUNCH-O-METER"
-L.punch_help = "按下行走键或跳跃键以推撞物品；按蹲下键则离开物品控制。"
+L.punch_title = "飞击量表"
 L.punch_bonus = "你的分数较低，飞击量表上限减少 {num}"
 L.punch_malus = "你的分数较高，飞击量表上限增加 {num}！"
 
@@ -663,7 +614,7 @@ L.col_roles = "角色"
 L.col_teams = "阵营"
 L.col_kills1 = "无辜者杀敌数"
 L.col_kills2 = "叛徒杀敌数"
-L.col_points = "积分"
+L.col_points = "得分"
 L.col_team = "团队奖励"
 L.col_total = "总分"
 
@@ -863,8 +814,8 @@ L.aw_tod1_text = "在他的团队即将获得胜利的前几秒死去。"
 L.aw_tod2_title = "垃圾游戏！"
 L.aw_tod2_text = "在这回合刚开始不久即被杀害。"
 
--- New and modified pieces of text are placed below this point， marked with the
--- version in which they were added， to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
@@ -932,16 +883,13 @@ L.shop_role_select = "选择身份"
 L.shop_role_selected = "选中了 {role} 的商店！"
 L.shop_search = "搜索"
 
-L.spec_help = "点击来观察玩家，或对着物理道具按 {usekey} 来附身。"
-L.spec_help2 = "若想离开观察者模式，用 {helpkey} 打开菜单，在“游戏性”选项中勾选选项。"
-
 -- 2019-10-19
 L.drop_ammo_prevented = "有什么东西阻挡你丢出子弹。"
 
 -- 2019-10-28
 L.target_c4 = "按 [{usekey}] 打开C4菜单"
 L.target_c4_armed = "按 [{usekey}] 拆除C4"
-L.target_c4_armed_defuser = "按 [{usekey}] 使用拆弹器"
+L.target_c4_armed_defuser = "按 [{primaryfire}] 使用拆弹器"
 L.target_c4_not_disarmable = "你不能拆除存活队友的C4"
 L.c4_short_desc = "可以炸得很欢"
 
@@ -949,22 +897,21 @@ L.target_pickup = "按 [{usekey}] 捡起"
 L.target_slot_info = "槽位：{slot}"
 L.target_pickup_weapon = "按 [{usekey}] 捡起武器"
 L.target_switch_weapon = "按 [{usekey}] 和当前武器交换"
-L.target_pickup_weapon_hidden = "按 [{usekey} + {walkkey}] 隐秘地捡起"
-L.target_switch_weapon_hidden = "按 [{usekey} + {walkkey}] 隐秘地交换"
+L.target_pickup_weapon_hidden = "按 [{walkkey} + {usekey}] 隐秘地捡起"
+L.target_switch_weapon_hidden = "按 [{walkkey} + {usekey}] 隐秘地交换"
 L.target_switch_weapon_nospace = "没有提供给这个武器的槽位"
 L.target_switch_drop_weapon_info = "丢弃槽位 {slot} 的 {name}"
 L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 没有可丢弃的武器"
 
-L.corpse_searched_by_detective = "这个尸体被探长搜查过"
+L.corpse_searched_by_detective = "这具尸体已被公共警察角色搜索过"
 L.corpse_too_far_away = "这个尸体太远了。"
 
-L.radio_pickup_wrong_team = "你不能捡起其他队伍的收音机"
 L.radio_short_desc = "武器声音，悦耳动听"
 
-L.hstation_subtitle = "按 [{usekey}] 恢复生命"
+L.hstation_subtitle = "按 [{usekey}] 恢复生命值"
 L.hstation_charge = "剩余充能：{charge}"
 L.hstation_empty = "这个医疗站没有剩余充能"
-L.hstation_maxhealth = "你的生命恢复已满"
+L.hstation_maxhealth = "你的生命值已满"
 L.hstation_short_desc = "医疗站会逐渐回复充能"
 
 -- 2019-11-03
@@ -1003,7 +950,6 @@ L.mute_team = "静音 {team}"
 L.door_auto_closes = "此门会自动关闭"
 L.door_open_touch = "此门接触后会自动开启"
 L.door_open_touch_and_use = "接触门或按 [{usekey}] 开门。"
-L.hud_health = "生命"
 
 -- 2020-03-09
 L.help_title = "帮助和设定"
@@ -1025,7 +971,7 @@ L.menu_guide_description = "帮助你开始游玩 TTT2 并解释玩法和身份�
 L.menu_bindings_description = "将 TTT2 和其插件的功能绑到你想要的键位"
 L.menu_language_description = "选择游戏语言"
 L.menu_appearance_description = "调整界面的样式和性能"
-L.menu_gameplay_description = "避免特定身份和其他游戏相关选项"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "配置本地插件"
 L.menu_legacy_description = "旧TTT的菜单，应该已被导入新系统"
 L.menu_administration_description = "界面和商店的通用管理菜单"
@@ -1049,10 +995,8 @@ L.submenu_appearance_crosshair_title = "准星"
 L.submenu_appearance_dmgindicator_title = "伤害指示"
 L.submenu_appearance_performance_title = "性能"
 L.submenu_appearance_interface_title = "界面"
-L.submenu_appearance_miscellaneous_title = "其他"
 
 L.submenu_gameplay_general_title = "通用"
-L.submenu_gameplay_avoidroles_title = "避免特定身份"
 
 L.submenu_administration_hud_title = "HUD 设置"
 L.submenu_administration_randomshop_title = "随机商店"
@@ -1089,17 +1033,12 @@ L.label_shop_show_slot = "显示装备槽位"
 L.label_shop_show_custom = "显示自定义标记"
 L.label_shop_show_fav = "显示最爱标记"
 L.label_crosshair_enable = "启用十字准星"
-L.label_crosshair_gap_enable = "启用自定义准星大小"
-L.label_crosshair_gap = "自定义准星大小"
 L.label_crosshair_opacity = "准星透明度"
 L.label_crosshair_ironsight_opacity = "瞄准时准星透明度"
 L.label_crosshair_size = "准星长度"
 L.label_crosshair_thickness = "准星粗细"
 L.label_crosshair_thickness_outline = "准星外框粗细"
-L.label_crosshair_static_enable = "启用静态准星"
-L.label_crosshair_dot_enable = "启用准星中点"
-L.label_crosshair_lines_enable = "启用准星直线"
-L.label_crosshair_scale_enable = "启用武器对应准星大小"
+L.label_crosshair_scale_enable = "启用动态十字准线刻度"
 L.label_crosshair_ironsight_low_enabled = "瞄准时降低武器模型"
 L.label_damage_indicator_enable = "启用伤害指示"
 L.label_damage_indicator_mode = "选择伤害指示主题"
@@ -1118,13 +1057,10 @@ L.label_gameplay_specmode = "观察者模式（永远观察）"
 L.label_gameplay_fastsw = "武器快速切换"
 L.label_gameplay_hold_aim = "启用持续瞄准"
 L.label_gameplay_mute = "死亡时静音存活玩家"
-L.label_gameplay_dtsprint_enable = "启用双击冲刺"
-L.label_gameplay_dtsprint_anykey = "冲刺时任何方向键都持续冲刺"
 L.label_hud_default = "默认 HUD"
 L.label_hud_force = "强制 HUD"
 
 L.label_bind_weaponswitch = "捡起武器"
-L.label_bind_sprint = "冲刺"
 L.label_bind_voice = "全局语言"
 L.label_bind_voice_team = "团队语言"
 
@@ -1148,7 +1084,6 @@ L.header_damage_indicator = "伤害指示设置"
 L.header_performance_settings = "性能设置"
 L.header_interface_settings = "界面设置"
 L.header_gameplay_settings = "游戏性设置"
-L.header_roleselection = "启用身份分配"
 L.header_hud_administration = "选择默认和强制 HUD"
 L.header_hud_enabled = "启用/禁用 HUDs"
 
@@ -1192,14 +1127,10 @@ L.hud_revival_title = "复活剩余时间："
 L.hud_revival_time = "{time}秒"
 
 -- 2020-05-03
-L.door_destructible = "此门不可摧毁 （{health}生命）"
+L.door_destructible = "此门不可摧毁 （{health}生命值）"
 
 -- 2020-05-28
-L.confirm_detective_only = "只有侦探能确认死亡。"
-L.inspect_detective_only = "只有侦探能检查尸体。"
-L.corpse_hint_no_inspect = "只有侦探能检查这个尸体。"
-L.corpse_hint_inspect_only = "按 [{usekey}] 搜索。只有侦探能确认死亡。"
-L.corpse_hint_inspect_only_credits = "按 [{usekey}] 获取积分。只有侦探能确认死亡。"
+L.corpse_hint_inspect_limited = "按下 [{usekey}] 进行搜索。按下 [{walkkey} + {usekey}] 仅查看搜索界面。"
 
 -- 2020-06-04
 L.label_bind_disguiser = "切换伪装器"
@@ -1212,9 +1143,8 @@ L.dna_help_reload = "删除当前样本"
 L.binoc_help_pri = "确认尸体"
 L.binoc_help_sec = "切换放大倍率"
 
-L.vis_help_pri = "丢弃当前设备。"
+L.vis_help_pri = "丢弃当前装备。"
 
-L.decoy_help_pri = "安放诱饵。"
 
 -- 2020-08-07
 L.pickup_error_spec = "作为观察者你无法捡起这个。"
@@ -1269,7 +1199,7 @@ L.title_event_bodyfound = "发现了一具尸体"
 L.title_event_c4_disarm = "一枚C4被解除了"
 L.title_event_c4_explode = "一枚C4爆炸了"
 L.title_event_c4_plant = "放置了一枚C4"
-L.title_event_creditfound = "积分被发现"
+L.title_event_creditfound = "搜到积分"
 L.title_event_finish = "本回合已经结束"
 L.title_event_game = "新回合已经开始"
 L.title_event_kill = "一名玩家被杀害"
@@ -1298,6 +1228,7 @@ L.trap_something = "某件物品"
 -- Kill events
 L.desc_event_kill_suicide = "是自杀的"
 L.desc_event_kill_team = "是被队友杀的"
+
 L.desc_event_kill_blowup = "{victim} ({vrole} / {vteam}) 被自己炸飞。"
 L.desc_event_kill_blowup_trap = "{victim} ({vrole} / {vteam}) 被 {trap} 炸飞。"
 
@@ -1357,9 +1288,9 @@ L.header_random_shop_value_administration = "平衡性设置"
 L.shopeditor_name_random_shops = "启用随机商店"
 L.shopeditor_desc_random_shops = [[随机商店只给每个玩家提供一套有限的随机化装备。
 阵营商店迫使一个阵营中的所有玩家拥有相同的套装，而不是定制化。
-重新投票可以让你用积分获得一套新的随机装备。]]
+重选可以让你使用积分来刷新随机装备。]]
 L.shopeditor_name_random_shop_items = "随机装备的数量"
-L.shopeditor_desc_random_shop_items = "这包括那些标有“非随机”的设备。所以请选择一个足够高的数字，否则你只能得到这些。"
+L.shopeditor_desc_random_shop_items = "这包括那些标有“非随机”的装备。所以请选择一个足够高的数字，否则你只能得到这些。"
 L.shopeditor_name_random_team_shops = "启用阵营商店"
 L.shopeditor_name_random_shop_reroll = "启用商店重选功能"
 L.shopeditor_name_random_shop_reroll_cost = "每次重选的花费"
@@ -1409,12 +1340,6 @@ L.xfer_team_indicator = "阵营"
 -- 2021-06-25
 L.searchbar_default_placeholder = "在列表中搜索..."
 
--- 2021-07-07
-L.header_equipment_weapon_spawn_setup = "武器生成设置"
-
-L.equipmenteditor_name_auto_spawnable = "装备随机生成"
-L.equipmenteditor_name_spawn_type = "生成类型"
-
 -- 2021-07-11
 L.spec_about_to_revive = "在复活时，观察将被限制。"
 
@@ -1443,7 +1368,7 @@ L.spawn_ammo_rifle = "狙击枪弹药生成"
 L.spawn_ammo_shotgun = "霰弹枪弹药生成"
 L.spawn_player_random = "随机玩家生成"
 
-L.spawn_weapon_ammo = " （弹药：{ammo}）"
+L.spawn_weapon_ammo = "（弹药：{ammo}）"
 
 L.spawn_weapon_edit_ammo = "按住 [{walkkey}]并按 [{primaryfire} 或 {secondaryfire}] 以增加或减少此武器生成的弹药量"
 
@@ -1461,7 +1386,7 @@ L.button_delete_all_spawns = "删除所有生成点位置"
 L.label_dynamic_spawns_enable = "为该地图启用动态生成"
 L.label_dynamic_spawns_global_enable = "为所有地图启用自定义生成"
 
-L.header_equipment_weapon_spawn_setup = "武器生成设定"
+L.header_equipment_weapon_spawn_setup = "武器生成设置"
 
 L.help_spawn_editor_info = [[
 生成编辑器是用来放置，移除和编辑世界上的生成点。这些生成点是为武器，弹药和玩家准备的。
@@ -1474,7 +1399,7 @@ L.help_spawn_editor_info = [[
 L.help_spawn_editor_enable = "在某些地图上，可能会建议使用在地图自带的原始生成点，而不用动态系统来取代它们。禁用这个复选框只对当前活动地图禁用。其他地图仍将使用动态系统。"
 L.help_spawn_editor_hint = "提示：要离开生成编辑器，重新打开游戏模式菜单。"
 L.help_spawn_editor_spawn_amount = [[
-目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 player} 个玩家生成点。
+目前在这张地图上有 {weapon} 个武器生成点，{ammo} 个弹药生成点和 {player} 个玩家生成点。
 点击'开始编辑生成'来改变这个生成。
 
 {weaponrandom}x 随机武器生成
@@ -1493,9 +1418,9 @@ L.help_spawn_editor_spawn_amount = [[
 {ammorifle}x 狙击枪弹药生成
 {ammoshotgun}x 霰弹枪弹药生成
 
-{playerrandom} x 玩家随机位置生成]]
+{playerrandom}x 玩家随机位置生成]]
 
-L.equipmenteditor_name_auto_spawnable = "设备在地图中随机产生"
+L.equipmenteditor_name_auto_spawnable = "装备可在地图中随机生成"
 L.equipmenteditor_name_spawn_type = "选择生成类型"
 L.equipmenteditor_desc_auto_spawnable = [[
 TTT2的生成系统允许每种武器在世界中生成，默认情况下，只有被创造者标记为'自动生成'的武器才会在世界中生成，但这些设置可以在该菜单中更改。
@@ -1540,8 +1465,9 @@ L.kill_score_team = "击杀队友："
 -- 2021-10-09
 L.help_models_select = [[
 左键点击模型，将其添加到玩家模型库中。再次以左键删除它们。右键可在所关注的模型的启用和禁用侦探帽之间进行切换。
-	
+
 左上角的小指示器显示玩家模型是否有头部的命中箱，下面的图标显示了这个模型是否可佩戴侦探帽。]]
+
 L.menu_roles_title = "角色设置"
 L.menu_roles_description = "设置生成概率、装备积分及更多。"
 
@@ -1557,14 +1483,14 @@ L.header_roles_reward_credits = "奖励装备积分"
 L.help_roles_default_team = "默认团队：{team}"
 L.help_roles_unselectable = "这个角色是不可选择的。这意味着它在角色选择系统中不被考虑。大多数情况下，这意味着这是回合中通过某个事件（如复活为僵尸，副手老鹰或类似的东西）手动应用的角色。"
 L.help_roles_selectable = "这个角色是可选择的，这意味着如果满足所有的标准，这个角色在角色选择过程中会被考虑。"
-L.help_roles_credits = "装备积分用于在商店购买装备。大多数情况下，只给那些可以进入商店的角色信用额度是有意义的。然而，由于可从尸体上偷取积分，也可以考虑给角色提供起始积分，作为给加害者的奖励。"
+L.help_roles_credits = "积分用于在商店购买装备。大部分情况下，积分只对能使用商店的身份有用。不过，由于尸体上可以搜刮到积分，可以考虑给一个身份提供初始积分来作为杀手的奖励。"
 L.help_roles_selection_short = "每个玩家的角色分布定义了被分配到这个角色的玩家的百分比。例如，如果该值被设置为'0.2'，那么每五名玩家中就有一人会变为此角色。"
 L.help_roles_selection = [[
 每个玩家的角色分配定义了被分配到这个角色的玩家的百分比。例如，如果该值被设置为 "0.2"，那么每五个玩家就会得到这个角色。这也意味着，至少需要5名玩家才能分配到这个角色。
 请记住，所有这些都只适用于该角色被考虑分配过程。
 
 前面提到的角色分配与玩家的下限有一个特殊的整合。如果该角色被考虑用于分配，且最小值低于分配系数所给的值，但玩家数量等于或大于下限，则单个玩家仍可获得该角色。然后分配过程对第二个玩家照常进行。]]
-L.help_roles_award_info = "部分角色（如果在他们的积分设置中启用）在一定比例的对手死亡后会获得装备积分，该数值可在这里进行调整。"
+L.help_roles_award_info = "部分身份（如果在积分设置中启用）在一定比例的敌人死亡后会获得积分。此功能的相关数值可以在这里调整。"
 L.help_roles_award_pct = "当这个百分比的敌人死亡后，特定的角色会获得积分。"
 L.help_roles_award_repeat = "积分奖励是否会多次发放。例如，如果你将百分比设置为'0.25'，并启用此功能，玩家将在死亡人数到达全玩家的'25%'，'50%'和'75%'时获得积分。"
 L.help_roles_advanced_warning = "警告：这些是高级设置，可以完全扰乱角色分配过程。如果有疑问，请将所有值保持在 '0'。这个值意味着不应用任何限制，角色分配将尝试分配尽可能多的角色。"
@@ -1593,7 +1519,7 @@ L.label_roles_tbutton = "是否可使用叛徒按钮"
 L.label_roles_credits_starting = "初始装备积分"
 L.label_roles_credits_award_pct = "积分奖励报酬率"
 L.label_roles_credits_award_size = "积分奖励比例"
-L.label_roles_credits_award_repeat = "重复学积分奖励"
+L.label_roles_credits_award_repeat = "积分奖励重复量"
 L.label_roles_newroles_enabled = "启用自定义角色"
 L.label_roles_max_roles = "角色上限"
 L.label_roles_max_roles_pct = "按百分比计算角色上限"
@@ -1603,27 +1529,27 @@ L.label_detective_hats = "为像侦探这样的警察角色启用帽子（如果
 
 L.ttt2_desc_innocent = "无辜者没有特殊能力。他们必须在恐怖分子中找到邪恶的人并杀死他们。但他们必须小心，不要误杀自己的同伴。"
 L.ttt2_desc_traitor = "叛徒是无辜者的敌人。他们有一个装备菜单，可以购买特殊装备。他们必须杀死所有的人，除了他们的队友。"
-L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜者？强大的侦探必须要找到所有图谋不轨恐怖分子。他们商店里的设备可能会帮助他们完成这项任务。"
+L.ttt2_desc_detective = "侦探是无辜者们最信任的人。但谁是无辜者？强大的侦探必须要找到所有图谋不轨恐怖分子。他们商店里的装备可能会帮助他们完成这项任务。"
 
 -- 2021-10-10
 L.button_reset_models = "重置玩家模型"
 
 -- 2021-10-13
-L.help_roles_credits_award_kill = "另一种获得积分的方式是通过杀死为'公开角色'（如侦探）的高价值玩家。如果非无辜者阵营的角色启用了这个功能，他们就会获得以下规定的积分。"
+L.help_roles_credits_award_kill = "另一种获得积分的方式是通过杀死拥有'公开身份'的高价值玩家，比如侦探。如果杀手的身份启用了这个功能，他们会获得此处配置的积分量。"
 L.help_roles_credits_award = [[
 在TTT2中，有两种不同的方式可以获得积分：
 
-1.如果敌方队伍中有一定比例的人死亡，整个队伍将会奖励积分。
+1.如果敌方队伍中有一定比例的人死亡，整个队伍将会被奖励积分。
 2.如果一个玩家用'公开角色'（如侦探）杀死了一个高价值的角色，那么这位玩家就会得到奖励。
 
-请注，，即使全队都会获得奖励，这仍然可以为每个角色启用/禁用。例如，如果'无辜者'阵营被奖励，但无辜者角色的装备商店被禁用，所以只有侦探会收到积分。
+请注意，即使整个团队都获得了奖励，每个身份仍可启用/禁用此功能。例如，如果'无辜者'团队获得了奖励，但'无辜者'身份禁用了此功能，则只有'侦探'会获得积分。
 这个功能的平衡值可以在'管理'->'通用角色设置'中设置。]]
 L.help_detective_hats = [[
 侦探等警察角色可以戴帽子以显示其权威。他们在死亡时或头部受损时将失去帽子。
 
 部分玩家模型默认不支持帽子。你可以在'管理'->'玩家模型'中改变这一点。]]
 
-L.label_roles_credits_award_kill = "Credit reward amount for the kill"
+L.label_roles_credits_award_kill = "击杀获得的积分奖励"
 L.label_roles_credits_dead_award = "启用对依据一定比例敌人死亡数提供积分奖励"
 L.label_roles_credits_kill_award = "启用对击杀高价值角色时提供积分奖励"
 L.label_roles_min_karma = "分配角色时玩家的最低人品值"
@@ -1690,7 +1616,7 @@ L.help_haste_mode = [[
 如果急速模式被启用，固定的回合时间将被忽略。]]
 L.help_round_limit = "在满足设定的限制条件之一后，将会更换地图。"
 L.help_armor_balancing = "以下数值可以用来平衡护甲。"
-L.help_item_armor_classic = "如果启用了经典护甲模式，只有之前的设置才是生效的。经典护甲模式意味着玩家在一个回合中只能购买一次护甲，并且这个盔甲可以阻挡30%的子弹和撬棍的伤害，直到他们死亡。"
+L.help_item_armor_classic = "如果启用了经典护甲模式，只有之前的设置才是生效的。经典护甲模式意味着玩家在一个回合中只能购买一次护甲，并且这个护甲可以阻挡30%的子弹和撬棍的伤害，直到他们死亡。"
 L.help_item_armor_dynamic = [[
 动态护甲是TTT2的新系统，使护甲系统更加有趣。现在可以购买的护甲数量是无限的，而且护甲的效果可以叠加。受到伤害会降低护甲值，每件物品的护甲值是在该物品的"装备设置"中设置的。
 
@@ -1733,8 +1659,6 @@ L.label_bots_are_spectators = "机器人永远是观察者"
 L.label_tbutton_admin_show = "向管理员显示叛徒按钮"
 L.label_ragdoll_carrying = "启用布娃娃搬运"
 L.label_prop_throwing = "启用道具投掷"
-L.label_ragdoll_pinning = "为非无辜者角色启用布娃娃夹子"
-L.label_ragdoll_pinning_innocents = "为无辜者启用布娃娃夹子"
 L.label_weapon_carrying = "启用武器搬运"
 L.label_weapon_carrying_range = "武器搬运范围"
 L.label_prop_carrying_force = "Prop推进力"
@@ -1760,17 +1684,16 @@ L.label_round_limit = "回合数上限"
 L.label_time_limit_minutes = "游戏时间上限，以分钟为单位"
 L.label_nade_throw_during_prep = "在准备时间内允许投掷手榴弹"
 L.label_postround_dm = "回合结束后启用死亡竞赛"
+L.label_session_limits_enabled = "启用地图更换"
 L.label_spectator_chat = "启用观察者与大家聊天的功能"
 L.label_lastwords_chatprint = "如果在打字时被杀，则发出最后一句话至聊天室"
 L.label_identify_body_woconfirm = "不按'确认'按钮识别尸体"
-L.label_announce_body_found = "宣布发现了一具尸体"
+L.label_announce_body_found = "当尸体被确认时，宣布找到了一个尸体"
 L.label_confirm_killlist = "宣布确认尸体时，该尸体的击杀名单"
-L.label_inspect_detective_only = "只允许警察角色搜查尸体"
-L.label_confirm_detective_only = "只允许警察角色确认死者"
 L.label_dyingshot = "如果玩家在瞄准中，则在死亡时开枪[试验性]"
 L.label_armor_block_headshots = "启用护甲阻挡爆头伤害"
 L.label_armor_block_blastdmg = "启用护甲阻挡爆炸伤害"
-L.label_armor_dynamic = "启用动态装甲"
+L.label_armor_dynamic = "启用动态护甲"
 L.label_armor_value = "护甲物品所赋予的护甲"
 L.label_armor_damage_block_pct = "护甲承受的伤害百分比"
 L.label_armor_damage_health_pct = "玩家承受的伤害百分比"
@@ -1782,7 +1705,7 @@ L.label_highlight_dev = "突出显示TTT2开发者"
 L.label_highlight_vip = "突出显示TTT2支持者"
 L.label_highlight_addondev = "突出显示TTT2附加组件的开发者"
 L.label_highlight_supporter = "突出显示其他人"
-L.label_enable_hud_element = "启用{elem}HUD元素"
+L.label_enable_hud_element = "启用 {elem} HUD 元素"
 L.label_spec_prop_control = "启用Prop附体"
 L.label_spec_prop_base = "附体时的基础值"
 L.label_spec_prop_maxpenalty = "降低附体奖金下限"
@@ -1825,13 +1748,8 @@ L.label_sprint_enabled = "启用冲刺功能"
 L.label_sprint_max = "冲刺体力最大值"
 L.label_sprint_stamina_consumption = "体力消耗系数"
 L.label_sprint_stamina_regeneration = "体力恢复系数"
-L.label_sprint_crosshair = "冲刺时显示准星"
 L.label_crowbar_unlocks = "主要攻击键可以作为互动（即解锁）使用"
 L.label_crowbar_pushforce = "撬棍推动力"
-
---2022-04-13
-L.label_session_limits_enabled = "启用地图更换"
-
 
 -- 2022-07-02
 L.header_playersettings_falldmg = "摔落伤害设置"
@@ -1859,10 +1777,417 @@ L.guide_nothing_desc = "这是一项正在进行中的工作，通过在GitHub�
 
 L.sb_rank_tooltip_developer = "TTT2开发者"
 L.sb_rank_tooltip_vip = "TTT2支持者"
-L.sb_rank_tooltip_addondev = "TTT2附加组件开发者"
+L.sb_rank_tooltip_addondev = "TTT2插件开发者"
 L.sb_rank_tooltip_admin = "服务器管理员"
 L.sb_rank_tooltip_streamer = "主播"
 L.sb_rank_tooltip_heroes = "TTT2 英雄"
 L.sb_rank_tooltip_team = "阵营"
 
 L.tbut_adminarea = "管理区:"
+
+-- 2023-08-10
+L.equipmenteditor_name_damage_scaling = "伤害缩放"
+
+-- 2023-08-11
+L.equipmenteditor_name_allow_drop = "允许丢弃"
+L.equipmenteditor_desc_allow_drop = "如果启用，玩家可以自由地丢弃装备。"
+
+L.equipmenteditor_name_drop_on_death_type = "死亡时丢弃"
+L.equipmenteditor_desc_drop_on_death_type = "尝试覆盖玩家死亡时装备是否被丢弃的操作。"
+
+L.drop_on_death_type_default = "默认（由武器定义）"
+L.drop_on_death_type_force = "强制死亡时丢弃"
+L.drop_on_death_type_deny = "拒绝死亡时丢弃"
+
+-- 2023-08-26
+L.equipmenteditor_name_kind = "装备槽"
+L.equipmenteditor_desc_kind = "装备将占用的库存槽。"
+
+L.slot_weapon_melee = "近战槽"
+L.slot_weapon_pistol = "手枪槽"
+L.slot_weapon_heavy = "重型槽"
+L.slot_weapon_nade = "手雷槽"
+L.slot_weapon_carry = "携带槽"
+L.slot_weapon_unarmed = "空手槽"
+L.slot_weapon_special = "特殊槽"
+L.slot_weapon_extra = "额外槽"
+L.slot_weapon_class = "职业槽"
+
+-- 2023-10-04
+L.label_voice_duck_spectator = "观察者语音淡化"
+L.label_voice_duck_spectator_amount = "观察者语音淡化程度"
+L.label_voice_scaling = "语音淡化比例"
+L.label_voice_scaling_mode_linear = "线性"
+L.label_voice_scaling_mode_power4 = "四次方"
+L.label_voice_scaling_mode_log = "对数"
+
+-- 2023-10-07
+L.search_title = "尸检 - {player}"
+L.search_info = "信息"
+L.search_confirm = "确认死亡"
+L.search_confirm_credits = "确认（+{credits} 积分）"
+L.search_take_credits = "获取 {credits} 积分"
+L.search_confirm_forbidden = "确认死亡被禁用"
+L.search_confirmed = "确认死亡"
+L.search_call = "呼叫探长"
+L.search_called = "死亡报告"
+
+L.search_team_role_unknown = "???"
+
+L.search_words = "直觉告诉你这个人的遗言是：{lastwords}"
+L.search_armor = "他穿着非标准护甲。"
+L.search_disguiser = "他持有一个能隐匿身份的设备"
+L.search_radar = "他持有像是雷达的装备，已经无法使用了。"
+L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
+
+L.search_dmg_crush = "他多处骨折。看起来是某种重物的冲击撞死了他。"
+L.search_dmg_bullet = "他很明显是被射杀身亡的。"
+L.search_dmg_fall = "他是坠落身亡的。"
+L.search_dmg_boom = "他的伤口以及烧焦的衣物，应是爆炸导致其死亡。"
+L.search_dmg_club = "他的身体有许多擦伤打击痕迹，明显是被殴打致死的。"
+L.search_dmg_drown = "他身上的蛛丝马迹显示是溺死的。"
+L.search_dmg_stab = "他是被刺击与挥砍后，迅速失血致死的。"
+L.search_dmg_burn = "闻起来像烧焦的恐怖分子.."
+L.search_dmg_teleport = "看起来他的DNA以超光速粒子之形式散乱在附近。"
+L.search_dmg_car = "他穿越马路时被一个粗心的驾驶碾死了。"
+L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
+
+L.search_floor_antlions = "尸体上仍然爬满了蚂蚁。地上也爬满了它们。"
+L.search_floor_bloodyflesh = "尸体上的血看起来又老又恶心，甚至有小块血肉粘在鞋上。"
+L.search_floor_concrete = "灰色的尘土覆盖了尸体的鞋子和膝盖。看起来犯罪现场的地面是混凝土制的。"
+L.search_floor_dirt = "闻起来有泥土的味道。可能是来自粘在受害者鞋子上的泥土。"
+L.search_floor_eggshell = "恶心的白色斑点覆盖了受害者的身体。看起来像鸡蛋壳。"
+L.search_floor_flesh = "受害者的衣服感觉有点湿。好像摔在了一个潮湿的表面上。比如肉质的表面，或者水体里的沙地。"
+L.search_floor_grate = "受害者的皮肤像牛排一样，全身都有网格状的粗线。他们是不是倒在了格栅上？"
+L.search_floor_alienflesh = "外星人的肉？听起来有点离谱。但你的侦探助手书将其列为可能的地面材质。"
+L.search_floor_snow = "一眼看去，他的衣服只是潮湿而冰冷的。但当你看到边缘的白色泡沫时你就明白了。是雪！"
+L.search_floor_plastic = "'哎哟，那一定很疼。' 尸体上布满了烫伤的痕迹，看起来像是和塑料表面摩擦出来的伤势。"
+L.search_floor_metal = "尸体上布满了锈迹斑斑的伤口，至少他们现在死了，不会得破伤风。他们可能是在金属表面上死的。"
+L.search_floor_sand = "小小的粗糙的岩石粘在他们冰冷的身体上。像海滩上的粗砂。啊，它到处都是！"
+L.search_floor_foliage = "大自然真美。受害者的血腥伤口被足够的叶子覆盖，几乎被隐藏起来。"
+L.search_floor_computer = "嘀嗒嘀嗒。他的尸体被计算机表面覆盖着！你问这看起来会是什么样子？额，诶嘿！"
+L.search_floor_slosh = "湿漉漉的，甚至可能有点黏糊糊的。他们的整个身体都被它覆盖，衣服也被浸湿。它很臭！"
+L.search_floor_tile = "许多碎片插在尸体上，像是摔在瓷砖地面上时砸出的痕迹。"
+L.search_floor_grass = "闻起来像刚割过的草。这种气味几乎盖过了血和死亡的气味。"
+L.search_floor_vent = "当你摸他们的身体时，你感觉到一股新鲜的气流。他是不是在死在了通风口里然后带走了空气？"
+L.search_floor_wood = "有什么比坐在硬木地板上沉思更好的事情呢？至少不是躺在木地板上死！"
+L.search_floor_default = "那看起来很基础，很普通。像是默认的一样。你无法判断出这个表面的任何特征。"
+L.search_floor_glass = "他的尸体上全是血腥的切口。有些伤口里卡着玻璃碎片，看上去挺吓人的。"
+L.search_floor_warpshield = "由'warpshield'制成的地板？没错，我们和你一样困惑。但我们的笔记上清楚地这么写着。'Warpshield'。"
+
+L.search_water_1 = "受害者的鞋子沾了水，但其他地方都是干的。他可能是脚踩在水里时被杀的。"
+L.search_water_2 = "受害者的鞋子和裤子都湿透了。他们在被杀时是不是在涉水？"
+L.search_water_3 = "潮湿的尸体全身肿胀着。他可能是在完全被淹没的时候死的。"
+
+L.search_weapon = "死者是被 {weapon} 所杀。"
+L.search_head = "最后一击打在头上。完全没机会叫喊。"
+L.search_time = "他们在你进行搜索之前就已经死了一段时间了。"
+L.search_dna = "用DNA扫描仪获取杀手的DNA样本。DNA样本会在一段时间后消逝。"
+
+L.search_kills1 = "你找到一个名单，记载着他发现的死者：{player}"
+L.search_kills2 = "你找到了一个名单，记载着他杀的这些人：{player}"
+L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player}。是凶手，还是巧合？"
+
+L.search_credits = "受害者口袋里有 {credits} 积分。带商店的身份也许会拿走它们并好好利用。请留意！"
+
+L.search_kill_distance_point_blank = "受害者是从近处被攻击的。"
+L.search_kill_distance_close = "受害者是从不远处被攻击的。"
+L.search_kill_distance_far = "受害者是从远处被攻击的。"
+
+L.search_kill_from_front = "受害者是正面中弹的。"
+L.search_kill_from_back = "受害者是背面中弹的。"
+L.search_kill_from_side = "受害者是侧面中弹的。"
+
+L.search_hitgroup_head = "弹头发现于尸体的头部。"
+L.search_hitgroup_chest = "弹头发现于尸体的胸部。"
+L.search_hitgroup_stomach = "弹头发现于尸体的胃部。"
+L.search_hitgroup_rightarm = "弹头发现于尸体的右臂。"
+L.search_hitgroup_leftarm = "弹头发现于尸体的左臂。"
+L.search_hitgroup_rightleg = "弹头发现于尸体的右腿。"
+L.search_hitgroup_leftleg = "弹头发现于尸体的左腿。"
+L.search_hitgroup_gear = "弹头发现于尸体的腰部。"
+
+L.search_policingrole_report_confirm = [[
+只有在尸体被确认死亡后，才能召唤公开警察角色到死亡尸体的位置。]]
+L.search_policingrole_confirm_disabled_1 = [[
+只有公开警察角色才能确认死亡。报告尸体位置来让他们知道！]]
+L.search_policingrole_confirm_disabled_2 = [[
+只有公开警察角色才能确认死亡。报告尸体位置来让他们知道！
+他们确认后，你可以在这里看到尸检。]]
+L.search_spec = [[
+作为观察者，你能看到尸检的全部信息，但不能与界面交互。]]
+
+L.search_title_words = "受害者遗言"
+L.search_title_c4 = "拆弹失误"
+L.search_title_dmg_crush = "挤压伤害 ({amount} 生命值)"
+L.search_title_dmg_bullet = "枪弹伤害 ({amount} 生命值)"
+L.search_title_dmg_fall = "跌落伤害 ({amount} 生命值)"
+L.search_title_dmg_boom = "爆炸伤害 ({amount} 生命值)"
+L.search_title_dmg_club = "钝器伤害 ({amount} 生命值)"
+L.search_title_dmg_drown = "溺水伤害 ({amount} 生命值)"
+L.search_title_dmg_stab = "刺伤伤害 ({amount} 生命值)"
+L.search_title_dmg_burn = "烧伤伤害 ({amount} 生命值)"
+L.search_title_dmg_teleport = "传送伤害 ({amount} 生命值)"
+L.search_title_dmg_car = "车祸 ({amount} 生命值)"
+L.search_title_dmg_other = "未知伤害 ({amount} 生命值)"
+L.search_title_time = "死亡时间"
+L.search_title_dna = "DNA样本衰变"
+L.search_title_kills = "受害者名单"
+L.search_title_eyes = "眼中的倒影"
+L.search_title_floor = "犯罪现场的地板"
+L.search_title_credits = "{credits} 设备积分"
+L.search_title_water = "水位 {level}"
+L.search_title_policingrole_report_confirm = "确认死亡"
+L.search_title_policingrole_confirm_disabled = "报告尸体位置"
+L.search_title_spectator = "你是观察者"
+
+L.target_credits_on_confirm = "确认死亡可获得未使用的积分"
+L.target_credits_on_search = "搜索可获得未使用的积分"
+L.corpse_hint_no_inspect_details = "只有公开警察角色可以找到这具尸体的信息。"
+L.corpse_hint_inspect_limited_details = "只有公共警察角色可以确认这具尸体。"
+L.corpse_hint_spectator = "按 [{usekey}] 查看尸体界面"
+L.corpse_hint_public_policing_searched = "按 [{usekey}] 查看公共警察角色的搜索结果"
+
+L.label_inspect_confirm_mode = "选择尸体搜索模式"
+L.choice_inspect_confirm_mode_0 = "模式 0: 标准 TTT"
+L.choice_inspect_confirm_mode_1 = "模式 1: 限制确认"
+L.choice_inspect_confirm_mode_2 = "模式 2: 限制搜索"
+L.help_inspect_confirm_mode = [[
+在这个游戏模式中，有三种不同的尸体搜索/确认模式。选择这个模式对公开警察角色（如侦探）的重要性有很大影响。
+
+模式 0: 这是标准的 TTT 行为。每个人都可以搜索和确认尸体。要取得尸检或从尸体上取得积分，首先必须确认死亡。这使得带商店角色偷偷地偷取积分变得有点困难。然而，想要报告尸体位置以召唤公开警察玩家的无辜玩家也需要先确认。
+
+模式 1: 这种模式通过将确认死亡选项限制为公开警察角色，提升了公开警察角色的重要性。这也意味着在确认死亡之前就可以取得积分和尸检。每个人仍然可以搜索死尸并找到信息，但他们无法宣布找到的信息。
+
+模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公开警察玩家报告尸体位置现在是获取任何尸体信息的唯一方式。]]
+
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
+-- 2023-10-23
+L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条将会开始闪烁"
+L.header_hud_elements_customize = "自定义 HUD 元素"
+L.help_hud_elements_special_settings = "这些是所使用的 HUD 元素的特殊设置"
+
+-- 2023-10-25
+L.help_keyhelp = [[
+键位助手是一个向玩家显示相关键位的界面元素，对新玩家特别有帮助。键位分为三种类型：
+
+核心：包含 TTT2 中最重要的键位。不使用它们的话很难体验游戏的全部潜力。
+附加：类似核心键位，但并非必要使用。这包含聊天、语音或手电筒等功能。显示这些键位也许会对新玩家有所帮助。
+装备：部分装备有自己的键位，这些都显示在此类别中。
+
+当记分板可见时，已禁用的类别仍会显示]]
+
+L.label_keyhelp_show_core = "启用始终显示核心键位"
+L.label_keyhelp_show_extra = "启用始终显示额外键位"
+L.label_keyhelp_show_equipment = "启用始终显示装备键位"
+
+L.header_interface_keys = "键位助手设置"
+L.header_interface_wepswitch = "武器选择界面设置"
+
+L.label_keyhelper_help = "打开游戏模式菜单"
+L.label_keyhelper_mutespec = "切换观看语音模式"
+L.label_keyhelper_shop = "打开装备商店"
+L.label_keyhelper_show_pointer = "显示鼠标指针"
+L.label_keyhelper_possess_focus_entity = "附体焦点中的Prop"
+L.label_keyhelper_spec_focus_player = "观看焦点中的玩家"
+L.label_keyhelper_spec_previous_player = "上一个玩家"
+L.label_keyhelper_spec_next_player = "下一个玩家"
+L.label_keyhelper_spec_player = "观看随机玩家"
+L.label_keyhelper_possession_jump = "Prop：跳跃"
+L.label_keyhelper_possession_left = "Prop：向左"
+L.label_keyhelper_possession_right = "Prop：向右"
+L.label_keyhelper_possession_forward = "Prop：向前"
+L.label_keyhelper_possession_backward = "Prop：向后"
+L.label_keyhelper_free_roam = "离开对象并自由漫游"
+L.label_keyhelper_flashlight = "切换手电筒"
+L.label_keyhelper_quickchat = "打开快速聊天"
+L.label_keyhelper_voice_global = "全局语音聊天"
+L.label_keyhelper_voice_team = "团队语音聊天"
+L.label_keyhelper_chat_global = "全局聊天"
+L.label_keyhelper_chat_team = "团队聊天"
+L.label_keyhelper_show_all = "显示全部"
+L.label_keyhelper_disguiser = "切换伪装"
+L.label_keyhelper_save_exit = "保存退出"
+L.label_keyhelper_spec_third_person = "切换第三人称视图"
+
+-- 2023-10-26
+L.item_armor_reinforced = "强化护甲"
+L.item_armor_sidebar = "护甲可以保护你免受子弹穿透身体。但不是永久的。"
+L.item_disguiser_sidebar = "伪装者不会向其他玩家显示你的名字，从而保护你的身份。"
+L.status_speed_name = "移速倍率"
+L.status_speed_description_good = "你的移动速度高于普通。物品，装备或效果可能会影响此值。"
+L.status_speed_description_bad = "你的移动速度低于普通。物品，装备或效果可能会影响此值。"
+
+L.status_on = "开启"
+L.status_off = "关闭"
+
+L.crowbar_help_primary = "攻击"
+L.crowbar_help_secondary = "推动玩家"
+
+-- 2023-10-27
+L.help_HUD_enable_description = [[
+当记分板打开时，一些 HUD 元素（如键位助手或侧边栏）会显示详细信息。可以禁用此功能以减少杂乱。]]
+L.label_HUD_enable_description = "打开记分板时启用描述"
+L.label_HUD_enable_box_blur = "启用用户界面框背景模糊"
+
+-- 2023-10-28
+L.submenu_gameplay_voiceandvolume_title = "声音和音量"
+L.header_soundeffect_settings = "声音效果"
+L.header_voiceandvolume_settings = "声音和音量设置"
+
+-- 2023-11-06
+L.drop_reserve_prevented = "有东西阻止你丢弃备弹。"
+L.drop_no_reserve = "你的备弹不足，无法作为弹药箱投放。"
+L.drop_no_room_ammo = "你没有地方放置弹药箱！"
+
+-- 2023-11-14
+L.hat_deerstalker_name = "侦探帽"
+
+-- 2023-11-16
+L.help_prop_spec_dash = [[
+Propspec 冲刺是向目标矢量方向的移动。它们可以比正常移动的力度更大。更高的力度也意味着更高的基础值消耗。
+
+该变量是推力的乘数。]]
+L.label_spec_prop_dash = "冲刺力倍增器"
+L.label_keyhelper_possession_dash = "Prop：向视线方向冲刺"
+L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
+L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
+
+-- 2023-12-07
+L.c4_help_primary = "安放C4"
+L.c4_help_secondary = "将其放置在墙面上"
+
+-- 2023-12-11
+L.magneto_help_primary = "推动实体"
+L.magneto_help_secondary = "推动/拾取实体"
+L.knife_help_primary = "刺"
+L.knife_help_secondary = "投掷小刀"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
+-- 2023-12-13
+L.vis_no_pickup = "只有公开警察角色才能捡起显像器"
+L.newton_force = "推力"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+
+-- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
+L.beacon_help_pri = "将信标扔在地上"
+L.beacon_help_sec = "将信标粘贴到表面"
+L.beacon_name = "信标"
+L.beacon_desc = [[
+将玩家位置广播给信标周围球形范围内的所有人。
+
+用于跟踪地图上难以看到的位置。]]
+
+L.msg_beacon_destroyed = "你的一个信标已被摧毁！"
+L.msg_beacon_death = "一个玩家在你的一个信标的附近死亡。"
+
+L.beacon_pickup_disabled = "只有信标的拥有者才能拾起它"
+L.beacon_short_desc = "警察角色使用信标在他们周围添加本地透视效果"
+
+-- 2023-12-18
+L.entity_pickup_owner_only = "只有拥有者才能捡起这个"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
+L.body_confirm_more = "{finder} 确认了以下 {count} 人的死亡: {victims}。"
+
+-- 2023-12-19
+L.builtin_marker = "内置。"
+L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
+L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
+L.header_equipment_info = "装备信息"
+
+
+-- 2023-12-24
+L.submenu_gameplay_accessibility_title = "辅助功能"
+
+L.header_accessibility_settings = "辅助功能设置"
+
+L.label_enable_dynamic_fov = "启用动态 FOV 更改"
+L.label_enable_bobbing = "启用视图晃动"
+L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
+
+L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
+L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
+-- 2023-12-20
+L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
+对于霰弹枪，这将影响每个弹丸。
+对于步枪，这将只影响子弹。
+对于鬼怪，这将影响每次"砰"声和最后的爆炸。
+
+0.5 = 造成一半的伤害。
+2 = 造成两倍的伤害。
+
+注意：有些武器可能不使用这个值，这会导致这个修饰符无效。]]
+
+-- 2023-12-24
+L.binoc_help_reload = "清除目标。"
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+
+-- 2024-01-05
+L.label_crosshair_thickness_outline_enable = "启用准星轮廓"
+L.label_crosshair_outline_high_contrast = "启用轮廓高对比度颜色"
+L.label_crosshair_mode = "准星模式"
+L.label_crosshair_static_length = "启用静态准星长度"
+
+L.choice_crosshair_mode_0 = "线条和点"
+L.choice_crosshair_mode_1 = "仅线条"
+L.choice_crosshair_mode_2 = "仅点"
+
+L.help_crosshair_scale_enable = [[
+动态准星可根据武器的扩散度缩放准星。扩散度受武器的基本精度影响，并与跳跃和冲刺等外部因素相乘。
+
+如果线的长度保持不变，则只有间隙会随着扩散度的变化而缩放。]]
+
+L.header_weapon_settings = "武器设置"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放诱饵"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+--L.throw_no_room = "You have no space here to throw this device"

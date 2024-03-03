@@ -1,11 +1,11 @@
 ---
 -- This file contains all shared vars, tables and functions
 
-GM.Name = "TTT2 (Advanced Update)"
+GM.Name = "TTT2"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, docs.ttt2.neoxult.de"
-GM.Version = "0.11.6b"
+GM.Version = "0.13.0b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -18,63 +18,63 @@ ROUND_POST = 4
 
 -- equipment setups
 INNO_EQUIPMENT = {
-	"weapon_ttt_confgrenade",
-	"weapon_ttt_m16",
-	"weapon_ttt_smokegrenade",
-	"weapon_ttt_unarmed",
-	"weapon_ttt_wtester",
-	"weapon_tttbase",
-	"weapon_tttbasegrenade",
-	"weapon_zm_carry",
-	"weapon_zm_improvised",
-	"weapon_zm_mac10",
-	"weapon_zm_molotov",
-	"weapon_zm_pistol",
-	"weapon_zm_revolver",
-	"weapon_zm_rifle",
-	"weapon_zm_shotgun",
-	"weapon_zm_sledge",
-	"weapon_ttt_glock"
+    "weapon_ttt_confgrenade",
+    "weapon_ttt_m16",
+    "weapon_ttt_smokegrenade",
+    "weapon_ttt_unarmed",
+    "weapon_ttt_wtester",
+    "weapon_tttbase",
+    "weapon_tttbasegrenade",
+    "weapon_zm_carry",
+    "weapon_zm_improvised",
+    "weapon_zm_mac10",
+    "weapon_zm_molotov",
+    "weapon_zm_pistol",
+    "weapon_zm_revolver",
+    "weapon_zm_rifle",
+    "weapon_zm_shotgun",
+    "weapon_zm_sledge",
+    "weapon_ttt_glock",
 }
 
 SPECIAL_EQUIPMENT = {
-	"weapon_ttt_unarmed",
-	"weapon_zm_carry",
-	"weapon_zm_improvised",
-	"weapon_ttt_binoculars",
-	"weapon_ttt_defuser",
-	"weapon_ttt_health_station",
-	"weapon_ttt_stungun",
-	"weapon_ttt_cse",
-	"weapon_ttt_teleport",
-	"item_ttt_armor",
-	"item_ttt_radar",
-	"item_ttt_nodrowningdmg",
-	"item_ttt_noenergydmg",
-	"item_ttt_noexplosiondmg",
-	"item_ttt_nofalldmg",
-	"item_ttt_nofiredmg",
-	"item_ttt_nohazarddmg",
-	"item_ttt_nopropdmg",
-	"item_ttt_speedrun"
+    "weapon_ttt_unarmed",
+    "weapon_zm_carry",
+    "weapon_zm_improvised",
+    "weapon_ttt_binoculars",
+    "weapon_ttt_defuser",
+    "weapon_ttt_health_station",
+    "weapon_ttt_stungun",
+    "weapon_ttt_cse",
+    "weapon_ttt_teleport",
+    "item_ttt_armor",
+    "item_ttt_radar",
+    "item_ttt_nodrowningdmg",
+    "item_ttt_noenergydmg",
+    "item_ttt_noexplosiondmg",
+    "item_ttt_nofalldmg",
+    "item_ttt_nofiredmg",
+    "item_ttt_nohazarddmg",
+    "item_ttt_nopropdmg",
+    "item_ttt_speedrun",
 }
 
 TRAITOR_EQUIPMENT = {
-	"weapon_ttt_unarmed",
-	"weapon_zm_carry",
-	"weapon_zm_improvised",
-	"weapon_ttt_c4",
-	"weapon_ttt_flaregun",
-	"weapon_ttt_knife",
-	"weapon_ttt_phammer",
-	"weapon_ttt_push",
-	"weapon_ttt_radio",
-	"weapon_ttt_sipistol",
-	"weapon_ttt_teleport",
-	"weapon_ttt_decoy",
-	"item_ttt_armor",
-	"item_ttt_radar",
-	"item_ttt_disguiser"
+    "weapon_ttt_unarmed",
+    "weapon_zm_carry",
+    "weapon_zm_improvised",
+    "weapon_ttt_c4",
+    "weapon_ttt_flaregun",
+    "weapon_ttt_knife",
+    "weapon_ttt_phammer",
+    "weapon_ttt_push",
+    "weapon_ttt_radio",
+    "weapon_ttt_sipistol",
+    "weapon_ttt_teleport",
+    "weapon_ttt_decoy",
+    "item_ttt_armor",
+    "item_ttt_radar",
+    "item_ttt_disguiser",
 }
 
 -- role teams to have an identifier
@@ -96,23 +96,24 @@ ROLE_DETECTIVE = 2
 ROLE_NONE = 3
 
 -- TEAM_ARRAY
-TEAMS = TEAMS or {
-	[TEAM_INNOCENT] = {
-		icon = "vgui/ttt/dynamic/roles/icon_inno",
-		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_inno"),
-		color = Color(80, 173, 59, 255)
-	},
-	[TEAM_TRAITOR] = {
-		icon = "vgui/ttt/dynamic/roles/icon_traitor",
-		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_traitor"),
-		color = Color(209, 43, 39, 255)
-	},
-	[TEAM_NONE] = {
-		icon = "vgui/ttt/dynamic/roles/icon_no_team",
-		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_no_team"),
-		color = Color(91, 94, 99, 255)
-	}
-}
+TEAMS = TEAMS
+    or {
+        [TEAM_INNOCENT] = {
+            icon = "vgui/ttt/dynamic/roles/icon_inno",
+            iconMaterial = Material("vgui/ttt/dynamic/roles/icon_inno"),
+            color = Color(80, 173, 59, 255),
+        },
+        [TEAM_TRAITOR] = {
+            icon = "vgui/ttt/dynamic/roles/icon_traitor",
+            iconMaterial = Material("vgui/ttt/dynamic/roles/icon_traitor"),
+            color = Color(209, 43, 39, 255),
+        },
+        [TEAM_NONE] = {
+            icon = "vgui/ttt/dynamic/roles/icon_no_team",
+            iconMaterial = Material("vgui/ttt/dynamic/roles/icon_no_team"),
+            color = Color(91, 94, 99, 255),
+        },
+    }
 
 ACTIVEROLES = ACTIVEROLES or {}
 
@@ -139,7 +140,7 @@ REVIVAL_BITS = 2
 -- @realm shared
 -- @deprecated
 function GetRoles()
-	return roles.GetList()
+    return roles.GetList()
 end
 
 ---
@@ -150,7 +151,7 @@ end
 -- @realm shared
 -- @deprecated
 function SortRolesTable(tbl)
-	roles.SortTable(tbl)
+    roles.SortTable(tbl)
 end
 
 ---
@@ -161,7 +162,7 @@ end
 -- @realm shared
 -- @deprecated
 function GetRoleByIndex(index)
-	return roles.GetByIndex(index)
+    return roles.GetByIndex(index)
 end
 
 ---
@@ -172,7 +173,7 @@ end
 -- @realm shared
 -- @deprecated
 function GetRoleByName(name)
-	return roles.GetByName(name)
+    return roles.GetByName(name)
 end
 
 ---
@@ -183,7 +184,7 @@ end
 -- @realm shared
 -- @deprecated
 function GetRoleByAbbr(abbr)
-	return roles.GetByAbbr(abbr)
+    return roles.GetByAbbr(abbr)
 end
 
 ---
@@ -194,9 +195,9 @@ end
 -- @see ROLE:GetStartingCredits
 -- @deprecated
 function GetStartingCredits(abbr)
-	local roleData = roles.GetByAbbr(abbr)
+    local roleData = roles.GetByAbbr(abbr)
 
-	return roleData:GetStartingCredits()
+    return roleData:GetStartingCredits()
 end
 
 ---
@@ -207,9 +208,9 @@ end
 -- @see ROLE:IsShoppingRole
 -- @deprecated
 function IsShoppingRole(subrole)
-	local roleData = roles.GetByIndex(subrole)
+    local roleData = roles.GetByIndex(subrole)
 
-	return roleData:IsShoppingRole()
+    return roleData:IsShoppingRole()
 end
 
 ---
@@ -219,7 +220,7 @@ end
 -- @see roles.GetShopRoles
 -- @deprecated
 function GetShopRoles()
-	return roles.GetShopRoles()
+    return roles.GetShopRoles()
 end
 
 ---
@@ -230,7 +231,7 @@ end
 -- @see ROLE:IsBaseRole
 -- @deprecated
 function IsBaseRole(roleData)
-	return roleData:IsBaseRole()
+    return roleData:IsBaseRole()
 end
 
 ---
@@ -241,22 +242,21 @@ end
 -- @see ROLE:GetBaseRole
 -- @deprecated
 function GetBaseRole(subrole)
-	return roles.GetByIndex(subrole):GetBaseRole()
+    return roles.GetByIndex(subrole):GetBaseRole()
 end
 
 if SERVER then
-
-	---
-	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
-	-- @param ROLE roleData
-	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
-	-- @return boolean
-	-- @realm server
-	-- @see ROLE:IsSelectable
-	-- @deprecated
-	function IsRoleSelectable(roleData, avoidHook)
-		return roleData:IsSelectable(avoidHook)
-	end
+    ---
+    -- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+    -- @param ROLE roleData
+    -- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
+    -- @return boolean
+    -- @realm server
+    -- @see ROLE:IsSelectable
+    -- @deprecated
+    function IsRoleSelectable(roleData, avoidHook)
+        return roleData:IsSelectable(avoidHook)
+    end
 end
 
 ---
@@ -267,9 +267,9 @@ end
 -- @see ROLE:GetSubRoles
 -- @deprecated
 function GetSubRoles(subrole)
-	local roleData = roles.GetByIndex(subrole)
+    local roleData = roles.GetByIndex(subrole)
 
-	return roleData:GetSubRoles()
+    return roleData:GetSubRoles()
 end
 
 ---
@@ -280,7 +280,7 @@ end
 -- @see roles.GetDefaultTeamRole
 -- @deprecated
 function GetDefaultTeamRole(team)
-	return roles.GetDefaultTeamRole(team)
+    return roles.GetDefaultTeamRole(team)
 end
 
 ---
@@ -291,7 +291,7 @@ end
 -- @see roles.GetDefaultTeamRoles
 -- @deprecated
 function GetDefaultTeamRoles(team)
-	return roles.GetDefaultTeamRoles(team)
+    return roles.GetDefaultTeamRoles(team)
 end
 
 ---
@@ -302,7 +302,7 @@ end
 -- @see roles.GetTeamMembers
 -- @deprecated
 function GetTeamMembers(team)
-	return roles.GetTeamMembers(team)
+    return roles.GetTeamMembers(team)
 end
 
 ---
@@ -312,7 +312,7 @@ end
 -- @see roles.GetWinTeams
 -- @deprecated
 function GetWinTeams()
-	return roles.GetWinTeams()
+    return roles.GetWinTeams()
 end
 
 ---
@@ -322,7 +322,7 @@ end
 -- @see roles.GetAvailableTeams
 -- @deprecated
 function GetAvailableTeams()
-	return roles.GetAvailableTeams()
+    return roles.GetAvailableTeams()
 end
 
 ---
@@ -332,7 +332,7 @@ end
 -- @see roles.GetSortedRoles
 -- @deprecated
 function GetSortedRoles()
-	return roles.GetSortedRoles()
+    return roles.GetSortedRoles()
 end
 
 ---
@@ -340,7 +340,7 @@ end
 -- @return table
 -- @realm shared
 function GetActiveRoles()
-	return ACTIVEROLES
+    return ACTIVEROLES
 end
 
 ---
@@ -349,7 +349,7 @@ end
 -- @return number
 -- @realm shared
 function GetActiveRolesCount(rd)
-	return ACTIVEROLES[rd] or 0
+    return ACTIVEROLES[rd] or 0
 end
 
 ---
@@ -358,7 +358,7 @@ end
 -- @param number count
 -- @realm shared
 function SetActiveRolesCount(rd, count)
-	ACTIVEROLES[rd] = count == 0 and nil or count
+    ACTIVEROLES[rd] = count == 0 and nil or count
 end
 
 ---
@@ -368,16 +368,18 @@ end
 -- @realm shared
 -- @deprecated
 function GetTraitors()
-	local trs = {}
-	local plys = player.GetAll()
+    local trs = {}
+    local plys = player.GetAll()
 
-	for i = 1, #plys do
-		if not plys[i]:IsTraitor() then continue end
+    for i = 1, #plys do
+        if not plys[i]:IsTraitor() then
+            continue
+        end
 
-		trs[#trs + 1] = plys[i]
-	end
+        trs[#trs + 1] = plys[i]
+    end
 
-	return trs
+    return trs
 end
 
 ---
@@ -387,59 +389,61 @@ end
 -- @realm shared
 -- @deprecated
 function CountTraitors()
-	return #GetTraitors()
+    return #GetTraitors()
 end
 
 -- TODO move to client file
 if CLIENT then
-	local SafeTranslate
+    local SafeTranslate
 
-	---
-	-- Returns an equipment's translation based on the user's language
-	-- @param string name
-	-- @param string printName
-	-- @return string the translated text
-	-- @realm client
-	function GetEquipmentTranslation(name, printName)
-		SafeTranslate = SafeTranslate or LANG.TryTranslation
+    ---
+    -- Returns an equipment's translation based on the user's language
+    -- @param string name
+    -- @param string printName
+    -- @return string the translated text
+    -- @realm client
+    function GetEquipmentTranslation(name, printName)
+        SafeTranslate = SafeTranslate or LANG.TryTranslation
 
-		local val = printName
-		local str = SafeTranslate(val)
+        local val = printName
+        local str = SafeTranslate(val)
 
-		if str == val and name then
-			val = name
-			str = SafeTranslate(val)
-		end
+        if str == val and name then
+            val = name
+            str = SafeTranslate(val)
+        end
 
-		if str == val and printName then
-			str = printName
-		end
+        if str == val and printName then
+            str = printName
+        end
 
-		return str
-	end
+        return str
+    end
 
-	---
-	-- Sorts an equipment table
-	-- @param table tbl the equipment table
-	-- @realm client
-	function SortEquipmentTable(tbl)
-		if not tbl or #tbl < 2 then return end
+    ---
+    -- Sorts an equipment table
+    -- @param table tbl the equipment table
+    -- @realm client
+    function SortEquipmentTable(tbl)
+        if not tbl or #tbl < 2 then
+            return
+        end
 
-		local _func = function(adata, bdata)
-			a = adata.id
-			b = bdata.id
+        local _func = function(adata, bdata)
+            a = adata.id
+            b = bdata.id
 
-			if tonumber(a) and not tonumber(b) then
-				return true
-			elseif tonumber(b) and not tonumber(a) then
-				return false
-			else
-				return a < b
-			end
-		end
+            if tonumber(a) and not tonumber(b) then
+                return true
+            elseif tonumber(b) and not tonumber(a) then
+                return false
+            else
+                return a < b
+            end
+        end
 
-		table.sort(tbl, _func)
-	end
+        table.sort(tbl, _func)
+    end
 end
 
 WIN_NONE = WIN_NONE or 1
@@ -511,6 +515,11 @@ MUTE_TERROR = 1
 MUTE_ALL = 2
 MUTE_SPEC = 1002 -- TODO why not 3?
 
+-- Drop On Death override types
+DROP_ON_DEATH_TYPE_DEFAULT = 0
+DROP_ON_DEATH_TYPE_FORCE = 1
+DROP_ON_DEATH_TYPE_DENY = 2
+
 COLOR_WHITE = Color(255, 255, 255, 255)
 COLOR_BLACK = Color(0, 0, 0, 255)
 COLOR_GREEN = Color(0, 255, 0, 255)
@@ -528,12 +537,17 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
 COLOR_LBROWN = Color(135, 105, 70)
 COLOR_WARMGRAY = Color(91, 94, 99, 255)
+COLOR_GOLD = Color(255, 215, 30)
+
+-- include independent extensions
+include("ttt2/extensions/debug.lua")
 
 -- include independent libraries (other extensions might require them)
 include("ttt2/libraries/pon.lua")
 
 -- include extensions
 include("ttt2/extensions/math.lua")
+include("ttt2/extensions/player.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")
@@ -543,8 +557,11 @@ include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
 include("ttt2/extensions/input.lua")
 include("ttt2/extensions/cvars.lua")
+include("ttt2/extensions/render.lua")
 
 -- include libraries
+include("ttt2/libraries/none.lua")
+include("ttt2/libraries/fastutf8.lua")
 include("ttt2/libraries/huds.lua")
 include("ttt2/libraries/hudelements.lua")
 include("ttt2/libraries/items.lua")
@@ -565,10 +582,14 @@ include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/roles.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
-include("ttt2/libraries/none.lua")
 include("ttt2/libraries/targetid.lua")
 include("ttt2/libraries/playermodels.lua")
 include("ttt2/libraries/entspawnscript.lua")
+include("ttt2/libraries/bodysearch.lua")
+include("ttt2/libraries/keyhelp.lua")
+include("ttt2/libraries/marker_vision.lua")
+include("ttt2/libraries/weaponrenderer.lua")
+include("ttt2/libraries/game_effects.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")
@@ -579,6 +600,10 @@ ttt_include("sh_hudelement_module")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
+ttt_include("sh_playerclass")
+
+-- include files that need all the above
+include("ttt2/libraries/migrations.lua")
 
 ---
 -- Returns the equipment's file name
@@ -586,7 +611,7 @@ ttt_include("sh_item_module")
 -- @return string
 -- @realm shared
 function GetEquipmentFileName(name)
-	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
+    return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
 end
 
 ---
@@ -596,9 +621,9 @@ end
 -- @return string name
 -- @realm shared
 function GetEquipmentByName(name)
-	name = GetEquipmentFileName(name)
+    name = GetEquipmentFileName(name)
 
-	return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
+    return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
 end
 
 ---
@@ -606,7 +631,7 @@ end
 -- @return boolean
 -- @realm shared
 function DetectiveMode()
-	return GetGlobalBool("ttt_detective", false)
+    return GetGlobalBool("ttt_detective", false)
 end
 
 ---
@@ -614,7 +639,7 @@ end
 -- @return boolean
 -- @realm shared
 function HasteMode()
-	return GetGlobalBool("ttt_haste", false)
+    return GetGlobalBool("ttt_haste", false)
 end
 
 -- Create teams
@@ -629,82 +654,24 @@ TEAM_SPEC = TEAM_SPECTATOR
 -- @return table list of default equipment
 -- @realm shared
 function GetDefaultEquipment()
-	local defaultEquipment = {}
-	local rlsList = roles.GetList()
+    local defaultEquipment = {}
+    local rlsList = roles.GetList()
 
-	for i = 1, #rlsList do
-		local v = rlsList[i]
+    for i = 1, #rlsList do
+        local v = rlsList[i]
 
-		if not v.defaultEquipment then continue end
+        if not v.defaultEquipment then
+            continue
+        end
 
-		defaultEquipment[v.index] = v.defaultEquipment
-	end
+        defaultEquipment[v.index] = v.defaultEquipment
+    end
 
-	return defaultEquipment
+    return defaultEquipment
 end
 
 DefaultEquipment = {
-	[0] = {},
-	[1] = {},
-	[2] = {}
+    [0] = {},
+    [1] = {},
+    [2] = {},
 }
-
-BUYTABLE = BUYTABLE or {}
-TEAMBUYTABLE = TEAMBUYTABLE or {}
-
----
--- Checks whether an equipment is buyable
--- @param table tbl equipment table
--- @param Player player
--- @return boolean
--- @return string text as an icon
--- @return string result or error
--- @realm shared
-function EquipmentIsBuyable(tbl, ply)
-	local valPly = IsValid(ply) and ply:IsPlayer()
-	if not tbl or not valPly then
-		return false, "X", "error"
-	end
-
-	local team = ply:GetTeam()
-
-	if not tbl.id then
-		ErrorNoHalt("[TTT2][ERROR] Missing id in table:", tbl)
-		PrintTable(tbl)
-
-		return false, "X", "ID error"
-	end
-
-	if tbl.notBuyable then
-		return false, "X", "This equipment cannot be bought."
-	end
-
-	if tbl.minPlayers and tbl.minPlayers > 1 then
-		local choices = {}
-		local plys = player.GetAll()
-
-		for i = 1, #plys do
-			local v = plys[i]
-
-			-- everyone on the forcespec team is in specmode
-			if not IsValid(v) or v:GetForceSpec() then continue end
-
-			choices[#choices + 1] = v
-		end
-
-		if #choices < tbl.minPlayers then
-			return false, " " .. #choices .. " / " .. tbl.minPlayers, "Minimum amount of active players needed."
-		end
-	end
-
-	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] or tbl.limited and ply:HasBought(tbl.ClassName) then
-		return false, "X", "This equipment is limited and is already bought."
-	end
-
-	-- weapon whitelist check
-	if not tbl.CanBuy[GetShopFallback(ply:GetSubRole())] then
-		return false, "X", "Your role can't buy this equipment."
-	end
-
-	return true, "✔", "ok"
-end

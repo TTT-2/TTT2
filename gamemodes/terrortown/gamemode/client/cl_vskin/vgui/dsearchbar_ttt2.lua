@@ -29,68 +29,70 @@ AccessorFunc(PANEL, "curPlaceholderText", "CurrentPlaceholderText")
 ---
 -- @ignore
 function PANEL:Init()
-	local textEntry = vgui.Create("DTextEntry", self)
-	local textColor = util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25))
+    local textEntry = vgui.Create("DTextEntry", self)
+    local textColor = util.GetActiveColor(
+        util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)
+    )
 
-	textEntry:SetFont(font)
-	textEntry:SetTextColor(textColor)
-	textEntry:SetCursorColor(textColor)
+    textEntry:SetFont(font)
+    textEntry:SetTextColor(textColor)
+    textEntry:SetCursorColor(textColor)
 
-	textEntry.OnValueChange = function(slf,value)
-		self:OnValueChange(value)
-	end
+    textEntry.OnValueChange = function(slf, value)
+        self:OnValueChange(value)
+    end
 
-	textEntry.OnGetFocus = function(slf)
-		self:SetIsOnFocus(true)
-		self:OnGetFocus()
-	end
+    textEntry.OnGetFocus = function(slf)
+        self:SetIsOnFocus(true)
+        self:OnGetFocus()
+    end
 
-	textEntry.OnLoseFocus = function(slf)
-		self:SetIsOnFocus(false)
-		self:OnLoseFocus()
+    textEntry.OnLoseFocus = function(slf)
+        self:SetIsOnFocus(false)
+        self:OnLoseFocus()
 
-		if slf:GetValue() == "" then
-			self:SetCurrentPlaceholderText(self:GetPlaceholderText())
-		else
-			self:SetCurrentPlaceholderText("")
-		end
-	end
+        if slf:GetValue() == "" then
+            self:SetCurrentPlaceholderText(self:GetPlaceholderText())
+        else
+            self:SetCurrentPlaceholderText("")
+        end
+    end
 
-	-- This turns off the engine drawing for the text entry
-	textEntry:SetPaintBackgroundEnabled(false)
-	textEntry:SetPaintBorderEnabled(false)
-	textEntry:SetPaintBackground(false)
+    -- This turns off the engine drawing for the text entry
+    textEntry:SetPaintBackgroundEnabled(false)
+    textEntry:SetPaintBorderEnabled(false)
+    textEntry:SetPaintBackground(false)
 
-	self.textEntry = textEntry
+    self.textEntry = textEntry
 
-	-- This turns off the engine drawing of the panel itself
-	self:SetPaintBackgroundEnabled(false)
-	self:SetPaintBorderEnabled(false)
-	self:SetPaintBackground(false)
+    -- This turns off the engine drawing of the panel itself
+    self:SetPaintBackgroundEnabled(false)
+    self:SetPaintBorderEnabled(false)
+    self:SetPaintBackground(false)
 
-	-- Sets default values
-	self:SetHeightMult(1)
-	self:SetIsOnFocus(false)
-	self:SetPlaceholderText("searchbar_default_placeholder")
-	self:SetCurrentPlaceholderText("searchbar_default_placeholder")
+    -- Sets default values
+    self:SetHeightMult(1)
+    self:SetIsOnFocus(false)
+    self:SetPlaceholderText("searchbar_default_placeholder")
+    self:SetCurrentPlaceholderText("searchbar_default_placeholder")
 
-	self:PerformLayout()
+    self:PerformLayout()
 end
 
 ---
 -- @param string newFont
 -- @realm client
 function PANEL:SetFont(newFont)
-	self.textEntry:SetFont(newFont)
+    self.textEntry:SetFont(newFont)
 
-	font = newFont
+    font = newFont
 end
 
 ---
 -- @return string
 -- @realm client
 function PANEL:GetFont()
-	return font
+    return font
 end
 
 ---
@@ -98,70 +100,68 @@ end
 -- @return string
 -- @realm client
 function PANEL:GetValue()
-	return textEntry:GetValue()
+    return self.textEntry:GetValue()
 end
 
 ---
 -- This function determines if @{PANEL:OnValueChange()} is called on every typed letter or not.
--- @param bool enabled
+-- @param boolean enabled
 -- @realm client
 function PANEL:SetUpdateOnType(enabled)
-	self.textEntry:SetUpdateOnType(enabled)
+    self.textEntry:SetUpdateOnType(enabled)
 end
 
 ---
 -- This function is called when the searchbar is focussed.
 -- @note This function can be overwritten but not called.
 -- @realm client
-function PANEL:OnGetFocus()
-
-end
+function PANEL:OnGetFocus() end
 
 ---
 -- This function is called when the searchbar is not focussed anymore.
 -- @note This function can be overwritten but not called.
 -- @realm client
-function PANEL:OnLoseFocus()
-
-end
+function PANEL:OnLoseFocus() end
 
 ---
 -- This function is called by the searchbar when a text is entered/changed.
 -- @note This function should be overwritten but not called.
 -- @param string value
 -- @realm client
-function PANEL:OnValueChange(value)
-
-end
+function PANEL:OnValueChange(value) end
 
 ---
 -- @ignore
 function PANEL:Paint(w, h)
-	derma.SkinHook("Paint", "Searchbar", self, w, h)
+    derma.SkinHook("Paint", "Searchbar", self, w, h)
 
-	return true
+    return true
 end
 
 ---
 -- @ignore
 function PANEL:PerformLayout()
-	local width, height = self:GetSize()
-	local heightMult = self:GetHeightMult()
+    local width, height = self:GetSize()
+    local heightMult = self:GetHeightMult()
 
-	self.textEntry:SetSize(width, height * heightMult)
-	self.textEntry:SetPos(0, height * (1 - heightMult) * 0.5)
+    self.textEntry:SetSize(width, height * heightMult)
+    self.textEntry:SetPos(0, height * (1 - heightMult) * 0.5)
 
-	-- React to skin changes in menu
-	self.textEntry:SetTextColor(util.GetActiveColor(util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)))
+    -- React to skin changes in menu
+    self.textEntry:SetTextColor(
+        util.GetActiveColor(
+            util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 25)
+        )
+    )
 
-	self.textEntry:InvalidateLayout(true)
+    self.textEntry:InvalidateLayout(true)
 end
 
 ---
 -- @return boolean
 -- @realm client
 function PANEL:Clear()
-	return self.textEntry:Clear()
+    return self.textEntry:Clear()
 end
 
 derma.DefineControl("DSearchBarTTT2", "", PANEL, "DPanelTTT2")

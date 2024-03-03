@@ -13,21 +13,21 @@ PICKUP_ITEM = 1
 PICKUP_AMMO = 2
 
 local function InsertNewPickupItem()
-	local pickup = {}
-	pickup.time = CurTime()
-	pickup.holdtime = 5
-	pickup.fadein = 0.04
-	pickup.fadeout = 0.3
+    local pickup = {}
+    pickup.time = CurTime()
+    pickup.holdtime = 5
+    pickup.fadein = 0.04
+    pickup.fadeout = 0.3
 
-	if PICKUP.last >= pickup.time then
-		pickup.time = PICKUP.last + 0.05
-	end
+    if PICKUP.last >= pickup.time then
+        pickup.time = PICKUP.last + 0.05
+    end
 
-	PICKUP.items[#PICKUP.items + 1] = pickup
+    PICKUP.items[#PICKUP.items + 1] = pickup
 
-	PICKUP.last = pickup.time
+    PICKUP.last = pickup.time
 
-	return pickup
+    return pickup
 end
 
 ---
@@ -38,18 +38,25 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDWeaponPickedUp
 -- @local
 function GM:HUDWeaponPickedUp(wep)
-	if not IsValid(wep) then return end
+    if not IsValid(wep) or wep.silentPickup then
+        return
+    end
 
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	if not IsValid(client) or not client:Alive() then return end
+    if not IsValid(client) or not client:Alive() then
+        return
+    end
 
-	local name = GetEquipmentTranslation(wep:GetClass(), (wep.GetPrintName and wep:GetPrintName()) or wep:GetClass())
+    local name = GetEquipmentTranslation(
+        wep:GetClass(),
+        (wep.GetPrintName and wep:GetPrintName()) or wep:GetClass()
+    )
 
-	local pickup = InsertNewPickupItem()
-	pickup.name = string.upper(name)
-	pickup.type = PICKUP_WEAPON
-	pickup.kind = MakeKindValid(wep.Kind)
+    local pickup = InsertNewPickupItem()
+    pickup.name = string.upper(name)
+    pickup.type = PICKUP_WEAPON
+    pickup.kind = MakeKindValid(wep.Kind)
 end
 
 ---
@@ -60,13 +67,15 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDItemPickedUp
 -- @local
 function GM:HUDItemPickedUp(itemName)
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	if not IsValid(client) or not client:Alive() then return end
+    if not IsValid(client) or not client:Alive() then
+        return
+    end
 
-	local pickup = InsertNewPickupItem()
-	pickup.name = "#" .. itemName
-	pickup.type = PICKUP_ITEM
+    local pickup = InsertNewPickupItem()
+    pickup.name = "#" .. itemName
+    pickup.type = PICKUP_ITEM
 end
 
 ---
@@ -78,33 +87,35 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:HUDAmmoPickedUp
 -- @local
 function GM:HUDAmmoPickedUp(itemName, amount)
-	local client = LocalPlayer()
+    local client = LocalPlayer()
 
-	if not IsValid(client) or not client:Alive() then return end
+    if not IsValid(client) or not client:Alive() then
+        return
+    end
 
-	local itemname_trans = TryTranslation(string.lower("ammo_" .. itemName))
+    local itemname_trans = TryTranslation(string.lower("ammo_" .. itemName))
 
-	local cachedPickups = PICKUP.items
-	if cachedPickups then
-		local localized_name = string.upper(itemname_trans)
+    local cachedPickups = PICKUP.items
+    if cachedPickups then
+        local localized_name = string.upper(itemname_trans)
 
-		for k = 1, #cachedPickups do
-			local v = cachedPickups[k]
+        for k = 1, #cachedPickups do
+            local v = cachedPickups[k]
 
-			if v.name == localized_name and CurTime() - v.firstTime < 0.5 then
-				v.amount = tostring(tonumber(v.amount) + amount)
-				v.time = CurTime() - v.fadein
+            if v.name == localized_name and CurTime() - v.firstTime < 0.5 then
+                v.amount = tostring(tonumber(v.amount) + amount)
+                v.time = CurTime() - v.fadein
 
-				return
-			end
-		end
-	end
+                return
+            end
+        end
+    end
 
-	local pickup = InsertNewPickupItem()
-	pickup.firstTime = CurTime()
-	pickup.name = string.upper(itemname_trans)
-	pickup.amount = tostring(amount)
-	pickup.type = PICKUP_AMMO
+    local pickup = InsertNewPickupItem()
+    pickup.firstTime = CurTime()
+    pickup.name = string.upper(itemname_trans)
+    pickup.amount = tostring(amount)
+    pickup.type = PICKUP_AMMO
 end
 
 ---
@@ -112,21 +123,21 @@ end
 -- @realm client
 -- @internal
 function PICKUP.RemoveOutdatedValues()
-	local cachedPickups = PICKUP.items
-	local itemCount = #cachedPickups
-	local j = 1
+    local cachedPickups = PICKUP.items
+    local itemCount = #cachedPickups
+    local j = 1
 
-	for i = 1, itemCount do
-		if not cachedPickups[i].remove then
-			if i ~= j then
-				-- Keep i's value, move it to j's pos.
-				cachedPickups[j] = cachedPickups[i]
-				cachedPickups[i] = nil
-			end
+    for i = 1, itemCount do
+        if not cachedPickups[i].remove then
+            if i ~= j then
+                -- Keep i's value, move it to j's pos.
+                cachedPickups[j] = cachedPickups[i]
+                cachedPickups[i] = nil
+            end
 
-			j = j + 1
-		else
-			cachedPickups[i] = nil
-		end
-	end
+            j = j + 1
+        else
+            cachedPickups[i] = nil
+        end
+    end
 end

@@ -41,7 +41,7 @@ L.win_showreport = "Spójrzmy na raport rundy na {num} sekund."
 
 --L.limit_round = "Round limit reached. The next map will load soon."
 --L.limit_time = "Time limit reached. The next map will load soon."
-L.limit_left = "{num} rund(a), albo {time} minut, do zmiany mapy na {mapname}."
+--L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Twój team został nagrodzony {num} kredytami na zakupy."
@@ -59,8 +59,6 @@ L.body_found_team = "{finder} znalazł ciało {victim}. {role} ({team})"
 L.body_found_traitor = "On był zdrajcą!"
 L.body_found_det = "On był detektywem."
 L.body_found_inno = "On był niewinny."
-
-L.body_confirm = "{finder} potwierdził śmierć {victim}."
 
 L.body_call = "{player} zawołał detektywa do ciała {victim}!"
 L.body_call_error = "Musisz potwierdić zgon tego gracza, zanim zawołasz detektywa!"
@@ -172,46 +170,6 @@ L.quick_disg = "ktoś w przebraniu"
 L.quick_corpse = "niezidentyfikowane zwłoki"
 L.quick_corpse_id = "ciało gracza {player}"
 
--- Body search window
-L.search_title = "Rezultaty przeszukania ciała"
-L.search_info = "Informacje"
-L.search_confirm = "Potwierdź śmierć"
-L.search_call = "Zawołaj detektywa"
-
--- Descriptions of pieces of information found
-L.search_nick = "To jest ciało gracza {player}."
-
-L.search_role_traitor = "Ta osoba była zdrajcą!"
-L.search_role_det = "Ta osoba była detektywem."
-L.search_role_inno = "Ta osoba była niewinnym terrorystą."
-
-L.search_words = "Coś ci mówi, że jego ostanie słowa to: '{lastwords}'"
-L.search_armor = "On nosił niestandardową kamizelkę kuloodporną."
-L.search_disg = "Trzymał urządzenie, które mogło ukryć jego tożsamość."
-L.search_radar = "Miał jakiegoś rodzaju radar. Już nie działa."
-L.search_c4 = "W kieszeni znalazłeś notkę. Stwierdza, że przecięcie przewodu {num} bezpiecznie rozbroi bombę."
-
-L.search_dmg_crush = "Wiele z jego kości jest połamanych. To pokazuje, że zabił go jakiś duży obiekt."
-L.search_dmg_bullet = "Jest oczywiste, że został zastrzelony na śmierć."
-L.search_dmg_fall = "Spadł i połamał sobie kark."
-L.search_dmg_boom = "Stan jego ubrania pokazują, że wybuch zakończył jego żywot."
-L.search_dmg_club = "Ciało jest posiniaczone i poobijane. Najwyraźniej został zatłuczony na śmierć."
-L.search_dmg_drown = "Ciało wykazuje, że delikwent utonął."
-L.search_dmg_stab = "Został dźgnięty nożem, zanim szybko się wykrwawił."
-L.search_dmg_burn = "Pachnie jak pieczony terrorysta..."
-L.search_dmg_tele = "Jego DNA zostało uszkodzone przez fale tachionu."
-L.search_dmg_car = "Gdy ten terrorysta przechodził przez drogę, został przejechany przez lekkomyślnego kierowce."
-L.search_dmg_other = "Nie możesz znaleźć konkretnej przyczyny śmierci tego terrorysty."
-
-L.search_weapon = "Wygląda na to, że {weapon} posłużyła do tego zabójstwa."
-L.search_head = "Rana śmiertelna była strzałem w głowę. Nie miał czasu, aby krzyczeć."
-L.search_time = "Zmarł w przybliżeniu {time}, zanim go przeszukałeś."
-L.search_dna = "Pobierz próbkę DNA zabójcy za pomocą skanera DNA. Próbka DNA przeterminuje się za {time}."
-
-L.search_kills1 = "Znalazłeś listę zabójstw, co potwierdza śmierć {player}."
-L.search_kills2 = "Znalazłeś listę zabójstw z tymi imionami:"
-L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatnią osobę, która go widziała: {player}. Morderca, czy zbieg okoliczności?"
-
 -- Scoreboard
 L.sb_playing = "Grasz na..."
 L.sb_mapchange = "Mapa zmieni się za {num} rund(ę) lub za {time}"
@@ -267,7 +225,6 @@ Ukrywa twój status, gdy jest włączone. Także unika, bycia ostanią osobą wi
 Przełącz w zakładce Przebrania w tym menu lub kliknij Enter na Numpadzie.]]
 
 -- C4
-L.c4_hint = "Kliknij {usekey}, by uzbroić lub rozbroić."
 L.c4_disarm_warn = "C4, które uzbroiłeś, zostało rozbrojone."
 L.c4_armed = "Pomyślnie uzbroiłeś bombę."
 L.c4_disarmed = "Pomyślnie rozbroiłeś bombę."
@@ -288,6 +245,7 @@ L.c4_remove_destroy2 = "Potwierdź: zniszcz"
 L.c4_disarm = "Rozbrój C4"
 L.c4_disarm_cut = "Kliknij, by przeciąć kabel {num}"
 
+L.c4_disarm_t = "Przetnij kabel, aby rozbroić bombę. Jako że jesteś Zdrajcą, każdy kabel jest bezpieczny. Niewinni nie mają tak łatwo!"
 L.c4_disarm_owned = "Przetnij kabel, by rozbroić bombe. To twoja bomba, więc każdy kabel ją rozbraja"
 L.c4_disarm_other = "Przetnij odpowiedni kabel, by rozbroić bombe. Jak się pomylisz, to ona wybuchnie!"
 
@@ -296,7 +254,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 
 -- Visualizer
 L.vis_name = "Wizualizer"
-L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
 L.vis_desc = [[
 Wizualizator chwili zabójstwa.
@@ -305,7 +262,6 @@ Analizuje ciało by pokazać jak jak ofiara zostałą zabita, ale tylko jak zgin
 
 -- Decoy
 L.decoy_name = "Wabik"
-L.decoy_no_room = "Nie możesz wziąć tego wabika."
 L.decoy_broken = "Twój wabik został zniszczony!"
 
 L.decoy_short_desc = "Pokazuje oszukaną pozycję na radarze"
@@ -316,7 +272,6 @@ Pokazuje fałszywy znacznik na radarze Detektywów, i sprawia, że DNA skaner po
 
 -- Defuser
 L.defuser_name = "Rozbrajacz"
-L.defuser_help = "{primaryfire} rozbraja zaznaczone C4."
 
 L.defuser_desc = [[
 Natychmiastowo robraja ładunek C4.
@@ -335,7 +290,6 @@ Palenie zwłok wydaje charakterystyczny dźwięk.]]
 L.hstation_name = "Stacja Lecząca"
 
 L.hstation_broken = "Twoja stacja lecząca została zniszczona!"
-L.hstation_help = "{primaryfire} kładzie stacje."
 
 L.hstation_desc = [[
 Pozwala ludzią się leczyć, gdy jest położone.
@@ -359,7 +313,6 @@ Rani ludzi, których trafi.]]
 
 -- Radio
 L.radio_broken = "Twoje radio zostało zniszczone!"
-L.radio_help_pri = "{primaryfire} kładzie radio."
 
 L.radio_desc = [[
 Odtwarza dźwięki lub odgłosy.
@@ -405,7 +358,7 @@ L.dna_killer = "Zebrano próbkę DNA zabójcy z trupa!"
 --L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "Nie można było pobrać DNA (zabójca się rozłączył?)."
 L.dna_armed = "Ta bomba jest uzbrojona! Rozbrój ją najpierw!"
-L.dna_object = "Zebrano {num} nową próbkę DNA z obiektu."
+--L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA nie zostało znalezione na tym terenie."
 
 L.dna_desc = [[
@@ -474,7 +427,7 @@ L.hp_wounded = "Ranny"
 L.hp_badwnd = "Bardzo ranny"
 L.hp_death = "Bliski śmierci"
 
--- TargetID karma status
+-- TargetID Karma status
 L.karma_max = "Renomowany"
 L.karma_high = "Szorski"
 L.karma_med = "Brutalny"
@@ -483,13 +436,11 @@ L.karma_min = "Szaleniec"
 
 -- TargetID misc
 L.corpse = "Zwłoki"
-L.corpse_hint = "Kliknij [{usekey}] by zbadać. [{walkkey} + {usekey}], aby je zbadać po cichu."
+--L.corpse_hint = "Press [{usekey}] to search and confirm. [{walkkey} + {usekey}] to search covertly."
 
 L.target_disg = "przebrany"
 L.target_unid = "Niezidentyfikowane ciało"
 --L.target_unknown = "A Terrorist"
-
-L.target_credits = "Przeszukaj, aby otrzymywać niewykorzystane kredyty"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Jednorazowe"
@@ -505,7 +456,6 @@ L.mute_off = "None muted"
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
-L.punch_help = "Klawisze ruchu lub skok: uderz obiekt. Skradanie: opuść obiekt."
 L.punch_bonus = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {num}"
 L.punch_malus = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
 
@@ -676,7 +626,7 @@ L.aw_sui2_title = "Samotny i zdesperowany"
 L.aw_sui2_text = "był jedynym, który zabił samego siebie."
 
 L.aw_exp1_title = "Badania MateriaŁÓw Wybuchowych"
-L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
+L.aw_exp1_text = "został wyrÓżniony za badania nad eksplozjami. Pomogło mu {num} obiektów."
 
 L.aw_exp2_title = "Badania Terenowe"
 L.aw_exp2_text = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
@@ -930,11 +880,8 @@ L.hud_forced_failed = "Nie udało się wymusić HUD {hudname}. Nie masz permisji
 L.hud_restricted_failed = "Nie udało się nadać restrykcji HUDa {hudname}. Nie masz permisji."
 
 L.shop_role_select = "Wybierz rolę"
-L.shop_role_selected = "{roles} wybrano do sklepu!"
+L.shop_role_selected = "{role} wybrano do sklepu!"
 L.shop_search = "Szukaj"
-
-L.spec_help = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizyczny, by go posiąść."
-L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
 
 -- 2019-10-19
 L.drop_ammo_prevented = "Coś Cię powstrzymuje przed wyrzuceniem amunicji."
@@ -942,7 +889,7 @@ L.drop_ammo_prevented = "Coś Cię powstrzymuje przed wyrzuceniem amunicji."
 -- 2019-10-28
 L.target_c4 = "Naciśnij [{usekey}] aby otworzyć menu C4"
 L.target_c4_armed = "Naciśnij [{usekey}] aby rozborić C4"
-L.target_c4_armed_defuser = "Naciśnij [{usekey}] aby rozborić przyżądem"
+L.target_c4_armed_defuser = "Naciśnij [{primaryfire}] aby rozborić przyżądem"
 L.target_c4_not_disarmable = "Nie możesz rozbroić bomby żywego gracza"
 L.c4_short_desc = "Coś bardzo wybuchowego"
 
@@ -950,16 +897,15 @@ L.target_pickup = "Naciśnij [{usekey}] aby podnieść"
 L.target_slot_info = "Slot: {slot}"
 L.target_pickup_weapon = "Naciśnij [{usekey}] aby ponieść broń"
 L.target_switch_weapon = "Naciśnij [{usekey}] aby zamienić broń"
-L.target_pickup_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytego podniesienia"
-L.target_switch_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytej zamiany"
+L.target_pickup_weapon_hidden = ", Naciśnij [{walkkey} + {usekey}] dla ukrytego podniesienia"
+L.target_switch_weapon_hidden = ", Naciśnij [{walkkey} + {usekey}] dla ukrytej zamiany"
 L.target_switch_weapon_nospace = "Brak slotu!"
 L.target_switch_drop_weapon_info = "Upuszczanie {name} ze slotu {slot}"
 L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można wywalić"
 
-L.corpse_searched_by_detective = "Te ciało przeszukał detektyw"
+--L.corpse_searched_by_detective = "This corpse was searched by a public policing role"
 L.corpse_too_far_away = "Ciało jest za daleko."
 
-L.radio_pickup_wrong_team = "Nie możesz mieć radio innego teamu."
 L.radio_short_desc = "Wystrzały broni są dla mnie muzyką"
 
 L.hstation_subtitle = "Naciśnij [{usekey}] aby otrzymać życie."
@@ -1004,7 +950,6 @@ L.mute_team = "{team} zmutowani."
 L.door_auto_closes = "Te drzwi zamykają się same"
 L.door_open_touch = "Wejdź w drzwi żeby je otworzyć."
 L.door_open_touch_and_use = "Wejdź w drzwi i naciśnij [{usekey}] aby otworzyć."
-L.hud_health = "Zdrowie"
 
 -- 2020-03-09
 L.help_title = "Pomoc i ustawienia"
@@ -1026,7 +971,7 @@ L.menu_guide_description = "Pomaga zapoznać się z TTT i pomóc Ci je zrozumie�
 L.menu_bindings_description = "Ustaw swoje własne bindy dotyczące rozgrywki"
 L.menu_language_description = "Wybierz język gry"
 L.menu_appearance_description = "Popraw wygląd i wydajność UI"
-L.menu_gameplay_description = "Unikaj ról, bądź widzem itp"
+--L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "Konfiguracja addonów"
 L.menu_legacy_description = "Panle z przekonwertowanymi addonami TTT, powinny być przeportowane do nowego systemu"
 L.menu_administration_description = "Ustawienia generalne HUDu, sklepów itd."
@@ -1050,10 +995,8 @@ L.submenu_appearance_crosshair_title = "Celownik"
 L.submenu_appearance_dmgindicator_title = "Pow. o obrażeniach"
 L.submenu_appearance_performance_title = "Wydajność"
 L.submenu_appearance_interface_title = "Interfejs"
-L.submenu_appearance_miscellaneous_title = "Różne"
 
 L.submenu_gameplay_general_title = "Główne"
-L.submenu_gameplay_avoidroles_title = "Unikaj ról"
 
 L.submenu_administration_hud_title = "Ustawienia HUDa"
 L.submenu_administration_randomshop_title = "Losowy Sklep"
@@ -1090,16 +1033,11 @@ L.label_shop_show_slot = "Pokaż sloty"
 L.label_shop_show_custom = "Pokaż customowe intemy"
 L.label_shop_show_fav = "Pokaż ulubione itemy"
 L.label_crosshair_enable = "Włącz celownik"
-L.label_crosshair_gap_enable = "Umożliw odstęp"
-L.label_crosshair_gap = "Odstęp celownika"
 L.label_crosshair_opacity = "Ukrycie celownika podczas korzystania z celowniku mechanicznego"
 L.label_crosshair_ironsight_opacity = "Widoczność celownika z przycelowania"
 L.label_crosshair_size = "Wielkość celownika"
 L.label_crosshair_thickness = "Grubość celownika"
 L.label_crosshair_thickness_outline = "Grubość otoczki celownika"
-L.label_crosshair_static_enable = "Umożliw statyczny celownik "
-L.label_crosshair_dot_enable = "Umożliw kropkę celownika"
-L.label_crosshair_lines_enable = "Zezwól na linie celownika"
 L.label_crosshair_scale_enable = "Umożliw różne wielkości"
 L.label_crosshair_ironsight_low_enabled = "Obniż broń podczas użycia celowniku mechanicznego"
 L.label_damage_indicator_enable = "Enable damage indicator"
@@ -1119,13 +1057,10 @@ L.label_gameplay_specmode = "Tryb obserwatora (zawsze bądź obserwatorem)"
 L.label_gameplay_fastsw = "Szybkie przełącznie broni"
 L.label_gameplay_hold_aim = "Trzymaj aby celować"
 L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
-L.label_gameplay_dtsprint_enable = "Włącz 2x przód, aby sprintować"
-L.label_gameplay_dtsprint_anykey = "Sprintuj dopóki Ci się nie szkończy wytrzymałość"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
 L.label_bind_weaponswitch = "Zmień broń"
-L.label_bind_sprint = "Sprint"
 L.label_bind_voice = "Globalny Czat"
 L.label_bind_voice_team = "Teamowy Czat"
 
@@ -1149,7 +1084,6 @@ L.header_damage_indicator = "Ustawienia powiadomień obrażeń"
 L.header_performance_settings = "Ustawienia Wydajności"
 L.header_interface_settings = "Ustawienia interfejsu"
 L.header_gameplay_settings = "Ustawienia rozgrywki"
-L.header_roleselection = "Włącz przypisywanie ról"
 L.header_hud_administration = "Wybierz Domyślne i wymuś HUDy"
 L.header_hud_enabled = "Włącz/Wyłącz HUDy"
 
@@ -1196,11 +1130,7 @@ L.hud_revival_time = "{time}s"
 L.door_destructible = "Te drzwi da się zniszczyć ({health}PW)"
 
 -- 2020-05-28
-L.confirm_detective_only = "Tylko detektywni mogą potwierdzić ciało"
-L.inspect_detective_only = "Tylko detektywni mogą sprawdzać ciało"
-L.corpse_hint_no_inspect = "Tylko detektywni mogą przeszukać ciało"
-L.corpse_hint_inspect_only = "Naciśnij [{usekey}] aby wyszukać. Tylko detektywni mogą potwierdzić ciało."
-L.corpse_hint_inspect_only_credits = "Naciśnij [{usekey}] aby otrzymać kredyty. Tylko detektywni mogą przeszukać ciało."
+--L.corpse_hint_inspect_limited = "Press [{usekey}] to search. [{walkkey} + {usekey}] to only view search UI."
 
 -- 2020-06-04
 L.label_bind_disguiser = "Przełącz przebranie"
@@ -1215,7 +1145,6 @@ L.binoc_help_sec = "Zmień Przybliżenie."
 
 L.vis_help_pri = "Wyrzuć aktywne urządzenie."
 
-L.decoy_help_pri = "Rozstaw Wabik."
 
 -- 2020-08-07
 L.pickup_error_spec = "Nie możesz tego zrobić jako widz."
@@ -1226,7 +1155,7 @@ L.pickup_error_noslot = "Nie możesz tego podnieść, bo nie masz na to miejsca.
 L.lang_server_default = "Ustawienie Serwera"
 --L.help_lang_info = [[
 --This translation is {coverage}% complete with the English language taken as a default reference.
-
+--
 --Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
 
 -- 2021-04-13
@@ -1421,7 +1350,7 @@ L.none = "Brak Roli"
 --L.spawneditor_place = "Place spawn"
 --L.spawneditor_remove = "Remove spawn"
 --L.spawneditor_change = "Change spawn type (hold [SHIFT] to reverse)"
---L.spawneditor_ammo_edit = "Hold to edit amount of autospawning ammo on weapon spawns"
+--L.spawneditor_ammo_edit = "Hold on weapon spawn to edit autospawning ammo"
 
 --L.spawn_weapon_random = "Random Weapon Spawn"
 --L.spawn_weapon_melee = "Melee Weapon Spawn"
@@ -1439,7 +1368,7 @@ L.none = "Brak Roli"
 --L.spawn_ammo_shotgun = "Shotgun ammo spawn"
 --L.spawn_player_random = "Random player spawn"
 
---L.spawn_weapon_ammo = " (Ammo: {ammo})"
+--L.spawn_weapon_ammo = "(Ammo: {ammo})"
 
 --L.spawn_weapon_edit_ammo = "Hold [{walkkey}] and press [{primaryfire} or {secondaryfire}] to increase or decrease the ammo for this weapon spawn"
 
@@ -1461,18 +1390,18 @@ L.none = "Brak Roli"
 
 --L.help_spawn_editor_info = [[
 --The spawn editor is used to place, remove and edit spawns in the world. These spawns are for weapons, ammunition and players.
-
+--
 --These spawns are saved in files located in 'data/ttt/weaponspawnscripts/'. They can be deleted for a hard reset. The initial spawn files are created from spawns found on the map and in the original TTT weapon spawn scripts. Pressing the reset button always reverts to the initial state.
-
+--
 --It should be noted that this spawn system uses dynamic spawns. This is most interesting for weapons because it no longer defines a specific weapon, but a type of weapons. For example instead of a TTT shotgun spawn, there is now a general shotgun spawn where any weapon defined as shotgun can spawn. The spawn type for each weapon can be set in the 'Edit Equipment' menu. This makes it possible for any weapon to spawn on the map, or to disable certain default weapons.
-
+--
 --Keep in mind that many changes only take effect after a new round has started.]]
 --L.help_spawn_editor_enable = "On some maps it might be advised to use the original spawns found on the map without replacing them with the dynamic system. Changing this option below only affects the currently active map, so the dynamic system will still be used for every other map."
 --L.help_spawn_editor_hint = "Hint: To leave the spawn editor, reopen the gamemode menu."
 --L.help_spawn_editor_spawn_amount = [[
 --There currently are {weapon} weapon spawns, {ammo} ammunition spawns and {player} player spawns on this map.
 --Click 'start spawn edit' to change this amount.
-
+--
 --{weaponrandom}x Random weapon spawn
 --{weaponmelee}x Melee weapon spawn
 --{weaponnade}x Grenade weapon spawn
@@ -1481,21 +1410,21 @@ L.none = "Brak Roli"
 --{weaponsniper}x Sniper weapon spawn
 --{weaponpistol}x Pistol weapon spawn
 --{weaponspecial}x Special weapon spawn
-
+--
 --{ammorandom}x Random ammo spawn
 --{ammodeagle}x Deagle ammo spawn
 --{ammopistol}x Pistol ammo spawn
 --{ammomac10}x Mac10 ammo spawn
 --{ammorifle}x Rifle ammo spawn
 --{ammoshotgun}x Shotgun ammo spawn
-
+--
 --{playerrandom}x Random player spawn]]
 
 --L.equipmenteditor_name_auto_spawnable = "Equipment spawns randomly in world"
 --L.equipmenteditor_name_spawn_type = "Select spawn type"
 --L.equipmenteditor_desc_auto_spawnable = [[
 --The TTT2 spawn system allows every weapon to spawn in the world. By default only weapons marked as 'AutoSpawnable' by the creator will spawn in the world, however this can be changed from within this menu.
-
+--
 --Most of the equipment is set to 'special weapon spawns' by default. This means that equipment only spawns on random weapon spawns. However it is possible to place special weapon spawns in the world or change the spawn type here to use other existing spawn types.]]
 
 --L.pickup_error_inv_cached = "You cannot pick this up right now because your inventory is cached."
@@ -1512,14 +1441,14 @@ L.none = "Brak Roli"
 
 --L.help_prefer_map_models = [[
 --Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
-
+--
 --Role specific models always have a higher priority and are unaffected by this setting.]]
 --L.help_enforce_playermodel = [[
 --Some roles have custom player models. They can be disabled which can be relevant for compatibility with some player model selectors.
 --Random default models can still be selected, if this setting is disabled.]]
 --L.help_use_custom_models = [[
 --By default only the CS:S Phoenix player model is assigned to all players. By enabling this option however it is possible to select a player model pool. With this setting enabled each player will still be assigned the same player model, however it is a random model from the defined model pool.
-
+--
 --This selection of models can be extended by installing more player models.]]
 
 -- 2021-10-06
@@ -1536,7 +1465,7 @@ L.none = "Brak Roli"
 -- 2021-10-09
 --L.help_models_select = [[
 --Left click on the models to add them to the player model pool. Left click again to remove them. Right clicking toggles between enabled and disabled detective hats for the focused model.
-
+--
 --The small indicator in the top left shows if the player model has a head hitbox. The icon below shows if this model is applicable for a detective hat.]]
 
 --L.menu_roles_title = "Role Settings"
@@ -1559,7 +1488,7 @@ L.none = "Brak Roli"
 --L.help_roles_selection = [[
 --The role distribution per player defines the percentage of players that are assigned this role. For example, if the value is set to '0.2' every fifth player receives this role. This also means that at least 5 players are needed for this role to be distributed at all.
 --Keep in mind that all of this only applies if the role is considered for distribution process.
-
+--
 --The aforementioned role distribution has a special integration with the lower limit of players. If the role is considered for distribution and the minimum value is below the value given by the distribution factor, but the amount of players is equal or greater than the lower limit, a single player can still receive this role. The distribution process then works as usual for the second player.]]
 --L.help_roles_award_info = "Some roles (if enabled in their credits settings) receive equipment credits if a certain percentage of enemies has died. Related values can be tweaked here."
 --L.help_roles_award_pct = "When this percentage of enemies are dead, specific roles are awarded equipment credits."
@@ -1567,17 +1496,17 @@ L.none = "Brak Roli"
 --L.help_roles_advanced_warning = "WARNING: These are advanced settings that can completely mess up the role distribution process. When in doubt keep all values at '0'. This value means that no limits are applied and the role distribution will try to assign as many roles as possible."
 --L.help_roles_max_roles = [[
 --The term roles here includes both the base roles and the subroles. By default, there is no limit on how many different roles can be assigned. However, here are two different ways to limit them.
-
+--
 --1. Limit them by a fixed amount.
 --2. Limit them by a percentage.
-
+--
 --The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 --L.help_roles_max_baseroles = [[
 --Base roles are only those roles others inherit from. For example, the Innocent role is a base role, while a Pharaoh is a subrole of this role. By default, there is no limit on how many different base roles can be assigned. However, here are two different ways to limit them.
-
+--
 --1. Limit them by a fixed amount.
 --2. Limit them by a percentage.
-
+--
 --The latter is only used if the fixed amount is '0' and sets an upper limit based on the set percentage of available players.]]
 
 --L.label_roles_enabled = "Enable role"
@@ -1609,15 +1538,15 @@ L.none = "Brak Roli"
 --L.help_roles_credits_award_kill = "Another way of gaining credits is by killing high value players with a 'public role' such as a Detective. If the killer's role has this enabled, they gain the below defined amount of credits."
 --L.help_roles_credits_award = [[
 --There are two different ways to be awarded credits in base TTT2:
-
+--
 --1. If a certain percentage of the enemy team is dead, the whole team is awarded credits.
 --2. If a player killed a high value player with a 'public role' such as a Detective, the killer is awarded credits.
-
+--
 --Please note, that this still can be enabled/disabled for every role, even if the whole team is awarded. For example, if team Innocent is awarded, but the Innocent role has this disabled, only the Detective will receive their credits.
 --The balancing values for this feature can be set in 'Administration' -> 'General Role Settings'.]]
 --L.help_detective_hats = [[
 --Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
-
+--
 --Some player models do not support hats by default. This can be changed in 'Administration' -> 'Player Models']]
 
 --L.label_roles_credits_award_kill = "Credit reward amount for the kill"
@@ -1669,35 +1598,35 @@ L.none = "Brak Roli"
 --L.help_idle = "The idle mode is used to forcefully move idle players into the spectator mode. To leave this mode, they will have to disable it in their 'gameplay' menu."
 --L.help_namechange_kick = [[
 --A name change during an active round could be abused. Therefore, this is prohibited by default and will lead to the offending player being kicked from the server.
-
+--
 --If the bantime is greater than 0, the player will be unable to reconnect to the server until that time has passed.]]
 --L.help_damage_log = "Each time a player is damaged, a damage log entry is added to the console if enabled. This can also be stored to disk after a round has ended. The file is located at 'data/terrortown/logs/'"
 --L.help_spawn_waves = [[
 --If this variable is set to 0, all players are spawned at once. For servers with huge amounts of players, it can be beneficial to spawn the players in waves. The spawn wave interval is the time between each spawn wave. A spawn wave always spawns as many players as there are valid spawn points.
-
+--
 --Note: Make sure that the preparing time is long enough for the desired amount of spawn waves.]]
 --L.help_voicechat_battery = [[
 --Voice chatting with enabled voice chat battery reduces battery charge. When it's empty, the player can't use voice chat and has to wait for it to recharge. This can help to prevent excessive voice chat usage.
-
+--
 --Note: 'Tick' refers to a game tick. For example, if the tick rate is set to 66, then it will be 1/66th of a second.]]
 --L.help_ply_spawn = "Player settings that are used on player (re-)spawn."
 --L.help_haste_mode = [[
 --Haste mode balances the game by increasing the round time with every dead player. Only roles that see missing in action players can see the real round time. Every other role can only see the haste mode starting time.
-
+--
 --If haste mode is enabled, the fixed round time is ignored.]]
 --L.help_round_limit = "After one of the set limit conditions is met, a map change is triggered."
 --L.help_armor_balancing = "The following values can be used to balance the armor."
 --L.help_item_armor_classic = "If classic armor mode is enabled, only the previous settings matter. Classic armor mode means that a player can only buy armor once in a round, and that this armor blocks 30% of the incoming bullet and crowbar damage until they die."
 --L.help_item_armor_dynamic = [[
 --Dynamic armor is the TTT2 approach to make armor more interesting. The amount of armor that can be bought is now unlimited, and the armor value stacks. Getting damaged decreases the armor value. The armor value per bought armor item is set in the 'Equipment Settings' of said item.
-
+--
 --When taking damage, a certain percentage of this damage is converted into armor damage, a different percentage is still applied to the player and the rest vanishes.
-
+--
 --If reinforced armor is enabled, the damage applied to the player is decreased by 15% as long as the armor value is above the reinforcement threshold.]]
 --L.help_sherlock_mode = "The sherlock mode is the classic TTT mode. If the sherlock mode is disabled, dead bodies can not be confirmed, the scoreboard shows everyone as alive and the spectators can talk to the living players."
 --L.help_prop_possession = [[
 --Prop possession can be used by spectators to possess props lying in the world and use the slowly recharging 'punch-o-meter' to move said prop around.
-
+--
 --The maximum value of the 'punch-o-meter' consists of a possession base value, where the kills/deaths difference clamped inbetween two defined limits is added. The meter slowly recharges over time. The set recharge time is the time needed to recharge a single point in the 'punch-o-meter'.]]
 --L.help_karma = "Players start with a certain amount of Karma, and lose it when they damage/kill teammates. The amount they lose is dependent on the Karma of the person they hurt or killed. Lower Karma reduces damage given."
 --L.help_karma_strict = "If strict Karma is enabled, the damage penalty increases more quickly as Karma goes down. When it is off, the damage penalty is very low when people stay above 800. Enabling strict mode makes Karma play a larger role in discouraging any unnecessary kills, while disabling it results in a more “loose” game where Karma only hurts players who constantly kill teammates."
@@ -1707,7 +1636,7 @@ L.none = "Brak Roli"
 --L.help_karma_bonus = "There are also two different passive ways to gain Karma during a round. First is a karma restoration which applied to every player at the round end. Then a secondary clean round bonus is given if no teammates were hurt or killed by a player."
 --L.help_karma_clean_half = [[
 --When a player's Karma is above the starting level (meaning the Karma max has been configured to be higher than that), all their Karma increases will be reduced based on how far their Karma is above that starting level. So it goes up slower the higher it is.
-
+--
 --This reduction goes in a curve of exponential decay: initially it's fast, and it slows down as the increment gets smaller. This convar sets at what point the bonus has been halved (so the half-life). With the default value of 0.25, if the starting amount of Karma is 1000 and the max 1500, and a player has Karma 1125 ((1500 - 1000) * 0.25 = 125), then his clean round bonus will be 30 / 2 = 15. So to make the bonus go down faster you’d set this convar lower, to make it go down slower you’d increase it towards 1.]]
 --L.help_max_slots = "Sets the maximum amount of weapons per slot. '-1' means that there is no limit."
 --L.help_item_armor_value = "This is the armor value given by the armor item in dynamic mode. If classic mode is enabled (see 'Administration' -> 'Player Settings') then every value greater than 0 is counted as existing armor."
@@ -1730,8 +1659,6 @@ L.none = "Brak Roli"
 --L.label_tbutton_admin_show = "Show traitor buttons to admins"
 --L.label_ragdoll_carrying = "Enable ragdoll carrying"
 --L.label_prop_throwing = "Enable prop throwing"
---L.label_ragdoll_pinning = "Enable ragdoll pinning for non-Innocent roles"
---L.label_ragdoll_pinning_innocents = "Enable ragdoll pinning for Innocent roles"
 --L.label_weapon_carrying = "Enable weapon carrying"
 --L.label_weapon_carrying_range = "Weapon carry range"
 --L.label_prop_carrying_force = "Prop pickup force"
@@ -1761,10 +1688,8 @@ L.none = "Brak Roli"
 --L.label_spectator_chat = "Enable spectators chatting with everybody"
 --L.label_lastwords_chatprint = "Print last words to chat if killed while typing"
 --L.label_identify_body_woconfirm = "Identify corpse without pressing the 'confirm' button"
---L.label_announce_body_found = "Announce that a body was found"
+--L.label_announce_body_found = "Announce that a body was found when the body was confirmed"
 --L.label_confirm_killlist = "Announce kill list of confirmed corpse"
---L.label_inspect_detective_only = "Limit corpse search to policing roles only"
---L.label_confirm_detective_only = "Limit corpse confirmation to policing roles only"
 --L.label_dyingshot = "Shoot on death if in ironsights [experimental]"
 --L.label_armor_block_headshots = "Enable armor blocking headshots"
 --L.label_armor_block_blastdmg = "Enable armor blocking blast damage"
@@ -1823,7 +1748,6 @@ L.none = "Brak Roli"
 --L.label_sprint_max = "Max sprinting stamina"
 --L.label_sprint_stamina_consumption = "Stamina consumption factor"
 --L.label_sprint_stamina_regeneration = "Stamina regeneration factor"
---L.label_sprint_crosshair = "Show crosshair while sprinting"
 --L.label_crowbar_unlocks = "Primary attack can be used as interaction (i.e. unlocking)"
 --L.label_crowbar_pushforce = "Crowbar push force"
 
@@ -1836,7 +1760,7 @@ L.none = "Brak Roli"
 
 --L.help_falldmg_exponent = [[
 --This value modifies how exponentially fall damage is increased with the speed the player hits the ground at.
-
+--
 --Take care when altering this value. Setting it too high can make even the smallest falls lethal, while setting it too low will allow players to fall from extreme heights and suffer little to no damage.]]
 
 -- 2023-02-08
@@ -1860,3 +1784,410 @@ L.none = "Brak Roli"
 --L.sb_rank_tooltip_team = "Team"
 
 --L.tbut_adminarea = "ADMIN AREA:"
+
+-- 2023-08-10
+--L.equipmenteditor_name_damage_scaling = "Damage Scaling"
+
+-- 2023-08-11
+--L.equipmenteditor_name_allow_drop = "Allow Drop"
+--L.equipmenteditor_desc_allow_drop = "If enabled, the equipment can be dropped freely by the player."
+
+--L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
+--L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
+
+--L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_force = "Force Drop on Death"
+--L.drop_on_death_type_deny = "Deny Drop on Death"
+
+-- 2023-08-26
+--L.equipmenteditor_name_kind = "Equipment Slot"
+--L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
+
+--L.slot_weapon_melee = "Melee Slot"
+--L.slot_weapon_pistol = "Pistol Slot"
+--L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_nade = "Grenade Slot"
+--L.slot_weapon_carry = "Carry Slot"
+--L.slot_weapon_unarmed = "Unarmed Slot"
+--L.slot_weapon_special = "Special Slot"
+--L.slot_weapon_extra = "Extra Slot"
+--L.slot_weapon_class = "Class Slot"
+
+-- 2023-10-04
+--L.label_voice_duck_spectator = "Duck spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_scaling = "Voice Volume Scaling Mode"
+--L.label_voice_scaling_mode_linear = "Linear"
+--L.label_voice_scaling_mode_power4 = "Power 4"
+--L.label_voice_scaling_mode_log = "Logarithmic"
+
+-- 2023-10-07
+L.search_title = "Rezultaty przeszukania ciała - {player}"
+L.search_info = "Informacje"
+L.search_confirm = "Potwierdź śmierć"
+--L.search_confirm_credits = "Confirm (+{credits} Credit(s))"
+--L.search_take_credits = "Take {credits} Credit(s)"
+--L.search_confirm_forbidden = "Confirm forbidden"
+--L.search_confirmed = "Death Confirmed"
+--L.search_call = "Report Death"
+--L.search_called = "Death Reported"
+
+--L.search_team_role_unknown = "???"
+
+L.search_words = "Coś ci mówi, że jego ostanie słowa to: '{lastwords}'"
+L.search_armor = "On nosił niestandardową kamizelkę kuloodporną."
+L.search_disguiser = "Trzymał urządzenie, które mogło ukryć jego tożsamość."
+L.search_radar = "Miał jakiegoś rodzaju radar. Już nie działa."
+L.search_c4 = "W kieszeni znalazłeś notkę. Stwierdza, że przecięcie przewodu {num} bezpiecznie rozbroi bombę."
+
+L.search_dmg_crush = "Wiele z jego kości jest połamanych. To pokazuje, że zabił go jakiś duży obiekt."
+L.search_dmg_bullet = "Jest oczywiste, że został zastrzelony na śmierć."
+L.search_dmg_fall = "Spadł i połamał sobie kark."
+L.search_dmg_boom = "Stan jego ubrania pokazują, że wybuch zakończył jego żywot."
+L.search_dmg_club = "Ciało jest posiniaczone i poobijane. Najwyraźniej został zatłuczony na śmierć."
+L.search_dmg_drown = "Ciało wykazuje, że delikwent utonął."
+L.search_dmg_stab = "Został dźgnięty nożem, zanim szybko się wykrwawił."
+L.search_dmg_burn = "Pachnie jak pieczony terrorysta..."
+L.search_dmg_teleport = "Jego DNA zostało uszkodzone przez fale tachionu."
+L.search_dmg_car = "Gdy ten terrorysta przechodził przez drogę, został przejechany przez lekkomyślnego kierowce."
+L.search_dmg_other = "Nie możesz znaleźć konkretnej przyczyny śmierci tego terrorysty."
+
+--L.search_floor_antlions = "There are still antlions all over the body. The floor must be covered with them."
+--L.search_floor_bloodyflesh = "The blood on this body looks old and disgusting. There are even small bits of bloody flesh stuck to their shoes."
+--L.search_floor_concrete = "Gray dust covers their shoes and knees. Looks as if the crime scene had a concrete floor."
+--L.search_floor_dirt = "It smells earthy. It probably stems from the dirt that clings to the victims shoes."
+--L.search_floor_eggshell = "Disgusting looking white specks cover the body of the victim. It looks like egg shells."
+--L.search_floor_flesh = "The victim's clothing feels kinda moist. As if they fell onto a wet surface. Like a fleshy surface, or the sandy ground of a water body."
+--L.search_floor_grate = "The skin of the victim looks like a steak. Thick lines arranged in a grid are visible all over them. Did they rest on a grate?"
+--L.search_floor_alienflesh = "Alien flesh, you think? Sounds kinda outlandish. But your detective helper book lists it as a possible floor surface."
+--L.search_floor_snow = "On first glance their clothing only feels wet and ice-cold. But once you see the white foam on the rims you understand. It's snow!"
+--L.search_floor_plastic = "'Ouch, that has to hurt.' Their body is covered in burns. They look like those you get when sliding over a plastic surface."
+--L.search_floor_metal = "At least they can't get tetanus now that they are dead. Rust covers their wounds. They probably died on a metal surface."
+--L.search_floor_sand = "Small little rough rocks are stuck to their cold body. Like coarse sand from a beach. Argh, it gets everywhere!"
+--L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
+--L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
+--L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
+--L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
+--L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
+--L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
+--L.search_floor_warpshield = "A floor made out of warpshield? Yep, we are as confused as you were. But our notes clearly state it. Warpshield."
+
+--L.search_water_1 = "The victim's shoes are wet, but the rest seems dry. They were probably killed with their feet in water."
+--L.search_water_2 = "The victim's shoes are trousers are soaked through. Did they wander through water before they were killed?"
+--L.search_water_3 = "The whole body is wet and swollen. They probably died while they were completely submerged."
+
+L.search_weapon = "Wygląda na to, że {weapon} posłużyła do tego zabójstwa."
+L.search_head = "Rana śmiertelna była strzałem w głowę. Nie miał czasu, aby krzyczeć."
+--L.search_time = "They died a while before you conducted the search."
+--L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay after a while."
+
+L.search_kills1 = "Znalazłeś listę zabójstw, co potwierdza śmierć {player}."
+L.search_kills2 = "Znalazłeś listę zabójstw z tymi imionami: {player}"
+L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatnią osobę, która go widziała: {player}. Morderca, czy zbieg okoliczności?"
+
+--L.search_credits = "The victim has {credits} equipment credit(s) in their pocket. A shopping role might take them and put them to good use. Keep an eye out!"
+
+--L.search_kill_distance_point_blank = "It was a point blank attack."
+--L.search_kill_distance_close = "The attack came from a short distance."
+--L.search_kill_distance_far = "The victim was attacked from a long distance away."
+
+--L.search_kill_from_front = "The victim was shot from the front."
+--L.search_kill_from_back = "The victim was shot from behind."
+--L.search_kill_from_side = "The victim was shot from the side."
+
+--L.search_hitgroup_head = "The projectile was found in their head."
+--L.search_hitgroup_chest = "The projectile was found in their chest."
+--L.search_hitgroup_stomach = "The projectile was found in their stomach."
+--L.search_hitgroup_rightarm = "The projectile was found in their right arm."
+--L.search_hitgroup_leftarm = "The projectile was found in their left arm."
+--L.search_hitgroup_rightleg = "The projectile was found in their right leg."
+--L.search_hitgroup_leftleg = "The projectile was found in their left leg."
+--L.search_hitgroup_gear = "The projectile was found in their hip."
+
+--L.search_policingrole_report_confirm = [[
+--A public policing role can only be called to a dead body after the corpse was confirmed dead.]]
+--L.search_policingrole_confirm_disabled_1 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!]]
+--L.search_policingrole_confirm_disabled_2 = [[
+--The corpse can only be confirmed by a public policing role. Report the body to let them know!
+--You can see the information in here after they confirmed it.]]
+--L.search_spec = [[
+--As a spectator you are able to see all information of a corpse, but unable to interact with the UI.]]
+
+--L.search_title_words = "Victim's last words"
+--L.search_title_c4 = "Defusion mishap"
+--L.search_title_dmg_crush = "Crush damage ({amount} HP)"
+--L.search_title_dmg_bullet = "Bullet damage ({amount} HP)"
+--L.search_title_dmg_fall = "Fall damage ({amount} HP)"
+--L.search_title_dmg_boom = "Explosion damage ({amount} HP)"
+--L.search_title_dmg_club = "Club damage ({amount} HP)"
+--L.search_title_dmg_drown = "Drowning damage ({amount} HP)"
+--L.search_title_dmg_stab = "Stabbing damage ({amount} HP)"
+--L.search_title_dmg_burn = "Burning damage ({amount} HP)"
+--L.search_title_dmg_teleport = "Teleport damage ({amount} HP)"
+--L.search_title_dmg_car = "Car accident ({amount} HP)"
+--L.search_title_dmg_other = "Unknown damage ({amount} HP)"
+--L.search_title_time = "Death time"
+--L.search_title_dna = "DNA sample decay"
+--L.search_title_kills = "The victim's kill list"
+--L.search_title_eyes = "The killer's shadow"
+--L.search_title_floor = "Floor of the crime scene"
+--L.search_title_credits = "{credits} Equipment credit(s)"
+--L.search_title_water = "Water level {level}"
+--L.search_title_policingrole_report_confirm = "Confirm to report death"
+--L.search_title_policingrole_confirm_disabled = "Report corpse"
+--L.search_title_spectator = "You are a spectator"
+
+--L.target_credits_on_confirm = "Confirm to receive unspent credits"
+--L.target_credits_on_search = "Search to receive unspent credits"
+--L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
+--L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
+--L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
+
+--L.label_inspect_confirm_mode = "Select body search mode"
+--L.choice_inspect_confirm_mode_0 = "mode 0: standard TTT"
+--L.choice_inspect_confirm_mode_1 = "mode 1: limited confirm"
+--L.choice_inspect_confirm_mode_2 = "mode 2: limited search"
+--L.help_inspect_confirm_mode = [[
+--There are three different body search/confirm modes in this gamemode. The selection of this mode has huge influences to the importance of public policing roles like the detective.
+--
+--mode 0: This is standard TTT behavior. Everyone can search and confirm bodies. To report a body or to take the credits from it, the body first has to be confirmed. This makes it a bit harder for shopping roles to sneakily steal credits. However innocent players that want to report the body to call a public policing player need to confirm first as well.
+--
+--mode 1: This mode increases the importance of public policing roles by limiting the confirmation option to them. This also means that taking credits and reporting bodies is now also possible before confirming a body. Everybody can still search dead bodies and find the information, but they are unable to announce the found information.
+--
+--mode 2: This mode is yet a bit more strict than mode 1. In this mode the search ability is removed as well from normal players. This means that reporting a dead body to a public policing player is now the only way to get any information from dead bodies.]]
+
+-- 2023-10-19
+--L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+
+-- 2023-10-23
+--L.label_hud_pulsate_health_enable = "Pulsate healthbar when below 25% health"
+--L.header_hud_elements_customize = "Customize the HUD-Elements"
+--L.help_hud_elements_special_settings = "These are specific settings for the used HUD-Elements."
+
+-- 2023-10-25
+--L.help_keyhelp = [[
+--Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--
+--Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
+--Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
+--Equipment: Some equipment items have their own bindings, these are shown in this category.
+--
+--Disabled categories are still shown when the scoreboard is visible]]
+
+--L.label_keyhelp_show_core = "Enable always showing the core bindings"
+--L.label_keyhelp_show_extra = "Enable always showing the extra bindings"
+--L.label_keyhelp_show_equipment = "Enable always showing the equipment bindings"
+
+--L.header_interface_keys = "Key helper settings"
+--L.header_interface_wepswitch = "Weapon switch UI settings"
+
+--L.label_keyhelper_help = "open gamemode menu"
+--L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_shop = "open equipment shop"
+--L.label_keyhelper_show_pointer = "free mouse pointer"
+--L.label_keyhelper_possess_focus_entity = "possess focused entity"
+--L.label_keyhelper_spec_focus_player = "spectate focused player"
+--L.label_keyhelper_spec_previous_player = "previous player"
+--L.label_keyhelper_spec_next_player = "next player"
+--L.label_keyhelper_spec_player = "spectate random player"
+--L.label_keyhelper_possession_jump = "prop: jump"
+--L.label_keyhelper_possession_left = "prop: left"
+--L.label_keyhelper_possession_right = "prop: right"
+--L.label_keyhelper_possession_forward = "prop: forward"
+--L.label_keyhelper_possession_backward = "prop: backward"
+--L.label_keyhelper_free_roam = "leave object and roam free"
+--L.label_keyhelper_flashlight = "toggle flashlight"
+--L.label_keyhelper_quickchat = "open quickchat"
+--L.label_keyhelper_voice_global = "global voice chat"
+--L.label_keyhelper_voice_team = "team voice chat"
+--L.label_keyhelper_chat_global = "global chat"
+--L.label_keyhelper_chat_team = "team chat"
+--L.label_keyhelper_show_all = "show all"
+--L.label_keyhelper_disguiser = "toggle disguiser"
+--L.label_keyhelper_save_exit = "save and exit"
+--L.label_keyhelper_spec_third_person = "toggle third person view"
+
+-- 2023-10-26
+--L.item_armor_reinforced = "Reinforced Armor"
+--L.item_armor_sidebar = "Armor protects you against bullets penetrating your body. But not forever."
+--L.item_disguiser_sidebar = "The disguiser protects your identity by not showing your name to other players."
+--L.status_speed_name = "Speed Multiplier"
+--L.status_speed_description_good = "You are faster than normal. Items, equipment or effects can influence this."
+--L.status_speed_description_bad = "You are slower than normal. Items, equipment or effects can influence this."
+
+--L.status_on = "on"
+--L.status_off = "off"
+
+--L.crowbar_help_primary = "Attack"
+--L.crowbar_help_secondary = "Push players"
+
+-- 2023-10-27
+--L.help_HUD_enable_description = [[
+--Some HUD elements like the key helper or sidebar show detailed information when the scoreboard is open. This can be disabled to reduce clutter.]]
+--L.label_HUD_enable_description = "Enable descriptions when scoreboard is open"
+--L.label_HUD_enable_box_blur = "Enable UI box background blur"
+
+-- 2023-10-28
+--L.submenu_gameplay_voiceandvolume_title = "Voice & Volume"
+--L.header_soundeffect_settings = "Sound Effects"
+--L.header_voiceandvolume_settings = "Voice & Volume Settings"
+
+-- 2023-11-06
+--L.drop_reserve_prevented = "Something prevents you from dropping your reserve ammo."
+--L.drop_no_reserve = "Insufficient ammo in your reserve to drop as an ammo box."
+--L.drop_no_room_ammo = "You have no room here to drop your ammo!"
+
+-- 2023-11-14
+--L.hat_deerstalker_name = "Detective's Hat"
+
+-- 2023-11-16
+--L.help_prop_spec_dash = [[
+--Propspec dashes are movements into the direction of the aim vector. They can be of higher force than the normal movement. Higher force also means higher base value consumption.
+--
+--This variable is a multiplier of the push force.]]
+--L.label_spec_prop_dash = "Dash force multiplier"
+--L.label_keyhelper_possession_dash = "prop: dash in view direction"
+--L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
+--L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+
+-- 2023-12-07
+--L.c4_help_primary = "Place the C4"
+--L.c4_help_secondary = "Stick to surface"
+
+-- 2023-12-11
+--L.magneto_help_primary = "Push entity"
+--L.magneto_help_secondary = "Pull / pickup entity"
+--L.knife_help_primary = "Stab"
+--L.knife_help_secondary = "Throw knife"
+--L.polter_help_primary = "Fire thumper"
+--L.polter_help_secondary = "Charge long range shot"
+
+-- 2023-12-12
+--L.newton_help_primary = "Knockback shot"
+--L.newton_help_secondary = "Charged knockback shot"
+
+-- 2023-12-13
+--L.vis_no_pickup = "Only public policing roles can pick up the visualizer"
+--L.newton_force = "FORCE"
+--L.defuser_help_primary = "Defuse targeted C4"
+--L.radio_help_primary = "Place the Radio"
+--L.radio_help_secondary = "Stick to surface"
+--L.hstation_help_primary = "Place the Health Station"
+--L.flaregun_help_primary = "Burn body/entity"
+
+-- 2023-12-14
+--L.marker_vision_owner = "Owner: {owner}"
+--L.marker_vision_distance = "Distance: {distance}m"
+--L.marker_vision_distance_collapsed = "{distance}m"
+
+--L.c4_marker_vision_time = "Detonation time: {time}"
+--L.c4_marker_vision_collapsed = "{time} / {distance}m"
+
+--L.c4_marker_vision_safe_zone = "Bomb safe zone"
+--L.c4_marker_vision_damage_zone = "Bomb damage zone"
+--L.c4_marker_vision_kill_zone = "Bomb kill zone"
+
+--L.beacon_marker_vision_player = "Tracked Player"
+--L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+
+-- 2023-12-18
+--L.beacon_help_pri = "Throw Beacon on the ground"
+--L.beacon_help_sec = "Stick Beacon to surface"
+--L.beacon_name = "Beacon"
+--L.beacon_desc = [[
+--Broadcasts player locations to everyone in a sphere around this beacon.
+--
+--Use to keep track of locations on the map that are hard to see.]]
+
+--L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
+--L.msg_beacon_death = "A player died in close proximity to one of your beacons."
+
+--L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
+--L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
+
+-- 2023-12-18
+--L.entity_pickup_owner_only = "Only the owner can pick this up"
+
+-- 2023-12-18
+L.body_confirm_one = "{finder} potwierdził śmierć {victim}."
+--L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
+
+-- 2023-12-19
+--L.builtin_marker = "Built-in."
+--L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
+--L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
+--L.header_equipment_info = "Equipment information"
+
+
+-- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+-- 2023-12-20
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
+--2 = Deal twice the amount of damage.
+--
+--Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+
+-- 2023-12-24
+--L.binoc_help_reload = "Clear target."
+--L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+--L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+
+-- 2024-01-05
+--L.label_crosshair_thickness_outline_enable = "Enable crosshair outline"
+--L.label_crosshair_outline_high_contrast = "Enable outline high contrast color"
+--L.label_crosshair_mode = "Crosshair mode"
+--L.label_crosshair_static_length = "Enable static crosshair line length"
+
+--L.choice_crosshair_mode_0 = "Lines and dot"
+--L.choice_crosshair_mode_1 = "Lines only"
+--L.choice_crosshair_mode_2 = "Dot only"
+
+--L.help_crosshair_scale_enable = [[
+--Dynamic crosshair enables scaling the crosshair depending on the weapon's cone. The cone is influenced by the weapon's base accuracy, multiplied with external factors such as jumping and sprinting.
+--
+--If the line length is kept static, only the gap scales with cone changes.]]
+
+--L.header_weapon_settings = "Weapon Settings"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
+
+-- 2024-01-27
+L.decoy_help_primary = "Rozstaw Wabik"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+-- 2024-01-24
+--L.grenade_fuse = "FUSE"
+
+-- 2024-01-25
+--L.header_roles_magnetostick = "Magneto Stick"
+--L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+--L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_prop_release = "Release prop"
+--L.magneto_stick_help_carry_prop_drop = "Drop prop"
+
+-- 2024-02-14
+--L.throw_no_room = "You have no space here to throw this device"

@@ -3,7 +3,7 @@
 -- @module math
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 local exp = math.exp
@@ -16,7 +16,6 @@ local exp = math.exp
 -- @return number
 -- @realm shared
 function math.ExponentialDecay(halflife, dt)
-	-- ln(0.5) = -0.69..
-	return exp((-0.69314718 / halflife) * dt)
+    -- ln(0.5) = -0.69..
+    return exp((-0.69314718 / halflife) * dt)
 end
-

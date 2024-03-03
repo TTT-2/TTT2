@@ -6,10 +6,11 @@
 
 local baseclass = baseclass
 local pairs = pairs
+-- stylua: ignore
 local CreateConVar = CreateConVar
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 end
 
 roles = {}
@@ -22,15 +23,15 @@ roles.roleList = {}
 -- @return table t target table
 -- @realm shared
 local function TableInherit(t, base)
-	for k, v in pairs(base) do
-		if t[k] == nil then
-			t[k] = v
-		elseif k ~= "BaseClass" and istable(t[k]) and istable(v[k]) then
-			TableInherit(t[k], v)
-		end
-	end
+    for k, v in pairs(base) do
+        if t[k] == nil then
+            t[k] = v
+        elseif k ~= "BaseClass" and istable(t[k]) and istable(v[k]) then
+            TableInherit(t[k], v)
+        end
+    end
 
-	return t
+    return t
 end
 
 ---
@@ -40,21 +41,21 @@ end
 -- @return boolean returns whether name is based on base
 -- @realm shared
 function roles.IsBasedOn(name, base)
-	local t = roles.GetStored(name)
+    local t = roles.GetStored(name)
 
-	if not t then
-		return false
-	end
+    if not t then
+        return false
+    end
 
-	if t.Base == name then
-		return false
-	end
+    if t.Base == name then
+        return false
+    end
 
-	if t.Base == base then
-		return true
-	end
+    if t.Base == base then
+        return true
+    end
 
-	return roles.IsBasedOn(t.Base, base)
+    return roles.IsBasedOn(t.Base, base)
 end
 
 ---
@@ -63,17 +64,17 @@ end
 -- @todo global vars list
 -- @realm shared
 local function SetupGlobals(roleData)
-	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
+    Dev(1, "[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 
-	local upStr = string.upper(roleData.name)
+    local upStr = string.upper(roleData.name)
 
-	if _G[upStr] then
-		print("[TTT2][ROLE] Overwriting already existing global '" .. upStr .. "' ...")
-	end
+    if _G[upStr] then
+        Dev(1, "[TTT2][ROLE] Overwriting already existing global '" .. upStr .. "' ...")
+    end
 
-	_G["ROLE_" .. upStr] = roleData.index
-	_G[upStr] = roleData
-	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
+    _G["ROLE_" .. upStr] = roleData.index
+    _G[upStr] = roleData
+    _G["SHOP_FALLBACK_" .. upStr] = roleData.name
 end
 
 ---
@@ -82,97 +83,108 @@ end
 -- @todo ConVar list
 -- @realm shared
 local function SetupData(roleData)
-	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
+    Dev(1, "[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
 
-	local conVarData = roleData.conVarData or {}
+    local conVarData = roleData.conVarData or {}
 
-	-- shared
-	if not roleData.notSelectable then
-		if CLIENT then
-			if conVarData.togglable then
-				---
-				-- @realm client
-				CreateConVar("ttt_avoid_" .. roleData.name, "0", {FCVAR_ARCHIVE, FCVAR_USERINFO})
-			end
-		else -- SERVER
-			---
-			-- @realm server
-			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    -- shared
+    if not roleData.notSelectable and SERVER then
+        ---
+        -- @realm server
+        -- stylua: ignore
+        CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-			---
-			-- @realm server
-			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        ---
+        -- @realm server
+        -- stylua: ignore
+        CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-			---
-			-- @realm server
-			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        ---
+        -- @realm server
+        -- stylua: ignore
+        CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-			if not roleData.builtin then
-				---
-				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        -- if we don't compare detective here, roles will never get assigned
+        if not roleData.builtin or roleData.index == ROLE_DETECTIVE then
+            ---
+            -- @realm server
+            -- stylua: ignore
+            CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-				---
-				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+            ---
+            -- @realm server
+            -- stylua: ignore
+            CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-				---
-				-- @realm server
-				CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-			end
-		end
-	end
+            ---
+            -- @realm server
+            -- stylua: ignore
+            CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        end
+    end
 
-	---
-	-- @realm shared
-	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
-	if SERVER then
-		---
-		-- @realm server
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    CreateConVar("ttt2_ragdoll_pinning_" .. roleData.name, tostring(conVarData.ragdollPinning or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
-		---
-		-- @realm server
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_dead_enb", tostring(conVarData.creditsAwardDeadEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+    if SERVER then
+        ---
+        -- @realm server
+        -- stylua: ignore
+        CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		---
-		-- @realm server
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_kill_enb", tostring(conVarData.creditsAwardKillEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        ---
+        -- @realm server
+        -- stylua: ignore
+        CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_dead_enb", tostring(conVarData.creditsAwardDeadEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		local shopFallbackValue
+        ---
+        -- @realm server
+        -- stylua: ignore
+        CreateConVar("ttt_" .. roleData.abbr .. "_credits_award_kill_enb", tostring(conVarData.creditsAwardKillEnable or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		if not conVarData.shopFallback and roleData.fallbackTable then
-			shopFallbackValue = SHOP_UNSET
-		else
-			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
-		end
+        local shopFallbackValue
 
-		---
-		-- @realm server
-		SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+        if not conVarData.shopFallback and roleData.fallbackTable then
+            shopFallbackValue = SHOP_UNSET
+        else
+            shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback)
+                or SHOP_DISABLED
+        end
 
-		if conVarData.traitorKill then
-			---
-			-- @realm server
-			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-		end
-	else -- CLIENT
-		roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
+        ---
+        -- @realm server
+        -- stylua: ignore
+        SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
 
-		-- set a roledata icon material to prevent creating new materials each frame
-		roleData.iconMaterial = Material(roleData.icon)
+        if conVarData.traitorKill then
+            ---
+            -- @realm server
+            -- stylua: ignore
+            CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+        end
+    else -- CLIENT
+        roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
 
-		-- set default colors
-		roleData.dkcolor = util.ColorDarken(roleData.color, 30)
-		roleData.ltcolor = util.ColorLighten(roleData.color, 30)
-		roleData.bgcolor = util.ColorComplementary(roleData.color)
-	end
+        -- set a roledata icon material to prevent creating new materials each frame
+        roleData.iconMaterial = Material(roleData.icon)
 
-	-- set fallback data if not already exists
-	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE -- fix defaultTeam
+        -- set default colors
+        roleData.dkcolor = util.ColorDarken(roleData.color, 30)
+        roleData.ltcolor = util.ColorLighten(roleData.color, 30)
+        roleData.bgcolor = util.ColorComplementary(roleData.color)
+    end
 
-	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
+    -- set fallback data if not already exists
+    roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE -- fix defaultTeam
+
+    Dev(1, "[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
 ---
@@ -182,33 +194,39 @@ end
 -- @param string name role name
 -- @realm shared
 function roles.Register(t, name)
-	name = string.lower(name)
+    name = string.lower(name)
 
-	local old = roles.roleList[name]
-	if old then return end
+    local old = roles.roleList[name]
+    if old then
+        return
+    end
 
-	t.ClassName = name
-	t.name = name
-	t.isAbstract = t.isAbstract or false
+    t.ClassName = name
+    t.name = name
+    t.isAbstract = t.isAbstract or false
 
-	if not t.isAbstract then
-		-- set id
-		t.index = t.index or roles.GenerateNewRoleID()
+    if not t.isAbstract then
+        -- set id
+        t.index = t.index or roles.GenerateNewRoleID()
 
-		SetupGlobals(t)
+        SetupGlobals(t)
 
-		t.id = t.index
-	end
+        t.id = t.index
+    end
 
-	roles.roleList[name] = t
+    roles.roleList[name] = t
 
-	local upStr = string.upper(name)
+    local upStr = string.upper(name)
 
-	if roles[upStr] then
-		print("[TTT2][ROLE] Role '" .. name .. "' interferes with the 'roles' table (function or role with same name is already registered)!")
-	end
+    if roles[upStr] then
+        ErrorNoHaltWithStack(
+            "[TTT2][ROLE] Role '"
+                .. name
+                .. "' interferes with the 'roles' table (function or role with same name is already registered)!"
+        )
+    end
 
-	roles[upStr] = t
+    roles[upStr] = t
 end
 
 ---
@@ -216,35 +234,34 @@ end
 -- @local
 -- @realm shared
 function roles.OnLoaded()
+    --
+    -- Once all the scripts are loaded we can set up the baseclass
+    -- - we have to wait until they're all setup because load order
+    -- could cause some entities to load before their bases!
+    --
+    for k, v in pairs(roles.roleList) do
+        roles.Get(k, v)
 
-	--
-	-- Once all the scripts are loaded we can set up the baseclass
-	-- - we have to wait until they're all setup because load order
-	-- could cause some entities to load before their bases!
-	--
-	for k, v in pairs(roles.roleList) do
-		roles.Get(k, v)
+        baseclass.Set(k, v)
 
-		baseclass.Set(k, v)
+        if not v.isAbstract then
+            v:PreInitialize()
+        end
+    end
 
-		if not v.isAbstract then
-			v:PreInitialize()
-		end
-	end
+    -- Setup data (eg. convars for all roles)
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract then
+            SetupData(v)
+        end
+    end
 
-	-- Setup data (eg. convars for all roles)
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract then
-			SetupData(v)
-		end
-	end
-
-	-- Call Initialize() on all roles
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract then
-			v:Initialize()
-		end
-	end
+    -- Call Initialize() on all roles
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract then
+            v:Initialize()
+        end
+    end
 end
 
 ---
@@ -254,33 +271,41 @@ end
 -- @return table returns the modified retTbl or the new role table
 -- @realm shared
 function roles.Get(name, retTbl)
-	local stored = roles.GetStored(name)
-	if not stored then return end
+    local stored = roles.GetStored(name)
+    if not stored then
+        return
+    end
 
-	-- Create/copy a new table
-	local retval = retTbl or {}
+    -- Create/copy a new table
+    local retval = retTbl or {}
 
-	if retval ~= stored then
-		for k, v in pairs(stored) do
-			retval[k] = istable(v) and table.Copy(v) or v
-		end
-	end
+    if retval ~= stored then
+        for k, v in pairs(stored) do
+            retval[k] = istable(v) and table.Copy(v) or v
+        end
+    end
 
-	retval.Base = retval.Base or "ttt_role_base"
+    retval.Base = retval.Base or "ttt_role_base"
 
-	-- If we're not derived from ourselves (a base role)
-	-- then derive from our 'Base' role.
-	if retval.Base ~= name then
-		local base = roles.Get(retval.Base)
+    -- If we're not derived from ourselves (a base role)
+    -- then derive from our 'Base' role.
+    if retval.Base ~= name then
+        local base = roles.Get(retval.Base)
 
-		if not base then
-			Msg("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
-		else
-			retval = TableInherit(retval, base)
-		end
-	end
+        if not base then
+            ErrorNoHaltWithStack(
+                "ERROR: Trying to derive role "
+                    .. tostring(name)
+                    .. " from non existant role "
+                    .. tostring(retval.Base)
+                    .. "!\n"
+            )
+        else
+            retval = TableInherit(retval, base)
+        end
+    end
 
-	return retval
+    return retval
 end
 
 ---
@@ -289,7 +314,7 @@ end
 -- @return table returns the real role table
 -- @realm shared
 function roles.GetStored(name)
-	return roles.roleList[name]
+    return roles.roleList[name]
 end
 
 ---
@@ -297,18 +322,18 @@ end
 -- @return table all registered roles
 -- @realm shared
 function roles.GetList()
-	local result = {}
+    local result = {}
 
-	local i = 0
+    local i = 0
 
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract then
-			i = i + 1
-			result[i] = v
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract then
+            i = i + 1
+            result[i] = v
+        end
+    end
 
-	return result
+    return result
 end
 
 ---
@@ -324,16 +349,16 @@ end
 -- @return number new generated subrole id
 -- @realm shared
 function roles.GenerateNewRoleID()
-	local id = 3 -- 3 nops (4, 5, 6)
-	local reservedList = {"INNOCENT", "TRAITOR", "DETECTIVE", "NONE"}
+    local id = 3 -- 3 nops (4, 5, 6)
+    local reservedList = { "INNOCENT", "TRAITOR", "DETECTIVE", "NONE" }
 
-	for i = 1, #reservedList do
-		if not roles[reservedList[i]] then
-			id = id + 1
-		end
-	end
+    for i = 1, #reservedList do
+        if not roles[reservedList[i]] then
+            id = id + 1
+        end
+    end
 
-	return #roles.GetList() + id
+    return #roles.GetList() + id
 end
 
 ---
@@ -343,13 +368,13 @@ end
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetByIndex(index, fallback)
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract and v.index == index then
-			return v
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract and v.index == index then
+            return v
+        end
+    end
 
-	return fallback or roles.NONE
+    return fallback or roles.NONE
 end
 
 ---
@@ -358,7 +383,7 @@ end
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetByName(name)
-	return roles.GetStored(name) or roles.NONE
+    return roles.GetStored(name) or roles.NONE
 end
 
 ---
@@ -367,13 +392,13 @@ end
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetByAbbr(abbr)
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract and v.abbr == abbr then
-			return v
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract and v.abbr == abbr then
+            return v
+        end
+    end
 
-	return roles.NONE
+    return roles.NONE
 end
 
 ---
@@ -383,15 +408,15 @@ end
 -- @todo data table structure
 -- @realm shared
 function roles.InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
-	name = string.Trim(name)
+    name = string.Trim(name)
 
-	local teamname = string.lower(name) .. "s"
+    local teamname = string.lower(name) .. "s"
 
-	_G["TEAM_" .. string.upper(name)] = teamname
+    _G["TEAM_" .. string.upper(name)] = teamname
 
-	data.iconMaterial = Material(data.icon)
+    data.iconMaterial = Material(data.icon)
 
-	TEAMS[teamname] = data
+    TEAMS[teamname] = data
 end
 
 ---
@@ -399,11 +424,11 @@ end
 -- @param table tbl table to sort
 -- @realm shared
 function roles.SortTable(tbl)
-	local _func = function(a, b)
-		return a.index < b.index
-	end
+    local _func = function(a, b)
+        return a.index < b.index
+    end
 
-	table.sort(tbl, _func)
+    table.sort(tbl, _func)
 end
 
 ---
@@ -411,23 +436,25 @@ end
 -- @return table list of roles that have access to a shop
 -- @realm shared
 function roles.GetShopRoles()
-	local shopRoles = {}
+    local shopRoles = {}
 
-	local i = 0
+    local i = 0
 
-	for _, v in pairs(roles.roleList) do
-		if v.isAbstract or v == roles.NONE then continue end
+    for _, v in pairs(roles.roleList) do
+        if v.isAbstract or v == roles.NONE then
+            continue
+        end
 
-		local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
-		if shopFallback ~= SHOP_DISABLED then
-			i = i + 1
-			shopRoles[i] = v
-		end
-	end
+        local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
+        if shopFallback ~= SHOP_DISABLED then
+            i = i + 1
+            shopRoles[i] = v
+        end
+    end
 
-	roles.SortTable(shopRoles)
+    roles.SortTable(shopRoles)
 
-	return shopRoles
+    return shopRoles
 end
 
 ---
@@ -436,17 +463,17 @@ end
 -- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function roles.GetDefaultTeamRole(team)
-	if team == TEAM_NONE then
-		return roles.NONE
-	end
+    if team == TEAM_NONE then
+        return roles.NONE
+    end
 
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract and v:IsBaseRole() and v.defaultTeam == team then
-			return v
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract and v:IsBaseRole() and v.defaultTeam == team then
+            return v
+        end
+    end
 
-	return roles.NONE
+    return roles.NONE
 end
 
 ---
@@ -455,7 +482,7 @@ end
 -- @return table returns the role tables. This will return the <code>NONE</code> role table as well as its subrole tables as fallback.
 -- @realm shared
 function roles.GetDefaultTeamRoles(team)
-	return roles.GetDefaultTeamRole(team):GetSubRoles()
+    return roles.GetDefaultTeamRole(team):GetSubRoles()
 end
 
 ---
@@ -464,21 +491,23 @@ end
 -- @return table returns the member table of a role team.
 -- @realm shared
 function roles.GetTeamMembers(team)
-	if team == TEAM_NONE or TEAMS[team].alone then return end
+    if team == TEAM_NONE or TEAMS[team].alone then
+        return
+    end
 
-	local tmp = {}
-	local plys = player.GetAll()
+    local tmp = {}
+    local plys = player.GetAll()
 
-	local count = 0
+    local count = 0
 
-	for i = 1, #plys do
-		if plys[i]:GetTeam() == team then
-			count = count + 1
-			tmp[count] = plys[i]
-		end
-	end
+    for i = 1, #plys do
+        if plys[i]:GetTeam() == team then
+            count = count + 1
+            tmp[count] = plys[i]
+        end
+    end
 
-	return tmp
+    return tmp
 end
 
 ---
@@ -486,18 +515,23 @@ end
 -- @return table returns a list of all teams that are able to win
 -- @realm shared
 function roles.GetWinTeams()
-	local winTeams = {}
+    local winTeams = {}
 
-	local i = 0
+    local i = 0
 
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
-			i = i + 1
-			winTeams[i] = v.defaultTeam
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if
+            not v.isAbstract
+            and v.defaultTeam ~= TEAM_NONE
+            and not table.HasValue(winTeams, v.defaultTeam)
+            and not v.preventWin
+        then
+            i = i + 1
+            winTeams[i] = v.defaultTeam
+        end
+    end
 
-	return winTeams
+    return winTeams
 end
 
 ---
@@ -505,18 +539,22 @@ end
 -- @return table returns a list of all available teams
 -- @realm shared
 function roles.GetAvailableTeams()
-	local availableTeams = {}
+    local availableTeams = {}
 
-	local i = 0
+    local i = 0
 
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
-			i = i + 1
-			availableTeams[i] = v.defaultTeam
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if
+            not v.isAbstract
+            and v.defaultTeam ~= TEAM_NONE
+            and not table.HasValue(availableTeams, v.defaultTeam)
+        then
+            i = i + 1
+            availableTeams[i] = v.defaultTeam
+        end
+    end
 
-	return availableTeams
+    return availableTeams
 end
 
 ---
@@ -524,20 +562,20 @@ end
 -- @return table returns a list of all roles
 -- @realm shared
 function roles.GetSortedRoles()
-	local rls = {}
+    local rls = {}
 
-	local i = 0
+    local i = 0
 
-	for _, v in pairs(roles.roleList) do
-		if not v.isAbstract then
-			i = i + 1
-			rls[i] = v
-		end
-	end
+    for _, v in pairs(roles.roleList) do
+        if not v.isAbstract then
+            i = i + 1
+            rls[i] = v
+        end
+    end
 
-	roles.SortTable(rls)
+    roles.SortTable(rls)
 
-	return rls
+    return rls
 end
 
 ---
@@ -547,22 +585,41 @@ end
 -- @param ROLE baserole the BaseRole
 -- @realm shared
 function roles.SetBaseRole(roleTable, baserole)
-	if roleTable.baserole then
-		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. roleTable.name .. " already set (" .. roleTable.baserole .. ")!")
-	elseif roleTable.index == baserole then
-		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole " .. roleTable.name .. " can't be a baserole of itself!")
-	else
-		local br = roles.GetByIndex(baserole)
+    if roleTable.baserole then
+        error(
+            "[TTT2][ROLE-SYSTEM][ERROR] BaseRole of "
+                .. roleTable.name
+                .. " already set ("
+                .. roleTable.baserole
+                .. ")!"
+        )
+    elseif roleTable.index == baserole then
+        error(
+            "[TTT2][ROLE-SYSTEM][ERROR] BaseRole "
+                .. roleTable.name
+                .. " can't be a baserole of itself!"
+        )
+    else
+        local br = roles.GetByIndex(baserole)
 
-		if br.baserole then
-			error("[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
+        if br.baserole then
+            error(
+                "[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well."
+            )
 
-			return
-		end
+            return
+        end
 
-		roleTable.baserole = baserole
-		roleTable.defaultTeam = br.defaultTeam
+        roleTable.baserole = baserole
+        roleTable.defaultTeam = br.defaultTeam
 
-		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleTable.name .. "' subrole with baserole '" .. br.name .. "'")
-	end
+        Dev(
+            1,
+            "[TTT2][ROLE-SYSTEM] Connected '"
+                .. roleTable.name
+                .. "' subrole with baserole '"
+                .. br.name
+                .. "'"
+        )
+    end
 end

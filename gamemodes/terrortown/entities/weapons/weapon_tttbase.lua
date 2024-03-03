@@ -1,7 +1,7 @@
 ---
 -- @class SWEP
 -- @desc Custom weapon base, used to derive from CS one, still very similar.
--- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
+-- See <a href="https://wiki.facepunch.com/gmod/Weapon">Weapon</a>
 -- @section weapon_tttbase
 
 local math = math
@@ -14,11 +14,19 @@ local draw = draw
 local weaponMetaTable = FindMetaTable("Weapon")
 
 if SERVER then
-	AddCSLuaFile()
-else -- CLIENT
-	-- hud help font
-	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 17, weight = 600})
-	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
+    AddCSLuaFile()
+end
+
+if CLIENT then
+    -- hud help font
+    surface.CreateAdvancedFont(
+        "weapon_hud_help",
+        { font = "Tahoma", size = 16, weight = 600, extended = true }
+    )
+    surface.CreateAdvancedFont(
+        "weapon_hud_help_key",
+        { font = "Tahoma", size = 13, weight = 1200, extended = true }
+    )
 end
 
 --   TTT SPECIAL EQUIPMENT FIELDS
@@ -39,35 +47,51 @@ SWEP.CanBuy = nil
 SWEP.notBuyable = false
 
 if CLIENT then
-	-- If this is a buyable weapon (ie. CanBuy is not nil) EquipMenuData must be
-	-- a table containing some information to show in the Equipment Menu. See
-	-- default equipment weapons for real-world examples.
-	SWEP.EquipMenuData = nil
+    -- If this is a buyable weapon (ie. CanBuy is not nil) EquipMenuData must be
+    -- a table containing some information to show in the Equipment Menu. See
+    -- default equipment weapons for real-world examples.
+    SWEP.EquipMenuData = nil
 
-	-- Example data:
-	-- SWEP.EquipMenuData = {
-	--
-	--   Type tells players if it's a weapon or item
-	--	 type = "Weapon",
-	--
-	--   Desc is the description in the menu. Needs manual linebreaks (via \n).
-	--	 desc = "Text."
-	-- }
+    -- Example data:
+    -- SWEP.EquipMenuData = {
+    --
+    --   Type tells players if it's a weapon or item
+    --	 type = "Weapon",
+    --
+    --   Desc is the description in the menu. Needs manual linebreaks (via \n).
+    --	 desc = "Text."
+    -- }
 
-	-- This sets the icon shown for the weapon in the DNA sampler, search window,
-	-- equipment menu (if buyable), etc.
-	SWEP.Icon = "vgui/ttt/icon_nades" -- most generic icon I guess
+    -- This sets the icon shown for the weapon in the DNA sampler, search window,
+    -- equipment menu (if buyable), etc.
+    SWEP.Icon = "vgui/ttt/icon_nades" -- most generic icon I guess
 
-	-- You can make your own weapon icon using the template in:
-	--	/garrysmod/gamemodes/terrortown/template/
+    -- You can make your own weapon icon using the template in:
+    --	/garrysmod/gamemodes/terrortown/template/
 
-	-- Open one of TTT's icons with VTFEdit to see what kind of settings to use
-	-- when exporting to VTF. Once you have a VTF and VMT, you can
-	-- resource.AddFile("materials/vgui/...") them here. GIVE YOUR ICON A UNIQUE
-	-- FILENAME, or it WILL be overwritten by other servers! Gmod does not check
-	-- if the files are different, it only looks at the name. I recommend you
-	-- create your own directory so that this does not happen,
-	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+    -- Open one of TTT's icons with VTFEdit to see what kind of settings to use
+    -- when exporting to VTF. Once you have a VTF and VMT, you can
+    -- resource.AddFile("materials/vgui/...") them here. GIVE YOUR ICON A UNIQUE
+    -- FILENAME, or it WILL be overwritten by other servers! Gmod does not check
+    -- if the files are different, it only looks at the name. I recommend you
+    -- create your own directory so that this does not happen,
+    -- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+
+    -- Set this to true ONLY if a weapon uses CS:S viewmodels that fail to recenter after firing.
+    -- Also requires SWEP.IdleAnim to be set to the appropriate animation, usually ACT_VM_IDLE or ACT_VM_IDLE_SILENCED.
+    SWEP.idleResetFix = false
+
+    -- It set to true, hands are drawn in the view model
+    SWEP.UseHands = false
+
+    -- If set to true, the default world model of the weapon is drawn. If set to false
+    -- the hands are still drawn in the position of the SWEP.HoldType.
+    SWEP.ShowDefaultWorldModel = true
+
+    -- If set to true, the default view model of the weapon is drawn, otherwise it
+    -- is hidden and no view model is drawn. Set SWEP.UseHands to true to only hide
+    -- the weapon but still draw the hands holding it.
+    SWEP.ShowDefaultViewModel = true
 end
 
 --   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
@@ -96,6 +120,9 @@ SWEP.IsSilent = false
 -- in close proximity to this weapon when spawned.
 SWEP.autoAmmoAmount = 0
 
+-- It this is set to true, there will be no pickup notification when receiving this weapon.
+SWEP.silentPickup = false
+
 -- Set Keys like { "HeadshotMultiplier", "Weight", { "Primary", "Recoil" }, { "Secondary", "Ammo" } } if you want the data to be persistent after hotreloads
 -- Empty it before a hotreload to reset data after a hotreload, otherwise this data keep persisting until you do a map reload or restart your server
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
@@ -113,10 +140,10 @@ SWEP.HotReloadableKeys = {}
 --   YE OLDE SWEP STUFF
 
 if CLIENT then
-	SWEP.DrawCrosshair = false
-	SWEP.ViewModelFOV = 82
-	SWEP.ViewModelFlip = true
-	SWEP.CSMuzzleFlashes = true
+    SWEP.DrawCrosshair = false
+    SWEP.ViewModelFOV = 82
+    SWEP.ViewModelFlip = true
+    SWEP.CSMuzzleFlashes = true
 end
 
 SWEP.Base = "weapon_base"
@@ -158,33 +185,53 @@ SWEP.DeploySpeed = 1.4
 
 SWEP.PrimaryAnim = ACT_VM_PRIMARYATTACK
 SWEP.ReloadAnim = ACT_VM_RELOAD
+SWEP.IdleAnim = ACT_VM_IDLE
 
 SWEP.fingerprints = {}
 
 --[[
-	-- The position offset applied when entering the ironsight
-	SWEP.IronSightsPos = Vector(0, 0, 0)
-	-- The rotational offset applied when entering the ironsight
-	SWEP.IronSightsAng = Vector(0, 0, 0)
+    -- The position offset applied when entering the ironsight
+    SWEP.IronSightsPos = Vector(0, 0, 0)
+    -- The rotational offset applied when entering the ironsight
+    SWEP.IronSightsAng = Vector(0, 0, 0)
 --]]
 
 local skipWeapons = {}
 
 ---
 -- Checks if the weapon should be skipped. Skips all weapons not based on weapon_tttbase
--- @param weapon swep the weapon to check
+-- @param Weapon swep the weapon to check
 -- @realm shared
 -- @internal
 local function shouldSkipWeapon(swep)
-	local className = swep:GetClass()
-	local skipWeapon = skipWeapons[className]
+    local className = swep:GetClass()
+    local skipWeapon = skipWeapons[className]
 
-	if skipWeapon == nil then
-		skipWeapon = not weapons.IsBasedOn(className, "weapon_tttbase")
-		skipWeapons[className] = skipWeapon
-	end
+    if skipWeapon == nil then
+        skipWeapon = not weapons.IsBasedOn(className, "weapon_tttbase")
+        skipWeapons[className] = skipWeapon
+    end
 
-	return skipWeapon
+    return skipWeapon
+end
+
+-- The original Remove is not saved in the weaponMetaTable, it only exists on Entity.
+local oldRemove = FindMetaTable("Entity").Remove
+
+---
+-- This changes the function Remove of all weapons, but only affects ones that implement ShouldRemove
+-- This enables changing weapon drop behavior against a convention of being removed
+-- @param any ... A variable amount of arguments passed to this event
+-- @realm shared
+function weaponMetaTable:Remove(...)
+    if self.ShouldRemove and isfunction(self.ShouldRemove) then
+        local res = self:ShouldRemove(...)
+        if not res then
+            return res
+        end
+    end
+
+    return oldRemove(self, ...)
 end
 
 -- The original SetNextPrimaryFire saved in the weaponMetaTable
@@ -195,338 +242,641 @@ local tickInterval = engine.TickInterval()
 -- This changes the function SetNextPrimaryFire of all weapons, but filters out all weapons not based on the weapon_tttbase
 -- This compensates for weapons not having the same timesteps as the serverside-tickrate, which otherwise would lead to a lower firerate on average
 -- @param number nextTime The time you want to have the next primary attack available
--- @param[opt] bool skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
+-- @param[opt] boolean skipTickrateFix If you want to use the old function and just SetNextPrimaryFire without Tickrate Fix
 -- @realm shared
 function weaponMetaTable:SetNextPrimaryFire(nextTime, skipTickrateFix)
-	if not skipTickrateFix and not shouldSkipWeapon(self) then
-		local diff = CurTime() - self:GetNextPrimaryFire()
+    if not skipTickrateFix and not shouldSkipWeapon(self) then
+        local diff = CurTime() - self:GetNextPrimaryFire()
 
-		if diff > 0 and diff < tickInterval then
-			nextTime = nextTime - diff
-		end
-	end
+        if diff > 0 and diff < tickInterval then
+            nextTime = nextTime - diff
+        end
+    end
 
-	oldSetNextPrimaryFire(self, nextTime)
+    oldSetNextPrimaryFire(self, nextTime)
 end
 
 ---
 -- @realm client
+-- stylua: ignore
 local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE, "Toggles whether the `cball_bounce` Effect should get triggered on the hit position") or nil
 
 ---
 -- @realm client
+-- stylua: ignore
 local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE, "Toogles whether you have to hold the key to aim", 0, 1) or nil
 
 -- crosshair
 if CLIENT then
-	local GetPTranslation = LANG.GetParamTranslation
-	local TryT = LANG.TryTranslation
+    local TryT = LANG.TryTranslation
+    local ParT = LANG.GetParamTranslation
 
-	---
-	-- @realm client
-	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
+    local mathRound = math.Round
+    local mathClamp = math.Clamp
+    local mathCeil = math.ceil
+    local mathMax = math.max
 
-	---
-	-- @realm client
-	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+    local CROSSHAIR_MODE_DOT_AND_LINES = 0
+    local CROSSHAIR_MODE_LINES_ONLY = 1
+    local CROSSHAIR_MODE_DOT_ONLY = 2
 
-	---
-	-- @realm client
-	local enable_crosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvOpacitySights = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvEnableCrosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvOpacityCrosshair = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvCrosshairUseWeaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvThicknessCrosshair = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvEnableOutlineCrosshair = CreateConVar("ttt_crosshair_outline_enable", "0", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvThicknessOutlineCrosshair = CreateConVar("ttt_crosshair_outline_thickness", "1", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local enable_crosshair_lines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvHighContrastOutlineCrosshair = CreateConVar("ttt_crosshair_outline_high_contrast", "0", FCVAR_ARCHIVE)
 
-	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
-	local icon_help_secondary = Material("vgui/ttt/hudhelp/rmb")
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
-	---
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
-	-- @realm client
-	function SWEP:DrawHUD()
-		if self.HUDHelp then
-			self:DrawHelp()
-		end
+    local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
+    local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
 
-		local client = LocalPlayer()
+    local animData = {
+        timeStart = 0,
+        timeEnd = 0,
+        valueStart = 0,
+        valueEnd = 0,
+    }
 
-		if not enable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
+    ---
+    -- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
+    -- @realm client
+    function SWEP:DrawHUD()
+        if self.HUDHelp then
+            self:DrawHelp()
+        end
 
-		local sights = not self.NoSights and self:GetIronsights()
-		local x = math.floor(ScrW() * 0.5)
-		local y = math.floor(ScrH() * 0.5)
-		local scale = crosshair_weaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
-		local timescale = 1
+        if not cvEnableCrosshair:GetBool() then
+            return
+        end
 
-		if not crosshair_static:GetBool() then
-			timescale = (2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0))
-		end
+        local client = LocalPlayer()
+        local sights = not self.NoSights and self:GetIronsights()
 
-		local alpha = sights and sights_opacity:GetFloat() or crosshair_opacity:GetFloat()
-		local gap = enable_gap_crosshair:GetBool() and math.floor(timescale * crosshair_gap:GetFloat()) or math.floor(20 * scale * timescale * (sights and 0.8 or 1))
-		local thickness = crosshair_thickness:GetFloat()
-		local outline = math.floor(crosshair_outlinethickness:GetFloat())
-		local length = math.floor(gap + 25 * crosshair_size:GetFloat() * scale * timescale)
-		local offset = thickness * 0.5
+        local xCenter = mathCeil(ScrW() * 0.5)
+        local yCenter = mathCeil(ScrH() * 0.5)
+        local scale = appearance.GetGlobalScale()
+        local baseConeWeapon = mathMax(0.2, 10 * self:GetPrimaryConeBase())
+        local scaleWeapon = cvCrosshairUseWeaponscale:GetBool()
+                and math.max(0.2, 10 * self:GetPrimaryCone())
+            or 1
+        local timescale = 2 - mathClamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0)
 
-		if outline > 0 then
-			surface.SetDrawColor(0, 0, 0, 255 * alpha)
-			surface.DrawRect(x - length - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(x + gap - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
-			surface.DrawRect(x - offset - outline, y - length - outline, thickness + outline * 2, length - gap + outline * 2)
-			surface.DrawRect(x - offset - outline, y + gap - outline, thickness + outline * 2, length - gap + outline * 2)
-		end
+        -- handle size animation
+        if scaleWeapon ~= animData.valueEnd then
+            animData = {
+                timeStart = CurTime(),
+                timeEnd = CurTime() + 0.25,
+                valueStart = animData.valueEnd,
+                valueEnd = scaleWeapon,
+            }
+        end
 
-		-- set up crosshair color
-		local color = client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
+        scaleWeapon = Lerp(
+            math.ease.OutQuint(math.TimeFraction(animData.timeStart, animData.timeEnd, CurTime())),
+            animData.valueStart,
+            animData.valueEnd
+        )
 
-		color = appearance.SelectFocusColor(color)
+        local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
+        local gap = mathCeil(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
+        local thicknessLine = mathCeil(cvThicknessCrosshair:GetFloat() * scale)
+        local thicknessOutline = mathCeil(cvThicknessOutlineCrosshair:GetFloat() * scale)
+        local lengthLine = mathCeil(
+            gap
+                + 25
+                    * cvSizeCrosshair:GetFloat()
+                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon)
+                    * timescale
+                    * scale
+        )
+        local offsetLine = mathCeil(thicknessLine * 0.5)
 
-		surface.SetDrawColor(
-			color.r,
-			color.g,
-			color.b,
-			255 * alpha
-		)
+        -- set up crosshair color
+        local color = appearance.SelectFocusColor(
+            client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
+        )
+        local colorOutline = cvHighContrastOutlineCrosshair:GetBool()
+                and util.GetDefaultColor(color)
+            or COLOR_BLACK
 
-		-- draw crosshair dot
-		if enable_dot_crosshair:GetBool() then
-			surface.DrawRect(x - thickness * 0.5, y - thickness * 0.5, thickness, thickness)
-		end
+        -- draw crosshair dot
+        if
+            cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES
+            or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_ONLY
+        then
+            local xDot = xCenter - offsetLine
+            local yDot = yCenter - offsetLine
 
-		-- draw crosshair lines
-		if enable_crosshair_lines:GetBool() then
-			surface.DrawRect(x - length, y - offset, length - gap, thickness)
-			surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-			surface.DrawRect(x - offset, y - length, thickness, length - gap)
-			surface.DrawRect(x - offset, y + gap, thickness, length - gap)
-		end
-	end
+            if cvEnableOutlineCrosshair:GetBool() then
+                surface.SetDrawColor(
+                    colorOutline.r,
+                    colorOutline.g,
+                    colorOutline.b,
+                    colorOutline.a * alpha
+                )
 
-	---
-	-- @param number x
-	-- @param number y
-	-- @param string key
-	-- @realm client
-	function SWEP:DrawKeyBox(x, y, key)
-		local pad = 3
-		local pad2 = pad * 2
+                surface.DrawRect(
+                    xDot - thicknessOutline,
+                    yDot - thicknessOutline,
+                    thicknessLine + thicknessOutline * 2,
+                    thicknessLine + thicknessOutline * 2
+                )
+            end
 
-		x = x - pad + 1
-		y = y - pad2 * 0.5 + 1
+            surface.SetDrawColor(color.r, color.g, color.b, color.a * alpha)
 
-		local key_box_w, key_box_h = draw.GetTextSize(key, "weapon_hud_help_key")
+            surface.DrawRect(xDot, yDot, thicknessLine, thicknessLine)
+        end
 
-		key_box_w = key_box_w + 3 * pad
-		key_box_h = key_box_h + pad2
+        -- draw crosshair lines
+        if
+            cvCrosshairMode:GetInt() == CROSSHAIR_MODE_DOT_AND_LINES
+            or cvCrosshairMode:GetInt() == CROSSHAIR_MODE_LINES_ONLY
+        then
+            if cvEnableOutlineCrosshair:GetBool() then
+                surface.SetDrawColor(
+                    colorOutline.r,
+                    colorOutline.g,
+                    colorOutline.b,
+                    colorOutline.a * alpha
+                )
 
-		local key_box_x = x - key_box_w + 1.5 * pad
-		local key_box_y = y - key_box_h + 0.5 * pad2
+                surface.DrawRect(
+                    xCenter - lengthLine - thicknessOutline,
+                    yCenter - offsetLine - thicknessOutline,
+                    lengthLine - gap + thicknessOutline * 2,
+                    thicknessLine + thicknessOutline * 2
+                )
+                surface.DrawRect(
+                    xCenter + gap - thicknessOutline,
+                    yCenter - offsetLine - thicknessOutline,
+                    lengthLine - gap + thicknessOutline * 2,
+                    thicknessLine + thicknessOutline * 2
+                )
+                surface.DrawRect(
+                    xCenter - offsetLine - thicknessOutline,
+                    yCenter - lengthLine - thicknessOutline,
+                    thicknessLine + thicknessOutline * 2,
+                    lengthLine - gap + thicknessOutline * 2
+                )
+                surface.DrawRect(
+                    xCenter - offsetLine - thicknessOutline,
+                    yCenter + gap - thicknessOutline,
+                    thicknessLine + thicknessOutline * 2,
+                    lengthLine - gap + thicknessOutline * 2
+                )
+            end
 
-		surface.SetDrawColor(0, 0, 0, 150)
-		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
-		draw.ShadowedText(key, "weapon_hud_help_key", x, y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-	end
+            surface.SetDrawColor(color.r, color.g, color.b, color.a * alpha)
 
-	---
-	-- Draws a line on the screen
-	-- @param number x x coordinate of the line
-	-- @param number y y coordinate of the line
-	-- @param string text text for the line
-	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
-	-- @realm client
-	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
-		local icon_size = 18
-		local valid_icon = true
+            surface.DrawRect(
+                xCenter - lengthLine,
+                yCenter - offsetLine,
+                lengthLine - gap,
+                thicknessLine
+            )
+            surface.DrawRect(xCenter + gap, yCenter - offsetLine, lengthLine - gap, thicknessLine)
+            surface.DrawRect(
+                xCenter - offsetLine,
+                yCenter - lengthLine,
+                thicknessLine,
+                lengthLine - gap
+            )
+            surface.DrawRect(xCenter - offsetLine, yCenter + gap, thicknessLine, lengthLine - gap)
+        end
+    end
 
-		if isstring(icon_or_key) then
-			self:DrawKeyBox(x, y, icon_or_key)
-		elseif icon_or_key then
-			draw.FilteredShadowedTexture(x - icon_size + 2, y - 17, icon_size, icon_size, icon_or_key, 255, COLOR_WHITE)
-		else
-			valid_icon = false
-		end
+    local colorBox = Color(0, 0, 0, 100)
+    local colorDarkBox = Color(0, 0, 0, 150)
 
-		draw.ShadowedText(TryT(text), "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    local sizeIcon = 16
+    local padYKey = 3
+    local padXKey = 5
 
-		return valid_icon
-	end
+    local function ProcessHelpText(lines, scale)
+        local widthBinding, widthDescription = 0, 0
+        local processedData = {}
 
-	---
-	-- Draws the help text to the bottom of the screen
-	-- @realm client
-	function SWEP:DrawHelp()
-		local data = self.HUDHelp
-		local additional_lines = data.additional_lines
-		local x = ScrW() * 0.5 - data.max_length * 0.5
-		local y_start = ScrH() - 25
-		local y = y_start
-		local delta_y = 25
-		local valid_icon = false
+        for i = 1, #lines do
+            local line = lines[i]
+            local binding = line.binding -- can be an icon or key
+            local description = line.text
 
-		for i = #additional_lines, 1, -1 do
-			local line = additional_lines[i]
-			local drawn_icon = self:DrawHelpLine(x, y, line.text, line.icon)
+            local wBinding, hBinding = 0, 0
+            local isIcon = false
 
-			valid_icon = valid_icon or drawn_icon
-			y = y - delta_y
-		end
+            if isstring(binding) then
+                local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key", scale)
 
-		if valid_icon then
-			local line_x = x + 10
+                wBinding = wKey + 2 * padXKey * scale
+                hBinding = hKey + 2 * padYKey * scale
 
-			draw.ShadowedLine(line_x, y_start + 2, line_x, y + 8, COLOR_WHITE)
-		end
-	end
+                isIcon = false
+            elseif binding then
+                wBinding = sizeIcon * scale
+                hBinding = sizeIcon * scale
+                isIcon = true
+            else
+                continue
+            end
 
-	-- mousebuttons are enough for most weapons
-	local default_key_params = {
-		primaryfire = Key("+attack", "MOUSE1"),
-		secondaryfire = Key("+attack2", "MOUSE2"),
-		usekey = Key("+use", "USE")
-	}
+            local translatedDescription = TryT(description)
+            local wDescription = draw.GetTextSize(translatedDescription, "weapon_hud_help", scale)
 
-	---
-	-- Adds a help text for the weapon to the HUD.
-	-- TTT legacy function.
-	-- @param[opt] string primary_text first line of the help text
-	-- @param[optchain] string secondary_text second line of the help text
-	-- @param[optchain][default=false] bool translate should the text get translated
-	-- @param[optchain] table extra_params parameters for @{Lang.GetParamTranslation}
-	-- @realm client
-	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
-		local primary = primary_text
-		local secondary = secondary_text
+            processedData[i] = {
+                w = wBinding,
+                h = hBinding,
+                isIcon = isIcon,
+                binding = binding,
+                description = translatedDescription,
+                wDescription = wDescription,
+            }
 
-		if translate then
-			extra_params = extra_params or {}
-			translate_params = table.Merge(extra_params, default_key_params)
-			primary = primary and GetPTranslation(primary, translate_params)
-			secondary = secondary and GetPTranslation(secondary, translate_params)
-		end
+            widthBinding = math.max(widthBinding, wBinding)
+            widthDescription = math.max(widthDescription, wDescription)
+        end
 
-		--find mouse keys in the texts to add respective icons
-		primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
-		secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2") or nil
+        return widthBinding, widthDescription, processedData
+    end
 
-		self:AddTTT2HUDHelp()
+    ---
+    -- Draws the help text to the bottom of the screen
+    -- @realm client
+    function SWEP:DrawHelp()
+        if not self.HUDHelp or not #self.HUDHelp.bindingLines then
+            return
+        end
+        local scale = appearance.GetGlobalScale()
 
-		if primary then
-			self:AddHUDHelpLine(primary, primary_key)
-		end
+        local baseWidthBinding, baseWidthDescription, processedData =
+            ProcessHelpText(self.HUDHelp.bindingLines, scale)
 
-		if secondary then
-			self:AddHUDHelpLine(secondary, secondary_key)
-		end
-	end
+        local padding = 10 * scale
+        local hLine = 23 * scale
 
-	---
-	-- Adds a help text for the weapon to the HUD.
-	-- @param[opt] string primary_text description for primaryfire
-	-- @param[optchain] string secondary_text description for secondaryfire
-	-- @realm client
-	function SWEP:AddTTT2HUDHelp(primary, secondary)
-		self.HUDHelp = {
-			additional_lines = {},
-			max_length = 0
-		}
+        local wBox = baseWidthBinding + baseWidthDescription + 4 * padding
+        local hBox = hLine * #processedData + 2 * padding
+        local xBox = 0.5 * (ScrW() - wBox)
+        local yBox = ScrH() - hBox
+        local xDivider = xBox + baseWidthBinding + 2 * padding
+        local yDividerStart = yBox + padding
+        local yLine = yDividerStart + 10 * scale
+        local xDescription = xDivider + padding
 
-		if primary then
-			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
-		end
+        if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
+            draw.BlurredBox(xBox, yBox, wBox, hBox)
+            draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
+            draw.Box(xBox, yBox, wBox, mathRound(1 * scale), colorBox) -- top line shadow
+            draw.Box(xBox, yBox, wBox, mathRound(2 * scale), colorBox) -- top line shadow
+            draw.Box(xBox, yBox - mathRound(2 * scale), wBox, mathRound(2 * scale), COLOR_WHITE) -- white top line
+        end
 
-		if secondary then
-			self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
-		end
-	end
+        draw.ShadowedBox(
+            xDivider,
+            yDividerStart,
+            mathRound(scale),
+            hBox - 2 * padding,
+            COLOR_WHITE,
+            scale
+        )
 
-	---
-	-- Adds an additional line to the help text.
-	-- @{SWEP:AddTTT2HUDHelp} needs to be called first
-	-- @param string text text to be displayed on the line
-	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
-	-- @realm client
-	function SWEP:AddHUDHelpLine(text, icon_or_key)
-		if not self.HUDHelp then return end
+        for i = 1, #processedData do
+            local line = processedData[i]
 
-		--replace MOUSE1/MOUSE2 strings with respective icons
-		if isstring(icon_or_key) then
-			if icon_or_key == "MOUSE1" then
-				icon_or_key = icon_help_primary
-			elseif icon_or_key == "MOUSE2" then
-				icon_or_key = icon_help_secondary
-			end
-		end
+            local w = line.w
+            local h = line.h
+            local xBinding = xDivider - padding - w
+            local yBinding = yLine - 0.5 * h
 
-		local width = draw.GetTextSize(text, "weapon_hud_help")
+            if line.isIcon then
+                draw.FilteredShadowedTexture(
+                    xBinding,
+                    yBinding,
+                    w,
+                    h,
+                    line.binding,
+                    255,
+                    COLOR_WHITE,
+                    scale
+                )
+            else
+                draw.Box(xBinding, yBinding + 1, w, h, colorDarkBox)
+                draw.OutlinedShadowedBox(xBinding, yBinding + 1, w, h, 1, COLOR_WHITE)
 
-		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
-		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
-	end
+                draw.AdvancedText(
+                    line.binding,
+                    "weapon_hud_help_key",
+                    xBinding + 0.5 * w,
+                    yLine,
+                    COLOR_WHITE,
+                    TEXT_ALIGN_CENTER,
+                    TEXT_ALIGN_CENTER,
+                    true,
+                    scale
+                )
+            end
 
-	---
-	-- This hook draws the selection icon in the weapon selection menu.
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
-	-- @realm client
-	function SWEP:DrawWeaponSelection()
+            draw.AdvancedText(
+                line.description,
+                "weapon_hud_help",
+                xDescription,
+                yLine,
+                COLOR_WHITE,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_CENTER,
+                true,
+                scale
+            )
 
-	end
+            yLine = yLine + hLine
+        end
+    end
 
-	---
-	-- @realm client
-	function SWEP:CalcViewModel()
-		if not IsFirstTimePredicted() then return end
+    -- mousebuttons are enough for most weapons
+    local defaultKeyParams = {
+        primaryfire = Key("+attack", "MOUSE1"),
+        secondaryfire = Key("+attack2", "MOUSE2"),
+        usekey = Key("+use", "USE"),
+    }
 
-		self.bIron = self:GetIronsights()
-		self.fIronTime = self:GetIronsightsTime()
-		self.fCurrentTime = CurTime()
-		self.fCurrentSysTime = SysTime()
-	end
+    ---
+    -- Adds a help text for the weapon to the HUD.
+    -- @deprecated TTT legacy function. Do not use for new addons!
+    -- @param[opt] string primary_text first line of the help text
+    -- @param[optchain] string secondary_text second line of the help text
+    -- @param[optchain][default=false] boolean translate should the text get translated
+    -- @param[optchain] table extraKeyParams parameters for @{Lang.GetParamTranslation}
+    -- @realm client
+    function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extraKeyParams)
+        local primary = primary_text
+        local secondary = secondary_text
 
-	---
-	-- This hook can be used by swep addons to populate the equipment settings page
-	-- with custom convars. The parent is the submenu, where a new form has to
-	-- be added.
-	-- @param DPanel parent The parent panel which is the submenu
-	-- @hook
-	-- @realm client
-	function SWEP:AddToSettingsMenu(parent)
+        if translate then
+            extraKeyParams = extraKeyParams or {}
+            translate_params = table.Merge(extraKeyParams, defaultKeyParams)
+            primary = primary and ParT(primary, translate_params)
+            secondary = secondary and ParT(secondary, translate_params)
+        end
 
-	end
+        --find mouse keys in the texts to add respective icons
+        primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
+        secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2")
+            or nil
+
+        self:ClearHUDHelp()
+
+        if primary then
+            self:AddHUDHelpLine(primary, primary_key)
+        end
+
+        if secondary then
+            self:AddHUDHelpLine(secondary, secondary_key)
+        end
+    end
+
+    ---
+    -- Adds a help text for the weapon to the HUD.
+    -- @param[opt] string primary_text description for primaryfire
+    -- @param[optchain] string secondary_text description for secondaryfire
+    -- @realm client
+    function SWEP:AddTTT2HUDHelp(primary, secondary)
+        self:ClearHUDHelp()
+
+        if primary then
+            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
+        end
+
+        if secondary then
+            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
+        end
+    end
+
+    ---
+    -- Utility for removing all existing help lines so more can be added.
+    -- This can be useful for dynamically updating help text.
+    -- @realm client
+    function SWEP:ClearHUDHelp()
+        self.HUDHelp = {
+            bindingLines = {},
+            max_length = 0,
+        }
+    end
+
+    ---
+    -- Adds an additional line to the help text.
+    -- @{SWEP:AddTTT2HUDHelp} needs to be called first
+    -- @param string text text to be displayed on the line
+    -- @param[opt] Material|string materialOrBinding icon or description for the concerning key
+    -- @realm client
+    function SWEP:AddHUDHelpLine(text, materialOrBinding)
+        if not self.HUDHelp then
+            return
+        end
+
+        --replace MOUSE1/MOUSE2 strings with respective icons
+        if isstring(materialOrBinding) then
+            if materialOrBinding == "MOUSE1" then
+                materialOrBinding = materialKeyLMB
+            elseif materialOrBinding == "MOUSE2" then
+                materialOrBinding = materialKeyRMB
+            end
+        end
+
+        local width = draw.GetTextSize(text, "weapon_hud_help")
+
+        self.HUDHelp.bindingLines[#self.HUDHelp.bindingLines + 1] =
+            { text = text, binding = materialOrBinding }
+        self.HUDHelp.max_length = math.max(self.HUDHelp.max_length or 0, width)
+    end
+
+    ---
+    -- This hook draws the selection icon in the weapon selection menu.
+    -- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
+    -- @realm client
+    function SWEP:DrawWeaponSelection() end
+
+    ---
+    -- @realm client
+    function SWEP:OnRemove()
+        local owner = self:GetOwner()
+
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
+
+    ---
+    -- @realm client
+    function SWEP:CalcViewModel()
+        if not IsFirstTimePredicted() then
+            return
+        end
+
+        self.bIron = self:GetIronsights()
+        self.fIronTime = self:GetIronsightsTime()
+        self.fCurrentTime = CurTime()
+        self.fCurrentSysTime = SysTime()
+    end
+
+    ---
+    -- Adds a custom view model.
+    -- @note Multiple view models can be added, they are all rendered at once.
+    -- @note Call this in @{SWEP:InitializeCustomModels}.
+    -- @param string identifier The name of the added view model
+    -- @param ModelData modelData The model data table
+    -- @realm client
+    function SWEP:AddCustomViewModel(identifier, modelData)
+        self.customViewModelElements = self.customViewModelElements or {}
+
+        self.customViewModelElements[identifier] = weaponrenderer.CreateModel(self, modelData)
+    end
+
+    ---
+    -- Adds a custom world model.
+    -- @note Multiple world models can be added, they are all rendered at once.
+    -- @note Call this in @{SWEP:InitializeCustomModels}.
+    -- @param string identifier The name of the added world model
+    -- @param ModelData modelData The model data table
+    -- @realm client
+    function SWEP:AddCustomWorldModel(identifier, modelData)
+        self.customWorldModelElements = self.customWorldModelElements or {}
+
+        self.customWorldModelElements[identifier] = weaponrenderer.CreateModel(self, modelData)
+    end
+
+    ---
+    -- Adds modifications to view model bones.
+    -- @param string identifier The identifier for this bone
+    -- @param BoneData boneData The bone data table
+    -- @realm client
+    function SWEP:ApplyViewModelBoneMods(identifier, boneData)
+        self.customViewModelBoneMods = self.customViewModelBoneMods or {}
+        self.customViewModelBoneMods[identifier] = boneData
+    end
+
+    ---
+    -- Initialization function that is only used to initialize custom view and world models with
+    -- @{SWEP:AddCustomViewModel} and @{SWEP:AddCustomWorldModel}.
+    -- @warning This function is also called in the setup for clientside weapon entities for the UI.
+    -- Therefore this function should only contain the setup calls for custom view and world models.
+    -- Entity specific function calls might throw errors in this function.
+    -- @realm client
+    function SWEP:InitializeCustomModels() end
+
+    ---
+    -- Called straight after the view model has been drawn. This is called before
+    -- @{GM:PostDrawViewModel} and @{WEAPON:PostDrawViewModel}.
+    -- @warning If you override ViewModelDrawn in your SWEP and you are using a custom world or
+    -- view model, you should call BaseClass.ViewModelDrawn(self) so as not to break viewmodels.
+    -- @param Entity viewModel Player's view model
+    -- @see https://wiki.facepunch.com/gmod/WEAPON:ViewModelDrawn
+    -- @realm client
+    function SWEP:ViewModelDrawn(viewModel)
+        weaponrenderer.RenderViewModel(self, self.customViewModelElements, viewModel)
+    end
+
+    ---
+    -- Called when we are about to draw the world model.
+    -- @realm client
+    function SWEP:DrawWorldModel()
+        local client = LocalPlayer()
+
+        -- draw view model when spectating player
+        if
+            client:GetObserverMode() == OBS_MODE_IN_EYE
+            and client:GetObserverTarget() == self:GetOwner()
+        then
+            return
+        end
+
+        weaponrenderer.RenderWorldModel(self, self, self.customWorldModelElements, self:GetOwner())
+    end
+
+    ---
+    -- Allows you to modify viewmodel while the weapon in use before it is drawn.
+    -- @warning This hook only works if you haven't overridden @{GM:PreDrawViewModel}.
+    -- @param Entity viewModel This is the view model entity before it is drawn
+    -- @param Player ply The the owner of the view model
+    -- @param Weapon wep This is the weapon that is from the view model
+    -- @return boolean Return true to prevent the default view model rendering. This also affects @{GM:PostDrawViewModel}
+    -- @realm client
+    hook.Add("PreDrawViewModel", "TTT2ViewModelHider", function(viewModel, ply, wep)
+        -- special case: Hands should be shown, but the view model weapon shouldn't be; in this
+        -- case we have to apply this debug material to make it invisible because returning true
+        -- in this hook would prevent both the hands and the weapon from rendering
+        if wep.UseHands and not wep.ShowDefaultViewModel then
+            viewModel:SetMaterial("vgui/hsv")
+
+            return
+        end
+
+        -- default case: Normal view model texture is used and view model draw is defined
+        -- with the SWEP.ShowDefaultViewModel variable
+        viewModel:SetMaterial("")
+
+        -- only return something if we actually want to hide it because otherwise the SWEP
+        -- hook is never called even if the view model is rendered
+        if not wep.ShowDefaultViewModel then
+            return true
+        end
+    end)
+
+    ---
+    -- This hook can be used by swep addons to populate the equipment settings page
+    -- with custom convars. The parent is the submenu, where a new form has to
+    -- be added.
+    -- @param DPanel parent The parent panel which is the submenu
+    -- @hook
+    -- @realm client
+    function SWEP:AddToSettingsMenu(parent) end
 end
 
 ---
@@ -536,38 +886,53 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:PrimaryAttack
 -- @realm shared
 function SWEP:PrimaryAttack(worldsnd)
-	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	if not self:CanPrimaryAttack() then return end
+    if not self:CanPrimaryAttack() then
+        return
+    end
 
-	if not worldsnd then
-		self:EmitSound(self.Primary.Sound, self.Primary.SoundLevel)
-	elseif SERVER then
-		sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
-	end
+    if not worldsnd then
+        self:EmitSound(self.Primary.Sound, self.Primary.SoundLevel)
+    elseif SERVER then
+        sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
+    end
 
-	self:ShootBullet(self.Primary.Damage, self.Primary.Recoil, self.Primary.NumShots, self:GetPrimaryCone())
-	self:TakePrimaryAmmo(1)
+    self:ShootBullet(
+        self.Primary.Damage,
+        self:GetPrimaryRecoil(),
+        self.Primary.NumShots,
+        self:GetPrimaryCone()
+    )
+    self:TakePrimaryAmmo(1)
 
-	local owner = self:GetOwner()
+    local owner = self:GetOwner()
 
-	if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then return end
+    if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then
+        return
+    end
 
-	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
+    owner:ViewPunch(
+        Angle(
+            util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self:GetPrimaryRecoil(),
+            util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self:GetPrimaryRecoil(),
+            0
+        )
+    )
 end
 
 ---
 -- @param function setnext
 -- @realm shared
 function SWEP:DryFire(setnext)
-	if CLIENT and LocalPlayer() == self:GetOwner() then
-		self:EmitSound("Weapon_Pistol.Empty")
-	end
+    if CLIENT and LocalPlayer() == self:GetOwner() then
+        self:EmitSound("Weapon_Pistol.Empty")
+    end
 
-	setnext(self, CurTime() + 0.2)
+    setnext(self, CurTime() + 0.2)
 
-	self:Reload()
+    self:Reload()
 end
 
 ---
@@ -576,15 +941,17 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:CanPrimaryAttack
 -- @realm shared
 function SWEP:CanPrimaryAttack()
-	if not IsValid(self:GetOwner()) then return end
+    if not IsValid(self:GetOwner()) then
+        return
+    end
 
-	if self:Clip1() <= 0 then
-		self:DryFire(self.SetNextPrimaryFire)
+    if self:Clip1() <= 0 then
+        self:DryFire(self.SetNextPrimaryFire)
 
-		return false
-	end
+        return false
+    end
 
-	return true
+    return true
 end
 
 ---
@@ -593,101 +960,164 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:CanSecondaryAttack
 -- @realm shared
 function SWEP:CanSecondaryAttack()
-	if not IsValid(self:GetOwner()) then return end
+    if not IsValid(self:GetOwner()) then
+        return
+    end
 
-	if self:Clip2() <= 0 then
-		self:DryFire(self.SetNextSecondaryFire)
+    if self:Clip2() <= 0 then
+        self:DryFire(self.SetNextSecondaryFire)
 
-		return false
-	end
+        return false
+    end
 
-	return true
+    return true
 end
 
 local function Sparklies(attacker, tr, dmginfo)
-	if not tr.HitWorld or tr.MatType ~= MAT_METAL then return end
+    if not tr.HitWorld or tr.MatType ~= MAT_METAL then
+        return
+    end
 
-	local eff = EffectData()
-	eff:SetOrigin(tr.HitPos)
-	eff:SetNormal(tr.HitNormal)
+    local eff = EffectData()
+    eff:SetOrigin(tr.HitPos)
+    eff:SetNormal(tr.HitNormal)
 
-	util.Effect("cball_bounce", eff)
+    util.Effect("cball_bounce", eff)
 end
 
 ---
 -- A convenience function to shoot bullets
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
 -- @see https://wiki.facepunch.com/gmod/WEAPON:ShootBullet
 -- @realm shared
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
-	self:SendWeaponAnim(self.PrimaryAnim)
+    self:SendWeaponAnim(self.PrimaryAnim)
 
-	self:GetOwner():MuzzleFlash()
-	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    self:GetOwner():MuzzleFlash()
+    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
-	local sights = self:GetIronsights()
+    numbul = numbul or 1
+    cone = cone or 0.02
 
-	numbul = numbul or 1
-	cone = cone or 0.01
+    local bullet = {}
+    bullet.Num = numbul
+    bullet.Src = self:GetOwner():GetShootPos()
+    bullet.Dir = self:GetOwner():GetAimVector()
+    bullet.Spread = Vector(cone, cone, 0)
+    bullet.Tracer = 4
+    bullet.TracerName = self.Tracer or "Tracer"
+    bullet.Force = 10
+    bullet.Damage = dmg * (self.damageScaling or 1)
 
-	local bullet = {}
-	bullet.Num = numbul
-	bullet.Src = self:GetOwner():GetShootPos()
-	bullet.Dir = self:GetOwner():GetAimVector()
-	bullet.Spread = Vector(cone, cone, 0)
-	bullet.Tracer = 4
-	bullet.TracerName = self.Tracer or "Tracer"
-	bullet.Force = 10
-	bullet.Damage = dmg
+    if CLIENT and sparkle:GetBool() then
+        bullet.Callback = Sparklies
+    end
 
-	if CLIENT and sparkle:GetBool() then
-		bullet.Callback = Sparklies
-	end
+    self:GetOwner():FireBullets(bullet)
 
-	self:GetOwner():FireBullets(bullet)
+    -- Owner can die after firebullets
+    if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then
+        return
+    end
 
-	-- Owner can die after firebullets
-	if not IsValid(self:GetOwner()) or not self:GetOwner():Alive() or self:GetOwner():IsNPC() then return end
+    if
+        SERVER and game.SinglePlayer()
+        or CLIENT and not game.SinglePlayer() and IsFirstTimePredicted()
+    then
+        local eyeang = self:GetOwner():EyeAngles()
+        eyeang.pitch = eyeang.pitch - recoil
 
-	if game.SinglePlayer() and SERVER
-	or not game.SinglePlayer() and CLIENT and IsFirstTimePredicted() then
-		-- reduce recoil if ironsighting
-		recoil = sights and (recoil * 0.6) or recoil
+        self:GetOwner():SetEyeAngles(eyeang)
+    end
+end
 
-		local eyeang = self:GetOwner():EyeAngles()
-		eyeang.pitch = eyeang.pitch - recoil
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryConeFactor()
+    local owner = self:GetOwner()
 
-		self:GetOwner():SetEyeAngles(eyeang)
-	end
+    if not IsValid(owner) then
+        return 1
+    end
+
+    if SPRINT:IsSprinting(owner) and not owner:IsOnGround() then
+        return 2.0
+    elseif SPRINT:IsSprinting(owner) or not owner:IsOnGround() then
+        return 1.6
+    elseif self:GetIronsights() then
+        return 0.8
+    else
+        return 1
+    end
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoilFactor()
+    local owner = self:GetOwner()
+
+    if not IsValid(owner) then
+        return 1
+    end
+
+    if SPRINT:IsSprinting(owner) and not owner:IsOnGround() then
+        return 2.8
+    elseif SPRINT:IsSprinting(owner) or not owner:IsOnGround() then
+        return 2.2
+    elseif self:GetIronsights() then
+        return 0.6
+    else
+        return 1
+    end
 end
 
 ---
 -- @return number
 -- @realm shared
 function SWEP:GetPrimaryCone()
-	local cone = self.Primary.Cone or 0.2
+    return self:GetPrimaryConeBase() * self:GetPrimaryConeFactor()
+end
 
-	-- 10% accuracy bonus when sighting
-	return self:GetIronsights() and (cone * 0.85) or cone
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryConeBase()
+    return self.Primary.Cone or 0.02
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoil()
+    return self:GetPrimaryRecoilBase() * self:GetPrimaryRecoilFactor()
+end
+
+---
+-- @return number
+-- @realm shared
+function SWEP:GetPrimaryRecoilBase()
+    return self.Primary.Recoil or 1.5
 end
 
 ---
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @return number
 -- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
-	return self.HeadshotMultiplier
+    return self.HeadshotMultiplier
 end
 
 ---
 -- @return boolean
 -- @realm shared
 function SWEP:IsEquipment()
-	return WEPS.IsEquipment(self)
+    return WEPS.IsEquipment(self)
 end
 
 ---
@@ -696,13 +1126,16 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:SecondaryAttack
 -- @realm shared
 function SWEP:SecondaryAttack()
-	if self.NoSights or not self.IronSightsPos then return end
+    if self.NoSights or not self.IronSightsPos then
+        return
+    end
 
-	local bNotIronsights = not self:GetIronsights()
+    local bNotIronsights = not self:GetIronsights()
 
-	self:SetIronsights(bNotIronsights)
-	self:SetZoom(bNotIronsights)
-	self:SetNextSecondaryFire(CurTime() + 0.3)
+    self:SetIronsights(bNotIronsights)
+    self:SetZoom(bNotIronsights)
+
+    self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
 ---
@@ -711,10 +1144,10 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Deploy
 -- @realm shared
 function SWEP:Deploy()
-	self:SetIronsights(false)
-	self:SetZoom(false)
+    self:SetIronsights(false)
+    self:SetZoom(false)
 
-	return true
+    return true
 end
 
 ---
@@ -722,11 +1155,17 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Reload
 -- @realm shared
 function SWEP:Reload()
-	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
+    if
+        self:Clip1() == self.Primary.ClipSize
+        or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0
+    then
+        return
+    end
 
-	self:DefaultReload(self.ReloadAnim)
-	self:SetIronsights(false)
-	self:SetZoom(false)
+    self:DefaultReload(self.ReloadAnim)
+
+    self:SetIronsights(false)
+    self:SetZoom(false)
 end
 
 ---
@@ -734,10 +1173,10 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:OnRestore
 -- @realm shared
 function SWEP:OnRestore()
-	self.NextSecondaryAttack = 0
+    self.NextSecondaryAttack = 0
 
-	self:SetIronsights(false)
-	self:SetZoom(false)
+    self:SetIronsights(false)
+    self:SetZoom(false)
 end
 
 ---
@@ -746,140 +1185,160 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Ammo1
 -- @realm shared
 function SWEP:Ammo1()
-	return IsValid(self:GetOwner()) and self:GetOwner():GetAmmoCount(self.Primary.Ammo) or false
+    return IsValid(self:GetOwner()) and self:GetOwner():GetAmmoCount(self.Primary.Ammo) or false
 end
 
 if SERVER then
-	---
-	-- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
-	-- does not occur when a drop happens for some reason. Hence this thing.
-	-- @realm server
-	function SWEP:PreDrop()
-		if not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
+    ---
+    -- This allows us to override behavior of PreDrop/OnDrop calls that request equipment be dropped.
+    -- @realm server
+    function SWEP:ShouldRemove()
+        local should_force = self.overrideDropOnDeath
+            and self.overrideDropOnDeath == DROP_ON_DEATH_TYPE_FORCE
+        local deathDrop = self.IsDroppedBecauseDeath
+        if deathDrop and should_force then
+            return false
+        end
 
-		local ammo = self:Ammo1()
+        return true
+    end
 
-		-- Do not drop ammo if we have another gun that uses this type
-		local weps = self:GetOwner():GetWeapons()
+    ---
+    -- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
+    -- does not occur when a drop happens for some reason. Hence this thing.
+    -- @realm server
+    function SWEP:PreDrop()
+        if not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then
+            return
+        end
 
-		for i = 1, #weps do
-			local w = weps[i]
+        local ammo = self:Ammo1()
 
-			if not IsValid(w) or w == self or w:GetPrimaryAmmoType() ~= self:GetPrimaryAmmoType() then continue end
+        -- Do not drop ammo if we have another gun that uses this type
+        local weps = self:GetOwner():GetWeapons()
 
-			ammo = 0
-		end
+        for i = 1, #weps do
+            local w = weps[i]
 
-		self.StoredAmmo = ammo
+            if
+                not IsValid(w)
+                or w == self
+                or w:GetPrimaryAmmoType() ~= self:GetPrimaryAmmoType()
+            then
+                continue
+            end
 
-		if ammo > 0 then
-			self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
-		end
-	end
+            ammo = 0
+        end
 
-	---
-	-- Helper function to slow down dropped weapons
-	-- @realm server
-	function SWEP:DampenDrop()
-		-- For some reason gmod drops guns on death at a speed of 400 units, which
-		-- catapults them away from the body. Here we want people to actually be able
-		-- to find a given corpse's weapon, so we override the velocity here and call
-		-- this when dropping guns on death.
-		local phys = self:GetPhysicsObject()
+        self.StoredAmmo = ammo
 
-		if IsValid(phys) then
-			phys:SetVelocityInstantaneous(Vector(0, 0, - 75) + phys:GetVelocity() * 0.001)
-			phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
-		end
-	end
+        if ammo > 0 then
+            self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
+        end
+    end
 
-	local SF_WEAPON_START_CONSTRAINED = 1
+    ---
+    -- Helper function to slow down dropped weapons
+    -- @realm server
+    function SWEP:DampenDrop()
+        -- For some reason gmod drops guns on death at a speed of 400 units, which
+        -- catapults them away from the body. Here we want people to actually be able
+        -- to find a given corpse's weapon, so we override the velocity here and call
+        -- this when dropping guns on death.
+        local phys = self:GetPhysicsObject()
 
-	---
-	-- Called when a player has picked the weapon up
-	-- Transfers the currently stored ammo to the new player and updates the fingerprints
-	-- @param Player newowner
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:Equip
-	-- @realm server
-	function SWEP:Equip(newowner)
-		if self:IsOnFire() then
-			self:Extinguish()
-		end
+        if IsValid(phys) then
+            phys:SetVelocityInstantaneous(Vector(0, 0, -75) + phys:GetVelocity() * 0.001)
+            phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
+        end
+    end
 
-		self.fingerprints = self.fingerprints or {}
+    local SF_WEAPON_START_CONSTRAINED = 1
 
-		if not table.HasValue(self.fingerprints, newowner) then
-			self.fingerprints[#self.fingerprints + 1] = newowner
-		end
+    ---
+    -- Called when a player has picked the weapon up
+    -- Transfers the currently stored ammo to the new player and updates the fingerprints
+    -- @param Player newowner
+    -- @see https://wiki.facepunch.com/gmod/WEAPON:Equip
+    -- @realm server
+    function SWEP:Equip(newowner)
+        if self:IsOnFire() then
+            self:Extinguish()
+        end
 
-		if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
-			-- If this weapon started constrained, unset that spawnflag, or the
-			-- weapon will be re-constrained and float
-			local flags = self:GetSpawnFlags()
-			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
+        self.fingerprints = self.fingerprints or {}
 
-			self:SetKeyValue("spawnflags", newflags)
-		end
+        if not table.HasValue(self.fingerprints, newowner) then
+            self.fingerprints[#self.fingerprints + 1] = newowner
+        end
 
-		if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
-			local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
-			local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
+        if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
+            -- If this weapon started constrained, unset that spawnflag, or the
+            -- weapon will be re-constrained and float
+            local flags = self:GetSpawnFlags()
+            local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
 
-			newowner:GiveAmmo(given, self.Primary.Ammo)
+            self:SetKeyValue("spawnflags", newflags)
+        end
 
-			self.StoredAmmo = 0
-		end
-	end
+        if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
+            local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
+            local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
 
-	---
-	-- We were bought as special equipment, some weapons will want to do something
-	-- extra for their buyer
-	-- @param Player buyer
-	-- @realm server
-	function SWEP:WasBought(buyer)
+            newowner:GiveAmmo(given, self.Primary.Ammo)
 
-	end
+            self.StoredAmmo = 0
+        end
+    end
 
-	---
-	-- Experimental. Enables a feature that causes a player who is using his ironsights and is killed (by a gun, and not a headshot) to fire an inaccurate dying shot.
-	-- @return boolean
-	-- @see http://www.troubleinterroristtown.com/config-and-commands/convars#TOC-Other-gameplay-settings
-	-- @realm server
-	function SWEP:DyingShot()
-		if not self:GetIronsights() then
-			return false
-		end
+    ---
+    -- We were bought as special equipment, some weapons will want to do something
+    -- extra for their buyer
+    -- @param Player buyer
+    -- @realm server
+    function SWEP:WasBought(buyer) end
 
-		self:SetIronsights(false)
-		self:SetZoom(false)
+    ---
+    -- Experimental. Enables a feature that causes a player who is using his ironsights and is killed (by a gun, and not a headshot) to fire an inaccurate dying shot.
+    -- @return boolean
+    -- @see http://www.troubleinterroristtown.com/config-and-commands/convars#TOC-Other-gameplay-settings
+    -- @realm server
+    function SWEP:DyingShot()
+        if not self:GetIronsights() then
+            return false
+        end
 
-		if self:GetNextPrimaryFire() > CurTime() then
-			return false
-		end
+        self:SetIronsights(false)
+        self:SetZoom(false)
 
-		-- Owner should still be alive here
-		local owner = self:GetOwner()
-		if not IsValid(owner) then
-			return false
-		end
+        if self:GetNextPrimaryFire() > CurTime() then
+            return false
+        end
 
-		local punch = self.Primary.Recoil or 5
+        -- Owner should still be alive here
+        local owner = self:GetOwner()
+        if not IsValid(owner) then
+            return false
+        end
 
-		-- Punch view to disorient aim before firing dying shot
-		local eyeang = owner:EyeAngles()
-		eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
-		eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
+        local punch = self.Primary.Recoil or 5
 
-		owner:SetEyeAngles(eyeang)
+        -- Punch view to disorient aim before firing dying shot
+        local eyeang = owner:EyeAngles()
+        eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
+        eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
 
-		MsgN(owner:Nick() .. " fired his DYING SHOT")
+        owner:SetEyeAngles(eyeang)
 
-		owner.dying_wep = self
+        Dev(1, owner:Nick() .. " fired his DYING SHOT")
 
-		self:PrimaryAttack(true)
+        owner.dying_wep = self
 
-		return true
-	end
+        self:PrimaryAttack(true)
+
+        return true
+    end
 end
 
 ---
@@ -887,23 +1346,23 @@ end
 -- Look at weapon_ttt_m16 for an example of how to use this.
 -- @param boolean zoomIn
 -- @realm shared
-function SWEP:SetZoom(zoomIn)
-
-end
+function SWEP:SetZoom(zoomIn) end
 
 ---
 -- Sets the flag signaling whether or not the ironsights should be used
 -- @param boolean b
 -- @realm shared
 function SWEP:SetIronsights(b)
-	if b == self:GetIronsights() then return end
+    if b == self:GetIronsights() then
+        return
+    end
 
-	self:SetIronsightsPredicted(b)
-	self:SetIronsightsTime(CurTime())
+    self:SetIronsightsPredicted(b)
+    self:SetIronsightsTime(CurTime())
 
-	if CLIENT then
-		self:CalcViewModel()
-	end
+    if CLIENT then
+        self:CalcViewModel()
+    end
 end
 
 ---
@@ -911,7 +1370,7 @@ end
 -- @return boolean
 -- @realm shared
 function SWEP:GetIronsights()
-	return self:GetIronsightsPredicted()
+    return self:GetIronsightsPredicted()
 end
 
 ---
@@ -920,16 +1379,14 @@ end
 -- @return[default=-1] number
 -- @realm shared
 function SWEP:GetIronsightsTime()
-	return -1
+    return -1
 end
 
 ---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
 -- @realm shared
-function SWEP:SetIronsightsTime()
-
-end
+function SWEP:SetIronsightsTime() end
 
 ---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
@@ -937,16 +1394,14 @@ end
 -- @return[default=false] boolean
 -- @realm shared
 function SWEP:GetIronsightsPredicted()
-	return false
+    return false
 end
 
 ---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
 -- @realm shared
-function SWEP:SetIronsightsPredicted()
-
-end
+function SWEP:SetIronsightsPredicted() end
 
 ---
 -- Called when the SWEP should set up its Data Tables.
@@ -955,8 +1410,8 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:SetupDataTables
 -- @realm shared
 function SWEP:SetupDataTables()
-	self:NetworkVar("Bool", 3, "IronsightsPredicted")
-	self:NetworkVar("Float", 3, "IronsightsTime")
+    self:NetworkVar("Bool", 3, "IronsightsPredicted")
+    self:NetworkVar("Float", 3, "IronsightsTime")
 end
 
 ---
@@ -964,21 +1419,53 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Initialize
 -- @realm shared
 function SWEP:Initialize()
-	if CLIENT and self:Clip1() == -1 then
-		self:SetClip1(self.Primary.DefaultClip)
-	elseif SERVER then
-		self.fingerprints = {}
+    if CLIENT then
+        self:InitializeCustomModels()
+    end
 
-		self:SetIronsights(false)
-		self:SetZoom(false)
-	end
+    if CLIENT and self:Clip1() == -1 then
+        self:SetClip1(self.Primary.DefaultClip)
+    elseif SERVER then
+        self.fingerprints = {}
 
-	self:SetDeploySpeed(self.DeploySpeed)
+        self:SetZoom(false)
+        self:SetIronsights(false)
+    end
 
-	-- compat for gmod update
-	if self.SetHoldType then
-		self:SetHoldType(self.HoldType or "pistol")
-	end
+    self:SetDeploySpeed(self.DeploySpeed)
+    self:SetHoldType(self.HoldType or "pistol")
+end
+
+local idle_activities = {
+    [ACT_VM_IDLE] = true,
+    [ACT_VM_IDLE_TO_LOWERED] = true,
+    [ACT_VM_IDLE_LOWERED] = true,
+    [ACT_VM_IDLE_SILENCED] = true,
+    [ACT_VM_IDLE_EMPTY_LEFT] = true,
+    [ACT_VM_IDLE_EMPTY] = true,
+    [ACT_VM_IDLE_DEPLOYED_EMPTY] = true,
+    [ACT_VM_IDLE_8] = true,
+    [ACT_VM_IDLE_7] = true,
+    [ACT_VM_IDLE_6] = true,
+    [ACT_VM_IDLE_5] = true,
+    [ACT_VM_IDLE_4] = true,
+    [ACT_VM_IDLE_3] = true,
+    [ACT_VM_IDLE_2] = true,
+    [ACT_VM_IDLE_1] = true,
+    [ACT_VM_IDLE_DEPLOYED] = true,
+    [ACT_VM_IDLE_DEPLOYED_8] = true,
+    [ACT_VM_IDLE_DEPLOYED_7] = true,
+    [ACT_VM_IDLE_DEPLOYED_6] = true,
+    [ACT_VM_IDLE_DEPLOYED_5] = true,
+    [ACT_VM_IDLE_DEPLOYED_4] = true,
+    [ACT_VM_IDLE_DEPLOYED_3] = true,
+    [ACT_VM_IDLE_DEPLOYED_2] = true,
+    [ACT_VM_IDLE_DEPLOYED_1] = true,
+    [ACT_VM_IDLE_M203] = true,
+}
+
+local function IsIdleActivity(vm)
+    return idle_activities[vm:GetSequenceActivity(vm:GetSequence())] or false
 end
 
 ---
@@ -987,106 +1474,127 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
-	if CLIENT then
-		self:CalcViewModel()
-	end
+    local viewModel = self:GetOwner():GetViewModel()
+
+    if
+        self.idleResetFix
+        and self.ViewModel
+        and viewModel:GetCycle() >= 1
+        and not IsIdleActivity(viewModel)
+    then
+        self:SendWeaponAnim(self.IdleAnim or ACT_VM_IDLE)
+    end
+
+    if CLIENT then
+        self:CalcViewModel()
+    end
 end
 
 if CLIENT then
-	---
-	-- @realm client
-	local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
 
-	local host_timescale = GetConVar("host_timescale")
+    local host_timescale = GetConVar("host_timescale")
 
-	local LOWER_POS = Vector(0, 0, -2)
-	local IRONSIGHT_TIME = 0.25
+    local LOWER_POS = Vector(0, 0, -2)
+    local IRONSIGHT_TIME = 0.25
 
-	---
-	-- This hook allows you to adjust view model position and angles.
-	-- @param Vector pos
-	-- @param Angle ang
-	-- @return Vector
-	-- @return Angle
-	-- @see https://wiki.facepunch.com/gmod/WEAPON:GetViewModelPosition
-	-- @realm client
-	function SWEP:GetViewModelPosition(pos, ang)
-		if not self.IronSightsPos or self.bIron == nil then
-			return pos, ang
-		end
+    ---
+    -- This hook allows you to adjust view model position and angles.
+    -- @param Vector pos
+    -- @param Angle ang
+    -- @return Vector
+    -- @return Angle
+    -- @see https://wiki.facepunch.com/gmod/WEAPON:GetViewModelPosition
+    -- @realm client
+    function SWEP:GetViewModelPosition(pos, ang)
+        if not self.IronSightsPos or self.bIron == nil then
+            return pos, ang
+        end
 
-		local bIron = self.bIron
-		local time = self.fCurrentTime + (SysTime() - self.fCurrentSysTime) * game.GetTimeScale() * host_timescale:GetFloat()
+        local bIron = self.bIron
+        local time = self.fCurrentTime
+            + (SysTime() - self.fCurrentSysTime)
+                * game.GetTimeScale()
+                * host_timescale:GetFloat()
 
-		if bIron then
-			self.SwayScale = 0.3
-			self.BobScale = 0.1
-		else
-			self.SwayScale = 1.0
-			self.BobScale = 1.0
-		end
+        if bIron then
+            self.SwayScale = 0.3
+            self.BobScale = 0.1
+        else
+            self.SwayScale = 1.0
+            self.BobScale = 1.0
+        end
 
-		local fIronTime = self.fIronTime
+        local fIronTime = self.fIronTime
 
-		if not bIron and fIronTime < time - IRONSIGHT_TIME then
-			return pos, ang
-		end
+        if not bIron and fIronTime < time - IRONSIGHT_TIME then
+            return pos, ang
+        end
 
-		local mul = 1.0
+        local mul = 1.0
 
-		if fIronTime > time - IRONSIGHT_TIME then
-			mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
+        if fIronTime > time - IRONSIGHT_TIME then
+            mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
 
-			if not bIron then
-				mul = 1 - mul
-			end
-		end
+            if not bIron then
+                mul = 1 - mul
+            end
+        end
 
-		local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
+        local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
 
-		if self.IronSightsAng then
-			ang = Angle(ang)
-			ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
-			ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
-			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
-		end
+        if self.IronSightsAng then
+            ang = Angle(ang)
+            ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
+            ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
+            ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
+        end
 
-		pos = pos + offset.x * ang:Right() * mul
-		pos = pos + offset.y * ang:Forward() * mul
-		pos = pos + offset.z * ang:Up() * mul
+        pos = pos + offset.x * ang:Right() * mul
+        pos = pos + offset.y * ang:Forward() * mul
+        pos = pos + offset.z * ang:Up() * mul
 
-		return pos, ang
-	end
+        return pos, ang
+    end
 end
 
 hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
-	if key ~= IN_ATTACK2 or not IsValid(ply) then return end
+    if key ~= IN_ATTACK2 or not IsValid(ply) then
+        return
+    end
 
-	if not (CLIENT and ttt2_hold_aim:GetBool() or SERVER and ply.holdAim) then return end
+    if not (CLIENT and ttt2_hold_aim:GetBool() or SERVER and ply.holdAim) then
+        return
+    end
 
-	local wep = ply:GetActiveWeapon()
+    local wep = ply:GetActiveWeapon()
 
-	if not IsValid(wep) or not wep:GetIronsights() then return end
+    if not IsValid(wep) or (wep.GetIronsights and not wep:GetIronsights()) then
+        return
+    end
 
-	wep:SetIronsights(false)
-	wep:SetZoom(false)
+    wep:SetIronsights(false)
+    wep:SetZoom(false)
 end)
 
 if CLIENT then
-	---
-	-- Tell the server about the users preference regarding holding aim or toggle aim,
-	-- necessary to avoid prediction issues
-	local function UpdateHoldAimCV()
-		net.Start("TTT2UpdateHoldAimConvar")
-		net.WriteBool(ttt2_hold_aim:GetBool())
-		net.SendToServer()
-	end
+    ---
+    -- Tell the server about the users preference regarding holding aim or toggle aim,
+    -- necessary to avoid prediction issues
+    local function UpdateHoldAimCV()
+        net.Start("TTT2UpdateHoldAimConvar")
+        net.WriteBool(ttt2_hold_aim:GetBool())
+        net.SendToServer()
+    end
 
-	hook.Add("InitPostEntity", "TTT2InitHoldAimCV", UpdateHoldAimCV)
+    hook.Add("InitPostEntity", "TTT2InitHoldAimCV", UpdateHoldAimCV)
 
-	cvars.AddChangeCallback("ttt2_hold_aim", UpdateHoldAimCV)
+    cvars.AddChangeCallback("ttt2_hold_aim", UpdateHoldAimCV)
 else
-	net.Receive("TTT2UpdateHoldAimConvar", function(_, ply)
-		ply.holdAim = net.ReadBool()
-	end)
+    net.Receive("TTT2UpdateHoldAimConvar", function(_, ply)
+        ply.holdAim = net.ReadBool()
+    end)
 end

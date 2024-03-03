@@ -3,9 +3,9 @@
 -- @module input
 
 if SERVER then
-	AddCSLuaFile()
+    AddCSLuaFile()
 
-	return
+    return
 end
 
 local inputIsButtonDown = input.IsButtonDown
@@ -18,5 +18,5 @@ local inputLookupBinding = input.LookupBinding
 -- @return boolean Returns true if the binding is pressed
 -- @realm client
 function input.IsBindingDown(binding)
-	return inputIsButtonDown(inputGetKeyCode(inputLookupBinding(binding)))
+    return inputIsButtonDown(inputGetKeyCode(inputLookupBinding(binding)))
 end

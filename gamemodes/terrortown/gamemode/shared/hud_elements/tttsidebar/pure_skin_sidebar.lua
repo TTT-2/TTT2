@@ -10,192 +10,275 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local padding = 10
-	local color_badstatus = Color(183, 54, 47)
-	local color_goodstatus = Color(36, 115, 51)
+    local TryT = LANG.TryTranslation
 
-	local const_defaults = {
-		basepos = {x = 0, y = 0},
-		size = {w = 48, h = 48},
-		minsize = {w = 48, h = 48}
-	}
+    local padding = 10
+    local color_badstatus = Color(183, 54, 47)
+    local color_goodstatus = Color(36, 115, 51)
 
-	function HUDELEMENT:Initialize()
-		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor()
-		self.padding = padding
+    local const_defaults = {
+        basepos = { x = 0, y = 0 },
+        size = { w = 48, h = 48 },
+        minsize = { w = 48, h = 48 },
+    }
 
-		BaseClass.Initialize(self)
-	end
+    function HUDELEMENT:Initialize()
+        self.scale = 1.0
+        self.basecolor = self:GetHUDBasecolor()
+        self.padding = padding
 
-	-- parameter overwrites
-	function HUDELEMENT:IsResizable()
-		return false, false
-	end
-	-- parameter overwrites end
+        BaseClass.Initialize(self)
+    end
 
-	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {
-			x = self.padding,
-			y = ScrH() * 0.5
-		}
+    -- parameter overwrites
+    function HUDELEMENT:IsResizable()
+        return false, false
+    end
+    -- parameter overwrites end
 
-		return const_defaults
-	end
+    function HUDELEMENT:GetDefaults()
+        const_defaults["basepos"] = {
+            x = self.padding,
+            y = ScrH() * 0.5,
+        }
 
-	function HUDELEMENT:PerformLayout()
-		self.scale = appearance.GetGlobalScale()
-		self.basecolor = self:GetHUDBasecolor()
-		self.padding = padding * self.scale
+        return const_defaults
+    end
 
-		BaseClass.PerformLayout(self)
-	end
+    function HUDELEMENT:PerformLayout()
+        self.scale = appearance.GetGlobalScale()
+        self.basecolor = self:GetHUDBasecolor()
+        self.padding = padding * self.scale
 
-	function HUDELEMENT:ShouldDraw()
-		local client = LocalPlayer()
+        BaseClass.PerformLayout(self)
+    end
 
-		return client:Alive() or client:Team() == TEAM_TERROR
-	end
+    function HUDELEMENT:ShouldDraw()
+        local client = LocalPlayer()
 
-	function HUDELEMENT:DrawIcon(curY, item)
-		local pos = self:GetPos()
-		local size = self:GetSize()
+        return client:Alive() or client:Team() == TEAM_TERROR
+    end
 
-		if not item.hud_color then
-			item.hud_color = self.basecolor
-		end
+    function HUDELEMENT:DrawIcon(curY, item)
+        local pos = self:GetPos()
+        local size = self:GetSize()
 
-		local fontColor = util.GetDefaultColor(item.hud_color)
-		local iconAlpha = fontColor.r > 60 and 175 or 250
+        if not item.hud_color then
+            item.hud_color = self.basecolor
+        end
 
-		curY = curY - size.w
+        local fontColor = util.GetDefaultColor(item.hud_color)
+        local iconAlpha = fontColor.r > 60 and 175 or 250
 
-		local factor = 1
+        curY = curY - size.w
 
-		if item.displaytime then -- start blinking in last 5 seconds
-			local time_left = item.displaytime - CurTime()
+        local factor = 1
 
-			if time_left < 5 then
-				local num = 0.5 * math.pi + (-1.4 * time_left + 7) * math.pi
+        if item.displaytime then -- start blinking in last 5 seconds
+            local time_left = item.displaytime - CurTime()
 
-				factor = 0.5 * (math.sin(num) + 1)
-			end
-		end
+            if time_left < 5 then
+                local num = 0.5 * math.pi + (-1.4 * time_left + 7) * math.pi
 
-		surface.SetDrawColor(item.hud_color.r, item.hud_color.g, item.hud_color.b, math.Round(factor * 255))
-		surface.DrawRect(pos.x, curY, size.w, size.w)
+                factor = 0.5 * (math.sin(num) + 1)
+            end
+        end
 
-		local hud_icon = item.hud.GetTexture and item.hud or item.hud[item.active_icon]
+        surface.SetDrawColor(
+            item.hud_color.r,
+            item.hud_color.g,
+            item.hud_color.b,
+            math.Round(factor * 255)
+        )
+        surface.DrawRect(pos.x, curY, size.w, size.w)
 
-		draw.FilteredShadowedTexture(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor, self.scale)
+        local hud_icon = item.hud.GetTexture and item.hud or item.hud[item.active_icon]
 
-		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
+        draw.FilteredShadowedTexture(
+            pos.x,
+            curY,
+            size.w,
+            size.w,
+            hud_icon,
+            iconAlpha,
+            fontColor,
+            self.scale
+        )
 
-		if isfunction(item.DrawInfo) then
-			local info = item:DrawInfo()
-			if info then
-				-- right bottom corner
-				local tx = pos.x + size.w - 5
-				local ty = curY +  size.w - 1
-				local pad = 5 * self.scale
+        self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
-				surface.SetFont("PureSkinItemInfo")
+        if isfunction(item.DrawInfo) then
+            local info = TryT(item:DrawInfo())
+            if info then
+                local infoW, infoH = draw.GetTextSize(info, "PureSkinItemInfo")
+                infoW = infoW * self.scale
+                infoH = (infoH + 3) * self.scale
 
-				local infoW, infoH = surface.GetTextSize(info)
-				infoW = infoW * self.scale
-				infoH = (infoH + 2) * self.scale
+                -- right bottom corner
+                local pad = 4 * self.scale
+                local tx = pos.x + size.w - 1 * self.scale - 0.5 * infoW
+                local ty = curY + size.w + 4 * self.scale - 0.5 * infoH
 
-				local bx = tx - infoW * 0.5 - pad
-				local by = ty - infoH * 0.5
-				local bw = infoW + pad * 2
+                local bx = tx - 0.5 * infoW - pad
+                local by = ty - infoH * 0.5
+                local bw = infoW + pad * 2
 
-				self:DrawBg(bx, by, bw, infoH, item.hud_color)
+                self:DrawBg(bx, by, bw, infoH, item.hud_color)
 
-				draw.AdvancedText(info, "PureSkinItemInfo", tx, ty, fontColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+                draw.AdvancedText(
+                    info,
+                    "PureSkinItemInfo",
+                    tx,
+                    ty,
+                    fontColor,
+                    TEXT_ALIGN_CENTER,
+                    TEXT_ALIGN_CENTER,
+                    true,
+                    self.scale
+                )
 
-				self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
-			end
-		end
+                self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
+            end
+        end
 
-		return curY - self.padding
-	end
+        if GAMEMODE.ShowScoreboard and GetConVar("ttt2_hud_enable_description"):GetBool() then
+            local xText = pos.x + size.w + self.padding
+            local offsetTitle = -2 * self.scale
+            local offsetLines = { 19 * self.scale, 33 * self.scale }
 
-	function HUDELEMENT:Draw()
-		local client = LocalPlayer()
+            local name = item.EquipMenuData and item.EquipMenuData.name or (item.name or "")
 
-		local basepos = self:GetBasePos()
-		local itms = client:GetEquipmentItems()
+            -- allow dynamic status names
+            if istable(name) then
+                name = name[item.active_icon]
+            end
 
-		-- get number of new icons
-		local num_icons = 0
-		local num_items = 0
+            draw.AdvancedText(
+                TryT(name),
+                "PureSkinPopupText",
+                xText,
+                curY + offsetTitle,
+                COLOR_WHITE,
+                TEXT_ALIGN_LEFT,
+                TEXT_ALIGN_TOP,
+                true,
+                self.scale
+            )
 
-		for i = 1, #itms do
-			local item = items.GetStored(itms[i])
+            local translatedText = TryT(
+                (item.sidebarDescription or item.EquipMenuData and item.EquipMenuData.desc) or ""
+            )
 
-			if item and item.hud then
-				num_items = num_items + 1
-			end
-		end
+            local wrappedText =
+                draw.GetWrappedText(translatedText, 285 * self.scale, "PureSkinItemInfo")
 
-		num_icons = num_icons + num_items
+            local lineCount = #wrappedText
 
-		local num_status = 0
+            for i = 1, math.min(2, lineCount) do
+                local line = wrappedText[i]
 
-		for _, status in pairs(STATUS.active) do
-			num_status = num_status + 1
-		end
+                -- if text is shortned, then this should be indicated
+                if i == 2 and lineCount > 2 then
+                    line = line .. " [...]"
+                end
 
-		num_icons = num_icons + num_status
+                draw.AdvancedText(
+                    line,
+                    "PureSkinItemInfo",
+                    xText,
+                    curY + offsetLines[i],
+                    COLOR_WHITE,
+                    TEXT_ALIGN_LEFT,
+                    TEXT_ALIGN_TOP,
+                    true,
+                    self.scale
+                )
+            end
+        end
 
-		local linespace = ((num_status > 0) and (num_items > 0)) and 25 or 0
-		local height = math.max(num_icons, 1) * self.size.w + math.max(num_icons -1, 0) * ((num_icons > 1) and self.padding or 0) + linespace
-		local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
-		local curY = startY
+        return curY - self.padding
+    end
 
-		-- draw status
-		for _, status in pairs(STATUS.active) do
-			if status.type == "bad" then
-				status.hud_color = color_badstatus
-			end
+    function HUDELEMENT:Draw()
+        local client = LocalPlayer()
 
-			if status.type == "good" then
-				status.hud_color = color_goodstatus
-			end
+        local basepos = self:GetBasePos()
+        local itms = client:GetEquipmentItems()
 
-			if status.type == "default" then
-				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
-			end
+        -- get number of new icons
+        local num_icons = 0
+        local num_items = 0
 
-			-- fallback
-			if status.type == nil and status.hud_color == nil then
-				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
-			end
+        for i = 1, #itms do
+            local item = items.GetStored(itms[i])
 
-			curY = self:DrawIcon(curY, status)
-		end
+            if item and item.hud then
+                num_items = num_items + 1
+            end
+        end
 
-		-- draw spacer
-		if num_status > 0 and num_items > 0 then
-			curY = curY - 16
+        num_icons = num_icons + num_items
 
-			local pos = self:GetPos()
-			local size = self:GetSize()
+        local num_status = 0
 
-			surface.SetDrawColor(self.basecolor)
-			surface.DrawRect(pos.x, curY + self.padding * 0.5 + 8, size.w, 2)
-		end
+        for _, status in pairs(STATUS.active) do
+            num_status = num_status + 1
+        end
 
-		-- draw items
-		for i = 1, #itms do
-			local item = items.GetStored(itms[i])
-			if not item or not item.hud then continue end
+        num_icons = num_icons + num_status
 
-			item.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
-			curY = self:DrawIcon(curY, item)
-		end
+        local linespace = ((num_status > 0) and (num_items > 0)) and 25 or 0
+        local height = math.max(num_icons, 1) * self.size.w
+            + math.max(num_icons - 1, 0) * ((num_icons > 1) and self.padding or 0)
+            + linespace
+        local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
+        local curY = startY
 
-		self:SetSize(self.size.w, - math.max(height, self.minsize.h)) -- adjust the size
-		self:SetPos(basepos.x, startY - height)
-	end
+        -- draw status
+        for _, status in pairs(STATUS.active) do
+            if status.type == "bad" then
+                status.hud_color = color_badstatus
+            end
+
+            if status.type == "good" then
+                status.hud_color = color_goodstatus
+            end
+
+            if status.type == "default" then
+                status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
+            end
+
+            -- fallback
+            if status.type == nil and status.hud_color == nil then
+                status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
+            end
+
+            curY = self:DrawIcon(curY, status)
+        end
+
+        -- draw spacer
+        if num_status > 0 and num_items > 0 then
+            curY = curY - 16
+
+            local pos = self:GetPos()
+            local size = self:GetSize()
+
+            surface.SetDrawColor(self.basecolor)
+            surface.DrawRect(pos.x, curY + self.padding * 0.5 + 8, size.w, 2)
+        end
+
+        -- draw items
+        for i = 1, #itms do
+            local item = items.GetStored(itms[i])
+            if not item or not item.hud then
+                continue
+            end
+
+            item.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
+            curY = self:DrawIcon(curY, item)
+        end
+
+        self:SetSize(self.size.w, -math.max(height, self.minsize.h)) -- adjust the size
+        self:SetPos(basepos.x, startY - height)
+    end
 end
