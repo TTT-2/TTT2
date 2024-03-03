@@ -571,7 +571,6 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
     if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
         ent:Use(ply, ply)
     end
-    overrideDoPlayerUse = false
 
     if ply:IsSpec() then
         SpecUseKey(ply, ent)
