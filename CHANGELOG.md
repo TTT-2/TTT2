@@ -5,7 +5,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ## Unreleased
 
 ### Added
-- Added ENT:RemoteUse to ttt_base_placeable entities to allow remote triggers clientside
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
