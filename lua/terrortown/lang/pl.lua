@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
-L.label_bind_weaponswitch = "Zmień broń"
 L.label_bind_voice = "Globalny Czat"
 L.label_bind_voice_team = "Teamowy Czat"
 

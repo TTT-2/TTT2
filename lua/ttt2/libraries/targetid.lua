@@ -344,14 +344,13 @@ function targetid.HUDDrawTargetIDWeapons(tData)
     tData:SetOutlineColor(client:GetRoleColor())
 
     -- general info
-    tData:SetKey(bind.Find("ttt2_weaponswitch"))
-
+    tData:SetKey(input.GetKeyCode(Key("+use", "USE")))
     tData:SetTitle(
         TryT(weapon_name) .. " [" .. ParT("target_slot_info", { slot = kind_pickup_wep }) .. "]"
     )
 
     local key_params_wep = {
-        usekey = string.upper(input.GetKeyName(bind.Find("ttt2_weaponswitch")) or ""),
+        usekey = Key("+use", "USE"),
         walkkey = Key("+walk", "WALK"),
     }
 

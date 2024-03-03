@@ -45,6 +45,7 @@ CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 util.AddNetworkString("ttt2_damage_received")
 util.AddNetworkString("ttt2_set_player_setting")
+util.AddNetworkString("TTT2PlayerUseEntity")
 
 ---
 -- First spawn on the server.
@@ -372,17 +373,18 @@ end
 -- Triggered when the @{Player} presses use on an object.
 -- Continuously runs until USE is released but will not activate other Entities
 -- until the USE key is released; dependent on activation type of the @{Entity}.
--- @note This is just allowed for terrorists
+-- @note TTT2 blocks all gmod internal use and only checks this for addons
 -- @param Player ply The @{Player} pressing the "use" key.
 -- @param Entity ent The entity which the @{Player} is looking at / activating USE on.
+-- @param bool overrideDoPlayerUse This is used to override the default outcome of the check
 -- @return boolean Return false if the @{Player} is not allowed to USE the entity.
 -- Do not return true if using a hook, otherwise other mods may not get a chance to block a @{Player}'s use.
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerUse
 -- @local
-function GM:PlayerUse(ply, ent)
-    return ply:IsTerror()
+function GM:PlayerUse(ply, ent, overrideDoPlayerUse)
+    return overrideDoPlayerUse or false
 end
 
 ---
@@ -511,59 +513,13 @@ function GM:KeyPress(ply, key)
 end
 
 ---
--- Runs when a IN key was released by a player.
--- For a more general purpose @{function} that handles all kinds of input, see @{GM:PlayerButtonUp}
--- @predicted
--- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
--- @param number key The key that the @{Player} pressed using <a href="https://wiki.facepunch.com/gmod/Enums/IN">IN_Enums</a>.
--- @hook
+-- This is called as spectator to use an entity
+-- Spectators can search bodies, spectate players and possess entities.
+-- @param Player ply The player using the use key
+-- @param Entity ent The entity, that is used
 -- @realm server
--- @ref https://wiki.facepunch.com/gmod/GM:KeyRelease
 -- @local
-function GM:KeyRelease(ply, key)
-    if key ~= IN_USE or not IsValid(ply) or not ply:IsTerror() then
-        return
-    end
-
-    -- see if we need to do some custom usekey overriding
-    local tr = util.TraceLine({
-        start = ply:GetShootPos(),
-        endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
-        filter = ply,
-        mask = MASK_SHOT,
-    })
-
-    if not tr.Hit or not IsValid(tr.Entity) then
-        return
-    end
-
-    if tr.Entity.CanUseKey and tr.Entity.UseOverride then
-        local phys = tr.Entity:GetPhysicsObject()
-
-        if IsValid(phys) and not phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
-            tr.Entity:UseOverride(ply)
-
-            return true
-        else
-            -- do nothing, can't +use held objects
-            return true
-        end
-    elseif tr.Entity.player_ragdoll then
-        CORPSE.ShowSearch(ply, tr.Entity, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK)) -- Body Corpse Search Identify TODO
-
-        return true
-    end
-end
-
----
--- Normally all dead players are blocked from IN_USE on the server, meaning we
--- can't let them search bodies. This sucks because searching bodies is
--- fun. Hence on the client we override +use for specs and use this instead.
-local function SpecUseKey(ply, cmd, arg)
-    if not IsValid(ply) or not ply:IsSpec() then
-        return
-    end
-
+local function SpecUseKey(ply, ent)
     -- Do not allow the spectator to gather information if they're about to revive.
     if ply:IsReviving() then
         LANG.Msg(ply, "spec_about_to_revive", nil, MSG_MSTACK_WARN)
@@ -571,28 +527,74 @@ local function SpecUseKey(ply, cmd, arg)
         return
     end
 
-    -- longer range than normal use
-    local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 128, ply)
+    if ent.player_ragdoll then
+        if not ply:KeyDown(IN_WALK) then
+            CORPSE.ShowSearch(ply, ent)
+        else
+            ply:Spectate(OBS_MODE_IN_EYE)
+            ply:SpectateEntity(ent)
+        end
+    elseif ent:IsPlayer() and ent:IsActive() then
+        ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+        ply:SpectateEntity(ent)
+    else
+        PROPSPEC.Target(ply, ent)
+    end
+end
 
-    if not tr.Hit or not IsValid(tr.Entity) then
+---
+-- This is called by a client when using the "+use"-key
+-- and contains the entity which was detected
+-- @param number len Length of the message
+-- @param Player ply Player that sent the message
+-- @realm server
+-- @internal
+net.Receive("TTT2PlayerUseEntity", function(len, ply)
+    local ent = net.ReadEntity()
+
+    if not IsValid(ent) then
         return
     end
 
-    if tr.Entity.player_ragdoll then
-        if not ply:KeyDown(IN_WALK) then
-            CORPSE.ShowSearch(ply, tr.Entity)
-        else
-            ply:Spectate(OBS_MODE_IN_EYE)
-            ply:SpectateEntity(tr.Entity)
-        end
-    elseif tr.Entity:IsPlayer() and tr.Entity:IsActive() then
-        ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
-        ply:SpectateEntity(tr.Entity)
-    else
-        PROPSPEC.Target(ply, tr.Entity)
+    -- Check if the use interaction is possible
+    -- Add the bounding radius to compensate for center position
+    local distance = ply:GetShootPos():Distance(ent:GetPos())
+    if distance > 100 + ent:BoundingRadius() then
+        return
     end
-end
-concommand.Add("ttt_spec_use", SpecUseKey)
+
+    ---
+    -- Enable addons to allow handling PlayerUse
+    -- Otherwise default to old IsTerror Check
+    -- @realm server
+    -- stylua: ignore
+    if hook.Run("PlayerUse", ply, ent, ply:IsTerror()) then
+        ent:Use(ply, ply)
+    end
+
+    if ply:IsSpec() then
+        SpecUseKey(ply, ent)
+        return
+    end
+
+    if not ply:IsTerror() then
+        return
+    end
+
+    if ent.CanUseKey and ent.UseOverride then
+        local phys = ent:GetPhysicsObject()
+
+        if not IsValid(phys) or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
+            return
+        end
+
+        ent:UseOverride(ply)
+    elseif ent.player_ragdoll then
+        CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
+    elseif ent:IsWeapon() then
+        ply:SafePickupWeapon(ent, false, true, true, nil)
+    end
+end)
 
 ---
 -- Called when a @{Player} leaves the server. See the <a href="https://wiki.facepunch.com/gmod/gameevent/player_disconnect">player_disconnect gameevent</a> for a shared version of this hook.

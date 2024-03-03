@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Mutar jogadores vivos quando morrer"
 L.label_hud_default = "HUD Padrão"
 L.label_hud_force = "HUD Forçada"
 
-L.label_bind_weaponswitch = "Pegar arma"
 L.label_bind_voice = "Microfone Global"
 L.label_bind_voice_team = "Microfone do Time"
 

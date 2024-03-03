@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Muta tutti i giocatori vivi quando muori"
 L.label_hud_default = "HUD di Default"
 L.label_hud_force = "Forza HUD"
 
-L.label_bind_weaponswitch = "Prendi Arma"
 L.label_bind_voice = "Chat Vocale Globale"
 L.label_bind_voice_team = "Chat Vocale di Squadra"
 

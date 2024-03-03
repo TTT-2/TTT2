@@ -66,19 +66,40 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return true
         end
     elseif bindName == "+use" and pressed then
-        if ply:IsSpec() then
-            RunConsoleCommand("ttt_spec_use")
-
-            return true
-        elseif TBHUD:PlayerIsFocused() then
+        if TBHUD:PlayerIsFocused() then
             if ply:KeyDown(IN_WALK) then
                 -- Try to change the access to the button for your current role or team
                 return TBHUD:ToggleFocused(input.IsButtonDown(KEY_LSHIFT))
-            else
-                -- Try to use the button that is currently focused
-                return TBHUD:UseFocused()
             end
+
+            -- Else try to use the button that is currently focused
+            return TBHUD:UseFocused()
         end
+
+        local tr = util.TraceLine({
+            start = ply:GetShootPos(),
+            endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
+            filter = ply,
+            mask = MASK_SHOT,
+        })
+
+        if not tr.Hit or not IsValid(tr.Entity) then
+            return
+        end
+
+        local isClientOnly = false
+        if isfunction(tr.Entity.ClientUse) then
+            isClientOnly = tr.Entity:ClientUse()
+        end
+
+        -- If returned true by ClientUse, then dont call Use and UseOverride serverside
+        if isClientOnly then
+            return
+        end
+
+        net.Start("TTT2PlayerUseEntity")
+        net.WriteEntity(tr.Entity)
+        net.SendToServer()
     elseif string.sub(bindName, 1, 4) == "slot" and pressed then
         local idx = tonumber(string.sub(bindName, 5, -1)) or 1
 
