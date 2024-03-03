@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Stelle lebende Spieler stumm, wenn du tot bist"
 L.label_hud_default = "Standard HUD"
 L.label_hud_force = "Erzwungenes HUD"
 
-L.label_bind_weaponswitch = "Waffe aufheben"
 L.label_bind_voice = "Globaler Sprachchat"
 L.label_bind_voice_team = "Team Sprachchat"
 

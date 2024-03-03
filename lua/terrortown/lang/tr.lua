@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Öldüğünde canlı oyuncuları sessize al"
 L.label_hud_default = "Varsayılan Arayüz"
 L.label_hud_force = "Zorunlu Arayüz"
 
-L.label_bind_weaponswitch = "Silahı Al"
 L.label_bind_voice = "Genel Sesli Sohbet"
 L.label_bind_voice_team = "Takım Sesli Sohbeti"
 

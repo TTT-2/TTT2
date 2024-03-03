@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "死んだとき生存者のボイスチャットをミ�
 L.label_hud_default = "デフォルトHUD"
 L.label_hud_force = "強制的HUD"
 
-L.label_bind_weaponswitch = "武器を拾う"
 L.label_bind_voice = "通常ボイスチャット"
 L.label_bind_voice_team = "チームボイスチャット"
 

@@ -1062,7 +1062,6 @@ L.label_gameplay_mute = "Заглушать живых игроков после
 L.label_hud_default = "Интерфейс по умолчанию"
 L.label_hud_force = "Принудительно назначаемый интерфейс"
 
-L.label_bind_weaponswitch = "Смена оружия"
 L.label_bind_voice = "Глобальный голосовой чат"
 L.label_bind_voice_team = "Командный голосовой чат"
 
