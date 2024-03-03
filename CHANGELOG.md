@@ -8,8 +8,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
+- Added hook `GM:TTT2OnGiveFoundCredits()`, which is triggered serverside when a player has been given credits for searching a corpse.
+- Added hook `GM:TTT2ReceivedKillCredits()`, which is called when a player recieves credits for a kill.
+- Added hook `GM:TTT2ReceivedTeamAwardCredits()`, which is called when a player recieves credits as a team award.
+- Added hook `GM:TTT2TransferedCredits()`, which is called when a player has successfully transfered a credit to another player.
 
 ### Changed
+
+- TryRerollShop calls `TTT2OrderedEquipment` hook.
 
 ### Fixed
 
