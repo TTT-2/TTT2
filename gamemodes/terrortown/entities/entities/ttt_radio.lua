@@ -368,10 +368,14 @@ if CLIENT then
 
     ---
     -- This is triggered, when you focus a marker of an entity and press 'Use'-Key
-    -- Overriden to open the radio menu
+    -- Opens the radio menu
+    -- @param Player ply The player that used this entity. Always LocalPlayer here.
+    -- @return bool True, if this shouldnt be used serverside
     -- @realm client
-    function ENT:RemoteUse()
+    function ENT:RemoteUse(ply)
         TRADIO:Toggle(self)
+
+        return true
     end
 end
 
