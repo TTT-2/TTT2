@@ -183,9 +183,7 @@ concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 -- @return[default=nil] string for the client which offers info related to the transaction
 -- @hook
 -- @realm server
-function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
-
-end
+function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer) end
 
 ---
 -- Called when a player has successfully transfered a credit to another player.
@@ -195,9 +193,7 @@ end
 -- @param boolean isRecipientDead If the recipient is dead or not.
 -- @hook
 -- @realm server
-function GM:TTT2TransferedCredits(sender, recipient, credits, isRecipientDead)
-
-end
+function GM:TTT2TransferedCredits(sender, recipient, credits, isRecipientDead) end
 
 local function TransferCredits(ply, cmd, args)
     if #args ~= 2 then
