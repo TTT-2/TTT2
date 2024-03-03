@@ -590,7 +590,7 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
 
         ent:UseOverride(ply)
     elseif ent.player_ragdoll then
-        CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK)) -- Body Corpse Search Identify TODO
+        CORPSE.ShowSearch(ply, ent, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))
     elseif ent:IsWeapon() and ply:Alive() then
         ply:SafePickupWeapon(ent, false, true, true, nil) -- force pickup; drop blocking weapon, autoselect is set automatically
     end
