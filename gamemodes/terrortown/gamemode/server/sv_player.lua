@@ -557,9 +557,9 @@ net.Receive("TTT2PlayerUseEntity", function(len, ply)
     end
 
     -- Check if the use interaction is possible
-    -- Use 150 instead of 100 to allow some desync between client and server
+    -- Add the bounding radius to compensate for center position
     local distance = ply:GetShootPos():Distance(ent:GetPos())
-    if distance > 150 then
+    if distance > 100 + ent:BoundingRadius() then
         return
     end
 
