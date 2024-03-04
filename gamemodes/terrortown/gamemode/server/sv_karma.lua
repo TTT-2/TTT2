@@ -119,6 +119,7 @@ KARMA.reason = {
 
 local IsValid = IsValid
 local hook = hook
+local playerIterator = player.Iterator
 
 local function IsDebug()
     return config.debug:GetBool()
@@ -570,7 +571,7 @@ function KARMA.RoundIncrement()
     local healbonus = config.roundheal:GetFloat()
     local cleanbonus = config.clean:GetFloat()
 
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -591,7 +592,7 @@ end
 -- When a new round starts, Live karma becomes Base karma
 -- @realm server
 function KARMA.Rebase()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -608,7 +609,7 @@ end
 -- Apply karma to damage factor for all players
 -- @realm server
 function KARMA.ApplyKarmaAll()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         KARMA.ApplyKarma(plys[i])
@@ -673,7 +674,7 @@ function KARMA.RoundPrepare()
         return
     end
 
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -692,7 +693,7 @@ function KARMA.CheckAutoKickAll()
         return
     end
 
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         KARMA.CheckAutoKick(plys[i])
@@ -776,7 +777,7 @@ end
 -- @realm server
 -- @see KARMA.Remember
 function KARMA.RememberAll()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         KARMA.Remember(plys[i])
@@ -825,7 +826,7 @@ end
 -- @param function printfn
 -- @realm server
 function KARMA.PrintAll(printfn)
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]

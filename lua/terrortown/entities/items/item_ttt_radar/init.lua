@@ -8,6 +8,7 @@ local net = net
 local table = table
 local IsValid = IsValid
 local hook = hook
+local playerIterator = player.Iterator
 
 local cv_radarCharge
 
@@ -76,7 +77,7 @@ function RADAR.TriggerRadarScan(ply)
     else -- if we get no value we use default radar
         targets = {}
 
-        local scan_ents = player.GetAll()
+        local scan_ents = select(2, playerIterator())
 
         table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 

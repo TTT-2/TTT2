@@ -8,6 +8,7 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 local math = math
+local playerIterator = player.Iterator
 
 -- Distinguish between 3 modes to reset, add or remove equipped items
 EQUIPITEMS_RESET = 0
@@ -1146,8 +1147,7 @@ function plymeta:SetModel(mdlName)
 end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
-    local plys = player.GetAll()
-
+    local plys = select(2, playerIterator())
     for i = 1, #plys do
         plys[i].targetPlayer = nil
     end

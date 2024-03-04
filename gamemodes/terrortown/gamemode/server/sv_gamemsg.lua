@@ -6,6 +6,7 @@ local net = net
 local string = string
 local table = table
 local IsValid = IsValid
+local playerIterator = player.Iterator
 
 ---
 -- Sends a GameMessage to every @{Player}
@@ -103,7 +104,7 @@ end
 -- @realm server
 -- @internal
 function ShowRoundStartPopup()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -123,7 +124,7 @@ end
 -- @realm server
 function GetPlayerFilter(pred)
     local filter = {}
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
