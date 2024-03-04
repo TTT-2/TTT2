@@ -362,6 +362,7 @@ if CLIENT then
 
         mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
         mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
+        mvData:AddDescriptionLine(ParT("use_entity", { usekey = Key("+use", "USE") }))
 
         mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
     end)
