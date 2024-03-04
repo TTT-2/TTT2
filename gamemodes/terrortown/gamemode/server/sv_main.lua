@@ -922,8 +922,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
-    ents.TTT.FixParentedPostCleanup()
-
     entityOutputs.SetUp()
 
     entspawn.HandleSpawns()
@@ -941,7 +939,7 @@ function GM:PostCleanupMap()
 end
 
 local function CleanUp()
-    game.CleanUpMap()
+    game.CleanUpMap(false, nil, function() ents.TTT.FixParentedPostCleanup() end)
 
     -- Strip players now, so that their weapons are not seen by ReplaceEntities
     local plys = select(2, playerIterator())
