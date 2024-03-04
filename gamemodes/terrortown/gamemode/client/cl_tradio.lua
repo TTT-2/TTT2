@@ -77,14 +77,10 @@ function TRADIO:Toggle(radioEnt)
     contentBox:SetSize(self.sizes.widthMainArea, self.sizes.heightMainArea)
     contentBox:Dock(TOP)
 
-    local contentAreaScroll = vgui.Create("DScrollPanelTTT2", contentBox)
-    contentAreaScroll:SetVerticalScrollbarEnabled(true)
-    contentAreaScroll:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
-    contentAreaScroll:Dock(FILL)
-
-    local buttonField = vgui.Create("DIconLayout", contentAreaScroll)
+    local buttonField = vgui.Create("DIconLayout", contentBox)
     buttonField:SetSpaceY(self.sizes.padding)
     buttonField:SetSpaceX(self.sizes.padding)
+    buttonField:SetSize(self.sizes.widthContentArea, self.sizes.heightMainArea)
     buttonField:Dock(TOP)
 
     for sound, translationName in pairs(sounds) do
