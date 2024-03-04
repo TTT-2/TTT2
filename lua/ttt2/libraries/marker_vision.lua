@@ -20,6 +20,7 @@ VISIBLE_FOR_BITS = 3
 markerVision = {}
 
 markerVision.registry = {}
+markerVision.focussedMarkers = {}
 
 ---
 -- Creates a new marker vision object for the entity.
@@ -228,6 +229,24 @@ if CLIENT then
     )
 
     ---
+    -- This gets the currently focussed closest entity.
+    -- @realm client
+    function markerVision.GetFocussedEntity()
+        local closestEntTbl = markerVision.focussedMarkers[1] or {}
+
+        for i = 2, #markerVision.focussedMarkers do
+            local entTbl = markerVision.focussedMarkers[i]
+            if entTbl.screenDistanceSquared < closestEntTbl.screenDistanceSquared then
+                closestEntTbl = entTbl
+            end
+        end
+
+        markerVision.focussedMarkers = { closestEntTbl }
+
+        return closestEntTbl.entity
+    end
+
+    ---
     -- The draw function of the radar vision module.
     -- @internal
     -- @realm client
@@ -254,6 +273,8 @@ if CLIENT then
         local xScreenCenter = 0.5 * widthScreen
         local yScreenCenter = 0.5 * heightScreen
 
+        markerVision.focussedMarkers = {}
+
         for i = 1, #markerVision.registry do
             local mvObject = markerVision.registry[i]
             local ent = mvObject.data.ent
@@ -265,11 +286,9 @@ if CLIENT then
             local posEnt = ent:GetPos() + ent:OBBCenter()
             local screenPos = posEnt:ToScreen()
             local isOffScreen = util.IsOffScreen(screenPos)
-            local isOnScreenCenter = not isOffScreen
-                and screenPos.x > xScreenCenter - offsetIcon
-                and screenPos.x < xScreenCenter + offsetIcon
-                and screenPos.y > yScreenCenter - offsetIcon
-                and screenPos.y < yScreenCenter + offsetIcon
+            local screenDistSquared = (screenPos.x - xScreenCenter) ^ 2
+                + (screenPos.y - yScreenCenter) ^ 2
+            local isOnScreenCenter = not isOffScreen and screenDistSquared < offsetIcon ^ 2
             local distanceEntity = posEnt:Distance(client:EyePos())
 
             -- call internal targetID functions first so the data can be modified by addons
@@ -292,6 +311,13 @@ if CLIENT then
 
             if not params.drawInfo then
                 continue
+            end
+
+            if isOnScreenCenter then
+                markerVision.focussedMarkers[#markerVision.focussedMarkers + 1] = {
+                    entity = ent,
+                    screenDistanceSquared = screenDistSquared,
+                }
             end
 
             local amountIcons = #params.displayInfo.icon

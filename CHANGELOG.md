@@ -8,6 +8,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
+- Added hook ENTITY:RemoteUse(ply), which is shared
+  - Return true if only clientside should be used
 
 ### Changed
 
