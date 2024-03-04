@@ -46,6 +46,7 @@ end
 
 ---
 -- Show the radio UI with all sound buttons. Generates the whole UI.
+-- @param Entity radioEnt The radio Entity to toggle UI for
 -- @realm client
 function TRADIO:Toggle(radioEnt)
     self.radio = radioEnt
