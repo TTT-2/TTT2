@@ -310,7 +310,7 @@ if SERVER then
 else
     net.Receive("TTT2SyncModel", function()
         local mdl = net.ReadString()
-        local ply = net.ReadEntity()
+        local ply = net.ReadPlayer()
 
         if not IsValid(ply) then
             return
@@ -321,7 +321,7 @@ else
 
     net.Receive("TTT2SyncSubroleModel", function()
         local mdl = net.ReadString()
-        local ply = net.ReadEntity()
+        local ply = net.ReadPlayer()
 
         if mdl == "" then
             mdl = nil
@@ -1000,7 +1000,7 @@ function plymeta:SetTargetPlayer(ply)
 
     if SERVER then
         net.Start("TTT2TargetPlayer")
-        net.WriteEntity(ply)
+        net.WritePlayer(ply)
         net.Send(self)
     end
 end
@@ -1031,7 +1031,7 @@ function plymeta:SetSubRoleModel(mdl)
     if SERVER then
         net.Start("TTT2SyncSubroleModel")
         net.WriteString(mdl or "")
-        net.WriteEntity(self)
+        net.WritePlayer(self)
         net.Broadcast()
     end
 end

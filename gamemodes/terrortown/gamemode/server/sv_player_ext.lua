@@ -1251,7 +1251,7 @@ function plymeta:AnimPerformGesture(act)
     end
 
     net.Start("TTT_PerformGesture")
-    net.WriteEntity(self)
+    net.WritePlayer(self)
     net.WriteUInt(act, 16)
     net.Broadcast()
 end
