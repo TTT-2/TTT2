@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "死亡时静音存活玩家"
 L.label_hud_default = "默认 HUD"
 L.label_hud_force = "强制 HUD"
 
-L.label_bind_weaponswitch = "捡起武器"
 L.label_bind_voice = "全局语言"
 L.label_bind_voice_team = "团队语言"
 

@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Mettez en sourdine les joueurs vivants lorsqu'ils sont 
 L.label_hud_default = "HUD par défaut"
 L.label_hud_force = "HUD Obligatoire"
 
-L.label_bind_weaponswitch = "Ramasser une arme"
 L.label_bind_voice = "Chat Vocal Global"
 L.label_bind_voice_team = "Chat Vocal de Team"
 

@@ -6,6 +6,7 @@ ttt_include("sh_weaponry") -- inits WEPS tbl
 util.AddNetworkString("TTT2CleanupInventory")
 util.AddNetworkString("TTT2AddWeaponToInventory")
 util.AddNetworkString("TTT2RemoveWeaponFromInventory")
+util.AddNetworkString("ttt2_switch_weapon_update_cache")
 
 -- Weapon system, pickup limits, etc
 local IsValid = IsValid

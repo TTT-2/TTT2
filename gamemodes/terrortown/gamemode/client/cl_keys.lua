@@ -66,19 +66,50 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return true
         end
     elseif bindName == "+use" and pressed then
-        if ply:IsSpec() then
-            RunConsoleCommand("ttt_spec_use")
-
-            return true
-        elseif TBHUD:PlayerIsFocused() then
+        -- Do old traitor button check
+        if TBHUD:PlayerIsFocused() then
             if ply:KeyDown(IN_WALK) then
                 -- Try to change the access to the button for your current role or team
                 return TBHUD:ToggleFocused(input.IsButtonDown(KEY_LSHIFT))
-            else
-                -- Try to use the button that is currently focused
-                return TBHUD:UseFocused()
             end
+
+            -- Else try to use the button that is currently focused
+            return TBHUD:UseFocused()
         end
+
+        -- Find out if a marker is focussed otherwise check normal use
+        local isClientOnly = false
+        local useEnt = markerVision.GetFocussedEntity()
+        local isRemote = IsValid(useEnt)
+        if not isRemote then
+            local tr = util.TraceLine({
+                start = ply:GetShootPos(),
+                endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
+                filter = ply,
+                mask = MASK_SHOT,
+            })
+
+            useEnt = tr.Entity
+            if not tr.Hit or not IsValid(useEnt) then
+                return
+            end
+
+            if isfunction(useEnt.ClientUse) then
+                isClientOnly = useEnt:ClientUse()
+            end
+        elseif isfunction(useEnt.RemoteUse) then
+            isClientOnly = useEnt:RemoteUse(ply)
+        end
+
+        -- If returned true by ClientUse or RemoteUse, then dont call Use and UseOverride or RemoteUse serverside
+        if isClientOnly then
+            return
+        end
+
+        net.Start("TTT2PlayerUseEntity")
+        net.WriteEntity(useEnt)
+        net.WriteBool(isRemote)
+        net.SendToServer()
     elseif string.sub(bindName, 1, 4) == "slot" and pressed then
         local idx = tonumber(string.sub(bindName, 5, -1)) or 1
 

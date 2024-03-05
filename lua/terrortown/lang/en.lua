@@ -1060,7 +1060,6 @@ L.label_gameplay_mute = "Mute living players when dead"
 L.label_hud_default = "Default HUD"
 L.label_hud_force = "Forced HUD"
 
-L.label_bind_weaponswitch = "Pickup Weapon"
 L.label_bind_voice = "Global Voice Chat"
 L.label_bind_voice_team = "Team Voice Chat"
 

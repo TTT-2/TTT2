@@ -174,7 +174,6 @@ if SERVER then
         sv_shopeditor = { file = "sv_shopeditor.lua", on = "server" },
         sv_status = { file = "sv_status.lua", on = "server" },
         sv_voice = { file = "sv_voice.lua", on = "server" },
-        sv_weapon_pickup = { file = "sv_weapon_pickup.lua", on = "server" },
         sv_weaponry = { file = "sv_weaponry.lua", on = "server" },
     }
 
