@@ -561,6 +561,15 @@ function plymeta:IsActive()
 end
 
 ---
+-- Checks whether a @{Player} is fully connected to the server
+-- @return boolean
+-- @realm shared
+function plymeta:IsFullySignedOn()
+    return (GAMEMODE.PlayerSignOnStates and GAMEMODE.PlayerSignOnStates[self:UserID()])
+        == SIGNONSTATE_FULL
+end
+
+---
 -- Convenience functions for common patterns
 -- will match if player has specific subrole or a general baserole if requested.
 -- To check whether a player have a specific baserole not a subrole, use <code>@{plymeta:GetSubRole} == baserole</code>

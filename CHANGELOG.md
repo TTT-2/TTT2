@@ -8,6 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
+- Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
 - Added hook ENTITY:RemoteUse(ply), which is shared
   - Return true if only clientside should be used
 - Added RemoteUse to radio, you can now directly access it via use button on marker focus
@@ -16,6 +17,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
+- 
 ### Removed
 
 - Removed radio tab in shop UI
