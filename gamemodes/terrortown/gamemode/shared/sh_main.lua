@@ -308,6 +308,20 @@ function GM:FinishMove(ply, moveData)
     SPRINT:HandleStaminaCalculation(ply)
 end
 
+---
+-- This hook is called every time a connecting client advances progress to signing on.
+-- @param number userID The userID of the player whose sign on state has changed.
+-- @param number oldState The previous sign on state. See @{SIGNONSTATE} enums.
+-- @param number newState The new/current sign on state. See @{SIGNONSTATE} enums.
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:ClientSignOnStateChanged
+-- @local
+function GM:ClientSignOnStateChanged(userID, oldState, newState)
+    GAMEMODE.PlayerSignOnStates = GAMEMODE.PlayerSignOnStates or {}
+    GAMEMODE.PlayerSignOnStates[userID] = newState
+end
+
 local ttt_playercolors = {
     all = {
         COLOR_WHITE,

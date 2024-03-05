@@ -1000,6 +1000,7 @@ local idle = {
     mx = 0,
     my = 0,
     t = 0,
+    last_check = 0,
 }
 
 ---
@@ -1023,16 +1024,16 @@ end)
 -- @realm client
 -- @internal
 function CheckIdle()
-    if not GetGlobalBool("ttt_idle", false) then
-        return
-    end
-
     local client = LocalPlayer()
-    if not IsValid(client) then
-        return
-    end
 
-    if GetRoundState() == ROUND_ACTIVE and client:IsTerror() and client:Alive() then
+    if
+        GetGlobalBool("ttt_idle", false)
+        and IsValid(client)
+        and GetRoundState() == ROUND_ACTIVE
+        and client:IsTerror()
+        and client:Alive()
+        and client:IsFullySignedOn()
+    then
         local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
 
         if idle_limit <= 0 then -- networking sucks sometimes
@@ -1056,10 +1057,12 @@ function CheckIdle()
 
                 RunConsoleCommand("ttt_cl_idlepopup")
             end)
-        elseif CurTime() > idle.t + idle_limit * 0.5 then
+        elseif CurTime() > idle.t + (idle_limit * 0.5) then
             -- will repeat
             LANG.Msg("idle_warning")
         end
+    else
+        idle.t = CurTime()
     end
 end
 

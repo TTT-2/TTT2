@@ -8,12 +8,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
+- Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
 - Added hook ENTITY:RemoteUse(ply), which is shared
   - Return true if only clientside should be used
 
 ### Changed
 
 ### Fixed
+
+- Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
