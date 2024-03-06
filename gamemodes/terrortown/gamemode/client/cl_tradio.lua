@@ -88,9 +88,9 @@ function TRADIO:Toggle(radioEnt)
         buttonReport:SetText(LANG.GetTranslation(translationName))
         buttonReport:SetSize(self.sizes.widthButton, self.sizes.heightButton)
         buttonReport.DoClick = function(btn)
-            if IsValid(self.radio) then
-                RunConsoleCommand("ttt_radio_play", self.entIndex, sound)
-            end
+            if not IsValid(self.radio) then return end
+
+            RunConsoleCommand("ttt_radio_play", self.entIndex, sound)
         end
     end
 end
