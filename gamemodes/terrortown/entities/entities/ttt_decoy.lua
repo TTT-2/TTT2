@@ -16,7 +16,6 @@ ENT.Model = "models/props_lab/reciever01b.mdl"
 
 ENT.CanHavePrints = false
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_decoy"
 
 ---

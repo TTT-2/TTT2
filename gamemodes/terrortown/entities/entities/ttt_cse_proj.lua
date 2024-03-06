@@ -18,7 +18,6 @@ ENT.MaxScenesPerPulse = 3
 ENT.SceneDuration = 10
 ENT.PulseDelay = 10
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_cse"
 
 ---

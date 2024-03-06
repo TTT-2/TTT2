@@ -21,7 +21,6 @@ ENT.Model = "models/props/cs_office/radio.mdl"
 
 ENT.CanHavePrints = false
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_radio"
 
 ENT.SoundLimit = 5

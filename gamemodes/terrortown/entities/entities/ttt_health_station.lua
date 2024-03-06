@@ -17,7 +17,6 @@ end
 ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/props/cs_office/microwave.mdl"
 
---ENT.CanUseKey = true
 ENT.CanHavePrints = true
 ENT.MaxHeal = 25
 ENT.MaxStored = 200
@@ -146,24 +145,6 @@ function ENT:GiveHealth(ply, healthMax)
     return false
 end
 
----
--- @param Player ply
--- @realm shared
-function ENT:Use(ply)
-    if not IsValid(ply) or not ply:IsPlayer() or not ply:IsActive() then
-        return
-    end
-
-    local t = CurTime()
-    if t < self.NextHeal then
-        return
-    end
-
-    local healed = self:GiveHealth(ply, self.HealRate)
-
-    self.NextHeal = t + (self.HealFreq * (healed and 1 or 2))
-end
-
 if SERVER then
     -- recharge
     local nextcharge = 0
@@ -178,6 +159,24 @@ if SERVER then
         self:AddToStorage(self.RechargeRate)
 
         nextcharge = CurTime() + self.RechargeFreq
+    end
+
+    ---
+    -- @param Player ply
+    -- @realm server
+    function ENT:Use(ply)
+        if not IsValid(ply) or not ply:IsPlayer() or not ply:IsActive() then
+            return
+        end
+
+        local t = CurTime()
+        if t < self.NextHeal then
+            return
+        end
+
+        local healed = self:GiveHealth(ply, self.HealRate)
+
+        self.NextHeal = t + (self.HealFreq * (healed and 1 or 2))
     end
 
     ---
@@ -199,6 +198,19 @@ else
         usekey = Key("+use", "USE"),
         walkkey = Key("+walk", "WALK"),
     }
+
+    ---
+    -- Hook that is called if a player uses their use key while focusing on the entity.
+    -- Early check if client can use the health station
+    -- @return bool True to prevent pickup
+    -- @hook
+    -- @realm client
+    function ENT:ClientUse()
+        local client = LocalPlayer()
+        if not IsValid(client) or not client:IsPlayer() or not client:IsActive() then
+            return true
+        end
+    end
 
     -- handle looking at healthstation
     hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tData)

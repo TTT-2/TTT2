@@ -19,7 +19,6 @@ ENT.Model = "models/props_lab/reciever01a.mdl"
 
 ENT.CanHavePrints = true
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_beacon"
 
 ENT.timeLastBeep = CurTime()
