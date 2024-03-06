@@ -10,7 +10,6 @@ ENT.Base = "base_anim"
 ENT.PrintName = "hat_deerstalker_name"
 ENT.Model = Model("models/ttt/deerstalker.mdl")
 ENT.CanHavePrints = false
-ENT.CanUseKey = true
 
 ---
 -- @realm shared
@@ -131,7 +130,7 @@ if SERVER then
     ---
     -- @param Player ply
     -- @realm server
-    function ENT:UseOverride(ply)
+    function ENT:Use(ply)
         if not ttt_hats_reclaim:GetBool() then
             return
         end

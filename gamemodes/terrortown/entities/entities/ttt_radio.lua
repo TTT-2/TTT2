@@ -21,7 +21,6 @@ ENT.Model = "models/props/cs_office/radio.mdl"
 
 ENT.CanHavePrints = false
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_radio"
 
 ENT.SoundLimit = 5
@@ -63,6 +62,13 @@ function ENT:Initialize()
     self.fingerprints = {}
 end
 
+---
+-- @param Player activator
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return activator == self:GetOriginator()
+end
+
 if SERVER then
     ---
     -- @realm server
@@ -74,13 +80,6 @@ if SERVER then
         end
 
         LANG.Msg(originator, "radio_broken", nil, MSG_MSTACK_WARN)
-    end
-
-    ---
-    -- @param Player activator
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        return activator == self:GetOriginator()
     end
 
     ---

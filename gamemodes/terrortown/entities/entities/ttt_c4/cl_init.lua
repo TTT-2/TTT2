@@ -494,19 +494,6 @@ end
 
 ---- Communication
 
-local function C4ConfigHook()
-    local bomb = net.ReadEntity()
-
-    if IsValid(bomb) then
-        if not bomb:GetArmed() then
-            ShowC4Config(bomb)
-        else
-            ShowC4Disarm(bomb)
-        end
-    end
-end
-net.Receive("TTT_C4Config", C4ConfigHook)
-
 local function C4DisarmResultHook()
     local bomb = net.ReadEntity()
     local correct = net.ReadBit() == 1
