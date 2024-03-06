@@ -309,7 +309,7 @@ function GM:HUDDrawTargetID()
     end
 
     -- if the entity also is a focused marker vision element, then targetID should be hidden
-    if ent == markerVision.GetFocussedEntity() then
+    if ent == markerVision.GetFocusedEntity() then
         return
     end
 

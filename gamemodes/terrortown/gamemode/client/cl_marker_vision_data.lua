@@ -134,7 +134,7 @@ function MARKER_VISION_DATA:SetTitle(text, color, inline_icons)
 end
 
 ---
--- Sets the subtitle of the specific targetID element
+-- Sets the subtitle of the specific radar vision element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
 -- @param[opt] table inline_icons A table of materials that should be rendered in front of the text

@@ -235,7 +235,7 @@ if CLIENT then
     ---
     -- This gets the currently focussed closest entity.
     -- @realm client
-    function markerVision.GetFocussedEntity()
+    function markerVision.GetFocusedEntity()
         local closestEntTbl = markerVision.focussedMarkers[1] or {}
 
         for i = 2, #markerVision.focussedMarkers do

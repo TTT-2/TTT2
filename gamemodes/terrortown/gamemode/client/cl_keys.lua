@@ -79,7 +79,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 
         -- Find out if a marker is focussed otherwise check normal use
         local isClientOnly = false
-        local useEnt = markerVision.GetFocussedEntity()
+        local useEnt = markerVision.GetFocusedEntity()
         local isRemote = IsValid(useEnt)
         if not isRemote then
             local tr = util.TraceLine({
