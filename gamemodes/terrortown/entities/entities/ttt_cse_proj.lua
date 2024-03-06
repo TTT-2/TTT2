@@ -39,6 +39,13 @@ function ENT:Initialize()
 end
 
 ---
+-- @param Player activator
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return self:GetOriginator() == activator
+end
+
+---
 -- @realm shared
 function ENT:GetNearbyCorpses()
     local pos = self:GetPos()
@@ -185,15 +192,6 @@ if SERVER then
         self:NextThink(CurTime() + self.PulseDelay)
 
         return true
-    end
-
-    ---
-    -- @param Player activator
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        local roleDataActivator = activator:GetSubRoleData()
-
-        return roleDataActivator.isPolicingRole and roleDataActivator.isPublicRole
     end
 end
 

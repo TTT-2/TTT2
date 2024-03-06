@@ -50,6 +50,13 @@ function ENT:Initialize()
     end
 end
 
+---
+-- @param Player activator
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return self:GetOriginator() == activator
+end
+
 if SERVER then
     local soundBeep = Sound("weapons/c4/cc4_beep1.wav")
 
@@ -128,13 +135,6 @@ if SERVER then
     end
 
     ---
-    -- @param Player activator
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        return self:GetOriginator() == activator
-    end
-
-    ---
     -- @realm server
     function ENT:UpdateTransmitState()
         return TRANSMIT_ALWAYS
@@ -164,7 +164,7 @@ if SERVER then
             end
 
             ---
-            -- @realm server			
+            -- @realm server
             -- stylua: ignore
             if hook.Run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
