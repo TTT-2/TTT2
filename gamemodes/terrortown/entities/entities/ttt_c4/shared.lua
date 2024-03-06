@@ -775,7 +775,6 @@ else -- CLIENT
     -- Hook that is called if a player uses their use key while focusing on the entity.
     -- Shows C4 UI
     -- @return bool True to prevent pickup
-    -- @hook
     -- @realm client
     function ENT:ClientUse()
         if IsValid(self) then

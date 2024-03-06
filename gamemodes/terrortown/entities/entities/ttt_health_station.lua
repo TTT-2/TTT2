@@ -203,7 +203,6 @@ else
     -- Hook that is called if a player uses their use key while focusing on the entity.
     -- Early check if client can use the health station
     -- @return bool True to prevent pickup
-    -- @hook
     -- @realm client
     function ENT:ClientUse()
         local client = LocalPlayer()
