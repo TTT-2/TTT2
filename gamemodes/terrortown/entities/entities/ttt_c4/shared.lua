@@ -32,7 +32,6 @@ ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/weapons/w_c4_planted.mdl"
 
 ENT.CanHavePrints = true
-ENT.CanUseKey = true
 ENT.Avoidable = true
 
 ENT.isDestructible = false
@@ -123,15 +122,6 @@ end
 function ENT:SetDetonateTimer(length)
     self:SetTimerLength(length)
     self:SetExplodeTime(CurTime() + length)
-end
-
----
--- @param Entity activator
--- @realm shared
-function ENT:UseOverride(activator)
-    if IsValid(activator) and activator:IsPlayer() then
-        self:ShowC4Config(activator)
-    end
 end
 
 ---
@@ -525,16 +515,6 @@ if SERVER then
         mvObject:SyncToClients()
     end
 
-    ---
-    -- @param Player ply
-    -- @realm server
-    function ENT:ShowC4Config(ply)
-        -- show menu to player to configure or disarm us
-        net.Start("TTT_C4Config")
-        net.WriteEntity(self)
-        net.Send(ply)
-    end
-
     local function ReceiveC4Config(ply, cmd, args)
         if not (IsValid(ply) and ply:IsTerror() and #args == 2) then
             return
@@ -790,6 +770,24 @@ else -- CLIENT
         weight = 0,
         antialias = false,
     })
+
+    ---
+    -- Hook that is called if a player uses their use key while focusing on the entity.
+    -- Shows C4 UI
+    -- @return bool True to prevent pickup
+    -- @hook
+    -- @realm client
+    function ENT:ClientUse()
+        if IsValid(self) then
+            if not self:GetArmed() then
+                ShowC4Config(self)
+            else
+                ShowC4Disarm(self)
+            end
+        end
+
+        return true
+    end
 
     ---
     -- @return table pos
