@@ -130,8 +130,6 @@ L.xfer_received = "{player} sana {num} kredi verdi."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radyo"
-L.radio_help = "Radyonuzun bu sesi çalmasını sağlamak için bir düğmeye tıklayın."
-L.radio_notplaced = "Sesi çalmak için Radyoyu yerleştirmelisiniz."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Çığlık"
@@ -2188,3 +2186,6 @@ L.decoy_help_primary = "Tuzağı yerleştirin"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"

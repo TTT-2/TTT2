@@ -130,8 +130,6 @@ L.xfer_received = "{player} надав вам кредити в розмірі {
 
 -- Radio tab in equipment menu
 L.radio_name = "Радіо"
-L.radio_help = "Натисніть кнопку, щоб радіо відтворювало обраний звук."
-L.radio_notplaced = "Ви повинні розташувати Радіо, щоб відтворювати на ньому звук."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Крик"
@@ -2190,3 +2188,6 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"

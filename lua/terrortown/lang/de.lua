@@ -130,8 +130,6 @@ L.xfer_received = "{player} gab dir {num} Ausrüstungspunkt(e)."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
-L.radio_help = "Drücke einen Knopf, um das Radio den Ton abspielen zu lassen."
-L.radio_notplaced = "Du musst das Radio platzieren, um einen Ton abspielen zu lassen."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Schrei"
@@ -2190,3 +2188,6 @@ L.magneto_stick_help_carry_prop_drop = "Prop fallenlassen"
 
 -- 2024-02-14
 L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"

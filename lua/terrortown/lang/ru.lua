@@ -132,8 +132,6 @@ L.xfer_received = "{player} передаёт вам {num} кредит."
 
 -- Radio tab in equipment menu
 L.radio_name = "Радио"
-L.radio_help = "Нажмите на кнопку, чтобы воспроизвести выбранный звук."
-L.radio_notplaced = "Вы должны поместить Радио, чтобы воспроизводить звуки."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Крик"
@@ -2192,3 +2190,6 @@ L.decoy_help_primary = "Установить Приманку"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"

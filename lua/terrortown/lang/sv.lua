@@ -130,8 +130,6 @@ L.xfer_received = "{player} har gett dig {num} krediter."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
-L.radio_help = "Tryck på en knapp för att spela det ljudet på Radion."
-L.radio_notplaced = "Du måste placera Radion för att kunna spela ljud på den."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Skrik"
@@ -2190,3 +2188,6 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"
