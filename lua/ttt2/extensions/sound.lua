@@ -21,6 +21,11 @@ local cvLevelSoundButtons = CreateConVar("ttt2_level_sound_buttons", "1", { FCVA
 local cvEnableSoundMessage = CreateConVar("ttt2_enable_sound_message", "0", { FCVAR_ARCHIVE })
 local cvLevelSoundMessage = CreateConVar("ttt2_level_sound_message", "1", { FCVAR_ARCHIVE })
 
+---
+-- Plays the sound only if the provided type is enabled on the client.
+-- @param string sound The sound to play; this should either be a sound script name or a file path relative to the `sound/` folder
+-- @param number typeSound The sound type. Can be `SOUND_TYPE_INTERACT`, `SOUND_TYPE_BUTTONS` or `SOUND_TYPE_MESSAGE`
+-- @realm client
 function sound.ConditionalPlay(sound, typeSound)
     local client = LocalPlayer()
 
@@ -33,6 +38,10 @@ function sound.ConditionalPlay(sound, typeSound)
     end
 end
 
+---
+-- Plays the chat "tick" sound.
+-- @note This is overwritten so that this function respects the TTT2 convar.
+-- @realm client
 function chat.PlaySound()
     sound.ConditionalPlay("HudChat.Message", SOUND_TYPE_MESSAGE)
 end
