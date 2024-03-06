@@ -3,7 +3,9 @@
 -- @section key_manager
 
 local IsValid = IsValid
-local cv_sv_cheats = GetConVar("sv_cheats")
+local cvSVCheats = GetConVar("sv_cheats")
+
+local soundUse = Sound("buttons/lightswitch2.wav")
 
 local function SendWeaponDrop()
     RunConsoleCommand("ttt_dropweapon")
@@ -98,6 +100,8 @@ function GM:PlayerBindPress(ply, bindName, pressed)
                 isClientOnly = useEnt:ClientUse()
             end
         elseif isfunction(useEnt.RemoteUse) then
+            sound.ConditionalPlay(soundUse, SOUND_TYPE_UI)
+
             isClientOnly = useEnt:RemoteUse(ply)
         end
 
@@ -151,7 +155,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             end
         end
     elseif bindName == "noclip" and pressed then
-        if not cv_sv_cheats:GetBool() then
+        if not cvSVCheats:GetBool() then
             RunConsoleCommand("ttt_equipswitch")
 
             return true
