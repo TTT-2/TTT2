@@ -230,14 +230,13 @@ if CLIENT then
 
         tData:SetTitle(TryT("vis_name"))
 
-        if roleData.isPublicRole and roleData.isPolicingRole then
+        if ent:GetOriginator() == client then
             tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
-            tData:SetKeyBinding("+use")
         else
-            tData:SetSubtitle(TryT("vis_no_pickup"))
-            tData:AddIcon(roles.DETECTIVE.iconMaterial)
+            tData:SetSubtitle(TryT("entity_pickup_owner_only"))
         end
 
+        tData:SetKeyBinding("+use")
         tData:AddDescriptionLine(TryT("vis_short_desc"))
     end)
 end
