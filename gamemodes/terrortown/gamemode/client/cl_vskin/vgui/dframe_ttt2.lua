@@ -218,7 +218,7 @@ function PANEL:OnClear() end
 -- @realm client
 function PANEL:InitButtons()
     -- add close button
-    self.btnClose = vgui.Create("DButton", self)
+    self.btnClose = vgui.Create("DButtonTTT2", self)
     self.btnClose:SetText("")
     self.btnClose:SetVisible(true)
 
@@ -231,7 +231,7 @@ function PANEL:InitButtons()
     end
 
     -- add back button
-    self.btnBack = vgui.Create("DButton", self)
+    self.btnBack = vgui.Create("DButtonTTT2", self)
     self.btnBack:SetText("")
     self.btnBack:SetVisible(true)
 
