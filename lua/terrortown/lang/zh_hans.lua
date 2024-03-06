@@ -130,8 +130,6 @@ L.xfer_received = "{player} 给予你 {num} 积分。"
 
 -- Radio tab in equipment menu
 L.radio_name = "收音机"
-L.radio_help = "点击按钮，让收音机播放音效。"
-L.radio_notplaced = "你必须放置收音机以播放音效。"
 
 -- Radio soundboard buttons
 L.radio_button_scream = "尖叫"
@@ -2190,3 +2188,6 @@ L.decoy_help_primary = "安放诱饵"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"

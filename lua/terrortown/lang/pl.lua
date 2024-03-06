@@ -130,8 +130,6 @@ L.xfer_received = "{player} dał ci {num} kredyt(ów)."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
-L.radio_help = "Klkinij przycisk, by twoje radio zaczeło grać."
-L.radio_notplaced = "Musisz postawić radio, by móc puścić jakieś dźwięki."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Krzyk"
@@ -2190,3 +2188,6 @@ L.decoy_help_primary = "Rozstaw Wabik"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"

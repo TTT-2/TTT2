@@ -130,8 +130,6 @@ L.xfer_received = "{player}はあなたに{num}クレジットを渡した。"
 
 -- Radio tab in equipment menu
 L.radio_name = "ラジオ"
-L.radio_help = "音を再生するためにボタンをクリックしよう。"
-L.radio_notplaced = "再生するためにはラジオを置かなくてはならないぞ。"
 
 -- Radio soundboard buttons
 L.radio_button_scream = "悲鳴"
@@ -2190,3 +2188,6 @@ L.decoy_help_primary = "デコイを設置する"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"
