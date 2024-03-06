@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Placeable Entities are now checked for pickup clientside first
 - Visualizer can now only be picked up by the originator
+- C4 UI is not routed over the server anymore
 
 ### Fixed
 
@@ -25,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed radio tab in shop UI
+- Removed all uses of UseOverride-Hook inside TTT2 (It's still available for addons!)
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
