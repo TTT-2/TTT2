@@ -211,7 +211,6 @@ if CLIENT then
     hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(tData)
         local client = LocalPlayer()
         local ent = tData:GetEntity()
-        local roleData = client:GetSubRoleData()
 
         if
             not IsValid(client)
