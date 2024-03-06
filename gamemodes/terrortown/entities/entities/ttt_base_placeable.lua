@@ -61,13 +61,13 @@ if CLIENT then
     -- @hook
     -- @realm client
     function ENT:ClientUse()
-        local activator = LocalPlayer()
-        if not IsValid(activator) or not activator:IsTerror() or not self.pickupWeaponClass then
+        local client = LocalPlayer()
+        if not IsValid(client) or not client:IsTerror() or not self.pickupWeaponClass then
             return true
         end
 
-        if not self:PlayerCanPickupWeapon(activator) then
-            LANG.Msg(activator, "pickup_fail", nil, MSG_MSTACK_WARN)
+        if not self:PlayerCanPickupWeapon(client) then
+            LANG.Msg(client, "pickup_fail", nil, MSG_MSTACK_WARN)
 
             self:EmitSound(soundDeny)
 
