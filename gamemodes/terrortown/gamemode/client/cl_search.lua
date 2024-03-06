@@ -14,6 +14,26 @@ local materialCredits = Material("vgui/ttt/icon_credits_transparent")
 local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
 local materialPlayerIconUnknown = Material("vgui/ttt/b-draw/icon_avatar_default")
 
+local soundsSearch = {
+    Sound("player/suit_ct_01.wav"),
+    Sound("player/suit_ct_02.wav"),
+    Sound("player/suit_ct_03.wav"),
+    Sound("player/suit_ct_04.wav"),
+    Sound("player/suit_ct_05.wav"),
+    Sound("player/suit_ct_06.wav"),
+    Sound("player/suit_ct_07.wav"),
+    Sound("player/suit_ct_08.wav"),
+    Sound("player/suit_ct_09.wav"),
+    Sound("player/suit_ct_11.wav"),
+    Sound("player/suit_ct_13.wav"),
+    Sound("player/suit_ct_15.wav"),
+    Sound("player/suit_ct_17.wav"),
+    Sound("player/suit_ct_19.wav"),
+    Sound("player/suit_ct_20.wav"),
+    Sound("player/suit_ct_21.wav"),
+    Sound("player/suit_ct_23.wav"),
+}
+
 net.Receive("TTT2SendConfirmMsg", function()
     local msgName = net.ReadString()
     local sid64 = net.ReadString()
@@ -172,6 +192,9 @@ end
 -- @param table data The scene data that should be added
 -- @realm client
 function SEARCHSCREEN:Show(data)
+    -- play sound on open
+    sound.ConditionalPlay(table.Random(soundsSearch), SOUND_TYPE_INTERACT)
+
     local client = LocalPlayer()
 
     self:CalculateSizes()

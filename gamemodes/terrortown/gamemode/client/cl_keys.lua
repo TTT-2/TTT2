@@ -100,7 +100,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
                 isClientOnly = useEnt:ClientUse()
             end
         elseif isfunction(useEnt.RemoteUse) then
-            sound.ConditionalPlay(soundUse, SOUND_TYPE_UI)
+            sound.ConditionalPlay(soundUse, SOUND_TYPE_INTERACT)
 
             isClientOnly = useEnt:RemoteUse(ply)
         end
