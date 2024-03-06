@@ -15,6 +15,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Placeable Entities are now checked for pickup clientside first
+- Visualizer can now only be picked up by the originator
+
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
