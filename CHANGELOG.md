@@ -11,12 +11,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
 - Added hook ENTITY:RemoteUse(ply), which is shared
   - Return true if only clientside should be used
+- Added RemoteUse to radio, you can now directly access it via use button on marker focus
 
 ### Changed
 
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
+- 
+### Removed
+
+- Removed radio tab in shop UI
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 

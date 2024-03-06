@@ -938,20 +938,6 @@ function TraitorMenuPopup()
         )
     end
 
-    -- Weapon/item control
-    if IsValid(client.radio) or client:HasWeapon("weapon_ttt_radio") then
-        local dradio = TRADIO.CreateMenu(dsheet)
-
-        dsheet:AddSheet(
-            GetTranslation("radio_name"),
-            dradio,
-            "icon16/transmit.png",
-            false,
-            false,
-            GetTranslation("equip_tooltip_radio")
-        )
-    end
-
     -- Credit transferring
     if credits > 0 then
         local dtransfer = CreateTransferMenu(dsheet)
