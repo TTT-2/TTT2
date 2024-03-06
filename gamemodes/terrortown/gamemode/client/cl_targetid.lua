@@ -308,6 +308,11 @@ function GM:HUDDrawTargetID()
         return
     end
 
+    -- if the entity also is a focused marker vision element, then targetID should be hidden
+    if ent == markerVision.GetFocussedEntity() then
+        return
+    end
+
     -- call internal targetID functions first so the data can be modified by addons
     local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
 

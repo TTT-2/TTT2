@@ -224,6 +224,10 @@ if CLIENT then
         { font = "Tahoma", size = 20, weight = 600, extended = true }
     )
     surface.CreateAdvancedFont(
+        "RadarVision_Subtitle",
+        { font = "Tahoma", size = 17, weight = 300, extended = true }
+    )
+    surface.CreateAdvancedFont(
         "RadarVision_Text",
         { font = "Tahoma", size = 14, weight = 300, extended = true }
     )
@@ -253,7 +257,7 @@ if CLIENT then
     function markerVision.Draw()
         local scale = appearance.GetGlobalScale()
 
-        local padding = 3 * scale
+        local padding = 4 * scale
         local paddingScreen = 10 * scale
 
         local sizeIcon = 28 * scale
@@ -264,6 +268,11 @@ if CLIENT then
 
         local sizeTitleIcon = 14 * scale
         local offsetTitleIcon = 0.5 * sizeTitleIcon
+
+        local sizeSubtitleIcon = 12 * scale
+        local offsetSubtitleIcon = 0.5 * sizeSubtitleIcon
+
+        local offsetSubtitle = 8 * scale
 
         local heightLineDescription = 14 * scale
 
@@ -378,15 +387,19 @@ if CLIENT then
                 continue
             end
 
-            screenPos.x = math.Clamp(
-                screenPos.x,
-                offsetIcon + paddingScreen,
-                widthScreen - offsetIcon - paddingScreen
+            screenPos.x = math.Round(
+                math.Clamp(
+                    screenPos.x,
+                    offsetIcon + paddingScreen,
+                    widthScreen - offsetIcon - paddingScreen
+                )
             )
-            screenPos.y = math.Clamp(
-                screenPos.y,
-                offsetIcon + paddingScreen,
-                heightScreen - offsetIcon - paddingScreen
+            screenPos.y = math.Round(
+                math.Clamp(
+                    screenPos.y,
+                    offsetIcon + paddingScreen,
+                    heightScreen - offsetIcon - paddingScreen
+                )
             )
 
             -- draw Icons
@@ -414,11 +427,14 @@ if CLIENT then
                 end
             end
 
+            -- check if a subtitle is set because that shifts multiple things around
+            local hasSubtitle = mvData:HasSubtitle()
+
             -- draw title
             local stringTitle = params.displayInfo.title.text
 
             local xStringTitle = screenPos.x + offsetIcon + padding
-            local yStringTitle = screenPos.y
+            local yStringTitle = hasSubtitle and (screenPos.y - offsetSubtitle) or screenPos.y
 
             for j = 1, #params.displayInfo.title.icons do
                 drawsc.FilteredShadowedTexture(
@@ -431,7 +447,7 @@ if CLIENT then
                     params.displayInfo.title.color
                 )
 
-                xStringTitle = xStringTitle + 18 * scale
+                xStringTitle = xStringTitle + sizeTitleIcon + 4 * scale
             end
 
             draw.AdvancedText(
@@ -446,6 +462,38 @@ if CLIENT then
                 scale
             )
 
+            -- draw subtitle
+            if hasSubtitle then
+                local stringSubtitle = params.displayInfo.subtitle.text
+
+                local xStringSubtitle = xStringTitle
+                local yStringSubtitle = screenPos.y + offsetSubtitle
+
+                for j = 1, #params.displayInfo.subtitle.icons do
+                    drawsc.FilteredShadowedTexture(
+                        xStringSubtitle,
+                        yStringSubtitle - offsetSubtitleIcon,
+                        sizeSubtitleIcon,
+                        sizeSubtitleIcon,
+                        params.displayInfo.subtitle.icons[j],
+                        params.displayInfo.subtitle.color.a,
+                        params.displayInfo.subtitle.color
+                    )
+
+                    xStringSubtitle = xStringSubtitle + sizeSubtitleIcon + 4 * scale
+                end
+
+                drawsc.AdvancedShadowedText(
+                    stringSubtitle,
+                    "RadarVision_Subtitle",
+                    xStringSubtitle,
+                    yStringSubtitle,
+                    params.displayInfo.subtitle.color,
+                    TEXT_ALIGN_LEFT,
+                    TEXT_ALIGN_CENTER
+                )
+            end
+
             -- draw description
             local linesDescription = params.displayInfo.desc
             local amountLinesDescription = #linesDescription
@@ -458,7 +506,9 @@ if CLIENT then
                 local color = linesDescription[j].color
 
                 local xStringDescriptionShifted = xStringDescription
-                local yStringDescription = yStringTitle + j * heightLineDescription
+                local yStringDescription = yStringTitle
+                    + j * heightLineDescription
+                    + (hasSubtitle and 3 * offsetSubtitle or 0)
 
                 for k = 1, #icons do
                     draw.FilteredShadowedTexture(
