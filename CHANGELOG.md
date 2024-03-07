@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - TargetID is now hidden when a marker vision element is focused
+- Crosshair rendering now is a bit more flexible and customizable
 
 ### Fixed
 
