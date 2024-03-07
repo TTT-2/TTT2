@@ -114,4 +114,4 @@ function PANEL:Paint(w, h)
     return false
 end
 
-derma.DefineControl("DCardTTT2", "A special button used for the shop editor", PANEL, "DLabelTTT2")
+derma.DefineControl("DCardTTT2", "A special button used for the shop editor", PANEL, "DButtonTTT2")

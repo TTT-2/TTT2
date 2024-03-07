@@ -360,11 +360,25 @@ if CLIENT then
         mvData:SetTitle(TryT(ent.PrintName))
         mvData:AddIcon(materialRadio)
 
+        mvData:SetSubtitle(ParT("use_entity", { usekey = Key("+use", "USE") }))
+
         mvData:AddDescriptionLine(ParT("marker_vision_owner", { owner = nick }))
         mvData:AddDescriptionLine(ParT("marker_vision_distance", { distance = distance }))
 
         mvData:AddDescriptionLine(TryT(mvObject:GetVisibleForTranslationKey()), COLOR_SLATEGRAY)
     end)
+
+    ---
+    -- This is triggered, when you focus a marker of an entity and press 'Use'-Key
+    -- Opens the radio menu
+    -- @param Player ply The player that used this entity. Always LocalPlayer here.
+    -- @return bool True, because this shouldn't be used serverside
+    -- @realm client
+    function ENT:RemoteUse(ply)
+        TRADIO:Toggle(self)
+
+        return true
+    end
 end
 
 if SERVER then

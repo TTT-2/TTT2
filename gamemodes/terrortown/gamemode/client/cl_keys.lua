@@ -3,7 +3,9 @@
 -- @section key_manager
 
 local IsValid = IsValid
-local cv_sv_cheats = GetConVar("sv_cheats")
+local cvSVCheats = GetConVar("sv_cheats")
+
+local soundUse = Sound("buttons/lightswitch2.wav")
 
 local function SendWeaponDrop()
     RunConsoleCommand("ttt_dropweapon")
@@ -66,6 +68,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return true
         end
     elseif bindName == "+use" and pressed then
+        -- Do old traitor button check
         if TBHUD:PlayerIsFocused() then
             if ply:KeyDown(IN_WALK) then
                 -- Try to change the access to the button for your current role or team
@@ -76,29 +79,40 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             return TBHUD:UseFocused()
         end
 
-        local tr = util.TraceLine({
-            start = ply:GetShootPos(),
-            endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
-            filter = ply,
-            mask = MASK_SHOT,
-        })
-
-        if not tr.Hit or not IsValid(tr.Entity) then
-            return
-        end
-
+        -- Find out if a marker is focussed otherwise check normal use
         local isClientOnly = false
-        if isfunction(tr.Entity.ClientUse) then
-            isClientOnly = tr.Entity:ClientUse()
+        local useEnt = markerVision.GetFocusedEntity()
+        local isRemote = IsValid(useEnt)
+        if not isRemote then
+            local tr = util.TraceLine({
+                start = ply:GetShootPos(),
+                endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
+                filter = ply,
+                mask = MASK_SHOT,
+            })
+
+            useEnt = tr.Entity
+            if not tr.Hit or not IsValid(useEnt) then
+                return
+            end
+
+            if isfunction(useEnt.ClientUse) then
+                isClientOnly = useEnt:ClientUse()
+            end
+        elseif isfunction(useEnt.RemoteUse) then
+            sound.ConditionalPlay(soundUse, SOUND_TYPE_INTERACT)
+
+            isClientOnly = useEnt:RemoteUse(ply)
         end
 
-        -- If returned true by ClientUse, then dont call Use and UseOverride serverside
+        -- If returned true by ClientUse or RemoteUse, then dont call Use and UseOverride or RemoteUse serverside
         if isClientOnly then
             return
         end
 
         net.Start("TTT2PlayerUseEntity")
-        net.WriteEntity(tr.Entity)
+        net.WriteEntity(useEnt)
+        net.WriteBool(isRemote)
         net.SendToServer()
     elseif string.sub(bindName, 1, 4) == "slot" and pressed then
         local idx = tonumber(string.sub(bindName, 5, -1)) or 1
@@ -141,7 +155,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             end
         end
     elseif bindName == "noclip" and pressed then
-        if not cv_sv_cheats:GetBool() then
+        if not cvSVCheats:GetBool() then
             RunConsoleCommand("ttt_equipswitch")
 
             return true
