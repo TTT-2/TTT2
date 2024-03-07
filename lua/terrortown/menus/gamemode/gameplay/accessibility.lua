@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 98
+CLGAMEMODESUBMENU.priority = 99
 CLGAMEMODESUBMENU.title = "submenu_gameplay_accessibility_title"
 CLGAMEMODESUBMENU.icon = Material("vgui/ttt/vskin/helpscreen/accessibility")
 
