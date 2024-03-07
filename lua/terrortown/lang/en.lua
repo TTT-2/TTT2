@@ -2193,9 +2193,11 @@ L.throw_no_room = "You have no space here to throw this device"
 L.use_entity = "Press [{usekey}] to use"
 
 -- 2024-03.06
+L.submenu_gameplay_sounds_title = "Client-Sounds"
+
 L.header_sounds_settings = "UI Sound Settings"
 
-L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when searching a body."
+L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
 L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
 L.help_enable_sound_message = "Message or notification sounds are played for chat and mStack messages. They can be quite obnoxious."
 

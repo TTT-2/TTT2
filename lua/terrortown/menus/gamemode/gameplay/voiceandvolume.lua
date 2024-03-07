@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 99
+CLGAMEMODESUBMENU.priority = 98
 CLGAMEMODESUBMENU.title = "submenu_gameplay_voiceandvolume_title"
 CLGAMEMODESUBMENU.icon = Material("vgui/ttt/vskin/helpscreen/voiceandvolume")
 
@@ -44,61 +44,5 @@ function CLGAMEMODESUBMENU:Populate(parent)
         max = 1,
         decimal = 2,
         master = enbSpecDuck,
-    })
-
-    local form3 = vgui.CreateTTT2Form(parent, "header_sounds_settings")
-
-    form3:MakeHelp({
-        label = "help_enable_sound_interact",
-    })
-
-    local enbSoundInteract = form3:MakeCheckBox({
-        label = "label_enable_sound_interact",
-        convar = "ttt2_enable_sound_interact",
-    })
-
-    form3:MakeSlider({
-        label = "label_level_sound_interact",
-        convar = "ttt2_level_sound_interact",
-        min = 0,
-        max = 2,
-        decimal = 1,
-        master = enbSoundInteract,
-    })
-
-    form3:MakeHelp({
-        label = "help_enable_sound_buttons",
-    })
-
-    local enbSoundButtons = form3:MakeCheckBox({
-        label = "label_enable_sound_buttons",
-        convar = "ttt2_enable_sound_buttons",
-    })
-
-    form3:MakeSlider({
-        label = "label_level_sound_buttons",
-        convar = "ttt2_level_sound_buttons",
-        min = 0,
-        max = 2,
-        decimal = 1,
-        master = enbSoundButtons,
-    })
-
-    form3:MakeHelp({
-        label = "help_enable_sound_message",
-    })
-
-    local enbSoundMessage = form3:MakeCheckBox({
-        label = "label_enable_sound_message",
-        convar = "ttt2_enable_sound_message",
-    })
-
-    form3:MakeSlider({
-        label = "label_level_sound_message",
-        convar = "ttt2_level_sound_message",
-        min = 0,
-        max = 2,
-        decimal = 1,
-        master = enbSoundMessage,
     })
 end
