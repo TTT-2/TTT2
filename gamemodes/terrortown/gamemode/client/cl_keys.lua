@@ -65,7 +65,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 
             return true
         end
-    elseif bindName == "+use" and pressed then
+    elseif bindName == "+use" then
         -- Do old traitor button check
         if TBHUD:PlayerIsFocused() then
             if ply:KeyDown(IN_WALK) then
