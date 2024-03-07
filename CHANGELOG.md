@@ -12,8 +12,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added hook ENTITY:RemoteUse(ply), which is shared
   - Return true if only clientside should be used
 - Added RemoteUse to radio, you can now directly access it via use button on marker focus
+- Added the option to add a subtitle to a marker vision element
 
 ### Changed
+
+- TargetID is now hidden when a marker vision element is focused
 
 ### Fixed
 
