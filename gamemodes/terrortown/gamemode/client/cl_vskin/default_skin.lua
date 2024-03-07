@@ -256,10 +256,6 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintWindowCloseButton(panel, w, h)
-    if not panel.m_bBackground then
-        return
-    end
-
     local colorBackground = colors.accent
     local colorText = ColorAlpha(colors.accentText, 150)
     local shift = 0
@@ -294,10 +290,6 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintWindowBackButton(panel, w, h)
-    if not panel.m_bBackground then
-        return
-    end
-
     local colorBackground = colors.accent
     local colorText = ColorAlpha(colors.accentText, 150)
     local shift = 0

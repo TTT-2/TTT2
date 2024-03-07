@@ -40,6 +40,26 @@ local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, 
 -- stylua: ignore
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local soundsSearch = {
+    Sound("player/suit_ct_01.wav"),
+    Sound("player/suit_ct_02.wav"),
+    Sound("player/suit_ct_03.wav"),
+    Sound("player/suit_ct_04.wav"),
+    Sound("player/suit_ct_05.wav"),
+    Sound("player/suit_ct_06.wav"),
+    Sound("player/suit_ct_07.wav"),
+    Sound("player/suit_ct_08.wav"),
+    Sound("player/suit_ct_09.wav"),
+    Sound("player/suit_ct_11.wav"),
+    Sound("player/suit_ct_13.wav"),
+    Sound("player/suit_ct_15.wav"),
+    Sound("player/suit_ct_17.wav"),
+    Sound("player/suit_ct_19.wav"),
+    Sound("player/suit_ct_20.wav"),
+    Sound("player/suit_ct_21.wav"),
+    Sound("player/suit_ct_23.wav"),
+}
+
 ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
@@ -275,6 +295,14 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
     -- identifier so we know whether a ttt_confirm_death was legit
     ply.searchID = sceneData.searchUID
+
+    -- play sound when the body was searched
+    -- note: These sounds are pretty quiet and are therefore played thrice to increase the volume
+    local soundSelected = table.Random(soundsSearch)
+
+    rag:EmitSound(soundSelected, 100)
+    rag:EmitSound(soundSelected, 100)
+    rag:EmitSound(soundSelected, 100)
 
     local roleData = ply:GetSubRoleData()
     if ply:IsActive() and roleData.isPolicingRole and roleData.isPublicRole and not isCovert then
