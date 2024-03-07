@@ -939,7 +939,7 @@ function GM:PostCleanupMap()
 end
 
 local function CleanUp()
-    game.CleanUpMap(false, nil, function() ents.TTT.FixParentedPostCleanup() end)
+    game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
 
     -- Strip players now, so that their weapons are not seen by ReplaceEntities
     local plys = select(2, playerIterator())

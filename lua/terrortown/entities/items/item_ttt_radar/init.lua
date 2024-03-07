@@ -109,9 +109,9 @@ function RADAR.TriggerRadarScan(ply)
     for i = 1, #targets do
         local tgt = targets[i]
 
-        net.WriteInt(tgt.pos.x, 32)
-        net.WriteInt(tgt.pos.y, 32)
-        net.WriteInt(tgt.pos.z, 32)
+        net.WriteInt(tgt.pos.x, 15)
+        net.WriteInt(tgt.pos.y, 15)
+        net.WriteInt(tgt.pos.z, 15)
 
         if tgt.subrole == -1 then
             net.WriteBool(false)
