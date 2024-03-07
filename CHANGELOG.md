@@ -26,6 +26,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The binoculars now use the default crosshair as well
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
+- Micro optimizations
+  - switched from `player.GetAll()` to `select(2, player.Iterator())`
+  - `Read` / `WritePlayer` for syncing players
+  - Reduced radar bit size for net message
 
 ### Fixed
 
