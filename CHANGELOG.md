@@ -13,8 +13,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Return true if only clientside should be used
 - Added RemoteUse to radio, you can now directly access it via use button on marker focus
 - Added sounds to multiple UI interactions (can be disabled in settings)
+- Added the option to add a subtitle to a marker vision element
 
 ### Changed
+
+- TargetID is now hidden when a marker vision element is focused
 
 ### Fixed
 

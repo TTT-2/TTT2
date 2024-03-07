@@ -134,6 +134,20 @@ function MARKER_VISION_DATA:SetTitle(text, color, inline_icons)
 end
 
 ---
+-- Sets the subtitle of the specific radar vision element
+-- @param[default=""] string text The text that should be displayed
+-- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
+-- @param[opt] table inline_icons A table of materials that should be rendered in front of the text
+-- @realm client
+function MARKER_VISION_DATA:SetSubtitle(text, color, inline_icons)
+    self.params.displayInfo.subtitle = {
+        text = text or "",
+        color = IsColor(color) and color or COLOR_LLGRAY,
+        icons = inline_icons or {},
+    }
+end
+
+---
 -- Adds a line of text to the description area of the radar vision element
 -- @param[default=""] string text The text that should be displayed
 -- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
@@ -170,6 +184,14 @@ end
 -- @realm client
 function MARKER_VISION_DATA:HasTitle()
     return self.params.displayInfo.title and self.params.displayInfo.title.text ~= ""
+end
+
+---
+-- Returns whether or not a subtitle has been set
+-- @return boolean True if a subtitle is set
+-- @realm client
+function MARKER_VISION_DATA:HasSubtitle()
+    return self.params.displayInfo.subtitle and self.params.displayInfo.subtitle ~= ""
 end
 
 ---
