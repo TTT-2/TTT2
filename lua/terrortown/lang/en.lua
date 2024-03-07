@@ -1033,7 +1033,7 @@ L.label_shop_show_fav = "Show favourite item marker"
 L.label_crosshair_enable = "Enable crosshair"
 L.label_crosshair_opacity = "Crosshair opacity"
 L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
-L.label_crosshair_size = "Crosshair size multiplier"
+L.label_crosshair_size = "Crosshair line size multiplier"
 L.label_crosshair_thickness = "Crosshair thickness multiplier"
 L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
 L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
@@ -2191,3 +2191,7 @@ L.throw_no_room = "You have no space here to throw this device"
 
 -- 2024-03-04
 L.use_entity = "Press [{usekey}] to use"
+
+-- 2024-03-07
+L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+L.label_crosshair_size_gap = "Crosshair gap size multiplier"

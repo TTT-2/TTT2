@@ -288,7 +288,12 @@ if CLIENT then
     ---
     -- @realm client
     -- stylua: ignore
-    local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+    local cvSizeLineCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvSizeGapCrosshair = CreateConVar("ttt_crosshair_size_gap", "1.0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
@@ -309,6 +314,11 @@ if CLIENT then
     -- @realm client
     -- stylua: ignore
     local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvCrosshairStaticGapLength = CreateConVar("ttt_crosshair_static_gap_length", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
@@ -386,15 +396,19 @@ if CLIENT then
         )
 
         local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-        local gap = mathCeil(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
         local thicknessLine = mathCeil(cvThicknessCrosshair:GetFloat() * scale)
         local thicknessOutline = mathCeil(cvThicknessOutlineCrosshair:GetFloat() * scale)
+        local gap = mathCeil(
+            25
+                * cvSizeGapCrosshair:GetFloat()
+                * (cvCrosshairStaticGapLength:GetBool() and baseConeWeapon or scaleWeapon * timescale)
+                * scale
+        )
         local lengthLine = mathCeil(
             gap
                 + 25
-                    * cvSizeCrosshair:GetFloat()
-                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon)
-                    * timescale
+                    * cvSizeLineCrosshair:GetFloat()
+                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon * timescale)
                     * scale
         )
         local offsetLine = mathCeil(thicknessLine * 0.5)
