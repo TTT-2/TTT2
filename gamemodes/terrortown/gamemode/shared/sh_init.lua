@@ -558,6 +558,7 @@ include("ttt2/extensions/draw.lua")
 include("ttt2/extensions/input.lua")
 include("ttt2/extensions/cvars.lua")
 include("ttt2/extensions/render.lua")
+include("ttt2/extensions/chat.lua")
 include("ttt2/extensions/sound.lua")
 
 -- include libraries
