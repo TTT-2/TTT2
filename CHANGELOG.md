@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Crosshair rendering now is a bit more flexible and customizable
 - A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
 
 ### Fixed
