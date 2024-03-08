@@ -11,6 +11,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
+
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
