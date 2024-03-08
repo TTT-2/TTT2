@@ -28,7 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
 - Micro optimizations
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
-  - `Read` / `WritePlayer` for syncing players
+  - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
 
 ### Fixed
