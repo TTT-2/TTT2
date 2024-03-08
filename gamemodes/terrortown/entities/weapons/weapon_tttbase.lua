@@ -854,10 +854,9 @@ if CLIENT then
         weaponrenderer.RenderWorldModel(self, self, self.customWorldModelElements, self:GetOwner())
     end
 
-    local weaponIsHidden = false
-
     ---
-    -- Allows you to modify viewmodel of the weapon in use before it is drawn.
+    -- Allows you to modify viewmodel while the weapon in use before it is drawn.
+    -- @warning This hook only works if you haven't overridden @{GM:PreDrawViewModel}.
     -- @param Entity viewModel This is the view model entity before it is drawn
     -- @param Player ply The the owner of the view model
     -- @param Weapon wep This is the weapon that is from the view model
@@ -877,38 +876,17 @@ if CLIENT then
         if wep.UseHands and wep.ShowDefaultViewModel == false then
             viewModel:SetMaterial("vgui/hsv")
 
-            -- trigger a texture reset after the view model is drawn
-            weaponIsHidden = true
-
             return
         end
+
+        -- default case: Normal view model texture is used and view model draw is defined
+        -- with the SWEP.ShowDefaultViewModel variable
+        viewModel:SetMaterial("")
 
         -- only return something if we actually want to hide it because otherwise the SWEP
         -- hook is never called even if the view model is rendered
         if wep.ShowDefaultViewModel == false then
             return true
-        end
-    end)
-
-    ---
-    -- Allows you to modify viewmodel of the weapon in use after it is drawn.
-    -- @param Entity viewModel This is the view model entity before it is drawn
-    -- @param Player ply The the owner of the view model
-    -- @param Weapon wep This is the weapon that is from the view model
-    -- @realm client
-    hook.Add("PostDrawViewModel", "TTT2ViewModelHiderReset", function(viewModel, ply, wep)
-        -- default case: Normal view model texture is used and view model draw is defined
-        -- with the SWEP.ShowDefaultViewModel variable
-
-        -- note: we only reset the material to the default material if it was previously set to
-        -- the invisible debug material. That way it is only applied to view models that are
-        -- intended to be invisible where it doesn't matter if it messes up their materials.
-        -- This is done because some weapons set custom materials to the view model (e.g. the
-        -- zombie perk bottles) and always resetting it makes the texture the error texture.
-        if weaponIsHidden then
-            viewModel:SetMaterial("")
-
-            weaponIsHidden = false
         end
     end)
 
