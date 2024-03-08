@@ -20,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
 - Fixed the equipment menu throwing errors when clicking on some items
+- Fixed hud help text not being shown for some old weapons
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
