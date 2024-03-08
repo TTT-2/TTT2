@@ -486,16 +486,6 @@ if CLIENT then
     local hudTextColor = Color(255, 255, 255, 180)
 
     ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("use", "weapon_ttt_unarmed")
-        end
-    end
-
-    ---
     -- @ignore
     function SWEP:DrawHUD()
         if self.HUDHelp then
@@ -534,6 +524,8 @@ if CLIENT then
             draw.Box(x - w / 2 + scale, y - h + scale, w * pct, h, COLOR_BLACK)
             draw.OutlinedShadowedBox(x - w / 2, y - h, w, h, scale, drawColor)
             draw.Box(x - w / 2, y - h, w * pct, h, drawColor)
+        else
+            BaseClass.DrawHUD(self)
         end
     end
 end

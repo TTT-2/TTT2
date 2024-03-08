@@ -8,6 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
+- Added upstream content files to base TTT2
 - Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
 - Added hook ENTITY:RemoteUse(ply), which is shared
   - Return true if only clientside should be used
@@ -20,6 +21,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - TargetID is now hidden when a marker vision element is focused
 - Crosshair rendering now is a bit more flexible and customizable
+- A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
 
 ### Fixed
 
