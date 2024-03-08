@@ -2208,3 +2208,7 @@ L.decoy_help_primary = "Plantar a isca"
 --L.label_level_sound_interact = "Interaction sound level multiplier"
 --L.label_level_sound_buttons = "Button sound level multiplier"
 --L.label_level_sound_message = "Message sound level multiplier"
+
+-- 2024-03-07
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_size_gap = "Crosshair gap size multiplier"
