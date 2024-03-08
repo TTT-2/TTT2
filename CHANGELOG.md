@@ -27,8 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
-- Fixed view models of some weapons having an error texture
-
+- 
 ### Removed
 
 - Removed radio tab in shop UI
