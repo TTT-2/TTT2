@@ -194,7 +194,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
             1,
             "Weapon / item '"
                 .. equipmentClass
-                .. "' doesn't use the weapon_tttbase / item_base and cannot be added to the settings panel."
+                .. "' doesn't use the weapon_tttbase / item_base and can therefore add no custom settings to the settings panel."
         )
     end
 
