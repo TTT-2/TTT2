@@ -22,11 +22,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID is now hidden when a marker vision element is focused
 - Crosshair rendering now is a bit more flexible and customizable
 - A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
+- Hides item settings in the equipment editor that are only relevant for weapons
 
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
 - Fixed view models of some weapons having an error texture
+- Fixed the equipment menu throwing errors when clicking on some items
 
 ### Removed
 

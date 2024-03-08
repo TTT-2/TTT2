@@ -100,9 +100,32 @@ function ITEM:Bought(ply) end
 function ITEM:Initialize() end
 
 ---
--- useable, but do not modify this!
--- @return boolean whether this @{ITEM} is an equipment
+-- Checks whether this items is a valid equipment item.
+-- @note Useable, but do not modify or overwrite this!
+-- @return boolean Return whether this @{ITEM} is an equipment
 -- @realm shared
 function ITEM:IsEquipment()
     return WEPS.IsEquipment(self)
+end
+
+---
+-- Returns the classname of an item. This is often the name of the Lua file or folder containing the files for the item.
+-- @return string The item's class name
+-- @realm shared
+function ITEM:GetClass()
+    return self.ClassName
+end
+
+---
+-- Checks if the item is valid. Returns true if valid.
+-- @return boolean Returns true if item is valid
+-- @realm shared
+function ITEM:IsValid()
+    -- this is probably always valid if there is no custom weird stuff done
+    -- to the item's class
+    if self:GetClass() and self:GetClass() ~= "" then
+        return true
+    end
+
+    return false
 end
