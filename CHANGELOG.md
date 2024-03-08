@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
+- Fixed weapons which set a custom view model texture having an error texture
 - Fixed the equipment menu throwing errors when clicking on some items
 - Fixed hud help text not being shown for some old weapons
 
