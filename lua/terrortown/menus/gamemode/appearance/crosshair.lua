@@ -35,10 +35,25 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = crossDynScaleEnb,
     })
 
+    form:MakeCheckBox({
+        label = "label_crosshair_static_gap_length",
+        convar = "ttt_crosshair_static_gap_length",
+        master = crossDynScaleEnb,
+    })
+
     form:MakeSlider({
         label = "label_crosshair_size",
         convar = "ttt_crosshair_size",
-        min = 0.1,
+        min = 0,
+        max = 3,
+        decimal = 1,
+        master = crossEnb,
+    })
+
+    form:MakeSlider({
+        label = "label_crosshair_size_gap",
+        convar = "ttt_crosshair_size_gap",
+        min = 0,
         max = 3,
         decimal = 1,
         master = crossEnb,
