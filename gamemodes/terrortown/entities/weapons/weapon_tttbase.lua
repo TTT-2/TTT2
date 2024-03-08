@@ -680,19 +680,14 @@ if CLIENT then
             secondary = secondary and ParT(secondary, translate_params)
         end
 
-        --find mouse keys in the texts to add respective icons
-        primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
-        secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2")
-            or nil
-
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, primary_key)
+            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, secondary_key)
+            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
         end
     end
 
