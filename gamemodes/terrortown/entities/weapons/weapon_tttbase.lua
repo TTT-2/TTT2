@@ -857,7 +857,7 @@ if CLIENT then
     local weaponIsHidden = false
 
     ---
-    -- Allows you to modify viewmodel of the weapon in use before it is drawn.
+    -- Allows you to modify the viewmodel of the weapon in use before it is drawn.
     -- @param Entity viewModel This is the view model entity before it is drawn
     -- @param Player ply The the owner of the view model
     -- @param Weapon wep This is the weapon that is from the view model
@@ -891,7 +891,7 @@ if CLIENT then
     end)
 
     ---
-    -- Allows you to modify viewmodel of the weapon in use after it is drawn.
+    -- Allows you to modify the viewmodel of the weapon in use after it is drawn.
     -- @param Entity viewModel This is the view model entity before it is drawn
     -- @param Player ply The the owner of the view model
     -- @param Weapon wep This is the weapon that is from the view model
