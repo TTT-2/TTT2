@@ -23,12 +23,15 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Crosshair rendering now is a bit more flexible and customizable
 - A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
 - Hides item settings in the equipment editor that are only relevant for weapons
+- The binoculars now use the default crosshair as well
 
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
+- Fixed weapons which set a custom view model texture having an error texture
 - Fixed the equipment menu throwing errors when clicking on some items
 - TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
+- Fixed hud help text not being shown for some old weapons
 
 ### Removed
 
