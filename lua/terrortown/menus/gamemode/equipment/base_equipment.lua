@@ -179,9 +179,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
         database = DatabaseElement(accessName, itemName, "damageScaling"),
     })
 
+    local equipmentClass = WEPS.GetClass(equipment)
+
     -- Get inheritable version for weapons to access inherited functions
     if not self.isItem then
-        equipment = weapons.Get(WEPS.GetClass(equipment))
+        equipment = weapons.Get(equipmentClass)
     end
 
     -- now add custom equipment settings
@@ -190,9 +192,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
     else
         Dev(
             1,
-            "Weapon '"
-                .. equipment:GetClass()
-                .. "' doesn't use the weapon_tttbase and cannot be added to the settings panel."
+            "Weapon / item '"
+                .. equipmentClass
+                .. "' doesn't use the weapon_tttbase / item_base and can therefore add no custom settings to the settings panel."
         )
     end
 
