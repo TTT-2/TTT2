@@ -33,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed weapons which set a custom view model texture having an error texture
 - Fixed the equipment menu throwing errors when clicking on some items
 - Fixed hud help text not being shown for some old weapons
+- Fixed detective search being overwritten by player search results
 
 ### Removed
 
