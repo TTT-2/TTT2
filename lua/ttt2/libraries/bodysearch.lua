@@ -83,7 +83,7 @@ function bodysearch.CanTakeCredits(ply, rag, isLongRange)
     ---
     -- @realm shared
     -- stylua: ignore
-    if hook.Run("TTT2CheckFindCredits", ply, rag) == false then
+    if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
         return false
     end
 
