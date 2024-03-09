@@ -796,7 +796,7 @@ local function WinChecker()
         return
     end
 
-    if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
+    if CurTime() > GetGlobalFloat("ttt_round_end", 0) and not ttt_dbgwin:GetBool() then
         EndRound(WIN_TIMELIMIT)
     elseif not ttt_dbgwin:GetBool() then
         ---
