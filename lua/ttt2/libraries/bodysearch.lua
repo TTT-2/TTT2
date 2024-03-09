@@ -994,7 +994,7 @@ if CLIENT then
     -- New data will append/overwrite existing data, but not remove it.
     -- This functions considers the roles and the settings of the local player and the player that
     -- inspected the body.
-    -- @param SceneData sceneData The table of scene data that should be stored
+    -- @param SceneData newData The table of scene data that should be stored
     -- @note The data is stored as `bodySearchResult` on the ragdoll and the owner of the ragdoll
     -- @realm client
     function bodysearch.StoreSearchResult(newData)
