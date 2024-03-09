@@ -114,6 +114,12 @@ function plymeta:AnimUpdateGesture()
     end
 end
 
+---
+-- Generates a fake voice spectrum based on the player voice volume that looks like
+-- the restult of an FFT.
+-- @param[default=16] number stepCount Defines the result's resolution
+-- @return table Returns the table with the fake spectrum
+-- @realm client
 function plymeta:GetFakeVoiceSpectrum(stepCount)
     stepCount = stepCount or 16
 
@@ -161,18 +167,34 @@ function plymeta:GetFakeVoiceSpectrum(stepCount)
     return self.lastSteps
 end
 
+---
+-- Enables that the player is currently speaking in voice. This state is used for the voice UI.
+-- @param boolean state The speaking state
+-- @realm client
 function plymeta:SetSpeakingInVoice(state)
     self.speaking = state
 end
 
+---
+-- Returns if the player is currently speaking in voice. This state is used for the voice UI.
+-- @return boolean The speaking state
+-- @realm client
 function plymeta:IsSpeakingInVoice()
     return self.speaking or false
 end
 
+---
+-- Sets the color of the voice panel.
+-- @param Color color The color of the voice panel
+-- @realm client
 function plymeta:SetVoiceColor(color)
     self.voiceColor = color
 end
 
+---
+-- Returns the color of the voice panel.
+-- @return Color The color of the voice panel
+-- @realm client
 function plymeta:GetVoiceColor()
     return self.voiceColor or INNOCENT.color
 end
