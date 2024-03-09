@@ -83,7 +83,6 @@ function bodysearch.CanTakeCredits(ply, rag, isLongRange)
     ---
     -- @realm shared
     -- stylua: ignore
-
     local hookOverride = hook.Run("TTT2CanTakeCredits", ply, rag, isLongRange)
     if hookOverride ~= nil then
         return hookOverride
@@ -202,6 +201,9 @@ if SERVER then
             return
         end
 
+        ---
+        -- @realm shared
+        -- stylua: ignore
         if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
             return false
         end
