@@ -24,7 +24,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
 - Hides item settings in the equipment editor that are only relevant for weapons
 - The binoculars now use the default crosshair as well
-- Tracers for weapons are no longer RNG 25% chance
+- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
 
 ### Fixed
 
