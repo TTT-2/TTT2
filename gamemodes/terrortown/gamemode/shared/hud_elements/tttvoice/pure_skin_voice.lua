@@ -125,12 +125,15 @@ if CLIENT then
     end
 
     function HUDELEMENT:Draw()
+        local client = LocalPlayer()
+
         local pos = self:GetPos()
         local size = self:GetSize()
         local x, y = pos.x, pos.y
         local w, h = size.w, size.h
 
         local plys = player.GetAll()
+        local plysSorted = {}
 
         for i = 1, #plys do
             local ply = plys[i]
@@ -138,6 +141,18 @@ if CLIENT then
             if not ply:IsSpeakingInVoice() then
                 continue
             end
+
+            if ply == client then
+                table.insert(plysSorted, 1, ply)
+
+                continue
+            end
+
+            plysSorted[#plysSorted + 1] = ply
+        end
+
+        for i = 1, #plysSorted do
+            local ply = plys[i]
 
             self:DrawVoiceBar(ply, x, y, w, h)
 
