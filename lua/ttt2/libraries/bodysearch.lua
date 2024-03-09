@@ -74,7 +74,7 @@ end
 
 ---
 -- Checks if a given player is allowed to take credits from a given corpse-
--- @param Payer ply The player that tries to take credits
+-- @param Player ply The player that tries to take credits
 -- @param Entity rag The ragdoll where the credits should be taken from
 -- @param[default=false] isLongRange Whether the search is a long range search
 -- @return boolean Returns if the player is able to take credits
@@ -83,8 +83,10 @@ function bodysearch.CanTakeCredits(ply, rag, isLongRange)
     ---
     -- @realm shared
     -- stylua: ignore
-    if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
-        return false
+
+	local hookOverride = hook.Run("TTT2CanTakeCredits", ply, rag, isLongRange)
+    if hookOverride != nil then
+        return hookOverride
     end
 
     local credits = CORPSE.GetCredits(rag, 0)
@@ -199,6 +201,10 @@ if SERVER then
         if bodysearch.CanTakeCredits(ply, rag, isLongRange) == false then
             return
         end
+
+		if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
+			return false
+		end
 
         local corpseNick = CORPSE.GetPlayerNick(rag)
         local credits = CORPSE.GetCredits(rag, 0)
