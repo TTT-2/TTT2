@@ -161,6 +161,22 @@ function plymeta:GetFakeVoiceSpectrum(stepCount)
     return self.lastSteps
 end
 
+function plymeta:SetSpeakingInVoice(state)
+    self.speaking = state
+end
+
+function plymeta:IsSpeakingInVoice()
+    return self.speaking or false
+end
+
+function plymeta:SetVoiceColor(color)
+    self.voiceColor = color
+end
+
+function plymeta:GetVoiceColor()
+    return self.voiceColor or INNOCENT.color
+end
+
 ---
 -- @hook
 -- @param Player ply The player to update the animation info for.

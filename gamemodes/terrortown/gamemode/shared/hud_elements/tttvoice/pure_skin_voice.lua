@@ -7,8 +7,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-    local TryT = LANG.TryTranslation
-
     local padding = 10
 
     local baseDefaults = {
@@ -46,18 +44,13 @@ if CLIENT then
         BaseClass.PerformLayout(self)
     end
 
-    function HUDELEMENT:Draw()
-        local client = LocalPlayer()
+    function HUDELEMENT:DrawVoiceBar(ply, xPos, yPos, w, h)
+        local color = ply:GetVoiceColor()
 
-        local pos = self:GetPos()
-        local size = self:GetSize()
-        local x, y = pos.x, pos.y
-        local w, h = size.w, size.h
+        draw.Box(xPos + 6, yPos + 6, w - 6, h - 12, color)
+        self:DrawLines(xPos + 6, yPos + 6, w - 6, h - 12, color.a)
 
-        draw.Box(x + 6, y + 6, w - 6, h - 12, INNOCENT.color)
-        self:DrawLines(x + 6, y + 6, w - 6, h - 12, self.basecolor.a)
-
-        local data = client:GetFakeVoiceSpectrum(24)
+        local data = ply:GetFakeVoiceSpectrum(24)
 
         local widthBar = (w - h - 6) / #data - 1
 
@@ -65,16 +58,16 @@ if CLIENT then
             local yValue = math.floor(data[i] * 15)
 
             draw.Box(
-                x + h + 3 + (i - 1) * (widthBar + 1),
-                y + 0.5 * h - yValue - 1,
+                xPos + h + 3 + (i - 1) * (widthBar + 1),
+                yPos + 0.5 * h - yValue - 1,
                 widthBar,
                 yValue,
                 Color(255, 255, 255, 35)
             )
             if yValue > 1 then
                 draw.Box(
-                    x + h + 3 + (i - 1) * (widthBar + 1),
-                    y + 0.5 * h - yValue - 2,
+                    xPos + h + 3 + (i - 1) * (widthBar + 1),
+                    yPos + 0.5 * h - yValue - 2,
                     widthBar,
                     1,
                     Color(255, 255, 255, 140)
@@ -82,24 +75,24 @@ if CLIENT then
             end
 
             draw.Box(
-                x + h + 3 + (i - 1) * (widthBar + 1),
-                y + 0.5 * h,
+                xPos + h + 3 + (i - 1) * (widthBar + 1),
+                yPos + 0.5 * h,
                 widthBar,
                 1,
                 Color(255, 255, 255, 175)
             )
 
             draw.Box(
-                x + h + 3 + (i - 1) * (widthBar + 1),
-                y + 0.5 * h + 2,
+                xPos + h + 3 + (i - 1) * (widthBar + 1),
+                yPos + 0.5 * h + 2,
                 widthBar,
                 yValue,
                 Color(255, 255, 255, 35)
             )
             if yValue > 1 then
                 draw.Box(
-                    x + h + 3 + (i - 1) * (widthBar + 1),
-                    y + 0.5 * h + 2 + yValue,
+                    xPos + h + 3 + (i - 1) * (widthBar + 1),
+                    yPos + 0.5 * h + 2 + yValue,
                     widthBar,
                     1,
                     Color(255, 255, 255, 140)
@@ -108,26 +101,47 @@ if CLIENT then
         end
 
         draw.FilteredTexture(
-            x,
-            y,
+            xPos,
+            yPos,
             h,
             h,
-            draw.GetAvatarMaterial(client:SteamID64(), "medium"),
+            draw.GetAvatarMaterial(ply:SteamID64(), "medium"),
             255,
             COLOR_WHITE
         )
-        self:DrawLines(x, y, h, h, 255)
+        self:DrawLines(xPos, yPos, h, h, 255)
 
         draw.AdvancedText(
-            client:Nick(),
+            ply:Nick(),
             "PureSkinPopupText",
-            x + h + self.padding,
-            y + h * 0.5 - 1,
-            util.GetDefaultColor(INNOCENT.color),
+            xPos + h + self.padding,
+            yPos + h * 0.5 - 1,
+            util.GetDefaultColor(color),
             TEXT_ALIGN_LEFT,
             TEXT_ALIGN_CENTER,
             true,
             self.scale
         )
+    end
+
+    function HUDELEMENT:Draw()
+        local pos = self:GetPos()
+        local size = self:GetSize()
+        local x, y = pos.x, pos.y
+        local w, h = size.w, size.h
+
+        local plys = player.GetAll()
+
+        for i = 1, #plys do
+            local ply = plys[i]
+
+            if not ply:IsSpeakingInVoice() then
+                continue
+            end
+
+            self:DrawVoiceBar(ply, x, y, w, h)
+
+            y = y + h + self.padding
+        end
     end
 end

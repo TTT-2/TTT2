@@ -2,29 +2,19 @@
 -- Voicechat popup
 -- @module VOICE
 
-DEFINE_BASECLASS("gamemode_base")
-
 local GetTranslation = LANG.GetTranslation
 local string = string
 local math = math
 local net = net
 local player = player
 local pairs = pairs
-local timer = timer
 local IsValid = IsValid
 local hook = hook
-local surface = surface
 
 -- voicechat stuff
 VOICE = {}
 
-local VP_GREEN = Color(0, 200, 0)
-local VP_RED = Color(200, 0, 0)
 local MutedState
-
--- voice popups, copied from base gamemode and modified
-
-g_VoicePanelList = nil
 
 ---
 -- @realm client
@@ -52,8 +42,13 @@ end
 CreateVoiceTable()
 
 local function VoiceTryEnable()
-    if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanEnable() then
+    local client = LocalPlayer()
+
+    if not client:IsSpeakingInVoice() and VOICE.CanSpeak() and VOICE.CanEnable() then
+        client:SetSpeakingInVoice(true)
+
         VOICE.isTeam = false
+
         permissions.EnableVoiceChat(true)
 
         return true
@@ -63,7 +58,11 @@ local function VoiceTryEnable()
 end
 
 local function VoiceTryDisable()
-    if VOICE.IsSpeaking() and not VOICE.isTeam then
+    local client = LocalPlayer()
+
+    if not VOICE.isTeam then
+        client:SetSpeakingInVoice(false)
+
         permissions.EnableVoiceChat(false)
 
         return true
@@ -73,7 +72,11 @@ local function VoiceTryDisable()
 end
 
 local function VoiceTeamTryEnable()
-    if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
+    local client = LocalPlayer()
+
+    if not client:IsSpeakingInVoice() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
+        client:SetSpeakingInVoice(true)
+
         VOICE.isTeam = true
 
         permissions.EnableVoiceChat(true)
@@ -85,7 +88,11 @@ local function VoiceTeamTryEnable()
 end
 
 local function VoiceTeamTryDisable()
-    if VOICE.IsSpeaking() and VOICE.isTeam then
+    local client = LocalPlayer()
+
+    if VOICE.isTeam then
+        client:SetSpeakingInVoice(false)
+
         permissions.EnableVoiceChat(false)
 
         return true
@@ -163,32 +170,6 @@ bind.Register(
     KEY_T
 )
 
--- 255 at 100
--- 5 at 5000
-local function VoiceNotifyThink(pnl)
-    local client = LocalPlayer()
-
-    if
-        not IsValid(pnl)
-        or not IsValid(client)
-        or not IsValid(pnl.ply)
-        or not GetGlobalBool("ttt_locational_voice", false)
-        or pnl.ply:IsSpec()
-        or pnl.ply == client
-        or client:IsActive()
-            and pnl.ply:IsActive()
-            and (client:IsInTeam(pnl.ply) and not pnl.ply:GetSubRoleData().unknownTeam and not pnl.ply:GetSubRoleData().disabledTeamVoice and not client:GetSubRoleData().disabledTeamVoiceRecv)
-    then
-        return
-    end
-
-    local d = client:GetPos():Distance(pnl.ply:GetPos())
-
-    pnl:SetAlpha(math.max(-0.1 * d + 255, 15))
-end
-
-local PlayerVoicePanels = {}
-
 ---
 -- Called when a @{Player} starts using voice chat.
 -- @param Player ply @{Player} who started using voice chat
@@ -201,112 +182,68 @@ function GM:PlayerStartVoice(ply)
         return
     end
 
+    local plyRoleData = ply:GetSubRoleData()
+
     local client = LocalPlayer()
+    local clientTeam = client:GetTeam()
+    local clientRoleData = client:GetSubRoleData()
+
+    if ply ~= client then
+        -- if someone else than us starts talking, the UI should be updated as well
+        ply:SetSpeakingInVoice(true)
+    else
+        -- todo: is this used anywhere? why?
+        client[client:GetTeam() .. "_gvoice"] = not VOICE.isTeam
+
+        -- notify server this if this is a global voice chat
+        net.Start("TTT2RoleGlobalVoice")
+        net.WriteBool(not VOICE.isTeam)
+        net.SendToServer()
+    end
 
     VOICE.UpdatePlayerVoiceVolume(ply)
 
-    if not IsValid(g_VoicePanelList) or not IsValid(client) then
-        return
-    end
-
-    -- There'd be an extra one if voice_loopback is on, so remove it.
-    GAMEMODE:PlayerEndVoice(ply, true)
-
-    -- Tell server this is global
-    if client == ply then
-        local tm = client:GetTeam()
-
-        local isGlobal = not VOICE.isTeam
-        client[tm .. "_gvoice"] = isGlobal
-
-        net.Start("TTT2RoleGlobalVoice")
-        net.WriteBool(isGlobal)
-        net.SendToServer()
-
-        VOICE.SetSpeaking(true)
-    end
-
-    local pnl = g_VoicePanelList:Add("VoiceNotify")
-    pnl:Setup(ply)
-    pnl:Dock(TOP)
-
-    local oldThink = pnl.Think
-
-    pnl.Think = function(s)
-        oldThink(s)
-
-        VoiceNotifyThink(s)
-    end
-
-    local shade = Color(0, 0, 0, 150)
-
-    -- TODO recreate all voice panels on HUD switch
-    local paintFn = function(s, w, h)
-        if not IsValid(s.ply) then
-            return
-        end
-
-        draw.RoundedBox(4, 0, 0, w, h, s.Color)
-        draw.RoundedBox(4, 1, 1, w - 2, h - 2, shade)
-    end
-
-    if huds and HUDManager then
-        local hud = huds.GetStored(HUDManager.GetHUD())
-        if hud then
-            paintFn = hud.VoicePaint or paintFn
-        end
-    end
-
-    pnl.Paint = paintFn
-
-    -- roles things
-    local tm = client:GetTeam()
-    local clrd = client:GetSubRoleData()
+    -- handle voice panel color
+    local color = INNOCENT.color
 
     if
         client:IsActive()
-        and tm ~= TEAM_NONE
-        and not clrd.unknownTeam
-        and not clrd.disabledTeamVoice
-        and not TEAMS[tm].alone
+        and clientTeam ~= TEAM_NONE
+        and not clientRoleData.unknownTeam
+        and not clientRoleData.disabledTeamVoice
+        and not TEAMS[clientTeam].alone
     then
         if ply == client then
-            if not client[tm .. "_gvoice"] then
-                pnl.Color = TEAMS[tm].color
+            if not client[clientTeam .. "_gvoice"] then
+                color = TEAMS[clientTeam].color
             end
         elseif
             ply:IsInTeam(client)
-            and not (ply:GetSubRoleData().disabledTeamVoice or clrd.disabledTeamVoiceRecv)
+            and not (plyRoleData.disabledTeamVoice or clientRoleData.disabledTeamVoiceRecv)
         then
-            if not ply[tm .. "_gvoice"] then
-                pnl.Color = TEAMS[tm].color
+            if not ply[clientTeam .. "_gvoice"] then
+                color = TEAMS[clientTeam].color
             end
         end
-    end
-
-    -- since detective (sub-) roles don't have their own team, they have a manual role color
-    -- handling here
-    if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
-        pnl.Color = roles.DETECTIVE.color
     end
 
     ---
     -- @realm client
     -- stylua: ignore
-    pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply, pnl.Color) or pnl.Color
+    color = hook.Run("TTT2ModifyVoiceChatColor", ply, color) or color
 
-    PlayerVoicePanels[ply] = pnl
+    ply:SetVoiceColor(color)
 
-    local plyrd = ply:GetSubRoleData()
-
-    -- run ear gesture
+    -- add animation when player is speaking in voice
     if
         not (
             ply:IsActive()
-            and not plyrd.unknownTeam
-            and not plyrd.disabledTeamVoice
-            and not clrd.disabledTeamVoiceRecv
-        ) or (tm ~= TEAM_NONE and not TEAMS[tm].alone) and ply[tm .. "_gvoice"]
+            and not plyRoleData.unknownTeam
+            and not plyRoleData.disabledTeamVoice
+            and not clientRoleData.disabledTeamVoiceRecv
+        )
+        or (clientTeam ~= TEAM_NONE and not TEAMS[clientTeam].alone)
+            and ply[clientTeam .. "_gvoice"]
     then
         ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
     end
@@ -350,74 +287,32 @@ local function ReceiveVoiceState()
     end
 
     ply[tm .. "_gvoice"] = isGlobal
-
-    if not IsValid(PlayerVoicePanels[ply]) then
-        return
-    end
-
-    PlayerVoicePanels[ply].Color = isGlobal and VP_GREEN or (ply:GetRoleColor() or VP_RED)
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
-
-local function VoiceClean()
-    if not PlayerVoicePanels then
-        return
-    end
-
-    for ply, pnl in pairs(PlayerVoicePanels) do
-        if IsValid(pnl) and IsValid(ply) then
-            continue
-        end
-
-        GAMEMODE:PlayerEndVoice(ply)
-    end
-end
-timer.Create("VoiceClean", 10, 0, VoiceClean)
 
 ---
 -- Called when @{Player} stops using voice chat.
 -- @param Player ply @{Player} who stopped talking
--- @param boolean no_reset whether the stored voice state shouldn't reset
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerEndVoice
 -- @local
-function GM:PlayerEndVoice(ply, no_reset)
-    if IsValid(PlayerVoicePanels[ply]) then
-        PlayerVoicePanels[ply]:Remove()
-
-        PlayerVoicePanels[ply] = nil
+function GM:PlayerEndVoice(ply)
+    if not IsValid(ply) then
+        return
     end
 
-    if IsValid(ply) and not no_reset then
-        local tm = ply:GetTeam()
+    local plyTeam = ply:GetTeam()
 
-        if tm ~= TEAM_NONE and not TEAMS[tm].alone then
-            ply[tm .. "_gvoice"] = false
-        end
+    -- if someone else than us stops talking, the UI should be updated as well
+    if ply ~= LocalPlayer() then
+        ply:SetSpeakingInVoice(false)
     end
 
-    if ply == LocalPlayer() then
-        VOICE.SetSpeaking(false)
+    if plyTeam ~= TEAM_NONE and not TEAMS[plyTeam].alone then
+        ply[plyTeam .. "_gvoice"] = false
     end
 end
-
-local function CreateVoiceVGUI()
-    g_VoicePanelList = vgui.Create("DPanel")
-    g_VoicePanelList:ParentToHUD()
-    g_VoicePanelList:SetPos(25, 25)
-    g_VoicePanelList:SetSize(200, ScrH() - 200)
-    g_VoicePanelList:SetPaintBackground(false)
-
-    MutedState = vgui.Create("DLabel")
-    MutedState:SetPos(ScrW() - 200, ScrH() - 50)
-    MutedState:SetSize(200, 50)
-    MutedState:SetFont("Trebuchet18")
-    MutedState:SetText("")
-    MutedState:SetTextColor(Color(240, 240, 240, 250))
-    MutedState:SetVisible(false)
-end
-hook.Add("InitPostEntity", "CreateVoiceVGUI", CreateVoiceVGUI)
 
 --local MuteStates = {MUTE_NONE, MUTE_TERROR, MUTE_ALL, MUTE_SPEC}
 
@@ -704,44 +599,6 @@ function VOICE.CanSpeak()
     local client = LocalPlayer()
 
     return client.voice_battery > VOICE.battery_min or IsRoleChatting(client)
-end
-
-local speaker = surface.GetTextureID("voice/icntlk_sv")
-
----
--- Draws a popup displaying the speaking @{Player}s
--- @param Player client This should be the local @{Player}
--- @return boolean
--- @realm client
--- @internal
-function VOICE.Draw(client)
-    local b = client.voice_battery
-
-    if not b or not VOICE.battery_max or b >= VOICE.battery_max then
-        return
-    end
-
-    local x, y = 25, 10
-    local w, h = 200, 6
-
-    if b < VOICE.battery_min and CurTime() % 0.2 < 0.1 then
-        surface.SetDrawColor(200, 0, 0, 155)
-    else
-        surface.SetDrawColor(0, 200, 0, 255)
-    end
-
-    surface.DrawOutlinedRect(x, y, w, h)
-
-    surface.SetTexture(speaker)
-    surface.DrawTexturedRect(5, 5, 16, 16)
-
-    x = x + 1
-    y = y + 1
-    w = w - 2
-    h = h - 2
-
-    surface.SetDrawColor(0, 200, 0, 150)
-    surface.DrawRect(x, y, w * math.Clamp((client.voice_battery - 10) / 90, 0, 1), h)
 end
 
 ---
