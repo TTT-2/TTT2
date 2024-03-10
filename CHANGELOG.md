@@ -32,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
 - Fixed weapons which set a custom view model texture having an error texture
 - Fixed the equipment menu throwing errors when clicking on some items
+- TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
 - Fixed hud help text not being shown for some old weapons
 
 ### Removed
