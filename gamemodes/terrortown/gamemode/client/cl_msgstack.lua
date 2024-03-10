@@ -11,6 +11,15 @@ MSTACK.last = 0
 local table = table
 local net = net
 
+sound.Add({
+    name = "Hud.Hint",
+    channel = CHAN_STATIC,
+    volume = 1.0,
+    level = SNDLVL_NONE,
+    pitch = 100,
+    sound = "ui/hint.wav",
+})
+
 local traitor_msg_bg = Color(255, 0, 0, 255)
 
 ---

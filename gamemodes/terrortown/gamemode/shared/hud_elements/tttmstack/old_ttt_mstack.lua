@@ -212,7 +212,7 @@ if CLIENT then
                 end
 
                 if item.sounded == false then
-                    LocalPlayer():EmitSound(msg_sound, 80, 250)
+                    sound.ConditionalPlay(msg_sound, SOUND_TYPE_MESSAGE)
 
                     item.sounded = true
                 end

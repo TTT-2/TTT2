@@ -35,6 +35,7 @@ SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.Delay = 1.0
+SWEP.Primary.Cone = 0.075
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
@@ -262,10 +263,7 @@ if CLIENT then
     local GetPT = LANG.GetParamTranslation
     local mathRound = math.Round
     local mathClamp = math.Clamp
-
-    local hud_color = Color(60, 220, 20, 255)
-
-    local cv_thickness
+    local mathCeil = math.ceil
 
     ---
     -- @ignore
@@ -273,9 +271,7 @@ if CLIENT then
         self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
         self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
 
-        cv_thickness = GetConVar("ttt_crosshair_thickness")
-
-        self.BaseClass.Initialize(self)
+        BaseClass.Initialize(self)
     end
 
     ---
@@ -330,40 +326,29 @@ if CLIENT then
         local progress =
             mathRound(mathClamp((c_wep:GetProgress() / c_wep.ProcessingDelay) * 100, 0, 100))
 
-        tData:AddDescriptionLine(GetPT("binoc_progress", { progress = progress }), hud_color)
+        tData:AddDescriptionLine(
+            GetPT("binoc_progress", { progress = progress }),
+            client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
+        )
     end)
 
     ---
     -- @ignore
     function SWEP:DrawHUD()
-        self:DrawHelp()
+        BaseClass.DrawHUD(self)
 
-        local length = 35
-        local gap = 15
-        local thickness = math.floor(cv_thickness and cv_thickness:GetFloat() or 1)
-        local offset = thickness * 0.5
-
-        surface.SetDrawColor(clr(hud_color))
-
-        -- change scope when looking at corpse
-        if self:IsTargetingCorpse() then
-            gap = thickness * 2
-        end
-
-        local x = ScrW() * 0.5
-        local y = ScrH() * 0.5
-
-        surface.DrawRect(x - length, y - offset, length - gap, thickness)
-        surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-        surface.DrawRect(x - offset, y - length, thickness, length - gap)
-        surface.DrawRect(x - offset, y + gap, thickness, length - gap)
+        local client = LocalPlayer()
+        local scale = appearance.GetGlobalScale()
+        local color = appearance.SelectFocusColor(
+            client.GetRoleColor and client:GetRoleColor() or roles.INNOCENT.color
+        )
 
         draw.ShadowedText(
             TryT("binoc_zoom_level") .. ": " .. self:GetZoomAmount(),
             "TargetID_Description",
-            x + length + 10,
-            y - length,
-            hud_color,
+            mathCeil(ScrW() * 0.5) + 45 * scale,
+            mathCeil(ScrH() * 0.5) - 35 * scale,
+            color,
             TEXT_ALIGN_LEFT,
             TEXT_ALIGN_CENTER
         )

@@ -4,6 +4,8 @@
 
 local PANEL = {}
 
+local soundClick = Sound("common/talk.wav")
+
 ---
 -- @accessor boolean
 -- @realm client
@@ -27,6 +29,28 @@ function PANEL:Init()
     end
 
     self.data = {}
+
+    -- hack a sound into the DoClick function after it is initialized
+    timer.Simple(0, function()
+        if not IsValid(self) then
+            return
+        end
+
+        local oldClick = self.DoClick
+        local oldRightClick = self.DoRightClick
+
+        self.DoClick = function(slf)
+            sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
+
+            oldClick(slf)
+        end
+
+        self.DoRightClick = function(slf)
+            sound.ConditionalPlay(soundClick, SOUND_TYPE_BUTTONS)
+
+            oldRightClick(slf)
+        end
+    end)
 end
 
 ---

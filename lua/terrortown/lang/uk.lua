@@ -130,8 +130,6 @@ L.xfer_received = "{player} надав вам кредити в розмірі {
 
 -- Radio tab in equipment menu
 L.radio_name = "Радіо"
-L.radio_help = "Натисніть кнопку, щоб радіо відтворювало обраний звук."
-L.radio_notplaced = "Ви повинні розташувати Радіо, щоб відтворювати на ньому звук."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Крик"
@@ -1035,7 +1033,7 @@ L.help_title = "Допомога та Налаштування"
 --L.label_crosshair_enable = "Enable crosshair"
 --L.label_crosshair_opacity = "Crosshair opacity"
 --L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
---L.label_crosshair_size = "Crosshair size multiplier"
+--L.label_crosshair_size = "Crosshair line size multiplier"
 --L.label_crosshair_thickness = "Crosshair thickness multiplier"
 --L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
 --L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
@@ -2190,3 +2188,27 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to throw this device"
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"
+
+-- 2024-03-06
+--L.submenu_gameplay_sounds_title = "Client-Sounds"
+
+--L.header_sounds_settings = "UI Sound Settings"
+
+--L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
+--L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+
+--L.label_enable_sound_interact = "Enable interaction sounds"
+--L.label_enable_sound_buttons = "Enable button sounds"
+--L.label_enable_sound_message = "Enable message sounds"
+
+--L.label_level_sound_interact = "Interaction sound level multiplier"
+--L.label_level_sound_buttons = "Button sound level multiplier"
+--L.label_level_sound_message = "Message sound level multiplier"
+
+-- 2024-03-07
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_size_gap = "Crosshair gap size multiplier"

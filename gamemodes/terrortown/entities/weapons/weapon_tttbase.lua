@@ -288,7 +288,12 @@ if CLIENT then
     ---
     -- @realm client
     -- stylua: ignore
-    local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+    local cvSizeLineCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvSizeGapCrosshair = CreateConVar("ttt_crosshair_size_gap", "1.0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
@@ -309,6 +314,11 @@ if CLIENT then
     -- @realm client
     -- stylua: ignore
     local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvCrosshairStaticGapLength = CreateConVar("ttt_crosshair_static_gap_length", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
@@ -353,15 +363,30 @@ if CLIENT then
             self:DrawHelp()
         end
 
-        if not cvEnableCrosshair:GetBool() then
-            return
+        self:DoDrawCrosshair(mathCeil(ScrW() * 0.5), mathCeil(ScrH() * 0.5), true)
+    end
+
+    ---
+    -- Called when the crosshair is about to get drawn, and allows you to override it.
+    -- @note This is a hook that is used to draw the crosshair. We use the function to prevent
+    -- the crosshair from being drawn and then use the same hook to draw our own custom
+    -- crosshair. The third parameter has therefore be set to true if the crosshair should
+    -- actually be drawn, otherwise the function only returns true to prevent the default one.
+    -- @param number xCenter The x center position of the crosshair
+    -- @param number yCenter The y center position of the crosshair
+    -- @param boolean shouldDraw Should the crosshair be drawn
+    -- @return boolean Return true to prevent the default crosshair from being drawn
+    -- @ref https://wiki.facepunch.com/gmod/WEAPON:DoDrawCrosshair
+    -- @hook
+    -- @realm client
+    function SWEP:DoDrawCrosshair(xCenter, yCenter, shouldDraw)
+        if not shouldDraw or not cvEnableCrosshair:GetBool() then
+            return true
         end
 
         local client = LocalPlayer()
         local sights = not self.NoSights and self:GetIronsights()
 
-        local xCenter = mathCeil(ScrW() * 0.5)
-        local yCenter = mathCeil(ScrH() * 0.5)
         local scale = appearance.GetGlobalScale()
         local baseConeWeapon = mathMax(0.2, 10 * self:GetPrimaryConeBase())
         local scaleWeapon = cvCrosshairUseWeaponscale:GetBool()
@@ -386,15 +411,19 @@ if CLIENT then
         )
 
         local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-        local gap = mathCeil(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
         local thicknessLine = mathCeil(cvThicknessCrosshair:GetFloat() * scale)
         local thicknessOutline = mathCeil(cvThicknessOutlineCrosshair:GetFloat() * scale)
+        local gap = mathCeil(
+            25
+                * cvSizeGapCrosshair:GetFloat()
+                * (cvCrosshairStaticGapLength:GetBool() and baseConeWeapon or scaleWeapon * timescale)
+                * scale
+        )
         local lengthLine = mathCeil(
             gap
                 + 25
-                    * cvSizeCrosshair:GetFloat()
-                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon)
-                    * timescale
+                    * cvSizeLineCrosshair:GetFloat()
+                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon * timescale)
                     * scale
         )
         local offsetLine = mathCeil(thicknessLine * 0.5)
@@ -492,6 +521,8 @@ if CLIENT then
             )
             surface.DrawRect(xCenter - offsetLine, yCenter + gap, thicknessLine, lengthLine - gap)
         end
+
+        return true
     end
 
     local colorBox = Color(0, 0, 0, 100)
@@ -666,19 +697,14 @@ if CLIENT then
             secondary = secondary and ParT(secondary, translate_params)
         end
 
-        --find mouse keys in the texts to add respective icons
-        primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
-        secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2")
-            or nil
-
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, primary_key)
+            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, secondary_key)
+            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
         end
     end
 
@@ -840,9 +866,10 @@ if CLIENT then
         weaponrenderer.RenderWorldModel(self, self, self.customWorldModelElements, self:GetOwner())
     end
 
+    local weaponIsHidden = false
+
     ---
-    -- Allows you to modify viewmodel while the weapon in use before it is drawn.
-    -- @warning This hook only works if you haven't overridden @{GM:PreDrawViewModel}.
+    -- Allows you to modify the viewmodel of the weapon in use before it is drawn.
     -- @param Entity viewModel This is the view model entity before it is drawn
     -- @param Player ply The the owner of the view model
     -- @param Weapon wep This is the weapon that is from the view model
@@ -862,17 +889,38 @@ if CLIENT then
         if wep.UseHands and wep.ShowDefaultViewModel == false then
             viewModel:SetMaterial("vgui/hsv")
 
+            -- trigger a texture reset after the view model is drawn
+            weaponIsHidden = true
+
             return
         end
-
-        -- default case: Normal view model texture is used and view model draw is defined
-        -- with the SWEP.ShowDefaultViewModel variable
-        viewModel:SetMaterial("")
 
         -- only return something if we actually want to hide it because otherwise the SWEP
         -- hook is never called even if the view model is rendered
         if wep.ShowDefaultViewModel == false then
             return true
+        end
+    end)
+
+    ---
+    -- Allows you to modify the viewmodel of the weapon in use after it is drawn.
+    -- @param Entity viewModel This is the view model entity before it is drawn
+    -- @param Player ply The the owner of the view model
+    -- @param Weapon wep This is the weapon that is from the view model
+    -- @realm client
+    hook.Add("PostDrawViewModel", "TTT2ViewModelHiderReset", function(viewModel, ply, wep)
+        -- default case: Normal view model texture is used and view model draw is defined
+        -- with the SWEP.ShowDefaultViewModel variable
+
+        -- note: we only reset the material to the default material if it was previously set to
+        -- the invisible debug material. That way it is only applied to view models that are
+        -- intended to be invisible where it doesn't matter if it messes up their materials.
+        -- This is done because some weapons set custom materials to the view model (e.g. the
+        -- zombie perk bottles) and always resetting it makes the texture the error texture.
+        if weaponIsHidden then
+            viewModel:SetMaterial("")
+
+            weaponIsHidden = false
         end
     end)
 
@@ -1014,7 +1062,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
     bullet.Src = self:GetOwner():GetShootPos()
     bullet.Dir = self:GetOwner():GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
-    bullet.Tracer = 4
+    bullet.Tracer = 1
     bullet.TracerName = self.Tracer or "Tracer"
     bullet.Force = 10
     bullet.Damage = dmg * (self.damageScaling or 1)

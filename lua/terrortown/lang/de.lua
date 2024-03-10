@@ -130,8 +130,6 @@ L.xfer_received = "{player} gab dir {num} Ausrüstungspunkt(e)."
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
-L.radio_help = "Drücke einen Knopf, um das Radio den Ton abspielen zu lassen."
-L.radio_notplaced = "Du musst das Radio platzieren, um einen Ton abspielen zu lassen."
 
 -- Radio soundboard buttons
 L.radio_button_scream = "Schrei"
@@ -1035,7 +1033,7 @@ L.label_shop_show_fav = "Zeige Symbol für favorisiertes Element"
 L.label_crosshair_enable = "Aktiviere Fadenkreuz"
 L.label_crosshair_opacity = "Transparenz des Fadenkreuzes"
 L.label_crosshair_ironsight_opacity = "Durchlässigkeit des Fadenkreuz-Visiers"
-L.label_crosshair_size = "Fadenkreuz Größe"
+L.label_crosshair_size = "Fadenkreuz Liniengrößeskalierungsfaktor"
 L.label_crosshair_thickness = "Fadenkreuz Dicke"
 L.label_crosshair_thickness_outline = "Dicke der Umrandung des Fadenkreuzes"
 L.label_crosshair_scale_enable = "Aktiviere die dynamische Skalierung des Fadenkreuzes"
@@ -2190,3 +2188,27 @@ L.magneto_stick_help_carry_prop_drop = "Prop fallenlassen"
 
 -- 2024-02-14
 L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
+
+-- 2024-03-04
+--L.use_entity = "Press [{usekey}] to use"
+
+-- 2024-03-06
+--L.submenu_gameplay_sounds_title = "Client-Sounds"
+
+--L.header_sounds_settings = "UI Sound Settings"
+
+--L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
+--L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+
+--L.label_enable_sound_interact = "Enable interaction sounds"
+--L.label_enable_sound_buttons = "Enable button sounds"
+--L.label_enable_sound_message = "Enable message sounds"
+
+--L.label_level_sound_interact = "Interaction sound level multiplier"
+--L.label_level_sound_buttons = "Button sound level multiplier"
+--L.label_level_sound_message = "Message sound level multiplier"
+
+-- 2024-03-07
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_size_gap = "Crosshair gap size multiplier"
