@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.13.2b](https://github.com/TTT-2/TTT2/tree/0.13.2b) (2024-03-10)
+
 ### Added
 
 - Added upstream content files to base TTT2

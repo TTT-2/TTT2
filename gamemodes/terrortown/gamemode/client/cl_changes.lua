@@ -2024,6 +2024,36 @@ function CreateChanges()
         os.time({ year = 2024, month = 02, day = 27 })
     )
 
+    AddChange(
+        "TTT2 Base - v0.13.2b",
+        [[
+        <h3>Added</h3>
+        <ul>
+        <li>Added upstream content files to base TTT2</li>
+        <li>Added <code>plymeta:IsFullySignedOn()</code> to allow excluding players that have not gotten control yet (by @EntranceJew)</li>
+        </ul>
+        <h3>Changed</h3>
+        <ul>
+        <li>Crosshair rendering now is a bit more flexible and customizable</li>
+        <li>A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities</li>
+        <li>Hides item settings in the equipment editor that are only relevant for weapons</li>
+        <li>The binoculars now use the default crosshair as well</li>
+        </ul>
+        <h3>Fixed</h3>
+        <ul>
+        <li>Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)</li>
+        <li>Fixed weapons which set a custom view model texture having an error texture</li>
+        <li>Fixed the equipment menu throwing errors when clicking on some items</li>
+        <li>TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once</li>
+        <li>Fixed hud help text not being shown for some old weapons</li>
+        <li>Fixed detective search being overwritten by player search results</li>
+        </ul>
+    ]],
+        os.time({ year = 2024, month = 03, day = 10 })
+    )
+
+    --#endofchanges
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
