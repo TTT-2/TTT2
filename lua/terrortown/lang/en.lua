@@ -1142,7 +1142,6 @@ L.binoc_help_sec = "Change zoom level."
 
 L.vis_help_pri = "Drop the activated device."
 
-
 -- 2020-08-07
 L.pickup_error_spec = "You cannot pick this up as a spectator."
 L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
@@ -2172,7 +2171,6 @@ L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
 L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
 L.magneto_stick_help_carry_prop_release = "Release prop"
 L.magneto_stick_help_carry_prop_drop = "Drop prop"
-
 -- 2024-01-27
 L.decoy_help_primary = "Throw Decoy on the ground"
 L.decoy_help_secondary = "Stick Decoy to surface"

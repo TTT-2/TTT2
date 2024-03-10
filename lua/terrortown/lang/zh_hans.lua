@@ -1142,7 +1142,6 @@ L.binoc_help_sec = "切换放大倍率"
 
 L.vis_help_pri = "丢弃当前装备。"
 
-
 -- 2020-08-07
 L.pickup_error_spec = "作为观察者你无法捡起这个。"
 L.pickup_error_owns = "你已经有这个武器，无法再次捡起"
@@ -2162,6 +2161,11 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "武器设置"
 
+L.marker_vision_visible_for_0 = "您可见"
+L.marker_vision_visible_for_1 = "您的角色可见"
+L.marker_vision_visible_for_2 = "您的团队可见"
+L.marker_vision_visible_for_3 = "每个人都可见"
+
 -- 2024-01-24
 L.grenade_fuse = "保险丝"
 
@@ -2177,35 +2181,29 @@ L.magneto_stick_help_carry_prop_drop = "丢弃道具"
 L.decoy_help_primary = "安放诱饵"
 L.decoy_help_secondary = "将诱饵粘在表面"
 
---2024-01-29
-L.marker_vision_visible_for_0 = "您可见"
-L.marker_vision_visible_for_1 = "您的角色可见"
-L.marker_vision_visible_for_2 = "您的团队可见"
-L.marker_vision_visible_for_3 = "每个人都可见"
-
 -- 2024-02-14
 L.throw_no_room = "你这里没有地方扔这个装置"
 
 -- 2024-03-04
---L.use_entity = "Press [{usekey}] to use"
+L.use_entity = "按 [{usekey}] 使用"
 
 -- 2024-03-06
---L.submenu_gameplay_sounds_title = "Client-Sounds"
+L.submenu_gameplay_sounds_title = "客户端声音"
 
---L.header_sounds_settings = "UI Sound Settings"
+L.header_sounds_settings = "UI 声音设置"
 
---L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
---L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+L.help_enable_sound_interact = "交互声音是指打开用户界面时播放的声音。例如，与无线电标记交互时就会播放这种声音。"
+L.help_enable_sound_buttons = "按钮声音是点击按钮时播放的咔哒声。"
+L.help_enable_sound_message = "聊天信息和通知时会播放信息或通知声音。它们可能相当令人讨厌。"
 
---L.label_enable_sound_interact = "Enable interaction sounds"
---L.label_enable_sound_buttons = "Enable button sounds"
---L.label_enable_sound_message = "Enable message sounds"
+L.label_enable_sound_interact = "启用交互声音"
+L.label_enable_sound_buttons = "启用按键音"
+L.label_enable_sound_message = "启用信息声音"
 
---L.label_level_sound_interact = "Interaction sound level multiplier"
---L.label_level_sound_buttons = "Button sound level multiplier"
---L.label_level_sound_message = "Message sound level multiplier"
+L.label_level_sound_interact = "交互声级乘数"
+L.label_level_sound_buttons = "按钮音量倍增器"
+L.label_level_sound_message = "信息音量乘数"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
---L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+L.label_crosshair_static_gap_length = "启用静态十字准线间距长度"
+L.label_crosshair_size_gap = "十字准线间距尺寸乘数"
