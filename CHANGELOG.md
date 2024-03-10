@@ -67,6 +67,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
+- Readded global accessors to clientside shop favorites
+  - `shop.IsFavorite(equipmentId)`
+  - `shop.SetFavoriteState(equipmentId, isFavorite)`
+  - `shop.GetFavorites()`
 - Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew)
 - Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
@@ -171,6 +175,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
+- Removed use of `ttt_bem_fav` sql-table storing all favorites for steamid and roles
+  - They are now stored under `ttt2_shop_favorites` for all users on one pc and all roles
 - No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 - Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
   - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`

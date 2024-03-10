@@ -223,6 +223,8 @@ function GM:TTT2Initialize()
     hook.Run("TTT2BaseRoleInit")
 
     DefaultEquipment = GetDefaultEquipment()
+
+    shop.Initialize()
 end
 
 ---
