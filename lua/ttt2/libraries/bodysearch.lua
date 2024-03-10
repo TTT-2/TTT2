@@ -1028,9 +1028,7 @@ if CLIENT then
         -- entries
         table.Merge(oldData, newData)
 
-        if previousOldDataBase then
-            oldData.base = previousOldDataBase or oldData.base
-        end
+        oldData.base = previousOldDataBase or oldData.base
 
         ply.bodySearchResult = oldData
 
