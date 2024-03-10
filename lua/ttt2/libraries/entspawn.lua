@@ -207,7 +207,7 @@ end
 -- @realm server
 function entspawn.SpawnPlayers(deadOnly)
     local waveDelay = cvSpawnWaveInterval:GetFloat()
-    local plys = player.GetAll()
+    local plys = select(2, player.Iterator())
 
     -- simple method, spawn everybody at once
     if waveDelay <= 0 or deadOnly then

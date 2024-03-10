@@ -496,14 +496,15 @@ function roles.GetTeamMembers(team)
     end
 
     local tmp = {}
-    local plys = player.GetAll()
 
     local count = 0
 
+    local plys = select(2, player.Iterator())
     for i = 1, #plys do
-        if plys[i]:GetTeam() == team then
+        local ply = plys[i]
+        if ply:GetTeam() == team then
             count = count + 1
-            tmp[count] = plys[i]
+            tmp[count] = ply
         end
     end
 
