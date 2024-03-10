@@ -6,6 +6,7 @@ end
 
 local oldDatabaseName = "ttt_bem_fav"
 local newDatabaseName = "ttt2_shop_favorites"
+
 ---
 -- Drops an existing sql table with the same name and creates a new one for shop favorites
 -- Then checks out old favorites table and merges them into the new table as good as possible
