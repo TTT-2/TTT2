@@ -115,6 +115,91 @@ function plymeta:AnimUpdateGesture()
 end
 
 ---
+-- Generates a fake voice spectrum based on the player voice volume that looks like
+-- the restult of an FFT.
+-- @param[default=16] number stepCount Defines the result's resolution
+-- @return table Returns the table with the fake spectrum
+-- @realm client
+function plymeta:GetFakeVoiceSpectrum(stepCount)
+    stepCount = stepCount or 16
+
+    self.lastSteps = self.lastSteps or {}
+
+    -- at first the volume is boosted and limited so that the voice level range
+    -- makes a nice sweep over the whole spectrum
+    volume = math.min(4, self:VoiceVolume() * 6 + math.Rand(-0.2, 0.2))
+
+    local biggestValue = 0
+
+    for i = 1, stepCount do
+        local progress = (i - 1) / stepCount
+
+        -- the base for the fake spectrum is a simple sweep over the whole range
+        local value = 2 ^ (-(volume * 4 - 2.2 - progress * 4) ^ 2)
+
+        -- since most people talk a bit quiet, we add a signal to the end of the spectrum
+        value = value + 2 ^ (-(4.5 - 4 * progress) ^ 2) * self:VoiceVolume() ^ 0.5
+
+        -- also the whole spectrum is linearly shifted, when the voice is louder
+        value = value + 2.5 * self:VoiceVolume()
+
+        -- to decrease jumpyness a slow lerp is put on top which smoothes everything
+        value = Lerp(7.5 * FrameTime(), self.lastSteps[i] or 0, value)
+
+        -- then a random value is put on top that makes it look less static and slow
+        value = value + math.Rand(-0.2 * value ^ 2, 0.2 * value ^ 2)
+        value = math.max(0, value)
+
+        -- in the last step a fast lerp is applied that only takes the edge of the random noise
+        self.lastSteps[i] = Lerp(150 * FrameTime(), self.lastSteps[i] or 0, value)
+
+        biggestValue = math.max(biggestValue, value)
+    end
+
+    -- make sure that the spectrum never surpasses 1; if the values are too big, the spectrum
+    -- is normalized
+    if biggestValue > 1.0 then
+        for i = 1, stepCount do
+            self.lastSteps[i] = self.lastSteps[i] / biggestValue
+        end
+    end
+
+    return self.lastSteps
+end
+
+---
+-- Enables that the player is currently speaking in voice. This state is used for the voice UI.
+-- @param boolean state The speaking state
+-- @realm client
+function plymeta:SetSpeakingInVoice(state)
+    self.speaking = state
+end
+
+---
+-- Returns if the player is currently speaking in voice. This state is used for the voice UI.
+-- @return boolean The speaking state
+-- @realm client
+function plymeta:IsSpeakingInVoice()
+    return self.speaking or false
+end
+
+---
+-- Sets the color of the voice panel.
+-- @param Color color The color of the voice panel
+-- @realm client
+function plymeta:SetVoiceColor(color)
+    self.voiceColor = color
+end
+
+---
+-- Returns the color of the voice panel.
+-- @return Color The color of the voice panel
+-- @realm client
+function plymeta:GetVoiceColor()
+    return self.voiceColor or INNOCENT.color
+end
+
+---
 -- @hook
 -- @param Player ply The player to update the animation info for.
 -- @param Vector vel The player's velocity.
