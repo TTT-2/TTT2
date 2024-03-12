@@ -37,13 +37,6 @@ function GM:HUDPaint()
     ---
     -- @realm client
     -- stylua: ignore
-    if hook.Run("HUDShouldDraw", "TTTTButton") then
-        TBHUD:Draw(client)
-    end
-
-    ---
-    -- @realm client
-    -- stylua: ignore
     if hook.Run("HUDShouldDraw", "TTTTargetID") then
         ---
         -- @realm client

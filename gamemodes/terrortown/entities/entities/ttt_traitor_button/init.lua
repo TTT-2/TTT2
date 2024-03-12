@@ -164,9 +164,15 @@ local function ActivateTButton(ply, ent)
     ent:TraitorUse(ply)
 end
 
-net.Receive("TTT2ActivateTButton", function(len, ply)
-    ActivateTButton(ply, net.ReadEntity())
-end)
+---
+-- This is triggered, when you focus a marker of an entity and press 'Use'-Key
+-- Activates the traitor button
+-- @param Player ply The player that used this entity. Always LocalPlayer on client.
+-- @return bool True, because this shouldn't be used serverside
+-- @realm server
+function ENT:RemoteUse(ply)
+    ActivateTButton(ply, self)
+end
 
 ENT.RemoveOnPress = false
 
@@ -206,6 +212,12 @@ function ENT:Initialize()
 
     self.RawDelay = nil
     self.RawDescription = nil
+
+    local mvObject = self:AddMarkerVision("ttt_traitor_button")
+    mvObject:SetOwner(self) -- Set self as owner as markervision currently needs an owner
+    mvObject:SetVisibleFor(VISIBLE_FOR_ALL)
+    mvObject:SetHideWallhack(true)
+    mvObject:SyncToClients()
 end
 
 ---

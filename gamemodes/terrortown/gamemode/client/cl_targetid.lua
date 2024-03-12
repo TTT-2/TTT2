@@ -317,7 +317,6 @@ function GM:HUDDrawTargetID()
     local tData = TARGET_DATA:Initialize(ent, unchangedEnt, distance)
 
     targetid.HUDDrawTargetIDSpawnEdit(tData)
-    targetid.HUDDrawTargetIDTButtons(tData)
     targetid.HUDDrawTargetIDWeapons(tData)
     targetid.HUDDrawTargetIDPlayers(tData)
     targetid.HUDDrawTargetIDRagdolls(tData)

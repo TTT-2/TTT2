@@ -117,6 +117,22 @@ function MARKER_VISION_ELEMENT:GetVisibleFor()
 end
 
 ---
+-- Sets if the mark should not be visible through walls.
+-- @param bool hide Wallhack
+-- @realm shared
+function MARKER_VISION_ELEMENT:SetHideWallhack(hideWallhack)
+    self.data.hideWallhack = hideWallhack
+end
+
+---
+-- Gets if the mark should not be visible through walls.
+-- @return bool If the mark should be hidden behind walls
+-- @realm shared
+function MARKER_VISION_ELEMENT:GetHideWallhack()
+    return self.data.hideWallhack
+end
+
+---
 -- Gets the visible for flag as a language string to the element.
 -- @return string The visible for flag as a language string
 -- @realm shared

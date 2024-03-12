@@ -210,8 +210,12 @@ if CLIENT then
         mvObject:SetOwner(streamData.owner)
         mvObject:SetVisibleFor(streamData.visibleFor)
         mvObject:SetColor(streamData.color)
+        mvObject:SetHideWallhack(streamData.hideWallhack)
 
-        -- add mark to entity
+        -- add mark to entity that is not hidden
+        if streamData.hideWallhack then
+            return
+        end
         marks.Add({ streamData.ent }, mvObject:GetColor())
     end)
 

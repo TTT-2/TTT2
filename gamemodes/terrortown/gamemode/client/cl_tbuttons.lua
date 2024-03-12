@@ -9,6 +9,8 @@ local abs = math.abs
 local table = table
 local net = net
 local IsValid = IsValid
+local TryT = LANG.TryTranslation
+local ParT = LANG.GetParamTranslation
 
 TBHUD = {}
 TBHUD.buttons = {}
@@ -82,29 +84,6 @@ function TBHUD:PlayerIsFocused()
 end
 
 ---
--- Runs the "ttt_use_tbutton" concommand to activate the traitor button
--- @return boolean whether the activation was successful
--- @realm client
-function TBHUD:UseFocused()
-    local buttonChecks = self.focus_but
-        and IsValid(self.focus_but.ent)
-        and self.focus_but.access
-        and self.focus_stick >= CurTime()
-
-    if buttonChecks then
-        net.Start("TTT2ActivateTButton")
-        net.WriteEntity(self.focus_but.ent)
-        net.SendToServer()
-
-        self.focus_but = nil
-
-        return true
-    else
-        return false
-    end
-end
-
----
 -- Sends a request to server to change the access to the tbutton
 -- @param boolean teamMode does this change apply to the current role or team
 -- @return boolean whether the request was sent to server
@@ -142,144 +121,44 @@ function TBHUD.ReceiveUseConfirm()
 end
 net.Receive("TTT_ConfirmUseTButton", TBHUD.ReceiveUseConfirm)
 
-local tbut_normal = Material("vgui/ttt/ttt2_hand_line")
-local tbut_focus = Material("vgui/ttt/ttt2_hand_filled")
-local tbut_outline = Material("vgui/ttt/ttt2_hand_outline")
+local tbut_normal = Material("vgui/ttt/ttt2_hand_filled")
 
-local size = 32
-local mid = size * 0.5
-local focus_range = 25
+-- Handle markervision for ttt_traitor_button
+hook.Add("TTT2RenderMarkerVisionInfo", "HUDDrawMarkerVisionTraitorButton", function(mvData)
+    local ent = mvData:GetEntity()
+    local mvObject = mvData:GetMarkerVisionObject()
+    local client = LocalPlayer()
 
----
--- Draws the traitor buttons on the HUD
--- @param Player client This should be the local @{Player}
--- @realm client
-function TBHUD:Draw(client)
-    if self.buttons_count == 0 then
+    if
+        not mvObject:IsObjectFor(ent, "ttt_traitor_button")
+        or mvData:GetEntityDistance() > ent:GetUsableRange()
+        or not ent:PlayerRoleCanUse(client)
+        or not ent:IsUsable()
+    then
         return
     end
 
-    -- we're doing slowish distance computation here, so lots of probably
-    -- ineffective micro-optimization
-    local plypos = client:GetPos()
-    local midscreen_x = ScrW() * 0.5
-    local midscreen_y = ScrH() * 0.5
-    local pos, scrpos, d
-    local focus_but
-    local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
-    local showToAdmins = GetGlobalBool("ttt2_tbutton_admin_show", false)
+    local teamAccess = ent.overrideTeam
+        or ent.access
+            and ent.teamIntend ~= TEAM_NONE
+            and ent.overrideRole == nil
+            and ent.overrideTeam == nil
+    local outlineColor = teamAccess and ent.teamColor or ent.roleColor or COLOR_WHITE
 
-    -- draw icon on HUD for every button within range
-    for _, val in pairs(self.buttons) do
-        local ent = val.ent
-        local teamAccess = val.overrideTeam
-            or val.access
-                and val.teamIntend ~= TEAM_NONE
-                and val.overrideRole == nil
-                and val.overrideTeam == nil
-        local outlineColor = teamAccess and val.teamColor or val.roleColor or COLOR_BLACK
+    mvData:EnableText()
+    mvData:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or TryT(ent:GetDescription()))
 
-        if not IsValid(ent) or not ent.IsUsable then
-            continue
-        end
+    mvData:AddIcon(tbut_normal, outlineColor)
 
-        pos = ent:GetPos()
-        scrpos = pos:ToScreen()
+    mvData:SetSubtitle(ParT("tbut_help", { usekey = Key("+use", "USE") }))
 
-        if util.IsOffScreen(scrpos) or not ent:IsUsable() then
-            continue
-        end
-
-        local usableRange = ent:GetUsableRange()
-
-        if not val.access and not showToAdmins then
-            continue
-        end
-
-        d = pos - plypos
-        d = d:Dot(d) / (usableRange * usableRange)
-
-        -- draw if this button is within range, with alpha based on distance
-        if d >= 1 then
-            continue
-        end
-
-        local scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
-
-        if val.access then
-            draw.FilteredTexture(
-                scrPosXMid,
-                scrPosYMid,
-                size,
-                size,
-                tbut_normal,
-                200 * (1 - d),
-                COLOR_WHITE
-            )
-        end
-
-        draw.FilteredTexture(
-            scrPosXMid,
-            scrPosYMid,
-            size,
-            size,
-            tbut_outline,
-            200 * (1 - d),
-            outlineColor
-        )
-
-        if d <= focus_d then
-            continue
-        end
-
-        local x = abs(scrpos.x - midscreen_x)
-        local y = abs(scrpos.y - midscreen_y)
-
-        if
-            x >= focus_range
-            or y >= focus_range
-            or x >= focus_scrpos_x
-            or y >= focus_scrpos_y
-            or self.focus_stick >= CurTime()
-                and (ent ~= (self.focus_but and self.focus_but.ent or nil))
-        then
-            continue
-        end
-
-        -- avoid constantly switching focus every frame causing
-        -- 2+ buttons to appear in focus, instead "stick" to one
-        -- ent for a very short time to ensure consistency
-        focus_but = val
-
-        -- draw extra graphics and information for button when it's in-focus
-        if not focus_but or not IsValid(focus_but.ent) then
-            continue
-        end
-
-        self.focus_but = focus_but
-        self.focus_stick = CurTime() + 0.1
-
-        scrpos = focus_but.ent:GetPos():ToScreen()
-        scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
-
-        -- redraw in-focus version of icon
-        draw.FilteredTexture(
-            scrPosXMid - 3,
-            scrPosYMid - 3,
-            size + 6,
-            size + 6,
-            tbut_focus,
-            200,
-            COLOR_WHITE
-        )
-        draw.FilteredTexture(
-            scrPosXMid - 3,
-            scrPosYMid - 3,
-            size + 6,
-            size + 6,
-            tbut_outline,
-            150,
-            outlineColor
-        )
+    local delay = ent:GetDelay()
+    -- add description time with some general info about this specific traitor button
+    if delay < 0 then
+        mvData:AddDescriptionLine(TryT("tbut_single"), client:GetRoleColor())
+    elseif delay == 0 then
+        mvData:AddDescriptionLine(TryT("tbut_reuse"), client:GetRoleColor())
+    else
+        mvData:AddDescriptionLine(ParT("tbut_retime", { num = delay }), client:GetRoleColor())
     end
-end
+end)
