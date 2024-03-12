@@ -32,7 +32,7 @@ end
 
 if SERVER then
     function EVENT:Trigger(wintype)
-        local plys = player.GetAll()
+        local plys = select(2, player.Iterator())
         local eventPlys = {}
 
         for i = 1, #plys do

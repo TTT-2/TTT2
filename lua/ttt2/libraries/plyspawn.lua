@@ -78,7 +78,7 @@ function plyspawn.IsSpawnPointSafe(ply, pos, force, filter)
     local traceGround = util.TraceLine({
         start = posCenter,
         endpos = posCenter - Vector(0, 0, sizePlayer.z),
-        filter = player.GetAll(),
+        filter = select(2, player.Iterator()),
         mask = MASK_SOLID,
     })
 

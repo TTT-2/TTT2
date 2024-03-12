@@ -257,7 +257,7 @@ local function ReceiveRadarScan()
     RADAR.targets = {}
 
     for i = 1, num_targets do
-        local pos = Vector(net.ReadInt(32), net.ReadInt(32), net.ReadInt(32))
+        local pos = Vector(net.ReadInt(15), net.ReadInt(15), net.ReadInt(15))
 
         local hasSubrole = net.ReadBool()
         local subrole

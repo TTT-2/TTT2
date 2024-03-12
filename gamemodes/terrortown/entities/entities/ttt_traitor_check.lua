@@ -32,7 +32,7 @@ function ENT:CountValidPlayers(activator, caller, data)
     local mins = self:LocalToWorld(self:OBBMins())
     local maxs = self:LocalToWorld(self:OBBMaxs())
 
-    local plys = player.GetAll()
+    local plys = select(2, player.Iterator())
     local count = 0
 
     for i = 1, #plys do
