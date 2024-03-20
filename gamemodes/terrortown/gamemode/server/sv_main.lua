@@ -202,6 +202,11 @@ local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {
 ---
 -- @realm server
 -- stylua: ignore
+local cvSelectUniqueModelPerRound = CreateConVar("ttt2_select_unique_model_per_round", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+-- stylua: ignore
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
 
 ---
@@ -1041,6 +1046,11 @@ function PrepareRound()
         and GAMEMODE.force_plymodel ~= ""
     then
         GAMEMODE.playermodel = GAMEMODE.force_plymodel
+	elseif cvSelectUniqueModelPerRound:GetBool() then
+		local plys = player.GetAll()
+		for i = 1, #plys do
+		plys[i].defaultModel = playermodels.GetRandomPlayerModel()
+		end 
     elseif cvSelectModelPerRound:GetBool() then
         GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
     end
