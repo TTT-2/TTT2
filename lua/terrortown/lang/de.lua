@@ -1435,6 +1435,7 @@ L.label_enforce_playermodel = "Erzwinge rollenspezifisches Spielermodell"
 L.label_use_custom_models = "Verwende ein zufällig ausgewähltes Spielermodell"
 L.label_prefer_map_models = "Bevorzuge kartenspezifische Modelle über die Standardspielermodelle"
 L.label_select_model_per_round = "Wähle in jeder Runde ein neues zufälliges Modell aus (wenn deaktiviert, dann nur bei Kartenwechsel)"
+L.label_select_unique_model_per_round = "Jeder Spieler erhält ein unterschiedliches Spielermodell (Überschreibt custom Spielermodelle)"
 
 L.help_prefer_map_models = [[
 Einige Karten definieren ihre eigenen Spielermodelle. Standardmäßig haben diese Modelle eine höhere Priorität als die automatisch zugewiesenen Modelle. Durch das Deaktivieren dieser Einstellung werden die kartenspezifischen Modelle deaktiviert.
