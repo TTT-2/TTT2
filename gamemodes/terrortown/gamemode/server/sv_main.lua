@@ -1046,11 +1046,11 @@ function PrepareRound()
         and GAMEMODE.force_plymodel ~= ""
     then
         GAMEMODE.playermodel = GAMEMODE.force_plymodel
-	elseif cvSelectUniqueModelPerRound:GetBool() then
-		local plys = player.GetAll()
-		for i = 1, #plys do
-		plys[i].defaultModel = playermodels.GetRandomPlayerModel()
-		end 
+    elseif cvSelectUniqueModelPerRound:GetBool() then
+        local plys = player.GetAll()
+        for i = 1, #plys do
+        plys[i].defaultModel = playermodels.GetRandomPlayerModel()
+        end
     elseif cvSelectModelPerRound:GetBool() then
         GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
     end
