@@ -43,11 +43,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = customModelsEnb,
     })
 
-   form:MakeCheckBox({
+    form:MakeCheckBox({
         label = "label_select_unique_model_per_round",
         serverConvar = "ttt2_select_unique_model_per_round",
-        master = customModelsEnb
-   })
+        master = customModelsEnb,
+    })
 
     local form2 = vgui.CreateTTT2Form(parent, "header_playermodels_selection")
 

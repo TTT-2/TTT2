@@ -1049,7 +1049,7 @@ function PrepareRound()
     elseif cvSelectUniqueModelPerRound:GetBool() then
         local plys = player.GetAll()
         for i = 1, #plys do
-        plys[i].defaultModel = playermodels.GetRandomPlayerModel()
+            plys[i].defaultModel = playermodels.GetRandomPlayerModel()
         end
     elseif cvSelectModelPerRound:GetBool() then
         GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
