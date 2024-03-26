@@ -451,7 +451,7 @@ function SWEP:DoAttack(pickup)
     end
 
     local ply = self:GetOwner()
-    local trace = ply:GetEyeTrace()
+    local trace = ply:GetEyeTrace(MASK_SHOT)
     local trEnt = trace.Entity
 
     if not IsValid(trEnt) or not self:CanBeMoved(trEnt) then
