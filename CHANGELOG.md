@@ -16,6 +16,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
 - Added a globally audible sound when searching a body
 - Added the option to add a subtitle to a marker vision element
+- Added the option to assign random unique models at round start
 
 ### Changed
 
