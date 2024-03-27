@@ -378,7 +378,7 @@ end
 concommand.Add("ttt_radio", RadioCommand, RadioComplete)
 
 local function RadioMsgRecv()
-    local sender = net.ReadEntity()
+    local sender = net.ReadPlayer()
     local msg = net.ReadString()
     local param = net.ReadString()
 

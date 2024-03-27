@@ -10,6 +10,7 @@ local math = math
 local IsValid = IsValid
 local hook = hook
 local targetid = targetid
+local playerIterator = player.Iterator
 
 ---
 -- Make sure local TargetID Variables are initialized
@@ -142,7 +143,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
     local client = LocalPlayer()
     local clientTarget = client:GetObserverTarget()
     local clientObsMode = client:GetObserverMode()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
         cam.Start3D(EyePos(), EyeAngles())
@@ -223,7 +224,7 @@ local function DrawPropSpecLabels(client)
     end
 
     local tgt, scrpos, color, _
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]

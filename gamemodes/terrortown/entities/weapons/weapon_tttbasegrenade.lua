@@ -492,11 +492,12 @@ if CLIENT then
             self:DrawHelp()
         end
 
+        local x = ScrW() * 0.5
+        local y = ScrH() * 0.5
+
         if self:GetPin() and self:GetPullTime() > 0 then
             local client = LocalPlayer()
 
-            local x = ScrW() * 0.5
-            local y = ScrH() * 0.5
             y = y + (y / 3)
 
             local pct = 1
@@ -513,7 +514,7 @@ if CLIENT then
             draw.AdvancedText(
                 TryT("grenade_fuse"),
                 "PureSkinBar",
-                x - w / 2,
+                x - 0.5 * w,
                 y - h,
                 hudTextColor,
                 TEXT_ALIGN_LEFT,
@@ -525,7 +526,7 @@ if CLIENT then
             draw.OutlinedShadowedBox(x - w / 2, y - h, w, h, scale, drawColor)
             draw.Box(x - w / 2, y - h, w * pct, h, drawColor)
         else
-            BaseClass.DrawHUD(self)
+            self:DoDrawCrosshair(x, y, true)
         end
     end
 end
