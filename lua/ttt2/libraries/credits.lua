@@ -52,7 +52,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
         ---
         -- @realm server
         -- stylua: ignore
-        hook.Run("TTT2ReceivedKillCredits", victim, attacker, creditsAmount)
+        hook.Run("TTT2OnReceiveKillCredits", victim, attacker, creditsAmount)
 
         LANG.Msg(
             attacker,
@@ -153,7 +153,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
             ---
             -- @realm server
             -- stylua: ignore
-            hook.Run("TTT2ReceivedTeamAwardCredits", plyToAward, creditsAmount)
+            hook.Run("TTT2OnReceiveTeamAwardCredits", plyToAward, creditsAmount)
 
             LANG.Msg(plyToAward, "credit_all", { num = creditsAmount }, MSG_MSTACK_ROLE)
         end
