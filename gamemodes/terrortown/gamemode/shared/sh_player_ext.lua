@@ -8,6 +8,7 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 local math = math
+local playerIterator = player.Iterator
 
 -- Distinguish between 3 modes to reset, add or remove equipped items
 EQUIPITEMS_RESET = 0
@@ -309,7 +310,7 @@ if SERVER then
 else
     net.Receive("TTT2SyncModel", function()
         local mdl = net.ReadString()
-        local ply = net.ReadEntity()
+        local ply = net.ReadPlayer()
 
         if not IsValid(ply) then
             return
@@ -320,7 +321,7 @@ else
 
     net.Receive("TTT2SyncSubroleModel", function()
         local mdl = net.ReadString()
-        local ply = net.ReadEntity()
+        local ply = net.ReadPlayer()
 
         if mdl == "" then
             mdl = nil
@@ -558,6 +559,15 @@ end
 -- @realm shared
 function plymeta:IsActive()
     return GetRoundState() == ROUND_ACTIVE and self:IsTerror()
+end
+
+---
+-- Checks whether a @{Player} is fully connected to the server
+-- @return boolean
+-- @realm shared
+function plymeta:IsFullySignedOn()
+    return (GAMEMODE.PlayerSignOnStates and GAMEMODE.PlayerSignOnStates[self:UserID()])
+        == SIGNONSTATE_FULL
 end
 
 ---
@@ -990,7 +1000,7 @@ function plymeta:SetTargetPlayer(ply)
 
     if SERVER then
         net.Start("TTT2TargetPlayer")
-        net.WriteEntity(ply)
+        net.WritePlayer(ply)
         net.Send(self)
     end
 end
@@ -1021,7 +1031,7 @@ function plymeta:SetSubRoleModel(mdl)
     if SERVER then
         net.Start("TTT2SyncSubroleModel")
         net.WriteString(mdl or "")
-        net.WriteEntity(self)
+        net.WritePlayer(self)
         net.Broadcast()
     end
 end
@@ -1137,8 +1147,7 @@ function plymeta:SetModel(mdlName)
 end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
-    local plys = player.GetAll()
-
+    local plys = select(2, playerIterator())
     for i = 1, #plys do
         plys[i].targetPlayer = nil
     end

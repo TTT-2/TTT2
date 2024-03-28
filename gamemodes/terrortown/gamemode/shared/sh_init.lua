@@ -369,7 +369,7 @@ end
 -- @deprecated
 function GetTraitors()
     local trs = {}
-    local plys = player.GetAll()
+    local plys = select(2, player.Iterator())
 
     for i = 1, #plys do
         if not plys[i]:IsTraitor() then
@@ -558,6 +558,8 @@ include("ttt2/extensions/draw.lua")
 include("ttt2/extensions/input.lua")
 include("ttt2/extensions/cvars.lua")
 include("ttt2/extensions/render.lua")
+include("ttt2/extensions/chat.lua")
+include("ttt2/extensions/sound.lua")
 
 -- include libraries
 include("ttt2/libraries/none.lua")

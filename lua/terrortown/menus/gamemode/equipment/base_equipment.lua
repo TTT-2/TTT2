@@ -53,24 +53,26 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
     local form = vgui.CreateTTT2Form(parent, "header_equipment_setup")
 
-    form:MakeHelp({
-        label = "equipmenteditor_desc_kind",
-    })
+    if not self.isItem then
+        form:MakeHelp({
+            label = "equipmenteditor_desc_kind",
+        })
 
-    form:MakeComboBox({
-        label = "equipmenteditor_name_kind",
-        database = DatabaseElement(accessName, itemName, "Kind"),
-        choices = {
-            { title = TryT("slot_weapon_melee"), value = WEAPON_MELEE },
-            { title = TryT("slot_weapon_pistol"), value = WEAPON_PISTOL },
-            { title = TryT("slot_weapon_heavy"), value = WEAPON_HEAVY },
-            { title = TryT("slot_weapon_nade"), value = WEAPON_NADE },
-            { title = TryT("slot_weapon_carry"), value = WEAPON_CARRY },
-            { title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL },
-            { title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA },
-            { title = TryT("slot_weapon_class"), value = WEAPON_CLASS },
-        },
-    })
+        form:MakeComboBox({
+            label = "equipmenteditor_name_kind",
+            database = DatabaseElement(accessName, itemName, "Kind"),
+            choices = {
+                { title = TryT("slot_weapon_melee"), value = WEAPON_MELEE },
+                { title = TryT("slot_weapon_pistol"), value = WEAPON_PISTOL },
+                { title = TryT("slot_weapon_heavy"), value = WEAPON_HEAVY },
+                { title = TryT("slot_weapon_nade"), value = WEAPON_NADE },
+                { title = TryT("slot_weapon_carry"), value = WEAPON_CARRY },
+                { title = TryT("slot_weapon_special"), value = WEAPON_SPECIAL },
+                { title = TryT("slot_weapon_extra"), value = WEAPON_EXTRA },
+                { title = TryT("slot_weapon_class"), value = WEAPON_CLASS },
+            },
+        })
+    end
 
     form:MakeHelp({
         label = "equipmenteditor_desc_not_buyable",
@@ -126,28 +128,30 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = master,
     })
 
-    form:MakeHelp({
-        label = "equipmenteditor_desc_allow_drop",
-    })
+    if not self.isItem then
+        form:MakeHelp({
+            label = "equipmenteditor_desc_allow_drop",
+        })
 
-    form:MakeCheckBox({
-        label = "equipmenteditor_name_allow_drop",
-        database = DatabaseElement(accessName, itemName, "AllowDrop"),
-    })
+        form:MakeCheckBox({
+            label = "equipmenteditor_name_allow_drop",
+            database = DatabaseElement(accessName, itemName, "AllowDrop"),
+        })
 
-    form:MakeHelp({
-        label = "equipmenteditor_desc_drop_on_death_type",
-    })
+        form:MakeHelp({
+            label = "equipmenteditor_desc_drop_on_death_type",
+        })
 
-    form:MakeComboBox({
-        label = "equipmenteditor_name_drop_on_death_type",
-        database = DatabaseElement(accessName, itemName, "overrideDropOnDeath"),
-        choices = {
-            { title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT },
-            { title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE },
-            { title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY },
-        },
-    })
+        form:MakeComboBox({
+            label = "equipmenteditor_name_drop_on_death_type",
+            database = DatabaseElement(accessName, itemName, "overrideDropOnDeath"),
+            choices = {
+                { title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT },
+                { title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE },
+                { title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY },
+            },
+        })
+    end
 
     form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
 
@@ -167,21 +171,25 @@ function CLGAMEMODESUBMENU:Populate(parent)
         database = DatabaseElement(accessName, itemName, "credits"),
     })
 
-    form:MakeHelp({
-        label = "equipmenteditor_desc_damage_scaling",
-    })
+    if not self.isItem then
+        form:MakeHelp({
+            label = "equipmenteditor_desc_damage_scaling",
+        })
 
-    form:MakeSlider({
-        label = "equipmenteditor_name_damage_scaling",
-        min = 0,
-        max = 8,
-        decimal = 2,
-        database = DatabaseElement(accessName, itemName, "damageScaling"),
-    })
+        form:MakeSlider({
+            label = "equipmenteditor_name_damage_scaling",
+            min = 0,
+            max = 8,
+            decimal = 2,
+            database = DatabaseElement(accessName, itemName, "damageScaling"),
+        })
+    end
+
+    local equipmentClass = WEPS.GetClass(equipment)
 
     -- Get inheritable version for weapons to access inherited functions
     if not self.isItem then
-        equipment = weapons.Get(WEPS.GetClass(equipment))
+        equipment = weapons.Get(equipmentClass)
     end
 
     -- now add custom equipment settings
@@ -190,9 +198,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
     else
         Dev(
             1,
-            "Weapon '"
-                .. equipment:GetClass()
-                .. "' doesn't use the weapon_tttbase and cannot be added to the settings panel."
+            "Weapon / item '"
+                .. equipmentClass
+                .. "' doesn't use the weapon_tttbase / item_base and can therefore add no custom settings to the settings panel."
         )
     end
 

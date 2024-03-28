@@ -4,6 +4,7 @@
 local IsValid = IsValid
 local hook = hook
 local team = team
+local playerIterator = player.Iterator
 
 local MAX_DROWN_TIME = 8
 
@@ -223,6 +224,8 @@ function GM:TTT2Initialize()
     hook.Run("TTT2BaseRoleInit")
 
     DefaultEquipment = GetDefaultEquipment()
+
+    shop.Initialize()
 end
 
 ---
@@ -306,6 +309,20 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:FinishMove
 function GM:FinishMove(ply, moveData)
     SPRINT:HandleStaminaCalculation(ply)
+end
+
+---
+-- This hook is called every time a connecting client advances progress to signing on.
+-- @param number userID The userID of the player whose sign on state has changed.
+-- @param number oldState The previous sign on state. See @{SIGNONSTATE} enums.
+-- @param number newState The new/current sign on state. See @{SIGNONSTATE} enums.
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:ClientSignOnStateChanged
+-- @local
+function GM:ClientSignOnStateChanged(userID, oldState, newState)
+    GAMEMODE.PlayerSignOnStates = GAMEMODE.PlayerSignOnStates or {}
+    GAMEMODE.PlayerSignOnStates[userID] = newState
 end
 
 local ttt_playercolors = {
@@ -413,8 +430,7 @@ function GM:Tick()
     end
 
     -- three cheers for micro-optimizations
-    plys = client and { client } or player.GetAll()
-
+    plys = client and { client } or select(2, playerIterator())
     for i = 1, #plys do
         ply = plys[i]
         tm = ply:Team()

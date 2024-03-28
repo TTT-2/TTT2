@@ -9,6 +9,7 @@ local util = util
 local IsValid = IsValid
 local surface = surface
 local hook = hook
+local playerIterator = player.Iterator
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", { font = "Tahoma", size = 13, weight = 1000 })
@@ -348,8 +349,7 @@ function GM:InitPostEntity()
     end
 
     -- cache players avatar
-    local plys = player.GetAll()
-
+    local plys = select(2, playerIterator())
     for i = 1, #plys do
         local plyid64 = plys[i]:SteamID64()
 
@@ -452,8 +452,6 @@ function GetRoundState()
 end
 
 local function RoundStateChange(o, n)
-    local plys = player.GetAll()
-
     if n == ROUND_PREP then
         -- prep starts
         GAMEMODE:ClearClientState()
@@ -489,6 +487,7 @@ local function RoundStateChange(o, n)
         CLSCORE:ClearPanel()
 
         -- people may have died and been searched during prep
+        local plys = select(2, playerIterator())
         for i = 1, #plys do
             bodysearch.ResetSearchResult(plys[i])
         end
@@ -529,11 +528,10 @@ local function RoundStateChange(o, n)
     -- whatever round state we get, clear out the voice flags
     local winTeams = roles.GetWinTeams()
 
+    local plys = select(2, playerIterator())
     for i = 1, #plys do
-        local pl = plys[i]
-
         for k = 1, #winTeams do
-            pl[winTeams[k] .. "_gvoice"] = false
+            plys[i][winTeams[k] .. "_gvoice"] = false
         end
     end
 end
@@ -565,8 +563,7 @@ end
 net.Receive("TTT_Role", ReceiveRole)
 
 local function ReceiveRoleReset()
-    local plys = player.GetAll()
-
+    local plys = select(2, playerIterator())
     for i = 1, #plys do
         plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
     end
@@ -651,8 +648,7 @@ function GM:ClearClientState()
 
     VOICE.InitBattery()
 
-    local plys = player.GetAll()
-
+    local plys = select(2, playerIterator())
     for i = 1, #plys do
         local pl = plys[i]
         if not IsValid(pl) then
@@ -1000,6 +996,7 @@ local idle = {
     mx = 0,
     my = 0,
     t = 0,
+    last_check = 0,
 }
 
 ---
@@ -1023,16 +1020,16 @@ end)
 -- @realm client
 -- @internal
 function CheckIdle()
-    if not GetGlobalBool("ttt_idle", false) then
-        return
-    end
-
     local client = LocalPlayer()
-    if not IsValid(client) then
-        return
-    end
 
-    if GetRoundState() == ROUND_ACTIVE and client:IsTerror() and client:Alive() then
+    if
+        GetGlobalBool("ttt_idle", false)
+        and IsValid(client)
+        and GetRoundState() == ROUND_ACTIVE
+        and client:IsTerror()
+        and client:Alive()
+        and client:IsFullySignedOn()
+    then
         local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
 
         if idle_limit <= 0 then -- networking sucks sometimes
@@ -1056,10 +1053,12 @@ function CheckIdle()
 
                 RunConsoleCommand("ttt_cl_idlepopup")
             end)
-        elseif CurTime() > idle.t + idle_limit * 0.5 then
+        elseif CurTime() > idle.t + (idle_limit * 0.5) then
             -- will repeat
             LANG.Msg("idle_warning")
         end
+    else
+        idle.t = CurTime()
     end
 end
 

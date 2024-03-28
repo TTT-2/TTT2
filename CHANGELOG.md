@@ -8,16 +8,48 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
-- Added hook `GM:TTT2OnGiveFoundCredits()`, which is called when a player has been given credits for searching a corpse.
-- Added hook `GM:TTT2OnReceiveKillCredits()`, which is called when a player recieves credits for a kill.
-- Added hook `GM:TTT2OnReceiveTeamAwardCredits()`, which is called when a player recieves credits as a team award.
-- Added hook `GM:TTT2OnTransferCredits()`, which is called when a player has successfully transfered a credit to another player.
+- Added upstream content files to base TTT2
+- Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
+- Added hook ENTITY:RemoteUse(ply), which is shared
+  - Return true if only clientside should be used
+- Added RemoteUse to radio, you can now directly access it via use button on marker focus
+- Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
+- Added a globally audible sound when searching a body
+- Added the option to add a subtitle to a marker vision element
+- Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- Added `GM:TTT2OnGiveFoundCredits()` hook which is called when a player has been given credits for searching a corpse.
+- Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill.
+- Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award.
+- Added `GM:TTT2OnTransferCredits()` hook which is called when a player has successfully transfered a credit to another player.
 
 ### Changed
 
 - TryRerollShop calls `TTT2OrderedEquipment` hook.
+- TargetID is now hidden when a marker vision element is focused
+- Crosshair rendering now is a bit more flexible and customizable
+- A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
+- Hides item settings in the equipment editor that are only relevant for weapons
+- The binoculars now use the default crosshair as well
+- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
+- The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
+- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- Micro optimizations
+  - switched from `player.GetAll()` to `select(2, player.Iterator())`
+  - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
+  - Reduced radar bit size for net message
 
 ### Fixed
+
+- Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
+- Fixed weapons which set a custom view model texture having an error texture
+- Fixed the equipment menu throwing errors when clicking on some items
+- TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
+- Fixed hud help text not being shown for some old weapons
+- Fixed detective search being overwritten by player search results
+
+### Removed
+
+- Removed radio tab in shop UI
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
@@ -29,6 +61,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the new view changes preventing weapons from modifying the playerview (by @TimGoll)
 - Fixed the new view changes affecting non-player entities (by @TimGoll)
 - Fixed an error in an error message (by @mexikoedi)
+- Fixed magneto stick not targeting certain props (by @homonovus)
 
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 
@@ -47,6 +80,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
+- Readded global accessors to clientside shop favorites
+  - `shop.IsFavorite(equipmentId)`
+  - `shop.SetFavoriteState(equipmentId, isFavorite)`
+  - `shop.GetFavorites()`
 - Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew)
 - Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
@@ -151,6 +188,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
+- Removed use of `ttt_bem_fav` sql-table storing all favorites for steamid and roles
+  - They are now stored under `ttt2_shop_favorites` for all users on one pc and all roles
 - No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 - Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
   - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`

@@ -8,6 +8,7 @@ local player = player
 local net = net
 local IsValid = IsValid
 local hook = hook
+local playerIterator = player.Iterator
 
 ---@class Player
 local plymeta = FindMetaTable("Player")
@@ -101,7 +102,7 @@ end
 -- @local
 function GM:NetworkIDValidated(name, steamid)
     -- edge case where player authed after initspawn
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local p = plys[i]
@@ -551,8 +552,17 @@ end
 -- @internal
 net.Receive("TTT2PlayerUseEntity", function(len, ply)
     local ent = net.ReadEntity()
+    local isRemote = net.ReadBool()
 
     if not IsValid(ent) then
+        return
+    end
+
+    if isRemote then
+        if isfunction(ent.RemoteUse) then
+            ent:RemoteUse(ply)
+        end
+
         return
     end
 
@@ -1617,10 +1627,20 @@ end
 function GM:TTT2CheckCreditAward(victim, attacker) end
 
 ---
--- Use this hook to prevent the transfer of credits from a body to a player.
+-- Use this hook to override whether a given player is allowed to take credits from a given corpse.
+-- @param Player ply The player that tries to take credits
+-- @param Entity rag The ragdoll where the credits should be taken from
+-- @param[default=false] isLongRange Whether the search is a long range search
+-- @return nil|boolean Return true/false to override if the player is able to take credits
+-- @hook
+-- @realm server
+function GM:TTT2CanTakeCredits(ply, rag, isLongRange) end
+
+---
+-- Use this hook to prevent or override the transfer of credits from a corpse to a player.
 -- @param Entity rag The ragdoll that is inspected
 -- @param Player ply The @{Player} attempting to find credits from ragdoll
--- @return nil|boolean Return false to prevent transfer
+-- @return nil|boolean Return false to prevent normal transfer
 -- @hook
 -- @realm server
 function GM:TTT2GiveFoundCredits(ply, rag) end

@@ -8,6 +8,7 @@ local table = table
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
+local playerIterator = player.Iterator
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -1126,7 +1127,7 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-    local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
+    local availablePlayers = roleselection.GetSelectablePlayers(select(2, playerIterator()))
     local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
     local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
 
@@ -1250,7 +1251,7 @@ function plymeta:AnimPerformGesture(act)
     end
 
     net.Start("TTT_PerformGesture")
-    net.WriteEntity(self)
+    net.WritePlayer(self)
     net.WriteUInt(act, 16)
     net.Broadcast()
 end
@@ -1275,7 +1276,7 @@ end)
 
 -- reset confirm state only on round begin, not on revive
 hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1284,7 +1285,7 @@ end)
 
 -- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
 hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()

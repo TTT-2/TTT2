@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 99
+CLGAMEMODESUBMENU.priority = 98
 CLGAMEMODESUBMENU.title = "submenu_gameplay_voiceandvolume_title"
 CLGAMEMODESUBMENU.icon = Material("vgui/ttt/vskin/helpscreen/voiceandvolume")
 
@@ -14,30 +14,30 @@ function CLGAMEMODESUBMENU:Populate(parent)
         convar = "ttt_cl_soundcues",
     })
 
-    form = vgui.CreateTTT2Form(parent, "header_voiceandvolume_settings")
+    local form2 = vgui.CreateTTT2Form(parent, "header_voiceandvolume_settings")
 
-    form:MakeCheckBox({
+    form2:MakeCheckBox({
         label = "label_gameplay_mute",
         convar = "ttt_mute_team_check",
     })
 
-    form:MakeComboBox({
+    form2:MakeComboBox({
         label = "label_voice_scaling",
         convar = "ttt2_voice_scaling",
         choices = VOICE.GetScalingFunctions(),
         OnChange = function()
-            for _, ply in ipairs(player.GetAll()) do
+            for _, ply in ipairs(select(2, player.Iterator())) do
                 VOICE.UpdatePlayerVoiceVolume(ply)
             end
         end,
     })
 
-    local enbSpecDuck = form:MakeCheckBox({
+    local enbSpecDuck = form2:MakeCheckBox({
         label = "label_voice_duck_spectator",
         convar = "ttt2_voice_duck_spectator",
     })
 
-    form:MakeSlider({
+    form2:MakeSlider({
         label = "label_voice_duck_spectator_amount",
         convar = "ttt2_voice_duck_spectator_amount",
         min = 0,

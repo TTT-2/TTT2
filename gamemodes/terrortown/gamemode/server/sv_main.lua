@@ -65,6 +65,7 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local hook = hook
+local playerIterator = player.Iterator
 
 ---
 -- @realm server
@@ -717,7 +718,7 @@ local function EnoughPlayers()
     local ready = 0
 
     -- only count truly available players, i.e. no forced specs
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -773,7 +774,7 @@ end
 -- @realm server
 -- @internal
 function FixSpectators()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -796,7 +797,7 @@ local function WinChecker()
         return
     end
 
-    if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
+    if CurTime() > GetGlobalFloat("ttt_round_end", 0) and not ttt_dbgwin:GetBool() then
         EndRound(WIN_TIMELIMIT)
     elseif not ttt_dbgwin:GetBool() then
         ---
@@ -828,10 +829,10 @@ local function NameChangeKick()
         return
     end
 
-    local hmns = player.GetHumans()
+    local plys = select(2, playerIterator())
 
-    for i = 1, #hmns do
-        local ply = hmns[i]
+    for i = 1, #plys do
+        local ply = plys[i]
 
         if not ply.spawn_nick then
             ply.spawn_nick = ply:Nick()
@@ -842,7 +843,7 @@ local function NameChangeKick()
         ---
         -- @realm server
         -- stylua: ignore
-        if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
+        if ply:IsBot() or not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
 
         local t = namechangebtime:GetInt()
         local msg = "Changed name during a round"
@@ -866,7 +867,7 @@ function StartNameChangeChecks()
     end
 
     -- bring nicks up to date, may have been changed during prep/post
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -921,8 +922,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
-    ents.TTT.FixParentedPostCleanup()
-
     entityOutputs.SetUp()
 
     entspawn.HandleSpawns()
@@ -940,10 +939,10 @@ function GM:PostCleanupMap()
 end
 
 local function CleanUp()
-    game.CleanUpMap()
+    game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
 
     -- Strip players now, so that their weapons are not seen by ReplaceEntities
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local v = plys[i]
@@ -1098,7 +1097,7 @@ function PrepareRound()
     -- In case client's cleanup fails, make client set all players to innocent role
     timer.Simple(1, SendRoleReset)
 
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -1131,7 +1130,7 @@ end
 -- @realm server
 function TellTraitorsAboutTraitors()
     local traitornicks = {}
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local v = plys[i]
@@ -1275,7 +1274,7 @@ function BeginRound()
 
     ARMOR:InitPlayerArmor()
 
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -1624,7 +1623,7 @@ function GM:TTTCheckForWin()
     end
 
     local aliveTeams = {}
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]

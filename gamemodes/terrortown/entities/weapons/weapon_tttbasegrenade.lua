@@ -486,27 +486,18 @@ if CLIENT then
     local hudTextColor = Color(255, 255, 255, 180)
 
     ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("use", "weapon_ttt_unarmed")
-        end
-    end
-
-    ---
     -- @ignore
     function SWEP:DrawHUD()
         if self.HUDHelp then
             self:DrawHelp()
         end
 
+        local x = ScrW() * 0.5
+        local y = ScrH() * 0.5
+
         if self:GetPin() and self:GetPullTime() > 0 then
             local client = LocalPlayer()
 
-            local x = ScrW() * 0.5
-            local y = ScrH() * 0.5
             y = y + (y / 3)
 
             local pct = 1
@@ -523,7 +514,7 @@ if CLIENT then
             draw.AdvancedText(
                 TryT("grenade_fuse"),
                 "PureSkinBar",
-                x - w / 2,
+                x - 0.5 * w,
                 y - h,
                 hudTextColor,
                 TEXT_ALIGN_LEFT,
@@ -534,6 +525,8 @@ if CLIENT then
             draw.Box(x - w / 2 + scale, y - h + scale, w * pct, h, COLOR_BLACK)
             draw.OutlinedShadowedBox(x - w / 2, y - h, w, h, scale, drawColor)
             draw.Box(x - w / 2, y - h, w * pct, h, drawColor)
+        else
+            self:DoDrawCrosshair(x, y, true)
         end
     end
 end
