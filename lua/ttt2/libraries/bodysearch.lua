@@ -215,6 +215,8 @@ if SERVER then
 
         events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
 
+        hook.Run("TTT2OnGiveFoundCredits", ply, rag, credits)
+
         -- update clients so their UIs can be updated
         net.Start("ttt2_credits_were_taken")
         net.WriteUInt(searchUID or 0, 16)
@@ -359,6 +361,15 @@ if SERVER then
     function bodysearch.StreamSceneData(sceneData, client)
         net.SendStream("TTT2_BodySearchData", sceneData, client)
     end
+
+    ---
+    -- Called after a player has been given credits for searching a corpse.
+    -- @param Player ply The player that searched the corpse
+    -- @param Entity rag The ragdoll that was searched
+    -- @param number credits The amount of credits that were given
+    -- @hook
+    -- @realm server
+    function GM:TTT2OnGiveFoundCredits(ply, rag, credits) end
 end
 
 if CLIENT then

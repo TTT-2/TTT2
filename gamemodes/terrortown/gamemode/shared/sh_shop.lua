@@ -434,7 +434,7 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
             ---
             -- @realm server
             -- stylua: ignore
-            hook.Run("TTT2TransferedCredits", ply, target, credits, false)
+            hook.Run("TTT2OnTransferCredits", ply, target, credits, false)
         else
             -- The would be recipient is dead, which the sender may not know.
             -- Instead attempt to send the credits to the target's corpse, where they can be picked up.
@@ -445,7 +445,7 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
                 ---
                 -- @realm server
                 -- stylua: ignore
-                hook.Run("TTT2TransferedCredits", ply, target, credits, false)
+                hook.Run("TTT2OnTransferCredits", ply, target, credits, false)
             end
         end
 

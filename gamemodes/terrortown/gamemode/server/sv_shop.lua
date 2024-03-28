@@ -193,7 +193,7 @@ function GM:TTT2CanTransferCredits(sender, recipient, credits_per_xfer) end
 -- @param boolean isRecipientDead If the recipient is dead or not.
 -- @hook
 -- @realm server
-function GM:TTT2TransferedCredits(sender, recipient, credits, isRecipientDead) end
+function GM:TTT2OnTransferCredits(sender, recipient, credits, isRecipientDead) end
 
 local function TransferCredits(ply, cmd, args)
     if #args ~= 2 then

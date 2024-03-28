@@ -732,12 +732,3 @@ function GM:TTT2ModifyRagdollVelocity(deadply, rag, velocity) end
 -- @hook
 -- @realm server
 function GM:TTTOnCorpseCreated(rag, deadply) end
-
----
--- Called after a player has been given credits for searching a corpse.
--- @param Player ply The player that searched the corpse
--- @param Entity rag The ragdoll that was searched
--- @param number credits The amount of credits that were given
--- @hook
--- @realm server
-function GM:TTT2OnGiveFoundCredits(ply, rag, credits) end
