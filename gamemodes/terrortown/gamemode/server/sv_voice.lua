@@ -30,9 +30,15 @@ local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "
 -- stylua: ignore
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
+-- stylua: ignore
+local loc_voice_prep = CreateConVar("ttt_locational_voice_prep", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
     SetGlobalBool(sv_voiceenable:GetName(), sv_voiceenable:GetBool())
     SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
+    SetGlobalBool(loc_voice_prep:GetName(), loc_voice_prep:GetBool())
 end)
 
 cvars.AddChangeCallback(sv_voiceenable:GetName(), function(cv, old, new)
@@ -43,6 +49,16 @@ cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
     SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
 end)
 
+cvars.AddChangeCallback(loc_voice_prep:GetName(), function(cv, old, new)
+    SetGlobalBool(loc_voice_prep:GetName(), tobool(tonumber(new)))
+end)
+
+local function LocationalVoiceIsActive(roundState)
+    return loc_voice:GetBool()
+        and roundState ~= ROUND_POST
+        and (roundState ~= ROUND_PREP or loc_voice_prep:GetBool())
+end
+
 local function PlayerCanHearSpectator(listener, speaker, roundState)
     local isSpec = listener:IsSpec()
 
@@ -50,7 +66,7 @@ local function PlayerCanHearSpectator(listener, speaker, roundState)
     local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
 
     return isSpec or not limit or roundState ~= ROUND_ACTIVE,
-        not isSpec and loc_voice:GetBool() and roundState ~= ROUND_POST
+        not isSpec and LocationalVoiceIsActive(roundState)
 end
 
 local function PlayerCanHearTeam(listener, speaker, speakerTeam)
@@ -93,7 +109,7 @@ local function PlayerIsMuted(listener, speaker)
 end
 
 local function PlayerCanHearGlobal(roundState)
-    return true, loc_voice:GetBool() and roundState ~= ROUND_POST
+    return true, LocationalVoiceIsActive(roundState)
 end
 
 ---
