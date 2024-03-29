@@ -41,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
 - Fixed hud help text not being shown for some old weapons
 - Fixed detective search being overwritten by player search results
+- Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
 
 ### Removed
 
