@@ -38,7 +38,6 @@ local loc_voice_prep = CreateConVar("ttt_locational_voice_prep", "0", {FCVAR_NOT
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
     SetGlobalBool(sv_voiceenable:GetName(), sv_voiceenable:GetBool())
     SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
-    SetGlobalBool(loc_voice_prep:GetName(), loc_voice_prep:GetBool())
 end)
 
 cvars.AddChangeCallback(sv_voiceenable:GetName(), function(cv, old, new)
@@ -47,10 +46,6 @@ end)
 
 cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
     SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
-end)
-
-cvars.AddChangeCallback(loc_voice_prep:GetName(), function(cv, old, new)
-    SetGlobalBool(loc_voice_prep:GetName(), tobool(tonumber(new)))
 end)
 
 local function LocationalVoiceIsActive(roundState)
