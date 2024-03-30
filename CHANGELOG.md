@@ -18,7 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added the option to add a subtitle to a marker vision element
 - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 - Disabled locational voice during the preparing phase by default
-  - Added a ConVar `ttt_voice_locational_prep` to reenable it
+  - Added a ConVar `ttt_locational_voice_prep` to reenable it
 
 ### Changed
 
