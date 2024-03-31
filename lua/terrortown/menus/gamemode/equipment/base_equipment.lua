@@ -128,39 +128,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = master,
     })
 
-    if not self.isItem then
-        form:MakeHelp({
-            label = "equipmenteditor_desc_allow_drop",
-        })
-
-        form:MakeCheckBox({
-            label = "equipmenteditor_name_allow_drop",
-            database = DatabaseElement(accessName, itemName, "AllowDrop"),
-        })
-
-        form:MakeHelp({
-            label = "equipmenteditor_desc_drop_on_death_type",
-        })
-
-        form:MakeComboBox({
-            label = "equipmenteditor_name_drop_on_death_type",
-            database = DatabaseElement(accessName, itemName, "overrideDropOnDeath"),
-            choices = {
-                { title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT },
-                { title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE },
-                { title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY },
-            },
-        })
-    end
-
-    form = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
-
     form:MakeSlider({
         label = "equipmenteditor_name_min_players",
         min = 0,
         max = 63,
         decimal = 0,
         database = DatabaseElement(accessName, itemName, "minPlayers"),
+        master = master,
     })
 
     form:MakeSlider({
@@ -169,14 +143,40 @@ function CLGAMEMODESUBMENU:Populate(parent)
         max = 20,
         decimal = 0,
         database = DatabaseElement(accessName, itemName, "credits"),
+        master = master,
     })
 
     if not self.isItem then
-        form:MakeHelp({
+        local form2 = vgui.CreateTTT2Form(parent, "header_equipment_value_setup")
+
+        form2:MakeHelp({
+            label = "equipmenteditor_desc_allow_drop",
+        })
+
+        form2:MakeCheckBox({
+            label = "equipmenteditor_name_allow_drop",
+            database = DatabaseElement(accessName, itemName, "AllowDrop"),
+        })
+
+        form2:MakeHelp({
+            label = "equipmenteditor_desc_drop_on_death_type",
+        })
+
+        form2:MakeComboBox({
+            label = "equipmenteditor_name_drop_on_death_type",
+            database = DatabaseElement(accessName, itemName, "overrideDropOnDeath"),
+            choices = {
+                { title = TryT("drop_on_death_type_default"), value = DROP_ON_DEATH_TYPE_DEFAULT },
+                { title = TryT("drop_on_death_type_force"), value = DROP_ON_DEATH_TYPE_FORCE },
+                { title = TryT("drop_on_death_type_deny"), value = DROP_ON_DEATH_TYPE_DENY },
+            },
+        })
+
+        form2:MakeHelp({
             label = "equipmenteditor_desc_damage_scaling",
         })
 
-        form:MakeSlider({
+        form2:MakeSlider({
             label = "equipmenteditor_name_damage_scaling",
             min = 0,
             max = 8,
