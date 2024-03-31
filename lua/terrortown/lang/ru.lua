@@ -1670,6 +1670,7 @@ L.label_voice_drain_normal = "Расход за тик: обычные роли"
 L.label_voice_drain_admin = "Расход за тик: полицейские роли, администраторы"
 L.label_voice_drain_recharge = "Частота подзарядки за тик при голосовом молчании"
 L.label_locational_voice = "Включить ближний голосовой чат для живых игроков"
+--L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
 L.label_armor_on_spawn = "Броня игрока при появлении или возрождении"
 L.label_prep_respawn = "Включить мгновенное возрождение во время подготовки"
 L.label_preptime_seconds = "Время подготовки в секундах"
@@ -2214,3 +2215,6 @@ L.decoy_help_primary = "Установить Приманку"
 -- 2024-03-07
 --L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."

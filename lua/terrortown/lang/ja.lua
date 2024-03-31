@@ -1668,6 +1668,7 @@ L.label_voice_drain_normal = "通常プレイヤーのボイスチャットの�
 L.label_voice_drain_admin = "管理者および確白役職のボイスチャットのバッテリーのチックあたりの減少値"
 --L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 --L.label_locational_voice = "Enable proximity voice chat for living players"
+--L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
 L.label_armor_on_spawn = "全プレイヤーアーマー装着"
 L.label_prep_respawn = "ラウンド準備中時のリスポーンを有効"
 L.label_preptime_seconds = "ラウンド準備時間(秒)"
@@ -2212,3 +2213,6 @@ L.decoy_help_primary = "デコイを設置する"
 -- 2024-03-07
 --L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
