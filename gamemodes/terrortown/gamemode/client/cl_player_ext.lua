@@ -115,6 +115,25 @@ function plymeta:AnimUpdateGesture()
 end
 
 ---
+-- Creates and caches a elliptic nick for a given length.
+-- @param number width The maximum width that should be used to limit the nick
+-- @param[default="DefaultBold"] string font The font ID
+-- @param[default="..."] string limitChar The limiting character(s) that might be appended to the end
+-- @param[default=1.0] number scale The UI scale factor
+-- @return string The length limited nick
+-- @realm client
+function plymeta:NickElliptic(width, font, limitChar, scale)
+    limitChar = limitChar or "..."
+
+    self.cachedEllipticNicks = self.cachedEllipticNicks or {}
+
+    self.cachedEllipticNicks[width] = self.cachedEllipticNicks[width]
+        or draw.GetLimitedLengthText(self:Nick(), width, font, limitChar, scale)
+
+    return self.cachedEllipticNicks[width]
+end
+
+---
 -- @hook
 -- @param Player ply The player to update the animation info for.
 -- @param Vector vel The player's velocity.
