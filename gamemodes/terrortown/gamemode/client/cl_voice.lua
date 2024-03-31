@@ -206,7 +206,9 @@ function GM:PlayerStartVoice(ply)
     -- handle voice panel color
     local color = INNOCENT.color
 
-    if
+    if ply:IsSpec() then
+        color = COLOR_SPEC
+    elseif
         client:IsActive()
         and clientTeam ~= TEAM_NONE
         and not clientRoleData.unknownTeam

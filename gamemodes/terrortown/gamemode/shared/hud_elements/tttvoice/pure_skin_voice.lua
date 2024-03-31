@@ -132,7 +132,7 @@ if CLIENT then
         local x, y = pos.x, pos.y
         local w, h = size.w, size.h
 
-        local plys = player.GetAll()
+        local plys = select(2, player.Iterator())
         local plysSorted = {}
 
         for i = 1, #plys do
@@ -152,7 +152,7 @@ if CLIENT then
         end
 
         for i = 1, #plysSorted do
-            local ply = plys[i]
+            local ply = plysSorted[i]
 
             self:DrawVoiceBar(ply, x, y, w, h)
 
