@@ -1668,6 +1668,7 @@ L.label_voice_drain_normal = "普通玩家的每滴答消耗量"
 L.label_voice_drain_admin = "让管理员和公共警察角色的电池会耗尽"
 L.label_voice_drain_recharge = "不进行语音聊天时每滴答的充能率"
 L.label_locational_voice = "为活着的玩家启用近距离语音聊天功能"
+--L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
 L.label_armor_on_spawn = "玩家在重生时的默认护甲量"
 L.label_prep_respawn = "在准备阶段启用即时重生"
 L.label_preptime_seconds = "准备时间（秒）"
@@ -2212,3 +2213,6 @@ L.decoy_help_primary = "安放诱饵"
 -- 2024-03-07
 --L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."

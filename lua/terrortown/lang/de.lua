@@ -2213,3 +2213,6 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 -- 2024-03-07
 --L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
