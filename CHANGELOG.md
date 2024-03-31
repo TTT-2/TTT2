@@ -32,7 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
-
+- The holdtype for pistol weapons now matches the viewmodel
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
