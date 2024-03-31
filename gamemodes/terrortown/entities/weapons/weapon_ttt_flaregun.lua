@@ -4,7 +4,7 @@ end
 
 DEFINE_BASECLASS("weapon_tttbase")
 
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "revolver"
 
 if CLIENT then
     SWEP.PrintName = "flare_name"
