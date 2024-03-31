@@ -16,7 +16,7 @@ local isfunction = isfunction
 local VectorRand = VectorRand
 local HSVToColor = HSVToColor
 
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 local stringSplit = string.Split
 local tableConcat = table.concat
 local weaponsGetStored = weapons.GetStored
@@ -89,7 +89,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-    local plys = select(2, playerIterator())
+    local plys = player.GetAll()
 
     if not isfunction(filterFn) then
         return plys
@@ -111,7 +111,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-    local plys = select(2, playerIterator())
+    local plys = player.GetAll()
     local tmp = {}
 
     for i = 1, #plys do

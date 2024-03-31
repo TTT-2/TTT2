@@ -19,8 +19,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
         convar = "ttt2_voice_scaling",
         choices = VOICE.GetScalingFunctions(),
         OnChange = function()
-            for _, ply in ipairs(select(2, player.Iterator())) do
-                VOICE.UpdatePlayerVoiceVolume(ply)
+            local plys = player.GetAll()
+
+            for i = 1, #plys do
+                VOICE.UpdatePlayerVoiceVolume(plys[i])
             end
         end,
     })

@@ -8,7 +8,7 @@ local player = player
 local net = net
 local IsValid = IsValid
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 ---@class Player
 local plymeta = FindMetaTable("Player")
@@ -102,7 +102,7 @@ end
 -- @local
 function GM:NetworkIDValidated(name, steamid)
     -- edge case where player authed after initspawn
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local p = plys[i]

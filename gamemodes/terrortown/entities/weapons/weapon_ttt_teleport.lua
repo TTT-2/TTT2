@@ -176,7 +176,7 @@ local function CanTeleportToPos(ply, pos)
         start = pos,
         endpos = pos,
         mask = MASK_PLAYERSOLID,
-        filter = select(2, player.Iterator()),
+        filter = player.GetAll(),
     }
     local collide = false
 

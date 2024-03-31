@@ -499,7 +499,7 @@ function roles.GetTeamMembers(team)
 
     local count = 0
 
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
     for i = 1, #plys do
         local ply = plys[i]
         if ply:GetTeam() == team then

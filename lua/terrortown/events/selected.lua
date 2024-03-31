@@ -22,7 +22,7 @@ if SERVER then
             plys = {},
         }
         local eventPlys = event.plys
-        local plys = select(2, player.Iterator())
+        local plys = player.GetAll()
 
         for i = 1, #plys do
             local ply = plys[i]

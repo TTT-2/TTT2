@@ -19,7 +19,7 @@ local tableAdd = table.Add
 local tableCopy = table.Copy
 local utilTableToJSON = util.TableToJSON
 local utilJSONToTable = util.JSONToTable
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local spawnPointList = {}
 local settingsList = {}
@@ -491,7 +491,7 @@ if SERVER then
     -- @param table plys A table of players that should be updated
     -- @realm server
     function entspawnscript.UpdateSettingsOnClients(plys)
-        plys = plys or select(2, playerIterator())
+        plys = plys or player.GetAll()
         for i = 1, #plys do
             local ply = plys[i]
 
@@ -531,7 +531,7 @@ if SERVER then
             end
         end
 
-        plys = plys or select(2, playerIterator())
+        plys = plys or player.GetAll()
         for i = 1, #plys do
             local ply = plys[i]
             ---
