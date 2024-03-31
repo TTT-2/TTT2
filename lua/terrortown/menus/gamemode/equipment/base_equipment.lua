@@ -183,6 +183,16 @@ function CLGAMEMODESUBMENU:Populate(parent)
             decimal = 2,
             database = DatabaseElement(accessName, itemName, "damageScaling"),
         })
+
+        if equipment.SetClipOnBuy then
+            form2:MakeSlider({
+                label = "label_equipmenteditor_clip_on_buy",
+                min = 1,
+                max = 20,
+                decimal = 0,
+                database = DatabaseElement(accessName, itemName, "ClipOnBuy"),
+            })
+        end
     end
 
     local equipmentClass = WEPS.GetClass(equipment)

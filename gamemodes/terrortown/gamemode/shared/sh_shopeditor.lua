@@ -55,6 +55,11 @@ ShopEditor.savingKeys = {
     damageScaling = {
         typ = "float",
         bits = 8,
+        default = 0,
+    },
+    ClipOnBuy = {
+        typ = "number",
+        bits = 8,
         default = 1,
     },
     AllowDrop = {
