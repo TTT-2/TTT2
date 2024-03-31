@@ -19,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 - Disabled locational voice during the preparing phase by default
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
+- Added `SWEP.SetClipOnBuy` and `SWEP.ClipOnBuy` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
 
 ### Changed
 
