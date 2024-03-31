@@ -6,6 +6,7 @@ local net = net
 local string = string
 local table = table
 local IsValid = IsValid
+local playerIterator = player.Iterator
 
 ---
 -- Sends a GameMessage to every @{Player}
@@ -93,7 +94,7 @@ local function RoleChatMsg(sender, msg)
     end
 
     net.Start("TTT_RoleChat")
-    net.WriteEntity(sender)
+    net.WritePlayer(sender)
     net.WriteString(msg)
     net.Send(GetTeamChatFilter(senderTeam))
 end
@@ -103,7 +104,7 @@ end
 -- @realm server
 -- @internal
 function ShowRoundStartPopup()
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -123,7 +124,7 @@ end
 -- @realm server
 function GetPlayerFilter(pred)
     local filter = {}
-    local plys = player.GetAll()
+    local plys = select(2, playerIterator())
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -427,7 +428,7 @@ local function LastWordsMsg(ply, words)
     local context = LastWordContext[ply.death_type] or ""
 
     net.Start("TTT_LastWordsMsg")
-    net.WriteEntity(ply)
+    net.WritePlayer(ply)
     net.WriteString(words .. (final and "" or "--") .. context)
     net.Broadcast()
 end
@@ -527,7 +528,7 @@ local function ttt_radio_send(ply, cmd, args)
     if hook.Run("TTTPlayerRadioCommand", ply, msgName, msgTarget) then return end
 
     net.Start("TTT_RadioMsg")
-    net.WriteEntity(ply)
+    net.WritePlayer(ply)
     net.WriteString(msgName)
     net.WriteString(name)
 

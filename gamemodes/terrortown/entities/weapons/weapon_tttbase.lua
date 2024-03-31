@@ -363,15 +363,30 @@ if CLIENT then
             self:DrawHelp()
         end
 
-        if not cvEnableCrosshair:GetBool() then
-            return
+        self:DoDrawCrosshair(mathCeil(ScrW() * 0.5), mathCeil(ScrH() * 0.5), true)
+    end
+
+    ---
+    -- Called when the crosshair is about to get drawn, and allows you to override it.
+    -- @note This is a hook that is used to draw the crosshair. We use the function to prevent
+    -- the crosshair from being drawn and then use the same hook to draw our own custom
+    -- crosshair. The third parameter has therefore be set to true if the crosshair should
+    -- actually be drawn, otherwise the function only returns true to prevent the default one.
+    -- @param number xCenter The x center position of the crosshair
+    -- @param number yCenter The y center position of the crosshair
+    -- @param boolean shouldDraw Should the crosshair be drawn
+    -- @return boolean Return true to prevent the default crosshair from being drawn
+    -- @ref https://wiki.facepunch.com/gmod/WEAPON:DoDrawCrosshair
+    -- @hook
+    -- @realm client
+    function SWEP:DoDrawCrosshair(xCenter, yCenter, shouldDraw)
+        if not shouldDraw or not cvEnableCrosshair:GetBool() then
+            return true
         end
 
         local client = LocalPlayer()
         local sights = not self.NoSights and self:GetIronsights()
 
-        local xCenter = mathCeil(ScrW() * 0.5)
-        local yCenter = mathCeil(ScrH() * 0.5)
         local scale = appearance.GetGlobalScale()
         local baseConeWeapon = mathMax(0.2, 10 * self:GetPrimaryConeBase())
         local scaleWeapon = cvCrosshairUseWeaponscale:GetBool()
@@ -506,6 +521,8 @@ if CLIENT then
             )
             surface.DrawRect(xCenter - offsetLine, yCenter + gap, thicknessLine, lengthLine - gap)
         end
+
+        return true
     end
 
     local colorBox = Color(0, 0, 0, 100)
@@ -1045,7 +1062,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
     bullet.Src = self:GetOwner():GetShootPos()
     bullet.Dir = self:GetOwner():GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
-    bullet.Tracer = 4
+    bullet.Tracer = 1
     bullet.TracerName = self.Tracer or "Tracer"
     bullet.Force = 10
     bullet.Damage = dmg * (self.damageScaling or 1)

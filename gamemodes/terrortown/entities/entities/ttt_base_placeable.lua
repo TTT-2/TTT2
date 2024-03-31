@@ -179,7 +179,7 @@ if SERVER then
             end
 
             local pos = self:GetPos()
-            local ignore = player.GetAll()
+            local ignore = select(2, player.Iterator())
 
             ignore[#ignore + 1] = self
 

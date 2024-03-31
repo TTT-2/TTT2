@@ -16,7 +16,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
 - Added a globally audible sound when searching a body
 - Added the option to add a subtitle to a marker vision element
-- Added a new voice chat UI
+- Added a new voice chat UI (by @TimGoll)
+- Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 
 ### Changed
 
@@ -25,14 +26,25 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
 - Hides item settings in the equipment editor that are only relevant for weapons
 - The binoculars now use the default crosshair as well
+- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
+- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- Micro optimizations
+  - switched from `player.GetAll()` to `select(2, player.Iterator())`
+  - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
+  - Reduced radar bit size for net message
+  - The holdtype for pistol weapons now matches the viewmodel
 
 ### Fixed
 
 - Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
 - Fixed weapons which set a custom view model texture having an error texture
 - Fixed the equipment menu throwing errors when clicking on some items
+- TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
 - Fixed hud help text not being shown for some old weapons
+- Fixed detective search being overwritten by player search results
+- Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
+- Fixed Roundendscreen showing karma changes even if karma is disabled
 
 ### Removed
 
@@ -48,6 +60,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the new view changes preventing weapons from modifying the playerview (by @TimGoll)
 - Fixed the new view changes affecting non-player entities (by @TimGoll)
 - Fixed an error in an error message (by @mexikoedi)
+- Fixed magneto stick not targeting certain props (by @homonovus)
 
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 
@@ -66,6 +79,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `draw.Arc` and `draw.ShadowedArc` from TTTC to TTT2 to draw arcs (by @TimGoll und @Alf21)
 - Added possibility to cache and remove items, similar to how it is already possible with weapons with `CacheAndStripItems` (by @TimGoll)
 - Added an option for weapons to hide the pickup notification by setting `SWEP.silentPickup` to `true` (by @TimGoll)
+- Readded global accessors to clientside shop favorites
+  - `shop.IsFavorite(equipmentId)`
+  - `shop.SetFavoriteState(equipmentId, isFavorite)`
+  - `shop.GetFavorites()`
 - Added `TTT2FetchAvatar` hook for intercepting avatar URIs (by @EntranceJew)
 - Added `draw.DropCacheAvatar` to allow destroying and refreshing an existing avatar, so bots can intercept avatar requests and circumvent the limited unique SteamID64s they're given (by @EntranceJew)
 - `weapon_tttbase` changes to correct non-looping animations which affected ADS scoping (by @EntranceJew)
@@ -170,6 +187,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Moved global shared `EquipmentIsBuyable(tbl, ply)` to `shop.CanBuyEquipment(ply, equipmentName)`
   - Returned text and result are now replaced by a statusCode
+- Removed use of `ttt_bem_fav` sql-table storing all favorites for steamid and roles
+  - They are now stored under `ttt2_shop_favorites` for all users on one pc and all roles
 - No more `plymeta:GetAvoidRole(role)` or `plymeta:GetAvoidDetective()`
 - Moved global `TEAMBUYTABLE` to `shop.teamBuyTable` and separated `BUYTABLE` into `shop.buyTable` and `shop.globalBuyTable`
   - Use new Accessors `shop.IsBoughtFor(ply, equipmentName)`, `shop.IsGlobalBought(equipmentName)` and `shop.IsTeamBoughtFor(ply, equipmentName)`

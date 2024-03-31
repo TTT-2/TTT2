@@ -2,6 +2,7 @@
 
 local TryT = LANG.TryTranslation
 local ParT = LANG.GetParamTranslation
+local IsKarmaEnabled = KARMA.IsEnabled
 
 local function GetPanelTextSize(pnl)
     surface.SetFont(pnl:GetTitleFont())
@@ -104,7 +105,13 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
         - 2 * sizes.padding
         - (heightScroll < maxHeightColumn and 15 or 0)
     ) / 3
-    local widthName = widthColumn - sizes.widthKarma - sizes.widthScore - 4 * sizes.padding
+
+    local widthName
+    if IsKarmaEnabled() then
+        widthName = widthColumn - sizes.widthKarma - sizes.widthScore - 4 * sizes.padding
+    else
+        widthName = widthColumn - sizes.widthScore - 3 * sizes.padding
+    end
 
     local teamInfoBox = {}
 
@@ -201,33 +208,35 @@ local function PopulatePlayerView(parent, sizes, columnData, columnTeams, showDe
                 plyNameBox:SetTooltipFixedSize(widthRolesTooltip, heightRolesTooltip)
                 plyRolesTooltipPanel:SetSize(widthRolesTooltip, heightRolesTooltip)
 
-                local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
-                plyKarmaBox:SetSize(sizes.widthKarma, sizes.heightRow)
-                plyKarmaBox:SetColor(colorTeamLight)
-                plyKarmaBox:SetTitle(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
-                plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
-                plyKarmaBox:SetTooltip("tooltip_karma_gained")
+                if IsKarmaEnabled() then
+                    local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
+                    plyKarmaBox:SetSize(sizes.widthKarma, sizes.heightRow)
+                    plyKarmaBox:SetColor(colorTeamLight)
+                    plyKarmaBox:SetTitle(CLSCORE.eventsInfoKarma[ply.sid64] or 0)
+                    plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
+                    plyKarmaBox:SetTooltip("tooltip_karma_gained")
 
-                local plyKarmaTooltipPanel = vgui.Create("DPanelTTT2")
+                    local plyKarmaTooltipPanel = vgui.Create("DPanelTTT2")
 
-                local karmaBucket = {}
-                local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
-                for karmaText, karma in pairs(plyKarmaList) do
-                    karmaBucket[#karmaBucket + 1] = {
-                        title = "- " .. TryT(karmaText) .. ": " .. karma,
-                    }
+                    local karmaBucket = {}
+                    local plyKarmaList = CLSCORE.eventsPlayerKarma[ply.sid64] or {}
+                    for karmaText, karma in pairs(plyKarmaList) do
+                        karmaBucket[#karmaBucket + 1] = {
+                            title = "- " .. TryT(karmaText) .. ": " .. karma,
+                        }
+                    end
+                    local widthKarmaTooltip, heightKarmaTooltip = MakePlayerGenericTooltip(
+                        plyKarmaTooltipPanel,
+                        ply,
+                        karmaBucket,
+                        "tooltip_karma_gained"
+                    )
+
+                    plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
+                    plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
+                    plyKarmaBox:SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
+                    plyKarmaTooltipPanel:SetSize(widthKarmaTooltip, heightKarmaTooltip)
                 end
-                local widthKarmaTooltip, heightKarmaTooltip = MakePlayerGenericTooltip(
-                    plyKarmaTooltipPanel,
-                    ply,
-                    karmaBucket,
-                    "tooltip_karma_gained"
-                )
-
-                plyKarmaBox:SetTooltipPanel(plyKarmaTooltipPanel)
-                plyKarmaBox:SetTooltipFixedPosition(0, sizes.heightRow + 1)
-                plyKarmaBox:SetTooltipFixedSize(widthKarmaTooltip, heightKarmaTooltip)
-                plyKarmaTooltipPanel:SetSize(widthKarmaTooltip, heightKarmaTooltip)
 
                 local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
                 plyPointsBox:SetSize(sizes.widthScore, sizes.heightRow)

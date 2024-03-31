@@ -147,7 +147,7 @@ function SWEP:PrimaryAttack()
         local tr = util.TraceLine({
             start = ply:GetShootPos(),
             endpos = ply:GetShootPos() + ply:GetAimVector() * self.MaxRange,
-            filter = { ply, self.Entity },
+            filter = { ply, self },
             mask = MASK_SOLID,
         })
 
@@ -191,7 +191,7 @@ function SWEP:SecondaryAttack()
         local tr = util.TraceLine({
             start = ply:GetShootPos(),
             endpos = ply:GetShootPos() + ply:GetAimVector() * range,
-            filter = { ply, self.Entity },
+            filter = { ply, self },
             mask = MASK_SOLID,
         })
 

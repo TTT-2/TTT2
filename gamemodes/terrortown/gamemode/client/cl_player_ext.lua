@@ -219,7 +219,7 @@ end
 function GM:GrabEarAnimation(ply) end
 
 local function TTT_PerformGesture()
-    local ply = net.ReadEntity()
+    local ply = net.ReadPlayer()
     local act = net.ReadUInt(16)
 
     if not IsValid(ply) or act == nil then
@@ -244,7 +244,7 @@ net.Receive("StartDrowning", StartDrowning)
 
 local function TargetPlayer()
     local client = LocalPlayer()
-    local target = net.ReadEntity()
+    local target = net.ReadPlayer()
 
     if not IsValid(client) then
         return

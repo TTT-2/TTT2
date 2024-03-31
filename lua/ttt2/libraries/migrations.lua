@@ -34,6 +34,10 @@ function migrations.Apply()
         local fileName = files[i]
         local fullPath = migrations.folderPath .. files[i]
 
+        if SERVER then
+            AddCSLuaFile(fullPath)
+        end
+
         local fileInfo = migrations.orm:Find(fileName)
 
         if fileInfo then
@@ -42,9 +46,6 @@ function migrations.Apply()
 
         Dev(1, "Migrating: ", fileName)
 
-        if SERVER then
-            AddCSLuaFile(fullPath)
-        end
         local isSuccess, errorMessage = pcall(include(fullPath))
 
         if not isSuccess then

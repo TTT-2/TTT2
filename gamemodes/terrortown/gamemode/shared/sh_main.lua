@@ -4,6 +4,7 @@
 local IsValid = IsValid
 local hook = hook
 local team = team
+local playerIterator = player.Iterator
 
 local MAX_DROWN_TIME = 8
 
@@ -223,6 +224,8 @@ function GM:TTT2Initialize()
     hook.Run("TTT2BaseRoleInit")
 
     DefaultEquipment = GetDefaultEquipment()
+
+    shop.Initialize()
 end
 
 ---
@@ -427,8 +430,7 @@ function GM:Tick()
     end
 
     -- three cheers for micro-optimizations
-    plys = client and { client } or player.GetAll()
-
+    plys = client and { client } or select(2, playerIterator())
     for i = 1, #plys do
         ply = plys[i]
         tm = ply:Team()
