@@ -7,12 +7,12 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-    local padding = 10
+    local padding = 6
 
     local baseDefaults = {
         basepos = { x = 0, y = 0 },
-        size = { w = 240, h = 48 },
-        minsize = { w = 120, h = 48 },
+        size = { w = 240, h = 42 },
+        minsize = { w = 120, h = 42 },
     }
 
     function HUDELEMENT:Initialize()
@@ -46,16 +46,22 @@ if CLIENT then
 
     function HUDELEMENT:DrawVoiceBar(ply, xPos, yPos, w, h)
         local color = ply:GetVoiceColor()
-
-        draw.Box(xPos + 6, yPos + 6, w - 6, h - 12, color)
-        self:DrawLines(xPos + 6, yPos + 6, w - 6, h - 12, color.a)
-
         local data = ply:GetFakeVoiceSpectrum(24)
 
-        local widthBar = (w - h - 6) / #data - 1
+        local widthBar = (w - h - self.padding) / #data - 1
+        local heightBar = h - 2 * self.padding
+
+        draw.Box(xPos + self.padding, yPos + self.padding, w - self.padding, heightBar, color)
+        self:DrawLines(
+            xPos + self.padding,
+            yPos + self.padding,
+            w - self.padding,
+            heightBar,
+            color.a
+        )
 
         for i = 1, #data do
-            local yValue = math.floor(data[i] * 15)
+            local yValue = math.floor(data[i] * 0.5 * heightBar - 4 * self.scale)
 
             draw.Box(
                 xPos + h + 3 + (i - 1) * (widthBar + 1),
