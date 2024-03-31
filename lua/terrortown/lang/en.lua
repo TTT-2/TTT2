@@ -2219,3 +2219,4 @@ L.help_locational_voice = "Proximity chat is TTT2's implementation of locational
 L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
 
 Note: Proximity chat is always disabled during the post round phase.]]
+L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
