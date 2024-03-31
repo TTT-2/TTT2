@@ -185,6 +185,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
         })
 
         if equipment.SetClipOnBuy then
+            form2:MakeHelp({
+                label = "help_equipmenteditor_clip_on_buy",
+            })
+
             form2:MakeSlider({
                 label = "label_equipmenteditor_clip_on_buy",
                 min = 1,

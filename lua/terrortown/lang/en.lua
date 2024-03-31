@@ -2221,4 +2221,7 @@ L.help_locational_voice_prep = [[By default the proximity chat is disabled in th
 Note: Proximity chat is always disabled during the post round phase.]]
 L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
 
+L.help_equipmenteditor_clip_on_buy = [[The clip size on buy defines the amount of uses the weapon has after it was bought.
+
+Note: This setting is only available for those weapons where its author implemented the handling of it.]]
 L.label_equipmenteditor_clip_on_buy = "Clip size on buy"
