@@ -128,6 +128,12 @@ SWEP.silentPickup = false
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
 SWEP.HotReloadableKeys = {}
 
+-- Set this to true if the weapon should have a custom clip size on buy that can be set in the equipment editor
+SWEP.SetClipOnBuy = false
+
+-- The defult clip on buy if `SWEP.SetClipOnBuy` is set to true
+SWEP.ClipOnBuy = 1
+
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
 --	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
