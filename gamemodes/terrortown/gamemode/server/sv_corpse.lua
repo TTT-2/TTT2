@@ -556,7 +556,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
     ---
     -- @realm server
     -- stylua: ignore
-    hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
+    v = hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v) or v
 
     for i = 0, num do
         local bone = rag:GetPhysicsObjectNum(i)

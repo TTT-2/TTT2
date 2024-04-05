@@ -30,6 +30,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
 - `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- `TTT2ModifyRagdollVelocity` hook now supports returning a vector to properly override a created corpse's velocity (by @TW1STaL1CKY)
 - Micro optimizations
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
