@@ -223,6 +223,9 @@ if SERVER then
 
         events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
 
+        ---
+        -- @realm server
+        -- stylua: ignore
         hook.Run("TTT2OnGiveFoundCredits", ply, rag, credits)
 
         -- update clients so their UIs can be updated
