@@ -29,12 +29,12 @@ g_VoicePanelList = nil
 ---
 -- @realm client
 -- stylua: ignore
-local duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE})
+local cvDuckSpectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE})
 
 ---
 -- @realm client
 -- stylua: ignore
-local duck_spectator_amount = CreateConVar("ttt2_voice_duck_spectator_amount", "0", {FCVAR_ARCHIVE})
+local cvDuckSpectatorAmount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", {FCVAR_ARCHIVE})
 
 ---
 -- @realm client
@@ -580,8 +580,8 @@ function VOICE.UpdatePlayerVoiceVolume(ply)
     end
 
     local vol = VOICE.GetPreferredPlayerVoiceVolume(ply)
-    if duck_spectator:GetBool() and ply:IsSpec() then
-        vol = vol * (1 - duck_spectator_amount:GetFloat())
+    if cvDuckSpectator:GetBool() and ply:IsSpec() then
+        vol = vol * (1 - cvDuckSpectatorAmount:GetFloat())
     end
     local out_vol = vol
 

@@ -1668,6 +1668,7 @@ L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
 L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
+--L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
 L.label_armor_on_spawn = "(Yeniden) canlanmada oyuncu zırhı"
 L.label_prep_respawn = "Hazırlık aşamasında anında yeniden canlanmayı etkinleştir"
 L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
@@ -2210,3 +2211,10 @@ L.decoy_help_primary = "Tuzağı yerleştirin"
 -- 2024-03-07
 --L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--
+--Note: Proximity chat is always disabled during the post round phase.]]
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."

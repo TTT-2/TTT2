@@ -21,6 +21,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill.
 - Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award.
 - Added `GM:TTT2OnTransferCredits()` hook which is called when a player has successfully transfered a credit to another player.
+- Disabled locational voice during the preparing phase by default
+  - Added a ConVar `ttt_locational_voice_prep` to reenable it
 
 ### Changed
 
@@ -37,6 +39,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
+  - The holdtype for pistol weapons now matches the viewmodel
 
 ### Fixed
 
@@ -46,6 +49,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
 - Fixed hud help text not being shown for some old weapons
 - Fixed detective search being overwritten by player search results
+- Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
+- Fixed Roundendscreen showing karma changes even if karma is disabled
 
 ### Removed
 

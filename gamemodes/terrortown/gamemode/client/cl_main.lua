@@ -797,7 +797,11 @@ function GM:CalcView(ply, origin, angles, fov, znear, zfar)
     if IsValid(wep) then
         local func = wep.CalcView
         if func then
-            view.origin, view.angles, view.fov = func(wep, ply, origin * 1, angles * 1, fov)
+            local wepOrigin, wepAngles, wepFov = func(wep, ply, origin * 1, angles * 1, fov)
+
+            view.origin = wepOrigin or view.origin
+            view.angles = wepAngles or view.angles
+            view.fov = wepFov or view.fov
         end
     end
 
