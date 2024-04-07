@@ -115,7 +115,7 @@ function plymeta:AnimUpdateGesture()
 end
 
 ---
--- Creates  na elliptic nick for a given length.
+-- Creates an elliptic nick for a given length.
 -- @param number width The maximum width that should be used to limit the nick
 -- @param[default="DefaultBold"] string font The font ID
 -- @param[default="..."] string limitChar The limiting character(s) that might be appended to the end
