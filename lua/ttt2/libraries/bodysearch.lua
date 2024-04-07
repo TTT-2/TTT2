@@ -65,6 +65,7 @@ local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCV
 -- on (1), default: all roles can see credits on a body
 -- NOTE: On is default only for compatability. Many players seem to expect it to not be the case by default,
 --       so perhaps it'd be a good idea to default to off.
+-- stylua: ignore
 local cvCreditsVisibleToAll = CreateConVar("ttt2_inspect_credits_always_visible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 local materialWeaponFallback = Material("vgui/ttt/missing_equip_icon")

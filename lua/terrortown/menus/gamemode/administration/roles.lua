@@ -123,11 +123,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
     })
 
     form3:MakeHelp({
-        label = "help_inspect_credits_always"
+        label = "help_inspect_credits_always",
     })
 
     form3:MakeCheckBox({
         serverConvar = "ttt2_inspect_credits_always_visible",
-        label = "label_inspect_credits_always"
+        label = "label_inspect_credits_always",
     })
 end
