@@ -1669,6 +1669,7 @@ L.label_voice_drain_admin = "Entladung pro Tick für Admins und öffentliche Ord
 L.label_voice_drain_recharge = "Aufladungsrate pro Tick wenn nicht gesprochen wird"
 L.label_locational_voice = "Aktiviere Proximity Sprachchat für lebende Spieler"
 L.label_locational_voice_prep = "Aktiviere Proximity Sprachchat während der Vorbereitungszeit"
+L.label_locational_voice_range = "Proximity Sprachchat Reichweite"
 L.label_armor_on_spawn = "Spielerrüstung beim (Neu-)Spawnen"
 L.label_prep_respawn = "Aktiviere automatischen Respawn während der Vorbereitungszeit"
 L.label_preptime_seconds = "Vorbereitungszeit in Sekunden"
