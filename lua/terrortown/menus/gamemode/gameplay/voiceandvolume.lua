@@ -10,14 +10,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local form = vgui.CreateTTT2Form(parent, "header_voiceandvolume_settings")
 
     form:MakeHelp({
-        label = "help_voice_activation"
+        label = "help_voice_activation",
     })
 
     form:MakeComboBox({
         label = "label_voice_activation",
         convar = "ttt2_voice_activation",
         choices = VOICE.ActivationModeChoices,
-        OnChange = VOICE.ActivationModeFunc("OnJoin")
+        OnChange = VOICE.ActivationModeFunc("OnJoin"),
     })
 
     form:MakeCheckBox({
