@@ -1669,6 +1669,7 @@ L.label_voice_drain_admin = "Drain per tick for admins and public policing roles
 L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 L.label_locational_voice = "Enable proximity voice chat for living players"
 L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+L.label_locational_voice_range = "Proximity voice chat range"
 L.label_armor_on_spawn = "Player armor on (re-)spawn"
 L.label_prep_respawn = "Enable instant respawn during preparing phase"
 L.label_preptime_seconds = "Preparing time in seconds"
@@ -2225,3 +2226,8 @@ L.help_equipmenteditor_clip_on_buy = [[The clip size on buy defines the amount o
 
 Note: This setting is only available for weapons that enable this feature.]]
 L.label_equipmenteditor_clip_on_buy = "Clip size on buy"
+
+-- 2024-04-06
+L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+
+Set to 0 to disable this cut-off.]]

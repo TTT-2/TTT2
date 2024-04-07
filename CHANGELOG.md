@@ -20,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Disabled locational voice during the preparing phase by default
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added `SWEP.SetClipOnBuy` and `SWEP.ClipOnBuy` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
+- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
 
 ### Changed
 
