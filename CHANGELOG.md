@@ -20,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Disabled locational voice during the preparing phase by default
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added Text / Nickname length limiting and caching (by @TimGoll)
+- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
 
 ### Changed
 

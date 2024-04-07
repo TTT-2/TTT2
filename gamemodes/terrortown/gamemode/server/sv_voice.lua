@@ -35,6 +35,13 @@ local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR
 -- stylua: ignore
 local loc_voice_prep = CreateConVar("ttt_locational_voice_prep", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
+-- stylua: ignore
+local loc_voice_range = CreateConVar("ttt_locational_voice_range", "0", { FCVAR_NOTIFY, FCVAR_ARCHIVE })
+
+local loc_voice_range_sq = loc_voice_range:GetInt() ^ 2
+
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
     SetGlobalBool(sv_voiceenable:GetName(), sv_voiceenable:GetBool())
     SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
@@ -46,6 +53,10 @@ end)
 
 cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
     SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(loc_voice_range:GetName(), function(cv, old, new)
+    loc_voice_range_sq = tonumber(new) ^ 2
 end)
 
 local function LocationalVoiceIsActive(roundState)
@@ -148,12 +159,24 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 
     if speaker:IsSpec() and isGlobalVoice then
         -- Check that the speaker was not previously sending voice on the team chat
-        return PlayerCanHearSpectator(listener, speaker, roundState)
+        can_hear, is_locational = PlayerCanHearSpectator(listener, speaker, roundState)
     elseif isGlobalVoice then
-        return PlayerCanHearGlobal(roundState)
+        can_hear, is_locational = PlayerCanHearGlobal(roundState)
     else
-        return PlayerCanHearTeam(listener, speaker, speakerTeam)
+        can_hear, is_locational = PlayerCanHearTeam(listener, speaker, speakerTeam)
     end
+
+    -- If the listener is too far away from the speaker, they can't hear them at all
+    if
+        can_hear
+        and is_locational
+        and loc_voice_range_sq > 0
+        and listener:GetPos():DistToSqr(speaker:GetPos()) > loc_voice_range_sq
+    then
+        can_hear = false
+    end
+
+    return can_hear, is_locational
 end
 
 ---
