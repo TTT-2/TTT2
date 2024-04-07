@@ -679,8 +679,9 @@ function draw.GetTextSize(text, font, scale)
 end
 
 ---
--- Creates a text that is limited to the provided length. Adds a limiting chat (e.g. '...') after the
--- text if so desired.
+-- Creates a text that is limited to the provided length. Adds a limiting char (e.g. '...') after the
+-- text if so desired. The limiting char is only added to the string (and also only then considered
+-- for the length) if the text without the limiting char is too long for the provided width.
 -- @param string text The text that may be limited in length
 -- @param number width The maximum width that should be used to limit the text
 -- @param[default="DefaultBold"] string font The font ID
