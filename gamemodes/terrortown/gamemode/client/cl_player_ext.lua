@@ -115,7 +115,7 @@ function plymeta:AnimUpdateGesture()
 end
 
 ---
--- Creates and caches a elliptic nick for a given length.
+-- Creates  na elliptic nick for a given length.
 -- @param number width The maximum width that should be used to limit the nick
 -- @param[default="DefaultBold"] string font The font ID
 -- @param[default="..."] string limitChar The limiting character(s) that might be appended to the end
@@ -123,14 +123,7 @@ end
 -- @return string The length limited nick
 -- @realm client
 function plymeta:NickElliptic(width, font, limitChar, scale)
-    limitChar = limitChar or "..."
-
-    self.cachedEllipticNicks = self.cachedEllipticNicks or {}
-
-    self.cachedEllipticNicks[width] = self.cachedEllipticNicks[width]
-        or draw.GetLimitedLengthText(self:Nick(), width, font, limitChar, scale)
-
-    return self.cachedEllipticNicks[width]
+    return draw.GetLimitedLengthText(self:Nick(), width, font, limitChar or "...", scale)
 end
 
 ---
