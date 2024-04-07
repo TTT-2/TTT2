@@ -21,6 +21,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added Text / Nickname length limiting (by @TimGoll)
 - Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
+- Added multiple voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+  - Push-to-Talk (default)
+  - Push-to-Mute
+  - Toggle
+  - Toggle (Activate on Join)
 
 ### Changed
 

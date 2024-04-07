@@ -41,6 +41,11 @@ local cvDuckSpectatorAmount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", 
 -- stylua: ignore
 local scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE})
 
+---
+-- @realm client
+-- stylua: ignore
+local cvVoiceActivationMode = CreateConVar("ttt2_voice_activation", "0", {FCVAR_ARCHIVE})
+
 local function CreateVoiceTable()
     if not sql.TableExists("ttt2_voice") then
         local query =
@@ -71,6 +76,51 @@ local function VoiceTryDisable()
 
     return false
 end
+
+-- TODO This does not belong here
+function VOICE.ComboBoxChoicesFromKeys(choiceMap, labelPrefix, default)
+    local choices = {}
+    for key in pairs(choiceMap) do
+        choices[#choices + 1] = {
+            title = LANG.TryTranslation(labelPrefix .. key),
+            value = key,
+            select = key == default,
+        }
+    end
+    return choices
+end
+
+local function VoiceToggle()
+    if VOICE.IsSpeaking() then
+        return VoiceTryDisable()
+    else
+        return VoiceTryEnable()
+    end
+end
+
+VOICE.ActivationModes = {
+    ptt = { OnPressed = VoiceTryEnable, OnReleased = VoiceTryDisable, OnJoin = VoiceTryDisable },
+    ptm = { OnPressed = VoiceTryDisable, OnReleased = VoiceTryEnable, OnJoin = VoiceTryEnable },
+    toggle_disabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryDisable },
+    toggle_enabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryEnable },
+}
+
+VOICE.ActivationModeChoices = VOICE.ComboBoxChoicesFromKeys(
+    VOICE.ActivationModes,
+    "label_voice_activation_mode_",
+    cvVoiceActivationMode:GetString()
+)
+
+function VOICE.ActivationModeFunc(func)
+    return function()
+        local mode = VOICE.ActivationModes[cvVoiceActivationMode:GetString()]
+        if istable(mode) and isfunction(mode[func]) then
+            return mode[func]()
+        end
+    end
+end
+
+hook.Add("InitPostEntity", "TTT2ActivateVoiceChat", VOICE.ActivationModeFunc("OnJoin"))
 
 local function VoiceTeamTryEnable()
     if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
@@ -146,8 +196,8 @@ end
 -- register a binding for the general voicechat
 bind.Register(
     "ttt2_voice",
-    VoiceTryEnable,
-    VoiceTryDisable,
+    VOICE.ActivationModeFunc("OnPressed"),
+    VOICE.ActivationModeFunc("OnReleased"),
     "header_bindings_ttt2",
     "label_bind_voice",
     input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X)
@@ -499,17 +549,11 @@ VOICE.ScalingFunctions = {
     linear = VOICE.LinearToLinear,
 }
 
-VOICE.GetScalingFunctions = function()
-    local opts = {}
-    for mode in pairs(VOICE.ScalingFunctions) do
-        opts[#opts + 1] = {
-            title = LANG.TryTranslation("label_voice_scaling_mode_" .. mode),
-            value = mode,
-            select = mode == scaling_mode:GetString(),
-        }
-    end
-    return opts
-end
+VOICE.ScalingFunctionChoices = VOICE.ComboBoxChoicesFromKeys(
+    VOICE.ScalingFunctions,
+    "label_voice_scaling_mode_",
+    scaling_mode:GetString()
+)
 
 ---
 -- Gets the stored volume for the player's voice.

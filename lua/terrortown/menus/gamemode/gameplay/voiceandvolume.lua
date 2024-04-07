@@ -9,6 +9,17 @@ CLGAMEMODESUBMENU.icon = Material("vgui/ttt/vskin/helpscreen/voiceandvolume")
 function CLGAMEMODESUBMENU:Populate(parent)
     local form = vgui.CreateTTT2Form(parent, "header_voiceandvolume_settings")
 
+    form:MakeHelp({
+        label = "help_voice_activation"
+    })
+
+    form:MakeComboBox({
+        label = "label_voice_activation",
+        convar = "ttt2_voice_activation",
+        choices = VOICE.ActivationModeChoices,
+        OnChange = VOICE.ActivationModeFunc("OnJoin")
+    })
+
     form:MakeCheckBox({
         label = "label_gameplay_mute",
         convar = "ttt_mute_team_check",
@@ -17,7 +28,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
     form:MakeComboBox({
         label = "label_voice_scaling",
         convar = "ttt2_voice_scaling",
-        choices = VOICE.GetScalingFunctions(),
+        choices = VOICE.ScalingFunctionChoices,
         OnChange = function()
             for _, ply in ipairs(select(2, player.Iterator())) do
                 VOICE.UpdatePlayerVoiceVolume(ply)

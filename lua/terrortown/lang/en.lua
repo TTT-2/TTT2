@@ -2226,3 +2226,16 @@ L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter
 L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 
 Set to 0 to disable this cut-off.]]
+
+-- 2024-04-07
+L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your "Global Voice Chat" keybinding. Team voice chat is always push-to-talk.
+
+Push-to-Talk: Hold down the key to talk.
+Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
+Toggle: Press the key to toggle your mic on/off.
+Toggle (Activate on Join): Like "Toggle" but your mic gets activated when joining the server.]]
+L.label_voice_activation = "Voice Chat Activation Mode"
+L.label_voice_activation_mode_ptt = "Push to Talk"
+L.label_voice_activation_mode_ptm = "Push to Mute"
+L.label_voice_activation_mode_toggle_disabled = "Toggle"
+L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"

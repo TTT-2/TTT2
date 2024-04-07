@@ -2221,3 +2221,16 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
 --L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+
+-- 2024-04-07
+L.help_voice_activation = [[Stellt ein, wie dein Mikro für den globalen Sprachchat aktiviert wird. Alle Optionen nutzen deine "Globaler Sprachchat"-Taste. Der Team Sprachchat nutzt immer always Push-to-Talk.
+
+Push-to-Talk: Halte die Taste gedrückt, um zu sprechen.
+Push-to-Mute: Dein Mikro ist immer an, halte die Taste gedrückt um dich stumm zu stellen.
+Toggle: Drücke einmal die Taste, um dein Mikro an-/auszuschalten.
+Toggle (Aktiviere bei Beitritt): Wie "Toggle", zusätzlich wird dein Mikro beim Server-Beitritt angeschaltet.]]
+L.label_voice_activation = "Voice Chat Activation Mode"
+L.label_voice_activation_mode_ptt = "Push-to-Talk"
+L.label_voice_activation_mode_ptm = "Push-to-Mute"
+L.label_voice_activation_mode_toggle_disabled = "Toggle"
+L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
