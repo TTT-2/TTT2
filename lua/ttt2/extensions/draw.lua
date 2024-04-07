@@ -691,6 +691,7 @@ end
 -- @realm client
 function draw.GetLimitedLengthText(text, width, font, limitChar, scale)
     scale = scale or 1.0
+    limitChar = limitChar or ""
 
     local widthText = draw.GetTextSize(text, font, scale)
 
@@ -698,14 +699,14 @@ function draw.GetLimitedLengthText(text, width, font, limitChar, scale)
         return text
     end
 
-    if limitChar and limitChar ~= "" then
+    if limitChar ~= "" then
         width = width - draw.GetTextSize(limitChar, font, scale)
     end
 
     -- we use this function here that splits the text in multiple lines
     local lines = InternalSplitLongWord(text, width, widthText)
 
-    return lines[1] .. (limitChar or "")
+    return lines[1] .. limitChar
 end
 
 local cachedArcs = {}
