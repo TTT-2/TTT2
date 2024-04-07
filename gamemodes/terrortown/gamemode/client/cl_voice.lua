@@ -78,9 +78,15 @@ local function VoiceTryDisable()
 end
 
 -- TODO This does not belong here
-function VOICE.ComboBoxChoicesFromKeys(choiceMap, labelPrefix, default)
+---
+-- @param table tbl A table with all available choices as string keys
+-- @param string labelPrefix The prefix for all label translations
+-- @param string default The default value
+-- @return table A choices table for MakeComboBox
+-- @realm client
+function VOICE.ComboBoxChoicesFromKeys(tbl, labelPrefix, default)
     local choices = {}
-    for key in pairs(choiceMap) do
+    for key in pairs(tbl) do
         choices[#choices + 1] = {
             title = LANG.TryTranslation(labelPrefix .. key),
             value = key,
@@ -111,6 +117,10 @@ VOICE.ActivationModeChoices = VOICE.ComboBoxChoicesFromKeys(
     cvVoiceActivationMode:GetString()
 )
 
+---
+-- @param string func The name of the function to call on the current voice activation mode
+-- @return function A closure that calls the function on the current voice activation mode if it exists
+-- @realm client
 function VOICE.ActivationModeFunc(func)
     return function()
         local mode = VOICE.ActivationModes[cvVoiceActivationMode:GetString()]
