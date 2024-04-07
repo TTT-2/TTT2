@@ -118,12 +118,11 @@ end
 -- Creates an elliptic nick for a given length.
 -- @param number width The maximum width that should be used to limit the nick
 -- @param[default="DefaultBold"] string font The font ID
--- @param[default="..."] string limitChar The limiting character(s) that might be appended to the end
 -- @param[default=1.0] number scale The UI scale factor
 -- @return string The length limited nick
 -- @realm client
-function plymeta:NickElliptic(width, font, limitChar, scale)
-    return draw.GetLimitedLengthText(self:Nick(), width, font, limitChar or "...", scale)
+function plymeta:NickElliptic(width, font, scale)
+    return draw.GetLimitedLengthText(self:Nick(), width, font, "...", scale)
 end
 
 ---
