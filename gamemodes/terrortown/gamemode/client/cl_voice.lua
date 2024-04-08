@@ -56,18 +56,6 @@ end
 
 CreateVoiceTable()
 
-local function ComboBoxChoicesFromKeys(tbl, labelPrefix, default)
-    local choices = {}
-    for key in pairs(tbl) do
-        choices[#choices + 1] = {
-            title = LANG.TryTranslation(labelPrefix .. key),
-            value = key,
-            select = key == default,
-        }
-    end
-    return choices
-end
-
 local function VoiceTryEnable()
     if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanEnable() then
         VOICE.isTeam = false
@@ -104,7 +92,7 @@ VOICE.ActivationModes = {
     toggle_enabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryEnable },
 }
 
-VOICE.ActivationModeChoices = ComboBoxChoicesFromKeys(
+VOICE.ActivationModeChoices = util.ComboBoxChoicesFromKeys(
     VOICE.ActivationModes,
     "label_voice_activation_mode_",
     cvVoiceActivationMode:GetString()
@@ -552,7 +540,7 @@ VOICE.ScalingFunctions = {
     linear = VOICE.LinearToLinear,
 }
 
-VOICE.ScalingFunctionChoices = ComboBoxChoicesFromKeys(
+VOICE.ScalingFunctionChoices = util.ComboBoxChoicesFromKeys(
     VOICE.ScalingFunctions,
     "label_voice_scaling_mode_",
     scaling_mode:GetString()
