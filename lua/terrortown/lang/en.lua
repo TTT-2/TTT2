@@ -2239,3 +2239,11 @@ L.label_voice_activation_mode_ptt = "Push to Talk"
 L.label_voice_activation_mode_ptm = "Push to Mute"
 L.label_voice_activation_mode_toggle_disabled = "Toggle"
 L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+
+-- 2024-04-08
+L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+L.help_inspect_credits_always = [[
+When shopping roles die, their credits can be picked up by other players with shopping roles.
+
+When this option is disabled, only players that can pick up credits can see them on a body.
+When enabled, all players can see credits on a body.]]
