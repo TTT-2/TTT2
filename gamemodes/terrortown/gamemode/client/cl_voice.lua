@@ -44,7 +44,7 @@ local scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE
 ---
 -- @realm client
 -- stylua: ignore
-local cvVoiceActivationMode = CreateConVar("ttt2_voice_activation", "0", {FCVAR_ARCHIVE})
+local cvVoiceActivationMode = CreateConVar("ttt2_voice_activation", "ptt", {FCVAR_ARCHIVE})
 
 local function CreateVoiceTable()
     if not sql.TableExists("ttt2_voice") then
@@ -55,6 +55,18 @@ local function CreateVoiceTable()
 end
 
 CreateVoiceTable()
+
+local function ComboBoxChoicesFromKeys(tbl, labelPrefix, default)
+    local choices = {}
+    for key in pairs(tbl) do
+        choices[#choices + 1] = {
+            title = LANG.TryTranslation(labelPrefix .. key),
+            value = key,
+            select = key == default,
+        }
+    end
+    return choices
+end
 
 local function VoiceTryEnable()
     if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanEnable() then
@@ -77,25 +89,6 @@ local function VoiceTryDisable()
     return false
 end
 
--- TODO This does not belong here
----
--- @param table tbl A table with all available choices as string keys
--- @param string labelPrefix The prefix for all label translations
--- @param string default The default value
--- @return table A choices table for MakeComboBox
--- @realm client
-function VOICE.ComboBoxChoicesFromKeys(tbl, labelPrefix, default)
-    local choices = {}
-    for key in pairs(tbl) do
-        choices[#choices + 1] = {
-            title = LANG.TryTranslation(labelPrefix .. key),
-            value = key,
-            select = key == default,
-        }
-    end
-    return choices
-end
-
 local function VoiceToggle()
     if VOICE.IsSpeaking() then
         return VoiceTryDisable()
@@ -111,7 +104,7 @@ VOICE.ActivationModes = {
     toggle_enabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryEnable },
 }
 
-VOICE.ActivationModeChoices = VOICE.ComboBoxChoicesFromKeys(
+VOICE.ActivationModeChoices = ComboBoxChoicesFromKeys(
     VOICE.ActivationModes,
     "label_voice_activation_mode_",
     cvVoiceActivationMode:GetString()
@@ -559,7 +552,7 @@ VOICE.ScalingFunctions = {
     linear = VOICE.LinearToLinear,
 }
 
-VOICE.ScalingFunctionChoices = VOICE.ComboBoxChoicesFromKeys(
+VOICE.ScalingFunctionChoices = ComboBoxChoicesFromKeys(
     VOICE.ScalingFunctions,
     "label_voice_scaling_mode_",
     scaling_mode:GetString()
