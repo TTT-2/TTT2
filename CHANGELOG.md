@@ -21,6 +21,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added Text / Nickname length limiting (by @TimGoll)
 - Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
+- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
 
 ### Changed
 

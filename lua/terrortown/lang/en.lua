@@ -2226,3 +2226,11 @@ L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter
 L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 
 Set to 0 to disable this cut-off.]]
+
+-- 2024-04-08
+L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+L.help_inspect_credits_always = [[
+When shopping roles die, their credits can be picked up by other players with shopping roles.
+
+When this option is disabled, only players that can pick up credits can see them on a body.
+When enabled, all players can see credits on a body.]]
