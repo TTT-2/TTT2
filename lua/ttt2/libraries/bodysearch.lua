@@ -747,7 +747,7 @@ if CLIENT then
             -- special case: mode 2, only shopping roles can see credits
             local client = LocalPlayer()
             if
-                (cvInspectConfirmMode:GetInt() == 2 or cvCreditsVisibleToAll:GetInt() == 0)
+                (cvInspectConfirmMode:GetInt() == 2 or not cvCreditsVisibleToAll:GetBool())
                 and not bodysearch.CanTakeCredits(client, data.rag)
             then
                 return

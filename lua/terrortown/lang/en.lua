@@ -1523,7 +1523,6 @@ L.label_roles_max_roles_pct = "Upper role limit by percentage"
 L.label_roles_max_baseroles = "Upper base role limit"
 L.label_roles_max_baseroles_pct = "Upper base role limit by percentage"
 L.label_detective_hats = "Enable hats for policing roles like the Detective (if player model allows to have them)"
-L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
 
 L.ttt2_desc_innocent = "An Innocent has no special abilities. They have to find the evil ones among the terrorists and kill them. But they have to be careful not to kill their teammates."
 L.ttt2_desc_traitor = "The Traitor is the enemy of the Innocent. They have an equipment menu with which they are being able to buy special equipment. They have to kill everyone but their teammates."
@@ -1546,10 +1545,6 @@ L.help_detective_hats = [[
 Policing roles such as the Detective may wear hats to show their authority. They lose them on death or if damaged at the head.
 
 Some player models do not support hats by default. This can be changed in 'Administration' -> 'Player Models']]
-L.help_inspect_credits_always = [[
-When players with credits (detectives, traitors, survivalist, etc.) die, their credits can be picked up by other players that can use credits. 
-
-When this option is disabled, only players that can pick up credits can see them on the body.]]
 
 L.label_roles_credits_award_kill = "Credit reward amount for the kill"
 L.label_roles_credits_dead_award = "Enable credits award for certain percentage of dead enemies"
@@ -2231,3 +2226,11 @@ L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter
 L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 
 Set to 0 to disable this cut-off.]]
+
+-- 2024-04-08
+L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+L.help_inspect_credits_always = [[
+When shopping roles die, their credits can be picked up by other players with shopping roles.
+
+When this option is disabled, only players that can pick up credits can see them on a body.
+When enabled, all players can see credits on a body.]]
