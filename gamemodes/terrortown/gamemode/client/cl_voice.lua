@@ -99,19 +99,20 @@ VOICE.ActivationModeChoices = util.ComboBoxChoicesFromKeys(
 )
 
 ---
+-- Creates a closure that dynamically calls a function from VOICE.ActivationModes depending on the current mode.
 -- @param string func The name of the function to call on the current voice activation mode
--- @return function A closure that calls the function on the current voice activation mode if it exists
+-- @return function A closure that calls the function on the current voice activation mode, if it exists
 -- @realm client
-function VOICE.ActivationModeFunc(func)
+function VOICE.ActivationModeFunc(functionName)
     return function()
         local mode = VOICE.ActivationModes[cvVoiceActivationMode:GetString()]
-        if istable(mode) and isfunction(mode[func]) then
-            return mode[func]()
+        if istable(mode) and isfunction(mode[functionName]) then
+            return mode[functionName]()
         end
     end
 end
 
-hook.Add("InitPostEntity", "TTT2ActivateVoiceChat", VOICE.ActivationModeFunc("OnJoin"))
+hook.Add("TTT2FinishedLoading", "TTT2ActivateVoiceChat", VOICE.ActivationModeFunc("OnJoin"))
 
 local function VoiceTeamTryEnable()
     if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
