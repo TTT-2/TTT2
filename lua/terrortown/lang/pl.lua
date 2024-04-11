@@ -1669,6 +1669,7 @@ L.none = "Brak Roli"
 --L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 --L.label_locational_voice = "Enable proximity voice chat for living players"
 --L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+--L.label_locational_voice_range = "Proximity voice chat range"
 --L.label_armor_on_spawn = "Player armor on (re-)spawn"
 --L.label_prep_respawn = "Enable instant respawn during preparing phase"
 --L.label_preptime_seconds = "Preparing time in seconds"
@@ -2220,3 +2221,29 @@ L.decoy_help_primary = "Rozstaw Wabik"
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
 --L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+
+-- 2024-04-06
+--L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--
+--Set to 0 to disable this cut-off.]]
+
+-- 2024-04-07
+--L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
+--
+--Push-to-Talk: Hold down the key to talk.
+--Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
+--Toggle: Press the key to toggle your mic on/off.
+--Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
+--L.label_voice_activation = "Voice Chat Activation Mode"
+--L.label_voice_activation_mode_ptt = "Push to Talk"
+--L.label_voice_activation_mode_ptm = "Push to Mute"
+--L.label_voice_activation_mode_toggle_disabled = "Toggle"
+--L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+
+-- 2024-04-08
+--L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+--L.help_inspect_credits_always = [[
+--When shopping roles die, their credits can be picked up by other players with shopping roles.
+--
+--When this option is disabled, only players that can pick up credits can see them on a body.
+--When enabled, all players can see credits on a body.]]

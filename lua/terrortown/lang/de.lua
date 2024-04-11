@@ -2222,6 +2222,11 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 --Note: Proximity chat is always disabled during the post round phase.]]
 --L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
 
+-- 2024-04-06
+--L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--
+--Set to 0 to disable this cut-off.]]
+
 -- 2024-04-07
 L.help_voice_activation = [[Stellt ein, wie dein Mikro für den globalen Sprachchat aktiviert wird. Alle Optionen nutzen deine 'Globaler Sprachchat'-Taste. Der Team Sprachchat nutzt immer always Push-to-Talk.
 
@@ -2234,3 +2239,11 @@ L.label_voice_activation_mode_ptt = "Push-to-Talk"
 L.label_voice_activation_mode_ptm = "Push-to-Mute"
 L.label_voice_activation_mode_toggle_disabled = "Umschalten"
 L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)"
+
+-- 2024-04-08
+--L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+--L.help_inspect_credits_always = [[
+--When shopping roles die, their credits can be picked up by other players with shopping roles.
+--
+--When this option is disabled, only players that can pick up credits can see them on a body.
+--When enabled, all players can see credits on a body.]]
