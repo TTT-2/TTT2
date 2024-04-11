@@ -673,4 +673,23 @@ if CLIENT then
 
         return parent
     end
+
+    ---
+    -- Generates a table of choices for PANEL:MakeComboBox from the string keys of a table.
+    -- @param table tbl A table where the keys are strings of all available choices
+    -- @param string labelPrefix The prefix for all label translations, keys will be appended to this
+    -- @param string default The default key value that should be selected
+    -- @return table A choices table to be consumed by PANEL:MakeComboBox
+    -- @realm client
+    function util.ComboBoxChoicesFromKeys(tbl, labelPrefix, default)
+        local choices = {}
+        for key in pairs(tbl) do
+            choices[#choices + 1] = {
+                title = LANG.TryTranslation(labelPrefix .. key),
+                value = key,
+                select = key == default,
+            }
+        end
+        return choices
+    end
 end

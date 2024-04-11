@@ -26,20 +26,27 @@ local MutedState
 
 g_VoicePanelList = nil
 
----
--- @realm client
--- stylua: ignore
-local cvDuckSpectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE})
+VOICE.cv = {
+    ---
+    -- @realm client
+    -- stylua: ignore
+    duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE}),
 
----
--- @realm client
--- stylua: ignore
-local cvDuckSpectatorAmount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", {FCVAR_ARCHIVE})
+    ---
+    -- @realm client
+    -- stylua: ignore
+    duck_spectator_amount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", {FCVAR_ARCHIVE}),
 
----
--- @realm client
--- stylua: ignore
-local scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE})
+    ---
+    -- @realm client
+    -- stylua: ignore
+    scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE}),
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    activation_mode = CreateConVar("ttt2_voice_activation", "ptt", {FCVAR_ARCHIVE}),
+}
 
 local function CreateVoiceTable()
     if not sql.TableExists("ttt2_voice") then
@@ -71,6 +78,37 @@ local function VoiceTryDisable()
 
     return false
 end
+
+local function VoiceToggle()
+    if VOICE.IsSpeaking() then
+        return VoiceTryDisable()
+    else
+        return VoiceTryEnable()
+    end
+end
+
+VOICE.ActivationModes = {
+    ptt = { OnPressed = VoiceTryEnable, OnReleased = VoiceTryDisable, OnJoin = VoiceTryDisable },
+    ptm = { OnPressed = VoiceTryDisable, OnReleased = VoiceTryEnable, OnJoin = VoiceTryEnable },
+    toggle_disabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryDisable },
+    toggle_enabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryEnable },
+}
+
+---
+-- Creates a closure that dynamically calls a function from VOICE.ActivationModes depending on the current mode.
+-- @param string func The name of the function to call on the current voice activation mode
+-- @return function A closure that calls the function on the current voice activation mode, if it exists
+-- @realm client
+function VOICE.ActivationModeFunc(functionName)
+    return function()
+        local mode = VOICE.ActivationModes[VOICE.cv.activation_mode:GetString()]
+        if istable(mode) and isfunction(mode[functionName]) then
+            return mode[functionName]()
+        end
+    end
+end
+
+hook.Add("TTT2FinishedLoading", "TTT2ActivateVoiceChat", VOICE.ActivationModeFunc("OnJoin"))
 
 local function VoiceTeamTryEnable()
     if not VOICE.IsSpeaking() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
@@ -146,8 +184,8 @@ end
 -- register a binding for the general voicechat
 bind.Register(
     "ttt2_voice",
-    VoiceTryEnable,
-    VoiceTryDisable,
+    VOICE.ActivationModeFunc("OnPressed"),
+    VOICE.ActivationModeFunc("OnReleased"),
     "header_bindings_ttt2",
     "label_bind_voice",
     input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X)
@@ -499,18 +537,6 @@ VOICE.ScalingFunctions = {
     linear = VOICE.LinearToLinear,
 }
 
-VOICE.GetScalingFunctions = function()
-    local opts = {}
-    for mode in pairs(VOICE.ScalingFunctions) do
-        opts[#opts + 1] = {
-            title = LANG.TryTranslation("label_voice_scaling_mode_" .. mode),
-            value = mode,
-            select = mode == scaling_mode:GetString(),
-        }
-    end
-    return opts
-end
-
 ---
 -- Gets the stored volume for the player's voice.
 -- @param Player ply
@@ -580,12 +606,12 @@ function VOICE.UpdatePlayerVoiceVolume(ply)
     end
 
     local vol = VOICE.GetPreferredPlayerVoiceVolume(ply)
-    if cvDuckSpectator:GetBool() and ply:IsSpec() then
-        vol = vol * (1 - cvDuckSpectatorAmount:GetFloat())
+    if VOICE.cv.duck_spectator:GetBool() and ply:IsSpec() then
+        vol = vol * (1 - VOICE.cv.duck_spectator_amount:GetFloat())
     end
     local out_vol = vol
 
-    local func = VOICE.ScalingFunctions[scaling_mode:GetString()]
+    local func = VOICE.ScalingFunctions[VOICE.cv.scaling_mode:GetString()]
     if isfunction(func) then
         out_vol = func(vol)
     end

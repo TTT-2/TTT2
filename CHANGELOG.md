@@ -22,6 +22,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Text / Nickname length limiting (by @TimGoll)
 - Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
 - Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
+- Added multiple voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+  - Push-to-Talk (default)
+  - Push-to-Mute
+  - Toggle
+  - Toggle (Activate on Join)
 
 ### Changed
 
