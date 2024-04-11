@@ -885,10 +885,7 @@ function GM:DynamicCamera(viewTable, ply)
             curTime = curTime + curTimeShift
         end
 
-        local time = math.max(
-            0,
-            (curTime - fovTime) * game.GetTimeScale() * cvHostTimescale:GetFloat()
-        )
+        local time = math.max(0, (curTime - fovTime) * game.GetTimeScale() * cvHostTimescale:GetFloat())
 
         local progressTransition = math.min(1.0, time / fovTranDur)
 
