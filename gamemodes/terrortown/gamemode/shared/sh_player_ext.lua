@@ -8,7 +8,6 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 local math = math
-local playerGetAll = player.GetAll
 
 -- Distinguish between 3 modes to reset, add or remove equipped items
 EQUIPITEMS_RESET = 0

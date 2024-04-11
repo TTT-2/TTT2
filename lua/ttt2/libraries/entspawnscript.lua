@@ -491,7 +491,7 @@ if SERVER then
     -- @param table plys A table of players that should be updated
     -- @realm server
     function entspawnscript.UpdateSettingsOnClients(plys)
-        plys = plys or player.GetAll()
+        plys = plys or playerGetAll()
         for i = 1, #plys do
             local ply = plys[i]
 
@@ -531,7 +531,7 @@ if SERVER then
             end
         end
 
-        plys = plys or player.GetAll()
+        plys = plys or playerGetAll()
         for i = 1, #plys do
             local ply = plys[i]
             ---

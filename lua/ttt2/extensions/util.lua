@@ -89,7 +89,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     if not isfunction(filterFn) then
         return plys
@@ -111,7 +111,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-    local plys = player.GetAll()
+    local plys = playerGetAll()
     local tmp = {}
 
     for i = 1, #plys do

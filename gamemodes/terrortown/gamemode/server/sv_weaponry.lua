@@ -13,7 +13,6 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
-local playerGetAll = player.GetAll
 
 local IsEquipment = WEPS.IsEquipment
 
