@@ -2227,10 +2227,10 @@ L.help_voice_activation = [[Stellt ein, wie dein Mikro für den globalen Sprachc
 
 Push-to-Talk: Halte die Taste gedrückt, um zu sprechen.
 Push-to-Mute: Dein Mikro ist immer an, halte die Taste gedrückt um dich stumm zu stellen.
-Toggle: Drücke einmal die Taste, um dein Mikro an-/auszuschalten.
-Toggle (Aktiviere bei Beitritt): Wie 'Toggle', zusätzlich wird dein Mikro beim Server-Beitritt angeschaltet.]]
-L.label_voice_activation = "Voice Chat Activation Mode"
+Umschalten: Drücke einmal die Taste, um dein Mikro an-/auszuschalten.
+Umschalten (Aktiviert zum Start): Wie 'Umschalten', zusätzlich wird dein Mikro beim Server-Beitritt angeschaltet.]]
+L.label_voice_activation = "Sprachchat Aktivierungsmodus"
 L.label_voice_activation_mode_ptt = "Push-to-Talk"
 L.label_voice_activation_mode_ptm = "Push-to-Mute"
-L.label_voice_activation_mode_toggle_disabled = "Toggle"
-L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+L.label_voice_activation_mode_toggle_disabled = "Umschalten"
+L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)"
