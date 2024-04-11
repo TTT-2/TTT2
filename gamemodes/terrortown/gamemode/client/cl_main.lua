@@ -876,7 +876,7 @@ function GM:DynamicCamera(viewTable, ply)
             curTimeShift = 0
         end
 
-        local curTime, fovTranDur = CurTime() + curTimeShift, ply:GetFOVTransitionTime()
+        local curTime = CurTime() + curTimeShift
 
         -- GetFOVTime ends up in the future with lag, causing a delay in the transition (the bigger your lag, the longer the delay)
         -- shift curTime by the difference to correct it
@@ -885,9 +885,10 @@ function GM:DynamicCamera(viewTable, ply)
             curTime = curTime + curTimeShift
         end
 
-        local time = math.max(0, (curTime - fovTime) * game.GetTimeScale() * cvHostTimescale:GetFloat())
+        local time =
+            math.max(0, (curTime - fovTime) * game.GetTimeScale() * cvHostTimescale:GetFloat())
 
-        local progressTransition = math.min(1.0, time / fovTranDur)
+        local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
 
         -- if the transition progress has reached 100%, we should enable the sprint
         -- FOV smoothing algorithm; the value 40 was determined by trying different values
