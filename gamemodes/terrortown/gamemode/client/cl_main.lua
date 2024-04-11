@@ -817,6 +817,8 @@ local position = 0
 local frameCount = 10
 
 local lastStrafeValue = 0
+local lastFovTimeValue = 0
+local curTimeShift = 0
 
 local cvHostTimescale = GetConVar("host_timescale")
 
@@ -867,10 +869,24 @@ function GM:DynamicCamera(viewTable, ply)
 
     -- dynamic mode: transition between different FOV values
     else
-        local time = math.max(
-            0,
-            (CurTime() - ply:GetFOVTime()) * game.GetTimeScale() * cvHostTimescale:GetFloat()
-        )
+        local fovTime = ply:GetFOVTime()
+
+        if lastFovTimeValue ~= fovTime then
+            lastFovTimeValue = fovTime
+            curTimeShift = 0
+        end
+
+        local curTime = CurTime() + curTimeShift
+
+        -- GetFOVTime ends up in the future with lag, causing a delay in the transition (the bigger your lag, the longer the delay)
+        -- shift curTime by the difference to correct it
+        if curTime < fovTime then
+            curTimeShift = fovTime - curTime
+            curTime = curTime + curTimeShift
+        end
+
+        local time =
+            math.max(0, (curTime - fovTime) * game.GetTimeScale() * cvHostTimescale:GetFloat())
 
         local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
 
