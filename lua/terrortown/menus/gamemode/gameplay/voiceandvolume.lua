@@ -16,7 +16,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
     form:MakeComboBox({
         label = "label_voice_activation",
         convar = "ttt2_voice_activation",
-        choices = VOICE.ActivationModeChoices,
+        choices = util.ComboBoxChoicesFromKeys(
+            VOICE.ActivationModes,
+            "label_voice_activation_mode_",
+            VOICE.cv.activation_mode:GetString()
+        ),
         OnChange = VOICE.ActivationModeFunc("OnJoin"),
     })
 
@@ -28,7 +32,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
     form:MakeComboBox({
         label = "label_voice_scaling",
         convar = "ttt2_voice_scaling",
-        choices = VOICE.ScalingFunctionChoices,
+        choices = util.ComboBoxChoicesFromKeys(
+            VOICE.ScalingFunctions,
+            "label_voice_scaling_mode_",
+            VOICE.cv.scaling_mode:GetString()
+        ),
         OnChange = function()
             for _, ply in ipairs(select(2, player.Iterator())) do
                 VOICE.UpdatePlayerVoiceVolume(ply)

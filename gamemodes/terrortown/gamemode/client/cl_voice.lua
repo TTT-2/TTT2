@@ -26,25 +26,27 @@ local MutedState
 
 g_VoicePanelList = nil
 
----
--- @realm client
--- stylua: ignore
-local cvDuckSpectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE})
+VOICE.cv = {
+    ---
+    -- @realm client
+    -- stylua: ignore
+    duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE}),
 
----
--- @realm client
--- stylua: ignore
-local cvDuckSpectatorAmount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", {FCVAR_ARCHIVE})
+    ---
+    -- @realm client
+    -- stylua: ignore
+    duck_spectator_amount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", {FCVAR_ARCHIVE}),
 
----
--- @realm client
--- stylua: ignore
-local scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE})
+    ---
+    -- @realm client
+    -- stylua: ignore
+    scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE}),
 
----
--- @realm client
--- stylua: ignore
-local cvVoiceActivationMode = CreateConVar("ttt2_voice_activation", "ptt", {FCVAR_ARCHIVE})
+    ---
+    -- @realm client
+    -- stylua: ignore
+    activation_mode = CreateConVar("ttt2_voice_activation", "ptt", {FCVAR_ARCHIVE}),
+}
 
 local function CreateVoiceTable()
     if not sql.TableExists("ttt2_voice") then
@@ -92,12 +94,6 @@ VOICE.ActivationModes = {
     toggle_enabled = { OnPressed = VoiceToggle, OnJoin = VoiceTryEnable },
 }
 
-VOICE.ActivationModeChoices = util.ComboBoxChoicesFromKeys(
-    VOICE.ActivationModes,
-    "label_voice_activation_mode_",
-    cvVoiceActivationMode:GetString()
-)
-
 ---
 -- Creates a closure that dynamically calls a function from VOICE.ActivationModes depending on the current mode.
 -- @param string func The name of the function to call on the current voice activation mode
@@ -105,7 +101,7 @@ VOICE.ActivationModeChoices = util.ComboBoxChoicesFromKeys(
 -- @realm client
 function VOICE.ActivationModeFunc(functionName)
     return function()
-        local mode = VOICE.ActivationModes[cvVoiceActivationMode:GetString()]
+        local mode = VOICE.ActivationModes[VOICE.cv.activation_mode:GetString()]
         if istable(mode) and isfunction(mode[functionName]) then
             return mode[functionName]()
         end
@@ -541,12 +537,6 @@ VOICE.ScalingFunctions = {
     linear = VOICE.LinearToLinear,
 }
 
-VOICE.ScalingFunctionChoices = util.ComboBoxChoicesFromKeys(
-    VOICE.ScalingFunctions,
-    "label_voice_scaling_mode_",
-    scaling_mode:GetString()
-)
-
 ---
 -- Gets the stored volume for the player's voice.
 -- @param Player ply
@@ -616,12 +606,12 @@ function VOICE.UpdatePlayerVoiceVolume(ply)
     end
 
     local vol = VOICE.GetPreferredPlayerVoiceVolume(ply)
-    if cvDuckSpectator:GetBool() and ply:IsSpec() then
-        vol = vol * (1 - cvDuckSpectatorAmount:GetFloat())
+    if VOICE.cv.duck_spectator:GetBool() and ply:IsSpec() then
+        vol = vol * (1 - VOICE.cv.duck_spectator_amount:GetFloat())
     end
     local out_vol = vol
 
-    local func = VOICE.ScalingFunctions[scaling_mode:GetString()]
+    local func = VOICE.ScalingFunctions[VOICE.cv.scaling_mode:GetString()]
     if isfunction(func) then
         out_vol = func(vol)
     end
