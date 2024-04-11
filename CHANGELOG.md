@@ -47,6 +47,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
 - Fixed Roundendscreen showing karma changes even if karma is disabled
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
+- Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
 
 ### Removed
 
