@@ -96,7 +96,7 @@ end)
 -- @realm server
 -- @internal
 function ARMOR:InitPlayerArmor()
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         local ply = plys[i]

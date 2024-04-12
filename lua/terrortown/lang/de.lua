@@ -1668,6 +1668,8 @@ L.label_voice_drain_normal = "Entladung pro Tick für normale Spieler"
 L.label_voice_drain_admin = "Entladung pro Tick für Admins und öffentliche Ordnungsrollen"
 L.label_voice_drain_recharge = "Aufladungsrate pro Tick wenn nicht gesprochen wird"
 L.label_locational_voice = "Aktiviere Proximity Sprachchat für lebende Spieler"
+L.label_locational_voice_prep = "Aktiviere Proximity Sprachchat während der Vorbereitungszeit"
+L.label_locational_voice_range = "Proximity Sprachchat Reichweite"
 L.label_armor_on_spawn = "Spielerrüstung beim (Neu-)Spawnen"
 L.label_prep_respawn = "Aktiviere automatischen Respawn während der Vorbereitungszeit"
 L.label_preptime_seconds = "Vorbereitungszeit in Sekunden"
@@ -2212,3 +2214,36 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 -- 2024-03-07
 --L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--
+--Note: Proximity chat is always disabled during the post round phase.]]
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+
+-- 2024-04-06
+--L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--
+--Set to 0 to disable this cut-off.]]
+
+-- 2024-04-07
+L.help_voice_activation = [[Stellt ein, wie dein Mikro für den globalen Sprachchat aktiviert wird. Alle Optionen nutzen deine 'Globaler Sprachchat'-Taste. Der Team Sprachchat nutzt immer always Push-to-Talk.
+
+Push-to-Talk: Halte die Taste gedrückt, um zu sprechen.
+Push-to-Mute: Dein Mikro ist immer an, halte die Taste gedrückt um dich stumm zu stellen.
+Umschalten: Drücke einmal die Taste, um dein Mikro an-/auszuschalten.
+Umschalten (Aktiviert zum Start): Wie 'Umschalten', zusätzlich wird dein Mikro beim Server-Beitritt angeschaltet.]]
+L.label_voice_activation = "Sprachchat Aktivierungsmodus"
+L.label_voice_activation_mode_ptt = "Push-to-Talk"
+L.label_voice_activation_mode_ptm = "Push-to-Mute"
+L.label_voice_activation_mode_toggle_disabled = "Umschalten"
+L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)"
+
+-- 2024-04-08
+--L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+--L.help_inspect_credits_always = [[
+--When shopping roles die, their credits can be picked up by other players with shopping roles.
+--
+--When this option is disabled, only players that can pick up credits can see them on a body.
+--When enabled, all players can see credits on a body.]]

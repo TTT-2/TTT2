@@ -13,7 +13,6 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
-local playerIterator = player.Iterator
 
 local IsEquipment = WEPS.IsEquipment
 
@@ -471,7 +470,7 @@ end
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 function GM:UpdatePlayerLoadouts()
-    local plys = select(2, playerIterator())
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         ---

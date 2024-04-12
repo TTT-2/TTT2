@@ -369,7 +369,7 @@ end
 -- @deprecated
 function GetTraitors()
     local trs = {}
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         if not plys[i]:IsTraitor() then

@@ -10,7 +10,7 @@ local pairs = pairs
 local IsValid = IsValid
 local player = player
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 ---
 -- Sends a message to a list of @{Player}s
@@ -22,7 +22,7 @@ local playerIterator = player.Iterator
 -- @todo add role hacking
 -- @realm server
 function SendRoleListMessage(subrole, team, sids, ply_or_rf)
-    local tmp = ply_or_rf or select(2, playerIterator())
+    local tmp = ply_or_rf or playerGetAll()
 
     if not istable(tmp) then
         tmp = { ply_or_rf }
@@ -108,7 +108,7 @@ end
 -- @see SendRoleList
 function SendSubRoleList(subrole, ply_or_rf, pred)
     local team_ids = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -137,7 +137,7 @@ end
 -- @see SendSubRoleList
 function SendRoleList(subrole, ply_or_rf, pred)
     local team_ids = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -168,7 +168,7 @@ function SendTeamList(team, ply_or_rf, pred)
     end
 
     local team_ids = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -221,7 +221,7 @@ end
 function SendFullStateUpdate()
     local syncTbl = {}
     local localPly = false
-    local players = select(2, playerIterator())
+    local players = playerGetAll()
     local plyCount = #players
 
     for i = 1, plyCount do
@@ -297,7 +297,7 @@ end
 -- @param nil|Player|table ply_or_rf
 -- @realm server
 function SendRoleReset(ply_or_rf)
-    local players = select(2, playerIterator())
+    local players = playerGetAll()
     local plyCount = #players
 
     for i = 1, plyCount do
@@ -330,7 +330,7 @@ local function ttt_request_rolelist(plySyncTo)
         local tmp = {}
         local team = plySyncTo:GetTeam()
         local roleDataSyncTo = plySyncTo:GetSubRoleData()
-        local plys = select(2, playerIterator())
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             local plySyncFrom = plys[i]
