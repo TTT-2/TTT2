@@ -50,6 +50,7 @@ if CLIENT then
 
         local widthBar = (w - h - self.padding) / #data - 1
         local heightBar = h - 2 * self.padding
+        local wNick = w - h - self.padding
 
         draw.Box(xPos + self.padding, yPos + self.padding, w - self.padding, heightBar, color)
         self:DrawLines(
@@ -118,7 +119,7 @@ if CLIENT then
         self:DrawLines(xPos, yPos, h, h, 255)
 
         draw.AdvancedText(
-            ply:Nick(),
+            ply:NickElliptic(wNick, "PureSkinPopupText", self.scale),
             "PureSkinPopupText",
             xPos + h + self.padding,
             yPos + h * 0.5 - 1,
