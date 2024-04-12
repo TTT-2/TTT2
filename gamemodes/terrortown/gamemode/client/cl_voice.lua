@@ -7,7 +7,6 @@ local string = string
 local math = math
 local net = net
 local player = player
-local pairs = pairs
 local IsValid = IsValid
 local hook = hook
 
