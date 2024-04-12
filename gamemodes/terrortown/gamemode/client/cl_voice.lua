@@ -108,7 +108,7 @@ function VOICE.GetFakeVoiceSpectrum(ply, stepCount)
 
     -- at first the volume is boosted and limited so that the voice level range
     -- makes a nice sweep over the whole spectrum
-    volume = math.min(4, ply:VoiceVolume() * 6 + math.Rand(-0.2, 0.2))
+    local volume = math.min(4, ply:VoiceVolume() * 6 + math.Rand(-0.2, 0.2))
 
     local biggestValue = 0
 
@@ -154,7 +154,7 @@ end
 -- @param number mode The voice mode
 -- @realm client
 function VOICE.SetVoiceMode(ply, mode)
-    self.voiceMode = mode
+    ply.voiceMode = mode
 end
 
 ---
