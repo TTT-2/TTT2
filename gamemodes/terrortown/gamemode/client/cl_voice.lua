@@ -229,7 +229,6 @@ function GM:PlayerStartVoice(ply)
         -- if someone else than us starts talking, the UI should be updated as well
         ply:SetSpeakingInVoice(true)
     else
-        -- todo: is this used anywhere? why?
         client[client:GetTeam() .. "_gvoice"] = not VOICE.isTeam
 
         -- notify server this if this is a global voice chat
