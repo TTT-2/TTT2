@@ -92,6 +92,59 @@ VOICE.ActivationModes = {
 }
 
 ---
+-- Generates a fake voice spectrum based on the player voice volume that looks like
+-- the restult of an FFT.
+-- @param[default=16] number stepCount Defines the result's resolution
+-- @return table Returns the table with the fake spectrum
+-- @realm client
+function VOICE.GetFakeVoiceSpectrum(ply, stepCount)
+    stepCount = stepCount or 16
+
+    ply.lastSteps = ply.lastSteps or {}
+
+    -- at first the volume is boosted and limited so that the voice level range
+    -- makes a nice sweep over the whole spectrum
+    volume = math.min(4, ply:VoiceVolume() * 6 + math.Rand(-0.2, 0.2))
+
+    local biggestValue = 0
+
+    for i = 1, stepCount do
+        local progress = (i - 1) / stepCount
+
+        -- the base for the fake spectrum is a simple sweep over the whole range
+        local value = 2 ^ (-(volume * 4 - 2.2 - progress * 4) ^ 2)
+
+        -- since most people talk a bit quiet, we add a signal to the end of the spectrum
+        value = value + 2 ^ (-(4.5 - 4 * progress) ^ 2) * ply:VoiceVolume() ^ 0.5
+
+        -- also the whole spectrum is linearly shifted, when the voice is louder
+        value = value + 2.5 * ply:VoiceVolume()
+
+        -- to decrease jumpyness a slow lerp is put on top which smoothes everything
+        value = Lerp(7.5 * FrameTime(), ply.lastSteps[i] or 0, value)
+
+        -- then a random value is put on top that makes it look less static and slow
+        value = value + math.Rand(-0.2 * value ^ 2, 0.2 * value ^ 2)
+        value = math.max(0, value)
+
+        -- in the last step a fast lerp is applied that only takes the edge of the random noise
+        ply.lastSteps[i] = Lerp(150 * FrameTime(), ply.lastSteps[i] or 0, value)
+
+        biggestValue = math.max(biggestValue, value)
+    end
+
+    -- make sure that the spectrum never surpasses 1; if the values are too big, the spectrum
+    -- is normalized
+    if biggestValue > 1.0 then
+        for i = 1, stepCount do
+            ply.lastSteps[i] = ply.lastSteps[i] / biggestValue
+        end
+    end
+
+    return ply.lastSteps
+end
+
+---
 -- Creates a closure that dynamically calls a function from VOICE.ActivationModes depending on the current mode.
 -- @param string func The name of the function to call on the current voice activation mode
 -- @return function A closure that calls the function on the current voice activation mode, if it exists
