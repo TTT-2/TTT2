@@ -97,6 +97,7 @@ VOICE.ActivationModes = {
 ---
 -- Generates a fake voice spectrum based on the player voice volume that looks like
 -- the restult of an FFT.
+-- @param Player ply The player that should generate a fake voice spectrum
 -- @param[default=16] number stepCount Defines the result's resolution
 -- @return table Returns the table with the fake spectrum
 -- @realm client
@@ -149,6 +150,7 @@ end
 
 ---
 -- Sets the mode of the voice panel.
+-- @param Player ply The player whose voice mode should be set
 -- @param number mode The voice mode
 -- @realm client
 function VOICE.SetVoiceMode(ply, mode)
@@ -157,6 +159,7 @@ end
 
 ---
 -- Returns the mode of the voice panel.
+-- @param Player ply The player whose vocie mode should be read
 -- @return number The mode of the voice panel
 -- @realm client
 function VOICE.GetVoiceMode(ply)
@@ -165,13 +168,14 @@ end
 
 ---
 -- Returns the color of the voice panel.
+-- @param Player ply The player whose voice color should be read
 -- @return Color The color of the voice panel
 -- @realm client
 function VOICE.GetVoiceColor(ply)
     if VOICE.GetVoiceMode(ply) then
         return INNOCENT.color
     else
-        TEAMS[ply:GetTeam()].color
+        return TEAMS[ply:GetTeam()].color
     end
 end
 
