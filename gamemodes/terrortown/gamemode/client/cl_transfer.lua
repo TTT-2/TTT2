@@ -92,7 +92,7 @@ function CreateTransferMenu(parent)
     dpick:SetSortItems(false)
 
     -- fill combobox
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
 
     table.sort(plys, function(a, b)
         return a:IsInTeam(client) and not b:IsInTeam(client)

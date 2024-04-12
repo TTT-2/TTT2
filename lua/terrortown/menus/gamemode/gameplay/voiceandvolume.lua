@@ -38,8 +38,10 @@ function CLGAMEMODESUBMENU:Populate(parent)
             VOICE.cv.scaling_mode:GetString()
         ),
         OnChange = function()
-            for _, ply in ipairs(select(2, player.Iterator())) do
-                VOICE.UpdatePlayerVoiceVolume(ply)
+            local plys = player.GetAll()
+
+            for i = 1, #plys do
+                VOICE.UpdatePlayerVoiceVolume(plys[i])
             end
         end,
     })

@@ -9,7 +9,7 @@ local util = util
 local IsValid = IsValid
 local surface = surface
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", { font = "Tahoma", size = 13, weight = 1000 })
@@ -349,7 +349,7 @@ function GM:InitPostEntity()
     end
 
     -- cache players avatar
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local plyid64 = plys[i]:SteamID64()
 
@@ -487,7 +487,7 @@ local function RoundStateChange(o, n)
         CLSCORE:ClearPanel()
 
         -- people may have died and been searched during prep
-        local plys = select(2, playerIterator())
+        local plys = playerGetAll()
         for i = 1, #plys do
             bodysearch.ResetSearchResult(plys[i])
         end
@@ -528,7 +528,7 @@ local function RoundStateChange(o, n)
     -- whatever round state we get, clear out the voice flags
     local winTeams = roles.GetWinTeams()
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         for k = 1, #winTeams do
             plys[i][winTeams[k] .. "_gvoice"] = false
@@ -563,7 +563,7 @@ end
 net.Receive("TTT_Role", ReceiveRole)
 
 local function ReceiveRoleReset()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
     end
@@ -648,7 +648,7 @@ function GM:ClearClientState()
 
     VOICE.InitBattery()
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local pl = plys[i]
         if not IsValid(pl) then

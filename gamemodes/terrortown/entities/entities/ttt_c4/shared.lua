@@ -8,7 +8,7 @@ local hook = hook
 local table = table
 local net = net
 local IsValid = IsValid
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local defuserNearRadius = 90000
 
@@ -173,7 +173,7 @@ function ENT:SphereDamage(dmgowner, center, radius)
     local diff = nil
     local dmg = 0
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local ply = plys[i]
         if ply:Team() ~= TEAM_TERROR then
@@ -322,7 +322,7 @@ function ENT:IsDefuserInRange()
     local d = 0.0
     local diff = nil
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local ply = plys[i]
         if not ply:IsActive() or not ply:GetSubRoleData().isPolicingRole then

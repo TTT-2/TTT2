@@ -273,7 +273,7 @@ function SWEP:CheckValidity()
 end
 
 local function PlayerStandsOn(ent)
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
