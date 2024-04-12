@@ -9,6 +9,10 @@ HUDELEMENT.Base = base
 if CLIENT then
     local padding = 6
 
+    local colorVoiceBar = Color(255, 255, 255, 35)
+    local colorVoiceLine = Color(255, 255, 255, 140)
+    local colorVoiceDevider = Color(255, 255, 255, 175)
+
     local baseDefaults = {
         basepos = { x = 0, y = 0 },
         size = { w = 240, h = 42 },
@@ -69,15 +73,15 @@ if CLIENT then
                 yPos + 0.5 * h - yValue - 1,
                 widthBar,
                 yValue,
-                Color(255, 255, 255, 35)
+                colorVoiceBar
             )
             if yValue > 1 then
                 draw.Box(
                     xPos + h + 3 + (i - 1) * (widthBar + 1),
                     yPos + 0.5 * h - yValue - 2,
                     widthBar,
-                    1,
-                    Color(255, 255, 255, 140)
+                    self.scale,
+                    colorVoiceLine
                 )
             end
 
@@ -85,8 +89,8 @@ if CLIENT then
                 xPos + h + 3 + (i - 1) * (widthBar + 1),
                 yPos + 0.5 * h,
                 widthBar,
-                1,
-                Color(255, 255, 255, 175)
+                self.scale,
+                colorVoiceDevider
             )
 
             draw.Box(
@@ -94,15 +98,15 @@ if CLIENT then
                 yPos + 0.5 * h + 2,
                 widthBar,
                 yValue,
-                Color(255, 255, 255, 35)
+                colorVoiceBar
             )
             if yValue > 1 then
                 draw.Box(
                     xPos + h + 3 + (i - 1) * (widthBar + 1),
                     yPos + 0.5 * h + 2 + yValue,
                     widthBar,
-                    1,
-                    Color(255, 255, 255, 140)
+                    self.scale,
+                    colorVoiceLine
                 )
             end
         end
