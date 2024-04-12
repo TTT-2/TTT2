@@ -130,22 +130,6 @@ function plymeta:IsSpeakingInVoice()
     return self.speaking or false
 end
 
----
--- Sets the color of the voice panel.
--- @param Color color The color of the voice panel
--- @realm client
-function plymeta:SetVoiceColor(color)
-    self.voiceColor = color
-end
-
----
--- Returns the color of the voice panel.
--- @return Color The color of the voice panel
--- @realm client
-function plymeta:GetVoiceColor()
-    return self.voiceColor or INNOCENT.color
-end
-
 -- Creates an elliptic nick for a given length.
 -- @param number width The maximum width that should be used to limit the nick
 -- @param[default="DefaultBold"] string font The font ID

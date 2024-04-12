@@ -10,6 +10,9 @@ local player = player
 local IsValid = IsValid
 local hook = hook
 
+VOCIE_MODE_GLOBAL = 0
+VOICE_MODE_TEAM = 1
+
 -- voicechat stuff
 VOICE = {}
 
@@ -142,6 +145,34 @@ function VOICE.GetFakeVoiceSpectrum(ply, stepCount)
     end
 
     return ply.lastSteps
+end
+
+---
+-- Sets the mode of the voice panel.
+-- @param number mode The voice mode
+-- @realm client
+function VOICE.SetVoiceMode(ply, mode)
+    self.voiceMode = mode
+end
+
+---
+-- Returns the mode of the voice panel.
+-- @return number The mode of the voice panel
+-- @realm client
+function VOICE.GetVoiceMode(ply)
+    return ply.voiceMode or VOICE_MODE_GLOBAL
+end
+
+---
+-- Returns the color of the voice panel.
+-- @return Color The color of the voice panel
+-- @realm client
+function VOICE.GetVoiceColor(ply)
+    if VOICE.GetVoiceMode(ply) then
+        return INNOCENT.color
+    else
+        TEAMS[ply:GetTeam()].color
+    end
 end
 
 ---

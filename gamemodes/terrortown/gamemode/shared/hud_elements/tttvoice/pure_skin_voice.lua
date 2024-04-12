@@ -48,7 +48,7 @@ if CLIENT then
     end
 
     function HUDELEMENT:DrawVoiceBar(ply, xPos, yPos, w, h)
-        local color = ply:GetVoiceColor()
+        local color = VOICE.GetVoiceColor(ply)
         local data = VOICE.GetFakeVoiceSpectrum(ply, 24)
 
         local widthBar = (w - h - self.padding) / #data - 1
