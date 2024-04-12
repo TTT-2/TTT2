@@ -21,7 +21,6 @@ if CLIENT then
 
     function HUDELEMENT:Initialize()
         self.scale = 1.0
-        self.basecolor = self:GetHUDBasecolor()
         self.padding = padding
 
         BaseClass.Initialize(self)
