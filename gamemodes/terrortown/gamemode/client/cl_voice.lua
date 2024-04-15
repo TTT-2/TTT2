@@ -172,7 +172,7 @@ end
 -- @return Color The color of the voice panel
 -- @realm client
 function VOICE.GetVoiceColor(ply)
-    if VOICE.GetVoiceMode(ply) then
+    if VOICE.GetVoiceMode(ply) == VOICE_MODE_GLOBAL then
         return INNOCENT.color
     else
         return TEAMS[ply:GetTeam()].color
