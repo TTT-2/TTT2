@@ -12,6 +12,7 @@ local hook = hook
 
 VOCIE_MODE_GLOBAL = 0
 VOICE_MODE_TEAM = 1
+VOICE_MODE_SPEC = 2
 
 -- voicechat stuff
 VOICE = {}
@@ -326,11 +327,11 @@ function GM:PlayerStartVoice(ply)
 
     VOICE.UpdatePlayerVoiceVolume(ply)
 
-    -- handle voice panel color
-    local color = INNOCENT.color
+    -- handle voice panel color / mode
+    local mode = VOICE_MODE_GLOBAL
 
     if ply:IsSpec() then
-        color = COLOR_SPEC
+        mode = VOICE_MODE_SPEC
     elseif
         client:IsActive()
         and clientTeam ~= TEAM_NONE
@@ -340,14 +341,14 @@ function GM:PlayerStartVoice(ply)
     then
         if ply == client then
             if not client[clientTeam .. "_gvoice"] then
-                color = TEAMS[clientTeam].color
+                mode = VOICE_MODE_TEAM
             end
         elseif
             ply:IsInTeam(client)
             and not (plyRoleData.disabledTeamVoice or clientRoleData.disabledTeamVoiceRecv)
         then
             if not ply[clientTeam .. "_gvoice"] then
-                color = TEAMS[clientTeam].color
+                mode = VOICE_MODE_TEAM
             end
         end
     end
@@ -355,9 +356,9 @@ function GM:PlayerStartVoice(ply)
     ---
     -- @realm client
     -- stylua: ignore
-    color = hook.Run("TTT2ModifyVoiceChatColor", ply, color) or color
+    mode = hook.Run("TTT2ModifyVoiceChatMode", ply, mode) or mode
 
-    ply:SetVoiceColor(color)
+    VOICE.SetVoiceMode(ply, mode)
 
     -- add animation when player is speaking in voice
     if
@@ -716,10 +717,10 @@ end
 
 ---
 -- This hook can be used to modify the background color of the voice chat
--- box that is rendered on the client.
+-- box that is rendered on the client. This is done by setting the voice chat mode.
 -- @param ply The player that started a voice chat
--- @param Color clr The color that is used if this hook does not modify it
--- @return Color The new and modified color
+-- @param number mode The voice chat mode that is used if this hook does not modify it
+-- @return number The new and modified mode
 -- @hook
 -- @realm client
-function GM:TTT2ModifyVoiceChatColor(ply, clr) end
+function GM:TTT2ModifyVoiceChatMode(ply, mode) end
