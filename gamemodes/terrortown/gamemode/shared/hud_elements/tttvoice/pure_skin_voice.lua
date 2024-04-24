@@ -142,7 +142,7 @@ if CLIENT then
         local x, y = pos.x, pos.y
         local w, h = size.w, size.h
 
-        local plys = select(2, player.Iterator())
+        local plys = player.GetAll()
         local plysSorted = {}
 
         for i = 1, #plys do
