@@ -69,6 +69,12 @@ end
 local function VoiceTryDisable()
     local client = LocalPlayer()
 
+    -- when connecting to a server this function might be executed before the local
+    -- player is ready. To prevent this, we have to check if it is valid
+    if not IsValid(client) then
+        return
+    end
+
     if not VOICE.isTeam then
         client:SetSpeakingInVoice(false)
 
