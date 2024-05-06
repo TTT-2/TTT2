@@ -300,6 +300,54 @@ function PANEL:MakeSlider(data)
 end
 
 ---
+-- Adds a button
+-- @param table data The data for the slider
+-- @return Panel The created slider
+-- @realm client
+function PANEL:MakeButton(data)
+    local left = vgui.Create("DLabelTTT2", self)
+
+    left:SetText(data.label)
+
+    left.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+        return true
+    end
+
+    local right = vgui.Create("DButtonTTT2", self)
+
+    right:SetText(data.buttonLabel)
+
+    if isfunction(data.OnClick) then
+        right.DoClick = data.OnClick
+    end
+
+    right:SetTall(32)
+    right:Dock(TOP)
+
+    right.Paint = function(slf, w, h)
+        derma.SkinHook("Paint", "FormButtonTTT2", slf, w, h)
+
+        return true
+    end
+
+    self:AddItem(left, right)
+
+    if IsValid(data.master) and isfunction(data.master.AddSlave) then
+        data.master:AddSlave(left)
+        data.master:AddSlave(right)
+
+        left:SetMaster(data.master)
+        right:SetMaster(data.master)
+
+        left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
+    end
+
+    return left
+end
+
+---
 -- Adds a combobox to the form
 -- @param table data The data for the combobox
 -- @note Structure of data = {

@@ -759,6 +759,46 @@ end
 -- @param number w
 -- @param number h
 -- @realm client
+function SKIN:PaintFormButtonTTT2(panel, w, h)
+    local colorBoxBack = colors.settingsBox
+    local colorBox = colors.accent
+    local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+    local shift = 0
+
+    if not panel:IsEnabled() then
+        colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
+        colorBox = ColorAlpha(colors.accent, alphaDisabled)
+        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
+    elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+        colorBoxBack = colors.settingsBox
+        colorBox = colors.accentActive
+        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+        shift = 1
+    elseif panel.Hovered then
+        colorBoxBack = colors.settingsBox
+        colorBox = colors.accentHover
+        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+    end
+
+    drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+    drawShadowedText(
+        TryT(panel:GetText()),
+        panel:GetFont(),
+        0.5 * w,
+        0.5 * h + shift,
+        colorText,
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
 function SKIN:PaintBinderButtonTTT2(panel, w, h)
     local colorBoxBack = colors.settingsBox
     local colorBox = colors.accent
