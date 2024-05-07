@@ -244,7 +244,7 @@ function PANEL:MakeTextEntry(data)
     right:SetTall(32)
     right:Dock(TOP)
 
-    self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset, toggle, run)
 
     if IsValid(data.master) and isfunction(data.master.AddSlave) then
         data.master:AddSlave(left)
@@ -392,7 +392,7 @@ function PANEL:MakeSlider(data)
     right:SetTall(32)
     right:Dock(TOP)
 
-    self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset, toggle, run)
 
     if IsValid(data.master) and isfunction(data.master.AddSlave) then
         data.master:AddSlave(left)
@@ -549,7 +549,7 @@ function PANEL:MakeComboBox(data)
     right:SetTall(32)
     right:Dock(TOP)
 
-    self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset, toggle, run)
 
     if IsValid(data.master) and isfunction(data.master.AddSlave) then
         data.master:AddSlave(left)
