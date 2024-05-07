@@ -22,6 +22,9 @@ AccessorFunc(PANEL, "m_iSpacing", "Spacing")
 AccessorFunc(PANEL, "m_Padding", "Padding")
 
 local materialReset = Material("vgui/ttt/vskin/icon_reset")
+local materialLockOpen = Material("vgui/ttt/vskin/icon_lock_open")
+local materialLockClosed = Material("vgui/ttt/vskin/icon_lock_closed")
+local materialRun = Material("vgui/ttt/vskin/icon_run")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 ---
@@ -64,9 +67,11 @@ end
 ---
 -- @param Panel left
 -- @param Panel right
--- @param Panel reset
+-- @param Panel buttonReset
+-- @param Panel buttonToggle
+-- @param Panel buttonRun
 -- @realm client
-function PANEL:AddItem(left, right, reset)
+function PANEL:AddItem(left, right, buttonReset, buttonToggle, buttonRun)
     self:InvalidateLayout()
 
     local panel = vgui.Create("DSizeToContents", self)
@@ -76,9 +81,19 @@ function PANEL:AddItem(left, right, reset)
     panel:DockPadding(10, 10, 10, 0)
     panel:InvalidateLayout()
 
-    if IsValid(reset) then
-        reset:SetParent(panel)
-        reset:Dock(RIGHT)
+    if IsValid(buttonReset) then
+        buttonReset:SetParent(panel)
+        buttonReset:Dock(RIGHT)
+    end
+
+    if IsValid(buttonToggle) then
+        buttonToggle:SetParent(panel)
+        buttonToggle:Dock(RIGHT)
+    end
+
+    if IsValid(buttonRun) then
+        buttonRun:SetParent(panel)
+        buttonRun:Dock(RIGHT)
     end
 
     if IsValid(right) then
@@ -105,21 +120,63 @@ function PANEL:Rebuild() end
 
 -- FUNCTIONS TO POPULATE THE FORM
 
-local function MakeReset(parent)
-    local reset = vgui.Create("DButtonTTT2", parent)
+local function MakeButton(parent)
+    local button = vgui.Create("DButtonTTT2", parent)
 
-    reset:SetText("button_default")
-    reset:SetSize(32, 32)
+    button:SetText("button_default")
+    button:SetSize(32, 32)
 
-    reset.Paint = function(slf, w, h)
+    button.Paint = function(slf, w, h)
         derma.SkinHook("Paint", "FormButtonIconTTT2", slf, w, h)
 
         return true
     end
 
-    reset.material = materialReset
+    return button
+end
 
-    return reset
+local function MakeResetButton(parent)
+    local buttonReset = MakeButton(parent)
+
+    buttonReset.iconMaterial = materialReset
+    buttonReset.roundedCorner = true
+
+    return buttonReset
+end
+
+local function MakeToggleButton(parent, data)
+    local buttonToggle = MakeButton(parent)
+
+    buttonToggle.state = data.toggleInitialState or 1
+    buttonToggle.iconMaterial = data.toggleIconMaterial or { materialLockOpen, materialLockClosed }
+    buttonToggle.colorBackground = data.toggleColorBackground or { COLOR_OLIVE, COLOR_ORANGE }
+
+    buttonToggle.DoClick = function(slf)
+        slf.state = slf.state + 1
+
+        if slf.state > #slf.iconMaterial then
+            slf.state = 1
+        end
+
+        if isfunction(data.OnClickToggle) then
+            data.OnClickToggle(slf, slf.state)
+        end
+    end
+
+    return buttonToggle
+end
+
+local function MakeRunButton(parent, data)
+    local buttonRun = MakeButton(parent)
+
+    buttonRun.iconMaterial = data.runIconMaterial or materialRun
+    buttonRun.colorBackground = data.runColorBackground
+
+    if isfunction(data.OnClickRun) then
+        buttonRun.DoClick = data.OnClickRun
+    end
+
+    return buttonRun
 end
 
 ---
@@ -144,8 +201,19 @@ function PANEL:MakeTextEntry(data)
 
     local right = vgui.Create("DTextEntryTTT2", self)
 
-    local reset = MakeReset(self)
+    local reset = MakeResetButton(self)
     right:SetResetButton(reset)
+
+    -- optional buttons
+    local toggle, run
+
+    if data.enableToggle then
+        toggle = MakeToggleButton(self, data)
+    end
+
+    if data.enableRun then
+        run = MakeRunButton(self, data)
+    end
 
     right:SetUpdateOnType(false)
     right:SetHeightMult(1)
@@ -182,6 +250,16 @@ function PANEL:MakeTextEntry(data)
         data.master:AddSlave(left)
         data.master:AddSlave(right)
         data.master:AddSlave(reset)
+
+        if IsValid(toggle) then
+            toggle:SetMaster(data.master)
+            data.master:AddSlave(toggle)
+        end
+
+        if IsValid(run) then
+            run:SetMaster(data.master)
+            data.master:AddSlave(run)
+        end
     end
 
     return left, right
@@ -195,8 +273,19 @@ end
 function PANEL:MakeCheckBox(data)
     local left = vgui.Create("DCheckBoxLabelTTT2", self)
 
-    local reset = MakeReset(self)
+    local reset = MakeResetButton(self)
     left:SetResetButton(reset)
+
+    -- optional buttons
+    local toggle, run
+
+    if data.enableToggle then
+        toggle = MakeToggleButton(self, data)
+    end
+
+    if data.enableRun then
+        run = MakeRunButton(self, data)
+    end
 
     left:SetText(data.label)
     left:SetTextParams(data.params)
@@ -220,7 +309,7 @@ function PANEL:MakeCheckBox(data)
         end
     end
 
-    self:AddItem(left, nil, reset)
+    self:AddItem(left, nil, reset, toggle, run)
 
     if IsValid(data.master) and isfunction(data.master.AddSlave) then
         left:SetMaster(data.master)
@@ -228,6 +317,16 @@ function PANEL:MakeCheckBox(data)
 
         data.master:AddSlave(left)
         data.master:AddSlave(reset)
+
+        if IsValid(toggle) then
+            toggle:SetMaster(data.master)
+            data.master:AddSlave(toggle)
+        end
+
+        if IsValid(run) then
+            run:SetMaster(data.master)
+            data.master:AddSlave(run)
+        end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
@@ -253,8 +352,19 @@ function PANEL:MakeSlider(data)
 
     local right = vgui.Create("DNumSliderTTT2", self)
 
-    local reset = MakeReset(self)
+    local reset = MakeResetButton(self)
     right:SetResetButton(reset)
+
+    -- optional buttons
+    local toggle, run
+
+    if data.enableToggle then
+        toggle = MakeToggleButton(self, data)
+    end
+
+    if data.enableRun then
+        run = MakeRunButton(self, data)
+    end
 
     right:SetMinMax(data.min, data.max)
 
@@ -292,6 +402,16 @@ function PANEL:MakeSlider(data)
         left:SetMaster(data.master)
         right:SetMaster(data.master)
         reset:SetMaster(data.master)
+
+        if IsValid(toggle) then
+            toggle:SetMaster(data.master)
+            data.master:AddSlave(toggle)
+        end
+
+        if IsValid(run) then
+            run:SetMaster(data.master)
+            data.master:AddSlave(run)
+        end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
@@ -372,8 +492,20 @@ function PANEL:MakeComboBox(data)
 
     local right = vgui.Create("DComboBoxTTT2", self)
 
-    local reset = MakeReset(self)
+    local reset = MakeResetButton(self)
     right:SetResetButton(reset)
+
+    -- optional buttons
+    local toggle, run
+
+    if data.enableToggle then
+        toggle = MakeToggleButton(self, data)
+    end
+
+    if data.enableRun then
+        run = MakeRunButton(self, data)
+    end
+
     right:SetDefaultValue(data.default) -- Set default if possible even if the convar could still overwrite it
 
     if data.choices then
@@ -428,6 +560,16 @@ function PANEL:MakeComboBox(data)
         right:SetMaster(data.master)
         reset:SetMaster(data.master)
 
+        if IsValid(toggle) then
+            toggle:SetMaster(data.master)
+            data.master:AddSlave(toggle)
+        end
+
+        if IsValid(run) then
+            run:SetMaster(data.master)
+            data.master:AddSlave(run)
+        end
+
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
 
@@ -472,7 +614,7 @@ function PANEL:MakeBinder(data)
     right:SetTall(32)
     right:Dock(TOP)
 
-    local reset = MakeReset(self)
+    local reset = MakeResetButton(self)
 
     if data.default ~= nil then
         reset.DoClick = function(slf)
