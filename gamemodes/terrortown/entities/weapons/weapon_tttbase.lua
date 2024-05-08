@@ -777,16 +777,6 @@ if CLIENT then
 
     ---
     -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("lastinv")
-        end
-    end
-
-    ---
-    -- @realm client
     function SWEP:CalcViewModel()
         if not IsFirstTimePredicted() then
             return
@@ -1226,6 +1216,22 @@ function SWEP:Reload()
     self:DefaultReload(self.ReloadAnim)
 
     self:SetIronsights(false)
+    self:SetZoom(false)
+end
+
+---
+-- Called when the weapon entity is about to be removed
+-- @see https://wiki.facepunch.com/gmod/WEAPON:OnRemove
+-- @realm shared
+function SWEP:OnRemove()
+    if CLIENT then
+        local owner = self:GetOwner()
+
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
+
     self:SetZoom(false)
 end
 

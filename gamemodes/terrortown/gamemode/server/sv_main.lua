@@ -65,7 +65,7 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 ---
 -- @realm server
@@ -719,7 +719,7 @@ local function EnoughPlayers()
     local ready = 0
 
     -- only count truly available players, i.e. no forced specs
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -775,7 +775,7 @@ end
 -- @realm server
 -- @internal
 function FixSpectators()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -830,7 +830,7 @@ local function NameChangeKick()
         return
     end
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -868,7 +868,7 @@ function StartNameChangeChecks()
     end
 
     -- bring nicks up to date, may have been changed during prep/post
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -943,7 +943,7 @@ local function CleanUp()
     game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
 
     -- Strip players now, so that their weapons are not seen by ReplaceEntities
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -1098,7 +1098,7 @@ function PrepareRound()
     -- In case client's cleanup fails, make client set all players to innocent role
     timer.Simple(1, SendRoleReset)
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -1131,7 +1131,7 @@ end
 -- @realm server
 function TellTraitorsAboutTraitors()
     local traitornicks = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -1275,7 +1275,7 @@ function BeginRound()
 
     ARMOR:InitPlayerArmor()
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -1624,7 +1624,7 @@ function GM:TTTCheckForWin()
     end
 
     local aliveTeams = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]

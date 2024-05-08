@@ -10,7 +10,7 @@ local player = player
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 roleselection.forcedRoles = {}
 roleselection.finalRoles = {}
@@ -199,7 +199,7 @@ function roleselection.GetCurrentRoleAmount(subrole)
     local tmp = 0
 
     if GetRoundState() == ROUND_ACTIVE then
-        local plys = select(2, playerIterator())
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             local ply = plys[i]
@@ -880,7 +880,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
     GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
-    plys = roleselection.GetSelectablePlayers(plys or select(2, playerIterator()))
+    plys = roleselection.GetSelectablePlayers(plys or playerGetAll())
 
     -- Randomize role assignment by shuffling the list early.
     table.Shuffle(plys)

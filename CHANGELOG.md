@@ -20,7 +20,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Disabled locational voice during the preparing phase by default
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added `SWEP.SetClipOnBuy` and `SWEP.ClipOnBuy` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
+- Added Text / Nickname length limiting (by @TimGoll)
 - Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
+- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
+- Added multiple voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+  - Push-to-Talk (default)
+  - Push-to-Mute
+  - Toggle
+  - Toggle (Activate on Join)
 
 ### Changed
 
@@ -48,6 +55,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed detective search being overwritten by player search results
 - Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
 - Fixed Roundendscreen showing karma changes even if karma is disabled
+- Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
+- Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
 
 ### Removed
 

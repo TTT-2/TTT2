@@ -18,7 +18,7 @@ local pairs = pairs
 local ipairs = ipairs
 local timer = timer
 local IsValid = IsValid
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 ttt_include("vgui__cl_sb_team")
 
@@ -530,7 +530,7 @@ function PANEL:UpdateScoreboard(force)
 
     -- Put players where they belong. Groups will dump them as soon as they don't
     -- anymore.
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local p = plys[i]
         if IsValid(p) then

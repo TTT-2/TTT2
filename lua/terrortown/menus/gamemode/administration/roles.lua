@@ -121,4 +121,13 @@ function CLGAMEMODESUBMENU:Populate(parent)
         serverConvar = "ttt_detective_hats",
         label = "label_detective_hats",
     })
+
+    form3:MakeHelp({
+        label = "help_inspect_credits_always",
+    })
+
+    form3:MakeCheckBox({
+        serverConvar = "ttt2_inspect_credits_always_visible",
+        label = "label_inspect_credits_always",
+    })
 end

@@ -9,7 +9,7 @@ local util = util
 local IsValid = IsValid
 local surface = surface
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", { font = "Tahoma", size = 13, weight = 1000 })
@@ -349,7 +349,7 @@ function GM:InitPostEntity()
     end
 
     -- cache players avatar
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local plyid64 = plys[i]:SteamID64()
 
@@ -487,7 +487,7 @@ local function RoundStateChange(o, n)
         CLSCORE:ClearPanel()
 
         -- people may have died and been searched during prep
-        local plys = select(2, playerIterator())
+        local plys = playerGetAll()
         for i = 1, #plys do
             bodysearch.ResetSearchResult(plys[i])
         end
@@ -528,7 +528,7 @@ local function RoundStateChange(o, n)
     -- whatever round state we get, clear out the voice flags
     local winTeams = roles.GetWinTeams()
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         for k = 1, #winTeams do
             plys[i][winTeams[k] .. "_gvoice"] = false
@@ -563,7 +563,7 @@ end
 net.Receive("TTT_Role", ReceiveRole)
 
 local function ReceiveRoleReset()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
     end
@@ -648,7 +648,7 @@ function GM:ClearClientState()
 
     VOICE.InitBattery()
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local pl = plys[i]
         if not IsValid(pl) then
@@ -817,6 +817,8 @@ local position = 0
 local frameCount = 10
 
 local lastStrafeValue = 0
+local lastFovTimeValue = 0
+local curTimeShift = 0
 
 local cvHostTimescale = GetConVar("host_timescale")
 
@@ -867,10 +869,24 @@ function GM:DynamicCamera(viewTable, ply)
 
     -- dynamic mode: transition between different FOV values
     else
-        local time = math.max(
-            0,
-            (CurTime() - ply:GetFOVTime()) * game.GetTimeScale() * cvHostTimescale:GetFloat()
-        )
+        local fovTime = ply:GetFOVTime()
+
+        if lastFovTimeValue ~= fovTime then
+            lastFovTimeValue = fovTime
+            curTimeShift = 0
+        end
+
+        local curTime = CurTime() + curTimeShift
+
+        -- GetFOVTime ends up in the future with lag, causing a delay in the transition (the bigger your lag, the longer the delay)
+        -- shift curTime by the difference to correct it
+        if curTime < fovTime then
+            curTimeShift = fovTime - curTime
+            curTime = curTime + curTimeShift
+        end
+
+        local time =
+            math.max(0, (curTime - fovTime) * game.GetTimeScale() * cvHostTimescale:GetFloat())
 
         local progressTransition = math.min(1.0, time / ply:GetFOVTransitionTime())
 

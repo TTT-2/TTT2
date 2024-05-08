@@ -9,7 +9,7 @@ local pairs = pairs
 local ipairs = ipairs
 local util = util
 local IsValid = IsValid
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local function GetPrintFn(ply)
     if IsValid(ply) then
@@ -55,7 +55,7 @@ function PrintTraitors(ply)
         ServerLog(Format("%s used ttt_print_traitors\n", IsValid(ply) and ply:Nick() or "console"))
 
         local pr = GetPrintFn(ply)
-        local ps = select(2, playerIterator())
+        local ps = playerGetAll()
 
         table.sort(ps, TraitorSort)
 
@@ -75,7 +75,7 @@ function PrintGroups(ply)
 
     pr("User", "-", "Group")
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local p = plys[i]
         pr(p:Nick(), "-", p:GetNWString("UserGroup"))
