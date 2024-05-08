@@ -22,8 +22,8 @@ AccessorFunc(PANEL, "m_iSpacing", "Spacing")
 AccessorFunc(PANEL, "m_Padding", "Padding")
 
 local materialReset = Material("vgui/ttt/vskin/icon_reset")
-local materialLockOpen = Material("vgui/ttt/vskin/icon_lock_open")
-local materialLockClosed = Material("vgui/ttt/vskin/icon_lock_closed")
+local materialCheckmark = Material("vgui/ttt/vskin/icon_checkmark")
+local materialCross = Material("vgui/ttt/vskin/icon_cross")
 local materialRun = Material("vgui/ttt/vskin/icon_run")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
@@ -148,7 +148,7 @@ local function MakeToggleButton(parent, data)
     local buttonToggle = MakeButton(parent)
 
     buttonToggle.state = data.toggleInitialState or 1
-    buttonToggle.iconMaterial = data.toggleIconMaterial or { materialLockOpen, materialLockClosed }
+    buttonToggle.iconMaterial = data.toggleIconMaterial or { materialCheckmark, materialCross }
     buttonToggle.colorBackground = data.toggleColorBackground or { COLOR_OLIVE, COLOR_ORANGE }
 
     buttonToggle.DoClick = function(slf)
