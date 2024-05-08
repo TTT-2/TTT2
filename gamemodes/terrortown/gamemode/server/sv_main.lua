@@ -286,7 +286,6 @@ util.AddNetworkString("TTT2OrderEquipment")
 util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
-util.AddNetworkString("TTT2SetClipOnBuy")
 
 -- provide menu files by loading them from here:
 fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)

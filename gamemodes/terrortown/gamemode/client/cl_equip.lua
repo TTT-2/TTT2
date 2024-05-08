@@ -1044,12 +1044,6 @@ local function ReceiveBoughtItem()
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 
-net.Receive("TTT2SetClipOnBuy", function()
-    local wep = net.ReadEntity()
-
-    wep.Primary.ClipSize = net.ReadUInt(8)
-end)
-
 --
 -- HOOKS / GAMEMODE RELATED STUFF:
 --

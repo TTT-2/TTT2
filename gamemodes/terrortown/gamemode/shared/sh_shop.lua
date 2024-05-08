@@ -314,17 +314,6 @@ function shop.BuyEquipment(ply, equipmentName)
             end
         else
             ply:GiveEquipmentWeapon(equipmentName, function(_ply, _equipmentName, _weapon)
-                if _weapon.SetClipOnBuy then
-                    _weapon.Primary.ClipSize = _weapon.ClipOnBuy
-
-                    _weapon:SetClip1(_weapon.ClipOnBuy)
-
-                    net.Start("TTT2SetClipOnBuy")
-                    net.WriteEntity(_weapon)
-                    net.WriteUInt(_weapon.ClipOnBuy, 8)
-                    net.Send(ply)
-                end
-
                 if isfunction(_weapon.WasBought) then
                     -- some weapons give extra ammo after being bought, etc
                     _weapon:WasBought(_ply)
