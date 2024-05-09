@@ -1492,6 +1492,8 @@ function SWEP:Initialize()
 
     if self.SetClipOnBuy then
         self:SetClip1(self.ClipOnBuy or self.Primary.DefaultClip)
+
+        self.Primary.ClipSize = self.ClipOnBuy or self.Primary.DefaultClip
     end
 
     if CLIENT and self:Clip1() == -1 then
