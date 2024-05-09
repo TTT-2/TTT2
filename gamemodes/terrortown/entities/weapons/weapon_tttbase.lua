@@ -129,10 +129,10 @@ SWEP.silentPickup = false
 SWEP.HotReloadableKeys = {}
 
 -- Set this to true if the weapon should have a custom clip size on buy that can be set in the equipment editor
-SWEP.SetClipOnBuy = false
+SWEP.EnableConfigurableClip = false
 
--- The default clip on buy if `SWEP.SetClipOnBuy` is set to true
-SWEP.ClipOnBuy = 1
+-- The default clip on buy if `SWEP.EnableConfigurableClip` is set to true
+SWEP.ConfigurableClip = 1
 
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
@@ -1490,10 +1490,10 @@ function SWEP:Initialize()
         self:InitializeCustomModels()
     end
 
-    if self.SetClipOnBuy then
-        self:SetClip1(self.ClipOnBuy or self.Primary.DefaultClip)
+    if self.EnableConfigurableClip then
+        self.Primary.ClipSize = self.ConfigurableClip or self.Primary.DefaultClip
 
-        self.Primary.ClipSize = self.ClipOnBuy or self.Primary.DefaultClip
+        self:SetClip1(self.ConfigurableClip or self.Primary.DefaultClip)
     end
 
     if CLIENT and self:Clip1() == -1 then

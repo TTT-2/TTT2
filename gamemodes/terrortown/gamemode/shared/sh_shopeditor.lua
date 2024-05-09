@@ -57,7 +57,7 @@ ShopEditor.savingKeys = {
         bits = 8,
         default = 1,
     },
-    ClipOnBuy = {
+    ConfigurableClip = {
         typ = "number",
         bits = 8,
         default = 1,

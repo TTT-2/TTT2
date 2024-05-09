@@ -184,7 +184,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
             database = DatabaseElement(accessName, itemName, "damageScaling"),
         })
 
-        if equipment.SetClipOnBuy then
+        if equipment.EnableConfigurableClip then
             form2:MakeHelp({
                 label = "help_equipmenteditor_clip_on_buy",
             })
@@ -194,7 +194,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
                 min = 1,
                 max = 20,
                 decimal = 0,
-                database = DatabaseElement(accessName, itemName, "ClipOnBuy"),
+                database = DatabaseElement(accessName, itemName, "ConfigurableClip"),
             })
         end
     end
