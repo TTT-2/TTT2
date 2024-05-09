@@ -131,7 +131,7 @@ SWEP.HotReloadableKeys = {}
 -- Set this to true if the weapon should have a custom clip size on buy that can be set in the equipment editor
 SWEP.SetClipOnBuy = false
 
--- The defult clip on buy if `SWEP.SetClipOnBuy` is set to true
+-- The default clip on buy if `SWEP.SetClipOnBuy` is set to true
 SWEP.ClipOnBuy = 1
 
 -- If this weapon should be given to players upon spawning, set a table of the
