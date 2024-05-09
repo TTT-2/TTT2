@@ -186,11 +186,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
         if equipment.EnableConfigurableClip then
             form2:MakeHelp({
-                label = "help_equipmenteditor_clip_on_buy",
+                label = "help_equipmenteditor_configurable_clip",
             })
 
             form2:MakeSlider({
-                label = "label_equipmenteditor_clip_on_buy",
+                label = "label_equipmenteditor_configurable_clip",
                 min = 1,
                 max = 20,
                 decimal = 0,
