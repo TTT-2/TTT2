@@ -57,6 +57,11 @@ ShopEditor.savingKeys = {
         bits = 8,
         default = 1,
     },
+    ConfigurableClip = {
+        typ = "number",
+        bits = 8,
+        default = 1,
+    },
     AllowDrop = {
         typ = "bool",
         default = true,
