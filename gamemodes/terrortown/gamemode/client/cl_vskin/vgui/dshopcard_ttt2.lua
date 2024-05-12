@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DCardTTT2
+-- @section DShopCardTTT2
 
 local PANEL = {}
 
@@ -114,4 +114,9 @@ function PANEL:Paint(w, h)
     return false
 end
 
-derma.DefineControl("DCardTTT2", "A special button used for the shop editor", PANEL, "DButtonTTT2")
+derma.DefineControl(
+    "DShopCardTTT2",
+    "A special button used for the shop editor",
+    PANEL,
+    "DButtonTTT2"
+)

@@ -99,7 +99,7 @@ TTTFiles = {
     },
     cl_vskin__vgui__dnavpanel = { file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcontentpanel = { file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dcard = { file = "cl_vskin/vgui/dcard_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dshopcard = { file = "cl_vskin/vgui/dshopcard_ttt2.lua", on = "client" },
     cl_vskin__vgui__dbuttonpanel = { file = "cl_vskin/vgui/dbuttonpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcategoryheader = {
         file = "cl_vskin/vgui/dcategoryheader_ttt2.lua",

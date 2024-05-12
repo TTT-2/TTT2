@@ -581,8 +581,8 @@ end
 -- @param PANEL base The base Panel (DIconLayout) where this card will be added
 -- @return Panel The created card
 -- @realm client
-function PANEL:MakeCard(data, base)
-    local card = base:Add("DCardTTT2")
+function PANEL:MakeShopCard(data, base)
+    local card = base:Add("DShopCardTTT2")
 
     card:SetSize(238, 78)
     card:SetIcon(data.icon)
