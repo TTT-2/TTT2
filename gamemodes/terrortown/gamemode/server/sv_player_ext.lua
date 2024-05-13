@@ -1679,6 +1679,8 @@ local function SetPlayerReady(_, ply)
 
     entspawnscript.TransmitToPlayer(ply)
 
+    map.SyncToClient(ply)
+
     ---
     -- @realm server
     -- stylua: ignore

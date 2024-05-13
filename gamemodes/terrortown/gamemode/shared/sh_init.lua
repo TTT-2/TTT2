@@ -562,6 +562,7 @@ include("ttt2/extensions/chat.lua")
 include("ttt2/extensions/sound.lua")
 
 -- include libraries
+include("ttt2/libraries/map.lua")
 include("ttt2/libraries/none.lua")
 include("ttt2/libraries/fastutf8.lua")
 include("ttt2/libraries/huds.lua")

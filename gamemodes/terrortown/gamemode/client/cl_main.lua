@@ -417,6 +417,10 @@ function GM:OnReloaded()
         GetConVar("ttt2_enable_dynamic_fov"):GetBool()
     )
 
+    -- notify the server that the client finished reloading
+    net.Start("TTT2FinishedReloading")
+    net.SendToServer()
+
     ---
     -- @realm shared
     -- stylua: ignore

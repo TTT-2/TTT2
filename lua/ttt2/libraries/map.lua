@@ -5,6 +5,8 @@
 
 if SERVER then
     AddCSLuaFile()
+
+    util.AddNetworkString("TTT2ChangeServerLevel")
 end
 
 local scripedEntsRegister = scripted_ents.Register
@@ -501,6 +503,229 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 
         return ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls],
             data
+    end
+end
+
+local mapsAll = {}
+local mapsPrefixes = {}
+local mapsWSIDs = {}
+
+if SERVER then
+    -- by default cs and de maps should be hidden
+    CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+    CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    function map.InitializeList()
+        local mapsFound = file.Find("maps/*.bsp", "GAME")
+
+        mapsAll = {}
+        mapsPrefixes = {}
+        mapsWSIDs = {}
+
+        for i = 1, #mapsFound do
+            mapsAll[i] = string.sub(mapsFound[i], 1, -5)
+
+            local prefix = map.GetPrefix(mapsAll[i])
+
+            if not prefix then
+                continue
+            end
+
+            mapsPrefixes[prefix] = true
+        end
+
+        for prefix, _ in pairs(mapsPrefixes) do
+            local convarName = "ttt2_enable_map_prefix_" .. prefix
+
+            -- creating a convar which already exists does nothing
+            -- the existing value will not be overwritten
+            CreateConVar(convarName, "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+            -- because these convars are generated dynamically, replicated convars do not work here
+            SetGlobalBool(convarName, GetConVar(convarName):GetBool())
+
+            cvars.RemoveChangeCallback(convarName, convarName)
+            cvars.AddChangeCallback(convarName, function(convar, _, new)
+                SetGlobalBool(convar, tobool(new))
+            end, convarName)
+        end
+
+        local addons = engine.GetAddons()
+
+        for i = 1, #addons do
+            local addon = addons[i]
+
+            if not string.find(string.lower(addon.tags), "map") then
+                continue
+            end
+
+            addonTitle = string.lower(addon.title)
+            addonFile = string.lower(addon.file)
+
+            addonTitle = string.gsub(addonTitle, "_", "")
+            addonTitle = string.gsub(addonTitle, " ", "")
+            addonFile = string.gsub(addonFile, "_", "")
+            addonFile = string.gsub(addonFile, " ", "")
+
+            -- asigns maps that have fitting addon names
+            for j = 1, #mapsAll do
+                local mapName = mapsAll[j]
+
+                local searchName = mapName
+                searchName = string.gsub(searchName, "_", "")
+                searchName = string.gsub(searchName, " ", "")
+
+                if
+                    string.find(addonTitle, searchName)
+                    or string.find(addonFile, searchName)
+                    or string.find(searchName, addonTitle)
+                then
+                    mapsWSIDs[mapName] = addon.wsid
+
+                    break
+                end
+            end
+
+            -- fallback search, this just tries to find something
+            for j = 1, #mapsAll do
+                local mapName = mapsAll[j]
+
+                if mapsWSIDs[mapName] then
+                    continue
+                end
+
+                -- remove the map prefix
+                local searchName = table.concat(string.Split(mapName, "_"), "_")
+
+                searchName = string.match(searchName, "_(.*)")
+
+                if not searchName then
+                    continue
+                end
+
+                searchName = string.gsub(searchName, "_", "")
+                searchName = string.gsub(searchName, " ", "")
+
+                searchName = string.sub(searchName, 1, 8)
+
+                if string.find(addonTitle, searchName) then
+                    mapsWSIDs[mapName] = addon.wsid
+
+                    break
+                end
+            end
+        end
+    end
+
+    function map.SyncToClient(ply)
+        if #mapsAll == 0 then
+            map.InitializeList()
+        end
+
+        net.SendStream(
+            "InitializeMapList",
+            { maps = mapsAll, prefixes = mapsPrefixes, wsid = mapsWSIDs },
+            ply
+        )
+    end
+
+    net.Receive("TTT2ChangeServerLevel", function(_, ply)
+        if not IsValid(ply) or not ply:IsSuperAdmin() then
+            return
+        end
+
+        map.ChangeLevel(net.ReadString())
+    end)
+end
+
+if CLIENT then
+    local mapsIcons = {}
+
+    net.ReceiveStream("InitializeMapList", function(sharedMapList)
+        mapsAll = sharedMapList.maps
+        mapsPrefixes = sharedMapList.prefixes
+        mapsWSIDs = sharedMapList.wsid
+
+        for i = 1, #mapsAll do
+            map.PrecacheIcon(mapsAll[i])
+        end
+
+        map.DownloadIcons()
+    end)
+
+    function map.DownloadIcons()
+        for mapName, wsid in pairs(mapsWSIDs) do
+            if mapsIcons[mapName] then
+                continue
+            end
+
+            steamworks.FileInfo(wsid, function(result)
+                steamworks.Download(result.previewid, true, function(name)
+                    mapsIcons[mapName] = AddonMaterial(name)
+                end)
+            end)
+        end
+    end
+
+    function map.PrecacheIcon(name)
+        if file.Exists("maps/thumb/" .. name .. ".png", "GAME") then
+            mapsIcons[name] = Material("maps/thumb/" .. name .. ".png")
+        elseif file.Exists("maps/" .. name .. ".png", "GAME") then
+            mapsIcons[name] = Material("maps/" .. name .. ".png")
+        end
+    end
+
+    function map.GetIcon(name)
+        return mapsIcons[name]
+    end
+end
+
+function map.GetPrefixes()
+    return table.GetKeys(mapsPrefixes)
+end
+
+function map.GetRawMapList()
+    return mapsAll
+end
+
+function map.GetList()
+    local cleanedList = {}
+
+    for i = 1, #mapsAll do
+        local mapName = mapsAll[i]
+        local mapNameSplit = string.Split(mapName, "_")
+
+        if
+            #mapNameSplit > 1
+            and not GetGlobalBool("ttt2_enable_map_prefix_" .. mapNameSplit[1], false)
+        then
+            continue
+        end
+
+        cleanedList[#cleanedList + 1] = mapName
+    end
+
+    return cleanedList
+end
+
+function map.GetPrefix(name)
+    local mapNameSplit = string.Split(name, "_")
+
+    if #mapNameSplit <= 1 then
+        return
+    end
+
+    return mapNameSplit[1]
+end
+
+function map.ChangeLevel(name)
+    if SERVER then
+        game.ConsoleCommand("changelevel " .. name .. "\n")
+    else
+        net.Start("TTT2ChangeServerLevel")
+        net.WriteString(name)
+        net.SendToServer()
     end
 end
 
