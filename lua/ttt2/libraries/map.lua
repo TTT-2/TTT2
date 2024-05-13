@@ -516,6 +516,11 @@ if SERVER then
     CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
     CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
+    ---
+    -- Initializes the map list. Searches the file system for available maps, scans those maps
+    -- for their different prefixes and tries to associate a workshop ID with each map.
+    -- @internal
+    -- @realm server
     function map.InitializeList()
         local mapsFound = file.Find("maps/*.bsp", "GAME")
 
@@ -618,6 +623,11 @@ if SERVER then
         end
     end
 
+    ---
+    -- Syncs the map data to a given client.
+    -- @param Player ply The player that should receive the update
+    -- @internal
+    -- @realm server
     function map.SyncToClient(ply)
         if #mapsAll == 0 then
             map.InitializeList()
@@ -654,6 +664,11 @@ if CLIENT then
         map.DownloadIcons()
     end)
 
+    ---
+    -- Downloads map icons from the steam workshop on connect and server reload.
+    -- @note This skips maps that already have a locally available icon.
+    -- @internal
+    -- @realm client
     function map.DownloadIcons()
         for mapName, wsid in pairs(mapsWSIDs) do
             if mapsIcons[mapName] then
@@ -668,6 +683,11 @@ if CLIENT then
         end
     end
 
+    ---
+    -- Precaches the map icons on connect and server reload.
+    -- @param string name The map name
+    -- @internal
+    -- @realm client
     function map.PrecacheIcon(name)
         if file.Exists("maps/thumb/" .. name .. ".png", "GAME") then
             mapsIcons[name] = Material("maps/thumb/" .. name .. ".png")
@@ -676,19 +696,42 @@ if CLIENT then
         end
     end
 
+    ---
+    -- Returns the cached icon of a map if there is an icon available.
+    -- @note This not only uses the icons available on the client through addons, it also
+    -- searches the workshop and tries to assign the corrent workshop icon if there
+    -- is no locally available map icon.
+    -- @param string name The map name
+    -- @return nil|IMaterial Returns the cached material if available
+    -- @realm client
     function map.GetIcon(name)
         return mapsIcons[name]
     end
 end
 
+---
+-- Returns all available map prefixes found in the raw map table.
+-- @return table Returns the table with all map prefixes
+-- @realm shared
 function map.GetPrefixes()
     return table.GetKeys(mapsPrefixes)
 end
 
+---
+-- Returns the raw map table. This contains the names of all maps on the server. This
+-- list is automatically synced between the server and all clients.
+-- @return table Returns a table with the map names
+-- @realm shared
 function map.GetRawMapList()
     return mapsAll
 end
 
+---
+-- Returns a sanitized list of maps installed on the server. Sanitized means that only
+-- valid maps with a prefix that is enabled are listed here. This list is automatically
+-- synced between the server and all clients.
+-- @return table Returns a table with the map names
+-- @realm shared
 function map.GetList()
     local cleanedList = {}
 
@@ -709,6 +752,11 @@ function map.GetList()
     return cleanedList
 end
 
+---
+-- Returns the map prefix (e.g. ttt) for a given name.
+-- @param string name The map name
+-- @return nil|string Returns the prefix or nil if there is none
+-- @realm shared
 function map.GetPrefix(name)
     local mapNameSplit = string.Split(name, "_")
 
@@ -719,6 +767,13 @@ function map.GetPrefix(name)
     return mapNameSplit[1]
 end
 
+---
+-- Changes the currently played level (map) to the given name.
+-- @note This does not check if this map exists on the server
+-- @note When this function is run on the client, it is automatically
+-- networked to the server while also making sure the client is a super admin.
+-- @param string name The level name to switch to
+-- @realm shared
 function map.ChangeLevel(name)
     if SERVER then
         game.ConsoleCommand("changelevel " .. name .. "\n")
