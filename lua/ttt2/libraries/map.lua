@@ -512,8 +512,20 @@ local mapsWSIDs = {}
 
 if SERVER then
     -- by default cs and de maps should be hidden
+
+    ---
+    -- @realm server
+    -- stylua: ignore
     CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
+    -- stylua: ignore
     CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
+    -- stylua: ignore
     CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
     ---
@@ -545,6 +557,10 @@ if SERVER then
 
             -- creating a convar which already exists does nothing
             -- the existing value will not be overwritten
+
+            ---
+            -- @realm server
+            -- stylua: ignore
             CreateConVar(convarName, "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
             -- because these convars are generated dynamically, replicated convars do not work here
