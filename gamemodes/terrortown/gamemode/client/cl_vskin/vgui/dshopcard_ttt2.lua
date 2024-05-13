@@ -109,7 +109,7 @@ end
 ---
 -- @ignore
 function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "CardTTT2", self, w, h)
+    derma.SkinHook("Paint", "ShopCardTTT2", self, w, h)
 
     return false
 end
