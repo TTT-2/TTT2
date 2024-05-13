@@ -50,18 +50,30 @@ function PANEL:GetIcon()
     return self.data.icon
 end
 
+---
+-- @param string text
+-- @realm client
 function PANEL:SetTagText(text)
     self.data.tagtext = text
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetTagText(text)
     return self.data.tagtext
 end
 
+---
+-- @param Color color
+-- @realm client
 function PANEL:SetTagColor(color)
     self.data.tagcolor = color
 end
 
+---
+-- @return Color
+-- @realm client
 function PANEL:GetTagColor(color)
     return self.data.tagcolor
 end
