@@ -28,6 +28,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
+- Added a new admin commands menu (by @TimGoll)
+  - Added a submenu to change maps
 
 ### Changed
 
