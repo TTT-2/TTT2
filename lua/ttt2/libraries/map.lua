@@ -511,7 +511,7 @@ local mapsPrefixes = {}
 local mapsWSIDs = {}
 
 if SERVER then
-    -- by default cs and de maps should be hidden
+    -- by default cs, de and test maps should be hidden
 
     ---
     -- @realm server
