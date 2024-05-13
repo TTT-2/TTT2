@@ -1251,9 +1251,12 @@ function plymeta:GetHeightVector()
         posHeadBone = matrix:GetTranslation()
     end
 
-    -- if a player is too far away, their location is only updated sporadically
-    -- if the distance between these two positions is too large, the fallback position
-    -- should be used
+    -- if a player is too far away, their head-bone position is only updated
+    -- sporadically.
+    -- if the head-bone position and the player position are not too far apart
+    -- we assume the head-bone position is accurate and use it.
+    -- otherwise we fall back to the highest corner of the players bounding
+    -- box position.
     if posHeadBone and (posHeadBone - posPlayer):Length() < 90 then
         -- note: the 8 is the assumed height of the head after the head bone
         -- this might not work for every model
