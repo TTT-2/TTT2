@@ -41,7 +41,6 @@ if CLIENT then
 
     function HUDELEMENT:PerformLayout()
         self.scale = appearance.GetGlobalScale()
-        self.basecolor = self:GetHUDBasecolor()
         self.padding = padding * self.scale
 
         BaseClass.PerformLayout(self)
