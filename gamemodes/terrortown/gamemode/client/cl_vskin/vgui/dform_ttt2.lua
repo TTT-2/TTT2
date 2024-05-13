@@ -616,9 +616,9 @@ function PANEL:MakeComboCard(data, base)
     card:SetTagColor(data.colorTag)
     card:SetChecked(data.initial)
 
-    card.OnModeChanged = function(slf, oldMode, newMode)
-        if data and isfunction(data.OnChange) then
-            data.OnChange(slf, oldMode, newMode)
+    card.OnClick = function(slf, old, new)
+        if data and isfunction(data.OnClick) then
+            data.OnClick(slf, old, new)
         end
     end
 

@@ -108,11 +108,15 @@ function PANEL:OnMouseReleased(keyCode)
         return
     end
 
+    local oldChecked = self:GetChecked()
+
     self:SetChecked(true)
 
     local checked = parent.checked
 
     parent.checked = self
+
+    self:OnClick(oldChecked, true)
 
     if not IsValid(checked) or checked == self then
         return
@@ -122,10 +126,10 @@ function PANEL:OnMouseReleased(keyCode)
 end
 
 ---
--- @param number oldMode
--- @param number newMode
+-- @param number old
+-- @param number new
 -- @realm client
-function PANEL:OnClick(oldMode, newMode) end
+function PANEL:OnClick(old, new) end
 
 ---
 -- @return boolean
