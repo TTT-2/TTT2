@@ -60,7 +60,7 @@ end
 ---
 -- @return string
 -- @realm client
-function PANEL:GetTagText(text)
+function PANEL:GetTagText()
     return self.data.tagtext
 end
 
@@ -74,7 +74,7 @@ end
 ---
 -- @return Color
 -- @realm client
-function PANEL:GetTagColor(color)
+function PANEL:GetTagColor()
     return self.data.tagcolor
 end
 
