@@ -308,6 +308,11 @@ local function DoBleed(ent)
     util.PaintDown(ent:GetPos() + jitter, "Blood", ent)
 end
 
+---
+-- Creates a color based on a given input string.
+-- @param string str The input string, can be any text
+-- @return Color The created color
+-- @realm shared
 function util.StringToColor(str)
     local hash = 0
 

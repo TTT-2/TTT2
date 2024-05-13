@@ -1534,6 +1534,9 @@ end
 concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
 
 net.Receive("TTT2FinishedReloading", function(_, ply)
+    ---
+    -- @realm server
+    -- stylua: ignore
     hook.Run("TTT2PlayerFinishedReloading", ply)
 end)
 
@@ -1687,6 +1690,12 @@ function GM:TTTCheckForWin()
     end
 end
 
+---
+-- Called when a player is ready again after they reloaded their game. Can be used to send
+-- data that is needed after a reload.
+-- @param Player ply The player that finished the reloading
+-- @hook
+-- @realm server
 function GM:TTT2PlayerFinishedReloading(ply)
     map.SyncToClient(ply)
 end
