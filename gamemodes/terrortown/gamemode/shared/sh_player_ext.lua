@@ -1235,8 +1235,10 @@ end
 -- @return vector The player height
 -- @realm shared
 function plymeta:GetHeightVector()
-    local matrix
+    local matrix, pos
     local bone = self:LookupBone("ValveBiped.Bip01_Head1")
+
+    local posPlayer = self:GetPos()
 
     -- if the bone is defined, the bone matrix is defined as well;
     -- however on hot reloads this can momentarily break before it
@@ -1246,23 +1248,27 @@ function plymeta:GetHeightVector()
     end
 
     if matrix then
-        local pos = matrix:GetTranslation()
+        pos = matrix:GetTranslation()
+    end
 
+    -- if a player is too far away, their location is only updated sporadically
+    -- if the distance between these two positions is too large, the fallback position
+    -- should be used
+    if (pos - posPlayer):Length() < 90 then
         -- note: the 8 is the assumed height of the head after the head bone
         -- this might not work for every model
         pos.z = pos.z + 8 * self:GetModelScale() * self:GetManipulateBoneScale(bone).z
 
-        return pos - self:GetPos()
+        return pos - posPlayer
+    end
 
     -- if the model has no head bone for some reason, use the player
     -- position as a fallback
-    else
-        local obbmMaxs = self:OBBMaxs()
-        obbmMaxs.x = 0
-        obbmMaxs.y = 0
+    local obbmMaxs = self:OBBMaxs()
+    obbmMaxs.x = 0
+    obbmMaxs.y = 0
 
-        return obbmMaxs * self:GetModelScale()
-    end
+    return obbmMaxs * self:GetModelScale()
 end
 
 -- to make it hotreload safe, we have to make sure it is not
