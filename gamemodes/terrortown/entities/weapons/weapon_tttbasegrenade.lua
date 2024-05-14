@@ -503,11 +503,7 @@ if CLIENT then
             y = y + (y / 3)
 
             local pct = 1
-                - math.Clamp(
-                    (CurTime() - pulltime) / (self:GetDetTime() - pulltime),
-                    0,
-                    1
-                )
+                - math.Clamp((CurTime() - pulltime) / (self:GetDetTime() - pulltime), 0, 1)
 
             local scale = appearance.GetGlobalScale()
             local w, h = 100 * scale, 20 * scale
