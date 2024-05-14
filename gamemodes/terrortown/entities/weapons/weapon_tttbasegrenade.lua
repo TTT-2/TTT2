@@ -495,14 +495,16 @@ if CLIENT then
         local x = ScrW() * 0.5
         local y = ScrH() * 0.5
 
-        if self:GetPin() and self:GetPullTime() > 0 then
+        local pulltime = self:GetPullTime()
+
+        if self:GetPin() and pulltime and pulltime > 0 then
             local client = LocalPlayer()
 
             y = y + (y / 3)
 
             local pct = 1
                 - math.Clamp(
-                    (CurTime() - self:GetPullTime()) / (self:GetDetTime() - self:GetPullTime()),
+                    (CurTime() - pulltime) / (self:GetDetTime() - pulltime),
                     0,
                     1
                 )
