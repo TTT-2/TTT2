@@ -1259,7 +1259,7 @@ function plymeta:GetHeadPosition()
     -- updated.
     -- Otherwise we fall back to the highest corner of the players bounding
     -- box position.
-    if posHeadBone and not self:IsDorman() then
+    if posHeadBone and not self:IsDormant() then
         -- note: the 8 is the assumed height of the head after the head bone
         -- this might not work for every model
         posHeadBone.z = posHeadBone.z
