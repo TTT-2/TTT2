@@ -1234,7 +1234,7 @@ end
 -- @note Respects the model scale for the height calculation
 -- @return vector The player height
 -- @realm shared
-function plymeta:GetHeightVector()
+function plymeta:GetHeadPosition()
     local matrix, posHeadBone
     local bone = self:LookupBone("ValveBiped.Bip01_Head1")
 
