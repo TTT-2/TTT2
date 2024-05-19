@@ -576,13 +576,13 @@ function PANEL:MakePanel()
 end
 
 ---
--- Adds a new card to the form.
+-- Adds a new shop card to the form.
 -- @param table data The data for the card
 -- @param PANEL base The base Panel (DIconLayout) where this card will be added
 -- @return Panel The created card
 -- @realm client
-function PANEL:MakeCard(data, base)
-    local card = base:Add("DCardTTT2")
+function PANEL:MakeShopCard(data, base)
+    local card = base:Add("DShopCardTTT2")
 
     card:SetSize(238, 78)
     card:SetIcon(data.icon)
@@ -592,6 +592,33 @@ function PANEL:MakeCard(data, base)
     card.OnModeChanged = function(slf, oldMode, newMode)
         if data and isfunction(data.OnChange) then
             data.OnChange(slf, oldMode, newMode)
+        end
+    end
+
+    return card
+end
+
+---
+-- Adds a new combo card to the form. A combo card is a card where only one
+-- can be selected at any time.
+-- @param table data The data for the card
+-- @param PANEL base The base Panel (DIconLayout) where this card will be added
+-- @return Panel The created card
+-- @realm client
+function PANEL:MakeComboCard(data, base)
+    local card = base:Add("DComboCardTTT2")
+
+    -- todo smaller, higher - square?
+    card:SetSize(175, 205)
+    card:SetIcon(data.icon)
+    card:SetText(data.label)
+    card:SetTagText(data.tag)
+    card:SetTagColor(data.colorTag)
+    card:SetChecked(data.initial)
+
+    card.OnClick = function(slf, old, new)
+        if data and isfunction(data.OnClick) then
+            data.OnClick(slf, old, new)
         end
     end
 

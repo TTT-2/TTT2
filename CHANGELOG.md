@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
+- Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
 
 ### Changed
 
