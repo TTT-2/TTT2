@@ -55,6 +55,7 @@ local drawSimpleText = draw.SimpleText
 local drawLine = draw.Line
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
+local drawGetLimitedLengthText = draw.GetLimitedLengthText
 
 local alphaDisabled = 100
 
@@ -1524,7 +1525,7 @@ local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
 -- @param number w
 -- @param number h
 -- @realm client
-function SKIN:PaintCardTTT2(panel, w, h)
+function SKIN:PaintShopCardTTT2(panel, w, h)
     local widthBorder = 2
     local widthBorder2 = widthBorder * 2
     local sizeIcon = 64
@@ -1618,6 +1619,97 @@ function SKIN:PaintCardTTT2(panel, w, h)
         colorTextMode,
         TEXT_ALIGN_LEFT,
         TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintComboCardTTT2(panel, w, h)
+    local widthBorder = 2
+    local widthBorder2 = widthBorder * 2
+    local widthBorder4 = widthBorder2 * 2
+    local shift = 0
+
+    local colorBackground = utilGetChangedColor(colors.background, 75)
+    local colorBox = colors.settingsBox
+    local opacity = 255
+
+    if panel:GetChecked() then
+        colorBox = colors.accent
+    end
+
+    if panel.Hovered then
+        colorBox = utilGetHoverColor(colorBox)
+        opacity = 230
+    end
+
+    if panel.Depressed then
+        opacity = 240
+        shift = 1
+    end
+
+    local colorText = utilGetDefaultColor(colorBox)
+
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+    drawRoundedBox(
+        sizes.cornerRadius,
+        widthBorder,
+        widthBorder,
+        w - widthBorder2,
+        h - widthBorder2,
+        colorBox
+    )
+
+    if panel:GetIcon() then
+        draw.FilteredTexture(
+            widthBorder2,
+            widthBorder2 + shift,
+            w - widthBorder4,
+            w - widthBorder4,
+            panel:GetIcon(),
+            opacity,
+            COLOR_WHITE
+        )
+    end
+
+    local tagText = panel:GetTagText()
+
+    if tagText then
+        local width = drawGetTextSize(tagText, panel:GetFont())
+        local colorTag = panel:GetTagColor() or COLOR_WARMGRAY
+
+        width = width + 20
+
+        drawRoundedBox(sizes.cornerRadius, widthBorder4, widthBorder4, width, 20, colorTag)
+
+        drawSimpleText(
+            TryT(tagText),
+            panel:GetFont(),
+            widthBorder4 + 0.5 * width,
+            widthBorder4 + 10,
+            utilGetDefaultColor(colorTag),
+            TEXT_ALIGN_CENTER,
+            TEXT_ALIGN_CENTER
+        )
+    end
+
+    drawSimpleText(
+        drawGetLimitedLengthText(
+            TryT(panel:GetText()),
+            w - 2 * widthBorder4,
+            panel:GetFont(),
+            "..."
+        ),
+        panel:GetFont(),
+        widthBorder4,
+        w + shift,
+        colorText,
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_TOP
     )
 end
 
