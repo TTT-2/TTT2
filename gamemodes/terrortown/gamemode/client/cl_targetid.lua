@@ -87,7 +87,7 @@ local sizeIconOverHeadIcon = 0.7 * sizeOverHeadIcon
 -- @realm client
 function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
     local ang = client:EyeAngles()
-    local pos = ply:GetPos() + ply:GetHeightVector()
+    local pos = ply:GetPos() + ply:GetHeadPosition()
     pos.z = pos.z + offsetOverHeadIcon
 
     local shift = Vector(0, shiftOverHeadIcon, 0)

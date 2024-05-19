@@ -60,12 +60,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Roundendscreen showing karma changes even if karma is disabled
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
 - Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
+- Fixed overhead icons sometimes being stuck at random places (by @TimGoll)
 - Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
 - Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
 
 ### Removed
 
 - Removed radio tab in shop UI
+
+### Breaking Changes
+
+- Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
