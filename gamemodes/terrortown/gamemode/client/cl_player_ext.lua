@@ -115,6 +115,21 @@ function plymeta:AnimUpdateGesture()
 end
 
 ---
+-- Enables that the player is currently speaking in voice. This state is used for the voice UI.
+-- @param boolean state The speaking state
+-- @realm client
+function plymeta:SetSpeakingInVoice(state)
+    self.speaking = state
+end
+
+---
+-- Returns if the player is currently speaking in voice. This state is used for the voice UI.
+-- @return boolean The speaking state
+-- @realm client
+function plymeta:IsSpeakingInVoice()
+    return self.speaking or false
+end
+
 -- Creates an elliptic nick for a given length.
 -- @param number width The maximum width that should be used to limit the nick
 -- @param[default="DefaultBold"] string font The font ID
