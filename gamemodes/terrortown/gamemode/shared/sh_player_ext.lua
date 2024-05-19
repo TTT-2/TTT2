@@ -1253,11 +1253,7 @@ function plymeta:GetHeadPosition()
 
     -- If a player is too far away, their head-bone position is only updated
     -- sporadically.
-    -- If the head-bone position and the player position are not too far apart
-    -- we assume the head-bone position is accurate and use it. When this is the
-    -- case it is because the entity is dormant and its position is no longer
-    -- updated.
-    -- Otherwise we fall back to the highest corner of the players bounding
+    -- In that case we want to fall back to the highest corner of the players bounding
     -- box position.
     if posHeadBone and not self:IsDormant() then
         -- note: the 8 is the assumed height of the head after the head bone
