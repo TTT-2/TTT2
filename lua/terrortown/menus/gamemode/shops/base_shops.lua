@@ -113,7 +113,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
     for i = 1, #sortedEquipmentList do
         local item = sortedEquipmentList[i]
 
-        form:MakeCard({
+        form:MakeShopCard({
             label = item.shopTitle,
             icon = item.iconMaterial,
             initial = item.CanBuy[roleIndex] and MODE_ADDED or MODE_DEFAULT, -- todo: this should be the current mode

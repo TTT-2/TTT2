@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
+- Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
 - Added a new admin commands menu (by @TimGoll)
   - Added a submenu to change maps
 
@@ -59,6 +60,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Roundendscreen showing karma changes even if karma is disabled
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
 - Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
+- Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
+- Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
 
 ### Removed
 
