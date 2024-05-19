@@ -534,11 +534,33 @@ if SERVER then
     -- @internal
     -- @realm server
     function map.InitializeList()
-        local mapsFound = file.Find("maps/*.bsp", "GAME")
-
         mapsAll = {}
         mapsPrefixes = {}
         mapsWSIDs = {}
+
+        local addons = engine.GetAddons()
+
+        -- as a first step we create a mapname-wsid lookup table that can be used to later on
+        -- assign wsids to maps that were found
+        for i = 1, #addons do
+            local addon = addons[i]
+
+            if not string.find(string.lower(addon.tags), "map") then
+                continue
+            end
+
+            local mapFound = file.Find("maps/*.bsp", addon.title)
+
+            if not mapFound or #mapFound == 0 then
+                continue
+            end
+
+            mapsWSIDs[string.sub(mapFound[1], 1, -5)] = addon.wsid
+        end
+
+        -- the next step is to find all maps that are installed on the server
+        -- based on these found maps the prefixes and the base list is generated
+        local mapsFound = file.Find("maps/*.bsp", "GAME")
 
         for i = 1, #mapsFound do
             mapsAll[i] = string.sub(mapsFound[i], 1, -5)
@@ -555,7 +577,7 @@ if SERVER then
         for prefix, _ in pairs(mapsPrefixes) do
             local convarName = "ttt2_enable_map_prefix_" .. prefix
 
-            -- creating a convar which already exists does nothing
+            -- note: creating a convar which already exists does nothing
             -- the existing value will not be overwritten
 
             ---
@@ -570,72 +592,6 @@ if SERVER then
             cvars.AddChangeCallback(convarName, function(convar, _, new)
                 SetGlobalBool(convar, tobool(new))
             end, convarName)
-        end
-
-        local addons = engine.GetAddons()
-
-        for i = 1, #addons do
-            local addon = addons[i]
-
-            if not string.find(string.lower(addon.tags), "map") then
-                continue
-            end
-
-            addonTitle = string.lower(addon.title)
-            addonFile = string.lower(addon.file)
-
-            addonTitle = string.gsub(addonTitle, "_", "")
-            addonTitle = string.gsub(addonTitle, " ", "")
-            addonFile = string.gsub(addonFile, "_", "")
-            addonFile = string.gsub(addonFile, " ", "")
-
-            -- asigns maps that have fitting addon names
-            for j = 1, #mapsAll do
-                local mapName = mapsAll[j]
-
-                local searchName = mapName
-                searchName = string.gsub(searchName, "_", "")
-                searchName = string.gsub(searchName, " ", "")
-
-                if
-                    string.find(addonTitle, searchName)
-                    or string.find(addonFile, searchName)
-                    or string.find(searchName, addonTitle)
-                then
-                    mapsWSIDs[mapName] = addon.wsid
-
-                    break
-                end
-            end
-
-            -- fallback search, this just tries to find something
-            for j = 1, #mapsAll do
-                local mapName = mapsAll[j]
-
-                if mapsWSIDs[mapName] then
-                    continue
-                end
-
-                -- remove the map prefix
-                local searchName = table.concat(string.Split(mapName, "_"), "_")
-
-                searchName = string.match(searchName, "_(.*)")
-
-                if not searchName then
-                    continue
-                end
-
-                searchName = string.gsub(searchName, "_", "")
-                searchName = string.gsub(searchName, " ", "")
-
-                searchName = string.sub(searchName, 1, 8)
-
-                if string.find(addonTitle, searchName) then
-                    mapsWSIDs[mapName] = addon.wsid
-
-                    break
-                end
-            end
         end
     end
 
