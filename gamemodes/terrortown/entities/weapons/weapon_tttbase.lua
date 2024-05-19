@@ -128,6 +128,12 @@ SWEP.silentPickup = false
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
 SWEP.HotReloadableKeys = {}
 
+-- Set this to true if the weapon should have a custom clip size on buy that can be set in the equipment editor
+SWEP.EnableConfigurableClip = false
+
+-- The default clip on buy if `SWEP.EnableConfigurableClip` is set to true
+SWEP.ConfigurableClip = 1
+
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
 --	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
@@ -1039,18 +1045,24 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:ShootBullet
 -- @realm shared
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
+    local owner = self:GetOwner()
+
+    if not IsValid(owner) then
+        return
+    end
+
     self:SendWeaponAnim(self.PrimaryAnim)
 
-    self:GetOwner():MuzzleFlash()
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    owner:MuzzleFlash()
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     numbul = numbul or 1
     cone = cone or 0.02
 
     local bullet = {}
     bullet.Num = numbul
-    bullet.Src = self:GetOwner():GetShootPos()
-    bullet.Dir = self:GetOwner():GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
     bullet.Tracer = 1
     bullet.TracerName = self.Tracer or "Tracer"
@@ -1061,10 +1073,10 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         bullet.Callback = Sparklies
     end
 
-    self:GetOwner():FireBullets(bullet)
+    owner:FireBullets(bullet)
 
     -- Owner can die after firebullets
-    if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then
+    if not IsValid(owner) or owner:IsNPC() or not owner:Alive() then
         return
     end
 
@@ -1072,10 +1084,10 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         SERVER and game.SinglePlayer()
         or CLIENT and not game.SinglePlayer() and IsFirstTimePredicted()
     then
-        local eyeang = self:GetOwner():EyeAngles()
+        local eyeang = owner:EyeAngles()
         eyeang.pitch = eyeang.pitch - recoil
 
-        self:GetOwner():SetEyeAngles(eyeang)
+        owner:SetEyeAngles(eyeang)
     end
 end
 
@@ -1482,6 +1494,12 @@ end
 function SWEP:Initialize()
     if CLIENT then
         self:InitializeCustomModels()
+    end
+
+    if self.EnableConfigurableClip then
+        self.Primary.ClipSize = self.ConfigurableClip or self.Primary.DefaultClip
+
+        self:SetClip1(self.ConfigurableClip or self.Primary.DefaultClip)
     end
 
     if CLIENT and self:Clip1() == -1 then

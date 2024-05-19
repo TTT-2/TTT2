@@ -1,6 +1,6 @@
 ---
 -- @class PANEL
--- @section DCardTTT2
+-- @section DShopCardTTT2
 
 local PANEL = {}
 
@@ -109,9 +109,14 @@ end
 ---
 -- @ignore
 function PANEL:Paint(w, h)
-    derma.SkinHook("Paint", "CardTTT2", self, w, h)
+    derma.SkinHook("Paint", "ShopCardTTT2", self, w, h)
 
     return false
 end
 
-derma.DefineControl("DCardTTT2", "A special button used for the shop editor", PANEL, "DButtonTTT2")
+derma.DefineControl(
+    "DShopCardTTT2",
+    "A special button used for the shop editor",
+    PANEL,
+    "DButtonTTT2"
+)

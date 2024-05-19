@@ -20,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 - Disabled locational voice during the preparing phase by default
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
+- Added `SWEP.EnableConfigurableClip` and `SWEP.ConfigurableClip` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
 - Added Text / Nickname length limiting (by @TimGoll)
 - Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
 - Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
@@ -28,6 +29,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
+- Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
+- Added toggle and run buttons to many F1 menu elements (by @TimGoll)
+- Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
 
 ### Changed
 
@@ -57,6 +61,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Roundendscreen showing karma changes even if karma is disabled
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
 - Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
+- Fixed overhead icons sometimes being stuck at random places (by @TimGoll)
+- Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
+- Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
 
 ### Removed
 
@@ -65,6 +72,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Breaking Changes
 
 - Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
+- Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
