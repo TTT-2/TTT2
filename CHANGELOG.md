@@ -28,6 +28,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
+- Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
+- Added toggle and run buttons to many F1 menu elements (by @TimGoll)
 - Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
 
 ### Changed

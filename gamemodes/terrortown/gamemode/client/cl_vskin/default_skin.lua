@@ -716,18 +716,75 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintFormButtonIconTTT2(panel, w, h)
-    local colorBoxBack = colors.settingsBox
     local colorBox = colors.accent
+
+    if panel.colorBackground then
+        if IsColor(panel.colorBackground) then
+            colorBox = panel.colorBackground
+        else
+            colorBox = panel.colorBackground[panel.state or 1]
+        end
+    end
+
+    local iconMaterial = panel.iconMaterial
+
+    if not iconMaterial.GetTexture then
+        iconMaterial = iconMaterial[panel.state or 1]
+    end
+
+    local colorBoxBack = colors.settingsBox
     local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     local shift = 0
     local pad = 6
 
     if not panel:IsEnabled() then
-        colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
-        colorBox = ColorAlpha(colors.accent, alphaDisabled)
-        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
+        colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
+        colorBox = ColorAlpha(colorBox, alphaDisabled)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), alphaDisabled)
     elseif panel.noDefault then
-        colorBoxBack = colors.settingsBox
+        colorBox = ColorAlpha(colorBox, alphaDisabled)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), alphaDisabled)
+    elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+        colorBox = utilGetActiveColor(colorBox)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), 150)
+        shift = 1
+    elseif panel.Hovered then
+        colorBox = utilGetHoverColor(colorBox)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), 150)
+    end
+
+    if panel.roundedCorner then
+        drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+    else
+        drawBox(0, 0, w, h, colorBoxBack)
+    end
+
+    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+    drawFilteredShadowedTexture(
+        pad,
+        pad + shift,
+        w - 2 * pad,
+        h - 2 * pad,
+        iconMaterial,
+        colorText.a,
+        colorText
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintFormButtonTTT2(panel, w, h)
+    local colorBoxBack = colors.settingsBox
+    local colorBox = colors.accent
+    local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+    local shift = 0
+
+    if not panel:IsEnabled() then
+        colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
         colorBox = ColorAlpha(colors.accent, alphaDisabled)
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
     elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
@@ -744,14 +801,14 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
     drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
 
-    drawFilteredShadowedTexture(
-        pad,
-        pad + shift,
-        w - 2 * pad,
-        h - 2 * pad,
-        panel.material,
-        colorText.a,
-        colorText
+    drawShadowedText(
+        TryT(panel:GetText()),
+        panel:GetFont(),
+        0.5 * w,
+        0.5 * h + shift,
+        colorText,
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_CENTER
     )
 end
 
