@@ -726,12 +726,6 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
         end
     end
 
-    local iconMaterial = panel.iconMaterial
-
-    if not iconMaterial.GetTexture then
-        iconMaterial = iconMaterial[panel.state or 1]
-    end
-
     local colorBoxBack = colors.settingsBox
     local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     local shift = 0
@@ -760,6 +754,16 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
     end
 
     drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+    local iconMaterial = panel.iconMaterial or panel.material
+
+    if not iconMaterial then
+        return
+    end
+
+    if not iconMaterial.GetTexture then
+        iconMaterial = iconMaterial[panel.state or 1]
+    end
 
     drawFilteredShadowedTexture(
         pad,
