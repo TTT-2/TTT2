@@ -90,7 +90,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         end,
     })
 
-    -- SET CREDITS --
+    -- ADD CREDITS --
 
     local form5 = vgui.CreateTTT2Form(parent, "header_commands_player_add_credits")
 
@@ -118,7 +118,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         end,
     })
 
-    -- SET CREDITS --
+    -- SET HEALTH --
 
     local form6 = vgui.CreateTTT2Form(parent, "header_commands_player_set_health")
 
