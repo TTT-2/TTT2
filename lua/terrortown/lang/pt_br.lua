@@ -366,7 +366,6 @@ Utilize-o em terroristas recentemente mortos para coletar a amostra do DNA do as
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
-L.magnet_help = "{primaryfire} para prender um corpo a uma superfície."
 
 -- Grenades and misc
 L.grenade_smoke = "Granada de Fumaça"

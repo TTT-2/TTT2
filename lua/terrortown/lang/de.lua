@@ -366,7 +366,6 @@ Kann an frischen Leichen verwendet werden, um die DNA des Mörders zu erhalten u
 
 -- Magneto stick
 L.magnet_name = "Magneto-Stick"
-L.magnet_help = "{primaryfire} um Körper an Oberfläche anzubinden."
 
 -- Grenades and misc
 L.grenade_smoke = "Rauchgranate"

@@ -366,7 +366,6 @@ Essayez-le sur des corps tout frais pour récupérer l'ADN du tueur pour le traq
 
 -- Magneto stick
 L.magnet_name = "Magnéto-stick"
-L.magnet_help = "{primaryfire} pour attacher le corps sur cette surface."
 
 -- Grenades and misc
 L.grenade_smoke = "Grenade fumigène"

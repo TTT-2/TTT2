@@ -366,7 +366,6 @@ Katilin DNA'sını almak ve izini sürmek için taze cesetler üzerinde kullanı
 
 -- Magneto stick
 L.magnet_name = "Manyeto çubuğu"
-L.magnet_help = "Cesedi yüzeye tutturmak için {primaryfire}"
 
 -- Grenades and misc
 L.grenade_smoke = "Duman bombası"
