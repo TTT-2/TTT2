@@ -217,6 +217,10 @@ addonChecker.curatedList = {
         reason = "Breaks random weapon spawns by overwriting the random weapon entity.",
         type = ADDON_INCOMPATIBLE,
     },
+    ["2705642928"] = { -- Graffiti by Leeroy
+        reason = "This addon doesn't use the TTT base correctly and also causes sound and broken playermodel issues.",
+        type = ADDON_INCOMPATIBLE,
+    },
     ["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
         alternative = "2150924507",
         reason = "Addon is broken and doesn't do anything.",
