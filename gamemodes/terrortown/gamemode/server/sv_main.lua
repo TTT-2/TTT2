@@ -50,7 +50,6 @@ ttt_include("sv_addonchecker")
 ttt_include("sv_roleselection")
 ttt_include("sh_rolelayering")
 
-include("ttt2/libraries/map.lua")
 include("ttt2/libraries/entspawn.lua")
 include("ttt2/libraries/plyspawn.lua")
 include("ttt2/libraries/entity_outputs.lua")
@@ -286,6 +285,7 @@ util.AddNetworkString("TTT2OrderEquipment")
 util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
+util.AddNetworkString("TTT2FinishedReloading")
 
 -- provide menu files by loading them from here:
 fileloader.LoadFolder("terrortown/menus/score/", false, CLIENT_FILE)
@@ -1436,6 +1436,8 @@ function GM:OnReloaded()
     -- reload everything from the playermodels
     playermodels.Initialize()
 
+    map.InitializeList()
+
     -- set the default random playermodel
     self.playermodel = playermodels.GetRandomPlayerModel()
     self.playercolor = COLOR_WHITE
@@ -1530,6 +1532,13 @@ local function ttt_toggle_newroles(ply)
     ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
 end
 concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
+
+net.Receive("TTT2FinishedReloading", function(_, ply)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2PlayerFinishedReloading", ply)
+end)
 
 ---
 -- This hook is used to sync the global networked vars. It is run in @{GM:SyncGlobals} after the
@@ -1679,4 +1688,14 @@ function GM:TTTCheckForWin()
     else -- rare case: nobody is alive, e.g. because of an explosion
         return TEAM_NONE -- none_win
     end
+end
+
+---
+-- Called when a player is ready again after they reloaded their game. Can be used to send
+-- data that is needed after a reload.
+-- @param Player ply The player that finished the reloading
+-- @hook
+-- @realm server
+function GM:TTT2PlayerFinishedReloading(ply)
+    map.SyncToClient(ply)
 end
