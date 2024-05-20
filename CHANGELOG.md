@@ -32,6 +32,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
 - Added toggle and run buttons to many F1 menu elements (by @TimGoll)
 - Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
+- Added a new admin commands menu (by @TimGoll)
+  - Added a submenu to change maps
 
 ### Changed
 

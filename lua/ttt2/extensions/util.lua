@@ -309,6 +309,25 @@ local function DoBleed(ent)
 end
 
 ---
+-- Creates a color based on a given input string.
+-- @param string str The input string, can be any text
+-- @return Color The created color
+-- @realm shared
+function util.StringToColor(str)
+    local hash = 0
+
+    for i = 1, #str do
+        hash = string.byte(str, i) + bit.lshift(hash, 8 - i) - hash
+    end
+
+    local r = bit.band(bit.rshift(hash, 16), 0xFF)
+    local g = bit.band(bit.rshift(hash, 8), 0xFF)
+    local b = bit.band(hash, 0xFF)
+
+    return Color(r, g, b)
+end
+
+---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
 -- @param CTakeDamageInfo dmg
