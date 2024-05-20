@@ -955,7 +955,7 @@ local function CleanUp()
     hook.Remove("PlayerSay", "ULXMeCheck")
 end
 
-local function StopRoundTimers()
+function StopRoundTimers()
     -- remove all timers
     timer.Stop("wait2prep")
     timer.Stop("prep2begin")

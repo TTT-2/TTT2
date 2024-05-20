@@ -2,7 +2,7 @@
 
 CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 
-CLGAMEMODESUBMENU.priority = 100
+CLGAMEMODESUBMENU.priority = 98
 CLGAMEMODESUBMENU.title = "submenu_commands_maps_title"
 
 local comboBase

@@ -374,6 +374,7 @@ function PANEL:MakeSlider(data)
 
     -- Set default if possible even if the convar could still overwrite it
     right:SetDefaultValue(data.default)
+    right:SetValue(data.initial)
     right:SetConVar(data.convar)
     right:SetServerConVar(data.serverConvar)
     right:SetDatabase(data.database)
@@ -416,7 +417,7 @@ function PANEL:MakeSlider(data)
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
 
-    return left
+    return right, left
 end
 
 ---
