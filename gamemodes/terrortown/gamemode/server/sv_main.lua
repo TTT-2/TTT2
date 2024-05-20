@@ -955,6 +955,9 @@ local function CleanUp()
     hook.Remove("PlayerSay", "ULXMeCheck")
 end
 
+---
+-- Stops the timers in order to restart a round.
+-- @realm server
 function StopRoundTimers()
     -- remove all timers
     timer.Stop("wait2prep")
