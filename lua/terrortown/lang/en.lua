@@ -366,7 +366,6 @@ Use on fresh corpses to get the killer's DNA and track them down.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
-L.magnet_help = "{primaryfire} to attach body to surface."
 
 -- Grenades and misc
 L.grenade_smoke = "Smoke grenade"
