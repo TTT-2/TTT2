@@ -19,6 +19,10 @@ local ADMIN_COMMAND_ARMOR = 7
 
 admin = admin or {}
 
+---
+-- Restarts the current round.
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.RoundRestart()
     if CLIENT then
         net.Start("TTT2AdminCommand")
@@ -32,6 +36,11 @@ function admin.RoundRestart()
     end
 end
 
+---
+-- Kills the given player.
+-- @param Player ply The player to kill
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.PlayerSlay(ply)
     if CLIENT then
         net.Start("TTT2AdminCommand")
@@ -45,6 +54,13 @@ function admin.PlayerSlay(ply)
     end
 end
 
+---
+-- Teleports a player to the provided position.
+-- @param Player ply The player to teleport
+-- @param Vector pos The position
+-- @note The player has to be alive to be teleported.
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.PlayerTeleport(ply, pos)
     if CLIENT then
         net.Start("TTT2AdminCommand")
@@ -63,6 +79,13 @@ function admin.PlayerTeleport(ply, pos)
     end
 end
 
+---
+-- Respawns a player at the provided position.
+-- @param Player ply The player to respawn
+-- @param Vector pos The position
+-- @note The player has to be dead to be respawned.
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.PlayerRespawn(ply, pos)
     if CLIENT then
         net.Start("TTT2AdminCommand")
@@ -81,6 +104,12 @@ function admin.PlayerRespawn(ply, pos)
     end
 end
 
+---
+-- Adds the given amount of credits to that player.
+-- @param Player ply The player to receive credits
+-- @param number The amount of credits the player should receive
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.PlayerAddCredits(ply, amount)
     if CLIENT then
         net.Start("TTT2AdminCommand")
@@ -95,6 +124,12 @@ function admin.PlayerAddCredits(ply, amount)
     end
 end
 
+---
+-- Sets the health of the given player.
+-- @param Player ply The player that should update their health
+-- @param number The amount of health the player should receive
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.PlayerSetHealth(ply, amount)
     if CLIENT then
         net.Start("TTT2AdminCommand")
@@ -109,6 +144,12 @@ function admin.PlayerSetHealth(ply, amount)
     end
 end
 
+---
+-- Sets the armor of the given player.
+-- @param Player ply The player that should update their armor
+-- @param number The amount of armor the player should receive
+-- @note When called on the client the local player had to be a super admin.
+-- @realm shared
 function admin.PlayerSetArmor(ply, amount)
     if CLIENT then
         net.Start("TTT2AdminCommand")
