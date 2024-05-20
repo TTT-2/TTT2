@@ -616,6 +616,17 @@ function PANEL:MakeBinder(data)
 
     local reset = MakeResetButton(self)
 
+    -- optional buttons
+    local toggle, run
+
+    if data.enableToggle then
+        toggle = MakeToggleButton(self, data)
+    end
+
+    if data.enableRun then
+        run = MakeRunButton(self, data)
+    end
+
     if data.default ~= nil then
         reset.DoClick = function(slf)
             right.binder:SetValue(data.default)
@@ -624,7 +635,7 @@ function PANEL:MakeBinder(data)
         reset.noDefault = true
     end
 
-    self:AddItem(left, right, reset)
+    self:AddItem(left, right, reset, toggle, run)
 
     if IsValid(data.master) and isfunction(data.master.AddSlave) then
         data.master:AddSlave(left)
@@ -634,6 +645,16 @@ function PANEL:MakeBinder(data)
         left:SetMaster(data.master)
         right:SetMaster(data.master)
         reset:SetMaster(data.master)
+
+        if IsValid(toggle) then
+            toggle:SetMaster(data.master)
+            data.master:AddSlave(toggle)
+        end
+
+        if IsValid(run) then
+            run:SetMaster(data.master)
+            data.master:AddSlave(run)
+        end
 
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
