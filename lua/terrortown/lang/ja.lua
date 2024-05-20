@@ -2252,3 +2252,14 @@ L.decoy_help_primary = "デコイを設置する"
 --
 --When this option is disabled, only players that can pick up credits can see them on a body.
 --When enabled, all players can see credits on a body.]]
+
+-- 2024-05-13
+--L.menu_commands_title = "Admin Commands"
+--L.menu_commands_description = "Change maps, spawn bots and edit player roles."
+
+--L.submenu_commands_maps_title = "Maps"
+
+--L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
+--L.header_maps_select = "Select and Change Maps"
+
+--L.button_change_map = "Change Map"
