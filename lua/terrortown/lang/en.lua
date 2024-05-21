@@ -2275,7 +2275,7 @@ L.header_commands_player_add_credits = "Add Equipment Credits"
 L.header_commands_player_set_health = "Set Health"
 L.header_commands_player_set_armor = "Set Armor"
 
-L.label_button_round_restart = "round resart"
+L.label_button_round_restart = "round restart"
 L.label_button_player_slay = "slay player"
 L.label_button_player_teleport = "teleport player"
 L.label_button_player_respawn = "respawn player"
