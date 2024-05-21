@@ -366,7 +366,6 @@ L.dna_desc = [[
 
 -- Magneto stick
 L.magnet_name = "マグネットスティック"
-L.magnet_help = "{primaryfire}で死体を貼り付ける"
 
 -- Grenades and misc
 L.grenade_smoke = "発煙弾"

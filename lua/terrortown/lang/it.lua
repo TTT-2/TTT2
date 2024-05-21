@@ -366,7 +366,6 @@ Usalo su giocatori appena uccisi per prendere il DNA dell'assassino e trovarli.]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
-L.magnet_help = "{primaryfire} per attaccare i corpi alle superfici."
 
 -- Grenades and misc
 L.grenade_smoke = "Granata fumogena"

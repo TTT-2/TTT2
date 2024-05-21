@@ -366,7 +366,6 @@ Użyj na świeżych zwłokach, by znaleźć DNA zabójcy i śledzić go.]]
 
 -- Magneto stick
 L.magnet_name = "Kijek magnetyczny"
-L.magnet_help = "{primaryfire}, aby przymocować ciało do powierzchni."
 
 -- Grenades and misc
 L.grenade_smoke = "Granat dymny"

@@ -366,7 +366,6 @@ Använd på färska lik för att få mördarens DNA och söka upp honom.]]
 
 -- Magneto stick
 L.magnet_name = "Magnetstav"
-L.magnet_help = "{primaryfire} för att sätta fast kropp på ytan."
 
 -- Grenades and misc
 L.grenade_smoke = "Rökgranat"

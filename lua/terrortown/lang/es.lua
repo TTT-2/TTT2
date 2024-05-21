@@ -366,7 +366,6 @@ Toma muestras de ADN a las cosas y úsalas para encontrar el dueño del ADN.
 
 -- Magneto stick
 L.magnet_name = "Magnetopalo"
-L.magnet_help = "{primaryfire} para colgar el cuerpo a una superficie."
 
 -- Grenades and misc
 L.grenade_smoke = "Granada de Humo"

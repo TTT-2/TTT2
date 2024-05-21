@@ -366,7 +366,6 @@ L.dna_desc = [[
 
 -- Magneto stick
 L.magnet_name = "Магнітна палиця"
-L.magnet_help = "Використовуйте {primaryfire}, щоб прикріпити тіло до поверхні."
 
 -- Grenades and misc
 L.grenade_smoke = "Димова шашка"

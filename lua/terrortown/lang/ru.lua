@@ -368,7 +368,6 @@ L.dna_desc = [[
 
 -- Magneto stick
 L.magnet_name = "Магнитопалка"
-L.magnet_help = "{primaryfire}: прикрепить тело к поверхности."
 
 -- Grenades and misc
 L.grenade_smoke = "Дымовая граната"
