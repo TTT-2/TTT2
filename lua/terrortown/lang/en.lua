@@ -2262,3 +2262,29 @@ L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
 L.header_maps_select = "Select and Change Maps"
 
 L.button_change_map = "Change Map"
+
+-- 2024-05-20
+L.submenu_commands_commands_title = "Commands"
+
+L.header_commands_round_restart = "Round Restart"
+L.header_commands_player_slay = "Slay Player"
+L.header_commands_player_teleport = "Teleport Player to Focused Point"
+L.header_commands_player_respawn = "Respawn Player at Focused Point"
+L.header_commands_player_add_credits = "Add Equipment Credits"
+L.header_commands_player_set_health = "Set Health"
+L.header_commands_player_set_armor = "Set Armor"
+
+L.label_button_round_restart = "round restart"
+L.label_button_player_slay = "slay player"
+L.label_button_player_teleport = "teleport player"
+L.label_button_player_respawn = "respawn player"
+L.label_button_player_add_credits = "add credits"
+L.label_button_player_set_health = "set health"
+L.label_button_player_set_armor = "set armor"
+
+L.label_slider_add_credits = "Set credit amount"
+L.label_slider_set_health = "Set health"
+L.label_slider_set_armor = "Set armor"
+
+L.label_player_select = "Select affected player"
+L.label_execute_command = "Execute command"
