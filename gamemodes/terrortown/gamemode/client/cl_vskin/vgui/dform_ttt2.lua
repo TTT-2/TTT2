@@ -465,7 +465,7 @@ function PANEL:MakeButton(data)
         left:DockMargin(left:GetIndentationMargin(), 0, 0, 0)
     end
 
-    return left
+    return right, left
 end
 
 ---

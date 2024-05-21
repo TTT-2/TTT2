@@ -47,6 +47,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
             admin.PlayerSlay(ply)
         end,
+        master = playerSlay,
     })
 
     -- TELEPORT PLAYER --
@@ -66,6 +67,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
             admin.PlayerTeleport(ply, LocalPlayer():GetEyeTrace().HitPos)
         end,
+        master = playerTeleport,
     })
 
     -- RESPAWN PLAYER --
@@ -85,6 +87,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
             admin.PlayerRespawn(ply, LocalPlayer():GetEyeTrace().HitPos)
         end,
+        master = playerRespawn,
     })
 
     -- ADD CREDITS --
@@ -102,6 +105,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         max = 25,
         decimal = 0,
         initial = 2,
+        master = playerCredits,
     })
 
     form5:MakeButton({
@@ -112,6 +116,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
             admin.PlayerAddCredits(ply, amountCredits:GetValue())
         end,
+        master = playerCredits,
     })
 
     -- SET HEALTH --
@@ -129,6 +134,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         max = 200,
         decimal = 0,
         initial = 100,
+        master = playerHealth,
     })
 
     form6:MakeButton({
@@ -139,6 +145,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
             admin.PlayerSetHealth(ply, amountHealth:GetValue())
         end,
+        master = playerHealth,
     })
 
     -- SET ARMOR --
@@ -156,6 +163,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
         max = 100,
         decimal = 0,
         initial = 30,
+        master = playerArmor,
     })
 
     form7:MakeButton({
@@ -166,5 +174,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
             admin.PlayerSetArmor(ply, amountArmor:GetValue())
         end,
+        master = playerArmor,
     })
 end
