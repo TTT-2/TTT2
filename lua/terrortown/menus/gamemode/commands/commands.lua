@@ -37,7 +37,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerSlay = form2:MakeComboBox({
         label = "label_player_select",
         choices = plyChoices,
-        selectValue = plyChoices[1].value,
     })
 
     form2:MakeButton({
@@ -57,7 +56,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerTeleport = form3:MakeComboBox({
         label = "label_player_select",
         choices = plyChoices,
-        selectValue = plyChoices[1].value,
     })
 
     form3:MakeButton({
@@ -77,7 +75,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerRespawn = form4:MakeComboBox({
         label = "label_player_select",
         choices = plyChoices,
-        selectValue = plyChoices[1].value,
     })
 
     form4:MakeButton({
@@ -97,7 +94,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerCredits = form5:MakeComboBox({
         label = "label_player_select",
         choices = plyChoices,
-        selectValue = plyChoices[1].value,
     })
 
     local amountCredits = form5:MakeSlider({
@@ -125,7 +121,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerHealth = form6:MakeComboBox({
         label = "label_player_select",
         choices = plyChoices,
-        selectValue = plyChoices[1].value,
     })
 
     local amountHealth = form6:MakeSlider({
@@ -153,7 +148,6 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerArmor = form7:MakeComboBox({
         label = "label_player_select",
         choices = plyChoices,
-        selectValue = plyChoices[1].value,
     })
 
     local amountArmor = form7:MakeSlider({
