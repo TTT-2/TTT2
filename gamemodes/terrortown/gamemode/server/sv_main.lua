@@ -236,7 +236,7 @@ local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVA
 ---
 -- @realm server
 -- stylua: ignore
-local ttt_newroles_enabled = CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
@@ -313,7 +313,7 @@ end)
 -- @local
 function GM:Initialize()
     Dev(1, "Trouble In Terrorist Town 2 gamemode initializing...")
-    ShowVersion()
+    admin.ShowVersion()
 
     -- Migrate all changes of TTT2
     migrations.Apply()
@@ -930,14 +930,19 @@ function GM:PostCleanupMap()
     -- This is necessary for maps like 'ttt_lttp_kakariko_a5', that only initialize 'ttt_random_weapon'-entities
     -- after destroying vases and were therefore not affected by our entspawn-system
     entspawn.SetForcedRandomSpawn(true)
+
+    door.SetUp()
+
     ---
     -- @realm server
     -- stylua: ignore
     hook.Run("TTT2PostCleanupMap")
 
-    door.SetUp()
-end
+    -- now that the map is cleaned up, the loading screen can be removed and the next round
+    -- can be triggered
+    loadingscreen.End()
 
+<<<<<<< Updated upstream
 local function CleanUp()
     game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
 
@@ -953,6 +958,9 @@ local function CleanUp()
 
     -- a different kind of cleanup
     hook.Remove("PlayerSay", "ULXMeCheck")
+=======
+    PrepareRound()
+>>>>>>> Stashed changes
 end
 
 ---
@@ -962,7 +970,7 @@ function StopRoundTimers()
     -- remove all timers
     timer.Stop("wait2prep")
     timer.Stop("prep2begin")
-    timer.Stop("end2prep")
+    timer.Stop("end2mapCleanup")
     timer.Stop("winchecker")
 end
 
@@ -1000,7 +1008,37 @@ function IncRoundEnd(incr)
 end
 
 ---
--- This @{function} calls @{GM:TTTPrepareRound} and is used to prepare the round
+-- This function is called from a timer in the post round hook. After this function the
+-- next round has to be started. To prevent issues with scruffed timers after long map
+-- cleanups this isn't done here, but in the @{GM:PostCleanupMap} hook.
+-- @realm server
+-- @internal
+function PostRoundCleanupAndPrepStart()
+    loadingscreen.Begin()
+
+    -- delay the cleanup a bit so that the client starts the loading screen animation before the
+    -- cleanup starts
+    -- note: delaying by a single tick seemed to be ineffective
+    timer.Simple(0.25, function()
+        game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+    end)
+
+    -- Strip players now, so that their weapons are not seen by ReplaceEntities
+    local plys = playerGetAll()
+
+    for i = 1, #plys do
+        local v = plys[i]
+
+        v:StripWeapons()
+        v:SetRole(ROLE_NONE) -- will reset team automatically
+    end
+
+    -- Remove ULX /me command. (the /me command is the only thing this hook does)
+    hook.Remove("PlayerSay", "ULXMeCheck")
+end
+
+---
+-- This function calls @{GM:TTTPrepareRound} and is used to prepare the round
 -- @realm server
 -- @internal
 function PrepareRound()
@@ -1023,8 +1061,6 @@ function PrepareRound()
 
         return
     end
-
-    CleanUp()
 
     GAMEMODE.roundCount = GAMEMODE.roundCount + 1
 
@@ -1346,7 +1382,7 @@ function CheckForMapSwitch()
     local nextmap = string.upper(game.GetMapNext())
 
     if roundsLeft <= 0 or timeLeft <= 0 then
-        timer.Stop("end2prep")
+        timer.Stop("end2mapCleanup")
         SetRoundEnd(CurTime())
 
         ---
@@ -1375,7 +1411,7 @@ function EndRound(result)
     local ptime = math.max(5, posttime:GetInt())
 
     LANG.Msg("win_showreport", { num = ptime })
-    timer.Create("end2prep", ptime, 1, PrepareRound)
+    timer.Create("end2mapCleanup", ptime, 1, PostRoundCleanupAndPrepStart)
 
     -- Piggyback on "round end" time global var to show end of phase timer
     SetRoundEnd(CurTime() + ptime)
@@ -1414,6 +1450,13 @@ function EndRound(result)
 
     ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
+
+net.Receive("TTT2FinishedReloading", function(_, ply)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2PlayerFinishedReloading", ply)
+end)
 
 ---
 -- Called when gamemode has been reloaded by auto refresh.
@@ -1478,70 +1521,12 @@ function GM:MapTriggeredEnd(wintype)
     end
 end
 
-hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
+function GM:PlayerAuthed(ply, steamid, uniqueid)
     net.Start("TTT2PlayerAuthedShared")
     net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
     net.WriteString((ply and ply:Nick()) or "UNKNOWN")
     net.Broadcast()
-end)
-
-local function ttt_roundrestart(ply, command, args)
-    ---
-    -- ply is nil on dedicated server console
-    -- @realm server
-    -- stylua: ignore
-    if not IsValid(ply) or ply:IsAdmin() or hook.Run("TTT2AdminCheck", ply) or cvars.Bool("sv_cheats", 0) then
-        LANG.Msg("round_restart")
-
-        StopRoundTimers()
-
-        -- do prep
-        PrepareRound()
-    else
-        ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
-    end
 end
-concommand.Add("ttt_roundrestart", ttt_roundrestart)
-
----
--- Version announce also used in Initialize
--- @param Player ply
--- @realm server
-function ShowVersion(ply)
-    local text = Format(
-        "This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n",
-        GAMEMODE.Version
-    )
-
-    if IsValid(ply) then
-        ply:PrintMessage(HUD_PRINTNOTIFY, text)
-    else
-        Msg(text)
-    end
-end
-concommand.Add("ttt_version", ShowVersion)
-
-local function ttt_toggle_newroles(ply)
-    if not ply:IsAdmin() then
-        return
-    end
-
-    local b = not ttt_newroles_enabled:GetBool()
-
-    ttt_newroles_enabled:SetBool(b)
-
-    local word = b and "enabled" or "disabled"
-
-    ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
-end
-concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
-
-net.Receive("TTT2FinishedReloading", function(_, ply)
-    ---
-    -- @realm server
-    -- stylua: ignore
-    hook.Run("TTT2PlayerFinishedReloading", ply)
-end)
 
 ---
 -- This hook is used to sync the global networked vars. It is run in @{GM:SyncGlobals} after the

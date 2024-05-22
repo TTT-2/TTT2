@@ -31,8 +31,10 @@ function admin.RoundRestart()
     end
 
     if SERVER then
+        LANG.Msg("round_restart")
+
         StopRoundTimers()
-        PrepareRound()
+        PostRoundCleanupAndPrepStart()
     end
 end
 
@@ -192,4 +194,27 @@ if SERVER then
             admin.PlayerSetArmor(net.ReadPlayer(), net.ReadUInt(16))
         end
     end)
+
+    ---
+    -- Version announce also used in Initialize
+    -- @param Player ply
+    -- @realm server
+    function admin.ShowVersion(ply)
+        local text = Format(
+            "This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n",
+            GAMEMODE.Version
+        )
+
+        if IsValid(ply) then
+            LANG.Msg(ply, text, nil, MSG_MSTACK_WARN)
+        else
+            Msg(text)
+        end
+    end
+
+    -- CLASSIC TTT COMMANDS
+
+    concommand.Add("ttt_roundrestart", admin.RoundRestart)
+
+    concommand.Add("ttt_version", admin.ShowVersion)
 end
