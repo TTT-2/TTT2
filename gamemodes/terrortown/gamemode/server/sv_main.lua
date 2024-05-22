@@ -922,6 +922,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
+    loadingscreen.End()
+
     entityOutputs.SetUp()
 
     entspawn.HandleSpawns()
@@ -939,7 +941,14 @@ function GM:PostCleanupMap()
 end
 
 local function CleanUp()
-    game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+    loadingscreen.Begin()
+
+    -- delay the cleanup a bit so that the client starts the loading screen animation before the
+    -- cleanup starts
+    -- note: delaying by a single tick seemed to be ineffective
+    timer.Simple(0.05, function()
+        game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+    end)
 
     -- Strip players now, so that their weapons are not seen by ReplaceEntities
     local plys = playerGetAll()

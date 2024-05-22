@@ -89,6 +89,8 @@ end
 -- @local
 function GM:PostDrawHUD()
     vguihandler.DrawBackground()
+
+    loadingscreen.Handler()
 end
 
 ---

@@ -248,6 +248,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
+    loadingscreen.End()
+
     ---
     -- @realm client
     -- stylua: ignore
@@ -689,6 +691,8 @@ local color_trans = Color(0, 0, 0, 0)
 -- @hook
 -- @realm client
 function GM:CleanUpMap()
+    loadingscreen.Begin()
+
     --remove thermal vision
     thermalvision.Clear()
 
@@ -711,8 +715,6 @@ function GM:CleanUpMap()
         -- modify the collision group clientside.
         ent.NoTarget = true
     end
-
-    game.CleanUpMap()
 end
 
 -- server tells us to call this when our LocalPlayer has spawned
