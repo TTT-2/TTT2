@@ -16,9 +16,6 @@ loadingscreen.wasInReloading = false
 loadingscreen.disableSounds = false
 
 function loadingscreen.Begin()
-    loadingscreen.isInReloading = true
-    loadingscreen.disableSounds = true
-
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
     if SERVER then
@@ -27,10 +24,16 @@ function loadingscreen.Begin()
     end
 
     if CLIENT then
+        timer.Remove("TTT2LoadingscreenShow")
+        timer.Remove("TTT2LoadingscreenHide")
+
         loadingscreen.currentTipText, loadingscreen.currentTipKeys = tips.GetRandomTip()
 
         MSTACK:ClearMessages()
     end
+
+    loadingscreen.isInReloading = true
+    loadingscreen.disableSounds = true
 end
 
 function loadingscreen.End()
@@ -66,9 +69,6 @@ if CLIENT then
 
     local durationStateChange = 0.35
 
-    local colorLoadingScreen = Color(170, 210, 245, 255)
-    local colorTip = Color(255, 255, 255, 255)
-
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()
 
@@ -82,7 +82,7 @@ if CLIENT then
             loadingscreen.state = LS_FADE_IN
             loadingscreen.timeStateChange = SysTime()
 
-            timer.Simple(durationStateChange, function()
+            timer.Create("TTT2LoadingscreenShow", durationStateChange, 1, function()
                 loadingscreen.state = LS_SHOWN
                 loadingscreen.timeStateChange = SysTime()
             end)
@@ -94,7 +94,7 @@ if CLIENT then
             loadingscreen.state = LS_FADE_OUT
             loadingscreen.timeStateChange = SysTime()
 
-            timer.Simple(durationStateChange * 2, function()
+            timer.Create("TTT2LoadingscreenHide", durationStateChange * 2, 1, function()
                 loadingscreen.state = LS_HIDDEN
                 loadingscreen.timeStateChange = SysTime()
             end)
@@ -120,7 +120,10 @@ if CLIENT then
                 - math.min((SysTime() - loadingscreen.timeStateChange) / durationStateChange, 1.0)
         end
 
-        colorLoadingScreen.a = 160 * progress
+        local c = vskin.GetBackgroundColor()
+
+        local colorLoadingScreen = Color(c.r, c.g, c.b, 220 * progress)
+        local colorTip = table.Copy(util.GetDefaultColor(colorLoadingScreen))
         colorTip.a = 255 * progress
 
         draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 5)
