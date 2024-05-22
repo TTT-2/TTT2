@@ -944,7 +944,7 @@ local function CleanUp()
     -- delay the cleanup a bit so that the client starts the loading screen animation before the
     -- cleanup starts
     -- note: delaying by a single tick seemed to be ineffective
-    timer.Simple(0.05, function()
+    timer.Simple(0.25, function()
         game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
     end)
 
