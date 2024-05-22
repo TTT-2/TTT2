@@ -202,7 +202,7 @@ function PANEL:Init()
     self.ply_groups[GROUP_TERROR] = t
 
     t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
-    t:SetGroupInfo(GetTranslation("spectators"), Color(200, 200, 0, 100), GROUP_SPEC)
+    t:SetGroupInfo(GetTranslation("spectators"), COLOR_SPEC, GROUP_SPEC)
     self.ply_groups[GROUP_SPEC] = t
 
     if DetectiveMode() then

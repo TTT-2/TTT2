@@ -87,7 +87,7 @@ if CLIENT then
             c = tm.color or COLOR_BLACK
         else -- player is dead and spectator
             icon = material_watching
-            c = COLOR_WARMGRAY
+            c = COLOR_SPEC
         end
 
         -- draw dark bottom overlay
