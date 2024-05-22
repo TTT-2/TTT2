@@ -116,6 +116,9 @@ function MSTACK:AddMessage(text, traitor_only)
     end
 end
 
+---
+-- Clears the whole MStack message buffer and resets the counter to 0.
+-- @realm client
 function MSTACK:ClearMessages()
     MSTACK.msgs = {}
     MSTACK.last = 0
