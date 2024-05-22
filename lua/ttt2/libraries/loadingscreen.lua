@@ -32,7 +32,7 @@ function loadingscreen.End()
 
     if SERVER then
         -- disables sounds a while longer so it stays muted
-        timer.Simple(2, function()
+        timer.Simple(1.5, function()
             loadingscreen.disableSounds = false
         end)
     end
