@@ -694,8 +694,6 @@ local color_trans = Color(0, 0, 0, 0)
 -- @hook
 -- @realm client
 function GM:CleanUpMap()
-    loadingscreen.Begin()
-
     --remove thermal vision
     thermalvision.Clear()
 
