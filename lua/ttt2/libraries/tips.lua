@@ -11,6 +11,11 @@ end
 tips = {}
 tips.registry = {}
 
+---
+-- Registers a new tip and adds it to the tip registry.
+-- @param string tip The tip string that can be translated
+-- @param table keys A table of the keys used in this tip if there are any
+-- @realm client
 function tips.Register(tip, keys)
     tips.registry[#tips.registry + 1] = {
         tip = tip,
@@ -18,12 +23,21 @@ function tips.Register(tip, keys)
     }
 end
 
+---
+-- Gets a random tip from the list of all available tips.
+-- @return string The tip string that can be translated
+-- @return table A table of the keys used in this tip if there are any
+-- @realm client
 function tips.GetRandomTip()
     local tip = tips.registry[math.random(#tips.registry)]
 
     return tip.tip, tip.keys or {}
 end
 
+---
+-- Initializes the built-in tips.
+-- @internal
+-- @realm client
 function tips.Initialize()
     tips.Register("tip1", { walkkey = Key("+walk", "WALK"), usekey = Key("+use", "USE") })
     tips.Register("tip2")
