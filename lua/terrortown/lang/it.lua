@@ -524,67 +524,45 @@ L.tip8 = "Traditori e Detective possono collezionare crediti non spesi dai cadav
 
 L.tip9 = "Il Poltergeist può trasformare qualsiasi oggetto in un proiettile mortale. Ogni colpo è accompagnato da una scarica di energia ferendo tutti quanti nei dintorni."
 
-L.tip10 = "Come Traditore o Detective, tieni d'occhio i messaggi rossi in alto a destra. Saranno importanti per te."
+L.tip11 = "Il DNA Scanner dei Detective DNA Scanner può essere usato per prendere campioni di DNA da armi e oggetti e scansionarli per trovare chi li ha usati. Utile prendere un campione da un cadavere o da un C4 disinnescato!"
 
-L.tip11 = "Come Traditore o Detective, tieni a mente che riceverai altri crediti se i tuoi compagni giocheranno bene. Ricordati di spenderli!"
+L.tip12 = "Quando sei vicino ad uccidere qualcuno, un po' del tuo DNA rimane sul cadavere. Questo DNA può essere usato dal DNA Scanner del Detective per trovarti. Meglio nascondere i cadaveri dopo averli accoltellati!"
 
-L.tip12 = "Il DNA Scanner dei Detective DNA Scanner può essere usato per prendere campioni di DNA da armi e oggetti e scansionarli per trovare chi li ha usati. Utile prendere un campione da un cadavere o da un C4 disinnescato!"
+L.tip13 = "Più sarai lontano dalla persona che uccidi, più velocemente il DNA sul corpo si deteriorerà."
 
-L.tip13 = "Quando sei vicino ad uccidere qualcuno, un po' del tuo DNA rimane sul cadavere. Questo DNA può essere usato dal DNA Scanner del Detective per trovarti. Meglio nascondere i cadaveri dopo averli accoltellati!"
+L.tip16 = "Gli innocenti sono tutti raggruppati e difficili da trovare soli? Prova ad usare la Radio e fare i suoni di un C4 o di una sparatoria per farli scappare."
 
-L.tip14 = "Più sarai lontano dalla persona che uccidi, più velocemente il DNA sul corpo si deteriorerà."
+L.tip18 = "Come Detective, se ti rimangono dei crediti potresti dare ad un Innocente fidato un Disinnescatore. Poi puoi spendere tempo facendo investigazioni serie e lasciare il pericoloso disinnescaggio a loro."
 
-L.tip15 = "Sei un Traditore e vuoi sparare con il cecchino? Prova ad usare il Trasferimento. Se non colpisci, scappa in un posto sicuro, disabilita il Travestimento, e nessuno saprà che gli stavi sparando."
+L.tip19 = "Il binocolo dei Detective permette di identificare cadaveri a distanza. Brutte notizie se i Traditori speravano di usare questo cadavere come esca. Ovviamente, mentre usa il Binocolo un Detective è disarmato e distratto..."
 
-L.tip16 = "Come Traditore, il Teletrasporto può aiutarti a scappare quando inseguito, e ti permette di viaggiare velocemente in una mappa grande. Assicurati che tu abbia sempre una posizione sicura segnalata."
+L.tip20 = "La Stazione di Cura dei Detective fa curare i giocatori feriti. Ovviamente, potrebbero essere Traditori..."
 
-L.tip17 = "Gli innocenti sono tutti raggruppati e difficili da trovare soli? Prova ad usare la Radio e fare i suoni di un C4 o di una sparatoria per farli scappare."
+L.tip21 = "La Stazione di Cura registra il campione di DNA di chiunque la usa. I Detective possano usare il DNA Scanner per scoprire chi si è curato."
 
-L.tip18 = "Usando la Radio da Traditore, puoi far partire i suoni tramite il menù dopo aver piazzato la radio. Metti in coda diversi suoni cliccandoli più volte nell'ordine in cui li vuoi."
+L.tip22 = "Al contrario delle armi e del C4, la Radio dei Traditori non contiene campioni di DNA di chi l'ha piazzata. Non preoccupatevi che i Detective al trovino e facciano saltare la vostra copertura."
 
-L.tip19 = "Come Detective, se ti rimangono dei crediti potresti dare ad un Innocente fidato un Disinnescatore. Poi puoi spendere tempo facendo investigazioni serie e lasciare il pericoloso disinnescaggio a loro."
+L.tip24 = "Quando un Detective identifica un corpo, il risultato è disponibile per tutti sullo scoreboard, cliccando il nome della persona morta."
 
-L.tip20 = "Il binocolo dei Detective permette di identificare cadaveri a distanza. Brutte notizie se i Traditori speravano di usare questo cadavere come esca. Ovviamente, mentre usa il Binocolo un Detective è disarmato e distratto..."
+L.tip25 = "Nello scoreboard, una magnifica icona di vetro vicino al nome di qualcuno indica che hai delle informazioni su quella persona. Se l'icona è chiara, le informazioni vengono da un Detective e potrebbero essere più complete."
 
-L.tip21 = "La Stazione di Cura dei Detective fa curare i giocatori feriti. Ovviamente, potrebbero essere Traditori..."
+L.tip27 = "Gli Spettatori possono premere {mutekey} per mutare altri spettatori o i giocatori in vita."
 
-L.tip22 = "La Stazione di Cura registra il campione di DNA di chiunque la usa. I Detective possano usare il DNA Scanner per scoprire chi si è curato."
+L.tip29 = "Chat veloce o i comandi 'radio' possono essere usati con il tasto {zoomkey}."
 
-L.tip23 = "Al contrario delle armi e del C4, la Radio dei Traditori non contiene campioni di DNA di chi l'ha piazzata. Non preoccupatevi che i Detective al trovino e facciano saltare la vostra copertura."
+L.tip30 = "Il fuoco secondario della Crowbar spingerà gli altri giocatori."
 
-L.tip24 = "Premi {helpkey} per vedere un piccolo tutorial o modifica alcune impostazioni di TTT. Per esempio, puoi disabilitare questi consigli."
+L.tip31 = "Sparare dal mirino di ferro di un'arma migliora leggermente la tua precisione e diminuisci il rinculo. Abbassarti non lo fa."
 
-L.tip25 = "Quando un Detective identifica un corpo, il risultato è disponibile per tutti sullo scoreboard, cliccando il nome della persona morta."
+L.tip32 = "Le granate fumogene sono efficienti in luoghi chiusi, specialmente per creare confusione in stanze con molte persone."
 
-L.tip26 = "Nello scoreboard, una magnifica icona di vetro vicino al nome di qualcuno indica che hai delle informazioni su quella persona. Se l'icona è chiara, le informazioni vengono da un Detective e potrebbero essere più complete."
+L.tip33 = "Come Traditore, ricorda che puoi prendere i cadaveri e nasconderli dagli occhi degli Innocenti e dei Detective."
 
-L.tip27 = "Come Detective, i cadaveri con una magnifica icona di vetro vicino al nome di qualcuno indica che sono stati identificati da un Detective e i risultati sono disponibili a tutti tramite lo scoreboard."
+L.tip34 = "Nello scoreboard, clicca il nome di un giocatore in vita e potrai selezionare un tag per loro, come 'sospetto' o 'amico'. Questo tag si vedrà quando li miri."
 
-L.tip28 = "Gli Spettatori possono premere {mutekey} per mutare altri spettatori o i giocatori in vita."
+L.tip35 = "Molti degli oggetti che si possono piazzare (come C4, Radio) posso essere attacati ai muri usando il fuoco secondario."
 
-L.tip29 = "Se il server ha installate altre lingue, puoi cambiare lingua in ogni momento dal menù delle Impostazioni."
-
-L.tip30 = "Chat veloce o i comandi 'radio' possono essere usati con il tasto {zoomkey}."
-
-L.tip31 = "Come Spettatore, premi {duckkey} per sbloccare il cursore del mouse e clicca i bottoni su questa finestra dei consigli. Premi {duckkey} ancora per muovere la visuale."
-
-L.tip32 = "Il fuoco secondario della Crowbar spingerà gli altri giocatori."
-
-L.tip33 = "Sparare dal mirino di ferro di un'arma migliora leggermente la tua precisione e diminuisci il rinculo. Abbassarti non lo fa."
-
-L.tip34 = "Le granate fumogene sono efficienti in luoghi chiusi, specialmente per creare confusione in stanze con molte persone."
-
-L.tip35 = "Come Traditore, ricorda che puoi prendere i cadaveri e nasconderli dagli occhi degli Innocenti e dei Detective."
-
-L.tip36 = "Il tutorial disponibile premendo {helpkey} contiene una descrizione sui tasti più importanti di questa modalità."
-
-L.tip37 = "Nello scoreboard, clicca il nome di un giocatore in vita e potrai selezionare un tag per loro, come 'sospetto' o 'amico'. Questo tag si vedrà quando li miri."
-
-L.tip38 = "Molti degli oggetti che si possono piazzare (come C4, Radio) posso essere attacati ai muri usando il fuoco secondario."
-
-L.tip39 = "Il C4 che esplode per errore durante le operazione di disinnescamento ha un'esplosione più piccola di quando esplode perché è scaduto il tempo."
-
-L.tip40 = "Se dice 'SUPPLEMENTARI' sopra il tempo del round, il round all'inizio durerà solo qualche minuto, ma con ogni uccisione il tempo a disposizione aumenterà (come catturare un punto su TF2). Questa modalità mette pressione ai traditori, così che facciano in fretta."
+L.tip36 = "Il C4 che esplode per errore durante le operazione di disinnescamento ha un'esplosione più piccola di quando esplode perché è scaduto il tempo."
 
 -- Round report
 L.report_title = "Report del Round"

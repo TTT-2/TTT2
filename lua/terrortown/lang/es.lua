@@ -524,67 +524,47 @@ L.tip8 = "Los traidores y los detectives pueden recolectar créditos no gastados
 
 L.tip9 = "El Poltergeist puede convertir cualquier objeto en un proyectil mortal. Cada golpe está acompañado de energía que hará daño a las personas cercanas."
 
-L.tip10 = "Como traidor o detective, mantén un ojo en los mensajes rojos en la parte superior derecha de la pantalla. Comúnmente son información importante para tí."
+L.tip11 = "El escáner ADN de los detectives puede ser usado para obtener muestras de ADN de armas y objetos y luego obtener la posición de la persona que las utilizó ¡Muy útil cuando puedes obtener ADN de un C4 o un cadáver!"
 
-L.tip11 = "Como traidor o detective, recuerda que eres recompensado con créditos si cumples con tu trabajo ¡Recuerda utilizarlos!"
+L.tip12 = "Cuando estés cerca de alguien que asesinaste, algo de tu ADN queda en el cuerpo. Este ADN puede ser usado para encontrar tu posición actual por el detective ¡Mejor esconde bien el cuerpo!"
 
-L.tip12 = "El escáner ADN de los detectives puede ser usado para obtener muestras de ADN de armas y objetos y luego obtener la posición de la persona que las utilizó ¡Muy útil cuando puedes obtener ADN de un C4 o un cadáver!"
+L.tip13 = "Mientras más lejos estés de la persona que asesinaste más rápido se deteriorará la muestra de ADN restante en su cadáver."
 
-L.tip13 = "Cuando estés cerca de alguien que asesinaste, algo de tu ADN queda en el cuerpo. Este ADN puede ser usado para encontrar tu posición actual por el detective ¡Mejor esconde bien el cuerpo!"
+L.tip16 = "¿Los inocentes están todos juntos y es difícil matarlos? Considera usar la radio con sonidos de C4 o Disparos para separarlos."
 
-L.tip14 = "Mientras más lejos estés de la persona que asesinaste más rápido se deteriorará la muestra de ADN restante en su cadáver."
+L.tip18 = "Como detective, si te sobran créditos, puedes darle a un inocente un Kit de Desactivación. De esta manera puedes gastar tu tiempo en otra cosa, dejando a cargo a un inocente para los C4."
 
-L.tip15 = "¿Eres un traidor y atacás a la distancia? Considera usar el disfraz. Sino conectas un disparo, corre a una posición segura, desactiva el disfraz, y de esa manera nadie sabrá que el que intentó disparar eras tú."
+L.tip19 = "Los binoculares de los detectives permiten inspeccionar cuerpos a la distancia. Malas noticias si los traidores pensaban usar ese cuerpo como carnada. Claro, los detectives están desarmados al utilizar los binoculares..."
 
-L.tip16 = "Como traidor, el teletransportador puede ayudarte cuando te están persiguiendo y te permite desplazarte grandes distancias. Mantén siempre una posición segura seleccionada."
+L.tip20 = "La estación de salud de los detectives. Obviamente, esos curados pueden ser traidores..."
 
-L.tip17 = "¿Los inocentes están todos juntos y es difícil matarlos? Considera usar la radio con sonidos de C4 o Disparos para separarlos."
+L.tip21 = "La estación de salud toma una muestra de ADN de todo aquel que la use. Los detectives pueden usar un escáner ADN para analizar estas muestras."
 
-L.tip18 = "Para usar la Radio como traidor, debes acceder al menú de equipamiento y reproducir los sonidos después de haberla puesto. Pon múltiples sonidos en cola clickeando cada uno de ellos."
+L.tip22 = "A diferencia de las armas y el C4, la radio de traidores no deja marcas de ADN. No te preocupes si la encuentran y la rompen."
 
-L.tip19 = "Como detective, si te sobran créditos, puedes darle a un inocente un Kit de Desactivación. De esta manera puedes gastar tu tiempo en otra cosa, dejando a cargo a un inocente para los C4."
+L.tip24 = "Cuando un detective inspecciona un cuerpo, los resultados son visibles por cualquier persona en la tabla de puntuaciones haciendo click en la persona muerta."
 
-L.tip20 = "Los binoculares de los detectives permiten inspeccionar cuerpos a la distancia. Malas noticias si los traidores pensaban usar ese cuerpo como carnada. Claro, los detectives están desarmados al utilizar los binoculares..."
+L.tip25 = "En la tabla de puntuaciones, un ícono de lupa sale al lado del nombre de las personas si la inspeccionaste. Si el ícono brilla, significa que esa información viene de un detective y contiene datos adicionales."
 
-L.tip21 = "La estación de salud de los detectives. Obviamente, esos curados pueden ser traidores..."
+L.tip27 = "Los espectadores pueden presionar {mutekey} para variar el estado de silenciado."
 
-L.tip22 = "La estación de salud toma una muestra de ADN de todo aquel que la use. Los detectives pueden usar un escáner ADN para analizar estas muestras."
+L.tip29 = "El chat rápido o la 'radio' puede ser usada con {zoomkey}."
 
-L.tip23 = "A diferencia de las armas y el C4, la radio de traidores no deja marcas de ADN. No te preocupes si la encuentran y la rompen."
+L.tip30 = "El click secundario de la Crowbar empuja a las personas."
 
-L.tip24 = "Pulsa {helpkey} para ver el tutorial o cambiar configuraciones. Por ejemplo, puedes desactivar estos consejos."
+L.tip31 = "Disparar a través de la mira aumenta la precisión y reduce el retroceso. Agacharse no ayuda."
 
-L.tip25 = "Cuando un detective inspecciona un cuerpo, los resultados son visibles por cualquier persona en la tabla de puntuaciones haciendo click en la persona muerta."
+L.tip32 = "Las granadas de humo son útiles en espacios cerrados. Especialmente en las salas con laberintos o varios pasillos."
 
-L.tip26 = "En la tabla de puntuaciones, un ícono de lupa sale al lado del nombre de las personas si la inspeccionaste. Si el ícono brilla, significa que esa información viene de un detective y contiene datos adicionales."
+L.tip33 = "Como traidor, recuerda que puedes arrastrar los cuerpos para que nunca sean encontrados por un detective o inocente."
 
-L.tip27 = "Como detective, verás una lupa si el cuerpo fue inspeccionado por ti mismo en la tabla de puntuaciones. Además, esta información será visible para los demás jugadores."
+L.tip34 = "En la tabla de puntuaciones, puedes etiquetar a las personas como 'sospechosos' o 'amigos'. Esta etiqueta te puede servir a la hora de combatir o apuntarles."
 
-L.tip28 = "Los espectadores pueden presionar {mutekey} para variar el estado de silenciado."
+L.tip35 = "La mayoría de objetos que se pueden soltar son también acoplables a la pared usando el click secundario."
 
-L.tip29 = "Si el servidor tiene distintos idiomas instalados, puedes cambiarlo en el menú de configuraciones."
+L.tip36 = "Los C4 que explotan for una falla en la desactivación tienen un radio menor que los que explotan naturalmente."
 
-L.tip30 = "El chat rápido o la 'radio' puede ser usada con {zoomkey}."
-
-L.tip31 = "Como espectador puedes presionar {duckkey} para desbloquear el cursor y ver los distintos consejos. Presiona {duckkey} de vuelta para volver al control de la cámara."
-
-L.tip32 = "El click secundario de la Crowbar empuja a las personas."
-
-L.tip33 = "Disparar a través de la mira aumenta la precisión y reduce el retroceso. Agacharse no ayuda."
-
-L.tip34 = "Las granadas de humo son útiles en espacios cerrados. Especialmente en las salas con laberintos o varios pasillos."
-
-L.tip35 = "Como traidor, recuerda que puedes arrastrar los cuerpos para que nunca sean encontrados por un detective o inocente."
-
-L.tip36 = "El tutorial disponible con {helpkey} contiene información importante de la clave de este modo de juego."
-
-L.tip37 = "En la tabla de puntuaciones, puedes etiquetar a las personas como 'sospechosos' o 'amigos'. Esta etiqueta te puede servir a la hora de combatir o apuntarles."
-
-L.tip38 = "La mayoría de objetos que se pueden soltar son también acoplables a la pared usando el click secundario."
-
-L.tip39 = "Los C4 que explotan for una falla en la desactivación tienen un radio menor que los que explotan naturalmente."
-
-L.tip40 = "Si dice 'MODO PRISA' la ronda inicial tendrá menos tiempo que de lo común, pero con cada muerte el tiempo incrementa. Este modo presiona a los traidores a mantenerse activos."
+L.tip37 = "Si dice 'MODO PRISA' la ronda inicial tendrá menos tiempo que de lo común, pero con cada muerte el tiempo incrementa. Este modo presiona a los traidores a mantenerse activos."
 
 -- Round report
 L.report_title = "Reporte de Ronda"

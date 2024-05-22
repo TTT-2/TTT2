@@ -125,7 +125,11 @@ if CLIENT then
         draw.Box(0, 0, ScrW(), ScrH(), colorLoadingScreen)
 
         local textWrapped, _, heightText = draw.GetWrappedText(
-            LANG.GetParamTranslation(loadingscreen.currentTipText, loadingscreen.currentTipKeys),
+            LANG.TryTranslation("tips_panel_tip")
+                .. LANG.GetParamTranslation(
+                    loadingscreen.currentTipText,
+                    loadingscreen.currentTipKeys
+                ),
             0.6 * ScrW(),
             "PureSkinRole",
             appearance.GetGlobalScale()

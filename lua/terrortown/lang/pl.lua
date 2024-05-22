@@ -524,67 +524,45 @@ L.tip8 = "Zdrajcy i detektywi mogą zbierać niewykorzystany sprzęt i kredyty z
 
 L.tip9 = "Poltergeist może zmienić każdy fizyczny obiekt w śmiercionośny pocisk. Każdemu uderzeniu towarzyszy uderzenie energii, które rani pobliskie osoby."
 
-L.tip10 = "Jako Zdrajca i Detektyw, miej na oku czerwone wiadomości w górnym prawym rogu. Będą dla ciebie ważne."
+L.tip11 = "DNA Skaner detektywów może służyć do zbierania próbek DNA z broni i przedmiotów i potem skanowania, by zobaczyć lokalizacje ich właściela. Przydatne kiedy masz próbkę z martwego ciała lub rozbrojonej bomby!"
 
-L.tip11 = "Jako Zdrajca i Detektyw, pamiętaj, że otrzymasz dodatkowe kredyty, jeśli ty i twoi towarzysze osiągniecie dobre wyniki. Pamiętaj by je zużyć na coś przydatnego!"
+L.tip12 = "Kiedy jesteś blisko osoby którą mordujesz, trochę twojego DNA zostaje na ciele. To DNA może posłużyć detektywowi by zobaczyć twoją aktualną lokalizacje przy pomocy DNA skanera. Lepiej schowaj ciało, kiedy kogoś zanożujesz!"
 
-L.tip12 = "DNA Skaner detektywów może służyć do zbierania próbek DNA z broni i przedmiotów i potem skanowania, by zobaczyć lokalizacje ich właściela. Przydatne kiedy masz próbkę z martwego ciała lub rozbrojonej bomby!"
+L.tip13 = "Im dalej jesteś od osoby, którą mordujesz, tym szybciej twoja próbka DNA się zepsuje."
 
-L.tip13 = "Kiedy jesteś blisko osoby którą mordujesz, trochę twojego DNA zostaje na ciele. To DNA może posłużyć detektywowi by zobaczyć twoją aktualną lokalizacje przy pomocy DNA skanera. Lepiej schowaj ciało, kiedy kogoś zanożujesz!"
+L.tip16 = "Niewinni są wszyscy w grupie i trudni do zdjęcia? Zastanów się nad wypróbowaniem Radia, aby odtworzyć dźwięki C4 lub strzelaniny, aby rozbiegli się w panice."
 
-L.tip14 = "Im dalej jesteś od osoby, którą mordujesz, tym szybciej twoja próbka DNA się zepsuje."
+L.tip18 = "Jako detektyw, jeśli posiadasz niewykorzystane kredyty, możesz dać zaufanej osobie rozbrajacz. Następnie możesz spędzić czas na poważnych pracach dochodzeniowych i pozostawić ryzykowne rozbrajanie bomb innym."
 
-L.tip15 = "Jako zdrajca będziesz snajpił? Zastanów się nad wypróbowaniem przebrania. Jeśli spudłujesz, ucieknij do bezpiecznego miejsca, wyłącz przebranie i nikt nie będzie wiedział, że to ty strzelałeś"
+L.tip19 = "Lornetka detektywów pozwala długo dysanstowe szukanie i indetyfukowanie zwłok. Złe wieści, jeśli zdrajcy mieli nadzieję użyć zwłok jako przynęty. Oczywiście podczas korzystania z lornetki detektyw jest nieuzbrojony i rozproszony..."
 
-L.tip16 = "Jak Zdrajca, Teleporter może pomóc ci uciec, gdy jesteś ścigany, i pozwala ci szybko podróżować po dużej mapie. Zawsze upewnij się, że masz zanzaczoną bepieczną lokalizacje teleportacji."
+L.tip20 = "Stacja lecząca detektywów pomoże poobijanym graczom się wyleczyć. Oczywiście poobijanymi osobami mogą być zdrajcy..."
 
-L.tip17 = "Niewinni są wszyscy w grupie i trudni do zdjęcia? Zastanów się nad wypróbowaniem Radia, aby odtworzyć dźwięki C4 lub strzelaniny, aby rozbiegli się w panice."
+L.tip21 = "Stacja lecząca pobiera próbki DNA wszystkich jej użytkowników. Detektyw może użyć z DNA skanerem i znaleźć tego go się nią leczył ."
 
-L.tip18 = "Używając radia jako zdrajca, możesz puszczać dźwięki przez twoje menu ekwipunku, kiedy radio jest położone. Ustaw wiele dźwięków w kolejce, klikając wiele przycisków w żądanej kolejności."
+L.tip22 = "W przeciwieństwie do broni i C4, radio zdrajców nie zawiera próbki DNA osoby, która je postawiła. Nie martw się, że detektywi je znajdą i zepsują twoją przykrywkę."
 
-L.tip19 = "Jako detektyw, jeśli posiadasz niewykorzystane kredyty, możesz dać zaufanej osobie rozbrajacz. Następnie możesz spędzić czas na poważnych pracach dochodzeniowych i pozostawić ryzykowne rozbrajanie bomb innym."
+L.tip24 = "Kiedy detektyw przeszuka ciało, rezultaty będą dostępne dla wszystkich przez klniknięcie nicku martwej osoby na tabeli wyników."
 
-L.tip20 = "Lornetka detektywów pozwala długo dysanstowe szukanie i indetyfukowanie zwłok. Złe wieści, jeśli zdrajcy mieli nadzieję użyć zwłok jako przynęty. Oczywiście podczas korzystania z lornetki detektyw jest nieuzbrojony i rozproszony..."
+L.tip25 = "W tabeli wyników ikona lupy obok czyjegoś imienia wskazuje, że masz informacje o przeszukaniu tej osoby. Jeśli ikona jest jasna, dane pochodzą od detektywa i mogą zawierać dodatkowe przydatne informacje."
 
-L.tip21 = "Stacja lecząca detektywów pomoże poobijanym graczom się wyleczyć. Oczywiście poobijanymi osobami mogą być zdrajcy..."
+L.tip27 = "Obserwatorzy mogą kliknąć {mutekey} by wyciszyć innych obserwatorów lub żywych graczy."
 
-L.tip22 = "Stacja lecząca pobiera próbki DNA wszystkich jej użytkowników. Detektyw może użyć z DNA skanerem i znaleźć tego go się nią leczył ."
+L.tip29 = "Szybki-chat albo komendy 'radia' mogą zostać użyte przez kliknięcie {zoomkey}."
 
-L.tip23 = "W przeciwieństwie do broni i C4, radio zdrajców nie zawiera próbki DNA osoby, która je postawiła. Nie martw się, że detektywi je znajdą i zepsują twoją przykrywkę."
+L.tip30 = "Drugi atak łomu odpycha innych graczy."
 
-L.tip24 = "Kliknij {helpkey} by zobaczyć szybki tutorial albo edytować jakieś ustawienia TTT. Na przykład, możesz wyłączyć na zawsze podpowiedzi w grze."
+L.tip31 = "Celowanie przez celowniki broni nieco zwiększy twoją dokładność i zmniejszyć odrzut. Kucanie już nie."
 
-L.tip25 = "Kiedy detektyw przeszuka ciało, rezultaty będą dostępne dla wszystkich przez klniknięcie nicku martwej osoby na tabeli wyników."
+L.tip32 = "Granaty dymne są efektywniejsze w pomieszczeniach, sczególnie tworzą zamieszanie w tych zatłoczonych."
 
-L.tip26 = "W tabeli wyników ikona lupy obok czyjegoś imienia wskazuje, że masz informacje o przeszukaniu tej osoby. Jeśli ikona jest jasna, dane pochodzą od detektywa i mogą zawierać dodatkowe przydatne informacje."
+L.tip33 = "Jako Zdrajca pamiętaj, że możesz prznosić ciała i chować przed wzrokiem niewinnych i detektywów."
 
-L.tip27 = "Jako detektyw trupy z lupą po nicku zostali przeszukani przez detektywa, a ich wyniki są dostępne dla wszystkich graczy za pośrednictwem tablicy wyników."
+L.tip34 = "Na tablicy wyników, kliknij nick żyjącego gracza, a będziesz mógł oznaczyć go jako 'podejrzany' albo 'przyjaciel'. Ten przydomek pojawi się, gdy będziesz go miał na muszce."
 
-L.tip28 = "Obserwatorzy mogą kliknąć {mutekey} by wyciszyć innych obserwatorów lub żywych graczy."
+L.tip35 = "Wiele stawialnych przedmiotów (takich jak C4, Radio) może być postawinych na ściania przez drugi atak."
 
-L.tip29 = "Jeśli serwer ma zainstalowane dodatkowe języki, możesz je ustawić w menu ustawień."
-
-L.tip30 = "Szybki-chat albo komendy 'radia' mogą zostać użyte przez kliknięcie {zoomkey}."
-
-L.tip31 = "Jako obserwator, kliknij {duckkey} by odblokować twój kursor i kliknąć na tym panelu ciekawostek. Kliknij {duckkey} ponownie, aby powrócić."
-
-L.tip32 = "Drugi atak łomu odpycha innych graczy."
-
-L.tip33 = "Celowanie przez celowniki broni nieco zwiększy twoją dokładność i zmniejszyć odrzut. Kucanie już nie."
-
-L.tip34 = "Granaty dymne są efektywniejsze w pomieszczeniach, sczególnie tworzą zamieszanie w tych zatłoczonych."
-
-L.tip35 = "Jako Zdrajca pamiętaj, że możesz prznosić ciała i chować przed wzrokiem niewinnych i detektywów."
-
-L.tip36 = "Samouczek jest dostępny pod {helpkey} zawierający zbiór najpotrzebnieszych zasad i klawiszy podczas gry."
-
-L.tip37 = "Na tablicy wyników, kliknij nick żyjącego gracza, a będziesz mógł oznaczyć go jako 'podejrzany' albo 'przyjaciel'. Ten przydomek pojawi się, gdy będziesz go miał na muszce."
-
-L.tip38 = "Wiele stawialnych przedmiotów (takich jak C4, Radio) może być postawinych na ściania przez drugi atak."
-
-L.tip39 = "Tłumaczenie TTT2 ogarnął Wuker."
-
-L.tip40 = "Jeśli jest napisane 'TRYB SZYBKI' ponad czasem rundy, runda z początku potrwa tylko kilka minut, ale z każdą śmiercią czas będzię się zwiększał (jak przejmowanie punktów w TF2). Ten tryb wywiera presję na zdrajców, aby szybciej się uwijali."
+L.tip36 = "Tłumaczenie TTT2 ogarnął Wuker."
 
 -- Round report
 L.report_title = "Raport rundy"

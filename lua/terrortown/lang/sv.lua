@@ -524,67 +524,47 @@ L.tip8 = "Förrädare och Detektiver kan samla på sig oanvända verktygskredite
 
 L.tip9 = "Poltergeisten kan förvandla vilket rörligt föremål som helst till en dödlig projektil. Varje knuff medför en stark smäll som skadar alla i närheten."
 
-L.tip10 = "Som en Förrädare eller som en Detektiv bör du hålla ett öga på röda meddelanden i det övre högra hörnet av skärmen, då dessa innehåller viktig information."
+L.tip11 = "Detektivernas DNA-skanner kan användas till att samla DNA-prov från vapen och föremål för att sedan skanna och finna dess användare. Detta är användbart när du kan hitta ett prov från ett lik eller en avstängd C4!"
 
-L.tip11 = "Som en Förrädare eller som en Detektiv får du extra verktygskrediter om dina kamrater arbetar väl. Kom också ihåg att spendera dem!"
+L.tip12 = "Om du är nära ditt mordoffer kommer ditt DNA att hamna på liket. DNAt kan sedan användas med Detektivernas DNA-skannrar för att hitta var du är. Du gör därför bäst i att gömma liken efter att du har knivhuggit det!"
 
-L.tip12 = "Detektivernas DNA-skanner kan användas till att samla DNA-prov från vapen och föremål för att sedan skanna och finna dess användare. Detta är användbart när du kan hitta ett prov från ett lik eller en avstängd C4!"
+L.tip13 = "Ju längre ifrån du är ditt mordoffer, desto kortare tid kommer ditt DNA finnas kvar på liket innan det förruttnar."
 
-L.tip13 = "Om du är nära ditt mordoffer kommer ditt DNA att hamna på liket. DNAt kan sedan användas med Detektivernas DNA-skannrar för att hitta var du är. Du gör därför bäst i att gömma liken efter att du har knivhuggit det!"
+L.tip16 = "Är de oskylda ihopklumpade och svåra att ha ihjäl? Prova att använda Radion och spela upp C4-pip eller ljud av en skottlossning för att splittra gruppen."
 
-L.tip14 = "Ju längre ifrån du är ditt mordoffer, desto kortare tid kommer ditt DNA finnas kvar på liket innan det förruttnar."
+L.tip18 = "Om du har krediter över kan du som Detektiv ge en Desarmerare till en oskyldig som du litar på. Då kan du spendera mer tid till att utreda och lämna den riskfulla bombdesarmeringen till dem."
 
-L.tip15 = "Tänkte du skjuta prick som Förrädare? Överväg att använda en Förklädare. Om du missar ett skott kan du springa till en säker plats, stänga av apparaten och komma ut som om ingenting hade hänt."
+L.tip19 = "Detektivernas Kikare tillåter likidentifiering från långa avstånd. Det är dåliga nyheter för Förrädarna, om de tänkte använda liket som lockbete. Å andra sidan är Detektiven distraherad och obeväpnad när han använder Kikaren..."
 
-L.tip16 = "Som Förrädare kan Teleportören hjälpa dig fly när du är jagad, och tillåter dig att komma från plats A till plats B på väldigt kort tid. Se bara till så att du har en säker plats markerad."
+L.tip20 = "Detektivernas Hälsostation tillåter skadade spelare att återhämta sig. Å andra sidan kan de skadade spelarna vara Förrädare..."
 
-L.tip17 = "Är de oskylda ihopklumpade och svåra att ha ihjäl? Prova att använda Radion och spela upp C4-pip eller ljud av en skottlossning för att splittra gruppen."
+L.tip21 = "Genom att använda DNA-skannern på Hälsostationen kan man få fram DNA-prov från alla som använt den."
 
-L.tip18 = "Genom att använda Radion som Förrädare kan du spela upp ljud genom din Verktygs-meny efter att Radion har blivit placerad. Köa flera ljud genom att klicka på flera knappar i den ordning du vill att de ska spelas upp i."
+L.tip22 = "Till skillnad från vapen och C4 lämnas inga DNA-spår på Radion, så Förrädare behöver inte oroa sig för att Detektiver hittar den och förstör deras dag."
 
-L.tip19 = "Om du har krediter över kan du som Detektiv ge en Desarmerare till en oskyldig som du litar på. Då kan du spendera mer tid till att utreda och lämna den riskfulla bombdesarmeringen till dem."
+L.tip24 = "När en Detektiv söker igenom en kropp kan resultaten hittas för alla spelare på poängtavlan genom att klicka på den döde personens namn."
 
-L.tip20 = "Detektivernas Kikare tillåter likidentifiering från långa avstånd. Det är dåliga nyheter för Förrädarna, om de tänkte använda liket som lockbete. Å andra sidan är Detektiven distraherad och obeväpnad när han använder Kikaren..."
+L.tip25 = "På poängtavlan betyder ett förstoringsglass bredvid någons namn att det finns sökinformation om den personen. Om ikonen är ljus kommer informationen från en Detektiv och kan innehålla mer information."
 
-L.tip21 = "Detektivernas Hälsostation tillåter skadade spelare att återhämta sig. Å andra sidan kan de skadade spelarna vara Förrädare..."
+L.tip27 = "Åskådare kan trycka på {mutekey} för att rotera mellan alternativ för att tysta ned åskådare eller levande spelare."
 
-L.tip22 = "Genom att använda DNA-skannern på Hälsostationen kan man få fram DNA-prov från alla som använt den."
+L.tip29 = "Snabbknappar eller 'radio-kommandon' kan användas genom att trycka på {zoomkey}."
 
-L.tip23 = "Till skillnad från vapen och C4 lämnas inga DNA-spår på Radion, så Förrädare behöver inte oroa sig för att Detektiver hittar den och förstör deras dag."
+L.tip30 = "Kofotens alternativa avfyrningsläge knuffar andra spelare."
 
-L.tip24 = "Tryck på {helpkey} för att se en kort genomgång eller ändra några inställningar för TTT. Till exempel kan du stänga av dessa tips där för gott."
+L.tip31 = "Genom att använda siktet på vapnen kommer träffsäkerheten att höjas något och rekylen minskas. Att ducka gör ingen skillnad."
 
-L.tip25 = "När en Detektiv söker igenom en kropp kan resultaten hittas för alla spelare på poängtavlan genom att klicka på den döde personens namn."
+L.tip32 = "Rökgranater är effektiva inomhus, särskilt för att skapa förvirring i ett rum proppfullt med folk."
 
-L.tip26 = "På poängtavlan betyder ett förstoringsglass bredvid någons namn att det finns sökinformation om den personen. Om ikonen är ljus kommer informationen från en Detektiv och kan innehålla mer information."
+L.tip33 = "Som en Förrädare bör du komma ihåg att du kan gömma kroppar från oskyldiga och Detektivers snokande ögon."
 
-L.tip27 = "Som en Detektiv betyder ett förstoringsglas bredvid någons namn att kroppen har blivit genomsökt och att informationen finns tillgänglig för alla spelare via poängtavlan."
+L.tip34 = "På poängtavlan kan du klicka på någons namn och välja en tagg för dem, t.ex. 'misstänkt' eller 'vän'. Denna tagg dyker sedan upp om du siktar på spelaren."
 
-L.tip28 = "Åskådare kan trycka på {mutekey} för att rotera mellan alternativ för att tysta ned åskådare eller levande spelare."
+--L.tip35 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
 
-L.tip29 = "If the server has installed additional languages, you can switch to a different language at any time in the Settings menu."
+L.tip36 = "C4 som exploderar på grund av en misslyckad desarmering har mindre explosionsradie än en C4 där timern når noll."
 
-L.tip30 = "Snabbknappar eller 'radio-kommandon' kan användas genom att trycka på {zoomkey}."
-
-L.tip31 = "Som en åskådare kan du trycka på {duckkey} för att låsa upp din muspekare och klicka på knapparna på den här panelen. Tryck på {duckkey} igen för att komma tillbaka till musstyrning."
-
-L.tip32 = "Kofotens alternativa avfyrningsläge knuffar andra spelare."
-
-L.tip33 = "Genom att använda siktet på vapnen kommer träffsäkerheten att höjas något och rekylen minskas. Att ducka gör ingen skillnad."
-
-L.tip34 = "Rökgranater är effektiva inomhus, särskilt för att skapa förvirring i ett rum proppfullt med folk."
-
-L.tip35 = "Som en Förrädare bör du komma ihåg att du kan gömma kroppar från oskyldiga och Detektivers snokande ögon."
-
-L.tip36 = "En genomgång av spelläget finns tillgängligt under {helpkey}. I den finns en översikt över viktiga element i spelet."
-
-L.tip37 = "På poängtavlan kan du klicka på någons namn och välja en tagg för dem, t.ex. 'misstänkt' eller 'vän'. Denna tagg dyker sedan upp om du siktar på spelaren."
-
---L.tip38 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
-
-L.tip39 = "C4 som exploderar på grund av en misslyckad desarmering har mindre explosionsradie än en C4 där timern når noll."
-
-L.tip40 = "Om det står 'HETSLÄGE' ovanför rundtimern kommer rundan först bara att vara några minuter lång, men efter varje oskyldig död kommer tiden att ökas. Det här läget pressar Förrädarna att göra någonting och inte bara stå still hela rundan."
+L.tip37 = "Om det står 'HETSLÄGE' ovanför rundtimern kommer rundan först bara att vara några minuter lång, men efter varje oskyldig död kommer tiden att ökas. Det här läget pressar Förrädarna att göra någonting och inte bara stå still hela rundan."
 
 -- Round report
 L.report_title = "Rundrapport"
