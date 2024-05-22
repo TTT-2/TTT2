@@ -13,8 +13,11 @@ loadingscreen = loadingscreen or {}
 loadingscreen.isInReloading = false
 loadingscreen.wasInReloading = false
 
+loadingscreen.disableSounds = false
+
 function loadingscreen.Begin()
     loadingscreen.isInReloading = true
+    loadingscreen.disableSounds = true
 
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
@@ -25,22 +28,25 @@ function loadingscreen.Begin()
 end
 
 function loadingscreen.End()
+    loadingscreen.isInReloading = false
+
     if SERVER then
-        -- disables the loading screen on the server a moment later so that the
-        -- sound stays muted a while longer
+        -- disables sounds a while longer so it stays muted
         timer.Simple(2, function()
-            loadingscreen.isInReloading = false
+            loadingscreen.disableSounds = false
         end)
-    else
-        loadingscreen.isInReloading = false
     end
+end
+
+function loadingscreen.IsInReloading()
+    return loadingscreen.isInReloading or false
 end
 
 if SERVER then
     -- mutes the sound while the loading screen is shown
     -- this makes it so that you can't hear weapons spawning
     hook.Add("EntityEmitSound", "TTT2PreventReloadingSound", function(data)
-        if loadingscreen.isInReloading then
+        if loadingscreen.disableSounds then
             return false
         end
     end)
