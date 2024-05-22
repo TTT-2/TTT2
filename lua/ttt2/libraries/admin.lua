@@ -31,8 +31,6 @@ function admin.RoundRestart()
     end
 
     if SERVER then
-        LANG.Msg("round_restart")
-
         StopRoundTimers()
         PostRoundCleanupAndPrepStart()
     end
