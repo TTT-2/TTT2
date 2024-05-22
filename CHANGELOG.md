@@ -36,6 +36,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new admin commands menu (by @TimGoll)
   - Added a submenu to change maps
   - Added a submenu to issue basic commands
+- Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 
 ### Changed
 
@@ -72,6 +73,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed radio tab in shop UI
+- Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
 
 ### Breaking Changes
 
