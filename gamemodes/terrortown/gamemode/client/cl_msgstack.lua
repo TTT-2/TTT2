@@ -116,6 +116,11 @@ function MSTACK:AddMessage(text, traitor_only)
     end
 end
 
+function MSTACK:ClearMessages()
+    MSTACK.msgs = {}
+    MSTACK.last = 0
+end
+
 -- Game state message channel
 local function ReceiveGameMsg()
     local text = net.ReadString()

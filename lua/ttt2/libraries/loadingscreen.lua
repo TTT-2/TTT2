@@ -28,6 +28,8 @@ function loadingscreen.Begin()
 
     if CLIENT then
         loadingscreen.currentTipText, loadingscreen.currentTipKeys = tips.GetRandomTip()
+
+        MSTACK:ClearMessages()
     end
 end
 
@@ -126,6 +128,7 @@ if CLIENT then
 
         local textWrapped, _, heightText = draw.GetWrappedText(
             LANG.TryTranslation("tips_panel_tip")
+                .. " "
                 .. LANG.GetParamTranslation(
                     loadingscreen.currentTipText,
                     loadingscreen.currentTipKeys
