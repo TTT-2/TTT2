@@ -44,7 +44,7 @@ function PANEL:Init()
 
     local value, _ = self:GetSelected()
 
-    self:UpdateSlaves(IsValid(value))
+    self:UpdateSlaves(value ~= nil)
 end
 
 ---
@@ -59,7 +59,7 @@ function PANEL:AddSlave(slave)
 
     local value, _ = self:GetSelected()
 
-    slave:SetEnabled(IsValid(value))
+    slave:SetEnabled(value ~= nil)
 end
 
 ---
@@ -249,7 +249,7 @@ function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
     self:SetText(choice.title)
     self:OnSelect(index, value, choice.data)
 
-    self:UpdateSlaves(IsValid(value))
+    self:UpdateSlaves(value ~= nil)
 
     self:CloseMenu()
 
