@@ -1039,7 +1039,6 @@ L.label_damage_indicator_maxalpha = "ダメージインジケーター最大不�
 L.label_performance_halo_enable = "いくつかのエンティティを見ている間に、それらにアウトラインが表示されることを有効"
 L.label_performance_spec_outline_enable = "操作しているオブジェクトのアウトラインを有効"
 L.label_performance_ohicon_enable = "頭の上の役職アイコンを有効"
-L.label_interface_tips_enable = "観戦中画面の下部にゲームヒントを表示"
 L.label_interface_popup = "ラウンド開始時にポップアップを表示"
 L.label_interface_fastsw_menu = "高速武器スイッチでメニューを有効"
 L.label_inferface_wswitch_hide_enable = "武器の切り替えメニューが自動で閉じることを有効"

@@ -1039,7 +1039,6 @@ L.label_damage_indicator_maxalpha = "Opacité maximale de l'indicateur de dégâ
 L.label_performance_halo_enable = "Dessinez un contour autour de certaines entités quand vous les regardez"
 L.label_performance_spec_outline_enable = "Activer les contours des objets contrôlés"
 L.label_performance_ohicon_enable = "Activer les icônes des rôles"
-L.label_interface_tips_enable = "Afficher des conseils de jeu au bas de l'écran en mode spectateur"
 L.label_interface_popup = "Durée du pop-up de début de round"
 L.label_interface_fastsw_menu = "Activer le menu avec un changement d'arme rapide"
 L.label_inferface_wswitch_hide_enable = "Activer la fermeture automatique du menu quand je change d'arme"

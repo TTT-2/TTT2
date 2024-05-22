@@ -1039,7 +1039,6 @@ L.door_open_touch_and_use = "Acércate a la puerta y pulsa [{usekey}] para abrir
 --L.label_performance_halo_enable = "Draw an outline around some entities while looking at them"
 --L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
 --L.label_performance_ohicon_enable = "Enable role icons over players' heads"
---L.label_interface_tips_enable = "Show gameplay tips at the bottom of the screen while spectating"
 --L.label_interface_popup = "Start of round info popup duration"
 --L.label_interface_fastsw_menu = "Enable menu with fast weapon switch"
 --L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"

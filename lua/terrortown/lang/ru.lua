@@ -1041,7 +1041,6 @@ L.label_damage_indicator_maxalpha = "Максимальная непрозрач
 L.label_performance_halo_enable = "Отображать контуры вокруг некоторых энтити при наведении прицела."
 L.label_performance_spec_outline_enable = "Включить контуры контролируемых предметов."
 L.label_performance_ohicon_enable = "Включить иконки ролей над головами игроков."
-L.label_interface_tips_enable = "Показывать советы внизу экрана во время наблюдения."
 L.label_interface_popup = "Длительность всплывающего окна в начале раунда"
 L.label_interface_fastsw_menu = "Включить меню переключения оружия с быстрой сменой оружия."
 L.label_inferface_wswitch_hide_enable = "Включить автозакрытие меню переключения оружия."
