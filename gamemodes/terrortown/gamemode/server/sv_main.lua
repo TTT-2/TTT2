@@ -1242,8 +1242,6 @@ function BeginRound()
     -- anymore.
     roleselection.SelectRoles()
 
-    LANG.Msg("round_selected")
-
     -- Edge case where a player joins just as the round starts and is picked as
     -- traitor, but for whatever reason does not get the traitor state msg. So
     -- re-send after a second just to make sure everyone is getting it.
@@ -1268,7 +1266,6 @@ function BeginRound()
 
     -- Sound start alarm
     SetRoundState(ROUND_ACTIVE)
-    LANG.Msg("round_started")
     ServerLog("Round proper has begun...\n")
 
     events.Trigger(EVENT_SELECTED)
