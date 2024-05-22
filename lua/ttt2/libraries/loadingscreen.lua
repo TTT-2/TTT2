@@ -15,6 +15,11 @@ loadingscreen.wasInReloading = false
 
 loadingscreen.disableSounds = false
 
+---
+-- Called when the loading screen should begin.
+-- @note Syncs it to the client when called on the server.
+-- @internal
+-- @realm shared
 function loadingscreen.Begin()
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
@@ -36,6 +41,10 @@ function loadingscreen.Begin()
     loadingscreen.disableSounds = true
 end
 
+---
+-- Called when the loading screen should end.
+-- @internal
+-- @realm shared
 function loadingscreen.End()
     loadingscreen.isInReloading = false
 
@@ -47,6 +56,10 @@ function loadingscreen.End()
     end
 end
 
+---
+-- Returns true if the loadingscreen is currently visible because the map is cleaning up.
+-- @return boolean Return true if loading screen is visible
+-- @realm shared
 function loadingscreen.IsInReloading()
     return loadingscreen.isInReloading or false
 end
@@ -86,6 +99,10 @@ if CLIENT then
         loadingscreen.Begin()
     end)
 
+    ---
+    -- Handles the loading screen transistions and drawing.
+    -- @internal
+    -- @realm client
     function loadingscreen.Handler()
         -- start reloading screen
         if loadingscreen.isInReloading and not loadingscreen.wasInReloading then
@@ -115,6 +132,10 @@ if CLIENT then
         loadingscreen.Draw()
     end
 
+    ---
+    -- Handles the loading screen drawing.
+    -- @internal
+    -- @realm client
     function loadingscreen.Draw()
         if not cvLoadingScreen:GetBool() or loadingscreen.state == LS_HIDDEN then
             return
