@@ -720,33 +720,6 @@ function GM:CleanUpMap()
     end
 end
 
--- server tells us to call this when our LocalPlayer has spawned
-local function PlayerSpawn()
-    local as_spec = net.ReadBit() == 1
-    if as_spec then
-        TIPS.Show()
-    else
-        TIPS.Hide()
-    end
-
-    -- TTT Totem prevention
-    if LocalPlayer().GetRoleTable then
-        ErrorNoHaltWithStack(
-            "[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod..."
-        )
-    end
-end
-net.Receive("TTT_PlayerSpawned", PlayerSpawn)
-
-local function PlayerDeath()
-    if not TIPS then
-        return
-    end
-
-    TIPS.Show()
-end
-net.Receive("TTT_PlayerDied", PlayerDeath)
-
 ---
 -- Called to determine if the LocalPlayer should be drawn.
 -- @note If you're using this hook to draw a @{Player} for a @{GM:CalcView} hook,
