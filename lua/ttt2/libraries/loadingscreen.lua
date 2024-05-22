@@ -25,6 +25,10 @@ function loadingscreen.Begin()
         net.Start("TTT2LoadingscreenStart")
         net.Broadcast()
     end
+
+    if CLIENT then
+        loadingscreen.currentTipText, loadingscreen.currentTipKeys = tips.GetRandomTip()
+    end
 end
 
 function loadingscreen.End()
@@ -61,6 +65,7 @@ if CLIENT then
     local durationStateChange = 0.35
 
     local colorLoadingScreen = Color(170, 210, 245, 255)
+    local colorTip = Color(255, 255, 255, 255)
 
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()
@@ -114,8 +119,32 @@ if CLIENT then
         end
 
         colorLoadingScreen.a = 160 * progress
+        colorTip.a = 255 * progress
 
         draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 5)
         draw.Box(0, 0, ScrW(), ScrH(), colorLoadingScreen)
+
+        local textWrapped, _, heightText = draw.GetWrappedText(
+            LANG.GetParamTranslation(loadingscreen.currentTipText, loadingscreen.currentTipKeys),
+            0.6 * ScrW(),
+            "PureSkinRole",
+            appearance.GetGlobalScale()
+        )
+
+        local heightLine = heightText / #textWrapped
+
+        for i = 1, #textWrapped do
+            draw.AdvancedText(
+                textWrapped[i],
+                "PureSkinRole",
+                0.5 * ScrW(),
+                0.7 * ScrH() + i * heightLine,
+                colorTip,
+                TEXT_ALIGN_CENTER,
+                TEXT_ALIGN_CENTER,
+                true,
+                appearance.GetGlobalScale()
+            )
+        end
     end
 end
