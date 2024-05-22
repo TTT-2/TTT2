@@ -524,13 +524,21 @@ L.tip8 = "Förrädare och Detektiver kan samla på sig oanvända verktygskredite
 
 L.tip9 = "Poltergeisten kan förvandla vilket rörligt föremål som helst till en dödlig projektil. Varje knuff medför en stark smäll som skadar alla i närheten."
 
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+
 L.tip11 = "Detektivernas DNA-skanner kan användas till att samla DNA-prov från vapen och föremål för att sedan skanna och finna dess användare. Detta är användbart när du kan hitta ett prov från ett lik eller en avstängd C4!"
 
 L.tip12 = "Om du är nära ditt mordoffer kommer ditt DNA att hamna på liket. DNAt kan sedan användas med Detektivernas DNA-skannrar för att hitta var du är. Du gör därför bäst i att gömma liken efter att du har knivhuggit det!"
 
 L.tip13 = "Ju längre ifrån du är ditt mordoffer, desto kortare tid kommer ditt DNA finnas kvar på liket innan det förruttnar."
 
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+
 L.tip16 = "Är de oskylda ihopklumpade och svåra att ha ihjäl? Prova att använda Radion och spela upp C4-pip eller ljud av en skottlossning för att splittra gruppen."
+
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
 L.tip18 = "Om du har krediter över kan du som Detektiv ge en Desarmerare till en oskyldig som du litar på. Då kan du spendera mer tid till att utreda och lämna den riskfulla bombdesarmeringen till dem."
 
@@ -542,11 +550,17 @@ L.tip21 = "Genom att använda DNA-skannern på Hälsostationen kan man få fram 
 
 L.tip22 = "Till skillnad från vapen och C4 lämnas inga DNA-spår på Radion, så Förrädare behöver inte oroa sig för att Detektiver hittar den och förstör deras dag."
 
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+
 L.tip24 = "När en Detektiv söker igenom en kropp kan resultaten hittas för alla spelare på poängtavlan genom att klicka på den döde personens namn."
 
 L.tip25 = "På poängtavlan betyder ett förstoringsglass bredvid någons namn att det finns sökinformation om den personen. Om ikonen är ljus kommer informationen från en Detektiv och kan innehålla mer information."
 
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+
 L.tip27 = "Åskådare kan trycka på {mutekey} för att rotera mellan alternativ för att tysta ned åskådare eller levande spelare."
+
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
 L.tip29 = "Snabbknappar eller 'radio-kommandon' kan användas genom att trycka på {zoomkey}."
 
@@ -2242,3 +2256,37 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 --L.header_maps_select = "Select and Change Maps"
 
 --L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-8-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."

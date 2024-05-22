@@ -524,13 +524,21 @@ L.tip8 = "TraitorとDetectiveは他のTraitorやDetectiveの死体から未使�
 
 L.tip9 = "Poltergeistはオブジェクトを危険な発射物に変えることができます。 その時の衝撃波は近くにいる者を傷つけていきます。"
 
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+
 L.tip11 = "DetectiveのDNAスキャナーは武器とアイテムからDNAサンプルを集めることができ、そのサンプルが付着したプレイヤーの居場所を捕捉してくれます。死体や解除したC4からもサンプルを入手できる。"
 
 L.tip12 = "もしあなたが始末した相手の近くにいた場合、あなたのDNAのいくつかは死体に残されています。そのDNAはDetectiveのDNAスキャナーにより居場所を補足されてしまう危険性があるため、死体はなるべく証拠隠滅しよう。"
 
 L.tip13 = "あなたが始末した相手から遠くに離れるにつれ、死体に付着したあなたのDNAサンプルはより早く腐敗するでしょう。"
 
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+
 L.tip16 = "Innocentが皆集まっていて孤立させるのは難しいですか？それならば、何人かを引き離すためにラジオでC4の音か銃撃音を鳴らし、場を混乱させてみましょう。"
+
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
 L.tip18 = "Detectiveは、もしクレジットが余っているのなら信頼できるInnocentにC4除去装置を渡してしまってもかまいません。そうすればあなたは調査の方に時間を費やし、C4の解除からは離れることができます。"
 
@@ -542,11 +550,17 @@ L.tip21 = "Health Stationは使用した全員のDNAサンプルを記録しま�
 
 L.tip22 = "武器やC4と違い, Radioは置いたTraitorのDNAサンプルを含めません. Detectiveがそれを見つけて避難場所を吹き飛ばすことを心配する必要はありません."
 
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+
 L.tip24 = "Detectiveが死体を調査すると, 結果はスコアボードで死亡した人の名前をクリックすることにより全てのプレイヤーが確認できます."
 
 L.tip25 = "スコアボードの誰かの名前のすぐ近くの虫眼鏡アイコンはあなたがその人物の情報を調査したことを示しています. アイコンが明るければ, データはDetectiveからの追加の情報が含まれているかもしれません. "
 
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+
 L.tip27 = "観戦者は{mutekey}を押すことで他の観戦者や生存者のミュートを切り替えることができます."
+
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
 L.tip29 = "クイックチャットか'ラジオ'コマンドは{zoomkey}を押すことで使用できます."
 
@@ -563,6 +577,8 @@ L.tip34 = "スコアボード上では, 生存しているプレイヤーの名�
 L.tip35 = "(C4やRadioのような)置くことのできるアイテムの多くはセカンダリファイア(右クリック)で壁に固定することができます."
 
 L.tip36 = "C4の解除失敗による爆発はタイマーがゼロに達したC4の爆発より小さいです."
+
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "ラウンドレポート"
@@ -2240,3 +2256,37 @@ L.decoy_help_primary = "デコイを設置する"
 --L.header_maps_select = "Select and Change Maps"
 
 --L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-8-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."

@@ -526,13 +526,21 @@ L.tip8 = "Предатели и детективы могут получить �
 
 L.tip9 = "Полтергейст может превратить любой физический объект в смертоносный снаряд. Каждый толчок сопровождается энергетическим взрывом, наносящим урон всем поблизости."
 
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+
 L.tip11 = "Сканер ДНК может быть использован для сбора образцов ДНК с оружия или предметов, а затем для нахождения местоположения владельца образца. Полезно, когда вы можете собрать образец с тела или обезвреженной бомбы!"
 
 L.tip12 = "Когда вы близко к тому, кого убиваете, часть вашей ДНК остаётся на теле. Эта ДНК может быть использована с помощью Сканера ДНК, чтобы найти ваше местоположение. Лучше спрятать тело человека после того, как вы его зарезали!"
 
 L.tip13 = "Чем дальше вы от того, кого убьёте, тем быстрее разложиться образец вашего ДНК на его теле."
 
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+
 L.tip16 = "Все невиновные сгруппированы и их трудно разъединить? Попробуйте отвлечь некоторых из них звуками перестрелки или пиканьем С4 при помощи Радио."
+
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
 L.tip18 = "Будучи детективом, если у вас есть кредиты, вы можете отдать доверенному невиновному Набор сапёра. Так, вы сможете заняться серьёзной следственной работой, а он займётся обезвреживанием бомбы."
 
@@ -544,11 +552,17 @@ L.tip21 = "Лечебная станция собирает образцы ДН�
 
 L.tip22 = "В отличие от оружия и С4, Радио не содержит образец ДНК поставившего его человека. Не волнуйтесь о возможном раскрытии при нахождении Радио детективами."
 
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+
 L.tip24 = "Когда детектив осматривает тело, результаты осмотра доступны всем игрокам через таблицу счёта, нажав на имя мёртвого человека."
 
 L.tip25 = "В таблице счёта значок лупы возле чьего-либо имени означает, что у вас есть результаты осмотра тела этого человека. Если значок яркий, результаты получены от детектива и могут содержать дополнительную информацию."
 
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+
 L.tip27 = "Наблюдатели могут нажать {mutekey}, чтобы заглушить других наблюдателей, живых игроков или всех."
+
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
 L.tip29 = "Использовать быстрые сообщения можно нажатием {zoomkey}."
 
@@ -2244,3 +2258,37 @@ L.decoy_help_primary = "Установить Приманку"
 --L.header_maps_select = "Select and Change Maps"
 
 --L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-8-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."

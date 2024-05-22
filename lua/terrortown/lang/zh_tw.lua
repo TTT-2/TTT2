@@ -524,13 +524,21 @@ L.tip8 = "叛徒和探長能從夥伴屍體上，取得未被消耗的信用點�
 
 L.tip9 = "搗蛋鬼將使物體變得極其危險。搗蛋鬼調整過的物體將產生爆炸能量傷害接近它的人。"
 
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+
 L.tip11 = "探長的DNA掃描器可使用在武器或道具上，找到曾使用它的玩家的位置。用在屍體或C4上效果將更好！"
 
 L.tip12 = "太靠近你殺害的人的話，DNA將殘留在屍體上，探長的DNA掃描器會以此找到你的正確位置。切記，殺了人最好將屍體藏好！"
 
 L.tip13 = "殺人時離被害者越遠，殘留在屍體上的DNA就會越快衰變！"
 
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+
 L.tip16 = "是否遇過無辜者群聚在一起而難以下手？請試試用收音機發出C4嗶嗶聲或交火聲，讓他們分散。"
+
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
 L.tip18 = "探長若有多餘的信用點數，可將拆彈器交給一位可信任的無辜者，將危險的C4交給他們，自己全神貫注地調查與處決叛徒。"
 
@@ -542,11 +550,17 @@ L.tip21 = "治療站將遺留每位前來治療的人的DNA樣本，探長可將
 
 L.tip22 = "與武器、C4不同，收音機並不會留下你的DNA樣本，不用擔心探長會在上頭用DNA識破你的身分。"
 
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+
 L.tip24 = "探長確認屍體後，相關訊息將在計分板公布，如要查看只需點擊死者之名字即可。"
 
 L.tip25 = "計分板上，人物名字旁的放大鏡圖樣可以查看關於他的訊息，若圖樣亮著，代表是某位探長確認後的結果。"
 
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+
 L.tip27 = "觀察者可以按下 {mutekey} 循環調整對其他觀察者或遊戲中的玩家靜音。"
+
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
 L.tip29 = "若要使用語音或無線電，可以按下 {zoomkey} 使用。"
 
@@ -563,6 +577,8 @@ L.tip34 = "在計分板上，點擊活人玩家的名字，可以選擇一個標
 L.tip35 = "許多需放置的裝備（如C4或收音機），可以使用右鍵將其置於牆上。"
 
 L.tip36 = "拆除C4時失誤導致的爆炸，比起直接引爆時來得小。"
+
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "回合報告"
@@ -2240,3 +2256,37 @@ L.decoy_help_primary = "安放誘餌"
 --L.header_maps_select = "Select and Change Maps"
 
 --L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-8-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."

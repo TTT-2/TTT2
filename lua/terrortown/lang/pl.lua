@@ -524,13 +524,21 @@ L.tip8 = "Zdrajcy i detektywi mogą zbierać niewykorzystany sprzęt i kredyty z
 
 L.tip9 = "Poltergeist może zmienić każdy fizyczny obiekt w śmiercionośny pocisk. Każdemu uderzeniu towarzyszy uderzenie energii, które rani pobliskie osoby."
 
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+
 L.tip11 = "DNA Skaner detektywów może służyć do zbierania próbek DNA z broni i przedmiotów i potem skanowania, by zobaczyć lokalizacje ich właściela. Przydatne kiedy masz próbkę z martwego ciała lub rozbrojonej bomby!"
 
 L.tip12 = "Kiedy jesteś blisko osoby którą mordujesz, trochę twojego DNA zostaje na ciele. To DNA może posłużyć detektywowi by zobaczyć twoją aktualną lokalizacje przy pomocy DNA skanera. Lepiej schowaj ciało, kiedy kogoś zanożujesz!"
 
 L.tip13 = "Im dalej jesteś od osoby, którą mordujesz, tym szybciej twoja próbka DNA się zepsuje."
 
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+
 L.tip16 = "Niewinni są wszyscy w grupie i trudni do zdjęcia? Zastanów się nad wypróbowaniem Radia, aby odtworzyć dźwięki C4 lub strzelaniny, aby rozbiegli się w panice."
+
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
 L.tip18 = "Jako detektyw, jeśli posiadasz niewykorzystane kredyty, możesz dać zaufanej osobie rozbrajacz. Następnie możesz spędzić czas na poważnych pracach dochodzeniowych i pozostawić ryzykowne rozbrajanie bomb innym."
 
@@ -542,11 +550,17 @@ L.tip21 = "Stacja lecząca pobiera próbki DNA wszystkich jej użytkowników. De
 
 L.tip22 = "W przeciwieństwie do broni i C4, radio zdrajców nie zawiera próbki DNA osoby, która je postawiła. Nie martw się, że detektywi je znajdą i zepsują twoją przykrywkę."
 
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+
 L.tip24 = "Kiedy detektyw przeszuka ciało, rezultaty będą dostępne dla wszystkich przez klniknięcie nicku martwej osoby na tabeli wyników."
 
 L.tip25 = "W tabeli wyników ikona lupy obok czyjegoś imienia wskazuje, że masz informacje o przeszukaniu tej osoby. Jeśli ikona jest jasna, dane pochodzą od detektywa i mogą zawierać dodatkowe przydatne informacje."
 
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+
 L.tip27 = "Obserwatorzy mogą kliknąć {mutekey} by wyciszyć innych obserwatorów lub żywych graczy."
+
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
 L.tip29 = "Szybki-chat albo komendy 'radia' mogą zostać użyte przez kliknięcie {zoomkey}."
 
@@ -563,6 +577,8 @@ L.tip34 = "Na tablicy wyników, kliknij nick żyjącego gracza, a będziesz móg
 L.tip35 = "Wiele stawialnych przedmiotów (takich jak C4, Radio) może być postawinych na ściania przez drugi atak."
 
 L.tip36 = "Tłumaczenie TTT2 ogarnął Wuker."
+
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "Raport rundy"
@@ -2240,3 +2256,37 @@ L.decoy_help_primary = "Rozstaw Wabik"
 --L.header_maps_select = "Select and Change Maps"
 
 --L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-8-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
