@@ -69,6 +69,16 @@ if CLIENT then
 
     local durationStateChange = 0.35
 
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvLoadingScreen = CreateConVar("ttt2_enable_loadingscreen", "1", {FCVAR_ARCHIVE})
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvLoadingScreenTips = CreateConVar("ttt_tips_enable", "1", {FCVAR_ARCHIVE})
+
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()
 
@@ -106,7 +116,7 @@ if CLIENT then
     end
 
     function loadingscreen.Draw()
-        if loadingscreen.state == LS_HIDDEN then
+        if not cvLoadingScreen:GetBool() or loadingscreen.state == LS_HIDDEN then
             return
         end
 
@@ -128,6 +138,10 @@ if CLIENT then
 
         draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 5)
         draw.Box(0, 0, ScrW(), ScrH(), colorLoadingScreen)
+
+        if not cvLoadingScreenTips:GetBool() then
+            return
+        end
 
         local textWrapped, _, heightText = draw.GetWrappedText(
             LANG.TryTranslation("tips_panel_tip")
