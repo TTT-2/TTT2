@@ -23,42 +23,6 @@ marks = {}
 local marksList = {}
 local marksHookInstalled = false
 
--- reuse the same memory for each render
-local oldR, oldG, oldB = 1, 1, 1
-local oldBlend = 1
-local markedEnt = NULL
-local markedColor = color_white
-
----
--- Renders marked models, this is a sub function for Render.
--- @param table markedEntsTable list of @{Entity}
--- @param Color col color of rendering
--- @param number size size of markedEntsTable table
--- @realm client
-local function RenderMarkedModels(markedEntsTable, col, size)
-    for i = 1, size do
-        markedEnt = markedEntsTable[i]
-
-        -- prevent messing up materials
-        markedEnt:SetNoDraw(true)
-        -- get/set the color of our marked entity
-        markedColor = markedEnt:GetColor()
-        oldR, oldG, oldB = render.GetColorModulation()
-        render.SetColorModulation(markedColor.r / 255, markedColor.g / 255, markedColor.b / 255)
-        -- get/set the transparency of our marked entity
-        oldBlend = render.GetBlend()
-        render.SetBlend(markedColor.a / 255)
-
-        -- draw the entity
-        markedEnt:DrawModel()
-
-        -- reset the values back to what they were
-        markedEnt:SetNoDraw(false)
-        render.SetColorModulation(oldR, oldG, oldB)
-        render.SetBlend(oldBlend)
-    end
-end
-
 ---
 -- Renders the entity based on the color.
 -- @param table markedEntsTable list of @{Entity}
@@ -122,19 +86,32 @@ local function Render(markedEntsTable, col)
     -- set the reference value to 1. This is what the compare function tests against
     render.SetStencilReferenceValue(1)
 
-    -- always draw everything, since we need the ZFail to work we cannot use STENCIL_NEVER to avoid drawing to the RT
+    -- disable drawing color onto the RT
+    render.OverrideColorWriteEnable(true, false)
+    -- disable writing depth to the RT
+    render.OverrideDepthEnable(true, false)
+
+    -- always draw everything
     render.SetStencilCompareFunction(STENCIL_ALWAYS)
     -- if something would draw to the screen but is behind something, set the pixels it draws to 1
     render.SetStencilZFailOperation(STENCIL_REPLACE)
 
-    RenderMarkedModels(tmp, col, size)
+    for i = 1, size do
+        tmp[i]:DrawModel()
+    end
 
     -- now we basically do the same thing again but this time we set stencil values to 0 if the operation passes
     -- this fixes the entity zfailing with itself
     render.SetStencilZFailOperation(STENCIL_KEEP)
     render.SetStencilPassOperation(STENCILOPERATION_ZERO)
 
-    RenderMarkedModels(tmp, col, size)
+    for i = 1, size do
+        tmp[i]:DrawModel()
+    end
+
+    -- disable the overrides
+    render.OverrideColorWriteEnable(false)
+    render.OverrideDepthEnable(false)
 
     -- now, only draw things that have their pixels set to 1. This is the hidden parts of the stencil tests
     render.SetStencilCompareFunction(STENCIL_EQUAL)
@@ -148,9 +125,11 @@ end
 ---
 -- Hook that renders the entities with the highlighting
 -- @realm client
-local function RenderHook()
-    for _, list in pairs(marksList) do
-        Render(list.ents, list.col)
+local function RenderHook(bDrawingDepth, bDrawingSkybox, isDraw3DSkybox)
+    if not bDrawingDepth and not isDraw3DSkybox then
+        for _, list in pairs(marksList) do
+            Render(list.ents, list.col)
+        end
     end
 end
 
