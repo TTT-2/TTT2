@@ -10,8 +10,8 @@ end
 
 loadingscreen = loadingscreen or {}
 
-loadingscreen.isInReloading = false
-loadingscreen.wasInReloading = false
+loadingscreen.isShown = false
+loadingscreen.wasShown = false
 
 loadingscreen.disableSounds = false
 
@@ -37,7 +37,7 @@ function loadingscreen.Begin()
         MSTACK:ClearMessages()
     end
 
-    loadingscreen.isInReloading = true
+    loadingscreen.isShown = true
     loadingscreen.disableSounds = true
 end
 
@@ -46,7 +46,7 @@ end
 -- @internal
 -- @realm shared
 function loadingscreen.End()
-    loadingscreen.isInReloading = false
+    loadingscreen.isShown = false
 
     if SERVER then
         -- disables sounds a while longer so it stays muted
@@ -54,14 +54,6 @@ function loadingscreen.End()
             loadingscreen.disableSounds = false
         end)
     end
-end
-
----
--- Returns true if the loadingscreen is currently visible because the map is cleaning up.
--- @return boolean Return true if loading screen is visible
--- @realm shared
-function loadingscreen.IsInReloading()
-    return loadingscreen.isInReloading or false
 end
 
 if SERVER then
@@ -105,7 +97,7 @@ if CLIENT then
     -- @realm client
     function loadingscreen.Handler()
         -- start reloading screen
-        if loadingscreen.isInReloading and not loadingscreen.wasInReloading then
+        if loadingscreen.isShown and not loadingscreen.wasShown then
             loadingscreen.state = LS_FADE_IN
             loadingscreen.timeStateChange = SysTime()
 
@@ -114,10 +106,10 @@ if CLIENT then
                 loadingscreen.timeStateChange = SysTime()
             end)
 
-            loadingscreen.wasInReloading = true
+            loadingscreen.wasShown = true
 
         -- stop reloading screen
-        elseif not loadingscreen.isInReloading and loadingscreen.wasInReloading then
+        elseif not loadingscreen.isShown and loadingscreen.wasShown then
             loadingscreen.state = LS_FADE_OUT
             loadingscreen.timeStateChange = SysTime()
 
@@ -126,7 +118,7 @@ if CLIENT then
                 loadingscreen.timeStateChange = SysTime()
             end)
 
-            loadingscreen.wasInReloading = false
+            loadingscreen.wasShown = false
         end
 
         loadingscreen.Draw()

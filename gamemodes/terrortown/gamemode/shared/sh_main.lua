@@ -292,7 +292,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
     -- stop movement while in loading screen
-    if loadingscreen.IsInReloading() then
+    if loadingscreen.isShown then
         return true
     end
 
