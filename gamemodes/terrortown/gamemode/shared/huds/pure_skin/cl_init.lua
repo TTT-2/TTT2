@@ -79,8 +79,5 @@ function HUD:Initialize()
     BaseClass.Initialize(self)
 end
 
--- Voice overriding
-include("cl_voice.lua")
-
 -- Popup overriding
 include("cl_popup.lua")
