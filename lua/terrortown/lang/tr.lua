@@ -1667,8 +1667,8 @@ L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
 L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
---L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
---L.label_locational_voice_range = "Proximity voice chat range"
+L.label_locational_voice_prep = "Hazırlanma sürecinde mesafeye bağlı ses sohbetini etkinleştir"
+--L.label_locational_voice_range = "Mesafeye bağlı ses sohbetinin uzaklık oranı"
 L.label_armor_on_spawn = "(Yeniden) canlanmada oyuncu zırhı"
 L.label_prep_respawn = "Hazırlık aşamasında anında yeniden canlanmayı etkinleştir"
 L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
@@ -2095,7 +2095,7 @@ L.beacon_marker_vision_player_tracked = "Bu oyuncu bir Fener tarafından izleniy
 
 -- 2023-12-18
 L.beacon_help_pri = "Feneri yere at"
-L.beacon_help_sec = "Feneri yere yapıştır"
+L.beacon_help_sec = "Feneri yere kur"
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
@@ -2144,14 +2144,14 @@ Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri
 
 -- 2023-12-24
 L.binoc_help_reload = "Hedefi kaldırın."
---L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
---L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+L.cl_sb_row_sresult_direct_conf = "Doğrudan Onay"
+L.cl_sb_row_sresult_pub_police = "Kamu polisliği rolü onayı"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
 L.label_crosshair_outline_high_contrast = "Dış çizgi yüksek kontrast rengini etkinleştir"
 L.label_crosshair_mode = "Nişangah modu"
-L.label_crosshair_static_length = "Statik nişangah çizgi uzunluğunu etkinleştir"
+L.label_crosshair_static_length = "Sabit nişangah çizgi uzunluğunu etkinleştir"
 
 L.choice_crosshair_mode_0 = "Çizgiler ve nokta"
 L.choice_crosshair_mode_1 = "Sadece çizgiler"
@@ -2166,13 +2166,13 @@ L.header_weapon_settings = "Silah Ayarları"
 
 
 L.marker_vision_visible_for_0 = "Sadece size görünür"
---L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_1 = "Sadece sizin rolünüze görünür"
 L.marker_vision_visible_for_2 = "Takıma görünür"
 L.marker_vision_visible_for_3 = "Herkese görünür"
 
 -- 2024-01-27
 L.decoy_help_primary = "Tuzağı yerleştirin"
---L.decoy_help_secondary = "Stick Decoy to surface"
+L.decoy_help_secondary = "Tuzağı kur"
 
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
