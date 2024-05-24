@@ -30,6 +30,14 @@ function CLGAMEMODESUBMENU:Populate(parent)
         end,
     })
 
+    form:MakeButton({
+        label = "label_execute_command",
+        buttonLabel = "label_button_level_reset",
+        OnClick = function(slf)
+            admin.LevelReset()
+        end,
+    })
+
     -- SLAY PLAYER --
 
     local form2 = vgui.CreateTTT2Form(parent, "header_commands_player_slay")
