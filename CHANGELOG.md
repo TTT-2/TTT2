@@ -53,6 +53,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Reduced radar bit size for net message
   - The holdtype for pistol weapons now matches the viewmodel
 - Unified the spec color usage throughout the whole UI (by @TimGoll)
+- Updated the Turkish localization file (by @NovaDiablox)
 
 ### Fixed
 
