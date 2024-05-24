@@ -1960,7 +1960,7 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
 -- 2023-10-19
---L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+L.label_grenade_trajectory_ui = "Bomba yörüngesi göstergesi"
 
 -- 2023-10-23
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
@@ -2175,88 +2175,88 @@ L.decoy_help_primary = "Tuzağı yerleştirin"
 L.decoy_help_secondary = "Tuzağı kur"
 
 -- 2024-01-24
---L.grenade_fuse = "FUSE"
+L.grenade_fuse = "ATEŞLE"
 
 -- 2024-01-25
---L.header_roles_magnetostick = "Magneto Stick"
---L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
---L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
---L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+L.header_roles_magnetostick = "Manyeto Çubuğu"
+L.label_roles_ragdoll_pinning = "Ceset sabitlemeyi etkinleştir"
+L.magneto_stick_help_carry_rag_pin = "Ceseti sabitle"
+L.magneto_stick_help_carry_rag_drop = "Ceseti bırak"
+L.magneto_stick_help_carry_prop_release = "Nesneyi sal"
+L.magneto_stick_help_carry_prop_drop = "Nesneyi bırak"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+L.throw_no_room = "Bu cihazı atmak için yeterli alanınız yok"
 
 -- 2024-03-04
---L.use_entity = "Press [{usekey}] to use"
+L.use_entity = "Kullanmak için [{usekey}] tuşuna basın"
 
 -- 2024-03-06
---L.submenu_gameplay_sounds_title = "Client-Sounds"
+L.submenu_gameplay_sounds_title = "Kullanıcı Sesleri"
 
---L.header_sounds_settings = "UI Sound Settings"
+L.header_sounds_settings = "Arayüz Ses Ayarları"
 
---L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
---L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+L.help_enable_sound_interact = "Etkileşim sesleri, bir kullanıcı arayüzü açılırken çalınan seslerdir. Örneğin radyo işaretçisi ile etkileşime girerken bir ses çalınır."
+L.help_enable_sound_buttons = "Düğme sesleri, bir düğmeye tıklandığında çalınan tıklama sesleridir."
+L.help_enable_sound_message = "Sohbet mesajları ve bildirimler için mesaj veya bildirim sesleri çalınır. Oldukça can sıkıcı olabilirler."
 
---L.label_enable_sound_interact = "Enable interaction sounds"
---L.label_enable_sound_buttons = "Enable button sounds"
---L.label_enable_sound_message = "Enable message sounds"
+L.label_enable_sound_interact = "Etkileşim seslerini etkinleştir"
+L.label_enable_sound_buttons = "Düğme seslerini etkinleştir"
+L.label_enable_sound_message = "Mesaj seslerini etkinleştir"
 
---L.label_level_sound_interact = "Interaction sound level multiplier"
---L.label_level_sound_buttons = "Button sound level multiplier"
---L.label_level_sound_message = "Message sound level multiplier"
+L.label_level_sound_interact = "Etkileşim ses seviyesi çarpanı"
+L.label_level_sound_buttons = "Düğme ses seviyesi çarpanı"
+L.label_level_sound_message = "Mesaj ses seviyesi çarpanı"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
---L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+L.label_crosshair_static_gap_length = "Sabit nişangah boşluk uzunluğunu etkinleştir"
+L.label_crosshair_size_gap = "Nişangah boşluk boyutu çarpanı"
 
 -- 2024-03-31
---L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
---
---Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+L.help_locational_voice = "Konumsal sohbet, TTT2'nin konumsal 3D ses uygulamasıdır. Oyuncular sadece çevrelerindeki belirli bir yarıçapta duyulabilir ve oyuncular ne kadar uzakta olurlarsa sesleri o kadar sessizleşir."
+L.help_locational_voice_prep = [[Varsayılan olarak, konumsal sohbet hazırlık aşamasında devre dışıdır. Hazırlık aşamasında konumsal sohbeti de kullanmak için bu konsol değerini değiştirin.
 
---L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
---
---Note: This setting is only available for weapons that enable this feature.]]
---L.label_equipmenteditor_configurable_clip = "Configurable clip size"
+Not: Konumsal sohbet, raunt sonrası her zaman devre dışı bırakılır.]]
+L.help_voice_duck_spectator = "İzleyici seslerini azaltmak, diğer izleyicileri canlı oyunculara kıyasla daha sessiz hale getirir. Yaşayan oyuncuların tartışmalarını yakından dinlemek istiyorsanız bu yararlı olabilir."
+
+L.help_equipmenteditor_configurable_clip = [[Yapılandırılabilir boyut, silahın mağazadan satın alındığında veya haritada oluştuğunda sahip olduğu kullanım miktarını tanımlar.
+
+Not: Bu ayar yalnızca bu özelliği etkinleştiren silahlar için kullanılabilir.]]
+L.label_equipmenteditor_configurable_clip = "Yapılandırılabilir şarjör boyutu"
 
 -- 2024-04-06
---L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
---
---Set to 0 to disable this cut-off.]]
+L.help_locational_voice_range = [[Bu konsol değeri, oyuncuların birbirlerini duyabilecekleri maksimum menzili kısıtlar. Sesin mesafeyle nasıl azaldığını değiştirmez, daha ziyade sert bir kesme noktası belirler.
+
+Bu kesintiyi devre dışı bırakmak için 0'a ayarlayın.]]
 
 -- 2024-04-07
---L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
---
---Push-to-Talk: Hold down the key to talk.
---Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
---Toggle: Press the key to toggle your mic on/off.
---Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
---L.label_voice_activation = "Voice Chat Activation Mode"
---L.label_voice_activation_mode_ptt = "Push to Talk"
---L.label_voice_activation_mode_ptm = "Push to Mute"
---L.label_voice_activation_mode_toggle_disabled = "Toggle"
---L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+L.help_voice_activation = [[Genel sesli sohbet için mikrofonunun etkinleştirilme şeklini değiştirir. Bunların hepsi 'Genel Sesli Sohbet' tuş atamanızı kullanır. Takım sesli sohbeti her zaman bas konuş şeklindedir.
+
+Bas Konuş: Konuşmak için tuşa basılı tutun.
+Sessize almak için bas: Mikrofonun her zaman açık, sesini kapatmak için tuşu basılı tut.
+Aç Kapat: Mikrofonunuzu açmak veya kapatmak için tuşa basın.
+Aç Kapat (Katılınca Etkinleştir): 'Aç Kapat' gibi, ancak sunucuya katıldığınızda mikrofonunuz etkinleştirilir.]]
+L.label_voice_activation = "Sesli Sohbet Etkinleştirme Modu"
+L.label_voice_activation_mode_ptt = "Bas Konuş"
+L.label_voice_activation_mode_ptm = "Sessize almak için bas"
+L.label_voice_activation_mode_toggle_disabled = "Aç - Kapat"
+L.label_voice_activation_mode_toggle_enabled = "Aç - Kapat (Katılınca Etkinleştir)"
 
 -- 2024-04-08
---L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
---L.help_inspect_credits_always = [[
---When shopping roles die, their credits can be picked up by other players with shopping roles.
---
---When this option is disabled, only players that can pick up credits can see them on a body.
---When enabled, all players can see credits on a body.]]
+L.label_inspect_credits_always = "Tüm oyuncuların cesetlerdeki kredileri görmesine izin ver"
+L.help_inspect_credits_always = [[
+Alışveriş rolleri öldüğünde kredileri alışveriş rolleri olan diğer oyuncular tarafından alınabilir.
+
+Bu seçenek devre dışıyken, yalnızca kredi toplayabilen oyuncular kredileri bir ceset üzerinde görebilir.
+Etkinleştirildiğinde, tüm oyuncular bir cesetteki kredileri görebilir.]]
 
 -- 2024-05-13
---L.menu_commands_title = "Admin Commands"
---L.menu_commands_description = "Change maps, spawn bots and edit player roles."
+L.menu_commands_title = "Yönetici Komutları"
+L.menu_commands_description = "Haritaları değiştir, bot oluştur ve oyuncu rollerini düzenle."
 
---L.submenu_commands_maps_title = "Maps"
+L.submenu_commands_maps_title = "Haritalar"
 
---L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
---L.header_maps_select = "Select and Change Maps"
+L.header_maps_prefixes = "Haritaları Öneklerine Göre Etkinleştir veya Devre Dışı Bırak"
+L.header_maps_select = "Haritaları Seç ve Değiştir"
 
---L.button_change_map = "Change Map"
+L.button_change_map = "Haritayı Değiştir"
