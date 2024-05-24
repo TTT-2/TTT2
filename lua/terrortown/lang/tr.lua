@@ -2260,3 +2260,29 @@ L.header_maps_prefixes = "Haritaları Öneklerine Göre Etkinleştir veya Devre 
 L.header_maps_select = "Haritaları Seç ve Değiştir"
 
 L.button_change_map = "Haritayı Değiştir"
+
+-- 2024-05-20
+L.submenu_commands_commands_title = "Komutlar"
+
+L.header_commands_round_restart = "Raundu Yeniden Başlat"
+L.header_commands_player_slay = "Oyuncuyu Öldür"
+L.header_commands_player_teleport = "Oyuncuyu Bakılan Yere Işınla"
+L.header_commands_player_respawn = "Oyuncuyu Bakılan Yerde Yeniden Canlandır"
+L.header_commands_player_add_credits = "Ekipman Kredisi Ekle"
+L.header_commands_player_set_health = "Sağlık Ayarla"
+L.header_commands_player_set_armor = "Zırh Ayarla"
+
+L.label_button_round_restart = "raundu yeniden başlat"
+L.label_button_player_slay = "oyuncuyu öldür"
+L.label_button_player_teleport = "oyuncuyu ışınla"
+L.label_button_player_respawn = "oyuncuyu yeniden canlandır"
+L.label_button_player_add_credits = "kredi ekle"
+L.label_button_player_set_health = "sağlık ayarla"
+L.label_button_player_set_armor = "zırh ayarla"
+
+L.label_slider_add_credits = "Kredi tutarını ayarla"
+L.label_slider_set_health = "sağlık ayarla"
+L.label_slider_set_armor = "zırh ayarla"
+
+L.label_player_select = "Etkilenen oyuncuyu seç"
+L.label_execute_command = "Komut Çalıştır"
