@@ -296,11 +296,6 @@ if SERVER then
     function gameloop.PlayerReady(ply)
         gameloop.ClearClientState(ply)
 
-        -- todo: is this role reset needed here?
-        if GetRoundState() == ROUND_PREP then
-            RoleReset()
-        end
-
         -- set the synced data to ROLE_NONE, TEAM_NONE on the server so a new full update
         -- is forced for this client
         RoleResetForPlayer(ply)
