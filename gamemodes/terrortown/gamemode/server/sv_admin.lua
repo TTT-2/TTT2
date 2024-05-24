@@ -247,7 +247,7 @@ hook.Add("TTTEndRound", "ttt_damagelog_save_hook", SaveDamageLog)
 -- @param string txt
 -- @realm server
 function DamageLog(txt)
-    local t = math.max(0, CurTime() - GAMEMODE.RoundStartTime)
+    local t = math.max(0, CurTime() - gameloop.timeRoundStart)
 
     txt = util.SimpleTime(t, "%02i:%02i.%02i - ") .. txt
 
@@ -256,6 +256,10 @@ function DamageLog(txt)
     if dmglog_console:GetBool() or dmglog_save:GetBool() then
         table.insert(GAMEMODE.DamageLog, txt)
     end
+end
+
+function ResetDamageLog()
+    GAMEMODE.DamageLog = {}
 end
 
 ---

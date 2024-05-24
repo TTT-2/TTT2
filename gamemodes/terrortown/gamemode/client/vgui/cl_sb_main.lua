@@ -8,7 +8,6 @@ local draw = draw
 local math = math
 local string = string
 local vgui = vgui
-local max = math.max
 local floor = math.floor
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
@@ -119,19 +118,20 @@ surface.CreateFont("treb_small", {
 })
 
 local function UntilMapChange()
-    local rounds_left = max(0, GetGlobalInt("ttt_rounds_left", 6))
-    local time_left = floor(max(0, (GetGlobalInt("ttt_time_limit_minutes") or 60) * 60 - CurTime()))
-    local h = floor(time_left / 3600)
+    local roundsLeft = gameloop.GetRoundsLeft()
+    local timeLeft = floor(gameloop.GetLevelTimeLeft())
 
-    time_left = time_left - floor(h * 3600)
+    local h = floor(timeLeft / 3600)
 
-    local m = floor(time_left / 60)
+    timeLeft = timeLeft - floor(h * 3600)
 
-    time_left = time_left - floor(m * 60)
+    local m = floor(timeLeft / 60)
 
-    local s = floor(time_left)
+    timeLeft = timeLeft - floor(m * 60)
 
-    return rounds_left, string.format("%02i:%02i:%02i", h, m, s)
+    local s = floor(timeLeft)
+
+    return roundsLeft, string.format("%02i:%02i:%02i", h, m, s)
 end
 
 ---

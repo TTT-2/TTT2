@@ -69,32 +69,7 @@ local playerGetAll = player.GetAll
 ---
 -- @realm server
 -- stylua: ignore
-local roundtime = CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local preptime = CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local posttime = CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local firstpreptime = CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
 local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local haste_starting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -127,16 +102,6 @@ CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 -- @realm server
 -- stylua: ignore
 local ttt_session_limits_enabled = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
-
----
--- @realm server
--- stylua: ignore
-local round_limit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
-
----
--- @realm server
--- stylua: ignore
-local time_limit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
@@ -182,21 +147,6 @@ local namechangebtime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTI
 -- @realm server
 -- stylua: ignore
 local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local cvPreferMapModels = CreateConVar("ttt2_prefer_map_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -257,11 +207,9 @@ util.AddNetworkString("TTT_InterruptChat")
 util.AddNetworkString("TTT_PlayerSpawned")
 util.AddNetworkString("TTT_PlayerDied")
 util.AddNetworkString("TTT_CorpseCall")
-util.AddNetworkString("TTT_ClearClientState")
 util.AddNetworkString("TTT_PerformGesture")
 util.AddNetworkString("TTT_Role")
 util.AddNetworkString("TTT_RoleList")
-util.AddNetworkString("TTT_RoleReset")
 util.AddNetworkString("TTT_ConfirmUseTButton")
 util.AddNetworkString("TTT_C4Config")
 util.AddNetworkString("TTT_C4DisarmResult")
@@ -395,7 +343,7 @@ function GM:Initialize()
     math.random()
     math.random()
 
-    WaitForPlayers()
+    gameloop.Initialize()
 
     if cvars.Number("sv_alltalk", 0) > 0 then
         ErrorNoHalt(
@@ -424,9 +372,6 @@ end
 -- @realm server
 function GM:InitCvars()
     Dev(1, "TTT2 initializing ConVar settings...")
-
-    -- Initialize game state that is synced with client
-    SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
 
     self:SyncGlobals()
 
@@ -586,7 +531,6 @@ function GM:SyncGlobals()
     SetGlobalBool("ttt_detective", ttt_detective:GetBool())
     SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
     SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
-    SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
     SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
     SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
 
@@ -624,10 +568,6 @@ end)
 
 cvars.AddChangeCallback(ttt_session_limits_enabled:GetName(), function(cv, old, new)
     SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))
-end)
-
-cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
-    SetGlobalInt(time_limit:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(idle_time:GetName(), function(cv, old, new)
@@ -714,57 +654,6 @@ function GetRoundState()
     return GAMEMODE.round_state
 end
 
-local function EnoughPlayers()
-    local ready = 0
-
-    -- only count truly available players, i.e. no forced specs
-    local plys = playerGetAll()
-
-    for i = 1, #plys do
-        local ply = plys[i]
-
-        if not IsValid(ply) or not ply:ShouldSpawn() then
-            continue
-        end
-
-        ready = ready + 1
-    end
-
-    return ready >= ttt_minply:GetInt()
-end
-
----
--- This @{function} is used to create the timers that checks
--- whether is the round is able to start (enough players?)
--- @note Used to be in Think/Tick, now in a timer
--- @note this stops @{WaitForPlayers}
--- @realm server
--- @see WaitForPlayers
--- @internal
-function WaitingForPlayersChecker()
-    if GetRoundState() ~= ROUND_WAIT or not EnoughPlayers() then
-        return
-    end
-
-    timer.Create("wait2prep", 1, 1, PrepareRound)
-    timer.Stop("waitingforply")
-end
-
----
--- Start waiting for players
--- @realm server
--- @see WaitingForPlayersChecker
--- @internal
-function WaitForPlayers()
-    SetRoundState(ROUND_WAIT)
-
-    if timer.Start("waitingforply") then
-        return
-    end
-
-    timer.Create("waitingforply", 2, 0, WaitingForPlayersChecker)
-end
-
 ---
 -- Fixes a spectator bug in the beginning
 -- @note When a player initially spawns after mapload, everything is a bit strange
@@ -798,7 +687,7 @@ local function WinChecker()
     end
 
     if CurTime() > GetGlobalFloat("ttt_round_end", 0) and not ttt_dbgwin:GetBool() then
-        EndRound(WIN_TIMELIMIT)
+        gameloop.End(WIN_TIMELIMIT)
     elseif not ttt_dbgwin:GetBool() then
         ---
         -- @realm server
@@ -814,7 +703,7 @@ local function WinChecker()
             return
         end
 
-        EndRound(win)
+        gameloop.End(win)
     end
 end
 
@@ -936,58 +825,8 @@ function GM:PostCleanupMap()
     hook.Run("TTT2PostCleanupMap")
 
     door.SetUp()
-end
 
-local function CleanUp()
-    game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
-
-    -- Strip players now, so that their weapons are not seen by ReplaceEntities
-    local plys = playerGetAll()
-
-    for i = 1, #plys do
-        local v = plys[i]
-
-        v:StripWeapons()
-        v:SetRole(ROLE_NONE) -- will reset team automatically
-    end
-
-    -- a different kind of cleanup
-    hook.Remove("PlayerSay", "ULXMeCheck")
-end
-
----
--- Stops the timers in order to restart a round.
--- @realm server
-function StopRoundTimers()
-    -- remove all timers
-    timer.Stop("wait2prep")
-    timer.Stop("prep2begin")
-    timer.Stop("end2prep")
-    timer.Stop("winchecker")
-end
-
--- Make sure we have the players to do a round, people can leave during our
--- preparations so we'll call this numerous times
-local function CheckForAbort()
-    if not EnoughPlayers() then
-        LANG.Msg("round_minplayers")
-
-        StopRoundTimers()
-        WaitForPlayers()
-
-        return true
-    end
-
-    return false
-end
-
----
--- Sets the global round end time var
--- @param number endtime time
--- @realm server
--- @internal
-function SetRoundEnd(endtime)
-    SetGlobalFloat("ttt_round_end", endtime)
+    gameloop.Prepare()
 end
 
 ---
@@ -997,131 +836,6 @@ end
 -- @internal
 function IncRoundEnd(incr)
     SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
-end
-
----
--- This @{function} calls @{GM:TTTPrepareRound} and is used to prepare the round
--- @realm server
--- @internal
-function PrepareRound()
-    -- Check playercount
-    if CheckForAbort() then
-        return
-    end
-
-    ---
-    -- @realm server
-    -- stylua: ignore
-    local delay_round, delay_length = hook.Run("TTTDelayRoundStartForVote")
-
-    if delay_round then
-        delay_length = delay_length or 30
-
-        LANG.Msg("round_voting", { num = delay_length })
-
-        timer.Create("delayedprep", delay_length, 1, PrepareRound)
-
-        return
-    end
-
-    CleanUp()
-
-    GAMEMODE.roundCount = GAMEMODE.roundCount + 1
-
-    GAMEMODE.MapWin = WIN_NONE
-    GAMEMODE.AwardedCredits = false
-    GAMEMODE.AwardedCreditsDead = 0
-
-    events.Reset()
-
-    -- Update damage scaling
-    KARMA.RoundPrepare()
-
-    -- New look. Random if no forced model set
-    if
-        cvPreferMapModels:GetBool()
-        and GAMEMODE.force_plymodel
-        and GAMEMODE.force_plymodel ~= ""
-    then
-        GAMEMODE.playermodel = GAMEMODE.force_plymodel
-    elseif cvSelectModelPerRound:GetBool() then
-        GAMEMODE.playermodel = playermodels.GetRandomPlayerModel()
-    end
-
-    ---
-    -- @realm server
-    -- stylua: ignore
-    GAMEMODE.playercolor = hook.Run("TTTPlayerColor", GAMEMODE.playermodel)
-
-    if CheckForAbort() then
-        return
-    end
-
-    -- Schedule round start
-    local ptime = preptime:GetInt()
-
-    if GAMEMODE.FirstRound then
-        ptime = firstpreptime:GetInt()
-
-        GAMEMODE.FirstRound = false
-    end
-
-    -- remove decals
-    util.ClearDecals()
-
-    -- Piggyback on "round end" time global var to show end of phase timer
-    SetRoundEnd(CurTime() + ptime)
-
-    timer.Simple(1, function()
-        SetRoundEnd(CurTime() + ptime - 1)
-    end)
-
-    timer.Create("prep2begin", ptime, 1, BeginRound)
-
-    -- Mute for a second around traitor selection, to counter a dumb exploit
-    -- related to traitor's mics cutting off for a second when they're selected.
-    timer.Create("selectmute", ptime - 1, 1, function()
-        MuteForRestart(true)
-    end)
-
-    LANG.Msg("round_begintime", { num = ptime })
-
-    SetRoundState(ROUND_PREP)
-
-    -- Undo the roundrestart mute, though they will once again be muted for the
-    -- selectmute timer.
-    timer.Create("restartmute", 1, 1, function()
-        MuteForRestart(false)
-    end)
-
-    net.Start("TTT_ClearClientState")
-    net.Broadcast()
-
-    -- In case client's cleanup fails, make client set all players to innocent role
-    timer.Simple(1, SendRoleReset)
-
-    local plys = playerGetAll()
-
-    for i = 1, #plys do
-        local ply = plys[i]
-
-        ply:SetTargetPlayer(nil)
-        ply:ResetRoundDeathCounter()
-        ply:SetActiveInRound(false)
-
-        ply:CancelRevival(nil, true)
-        ply:SendRevivalReason(nil)
-
-        ply:ResetItemAndWeaponCache()
-    end
-
-    ---
-    -- Tell hooks and map we started prep
-    -- @realm server
-    -- stylua: ignore
-    hook.Run("TTTPrepareRound")
-
-    ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
 
 local function TraitorSorting(a, b)
@@ -1190,114 +904,6 @@ function TellTraitorsAboutTraitors()
     end
 end
 
-local function InitRoundEndTime()
-    -- Init round values
-    local endtime = CurTime() + roundtime:GetInt() * 60
-
-    if HasteMode() then
-        endtime = CurTime() + haste_starting:GetInt() * 60
-
-        -- this is a "fake" time shown to innocents, showing the end time if no
-        -- one would have been killed, it has no gameplay effect
-        SetGlobalFloat("ttt_haste_end", endtime)
-    end
-
-    SetRoundEnd(endtime)
-end
-
----
--- This @{function} calls @{GM:TTTBeginRound} and is used to start the round
--- @realm server
--- @internal
-function BeginRound()
-    GAMEMODE:SyncGlobals()
-
-    if CheckForAbort() then
-        return
-    end
-
-    InitRoundEndTime()
-
-    if CheckForAbort() then
-        return
-    end
-
-    -- Respawn dumb people who died during prep
-    entspawn.SpawnPlayers(true)
-
-    -- Remove their ragdolls
-    ents.TTT.RemoveRagdolls(true)
-
-    -- remove decals
-    util.ClearDecals()
-
-    -- Check for low-karma players that weren't banned on round end
-    KARMA.RoundBegin()
-
-    if CheckForAbort() then
-        return
-    end
-
-    -- Select traitors & co. This is where things really start so we can't abort
-    -- anymore.
-    roleselection.SelectRoles()
-
-    LANG.Msg("round_selected")
-
-    -- Edge case where a player joins just as the round starts and is picked as
-    -- traitor, but for whatever reason does not get the traitor state msg. So
-    -- re-send after a second just to make sure everyone is getting it.
-    -- TODO improve
-    timer.Simple(1, SendFullStateUpdate)
-    timer.Simple(10, SendFullStateUpdate)
-
-    -- Give the StateUpdate messages ample time to arrive
-    timer.Simple(1.5, TellTraitorsAboutTraitors)
-    timer.Simple(2.5, ShowRoundStartPopup)
-
-    -- Start the win condition check timer
-    StartWinChecks()
-    StartNameChangeChecks()
-
-    timer.Create("selectmute", 1, 1, function()
-        MuteForRestart(false)
-    end)
-
-    GAMEMODE.DamageLog = {}
-    GAMEMODE.RoundStartTime = CurTime()
-
-    -- Sound start alarm
-    SetRoundState(ROUND_ACTIVE)
-    LANG.Msg("round_started")
-    ServerLog("Round proper has begun...\n")
-
-    events.Trigger(EVENT_SELECTED)
-
-    GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
-
-    ARMOR:InitPlayerArmor()
-
-    local plys = playerGetAll()
-
-    for i = 1, #plys do
-        local ply = plys[i]
-
-        ply:ResetRoundDeathCounter()
-
-        -- a player should be considered "was active in round" if they received a role
-        ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
-    end
-
-    credits.ResetTeamStates()
-
-    ---
-    -- @realm server
-    -- stylua: ignore
-    hook.Run("TTTBeginRound")
-
-    ents.TTT.TriggerRoundStateOutputs(ROUND_ACTIVE)
-end
-
 ---
 -- Prints round results / win conditions to the server log
 -- @param string result the winner team
@@ -1330,89 +936,6 @@ function PrintResultMessage(result)
 
         return
     end
-end
-
----
--- Checks whether the map is able to switch based on round limits and time limits
--- @realm server
--- @internal
-function CheckForMapSwitch()
-    -- Check for mapswitch
-    local roundsLeft = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
-
-    SetGlobalInt("ttt_rounds_left", roundsLeft)
-
-    local timeLeft = math.max(0, time_limit:GetInt() * 60 - CurTime())
-    local nextmap = string.upper(game.GetMapNext())
-
-    if roundsLeft <= 0 or timeLeft <= 0 then
-        timer.Stop("end2prep")
-        SetRoundEnd(CurTime())
-
-        ---
-        -- @realm server
-        -- stylua: ignore
-        hook.Run("TTT2LoadNextMap", nextmap, roundsLeft, timeLeft)
-    else
-        LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
-    end
-end
-
----
--- This @{function} calls @{GM:TTTEndRound} and is used to end the round
--- @param string result The winning team / result / condition
--- @realm server
--- @internal
-function EndRound(result)
-    PrintResultMessage(result)
-
-    KARMA.RoundEnd()
-
-    events.Trigger(EVENT_FINISH, result)
-
-    SetRoundState(ROUND_POST)
-
-    local ptime = math.max(5, posttime:GetInt())
-
-    LANG.Msg("win_showreport", { num = ptime })
-    timer.Create("end2prep", ptime, 1, PrepareRound)
-
-    -- Piggyback on "round end" time global var to show end of phase timer
-    SetRoundEnd(CurTime() + ptime)
-
-    timer.Create("restartmute", ptime - 1, 1, function()
-        MuteForRestart(true)
-    end)
-
-    -- Stop checking for wins
-    StopWinChecks()
-
-    -- send each client the role setup, reveal every player
-    local rlsList = roles.GetList()
-
-    for i = 1, #rlsList do
-        SendSubRoleList(rlsList[i].index)
-    end
-
-    -- We may need to start a timer for a mapswitch, or start a vote
-    if GetGlobalBool("ttt_session_limits_enabled") then
-        CheckForMapSwitch()
-    end
-
-    events.UpdateScoreboard()
-
-    -- send the clients the round log, players will be shown the report
-    events.StreamToClients()
-
-    ---
-    -- server plugins might want to start a map vote here or something
-    -- these hooks are not used by TTT internally
-    -- possible incompatibility for other addons
-    -- @realm server
-    -- stylua: ignore
-    hook.Run("TTTEndRound", result)
-
-    ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
 
 ---
@@ -1471,7 +994,7 @@ end
 -- @realm server
 function GM:MapTriggeredEnd(wintype)
     if wintype ~= WIN_NONE then
-        self.MapWin = wintype
+        gameloop.mapWinType = wintype
     else
         -- print alert and hint for contact
         ErrorNoHaltWithStack("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
@@ -1626,12 +1149,8 @@ function GM:TTTCheckForWin()
         return WIN_NONE
     end
 
-    if self.MapWin ~= WIN_NONE then -- a role wins
-        local mapWin = self.MapWin
-
-        self.MapWin = WIN_NONE
-
-        return mapWin
+    if gameloop.mapWinType ~= WIN_NONE then
+        return gameloop.mapWinType
     end
 
     local aliveTeams = {}

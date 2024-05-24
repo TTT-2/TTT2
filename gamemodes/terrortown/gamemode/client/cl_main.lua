@@ -459,9 +459,6 @@ end
 local function RoundStateChange(o, n)
     if n == ROUND_PREP then
         -- prep starts
-        GAMEMODE:ClearClientState()
-        GAMEMODE:CleanUpMap()
-
         EPOP:Clear()
 
         -- show warning to spec mode players
@@ -557,6 +554,8 @@ local function ReceiveRole()
     local subrole = net.ReadUInt(ROLE_BITS)
     local team = net.ReadString()
 
+    print("received role update", subrole, team)
+
     -- after a mapswitch, server might have sent us this before we are even done
     -- loading our code
     if not isfunction(client.SetRole) then
@@ -566,14 +565,6 @@ local function ReceiveRole()
     client:SetRole(subrole, team)
 end
 net.Receive("TTT_Role", ReceiveRole)
-
-local function ReceiveRoleReset()
-    local plys = playerGetAll()
-    for i = 1, #plys do
-        plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
-    end
-end
-net.Receive("TTT_RoleReset", ReceiveRoleReset)
 
 -- role test
 local function TTT2TestRole()
@@ -635,12 +626,14 @@ net.Receive("TTT_RoundState", ReceiveRoundState)
 function GM:ClearClientState()
     self:HUDClear()
 
-    local client = LocalPlayer()
-    if not client.SetRole then
-        return
-    end -- code not loaded yet
+    -- todo: stuff like this should be in their respective files inside the hooks
+    -- maybe even the prepare round hook? this mess has to go
 
-    client:SetRole(ROLE_NONE)
+    local client = LocalPlayer()
+
+    if not client:IsReady() then
+        return
+    end
 
     client.equipmentItems = {}
     client.equipment_credits = 0
@@ -654,17 +647,13 @@ function GM:ClearClientState()
     VOICE.InitBattery()
 
     local plys = playerGetAll()
+
     for i = 1, #plys do
-        local pl = plys[i]
-        if not IsValid(pl) then
-            continue
-        end
+        local ply = plys[i]
 
-        pl.sb_tag = nil
+        ply.sb_tag = nil
 
-        pl:SetRole(ROLE_NONE)
-
-        bodysearch.ResetSearchResult(pl)
+        bodysearch.ResetSearchResult(ply)
     end
 
     VOICE.CycleMuteState(MUTE_NONE)
@@ -677,9 +666,6 @@ function GM:ClearClientState()
 
     gui.EnableScreenClicker(false)
 end
-net.Receive("TTT_ClearClientState", function()
-    GAMEMODE:ClearClientState()
-end)
 
 local color_trans = Color(0, 0, 0, 0)
 

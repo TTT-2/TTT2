@@ -293,31 +293,27 @@ function SendFullStateUpdate()
 end
 
 ---
--- Resynces the list of @{Player}s for a given list of @{Player}s
--- @param nil|Player|table ply_or_rf
+-- Resets the list of @{Player}s for a given list of @{Player}s
 -- @realm server
-function SendRoleReset(ply_or_rf)
+function RoleReset()
     local players = playerGetAll()
-    local plyCount = #players
 
-    for i = 1, plyCount do
+    for i = 1, #players do
         local ply = players[i]
 
-        TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
-
-        for k = 1, plyCount do
-            local p = players[k]
-
-            TTT2NETTABLE[ply][p] = { ROLE_NONE, TEAM_NONE }
-        end
+        RoleResetForPlayer(ply)
     end
+end
 
-    net.Start("TTT_RoleReset")
+function RoleResetForPlayer(ply)
+    local players = playerGetAll()
 
-    if ply_or_rf then
-        net.Send(ply_or_rf)
-    else
-        net.Broadcast()
+    TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+    for i = 1, #players do
+        local p = players[i]
+
+        TTT2NETTABLE[ply][p] = { ROLE_NONE, TEAM_NONE }
     end
 end
 

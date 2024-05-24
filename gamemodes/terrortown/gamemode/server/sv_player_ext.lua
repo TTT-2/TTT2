@@ -1098,7 +1098,7 @@ function plymeta:GetSpawnPosition()
 end
 
 ---
--- Sets the if a player was active (TEAM_TERROR) in a round.
+-- Sets the if a player was active (TEAM_TERROR) in a gameloop.
 -- @param boolean state The state
 -- @internal
 -- @realm server
@@ -1680,6 +1680,8 @@ local function SetPlayerReady(_, ply)
     entspawnscript.TransmitToPlayer(ply)
 
     map.SyncToClient(ply)
+
+    gameloop.PlayerReady(ply)
 
     ---
     -- @realm server

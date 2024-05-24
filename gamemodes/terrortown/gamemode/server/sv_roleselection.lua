@@ -1001,6 +1001,16 @@ function roleselection.SelectRoles(plys, maxPlys)
     SendFullStateUpdate()
 end
 
+function roleselection.ResetAllPlayers()
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        plys[i]:SetRole(ROLE_NONE)
+    end
+
+    SendFullStateUpdate()
+end
+
 ---
 -- @param table layeredBaseRolesTbl
 -- @param table availableBaseRolesTbl
