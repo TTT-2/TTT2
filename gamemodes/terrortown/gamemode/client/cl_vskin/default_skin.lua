@@ -792,12 +792,10 @@ function SKIN:PaintFormButtonTTT2(panel, w, h)
         colorBox = ColorAlpha(colors.accent, alphaDisabled)
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
     elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-        colorBoxBack = colors.settingsBox
         colorBox = colors.accentActive
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
         shift = 1
     elseif panel.Hovered then
-        colorBoxBack = colors.settingsBox
         colorBox = colors.accentHover
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     end

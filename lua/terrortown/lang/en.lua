@@ -26,9 +26,6 @@ L.traitors = "Team Traitor"
 L.round_minplayers = "Not enough players to start a new round..."
 L.round_voting = "Vote in progress, delaying new round by {num} seconds..."
 L.round_begintime = "A new round begins in {num} seconds. Prepare yourself."
-L.round_selected = "The Traitors have been selected."
-L.round_started = "The round has begun!"
-L.round_restart = "The round has been forced to restart by an admin."
 
 L.round_traitors_one = "Traitor, you stand alone."
 L.round_traitors_more = "Traitor, these are your allies: {names}"
@@ -366,7 +363,6 @@ Use on fresh corpses to get the killer's DNA and track them down.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
-L.magnet_help = "{primaryfire} to attach body to surface."
 
 -- Grenades and misc
 L.grenade_smoke = "Smoke grenade"
@@ -521,71 +517,65 @@ L.tip6 = "When a Traitor dies, all Detectives are rewarded equipment credits."
 
 L.tip7 = "When the Traitors have made significant progress in killing innocents, they will receive an equipment credit as reward."
 
-L.tip8 = "Traitors and Detectives can collect unspent equipment credits from the dead bodies of other Traitors and Detectives."
+L.tip8 = "Shopping roles can collect unspent equipment credits from the dead bodies of other shopping roles such as Traitors and Detectives."
 
 L.tip9 = "The Poltergeist can turn any physics object into a deadly projectile. Each punch is accompanied by a blast of energy hurting anyone nearby."
 
-L.tip10 = "As Traitor or Detective, keep an eye on red messages in the top right. These will be important for you."
+L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "As Traitor or Detective, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+L.tip11 = "The Detectives' DNA Scanner can be used to gather DNA samples from weapons and items and then scan to find the location of the player who used them. Useful when you can get a sample from a corpse or a disarmed C4!"
 
-L.tip12 = "The Detectives' DNA Scanner can be used to gather DNA samples from weapons and items and then scan to find the location of the player who used them. Useful when you can get a sample from a corpse or a disarmed C4!"
+L.tip12 = "When you are close to someone you kill, some of your DNA is left on the corpse. This DNA can be used with a Detective's DNA Scanner to find your current location. Better hide the body after you knife someone!"
 
-L.tip13 = "When you are close to someone you kill, some of your DNA is left on the corpse. This DNA can be used with a Detective's DNA Scanner to find your current location. Better hide the body after you knife someone!"
+L.tip13 = "The further you are away from someone you kill, the faster your DNA sample on their body will decay."
 
-L.tip14 = "The further you are away from someone you kill, the faster your DNA sample on their body will decay."
+L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "Are you Traitor and going sniping? Consider trying out the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "As Traitor, the Teleporter can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+L.tip16 = "Are the innocents all grouped up and hard to pick off? Consider trying out the Radio to play sounds of C4 or a firefight to lead some of them away."
 
-L.tip17 = "Are the innocents all grouped up and hard to pick off? Consider trying out the Radio to play sounds of C4 or a firefight to lead some of them away."
+L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "Using the Radio as Traitor, you can play sounds through your Equipment Menu after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
+L.tip18 = "As Detective, if you have leftover credits you could give a trusted Innocent a Defuser. Then you can spend your time doing the serious investigative work and leave the risky bomb defusal to them."
 
-L.tip19 = "As Detective, if you have leftover credits you could give a trusted Innocent a Defuser. Then you can spend your time doing the serious investigative work and leave the risky bomb defusal to them."
+L.tip19 = "The Detectives' Binoculars allow long-range searching and identifying of corpses. Bad news if the Traitors were hoping to use a corpse as bait. Of course, while using the Binoculars a Detective is unarmed and distracted..."
 
-L.tip20 = "The Detectives' Binoculars allow long-range searching and identifying of corpses. Bad news if the Traitors were hoping to use a corpse as bait. Of course, while using the Binoculars a Detective is unarmed and distracted..."
+L.tip20 = "The Detectives' Health Station lets wounded players recover. Of course, those wounded people could be Traitors..."
 
-L.tip21 = "The Detectives' Health Station lets wounded players recover. Of course, those wounded people could be Traitors..."
+L.tip21 = "The Health Station records a DNA sample of everyone who uses it. Detectives can use this with the DNA Scanner to find out who has been healing up."
 
-L.tip22 = "The Health Station records a DNA sample of everyone who uses it. Detectives can use this with the DNA Scanner to find out who has been healing up."
+L.tip22 = "Unlike weapons and C4, the Radio equipment for Traitors does not contain a DNA sample of the person who planted it. Don't worry about Detectives finding it and blowing your cover."
 
-L.tip23 = "Unlike weapons and C4, the Radio equipment for Traitors does not contain a DNA sample of the person who planted it. Don't worry about Detectives finding it and blowing your cover."
+L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings. For example, you can permanently disable these tips there."
+L.tip24 = "When a Detective searches a body, the result is available to all players via the scoreboard by clicking on the name of the dead person."
 
-L.tip25 = "When a Detective searches a body, the result is available to all players via the scoreboard by clicking on the name of the dead person."
+L.tip25 = "In the scoreboard, a magnifying glass icon next to someone's name indicates you have search information about that person. If the icon is bright, the data comes from a Detective and may contain additional information."
 
-L.tip26 = "In the scoreboard, a magnifying glass icon next to someone's name indicates you have search information about that person. If the icon is bright, the data comes from a Detective and may contain additional information."
+L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "As Detective, corpses with a magnifying glass after the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+L.tip27 = "Spectators can press {mutekey} to cycle through muting other spectators or living players."
 
-L.tip28 = "Spectators can press {mutekey} to cycle through muting other spectators or living players."
+L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "If the server has installed additional languages, you can switch to a different language at any time in the Settings menu."
+L.tip29 = "Quickchat or 'radio' commands can be used by pressing {zoomkey}."
 
-L.tip30 = "Quickchat or 'radio' commands can be used by pressing {zoomkey}."
+L.tip30 = "The Crowbar's secondary fire will push other players."
 
-L.tip31 = "As Spectator, press {duckkey} to unlock your mouse cursor and click the buttons on this tips panel. Press {duckkey} again to go back to mouseview."
+L.tip31 = "Firing through the ironsights of a weapon will slightly increase your accuracy and decrease recoil. Crouching does not."
 
-L.tip32 = "The Crowbar's secondary fire will push other players."
+L.tip32 = "Smoke grenades are effective indoors, especially for creating confusion in crowded rooms."
 
-L.tip33 = "Firing through the ironsights of a weapon will slightly increase your accuracy and decrease recoil. Crouching does not."
+L.tip33 = "As Traitor, remember you can carry dead bodies and hide them from the prying eyes of the innocent and their Detectives."
 
-L.tip34 = "Smoke grenades are effective indoors, especially for creating confusion in crowded rooms."
+L.tip34 = "On the scoreboard, click the name of a living player and you can select a tag for them such as 'suspect' or 'friend'. This tag will show up if you have them under your crosshair."
 
-L.tip35 = "As Traitor, remember you can carry dead bodies and hide them from the prying eyes of the innocent and their Detectives."
+L.tip35 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
 
-L.tip36 = "The tutorial available under {helpkey} contains an overview of the most important keys of the game."
+L.tip36 = "C4 that explodes due to a mistake in disarming it has a smaller explosion than C4 that reaches zero on its timer."
 
-L.tip37 = "On the scoreboard, click the name of a living player and you can select a tag for them such as 'suspect' or 'friend'. This tag will show up if you have them under your crosshair."
-
-L.tip38 = "Many of the placeable equipment items (such as C4, Radio) can be stuck on walls using secondary fire."
-
-L.tip39 = "C4 that explodes due to a mistake in disarming it has a smaller explosion than C4 that reaches zero on its timer."
-
-L.tip40 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases (like capturing a point in TF2). This mode puts the pressure on the traitors to keep things moving."
+L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "Round Report"
@@ -1046,7 +1036,6 @@ L.label_damage_indicator_maxalpha = "Maximum opacity"
 L.label_performance_halo_enable = "Draw an outline around some entities while looking at them"
 L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
 L.label_performance_ohicon_enable = "Enable role icons over players' heads"
-L.label_interface_tips_enable = "Show gameplay tips at the bottom of the screen while spectating"
 L.label_interface_popup = "Start of round info popup duration"
 L.label_interface_fastsw_menu = "Enable menu with fast weapon switch"
 L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
@@ -2263,3 +2252,44 @@ L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
 L.header_maps_select = "Select and Change Maps"
 
 L.button_change_map = "Change Map"
+
+-- 2024-05-20
+L.submenu_commands_commands_title = "Commands"
+
+L.header_commands_round_restart = "Round Restart"
+L.header_commands_player_slay = "Slay Player"
+L.header_commands_player_teleport = "Teleport Player to Focused Point"
+L.header_commands_player_respawn = "Respawn Player at Focused Point"
+L.header_commands_player_add_credits = "Add Equipment Credits"
+L.header_commands_player_set_health = "Set Health"
+L.header_commands_player_set_armor = "Set Armor"
+
+L.label_button_round_restart = "round restart"
+L.label_button_player_slay = "slay player"
+L.label_button_player_teleport = "teleport player"
+L.label_button_player_respawn = "respawn player"
+L.label_button_player_add_credits = "add credits"
+L.label_button_player_set_health = "set health"
+L.label_button_player_set_armor = "set armor"
+
+L.label_slider_add_credits = "Set credit amount"
+L.label_slider_set_health = "Set health"
+L.label_slider_set_armor = "Set armor"
+
+L.label_player_select = "Select affected player"
+L.label_execute_command = "Execute command"
+
+-- 2024-05-22
+L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+L.header_loadingscreen = "Loading Screen"
+
+L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+L.label_enable_loadingscreen = "Enable the loading screen"
+L.label_enable_loadingscreen_tips = "Enable tips on loading screen"

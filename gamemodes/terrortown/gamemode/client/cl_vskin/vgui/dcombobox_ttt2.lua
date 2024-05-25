@@ -39,6 +39,36 @@ function PANEL:Init()
     self.valueIndices = {}
 
     self.valueType = nil
+
+    self.slaves = {}
+
+    local value, _ = self:GetSelected()
+
+    self:UpdateSlaves(value ~= nil)
+end
+
+---
+-- @param Panel slave
+-- @realm client
+function PANEL:AddSlave(slave)
+    if not IsValid(slave) then
+        return
+    end
+
+    self.slaves[#self.slaves + 1] = slave
+
+    local value, _ = self:GetSelected()
+
+    slave:SetEnabled(value ~= nil)
+end
+
+---
+-- @param boolean val
+-- @realm client
+function PANEL:UpdateSlaves(val)
+    for i = 1, #self.slaves do
+        self.slaves[i]:SetEnabled(val)
+    end
 end
 
 ---
@@ -218,6 +248,8 @@ function PANEL:ChooseOptionID(index, ignoreCallbackEnabledVars)
 
     self:SetText(choice.title)
     self:OnSelect(index, value, choice.data)
+
+    self:UpdateSlaves(value ~= nil)
 
     self:CloseMenu()
 
