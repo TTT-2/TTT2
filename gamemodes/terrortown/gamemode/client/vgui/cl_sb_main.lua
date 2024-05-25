@@ -121,17 +121,17 @@ local function UntilMapChange()
     local roundsLeft = gameloop.GetRoundsLeft()
     local timeLeft = floor(gameloop.GetLevelTimeLeft())
 
-    local h = floor(timeLeft / 3600)
+    local hours = floor(timeLeft / 3600)
 
-    timeLeft = timeLeft - floor(h * 3600)
+    timeLeft = timeLeft - floor(hours * 3600)
 
-    local m = floor(timeLeft / 60)
+    local minutes = floor(timeLeft / 60)
 
-    timeLeft = timeLeft - floor(m * 60)
+    timeLeft = timeLeft - floor(minutes * 60)
 
-    local s = floor(timeLeft)
+    local seconds = floor(timeLeft)
 
-    return roundsLeft, string.format("%02i:%02i:%02i", h, m, s)
+    return roundsLeft, string.format("%02i:%02i:%02i", hours, minutes, seconds)
 end
 
 ---
