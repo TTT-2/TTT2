@@ -101,6 +101,10 @@ if CLIENT then
             loadingscreen.state = LS_FADE_IN
             loadingscreen.timeStateChange = SysTime()
 
+            if cvLoadingScreen:GetBool() then
+                surface.PlaySound("ttt/loadingscreen.wav")
+            end
+
             timer.Create("TTT2LoadingscreenShow", durationStateChange, 1, function()
                 loadingscreen.state = LS_SHOWN
                 loadingscreen.timeStateChange = SysTime()
@@ -152,6 +156,43 @@ if CLIENT then
         draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 5)
         draw.Box(0, 0, ScrW(), ScrH(), colorLoadingScreen)
 
+        draw.AdvancedText(
+            LANG.TryTranslation("loadingscreen_round_restart_title"),
+            "PureSkinPopupTitle",
+            0.5 * ScrW(),
+            0.15 * ScrH(),
+            colorTip,
+            TEXT_ALIGN_CENTER,
+            TEXT_ALIGN_CENTER,
+            true,
+            appearance.GetGlobalScale()
+        )
+
+        local text = ""
+
+        if gameloop.HasLevelLimits() then
+            local roundsLeft, timeLeft = gameloop.UntilMapChange()
+
+            text = LANG.GetParamTranslation(
+                "loadingscreen_round_restart_subtitle_limits",
+                { map = game.GetMap(), rounds = roundsLeft, time = timeLeft }
+            )
+        else
+            text = LANG.TryTranslation("loadingscreen_round_restart_subtitle")
+        end
+
+        draw.AdvancedText(
+            text,
+            "PureSkinPopupText",
+            0.5 * ScrW(),
+            0.2 * ScrH(),
+            colorTip,
+            TEXT_ALIGN_CENTER,
+            TEXT_ALIGN_CENTER,
+            true,
+            appearance.GetGlobalScale()
+        )
+
         if not cvLoadingScreenTips:GetBool() then
             return
         end
@@ -175,7 +216,7 @@ if CLIENT then
                 textWrapped[i],
                 "PureSkinRole",
                 0.5 * ScrW(),
-                0.7 * ScrH() + i * heightLine,
+                0.85 * ScrH() + i * heightLine,
                 colorTip,
                 TEXT_ALIGN_CENTER,
                 TEXT_ALIGN_CENTER,

@@ -8,8 +8,11 @@ local draw = draw
 local math = math
 local string = string
 local vgui = vgui
+<<<<<<< Updated upstream
 local max = math.max
 local floor = math.floor
+=======
+>>>>>>> Stashed changes
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local table = table
@@ -118,6 +121,7 @@ surface.CreateFont("treb_small", {
     weight = 700,
 })
 
+<<<<<<< Updated upstream
 local function UntilMapChange()
     local rounds_left = max(0, GetGlobalInt("ttt_rounds_left", 6))
     local time_left = floor(max(0, (GetGlobalInt("ttt_time_limit_minutes") or 60) * 60 - CurTime()))
@@ -134,6 +138,8 @@ local function UntilMapChange()
     return rounds_left, string.format("%02i:%02i:%02i", h, m, s)
 end
 
+=======
+>>>>>>> Stashed changes
 ---
 -- Comparison functions used to sort scoreboard
 sboard_sort = {
@@ -184,8 +190,13 @@ function PANEL:Init()
     self.mapchange:SetContentAlignment(9)
 
     self.mapchange.Think = function(sf)
+<<<<<<< Updated upstream
         if GetGlobalBool("ttt_session_limits_enabled") then
             local r, t = UntilMapChange()
+=======
+        if gameloop.HasLevelLimits() then
+            local r, t = gameloop.UntilMapChange()
+>>>>>>> Stashed changes
             sf:SetText(GetPTranslation("sb_mapchange", { num = r, time = t }))
         else
             sf:SetText(GetTranslation("sb_mapchange_disabled"))
