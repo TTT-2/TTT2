@@ -75,6 +75,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed radio tab in shop UI
+- Removed `round_restart`, `round_selected` and `round_started` MStack messages to reduce message spawm (by @TimGoll)
 - Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
 
 ### Breaking Changes
