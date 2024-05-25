@@ -37,6 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a submenu to change maps
   - Added a submenu to issue basic commands
 - Added a new `gameloop` module that contains all functions related to the round structure (by @Tim Goll)
+- Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 
 ### Changed
 
@@ -77,11 +78,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed radio tab in shop UI
+- Removed `round_restart`, `round_selected` and `round_started` MStack messages to reduce message spawm (by @TimGoll)
+- Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
 
 ### Breaking Changes
 
 - Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
+- Removed the `TIPS` module and replaced it with a new `tips` module
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 

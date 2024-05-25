@@ -524,67 +524,61 @@ L.tip8 = "叛徒和探長能從夥伴屍體上，取得未被消耗的信用點�
 
 L.tip9 = "搗蛋鬼將使物體變得極其危險。搗蛋鬼調整過的物體將產生爆炸能量傷害接近它的人。"
 
-L.tip10 = "叛徒與探長應保持注意螢幕右上方的紅色訊息，這對你無比重要。"
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "若叛徒與探長能和同伴配合得好，將擁有額外的信用點數。請將它用在對的地方！"
+L.tip11 = "探長的DNA掃描器可使用在武器或道具上，找到曾使用它的玩家的位置。用在屍體或C4上效果將更好！"
 
-L.tip12 = "探長的DNA掃描器可使用在武器或道具上，找到曾使用它的玩家的位置。用在屍體或C4上效果將更好！"
+L.tip12 = "太靠近你殺害的人的話，DNA將殘留在屍體上，探長的DNA掃描器會以此找到你的正確位置。切記，殺了人最好將屍體藏好！"
 
-L.tip13 = "太靠近你殺害的人的話，DNA將殘留在屍體上，探長的DNA掃描器會以此找到你的正確位置。切記，殺了人最好將屍體藏好！"
+L.tip13 = "殺人時離被害者越遠，殘留在屍體上的DNA就會越快衰變！"
 
-L.tip14 = "殺人時離被害者越遠，殘留在屍體上的DNA就會越快衰變！"
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "你是叛徒而且想進行狙擊？試試偽裝吧！若你狙殺失準，逃到安全的地方，取消偽裝，就沒人知道是你開的槍囉！"
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "作為叛徒，傳送器可幫助你逃脫追蹤，並讓你得以迅速穿過整個地圖。請隨時確保有個安全的傳送標記。"
+L.tip16 = "是否遇過無辜者群聚在一起而難以下手？請試試用收音機發出C4嗶嗶聲或交火聲，讓他們分散。"
 
-L.tip17 = "是否遇過無辜者群聚在一起而難以下手？請試試用收音機發出C4嗶嗶聲或交火聲，讓他們分散。"
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "叛徒可以在選單使用已放置的收音機，依序點擊想播放的聲音，就會按順序排列播放。"
+L.tip18 = "探長若有多餘的信用點數，可將拆彈器交給一位可信任的無辜者，將危險的C4交給他們，自己全神貫注地調查與處決叛徒。"
 
-L.tip19 = "探長若有多餘的信用點數，可將拆彈器交給一位可信任的無辜者，將危險的C4交給他們，自己全神貫注地調查與處決叛徒。"
+L.tip19 = "探長的望遠鏡可讓你遠距離搜索並確認屍體，壞消息是叛徒總是會用誘餌欺騙你。當然，使用望遠鏡的探長全身都是破綻。"
 
-L.tip20 = "探長的望遠鏡可讓你遠距離搜索並確認屍體，壞消息是叛徒總是會用誘餌欺騙你。當然，使用望遠鏡的探長全身都是破綻。"
+L.tip20 = "探長的醫療站可讓受傷的玩家恢復健康，當然，其中也包括叛徒..."
 
-L.tip21 = "探長的醫療站可讓受傷的玩家恢復健康，當然，其中也包括叛徒..."
+L.tip21 = "治療站將遺留每位前來治療的人的DNA樣本，探長可將其用在DNA掃描器上，尋找究竟誰曾受過治療。"
 
-L.tip22 = "治療站將遺留每位前來治療的人的DNA樣本，探長可將其用在DNA掃描器上，尋找究竟誰曾受過治療。"
+L.tip22 = "與武器、C4不同，收音機並不會留下你的DNA樣本，不用擔心探長會在上頭用DNA識破你的身分。"
 
-L.tip23 = "與武器、C4不同，收音機並不會留下你的DNA樣本，不用擔心探長會在上頭用DNA識破你的身分。"
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "按下 {helpkey} 閱讀教學或變更設定，比如說，你可以永遠關掉現在所看到的提示唷～"
+L.tip24 = "探長確認屍體後，相關訊息將在計分板公布，如要查看只需點擊死者之名字即可。"
 
-L.tip25 = "探長確認屍體後，相關訊息將在計分板公布，如要查看只需點擊死者之名字即可。"
+L.tip25 = "計分板上，人物名字旁的放大鏡圖樣可以查看關於他的訊息，若圖樣亮著，代表是某位探長確認後的結果。"
 
-L.tip26 = "計分板上，人物名字旁的放大鏡圖樣可以查看關於他的訊息，若圖樣亮著，代表是某位探長確認後的結果。"
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "探長調查屍體後的結果將公布在計分板，供所有玩家查看。"
+L.tip27 = "觀察者可以按下 {mutekey} 循環調整對其他觀察者或遊戲中的玩家靜音。"
 
-L.tip28 = "觀察者可以按下 {mutekey} 循環調整對其他觀察者或遊戲中的玩家靜音。"
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "若伺服器有安裝其他語言，你可以在任何時間開啟F1選單，啟用不同語言。"
+L.tip29 = "若要使用語音或無線電，可以按下 {zoomkey} 使用。"
 
-L.tip30 = "若要使用語音或無線電，可以按下 {zoomkey} 使用。"
+L.tip30 = "使用撬棍時，按下右鍵可推開其他玩家。"
 
-L.tip31 = "作為觀察者，按下 {duckkey} 能使視角固定，可在遊戲內移動游標，也可以點擊提示欄裡的按鈕。此外，再次按下 {duckkey} 會解除之，恢復預設視角控制。"
+L.tip31 = "使用武器瞄準器射擊將些微提升你的精準度，並降低後座力。蹲下則不會。"
 
-L.tip32 = "使用撬棍時，按下右鍵可推開其他玩家。"
+L.tip32 = "煙霧彈於室內相當有效，尤其是在擁擠的房間中製造混亂。"
 
-L.tip33 = "使用武器瞄準器射擊將些微提升你的精準度，並降低後座力。蹲下則不會。"
+L.tip33 = "叛徒，請記住你能搬運屍體並將它們藏起來，避開無辜者與探長的耳目。"
 
-L.tip34 = "煙霧彈於室內相當有效，尤其是在擁擠的房間中製造混亂。"
+L.tip34 = "在計分板上，點擊活人玩家的名字，可以選擇一個標記（如令人懷疑的或友好的）記錄這位玩家。此標誌會在你的準心指向該玩家時顯示。"
 
-L.tip35 = "叛徒，請記住你能搬運屍體並將它們藏起來，避開無辜者與探長的耳目。"
+L.tip35 = "許多需放置的裝備（如C4或收音機），可以使用右鍵將其置於牆上。"
 
-L.tip36 = "按下 {helpkey} 可以觀看教學，其中包含了重要的遊戲關鍵。"
+L.tip36 = "拆除C4時失誤導致的爆炸，比起直接引爆時來得小。"
 
-L.tip37 = "在計分板上，點擊活人玩家的名字，可以選擇一個標記（如令人懷疑的或友好的）記錄這位玩家。此標誌會在你的準心指向該玩家時顯示。"
-
-L.tip38 = "許多需放置的裝備（如C4或收音機），可以使用右鍵將其置於牆上。"
-
-L.tip39 = "拆除C4時失誤導致的爆炸，比起直接引爆時來得小。"
-
-L.tip40 = "若時間上顯示「急速模式」，此回合的時間會很短，但每位玩家的死亡都將延長時間（就像TF2的佔領點模式）。延長時間將迫使叛徒加緊腳步。"
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "回合報告"
@@ -1045,7 +1039,6 @@ L.label_damage_indicator_maxalpha = "最大透明度"
 L.label_performance_halo_enable = "指向特定實體時顯示外框"
 L.label_performance_spec_outline_enable = "啟用被附身物品的外框"
 L.label_performance_ohicon_enable = "啟用頭上身份圖標"
-L.label_interface_tips_enable = "啟用觀察時屏幕下方的遊戲提示"
 L.label_interface_popup = "回合開始信息持續時間"
 L.label_interface_fastsw_menu = "啟用快速切換菜單"
 L.label_inferface_wswitch_hide_enable = "啟用武器菜單自動關閉"
@@ -2288,3 +2281,18 @@ L.decoy_help_primary = "安放誘餌"
 
 --L.label_player_select = "Select affected player"
 --L.label_execute_command = "Execute command"
+
+-- 2024-05-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"

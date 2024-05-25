@@ -99,7 +99,6 @@ ttt_include("cl_marker_vision_data")
 ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
-ttt_include("cl_tips")
 ttt_include("cl_msgstack")
 ttt_include("cl_eventpopup")
 ttt_include("cl_hudpickup")
@@ -208,6 +207,8 @@ function GM:Initialize()
 
     ShopEditor.BuildValidEquipmentCache()
 
+    tips.Initialize()
+
     ---
     -- @realm shared
     -- stylua: ignore
@@ -226,6 +227,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
+    loadingscreen.End()
+
     ---
     -- @realm client
     -- stylua: ignore
@@ -390,6 +393,8 @@ function GM:OnReloaded()
     keyhelp.InitializeBasicKeys()
 
     ShopEditor.BuildValidEquipmentCache()
+
+    tips.Initialize()
 
     LocalPlayer():SetSettingOnServer(
         "enable_dynamic_fov",
@@ -569,36 +574,7 @@ function GM:CleanUpMap()
         -- modify the collision group clientside.
         ent.NoTarget = true
     end
-
-    game.CleanUpMap()
 end
-
--- server tells us to call this when our LocalPlayer has spawned
-local function PlayerSpawn()
-    local as_spec = net.ReadBit() == 1
-    if as_spec then
-        TIPS.Show()
-    else
-        TIPS.Hide()
-    end
-
-    -- TTT Totem prevention
-    if LocalPlayer().GetRoleTable then
-        ErrorNoHaltWithStack(
-            "[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod..."
-        )
-    end
-end
-net.Receive("TTT_PlayerSpawned", PlayerSpawn)
-
-local function PlayerDeath()
-    if not TIPS then
-        return
-    end
-
-    TIPS.Show()
-end
-net.Receive("TTT_PlayerDied", PlayerDeath)
 
 ---
 -- Called to determine if the LocalPlayer should be drawn.
