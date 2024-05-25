@@ -307,9 +307,6 @@ function GM:Initialize()
     -- Delay reading of cvars until config has definitely loaded
     self.cvar_init = false
 
-    SetGlobalFloat("ttt_round_end", -1)
-    SetGlobalFloat("ttt_haste_end", -1)
-
     -- For the paranoid
     math.randomseed(os.time())
     math.random()
@@ -632,15 +629,6 @@ function GM:PostCleanupMap()
     door.SetUp()
 
     gameloop.Prepare()
-end
-
----
--- Increases the global round end time var
--- @param number endtime time (addition)
--- @realm server
--- @internal
-function IncRoundEnd(incr)
-    SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
 end
 
 local function TraitorSorting(a, b)

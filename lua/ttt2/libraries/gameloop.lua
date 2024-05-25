@@ -99,7 +99,8 @@ if SERVER then
 
     function gameloop.Initialize()
         gameloop.SetRoundsLeft(cvRoundLimit:GetInt())
-
+        gameloop.SetPhaseEnd(-1)
+        gameloop.SetHasteEnd(-1)
         gameloop.SetRoundState(ROUND_WAIT)
 
         gameloop.WaitForPlayers()
@@ -209,7 +210,7 @@ if SERVER then
 
             -- this is a "fake" time shown to innocents, showing the end time if no
             -- one would have been killed, it has no gameplay effect
-            SetGlobalFloat("ttt_haste_end", timeRoundEnd)
+            gameloop.SetHasteEnd(timeRoundEnd)
         end
 
         gameloop.SetPhaseEnd(timeRoundEnd)
@@ -360,7 +361,7 @@ if SERVER then
             return
         end
 
-        if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
+        if CurTime() > gameloop.GetPhaseEnd() then
             gameloop.End(WIN_TIMELIMIT)
         else
             ---
@@ -434,12 +435,30 @@ if SERVER then
     end
 
     ---
-    -- Sets the synced phase end time variable
+    -- Increases the global round end time variable.
+    -- @param number time The time addition
+    -- @realm server
+    -- @internal
+    function gameloop.IncreasePhaseEnd(time)
+        gameloop.SetPhaseEnd(gameloop.GetPhaseEnd() + time)
+    end
+
+    ---
+    -- Sets the synced phase end time variable.
     -- @param number time time
     -- @realm server
     -- @internal
     function gameloop.SetPhaseEnd(time)
         SetGlobalFloat("ttt_round_end", time)
+    end
+
+    ---
+    -- Sets the synced haste end time variable.
+    -- @param number time time
+    -- @realm server
+    -- @internal
+    function gameloop.SetHasteEnd(time)
+        SetGlobalFloat("ttt_haste_end", time)
     end
 
     function gameloop.SetLevelStartTime(time)
@@ -718,6 +737,10 @@ end
 
 function gameloop.GetPhaseEnd()
     return GetGlobalFloat("ttt_round_end", 0)
+end
+
+function gameloop.GetHasteEnd()
+    return GetGlobalFloat("ttt_haste_end", 0)
 end
 
 function gameloop.GetLevelStartTime()

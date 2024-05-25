@@ -835,8 +835,12 @@ function GM:PlayerDeath(victim, infl, attacker)
     ---
     -- @realm server
     -- stylua: ignore
-    if gameloop.IsHasteMode() and gameloop.GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
-        IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
+    if
+        gameloop.IsHasteMode()
+        and gameloop.GetRoundState() == ROUND_ACTIVE
+        and not hook.Run("TTT2ShouldSkipHaste", victim, attacker)
+    then
+        gameloop.IncreasePhaseEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
     end
 
     if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
