@@ -24,11 +24,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Text / Nickname length limiting (by @TimGoll)
 - Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
 - Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
-- Added multiple voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+- Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
   - Push-to-Talk (default)
   - Push-to-Mute
   - Toggle
   - Toggle (Activate on Join)
+- Team Voice Chat is always push-to-talk and temporarily disables global voice chat while being used
 - Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
 - Added toggle and run buttons to many F1 menu elements (by @TimGoll)
 - Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
@@ -53,6 +54,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
   - The holdtype for pistol weapons now matches the viewmodel
+- `VOICE.IsSpeaking(ply)` (clientside) can now be used to check if any player is speaking to you
 - Unified the spec color usage throughout the whole UI (by @TimGoll)
 - Cleanup and performance optimizations for marks library (by @WardenPotato)
 - Updated the Turkish localization file (by @NovaDiablox)
