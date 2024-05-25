@@ -1036,6 +1036,8 @@ end
 function GM:TTT2PreEndRound(result, duration)
     events.Trigger(EVENT_FINISH, result)
 
+    LANG.Msg("win_showreport", { num = duration })
+
     events.UpdateScoreboard()
 
     -- send the clients the round log, players will be shown the report

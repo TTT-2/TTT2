@@ -109,7 +109,7 @@ if SERVER then
         -- if not enough players are available, we go into a idle state where
         -- the game periodically tries again to start a new round until enough
         -- player were found
-        if gameloop.CheckForAbort() then --TODO new function
+        if gameloop.CheckForAbort() then
             return
         end
 
@@ -157,9 +157,6 @@ if SERVER then
         roleselection.ResetAllPlayers()
 
         gameloop.ClearClientState()
-
-        -- TODO: if a player is ready via `TTT2PlayerFinishedReloading` or `TTT2PlayerReady` these
-        -- timers should be updated again
         gameloop.SetPhaseEnd(CurTime() + timePrepPhase)
 
         -- starts the preparing phase timer that transitions from the preparing phase to the active round
@@ -217,7 +214,7 @@ if SERVER then
 
         gameloop.SetPhaseEnd(timeRoundEnd)
         gameloop.StartWinChecks()
-        gameloop.StartNameChangeChecks() -- todo new function
+        gameloop.StartNameChangeChecks()
 
         -- todo: trigger the menu at round begin with role info
         --timer.Simple(1.5, TellTraitorsAboutTraitors)
@@ -249,8 +246,6 @@ if SERVER then
         PrintResultMessage(result)
 
         local timeEndPhase = math.max(5, cvDurationEndPhase:GetInt())
-
-        --LANG.Msg("win_showreport", { num = timeEndPhase }) -- todo remove as well
 
         timer.Create("end2prep", timeEndPhase, 1, gameloop.Post)
 
@@ -423,7 +418,6 @@ if SERVER then
         end
     end
 
-    -- todo maybe called at any time a player is ready to update/clear all important variables
     function gameloop.PlayerReady(ply)
         gameloop.ClearClientState(ply)
         gameloop.SendRoundState(ply)
@@ -434,6 +428,9 @@ if SERVER then
 
         -- this should fix issues where late joiners don't receive the data
         SendFullStateUpdate()
+
+        -- maybe we need to trigegr syncing of global bools/ints as well? or are they automatically
+        -- synced on connect?
     end
 
     ---
