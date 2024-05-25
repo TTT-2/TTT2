@@ -69,11 +69,6 @@ local playerGetAll = player.GetAll
 ---
 -- @realm server
 -- stylua: ignore
-local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Credits
@@ -523,7 +518,6 @@ end
 -- @hook
 -- @realm server
 function GM:SyncGlobals()
-    SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
     SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
     SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
     SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
@@ -551,10 +545,6 @@ function GM:SyncGlobals()
     -- stylua: ignore
     hook.Run("TTT2SyncGlobals")
 end
-
-cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
-    SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
-end)
 
 cvars.AddChangeCallback(ttt_session_limits_enabled:GetName(), function(cv, old, new)
     SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))

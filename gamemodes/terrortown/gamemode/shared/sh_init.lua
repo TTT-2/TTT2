@@ -6,6 +6,11 @@
 -- stylua: ignore
 local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
+---
+-- @realm server
+-- stylua: ignore
+local cvHasteMode = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 GM.Name = "TTT2"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
@@ -651,7 +656,7 @@ end
 -- @return boolean
 -- @realm shared
 function HasteMode()
-    return GetGlobalBool("ttt_haste", false)
+    return cvHasteMode:GetBool()
 end
 
 -- Create teams
