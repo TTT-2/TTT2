@@ -118,7 +118,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
     end
 
     -- simplified case for those who die and get found during prep
-    if GetRoundState() == ROUND_PREP then
+    if gameloop.GetRoundState() == ROUND_PREP then
         CORPSE.SetFound(rag, true)
 
         return

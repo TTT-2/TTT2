@@ -219,7 +219,7 @@ end
 ---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
-    if not client:IsSpec() and GetRoundState() ~= ROUND_POST then
+    if not client:IsSpec() and gameloop.GetRoundState() ~= ROUND_POST then
         return
     end
 

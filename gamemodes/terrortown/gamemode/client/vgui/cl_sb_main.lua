@@ -84,7 +84,7 @@ function ScoreGroup(ply)
             if
                 client:IsSpec()
                 or client:IsActive() and client:GetSubRoleData().isOmniscientRole
-                or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
+                or gameloop.GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
             then
                 return GROUP_NOTFOUND
             else

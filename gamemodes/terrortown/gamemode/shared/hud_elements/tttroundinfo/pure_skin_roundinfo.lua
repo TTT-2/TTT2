@@ -54,7 +54,7 @@ if CLIENT then
     function HUDELEMENT:Draw()
         local client = LocalPlayer()
         local L = GetLang()
-        local round_state = GAMEMODE.round_state
+        local round_state = gameloop.GetRoundState()
 
         -- draw bg and shadow
         self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)

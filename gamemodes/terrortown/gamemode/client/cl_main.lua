@@ -189,9 +189,6 @@ function GM:Initialize()
     -- stylua: ignore
     hook.Run("TTT2Initialize")
 
-    self.round_state = ROUND_WAIT
-    self.roundCount = 0
-
     -- load default TTT2 language files or mark them as downloadable on the server
     -- load addon language files in a second pass, the core language files are loaded earlier
     fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
@@ -448,96 +445,6 @@ function GM:HUDClear()
     TBHUD:Clear()
 end
 
----
--- Returns the current round state
--- @return boolean
--- @realm client
-function GetRoundState()
-    return GAMEMODE.round_state
-end
-
-local function RoundStateChange(o, n)
-    if n == ROUND_PREP then
-        -- prep starts
-        EPOP:Clear()
-
-        -- show warning to spec mode players
-        if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
-            LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
-        end
-
-        -- reset cached server language in case it has changed
-        RunConsoleCommand("_ttt_request_serverlang")
-
-        GAMEMODE.roundCount = GAMEMODE.roundCount + 1
-
-        -- clear decals in cache from previous round
-        util.ClearDecals()
-
-        local client = LocalPlayer()
-
-        -- Resets bone positions that fixes broken fingers on bad addons.
-        -- When late-joining a server this function is executed before the local player
-        -- is completely set up. Therefore we safeguard this with this check.
-        if IsValid(client) and isfunction(client.GetViewModel) then
-            weaponrenderer.ResetBonePositions(client:GetViewModel())
-        end
-    elseif n == ROUND_ACTIVE then
-        -- round starts
-        VOICE.CycleMuteState(MUTE_NONE)
-
-        CLSCORE:ClearPanel()
-
-        -- people may have died and been searched during prep
-        local plys = playerGetAll()
-        for i = 1, #plys do
-            bodysearch.ResetSearchResult(plys[i])
-        end
-
-        -- clear blood decals produced during prep
-        util.ClearDecals()
-
-        GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
-
-        PlaySoundCue()
-    elseif n == ROUND_POST then
-        RunConsoleCommand("ttt_cl_traitorpopup_close")
-
-        PlaySoundCue()
-    end
-
-    -- stricter checks when we're talking about hooks, because this function may
-    -- be called with for example o = WAIT and n = POST, for newly connecting
-    -- players, which hooking code may not expect
-    if n == ROUND_PREP then
-        ---
-        -- Can enter PREP from any phase due to ttt_roundrestart
-        -- @realm shared
-        -- stylua: ignore
-        hook.Run("TTTPrepareRound")
-    elseif o == ROUND_PREP and n == ROUND_ACTIVE then
-        ---
-        -- @realm shared
-        -- stylua: ignore
-        hook.Run("TTTBeginRound")
-    elseif o == ROUND_ACTIVE and n == ROUND_POST then
-        ---
-        -- @realm shared
-        -- stylua: ignore
-        hook.Run("TTTEndRound")
-    end
-
-    -- whatever round state we get, clear out the voice flags
-    local winTeams = roles.GetWinTeams()
-
-    local plys = playerGetAll()
-    for i = 1, #plys do
-        for k = 1, #winTeams do
-            plys[i][winTeams[k] .. "_gvoice"] = false
-        end
-    end
-end
-
 local function ttt_print_playercount()
     Dev(2, GAMEMODE.StartingPlayers)
 end
@@ -601,20 +508,6 @@ local function ReceiveRoleList()
     end
 end
 net.Receive("TTT_RoleList", ReceiveRoleList)
-
--- Round state comm
-local function ReceiveRoundState()
-    local o = GetRoundState()
-
-    GAMEMODE.round_state = net.ReadUInt(3)
-
-    if o ~= GAMEMODE.round_state then
-        RoundStateChange(o, GAMEMODE.round_state)
-    end
-
-    Dev(1, "Round state: " .. GAMEMODE.round_state)
-end
-net.Receive("TTT_RoundState", ReceiveRoundState)
 
 ---
 -- Cleanup at start of new round
@@ -1034,7 +927,7 @@ function CheckIdle()
     if
         GetGlobalBool("ttt_idle", false)
         and IsValid(client)
-        and GetRoundState() == ROUND_ACTIVE
+        and gameloop.GetRoundState() == ROUND_ACTIVE
         and client:IsTerror()
         and client:Alive()
         and client:IsFullySignedOn()

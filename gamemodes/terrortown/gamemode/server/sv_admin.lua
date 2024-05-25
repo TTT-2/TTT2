@@ -200,7 +200,7 @@ local function PrintDamageLog(ply)
     ---
     -- @realm server
     -- stylua: ignore
-    if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) or GetRoundState() ~= ROUND_ACTIVE then
+    if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) or gameloop.GetRoundState() ~= ROUND_ACTIVE then
         ServerLog(Format("%s used ttt_print_damagelog\n", IsValid(ply) and ply:Nick() or "console"))
         pr("*** Damage log:\n")
 

@@ -140,7 +140,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
     end
 
     local speakerTeam = speaker:GetTeam()
-    local roundState = GetRoundState()
+    local roundState = gameloop.GetRoundState()
     local isGlobalVoice = speaker[speakerTeam .. "_gvoice"]
 
     if PlayerIsMuted(listener, speaker) then

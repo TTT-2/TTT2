@@ -198,7 +198,7 @@ end
 function roleselection.GetCurrentRoleAmount(subrole)
     local tmp = 0
 
-    if GetRoundState() == ROUND_ACTIVE then
+    if gameloop.GetRoundState() == ROUND_ACTIVE then
         local plys = playerGetAll()
 
         for i = 1, #plys do

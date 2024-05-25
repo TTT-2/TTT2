@@ -165,7 +165,7 @@ if CLIENT then
             local tmp = width - hastewidth - bgheight - smargin * 2
 
             -- Draw the current role
-            local round_state = GAMEMODE.round_state
+            local round_state = gameloop.GetRoundState()
             local traitor_y = y - 30
             local text
 
@@ -281,7 +281,7 @@ if CLIENT then
             draw.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
 
             -- Draw current round state
-            local text = L[self.roundstate_string[GAMEMODE.round_state]]
+            local text = L[self.roundstate_string[gameloop.GetRoundState()]
 
             self:ShadowedText(
                 text,

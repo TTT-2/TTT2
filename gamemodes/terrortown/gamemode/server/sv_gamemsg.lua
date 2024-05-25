@@ -298,7 +298,7 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, sender)
     local senderRoleData = sender:GetSubRoleData()
 
     if
-        GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
+        gameloop.GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
         or cv_ttt_spectators_chat_globally:GetBool() -- Spectators can chat freely
         or not gameloop.IsDetectiveMode() -- Mumbling
         or not senderIsSpectator and not teamOnly -- General Chat
@@ -366,7 +366,7 @@ function GM:PlayerSay(ply, text, teamOnly)
         return text or ""
     end
 
-    if GetRoundState() == ROUND_ACTIVE then
+    if gameloop.GetRoundState() == ROUND_ACTIVE then
         local team_spec = ply:Team() == TEAM_SPEC
 
         if team_spec and not gameloop.IsDetectiveMode() then

@@ -62,7 +62,6 @@ local net = net
 local player = player
 local timer = timer
 local util = util
-local IsValid = IsValid
 local hook = hook
 local playerGetAll = player.GetAll
 
@@ -184,7 +183,6 @@ local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVA
 CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Pool some network names.
-util.AddNetworkString("TTT_RoundState")
 util.AddNetworkString("TTT_GameMsg")
 util.AddNetworkString("TTT_GameMsgColor")
 util.AddNetworkString("TTT_RoleChat")
@@ -317,11 +315,6 @@ function GM:Initialize()
     self.MapWin = WIN_NONE
     self.AwardedCredits = false
     self.AwardedCreditsDead = 0
-
-    self.round_state = ROUND_WAIT
-    self.FirstRound = true
-    self.RoundStartTime = 0
-    self.roundCount = 0
 
     self.DamageLog = {}
     self.LastRole = {}
@@ -595,46 +588,6 @@ function LoadShopsEquipment()
 end
 
 ---
--- This @{function} is used to trigger the round syncing
--- @param number state the round state
--- @param[opt] Player ply if nil, this will broadcast to every connected @{PLayer}
--- @realm server
-function SendRoundState(state, ply)
-    net.Start("TTT_RoundState")
-    net.WriteUInt(state, 3)
-
-    if IsValid(ply) then
-        net.Send(ply)
-    else
-        net.Broadcast()
-    end
-end
-
----
--- Sets the current round state
--- @note Round state is encapsulated by set/get so that it can easily be changed to
--- eg. a networked var if this proves more convenient
--- @param number state
--- @realm server
-function SetRoundState(state)
-    GAMEMODE.round_state = state
-
-    events.Trigger(EVENT_GAME, state)
-
-    SendRoundState(state)
-end
-
----
--- Returns the current round state
--- @note Round state is encapsulated by set/get so that it can easily be changed to
--- eg. a networked var if this proves more convenient
--- @return number
--- @realm server
-function GetRoundState()
-    return GAMEMODE.round_state
-end
-
----
 -- Fixes a spectator bug in the beginning
 -- @note When a player initially spawns after mapload, everything is a bit strange
 -- just making him spectator for some reason does not work right. Therefore,
@@ -662,7 +615,7 @@ end
 -- @realm server
 -- @internal
 local function WinChecker()
-    if GetRoundState() ~= ROUND_ACTIVE then
+    if gameloop.GetRoundState() ~= ROUND_ACTIVE then
         return
     end
 
@@ -694,7 +647,7 @@ local function NameChangeKick()
         return
     end
 
-    if GetRoundState() ~= ROUND_ACTIVE then
+    if gameloop.GetRoundState() ~= ROUND_ACTIVE then
         return
     end
 

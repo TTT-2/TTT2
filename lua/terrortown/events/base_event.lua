@@ -292,7 +292,7 @@ if SERVER then
     function EVENT:Add(event)
         -- store the event time in relation to the round start time in milliseconds
         event.time = math.Round((CurTime() - gameloop.timeRoundStart) * 1000, 0)
-        event.roundState = GetRoundState()
+        event.roundState = gameloop.GetRoundState()
 
         ---
         -- Call hook that a new event is about to be added, can be canceled or

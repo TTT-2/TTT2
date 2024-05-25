@@ -557,7 +557,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsActive()
-    return GetRoundState() == ROUND_ACTIVE and self:IsTerror()
+    return gameloop.GetRoundState() == ROUND_ACTIVE and self:IsTerror()
 end
 
 ---

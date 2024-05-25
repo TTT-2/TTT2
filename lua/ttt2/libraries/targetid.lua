@@ -445,7 +445,7 @@ function targetid.HUDDrawTargetIDPlayers(tData)
     end
 
     -- show the role of a player if it is known to the client
-    local rstate = GetRoundState()
+    local rstate = gameloop.GetRoundState()
     local target_role
 
     if rstate == ROUND_ACTIVE and ent.HasRole and ent:HasRole() then

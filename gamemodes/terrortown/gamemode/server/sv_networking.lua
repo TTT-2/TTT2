@@ -51,7 +51,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
             TTT2NETTABLE[ply][p] = { subrole, team }
 
             if p ~= ply then
-                local rs = GetRoundState()
+                local rs = gameloop.GetRoundState()
 
                 if
                     p:GetSubRoleData().disableSync
@@ -321,7 +321,7 @@ end
 local function ttt_request_rolelist(plySyncTo)
     -- Client requested a state update. Note that the client can only use this
     -- information after entities have been initialized (e.g. in InitPostEntity).
-    if GetRoundState() ~= ROUND_WAIT then
+    if gameloop.GetRoundState() ~= ROUND_WAIT then
         local localPly = false
         local tmp = {}
         local team = plySyncTo:GetTeam()

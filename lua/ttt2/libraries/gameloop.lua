@@ -10,6 +10,7 @@ if SERVER then
     AddCSLuaFile()
 
     util.AddNetworkString("TTT_ClearClientState")
+    util.AddNetworkString("TTT_RoundState")
 end
 
 ---
@@ -84,7 +85,7 @@ if SERVER then
     function gameloop.Initialize()
         gameloop.SetRoundsLeft(cvRoundLimit:GetInt())
 
-        SetRoundState(ROUND_WAIT)
+        gameloop.SetRoundState(ROUND_WAIT)
 
         gameloop.WaitForPlayers()
     end
@@ -116,7 +117,7 @@ if SERVER then
         end
 
         -- update the round state that is used to determine how the game behaves
-        SetRoundState(ROUND_PREP)
+        gameloop.SetRoundState(ROUND_PREP)
 
         -- triggers the round state output for every map setting entity
         ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
@@ -184,7 +185,7 @@ if SERVER then
         roleselection.SelectRoles()
 
         -- update the round state that is used to determine how the game behaves
-        SetRoundState(ROUND_ACTIVE)
+        gameloop.SetRoundState(ROUND_ACTIVE)
 
         -- triggers the round state output for every map setting entity
         ents.TTT.TriggerRoundStateOutputs(ROUND_ACTIVE)
@@ -226,7 +227,7 @@ if SERVER then
         KARMA.RoundEnd()
 
         -- update the round state that is used to determine how the game behaves
-        SetRoundState(ROUND_POST)
+        gameloop.SetRoundState(ROUND_POST)
 
         -- triggers the round state output for every map setting entity
         ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
@@ -293,7 +294,7 @@ if SERVER then
         gameloop.SetRoundsLeft(cvRoundLimit:GetInt())
         gameloop.SetLevelStartTime(CurTime())
 
-        SetRoundState(ROUND_WAIT)
+        gameloop.SetRoundState(ROUND_WAIT)
         gameloop.WaitForPlayers()
     end
 
@@ -310,6 +311,7 @@ if SERVER then
     -- todo maybe called at any time a player is ready to update/clear all important variables
     function gameloop.PlayerReady(ply)
         gameloop.ClearClientState(ply)
+        gameloop.SendRoundState(ply)
 
         -- set the synced data to ROLE_NONE, TEAM_NONE on the server so a new full update
         -- is forced for this client
@@ -370,7 +372,7 @@ if SERVER then
     -- @see WaitForPlayers
     -- @internal
     function gameloop.WaitingForPlayersChecker()
-        if GetRoundState() ~= ROUND_WAIT or not gameloop.HasEnoughPlayers() then
+        if gameloop.GetRoundState() ~= ROUND_WAIT or not gameloop.HasEnoughPlayers() then
             return
         end
 
@@ -384,7 +386,7 @@ if SERVER then
     -- @see WaitingForPlayersChecker
     -- @internal
     function gameloop.WaitForPlayers()
-        SetRoundState(ROUND_WAIT)
+        gameloop.SetRoundState(ROUND_WAIT)
 
         if timer.Start("waitingforply") then
             return
@@ -447,15 +449,141 @@ if SERVER then
             LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
         end
     end
+
+    ---
+    -- This function is used to trigger the round syncing. It is called automatically if
+    -- the state is updated by @{gameloop.SetRoundState}.
+    -- @param[opt] Player ply if nil, this will broadcast to every connected @{PLayer}
+    -- @realm server
+    function gameloop.SendRoundState(ply)
+        net.Start("TTT_RoundState")
+        net.WriteUInt(gameloop.GetRoundState(), 3)
+
+        if IsValid(ply) then
+            net.Send(ply)
+        else
+            net.Broadcast()
+        end
+    end
+
+    ---
+    -- Sets the current round state
+    -- @param number state The new round state
+    -- @realm server
+    function gameloop.SetRoundState(state)
+        gameloop.roundState = state
+        gameloop.SendRoundState()
+
+        events.Trigger(EVENT_GAME, state)
+    end
 end
 
 if CLIENT then
+    function gameloop.RoundStateChange(oldRoundState, newRoundState)
+        if nnewRoundState == ROUND_PREP then
+            EPOP:Clear()
+
+            -- show warning to spec mode players
+            if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
+                LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
+            end
+
+            -- reset cached server language in case it has changed
+            RunConsoleCommand("_ttt_request_serverlang")
+
+            -- clear decals in cache from previous round
+            util.ClearDecals()
+
+            local client = LocalPlayer()
+
+            -- Resets bone positions that fixes broken fingers on bad addons.
+            -- When late-joining a server this function is executed before the local player
+            -- is completely set up. Therefore we safeguard this with this check.
+            if IsValid(client) and isfunction(client.GetViewModel) then
+                weaponrenderer.ResetBonePositions(client:GetViewModel())
+            end
+        elseif newRoundState == ROUND_ACTIVE then
+            VOICE.CycleMuteState(MUTE_NONE)
+
+            CLSCORE:ClearPanel()
+
+            -- people may have died and been searched during prep
+            local plys = playerGetAll()
+            for i = 1, #plys do
+                bodysearch.ResetSearchResult(plys[i])
+            end
+
+            -- clear blood decals produced during prep
+            util.ClearDecals()
+
+            GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
+
+            PlaySoundCue()
+        elseif newRoundState == ROUND_POST then
+            RunConsoleCommand("ttt_cl_traitorpopup_close")
+
+            PlaySoundCue()
+        end
+
+        -- stricter checks when we're talking about hooks, because this function may
+        -- be called with for example old = WAIT and new = POST, for newly connecting
+        -- players, which hooking code may not expect
+        if newRoundState == ROUND_PREP then
+            ---
+            -- Can enter PREP from any phase due to ttt_roundrestart
+            -- @realm shared
+            -- stylua: ignore
+            hook.Run("TTTPrepareRound")
+        elseif oldRoundState == ROUND_PREP and n == ROUND_ACTIVE then
+            ---
+            -- @realm shared
+            -- stylua: ignore
+            hook.Run("TTTBeginRound")
+        elseif oldRoundState == ROUND_ACTIVE and n == ROUND_POST then
+            ---
+            -- @realm shared
+            -- stylua: ignore
+            hook.Run("TTTEndRound")
+        end
+
+        -- whatever round state we get, clear out the voice flags
+        local winTeams = roles.GetWinTeams()
+        local plys = player.GetAll()
+
+        for i = 1, #plys do
+            for k = 1, #winTeams do
+                plys[i][winTeams[k] .. "_gvoice"] = false
+            end
+        end
+    end
+
     net.Receive("TTT_ClearClientState", function()
         ---
         -- @realm client
         -- stylua: ignore
         hook.Run("ClearClientState")
     end)
+
+    -- Round state comm
+    net.Receive("TTT_RoundState", function()
+        local oldRoundState = gameloop.GetRoundState()
+
+        gameloop.roundState = net.ReadUInt(3)
+
+        if oldRoundState ~= gameloop.roundState then
+            gameloop.RoundStateChange(oldRoundState, gameloop.roundState)
+        end
+
+        Dev(1, "New round state: " .. gameloop.roundState)
+    end)
+end
+
+---
+-- Returns the current round state.
+-- @return number
+-- @realm shared
+function gameloop.GetRoundState()
+    return gameloop.roundState
 end
 
 function gameloop.GetPhaseEnd()
@@ -501,3 +629,5 @@ end
 -- old function name aliases
 DetectiveMode = gameloop.IsDetectiveMode
 HasteMode = gameloop.IsHasteMode
+SetRoundState = gameloop.SetRoundState
+GetRoundState = gameloop.GetRoundState
