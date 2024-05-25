@@ -21,7 +21,7 @@ local ADMIN_COMMAND_ARMOR = 8
 admin = {}
 
 ---
--- Restarts the current gameloop.
+-- Restarts the current round.
 -- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.RoundRestart()
