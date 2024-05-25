@@ -692,9 +692,8 @@ end
 -- @return boolean
 -- @realm client
 function VOICE.IsSpeaking(ply)
-    ply = ply or LocalPlayer()
-    if ply == LocalPlayer() then
-        return ply.speaking
+    if not ply or ply == LocalPlayer() then
+        return LocalPlayer().speaking
     else
         return ply:IsSpeaking()
     end
