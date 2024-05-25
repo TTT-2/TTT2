@@ -261,7 +261,7 @@ end)
 -- @local
 function GM:Initialize()
     Dev(1, "Trouble In Terrorist Town 2 gamemode initializing...")
-    ShowVersion()
+    admin.ShowVersion()
 
     -- Migrate all changes of TTT2
     migrations.Apply()
@@ -938,6 +938,13 @@ function PrintResultMessage(result)
     end
 end
 
+net.Receive("TTT2FinishedReloading", function(_, ply)
+    ---
+    -- @realm server
+    -- stylua: ignore
+    hook.Run("TTT2PlayerFinishedReloading", ply)
+end)
+
 ---
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
@@ -1001,70 +1008,12 @@ function GM:MapTriggeredEnd(wintype)
     end
 end
 
-hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
+function GM:PlayerAuthed(ply, steamid, uniqueid)
     net.Start("TTT2PlayerAuthedShared")
     net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
     net.WriteString((ply and ply:Nick()) or "UNKNOWN")
     net.Broadcast()
-end)
-
-local function ttt_roundrestart(ply, command, args)
-    ---
-    -- ply is nil on dedicated server console
-    -- @realm server
-    -- stylua: ignore
-    if not IsValid(ply) or ply:IsAdmin() or hook.Run("TTT2AdminCheck", ply) or cvars.Bool("sv_cheats", 0) then
-        LANG.Msg("round_restart")
-
-        StopRoundTimers()
-
-        -- do prep
-        PrepareRound()
-    else
-        ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
-    end
 end
-concommand.Add("ttt_roundrestart", ttt_roundrestart)
-
----
--- Version announce also used in Initialize
--- @param Player ply
--- @realm server
-function ShowVersion(ply)
-    local text = Format(
-        "This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n",
-        GAMEMODE.Version
-    )
-
-    if IsValid(ply) then
-        ply:PrintMessage(HUD_PRINTNOTIFY, text)
-    else
-        Msg(text)
-    end
-end
-concommand.Add("ttt_version", ShowVersion)
-
-local function ttt_toggle_newroles(ply)
-    if not ply:IsAdmin() then
-        return
-    end
-
-    local b = not ttt_newroles_enabled:GetBool()
-
-    ttt_newroles_enabled:SetBool(b)
-
-    local word = b and "enabled" or "disabled"
-
-    ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
-end
-concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
-
-net.Receive("TTT2FinishedReloading", function(_, ply)
-    ---
-    -- @realm server
-    -- stylua: ignore
-    hook.Run("TTT2PlayerFinishedReloading", ply)
-end)
 
 ---
 -- This hook is used to sync the global networked vars. It is run in @{GM:SyncGlobals} after the
