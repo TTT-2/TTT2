@@ -1001,6 +1001,9 @@ function roleselection.SelectRoles(plys, maxPlys)
     SendFullStateUpdate()
 end
 
+---
+-- Resets the role and team of all players to ROLE_NONE and TEAM_NONE.
+-- @realm server
 function roleselection.ResetAllPlayers()
     local plys = player.GetAll()
 

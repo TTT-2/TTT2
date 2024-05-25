@@ -258,6 +258,9 @@ function DamageLog(txt)
     end
 end
 
+---
+-- Resets the damage log to an empty table.
+-- @realm server
 function ResetDamageLog()
     GAMEMODE.DamageLog = {}
 end

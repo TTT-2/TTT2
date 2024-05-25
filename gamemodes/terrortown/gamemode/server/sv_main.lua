@@ -801,6 +801,14 @@ function GM:MapTriggeredEnd(wintype)
     end
 end
 
+---
+-- Called after the player is authenticated by Steam. This hook will also be called in singleplayer.
+-- @param Player ply The player
+-- @param string steamid The player's SteamID
+-- @param string uniqueid The player's UniqueID
+-- @book
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerAuthed
 function GM:PlayerAuthed(ply, steamid, uniqueid)
     net.Start("TTT2PlayerAuthedShared")
     net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
@@ -960,6 +968,11 @@ function GM:TTT2PlayerFinishedReloading(ply)
     map.SyncToClient(ply)
 end
 
+---
+-- Called before @{GM:TTTPrepareRound} and is mostly intended for internal setups and round preparation.
+-- @param number duration The duration of this phase
+-- @hook
+-- @realm server
 function GM:TTT2PrePrepareRound(duration)
     events.Reset()
     KARMA.RoundPrepare()
@@ -991,6 +1004,11 @@ function GM:TTT2PrePrepareRound(duration)
     self.playercolor = hook.Run("TTTPlayerColor", self.playermodel)
 end
 
+---
+-- Called before @{GM:TTTBeginRound} and is mostly intended for internal setups and round prepararation.
+-- @param number duration The duration of this phase
+-- @hook
+-- @realm server
 function GM:TTT2PreBeginRound(duration)
     -- remove decals
     util.ClearDecals()
@@ -1021,6 +1039,12 @@ function GM:TTT2PreBeginRound(duration)
     credits.ResetTeamStates()
 end
 
+---
+-- Called before @{GM:TTTEndRound} and is mostly intended for internal setups and round prepararation.
+-- @param string|number result The wininng team or the result
+-- @param number duration The duration of this phase
+-- @hook
+-- @realm server
 function GM:TTT2PreEndRound(result, duration)
     events.Trigger(EVENT_FINISH, result)
 

@@ -32,7 +32,7 @@ local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR
 ---
 -- @realm server
 -- stylua: ignore
-local cvHasteMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local cvHasteMode = CreateConVar("ttt_haste_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 ---
 -- @realm server
@@ -249,6 +249,7 @@ if SERVER then
 
     ---
     -- Starts the wnd phase. Handles all setup needed to end a round.
+    -- @param string|number result The winning team or the win type
     -- @internal
     -- @realm server
     function gameloop.End(result)
@@ -379,13 +380,13 @@ if SERVER then
                 continue
             end
 
-            ---
-            -- @realm server
-            -- stylua: ignore
             if
                 ply:IsBot()
                 or not ply.has_spawned
                 or ply.spawn_nick == ply:Nick()
+                ---
+                -- @realm server
+                -- stylua: ignore
                 or hook.Run("TTTNameChangeKick", ply)
             then
                 continue

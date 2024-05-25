@@ -305,6 +305,10 @@ function RoleReset()
     end
 end
 
+---
+-- Resets the list of a player for a given list of @{Player}s
+-- @param Player ply The player that should be updated
+-- @realm server
 function RoleResetForPlayer(ply)
     local players = playerGetAll()
 
