@@ -77,6 +77,16 @@ if SERVER then
     -- stylua: ignore
     local cvPreventWin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local cvNameChangeKick = CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local cvNameChangeKickBanTime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
     -- defines if this is the first round played on this level, some special
     -- care should be taken if it is the first round
     gameloop.firstRound = true
@@ -206,10 +216,8 @@ if SERVER then
         end
 
         gameloop.SetPhaseEnd(timeRoundEnd)
-
-        -- Start the win condition check timer
         gameloop.StartWinChecks()
-        StartNameChangeChecks() -- todo new function
+        gameloop.StartNameChangeChecks() -- todo new function
 
         -- todo: trigger the menu at round begin with role info
         --timer.Simple(1.5, TellTraitorsAboutTraitors)
@@ -247,8 +255,6 @@ if SERVER then
         timer.Create("end2prep", timeEndPhase, 1, gameloop.Post)
 
         gameloop.SetPhaseEnd(CurTime() + timeEndPhase)
-
-        -- Stop checking for wins
         gameloop.StopWinChecks()
 
         -- send each client the role setup, reveal every player
@@ -279,6 +285,75 @@ if SERVER then
 
         -- Remove ULX /me command. (the /me command is the only thing this hook does)
         hook.Remove("PlayerSay", "ULXMeCheck")
+    end
+
+    local function NameChangeKick()
+        if not cvNameChangeKick:GetBool() then
+            timer.Remove("namecheck")
+
+            return
+        end
+
+        if gameloop.GetRoundState() ~= ROUND_ACTIVE then
+            return
+        end
+
+        local plys = player.GetAll()
+
+        for i = 1, #plys do
+            local ply = plys[i]
+
+            if not ply.spawn_nick then
+                ply.spawn_nick = ply:Nick()
+
+                continue
+            end
+
+            ---
+            -- @realm server
+            -- stylua: ignore
+            if
+                ply:IsBot()
+                or not ply.has_spawned
+                or ply.spawn_nick == ply:Nick()
+                or hook.Run("TTTNameChangeKick", ply)
+            then
+                continue
+            end
+
+            local timeBan = cvNameChangeKickBanTime:GetInt()
+            local textMessage = "Changed name during a round"
+
+            if timeBan > 0 then
+                ply:KickBan(timeBan, textMessage)
+            else
+                ply:Kick(textMessage)
+            end
+        end
+    end
+
+    ---
+    -- This function is used to install a timer that checks for name changes.
+    -- and kicks @{Player} if it's activated.
+    -- @realm server
+    -- @internal
+    function gameloop.StartNameChangeChecks()
+        if not cvNameChangeKick:GetBool() then
+            return
+        end
+
+        -- bring nicks up to date, may have been changed during prep/post
+        local plys = player.GetAll()
+
+        for i = 1, #plys do
+            local ply = plys[i]
+
+            ply.spawn_nick = ply:Nick()
+        end
+
+        if not timer.Exists("namecheck") then
+            timer.Create("namecheck", 3, 0, NameChangeKick)
+        end
     end
 
     ---

@@ -135,16 +135,6 @@ local voice_drain_recharge = CreateConVar("ttt_voice_drain_recharge", "0.05", {F
 ---
 -- @realm server
 -- stylua: ignore
-local namechangekick = CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local namechangebtime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
 
 ---
@@ -601,68 +591,6 @@ function FixSpectators()
         end
 
         ply:Spectate(OBS_MODE_ROAMING)
-    end
-end
-
-local function NameChangeKick()
-    if not namechangekick:GetBool() then
-        timer.Remove("namecheck")
-
-        return
-    end
-
-    if gameloop.GetRoundState() ~= ROUND_ACTIVE then
-        return
-    end
-
-    local plys = playerGetAll()
-
-    for i = 1, #plys do
-        local ply = plys[i]
-
-        if not ply.spawn_nick then
-            ply.spawn_nick = ply:Nick()
-
-            continue
-        end
-
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if ply:IsBot() or not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
-
-        local t = namechangebtime:GetInt()
-        local msg = "Changed name during a round"
-
-        if t > 0 then
-            ply:KickBan(t, msg)
-        else
-            ply:Kick(msg)
-        end
-    end
-end
-
----
--- This @{function} is used to install a timer that checks for name changes
--- and kicks @{Player} if it's activated
--- @realm server
--- @internal
-function StartNameChangeChecks()
-    if not namechangekick:GetBool() then
-        return
-    end
-
-    -- bring nicks up to date, may have been changed during prep/post
-    local plys = playerGetAll()
-
-    for i = 1, #plys do
-        local ply = plys[i]
-
-        ply.spawn_nick = ply:Nick()
-    end
-
-    if not timer.Exists("namecheck") then
-        timer.Create("namecheck", 3, 0, NameChangeKick)
     end
 end
 
