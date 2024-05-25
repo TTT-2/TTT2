@@ -554,8 +554,6 @@ local function ReceiveRole()
     local subrole = net.ReadUInt(ROLE_BITS)
     local team = net.ReadString()
 
-    print("received role update", subrole, team)
-
     -- after a mapswitch, server might have sent us this before we are even done
     -- loading our code
     if not isfunction(client.SetRole) then
