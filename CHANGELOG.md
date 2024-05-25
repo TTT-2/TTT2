@@ -36,6 +36,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new admin commands menu (by @TimGoll)
   - Added a submenu to change maps
   - Added a submenu to issue basic commands
+- Added a new `gameloop` module that contains all functions related to the round structure (by @Tim Goll)
 
 ### Changed
 
@@ -71,6 +72,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed overhead icons sometimes being stuck at random places (by @TimGoll)
 - Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
 - Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
+- Fixed players sometimes not receiving their role if they joined late to the game (by @TimGoll)
 
 ### Removed
 
