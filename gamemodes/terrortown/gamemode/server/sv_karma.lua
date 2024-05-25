@@ -155,6 +155,21 @@ function KARMA.IsEnabled()
 end
 
 ---
+-- Resets the KARMA for all connected players to a clean sheet.
+-- @realm server
+function KARMA.Reset()
+    KARMA.rememberedPlayers = {}
+    KARMA.karmaChanges = {}
+    KARMA.karmaChangesOld = {}
+
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        KARMA.InitPlayer(plys[i])
+    end
+end
+
+---
 -- Allows to change the live KARMA from anywhere
 -- Use this function only if you want to influence KARMA per event or similar
 -- @note Reason is a string and will be displayed in the roundendscreen as tooltip, so use language localization or describe it properly

@@ -52,7 +52,13 @@ function admin.LevelReset()
         gameloop.StopTimers()
         gameloop.Reset()
 
-        --todo set karma and score
+        KARMA.Reset()
+
+        -- reset score
+        local plys = player.GetAll()
+        for i = 1, #plys do
+            plys[i]:SetFrags(0)
+        end
     end
 end
 
