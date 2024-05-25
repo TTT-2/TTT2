@@ -146,11 +146,6 @@ local namechangebtime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTI
 ---
 -- @realm server
 -- stylua: ignore
-local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
 
 ---
@@ -528,7 +523,6 @@ end
 -- @hook
 -- @realm server
 function GM:SyncGlobals()
-    SetGlobalBool("ttt_detective", ttt_detective:GetBool())
     SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
     SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
     SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
@@ -557,10 +551,6 @@ function GM:SyncGlobals()
     -- stylua: ignore
     hook.Run("TTT2SyncGlobals")
 end
-
-cvars.AddChangeCallback(ttt_detective:GetName(), function(cv, old, new)
-    SetGlobalBool("ttt_detective", tobool(tonumber(new)))
-end)
 
 cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
     SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))

@@ -1,6 +1,11 @@
 ---
 -- This file contains all shared vars, tables and functions
 
+---
+-- @realm server
+-- stylua: ignore
+local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+
 GM.Name = "TTT2"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
@@ -638,7 +643,7 @@ end
 -- @return boolean
 -- @realm shared
 function DetectiveMode()
-    return GetGlobalBool("ttt_detective", false)
+    return cvDetectiveMode:GetBool()
 end
 
 ---
