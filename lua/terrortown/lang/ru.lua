@@ -2284,7 +2284,7 @@ L.decoy_help_primary = "Установить Приманку"
 --L.label_player_select = "Select affected player"
 --L.label_execute_command = "Execute command"
 
--- 2024-8-22
+-- 2024-05-22
 --L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
 --L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
 --L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
