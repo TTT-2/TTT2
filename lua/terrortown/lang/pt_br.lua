@@ -524,67 +524,61 @@ L.tip8 = "Traidores e Detetives podem coletar créditos não gastos dos cadáver
 
 L.tip9 = "O Poltergeist pode tornar qualquer objeto de física em um projétil mortal. Cada empurrão é acompanhado de uma explosão de energia que fere todos que estiverem ao redor."
 
-L.tip10 = "Como Traidor ou Detetive, fique de olho em mensagens vermelhas no canto superior direito da tela. Elas serão importantes para você."
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "Como Traidor ou Detetive, tenha em mente que você será recompensado com créditos se você e seus comparsas progredirem bem. Lembre-se de gastá-los!"
+L.tip11 = "O Scanner de DNA dos Detetives pode ser usado para coletar amostras de DNA de armas e itens e analisá-las para descobrir a localização do jogador que os usou. Isso é útil quando você consegue coletar uma amostra de um cadáver ou de um C4 desarmado!"
 
-L.tip12 = "O Scanner de DNA dos Detetives pode ser usado para coletar amostras de DNA de armas e itens e analisá-las para descobrir a localização do jogador que os usou. Isso é útil quando você consegue coletar uma amostra de um cadáver ou de um C4 desarmado!"
+L.tip12 = "Quando estiver perto de alguém que você matou, um pouco do seu DNA será deixado no cadáver. Esse DNA pode ser coletado por um Scanner de DNA de um Detetive para encontrar sua localização atual. É melhor esconder o corpo da vítima depois de esfaqueá-la!"
 
-L.tip13 = "Quando estiver perto de alguém que você matou, um pouco do seu DNA será deixado no cadáver. Esse DNA pode ser coletado por um Scanner de DNA de um Detetive para encontrar sua localização atual. É melhor esconder o corpo da vítima depois de esfaqueá-la!"
+L.tip13 = "Quanto mais longe você estiver de alguém que você matar, mais rapidamente a amostra do seu DNA no corpo da sua vítima vai deteriorar-se."
 
-L.tip14 = "Quanto mais longe você estiver de alguém que você matar, mais rapidamente a amostra do seu DNA no corpo da sua vítima vai deteriorar-se."
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "Você é um Traidor e quer tentar matar alguém com um rifle de precisão? Considere habilitar o Disfarce antes. Se você errar um tiro, fuja para um local seguro, desabilite o Disfarce, e ninguém saberá que era você que estava atirando neles."
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "Como Traidor, o Teletransportador pode ajudar-lhe a escapar enquanto você estiver sendo perseguido, além de permitir que você se desloque rapidamente em um mapa grande. Certifique-se de sempre ter uma posição segura marcada."
+L.tip16 = "Os inocentes estão todos agrupados sendo difíceis de serem mortos? Considere experimentar o Rádio para reproduzir sons de um C4 ou de um tiroteio para fazer com que eles se desagrupem."
 
-L.tip17 = "Os inocentes estão todos agrupados sendo difíceis de serem mortos? Considere experimentar o Rádio para reproduzir sons de um C4 ou de um tiroteio para fazer com que eles se desagrupem."
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "Ao usar o Rádio como Traidor, você pode reproduzir sons através do seu Menu de Equipamentos depois que o Rádio for posicionado. Coloque vários sons para serem reproduzidos em sequência ao clicar nos botões usando a ordem desejada."
+L.tip18 = "Como Detetive, se você estiver com alguns créditos sobrando, você pode dar um Kit de Desarme para um Inocente confiável. Assim, você pode gastar seu tempo com um trabalho mais sério de investigação enquanto você deixa a missão arriscada de desarmamento para ele."
 
-L.tip19 = "Como Detetive, se você estiver com alguns créditos sobrando, você pode dar um Kit de Desarme para um Inocente confiável. Assim, você pode gastar seu tempo com um trabalho mais sério de investigação enquanto você deixa a missão arriscada de desarmamento para ele."
+L.tip19 = "Os Binóculos dos Detetives permitem localizar e identificar cadáveres a distância. Más notícias se os Traidores estavam querendo usar um cadáver como isca. Mas é claro que, quando um Detetive estiver usando os Binóculos, ele estará desarmado e distraído..."
 
-L.tip20 = "Os Binóculos dos Detetives permitem localizar e identificar cadáveres a distância. Más notícias se os Traidores estavam querendo usar um cadáver como isca. Mas é claro que, quando um Detetive estiver usando os Binóculos, ele estará desarmado e distraído..."
+L.tip20 = "A Estação de Cura dos Detetives permite que jogadores feridos se curem. Mas é claro que, os jogadores feridos podem ser Traidores..."
 
-L.tip21 = "A Estação de Cura dos Detetives permite que jogadores feridos se curem. Mas é claro que, os jogadores feridos podem ser Traidores..."
+L.tip21 = "A Estação de Cura armazena uma amostra do DNA de cada jogador que a utilizar. Os Detetives podem utilizar o Scanner de DNA na Estação de Cura para descobrir quem andou se curando."
 
-L.tip22 = "A Estação de Cura armazena uma amostra do DNA de cada jogador que a utilizar. Os Detetives podem utilizar o Scanner de DNA na Estação de Cura para descobrir quem andou se curando."
+L.tip22 = "Diferentemente de armas e do C4, o Rádio dos Traidores não contém uma amostra do DNA de quem o posicionou. Não se preocupe com Detetives encontrando o seu DNA e descobrindo a sua verdadeira identidade."
 
-L.tip23 = "Diferentemente de armas e do C4, o Rádio dos Traidores não contém uma amostra do DNA de quem o posicionou. Não se preocupe com Detetives encontrando o seu DNA e descobrindo a sua verdadeira identidade."
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "Pressione {helpkey} para ver um curto tutorial ou modificar suas configurações do TTT. Por exemplo, você pode desabilitar permanentemente estas dicas lá."
+L.tip24 = "Quando um Detetive investiga um corpo, o resultado é disponibilizado para todos no placar ao clicar no nome da pessoa morta."
 
-L.tip25 = "Quando um Detetive investiga um corpo, o resultado é disponibilizado para todos no placar ao clicar no nome da pessoa morta."
+L.tip25 = "No placar, um ícone de lupa próximo ao nome de alguém indica que você coletou informações sobre aquela pessoa. Se o ícone estiver brilhando, os dados da investigação são provindos de um Detetive e podem conter informações adicionais."
 
-L.tip26 = "No placar, um ícone de lupa próximo ao nome de alguém indica que você coletou informações sobre aquela pessoa. Se o ícone estiver brilhando, os dados da investigação são provindos de um Detetive e podem conter informações adicionais."
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "Como Detetive, cadáveres com um ícone de lupa depois de seu nome foram investigados por um Detetive e os resultados estão disponíveis para todos os jogadores pelo placar."
+L.tip27 = "Espectadores podem pressionar {mutekey} para alternar entre emudecer outros espectadores ou jogadores vivos."
 
-L.tip28 = "Espectadores podem pressionar {mutekey} para alternar entre emudecer outros espectadores ou jogadores vivos."
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "Se o servidor instalou idiomas adicionais, você pode mudar para um idioma diferente a qualquer momento no menu Configurações."
+L.tip29 = "Os atalhos do chat ou comandos do 'rádio' podem ser utilizados ao pressionar {zoomkey}."
 
-L.tip30 = "Os atalhos do chat ou comandos do 'rádio' podem ser utilizados ao pressionar {zoomkey}."
+L.tip30 = "O ataque alternativo do Pé de Cabra empurrará outros jogadores."
 
-L.tip31 = "Como Espectador, pressione {duckkey} para destravar o cursor do seu mouse e ser possibilitado de clicar neste painel de dicas. Pressione {duckkey} novamente para voltar à visualização normal."
+L.tip31 = "Atirar usando a retícula de ferro de uma arma aumentará levemente a sua precisão e diminuirá o seu recuo. Agachar-se não fará diferença."
 
-L.tip32 = "O ataque alternativo do Pé de Cabra empurrará outros jogadores."
+L.tip32 = "Granadas de Fumaça são eficazes em ambientes fechados, especialmente para criar confusão em salas lotadas."
 
-L.tip33 = "Atirar usando a retícula de ferro de uma arma aumentará levemente a sua precisão e diminuirá o seu recuo. Agachar-se não fará diferença."
+L.tip33 = "Como Traidor, lembre-se de que você pode deslocar corpos e escondê-los dos inocentes e dos Detetives."
 
-L.tip34 = "Granadas de Fumaça são eficazes em ambientes fechados, especialmente para criar confusão em salas lotadas."
+L.tip34 = "No placar, clique no nome de um jogador vivo e então você poderá marcá-lo como 'suspeito' ou 'amigo', entre outras marcações. A marcação será exibida quando você estiver com a mira sobre o jogador marcado."
 
-L.tip35 = "Como Traidor, lembre-se de que você pode deslocar corpos e escondê-los dos inocentes e dos Detetives."
+L.tip35 = "A maioria dos equipamentos especiais posicionáveis (como o C4 e o Rádio) podem ser presos nas paredes ao usar o botão de ataque alternativo."
 
-L.tip36 = "O tutorial disponível na tecla {helpkey} contém uma visão geral sobre as características mais importantes do TTT."
+L.tip36 = "Um explosivo C4 que explodir devido a uma falha no seu desarmamento causará uma explosão menor do que um explosivo C4 que explodir devido ao seu temporizador ter chegado a zero."
 
-L.tip37 = "No placar, clique no nome de um jogador vivo e então você poderá marcá-lo como 'suspeito' ou 'amigo', entre outras marcações. A marcação será exibida quando você estiver com a mira sobre o jogador marcado."
-
-L.tip38 = "A maioria dos equipamentos especiais posicionáveis (como o C4 e o Rádio) podem ser presos nas paredes ao usar o botão de ataque alternativo."
-
-L.tip39 = "Um explosivo C4 que explodir devido a uma falha no seu desarmamento causará uma explosão menor do que um explosivo C4 que explodir devido ao seu temporizador ter chegado a zero."
-
-L.tip40 = "Caso esteja escrito 'MODO PRESSA' acima do tempo da rodada, a rodada terá inicialmente apenas alguns minutos, mas a cada morte o tempo restante aumentará (como capturar um ponto no TF2). Esse modo pressiona os traidores para que eles mantenham as coisas em movimento."
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "Relatório da rodada"
@@ -1045,7 +1039,6 @@ L.label_damage_indicator_maxalpha = "Máximo opacidade"
 L.label_performance_halo_enable = "Desenhar um contorno em volta a entidade quando olhar para ela"
 L.label_performance_spec_outline_enable = "Ativar contorno de controle de objetos"
 L.label_performance_ohicon_enable = "Ativar icone de funções acima da cabeça dos jogadores"
-L.label_interface_tips_enable = "Mostrar dica de jogo na tela quando estiver espectando"
 L.label_interface_popup = "Mostrar popup da duração de rodada"
 L.label_interface_fastsw_menu = "Ativar menu de troca de arma rápida"
 L.label_inferface_wswitch_hide_enable = "Ativar auto-fechamento de troca de arma rápida"
@@ -2262,3 +2255,44 @@ L.decoy_help_primary = "Plantar a isca"
 --L.header_maps_select = "Select and Change Maps"
 
 --L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-05-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"

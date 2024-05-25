@@ -254,8 +254,6 @@ util.AddNetworkString("TTT_Credits")
 util.AddNetworkString("TTT_Bought")
 util.AddNetworkString("TTT_BoughtItem")
 util.AddNetworkString("TTT_InterruptChat")
-util.AddNetworkString("TTT_PlayerSpawned")
-util.AddNetworkString("TTT_PlayerDied")
 util.AddNetworkString("TTT_CorpseCall")
 util.AddNetworkString("TTT_ClearClientState")
 util.AddNetworkString("TTT_PerformGesture")
@@ -922,6 +920,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
+    loadingscreen.End()
+
     entityOutputs.SetUp()
 
     entspawn.HandleSpawns()
@@ -939,7 +939,14 @@ function GM:PostCleanupMap()
 end
 
 local function CleanUp()
-    game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+    loadingscreen.Begin()
+
+    -- delay the cleanup a bit so that the client starts the loading screen animation before the
+    -- cleanup starts
+    -- note: delaying by a single tick seemed to be ineffective
+    timer.Simple(0.25, function()
+        game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+    end)
 
     -- Strip players now, so that their weapons are not seen by ReplaceEntities
     local plys = playerGetAll()

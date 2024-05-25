@@ -44,17 +44,13 @@ function GM:PlayerBindPress(ply, bindName, pressed)
     end
 
     if bindName == "invnext" and pressed then
-        if ply:IsSpec() then
-            TIPS.Next()
-        else
+        if not ply:IsSpec() then
             WSWITCH:SelectNext()
         end
 
         return true
     elseif bindName == "invprev" and pressed then
-        if ply:IsSpec() then
-            TIPS.Prev()
-        else
+        if not ply:IsSpec() then
             WSWITCH:SelectPrev()
         end
 
