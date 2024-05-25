@@ -281,7 +281,7 @@ if CLIENT then
             draw.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
 
             -- Draw current round state
-            local text = L[self.roundstate_string[gameloop.GetRoundState()]
+            local text = L[self.roundstate_string[gameloop.GetRoundState()]]
 
             self:ShadowedText(
                 text,
