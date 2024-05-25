@@ -714,7 +714,7 @@ if CLIENT then
             CLSCORE:ClearPanel()
 
             -- people may have died and been searched during prep
-            local plys = playerGetAll()
+            local plys = player.GetAll()
             for i = 1, #plys do
                 bodysearch.ResetSearchResult(plys[i])
             end

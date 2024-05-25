@@ -2292,6 +2292,6 @@ L.label_execute_command = "Execute command"
 L.help_round_restart_reset = [[
 Restart a round or reset the level.
 
-Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a round restart]]
+Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 L.label_button_level_reset = "reset level"
