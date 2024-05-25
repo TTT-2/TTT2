@@ -247,9 +247,9 @@ hook.Add("TTTEndRound", "ttt_damagelog_save_hook", SaveDamageLog)
 -- @param string txt
 -- @realm server
 function DamageLog(txt)
-    local t = math.max(0, CurTime() - gameloop.timeRoundStart)
+    local timestamp = math.max(0, CurTime() - gameloop.timeRoundStart)
 
-    txt = util.SimpleTime(t, "%02i:%02i.%02i - ") .. txt
+    txt = util.SimpleTime(timestamp, "%02i:%02i.%02i - ") .. txt
 
     ServerLog(txt .. "\n")
 
