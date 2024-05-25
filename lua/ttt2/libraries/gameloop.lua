@@ -72,6 +72,11 @@ if SERVER then
     -- stylua: ignore
     local cvMinPlayers = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+    ---
+    -- @realm server
+    -- stylua: ignore
+    local cvPreventWin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
     -- defines if this is the first round played on this level, some special
     -- care should be taken if it is the first round
     gameloop.firstRound = true
@@ -203,7 +208,7 @@ if SERVER then
         gameloop.SetPhaseEnd(timeRoundEnd)
 
         -- Start the win condition check timer
-        StartWinChecks() -- todo new function/s
+        gameloop.StartWinChecks()
         StartNameChangeChecks() -- todo new function
 
         -- todo: trigger the menu at round begin with role info
@@ -244,7 +249,7 @@ if SERVER then
         gameloop.SetPhaseEnd(CurTime() + timeEndPhase)
 
         -- Stop checking for wins
-        StopWinChecks()
+        gameloop.StopWinChecks()
 
         -- send each client the role setup, reveal every player
         local rlsList = roles.GetList()
@@ -272,21 +277,56 @@ if SERVER then
 
         game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
 
-        -- todo move somewhere else?
-        -- Strip players now, so that their weapons are not seen by ReplaceEntities
-        --local plys = player.GetAll()
-
-        --for i = 1, #plys do
-        --local v = plys[i]
-
-        --v:StripWeapons()
-        --plys[i]:SetRole(ROLE_NONE)
-        --end
-
-        --SendFullStateUpdate()
-
         -- Remove ULX /me command. (the /me command is the only thing this hook does)
         hook.Remove("PlayerSay", "ULXMeCheck")
+    end
+
+    ---
+    -- This is the win condition checker
+    -- @realm server
+    -- @internal
+    local function WinChecker()
+        if gameloop.GetRoundState() ~= ROUND_ACTIVE or cvPreventWin:GetBool() then
+            return
+        end
+
+        if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
+            gameloop.End(WIN_TIMELIMIT)
+        else
+            ---
+            -- @realm server
+            -- stylua: ignore
+            local win = hook.Run("TTT2PreWinChecker", preventWin)
+
+            ---
+            -- @realm server
+            -- stylua: ignore
+            win = win or hook.Run("TTTCheckForWin", preventWin)
+
+            if win == WIN_NONE then
+                return
+            end
+
+            gameloop.End(win)
+        end
+    end
+
+    ---
+    -- This function install the win condition checker (with a timer).
+    -- @realm server
+    -- @internal
+    function gameloop.StartWinChecks()
+        if not timer.Start("winchecker") then
+            timer.Create("winchecker", 0.5, 0, WinChecker)
+        end
+    end
+
+    ---
+    -- This function stops the win condition checker (the timer).
+    -- @realm server
+    -- @internal
+    function gameloop.StopWinChecks()
+        timer.Stop("winchecker")
     end
 
     function gameloop.Reset()

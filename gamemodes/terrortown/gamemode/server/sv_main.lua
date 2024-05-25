@@ -175,11 +175,6 @@ CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whe
 ---
 -- @realm server
 -- stylua: ignore
-local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
 CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Pool some network names.
@@ -609,37 +604,6 @@ function FixSpectators()
     end
 end
 
----
--- This is the win condition checker
--- @note Used to be in think, now a timer
--- @realm server
--- @internal
-local function WinChecker()
-    if gameloop.GetRoundState() ~= ROUND_ACTIVE then
-        return
-    end
-
-    if CurTime() > GetGlobalFloat("ttt_round_end", 0) and not ttt_dbgwin:GetBool() then
-        gameloop.End(WIN_TIMELIMIT)
-    elseif not ttt_dbgwin:GetBool() then
-        ---
-        -- @realm server
-        -- stylua: ignore
-        win = hook.Run("TTT2PreWinChecker")
-
-        ---
-        -- @realm server
-        -- stylua: ignore
-        win = win or hook.Run("TTTCheckForWin")
-
-        if win == WIN_NONE then
-            return
-        end
-
-        gameloop.End(win)
-    end
-end
-
 local function NameChangeKick()
     if not namechangekick:GetBool() then
         timer.Remove("namecheck")
@@ -700,26 +664,6 @@ function StartNameChangeChecks()
     if not timer.Exists("namecheck") then
         timer.Create("namecheck", 3, 0, NameChangeKick)
     end
-end
-
----
--- This function install the win condition checker (with a timer)
--- @realm server
--- @internal
--- @see StopWinChecks
-function StartWinChecks()
-    if not timer.Start("winchecker") then
-        timer.Create("winchecker", 1, 0, WinChecker)
-    end
-end
-
----
--- This function stops the win condition checker (the timer)
--- @realm server
--- @internal
--- @see StartWinChecks
-function StopWinChecks()
-    timer.Stop("winchecker")
 end
 
 ---
@@ -1027,10 +971,6 @@ end
 -- @hook
 -- @realm server
 function GM:TTTCheckForWin()
-    if not ttt_dbgwin or ttt_dbgwin:GetBool() then
-        return WIN_NONE
-    end
-
     if gameloop.mapWinType ~= WIN_NONE then
         return gameloop.mapWinType
     end
