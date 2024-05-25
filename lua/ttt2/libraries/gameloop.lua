@@ -31,7 +31,12 @@ local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR
 ---
 -- @realm server
 -- stylua: ignore
-local cvHasteMode = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvHasteMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+
+---
+-- @realm server
+-- stylua: ignore
+local cvSessionLimits = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 gameloop = {}
 
@@ -247,9 +252,7 @@ if SERVER then
         end
 
         -- We may need to start a timer for a mapswitch, or start a vote
-        if GetGlobalBool("ttt_session_limits_enabled") then
-            gameloop.CheckForMapSwitch()
-        end
+        gameloop.CheckForMapSwitch()
 
         ---
         -- @realm server
@@ -423,6 +426,10 @@ if SERVER then
     -- @realm server
     -- @internal
     function gameloop.CheckForMapSwitch()
+        if not gameloop.HasLevelLimits() then
+            return
+        end
+
         local roundsLeft = gameloop.GetRoundsLeft()
         local timeLeft = gameloop.GetLevelTimeLeft()
         local nextMap = string.upper(game.GetMapNext())
@@ -467,7 +474,7 @@ function gameloop.GetLevelTimeLeft()
 end
 
 ---
--- Returns whether the detective mode is enabled
+-- Returns whether the detective mode is enabled.
 -- @return boolean
 -- @realm shared
 function gameloop.IsDetectiveMode()
@@ -475,13 +482,22 @@ function gameloop.IsDetectiveMode()
 end
 
 ---
--- Returns whether the haste mode is enabled
+-- Returns whether the haste mode is enabled.
 -- @return boolean
 -- @realm shared
 function gameloop.IsHasteMode()
     return cvHasteMode:GetBool()
 end
 
+---
+-- Returns whether the level has session limits like time or round count.
+-- @return boolean
+-- @realm shared
+function gameloop.HasLevelLimits()
+    return cvSessionLimits:GetBool()
+end
+
+-- old function name aliases
 DetectiveMode = gameloop.IsDetectiveMode
 HasteMode = gameloop.IsHasteMode
 

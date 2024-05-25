@@ -96,11 +96,6 @@ CreateConVar("ttt_credits_award_kill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ---
 -- @realm server
 -- stylua: ignore
-local ttt_session_limits_enabled = CreateConVar("ttt_session_limits_enabled", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
-
----
--- @realm server
--- stylua: ignore
 local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -518,7 +513,6 @@ end
 -- @hook
 -- @realm server
 function GM:SyncGlobals()
-    SetGlobalBool(ttt_session_limits_enabled:GetName(), ttt_session_limits_enabled:GetBool())
     SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
     SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
 
@@ -545,10 +539,6 @@ function GM:SyncGlobals()
     -- stylua: ignore
     hook.Run("TTT2SyncGlobals")
 end
-
-cvars.AddChangeCallback(ttt_session_limits_enabled:GetName(), function(cv, old, new)
-    SetGlobalBool(ttt_session_limits_enabled:GetName(), tobool(tonumber(new)))
-end)
 
 cvars.AddChangeCallback(idle_time:GetName(), function(cv, old, new)
     SetGlobalInt(idle_time:GetName(), tonumber(new))

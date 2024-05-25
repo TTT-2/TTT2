@@ -184,7 +184,7 @@ function PANEL:Init()
     self.mapchange:SetContentAlignment(9)
 
     self.mapchange.Think = function(sf)
-        if GetGlobalBool("ttt_session_limits_enabled") then
+        if gameloop.HasLevelLimits() then
             local r, t = UntilMapChange()
             sf:SetText(GetPTranslation("sb_mapchange", { num = r, time = t }))
         else
