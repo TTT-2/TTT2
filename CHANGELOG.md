@@ -54,6 +54,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - The holdtype for pistol weapons now matches the viewmodel
 - Unified the spec color usage throughout the whole UI (by @TimGoll)
 - Updated the Turkish localization file (by @NovaDiablox)
+- The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 
 ### Fixed
 

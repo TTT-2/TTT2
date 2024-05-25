@@ -97,6 +97,11 @@ if SERVER then
     -- the win type when triggered by a map
     gameloop.mapWinType = WIN_NONE
 
+    ---
+    -- Initializes the game loop. Sets up all variables and starts waiting for players.
+    -- Is valled from @{GM:Initialize}.
+    -- @internal
+    -- @realm server
     function gameloop.Initialize()
         gameloop.SetRoundsLeft(cvRoundLimit:GetInt())
         gameloop.SetPhaseEnd(-1)
@@ -106,6 +111,10 @@ if SERVER then
         gameloop.WaitForPlayers()
     end
 
+    ---
+    -- Starts the preparation phase. Handles all setup needed to prepare a new round.
+    -- @internal
+    -- @realm server
     function gameloop.Prepare()
         -- if not enough players are available, we go into a idle state where
         -- the game periodically tries again to start a new round until enough
@@ -176,6 +185,10 @@ if SERVER then
         LANG.Msg("round_begintime", { num = timePrepPhase })
     end
 
+    ---
+    -- Starts the active phase. Handles all setup needed to run an active round.
+    -- @internal
+    -- @realm server
     function gameloop.Begin()
         -- check for low-karma players that weren't kicked/banned on round end
         KARMA.RoundBegin()
@@ -234,6 +247,10 @@ if SERVER then
         hook.Run("TTTBeginRound")
     end
 
+    ---
+    -- Starts the wnd phase. Handles all setup needed to end a round.
+    -- @internal
+    -- @realm server
     function gameloop.End(result)
         KARMA.RoundEnd()
 
@@ -274,6 +291,11 @@ if SERVER then
         hook.Run("TTTEndRound", result)
     end
 
+    ---
+    -- Is called after round end and cleans up the current round, calls the map cleanup and
+    -- therefore prepares the start of the next round.
+    -- @internal
+    -- @realm server
     function gameloop.Post()
         gameloop.DecreaseRoundsLeft()
 
@@ -281,6 +303,58 @@ if SERVER then
 
         -- Remove ULX /me command. (the /me command is the only thing this hook does)
         hook.Remove("PlayerSay", "ULXMeCheck")
+    end
+
+    ---
+    -- Resets the current level to its initial state. This not only restarts the round,
+    -- it also resets everything so that it acts as if the level was changed.
+    -- @internal
+    -- @realm server
+    function gameloop.Reset()
+        gameloop.firstRound = true
+
+        gameloop.SetRoundsLeft(cvRoundLimit:GetInt())
+        gameloop.SetLevelStartTime(CurTime())
+        gameloop.SetRoundState(ROUND_WAIT)
+
+        gameloop.WaitForPlayers()
+    end
+
+    ---
+    -- Clears the client state. This is needed for a new round to clear everything carried
+    -- over from the previous round.
+    -- @param[opt] Player ply Define a player here to only clear their state, leave nil to clear all players
+    -- @internal
+    -- @realm server
+    function gameloop.ClearClientState(ply)
+        net.Start("TTT_ClearClientState")
+
+        if IsValid(ply) then
+            net.Send(ply)
+        else
+            net.Broadcast()
+        end
+    end
+
+    ---
+    -- When a player is ready while the round is still active, they are updated with this function.
+    -- It sets everything relevant to them. This is called from @{GM:TTT2PlayerReady.
+    -- @param Player ply The player that just got ready
+    -- @internal
+    -- @realm server
+    function gameloop.PlayerReady(ply)
+        gameloop.ClearClientState(ply)
+        gameloop.SendRoundState(ply)
+
+        -- set the synced data to ROLE_NONE, TEAM_NONE on the server so a new full update
+        -- is forced for this client
+        RoleResetForPlayer(ply)
+
+        -- this should fix issues where late joiners don't receive the data
+        SendFullStateUpdate()
+
+        -- maybe we need to trigegr syncing of global bools/ints as well? or are they automatically
+        -- synced on connect?
     end
 
     local function NameChangeKick()
@@ -352,10 +426,6 @@ if SERVER then
         end
     end
 
-    ---
-    -- This is the win condition checker
-    -- @realm server
-    -- @internal
     local function WinChecker()
         if gameloop.GetRoundState() ~= ROUND_ACTIVE or cvPreventWin:GetBool() then
             return
@@ -400,40 +470,6 @@ if SERVER then
         timer.Stop("winchecker")
     end
 
-    function gameloop.Reset()
-        gameloop.firstRound = true
-        gameloop.SetRoundsLeft(cvRoundLimit:GetInt())
-        gameloop.SetLevelStartTime(CurTime())
-
-        gameloop.SetRoundState(ROUND_WAIT)
-        gameloop.WaitForPlayers()
-    end
-
-    function gameloop.ClearClientState(ply)
-        net.Start("TTT_ClearClientState")
-
-        if IsValid(ply) then
-            net.Send(ply)
-        else
-            net.Broadcast()
-        end
-    end
-
-    function gameloop.PlayerReady(ply)
-        gameloop.ClearClientState(ply)
-        gameloop.SendRoundState(ply)
-
-        -- set the synced data to ROLE_NONE, TEAM_NONE on the server so a new full update
-        -- is forced for this client
-        RoleResetForPlayer(ply)
-
-        -- this should fix issues where late joiners don't receive the data
-        SendFullStateUpdate()
-
-        -- maybe we need to trigegr syncing of global bools/ints as well? or are they automatically
-        -- synced on connect?
-    end
-
     ---
     -- Increases the global round end time variable.
     -- @param number time The time addition
@@ -461,21 +497,36 @@ if SERVER then
         SetGlobalFloat("ttt_haste_end", time)
     end
 
+    ---
+    -- Sets the level start time. It is the time when the first preparing phase started.
+    -- @param number time The start time
+    -- @internal
+    -- @realm server
     function gameloop.SetLevelStartTime(time)
         SetGlobalFloat("ttt_map_start", time)
     end
 
+    ---
+    -- Sets the amount of rounds left to be played on this level.
+    -- @param number num The amount it is set to
+    -- @internal
+    -- @realm server
     function gameloop.SetRoundsLeft(num)
         SetGlobalInt("ttt_rounds_left", num)
     end
 
+    ---
+    -- Decresed the amount of rounds left to be played on this level.
+    -- @param[default=1] number num The amount it is decreased by
+    -- @internal
+    -- @realm server
     function gameloop.DecreaseRoundsLeft(num)
         num = num or 1
 
         gameloop.SetRoundsLeft(math.max(0, gameloop.GetRoundsLeft() - num))
     end
 
-    function gameloop.HasEnoughPlayers()
+    local function HasEnoughPlayers()
         local ready = 0
 
         -- only count truly available players, i.e. no forced specs
@@ -495,27 +546,24 @@ if SERVER then
     end
 
     ---
-    -- This @{function} is used to create the timers that checks
-    -- whether is the round is able to start (enough players?)
-    -- @note Used to be in Think/Tick, now in a timer
-    -- @note this stops @{WaitForPlayers}
-    -- @realm server
-    -- @see WaitForPlayers
+    -- This function is used to create the timers that checks whether is the round
+    -- is able to start.
     -- @internal
+    -- @realm server
     function gameloop.WaitingForPlayersChecker()
-        if gameloop.GetRoundState() ~= ROUND_WAIT or not gameloop.HasEnoughPlayers() then
+        if gameloop.GetRoundState() ~= ROUND_WAIT or not HasEnoughPlayers() then
             return
         end
 
-        timer.Create("wait2prep", 1, 1, gameloop.Post)
+        timer.Create("wait2prep", 0.5, 1, gameloop.Post)
         timer.Stop("waitingforply")
     end
 
     ---
-    -- Start waiting for players
-    -- @realm server
-    -- @see WaitingForPlayersChecker
+    -- Start waiting for players.
+    -- @see gameloop.WaitingForPlayersChecker
     -- @internal
+    -- @realm server
     function gameloop.WaitForPlayers()
         gameloop.SetRoundState(ROUND_WAIT)
 
@@ -527,23 +575,14 @@ if SERVER then
     end
 
     ---
-    -- Stops the timers in order to restart a gameloop.
-    -- @realm server
-    function gameloop.StopTimers()
-        -- remove all timers
-        timer.Stop("wait2prep")
-        timer.Stop("prep2begin")
-        timer.Stop("end2prep")
-        timer.Stop("winchecker")
-    end
-
-    ---
     -- Make sure we have the players to do a round, people can leave during our
-    -- preparations so we'll call this numerous times
-    -- @return boolean
+    -- preparations so we'll call this numerous times. Also stops the timers.
+    -- @return boolean Returns if the round should be aborted because there are npt
+    -- enough players for a valid round
+    -- @internal
     -- @realm server
     function gameloop.CheckForAbort()
-        if not gameloop.HasEnoughPlayers() then
+        if not HasEnoughPlayers() then
             LANG.Msg("round_minplayers")
 
             gameloop.StopTimers()
@@ -579,6 +618,17 @@ if SERVER then
         else
             LANG.Msg("limit_left", { num = roundsLeft, time = math.ceil(timeLeft / 60) })
         end
+    end
+
+    ---
+    -- Stops the timers in order to restart a gameloop.
+    -- @realm server
+    function gameloop.StopTimers()
+        -- remove all timers
+        timer.Stop("wait2prep")
+        timer.Stop("prep2begin")
+        timer.Stop("end2prep")
+        timer.Stop("winchecker")
     end
 
     ---
@@ -628,6 +678,12 @@ if CLIENT then
         surface.PlaySound(cues[math.random(#cues)])
     end
 
+    ---
+    -- Clientside function that handles the internal round state change.
+    -- @param number oldRoundState The old round state
+    -- @param number newRoundState The new round state
+    -- @internal
+    -- @realm client
     function gameloop.RoundStateChange(oldRoundState, newRoundState)
         if nnewRoundState == ROUND_PREP then
             EPOP:Clear()
@@ -729,28 +785,48 @@ end
 
 ---
 -- Returns the current round state.
--- @return number
+-- @return number The current round state
 -- @realm shared
 function gameloop.GetRoundState()
     return gameloop.roundState
 end
 
+---
+-- Returns the current phase end time.
+-- @return number The phase end time
+-- @realm shared
 function gameloop.GetPhaseEnd()
     return GetGlobalFloat("ttt_round_end", 0)
 end
 
+---
+-- Returns the current haste end time.
+-- @return number The haste end time
+-- @realm shared
 function gameloop.GetHasteEnd()
     return GetGlobalFloat("ttt_haste_end", 0)
 end
 
+---
+-- Returns the level start time.
+-- @return number The level start time
+-- @realm shared
 function gameloop.GetLevelStartTime()
     return GetGlobalFloat("ttt_map_start", 0)
 end
 
+---
+-- Returns the amount of rounds left on this level.
+-- @return number The amound of rounds left
+-- @realm shared
 function gameloop.GetRoundsLeft()
     return GetGlobalInt("ttt_rounds_left", 0)
 end
 
+---
+-- Returns the remaining time left on this level.
+-- @return number The time left on this level
+-- @realm shared
 function gameloop.GetLevelTimeLeft()
     return math.max(0, cvLevelTimeLimit:GetInt() * 60 - CurTime() + gameloop.GetLevelStartTime())
 end
