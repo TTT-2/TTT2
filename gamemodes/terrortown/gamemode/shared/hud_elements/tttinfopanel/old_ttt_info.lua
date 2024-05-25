@@ -203,7 +203,7 @@ if CLIENT then
             end
 
             -- Draw round time
-            local isHaste = HasteMode() and round_state == ROUND_ACTIVE
+            local isHaste = gameloop.IsHasteMode() and round_state == ROUND_ACTIVE
             local isOmniscient = client:IsActive() and client:GetSubRoleData().isOmniscientRole
             local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
             local font = "TimeLeft"

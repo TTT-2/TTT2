@@ -74,7 +74,7 @@ function ScoreGroup(ply)
         return group
     end
 
-    if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
+    if gameloop.IsDetectiveMode() and ply:IsSpec() and not ply:Alive() then
         if ply:TTT2NETGetBool("body_found", false) then
             return GROUP_FOUND
         else
@@ -205,7 +205,7 @@ function PANEL:Init()
     t:SetGroupInfo(GetTranslation("spectators"), COLOR_SPEC, GROUP_SPEC)
     self.ply_groups[GROUP_SPEC] = t
 
-    if DetectiveMode() then
+    if gameloop.IsDetectiveMode() then
         t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
         t:SetGroupInfo(GetTranslation("sb_mia"), Color(130, 190, 130, 100), GROUP_NOTFOUND)
         self.ply_groups[GROUP_NOTFOUND] = t

@@ -359,14 +359,16 @@ function targetid.HUDDrawTargetIDWeapons(tData)
         tData:SetSubtitle(
             ParT("target_pickup_weapon", key_params_wep)
                 .. (
-                    not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep) or ""
+                    not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep)
+                    or ""
                 )
         )
     elseif switchMode == SWITCHMODE_SWITCH then
         tData:SetSubtitle(
             ParT("target_switch_weapon", key_params_wep)
                 .. (
-                    not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep) or ""
+                    not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep)
+                    or ""
                 )
         )
     elseif switchMode == SWITCHMODE_FULLINV then
@@ -517,7 +519,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
         return
     end
 
-    local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
+    local corpse_found = CORPSE.GetFound(ent, false) or not gameloop.IsDetectiveMode()
     local corpse_ply = corpse_found and CORPSE.GetPlayer(ent) or false
     local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars"
         or false

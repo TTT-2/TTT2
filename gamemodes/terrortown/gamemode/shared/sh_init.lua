@@ -1,16 +1,6 @@
 ---
 -- This file contains all shared vars, tables and functions
 
----
--- @realm server
--- stylua: ignore
-local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
-
----
--- @realm server
--- stylua: ignore
-local cvHasteMode = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 GM.Name = "TTT2"
 GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer, Histalek, ZenBre4ker"
 GM.Email = "ttt2@neoxult.de"
@@ -641,22 +631,6 @@ function GetEquipmentByName(name)
     name = GetEquipmentFileName(name)
 
     return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
-end
-
----
--- Returns whether the detective mode is enabled
--- @return boolean
--- @realm shared
-function DetectiveMode()
-    return cvDetectiveMode:GetBool()
-end
-
----
--- Returns whether the haste mode is enabled
--- @return boolean
--- @realm shared
-function HasteMode()
-    return cvHasteMode:GetBool()
 end
 
 -- Create teams

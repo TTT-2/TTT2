@@ -22,6 +22,17 @@ local cvLevelTimeLimit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and
 -- stylua: ignore
 local cvRoundLimit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
+
+---
+-- @realm server
+-- stylua: ignore
+local cvDetectiveMode = CreateConVar("ttt_sherlock_mode", "1", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+
+---
+-- @realm server
+-- stylua: ignore
+local cvHasteMode = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 gameloop = {}
 
 if SERVER then
@@ -175,7 +186,7 @@ if SERVER then
 
         local timeRoundEnd = CurTime() + cvDurationRound:GetInt() * 60
 
-        if HasteMode() then
+        if gameloop.IsHasteMode() then
             timeRoundEnd = CurTime() + cvTimeHasteStarting:GetInt() * 60
 
             -- this is a "fake" time shown to innocents, showing the end time if no
@@ -454,6 +465,25 @@ end
 function gameloop.GetLevelTimeLeft()
     return math.max(0, cvLevelTimeLimit:GetInt() * 60 - CurTime() + gameloop.GetLevelStartTime())
 end
+
+---
+-- Returns whether the detective mode is enabled
+-- @return boolean
+-- @realm shared
+function gameloop.IsDetectiveMode()
+    return cvDetectiveMode:GetBool()
+end
+
+---
+-- Returns whether the haste mode is enabled
+-- @return boolean
+-- @realm shared
+function gameloop.IsHasteMode()
+    return cvHasteMode:GetBool()
+end
+
+DetectiveMode = gameloop.IsDetectiveMode
+HasteMode = gameloop.IsHasteMode
 
 -- HOOKS to sv main --
 

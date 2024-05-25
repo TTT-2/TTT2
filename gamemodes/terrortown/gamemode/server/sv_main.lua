@@ -151,7 +151,7 @@ local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTI
 ---
 -- @realm server
 -- stylua: ignore
-CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
+CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in gameloop.IsDetectiveMode() without clicking on confirm espacially")
 
 ---
 -- @realm server

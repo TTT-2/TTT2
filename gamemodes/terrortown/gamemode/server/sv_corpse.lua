@@ -280,7 +280,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
         if
             GetConVar("ttt_identify_body_woconfirm"):GetBool()
-            and DetectiveMode()
+            and gameloop.IsDetectiveMode()
             and not isCovert
         then
             CORPSE.IdentifyBody(ply, rag, sceneData.searchUID)
