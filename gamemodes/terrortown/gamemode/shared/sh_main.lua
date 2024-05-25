@@ -291,6 +291,11 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
+    -- stop movement while in loading screen
+    if loadingscreen.isShown then
+        return true
+    end
+
     SPEED:HandleSpeedCalculation(ply, moveData)
 
     local mul = ply:GetSpeedMultiplier()

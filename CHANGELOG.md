@@ -36,6 +36,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new admin commands menu (by @TimGoll)
   - Added a submenu to change maps
   - Added a submenu to issue basic commands
+- Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 
 ### Changed
 
@@ -74,11 +75,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Removed
 
 - Removed radio tab in shop UI
+- Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
 
 ### Breaking Changes
 
 - Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
+- Removed the `TIPS` module and replaced it with a new `tips` module
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
