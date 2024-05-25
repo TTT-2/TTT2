@@ -824,9 +824,6 @@ function GM:PlayerDeath(victim, infl, attacker)
     victim:Flashlight(false)
     victim:Extinguish()
 
-    net.Start("TTT_PlayerDied")
-    net.Send(victim)
-
     if
         gameloop.IsHasteMode()
         and gameloop.GetRoundState() == ROUND_ACTIVE
