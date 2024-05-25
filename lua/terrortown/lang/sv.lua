@@ -2289,3 +2289,10 @@ L.body_confirm_one = "{finder} bekräftade att {victim} har dött."
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"

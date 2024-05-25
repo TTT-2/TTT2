@@ -2280,34 +2280,6 @@ L.label_slider_set_armor = "zırh ayarla"
 L.label_player_select = "Etkilenen oyuncuyu seç"
 L.label_execute_command = "Komut Çalıştır"
 
---L.button_change_map = "Change Map"
-
--- 2024-05-20
---L.submenu_commands_commands_title = "Commands"
-
---L.header_commands_round_restart = "Round Restart"
---L.header_commands_player_slay = "Slay Player"
---L.header_commands_player_teleport = "Teleport Player to Focused Point"
---L.header_commands_player_respawn = "Respawn Player at Focused Point"
---L.header_commands_player_add_credits = "Add Equipment Credits"
---L.header_commands_player_set_health = "Set Health"
---L.header_commands_player_set_armor = "Set Armor"
-
---L.label_button_round_restart = "round restart"
---L.label_button_player_slay = "slay player"
---L.label_button_player_teleport = "teleport player"
---L.label_button_player_respawn = "respawn player"
---L.label_button_player_add_credits = "add credits"
---L.label_button_player_set_health = "set health"
---L.label_button_player_set_armor = "set armor"
-
---L.label_slider_add_credits = "Set credit amount"
---L.label_slider_set_health = "Set health"
---L.label_slider_set_armor = "Set armor"
-
---L.label_player_select = "Select affected player"
---L.label_execute_command = "Execute command"
-
 -- 2024-05-22
 --L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
 --L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
@@ -2315,3 +2287,10 @@ L.label_execute_command = "Komut Çalıştır"
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
