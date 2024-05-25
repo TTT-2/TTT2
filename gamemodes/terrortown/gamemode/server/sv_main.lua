@@ -69,6 +69,16 @@ local playerGetAll = player.GetAll
 ---
 -- @realm server
 -- stylua: ignore
+local cvPreferMapModels = CreateConVar("ttt2_prefer_map_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+-- stylua: ignore
+local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+-- stylua: ignore
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Credits
@@ -1139,4 +1149,74 @@ end
 -- @realm server
 function GM:TTT2PlayerFinishedReloading(ply)
     map.SyncToClient(ply)
+end
+
+function GM:TTT2PrePrepareRound(duration)
+    events.Reset()
+    KARMA.RoundPrepare()
+
+    -- todo: this muting here seems like a bad idea - rework?
+    -- mute for a second around role selection, to counter a dumb exploit
+    -- related to team voice mics cutting off for a second when they're selected
+    timer.Create("selectmute", duration - 1, 1, function()
+        MuteForRestart(true)
+    end)
+
+    -- undo the roundrestart mute, though they will once again be muted for the
+    -- selectmute timer
+    timer.Create("restartmute", 1, 1, function()
+        MuteForRestart(false)
+    end)
+
+    -- sets the player model
+    -- supports map models or random player models
+    if cvPreferMapModels:GetBool() and self.force_plymodel and self.force_plymodel ~= "" then
+        self.playermodel = self.force_plymodel
+    elseif cvSelectModelPerRound:GetBool() then
+        self.playermodel = playermodels.GetRandomPlayerModel()
+    end
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    self.playercolor = hook.Run("TTTPlayerColor", self.playermodel)
+end
+
+function GM:TTT2PreBeginRound(duration)
+    -- remove decals
+    util.ClearDecals()
+
+    timer.Create("selectmute", 1, 1, function()
+        MuteForRestart(false)
+    end)
+
+    ResetDamageLog()
+
+    events.Trigger(EVENT_SELECTED)
+
+    self:UpdatePlayerLoadouts() -- needs to happen when round_active
+
+    ARMOR:InitPlayerArmor()
+
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        local ply = plys[i]
+
+        ply:ResetRoundDeathCounter()
+
+        -- a player should be considered "was active in round" if they received a role
+        ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
+    end
+
+    credits.ResetTeamStates()
+end
+
+function GM:TTT2PreEndRound(result, duration)
+    events.Trigger(EVENT_FINISH, result)
+
+    events.UpdateScoreboard()
+
+    -- send the clients the round log, players will be shown the report
+    events.StreamToClients()
 end
