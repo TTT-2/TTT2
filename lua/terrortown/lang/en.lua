@@ -2288,3 +2288,10 @@ L.label_slider_set_armor = "Set armor"
 
 L.label_player_select = "Select affected player"
 L.label_execute_command = "Execute command"
+
+L.help_round_restart_reset = [[
+Restart a round or reset the level.
+
+Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a round restart]]
+
+L.label_button_level_reset = "reset level"
