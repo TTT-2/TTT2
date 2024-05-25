@@ -1035,6 +1035,9 @@ function GM:TTT2PreBeginRound(duration)
     end
 
     credits.ResetTeamStates()
+
+    timer.Simple(1.5, TellTraitorsAboutTraitors)
+    timer.Simple(2.5, ShowRoundStartPopup)
 end
 
 ---

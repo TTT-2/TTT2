@@ -232,10 +232,6 @@ if SERVER then
         gameloop.StartWinChecks()
         gameloop.StartNameChangeChecks()
 
-        -- todo: trigger the menu at round begin with role info
-        --timer.Simple(1.5, TellTraitorsAboutTraitors)
-        --timer.Simple(2.5, ShowRoundStartPopup)
-
         ServerLog("Round proper has begun...\n")
 
         ---
