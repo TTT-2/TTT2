@@ -5,7 +5,6 @@ local math = math
 local net = net
 local player = player
 local timer = timer
-local util = util
 local IsValid = IsValid
 local surface = surface
 local hook = hook
@@ -139,11 +138,6 @@ local TryT = LANG.TryTranslation
 ---
 -- @realm client
 -- stylua: ignore
-local cvSoundCues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
-
----
--- @realm client
--- stylua: ignore
 local cvEnableBobbing = CreateConVar("ttt2_enable_bobbing", "1", FCVAR_ARCHIVE)
 
 ---
@@ -158,19 +152,6 @@ local cvEnableDynamicFOV = CreateConVar("ttt2_enable_dynamic_fov", "1", {FCVAR_N
 cvars.AddChangeCallback("ttt2_enable_dynamic_fov", function(_, _, valueNew)
     LocalPlayer():SetSettingOnServer("enable_dynamic_fov", tobool(valueNew))
 end)
-
-local cues = {
-    Sound("ttt/thump01e.mp3"),
-    Sound("ttt/thump02e.mp3"),
-}
-
-local function PlaySoundCue()
-    if not cvSoundCues:GetBool() then
-        return
-    end
-
-    surface.PlaySound(cues[math.random(#cues)])
-end
 
 ---
 -- Called after the gamemode loads and starts.

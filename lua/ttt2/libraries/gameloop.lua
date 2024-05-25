@@ -479,6 +479,24 @@ if SERVER then
 end
 
 if CLIENT then
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvSoundCues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
+
+    local cues = {
+        Sound("ttt/thump01e.mp3"),
+        Sound("ttt/thump02e.mp3"),
+    }
+
+    local function PlaySoundCue()
+        if not cvSoundCues:GetBool() then
+            return
+        end
+
+        surface.PlaySound(cues[math.random(#cues)])
+    end
+
     function gameloop.RoundStateChange(oldRoundState, newRoundState)
         if nnewRoundState == ROUND_PREP then
             EPOP:Clear()
