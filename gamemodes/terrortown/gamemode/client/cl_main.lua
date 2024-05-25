@@ -227,8 +227,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
-    loadingscreen.End()
-
     ---
     -- @realm client
     -- stylua: ignore
