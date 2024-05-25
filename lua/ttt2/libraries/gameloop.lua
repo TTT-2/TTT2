@@ -116,6 +116,8 @@ if SERVER then
     -- @internal
     -- @realm server
     function gameloop.Prepare()
+        loadingscreen.End()
+
         -- if not enough players are available, we go into a idle state where
         -- the game periodically tries again to start a new round until enough
         -- player were found
@@ -298,9 +300,16 @@ if SERVER then
     -- @internal
     -- @realm server
     function gameloop.Post()
+        loadingscreen.Begin()
+
         gameloop.DecreaseRoundsLeft()
 
-        game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+        -- delay the cleanup a bit so that the client starts the loading screen animation before the
+        -- cleanup starts
+        -- note: delaying by a single tick seemed to be ineffective
+        timer.Simple(0.25, function()
+            game.CleanUpMap(false, nil, ents.TTT.FixParentedPostCleanup)
+        end)
 
         -- Remove ULX /me command. (the /me command is the only thing this hook does)
         hook.Remove("PlayerSay", "ULXMeCheck")
