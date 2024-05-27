@@ -69,6 +69,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed overhead icons sometimes being stuck at random places (by @TimGoll)
 - Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
 - Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
+- Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 
 ### Removed
 
