@@ -394,7 +394,7 @@ local function ReceiveVoiceState()
     local isGlobal = net.ReadBit() == 1
 
     -- prevent glitching due to chat starting/ending across round boundary
-    if GAMEMODE.round_state ~= ROUND_ACTIVE then
+    if gameloop.GetRoundState() ~= ROUND_ACTIVE then
         return
     end
 
@@ -637,7 +637,7 @@ local function GetDrainRate()
         not IsValid(ply)
         or ply:IsSpec()
         or not GetGlobalBool("ttt_voice_drain", false)
-        or GetRoundState() ~= ROUND_ACTIVE
+        or gameloop.GetRoundState() ~= ROUND_ACTIVE
     then
         return 0
     end

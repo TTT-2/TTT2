@@ -587,6 +587,7 @@ include("ttt2/libraries/marks.lua")
 include("ttt2/libraries/outline.lua")
 include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/roles.lua")
+include("ttt2/libraries/gameloop.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/eventdata.lua")
 include("ttt2/libraries/targetid.lua")
@@ -632,22 +633,6 @@ function GetEquipmentByName(name)
     name = GetEquipmentFileName(name)
 
     return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
-end
-
----
--- Returns whether the detective mode is enabled
--- @return boolean
--- @realm shared
-function DetectiveMode()
-    return GetGlobalBool("ttt_detective", false)
-end
-
----
--- Returns whether the haste mode is enabled
--- @return boolean
--- @realm shared
-function HasteMode()
-    return GetGlobalBool("ttt_haste", false)
 end
 
 -- Create teams

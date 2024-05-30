@@ -148,7 +148,7 @@ if SERVER then
     -- @realm server
     function ENT:Think()
         -- prevent starting effects when round is about to restart
-        if GetRoundState() == ROUND_POST then
+        if gameloop.GetRoundState() == ROUND_POST then
             return
         end
 

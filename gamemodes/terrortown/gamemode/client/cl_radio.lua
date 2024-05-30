@@ -222,7 +222,7 @@ function RADIO:GetTargetType()
             return ent, false
         end
     elseif ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, "") ~= "" then
-        if DetectiveMode() and not CORPSE.GetFound(ent, false) then
+        if gameloop.IsDetectiveMode() and not CORPSE.GetFound(ent, false) then
             return "quick_corpse", true
         else
             return ent, false

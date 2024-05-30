@@ -69,7 +69,7 @@ local function PlayerCanHearSpectator(listener, speaker, roundState)
     local isSpec = listener:IsSpec()
 
     -- limited if specific convar is on, or we're in detective mode
-    local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
+    local limit = gameloop.IsDetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
 
     return isSpec or not limit or roundState ~= ROUND_ACTIVE,
         not isSpec and LocationalVoiceIsActive(roundState)
@@ -140,7 +140,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
     end
 
     local speakerTeam = speaker:GetTeam()
-    local roundState = GetRoundState()
+    local roundState = gameloop.GetRoundState()
     local isGlobalVoice = speaker[speakerTeam .. "_gvoice"]
 
     if PlayerIsMuted(listener, speaker) then

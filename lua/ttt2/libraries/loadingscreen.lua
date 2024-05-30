@@ -5,7 +5,7 @@
 if SERVER then
     AddCSLuaFile()
 
-    util.AddNetworkString("TTT2LoadingscreenStart")
+    util.AddNetworkString("TTT2LoadingScreenActive")
 end
 
 loadingscreen = loadingscreen or {}
@@ -24,7 +24,8 @@ function loadingscreen.Begin()
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
     if SERVER then
-        net.Start("TTT2LoadingscreenStart")
+        net.Start("TTT2LoadingScreenActive")
+        net.WriteBool(true)
         net.Broadcast()
     end
 
@@ -49,6 +50,10 @@ function loadingscreen.End()
     loadingscreen.isShown = false
 
     if SERVER then
+        net.Start("TTT2LoadingScreenActive")
+        net.WriteBool(false)
+        net.Broadcast()
+
         -- disables sounds a while longer so it stays muted
         timer.Simple(1.5, function()
             loadingscreen.disableSounds = false
@@ -87,8 +92,12 @@ if CLIENT then
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()
 
-    net.Receive("TTT2LoadingscreenStart", function()
-        loadingscreen.Begin()
+    net.Receive("TTT2LoadingScreenActive", function()
+        if net.ReadBool() then
+            loadingscreen.Begin()
+        else
+            loadingscreen.End()
+        end
     end)
 
     ---
@@ -96,7 +105,7 @@ if CLIENT then
     -- @internal
     -- @realm client
     function loadingscreen.Handler()
-        -- start reloading screen
+        -- start loadingscreen
         if loadingscreen.isShown and not loadingscreen.wasShown then
             loadingscreen.state = LS_FADE_IN
             loadingscreen.timeStateChange = SysTime()
@@ -108,7 +117,7 @@ if CLIENT then
 
             loadingscreen.wasShown = true
 
-        -- stop reloading screen
+        -- stop loadingscreen
         elseif not loadingscreen.isShown and loadingscreen.wasShown then
             loadingscreen.state = LS_FADE_OUT
             loadingscreen.timeStateChange = SysTime()
@@ -116,6 +125,8 @@ if CLIENT then
             timer.Create("TTT2LoadingscreenHide", durationStateChange * 2, 1, function()
                 loadingscreen.state = LS_HIDDEN
                 loadingscreen.timeStateChange = SysTime()
+
+                timer.Remove("TTT2LoadingscreenShow")
             end)
 
             loadingscreen.wasShown = false

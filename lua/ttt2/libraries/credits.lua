@@ -18,7 +18,7 @@ credits = credits or {}
 -- @realm server
 function credits.HandleKillCreditsAward(victim, attacker)
     if
-        GetRoundState() ~= ROUND_ACTIVE
+        gameloop.GetRoundState() ~= ROUND_ACTIVE
         or not IsValid(victim)
         or not IsValid(attacker)
         or not attacker:IsPlayer()

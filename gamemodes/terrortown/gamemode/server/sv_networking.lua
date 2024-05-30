@@ -51,7 +51,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
             TTT2NETTABLE[ply][p] = { subrole, team }
 
             if p ~= ply then
-                local rs = GetRoundState()
+                local rs = gameloop.GetRoundState()
 
                 if
                     p:GetSubRoleData().disableSync
@@ -293,31 +293,31 @@ function SendFullStateUpdate()
 end
 
 ---
--- Resynces the list of @{Player}s for a given list of @{Player}s
--- @param nil|Player|table ply_or_rf
+-- Resets the list of @{Player}s for a given list of @{Player}s
 -- @realm server
-function SendRoleReset(ply_or_rf)
+function RoleReset()
     local players = playerGetAll()
-    local plyCount = #players
 
-    for i = 1, plyCount do
+    for i = 1, #players do
         local ply = players[i]
 
-        TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
-
-        for k = 1, plyCount do
-            local p = players[k]
-
-            TTT2NETTABLE[ply][p] = { ROLE_NONE, TEAM_NONE }
-        end
+        RoleResetForPlayer(ply)
     end
+end
 
-    net.Start("TTT_RoleReset")
+---
+-- Resets the list of a player for a given list of @{Player}s
+-- @param Player ply The player that should be updated
+-- @realm server
+function RoleResetForPlayer(ply)
+    local players = playerGetAll()
 
-    if ply_or_rf then
-        net.Send(ply_or_rf)
-    else
-        net.Broadcast()
+    TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+    for i = 1, #players do
+        local p = players[i]
+
+        TTT2NETTABLE[ply][p] = { ROLE_NONE, TEAM_NONE }
     end
 end
 
@@ -325,7 +325,7 @@ end
 local function ttt_request_rolelist(plySyncTo)
     -- Client requested a state update. Note that the client can only use this
     -- information after entities have been initialized (e.g. in InitPostEntity).
-    if GetRoundState() ~= ROUND_WAIT then
+    if gameloop.GetRoundState() ~= ROUND_WAIT then
         local localPly = false
         local tmp = {}
         local team = plySyncTo:GetTeam()

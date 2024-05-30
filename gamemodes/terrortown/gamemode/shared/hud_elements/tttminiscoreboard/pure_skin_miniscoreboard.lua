@@ -91,7 +91,7 @@ end
 
 -- parameter overwrites
 function HUDELEMENT:ShouldDraw()
-    return GAMEMODE.round_state == ROUND_ACTIVE
+    return gameloop.GetRoundState() == ROUND_ACTIVE
 end
 
 function HUDELEMENT:InheritParentBorder()
