@@ -486,9 +486,6 @@ function VOICE.CycleMuteState(force_state)
     return mute_state
 end
 
-VOICE.battery_max = 100
-VOICE.battery_min = 10
-
 ---
 -- Scales a linear volume into a Power 4 value.
 -- @param number volume
@@ -613,45 +610,7 @@ function VOICE.UpdatePlayerVoiceVolume(ply)
     return out_vol, mute
 end
 
----
--- Initializes the voice battery
--- @realm client
-function VOICE.InitBattery()
-    LocalPlayer().voice_battery = VOICE.battery_max
-end
-
-local function GetRechargeRate()
-    local r = GetGlobalFloat("ttt_voice_drain_recharge", 0.05)
-
-    if LocalPlayer().voice_battery < VOICE.battery_min then
-        r = r * 0.5
-    end
-
-    return r
-end
-
-local function GetDrainRate()
-    local ply = LocalPlayer()
-
-    if
-        not IsValid(ply)
-        or ply:IsSpec()
-        or not GetGlobalBool("ttt_voice_drain", false)
-        or GetRoundState() ~= ROUND_ACTIVE
-    then
-        return 0
-    end
-
-    local plyRoleData = ply:GetSubRoleData()
-
-    if ply:IsAdmin() or (plyRoleData.isPublicRole and plyRoleData.isPolicingRole) then
-        return GetGlobalFloat("ttt_voice_drain_admin", 0)
-    else
-        return GetGlobalFloat("ttt_voice_drain_normal", 0)
-    end
-end
-
-local function IsRoleChatting(ply)
+function VOICE.IsRoleChatting(ply)
     local plyTeam = ply:GetTeam()
     local plyRoleData = ply:GetSubRoleData()
 
@@ -662,31 +621,6 @@ local function IsRoleChatting(ply)
         and plyTeam ~= TEAM_NONE
         and not TEAMS[plyTeam].alone
         and not ply[plyTeam .. "_gvoice"]
-end
-
----
--- Updates the voice battery
--- @note Called every @{GM:Tick}
--- @realm client
--- @internal
-function VOICE.Tick()
-    if not GetGlobalBool("ttt_voice_drain", false) then
-        return
-    end
-
-    local client = LocalPlayer()
-
-    if VOICE.IsSpeaking() and not IsRoleChatting(client) then
-        client.voice_battery = client.voice_battery - GetDrainRate()
-
-        if not VOICE.CanSpeak() then
-            client.voice_battery = 0
-
-            permissions.EnableVoiceChat(false)
-        end
-    elseif client.voice_battery < VOICE.battery_max then
-        client.voice_battery = client.voice_battery + GetRechargeRate()
-    end
 end
 
 ---
@@ -720,13 +654,13 @@ function VOICE.CanSpeak()
         return false
     end
 
-    if not GetGlobalBool("ttt_voice_drain", false) then
+    if not voicebattery.IsEnabled() then
         return true
     end
 
     local client = LocalPlayer()
 
-    return client.voice_battery > VOICE.battery_min or IsRoleChatting(client)
+    return voicebattery.IsCharged() or VOICE.IsRoleChatting(client)
 end
 
 ---
