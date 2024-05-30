@@ -62,21 +62,6 @@ util.AddNetworkString("TTT2PlayerUseEntity")
 function GM:PlayerInitialSpawn(ply)
     ply:InitialSpawn()
 
-    local rstate = GetRoundState() or ROUND_WAIT
-
-    -- We should update the traitor list, if we are not about to send it
-    -- sending roles for spectators
-    if rstate <= ROUND_PREP then
-        SendFullStateUpdate() -- TODO needed?
-    end
-
-    -- Game has started, tell this guy (spec) where the round is at
-    if rstate ~= ROUND_WAIT then
-        SendRoundState(rstate, ply)
-
-        timer.Simple(1, SendFullStateUpdate)
-    end
-
     -- Handle spec bots
     if ply:IsBot() and ttt_bots_are_spectators:GetBool() then
         ply:SetTeam(TEAM_SPEC)
@@ -143,11 +128,6 @@ function GM:PlayerSpawn(ply)
 
     -- Clear out stuff like whether we ordered guns or what bomb code we used
     ply:ResetRoundFlags()
-
-    -- latejoiner, send him some info
-    if GetRoundState() == ROUND_ACTIVE then
-        SendRoundState(GetRoundState(), ply)
-    end
 
     ply.spawn_nick = ply:Nick()
     ply.has_spawned = true
@@ -620,7 +600,7 @@ function GM:PlayerDisconnected(ply)
         ply:SetRole(ROLE_NONE)
     end
 
-    if GetRoundState() ~= ROUND_PREP then
+    if gameloop.GetRoundState() ~= ROUND_PREP then
         TTT2NETTABLE[ply] = nil
 
         SendFullStateUpdate()
@@ -755,7 +735,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     util.StartBleeding(rag, dmginfo:GetDamage(), 15)
 
     -- Score only when there is a round active.
-    if GetRoundState() == ROUND_ACTIVE then
+    if gameloop.GetRoundState() == ROUND_ACTIVE then
         events.Trigger(EVENT_KILL, ply, attacker, dmginfo)
 
         if IsValid(attacker) and attacker:IsPlayer() then
@@ -844,11 +824,15 @@ function GM:PlayerDeath(victim, infl, attacker)
     victim:Flashlight(false)
     victim:Extinguish()
 
-    ---
-    -- @realm server
-    -- stylua: ignore
-    if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
-        IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
+    if
+        gameloop.IsHasteMode()
+        and gameloop.GetRoundState() == ROUND_ACTIVE
+        ---
+        -- @realm server
+        -- stylua: ignore
+        and not hook.Run("TTT2ShouldSkipHaste", victim, attacker)
+    then
+        gameloop.IncreasePhaseEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
     end
 
     if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
@@ -896,7 +880,7 @@ end
 -- @local
 function GM:PostPlayerDeath(ply)
     -- endless respawn player if he dies in preparing time
-    if GetRoundState() ~= ROUND_PREP or not GetConVar("ttt2_prep_respawn"):GetBool() then
+    if gameloop.GetRoundState() ~= ROUND_PREP or not GetConVar("ttt2_prep_respawn"):GetBool() then
         return
     end
 
@@ -990,7 +974,7 @@ function GM:SpectatorThink(ply)
                 -- stop speccing as soon as target dies
                 ply:UnSpectate()
                 ply:Spectate(OBS_MODE_ROAMING)
-            elseif GetRoundState() == ROUND_ACTIVE then
+            elseif gameloop.GetRoundState() == ROUND_ACTIVE then
                 -- Sync position to target. Uglier than parenting, but unlike
                 -- parenting this is less sensitive to breakage: if we are
                 -- no longer spectating, we will never sync to their position.
@@ -1057,7 +1041,7 @@ function GM:OnDamagedByExplosion(ply, dmginfo) end
 -- @ref https://wiki.facepunch.com/gmod/GM:ScalePlayerDamage
 -- @local
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
-    if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() and GetRoundState() == 2 then
+    if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() and gameloop.GetRoundState() == 2 then
         dmginfo:ScaleDamage(0)
     end
 
@@ -1438,7 +1422,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
     if
         IsValid(att)
         and att:IsPlayer()
-        and GetRoundState() == ROUND_ACTIVE
+        and gameloop.GetRoundState() == ROUND_ACTIVE
         and math.floor(dmginfo:GetDamage()) > 0
     then
         if KARMA.IsEnabled() and ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
@@ -1662,7 +1646,7 @@ function GM:TTT2PostPlayerDeath(victim, inflictor, attacker) end
 -- @hook
 -- @realm server
 function GM:AllowPVP()
-    local rs = GetRoundState()
+    local rs = gameloop.GetRoundState()
 
     return rs ~= ROUND_PREP and (rs ~= ROUND_POST or ttt_postdm:GetBool())
 end

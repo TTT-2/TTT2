@@ -8,8 +8,6 @@ local draw = draw
 local math = math
 local string = string
 local vgui = vgui
-<<<<<<< Updated upstream
-local max = math.max
 local floor = math.floor
 =======
 >>>>>>> Stashed changes
@@ -78,7 +76,7 @@ function ScoreGroup(ply)
         return group
     end
 
-    if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
+    if gameloop.IsDetectiveMode() and ply:IsSpec() and not ply:Alive() then
         if ply:TTT2NETGetBool("body_found", false) then
             return GROUP_FOUND
         else
@@ -88,7 +86,7 @@ function ScoreGroup(ply)
             if
                 client:IsSpec()
                 or client:IsActive() and client:GetSubRoleData().isOmniscientRole
-                or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
+                or gameloop.GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
             then
                 return GROUP_NOTFOUND
             else
@@ -123,19 +121,20 @@ surface.CreateFont("treb_small", {
 
 <<<<<<< Updated upstream
 local function UntilMapChange()
-    local rounds_left = max(0, GetGlobalInt("ttt_rounds_left", 6))
-    local time_left = floor(max(0, (GetGlobalInt("ttt_time_limit_minutes") or 60) * 60 - CurTime()))
-    local h = floor(time_left / 3600)
+    local roundsLeft = gameloop.GetRoundsLeft()
+    local timeLeft = floor(gameloop.GetLevelTimeLeft())
 
-    time_left = time_left - floor(h * 3600)
+    local hours = floor(timeLeft / 3600)
 
-    local m = floor(time_left / 60)
+    timeLeft = timeLeft - floor(hours * 3600)
 
-    time_left = time_left - floor(m * 60)
+    local minutes = floor(timeLeft / 60)
 
-    local s = floor(time_left)
+    timeLeft = timeLeft - floor(minutes * 60)
 
-    return rounds_left, string.format("%02i:%02i:%02i", h, m, s)
+    local seconds = floor(timeLeft)
+
+    return roundsLeft, string.format("%02i:%02i:%02i", hours, minutes, seconds)
 end
 
 =======
@@ -190,8 +189,7 @@ function PANEL:Init()
     self.mapchange:SetContentAlignment(9)
 
     self.mapchange.Think = function(sf)
-<<<<<<< Updated upstream
-        if GetGlobalBool("ttt_session_limits_enabled") then
+        if gameloop.HasLevelLimits() then
             local r, t = UntilMapChange()
 =======
         if gameloop.HasLevelLimits() then
@@ -216,7 +214,7 @@ function PANEL:Init()
     t:SetGroupInfo(GetTranslation("spectators"), COLOR_SPEC, GROUP_SPEC)
     self.ply_groups[GROUP_SPEC] = t
 
-    if DetectiveMode() then
+    if gameloop.IsDetectiveMode() then
         t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
         t:SetGroupInfo(GetTranslation("sb_mia"), Color(130, 190, 130, 100), GROUP_NOTFOUND)
         self.ply_groups[GROUP_NOTFOUND] = t

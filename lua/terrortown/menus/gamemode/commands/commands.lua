@@ -22,11 +22,23 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
     local form = vgui.CreateTTT2Form(parent, "header_commands_round_restart")
 
+    form:MakeHelp({
+        label = "help_round_restart_reset",
+    })
+
     form:MakeButton({
         label = "label_execute_command",
         buttonLabel = "label_button_round_restart",
         OnClick = function(slf)
             admin.RoundRestart()
+        end,
+    })
+
+    form:MakeButton({
+        label = "label_execute_command",
+        buttonLabel = "label_button_level_reset",
+        OnClick = function(slf)
+            admin.LevelReset()
         end,
     })
 

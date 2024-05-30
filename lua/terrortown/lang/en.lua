@@ -2293,8 +2293,6 @@ L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshe
 
 L.label_enable_loadingscreen = "Enable the loading screen"
 L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
-<<<<<<< Updated upstream
-=======
 
 -- 2024-05-25
 L.help_round_restart_reset = [[
@@ -2307,4 +2305,3 @@ L.label_button_level_reset = "reset level"
 L.loadingscreen_round_restart_title = "Starting new round"
 L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
 L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
->>>>>>> Stashed changes

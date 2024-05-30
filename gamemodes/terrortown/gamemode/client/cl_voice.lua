@@ -23,21 +23,21 @@ VOICE.cv = {
     ---
     -- @realm client
     -- stylua: ignore
-    duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", {FCVAR_ARCHIVE}),
+    duck_spectator = CreateConVar("ttt2_voice_duck_spectator", "0", { FCVAR_ARCHIVE }),
     ---
     -- @realm client
     -- stylua: ignore
-    duck_spectator_amount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", {FCVAR_ARCHIVE}),
+    duck_spectator_amount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", { FCVAR_ARCHIVE }),
 
     ---
     -- @realm client
     -- stylua: ignore
-    scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", {FCVAR_ARCHIVE}),
+    scaling_mode = CreateConVar("ttt2_voice_scaling", "linear", { FCVAR_ARCHIVE }),
 
     ---
     -- @realm client
     -- stylua: ignore
-    activation_mode = CreateConVar("ttt2_voice_activation", "ptt", {FCVAR_ARCHIVE}),
+    activation_mode = CreateConVar("ttt2_voice_activation", "ptt", { FCVAR_ARCHIVE }),
 }
 
 local function CreateVoiceTable()
@@ -51,46 +51,38 @@ end
 CreateVoiceTable()
 
 local function VoiceTryEnable()
-    local client = LocalPlayer()
+    VOICE.globalState = true
 
-    if not client:IsSpeakingInVoice() and VOICE.CanSpeak() and VOICE.CanEnable() then
-        client:SetSpeakingInVoice(true)
-
-        VOICE.isTeam = false
-
-        permissions.EnableVoiceChat(true)
-
-        return true
-    end
-
-    return false
-end
-
-local function VoiceTryDisable()
-    local client = LocalPlayer()
-
-    -- when connecting to a server this function might be executed before the local
-    -- player is ready. To prevent this, we have to check if it is valid
-    if not IsValid(client) then
+    if
+        not IsValid(LocalPlayer())
+        or VOICE.IsSpeaking()
+        or not VOICE.CanSpeak()
+        or not VOICE.CanEnable()
+    then
         return
     end
 
-    if not VOICE.isTeam then
-        client:SetSpeakingInVoice(false)
+    VOICE.isTeam = false
+    VOICE.SetSpeaking(true)
+    permissions.EnableVoiceChat(true)
+end
 
-        permissions.EnableVoiceChat(false)
+local function VoiceTryDisable()
+    VOICE.globalState = false
 
-        return true
+    if not IsValid(LocalPlayer()) or VOICE.isTeam then
+        return
     end
 
-    return false
+    VOICE.SetSpeaking(false)
+    permissions.EnableVoiceChat(false)
 end
 
 local function VoiceToggle()
-    if VOICE.IsSpeaking() then
-        return VoiceTryDisable()
+    if VOICE.globalState and VOICE.IsSpeaking() then
+        VoiceTryDisable()
     else
-        return VoiceTryEnable()
+        VoiceTryEnable()
     end
 end
 
@@ -192,7 +184,7 @@ end
 
 ---
 -- Creates a closure that dynamically calls a function from VOICE.ActivationModes depending on the current mode.
--- @param string func The name of the function to call on the current voice activation mode
+-- @param string functionName The name of the function to call on the current voice activation mode
 -- @return function A closure that calls the function on the current voice activation mode, if it exists
 -- @realm client
 function VOICE.ActivationModeFunc(functionName)
@@ -206,34 +198,49 @@ end
 
 hook.Add("TTT2FinishedLoading", "TTT2ActivateVoiceChat", VOICE.ActivationModeFunc("OnJoin"))
 
+-- TTT2FinishedLoading runs too early on join, the player entity is not yet valid
+hook.Add("TTTInitPostEntity", "TTT2ActivateVoiceChat", VOICE.ActivationModeFunc("OnJoin"))
+
 local function VoiceTeamTryEnable()
-    local client = LocalPlayer()
-
-    if not client:IsSpeakingInVoice() and VOICE.CanSpeak() and VOICE.CanTeamEnable() then
-        client:SetSpeakingInVoice(true)
-
-        VOICE.isTeam = true
-
-        permissions.EnableVoiceChat(true)
-
-        return true
+    if not VOICE.CanTeamEnable() or not VOICE.CanSpeak() then
+        return
     end
 
-    return false
+    if not VOICE.IsSpeaking() then
+        VOICE.SetSpeaking(true)
+        VOICE.isTeam = true
+        permissions.EnableVoiceChat(true)
+
+    -- (temporarily) disable global voice chat and enable team voice chat
+    elseif VOICE.IsSpeaking() and not VOICE.isTeam then
+        permissions.EnableVoiceChat(false)
+        VOICE.isTeam = true
+
+        timer.Simple(0, function()
+            permissions.EnableVoiceChat(true)
+        end)
+    end
 end
 
 local function VoiceTeamTryDisable()
-    local client = LocalPlayer()
-
-    if VOICE.isTeam then
-        client:SetSpeakingInVoice(false)
-
-        permissions.EnableVoiceChat(false)
-
-        return true
+    if not VOICE.isTeam then
+        return
     end
 
-    return false
+    -- re-enable global voice chat if it's supposed to be enabled
+    if VOICE.globalState then
+        permissions.EnableVoiceChat(false)
+        VOICE.isTeam = false
+
+        timer.Simple(0, function()
+            permissions.EnableVoiceChat(true)
+        end)
+
+    -- otherwise just disable team voice chat
+    else
+        VOICE.SetSpeaking(false)
+        permissions.EnableVoiceChat(false)
+    end
 end
 
 ---
@@ -323,10 +330,7 @@ function GM:PlayerStartVoice(ply)
     local clientTeam = client:GetTeam()
     local clientRoleData = client:GetSubRoleData()
 
-    if ply ~= client then
-        -- if someone else than us starts talking, the UI should be updated as well
-        ply:SetSpeakingInVoice(true)
-    else
+    if ply == client then
         client[client:GetTeam() .. "_gvoice"] = not VOICE.isTeam
 
         -- notify server this if this is a global voice chat
@@ -390,7 +394,7 @@ local function ReceiveVoiceState()
     local isGlobal = net.ReadBit() == 1
 
     -- prevent glitching due to chat starting/ending across round boundary
-    if GAMEMODE.round_state ~= ROUND_ACTIVE then
+    if gameloop.GetRoundState() ~= ROUND_ACTIVE then
         return
     end
 
@@ -439,11 +443,6 @@ function GM:PlayerEndVoice(ply)
     end
 
     local plyTeam = ply:GetTeam()
-
-    -- if someone else than us stops talking, the UI should be updated as well
-    if ply ~= LocalPlayer() then
-        ply:SetSpeakingInVoice(false)
-    end
 
     if plyTeam ~= TEAM_NONE and not TEAMS[plyTeam].alone then
         ply[plyTeam .. "_gvoice"] = false
@@ -638,7 +637,7 @@ local function GetDrainRate()
         not IsValid(ply)
         or ply:IsSpec()
         or not GetGlobalBool("ttt_voice_drain", false)
-        or GetRoundState() ~= ROUND_ACTIVE
+        or gameloop.GetRoundState() ~= ROUND_ACTIVE
     then
         return 0
     end
@@ -691,12 +690,17 @@ function VOICE.Tick()
 end
 
 ---
--- Returns whether the local @{Player} is speaking
+-- Returns whether a @{Player} is speaking
 -- @note @{Player:IsSpeaking} does not work for local @{Player}
+-- @param Player ply The @{Player} to check, defaults to the local @{Player}
 -- @return boolean
 -- @realm client
-function VOICE.IsSpeaking()
-    return LocalPlayer().speaking
+function VOICE.IsSpeaking(ply)
+    if not ply or ply == LocalPlayer() then
+        return LocalPlayer().speaking
+    else
+        return ply:IsSpeaking()
+    end
 end
 
 ---

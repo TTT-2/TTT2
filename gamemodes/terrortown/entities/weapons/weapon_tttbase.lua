@@ -978,7 +978,7 @@ end
 -- @realm shared
 function SWEP:DryFire(setnext)
     if CLIENT and LocalPlayer() == self:GetOwner() then
-        self:EmitSound("Weapon_Pistol.Empty")
+        self:EmitSound(")weapons/pistol/pistol_empty.wav", 75, 100, 0.7, CHAN_ITEM)
     end
 
     setnext(self, CurTime() + 0.2)

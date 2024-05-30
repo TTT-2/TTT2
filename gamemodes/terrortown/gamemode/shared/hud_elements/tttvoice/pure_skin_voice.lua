@@ -147,7 +147,7 @@ if CLIENT then
         for i = 1, #plys do
             local ply = plys[i]
 
-            if not ply:IsSpeakingInVoice() then
+            if not VOICE.IsSpeaking(ply) then
                 continue
             end
 

@@ -10,18 +10,19 @@ if SERVER then
 end
 
 local ADMIN_COMMAND_RESTART = 1
-local ADMIN_COMMAND_SLAY = 2
-local ADMIN_COMMAND_TELEPORT = 3
-local ADMIN_COMMAND_RESPAWN = 4
-local ADMIN_COMMAND_CREDITS = 5
-local ADMIN_COMMAND_HEALTH = 6
-local ADMIN_COMMAND_ARMOR = 7
+local ADMIN_COMMAND_RESET = 2
+local ADMIN_COMMAND_SLAY = 3
+local ADMIN_COMMAND_TELEPORT = 4
+local ADMIN_COMMAND_RESPAWN = 5
+local ADMIN_COMMAND_CREDITS = 6
+local ADMIN_COMMAND_HEALTH = 7
+local ADMIN_COMMAND_ARMOR = 8
 
-admin = admin or {}
+admin = {}
 
 ---
 -- Restarts the current round.
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.RoundRestart()
     if CLIENT then
@@ -31,15 +32,40 @@ function admin.RoundRestart()
     end
 
     if SERVER then
-        StopRoundTimers()
-        PrepareRound()
+        gameloop.StopTimers()
+        gameloop.Post(true)
+    end
+end
+
+---
+-- Resets the current level.
+-- @note When called on the client the local player has to be a super admin.
+-- @realm shared
+function admin.LevelReset()
+    if CLIENT then
+        net.Start("TTT2AdminCommand")
+        net.WriteUInt(ADMIN_COMMAND_RESET, 4)
+        net.SendToServer()
+    end
+
+    if SERVER then
+        gameloop.StopTimers()
+        gameloop.Reset()
+
+        KARMA.Reset()
+
+        -- reset score
+        local plys = player.GetAll()
+        for i = 1, #plys do
+            plys[i]:SetFrags(0)
+        end
     end
 end
 
 ---
 -- Kills the given player.
 -- @param Player ply The player to kill
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.PlayerSlay(ply)
     if CLIENT then
@@ -59,7 +85,7 @@ end
 -- @param Player ply The player to teleport
 -- @param Vector pos The position
 -- @note The player has to be alive to be teleported.
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.PlayerTeleport(ply, pos)
     if CLIENT then
@@ -84,7 +110,7 @@ end
 -- @param Player ply The player to respawn
 -- @param Vector pos The position
 -- @note The player has to be dead to be respawned.
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.PlayerRespawn(ply, pos)
     if CLIENT then
@@ -108,7 +134,7 @@ end
 -- Adds the given amount of credits to that player.
 -- @param Player ply The player to receive credits
 -- @param number The amount of credits the player should receive
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.PlayerAddCredits(ply, amount)
     if CLIENT then
@@ -128,7 +154,7 @@ end
 -- Sets the health of the given player.
 -- @param Player ply The player that should update their health
 -- @param number The amount of health the player should receive
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.PlayerSetHealth(ply, amount)
     if CLIENT then
@@ -148,7 +174,7 @@ end
 -- Sets the armor of the given player.
 -- @param Player ply The player that should update their armor
 -- @param number The amount of armor the player should receive
--- @note When called on the client the local player had to be a super admin.
+-- @note When called on the client the local player has to be a super admin.
 -- @realm shared
 function admin.PlayerSetArmor(ply, amount)
     if CLIENT then
@@ -178,6 +204,8 @@ if SERVER then
 
         if command == ADMIN_COMMAND_RESTART then
             admin.RoundRestart()
+        elseif command == ADMIN_COMMAND_RESET then
+            admin.LevelReset()
         elseif command == ADMIN_COMMAND_SLAY then
             admin.PlayerSlay(net.ReadPlayer())
         elseif command == ADMIN_COMMAND_TELEPORT then
@@ -192,4 +220,28 @@ if SERVER then
             admin.PlayerSetArmor(net.ReadPlayer(), net.ReadUInt(16))
         end
     end)
+
+    ---
+    -- Version announce also used in @{GM:Initialize}.
+    -- @note Is printed to console if no player is defined.
+    -- @param[opt] Player ply The player that shoulld receive the version message
+    -- @realm server
+    function admin.ShowVersion(ply)
+        local text = Format(
+            "This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n",
+            GAMEMODE.Version
+        )
+
+        if IsValid(ply) then
+            LANG.Msg(ply, text, nil, MSG_MSTACK_WARN)
+        else
+            Msg(text)
+        end
+    end
+
+    -- CLASSIC TTT COMMANDS
+
+    concommand.Add("ttt_roundrestart", admin.RoundRestart)
+
+    concommand.Add("ttt_version", admin.ShowVersion)
 end

@@ -234,7 +234,10 @@ function ENT:Explode(tr)
 
         local pos = self:GetPos()
 
-        if util.PointContents(pos) == CONTENTS_WATER or GetRoundState() ~= ROUND_ACTIVE then
+        if
+            util.PointContents(pos) == CONTENTS_WATER
+            or gameloop.GetRoundState() ~= ROUND_ACTIVE
+        then
             self:Remove()
             self:SetExplodeTime(0)
 

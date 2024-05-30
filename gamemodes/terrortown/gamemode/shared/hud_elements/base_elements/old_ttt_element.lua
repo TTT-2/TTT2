@@ -162,7 +162,8 @@ if CLIENT then
             y,
             tw,
             th,
-            GAMEMODE.round_state ~= ROUND_ACTIVE and self.bg_colors.noround or client:GetRoleColor()
+            gameloop.GetRoundState() ~= ROUND_ACTIVE and self.bg_colors.noround
+                or client:GetRoleColor()
         )
     end
 

@@ -232,10 +232,6 @@ if SERVER then
         gameloop.StartWinChecks()
         gameloop.StartNameChangeChecks()
 
-        -- todo: trigger the menu at round begin with role info
-        --timer.Simple(1.5, TellTraitorsAboutTraitors)
-        --timer.Simple(2.5, ShowRoundStartPopup)
-
         ServerLog("Round proper has begun...\n")
 
         ---
@@ -297,12 +293,15 @@ if SERVER then
     ---
     -- Is called after round end and cleans up the current round, calls the map cleanup and
     -- therefore prepares the start of the next round.
+    -- @param[opt] boolean keepRoundCount Set to true to prevent the round count decrease
     -- @internal
     -- @realm server
-    function gameloop.Post()
+    function gameloop.Post(keepRoundCount)
         loadingscreen.Begin()
 
-        gameloop.DecreaseRoundsLeft()
+        if not keepRoundCount then
+            gameloop.DecreaseRoundsLeft()
+        end
 
         -- delay the cleanup a bit so that the client starts the loading screen animation before the
         -- cleanup starts
@@ -545,7 +544,7 @@ if SERVER then
         for i = 1, #plys do
             local ply = plys[i]
 
-            if not IsValid(ply) or not ply:ShouldSpawn() then
+            if not IsValid(ply) or not ply:ShouldSpawn() or not ply:IsReady() then
                 continue
             end
 
@@ -558,15 +557,19 @@ if SERVER then
     ---
     -- This function is used to create the timers that checks whether is the round
     -- is able to start.
+    -- @return boolean Returns true if there are enough players for the next round
     -- @internal
     -- @realm server
     function gameloop.WaitingForPlayersChecker()
         if gameloop.GetRoundState() ~= ROUND_WAIT or not HasEnoughPlayers() then
-            return
+            return false
         end
 
-        timer.Create("wait2prep", 0.5, 1, gameloop.Post)
+        gameloop.Post()
+
         timer.Stop("waitingforply")
+
+        return true
     end
 
     ---
@@ -577,7 +580,7 @@ if SERVER then
     function gameloop.WaitForPlayers()
         gameloop.SetRoundState(ROUND_WAIT)
 
-        if timer.Start("waitingforply") then
+        if gameloop.WaitingForPlayersChecker() or timer.Start("waitingforply") then
             return
         end
 
@@ -634,8 +637,6 @@ if SERVER then
     -- Stops the timers in order to restart a gameloop.
     -- @realm server
     function gameloop.StopTimers()
-        -- remove all timers
-        timer.Stop("wait2prep")
         timer.Stop("prep2begin")
         timer.Stop("end2prep")
         timer.Stop("winchecker")

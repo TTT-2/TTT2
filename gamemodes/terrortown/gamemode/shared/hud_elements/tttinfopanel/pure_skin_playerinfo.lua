@@ -192,7 +192,7 @@ if CLIENT then
 
             -- draw role string name
             local text
-            local round_state = GAMEMODE.round_state
+            local round_state = gameloop.GetRoundState()
 
             if cactive then
                 text = L[rd.name]

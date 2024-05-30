@@ -53,7 +53,7 @@ if SERVER then
                 credits = CORPSE.GetCredits(rag, 0),
                 headshot = CORPSE.WasHeadshot(rag) or false,
                 time = math.Round(
-                    (CORPSE.GetPlayerDeathTime(rag) - GAMEMODE.RoundStartTime) * 1000,
+                    (CORPSE.GetPlayerDeathTime(rag) - gameloop.timeRoundStart) * 1000,
                     0
                 ),
             },
