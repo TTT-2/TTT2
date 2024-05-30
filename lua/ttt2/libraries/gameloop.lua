@@ -293,12 +293,15 @@ if SERVER then
     ---
     -- Is called after round end and cleans up the current round, calls the map cleanup and
     -- therefore prepares the start of the next round.
+    -- @param[opt] boolean keepRoundCount Set to true to prevent the round count decrease
     -- @internal
     -- @realm server
-    function gameloop.Post()
+    function gameloop.Post(keepRoundCount)
         loadingscreen.Begin()
 
-        gameloop.DecreaseRoundsLeft()
+        if not keepRoundCount then
+            gameloop.DecreaseRoundsLeft()
+        end
 
         -- delay the cleanup a bit so that the client starts the loading screen animation before the
         -- cleanup starts

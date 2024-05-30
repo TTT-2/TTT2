@@ -33,7 +33,7 @@ function admin.RoundRestart()
 
     if SERVER then
         gameloop.StopTimers()
-        gameloop.Post()
+        gameloop.Post(true)
     end
 end
 
