@@ -48,4 +48,21 @@ function CLGAMEMODESUBMENU:Populate(parent)
         end,
         default = appearance.GetDefaultGlobalScale(),
     })
+
+    local form2 = vgui.CreateTTT2Form(parent, "header_loadingscreen")
+
+    form2:MakeHelp({
+        label = "help_enable_loadingscreen",
+    })
+
+    local enbLoadingscreen = form2:MakeCheckBox({
+        label = "label_enable_loadingscreen",
+        convar = "ttt2_enable_loadingscreen",
+    })
+
+    form2:MakeCheckBox({
+        label = "label_enable_loadingscreen_tips",
+        convar = "ttt_tips_enable",
+        master = enbLoadingscreen,
+    })
 end

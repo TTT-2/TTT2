@@ -4,7 +4,7 @@
 local IsValid = IsValid
 local hook = hook
 local team = team
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local MAX_DROWN_TIME = 8
 
@@ -291,6 +291,11 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
+    -- stop movement while in loading screen
+    if loadingscreen.isShown then
+        return true
+    end
+
     SPEED:HandleSpeedCalculation(ply, moveData)
 
     local mul = ply:GetSpeedMultiplier()
@@ -430,9 +435,11 @@ function GM:Tick()
     end
 
     -- three cheers for micro-optimizations
-    plys = client and { client } or select(2, playerIterator())
+    plys = client and { client } or playerGetAll()
+
     for i = 1, #plys do
         ply = plys[i]
+
         tm = ply:Team()
 
         if tm == TEAM_TERROR and ply:Alive() then

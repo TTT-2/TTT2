@@ -16,7 +16,30 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
 - Added a globally audible sound when searching a body
 - Added the option to add a subtitle to a marker vision element
-- Added the option to assign random unique models at round start
+- Added the option to assign random unique models at round start (by @Exonen2)
+- Added a new voice chat UI (by @TimGoll)
+- Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- Disabled locational voice during the preparing phase by default
+  - Added a ConVar `ttt_locational_voice_prep` to reenable it
+- Added `SWEP.EnableConfigurableClip` and `SWEP.ConfigurableClip` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
+- Added Text / Nickname length limiting (by @TimGoll)
+- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
+- Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
+- Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
+  - Push-to-Talk (default)
+  - Push-to-Mute
+  - Toggle
+  - Toggle (Activate on Join)
+- Team Voice Chat is always push-to-talk and temporarily disables global voice chat while being used
+- Added a new generic button to F1 menu elements to be used in custom menus (by @TimGoll)
+- Added toggle and run buttons to many F1 menu elements (by @TimGoll)
+- Added combo cards to the UI, clickable cards that act like combo boxes (by @TimGoll)
+- Added a run button to bindings in the bindings menu (by @TimGoll)
+- Added a new admin commands menu (by @TimGoll)
+  - Added a submenu to change maps
+  - Added a submenu to issue basic commands
+- Added a new `gameloop` module that contains all functions related to the round structure (by @Tim Goll)
+- Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 
 ### Changed
 
@@ -27,10 +50,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The binoculars now use the default crosshair as well
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
+- `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 - Micro optimizations
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
+  - The holdtype for pistol weapons now matches the viewmodel
+- `VOICE.IsSpeaking(ply)` (clientside) can now be used to check if any player is speaking to you
+- Unified the spec color usage throughout the whole UI (by @TimGoll)
+- Cleanup and performance optimizations for marks library (by @WardenPotato)
+- Updated the Turkish localization file (by @NovaDiablox)
+- The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 
 ### Fixed
 
@@ -40,10 +70,27 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
 - Fixed hud help text not being shown for some old weapons
 - Fixed detective search being overwritten by player search results
+- Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
+- Fixed Roundendscreen showing karma changes even if karma is disabled
+- Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
+- Fixed weapon unscoping (or generally any time FOV is set back to default) being delayed due to the player's lag (by @TW1STaL1CKY)
+- Fixed overhead icons sometimes being stuck at random places (by @TimGoll)
+- Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
+- Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
+- Fixed players sometimes not receiving their role if they joined late to the game (by @TimGoll)
+- Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 
 ### Removed
 
 - Removed radio tab in shop UI
+- Removed `round_restart`, `round_selected` and `round_started` MStack messages to reduce message spawm (by @TimGoll)
+- Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
+
+### Breaking Changes
+
+- Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
+- Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
+- Removed the `TIPS` module and replaced it with a new `tips` module
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
@@ -55,6 +102,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the new view changes preventing weapons from modifying the playerview (by @TimGoll)
 - Fixed the new view changes affecting non-player entities (by @TimGoll)
 - Fixed an error in an error message (by @mexikoedi)
+- Fixed magneto stick not targeting certain props (by @homonovus)
 
 ## [v0.13.0b](https://github.com/TTT-2/TTT2/tree/v0.13.0b) (2024-02-21)
 

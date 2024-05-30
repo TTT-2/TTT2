@@ -84,7 +84,7 @@ function SWEP:PrimaryAttack()
 
     -- Disallow initiating teleports during post, as it will occur across the
     -- restart and allow the user an advantage during prep
-    if GetRoundState() == ROUND_POST then
+    if gameloop.GetRoundState() == ROUND_POST then
         return
     end
 
@@ -176,7 +176,7 @@ local function CanTeleportToPos(ply, pos)
         start = pos,
         endpos = pos,
         mask = MASK_PLAYERSOLID,
-        filter = select(2, player.Iterator()),
+        filter = player.GetAll(),
     }
     local collide = false
 

@@ -1056,7 +1056,7 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- @ref https://wiki.facepunch.com/gmod/GM:OnContextMenuOpen
 -- @local
 function GM:OnContextMenuOpen()
-    local rs = GetRoundState()
+    local rs = gameloop.GetRoundState()
 
     if (rs == ROUND_PREP or rs == ROUND_POST) and not alwaysShowShopVar:GetBool() then
         CLSCORE:Toggle()

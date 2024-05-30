@@ -10,7 +10,7 @@ local player = player
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 roleselection.forcedRoles = {}
 roleselection.finalRoles = {}
@@ -198,8 +198,8 @@ end
 function roleselection.GetCurrentRoleAmount(subrole)
     local tmp = 0
 
-    if GetRoundState() == ROUND_ACTIVE then
-        local plys = select(2, playerIterator())
+    if gameloop.GetRoundState() == ROUND_ACTIVE then
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             local ply = plys[i]
@@ -880,7 +880,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
     GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
-    plys = roleselection.GetSelectablePlayers(plys or select(2, playerIterator()))
+    plys = roleselection.GetSelectablePlayers(plys or playerGetAll())
 
     -- Randomize role assignment by shuffling the list early.
     table.Shuffle(plys)
@@ -997,6 +997,19 @@ function roleselection.SelectRoles(plys, maxPlys)
     end
 
     roleselection.finalRoles = {}
+
+    SendFullStateUpdate()
+end
+
+---
+-- Resets the role and team of all players to ROLE_NONE and TEAM_NONE.
+-- @realm server
+function roleselection.ResetAllPlayers()
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        plys[i]:SetRole(ROLE_NONE)
+    end
 
     SendFullStateUpdate()
 end

@@ -8,7 +8,7 @@ local table = table
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -676,7 +676,7 @@ function plymeta:InitialSpawn()
     self.has_spawned = false
 
     -- The team the player spawns on depends on the round state
-    self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
+    self:SetTeam(gameloop.GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
 
     -- Change some gmod defaults
     self:SetCanZoom(false)
@@ -1098,7 +1098,7 @@ function plymeta:GetSpawnPosition()
 end
 
 ---
--- Sets the if a player was active (TEAM_TERROR) in a round.
+-- Sets the if a player was active (TEAM_TERROR) in a gameloop.
 -- @param boolean state The state
 -- @internal
 -- @realm server
@@ -1127,7 +1127,7 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-    local availablePlayers = roleselection.GetSelectablePlayers(select(2, playerIterator()))
+    local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
     local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
     local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
 
@@ -1165,7 +1165,7 @@ local pendingItems = {}
 -- @param string cls
 -- @realm server
 function plymeta:GiveItem(cls)
-    if GetRoundState() == ROUND_PREP then
+    if gameloop.GetRoundState() == ROUND_PREP then
         pendingItems[self] = pendingItems[self] or {}
         pendingItems[self][#pendingItems[self] + 1] = cls
 
@@ -1276,7 +1276,7 @@ end)
 
 -- reset confirm state only on round begin, not on revive
 hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1285,7 +1285,7 @@ end)
 
 -- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
 hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1678,6 +1678,10 @@ local function SetPlayerReady(_, ply)
     ttt2net.SendFullStateUpdate(ply)
 
     entspawnscript.TransmitToPlayer(ply)
+
+    map.SyncToClient(ply)
+
+    gameloop.PlayerReady(ply)
 
     ---
     -- @realm server

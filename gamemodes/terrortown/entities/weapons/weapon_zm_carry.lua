@@ -273,7 +273,7 @@ function SWEP:CheckValidity()
 end
 
 local function PlayerStandsOn(ent)
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -451,7 +451,7 @@ function SWEP:DoAttack(pickup)
     end
 
     local ply = self:GetOwner()
-    local trace = ply:GetEyeTrace()
+    local trace = ply:GetEyeTrace(MASK_SHOT)
     local trEnt = trace.Entity
 
     if not IsValid(trEnt) or not self:CanBeMoved(trEnt) then

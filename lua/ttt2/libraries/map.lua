@@ -5,6 +5,8 @@
 
 if SERVER then
     AddCSLuaFile()
+
+    util.AddNetworkString("TTT2ChangeServerLevel")
 end
 
 local scripedEntsRegister = scripted_ents.Register
@@ -501,6 +503,256 @@ function map.GetDataFromSpawnEntity(ent, spawnType)
 
         return ttt_player_spawns[cls] or hook_player_spawns[cls] or ttt_player_spawns_fallback[cls],
             data
+    end
+end
+
+local mapsAll = {}
+local mapsPrefixes = {}
+local mapsWSIDs = {}
+
+if SERVER then
+    -- by default cs, de and test maps should be hidden
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    CreateConVar("ttt2_enable_map_prefix_cs", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    CreateConVar("ttt2_enable_map_prefix_de", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    CreateConVar("ttt2_enable_map_prefix_test", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+    ---
+    -- Initializes the map list. Searches the file system for available maps, scans those maps
+    -- for their different prefixes and tries to associate a workshop ID with each map.
+    -- @internal
+    -- @realm server
+    function map.InitializeList()
+        mapsAll = {}
+        mapsPrefixes = {}
+        mapsWSIDs = {}
+
+        local addons = engine.GetAddons()
+
+        -- as a first step we create a mapname-wsid lookup table that can be used to later on
+        -- assign wsids to maps that were found
+        for i = 1, #addons do
+            local addon = addons[i]
+
+            if not string.find(string.lower(addon.tags), "map") then
+                continue
+            end
+
+            local mapFound = file.Find("maps/*.bsp", addon.title)
+
+            if not mapFound or #mapFound == 0 then
+                continue
+            end
+
+            mapsWSIDs[string.sub(mapFound[1], 1, -5)] = addon.wsid
+        end
+
+        -- the next step is to find all maps that are installed on the server
+        -- based on these found maps the prefixes and the base list is generated
+        local mapsFound = file.Find("maps/*.bsp", "GAME")
+
+        for i = 1, #mapsFound do
+            mapsAll[i] = string.sub(mapsFound[i], 1, -5)
+
+            local prefix = map.GetPrefix(mapsAll[i])
+
+            if not prefix then
+                continue
+            end
+
+            mapsPrefixes[prefix] = true
+        end
+
+        for prefix, _ in pairs(mapsPrefixes) do
+            local convarName = "ttt2_enable_map_prefix_" .. prefix
+
+            -- note: creating a convar which already exists does nothing
+            -- the existing value will not be overwritten
+
+            ---
+            -- @realm server
+            -- stylua: ignore
+            CreateConVar(convarName, "1", { FCVAR_ARCHIVE, FCVAR_NOTIFY })
+
+            -- because these convars are generated dynamically, replicated convars do not work here
+            SetGlobalBool(convarName, GetConVar(convarName):GetBool())
+
+            cvars.RemoveChangeCallback(convarName, convarName)
+            cvars.AddChangeCallback(convarName, function(convar, _, new)
+                SetGlobalBool(convar, tobool(new))
+            end, convarName)
+        end
+    end
+
+    ---
+    -- Syncs the map data to a given client.
+    -- @param Player ply The player that should receive the update
+    -- @internal
+    -- @realm server
+    function map.SyncToClient(ply)
+        if #mapsAll == 0 then
+            map.InitializeList()
+        end
+
+        net.SendStream(
+            "InitializeMapList",
+            { maps = mapsAll, prefixes = mapsPrefixes, wsid = mapsWSIDs },
+            ply
+        )
+    end
+
+    net.Receive("TTT2ChangeServerLevel", function(_, ply)
+        if not IsValid(ply) or not ply:IsSuperAdmin() then
+            return
+        end
+
+        map.ChangeLevel(net.ReadString())
+    end)
+end
+
+if CLIENT then
+    local mapsIcons = {}
+
+    net.ReceiveStream("InitializeMapList", function(sharedMapList)
+        mapsAll = sharedMapList.maps
+        mapsPrefixes = sharedMapList.prefixes
+        mapsWSIDs = sharedMapList.wsid
+
+        for i = 1, #mapsAll do
+            map.PrecacheIcon(mapsAll[i])
+        end
+
+        map.DownloadIcons()
+    end)
+
+    ---
+    -- Downloads map icons from the steam workshop on connect and server reload.
+    -- @note This skips maps that already have a locally available icon.
+    -- @internal
+    -- @realm client
+    function map.DownloadIcons()
+        for mapName, wsid in pairs(mapsWSIDs) do
+            if mapsIcons[mapName] then
+                continue
+            end
+
+            steamworks.FileInfo(wsid, function(result)
+                steamworks.Download(result.previewid, true, function(name)
+                    mapsIcons[mapName] = AddonMaterial(name)
+                end)
+            end)
+        end
+    end
+
+    ---
+    -- Precaches the map icons on connect and server reload.
+    -- @param string name The map name
+    -- @internal
+    -- @realm client
+    function map.PrecacheIcon(name)
+        if file.Exists("maps/thumb/" .. name .. ".png", "GAME") then
+            mapsIcons[name] = Material("maps/thumb/" .. name .. ".png")
+        elseif file.Exists("maps/" .. name .. ".png", "GAME") then
+            mapsIcons[name] = Material("maps/" .. name .. ".png")
+        end
+    end
+
+    ---
+    -- Returns the cached icon of a map if there is an icon available.
+    -- @note This not only uses the icons available on the client through addons, it also
+    -- searches the workshop and tries to assign the corrent workshop icon if there
+    -- is no locally available map icon.
+    -- @param string name The map name
+    -- @return nil|IMaterial Returns the cached material if available
+    -- @realm client
+    function map.GetIcon(name)
+        return mapsIcons[name]
+    end
+end
+
+---
+-- Returns all available map prefixes found in the raw map table.
+-- @return table Returns the table with all map prefixes
+-- @realm shared
+function map.GetPrefixes()
+    return table.GetKeys(mapsPrefixes)
+end
+
+---
+-- Returns the raw map table. This contains the names of all maps on the server. This
+-- list is automatically synced between the server and all clients.
+-- @return table Returns a table with the map names
+-- @realm shared
+function map.GetRawMapList()
+    return mapsAll
+end
+
+---
+-- Returns a sanitized list of maps installed on the server. Sanitized means that only
+-- valid maps with a prefix that is enabled are listed here. This list is automatically
+-- synced between the server and all clients.
+-- @return table Returns a table with the map names
+-- @realm shared
+function map.GetList()
+    local cleanedList = {}
+
+    for i = 1, #mapsAll do
+        local mapName = mapsAll[i]
+        local mapNameSplit = string.Split(mapName, "_")
+
+        if
+            #mapNameSplit > 1
+            and not GetGlobalBool("ttt2_enable_map_prefix_" .. mapNameSplit[1], false)
+        then
+            continue
+        end
+
+        cleanedList[#cleanedList + 1] = mapName
+    end
+
+    return cleanedList
+end
+
+---
+-- Returns the map prefix (e.g. ttt) for a given name.
+-- @param string name The map name
+-- @return nil|string Returns the prefix or nil if there is none
+-- @realm shared
+function map.GetPrefix(name)
+    local mapNameSplit = string.Split(name, "_")
+
+    if #mapNameSplit <= 1 then
+        return
+    end
+
+    return mapNameSplit[1]
+end
+
+---
+-- Changes the currently played level (map) to the given name.
+-- @note This does not check if this map exists on the server
+-- @note When this function is run on the client, it is automatically
+-- networked to the server while also making sure the client is a super admin.
+-- @param string name The level name to switch to
+-- @realm shared
+function map.ChangeLevel(name)
+    if SERVER then
+        game.ConsoleCommand("changelevel " .. name .. "\n")
+    else
+        net.Start("TTT2ChangeServerLevel")
+        net.WriteString(name)
+        net.SendToServer()
     end
 end
 

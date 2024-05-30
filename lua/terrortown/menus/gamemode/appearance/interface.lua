@@ -8,11 +8,6 @@ CLGAMEMODESUBMENU.title = "submenu_appearance_interface_title"
 function CLGAMEMODESUBMENU:Populate(parent)
     local form = vgui.CreateTTT2Form(parent, "header_interface_settings")
 
-    form:MakeCheckBox({
-        label = "label_interface_tips_enable",
-        convar = "ttt_tips_enable",
-    })
-
     form:MakeSlider({
         label = "label_interface_popup",
         convar = "ttt_startpopup_duration",

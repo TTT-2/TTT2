@@ -92,7 +92,7 @@ function ENT:Explode(tr)
 
         -- Smoke particles can't get cleaned up when a round restarts, so prevent
         -- them from existing post-round.
-        if GetRoundState() == ROUND_POST then
+        if gameloop.GetRoundState() == ROUND_POST then
             return
         end
 

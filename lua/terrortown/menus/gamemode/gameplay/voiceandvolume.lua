@@ -7,37 +7,55 @@ CLGAMEMODESUBMENU.title = "submenu_gameplay_voiceandvolume_title"
 CLGAMEMODESUBMENU.icon = Material("vgui/ttt/vskin/helpscreen/voiceandvolume")
 
 function CLGAMEMODESUBMENU:Populate(parent)
-    local form = vgui.CreateTTT2Form(parent, "header_soundeffect_settings")
+    local form = vgui.CreateTTT2Form(parent, "header_voiceandvolume_settings")
 
-    form:MakeCheckBox({
-        label = "label_inferface_scues_enable",
-        convar = "ttt_cl_soundcues",
+    form:MakeHelp({
+        label = "help_voice_activation",
     })
 
-    local form2 = vgui.CreateTTT2Form(parent, "header_voiceandvolume_settings")
+    form:MakeComboBox({
+        label = "label_voice_activation",
+        convar = "ttt2_voice_activation",
+        choices = util.ComboBoxChoicesFromKeys(
+            VOICE.ActivationModes,
+            "label_voice_activation_mode_",
+            VOICE.cv.activation_mode:GetString()
+        ),
+        OnChange = VOICE.ActivationModeFunc("OnJoin"),
+    })
 
-    form2:MakeCheckBox({
+    form:MakeCheckBox({
         label = "label_gameplay_mute",
         convar = "ttt_mute_team_check",
     })
 
-    form2:MakeComboBox({
+    form:MakeComboBox({
         label = "label_voice_scaling",
         convar = "ttt2_voice_scaling",
-        choices = VOICE.GetScalingFunctions(),
+        choices = util.ComboBoxChoicesFromKeys(
+            VOICE.ScalingFunctions,
+            "label_voice_scaling_mode_",
+            VOICE.cv.scaling_mode:GetString()
+        ),
         OnChange = function()
-            for _, ply in ipairs(select(2, player.Iterator())) do
-                VOICE.UpdatePlayerVoiceVolume(ply)
+            local plys = player.GetAll()
+
+            for i = 1, #plys do
+                VOICE.UpdatePlayerVoiceVolume(plys[i])
             end
         end,
     })
 
-    local enbSpecDuck = form2:MakeCheckBox({
+    form:MakeHelp({
+        label = "help_voice_duck_spectator",
+    })
+
+    local enbSpecDuck = form:MakeCheckBox({
         label = "label_voice_duck_spectator",
         convar = "ttt2_voice_duck_spectator",
     })
 
-    form2:MakeSlider({
+    form:MakeSlider({
         label = "label_voice_duck_spectator_amount",
         convar = "ttt2_voice_duck_spectator_amount",
         min = 0,

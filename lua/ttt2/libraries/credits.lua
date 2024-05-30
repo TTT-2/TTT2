@@ -18,7 +18,7 @@ credits = credits or {}
 -- @realm server
 function credits.HandleKillCreditsAward(victim, attacker)
     if
-        GetRoundState() ~= ROUND_ACTIVE
+        gameloop.GetRoundState() ~= ROUND_ACTIVE
         or not IsValid(victim)
         or not IsValid(attacker)
         or not attacker:IsPlayer()
@@ -60,7 +60,7 @@ function credits.HandleKillCreditsAward(victim, attacker)
 
     -- This is a special case scenario where for every kill it is checked for every player,
     -- how many players are dead from different teams than their own team.
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
     local plysAmount = #plys
     local plysByTeams = {}
 

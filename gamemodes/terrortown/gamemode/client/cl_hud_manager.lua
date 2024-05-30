@@ -78,17 +78,6 @@ function GM:HUDPaint()
     if hook.Run("HUDShouldDraw", "TTTRadar") then
         RADAR:Draw(client)
     end
-
-    if not client:Alive() or client:Team() == TEAM_SPEC then
-        return
-    end
-
-    ---
-    -- @realm client
-    -- stylua: ignore
-    if hook.Run("HUDShouldDraw", "TTTVoice") then
-        VOICE.Draw(client)
-    end
 end
 
 ---
@@ -100,6 +89,8 @@ end
 -- @local
 function GM:PostDrawHUD()
     vguihandler.DrawBackground()
+
+    loadingscreen.Handler()
 end
 
 ---

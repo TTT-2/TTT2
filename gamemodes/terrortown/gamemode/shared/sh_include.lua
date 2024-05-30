@@ -34,7 +34,6 @@ TTTFiles = {
     cl_targetid = { file = "cl_targetid.lua", on = "client" },
     cl_tbuttons = { file = "cl_tbuttons.lua", on = "client" },
     cl_tradio = { file = "cl_tradio.lua", on = "client" },
-    cl_tips = { file = "cl_tips.lua", on = "client" },
     cl_transfer = { file = "cl_transfer.lua", on = "client" },
     cl_voice = { file = "cl_voice.lua", on = "client" },
     cl_weapon_pickup = { file = "cl_weapon_pickup.lua", on = "client" },
@@ -99,7 +98,8 @@ TTTFiles = {
     },
     cl_vskin__vgui__dnavpanel = { file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcontentpanel = { file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client" },
-    cl_vskin__vgui__dcard = { file = "cl_vskin/vgui/dcard_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dshopcard = { file = "cl_vskin/vgui/dshopcard_ttt2.lua", on = "client" },
+    cl_vskin__vgui__dcombocard = { file = "cl_vskin/vgui/dcombocard_ttt2.lua", on = "client" },
     cl_vskin__vgui__dbuttonpanel = { file = "cl_vskin/vgui/dbuttonpanel_ttt2.lua", on = "client" },
     cl_vskin__vgui__dcategoryheader = {
         file = "cl_vskin/vgui/dcategoryheader_ttt2.lua",

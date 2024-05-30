@@ -4,7 +4,7 @@
 -- @author Alf21
 -- @author Mineotopia
 
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 rolelayering = {}
 
@@ -125,10 +125,10 @@ if SERVER then
             roleselection.SaveLayers()
 
             if #layerData == 0 then -- is a reset
-                receiverTable = select(2, playerIterator())
+                receiverTable = playerGetAll()
             else
                 -- send back to everyone but the person updating the data
-                local plys = select(2, playerIterator())
+                local plys = playerGetAll()
 
                 for i = 1, #plys do
                     local p = plys[i]

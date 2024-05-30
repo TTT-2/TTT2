@@ -13,7 +13,6 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
-local playerIterator = player.Iterator
 
 local IsEquipment = WEPS.IsEquipment
 
@@ -184,7 +183,7 @@ local function GiveLoadoutWeapon(ply, cls)
 end
 
 local function GiveLoadoutWeapons(ply)
-    local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+    local subrole = gameloop.GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
     local weps = GetLoadoutWeapons(subrole)
 
     if not weps then
@@ -203,7 +202,7 @@ local function GiveLoadoutWeapons(ply)
 end
 
 local function GetGiveLoadoutWeapons(ply)
-    local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+    local subrole = gameloop.GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
     local weps = GetLoadoutWeapons(subrole)
 
     return table.Copy(weps)
@@ -232,7 +231,7 @@ local function HasLoadoutWeapons(ply)
         return true
     end
 
-    local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+    local subrole = gameloop.GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
     local weps = GetLoadoutWeapons(subrole)
 
     if not weps then
@@ -316,7 +315,7 @@ local function GiveLoadoutItem(ply, cls)
 end
 
 local function GiveLoadoutItems(ply)
-    local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+    local subrole = gameloop.GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
     local itms = GetLoadoutItems(subrole)
 
     if not itms then
@@ -471,7 +470,7 @@ end
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 function GM:UpdatePlayerLoadouts()
-    local plys = select(2, playerIterator())
+    local plys = player.GetAll()
 
     for i = 1, #plys do
         ---

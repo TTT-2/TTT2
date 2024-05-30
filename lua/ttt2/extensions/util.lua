@@ -16,7 +16,7 @@ local isfunction = isfunction
 local VectorRand = VectorRand
 local HSVToColor = HSVToColor
 
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 local stringSplit = string.Split
 local tableConcat = table.concat
 local weaponsGetStored = weapons.GetStored
@@ -89,7 +89,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     if not isfunction(filterFn) then
         return plys
@@ -111,7 +111,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     local tmp = {}
 
     for i = 1, #plys do
@@ -306,6 +306,25 @@ local function DoBleed(ent)
     jitter.z = 20
 
     util.PaintDown(ent:GetPos() + jitter, "Blood", ent)
+end
+
+---
+-- Creates a color based on a given input string.
+-- @param string str The input string, can be any text
+-- @return Color The created color
+-- @realm shared
+function util.StringToColor(str)
+    local hash = 0
+
+    for i = 1, #str do
+        hash = string.byte(str, i) + bit.lshift(hash, 8 - i) - hash
+    end
+
+    local r = bit.band(bit.rshift(hash, 16), 0xFF)
+    local g = bit.band(bit.rshift(hash, 8), 0xFF)
+    local b = bit.band(hash, 0xFF)
+
+    return Color(r, g, b)
 end
 
 ---
@@ -672,5 +691,24 @@ if CLIENT then
         end
 
         return parent
+    end
+
+    ---
+    -- Generates a table of choices for PANEL:MakeComboBox from the string keys of a table.
+    -- @param table tbl A table where the keys are strings of all available choices
+    -- @param string labelPrefix The prefix for all label translations, keys will be appended to this
+    -- @param string default The default key value that should be selected
+    -- @return table A choices table to be consumed by PANEL:MakeComboBox
+    -- @realm client
+    function util.ComboBoxChoicesFromKeys(tbl, labelPrefix, default)
+        local choices = {}
+        for key in pairs(tbl) do
+            choices[#choices + 1] = {
+                title = LANG.TryTranslation(labelPrefix .. key),
+                value = key,
+                select = key == default,
+            }
+        end
+        return choices
     end
 end

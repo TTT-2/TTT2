@@ -77,7 +77,10 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-    if GetRoundState() == ROUND_PREP and not GetConVar("ttt_nade_throw_during_prep"):GetBool() then
+    if
+        gameloop.GetRoundState() == ROUND_PREP
+        and not GetConVar("ttt_nade_throw_during_prep"):GetBool()
+    then
         return
     end
 
@@ -495,17 +498,15 @@ if CLIENT then
         local x = ScrW() * 0.5
         local y = ScrH() * 0.5
 
-        if self:GetPin() and self:GetPullTime() > 0 then
+        local pulltime = self:GetPullTime()
+
+        if self:GetPin() and pulltime and pulltime > 0 then
             local client = LocalPlayer()
 
             y = y + (y / 3)
 
             local pct = 1
-                - math.Clamp(
-                    (CurTime() - self:GetPullTime()) / (self:GetDetTime() - self:GetPullTime()),
-                    0,
-                    1
-                )
+                - math.Clamp((CurTime() - pulltime) / (self:GetDetTime() - pulltime), 0, 1)
 
             local scale = appearance.GetGlobalScale()
             local w, h = 100 * scale, 20 * scale

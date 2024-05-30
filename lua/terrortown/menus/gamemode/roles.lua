@@ -10,7 +10,7 @@ CLGAMEMODEMENU.base = "base_gamemodemenu"
 CLGAMEMODEMENU.icon = Material("vgui/ttt/vskin/helpscreen/roles")
 CLGAMEMODEMENU.title = "menu_roles_title"
 CLGAMEMODEMENU.description = "menu_roles_description"
-CLGAMEMODEMENU.priority = 47
+CLGAMEMODEMENU.priority = 46
 
 CLGAMEMODEMENU.isInitialized = false
 CLGAMEMODEMENU.roles = nil

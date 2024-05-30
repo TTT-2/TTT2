@@ -55,6 +55,7 @@ local drawSimpleText = draw.SimpleText
 local drawLine = draw.Line
 local drawGetWrappedText = draw.GetWrappedText
 local drawGetTextSize = draw.GetTextSize
+local drawGetLimitedLengthText = draw.GetLimitedLengthText
 
 local alphaDisabled = 100
 
@@ -715,27 +716,86 @@ end
 -- @param number h
 -- @realm client
 function SKIN:PaintFormButtonIconTTT2(panel, w, h)
-    local colorBoxBack = colors.settingsBox
     local colorBox = colors.accent
+
+    if panel.colorBackground then
+        if IsColor(panel.colorBackground) then
+            colorBox = panel.colorBackground
+        else
+            colorBox = panel.colorBackground[panel.state or 1]
+        end
+    end
+
+    local colorBoxBack = colors.settingsBox
     local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     local shift = 0
     local pad = 6
 
     if not panel:IsEnabled() then
+        colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
+        colorBox = ColorAlpha(colorBox, alphaDisabled)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), alphaDisabled)
+    elseif panel.noDefault then
+        colorBox = ColorAlpha(colorBox, alphaDisabled)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), alphaDisabled)
+    elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+        colorBox = utilGetActiveColor(colorBox)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), 150)
+        shift = 1
+    elseif panel.Hovered then
+        colorBox = utilGetHoverColor(colorBox)
+        colorText = ColorAlpha(utilGetDefaultColor(colorBox), 150)
+    end
+
+    if panel.roundedCorner then
+        drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+    else
+        drawBox(0, 0, w, h, colorBoxBack)
+    end
+
+    drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+    local iconMaterial = panel.iconMaterial or panel.material
+
+    if not iconMaterial then
+        return
+    end
+
+    if not iconMaterial.GetTexture then
+        iconMaterial = iconMaterial[panel.state or 1]
+    end
+
+    drawFilteredShadowedTexture(
+        pad,
+        pad + shift,
+        w - 2 * pad,
+        h - 2 * pad,
+        iconMaterial,
+        colorText.a,
+        colorText
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintFormButtonTTT2(panel, w, h)
+    local colorBoxBack = colors.settingsBox
+    local colorBox = colors.accent
+    local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+    local shift = 0
+
+    if not panel:IsEnabled() then
         colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
         colorBox = ColorAlpha(colors.accent, alphaDisabled)
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
-    elseif panel.noDefault then
-        colorBoxBack = colors.settingsBox
-        colorBox = ColorAlpha(colors.accent, alphaDisabled)
-        colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
     elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-        colorBoxBack = colors.settingsBox
         colorBox = colors.accentActive
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
         shift = 1
     elseif panel.Hovered then
-        colorBoxBack = colors.settingsBox
         colorBox = colors.accentHover
         colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
     end
@@ -743,14 +803,14 @@ function SKIN:PaintFormButtonIconTTT2(panel, w, h)
     drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
     drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
 
-    drawFilteredShadowedTexture(
-        pad,
-        pad + shift,
-        w - 2 * pad,
-        h - 2 * pad,
-        panel.material,
-        colorText.a,
-        colorText
+    drawShadowedText(
+        TryT(panel:GetText()),
+        panel:GetFont(),
+        0.5 * w,
+        0.5 * h + shift,
+        colorText,
+        TEXT_ALIGN_CENTER,
+        TEXT_ALIGN_CENTER
     )
 end
 
@@ -1467,7 +1527,7 @@ local MODE_INHERIT_REMOVED = ShopEditor.MODE_INHERIT_REMOVED
 -- @param number w
 -- @param number h
 -- @realm client
-function SKIN:PaintCardTTT2(panel, w, h)
+function SKIN:PaintShopCardTTT2(panel, w, h)
     local widthBorder = 2
     local widthBorder2 = widthBorder * 2
     local sizeIcon = 64
@@ -1561,6 +1621,97 @@ function SKIN:PaintCardTTT2(panel, w, h)
         colorTextMode,
         TEXT_ALIGN_LEFT,
         TEXT_ALIGN_CENTER
+    )
+end
+
+---
+-- @param Panel panel
+-- @param number w
+-- @param number h
+-- @realm client
+function SKIN:PaintComboCardTTT2(panel, w, h)
+    local widthBorder = 2
+    local widthBorder2 = widthBorder * 2
+    local widthBorder4 = widthBorder2 * 2
+    local shift = 0
+
+    local colorBackground = utilGetChangedColor(colors.background, 75)
+    local colorBox = colors.settingsBox
+    local opacity = 255
+
+    if panel:GetChecked() then
+        colorBox = colors.accent
+    end
+
+    if panel.Hovered then
+        colorBox = utilGetHoverColor(colorBox)
+        opacity = 230
+    end
+
+    if panel.Depressed then
+        opacity = 240
+        shift = 1
+    end
+
+    local colorText = utilGetDefaultColor(colorBox)
+
+    drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+
+    drawRoundedBox(
+        sizes.cornerRadius,
+        widthBorder,
+        widthBorder,
+        w - widthBorder2,
+        h - widthBorder2,
+        colorBox
+    )
+
+    if panel:GetIcon() then
+        draw.FilteredTexture(
+            widthBorder2,
+            widthBorder2 + shift,
+            w - widthBorder4,
+            w - widthBorder4,
+            panel:GetIcon(),
+            opacity,
+            COLOR_WHITE
+        )
+    end
+
+    local tagText = panel:GetTagText()
+
+    if tagText then
+        local width = drawGetTextSize(tagText, panel:GetFont())
+        local colorTag = panel:GetTagColor() or COLOR_WARMGRAY
+
+        width = width + 20
+
+        drawRoundedBox(sizes.cornerRadius, widthBorder4, widthBorder4, width, 20, colorTag)
+
+        drawSimpleText(
+            TryT(tagText),
+            panel:GetFont(),
+            widthBorder4 + 0.5 * width,
+            widthBorder4 + 10,
+            utilGetDefaultColor(colorTag),
+            TEXT_ALIGN_CENTER,
+            TEXT_ALIGN_CENTER
+        )
+    end
+
+    drawSimpleText(
+        drawGetLimitedLengthText(
+            TryT(panel:GetText()),
+            w - 2 * widthBorder4,
+            panel:GetFont(),
+            "..."
+        ),
+        panel:GetFont(),
+        widthBorder4,
+        w + shift,
+        colorText,
+        TEXT_ALIGN_LEFT,
+        TEXT_ALIGN_TOP
     )
 end
 

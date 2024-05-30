@@ -59,6 +59,15 @@ CORPSE_KILL_DIRECTION_SIDE = 3
 -- stylua: ignore
 local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+---
+-- @realm shared
+-- off (0): only roles which have a shop can see credits on a body
+-- on (1), default: all roles can see credits on a body
+-- NOTE: On is default only for compatability. Many players seem to expect it to not be the case by default,
+--       so perhaps it'd be a good idea to default to off.
+-- stylua: ignore
+local cvCreditsVisibleToAll = CreateConVar("ttt2_inspect_credits_always_visible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
 local materialWeaponFallback = Material("vgui/ttt/missing_equip_icon")
 
 bodysearch = {}
@@ -74,7 +83,7 @@ end
 
 ---
 -- Checks if a given player is allowed to take credits from a given corpse-
--- @param Payer ply The player that tries to take credits
+-- @param Player ply The player that tries to take credits
 -- @param Entity rag The ragdoll where the credits should be taken from
 -- @param[default=false] isLongRange Whether the search is a long range search
 -- @return boolean Returns if the player is able to take credits
@@ -83,8 +92,9 @@ function bodysearch.CanTakeCredits(ply, rag, isLongRange)
     ---
     -- @realm shared
     -- stylua: ignore
-    if hook.Run("TTT2CheckFindCredits", ply, rag) == false then
-        return false
+    local hookOverride = hook.Run("TTT2CanTakeCredits", ply, rag, isLongRange)
+    if hookOverride ~= nil then
+        return hookOverride
     end
 
     local credits = CORPSE.GetCredits(rag, 0)
@@ -198,6 +208,13 @@ if SERVER then
     function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
         if bodysearch.CanTakeCredits(ply, rag, isLongRange) == false then
             return
+        end
+
+        ---
+        -- @realm shared
+        -- stylua: ignore
+        if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
+            return false
         end
 
         local corpseNick = CORPSE.GetPlayerNick(rag)
@@ -730,7 +747,7 @@ if CLIENT then
             -- special case: mode 2, only shopping roles can see credits
             local client = LocalPlayer()
             if
-                cvInspectConfirmMode:GetInt() == 2
+                (cvInspectConfirmMode:GetInt() == 2 or not cvCreditsVisibleToAll:GetBool())
                 and not bodysearch.CanTakeCredits(client, data.rag)
             then
                 return
