@@ -37,6 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new admin commands menu (by @TimGoll)
   - Added a submenu to change maps
   - Added a submenu to issue basic commands
+- Added a new `gameloop` module that contains all functions related to the round structure (by @Tim Goll)
 - Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 - Added a voicebattery module that handles the voice battery (by @TimGoll)
 
@@ -59,6 +60,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Unified the spec color usage throughout the whole UI (by @TimGoll)
 - Cleanup and performance optimizations for marks library (by @WardenPotato)
 - Updated the Turkish localization file (by @NovaDiablox)
+- The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 
 ### Fixed
 
@@ -75,6 +77,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed overhead icons sometimes being stuck at random places (by @TimGoll)
 - Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
 - Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
+- Fixed players sometimes not receiving their role if they joined late to the game (by @TimGoll)
 - Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 
 ### Removed

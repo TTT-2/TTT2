@@ -165,7 +165,7 @@ if CLIENT then
             local tmp = width - hastewidth - bgheight - smargin * 2
 
             -- Draw the current role
-            local round_state = GAMEMODE.round_state
+            local round_state = gameloop.GetRoundState()
             local traitor_y = y - 30
             local text
 
@@ -203,9 +203,9 @@ if CLIENT then
             end
 
             -- Draw round time
-            local isHaste = HasteMode() and round_state == ROUND_ACTIVE
+            local isHaste = gameloop.IsHasteMode() and round_state == ROUND_ACTIVE
             local isOmniscient = client:IsActive() and client:GetSubRoleData().isOmniscientRole
-            local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
+            local endtime = gameloop.GetPhaseEnd() - CurTime()
             local font = "TimeLeft"
             local color = COLOR_WHITE
 
@@ -217,7 +217,7 @@ if CLIENT then
             -- Time displays differently depending on whether haste mode is on,
             -- whether the player is traitor or not, and whether it is overtime.
             if isHaste then
-                local hastetime = GetGlobalFloat("ttt_haste_end", 0) - CurTime()
+                local hastetime = gameloop.GetHasteEnd() - CurTime()
                 if hastetime < 0 then
                     if not isOmniscient or math.ceil(CurTime()) % 7 <= 2 then
                         -- innocent or blinking "overtime"
@@ -281,7 +281,7 @@ if CLIENT then
             draw.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
 
             -- Draw current round state
-            local text = L[self.roundstate_string[GAMEMODE.round_state]]
+            local text = L[self.roundstate_string[gameloop.GetRoundState()]]
 
             self:ShadowedText(
                 text,
@@ -293,10 +293,7 @@ if CLIENT then
             )
 
             -- Draw round/prep/post time remaining
-            text = util.SimpleTime(
-                math.max(0, GetGlobalFloat("ttt_round_end", 0) - CurTime()),
-                "%02i:%02i"
-            )
+            text = util.SimpleTime(math.max(0, gameloop.GetPhaseEnd() - CurTime()), "%02i:%02i")
 
             self:ShadowedText(
                 text,

@@ -676,7 +676,7 @@ function plymeta:InitialSpawn()
     self.has_spawned = false
 
     -- The team the player spawns on depends on the round state
-    self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
+    self:SetTeam(gameloop.GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
 
     -- Change some gmod defaults
     self:SetCanZoom(false)
@@ -1098,7 +1098,7 @@ function plymeta:GetSpawnPosition()
 end
 
 ---
--- Sets the if a player was active (TEAM_TERROR) in a round.
+-- Sets the if a player was active (TEAM_TERROR) in a gameloop.
 -- @param boolean state The state
 -- @internal
 -- @realm server
@@ -1165,7 +1165,7 @@ local pendingItems = {}
 -- @param string cls
 -- @realm server
 function plymeta:GiveItem(cls)
-    if GetRoundState() == ROUND_PREP then
+    if gameloop.GetRoundState() == ROUND_PREP then
         pendingItems[self] = pendingItems[self] or {}
         pendingItems[self][#pendingItems[self] + 1] = cls
 
@@ -1680,6 +1680,8 @@ local function SetPlayerReady(_, ply)
     entspawnscript.TransmitToPlayer(ply)
 
     map.SyncToClient(ply)
+
+    gameloop.PlayerReady(ply)
 
     ---
     -- @realm server

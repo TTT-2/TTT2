@@ -2293,3 +2293,11 @@ L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshe
 
 L.label_enable_loadingscreen = "Enable the loading screen"
 L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
+
+-- 2024-05-25
+L.help_round_restart_reset = [[
+Restart a round or reset the level.
+
+Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
+
+L.label_button_level_reset = "reset level"

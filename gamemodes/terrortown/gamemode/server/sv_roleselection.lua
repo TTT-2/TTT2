@@ -198,7 +198,7 @@ end
 function roleselection.GetCurrentRoleAmount(subrole)
     local tmp = 0
 
-    if GetRoundState() == ROUND_ACTIVE then
+    if gameloop.GetRoundState() == ROUND_ACTIVE then
         local plys = playerGetAll()
 
         for i = 1, #plys do
@@ -997,6 +997,19 @@ function roleselection.SelectRoles(plys, maxPlys)
     end
 
     roleselection.finalRoles = {}
+
+    SendFullStateUpdate()
+end
+
+---
+-- Resets the role and team of all players to ROLE_NONE and TEAM_NONE.
+-- @realm server
+function roleselection.ResetAllPlayers()
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        plys[i]:SetRole(ROLE_NONE)
+    end
 
     SendFullStateUpdate()
 end

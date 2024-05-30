@@ -118,7 +118,7 @@ function CORPSE.IdentifyBody(ply, rag, searchUID)
     end
 
     -- simplified case for those who die and get found during prep
-    if GetRoundState() == ROUND_PREP then
+    if gameloop.GetRoundState() == ROUND_PREP then
         CORPSE.SetFound(rag, true)
 
         return
@@ -280,7 +280,7 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 
         if
             GetConVar("ttt_identify_body_woconfirm"):GetBool()
-            and DetectiveMode()
+            and gameloop.IsDetectiveMode()
             and not isCovert
         then
             CORPSE.IdentifyBody(ply, rag, sceneData.searchUID)
