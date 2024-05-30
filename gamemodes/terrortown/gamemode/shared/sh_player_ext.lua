@@ -1069,10 +1069,15 @@ end
 
 ---
 -- Returns whether the player is ready. A player is ready when he is able to look
--- around and move (first call of @{GM:SetupMove})
+-- around and move (first call of @{GM:SetupMove}). A bot player is always considered
+-- as ready.
 -- @return boolean
 -- @realm shared
 function plymeta:IsReady()
+    if self:IsBot() then
+        return true
+    end
+
     return self.isReady or false
 end
 
