@@ -5,7 +5,7 @@
 if SERVER then
     AddCSLuaFile()
 
-    util.AddNetworkString("TTT2LoadingscreenUpdate")
+    util.AddNetworkString("TTT2LoadingScreenActive")
 end
 
 loadingscreen = loadingscreen or {}
@@ -24,7 +24,7 @@ function loadingscreen.Begin()
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
     if SERVER then
-        net.Start("TTT2LoadingscreenUpdate")
+        net.Start("TTT2LoadingScreenActive")
         net.WriteBool(true)
         net.Broadcast()
     end
@@ -50,7 +50,7 @@ function loadingscreen.End()
     loadingscreen.isShown = false
 
     if SERVER then
-        net.Start("TTT2LoadingscreenUpdate")
+        net.Start("TTT2LoadingScreenActive")
         net.WriteBool(false)
         net.Broadcast()
 
@@ -92,7 +92,7 @@ if CLIENT then
     loadingscreen.state = LS_HIDDEN
     loadingscreen.timeStateChange = SysTime()
 
-    net.Receive("TTT2LoadingscreenUpdate", function()
+    net.Receive("TTT2LoadingScreenActive", function()
         if net.ReadBool() then
             loadingscreen.Begin()
         else
