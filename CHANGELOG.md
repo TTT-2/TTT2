@@ -38,6 +38,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a submenu to change maps
   - Added a submenu to issue basic commands
 - Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
+- Added a voicebattery module that handles the voice battery (by @TimGoll)
 
 ### Changed
 
