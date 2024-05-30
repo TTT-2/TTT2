@@ -610,6 +610,12 @@ function VOICE.UpdatePlayerVoiceVolume(ply)
     return out_vol, mute
 end
 
+---
+-- Checks if a player is using the role/team voice chat. This is not the global
+-- voice chat.
+-- @param player ply The player to check
+-- @return boolean Returns true if the player is using the role voice chat
+-- @realm client
 function VOICE.IsRoleChatting(ply)
     local plyTeam = ply:GetTeam()
     local plyRoleData = ply:GetSubRoleData()
