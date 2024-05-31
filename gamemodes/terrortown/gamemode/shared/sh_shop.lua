@@ -385,6 +385,10 @@ function shop.TryRerollShop(ply)
     else
         ply:SubtractCredits(GetGlobalInt("ttt2_random_shop_reroll_cost"))
         shop.ForceRerollShop(ply)
+        ---
+        -- @realm server
+        -- stylua: ignore
+        hook.Run("TTT2OrderedEquipment", ply, "reroll_shop", false, GetGlobalInt("ttt2_random_shop_reroll_cost"), false)
     end
 
     return true
@@ -436,6 +440,10 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 
         if target:IsTerror() and target:Alive() then
             target:AddCredits(credits)
+            ---
+            -- @realm server
+            -- stylua: ignore
+            hook.Run("TTT2OnTransferCredits", ply, target, credits, false)
         else
             -- The would be recipient is dead, which the sender may not know.
             -- Instead attempt to send the credits to the target's corpse, where they can be picked up.
@@ -443,6 +451,10 @@ function shop.TransferCredits(ply, targetPlyId64, credits)
 
             if IsValid(rag) then
                 CORPSE.SetCredits(rag, CORPSE.GetCredits(rag, 0) + credits)
+                ---
+                -- @realm server
+                -- stylua: ignore
+                hook.Run("TTT2OnTransferCredits", ply, target, credits, false)
             end
         end
 
