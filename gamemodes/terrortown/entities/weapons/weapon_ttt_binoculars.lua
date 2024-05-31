@@ -168,6 +168,14 @@ end
 
 ---
 -- @ignore
+function SWEP:OnRemove()
+    BaseClass.OnRemove(self)
+
+    self:SetZoomLevel(1)
+end
+
+---
+-- @ignore
 function SWEP:Reload()
     local playSound = false
     if self:GetZoomAmount() > 1 or self:GetProgress() > 0 then
