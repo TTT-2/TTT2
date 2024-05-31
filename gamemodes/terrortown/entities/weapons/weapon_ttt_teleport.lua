@@ -46,7 +46,7 @@ SWEP.Primary.Delay = 0.5
 
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 1.0
+SWEP.Secondary.Delay = 1
 
 SWEP.Kind = WEAPON_EQUIP2
 SWEP.CanBuy = { ROLE_TRAITOR, ROLE_DETECTIVE }
@@ -126,13 +126,14 @@ local function Telefrag(victim, attacker, weapon)
     victim:TakeDamageInfo(dmginfo)
 end
 
+local shouldNotCollideList = {
+    [COLLISION_GROUP_WEAPON] = true,
+    [COLLISION_GROUP_DEBRIS] = true,
+    [COLLISION_GROUP_DEBRIS_TRIGGER] = true,
+    [COLLISION_GROUP_INTERACTIVE_DEBRIS] = true,
+}
 local function ShouldCollide(ent)
-    local g = ent:GetCollisionGroup()
-
-    return g ~= COLLISION_GROUP_WEAPON
-        and g ~= COLLISION_GROUP_DEBRIS
-        and g ~= COLLISION_GROUP_DEBRIS_TRIGGER
-        and g ~= COLLISION_GROUP_INTERACTIVE_DEBRIS
+    return not shouldNotCollideList[ent:GetCollisionGroup()]
 end
 
 -- Teleport a player to a {pos, ang}
