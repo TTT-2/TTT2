@@ -507,7 +507,7 @@ function GM:Tick()
             RADIO:StoreTarget()
         end
 
-        VOICE.Tick()
+        voicebattery.Tick()
     end
 end
 

@@ -54,20 +54,16 @@ if CLIENT then
         local heightBar = h - 2 * self.padding
         local wNick = w - h - self.padding
 
+        local offset = 3 * self.scale
+        local heightBatteryBar = 2 * self.scale
+
         draw.Box(xPos + self.padding, yPos + self.padding, w - self.padding, heightBar, color)
-        self:DrawLines(
-            xPos + self.padding,
-            yPos + self.padding,
-            w - self.padding,
-            heightBar,
-            color.a
-        )
 
         for i = 1, #data do
             local yValue = math.floor(data[i] * 0.5 * heightBar - 4 * self.scale)
 
             draw.Box(
-                xPos + h + 3 + (i - 1) * (widthBar + 1),
+                xPos + h + offset + (i - 1) * (widthBar + 1),
                 yPos + 0.5 * h - yValue - 1,
                 widthBar,
                 yValue,
@@ -75,7 +71,7 @@ if CLIENT then
             )
             if yValue > 1 then
                 draw.Box(
-                    xPos + h + 3 + (i - 1) * (widthBar + 1),
+                    xPos + h + offset + (i - 1) * (widthBar + 1),
                     yPos + 0.5 * h - yValue - 2,
                     widthBar,
                     self.scale,
@@ -84,7 +80,7 @@ if CLIENT then
             end
 
             draw.Box(
-                xPos + h + 3 + (i - 1) * (widthBar + 1),
+                xPos + h + offset + (i - 1) * (widthBar + 1),
                 yPos + 0.5 * h,
                 widthBar,
                 self.scale,
@@ -92,7 +88,7 @@ if CLIENT then
             )
 
             draw.Box(
-                xPos + h + 3 + (i - 1) * (widthBar + 1),
+                xPos + h + offset + (i - 1) * (widthBar + 1),
                 yPos + 0.5 * h + 2,
                 widthBar,
                 yValue,
@@ -100,7 +96,7 @@ if CLIENT then
             )
             if yValue > 1 then
                 draw.Box(
-                    xPos + h + 3 + (i - 1) * (widthBar + 1),
+                    xPos + h + offset + (i - 1) * (widthBar + 1),
                     yPos + 0.5 * h + 2 + yValue,
                     widthBar,
                     self.scale,
@@ -130,6 +126,36 @@ if CLIENT then
             TEXT_ALIGN_CENTER,
             true,
             self.scale
+        )
+
+        if
+            voicebattery.IsEnabled()
+            and ply == LocalPlayer()
+            and VOICE.GetVoiceMode(ply) == VOICE_MODE_GLOBAL
+        then
+            draw.Box(
+                xPos + h,
+                yPos + h - self.padding - heightBatteryBar,
+                w - h,
+                heightBatteryBar,
+                colorVoiceBar
+            )
+
+            draw.Box(
+                xPos + h,
+                yPos + h - self.padding - heightBatteryBar,
+                voicebattery.GetChargePercent() * (w - h),
+                heightBatteryBar,
+                colorVoiceLine
+            )
+        end
+
+        self:DrawLines(
+            xPos + self.padding,
+            yPos + self.padding,
+            w - self.padding,
+            heightBar,
+            color.a
         )
     end
 
