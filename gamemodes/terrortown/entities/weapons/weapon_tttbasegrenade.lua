@@ -77,10 +77,7 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-    if
-        gameloop.GetRoundState() == ROUND_PREP
-        and not cvNadeThrowDuringPrep:GetBool()
-    then
+    if gameloop.GetRoundState() == ROUND_PREP and not cvNadeThrowDuringPrep:GetBool() then
         return
     end
 

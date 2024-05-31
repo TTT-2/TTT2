@@ -130,7 +130,7 @@ local shouldNotCollideList = {
     [COLLISION_GROUP_WEAPON] = true,
     [COLLISION_GROUP_DEBRIS] = true,
     [COLLISION_GROUP_DEBRIS_TRIGGER] = true,
-    [COLLISION_GROUP_INTERACTIVE_DEBRIS] = true
+    [COLLISION_GROUP_INTERACTIVE_DEBRIS] = true,
 }
 local function ShouldCollide(ent)
     return not shouldNotCollideList[ent:GetCollisionGroup()]
