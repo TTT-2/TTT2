@@ -2301,3 +2301,7 @@ Restart a round or reset the level.
 Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 L.label_button_level_reset = "reset level"
+
+L.loadingscreen_round_restart_title = "Starting new round"
+L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

@@ -8,7 +8,6 @@ local draw = draw
 local math = math
 local string = string
 local vgui = vgui
-local floor = math.floor
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local table = table
@@ -117,23 +116,6 @@ surface.CreateFont("treb_small", {
     weight = 700,
 })
 
-local function UntilMapChange()
-    local roundsLeft = gameloop.GetRoundsLeft()
-    local timeLeft = floor(gameloop.GetLevelTimeLeft())
-
-    local hours = floor(timeLeft / 3600)
-
-    timeLeft = timeLeft - floor(hours * 3600)
-
-    local minutes = floor(timeLeft / 60)
-
-    timeLeft = timeLeft - floor(minutes * 60)
-
-    local seconds = floor(timeLeft)
-
-    return roundsLeft, string.format("%02i:%02i:%02i", hours, minutes, seconds)
-end
-
 ---
 -- Comparison functions used to sort scoreboard
 sboard_sort = {
@@ -185,7 +167,8 @@ function PANEL:Init()
 
     self.mapchange.Think = function(sf)
         if gameloop.HasLevelLimits() then
-            local r, t = UntilMapChange()
+            local r, t = gameloop.UntilMapChange()
+
             sf:SetText(GetPTranslation("sb_mapchange", { num = r, time = t }))
         else
             sf:SetText(GetTranslation("sb_mapchange_disabled"))
