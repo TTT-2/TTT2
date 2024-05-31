@@ -188,11 +188,10 @@ end
 -- @return boolean
 -- @realm shared
 function SWEP:IsTargetingCorpse()
-    local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
-    local ent = tr.Entity
+    local ent = self:GetOwner():GetEyeTrace(MASK_SHOT).Entity
 
     return IsValid(ent)
-        and ent:GetClass() == "prop_ragdoll"
+        and ent:IsRagdoll()
         and CORPSE.GetPlayerNick(ent, false) ~= false
 end
 
@@ -204,7 +203,7 @@ function SWEP:GetTargetingCorpse()
 
     if
         IsValid(ent)
-        and ent:GetClass() == "prop_ragdoll"
+        and ent:IsRagdoll()
         and CORPSE.GetPlayerNick(ent, false) ~= false
     then
         return ent
@@ -316,7 +315,7 @@ if CLIENT then
         if
             not IsValid(ent)
             or not IsValid(c_wep)
-            or ent:GetClass() ~= "prop_ragdoll"
+            or not ent:IsRagdoll()
             or c_wep:GetClass() ~= "weapon_ttt_binoculars"
             or c_wep:GetProcessTarget() ~= ent
         then

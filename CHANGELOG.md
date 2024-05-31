@@ -60,6 +60,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Cleanup and performance optimizations for marks library (by @WardenPotato)
 - Updated the Turkish localization file (by @NovaDiablox)
 - The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
+- Minor cleanup and optimizations in weapon code (by @TW1STaL1CKY)
 
 ### Fixed
 

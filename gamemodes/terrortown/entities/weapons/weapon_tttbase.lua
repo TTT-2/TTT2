@@ -351,6 +351,11 @@ if CLIENT then
     -- stylua: ignore
     local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvEnableHUDBoxBlur = GetConVar("ttt2_hud_enable_box_blur")
+
     local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
     local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
 
@@ -608,7 +613,7 @@ if CLIENT then
         local yLine = yDividerStart + 10 * scale
         local xDescription = xDivider + padding
 
-        if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
+        if cvEnableHUDBoxBlur:GetBool() then
             draw.BlurredBox(xBox, yBox, wBox, hBox)
             draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
             draw.Box(xBox, yBox, wBox, mathRound(1 * scale), colorBox) -- top line shadow
@@ -1281,14 +1286,15 @@ if SERVER then
     -- does not occur when a drop happens for some reason. Hence this thing.
     -- @realm server
     function SWEP:PreDrop()
-        if not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then
+        local owner = self:GetOwner()
+        if not IsValid(owner) or self.Primary.Ammo == "none" then
             return
         end
 
         local ammo = self:Ammo1()
 
         -- Do not drop ammo if we have another gun that uses this type
-        local weps = self:GetOwner():GetWeapons()
+        local weps = owner:GetWeapons()
 
         for i = 1, #weps do
             local w = weps[i]
@@ -1307,7 +1313,7 @@ if SERVER then
         self.StoredAmmo = ammo
 
         if ammo > 0 then
-            self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
+            owner:RemoveAmmo(ammo, self.Primary.Ammo)
         end
     end
 
