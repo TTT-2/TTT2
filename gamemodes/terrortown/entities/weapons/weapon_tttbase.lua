@@ -351,9 +351,6 @@ if CLIENT then
     -- stylua: ignore
     local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
-    ---
-    -- @realm client
-    -- stylua: ignore
     local cvEnableHUDBoxBlur = GetConVar("ttt2_hud_enable_box_blur")
 
     local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
