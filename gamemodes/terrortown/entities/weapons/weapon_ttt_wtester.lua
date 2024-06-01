@@ -204,7 +204,7 @@ function SWEP:GatherDNA(ent)
         return
     end
 
-    if ent:IsTrueRagdoll() and ent.killer_sample then
+    if ent:IsPlayerRagdoll() and ent.killer_sample then
         self:GatherRagdollSample(ent)
     elseif ent.fingerprints and #ent.fingerprints > 0 then
         self:GatherObjectSample(ent)

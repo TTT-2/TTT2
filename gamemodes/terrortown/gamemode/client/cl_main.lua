@@ -933,7 +933,7 @@ end
 -- @local
 function GM:OnEntityCreated(ent)
     -- Make ragdolls look like the player that has died
-    if ent:IsTrueRagdoll() then
+    if ent:IsPlayerRagdoll() then
         local ply = CORPSE.GetPlayer(ent)
 
         if IsValid(ply) then

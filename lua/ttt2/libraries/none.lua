@@ -97,8 +97,8 @@ end
 -- A simple check whether an @{Entity} is a valid ragdoll.
 -- @param Entity ent
 -- @return boolean
--- @deprecated Use @{ENTITY:IsTrueRagdoll} instead
+-- @deprecated Use @{ENTITY:IsPlayerRagdoll } instead
 -- @realm shared
 function IsRagdoll(ent)
-    return IsValid(ent) and ent:IsTrueRagdoll()
+    return IsValid(ent) and ent:IsPlayerRagdoll()
 end

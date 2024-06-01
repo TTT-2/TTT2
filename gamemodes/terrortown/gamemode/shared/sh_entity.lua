@@ -13,6 +13,6 @@ end
 -- for props (e.g. a mattress).
 -- @return boolean Returns true if it is a true ragdoll
 -- @realm shared
-function entmeta:IsTrueRagdoll()
+function entmeta:IsPlayerRagdoll()
     return self:IsRagdoll() and CORPSE.GetPlayerNick(self, nil) ~= nil
 end

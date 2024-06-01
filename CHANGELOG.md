@@ -40,7 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new `gameloop` module that contains all functions related to the round structure (by @Tim Goll)
 - Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 - Added a voicebattery module that handles the voice battery (by @TimGoll)
-- Added `ENTITY:IsTrueRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
+- Added `ENTITY:IsPlayerRagdoll ` to check if a corpse is a real player ragdoll (by @TimGoll)
 
 ### Changed
 
