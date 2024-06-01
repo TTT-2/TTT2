@@ -201,6 +201,9 @@ function admin.IsAdmin(ply)
         return false
     end
 
+    ---
+    -- @realm server
+    -- stylua: ignore
     return hook.Run("TTT2AdminCheck", ply) or false
 end
 
