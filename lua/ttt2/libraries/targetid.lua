@@ -235,7 +235,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     end
 
     -- only add more information if in admin mode
-    if not admin_mode or not client:IsAdmin() then
+    if not admin_mode or not admin.IsAdmin(client) then
         return
     end
 

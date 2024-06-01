@@ -97,7 +97,7 @@ if SERVER then
     util.AddNetworkString("TTT2SyncRolelayerData")
 
     net.Receive("TTT2SyncRolelayerData", function(_, ply)
-        if not IsValid(ply) or not ply:IsAdmin() then
+        if not admin.IsAdmin(ply) then
             return
         end
 

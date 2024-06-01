@@ -613,7 +613,7 @@ if SERVER then
     end
 
     net.Receive("TTT2ChangeServerLevel", function(_, ply)
-        if not IsValid(ply) or not ply:IsSuperAdmin() then
+        if not admin.IsAdmin(ply) then
             return
         end
 

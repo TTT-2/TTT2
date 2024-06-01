@@ -978,10 +978,7 @@ if SERVER then
         local isServer = true
 
         if plyID64 and playerID64Cache[plyID64] then
-            ---
-            -- @realm server
-            -- stylua: ignore
-            isAdmin = hook.Run("TTT2AdminCheck", playerID64Cache[plyID64])
+            isAdmin = admin.IsAdmin(playerID64Cache[plyID64])
             isServer = false
         end
 

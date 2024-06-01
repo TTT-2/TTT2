@@ -113,7 +113,7 @@ if CLIENT then
 
         local subRoleData = client:GetSubRoleData()
 
-        if client:IsSuperAdmin() or (subRoleData.isPublicRole and subRoleData.isPolicingRole) then
+        if admin.IsAdmin(client) or (subRoleData.isPublicRole and subRoleData.isPolicingRole) then
             return cvVoiceDrainAdmin:GetFloat()
         else
             return cvVoiceDrainNormal:GetFloat()

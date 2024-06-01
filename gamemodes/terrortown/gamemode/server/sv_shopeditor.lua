@@ -9,7 +9,7 @@ local playerGetAll = player.GetAll
 util.AddNetworkString("TTT2UpdateCVar")
 
 net.Receive("TTT2UpdateCVar", function(_, ply)
-    if not IsValid(ply) or not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -141,7 +141,7 @@ end
 util.AddNetworkString("shop")
 
 local function shop(len, ply)
-    if not IsValid(ply) or not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -166,7 +166,7 @@ util.AddNetworkString("shopFallbackReset")
 util.AddNetworkString("shopFallbackRefresh")
 
 local function shopFallback(len, ply)
-    if not IsValid(ply) or not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 

@@ -36,7 +36,7 @@ function TBHUD:CacheEnts()
     self.buttons = {}
 
     if IsValid(ply) and ply:IsActive() then
-        local admin = ply:IsAdmin()
+        local admin = admin.IsAdmin(ply)
         local team = ply:GetTeam()
         local btns = ents.FindByClass("ttt_traitor_button")
 
