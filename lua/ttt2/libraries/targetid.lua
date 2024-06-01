@@ -258,7 +258,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
         ParT("tbut_team_toggle", {
             usekey = key_params.usekey,
             walkkey = key_params.walkkey,
-            team = client:GetTeam():gsub("^%l", string.upper),
+            team = TryT(client:GetTeam()),
         }),
         COLOR_WHITE
     )
