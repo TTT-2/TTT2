@@ -458,7 +458,7 @@ end
 concommand.Add("get_role", get_role)
 
 local function ttt_toggle_role(ply, cmd, args, argStr)
-    if not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -511,7 +511,7 @@ end
 net.Receive("TTT_Spectate", TTT_Spectate)
 
 local function ttt_roles_index(ply)
-    if not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
