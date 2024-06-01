@@ -510,7 +510,7 @@ local function ttt_radio_send(ply, cmd, args)
         if IsValid(ent) then
             if ent:IsPlayer() then
                 name = ent:Nick()
-            elseif ent:GetClass() == "prop_ragdoll" then
+            elseif ent:IsPlayerRagdoll() then
                 name = LANG.NameParam("quick_corpse_id")
                 ragPlayerNick = CORPSE.GetPlayerNick(ent, "A Terrorist")
             end

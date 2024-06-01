@@ -180,7 +180,7 @@ function SWEP:PrimaryAttack()
             --edata:SetDamageType(DMG_CLUB)
             edata:SetEntity(hitEnt)
 
-            if hitEnt:IsPlayer() or hitEnt:IsRagdoll() then
+            if hitEnt:IsPlayer() or hitEnt:IsPlayerRagdoll() then
                 util.Effect("BloodImpact", edata)
 
                 -- does not work on players rah

@@ -510,7 +510,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
     local c_wep = client:GetActiveWeapon()
 
     -- has to be a ragdoll
-    if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then
+    if not IsValid(ent) or not ent:IsPlayerRagdoll() then
         return
     end
 
@@ -679,7 +679,7 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
         ent:IsWeapon()
         or ent.CanHavePrints
         or ent:GetNWBool("HasPrints", false)
-        or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+        or ent:IsPlayerRagdoll()
     then
         tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, { materialDNATargetID })
     else
