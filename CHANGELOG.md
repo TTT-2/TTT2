@@ -40,6 +40,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new `gameloop` module that contains all functions related to the round structure (by @Tim Goll)
 - Added a loadingscreen that hides the visible and audible lag introduced by the map cleanup on round change (by @TimGoll)
 - Added a voicebattery module that handles the voice battery (by @TimGoll)
+- Added `ENTITY:IsTrueRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
 
 ### Changed
 
@@ -62,6 +63,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated the Turkish localization file (by @NovaDiablox)
 - The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 - Minor cleanup and optimizations in weapon code (by @TW1STaL1CKY)
+- Now always properly checks if an entity is a true ragdoll to make sure no other props get ragdoll handling (by @TimGoll)
 
 ### Fixed
 
