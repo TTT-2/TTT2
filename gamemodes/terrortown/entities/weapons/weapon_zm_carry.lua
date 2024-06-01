@@ -142,7 +142,7 @@ function DetermineCarryType(ent)
     if IsValid(ent) then
         if ent.IsWeapon and ent:IsWeapon() then
             return CARRY_TYPE_WEAPON
-        elseif ent:IsRagdoll() then
+        elseif ent:IsTrueRagdoll() then
             return CARRY_TYPE_RAGDOLL
         else
             return CARRY_TYPE_PROP

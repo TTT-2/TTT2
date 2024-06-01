@@ -44,6 +44,7 @@ TTTFiles = {
     sh_corpse = { file = "sh_corpse.lua", on = "shared" },
     sh_decal = { file = "sh_decal.lua", on = "shared" },
     sh_door = { file = "sh_door.lua", on = "shared" },
+    sh_entity = { file = "sh_entity.lua", on = "shared" },
     sh_equip_items = { file = "sh_equip_items.lua", on = "shared" },
     sh_hud_module = { file = "sh_hud_module.lua", on = "shared" },
     sh_hudelement_module = { file = "sh_hudelement_module.lua", on = "shared" },

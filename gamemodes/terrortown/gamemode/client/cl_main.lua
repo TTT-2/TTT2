@@ -34,6 +34,7 @@ ttt_include("sh_player_ext")
 ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
 ttt_include("sh_door")
+ttt_include("sh_entity")
 ttt_include("sh_voice")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
@@ -932,7 +933,7 @@ end
 -- @local
 function GM:OnEntityCreated(ent)
     -- Make ragdolls look like the player that has died
-    if ent:IsRagdoll() then
+    if ent:IsTrueRagdoll() then
         local ply = CORPSE.GetPlayer(ent)
 
         if IsValid(ply) then

@@ -94,10 +94,11 @@ function IsPlayer(var)
 end
 
 ---
--- A simple check whether an @{Entity} is a valid ragdoll
+-- A simple check whether an @{Entity} is a valid ragdoll.
 -- @param Entity ent
 -- @return boolean
+-- @deprecated Use @{ENTITY:IsTrueRagdoll} instead
 -- @realm shared
 function IsRagdoll(ent)
-    return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
+    return IsValid(ent) and ent:IsTrueRagdoll()
 end

@@ -221,7 +221,7 @@ function RADIO:GetTargetType()
         else
             return ent, false
         end
-    elseif ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, "") ~= "" then
+    elseif ent:IsTrueRagdoll() then
         if gameloop.IsDetectiveMode() and not CORPSE.GetFound(ent, false) then
             return "quick_corpse", true
         else
@@ -241,7 +241,7 @@ function RADIO.ToPrintable(target)
     elseif IsValid(target) then
         if target:IsPlayer() then
             return target:Nick()
-        elseif target:GetClass() == "prop_ragdoll" then
+        elseif target:IsTrueRagdoll() then
             return GetPTranslation(
                 "quick_corpse_id",
                 { player = CORPSE.GetPlayerNick(target, "A Terrorist") }
