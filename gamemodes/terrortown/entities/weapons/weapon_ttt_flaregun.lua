@@ -140,7 +140,7 @@ function IgniteTarget(att, path, dmginfo)
     end
 
     if CLIENT and IsFirstTimePredicted() then
-        if ent:IsRagdoll() then
+        if ent:IsPlayerRagdoll() then
             ScorchUnderRagdoll(ent)
         end
         return
@@ -164,7 +164,7 @@ function IgniteTarget(att, path, dmginfo)
                     ent.ignite_info = nil
                 end
             end)
-        elseif ent:IsRagdoll() then
+        elseif ent:IsPlayerRagdoll() then
             ScorchUnderRagdoll(ent)
 
             local burn_time = 6

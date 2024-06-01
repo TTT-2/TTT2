@@ -42,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a voicebattery module that handles the voice battery (by @TimGoll)
 - Added `admin.IsAdmin(ply)` as a wrapper that automatically calls `GM:TTT2AdminCheck` (by @TimGoll)
   - Made sure this new function is used in our whole codebase for all admin checks
+- Added `ENTITY:IsPlayerRagdoll ` to check if a corpse is a real player ragdoll (by @TimGoll)
 
 ### Changed
 
@@ -64,6 +65,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated the Turkish localization file (by @NovaDiablox)
 - The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 - Minor cleanup and optimizations in weapon code (by @TW1STaL1CKY)
+- Now always properly checks if an entity is a true ragdoll to make sure no other props get ragdoll handling (by @TimGoll)
 
 ### Fixed
 

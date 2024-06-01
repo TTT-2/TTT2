@@ -109,7 +109,7 @@ function SWEP:PrimaryAttack()
         edata:SetNormal(tr.Normal)
         edata:SetEntity(hitEnt)
 
-        if hitEnt:IsPlayer() or hitEnt:IsRagdoll() then
+        if hitEnt:IsPlayer() or hitEnt:IsPlayerRagdoll() then
             util.Effect("BloodImpact", edata)
         end
     else

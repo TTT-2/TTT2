@@ -647,8 +647,8 @@ hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
     if
         IsValid(ent1)
         and IsValid(ent2)
-        and ent1:IsRagdoll()
-        and ent2:IsRagdoll()
+        and ent1:IsPlayerRagdoll()
+        and ent2:IsPlayerRagdoll()
         and ent1.GetCollisionGroup
         and ent1:GetCollisionGroup() == COLLISION_GROUP_WEAPON
         and ent2.GetCollisionGroup
