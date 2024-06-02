@@ -8,8 +8,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added hook ENTITY:ClientUse(), which is triggered clientside if an entity is used
   - Return true to prevent also using this on the server for clientside only usecases
-- Added upstream content files to base TTT2
-- Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
 - Added hook ENTITY:RemoteUse(ply), which is shared
   - Return true if only clientside should be used
 - Added RemoteUse to radio, you can now directly access it via use button on marker focus
@@ -22,7 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added `SWEP.EnableConfigurableClip` and `SWEP.ConfigurableClip` to set the weapon's clip on buy via the equipment editor (by @TimGoll)
 - Added Text / Nickname length limiting (by @TimGoll)
-- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range 
+- Added `ttt_locational_voice_range` to set a cut-off radius for the locational voice chat range
 - Added a convar `ttt2_inspect_credits_always_visible` to control whether credits are visible to players that do not have a shop
 - Added multiple global voice chat activation modes for clients to choose from (Gameplay > Voice & Volume):
   - Push-to-Talk (default)
@@ -42,15 +40,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a voicebattery module that handles the voice battery (by @TimGoll)
 - Added `admin.IsAdmin(ply)` as a wrapper that automatically calls `GM:TTT2AdminCheck` (by @TimGoll)
   - Made sure this new function is used in our whole codebase for all admin checks
-- Added `ENTITY:IsPlayerRagdoll ` to check if a corpse is a real player ragdoll (by @TimGoll)
+- Added `ENTITY:IsPlayerRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
 
 ### Changed
 
 - TargetID is now hidden when a marker vision element is focused
-- Crosshair rendering now is a bit more flexible and customizable
-- A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
-- Hides item settings in the equipment editor that are only relevant for weapons
-- The binoculars now use the default crosshair as well
 - Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
 - `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
@@ -69,12 +63,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
-- Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
-- Fixed weapons which set a custom view model texture having an error texture
-- Fixed the equipment menu throwing errors when clicking on some items
-- TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
-- Fixed hud help text not being shown for some old weapons
-- Fixed detective search being overwritten by player search results
 - Fixed `DynamicCamera` error when a weapon's `CalcView` doesn't return complete values (by @TW1STaL1CKY)
 - Fixed Roundendscreen showing karma changes even if karma is disabled
 - Fixed the player's FOV staying zoomed in if their weapon is removed while scoped in (by @TW1STaL1CKY)
@@ -99,6 +87,29 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 - Removed the `TIPS` module and replaced it with a new `tips` module
+
+## [v0.13.2b](https://github.com/TTT-2/TTT2/tree/0.13.2b) (2024-03-10)
+
+### Added
+
+- Added upstream content files to base TTT2
+- Added `plymeta:IsFullySignedOn()` to allow excluding players that have not gotten control yet (by @EntranceJew)
+
+### Changed
+
+- Crosshair rendering now is a bit more flexible and customizable
+- A crosshair is now also drawn when holding a nade, making it less confusing when looking at entities
+- Hides item settings in the equipment editor that are only relevant for weapons
+- The binoculars now use the default crosshair as well
+
+### Fixed
+
+- Fixed the AFK timer accumulating while player not fully joined (by @EntranceJew)
+- Fixed weapons which set a custom view model texture having an error texture
+- Fixed the equipment menu throwing errors when clicking on some items
+- TTT2 now ignores Gmods SWEP.DrawCrosshair and always draws just its own crosshair to prevent two crosshairs at once
+- Fixed hud help text not being shown for some old weapons
+- Fixed detective search being overwritten by player search results
 
 ## [v0.13.1b](https://github.com/TTT-2/TTT2/tree/v0.13.1b) (2024-02-27)
 
@@ -1076,7 +1087,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Added Infinity Gauntlet SEWP to buggy addons list (interferes with the sprinting system)
-- Remove GetWeapons and HasWeapon overrides (see https://github.com/Facepunch/garrysmod/pull/1648)
+- Remove GetWeapons and HasWeapon overrides (see <https://github.com/Facepunch/garrysmod/pull/1648>)
 - Improved role module to also use `isAbstract` instead of a base role class name
 - Migrated the HUDManager settings to the new network sync system
 - Renamed `TTT2NET` to `ttt2net` and removed unnecessary self references
@@ -1102,7 +1113,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed round info (the top panel) being displayed in other HUDs
-- Fix GetEyeTrace override (see https://github.com/Facepunch/garrysmod/pull/1647)
+- Fix GetEyeTrace override (see <https://github.com/Facepunch/garrysmod/pull/1647>)
 - Fixed an error with the pickup system in singleplayer
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
