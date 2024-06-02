@@ -2095,7 +2095,6 @@ L.beacon_desc = [[
 L.msg_beacon_destroyed = "你的一个信标已被摧毁！"
 L.msg_beacon_death = "一个玩家在你的一个信标的附近死亡。"
 
-L.beacon_pickup_disabled = "只有信标的拥有者才能拾起它"
 L.beacon_short_desc = "警察角色使用信标在他们周围添加本地透视效果"
 
 -- 2023-12-18
