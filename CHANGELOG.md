@@ -44,16 +44,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
-- TargetID is now hidden when a marker vision element is focused
-- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
+- Placeable Entities are now checked for pickup clientside first (by @ZenBre4ker)
+  - C4 UI is not routed over the server anymore
+- Visualizer can now only be picked up by the originator (by @ZenBre4ker)
+- TargetID is now hidden when a marker vision element is focused (by @TimGoll)
+- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets (by @EntranceJew)
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
 - `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
-- Micro optimizations
+- Micro optimizations (by @EntranceJew)
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
   - The holdtype for pistol weapons now matches the viewmodel
-- `VOICE.IsSpeaking(ply)` (clientside) can now be used to check if any player is speaking to you
+- `VOICE.IsSpeaking(ply)` (clientside) can now be used to check if any player is speaking to you (by @TimGoll)
 - Unified the spec color usage throughout the whole UI (by @TimGoll)
 - Cleanup and performance optimizations for marks library (by @WardenPotato)
 - Updated the Turkish localization file (by @NovaDiablox)
@@ -78,7 +81,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Removed
 
-- Removed radio tab in shop UI
+- Removed radio tab in shop UI (by @ZenBre4ker)
+- Removed all uses of UseOverride-Hook inside TTT2 (It's still available for addons!) (by @ZenBre4ker)
 - Removed `round_restart`, `round_selected` and `round_started` MStack messages to reduce message spawm (by @TimGoll)
 - Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
 

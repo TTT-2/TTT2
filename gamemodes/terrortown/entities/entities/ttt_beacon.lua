@@ -19,7 +19,6 @@ ENT.Model = "models/props_lab/reciever01a.mdl"
 
 ENT.CanHavePrints = true
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_beacon"
 
 ENT.timeLastBeep = CurTime()
@@ -48,6 +47,13 @@ function ENT:Initialize()
         mvObject:SetVisibleFor(VISIBLE_FOR_ROLE)
         mvObject:SyncToClients()
     end
+end
+
+---
+-- @param Player activator
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return self:GetOriginator() == activator
 end
 
 if SERVER then
@@ -128,13 +134,6 @@ if SERVER then
     end
 
     ---
-    -- @param Player activator
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        return self:GetOriginator() == activator
-    end
-
-    ---
     -- @realm server
     function ENT:UpdateTransmitState()
         return TRANSMIT_ALWAYS
@@ -164,7 +163,7 @@ if SERVER then
             end
 
             ---
-            -- @realm server			
+            -- @realm server
             -- stylua: ignore
             if hook.Run("TTT2BeaconDeathNotify", victim, beacon) == false then continue end
 
@@ -229,12 +228,12 @@ if CLIENT then
 
         tData:SetTitle(TryT(ent.PrintName))
 
-        if ent:GetOriginator() == client then
+        if ent:PlayerCanPickupWeapon(client) then
             tData:SetKeyBinding("+use")
             tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
         else
             tData:AddIcon(roles.DETECTIVE.iconMaterial)
-            tData:SetSubtitle(TryT("beacon_pickup_disabled"))
+            tData:SetSubtitle(TryT("entity_pickup_owner_only"))
         end
 
         tData:AddDescriptionLine(TryT("beacon_short_desc"))

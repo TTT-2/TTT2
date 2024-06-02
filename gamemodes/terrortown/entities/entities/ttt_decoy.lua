@@ -16,7 +16,6 @@ ENT.Model = "models/props_lab/reciever01b.mdl"
 
 ENT.CanHavePrints = false
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_decoy"
 
 ---
@@ -47,6 +46,14 @@ function ENT:OnRemove()
     self:GetOriginator().decoy = nil
 end
 
+---
+-- @param Player activator
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return activator:HasTeam()
+        and self:GetNWString("decoy_owner_team", "none") == activator:GetTeam()
+end
+
 if SERVER then
     ---
     -- @realm server
@@ -58,14 +65,6 @@ if SERVER then
         end
 
         LANG.Msg(originator, "decoy_broken", nil, MSG_MSTACK_WARN)
-    end
-
-    ---
-    -- @param Player activator
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        return activator:HasTeam()
-            and self:GetNWString("decoy_owner_team", "none") == activator:GetTeam()
     end
 end
 
@@ -95,9 +94,14 @@ if CLIENT then
         tData:SetOutlineColor(client:GetRoleColor())
 
         tData:SetTitle(TryT("decoy_name"))
-        tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
-        tData:SetKeyBinding("+use")
         tData:AddDescriptionLine(TryT("decoy_short_desc"))
+
+        if ent:PlayerCanPickupWeapon(client) then
+            tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
+            tData:SetKeyBinding("+use")
+        else
+            tData:SetSubtitle(TryT("entity_pickup_owner_only"))
+        end
 
         if ent:GetNWString("decoy_owner_team", "none") == client:GetTeam() then
             return
