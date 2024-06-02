@@ -79,6 +79,11 @@ local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {
 ---
 -- @realm server
 -- stylua: ignore
+local cvSelectUniqueModelPerPlayer = CreateConVar("ttt2_select_unique_model_per_player", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+-- stylua: ignore
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Credits
@@ -952,13 +957,20 @@ function GM:TTT2PrePrepareRound(duration)
     -- supports map models or random player models
     if cvPreferMapModels:GetBool() and self.force_plymodel and self.force_plymodel ~= "" then
         self.playermodel = self.force_plymodel
-    elseif cvSelectUniqueModelPerRound:GetBool() then
-        local plys = player.GetAll()
-        for i = 1, #plys do
-            plys[i].defaultModel = playermodels.GetRandomPlayerModel()
-        end
     elseif cvSelectModelPerRound:GetBool() then
-        self.playermodel = playermodels.GetRandomPlayerModel()
+        if cvSelectUniqueModelPerPlayer:GetBool() then
+            local plys = player.GetAll()
+            for i = 1, #plys do
+                plys[i].defaultModel = playermodels.GetRandomPlayerModel()
+            end
+        else
+            local plys = player.GetAll()
+            for i = 1, #plys do
+                plys[i].defaultModel = nil
+            end
+
+            self.playermodel = playermodels.GetRandomPlayerModel()
+        end
     end
 
     ---

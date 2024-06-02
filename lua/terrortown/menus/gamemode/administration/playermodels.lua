@@ -45,7 +45,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
     form:MakeCheckBox({
         label = "label_select_unique_model_per_round",
-        serverConvar = "ttt2_select_unique_model_per_round",
+        serverConvar = "ttt2_select_unique_model_per_player",
         master = customModelsEnb,
     })
 

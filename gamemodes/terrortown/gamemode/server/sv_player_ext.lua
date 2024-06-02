@@ -1683,6 +1683,12 @@ local function SetPlayerReady(_, ply)
 
     gameloop.PlayerReady(ply)
 
+    -- if random models for all players are enabled, they should be set as soon
+    -- as the player connects
+    if GetConVar("ttt2_select_unique_model_per_player"):GetBool() then
+        ply.defaultModel = playermodels.GetRandomPlayerModel()
+    end
+
     ---
     -- @realm server
     -- stylua: ignore
