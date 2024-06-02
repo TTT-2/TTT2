@@ -85,6 +85,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
 - Fixed players sometimes not receiving their role if they joined late to the game (by @TimGoll)
 - Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
+- Fixed incendiaries sometimes exploding without fire (by @TimGoll)
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
 
 ### Removed
