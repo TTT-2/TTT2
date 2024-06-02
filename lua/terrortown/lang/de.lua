@@ -2095,7 +2095,6 @@ Verwenden, um Orte auf der Karte im Auge zu behalten, die schwer zu sehen sind.]
 L.msg_beacon_destroyed = "Einer deiner Peilsender wurde zerstört!"
 L.msg_beacon_death = "Ein Spieler ist in unmittelbarer Nähe eines deiner Peilsender gestorben."
 
-L.beacon_pickup_disabled = "Nur der Besitzer des Peilsenders kann ihn aufheben"
 L.beacon_short_desc = "Peilsender werden von öffentlichen Ordnungsrollen verwendet, um lokale Wallhacks um sie herum hinzuzufügen"
 
 -- 2023-12-18

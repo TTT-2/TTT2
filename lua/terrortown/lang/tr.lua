@@ -2095,7 +2095,6 @@ Haritada görülmesi zor olan konumları takip etmek için kullanın.]]
 L.msg_beacon_destroyed = "Fenerlerinden biri yok edildi!"
 L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 
-L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
 -- 2023-12-18
