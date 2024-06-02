@@ -206,6 +206,7 @@ else
     -- @realm client
     function ENT:ClientUse()
         local client = LocalPlayer()
+
         if not IsValid(client) or not client:IsPlayer() or not client:IsActive() then
             return true
         end
