@@ -12,17 +12,17 @@ gameEffects = {}
 ---
 -- Create a bundle of fires all from a central location.
 -- This is used for incendiary grenades or C4 detonation.
--- @param Vector pos The position the fires should originate from.
--- @param TraceResult tr A trace to orient the creation of the fires around.
--- @param number amount The number of individual balls of fire that should be created.
--- @param number lifetime The base lifetime of all fires in the bundle.
--- @param boolean explode Should the fires explode when they reach the end of their lives?
--- @param nil|Player dmgowner The player to attribute the fire damage to.
--- @param number forceSpread The force that each fire will be flung with.
--- @param boolean immobile If true, fires will become stationary once they begin burning.
--- @param number size The physical scale of the fires.
--- @param number lifetimeVariance The amount each lifetime for each fire can vary.
--- @return table A table full of the fire entities.
+-- @param Vector pos The position the fires should originate from
+-- @param TraceResult tr A trace to orient the creation of the fires around
+-- @param number amount The number of individual balls of fire that should be created
+-- @param number lifetime The base lifetime of all fires in the bundle
+-- @param boolean explode Should the fires explode when they reach the end of their lives
+-- @param nil|Player dmgowner The player to attribute the fire damage to
+-- @param number forceSpread The force that each fire will be flung with
+-- @param boolean immobile If true, fires will become stationary once they begin burning
+-- @param number size The physical scale of the fires
+-- @param number lifetimeVariance The amount each lifetime for each fire can vary
+-- @return table A table full of the fire entities
 -- @realm shared
 function gameEffects.StartFires(
     pos,
@@ -76,14 +76,14 @@ end
 
 ---
 -- Creates a single point of fire.
--- @param Vector pos The position to create the fire at.
--- @param number scale Controls the height of the flame more than its radius. Informs the size.
--- @param number lifeSpan How long a fire will burn for.
--- @param nil|Entity owner The creator of the fire.
--- @param nil|Entity parent The thing to attach the fire to.
--- @return nil|Entity The fire it created, or nil if it was merged / couldn't be created.
+-- @param Vector pos The position to create the fire at
+-- @param number scale Controls the height of the flame more than its radius. Informs the size
+-- @param number lifetime How long a fire will burn for
+-- @param nil|Entity owner The creator of the fire
+-- @param nil|Entity parent The thing to attach the fire to
+-- @return nil|Entity The fire it created, or nil if it was merged / couldn't be created
 -- @realm server
-function gameEffects.SpawnFire(pos, scale, lifeSpan, owner, parent)
+function gameEffects.SpawnFire(pos, scale, lifetime, owner, parent)
     local fire = ents.Create("env_fire")
 
     if not IsValid(fire) then
@@ -99,7 +99,7 @@ function gameEffects.SpawnFire(pos, scale, lifeSpan, owner, parent)
 
     -- hardly controls size, hitbox is goofy, impossible to work with
     fire:SetKeyValue("firesize", tostring(scale))
-    fire:SetKeyValue("health", tostring(lifeSpan))
+    fire:SetKeyValue("health", tostring(lifetime))
     fire:SetKeyValue("ignitionpoint", "64")
 
     -- don't hurt the player because we're managing the hurtbox ourselves
@@ -111,7 +111,7 @@ function gameEffects.SpawnFire(pos, scale, lifeSpan, owner, parent)
 end
 
 ---
--- greatly simplified version of SDK's game_shard/gamerules.cpp:RadiusDamage
+-- Greatly simplified version of SDK's game_shard/gamerules.cpp:RadiusDamage
 -- does no block checking, radius should be very small.
 -- @note only hits players!
 -- @param DamageInfo dmginfo
