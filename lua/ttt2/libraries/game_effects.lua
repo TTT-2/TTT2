@@ -2,6 +2,7 @@
 -- A library to consolidate some common effects code.
 -- @author EntranceJew
 -- @module gameEffects
+
 if SERVER then
     AddCSLuaFile()
 end
@@ -13,33 +14,34 @@ gameEffects = {}
 -- This is used for incendiary grenades or C4 detonation.
 -- @param Vector pos The position the fires should originate from.
 -- @param TraceResult tr A trace to orient the creation of the fires around.
--- @param number num The number of individual balls of fire that should be created.
+-- @param number amount The number of individual balls of fire that should be created.
 -- @param number lifetime The base lifetime of all fires in the bundle.
 -- @param boolean explode Should the fires explode when they reach the end of their lives?
 -- @param nil|Player dmgowner The player to attribute the fire damage to.
--- @param number spread_force The force that each fire will be flung with.
+-- @param number forceSpread The force that each fire will be flung with.
 -- @param boolean immobile If true, fires will become stationary once they begin burning.
 -- @param number size The physical scale of the fires.
--- @param number lifetime_variance The amount each lifetime for each fire can vary.
+-- @param number lifetimeVariance The amount each lifetime for each fire can vary.
 -- @return table A table full of the fire entities.
 -- @realm shared
 function gameEffects.StartFires(
     pos,
     tr,
-    num,
+    amount,
     lifetime,
     explode,
     dmgowner,
-    spread_force,
+    forceSpread,
     immobile,
     size,
-    lifetime_variance
+    lifetimeVariance
 )
     local flames = {}
-    for i = 1, num do
+
+    for i = 1, amount do
         local ang = Angle(-math.Rand(0, 180), math.Rand(0, 360), math.Rand(0, 360))
         local vstart = pos + tr.HitNormal * 64
-        local ttl = lifetime + math.Rand(-lifetime_variance, lifetime_variance)
+        local ttl = lifetime + math.Rand(-lifetimeVariance, lifetimeVariance)
 
         local flame = ents.Create("ttt_flame")
         flame:SetPos(vstart)
@@ -62,7 +64,7 @@ function gameEffects.StartFires(
         if IsValid(phys) then
             -- the balance between mass and force is subtle, be careful adjusting
             phys:SetMass(2)
-            phys:ApplyForceCenter(ang:Forward() * spread_force)
+            phys:ApplyForceCenter(ang:Forward() * forceSpread)
             phys:AddAngleVelocity(Vector(ang.p, ang.r, ang.y))
         end
 
@@ -76,12 +78,12 @@ end
 -- Creates a single point of fire.
 -- @param Vector pos The position to create the fire at.
 -- @param number scale Controls the height of the flame more than its radius. Informs the size.
--- @param number life_span How long a fire will burn for.
+-- @param number lifeSpan How long a fire will burn for.
 -- @param nil|Entity owner The creator of the fire.
 -- @param nil|Entity parent The thing to attach the fire to.
 -- @return nil|Entity The fire it created, or nil if it was merged / couldn't be created.
 -- @realm server
-function gameEffects.SpawnFire(pos, scale, life_span, owner, parent)
+function gameEffects.SpawnFire(pos, scale, lifeSpan, owner, parent)
     local fire = ents.Create("env_fire")
 
     if not IsValid(fire) then
@@ -91,12 +93,15 @@ function gameEffects.SpawnFire(pos, scale, life_span, owner, parent)
     fire:SetParent(parent)
     fire:SetOwner(owner)
     fire:SetPos(pos)
+
     --no glow + delete when out + start on + last forever
     fire:SetKeyValue("spawnflags", tostring(128 + 32 + 4 + 2 + 1))
+
     -- hardly controls size, hitbox is goofy, impossible to work with
     fire:SetKeyValue("firesize", tostring(scale))
-    fire:SetKeyValue("health", tostring(life_span))
+    fire:SetKeyValue("health", tostring(lifeSpan))
     fire:SetKeyValue("ignitionpoint", "64")
+
     -- don't hurt the player because we're managing the hurtbox ourselves
     fire:SetKeyValue("damagescale", "0")
     fire:Spawn()
@@ -107,7 +112,7 @@ end
 
 ---
 -- greatly simplified version of SDK's game_shard/gamerules.cpp:RadiusDamage
--- does no block checking, radius should be very small
+-- does no block checking, radius should be very small.
 -- @note only hits players!
 -- @param DamageInfo dmginfo
 -- @param Vector pos
