@@ -16,7 +16,7 @@ local color_4 = Color(255, 200, 20)
 local color_5 = Color(255, 255, 200)
 
 local function LastWordsRecv()
-    local sender = net.ReadEntity()
+    local sender = net.ReadPlayer()
     local words = net.ReadString()
 
     local validSender = IsValid(sender)
@@ -36,7 +36,7 @@ end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
 local function TTT_RoleChat()
-    local sender = net.ReadEntity()
+    local sender = net.ReadPlayer()
     if not IsValid(sender) then
         return
     end

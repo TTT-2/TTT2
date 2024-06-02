@@ -118,7 +118,7 @@ net.Receive("TTT2ToggleTButton", function(len, ply)
     local ent = net.ReadEntity()
     local teamMode = net.ReadBool()
 
-    if not IsValid(ply) or not IsValid(ent) or not ply:IsAdmin() then
+    if not IsValid(ply) or not IsValid(ent) or not admin.IsAdmin(ply) then
         return
     end
 

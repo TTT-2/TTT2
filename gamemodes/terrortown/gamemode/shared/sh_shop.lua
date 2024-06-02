@@ -31,6 +31,15 @@ shop.globalBuyTable = shop.globalBuyTable or {}
 shop.teamBuyTable = shop.teamBuyTable or {}
 
 ---
+-- Initializes all necessary variables for the shop
+-- @realm shared
+function shop.Initialize()
+    if CLIENT then
+        shop.favorites.orm = orm.Make(shop.favorites.databaseName)
+    end
+end
+
+---
 -- Resets buy tables of shop
 -- @realm shared
 function shop.Reset()

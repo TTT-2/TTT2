@@ -678,6 +678,37 @@ function draw.GetTextSize(text, font, scale)
     return w * scale, h * scale
 end
 
+---
+-- Creates a text that is limited to the provided length. Adds a limiting char (e.g. '...') after the
+-- text if so desired. The limiting char is only added to the string (and also only then considered
+-- for the length) if the text without the limiting char is too long for the provided width.
+-- @param string text The text that may be limited in length
+-- @param number width The maximum width that should be used to limit the text
+-- @param[default="DefaultBold"] string font The font ID
+-- @param[opt] string limitChar The limiting character(s) that might be appended to the end
+-- @param[default=1.0] number scale The UI scale factor
+-- @return string The length limited text
+-- @realm client
+function draw.GetLimitedLengthText(text, width, font, limitChar, scale)
+    scale = scale or 1.0
+    limitChar = limitChar or ""
+
+    local widthText = draw.GetTextSize(text, font, scale)
+
+    if widthText <= width then
+        return text
+    end
+
+    if limitChar ~= "" then
+        width = width - draw.GetTextSize(limitChar, font, scale)
+    end
+
+    -- we use this function here that splits the text in multiple lines
+    local lines = InternalSplitLongWord(text, width, widthText)
+
+    return lines[1] .. limitChar
+end
+
 local cachedArcs = {}
 
 -- Generates an arc out of triangles that is cached in a table to reduce rendering time

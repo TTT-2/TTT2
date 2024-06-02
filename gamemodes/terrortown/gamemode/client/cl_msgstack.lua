@@ -11,6 +11,15 @@ MSTACK.last = 0
 local table = table
 local net = net
 
+sound.Add({
+    name = "Hud.Hint",
+    channel = CHAN_STATIC,
+    volume = 1.0,
+    level = SNDLVL_NONE,
+    pitch = 100,
+    sound = "ui/hint.wav",
+})
+
 local traitor_msg_bg = Color(255, 0, 0, 255)
 
 ---
@@ -105,6 +114,14 @@ function MSTACK:AddMessage(text, traitor_only)
     else
         self:AddColoredMessage(text)
     end
+end
+
+---
+-- Clears the whole MStack message buffer and resets the counter to 0.
+-- @realm client
+function MSTACK:ClearMessages()
+    MSTACK.msgs = {}
+    MSTACK.last = 0
 end
 
 -- Game state message channel

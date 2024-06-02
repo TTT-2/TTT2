@@ -6,6 +6,7 @@ local net = net
 local string = string
 local table = table
 local IsValid = IsValid
+local playerGetAll = player.GetAll
 
 ---
 -- Sends a GameMessage to every @{Player}
@@ -93,7 +94,7 @@ local function RoleChatMsg(sender, msg)
     end
 
     net.Start("TTT_RoleChat")
-    net.WriteEntity(sender)
+    net.WritePlayer(sender)
     net.WriteString(msg)
     net.Send(GetTeamChatFilter(senderTeam))
 end
@@ -103,7 +104,7 @@ end
 -- @realm server
 -- @internal
 function ShowRoundStartPopup()
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -123,7 +124,7 @@ end
 -- @realm server
 function GetPlayerFilter(pred)
     local filter = {}
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -297,9 +298,9 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, sender)
     local senderRoleData = sender:GetSubRoleData()
 
     if
-        GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
+        gameloop.GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
         or cv_ttt_spectators_chat_globally:GetBool() -- Spectators can chat freely
-        or not DetectiveMode() -- Mumbling
+        or not gameloop.IsDetectiveMode() -- Mumbling
         or not senderIsSpectator and not teamOnly -- General Chat
         or not senderIsSpectator
             and teamOnly
@@ -365,10 +366,10 @@ function GM:PlayerSay(ply, text, teamOnly)
         return text or ""
     end
 
-    if GetRoundState() == ROUND_ACTIVE then
+    if gameloop.GetRoundState() == ROUND_ACTIVE then
         local team_spec = ply:Team() == TEAM_SPEC
 
-        if team_spec and not DetectiveMode() then
+        if team_spec and not gameloop.IsDetectiveMode() then
             local filtered = {}
             local parts = string.Explode(" ", text)
 
@@ -427,7 +428,7 @@ local function LastWordsMsg(ply, words)
     local context = LastWordContext[ply.death_type] or ""
 
     net.Start("TTT_LastWordsMsg")
-    net.WriteEntity(ply)
+    net.WritePlayer(ply)
     net.WriteString(words .. (final and "" or "--") .. context)
     net.Broadcast()
 end
@@ -509,7 +510,7 @@ local function ttt_radio_send(ply, cmd, args)
         if IsValid(ent) then
             if ent:IsPlayer() then
                 name = ent:Nick()
-            elseif ent:GetClass() == "prop_ragdoll" then
+            elseif ent:IsPlayerRagdoll() then
                 name = LANG.NameParam("quick_corpse_id")
                 ragPlayerNick = CORPSE.GetPlayerNick(ent, "A Terrorist")
             end
@@ -527,7 +528,7 @@ local function ttt_radio_send(ply, cmd, args)
     if hook.Run("TTTPlayerRadioCommand", ply, msgName, msgTarget) then return end
 
     net.Start("TTT_RadioMsg")
-    net.WriteEntity(ply)
+    net.WritePlayer(ply)
     net.WriteString(msgName)
     net.WriteString(name)
 

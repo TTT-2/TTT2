@@ -36,7 +36,7 @@ function TBHUD:CacheEnts()
     self.buttons = {}
 
     if IsValid(ply) and ply:IsActive() then
-        local admin = ply:IsAdmin()
+        local admin = admin.IsAdmin(ply)
         local team = ply:GetTeam()
         local btns = ents.FindByClass("ttt_traitor_button")
 
@@ -77,6 +77,7 @@ function TBHUD:PlayerIsFocused()
         and ply:IsActive()
         and self.focus_but
         and (self.focus_but.access or self.focus_but.admin)
+        and self.focus_stick >= CurTime()
         and IsValid(self.focus_but.ent)
 end
 

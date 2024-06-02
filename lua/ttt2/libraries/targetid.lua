@@ -235,7 +235,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     end
 
     -- only add more information if in admin mode
-    if not admin_mode or not client:IsAdmin() then
+    if not admin_mode or not admin.IsAdmin(client) then
         return
     end
 
@@ -258,7 +258,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
         ParT("tbut_team_toggle", {
             usekey = key_params.usekey,
             walkkey = key_params.walkkey,
-            team = client:GetTeam():gsub("^%l", string.upper),
+            team = TryT(client:GetTeam()),
         }),
         COLOR_WHITE
     )
@@ -359,14 +359,16 @@ function targetid.HUDDrawTargetIDWeapons(tData)
         tData:SetSubtitle(
             ParT("target_pickup_weapon", key_params_wep)
                 .. (
-                    not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep) or ""
+                    not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep)
+                    or ""
                 )
         )
     elseif switchMode == SWITCHMODE_SWITCH then
         tData:SetSubtitle(
             ParT("target_switch_weapon", key_params_wep)
                 .. (
-                    not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep) or ""
+                    not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep)
+                    or ""
                 )
         )
     elseif switchMode == SWITCHMODE_FULLINV then
@@ -443,7 +445,7 @@ function targetid.HUDDrawTargetIDPlayers(tData)
     end
 
     -- show the role of a player if it is known to the client
-    local rstate = GetRoundState()
+    local rstate = gameloop.GetRoundState()
     local target_role
 
     if rstate == ROUND_ACTIVE and ent.HasRole and ent:HasRole() then
@@ -508,7 +510,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
     local c_wep = client:GetActiveWeapon()
 
     -- has to be a ragdoll
-    if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then
+    if not IsValid(ent) or not ent:IsPlayerRagdoll() then
         return
     end
 
@@ -517,7 +519,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
         return
     end
 
-    local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
+    local corpse_found = CORPSE.GetFound(ent, false) or not gameloop.IsDetectiveMode()
     local corpse_ply = corpse_found and CORPSE.GetPlayer(ent) or false
     local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars"
         or false
@@ -677,7 +679,7 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
         ent:IsWeapon()
         or ent.CanHavePrints
         or ent:GetNWBool("HasPrints", false)
-        or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+        or ent:IsPlayerRagdoll()
     then
         tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, { materialDNATargetID })
     else

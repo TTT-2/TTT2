@@ -217,6 +217,10 @@ addonChecker.curatedList = {
         reason = "Breaks random weapon spawns by overwriting the random weapon entity.",
         type = ADDON_INCOMPATIBLE,
     },
+    ["2705642928"] = { -- Graffiti by Leeroy
+        reason = "This addon doesn't use the TTT base correctly and also causes sound and broken playermodel issues.",
+        type = ADDON_INCOMPATIBLE,
+    },
     ["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
         alternative = "2150924507",
         reason = "Addon is broken and doesn't do anything.",
@@ -641,6 +645,31 @@ addonChecker.curatedList = {
     ["922285407"] = { -- Spring mine by Phoenixf
         alternative = "3166539189",
         reason = "The addon is completely broken and doesn't work at all. Also this rework has better integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["611873052"] = { -- Mirror fate by Hagen
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["340790912"] = { -- Mirror fate / Final hour by KhrumoX
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["2000714335"] = { -- Mirror fate remix by Pocable
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["1115379772"] = { -- Mirror fate by Steven3233
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["899488990"] = { -- Mirror fate by Keksgesicht
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
         type = ADDON_OUTDATED,
     },
 }

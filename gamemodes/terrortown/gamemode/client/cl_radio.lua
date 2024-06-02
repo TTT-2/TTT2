@@ -221,8 +221,8 @@ function RADIO:GetTargetType()
         else
             return ent, false
         end
-    elseif ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, "") ~= "" then
-        if DetectiveMode() and not CORPSE.GetFound(ent, false) then
+    elseif ent:IsPlayerRagdoll() then
+        if gameloop.IsDetectiveMode() and not CORPSE.GetFound(ent, false) then
             return "quick_corpse", true
         else
             return ent, false
@@ -241,7 +241,7 @@ function RADIO.ToPrintable(target)
     elseif IsValid(target) then
         if target:IsPlayer() then
             return target:Nick()
-        elseif target:GetClass() == "prop_ragdoll" then
+        elseif target:IsPlayerRagdoll() then
             return GetPTranslation(
                 "quick_corpse_id",
                 { player = CORPSE.GetPlayerNick(target, "A Terrorist") }
@@ -378,7 +378,7 @@ end
 concommand.Add("ttt_radio", RadioCommand, RadioComplete)
 
 local function RadioMsgRecv()
-    local sender = net.ReadEntity()
+    local sender = net.ReadPlayer()
     local msg = net.ReadString()
     local param = net.ReadString()
 

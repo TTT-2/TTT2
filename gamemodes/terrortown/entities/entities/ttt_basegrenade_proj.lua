@@ -56,28 +56,31 @@ end
 ---
 -- @ignore
 function ENT:Think()
-    local etime = self:GetExplodeTime() or 0
-    if etime ~= 0 and etime < CurTime() then
+    local timeExplosion = self:GetExplodeTime() or 0
+
+    if timeExplosion ~= 0 and timeExplosion < CurTime() then
+        local thrower = self:GetThrower()
+
         -- if thrower disconnects before grenade explodes, just don't explode
-        if SERVER and (not IsValid(self:GetThrower())) then
+        if SERVER and (not IsValid(thrower)) then
             self:Remove()
-            etime = 0
+
             return
         end
 
         -- find the ground if it's near and pass it to the explosion
-        local spos = self:GetPos()
+        local pos = self:GetPos()
         local tr = util.TraceLine({
-            start = spos,
-            endpos = spos + Vector(0, 0, -32),
-            mask = MASK_SHOT_HULL,
-            filter = self.thrower,
+            start = pos,
+            endpos = pos + Vector(0, 0, -32),
+            mask = MASK_SOLID_BRUSHONLY,
         })
 
         local success, err = pcall(self.Explode, self, tr)
         if not success then
             -- prevent effect spam on Lua error
             self:Remove()
+
             ErrorNoHaltWithStack("ERROR CAUGHT: ttt_basegrenade_proj: " .. err .. "\n")
         end
     end

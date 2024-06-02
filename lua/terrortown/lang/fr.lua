@@ -26,9 +26,6 @@ L.traitors = "Team des Traitres"
 L.round_minplayers = "Pas assez de joueurs pour commencer un nouveau round..."
 L.round_voting = "Un vote est en cours, le round est retardé de {num} secondes..."
 L.round_begintime = "Un nouveau round commencera dans {num} secondes. Préparez-vous."
-L.round_selected = "Les Traitres ont été choisis."
-L.round_started = "Le round a commencé!"
-L.round_restart = "Un admin a redémarré le round."
 
 L.round_traitors_one = "Traitre, vous êtes seul."
 L.round_traitors_more = "Traitres, voici vos alliés: {names}"
@@ -366,7 +363,6 @@ Essayez-le sur des corps tout frais pour récupérer l'ADN du tueur pour le traq
 
 -- Magneto stick
 L.magnet_name = "Magnéto-stick"
-L.magnet_help = "{primaryfire} pour attacher le corps sur cette surface."
 
 -- Grenades and misc
 L.grenade_smoke = "Grenade fumigène"
@@ -525,67 +521,61 @@ L.tip8 = "Les Traitres et les Détectives peuvent prendre les crédits d'équipe
 
 L.tip9 = "Le Poltergeist peut transformer n'importe quel objet physique en un projectile mortel. Chaque coup est un accompagné de coups d'énergie qui fait mal à tout le monde à proximité."
 
-L.tip10 = "Traitre ou Détective, gardez à l’œil les messages rouges en haut à droite. Ils sont importants pour vous."
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "Traitre ou Détective, gardez en tête que vous récompensez de crédits d'équipement si vos camarades et vous vous débrouillez bien. Assurez-vous de les dépenser!"
+L.tip11 = "Le scanner ADN des Détectives peut-être utilisé pour collecter des échantillons ADN d'armes et d'objets puis les scanner pour localiser le joueur qui les a utilisés. Pratique quand vous venez d'obtenir un échantillon d'un corps ou d'un C4 désamorcé!"
 
-L.tip12 = "Le scanner ADN des Détectives peut-être utilisé pour collecter des échantillons ADN d'armes et d'objets puis les scanner pour localiser le joueur qui les a utilisés. Pratique quand vous venez d'obtenir un échantillon d'un corps ou d'un C4 désamorcé!"
+L.tip12 = "Quand vous êtes proches de quelqu'un quand vous le tuez, un peu de votre ADN est déposé sur le corps. Cet ADN peut être utilisé pour le Scanner ADN d'un Détective pour vous localiser. Vous feriez mieux de cacher le corps quand vous coupez quelqu'un!"
 
-L.tip13 = "Quand vous êtes proches de quelqu'un quand vous le tuez, un peu de votre ADN est déposé sur le corps. Cet ADN peut être utilisé pour le Scanner ADN d'un Détective pour vous localiser. Vous feriez mieux de cacher le corps quand vous coupez quelqu'un!"
+L.tip13 = "Plus vous étiez quand vous avez tué quelqu'un, plus vite votre échantillon d'ADN sur son corps se dégradera."
 
-L.tip14 = "Plus vous étiez quand vous avez tué quelqu'un, plus vite votre échantillon d'ADN sur son corps se dégradera."
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "Vous êtes Traitre et vous allez sniper? Essayez le Déguisement. Si vous ratez voter coup, trouvez un endroit sécurisé, désactivez le Déguisement, et personne ne saura que c'était vous qui tiriez."
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "En tant que Traitre, le Téléporteur peut vous aider à vous enfuir quand on vous traque, et vous permet de voyager rapidement à travers une grande carte. Assurez-vous de marquer une position sécurisée avant."
+L.tip16 = "Les innocents sont tous groupés et vous n'arrivez pas à un en séparer un? Pourquoi pas utiliser la Radio pour jouer des sons de C4 ou d'un coup de feu pour les mener ailleurs?"
 
-L.tip17 = "Les innocents sont tous groupés et vous n'arrivez pas à un en séparer un? Pourquoi pas utiliser la Radio pour jouer des sons de C4 ou d'un coup de feu pour les mener ailleurs?"
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "Avec la Radio, en tant que Traitre, vous pouvez jouer des sons dans votre Menu des Équipements après que la radio a été placée. Mettez en attente plusieurs sons en cliquant sur plusieurs boutons dans l'ordre dans lequel vous voulez qu'ils soient."
+L.tip18 = "En tant que Détective, si vous avez des crédits en réserve, vous pourriez donner à un innocent de confiance un Démineur. Vous pourriez ensuite vous consacrez à un travail sérieux d'investigation et leur laisser le désamorçage risqué."
 
-L.tip19 = "En tant que Détective, si vous avez des crédits en réserve, vous pourriez donner à un innocent de confiance un Démineur. Vous pourriez ensuite vous consacrez à un travail sérieux d'investigation et leur laisser le désamorçage risqué."
+L.tip19 = "Les Jumelles des Détectives permettent une vue et une fouille longue portée des corps. Ce n'est pas bon pour les Traitres s'ils espéraient utiliser un corps comme appât. Bien sûr, ceux qui utilisent les jumelles sont désarmés et distraits..."
 
-L.tip20 = "Les Jumelles des Détectives permettent une vue et une fouille longue portée des corps. Ce n'est pas bon pour les Traitres s'ils espéraient utiliser un corps comme appât. Bien sûr, ceux qui utilisent les jumelles sont désarmés et distraits..."
+L.tip20 = "La Station de Soins des Détectives laisse les joueurs blessés guérir. Bien sûr, ces gens blessés pourraient bien être des Traitres..."
 
-L.tip21 = "La Station de Soins des Détectives laisse les joueurs blessés guérir. Bien sûr, ces gens blessés pourraient bien être des Traitres..."
+L.tip21 = "La Station de Soins enregistre un échantillon ADN de quiconque l'utilise. Les détectives peuvent l'utiliser avec le Scanner ADN pour trouver qui s'est soigné avec."
 
-L.tip22 = "La Station de Soins enregistre un échantillon ADN de quiconque l'utilise. Les détectives peuvent l'utiliser avec le Scanner ADN pour trouver qui s'est soigné avec."
+L.tip22 = "À l'inverse des armes et du C4, le dispositif Radio pour Traitres ne contiennent pas d'échantillon ADN de la personne qui l'a planté. Ne vous inquiétez donc pas d'un Détective qui gâcherait votre couverture."
 
-L.tip23 = "À l'inverse des armes et du C4, le dispositif Radio pour Traitres ne contiennent pas d'échantillon ADN de la personne qui l'a planté. Ne vous inquiétez donc pas d'un Détective qui gâcherait votre couverture."
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "Appuyez sur {helpkey} pour voir un court tutoriel ou modifier des options spécifiques au TTT. Par exemple, vous pouvez désactiver ces astuces pour de bon."
+L.tip24 = "Quand un Détective fouille un corps, les résultats sont disponibles pour tous les joueurs à travers le tableau de scores, en cliquant sur le nom de la personne morte."
 
-L.tip25 = "Quand un Détective fouille un corps, les résultats sont disponibles pour tous les joueurs à travers le tableau de scores, en cliquant sur le nom de la personne morte."
+L.tip25 = "Dans le tableau des scores, une icône de loupe à côté du nom de quelqu'un indique que vous avez déjà cherché des informations à propos de cette personne. Si l'icône est lumineuse, les données viennent d'un Détective et peuvent contenir des informations additionnelles."
 
-L.tip26 = "Dans le tableau des scores, une icône de loupe à côté du nom de quelqu'un indique que vous avez déjà cherché des informations à propos de cette personne. Si l'icône est lumineuse, les données viennent d'un Détective et peuvent contenir des informations additionnelles."
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "En tant que Détective, les corps avec une loupe après leur nom ont été fouillés par un Détective et leurs résultats sur accessibles pour tout le monde via le tableau des scores."
+L.tip27 = "Les Spectateurs peuvent appuyer sur {mutekey} pour choisir de mute les spectateurs et/ou les joueurs vivants."
 
-L.tip28 = "Les Spectateurs peuvent appuyer sur {mutekey} pour choisir de mute les spectateurs et/ou les joueurs vivants."
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "Si le serveur a installé des langues en plus, vous pouvez choisir une autre langue n'importe quand en appuyant sur F1 -> Langue."
+L.tip29 = "Les commandes quickchat ou 'radio' sont accessibles avec {zoomkey}."
 
-L.tip30 = "Les commandes quickchat ou 'radio' sont accessibles avec {zoomkey}."
+L.tip30 = "L'alt-fire du Pied de biche va pousser les autres joueurs."
 
-L.tip31 = "En tant que Spectateur, appuyez sur {duckkey} pour déverrouiller votre curseur et cliquer les boutons sur le panneau des astuces. Appuyez encore sur {duckkey} pour revenir en vue normale."
+L.tip31 = "Tirer à travers le viseur d'une arme augmentera légèrement votre précision et réduira le recul. S'accroupir, en revanche, non."
 
-L.tip32 = "L'alt-fire du Pied de biche va pousser les autres joueurs."
+L.tip32 = "Les grenades fumigènes sont efficaces dans les bâtiments, surtout pour créer de la confusion dans les salles bondées."
 
-L.tip33 = "Tirer à travers le viseur d'une arme augmentera légèrement votre précision et réduira le recul. S'accroupir, en revanche, non."
+L.tip33 = "En tant que Traitre, souvenez-vous que vous pouvez porter des cadavres et les cacher des pauvres yeux implorants des innocents et de leurs Détectives."
 
-L.tip34 = "Les grenades fumigènes sont efficaces dans les bâtiments, surtout pour créer de la confusion dans les salles bondées."
+L.tip34 = "Sur le tableau des scores, cliquez sur le nom d'un joueur vivant et vous pouvez lui poser un label pour eux comme 'suspect' ou 'ami'. Ce label apparaîtra sur la personne concernée en dessous de votre réticule."
 
-L.tip35 = "En tant que Traitre, souvenez-vous que vous pouvez porter des cadavres et les cacher des pauvres yeux implorants des innocents et de leurs Détectives."
+L.tip35 = "Beaucoup des équipements qui sont posables (comme le C4, ou la Radio) peuvent aussi être fixés sur des murs avec l'alt-fire."
 
-L.tip36 = "Le tutoriel accessible avec {helpkey} contient un aperçu des clés les plus importantes du jeu."
+L.tip36 = "Le C4 qui explose à cause d'une erreur de déminage a une plus petite explosion qu'un C4 qui atteint zéro sur le minuteur."
 
-L.tip37 = "Sur le tableau des scores, cliquez sur le nom d'un joueur vivant et vous pouvez lui poser un label pour eux comme 'suspect' ou 'ami'. Ce label apparaîtra sur la personne concernée en dessous de votre réticule."
-
-L.tip38 = "Beaucoup des équipements qui sont posables (comme le C4, ou la Radio) peuvent aussi être fixés sur des murs avec l'alt-fire."
-
-L.tip39 = "Le C4 qui explose à cause d'une erreur de déminage a une plus petite explosion qu'un C4 qui atteint zéro sur le minuteur."
-
-L.tip40 = "Si vous voyez 'MODE HÂTIF' au-dessus du chrono du round, le round ne durera au début que quelques minutes, mais chaque mort prolongera le temps restant (comme capturer un point de contrôle dans TF2). Ce mode met la pression aux traitres pour faire bouger les choses."
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "Rapport du round"
@@ -925,7 +915,7 @@ L.pickup_pending = "Vous avez déjà pris une arme, attendez de la recevoir"
 L.tbut_help_admin = "Éditer les paramètres du traître"
 L.tbut_role_toggle = " Appuyez sur [{walkkey} + {usekey}] pour basculer ce bouton pour {role}"
 L.tbut_role_config = "Rôle: {current}"
-L.tbut_team_toggle = "Appuyez sur [SHIFT + {walkkey} + {usekey}] pour basculer ce bouton pour la team {team}"
+L.tbut_team_toggle = "Appuyez sur [SHIFT + {walkkey} + {usekey}] pour basculer ce bouton pour la {team}"
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Configuration actuelle:"
 L.tbut_intended_config = "Configuration prévue par le créateur de la carte:"
@@ -1046,7 +1036,6 @@ L.label_damage_indicator_maxalpha = "Opacité maximale de l'indicateur de dégâ
 L.label_performance_halo_enable = "Dessinez un contour autour de certaines entités quand vous les regardez"
 L.label_performance_spec_outline_enable = "Activer les contours des objets contrôlés"
 L.label_performance_ohicon_enable = "Activer les icônes des rôles"
-L.label_interface_tips_enable = "Afficher des conseils de jeu au bas de l'écran en mode spectateur"
 L.label_interface_popup = "Durée du pop-up de début de round"
 L.label_interface_fastsw_menu = "Activer le menu avec un changement d'arme rapide"
 L.label_inferface_wswitch_hide_enable = "Activer la fermeture automatique du menu quand je change d'arme"
@@ -1668,6 +1657,8 @@ L.karma_unknown_tooltip = "Inconnu"
 --L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
 --L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 --L.label_locational_voice = "Enable proximity voice chat for living players"
+--L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+--L.label_locational_voice_range = "Proximity voice chat range"
 --L.label_armor_on_spawn = "Player armor on (re-)spawn"
 --L.label_prep_respawn = "Enable instant respawn during preparing phase"
 --L.label_preptime_seconds = "Preparing time in seconds"
@@ -2191,3 +2182,126 @@ L.decoy_help_primary = "Planter le leurre"
 
 -- 2024-03-04
 --L.use_entity = "Press [{usekey}] to use"
+
+-- 2024-03-06
+--L.submenu_gameplay_sounds_title = "Client-Sounds"
+
+--L.header_sounds_settings = "UI Sound Settings"
+
+--L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
+--L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+
+--L.label_enable_sound_interact = "Enable interaction sounds"
+--L.label_enable_sound_buttons = "Enable button sounds"
+--L.label_enable_sound_message = "Enable message sounds"
+
+--L.label_level_sound_interact = "Interaction sound level multiplier"
+--L.label_level_sound_buttons = "Button sound level multiplier"
+--L.label_level_sound_message = "Message sound level multiplier"
+
+-- 2024-03-07
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--
+--Note: Proximity chat is always disabled during the post round phase.]]
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+
+--L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
+--
+--Note: This setting is only available for weapons that enable this feature.]]
+--L.label_equipmenteditor_configurable_clip = "Configurable clip size"
+
+-- 2024-04-06
+--L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--
+--Set to 0 to disable this cut-off.]]
+
+-- 2024-04-07
+--L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
+--
+--Push-to-Talk: Hold down the key to talk.
+--Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
+--Toggle: Press the key to toggle your mic on/off.
+--Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
+--L.label_voice_activation = "Voice Chat Activation Mode"
+--L.label_voice_activation_mode_ptt = "Push to Talk"
+--L.label_voice_activation_mode_ptm = "Push to Mute"
+--L.label_voice_activation_mode_toggle_disabled = "Toggle"
+--L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+
+-- 2024-04-08
+--L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+--L.help_inspect_credits_always = [[
+--When shopping roles die, their credits can be picked up by other players with shopping roles.
+--
+--When this option is disabled, only players that can pick up credits can see them on a body.
+--When enabled, all players can see credits on a body.]]
+
+-- 2024-05-13
+--L.menu_commands_title = "Admin Commands"
+--L.menu_commands_description = "Change maps, spawn bots and edit player roles."
+
+--L.submenu_commands_maps_title = "Maps"
+
+--L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
+--L.header_maps_select = "Select and Change Maps"
+
+--L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-05-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
+
+-- 2024-05-25
+--L.help_round_restart_reset = [[
+--Restart a round or reset the level.
+--
+--Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
+
+--L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

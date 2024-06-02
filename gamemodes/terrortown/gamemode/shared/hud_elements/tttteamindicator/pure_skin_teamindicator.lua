@@ -36,7 +36,7 @@ if CLIENT then
 
     -- parameter overwrites
     function HUDELEMENT:ShouldDraw()
-        return GAMEMODE.round_state == ROUND_ACTIVE
+        return gameloop.GetRoundState() == ROUND_ACTIVE
     end
 
     function HUDELEMENT:InheritParentBorder()
@@ -87,7 +87,7 @@ if CLIENT then
             c = tm.color or COLOR_BLACK
         else -- player is dead and spectator
             icon = material_watching
-            c = COLOR_WARMGRAY
+            c = COLOR_SPEC
         end
 
         -- draw dark bottom overlay

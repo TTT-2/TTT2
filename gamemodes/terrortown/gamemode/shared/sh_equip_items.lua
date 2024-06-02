@@ -10,6 +10,7 @@ local pairs = pairs
 local util = util
 local hook = hook
 local math = math
+local playerGetAll = player.GetAll
 
 -- Details you shouldn't need:
 -- The number should increase by a factor of two for every item (ie. ids
@@ -525,7 +526,7 @@ if SERVER then
             end
         end
 
-        local tmpTbl = plys or player.GetAll()
+        local tmpTbl = plys or playerGetAll()
 
         local mathrandom = math.random
         local tableremove = table.remove
@@ -603,7 +604,7 @@ if SERVER then
         RANDOMSAVEDSHOPS[fallback] = nil
 
         local plys_with_fb = {}
-        local plys = player.GetAll()
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             local ply = plys[i]
@@ -1210,7 +1211,7 @@ if SERVER then
             SYNC_EQUIP[subrole][#SYNC_EQUIP[subrole] + 1] = equip_table.id
         end
 
-        local plys = player.GetAll()
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             SyncSingleEquipment(plys[i], subrole, equip_table.id, true)
@@ -1244,7 +1245,7 @@ if SERVER then
             break
         end
 
-        local plys = player.GetAll()
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             SyncSingleEquipment(plys[i], subrole, equip_table.id, false)

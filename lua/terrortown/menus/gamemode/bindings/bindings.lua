@@ -46,6 +46,25 @@ local function AddBindingCategory(category, parent)
 
                 currentBinding = keyNum
             end,
+            enableRun = true,
+            OnClickRun = function(button)
+                local bindingData = bind.registry[binding.name]
+
+                if not bindingData or not isfunction(bindingData.OnPressed) then
+                    return
+                end
+
+                bindingData.OnPressed()
+
+                -- run the release key binding a moment later
+                timer.Simple(0.1, function()
+                    if not bindingData or not isfunction(bindingData.OnReleased) then
+                        return
+                    end
+
+                    bindingData.OnReleased()
+                end)
+            end,
         })
     end
 end

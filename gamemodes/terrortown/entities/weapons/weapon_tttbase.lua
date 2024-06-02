@@ -128,6 +128,12 @@ SWEP.silentPickup = false
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
 SWEP.HotReloadableKeys = {}
 
+-- Set this to true if the weapon should have a custom clip size on buy that can be set in the equipment editor
+SWEP.EnableConfigurableClip = false
+
+-- The default clip on buy if `SWEP.EnableConfigurableClip` is set to true
+SWEP.ConfigurableClip = 1
+
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
 --	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
@@ -288,7 +294,12 @@ if CLIENT then
     ---
     -- @realm client
     -- stylua: ignore
-    local cvSizeCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+    local cvSizeLineCrosshair = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvSizeGapCrosshair = CreateConVar("ttt_crosshair_size_gap", "1.0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
@@ -309,6 +320,11 @@ if CLIENT then
     -- @realm client
     -- stylua: ignore
     local cvCrosshairStaticLength = CreateConVar("ttt_crosshair_static_length", "0", FCVAR_ARCHIVE)
+
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local cvCrosshairStaticGapLength = CreateConVar("ttt_crosshair_static_gap_length", "0", FCVAR_ARCHIVE)
 
     ---
     -- @realm client
@@ -335,6 +351,8 @@ if CLIENT then
     -- stylua: ignore
     local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
 
+    local cvEnableHUDBoxBlur = GetConVar("ttt2_hud_enable_box_blur")
+
     local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
     local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
 
@@ -353,15 +371,30 @@ if CLIENT then
             self:DrawHelp()
         end
 
-        if not cvEnableCrosshair:GetBool() then
-            return
+        self:DoDrawCrosshair(mathCeil(ScrW() * 0.5), mathCeil(ScrH() * 0.5), true)
+    end
+
+    ---
+    -- Called when the crosshair is about to get drawn, and allows you to override it.
+    -- @note This is a hook that is used to draw the crosshair. We use the function to prevent
+    -- the crosshair from being drawn and then use the same hook to draw our own custom
+    -- crosshair. The third parameter has therefore be set to true if the crosshair should
+    -- actually be drawn, otherwise the function only returns true to prevent the default one.
+    -- @param number xCenter The x center position of the crosshair
+    -- @param number yCenter The y center position of the crosshair
+    -- @param boolean shouldDraw Should the crosshair be drawn
+    -- @return boolean Return true to prevent the default crosshair from being drawn
+    -- @ref https://wiki.facepunch.com/gmod/WEAPON:DoDrawCrosshair
+    -- @hook
+    -- @realm client
+    function SWEP:DoDrawCrosshair(xCenter, yCenter, shouldDraw)
+        if not shouldDraw or not cvEnableCrosshair:GetBool() then
+            return true
         end
 
         local client = LocalPlayer()
         local sights = not self.NoSights and self:GetIronsights()
 
-        local xCenter = mathCeil(ScrW() * 0.5)
-        local yCenter = mathCeil(ScrH() * 0.5)
         local scale = appearance.GetGlobalScale()
         local baseConeWeapon = mathMax(0.2, 10 * self:GetPrimaryConeBase())
         local scaleWeapon = cvCrosshairUseWeaponscale:GetBool()
@@ -386,15 +419,19 @@ if CLIENT then
         )
 
         local alpha = sights and cvOpacitySights:GetFloat() or cvOpacityCrosshair:GetFloat()
-        local gap = mathCeil(25 * scaleWeapon * timescale * scale * cvSizeCrosshair:GetFloat())
         local thicknessLine = mathCeil(cvThicknessCrosshair:GetFloat() * scale)
         local thicknessOutline = mathCeil(cvThicknessOutlineCrosshair:GetFloat() * scale)
+        local gap = mathCeil(
+            25
+                * cvSizeGapCrosshair:GetFloat()
+                * (cvCrosshairStaticGapLength:GetBool() and baseConeWeapon or scaleWeapon * timescale)
+                * scale
+        )
         local lengthLine = mathCeil(
             gap
                 + 25
-                    * cvSizeCrosshair:GetFloat()
-                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon)
-                    * timescale
+                    * cvSizeLineCrosshair:GetFloat()
+                    * (cvCrosshairStaticLength:GetBool() and baseConeWeapon or scaleWeapon * timescale)
                     * scale
         )
         local offsetLine = mathCeil(thicknessLine * 0.5)
@@ -492,6 +529,8 @@ if CLIENT then
             )
             surface.DrawRect(xCenter - offsetLine, yCenter + gap, thicknessLine, lengthLine - gap)
         end
+
+        return true
     end
 
     local colorBox = Color(0, 0, 0, 100)
@@ -571,7 +610,7 @@ if CLIENT then
         local yLine = yDividerStart + 10 * scale
         local xDescription = xDivider + padding
 
-        if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
+        if cvEnableHUDBoxBlur:GetBool() then
             draw.BlurredBox(xBox, yBox, wBox, hBox)
             draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
             draw.Box(xBox, yBox, wBox, mathRound(1 * scale), colorBox) -- top line shadow
@@ -666,19 +705,14 @@ if CLIENT then
             secondary = secondary and ParT(secondary, translate_params)
         end
 
-        --find mouse keys in the texts to add respective icons
-        primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
-        secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2")
-            or nil
-
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, primary_key)
+            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, secondary_key)
+            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
         end
     end
 
@@ -742,16 +776,6 @@ if CLIENT then
     -- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
     -- @realm client
     function SWEP:DrawWeaponSelection() end
-
-    ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("lastinv")
-        end
-    end
 
     ---
     -- @realm client
@@ -840,9 +864,10 @@ if CLIENT then
         weaponrenderer.RenderWorldModel(self, self, self.customWorldModelElements, self:GetOwner())
     end
 
+    local weaponIsHidden = false
+
     ---
-    -- Allows you to modify viewmodel while the weapon in use before it is drawn.
-    -- @warning This hook only works if you haven't overridden @{GM:PreDrawViewModel}.
+    -- Allows you to modify the viewmodel of the weapon in use before it is drawn.
     -- @param Entity viewModel This is the view model entity before it is drawn
     -- @param Player ply The the owner of the view model
     -- @param Weapon wep This is the weapon that is from the view model
@@ -862,17 +887,38 @@ if CLIENT then
         if wep.UseHands and wep.ShowDefaultViewModel == false then
             viewModel:SetMaterial("vgui/hsv")
 
+            -- trigger a texture reset after the view model is drawn
+            weaponIsHidden = true
+
             return
         end
-
-        -- default case: Normal view model texture is used and view model draw is defined
-        -- with the SWEP.ShowDefaultViewModel variable
-        viewModel:SetMaterial("")
 
         -- only return something if we actually want to hide it because otherwise the SWEP
         -- hook is never called even if the view model is rendered
         if wep.ShowDefaultViewModel == false then
             return true
+        end
+    end)
+
+    ---
+    -- Allows you to modify the viewmodel of the weapon in use after it is drawn.
+    -- @param Entity viewModel This is the view model entity before it is drawn
+    -- @param Player ply The the owner of the view model
+    -- @param Weapon wep This is the weapon that is from the view model
+    -- @realm client
+    hook.Add("PostDrawViewModel", "TTT2ViewModelHiderReset", function(viewModel, ply, wep)
+        -- default case: Normal view model texture is used and view model draw is defined
+        -- with the SWEP.ShowDefaultViewModel variable
+
+        -- note: we only reset the material to the default material if it was previously set to
+        -- the invisible debug material. That way it is only applied to view models that are
+        -- intended to be invisible where it doesn't matter if it messes up their materials.
+        -- This is done because some weapons set custom materials to the view model (e.g. the
+        -- zombie perk bottles) and always resetting it makes the texture the error texture.
+        if weaponIsHidden then
+            viewModel:SetMaterial("")
+
+            weaponIsHidden = false
         end
     end)
 
@@ -934,7 +980,7 @@ end
 -- @realm shared
 function SWEP:DryFire(setnext)
     if CLIENT and LocalPlayer() == self:GetOwner() then
-        self:EmitSound("Weapon_Pistol.Empty")
+        self:EmitSound(")weapons/pistol/pistol_empty.wav", 75, 100, 0.7, CHAN_ITEM)
     end
 
     setnext(self, CurTime() + 0.2)
@@ -1001,20 +1047,26 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:ShootBullet
 -- @realm shared
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
+    local owner = self:GetOwner()
+
+    if not IsValid(owner) then
+        return
+    end
+
     self:SendWeaponAnim(self.PrimaryAnim)
 
-    self:GetOwner():MuzzleFlash()
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    owner:MuzzleFlash()
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     numbul = numbul or 1
     cone = cone or 0.02
 
     local bullet = {}
     bullet.Num = numbul
-    bullet.Src = self:GetOwner():GetShootPos()
-    bullet.Dir = self:GetOwner():GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
-    bullet.Tracer = 4
+    bullet.Tracer = 1
     bullet.TracerName = self.Tracer or "Tracer"
     bullet.Force = 10
     bullet.Damage = dmg * (self.damageScaling or 1)
@@ -1023,10 +1075,10 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         bullet.Callback = Sparklies
     end
 
-    self:GetOwner():FireBullets(bullet)
+    owner:FireBullets(bullet)
 
     -- Owner can die after firebullets
-    if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then
+    if not IsValid(owner) or owner:IsNPC() or not owner:Alive() then
         return
     end
 
@@ -1034,10 +1086,10 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         SERVER and game.SinglePlayer()
         or CLIENT and not game.SinglePlayer() and IsFirstTimePredicted()
     then
-        local eyeang = self:GetOwner():EyeAngles()
+        local eyeang = owner:EyeAngles()
         eyeang.pitch = eyeang.pitch - recoil
 
-        self:GetOwner():SetEyeAngles(eyeang)
+        owner:SetEyeAngles(eyeang)
     end
 end
 
@@ -1176,6 +1228,22 @@ function SWEP:Reload()
 end
 
 ---
+-- Called when the weapon entity is about to be removed
+-- @see https://wiki.facepunch.com/gmod/WEAPON:OnRemove
+-- @realm shared
+function SWEP:OnRemove()
+    if CLIENT then
+        local owner = self:GetOwner()
+
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
+
+    self:SetZoom(false)
+end
+
+---
 -- Called when the weapon entity is reloaded on a changelevel event
 -- @see https://wiki.facepunch.com/gmod/WEAPON:OnRestore
 -- @realm shared
@@ -1215,14 +1283,15 @@ if SERVER then
     -- does not occur when a drop happens for some reason. Hence this thing.
     -- @realm server
     function SWEP:PreDrop()
-        if not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then
+        local owner = self:GetOwner()
+        if not IsValid(owner) or self.Primary.Ammo == "none" then
             return
         end
 
         local ammo = self:Ammo1()
 
         -- Do not drop ammo if we have another gun that uses this type
-        local weps = self:GetOwner():GetWeapons()
+        local weps = owner:GetWeapons()
 
         for i = 1, #weps do
             local w = weps[i]
@@ -1241,7 +1310,7 @@ if SERVER then
         self.StoredAmmo = ammo
 
         if ammo > 0 then
-            self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
+            owner:RemoveAmmo(ammo, self.Primary.Ammo)
         end
     end
 
@@ -1428,6 +1497,12 @@ end
 function SWEP:Initialize()
     if CLIENT then
         self:InitializeCustomModels()
+    end
+
+    if self.EnableConfigurableClip then
+        self.Primary.ClipSize = self.ConfigurableClip or self.Primary.DefaultClip
+
+        self:SetClip1(self.ConfigurableClip or self.Primary.DefaultClip)
     end
 
     if CLIENT and self:Clip1() == -1 then

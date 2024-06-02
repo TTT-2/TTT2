@@ -8,6 +8,7 @@ local hook = hook
 local table = table
 local net = net
 local IsValid = IsValid
+local playerGetAll = player.GetAll
 
 local defuserNearRadius = 90000
 
@@ -161,11 +162,10 @@ function ENT:SphereDamage(dmgowner, center, radius)
     local d = 0.0
     local diff = nil
     local dmg = 0
-    local plys = player.GetAll()
 
+    local plys = playerGetAll()
     for i = 1, #plys do
         local ply = plys[i]
-
         if ply:Team() ~= TEAM_TERROR then
             continue
         end
@@ -224,7 +224,10 @@ function ENT:Explode(tr)
 
         local pos = self:GetPos()
 
-        if util.PointContents(pos) == CONTENTS_WATER or GetRoundState() ~= ROUND_ACTIVE then
+        if
+            util.PointContents(pos) == CONTENTS_WATER
+            or gameloop.GetRoundState() ~= ROUND_ACTIVE
+        then
             self:Remove()
             self:SetExplodeTime(0)
 
@@ -311,11 +314,10 @@ function ENT:IsDefuserInRange()
     local center = self:GetPos()
     local d = 0.0
     local diff = nil
-    local plys = player.GetAll()
 
+    local plys = playerGetAll()
     for i = 1, #plys do
         local ply = plys[i]
-
         if not ply:IsActive() or not ply:GetSubRoleData().isPolicingRole then
             continue
         end

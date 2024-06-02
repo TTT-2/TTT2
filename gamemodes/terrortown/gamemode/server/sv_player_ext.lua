@@ -8,6 +8,7 @@ local table = table
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
+local playerGetAll = player.GetAll
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -675,7 +676,7 @@ function plymeta:InitialSpawn()
     self.has_spawned = false
 
     -- The team the player spawns on depends on the round state
-    self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
+    self:SetTeam(gameloop.GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
 
     -- Change some gmod defaults
     self:SetCanZoom(false)
@@ -1097,7 +1098,7 @@ function plymeta:GetSpawnPosition()
 end
 
 ---
--- Sets the if a player was active (TEAM_TERROR) in a round.
+-- Sets the if a player was active (TEAM_TERROR) in a gameloop.
 -- @param boolean state The state
 -- @internal
 -- @realm server
@@ -1164,7 +1165,7 @@ local pendingItems = {}
 -- @param string cls
 -- @realm server
 function plymeta:GiveItem(cls)
-    if GetRoundState() == ROUND_PREP then
+    if gameloop.GetRoundState() == ROUND_PREP then
         pendingItems[self] = pendingItems[self] or {}
         pendingItems[self][#pendingItems[self] + 1] = cls
 
@@ -1250,7 +1251,7 @@ function plymeta:AnimPerformGesture(act)
     end
 
     net.Start("TTT_PerformGesture")
-    net.WriteEntity(self)
+    net.WritePlayer(self)
     net.WriteUInt(act, 16)
     net.Broadcast()
 end
@@ -1275,7 +1276,7 @@ end)
 
 -- reset confirm state only on round begin, not on revive
 hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1284,7 +1285,7 @@ end)
 
 -- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
 hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1677,6 +1678,10 @@ local function SetPlayerReady(_, ply)
     ttt2net.SendFullStateUpdate(ply)
 
     entspawnscript.TransmitToPlayer(ply)
+
+    map.SyncToClient(ply)
+
+    gameloop.PlayerReady(ply)
 
     ---
     -- @realm server

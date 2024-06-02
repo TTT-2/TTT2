@@ -59,6 +59,15 @@ CORPSE_KILL_DIRECTION_SIDE = 3
 -- stylua: ignore
 local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+---
+-- @realm shared
+-- off (0): only roles which have a shop can see credits on a body
+-- on (1), default: all roles can see credits on a body
+-- NOTE: On is default only for compatability. Many players seem to expect it to not be the case by default,
+--       so perhaps it'd be a good idea to default to off.
+-- stylua: ignore
+local cvCreditsVisibleToAll = CreateConVar("ttt2_inspect_credits_always_visible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
 local materialWeaponFallback = Material("vgui/ttt/missing_equip_icon")
 
 bodysearch = {}
@@ -74,7 +83,7 @@ end
 
 ---
 -- Checks if a given player is allowed to take credits from a given corpse-
--- @param Payer ply The player that tries to take credits
+-- @param Player ply The player that tries to take credits
 -- @param Entity rag The ragdoll where the credits should be taken from
 -- @param[default=false] isLongRange Whether the search is a long range search
 -- @return boolean Returns if the player is able to take credits
@@ -83,8 +92,9 @@ function bodysearch.CanTakeCredits(ply, rag, isLongRange)
     ---
     -- @realm shared
     -- stylua: ignore
-    if hook.Run("TTT2CheckFindCredits", ply, rag) == false then
-        return false
+    local hookOverride = hook.Run("TTT2CanTakeCredits", ply, rag, isLongRange)
+    if hookOverride ~= nil then
+        return hookOverride
     end
 
     local credits = CORPSE.GetCredits(rag, 0)
@@ -198,6 +208,13 @@ if SERVER then
     function bodysearch.GiveFoundCredits(ply, rag, isLongRange, searchUID)
         if bodysearch.CanTakeCredits(ply, rag, isLongRange) == false then
             return
+        end
+
+        ---
+        -- @realm shared
+        -- stylua: ignore
+        if hook.Run("TTT2GiveFoundCredits", ply, rag) == false then
+            return false
         end
 
         local corpseNick = CORPSE.GetPlayerNick(rag)
@@ -730,7 +747,7 @@ if CLIENT then
             -- special case: mode 2, only shopping roles can see credits
             local client = LocalPlayer()
             if
-                cvInspectConfirmMode:GetInt() == 2
+                (cvInspectConfirmMode:GetInt() == 2 or not cvCreditsVisibleToAll:GetBool())
                 and not bodysearch.CanTakeCredits(client, data.rag)
             then
                 return
@@ -994,65 +1011,62 @@ if CLIENT then
     -- New data will append/overwrite existing data, but not remove it.
     -- This functions considers the roles and the settings of the local player and the player that
     -- inspected the body.
-    -- @param SceneData sceneData The table of scene data that should be stored
+    -- @param SceneData newData The table of scene data that should be stored
     -- @note The data is stored as `bodySearchResult` on the ragdoll and the owner of the ragdoll
     -- @realm client
-    function bodysearch.StoreSearchResult(sceneData)
-        if not sceneData.ragOwner then
+    function bodysearch.StoreSearchResult(newData)
+        if not newData.ragOwner then
             return
         end
 
-        local ply = sceneData.ragOwner
-        local rag = sceneData.rag
+        local ply = newData.ragOwner
+        local rag = newData.rag
 
         -- do not store if searching player (client) is spectator
         if LocalPlayer():IsSpec() then
             return
         end
 
+        -- retrieve existing data
+        local oldData = ply.bodySearchResult or {}
+
+        -- keep the original finder info if previously searched by public policing role
         -- if the currently stored search result is by a public policing role, it should be kept
         -- it can be overwritten by another public policing role though
         -- data can still be updated, but the previous base is kept
-        local previousSceneDataBase
-        if
-            ply.bodySearchResult
-            and ply.bodySearchResult.base
-            and ply.bodySearchResult.base.isPublicPolicingSearch
-            and not sceneData.base.isPublicPolicingSearch
-        then
-            previousSceneDataBase = table.Copy(sceneData.base)
+        local previousOldDataBase
+        if oldData.base and oldData.base.isPublicPolicingSearch then
+            previousOldDataBase = table.Copy(oldData.base)
         end
 
         -- merge new data into old data
         -- this is useful if a player had good data on a body from another source
         -- and now gets updated info on it as it now only replaces the newly added
         -- entries
-        local newData = ply.bodySearchResult or {}
-        table.Merge(newData, sceneData)
+        table.Merge(oldData, newData)
 
-        -- keep the original finder info if previously searched by public policing role
-        newData.base = previousSceneDataBase or newData.base
+        oldData.base = previousOldDataBase or oldData.base
 
-        ply.bodySearchResult = newData
+        ply.bodySearchResult = oldData
 
         -- also store data in the ragdoll for targetID
         if not IsValid(rag) then
             return
         end
 
-        rag.bodySearchResult = newData
+        rag.bodySearchResult = oldData
     end
 
     ---
     -- Checks if the local player has a detailed search result of a given player.
     -- @param Player ply Then player whose search result should be checked
     -- @return boolean Returns if the local player has a detailed search result
-    -- @note A detailed search result means that the player knows the name of the
-    -- searched body. This is only known if the full data was transmitted.
     -- @realm client
     function bodysearch.PlayerHasDetailedSearchResult(ply)
-        -- note: the nick is only transmitted if there is full search data available
-        return IsValid(ply) and ply.bodySearchResult and ply.bodySearchResult.nick ~= nil
+        return IsValid(ply)
+            and ply.bodySearchResult
+            and ply.bodySearchResult.base
+            and ply.bodySearchResult.base.isPublicPolicingSearch
     end
 
     ---

@@ -169,7 +169,7 @@ if SERVER then
     -- @internal
     -- @realm server
     function door.SetUp()
-        local all_ents = ents.GetAll()
+        local all_ents = select(2, ents.Iterator())
         local doors = {}
 
         -- search for new doors

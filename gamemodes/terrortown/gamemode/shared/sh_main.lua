@@ -4,6 +4,7 @@
 local IsValid = IsValid
 local hook = hook
 local team = team
+local playerGetAll = player.GetAll
 
 local MAX_DROWN_TIME = 8
 
@@ -223,6 +224,8 @@ function GM:TTT2Initialize()
     hook.Run("TTT2BaseRoleInit")
 
     DefaultEquipment = GetDefaultEquipment()
+
+    shop.Initialize()
 end
 
 ---
@@ -288,6 +291,11 @@ end
 -- @realm shared
 -- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
+    -- stop movement while in loading screen
+    if loadingscreen.isShown then
+        return true
+    end
+
     SPEED:HandleSpeedCalculation(ply, moveData)
 
     local mul = ply:GetSpeedMultiplier()
@@ -398,18 +406,6 @@ end
 -- @realm shared
 function GM:TTT2PlayerSprintMultiplier(ply, sprintMultiplierModifier) end
 
----
--- A hook that is called whenever the gamemode needs to check if the player is in the superadmin usergroup.
--- This hook can be used to allow custom usergroups through these checks.
--- @note This hook grants access to powerful functionality, such as the gamemode configuration, damage logs and player role information. Only allow usergroups that absolutely need such access.
--- @param Player ply The player to be checked
--- @return boolean if the player is a valid usergroup
--- @hook
--- @realm shared
-function GM:TTT2AdminCheck(ply)
-    return ply:IsSuperAdmin()
-end
-
 -- Drowning and such
 local tm, ply, plys
 
@@ -427,10 +423,11 @@ function GM:Tick()
     end
 
     -- three cheers for micro-optimizations
-    plys = client and { client } or player.GetAll()
+    plys = client and { client } or playerGetAll()
 
     for i = 1, #plys do
         ply = plys[i]
+
         tm = ply:Team()
 
         if tm == TEAM_TERROR and ply:Alive() then
@@ -498,7 +495,7 @@ function GM:Tick()
             RADIO:StoreTarget()
         end
 
-        VOICE.Tick()
+        voicebattery.Tick()
     end
 end
 

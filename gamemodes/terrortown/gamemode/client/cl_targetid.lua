@@ -10,6 +10,7 @@ local math = math
 local IsValid = IsValid
 local hook = hook
 local targetid = targetid
+local playerGetAll = player.GetAll
 
 ---
 -- Make sure local TargetID Variables are initialized
@@ -86,7 +87,7 @@ local sizeIconOverHeadIcon = 0.7 * sizeOverHeadIcon
 -- @realm client
 function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
     local ang = client:EyeAngles()
-    local pos = ply:GetPos() + ply:GetHeightVector()
+    local pos = ply:GetPos() + ply:GetHeadPosition()
     pos.z = pos.z + offsetOverHeadIcon
 
     local shift = Vector(0, shiftOverHeadIcon, 0)
@@ -142,7 +143,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
     local client = LocalPlayer()
     local clientTarget = client:GetObserverTarget()
     local clientObsMode = client:GetObserverMode()
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
         cam.Start3D(EyePos(), EyeAngles())
@@ -218,12 +219,12 @@ end
 ---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
-    if not client:IsSpec() and GetRoundState() ~= ROUND_POST then
+    if not client:IsSpec() and gameloop.GetRoundState() ~= ROUND_POST then
         return
     end
 
     local tgt, scrpos, color, _
-    local plys = player.GetAll()
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -305,6 +306,11 @@ function GM:HUDDrawTargetID()
 
     -- make sure it is a valid entity
     if not IsValid(ent) or ent.NoTarget then
+        return
+    end
+
+    -- if the entity also is a focused marker vision element, then targetID should be hidden
+    if ent == markerVision.GetFocusedEntity() then
         return
     end
 

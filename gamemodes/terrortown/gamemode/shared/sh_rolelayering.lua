@@ -4,6 +4,8 @@
 -- @author Alf21
 -- @author Mineotopia
 
+local playerGetAll = player.GetAll
+
 rolelayering = {}
 
 local function SendLayerData(layerTable)
@@ -95,7 +97,7 @@ if SERVER then
     util.AddNetworkString("TTT2SyncRolelayerData")
 
     net.Receive("TTT2SyncRolelayerData", function(_, ply)
-        if not IsValid(ply) or not ply:IsAdmin() then
+        if not admin.IsAdmin(ply) then
             return
         end
 
@@ -123,10 +125,10 @@ if SERVER then
             roleselection.SaveLayers()
 
             if #layerData == 0 then -- is a reset
-                receiverTable = player.GetAll()
+                receiverTable = playerGetAll()
             else
                 -- send back to everyone but the person updating the data
-                local plys = player.GetAll()
+                local plys = playerGetAll()
 
                 for i = 1, #plys do
                     local p = plys[i]

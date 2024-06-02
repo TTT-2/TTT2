@@ -136,7 +136,7 @@ if SERVER then
         end
 
         if IsValid(ply) and not self:GetBeingWorn() then
-            if GetRoundState() ~= ROUND_ACTIVE then
+            if gameloop.GetRoundState() ~= ROUND_ACTIVE then
                 SafeRemoveEntity(self)
                 return
             elseif not CanEquipHat(ply) then

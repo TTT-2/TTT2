@@ -3,7 +3,9 @@
 -- @section key_manager
 
 local IsValid = IsValid
-local cv_sv_cheats = GetConVar("sv_cheats")
+local cvSVCheats = GetConVar("sv_cheats")
+
+local soundUse = Sound("buttons/lightswitch2.wav")
 
 local function SendWeaponDrop()
     RunConsoleCommand("ttt_dropweapon")
@@ -42,17 +44,13 @@ function GM:PlayerBindPress(ply, bindName, pressed)
     end
 
     if bindName == "invnext" and pressed then
-        if ply:IsSpec() then
-            TIPS.Next()
-        else
+        if not ply:IsSpec() then
             WSWITCH:SelectNext()
         end
 
         return true
     elseif bindName == "invprev" and pressed then
-        if ply:IsSpec() then
-            TIPS.Prev()
-        else
+        if not ply:IsSpec() then
             WSWITCH:SelectPrev()
         end
 
@@ -79,7 +77,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
 
         -- Find out if a marker is focussed otherwise check normal use
         local isClientOnly = false
-        local useEnt = markerVision.GetFocussedEntity()
+        local useEnt = markerVision.GetFocusedEntity()
         local isRemote = IsValid(useEnt)
         if not isRemote then
             local tr = util.TraceLine({
@@ -98,6 +96,8 @@ function GM:PlayerBindPress(ply, bindName, pressed)
                 isClientOnly = useEnt:ClientUse()
             end
         elseif isfunction(useEnt.RemoteUse) then
+            sound.ConditionalPlay(soundUse, SOUND_TYPE_INTERACT)
+
             isClientOnly = useEnt:RemoteUse(ply)
         end
 
@@ -151,7 +151,7 @@ function GM:PlayerBindPress(ply, bindName, pressed)
             end
         end
     elseif bindName == "noclip" and pressed then
-        if not cv_sv_cheats:GetBool() then
+        if not cvSVCheats:GetBool() then
             RunConsoleCommand("ttt_equipswitch")
 
             return true

@@ -62,90 +62,6 @@ local serverSizeVar = GetConVar("ttt_bem_sv_size")
 ---
 -- Some database functions of the shop
 
----
--- Creates the fav table if it not already exists
--- @realm client
-local function CreateFavTable()
-    if not sql.TableExists("ttt_bem_fav") then
-        local query = "CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT)"
-        sql.Query(query)
-    end
-end
-
----
--- Adds a @{WEAPON} or an @{ITEM} into the fav table
--- @param number steamid steamid of the @{Player}
--- @param number subrole subrole id
--- @param string id the @{WEAPON} or @{ITEM} id
--- @realm client
-local function AddFavorite(steamid, subrole, id)
-    local query = (
-        "INSERT INTO ttt_bem_fav VALUES('"
-        .. steamid
-        .. "','"
-        .. subrole
-        .. "','"
-        .. id
-        .. "')"
-    )
-    sql.Query(query)
-end
-
----
--- Removes a @{WEAPON} or an @{ITEM} into the fav table
--- @param number steamid steamid of the @{Player}
--- @param number subrole subrole id
--- @param string id the @{WEAPON} or @{ITEM} id
--- @realm client
-local function RemoveFavorite(steamid, subrole, id)
-    local query = (
-        "DELETE FROM ttt_bem_fav WHERE guid = '"
-        .. steamid
-        .. "' AND role = '"
-        .. subrole
-        .. "' AND weapon_id = '"
-        .. id
-        .. "'"
-    )
-    sql.Query(query)
-end
-
----
--- Get all favorites of a @{Player} based on the subrole
--- @param number steamid steamid of the @{Player}
--- @param number subrole subrole id
--- @return table list of all favorites based on the subrole
--- @realm client
-local function GetFavorites(steamid, subrole)
-    local query = (
-        "SELECT weapon_id FROM ttt_bem_fav WHERE guid = '"
-        .. steamid
-        .. "' AND role = '"
-        .. subrole
-        .. "'"
-    )
-
-    return sql.Query(query)
-end
-
----
--- Looks for weapon id in favorites table (result of GetFavorites)
--- @param table favorites favorites table
--- @param number id id of the @{WEAPON} or @{ITEM}
--- @return boolean
--- @realm client
-local function IsFavorite(favorites, id)
-    for _, value in pairs(favorites) do
-        local dbid = value["weapon_id"]
-
-        if dbid == tostring(id) then
-            return true
-        end
-    end
-
-    return false
-end
-
 local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
@@ -466,7 +382,6 @@ local function CreateEquipmentList(t)
     -- temp table for sorting
     local paneltablefav = {}
     local paneltable = {}
-    local steamid = client:SteamID64()
     local col = client:GetRoleColor()
 
     for k = 1, #itms do
@@ -500,9 +415,7 @@ local function CreateEquipmentList(t)
                 -- Favorites marker icon
                 ic.favorite = false
 
-                local favorites = GetFavorites(steamid, currole)
-
-                if favorites and IsFavorite(favorites, item.id) then
+                if shop.IsFavorite(item.id) then
                     ic.favorite = true
 
                     if showFavoriteVar:GetBool() then
@@ -1047,17 +960,7 @@ function TraitorMenuPopup()
             return
         end
 
-        local choice = pnl.item
-        local weapon = choice.id
-        local steamid = client:SteamID64()
-
-        CreateFavTable()
-
-        if pnl.favorite then
-            RemoveFavorite(steamid, role, weapon)
-        else
-            AddFavorite(steamid, role, weapon)
-        end
+        shop.SetFavoriteState(pnl.item.id, not pnl.favorite)
 
         -- Reload item list
         coroutine.resume(
@@ -1153,7 +1056,7 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- @ref https://wiki.facepunch.com/gmod/GM:OnContextMenuOpen
 -- @local
 function GM:OnContextMenuOpen()
-    local rs = GetRoundState()
+    local rs = gameloop.GetRoundState()
 
     if (rs == ROUND_PREP or rs == ROUND_POST) and not alwaysShowShopVar:GetBool() then
         CLSCORE:Toggle()

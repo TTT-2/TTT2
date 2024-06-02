@@ -53,9 +53,38 @@ function CLGAMEMODESUBMENU:Populate(parent)
 
     local form3 = vgui.CreateTTT2Form(parent, "header_voicechat_locational")
 
-    form3:MakeCheckBox({
+    form3:MakeHelp({
+        label = "help_locational_voice",
+    })
+
+    local enbLocVoice = form3:MakeCheckBox({
         serverConvar = "ttt_locational_voice",
         label = "label_locational_voice",
+    })
+
+    form3:MakeHelp({
+        label = "help_locational_voice_prep",
+        master = enbLocVoice,
+    })
+
+    form3:MakeCheckBox({
+        serverConvar = "ttt_locational_voice_prep",
+        label = "label_locational_voice_prep",
+        master = enbLocVoice,
+    })
+
+    form3:MakeHelp({
+        label = "help_locational_voice_range",
+        master = enbLocVoice,
+    })
+
+    form3:MakeSlider({
+        serverConvar = "ttt_locational_voice_range",
+        label = "label_locational_voice_range",
+        min = 0,
+        max = 3000,
+        decimal = 0,
+        master = enbLocVoice,
     })
 
     local form4 = vgui.CreateTTT2Form(parent, "header_textchat")

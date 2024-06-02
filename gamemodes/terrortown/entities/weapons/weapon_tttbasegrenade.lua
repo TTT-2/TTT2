@@ -34,7 +34,7 @@ SWEP.NoSights = true
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Delay = 1.0
+SWEP.Primary.Delay = 1
 SWEP.Primary.Ammo = "none"
 
 SWEP.Secondary.ClipSize = -1
@@ -63,7 +63,7 @@ AccessorFunc(SWEP, "pull_time", "PullTime", FORCE_NUMBER)
 ---
 -- @realm server
 -- stylua: ignore
-CreateConVar("ttt_nade_throw_during_prep", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cvNadeThrowDuringPrep = CreateConVar("ttt_nade_throw_during_prep", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- @ignore
@@ -77,7 +77,7 @@ end
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-    if GetRoundState() == ROUND_PREP and not GetConVar("ttt_nade_throw_during_prep"):GetBool() then
+    if gameloop.GetRoundState() == ROUND_PREP and not cvNadeThrowDuringPrep:GetBool() then
         return
     end
 
@@ -106,6 +106,8 @@ if CLIENT then
     -- stylua: ignore
     local cvEnableTrajectoryUI = CreateConVar("ttt2_grenade_trajectory_ui", 0, FCVAR_ARCHIVE)
 
+    local cvCrosshairOpacity = GetConVar("ttt_crosshair_opacity")
+
     local function AlphaLerp(from, frac, max)
         local fr = frac ^ 0.5
         return ColorAlpha(from, Lerp(fr, 0, math.min(max, 255)))
@@ -118,6 +120,7 @@ if CLIENT then
         local stepSize = 0.005
 
         local owner = self:GetOwner()
+
         local currentIterationPosition, _ =
             self:GetViewModelPosition(owner:EyePos(), owner:EyeAngles())
         local launchPosition, launchVelocity = self:GetThrowVelocity()
@@ -131,7 +134,7 @@ if CLIENT then
 
         local arcColor = appearance.ShouldUseGlobalFocusColor() and appearance.GetFocusColor()
             or self:GetOwner():GetRoleColor()
-        local arcAlpha = math.Round(GetConVar("ttt_crosshair_opacity"):GetFloat() * 255)
+        local arcAlpha = math.Round(cvCrosshairOpacity:GetFloat() * 255)
         local arcWidth = 0.6
         local arcWidthDiminishOverDistanceFactor = 0.25
         local arcSegmentLengthFactor = 0.5
@@ -158,7 +161,9 @@ if CLIENT then
 
             local denom = (stepDistance / stepSize) ^ arcWidthDiminishOverDistanceFactor
             local arcSegmentLength = from:DistToSqr(to) ^ arcSegmentLengthFactor
+
             i = (i + 1) % 2
+
             if i == 0 then
                 render.DrawBeam(
                     from,
@@ -186,8 +191,10 @@ if CLIENT then
 
                 local angleLeft = Angle(t.HitNormal:Angle())
                 angleLeft:RotateAroundAxis(t.HitNormal, -45)
+
                 local left = Vector(impactCrossVector)
                 left:Rotate(angleLeft)
+
                 render.DrawBeam(
                     hitPosition - (left * impactCrossSegmentLength),
                     hitPosition + left * impactCrossSegmentLength,
@@ -199,8 +206,10 @@ if CLIENT then
 
                 local angleUp = Angle(t.HitNormal:Angle())
                 angleUp:RotateAroundAxis(t.HitNormal, 45)
+
                 local up = Vector(impactCrossVector)
                 up:Rotate(angleUp)
+
                 render.DrawBeam(
                     hitPosition - (up * impactCrossSegmentLength),
                     hitPosition + up * impactCrossSegmentLength,
@@ -209,8 +218,10 @@ if CLIENT then
                     1,
                     drawColor
                 )
+
                 break
             end
+
             previousIterationPosition = pos
         end
 
@@ -274,7 +285,7 @@ function SWEP:Think()
             self:SendWeaponAnim(ACT_VM_THROW)
 
             if SERVER then
-                self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+                ply:SetAnimation(PLAYER_ATTACK1)
             end
         else
             -- still cooking it, see if our time is up
@@ -291,6 +302,7 @@ end
 -- @ignore
 function SWEP:BlowInFace()
     local ply = self:GetOwner()
+
     if not IsValid(ply) then
         return
     end
@@ -330,9 +342,12 @@ function SWEP:GetThrowVelocity()
         + (ply:Crouching() and ply:GetViewOffsetDucked() or ply:GetViewOffset())
         + (ang:Forward() * 8)
         + (ang:Right() * 10)
+
     local target = ply:GetEyeTraceNoCursor().HitPos
+
     -- A target angle to actually throw the grenade to the crosshair instead of forwards
     local tang = (target - src):Angle()
+
     -- Makes the grenade go upwards
     if tang.p < 90 then
         tang.p = -10 + tang.p * ((90 + 10) / 90)
@@ -343,8 +358,10 @@ function SWEP:GetThrowVelocity()
 
     -- Makes the grenade not go backwards :/
     tang.p = math.Clamp(tang.p, -90, 90)
+
     local vel = math.min(800, (90 - tang.p) * 6)
     local force = tang:Forward() * vel * self.throwForce + ply:GetVelocity()
+
     return src, force
 end
 
@@ -355,6 +372,7 @@ function SWEP:Throw()
         self:SetThrowTime(0)
     elseif SERVER then
         local ply = self:GetOwner()
+
         if not IsValid(ply) then
             return
         end
@@ -403,15 +421,13 @@ function SWEP:CreateGrenade(src, ang, vel, angimp, ply)
     gren:SetAngles(ang)
     gren:SetOwner(ply)
     gren:SetThrower(ply)
-    gren:SetGravity(0.4)
-    gren:SetFriction(0.2)
     gren:SetElasticity(0.45)
     gren:Spawn()
-    gren:PhysWake()
 
     local phys = gren:GetPhysicsObject()
 
     if IsValid(phys) then
+        phys:Wake()
         phys:SetVelocity(vel)
         phys:AddAngleVelocity(angimp)
     end
@@ -425,7 +441,7 @@ end
 ---
 -- @ignore
 function SWEP:PreDrop()
-    -- if owner dies or drops us while the pin has been pulled, create the armed
+    -- If owner dies or drops us while the pin has been pulled, create the armed
     -- grenade anyway
     if self:GetPin() then
         self:BlowInFace()
@@ -486,35 +502,24 @@ if CLIENT then
     local hudTextColor = Color(255, 255, 255, 180)
 
     ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("use", "weapon_ttt_unarmed")
-        end
-    end
-
-    ---
     -- @ignore
     function SWEP:DrawHUD()
         if self.HUDHelp then
             self:DrawHelp()
         end
 
-        if self:GetPin() and self:GetPullTime() > 0 then
+        local x = ScrW() * 0.5
+        local y = ScrH() * 0.5
+
+        local pulltime = self:GetPullTime()
+
+        if self:GetPin() and pulltime and pulltime > 0 then
             local client = LocalPlayer()
 
-            local x = ScrW() * 0.5
-            local y = ScrH() * 0.5
             y = y + (y / 3)
 
             local pct = 1
-                - math.Clamp(
-                    (CurTime() - self:GetPullTime()) / (self:GetDetTime() - self:GetPullTime()),
-                    0,
-                    1
-                )
+                - math.Clamp((CurTime() - pulltime) / (self:GetDetTime() - pulltime), 0, 1)
 
             local scale = appearance.GetGlobalScale()
             local w, h = 100 * scale, 20 * scale
@@ -523,7 +528,7 @@ if CLIENT then
             draw.AdvancedText(
                 TryT("grenade_fuse"),
                 "PureSkinBar",
-                x - w / 2,
+                x - 0.5 * w,
                 y - h,
                 hudTextColor,
                 TEXT_ALIGN_LEFT,
@@ -534,6 +539,8 @@ if CLIENT then
             draw.Box(x - w / 2 + scale, y - h + scale, w * pct, h, COLOR_BLACK)
             draw.OutlinedShadowedBox(x - w / 2, y - h, w, h, scale, drawColor)
             draw.Box(x - w / 2, y - h, w * pct, h, drawColor)
+        else
+            self:DoDrawCrosshair(x, y, true)
         end
     end
 end

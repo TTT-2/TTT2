@@ -26,9 +26,6 @@ L.spectators = "Спостерігачі"
 L.round_minplayers = "Недостатньо гравців, щоб розпочати новий раунд..."
 L.round_voting = "Триває голосування, новий раунд відкладено на {num} секунд..."
 L.round_begintime = "Новий раунд розпочнеться через {num} секунд. Приготуйтесь."
-L.round_selected = "Зрадників було обрано."
-L.round_started = "Раунд розпочато!"
-L.round_restart = "Раунд перезавантажено адміністратором."
 
 L.round_traitors_one = "Зрадник, ти один."
 L.round_traitors_more = "Зрадник, ось твої союзники: {names}"
@@ -366,7 +363,6 @@ L.dna_desc = [[
 
 -- Magneto stick
 L.magnet_name = "Магнітна палиця"
-L.magnet_help = "Використовуйте {primaryfire}, щоб прикріпити тіло до поверхні."
 
 -- Grenades and misc
 L.grenade_smoke = "Димова шашка"
@@ -525,67 +521,61 @@ L.tip8 = "Зрадники та Детективи можуть збирати �
 
 L.tip9 = "Полтергейст може перетворити будь-який фізичний об’єкт на смертоносний снаряд. Кожен удар супроводжується вибухом енергії, що завдає шкоди будь-кому поблизу."
 
-L.tip10 = "Як Зрадник або Детектив, слідкуйте за червоними повідомленнями у верхньому правому куті. Вони можуть бути важливими для вас."
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "Майте на увазі, що як зрадник або як детектив ви отримаєте додаткові кредити обладнання, якщо ви та ваші товариші будуть мати успіх у виконанні своїх завдань. Не забудьте їх витратити!"
+L.tip11 = "Сканер ДНК детективів можна використовувати, щоб зібрати зразки ДНК зі зброї та предметів, проаналізувавши їх, знайти місцеперебування гравця, який їх використовував. Корисно, коли ви можете отримати зразок з тіла або знешкодженої вибухівки C4!"
 
-L.tip12 = "Сканер ДНК детективів можна використовувати, щоб зібрати зразки ДНК зі зброї та предметів, проаналізувавши їх, знайти місцеперебування гравця, який їх використовував. Корисно, коли ви можете отримати зразок з тіла або знешкодженої вибухівки C4!"
+L.tip12 = "Коли ви поблизу людини, яку вбиваєте, частина вашої ДНК залишається на тілі жертви. Цю ДНК можна використати за допомогою сканера ДНК детектива, щоб визначити ваше поточне місцеперебування. Краще сховати тіло після того, як ви когось зарізали!"
 
-L.tip13 = "Коли ви поблизу людини, яку вбиваєте, частина вашої ДНК залишається на тілі жертви. Цю ДНК можна використати за допомогою сканера ДНК детектива, щоб визначити ваше поточне місцеперебування. Краще сховати тіло після того, як ви когось зарізали!"
+L.tip13 = "Чим далі ви знаходитесь від того, кого вбиваєте, тим швидше ваш зразок ДНК на його тілі розпадеться."
 
-L.tip14 = "Чим далі ви знаходитесь від того, кого вбиваєте, тим швидше ваш зразок ДНК на його тілі розпадеться."
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "Ви зрадник і збираєтесь стріляти? Спробуйте Маскування. Якщо ви промахнулися, біжіть у безпечне місце, вимкніть Маскування, і ніхто не дізнається, що це ви стріляли в них."
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "Як Зрадник, Телепорт може допомогти вам втекти, коли вас переслідують, і дозволяє швидко подорожувати великою мапою. Переконайтеся, що у вас завжди є позначена безпечна локація."
+L.tip16 = "Всі невинні згруповані і їх важко розділити? Спробуйте за допомогою Радіо відтворити звуки C4 або перестрілки, щоб відвести деяких із них."
 
-L.tip17 = "Всі невинні згруповані і їх важко розділити? Спробуйте за допомогою Радіо відтворити звуки C4 або перестрілки, щоб відвести деяких із них."
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "Як Зрадник, ви можете відтворювати звуки через меню обладнання після розміщення Радіо. Додайте кілька звуків у чергу, натиснувши кілька кнопок у потрібному вам порядку."
+L.tip18 = "Як Детектив, якщо у вас залишилися кредити, ви можете дати надійному Невинному Знешкоджувач. Тоді ви можете витратити свій час на більш серйозне розслідування та залишити ризиковане знешкодження бомби йому."
 
-L.tip19 = "Як Детектив, якщо у вас залишилися кредити, ви можете дати надійному Невинному Знешкоджувач. Тоді ви можете витратити свій час на більш серйозне розслідування та залишити ризиковане знешкодження бомби йому."
+L.tip19 = "Окуляр Детектива дозволяє здійснювати пошук та ідентифікацію тіл на великій відстані. Погана новина, якщо зрадники сподівалися використати тіло як приманку. Користуючись окуляром, детектив неозброєний і розсіяний, користуйтеся цим!"
 
-L.tip20 = "Окуляр Детектива дозволяє здійснювати пошук та ідентифікацію тіл на великій відстані. Погана новина, якщо зрадники сподівалися використати тіло як приманку. Користуючись окуляром, детектив неозброєний і розсіяний, користуйтеся цим!"
+L.tip20 = "Оздоровча Станція Детективів дозволяє пораненим гравцям лікуватися. Звичайно, ті поранені могли бути зрадниками..."
 
-L.tip21 = "Оздоровча Станція Детективів дозволяє пораненим гравцям лікуватися. Звичайно, ті поранені могли бути зрадниками..."
+L.tip21 = "Оздоровча Станція записує зразок ДНК кожного, хто нею користувався. Детективи можуть використовувати сканер ДНК, щоб дізнатися, хто зцілявся."
 
-L.tip22 = "Оздоровча Станція записує зразок ДНК кожного, хто нею користувався. Детективи можуть використовувати сканер ДНК, щоб дізнатися, хто зцілявся."
+L.tip22 = "На відміну від зброї та вибухівки C4, радіообладнання Зрадників не містить зразки ДНК людини, яка його підклала. Не хвилюйтеся, що детективи знайдуть їх та розкриють ваше прикриття."
 
-L.tip23 = "На відміну від зброї та вибухівки C4, радіообладнання Зрадників не містить зразки ДНК людини, яка його підклала. Не хвилюйтеся, що детективи знайдуть їх та розкриють ваше прикриття."
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "Натисніть {helpkey}, щоб переглянути короткий посібник або змінити деякі специфічні налаштування TTT. Наприклад, ви можете назавжди вимкнути ці підказки саме там."
+L.tip24 = "Коли детектив огляне тіло, результат дослідження стане доступним для всіх гравців через табло рахунку. Для цього натисніть на ім’я померлої людини."
 
-L.tip25 = "Коли детектив огляне тіло, результат дослідження стане доступним для всіх гравців через табло рахунку. Для цього натисніть на ім’я померлої людини."
+L.tip25 = "На табло рахунку лупа поруч з іменем гравця вказує на те, що у вас є інформація про нього. Якщо значок яскравий, дані надходять від детектива та можуть містити додаткову інформацію."
 
-L.tip26 = "На табло рахунку лупа поруч з іменем гравця вказує на те, що у вас є інформація про нього. Якщо значок яскравий, дані надходять від детектива та можуть містити додаткову інформацію."
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "Тіла з лупою після імені гравця вказують на те, що їх було оглянуто детективом. Інформація про огляд доступна всім іншим гравцям через табло рахунку."
+L.tip27 = "Спостерігачі можуть натискати {mutekey}, щоб вибрати заглушку іншим спостерігачам або живим гравцям."
 
-L.tip28 = "Спостерігачі можуть натискати {mutekey}, щоб вибрати заглушку іншим спостерігачам або живим гравцям."
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "Якщо на сервері встановлено додаткову мову, ви можете будь-коли перемкнутися на неї у меню «Налаштування»."
+L.tip29 = "Швидкі повідомлення або радіокоманди можна використовувати, натиснувши {zoomkey}."
 
-L.tip30 = "Швидкі повідомлення або радіокоманди можна використовувати, натиснувши {zoomkey}."
+L.tip30 = "Альтернативна атака лома штовхає інших гравців."
 
-L.tip31 = "Як спостерігач натисніть {duckkey}, щоб розблокувати курсор миші й мати можливість натискати кнопки на цій панелі підказок. Натисніть {duckkey} ще раз, щоб повернутися до керування мишею."
+L.tip31 = "Стрільба через приціл зброї дещо збільшить вашу точність і зменшить віддачу. Присідання такого не робить."
 
-L.tip32 = "Альтернативна атака лома штовхає інших гравців."
+L.tip32 = "Димові шашки ефективні в закритих приміщеннях для створення плутанини в людних місцях."
 
-L.tip33 = "Стрільба через приціл зброї дещо збільшить вашу точність і зменшить віддачу. Присідання такого не робить."
+L.tip33 = "Як Зрадник, пам’ятайте, що ви можете носити тіла та ховати їх від допитливих очей невинних та детективів."
 
-L.tip34 = "Димові шашки ефективні в закритих приміщеннях для створення плутанини в людних місцях."
+L.tip34 = "На табло рахунку клацніть ім’я живого гравця, щоб ви могли вибрати для нього тег, наприклад «підозрюваний» або «друг». Цей тег з’явиться, коли вони будуть знаходитись під прицілом."
 
-L.tip35 = "Як Зрадник, пам’ятайте, що ви можете носити тіла та ховати їх від допитливих очей невинних та детективів."
+L.tip35 = "Багато предметів розміщеного обладнання (наприклад, C4, радіо) можна прикріпити до стін за допомогою альтернативної атаки."
 
-L.tip36 = "Посібник, доступний у розділі {helpkey}, містить огляд найважливіших клавіш у грі."
+L.tip36 = "Вибухівка C4, яка вибухає через помилку під час знешкодження, має менший вибух, ніж C4, яка досягає нуля на своєму часовому пристрої."
 
-L.tip37 = "На табло рахунку клацніть ім’я живого гравця, щоб ви могли вибрати для нього тег, наприклад «підозрюваний» або «друг». Цей тег з’явиться, коли вони будуть знаходитись під прицілом."
-
-L.tip38 = "Багато предметів розміщеного обладнання (наприклад, C4, радіо) можна прикріпити до стін за допомогою альтернативної атаки."
-
-L.tip39 = "Вибухівка C4, яка вибухає через помилку під час знешкодження, має менший вибух, ніж C4, яка досягає нуля на своєму часовому пристрої."
-
-L.tip40 = "Якщо над таймером раунду написано «РЕЖИМ ПОСПІХУ», раунд спочатку триватиме лише кілька хвилин, але з кожною смертю доступний час буде збільшуватися (як для захоплення точки в TF2). Цей режим чинить тиск на зрадників, щоб вони продовжували діяти."
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "Доповідь про раунд"
@@ -925,7 +915,7 @@ L.idle_popup_title = "Бездіяльність"
 --L.tbut_help_admin = "Edit traitor button settings"
 --L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
 --L.tbut_role_config = "Role: {current}"
---L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
 --L.tbut_team_config = "Team: {current}"
 --L.tbut_current_config = "Current config:"
 --L.tbut_intended_config = "Intended config by map creator:"
@@ -1033,7 +1023,7 @@ L.help_title = "Допомога та Налаштування"
 --L.label_crosshair_enable = "Enable crosshair"
 --L.label_crosshair_opacity = "Crosshair opacity"
 --L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
---L.label_crosshair_size = "Crosshair size multiplier"
+--L.label_crosshair_size = "Crosshair line size multiplier"
 --L.label_crosshair_thickness = "Crosshair thickness multiplier"
 --L.label_crosshair_thickness_outline = "Crosshair outline thickness multiplier"
 --L.label_crosshair_scale_enable = "Enable dynamic crosshair scale"
@@ -1046,7 +1036,6 @@ L.help_title = "Допомога та Налаштування"
 --L.label_performance_halo_enable = "Draw an outline around some entities while looking at them"
 --L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
 --L.label_performance_ohicon_enable = "Enable role icons over players' heads"
---L.label_interface_tips_enable = "Show gameplay tips at the bottom of the screen while spectating"
 --L.label_interface_popup = "Start of round info popup duration"
 --L.label_interface_fastsw_menu = "Enable menu with fast weapon switch"
 --L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
@@ -1668,6 +1657,8 @@ L.hilite_win_traitors = "ЗРАДНИКИ ПЕРЕМОГЛИ"
 --L.label_voice_drain_admin = "Drain per tick for admins and public policing roles"
 --L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 --L.label_locational_voice = "Enable proximity voice chat for living players"
+--L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+--L.label_locational_voice_range = "Proximity voice chat range"
 --L.label_armor_on_spawn = "Player armor on (re-)spawn"
 --L.label_prep_respawn = "Enable instant respawn during preparing phase"
 --L.label_preptime_seconds = "Preparing time in seconds"
@@ -2191,3 +2182,126 @@ L.body_confirm_one = "{finder} підтверджує смерть {victim}."
 
 -- 2024-03-04
 --L.use_entity = "Press [{usekey}] to use"
+
+-- 2024-03-06
+--L.submenu_gameplay_sounds_title = "Client-Sounds"
+
+--L.header_sounds_settings = "UI Sound Settings"
+
+--L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
+--L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+
+--L.label_enable_sound_interact = "Enable interaction sounds"
+--L.label_enable_sound_buttons = "Enable button sounds"
+--L.label_enable_sound_message = "Enable message sounds"
+
+--L.label_level_sound_interact = "Interaction sound level multiplier"
+--L.label_level_sound_buttons = "Button sound level multiplier"
+--L.label_level_sound_message = "Message sound level multiplier"
+
+-- 2024-03-07
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+
+-- 2024-03-31
+--L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--
+--Note: Proximity chat is always disabled during the post round phase.]]
+--L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+
+--L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
+--
+--Note: This setting is only available for weapons that enable this feature.]]
+--L.label_equipmenteditor_configurable_clip = "Configurable clip size"
+
+-- 2024-04-06
+--L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--
+--Set to 0 to disable this cut-off.]]
+
+-- 2024-04-07
+--L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
+--
+--Push-to-Talk: Hold down the key to talk.
+--Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
+--Toggle: Press the key to toggle your mic on/off.
+--Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
+--L.label_voice_activation = "Voice Chat Activation Mode"
+--L.label_voice_activation_mode_ptt = "Push to Talk"
+--L.label_voice_activation_mode_ptm = "Push to Mute"
+--L.label_voice_activation_mode_toggle_disabled = "Toggle"
+--L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+
+-- 2024-04-08
+--L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+--L.help_inspect_credits_always = [[
+--When shopping roles die, their credits can be picked up by other players with shopping roles.
+--
+--When this option is disabled, only players that can pick up credits can see them on a body.
+--When enabled, all players can see credits on a body.]]
+
+-- 2024-05-13
+--L.menu_commands_title = "Admin Commands"
+--L.menu_commands_description = "Change maps, spawn bots and edit player roles."
+
+--L.submenu_commands_maps_title = "Maps"
+
+--L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
+--L.header_maps_select = "Select and Change Maps"
+
+--L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-05-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
+
+-- 2024-05-25
+--L.help_round_restart_reset = [[
+--Restart a round or reset the level.
+--
+--Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
+
+--L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
