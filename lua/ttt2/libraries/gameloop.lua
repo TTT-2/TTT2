@@ -663,7 +663,11 @@ if SERVER then
     -- @param number state The new round state
     -- @realm server
     function gameloop.SetRoundState(state)
-        gameloop.roundState = state
+        -- note: this is stored on the GAMEMODE table for two reasons:
+        -- - it is compatible with addons that try to access this variable directly
+        -- - it is hotreload safe because the table is kept on reload
+        GAMEMODE.round_state = state
+
         gameloop.SendRoundState()
 
         events.Trigger(EVENT_GAME, state)
@@ -806,13 +810,13 @@ if CLIENT then
     net.Receive("TTT_RoundState", function()
         local oldRoundState = gameloop.GetRoundState()
 
-        gameloop.roundState = net.ReadUInt(3)
+        GAMEMODE.round_state = net.ReadUInt(3)
 
-        if oldRoundState ~= gameloop.roundState then
-            gameloop.RoundStateChange(oldRoundState, gameloop.roundState)
+        if oldRoundState ~= GAMEMODE.round_state then
+            gameloop.RoundStateChange(oldRoundState, GAMEMODE.round_state)
         end
 
-        Dev(1, "New round state: " .. gameloop.roundState)
+        Dev(1, "New round state: " .. GAMEMODE.round_state)
     end)
 end
 
@@ -821,7 +825,7 @@ end
 -- @return number The current round state
 -- @realm shared
 function gameloop.GetRoundState()
-    return gameloop.roundState
+    return GAMEMODE.round_state
 end
 
 ---
