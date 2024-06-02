@@ -180,7 +180,7 @@ function SWEP:PrimaryAttack()
             --edata:SetDamageType(DMG_CLUB)
             edata:SetEntity(hitEnt)
 
-            if hitEnt:IsPlayer() or hitEnt:GetClass() == "prop_ragdoll" then
+            if hitEnt:IsPlayer() or hitEnt:IsPlayerRagdoll() then
                 util.Effect("BloodImpact", edata)
 
                 -- does not work on players rah
@@ -264,7 +264,7 @@ function SWEP:SecondaryAttack()
         tr.Hit
         and IsValid(ply)
         and ply:IsPlayer()
-        and (owner:EyePos() - tr.HitPos):Length() < 100
+        and (owner:EyePos() - tr.HitPos):LengthSqr() < 10000 -- 100hu
     then
         ---
         -- @realm shared

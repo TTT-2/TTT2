@@ -915,7 +915,7 @@ L.pickup_pending = "Você já pegou uma arma, espere alguns segundos."
 L.tbut_help_admin = "Configurar botão de traidor"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] para ocultar este botão para {role}"
 L.tbut_role_config = "Papel: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para ocultar o botão do time {team}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para ocultar o botão do {team}"
 L.tbut_team_config = "Time: {current}"
 L.tbut_current_config = "Configuração padrão:"
 L.tbut_intended_config = "Configuração padrão do padrão do criador do mapa:"
@@ -2301,3 +2301,7 @@ L.decoy_help_primary = "Plantar a isca"
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

@@ -11,6 +11,7 @@ ttt_include("sh_shop")
 ttt_include("sh_shopeditor")
 ttt_include("sh_network_sync")
 ttt_include("sh_door")
+ttt_include("sh_entity")
 ttt_include("sh_voice")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
@@ -111,26 +112,6 @@ local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}
 -- @realm server
 -- stylua: ignore
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local voice_drain_normal = CreateConVar("ttt_voice_drain_normal", "0.2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local voice_drain_admin = CreateConVar("ttt_voice_drain_admin", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
----
--- @realm server
--- stylua: ignore
-local voice_drain_recharge = CreateConVar("ttt_voice_drain_recharge", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- @realm server
@@ -499,11 +480,6 @@ function GM:SyncGlobals()
     SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
     SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
 
-    SetGlobalBool(voice_drain:GetName(), voice_drain:GetBool())
-    SetGlobalFloat(voice_drain_normal:GetName(), voice_drain_normal:GetFloat())
-    SetGlobalFloat(voice_drain_admin:GetName(), voice_drain_admin:GetFloat())
-    SetGlobalFloat(voice_drain_recharge:GetName(), voice_drain_recharge:GetFloat())
-
     local rlsList = roles.GetList()
 
     for i = 1, #rlsList do
@@ -529,22 +505,6 @@ end)
 
 cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
     SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
-end)
-
-cvars.AddChangeCallback(voice_drain:GetName(), function(cv, old, new)
-    SetGlobalBool(voice_drain:GetName(), tobool(tonumber(new)))
-end)
-
-cvars.AddChangeCallback(voice_drain_normal:GetName(), function(cv, old, new)
-    SetGlobalFloat(voice_drain_normal:GetName(), tonumber(new))
-end)
-
-cvars.AddChangeCallback(voice_drain_admin:GetName(), function(cv, old, new)
-    SetGlobalFloat(voice_drain_admin:GetName(), tonumber(new))
-end)
-
-cvars.AddChangeCallback(voice_drain_recharge:GetName(), function(cv, old, new)
-    SetGlobalFloat(voice_drain_recharge:GetName(), tonumber(new))
 end)
 
 ---

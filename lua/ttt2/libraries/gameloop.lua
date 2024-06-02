@@ -773,6 +773,28 @@ if CLIENT then
         end
     end
 
+    ---
+    -- Returns the amount of rounds and time left until the map changes.
+    -- @return number The amount of rounds left
+    -- @return string The amount of time left as hh:mm:ss
+    -- @realm client
+    function gameloop.UntilMapChange()
+        local roundsLeft = gameloop.GetRoundsLeft()
+        local timeLeft = math.floor(gameloop.GetLevelTimeLeft())
+
+        local hours = math.floor(timeLeft / 3600)
+
+        timeLeft = timeLeft - math.floor(hours * 3600)
+
+        local minutes = math.floor(timeLeft / 60)
+
+        timeLeft = timeLeft - math.floor(minutes * 60)
+
+        local seconds = math.floor(timeLeft)
+
+        return roundsLeft, string.format("%02i:%02i:%02i", hours, minutes, seconds)
+    end
+
     net.Receive("TTT_ClearClientState", function()
         ---
         -- @realm client

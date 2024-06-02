@@ -235,7 +235,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     end
 
     -- only add more information if in admin mode
-    if not admin_mode or not client:IsAdmin() then
+    if not admin_mode or not admin.IsAdmin(client) then
         return
     end
 
@@ -258,7 +258,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
         ParT("tbut_team_toggle", {
             usekey = key_params.usekey,
             walkkey = key_params.walkkey,
-            team = client:GetTeam():gsub("^%l", string.upper),
+            team = TryT(client:GetTeam()),
         }),
         COLOR_WHITE
     )
@@ -510,7 +510,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
     local c_wep = client:GetActiveWeapon()
 
     -- has to be a ragdoll
-    if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then
+    if not IsValid(ent) or not ent:IsPlayerRagdoll() then
         return
     end
 
@@ -679,7 +679,7 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
         ent:IsWeapon()
         or ent.CanHavePrints
         or ent:GetNWBool("HasPrints", false)
-        or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+        or ent:IsPlayerRagdoll()
     then
         tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, { materialDNATargetID })
     else

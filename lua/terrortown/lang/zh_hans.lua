@@ -915,7 +915,7 @@ L.pickup_pending = "你已经捡起这个武器，请等捡起完成"
 L.tbut_help_admin = "编辑叛徒按钮设定"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] 切换 {role} 的按钮权限"
 L.tbut_role_config = "身份：{current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] 切换 {team} 的按钮权限"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
 L.tbut_team_config = "阵营：{current}"
 L.tbut_current_config = "当前设定："
 L.tbut_intended_config = "地图默认设定："
@@ -2301,3 +2301,7 @@ L.decoy_help_primary = "安放诱饵"
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

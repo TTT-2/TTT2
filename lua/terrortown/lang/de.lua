@@ -915,7 +915,7 @@ L.pickup_pending = "Du hebst bereits eine Waffe auf, warte bis du sie erhältst"
 L.tbut_help_admin = "Bearbeite Knopfeinstellungen"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] zum Umschalten dieses Knopfes für {role}"
 L.tbut_role_config = "Rolle: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] zum Umschalten dieses Knopfes für Team {team}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] zum Umschalten dieses Knopfes für {team}"
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Aktuelle Einstellung:"
 L.tbut_intended_config = "Voreinstellung des Maperstellers:"
@@ -2302,3 +2302,7 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

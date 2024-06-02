@@ -191,6 +191,22 @@ function admin.PlayerSetArmor(ply, amount)
     end
 end
 
+-- checks if a player is in the admin user group by internally calling
+-- @{GM:TTT2AdminCheck}.
+-- @param Player ply The player to check
+-- @return boolean Returns true if the player is in the admin user group
+-- @realm shared
+function admin.IsAdmin(ply)
+    if not IsValid(ply) then
+        return false
+    end
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    return hook.Run("TTT2AdminCheck", ply) or false
+end
+
 if SERVER then
     net.Receive("TTT2AdminCommand", function(_, ply)
         ---
@@ -244,4 +260,18 @@ if SERVER then
     concommand.Add("ttt_roundrestart", admin.RoundRestart)
 
     concommand.Add("ttt_version", admin.ShowVersion)
+end
+
+---
+-- A hook that is called whenever the gamemode needs to check if the player is in the
+-- superadmin usergroup. This hook can be used to allow custom usergroups through these
+-- checks.
+-- @note This hook grants access to powerful functionality, such as the gamemode configuration,
+-- damage logs and player role information. Only allow usergroups that absolutely need such access.
+-- @param Player ply The player to be checked
+-- @return boolean if the player is a valid usergroup
+-- @hook
+-- @realm shared
+function GM:TTT2AdminCheck(ply)
+    return ply:IsSuperAdmin()
 end

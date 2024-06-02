@@ -72,7 +72,8 @@ function SWEP:PrimaryAttack()
     owner:LagCompensation(true)
 
     local spos = owner:GetShootPos()
-    local sdest = spos + owner:GetAimVector() * 100
+    local aim = owner:GetAimVector()
+    local sdest = spos + aim * 100
 
     local kmins = Vector(-10, -10, -10)
     local kmaxs = Vector(10, 10, 10)
@@ -108,7 +109,7 @@ function SWEP:PrimaryAttack()
         edata:SetNormal(tr.Normal)
         edata:SetEntity(hitEnt)
 
-        if hitEnt:IsPlayer() or hitEnt:GetClass() == "prop_ragdoll" then
+        if hitEnt:IsPlayer() or hitEnt:IsPlayerRagdoll() then
             util.Effect("BloodImpact", edata)
         end
     else
@@ -131,11 +132,11 @@ function SWEP:PrimaryAttack()
             dmg:SetDamage(self.Primary.Damage)
             dmg:SetAttacker(owner)
             dmg:SetInflictor(self)
-            dmg:SetDamageForce(owner:GetAimVector() * 5)
+            dmg:SetDamageForce(aim * 5)
             dmg:SetDamagePosition(owner:GetPos())
             dmg:SetDamageType(DMG_SLASH)
 
-            hitEnt:DispatchTraceAttack(dmg, spos + (owner:GetAimVector() * 3), sdest)
+            hitEnt:DispatchTraceAttack(dmg, spos + (aim * 3), sdest)
         end
     end
 

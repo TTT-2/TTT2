@@ -915,7 +915,7 @@ L.pickup_pending = "既に武器を拾っている、受け取りまで少し待
 L.tbut_help_admin = "Traitorトラップ設定を編集する"
 L.tbut_role_toggle = "[{walkkey} + {usekey}]で{role}に切り替える"
 L.tbut_role_config = "役職:{current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}]で{team}に切り替える"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
 L.tbut_team_config = "陣営:{current}"
 L.tbut_current_config = "現在の設定:"
 L.tbut_intended_config = "マップ制作者による意図された設定:"
@@ -2301,3 +2301,7 @@ L.decoy_help_primary = "デコイを設置する"
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

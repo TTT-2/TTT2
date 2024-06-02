@@ -915,7 +915,7 @@ L.pickup_pending = "Ya has recogido un arma, espera a recibirla"
 L.tbut_help_admin = "Editar configuración de teclas para el Traidor"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] para activar y desactivar esto para {role}"
 L.tbut_role_config = "Rol: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para activar este botón para el equipo {team}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para activar este botón para el {team}"
 L.tbut_team_config = "Equipo: {current}"
 L.tbut_current_config = "Configuración actual:"
 L.tbut_intended_config = "Configuración recomendada por el creador del mapa:"
@@ -2301,3 +2301,7 @@ L.decoy_help_primary = "Colocar el señuelo"
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

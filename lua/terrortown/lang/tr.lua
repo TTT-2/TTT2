@@ -915,7 +915,7 @@ L.pickup_pending = "Zaten bir silah aldın, alana kadar bekle."
 L.tbut_help_admin = "Hain düğmesi ayarlarını düzenle"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] düğmesi {role} için"
 L.tbut_role_config = "Rol {current}"
-L.tbut_team_toggle = "{team} takımı için bu düğmeyi değiştirmek için [SHIFT + {walkkey} + {usekey}]"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
 L.tbut_team_config = "Takım {current}"
 L.tbut_current_config = "Geçerli yapılandırma"
 L.tbut_intended_config = "Harita oluşturucu tarafından tasarlanan yapılandırma"
@@ -2299,3 +2299,7 @@ L.label_execute_command = "Komut Çalıştır"
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

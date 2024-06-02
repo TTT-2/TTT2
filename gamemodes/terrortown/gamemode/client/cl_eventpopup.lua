@@ -7,10 +7,10 @@ local TryT = LANG.TryTranslation
 
 local defaultMessage = {
     title = {
-        text = LANG.TryTranslation("testpopup_title"),
+        text = "testpopup_title",
     },
     subtitle = {
-        text = LANG.TryTranslation("testpopup_subtitle"),
+        text = "testpopup_subtitle",
     },
     iconTable = {},
     time = CurTime() + 5,

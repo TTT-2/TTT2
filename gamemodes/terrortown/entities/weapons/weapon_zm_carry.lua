@@ -142,7 +142,7 @@ function DetermineCarryType(ent)
     if IsValid(ent) then
         if ent.IsWeapon and ent:IsWeapon() then
             return CARRY_TYPE_WEAPON
-        elseif ent:GetClass() == "prop_ragdoll" then
+        elseif ent:IsPlayerRagdoll() then
             return CARRY_TYPE_RAGDOLL
         else
             return CARRY_TYPE_PROP
@@ -198,10 +198,21 @@ local function KillVelocity(ent)
     end)
 end
 
+local ragdollPinCvs = {}
+
 ---
 -- @realm shared
 function SWEP:CanRagPin()
-    return GetConVar("ttt2_ragdoll_pinning_" .. self:GetOwner():GetSubRoleData().name):GetBool()
+    local subRoleData = self:GetOwner():GetSubRoleData()
+
+    local convar = ragdollPinCvs[subRoleData.id]
+    if not convar then
+        convar = GetConVar("ttt2_ragdoll_pinning_" .. subRoleData.name)
+
+        ragdollPinCvs[subRoleData.id] = convar
+    end
+
+    return convar:GetBool()
 end
 
 ---
@@ -310,6 +321,7 @@ function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
     end
 
     local speed = phys:GetVelocity():Length()
+
     -- we're scaling down our desired force (maxforce) by the difference in the object's existing speed from self.moveObjectRemapSpeedInMax
     -- effectively clamping the amount of force we can add to an object every tick
     local force = math.Remap(

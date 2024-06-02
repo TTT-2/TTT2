@@ -915,7 +915,7 @@ L.pickup_pending = "Podniosłeś już broń! Poczekaj, aż ją otrzymasz!"
 L.tbut_help_admin = "Edytuj ustawienia guzika zdrajcy"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] aby włączyć ten przycisk dla roli {role}"
 L.tbut_role_config = "Rola: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] aby włączyć ten guzik dla teamu {team}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] aby włączyć ten guzik dla {team}"
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Obecne ustawienia:"
 L.tbut_intended_config = "Domyślny config twórcy mapy:"
@@ -2301,3 +2301,7 @@ L.decoy_help_primary = "Rozstaw Wabik"
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
 --L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"

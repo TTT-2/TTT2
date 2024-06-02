@@ -197,7 +197,7 @@ net.Receive("TTT2DefaultHUDRequest", function(_, ply)
     local HUDToSet = net.ReadString()
     local acceptedRequest = false
 
-    if ply:IsAdmin() then
+    if admin.IsAdmin(ply) then
         if HUDToSet == "" then -- Reset the forcedHUD value, to allow users to have a different HUD
             ttt2net.SetGlobal({ "hud_manager", "defaultHUD" }, { type = "string" }, "pure_skin")
 
@@ -225,7 +225,7 @@ net.Receive("TTT2ForceHUDRequest", function(_, ply)
     local HUDToForce = net.ReadString()
     local acceptedRequest = false
 
-    if ply:IsAdmin() then
+    if admin.IsAdmin(ply) then
         if HUDToForce == "" then -- Reset the forcedHUD value, to allow users to have a different HUD
             ttt2net.SetGlobal({ "hud_manager", "forcedHUD" }, { type = "string" }, nil)
 
@@ -253,7 +253,7 @@ net.Receive("TTT2RestrictHUDRequest", function(_, ply)
     local shouldBeRestricted = net.ReadBool()
     local acceptedRequest = false
 
-    if ply:IsAdmin() then
+    if admin.IsAdmin(ply) then
         local hudtbl = huds.GetStored(HUDToRestrict)
         if hudtbl ~= nil then
             local restrictedHUDs = ttt2net.GetGlobal({ "hud_manager", "restrictedHUDs" }) or {}
