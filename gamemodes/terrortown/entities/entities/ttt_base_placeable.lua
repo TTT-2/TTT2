@@ -61,6 +61,7 @@ if CLIENT then
     -- @realm client
     function ENT:ClientUse()
         local client = LocalPlayer()
+
         if not IsValid(client) or not client:IsTerror() or not self.pickupWeaponClass then
             return true
         end
