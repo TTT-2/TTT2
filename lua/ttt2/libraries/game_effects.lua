@@ -158,7 +158,10 @@ if SERVER then
     -- Explosive barrels rely on being ignited to explode after damaged by an explosion themselves
     -- Because vFire removes default fires, we need to encourage more chain explosions
     local function vFireTakeDamageReplacement(ent, dmg)
-        if hook.Call("vFireSuppressExplosionBehavior") then
+        ---
+        -- @realm server
+        -- stylua: ignore
+        if hook.Run("vFireSuppressExplosionBehavior") then
             return
         end
 
