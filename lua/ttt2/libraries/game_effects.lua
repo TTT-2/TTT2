@@ -43,6 +43,18 @@ function gameEffects.StartFires(
         local vstart = pos + tr.HitNormal * 64
         local ttl = lifetime + math.Rand(-lifetimeVariance, lifetimeVariance)
 
+        if vFireInstalled then
+            flames[#flames + 1] = CreateVFireBall(
+                ttl,
+                0.5 * size,
+                vstart,
+                0.5 * ang:Forward() * forceSpread,
+                dmgowner
+            )
+
+            continue
+        end
+
         local flame = ents.Create("ttt_flame")
         flame:SetPos(vstart)
         flame:SetFlameSize(size)
@@ -134,4 +146,41 @@ function gameEffects.RadiusDamage(dmginfo, pos, radius, inflictor)
             vic:TakeDamageInfo(dmginfo)
         end
     end
+end
+
+-- vFIRE INTEGRATION
+
+if SERVER then
+    -- This is a replacement hook for the explosion damage hook in vFire. The difference here is
+    -- that it is only applied if the damage is for non-player entities.
+    --
+    -- original doc: Fix fire dependent entities' behaviors, for instance:
+    -- Explosive barrels rely on being ignited to explode after damaged by an explosion themselves
+    -- Because vFire removes default fires, we need to encourage more chain explosions
+    local function vFireTakeDamageReplacement(ent, dmg)
+        if hook.Call("vFireSuppressExplosionBehavior") then
+            return
+        end
+
+        if not IsValid(ent) or not ent:IsPlayer() or not dmg:IsExplosionDamage() then
+            return
+        end
+
+        local hp = ent:Health()
+        if hp < dmg:GetDamage() and hp > 0 and math.random(1, 3) == 1 then
+            ent:SetHealth(0)
+        end
+    end
+
+    hook.Add("TTT2FinishedLoading", "TTT2TweakvFire", function()
+        if not vFireInstalled then
+            return
+        end
+
+        -- increase the think rate of fires to increase the damage dealt by fire
+        vFireBurnThinkTickRate = 0.75
+
+        hook.Remove("EntityTakeDamage", "vFireFixExplosion")
+        hook.Add("EntityTakeDamage", "vFireFixExplosionReplacement", vFireTakeDamageReplacement)
+    end)
 end
