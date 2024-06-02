@@ -94,9 +94,14 @@ if CLIENT then
         tData:SetOutlineColor(client:GetRoleColor())
 
         tData:SetTitle(TryT("decoy_name"))
-        tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
-        tData:SetKeyBinding("+use")
         tData:AddDescriptionLine(TryT("decoy_short_desc"))
+
+        if ent:PlayerCanPickupWeapon(client) then
+            tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
+            tData:SetKeyBinding("+use")
+        else
+            tData:SetSubtitle(TryT("entity_pickup_owner_only"))
+        end
 
         if ent:GetNWString("decoy_owner_team", "none") == client:GetTeam() then
             return

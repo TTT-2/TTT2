@@ -229,13 +229,13 @@ if CLIENT then
 
         tData:SetTitle(TryT("vis_name"))
 
-        if ent:GetOriginator() == client then
+        if ent:PlayerCanPickupWeapon(client) then
+            tData:SetKeyBinding("+use")
             tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
         else
             tData:SetSubtitle(TryT("entity_pickup_owner_only"))
         end
 
-        tData:SetKeyBinding("+use")
         tData:AddDescriptionLine(TryT("vis_short_desc"))
     end)
 end

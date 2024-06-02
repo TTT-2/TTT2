@@ -228,12 +228,12 @@ if CLIENT then
 
         tData:SetTitle(TryT(ent.PrintName))
 
-        if ent:GetOriginator() == client then
+        if ent:PlayerCanPickupWeapon(client) then
             tData:SetKeyBinding("+use")
             tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
         else
             tData:AddIcon(roles.DETECTIVE.iconMaterial)
-            tData:SetSubtitle(TryT("beacon_pickup_disabled"))
+            tData:SetSubtitle(TryT("entity_pickup_owner_only"))
         end
 
         tData:AddDescriptionLine(TryT("beacon_short_desc"))
