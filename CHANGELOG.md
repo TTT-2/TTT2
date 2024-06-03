@@ -63,6 +63,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 - Minor cleanup and optimizations in weapon code (by @TW1STaL1CKY)
 - Now always properly checks if an entity is a true ragdoll to make sure no other props get ragdoll handling (by @TimGoll)
+- Spectators are now able to look at corpses on fire (by @TimGoll)
+- Corpses on fire display that information in targetID and MStack (by @TimGoll)
 
 ### Fixed
 

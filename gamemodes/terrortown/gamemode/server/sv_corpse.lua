@@ -258,8 +258,8 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
     end
 
     -- prevent search for anyone if the body is burning
-    if rag:IsOnFire() then
-        LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
+    if rag:IsOnFire() and ply:IsTerror() then
+        LANG.Msg(ply, "body_burning", nil, MSG_MSTACK_WARN)
 
         return
     end
