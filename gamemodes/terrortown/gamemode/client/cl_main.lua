@@ -561,7 +561,7 @@ function GM:CleanUpMap()
     for i = 1, #ragdolls do
         local ent = ragdolls[i]
 
-        if not IsValid(ent) or CORPSE.GetPlayerNick(ent, "") == "" then
+        if not IsValid(ent) or not ent:IsPlayerRagdoll() then
             continue
         end
 
