@@ -64,14 +64,20 @@ if CLIENT then
         BaseClass.PerformLayout(self)
     end
 
-    function HUDELEMENT:DrawBarBg(x, y, w, h, active)
-        local ply = LocalPlayer()
-        local c = active and ply:GetRoleColor() or ply:GetRoleDkColor()
+    function HUDELEMENT:DrawBarBg(x, y, w, h, selected)
+        local client = LocalPlayer()
+        local c
+
+        if client:IsActive() then
+            c = selected and client:GetRoleColor() or client:GetRoleDkColor()
+        else
+            c = selected and COLOR_SPEC or util.ColorDarken(COLOR_SPEC, 30)
+        end
 
         -- draw bg and shadow
         self.drawer:DrawBg(x, y, w, h, self.basecolor)
 
-        if active then
+        if selected then
             surface.SetDrawColor(0, 0, 0, 90)
             surface.DrawRect(x, y, w, h)
         end
@@ -86,18 +92,18 @@ if CLIENT then
         return c
     end
 
-    function HUDELEMENT:DrawWeapon(x, y, active, wep, tip_color)
+    function HUDELEMENT:DrawWeapon(x, y, selected, wep, tip_color)
         if not IsValid(wep) or not IsValid(wep.Owner) or not isfunction(wep.Owner.GetAmmoCount) then
             return false
         end
 
         --define colors
         local text_color = util.GetDefaultColor(self.basecolor)
-        text_color = active and text_color
+        text_color = selected and text_color
             or Color(text_color.r, text_color.g, text_color.b, text_color.r > 128 and 100 or 180)
 
         local number_color = util.GetDefaultColor(tip_color)
-        number_color = active and number_color
+        number_color = selected and number_color
             or Color(
                 number_color.r,
                 number_color.g,
@@ -105,7 +111,7 @@ if CLIENT then
                 number_color.r > 128 and 100 or 180
             )
 
-        local empty_color = active and color_empty or color_empty_dark
+        local empty_color = selected and color_empty or color_empty_dark
 
         local name = TryTranslation(wep:GetPrintName() or wep.PrintName or "...")
         local cl1, am1 = wep:Clip1(), (wep.Ammo1 and wep:Ammo1() or false)
@@ -183,11 +189,11 @@ if CLIENT then
     end
 
     function HUDELEMENT:DrawElement(i, x, y, w, h)
-        local active = WSWITCH.Selected == i
+        local selected = WSWITCH.Selected == i
 
-        local tipCol = self:DrawBarBg(x, y, w, h, active)
+        local tipCol = self:DrawBarBg(x, y, w, h, selected)
 
-        if not self:DrawWeapon(x, y, active, WSWITCH.WeaponCache[i], tipCol) then
+        if not self:DrawWeapon(x, y, selected, WSWITCH.WeaponCache[i], tipCol) then
             WSWITCH:UpdateWeaponCache()
 
             return
