@@ -194,9 +194,9 @@ addonChecker.curatedList = {
         reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
         type = ADDON_INCOMPATIBLE,
     },
-    ["278185787"] = { -- Death Note by Blue-Pentagram
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
+    ["3118796974"] = { -- Death Note by Blue-Pentagram
+        alternative = "278185787",
+        reason = "Old Addon got massive update and works now with TTT2. The version with the workaround will be discontinued.",
         type = ADDON_INCOMPATIBLE,
     },
     ["2758610950"] = { -- Death Note TTT2 Fixed Edition by pat201290
