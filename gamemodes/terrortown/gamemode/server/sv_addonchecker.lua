@@ -194,21 +194,6 @@ addonChecker.curatedList = {
         reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
         type = ADDON_INCOMPATIBLE,
     },
-    ["278185787"] = { -- Death Note by Blue-Pentagram
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
-        type = ADDON_INCOMPATIBLE,
-    },
-    ["2758610950"] = { -- Death Note TTT2 Fixed Edition by pat201290
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
-        type = ADDON_INCOMPATIBLE,
-    },
-    ["110148946"] = { -- Death Note by SmokeTheBanana
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
-        type = ADDON_INCOMPATIBLE,
-    },
     ["110148946"] = { -- ttt_broken_hand_fix by Jolez
         reason = "Already built in into TTT2",
         type = ADDON_INCOMPATIBLE,
@@ -670,6 +655,21 @@ addonChecker.curatedList = {
     ["899488990"] = { -- Mirror fate by Keksgesicht
         alternative = "3229789817",
         reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["3118796974"] = { -- Death Note by Xopez
+        alternative = "278185787",
+        reason = "Old Addon got massive update and works now with TTT2. The version with the workaround will be discontinued.",
+        type = ADDON_OUTDATED,
+    },
+    ["2758610950"] = { -- Death Note TTT2 Fixed Edition by pat201290
+        alternative = "278185787",
+        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
+        type = ADDON_OUTDATED,
+    },
+    ["110148946"] = { -- Death Note by SmokeTheBanana
+        alternative = "278185787",
+        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
         type = ADDON_OUTDATED,
     },
 }
