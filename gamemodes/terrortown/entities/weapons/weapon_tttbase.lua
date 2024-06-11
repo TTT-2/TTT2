@@ -184,6 +184,8 @@ SWEP.Secondary.ClipMax = -1
 
 SWEP.HeadshotMultiplier = 2.7
 
+SWEP.DryFireSound = ")weapons/pistol/pistol_empty.wav"
+
 SWEP.StoredAmmo = 0
 SWEP.IsDropped = false
 
@@ -980,7 +982,7 @@ end
 -- @realm shared
 function SWEP:DryFire(setnext)
     if CLIENT and LocalPlayer() == self:GetOwner() then
-        self:EmitSound(")weapons/pistol/pistol_empty.wav", 75, 100, 0.7, CHAN_ITEM)
+        self:EmitSound(self.DryFireSound, 75, 100, 0.7, CHAN_ITEM)
     end
 
     setnext(self, CurTime() + 0.2)
