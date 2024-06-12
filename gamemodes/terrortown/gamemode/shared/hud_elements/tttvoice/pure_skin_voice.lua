@@ -59,6 +59,14 @@ if CLIENT then
 
         draw.Box(xPos + self.padding, yPos + self.padding, w - self.padding, heightBar, color)
 
+        self:DrawLines(
+            xPos + self.padding,
+            yPos + self.padding,
+            w - self.padding,
+            heightBar,
+            color.a
+        )
+
         for i = 1, #data do
             local yValue = math.floor(data[i] * 0.5 * heightBar - 4 * self.scale)
 
@@ -149,14 +157,6 @@ if CLIENT then
                 colorVoiceLine
             )
         end
-
-        self:DrawLines(
-            xPos + self.padding,
-            yPos + self.padding,
-            w - self.padding,
-            heightBar,
-            color.a
-        )
     end
 
     function HUDELEMENT:Draw()
