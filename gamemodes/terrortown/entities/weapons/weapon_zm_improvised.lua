@@ -166,6 +166,7 @@ function SWEP:PrimaryAttack()
     local hitEnt = tr_main.Entity
 
     self:EmitSound(sound_single)
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     if IsValid(hitEnt) or tr_main.HitWorld then
         self:SendWeaponAnim(ACT_VM_HITCENTER)
@@ -215,8 +216,6 @@ function SWEP:PrimaryAttack()
         })
 
         local trEnt = tr_all.Entity
-
-        owner:SetAnimation(PLAYER_ATTACK1)
 
         if IsValid(hitEnt) then
             if self:OpenEnt(hitEnt) == OPEN_NO and IsValid(trEnt) then
@@ -274,7 +273,6 @@ function SWEP:SecondaryAttack()
             pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching
 
             ply:SetVelocity(ply:GetVelocity() + pushvel)
-            owner:SetAnimation(PLAYER_ATTACK1)
 
             ply.was_pushed = {
                 att = owner,
@@ -286,6 +284,8 @@ function SWEP:SecondaryAttack()
 
         self:EmitSound(sound_single)
         self:SendWeaponAnim(ACT_VM_HITCENTER)
+        owner:SetAnimation(PLAYER_ATTACK1)
+
         self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     end
 
