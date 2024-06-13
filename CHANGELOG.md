@@ -41,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `admin.IsAdmin(ply)` as a wrapper that automatically calls `GM:TTT2AdminCheck` (by @TimGoll)
   - Made sure this new function is used in our whole codebase for all admin checks
 - Added `ENTITY:IsPlayerRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
+- Added the `SWEP.DryFireSound` field to the weapon base to allow the dryfire sound to be easily changed (by @TW1STaL1CKY)
 
 ### Changed
 
@@ -62,6 +63,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated the Turkish localization file (by @NovaDiablox)
 - The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 - Minor cleanup and optimizations in weapon code (by @TW1STaL1CKY)
+- Shotgun weapon changes (by @TW1STaL1CKY)
+  - Dry firing (attempting to shoot with no ammo) will now make you reload if possible, like all the other weapons do
+  - Interrupting the reload should look and feel less jank
+  - A thirdperson animation now plays when each shell is loaded (the pistol reload animation seems to fit best)
 - Now always properly checks if an entity is a true ragdoll to make sure no other props get ragdoll handling (by @TimGoll)
 - Spectators are now able to look at corpses on fire (by @TimGoll)
 - Corpses on fire display that information in targetID and MStack (by @TimGoll)
