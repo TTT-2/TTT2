@@ -41,23 +41,16 @@ local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, 
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local soundsSearch = {
-    Sound("player/suit_ct_01.wav"),
-    Sound("player/suit_ct_02.wav"),
-    Sound("player/suit_ct_03.wav"),
-    Sound("player/suit_ct_04.wav"),
-    Sound("player/suit_ct_05.wav"),
-    Sound("player/suit_ct_06.wav"),
-    Sound("player/suit_ct_07.wav"),
-    Sound("player/suit_ct_08.wav"),
-    Sound("player/suit_ct_09.wav"),
-    Sound("player/suit_ct_11.wav"),
-    Sound("player/suit_ct_13.wav"),
-    Sound("player/suit_ct_15.wav"),
-    Sound("player/suit_ct_17.wav"),
-    Sound("player/suit_ct_19.wav"),
-    Sound("player/suit_ct_20.wav"),
-    Sound("player/suit_ct_21.wav"),
-    Sound("player/suit_ct_23.wav"),
+    Sound("player/footsteps/snow1.wav"),
+    Sound("player/footsteps/snow2.wav"),
+    Sound("player/footsteps/snow3.wav"),
+    Sound("player/footsteps/snow4.wav"),
+    Sound("player/footsteps/snow5.wav"),
+    Sound("player/footsteps/snow6.wav"),
+    Sound("player/footsteps/sand1.wav"),
+    Sound("player/footsteps/sand2.wav"),
+    Sound("player/footsteps/sand3.wav"),
+    Sound("player/footsteps/sand4.wav"),
 }
 
 ttt_include("sh_corpse")
