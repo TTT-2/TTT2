@@ -126,7 +126,7 @@ function admin.PlayerRespawn(ply, pos)
             return
         end
 
-        ply:Revive(0, nil, nil, false, false, nil, pos)
+        ply:Revive(0, nil, nil, false, REVIVAL_BLOCK_NONE, nil, pos)
     end
 end
 
