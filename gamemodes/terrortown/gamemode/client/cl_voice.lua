@@ -27,7 +27,7 @@ VOICE.cv = {
     ---
     -- @realm client
     -- stylua: ignore
-    duck_spectator_amount = CreateConVar("ttt2_voice_cvDuckSpectator_amount", "0", { FCVAR_ARCHIVE }),
+    duck_spectator_amount = CreateConVar("ttt2_voice_duck_spectator_amount", "0", { FCVAR_ARCHIVE }),
 
     ---
     -- @realm client
