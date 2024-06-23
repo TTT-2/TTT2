@@ -45,7 +45,7 @@ function math.random_weighted(tbl, get_weight)
 
     -- first, compute the sum weight
     local sum = 0
-    for k,v in pairs(tbl) do
+    for k, v in pairs(tbl) do
         sum = sum + get_weight(v, k)
     end
 
@@ -54,7 +54,7 @@ function math.random_weighted(tbl, get_weight)
 
     -- now do the prefix-sum for the final value
     sum = 0
-    for k,v in pairs(tbl) do
+    for k, v in pairs(tbl) do
         sum = sum + get_weight(v, k)
         if sum > rand then
             return k

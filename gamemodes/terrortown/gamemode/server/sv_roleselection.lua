@@ -672,7 +672,10 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
     local plysAmount = #plys
     local availableRolesAmount = #availableRoles
     local tmpSelectableRoles = table.Copy(selectableRoles)
-    local derand = bit.band(roleselection.cv.ttt_role_derandomize_mode:GetInt(), ROLE_DERAND_SUB_FLAG) ~= 0;
+    local derand = bit.band(
+        roleselection.cv.ttt_role_derandomize_mode:GetInt(),
+        ROLE_DERAND_SUB_FLAG
+    ) ~= 0
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
     while plysAmount > 0 and availableRolesAmount > 0 do
@@ -899,7 +902,10 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
     local curRoles = 0
     local plysList = {}
     local roleData = roles.GetByIndex(subrole)
-    local derand = bit.band(roleselection.cv.ttt_role_derandomize_mode:GetInt(), ROLE_DERAND_BASE_FLAG) ~= 0;
+    local derand = bit.band(
+        roleselection.cv.ttt_role_derandomize_mode:GetInt(),
+        ROLE_DERAND_BASE_FLAG
+    ) ~= 0
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
     while curRoles < roleAmount and #plys > 0 do
@@ -1055,7 +1061,7 @@ function roleselection.SelectRoles(plys, maxPlys)
         local baserole = roles.GetByIndex(subrole):GetBaseRole()
         local roleWeightTable = ply:GetRoleWeightTable()
         -- increment all role weights for the player
-        for r,w in pairs(roleWeightTable) do
+        for r, w in pairs(roleWeightTable) do
             roleWeightTable[r] = w + 1
         end
         -- reset the weights for the final role and its baserole

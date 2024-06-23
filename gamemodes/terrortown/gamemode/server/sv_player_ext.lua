@@ -764,7 +764,7 @@ end
 ---
 -- @accessor table A table containing the weights to use when selecting roles, if enabled.
 -- @realm server
-AccessorFunc(plymeta, "role_weights", "RoleWeightTable");
+AccessorFunc(plymeta, "role_weights", "RoleWeightTable")
 
 ---
 -- Returns whether a @{Player} is able to select a specific @{ROLE}
