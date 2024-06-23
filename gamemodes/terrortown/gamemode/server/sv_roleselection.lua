@@ -48,8 +48,7 @@ roleselection.cv = {
     ---
     -- @realm server
     -- stylua: ignore
-    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization",
-    ROLE_DERAND_NONE, bit.bor(ROLE_DERAND_BASE_FLAG | ROLE_DERAND_SUB_FLAG)),
+    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, bit.bor(ROLE_DERAND_BASE_FLAG, ROLE_DERAND_SUB_FLAG)),
 
     ---
     -- NOTE: Currently the minimum is 1. In theory, it could be set to 0, which would mean that players cannot get the same role (or subrole, according to the mode)
