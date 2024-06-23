@@ -2327,12 +2327,13 @@ L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
 L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
 
 L.help_roles_derandomize_min_weight = [[
-Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role.
+Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
 
 Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
 
 For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
 
 The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
-]]
+
+Changes to this value will not take effect until players reconnect or the map changes.]]
 L.label_roles_derandomize_min_weight = "Derandomization minimum weight"

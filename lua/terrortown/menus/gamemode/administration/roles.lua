@@ -92,7 +92,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
     })
 
     form:MakeHelp({
-        label = "help_roles_derandmonize_min_weight",
+        label = "help_roles_derandomize_min_weight",
         master = masterDerand,
     })
 
