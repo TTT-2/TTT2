@@ -64,6 +64,44 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = masterEnb,
     })
 
+    form:MakeHelp({
+        label = "help_roles_derandomize",
+    })
+
+    local masterDerand = form:MakeComboBox({
+        serverConvar = "ttt_role_derandomize_mode",
+        label = "label_roles_derandomize_mode",
+        choices = {
+            {
+                title = "label_roles_derandomize_mode_none",
+                value = ROLE_DERAND_NONE,
+            },
+            {
+                title = "label_roles_derandomize_mode_base_only",
+                value = ROLE_DERAND_BASE_FLAG,
+            },
+            {
+                title = "label_roles_derandomize_mode_sub_only",
+                value = ROLE_DERAND_SUB_FLAG,
+            },
+            {
+                title = "label_roles_derandomize_mode_base_and_sub",
+                value = bit.bor(ROLE_RERAND_BASE_FLAG, ROLE_DERAND_SUB_FLAG),
+            },
+        },
+    })
+
+    form:MakeHelp({
+        label = "help_roles_derandmonize_min_weeight",
+        master = masterDerand,
+    })
+
+    form:MakeSlider({
+        serverConvar = "ttt_role_derandomize_min_weight",
+        label = "label_roles_derandomize_min_weight",
+        master = masterDerand,
+    })
+
     local form2 = vgui.CreateTTT2Form(parent, "header_roles_reward_credits")
 
     form2:MakeHelp({
