@@ -1055,7 +1055,7 @@ function roleselection.SelectRoles(plys, maxPlys)
         local baserole = roles.GetByIndex(subrole):GetBaseRole()
         local roleWeightTable = ply:GetRoleWeightTable()
         -- increment all role weights for the player
-        for r,w in roleWeightTable do
+        for r,w in pairs(roleWeightTable) do
             roleWeightTable[r] = w + 1
         end
         -- reset the weights for the final role and its baserole
