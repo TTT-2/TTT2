@@ -100,6 +100,9 @@ function CLGAMEMODESUBMENU:Populate(parent)
         serverConvar = "ttt_role_derandomize_min_weight",
         label = "label_roles_derandomize_min_weight",
         master = masterDerand,
+        min = 1,
+        max = 50,
+        decimal = 0,
     })
 
     local form2 = vgui.CreateTTT2Form(parent, "header_roles_reward_credits")
