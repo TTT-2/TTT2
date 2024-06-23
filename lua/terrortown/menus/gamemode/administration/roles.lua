@@ -74,19 +74,19 @@ function CLGAMEMODESUBMENU:Populate(parent)
         choices = {
             {
                 title = "label_roles_derandomize_mode_none",
-                value = ROLE_DERAND_NONE,
+                value = 0, -- ROLE_DEMAND_NONE
             },
             {
                 title = "label_roles_derandomize_mode_base_only",
-                value = ROLE_DERAND_BASE_FLAG,
+                value = 1, -- ROLE_DEMAND_BASE_FLAG
             },
             {
                 title = "label_roles_derandomize_mode_sub_only",
-                value = ROLE_DERAND_SUB_FLAG,
+                value = 2, -- ROLE_DEMAND_SUB_FLAG
             },
             {
                 title = "label_roles_derandomize_mode_base_and_sub",
-                value = bit.bor(ROLE_RERAND_BASE_FLAG, ROLE_DERAND_SUB_FLAG),
+                value = bit.bor(1, 2), -- ROLE_DEMAND_BASE_FLAG | ROLE_DEMAND_SUB_FLAG
             },
         },
     })
