@@ -922,7 +922,7 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
         end
 
         -- the player we consider
-        ply = plys[pick]
+        local ply = plys[pick]
 
         if subrole == ROLE_INNOCENT or ply:CanSelectRole(roleData, #plys, roleAmount) then
             table.remove(plys, pick)
