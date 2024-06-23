@@ -694,6 +694,9 @@ function plymeta:InitialSpawn()
     -- We never have weapons here, but this inits our equipment state
     self:StripAll()
 
+    -- Start with an empty role weight table. The table will be updated as needed during role selection.
+    self:SetRoleWeightTable({})
+
     -- set spawn position
     local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
@@ -757,6 +760,11 @@ function plymeta:UnSpectate()
 
     self:SetNoTarget(false)
 end
+
+---
+-- @accessor table A table containing the weights to use when selecting roles, if enabled.
+-- @realm server
+AccessorFunc(plymeta, "role_weights", "RoleWeightTable");
 
 ---
 -- Returns whether a @{Player} is able to select a specific @{ROLE}
