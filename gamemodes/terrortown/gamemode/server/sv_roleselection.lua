@@ -208,6 +208,23 @@ function roleselection.SaveLayers()
 end
 
 ---
+-- Initializes the player's role weights to be their minimum value.
+--
+-- @param Player ply
+-- @realm server
+function roleselection.InitializeRoleWeights(ply)
+    -- Initialize the weight table
+    local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
+    local roleWeightTable = {}
+    for _, v in roles.GetList() do
+        if not v.isAbstract then
+            roleWeightTable[v.index] = minWeight
+        end
+    end
+    ply:SetRoleWeightTable(roleWeightTable)
+end
+
+---
 -- Returns the current amount of selected/already selected @{ROLE}s.
 --
 -- @param number subrole subrole id of a @{ROLE}'s index

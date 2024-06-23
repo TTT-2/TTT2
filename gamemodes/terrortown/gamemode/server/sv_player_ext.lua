@@ -694,8 +694,8 @@ function plymeta:InitialSpawn()
     -- We never have weapons here, but this inits our equipment state
     self:StripAll()
 
-    -- Start with an empty role weight table. The table will be updated as needed during role selection.
-    self:SetRoleWeightTable({})
+    -- Initialize role weights
+    roleselection.InitializeRoleWeights(self)
 
     -- set spawn position
     local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
