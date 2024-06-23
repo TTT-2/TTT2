@@ -2024,6 +2024,8 @@ function CreateChanges()
         os.time({ year = 2024, month = 02, day = 27 })
     )
 
+    --#endofchanges
+
     ---
     -- run hook for other addons to add their changelog as well
     -- @realm client
