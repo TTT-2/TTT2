@@ -215,11 +215,16 @@ function roleselection.InitializeRoleWeights(ply)
     -- Initialize the weight table
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
     local roleWeightTable = {}
-    for _, v in roles.GetList() do
-        if not v.isAbstract then
-            roleWeightTable[v.index] = minWeight
+    local roleList = roles.GetList()
+
+    for i = 1, #roleList do
+        local roleData = roleList[i]
+
+        if not roleData.isAbstract then
+            roleWeightTable[roleData.index] = minWeight
         end
     end
+
     ply:SetRoleWeightTable(roleWeightTable)
 end
 
