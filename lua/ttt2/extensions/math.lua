@@ -50,13 +50,13 @@ function math.random_weighted(tbl, get_weight)
     end
 
     -- get the random number
-    local rand = math.random(0, sum - 1)
+    local rand = math.Rand(0, sum)
 
     -- now do the prefix-sum for the final value
     sum = 0
     for k, v in pairs(tbl) do
         sum = sum + get_weight(v, k)
-        if sum > rand then
+        if sum >= rand then
             return k
         end
     end
