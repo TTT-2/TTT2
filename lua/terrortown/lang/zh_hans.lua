@@ -2122,6 +2122,7 @@ L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
 
 L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
 L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
+
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
 对于霰弹枪，这将影响每个弹丸。

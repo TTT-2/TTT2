@@ -2122,6 +2122,7 @@ L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
+
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
 Bir pompalı için bu, her bir saçmayı etkileyecektir.

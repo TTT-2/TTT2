@@ -2122,6 +2122,7 @@ L.label_enable_bobbing_strafe = "Aktiviere 'Sichtwackeln' beim seitwärts gehen"
 
 L.help_enable_dynamic_fov = "Das dynamische Sichtfeld wird je nach Geschwindigkeit des Spielers angewendet. Wenn ein Spieler zum Beispiel rennt, wird das Sichtfeld vergrößert, um die Geschwindigkeit zu visualisieren."
 L.help_enable_bobbing_strafe = "'View bobbing' ist das leichte Kamerawackeln beim Gehen, Schwimmen oder Fallen."
+
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Multipliziert den Basisschadenswert der Waffe um diesen Faktor.
 Für eine Schrotflinte würde sich dies auf jedes Geschoss auswirken.
