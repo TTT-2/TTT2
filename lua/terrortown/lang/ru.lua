@@ -2006,7 +2006,7 @@ L.label_keyhelper_spec_third_person = "переключить вид от тре
 L.item_armor_reinforced = "Усиленная броня"
 L.item_armor_sidebar = "Броня защищает вас от пуль, пронзающих ваше тело, но не бесконечно."
 L.item_disguiser_sidebar = "Маскировка скрывает вашу личность за счёт отсутствия показа вашего имени другим."
-L.status_speed_name = "Множитель скорости" 
+L.status_speed_name = "Множитель скорости"
 L.status_speed_description_good = "Вы быстрее обычного. На это могут влиять предметы, снаряжение или эффекты."
 L.status_speed_description_bad = "Вы медленнее обычного. На это могут влиять предметы, снаряжение или эффекты."
 
