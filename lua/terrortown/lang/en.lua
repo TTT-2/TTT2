@@ -2309,7 +2309,7 @@ L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for ano
 L.help_roles_derandomize = [[
 Role derandomization can be used to make role distribution feel more fair over the course of a session.
 
-In essence, when it is enabled, a player's chance of recieving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
+In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
 
 There are 4 modes:
 
