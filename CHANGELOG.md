@@ -42,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Made sure this new function is used in our whole codebase for all admin checks
 - Added `ENTITY:IsPlayerRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
 - Added the `SWEP.DryFireSound` field to the weapon base to allow the dryfire sound to be easily changed (by @TW1STaL1CKY)
+- Added British English (by @NovaDiablox)
 
 ### Changed
 
