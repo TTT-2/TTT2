@@ -1959,7 +1959,7 @@ L.help_hud_elements_special_settings = "These are specific settings for the used
 
 -- 2023-10-25
 L.help_keyhelp = [[
-Key bind helper is an UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+Key bind helper is a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
 
 Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
 Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
