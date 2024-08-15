@@ -2122,6 +2122,7 @@ L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
 
 L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
 L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
+
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
 对于霰弹枪，这将影响每个弹丸。
@@ -2172,12 +2173,12 @@ L.decoy_help_primary = "安放诱饵"
 --L.header_roles_magnetostick = "Magneto Stick"
 --L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
 --L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
 --L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+--L.magneto_stick_help_carry_prop_drop = "Put down prop"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+--L.throw_no_room = "You have no space here to drop this device"
 
 -- 2024-03-04
 --L.use_entity = "Press [{usekey}] to use"
@@ -2189,7 +2190,7 @@ L.decoy_help_primary = "安放诱饵"
 
 --L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
 --L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat messages and notifications. They can be quite obnoxious."
 
 --L.label_enable_sound_interact = "Enable interaction sounds"
 --L.label_enable_sound_buttons = "Enable button sounds"
@@ -2200,15 +2201,15 @@ L.decoy_help_primary = "安放诱饵"
 --L.label_level_sound_message = "Message sound level multiplier"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap size"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
 
 -- 2024-03-31
 --L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+--L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
 
 --L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
 --
@@ -2216,7 +2217,7 @@ L.decoy_help_primary = "安放诱饵"
 --L.label_equipmenteditor_configurable_clip = "Configurable clip size"
 
 -- 2024-04-06
---L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 --
 --Set to 0 to disable this cut-off.]]
 
@@ -2281,7 +2282,7 @@ L.decoy_help_primary = "安放诱饵"
 -- 2024-05-22
 --L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
 --L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
---L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."

@@ -1783,7 +1783,7 @@ L.xfer_team_indicator = "Time"
 --L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
 --L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
 
---L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_default = "Default (equipment-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
 
@@ -1792,8 +1792,8 @@ L.xfer_team_indicator = "Time"
 --L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
 
 --L.slot_weapon_melee = "Melee Slot"
---L.slot_weapon_pistol = "Pistol Slot"
---L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_pistol = "Secondary Slot"
+--L.slot_weapon_heavy = "Primary Slot"
 --L.slot_weapon_nade = "Grenade Slot"
 --L.slot_weapon_carry = "Carry Slot"
 --L.slot_weapon_unarmed = "Unarmed Slot"
@@ -1802,8 +1802,8 @@ L.xfer_team_indicator = "Time"
 --L.slot_weapon_class = "Class Slot"
 
 -- 2023-10-04
---L.label_voice_duck_spectator = "Duck spectator voices"
---L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_duck_spectator = "Muffle spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice muffle amount"
 --L.label_voice_scaling = "Voice Volume Scaling Mode"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
@@ -1855,9 +1855,9 @@ L.search_dmg_other = "Você não pôde encontrar uma causa específica da morte 
 --L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
 --L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
 --L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
---L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on impact."
 --L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
---L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_vent = "You feel a fresh gust of air when you touch their body. Did they die in a vent and take the air with them?"
 --L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
 --L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
 --L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
@@ -1880,7 +1880,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 
 --L.search_kill_distance_point_blank = "It was a point blank attack."
 --L.search_kill_distance_close = "The attack came from a short distance."
---L.search_kill_distance_far = "The victim was attacked from a long distance away."
+--L.search_kill_distance_far = "The attack came from a long distance away."
 
 --L.search_kill_from_front = "The victim was shot from the front."
 --L.search_kill_from_back = "The victim was shot from behind."
@@ -1933,7 +1933,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
 --L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
---L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_spectator = "Press [{usekey}] to view search UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
 --L.label_inspect_confirm_mode = "Select body search mode"
@@ -1959,7 +1959,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 
 -- 2023-10-25
 --L.help_keyhelp = [[
---Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--Key bind helper is a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
 --
 --Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
 --Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
@@ -1975,7 +1975,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.header_interface_wepswitch = "Weapon switch UI settings"
 
 --L.label_keyhelper_help = "open gamemode menu"
---L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_mutespec = "cycle spectator mute mode"
 --L.label_keyhelper_shop = "open equipment shop"
 --L.label_keyhelper_show_pointer = "free mouse pointer"
 --L.label_keyhelper_possess_focus_entity = "possess focused entity"
@@ -2041,7 +2041,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_spec_prop_dash = "Dash force multiplier"
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
---L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+--L.label_keyhelper_ammo_drop = "drop reserved ammo from selected weapon"
 
 -- 2023-12-07
 --L.c4_help_primary = "Place the C4"
@@ -2122,6 +2122,7 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 
 --L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
 --For a shotgun, this would affect each pellet.
@@ -2131,7 +2132,7 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --0.5 = Deal half the amount of damage.
 --2 = Deal twice the amount of damage.
 --
---Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
+--Note: Some weapons might not use this value which causes this multiplier to be ineffective.]]
 
 -- 2023-12-24
 --L.binoc_help_reload = "Clear target."
@@ -2172,12 +2173,12 @@ L.decoy_help_primary = "Plantar a isca"
 --L.header_roles_magnetostick = "Magneto Stick"
 --L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
 --L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
 --L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+--L.magneto_stick_help_carry_prop_drop = "Put down prop"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+--L.throw_no_room = "You have no space here to drop this device"
 
 -- 2024-03-04
 --L.use_entity = "Press [{usekey}] to use"
@@ -2189,7 +2190,7 @@ L.decoy_help_primary = "Plantar a isca"
 
 --L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
 --L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat messages and notifications. They can be quite obnoxious."
 
 --L.label_enable_sound_interact = "Enable interaction sounds"
 --L.label_enable_sound_buttons = "Enable button sounds"
@@ -2200,15 +2201,15 @@ L.decoy_help_primary = "Plantar a isca"
 --L.label_level_sound_message = "Message sound level multiplier"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap size"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
 
 -- 2024-03-31
 --L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+--L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
 
 --L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
 --
@@ -2216,7 +2217,7 @@ L.decoy_help_primary = "Plantar a isca"
 --L.label_equipmenteditor_configurable_clip = "Configurable clip size"
 
 -- 2024-04-06
---L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 --
 --Set to 0 to disable this cut-off.]]
 
@@ -2281,7 +2282,7 @@ L.decoy_help_primary = "Plantar a isca"
 -- 2024-05-22
 --L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
 --L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
---L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."

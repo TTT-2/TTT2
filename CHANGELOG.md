@@ -71,6 +71,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Now always properly checks if an entity is a true ragdoll to make sure no other props get ragdoll handling (by @TimGoll)
 - Spectators are now able to look at corpses on fire (by @TimGoll)
 - Corpses on fire display that information in targetID and MStack (by @TimGoll)
+- Updated Russian and English localization files (by @Satton2)
 
 ### Fixed
 
@@ -87,6 +88,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 - Fixed incendiaries sometimes exploding without fire (by @TimGoll)
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
+- Fixed a nil error in the PreDrop function in weapon_ttt_cse (by @mexikoedi)
 
 ### Removed
 
