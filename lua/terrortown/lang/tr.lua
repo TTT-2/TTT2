@@ -174,7 +174,7 @@ L.sb_mia = "Eylem Eksik"
 L.sb_confirmed = "Onaylanmış Ölü"
 
 L.sb_ping = "Gecikme"
-L.sb_deaths = "Ölümler"
+L.sb_deaths = "Ölüm"
 L.sb_score = "Puan"
 L.sb_karma = "Karma"
 
@@ -549,7 +549,7 @@ L.tip22 = "Silahlar ve C4'ten farklı olarak, Hainler için Radyo ekipmanı, onu
 
 L.tip23 = "Kısa bir öğreticiyi görüntülemek veya TTT'ye özgü bazı ayarları değiştirmek için {helpkey} tuşuna basın."
 
-L.tip24 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan panosu aracılığıyla tüm oyuncuların kullanımına açıktır."
+L.tip24 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan tablosu aracılığıyla tüm oyuncuların kullanımına açıktır."
 
 L.tip25 = "Skor tablosunda, birinin adının yanındaki büyüteç simgesi, o kişi hakkında arama bilgilerine sahip olduğunuzu gösterir. Simge parlaksa, veriler bir Dedektiften gelir ve ek bilgiler içerebilir."
 
@@ -2128,8 +2128,10 @@ L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu 
 Bir pompalı için bu, her bir saçmayı etkileyecektir.
 Bir tüfek için bu sadece kurşunu etkiler.
 Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
+
 0.5 = Hasar miktarının yarısını ver.
 2 = Hasar miktarının iki katı kadar hasar ver.
+
 Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
 -- 2023-12-24
