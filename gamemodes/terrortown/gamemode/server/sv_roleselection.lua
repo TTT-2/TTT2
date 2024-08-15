@@ -20,8 +20,9 @@ roleselection.baseroleLayers = {}
 roleselection.subroleLayers = {}
 
 ROLE_DERAND_NONE = 0
-ROLE_DERAND_BASE_FLAG = 1
-ROLE_DERAND_SUB_FLAG = 2
+ROLE_DERAND_BASEROLE = 1
+ROLE_DERAND_SUBROLE = 2
+ROLE_DERAND_BOTH = 3
 
 -- Convars
 roleselection.cv = {
@@ -48,7 +49,7 @@ roleselection.cv = {
     ---
     -- @realm server
     -- stylua: ignore
-    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, bit.bor(ROLE_DERAND_BASE_FLAG, ROLE_DERAND_SUB_FLAG)),
+    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, 0),
 
     ---
     -- NOTE: Currently the minimum is 1. In theory, it could be set to 0, which would mean that players cannot get the same role (or subrole, according to the mode)
@@ -672,10 +673,9 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
     local plysAmount = #plys
     local availableRolesAmount = #availableRoles
     local tmpSelectableRoles = table.Copy(selectableRoles)
-    local derand = bit.band(
-        roleselection.cv.ttt_role_derandomize_mode:GetInt(),
-        ROLE_DERAND_SUB_FLAG
-    ) ~= 0
+    local modeDerandomize = roleselection.cv.ttt_role_derandomize_mode:GetInt()
+    local derand = modeDerandomize == ROLE_DERAND_SUBROLE or modeDerandomize == ROLE_DERAND_BOTH
+
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
     while plysAmount > 0 and availableRolesAmount > 0 do
@@ -902,10 +902,9 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
     local curRoles = 0
     local plysList = {}
     local roleData = roles.GetByIndex(subrole)
-    local derand = bit.band(
-        roleselection.cv.ttt_role_derandomize_mode:GetInt(),
-        ROLE_DERAND_BASE_FLAG
-    ) ~= 0
+    local modeDerandomize = roleselection.cv.ttt_role_derandomize_mode:GetInt()
+    local derand = modeDerandomize == ROLE_DERAND_BASEROLE or modeDerandomize == ROLE_DERAND_BOTH
+
     local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
     while curRoles < roleAmount and #plys > 0 do
