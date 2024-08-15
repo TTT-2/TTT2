@@ -2112,6 +2112,7 @@ L.equipmenteditor_desc_builtin = "Это встроенное в режим сн
 L.help_roles_builtin = "Это встроенная в режим роль, идущая совместно с TTT2!"
 L.header_equipment_info = "Информация о снаряжении"
 
+
 -- 2023-12-24
 L.submenu_gameplay_accessibility_title = "Специальные возможности"
 
