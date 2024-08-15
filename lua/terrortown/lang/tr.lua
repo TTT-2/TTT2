@@ -2280,7 +2280,7 @@ L.label_execute_command = "Komut Çalıştır"
 -- 2024-05-22
 --L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
 --L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
---L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
