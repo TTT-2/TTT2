@@ -18,11 +18,6 @@ roleselection.selectableRoles = nil
 roleselection.baseroleLayers = {}
 roleselection.subroleLayers = {}
 
-ROLE_DERAND_NONE = 0
-ROLE_DERAND_BASEROLE = 1
-ROLE_DERAND_SUBROLE = 2
-ROLE_DERAND_BOTH = 3
-
 -- Convars
 roleselection.cv = {
     ---
@@ -48,7 +43,7 @@ roleselection.cv = {
     ---
     -- @realm server
     -- stylua: ignore
-    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, 0),
+    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, ROLE_DERAND_BOTH),
 
     ---
     -- NOTE: Currently the minimum is 1. In theory, it could be set to 0, which would mean that players cannot get the same role (or subrole, according to the mode)

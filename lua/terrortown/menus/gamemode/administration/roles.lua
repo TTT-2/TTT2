@@ -5,6 +5,8 @@ CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 CLGAMEMODESUBMENU.priority = 97
 CLGAMEMODESUBMENU.title = "submenu_administration_roles_general_title"
 
+local TryT = LANG.TryTranslation
+
 function CLGAMEMODESUBMENU:Populate(parent)
     local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
 
@@ -75,19 +77,19 @@ function CLGAMEMODESUBMENU:Populate(parent)
         label = "label_roles_derandomize_mode",
         choices = {
             {
-                title = "label_roles_derandomize_mode_none",
+                title = TryT("label_roles_derandomize_mode_none"),
                 value = ROLE_DERAND_NONE,
             },
             {
-                title = "label_roles_derandomize_mode_base_only",
+                title = TryT("label_roles_derandomize_mode_base_only"),
                 value = ROLE_DERAND_BASEROLE,
             },
             {
-                title = "label_roles_derandomize_mode_sub_only",
+                title = TryT("label_roles_derandomize_mode_sub_only"),
                 value = ROLE_DERAND_SUBROLE,
             },
             {
-                title = "label_roles_derandomize_mode_base_and_sub",
+                title = TryT("label_roles_derandomize_mode_base_and_sub"),
                 value = ROLE_DERAND_BOTH,
             },
         },
