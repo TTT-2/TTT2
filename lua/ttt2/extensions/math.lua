@@ -21,12 +21,12 @@ function math.ExponentialDecay(halflife, dt)
 end
 
 ---
--- Gets the index of an item in the provided table, weighted according to the weights (derived from get_weight).
+-- Gets the index of an item in the provided table, weighted according to the weights (derived from getWeight).
 -- @param table tbl The array of items to find a weighted item in.
--- @param function get_weight Called as get_weight(item, index). Must return number.
+-- @param function getWeight Called as getWeight(item, index). Must return number.
 -- @return number
 -- @realm shared
-function math.random_weighted(tbl, get_weight)
+function math.WeightedRandom(tbl, getWeight)
     -- There are several possible ways to get a weighted item. The most obvious is to simply include an item in
     -- the table N times, where N is an integer proportional to the weight. This, however, requires maintaining
     -- that table, which may be undesirable.
@@ -46,7 +46,7 @@ function math.random_weighted(tbl, get_weight)
     -- first, compute the sum weight
     local sum = 0
     for k, v in pairs(tbl) do
-        sum = sum + get_weight(v, k)
+        sum = sum + getWeight(v, k)
     end
 
     -- get the random number
@@ -55,7 +55,7 @@ function math.random_weighted(tbl, get_weight)
     -- now do the prefix-sum for the final value
     sum = 0
     for k, v in pairs(tbl) do
-        sum = sum + get_weight(v, k)
+        sum = sum + getWeight(v, k)
         if sum >= rand then
             return k
         end

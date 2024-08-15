@@ -690,7 +690,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
             pick = math.random(plysAmount)
         else
             -- use a weighted sum to select the player
-            pick = math.random_weighted(plys, function(ply)
+            pick = math.WeightedRandom(plys, function(ply)
                 local weightTbl = ply:GetRoleWeightTable()
                 return weightTbl[subrole] or minWeight
             end)
@@ -915,7 +915,7 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
             pick = math.random(#plys)
         else
             -- use a weighted sum to select the player
-            pick = math.random_weighted(plys, function(ply)
+            pick = math.WeightedRandom(plys, function(ply)
                 local weightTbl = ply:GetRoleWeightTable()
                 return weightTbl[subrole] or minWeight
             end)
