@@ -700,7 +700,7 @@ if CLIENT then
     -- @internal
     -- @realm client
     function gameloop.RoundStateChange(oldRoundState, newRoundState)
-        if nnewRoundState == ROUND_PREP then
+        if newRoundState == ROUND_PREP then
             EPOP:Clear()
 
             -- show warning to spec mode players
@@ -754,12 +754,12 @@ if CLIENT then
             -- @realm shared
             -- stylua: ignore
             hook.Run("TTTPrepareRound")
-        elseif oldRoundState == ROUND_PREP and n == ROUND_ACTIVE then
+        elseif oldRoundState == ROUND_PREP and newRoundState == ROUND_ACTIVE then
             ---
             -- @realm shared
             -- stylua: ignore
             hook.Run("TTTBeginRound")
-        elseif oldRoundState == ROUND_ACTIVE and n == ROUND_POST then
+        elseif oldRoundState == ROUND_ACTIVE and newRoundState == ROUND_POST then
             ---
             -- @realm shared
             -- stylua: ignore
