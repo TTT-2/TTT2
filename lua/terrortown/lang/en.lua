@@ -2307,6 +2307,8 @@ L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
 L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
 
 -- 2024-06-23
+L.header_roles_derandomize = "Role Derandomization"
+
 L.help_roles_derandomize = [[
 Role derandomization can be used to make role distribution feel more fair over the course of a session.
 
