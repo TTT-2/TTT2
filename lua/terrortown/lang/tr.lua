@@ -443,10 +443,10 @@ L.tbut_retime = "{num} saniye sonra tekrar kullanılabilir"
 L.tbut_help = "Etkinleştirmek için [{usekey}] tuşuna basın"
 
 -- Spectator muting of living/dead
-L.mute_living = "Yaşayan oyuncular sessize alındı"
+L.mute_living = "Canlı oyuncular sessize alındı"
 L.mute_specs = "İzleyiciler sessize alındı"
-L.mute_all = "Tümü sessiz"
-L.mute_off = "Hiçbiri sessiz değil"
+L.mute_all = "Tümü sessize alındı"
+L.mute_off = "Kimse sessize alınmadı"
 
 -- Spectators and prop possession
 L.punch_title = "GÜÇ ÖLÇER"
