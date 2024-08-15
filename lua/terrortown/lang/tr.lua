@@ -174,7 +174,7 @@ L.sb_mia = "Eylem Eksik"
 L.sb_confirmed = "Onaylanmış Ölü"
 
 L.sb_ping = "Gecikme"
-L.sb_deaths = "Ölümler"
+L.sb_deaths = "Ölüm"
 L.sb_score = "Puan"
 L.sb_karma = "Karma"
 
@@ -443,10 +443,10 @@ L.tbut_retime = "{num} saniye sonra tekrar kullanılabilir"
 L.tbut_help = "Etkinleştirmek için [{usekey}] tuşuna basın"
 
 -- Spectator muting of living/dead
-L.mute_living = "Yaşayan oyuncular sessize alındı"
+L.mute_living = "Canlı oyuncular sessize alındı"
 L.mute_specs = "İzleyiciler sessize alındı"
-L.mute_all = "Tümü sessiz"
-L.mute_off = "Hiçbiri sessiz değil"
+L.mute_all = "Tümü sessize alındı"
+L.mute_off = "Kimse sessize alınmadı"
 
 -- Spectators and prop possession
 L.punch_title = "GÜÇ ÖLÇER"
@@ -521,7 +521,7 @@ L.tip8 = "Hainler ve Dedektifler, diğer Hainlerin ve Dedektiflerin cesetlerinde
 
 L.tip9 = "Afacan Peri herhangi bir fizik nesnesini ölümcül bir mermiye dönüştürebilir. Her darbeye, yakındaki herkese zarar veren bir enerji patlaması eşlik eder."
 
---L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+L.tip10 = "Bir alışveriş rolü olarak, siz ve yoldaşlarınız iyi performans gösterirseniz ekstra ekipman kredisi ile ödüllendirileceğinizi unutmayın. Harcamayı unutmayın!"
 
 L.tip11 = "Dedektiflerin DNA Tarayıcısı, silahlardan ve eşyalardan DNA örnekleri toplamak ve daha sonra bunları kullanan oyuncunun yerini bulmak için tarama yapmak için kullanılabilir. Bir cesetten veya etkisiz hale getirilmiş bir C4'ten numune alabildiğinizde kullanışlıdır!"
 
@@ -529,13 +529,13 @@ L.tip12 = "Öldürdüğünüz birine yakın olduğunuzda, DNA'nızın bir kısm�
 
 L.tip13 = "Öldürdüğünüz birinden ne kadar uzaktaysanız, vücudundaki DNA örneğiniz o kadar hızlı bozulur."
 
---L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+L.tip14 = "Keskin nişancılık mı yapacaksın? Kılık Değiştiriciyi satın almayı düşünün. Bir atışı kaçırırsan, güvenli bir yere kaç, Kılık Değiştiriciyi devre dışı bırak ve hiç kimse onlara ateş edenin sen olduğunu bilmeyecek."
 
---L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+L.tip15 = "Bir Işınlayıcınız varsa, kovalandığınızda kaçmanıza yardımcı olabilir ve büyük bir harita üzerinde hızlı bir şekilde seyahat etmenizi sağlar. Her zaman işaretli güvenli bir pozisyonunuz olduğundan emin olun."
 
 L.tip16 = "Masumların hepsi gruplanmış ve öldürmesi zor mu? C4 seslerini çalmak için Radyoyu veya bazılarını uzaklaştırmak için ateş etmeyi düşünün."
 
---L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
+L.tip17 = "Radyoyu kullanarak, radyo yerleştirildikten sonra yerleştirme işaretçisine bakarak sesleri çalabilirsiniz. İstediğiniz sırayla birden fazla düğmeye tıklayarak birden fazla sesi sıraya koyun."
 
 L.tip18 = "Dedektifken, kalan kredileriniz varsa, güvenilir bir Masuma İmha Kiti verebilirsiniz. O zaman zamanınızı ciddi araştırma çalışmaları yaparak geçirebilir ve riskli bomba imha işini onlara bırakabilirsiniz."
 
@@ -547,17 +547,17 @@ L.tip21 = "Sağlık İstasyonu, onu kullanan herkesin DNA örneğini kaydeder. D
 
 L.tip22 = "Silahlar ve C4'ten farklı olarak, Hainler için Radyo ekipmanı, onu yerleştiren kişinin DNA örneğini içermez. Dedektiflerin onu bulması ve kimliğini ifşa etmesi konusunda endişelenme."
 
---L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+L.tip23 = "Kısa bir öğreticiyi görüntülemek veya TTT'ye özgü bazı ayarları değiştirmek için {helpkey} tuşuna basın."
 
-L.tip24 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan panosu aracılığıyla tüm oyuncuların kullanımına açıktır."
+L.tip24 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan tablosu aracılığıyla tüm oyuncuların kullanımına açıktır."
 
 L.tip25 = "Skor tablosunda, birinin adının yanındaki büyüteç simgesi, o kişi hakkında arama bilgilerine sahip olduğunuzu gösterir. Simge parlaksa, veriler bir Dedektiften gelir ve ek bilgiler içerebilir."
 
---L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+L.tip26 = "Takma adın altında büyüteç bulunan cesetler bir Dedektif tarafından arandığında sonuçları puan tablosu aracılığıyla tüm oyunculara açıktır."
 
 L.tip27 = "İzleyiciler, diğer izleyicileri veya yaşayan oyuncuları susturmak için {mutekey} tuşuna basabilir."
 
---L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
+L.tip28 = "{helpkey} tuşuna basarak Ayarlar menüsünde istediğiniz zaman farklı bir dile geçebilirsiniz."
 
 L.tip29 = "Hızlı sohbet veya 'radyo' komutları {zoomkey} tuşuna basılarak kullanılabilir."
 
@@ -575,7 +575,7 @@ L.tip35 = "Yerleştirilebilir ekipman öğelerinin çoğu (C4, Radyo gibi) ikinc
 
 L.tip36 = "Etkisiz hale getirilirken bir hata nedeniyle patlayan C4, zamanlayıcısında sıfıra ulaşan C4'ten daha küçük bir patlamaya sahiptir."
 
---L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
+L.tip37 = "Raunt zamanlayıcısının üzerinde 'HIZLI MOD' yazıyorsa, raunt ilk başta sadece birkaç dakika uzunluğunda olacaktır, ancak her ölümle birlikte mevcut süre artar. Bu mod, hainlere işlerini devam ettirmeleri için baskı yapar."
 
 -- Round report
 L.report_title = "Raunt Raporu"
@@ -598,8 +598,8 @@ L.report_save_result = "Olay Kaydı şuraya kaydedildi:"
 L.col_time = "Zaman"
 L.col_event = "Olay"
 L.col_player = "Oyuncu"
-L.col_roles = "Rol(ler)"
-L.col_teams = "Takım(lar)"
+L.col_roles = "Rol"
+L.col_teams = "Takım"
 L.col_kills1 = "Öldürmeler"
 L.col_kills2 = "Takım öldürmeleri"
 L.col_points = "Puanlar"
@@ -915,7 +915,7 @@ L.pickup_pending = "Zaten bir silah aldın, alana kadar bekle."
 L.tbut_help_admin = "Hain düğmesi ayarlarını düzenle"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] düğmesi {role} için"
 L.tbut_role_config = "Rol {current}"
---L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
+L.tbut_team_toggle = "{team} için bu düğmeyi açmak için [SHIFT + {walkkey} + {usekey}]"
 L.tbut_team_config = "Takım {current}"
 L.tbut_current_config = "Geçerli yapılandırma"
 L.tbut_intended_config = "Harita oluşturucu tarafından tasarlanan yapılandırma"
@@ -2128,8 +2128,10 @@ L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu 
 Bir pompalı için bu, her bir saçmayı etkileyecektir.
 Bir tüfek için bu sadece kurşunu etkiler.
 Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
+
 0.5 = Hasar miktarının yarısını ver.
 2 = Hasar miktarının iki katı kadar hasar ver.
+
 Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
 -- 2023-12-24
@@ -2278,28 +2280,28 @@ L.label_player_select = "Etkilenen oyuncuyu seç"
 L.label_execute_command = "Komut Çalıştır"
 
 -- 2024-05-22
---L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
---L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
---L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
---L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
---L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
---L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+L.tip38 = "{usekey} tuşuna basarak baktığınız silahları alabilirsiniz. Seni engelleyen silahı otomatik olarak bırakacak."
+L.tip39 = "Tuş atamalarınızı {helpkey} ile açılan Ayarlar menüsünde bulunan atamalar menüsünden değiştirebilirsiniz."
+L.tip40 = "Ekranınızın sol tarafında, size uygulanan mevcut ekipmanı veya durum efektlerini gösteren simgeler vardır."
+L.tip41 = "Puan tablonuzu açarsanız, kenar çubuğu ve tuş yardımcısı ek bilgi gösterir."
+L.tip42 = "Ekranınızın alt kısmındaki tuş yardımcısı, o anda kullanabileceğiniz ilgili bağlantıları gösterir."
+L.tip43 = "Onaylanmış bir cesedin adının yanındaki simge, ölen oyuncunun rolünü gösterir."
 
---L.header_loadingscreen = "Loading Screen"
+L.header_loadingscreen = "Yükleme Ekranı"
 
---L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+L.help_enable_loadingscreen = "Yükleme ekranı, harita bir raunttan sonra yenilendiğinde gösterilir. Büyük haritalarda meydana gelen görünür ve duyulabilir gecikmeyi gizlemek için kullanılmaktadır. Oyun ipuçlarını göstermek için de kullanılır."
 
---L.label_enable_loadingscreen = "Enable the loading screen"
---L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
+L.label_enable_loadingscreen = "Yükleme ekranını etkinleştir"
+L.label_enable_loadingscreen_tips = "Yükleme ekranında ipuçlarını etkinleştir"
 
 -- 2024-05-25
---L.help_round_restart_reset = [[
---Restart a round or reset the level.
---
---Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
+L.help_round_restart_reset = [[
+Bir raundu yeniden başlat veya haritayı sıfırla.
 
---L.label_button_level_reset = "reset level"
+Bir raundu yeniden başlatmak yalnızca mevcut raundu yeniden başlatır, böylece baştan başlayabilirsiniz. Raundu sıfırlamak her şeyi temizler, böylece oyun bir harita değişikliğinden sonra tazeymiş gibi yeni başlar.]]
 
---L.loadingscreen_round_restart_title = "Starting new round"
---L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+L.label_button_level_reset = "haritayı sıfırla"
+
+L.loadingscreen_round_restart_title = "Yeni raunt başlıyor"
+L.loadingscreen_round_restart_subtitle = "{map} haritasında oynuyorsunuz"
+L.loadingscreen_round_restart_subtitle_limits = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
