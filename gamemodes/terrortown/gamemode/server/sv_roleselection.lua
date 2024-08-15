@@ -38,8 +38,20 @@ roleselection.cv = {
     ---
     -- @realm server
     -- stylua: ignore
-    ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
-,
+    ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0"),
+
+    ---
+    -- @realm server
+    -- stylua: ignore
+    ttt_role_derandomize_mode = CreateConVar("ttt_role_derandomize_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The mode to use for role selection derandomization", ROLE_DERAND_NONE, ROLE_DERAND_BOTH),
+
+    ---
+    -- NOTE: Currently the minimum is 1. In theory, it could be set to 0, which would mean that players cannot get the same role (or subrole, according to the mode)
+    -- twice in a row. I suspect we'd need some special handling in role distribution to make that not get stuck in an infinite loop or have some other undesirable
+    -- behavior in certain cases.
+    -- @realm server
+    -- stylua: ignore
+    ttt_role_derandomize_min_weight = CreateConVar("ttt_role_derandomize_min_weight", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The minimum weight a player can have with derandomize on", 1),
 }
 
 -- saving and loading
@@ -187,6 +199,28 @@ function roleselection.SaveLayers()
             roleselection.savingKeys
         )
     end
+end
+
+---
+-- Initializes the player's role weights to be their minimum value.
+--
+-- @param Player ply
+-- @realm server
+function roleselection.InitializeRoleWeights(ply)
+    -- Initialize the weight table
+    local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
+    local roleWeightTable = {}
+    local roleList = roles.GetList()
+
+    for i = 1, #roleList do
+        local roleData = roleList[i]
+
+        if not roleData.isAbstract then
+            roleWeightTable[roleData.index] = minWeight
+        end
+    end
+
+    ply:SetRoleWeightTable(roleWeightTable)
 end
 
 ---
@@ -633,15 +667,30 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
     local plysAmount = #plys
     local availableRolesAmount = #availableRoles
     local tmpSelectableRoles = table.Copy(selectableRoles)
+    local modeDerandomize = roleselection.cv.ttt_role_derandomize_mode:GetInt()
+    local derand = modeDerandomize == ROLE_DERAND_SUBROLE or modeDerandomize == ROLE_DERAND_BOTH
+
+    local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
     while plysAmount > 0 and availableRolesAmount > 0 do
-        local pick = math.random(plysAmount)
-        local ply = plys[pick]
-
         local rolePick = math.random(availableRolesAmount)
         local subrole = availableRoles[rolePick]
         local roleData = roles.GetByIndex(subrole)
         local roleCount = tmpSelectableRoles[subrole]
+
+        local pick
+        if not derand then
+            -- select random index in plys table
+            pick = math.random(plysAmount)
+        else
+            -- use a weighted sum to select the player
+            pick = math.WeightedRandom(plys, function(ply)
+                local weightTbl = ply:GetRoleWeightTable()
+                return weightTbl[subrole] or minWeight
+            end)
+        end
+
+        local ply = plys[pick]
 
         if selectedForcedRoles[subrole] then
             roleCount = roleCount - selectedForcedRoles[subrole]
@@ -847,10 +896,23 @@ local function SelectBaseRolePlayers(plys, subrole, roleAmount)
     local curRoles = 0
     local plysList = {}
     local roleData = roles.GetByIndex(subrole)
+    local modeDerandomize = roleselection.cv.ttt_role_derandomize_mode:GetInt()
+    local derand = modeDerandomize == ROLE_DERAND_BASEROLE or modeDerandomize == ROLE_DERAND_BOTH
+
+    local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
 
     while curRoles < roleAmount and #plys > 0 do
-        -- select random index in plys table
-        local pick = math.random(#plys)
+        local pick
+        if not derand then
+            -- select random index in plys table
+            pick = math.random(#plys)
+        else
+            -- use a weighted sum to select the player
+            pick = math.WeightedRandom(plys, function(ply)
+                local weightTbl = ply:GetRoleWeightTable()
+                return weightTbl[subrole] or minWeight
+            end)
+        end
 
         -- the player we consider
         local ply = plys[pick]
@@ -981,11 +1043,23 @@ function roleselection.SelectRoles(plys, maxPlys)
     -- stylua: ignore
     hook.Run("TTT2ModifyFinalRoles", roleselection.finalRoles)
 
+    local minWeight = roleselection.cv.ttt_role_derandomize_min_weight:GetInt()
+
     for i = 1, #plys do
         local ply = plys[i]
         local subrole = roleselection.finalRoles[ply] or ROLE_INNOCENT
 
         ply:SetRole(subrole, nil, true)
+
+        local baserole = roles.GetByIndex(subrole):GetBaseRole()
+        local roleWeightTable = ply:GetRoleWeightTable()
+        -- increment all role weights for the player
+        for r, w in pairs(roleWeightTable) do
+            roleWeightTable[r] = w + 1
+        end
+        -- reset the weights for the final role and its baserole
+        roleWeightTable[subrole] = minWeight
+        roleWeightTable[baserole] = minWeight
 
         -- store a steamid -> role map
         GAMEMODE.LastRole[ply:SteamID64()] = subrole
