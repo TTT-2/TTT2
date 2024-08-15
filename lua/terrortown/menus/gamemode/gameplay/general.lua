@@ -34,6 +34,5 @@ function CLGAMEMODESUBMENU:Populate(parent)
     form2:MakeCheckBox({
         label = "label_crosshair_ironsight_low_enabled",
         convar = "ttt_ironsights_lowered",
-        master = crossEnb,
     })
 end

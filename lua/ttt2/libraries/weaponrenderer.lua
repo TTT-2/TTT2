@@ -129,10 +129,7 @@ function weaponrenderer.CreateModel(wep, modelData)
         and string.find(modelDataCopy.model, ".mdl")
         and file.Exists(modelDataCopy.model, "GAME")
     then
-        -- note on the rendergroup: This rendergroup is not listed in the GMod wiki; however all
-        -- SWEP construction kit weapons use this rendergroup - and it works
-        modelDataCopy.modelEnt =
-            ClientsideModel(modelDataCopy.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
+        modelDataCopy.modelEnt = ClientsideModel(modelDataCopy.model)
 
         if IsValid(modelDataCopy.modelEnt) then
             -- for clientside entities wep:GetPos is not defined; since a view model is not needed

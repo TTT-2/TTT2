@@ -446,12 +446,12 @@ if SERVER then
             ---
             -- @realm server
             -- stylua: ignore
-            local win = hook.Run("TTT2PreWinChecker", preventWin)
+            local win = hook.Run("TTT2PreWinChecker")
 
             ---
             -- @realm server
             -- stylua: ignore
-            win = win or hook.Run("TTTCheckForWin", preventWin)
+            win = win or hook.Run("TTTCheckForWin")
 
             if win == WIN_NONE then
                 return
