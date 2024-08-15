@@ -7,7 +7,6 @@ roleselection = {}
 local math = math
 local table = table
 local player = player
-local bit = bit
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
