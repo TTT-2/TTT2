@@ -115,7 +115,7 @@ function RADIO:ShowRadioCommands(state)
             local w, h = 200, 300
 
             radioframe = vgui.Create("DForm")
-            radioframe:SetName(GetTranslation("quick_title"))
+            radioframe:SetLabel(GetTranslation("quick_title"))
             radioframe:SetSize(w, h)
             radioframe:SetMouseInputEnabled(false)
             radioframe:SetKeyboardInputEnabled(false)

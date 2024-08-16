@@ -194,7 +194,7 @@ addonChecker.curatedList = {
         reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
         type = ADDON_INCOMPATIBLE,
     },
-    ["110148946"] = { -- ttt_broken_hand_fix by Jolez
+    ["1629273484"] = { -- ttt_broken_hand_fix by Jolez
         reason = "Already built in into TTT2",
         type = ADDON_INCOMPATIBLE,
     },

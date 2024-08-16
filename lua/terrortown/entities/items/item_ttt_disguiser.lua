@@ -40,7 +40,7 @@ if CLIENT then
         trans = trans or LANG.GetTranslation
 
         local dform = vgui.Create("DForm", parent)
-        dform:SetName(trans("disg_menutitle"))
+        dform:SetLabel(trans("disg_menutitle"))
         dform:StretchToParent(0, 0, 0, 0)
         dform:SetAutoSize(false)
 
