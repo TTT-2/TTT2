@@ -25,6 +25,8 @@ if CLIENT then
     ITEM.material = "vgui/ttt/icon_disguise"
     ITEM.hud = Material("vgui/ttt/perks/hud_disguiser.png")
 
+    ITEM.sidebarDescription = "item_disguiser_sidebar"
+
     ---
     -- @ignore
     function ITEM:DrawInfo()
