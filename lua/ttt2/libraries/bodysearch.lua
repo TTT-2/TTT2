@@ -697,7 +697,7 @@ if CLIENT then
                     text = {
                         {
                             body = "search_kills2",
-                            params = { player = table.concat(nicks, "\n", 1) },
+                            params = { player = table.concat(nicks, ", ", 1) },
                         },
                     },
                 }
