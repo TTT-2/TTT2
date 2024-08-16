@@ -1424,6 +1424,7 @@ L.label_enforce_playermodel = "强制设置玩家模型"
 L.label_use_custom_models = "使用一个随机选择的玩家模型"
 L.label_prefer_map_models = "优先选择地图特定模型而不是默认模型"
 L.label_select_model_per_round = "每轮选择一个新的随机模型（如果禁用，则仅在地图变更时）"
+--L.label_select_unique_model_per_round = "Select a random unique model for each player"
 
 L.help_prefer_map_models = [[
 有些地图定义了他们自己的玩家模型，默认情况下。这些模型的优先级比自动分配的模型高。如果禁用此设置。地图自带的玩家模型将被禁用，
