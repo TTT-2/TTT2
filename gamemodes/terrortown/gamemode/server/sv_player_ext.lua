@@ -801,8 +801,6 @@ end
 function plymeta:FindCorpse()
     local ragdolls = ents.FindByClass("prop_ragdoll")
 
-    PrintTable(ragdolls)
-
     for i = 1, #ragdolls do
         local rag = ragdolls[i]
 
@@ -989,8 +987,9 @@ function plymeta:SetReviving(isReviving)
     self.isReviving = isReviving
 
     net.Start("TTT2RevivalUpdate_IsReviving")
+    net.WritePlayer(self)
     net.WriteBool(self.isReviving)
-    net.Send(self)
+    net.Broadcast()
 end
 
 ---
