@@ -795,17 +795,26 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 end
 
 ---
--- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
+-- Tries to find the corpse of a player. Returns nil if none was found.
+-- @return Entity Returns the ragdoll entity
 -- @realm server
 function plymeta:FindCorpse()
     local ragdolls = ents.FindByClass("prop_ragdoll")
 
-    for i = 1, #ragdolls do
-        local ent = ragdolls[i]
+    PrintTable(ragdolls)
 
-        if ent.uqid == self:UniqueID() and IsValid(ent) then
-            return ent or false
+    for i = 1, #ragdolls do
+        local rag = ragdolls[i]
+
+        if
+            not rag:IsPlayerRagdoll()
+            or not CORPSE.IsRealPlayerCorpse(rag)
+            or CORPSE.GetPlayerSID64(rag) ~= self:SteamID64()
+        then
+            continue
         end
+
+        return rag
     end
 end
 
