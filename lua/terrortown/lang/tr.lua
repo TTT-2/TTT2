@@ -1424,6 +1424,7 @@ L.label_enforce_playermodel = "Rol oyuncu modelini uygula"
 L.label_use_custom_models = "Rastgele seçilen bir oyuncu modeli kullan"
 L.label_prefer_map_models = "Varsayılan modeller yerine haritaya özgü modelleri tercih edin"
 L.label_select_model_per_round = "Her rauntta yeni bir rastgele model seçin (devre dışı bırakılmışsa yalnızca harita değişikliğinde)"
+--L.label_select_unique_model_per_round = "Select a random unique model for each player"
 
 L.help_prefer_map_models = [[
 Bazı haritalar kendi oyuncu modellerini tanımlar. Varsayılan olarak, bu modeller otomatik olarak atananlardan daha yüksek bir önceliğe sahiptir. Bu ayar devre dışı bırakıldığında, haritaya özgü modeller devre dışı bırakılır.
