@@ -39,6 +39,10 @@ end
 if SERVER then
     local foundButtons = {}
 
+    ---
+    -- Setting up all buttons found on a map, this is done on every map reset (on prepare round).
+    -- @internal
+    -- @realm server
     function button.SetUp()
         for i = 1, #validButtons do
             local classButton = validButtons[i]
@@ -51,6 +55,10 @@ if SERVER then
         net.SendStream("TTT2SyncButtonEntities", foundButtons)
     end
 
+    ---
+    -- Resyncs button states to the client if they late connect or hotreload.
+    -- @internal
+    -- @realm server
     function button.SyncToClient(ply)
         net.SendStream("TTT2SyncButtonEntities", foundButtons, ply)
     end
