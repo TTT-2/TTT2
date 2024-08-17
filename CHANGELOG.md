@@ -42,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `admin.IsAdmin(ply)` as a wrapper that automatically calls `GM:TTT2AdminCheck` (by @TimGoll)
   - Made sure this new function is used in our whole codebase for all admin checks
 - Added `ENTITY:IsPlayerRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
+- Added improved vFire integration for everything in TTT2 that spawns fire (by @TimGoll and @EntranceJew)
 - Added the `SWEP.DryFireSound` field to the weapon base to allow the dryfire sound to be easily changed (by @TW1STaL1CKY)
 - Added role derandomization options for perceptually fairer role distribution
 - Added targetID to buttons (by @TimGoll)
@@ -91,10 +92,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 - Fixed incendiaries sometimes exploding without fire (by @TimGoll)
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
+- Fixed vFire explosions killing a player even if they have `NoExplosionDamage` equipped (by @TimGoll)
 - Fixed a nil error in the PreDrop function in weapon_ttt_cse (by @mexikoedi)
 - Fixed `table.FullCopy(tbl)` behaviour when `tbl` contained a Vector or Angle (by @Histalek)
 - Fixed the bodysearch showing a wrong player icon when searching a fake body (by @TimGoll)
 - Fixed players respawned with `ply:Revive` sometimes spawning on a fake corpse (by @TimGoll)
+- Fixed undefined Keys breaking the gamemode (by @TimGoll)
+- Fixed markerVision elements being visible to team mates of unknown teams (such as team Innocent) (by @TimGoll)
 
 ### Removed
 

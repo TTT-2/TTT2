@@ -2348,3 +2348,5 @@ L.name_button_rotating = "Lever"
 
 L.button_default = "Press [{usekey}] to trigger"
 L.button_rotating = "Press [{usekey}] to flip"
+
+L.undefined_key = "???"
