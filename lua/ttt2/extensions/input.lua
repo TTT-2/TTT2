@@ -18,5 +18,11 @@ local inputLookupBinding = input.LookupBinding
 -- @return boolean Returns true if the binding is pressed
 -- @realm client
 function input.IsBindingDown(binding)
-    return inputIsButtonDown(inputGetKeyCode(inputLookupBinding(binding)))
+    local bindingLookup = inputLookupBinding(binding)
+
+    if not bindingLookup then
+        return false
+    end
+
+    return inputIsButtonDown(inputGetKeyCode(bindingLookup))
 end

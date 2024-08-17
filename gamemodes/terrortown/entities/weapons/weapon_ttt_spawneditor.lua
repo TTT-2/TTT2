@@ -368,8 +368,8 @@ if CLIENT then
         self.selectedMode = 1
 
         self:AddTTT2HUDHelp("spawneditor_place", "spawneditor_remove")
-        self:AddHUDHelpLine("spawneditor_change", Key("+reload", "R"))
-        self:AddHUDHelpLine("spawneditor_ammo_edit", Key("+walk", "WALK"))
+        self:AddHUDHelpLine("spawneditor_change", Key("+reload", "undefined_key"))
+        self:AddHUDHelpLine("spawneditor_ammo_edit", Key("+walk", "undefined_key"))
 
         hook.Add("PostDrawTranslucentRenderables", "RenderWeaponSpawnEdit", RenderHook)
     end
