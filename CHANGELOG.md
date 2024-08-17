@@ -73,6 +73,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Spectators are now able to look at corpses on fire (by @TimGoll)
 - Corpses on fire display that information in targetID and MStack (by @TimGoll)
 - Updated Russian and English localization files (by @Satton2)
+- Made `ply:IsReviving` a shared player variable (by @TimGoll)
 
 ### Fixed
 
@@ -91,6 +92,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
 - Fixed a nil error in the PreDrop function in weapon_ttt_cse (by @mexikoedi)
 - Fixed `table.FullCopy(tbl)` behaviour when `tbl` contained a Vector or Angle (by @Histalek)
+- Fixed the bodysearch showing a wrong player icon when searching a fake body (by @TimGoll)
+- Fixed players respawned with `ply:Revive` sometimes spawning on a fake corpse (by @TimGoll)
 
 ### Removed
 

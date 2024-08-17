@@ -14,5 +14,5 @@ end
 -- @return boolean Returns true if it is a true ragdoll
 -- @realm shared
 function entmeta:IsPlayerRagdoll()
-    return self:IsRagdoll() and CORPSE.GetPlayerNick(self, nil) ~= nil
+    return self:IsRagdoll() and CORPSE.GetPlayerNick(self, false) ~= false
 end

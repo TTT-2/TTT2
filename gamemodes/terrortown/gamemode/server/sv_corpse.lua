@@ -475,9 +475,10 @@ realdamageinfo = 0
 -- @param Player ply
 -- @param Player attacker
 -- @param CTakeDamageInfo dmginfo
+-- @param boolean realPlayerCorpse Set to true if this is a real player corpse
 -- @return Entity the CORPSE
 -- @realm server
-function CORPSE.Create(ply, attacker, dmginfo)
+function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
     if not IsValid(ply) then
         return
     end
@@ -489,6 +490,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
     if not IsValid(rag) then
         return
     end
+
+    rag:SetNWBool("real_player_corpse", realPlayerCorpse or false)
 
     rag:SetPos(ply:GetPos())
     rag:SetModel(ply:GetModel())

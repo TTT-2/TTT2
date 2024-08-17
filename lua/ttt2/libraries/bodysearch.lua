@@ -296,7 +296,7 @@ if SERVER then
         sceneData.lastWords = rag.last_words
         sceneData.wasHeadshot = rag.was_headshot or false
         sceneData.deathTime = rag.time or 0
-        sceneData.sid64 = rag.scene.plySID64 or ""
+        sceneData.sid64 = CORPSE.GetPlayerSID64(rag)
         sceneData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage or 0))
         sceneData.killFloorSurface = rag.scene.floorSurface or 0
         sceneData.killWaterLevel = rag.scene.waterLevel or 0
