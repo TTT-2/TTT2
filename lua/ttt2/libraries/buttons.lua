@@ -57,6 +57,7 @@ if SERVER then
 
     ---
     -- Resyncs button states to the client if they late connect or hotreload.
+    -- @param Player ply The player to sync to
     -- @internal
     -- @realm server
     function button.SyncToClient(ply)
