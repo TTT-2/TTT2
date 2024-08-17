@@ -2343,4 +2343,4 @@ Changes to this value will not take effect until players reconnect or the map ch
 L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
 
 -- 2024-08-17
-L.undefined_key = "UNK"
+L.undefined_key = "???"
