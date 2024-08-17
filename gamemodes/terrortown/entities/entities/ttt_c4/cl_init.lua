@@ -34,7 +34,7 @@ function ShowC4Config(bomb)
     local dformtime = vgui.Create("DForm", bg)
     dformtime:SetPos(m, m)
     dformtime:SetSize(w - m * 4, h / 2)
-    dformtime:SetName(T("c4_arm_timer"))
+    dformtime:SetLabel(T("c4_arm_timer"))
 
     local dclock = vgui.Create("DLabel", dformtime)
     dclock:SetFont("TimeLeft")
@@ -88,7 +88,7 @@ function ShowC4Config(bomb)
     dformmisc:SetPos(m, m + 140)
     dformmisc:SetSize(w - m * 4, h / 2)
     dformmisc:SetPadding(20)
-    dformmisc:SetName(T("c4_remove_title"))
+    dformmisc:SetLabel(T("c4_remove_title"))
 
     -- Buttons
     local by = 200
@@ -99,7 +99,7 @@ function ShowC4Config(bomb)
     dgrab:SetPos(m * 6, m * 5)
     dgrab:SetSize(bw, bh)
     dgrab:SetText(T("c4_remove_pickup"))
-    dgrab:SetDisabled(false)
+    dgrab:SetEnabled(true)
     dgrab.DoClick = function()
         if not LocalPlayer() or not LocalPlayer():Alive() then
             return
@@ -115,7 +115,7 @@ function ShowC4Config(bomb)
     ddestroy:SetPos(w - m * 4 - bw - m * 6, m * 5)
     ddestroy:SetSize(bw, bh)
     ddestroy:SetText(T("c4_remove_destroy1"))
-    ddestroy:SetDisabled(false)
+    ddestroy:SetEnabled(true)
     ddestroy.Confirmed = false
     ddestroy.DoClick = function(s)
         if not LocalPlayer() or not LocalPlayer():Alive() then
@@ -393,7 +393,7 @@ function ShowC4Disarm(bomb)
     dgrab:SetSize(bw, bh)
     dgrab:CenterHorizontal()
     dgrab:SetText(T("c4_remove_pickup"))
-    dgrab:SetDisabled(true)
+    dgrab:SetEnabled(false)
     dgrab.DoClick = function()
         if not LocalPlayer():Alive() then
             return
@@ -408,7 +408,7 @@ function ShowC4Disarm(bomb)
     ddestroy:SetSize(bw, bh)
     ddestroy:CenterHorizontal()
     ddestroy:SetText(T("c4_remove_destroy1"))
-    ddestroy:SetDisabled(true)
+    ddestroy:SetEnabled(false)
     ddestroy.Confirmed = false
     ddestroy.DoClick = function(s)
         if not LocalPlayer():Alive() then
@@ -470,8 +470,8 @@ function ShowC4Disarm(bomb)
         dstatus:SizeToContents()
         dstatus:CenterHorizontal()
 
-        ddestroy:SetDisabled(false)
-        dgrab:SetDisabled(false)
+        ddestroy:SetEnabled(true)
+        dgrab:SetEnabled(true)
     end
 
     disarm_fail = function()

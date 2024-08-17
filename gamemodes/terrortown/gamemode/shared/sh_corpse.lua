@@ -82,3 +82,13 @@ end
 function CORPSE.IsValidBody(rag)
     return IsValid(rag) and CORPSE.GetPlayerNick(rag, false) ~= false
 end
+
+---
+-- Checks if this corpse is a real corpse. There can be fake corpses that
+-- are tied to a specific player that are not real corpses
+-- @param Entity rag The ragdoll
+-- @return boolean Returns if the ragdoll is a real player corpse
+-- @realm shared
+function CORPSE.IsRealPlayerCorpse(rag)
+    return rag:GetNWBool("real_player_corpse", false)
+end

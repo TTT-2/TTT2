@@ -52,6 +52,8 @@ function entityOutputs.RegisterHook(hookName)
     entityOutputs.hooks[hookName] = true
 
     hook.Add(hookName .. "_Internal", hookName .. "_name", function()
+        -- The `ACTIVATOR` and `CALLER` globals are only available during execution
+        -- see note at https://wiki.facepunch.com/gmod/ENTITY:TriggerOutput#example
         local activator, caller = ACTIVATOR, CALLER
 
         ---

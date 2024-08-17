@@ -726,7 +726,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
 
     -- Create ragdoll and hook up marking effects
-    local rag = CORPSE.Create(ply, attacker, dmginfo)
+    local rag = CORPSE.Create(ply, attacker, dmginfo, true)
 
     ply.server_ragdoll = rag
 

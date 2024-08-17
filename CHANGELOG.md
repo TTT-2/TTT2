@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
 - Added a globally audible sound when searching a body
 - Added the option to add a subtitle to a marker vision element
+- Added the option to assign random unique models at round start (by @Exonen2)
 - Added a new voice chat UI (by @TimGoll)
 - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 - Disabled locational voice during the preparing phase by default
@@ -72,6 +73,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Spectators are now able to look at corpses on fire (by @TimGoll)
 - Corpses on fire display that information in targetID and MStack (by @TimGoll)
 - Updated Russian and English localization files (by @Satton2)
+- Made `ply:IsReviving` a shared player variable (by @TimGoll)
 
 ### Fixed
 
@@ -89,6 +91,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed incendiaries sometimes exploding without fire (by @TimGoll)
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
 - Fixed a nil error in the PreDrop function in weapon_ttt_cse (by @mexikoedi)
+- Fixed `table.FullCopy(tbl)` behaviour when `tbl` contained a Vector or Angle (by @Histalek)
+- Fixed the bodysearch showing a wrong player icon when searching a fake body (by @TimGoll)
+- Fixed players respawned with `ply:Revive` sometimes spawning on a fake corpse (by @TimGoll)
 
 ### Removed
 

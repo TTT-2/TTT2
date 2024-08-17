@@ -301,7 +301,7 @@ function RADAR.CreateMenu(parent, frame)
     --local w, h = parent:GetSize()
 
     local dform = vgui.Create("DForm", parent)
-    dform:SetName(GetTranslation("radar_menutitle"))
+    dform:SetLabel(GetTranslation("radar_menutitle"))
     dform:StretchToParent(0, 0, 0, 0)
     dform:SetAutoSize(false)
 

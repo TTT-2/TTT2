@@ -16,7 +16,7 @@ function CreateRerollMenu(parent)
     local client = LocalPlayer()
 
     local dform = vgui.Create("DForm", parent)
-    dform:SetName(GetTranslation("reroll_menutitle"))
+    dform:SetLabel(GetTranslation("reroll_menutitle"))
     dform:StretchToParent(0, 0, 0, 0)
     dform:SetAutoSize(false)
 

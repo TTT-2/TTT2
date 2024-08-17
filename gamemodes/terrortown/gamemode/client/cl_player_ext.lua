@@ -321,8 +321,9 @@ end)
 
 net.Receive("TTT2RevivalUpdate_IsReviving", function()
     local client = LocalPlayer()
+    local ply = net.ReadPlayer()
 
-    client.isReviving = net.ReadBool()
+    ply.isReviving = net.ReadBool()
 
     if not client.isReviving then
         return

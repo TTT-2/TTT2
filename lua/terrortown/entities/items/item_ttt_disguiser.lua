@@ -25,6 +25,8 @@ if CLIENT then
     ITEM.material = "vgui/ttt/icon_disguise"
     ITEM.hud = Material("vgui/ttt/perks/hud_disguiser.png")
 
+    ITEM.sidebarDescription = "item_disguiser_sidebar"
+
     ---
     -- @ignore
     function ITEM:DrawInfo()
@@ -40,7 +42,7 @@ if CLIENT then
         trans = trans or LANG.GetTranslation
 
         local dform = vgui.Create("DForm", parent)
-        dform:SetName(trans("disg_menutitle"))
+        dform:SetLabel(trans("disg_menutitle"))
         dform:StretchToParent(0, 0, 0, 0)
         dform:SetAutoSize(false)
 

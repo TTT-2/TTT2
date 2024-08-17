@@ -2169,7 +2169,11 @@ function SKIN:PaintInfoItemTTT2(panel, w, h)
                 continue
             end
 
-            text_translated = text_translated .. DynT(body, params, true) .. ""
+            if i == 1 then
+                text_translated = DynT(body, params, true)
+            else
+                text_translated = text_translated .. " " .. DynT(body, params, true)
+            end
         end
     end
 
