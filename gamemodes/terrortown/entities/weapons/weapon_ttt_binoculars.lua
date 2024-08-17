@@ -270,7 +270,7 @@ if CLIENT then
     -- @ignore
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
-        self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
+        self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "undefined_key"))
 
         BaseClass.Initialize(self)
     end

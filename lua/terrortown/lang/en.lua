@@ -2341,3 +2341,6 @@ The minimum weight, therefore, effectively controls how much each round affects 
 
 Changes to this value will not take effect until players reconnect or the map changes.]]
 L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+
+-- 2024-08-17
+L.undefined_key = "UNK"
