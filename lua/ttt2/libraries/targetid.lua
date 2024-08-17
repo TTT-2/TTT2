@@ -606,7 +606,7 @@ function targetid.HUDDrawTargetIDButtons(tData)
         or not client:IsTerror()
         or not IsValid(ent)
         or not ent:IsButton()
-        or tData:GetEntityDistance() > 100
+        or tData:GetEntityDistance() > 90
     then
         return
     end
@@ -616,11 +616,16 @@ function targetid.HUDDrawTargetIDButtons(tData)
     tData:EnableOutline()
     tData:SetOutlineColor(client:GetRoleColor())
 
-    tData:SetTitle(TryT("name_button"))
     tData:SetKey(input.GetKeyCode(key_params.usekey))
 
+    if ent:IsDefaultButton() then
+        tData:SetTitle(TryT("name_button_default"))
+        tData:SetSubtitle(ParT("button_default", key_params))
+    end
+
     if ent:IsRotatingButton() then
-        tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+        tData:SetTitle(TryT("name_button_rotating"))
+        tData:SetSubtitle(ParT("button_rotating", key_params))
     end
 end
 
