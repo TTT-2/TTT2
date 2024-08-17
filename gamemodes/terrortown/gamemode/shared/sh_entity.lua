@@ -16,3 +16,11 @@ end
 function entmeta:IsPlayerRagdoll()
     return self:IsRagdoll() and CORPSE.GetPlayerNick(self, false) ~= false
 end
+
+function entmeta:SetRotatingButton(state)
+    self.isRotatingButton = state
+end
+
+function entmeta:IsRotatingButton()
+    return self.isRotatingButton or false
+end

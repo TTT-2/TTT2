@@ -589,6 +589,7 @@ function GM:PostCleanupMap()
     hook.Run("TTT2PostCleanupMap")
 
     door.SetUp()
+    button.SetUp()
 
     gameloop.Prepare()
 end
