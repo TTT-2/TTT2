@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added sounds to multiple UI interactions (can be disabled in settings: Gameplay > Client-Sounds)
 - Added a globally audible sound when searching a body
 - Added the option to add a subtitle to a marker vision element
+- Added the option to assign random unique models at round start (by @Exonen2)
 - Added a new voice chat UI (by @TimGoll)
 - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
 - Disabled locational voice during the preparing phase by default
@@ -42,25 +43,38 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Made sure this new function is used in our whole codebase for all admin checks
 - Added `ENTITY:IsPlayerRagdoll` to check if a corpse is a real player ragdoll (by @TimGoll)
 - Added improved vFire integration for everything in TTT2 that spawns fire (by @TimGoll and @EntranceJew)
+- Added the `SWEP.DryFireSound` field to the weapon base to allow the dryfire sound to be easily changed (by @TW1STaL1CKY)
+- Added role derandomization options for perceptually fairer role distribution
 
 ### Changed
 
-- TargetID is now hidden when a marker vision element is focused
-- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets
+- Placeable Entities are now checked for pickup clientside first (by @ZenBre4ker)
+  - C4 UI is not routed over the server anymore
+- Visualizer can now only be picked up by the originator (by @ZenBre4ker)
+- TargetID is now hidden when a marker vision element is focused (by @TimGoll)
+- Tracers are now drawn for every shot/pellet instead of only 25% of shots/pellets (by @EntranceJew)
 - The ConVar "ttt_debug_preventwin" will now also prevent the time limit from ending the round (by @NickCloudAT)
 - `TTT2GiveFoundCredits` hook is no longer called when checking whether a player is allowed to take credits from a given corpse. (by @Spanospy)
-- Micro optimizations
+- Micro optimizations (by @EntranceJew)
   - switched from `player.GetAll()` to `select(2, player.Iterator())`
   - use `net.ReadPlayer` / `net.WritePlayer` if applicable instead of `net.Read|WriteEntity`
   - Reduced radar bit size for net message
   - The holdtype for pistol weapons now matches the viewmodel
-- `VOICE.IsSpeaking(ply)` (clientside) can now be used to check if any player is speaking to you
+- `VOICE.IsSpeaking(ply)` (clientside) can now be used to check if any player is speaking to you (by @TimGoll)
 - Unified the spec color usage throughout the whole UI (by @TimGoll)
 - Cleanup and performance optimizations for marks library (by @WardenPotato)
 - Updated the Turkish localization file (by @NovaDiablox)
 - The level time now starts with the first preparing phase, meaning that idle on connect doesn't decrease the map time (by @TimGoll)
 - Minor cleanup and optimizations in weapon code (by @TW1STaL1CKY)
+- Shotgun weapon changes (by @TW1STaL1CKY)
+  - Dry firing (attempting to shoot with no ammo) will now make you reload if possible, like all the other weapons do
+  - Interrupting the reload should look and feel less jank
+  - A thirdperson animation now plays when each shell is loaded (the pistol reload animation seems to fit best)
 - Now always properly checks if an entity is a true ragdoll to make sure no other props get ragdoll handling (by @TimGoll)
+- Spectators are now able to look at corpses on fire (by @TimGoll)
+- Corpses on fire display that information in targetID and MStack (by @TimGoll)
+- Updated Russian and English localization files (by @Satton2)
+- Made `ply:IsReviving` a shared player variable (by @TimGoll)
 
 ### Fixed
 
@@ -73,14 +87,20 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed a null entity error in the ShootBullet function in weapon_tttbase (by @mexikoedi)
 - Fixed a nil compare error in the DrawHUD function in weapon_tttbasegrenade (by @mexikoedi)
 - Fixed players sometimes not receiving their role if they joined late to the game (by @TimGoll)
+- Fixed crowbar attack animation not being visible to the player swinging it (by @TW1STaL1CKY)
 - Fixed weapon dryfire sound interrupting the weapon's gunshot sound (by @TW1STaL1CKY)
 - Fixed incendiaries sometimes exploding without fire (by @TimGoll)
 - Fixed scoreboard not showing any body search info on players that changed to forced spec during a round (by @TimGoll)
 - Fixed vFire explosions killing a player even if they have `NoExplosionDamage` equipped (by @TimGoll)
+- Fixed a nil error in the PreDrop function in weapon_ttt_cse (by @mexikoedi)
+- Fixed `table.FullCopy(tbl)` behaviour when `tbl` contained a Vector or Angle (by @Histalek)
+- Fixed the bodysearch showing a wrong player icon when searching a fake body (by @TimGoll)
+- Fixed players respawned with `ply:Revive` sometimes spawning on a fake corpse (by @TimGoll)
 
 ### Removed
 
-- Removed radio tab in shop UI
+- Removed radio tab in shop UI (by @ZenBre4ker)
+- Removed all uses of UseOverride-Hook inside TTT2 (It's still available for addons!) (by @ZenBre4ker)
 - Removed `round_restart`, `round_selected` and `round_started` MStack messages to reduce message spawm (by @TimGoll)
 - Removed the old tips panel visible to spectators (moved to the new loading screen) (by @TimGoll)
 

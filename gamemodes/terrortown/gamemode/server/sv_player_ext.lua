@@ -694,6 +694,9 @@ function plymeta:InitialSpawn()
     -- We never have weapons here, but this inits our equipment state
     self:StripAll()
 
+    -- Initialize role weights
+    roleselection.InitializeRoleWeights(self)
+
     -- set spawn position
     local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
 
@@ -759,6 +762,11 @@ function plymeta:UnSpectate()
 end
 
 ---
+-- @accessor table A table containing the weights to use when selecting roles, if enabled.
+-- @realm server
+AccessorFunc(plymeta, "role_weights", "RoleWeightTable")
+
+---
 -- Returns whether a @{Player} is able to select a specific @{ROLE}
 -- @param ROLE roleData
 -- @param number choice_count
@@ -787,17 +795,24 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 end
 
 ---
--- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
+-- Tries to find the corpse of a player. Returns nil if none was found.
+-- @return Entity Returns the ragdoll entity
 -- @realm server
 function plymeta:FindCorpse()
     local ragdolls = ents.FindByClass("prop_ragdoll")
 
     for i = 1, #ragdolls do
-        local ent = ragdolls[i]
+        local rag = ragdolls[i]
 
-        if ent.uqid == self:UniqueID() and IsValid(ent) then
-            return ent or false
+        if
+            not rag:IsPlayerRagdoll()
+            or not CORPSE.IsRealPlayerCorpse(rag)
+            or CORPSE.GetPlayerSID64(rag) ~= self:SteamID64()
+        then
+            continue
         end
+
+        return rag
     end
 end
 
@@ -972,8 +987,9 @@ function plymeta:SetReviving(isReviving)
     self.isReviving = isReviving
 
     net.Start("TTT2RevivalUpdate_IsReviving")
+    net.WritePlayer(self)
     net.WriteBool(self.isReviving)
-    net.Send(self)
+    net.Broadcast()
 end
 
 ---
@@ -1682,6 +1698,12 @@ local function SetPlayerReady(_, ply)
     map.SyncToClient(ply)
 
     gameloop.PlayerReady(ply)
+
+    -- if random models for all players are enabled, they should be set as soon
+    -- as the player connects
+    if GetConVar("ttt2_select_unique_model_per_player"):GetBool() then
+        ply.defaultModel = playermodels.GetRandomPlayerModel()
+    end
 
     ---
     -- @realm server

@@ -41,23 +41,16 @@ local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, 
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local soundsSearch = {
-    Sound("player/suit_ct_01.wav"),
-    Sound("player/suit_ct_02.wav"),
-    Sound("player/suit_ct_03.wav"),
-    Sound("player/suit_ct_04.wav"),
-    Sound("player/suit_ct_05.wav"),
-    Sound("player/suit_ct_06.wav"),
-    Sound("player/suit_ct_07.wav"),
-    Sound("player/suit_ct_08.wav"),
-    Sound("player/suit_ct_09.wav"),
-    Sound("player/suit_ct_11.wav"),
-    Sound("player/suit_ct_13.wav"),
-    Sound("player/suit_ct_15.wav"),
-    Sound("player/suit_ct_17.wav"),
-    Sound("player/suit_ct_19.wav"),
-    Sound("player/suit_ct_20.wav"),
-    Sound("player/suit_ct_21.wav"),
-    Sound("player/suit_ct_23.wav"),
+    Sound("player/footsteps/snow1.wav"),
+    Sound("player/footsteps/snow2.wav"),
+    Sound("player/footsteps/snow3.wav"),
+    Sound("player/footsteps/snow4.wav"),
+    Sound("player/footsteps/snow5.wav"),
+    Sound("player/footsteps/snow6.wav"),
+    Sound("player/footsteps/sand1.wav"),
+    Sound("player/footsteps/sand2.wav"),
+    Sound("player/footsteps/sand3.wav"),
+    Sound("player/footsteps/sand4.wav"),
 }
 
 ttt_include("sh_corpse")
@@ -258,8 +251,8 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
     end
 
     -- prevent search for anyone if the body is burning
-    if rag:IsOnFire() then
-        LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
+    if rag:IsOnFire() and ply:IsTerror() then
+        LANG.Msg(ply, "body_burning", nil, MSG_MSTACK_WARN)
 
         return
     end
@@ -482,9 +475,10 @@ realdamageinfo = 0
 -- @param Player ply
 -- @param Player attacker
 -- @param CTakeDamageInfo dmginfo
+-- @param boolean realPlayerCorpse Set to true if this is a real player corpse
 -- @return Entity the CORPSE
 -- @realm server
-function CORPSE.Create(ply, attacker, dmginfo)
+function CORPSE.Create(ply, attacker, dmginfo, realPlayerCorpse)
     if not IsValid(ply) then
         return
     end
@@ -496,6 +490,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
     if not IsValid(rag) then
         return
     end
+
+    rag:SetNWBool("real_player_corpse", realPlayerCorpse or false)
 
     rag:SetPos(ply:GetPos())
     rag:SetModel(ply:GetModel())

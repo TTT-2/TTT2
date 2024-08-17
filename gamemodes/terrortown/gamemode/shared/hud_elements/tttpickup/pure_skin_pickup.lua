@@ -17,7 +17,6 @@ if CLIENT then
     local tipsize = element_height
     local margin = 5
     local pad = 8
-    local color_tip = Color(205, 155, 0, 255)
 
     HUDELEMENT.icon_item = Material("vgui/ttt/pickup/icon_special.png")
     HUDELEMENT.icon_ammo = Material("vgui/ttt/pickup/icon_ammo.png")
@@ -65,19 +64,24 @@ if CLIENT then
     end
 
     function HUDELEMENT:DrawBar(x, y, w, h, alpha, item)
+        local client = LocalPlayer()
+
         -- draw bg and shadow
         local barColor = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b, alpha)
         self.drawer:DrawBg(x, y, w, h, barColor)
 
         --draw tip
-        local tipColor = COLOR_WHITE
-        local icon = self.icon_item
+        local tipColor, icon
+
+        if client:IsActive() then
+            tipColor = client:GetRoleColor()
+        else
+            tipColor = COLOR_SPEC
+        end
 
         if item.type == PICKUP_WEAPON then
-            tipColor = LocalPlayer():GetRoleColor()
             icon = self.drawer.SlotIcons[item.kind] or self.icon_item
         elseif item.type == PICKUP_AMMO then
-            tipColor = color_tip
             icon = self.icon_ammo
         end
 

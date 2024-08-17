@@ -1424,6 +1424,7 @@ L.label_enforce_playermodel = "Erzwinge rollenspezifisches Spielermodell"
 L.label_use_custom_models = "Verwende ein zufällig ausgewähltes Spielermodell"
 L.label_prefer_map_models = "Bevorzuge kartenspezifische Modelle über die Standardspielermodelle"
 L.label_select_model_per_round = "Wähle in jeder Runde ein neues zufälliges Modell aus (wenn deaktiviert, dann nur bei Kartenwechsel)"
+L.label_select_unique_model_per_round = "Unterschiedliches zufälliges Spielermodell je Spieler"
 
 L.help_prefer_map_models = [[
 Einige Karten definieren ihre eigenen Spielermodelle. Standardmäßig haben diese Modelle eine höhere Priorität als die automatisch zugewiesenen Modelle. Durch das Deaktivieren dieser Einstellung werden die kartenspezifischen Modelle deaktiviert.
@@ -2095,7 +2096,6 @@ Verwenden, um Orte auf der Karte im Auge zu behalten, die schwer zu sehen sind.]
 L.msg_beacon_destroyed = "Einer deiner Peilsender wurde zerstört!"
 L.msg_beacon_death = "Ein Spieler ist in unmittelbarer Nähe eines deiner Peilsender gestorben."
 
-L.beacon_pickup_disabled = "Nur der Besitzer des Peilsenders kann ihn aufheben"
 L.beacon_short_desc = "Peilsender werden von öffentlichen Ordnungsrollen verwendet, um lokale Wallhacks um sie herum hinzuzufügen"
 
 -- 2023-12-18
@@ -2123,6 +2123,7 @@ L.label_enable_bobbing_strafe = "Aktiviere 'Sichtwackeln' beim seitwärts gehen"
 
 L.help_enable_dynamic_fov = "Das dynamische Sichtfeld wird je nach Geschwindigkeit des Spielers angewendet. Wenn ein Spieler zum Beispiel rennt, wird das Sichtfeld vergrößert, um die Geschwindigkeit zu visualisieren."
 L.help_enable_bobbing_strafe = "'View bobbing' ist das leichte Kamerawackeln beim Gehen, Schwimmen oder Fallen."
+
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Multipliziert den Basisschadenswert der Waffe um diesen Faktor.
 Für eine Schrotflinte würde sich dies auf jedes Geschoss auswirken.
@@ -2190,7 +2191,7 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 
 --L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
 --L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat messages and notifications. They can be quite obnoxious."
 
 --L.label_enable_sound_interact = "Enable interaction sounds"
 --L.label_enable_sound_buttons = "Enable button sounds"
@@ -2201,15 +2202,15 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 --L.label_level_sound_message = "Message sound level multiplier"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap size"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
 
 -- 2024-03-31
 --L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+--L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
 
 --L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
 --
@@ -2217,7 +2218,7 @@ L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
 --L.label_equipmenteditor_configurable_clip = "Configurable clip size"
 
 -- 2024-04-06
---L.help_locational_voice_range = [[This convar constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 --
 --Set to 0 to disable this cut-off.]]
 
@@ -2282,7 +2283,7 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 -- 2024-05-22
 --L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
 --L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
---L.tip40 = "On the left side of your screen are icons showing current items or status effects applied to you."
+--L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
 --L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
 --L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
 --L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
@@ -2305,3 +2306,38 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 --L.loadingscreen_round_restart_title = "Starting new round"
 --L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
 --L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+
+-- 2024-06-23
+--L.header_roles_derandomize = "Role Derandomization"
+
+--L.help_roles_derandomize = [[
+--Role derandomization can be used to make role distribution feel more fair over the course of a session.
+--
+--In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
+--
+--There are 4 modes:
+--
+--mode 0: Disabled - No derandomization is done. This is the default.
+--
+--mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
+--
+--mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
+--
+--mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
+--L.label_roles_derandomize_mode = "Derandomization mode"
+--L.label_roles_derandomize_mode_none = "mode 0: Disabled"
+--L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
+--L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
+--L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+
+--L.help_roles_derandomize_min_weight = [[
+--Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
+--
+--Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
+--
+--For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
+--
+--The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
+--
+--Changes to this value will not take effect until players reconnect or the map changes.]]
+--L.label_roles_derandomize_min_weight = "Derandomization minimum weight"

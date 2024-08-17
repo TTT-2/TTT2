@@ -79,6 +79,11 @@ local cvSelectModelPerRound = CreateConVar("ttt2_select_model_per_round", "1", {
 ---
 -- @realm server
 -- stylua: ignore
+local cvSelectUniqueModelPerPlayer = CreateConVar("ttt2_select_unique_model_per_player", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+-- stylua: ignore
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Credits
@@ -168,7 +173,6 @@ util.AddNetworkString("TTT_PerformGesture")
 util.AddNetworkString("TTT_Role")
 util.AddNetworkString("TTT_RoleList")
 util.AddNetworkString("TTT_ConfirmUseTButton")
-util.AddNetworkString("TTT_C4Config")
 util.AddNetworkString("TTT_C4DisarmResult")
 util.AddNetworkString("TTT_ScanResult")
 util.AddNetworkString("TTT_FlareScorch")
@@ -953,7 +957,19 @@ function GM:TTT2PrePrepareRound(duration)
     if cvPreferMapModels:GetBool() and self.force_plymodel and self.force_plymodel ~= "" then
         self.playermodel = self.force_plymodel
     elseif cvSelectModelPerRound:GetBool() then
-        self.playermodel = playermodels.GetRandomPlayerModel()
+        if cvSelectUniqueModelPerPlayer:GetBool() then
+            local plys = player.GetAll()
+            for i = 1, #plys do
+                plys[i].defaultModel = playermodels.GetRandomPlayerModel()
+            end
+        else
+            local plys = player.GetAll()
+            for i = 1, #plys do
+                plys[i].defaultModel = nil
+            end
+
+            self.playermodel = playermodels.GetRandomPlayerModel()
+        end
     end
 
     ---

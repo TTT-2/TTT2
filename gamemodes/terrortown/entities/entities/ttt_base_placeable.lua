@@ -14,6 +14,8 @@ ENT.isDestructible = true
 
 ENT.pickupWeaponClass = nil
 
+local soundDeny = Sound("HL2Player.UseDeny")
+
 ---
 -- @realm shared
 function ENT:Initialize()
@@ -41,6 +43,39 @@ function ENT:SetupDataTables()
     self:NetworkVar("Entity", 0, "Originator")
 end
 
+---
+-- Run if a valid player tries to pick up this entity to check if this pickup is accepted.
+-- @param Player activator The player that used their use key
+-- @return[default=true] boolean Return true to allow pickup
+-- @hook
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return true
+end
+
+if CLIENT then
+    ---
+    -- Hook that is called if a player uses their use key while focusing on the entity.
+    -- Implement this to predict early if entity can be picked up
+    -- @return bool True to prevent pickup
+    -- @realm client
+    function ENT:ClientUse()
+        local client = LocalPlayer()
+
+        if not IsValid(client) or not client:IsTerror() or not self.pickupWeaponClass then
+            return true
+        end
+
+        if not self:PlayerCanPickupWeapon(client) then
+            LANG.Msg(client, "pickup_fail", nil, MSG_MSTACK_WARN)
+
+            self:EmitSound(soundDeny)
+
+            return true
+        end
+    end
+end -- CLIENT
+
 if SERVER then
     local soundRumble = {
         Sound("physics/concrete/concrete_break2.wav"),
@@ -66,8 +101,6 @@ if SERVER then
     local soundWeld = Sound("weapons/c4/c4_plant.wav")
 
     local soundThrow = Sound("Weapon_SLAM.SatchelThrow")
-
-    local soundDeny = Sound("HL2Player.UseDeny")
 
     local soundWeaponPickup = Sound("items/ammo_pickup.wav")
 
@@ -232,12 +265,11 @@ if SERVER then
 
     ---
     -- Hook that is called if a player uses their use key while focusing on the entity.
-    -- @note When overwriting this function BaseClass.UseOverwrite has to be called if
+    -- @note When overwriting this function BaseClass.Use has to be called if
     -- the entity pickup system should be used.
     -- @param Player activator The player that used their use key
-    -- @hook
     -- @realm server
-    function ENT:UseOverride(activator)
+    function ENT:Use(activator)
         if not IsValid(activator) or not activator:IsTerror() or not self.pickupWeaponClass then
             return
         end
@@ -279,16 +311,6 @@ if SERVER then
         self:OnPickup(activator, wep)
 
         self:Remove()
-    end
-
-    ---
-    -- Run if a valid player tries to pick up this entity to check if this pickup is accepted.
-    -- @param Player activator The player that used their use key
-    -- @return[default=true] boolean Return true to allow pickup
-    -- @hook
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        return true
     end
 
     ---
@@ -392,4 +414,4 @@ if SERVER then
 
         return true
     end
-end
+end -- SERVER

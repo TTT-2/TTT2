@@ -1,3 +1,8 @@
+ROLE_DERAND_NONE = 0
+ROLE_DERAND_BASEROLE = 1
+ROLE_DERAND_SUBROLE = 2
+ROLE_DERAND_BOTH = 3
+
 -- load roles
 local rolesPre = "terrortown/entities/roles/"
 local rolesFiles = file.Find(rolesPre .. "*.lua", "LUA")

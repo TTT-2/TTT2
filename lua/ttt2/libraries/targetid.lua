@@ -35,6 +35,7 @@ local materialAutoClose = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
+local materialFire = Material("vgui/ttt/tid/tid_onfire")
 
 ---
 -- This function makes sure local variables, which use other libraries that are not yet initialized, are initialized later.
@@ -514,11 +515,6 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
         return
     end
 
-    -- only show this if the ragdoll has a nick, else it could be a mattress
-    if not CORPSE.GetPlayerNick(ent, false) then
-        return
-    end
-
     local corpse_found = CORPSE.GetFound(ent, false) or not gameloop.IsDetectiveMode()
     local corpse_ply = corpse_found and CORPSE.GetPlayer(ent) or false
     local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars"
@@ -562,6 +558,10 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
             tData:AddDescriptionLine(TryT("corpse_hint_inspect_limited_details"))
         else
             tData:SetSubtitle(ParT("corpse_hint", key_params))
+        end
+
+        if ent:IsOnFire() then
+            tData:AddDescriptionLine(TryT("body_burning"), COLOR_ORANGE, { materialFire })
         end
     elseif binoculars_useable then
         tData:SetSubtitle(ParT("corpse_binoculars", { key = Key("+attack", "ATTACK") }))
