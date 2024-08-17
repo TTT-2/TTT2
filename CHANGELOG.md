@@ -97,6 +97,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the bodysearch showing a wrong player icon when searching a fake body (by @TimGoll)
 - Fixed players respawned with `ply:Revive` sometimes spawning on a fake corpse (by @TimGoll)
 - Fixed undefined Keys breaking the gamemode (by @TimGoll)
+- Fixed markerVision elements being visible to team mates of unknown teams (such as team Innocent) (by @TimGoll)
 
 ### Removed
 
