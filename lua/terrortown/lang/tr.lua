@@ -563,13 +563,13 @@ L.tip29 = "Hızlı sohbet veya 'radyo' komutları {zoomkey} tuşuna basılarak k
 
 L.tip30 = "Levyenin ikincil ateşi diğer oyuncuları itecektir."
 
-L.tip31 = "Nişangahı kullanarak ateş etmek, isabetini biraz artıracak ve geri tepmeyi azaltacaktır. Çömelmek işe yaramaz."
+L.tip31 = "Nişangâhı kullanarak ateş etmek, isabetini biraz artıracak ve geri tepmeyi azaltacaktır. Çömelmek işe yaramaz."
 
 L.tip32 = "Duman bombaları, özellikle kalabalık odalarda kafa karışıklığı yaratmak için iç mekanlarda etkilidir."
 
 L.tip33 = "Hain olarak, cesetleri taşıyabileceğinizi ve onları masumların ve Dedektiflerinin meraklı gözlerinden saklayabileceğinizi unutmayın."
 
-L.tip34 = "Skor tablosunda, yaşayan bir oyuncunun adına tıklayıp 'şüpheli' veya 'arkadaş' gibi bir etiket seçebilirsiniz. Bu etiket, nişangahınızın altındaysa görünecektir."
+L.tip34 = "Skor tablosunda, yaşayan bir oyuncunun adına tıklayıp 'şüpheli' veya 'arkadaş' gibi bir etiket seçebilirsiniz. Bu etiket, nişangâhınızın altındaysa görünecektir."
 
 L.tip35 = "Yerleştirilebilir ekipman öğelerinin çoğu (C4, Radyo gibi) ikincil ateş kullanılarak duvarlara yapıştırılabilir."
 
@@ -979,7 +979,7 @@ L.submenu_appearance_hudswitcher_title = "Arayüz Değiştirici"
 L.submenu_appearance_vskin_title = "Valve Arayüzü"
 L.submenu_appearance_targetid_title = "Hedef Kimliği"
 L.submenu_appearance_shop_title = "Mağaza Ayarları"
-L.submenu_appearance_crosshair_title = "Nişangah"
+L.submenu_appearance_crosshair_title = "Nişangâh"
 L.submenu_appearance_dmgindicator_title = "Hasar Göstergesi"
 L.submenu_appearance_performance_title = "Performans"
 L.submenu_appearance_interface_title = "Arayüz"
@@ -989,12 +989,12 @@ L.submenu_gameplay_general_title = "Genel"
 L.submenu_administration_hud_title = "Arayüz Ayarları"
 L.submenu_administration_randomshop_title = "Rasgele Mağaza"
 
-L.help_color_desc = "Bu ayar etkinleştirilirse, hedef kimliği dış çizgisi ve nişangah için kullanılacak genel bir renk seçebilirsiniz."
+L.help_color_desc = "Bu ayar etkinleştirilirse, hedef kimliği dış çizgisi ve nişangâh için kullanılacak genel bir renk seçebilirsiniz."
 L.help_scale_factor = "Bu ölçek faktörü tüm arayüz öğelerini (Arayüz, Valve Grafiksel Kullanıcı Arayüzü ve Hedef Kimliği) etkiler. Ekran çözünürlüğü değiştirilirse otomatik olarak güncellenir. Bu değerin değiştirilmesi arayüzü sıfırlayacaktır!"
 L.help_hud_game_reload = "Arayüz şu anda kullanılamıyor. Sunucuya yeniden bağlanın veya oyunu yeniden başlatın."
 L.help_hud_special_settings = "Bunlar bu arayüzün özel ayarlarıdır."
 L.help_vskin_info = "Valve Arayüzü (Valve Grafiksel Kullanıcı Arayüz görünümü), mevcut olan tüm menü öğelerine uygulanan görünümdür. Basit bir Lua komut dosyası ile kolayca oluşturulabilirler ve renkleri ve bazı boyut parametrelerini değiştirebilirler."
-L.help_targetid_info = "Hedef Kimliği, nişangahınızı bir varlığa yönlendirirken oluşturulan bilgilerdir. Rengi 'Genel' sekmesinde yapılandırılabilir."
+L.help_targetid_info = "Hedef Kimliği, nişangâhınızı bir varlığa yönlendirirken oluşturulan bilgilerdir. Rengi 'Genel' sekmesinde yapılandırılabilir."
 L.help_hud_default_desc = "Tüm oyuncular için varsayılan arayüz değerini ayarlar. Henüz bir arayüz seçmemiş olan oyuncular, varsayılan olarak bu arayüzü alacaklardır. Bunu değiştirmek, arayüzlerini zaten seçmiş olan oyuncuların arayüzlerini değiştirmez."
 L.help_hud_forced_desc = "Tüm oyuncular için bir arayüz zorlar. Bu, arayüz seçim özelliğini herkes için devre dışı bırakır."
 L.help_hud_enabled_desc = "Bu arayüzlerin seçimini kısıtlamak için etkinleştir veya devre dışı bırak."
@@ -1011,7 +1011,7 @@ L.label_hud_select = "Arayüz Seç"
 L.label_vskin_select = "Valve Arayüzü seçin"
 L.label_blur_enable = "Valve Arayüz arka plan bulanıklığını etkinleştir"
 L.label_color_enable = "Valve Arayüz arka plan rengini etkinleştir"
-L.label_minimal_targetid = "Nişangah altında minimalist Hedef Kimliği (Karma metni, ipuçları vb.)"
+L.label_minimal_targetid = "Nişangâh altında minimalist Hedef Kimliği (Karma metni, ipuçları vb.)"
 L.label_shop_always_show = "Her zaman mağazayı göster"
 L.label_shop_double_click_buy = "Mağazada üzerine çift tıklayarak bir ürün satın almayı etkinleştir"
 L.label_shop_num_col = "Sütun sayısı"
@@ -1020,13 +1020,13 @@ L.label_shop_item_size = "Simge boyutu"
 L.label_shop_show_slot = "Yuva işaretini göster"
 L.label_shop_show_custom = "Özel öğe işaretini göster"
 L.label_shop_show_fav = "Favori öğe işaretini göster"
-L.label_crosshair_enable = "Nişangahı etkinleştir"
-L.label_crosshair_opacity = "Nişangah opaklığı"
+L.label_crosshair_enable = "Nişangâhı etkinleştir"
+L.label_crosshair_opacity = "Nişangâh opaklığı"
 L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
-L.label_crosshair_size = "Nişangah boyutu"
-L.label_crosshair_thickness = "Nişangah kalınlığı"
-L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_scale_enable = "Silaha bağlı nişangah ölçeğini etkinleştir"
+L.label_crosshair_size = "Nişangâh boyutu"
+L.label_crosshair_thickness = "Nişangâh kalınlığı"
+L.label_crosshair_thickness_outline = "Nişangâh dış çizgi kalınlığı"
+L.label_crosshair_scale_enable = "Silaha bağlı nişangâh ölçeğini etkinleştir"
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -1065,7 +1065,7 @@ L.header_targetid = "Hedef Kimliği Ayarları"
 L.header_shop_settings = "Ekipman Mağazası Ayarları"
 L.header_shop_layout = "Öğe Listesi Düzeni"
 L.header_shop_marker = "Öğe İşaretleyici Ayarları"
-L.header_crosshair_settings = "Nişangah Ayarları"
+L.header_crosshair_settings = "Nişangâh Ayarları"
 L.header_damage_indicator = "Hasar Göstergesi Ayarları"
 L.header_performance_settings = "Performans Ayarları"
 L.header_interface_settings = "Arayüz Ayarları"
@@ -2141,17 +2141,17 @@ L.cl_sb_row_sresult_direct_conf = "Doğrudan Onay"
 L.cl_sb_row_sresult_pub_police = "Kamu polisliği rolü onayı"
 
 -- 2024-01-05
-L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
+L.label_crosshair_thickness_outline_enable = "Nişangâh dış çizgisini etkinleştir"
 L.label_crosshair_outline_high_contrast = "Dış çizgi yüksek kontrast rengini etkinleştir"
-L.label_crosshair_mode = "Nişangah modu"
-L.label_crosshair_static_length = "Sabit nişangah çizgi uzunluğunu etkinleştir"
+L.label_crosshair_mode = "Nişangâh modu"
+L.label_crosshair_static_length = "Sabit nişangâh çizgi uzunluğunu etkinleştir"
 
 L.choice_crosshair_mode_0 = "Çizgiler ve nokta"
 L.choice_crosshair_mode_1 = "Sadece çizgiler"
 L.choice_crosshair_mode_2 = "Sadece nokta"
 
 L.help_crosshair_scale_enable = [[
-Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendirilmesini sağlar. Koni, zıplama ve koşma gibi dış faktörlerle çarpılan silahın taban isabetinden etkilenir.
+Dinamik nişangâh, silahın konisine bağlı olarak nişangâhın ölçeklendirilmesini sağlar. Koni, zıplama ve koşma gibi dış faktörlerle çarpılan silahın taban isabetinden etkilenir.
 
 Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
 
@@ -2202,8 +2202,8 @@ L.label_level_sound_buttons = "Düğme ses seviyesi çarpanı"
 L.label_level_sound_message = "Mesaj ses seviyesi çarpanı"
 
 -- 2024-03-07
-L.label_crosshair_static_gap_length = "Sabit nişangah boşluk uzunluğunu etkinleştir"
-L.label_crosshair_size_gap = "Nişangah boşluk boyutu çarpanı"
+L.label_crosshair_static_gap_length = "Sabit nişangâh boşluk uzunluğunu etkinleştir"
+L.label_crosshair_size_gap = "Nişangâh boşluk boyutu çarpanı"
 
 -- 2024-03-31
 L.help_locational_voice = "Konumsal sohbet, TTT2'nin konumsal 3D ses uygulamasıdır. Oyuncular sadece çevrelerindeki belirli bir yarıçapta duyulabilir ve oyuncular ne kadar uzakta olurlarsa sesleri o kadar sessizleşir."
@@ -2308,36 +2308,36 @@ L.loadingscreen_round_restart_subtitle = "{map} haritasında oynuyorsunuz"
 L.loadingscreen_round_restart_subtitle_limits = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
 
 -- 2024-06-23
---L.header_roles_derandomize = "Role Derandomization"
+L.header_roles_derandomize = "Rastgele Rol Dağıtımı"
 
---L.help_roles_derandomize = [[
---Role derandomization can be used to make role distribution feel more fair over the course of a session.
---
---In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
---
---There are 4 modes:
---
---mode 0: Disabled - No derandomization is done. This is the default.
---
---mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
---
---mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
---
---mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
---L.label_roles_derandomize_mode = "Derandomization mode"
---L.label_roles_derandomize_mode_none = "mode 0: Disabled"
---L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
---L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
---L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+L.help_roles_derandomize = [[
+Rol dağılımını bir oturum boyunca daha adil hissettirmek için kullanılabilir.
 
---L.help_roles_derandomize_min_weight = [[
---Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
---
---Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
---
---For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
---
---The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
---
---Changes to this value will not take effect until players reconnect or the map changes.]]
---L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+Özünde, etkinleştirildiğinde, bir oyuncunun o role atanmamışken bir rol alma şansı artar. Bu daha adil gelse de, bir oyuncunun birkaç rauntta hain olarak seçilmedikleri gerçeğine dayanarak bir başkasının hain olarak seçilebileceğini tahmin edebileceği 'metagaming''i de mümkün kılar. İstenmiyorsa bu seçeneği etkinleştirmeyin.
+
+4 mod vardır:
+
+mod 0: Devre Dışı - Rastgele dağıtım yapılmaz. Bu varsayılandır.
+
+mod 1: Yalnızca temel roller - Rastgele dağıtıma son verme yalnızca temel roller için gerçekleştirilir. Alt roller rastgele seçilecektir. Bunlar Masum ve Hain gibi rollerdir.
+
+mod 2: Yalnızca alt roller - Rastgele dağıtım yalnızca alt roller için gerçekleştirilir. Alt roller rastgele seçilecektir. Alt rollerin yalnızca temel rolleri için daha önce seçilmiş oyunculara atandığını unutmayın.
+
+mod 3: Temel roller ve alt roller - Rastgele dağıtım hem temel roller hem de alt roller için gerçekleştirilir.]]
+L.label_roles_derandomize_mode = "Rastgele dağıtım modu"
+L.label_roles_derandomize_mode_none = "mod 0: Devre dışı"
+L.label_roles_derandomize_mode_base_only = "mod 1: Yalnızca temel roller"
+L.label_roles_derandomize_mode_sub_only = "mod 2: Yalnızca alt roller"
+L.label_roles_derandomize_mode_base_and_sub = "mod 3: Temel roller ve alt roller"
+
+L.help_roles_derandomize_min_weight = [[
+Rastgele oyuncu seçimlerinin rol dağılımı sırasında her oyuncu için her rolle ilişkili bir ağırlık kullanması sağlanarak ve oyuncuya o rol atanmadığında bu ağırlık 1 artar. Bu ağırlıklar bağlantılar arasında veya haritalar arasında kalıcı değildir.
+
+Bir oyuncuya her rol atandığında, ilgili ağırlık bu minimum ağırlığa sıfırlanır. Bu ağırlığın mutlak bir anlamı yoktur; sadece diğer ağırlıklara göre yorumlanabilir.
+
+Örneğin, ağırlığı 1 olan A oyuncusu ve ağırlığı 5 olan B oyuncusu göz önüne alındığında, B oyuncusunun seçilme olasılığı A oyuncusundan 5 kat daha fazladır. Ancak, A oyuncusunun ağırlığı 4 ise, B oyuncusunun seçilme olasılığı sadece 5/4 kat daha fazladır.
+
+Bu nedenle, minimum ağırlık, her raundun bir oyuncunun seçilme şansını ne kadar etkilediğini etkili bir şekilde kontrol eder ve daha yüksek değerler daha az etkilenmesine neden olur. Varsayılan 1 değeri, her raundun şansda oldukça önemli bir artışa neden olduğu ve tersine, bir oyuncunun arka arkaya iki kez aynı rolü almasının son derece düşük olduğu anlamına gelir.
+
+Bu değerdeki değişiklikler, oyuncular yeniden bağlanana veya harita değişene kadar geçerli olmayacaktır.]]
+L.label_roles_derandomize_min_weight = "Rastgele dağıtım minimum ağırlığı"
