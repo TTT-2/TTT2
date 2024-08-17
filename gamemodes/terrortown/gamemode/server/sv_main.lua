@@ -930,6 +930,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2PlayerFinishedReloading(ply)
+    map.SyncToClient(ply)
     button.SyncToClient(ply)
 end
 
