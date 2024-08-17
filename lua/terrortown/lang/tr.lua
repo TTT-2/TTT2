@@ -2341,3 +2341,12 @@ Bu nedenle, minimum ağırlık, her raundun bir oyuncunun seçilme şansını ne
 
 Bu değerdeki değişiklikler, oyuncular yeniden bağlanana veya harita değişene kadar geçerli olmayacaktır.]]
 L.label_roles_derandomize_min_weight = "Rastgele dağıtım minimum ağırlığı"
+
+-- 2024-08-17
+--L.name_button_default = "Button"
+--L.name_button_rotating = "Lever"
+
+--L.button_default = "Press [{usekey}] to trigger"
+--L.button_rotating = "Press [{usekey}] to flip"
+
+--L.undefined_key = "???"

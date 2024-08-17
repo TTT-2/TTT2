@@ -2341,3 +2341,12 @@ L.decoy_help_primary = "Colocar el señuelo"
 --
 --Changes to this value will not take effect until players reconnect or the map changes.]]
 --L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+
+-- 2024-08-17
+--L.name_button_default = "Button"
+--L.name_button_rotating = "Lever"
+
+--L.button_default = "Press [{usekey}] to trigger"
+--L.button_rotating = "Press [{usekey}] to flip"
+
+--L.undefined_key = "???"
