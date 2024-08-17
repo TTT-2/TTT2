@@ -46,7 +46,7 @@ L.credit_kill = "Bir {role} öldürdüğünüz için {num} kredi aldınız."
 
 -- Karma
 L.karma_dmg_full = "Karman {amount}, bu yüzden bu raunt tam hasar veriyorsun!"
-L.karma_dmg_other = "Karman {amount}. Sonuç olarak, verdiğiniz tüm hasar ​%{num}​ azaltılır."
+L.karma_dmg_other = "Karman {amount}. Bu nedenle, verdiğiniz tüm hasar ​%{num}​ azaltıldı."
 
 -- Body identification messages
 L.body_found = "{finder}, {victim} adlı kişinin cesedini buldu. {role}"
@@ -170,7 +170,7 @@ L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
 L.sb_mapchange = "{num} rauntta veya {time} içinde harita değişecektir."
 L.sb_mapchange_disabled = "Oturum sınırları devre dışı."
 
-L.sb_mia = "Eylem Eksik"
+L.sb_mia = "Kayıp"
 L.sb_confirmed = "Onaylanmış Ölü"
 
 L.sb_ping = "Gecikme"
@@ -455,7 +455,7 @@ L.punch_malus = "İyi puanın güç ölçer sınırını {num} arttırdı!"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
-Sen masum bir teröristsin! Ama etrafta hainler var...
+Sen masum bir teröristsin ama etrafta hainler var...
 Kime güvenebilirsin ve seni kurşuna dizmek isteyen kim olabilir?
 
 Arkanı kolla ve bu işten canlı çıkmak için yoldaşlarınla birlikte çalış!]]
@@ -2036,7 +2036,7 @@ L.hat_deerstalker_name = "Dedektifin Şapkası"
 
 -- 2023-11-16
 L.help_prop_spec_dash = [[
-Normal hareketten daha yüksek kuvvette olabilirler. Daha yüksek kuvvet aynı zamanda daha yüksek temel değer tüketimi anlamına gelir.
+İzleyiciyken nesneyle atılma, baktığınız yönde atılma hareketleridir. Normal hareketten daha yüksek kuvvette olabilirler. Daha yüksek kuvvet aynı zamanda daha yüksek temel değer tüketimi anlamına da gelir.
 
 Bu değişken itme kuvvetinin bir çarpanıdır.]]
 L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
@@ -2226,9 +2226,9 @@ Bu kesintiyi devre dışı bırakmak için 0'a ayarlayın.]]
 L.help_voice_activation = [[Genel sesli sohbet için mikrofonunun etkinleştirilme şeklini değiştirir. Bunların hepsi 'Genel Sesli Sohbet' tuş atamanızı kullanır. Takım sesli sohbeti her zaman bas konuş şeklindedir.
 
 Bas Konuş: Konuşmak için tuşa basılı tutun.
-Sessize almak için bas: Mikrofonun her zaman açık, sesini kapatmak için tuşu basılı tut.
-Aç Kapat: Mikrofonunuzu açmak veya kapatmak için tuşa basın.
-Aç Kapat (Katılınca Etkinleştir): 'Aç Kapat' gibi, ancak sunucuya katıldığınızda mikrofonunuz etkinleştirilir.]]
+Ses Etkinliği: Mikrofonun her zaman açık, sesini kapatmak için tuşu basılı tut.
+Aç - Kapat: Mikrofonunuzu açmak veya kapatmak için tuşa basın.
+Aç - Kapat (Katılınca Etkinleştir): 'Aç - Kapat' gibi, ancak sunucuya katıldığınızda mikrofonunuz etkinleştirilir.]]
 L.label_voice_activation = "Sesli Sohbet Etkinleştirme Modu"
 L.label_voice_activation_mode_ptt = "Bas Konuş"
 L.label_voice_activation_mode_ptm = "Sessize almak için bas"
