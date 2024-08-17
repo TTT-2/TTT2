@@ -19,7 +19,7 @@ end
 
 ---
 -- Sets the information if this entity is a default button.
--- @bote: This function does not network the information.
+-- @note: This function does not network the information.
 -- @param boolean state The new state
 -- @realm shared
 function entmeta:SetDefaultButton(state)
