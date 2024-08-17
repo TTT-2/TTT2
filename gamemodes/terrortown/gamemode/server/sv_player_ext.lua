@@ -1696,6 +1696,7 @@ local function SetPlayerReady(_, ply)
     entspawnscript.TransmitToPlayer(ply)
 
     map.SyncToClient(ply)
+    button.SyncToClient(ply)
 
     gameloop.PlayerReady(ply)
 

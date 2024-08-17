@@ -589,6 +589,7 @@ function GM:PostCleanupMap()
     hook.Run("TTT2PostCleanupMap")
 
     door.SetUp()
+    button.SetUp()
 
     gameloop.Prepare()
 end
@@ -725,6 +726,8 @@ function GM:OnReloaded()
     playermodels.Initialize()
 
     map.InitializeList()
+
+    button.SetUp()
 
     -- set the default random playermodel
     self.playermodel = playermodels.GetRandomPlayerModel()
@@ -928,6 +931,7 @@ end
 -- @realm server
 function GM:TTT2PlayerFinishedReloading(ply)
     map.SyncToClient(ply)
+    button.SyncToClient(ply)
 end
 
 ---

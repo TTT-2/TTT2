@@ -45,6 +45,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added improved vFire integration for everything in TTT2 that spawns fire (by @TimGoll and @EntranceJew)
 - Added the `SWEP.DryFireSound` field to the weapon base to allow the dryfire sound to be easily changed (by @TW1STaL1CKY)
 - Added role derandomization options for perceptually fairer role distribution
+- Added targetID to buttons (by @TimGoll)
 
 ### Changed
 

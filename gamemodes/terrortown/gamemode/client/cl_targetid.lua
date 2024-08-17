@@ -321,6 +321,7 @@ function GM:HUDDrawTargetID()
     targetid.HUDDrawTargetIDWeapons(tData)
     targetid.HUDDrawTargetIDPlayers(tData)
     targetid.HUDDrawTargetIDRagdolls(tData)
+    targetid.HUDDrawTargetIDButtons(tData)
     targetid.HUDDrawTargetIDDoors(tData)
     targetid.HUDDrawTargetIDDNAScanner(tData)
 
