@@ -27,6 +27,11 @@ local function UpdateStates(foundButtons)
             end
 
             ent:SetNotSolid(false)
+
+            if SERVER then
+                entityOutputs.RegisterMapEntityOutput(ent, "OnOut", "TTT2TestHook")
+                entityOutputs.RegisterMapEntityOutput(ent, "OnIn", "TTT2TestHook2")
+            end
         end
     end
 end
@@ -51,6 +56,13 @@ if SERVER then
 
     function button.SyncToClient(ply)
         net.SendStream("TTT2SyncButtonEntities", foundButtons, ply)
+    end
+
+    function GM:TTT2TestHook(doorEntity, activator)
+        print("OnOut Triggered", doorEntity, activator)
+    end
+    function GM:TTT2TestHook2(doorEntity, activator)
+        print("OnIn Triggered", doorEntity, activator)
     end
 end
 

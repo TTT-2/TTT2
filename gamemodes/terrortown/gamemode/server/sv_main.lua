@@ -727,6 +727,8 @@ function GM:OnReloaded()
 
     map.InitializeList()
 
+    button.SetUp()
+
     -- set the default random playermodel
     self.playermodel = playermodels.GetRandomPlayerModel()
     self.playercolor = COLOR_WHITE
@@ -928,7 +930,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTT2PlayerFinishedReloading(ply)
-    map.SyncToClient(ply)
+    button.SyncToClient(ply)
 end
 
 ---

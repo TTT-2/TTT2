@@ -198,7 +198,6 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or ent:GetClass() ~= "ttt_traitor_button"
         or tData:GetEntityDistance() > ent:GetUsableRange()
@@ -320,7 +319,6 @@ function targetid.HUDDrawTargetIDWeapons(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or tData:GetEntityDistance() > 100
         or not ent:IsWeapon()
@@ -596,6 +594,37 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 end
 
 ---
+-- This function handles looking at buttons and adds specific descriptions
+-- @param TARGET_DATA tData The object to be used in the hook
+-- @realm client
+function targetid.HUDDrawTargetIDButtons(tData)
+    local client = LocalPlayer()
+    local ent = tData:GetEntity()
+
+    if
+        not IsValid(client)
+        or not client:IsTerror()
+        or not IsValid(ent)
+        or not ent:IsButton()
+        or tData:GetEntityDistance() > 100
+    then
+        return
+    end
+
+    -- enable targetID rendering
+    tData:EnableText()
+    tData:EnableOutline()
+    tData:SetOutlineColor(client:GetRoleColor())
+
+    tData:SetTitle(TryT("name_button"))
+    tData:SetKey(input.GetKeyCode(key_params.usekey))
+
+    if ent:IsRotatingButton() then
+        tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+    end
+end
+
+---
 -- This function handles looking at doors and adds specific descriptions
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
@@ -606,7 +635,6 @@ function targetid.HUDDrawTargetIDDoors(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or not ent:IsDoor()
         or not ent:PlayerCanOpenDoor()

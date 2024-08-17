@@ -24,3 +24,7 @@ end
 function entmeta:IsRotatingButton()
     return self.isRotatingButton or false
 end
+
+function entmeta:IsButton()
+    return self:IsRotatingButton()
+end
