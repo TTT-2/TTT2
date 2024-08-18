@@ -7,7 +7,9 @@ CLGAMEMODESUBMENU.title = "submenu_commands_commands_title"
 
 function CLGAMEMODESUBMENU:Populate(parent)
     local plys = player.GetAll()
+    local roles = roles.GetSortedRoles()
     local plyChoices = {}
+    local roleChoices = {}
 
     for i = 1, #plys do
         local ply = plys[i]
@@ -15,6 +17,15 @@ function CLGAMEMODESUBMENU:Populate(parent)
         plyChoices[i] = {
             title = ply:Nick(),
             value = ply,
+        }
+    end
+
+    for i = 1, #roles do
+        local role = roles[i]
+
+        roleChoices[i] = {
+            title = role.name,
+            value = role.index,
         }
     end
 
@@ -187,5 +198,31 @@ function CLGAMEMODESUBMENU:Populate(parent)
             admin.PlayerSetArmor(ply, amountArmor:GetValue())
         end,
         master = playerArmor,
+    })
+
+    -- FORCE PLAYER ROLE --
+
+    local form8 = vgui.CreateTTT2Form(parent, "header_commands_player_force_role")
+
+    local playerList = form8:MakeComboBox({
+        label = "label_player_select",
+        choices = plyChoices,
+    })
+
+    local playerRole = form8:MakeComboBox({
+        label = "label_player_role",
+        choices = roleChoices,
+        master = playerList
+    })
+
+    form8:MakeButton({
+        label = "label_execute_command",
+        buttonLabel = "label_button_player_force_role",
+        OnClick = function(slf)
+            local ply, _ = playerList:GetSelected()
+
+            admin.PlayerForceRole(ply, playerRole:GetSelected())
+        end,
+        master = playerRole,
     })
 end
