@@ -189,11 +189,11 @@ function PANEL:SetDefaultValue(value)
     local noDefault = true
 
     if isbool(value) then
-        if self.inverted then
-            value = not value
-        end
+        -- note: even when it is inverted, the default is not inverted here
+        -- as it is inverted when the default button is pressed
 
         self.default = value
+
         noDefault = false
     else
         self.default = nil
