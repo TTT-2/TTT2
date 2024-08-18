@@ -212,7 +212,7 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local playerRole = form8:MakeComboBox({
         label = "label_player_role",
         choices = roleChoices,
-        master = playerList
+        master = playerList,
     })
 
     form8:MakeButton({
