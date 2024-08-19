@@ -2340,13 +2340,13 @@ Bir oyuncuya her rol atandığında, ilgili ağırlık bu minimum ağırlığa s
 Bu nedenle, minimum ağırlık, her raundun bir oyuncunun seçilme şansını ne kadar etkilediğini etkili bir şekilde kontrol eder ve daha yüksek değerler daha az etkilenmesine neden olur. Varsayılan 1 değeri, her raundun şansda oldukça önemli bir artışa neden olduğu ve tersine, bir oyuncunun arka arkaya iki kez aynı rolü almasının son derece düşük olduğu anlamına gelir.
 
 Bu değerdeki değişiklikler, oyuncular yeniden bağlanana veya harita değişene kadar geçerli olmayacaktır.]]
-L.label_roles_derandomize_min_weight = "Rastgele dağıtım minimum ağırlığı"
+L.label_roles_derandomize_min_weight = "Minimum rastgele dağıtım ağırlığı"
 
 -- 2024-08-17
---L.name_button_default = "Button"
---L.name_button_rotating = "Lever"
+L.name_button_default = "Düğme"
+L.name_button_rotating = "Anahtar"
 
---L.button_default = "Press [{usekey}] to trigger"
---L.button_rotating = "Press [{usekey}] to flip"
+L.button_default = "Tetiklemek için [{usekey}] tuşuna bas"
+L.button_rotating = "Devreye sokmak için [{usekey}] tuşuna bas"
 
---L.undefined_key = "???"
+L.undefined_key = "???"
