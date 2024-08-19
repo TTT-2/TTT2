@@ -203,7 +203,7 @@ function admin.PlayerForceRole(ply, roleIndex)
         net.Start("TTT2AdminCommand")
         net.WriteUInt(ADMIN_COMMAND_FORCE, 4)
         net.WritePlayer(ply)
-        net.WriteUInt(roleIndex, 16)
+        net.WriteUInt(roleIndex, ROLE_BITS)
         net.SendToServer()
     end
 
@@ -261,7 +261,7 @@ if SERVER then
         elseif command == ADMIN_COMMAND_ARMOR then
             admin.PlayerSetArmor(net.ReadPlayer(), net.ReadUInt(16))
         elseif command == ADMIN_COMMAND_FORCE then
-            admin.PlayerForceRole(net.ReadPlayer(), net.ReadUInt(16))
+            admin.PlayerForceRole(net.ReadPlayer(), ROLE_BITS)
         end
     end)
 
