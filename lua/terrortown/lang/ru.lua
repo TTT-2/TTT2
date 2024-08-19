@@ -21,7 +21,7 @@ L.terrorists = "Террористы"
 L.spectators = "Наблюдатели"
 
 L.nones = "Нет команды"
-L.innocents = "Команда невиновых"
+L.innocents = "Команда невиновных"
 L.traitors = "Команда предателей"
 
 -- Round status messages
@@ -1426,7 +1426,7 @@ L.label_enforce_playermodel = "Использовать модель от рол
 L.label_use_custom_models = "Использовать случайно выбранную модель игрока."
 L.label_prefer_map_models = "Предпочитать специфичные для карты модели игрока стандартным моделям."
 L.label_select_model_per_round = "Выбирать новую случайную модель каждый раунд(только при смене карты, если выключено)."
---L.label_select_unique_model_per_round = "Select a random unique model for each player"
+L.label_select_unique_model_per_round = "Выбирать случайную уникальную модель для каждого игрока"
 
 L.help_prefer_map_models = [[
 Некоторые карты устанавливают свои собственные модели игроков. По умолчанию, эти модели имеют больший приоритет чем те, что назначаются автоматически. Выключив эту настройку, заданные картой модели выключаются.
@@ -2310,45 +2310,45 @@ L.loadingscreen_round_restart_subtitle = "вы играете на карте {m
 L.loadingscreen_round_restart_subtitle_limits = "вы играете на карте {map}, которая продлится ещё {rounds} раунд (а/ов) или {time}"
 
 -- 2024-06-23
---L.header_roles_derandomize = "Role Derandomization"
+L.header_roles_derandomize = "Дерандомизация ролей"
 
---L.help_roles_derandomize = [[
---Role derandomization can be used to make role distribution feel more fair over the course of a session.
---
---In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
---
---There are 4 modes:
---
---mode 0: Disabled - No derandomization is done. This is the default.
---
---mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
---
---mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
---
---mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
---L.label_roles_derandomize_mode = "Derandomization mode"
---L.label_roles_derandomize_mode_none = "mode 0: Disabled"
---L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
---L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
---L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+L.help_roles_derandomize = [[
+Дерандомизацию ролей можно использовать, чтобы сделать распределение ролей более справедливой за время игровой сессии.
 
---L.help_roles_derandomize_min_weight = [[
---Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
---
---Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
---
---For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
---
---The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
---
---Changes to this value will not take effect until players reconnect or the map changes.]]
---L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+В сущности, если она включена, шансы игрока на получение роли повышаются до тех пор, пока эта роль не была ему назначена. Хотя это может казаться более справедливым, этот также позволяет игрокам предугадать, что другой игрок будет назначен в качестве предателя, основываясь на том, что ранее он не назначался в течение нескольких раундов. Не включайте эту настройку, если подобное нежелательно.
+
+Существует 4 режима:
+
+режим 0: выключена — дерандомизации не происходит. Это режим по умолчанию.
+
+режим 1: только базовые роли — дерандомизация происходит только для базовых ролей, таких как невиновный и предатель. Подроли выбираются случайным образом.
+
+режим 2: только подроли — дерандомизация происходит только для подролей. Базовые роли выбираются случайным образом. Учтите, что подроли назначаются только игрокам, которым уже были назначены базовые роли.
+
+режим 3: базовые роли И подроли — дерандомизация происходит как для базовых ролей, так и для подролей.]]
+L.label_roles_derandomize_mode = "Режим дерандомизации"
+L.label_roles_derandomize_mode_none = "режим 0: выключена"
+L.label_roles_derandomize_mode_base_only = "режим 1: только базовые роли"
+L.label_roles_derandomize_mode_sub_only = "режим 2: только подроли"
+L.label_roles_derandomize_mode_base_and_sub = "режим 3: базовые роли И подроли"
+
+L.help_roles_derandomize_min_weight = [[
+Дерандомизация происходит путём использования при выборе случайного игрока во время распределения ролей «веса», связанного с каждой ролью для каждого игрока, и этот вес увеличивается на 1 каждый раз, когда игроку не назначается эта роль. Этот вес не сохраняется между подключениями или картами.
+
+Каждый раз, когда игроку назначается роль, соответствующий вес сбрасывается до минимального значения. Этот вес не имеет никакого абсолютного значения и может толковаться только по отношению к другим весам.
+
+Например, есть игрок А с весом 1 и игрок Б с весом 5. Вероятность того, что будет выбран игрок Б в 5 раз выше, чем игрок А. Однако, если бы у игрока А был вес 4, то у игрока Б был бы шанс всего лишь в 5/4 раза выше.
+
+Следовательно, минимальный вес эффективно определяет, насколько сильно каждый раунд влияет на шансы игрока быть выбранным, где большие значения уменьшают это влияние. Стандартное значение 1 означает, что каждый раунд приводит к довольно значительному увеличению шансов игроку и наоборот, что он крайне маловероятно получит одну и ту же роль дважды подряд.
+
+Изменения этого значения не будут применены до тех пор, пока игроки не переподключатся или не сменится карта.]]
+L.label_roles_derandomize_min_weight = "Минимальный вес дерандомизации"
 
 -- 2024-08-17
---L.name_button_default = "Button"
---L.name_button_rotating = "Lever"
+L.name_button_default = "Кнопка"
+L.name_button_rotating = "Рычаг"
 
---L.button_default = "Press [{usekey}] to trigger"
---L.button_rotating = "Press [{usekey}] to flip"
+L.button_default = "[{usekey}] Нажать."
+L.button_rotating = "[{usekey}] Повернуть."
 
---L.undefined_key = "???"
+L.undefined_key = "???"
