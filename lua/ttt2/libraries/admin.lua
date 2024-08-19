@@ -261,7 +261,7 @@ if SERVER then
         elseif command == ADMIN_COMMAND_ARMOR then
             admin.PlayerSetArmor(net.ReadPlayer(), net.ReadUInt(16))
         elseif command == ADMIN_COMMAND_FORCE then
-            admin.PlayerForceRole(net.ReadPlayer(), ROLE_BITS)
+            admin.PlayerForceRole(net.ReadPlayer(), net.ReadUInt(ROLE_BITS))
         end
     end)
 
