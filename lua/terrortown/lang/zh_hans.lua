@@ -521,7 +521,7 @@ L.tip8 = "叛徒和探长能从同伴尸体上取得未被消耗的积分。"
 
 L.tip9 = "促狭鬼将使物体变得极其危险。促狭鬼调整过的物体将产生爆炸能量伤害接近它的人。"
 
---L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
+L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
 L.tip11 = "探长的DNA扫描器可使用在武器或道具上，找到曾使用它的玩家的位置。用在尸体或C4上效果将更好！"
 
@@ -529,13 +529,13 @@ L.tip12 = "太靠近你杀害的人的话，DNA将残留在尸体上，探长的
 
 L.tip13 = "杀人时离被害者越远，残留在尸体上的DNA就会越快消失！"
 
---L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
+L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
---L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
+L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
 L.tip16 = "是否遇过无辜者群聚在一起而难以下手？请试试用收音机发出C4哔哔声或交火声，让他们分散。"
 
---L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
+L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
 L.tip18 = "探长若有多余积分，可将拆弹器交给一位可信任的无辜者，将危险的C4交给他们，自己全神贯注地调查与处决叛徒。"
 
@@ -547,17 +547,17 @@ L.tip21 = "治疗站将遗留每位前来治疗的人的DNA样本，探长可将
 
 L.tip22 = "与武器、C4不同，收音机并不会留下你的DNA样本，不用担心探长会在上头用DNA识破你的身分。"
 
---L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
+L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
 L.tip24 = "探长确认尸体后，相关信息将在计分板公布，如要查看只需点击死者之名字即可。"
 
 L.tip25 = "计分板上，人物名字旁的放大镜图样可以查看关于他的信息，若图样亮着，代表是某位探长确认后的结果。"
 
---L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
+L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
 L.tip27 = "观察者可以按下 {mutekey} 循环调整对其他观察者或游戏中的玩家静音。"
 
---L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
+L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
 L.tip29 = "若要使用语音或无线电，可以按下 {zoomkey} 使用。"
 
@@ -575,7 +575,7 @@ L.tip35 = "许多需放置的装备（如C4或收音机）可以使用右键放�
 
 L.tip36 = "拆除C4时失误导致的爆炸，比起直接引爆时来得小。"
 
---L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
+L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "回合报告"
@@ -915,7 +915,7 @@ L.pickup_pending = "你已经捡起这个武器，请等捡起完成"
 L.tbut_help_admin = "编辑叛徒按钮设定"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] 切换 {role} 的按钮权限"
 L.tbut_role_config = "身份：{current}"
---L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for {team}"
 L.tbut_team_config = "阵营：{current}"
 L.tbut_current_config = "当前设定："
 L.tbut_intended_config = "地图默认设定："
@@ -959,7 +959,7 @@ L.menu_guide_description = "帮助你开始游玩 TTT2 并解释玩法和身份�
 L.menu_bindings_description = "将 TTT2 和其插件的功能绑到你想要的键位"
 L.menu_language_description = "选择游戏语言"
 L.menu_appearance_description = "调整界面的样式和性能"
---L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
+L.menu_gameplay_description = "Tweak voice and sound volume, accessibility settings, and gameplay settings."
 L.menu_addons_description = "配置本地插件"
 L.menu_legacy_description = "旧TTT的菜单，应该已被导入新系统"
 L.menu_administration_description = "界面和商店的通用管理菜单"
@@ -1423,7 +1423,7 @@ L.label_enforce_playermodel = "强制设置玩家模型"
 L.label_use_custom_models = "使用一个随机选择的玩家模型"
 L.label_prefer_map_models = "优先选择地图特定模型而不是默认模型"
 L.label_select_model_per_round = "每轮选择一个新的随机模型（如果禁用，则仅在地图变更时）"
---L.label_select_unique_model_per_round = "Select a random unique model for each player"
+L.label_select_unique_model_per_round = "Select a random unique model for each player"
 
 L.help_prefer_map_models = [[
 有些地图定义了他们自己的玩家模型，默认情况下。这些模型的优先级比自动分配的模型高。如果禁用此设置。地图自带的玩家模型将被禁用，
@@ -1657,8 +1657,8 @@ L.label_voice_drain_normal = "普通玩家的每滴答消耗量"
 L.label_voice_drain_admin = "让管理员和公共警察角色的电池会耗尽"
 L.label_voice_drain_recharge = "不进行语音聊天时每滴答的充能率"
 L.label_locational_voice = "为活着的玩家启用近距离语音聊天功能"
---L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
---L.label_locational_voice_range = "Proximity voice chat range"
+L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+L.label_locational_voice_range = "Proximity voice chat range"
 L.label_armor_on_spawn = "玩家在重生时的默认护甲量"
 L.label_prep_respawn = "在准备阶段启用即时重生"
 L.label_preptime_seconds = "准备时间（秒）"
@@ -1950,7 +1950,7 @@ L.help_inspect_confirm_mode = [[
 模式 2: 这种模式比模式 1 更严格一些。在这种模式中，普通玩家的搜索能力也被移除了。这意味着向公开警察玩家报告尸体位置现在是获取任何尸体信息的唯一方式。]]
 
 -- 2023-10-19
---L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
 
 -- 2023-10-23
 L.label_hud_pulsate_health_enable = "当生命值低于 25% 时，生命条将会开始闪烁"
@@ -2052,36 +2052,36 @@ L.magneto_help_primary = "推动实体"
 L.magneto_help_secondary = "推动/拾取实体"
 L.knife_help_primary = "刺"
 L.knife_help_secondary = "投掷小刀"
---L.polter_help_primary = "Fire thumper"
---L.polter_help_secondary = "Charge long range shot"
+L.polter_help_primary = "Fire thumper"
+L.polter_help_secondary = "Charge long range shot"
 
 -- 2023-12-12
---L.newton_help_primary = "Knockback shot"
---L.newton_help_secondary = "Charged knockback shot"
+L.newton_help_primary = "Knockback shot"
+L.newton_help_secondary = "Charged knockback shot"
 
 -- 2023-12-13
 L.vis_no_pickup = "只有公开警察角色才能捡起显像器"
 L.newton_force = "推力"
---L.defuser_help_primary = "Defuse targeted C4"
---L.radio_help_primary = "Place the Radio"
---L.radio_help_secondary = "Stick to surface"
---L.hstation_help_primary = "Place the Health Station"
---L.flaregun_help_primary = "Burn body/entity"
+L.defuser_help_primary = "Defuse targeted C4"
+L.radio_help_primary = "Place the Radio"
+L.radio_help_secondary = "Stick to surface"
+L.hstation_help_primary = "Place the Health Station"
+L.flaregun_help_primary = "Burn body/entity"
 
 -- 2023-12-14
---L.marker_vision_owner = "Owner: {owner}"
---L.marker_vision_distance = "Distance: {distance}m"
---L.marker_vision_distance_collapsed = "{distance}m"
+L.marker_vision_owner = "Owner: {owner}"
+L.marker_vision_distance = "Distance: {distance}m"
+L.marker_vision_distance_collapsed = "{distance}m"
 
---L.c4_marker_vision_time = "Detonation time: {time}"
---L.c4_marker_vision_collapsed = "{time} / {distance}m"
+L.c4_marker_vision_time = "Detonation time: {time}"
+L.c4_marker_vision_collapsed = "{time} / {distance}m"
 
---L.c4_marker_vision_safe_zone = "Bomb safe zone"
---L.c4_marker_vision_damage_zone = "Bomb damage zone"
---L.c4_marker_vision_kill_zone = "Bomb kill zone"
+L.c4_marker_vision_safe_zone = "Bomb safe zone"
+L.c4_marker_vision_damage_zone = "Bomb damage zone"
+L.c4_marker_vision_kill_zone = "Bomb kill zone"
 
---L.beacon_marker_vision_player = "Tracked Player"
---L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
+L.beacon_marker_vision_player = "Tracked Player"
+L.beacon_marker_vision_player_tracked = "This player is tracked by a Beacon"
 
 -- 2023-12-18
 L.beacon_help_pri = "将信标扔在地上"
@@ -2132,8 +2132,8 @@ L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，�
 L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
 
 L.binoc_help_reload = "清除目标。"
---L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
---L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
+L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "启用准星轮廓"
@@ -2153,159 +2153,159 @@ L.help_crosshair_scale_enable = [[
 L.header_weapon_settings = "武器设置"
 
 -- 2024-01-24
---L.grenade_fuse = "FUSE"
+L.grenade_fuse = "FUSE"
 
 -- 2024-01-25
---L.header_roles_magnetostick = "Magneto Stick"
---L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
---L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
---L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Put down prop"
+L.header_roles_magnetostick = "Magneto Stick"
+L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
+L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
+L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
+L.magneto_stick_help_carry_prop_release = "Release prop"
+L.magneto_stick_help_carry_prop_drop = "Put down prop"
 
 -- 2024-01-27
 L.decoy_help_primary = "安放诱饵"
---L.decoy_help_secondary = "Stick Decoy to surface"
+L.decoy_help_secondary = "Stick Decoy to surface"
 
 
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
+L.marker_vision_visible_for_0 = "Visible for you"
+L.marker_vision_visible_for_1 = "Visible for your role"
+L.marker_vision_visible_for_2 = "Visible for your team"
+L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to drop this device"
+L.throw_no_room = "You have no space here to drop this device"
 
 -- 2024-03-04
---L.use_entity = "Press [{usekey}] to use"
+L.use_entity = "Press [{usekey}] to use"
 
 -- 2024-03-06
---L.submenu_gameplay_sounds_title = "Client-Sounds"
+L.submenu_gameplay_sounds_title = "Client-Sounds"
 
---L.header_sounds_settings = "UI Sound Settings"
+L.header_sounds_settings = "UI Sound Settings"
 
---L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
---L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat messages and notifications. They can be quite obnoxious."
+L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
+L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
+L.help_enable_sound_message = "Message or notification sounds are played for chat messages and notifications. They can be quite obnoxious."
 
---L.label_enable_sound_interact = "Enable interaction sounds"
---L.label_enable_sound_buttons = "Enable button sounds"
---L.label_enable_sound_message = "Enable message sounds"
+L.label_enable_sound_interact = "Enable interaction sounds"
+L.label_enable_sound_buttons = "Enable button sounds"
+L.label_enable_sound_message = "Enable message sounds"
 
---L.label_level_sound_interact = "Interaction sound level multiplier"
---L.label_level_sound_buttons = "Button sound level multiplier"
---L.label_level_sound_message = "Message sound level multiplier"
+L.label_level_sound_interact = "Interaction sound level multiplier"
+L.label_level_sound_buttons = "Button sound level multiplier"
+L.label_level_sound_message = "Message sound level multiplier"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap size"
---L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+L.label_crosshair_static_gap_length = "Enable static crosshair gap size"
+L.label_crosshair_size_gap = "Crosshair gap size multiplier"
 
 -- 2024-03-31
---L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
+L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
+L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
+L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
 
---L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
+L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
 --
 --Note: This setting is only available for weapons that enable this feature.]]
---L.label_equipmenteditor_configurable_clip = "Configurable clip size"
+L.label_equipmenteditor_configurable_clip = "Configurable clip size"
 
 -- 2024-04-06
---L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
 --
 --Set to 0 to disable this cut-off.]]
 
 -- 2024-04-07
---L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
+L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
 --
 --Push-to-Talk: Hold down the key to talk.
 --Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
 --Toggle: Press the key to toggle your mic on/off.
 --Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
---L.label_voice_activation = "Voice Chat Activation Mode"
---L.label_voice_activation_mode_ptt = "Push to Talk"
---L.label_voice_activation_mode_ptm = "Push to Mute"
---L.label_voice_activation_mode_toggle_disabled = "Toggle"
---L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+L.label_voice_activation = "Voice Chat Activation Mode"
+L.label_voice_activation_mode_ptt = "Push to Talk"
+L.label_voice_activation_mode_ptm = "Push to Mute"
+L.label_voice_activation_mode_toggle_disabled = "Toggle"
+L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
 
 -- 2024-04-08
---L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
---L.help_inspect_credits_always = [[
+L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+L.help_inspect_credits_always = [[
 --When shopping roles die, their credits can be picked up by other players with shopping roles.
 --
 --When this option is disabled, only players that can pick up credits can see them on a body.
 --When enabled, all players can see credits on a body.]]
 
 -- 2024-05-13
---L.menu_commands_title = "Admin Commands"
---L.menu_commands_description = "Change maps, spawn bots and edit player roles."
+L.menu_commands_title = "Admin Commands"
+L.menu_commands_description = "Change maps, spawn bots and edit player roles."
 
---L.submenu_commands_maps_title = "Maps"
+L.submenu_commands_maps_title = "Maps"
 
---L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
---L.header_maps_select = "Select and Change Maps"
+L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
+L.header_maps_select = "Select and Change Maps"
 
---L.button_change_map = "Change Map"
+L.button_change_map = "Change Map"
 
 -- 2024-05-20
---L.submenu_commands_commands_title = "Commands"
+L.submenu_commands_commands_title = "Commands"
 
---L.header_commands_round_restart = "Round Restart"
---L.header_commands_player_slay = "Slay Player"
---L.header_commands_player_teleport = "Teleport Player to Focused Point"
---L.header_commands_player_respawn = "Respawn Player at Focused Point"
---L.header_commands_player_add_credits = "Add Equipment Credits"
---L.header_commands_player_set_health = "Set Health"
---L.header_commands_player_set_armor = "Set Armor"
+L.header_commands_round_restart = "Round Restart"
+L.header_commands_player_slay = "Slay Player"
+L.header_commands_player_teleport = "Teleport Player to Focused Point"
+L.header_commands_player_respawn = "Respawn Player at Focused Point"
+L.header_commands_player_add_credits = "Add Equipment Credits"
+L.header_commands_player_set_health = "Set Health"
+L.header_commands_player_set_armor = "Set Armor"
 
---L.label_button_round_restart = "round restart"
---L.label_button_player_slay = "slay player"
---L.label_button_player_teleport = "teleport player"
---L.label_button_player_respawn = "respawn player"
---L.label_button_player_add_credits = "add credits"
---L.label_button_player_set_health = "set health"
---L.label_button_player_set_armor = "set armor"
+L.label_button_round_restart = "round restart"
+L.label_button_player_slay = "slay player"
+L.label_button_player_teleport = "teleport player"
+L.label_button_player_respawn = "respawn player"
+L.label_button_player_add_credits = "add credits"
+L.label_button_player_set_health = "set health"
+L.label_button_player_set_armor = "set armor"
 
---L.label_slider_add_credits = "Set credit amount"
---L.label_slider_set_health = "Set health"
---L.label_slider_set_armor = "Set armor"
+L.label_slider_add_credits = "Set credit amount"
+L.label_slider_set_health = "Set health"
+L.label_slider_set_armor = "Set armor"
 
---L.label_player_select = "Select affected player"
---L.label_execute_command = "Execute command"
+L.label_player_select = "Select affected player"
+L.label_execute_command = "Execute command"
 
 -- 2024-05-22
---L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
---L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
---L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
---L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
---L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
---L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
+L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
 
---L.header_loadingscreen = "Loading Screen"
+L.header_loadingscreen = "Loading Screen"
 
---L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
 
---L.label_enable_loadingscreen = "Enable the loading screen"
---L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
+L.label_enable_loadingscreen = "Enable the loading screen"
+L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
 
 -- 2024-05-25
---L.help_round_restart_reset = [[
+L.help_round_restart_reset = [[
 --Restart a round or reset the level.
 --
 --Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
 
---L.label_button_level_reset = "reset level"
+L.label_button_level_reset = "reset level"
 
---L.loadingscreen_round_restart_title = "Starting new round"
---L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
---L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+L.loadingscreen_round_restart_title = "Starting new round"
+L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
 
 -- 2024-06-23
---L.header_roles_derandomize = "Role Derandomization"
+L.header_roles_derandomize = "Role Derandomization"
 
---L.help_roles_derandomize = [[
+L.help_roles_derandomize = [[
 --Role derandomization can be used to make role distribution feel more fair over the course of a session.
 --
 --In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
@@ -2319,13 +2319,13 @@ L.decoy_help_primary = "安放诱饵"
 --mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
 --
 --mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
---L.label_roles_derandomize_mode = "Derandomization mode"
---L.label_roles_derandomize_mode_none = "mode 0: Disabled"
---L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
---L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
---L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+L.label_roles_derandomize_mode = "Derandomization mode"
+L.label_roles_derandomize_mode_none = "mode 0: Disabled"
+L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
+L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
+L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
 
---L.help_roles_derandomize_min_weight = [[
+L.help_roles_derandomize_min_weight = [[
 --Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
 --
 --Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
@@ -2335,20 +2335,20 @@ L.decoy_help_primary = "安放诱饵"
 --The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
 --
 --Changes to this value will not take effect until players reconnect or the map changes.]]
---L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
 
 -- 2024-08-17
---L.name_button_default = "Button"
---L.name_button_rotating = "Lever"
+L.name_button_default = "Button"
+L.name_button_rotating = "Lever"
 
---L.button_default = "Press [{usekey}] to trigger"
---L.button_rotating = "Press [{usekey}] to flip"
+L.button_default = "Press [{usekey}] to trigger"
+L.button_rotating = "Press [{usekey}] to flip"
 
---L.undefined_key = "???"
+L.undefined_key = "???"
 
 -- 2024-08-18
---L.header_commands_player_force_role = "Force Player Role"
+L.header_commands_player_force_role = "Force Player Role"
 
---L.label_button_player_force_role = "force role"
+L.label_button_player_force_role = "force role"
 
---L.label_player_role = "Select role"
+L.label_player_role = "Select role"
