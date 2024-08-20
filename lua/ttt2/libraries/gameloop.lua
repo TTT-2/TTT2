@@ -683,6 +683,8 @@ if SERVER then
         )
 
         CheckForMapSwitch()
+
+        return true
     end)
 end
 
