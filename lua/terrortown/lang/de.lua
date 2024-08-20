@@ -1131,7 +1131,6 @@ L.binoc_help_sec = "Ändere Zoom-Level."
 
 L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 
-
 -- 2020-08-07
 L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
 L.pickup_error_owns = "Du kannst diese Waffe nicht aufheben, weil du die gleiche Waffe bereits trägst."
@@ -2098,10 +2097,8 @@ L.msg_beacon_death = "Ein Spieler ist in unmittelbarer Nähe eines deiner Peilse
 
 L.beacon_short_desc = "Peilsender werden von öffentlichen Ordnungsrollen verwendet, um lokale Wallhacks um sie herum hinzuzufügen"
 
--- 2023-12-18
 L.entity_pickup_owner_only = "Nur der Besitzer kann dies aufheben"
 
--- 2023-12-18
 L.body_confirm_one = "{finder} bestätigte den Tod von {victim}."
 L.body_confirm_more = "{finder} bestätigte {count} Tode von: {victims}."
 
@@ -2110,19 +2107,6 @@ L.builtin_marker = "Integriert."
 L.equipmenteditor_desc_builtin = "Diese Ausrüstung ist integriert, sie kommt mit TTT2!"
 L.help_roles_builtin = "Diese Rolle ist integriert, sie kommt mit TTT2!"
 L.header_equipment_info = "Ausrüstungsinformationen"
-
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "Barrierefreiheit"
-
-L.header_accessibility_settings = "Einstellungen für Barrierefreiheit"
-
-L.label_enable_dynamic_fov = "Aktiviere das dynamische Sichtfeld"
-L.label_enable_bobbing = "Aktiviere 'Sichtwackeln'"
-L.label_enable_bobbing_strafe = "Aktiviere 'Sichtwackeln' beim seitwärts gehen"
-
-L.help_enable_dynamic_fov = "Das dynamische Sichtfeld wird je nach Geschwindigkeit des Spielers angewendet. Wenn ein Spieler zum Beispiel rennt, wird das Sichtfeld vergrößert, um die Geschwindigkeit zu visualisieren."
-L.help_enable_bobbing_strafe = "'View bobbing' ist das leichte Kamerawackeln beim Gehen, Schwimmen oder Fallen."
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Multipliziert den Basisschadenswert der Waffe um diesen Faktor.
@@ -2136,6 +2120,17 @@ Für den Poltergeist würde sich dies auf jeden Stoß und die finale Explosion a
 Notiz: Einige Waffen verwenden diesen Wert möglicherweise nicht, was dazu führt, dass dieser Modifikator unwirksam ist.]]
 
 -- 2023-12-24
+L.submenu_gameplay_accessibility_title = "Barrierefreiheit"
+
+L.header_accessibility_settings = "Einstellungen für Barrierefreiheit"
+
+L.label_enable_dynamic_fov = "Aktiviere das dynamische Sichtfeld"
+L.label_enable_bobbing = "Aktiviere 'Sichtwackeln'"
+L.label_enable_bobbing_strafe = "Aktiviere 'Sichtwackeln' beim seitwärts gehen"
+
+L.help_enable_dynamic_fov = "Das dynamische Sichtfeld wird je nach Geschwindigkeit des Spielers angewendet. Wenn ein Spieler zum Beispiel rennt, wird das Sichtfeld vergrößert, um die Geschwindigkeit zu visualisieren."
+L.help_enable_bobbing_strafe = "'View bobbing' ist das leichte Kamerawackeln beim Gehen, Schwimmen oder Fallen."
+
 L.binoc_help_reload = "Ziel löschen."
 L.cl_sb_row_sresult_direct_conf = "Direkte Bestätigung"
 L.cl_sb_row_sresult_pub_police = "Bestätigung einer öffentlichen Ordnungsrolle"
@@ -2157,16 +2152,6 @@ Wenn die Linienlänge konstant bleibt, skaliert nur der Abstand mit den Streukeg
 
 L.header_weapon_settings = "Waffeneinstellungen"
 
-
-L.marker_vision_visible_for_0 = "Für dich sichtbar"
-L.marker_vision_visible_for_1 = "Für deine Rolle sichtbar"
-L.marker_vision_visible_for_2 = "Für dein Team sichtbar"
-L.marker_vision_visible_for_3 = "Für jeden sichtbar"
-
--- 2024-01-27
-L.decoy_help_primary = "Platziere die Attrappe"
-L.decoy_help_secondary = "Attrappe an Oberfläche kleben"
-
 -- 2024-01-24
 L.grenade_fuse = "LUNTE"
 
@@ -2177,6 +2162,16 @@ L.magneto_stick_help_carry_rag_pin = "Ragdoll anheften"
 L.magneto_stick_help_carry_rag_drop = "Ragdoll fallenlassen"
 L.magneto_stick_help_carry_prop_release = "Prop freilassen"
 L.magneto_stick_help_carry_prop_drop = "Prop fallenlassen"
+
+-- 2024-01-27
+L.decoy_help_primary = "Platziere die Attrappe"
+L.decoy_help_secondary = "Attrappe an Oberfläche kleben"
+
+
+L.marker_vision_visible_for_0 = "Für dich sichtbar"
+L.marker_vision_visible_for_1 = "Für deine Rolle sichtbar"
+L.marker_vision_visible_for_2 = "Für dein Team sichtbar"
+L.marker_vision_visible_for_3 = "Für jeden sichtbar"
 
 -- 2024-02-14
 L.throw_no_room = "Hier ist kein Platz, um dieses Gerät zu werfen."
@@ -2350,3 +2345,10 @@ L.label_voice_activation_mode_toggle_enabled = "Umschalten (Aktiviert zum Start)
 --L.button_rotating = "Press [{usekey}] to flip"
 
 --L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"

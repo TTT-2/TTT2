@@ -1131,7 +1131,6 @@ L.binoc_help_sec = "切换放大倍率"
 
 L.vis_help_pri = "丢弃当前装备。"
 
-
 -- 2020-08-07
 L.pickup_error_spec = "作为观察者你无法捡起这个。"
 L.pickup_error_owns = "你已经有这个武器，无法再次捡起"
@@ -2098,10 +2097,8 @@ L.msg_beacon_death = "一个玩家在你的一个信标的附近死亡。"
 
 L.beacon_short_desc = "警察角色使用信标在他们周围添加本地透视效果"
 
--- 2023-12-18
 L.entity_pickup_owner_only = "只有拥有者才能捡起这个"
 
--- 2023-12-18
 L.body_confirm_one = "{finder} 确认了 {victim} 的死亡。"
 L.body_confirm_more = "{finder} 确认了以下 {count} 人的死亡: {victims}。"
 
@@ -2110,19 +2107,6 @@ L.builtin_marker = "内置。"
 L.equipmenteditor_desc_builtin = "此装备为内置装备（TTT2自带！）"
 L.help_roles_builtin = "此角色为内置角色（TTT2自带！）"
 L.header_equipment_info = "装备信息"
-
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "辅助功能"
-
-L.header_accessibility_settings = "辅助功能设置"
-
-L.label_enable_dynamic_fov = "启用动态 FOV 更改"
-L.label_enable_bobbing = "启用视图晃动"
-L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
-
-L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
-L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此因子。
@@ -2136,6 +2120,17 @@ L.equipmenteditor_desc_damage_scaling = [[将武器的基础伤害值乘以此�
 注意：有些武器可能不使用这个值，这会导致这个修饰符无效。]]
 
 -- 2023-12-24
+L.submenu_gameplay_accessibility_title = "辅助功能"
+
+L.header_accessibility_settings = "辅助功能设置"
+
+L.label_enable_dynamic_fov = "启用动态 FOV 更改"
+L.label_enable_bobbing = "启用视图晃动"
+L.label_enable_bobbing_strafe = "在扫射时启用视图晃动"
+
+L.help_enable_dynamic_fov = "根据玩家的速度应用动态 FOV。例如，当玩家在冲刺时，FOV 会增加，以显示速度。"
+L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或下落时发生轻微抖动。"
+
 L.binoc_help_reload = "清除目标。"
 --L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
 --L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
@@ -2157,16 +2152,6 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "武器设置"
 
-
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
-
--- 2024-01-27
-L.decoy_help_primary = "安放诱饵"
---L.decoy_help_secondary = "Stick Decoy to surface"
-
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
 
@@ -2177,6 +2162,16 @@ L.decoy_help_primary = "安放诱饵"
 --L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
 --L.magneto_stick_help_carry_prop_release = "Release prop"
 --L.magneto_stick_help_carry_prop_drop = "Put down prop"
+
+-- 2024-01-27
+L.decoy_help_primary = "安放诱饵"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to drop this device"
@@ -2350,3 +2345,10 @@ L.decoy_help_primary = "安放诱饵"
 --L.button_rotating = "Press [{usekey}] to flip"
 
 --L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"
