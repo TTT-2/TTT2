@@ -1133,7 +1133,6 @@ L.binoc_help_sec = "Изменить уровень приближения."
 
 L.vis_help_pri = "Бросить активированное устройство."
 
-
 -- 2020-08-07
 L.pickup_error_spec = "Вы не можете подобрать это за наблюдателя."
 L.pickup_error_owns = "Вы не можете подобрать это, так как у вас уже есть это оружие."
@@ -2100,10 +2099,8 @@ L.msg_beacon_death = "Игрок умер в непосредственной б
 
 L.beacon_short_desc = "Маячки используются полицейскими ролями для локального просмотра сквозь стены возле них."
 
--- 2023-12-18
 L.entity_pickup_owner_only = "Может подобрать только владелец."
 
--- 2023-12-18
 L.body_confirm_one = "{finder} подтверждает смерть {victim}."
 L.body_confirm_more = "{finder} подтверждает несколько смертей ({count}): {victims}."
 
@@ -2112,19 +2109,6 @@ L.builtin_marker = "Встроенное."
 L.equipmenteditor_desc_builtin = "Это встроенное в режим снаряжение, идущее совместно с TTT2!"
 L.help_roles_builtin = "Это встроенная в режим роль, идущая совместно с TTT2!"
 L.header_equipment_info = "Информация о снаряжении"
-
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "Специальные возможности"
-
-L.header_accessibility_settings = "Настройки специальных возможностей"
-
-L.label_enable_dynamic_fov = "Включить динамичное поле зрения."
-L.label_enable_bobbing = "Включить покачивание камеры."
-L.label_enable_bobbing_strafe = "Включить покачивание камеры при движении в бок."
-
-L.help_enable_dynamic_fov = "Динамичное поле зрения применяется в зависимости от скорости игрока. Например, когда игрок ускоряется, поле зрения увеличивается для визуализации скорости."
-L.help_enable_bobbing_strafe = "Покачивание — лёгкая тряска камеры при ходьбе, плавании или падении."
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Множит значение базового урона оружия на этот коэффициент.
@@ -2138,6 +2122,17 @@ L.equipmenteditor_desc_damage_scaling = [[Множит значение базо
 Примечание: некоторое оружие может не использовать это значение, что приведёт к неэффективности этого множителя.]]
 
 -- 2023-12-24
+L.submenu_gameplay_accessibility_title = "Специальные возможности"
+
+L.header_accessibility_settings = "Настройки специальных возможностей"
+
+L.label_enable_dynamic_fov = "Включить динамичное поле зрения."
+L.label_enable_bobbing = "Включить покачивание камеры."
+L.label_enable_bobbing_strafe = "Включить покачивание камеры при движении в бок."
+
+L.help_enable_dynamic_fov = "Динамичное поле зрения применяется в зависимости от скорости игрока. Например, когда игрок ускоряется, поле зрения увеличивается для визуализации скорости."
+L.help_enable_bobbing_strafe = "Покачивание — лёгкая тряска камеры при ходьбе, плавании или падении."
+
 L.binoc_help_reload = "Сбросить цель."
 L.cl_sb_row_sresult_direct_conf = "Подтверждение напрямую"
 L.cl_sb_row_sresult_pub_police = "Подтверждение публичной полицейской роли"
@@ -2159,16 +2154,6 @@ L.help_crosshair_scale_enable = [[
 
 L.header_weapon_settings = "Настройки оружия"
 
-
-L.marker_vision_visible_for_0 = "Видимо для вас."
-L.marker_vision_visible_for_1 = "Видимо для вашей роли."
-L.marker_vision_visible_for_2 = "Видимо для вашей команды."
-L.marker_vision_visible_for_3 = "Видимо для всех."
-
--- 2024-01-27
-L.decoy_help_primary = "Разместить Приманку"
-L.decoy_help_secondary = "Прикрепить Приманку к поверхности"
-
 -- 2024-01-24
 L.grenade_fuse = "ФИТИЛЬ"
 
@@ -2179,6 +2164,16 @@ L.magneto_stick_help_carry_rag_pin = "Прикрепить рэгдолл"
 L.magneto_stick_help_carry_rag_drop = "Положить рэгдолл"
 L.magneto_stick_help_carry_prop_release = "Бросить объект"
 L.magneto_stick_help_carry_prop_drop = "Положить объект"
+
+-- 2024-01-27
+L.decoy_help_primary = "Разместить Приманку"
+L.decoy_help_secondary = "Прикрепить Приманку к поверхности"
+
+
+L.marker_vision_visible_for_0 = "Видимо для вас."
+L.marker_vision_visible_for_1 = "Видимо для вашей роли."
+L.marker_vision_visible_for_2 = "Видимо для вашей команды."
+L.marker_vision_visible_for_3 = "Видимо для всех."
 
 -- 2024-02-14
 L.throw_no_room = "Здесь нет места, чтобы выбросить устройство!"
@@ -2352,3 +2347,10 @@ L.button_default = "[{usekey}] Нажать."
 L.button_rotating = "[{usekey}] Повернуть."
 
 L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"

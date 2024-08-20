@@ -1131,7 +1131,6 @@ L.binoc_help_sec = "ズームレベル変更"
 
 L.vis_help_pri = "可視化装置を落とす"
 
-
 -- 2020-08-07
 L.pickup_error_spec = "観戦者のためこれは拾えないようだ。"
 L.pickup_error_owns = "すでにこの武器を持っているため拾えないようだ。"
@@ -2098,10 +2097,8 @@ L.search_eyes = "こいつが最後の人物は、{player}。こいつは敵か�
 
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
--- 2023-12-18
 L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
 
@@ -2110,19 +2107,6 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --L.equipmenteditor_desc_builtin = "This equipment is built-in, it comes with TTT2!"
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
-
-
--- 2023-12-24
---L.submenu_gameplay_accessibility_title = "Accessibility"
-
---L.header_accessibility_settings = "Accessibility Settings"
-
---L.label_enable_dynamic_fov = "Enable dynamic FOV change"
---L.label_enable_bobbing = "Enable view bobbing"
---L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
-
---L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
---L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
 
 -- 2023-12-20
 --L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
@@ -2136,6 +2120,17 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 --Note: Some weapons might not use this value which causes this multiplier to be ineffective.]]
 
 -- 2023-12-24
+--L.submenu_gameplay_accessibility_title = "Accessibility"
+
+--L.header_accessibility_settings = "Accessibility Settings"
+
+--L.label_enable_dynamic_fov = "Enable dynamic FOV change"
+--L.label_enable_bobbing = "Enable view bobbing"
+--L.label_enable_bobbing_strafe = "Enable view bobbing when strafing"
+
+--L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
+--L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
+
 --L.binoc_help_reload = "Clear target."
 --L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
 --L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
@@ -2157,16 +2152,6 @@ L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 
 --L.header_weapon_settings = "Weapon Settings"
 
-
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
-
--- 2024-01-27
-L.decoy_help_primary = "デコイを設置する"
---L.decoy_help_secondary = "Stick Decoy to surface"
-
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
 
@@ -2177,6 +2162,16 @@ L.decoy_help_primary = "デコイを設置する"
 --L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
 --L.magneto_stick_help_carry_prop_release = "Release prop"
 --L.magneto_stick_help_carry_prop_drop = "Put down prop"
+
+-- 2024-01-27
+L.decoy_help_primary = "デコイを設置する"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-02-14
 --L.throw_no_room = "You have no space here to drop this device"
@@ -2350,3 +2345,10 @@ L.decoy_help_primary = "デコイを設置する"
 --L.button_rotating = "Press [{usekey}] to flip"
 
 --L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"

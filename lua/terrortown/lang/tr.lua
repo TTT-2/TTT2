@@ -1131,7 +1131,6 @@ L.binoc_help_sec = "Yakınlaştırma seviyesini değiştirin."
 
 L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
 
-
 -- 2020-08-07
 L.pickup_error_spec = "Bunu izleyici olarak alamazsın."
 L.pickup_error_owns = "Bu silah zaten sende olduğu için bunu alamazsın."
@@ -2098,10 +2097,8 @@ L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
--- 2023-12-18
 L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 
--- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 
@@ -2110,19 +2107,6 @@ L.builtin_marker = "Bütünleşik."
 L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir öğedir!"
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
-
-
--- 2023-12-24
-L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
-
-L.header_accessibility_settings = "Erişilebilirlik Ayarları"
-
-L.label_enable_dynamic_fov = "Dinamik FOV değişikliğini etkinleştir"
-L.label_enable_bobbing = "Sallanmayı etkinleştir"
-L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
-
-L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
-L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
 
 -- 2023-12-20
 L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
@@ -2136,6 +2120,17 @@ Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
 Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
 -- 2023-12-24
+L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
+
+L.header_accessibility_settings = "Erişilebilirlik Ayarları"
+
+L.label_enable_dynamic_fov = "Dinamik FOV değişikliğini etkinleştir"
+L.label_enable_bobbing = "Sallanmayı etkinleştir"
+L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
+
+L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
+L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
+
 L.binoc_help_reload = "Hedefi kaldırın."
 L.cl_sb_row_sresult_direct_conf = "Doğrudan Onay"
 L.cl_sb_row_sresult_pub_police = "Kamu polisliği rolü onayı"
@@ -2157,16 +2152,6 @@ Dinamik nişangâh, silahın konisine bağlı olarak nişangâhın ölçeklendir
 
 L.header_weapon_settings = "Silah Ayarları"
 
-
-L.marker_vision_visible_for_0 = "Sadece size görünür"
-L.marker_vision_visible_for_1 = "Sadece sizin rolünüze görünür"
-L.marker_vision_visible_for_2 = "Takıma görünür"
-L.marker_vision_visible_for_3 = "Herkese görünür"
-
--- 2024-01-27
-L.decoy_help_primary = "Tuzağı yerleştirin"
-L.decoy_help_secondary = "Tuzağı kur"
-
 -- 2024-01-24
 L.grenade_fuse = "ATEŞLE"
 
@@ -2177,6 +2162,16 @@ L.magneto_stick_help_carry_rag_pin = "Ceseti sabitle"
 L.magneto_stick_help_carry_rag_drop = "Ceseti bırak"
 L.magneto_stick_help_carry_prop_release = "Nesneyi sal"
 L.magneto_stick_help_carry_prop_drop = "Nesneyi bırak"
+
+-- 2024-01-27
+L.decoy_help_primary = "Tuzağı yerleştirin"
+L.decoy_help_secondary = "Tuzağı kur"
+
+
+L.marker_vision_visible_for_0 = "Sadece size görünür"
+L.marker_vision_visible_for_1 = "Sadece sizin rolünüze görünür"
+L.marker_vision_visible_for_2 = "Takıma görünür"
+L.marker_vision_visible_for_3 = "Herkese görünür"
 
 -- 2024-02-14
 L.throw_no_room = "Bu cihazı atmak için yeterli alanınız yok"
@@ -2350,3 +2345,10 @@ L.button_default = "Tetiklemek için [{usekey}] tuşuna bas"
 L.button_rotating = "Devreye sokmak için [{usekey}] tuşuna bas"
 
 L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"
