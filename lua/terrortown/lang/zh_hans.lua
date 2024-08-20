@@ -2038,7 +2038,7 @@ L.help_prop_spec_dash = [[
 Propspec 冲刺是向目标矢量方向的移动。它们可以比正常移动的力度更大。更高的力度也意味着更高的基础值消耗。
 
 该变量是推力的乘数。]]
-L.label_spec_prop_dash = "冲刺力倍增器"
+L.label_spec_prop_dash = "冲刺力倍率"
 L.label_keyhelper_possession_dash = "Prop：向视线方向冲刺"
 L.label_keyhelper_weapon_drop = "尽可能丢出所选武器"
 L.label_keyhelper_ammo_drop = "将选定武器的弹药从弹夹中取出"
@@ -2192,13 +2192,13 @@ L.label_enable_sound_interact = "启用交互声音"
 L.label_enable_sound_buttons = "启用按钮声音"
 L.label_enable_sound_message = "启用消息声音"
 
-L.label_level_sound_interact = "交互声音音量倍增器"
-L.label_level_sound_buttons = "按钮声音音量倍增器"
-L.label_level_sound_message = "消息声音音量倍增器"
+L.label_level_sound_interact = "交互声音音量倍率"
+L.label_level_sound_buttons = "按钮声音音量倍率"
+L.label_level_sound_message = "消息声音音量倍率"
 
 -- 2024-03-07
 L.label_crosshair_static_gap_length = "启用静态准星间隙大小"
-L.label_crosshair_size_gap = "准星间隙大小倍增器"
+L.label_crosshair_size_gap = "准星间隙大小倍率"
 
 -- 2024-03-31
 L.help_locational_voice = "近距离聊天是TTT2实现的定位3D语音。玩家只能在其周围的设定半径内听到声音，距离越远声音越小。"
