@@ -2349,8 +2349,8 @@ L.button_rotating = "[{usekey}] Повернуть."
 L.undefined_key = "???"
 
 -- 2024-08-18
---L.header_commands_player_force_role = "Force Player Role"
+L.header_commands_player_force_role = "Назначение роли игроку"
 
---L.label_button_player_force_role = "force role"
+L.label_button_player_force_role = "назначить роль"
 
---L.label_player_role = "Select role"
+L.label_player_role = "Выберите роль"
