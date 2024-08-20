@@ -672,6 +672,20 @@ if SERVER then
 
         events.Trigger(EVENT_GAME, state)
     end
+
+    hook.Add("TTT2LoadNextMap", "MapVoteCompat", function(nextMap, roundsLeft, timeLeft)
+        if not isfunction(CheckForMapSwitch) then
+            return
+        end
+
+        ErrorNoHalt(
+            "[TTT2] Using deprecated map vote overwrite. Replace your map vote addon and contact the addon developer."
+        )
+
+        CheckForMapSwitch()
+
+        return true
+    end)
 end
 
 if CLIENT then
