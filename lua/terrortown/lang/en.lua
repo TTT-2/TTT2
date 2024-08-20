@@ -2345,3 +2345,10 @@ L.button_default = "Press [{usekey}] to trigger"
 L.button_rotating = "Press [{usekey}] to flip"
 
 L.undefined_key = "???"
+
+-- 2024-08-18
+L.header_commands_player_force_role = "Force Player Role"
+
+L.label_button_player_force_role = "force role"
+
+L.label_player_role = "Select role"
