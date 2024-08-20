@@ -77,6 +77,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Corpses on fire display that information in targetID and MStack (by @TimGoll)
 - Updated Russian and English localization files (by @Satton2)
 - Made `ply:IsReviving` a shared player variable (by @TimGoll)
+- Updated the Simplified Chinese localization file (by @sbzlzh) and Improved Simplified Chinese Translation (by @TheOnly8Z)
 
 ### Fixed
 
