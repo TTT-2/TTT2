@@ -891,7 +891,7 @@ L.target_switch_weapon_nospace = "没有提供给这个武器的槽位"
 L.target_switch_drop_weapon_info = "丢弃槽位 {slot} 的 {name}"
 L.target_switch_drop_weapon_info_noslot = "槽位 {slot} 没有可丢弃的武器"
 
-L.corpse_searched_by_detective = "这具尸体已被公共警察角色搜索过"
+L.corpse_searched_by_detective = "这具尸体已被公开警察角色搜索过"
 L.corpse_too_far_away = "这个尸体太远了。"
 
 L.radio_short_desc = "武器声音，悦耳动听"
@@ -1654,7 +1654,7 @@ L.label_spawn_wave_interval = "生成的间隔时间，以秒为单位"
 L.label_voice_enable = "启用语音聊天"
 L.label_voice_drain = "启用语音聊天的电池功能"
 L.label_voice_drain_normal = "普通玩家的每滴答消耗量"
-L.label_voice_drain_admin = "让管理员和公共警察角色的电池会耗尽"
+L.label_voice_drain_admin = "让管理员和公开警察角色的电池会耗尽"
 L.label_voice_drain_recharge = "不进行语音聊天时每滴答的充能率"
 L.label_locational_voice = "为活着的玩家启用近距离语音聊天功能"
 L.label_locational_voice_prep = "在准备阶段启用近距离语音聊天"
@@ -1932,9 +1932,9 @@ L.search_title_spectator = "你是观察者"
 L.target_credits_on_confirm = "确认死亡可获得未使用的积分"
 L.target_credits_on_search = "搜索可获得未使用的积分"
 L.corpse_hint_no_inspect_details = "只有公开警察角色可以找到这具尸体的信息。"
-L.corpse_hint_inspect_limited_details = "只有公共警察角色可以确认这具尸体。"
+L.corpse_hint_inspect_limited_details = "只有公开警察角色可以确认这具尸体。"
 L.corpse_hint_spectator = "按 [{usekey}] 查看尸体界面"
-L.corpse_hint_public_policing_searched = "按 [{usekey}] 查看公共警察角色的搜索结果"
+L.corpse_hint_public_policing_searched = "按 [{usekey}] 查看公开警察角色的搜索结果"
 
 L.label_inspect_confirm_mode = "选择尸体搜索模式"
 L.choice_inspect_confirm_mode_0 = "模式 0: 标准 TTT"
@@ -2133,7 +2133,7 @@ L.help_enable_bobbing_strafe = "视图晃动是指摄像机在行走、游泳或
 
 L.binoc_help_reload = "清除目标。"
 L.cl_sb_row_sresult_direct_conf = "直接确认"
-L.cl_sb_row_sresult_pub_police = "公共警察角色确认"
+L.cl_sb_row_sresult_pub_police = "公开警察角色确认"
 
 -- 2024-01-05
 L.label_crosshair_thickness_outline_enable = "启用准星轮廓"
