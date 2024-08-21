@@ -17,6 +17,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added the option to assign random unique models at round start (by @Exonen2)
 - Added a new voice chat UI (by @TimGoll)
 - Added `TTT2CanTakeCredits` hook for overriding whether a player is allowed to take credits from a given corpse. (by @Spanospy)
+- Added `GM:TTT2OnGiveFoundCredits()` hook which is called when a player has been given credits for searching a corpse.
+- Added `GM:TTT2OnReceiveKillCredits()` hook which is called when a player recieves credits for a kill.
+- Added `GM:TTT2OnReceiveTeamAwardCredits()` hook which is called when a player recieves credits as a team award.
+- Added `GM:TTT2OnTransferCredits()` hook which is called when a player has successfully transfered a credit to another player.
 - Disabled locational voice during the preparing phase by default
   - Added a ConVar `ttt_locational_voice_prep` to reenable it
 - Added `SWEP.EnableConfigurableClip` and `SWEP.ConfigurableClip` to set the weapon's clip on buy via the equipment editor (by @TimGoll)

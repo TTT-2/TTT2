@@ -1919,3 +1919,20 @@ function GM:TTT2SetDefaultCredits(ply) end
 -- @hook
 -- @realm server
 function GM:TTT2ModifyDefaultTraitorCredits(ply, credits) end
+
+---
+-- Hook that is called when a player recieves credits for a kill.
+-- @param Player ply The player who killed another player
+-- @param Player victim The player who was killed
+-- @param number credits The amount of credits the player received
+-- @hook
+-- @realm server
+function GM:TTT2OnReceiveKillCredits(ply, victim, credits) end
+
+---
+-- Hook that is called when a player recieves credits as a team award.
+-- @param Player ply The player who was awarded the credits
+-- @param number credits The amount of credits the player received
+-- @hook
+-- @realm server
+function GM:TTT2OnReceiveTeamAwardCredits(ply, credits) end
