@@ -2167,7 +2167,7 @@ L.magneto_stick_help_carry_prop_drop = "放下道具"
 L.decoy_help_primary = "安放诱饵"
 L.decoy_help_secondary = "将诱饵粘附在表面"
 
---2024-01-29
+
 L.marker_vision_visible_for_0 = "对你可见"
 L.marker_vision_visible_for_1 = "对你的角色可见"
 L.marker_vision_visible_for_2 = "对你的团队可见"
