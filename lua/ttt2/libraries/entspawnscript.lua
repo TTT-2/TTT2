@@ -19,7 +19,7 @@ local tableAdd = table.Add
 local tableCopy = table.Copy
 local utilTableToJSON = util.TableToJSON
 local utilJSONToTable = util.JSONToTable
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local spawnPointList = {}
 local settingsList = {}
@@ -491,14 +491,13 @@ if SERVER then
     -- @param table plys A table of players that should be updated
     -- @realm server
     function entspawnscript.UpdateSettingsOnClients(plys)
-        plys = plys or select(2, playerIterator())
+        plys = plys or playerGetAll()
         for i = 1, #plys do
             local ply = plys[i]
 
-            ---
-            -- @realm server
-            -- stylua: ignore
-            if not hook.Run("TTT2AdminCheck", ply) then continue end
+            if not admin.IsAdmin(ply) then
+                continue
+            end
 
             for key, value in pairs(entspawnscript.GetSettings()) do
                 ttt2net.Set(
@@ -531,13 +530,13 @@ if SERVER then
             end
         end
 
-        plys = plys or select(2, playerIterator())
+        plys = plys or playerGetAll()
         for i = 1, #plys do
             local ply = plys[i]
-            ---
-            -- @realm server
-            -- stylua: ignore
-            if not hook.Run("TTT2AdminCheck", ply) then continue end
+
+            if not admin.IsAdmin(ply) then
+                continue
+            end
 
             ttt2net.Set(
                 { "entspawnscript", "spawnamount", "weapon" },
@@ -1221,10 +1220,9 @@ if SERVER then
     util.AddNetworkString("ttt2_entspawn_setting_update")
 
     net.Receive("ttt2_remove_spawn_ent", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         entspawnscript.RemoveSpawnById(
             net.ReadUInt(4),
@@ -1236,10 +1234,9 @@ if SERVER then
     end)
 
     net.Receive("ttt2_add_spawn_ent", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         entspawnscript.AddSpawn(
             net.ReadUInt(4),
@@ -1253,10 +1250,9 @@ if SERVER then
     end)
 
     net.Receive("ttt2_update_spawn_ent", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         entspawnscript.UpdateSpawn(
             net.ReadUInt(4),
@@ -1271,37 +1267,33 @@ if SERVER then
     end)
 
     net.Receive("ttt2_delete_all_spawns", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         entspawnscript.DeleteAllSpawns()
     end)
 
     net.Receive("ttt2_entspawn_setting_update", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         entspawnscript.SetSetting(net.ReadString(), net.ReadInt(16), net.ReadBool())
     end)
 
     net.Receive("ttt2_entspawn_reset", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         entspawnscript.ResetMapToDefault()
     end)
 
     net.Receive("ttt2_toggle_entspawn_editing", function(_, ply)
-        ---
-        -- @realm server
-        -- stylua: ignore
-        if not IsValid(ply) or not hook.Run("TTT2AdminCheck", ply) then return end
+        if not admin.IsAdmin(ply) then
+            return
+        end
 
         if net.ReadBool() then
             entspawnscript.StartEditing(ply)

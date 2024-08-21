@@ -26,9 +26,6 @@ L.traitors = "Hain Takımı"
 L.round_minplayers = "Yeni raunda başlamak için yeterli sayıda oyuncu yok..."
 L.round_voting = "Oylama devam ediyor, yeni raunt {num} saniye geciktirilecek..."
 L.round_begintime = "Yeni raunt {num} saniyede başlayacak. Kendini hazırla."
-L.round_selected = "Hainler seçildi."
-L.round_started = "Raunt başladı!"
-L.round_restart = "Raunt bir yönetici tarafından yeniden başlatıldı."
 
 L.round_traitors_one = "Hey hain, yalnızsın."
 L.round_traitors_more = "Hey hain, bunlar senin müttefiklerin {names}"
@@ -49,7 +46,7 @@ L.credit_kill = "Bir {role} öldürdüğünüz için {num} kredi aldınız."
 
 -- Karma
 L.karma_dmg_full = "Karman {amount}, bu yüzden bu raunt tam hasar veriyorsun!"
-L.karma_dmg_other = "Karman {amount}. Sonuç olarak, verdiğiniz tüm hasar ​%{num}​ azaltılır."
+L.karma_dmg_other = "Karman {amount}. Bu nedenle, verdiğiniz tüm hasar ​%{num}​ azaltıldı."
 
 -- Body identification messages
 L.body_found = "{finder}, {victim} adlı kişinin cesedini buldu. {role}"
@@ -173,11 +170,11 @@ L.sb_playing = "Şu anda bu sunucuda oynuyorsunuz..."
 L.sb_mapchange = "{num} rauntta veya {time} içinde harita değişecektir."
 L.sb_mapchange_disabled = "Oturum sınırları devre dışı."
 
-L.sb_mia = "Eylem Eksik"
+L.sb_mia = "Kayıp"
 L.sb_confirmed = "Onaylanmış Ölü"
 
 L.sb_ping = "Gecikme"
-L.sb_deaths = "Ölümler"
+L.sb_deaths = "Ölüm"
 L.sb_score = "Puan"
 L.sb_karma = "Karma"
 
@@ -366,7 +363,6 @@ Katilin DNA'sını almak ve izini sürmek için taze cesetler üzerinde kullanı
 
 -- Magneto stick
 L.magnet_name = "Manyeto çubuğu"
-L.magnet_help = "Cesedi yüzeye tutturmak için {primaryfire}"
 
 -- Grenades and misc
 L.grenade_smoke = "Duman bombası"
@@ -447,10 +443,10 @@ L.tbut_retime = "{num} saniye sonra tekrar kullanılabilir"
 L.tbut_help = "Etkinleştirmek için [{usekey}] tuşuna basın"
 
 -- Spectator muting of living/dead
-L.mute_living = "Yaşayan oyuncular sessize alındı"
+L.mute_living = "Canlı oyuncular sessize alındı"
 L.mute_specs = "İzleyiciler sessize alındı"
-L.mute_all = "Tümü sessiz"
-L.mute_off = "Hiçbiri sessiz değil"
+L.mute_all = "Tümü sessize alındı"
+L.mute_off = "Kimse sessize alınmadı"
 
 -- Spectators and prop possession
 L.punch_title = "GÜÇ ÖLÇER"
@@ -459,7 +455,7 @@ L.punch_malus = "İyi puanın güç ölçer sınırını {num} arttırdı!"
 
 -- Info popups shown when the round starts
 L.info_popup_innocent = [[
-Sen masum bir teröristsin! Ama etrafta hainler var...
+Sen masum bir teröristsin ama etrafta hainler var...
 Kime güvenebilirsin ve seni kurşuna dizmek isteyen kim olabilir?
 
 Arkanı kolla ve bu işten canlı çıkmak için yoldaşlarınla birlikte çalış!]]
@@ -525,67 +521,61 @@ L.tip8 = "Hainler ve Dedektifler, diğer Hainlerin ve Dedektiflerin cesetlerinde
 
 L.tip9 = "Afacan Peri herhangi bir fizik nesnesini ölümcül bir mermiye dönüştürebilir. Her darbeye, yakındaki herkese zarar veren bir enerji patlaması eşlik eder."
 
-L.tip10 = "Hain veya Dedektifseniz, sağ üstteki kırmızı mesajlara dikkat edin. Bunlar sizin için önemli olacak."
+L.tip10 = "Bir alışveriş rolü olarak, siz ve yoldaşlarınız iyi performans gösterirseniz ekstra ekipman kredisi ile ödüllendirileceğinizi unutmayın. Harcamayı unutmayın!"
 
-L.tip11 = "Hain veya Dedektif olarak, siz ve yoldaşlarınız iyi performans gösterirseniz ekstra ekipman kredisi ile ödüllendirileceğinizi unutmayın. Harcamayı unutmayın!"
+L.tip11 = "Dedektiflerin DNA Tarayıcısı, silahlardan ve eşyalardan DNA örnekleri toplamak ve daha sonra bunları kullanan oyuncunun yerini bulmak için tarama yapmak için kullanılabilir. Bir cesetten veya etkisiz hale getirilmiş bir C4'ten numune alabildiğinizde kullanışlıdır!"
 
-L.tip12 = "Dedektiflerin DNA Tarayıcısı, silahlardan ve eşyalardan DNA örnekleri toplamak ve daha sonra bunları kullanan oyuncunun yerini bulmak için tarama yapmak için kullanılabilir. Bir cesetten veya etkisiz hale getirilmiş bir C4'ten numune alabildiğinizde kullanışlıdır!"
+L.tip12 = "Öldürdüğünüz birine yakın olduğunuzda, DNA'nızın bir kısmı cesedin üzerinde kalır. Bu DNA, mevcut konumunuzu bulmak için bir Dedektifin DNA Tarayıcısı ile kullanılabilir. Birini bıçakladıktan sonra cesedi saklasan iyi olur!"
 
-L.tip13 = "Öldürdüğünüz birine yakın olduğunuzda, DNA'nızın bir kısmı cesedin üzerinde kalır. Bu DNA, mevcut konumunuzu bulmak için bir Dedektifin DNA Tarayıcısı ile kullanılabilir. Birini bıçakladıktan sonra cesedi saklasan iyi olur!"
+L.tip13 = "Öldürdüğünüz birinden ne kadar uzaktaysanız, vücudundaki DNA örneğiniz o kadar hızlı bozulur."
 
-L.tip14 = "Öldürdüğünüz birinden ne kadar uzaktaysanız, vücudundaki DNA örneğiniz o kadar hızlı bozulur."
+L.tip14 = "Keskin nişancılık mı yapacaksın? Kılık Değiştiriciyi satın almayı düşünün. Bir atışı kaçırırsan, güvenli bir yere kaç, Kılık Değiştiriciyi devre dışı bırak ve hiç kimse onlara ateş edenin sen olduğunu bilmeyecek."
 
-L.tip15 = "Hain misin ve keskin nişancılık mı yapıyorsun? Kılık Değiştiriciyi denemeyi düşün. Bir atışı kaçırırsan, güvenli bir yere kaç, Kılık Değiştiriciyi devre dışı bırak ve hiç kimse onlara ateş edenin sen olduğunu bilmeyecek."
+L.tip15 = "Bir Işınlayıcınız varsa, kovalandığınızda kaçmanıza yardımcı olabilir ve büyük bir harita üzerinde hızlı bir şekilde seyahat etmenizi sağlar. Her zaman işaretli güvenli bir pozisyonunuz olduğundan emin olun."
 
-L.tip16 = "Hain olarak Işınlayıcı, kovalandığında kaçmana yardımcı olabilir ve büyük bir harita üzerinde hızlı bir şekilde seyahat etmeni sağlar. Her zaman işaretli güvenli bir pozisyonunuz olduğundan emin olun."
+L.tip16 = "Masumların hepsi gruplanmış ve öldürmesi zor mu? C4 seslerini çalmak için Radyoyu veya bazılarını uzaklaştırmak için ateş etmeyi düşünün."
 
-L.tip17 = "Masumların hepsi gruplanmış ve öldürmesi zor mu? C4 seslerini çalmak için Radyoyu veya bazılarını uzaklaştırmak için ateş etmeyi düşünün."
+L.tip17 = "Radyoyu kullanarak, radyo yerleştirildikten sonra yerleştirme işaretçisine bakarak sesleri çalabilirsiniz. İstediğiniz sırayla birden fazla düğmeye tıklayarak birden fazla sesi sıraya koyun."
 
-L.tip18 = "Radyoyu Hainken, radyo yerleştirildikten sonra Ekipman Menünüzden sesleri çalabilirsiniz. İstediğiniz sırayla birden fazla düğmeye tıklayarak birden fazla sesi sıraya koyun."
+L.tip18 = "Dedektifken, kalan kredileriniz varsa, güvenilir bir Masuma İmha Kiti verebilirsiniz. O zaman zamanınızı ciddi araştırma çalışmaları yaparak geçirebilir ve riskli bomba imha işini onlara bırakabilirsiniz."
 
-L.tip19 = "Dedektifken, kalan kredileriniz varsa, güvenilir bir Masuma İmha Kiti verebilirsiniz. O zaman zamanınızı ciddi araştırma çalışmaları yaparak geçirebilir ve riskli bomba imha işini onlara bırakabilirsiniz."
+L.tip19 = "Dedektiflerin Dürbünü, cesetlerin uzun menzilli aranmasına ve tanımlanmasına izin verir. Hainler bir cesedi yem olarak kullanmayı umuyorsa kötü haber. Elbette, Dürbünü kullanırken bir Dedektif silahsızdır ve dikkati dağılır..."
 
-L.tip20 = "Dedektiflerin Dürbünü, cesetlerin uzun menzilli aranmasına ve tanımlanmasına izin verir. Hainler bir cesedi yem olarak kullanmayı umuyorsa kötü haber. Elbette, Dürbünü kullanırken bir Dedektif silahsızdır ve dikkati dağılır..."
+L.tip20 = "Dedektiflerin Sağlık İstasyonu, yaralı oyuncuların iyileşmesini sağlar. Tabii o yaralılar da Hain olabilir..."
 
-L.tip21 = "Dedektiflerin Sağlık İstasyonu, yaralı oyuncuların iyileşmesini sağlar. Tabii o yaralılar da Hain olabilir..."
+L.tip21 = "Sağlık İstasyonu, onu kullanan herkesin DNA örneğini kaydeder. Dedektifler bunu DNA Tarayıcısı ile kimin iyileştiğini bulmak için kullanabilirler."
 
-L.tip22 = "Sağlık İstasyonu, onu kullanan herkesin DNA örneğini kaydeder. Dedektifler bunu DNA Tarayıcısı ile kimin iyileştiğini bulmak için kullanabilirler."
+L.tip22 = "Silahlar ve C4'ten farklı olarak, Hainler için Radyo ekipmanı, onu yerleştiren kişinin DNA örneğini içermez. Dedektiflerin onu bulması ve kimliğini ifşa etmesi konusunda endişelenme."
 
-L.tip23 = "Silahlar ve C4'ten farklı olarak, Hainler için Radyo ekipmanı, onu yerleştiren kişinin DNA örneğini içermez. Dedektiflerin onu bulması ve kimliğini ifşa etmesi konusunda endişelenme."
+L.tip23 = "Kısa bir öğreticiyi görüntülemek veya TTT'ye özgü bazı ayarları değiştirmek için {helpkey} tuşuna basın."
 
-L.tip24 = "Kısa bir öğreticiyi görüntülemek veya TTT'ye özgü bazı ayarları değiştirmek için {helpkey} tuşuna basın. Örneğin, bu ipuçlarını kalıcı olarak devre dışı bırakabilirsiniz."
+L.tip24 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan tablosu aracılığıyla tüm oyuncuların kullanımına açıktır."
 
-L.tip25 = "Dedektif bir cesedi aradığında, sonuç ölü kişinin adına tıklayarak puan panosu aracılığıyla tüm oyuncuların kullanımına açıktır."
+L.tip25 = "Skor tablosunda, birinin adının yanındaki büyüteç simgesi, o kişi hakkında arama bilgilerine sahip olduğunuzu gösterir. Simge parlaksa, veriler bir Dedektiften gelir ve ek bilgiler içerebilir."
 
-L.tip26 = "Skor tablosunda, birinin adının yanındaki büyüteç simgesi, o kişi hakkında arama bilgilerine sahip olduğunuzu gösterir. Simge parlaksa, veriler bir Dedektiften gelir ve ek bilgiler içerebilir."
+L.tip26 = "Takma adın altında büyüteç bulunan cesetler bir Dedektif tarafından arandığında sonuçları puan tablosu aracılığıyla tüm oyunculara açıktır."
 
-L.tip27 = "Dedektif olarak, takma addan sonra büyüteç takılan cesetler bir Dedektif tarafından arandı ve sonuçları skor tablosu aracılığıyla tüm oyunculara açıktır."
+L.tip27 = "İzleyiciler, diğer izleyicileri veya yaşayan oyuncuları susturmak için {mutekey} tuşuna basabilir."
 
-L.tip28 = "İzleyiciler, diğer izleyicileri veya yaşayan oyuncuları susturmak için {mutekey} tuşuna basabilir."
+L.tip28 = "{helpkey} tuşuna basarak Ayarlar menüsünde istediğiniz zaman farklı bir dile geçebilirsiniz."
 
-L.tip29 = "Sunucu ek diller yüklediyse, Ayarlar menüsünden istediğiniz zaman farklı bir dile geçebilirsiniz."
+L.tip29 = "Hızlı sohbet veya 'radyo' komutları {zoomkey} tuşuna basılarak kullanılabilir."
 
-L.tip30 = "Hızlı sohbet veya 'radyo' komutları {zoomkey} tuşuna basılarak kullanılabilir."
+L.tip30 = "Levyenin ikincil ateşi diğer oyuncuları itecektir."
 
-L.tip31 = "İzleyiciyken, fare imlecinin kilidini açmak için {duckkey} tuşuna bas ve bu ipuçları panelindeki düğmelere tıkla. Fare görünümüne geri dönmek için {duckkey} tuşuna tekrar basın."
+L.tip31 = "Nişangâhı kullanarak ateş etmek, isabetini biraz artıracak ve geri tepmeyi azaltacaktır. Çömelmek işe yaramaz."
 
-L.tip32 = "Levyenin ikincil ateşi diğer oyuncuları itecektir."
+L.tip32 = "Duman bombaları, özellikle kalabalık odalarda kafa karışıklığı yaratmak için iç mekanlarda etkilidir."
 
-L.tip33 = "Nişangahı kullanarak ateş etmek, isabetini biraz artıracak ve geri tepmeyi azaltacaktır. Çömelmek işe yaramaz."
+L.tip33 = "Hain olarak, cesetleri taşıyabileceğinizi ve onları masumların ve Dedektiflerinin meraklı gözlerinden saklayabileceğinizi unutmayın."
 
-L.tip34 = "Duman bombaları, özellikle kalabalık odalarda kafa karışıklığı yaratmak için iç mekanlarda etkilidir."
+L.tip34 = "Skor tablosunda, yaşayan bir oyuncunun adına tıklayıp 'şüpheli' veya 'arkadaş' gibi bir etiket seçebilirsiniz. Bu etiket, nişangâhınızın altındaysa görünecektir."
 
-L.tip35 = "Hain olarak, cesetleri taşıyabileceğinizi ve onları masumların ve Dedektiflerinin meraklı gözlerinden saklayabileceğinizi unutmayın."
+L.tip35 = "Yerleştirilebilir ekipman öğelerinin çoğu (C4, Radyo gibi) ikincil ateş kullanılarak duvarlara yapıştırılabilir."
 
-L.tip36 = "{helpkey} altında bulunan öğretici, oyunun en önemli ince ayrıntılarına genel bir bakış içerir."
+L.tip36 = "Etkisiz hale getirilirken bir hata nedeniyle patlayan C4, zamanlayıcısında sıfıra ulaşan C4'ten daha küçük bir patlamaya sahiptir."
 
-L.tip37 = "Skor tablosunda, yaşayan bir oyuncunun adına tıklayıp 'şüpheli' veya 'arkadaş' gibi bir etiket seçebilirsiniz. Bu etiket, nişangahınızın altındaysa görünecektir."
-
-L.tip38 = "Yerleştirilebilir ekipman öğelerinin çoğu (C4, Radyo gibi) ikincil ateş kullanılarak duvarlara yapıştırılabilir."
-
-L.tip39 = "Etkisiz hale getirilirken bir hata nedeniyle patlayan C4, zamanlayıcısında sıfıra ulaşan C4'ten daha küçük bir patlamaya sahiptir."
-
-L.tip40 = "Raunt zamanlayıcısının üzerinde 'HIZLI MOD' yazıyorsa, raunt ilk başta sadece birkaç dakika uzunluğunda olacaktır, ancak her ölümle birlikte mevcut süre artar (TF2'deki bir noktayı yakalamak gibi). Bu mod, hainlere işlerini devam ettirmeleri için baskı yapar."
+L.tip37 = "Raunt zamanlayıcısının üzerinde 'HIZLI MOD' yazıyorsa, raunt ilk başta sadece birkaç dakika uzunluğunda olacaktır, ancak her ölümle birlikte mevcut süre artar. Bu mod, hainlere işlerini devam ettirmeleri için baskı yapar."
 
 -- Round report
 L.report_title = "Raunt Raporu"
@@ -608,8 +598,8 @@ L.report_save_result = "Olay Kaydı şuraya kaydedildi:"
 L.col_time = "Zaman"
 L.col_event = "Olay"
 L.col_player = "Oyuncu"
-L.col_roles = "Rol(ler)"
-L.col_teams = "Takım(lar)"
+L.col_roles = "Rol"
+L.col_teams = "Takım"
 L.col_kills1 = "Öldürmeler"
 L.col_kills2 = "Takım öldürmeleri"
 L.col_points = "Puanlar"
@@ -925,7 +915,7 @@ L.pickup_pending = "Zaten bir silah aldın, alana kadar bekle."
 L.tbut_help_admin = "Hain düğmesi ayarlarını düzenle"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] düğmesi {role} için"
 L.tbut_role_config = "Rol {current}"
-L.tbut_team_toggle = "{team} takımı için bu düğmeyi değiştirmek için [SHIFT + {walkkey} + {usekey}]"
+L.tbut_team_toggle = "{team} için bu düğmeyi açmak için [SHIFT + {walkkey} + {usekey}]"
 L.tbut_team_config = "Takım {current}"
 L.tbut_current_config = "Geçerli yapılandırma"
 L.tbut_intended_config = "Harita oluşturucu tarafından tasarlanan yapılandırma"
@@ -989,7 +979,7 @@ L.submenu_appearance_hudswitcher_title = "Arayüz Değiştirici"
 L.submenu_appearance_vskin_title = "Valve Arayüzü"
 L.submenu_appearance_targetid_title = "Hedef Kimliği"
 L.submenu_appearance_shop_title = "Mağaza Ayarları"
-L.submenu_appearance_crosshair_title = "Nişangah"
+L.submenu_appearance_crosshair_title = "Nişangâh"
 L.submenu_appearance_dmgindicator_title = "Hasar Göstergesi"
 L.submenu_appearance_performance_title = "Performans"
 L.submenu_appearance_interface_title = "Arayüz"
@@ -999,12 +989,12 @@ L.submenu_gameplay_general_title = "Genel"
 L.submenu_administration_hud_title = "Arayüz Ayarları"
 L.submenu_administration_randomshop_title = "Rasgele Mağaza"
 
-L.help_color_desc = "Bu ayar etkinleştirilirse, hedef kimliği dış çizgisi ve nişangah için kullanılacak genel bir renk seçebilirsiniz."
+L.help_color_desc = "Bu ayar etkinleştirilirse, hedef kimliği dış çizgisi ve nişangâh için kullanılacak genel bir renk seçebilirsiniz."
 L.help_scale_factor = "Bu ölçek faktörü tüm arayüz öğelerini (Arayüz, Valve Grafiksel Kullanıcı Arayüzü ve Hedef Kimliği) etkiler. Ekran çözünürlüğü değiştirilirse otomatik olarak güncellenir. Bu değerin değiştirilmesi arayüzü sıfırlayacaktır!"
 L.help_hud_game_reload = "Arayüz şu anda kullanılamıyor. Sunucuya yeniden bağlanın veya oyunu yeniden başlatın."
 L.help_hud_special_settings = "Bunlar bu arayüzün özel ayarlarıdır."
 L.help_vskin_info = "Valve Arayüzü (Valve Grafiksel Kullanıcı Arayüz görünümü), mevcut olan tüm menü öğelerine uygulanan görünümdür. Basit bir Lua komut dosyası ile kolayca oluşturulabilirler ve renkleri ve bazı boyut parametrelerini değiştirebilirler."
-L.help_targetid_info = "Hedef Kimliği, nişangahınızı bir varlığa yönlendirirken oluşturulan bilgilerdir. Rengi 'Genel' sekmesinde yapılandırılabilir."
+L.help_targetid_info = "Hedef Kimliği, nişangâhınızı bir varlığa yönlendirirken oluşturulan bilgilerdir. Rengi 'Genel' sekmesinde yapılandırılabilir."
 L.help_hud_default_desc = "Tüm oyuncular için varsayılan arayüz değerini ayarlar. Henüz bir arayüz seçmemiş olan oyuncular, varsayılan olarak bu arayüzü alacaklardır. Bunu değiştirmek, arayüzlerini zaten seçmiş olan oyuncuların arayüzlerini değiştirmez."
 L.help_hud_forced_desc = "Tüm oyuncular için bir arayüz zorlar. Bu, arayüz seçim özelliğini herkes için devre dışı bırakır."
 L.help_hud_enabled_desc = "Bu arayüzlerin seçimini kısıtlamak için etkinleştir veya devre dışı bırak."
@@ -1021,7 +1011,7 @@ L.label_hud_select = "Arayüz Seç"
 L.label_vskin_select = "Valve Arayüzü seçin"
 L.label_blur_enable = "Valve Arayüz arka plan bulanıklığını etkinleştir"
 L.label_color_enable = "Valve Arayüz arka plan rengini etkinleştir"
-L.label_minimal_targetid = "Nişangah altında minimalist Hedef Kimliği (Karma metni, ipuçları vb.)"
+L.label_minimal_targetid = "Nişangâh altında minimalist Hedef Kimliği (Karma metni, ipuçları vb.)"
 L.label_shop_always_show = "Her zaman mağazayı göster"
 L.label_shop_double_click_buy = "Mağazada üzerine çift tıklayarak bir ürün satın almayı etkinleştir"
 L.label_shop_num_col = "Sütun sayısı"
@@ -1030,13 +1020,13 @@ L.label_shop_item_size = "Simge boyutu"
 L.label_shop_show_slot = "Yuva işaretini göster"
 L.label_shop_show_custom = "Özel öğe işaretini göster"
 L.label_shop_show_fav = "Favori öğe işaretini göster"
-L.label_crosshair_enable = "Nişangahı etkinleştir"
-L.label_crosshair_opacity = "Nişangah opaklığı"
+L.label_crosshair_enable = "Nişangâhı etkinleştir"
+L.label_crosshair_opacity = "Nişangâh opaklığı"
 L.label_crosshair_ironsight_opacity = "Gez ve arpacık opaklığı"
-L.label_crosshair_size = "Nişangah boyutu"
-L.label_crosshair_thickness = "Nişangah kalınlığı"
-L.label_crosshair_thickness_outline = "Nişangah dış çizgi kalınlığı"
-L.label_crosshair_scale_enable = "Silaha bağlı nişangah ölçeğini etkinleştir"
+L.label_crosshair_size = "Nişangâh boyutu"
+L.label_crosshair_thickness = "Nişangâh kalınlığı"
+L.label_crosshair_thickness_outline = "Nişangâh dış çizgi kalınlığı"
+L.label_crosshair_scale_enable = "Silaha bağlı nişangâh ölçeğini etkinleştir"
 L.label_crosshair_ironsight_low_enabled = "Gez ve arpacık kullanırken silahı indirin"
 L.label_damage_indicator_enable = "Hasar göstergesini etkinleştir"
 L.label_damage_indicator_mode = "Hasar göstergesi temasını seçin"
@@ -1046,7 +1036,6 @@ L.label_damage_indicator_maxalpha = "Maksimum opaklık"
 L.label_performance_halo_enable = "Bazı varlıklara bakarken etrafına bir dış çizgi çizin"
 L.label_performance_spec_outline_enable = "Kontrol edilen nesnelerin dış çizgilerini etkinleştir"
 L.label_performance_ohicon_enable = "Oyuncuların başındaki rol simgelerini etkinleştir"
-L.label_interface_tips_enable = "İzlerken ekranın alt kısmında oyun ipuçlarını göster"
 L.label_interface_popup = "Raunt başlangıç bilgisini gösteren açılan pencerenin süresi"
 L.label_interface_fastsw_menu = "Hızlı silah değişme ile menüyü etkinleştir"
 L.label_inferface_wswitch_hide_enable = "Silah değişme menüsünün otomatik olarak kapanmasını etkinleştir"
@@ -1076,7 +1065,7 @@ L.header_targetid = "Hedef Kimliği Ayarları"
 L.header_shop_settings = "Ekipman Mağazası Ayarları"
 L.header_shop_layout = "Öğe Listesi Düzeni"
 L.header_shop_marker = "Öğe İşaretleyici Ayarları"
-L.header_crosshair_settings = "Nişangah Ayarları"
+L.header_crosshair_settings = "Nişangâh Ayarları"
 L.header_damage_indicator = "Hasar Göstergesi Ayarları"
 L.header_performance_settings = "Performans Ayarları"
 L.header_interface_settings = "Arayüz Ayarları"
@@ -1141,7 +1130,6 @@ L.binoc_help_pri = "Bir ceset ara."
 L.binoc_help_sec = "Yakınlaştırma seviyesini değiştirin."
 
 L.vis_help_pri = "Etkinleştirilmiş cihazı bırakın."
-
 
 -- 2020-08-07
 L.pickup_error_spec = "Bunu izleyici olarak alamazsın."
@@ -1435,6 +1423,7 @@ L.label_enforce_playermodel = "Rol oyuncu modelini uygula"
 L.label_use_custom_models = "Rastgele seçilen bir oyuncu modeli kullan"
 L.label_prefer_map_models = "Varsayılan modeller yerine haritaya özgü modelleri tercih edin"
 L.label_select_model_per_round = "Her rauntta yeni bir rastgele model seçin (devre dışı bırakılmışsa yalnızca harita değişikliğinde)"
+--L.label_select_unique_model_per_round = "Select a random unique model for each player"
 
 L.help_prefer_map_models = [[
 Bazı haritalar kendi oyuncu modellerini tanımlar. Varsayılan olarak, bu modeller otomatik olarak atananlardan daha yüksek bir önceliğe sahiptir. Bu ayar devre dışı bırakıldığında, haritaya özgü modeller devre dışı bırakılır.
@@ -1668,7 +1657,8 @@ L.label_voice_drain_normal = "Normal oyuncular için tik başına azalma"
 L.label_voice_drain_admin = "Yöneticiler ve genel polislik rolleri için tik başına azalma"
 L.label_voice_drain_recharge = "Sesli sohbet etmeme işareti başına şarj oranı"
 L.label_locational_voice = "Canlı oyuncular için yakın sesli sohbeti etkinleştir"
---L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+L.label_locational_voice_prep = "Hazırlanma sürecinde konumsal ses sohbetini etkinleştir"
+L.label_locational_voice_range = "Konumsal ses sohbetinin uzaklık oranı"
 L.label_armor_on_spawn = "(Yeniden) canlanmada oyuncu zırhı"
 L.label_prep_respawn = "Hazırlık aşamasında anında yeniden canlanmayı etkinleştir"
 L.label_preptime_seconds = "Saniye cinsinden hazırlık süresi"
@@ -1960,7 +1950,7 @@ mode 1: Bu mod, onay seçeneğini bunlarla sınırlandırarak kamu polisliği ro
 mode 2: Bu mod, mod 1'den biraz daha katıdır. Bu modda arama yeteneği normal oyunculardan da kaldırılır. Bu, bir cesedi bir kamu polis oyuncusuna bildirmenin artık cesetlerden herhangi bir bilgi almanın tek yolu olduğu anlamına gelir.]]
 
 -- 2023-10-19
---L.label_grenade_trajectory_ui = "Grenade trajectory indicator"
+L.label_grenade_trajectory_ui = "Bomba yörüngesi göstergesi"
 
 -- 2023-10-23
 L.label_hud_pulsate_health_enable = "Sağlık %25'in altındayken sağlık göstergesini titret"
@@ -2045,7 +2035,7 @@ L.hat_deerstalker_name = "Dedektifin Şapkası"
 
 -- 2023-11-16
 L.help_prop_spec_dash = [[
-Normal hareketten daha yüksek kuvvette olabilirler. Daha yüksek kuvvet aynı zamanda daha yüksek temel değer tüketimi anlamına gelir.
+İzleyiciyken nesneyle atılma, baktığınız yönde atılma hareketleridir. Normal hareketten daha yüksek kuvvette olabilirler. Daha yüksek kuvvet aynı zamanda daha yüksek temel değer tüketimi anlamına da gelir.
 
 Bu değişken itme kuvvetinin bir çarpanıdır.]]
 L.label_spec_prop_dash = "Atılma kuvveti çarpanı"
@@ -2095,7 +2085,7 @@ L.beacon_marker_vision_player_tracked = "Bu oyuncu bir Fener tarafından izleniy
 
 -- 2023-12-18
 L.beacon_help_pri = "Feneri yere at"
-L.beacon_help_sec = "Feneri yere yapıştır"
+L.beacon_help_sec = "Feneri yere kur"
 L.beacon_name = "Fener"
 L.beacon_desc = [[
 Oyuncu konumlarını bu fenerin etrafındaki kürede herkese yayınlar.
@@ -2105,13 +2095,10 @@ Haritada görülmesi zor olan konumları takip etmek için kullanın.]]
 L.msg_beacon_destroyed = "Fenerlerinden biri yok edildi!"
 L.msg_beacon_death = "Fenerlerinden birinin yakınında bir oyuncu öldü."
 
-L.beacon_pickup_disabled = "Sadece fenerin sahibi alabilir"
 L.beacon_short_desc = "Fenerler, etraflarına yerel duvar hilesi eklemek için polislik rolleri tarafından kullanılır"
 
--- 2023-12-18
 L.entity_pickup_owner_only = "Bunu sadece sahibi alabilir"
 
--- 2023-12-18
 L.body_confirm_one = "{finder}, {victim} adlı kişinin ölümünü doğruladı."
 L.body_confirm_more = "{finder}, {count} ölümü doğruladı: {victims}."
 
@@ -2121,6 +2108,16 @@ L.equipmenteditor_desc_builtin = "Bu ekipman TTT2 ile gelen bütünleşik bir ö
 L.help_roles_builtin = "Bu rol TTT2 ile gelen bütünleşik bir öğedir!"
 L.header_equipment_info = "Ekipman bilgisi"
 
+-- 2023-12-20
+L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
+Bir pompalı için bu, her bir saçmayı etkileyecektir.
+Bir tüfek için bu sadece kurşunu etkiler.
+Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
+
+0.5 = Hasar miktarının yarısını ver.
+2 = Hasar miktarının iki katı kadar hasar ver.
+
+Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
 -- 2023-12-24
 L.submenu_gameplay_accessibility_title = "Erişilebilirlik"
@@ -2133,88 +2130,225 @@ L.label_enable_bobbing_strafe = "Sağ sol yaparken sallanmayı etkinleştir"
 
 L.help_enable_dynamic_fov = "Oyuncunun hızına bağlı olarak dinamik FOV uygulanır. Örneğin bir oyuncu koşarken hızı görselleştirmek için FOV artırılır."
 L.help_enable_bobbing_strafe = "Ekran sallanması, yürürken, yüzerken veya düşerken hafif kamera sarsıntısıdır."
--- 2023-12-20
-L.equipmenteditor_desc_damage_scaling = [[Bir silahın temel hasar değerini bu faktörle çarpar.
-Bir pompalı için bu, her bir saçmayı etkileyecektir.
-Bir tüfek için bu sadece kurşunu etkiler.
-Afacan Peri için bu, her bir "güm" ü ve son patlamayı etkileyecektir.
-0.5 = Hasar miktarının yarısını ver.
-2 = Hasar miktarının iki katı kadar hasar ver.
-Not: Bazı silahlar bu değiştiricinin etkisiz kalmasına neden olan bu değeri kullanmayabilir.]]
 
--- 2023-12-24
 L.binoc_help_reload = "Hedefi kaldırın."
---L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
---L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
+L.cl_sb_row_sresult_direct_conf = "Doğrudan Onay"
+L.cl_sb_row_sresult_pub_police = "Kamu polisliği rolü onayı"
 
 -- 2024-01-05
-L.label_crosshair_thickness_outline_enable = "Nişangah dış çizgisini etkinleştir"
+L.label_crosshair_thickness_outline_enable = "Nişangâh dış çizgisini etkinleştir"
 L.label_crosshair_outline_high_contrast = "Dış çizgi yüksek kontrast rengini etkinleştir"
-L.label_crosshair_mode = "Nişangah modu"
-L.label_crosshair_static_length = "Statik nişangah çizgi uzunluğunu etkinleştir"
+L.label_crosshair_mode = "Nişangâh modu"
+L.label_crosshair_static_length = "Sabit nişangâh çizgi uzunluğunu etkinleştir"
 
 L.choice_crosshair_mode_0 = "Çizgiler ve nokta"
 L.choice_crosshair_mode_1 = "Sadece çizgiler"
 L.choice_crosshair_mode_2 = "Sadece nokta"
 
 L.help_crosshair_scale_enable = [[
-Dinamik nişangah, silahın konisine bağlı olarak nişangahın ölçeklendirilmesini sağlar. Koni, zıplama ve koşma gibi dış faktörlerle çarpılan silahın taban isabetinden etkilenir.
+Dinamik nişangâh, silahın konisine bağlı olarak nişangâhın ölçeklendirilmesini sağlar. Koni, zıplama ve koşma gibi dış faktörlerle çarpılan silahın taban isabetinden etkilenir.
 
 Çizgi uzunluğu sabit tutulursa yalnızca konili boşluk ölçeklenir.]]
 
 L.header_weapon_settings = "Silah Ayarları"
 
+-- 2024-01-24
+L.grenade_fuse = "ATEŞLE"
 
-L.marker_vision_visible_for_0 = "Sadece size görünür"
---L.marker_vision_visible_for_1 = "Visible for your role"
-L.marker_vision_visible_for_2 = "Takıma görünür"
-L.marker_vision_visible_for_3 = "Herkese görünür"
+-- 2024-01-25
+L.header_roles_magnetostick = "Manyeto Çubuğu"
+L.label_roles_ragdoll_pinning = "Ceset sabitlemeyi etkinleştir"
+L.magneto_stick_help_carry_rag_pin = "Ceseti sabitle"
+L.magneto_stick_help_carry_rag_drop = "Ceseti bırak"
+L.magneto_stick_help_carry_prop_release = "Nesneyi sal"
+L.magneto_stick_help_carry_prop_drop = "Nesneyi bırak"
 
 -- 2024-01-27
 L.decoy_help_primary = "Tuzağı yerleştirin"
---L.decoy_help_secondary = "Stick Decoy to surface"
+L.decoy_help_secondary = "Tuzağı kur"
 
--- 2024-01-24
---L.grenade_fuse = "FUSE"
 
--- 2024-01-25
---L.header_roles_magnetostick = "Magneto Stick"
---L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
---L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
---L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+L.marker_vision_visible_for_0 = "Sadece size görünür"
+L.marker_vision_visible_for_1 = "Sadece sizin rolünüze görünür"
+L.marker_vision_visible_for_2 = "Takıma görünür"
+L.marker_vision_visible_for_3 = "Herkese görünür"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+L.throw_no_room = "Bu cihazı atmak için yeterli alanınız yok"
 
 -- 2024-03-04
---L.use_entity = "Press [{usekey}] to use"
+L.use_entity = "Kullanmak için [{usekey}] tuşuna basın"
 
 -- 2024-03-06
---L.submenu_gameplay_sounds_title = "Client-Sounds"
+L.submenu_gameplay_sounds_title = "Kullanıcı Sesleri"
 
---L.header_sounds_settings = "UI Sound Settings"
+L.header_sounds_settings = "Arayüz Ses Ayarları"
 
---L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
---L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+L.help_enable_sound_interact = "Etkileşim sesleri, bir kullanıcı arayüzü açılırken çalınan seslerdir. Örneğin radyo işaretçisi ile etkileşime girerken bir ses çalınır."
+L.help_enable_sound_buttons = "Düğme sesleri, bir düğmeye tıklandığında çalınan tıklama sesleridir."
+L.help_enable_sound_message = "Sohbet mesajları ve bildirimler için mesaj veya bildirim sesleri çalınır. Oldukça can sıkıcı olabilirler."
 
---L.label_enable_sound_interact = "Enable interaction sounds"
---L.label_enable_sound_buttons = "Enable button sounds"
---L.label_enable_sound_message = "Enable message sounds"
+L.label_enable_sound_interact = "Etkileşim seslerini etkinleştir"
+L.label_enable_sound_buttons = "Düğme seslerini etkinleştir"
+L.label_enable_sound_message = "Mesaj seslerini etkinleştir"
 
---L.label_level_sound_interact = "Interaction sound level multiplier"
---L.label_level_sound_buttons = "Button sound level multiplier"
---L.label_level_sound_message = "Message sound level multiplier"
+L.label_level_sound_interact = "Etkileşim ses seviyesi çarpanı"
+L.label_level_sound_buttons = "Düğme ses seviyesi çarpanı"
+L.label_level_sound_message = "Mesaj ses seviyesi çarpanı"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
---L.label_crosshair_size_gap = "Crosshair gap size multiplier"
+L.label_crosshair_static_gap_length = "Sabit nişangâh boşluk uzunluğunu etkinleştir"
+L.label_crosshair_size_gap = "Nişangâh boşluk boyutu çarpanı"
 
 -- 2024-03-31
---L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
---
---Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+L.help_locational_voice = "Konumsal sohbet, TTT2'nin konumsal 3D ses uygulamasıdır. Oyuncular sadece çevrelerindeki belirli bir yarıçapta duyulabilir ve oyuncular ne kadar uzakta olurlarsa sesleri o kadar sessizleşir."
+L.help_locational_voice_prep = [[Varsayılan olarak, konumsal sohbet hazırlık aşamasında devre dışıdır. Hazırlık aşamasında konumsal sohbeti de kullanmak için bu konsol değerini değiştirin.
+
+Not: Konumsal sohbet, raunt sonrası her zaman devre dışı bırakılır.]]
+L.help_voice_duck_spectator = "İzleyici seslerini azaltmak, diğer izleyicileri canlı oyunculara kıyasla daha sessiz hale getirir. Yaşayan oyuncuların tartışmalarını yakından dinlemek istiyorsanız bu yararlı olabilir."
+
+L.help_equipmenteditor_configurable_clip = [[Yapılandırılabilir boyut, silahın mağazadan satın alındığında veya haritada oluştuğunda sahip olduğu kullanım miktarını tanımlar.
+
+Not: Bu ayar yalnızca bu özelliği etkinleştiren silahlar için kullanılabilir.]]
+L.label_equipmenteditor_configurable_clip = "Yapılandırılabilir şarjör boyutu"
+
+-- 2024-04-06
+L.help_locational_voice_range = [[Bu konsol değeri, oyuncuların birbirlerini duyabilecekleri maksimum menzili kısıtlar. Sesin mesafeyle nasıl azaldığını değiştirmez, daha ziyade sert bir kesme noktası belirler.
+
+Bu kesintiyi devre dışı bırakmak için 0'a ayarlayın.]]
+
+-- 2024-04-07
+L.help_voice_activation = [[Genel sesli sohbet için mikrofonunun etkinleştirilme şeklini değiştirir. Bunların hepsi 'Genel Sesli Sohbet' tuş atamanızı kullanır. Takım sesli sohbeti her zaman bas konuş şeklindedir.
+
+Bas Konuş: Konuşmak için tuşa basılı tutun.
+Ses Etkinliği: Mikrofonun her zaman açık, sesini kapatmak için tuşu basılı tut.
+Aç - Kapat: Mikrofonunuzu açmak veya kapatmak için tuşa basın.
+Aç - Kapat (Katılınca Etkinleştir): 'Aç - Kapat' gibi, ancak sunucuya katıldığınızda mikrofonunuz etkinleştirilir.]]
+L.label_voice_activation = "Sesli Sohbet Etkinleştirme Modu"
+L.label_voice_activation_mode_ptt = "Bas Konuş"
+L.label_voice_activation_mode_ptm = "Sessize almak için bas"
+L.label_voice_activation_mode_toggle_disabled = "Aç - Kapat"
+L.label_voice_activation_mode_toggle_enabled = "Aç - Kapat (Katılınca Etkinleştir)"
+
+-- 2024-04-08
+L.label_inspect_credits_always = "Tüm oyuncuların cesetlerdeki kredileri görmesine izin ver"
+L.help_inspect_credits_always = [[
+Alışveriş rolleri öldüğünde kredileri alışveriş rolleri olan diğer oyuncular tarafından alınabilir.
+
+Bu seçenek devre dışıyken, yalnızca kredi toplayabilen oyuncular kredileri bir ceset üzerinde görebilir.
+Etkinleştirildiğinde, tüm oyuncular bir cesetteki kredileri görebilir.]]
+
+-- 2024-05-13
+L.menu_commands_title = "Yönetici Komutları"
+L.menu_commands_description = "Haritaları değiştir, bot oluştur ve oyuncu rollerini düzenle."
+
+L.submenu_commands_maps_title = "Haritalar"
+
+L.header_maps_prefixes = "Haritaları Öneklerine Göre Etkinleştir veya Devre Dışı Bırak"
+L.header_maps_select = "Haritaları Seç ve Değiştir"
+
+L.button_change_map = "Haritayı Değiştir"
+
+-- 2024-05-20
+L.submenu_commands_commands_title = "Komutlar"
+
+L.header_commands_round_restart = "Raundu Yeniden Başlat"
+L.header_commands_player_slay = "Oyuncuyu Öldür"
+L.header_commands_player_teleport = "Oyuncuyu Bakılan Yere Işınla"
+L.header_commands_player_respawn = "Oyuncuyu Bakılan Yerde Yeniden Canlandır"
+L.header_commands_player_add_credits = "Ekipman Kredisi Ekle"
+L.header_commands_player_set_health = "Sağlık Ayarla"
+L.header_commands_player_set_armor = "Zırh Ayarla"
+
+L.label_button_round_restart = "raundu yeniden başlat"
+L.label_button_player_slay = "oyuncuyu öldür"
+L.label_button_player_teleport = "oyuncuyu ışınla"
+L.label_button_player_respawn = "oyuncuyu yeniden canlandır"
+L.label_button_player_add_credits = "kredi ekle"
+L.label_button_player_set_health = "sağlık ayarla"
+L.label_button_player_set_armor = "zırh ayarla"
+
+L.label_slider_add_credits = "Kredi tutarını ayarla"
+L.label_slider_set_health = "sağlık ayarla"
+L.label_slider_set_armor = "zırh ayarla"
+
+L.label_player_select = "Etkilenen oyuncuyu seç"
+L.label_execute_command = "Komut Çalıştır"
+
+-- 2024-05-22
+L.tip38 = "{usekey} tuşuna basarak baktığınız silahları alabilirsiniz. Seni engelleyen silahı otomatik olarak bırakacak."
+L.tip39 = "Tuş atamalarınızı {helpkey} ile açılan Ayarlar menüsünde bulunan atamalar menüsünden değiştirebilirsiniz."
+L.tip40 = "Ekranınızın sol tarafında, size uygulanan mevcut ekipmanı veya durum efektlerini gösteren simgeler vardır."
+L.tip41 = "Puan tablonuzu açarsanız, kenar çubuğu ve tuş yardımcısı ek bilgi gösterir."
+L.tip42 = "Ekranınızın alt kısmındaki tuş yardımcısı, o anda kullanabileceğiniz ilgili bağlantıları gösterir."
+L.tip43 = "Onaylanmış bir cesedin adının yanındaki simge, ölen oyuncunun rolünü gösterir."
+
+L.header_loadingscreen = "Yükleme Ekranı"
+
+L.help_enable_loadingscreen = "Yükleme ekranı, harita bir raunttan sonra yenilendiğinde gösterilir. Büyük haritalarda meydana gelen görünür ve duyulabilir gecikmeyi gizlemek için kullanılmaktadır. Oyun ipuçlarını göstermek için de kullanılır."
+
+L.label_enable_loadingscreen = "Yükleme ekranını etkinleştir"
+L.label_enable_loadingscreen_tips = "Yükleme ekranında ipuçlarını etkinleştir"
+
+-- 2024-05-25
+L.help_round_restart_reset = [[
+Bir raundu yeniden başlat veya haritayı sıfırla.
+
+Bir raundu yeniden başlatmak yalnızca mevcut raundu yeniden başlatır, böylece baştan başlayabilirsiniz. Raundu sıfırlamak her şeyi temizler, böylece oyun bir harita değişikliğinden sonra tazeymiş gibi yeni başlar.]]
+
+L.label_button_level_reset = "haritayı sıfırla"
+
+L.loadingscreen_round_restart_title = "Yeni raunt başlıyor"
+L.loadingscreen_round_restart_subtitle = "{map} haritasında oynuyorsunuz"
+L.loadingscreen_round_restart_subtitle_limits = "{map} haritasında {rounds} raunt veya {time} daha oynayacaksınız"
+
+-- 2024-06-23
+L.header_roles_derandomize = "Rastgele Rol Dağıtımı"
+
+L.help_roles_derandomize = [[
+Rol dağılımını bir oturum boyunca daha adil hissettirmek için kullanılabilir.
+
+Özünde, etkinleştirildiğinde, bir oyuncunun o role atanmamışken bir rol alma şansı artar. Bu daha adil gelse de, bir oyuncunun birkaç rauntta hain olarak seçilmedikleri gerçeğine dayanarak bir başkasının hain olarak seçilebileceğini tahmin edebileceği 'metagaming''i de mümkün kılar. İstenmiyorsa bu seçeneği etkinleştirmeyin.
+
+4 mod vardır:
+
+mod 0: Devre Dışı - Rastgele dağıtım yapılmaz. Bu varsayılandır.
+
+mod 1: Yalnızca temel roller - Rastgele dağıtıma son verme yalnızca temel roller için gerçekleştirilir. Alt roller rastgele seçilecektir. Bunlar Masum ve Hain gibi rollerdir.
+
+mod 2: Yalnızca alt roller - Rastgele dağıtım yalnızca alt roller için gerçekleştirilir. Alt roller rastgele seçilecektir. Alt rollerin yalnızca temel rolleri için daha önce seçilmiş oyunculara atandığını unutmayın.
+
+mod 3: Temel roller ve alt roller - Rastgele dağıtım hem temel roller hem de alt roller için gerçekleştirilir.]]
+L.label_roles_derandomize_mode = "Rastgele dağıtım modu"
+L.label_roles_derandomize_mode_none = "mod 0: Devre dışı"
+L.label_roles_derandomize_mode_base_only = "mod 1: Yalnızca temel roller"
+L.label_roles_derandomize_mode_sub_only = "mod 2: Yalnızca alt roller"
+L.label_roles_derandomize_mode_base_and_sub = "mod 3: Temel roller ve alt roller"
+
+L.help_roles_derandomize_min_weight = [[
+Rastgele oyuncu seçimlerinin rol dağılımı sırasında her oyuncu için her rolle ilişkili bir ağırlık kullanması sağlanarak ve oyuncuya o rol atanmadığında bu ağırlık 1 artar. Bu ağırlıklar bağlantılar arasında veya haritalar arasında kalıcı değildir.
+
+Bir oyuncuya her rol atandığında, ilgili ağırlık bu minimum ağırlığa sıfırlanır. Bu ağırlığın mutlak bir anlamı yoktur; sadece diğer ağırlıklara göre yorumlanabilir.
+
+Örneğin, ağırlığı 1 olan A oyuncusu ve ağırlığı 5 olan B oyuncusu göz önüne alındığında, B oyuncusunun seçilme olasılığı A oyuncusundan 5 kat daha fazladır. Ancak, A oyuncusunun ağırlığı 4 ise, B oyuncusunun seçilme olasılığı sadece 5/4 kat daha fazladır.
+
+Bu nedenle, minimum ağırlık, her raundun bir oyuncunun seçilme şansını ne kadar etkilediğini etkili bir şekilde kontrol eder ve daha yüksek değerler daha az etkilenmesine neden olur. Varsayılan 1 değeri, her raundun şansda oldukça önemli bir artışa neden olduğu ve tersine, bir oyuncunun arka arkaya iki kez aynı rolü almasının son derece düşük olduğu anlamına gelir.
+
+Bu değerdeki değişiklikler, oyuncular yeniden bağlanana veya harita değişene kadar geçerli olmayacaktır.]]
+L.label_roles_derandomize_min_weight = "Minimum rastgele dağıtım ağırlığı"
+
+-- 2024-08-17
+L.name_button_default = "Düğme"
+L.name_button_rotating = "Anahtar"
+
+L.button_default = "Tetiklemek için [{usekey}] tuşuna bas"
+L.button_rotating = "Devreye sokmak için [{usekey}] tuşuna bas"
+
+L.undefined_key = "???"
+
+-- 2024-08-18
+L.header_commands_player_force_role = "Oyuncu Rolünü Zorla"
+
+L.label_button_player_force_role = "rolü zorla"
+
+L.label_player_role = "Rol seç"

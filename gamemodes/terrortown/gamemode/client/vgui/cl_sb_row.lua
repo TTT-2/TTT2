@@ -323,7 +323,7 @@ function PANEL:SetPlayer(ply)
             self.info:SetPlayer(ply)
 
             self:InvalidateLayout()
-        elseif g == GROUP_FOUND or g == GROUP_NOTFOUND then
+        else
             self.info = vgui.Create("TTTScorePlayerInfoSearch", self)
             self.info:SetPlayer(ply)
 
@@ -431,7 +431,7 @@ function PANEL:UpdatePlayerData()
         self.addondev:SetVisible(false)
     end
 
-    self.admin:SetVisible(ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true))
+    self.admin:SetVisible(admin.IsAdmin(ply) and GetGlobalBool("ttt_highlight_admins", true))
     self.streamer:SetVisible(
         steamid64 and streamer_tbl[steamid64] and GetGlobalBool("ttt_highlight_supporter", true)
     )
@@ -816,7 +816,7 @@ function GM:TTTScoreboardColorForPlayer(ply)
             end
         end
 
-        if ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
+        if admin.IsAdmin(ply) and GetGlobalBool("ttt_highlight_admins", true) then
             return namecolor.admin
         end
     end

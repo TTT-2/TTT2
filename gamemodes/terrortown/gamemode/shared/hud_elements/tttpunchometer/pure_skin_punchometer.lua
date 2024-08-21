@@ -13,8 +13,6 @@ HUDELEMENT.Base = base
 DEFINE_BASECLASS(base)
 
 if CLIENT then
-    local draw_col = Color(205, 155, 0, 255)
-
     local pad = 7
     local margin = 14
 
@@ -83,7 +81,7 @@ if CLIENT then
             y + self.pad,
             w - self.pad * 2,
             h - self.pad * 2,
-            draw_col,
+            COLOR_SPEC,
             punch,
             self.scale,
             L.punch_title

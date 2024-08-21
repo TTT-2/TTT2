@@ -64,7 +64,7 @@ function CreateTransferMenu(parent)
     local client = LocalPlayer()
 
     dform = vgui.Create("DForm", parent)
-    dform:SetName(GetTranslation("xfer_menutitle"))
+    dform:SetLabel(GetTranslation("xfer_menutitle"))
     dform:StretchToParent(0, 0, 0, 0)
     dform:SetAutoSize(false)
 
@@ -92,7 +92,7 @@ function CreateTransferMenu(parent)
     dpick:SetSortItems(false)
 
     -- fill combobox
-    local plys = select(2, player.Iterator())
+    local plys = player.GetAll()
 
     table.sort(plys, function(a, b)
         return a:IsInTeam(client) and not b:IsInTeam(client)

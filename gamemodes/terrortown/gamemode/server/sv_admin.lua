@@ -9,7 +9,7 @@ local pairs = pairs
 local ipairs = ipairs
 local util = util
 local IsValid = IsValid
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local function GetPrintFn(ply)
     if IsValid(ply) then
@@ -48,14 +48,11 @@ end
 -- @param Player ply
 -- @realm server
 function PrintTraitors(ply)
-    ---
-    -- @realm server
-    -- stylua: ignore
-    if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) then
+    if not IsValid(ply) or admin.IsAdmin(ply) then
         ServerLog(Format("%s used ttt_print_traitors\n", IsValid(ply) and ply:Nick() or "console"))
 
         local pr = GetPrintFn(ply)
-        local ps = select(2, playerIterator())
+        local ps = playerGetAll()
 
         table.sort(ps, TraitorSort)
 
@@ -75,7 +72,7 @@ function PrintGroups(ply)
 
     pr("User", "-", "Group")
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local p = plys[i]
         pr(p:Nick(), "-", p:GetNWString("UserGroup"))
@@ -90,11 +87,10 @@ concommand.Add("ttt_print_usergroups", PrintGroups)
 function PrintReport(ply)
     local pr = GetPrintFn(ply)
 
-    ---
-    -- @realm server
-    -- stylua: ignore
-    if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) then
-        ServerLog(Format("%s used ttt_print_adminreport\n", IsValid(ply) and ply:Nick() or "console"))
+    if not IsValid(ply) or admin.IsAdmin(ply) then
+        ServerLog(
+            Format("%s used ttt_print_adminreport\n", IsValid(ply) and ply:Nick() or "console")
+        )
 
         for _, e in pairs(SCORE.Events) do
             if e.id == EVENT_KILL then
@@ -119,14 +115,10 @@ concommand.Add("ttt_print_adminreport", PrintReport)
 local function PrintKarma(ply)
     local pr = GetPrintFn(ply)
 
-    ---
-    -- @realm server
-    -- stylua: ignore
-    if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) then
+    if not IsValid(ply) or admin.IsAdmin(ply) then
         ServerLog(Format("%s used ttt_print_karma\n", IsValid(ply) and ply:Nick() or "console"))
 
         KARMA.PrintAll(pr)
-
     else
         if IsValid(ply) then
             pr("You do not appear to be RCON or a superadmin!")
@@ -197,10 +189,7 @@ local dmglog_save = CreateConVar("ttt_damagelog_save", "0", {FCVAR_NOTIFY, FCVAR
 local function PrintDamageLog(ply)
     local pr = GetPrintFn(ply)
 
-    ---
-    -- @realm server
-    -- stylua: ignore
-    if not IsValid(ply) or hook.Run("TTT2AdminCheck", ply) or GetRoundState() ~= ROUND_ACTIVE then
+    if not IsValid(ply) or admin.IsAdmin(ply) or gameloop.GetRoundState() ~= ROUND_ACTIVE then
         ServerLog(Format("%s used ttt_print_damagelog\n", IsValid(ply) and ply:Nick() or "console"))
         pr("*** Damage log:\n")
 
@@ -247,15 +236,22 @@ hook.Add("TTTEndRound", "ttt_damagelog_save_hook", SaveDamageLog)
 -- @param string txt
 -- @realm server
 function DamageLog(txt)
-    local t = math.max(0, CurTime() - GAMEMODE.RoundStartTime)
+    local timestamp = math.max(0, CurTime() - gameloop.timeRoundStart)
 
-    txt = util.SimpleTime(t, "%02i:%02i.%02i - ") .. txt
+    txt = util.SimpleTime(timestamp, "%02i:%02i.%02i - ") .. txt
 
     ServerLog(txt .. "\n")
 
     if dmglog_console:GetBool() or dmglog_save:GetBool() then
         table.insert(GAMEMODE.DamageLog, txt)
     end
+end
+
+---
+-- Resets the damage log to an empty table.
+-- @realm server
+function ResetDamageLog()
+    GAMEMODE.DamageLog = {}
 end
 
 ---

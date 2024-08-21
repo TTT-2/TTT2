@@ -168,6 +168,14 @@ end
 
 ---
 -- @ignore
+function SWEP:OnRemove()
+    BaseClass.OnRemove(self)
+
+    self:SetZoomLevel(1)
+end
+
+---
+-- @ignore
 function SWEP:Reload()
     local playSound = false
     if self:GetZoomAmount() > 1 or self:GetProgress() > 0 then
@@ -188,12 +196,9 @@ end
 -- @return boolean
 -- @realm shared
 function SWEP:IsTargetingCorpse()
-    local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
-    local ent = tr.Entity
+    local ent = self:GetOwner():GetEyeTrace(MASK_SHOT).Entity
 
-    return IsValid(ent)
-        and ent:GetClass() == "prop_ragdoll"
-        and CORPSE.GetPlayerNick(ent, false) ~= false
+    return IsValid(ent) and ent:IsPlayerRagdoll()
 end
 
 ---
@@ -202,11 +207,7 @@ end
 function SWEP:GetTargetingCorpse()
     local ent = self:GetOwner():GetEyeTrace(MASK_SHOT).Entity
 
-    if
-        IsValid(ent)
-        and ent:GetClass() == "prop_ragdoll"
-        and CORPSE.GetPlayerNick(ent, false) ~= false
-    then
+    if IsValid(ent) and ent:IsPlayerRagdoll() then
         return ent
     end
 end
@@ -269,7 +270,7 @@ if CLIENT then
     -- @ignore
     function SWEP:Initialize()
         self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
-        self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "R"))
+        self:AddHUDHelpLine("binoc_help_reload", Key("+reload", "undefined_key"))
 
         BaseClass.Initialize(self)
     end
@@ -316,7 +317,7 @@ if CLIENT then
         if
             not IsValid(ent)
             or not IsValid(c_wep)
-            or ent:GetClass() ~= "prop_ragdoll"
+            or not ent:IsPlayerRagdoll()
             or c_wep:GetClass() ~= "weapon_ttt_binoculars"
             or c_wep:GetProcessTarget() ~= ent
         then

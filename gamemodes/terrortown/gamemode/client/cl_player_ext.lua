@@ -114,6 +114,16 @@ function plymeta:AnimUpdateGesture()
     end
 end
 
+-- Creates an elliptic nick for a given length.
+-- @param number width The maximum width that should be used to limit the nick
+-- @param[default="DefaultBold"] string font The font ID
+-- @param[default=1.0] number scale The UI scale factor
+-- @return string The length limited nick
+-- @realm client
+function plymeta:NickElliptic(width, font, scale)
+    return draw.GetLimitedLengthText(self:Nick(), width, font, "...", scale)
+end
+
 ---
 -- @hook
 -- @param Player ply The player to update the animation info for.
@@ -311,8 +321,9 @@ end)
 
 net.Receive("TTT2RevivalUpdate_IsReviving", function()
     local client = LocalPlayer()
+    local ply = net.ReadPlayer()
 
-    client.isReviving = net.ReadBool()
+    ply.isReviving = net.ReadBool()
 
     if not client.isReviving then
         return

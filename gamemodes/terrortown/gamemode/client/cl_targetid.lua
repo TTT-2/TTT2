@@ -10,7 +10,7 @@ local math = math
 local IsValid = IsValid
 local hook = hook
 local targetid = targetid
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 ---
 -- Make sure local TargetID Variables are initialized
@@ -59,7 +59,6 @@ surface.CreateFont("TargetIDSmall2", { font = "TargetID", size = 16, weight = 10
 
 -- cache colors
 local colorKeyBack = Color(0, 0, 0, 150)
-local colorPropSpecLabel = Color(220, 200, 0, 120)
 
 -- cached materials for overhead icons and outlines
 local materialPropspecOutline = Material("models/props_combine/portalball001_sheet")
@@ -87,7 +86,7 @@ local sizeIconOverHeadIcon = 0.7 * sizeOverHeadIcon
 -- @realm client
 function DrawOverheadRoleIcon(client, ply, iconRole, colorRole)
     local ang = client:EyeAngles()
-    local pos = ply:GetPos() + ply:GetHeightVector()
+    local pos = ply:GetPos() + ply:GetHeadPosition()
     pos.z = pos.z + offsetOverHeadIcon
 
     local shift = Vector(0, shiftOverHeadIcon, 0)
@@ -143,7 +142,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
     local client = LocalPlayer()
     local clientTarget = client:GetObserverTarget()
     local clientObsMode = client:GetObserverMode()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
         cam.Start3D(EyePos(), EyeAngles())
@@ -219,18 +218,18 @@ end
 ---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
-    if not client:IsSpec() and GetRoundState() ~= ROUND_POST then
+    if not client:IsSpec() and gameloop.GetRoundState() ~= ROUND_POST then
         return
     end
 
     local tgt, scrpos, color, _
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local ply = plys[i]
 
         if ply:IsSpec() then
-            color = colorPropSpecLabel
+            color = COLOR_SPEC
 
             tgt = ply:GetObserverTarget()
 
@@ -322,6 +321,7 @@ function GM:HUDDrawTargetID()
     targetid.HUDDrawTargetIDWeapons(tData)
     targetid.HUDDrawTargetIDPlayers(tData)
     targetid.HUDDrawTargetIDRagdolls(tData)
+    targetid.HUDDrawTargetIDButtons(tData)
     targetid.HUDDrawTargetIDDoors(tData)
     targetid.HUDDrawTargetIDDNAScanner(tData)
 

@@ -406,9 +406,9 @@ function table.FullCopy(tbl)
     for key, value in pairs(tbl) do
         if type(value) == "table" then
             result[key] = table.FullCopy(value)
-        elseif type(v) == "Vector" then
+        elseif type(value) == "Vector" then
             result[key] = Vector(value.x, value.y, value.z)
-        elseif type(v) == "Angle" then
+        elseif type(value) == "Angle" then
             result[key] = Angle(value.p, value.y, value.r)
         else
             result[key] = value

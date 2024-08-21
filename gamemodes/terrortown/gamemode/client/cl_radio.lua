@@ -115,7 +115,7 @@ function RADIO:ShowRadioCommands(state)
             local w, h = 200, 300
 
             radioframe = vgui.Create("DForm")
-            radioframe:SetName(GetTranslation("quick_title"))
+            radioframe:SetLabel(GetTranslation("quick_title"))
             radioframe:SetSize(w, h)
             radioframe:SetMouseInputEnabled(false)
             radioframe:SetKeyboardInputEnabled(false)
@@ -221,8 +221,8 @@ function RADIO:GetTargetType()
         else
             return ent, false
         end
-    elseif ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, "") ~= "" then
-        if DetectiveMode() and not CORPSE.GetFound(ent, false) then
+    elseif ent:IsPlayerRagdoll() then
+        if gameloop.IsDetectiveMode() and not CORPSE.GetFound(ent, false) then
             return "quick_corpse", true
         else
             return ent, false
@@ -241,7 +241,7 @@ function RADIO.ToPrintable(target)
     elseif IsValid(target) then
         if target:IsPlayer() then
             return target:Nick()
-        elseif target:GetClass() == "prop_ragdoll" then
+        elseif target:IsPlayerRagdoll() then
             return GetPTranslation(
                 "quick_corpse_id",
                 { player = CORPSE.GetPlayerNick(target, "A Terrorist") }

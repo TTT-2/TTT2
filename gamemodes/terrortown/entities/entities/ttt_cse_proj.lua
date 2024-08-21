@@ -18,7 +18,6 @@ ENT.MaxScenesPerPulse = 3
 ENT.SceneDuration = 10
 ENT.PulseDelay = 10
 
-ENT.CanUseKey = true
 ENT.pickupWeaponClass = "weapon_ttt_cse"
 
 ---
@@ -36,6 +35,13 @@ function ENT:Initialize()
     end
 
     self:SetHealth(50)
+end
+
+---
+-- @param Player activator
+-- @realm shared
+function ENT:PlayerCanPickupWeapon(activator)
+    return self:GetOriginator() == activator
 end
 
 ---
@@ -148,7 +154,7 @@ if SERVER then
     -- @realm server
     function ENT:Think()
         -- prevent starting effects when round is about to restart
-        if GetRoundState() == ROUND_POST then
+        if gameloop.GetRoundState() == ROUND_POST then
             return
         end
 
@@ -186,15 +192,6 @@ if SERVER then
 
         return true
     end
-
-    ---
-    -- @param Player activator
-    -- @realm server
-    function ENT:PlayerCanPickupWeapon(activator)
-        local roleDataActivator = activator:GetSubRoleData()
-
-        return roleDataActivator.isPolicingRole and roleDataActivator.isPublicRole
-    end
 end
 
 if CLIENT then
@@ -214,7 +211,6 @@ if CLIENT then
     hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(tData)
         local client = LocalPlayer()
         local ent = tData:GetEntity()
-        local roleData = client:GetSubRoleData()
 
         if
             not IsValid(client)
@@ -233,12 +229,11 @@ if CLIENT then
 
         tData:SetTitle(TryT("vis_name"))
 
-        if roleData.isPublicRole and roleData.isPolicingRole then
-            tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
+        if ent:PlayerCanPickupWeapon(client) then
             tData:SetKeyBinding("+use")
+            tData:SetSubtitle(ParT("target_pickup", { usekey = Key("+use", "USE") }))
         else
-            tData:SetSubtitle(TryT("vis_no_pickup"))
-            tData:AddIcon(roles.DETECTIVE.iconMaterial)
+            tData:SetSubtitle(TryT("entity_pickup_owner_only"))
         end
 
         tData:AddDescriptionLine(TryT("vis_short_desc"))

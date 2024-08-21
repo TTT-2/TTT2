@@ -5,6 +5,8 @@ CLGAMEMODESUBMENU.base = "base_gamemodesubmenu"
 CLGAMEMODESUBMENU.priority = 97
 CLGAMEMODESUBMENU.title = "submenu_administration_roles_general_title"
 
+local TryT = LANG.TryTranslation
+
 function CLGAMEMODESUBMENU:Populate(parent)
     local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
 
@@ -64,13 +66,56 @@ function CLGAMEMODESUBMENU:Populate(parent)
         master = masterEnb,
     })
 
-    local form2 = vgui.CreateTTT2Form(parent, "header_roles_reward_credits")
+    local form2 = vgui.CreateTTT2Form(parent, "header_roles_derandomize")
 
     form2:MakeHelp({
-        label = "help_roles_award_info",
+        label = "help_roles_derandomize",
+    })
+
+    local masterDerand = form2:MakeComboBox({
+        serverConvar = "ttt_role_derandomize_mode",
+        label = "label_roles_derandomize_mode",
+        choices = {
+            {
+                title = TryT("label_roles_derandomize_mode_none"),
+                value = ROLE_DERAND_NONE,
+            },
+            {
+                title = TryT("label_roles_derandomize_mode_base_only"),
+                value = ROLE_DERAND_BASEROLE,
+            },
+            {
+                title = TryT("label_roles_derandomize_mode_sub_only"),
+                value = ROLE_DERAND_SUBROLE,
+            },
+            {
+                title = TryT("label_roles_derandomize_mode_base_and_sub"),
+                value = ROLE_DERAND_BOTH,
+            },
+        },
+    })
+
+    form2:MakeHelp({
+        label = "help_roles_derandomize_min_weight",
+        master = masterDerand,
     })
 
     form2:MakeSlider({
+        serverConvar = "ttt_role_derandomize_min_weight",
+        label = "label_roles_derandomize_min_weight",
+        master = masterDerand,
+        min = 1,
+        max = 50,
+        decimal = 0,
+    })
+
+    local form3 = vgui.CreateTTT2Form(parent, "header_roles_reward_credits")
+
+    form3:MakeHelp({
+        label = "help_roles_award_info",
+    })
+
+    form3:MakeSlider({
         serverConvar = "ttt_credits_award_size",
         label = "label_roles_credits_award_size",
         min = 0,
@@ -78,11 +123,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
         decimal = 0,
     })
 
-    form2:MakeHelp({
+    form3:MakeHelp({
         label = "help_roles_award_pct",
     })
 
-    form2:MakeSlider({
+    form3:MakeSlider({
         serverConvar = "ttt_credits_award_pct",
         label = "label_roles_credits_award_pct",
         min = 0,
@@ -90,20 +135,20 @@ function CLGAMEMODESUBMENU:Populate(parent)
         decimal = 2,
     })
 
-    form2:MakeHelp({
+    form3:MakeHelp({
         label = "help_roles_award_repeat",
     })
 
-    form2:MakeCheckBox({
+    form3:MakeCheckBox({
         serverConvar = "ttt_credits_award_repeat",
         label = "label_roles_credits_award_repeat",
     })
 
-    form2:MakeHelp({
+    form3:MakeHelp({
         label = "help_roles_credits_award_kill",
     })
 
-    form2:MakeSlider({
+    form3:MakeSlider({
         serverConvar = "ttt_credits_award_kill",
         label = "label_roles_credits_award_kill",
         min = 0,
@@ -111,14 +156,23 @@ function CLGAMEMODESUBMENU:Populate(parent)
         decimal = 0,
     })
 
-    local form3 = vgui.CreateTTT2Form(parent, "header_roles_special_settings")
+    local form4 = vgui.CreateTTT2Form(parent, "header_roles_special_settings")
 
-    form3:MakeHelp({
+    form4:MakeHelp({
         label = "help_detective_hats",
     })
 
-    form3:MakeCheckBox({
+    form4:MakeCheckBox({
         serverConvar = "ttt_detective_hats",
         label = "label_detective_hats",
+    })
+
+    form4:MakeHelp({
+        label = "help_inspect_credits_always",
+    })
+
+    form4:MakeCheckBox({
+        serverConvar = "ttt2_inspect_credits_always_visible",
+        label = "label_inspect_credits_always",
     })
 end

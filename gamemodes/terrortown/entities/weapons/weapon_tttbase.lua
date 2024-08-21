@@ -128,6 +128,12 @@ SWEP.silentPickup = false
 -- Can be useful if you have multiple instances, that rely on global variables stored via weapons.GetStored()
 SWEP.HotReloadableKeys = {}
 
+-- Set this to true if the weapon should have a custom clip size on buy that can be set in the equipment editor
+SWEP.EnableConfigurableClip = false
+
+-- The default clip on buy if `SWEP.EnableConfigurableClip` is set to true
+SWEP.ConfigurableClip = 1
+
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
 --	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
@@ -177,6 +183,8 @@ SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.ClipMax = -1
 
 SWEP.HeadshotMultiplier = 2.7
+
+SWEP.DryFireSound = ")weapons/pistol/pistol_empty.wav"
 
 SWEP.StoredAmmo = 0
 SWEP.IsDropped = false
@@ -344,6 +352,8 @@ if CLIENT then
     -- @realm client
     -- stylua: ignore
     local cvCrosshairMode = CreateConVar("ttt_crosshair_mode", "0", FCVAR_ARCHIVE)
+
+    local cvEnableHUDBoxBlur = GetConVar("ttt2_hud_enable_box_blur")
 
     local materialKeyLMB = Material("vgui/ttt/hudhelp/lmb")
     local materialKeyRMB = Material("vgui/ttt/hudhelp/rmb")
@@ -545,6 +555,9 @@ if CLIENT then
             local isIcon = false
 
             if isstring(binding) then
+                -- attempt to translate binding in case it can be translated
+                bindig = TryT(binding)
+
                 local wKey, hKey = draw.GetTextSize(binding, "weapon_hud_help_key", scale)
 
                 wBinding = wKey + 2 * padXKey * scale
@@ -602,7 +615,7 @@ if CLIENT then
         local yLine = yDividerStart + 10 * scale
         local xDescription = xDivider + padding
 
-        if GetConVar("ttt2_hud_enable_box_blur"):GetBool() then
+        if cvEnableHUDBoxBlur:GetBool() then
             draw.BlurredBox(xBox, yBox, wBox, hBox)
             draw.Box(xBox, yBox, wBox, hBox, colorBox) -- background color
             draw.Box(xBox, yBox, wBox, mathRound(1 * scale), colorBox) -- top line shadow
@@ -700,11 +713,11 @@ if CLIENT then
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
+            self:AddHUDHelpLine(primary, Key("+attack", "undefined_key"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
+            self:AddHUDHelpLine(secondary, Key("+attack2", "undefined_key"))
         end
     end
 
@@ -717,11 +730,11 @@ if CLIENT then
         self:ClearHUDHelp()
 
         if primary then
-            self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
+            self:AddHUDHelpLine(primary, Key("+attack", "undefined_key"))
         end
 
         if secondary then
-            self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
+            self:AddHUDHelpLine(secondary, Key("+attack2", "undefined_key"))
         end
     end
 
@@ -768,16 +781,6 @@ if CLIENT then
     -- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
     -- @realm client
     function SWEP:DrawWeaponSelection() end
-
-    ---
-    -- @realm client
-    function SWEP:OnRemove()
-        local owner = self:GetOwner()
-
-        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
-            RunConsoleCommand("lastinv")
-        end
-    end
 
     ---
     -- @realm client
@@ -982,7 +985,7 @@ end
 -- @realm shared
 function SWEP:DryFire(setnext)
     if CLIENT and LocalPlayer() == self:GetOwner() then
-        self:EmitSound("Weapon_Pistol.Empty")
+        self:EmitSound(self.DryFireSound, 75, 100, 0.7, CHAN_ITEM)
     end
 
     setnext(self, CurTime() + 0.2)
@@ -1049,18 +1052,24 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:ShootBullet
 -- @realm shared
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
+    local owner = self:GetOwner()
+
+    if not IsValid(owner) then
+        return
+    end
+
     self:SendWeaponAnim(self.PrimaryAnim)
 
-    self:GetOwner():MuzzleFlash()
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    owner:MuzzleFlash()
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     numbul = numbul or 1
     cone = cone or 0.02
 
     local bullet = {}
     bullet.Num = numbul
-    bullet.Src = self:GetOwner():GetShootPos()
-    bullet.Dir = self:GetOwner():GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(cone, cone, 0)
     bullet.Tracer = 1
     bullet.TracerName = self.Tracer or "Tracer"
@@ -1071,10 +1080,10 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         bullet.Callback = Sparklies
     end
 
-    self:GetOwner():FireBullets(bullet)
+    owner:FireBullets(bullet)
 
     -- Owner can die after firebullets
-    if not IsValid(self:GetOwner()) or self:GetOwner():IsNPC() or not self:GetOwner():Alive() then
+    if not IsValid(owner) or owner:IsNPC() or not owner:Alive() then
         return
     end
 
@@ -1082,10 +1091,10 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
         SERVER and game.SinglePlayer()
         or CLIENT and not game.SinglePlayer() and IsFirstTimePredicted()
     then
-        local eyeang = self:GetOwner():EyeAngles()
+        local eyeang = owner:EyeAngles()
         eyeang.pitch = eyeang.pitch - recoil
 
-        self:GetOwner():SetEyeAngles(eyeang)
+        owner:SetEyeAngles(eyeang)
     end
 end
 
@@ -1224,6 +1233,22 @@ function SWEP:Reload()
 end
 
 ---
+-- Called when the weapon entity is about to be removed
+-- @see https://wiki.facepunch.com/gmod/WEAPON:OnRemove
+-- @realm shared
+function SWEP:OnRemove()
+    if CLIENT then
+        local owner = self:GetOwner()
+
+        if IsValid(owner) and owner == LocalPlayer() and owner:IsTerror() then
+            RunConsoleCommand("lastinv")
+        end
+    end
+
+    self:SetZoom(false)
+end
+
+---
 -- Called when the weapon entity is reloaded on a changelevel event
 -- @see https://wiki.facepunch.com/gmod/WEAPON:OnRestore
 -- @realm shared
@@ -1263,14 +1288,15 @@ if SERVER then
     -- does not occur when a drop happens for some reason. Hence this thing.
     -- @realm server
     function SWEP:PreDrop()
-        if not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then
+        local owner = self:GetOwner()
+        if not IsValid(owner) or self.Primary.Ammo == "none" then
             return
         end
 
         local ammo = self:Ammo1()
 
         -- Do not drop ammo if we have another gun that uses this type
-        local weps = self:GetOwner():GetWeapons()
+        local weps = owner:GetWeapons()
 
         for i = 1, #weps do
             local w = weps[i]
@@ -1289,7 +1315,7 @@ if SERVER then
         self.StoredAmmo = ammo
 
         if ammo > 0 then
-            self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
+            owner:RemoveAmmo(ammo, self.Primary.Ammo)
         end
     end
 
@@ -1476,6 +1502,12 @@ end
 function SWEP:Initialize()
     if CLIENT then
         self:InitializeCustomModels()
+    end
+
+    if self.EnableConfigurableClip then
+        self.Primary.ClipSize = self.ConfigurableClip or self.Primary.DefaultClip
+
+        self:SetClip1(self.ConfigurableClip or self.Primary.DefaultClip)
     end
 
     if CLIENT and self:Clip1() == -1 then

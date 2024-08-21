@@ -26,9 +26,6 @@ L.innocents = "Time Inocente"
 L.round_minplayers = "Não há jogadores suficientes para começar uma nova rodada..."
 L.round_voting = "Votação em andamento, adiando nova rodada em {num} segundos..."
 L.round_begintime = "Uma nova rodada começará em {num} segundos. Prepare-se."
-L.round_selected = "Os Traidores foram escolhidos"
-L.round_started = "A rodada começou!"
-L.round_restart = "A rodada foi reiniciada por um administrador."
 
 L.round_traitors_one = "Traidor, você é um assassino solitário."
 L.round_traitors_more = "Traidor, estes são seus aliados: {names}"
@@ -366,7 +363,6 @@ Utilize-o em terroristas recentemente mortos para coletar a amostra do DNA do as
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
-L.magnet_help = "{primaryfire} para prender um corpo a uma superfície."
 
 -- Grenades and misc
 L.grenade_smoke = "Granada de Fumaça"
@@ -525,67 +521,61 @@ L.tip8 = "Traidores e Detetives podem coletar créditos não gastos dos cadáver
 
 L.tip9 = "O Poltergeist pode tornar qualquer objeto de física em um projétil mortal. Cada empurrão é acompanhado de uma explosão de energia que fere todos que estiverem ao redor."
 
-L.tip10 = "Como Traidor ou Detetive, fique de olho em mensagens vermelhas no canto superior direito da tela. Elas serão importantes para você."
+--L.tip10 = "As a shopping role, keep in mind you are rewarded extra equipment credits if you and your comrades perform well. Make sure you remember to spend them!"
 
-L.tip11 = "Como Traidor ou Detetive, tenha em mente que você será recompensado com créditos se você e seus comparsas progredirem bem. Lembre-se de gastá-los!"
+L.tip11 = "O Scanner de DNA dos Detetives pode ser usado para coletar amostras de DNA de armas e itens e analisá-las para descobrir a localização do jogador que os usou. Isso é útil quando você consegue coletar uma amostra de um cadáver ou de um C4 desarmado!"
 
-L.tip12 = "O Scanner de DNA dos Detetives pode ser usado para coletar amostras de DNA de armas e itens e analisá-las para descobrir a localização do jogador que os usou. Isso é útil quando você consegue coletar uma amostra de um cadáver ou de um C4 desarmado!"
+L.tip12 = "Quando estiver perto de alguém que você matou, um pouco do seu DNA será deixado no cadáver. Esse DNA pode ser coletado por um Scanner de DNA de um Detetive para encontrar sua localização atual. É melhor esconder o corpo da vítima depois de esfaqueá-la!"
 
-L.tip13 = "Quando estiver perto de alguém que você matou, um pouco do seu DNA será deixado no cadáver. Esse DNA pode ser coletado por um Scanner de DNA de um Detetive para encontrar sua localização atual. É melhor esconder o corpo da vítima depois de esfaqueá-la!"
+L.tip13 = "Quanto mais longe você estiver de alguém que você matar, mais rapidamente a amostra do seu DNA no corpo da sua vítima vai deteriorar-se."
 
-L.tip14 = "Quanto mais longe você estiver de alguém que você matar, mais rapidamente a amostra do seu DNA no corpo da sua vítima vai deteriorar-se."
+--L.tip14 = "Are you going sniping? Consider buying the Disguiser. If you miss a shot, run away to a safe spot, disable the Disguiser, and no one will know it was you who was shooting at them."
 
-L.tip15 = "Você é um Traidor e quer tentar matar alguém com um rifle de precisão? Considere habilitar o Disfarce antes. Se você errar um tiro, fuja para um local seguro, desabilite o Disfarce, e ninguém saberá que era você que estava atirando neles."
+--L.tip15 = "If you have a Teleporter, it can help you escape when chased, and allows you to quickly travel across a big map. Make sure you always have a safe position marked."
 
-L.tip16 = "Como Traidor, o Teletransportador pode ajudar-lhe a escapar enquanto você estiver sendo perseguido, além de permitir que você se desloque rapidamente em um mapa grande. Certifique-se de sempre ter uma posição segura marcada."
+L.tip16 = "Os inocentes estão todos agrupados sendo difíceis de serem mortos? Considere experimentar o Rádio para reproduzir sons de um C4 ou de um tiroteio para fazer com que eles se desagrupem."
 
-L.tip17 = "Os inocentes estão todos agrupados sendo difíceis de serem mortos? Considere experimentar o Rádio para reproduzir sons de um C4 ou de um tiroteio para fazer com que eles se desagrupem."
+--L.tip17 = "Using the Radio, you can play sounds by looking at its placement marker after the radio has been placed. Queue up multiple sounds by clicking multiple buttons in the order you want them."
 
-L.tip18 = "Ao usar o Rádio como Traidor, você pode reproduzir sons através do seu Menu de Equipamentos depois que o Rádio for posicionado. Coloque vários sons para serem reproduzidos em sequência ao clicar nos botões usando a ordem desejada."
+L.tip18 = "Como Detetive, se você estiver com alguns créditos sobrando, você pode dar um Kit de Desarme para um Inocente confiável. Assim, você pode gastar seu tempo com um trabalho mais sério de investigação enquanto você deixa a missão arriscada de desarmamento para ele."
 
-L.tip19 = "Como Detetive, se você estiver com alguns créditos sobrando, você pode dar um Kit de Desarme para um Inocente confiável. Assim, você pode gastar seu tempo com um trabalho mais sério de investigação enquanto você deixa a missão arriscada de desarmamento para ele."
+L.tip19 = "Os Binóculos dos Detetives permitem localizar e identificar cadáveres a distância. Más notícias se os Traidores estavam querendo usar um cadáver como isca. Mas é claro que, quando um Detetive estiver usando os Binóculos, ele estará desarmado e distraído..."
 
-L.tip20 = "Os Binóculos dos Detetives permitem localizar e identificar cadáveres a distância. Más notícias se os Traidores estavam querendo usar um cadáver como isca. Mas é claro que, quando um Detetive estiver usando os Binóculos, ele estará desarmado e distraído..."
+L.tip20 = "A Estação de Cura dos Detetives permite que jogadores feridos se curem. Mas é claro que, os jogadores feridos podem ser Traidores..."
 
-L.tip21 = "A Estação de Cura dos Detetives permite que jogadores feridos se curem. Mas é claro que, os jogadores feridos podem ser Traidores..."
+L.tip21 = "A Estação de Cura armazena uma amostra do DNA de cada jogador que a utilizar. Os Detetives podem utilizar o Scanner de DNA na Estação de Cura para descobrir quem andou se curando."
 
-L.tip22 = "A Estação de Cura armazena uma amostra do DNA de cada jogador que a utilizar. Os Detetives podem utilizar o Scanner de DNA na Estação de Cura para descobrir quem andou se curando."
+L.tip22 = "Diferentemente de armas e do C4, o Rádio dos Traidores não contém uma amostra do DNA de quem o posicionou. Não se preocupe com Detetives encontrando o seu DNA e descobrindo a sua verdadeira identidade."
 
-L.tip23 = "Diferentemente de armas e do C4, o Rádio dos Traidores não contém uma amostra do DNA de quem o posicionou. Não se preocupe com Detetives encontrando o seu DNA e descobrindo a sua verdadeira identidade."
+--L.tip23 = "Press {helpkey} to view a short tutorial or modify some TTT-specific settings."
 
-L.tip24 = "Pressione {helpkey} para ver um curto tutorial ou modificar suas configurações do TTT. Por exemplo, você pode desabilitar permanentemente estas dicas lá."
+L.tip24 = "Quando um Detetive investiga um corpo, o resultado é disponibilizado para todos no placar ao clicar no nome da pessoa morta."
 
-L.tip25 = "Quando um Detetive investiga um corpo, o resultado é disponibilizado para todos no placar ao clicar no nome da pessoa morta."
+L.tip25 = "No placar, um ícone de lupa próximo ao nome de alguém indica que você coletou informações sobre aquela pessoa. Se o ícone estiver brilhando, os dados da investigação são provindos de um Detetive e podem conter informações adicionais."
 
-L.tip26 = "No placar, um ícone de lupa próximo ao nome de alguém indica que você coletou informações sobre aquela pessoa. Se o ícone estiver brilhando, os dados da investigação são provindos de um Detetive e podem conter informações adicionais."
+--L.tip26 = "Corpses with a magnifying glass below the nickname have been searched by a Detective and their results are available to all players via the scoreboard."
 
-L.tip27 = "Como Detetive, cadáveres com um ícone de lupa depois de seu nome foram investigados por um Detetive e os resultados estão disponíveis para todos os jogadores pelo placar."
+L.tip27 = "Espectadores podem pressionar {mutekey} para alternar entre emudecer outros espectadores ou jogadores vivos."
 
-L.tip28 = "Espectadores podem pressionar {mutekey} para alternar entre emudecer outros espectadores ou jogadores vivos."
+--L.tip28 = "You can switch to a different language at any time in the Settings menu by pressing {helpkey}."
 
-L.tip29 = "Se o servidor instalou idiomas adicionais, você pode mudar para um idioma diferente a qualquer momento no menu Configurações."
+L.tip29 = "Os atalhos do chat ou comandos do 'rádio' podem ser utilizados ao pressionar {zoomkey}."
 
-L.tip30 = "Os atalhos do chat ou comandos do 'rádio' podem ser utilizados ao pressionar {zoomkey}."
+L.tip30 = "O ataque alternativo do Pé de Cabra empurrará outros jogadores."
 
-L.tip31 = "Como Espectador, pressione {duckkey} para destravar o cursor do seu mouse e ser possibilitado de clicar neste painel de dicas. Pressione {duckkey} novamente para voltar à visualização normal."
+L.tip31 = "Atirar usando a retícula de ferro de uma arma aumentará levemente a sua precisão e diminuirá o seu recuo. Agachar-se não fará diferença."
 
-L.tip32 = "O ataque alternativo do Pé de Cabra empurrará outros jogadores."
+L.tip32 = "Granadas de Fumaça são eficazes em ambientes fechados, especialmente para criar confusão em salas lotadas."
 
-L.tip33 = "Atirar usando a retícula de ferro de uma arma aumentará levemente a sua precisão e diminuirá o seu recuo. Agachar-se não fará diferença."
+L.tip33 = "Como Traidor, lembre-se de que você pode deslocar corpos e escondê-los dos inocentes e dos Detetives."
 
-L.tip34 = "Granadas de Fumaça são eficazes em ambientes fechados, especialmente para criar confusão em salas lotadas."
+L.tip34 = "No placar, clique no nome de um jogador vivo e então você poderá marcá-lo como 'suspeito' ou 'amigo', entre outras marcações. A marcação será exibida quando você estiver com a mira sobre o jogador marcado."
 
-L.tip35 = "Como Traidor, lembre-se de que você pode deslocar corpos e escondê-los dos inocentes e dos Detetives."
+L.tip35 = "A maioria dos equipamentos especiais posicionáveis (como o C4 e o Rádio) podem ser presos nas paredes ao usar o botão de ataque alternativo."
 
-L.tip36 = "O tutorial disponível na tecla {helpkey} contém uma visão geral sobre as características mais importantes do TTT."
+L.tip36 = "Um explosivo C4 que explodir devido a uma falha no seu desarmamento causará uma explosão menor do que um explosivo C4 que explodir devido ao seu temporizador ter chegado a zero."
 
-L.tip37 = "No placar, clique no nome de um jogador vivo e então você poderá marcá-lo como 'suspeito' ou 'amigo', entre outras marcações. A marcação será exibida quando você estiver com a mira sobre o jogador marcado."
-
-L.tip38 = "A maioria dos equipamentos especiais posicionáveis (como o C4 e o Rádio) podem ser presos nas paredes ao usar o botão de ataque alternativo."
-
-L.tip39 = "Um explosivo C4 que explodir devido a uma falha no seu desarmamento causará uma explosão menor do que um explosivo C4 que explodir devido ao seu temporizador ter chegado a zero."
-
-L.tip40 = "Caso esteja escrito 'MODO PRESSA' acima do tempo da rodada, a rodada terá inicialmente apenas alguns minutos, mas a cada morte o tempo restante aumentará (como capturar um ponto no TF2). Esse modo pressiona os traidores para que eles mantenham as coisas em movimento."
+--L.tip37 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases. This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
 L.report_title = "Relatório da rodada"
@@ -925,7 +915,7 @@ L.pickup_pending = "Você já pegou uma arma, espere alguns segundos."
 L.tbut_help_admin = "Configurar botão de traidor"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] para ocultar este botão para {role}"
 L.tbut_role_config = "Papel: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para ocultar o botão do time {team}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] para ocultar o botão do {team}"
 L.tbut_team_config = "Time: {current}"
 L.tbut_current_config = "Configuração padrão:"
 L.tbut_intended_config = "Configuração padrão do padrão do criador do mapa:"
@@ -1046,7 +1036,6 @@ L.label_damage_indicator_maxalpha = "Máximo opacidade"
 L.label_performance_halo_enable = "Desenhar um contorno em volta a entidade quando olhar para ela"
 L.label_performance_spec_outline_enable = "Ativar contorno de controle de objetos"
 L.label_performance_ohicon_enable = "Ativar icone de funções acima da cabeça dos jogadores"
-L.label_interface_tips_enable = "Mostrar dica de jogo na tela quando estiver espectando"
 L.label_interface_popup = "Mostrar popup da duração de rodada"
 L.label_interface_fastsw_menu = "Ativar menu de troca de arma rápida"
 L.label_inferface_wswitch_hide_enable = "Ativar auto-fechamento de troca de arma rápida"
@@ -1141,7 +1130,6 @@ L.binoc_help_pri = "Procurar um corpo."
 L.binoc_help_sec = "Alterar o zoom."
 
 L.vis_help_pri = "Largar o dispositivo ativo."
-
 
 -- 2020-08-07
 L.pickup_error_spec = "Você não pode pegar isto como espectaor."
@@ -1435,6 +1423,7 @@ L.xfer_team_indicator = "Time"
 --L.label_use_custom_models = "Use a randomly selected player model"
 --L.label_prefer_map_models = "Prefer map specific models over default models"
 --L.label_select_model_per_round = "Select a new random model each round (only on map change if disabled)"
+--L.label_select_unique_model_per_round = "Select a random unique model for each player"
 
 --L.help_prefer_map_models = [[
 --Some maps define their own player models. By default these models have a higher priority than those that are assigned automatically. By disabling this setting, map specific models are disabled.
@@ -1669,6 +1658,7 @@ L.xfer_team_indicator = "Time"
 --L.label_voice_drain_recharge = "Recharge rate per tick of not voice chatting"
 --L.label_locational_voice = "Enable proximity voice chat for living players"
 --L.label_locational_voice_prep = "Enable proximity voice chat during preparing phase"
+--L.label_locational_voice_range = "Proximity voice chat range"
 --L.label_armor_on_spawn = "Player armor on (re-)spawn"
 --L.label_prep_respawn = "Enable instant respawn during preparing phase"
 --L.label_preptime_seconds = "Preparing time in seconds"
@@ -1793,7 +1783,7 @@ L.xfer_team_indicator = "Time"
 --L.equipmenteditor_name_drop_on_death_type = "Drop on Death"
 --L.equipmenteditor_desc_drop_on_death_type = "Attempt overriding the action taken for whether the equipment is dropped on player's death."
 
---L.drop_on_death_type_default = "Default (weapon-defined)"
+--L.drop_on_death_type_default = "Default (equipment-defined)"
 --L.drop_on_death_type_force = "Force Drop on Death"
 --L.drop_on_death_type_deny = "Deny Drop on Death"
 
@@ -1802,8 +1792,8 @@ L.xfer_team_indicator = "Time"
 --L.equipmenteditor_desc_kind = "The inventory slot the equipment will occupy."
 
 --L.slot_weapon_melee = "Melee Slot"
---L.slot_weapon_pistol = "Pistol Slot"
---L.slot_weapon_heavy = "Heavy Slot"
+--L.slot_weapon_pistol = "Secondary Slot"
+--L.slot_weapon_heavy = "Primary Slot"
 --L.slot_weapon_nade = "Grenade Slot"
 --L.slot_weapon_carry = "Carry Slot"
 --L.slot_weapon_unarmed = "Unarmed Slot"
@@ -1812,8 +1802,8 @@ L.xfer_team_indicator = "Time"
 --L.slot_weapon_class = "Class Slot"
 
 -- 2023-10-04
---L.label_voice_duck_spectator = "Duck spectator voices"
---L.label_voice_duck_spectator_amount = "Spectator voice duck amount"
+--L.label_voice_duck_spectator = "Muffle spectator voices"
+--L.label_voice_duck_spectator_amount = "Spectator voice muffle amount"
 --L.label_voice_scaling = "Voice Volume Scaling Mode"
 --L.label_voice_scaling_mode_linear = "Linear"
 --L.label_voice_scaling_mode_power4 = "Power 4"
@@ -1865,9 +1855,9 @@ L.search_dmg_other = "Você não pôde encontrar uma causa específica da morte 
 --L.search_floor_foliage = "Nature is wonderful. The victim's bloody wounds are covered with enough foliage that they are almost hidden."
 --L.search_floor_computer = "Beep-boop. Their body is covered in computer surface! How does this look, you might ask? Well, duh!"
 --L.search_floor_slosh = "Wet and maybe even a bit slimy. Their whole body is covered with it and their clothes are soaked. It stinks!"
---L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on inpact."
+--L.search_floor_tile = "Small shards are stuck to their skin. Like shards from floor tiles that shattered on impact."
 --L.search_floor_grass = "It smells like fresh cut grass. The smell almost overpowers the smell of blood and death."
---L.search_floor_vent = "You feel a fresh gust of air when feeling their body. Did they die in a vent and take the air with them?"
+--L.search_floor_vent = "You feel a fresh gust of air when you touch their body. Did they die in a vent and take the air with them?"
 --L.search_floor_wood = "What's nicer than sitting on a hardwood floor and dwelling in thoughts? At least lot lying dead on a wooden floor!"
 --L.search_floor_default = "That seems so basic, so normal. Almost default. You can't tell anything about the kind of surface."
 --L.search_floor_glass = "Their body is covered with many bloody cuts. In some of them glass shards are stuck and look rather threatening to you."
@@ -1890,7 +1880,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 
 --L.search_kill_distance_point_blank = "It was a point blank attack."
 --L.search_kill_distance_close = "The attack came from a short distance."
---L.search_kill_distance_far = "The victim was attacked from a long distance away."
+--L.search_kill_distance_far = "The attack came from a long distance away."
 
 --L.search_kill_from_front = "The victim was shot from the front."
 --L.search_kill_from_back = "The victim was shot from behind."
@@ -1943,7 +1933,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.target_credits_on_search = "Search to receive unspent credits"
 --L.corpse_hint_no_inspect_details = "Only public policing roles can find information on this body."
 --L.corpse_hint_inspect_limited_details = "Only public policing roles can confirm the body."
---L.corpse_hint_spectator = "Press [{usekey}] to view corpse UI"
+--L.corpse_hint_spectator = "Press [{usekey}] to view search UI"
 --L.corpse_hint_public_policing_searched = "Press [{usekey}] to view search results from public policing role"
 
 --L.label_inspect_confirm_mode = "Select body search mode"
@@ -1969,7 +1959,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 
 -- 2023-10-25
 --L.help_keyhelp = [[
---Key bind helpers are part of a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
+--Key bind helper is a UI element that always shows relevant keybindings to the player, which is especially helpful for new players. There are three different types of key bindings:
 --
 --Core: These contain the most important bindings found in TTT2. Without them the game is hard to play to its full potential.
 --Extra: Similar to core, but you don't always need them. They contain stuff like chat, voice or flashlight. It might be helpful for new players to enable this.
@@ -1985,7 +1975,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.header_interface_wepswitch = "Weapon switch UI settings"
 
 --L.label_keyhelper_help = "open gamemode menu"
---L.label_keyhelper_mutespec = "cycle spectator voice mode"
+--L.label_keyhelper_mutespec = "cycle spectator mute mode"
 --L.label_keyhelper_shop = "open equipment shop"
 --L.label_keyhelper_show_pointer = "free mouse pointer"
 --L.label_keyhelper_possess_focus_entity = "possess focused entity"
@@ -2051,7 +2041,7 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.label_spec_prop_dash = "Dash force multiplier"
 --L.label_keyhelper_possession_dash = "prop: dash in view direction"
 --L.label_keyhelper_weapon_drop = "drop selected weapon if possible"
---L.label_keyhelper_ammo_drop = "drop ammo from selected weapon out of clip"
+--L.label_keyhelper_ammo_drop = "drop reserved ammo from selected weapon"
 
 -- 2023-12-07
 --L.c4_help_primary = "Place the C4"
@@ -2105,13 +2095,10 @@ L.search_eyes = "Usando suas técnicas de detetive, você identificou a última 
 --L.msg_beacon_destroyed = "One of your beacons has been destroyed!"
 --L.msg_beacon_death = "A player died in close proximity to one of your beacons."
 
---L.beacon_pickup_disabled = "Only the owner of the beacon can pick it up"
 --L.beacon_short_desc = "Beacons are used by policing roles to add local wallhacks around them"
 
--- 2023-12-18
 --L.entity_pickup_owner_only = "Only the owner can pick this up"
 
--- 2023-12-18
 L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.body_confirm_more = "{finder} confirmed the {count} deaths of: {victims}."
 
@@ -2121,6 +2108,16 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 --L.help_roles_builtin = "This role is built-in, it comes with TTT2!"
 --L.header_equipment_info = "Equipment information"
 
+-- 2023-12-20
+--L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
+--For a shotgun, this would affect each pellet.
+--For a rifle, this would affect just the bullet.
+--For the poltergeist, this would affect each "thump" and the final explosion.
+--
+--0.5 = Deal half the amount of damage.
+--2 = Deal twice the amount of damage.
+--
+--Note: Some weapons might not use this value which causes this multiplier to be ineffective.]]
 
 -- 2023-12-24
 --L.submenu_gameplay_accessibility_title = "Accessibility"
@@ -2133,18 +2130,7 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 
 --L.help_enable_dynamic_fov = "Dynamic FOV is applied depending on the player's speed. When a player is sprinting for example, the FOV is increased to visualize the speed."
 --L.help_enable_bobbing_strafe = "View bobbing is the slight camera shake while walking, swimming or falling."
--- 2023-12-20
---L.equipmenteditor_desc_damage_scaling = [[Multiplies the base damage value of a weapon by this factor.
---For a shotgun, this would affect each pellet.
---For a rifle, this would affect just the bullet.
---For the poltergeist, this would affect each "thump" and the final explosion.
---
---0.5 = Deal half the amount of damage.
---2 = Deal twice the amount of damage.
---
---Note: Some weapons might not use this value which causes this modifier to be ineffective.]]
 
--- 2023-12-24
 --L.binoc_help_reload = "Clear target."
 --L.cl_sb_row_sresult_direct_conf = "Direct confirmation"
 --L.cl_sb_row_sresult_pub_police = "Public policing role confirmation"
@@ -2166,16 +2152,6 @@ L.body_confirm_one = "{finder} confirmou a morte de {victim}."
 
 --L.header_weapon_settings = "Weapon Settings"
 
-
---L.marker_vision_visible_for_0 = "Visible for you"
---L.marker_vision_visible_for_1 = "Visible for your role"
---L.marker_vision_visible_for_2 = "Visible for your team"
---L.marker_vision_visible_for_3 = "Visible for everyone"
-
--- 2024-01-27
-L.decoy_help_primary = "Plantar a isca"
---L.decoy_help_secondary = "Stick Decoy to surface"
-
 -- 2024-01-24
 --L.grenade_fuse = "FUSE"
 
@@ -2183,12 +2159,22 @@ L.decoy_help_primary = "Plantar a isca"
 --L.header_roles_magnetostick = "Magneto Stick"
 --L.label_roles_ragdoll_pinning = "Enable ragdoll pinning"
 --L.magneto_stick_help_carry_rag_pin = "Pin ragdoll"
---L.magneto_stick_help_carry_rag_drop = "Drop ragdoll"
+--L.magneto_stick_help_carry_rag_drop = "Put down ragdoll"
 --L.magneto_stick_help_carry_prop_release = "Release prop"
---L.magneto_stick_help_carry_prop_drop = "Drop prop"
+--L.magneto_stick_help_carry_prop_drop = "Put down prop"
+
+-- 2024-01-27
+L.decoy_help_primary = "Plantar a isca"
+--L.decoy_help_secondary = "Stick Decoy to surface"
+
+
+--L.marker_vision_visible_for_0 = "Visible for you"
+--L.marker_vision_visible_for_1 = "Visible for your role"
+--L.marker_vision_visible_for_2 = "Visible for your team"
+--L.marker_vision_visible_for_3 = "Visible for everyone"
 
 -- 2024-02-14
---L.throw_no_room = "You have no space here to throw this device"
+--L.throw_no_room = "You have no space here to drop this device"
 
 -- 2024-03-04
 --L.use_entity = "Press [{usekey}] to use"
@@ -2200,7 +2186,7 @@ L.decoy_help_primary = "Plantar a isca"
 
 --L.help_enable_sound_interact = "Interaction sounds are those sounds that are played when opening an UI. Such a sound is played for example when interacting with the radio marker."
 --L.help_enable_sound_buttons = "Button sounds are clicky sounds that are played when clicking a button."
---L.help_enable_sound_message = "Message or notification sounds are played for chat mesages and notifications. They can be quite obnoxious."
+--L.help_enable_sound_message = "Message or notification sounds are played for chat messages and notifications. They can be quite obnoxious."
 
 --L.label_enable_sound_interact = "Enable interaction sounds"
 --L.label_enable_sound_buttons = "Enable button sounds"
@@ -2211,12 +2197,158 @@ L.decoy_help_primary = "Plantar a isca"
 --L.label_level_sound_message = "Message sound level multiplier"
 
 -- 2024-03-07
---L.label_crosshair_static_gap_length = "Enable static crosshair gap length"
+--L.label_crosshair_static_gap_length = "Enable static crosshair gap size"
 --L.label_crosshair_size_gap = "Crosshair gap size multiplier"
 
 -- 2024-03-31
 --L.help_locational_voice = "Proximity chat is TTT2's implementation of locational 3D voice. Players are only audible in a set radius around them and become quieter the farther away they are."
---L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. Change this convar to also use proximity chat in the preparing phase.
+--L.help_locational_voice_prep = [[By default the proximity chat is disabled in the preparing phase. If this option enabled, proximity chat is also enabled in the preparing phase.
 --
 --Note: Proximity chat is always disabled during the post round phase.]]
---L.help_voice_duck_spectator = "Ducking spectators makes other spectators quieter in comparison to living players. This can be useful if one wants to listen closely to the discussions of the living players."
+--L.help_voice_duck_spectator = "Muffling spectators makes other spectators quieter in comparison to living players. This can be useful if you want to listen closely to the discussions of the living players."
+
+--L.help_equipmenteditor_configurable_clip = [[The configurable size defines the amount of uses the weapon has when bought in the shop or spawned in the world.
+--
+--Note: This setting is only available for weapons that enable this feature.]]
+--L.label_equipmenteditor_configurable_clip = "Configurable clip size"
+
+-- 2024-04-06
+--L.help_locational_voice_range = [[This option constrains the maximum range at which players can hear each other. It does not change how the volume decreases with distance but rather sets a hard cut-off point.
+--
+--Set to 0 to disable this cut-off.]]
+
+-- 2024-04-07
+--L.help_voice_activation = [[Changes the way your microphone is activated for global voice chat. These all use your 'Global Voice Chat' keybinding. Team voice chat is always push-to-talk.
+--
+--Push-to-Talk: Hold down the key to talk.
+--Push-to-Mute: Your mic is always on, hold down the key to mute yourself.
+--Toggle: Press the key to toggle your mic on/off.
+--Toggle (Activate on Join): Like 'Toggle' but your mic gets activated when joining the server.]]
+--L.label_voice_activation = "Voice Chat Activation Mode"
+--L.label_voice_activation_mode_ptt = "Push to Talk"
+--L.label_voice_activation_mode_ptm = "Push to Mute"
+--L.label_voice_activation_mode_toggle_disabled = "Toggle"
+--L.label_voice_activation_mode_toggle_enabled = "Toggle (Activate on Join)"
+
+-- 2024-04-08
+--L.label_inspect_credits_always = "Allow all players to see credits on dead bodies"
+--L.help_inspect_credits_always = [[
+--When shopping roles die, their credits can be picked up by other players with shopping roles.
+--
+--When this option is disabled, only players that can pick up credits can see them on a body.
+--When enabled, all players can see credits on a body.]]
+
+-- 2024-05-13
+--L.menu_commands_title = "Admin Commands"
+--L.menu_commands_description = "Change maps, spawn bots and edit player roles."
+
+--L.submenu_commands_maps_title = "Maps"
+
+--L.header_maps_prefixes = "Enable/Disable Maps by their Prefix"
+--L.header_maps_select = "Select and Change Maps"
+
+--L.button_change_map = "Change Map"
+
+-- 2024-05-20
+--L.submenu_commands_commands_title = "Commands"
+
+--L.header_commands_round_restart = "Round Restart"
+--L.header_commands_player_slay = "Slay Player"
+--L.header_commands_player_teleport = "Teleport Player to Focused Point"
+--L.header_commands_player_respawn = "Respawn Player at Focused Point"
+--L.header_commands_player_add_credits = "Add Equipment Credits"
+--L.header_commands_player_set_health = "Set Health"
+--L.header_commands_player_set_armor = "Set Armor"
+
+--L.label_button_round_restart = "round restart"
+--L.label_button_player_slay = "slay player"
+--L.label_button_player_teleport = "teleport player"
+--L.label_button_player_respawn = "respawn player"
+--L.label_button_player_add_credits = "add credits"
+--L.label_button_player_set_health = "set health"
+--L.label_button_player_set_armor = "set armor"
+
+--L.label_slider_add_credits = "Set credit amount"
+--L.label_slider_set_health = "Set health"
+--L.label_slider_set_armor = "Set armor"
+
+--L.label_player_select = "Select affected player"
+--L.label_execute_command = "Execute command"
+
+-- 2024-05-22
+--L.tip38 = "You can pick up focused weapons by pressing {usekey}. It will automatically drop you blocking weapon."
+--L.tip39 = "You can change your key bindings in the bindings menu, located in the Settings menu opened with {helpkey}."
+--L.tip40 = "On the left side of your screen are icons showing current equipment or status effects applied to you."
+--L.tip41 = "If you open your scoreboard, the sidebar and key helper show additional information."
+--L.tip42 = "The key helper at the bottom of your screen shows relevant bindings available to you at that moment."
+--L.tip43 = "The icon next to the name of a confirmed corpse shows the role of the deceased player."
+
+--L.header_loadingscreen = "Loading Screen"
+
+--L.help_enable_loadingscreen = "The Loading screen is shown when the map refreshes after a round. It is introduced to hide the visible and audible lag that appears on big maps. It is also used to show gameplay tips."
+
+--L.label_enable_loadingscreen = "Enable the loading screen"
+--L.label_enable_loadingscreen_tips = "Enable tips on loading screen"
+
+-- 2024-05-25
+--L.help_round_restart_reset = [[
+--Restart a round or reset the level.
+--
+--Restarting a round only restarts the current round so you can start over. Resetting the level clears everything so that the game starts new as if it is fresh after a map change.]]
+
+--L.label_button_level_reset = "reset level"
+
+--L.loadingscreen_round_restart_title = "Starting new round"
+--L.loadingscreen_round_restart_subtitle = "you're playing on {map}"
+--L.loadingscreen_round_restart_subtitle_limits = "you're playing on {map} for another {rounds} round(s) or {time}"
+
+-- 2024-06-23
+--L.header_roles_derandomize = "Role Derandomization"
+
+--L.help_roles_derandomize = [[
+--Role derandomization can be used to make role distribution feel more fair over the course of a session.
+--
+--In essence, when it is enabled, a player's chance of receiving a role increases while they have not been assigned that role. While this can feel more fair, this also enables metagaming, where a player can guess that another will be traitor-aligned based on the fact that they have not been traitor aligned in several rounds. Do not enable this option if this is undesirable.
+--
+--There are 4 modes:
+--
+--mode 0: Disabled - No derandomization is done. This is the default.
+--
+--mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
+--
+--mode 2: Sub-roles only - Derandomization is performed for sub-roles only. Base roles will be selected randomly. Note that sub-roles are only assigned to players which have already been selected for their base role.
+--
+--mode 3: Base roles AND sub-roles - Derandomization is performed for both base roles and sub-roles.]]
+--L.label_roles_derandomize_mode = "Derandomization mode"
+--L.label_roles_derandomize_mode_none = "mode 0: Disabled"
+--L.label_roles_derandomize_mode_base_only = "mode 1: Base roles only"
+--L.label_roles_derandomize_mode_sub_only = "mode 2: Sub-roles only"
+--L.label_roles_derandomize_mode_base_and_sub = "mode 3: Base roles AND sub-roles"
+
+--L.help_roles_derandomize_min_weight = [[
+--Derandomization is performed by making the random player selections during role distribution use a weight associated with each role for each player, and that weight increases by 1 each time the player does not get assigned that role. These weights are not persisted between connections, or across maps.
+--
+--Each time a player is assigned a role, the corresponding weight is reset to this minimum weight. This weight does not have any absolute meaning; it can only be interpreted with respect to other weights.
+--
+--For example, given player A with a weight of 1, and player B with a weight of 5, player B is 5 times more likely than player A to be selected. However, if player A had a weight of 4, player B is only 5/4 times more likely to be selected.
+--
+--The minimum weight, therefore, effectively controls how much each round affects a player's chance at being selected, with higher values causing it to be affected less. The default value of 1 means that each round causes a fairly significant increase in chance, and conversely, that it is extremely unlikely that a player will get the same role twice in a row.
+--
+--Changes to this value will not take effect until players reconnect or the map changes.]]
+--L.label_roles_derandomize_min_weight = "Derandomization minimum weight"
+
+-- 2024-08-17
+--L.name_button_default = "Button"
+--L.name_button_rotating = "Lever"
+
+--L.button_default = "Press [{usekey}] to trigger"
+--L.button_rotating = "Press [{usekey}] to flip"
+
+--L.undefined_key = "???"
+
+-- 2024-08-18
+--L.header_commands_player_force_role = "Force Player Role"
+
+--L.label_button_player_force_role = "force role"
+
+--L.label_player_role = "Select role"

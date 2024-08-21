@@ -10,7 +10,7 @@ local pairs = pairs
 local IsValid = IsValid
 local player = player
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 ---
 -- Sends a message to a list of @{Player}s
@@ -22,7 +22,7 @@ local playerIterator = player.Iterator
 -- @todo add role hacking
 -- @realm server
 function SendRoleListMessage(subrole, team, sids, ply_or_rf)
-    local tmp = ply_or_rf or select(2, playerIterator())
+    local tmp = ply_or_rf or playerGetAll()
 
     if not istable(tmp) then
         tmp = { ply_or_rf }
@@ -51,7 +51,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
             TTT2NETTABLE[ply][p] = { subrole, team }
 
             if p ~= ply then
-                local rs = GetRoundState()
+                local rs = gameloop.GetRoundState()
 
                 if
                     p:GetSubRoleData().disableSync
@@ -108,7 +108,7 @@ end
 -- @see SendRoleList
 function SendSubRoleList(subrole, ply_or_rf, pred)
     local team_ids = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -137,7 +137,7 @@ end
 -- @see SendSubRoleList
 function SendRoleList(subrole, ply_or_rf, pred)
     local team_ids = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -168,7 +168,7 @@ function SendTeamList(team, ply_or_rf, pred)
     end
 
     local team_ids = {}
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         local v = plys[i]
@@ -221,7 +221,7 @@ end
 function SendFullStateUpdate()
     local syncTbl = {}
     local localPly = false
-    local players = select(2, playerIterator())
+    local players = playerGetAll()
     local plyCount = #players
 
     for i = 1, plyCount do
@@ -293,31 +293,31 @@ function SendFullStateUpdate()
 end
 
 ---
--- Resynces the list of @{Player}s for a given list of @{Player}s
--- @param nil|Player|table ply_or_rf
+-- Resets the list of @{Player}s for a given list of @{Player}s
 -- @realm server
-function SendRoleReset(ply_or_rf)
-    local players = select(2, playerIterator())
-    local plyCount = #players
+function RoleReset()
+    local players = playerGetAll()
 
-    for i = 1, plyCount do
+    for i = 1, #players do
         local ply = players[i]
 
-        TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
-
-        for k = 1, plyCount do
-            local p = players[k]
-
-            TTT2NETTABLE[ply][p] = { ROLE_NONE, TEAM_NONE }
-        end
+        RoleResetForPlayer(ply)
     end
+end
 
-    net.Start("TTT_RoleReset")
+---
+-- Resets the list of a player for a given list of @{Player}s
+-- @param Player ply The player that should be updated
+-- @realm server
+function RoleResetForPlayer(ply)
+    local players = playerGetAll()
 
-    if ply_or_rf then
-        net.Send(ply_or_rf)
-    else
-        net.Broadcast()
+    TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+    for i = 1, #players do
+        local p = players[i]
+
+        TTT2NETTABLE[ply][p] = { ROLE_NONE, TEAM_NONE }
     end
 end
 
@@ -325,12 +325,12 @@ end
 local function ttt_request_rolelist(plySyncTo)
     -- Client requested a state update. Note that the client can only use this
     -- information after entities have been initialized (e.g. in InitPostEntity).
-    if GetRoundState() ~= ROUND_WAIT then
+    if gameloop.GetRoundState() ~= ROUND_WAIT then
         local localPly = false
         local tmp = {}
         local team = plySyncTo:GetTeam()
         local roleDataSyncTo = plySyncTo:GetSubRoleData()
-        local plys = select(2, playerIterator())
+        local plys = playerGetAll()
 
         for i = 1, #plys do
             local plySyncFrom = plys[i]
@@ -458,7 +458,7 @@ end
 concommand.Add("get_role", get_role)
 
 local function ttt_toggle_role(ply, cmd, args, argStr)
-    if not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -511,7 +511,7 @@ end
 net.Receive("TTT_Spectate", TTT_Spectate)
 
 local function ttt_roles_index(ply)
-    if not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 

@@ -108,7 +108,7 @@ end
 -- @realm server
 -- @internal
 function ents.TTT.TriggerRoundStateOutputs(r, param)
-    r = r or GetRoundState()
+    r = r or gameloop.GetRoundState()
 
     local entMapSettings = ents.FindByClass("ttt_map_settings")
 

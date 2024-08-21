@@ -194,27 +194,16 @@ addonChecker.curatedList = {
         reason = "Overwrites stock TTT2 crowbar which causes problems with doors and ttt_map_settings entity.",
         type = ADDON_INCOMPATIBLE,
     },
-    ["278185787"] = { -- Death Note by Blue-Pentagram
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
-        type = ADDON_INCOMPATIBLE,
-    },
-    ["2758610950"] = { -- Death Note TTT2 Fixed Edition by pat201290
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
-        type = ADDON_INCOMPATIBLE,
-    },
-    ["110148946"] = { -- Death Note by SmokeTheBanana
-        alternative = "3118796974",
-        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
-        type = ADDON_INCOMPATIBLE,
-    },
-    ["110148946"] = { -- ttt_broken_hand_fix by Jolez
+    ["1629273484"] = { -- ttt_broken_hand_fix by Jolez
         reason = "Already built in into TTT2",
         type = ADDON_INCOMPATIBLE,
     },
     ["2990353959"] = { -- Weapon Spawn Ratio Mod by Corvatile
         reason = "Breaks random weapon spawns by overwriting the random weapon entity.",
+        type = ADDON_INCOMPATIBLE,
+    },
+    ["2705642928"] = { -- Graffiti by Leeroy
+        reason = "This addon doesn't use the TTT base correctly and also causes sound and broken playermodel issues.",
         type = ADDON_INCOMPATIBLE,
     },
     ["456247192"] = { -- TTT Coffee-Cup Hunt by Niandra!
@@ -641,6 +630,46 @@ addonChecker.curatedList = {
     ["922285407"] = { -- Spring mine by Phoenixf
         alternative = "3166539189",
         reason = "The addon is completely broken and doesn't work at all. Also this rework has better integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["611873052"] = { -- Mirror fate by Hagen
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["340790912"] = { -- Mirror fate / Final hour by KhrumoX
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["2000714335"] = { -- Mirror fate remix by Pocable
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["1115379772"] = { -- Mirror fate by Steven3233
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["899488990"] = { -- Mirror fate by Keksgesicht
+        alternative = "3229789817",
+        reason = "Broken model, no UI feedback for affected people, no integration into TTT2 systems.",
+        type = ADDON_OUTDATED,
+    },
+    ["3118796974"] = { -- Death Note by Xopez
+        alternative = "278185787",
+        reason = "Old Addon got massive update and works now with TTT2. The version with the workaround will be discontinued.",
+        type = ADDON_OUTDATED,
+    },
+    ["2758610950"] = { -- Death Note TTT2 Fixed Edition by pat201290
+        alternative = "278185787",
+        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
+        type = ADDON_OUTDATED,
+    },
+    ["110148946"] = { -- Death Note by SmokeTheBanana
+        alternative = "278185787",
+        reason = "Prints only Detectives in TTT2. Roles are hard coded.",
         type = ADDON_OUTDATED,
     },
 }

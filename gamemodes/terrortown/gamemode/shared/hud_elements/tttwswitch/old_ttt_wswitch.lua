@@ -72,8 +72,14 @@ if CLIENT then
         local b = 8 -- bordersize
         local bh = b * 0.5
 
-        local ply = LocalPlayer()
-        local c = col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()
+        local client = LocalPlayer()
+        local c
+
+        if client:IsActive() then
+            c = (col == col_active) and client:GetRoleColor() or client:GetRoleDkColor()
+        else
+            c = (col == col_active) and COLOR_SPEC or util.ColorDarken(COLOR_SPEC, 30)
+        end
 
         -- Draw the colour tip
         surface.SetTexture(self.barcorner)

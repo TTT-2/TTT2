@@ -59,6 +59,15 @@ CORPSE_KILL_DIRECTION_SIDE = 3
 -- stylua: ignore
 local cvInspectConfirmMode = CreateConVar("ttt2_inspect_confirm_mode", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+---
+-- @realm shared
+-- off (0): only roles which have a shop can see credits on a body
+-- on (1), default: all roles can see credits on a body
+-- NOTE: On is default only for compatability. Many players seem to expect it to not be the case by default,
+--       so perhaps it'd be a good idea to default to off.
+-- stylua: ignore
+local cvCreditsVisibleToAll = CreateConVar("ttt2_inspect_credits_always_visible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
 local materialWeaponFallback = Material("vgui/ttt/missing_equip_icon")
 
 bodysearch = {}
@@ -292,7 +301,7 @@ if SERVER then
         sceneData.lastWords = rag.last_words
         sceneData.wasHeadshot = rag.was_headshot or false
         sceneData.deathTime = rag.time or 0
-        sceneData.sid64 = rag.scene.plySID64 or ""
+        sceneData.sid64 = CORPSE.GetPlayerSID64(rag)
         sceneData.lastDamage = mathRound(mathMax(0, rag.scene.lastDamage or 0))
         sceneData.killFloorSurface = rag.scene.floorSurface or 0
         sceneData.killWaterLevel = rag.scene.waterLevel or 0
@@ -702,7 +711,7 @@ if CLIENT then
                     text = {
                         {
                             body = "search_kills2",
-                            params = { player = table.concat(nicks, "\n", 1) },
+                            params = { player = table.concat(nicks, ", ", 1) },
                         },
                     },
                 }
@@ -752,7 +761,7 @@ if CLIENT then
             -- special case: mode 2, only shopping roles can see credits
             local client = LocalPlayer()
             if
-                cvInspectConfirmMode:GetInt() == 2
+                (cvInspectConfirmMode:GetInt() == 2 or not cvCreditsVisibleToAll:GetBool())
                 and not bodysearch.CanTakeCredits(client, data.rag)
             then
                 return

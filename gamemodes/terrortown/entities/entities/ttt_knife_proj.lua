@@ -154,7 +154,7 @@ if SERVER then
         end
         local tr = util.TraceLine({
             start = self:GetPos(),
-            endpos = self:GetPos() + vel:GetNormal() * 20,
+            endpos = self:GetPos() + vel:GetNormalized() * 20,
             filter = { self, self:GetOwner() },
             mask = MASK_SHOT_HULL,
         })

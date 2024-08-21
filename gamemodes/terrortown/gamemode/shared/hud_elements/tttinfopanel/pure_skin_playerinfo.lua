@@ -26,7 +26,6 @@ if CLIENT then
     local mat_tid_ammo = Material("vgui/ttt/tid/tid_ammo")
 
     local color_sprint = Color(36, 154, 198)
-    local color_defaultgrey = Color(100, 100, 100, 200)
     local color_health = Color(234, 41, 41)
     local color_ammoBar = Color(238, 151, 0)
 
@@ -150,7 +149,7 @@ if CLIENT then
         if cactive then
             c = client:GetRoleColor()
         else
-            c = color_defaultgrey
+            c = COLOR_SPEC
         end
 
         surface.SetDrawColor(clr(c))
@@ -193,7 +192,7 @@ if CLIENT then
 
             -- draw role string name
             local text
-            local round_state = GAMEMODE.round_state
+            local round_state = gameloop.GetRoundState()
 
             if cactive then
                 text = L[rd.name]

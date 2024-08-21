@@ -35,6 +35,7 @@ local materialAutoClose = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
+local materialFire = Material("vgui/ttt/tid/tid_onfire")
 
 ---
 -- This function makes sure local variables, which use other libraries that are not yet initialized, are initialized later.
@@ -197,7 +198,6 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or ent:GetClass() ~= "ttt_traitor_button"
         or tData:GetEntityDistance() > ent:GetUsableRange()
@@ -235,7 +235,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
     end
 
     -- only add more information if in admin mode
-    if not admin_mode or not client:IsAdmin() then
+    if not admin_mode or not admin.IsAdmin(client) then
         return
     end
 
@@ -258,7 +258,7 @@ function targetid.HUDDrawTargetIDTButtons(tData)
         ParT("tbut_team_toggle", {
             usekey = key_params.usekey,
             walkkey = key_params.walkkey,
-            team = client:GetTeam():gsub("^%l", string.upper),
+            team = TryT(client:GetTeam()),
         }),
         COLOR_WHITE
     )
@@ -319,7 +319,6 @@ function targetid.HUDDrawTargetIDWeapons(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or tData:GetEntityDistance() > 100
         or not ent:IsWeapon()
@@ -359,14 +358,16 @@ function targetid.HUDDrawTargetIDWeapons(tData)
         tData:SetSubtitle(
             ParT("target_pickup_weapon", key_params_wep)
                 .. (
-                    not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep) or ""
+                    not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep)
+                    or ""
                 )
         )
     elseif switchMode == SWITCHMODE_SWITCH then
         tData:SetSubtitle(
             ParT("target_switch_weapon", key_params_wep)
                 .. (
-                    not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep) or ""
+                    not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep)
+                    or ""
                 )
         )
     elseif switchMode == SWITCHMODE_FULLINV then
@@ -443,7 +444,7 @@ function targetid.HUDDrawTargetIDPlayers(tData)
     end
 
     -- show the role of a player if it is known to the client
-    local rstate = GetRoundState()
+    local rstate = gameloop.GetRoundState()
     local target_role
 
     if rstate == ROUND_ACTIVE and ent.HasRole and ent:HasRole() then
@@ -508,16 +509,11 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
     local c_wep = client:GetActiveWeapon()
 
     -- has to be a ragdoll
-    if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then
+    if not IsValid(ent) or not ent:IsPlayerRagdoll() then
         return
     end
 
-    -- only show this if the ragdoll has a nick, else it could be a mattress
-    if not CORPSE.GetPlayerNick(ent, false) then
-        return
-    end
-
-    local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
+    local corpse_found = CORPSE.GetFound(ent, false) or not gameloop.IsDetectiveMode()
     local corpse_ply = corpse_found and CORPSE.GetPlayer(ent) or false
     local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars"
         or false
@@ -561,6 +557,10 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
         else
             tData:SetSubtitle(ParT("corpse_hint", key_params))
         end
+
+        if ent:IsOnFire() then
+            tData:AddDescriptionLine(TryT("body_burning"), COLOR_ORANGE, { materialFire })
+        end
     elseif binoculars_useable then
         tData:SetSubtitle(ParT("corpse_binoculars", { key = Key("+attack", "ATTACK") }))
     else
@@ -594,6 +594,42 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 end
 
 ---
+-- This function handles looking at buttons and adds specific descriptions
+-- @param TARGET_DATA tData The object to be used in the hook
+-- @realm client
+function targetid.HUDDrawTargetIDButtons(tData)
+    local client = LocalPlayer()
+    local ent = tData:GetEntity()
+
+    if
+        not IsValid(client)
+        or not client:IsTerror()
+        or not IsValid(ent)
+        or not ent:IsButton()
+        or tData:GetEntityDistance() > 90
+    then
+        return
+    end
+
+    -- enable targetID rendering
+    tData:EnableText()
+    tData:EnableOutline()
+    tData:SetOutlineColor(client:GetRoleColor())
+
+    tData:SetKey(input.GetKeyCode(key_params.usekey))
+
+    if ent:IsDefaultButton() then
+        tData:SetTitle(TryT("name_button_default"))
+        tData:SetSubtitle(ParT("button_default", key_params))
+    end
+
+    if ent:IsRotatingButton() then
+        tData:SetTitle(TryT("name_button_rotating"))
+        tData:SetSubtitle(ParT("button_rotating", key_params))
+    end
+end
+
+---
 -- This function handles looking at doors and adds specific descriptions
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
@@ -604,7 +640,6 @@ function targetid.HUDDrawTargetIDDoors(tData)
     if
         not IsValid(client)
         or not client:IsTerror()
-        or not client:Alive()
         or not IsValid(ent)
         or not ent:IsDoor()
         or not ent:PlayerCanOpenDoor()
@@ -677,7 +712,7 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
         ent:IsWeapon()
         or ent.CanHavePrints
         or ent:GetNWBool("HasPrints", false)
-        or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+        or ent:IsPlayerRagdoll()
     then
         tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, { materialDNATargetID })
     else

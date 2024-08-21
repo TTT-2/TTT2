@@ -8,7 +8,7 @@ local hook = hook
 local table = table
 local net = net
 local IsValid = IsValid
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local defuserNearRadius = 90000
 
@@ -33,7 +33,6 @@ ENT.Base = "ttt_base_placeable"
 ENT.Model = "models/weapons/w_c4_planted.mdl"
 
 ENT.CanHavePrints = true
-ENT.CanUseKey = true
 ENT.Avoidable = true
 
 ENT.isDestructible = false
@@ -127,15 +126,6 @@ function ENT:SetDetonateTimer(length)
 end
 
 ---
--- @param Entity activator
--- @realm shared
-function ENT:UseOverride(activator)
-    if IsValid(activator) and activator:IsPlayer() then
-        self:ShowC4Config(activator)
-    end
-end
-
----
 -- @param number t
 -- @return number
 -- @realm shared
@@ -173,7 +163,7 @@ function ENT:SphereDamage(dmgowner, center, radius)
     local diff = nil
     local dmg = 0
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local ply = plys[i]
         if ply:Team() ~= TEAM_TERROR then
@@ -234,7 +224,10 @@ function ENT:Explode(tr)
 
         local pos = self:GetPos()
 
-        if util.PointContents(pos) == CONTENTS_WATER or GetRoundState() ~= ROUND_ACTIVE then
+        if
+            util.PointContents(pos) == CONTENTS_WATER
+            or gameloop.GetRoundState() ~= ROUND_ACTIVE
+        then
             self:Remove()
             self:SetExplodeTime(0)
 
@@ -322,7 +315,7 @@ function ENT:IsDefuserInRange()
     local d = 0.0
     local diff = nil
 
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     for i = 1, #plys do
         local ply = plys[i]
         if not ply:IsActive() or not ply:GetSubRoleData().isPolicingRole then
@@ -522,16 +515,6 @@ if SERVER then
         mvObject:SetOwner(ply)
         mvObject:SetVisibleFor(VISIBLE_FOR_TEAM)
         mvObject:SyncToClients()
-    end
-
-    ---
-    -- @param Player ply
-    -- @realm server
-    function ENT:ShowC4Config(ply)
-        -- show menu to player to configure or disarm us
-        net.Start("TTT_C4Config")
-        net.WriteEntity(self)
-        net.Send(ply)
     end
 
     local function ReceiveC4Config(ply, cmd, args)
@@ -789,6 +772,23 @@ else -- CLIENT
         weight = 0,
         antialias = false,
     })
+
+    ---
+    -- Hook that is called if a player uses their use key while focusing on the entity.
+    -- Shows C4 UI
+    -- @return bool True to prevent pickup
+    -- @realm client
+    function ENT:ClientUse()
+        if IsValid(self) then
+            if not self:GetArmed() then
+                ShowC4Config(self)
+            else
+                ShowC4Disarm(self)
+            end
+        end
+
+        return true
+    end
 
     ---
     -- @return table pos

@@ -4,12 +4,12 @@
 local net = net
 local sql = sql
 local util = util
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 util.AddNetworkString("TTT2UpdateCVar")
 
 net.Receive("TTT2UpdateCVar", function(_, ply)
-    if not IsValid(ply) or not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -95,7 +95,7 @@ function ShopEditor.AddToShopEditor(ply, roleData, equip)
     AddEquipmentToRole(roleData.index, eq)
 
     -- last but not least, notify each player
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     local nick = ply:Nick()
     local rdName = roleData.name
 
@@ -127,7 +127,7 @@ function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
     RemoveEquipmentFromRole(roleData.index, eq)
 
     -- last but not least, notify each player
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
     local nick = ply:Nick()
     local rdName = roleData.name
 
@@ -141,7 +141,7 @@ end
 util.AddNetworkString("shop")
 
 local function shop(len, ply)
-    if not IsValid(ply) or not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -166,7 +166,7 @@ util.AddNetworkString("shopFallbackReset")
 util.AddNetworkString("shopFallbackRefresh")
 
 local function shopFallback(len, ply)
-    if not IsValid(ply) or not ply:IsAdmin() then
+    if not admin.IsAdmin(ply) then
         return
     end
 
@@ -237,7 +237,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
     if fallback ~= SHOP_UNSET and fallback == rd.name then
         LoadSingleShopEquipment(rd)
 
-        ply_or_rf = ply_or_rf or select(2, playerIterator())
+        ply_or_rf = ply_or_rf or playerGetAll()
 
         if not istable(ply_or_rf) then
             ply_or_rf = { ply_or_rf }

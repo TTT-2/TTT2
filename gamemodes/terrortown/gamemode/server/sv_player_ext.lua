@@ -8,7 +8,7 @@ local table = table
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
-local playerIterator = player.Iterator
+local playerGetAll = player.GetAll
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -676,7 +676,7 @@ function plymeta:InitialSpawn()
     self.has_spawned = false
 
     -- The team the player spawns on depends on the round state
-    self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
+    self:SetTeam(gameloop.GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
 
     -- Change some gmod defaults
     self:SetCanZoom(false)
@@ -693,6 +693,9 @@ function plymeta:InitialSpawn()
 
     -- We never have weapons here, but this inits our equipment state
     self:StripAll()
+
+    -- Initialize role weights
+    roleselection.InitializeRoleWeights(self)
 
     -- set spawn position
     local spawnPoint = plyspawn.GetRandomSafePlayerSpawnPoint(self)
@@ -759,6 +762,11 @@ function plymeta:UnSpectate()
 end
 
 ---
+-- @accessor table A table containing the weights to use when selecting roles, if enabled.
+-- @realm server
+AccessorFunc(plymeta, "role_weights", "RoleWeightTable")
+
+---
 -- Returns whether a @{Player} is able to select a specific @{ROLE}
 -- @param ROLE roleData
 -- @param number choice_count
@@ -787,17 +795,24 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 end
 
 ---
--- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
+-- Tries to find the corpse of a player. Returns nil if none was found.
+-- @return Entity Returns the ragdoll entity
 -- @realm server
 function plymeta:FindCorpse()
     local ragdolls = ents.FindByClass("prop_ragdoll")
 
     for i = 1, #ragdolls do
-        local ent = ragdolls[i]
+        local rag = ragdolls[i]
 
-        if ent.uqid == self:UniqueID() and IsValid(ent) then
-            return ent or false
+        if
+            not rag:IsPlayerRagdoll()
+            or not CORPSE.IsRealPlayerCorpse(rag)
+            or CORPSE.GetPlayerSID64(rag) ~= self:SteamID64()
+        then
+            continue
         end
+
+        return rag
     end
 end
 
@@ -972,8 +987,9 @@ function plymeta:SetReviving(isReviving)
     self.isReviving = isReviving
 
     net.Start("TTT2RevivalUpdate_IsReviving")
+    net.WritePlayer(self)
     net.WriteBool(self.isReviving)
-    net.Send(self)
+    net.Broadcast()
 end
 
 ---
@@ -1098,7 +1114,7 @@ function plymeta:GetSpawnPosition()
 end
 
 ---
--- Sets the if a player was active (TEAM_TERROR) in a round.
+-- Sets the if a player was active (TEAM_TERROR) in a gameloop.
 -- @param boolean state The state
 -- @internal
 -- @realm server
@@ -1127,7 +1143,7 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-    local availablePlayers = roleselection.GetSelectablePlayers(select(2, playerIterator()))
+    local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
     local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
     local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
 
@@ -1165,7 +1181,7 @@ local pendingItems = {}
 -- @param string cls
 -- @realm server
 function plymeta:GiveItem(cls)
-    if GetRoundState() == ROUND_PREP then
+    if gameloop.GetRoundState() == ROUND_PREP then
         pendingItems[self] = pendingItems[self] or {}
         pendingItems[self][#pendingItems[self] + 1] = cls
 
@@ -1276,7 +1292,7 @@ end)
 
 -- reset confirm state only on round begin, not on revive
 hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1285,7 +1301,7 @@ end)
 
 -- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
 hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
-    local plys = select(2, playerIterator())
+    local plys = playerGetAll()
 
     for i = 1, #plys do
         plys[i]:ResetConfirmPlayer()
@@ -1678,6 +1694,17 @@ local function SetPlayerReady(_, ply)
     ttt2net.SendFullStateUpdate(ply)
 
     entspawnscript.TransmitToPlayer(ply)
+
+    map.SyncToClient(ply)
+    button.SyncToClient(ply)
+
+    gameloop.PlayerReady(ply)
+
+    -- if random models for all players are enabled, they should be set as soon
+    -- as the player connects
+    if GetConVar("ttt2_select_unique_model_per_player"):GetBool() then
+        ply.defaultModel = playermodels.GetRandomPlayerModel()
+    end
 
     ---
     -- @realm server

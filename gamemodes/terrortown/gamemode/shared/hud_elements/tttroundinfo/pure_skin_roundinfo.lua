@@ -54,7 +54,7 @@ if CLIENT then
     function HUDELEMENT:Draw()
         local client = LocalPlayer()
         local L = GetLang()
-        local round_state = GAMEMODE.round_state
+        local round_state = gameloop.GetRoundState()
 
         -- draw bg and shadow
         self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
@@ -62,9 +62,9 @@ if CLIENT then
         -- draw haste / time
         -- Draw round time
 
-        local isHaste = HasteMode() and round_state == ROUND_ACTIVE
+        local isHaste = gameloop.IsHasteMode() and round_state == ROUND_ACTIVE
         local isOmniscient = not client:IsActive() or client:GetSubRoleData().isOmniscientRole
-        local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
+        local endtime = gameloop.GetPhaseEnd() - CurTime()
         local font = "PureSkinTimeLeft"
         local color = util.GetDefaultColor(self.basecolor)
 
@@ -79,7 +79,7 @@ if CLIENT then
         -- Time displays differently depending on whether haste mode is on,
         -- whether the player is traitor or not, and whether it is overtime.
         if isHaste then
-            local hastetime = GetGlobalFloat("ttt_haste_end", 0) - CurTime()
+            local hastetime = gameloop.GetHasteEnd() - CurTime()
             if hastetime < 0 then
                 if not isOmniscient or math.ceil(CurTime()) % 7 <= 2 then
                     -- innocent or blinking "overtime"

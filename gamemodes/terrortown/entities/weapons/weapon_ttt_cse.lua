@@ -92,13 +92,13 @@ function SWEP:PreDrop(isdeath)
         return
     end
 
-    local cse = self:DropDevice()
+    if SERVER then
+        local cse = ents.Create("ttt_cse_proj")
 
-    if not IsValid(cse) then
-        return
+        if cse:ThrowEntity(self:GetOwner()) then
+            self:Remove()
+        end
     end
-
-    cse:SetDetonateTimer(self.DeathScanDelay or 10)
 end
 
 ---
