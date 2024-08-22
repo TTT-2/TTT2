@@ -101,6 +101,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed undefined Keys breaking the gamemode (by @TimGoll)
 - Fixed markerVision elements being visible to team mates of unknown teams (such as team Innocent) (by @TimGoll)
 - Fixed inverted settings being inverted twice in the equipment editor (by @TimGoll)
+- Fixed missing avatar icons if fetching from Steam fails (by @mexikoedi)
 
 ### Removed
 
