@@ -2347,8 +2347,8 @@ L.button_rotating = "Devreye sokmak için [{usekey}] tuşuna bas"
 L.undefined_key = "???"
 
 -- 2024-08-18
---L.header_commands_player_force_role = "Force Player Role"
+L.header_commands_player_force_role = "Oyuncu Rolünü Zorla"
 
---L.label_button_player_force_role = "force role"
+L.label_button_player_force_role = "rolü zorla"
 
---L.label_player_role = "Select role"
+L.label_player_role = "Rol seç"
