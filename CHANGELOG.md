@@ -82,6 +82,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Russian and English localization files (by @Satton2)
 - Made `ply:IsReviving` a shared player variable (by @TimGoll)
 - Updated and improved the Simplified Chinese localization file (by @sbzlzh and @TheOnly8Z)
+- Avatar icons are not fetched anymore but instead created with `AvatarImage` (fixes missing icons for chinese players) (by @mexikoedi)
 
 ### Fixed
 
@@ -106,7 +107,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed undefined Keys breaking the gamemode (by @TimGoll)
 - Fixed markerVision elements being visible to team mates of unknown teams (such as team Innocent) (by @TimGoll)
 - Fixed inverted settings being inverted twice in the equipment editor (by @TimGoll)
-- Fixed missing avatar icons if fetching from Steam fails (by @mexikoedi)
 
 ### Removed
 
@@ -120,6 +120,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Renamed `TTT2ModifyVoiceChatColor(ply, clr)` to `TTT2ModifyVoiceChatMode(ply, mode)`
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 - Removed the `TIPS` module and replaced it with a new `tips` module
+- Removed `draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)` and `draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)` from the `draw` module
 
 ## [v0.13.2b](https://github.com/TTT-2/TTT2/tree/0.13.2b) (2024-03-10)
 

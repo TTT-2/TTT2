@@ -21,16 +21,12 @@ file.CreateDir("downloaded_assets")
 local exists = file.Exists
 local write = file.Write
 local delete = file.Delete
-local fetch = http.Fetch
 local white = Color(255, 255, 255)
 local surface = surface
 local crc = util.CRC
-local _error = Material("error")
 local _bot_avatar = Material("vgui/ttt/b-draw/icon_avatar_bot.vmt")
 local _default_avatar = Material("vgui/ttt/b-draw/icon_avatar_default.vmt")
-local math = math
 local mats = {}
-local fetched_avatar_urls = {}
 
 ---
 -- Captures the content of a render target as a PNG image
@@ -62,11 +58,23 @@ end
 ---
 -- Creates an avatar material for a given SteamID64 if it doesn't exist
 -- @param string id64 The SteamID64 of the user
--- @return Material The created avatar material or nil if creation failed
+-- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @return Material The created avatar material or the default material
 -- @realm client
-local function CreateAvatarMaterial(id64)
-    local size = 184 -- maximum allowed size
-    local renderTargetName = id64 .. size
+local function CreateAvatarMaterial(id64, size)
+    if not id64 then
+        return _bot_avatar
+    end
+
+    local avatarSize = 32
+
+    if size == "large" then
+        avatarSize = 184
+    elseif "medium" then
+        avatarSize = 64
+    end
+
+    local renderTargetName = id64 .. avatarSize
     local crcUrl = crc(renderTargetName)
     local filePath = "downloaded_assets/" .. crcUrl .. ".png"
 
@@ -74,15 +82,26 @@ local function CreateAvatarMaterial(id64)
         return Material("data/" .. filePath)
     end
 
+    ---
+    -- @realm client
+    -- stylua: ignore
+    local data = hook.Run("TTT2FetchAvatar", id64, avatarSize)
+
+    if data then
+        write(filePath, data)
+
+        return Material("data/" .. filePath)
+    end
+
     local avatarImage = vgui.Create("AvatarImage")
-    avatarImage:SetSize(size, size)
-    avatarImage:SetSteamID(id64, size)
+    avatarImage:SetSize(avatarSize, avatarSize)
+    avatarImage:SetSteamID(id64, avatarSize)
     avatarImage:SetPaintedManually(true)
 
     local renderTarget = GetRenderTargetEx(
         renderTargetName,
-        size,
-        size,
+        avatarSize,
+        avatarSize,
         RT_SIZE_NO_CHANGE,
         MATERIAL_RT_DEPTH_NONE,
         16,
@@ -93,7 +112,7 @@ local function CreateAvatarMaterial(id64)
     if not renderTarget then
         avatarImage:Remove()
 
-        return nil
+        return _default_avatar
     end
 
     render.PushRenderTarget(renderTarget)
@@ -102,7 +121,7 @@ local function CreateAvatarMaterial(id64)
     cam.End2D()
     render.PopRenderTarget()
 
-    local material = CreateMaterial(id64 .. size, "UnlitGeneric", {
+    local material = CreateMaterial(id64 .. avatarSize, "UnlitGeneric", {
         ["$basetexture"] = renderTargetName,
         ["$nodecal"] = 1,
         ["$nolod"] = 1,
@@ -111,133 +130,52 @@ local function CreateAvatarMaterial(id64)
         ["$vertexcolor"] = 1,
     })
 
-    local data = CaptureRenderTarget(renderTarget, material, size, size)
+    local captureData = CaptureRenderTarget(renderTarget, material, avatarSize, avatarSize)
 
-    if data then
-        write(filePath, data)
+    if captureData then
+        write(filePath, captureData)
     end
 
     avatarImage:Remove()
+    mats[renderTargetName] = material
 
     return material
 end
 
 ---
--- Fetches an asset from the specified URL and caches it if successful
--- @param string url The URL of the asset
--- @return Material The material for the fetched asset
--- @realm client
-local function FetchAsset(url)
-    if not url then
-        return
-    end
-
-    if mats[url] then
-        return mats[url]
-    end
-
-    local crcUrl = crc(url)
-
-    if exists("downloaded_assets/" .. crcUrl .. ".png", "DATA") then
-        mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
-
-        return mats[url]
-    end
-
-    fetch(url, function(data)
-        write("downloaded_assets/" .. crcUrl .. ".png", data)
-
-        mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
-    end)
-end
-
----
--- Fetches an avatar asset for a given SteamID64 and size, with fallback support
--- @param string id64 The SteamID64 of the user
--- @param string size The size of the avatar, can be <code>small</code>, <code>medium</code> or <code>large</code>
--- @return Material The avatar material if available or a fallback material if fetching fails
--- @realm client
-local function FetchAvatarAsset(id64, size)
-    if not id64 then
-        return _bot_avatar
-    end
-
-    size = size == "medium" and "_medium" or size == "large" and "_full" or ""
-
-    local key = id64 .. size
-
-    if fetched_avatar_urls[key] then
-        return FetchAsset(fetched_avatar_urls[key])
-    end
-
-    ---
-    -- @realm client
-    -- stylua: ignore
-    local data = hook.Run("TTT2FetchAvatar", id64, size)
-    if data ~= nil then
-        local url = "hook://" .. key
-        local crcUrl = crc(url)
-
-        fetched_avatar_urls[key] = url
-
-        write("downloaded_assets/" .. crcUrl .. ".png", data)
-
-        return
-    end
-
-    local url = "http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1"
-
-    fetch(url, function(body)
-        local link = body:match("<avatarIcon><%!%[CDATA%[(.-)%]%]><%/avatarIcon>")
-
-        if not link then
-            return
-        end
-
-        fetched_avatar_urls[key] = link:Replace(".jpg", size .. ".jpg")
-        FetchAsset(fetched_avatar_urls[key])
-    end, function()
-        -- Fallback if fetching from Steam fails
-        local material = CreateAvatarMaterial(id64)
-
-        if material then
-            mats[key] = material
-        end
-    end)
-
-    return mats[key]
-end
-
----
--- fetches the avatar material for a steamid64
--- when an avatar is found it will be cached
--- @param string id64 the steamid64
--- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- Creates the avatar material for a steamid64
+-- When an avatar is found it will be cached
+-- @param string id64 The steamid64
+-- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @realm client
 function draw.CacheAvatar(id64, size)
-    FetchAvatarAsset(id64, size)
+    CreateAvatarMaterial(id64, size)
 end
 
 ---
 -- Deletes the avatar material for a steamid64
--- when a cached avatar is found it will be destroyed.
+-- When a cached avatar is found it will be destroyed
 -- @param string id64 The player's steamid64
 -- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @realm client
 function draw.DropCacheAvatar(id64, size)
-    size = size == "medium" and "_medium" or size == "large" and "_full" or ""
-    local key = id64 .. size
+    local avatarSize = 32
 
-    local url = fetched_avatar_urls[key]
-    local crcUrl = crc(url)
-    local uri = "data/downloaded_assets/" .. crcUrl .. ".png"
+    if size == "large" then
+        avatarSize = 184
+    elseif "medium" then
+        avatarSize = 64
+    end
+
+    local key = id64 .. avatarSize
+    local crcUrl = crc(key)
+    local uri = "downloaded_assets/" .. crcUrl .. ".png"
 
     if exists(uri, "DATA") then
         delete(uri, "DATA")
     end
 
-    mats[url] = nil
-    fetched_avatar_urls[key] = nil
+    mats[key] = nil
 end
 
 ---
@@ -249,7 +187,7 @@ end
 -- @param number height
 -- @param Color color
 -- @param Angle angle
--- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+-- @param boolean cornerorigin If it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 -- @realm client
 local function DrawImage(material, x, y, width, height, color, angle, cornerorigin)
     color = color or white
@@ -269,56 +207,20 @@ local function DrawImage(material, x, y, width, height, color, angle, cornerorig
 end
 
 ---
--- Draws a WebImage
--- @param string url the url to the WebImage
--- @param number x
--- @param number y
--- @param number width
--- @param number height
--- @param Color color
--- @param Angle angle
--- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
--- @realm client
-function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
-    DrawImage(FetchAsset(url) or _error, x, y, width, height, color, angle, cornerorigin)
-end
-
----
--- @todo description
--- @param string url
--- @param number parentwidth
--- @param number parentheight
--- @param number xrep
--- @param number yrep
--- @param Color color
--- @realm client
-function draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)
-    color = color or white
-
-    local xiwx, yihy = math.ceil(parentwidth / xrep), math.ceil(parentheight / yrep)
-
-    for x = 0, xrep - 1 do
-        for y = 0, yrep - 1 do
-            draw.WebImage(url, x * xiwx, y * yihy, xiwx, yihy, color)
-        end
-    end
-end
-
----
 -- Draws a SteamAvatar while caching it before
--- @param string id64 the steamid64
--- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @param string id64 The steamid64
+-- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @param number x
 -- @param number y
 -- @param number width
 -- @param number height
 -- @param Color color
 -- @param Angle angle
--- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+-- @param boolean cornerorigin If it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 -- @realm client
 function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornerorigin)
     DrawImage(
-        FetchAvatarAsset(id64, size) or _default_avatar,
+        CreateAvatarMaterial(id64, size) or _default_avatar,
         x,
         y,
         width,
@@ -330,12 +232,12 @@ function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornero
 end
 
 ---
--- fetches and returns the avatar material for a steamid64
--- when an avatar is found it will be cached
--- @param string id64 the steamid64
--- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
--- @return Material
+-- Creates and returns the avatar material for a steamid64
+-- When an avatar is found it will be cached
+-- @param string id64 The steamid64
+-- @param string size The avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @return Material The created avatar material or the default material
 -- @realm client
 function draw.GetAvatarMaterial(id64, size)
-    return FetchAvatarAsset(id64, size) or _default_avatar
+    return CreateAvatarMaterial(id64, size) or _default_avatar
 end
