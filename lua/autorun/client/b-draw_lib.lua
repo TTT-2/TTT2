@@ -70,7 +70,7 @@ local function CreateAvatarMaterial(id64, size)
 
     if size == "large" then
         avatarSize = 184
-    elseif "medium" then
+    elseif size == "medium" then
         avatarSize = 64
     end
 
@@ -78,8 +78,14 @@ local function CreateAvatarMaterial(id64, size)
     local crcUrl = crc(renderTargetName)
     local filePath = "downloaded_assets/" .. crcUrl .. ".png"
 
+    if mats[renderTargetName] then
+        return mats[renderTargetName]
+    end
+
     if exists(filePath, "DATA") then
-        return Material("data/" .. filePath)
+        mats[renderTargetName] = Material("data/" .. filePath)
+
+        return mats[renderTargetName]
     end
 
     ---
@@ -89,8 +95,9 @@ local function CreateAvatarMaterial(id64, size)
 
     if data then
         write(filePath, data)
+        mats[renderTargetName] = Material("data/" .. filePath)
 
-        return Material("data/" .. filePath)
+        return mats[renderTargetName]
     end
 
     local avatarImage = vgui.Create("AvatarImage")
@@ -163,7 +170,7 @@ function draw.DropCacheAvatar(id64, size)
 
     if size == "large" then
         avatarSize = 184
-    elseif "medium" then
+    elseif size == "medium" then
         avatarSize = 64
     end
 
