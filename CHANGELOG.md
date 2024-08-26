@@ -51,7 +51,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added role derandomization options for perceptually fairer role distribution, enabled by default (by @nike4613)
 - Added targetID to buttons (by @TimGoll)
 - Added force role admin command (by @mexikoedi)
-- Added `draw.RefreshAvatars(id64)` to refresh avater icons (by @mexikoedi)
+- Added `draw.RefreshAvatars(id64)` to refresh avatar icons (by @mexikoedi)
 
 ### Changed
 
