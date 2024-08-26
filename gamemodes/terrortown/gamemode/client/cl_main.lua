@@ -329,17 +329,6 @@ function GM:InitPostEntity()
         self:ClearClientState()
     end
 
-    -- cache players avatar
-    local plys = playerGetAll()
-    for i = 1, #plys do
-        local plyid64 = plys[i]:SteamID64()
-
-        -- caching
-        draw.CacheAvatar(plyid64, "small")
-        draw.CacheAvatar(plyid64, "medium")
-        draw.CacheAvatar(plyid64, "large")
-    end
-
     timer.Create("cache_ents", 1, 0, function()
         self:DoCacheEnts()
     end)
@@ -963,10 +952,10 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
         steamid64 = nil
     end
 
-    -- cache avatars
-    draw.CacheAvatar(steamid64, "small")
-    draw.CacheAvatar(steamid64, "medium")
-    draw.CacheAvatar(steamid64, "large")
+    -- deletes old avatars and caches new ones
+    timer.Simple(0, function()
+        draw.RefreshAvatars(steamid64)
+    end)
 
     ---
     -- @realm shared
