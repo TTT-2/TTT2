@@ -2312,7 +2312,7 @@ Rol dağılımını bir oturum boyunca daha adil hissettirmek için kullanılabi
 
 4 mod vardır:
 
-mod 0: Devre Dışı - Rastgele dağıtım yapılmaz. Bu varsayılandır.
+mod 0: Devre Dışı - Rastgele dağıtım yapılmaz.
 
 mod 1: Yalnızca temel roller - Rastgele dağıtıma son verme yalnızca temel roller için gerçekleştirilir. Alt roller rastgele seçilecektir. Bunlar Masum ve Hain gibi rollerdir.
 

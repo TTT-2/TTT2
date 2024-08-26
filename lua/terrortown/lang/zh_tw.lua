@@ -2312,7 +2312,7 @@ L.decoy_help_primary = "安放誘餌"
 --
 --There are 4 modes:
 --
---mode 0: Disabled - No derandomization is done. This is the default.
+--mode 0: Disabled - No derandomization is done.
 --
 --mode 1: Base roles only - Derandomization is performed for base roles only. Sub-roles will be selected randomly. These are roles like Innocent and Traitor.
 --
