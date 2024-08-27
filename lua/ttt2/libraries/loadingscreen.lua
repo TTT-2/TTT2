@@ -24,6 +24,10 @@ function loadingscreen.Begin()
     -- add manual syncing so that the loading screen starts as soon as the
     -- cleanup map is started
     if SERVER then
+        loadingscreen.timeBegin = SysTime()
+
+        timer.Remove("TTT2LoadingscreenEndTime")
+
         net.Start("TTT2LoadingScreenActive")
         net.WriteBool(true)
         net.Broadcast()
@@ -47,16 +51,27 @@ end
 -- @internal
 -- @realm shared
 function loadingscreen.End()
-    loadingscreen.isShown = false
+    if CLIENT then
+        loadingscreen.isShown = false
+    end
 
     if SERVER then
-        net.Start("TTT2LoadingScreenActive")
-        net.WriteBool(false)
-        net.Broadcast()
+        print(loadingscreen.timeBegin)
+        print(SysTime())
+        print(loadingscreen.GetDuration())
+        local duration = loadingscreen.timeBegin - SysTime() + loadingscreen.GetDuration()
 
-        -- disables sounds a while longer so it stays muted
-        timer.Simple(1.5, function()
-            loadingscreen.disableSounds = false
+        timer.Create("TTT2LoadingscreenEndTime", duration, 1, function()
+            loadingscreen.isShown = false
+
+            net.Start("TTT2LoadingScreenActive")
+            net.WriteBool(false)
+            net.Broadcast()
+
+            -- disables sounds a while longer so it stays muted
+            timer.Simple(1.5, function()
+                loadingscreen.disableSounds = false
+            end)
         end)
     end
 end
@@ -69,6 +84,14 @@ if SERVER then
             return false
         end
     end)
+
+    function loadingscreen.GetDuration()
+        return loadingscreen.duration or 4
+    end
+
+    function loadingscreen.SetDuration(duration)
+        loadingscreen.duration = duration
+    end
 end
 
 if CLIENT then
@@ -158,13 +181,18 @@ if CLIENT then
                 - math.min((SysTime() - loadingscreen.timeStateChange) / durationStateChange, 1.0)
         end
 
-        local c = vskin.GetBackgroundColor()
+        if progress < 0.01 then
+            return
+        end
 
-        local colorLoadingScreen = Color(c.r, c.g, c.b, 220 * progress)
+        local c = util.ColorDarken(vskin.GetDarkAccentColor(), 90)
+
+        local colorLoadingScreen = Color(c.r, c.g, c.b, 235 * progress)
         local colorTip = table.Copy(util.GetDefaultColor(colorLoadingScreen))
         colorTip.a = 255 * progress
 
-        draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 5)
+        draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 10)
+        draw.BlurredBox(0, 0, ScrW(), ScrH(), progress * 3)
         draw.Box(0, 0, ScrW(), ScrH(), colorLoadingScreen)
 
         draw.AdvancedText(
