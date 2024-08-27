@@ -56,9 +56,6 @@ function loadingscreen.End()
     end
 
     if SERVER then
-        print(loadingscreen.timeBegin)
-        print(SysTime())
-        print(loadingscreen.GetDuration())
         local duration = loadingscreen.timeBegin - SysTime() + loadingscreen.GetDuration()
 
         -- this timer makes sure the loading screen is displayed for at least the
