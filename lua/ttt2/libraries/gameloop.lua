@@ -162,6 +162,10 @@ if SERVER then
             gameloop.SetLevelStartTime(CurTime())
         end
 
+        -- make sure that the duration of the loading screen is added to the
+        -- duration of the prep time
+        timePrepPhase = timePrepPhase + loadingscreen.GetDuration()
+
         gameloop.mapWinType = WIN_NONE
 
         -- reset the role of all players on the server and client
