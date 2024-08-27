@@ -61,6 +61,8 @@ function loadingscreen.End()
         print(loadingscreen.GetDuration())
         local duration = loadingscreen.timeBegin - SysTime() + loadingscreen.GetDuration()
 
+        -- this timer makes sure the loading screen is displayed for at least the
+        -- time that is set as the minimum time
         timer.Create("TTT2LoadingscreenEndTime", duration, 1, function()
             loadingscreen.isShown = false
 
@@ -85,10 +87,18 @@ if SERVER then
         end
     end)
 
+    ---
+    -- Reads the minimum time that a loadingscreen should have.
+    -- @return number The minimum time
+    -- @realm server
     function loadingscreen.GetDuration()
         return loadingscreen.duration or 4
     end
 
+    ---
+    -- Sets the minimum time that a loadingscreen should have.
+    -- @param number duration The minimum time in seconds
+    -- @realm server
     function loadingscreen.SetDuration(duration)
         loadingscreen.duration = duration
     end
@@ -181,6 +191,8 @@ if CLIENT then
                 - math.min((SysTime() - loadingscreen.timeStateChange) / durationStateChange, 1.0)
         end
 
+        -- stop rendering the loadingscreen if the progress is close to 0, this removes
+        -- an ugly step when transitioning from blurry to sharp
         if progress < 0.01 then
             return
         end
