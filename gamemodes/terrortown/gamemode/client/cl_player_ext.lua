@@ -252,7 +252,13 @@ function GM:SetupMove(ply, mv, cmd)
         return
     end
 
-    ply.isReady = true
+    -- we make the assumption that every player, that already is connected
+    -- is ready. We can't tell for sure, but this is the best we can do here
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        plys[i].isReady = true
+    end
 
     net.Start("TTT2SetPlayerReady")
     net.SendToServer()
