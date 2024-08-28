@@ -1713,7 +1713,7 @@ local function SetPlayerReady(_, ply)
     hook.Run("TTT2PlayerReady", ply)
 
     -- notify all other players as well that this player is ready
-    local receipients = return GetPlayerFilter(function(p)
+    local receipients = GetPlayerFilter(function(p)
         return p ~= ply and p:IsReady()
     end)
 
