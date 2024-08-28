@@ -275,6 +275,19 @@ function GM:SetupMove(ply, mv, cmd)
     end
 end
 
+net.Receive("TTT2NotifyPlayerReadyOnClients", function()
+    local ply = net.ReadPlayer()
+
+    if not IsValid(ply) then return end
+
+    ply.isReady = true
+
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2PlayerReady", ply)
+end)
+
 ---
 -- Sets a revival reason that is displayed in the revival HUD element.
 -- It supports a language identifier for translated strings.
