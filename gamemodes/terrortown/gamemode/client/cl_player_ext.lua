@@ -284,7 +284,9 @@ end
 net.Receive("TTT2NotifyPlayerReadyOnClients", function()
     local ply = net.ReadPlayer()
 
-    if not IsValid(ply) then return end
+    if not IsValid(ply) then
+        return
+    end
 
     ply.isReady = true
 
