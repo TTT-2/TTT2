@@ -1713,13 +1713,13 @@ local function SetPlayerReady(_, ply)
     hook.Run("TTT2PlayerReady", ply)
 
     -- notify all other players as well that this player is ready
-    local receipients = GetPlayerFilter(function(p)
+    local recipients = GetPlayerFilter(function(p)
         return p ~= ply and p:IsReady()
     end)
 
     net.Start("TTT2NotifyPlayerReadyOnClients")
     net.WritePlayer(ply)
-    net.Send(receipients)
+    net.Send(recipients)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 
