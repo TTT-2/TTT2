@@ -36,6 +36,15 @@ if SERVER then
     end
 end
 
+---
+-- Checks if a given button entity has the provided class.
+-- @note This is checked like this, because buttons and levers
+-- lose their specific class name on the client and therefore use custom
+-- syncing here.
+-- @param Entity ent The button entity that should be checked
+-- @param string class The class name
+-- @return boolean Returns true if the entity matches the provided class name
+-- @realm shared
 function button.IsClass(ent, class)
     local classID = ent:GetNWInt("button_class")
 
