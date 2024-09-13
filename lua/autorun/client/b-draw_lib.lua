@@ -82,12 +82,6 @@ local function CreateAvatarMaterial(id64, size)
         return mats[renderTargetName]
     end
 
-    if exists(filePath, "DATA") then
-        mats[renderTargetName] = Material("data/" .. filePath)
-
-        return mats[renderTargetName]
-    end
-
     ---
     -- @realm client
     -- stylua: ignore
@@ -147,6 +141,19 @@ local function CreateAvatarMaterial(id64, size)
     mats[renderTargetName] = material
 
     return material
+end
+
+---
+-- Refreshes the avatar images by deleting old cached images and generating new ones
+-- @param string id64 The steamid64 of the player
+-- @realm client
+function draw.RefreshAvatars(id64)
+    draw.DropCacheAvatar(id64, "small")
+    draw.DropCacheAvatar(id64, "medium")
+    draw.DropCacheAvatar(id64, "large")
+    draw.CacheAvatar(id64, "small")
+    draw.CacheAvatar(id64, "medium")
+    draw.CacheAvatar(id64, "large")
 end
 
 ---

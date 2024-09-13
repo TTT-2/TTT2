@@ -237,6 +237,16 @@ local function UpdateEquipment()
 end
 net.Receive("TTT_Equipment", UpdateEquipment)
 
+-- Deletes old avatars and caches new ones
+local function CacheAllPlayerAvatars(ply)
+    local plys = IsPlayer(ply) and { ply } or player.GetAll()
+
+    for i = 1, #plys do
+        local plyid64 = plys[i]:SteamID64()
+        draw.RefreshAvatars(plyid64)
+    end
+end
+
 ---
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
@@ -279,6 +289,9 @@ function GM:SetupMove(ply, mv, cmd)
         -- stylua: ignore
         hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
     end
+
+    -- Cache avatars for all players currently on the server
+    CacheAllPlayerAvatars(ply)
 end
 
 net.Receive("TTT2NotifyPlayerReadyOnClients", function()
@@ -294,6 +307,9 @@ net.Receive("TTT2NotifyPlayerReadyOnClients", function()
     -- @realm shared
     -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
+
+    -- Cache avatar of the new player
+    CacheAllPlayerAvatars(ply)
 end)
 
 ---
