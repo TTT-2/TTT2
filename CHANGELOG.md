@@ -83,6 +83,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Made `ply:IsReviving` a shared player variable (by @TimGoll)
 - Updated and improved the Simplified Chinese localization file (by @sbzlzh and @TheOnly8Z)
 - Avatar icons are not fetched anymore but instead created with `AvatarImage` (fixes missing icons for chinese players) (by @mexikoedi)
+- Updated Japanese translation (by @westooooo)
 
 ### Fixed
 
