@@ -1067,7 +1067,7 @@ end
 -- Returns whether the player is ready. A player is ready when he is able to look
 -- around and move (first call of @{GM:SetupMove}). A bot player is always considered
 -- as ready.
--- @note If called on the client, it is only 100% reliable for the local player. While the
+-- @warning If called on the client, it is only 100% reliable for the local player. While the
 -- restult for other players is most likely still true, it can have some issues in certain
 -- scenarios.
 -- @return boolean
