@@ -238,8 +238,8 @@ end
 net.Receive("TTT_Equipment", UpdateEquipment)
 
 -- Deletes old avatars and caches new ones
-local function CacheAllPlayerAvatars()
-    local plys = player.GetAll()
+local function CacheAllPlayerAvatars(ply)
+    local plys = IsPlayer(ply) and {ply} or player.GetAll()
 
     for i = 1, #plys do
         local plyid64 = plys[i]:SteamID64()
@@ -291,7 +291,7 @@ function GM:SetupMove(ply, mv, cmd)
     end
 
     -- Cache avatars for all players currently on the server
-    CacheAllPlayerAvatars()
+    CacheAllPlayerAvatars(ply)
 end
 
 net.Receive("TTT2NotifyPlayerReadyOnClients", function()
@@ -308,8 +308,8 @@ net.Receive("TTT2NotifyPlayerReadyOnClients", function()
     -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
 
-    -- Cache avatars for all players currently on the server (with the new player included)
-    CacheAllPlayerAvatars()
+    -- Cache avatar of the new player
+    CacheAllPlayerAvatars(ply)
 end)
 
 ---
