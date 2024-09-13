@@ -51,6 +51,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added role derandomization options for perceptually fairer role distribution, enabled by default (by @nike4613)
 - Added targetID to buttons (by @TimGoll)
 - Added force role admin command (by @mexikoedi)
+- Added `draw.RefreshAvatars(id64)` to refresh avatar icons (by @mexikoedi)
 
 ### Changed
 
@@ -110,6 +111,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed markerVision elements being visible to team mates of unknown teams (such as team Innocent) (by @TimGoll)
 - Fixed inverted settings being inverted twice in the equipment editor (by @TimGoll)
 - Fixed OldTTT HUD sidebar elements missing translation (by @TimGoll)
+- Fixed avatar icons not refreshing if they were changed on Steam (by @mexikoedi)
 
 ### Removed
 
