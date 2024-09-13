@@ -239,7 +239,7 @@ net.Receive("TTT_Equipment", UpdateEquipment)
 
 -- Deletes old avatars and caches new ones
 local function CacheAllPlayerAvatars(ply)
-    local plys = IsPlayer(ply) and {ply} or player.GetAll()
+    local plys = IsPlayer(ply) and { ply } or player.GetAll()
 
     for i = 1, #plys do
         local plyid64 = plys[i]:SteamID64()
