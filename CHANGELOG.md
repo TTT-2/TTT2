@@ -84,6 +84,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Made `ply:IsReviving` a shared player variable (by @TimGoll)
 - Updated and improved the Simplified Chinese localization file (by @sbzlzh and @TheOnly8Z)
 - Avatar icons are not fetched anymore but instead created with `AvatarImage` (fixes missing icons for chinese players) (by @mexikoedi)
+- `GM:TTT2PlayerReady` is now called for every player even on clients (by @TimGoll)
+- Updated Japanese translation (by @westooooo)
 
 ### Fixed
 
@@ -124,6 +126,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Renamed `ply:GetHeightVector()` to `ply:GetHeadPosition()`
 - Removed the `TIPS` module and replaced it with a new `tips` module
 - Removed `draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)` and `draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)` from the `draw` module
+- Due to `GM:TTT2PlayerReady` now being called for every player, addon devs have to make sure to check the player on the client
 
 ## [v0.13.2b](https://github.com/TTT-2/TTT2/tree/0.13.2b) (2024-03-10)
 

@@ -22,6 +22,7 @@ local soundWeaponPickup = Sound("items/ammo_pickup.wav")
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
+util.AddNetworkString("TTT2NotifyPlayerReadyOnClients")
 util.AddNetworkString("TTT2SetRevivalReason")
 util.AddNetworkString("TTT2RevivalStopped")
 util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
@@ -1710,6 +1711,15 @@ local function SetPlayerReady(_, ply)
     -- @realm server
     -- stylua: ignore
     hook.Run("TTT2PlayerReady", ply)
+
+    -- notify all other players as well that this player is ready
+    local recipients = GetPlayerFilter(function(p)
+        return p ~= ply and p:IsReady()
+    end)
+
+    net.Start("TTT2NotifyPlayerReadyOnClients")
+    net.WritePlayer(ply)
+    net.Send(recipients)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
 

@@ -252,7 +252,13 @@ function GM:SetupMove(ply, mv, cmd)
         return
     end
 
-    ply.isReady = true
+    -- we make the assumption that every player, that already is connected
+    -- is ready. We can't tell for sure, but this is the best we can do here
+    local plys = player.GetAll()
+
+    for i = 1, #plys do
+        plys[i].isReady = true
+    end
 
     net.Start("TTT2SetPlayerReady")
     net.SendToServer()
@@ -274,6 +280,21 @@ function GM:SetupMove(ply, mv, cmd)
         hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
     end
 end
+
+net.Receive("TTT2NotifyPlayerReadyOnClients", function()
+    local ply = net.ReadPlayer()
+
+    if not IsValid(ply) then
+        return
+    end
+
+    ply.isReady = true
+
+    ---
+    -- @realm shared
+    -- stylua: ignore
+    hook.Run("TTT2PlayerReady", ply)
+end)
 
 ---
 -- Sets a revival reason that is displayed in the revival HUD element.
