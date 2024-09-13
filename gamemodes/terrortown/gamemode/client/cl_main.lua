@@ -335,15 +335,6 @@ function GM:InitPostEntity()
 
     RunConsoleCommand("_ttt_request_serverlang")
     RunConsoleCommand("_ttt_request_rolelist")
-
-    -- deletes old avatars and caches new ones
-    timer.Simple(0, function()
-        local plys = playerGetAll()
-        for i = 1, #plys do
-            local plyid64 = plys[i]:SteamID64()
-            draw.RefreshAvatars(plyid64)
-        end
-    end)
 end
 
 ---
@@ -960,11 +951,6 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
     if steamid64 == "" then
         steamid64 = nil
     end
-
-    -- deletes old avatars and caches new ones
-    timer.Simple(0, function()
-        draw.RefreshAvatars(steamid64)
-    end)
 
     ---
     -- @realm shared
