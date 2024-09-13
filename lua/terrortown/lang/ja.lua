@@ -2100,7 +2100,7 @@ L.msg_beacon_death = "ビーコンの近くでプレイヤーが死亡したよ�
 
 L.beacon_short_desc = "ビーコンはDetectiveのみ使用することができ、周囲のウォールハックをしてくれます"
 
--L.entity_pickup_owner_only = "所持者のみ回収が可能です"
+L.entity_pickup_owner_only = "所持者のみ回収が可能です"
 
 L.body_confirm_one = "{finder}は{victim}の死を確認した。"
 L.body_confirm_more = "{finder}は死亡回数が{count}である{victims}を確認した。"
