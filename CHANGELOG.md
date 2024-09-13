@@ -84,6 +84,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated and improved the Simplified Chinese localization file (by @sbzlzh and @TheOnly8Z)
 - Avatar icons are not fetched anymore but instead created with `AvatarImage` (fixes missing icons for chinese players) (by @mexikoedi)
 - `GM:TTT2PlayerReady` is now called for every player even on clients (by @TimGoll)
+- Updated Japanese translation (by @westooooo)
 
 ### Fixed
 
